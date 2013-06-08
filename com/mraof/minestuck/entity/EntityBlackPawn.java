@@ -17,16 +17,21 @@ import net.minecraft.world.World;
 
 public class EntityBlackPawn extends EntityPawn
 {
-	public EntityBlackPawn(World world) {
+	public EntityBlackPawn(World world) 
+	{
 		super(world);
-		texture = "/com/mraof/minestuck/textures/mobs/Dersite.png";
+		texture = "/mods/Minestuck/textures/mobs/Dersite.png";
 	}
-	
+	public EntityBlackPawn(World world, int type) 
+	{
+		super(world, type);
+	}
 	@Override
-	public void initCreature() {
+	public void setEnemies() 
+	{
 		enemyClasses.add(EntityWhitePawn.class);
 		enemyClasses.add(EntitySlime.class);
-		super.initCreature();
+		super.setEnemies();
 	}
 
 }

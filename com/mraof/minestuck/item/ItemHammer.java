@@ -14,10 +14,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTool;
 import net.minecraft.world.World;
 
 
-public class ItemHammer extends Item
+public class ItemHammer extends ItemTool
 {    
 	private int weaponDamage;
 	private final EnumHammerType hammerType;
@@ -27,12 +28,13 @@ public class ItemHammer extends Item
 	
     public ItemHammer(int id, EnumHammerType hammerType)
 	{
-		super(id);
+		super(id, 3, EnumToolMaterial.GOLD, blocksEffectiveAgainst);
 		
 		this.hammerType = hammerType;
 		this.maxStackSize = 1;
 		this.setMaxDamage(hammerType.getMaxUses());
 		this.setCreativeTab(CreativeTabs.tabCombat);
+		this.efficiencyOnProperMaterial = hammerType.getEfficiencyOnProperMaterial();
 		switch(hammerType)
 		{
 		case CLAW:
@@ -71,6 +73,11 @@ public class ItemHammer extends Item
 		this.weaponDamage = 3 + hammerType.getDamageVsEntity();
 	}
 	
+    @Override
+    public boolean canHarvestBlock(Block block) 
+    {
+		return block != null && (block.blockMaterial == Material.iron || block.blockMaterial == Material.anvil || block.blockMaterial == Material.rock);
+    }
 
 	public float getStrVsBlock(ItemStack itemStack, Block block)
 	{
@@ -90,12 +97,14 @@ public class ItemHammer extends Item
 	public boolean hitEntity(ItemStack itemStack, EntityLiving target, EntityLiving player)
 	{
 		itemStack.damageItem(1, player);
-		if(hammerType.equals(hammerType.POGO))
+		if(hammerType.equals(EnumHammerType.POGO))
 		{
 			target.motionY = Math.abs(player.motionY) + target.motionY + 0.5;
 			player.motionY = 0;
 			player.fallDistance = 0;
 		}
+		else if(hammerType.equals(EnumHammerType.SCARLET))
+			target.setFire(50);
 		return true;
 	}
 

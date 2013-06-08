@@ -4,6 +4,7 @@
 package com.mraof.minestuck.client.renderer.entity;
 
 import com.mraof.minestuck.entity.EntityBlackPawn;
+import com.mraof.minestuck.entity.EntityPawn;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
@@ -20,11 +21,11 @@ public class RenderPawn extends RenderBiped {
 	{
 		super(modelBiped, par2);
 	}
-	public void doRender(EntityBlackPawn entityPawn, double d, double d1, double d2,
+	public void doRender(EntityPawn entityPawn, double d, double d1, double d2,
 			float f, float f1) {
 		doRenderLiving(entityPawn, d, d1, d2, f, f1);
 	}
-	public void doRenderLiving(EntityBlackPawn entityPawn, double d, double d1,
+	public void doRenderLiving(EntityPawn entityPawn, double d, double d1,
 			double d2, float f, float f1) {
 		super.doRenderLiving(entityPawn, d, d1, d2, f, f1);
 	}

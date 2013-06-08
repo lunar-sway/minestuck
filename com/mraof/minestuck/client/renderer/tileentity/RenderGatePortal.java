@@ -36,7 +36,7 @@ public class RenderGatePortal extends TileEntitySpecialRenderer {
 
             if (var14 == 0)
             {
-                this.bindTextureByName("/com/mraof/minestuck/textures/tunnel.png");
+                this.bindTextureByName("/mods/Minestuck/textures/tunnel.png");
                 var17 = 0.1F;
                 var15 = 65.0F;
                 var16 = 0.125F;
@@ -46,7 +46,7 @@ public class RenderGatePortal extends TileEntitySpecialRenderer {
 
             if (var14 == 1)
             {
-                this.bindTextureByName("/com/mraof/minestuck/textures/particlefield.png");
+                this.bindTextureByName("/mods/Minestuck/textures/particlefield.png");
                 GL11.glEnable(GL11.GL_BLEND);
                 GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
                 var16 = 0.5F;

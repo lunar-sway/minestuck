@@ -4,8 +4,10 @@ package com.mraof.minestuck;
 
 import com.mraof.minestuck.block.BlockChessTile;
 import com.mraof.minestuck.block.BlockGatePortal;
+import com.mraof.minestuck.entity.EntityBishop;
 import com.mraof.minestuck.entity.EntityImp;
 import com.mraof.minestuck.entity.EntityBlackPawn;
+import com.mraof.minestuck.entity.EntityNakagator;
 import com.mraof.minestuck.entity.EntitySalamander;
 import com.mraof.minestuck.entity.EntityWhitePawn;
 import com.mraof.minestuck.item.EnumBladeType;
@@ -223,19 +225,25 @@ public class Minestuck
     	LanguageRegistry.instance().addStringLocalization("achievement.getHammer.desc", "Get the Claw Hammer");
     	//register entity with fml
     	EntityRegistry.registerModEntity(EntitySalamander.class, "Salamander", 0, this, 80, 3, true);
-    	EntityRegistry.registerModEntity(EntityImp.class, "Imp", 1, this, 80, 3, true);
-    	EntityRegistry.registerModEntity(EntityBlackPawn.class, "dersitePawn", 2, this, 80, 3, true);
-    	EntityRegistry.registerModEntity(EntityWhitePawn.class, "prospitianPawn", 3, this, 80, 3, true);
+    	EntityRegistry.registerModEntity(EntityNakagator.class, "Nakagator", 1, this, 80, 3, true);
+    	EntityRegistry.registerModEntity(EntityImp.class, "Imp", 2, this, 80, 3, true);
+    	EntityRegistry.registerModEntity(EntityBlackPawn.class, "dersitePawn", 3, this, 80, 3, true);
+    	EntityRegistry.registerModEntity(EntityWhitePawn.class, "prospitianPawn", 4, this, 80, 3, true);
+    	EntityRegistry.registerModEntity(EntityBishop.class, "dersiteBishop", 5, this, 80, 3, true);
     	//Identify mobs with their eggs
     	EntityList.IDtoClassMapping.put(eggIdStart, EntitySalamander.class);
-    	EntityList.IDtoClassMapping.put(eggIdStart + 1, EntityImp.class);
-    	EntityList.IDtoClassMapping.put(eggIdStart + 2, EntityBlackPawn.class);
-    	EntityList.IDtoClassMapping.put(eggIdStart + 3, EntityWhitePawn.class);
+    	EntityList.IDtoClassMapping.put(eggIdStart + 1, EntityNakagator.class);
+    	EntityList.IDtoClassMapping.put(eggIdStart + 2, EntityImp.class);
+    	EntityList.IDtoClassMapping.put(eggIdStart + 3, EntityBlackPawn.class);
+    	EntityList.IDtoClassMapping.put(eggIdStart + 4, EntityWhitePawn.class);
+    	EntityList.IDtoClassMapping.put(eggIdStart + 5, EntityBishop.class);
     	//set egg information
     	EntityList.entityEggs.put(eggIdStart, new EntityEggInfo(eggIdStart, 0xffe62e, 0xfffb53 ));
-    	EntityList.entityEggs.put(eggIdStart + 1, new EntityEggInfo(eggIdStart + 1, 0x000000, 0xffffff ));
-    	EntityList.entityEggs.put(eggIdStart + 2, new EntityEggInfo(eggIdStart + 2, 0x0f0f0f, 0xf0f0f0 ));
-    	EntityList.entityEggs.put(eggIdStart + 3, new EntityEggInfo(eggIdStart + 3, 0xf0f0f0, 0x0f0f0f ));
+    	EntityList.entityEggs.put(eggIdStart + 1, new EntityEggInfo(eggIdStart + 1, 0xff632e, 0xffbf35 ));
+    	EntityList.entityEggs.put(eggIdStart + 2, new EntityEggInfo(eggIdStart + 2, 0x000000, 0xffffff ));
+    	EntityList.entityEggs.put(eggIdStart + 3, new EntityEggInfo(eggIdStart + 3, 0x0f0f0f, 0xf0f0f0 ));
+    	EntityList.entityEggs.put(eggIdStart + 4, new EntityEggInfo(eggIdStart + 4, 0xf0f0f0, 0x0f0f0f ));
+    	EntityList.entityEggs.put(eggIdStart + 5, new EntityEggInfo(eggIdStart + 5, 0x0f0f0f, 0xf00ff0 ));
     	//register Tile Entities
     	GameRegistry.registerTileEntity(TileEntityGatePortal.class, "gatePortal");
     	//register world generators

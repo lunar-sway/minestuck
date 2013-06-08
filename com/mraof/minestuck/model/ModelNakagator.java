@@ -3,13 +3,13 @@ package com.mraof.minestuck.model;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 
-public class ModelSalamander extends ModelBase 
+public class ModelNakagator extends ModelBase 
 {
-	public boolean isGlubbing;
 	public boolean hasArms;
     private ModelRenderer tail;
     private ModelRenderer head;
@@ -21,24 +21,22 @@ public class ModelSalamander extends ModelBase
     private ModelRenderer rightArm;
 
     
-    public ModelSalamander()
+    public ModelNakagator()
     {
     	this(false);
     }
-    public ModelSalamander(boolean hasArms)
+    public ModelNakagator(boolean hasArms)
     {
-    	/*ModelRenderer(this, textureOffsetX, textureOffsetY)
-    	 * When figuring out the texture offset, the width will be 2 * sizeZ + 2 * sizeX, and the height will be sizeY + sizeZ
-    	 * addBox(offsetX,offsetY,offsetZ,sizeX,sizeY,sizeZ)
+    	/*addBox(offsetx,offsety,offsetz,sizex,sizey,sizez)
     	 * setRotationPoint(x,y,z) 
-    	 * x is width, y is height (lower numbers are higher), z is length
+    	 * x is width, y is height (0 is top of the model), z is length
     	 */
     	head = new ModelRenderer(this, 0, 0);
-        head.addBox(-4F, 0F, -4F, 8, 3, 7);
+        head.addBox(-4F, 0F, -4F, 8, 3, 10);
         head.setRotationPoint(0F, 4F, 0F);
     	
         jaw = new ModelRenderer(this, 0, 10);
-        jaw.addBox(-4F, 0F, -4F, 8, 1, 7);
+        jaw.addBox(-4F, 0F, -4F, 8, 1, 10);
         jaw.setRotationPoint(0F, 7F, 0F);
                 
         body = new ModelRenderer(this, 0, 19);
@@ -72,7 +70,6 @@ public class ModelSalamander extends ModelBase
             GL11.glPushMatrix();
             GL11.glScalef(1.5F / var8, 1.5F / var8, 1.5F / var8);
             GL11.glTranslatef(0.0F, 16.0F * par7, 0.0F);
-            this.head.render(par7);
             this.jaw.render(par7);
             GL11.glPopMatrix();
             GL11.glPushMatrix();
@@ -86,6 +83,7 @@ public class ModelSalamander extends ModelBase
             }
             this.rightLeg.render(par7);
             this.leftLeg.render(par7);
+            this.head.render(par7);
             GL11.glPopMatrix();
         }
         else
@@ -116,5 +114,4 @@ public class ModelSalamander extends ModelBase
         this.leftLeg.rotateAngleX = MathHelper.cos(par1 * 0.6662F) * 1.4F * par2;
         this.rightLeg.rotateAngleX = MathHelper.cos(par1 * 0.6662F + (float)Math.PI) * 1.4F * par2;
     }
-
 }

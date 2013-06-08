@@ -13,12 +13,12 @@ public class WorldProviderSkaia extends WorldProvider
 	@Override
 	public int getActualHeight() 
 	{
-		return 512;
+		return 256;
 	}
 	@Override
 	public int getHeight() 
 	{
-		return 512;
+		return 256;
 	}
 	@Override
 	public String getDimensionName() 

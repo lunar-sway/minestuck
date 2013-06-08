@@ -14,13 +14,24 @@ public class EntityImp extends EntityMob implements IMob{
 		moveSpeed = 2.5F;
         setSize(0.5F, 1.0F);
         this.experienceValue = 3;
-		texture = "/com/mraof/minestuck/textures/mobs/ShaleImp.png";
+		texture = "/mods/Minestuck/textures/mobs/ShaleImp.png";
 	} 
 
 	@Override
 	public int getMaxHealth() 
 	{
 		return 10;
+	}
+	
+	@Override
+	public void onLivingUpdate() 
+	{
+		if(this.rand.nextDouble() < .0005)
+		{
+			this.motionX += rand.nextInt(33) - 16;
+			this.motionZ += rand.nextInt(33) - 16;
+		}
+		super.onLivingUpdate();
 	}
 
 }

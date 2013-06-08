@@ -9,7 +9,7 @@ import net.minecraft.entity.EnumCreatureAttribute;
 
 public class EntityListAttackFilter implements IEntitySelector 
 {
-	List entitiesToAttack;
+	public List entitiesToAttack;
 	@Override
     public boolean isEntityApplicable(Entity par1Entity)
     {

@@ -79,7 +79,13 @@ public class ItemBlade extends Item{
 	public boolean hitEntity(ItemStack itemStack, EntityLiving target, EntityLiving player)
 	{
 		itemStack.damageItem(1, player);
-		if(bladeType.equals(bladeType.SORD) && Math.random() < .25);//find some way to make player drop sord
+		if(bladeType.equals(bladeType.SORD) && Math.random() < .25)
+		{
+			player.entityDropItem(itemStack, 0.0F);
+			//find some way to make player drop sord
+			itemStack.stackSize--;
+		}
+		
 		return true;
 	}
 	
