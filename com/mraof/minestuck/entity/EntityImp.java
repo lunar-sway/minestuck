@@ -26,7 +26,7 @@ public class EntityImp extends EntityMob implements IMob{
 	@Override
 	public void onLivingUpdate() 
 	{
-		if(this.rand.nextDouble() < .0005)
+		if(this.rand.nextDouble() < .0001)
 		{
 			this.motionX += rand.nextInt(33) - 16;
 			this.motionZ += rand.nextInt(33) - 16;

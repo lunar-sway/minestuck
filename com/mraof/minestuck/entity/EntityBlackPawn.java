@@ -25,13 +25,21 @@ public class EntityBlackPawn extends EntityPawn
 	public EntityBlackPawn(World world, int type) 
 	{
 		super(world, type);
+		texture = "/mods/Minestuck/textures/mobs/Dersite.png";
 	}
 	@Override
 	public void setEnemies() 
 	{
 		enemyClasses.add(EntityWhitePawn.class);
+		enemyClasses.add(EntityWhiteBishop.class);
 		enemyClasses.add(EntitySlime.class);
 		super.setEnemies();
+	}
+	@Override
+	public void setAllies() 
+	{
+		allyClasses.add(EntityBlackPawn.class);
+		allyClasses.add(EntityBlackBishop.class);
 	}
 
 }

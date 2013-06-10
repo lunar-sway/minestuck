@@ -3,6 +3,9 @@ package com.mraof.minestuck.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mraof.minestuck.entity.ai.EntityAIAttackByDistance;
+import com.mraof.minestuck.entity.ai.EntityAINearestAttackableTargetWithHeight;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
@@ -17,42 +20,28 @@ import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityLargeFireball;
+import net.minecraft.entity.projectile.EntitySmallFireball;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
-public class EntityBishop extends EntityCreature implements IRangedAttackMob, IMob
+public abstract class EntityBishop extends EntityCarapacian implements IRangedAttackMob, IMob
 {
-	List<Class<? extends EntityLiving>> enemyClasses;
-	private EntityAIArrowAttack entityAIArrowAttack = new EntityAIArrowAttack(this, 0.25F, 30, 10.0F);
-	private EntityAIAttackOnCollide entityAIAttackOnCollide = new EntityAIAttackOnCollide(this, .4F, false);
-	private EntityListAttackFilter attackEntitySelector;
+	private EntityAIAttackByDistance entityAIAttackByDistance = new EntityAIAttackByDistance(this, 0.25F, 30, 64.0F);
+	int burnTime;
 
 	public EntityBishop(World par1World) 
 	{
 		super(par1World);
-		enemyClasses = new ArrayList<Class<? extends EntityLiving>>();
-		attackEntitySelector = new EntityListAttackFilter(enemyClasses);
-		//TODO make an Enum or something like that with all the enemies and friends of dersites and enemies and friends of prospitians
-	
-		this.setEntityHealth(this.getMaxHealth());
-		this.texture = "/mods/Minestuck/textures/mobs/Bishop.png";
-		this.setSize(1.9F, 3.9F);
-		this.moveSpeed = 0.6F;
-//		this.getNavigator().setCanSwim(true);
-		this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(5, new EntityAIWander(this, this.moveSpeed));
-		this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-		this.tasks.addTask(7, new EntityAILookIdle(this));
-		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
+		this.moveSpeed = 0.2F;
+		this.setSize(1.9F, 4.1F);
 		this.experienceValue = 3;
 	}
-	public void setEnemies()
-	{
-		attackEntitySelector = new EntityListAttackFilter(enemyClasses);
-	}
-
+	
 	@Override
 	public int getMaxHealth() 
 	{
@@ -60,14 +49,40 @@ public class EntityBishop extends EntityCreature implements IRangedAttackMob, IM
 	}
 
 	@Override
+	public void initCreature() 
+	{
+		this.setCurrentItemOrArmor(0, new ItemStack(Item.blazeRod));
+		this.targetTasks.addTask(4, entityAIAttackByDistance);
+	}
+	
+	@Override
 	public void attackEntityWithRangedAttack(EntityLiving entityliving, float f) 
 	{
+
+        double distanceX = entityliving.posX - this.posX;
+        double distanceY = entityliving.boundingBox.minY + (double)(entityliving.height / 2.0F) - (this.posY + (double)(this.height / 2.0F));
+        double distanceZ = entityliving.posZ - this.posZ;
 		
+//        float distance = entityliving.getDistanceToEntity(this);
+//        System.out.println("attacking");
+//        this.motionY = 20;
+//
+//        EntitySmallFireball entitysmallfireball = new EntitySmallFireball(this.worldObj, this, distanceX + this.rand.nextGaussian() * (double)distance, distanceY, distanceZ + this.rand.nextGaussian() * (double)distance);
+//        entitysmallfireball.posY = this.posY + (double)(this.height) + 0.5D;
+//        this.worldObj.spawnEntityInWorld(entitysmallfireball);
+        EntityLargeFireball entitylargefireball = new EntityLargeFireball(this.worldObj, this, distanceX, distanceY, distanceZ);
+        entitylargefireball.field_92057_e = 1;
+        double d8 = (double)this.width;
+        Vec3 vec3 = this.getLook(1.0F);
+        entitylargefireball.posX = (this.boundingBox.minX + this.boundingBox.maxX) / 2.0F  + vec3.xCoord * d8;
+        entitylargefireball.posY = this.posY + (double)(this.height / 2.0F);
+        entitylargefireball.posZ = (this.boundingBox.minZ + this.boundingBox.maxZ) / 2.0F + vec3.zCoord * d8;
+        this.worldObj.spawnEntityInWorld(entitylargefireball);
 	}
 	public int getAttackStrength(Entity par1Entity)
 	{
 		ItemStack var2 = this.getHeldItem();
-		int var3 = 2;
+		int var3 = 0;
 		
 		if (var2 != null)
 			var3 += var2.getDamageVsEntity(this);
@@ -75,34 +90,59 @@ public class EntityBishop extends EntityCreature implements IRangedAttackMob, IM
 		return var3;
 	}
 	
-	public boolean attackEntityAsMob(Entity par1Entity)
-	{
-		int damage = this.getAttackStrength(par1Entity);
-		return par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this), damage);
-	}
 	/**
 	 * Basic mob attack. Default to touch of death in EntityCreature. Overridden by each mob to define their attack.
 	 */
 	protected void attackEntity(Entity par1Entity, float par2)
 	{
+
+		System.out.println(this.getAttackTarget().toString());
 		if (this.attackTime <= 0 && par2 < 2.0F && par1Entity.boundingBox.maxY > this.boundingBox.minY && par1Entity.boundingBox.minY < this.boundingBox.maxY)
 		{
 			this.attackTime = 20;
 			this.attackEntityAsMob(par1Entity);
-			System.out.println(this.getAttackTarget());
+		}
+	}
+
+	public boolean attackEntityAsMob(Entity par1Entity)
+	{
+		int damage = this.getAttackStrength(par1Entity);
+		int knockback = 6;
+		par1Entity.addVelocity((double)(-MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F) * (float)knockback * 0.5F), 0.1D, (double)(MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F) * (float)knockback * 0.5F));
+		return par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this), damage);
+	}
+	protected void setCombatTask() 
+	{
+		if(entityAIAttackByDistance == null)
+			entityAIAttackByDistance = new EntityAIAttackByDistance(this, 0.25F, 30, 64.0F);
+		this.tasks.removeTask(this.entityAIAttackByDistance);
+		this.tasks.addTask(4, this.entityAIAttackByDistance);
+	}
+	public void setCurrentItemOrArmor(int slot, ItemStack par2ItemStack)
+	{
+		super.setCurrentItemOrArmor(slot, par2ItemStack);
+
+		if (!this.worldObj.isRemote && slot == 0)
+		{
+			this.setCombatTask();
 		}
 	}
 	@Override
-	public void initCreature() 
+	public boolean attackEntityFrom(DamageSource par1DamageSource, int par2) 
 	{
-		attackEntitySelector = new EntityListAttackFilter(enemyClasses);
-		this.addRandomArmor();
-		this.func_82162_bC();
-		
-		this.targetTasks.addTask(4, entityAIArrowAttack);
-		this.tasks.addTask(5, this.entityAIAttackOnCollide);
-		this.setCurrentItemOrArmor(0, new ItemStack(Item.blazeRod));
-		this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityLiving.class, 32.0F, 0, true, false, attackEntitySelector));
+		if(par1DamageSource.isFireDamage())
+		{
+			burnTime += par2;
+			if(burnTime <= 3)
+				return false;
+		}
+		return super.attackEntityFrom(par1DamageSource, par2);
 	}
-
+	@Override
+	EntityAINearestAttackableTargetWithHeight entityAINearestAttackableTargetWithHeight() 
+	{
+		EntityAINearestAttackableTargetWithHeight ai = new EntityAINearestAttackableTargetWithHeight(this, EntityLiving.class, 256.0F, 0, true, false, attackEntitySelector);
+		ai.setTargetHeightDistance(64);
+		return ai;
+	}
 }

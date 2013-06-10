@@ -28,8 +28,8 @@ public class ModelBishop extends ModelBase
     	 * x is width, y is height (lower numbers are higher), z is length
     	 */
     	float offsetY = -46;
-        this.textureWidth = 256;
-        this.textureHeight = 256;
+        this.textureWidth = 128;
+        this.textureHeight = 128;
         hatKnob = new ModelRenderer(this, 0, 0);
         hatKnob.addBox(-2F, -34F, -2F, 4, 4, 4);
         hatKnob.setRotationPoint(0F, 33F + offsetY, -4F);
