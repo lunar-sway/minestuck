@@ -16,20 +16,20 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
-public abstract class EntityCarapacian extends EntityCreature 
+public abstract class EntityCarapacian extends EntityCreature
 {
 	protected List<Class<? extends EntityLiving>> enemyClasses;
 	protected List<Class<? extends EntityLiving>> allyClasses;
 	protected EntityListAttackFilter attackEntitySelector;
-	
-	public EntityCarapacian(World par1World) 
+
+	public EntityCarapacian(World par1World)
 	{
 		super(par1World);
 		enemyClasses = new ArrayList<Class<? extends EntityLiving>>();
 		allyClasses = new ArrayList<Class<? extends EntityLiving>>();
 		setEnemies();
 		setAllies();
-		
+
 		//TODO make an Enum or something like that with all the enemies and friends of dersites and enemies and friends of prospitians
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
@@ -45,20 +45,46 @@ public abstract class EntityCarapacian extends EntityCreature
 	}
 
 	protected abstract void setCombatTask();
-	
+
 	public void setEnemies()
 	{
 		attackEntitySelector = new EntityListAttackFilter(enemyClasses);
 	}
+	public void setEnemies(EnumEntityKingdom side)
+	{
+		switch(side)
+		{
+		case PROSPITIAN:
+			enemyClasses.add(EntityBlackPawn.class);
+			enemyClasses.add(EntityBlackBishop.class);
+			break;
+		case DERSITE:
+			enemyClasses.add(EntityWhitePawn.class);
+			enemyClasses.add(EntityWhiteBishop.class);
+		}
+	}
 	public void setAllies() {}
+	public void setAllies(EnumEntityKingdom side)
+	{
+		switch(side)
+		{
+		case PROSPITIAN:
+			allyClasses.add(EntityWhitePawn.class);
+			allyClasses.add(EntityWhiteBishop.class);
+			break;
+		case DERSITE:
+			allyClasses.add(EntityBlackPawn.class);
+			allyClasses.add(EntityBlackBishop.class);
+		}
+	}
 	@Override
-	public boolean canAttackClass(Class par1Class) 
+	public boolean canAttackClass(Class par1Class)
 	{
 		return !this.allyClasses.contains(par1Class);
 	}
-	
+
 	@Override
-	protected boolean isAIEnabled() 
+	protected boolean isAIEnabled()
 	{
 		return true;
 	}

@@ -15,16 +15,14 @@ public class EntityWhiteBishop extends EntityBishop
 	@Override
 	public void setEnemies() 
 	{
-		enemyClasses.add(EntityBlackPawn.class);
-		enemyClasses.add(EntityBlackBishop.class);
+		setEnemies(EnumEntityKingdom.PROSPITIAN);
 		enemyClasses.add(EntityGhast.class);
 		super.setEnemies();
 	}
 	@Override
 	public void setAllies() 
 	{
-		allyClasses.add(EntityWhitePawn.class);
-		allyClasses.add(EntityWhiteBishop.class);
+		setAllies(EnumEntityKingdom.PROSPITIAN);
 	}
 
 }

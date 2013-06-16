@@ -9,9 +9,11 @@ import java.util.Map;
 import java.util.Random;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.entity.EntityBlackBishop;
 import com.mraof.minestuck.entity.EntityBlackPawn;
 import com.mraof.minestuck.entity.EntityImp;
 import com.mraof.minestuck.entity.EntitySalamander;
+import com.mraof.minestuck.entity.EntityWhiteBishop;
 import com.mraof.minestuck.entity.EntityWhitePawn;
 import com.mraof.minestuck.world.gen.structure.MapGenCastle;
 
@@ -73,7 +75,9 @@ public class ChunkProviderSkaia implements IChunkProvider
         this.spawnableCreatureList.add(new SpawnListEntry(EntitySalamander.class, 2, 2, 2));
         this.spawnableMonsterList.add(new SpawnListEntry(EntityImp.class, 2, 2, 4));
         this.spawnableBlackList.add(new SpawnListEntry(EntityBlackPawn.class, 2, 1, 10));
+        this.spawnableBlackList.add(new SpawnListEntry(EntityBlackBishop.class, 1, 1, 1));
         this.spawnableWhiteList.add(new SpawnListEntry(EntityWhitePawn.class, 2, 1, 10));
+        this.spawnableWhiteList.add(new SpawnListEntry(EntityWhiteBishop.class, 1, 1, 1));
         this.noiseGen1 = new NoiseGeneratorOctaves(this.random, 7);
         this.noiseGen2 = new NoiseGeneratorOctaves(this.random, 3);
         this.noiseGen3 = new NoiseGeneratorOctaves(this.random, 8);

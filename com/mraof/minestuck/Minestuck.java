@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import com.mraof.minestuck.block.BlockChessTile;
 import com.mraof.minestuck.block.BlockGatePortal;
 import com.mraof.minestuck.client.ClientProxy;
+import com.mraof.minestuck.client.gui.GuiGristCache;
 import com.mraof.minestuck.entity.EntityBishop;
 import com.mraof.minestuck.entity.EntityBlackBishop;
 import com.mraof.minestuck.entity.EntityImp;
@@ -15,6 +16,7 @@ import com.mraof.minestuck.entity.EntityNakagator;
 import com.mraof.minestuck.entity.EntitySalamander;
 import com.mraof.minestuck.entity.EntityWhiteBishop;
 import com.mraof.minestuck.entity.EntityWhitePawn;
+import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.item.EnumBladeType;
 import com.mraof.minestuck.item.EnumCaneType;
 import com.mraof.minestuck.item.EnumClubType;
@@ -28,11 +30,13 @@ import com.mraof.minestuck.item.ItemClub;
 import com.mraof.minestuck.item.ItemHammer;
 import com.mraof.minestuck.item.ItemSickle;
 import com.mraof.minestuck.item.ItemSpork;
+import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
 import com.mraof.minestuck.world.WorldProviderSkaia;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityEggInfo;
@@ -60,9 +64,9 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@Mod(modid="Minestuck", name="Minestuck", version="0.0.3")
-@NetworkMod(clientSideRequired=true, serverSideRequired=false)
-public class Minestuck 
+@Mod(modid = "Minestuck", name = "Minestuck", version = "0.0.3")
+@NetworkMod(clientSideRequired = true, serverSideRequired = false, packetHandler = MinestuckPacketHandler.class, channels = {"Minestuck"})
+public class Minestuck
 {
 	//these ids are in case I need to raise or lower ids for whatever reason
 	public static int toolIdStart = 5001;
@@ -247,6 +251,7 @@ public class Minestuck
     	EntityRegistry.registerModEntity(EntityWhitePawn.class, "prospitianPawn", 4, this, 80, 3, true);
     	EntityRegistry.registerModEntity(EntityBlackBishop.class, "dersiteBishop", 5, this, 80, 3, true);
     	EntityRegistry.registerModEntity(EntityWhiteBishop.class, "prospitianBishop", 6, this, 80, 3, true);
+    	EntityRegistry.registerModEntity(EntityGrist.class, "grist", 7, this, 80, 3, true);
 //    	//Identify mobs with their eggs
 //    	EntityList.IDtoClassMapping.put(eggIdStart, EntitySalamander.class);
 //    	EntityList.IDtoClassMapping.put(eggIdStart + 1, EntityNakagator.class);
@@ -274,6 +279,7 @@ public class Minestuck
     @PostInit
     public void postInit(FMLPostInitializationEvent event) 
     {
-            FMLLog.info("The updateFrequency of EntityBlackPawn is %s", EntityRegistry.instance().lookupModSpawn(EntityBlackPawn.class, true).getUpdateFrequency());
+//    	FMLLog.info("The updateFrequency of EntityBlackPawn is %s", EntityRegistry.instance().lookupModSpawn(EntityBlackPawn.class, true).getUpdateFrequency());
+    	MinecraftForge.EVENT_BUS.register(new GuiGristCache(Minecraft.getMinecraft()));
     }
 }

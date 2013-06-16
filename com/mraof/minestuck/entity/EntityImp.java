@@ -1,5 +1,7 @@
 package com.mraof.minestuck.entity;
 
+import com.mraof.minestuck.entity.item.EntityGrist;
+
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.monster.EntityMob;
@@ -32,6 +34,18 @@ public class EntityImp extends EntityMob implements IMob{
 			this.motionZ += rand.nextInt(33) - 16;
 		}
 		super.onLivingUpdate();
+	}
+	@Override
+	protected void onDeathUpdate() 
+	{
+		super.onDeathUpdate();
+		if(this.deathTime == 20)
+		{
+			EntityGrist buildGrist = new EntityGrist(worldObj, this.posX + this.rand.nextDouble() * 3, this.posY, this.posZ + this.rand.nextDouble() * 3, "Build", 4);
+			EntityGrist shaleGrist = new EntityGrist(worldObj, this.posX + this.rand.nextDouble() * 3, this.posY, this.posZ + this.rand.nextDouble() * 3, "Shale", 2);
+			this.worldObj.spawnEntityInWorld(buildGrist);
+			this.worldObj.spawnEntityInWorld(shaleGrist);
+		}
 	}
 
 }

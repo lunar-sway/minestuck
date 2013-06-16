@@ -1,20 +1,16 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.CommonProxy;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumToolMaterial;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemBlade extends Item{
 	private int weaponDamage;
@@ -76,13 +72,13 @@ public class ItemBlade extends Item{
 		return this.bladeType.getEnchantability();
 	}
 	 
-	public boolean hitEntity(ItemStack itemStack, EntityLiving target, EntityLiving player)
+	public boolean hitEntity(ItemStack itemStack, EntityLiving target, EntityLiving attacker)
 	{
-		itemStack.damageItem(1, player);
+		itemStack.damageItem(1, attacker);
 		if(bladeType.equals(bladeType.SORD) && Math.random() < .25)
 		{
-			player.entityDropItem(itemStack, 0.0F);
-			//find some way to make player drop sord
+			EntityItem sord = new EntityItem(attacker.worldObj, attacker.posX, attacker.posY, attacker.posZ, itemStack);
+			attacker.worldObj.spawnEntityInWorld(sord);
 			itemStack.stackSize--;
 		}
 		

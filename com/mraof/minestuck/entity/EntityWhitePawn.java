@@ -10,30 +10,27 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.world.World;
 
-public class EntityWhitePawn extends EntityPawn 
+public class EntityWhitePawn extends EntityPawn
 {
-	public EntityWhitePawn(World world) 
+	public EntityWhitePawn(World world)
 	{
 		super(world);
 		texture = "/mods/Minestuck/textures/mobs/Prospitian.png";
 	}
-	public EntityWhitePawn(World world, int type) 
+	public EntityWhitePawn(World world, int type)
 	{
 		super(world, type);
 		texture = "/mods/Minestuck/textures/mobs/Prospitian.png";
 	}
 	@Override
-	public void setEnemies() 
+	public void setEnemies()
 	{
-		enemyClasses.add(EntityBlackPawn.class);
-		enemyClasses.add(EntityBlackBishop.class);
-		enemyClasses.add(EntityZombie.class);
+		setEnemies(EnumEntityKingdom.PROSPITIAN);
 		super.setEnemies();
 	}
 	@Override
-	public void setAllies() 
+	public void setAllies()
 	{
-		allyClasses.add(EntityWhitePawn.class);
-		allyClasses.add(EntityWhiteBishop.class);
+		setAllies(EnumEntityKingdom.PROSPITIAN);
 	}
 }
