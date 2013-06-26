@@ -6,6 +6,7 @@ import net.minecraftforge.client.MinecraftForgeClient;
 
 import com.mraof.minestuck.CommonProxy;
 import com.mraof.minestuck.client.renderer.entity.RenderBishop;
+import com.mraof.minestuck.client.renderer.entity.RenderGrist;
 import com.mraof.minestuck.client.renderer.entity.RenderImp;
 import com.mraof.minestuck.client.renderer.entity.RenderNakagator;
 import com.mraof.minestuck.client.renderer.entity.RenderSalamander;
@@ -15,6 +16,7 @@ import com.mraof.minestuck.entity.EntityImp;
 import com.mraof.minestuck.entity.EntityNakagator;
 import com.mraof.minestuck.entity.EntityPawn;
 import com.mraof.minestuck.entity.EntitySalamander;
+import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.model.ModelBishop;
 import com.mraof.minestuck.model.ModelImp;
 import com.mraof.minestuck.model.ModelNakagator;
@@ -38,6 +40,7 @@ public class ClientProxy extends CommonProxy
             RenderingRegistry.registerEntityRenderingHandler(EntityImp.class, new RenderImp(new ModelImp(), 0.5F));
             RenderingRegistry.registerEntityRenderingHandler(EntityPawn.class, new RenderBiped(new ModelBiped(), 0.5F));
             RenderingRegistry.registerEntityRenderingHandler(EntityBishop.class, new RenderBishop(new ModelBishop(), 0.9F));
+            RenderingRegistry.registerEntityRenderingHandler(EntityGrist.class, new RenderGrist());
             ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGatePortal.class, new RenderGatePortal());
     }
 }

@@ -8,6 +8,7 @@ import com.mraof.minestuck.block.BlockChessTile;
 import com.mraof.minestuck.block.BlockGatePortal;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.GuiGristCache;
+import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
 import com.mraof.minestuck.entity.EntityBishop;
 import com.mraof.minestuck.entity.EntityBlackBishop;
 import com.mraof.minestuck.entity.EntityImp;
@@ -30,6 +31,7 @@ import com.mraof.minestuck.item.ItemClub;
 import com.mraof.minestuck.item.ItemHammer;
 import com.mraof.minestuck.item.ItemSickle;
 import com.mraof.minestuck.item.ItemSpork;
+import com.mraof.minestuck.network.MinestuckConnectHandler;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
 import com.mraof.minestuck.world.WorldProviderSkaia;
@@ -37,6 +39,7 @@ import com.mraof.minestuck.world.WorldProviderSkaia;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityEggInfo;
@@ -47,6 +50,8 @@ import net.minecraft.stats.Achievement;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
+import cpw.mods.fml.client.registry.KeyBindingRegistry;
+import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
@@ -58,6 +63,8 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.EntityRegistry.EntityRegistration;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
@@ -108,178 +115,178 @@ public class Minestuck
 	public static Item crockerSpork;
 	public static Item skaiaFork;
 
-    public static Achievement getHammer;
+	public static Achievement getHammer;
 	
 	//Blocks
 	public static Block chessTile;
 	public static Block gatePortal;
+	public static KeyBinding[] bindings;
+	public static boolean[] keyRepeatings;
+	public static MinestuckKeyHandler keyHandler;
 	// The instance of your mod that Forge uses.
 	@Instance("Minestuck")
-    public static Minestuck instance;
-    
-    
-    // Says where the client and server 'proxy' code is loaded.
-    @SidedProxy(clientSide="com.mraof.minestuck.client.ClientProxy", serverSide="com.mraof.minestuck.CommonProxy")
-    
-    //The proxy to be used by client and server
-    public static CommonProxy proxy;
-    
-    @PreInit
-    public void preInit(FMLPreInitializationEvent event) 
-    {
-    	Configuration config = new Configuration(event.getSuggestedConfigurationFile());
-    	config.load();
-    	blockIdStart = config.get("Block Ids", "blockIdStart", 500).getInt();
-    	toolIdStart = config.get("Item Ids", "toolIdStart", 5001).getInt();
-    	eggIdStart = config.get("Item Ids", "eggIdStart", 5050).getInt();
-    	skaiaProviderTypeId = config.get("Provider Type Ids", "skaiaProviderTypeId", 2).getInt();
-    	skaiaDimensionId = config.get("Dimension Ids", "skaiaDimensionId", 2).getInt();
-    	config.save();
-    }
-    
-    @Init
-    public void load(FMLInitializationEvent event) 
-    {
-    	//blocks
-    	chessTile = new BlockChessTile(blockIdStart);
-    	gatePortal = new BlockGatePortal(blockIdStart + 1, Material.portal);
-    	//hammers
-    	clawHammer = new ItemHammer(toolIdStart, EnumHammerType.CLAW);
-    	sledgeHammer = new ItemHammer(toolIdStart + 1, EnumHammerType.SLEDGE);
-    	pogoHammer = new ItemHammer(toolIdStart + 2, EnumHammerType.POGO);
-    	telescopicSassacrusher = new ItemHammer(toolIdStart + 3, EnumHammerType.TELESCOPIC);
-    	fearNoAnvil = new ItemHammer(toolIdStart + 4, EnumHammerType.FEARNOANVIL);
-    	zillyhooHammer = new ItemHammer(toolIdStart + 5, EnumHammerType.ZILLYHOO);
-    	popamaticVrillyhoo = new ItemHammer(toolIdStart + 6, EnumHammerType.POPAMATIC);
-    	scarletZillyhoo = new ItemHammer(toolIdStart + 7, EnumHammerType.SCARLET);
-    	//blades
-    	sord = new ItemBlade(toolIdStart + 8, EnumBladeType.SORD);
-    	ninjaSword = new ItemBlade(toolIdStart + 9, EnumBladeType.NINJA);
-    	katana = new ItemBlade(toolIdStart + 10, EnumBladeType.KATANA);
-    	caledscratch = new ItemBlade(toolIdStart + 11, EnumBladeType.CALEDSCRATCH);
-    	royalDeringer = new ItemBlade(toolIdStart + 12, EnumBladeType.DERINGER);
-    	regisword = new ItemBlade(toolIdStart + 13, EnumBladeType.REGISWORD);
-    	scarletRibbitar = new ItemBlade(toolIdStart + 14, EnumBladeType.SCARLET);
-    	doggMachete = new ItemBlade(toolIdStart + 15, EnumBladeType.DOGG);
-    	//sickles
-    	sickle = new ItemSickle(toolIdStart + 16, EnumSickleType.SICKLE);
-    	homesSmellYaLater = new ItemSickle(toolIdStart + 17, EnumSickleType.HOMES);
-    	regiSickle = new ItemSickle(toolIdStart + 18, EnumSickleType.REGISICKLE);
-    	clawSickle = new ItemSickle(toolIdStart + 19, EnumSickleType.CLAW);
-    	//clubs
-    	deuceClub = new ItemClub(toolIdStart + 20, EnumClubType.DEUCE);
-    	//canes
-    	cane = new ItemCane(toolIdStart + 21, EnumCaneType.CANE);
-    	spearCane = new ItemCane(toolIdStart + 22, EnumCaneType.SPEAR);
-    	dragonCane = new ItemCane(toolIdStart + 23, EnumCaneType.DRAGON);
-    	//Spoons/forks
-    	crockerSpork = new ItemSpork(toolIdStart + 24, EnumSporkType.CROCKER);
-    	skaiaFork = new ItemSpork(toolIdStart + 25, EnumSporkType.SKAIA);
-    	//server doesn't actually register any renderers for obvious reasons
-    	proxy.registerRenderers();
-    	//the client does, however
-    	ClientProxy.registerRenderers();
-    	//register blocks
-    	GameRegistry.registerBlock(chessTile, ItemChessTile.class, "chessTile");
-    	GameRegistry.registerBlock(gatePortal, "gatePortal");
-    	//metadata nonsense to conserve ids
-    	ItemStack blackChessTileStack = new ItemStack(chessTile, 1, 0);
-    	ItemStack whiteChessTileStack = new ItemStack(chessTile, 1, 1);
-    	ItemStack darkGreyChessTileStack = new ItemStack(chessTile, 1, 2);
-    	ItemStack lightGreyChessTileStack = new ItemStack(chessTile, 1, 3);
-    	//achievements
-    	getHammer = (new Achievement(413, "getHammer", 12, 15, Minestuck.clawHammer, (Achievement)null)).setIndependent().registerAchievement();
-    	//Give Items names to be displayed ingame
-    	LanguageRegistry.addName(clawHammer, "Claw Hammer");
-    	LanguageRegistry.addName(sledgeHammer, "Sledgehammer");
-    	LanguageRegistry.addName(pogoHammer, "Pogo Hammer");
-    	LanguageRegistry.addName(telescopicSassacrusher, "Telescopic Sassacrusher");
-    	LanguageRegistry.addName(fearNoAnvil, "Fear No Anvil");
-    	LanguageRegistry.addName(zillyhooHammer, "The Warhammer of Zillyhoo");
-    	LanguageRegistry.addName(popamaticVrillyhoo, "Pop-a-matic Vrillyhoo Hammer");
-    	LanguageRegistry.addName(scarletZillyhoo, "Scarlet Zillyhoo");
-    	LanguageRegistry.addName(sord, "Sord.....");
-    	LanguageRegistry.addName(ninjaSword, "Katana");
-    	LanguageRegistry.addName(katana, "Unbreakable Katana");
-    	LanguageRegistry.addName(caledscratch, "Caledscratch");
-    	LanguageRegistry.addName(royalDeringer, "Royal Deringer");
-    	LanguageRegistry.addName(regisword, "Regisword");
-    	LanguageRegistry.addName(scarletRibbitar, "Scarlet Ribbitar");
-    	LanguageRegistry.addName(doggMachete, "Snoop Dogg Snow Cone Machete");
-    	LanguageRegistry.addName(sickle, "Sickle");
-    	LanguageRegistry.addName(homesSmellYaLater, "Homes Smell Ya Later");
-    	LanguageRegistry.addName(regiSickle, "Regisickle");
-    	LanguageRegistry.addName(clawSickle, "Clawsickle");
-    	LanguageRegistry.addName(deuceClub, "Deuce Club");
-    	LanguageRegistry.addName(cane, "Cane");
-    	LanguageRegistry.addName(spearCane, "Spear Cane");
-    	LanguageRegistry.addName(dragonCane, "Dragon Cane");
-    	LanguageRegistry.addName(crockerSpork, "Junior Battlemaster's Bowlbuster Stirring/Poking Solution 50000");
-    	LanguageRegistry.addName(skaiaFork, "Skaia War Fork");
-    	//Same for blocks
-    	LanguageRegistry.addName(blackChessTileStack, "Black Chess Tile");
-    	LanguageRegistry.addName(whiteChessTileStack, "White Chess Tile");
-    	LanguageRegistry.addName(lightGreyChessTileStack, "Light Grey Chess Tile");
-    	LanguageRegistry.addName(darkGreyChessTileStack, "Dark Grey Chess Tile");
-    	LanguageRegistry.addName(gatePortal, "Gate");
-    	//set harvest information for blocks
-    	MinecraftForge.setBlockHarvestLevel(chessTile, "shovel", 0);
+	public static Minestuck instance;
+	
+	// Says where the client and server 'proxy' code is loaded.
+	@SidedProxy(clientSide="com.mraof.minestuck.client.ClientProxy", serverSide="com.mraof.minestuck.CommonProxy")
+	
+	//The proxy to be used by client and server
+	public static CommonProxy proxy;
+	
+	@PreInit
+	public void preInit(FMLPreInitializationEvent event) 
+	{
+		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
+		config.load();
+		blockIdStart = config.get("Block Ids", "blockIdStart", 500).getInt();
+		toolIdStart = config.get("Item Ids", "toolIdStart", 5001).getInt();
+		eggIdStart = config.get("Item Ids", "eggIdStart", 5050).getInt();
+		skaiaProviderTypeId = config.get("Provider Type Ids", "skaiaProviderTypeId", 2).getInt();
+		skaiaDimensionId = config.get("Dimension Ids", "skaiaDimensionId", 2).getInt();
+		config.save();
+	}
+	
+	@Init
+	public void load(FMLInitializationEvent event) 
+	{
+		//blocks
+		chessTile = new BlockChessTile(blockIdStart);
+		gatePortal = new BlockGatePortal(blockIdStart + 1, Material.portal);
+		//hammers
+		clawHammer = new ItemHammer(toolIdStart, EnumHammerType.CLAW);
+		sledgeHammer = new ItemHammer(toolIdStart + 1, EnumHammerType.SLEDGE);
+		pogoHammer = new ItemHammer(toolIdStart + 2, EnumHammerType.POGO);
+		telescopicSassacrusher = new ItemHammer(toolIdStart + 3, EnumHammerType.TELESCOPIC);
+		fearNoAnvil = new ItemHammer(toolIdStart + 4, EnumHammerType.FEARNOANVIL);
+		zillyhooHammer = new ItemHammer(toolIdStart + 5, EnumHammerType.ZILLYHOO);
+		popamaticVrillyhoo = new ItemHammer(toolIdStart + 6, EnumHammerType.POPAMATIC);
+		scarletZillyhoo = new ItemHammer(toolIdStart + 7, EnumHammerType.SCARLET);
+		//blades
+		sord = new ItemBlade(toolIdStart + 8, EnumBladeType.SORD);
+		ninjaSword = new ItemBlade(toolIdStart + 9, EnumBladeType.NINJA);
+		katana = new ItemBlade(toolIdStart + 10, EnumBladeType.KATANA);
+		caledscratch = new ItemBlade(toolIdStart + 11, EnumBladeType.CALEDSCRATCH);
+		royalDeringer = new ItemBlade(toolIdStart + 12, EnumBladeType.DERINGER);
+		regisword = new ItemBlade(toolIdStart + 13, EnumBladeType.REGISWORD);
+		scarletRibbitar = new ItemBlade(toolIdStart + 14, EnumBladeType.SCARLET);
+		doggMachete = new ItemBlade(toolIdStart + 15, EnumBladeType.DOGG);
+		//sickles
+		sickle = new ItemSickle(toolIdStart + 16, EnumSickleType.SICKLE);
+		homesSmellYaLater = new ItemSickle(toolIdStart + 17, EnumSickleType.HOMES);
+		regiSickle = new ItemSickle(toolIdStart + 18, EnumSickleType.REGISICKLE);
+		clawSickle = new ItemSickle(toolIdStart + 19, EnumSickleType.CLAW);
+		//clubs
+		deuceClub = new ItemClub(toolIdStart + 20, EnumClubType.DEUCE);
+		//canes
+		cane = new ItemCane(toolIdStart + 21, EnumCaneType.CANE);
+		spearCane = new ItemCane(toolIdStart + 22, EnumCaneType.SPEAR);
+		dragonCane = new ItemCane(toolIdStart + 23, EnumCaneType.DRAGON);
+		//Spoons/forks
+		crockerSpork = new ItemSpork(toolIdStart + 24, EnumSporkType.CROCKER);
+		skaiaFork = new ItemSpork(toolIdStart + 25, EnumSporkType.SKAIA);
+		
+		//achievements
+		getHammer = (new Achievement(413, "getHammer", 12, 15, Minestuck.clawHammer, (Achievement)null)).setIndependent().registerAchievement();
+		bindings = new KeyBinding[1];
+		keyRepeatings = new boolean[bindings.length];
+		bindings[0] = new KeyBinding("key.gristCache", 34);
+		keyRepeatings[0] = false;
+		keyHandler = new MinestuckKeyHandler(bindings, keyRepeatings);
+		//registry
+		
+		//server doesn't actually register any renderers for obvious reasons
+		proxy.registerRenderers();
+		//the client does, however
+		ClientProxy.registerRenderers();
+		//register blocks
+		GameRegistry.registerBlock(chessTile, ItemChessTile.class, "chessTile");
+		GameRegistry.registerBlock(gatePortal, "gatePortal");
+		//metadata nonsense to conserve ids
+		ItemStack blackChessTileStack = new ItemStack(chessTile, 1, 0);
+		ItemStack whiteChessTileStack = new ItemStack(chessTile, 1, 1);
+		ItemStack darkGreyChessTileStack = new ItemStack(chessTile, 1, 2);
+		ItemStack lightGreyChessTileStack = new ItemStack(chessTile, 1, 3);
+		//Give Items names to be displayed ingame
+		
+		LanguageRegistry.addName(clawHammer, "Claw Hammer");
+		LanguageRegistry.addName(sledgeHammer, "Sledgehammer");
+		LanguageRegistry.addName(pogoHammer, "Pogo Hammer");
+		LanguageRegistry.addName(telescopicSassacrusher, "Telescopic Sassacrusher");
+		LanguageRegistry.addName(fearNoAnvil, "Fear No Anvil");
+		LanguageRegistry.addName(zillyhooHammer, "The Warhammer of Zillyhoo");
+		LanguageRegistry.addName(popamaticVrillyhoo, "Pop-a-matic Vrillyhoo Hammer");
+		LanguageRegistry.addName(scarletZillyhoo, "Scarlet Zillyhoo");
+		LanguageRegistry.addName(sord, "Sord.....");
+		LanguageRegistry.addName(ninjaSword, "Katana");
+		LanguageRegistry.addName(katana, "Unbreakable Katana");
+		LanguageRegistry.addName(caledscratch, "Caledscratch");
+		LanguageRegistry.addName(royalDeringer, "Royal Deringer");
+		LanguageRegistry.addName(regisword, "Regisword");
+		LanguageRegistry.addName(scarletRibbitar, "Scarlet Ribbitar");
+		LanguageRegistry.addName(doggMachete, "Snoop Dogg Snow Cone Machete");
+		LanguageRegistry.addName(sickle, "Sickle");
+		LanguageRegistry.addName(homesSmellYaLater, "Homes Smell Ya Later");
+		LanguageRegistry.addName(regiSickle, "Regisickle");
+		LanguageRegistry.addName(clawSickle, "Clawsickle");
+		LanguageRegistry.addName(deuceClub, "Deuce Club");
+		LanguageRegistry.addName(cane, "Cane");
+		LanguageRegistry.addName(spearCane, "Spear Cane");
+		LanguageRegistry.addName(dragonCane, "Dragon Cane");
+		LanguageRegistry.addName(crockerSpork, "Junior Battlemaster's Bowlbuster Stirring/Poking Solution 50000");
+		LanguageRegistry.addName(skaiaFork, "Skaia War Fork");
+		//Same for blocks
+		LanguageRegistry.addName(blackChessTileStack, "Black Chess Tile");
+		LanguageRegistry.addName(whiteChessTileStack, "White Chess Tile");
+		LanguageRegistry.addName(lightGreyChessTileStack, "Light Grey Chess Tile");
+		LanguageRegistry.addName(darkGreyChessTileStack, "Dark Grey Chess Tile");
+		LanguageRegistry.addName(gatePortal, "Gate");
+		//set harvest information for blocks
+		MinecraftForge.setBlockHarvestLevel(chessTile, "shovel", 0);
 
-    	//give mobs names, I think
-    	LanguageRegistry.instance().addStringLocalization("entity.Salamander.name", "Salamander");
-    	LanguageRegistry.instance().addStringLocalization("entity.Imp.name", "Imp");
-    	LanguageRegistry.instance().addStringLocalization("entity.dersitePawn.name", "Dersite Pawn");
-    	LanguageRegistry.instance().addStringLocalization("entity.prospitianPawn.name", "Prospitian Pawn");
-    	LanguageRegistry.instance().addStringLocalization("entity.dersiteBishop.name", "Dersite Bishop");
-    	LanguageRegistry.instance().addStringLocalization("entity.prospitianBishop.name", "Prospitian Bishop");
+		//give mobs names, I think
+		LanguageRegistry.instance().addStringLocalization("entity.Salamander.name", "Salamander");
+		LanguageRegistry.instance().addStringLocalization("entity.Imp.name", "Imp");
+		LanguageRegistry.instance().addStringLocalization("entity.dersitePawn.name", "Dersite Pawn");
+		LanguageRegistry.instance().addStringLocalization("entity.prospitianPawn.name", "Prospitian Pawn");
+		LanguageRegistry.instance().addStringLocalization("entity.dersiteBishop.name", "Dersite Bishop");
+		LanguageRegistry.instance().addStringLocalization("entity.prospitianBishop.name", "Prospitian Bishop");
 
-    	LanguageRegistry.instance().addStringLocalization("achievement.getHammer", "Get Hammer");
-    	LanguageRegistry.instance().addStringLocalization("achievement.getHammer.desc", "Get the Claw Hammer");
-    	//register entities with ids
-    	EntityList.addMapping(EntitySalamander.class, "Salamander", eggIdStart, 0xffe62e, 0xfffb53);
-    	EntityList.addMapping(EntityNakagator.class, "Nakagator", eggIdStart + 1, 0xffe62e, 0xfffb53);
-    	EntityList.addMapping(EntityImp.class, "Imp", eggIdStart + 2, 0x000000, 0xffffff);
-    	EntityList.addMapping(EntityBlackPawn.class, "dersitePawn", eggIdStart + 3, 0x0f0f0f, 0xf0f0f0);
-    	EntityList.addMapping(EntityWhitePawn.class, "prospitianPawn", eggIdStart + 4, 0xf0f0f0, 0x0f0f0f);
-    	EntityList.addMapping(EntityBlackBishop.class, "dersiteBishop", eggIdStart + 5, 0x000000, 0xc121d9);
-    	EntityList.addMapping(EntityWhiteBishop.class, "prospitianBishop", eggIdStart + 6, 0xffffff, 0xfde500);
-    	//register entities with fml
-    	EntityRegistry.registerModEntity(EntitySalamander.class, "Salamander", 0, this, 80, 3, true);
-    	EntityRegistry.registerModEntity(EntityNakagator.class, "Nakagator", 1, this, 80, 3, true);
-    	EntityRegistry.registerModEntity(EntityImp.class, "Imp", 2, this, 80, 3, true);
-    	EntityRegistry.registerModEntity(EntityBlackPawn.class, "dersitePawn", 3, this, 80, 3, true);
-    	EntityRegistry.registerModEntity(EntityWhitePawn.class, "prospitianPawn", 4, this, 80, 3, true);
-    	EntityRegistry.registerModEntity(EntityBlackBishop.class, "dersiteBishop", 5, this, 80, 3, true);
-    	EntityRegistry.registerModEntity(EntityWhiteBishop.class, "prospitianBishop", 6, this, 80, 3, true);
-    	EntityRegistry.registerModEntity(EntityGrist.class, "grist", 7, this, 80, 3, true);
-//    	//Identify mobs with their eggs
-//    	EntityList.IDtoClassMapping.put(eggIdStart, EntitySalamander.class);
-//    	EntityList.IDtoClassMapping.put(eggIdStart + 1, EntityNakagator.class);
-//    	EntityList.IDtoClassMapping.put(eggIdStart + 2, EntityImp.class);
-//    	EntityList.IDtoClassMapping.put(eggIdStart + 3, EntityBlackPawn.class);
-//    	EntityList.IDtoClassMapping.put(eggIdStart + 4, EntityWhitePawn.class);
-//    	EntityList.IDtoClassMapping.put(eggIdStart + 5, EntityBlackBishop.class);
-//    	EntityList.IDtoClassMapping.put(eggIdStart + 6, EntityWhiteBishop.class);
-//    	//set egg information
-//    	EntityList.entityEggs.put(eggIdStart, new EntityEggInfo(eggIdStart, 0xffe62e, 0xfffb53 ));
-//    	EntityList.entityEggs.put(eggIdStart + 1, new EntityEggInfo(eggIdStart + 1, 0xff632e, 0xffbf35 ));
-//    	EntityList.entityEggs.put(eggIdStart + 2, new EntityEggInfo(eggIdStart + 2, 0x000000, 0xffffff ));
-//    	EntityList.entityEggs.put(eggIdStart + 3, new EntityEggInfo(eggIdStart + 3, 0x0f0f0f, 0xf0f0f0 ));
-//    	EntityList.entityEggs.put(eggIdStart + 4, new EntityEggInfo(eggIdStart + 4, 0xf0f0f0, 0x0f0f0f ));
-//    	EntityList.entityEggs.put(eggIdStart + 5, new EntityEggInfo(eggIdStart + 5, 0x000000, 0xc121d9 ));
-//    	EntityList.entityEggs.put(eggIdStart + 6, new EntityEggInfo(eggIdStart + 6, 0xffffff, 0xfde500 ));
-    	//register Tile Entities
-    	GameRegistry.registerTileEntity(TileEntityGatePortal.class, "gatePortal");
-    	//register world generators
-    	DimensionManager.registerProviderType(skaiaProviderTypeId, WorldProviderSkaia.class, true);
-    	DimensionManager.registerDimension(skaiaDimensionId, skaiaProviderTypeId);
-    	
-    }
-    
-    @PostInit
-    public void postInit(FMLPostInitializationEvent event) 
-    {
-//    	FMLLog.info("The updateFrequency of EntityBlackPawn is %s", EntityRegistry.instance().lookupModSpawn(EntityBlackPawn.class, true).getUpdateFrequency());
-    	MinecraftForge.EVENT_BUS.register(new GuiGristCache(Minecraft.getMinecraft()));
-    }
+		LanguageRegistry.instance().addStringLocalization("achievement.getHammer", "Get Hammer");
+		LanguageRegistry.instance().addStringLocalization("achievement.getHammer.desc", "Get the Claw Hammer");
+		
+		LanguageRegistry.instance().addStringLocalization("key.gristCache", "View Grist Cache");
+		//register entities with ids
+		EntityList.addMapping(EntitySalamander.class, "Salamander", eggIdStart, 0xffe62e, 0xfffb53);
+		EntityList.addMapping(EntityNakagator.class, "Nakagator", eggIdStart + 1, 0xffe62e, 0xfffb53);
+		EntityList.addMapping(EntityImp.class, "Imp", eggIdStart + 2, 0x000000, 0xffffff);
+		EntityList.addMapping(EntityBlackPawn.class, "dersitePawn", eggIdStart + 3, 0x0f0f0f, 0xf0f0f0);
+		EntityList.addMapping(EntityWhitePawn.class, "prospitianPawn", eggIdStart + 4, 0xf0f0f0, 0x0f0f0f);
+		EntityList.addMapping(EntityBlackBishop.class, "dersiteBishop", eggIdStart + 5, 0x000000, 0xc121d9);
+		EntityList.addMapping(EntityWhiteBishop.class, "prospitianBishop", eggIdStart + 6, 0xffffff, 0xfde500);
+		//register entities with fml
+		EntityRegistry.registerModEntity(EntitySalamander.class, "Salamander", 0, this, 80, 3, true);
+		EntityRegistry.registerModEntity(EntityNakagator.class, "Nakagator", 1, this, 80, 3, true);
+		EntityRegistry.registerModEntity(EntityImp.class, "Imp", 2, this, 80, 3, true);
+		EntityRegistry.registerModEntity(EntityBlackPawn.class, "dersitePawn", 3, this, 80, 3, true);
+		EntityRegistry.registerModEntity(EntityWhitePawn.class, "prospitianPawn", 4, this, 80, 3, true);
+		EntityRegistry.registerModEntity(EntityBlackBishop.class, "dersiteBishop", 5, this, 80, 3, true);
+		EntityRegistry.registerModEntity(EntityWhiteBishop.class, "prospitianBishop", 6, this, 80, 3, true);
+		EntityRegistry.registerModEntity(EntityGrist.class, "grist", 7, this, 512, 1, true);
+//		EntityRegistry.instance().lookupModSpawn(EntityImp.class, false).setCustomSpawning(callable, true);
+		//register Tile Entities
+		GameRegistry.registerTileEntity(TileEntityGatePortal.class, "gatePortal");
+		//register world generators
+		DimensionManager.registerProviderType(skaiaProviderTypeId, WorldProviderSkaia.class, true);
+		DimensionManager.registerDimension(skaiaDimensionId, skaiaProviderTypeId);
+		KeyBindingRegistry.registerKeyBinding(keyHandler);
+		NetworkRegistry.instance().registerConnectionHandler(new MinestuckConnectHandler());
+		
+	}
+	
+	@PostInit
+	public void postInit(FMLPostInitializationEvent event) 
+	{
+//		FMLLog.info("The updateFrequency of EntityBlackPawn is %s", EntityRegistry.instance().lookupModSpawn(EntityBlackPawn.class, true).getUpdateFrequency());
+		MinecraftForge.EVENT_BUS.register(new GuiGristCache(Minecraft.getMinecraft()));
+	}
 }

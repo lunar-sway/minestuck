@@ -36,7 +36,6 @@ public class ComponentCastleSolidPiece extends ComponentCastlePiece {
                 return true;
             }
             
-            System.out.println(startPiece.averageGroundLevel);
         }
         if(this.boundingBox.minY < 1)
         	this.boundingBox.offset(0, startPiece.averageGroundLevel - 1, 0);

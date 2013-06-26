@@ -13,7 +13,6 @@ public class MinestuckPacketHandler implements IPacketHandler {
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) 
 	{
 		MinestuckPacket minestuckPacket = MinestuckPacket.readPacket(manager, packet.data);
-		System.out.println(minestuckPacket == null);
 		if(minestuckPacket == null)
 			return;
 		String username = "";

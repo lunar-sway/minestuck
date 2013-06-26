@@ -64,7 +64,6 @@ public abstract class EntityBishop extends EntityCarapacian implements IRangedAt
         double distanceZ = entityliving.posZ - this.posZ;
 		
 //        float distance = entityliving.getDistanceToEntity(this);
-//        System.out.println("attacking");
 //        this.motionY = 20;
 //
 //        EntitySmallFireball entitysmallfireball = new EntitySmallFireball(this.worldObj, this, distanceX + this.rand.nextGaussian() * (double)distance, distanceY, distanceZ + this.rand.nextGaussian() * (double)distance);
@@ -96,7 +95,6 @@ public abstract class EntityBishop extends EntityCarapacian implements IRangedAt
 	protected void attackEntity(Entity par1Entity, float par2)
 	{
 
-		System.out.println(this.getAttackTarget().toString());
 		if (this.attackTime <= 0 && par2 < 2.0F && par1Entity.boundingBox.maxY > this.boundingBox.minY && par1Entity.boundingBox.minY < this.boundingBox.maxY)
 		{
 			this.attackTime = 20;

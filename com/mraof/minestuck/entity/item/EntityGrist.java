@@ -1,8 +1,11 @@
 package com.mraof.minestuck.entity.item;
 
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -19,45 +22,42 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
-public class EntityGrist extends Entity
+public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 {
-	/**
-	 * A constantly increasing value that RenderXPOrb uses to control the colour shifting (Green / yellow)
-	 */
-	public static final String[] gristTypes = {"Build", "Shale"};
-	public int xpColor;
+	public static final String[] gristTypes = {"Amber", "Amethyst", "Artifact", "Build", "Caulk", "Chalk", "Cobalt", "Diamond", "Garnet", "Gold", "Iodine", "Marble", "Mercury", "Quartz", "Ruby", "Rust", "Shale", "Sulfur", "Tar", "Uranium", "Zillion"};
+	public int cycle;
 
-	/** The age of the XP orb in ticks. */
-	public int xpOrbAge = 0;
+	public int gristAge = 0;
 
-	/** The health of this XP orb. */
-	private int xpOrbHealth = 5;
+	private int gristHealth = 5;
 	//Type of grist
 	private String gristType;
-	/** This is how much XP this orb has. */
 	private int gristValue;
 
-	/** The closest EntityPlayer to this orb. */
 	private EntityPlayer closestPlayer;
 
-	/** Threshold color for tracking players */
-	private int xpTargetColor;
+	private int targetCycle;
 
 	public EntityGrist(World world, double x, double y, double z, String type, int value)
 	{
 		super(world);
-		this.setSize(0.5F, 0.5F);
+		this.gristValue = value;
+		this.setSize(this.getSizeByValue(), 0.5F);
 		this.yOffset = this.height / 2.0F;
 		this.setPosition(x, y, z);
 		this.rotationYaw = (float)(Math.random() * 360.0D);
 		this.motionX = (double)((float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
 		this.motionY = (double)((float)(Math.random() * 0.2D) * 2.0F);
 		this.motionZ = (double)((float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
-		this.gristValue = value;
 
 		this.gristType = type;
 	}
 
+	public EntityGrist(World par1World)
+	{
+		super(par1World);
+	}
+	
 	/**
 	 * returns if this entity triggers Block.onEntityWalking on the blocks they walk on. used for spiders and wolves to
 	 * prevent them from trampling crops
@@ -65,14 +65,6 @@ public class EntityGrist extends Entity
 	protected boolean canTriggerWalking()
 	{
 		return false;
-	}
-
-	public EntityGrist(World par1World)
-	{
-		super(par1World);
-		this.setSize(0.25F, 0.25F);
-		this.yOffset = this.height / 2.0F;
-		this.gristType = "Build";
 	}
 
 	protected void entityInit() {}
@@ -116,16 +108,16 @@ public class EntityGrist extends Entity
 		}
 
 		this.pushOutOfBlocks(this.posX, (this.boundingBox.minY + this.boundingBox.maxY) / 2.0D, this.posZ);
-		double d0 = 8.0D;
+		double d0 = this.getSizeByValue() * 2.0D;
 
-		if (this.xpTargetColor < this.xpColor - 20 + this.entityId % 100)
+		if (this.targetCycle < this.cycle - 20 + this.entityId % 100) //Why should I care about the entityId
 		{
 			if (this.closestPlayer == null || this.closestPlayer.getDistanceSqToEntity(this) > d0 * d0)
 			{
 				this.closestPlayer = this.worldObj.getClosestPlayerToEntity(this, d0);
 			}
 
-			this.xpTargetColor = this.xpColor;
+			this.targetCycle = this.cycle;
 		}
 
 		if (this.closestPlayer != null)
@@ -134,11 +126,10 @@ public class EntityGrist extends Entity
 			double d2 = (this.closestPlayer.posY + (double)this.closestPlayer.getEyeHeight() - this.posY) / d0;
 			double d3 = (this.closestPlayer.posZ - this.posZ) / d0;
 			double d4 = Math.sqrt(d1 * d1 + d2 * d2 + d3 * d3);
-			double d5 = 1.0D - d4;
+			double d5 = this.getSizeByValue() * 2.0D - d4;
 
 			if (d5 > 0.0D)
 			{
-				d5 *= d5;
 				this.motionX += d1 / d4 * d5 * 0.1D;
 				this.motionY += d2 / d4 * d5 * 0.1D;
 				this.motionZ += d3 / d4 * d5 * 0.1D;
@@ -168,10 +159,10 @@ public class EntityGrist extends Entity
 			this.motionY *= -0.8999999761581421D;
 		}
 
-		++this.xpColor;
-		++this.xpOrbAge;
+		++this.cycle;
+		++this.gristAge;
 
-		if (this.xpOrbAge >= 6000)
+		if (this.gristAge >= 60000)
 		{
 			this.setDead();
 		}
@@ -191,7 +182,8 @@ public class EntityGrist extends Entity
 	 */
 	protected void dealFireDamage(int par1)
 	{
-		this.attackEntityFrom(DamageSource.inFire, par1);
+//		this.attackEntityFrom(DamageSource.inFire, par1);
+		//Nope
 	}
 
 	/**
@@ -206,9 +198,9 @@ public class EntityGrist extends Entity
 		else
 		{
 			this.setBeenAttacked();
-			this.xpOrbHealth -= par2;
+			this.gristHealth -= par2;
 
-			if (this.xpOrbHealth <= 0)
+			if (this.gristHealth <= 0)
 			{
 				this.setDead();
 			}
@@ -222,9 +214,10 @@ public class EntityGrist extends Entity
 	 */
 	public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
 	{
-		par1NBTTagCompound.setShort("Health", (short)((byte)this.xpOrbHealth));
-		par1NBTTagCompound.setShort("Age", (short)this.xpOrbAge);
+		par1NBTTagCompound.setShort("Health", (short)((byte)this.gristHealth));
+		par1NBTTagCompound.setShort("Age", (short)this.gristAge);
 		par1NBTTagCompound.setShort("Value", (short)this.gristValue);
+		par1NBTTagCompound.setString("Type", this.gristType);
 	}
 
 	/**
@@ -232,9 +225,10 @@ public class EntityGrist extends Entity
 	 */
 	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
 	{
-		this.xpOrbHealth = par1NBTTagCompound.getShort("Health") & 255;
-		this.xpOrbAge = par1NBTTagCompound.getShort("Age");
+		this.gristHealth = par1NBTTagCompound.getShort("Health") & 255;
+		this.gristAge = par1NBTTagCompound.getShort("Age");
 		this.gristValue = par1NBTTagCompound.getShort("Value");
+		this.gristType = par1NBTTagCompound.getString("Type");
 	}
 
 	/**
@@ -244,15 +238,14 @@ public class EntityGrist extends Entity
 	{
 		if (!this.worldObj.isRemote)
 		{
-				this.playSound("random.orb", 0.1F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F));
-				par1EntityPlayer.onItemPickup(this, 1);
-				if(par1EntityPlayer.getEntityData().getCompoundTag("Grist").getTags().size() == 0)
-					par1EntityPlayer.getEntityData().setCompoundTag("Grist", new NBTTagCompound("Grist"));
-				this.addGrist(par1EntityPlayer);
-//				System.out.println(par1EntityPlayer.getEntityData().getCompoundTag("Grist").getInteger("Build"));
-				this.setDead();
+			this.playSound("random.pop", 0.1F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F));
+			par1EntityPlayer.onItemPickup(this, 1);
+			if(par1EntityPlayer.getEntityData().getCompoundTag("Grist").getTags().size() == 0)
+				par1EntityPlayer.getEntityData().setCompoundTag("Grist", new NBTTagCompound("Grist"));
+			this.addGrist(par1EntityPlayer);
+			this.setDead();
 		}
-		else 
+		else  
 			this.setDead();
 	}
 	public void addGrist(EntityPlayer entityPlayer)
@@ -261,45 +254,44 @@ public class EntityGrist extends Entity
 		entityPlayer.getEntityData().getCompoundTag("Grist").setInteger(this.gristType, oldValue + gristValue);
         Packet250CustomPayload packet = new Packet250CustomPayload();
         packet.channel = "Minestuck";
-        packet.data = MinestuckPacket.makePacket(Type.GRIST, typeInt(this.gristType), oldValue + gristValue, this.entityId	);
+        packet.data = MinestuckPacket.makePacket(Type.GRIST, typeInt(this.gristType), oldValue + gristValue);
         packet.length = packet.data.length;
         ((EntityPlayerMP)entityPlayer).playerNetServerHandler.sendPacketToPlayer(packet);
 	}
 
-	/**
-	 * Returns the XP value of this XP orb.
-	 */
-
-	@SideOnly(Side.CLIENT)
-
-	/**
-	 * Returns a number from 1 to 10 based on how much XP this orb is worth. This is used by RenderXPOrb to determine
-	 * what texture to use.
-	 */
-	public int getTextureByXP()
-	{
-		return this.gristValue >= 2477 ? 10 : (this.gristValue >= 1237 ? 9 : (this.gristValue >= 617 ? 8 : (this.gristValue >= 307 ? 7 : (this.gristValue >= 149 ? 6 : (this.gristValue >= 73 ? 5 : (this.gristValue >= 37 ? 4 : (this.gristValue >= 17 ? 3 : (this.gristValue >= 7 ? 2 : (this.gristValue >= 3 ? 1 : 0)))))))));
-	}
-
-	/**
-	 * Get xp split rate (Is called until the xp drop code in EntityLiving.onEntityUpdate is complete)
-	 */
-//	public static int getXPSplit(int par0)
-//	{
-//		return par0 >= 2477 ? 2477 : (par0 >= 1237 ? 1237 : (par0 >= 617 ? 617 : (par0 >= 307 ? 307 : (par0 >= 149 ? 149 : (par0 >= 73 ? 73 : (par0 >= 37 ? 37 : (par0 >= 17 ? 17 : (par0 >= 7 ? 7 : (par0 >= 3 ? 3 : 1)))))))));
-//	}
-
-	/**
-	 * If returns false, the item will not inflict any damage against entities.
-	 */
 	public boolean canAttackWithItem()
 	{
 		return false;
+	}
+	public String getType() 
+	{
+		return gristType;
 	}
 	public static int typeInt(String type)
 	{
 		for(int index = 0; index < gristTypes.length; index++)
 			if(type.equals(gristTypes[index]))return index;
 		return -1;
+	}
+
+	public float getSizeByValue() 
+	{
+		return (float) (Math.pow(gristValue, .25) / 3.0F);
+	}
+
+	@Override
+	public void writeSpawnData(ByteArrayDataOutput data) 
+	{
+		data.writeInt(this.typeInt(this.gristType));
+		data.writeInt(this.gristValue);
+	}
+
+	@Override
+	public void readSpawnData(ByteArrayDataInput data) 
+	{
+		this.gristType = this.gristTypes[data.readInt()];
+		this.gristValue = data.readInt();
+		this.setSize(this.getSizeByValue(), 0.5F);
+		this.yOffset = this.height / 2.0F;
 	}
 }

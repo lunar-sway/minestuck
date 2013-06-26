@@ -39,24 +39,20 @@ public class ItemHammer extends ItemTool
 		{
 		case CLAW:
 			this.setUnlocalizedName("clawHammer");
-//			this.setIconIndex(0);
 			break;
 		case SLEDGE:
 			this.setUnlocalizedName("sledgeHammer");
-//			this.setIconIndex(1);
 			break;
 		case POGO:
+			//10 Build Grist, 16 Shale
 			this.setUnlocalizedName("pogoHammer");
-//			this.setIconIndex(2);
 			break;
 		case TELESCOPIC:
 			this.setUnlocalizedName("telescopicSassacrusher");
-//			this.setIconIndex(3);
 			break;
 		case FEARNOANVIL:
 			this.setUnlocalizedName("fearNoAnvil");
-//			this.setIconIndex(4);
-			break	;
+			break;
 		case ZILLYHOO:
 			this.setUnlocalizedName("zillyhooHammer");
 //			this.setIconIndex(5);

@@ -17,7 +17,8 @@ public abstract class MinestuckPacket
 {
 	public enum Type
 	{
-		GRIST(GristPacket.class);
+		GRIST(GristPacket.class),
+		GRISTCACHE(GristCachePacket.class);
 		Class<? extends MinestuckPacket> packetType;
 		private Type(Class<? extends MinestuckPacket> packetClass)
 		{

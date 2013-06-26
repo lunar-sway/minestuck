@@ -47,7 +47,6 @@ public class ComponentCastleWallPiece extends ComponentCastlePiece
 		}
 		if(incrementDirection)
 		{
-			System.out.println("Direction: " + this.direction + " " + this.startPiece.x + " " + this.startPiece.z + " " + this.boundingBox.minX + " " + this.boundingBox.minZ + " " + this.startPiece.castleWidth + " " + this.startPiece.castleLength);
 			direction++;
 			this.cornerPiece = true;
 		}

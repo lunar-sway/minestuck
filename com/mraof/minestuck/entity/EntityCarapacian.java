@@ -30,7 +30,6 @@ public abstract class EntityCarapacian extends EntityCreature
 		setEnemies();
 		setAllies();
 
-		//TODO make an Enum or something like that with all the enemies and friends of dersites and enemies and friends of prospitians
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
 		this.targetTasks.addTask(2, this.entityAINearestAttackableTargetWithHeight());
