@@ -7,10 +7,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import net.minecraft.world.World;
-import net.minecraft.world.WorldProvider;
-
-import com.mraof.minestuck.world.WorldProviderSkaia;
-import com.mraof.minestuck.world.gen.structure.ComponentCastleStartPiece;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureStart;
 

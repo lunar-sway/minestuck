@@ -1,18 +1,14 @@
 package com.mraof.minestuck.network;
 
-import net.minecraft.client.multiplayer.NetClientHandler;
-import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.NetHandler;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.mraof.minestuck.entity.item.EntityGrist;
 
-import cpw.mods.fml.common.network.FMLNetworkHandler;
 import cpw.mods.fml.common.network.Player;
 
 public class GristPacket extends MinestuckPacket 
@@ -28,8 +24,8 @@ public class GristPacket extends MinestuckPacket
 	public byte[] generatePacket(Object... data) 
 	{
 		ByteArrayDataOutput dat = ByteStreams.newDataOutput();
-		dat.writeInt((int) data[0]);
-		dat.writeInt((int) data[1]);
+		dat.writeInt((Integer) data[0]);
+		dat.writeInt((Integer) data[1]);
 		return dat.toByteArray();
 	}
 

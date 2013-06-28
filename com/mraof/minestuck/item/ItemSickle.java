@@ -1,20 +1,15 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.CommonProxy;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemSickle extends Item
 {
@@ -89,16 +84,16 @@ public class ItemSickle extends Item
 		switch(sickleType)
 		{
 		case SICKLE:
-			itemIcon = iconRegister.registerIcon("Minestuck:sickle");
+			itemIcon = iconRegister.registerIcon("Minestuck:Sickle");
 			break;
 		case HOMES:
-			itemIcon = iconRegister.registerIcon("Minestuck:homessmellyalater");
+			itemIcon = iconRegister.registerIcon("Minestuck:HomesSmellYaLater");
 			break;
 		case REGISICKLE:
-			itemIcon = iconRegister.registerIcon("Minestuck:regisickle");
+			itemIcon = iconRegister.registerIcon("Minestuck:Regisickle");
 			break;
 		case CLAW:
-			itemIcon = iconRegister.registerIcon("Minestuck:clawsickle");
+			itemIcon = iconRegister.registerIcon("Minestuck:ClawSickle");
 			break;
 		}
 	}

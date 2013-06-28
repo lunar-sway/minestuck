@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item;
 
-public enum EnumBladeType {
+public enum EnumBladeType 
+{
 
 	SORD(0, 59, 2.0F, -1, 5),
 	NINJA(1, 100, 4.0F, 1, 15),

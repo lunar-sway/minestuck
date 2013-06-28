@@ -1,26 +1,25 @@
 package com.mraof.minestuck.entity.item;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
+
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 
+import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityTracker;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.packet.Packet22Collect;
-import net.minecraft.network.packet.Packet250CustomPayload;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 
 public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 {
@@ -57,7 +56,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	{
 		super(par1World);
 	}
-	
+
 	/**
 	 * returns if this entity triggers Block.onEntityWalking on the blocks they walk on. used for spiders and wolves to
 	 * prevent them from trampling crops
@@ -182,7 +181,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	 */
 	protected void dealFireDamage(int par1)
 	{
-//		this.attackEntityFrom(DamageSource.inFire, par1);
+		//		this.attackEntityFrom(DamageSource.inFire, par1);
 		//Nope
 	}
 
@@ -252,11 +251,11 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	{
 		int oldValue = entityPlayer.getEntityData().getCompoundTag("Grist").getInteger(this.gristType);
 		entityPlayer.getEntityData().getCompoundTag("Grist").setInteger(this.gristType, oldValue + gristValue);
-        Packet250CustomPayload packet = new Packet250CustomPayload();
-        packet.channel = "Minestuck";
-        packet.data = MinestuckPacket.makePacket(Type.GRIST, typeInt(this.gristType), oldValue + gristValue);
-        packet.length = packet.data.length;
-        ((EntityPlayerMP)entityPlayer).playerNetServerHandler.sendPacketToPlayer(packet);
+		Packet250CustomPayload packet = new Packet250CustomPayload();
+		packet.channel = "Minestuck";
+		packet.data = MinestuckPacket.makePacket(Type.GRIST, typeInt(this.gristType), oldValue + gristValue);
+		packet.length = packet.data.length;
+		((EntityPlayerMP)entityPlayer).playerNetServerHandler.sendPacketToPlayer(packet);
 	}
 
 	public boolean canAttackWithItem()
@@ -270,7 +269,9 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	public static int typeInt(String type)
 	{
 		for(int index = 0; index < gristTypes.length; index++)
-			if(type.equals(gristTypes[index]))return index;
+			if(type.equals(gristTypes[index]))
+				return index;
+		FMLLog.severe("\"%s\" is not a valid type of EntityGrist!", type);
 		return -1;
 	}
 
@@ -282,6 +283,10 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public void writeSpawnData(ByteArrayDataOutput data) 
 	{
+		if(this.typeInt(this.gristType) < 0)
+		{
+			this.setDead();
+		}
 		data.writeInt(this.typeInt(this.gristType));
 		data.writeInt(this.gristValue);
 	}
@@ -289,7 +294,13 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public void readSpawnData(ByteArrayDataInput data) 
 	{
-		this.gristType = this.gristTypes[data.readInt()];
+		int typeOffset = data.readInt();
+		if(typeOffset < 0)
+		{
+			this.setDead();
+			return;
+		}
+		this.gristType = this.gristTypes[typeOffset];
 		this.gristValue = data.readInt();
 		this.setSize(this.getSizeByValue(), 0.5F);
 		this.yOffset = this.height / 2.0F;

@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item;
 
-public enum EnumClubType {
+public enum EnumClubType 
+{
 	DEUCE(3, 1024, 20.0F, 2, 15);
 	
 	private final int harvestLevel;

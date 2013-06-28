@@ -2,10 +2,10 @@ package com.mraof.minestuck.client.settings;
 
 import java.util.EnumSet;
 
+import net.minecraft.client.settings.KeyBinding;
+
 import com.mraof.minestuck.client.gui.GuiGristCache;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.KeyBinding;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.common.TickType;
 

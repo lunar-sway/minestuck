@@ -3,12 +3,11 @@ package com.mraof.minestuck.world.gen.structure;
 import java.util.List;
 import java.util.Random;
 
-import com.mraof.minestuck.Minestuck;
-
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.ComponentStrongholdRoomCrossing;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
+
+import com.mraof.minestuck.Minestuck;
 
 public class ComponentCastleWallPiece extends ComponentCastlePiece 
 {

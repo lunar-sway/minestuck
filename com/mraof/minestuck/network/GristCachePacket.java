@@ -1,13 +1,14 @@
 package com.mraof.minestuck.network;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.INetworkManager;
+
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.mraof.minestuck.entity.item.EntityGrist;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.INetworkManager;
 import cpw.mods.fml.common.network.Player;
 
 public class GristCachePacket extends MinestuckPacket 
@@ -27,14 +28,12 @@ public class GristCachePacket extends MinestuckPacket
 		values = (int[]) data[0];
 		for(int currentValue : values)
 			dat.writeInt(currentValue);
-		System.out.println(dat.toByteArray().length);
 		return dat.toByteArray();
 	}
 	
 	@Override
 	public MinestuckPacket consumePacket(byte[] data) 
 	{
-		System.out.println(data.length);
 		ByteArrayDataInput dat = ByteStreams.newDataInput(data);
 		for(int typeInt = 0; typeInt < values.length; typeInt++)
 			values[typeInt] = dat.readInt();

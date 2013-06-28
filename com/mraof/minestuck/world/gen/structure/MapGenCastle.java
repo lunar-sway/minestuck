@@ -5,13 +5,12 @@ package com.mraof.minestuck.world.gen.structure;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-
-import com.mraof.minestuck.entity.EntityBlackPawn;
 
 import net.minecraft.world.biome.SpawnListEntry;
 import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.StructureStart;
+
+import com.mraof.minestuck.entity.carapacian.EntityBlackPawn;
 
 /**
  * @author mraof

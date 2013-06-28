@@ -3,13 +3,13 @@ package com.mraof.minestuck.world.gen.structure;
 import java.util.List;
 import java.util.Random;
 
-import com.mraof.minestuck.Minestuck;
-
-import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 
-public class ComponentCastleSolidPiece extends ComponentCastlePiece {
+import com.mraof.minestuck.Minestuck;
+
+public class ComponentCastleSolidPiece extends ComponentCastlePiece 
+{
 
 	protected ComponentCastleSolidPiece(int par1, ComponentCastleStartPiece startPiece, StructureBoundingBox structureBoundingBox) 
 	{

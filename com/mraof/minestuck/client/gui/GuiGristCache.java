@@ -1,10 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
 
-import org.lwjgl.input.Keyboard;
-
-import com.mraof.minestuck.entity.item.EntityGrist;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -13,6 +9,12 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.event.EventPriority;
 import net.minecraftforge.event.ForgeSubscribe;
 
+import com.mraof.minestuck.entity.item.EntityGrist;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+@SideOnly(Side.CLIENT)
 public class GuiGristCache extends Gui
 {
 	private Minecraft mc;

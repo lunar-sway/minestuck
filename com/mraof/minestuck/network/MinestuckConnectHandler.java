@@ -1,8 +1,5 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.entity.item.EntityGrist;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.INetworkManager;
@@ -11,10 +8,15 @@ import net.minecraft.network.packet.NetHandler;
 import net.minecraft.network.packet.Packet1Login;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.server.MinecraftServer;
+
+import com.mraof.minestuck.entity.item.EntityGrist;
+import com.mraof.minestuck.network.MinestuckPacket.Type;
+
 import cpw.mods.fml.common.network.IConnectionHandler;
 import cpw.mods.fml.common.network.Player;
 
-public class MinestuckConnectHandler implements IConnectionHandler {
+public class MinestuckConnectHandler implements IConnectionHandler 
+{
 
 	@Override
 	public void playerLoggedIn(Player player, NetHandler netHandler, INetworkManager manager) 

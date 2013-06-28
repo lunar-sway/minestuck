@@ -10,7 +10,8 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.entity.player.EntityPlayer;
 
-public class EntityAINearestAttackableTargetWithHeight extends EntityAITarget {
+public class EntityAINearestAttackableTargetWithHeight extends EntityAITarget 
+{
 
 	EntityLiving targetEntity;
     Class targetClass;

@@ -3,10 +3,10 @@ package com.mraof.minestuck.world.gen.structure;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 
-public class StructureCastlePieces {
+public class StructureCastlePieces 
+{
 
 	public static StructureComponent getNextValidComponent(ComponentCastleStartPiece startPiece, List par1List, Random par2Random, int x, int y, int z, int par6, int componentType)
 	{

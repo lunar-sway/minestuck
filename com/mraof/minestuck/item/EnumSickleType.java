@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item;
 
-public enum EnumSickleType {
+public enum EnumSickleType 
+{
 	SICKLE(1, 131, 4.0F, 0, 5),
 	HOMES(1, 200, 4.0F, 1, 10),
 	REGISICKLE(2, 256, 4.0F, 2, 1),

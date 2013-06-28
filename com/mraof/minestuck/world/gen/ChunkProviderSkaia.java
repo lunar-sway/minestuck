@@ -5,36 +5,26 @@ package com.mraof.minestuck.world.gen;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
-
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.entity.EntityBlackBishop;
-import com.mraof.minestuck.entity.EntityBlackPawn;
-import com.mraof.minestuck.entity.EntityImp;
-import com.mraof.minestuck.entity.EntitySalamander;
-import com.mraof.minestuck.entity.EntityWhiteBishop;
-import com.mraof.minestuck.entity.EntityWhitePawn;
-import com.mraof.minestuck.world.gen.structure.MapGenCastle;
 
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.IProgressUpdate;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraft.world.gen.FlatGeneratorInfo;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
-import net.minecraft.world.gen.feature.MapGenScatteredFeature;
-import net.minecraft.world.gen.structure.MapGenMineshaft;
-import net.minecraft.world.gen.structure.MapGenStronghold;
-import net.minecraft.world.gen.structure.MapGenVillage;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.Event.Result;
-import net.minecraftforge.event.terraingen.ChunkProviderEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
+
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.entity.carapacian.EntityBlackBishop;
+import com.mraof.minestuck.entity.carapacian.EntityBlackPawn;
+import com.mraof.minestuck.entity.carapacian.EntityWhiteBishop;
+import com.mraof.minestuck.entity.carapacian.EntityWhitePawn;
+import com.mraof.minestuck.entity.consort.EntitySalamander;
+import com.mraof.minestuck.entity.underling.EntityImp;
+import com.mraof.minestuck.world.gen.structure.MapGenCastle;
 
 /**
  * @author Mraof

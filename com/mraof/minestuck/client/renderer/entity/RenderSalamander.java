@@ -1,9 +1,9 @@
 package com.mraof.minestuck.client.renderer.entity;
 
-import com.mraof.minestuck.entity.EntitySalamander;
-
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.RenderLiving;
+
+import com.mraof.minestuck.entity.consort.EntitySalamander;
 
 public class RenderSalamander extends RenderLiving 
 {

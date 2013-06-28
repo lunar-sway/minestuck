@@ -1,9 +1,5 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.CommonProxy;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -12,8 +8,11 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemCane extends Item {
+public class ItemCane extends Item 
+{
 	private int weaponDamage;
 	private final EnumCaneType caneType;
     public float efficiencyOnProperMaterial = 4.0F;
@@ -80,13 +79,13 @@ public class ItemCane extends Item {
 		switch(caneType)
 		{
 		case CANE:
-			itemIcon = iconRegister.registerIcon("Minestuck:cane");
+			itemIcon = iconRegister.registerIcon("Minestuck:Cane");
 			break;
 		case SPEAR:
-			itemIcon = iconRegister.registerIcon("Minestuck:spearcane");
+			itemIcon = iconRegister.registerIcon("Minestuck:SpearCane");
 			break;
 		case DRAGON:
-			itemIcon = iconRegister.registerIcon("Minestuck:dragoncane");
+			itemIcon = iconRegister.registerIcon("Minestuck:DragonCane");
 			break;
 		}
 	}

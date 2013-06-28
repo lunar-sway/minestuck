@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item;
 
-public enum EnumCaneType {
+public enum EnumCaneType 
+{
 	CANE(0, 100, 2.0F, 0, 15),
 	SPEAR(1, 300, 4.0F, 3, 10),
 	DRAGON(1, 300, 4.0F, 4, 20);

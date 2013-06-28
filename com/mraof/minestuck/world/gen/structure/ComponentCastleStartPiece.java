@@ -1,19 +1,17 @@
 package com.mraof.minestuck.world.gen.structure;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.BlockChessTile;
-
-import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 
-public class ComponentCastleStartPiece extends ComponentCastlePiece {
+import com.mraof.minestuck.Minestuck;
+
+public class ComponentCastleStartPiece extends ComponentCastlePiece 
+{
 
     /** List of other Castle components linked to this room. */
 

@@ -2,22 +2,34 @@ package com.mraof.minestuck;
 
 
 
-import java.util.logging.Level;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.stats.Achievement;
+import net.minecraft.world.WorldType;
+import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.MinecraftForge;
 
 import com.mraof.minestuck.block.BlockChessTile;
 import com.mraof.minestuck.block.BlockGatePortal;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.GuiGristCache;
 import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
-import com.mraof.minestuck.entity.EntityBishop;
-import com.mraof.minestuck.entity.EntityBlackBishop;
-import com.mraof.minestuck.entity.EntityImp;
-import com.mraof.minestuck.entity.EntityBlackPawn;
-import com.mraof.minestuck.entity.EntityNakagator;
-import com.mraof.minestuck.entity.EntitySalamander;
-import com.mraof.minestuck.entity.EntityWhiteBishop;
-import com.mraof.minestuck.entity.EntityWhitePawn;
+import com.mraof.minestuck.entity.carapacian.EntityBlackBishop;
+import com.mraof.minestuck.entity.carapacian.EntityBlackPawn;
+import com.mraof.minestuck.entity.carapacian.EntityWhiteBishop;
+import com.mraof.minestuck.entity.carapacian.EntityWhitePawn;
+import com.mraof.minestuck.entity.consort.EntityNakagator;
+import com.mraof.minestuck.entity.consort.EntitySalamander;
 import com.mraof.minestuck.entity.item.EntityGrist;
+import com.mraof.minestuck.entity.underling.EntityImp;
+import com.mraof.minestuck.entity.underling.EntityOgre;
 import com.mraof.minestuck.item.EnumBladeType;
 import com.mraof.minestuck.item.EnumCaneType;
 import com.mraof.minestuck.item.EnumClubType;
@@ -36,23 +48,7 @@ import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
 import com.mraof.minestuck.world.WorldProviderSkaia;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityEggInfo;
-import net.minecraft.entity.EntityList;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.stats.Achievement;
-import net.minecraftforge.common.Configuration;
-import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.client.registry.KeyBindingRegistry;
-import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
-import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
@@ -64,10 +60,9 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.registry.EntityRegistry.EntityRegistration;
+import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
-import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -77,11 +72,11 @@ public class Minestuck
 {
 	//these ids are in case I need to raise or lower ids for whatever reason
 	public static int toolIdStart = 5001;
-	public static int eggIdStart = 5050;
+	public static int entityIdStart = 5050;
 	public static int blockIdStart = 500;
 	public static int skaiaProviderTypeId = 2;
 	public static int skaiaDimensionId = 2;
-	
+
 	//hammers
 	public static Item clawHammer;
 	public static Item sledgeHammer;
@@ -116,23 +111,23 @@ public class Minestuck
 	public static Item skaiaFork;
 
 	public static Achievement getHammer;
-	
+
 	//Blocks
 	public static Block chessTile;
 	public static Block gatePortal;
-	public static KeyBinding[] bindings;
-	public static boolean[] keyRepeatings;
-	public static MinestuckKeyHandler keyHandler;
+	
+	
 	// The instance of your mod that Forge uses.
 	@Instance("Minestuck")
 	public static Minestuck instance;
-	
+
 	// Says where the client and server 'proxy' code is loaded.
 	@SidedProxy(clientSide="com.mraof.minestuck.client.ClientProxy", serverSide="com.mraof.minestuck.CommonProxy")
-	
+
 	//The proxy to be used by client and server
 	public static CommonProxy proxy;
-	
+
+	public int currentEntityIdOffset = 0;
 	@PreInit
 	public void preInit(FMLPreInitializationEvent event) 
 	{
@@ -140,12 +135,12 @@ public class Minestuck
 		config.load();
 		blockIdStart = config.get("Block Ids", "blockIdStart", 500).getInt();
 		toolIdStart = config.get("Item Ids", "toolIdStart", 5001).getInt();
-		eggIdStart = config.get("Item Ids", "eggIdStart", 5050).getInt();
+		entityIdStart = config.get("Entity Ids", "entitydIdStart", 5050).getInt();
 		skaiaProviderTypeId = config.get("Provider Type Ids", "skaiaProviderTypeId", 2).getInt();
 		skaiaDimensionId = config.get("Dimension Ids", "skaiaDimensionId", 2).getInt();
 		config.save();
 	}
-	
+
 	@Init
 	public void load(FMLInitializationEvent event) 
 	{
@@ -184,16 +179,12 @@ public class Minestuck
 		//Spoons/forks
 		crockerSpork = new ItemSpork(toolIdStart + 24, EnumSporkType.CROCKER);
 		skaiaFork = new ItemSpork(toolIdStart + 25, EnumSporkType.SKAIA);
-		
+
 		//achievements
 		getHammer = (new Achievement(413, "getHammer", 12, 15, Minestuck.clawHammer, (Achievement)null)).setIndependent().registerAchievement();
-		bindings = new KeyBinding[1];
-		keyRepeatings = new boolean[bindings.length];
-		bindings[0] = new KeyBinding("key.gristCache", 34);
-		keyRepeatings[0] = false;
-		keyHandler = new MinestuckKeyHandler(bindings, keyRepeatings);
-		//registry
-		
+
+		//registers things for the client
+		ClientProxy.registerSided();
 		//server doesn't actually register any renderers for obvious reasons
 		proxy.registerRenderers();
 		//the client does, however
@@ -207,7 +198,7 @@ public class Minestuck
 		ItemStack darkGreyChessTileStack = new ItemStack(chessTile, 1, 2);
 		ItemStack lightGreyChessTileStack = new ItemStack(chessTile, 1, 3);
 		//Give Items names to be displayed ingame
-		
+
 		LanguageRegistry.addName(clawHammer, "Claw Hammer");
 		LanguageRegistry.addName(sledgeHammer, "Sledgehammer");
 		LanguageRegistry.addName(pogoHammer, "Pogo Hammer");
@@ -243,9 +234,16 @@ public class Minestuck
 		//set harvest information for blocks
 		MinecraftForge.setBlockHarvestLevel(chessTile, "shovel", 0);
 
-		//give mobs names, I think
+		//set translations for automatic names
 		LanguageRegistry.instance().addStringLocalization("entity.Salamander.name", "Salamander");
+		LanguageRegistry.instance().addStringLocalization("entity.Nakagator.name", "Nakagator");
 		LanguageRegistry.instance().addStringLocalization("entity.Imp.name", "Imp");
+		//Different names for different types of imps
+		for(EntityImp.Type impType : EntityImp.Type.values())
+			LanguageRegistry.instance().addStringLocalization("entity." + impType.getTypeString() + ".Imp.name", impType.getTypeString() + " Imp");
+		LanguageRegistry.instance().addStringLocalization("entity.Ogre.name", "Ogre");
+		for(EntityOgre.Type ogreType : EntityOgre.Type.values())
+			LanguageRegistry.instance().addStringLocalization("entity." + ogreType.getTypeString() + ".Ogre.name", ogreType.getTypeString() + " Ogre");
 		LanguageRegistry.instance().addStringLocalization("entity.dersitePawn.name", "Dersite Pawn");
 		LanguageRegistry.instance().addStringLocalization("entity.prospitianPawn.name", "Prospitian Pawn");
 		LanguageRegistry.instance().addStringLocalization("entity.dersiteBishop.name", "Dersite Bishop");
@@ -253,40 +251,45 @@ public class Minestuck
 
 		LanguageRegistry.instance().addStringLocalization("achievement.getHammer", "Get Hammer");
 		LanguageRegistry.instance().addStringLocalization("achievement.getHammer.desc", "Get the Claw Hammer");
-		
+
 		LanguageRegistry.instance().addStringLocalization("key.gristCache", "View Grist Cache");
-		//register entities with ids
-		EntityList.addMapping(EntitySalamander.class, "Salamander", eggIdStart, 0xffe62e, 0xfffb53);
-		EntityList.addMapping(EntityNakagator.class, "Nakagator", eggIdStart + 1, 0xffe62e, 0xfffb53);
-		EntityList.addMapping(EntityImp.class, "Imp", eggIdStart + 2, 0x000000, 0xffffff);
-		EntityList.addMapping(EntityBlackPawn.class, "dersitePawn", eggIdStart + 3, 0x0f0f0f, 0xf0f0f0);
-		EntityList.addMapping(EntityWhitePawn.class, "prospitianPawn", eggIdStart + 4, 0xf0f0f0, 0x0f0f0f);
-		EntityList.addMapping(EntityBlackBishop.class, "dersiteBishop", eggIdStart + 5, 0x000000, 0xc121d9);
-		EntityList.addMapping(EntityWhiteBishop.class, "prospitianBishop", eggIdStart + 6, 0xffffff, 0xfde500);
+		//register entities
+		this.registerAndMapEntity(EntitySalamander.class, "Salamander", 0xffe62e, 0xfffb53);
+		this.registerAndMapEntity(EntityNakagator.class, "Nakagator", 0xffe62e, 0xfffb53);
+		this.registerAndMapEntity(EntityImp.class, "Imp", 0x000000, 0xffffff);
+		this.registerAndMapEntity(EntityOgre.class, "Ogre", 0x000000, 0xffffff);
+		this.registerAndMapEntity(EntityBlackPawn.class, "dersitePawn", 0x0f0f0f, 0xf0f0f0);
+		this.registerAndMapEntity(EntityWhitePawn.class, "prospitianPawn", 0xf0f0f0, 0x0f0f0f);
+		this.registerAndMapEntity(EntityBlackBishop.class, "dersiteBishop", 0x000000, 0xc121d9);
+		this.registerAndMapEntity(EntityWhiteBishop.class, "prospitianBishop", 0xffffff, 0xfde500);
 		//register entities with fml
-		EntityRegistry.registerModEntity(EntitySalamander.class, "Salamander", 0, this, 80, 3, true);
-		EntityRegistry.registerModEntity(EntityNakagator.class, "Nakagator", 1, this, 80, 3, true);
-		EntityRegistry.registerModEntity(EntityImp.class, "Imp", 2, this, 80, 3, true);
-		EntityRegistry.registerModEntity(EntityBlackPawn.class, "dersitePawn", 3, this, 80, 3, true);
-		EntityRegistry.registerModEntity(EntityWhitePawn.class, "prospitianPawn", 4, this, 80, 3, true);
-		EntityRegistry.registerModEntity(EntityBlackBishop.class, "dersiteBishop", 5, this, 80, 3, true);
-		EntityRegistry.registerModEntity(EntityWhiteBishop.class, "prospitianBishop", 6, this, 80, 3, true);
-		EntityRegistry.registerModEntity(EntityGrist.class, "grist", 7, this, 512, 1, true);
-//		EntityRegistry.instance().lookupModSpawn(EntityImp.class, false).setCustomSpawning(callable, true);
+		EntityRegistry.registerModEntity(EntityGrist.class, "grist", currentEntityIdOffset, this, 512, 1, true);
+
+		EntityRegistry.addSpawn(EntityImp.class, 2, 3, 20, EnumCreatureType.monster, WorldType.base12Biomes);
+		EntityRegistry.addSpawn(EntityOgre.class, 1, 1, 1, EnumCreatureType.monster, WorldType.base12Biomes);
 		//register Tile Entities
 		GameRegistry.registerTileEntity(TileEntityGatePortal.class, "gatePortal");
 		//register world generators
 		DimensionManager.registerProviderType(skaiaProviderTypeId, WorldProviderSkaia.class, true);
 		DimensionManager.registerDimension(skaiaDimensionId, skaiaProviderTypeId);
-		KeyBindingRegistry.registerKeyBinding(keyHandler);
 		NetworkRegistry.instance().registerConnectionHandler(new MinestuckConnectHandler());
-		
+
 	}
-	
+
 	@PostInit
 	public void postInit(FMLPostInitializationEvent event) 
 	{
-//		FMLLog.info("The updateFrequency of EntityBlackPawn is %s", EntityRegistry.instance().lookupModSpawn(EntityBlackPawn.class, true).getUpdateFrequency());
-		MinecraftForge.EVENT_BUS.register(new GuiGristCache(Minecraft.getMinecraft()));
+		
+	}
+	//registers entity with forge and minecraft, and increases currentEntityIdOffset by one in order to prevent id collision
+	public void registerAndMapEntity(Class entityClass, String name, int eggColor, int eggSpotColor)
+	{
+		this.registerAndMapEntity(entityClass, name, eggColor, eggSpotColor, 80, 3, true);
+	}
+	public void registerAndMapEntity(Class entityClass, String name, int eggColor, int eggSpotColor, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates)
+	{
+		EntityList.addMapping(entityClass, name, entityIdStart + currentEntityIdOffset, eggColor, eggSpotColor);
+		EntityRegistry.registerModEntity(entityClass, name, currentEntityIdOffset, this, trackingRange, updateFrequency, sendsVelocityUpdates);
+		currentEntityIdOffset++;
 	}
 }

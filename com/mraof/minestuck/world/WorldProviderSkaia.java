@@ -1,11 +1,11 @@
 package com.mraof.minestuck.world;
 
-import com.mraof.minestuck.world.gen.ChunkProviderSkaia;
-
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.WorldChunkManagerHell;
 import net.minecraft.world.chunk.IChunkProvider;
+
+import com.mraof.minestuck.world.gen.ChunkProviderSkaia;
 
 public class WorldProviderSkaia extends WorldProvider 
 {

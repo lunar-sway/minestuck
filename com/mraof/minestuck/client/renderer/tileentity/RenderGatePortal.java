@@ -3,17 +3,16 @@ package com.mraof.minestuck.client.renderer.tileentity;
 import java.nio.FloatBuffer;
 import java.util.Random;
 
-import org.lwjgl.opengl.GL11;
-
-import com.mraof.minestuck.tileentity.TileEntityGatePortal;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityEndPortal;
+
+import org.lwjgl.opengl.GL11;
+
+import com.mraof.minestuck.tileentity.TileEntityGatePortal;
 
 public class RenderGatePortal extends TileEntitySpecialRenderer {
     FloatBuffer floatBuffer = GLAllocation.createDirectFloatBuffer(16);

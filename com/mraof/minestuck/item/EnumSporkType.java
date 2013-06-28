@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item;
 
-public enum EnumSporkType {
+public enum EnumSporkType 
+{
 	CROCKER(3, 64, 4.0F, 1, 15, true),
 	SKAIA(3, 2048, 4.0F, 3, 10, false	);
 	

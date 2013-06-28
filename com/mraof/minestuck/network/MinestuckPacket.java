@@ -3,15 +3,11 @@ package com.mraof.minestuck.network;
 import java.util.Arrays;
 
 import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.NetHandler;
 
 import com.google.common.primitives.Bytes;
 import com.google.common.primitives.UnsignedBytes;
 
-import cpw.mods.fml.common.network.FMLNetworkHandler;
 import cpw.mods.fml.common.network.Player;
-
-
 
 public abstract class MinestuckPacket 
 {
