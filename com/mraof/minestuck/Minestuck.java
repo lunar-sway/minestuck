@@ -18,6 +18,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 import com.mraof.minestuck.block.BlockChessTile;
 import com.mraof.minestuck.block.BlockGatePortal;
+import com.mraof.minestuck.block.BlockStorage;
 import com.mraof.minestuck.block.OreCruxite;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.GuiGristCache;
@@ -45,6 +46,7 @@ import com.mraof.minestuck.item.ItemCruxiteRaw;
 import com.mraof.minestuck.item.ItemHammer;
 import com.mraof.minestuck.item.ItemSickle;
 import com.mraof.minestuck.item.ItemSpork;
+import com.mraof.minestuck.item.ItemStorageBlock;
 import com.mraof.minestuck.network.MinestuckConnectHandler;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
@@ -122,6 +124,7 @@ public class Minestuck
 	public static Block chessTile;
 	public static Block gatePortal;
 	public static Block oreCruxite;
+	public static Block blockStorage;
 	
 	
 	// The instance of your mod that Forge uses.
@@ -156,6 +159,7 @@ public class Minestuck
 		chessTile = new BlockChessTile(blockIdStart);
 		gatePortal = new BlockGatePortal(blockIdStart + 1, Material.portal);
 		oreCruxite = new OreCruxite(blockIdStart + 2);
+		blockStorage = new BlockStorage(blockIdStart + 3);
 		//hammers
 		clawHammer = new ItemHammer(toolIdStart, EnumHammerType.CLAW);
 		sledgeHammer = new ItemHammer(toolIdStart + 1, EnumHammerType.SLEDGE);
@@ -204,11 +208,15 @@ public class Minestuck
 		GameRegistry.registerBlock(chessTile, ItemChessTile.class, "chessTile");
 		GameRegistry.registerBlock(gatePortal, "gatePortal");
 		GameRegistry.registerBlock(oreCruxite,"oreCruxite");
+		GameRegistry.registerBlock(blockStorage,ItemStorageBlock.class,"blockStorage");
 		//metadata nonsense to conserve ids
 		ItemStack blackChessTileStack = new ItemStack(chessTile, 1, 0);
 		ItemStack whiteChessTileStack = new ItemStack(chessTile, 1, 1);
 		ItemStack darkGreyChessTileStack = new ItemStack(chessTile, 1, 2);
 		ItemStack lightGreyChessTileStack = new ItemStack(chessTile, 1, 3);
+		
+		ItemStack cruxiteBlockTileStack = new ItemStack(blockStorage,1,0);
+		
 		//Give Items names to be displayed ingame
 
 		LanguageRegistry.addName(clawHammer, "Claw Hammer");
@@ -242,12 +250,14 @@ public class Minestuck
 		LanguageRegistry.addName(whiteChessTileStack, "White Chess Tile");
 		LanguageRegistry.addName(lightGreyChessTileStack, "Light Grey Chess Tile");
 		LanguageRegistry.addName(darkGreyChessTileStack, "Dark Grey Chess Tile");
+		LanguageRegistry.addName(cruxiteBlockTileStack, "Cruxite Block");
 		LanguageRegistry.addName(gatePortal, "Gate");
 		LanguageRegistry.addName(oreCruxite, "Cruxite Ore");
 		LanguageRegistry.addName(rawCruxite, "Raw Cruxite");
 		//set harvest information for blocks
 		MinecraftForge.setBlockHarvestLevel(chessTile, "shovel", 0);
 		MinecraftForge.setBlockHarvestLevel(oreCruxite, "pickaxe", 1);
+		MinecraftForge.setBlockHarvestLevel(blockStorage, "pickaxe", 1);
 
 		//set translations for automatic names
 		LanguageRegistry.instance().addStringLocalization("entity.Salamander.name", "Salamander");
