@@ -17,6 +17,7 @@ import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 
+import com.mraof.minestuck.alchemy.CombinationRegistry;
 import com.mraof.minestuck.alchemy.GristRegistry;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
@@ -321,8 +322,11 @@ public class Minestuck
 		//register recipes
 		GameRegistry.addRecipe(new ItemStack(blockStorage,1,0),new Object[]{ "XXX","XXX","XXX",'X',new ItemStack(rawCruxite,1)});
 		
-		//Set up Alchemiter recipes. This one's just an example for now.
-		GristRegistry.addGristConversion(cruxiteBlockTileStack, new GristSet(GristType.Build,9)); //1 Cruxite block is now worth 9 Build Grist
+		//Set up Alchemiter recipes
+		GristRegistry.addGristConversion(cruxiteBlockTileStack, new GristSet(GristType.Build,9)); //1 Cruxite block is now worth 9 Build Grist. This is an example!
+		
+		//Set up Punch Designex recipes
+		CombinationRegistry.addCombination(whiteChessTileStack, whiteChessTileStack, lightGreyChessTileStack); //You can now combine black and white chess tiles to get grey ones. Also an example!
 	}
 
 	@PostInit
