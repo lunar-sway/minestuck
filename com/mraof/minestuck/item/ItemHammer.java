@@ -1,5 +1,7 @@
 package com.mraof.minestuck.item;
 
+import com.mraof.minestuck.Minestuck;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -30,7 +32,7 @@ public class ItemHammer extends ItemTool
 		this.hammerType = hammerType;
 		this.maxStackSize = 1;
 		this.setMaxDamage(hammerType.getMaxUses());
-		this.setCreativeTab(CreativeTabs.tabCombat);
+		this.setCreativeTab(Minestuck.tabMinestuck);
 		this.efficiencyOnProperMaterial = hammerType.getEfficiencyOnProperMaterial();
 		switch(hammerType)
 		{

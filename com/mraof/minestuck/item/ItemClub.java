@@ -3,6 +3,8 @@
  */
 package com.mraof.minestuck.item;
 
+import com.mraof.minestuck.Minestuck;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -30,7 +32,7 @@ public class ItemClub extends Item
 		this.clubType = clubType;
 		this.maxStackSize = 1;
 		this.setMaxDamage(clubType.getMaxUses());
-		this.setCreativeTab(CreativeTabs.tabCombat);
+		this.setCreativeTab(Minestuck.tabMinestuck);
 		switch(clubType)
 		{
 		case DEUCE:
