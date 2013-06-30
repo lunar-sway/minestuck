@@ -22,10 +22,14 @@ public class GuiGristCache extends Gui
 	private static final int guiWidth = 226;
 	private static final int guiHeight = 232;
 	private static String cacheMessage = "Grist Cache";
+	
 	private Minecraft mc;
 	private FontRenderer fontRenderer;
     public static boolean visible = false;
 
+    private String title = "CLASS of ASPECT";
+    private String titleMessage = "";
+    
     public GuiGristCache(Minecraft mc)
 	{
 		super();
@@ -44,8 +48,13 @@ public class GuiGristCache extends Gui
 //	    for(int gristId = 0; gristId < EntityGrist.gristTypes.length; gristId++)
 //	   		drawString(fontRenderer, EntityGrist.gristTypes[gristId] + " Grist: " + mc.thePlayer.getEntityData().getCompoundTag("Grist").getInteger(EntityGrist.gristTypes[gristId]), 0, 20 + gristId * 8, 0xddddee);
 
+	    if (titleMessage.isEmpty()) {
+	    	titleMessage = mc.thePlayer.username.toUpperCase() + " : " + title;
+	    }
+	    
         this.mc.renderEngine.bindTexture("/gui/GristCache.png");
         this.drawTexturedModalRect((mc.displayWidth/4)-(guiWidth/2), 10, 0, 0, 226, 232);
         fontRenderer.drawString(cacheMessage, (mc.displayWidth/4)-fontRenderer.getStringWidth(cacheMessage)/2, 20, 4210752);
+        fontRenderer.drawString(titleMessage, (mc.displayWidth/4)-fontRenderer.getStringWidth(titleMessage)/2, 30, 4210752);
 	}
 }
