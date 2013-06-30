@@ -19,6 +19,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 import com.mraof.minestuck.alchemy.GristRegistry;
 import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.block.BlockChessTile;
 import com.mraof.minestuck.block.BlockGatePortal;
 import com.mraof.minestuck.block.BlockStorage;
@@ -321,7 +322,7 @@ public class Minestuck
 		GameRegistry.addRecipe(new ItemStack(blockStorage,1,0),new Object[]{ "XXX","XXX","XXX",'X',new ItemStack(rawCruxite,1)});
 		
 		//Set up Alchemiter recipes. This one's just an example for now.
-		GristRegistry.addGristConversion(cruxiteBlockTileStack, new GristSet(3,9)); //1 Cruxite block is now worth 9 Build Grist
+		GristRegistry.addGristConversion(cruxiteBlockTileStack, new GristSet(GristType.Build,9)); //1 Cruxite block is now worth 9 Build Grist
 	}
 
 	@PostInit
