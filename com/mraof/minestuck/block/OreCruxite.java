@@ -16,7 +16,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class OreCruxite extends Block {
-	private Icon texture;
 	public OreCruxite(int id)
 	{
 		super(id, Material.rock);
@@ -26,20 +25,9 @@ public class OreCruxite extends Block {
 		
 	}
 	
-	@Override
-	public Icon getIcon(int side, int metadata) 
-	{
-		return texture;
-	}
-	
-	@Override
-	public boolean canCreatureSpawn(EnumCreatureType type, World world, int x, int y, int z) {
-		return true;
-	}
-	
     public void registerIcons(IconRegister par1IconRegister)
     {
-            this.texture = par1IconRegister.registerIcon("Minestuck:CruxiteOre");
+            this.blockIcon = par1IconRegister.registerIcon("Minestuck:CruxiteOre");
     }
     
     public int idDropped(int par1, Random par2Random, int par3)
