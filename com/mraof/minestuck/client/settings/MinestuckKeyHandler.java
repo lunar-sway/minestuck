@@ -27,19 +27,23 @@ public class MinestuckKeyHandler extends KeyHandler
 	@Override
 	public void keyDown(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd, boolean isRepeat) 
 	{
-//		System.out.println(kb.keyDescription);
-		if(kb.keyDescription == "key.gristCache")
-		{
-			GuiGristCache.visible = true;
-		}
+//		if(kb.keyDescription == "key.gristCache")
+//		{
+//			GuiGristCache.visible = true;
+//		}
 	}
 
 	@Override
 	public void keyUp(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd) 
 	{
-		if(kb.keyDescription == "key.gristCache")
+//		if(kb.keyDescription == "key.gristCache")
+//		{
+//			GuiGristCache.visible = false;
+//		}
+		
+		if(tickEnd && kb.keyDescription == "key.gristCache")
 		{
-			GuiGristCache.visible = false;
+			GuiGristCache.visible = !GuiGristCache.visible;
 		}
 	}
 
