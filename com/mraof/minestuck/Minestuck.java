@@ -298,9 +298,13 @@ public class Minestuck
 		DimensionManager.registerProviderType(skaiaProviderTypeId, WorldProviderSkaia.class, true);
 		DimensionManager.registerDimension(skaiaDimensionId, skaiaProviderTypeId);
 		NetworkRegistry.instance().registerConnectionHandler(new MinestuckConnectHandler());
+		
 		//register ore generation
 		OreHandler oreHandler = new OreHandler();
 		GameRegistry.registerWorldGenerator(oreHandler);
+		
+		//register recipes
+		GameRegistry.addRecipe(new ItemStack(blockStorage,1,0),new Object[]{ "XXX","XXX","XXX",'X',new ItemStack(rawCruxite,1)});
 	}
 
 	@PostInit
