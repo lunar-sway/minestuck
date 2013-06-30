@@ -21,7 +21,7 @@ public class OreCruxite extends Block {
 		super(id, Material.rock);
 		setUnlocalizedName("oreCruxite");
 		setHardness(3.0F);
-		setCreativeTab(CreativeTabs.tabBlock);
+		this.setCreativeTab(Minestuck.tabMinestuck);
 		
 	}
 	

@@ -3,6 +3,7 @@ package com.mraof.minestuck.block;
 import java.util.List;
 
 import com.mraof.minestuck.CommonProxy;
+import com.mraof.minestuck.Minestuck;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -25,7 +26,7 @@ public class BlockChessTile extends Block
 		super(id, Material.ground);
 		setUnlocalizedName("chessTile");
 		setHardness(0.5F);
-		setCreativeTab(CreativeTabs.tabBlock);
+		this.setCreativeTab(Minestuck.tabMinestuck);
 	}
 	@Override
 	public Icon getIcon(int side, int metadata) 

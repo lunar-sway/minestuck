@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.item.Item;
@@ -16,6 +17,8 @@ import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 
+import com.mraof.minestuck.alchemy.GristRegistry;
+import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.block.BlockChessTile;
 import com.mraof.minestuck.block.BlockGatePortal;
 import com.mraof.minestuck.block.BlockStorage;
@@ -136,6 +139,7 @@ public class Minestuck
 
 	//The proxy to be used by client and server
 	public static CommonProxy proxy;
+	public static CreativeTabs tabMinestuck;
 
 	public int currentEntityIdOffset = 0;
 	@PreInit
@@ -155,6 +159,14 @@ public class Minestuck
 	@Init
 	public void load(FMLInitializationEvent event) 
 	{
+		
+		//Register the Minestuck creative tab
+		this.tabMinestuck = new CreativeTabs("tabMinestuck") {
+			public ItemStack getIconItemStack() {
+					return new ItemStack(zillyhooHammer,1);
+			}
+		};
+		
 		//blocks
 		chessTile = new BlockChessTile(blockIdStart);
 		gatePortal = new BlockGatePortal(blockIdStart + 1, Material.portal);
@@ -214,9 +226,8 @@ public class Minestuck
 		ItemStack whiteChessTileStack = new ItemStack(chessTile, 1, 1);
 		ItemStack darkGreyChessTileStack = new ItemStack(chessTile, 1, 2);
 		ItemStack lightGreyChessTileStack = new ItemStack(chessTile, 1, 3);
-		
 		ItemStack cruxiteBlockTileStack = new ItemStack(blockStorage,1,0);
-		
+	
 		//Give Items names to be displayed ingame
 
 		LanguageRegistry.addName(clawHammer, "Claw Hammer");
@@ -278,6 +289,9 @@ public class Minestuck
 		LanguageRegistry.instance().addStringLocalization("achievement.getHammer.desc", "Get the Claw Hammer");
 
 		LanguageRegistry.instance().addStringLocalization("key.gristCache", "View Grist Cache");
+		
+		LanguageRegistry.instance().addStringLocalization("itemGroup.tabMinestuck", "Minestuck");
+		
 		//register entities
 		this.registerAndMapEntity(EntitySalamander.class, "Salamander", 0xffe62e, 0xfffb53);
 		this.registerAndMapEntity(EntityNakagator.class, "Nakagator", 0xffe62e, 0xfffb53);
@@ -305,6 +319,9 @@ public class Minestuck
 		
 		//register recipes
 		GameRegistry.addRecipe(new ItemStack(blockStorage,1,0),new Object[]{ "XXX","XXX","XXX",'X',new ItemStack(rawCruxite,1)});
+		
+		//Set up Alchemiter recipes. This one's just an example for now.
+		GristRegistry.addGristConversion(cruxiteBlockTileStack, new GristSet(3,9)); //1 Cruxite block is now worth 9 Build Grist
 	}
 
 	@PostInit

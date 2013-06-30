@@ -2,6 +2,8 @@ package com.mraof.minestuck.block;
 
 import java.util.List;
 
+import com.mraof.minestuck.Minestuck;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -23,7 +25,7 @@ public class BlockStorage extends Block {
 		
 		setUnlocalizedName("blockStorage");
 		setHardness(3.0F);
-		setCreativeTab(CreativeTabs.tabBlock);
+		this.setCreativeTab(Minestuck.tabMinestuck);
 	}
 	
 	@Override

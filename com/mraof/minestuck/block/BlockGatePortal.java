@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.mraof.minestuck.CommonProxy;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
 
 import cpw.mods.fml.relauncher.Side;
@@ -26,7 +27,7 @@ public class BlockGatePortal extends BlockContainer
 	{
 		super(id, material);
 		setUnlocalizedName("gatePortal");
-		setCreativeTab(CreativeTabs.tabMisc);
+		this.setCreativeTab(Minestuck.tabMinestuck);
 		destinationDimension = 2;
 	}
     @Override
