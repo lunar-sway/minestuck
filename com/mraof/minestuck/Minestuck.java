@@ -18,6 +18,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 import com.mraof.minestuck.block.BlockChessTile;
 import com.mraof.minestuck.block.BlockGatePortal;
+import com.mraof.minestuck.block.OreCruxite;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.GuiGristCache;
 import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
@@ -40,6 +41,7 @@ import com.mraof.minestuck.item.ItemBlade;
 import com.mraof.minestuck.item.ItemCane;
 import com.mraof.minestuck.item.ItemChessTile;
 import com.mraof.minestuck.item.ItemClub;
+import com.mraof.minestuck.item.ItemCruxiteRaw;
 import com.mraof.minestuck.item.ItemHammer;
 import com.mraof.minestuck.item.ItemSickle;
 import com.mraof.minestuck.item.ItemSpork;
@@ -47,6 +49,7 @@ import com.mraof.minestuck.network.MinestuckConnectHandler;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
 import com.mraof.minestuck.world.WorldProviderSkaia;
+import com.mraof.minestuck.world.gen.OreHandler;
 
 import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.common.Mod;
@@ -74,6 +77,7 @@ public class Minestuck
 	public static int toolIdStart = 5001;
 	public static int entityIdStart = 5050;
 	public static int blockIdStart = 500;
+	public static int itemIdStart = 6001;
 	public static int skaiaProviderTypeId = 2;
 	public static int skaiaDimensionId = 2;
 
@@ -109,12 +113,15 @@ public class Minestuck
 	//Spoons/forks
 	public static Item crockerSpork;
 	public static Item skaiaFork;
+	//Other
+	public static Item rawCruxite;
 
 	public static Achievement getHammer;
 
 	//Blocks
 	public static Block chessTile;
 	public static Block gatePortal;
+	public static Block oreCruxite;
 	
 	
 	// The instance of your mod that Forge uses.
@@ -136,6 +143,7 @@ public class Minestuck
 		blockIdStart = config.get("Block Ids", "blockIdStart", 500).getInt();
 		toolIdStart = config.get("Item Ids", "toolIdStart", 5001).getInt();
 		entityIdStart = config.get("Entity Ids", "entitydIdStart", 5050).getInt();
+		itemIdStart = config.get("Item Ids", "itemIdStart", 6001).getInt();
 		skaiaProviderTypeId = config.get("Provider Type Ids", "skaiaProviderTypeId", 2).getInt();
 		skaiaDimensionId = config.get("Dimension Ids", "skaiaDimensionId", 2).getInt();
 		config.save();
@@ -147,6 +155,7 @@ public class Minestuck
 		//blocks
 		chessTile = new BlockChessTile(blockIdStart);
 		gatePortal = new BlockGatePortal(blockIdStart + 1, Material.portal);
+		oreCruxite = new OreCruxite(blockIdStart + 2);
 		//hammers
 		clawHammer = new ItemHammer(toolIdStart, EnumHammerType.CLAW);
 		sledgeHammer = new ItemHammer(toolIdStart + 1, EnumHammerType.SLEDGE);
@@ -179,6 +188,8 @@ public class Minestuck
 		//Spoons/forks
 		crockerSpork = new ItemSpork(toolIdStart + 24, EnumSporkType.CROCKER);
 		skaiaFork = new ItemSpork(toolIdStart + 25, EnumSporkType.SKAIA);
+		//items
+		rawCruxite = new ItemCruxiteRaw(itemIdStart);
 
 		//achievements
 		getHammer = (new Achievement(413, "getHammer", 12, 15, Minestuck.clawHammer, (Achievement)null)).setIndependent().registerAchievement();
@@ -192,6 +203,7 @@ public class Minestuck
 		//register blocks
 		GameRegistry.registerBlock(chessTile, ItemChessTile.class, "chessTile");
 		GameRegistry.registerBlock(gatePortal, "gatePortal");
+		GameRegistry.registerBlock(oreCruxite,"oreCruxite");
 		//metadata nonsense to conserve ids
 		ItemStack blackChessTileStack = new ItemStack(chessTile, 1, 0);
 		ItemStack whiteChessTileStack = new ItemStack(chessTile, 1, 1);
@@ -231,8 +243,11 @@ public class Minestuck
 		LanguageRegistry.addName(lightGreyChessTileStack, "Light Grey Chess Tile");
 		LanguageRegistry.addName(darkGreyChessTileStack, "Dark Grey Chess Tile");
 		LanguageRegistry.addName(gatePortal, "Gate");
+		LanguageRegistry.addName(oreCruxite, "Cruxite Ore");
+		LanguageRegistry.addName(rawCruxite, "Raw Cruxite");
 		//set harvest information for blocks
 		MinecraftForge.setBlockHarvestLevel(chessTile, "shovel", 0);
+		MinecraftForge.setBlockHarvestLevel(oreCruxite, "pickaxe", 1);
 
 		//set translations for automatic names
 		LanguageRegistry.instance().addStringLocalization("entity.Salamander.name", "Salamander");
@@ -273,7 +288,9 @@ public class Minestuck
 		DimensionManager.registerProviderType(skaiaProviderTypeId, WorldProviderSkaia.class, true);
 		DimensionManager.registerDimension(skaiaDimensionId, skaiaProviderTypeId);
 		NetworkRegistry.instance().registerConnectionHandler(new MinestuckConnectHandler());
-
+		//register ore generation
+		OreHandler oreHandler = new OreHandler();
+		GameRegistry.registerWorldGenerator(oreHandler);
 	}
 
 	@PostInit
