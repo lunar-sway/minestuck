@@ -1,6 +1,8 @@
 package com.mraof.minestuck.client.gui;
 
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -17,6 +19,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiGristCache extends Gui
 {
+	private static final int guiWidth = 226;
+	private static final int guiHeight = 232;
+	private static String cacheMessage = "Grist Cache";
 	private Minecraft mc;
 	private FontRenderer fontRenderer;
     public static boolean visible = false;
@@ -36,9 +41,11 @@ public class GuiGristCache extends Gui
 	    {
 	      return;
 	    }
-	    for(int gristId = 0; gristId < EntityGrist.gristTypes.length; gristId++)
-	    	drawString(fontRenderer, EntityGrist.gristTypes[gristId] + " Grist: " + mc.thePlayer.getEntityData().getCompoundTag("Grist").getInteger(EntityGrist.gristTypes[gristId]), 0, 20 + gristId * 8, 0xddddee);
-//		drawString(fontRenderer, "Build Grist: " + mc.thePlayer.getEntityData().getCompoundTag("Grist").getInteger("Build"), 0, 30, 0x00aaff);
-//		drawString(fontRenderer, "Shale Grist: " + mc.thePlayer.getEntityData().getCompoundTag("Grist").getInteger("Shale"), 0, 38, 0xddddee);
+//	    for(int gristId = 0; gristId < EntityGrist.gristTypes.length; gristId++)
+//	   		drawString(fontRenderer, EntityGrist.gristTypes[gristId] + " Grist: " + mc.thePlayer.getEntityData().getCompoundTag("Grist").getInteger(EntityGrist.gristTypes[gristId]), 0, 20 + gristId * 8, 0xddddee);
+
+        this.mc.renderEngine.bindTexture("/gui/GristCache.png");
+        this.drawTexturedModalRect((mc.displayWidth/4)-(guiWidth/2), 10, 0, 0, 226, 232);
+        fontRenderer.drawString(cacheMessage, (mc.displayWidth/4)-fontRenderer.getStringWidth(cacheMessage)/2, 20, 4210752);
 	}
 }
