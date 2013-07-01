@@ -2,7 +2,10 @@ package com.mraof.minestuck.tileentity;
 
 import java.util.Iterator;
 
+import com.mraof.minestuck.Minestuck;
+
 import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -39,7 +42,6 @@ public class TileEntityGatePortal extends TileEntity
 		//		/* //Yes I commented out a comment
 		if(entity instanceof EntityPlayerMP)
 		{
-			System.out.println("yeah");
 			EntityPlayerMP par1EntityPlayerMP = (EntityPlayerMP) entity;
 			int j = par1EntityPlayerMP.dimension;
 			WorldServer worldserver = par1EntityPlayerMP.mcServer.worldServerForDimension(par1EntityPlayerMP.dimension);
@@ -50,8 +52,14 @@ public class TileEntityGatePortal extends TileEntity
 			worldserver.removePlayerEntityDangerously(par1EntityPlayerMP);
 			par1EntityPlayerMP.isDead = false;
 			this.transferEntityToWorld(par1EntityPlayerMP, j, worldserver, worldserver1);
-			worldserver1.spawnEntityInWorld(par1EntityPlayerMP);
-			par1EntityPlayerMP.mcServer.getConfigurationManager().func_72375_a(par1EntityPlayerMP, worldserver);
+//	        this.func_72375_a(par1EntityPlayerMP, worldserver);
+	        WorldServer worldserver2 = par1EntityPlayerMP.getServerForPlayer();
+	        worldserver.getPlayerManager().removePlayer(par1EntityPlayerMP);
+	        worldserver2.getPlayerManager().addPlayer(par1EntityPlayerMP);
+	        worldserver2.theChunkProviderServer.loadChunk((int)par1EntityPlayerMP.posX >> 4, (int)par1EntityPlayerMP.posZ >> 4);
+//	        worldserver2.spawnEntityInWorld(par1EntityPlayerMP);
+	        
+//			par1EntityPlayerMP.mcServer.getConfigurationManager().func_72375_a(par1EntityPlayerMP, worldserver);
 			par1EntityPlayerMP.playerNetServerHandler.setPlayerLocation(par1EntityPlayerMP.posX, par1EntityPlayerMP.posY, par1EntityPlayerMP.posZ, par1EntityPlayerMP.rotationYaw, par1EntityPlayerMP.rotationPitch);
 			par1EntityPlayerMP.theItemInWorldManager.setWorld(worldserver1);
 			par1EntityPlayerMP.mcServer.getConfigurationManager().updateTimeAndWeatherForPlayer(par1EntityPlayerMP, worldserver1);
@@ -130,19 +138,37 @@ public class TileEntityGatePortal extends TileEntity
 
         if (dimension != 1)
         {
-            d0 = (double)MathHelper.clamp_int((int)d0, -29999872, 29999872);
-            d1 = (double)MathHelper.clamp_int((int)d1, -29999872, 29999872);
+//            d0 = (double)MathHelper.clamp_int((int)d0, -29999872, 29999872);
+//            d1 = (double)MathHelper.clamp_int((int)d1, -29999872, 29999872);
 
             if (entity.isEntityAlive())
             {
                 worldserver1.spawnEntityInWorld(entity);
                 entity.setLocationAndAngles(d0, entity.posY, d1, entity.rotationYaw, entity.rotationPitch);
                 worldserver1.updateEntityWithOptionalForce(entity, false);
+                this.makeDestination(entity, worldserver1);
             }
 
         }
 
         entity.setWorld(worldserver1);
+	}
+	public void makeDestination(Entity entity, WorldServer worldserver)
+	{
+		double x = entity.posX;
+		double y = entity.posY;
+		double z = entity.posZ;
+		for(int blockX = (int) x - 2; blockX < x + 2; blockX++)
+		{
+			for(int blockZ = (int) z - 2; blockZ < z + 2; blockZ++)
+			{
+				worldserver.setBlock(blockX, (int) y - 1, blockZ, Minestuck.chessTile.blockID, (blockX + blockZ) & 3, 3);
+				for(int blockY = (int) y; blockY < y + 6; blockY++)
+					worldserver.setBlockToAir(blockX, blockY, blockZ);
+					
+					
+			}
+		}
 	}
 
 }

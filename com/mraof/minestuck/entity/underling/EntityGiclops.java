@@ -60,6 +60,7 @@ public class EntityGiclops extends EntityUnderling
 		this.experienceValue = 5 * type.strength + 4;
 		this.maxHealth = 28 * (type.strength + 1) + 18;
 		this.health = this.maxHealth;
+		this.stepHeight = 2;
 	}
 
 	@Override
