@@ -2,6 +2,7 @@ package com.mraof.minestuck.client.settings;
 
 import java.util.EnumSet;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 
 import com.mraof.minestuck.client.gui.GuiGristCache;
@@ -30,7 +31,9 @@ public class MinestuckKeyHandler extends KeyHandler
 //		System.out.println(kb.keyDescription);
 		if(kb.keyDescription == "key.gristCache")
 		{
-			GuiGristCache.visible = true;
+//			GuiGristCache.visible = true;
+			if(Minecraft.getMinecraft().currentScreen == null)
+				Minecraft.getMinecraft().displayGuiScreen(new GuiGristCache(Minecraft.getMinecraft()));
 		}
 	}
 
@@ -39,7 +42,7 @@ public class MinestuckKeyHandler extends KeyHandler
 	{
 		if(kb.keyDescription == "key.gristCache")
 		{
-			GuiGristCache.visible = false;
+//			GuiGristCache.visible = false;
 		}
 	}
 

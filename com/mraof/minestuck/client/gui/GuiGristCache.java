@@ -3,11 +3,8 @@ package com.mraof.minestuck.client.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
-import net.minecraftforge.event.EventPriority;
-import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
 
 import com.mraof.minestuck.entity.item.EntityGrist;
 
@@ -15,7 +12,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class GuiGristCache extends Gui
+public class GuiGristCache extends GuiScreen
 {
 	private Minecraft mc;
 	private FontRenderer fontRenderer;
@@ -28,17 +25,17 @@ public class GuiGristCache extends Gui
 		this.mc = mc;
         this.fontRenderer = mc.fontRenderer;
 	}
-	//name of function doesn't actually matter
-	@ForgeSubscribe(priority = EventPriority.NORMAL)
-	public void onRenderGameOverlay(RenderGameOverlayEvent event)
-	{
-	    if(event.isCancelable() || event.type != ElementType.ALL  || !this.visible)
-	    {
-	      return;
-	    }
+    @Override
+    public void drawScreen(int par1, int par2, float par3) 
+    {
+    	super.drawScreen(par1, par2, par3);
+    	this.drawDefaultBackground();
 	    for(int gristId = 0; gristId < EntityGrist.gristTypes.length; gristId++)
-	    	drawString(fontRenderer, EntityGrist.gristTypes[gristId] + " Grist: " + mc.thePlayer.getEntityData().getCompoundTag("Grist").getInteger(EntityGrist.gristTypes[gristId]), 0, 20 + gristId * 8, 0xddddee);
-//		drawString(fontRenderer, "Build Grist: " + mc.thePlayer.getEntityData().getCompoundTag("Grist").getInteger("Build"), 0, 30, 0x00aaff);
-//		drawString(fontRenderer, "Shale Grist: " + mc.thePlayer.getEntityData().getCompoundTag("Grist").getInteger("Shale"), 0, 38, 0xddddee);
+	    	drawString(fontRenderer, EntityGrist.gristTypes[gristId] + " Grist: " + mc.thePlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(EntityGrist.gristTypes[gristId]), 0, 20 + gristId * 8, 0xddddee);
 	}
+    @Override
+    public boolean doesGuiPauseGame() 
+    {
+    	return false;
+    }
 }

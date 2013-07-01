@@ -24,6 +24,7 @@ public class EntityAIAttackOnCollideWithRate extends EntityAIBase
     Class classTarget;
     private int movementTime;
 	private int attackRate;
+	private float distanceMultiplier = 2.0F;
 
     public EntityAIAttackOnCollideWithRate(EntityLiving par1EntityLiving, Class par2Class, float par3, int attackRate, boolean par4)
     {
@@ -106,9 +107,9 @@ public class EntityAIAttackOnCollideWithRate extends EntityAIBase
         }
 
         this.attackTick = Math.max(this.attackTick - 1, 0);
-        double d0 = (double)(this.attacker.width * 2.0F * this.attacker.width * 2.0F);
+        double d0 = (double)(this.attacker.width * distanceMultiplier * this.attacker.width * distanceMultiplier);
 
-        if (this.attacker.getDistanceSq(this.entityTarget.posX, this.entityTarget.boundingBox.minY, this.entityTarget.posZ) <= d0)
+        if (this.attacker.getDistanceSq(this.entityTarget.posX, this.entityTarget.boundingBox.minY, this.entityTarget.posZ) - (entityTarget.width / 2 ) <= d0)
         {
             if (this.attackTick <= 0)
             {
@@ -123,4 +124,8 @@ public class EntityAIAttackOnCollideWithRate extends EntityAIBase
             }
         }
     }
+    public void setDistanceMultiplier(float distanceMultiplier) 
+    {
+		this.distanceMultiplier = distanceMultiplier;
+	}
 }

@@ -43,9 +43,11 @@ public class GristPacket extends MinestuckPacket
 	{
 		if(this.typeInt == -1)return;
 		EntityPlayer entityPlayer = (EntityPlayer)player;
-		if(entityPlayer.getEntityData().getCompoundTag("Grist").getTags().size() == 0)
-			entityPlayer.getEntityData().setCompoundTag("Grist", new NBTTagCompound("Grist"));
-		entityPlayer.getEntityData().getCompoundTag("Grist").setInteger(EntityGrist.gristTypes[this.typeInt], this.gristTotal);
+		if(entityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getTags().size() == 0)
+			entityPlayer.getEntityData().setCompoundTag(EntityPlayer.PERSISTED_NBT_TAG, new NBTTagCompound());
+		if(entityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getTags().size() == 0)
+			entityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setCompoundTag("Grist", new NBTTagCompound("Grist"));
+		entityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").setInteger(EntityGrist.gristTypes[this.typeInt], this.gristTotal);
 //		((WorldClient) entityPlayer.worldObj).removeEntityFromWorld(this.gristEntityId);
 	}
 	

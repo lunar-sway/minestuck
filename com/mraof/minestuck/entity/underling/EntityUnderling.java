@@ -1,7 +1,9 @@
 package com.mraof.minestuck.entity.underling;
 
+import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
@@ -11,6 +13,8 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
@@ -84,6 +88,13 @@ public abstract class EntityUnderling extends EntityCreature implements IEntityA
 	EntityAINearestAttackableTargetWithHeight entityAINearestAttackableTargetWithHeight()
 	{
 		return new EntityAINearestAttackableTargetWithHeight(this, EntityPlayer.class, 128.0F, 2, true, false);
+	}
+	@Override
+	public void moveEntity(double par1, double par3, double par5) 
+	{
+		//TODO Oh boy, trigonometry to make the bounding box the right size
+		 
+		super.moveEntity(par1, par3, par5);
 	}
 	@Override
 	public void writeEntityToNBT(NBTTagCompound par1nbtTagCompound) 

@@ -49,7 +49,8 @@ public class BlockChessTile extends Block
 			subItems.add(new ItemStack(this, 1, i));
 	}
 	@Override
-	public boolean canCreatureSpawn(EnumCreatureType type, World world, int x, int y, int z) {
+	public boolean canCreatureSpawn(EnumCreatureType type, World world, int x, int y, int z) 
+	{
 		return true;
 	}
     @SideOnly(Side.CLIENT)

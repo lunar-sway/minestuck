@@ -4,8 +4,6 @@ package com.mraof.minestuck;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.item.Item;
@@ -19,8 +17,6 @@ import net.minecraftforge.common.MinecraftForge;
 import com.mraof.minestuck.block.BlockChessTile;
 import com.mraof.minestuck.block.BlockGatePortal;
 import com.mraof.minestuck.client.ClientProxy;
-import com.mraof.minestuck.client.gui.GuiGristCache;
-import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
 import com.mraof.minestuck.entity.carapacian.EntityBlackBishop;
 import com.mraof.minestuck.entity.carapacian.EntityBlackPawn;
 import com.mraof.minestuck.entity.carapacian.EntityWhiteBishop;
@@ -28,6 +24,7 @@ import com.mraof.minestuck.entity.carapacian.EntityWhitePawn;
 import com.mraof.minestuck.entity.consort.EntityNakagator;
 import com.mraof.minestuck.entity.consort.EntitySalamander;
 import com.mraof.minestuck.entity.item.EntityGrist;
+import com.mraof.minestuck.entity.underling.EntityGiclops;
 import com.mraof.minestuck.entity.underling.EntityImp;
 import com.mraof.minestuck.entity.underling.EntityOgre;
 import com.mraof.minestuck.item.EnumBladeType;
@@ -43,12 +40,11 @@ import com.mraof.minestuck.item.ItemClub;
 import com.mraof.minestuck.item.ItemHammer;
 import com.mraof.minestuck.item.ItemSickle;
 import com.mraof.minestuck.item.ItemSpork;
-import com.mraof.minestuck.network.MinestuckConnectHandler;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
+import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.world.WorldProviderSkaia;
 
-import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
@@ -59,14 +55,11 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
-import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
-@Mod(modid = "Minestuck", name = "Minestuck", version = "0.0.3")
+@Mod(modid = "Minestuck", name = "Minestuck", version = "0.0.4")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false, packetHandler = MinestuckPacketHandler.class, channels = {"Minestuck"})
 public class Minestuck
 {
@@ -244,6 +237,9 @@ public class Minestuck
 		LanguageRegistry.instance().addStringLocalization("entity.Ogre.name", "Ogre");
 		for(EntityOgre.Type ogreType : EntityOgre.Type.values())
 			LanguageRegistry.instance().addStringLocalization("entity." + ogreType.getTypeString() + ".Ogre.name", ogreType.getTypeString() + " Ogre");
+		LanguageRegistry.instance().addStringLocalization("entity.Giclops.name", "Giclops");
+		for(EntityGiclops.Type giclopsType : EntityGiclops.Type.values())
+			LanguageRegistry.instance().addStringLocalization("entity." + giclopsType.getTypeString() + ".Giclops.name", giclopsType.getTypeString() + " Giclops");
 		LanguageRegistry.instance().addStringLocalization("entity.dersitePawn.name", "Dersite Pawn");
 		LanguageRegistry.instance().addStringLocalization("entity.prospitianPawn.name", "Prospitian Pawn");
 		LanguageRegistry.instance().addStringLocalization("entity.dersiteBishop.name", "Dersite Bishop");
@@ -258,6 +254,7 @@ public class Minestuck
 		this.registerAndMapEntity(EntityNakagator.class, "Nakagator", 0xffe62e, 0xfffb53);
 		this.registerAndMapEntity(EntityImp.class, "Imp", 0x000000, 0xffffff);
 		this.registerAndMapEntity(EntityOgre.class, "Ogre", 0x000000, 0xffffff);
+		this.registerAndMapEntity(EntityGiclops.class, "Giclops", 0x000000, 0xffffff);
 		this.registerAndMapEntity(EntityBlackPawn.class, "dersitePawn", 0x0f0f0f, 0xf0f0f0);
 		this.registerAndMapEntity(EntityWhitePawn.class, "prospitianPawn", 0xf0f0f0, 0x0f0f0f);
 		this.registerAndMapEntity(EntityBlackBishop.class, "dersiteBishop", 0x000000, 0xc121d9);
@@ -265,14 +262,15 @@ public class Minestuck
 		//register entities with fml
 		EntityRegistry.registerModEntity(EntityGrist.class, "grist", currentEntityIdOffset, this, 512, 1, true);
 
-		EntityRegistry.addSpawn(EntityImp.class, 2, 3, 20, EnumCreatureType.monster, WorldType.base12Biomes);
-		EntityRegistry.addSpawn(EntityOgre.class, 1, 1, 1, EnumCreatureType.monster, WorldType.base12Biomes);
+		EntityRegistry.addSpawn(EntityImp.class, 3, 3, 20, EnumCreatureType.monster, WorldType.base12Biomes);
+		EntityRegistry.addSpawn(EntityOgre.class, 2, 1, 1, EnumCreatureType.monster, WorldType.base12Biomes);
+		EntityRegistry.addSpawn(EntityGiclops.class, 1, 1, 1, EnumCreatureType.monster, WorldType.base12Biomes);
 		//register Tile Entities
 		GameRegistry.registerTileEntity(TileEntityGatePortal.class, "gatePortal");
 		//register world generators
 		DimensionManager.registerProviderType(skaiaProviderTypeId, WorldProviderSkaia.class, true);
 		DimensionManager.registerDimension(skaiaDimensionId, skaiaProviderTypeId);
-		NetworkRegistry.instance().registerConnectionHandler(new MinestuckConnectHandler());
+		GameRegistry.registerPlayerTracker(new MinestuckPlayerTracker());
 
 	}
 

@@ -15,7 +15,8 @@ public class EntityOgre extends EntityUnderling
 	{
 		CRUDE("Crude", 0),
 		LIME("Lime", 0),
-		SULFUR("Sulfur", 1),
+		SULFUR("Sulfur", 1), 
+		RUST("Rust", 1),
 		;
 		final String typeString;
 		final int strength;
@@ -46,7 +47,7 @@ public class EntityOgre extends EntityUnderling
 		}
 
 	}
-	private EntityAIAttackOnCollideWithRate entityAIAttackOnCollideWithRate = new EntityAIAttackOnCollideWithRate(this, .3F, 40, false);
+	private EntityAIAttackOnCollideWithRate entityAIAttackOnCollideWithRate;
 	public EntityOgre(World world)
 	{
 		this(world, Type.values()[randStatic.nextInt(Type.values().length)]);
@@ -56,8 +57,9 @@ public class EntityOgre extends EntityUnderling
 		super(par1World, type, "Ogre");
 		setSize(3.0F, 4.5F);
 		this.experienceValue = 5 * type.strength + 4;
-		this.maxHealth = 24 * (type.strength + 1);
+		this.maxHealth = 16 * (type.strength + 1) + 8;
 		this.health = this.maxHealth;
+		this.stepHeight = 1.0F;
 	}
 	@Override
 	protected void onDeathUpdate() 
@@ -80,6 +82,8 @@ public class EntityOgre extends EntityUnderling
 			return new String[] {"Build", "Quartz", "Marble"};
 		case SULFUR:
 			return new String[] {"Build", "Sulfur"};
+		case RUST:
+			return new String[] {"Build", "Sulfur"};
 		default:
 			return new String[] {"Build"};
 		}
@@ -87,14 +91,14 @@ public class EntityOgre extends EntityUnderling
 	@Override
 	public boolean attackEntityAsMob(Entity par1Entity) 
 	{
-		boolean flag = par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this), (this.type.getStrength() + 1) * 2);
-		return flag;
+		return par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this), (this.type.getStrength() + 1) * 2);
 	}
 	@Override
 	protected void setCombatTask() 
 	{
 		if(entityAIAttackOnCollideWithRate == null)
 			entityAIAttackOnCollideWithRate = new EntityAIAttackOnCollideWithRate(this, .3F, 40, false);
+		entityAIAttackOnCollideWithRate.setDistanceMultiplier(1.2F);
 		this.tasks.removeTask(this.entityAIAttackOnCollideWithRate);
 		this.tasks.addTask(4, entityAIAttackOnCollideWithRate);
 	}

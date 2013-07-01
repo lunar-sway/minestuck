@@ -239,8 +239,10 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		{
 			this.playSound("random.pop", 0.1F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F));
 			par1EntityPlayer.onItemPickup(this, 1);
-			if(par1EntityPlayer.getEntityData().getCompoundTag("Grist").getTags().size() == 0)
-				par1EntityPlayer.getEntityData().setCompoundTag("Grist", new NBTTagCompound("Grist"));
+			if(par1EntityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getTags().size() == 0)
+				par1EntityPlayer.getEntityData().setCompoundTag(EntityPlayer.PERSISTED_NBT_TAG, new NBTTagCompound());
+			if(par1EntityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getTags().size() == 0)
+				par1EntityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setCompoundTag("Grist", new NBTTagCompound("Grist"));
 			this.addGrist(par1EntityPlayer);
 			this.setDead();
 		}
@@ -249,8 +251,8 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	}
 	public void addGrist(EntityPlayer entityPlayer)
 	{
-		int oldValue = entityPlayer.getEntityData().getCompoundTag("Grist").getInteger(this.gristType);
-		entityPlayer.getEntityData().getCompoundTag("Grist").setInteger(this.gristType, oldValue + gristValue);
+		int oldValue = entityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(this.gristType);
+		entityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").setInteger(this.gristType, oldValue + gristValue);
 		Packet250CustomPayload packet = new Packet250CustomPayload();
 		packet.channel = "Minestuck";
 		packet.data = MinestuckPacket.makePacket(Type.GRIST, typeInt(this.gristType), oldValue + gristValue);

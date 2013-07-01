@@ -44,10 +44,12 @@ public class GristCachePacket extends MinestuckPacket
 	public void execute(INetworkManager network, MinestuckPacketHandler minestuckPacketHandler, Player player, String userName) 
 	{
 		EntityPlayer entityPlayer = (EntityPlayer)player;
-		if(entityPlayer.getEntityData().getCompoundTag("Grist").getTags().size() == 0)
-			entityPlayer.getEntityData().setCompoundTag("Grist", new NBTTagCompound("Grist"));
+		if(entityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getTags().size() == 0)
+			entityPlayer.getEntityData().setCompoundTag(EntityPlayer.PERSISTED_NBT_TAG, new NBTTagCompound());
+		if(entityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getTags().size() == 0)
+			entityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setCompoundTag("Grist", new NBTTagCompound("Grist"));
 		for(int typeInt = 0; typeInt < values.length; typeInt++)
-			entityPlayer.getEntityData().getCompoundTag("Grist").setInteger(EntityGrist.gristTypes[typeInt], values[typeInt]);
+			entityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").setInteger(EntityGrist.gristTypes[typeInt], values[typeInt]);
 	}
 
 
