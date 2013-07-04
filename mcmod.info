@@ -1,0 +1,22 @@
+[
+    {
+        "name": "Minestuck", 
+        "parent": "", 
+        "url": "http://www.mspaforums.com/showthread.php?43888-Minestuck-Attempting-to-put-some-Homestuck-in-Minecraft-%28CODERS-NEEDED%21%29", 
+        "logoFile": "/minestuck_logo.png", 
+        "updateUrl": "", 
+        "credits": "Coded by Mraof and Iconmaster, graphics by many others; see forum page for full credits.", 
+        "version": "0.0.4", 
+        "modid": "Minestuck", 
+        "authors": [
+            "Mroaf", 
+            "Iconmaster"
+        ], 
+        "mcversion": "1.5.2", 
+        "screenshots": [], 
+        "dependencies": [
+            "Forge"
+        ], 
+        "description": "Adds Homestuck in your Minecraft!"
+    }
+]
