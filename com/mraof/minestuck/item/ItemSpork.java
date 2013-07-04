@@ -1,5 +1,7 @@
 package com.mraof.minestuck.item;
 
+import com.mraof.minestuck.Minestuck;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -29,7 +31,7 @@ public class ItemSpork extends Item {
 		this.sporkType = sporkType;
 		this.maxStackSize = 1;
 		this.setMaxDamage(sporkType.getMaxUses());
-		this.setCreativeTab(CreativeTabs.tabCombat);
+		this.setCreativeTab(Minestuck.tabMinestuck);
 		switch(sporkType)
 		{
 		case CROCKER:

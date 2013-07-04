@@ -30,7 +30,7 @@ public class BlockGatePortal extends BlockContainer
 	{
 		super(id, material);
 		setUnlocalizedName("gatePortal");
-		setCreativeTab(CreativeTabs.tabMisc);
+		this.setCreativeTab(Minestuck.tabMinestuck);
 		destinationDimension = 2;
 	}
 	@Override

@@ -1,5 +1,7 @@
 package com.mraof.minestuck.item;
 
+import com.mraof.minestuck.Minestuck;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -23,7 +25,7 @@ public class ItemCane extends Item
 		this.caneType = caneType;
 		this.maxStackSize = 1;
 		this.setMaxDamage(caneType.getMaxUses());
-		this.setCreativeTab(CreativeTabs.tabCombat);
+		this.setCreativeTab(Minestuck.tabMinestuck);
 		switch(caneType)
 		{
 		case CANE:

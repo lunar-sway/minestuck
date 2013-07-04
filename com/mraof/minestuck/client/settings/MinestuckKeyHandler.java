@@ -13,6 +13,7 @@ import cpw.mods.fml.common.TickType;
 public class MinestuckKeyHandler extends KeyHandler 
 {
     private EnumSet tickTypes = EnumSet.of(TickType.CLIENT);
+    boolean gristHasBeenPressed = false;
     
 	public MinestuckKeyHandler(KeyBinding[] keyBindings, boolean[] repeatings) 
 	{
@@ -28,22 +29,23 @@ public class MinestuckKeyHandler extends KeyHandler
 	@Override
 	public void keyDown(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd, boolean isRepeat) 
 	{
-//		System.out.println(kb.keyDescription);
 		if(kb.keyDescription == "key.gristCache")
 		{
-//			GuiGristCache.visible = true;
-			if(Minecraft.getMinecraft().currentScreen == null)
-				Minecraft.getMinecraft().displayGuiScreen(new GuiGristCache(Minecraft.getMinecraft()));
+			if(!gristHasBeenPressed )
+			{
+				if(Minecraft.getMinecraft().currentScreen == null)
+					Minecraft.getMinecraft().displayGuiScreen(new GuiGristCache(Minecraft.getMinecraft()));
+				else if(Minecraft.getMinecraft().currentScreen instanceof GuiGristCache)
+					Minecraft.getMinecraft().displayGuiScreen(null);
+				gristHasBeenPressed = true;
+			}
 		}
 	}
 
 	@Override
 	public void keyUp(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd) 
 	{
-		if(kb.keyDescription == "key.gristCache")
-		{
-//			GuiGristCache.visible = false;
-		}
+		gristHasBeenPressed = false;
 	}
 
 	@Override

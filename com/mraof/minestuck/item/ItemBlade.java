@@ -1,5 +1,7 @@
 package com.mraof.minestuck.item;
 
+import com.mraof.minestuck.Minestuck;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -24,7 +26,7 @@ public class ItemBlade extends Item{
 		this.bladeType = bladeType;
 		this.maxStackSize = 1;
 		this.setMaxDamage(bladeType.getMaxUses());
-		this.setCreativeTab(CreativeTabs.tabCombat);
+		this.setCreativeTab(Minestuck.tabMinestuck);
 		switch(bladeType)
 		{
 		case SORD:

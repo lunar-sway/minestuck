@@ -4,6 +4,9 @@ package com.mraof.minestuck;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.item.Item;
@@ -14,8 +17,14 @@ import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 
+import com.mraof.minestuck.alchemy.CombinationRegistry;
+import com.mraof.minestuck.alchemy.GristRegistry;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.block.BlockChessTile;
 import com.mraof.minestuck.block.BlockGatePortal;
+import com.mraof.minestuck.block.BlockStorage;
+import com.mraof.minestuck.block.OreCruxite;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.entity.carapacian.EntityBlackBishop;
 import com.mraof.minestuck.entity.carapacian.EntityBlackPawn;
@@ -37,13 +46,16 @@ import com.mraof.minestuck.item.ItemBlade;
 import com.mraof.minestuck.item.ItemCane;
 import com.mraof.minestuck.item.ItemChessTile;
 import com.mraof.minestuck.item.ItemClub;
+import com.mraof.minestuck.item.ItemCruxiteRaw;
 import com.mraof.minestuck.item.ItemHammer;
 import com.mraof.minestuck.item.ItemSickle;
 import com.mraof.minestuck.item.ItemSpork;
+import com.mraof.minestuck.item.ItemStorageBlock;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.world.WorldProviderSkaia;
+import com.mraof.minestuck.world.gen.OreHandler;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
@@ -67,6 +79,7 @@ public class Minestuck
 	public static int toolIdStart = 5001;
 	public static int entityIdStart = 5050;
 	public static int blockIdStart = 500;
+	public static int itemIdStart = 6001;
 	public static int skaiaProviderTypeId = 2;
 	public static int skaiaDimensionId = 2;
 
@@ -102,12 +115,16 @@ public class Minestuck
 	//Spoons/forks
 	public static Item crockerSpork;
 	public static Item skaiaFork;
+	//Other
+	public static Item rawCruxite;
 
 	public static Achievement getHammer;
 
 	//Blocks
 	public static Block chessTile;
 	public static Block gatePortal;
+	public static Block oreCruxite;
+	public static Block blockStorage;
 	
 	
 	// The instance of your mod that Forge uses.
@@ -119,6 +136,7 @@ public class Minestuck
 
 	//The proxy to be used by client and server
 	public static CommonProxy proxy;
+	public static CreativeTabs tabMinestuck;
 
 	public int currentEntityIdOffset = 0;
 	@PreInit
@@ -129,6 +147,7 @@ public class Minestuck
 		blockIdStart = config.get("Block Ids", "blockIdStart", 500).getInt();
 		toolIdStart = config.get("Item Ids", "toolIdStart", 5001).getInt();
 		entityIdStart = config.get("Entity Ids", "entitydIdStart", 5050).getInt();
+		itemIdStart = config.get("Item Ids", "itemIdStart", 6001).getInt();
 		skaiaProviderTypeId = config.get("Provider Type Ids", "skaiaProviderTypeId", 2).getInt();
 		skaiaDimensionId = config.get("Dimension Ids", "skaiaDimensionId", 2).getInt();
 		config.save();
@@ -137,9 +156,21 @@ public class Minestuck
 	@Init
 	public void load(FMLInitializationEvent event) 
 	{
+		
+		//Register the Minestuck creative tab
+		this.tabMinestuck = new CreativeTabs("tabMinestuck")
+		{
+			public ItemStack getIconItemStack() 
+			{
+					return new ItemStack(zillyhooHammer,1);
+			}
+		};
+		
 		//blocks
 		chessTile = new BlockChessTile(blockIdStart);
 		gatePortal = new BlockGatePortal(blockIdStart + 1, Material.portal);
+		oreCruxite = new OreCruxite(blockIdStart + 2);
+		blockStorage = new BlockStorage(blockIdStart + 3);
 		//hammers
 		clawHammer = new ItemHammer(toolIdStart, EnumHammerType.CLAW);
 		sledgeHammer = new ItemHammer(toolIdStart + 1, EnumHammerType.SLEDGE);
@@ -172,6 +203,8 @@ public class Minestuck
 		//Spoons/forks
 		crockerSpork = new ItemSpork(toolIdStart + 24, EnumSporkType.CROCKER);
 		skaiaFork = new ItemSpork(toolIdStart + 25, EnumSporkType.SKAIA);
+		//items
+		rawCruxite = new ItemCruxiteRaw(itemIdStart);
 
 		//achievements
 		getHammer = (new Achievement(413, "getHammer", 12, 15, Minestuck.clawHammer, (Achievement)null)).setIndependent().registerAchievement();
@@ -185,11 +218,15 @@ public class Minestuck
 		//register blocks
 		GameRegistry.registerBlock(chessTile, ItemChessTile.class, "chessTile");
 		GameRegistry.registerBlock(gatePortal, "gatePortal");
+		GameRegistry.registerBlock(oreCruxite,"oreCruxite");
+		GameRegistry.registerBlock(blockStorage,ItemStorageBlock.class,"blockStorage");
 		//metadata nonsense to conserve ids
 		ItemStack blackChessTileStack = new ItemStack(chessTile, 1, 0);
 		ItemStack whiteChessTileStack = new ItemStack(chessTile, 1, 1);
 		ItemStack darkGreyChessTileStack = new ItemStack(chessTile, 1, 2);
 		ItemStack lightGreyChessTileStack = new ItemStack(chessTile, 1, 3);
+		ItemStack cruxiteBlockTileStack = new ItemStack(blockStorage,1,0);
+	
 		//Give Items names to be displayed ingame
 
 		LanguageRegistry.addName(clawHammer, "Claw Hammer");
@@ -223,9 +260,14 @@ public class Minestuck
 		LanguageRegistry.addName(whiteChessTileStack, "White Chess Tile");
 		LanguageRegistry.addName(lightGreyChessTileStack, "Light Grey Chess Tile");
 		LanguageRegistry.addName(darkGreyChessTileStack, "Dark Grey Chess Tile");
+		LanguageRegistry.addName(cruxiteBlockTileStack, "Cruxite Block");
 		LanguageRegistry.addName(gatePortal, "Gate");
+		LanguageRegistry.addName(oreCruxite, "Cruxite Ore");
+		LanguageRegistry.addName(rawCruxite, "Raw Cruxite");
 		//set harvest information for blocks
 		MinecraftForge.setBlockHarvestLevel(chessTile, "shovel", 0);
+		MinecraftForge.setBlockHarvestLevel(oreCruxite, "pickaxe", 1);
+		MinecraftForge.setBlockHarvestLevel(blockStorage, "pickaxe", 1);
 
 		//set translations for automatic names
 		LanguageRegistry.instance().addStringLocalization("entity.Salamander.name", "Salamander");
@@ -249,6 +291,9 @@ public class Minestuck
 		LanguageRegistry.instance().addStringLocalization("achievement.getHammer.desc", "Get the Claw Hammer");
 
 		LanguageRegistry.instance().addStringLocalization("key.gristCache", "View Grist Cache");
+		
+		LanguageRegistry.instance().addStringLocalization("itemGroup.tabMinestuck", "Minestuck");
+		
 		//register entities
 		this.registerAndMapEntity(EntitySalamander.class, "Salamander", 0xffe62e, 0xfffb53);
 		this.registerAndMapEntity(EntityNakagator.class, "Nakagator", 0xffe62e, 0xfffb53);
@@ -271,7 +316,19 @@ public class Minestuck
 		DimensionManager.registerProviderType(skaiaProviderTypeId, WorldProviderSkaia.class, true);
 		DimensionManager.registerDimension(skaiaDimensionId, skaiaProviderTypeId);
 		GameRegistry.registerPlayerTracker(new MinestuckPlayerTracker());
-
+		
+		//register ore generation
+		OreHandler oreHandler = new OreHandler();
+		GameRegistry.registerWorldGenerator(oreHandler);
+		
+		//register recipes
+		GameRegistry.addRecipe(new ItemStack(blockStorage,1,0),new Object[]{ "XXX","XXX","XXX",'X',new ItemStack(rawCruxite,1)});
+		
+		//Set up Alchemiter recipes
+		GristRegistry.addGristConversion(cruxiteBlockTileStack, new GristSet(GristType.Build,9)); //1 Cruxite block is now worth 9 Build Grist. This is an example!
+		
+		//Set up Punch Designex recipes
+		CombinationRegistry.addCombination(whiteChessTileStack, whiteChessTileStack, lightGreyChessTileStack); //You can now combine black and white chess tiles to get grey ones. Also an example!
 	}
 
 	@PostInit
