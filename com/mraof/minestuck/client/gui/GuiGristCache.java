@@ -72,20 +72,37 @@ public class GuiGristCache extends GuiScreen
         fontRenderer.drawString(cacheMessage, (mc.displayWidth/4)-fontRenderer.getStringWidth(cacheMessage)/2, yOffset*2, 4210752);
         fontRenderer.drawString(titleMessage, (mc.displayWidth/4)-fontRenderer.getStringWidth(titleMessage)/2, yOffset*2+10, 4210752);
         
+	    GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+	    RenderHelper.disableStandardItemLighting();
+	    GL11.glDisable(GL11.GL_LIGHTING);
+	    GL11.glDisable(GL11.GL_DEPTH_TEST);
+        
         for(int gristId = 0; gristId < EntityGrist.gristTypes.length; gristId++) {
         	int row = (int) (gristId/7);
         	int column = (int) (gristId%7);
-        	 this.drawGristIcon((mc.displayWidth/4)-(guiWidth/2)+gristIconX+(gristIconXOffset*row-row), yOffset+gristIconY+(gristIconYOffset*column-column), EntityGrist.gristTypes[gristId]);
-        	 fontRenderer.drawString(Integer.toString(mc.thePlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(EntityGrist.gristTypes[gristId])),(mc.displayWidth/4)-(guiWidth/2)+gristCountX+(gristCountXOffset*row-row), yOffset+gristCountY+(gristCountYOffset*column-column), 0xddddee);
+
+        	this.drawGristIcon((mc.displayWidth/4)-(guiWidth/2)+gristIconX+(gristIconXOffset*row-row), yOffset+gristIconY+(gristIconYOffset*column-column), EntityGrist.gristTypes[gristId]);
+        	fontRenderer.drawString(Integer.toString(mc.thePlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(EntityGrist.gristTypes[gristId])),(mc.displayWidth/4)-(guiWidth/2)+gristCountX+(gristCountXOffset*row-row), yOffset+gristCountY+(gristCountYOffset*column-column), 0xddddee);
+
+        	if (xcor > (mc.displayWidth/4)-(guiWidth/2)+gristIconX+(gristIconXOffset*row-row) && xcor < (mc.displayWidth/4)-(guiWidth/2)+gristIconX+(gristIconXOffset*row-row)+16 && ycor > yOffset+gristIconY+(gristIconYOffset*column-column) && ycor < yOffset+gristIconY+(gristIconYOffset*column-column)+16)  {
+       	   		drawGristTooltip(EntityGrist.gristTypes[gristId] + " Grist", xcor, ycor);
+        	}
+        	
         }
         
-  		int column = (int) (xcor - (mc.displayWidth/4)+(guiWidth/2)-gristIconX) / gristIconXOffset;
-		int row = (int) (ycor - yOffset-gristIconY) / gristIconYOffset;
-		int gristKind = 7*column + row;
-		
-    	if (gristKind >= 0 && gristKind < EntityGrist.gristTypes.length && row < 7 && row >= 0 && xcor > (mc.displayWidth/4)-(guiWidth/2)+gristIconX+(gristIconXOffset*column-column) && xcor < (mc.displayWidth/4)-(guiWidth/2)+gristIconX+(gristIconXOffset*column-column)+16 && ycor > yOffset+gristIconY+(gristIconYOffset*row-row) && ycor < yOffset+gristIconY+(gristIconYOffset*row-row)+16)  {
-    		drawGristTooltip(EntityGrist.gristTypes[gristKind] + " Grist", xcor, ycor);
-    	}
+	    GL11.glEnable(GL11.GL_LIGHTING);
+	    GL11.glEnable(GL11.GL_DEPTH_TEST);
+	    RenderHelper.enableStandardItemLighting();
+	    GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+        
+//  		int column = (int) (xcor - (mc.displayWidth/4)+(guiWidth/2)-gristIconX) / gristIconXOffset;
+//		int row = (int) (ycor - yOffset-gristIconY) / gristIconYOffset;
+//		int gristKind = 7*column + row;
+//		
+//    	if (gristKind >= 0 && gristKind < EntityGrist.gristTypes.length && row < 7 && row >= 0 && xcor > (mc.displayWidth/4)-(guiWidth/2)+gristIconX+(gristIconXOffset*column-column) && xcor < (mc.displayWidth/4)-(guiWidth/2)+gristIconX+(gristIconXOffset*column-column)+16 && ycor > yOffset+gristIconY+(gristIconYOffset*row-row) && ycor < yOffset+gristIconY+(gristIconYOffset*row-row)+16)  {
+//   		drawGristTooltip(EntityGrist.gristTypes[gristKind] + " Grist", xcor, ycor);
+//    	}
+////  drawGristTooltip(row + " " + column, xcor, ycor);
 	}
 	
 	private void drawGristIcon(int x,int y,String gristType) {
@@ -125,10 +142,10 @@ public class GuiGristCache extends GuiScreen
 
         if (list.length != 0)
 		{
-		    GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-		    RenderHelper.disableStandardItemLighting();
-		    GL11.glDisable(GL11.GL_LIGHTING);
-		    GL11.glDisable(GL11.GL_DEPTH_TEST);
+//		    GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+//		    RenderHelper.disableStandardItemLighting();
+//		    GL11.glDisable(GL11.GL_LIGHTING);
+//		    GL11.glDisable(GL11.GL_DEPTH_TEST);
 		    int k = 0;
 		
 			for (int i = 1; i < list.length; i++)
@@ -191,10 +208,10 @@ public class GuiGristCache extends GuiScreen
 		
 		    this.zLevel = 0.0F;
 		    itemRenderer.zLevel = 0.0F;
-		    GL11.glEnable(GL11.GL_LIGHTING);
-		    GL11.glEnable(GL11.GL_DEPTH_TEST);
-		    RenderHelper.enableStandardItemLighting();
-		    GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+//		    GL11.glEnable(GL11.GL_LIGHTING);
+//		    GL11.glEnable(GL11.GL_DEPTH_TEST);
+//		    RenderHelper.enableStandardItemLighting();
+//		    GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		}
     }
 }
