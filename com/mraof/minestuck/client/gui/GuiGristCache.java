@@ -146,18 +146,7 @@ public class GuiGristCache extends GuiScreen
 //		    RenderHelper.disableStandardItemLighting();
 //		    GL11.glDisable(GL11.GL_LIGHTING);
 //		    GL11.glDisable(GL11.GL_DEPTH_TEST);
-		    int k = 0;
-		
-			for (int i = 1; i < list.length; i++)
-		    {
-		        String s = list[i];
-		        int l = fontRenderer.getStringWidth(s);
-		
-		        if (l > k)
-		        {
-		            k = l;
-		        }
-		    }
+		    int k = fontRenderer.getStringWidth(text);
 		
 		    int i1 = par2 + 12;
 		    int j1 = par3 - 12;
@@ -195,7 +184,7 @@ public class GuiGristCache extends GuiScreen
 		
 		    for (int k2 = 0; k2 < list.length; ++k2)
 		    {
-		        String s1 = (String)list[k2];
+		        String s1 = list[k2];
 		        fontRenderer.drawStringWithShadow(s1, i1, j1, -1);
 		
 		        if (k2 == 0)
