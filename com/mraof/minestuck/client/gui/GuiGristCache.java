@@ -76,18 +76,27 @@ public class GuiGristCache extends GuiScreen
 	    RenderHelper.disableStandardItemLighting();
 	    GL11.glDisable(GL11.GL_LIGHTING);
 	    GL11.glDisable(GL11.GL_DEPTH_TEST);
+	    
+    	int tooltip = -1;
         
         for(int gristId = 0; gristId < EntityGrist.gristTypes.length; gristId++) {
         	int row = (int) (gristId/7);
         	int column = (int) (gristId%7);
 
+        	
+        	this.drawGristIcon((mc.displayWidth/4)-(guiWidth/2)+gristIconX+(gristIconXOffset*row-row), yOffset+gristIconY+(gristIconYOffset*column-column), EntityGrist.gristTypes[gristId]);
+
         	this.drawGristIcon((mc.displayWidth/4)-(guiWidth/2)+gristIconX+(gristIconXOffset*row-row), yOffset+gristIconY+(gristIconYOffset*column-column), EntityGrist.gristTypes[gristId]);
         	fontRenderer.drawString(Integer.toString(mc.thePlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(EntityGrist.gristTypes[gristId])),(mc.displayWidth/4)-(guiWidth/2)+gristCountX+(gristCountXOffset*row-row), yOffset+gristCountY+(gristCountYOffset*column-column), 0xddddee);
 
-        	if (xcor > (mc.displayWidth/4)-(guiWidth/2)+gristIconX+(gristIconXOffset*row-row) && xcor < (mc.displayWidth/4)-(guiWidth/2)+gristIconX+(gristIconXOffset*row-row)+16 && ycor > yOffset+gristIconY+(gristIconYOffset*column-column) && ycor < yOffset+gristIconY+(gristIconYOffset*column-column)+16)  {
-       	   		drawGristTooltip(EntityGrist.gristTypes[gristId] + " Grist", xcor, ycor);
+           	if (xcor > (mc.displayWidth/4)-(guiWidth/2)+gristIconX+(gristIconXOffset*row-row) && xcor < (mc.displayWidth/4)-(guiWidth/2)+gristIconX+(gristIconXOffset*row-row)+16 && ycor > yOffset+gristIconY+(gristIconYOffset*column-column) && ycor < yOffset+gristIconY+(gristIconYOffset*column-column)+16)  {
+       	   		tooltip = gristId;
         	}
         	
+        }
+        
+        if (tooltip != -1) {
+        	drawGristTooltip(EntityGrist.gristTypes[tooltip] + " Grist", xcor, ycor);
         }
         
 	    GL11.glEnable(GL11.GL_LIGHTING);
