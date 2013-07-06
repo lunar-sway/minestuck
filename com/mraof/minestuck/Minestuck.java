@@ -4,8 +4,6 @@ package com.mraof.minestuck;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EnumCreatureType;
@@ -322,10 +320,10 @@ public class Minestuck
 		GameRegistry.registerWorldGenerator(oreHandler);
 		
 		//register recipes
-		GameRegistry.addRecipe(new ItemStack(blockStorage,1,0),new Object[]{ "XXX","XXX","XXX",'X',new ItemStack(rawCruxite,1)});
+		GameRegistry.addRecipe(new ItemStack(blockStorage,1,0),new Object[]{ "XXX","XXX","XXX",'X',new ItemStack(rawCruxite, 1)});
 		
 		//Set up Alchemiter recipes
-		GristRegistry.addGristConversion(cruxiteBlockTileStack, new GristSet(GristType.Build,9)); //1 Cruxite block is now worth 9 Build Grist. This is an example!
+		GristRegistry.addGristConversion(cruxiteBlockTileStack, new GristSet(GristType.Build, 9)); //1 Cruxite block is now worth 9 Build Grist. This is an example!
 		
 		//Set up Punch Designex recipes
 		CombinationRegistry.addCombination(whiteChessTileStack, whiteChessTileStack, lightGreyChessTileStack); //You can now combine black and white chess tiles to get grey ones. Also an example!
