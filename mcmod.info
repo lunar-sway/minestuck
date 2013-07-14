@@ -9,10 +9,10 @@
         "version": "0.0.4", 
         "modid": "Minestuck", 
         "authors": [
-            "Mroaf", 
+            "Mraof", 
             "Iconmaster"
         ], 
-        "mcversion": "1.5.2", 
+        "mcversion": "1.6.1", 
         "screenshots": [], 
         "dependencies": [
             "Forge"

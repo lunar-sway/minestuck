@@ -6,7 +6,10 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityLivingData;
 import net.minecraft.entity.IRangedAttackMob;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIArrowAttack;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.monster.IMob;
@@ -41,7 +44,7 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 	}
 	
 	@Override
-	public int getMaxHealth() 
+	public float getMaxHealth() 
 	{
 		return 20;
 	}
@@ -53,8 +56,9 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 	}
 	
 	@Override
-	public void initCreature() 
+	public EntityLivingData func_110161_a(EntityLivingData par1EntityLivingData)
 	{
+		par1EntityLivingData = super.func_110161_a(par1EntityLivingData);
 		this.addRandomArmor();
 			
 		if(this.pawnType == 1)
@@ -65,10 +69,11 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 			this.tasks.addTask(4, this.entityAIAttackOnCollide);
 		this.setCurrentItemOrArmor(0, new ItemStack(this.pawnType == 1 ? Item.bow : rand.nextDouble() < .2 ? Minestuck.regisword : rand.nextDouble() < .02 ? Minestuck.sord : Item.swordStone));
 		this.func_82162_bC();
+		return par1EntityLivingData;
 	}
 	
 	@Override
-	public void attackEntityWithRangedAttack(EntityLiving entityLiving, float f1) 
+	public void attackEntityWithRangedAttack(EntityLivingBase entityLiving, float f1) 
 	{
 		EntityArrow arrow = new EntityArrow(this.worldObj, this, entityLiving, 1.6F, 12.0F);
 		int power = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, this.getHeldItem());
@@ -101,20 +106,20 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 	/**
 	 * Returns the amount of damage a mob should deal.
 	 */
-	public int getAttackStrength(Entity par1Entity)
+	public float getAttackStrength(Entity par1Entity)
 	{
 		ItemStack weapon = this.getHeldItem();
-		int damage = 2;
+		float damage = 2;
 
 		if (weapon != null)
-			damage += weapon.getDamageVsEntity(this);
+			damage += (float)this.func_110148_a(SharedMonsterAttributes.field_111264_e).func_111126_e();
         damage += EnchantmentHelper.getEnchantmentModifierLiving(this, (EntityLiving)par1Entity);
 
 		return damage;
 	}
 	public boolean attackEntityAsMob(Entity par1Entity)
 	{
-		int damage = this.getAttackStrength(par1Entity);
+		float damage = this.getAttackStrength(par1Entity);
 		int fireAspectLevel = EnchantmentHelper.getFireAspectModifier(this);
 		int knockback = EnchantmentHelper.getKnockbackModifier(this, (EntityLiving)par1Entity);
    

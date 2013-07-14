@@ -14,6 +14,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.resources.ResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
@@ -26,9 +27,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiGristCache extends GuiScreen
 {
+
+    private static final ResourceLocation guiBackground = new ResourceLocation("Minestuck:/gui/GristCache.png");
+    
 	private static final int guiWidth = 226;
 	private static final int guiHeight = 200;
-	private static  int yOffset = 20;
 	private static final String cacheMessage = "Grist Cache";
 
 	private static final int gristIconX = 21;
@@ -66,8 +69,10 @@ public class GuiGristCache extends GuiScreen
 		if (titleMessage.isEmpty())
 			titleMessage = mc.thePlayer.username.toUpperCase() + " : " + title;
 
-		this.mc.renderEngine.bindTexture("/gui/GristCache.png");
-		yOffset = (this.height / 2) - (guiHeight / 2);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        this.mc.func_110434_K().func_110577_a(guiBackground);
+		
+		int yOffset = (this.height / 2) - (guiHeight / 2);
 		this.drawTexturedModalRect((this.width / 2) - (guiWidth / 2), yOffset, 0, 0, guiWidth, guiHeight);
 		fontRenderer.drawString(cacheMessage, (this.width / 2) - fontRenderer.getStringWidth(cacheMessage) / 2, yOffset + 12, 0x404040);
 		fontRenderer.drawString(titleMessage, (this.width / 2) - fontRenderer.getStringWidth(titleMessage) / 2, yOffset + 22, 0x404040);
@@ -120,9 +125,10 @@ public class GuiGristCache extends GuiScreen
 		////  drawGristTooltip(row + " " + column, xcor, ycor);
 	}
 
-	private void drawGristIcon(int x,int y,String gristType) {
-
-		this.mc.renderEngine.bindTexture("/mods/Minestuck/textures/grist/" + gristType + ".png");
+	private void drawGristIcon(int x,int y,String gristType) 
+	{
+//		this.mc.renderEngine.bindTexture("Minestuck:/textures/grist/" + gristType + ".png");
+		this.mc.func_110434_K().func_110577_a(new ResourceLocation("Minestuck:/textures/grist/" + gristType + ".png"));
 
 		float scale = (float) 1/16;
 

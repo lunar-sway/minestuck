@@ -56,10 +56,8 @@ import com.mraof.minestuck.world.WorldProviderSkaia;
 import com.mraof.minestuck.world.gen.OreHandler;
 
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.Init;
+import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.Mod.PostInit;
-import cpw.mods.fml.common.Mod.PreInit;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -137,7 +135,7 @@ public class Minestuck
 	public static CreativeTabs tabMinestuck;
 
 	public int currentEntityIdOffset = 0;
-	@PreInit
+	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) 
 	{
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
@@ -151,7 +149,7 @@ public class Minestuck
 		config.save();
 	}
 
-	@Init
+	@EventHandler
 	public void load(FMLInitializationEvent event) 
 	{
 		
@@ -329,7 +327,7 @@ public class Minestuck
 		CombinationRegistry.addCombination(whiteChessTileStack, whiteChessTileStack, lightGreyChessTileStack); //You can now combine black and white chess tiles to get grey ones. Also an example!
 	}
 
-	@PostInit
+	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) 
 	{
 		

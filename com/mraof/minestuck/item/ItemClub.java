@@ -3,14 +3,9 @@
  */
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.Minestuck;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.item.Item;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
@@ -20,9 +15,8 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author mraof
  *
  */
-public class ItemClub extends Item 
+public class ItemClub extends ItemWeapon
 {
-	private int weaponDamage;
 	private final EnumClubType clubType;
     public float efficiencyOnProperMaterial = 4.0F;
     
@@ -30,9 +24,7 @@ public class ItemClub extends Item
 	{
 		super(id);
 		this.clubType = clubType;
-		this.maxStackSize = 1;
 		this.setMaxDamage(clubType.getMaxUses());
-		this.setCreativeTab(Minestuck.tabMinestuck);
 		switch(clubType)
 		{
 		case DEUCE:
@@ -43,23 +35,27 @@ public class ItemClub extends Item
 		this.weaponDamage = 2 + clubType.getDamageVsEntity();
 	}
 
-    
-	public int getDamageVsEntity(Entity par1Entity) {
+    @Override
+	public int getAttackDamage() 
+	{
 		return weaponDamage;
 	}
-	
+
+    @Override
 	public int getItemEnchantability()
 	{
 		return this.clubType.getEnchantability();
 	}
-	 
-	public boolean hitEntity(ItemStack itemStack, EntityLiving target, EntityLiving player)
+
+    @Override
+	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase player)
 	{
 		itemStack.damageItem(1, player);
 		return true;
 	}
-	
-	public boolean onBlockDestroyed(ItemStack itemStack, World world, int par3, int par4, int par5, int par6, EntityLiving par7EntityLiving)
+
+    @Override
+	public boolean onBlockDestroyed(ItemStack itemStack, World world, int par3, int par4, int par5, int par6, EntityLivingBase par7EntityLiving)
 	{
 		if ((double)Block.blocksList[par3].getBlockHardness(world, par4, par5, par6) != 0.0D)
 		{
@@ -68,6 +64,8 @@ public class ItemClub extends Item
 		
 		return true;
 	}
+
+    @Override
 	@SideOnly(Side.CLIENT)
 	public boolean isFull3D()
 	{

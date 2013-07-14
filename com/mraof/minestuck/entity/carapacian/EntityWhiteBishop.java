@@ -9,7 +9,6 @@ public class EntityWhiteBishop extends EntityBishop
 	public EntityWhiteBishop(World par1World) 
 	{
 		super(par1World);
-		this.texture = "/mods/Minestuck/textures/mobs/ProspitianBishop.png";
 	}
 	@Override
 	public void setEnemies() 
@@ -23,5 +22,9 @@ public class EntityWhiteBishop extends EntityBishop
 	{
 		setAllies(EnumEntityKingdom.PROSPITIAN);
 	}
-
+	@Override
+	public String getTexture() 
+	{
+		return "Minestuck:/textures/mobs/ProspitianBishop.png";
+	}
 }

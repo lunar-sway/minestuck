@@ -5,6 +5,7 @@ import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.entity.underling.EntityOgre.Type;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
@@ -58,8 +59,7 @@ public class EntityGiclops extends EntityUnderling
 		super(par1World, type, "Giclops");
 		setSize(8.0F, 12.0F);
 		this.experienceValue = 5 * type.strength + 4;
-		this.maxHealth = 28 * (type.strength + 1) + 18;
-		this.health = this.maxHealth;
+//		this.health = this.maxHealth;
 		this.stepHeight = 2;
 	}
 
@@ -99,6 +99,11 @@ public class EntityGiclops extends EntityUnderling
 	public boolean attackEntityAsMob(Entity par1Entity) 
 	{
 		return par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this), (int) ((this.type.getStrength() + 1) * 2.5 + 2));
+	}
+	@Override
+	protected float getMaxHealth() 
+	{
+		return 28 * (type.getStrength() + 1) + 18;
 	}
 
 }

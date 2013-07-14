@@ -3,8 +3,8 @@ package com.mraof.minestuck.entity.carapacian;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAISwimming;
@@ -13,10 +13,11 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
+import com.mraof.minestuck.entity.EntityMinestuck;
 import com.mraof.minestuck.entity.EntityListAttackFilter;
 import com.mraof.minestuck.entity.ai.EntityAINearestAttackableTargetWithHeight;
 
-public abstract class EntityCarapacian extends EntityCreature
+public abstract class EntityCarapacian extends EntityMinestuck
 {
 	protected List<Class<? extends EntityLiving>> enemyClasses;
 	protected List<Class<? extends EntityLiving>> allyClasses;
@@ -29,7 +30,10 @@ public abstract class EntityCarapacian extends EntityCreature
 		allyClasses = new ArrayList<Class<? extends EntityLiving>>();
 		setEnemies();
 		setAllies();
-
+		
+        this.func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a((double)(this.getMaxHealth()));
+		this.setEntityHealth(this.getMaxHealth());
+		
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
 		this.targetTasks.addTask(2, this.entityAINearestAttackableTargetWithHeight());
@@ -42,6 +46,7 @@ public abstract class EntityCarapacian extends EntityCreature
 			this.setCombatTask();
 		}
 	}
+
 
 	protected abstract void setCombatTask();
 	

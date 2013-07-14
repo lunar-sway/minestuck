@@ -33,11 +33,6 @@ public class BlockChessTile extends Block
 	{
 		return textures[metadata];
 	}
-//	@Override
-//    public String getTextureFile () 
-//	{
-//		return CommonProxy.BLOCKS_PNG;
-//	}
 	@Override
 	public int damageDropped(int metadata) 
 	{

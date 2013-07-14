@@ -1,6 +1,7 @@
 package com.mraof.minestuck.entity.ai;
 
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.MathHelper;
@@ -14,7 +15,7 @@ public class EntityAIAttackByDistance extends EntityAIBase
 	 * The entity (as a RangedAttackMob) the AI instance has been applied to.
 	 */
 	private final EntityLiving attacker;
-	private EntityLiving attackTarget;
+	private EntityLivingBase attackTarget;
 
 	/**
 	 * A decrementing tick that spawns a ranged attack once this value reaches 0. It is then set back to the
@@ -64,7 +65,7 @@ public class EntityAIAttackByDistance extends EntityAIBase
 	 */
 	public boolean shouldExecute()
 	{
-		EntityLiving entityliving = this.entityHost.getAttackTarget();
+		EntityLivingBase entityliving = this.entityHost.getAttackTarget();
 
 		if (entityliving == null)
 			return false;
@@ -85,7 +86,7 @@ public class EntityAIAttackByDistance extends EntityAIBase
 	 */
 	public boolean continueExecuting()
 	{
-		EntityLiving entityliving = this.attacker.getAttackTarget();
+		EntityLivingBase entityliving = this.attacker.getAttackTarget();
 		return this.shouldExecute() || !this.entityHost.getNavigator().noPath();
 	}
 

@@ -8,13 +8,18 @@ import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.resources.ResourceLocation;
 import net.minecraft.tileentity.TileEntity;
 
 import org.lwjgl.opengl.GL11;
 
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
 
-public class RenderGatePortal extends TileEntitySpecialRenderer {
+public class RenderGatePortal extends TileEntitySpecialRenderer 
+{
+	private static final ResourceLocation tunnel = new ResourceLocation("Minestuck:/textures/tunnel.png");
+    private static final ResourceLocation particlefield = new ResourceLocation("Minestuck:/textures/particlefield.png");
+    
     FloatBuffer floatBuffer = GLAllocation.createDirectFloatBuffer(16);
 
 	public void renderGatePortalTileEntity(TileEntityGatePortal par1TileEntityGatePortal, double par2, double par4, double par6, float par8)
@@ -35,7 +40,7 @@ public class RenderGatePortal extends TileEntitySpecialRenderer {
 
             if (var14 == 0)
             {
-                this.bindTextureByName("/mods/Minestuck/textures/tunnel.png");
+                this.func_110628_a(tunnel);
                 var17 = 0.1F;
                 var15 = 65.0F;
                 var16 = 0.125F;
@@ -45,7 +50,7 @@ public class RenderGatePortal extends TileEntitySpecialRenderer {
 
             if (var14 == 1)
             {
-                this.bindTextureByName("/mods/Minestuck/textures/particlefield.png");
+                this.func_110628_a(particlefield);
                 GL11.glEnable(GL11.GL_BLEND);
                 GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
                 var16 = 0.5F;

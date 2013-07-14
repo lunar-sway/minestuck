@@ -2,10 +2,11 @@ package com.mraof.minestuck.entity.carapacian;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IRangedAttackMob;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.projectile.EntityLargeFireball;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
@@ -23,16 +24,17 @@ public abstract class EntityBishop extends EntityCarapacian implements IRangedAt
 	public EntityBishop(World par1World) 
 	{
 		super(par1World);
-		this.moveSpeed = 0.2F;
 		this.setSize(1.9F, 4.1F);
 		this.experienceValue = 3;
 	}
 	
 	@Override
-	public int getMaxHealth() 
+	protected void func_110147_ax() 
 	{
-		return 40;
+		super.func_110147_ax();
+		this.func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a(40.0D);
 	}
+	
 	@Override
 	protected float getWanderSpeed() 
 	{
@@ -40,26 +42,19 @@ public abstract class EntityBishop extends EntityCarapacian implements IRangedAt
 	}
 
 	@Override
-	public void initCreature() 
+	protected float getMaxHealth() 
 	{
-		this.setCurrentItemOrArmor(0, new ItemStack(Item.blazeRod));
-		this.targetTasks.addTask(4, entityAIAttackByDistance);
+		return 40;
 	}
 	
 	@Override
-	public void attackEntityWithRangedAttack(EntityLiving entityliving, float f) 
+	public void attackEntityWithRangedAttack(EntityLivingBase entityliving, float f) 
 	{
 
         double distanceX = entityliving.posX - this.posX;
         double distanceY = entityliving.boundingBox.minY + (double)(entityliving.height / 2.0F) - (this.posY + (double)(this.height / 2.0F));
         double distanceZ = entityliving.posZ - this.posZ;
 		
-//        float distance = entityliving.getDistanceToEntity(this);
-//        this.motionY = 20;
-//
-//        EntitySmallFireball entitysmallfireball = new EntitySmallFireball(this.worldObj, this, distanceX + this.rand.nextGaussian() * (double)distance, distanceY, distanceZ + this.rand.nextGaussian() * (double)distance);
-//        entitysmallfireball.posY = this.posY + (double)(this.height) + 0.5D;
-//        this.worldObj.spawnEntityInWorld(entitysmallfireball);
         EntityLargeFireball entitylargefireball = new EntityLargeFireball(this.worldObj, this, distanceX, distanceY, distanceZ);
         entitylargefireball.field_92057_e = 1;
         double d8 = (double)this.width;
@@ -75,7 +70,7 @@ public abstract class EntityBishop extends EntityCarapacian implements IRangedAt
 		int var3 = 0;
 		
 		if (var2 != null)
-			var3 += var2.getDamageVsEntity(this);
+			var3 += var2.getItemDamage();
 		
 		return var3;
 	}
@@ -117,7 +112,7 @@ public abstract class EntityBishop extends EntityCarapacian implements IRangedAt
 		}
 	}
 	@Override
-	public boolean attackEntityFrom(DamageSource par1DamageSource, int par2) 
+	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2) 
 	{
 		if(par1DamageSource.isFireDamage())
 		{

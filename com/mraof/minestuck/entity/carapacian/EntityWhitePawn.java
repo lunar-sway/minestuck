@@ -7,12 +7,10 @@ public class EntityWhitePawn extends EntityPawn
 	public EntityWhitePawn(World world)
 	{
 		super(world);
-		texture = "/mods/Minestuck/textures/mobs/ProspitianPawn.png";
 	}
 	public EntityWhitePawn(World world, int type)
 	{
 		super(world, type);
-		texture = "/mods/Minestuck/textures/mobs/ProspitianPawn.png";
 	}
 	@Override
 	public void setEnemies()
@@ -24,5 +22,10 @@ public class EntityWhitePawn extends EntityPawn
 	public void setAllies()
 	{
 		setAllies(EnumEntityKingdom.PROSPITIAN);
+	}
+	@Override
+	public String getTexture() 
+	{
+		return "Minestuck:/textures/mobs/ProspitianPawn.png";
 	}
 }

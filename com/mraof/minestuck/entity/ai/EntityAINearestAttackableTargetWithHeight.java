@@ -6,14 +6,16 @@ import java.util.List;
 
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class EntityAINearestAttackableTargetWithHeight extends EntityAITarget 
 {
 
-	EntityLiving targetEntity;
+	EntityLivingBase targetEntity;
     Class targetClass;
     int targetChance;
     private float targetHeightDistance;
@@ -21,25 +23,26 @@ public class EntityAINearestAttackableTargetWithHeight extends EntityAITarget
 
     /** Instance of EntityAINearestAttackableTargetSorter. */
     private EntityAINearestAttackableTargetWithHeightSorter theNearestAttackableTargetWithHeightSorter;
+	private float targetDistance;
 
-    public EntityAINearestAttackableTargetWithHeight(EntityLiving par1EntityLiving, Class par2Class, float par3, int par4, boolean par5)
+    public EntityAINearestAttackableTargetWithHeight(EntityCreature owner, Class par2Class, float par3, int par4, boolean par5)
     {
-        this(par1EntityLiving, par2Class, par3, par4, par5, false);
+        this(owner, par2Class, par3, par4, par5, false);
     }
 
-    public EntityAINearestAttackableTargetWithHeight(EntityLiving par1EntityLiving, Class par2Class, float par3, int par4, boolean par5, boolean par6)
+    public EntityAINearestAttackableTargetWithHeight(EntityCreature owner, Class par2Class, float par3, int par4, boolean par5, boolean par6)
     {
-        this(par1EntityLiving, par2Class, par3, par4, par5, par6, (IEntitySelector)null);
+        this(owner, par2Class, par3, par4, par5, par6, (IEntitySelector)null);
     }
 
-    public EntityAINearestAttackableTargetWithHeight(EntityLiving par1, Class par2, float par3, int par4, boolean par5, boolean par6, IEntitySelector par7IEntitySelector)
+    public EntityAINearestAttackableTargetWithHeight(EntityCreature owner, Class target, float par3, int par4, boolean par5, boolean par6, IEntitySelector par7IEntitySelector)
     {
-        super(par1, par3, par5, par6);
-        this.targetClass = par2;
+        super(owner, par5, par6);
+        this.targetClass = target;
         this.targetDistance = par3;
         this.targetHeightDistance = 4;
         this.targetChance = par4;
-        this.theNearestAttackableTargetWithHeightSorter = new EntityAINearestAttackableTargetWithHeightSorter(this, par1);
+        this.theNearestAttackableTargetWithHeightSorter = new EntityAINearestAttackableTargetWithHeightSorter(this, owner);
         this.field_82643_g = par7IEntitySelector;
         this.setMutexBits(1);
     }

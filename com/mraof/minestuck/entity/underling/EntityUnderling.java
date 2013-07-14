@@ -1,10 +1,8 @@
 package com.mraof.minestuck.entity.underling;
 
-import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAISwimming;
@@ -13,18 +11,17 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+import com.mraof.minestuck.entity.EntityMinestuck;
 import com.mraof.minestuck.entity.ai.EntityAINearestAttackableTargetWithHeight;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
-public abstract class EntityUnderling extends EntityCreature implements IEntityAdditionalSpawnData, IMob
+public abstract class EntityUnderling extends EntityMinestuck implements IEntityAdditionalSpawnData, IMob
 {
 	public static interface IType
 	{
@@ -35,20 +32,20 @@ public abstract class EntityUnderling extends EntityCreature implements IEntityA
 		//used in determining variables regarding how strong the underling is
 		public int getStrength();
 	}
-	//this is needed to have different amounts of health for different types of the underling
-	protected int maxHealth = 0;
 	//Type of Underling, this should always be an enum
 	protected IType type;
 	//Name of underling, used in getting the texture and actually naming it
 	public String underlingName;
 	//random used in randomly choosing a type of creature
 	protected static Random randStatic = new Random();
+	
 	public EntityUnderling(World par1World, IType type, String underlingName) 
 	{
-		super(par1World);
-		this.type = type;
-		this.underlingName = underlingName;
-		texture = "/mods/Minestuck/textures/mobs/" + type.getTypeString() + underlingName + ".png";
+		super(par1World, type, underlingName);
+		
+        this.func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a((double)(this.getMaxHealth()));
+		this.setEntityHealth(this.getMaxHealth());
+		
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
 		this.targetTasks.addTask(2, this.entityAINearestAttackableTargetWithHeight());
@@ -62,16 +59,24 @@ public abstract class EntityUnderling extends EntityCreature implements IEntityA
 		}
 
 	}
+	@Override
+	protected void setCustomStartingVariables(Object[] objects) 
+	{
+		this.type = (IType)objects[0];
+		this.underlingName = (String)objects[1];
+	}
 	//used when getting how much grist should be dropped on death
 	public abstract String[] getGristSpoils();
 
 	protected abstract void setCombatTask();
+	
+	protected abstract float getMaxHealth();
 
 	protected abstract float getWanderSpeed();
 	@Override
-	public int getMaxHealth() 
+	public String getTexture() 
 	{
-		return maxHealth;
+		return "Minestuck:/textures/mobs/" + type.getTypeString() + underlingName + ".png";
 	}
 	//Gives each type of underling a unique name, so instead of all types being called entity.underlingName.name they are called entity.typeString.underlingName.name
 	@Override
@@ -117,7 +122,7 @@ public abstract class EntityUnderling extends EntityCreature implements IEntityA
 	public void readSpawnData(ByteArrayDataInput data) 
 	{
 		this.type = type.getClass().getEnumConstants()[data.readInt()];
-		texture = "/mods/Minestuck/textures/mobs/" + type.getTypeString() + underlingName + ".png";
+//		texture = "Minestuck:/textures/mobs/" + type.getTypeString() + underlingName + ".png";
 	}
 
 

@@ -57,8 +57,6 @@ public class EntityOgre extends EntityUnderling
 		super(par1World, type, "Ogre");
 		setSize(3.0F, 4.5F);
 		this.experienceValue = 5 * type.strength + 4;
-		this.maxHealth = 16 * (type.strength + 1) + 8;
-		this.health = this.maxHealth;
 		this.stepHeight = 1.0F;
 	}
 	@Override
@@ -106,6 +104,11 @@ public class EntityOgre extends EntityUnderling
 	protected float getWanderSpeed() 
 	{
 		return .1F;
+	}
+	@Override
+	protected float getMaxHealth() 
+	{
+		return 16 * (type.getStrength() + 1) + 8;
 	}
 
 }

@@ -1,23 +1,17 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.Minestuck;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 
-public class ItemHammer extends ItemTool
+public class ItemHammer extends ItemWeapon
 {    
 	private int weaponDamage;
 	private final EnumHammerType hammerType;
@@ -27,12 +21,10 @@ public class ItemHammer extends ItemTool
 	
     public ItemHammer(int id, EnumHammerType hammerType)
 	{
-		super(id, 3, EnumToolMaterial.GOLD, blocksEffectiveAgainst);
+		super(id, blocksEffectiveAgainst);
 		
 		this.hammerType = hammerType;
-		this.maxStackSize = 1;
 		this.setMaxDamage(hammerType.getMaxUses());
-		this.setCreativeTab(Minestuck.tabMinestuck);
 		this.efficiencyOnProperMaterial = hammerType.getEfficiencyOnProperMaterial();
 		switch(hammerType)
 		{
@@ -71,22 +63,26 @@ public class ItemHammer extends ItemTool
 		return block != null && (block.blockMaterial == Material.iron || block.blockMaterial == Material.anvil || block.blockMaterial == Material.rock);
     }
 
+    @Override
 	public float getStrVsBlock(ItemStack itemStack, Block block)
 	{
 		return block != null && (block.blockMaterial == Material.iron || block.blockMaterial == Material.anvil || block.blockMaterial == Material.rock) ? this.efficiencyOnProperMaterial : super.getStrVsBlock(itemStack, block);
 	}
-	
-	public int getDamageVsEntity(Entity par1Entity)
+
+    @Override
+	public int getAttackDamage()
 	{
 	    return hammerType.equals(hammerType.POPAMATIC) ? (int) (Math.pow(( Math.random() * 5), 2)) : this.weaponDamage;
 	}
-	
+
+    @Override
 	public int getItemEnchantability()
 	{
 		return this.hammerType.getEnchantability();
 	}
-	 
-	public boolean hitEntity(ItemStack itemStack, EntityLiving target, EntityLiving player)
+
+    @Override
+	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase player)
 	{
 		itemStack.damageItem(1, player);
 		if(hammerType.equals(EnumHammerType.POGO))
@@ -100,7 +96,8 @@ public class ItemHammer extends ItemTool
 		return true;
 	}
 
-	public boolean onBlockDestroyed(ItemStack itemStack, World world, int par3, int par4, int par5, int par6, EntityLiving par7EntityLiving)
+    @Override
+	public boolean onBlockDestroyed(ItemStack itemStack, World world, int par3, int par4, int par5, int par6, EntityLivingBase par7EntityLiving)
 	{
 		if ((double)Block.blocksList[par3].getBlockHardness(world, par4, par5, par6) != 0.0D)
 			itemStack.damageItem(2, par7EntityLiving);

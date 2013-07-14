@@ -62,8 +62,6 @@ public class EntityImp extends EntityUnderling
 		super(world, type, "Imp");
 		setSize(0.5F, 1.0F);
 		this.experienceValue = 3 * type.strength + 1;
-		this.maxHealth = 5 * (type.strength + 1);
-		this.health = this.maxHealth;
 	}
 
 
@@ -138,6 +136,11 @@ public class EntityImp extends EntityUnderling
 	protected float getWanderSpeed() 
 	{
 		return .3F;
+	}
+	@Override
+	protected float getMaxHealth() 
+	{
+		return 5 * (type.getStrength() + 1);
 	}
 
 }

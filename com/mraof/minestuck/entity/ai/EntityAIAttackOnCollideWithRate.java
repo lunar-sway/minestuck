@@ -1,6 +1,7 @@
 package com.mraof.minestuck.entity.ai;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.util.MathHelper;
@@ -9,8 +10,8 @@ import net.minecraft.world.World;
 public class EntityAIAttackOnCollideWithRate extends EntityAIBase
 {
     World worldObj;
-    EntityLiving attacker;
-    EntityLiving entityTarget;
+    EntityCreature attacker;
+    EntityLivingBase entityTarget;
 
     /**
      * An amount of decrementing ticks that allows the entity to attack once the tick reaches 0.
@@ -26,13 +27,13 @@ public class EntityAIAttackOnCollideWithRate extends EntityAIBase
 	private int attackRate;
 	private float distanceMultiplier = 2.0F;
 
-    public EntityAIAttackOnCollideWithRate(EntityLiving par1EntityLiving, Class par2Class, float par3, int attackRate, boolean par4)
+    public EntityAIAttackOnCollideWithRate(EntityCreature par1EntityLiving, Class par2Class, float par3, int attackRate, boolean par4)
     {
         this(par1EntityLiving, par3, attackRate, par4);
         this.classTarget = par2Class;
     }
 
-    public EntityAIAttackOnCollideWithRate(EntityLiving par1EntityLiving, float par2, int attackRate, boolean par3)
+    public EntityAIAttackOnCollideWithRate(EntityCreature par1EntityLiving, float par2, int attackRate, boolean par3)
     {
         this.attackTick = 0;
         this.attacker = par1EntityLiving;
@@ -48,7 +49,7 @@ public class EntityAIAttackOnCollideWithRate extends EntityAIBase
      */
     public boolean shouldExecute()
     {
-        EntityLiving entityliving = this.attacker.getAttackTarget();
+        EntityLivingBase entityliving = this.attacker.getAttackTarget();
 
         if (entityliving == null)
         {
@@ -71,8 +72,8 @@ public class EntityAIAttackOnCollideWithRate extends EntityAIBase
      */
     public boolean continueExecuting()
     {
-        EntityLiving entityliving = this.attacker.getAttackTarget();
-        return entityliving == null ? false : (!this.entityTarget.isEntityAlive() ? false : (!this.willSearch ? !this.attacker.getNavigator().noPath() : this.attacker.isWithinHomeDistance(MathHelper.floor_double(this.entityTarget.posX), MathHelper.floor_double(this.entityTarget.posY), MathHelper.floor_double(this.entityTarget.posZ))));
+        EntityLivingBase entityliving = this.attacker.getAttackTarget();
+        return entityliving == null ? false : (!this.entityTarget.isEntityAlive() ? false : (!this.willSearch ? !this.attacker.getNavigator().noPath() : this.attacker.func_110176_b(MathHelper.floor_double(this.entityTarget.posX), MathHelper.floor_double(this.entityTarget.posY), MathHelper.floor_double(this.entityTarget.posZ))));
     }
 
     /**

@@ -22,7 +22,7 @@ import com.mraof.minestuck.entity.carapacian.EntityBlackBishop;
 import com.mraof.minestuck.entity.carapacian.EntityBlackPawn;
 import com.mraof.minestuck.entity.carapacian.EntityWhiteBishop;
 import com.mraof.minestuck.entity.carapacian.EntityWhitePawn;
-import com.mraof.minestuck.entity.consort.EntitySalamander;
+import com.mraof.minestuck.entity.consort.EntityConsort;
 import com.mraof.minestuck.entity.underling.EntityImp;
 import com.mraof.minestuck.world.gen.structure.MapGenCastle;
 
@@ -62,7 +62,7 @@ public class ChunkProviderSkaia implements IChunkProvider
         this.spawnableCreatureList = new ArrayList();
         this.spawnableBlackList = new ArrayList();
         this.spawnableWhiteList = new ArrayList();
-        this.spawnableCreatureList.add(new SpawnListEntry(EntitySalamander.class, 2, 2, 2));
+        this.spawnableCreatureList.add(new SpawnListEntry(EntityConsort.class, 2, 2, 2));
         this.spawnableMonsterList.add(new SpawnListEntry(EntityImp.class, 2, 2, 4));
         this.spawnableBlackList.add(new SpawnListEntry(EntityBlackPawn.class, 2, 1, 10));
         this.spawnableBlackList.add(new SpawnListEntry(EntityBlackBishop.class, 1, 1, 1));

@@ -1,20 +1,23 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.Minestuck;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import com.google.common.collect.Multimap;
+import com.mraof.minestuck.Minestuck;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemBlade extends Item{
+public class ItemBlade extends ItemWeapon
+{
 	private int weaponDamage;
 	private final EnumBladeType bladeType;
     public float efficiencyOnProperMaterial = 4.0F;
@@ -24,9 +27,7 @@ public class ItemBlade extends Item{
 		super(id);
 		
 		this.bladeType = bladeType;
-		this.maxStackSize = 1;
 		this.setMaxDamage(bladeType.getMaxUses());
-		this.setCreativeTab(Minestuck.tabMinestuck);
 		switch(bladeType)
 		{
 		case SORD:
@@ -64,17 +65,19 @@ public class ItemBlade extends Item{
 		this.weaponDamage = 4 + bladeType.getDamageVsEntity();
 	}
 
-    
-	public int getDamageVsEntity(Entity par1Entity) {
+	public int getAttackDamage() 
+	{
 		return weaponDamage;
 	}
 	
+    @Override
 	public int getItemEnchantability()
 	{
 		return this.bladeType.getEnchantability();
 	}
 	 
-	public boolean hitEntity(ItemStack itemStack, EntityLiving target, EntityLiving attacker)
+    @Override
+	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase attacker)
 	{
 		itemStack.damageItem(1, attacker);
 		if(bladeType.equals(bladeType.SORD) && Math.random() < .25)
@@ -86,8 +89,9 @@ public class ItemBlade extends Item{
 		
 		return true;
 	}
-	
-	public boolean onBlockDestroyed(ItemStack itemStack, World world, int par3, int par4, int par5, int par6, EntityLiving par7EntityLiving)
+
+    @Override
+	public boolean onBlockDestroyed(ItemStack itemStack, World world, int par3, int par4, int par5, int par6, EntityLivingBase par7EntityLiving)
 	{
 		if ((double)Block.blocksList[par3].getBlockHardness(world, par4, par5, par6) != 0.0D)
 		{
@@ -96,11 +100,14 @@ public class ItemBlade extends Item{
 		
 		return true;
 	}
+
+    @Override
 	@SideOnly(Side.CLIENT)
 	public boolean isFull3D()
 	{
 		return true;
 	}
+    
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister iconRegister) 
