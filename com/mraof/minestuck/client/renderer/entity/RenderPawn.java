@@ -2,8 +2,8 @@ package com.mraof.minestuck.client.renderer.entity;
 
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderBiped;
-import net.minecraft.client.resources.ResourceLocation;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.util.ResourceLocation;
 
 import com.mraof.minestuck.entity.carapacian.EntityPawn;
 

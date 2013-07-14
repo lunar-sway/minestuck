@@ -1,8 +1,8 @@
 package com.mraof.minestuck.entity;
 
-import net.minecraft.client.resources.ResourceLocation;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 public abstract class EntityMinestuck extends EntityCreature 

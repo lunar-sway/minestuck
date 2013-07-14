@@ -68,7 +68,7 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 		else
 			this.tasks.addTask(4, this.entityAIAttackOnCollide);
 		this.setCurrentItemOrArmor(0, new ItemStack(this.pawnType == 1 ? Item.bow : rand.nextDouble() < .2 ? Minestuck.regisword : rand.nextDouble() < .02 ? Minestuck.sord : Item.swordStone));
-		this.func_82162_bC();
+		this.enchantEquipment();
 		return par1EntityLivingData;
 	}
 	
