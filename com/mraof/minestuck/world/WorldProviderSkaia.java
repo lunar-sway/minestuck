@@ -10,16 +10,7 @@ import com.mraof.minestuck.world.gen.ChunkProviderSkaia;
 public class WorldProviderSkaia extends WorldProvider 
 {
 	public int dimensionId = 2;
-	@Override
-	public int getActualHeight() 
-	{
-		return 256;
-	}
-	@Override
-	public int getHeight() 
-	{
-		return 256;
-	}
+
 	@Override
 	public String getDimensionName() 
 	{
@@ -48,7 +39,4 @@ public class WorldProviderSkaia extends WorldProvider
         return false;
     }
 	
-	
-	
-
 }

@@ -112,16 +112,22 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 		float damage = 2;
 
 		if (weapon != null)
-			damage += (float)this.func_110148_a(SharedMonsterAttributes.field_111264_e).func_111126_e();
-        damage += EnchantmentHelper.getEnchantmentModifierLiving(this, (EntityLiving)par1Entity);
+			damage += 
+			(float)this
+			.func_110148_a(SharedMonsterAttributes.field_111264_e)
+			.func_111126_e();
+//			damage += ((AttributeModifier)weapon.func_111283_C().get(SharedMonsterAttributes.field_111264_e.func_111108_a())).func_111164_d();
+        damage += EnchantmentHelper.getEnchantmentModifierLiving(this, (EntityLivingBase)par1Entity);
 
 		return damage;
 	}
+	
+	@Override
 	public boolean attackEntityAsMob(Entity par1Entity)
 	{
 		float damage = this.getAttackStrength(par1Entity);
 		int fireAspectLevel = EnchantmentHelper.getFireAspectModifier(this);
-		int knockback = EnchantmentHelper.getKnockbackModifier(this, (EntityLiving)par1Entity);
+		int knockback = EnchantmentHelper.getKnockbackModifier(this, (EntityLivingBase)par1Entity);
    
         if (fireAspectLevel > 0 && !par1Entity.isBurning())
             par1Entity.setFire(1);
@@ -134,6 +140,8 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 	/**
 	 * Basic mob attack. Default to touch of death in EntityCreature. Overridden by each mob to define their attack.
 	 */
+	
+	@Override
 	protected void attackEntity(Entity par1Entity, float par2)
 	{
 		if (this.attackTime <= 0 && par2 < 2.0F && par1Entity.boundingBox.maxY > this.boundingBox.minY && par1Entity.boundingBox.minY < this.boundingBox.maxY)
@@ -143,6 +151,7 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 		}
 	}
 	
+	@Override
 	public void setCombatTask()
 	{
 		if(this.entityAIArrowAttack == null || this.entityAIAttackOnCollide == null)
@@ -161,6 +170,8 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 		else
 			this.tasks.addTask(4, this.entityAIAttackOnCollide);
 	}
+	
+	@Override
 	public void setCurrentItemOrArmor(int slot, ItemStack par2ItemStack)
 	{
 		super.setCurrentItemOrArmor(slot, par2ItemStack);
@@ -170,6 +181,13 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 			this.setCombatTask();
 		}
 	}
+	
+	@Override
+    protected void func_110147_ax()
+    {
+        super.func_110147_ax();
+        this.func_110140_aT().func_111150_b(SharedMonsterAttributes.field_111264_e);
+    }
 
 
 }
