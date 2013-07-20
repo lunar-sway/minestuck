@@ -13,18 +13,23 @@ import net.minecraft.util.StatCollector;
 
 public class GuiMachine extends GuiContainer {
 	
+	private static final String[] guis = {"Minestuck:/gui/cruxtruder.png","Minestuck:/gui/designex.png","Minestuck:/gui/lathe.png","Minestuck:/gui/alchemiter.png"};
+	private static final String[] guiTitles = {"Cruxtruder","Punch Desgnex","Totem Lathe","Alchemiter"};
+	
 	private ResourceLocation guiBackground;
+	private int metadata;
 
     public GuiMachine (InventoryPlayer inventoryPlayer,
             TileEntityMachine tileEntity) {
     //the container is instanciated and passed to the superclass for handling
     super(new ContainerMachine(inventoryPlayer, tileEntity));
-    guiBackground = new ResourceLocation("Minestuck:/gui/Cruxtruder.png");
+    this.metadata = tileEntity.getMetadata();
+    guiBackground = new ResourceLocation(guis[metadata]);
 }
 
 @Override
 protected void drawGuiContainerForegroundLayer(int param1, int param2) {
-    fontRenderer.drawString("Alchemy Machine", 8, 6, 4210752);
+    fontRenderer.drawString(guiTitles[metadata], 8, 6, 4210752);
     //draws "Inventory" or your regional equivalent
     fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
 }

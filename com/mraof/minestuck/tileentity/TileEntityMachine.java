@@ -10,9 +10,11 @@ import net.minecraft.tileentity.TileEntity;
 public class TileEntityMachine extends TileEntity implements IInventory {
 
     private ItemStack[] inv;
+    //public int metadata = worldObj.getBlockMetadata(xCoord,yCoord,zCoord);
 
     public TileEntityMachine(){
             inv = new ItemStack[9];
+            
     }
     
     @Override
@@ -106,21 +108,22 @@ public class TileEntityMachine extends TileEntity implements IInventory {
             tagCompound.setTag("Inventory", itemList);
     }
 
-            @Override
-            public String getInvName() {
-                    return "Alchemy Machine";
-            }
+    @Override
+    public String getInvName() {
+            return "Alchemy Machine";
+    }
 
-			@Override
-			public boolean isInvNameLocalized() {
-				// TODO Auto-generated method stub
-				return false;
-			}
+	@Override
+	public boolean isInvNameLocalized() {
+		return false;
+	}
 
-			@Override
-			public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-				// TODO Auto-generated method stub
-				return true;
-			}
+	@Override
+	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+		return true;
+	}
 
+	public int getMetadata() {
+		return worldObj.getBlockMetadata(xCoord,yCoord,zCoord);
+	}
 }
