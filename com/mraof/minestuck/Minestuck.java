@@ -44,9 +44,13 @@ import com.mraof.minestuck.item.EnumSickleType;
 import com.mraof.minestuck.item.EnumSporkType;
 import com.mraof.minestuck.item.ItemBlade;
 import com.mraof.minestuck.item.ItemCane;
+import com.mraof.minestuck.item.ItemCardBlank;
+import com.mraof.minestuck.item.ItemCardPunched;
 import com.mraof.minestuck.item.ItemChessTile;
 import com.mraof.minestuck.item.ItemClub;
 import com.mraof.minestuck.item.ItemCruxiteRaw;
+import com.mraof.minestuck.item.ItemDowelCarved;
+import com.mraof.minestuck.item.ItemDowelUncarved;
 import com.mraof.minestuck.item.ItemHammer;
 import com.mraof.minestuck.item.ItemMachine;
 import com.mraof.minestuck.item.ItemSickle;
@@ -118,6 +122,10 @@ public class Minestuck
 	public static Item skaiaFork;
 	//Other
 	public static Item rawCruxite;
+	public static Item cruxiteDowel;
+	public static Item cruxiteDowelCarved;
+	public static Item blankCard;
+	public static Item punchedCard;
 
 	public static Achievement getHammer;
 
@@ -208,6 +216,10 @@ public class Minestuck
 		skaiaFork = new ItemSpork(toolIdStart + 25, EnumSporkType.SKAIA);
 		//items
 		rawCruxite = new ItemCruxiteRaw(itemIdStart);
+		cruxiteDowel = new ItemDowelUncarved(itemIdStart + 1);
+		cruxiteDowelCarved = new ItemDowelCarved(itemIdStart + 2);
+		blankCard = new ItemCardBlank(itemIdStart + 3);
+		punchedCard = new ItemCardPunched(itemIdStart + 4);
 
 		//achievements
 		getHammer = (new Achievement(413, "getHammer", 12, 15, Minestuck.clawHammer, (Achievement)null)).setIndependent().registerAchievement();
@@ -264,6 +276,11 @@ public class Minestuck
 		LanguageRegistry.addName(crockerSpork, "Junior Battlemaster's Bowlbuster Stirring/Poking Solution 50000");
 		LanguageRegistry.addName(skaiaFork, "Skaia War Fork");
 		LanguageRegistry.addName(rawCruxite, "Raw Cruxite");
+		LanguageRegistry.addName(cruxiteDowel, "Cruxite Dowel");
+		LanguageRegistry.addName(cruxiteDowelCarved, "Cruxite Dowel");
+		LanguageRegistry.addName(blankCard, "Captchalogue Card");
+		LanguageRegistry.addName(punchedCard, "Captchalogue Card");
+		
 		//Same for blocks
 		LanguageRegistry.addName(blackChessTileStack, "Black Chess Tile");
 		LanguageRegistry.addName(whiteChessTileStack, "White Chess Tile");
@@ -340,6 +357,7 @@ public class Minestuck
 		
 		//register recipes
 		GameRegistry.addRecipe(new ItemStack(blockStorage,1,0),new Object[]{ "XXX","XXX","XXX",'X',new ItemStack(rawCruxite, 1)});
+		GameRegistry.addRecipe(new ItemStack(blankCard,8,0),new Object[]{ "XXX","XYX","XXX",'Y',new ItemStack(rawCruxite, 1),'X',new ItemStack(Item.paper,1)});
 		
 		//Set up Alchemiter recipes
 		GristRegistry.addGristConversion(cruxiteBlockTileStack, new GristSet(GristType.Build, 9)); //1 Cruxite block is now worth 9 Build Grist. This is an example!
