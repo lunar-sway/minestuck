@@ -231,6 +231,9 @@ public class Minestuck
 		ItemStack lightGreyChessTileStack = new ItemStack(chessTile, 1, 3);
 		ItemStack cruxiteBlockTileStack = new ItemStack(blockStorage,1,0);
 		ItemStack cruxtruderTileStack = new ItemStack(blockMachine,1,0);
+		ItemStack punchDesignexTileStack = new ItemStack(blockMachine,1,1);
+		ItemStack totemLatheTileStack = new ItemStack(blockMachine,1,2);
+		ItemStack alchemiterTileStack = new ItemStack(blockMachine,1,3);
 	
 		//Give Items names to be displayed ingame
 
@@ -270,6 +273,9 @@ public class Minestuck
 		LanguageRegistry.addName(gatePortal, "Gate");
 		LanguageRegistry.addName(oreCruxite, "Cruxite Ore");
 		LanguageRegistry.addName(cruxtruderTileStack, "Cruxtruder");
+		LanguageRegistry.addName(punchDesignexTileStack, "Punch Designex");
+		LanguageRegistry.addName(totemLatheTileStack, "Totem Lathe");
+		LanguageRegistry.addName(alchemiterTileStack, "Alchemiter");
 		//set harvest information for blocks
 		MinecraftForge.setBlockHarvestLevel(chessTile, "shovel", 0);
 		MinecraftForge.setBlockHarvestLevel(oreCruxite, "pickaxe", 1);

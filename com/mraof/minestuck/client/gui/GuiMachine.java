@@ -13,12 +13,13 @@ import net.minecraft.util.StatCollector;
 
 public class GuiMachine extends GuiContainer {
 	
-	private static final ResourceLocation guiBackground = new ResourceLocation("Minestuck:/gui/Cruxtruder.png");
+	private ResourceLocation guiBackground;
 
     public GuiMachine (InventoryPlayer inventoryPlayer,
             TileEntityMachine tileEntity) {
     //the container is instanciated and passed to the superclass for handling
     super(new ContainerMachine(inventoryPlayer, tileEntity));
+    guiBackground = new ResourceLocation("Minestuck:/gui/Cruxtruder.png");
 }
 
 @Override

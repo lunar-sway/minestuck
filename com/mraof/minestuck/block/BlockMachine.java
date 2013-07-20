@@ -25,7 +25,7 @@ import net.minecraft.world.World;
 
 public class BlockMachine extends BlockContainer {
 	
-	public static final String[] iconNames = {"PhernaliaFrame"};
+	public static final String[] iconNames = {"PhernaliaFrame","PhernaliaFrame","PhernaliaFrame","PhernaliaFrame"};
 	private Icon[] textures;
 
 	public BlockMachine(int id) {

@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 
 public class ItemMachine extends ItemBlock {
 
-		private final static String[] subNames = {"cruxtruder"};
+		private final static String[] subNames = {"cruxtruder","punchDesignex","totemLathe","alchemiter"};
 		
 		public ItemMachine(int par1) 
 		{
