@@ -166,7 +166,6 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 				//Create a new card, using CombinationRegistry
 				ItemStack outputItem = CombinationRegistry.getCombination(inv[1], inv[2]);
 				ItemStack outputCard = new ItemStack(Minestuck.punchedCard);
-				
 	
 				NBTTagCompound nbttagcompound = new NBTTagCompound();
 				outputCard.setTagCompound(nbttagcompound);
@@ -180,6 +179,21 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			}
 			break;
 		case (2):
+			if (inv[1] != null && inv[2] != null) {
+				ItemStack outputDowel = new ItemStack(Minestuck.cruxiteDowelCarved);
+				
+				NBTTagCompound cardtag = inv[1].getTagCompound();
+				if (cardtag == null) {
+					break;
+				}
+				NBTTagCompound doweltag = new NBTTagCompound();
+				doweltag.setInteger("contentID", cardtag.getInteger("contentID"));
+				doweltag.setInteger("contentMeta", cardtag.getInteger("contentMeta"));
+				outputDowel.setTagCompound(doweltag);
+				setInventorySlotContents(0,outputDowel);
+				decrStackSize(1, 1);
+				decrStackSize(2, 1);
+			}
 			break;
 		case (3):
 			break;
