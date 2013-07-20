@@ -1,6 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.alchemy.CombinationRegistry;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -152,14 +153,21 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 				// Process the Raw Cruxite
 				
 				if (inv[0] == null) {
-					this.setInventorySlotContents(0, new ItemStack(Minestuck.cruxiteDowel,1));
+					setInventorySlotContents(0, new ItemStack(Minestuck.cruxiteDowel,1));
 				} else {
-					this.decrStackSize(0, -1);
+					decrStackSize(0, -1);
 				}
-				this.decrStackSize(1, 1);
+				decrStackSize(1, 1);
 			}
 			break;
 		case (1):
+			if (inv[1] != null && inv[2] != null && inv[3] != null && inv[0] == null && CombinationRegistry.getCombination(inv[1], inv[2]) != null)  {
+				//Create a new card, using CombinationRegistry
+				setInventorySlotContents(0,CombinationRegistry.getCombination(inv[1], inv[2]).copy());
+				decrStackSize(1, 1);
+				decrStackSize(2, 1);
+				decrStackSize(3, 1);
+			}
 			break;
 		case (2):
 			break;

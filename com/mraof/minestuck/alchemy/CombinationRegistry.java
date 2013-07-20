@@ -1,5 +1,6 @@
 package com.mraof.minestuck.alchemy;
 
+import java.util.Arrays;
 import java.util.Hashtable;
 
 import net.minecraft.item.ItemStack;
@@ -12,13 +13,13 @@ public class CombinationRegistry {
 	 * Creates an entry for a result of combining the cards of two items. Used in the Punch Designex.
 	 */
 	public static void addCombination(ItemStack input1,ItemStack input2,ItemStack output) {
-		combRecipes.put(new ItemStack[] {input1,input2},output);
+		combRecipes.put(Arrays.asList(input1.itemID,input1.getItemDamage(),input2.itemID,input2.getItemDamage()),output);
 	}
 	
 	/*
 	 * Returns an entry for a result of combining the cards of two items. Used in the Punch Designex.
 	 */
-	public static GristSet getCombination(ItemStack input1,ItemStack input2) {
-		return (GristSet) combRecipes.get(new ItemStack[] {input1,input2});
+	public static ItemStack getCombination(ItemStack input1,ItemStack input2) {
+		return (ItemStack) combRecipes.get(Arrays.asList(input1.itemID,input1.getItemDamage(),input2.itemID,input2.getItemDamage()));
 	}
 }
