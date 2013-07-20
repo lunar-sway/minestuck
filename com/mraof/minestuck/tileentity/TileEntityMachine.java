@@ -12,6 +12,7 @@ import net.minecraft.tileentity.TileEntity;
 public class TileEntityMachine extends TileEntity implements IInventory {
 
     private ItemStack[] inv;
+    public int progress = 0;
     //public int metadata = worldObj.getBlockMetadata(xCoord,yCoord,zCoord);
 
     public TileEntityMachine(){
@@ -93,6 +94,8 @@ public class TileEntityMachine extends TileEntity implements IInventory {
     public void readFromNBT(NBTTagCompound tagCompound) {
             super.readFromNBT(tagCompound);
             
+            int progress = tagCompound.getInteger("progress");
+            
             NBTTagList tagList = tagCompound.getTagList("Inventory");
             for (int i = 0; i < tagList.tagCount(); i++) {
                     NBTTagCompound tag = (NBTTagCompound) tagList.tagAt(i);
@@ -107,6 +110,8 @@ public class TileEntityMachine extends TileEntity implements IInventory {
     public void writeToNBT(NBTTagCompound tagCompound) {
             super.writeToNBT(tagCompound);
                             
+            tagCompound.setInteger("progress", progress);
+            
             NBTTagList itemList = new NBTTagList();
             for (int i = 0; i < inv.length; i++) {
                     ItemStack stack = inv[i];
@@ -143,7 +148,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 	public void updateEntity() {
 		switch (getMetadata()) {
 		case (0):
-			if (inv[1] != null && inv[1].itemID == Minestuck.rawCruxite.itemID && (inv[0] == null || inv[0].stackSize < 64)) {
+			if (inv[1] != null && (inv[0] == null || inv[0].stackSize < 64)) {
 				// Process the Raw Cruxite
 				
 				if (inv[0] == null) {

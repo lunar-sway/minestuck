@@ -1,5 +1,6 @@
 package com.mraof.minestuck.inventory;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -47,22 +48,22 @@ public class ContainerMachine extends Container {
         //and the x-y coordinates it resides on-screen
         switch (metadata) {
         case (0):
-        	addSlotToContainer(new Slot(tileEntity,1,cruxtruderInputX,cruxtruderInputY));
+        	addSlotToContainer(new SlotInput(tileEntity,1,cruxtruderInputX,cruxtruderInputY,Minestuck.rawCruxite.itemID));
         	addSlotToContainer(new SlotOutput(tileEntity,0,cruxtruderOutputX,cruxtruderOutputY));
         	break;
         case (1):
         	addSlotToContainer(new Slot(tileEntity,1,designexInput1X,designexInput1Y));
         	addSlotToContainer(new Slot(tileEntity,2,designexInput2X,designexInput2Y));
-        	addSlotToContainer(new Slot(tileEntity,3,designexCardsX,designexCardsY));
+        	addSlotToContainer(new SlotInput(tileEntity,3,designexCardsX,designexCardsY,Minestuck.blankCard.itemID));
         	addSlotToContainer(new SlotOutput(tileEntity,0,designexOutputX,designexOutputY));
         	break;
         case (2):
-        	addSlotToContainer(new Slot(tileEntity,1,latheCardX,latheCardY));
-        	addSlotToContainer(new Slot(tileEntity,2,latheDowelX,latheDowelY));
+        	addSlotToContainer(new SlotInput(tileEntity,1,latheCardX,latheCardY,Minestuck.punchedCard.itemID));
+        	addSlotToContainer(new SlotInput(tileEntity,2,latheDowelX,latheDowelY,Minestuck.cruxiteDowel.itemID));
         	addSlotToContainer(new SlotOutput(tileEntity,0,latheOutputX,latheOutputY));
         	break;
         case (3):
-        	addSlotToContainer(new Slot(tileEntity,1,alchemiterInputX,alchemiterInputY));
+        	addSlotToContainer(new SlotInput(tileEntity,1,alchemiterInputX,alchemiterInputY,Minestuck.cruxiteDowelCarved.itemID));
         	addSlotToContainer(new SlotOutput(tileEntity,0,alchemiterOutputX,alchemiterOutputY));
         	//break;
         }
