@@ -52,7 +52,9 @@ public class ItemCardPunched extends Item {
 	        if (nbttagstring != null)
 	        {
 	        	par3List.add("(" + nbttagstring.toString() + ")");
+	        	return;
 	        }
+	        return;
         }
         par3List.add("(invalid data)");
     }

@@ -33,11 +33,14 @@ public class ItemDowelCarved extends Item {
 	        NBTTagCompound nbttagcompound = par1ItemStack.getTagCompound();
 	        NBTTagString nbttagstring = (NBTTagString)nbttagcompound.getTag("contents");
 	
-	        if (nbttagstring != null)
-	        {
+	        if (nbttagstring != null) {
 	        	par3List.add("(" + nbttagstring.toString() + ")");
+	        	return;
+	        }
+	        else {
+	        	 par3List.add("(invalid data)");
 	        }
         }
-        par3List.add("(invalid data)");
+       
     }
 }
