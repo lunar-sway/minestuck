@@ -40,7 +40,8 @@ public class ItemCardPunched extends Item {
 		        
 		
 		        if (contentID != null && contentMeta != null) {
-		        	par3List.add("(" + contentID.data + ":" + contentMeta.data + ")");
+		        	//par3List.add("(" + contentID.data + ":" + contentMeta.data + ")");
+		        	par3List.add("(" + (new ItemStack(contentID.data,1,contentMeta.data)).getDisplayName() + ")");
 		        	return;
 		        }
 		        else {
