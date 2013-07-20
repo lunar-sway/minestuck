@@ -1,5 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
+import com.mraof.minestuck.Minestuck;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -19,6 +21,16 @@ public class TileEntityMachine extends TileEntity implements IInventory {
     
     @Override
     public int getSizeInventory() {
+    		switch (getMetadata()) {
+    		case (0):
+    			return 2;
+    		case (1):
+    			return 4;
+    		case (2):
+    			return 3;
+    		case (3):
+    			return 2;
+    		}
             return inv.length;
     }
 
@@ -125,5 +137,29 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 
 	public int getMetadata() {
 		return worldObj.getBlockMetadata(xCoord,yCoord,zCoord);
+	}
+	
+	@Override
+	public void updateEntity() {
+		switch (getMetadata()) {
+		case (0):
+			if (inv[1] != null && inv[1].itemID == Minestuck.rawCruxite.itemID && (inv[0] == null || inv[0].stackSize < 64)) {
+				// Process the Raw Cruxite
+				
+				if (inv[0] == null) {
+					this.setInventorySlotContents(0, new ItemStack(Minestuck.cruxiteDowel,1));
+				} else {
+					this.decrStackSize(0, -1);
+				}
+				this.decrStackSize(1, 1);
+			}
+			break;
+		case (1):
+			break;
+		case (2):
+			break;
+		case (3):
+			break;
+		}
 	}
 }
