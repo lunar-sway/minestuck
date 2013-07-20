@@ -7,6 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 
@@ -163,7 +164,16 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		case (1):
 			if (inv[1] != null && inv[2] != null && inv[3] != null && inv[0] == null && CombinationRegistry.getCombination(inv[1], inv[2]) != null)  {
 				//Create a new card, using CombinationRegistry
-				setInventorySlotContents(0,CombinationRegistry.getCombination(inv[1], inv[2]).copy());
+				ItemStack outputItem = CombinationRegistry.getCombination(inv[1], inv[2]);
+				ItemStack outputCard = new ItemStack(Minestuck.punchedCard);
+				
+	
+				NBTTagCompound nbttagcompound = new NBTTagCompound();
+				outputCard.setTagCompound(nbttagcompound);
+		        nbttagcompound.setInteger("contentID", outputItem.itemID);
+		        nbttagcompound.setInteger("contentMeta", outputItem.getItemDamage());
+		        
+				setInventorySlotContents(0,outputCard);
 				decrStackSize(1, 1);
 				decrStackSize(2, 1);
 				decrStackSize(3, 1);
