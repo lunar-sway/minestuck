@@ -1,9 +1,13 @@
 package com.mraof.minestuck.item;
 
+import com.google.common.collect.Multimap;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -130,6 +134,7 @@ public class ItemHammer extends ItemWeapon
 		}
 		return false;
 	}
+    
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister iconRegister) 
