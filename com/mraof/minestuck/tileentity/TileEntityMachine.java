@@ -13,7 +13,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
     //public int metadata = worldObj.getBlockMetadata(xCoord,yCoord,zCoord);
 
     public TileEntityMachine(){
-            inv = new ItemStack[9];
+            inv = new ItemStack[4];
             
     }
     
