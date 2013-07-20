@@ -20,6 +20,11 @@ public class CombinationRegistry {
 	 * Returns an entry for a result of combining the cards of two items. Used in the Punch Designex.
 	 */
 	public static ItemStack getCombination(ItemStack input1,ItemStack input2) {
-		return (ItemStack) combRecipes.get(Arrays.asList(input1.itemID,input1.getItemDamage(),input2.itemID,input2.getItemDamage()));
+		Object temp = combRecipes.get(Arrays.asList(input1.itemID,input1.getItemDamage(),input2.itemID,input2.getItemDamage()));
+		if (temp == null) {
+			return (ItemStack) combRecipes.get(Arrays.asList(input2.itemID,input2.getItemDamage(),input1.itemID,input1.getItemDamage()));
+		} else {
+			return (ItemStack) temp;
+		}
 	}
 }

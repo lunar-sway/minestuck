@@ -14,7 +14,7 @@ import net.minecraft.util.StatCollector;
 public class GuiMachine extends GuiContainer {
 	
 	private static final String[] guis = {"Minestuck:/gui/cruxtruder.png","Minestuck:/gui/designex.png","Minestuck:/gui/lathe.png","Minestuck:/gui/alchemiter.png"};
-	private static final String[] guiTitles = {"Cruxtruder","Punch Desgnex","Totem Lathe","Alchemiter"};
+	private static final String[] guiTitles = {"Cruxtruder","Punch Designex","Totem Lathe","Alchemiter"};
 	
 	private ResourceLocation guiBackground;
 	private int metadata;
