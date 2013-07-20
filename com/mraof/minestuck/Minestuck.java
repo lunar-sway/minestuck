@@ -21,9 +21,11 @@ import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.block.BlockChessTile;
 import com.mraof.minestuck.block.BlockGatePortal;
+import com.mraof.minestuck.block.BlockMachine;
 import com.mraof.minestuck.block.BlockStorage;
 import com.mraof.minestuck.block.OreCruxite;
 import com.mraof.minestuck.client.ClientProxy;
+import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.entity.carapacian.EntityBlackBishop;
 import com.mraof.minestuck.entity.carapacian.EntityBlackPawn;
 import com.mraof.minestuck.entity.carapacian.EntityWhiteBishop;
@@ -42,15 +44,21 @@ import com.mraof.minestuck.item.EnumSickleType;
 import com.mraof.minestuck.item.EnumSporkType;
 import com.mraof.minestuck.item.ItemBlade;
 import com.mraof.minestuck.item.ItemCane;
+import com.mraof.minestuck.item.ItemCardBlank;
+import com.mraof.minestuck.item.ItemCardPunched;
 import com.mraof.minestuck.item.ItemChessTile;
 import com.mraof.minestuck.item.ItemClub;
 import com.mraof.minestuck.item.ItemCruxiteRaw;
+import com.mraof.minestuck.item.ItemDowelCarved;
+import com.mraof.minestuck.item.ItemDowelUncarved;
 import com.mraof.minestuck.item.ItemHammer;
+import com.mraof.minestuck.item.ItemMachine;
 import com.mraof.minestuck.item.ItemSickle;
 import com.mraof.minestuck.item.ItemSpork;
 import com.mraof.minestuck.item.ItemStorageBlock;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
+import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.world.WorldProviderSkaia;
 import com.mraof.minestuck.world.gen.OreHandler;
@@ -63,6 +71,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -113,6 +122,10 @@ public class Minestuck
 	public static Item skaiaFork;
 	//Other
 	public static Item rawCruxite;
+	public static Item cruxiteDowel;
+	public static Item cruxiteDowelCarved;
+	public static Item blankCard;
+	public static Item punchedCard;
 
 	public static Achievement getHammer;
 
@@ -121,6 +134,7 @@ public class Minestuck
 	public static Block gatePortal;
 	public static Block oreCruxite;
 	public static Block blockStorage;
+	public static Block blockMachine;
 	
 	
 	// The instance of your mod that Forge uses.
@@ -167,6 +181,7 @@ public class Minestuck
 		gatePortal = new BlockGatePortal(blockIdStart + 1, Material.portal);
 		oreCruxite = new OreCruxite(blockIdStart + 2);
 		blockStorage = new BlockStorage(blockIdStart + 3);
+		blockMachine = new BlockMachine(blockIdStart + 4);
 		//hammers
 		clawHammer = new ItemHammer(toolIdStart, EnumHammerType.CLAW);
 		sledgeHammer = new ItemHammer(toolIdStart + 1, EnumHammerType.SLEDGE);
@@ -201,6 +216,10 @@ public class Minestuck
 		skaiaFork = new ItemSpork(toolIdStart + 25, EnumSporkType.SKAIA);
 		//items
 		rawCruxite = new ItemCruxiteRaw(itemIdStart);
+		cruxiteDowel = new ItemDowelUncarved(itemIdStart + 1);
+		cruxiteDowelCarved = new ItemDowelCarved(itemIdStart + 2);
+		blankCard = new ItemCardBlank(itemIdStart + 3);
+		punchedCard = new ItemCardPunched(itemIdStart + 4);
 
 		//achievements
 		getHammer = (new Achievement(413, "getHammer", 12, 15, Minestuck.clawHammer, (Achievement)null)).setIndependent().registerAchievement();
@@ -216,12 +235,17 @@ public class Minestuck
 		GameRegistry.registerBlock(gatePortal, "gatePortal");
 		GameRegistry.registerBlock(oreCruxite,"oreCruxite");
 		GameRegistry.registerBlock(blockStorage,ItemStorageBlock.class,"blockStorage");
+		GameRegistry.registerBlock(blockMachine,ItemMachine.class,"blockMachine");
 		//metadata nonsense to conserve ids
 		ItemStack blackChessTileStack = new ItemStack(chessTile, 1, 0);
 		ItemStack whiteChessTileStack = new ItemStack(chessTile, 1, 1);
 		ItemStack darkGreyChessTileStack = new ItemStack(chessTile, 1, 2);
 		ItemStack lightGreyChessTileStack = new ItemStack(chessTile, 1, 3);
 		ItemStack cruxiteBlockTileStack = new ItemStack(blockStorage,1,0);
+		ItemStack cruxtruderTileStack = new ItemStack(blockMachine,1,0);
+		ItemStack punchDesignexTileStack = new ItemStack(blockMachine,1,1);
+		ItemStack totemLatheTileStack = new ItemStack(blockMachine,1,2);
+		ItemStack alchemiterTileStack = new ItemStack(blockMachine,1,3);
 	
 		//Give Items names to be displayed ingame
 
@@ -251,6 +275,12 @@ public class Minestuck
 		LanguageRegistry.addName(dragonCane, "Dragon Cane");
 		LanguageRegistry.addName(crockerSpork, "Junior Battlemaster's Bowlbuster Stirring/Poking Solution 50000");
 		LanguageRegistry.addName(skaiaFork, "Skaia War Fork");
+		LanguageRegistry.addName(rawCruxite, "Raw Cruxite");
+		LanguageRegistry.addName(cruxiteDowel, "Cruxite Dowel");
+		LanguageRegistry.addName(cruxiteDowelCarved, "Cruxite Dowel");
+		LanguageRegistry.addName(blankCard, "Captchalogue Card");
+		LanguageRegistry.addName(punchedCard, "Captchalogue Card");
+		
 		//Same for blocks
 		LanguageRegistry.addName(blackChessTileStack, "Black Chess Tile");
 		LanguageRegistry.addName(whiteChessTileStack, "White Chess Tile");
@@ -259,11 +289,15 @@ public class Minestuck
 		LanguageRegistry.addName(cruxiteBlockTileStack, "Cruxite Block");
 		LanguageRegistry.addName(gatePortal, "Gate");
 		LanguageRegistry.addName(oreCruxite, "Cruxite Ore");
-		LanguageRegistry.addName(rawCruxite, "Raw Cruxite");
+		LanguageRegistry.addName(cruxtruderTileStack, "Cruxtruder");
+		LanguageRegistry.addName(punchDesignexTileStack, "Punch Designex");
+		LanguageRegistry.addName(totemLatheTileStack, "Totem Lathe");
+		LanguageRegistry.addName(alchemiterTileStack, "Alchemiter");
 		//set harvest information for blocks
 		MinecraftForge.setBlockHarvestLevel(chessTile, "shovel", 0);
 		MinecraftForge.setBlockHarvestLevel(oreCruxite, "pickaxe", 1);
 		MinecraftForge.setBlockHarvestLevel(blockStorage, "pickaxe", 1);
+		MinecraftForge.setBlockHarvestLevel(blockMachine, "pickaxe", 1);
 
 		//set translations for automatic names
 		LanguageRegistry.instance().addStringLocalization("entity.Salamander.name", "Salamander");
@@ -308,6 +342,7 @@ public class Minestuck
 		EntityRegistry.addSpawn(EntityGiclops.class, 1, 1, 1, EnumCreatureType.monster, WorldType.base12Biomes);
 		//register Tile Entities
 		GameRegistry.registerTileEntity(TileEntityGatePortal.class, "gatePortal");
+		GameRegistry.registerTileEntity(TileEntityMachine.class, "containerMachine");
 		//register world generators
 		DimensionManager.registerProviderType(skaiaProviderTypeId, WorldProviderSkaia.class, true);
 		DimensionManager.registerDimension(skaiaDimensionId, skaiaProviderTypeId);
@@ -317,14 +352,18 @@ public class Minestuck
 		OreHandler oreHandler = new OreHandler();
 		GameRegistry.registerWorldGenerator(oreHandler);
 		
+		//register machine GUIs
+        NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
+		
 		//register recipes
 		GameRegistry.addRecipe(new ItemStack(blockStorage,1,0),new Object[]{ "XXX","XXX","XXX",'X',new ItemStack(rawCruxite, 1)});
+		GameRegistry.addRecipe(new ItemStack(blankCard,8,0),new Object[]{ "XXX","XYX","XXX",'Y',new ItemStack(rawCruxite, 1),'X',new ItemStack(Item.paper,1)});
 		
 		//Set up Alchemiter recipes
 		GristRegistry.addGristConversion(cruxiteBlockTileStack, new GristSet(GristType.Build, 9)); //1 Cruxite block is now worth 9 Build Grist. This is an example!
 		
 		//Set up Punch Designex recipes
-		CombinationRegistry.addCombination(whiteChessTileStack, whiteChessTileStack, lightGreyChessTileStack); //You can now combine black and white chess tiles to get grey ones. Also an example!
+		CombinationRegistry.addCombination(whiteChessTileStack, blackChessTileStack, lightGreyChessTileStack); //You can now combine black and white chess tiles to get grey ones. Also an example!
 	}
 
 	@EventHandler
