@@ -1,6 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.alchemy.CombinationMode;
 import com.mraof.minestuck.alchemy.CombinationRegistry;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -170,7 +171,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		case (0):
 			return (inv[1] != null && (inv[0] == null || inv[0].stackSize < 64));
 		case (1):
-			return (inv[1] != null && inv[2] != null && inv[3] != null && inv[0] == null && CombinationRegistry.getCombination(inv[1], inv[2]) != null);
+			return (inv[1] != null && inv[2] != null && inv[3] != null && inv[0] == null && CombinationRegistry.getCombination(inv[1], inv[2],CombinationMode.AND) != null);
 		case (2):
 			return (inv[1] != null && inv[2] != null);
 		case (3):
@@ -195,7 +196,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			break;
 		case (1):
 			//Create a new card, using CombinationRegistry
-			ItemStack outputItem = CombinationRegistry.getCombination(inv[1], inv[2]);
+			ItemStack outputItem = CombinationRegistry.getCombination(inv[1], inv[2],CombinationMode.AND);
 			ItemStack outputCard = new ItemStack(Minestuck.punchedCard);
 
 			NBTTagCompound nbttagcompound = new NBTTagCompound();
