@@ -15,6 +15,7 @@ import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 
+import com.mraof.minestuck.alchemy.CombinationMode;
 import com.mraof.minestuck.alchemy.CombinationRegistry;
 import com.mraof.minestuck.alchemy.GristRegistry;
 import com.mraof.minestuck.alchemy.GristSet;
@@ -363,7 +364,7 @@ public class Minestuck
 		GristRegistry.addGristConversion(cruxiteBlockTileStack, new GristSet(GristType.Build, 9)); //1 Cruxite block is now worth 9 Build Grist. This is an example!
 		
 		//Set up Punch Designex recipes
-		CombinationRegistry.addCombination(whiteChessTileStack, blackChessTileStack, lightGreyChessTileStack); //You can now combine black and white chess tiles to get grey ones. Also an example!
+		CombinationRegistry.addCombination(whiteChessTileStack, blackChessTileStack, CombinationMode.AND,lightGreyChessTileStack); //You can now combine black and white chess tiles to get grey ones. Also an example!
 	}
 
 	@EventHandler

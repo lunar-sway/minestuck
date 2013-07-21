@@ -37,7 +37,7 @@ public class ContainerMachine extends Container {
 	private static final int alchemiterOutputX = 135;
 	private static final int alchemiterOutputY = 20;
 	
-	private TileEntityMachine tileEntity;
+	public TileEntityMachine tileEntity;
 	private int metadata;
 
 	public ContainerMachine(InventoryPlayer inventoryPlayer, TileEntityMachine te) {

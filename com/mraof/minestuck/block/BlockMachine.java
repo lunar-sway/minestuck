@@ -66,7 +66,10 @@ public class BlockMachine extends BlockContainer {
 	
 	@Override
 	public boolean onBlockActivated(World world, int x,int y,int z, EntityPlayer player,int par6, float par7, float par8, float par9) {
-        TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
+        TileEntityMachine tileEntity = (TileEntityMachine) world.getBlockTileEntity(x, y, z);
+        if (!world.isRemote) {
+        	tileEntity.owner = player;
+        }
         if (tileEntity == null || player.isSneaking()) {
                 return false;
         }
