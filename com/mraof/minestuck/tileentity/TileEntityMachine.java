@@ -100,7 +100,9 @@ public class TileEntityMachine extends TileEntity implements IInventory {
     public void readFromNBT(NBTTagCompound tagCompound) {
             super.readFromNBT(tagCompound);
             
-            int progress = tagCompound.getInteger("progress");
+            progress = tagCompound.getInteger("progress");
+            mode =  tagCompound.getBoolean("mode") ? CombinationMode.AND : CombinationMode.OR;
+            
             //String ownerName = tagCompound.getString("owner");
             
             NBTTagList tagList = tagCompound.getTagList("Inventory");
@@ -118,6 +120,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
             super.writeToNBT(tagCompound);
                             
             tagCompound.setInteger("progress", progress);
+            tagCompound.setBoolean("mode", mode == CombinationMode.AND);
             //tagCompound.setString("owner", owner.username);
             
             NBTTagList itemList = new NBTTagList();

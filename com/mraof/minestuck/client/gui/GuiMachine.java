@@ -126,16 +126,15 @@ protected void actionPerformed(GuiButton guibutton) {
 	
 		Packet250CustomPayload packet = new Packet250CustomPayload();
 		packet.channel = "Minestuck";
-		packet.data = MinestuckPacket.makePacket(Type.MACHINE,te.xCoord,te.yCoord,te.zCoord,te.mode == CombinationMode.AND ? false : true);
+		packet.data = MinestuckPacket.makePacket(Type.MACHINE,te.mode == CombinationMode.AND ? false : true);
 		packet.length = packet.data.length;
-		//((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(packet);
 		this.mc.getNetHandler().addToSendQueue(packet);
 	
 	te.mode = te.mode == CombinationMode.AND ? CombinationMode.OR : CombinationMode.AND;
 	modeButton.displayString = te.mode == CombinationMode.AND ? "&&" : "||";
 }
 
-/*
+/**
  * Draws a box like drawModalRect, but with custom width and height values.
  */
 public void drawCustomBox(int par1, int par2, int par3, int par4, int par5, int par6, int width, int height)
@@ -151,6 +150,14 @@ public void drawCustomBox(int par1, int par2, int par3, int par4, int par5, int 
     tessellator.draw();
 }
 
+/**
+ * Returns a number to be used in calculation of progres bar legnth.
+ * 
+ * @param progress the progress done.
+ * @param max The maximim amount of progress.
+ * @param imageMax The legnth of the progress bar image to scale to
+ * @return The legnth the progress bar should be shown to
+ */
 public int getScaledValue(int progress,int max,int imageMax) {
 	return (int) ((float) imageMax*((float)progress/(float)max));
 }
