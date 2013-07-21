@@ -2,13 +2,24 @@ package com.mraof.minestuck.client.gui;
 
 import org.lwjgl.opengl.GL11;
 
+import com.mraof.minestuck.alchemy.CombinationMode;
 import com.mraof.minestuck.inventory.ContainerMachine;
+import com.mraof.minestuck.network.MachinePacket;
+import com.mraof.minestuck.network.MinestuckPacket;
+import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 
+import cpw.mods.fml.common.network.PacketDispatcher;
+
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
@@ -21,11 +32,15 @@ public class GuiMachine extends GuiContainer {
 	private ResourceLocation guiProgress;
 	private int metadata;
 	private TileEntityMachine te;
+	private EntityPlayer player;
 	
 	private int progressX;
 	private int progressY;
 	private int progressWidth;
 	private int progressHeight;
+	private int buttonX = 24;
+	private int buttonY = 23;
+	private GuiButton modeButton;
 
     public GuiMachine (InventoryPlayer inventoryPlayer,
             TileEntityMachine tileEntity) {
@@ -34,6 +49,7 @@ public class GuiMachine extends GuiContainer {
     this.metadata = tileEntity.getMetadata();
     guiBackground = new ResourceLocation("Minestuck:/gui/" + guis[metadata] + ".png");
     guiProgress = new ResourceLocation("Minestuck:/gui/progress/" + guis[metadata] + ".png");
+    this.player = inventoryPlayer.player;
     
     //sets prgress bar information based on machine type
     switch (metadata) {
@@ -89,6 +105,29 @@ protected void drawGuiContainerBackgroundLayer(float par1, int par2,
     int width = metadata == 0 ? progressWidth : getScaledValue(te.progress,te.maxProgress,progressWidth);
     int height = metadata != 0 ? progressHeight : getScaledValue(te.progress,te.maxProgress,progressHeight);
     this.drawCustomBox(x+progressX, y+progressY, 0, 0, width, height,progressWidth,progressHeight);
+}
+
+@Override
+public void initGui() {
+        super.initGui();
+        //make buttons:		id, x, y, width, height, text
+        if (metadata == 1) {
+        	modeButton = new GuiButton(1, (width - xSize) / 2 + buttonX, (height - ySize) / 2 + buttonY, 20, 20, te.mode == CombinationMode.AND ? "&&": "||");
+        	buttonList.add(modeButton);
+        }
+}
+
+protected void actionPerformed(GuiButton guibutton) {
+
+        //Sends new mode info to server
+	
+//		Packet250CustomPayload packet = new Packet250CustomPayload();
+//		packet.channel = "Minestuck";
+//		packet.data = MinestuckPacket.makePacket(Type.MACHINE,te.xCoord,te.yCoord,te.zCoord,te.mode == CombinationMode.AND ? false : true);
+//		packet.length = packet.data.length;
+//		((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(packet);
+	te.mode = te.mode == CombinationMode.AND ? CombinationMode.OR : CombinationMode.AND;
+	modeButton.displayString = te.mode == CombinationMode.AND ? "&&" : "||";
 }
 
 /*

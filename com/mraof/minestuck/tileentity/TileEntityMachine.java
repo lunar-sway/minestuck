@@ -18,6 +18,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
     public int progress = 0;
     public int maxProgress = 100;
     public EntityPlayer owner;
+    public CombinationMode mode = CombinationMode.AND;
     //public int metadata = worldObj.getBlockMetadata(xCoord,yCoord,zCoord);
 
     public TileEntityMachine(){
@@ -171,11 +172,11 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		case (0):
 			return (inv[1] != null && (inv[0] == null || inv[0].stackSize < 64));
 		case (1):
-			return (inv[1] != null && inv[2] != null && inv[3] != null && inv[0] == null && CombinationRegistry.getCombination(inv[1], inv[2],CombinationMode.AND) != null);
+			return (inv[1] != null && inv[2] != null && inv[3] != null && inv[0] == null && CombinationRegistry.getCombination(inv[1], inv[2],mode) != null);
 		case (2):
-			return (inv[1] != null && inv[2] != null);
+			return (inv[1] != null && inv[2] != null && inv[0] == null);
 		case (3):
-			return (inv[1] != null);
+			return (inv[1] != null && inv[0] == null);
 		}
 		return false;
 	}
@@ -196,7 +197,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			break;
 		case (1):
 			//Create a new card, using CombinationRegistry
-			ItemStack outputItem = CombinationRegistry.getCombination(inv[1], inv[2],CombinationMode.AND);
+			ItemStack outputItem = CombinationRegistry.getCombination(inv[1], inv[2],mode);
 			ItemStack outputCard = new ItemStack(Minestuck.punchedCard);
 
 			NBTTagCompound nbttagcompound = new NBTTagCompound();
