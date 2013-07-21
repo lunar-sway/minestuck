@@ -156,6 +156,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 	public void updateEntity() {
 		
 		if (!contentsValid()) {
+			progress = 0;
 			return;
 		}
 		

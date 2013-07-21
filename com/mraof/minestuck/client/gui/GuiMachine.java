@@ -1,5 +1,8 @@
 package com.mraof.minestuck.client.gui;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+
 import org.lwjgl.opengl.GL11;
 
 import com.mraof.minestuck.alchemy.CombinationMode;
@@ -121,11 +124,13 @@ protected void actionPerformed(GuiButton guibutton) {
 
         //Sends new mode info to server
 	
-//		Packet250CustomPayload packet = new Packet250CustomPayload();
-//		packet.channel = "Minestuck";
-//		packet.data = MinestuckPacket.makePacket(Type.MACHINE,te.xCoord,te.yCoord,te.zCoord,te.mode == CombinationMode.AND ? false : true);
-//		packet.length = packet.data.length;
-//		((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(packet);
+		Packet250CustomPayload packet = new Packet250CustomPayload();
+		packet.channel = "Minestuck";
+		packet.data = MinestuckPacket.makePacket(Type.MACHINE,te.xCoord,te.yCoord,te.zCoord,te.mode == CombinationMode.AND ? false : true);
+		packet.length = packet.data.length;
+		//((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(packet);
+		this.mc.getNetHandler().addToSendQueue(packet);
+	
 	te.mode = te.mode == CombinationMode.AND ? CombinationMode.OR : CombinationMode.AND;
 	modeButton.displayString = te.mode == CombinationMode.AND ? "&&" : "||";
 }
