@@ -196,6 +196,12 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			}
 			break;
 		case (3):
+			if (inv[1] != null) {
+				NBTTagCompound nbttagcompound = inv[1].getTagCompound();
+				if (nbttagcompound == null) { break;}
+				setInventorySlotContents(0,new ItemStack(nbttagcompound.getInteger("contentID"),1,nbttagcompound.getInteger("contentMeta")));
+				decrStackSize(1, 1);
+			}
 			break;
 		}
 	}
