@@ -1,6 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.alchemy.CombinationMode;
 import com.mraof.minestuck.alchemy.CombinationRegistry;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,6 +16,9 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 
     private ItemStack[] inv;
     public int progress = 0;
+    public int maxProgress = 100;
+    public EntityPlayer owner;
+    public CombinationMode mode = CombinationMode.AND;
     //public int metadata = worldObj.getBlockMetadata(xCoord,yCoord,zCoord);
 
     public TileEntityMachine(){
@@ -96,7 +100,10 @@ public class TileEntityMachine extends TileEntity implements IInventory {
     public void readFromNBT(NBTTagCompound tagCompound) {
             super.readFromNBT(tagCompound);
             
-            int progress = tagCompound.getInteger("progress");
+            progress = tagCompound.getInteger("progress");
+            mode =  tagCompound.getBoolean("mode") ? CombinationMode.AND : CombinationMode.OR;
+            
+            //String ownerName = tagCompound.getString("owner");
             
             NBTTagList tagList = tagCompound.getTagList("Inventory");
             for (int i = 0; i < tagList.tagCount(); i++) {
@@ -113,6 +120,8 @@ public class TileEntityMachine extends TileEntity implements IInventory {
             super.writeToNBT(tagCompound);
                             
             tagCompound.setInteger("progress", progress);
+            tagCompound.setBoolean("mode", mode == CombinationMode.AND);
+            //tagCompound.setString("owner", owner.username);
             
             NBTTagList itemList = new NBTTagList();
             for (int i = 0; i < inv.length; i++) {
@@ -148,54 +157,83 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 	
 	@Override
 	public void updateEntity() {
+		
+		if (!contentsValid()) {
+			progress = 0;
+			return;
+		}
+		
+		progress++;
+		
+		if (progress == maxProgress) {
+			progress = 0;
+			processContents();
+		}
+	}
+	
+	public boolean contentsValid() {
 		switch (getMetadata()) {
 		case (0):
-			if (inv[1] != null && (inv[0] == null || inv[0].stackSize < 64)) {
-				// Process the Raw Cruxite
-				
-				if (inv[0] == null) {
-					setInventorySlotContents(0, new ItemStack(Minestuck.cruxiteDowel,1));
-				} else {
-					decrStackSize(0, -1);
-				}
-				decrStackSize(1, 1);
+			return (inv[1] != null && (inv[0] == null || inv[0].stackSize < 64));
+		case (1):
+			return (inv[1] != null && inv[2] != null && inv[3] != null && inv[0] == null && CombinationRegistry.getCombination(inv[1], inv[2],mode) != null);
+		case (2):
+			return (inv[1] != null && inv[2] != null && inv[0] == null);
+		case (3):
+			return (inv[1] != null && inv[0] == null);
+		}
+		return false;
+	}
+	
+	public void processContents() {
+		switch (getMetadata()) {
+		case (0):
+			// Process the Raw Cruxite
+			
+			if (inv[0] == null) {
+				setInventorySlotContents(0, new ItemStack(Minestuck.cruxiteDowel,1));
+			} else {
+				decrStackSize(0, -1);
 			}
+			decrStackSize(1, 1);
+			
+			progress++;
 			break;
 		case (1):
-			if (inv[1] != null && inv[2] != null && inv[3] != null && inv[0] == null && CombinationRegistry.getCombination(inv[1], inv[2]) != null)  {
-				//Create a new card, using CombinationRegistry
-				ItemStack outputItem = CombinationRegistry.getCombination(inv[1], inv[2]);
-				ItemStack outputCard = new ItemStack(Minestuck.punchedCard);
-	
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				outputCard.setTagCompound(nbttagcompound);
-		        nbttagcompound.setInteger("contentID", outputItem.itemID);
-		        nbttagcompound.setInteger("contentMeta", outputItem.getItemDamage());
-		        
-				setInventorySlotContents(0,outputCard);
-				decrStackSize(1, 1);
-				decrStackSize(2, 1);
-				decrStackSize(3, 1);
-			}
+			//Create a new card, using CombinationRegistry
+			ItemStack outputItem = CombinationRegistry.getCombination(inv[1], inv[2],mode);
+			ItemStack outputCard = new ItemStack(Minestuck.punchedCard);
+
+			NBTTagCompound nbttagcompound = new NBTTagCompound();
+			outputCard.setTagCompound(nbttagcompound);
+	        nbttagcompound.setInteger("contentID", outputItem.itemID);
+	        nbttagcompound.setInteger("contentMeta", outputItem.getItemDamage());
+	        
+			setInventorySlotContents(0,outputCard);
+			decrStackSize(1, 1);
+			decrStackSize(2, 1);
+			decrStackSize(3, 1);
 			break;
 		case (2):
-			if (inv[1] != null && inv[2] != null) {
-				ItemStack outputDowel = new ItemStack(Minestuck.cruxiteDowelCarved);
-				
-				NBTTagCompound cardtag = inv[1].getTagCompound();
-				if (cardtag == null) {
-					break;
-				}
-				NBTTagCompound doweltag = new NBTTagCompound();
-				doweltag.setInteger("contentID", cardtag.getInteger("contentID"));
-				doweltag.setInteger("contentMeta", cardtag.getInteger("contentMeta"));
-				outputDowel.setTagCompound(doweltag);
-				setInventorySlotContents(0,outputDowel);
-				decrStackSize(1, 1);
-				decrStackSize(2, 1);
+			ItemStack outputDowel = new ItemStack(Minestuck.cruxiteDowelCarved);
+			
+			NBTTagCompound cardtag = inv[1].getTagCompound();
+			if (cardtag == null) {
+				break;
 			}
+			NBTTagCompound doweltag = new NBTTagCompound();
+			doweltag.setInteger("contentID", cardtag.getInteger("contentID"));
+			doweltag.setInteger("contentMeta", cardtag.getInteger("contentMeta"));
+			outputDowel.setTagCompound(doweltag);
+			setInventorySlotContents(0,outputDowel);
+			decrStackSize(1, 1);
+			decrStackSize(2, 1);
 			break;
 		case (3):
+			nbttagcompound = inv[1].getTagCompound();
+			if (nbttagcompound == null) { break;}
+			setInventorySlotContents(0,new ItemStack(nbttagcompound.getInteger("contentID"),1,nbttagcompound.getInteger("contentMeta")));
+			decrStackSize(1, 1);
 			break;
 		}
 	}
