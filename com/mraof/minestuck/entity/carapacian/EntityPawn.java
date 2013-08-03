@@ -5,7 +5,6 @@ import java.util.Random;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EntityLivingData;
 import net.minecraft.entity.IRangedAttackMob;
@@ -113,10 +112,8 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 
 		if (weapon != null)
 			damage += 
-			(float)this
-			.func_110148_a(SharedMonsterAttributes.field_111264_e)
-			.func_111126_e();
-//			damage += ((AttributeModifier)weapon.func_111283_C().get(SharedMonsterAttributes.field_111264_e.func_111108_a())).func_111164_d();
+			(float)this.func_110148_a(SharedMonsterAttributes.field_111264_e).func_111126_e();
+		
         damage += EnchantmentHelper.getEnchantmentModifierLiving(this, (EntityLivingBase)par1Entity);
 
 		return damage;

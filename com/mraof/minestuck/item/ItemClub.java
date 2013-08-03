@@ -74,6 +74,6 @@ public class ItemClub extends ItemWeapon
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister iconRegister) {
-		itemIcon = iconRegister.registerIcon("Minestuck:DeuceClub");
+		itemIcon = iconRegister.registerIcon("minestuck:DeuceClub");
 	}
 }

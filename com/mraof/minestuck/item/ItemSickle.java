@@ -91,16 +91,16 @@ public class ItemSickle extends ItemWeapon
 		switch(sickleType)
 		{
 		case SICKLE:
-			itemIcon = iconRegister.registerIcon("Minestuck:Sickle");
+			itemIcon = iconRegister.registerIcon("minestuck:Sickle");
 			break;
 		case HOMES:
-			itemIcon = iconRegister.registerIcon("Minestuck:HomesSmellYaLater");
+			itemIcon = iconRegister.registerIcon("minestuck:HomesSmellYaLater");
 			break;
 		case REGISICKLE:
-			itemIcon = iconRegister.registerIcon("Minestuck:Regisickle");
+			itemIcon = iconRegister.registerIcon("minestuck:Regisickle");
 			break;
 		case CLAW:
-			itemIcon = iconRegister.registerIcon("Minestuck:ClawSickle");
+			itemIcon = iconRegister.registerIcon("minestuck:ClawSickle");
 			break;
 		}
 	}

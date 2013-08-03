@@ -24,7 +24,7 @@ public class ItemDowelCarved extends Item {
 	}
 
 	public void registerIcons(IconRegister par1IconRegister) {
-	   itemIcon = par1IconRegister.registerIcon("Minestuck:CruxiteCarved");
+	   itemIcon = par1IconRegister.registerIcon("minestuck:CruxiteCarved");
 	}
 	
 	   @Override

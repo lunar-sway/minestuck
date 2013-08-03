@@ -27,7 +27,7 @@ public class OreCruxite extends Block {
 	
     public void registerIcons(IconRegister par1IconRegister)
     {
-            this.blockIcon = par1IconRegister.registerIcon("Minestuck:CruxiteOre");
+            this.blockIcon = par1IconRegister.registerIcon("minestuck:CruxiteOre");
     }
     
     public int idDropped(int par1, Random par2Random, int par3)

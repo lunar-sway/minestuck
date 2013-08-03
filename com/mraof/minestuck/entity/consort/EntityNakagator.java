@@ -12,6 +12,6 @@ public class EntityNakagator extends EntityConsort
 	@Override
 	public String getTexture() 
 	{
-		return "Minestuck:/textures/mobs/Nakagator.png";
+		return "textures/mobs/Nakagator.png";
 	}
 }

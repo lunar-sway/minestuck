@@ -23,7 +23,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class GuiGristCache extends GuiScreen
 {
 
-    private static final ResourceLocation guiBackground = new ResourceLocation("Minestuck:/gui/GristCache.png");
+    private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/GristCache.png");
     
 	private static final int guiWidth = 226;
 	private static final int guiHeight = 200;
@@ -122,8 +122,8 @@ public class GuiGristCache extends GuiScreen
 
 	private void drawGristIcon(int x,int y,String gristType) 
 	{
-//		this.mc.renderEngine.bindTexture("Minestuck:/textures/grist/" + gristType + ".png");
-		this.mc.func_110434_K().func_110577_a(new ResourceLocation("Minestuck:/textures/grist/" + gristType + ".png"));
+//		this.mc.renderEngine.bindTexture("minestuck:/textures/grist/" + gristType + ".png");
+		this.mc.func_110434_K().func_110577_a(new ResourceLocation("minestuck:/textures/grist/" + gristType + ".png"));
 
 		float scale = (float) 1/16;
 

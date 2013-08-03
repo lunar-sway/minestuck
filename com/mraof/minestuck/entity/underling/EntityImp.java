@@ -1,11 +1,8 @@
 package com.mraof.minestuck.entity.underling;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeHooks;
 
 import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
 import com.mraof.minestuck.entity.item.EntityGrist;
@@ -140,7 +137,7 @@ public class EntityImp extends EntityUnderling
 	@Override
 	protected float getMaxHealth() 
 	{
-		return 5 * (type.getStrength() + 1);
+		return 4 * (type.getStrength() + 1) + 2;
 	}
 
 }

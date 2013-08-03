@@ -17,6 +17,6 @@ public class ItemCruxiteRaw extends Item {
 	}
 
 	public void registerIcons(IconRegister par1IconRegister) {
-	   itemIcon = par1IconRegister.registerIcon("Minestuck:CruxiteRaw");
+	   itemIcon = par1IconRegister.registerIcon("minestuck:CruxiteRaw");
 	}
 }

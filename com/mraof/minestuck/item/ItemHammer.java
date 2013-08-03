@@ -142,28 +142,28 @@ public class ItemHammer extends ItemWeapon
 		switch(hammerType)
 		{
 		case CLAW:
-			itemIcon = iconRegister.registerIcon("Minestuck:ClawHammer");
+			itemIcon = iconRegister.registerIcon("minestuck:ClawHammer");
 			break;
 		case SLEDGE:
-			itemIcon = iconRegister.registerIcon("Minestuck:SledgeHammer");
+			itemIcon = iconRegister.registerIcon("minestuck:SledgeHammer");
 			break;
 		case POGO:
-			itemIcon = iconRegister.registerIcon("Minestuck:PogoHammer");
+			itemIcon = iconRegister.registerIcon("minestuck:PogoHammer");
 			break;
 		case TELESCOPIC:
-			itemIcon = iconRegister.registerIcon("Minestuck:TelescopicSassacrusher");
+			itemIcon = iconRegister.registerIcon("minestuck:TelescopicSassacrusher");
 			break;
 		case FEARNOANVIL:
-			itemIcon = iconRegister.registerIcon("Minestuck:FearNoAnvil");
+			itemIcon = iconRegister.registerIcon("minestuck:FearNoAnvil");
 			break	;
 		case ZILLYHOO:
-			itemIcon = iconRegister.registerIcon("Minestuck:ZillyhooHammer");
+			itemIcon = iconRegister.registerIcon("minestuck:ZillyhooHammer");
 			break;
 		case POPAMATIC:
-			itemIcon = iconRegister.registerIcon("Minestuck:Vrillyhoo");
+			itemIcon = iconRegister.registerIcon("minestuck:Vrillyhoo");
 			break;
 		case SCARLET:
-			itemIcon = iconRegister.registerIcon("Minestuck:ScarletZillyhoo");
+			itemIcon = iconRegister.registerIcon("minestuck:ScarletZillyhoo");
 			break;
 		}
 	}

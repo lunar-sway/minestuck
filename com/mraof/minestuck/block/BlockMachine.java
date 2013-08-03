@@ -61,7 +61,7 @@ public class BlockMachine extends BlockContainer {
         this.textures = new Icon[iconNames.length];
 
         for (int i = 0; i < this.textures.length; i++)
-            this.textures[i] = par1IconRegister.registerIcon("Minestuck:" + iconNames[i]);
+            this.textures[i] = par1IconRegister.registerIcon("minestuck:" + iconNames[i]);
     }
 	
 	@Override

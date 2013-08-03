@@ -27,7 +27,7 @@ public class ItemCardPunched extends Item {
 	}
 
 	public void registerIcons(IconRegister par1IconRegister) {
-	   itemIcon = par1IconRegister.registerIcon("Minestuck:CardPunched");
+	   itemIcon = par1IconRegister.registerIcon("minestuck:CardPunched");
 	}
     
 	   @Override
