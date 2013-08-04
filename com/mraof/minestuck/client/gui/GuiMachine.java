@@ -50,8 +50,8 @@ public class GuiMachine extends GuiContainer {
     super(new ContainerMachine(inventoryPlayer, tileEntity));
     this.te = tileEntity;
     this.metadata = tileEntity.getMetadata();
-    guiBackground = new ResourceLocation("minestuck:/gui/" + guis[metadata] + ".png");
-    guiProgress = new ResourceLocation("minestuck:/gui/progress/" + guis[metadata] + ".png");
+    guiBackground = new ResourceLocation("minestuck:textures/gui/" + guis[metadata] + ".png");
+    guiProgress = new ResourceLocation("minestuck:textures/gui/progress/" + guis[metadata] + ".png");
     this.player = inventoryPlayer.player;
     
     //sets prgress bar information based on machine type
