@@ -86,7 +86,7 @@ public class ComponentCastleWallPiece extends ComponentCastlePiece
 			this.getNextComponentNormal(startPiece, components, random, 0, -8, true);
 			break;
 		default:
-			System.out.println("Wall done");
+			System.out.println("[MINESTUCK] Wall done");
 		}
 		this.componentType = 3;
 //		if(!this.cornerPiece)

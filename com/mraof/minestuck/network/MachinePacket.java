@@ -54,7 +54,7 @@ public class MachinePacket extends MinestuckPacket {
 				TileEntityMachine te = ((ContainerMachine) ((EntityPlayerMP)player).openContainer).tileEntity;
 		
 		if (te == null) {
-			System.out.println("Invalid TE!");
+			System.out.println("[MINESTUCK] Invalid TE!");
 		} else {
 			te.mode = newMode ? CombinationMode.AND : CombinationMode.OR;
 		}
