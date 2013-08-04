@@ -56,6 +56,7 @@ public class MachinePacket extends MinestuckPacket {
 		if (te == null) {
 			System.out.println("[MINESTUCK] Invalid TE!");
 		} else {
+			System.out.println("[MINESTUCK] Button pressed. AND mode is " + newMode);
 			te.mode = newMode ? CombinationMode.AND : CombinationMode.OR;
 		}
 	}
