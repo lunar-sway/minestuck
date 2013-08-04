@@ -1,8 +1,15 @@
 package com.mraof.minestuck.tileentity;
 
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.alchemy.CombinationMode;
-import com.mraof.minestuck.alchemy.CombinationRegistry;
+import com.mraof.minestuck.entity.item.EntityGrist;
+import com.mraof.minestuck.util.CombinationMode;
+import com.mraof.minestuck.util.CombinationRegistry;
+import com.mraof.minestuck.util.GristRegistry;
+import com.mraof.minestuck.util.GristSet;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -14,12 +21,11 @@ import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityMachine extends TileEntity implements IInventory {
 
-    private ItemStack[] inv;
+    public ItemStack[] inv;
     public int progress = 0;
     public int maxProgress = 100;
     public CombinationMode mode = CombinationMode.AND;
     public EntityPlayer owner;
-    //public int metadata = worldObj.getBlockMetadata(xCoord,yCoord,zCoord);
 	public boolean alcReady = false;
 
     public TileEntityMachine(){
@@ -161,6 +167,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		
 		if (!contentsValid()) {
 			progress = 0;
+			alcReady = false;
 			return;
 		}
 		
@@ -182,8 +189,24 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			return (inv[1] != null && inv[2] != null && inv[0] == null);
 		case (3):
 		if (alcReady && inv[1] != null && inv[0] == null && owner != null) {
-			//code to check owner's cache will go here
-			return true;
+			//Check owner's cache: Do they have everything they need?
+		  	NBTTagCompound nbttagcompound = inv[1].getTagCompound();
+	    	GristSet set = GristRegistry.getGristConversion(new ItemStack(nbttagcompound.getInteger("contentID"),1,nbttagcompound.getInteger("contentMeta")));
+	    	if (set == null) {return false;}
+		    	Hashtable reqs = set.getTable();
+		    	//System.out.println("reqs: " + reqs.size());
+		    	if (reqs != null) {
+		    	   	Iterator it = reqs.entrySet().iterator();
+		            while (it.hasNext()) {
+		                Map.Entry pairs = (Map.Entry)it.next();
+		                int type = (Integer) pairs.getKey();
+		                int need = (Integer) pairs.getValue();
+		                int have =  owner.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(EntityGrist.gristTypes[type]);
+		                
+		                if (need > have) {return false;}
+		        }
+	    	} else {return false;}
+	    	return true;
 		} else {
 			return false;
 		}
@@ -240,7 +263,17 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			if (nbttagcompound == null) { break;}
 			setInventorySlotContents(0,new ItemStack(nbttagcompound.getInteger("contentID"),1,nbttagcompound.getInteger("contentMeta")));
 			decrStackSize(1, 1);
+	    	GristSet set = GristRegistry.getGristConversion(new ItemStack(nbttagcompound.getInteger("contentID"),1,nbttagcompound.getInteger("contentMeta")));
+		    Hashtable reqs = set.getTable();
+	    	if (reqs != null) {
+	    	   	Iterator it = reqs.entrySet().iterator();
+	            while (it.hasNext()) {
+	                Map.Entry pairs = (Map.Entry)it.next();
+	                owner.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").setInteger(EntityGrist.gristTypes[(Integer) pairs.getKey()],owner.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(EntityGrist.gristTypes[(Integer)pairs.getKey()]) - (Integer)pairs.getValue());
+	            }
+	        alcReady = false;
 			break;
+	    	}
 		}
 	}
 }

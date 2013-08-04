@@ -15,6 +15,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import com.mraof.minestuck.entity.item.EntityGrist;
+import com.mraof.minestuck.util.Title;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -44,7 +45,7 @@ public class GuiGristCache extends GuiScreen
 	private static RenderItem itemRenderer = new RenderItem();
 	public static boolean visible = false;
 
-	private String title = "CLASS of ASPECT";
+	private Title title;
 	private String titleMessage = "";
 
 
@@ -63,7 +64,12 @@ public class GuiGristCache extends GuiScreen
 
 		if (titleMessage.isEmpty())
 			titleMessage = mc.thePlayer.username.toUpperCase() + " : " + title;
-
+		
+		if (title == null) {
+			title = new Title(((EntityPlayer)mc.thePlayer).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Class"),((EntityPlayer)mc.thePlayer).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Aspect"));
+			titleMessage = title.getTitleName();
+		}
+		
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.func_110434_K().func_110577_a(guiBackground);
 		
@@ -95,6 +101,7 @@ public class GuiGristCache extends GuiScreen
 
 			this.drawGristIcon(gristXOffset, gristYOffset, EntityGrist.gristTypes[gristId]);
 			fontRenderer.drawString(Integer.toString(mc.thePlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(EntityGrist.gristTypes[gristId])),(this.width / 2)-(guiWidth / 2) + gristCountX + (gristCountXOffset * row - row), yOffset + gristCountY + (gristCountYOffset * column - column), 0xddddee);
+			
 
 
 		}
@@ -123,7 +130,7 @@ public class GuiGristCache extends GuiScreen
 	private void drawGristIcon(int x,int y,String gristType) 
 	{
 //		this.mc.renderEngine.bindTexture("minestuck:/textures/grist/" + gristType + ".png");
-		this.mc.func_110434_K().func_110577_a(new ResourceLocation("minestuck:/textures/grist/" + gristType + ".png"));
+		this.mc.func_110434_K().func_110577_a(new ResourceLocation("minestuck","textures/grist/" + gristType + ".png"));
 
 		float scale = (float) 1/16;
 
