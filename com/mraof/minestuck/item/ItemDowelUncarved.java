@@ -17,6 +17,6 @@ public class ItemDowelUncarved extends Item {
 	}
 
 	public void registerIcons(IconRegister par1IconRegister) {
-	   itemIcon = par1IconRegister.registerIcon("Minestuck:CruxiteDowel");
+	   itemIcon = par1IconRegister.registerIcon("minestuck:CruxiteDowel");
 	}
 }

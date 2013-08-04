@@ -115,26 +115,26 @@ public class ItemBlade extends ItemWeapon
 		switch(bladeType)
 		{
 		case SORD:
-			itemIcon = iconRegister.registerIcon("Minestuck:Sord");
+			itemIcon = iconRegister.registerIcon("minestuck:Sord");
 			break;
 		case NINJA:
 		case KATANA:
-			itemIcon = iconRegister.registerIcon("Minestuck:Katana");
+			itemIcon = iconRegister.registerIcon("minestuck:Katana");
 			break;
 		case CALEDSCRATCH:
-			itemIcon = iconRegister.registerIcon("Minestuck:Caledscratch");
+			itemIcon = iconRegister.registerIcon("minestuck:Caledscratch");
 			break;
 		case DERINGER:
-			itemIcon = iconRegister.registerIcon("Minestuck:RoyalDeringer");
+			itemIcon = iconRegister.registerIcon("minestuck:RoyalDeringer");
 			break	;
 		case REGISWORD:
-			itemIcon = iconRegister.registerIcon("Minestuck:Regisword");
+			itemIcon = iconRegister.registerIcon("minestuck:Regisword");
 			break;
 		case SCARLET:
-			itemIcon = iconRegister.registerIcon("Minestuck:ScarletRibbitar");
+			itemIcon = iconRegister.registerIcon("minestuck:ScarletRibbitar");
 			break;
 		case DOGG:
-			itemIcon = iconRegister.registerIcon("Minestuck:SnoopDoggMachete");
+			itemIcon = iconRegister.registerIcon("minestuck:SnoopDoggMachete");
 		}
 	}
 	

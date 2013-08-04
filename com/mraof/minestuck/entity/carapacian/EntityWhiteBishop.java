@@ -25,6 +25,6 @@ public class EntityWhiteBishop extends EntityBishop
 	@Override
 	public String getTexture() 
 	{
-		return "Minestuck:/textures/mobs/ProspitianBishop.png";
+		return "textures/mobs/ProspitianBishop.png";
 	}
 }

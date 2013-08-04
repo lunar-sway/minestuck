@@ -109,12 +109,12 @@ public class ItemSpork extends ItemWeapon
 		switch(sporkType)
 		{
 		case CROCKER:
-			crockerTypes[0] = iconRegister.registerIcon("Minestuck:CrockerSpoon");
-			crockerTypes[1] = iconRegister.registerIcon("Minestuck:CrockerFork");
+			crockerTypes[0] = iconRegister.registerIcon("minestuck:CrockerSpoon");
+			crockerTypes[1] = iconRegister.registerIcon("minestuck:CrockerFork");
 			itemIcon = crockerTypes[0];
 			break;
 		case SKAIA:
-			itemIcon = iconRegister.registerIcon("Minestuck:SkaianFork");
+			itemIcon = iconRegister.registerIcon("minestuck:SkaianFork");
 			break;
 		}
 	}

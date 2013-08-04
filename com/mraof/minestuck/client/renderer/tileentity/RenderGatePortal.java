@@ -17,8 +17,8 @@ import com.mraof.minestuck.tileentity.TileEntityGatePortal;
 
 public class RenderGatePortal extends TileEntitySpecialRenderer 
 {
-	private static final ResourceLocation tunnel = new ResourceLocation("Minestuck:/textures/tunnel.png");
-    private static final ResourceLocation particlefield = new ResourceLocation("Minestuck:/textures/particlefield.png");
+	private static final ResourceLocation tunnel = new ResourceLocation("minestuck:/textures/tunnel.png");
+    private static final ResourceLocation particlefield = new ResourceLocation("minestuck:/textures/particlefield.png");
     
     FloatBuffer floatBuffer = GLAllocation.createDirectFloatBuffer(16);
 

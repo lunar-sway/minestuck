@@ -83,13 +83,13 @@ public class ItemCane extends ItemWeapon
 		switch(caneType)
 		{
 		case CANE:
-			itemIcon = iconRegister.registerIcon("Minestuck:Cane");
+			itemIcon = iconRegister.registerIcon("minestuck:Cane");
 			break;
 		case SPEAR:
-			itemIcon = iconRegister.registerIcon("Minestuck:SpearCane");
+			itemIcon = iconRegister.registerIcon("minestuck:SpearCane");
 			break;
 		case DRAGON:
-			itemIcon = iconRegister.registerIcon("Minestuck:DragonCane");
+			itemIcon = iconRegister.registerIcon("minestuck:DragonCane");
 			break;
 		}
 	}

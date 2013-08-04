@@ -161,6 +161,6 @@ public class BlockGatePortal extends BlockContainer
 	 */
 	public void registerIcons(IconRegister par1IconRegister)
 	{
-		this.blockIcon = par1IconRegister.registerIcon("Minestuck:GatePortal");
+		this.blockIcon = par1IconRegister.registerIcon("minestuck:GatePortal");
 	}
 }

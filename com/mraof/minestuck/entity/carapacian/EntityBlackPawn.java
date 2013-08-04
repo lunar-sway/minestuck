@@ -32,7 +32,7 @@ public class EntityBlackPawn extends EntityPawn
 	@Override
 	public String getTexture() 
 	{
-		return "Minestuck:/textures/mobs/DersitePawn.png";
+		return "textures/mobs/DersitePawn.png";
 	}
 
 }

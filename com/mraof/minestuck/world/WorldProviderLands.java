@@ -1,5 +1,42 @@
 package com.mraof.minestuck.world;
 
-public class WorldProviderLands {
+import net.minecraft.world.WorldProvider;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.WorldChunkManagerHell;
+import net.minecraft.world.chunk.IChunkProvider;
+
+import com.mraof.minestuck.world.gen.ChunkProviderLands;
+
+public class WorldProviderLands extends WorldProvider 
+{
+	public int dimensionId = 2;
+
+	@Override
+	public String getDimensionName()
+	{
+		return "Land of ";
+	}
+
+	public IChunkProvider createChunkGenerator()
+	{
+		return new ChunkProviderLands(this.worldObj, this.worldObj.getSeed(), true);
+	}
+	@Override
+	public boolean isDaytime() {
+		return true;
+	}
+	public void registerWorldChunkManager()
+    {
+		super.registerWorldChunkManager();
+        this.worldChunkMgr = new WorldChunkManagerHell(BiomeGenBase.plains, 0.5F, 0.5F);
+    }
+    public float calculateCelestialAngle(long par1, float par3)
+    {
+        return 12000.0F;
+    }
+    public boolean isSurfaceWorld()
+    {
+        return false;
+    }
 
 }

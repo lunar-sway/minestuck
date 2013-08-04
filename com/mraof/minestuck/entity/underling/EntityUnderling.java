@@ -2,7 +2,6 @@ package com.mraof.minestuck.entity.underling;
 
 import java.util.Random;
 
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAISwimming;
@@ -43,9 +42,6 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	{
 		super(par1World, type, underlingName);
 		
-        this.func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a((double)(this.getMaxHealth()));
-		this.setEntityHealth(this.getMaxHealth());
-		
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
 		this.targetTasks.addTask(2, this.entityAINearestAttackableTargetWithHeight());
@@ -76,7 +72,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	@Override
 	public String getTexture() 
 	{
-		return "Minestuck:/textures/mobs/" + type.getTypeString() + underlingName + ".png";
+		return "textures/mobs/" + type.getTypeString() + underlingName + ".png";
 	}
 	//Gives each type of underling a unique name, so instead of all types being called entity.underlingName.name they are called entity.typeString.underlingName.name
 	@Override
@@ -122,7 +118,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	public void readSpawnData(ByteArrayDataInput data) 
 	{
 		this.type = type.getClass().getEnumConstants()[data.readInt()];
-//		texture = "Minestuck:/textures/mobs/" + type.getTypeString() + underlingName + ".png";
+//		texture = "minestuck:/textures/mobs/" + type.getTypeString() + underlingName + ".png";
 	}
 
 

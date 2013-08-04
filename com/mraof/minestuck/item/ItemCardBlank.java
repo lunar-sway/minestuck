@@ -17,6 +17,6 @@ public class ItemCardBlank extends Item {
 	}
 
 	public void registerIcons(IconRegister par1IconRegister) {
-	   itemIcon = par1IconRegister.registerIcon("Minestuck:CardBlank");
+	   itemIcon = par1IconRegister.registerIcon("minestuck:CardBlank");
 	}
 }
