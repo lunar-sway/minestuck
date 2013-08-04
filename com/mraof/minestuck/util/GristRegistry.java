@@ -1,4 +1,4 @@
-package com.mraof.minestuck.alchemy;
+package com.mraof.minestuck.util;
 
 import java.util.Arrays;
 import java.util.Hashtable;

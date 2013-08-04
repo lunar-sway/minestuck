@@ -5,11 +5,11 @@ import java.util.Iterator;
 import java.util.Map;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.alchemy.CombinationMode;
-import com.mraof.minestuck.alchemy.CombinationRegistry;
-import com.mraof.minestuck.alchemy.GristRegistry;
-import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.entity.item.EntityGrist;
+import com.mraof.minestuck.util.CombinationMode;
+import com.mraof.minestuck.util.CombinationRegistry;
+import com.mraof.minestuck.util.GristRegistry;
+import com.mraof.minestuck.util.GristSet;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
