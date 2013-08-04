@@ -17,8 +17,8 @@ public class TileEntityMachine extends TileEntity implements IInventory {
     private ItemStack[] inv;
     public int progress = 0;
     public int maxProgress = 100;
-    public EntityPlayer owner;
     public CombinationMode mode = CombinationMode.AND;
+    public EntityPlayer owner;
     //public int metadata = worldObj.getBlockMetadata(xCoord,yCoord,zCoord);
 
     public TileEntityMachine(){

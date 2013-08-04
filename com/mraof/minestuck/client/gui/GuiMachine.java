@@ -88,6 +88,9 @@ protected void drawGuiContainerForegroundLayer(int param1, int param2) {
     fontRenderer.drawString(guiTitles[metadata], 8, 6, 4210752);
     //draws "Inventory" or your regional equivalent
     fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
+    if (metadata == 3) {
+    	 //fontRenderer.drawString(te.owner.username, 8, ySize - 96 + 20, 4210752);
+    }
 }
 
 @Override
@@ -115,9 +118,18 @@ public void initGui() {
         super.initGui();
         //make buttons:		id, x, y, width, height, text
         if (metadata == 1) {
+        	//The Designex's the only one with buttons
         	modeButton = new GuiButton(1, (width - xSize) / 2 + buttonX, (height - ySize) / 2 + buttonY, 20, 20, te.mode == CombinationMode.AND ? "&&": "||");
         	buttonList.add(modeButton);
         }
+//        if (metadata == 3) {
+//        	//If it's an Alchemiter, we need the player who placed it
+//    		Packet250CustomPayload packet = new Packet250CustomPayload();
+//    		packet.channel = "Minestuck";
+//    		packet.data = MinestuckPacket.makePacket(Type.MACHINEOWNER);
+//    		packet.length = packet.data.length;
+//    		this.mc.getNetHandler().addToSendQueue(packet);
+//        }
 }
 
 protected void actionPerformed(GuiButton guibutton) {
