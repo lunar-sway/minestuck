@@ -14,7 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityMachine extends TileEntity implements IInventory {
 
-    private ItemStack[] inv;
+    public ItemStack[] inv;
     public int progress = 0;
     public int maxProgress = 100;
     public CombinationMode mode = CombinationMode.AND;

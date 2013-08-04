@@ -2,10 +2,16 @@ package com.mraof.minestuck.client.gui;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
 
 import org.lwjgl.opengl.GL11;
 
 import com.mraof.minestuck.alchemy.CombinationMode;
+import com.mraof.minestuck.alchemy.GristRegistry;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.inventory.ContainerMachine;
 import com.mraof.minestuck.network.ComboButtonPacket;
 import com.mraof.minestuck.network.MinestuckPacket;
@@ -21,6 +27,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.util.ResourceLocation;
@@ -88,8 +96,34 @@ protected void drawGuiContainerForegroundLayer(int param1, int param2) {
     fontRenderer.drawString(guiTitles[metadata], 8, 6, 4210752);
     //draws "Inventory" or your regional equivalent
     fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
-    if (metadata == 3) {
-    	 //fontRenderer.drawString(te.owner.username, 8, ySize - 96 + 20, 4210752);
+    if (metadata == 3 && te.inv[1] != null) {
+    	//Render grist requirements
+    	NBTTagCompound nbttagcompound = te.inv[1].getTagCompound();
+    	GristSet set = GristRegistry.getGristConversion(new ItemStack(nbttagcompound.getInteger("contentID"),1,nbttagcompound.getInteger("contentMeta")));
+    	if (set == null) {return;}
+    	Hashtable reqs = set.getTable();
+    	//System.out.println("reqs: " + reqs.size());
+    	if (reqs != null) {
+    	   	Iterator it = reqs.entrySet().iterator();
+    	   	int place = 0;
+            while (it.hasNext()) {
+                Map.Entry pairs = (Map.Entry)it.next();
+                int type = (Integer) pairs.getKey();
+                int need = (Integer) pairs.getValue();
+                int have =  player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(EntityGrist.gristTypes[type]);
+                
+                int row = place % 3;
+                int col = place / 3;
+                
+                int color = need <= have ? 65280 : 16711680; //Green if we have enough grist, red if not
+                
+                fontRenderer.drawString(need + " " + EntityGrist.gristTypes[type] + " (" + have + ")", 9 + (80 * col),45 + (8 * (row)), color);
+                
+                place++;
+                
+                //System.out.println("Need" + need + ". Have " + have);
+            }
+    	}
     }
 }
 

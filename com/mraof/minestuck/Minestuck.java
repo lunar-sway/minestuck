@@ -361,7 +361,7 @@ public class Minestuck
 		GameRegistry.addRecipe(new ItemStack(blankCard,8,0),new Object[]{ "XXX","XYX","XXX",'Y',new ItemStack(rawCruxite, 1),'X',new ItemStack(Item.paper,1)});
 		
 		//Set up Alchemiter recipes
-		GristRegistry.addGristConversion(cruxiteBlockTileStack, new GristSet(GristType.Build, 9)); //1 Cruxite block is now worth 9 Build Grist. This is an example!
+		GristRegistry.addGristConversion(lightGreyChessTileStack, new GristSet(new GristType[] {GristType.Build,GristType.Diamond,GristType.Uranium,GristType.Amber}, new int[] {1,2,3,4})); //1 light grey tile is now worth 9 Build Grist. This is an example!
 		
 		//Set up Punch Designex recipes
 		CombinationRegistry.addCombination(whiteChessTileStack, blackChessTileStack, CombinationMode.AND,lightGreyChessTileStack); //You can now combine black and white chess tiles to get grey ones. Also an example!
