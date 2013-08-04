@@ -43,6 +43,7 @@ public class ContainerMachine extends Container {
 	public ContainerMachine(InventoryPlayer inventoryPlayer, TileEntityMachine te) {
         tileEntity = te;
         metadata = te.getMetadata();
+        te.owner = inventoryPlayer.player;
 
         //the Slot constructor takes the IInventory and the slot number in that it binds to
         //and the x-y coordinates it resides on-screen
