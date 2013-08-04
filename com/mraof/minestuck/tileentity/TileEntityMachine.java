@@ -17,9 +17,10 @@ public class TileEntityMachine extends TileEntity implements IInventory {
     private ItemStack[] inv;
     public int progress = 0;
     public int maxProgress = 100;
-    public EntityPlayer owner;
     public CombinationMode mode = CombinationMode.AND;
+    public EntityPlayer owner;
     //public int metadata = worldObj.getBlockMetadata(xCoord,yCoord,zCoord);
+	public boolean alcReady = false;
 
     public TileEntityMachine(){
             inv = new ItemStack[4];
@@ -180,7 +181,12 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		case (2):
 			return (inv[1] != null && inv[2] != null && inv[0] == null);
 		case (3):
-			return (inv[1] != null && inv[0] == null);
+		if (alcReady && inv[1] != null && inv[0] == null && owner != null) {
+			//code to check owner's cache will go here
+			return true;
+		} else {
+			return false;
+		}
 		}
 		return false;
 	}

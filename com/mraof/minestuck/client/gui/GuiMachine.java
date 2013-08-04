@@ -7,7 +7,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.mraof.minestuck.alchemy.CombinationMode;
 import com.mraof.minestuck.inventory.ContainerMachine;
-import com.mraof.minestuck.network.MachinePacket;
+import com.mraof.minestuck.network.ComboButtonPacket;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
@@ -50,8 +50,8 @@ public class GuiMachine extends GuiContainer {
     super(new ContainerMachine(inventoryPlayer, tileEntity));
     this.te = tileEntity;
     this.metadata = tileEntity.getMetadata();
-    guiBackground = new ResourceLocation("minestuck:/gui/" + guis[metadata] + ".png");
-    guiProgress = new ResourceLocation("minestuck:/gui/progress/" + guis[metadata] + ".png");
+    guiBackground = new ResourceLocation("minestuck:textures/gui/" + guis[metadata] + ".png");
+    guiProgress = new ResourceLocation("minestuck:textures/gui/progress/" + guis[metadata] + ".png");
     this.player = inventoryPlayer.player;
     
     //sets prgress bar information based on machine type
@@ -88,6 +88,9 @@ protected void drawGuiContainerForegroundLayer(int param1, int param2) {
     fontRenderer.drawString(guiTitles[metadata], 8, 6, 4210752);
     //draws "Inventory" or your regional equivalent
     fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
+    if (metadata == 3) {
+    	 //fontRenderer.drawString(te.owner.username, 8, ySize - 96 + 20, 4210752);
+    }
 }
 
 @Override
@@ -115,23 +118,50 @@ public void initGui() {
         super.initGui();
         //make buttons:		id, x, y, width, height, text
         if (metadata == 1) {
+        	//The Designex's needs a button...
         	modeButton = new GuiButton(1, (width - xSize) / 2 + buttonX, (height - ySize) / 2 + buttonY, 20, 20, te.mode == CombinationMode.AND ? "&&": "||");
         	buttonList.add(modeButton);
         }
+        if (metadata == 3) {
+        	//... and so does the Alchemiter.
+        	modeButton = new GuiButton(1, (width - xSize) / 2 + 72, (height - ySize) / 2 + 31, 30, 12, "GO!");
+        	buttonList.add(modeButton);
+        }
+//        if (metadata == 3) {
+//        	//If it's an Alchemiter, we need the player who placed it
+//    		Packet250CustomPayload packet = new Packet250CustomPayload();
+//    		packet.channel = "Minestuck";
+//    		packet.data = MinestuckPacket.makePacket(Type.MACHINEOWNER);
+//    		packet.length = packet.data.length;
+//    		this.mc.getNetHandler().addToSendQueue(packet);
+//        }
 }
 
 protected void actionPerformed(GuiButton guibutton) {
 
-        //Sends new mode info to server
-	
+        
+	if (metadata == 1) {
+		//Sends new mode info to server
 		Packet250CustomPayload packet = new Packet250CustomPayload();
 		packet.channel = "Minestuck";
-		packet.data = MinestuckPacket.makePacket(Type.MACHINE,te.mode == CombinationMode.AND ? false : true);
+		packet.data = MinestuckPacket.makePacket(Type.COMBOBUTTON,te.mode == CombinationMode.AND ? false : true);
 		packet.length = packet.data.length;
 		this.mc.getNetHandler().addToSendQueue(packet);
 	
-	te.mode = te.mode == CombinationMode.AND ? CombinationMode.OR : CombinationMode.AND;
-	modeButton.displayString = te.mode == CombinationMode.AND ? "&&" : "||";
+		te.mode = te.mode == CombinationMode.AND ? CombinationMode.OR : CombinationMode.AND;
+		modeButton.displayString = te.mode == CombinationMode.AND ? "&&" : "||";
+	}
+	
+	if (metadata == 3) {
+		//Tell the Alchemiter to go
+		Packet250CustomPayload packet = new Packet250CustomPayload();
+		packet.channel = "Minestuck";
+		packet.data = MinestuckPacket.makePacket(Type.GOBUTTON,true);
+		packet.length = packet.data.length;
+		this.mc.getNetHandler().addToSendQueue(packet);
+		
+		te.alcReady = true;
+	}
 }
 
 /**

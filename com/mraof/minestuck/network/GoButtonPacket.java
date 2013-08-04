@@ -18,16 +18,16 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import cpw.mods.fml.common.network.Player;
 
-public class MachinePacket extends MinestuckPacket {
+public class GoButtonPacket extends MinestuckPacket {
 
 	public boolean newMode;
 	public int xCoord;
 	public int yCoord;
 	public int zCoord;
 	public int gristTotal;
-	public MachinePacket() 
+	public GoButtonPacket() 
 	{
-		super(Type.MACHINE);
+		super(Type.COMBOBUTTON);
 	}
 
 	@Override
@@ -54,9 +54,10 @@ public class MachinePacket extends MinestuckPacket {
 				TileEntityMachine te = ((ContainerMachine) ((EntityPlayerMP)player).openContainer).tileEntity;
 		
 		if (te == null) {
-			System.out.println("Invalid TE!");
+			System.out.println("[MINESTUCK] Invalid TE!");
 		} else {
-			te.mode = newMode ? CombinationMode.AND : CombinationMode.OR;
+			System.out.println("[MINESTUCK] Button pressed. Alchemiter going!");
+			te.alcReady = newMode;
 		}
 	}
 
