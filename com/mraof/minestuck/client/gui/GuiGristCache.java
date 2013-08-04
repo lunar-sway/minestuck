@@ -130,7 +130,7 @@ public class GuiGristCache extends GuiScreen
 	private void drawGristIcon(int x,int y,String gristType) 
 	{
 //		this.mc.renderEngine.bindTexture("minestuck:/textures/grist/" + gristType + ".png");
-		this.mc.func_110434_K().func_110577_a(new ResourceLocation("minestuck:/textures/grist/" + gristType + ".png"));
+		this.mc.func_110434_K().func_110577_a(new ResourceLocation("minestuck","textures/grist/" + gristType + ".png"));
 
 		float scale = (float) 1/16;
 
