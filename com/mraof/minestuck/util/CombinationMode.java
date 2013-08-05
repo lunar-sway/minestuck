@@ -1,4 +1,4 @@
-package com.mraof.minestuck.alchemy;
+package com.mraof.minestuck.util;
 
 public enum CombinationMode {
 	AND,OR;
