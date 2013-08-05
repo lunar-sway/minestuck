@@ -15,11 +15,6 @@ import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 
-import com.mraof.minestuck.alchemy.CombinationMode;
-import com.mraof.minestuck.alchemy.CombinationRegistry;
-import com.mraof.minestuck.alchemy.GristRegistry;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.block.BlockChessTile;
 import com.mraof.minestuck.block.BlockGatePortal;
 import com.mraof.minestuck.block.BlockMachine;
@@ -61,6 +56,11 @@ import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+import com.mraof.minestuck.util.CombinationMode;
+import com.mraof.minestuck.util.CombinationRegistry;
+import com.mraof.minestuck.util.GristRegistry;
+import com.mraof.minestuck.util.GristSet;
+import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.world.WorldProviderSkaia;
 import com.mraof.minestuck.world.gen.OreHandler;
 
@@ -361,7 +361,7 @@ public class Minestuck
 		GameRegistry.addRecipe(new ItemStack(blankCard,8,0),new Object[]{ "XXX","XYX","XXX",'Y',new ItemStack(rawCruxite, 1),'X',new ItemStack(Item.paper,1)});
 		
 		//Set up Alchemiter recipes
-		GristRegistry.addGristConversion(cruxiteBlockTileStack, new GristSet(GristType.Build, 9)); //1 Cruxite block is now worth 9 Build Grist. This is an example!
+		GristRegistry.addGristConversion(lightGreyChessTileStack, new GristSet(new GristType[] {GristType.Build,GristType.Uranium}, new int[] {1,2})); //1 light grey tile is now worth 9 Build Grist. This is an example!
 		
 		//Set up Punch Designex recipes
 		CombinationRegistry.addCombination(whiteChessTileStack, blackChessTileStack, CombinationMode.AND,lightGreyChessTileStack); //You can now combine black and white chess tiles to get grey ones. Also an example!
