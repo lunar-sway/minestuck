@@ -111,36 +111,6 @@ public class TileEntityGatePortal extends TileEntity
         double d5 = entity.posZ;
         float f = entity.rotationYaw;
 
-        if (entity.dimension == 1)
-        {
-            ChunkCoordinates chunkcoordinates;
-
-            if (dimension == 1)
-            {
-                chunkcoordinates = worldserver1.getSpawnPoint();
-            }
-            else
-            {
-                chunkcoordinates = worldserver1.getEntrancePortalLocation();
-            }
-
-            d0 = (double)chunkcoordinates.posX;
-            entity.posY = (double)chunkcoordinates.posY;
-            d1 = (double)chunkcoordinates.posZ;
-            entity.setLocationAndAngles(d0, entity.posY, d1, 90.0F, 0.0F);
-
-            if (entity.isEntityAlive())
-            {
-                worldserver.updateEntityWithOptionalForce(entity, false);
-            }
-        }
-
-
-        if (dimension != 1)
-        {
-//            d0 = (double)MathHelper.clamp_int((int)d0, -29999872, 29999872);
-//            d1 = (double)MathHelper.clamp_int((int)d1, -29999872, 29999872);
-
             if (entity.isEntityAlive())
             {
                 worldserver1.spawnEntityInWorld(entity);
@@ -149,7 +119,6 @@ public class TileEntityGatePortal extends TileEntity
                 this.makeDestination(entity, worldserver1);
             }
 
-        }
 
         entity.setWorld(worldserver1);
 	}

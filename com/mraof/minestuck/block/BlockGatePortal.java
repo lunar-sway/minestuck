@@ -1,27 +1,22 @@
 package com.mraof.minestuck.block;
 
-import java.util.List;
 import java.util.Random;
 
-import com.mraof.minestuck.CommonProxy;
+import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.common.DimensionManager;
+
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.packet.Packet9Respawn;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 
 public class BlockGatePortal extends BlockContainer
 {
@@ -149,6 +144,24 @@ public class BlockGatePortal extends BlockContainer
 				this.destinationDimension = Minestuck.skaiaDimensionId;
 		}
 	}
+    /**
+     * Called upon block activation (right click on the block.)
+     */
+    public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
+    {
+        if (par1World.isRemote)
+        {
+            return true;
+        }
+        int newDimension = ((TileEntityGatePortal) par1World.getBlockTileEntity(x, y, z)).destinationDimension + 1;
+        if(par1World.provider.dimensionId != newDimension && DimensionManager.isDimensionRegistered(newDimension))
+        {
+        	this.destinationDimension = newDimension;
+        	((TileEntityGatePortal) par1World.getBlockTileEntity(x, y, z)).destinationDimension = newDimension;
+        }
+        	
+        return true;
+    }
 	public void setDestinationDimension(World world, int x, int y, int z, int destinationDimension) 
 	{
 		((TileEntityGatePortal) world.getBlockTileEntity(x, y, z)).destinationDimension = destinationDimension;
