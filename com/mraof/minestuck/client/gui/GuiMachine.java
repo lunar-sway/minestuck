@@ -96,7 +96,8 @@ protected void drawGuiContainerForegroundLayer(int param1, int param2) {
     fontRenderer.drawString(guiTitles[metadata], 8, 6, 4210752);
     //draws "Inventory" or your regional equivalent
     fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
-    if (metadata == 3 && te.inv[1] != null) {
+    if (metadata == 3 && te.inv[1] != null && te.inv[1].getTagCompound() != null) 
+    {
     	//Render grist requirements
     	NBTTagCompound nbttagcompound = te.inv[1].getTagCompound();
     	GristSet set = GristRegistry.getGristConversion(new ItemStack(nbttagcompound.getInteger("contentID"),1,nbttagcompound.getInteger("contentMeta")));
