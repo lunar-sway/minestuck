@@ -39,7 +39,6 @@ public class ChunkProviderSkaia implements IChunkProvider
     private NoiseGeneratorOctaves noiseGen3;
     public NoiseGeneratorOctaves noiseGen4;
     public NoiseGeneratorOctaves noiseGen5;
-    private double[] densities;
     
     private MapGenCastle castleGenerator = new MapGenCastle();
     
@@ -49,8 +48,6 @@ public class ChunkProviderSkaia implements IChunkProvider
     double[] noiseData4;
     double[] noiseData5;
     
-	List spawnableMonsterList;
-	List spawnableCreatureList;
 	List spawnableWhiteList;
 	List spawnableBlackList;
 
@@ -58,12 +55,8 @@ public class ChunkProviderSkaia implements IChunkProvider
 	{
 		this.skaiaWorld = world;
         this.random = new Random(seed);
-        this.spawnableMonsterList = new ArrayList();
-        this.spawnableCreatureList = new ArrayList();
         this.spawnableBlackList = new ArrayList();
         this.spawnableWhiteList = new ArrayList();
-        this.spawnableCreatureList.add(new SpawnListEntry(EntityConsort.class, 2, 2, 2));
-        this.spawnableMonsterList.add(new SpawnListEntry(EntityImp.class, 2, 2, 4));
         this.spawnableBlackList.add(new SpawnListEntry(EntityBlackPawn.class, 2, 1, 10));
         this.spawnableBlackList.add(new SpawnListEntry(EntityBlackBishop.class, 1, 1, 1));
         this.spawnableWhiteList.add(new SpawnListEntry(EntityWhitePawn.class, 2, 1, 10));

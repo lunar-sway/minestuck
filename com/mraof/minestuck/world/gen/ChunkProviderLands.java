@@ -9,28 +9,30 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 
-public class ChunkProviderLands implements IChunkProvider {
+public class ChunkProviderLands implements IChunkProvider 
+{
+	List consortList;
 
-	public ChunkProviderLands(World worldObj, long seed, boolean b) {
-		// TODO Auto-generated constructor stub
+	public ChunkProviderLands(World worldObj, long seed, boolean b) 
+	{
+		
 	}
 
 	@Override
-	public boolean chunkExists(int i, int j) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean chunkExists(int i, int j) 
+	{
+		return true;
 	}
 
 	@Override
 	public Chunk provideChunk(int i, int j) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Chunk loadChunk(int i, int j) {
-		// TODO Auto-generated method stub
-		return null;
+	public Chunk loadChunk(int chunkX, int chunkZ) 
+	{
+		return this.provideChunk(chunkX, chunkZ);
 	}
 
 	@Override
