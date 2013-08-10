@@ -103,7 +103,7 @@ public class ChunkProviderSkaia implements IChunkProvider
 		short chessTileId = (short)Minestuck.chessTile.blockID;
 		for(int x = 0; x < 16; x++)
 			for(int z = 0; z < 16; z++)
-				for(int y = 0; y <= topBlock[x*16 + z]; y++)
+				for(int y = 0; y <= topBlock[x * 16 + z]; y++)
 				{
 					chunkIds[x + z * 16 + y * 256] = chessTileId;
 					chunkMetadata[x + z * 16 + y * 256] = chessTileMetadata;

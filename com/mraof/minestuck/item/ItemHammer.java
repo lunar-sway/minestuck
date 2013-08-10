@@ -10,6 +10,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -76,7 +77,7 @@ public class ItemHammer extends ItemWeapon
     @Override
 	public int getAttackDamage()
 	{
-	    return hammerType.equals(hammerType.POPAMATIC) ? (int) (Math.pow(( Math.random() * 5), 2)) : this.weaponDamage;
+	    return this.weaponDamage;
 	}
 
     @Override
@@ -97,6 +98,8 @@ public class ItemHammer extends ItemWeapon
 		}
 		else if(hammerType.equals(EnumHammerType.SCARLET))
 			target.setFire(50);
+		else if(hammerType.equals(hammerType.POPAMATIC) )
+			target.attackEntityFrom(DamageSource.magic , (float) (Math.pow(( Math.random() * 5), 2)) );
 		return true;
 	}
 

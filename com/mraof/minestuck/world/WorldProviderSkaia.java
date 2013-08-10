@@ -9,7 +9,7 @@ import com.mraof.minestuck.world.gen.ChunkProviderSkaia;
 
 public class WorldProviderSkaia extends WorldProvider 
 {
-	public int dimensionId = 2;
+//	public int dimensionId = 2;
 
 	@Override
 	public String getDimensionName() 

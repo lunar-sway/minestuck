@@ -1,21 +1,36 @@
 package com.mraof.minestuck.world.gen;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.IProgressUpdate;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.NoiseGeneratorOctaves;
+
+import com.mraof.minestuck.entity.consort.EntityNakagator;
 
 public class ChunkProviderLands implements IChunkProvider 
 {
 	List consortList;
+	World landWorld;
+	Random random;
+	private NoiseGeneratorOctaves noiseGens[] = new NoiseGeneratorOctaves[2];
 
 	public ChunkProviderLands(World worldObj, long seed, boolean b) 
 	{
-		
+		this.landWorld = worldObj;
+		this.random = new Random(seed);
+		this.consortList = new ArrayList();
+		this.consortList.add(new SpawnListEntry(EntityNakagator.class, 2, 1, 10));
+		this.noiseGens[0] = new NoiseGeneratorOctaves(this.random, 7);
+        this.noiseGens[1] = new NoiseGeneratorOctaves(this.random, 1);
 	}
 
 	@Override
@@ -25,8 +40,34 @@ public class ChunkProviderLands implements IChunkProvider
 	}
 
 	@Override
-	public Chunk provideChunk(int i, int j) {
-		return null;
+	public Chunk provideChunk(int chunkX, int chunkZ) 
+	{
+		short[] chunkIds = new short[65536];
+		byte[] chunkMetadata = new byte[65536];
+		double[] generated0 = new double[256];
+		double[] generated1 = new double[65536];
+		int[] topBlock = new int[256];
+		
+		generated0 = this.noiseGens[0].generateNoiseOctaves(generated0, chunkX*16, 10, chunkZ*16, 16, 1, 16, .1, 0, .1);
+		generated1 = this.noiseGens[1].generateNoiseOctaves(generated1, chunkX*16, 1, chunkZ*16, 16, 256, 16, .12, .11, .12);
+		
+		for(int i = 0; i < 256; i++)
+		{
+			int y = (int)(64 + generated0[i]);
+			topBlock[i] = (y&511)<=255  ? y&255 : 255 - y&255;
+		}
+		
+		for(int x = 0; x < 16; x++)
+			for(int z = 0; z < 16; z++)
+			{
+				chunkIds[x + z * 16] = (short) Block.bedrock.blockID;
+				for(int y = 1; y < topBlock[x * 16 + z]; y++)
+					chunkIds[x + z * 16 + y * 256] = (short) (generated1[x + z * 256 + y * 16] + 99);
+//					(short) (generated1[x + z * 256 + y * 16] < 0 ? Block.blockEmerald.blockID : Block.blockDiamond.blockID);
+				
+			}
+		Chunk chunk = new Chunk(this.landWorld, chunkIds, chunkMetadata, chunkX, chunkZ);
+		return chunk;
 	}
 
 	@Override
@@ -37,64 +78,51 @@ public class ChunkProviderLands implements IChunkProvider
 
 	@Override
 	public void populate(IChunkProvider ichunkprovider, int i, int j) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public boolean saveChunks(boolean flag, IProgressUpdate iprogressupdate) {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean unloadQueuedChunks() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean canSave() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public String makeString() {
-		// TODO Auto-generated method stub
-		return null;
+		return "LandRandomLevelSource";
 	}
 
 	@Override
 	public List getPossibleCreatures(EnumCreatureType enumcreaturetype, int i,
 			int j, int k) {
-		// TODO Auto-generated method stub
-		return null;
+		return enumcreaturetype == EnumCreatureType.creature ? this.consortList : null;
 	}
 
 	@Override
 	public ChunkPosition findClosestStructure(World world, String s, int i,
 			int j, int k) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public int getLoadedChunkCount() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public void recreateStructures(int i, int j) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void func_104112_b() {
-		// TODO Auto-generated method stub
-
 	}
 
 }
