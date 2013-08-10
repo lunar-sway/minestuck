@@ -56,7 +56,6 @@ import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
-import com.mraof.minestuck.util.CombinationMode;
 import com.mraof.minestuck.util.CombinationRegistry;
 import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
@@ -139,8 +138,8 @@ public class Minestuck
 	public static Block oreCruxite;
 	public static Block blockStorage;
 	public static Block blockMachine;
-	
-	
+
+
 	// The instance of your mod that Forge uses.
 	@Instance("Minestuck")
 	public static Minestuck instance;
@@ -172,16 +171,16 @@ public class Minestuck
 	@EventHandler
 	public void load(FMLInitializationEvent event) 
 	{
-		
+
 		//Register the Minestuck creative tab
 		this.tabMinestuck = new CreativeTabs("tabMinestuck")
 		{
 			public ItemStack getIconItemStack() 
 			{
-					return new ItemStack(zillyhooHammer,1);
+				return new ItemStack(zillyhooHammer,1);
 			}
 		};
-		
+
 		//blocks
 		chessTile = new BlockChessTile(blockIdStart);
 		gatePortal = new BlockGatePortal(blockIdStart + 1, Material.portal);
@@ -252,7 +251,12 @@ public class Minestuck
 		ItemStack punchDesignexTileStack = new ItemStack(blockMachine,1,1);
 		ItemStack totemLatheTileStack = new ItemStack(blockMachine,1,2);
 		ItemStack alchemiterTileStack = new ItemStack(blockMachine,1,3);
-	
+		//set harvest information for blocks
+		MinecraftForge.setBlockHarvestLevel(chessTile, "shovel", 0);
+		MinecraftForge.setBlockHarvestLevel(oreCruxite, "pickaxe", 1);
+		MinecraftForge.setBlockHarvestLevel(blockStorage, "pickaxe", 1);
+		MinecraftForge.setBlockHarvestLevel(blockMachine, "pickaxe", 1);
+
 		//Give Items names to be displayed ingame
 
 		LanguageRegistry.addName(clawHammer, "Claw Hammer");
@@ -286,7 +290,7 @@ public class Minestuck
 		LanguageRegistry.addName(cruxiteDowelCarved, "Cruxite Dowel");
 		LanguageRegistry.addName(blankCard, "Captchalogue Card");
 		LanguageRegistry.addName(punchedCard, "Captchalogue Card");
-		
+
 		//Same for blocks
 		LanguageRegistry.addName(blackChessTileStack, "Black Chess Tile");
 		LanguageRegistry.addName(whiteChessTileStack, "White Chess Tile");
@@ -299,11 +303,6 @@ public class Minestuck
 		LanguageRegistry.addName(punchDesignexTileStack, "Punch Designex");
 		LanguageRegistry.addName(totemLatheTileStack, "Totem Lathe");
 		LanguageRegistry.addName(alchemiterTileStack, "Alchemiter");
-		//set harvest information for blocks
-		MinecraftForge.setBlockHarvestLevel(chessTile, "shovel", 0);
-		MinecraftForge.setBlockHarvestLevel(oreCruxite, "pickaxe", 1);
-		MinecraftForge.setBlockHarvestLevel(blockStorage, "pickaxe", 1);
-		MinecraftForge.setBlockHarvestLevel(blockMachine, "pickaxe", 1);
 
 		//set translations for automatic names
 		LanguageRegistry.instance().addStringLocalization("entity.Salamander.name", "Salamander");
@@ -327,9 +326,9 @@ public class Minestuck
 		LanguageRegistry.instance().addStringLocalization("achievement.getHammer.desc", "Get the Claw Hammer");
 
 		LanguageRegistry.instance().addStringLocalization("key.gristCache", "View Grist Cache");
-		
+
 		LanguageRegistry.instance().addStringLocalization("itemGroup.tabMinestuck", "Minestuck");
-		
+
 		//register entities
 		this.registerAndMapEntity(EntitySalamander.class, "Salamander", 0xffe62e, 0xfffb53);
 		this.registerAndMapEntity(EntityNakagator.class, "Nakagator", 0xffe62e, 0xfffb53);
@@ -355,29 +354,31 @@ public class Minestuck
 		DimensionManager.registerProviderType(landProviderTypeIdStart, WorldProviderLands.class, true);
 		DimensionManager.registerDimension(landDimensionIdStart, landProviderTypeIdStart);
 		GameRegistry.registerPlayerTracker(new MinestuckPlayerTracker());
-		
+
 		//register ore generation
 		OreHandler oreHandler = new OreHandler();
 		GameRegistry.registerWorldGenerator(oreHandler);
-		
+
 		//register machine GUIs
-        NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
-		
+		NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
+
 		//register recipes
 		GameRegistry.addRecipe(new ItemStack(blockStorage,1,0),new Object[]{ "XXX","XXX","XXX",'X',new ItemStack(rawCruxite, 1)});
 		GameRegistry.addRecipe(new ItemStack(blankCard,8,0),new Object[]{ "XXX","XYX","XXX",'Y',new ItemStack(rawCruxite, 1),'X',new ItemStack(Item.paper,1)});
-		
+
 		//Set up Alchemiter recipes
 		GristRegistry.addGristConversion(lightGreyChessTileStack, new GristSet(new GristType[] {GristType.Build,GristType.Uranium}, new int[] {1,2})); //1 light grey tile is now worth 9 Build Grist. This is an example!
-		
+		GristRegistry.addGristConversion(new ItemStack(Block.wood, 1, 3), new GristSet(new GristType[] {GristType.Build}, new int[] {3})); 
+
 		//Set up Punch Designex recipes
-		CombinationRegistry.addCombination(whiteChessTileStack, blackChessTileStack, CombinationMode.AND,lightGreyChessTileStack); //You can now combine black and white chess tiles to get grey ones. Also an example!
+		CombinationRegistry.addCombination(whiteChessTileStack, blackChessTileStack, true, lightGreyChessTileStack); //You can now combine black and white chess tiles to get grey ones. Also an example!
+		CombinationRegistry.addCombination(new ItemStack(Block.sapling, 1, 3), new ItemStack(Block.wood), true, true, false, new ItemStack(Block.wood, 1, 3));
 	}
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) 
 	{
-		
+
 	}
 	//registers entity with forge and minecraft, and increases currentEntityIdOffset by one in order to prevent id collision
 	public void registerAndMapEntity(Class entityClass, String name, int eggColor, int eggSpotColor)

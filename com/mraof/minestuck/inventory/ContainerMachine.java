@@ -1,13 +1,14 @@
 package com.mraof.minestuck.inventory;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.tileentity.TileEntityMachine;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.tileentity.TileEntityMachine;
 
 public class ContainerMachine extends Container {
 	
@@ -39,6 +40,7 @@ public class ContainerMachine extends Container {
 	
 	public TileEntityMachine tileEntity;
 	private int metadata;
+	private boolean operator = true;
 
 	public ContainerMachine(InventoryPlayer inventoryPlayer, TileEntityMachine te) {
         tileEntity = te;
@@ -79,21 +81,21 @@ public class ContainerMachine extends Container {
 	}
     @Override
     public boolean canInteractWith(EntityPlayer player) {
-            return tileEntity.isUseableByPlayer(player);
+    	return tileEntity.isUseableByPlayer(player);
     }
 
 
     protected void bindPlayerInventory(InventoryPlayer inventoryPlayer) {
-            for (int i = 0; i < 3; i++) {
-                    for (int j = 0; j < 9; j++) {
-                            addSlotToContainer(new Slot(inventoryPlayer, j + i * 9 + 9,
-                                            8 + j * 18, 84 + i * 18));
-                    }
-            }
+    	for (int i = 0; i < 3; i++) {
+    		for (int j = 0; j < 9; j++) {
+    			addSlotToContainer(new Slot(inventoryPlayer, j + i * 9 + 9,
+    					8 + j * 18, 84 + i * 18));
+    		}
+    	}
 
-            for (int i = 0; i < 9; i++) {
-                    addSlotToContainer(new Slot(inventoryPlayer, i, 8 + i * 18, 142));
-            }
+    	for (int i = 0; i < 9; i++) {
+    		addSlotToContainer(new Slot(inventoryPlayer, i, 8 + i * 18, 142));
+    	}
     }
 
     @Override
@@ -130,6 +132,45 @@ public class ContainerMachine extends Container {
 //            }
 //            return stack;
     	return null;
+    }
+
+    public void addCraftingToCrafters(ICrafting par1ICrafting)
+    {
+    	super.addCraftingToCrafters(par1ICrafting);
+    	System.out.printf("addCraftingToCrafters running, the metadata is %d", this.metadata);
+    	switch(this.metadata)
+    	{
+    	case 0:
+    		System.out.printf("Mode is %b \n", this.tileEntity.mode);
+    		par1ICrafting.sendProgressBarUpdate(this, 0, this.tileEntity.mode ? 0 : 1);
+    	}
+    }
+    public void detectAndSendChanges()
+    {
+    	super.detectAndSendChanges();
+
+    	for (int i = 0; i < this.crafters.size(); ++i)
+    	{
+    		ICrafting icrafting = (ICrafting)this.crafters.get(i);
+    		switch(this.metadata)
+    		{
+    		case 0:
+    			if (this.operator != (this.tileEntity.mode))
+    			{
+    				icrafting.sendProgressBarUpdate(this, 0, this.tileEntity.mode ? 0 : 1);
+    				this.operator = this.tileEntity.mode;
+    			}
+    		}
+    	}
+    }
+    @Override
+    public void updateProgressBar(int par1, int par2) 
+    {
+    	switch(par1)
+    	{
+    	case 0:
+    		tileEntity.mode = par2 == 0;
+    	}
     }
 }
 

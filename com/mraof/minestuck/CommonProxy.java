@@ -6,8 +6,6 @@ import cpw.mods.fml.common.network.IGuiHandler;
 
 public class CommonProxy implements IGuiHandler
 {
-	public static String MINESTUCKFOLDER = "/com/mraof/minestuck/";
-    
     
     // Client stuff
     public static void registerRenderers()
