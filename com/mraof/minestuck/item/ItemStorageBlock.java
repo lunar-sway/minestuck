@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 
 public class ItemStorageBlock extends ItemBlock
 {
-	private final static String[] subNames = {"Cruxite"};
+	private final static String[] subNames = {"Cruxite","GenericObject"};
 	
 	public ItemStorageBlock(int par1) 
 	{
