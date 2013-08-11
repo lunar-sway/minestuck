@@ -183,7 +183,13 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		case (0):
 			return (inv[1] != null && (inv[0] == null || inv[0].stackSize < 64));
 		case (1):
-			return (inv[1] != null && inv[2] != null && inv[3] != null && inv[0] == null && CombinationRegistry.getCombination(inv[1], inv[2],mode) != null);
+			if (inv[1] != null || inv[2] != null) {
+				return (inv[3] != null && inv[0] == null);
+			} else if (inv[1] != null && inv[2] != null) {
+				return (inv[3] != null && inv[0] == null && CombinationRegistry.getCombination(inv[1], inv[2],mode) != null);
+			} else {
+				return false;
+			}
 		case (2):
 			return (inv[1] != null && inv[2] != null && inv[0] == null);
 		case (3):
@@ -234,8 +240,17 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 
 			NBTTagCompound nbttagcompound = new NBTTagCompound();
 			outputCard.setTagCompound(nbttagcompound);
-	        nbttagcompound.setInteger("contentID", outputItem.itemID);
-	        nbttagcompound.setInteger("contentMeta", outputItem.getItemDamage());
+			if (inv[1] == null) {
+		        nbttagcompound.setInteger("contentID", inv[2].itemID);
+		        nbttagcompound.setInteger("contentMeta", inv[2].getItemDamage());
+			} else if (inv[2]==null) {
+		        nbttagcompound.setInteger("contentID", inv[1].itemID);
+		        nbttagcompound.setInteger("contentMeta", inv[1].getItemDamage());
+			} else {
+		        nbttagcompound.setInteger("contentID", outputItem.itemID);
+		        nbttagcompound.setInteger("contentMeta", outputItem.getItemDamage());
+			}
+
 	        
 			setInventorySlotContents(0,outputCard);
 			//decrStackSize(1, 1);
