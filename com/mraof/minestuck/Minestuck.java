@@ -247,11 +247,12 @@ public class Minestuck
 		ItemStack whiteChessTileStack = new ItemStack(chessTile, 1, 1);
 		ItemStack darkGreyChessTileStack = new ItemStack(chessTile, 1, 2);
 		ItemStack lightGreyChessTileStack = new ItemStack(chessTile, 1, 3);
-		ItemStack cruxiteBlockTileStack = new ItemStack(blockStorage,1,0);
-		ItemStack cruxtruderTileStack = new ItemStack(blockMachine,1,0);
-		ItemStack punchDesignexTileStack = new ItemStack(blockMachine,1,1);
-		ItemStack totemLatheTileStack = new ItemStack(blockMachine,1,2);
-		ItemStack alchemiterTileStack = new ItemStack(blockMachine,1,3);
+		ItemStack cruxiteBlockStack = new ItemStack(blockStorage,1,0);
+		ItemStack genericObjectStack = new ItemStack(blockStorage,1,1);
+		ItemStack cruxtruderStack = new ItemStack(blockMachine,1,0);
+		ItemStack punchDesignexStack = new ItemStack(blockMachine,1,1);
+		ItemStack totemLatheStack = new ItemStack(blockMachine,1,2);
+		ItemStack alchemiterStack = new ItemStack(blockMachine,1,3);
 		//set harvest information for blocks
 		MinecraftForge.setBlockHarvestLevel(chessTile, "shovel", 0);
 		MinecraftForge.setBlockHarvestLevel(oreCruxite, "pickaxe", 1);
@@ -297,13 +298,14 @@ public class Minestuck
 		LanguageRegistry.addName(whiteChessTileStack, "White Chess Tile");
 		LanguageRegistry.addName(lightGreyChessTileStack, "Light Grey Chess Tile");
 		LanguageRegistry.addName(darkGreyChessTileStack, "Dark Grey Chess Tile");
-		LanguageRegistry.addName(cruxiteBlockTileStack, "Cruxite Block");
+		LanguageRegistry.addName(cruxiteBlockStack, "Cruxite Block");
+		LanguageRegistry.addName(genericObjectStack, "Perfectly Generic Object");
 		LanguageRegistry.addName(gatePortal, "Gate");
 		LanguageRegistry.addName(oreCruxite, "Cruxite Ore");
-		LanguageRegistry.addName(cruxtruderTileStack, "Cruxtruder");
-		LanguageRegistry.addName(punchDesignexTileStack, "Punch Designex");
-		LanguageRegistry.addName(totemLatheTileStack, "Totem Lathe");
-		LanguageRegistry.addName(alchemiterTileStack, "Alchemiter");
+		LanguageRegistry.addName(cruxtruderStack, "Cruxtruder");
+		LanguageRegistry.addName(punchDesignexStack, "Punch Designex");
+		LanguageRegistry.addName(totemLatheStack, "Totem Lathe");
+		LanguageRegistry.addName(alchemiterStack, "Alchemiter");
 
 		//set translations for automatic names
 		LanguageRegistry.instance().addStringLocalization("entity.Salamander.name", "Salamander");
