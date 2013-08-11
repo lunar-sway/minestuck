@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 
 
 public class BlockStorage extends Block {
-	public static final String[] iconNames = {"CruxiteBlock"};
+	public static final String[] iconNames = {"CruxiteBlock","GenericObject"};
 	private Icon[] textures;
 	
 	public BlockStorage(int id) {
