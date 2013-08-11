@@ -190,7 +190,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			return (inv[1] != null && (inv[0] == null || inv[0].stackSize < 64));
 		case (1):
 		 if (inv[1] != null && inv[2] != null) {
-			return (inv[3] != null && inv[0] == null && CombinationRegistry.getCombination(inv[1], inv[2],mode) != null);
+			return (inv[3] != null && inv[0] == null && CombinationRegistry.getCombination(getDecodedItem(inv[1]), getDecodedItem(inv[2]),mode) != null);
 		 } else if (inv[1] != null || inv[2] != null) {
 			return (inv[3] != null && inv[0] == null);
 		} else {
@@ -201,9 +201,9 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		case (3):
 		if (inv[1] != null && inv[0] == null && owner != null && inv[1].getTagCompound() != null) {
 			//Check owner's cache: Do they have everything they need?
-		  	NBTTagCompound nbttagcompound = inv[1].getTagCompound();
-		  	if (nbttagcompound == null || Item.itemsList[nbttagcompound.getInteger("contentID")] == null) {return false;}
-	    	GristSet set = GristRegistry.getGristConversion(new ItemStack(nbttagcompound.getInteger("contentID"),1,nbttagcompound.getInteger("contentMeta")));
+			ItemStack newItem = getDecodedItem(inv[1]);
+			if (newItem == null) {return false;}
+	    	GristSet set = GristRegistry.getGristConversion(newItem);
 	    	if (set == null) {return false;}
 		    	Hashtable reqs = set.getTable();
 		    	//System.out.println("reqs: " + reqs.size());
@@ -242,7 +242,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			break;
 		case (1):
 			//Create a new card, using CombinationRegistry
-			ItemStack outputItem = CombinationRegistry.getCombination(inv[1], inv[2],mode);
+			ItemStack outputItem = CombinationRegistry.getCombination(getDecodedItem(inv[1]),getDecodedItem(inv[2]),mode);
 			ItemStack outputCard = new ItemStack(Minestuck.punchedCard);
 
 			NBTTagCompound nbttagcompound = new NBTTagCompound();
@@ -280,11 +280,10 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			decrStackSize(2, 1);
 			break;
 		case (3):
-			nbttagcompound = inv[1].getTagCompound();
-			if (nbttagcompound == null) { break;}
-			setInventorySlotContents(0,new ItemStack(nbttagcompound.getInteger("contentID"),1,nbttagcompound.getInteger("contentMeta")));
+			ItemStack newItem = getDecodedItem(inv[1]);
+			setInventorySlotContents(0,newItem);
 			//decrStackSize(1, 1);
-	    	GristSet set = GristRegistry.getGristConversion(new ItemStack(nbttagcompound.getInteger("contentID"),1,nbttagcompound.getInteger("contentMeta")));
+	    	GristSet set = GristRegistry.getGristConversion(newItem);
 		    Hashtable reqs = set.getTable();
 	    	if (reqs != null) {
 	    	   	Iterator it = reqs.entrySet().iterator();
@@ -297,4 +296,21 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		}
 	}
 	
+	/**
+	 * Given a punched card or a carved dowel, returns a new item that represents the encoded data.
+	 * 
+	 * @param card - The dowel or card with encoded data
+	 * @return An item, or null if the data was invalid.
+	 */
+	public ItemStack getDecodedItem(ItemStack card) {
+		
+		if (card == null) {return null;}
+		NBTTagCompound tag = card.getTagCompound();
+		
+		if (tag == null || Item.itemsList[tag.getInteger("contentID")] == null) {return null;}
+		ItemStack newItem = new ItemStack(tag.getInteger("contentID"),1,tag.getInteger("contentMeta"));
+		
+		return newItem;
+		
+	}
 }

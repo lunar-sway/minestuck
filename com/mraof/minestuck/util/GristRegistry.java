@@ -23,6 +23,7 @@ public class GristRegistry {
 	 * Returns a item-grist conversion ratio, given an ItemStack. Used in the Alchemiter and GristWidget.
 	 */
 	public static GristSet getGristConversion(ItemStack item) {
+		if (item == null) {return null;}
 		if (gristRecipes.get(Arrays.asList(item.itemID,item.getItemDamage(),true)) == null) {
 			return (GristSet) gristRecipes.get(Arrays.asList(item.itemID,0,false));
 		} else {
