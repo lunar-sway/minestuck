@@ -174,11 +174,16 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		
 		if (progress == maxProgress) {
 			progress = 0;
+			ready = false;
 			processContents();
 		}
 	}
 	
 	public boolean contentsValid() {
+		
+		if (getMetadata() != 0 && !ready) {
+			return false;
+		}
 		switch (getMetadata()) {
 		case (0):
 			return (inv[1] != null && (inv[0] == null || inv[0].stackSize < 64));
@@ -193,7 +198,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		case (2):
 			return (inv[1] != null && inv[2] != null && inv[0] == null);
 		case (3):
-		if (ready && inv[1] != null && inv[0] == null && owner != null && inv[1].getTagCompound() != null) {
+		if (inv[1] != null && inv[0] == null && owner != null && inv[1].getTagCompound() != null) {
 			//Check owner's cache: Do they have everything they need?
 		  	NBTTagCompound nbttagcompound = inv[1].getTagCompound();
 	    	GristSet set = GristRegistry.getGristConversion(new ItemStack(nbttagcompound.getInteger("contentID"),1,nbttagcompound.getInteger("contentMeta")));
