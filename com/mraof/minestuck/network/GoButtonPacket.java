@@ -1,21 +1,14 @@
 package com.mraof.minestuck.network;
 
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.INetworkManager;
+
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.inventory.ContainerMachine;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
-import com.mraof.minestuck.util.CombinationMode;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ContainerBeacon;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.INetworkManager;
 import cpw.mods.fml.common.network.Player;
 
 public class GoButtonPacket extends MinestuckPacket {

@@ -8,7 +8,7 @@ public enum EnumHammerType {
     FEARNOANVIL(4, 2048, 12.0F, 4, 22),
 	SCARLET(3, 2000, 4.0F, 6, 30),
     ZILLYHOO(5, 3000, 15.0F, 5, 30),
-	POPAMATIC(5, 3000, 15.0F, 0, 30);
+	POPAMATIC(5, 3000, 15.0F, -3, 30);
 	
 	private final int harvestLevel;
     private final int maxUses;

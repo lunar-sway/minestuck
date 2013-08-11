@@ -8,6 +8,7 @@ import com.mraof.minestuck.util.TitleHelper;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import cpw.mods.fml.common.IPlayerTracker;
 
@@ -66,5 +67,9 @@ public class MinestuckPlayerTracker implements IPlayerTracker
 	        packet.data = MinestuckPacket.makePacket(Type.TITLE, newTitle.getHeroClass(),newTitle.getHeroAspect());
 	        packet.length = packet.data.length;
 	        ((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(packet);
+			if(player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getTags().size() == 0)
+				player.getEntityData().setCompoundTag(EntityPlayer.PERSISTED_NBT_TAG, new NBTTagCompound());
+			player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Class", newTitle.getHeroClass());
+			player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Aspect", newTitle.getHeroAspect());
 	}
 }

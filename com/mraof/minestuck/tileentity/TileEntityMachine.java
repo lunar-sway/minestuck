@@ -4,27 +4,26 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.entity.item.EntityGrist;
-import com.mraof.minestuck.util.CombinationMode;
-import com.mraof.minestuck.util.CombinationRegistry;
-import com.mraof.minestuck.util.GristRegistry;
-import com.mraof.minestuck.util.GristSet;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.entity.item.EntityGrist;
+import com.mraof.minestuck.util.CombinationRegistry;
+import com.mraof.minestuck.util.GristRegistry;
+import com.mraof.minestuck.util.GristSet;
 
 public class TileEntityMachine extends TileEntity implements IInventory {
 
     public ItemStack[] inv;
     public int progress = 0;
     public int maxProgress = 100;
-    public CombinationMode mode = CombinationMode.AND;
+    //true if and, false if or
+    public boolean mode = true;
     public EntityPlayer owner;
 	public boolean alcReady = false;
 
@@ -108,7 +107,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
             super.readFromNBT(tagCompound);
             
             progress = tagCompound.getInteger("progress");
-            mode =  tagCompound.getBoolean("mode") ? CombinationMode.AND : CombinationMode.OR;
+            mode =  tagCompound.getBoolean("mode");
             
             //String ownerName = tagCompound.getString("owner");
             
@@ -127,7 +126,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
             super.writeToNBT(tagCompound);
                             
             tagCompound.setInteger("progress", progress);
-            tagCompound.setBoolean("mode", mode == CombinationMode.AND);
+            tagCompound.setBoolean("mode", mode);
             //tagCompound.setString("owner", owner.username);
             
             NBTTagList itemList = new NBTTagList();

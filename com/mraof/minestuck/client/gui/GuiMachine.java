@@ -1,38 +1,29 @@
 package com.mraof.minestuck.client.gui;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
-
-import org.lwjgl.opengl.GL11;
-
-import com.mraof.minestuck.entity.item.EntityGrist;
-import com.mraof.minestuck.inventory.ContainerMachine;
-import com.mraof.minestuck.network.ComboButtonPacket;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
-import com.mraof.minestuck.tileentity.TileEntityMachine;
-import com.mraof.minestuck.util.CombinationMode;
-import com.mraof.minestuck.util.GristRegistry;
-import com.mraof.minestuck.util.GristSet;
-
-import cpw.mods.fml.common.network.PacketDispatcher;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+
+import org.lwjgl.opengl.GL11;
+
+import com.mraof.minestuck.entity.item.EntityGrist;
+import com.mraof.minestuck.inventory.ContainerMachine;
+import com.mraof.minestuck.network.MinestuckPacket;
+import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.tileentity.TileEntityMachine;
+import com.mraof.minestuck.util.GristRegistry;
+import com.mraof.minestuck.util.GristSet;
 
 public class GuiMachine extends GuiContainer {
 	
@@ -154,7 +145,7 @@ public void initGui() {
         //make buttons:		id, x, y, width, height, text
         if (metadata == 1) {
         	//The Designex's needs a button...
-        	modeButton = new GuiButton(1, (width - xSize) / 2 + buttonX, (height - ySize) / 2 + buttonY, 20, 20, te.mode == CombinationMode.AND ? "&&": "||");
+        	modeButton = new GuiButton(1, (width - xSize) / 2 + buttonX, (height - ySize) / 2 + buttonY, 20, 20, te.mode ? "&&": "||");
         	buttonList.add(modeButton);
         }
         if (metadata == 3) {
@@ -179,12 +170,12 @@ protected void actionPerformed(GuiButton guibutton) {
 		//Sends new mode info to server
 		Packet250CustomPayload packet = new Packet250CustomPayload();
 		packet.channel = "Minestuck";
-		packet.data = MinestuckPacket.makePacket(Type.COMBOBUTTON,te.mode == CombinationMode.AND ? false : true);
+		packet.data = MinestuckPacket.makePacket(Type.COMBOBUTTON,te.mode ? false : true);
 		packet.length = packet.data.length;
 		this.mc.getNetHandler().addToSendQueue(packet);
 	
-		te.mode = te.mode == CombinationMode.AND ? CombinationMode.OR : CombinationMode.AND;
-		modeButton.displayString = te.mode == CombinationMode.AND ? "&&" : "||";
+		te.mode = !te.mode;
+		modeButton.displayString = te.mode ? "&&" : "||";
 	}
 	
 	if (metadata == 3) {

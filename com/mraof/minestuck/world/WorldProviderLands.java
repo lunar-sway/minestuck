@@ -9,7 +9,7 @@ import com.mraof.minestuck.world.gen.ChunkProviderLands;
 
 public class WorldProviderLands extends WorldProvider 
 {
-	public int dimensionId = 2;
+//	public int dimensionId = 2;
 
 	@Override
 	public String getDimensionName()
