@@ -50,7 +50,7 @@ public class GoButtonPacket extends MinestuckPacket {
 			System.out.println("[MINESTUCK] Invalid TE!");
 		} else {
 			System.out.println("[MINESTUCK] Button pressed. Alchemiter going!");
-			te.alcReady = newMode;
+			te.ready = newMode;
 		}
 	}
 

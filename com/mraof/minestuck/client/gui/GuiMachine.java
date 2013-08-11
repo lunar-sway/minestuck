@@ -186,7 +186,7 @@ protected void actionPerformed(GuiButton guibutton) {
 		packet.length = packet.data.length;
 		this.mc.getNetHandler().addToSendQueue(packet);
 		
-		te.alcReady = true;
+		te.ready = true;
 	}
 }
 

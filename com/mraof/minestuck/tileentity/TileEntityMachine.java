@@ -25,7 +25,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
     //true if and, false if or
     public boolean mode = true;
     public EntityPlayer owner;
-	public boolean alcReady = false;
+	public boolean ready = false;
 
     public TileEntityMachine(){
             inv = new ItemStack[4];
@@ -166,7 +166,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		
 		if (!contentsValid()) {
 			progress = 0;
-			alcReady = false;
+			ready = false;
 			return;
 		}
 		
@@ -183,17 +183,17 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		case (0):
 			return (inv[1] != null && (inv[0] == null || inv[0].stackSize < 64));
 		case (1):
-			if (inv[1] != null || inv[2] != null) {
-				return (inv[3] != null && inv[0] == null);
-			} else if (inv[1] != null && inv[2] != null) {
-				return (inv[3] != null && inv[0] == null && CombinationRegistry.getCombination(inv[1], inv[2],mode) != null);
-			} else {
-				return false;
-			}
+		 if (inv[1] != null && inv[2] != null) {
+			return (inv[3] != null && inv[0] == null && CombinationRegistry.getCombination(inv[1], inv[2],mode) != null);
+		 } else if (inv[1] != null || inv[2] != null) {
+			return (inv[3] != null && inv[0] == null);
+		} else {
+			return false;
+		}
 		case (2):
 			return (inv[1] != null && inv[2] != null && inv[0] == null);
 		case (3):
-		if (alcReady && inv[1] != null && inv[0] == null && owner != null && inv[1].getTagCompound() != null) {
+		if (ready && inv[1] != null && inv[0] == null && owner != null && inv[1].getTagCompound() != null) {
 			//Check owner's cache: Do they have everything they need?
 		  	NBTTagCompound nbttagcompound = inv[1].getTagCompound();
 	    	GristSet set = GristRegistry.getGristConversion(new ItemStack(nbttagcompound.getInteger("contentID"),1,nbttagcompound.getInteger("contentMeta")));
@@ -285,7 +285,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 	                Map.Entry pairs = (Map.Entry)it.next();
 	                owner.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").setInteger(EntityGrist.gristTypes[(Integer) pairs.getKey()],owner.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(EntityGrist.gristTypes[(Integer)pairs.getKey()]) - (Integer)pairs.getValue());
 	            }
-	        alcReady = false;
+	        ready = false;
 			break;
 	    	}
 		}
