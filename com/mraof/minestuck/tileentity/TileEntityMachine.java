@@ -6,6 +6,7 @@ import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -25,7 +26,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
     //true if and, false if or
     public boolean mode = true;
     public EntityPlayer owner;
-	public boolean alcReady = false;
+	public boolean ready = false;
 
     public TileEntityMachine(){
             inv = new ItemStack[4];
@@ -166,7 +167,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		
 		if (!contentsValid()) {
 			progress = 0;
-			alcReady = false;
+			ready = false;
 			return;
 		}
 		
@@ -174,22 +175,34 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		
 		if (progress == maxProgress) {
 			progress = 0;
+			ready = false;
 			processContents();
 		}
 	}
 	
 	public boolean contentsValid() {
+		
+		if (getMetadata() != 0 && !ready) {
+			return false;
+		}
 		switch (getMetadata()) {
 		case (0):
 			return (inv[1] != null && (inv[0] == null || inv[0].stackSize < 64));
 		case (1):
-			return (inv[1] != null && inv[2] != null && inv[3] != null && inv[0] == null && CombinationRegistry.getCombination(inv[1], inv[2],mode) != null);
+		 if (inv[1] != null && inv[2] != null) {
+			return (inv[3] != null && inv[0] == null && CombinationRegistry.getCombination(inv[1], inv[2],mode) != null);
+		 } else if (inv[1] != null || inv[2] != null) {
+			return (inv[3] != null && inv[0] == null);
+		} else {
+			return false;
+		}
 		case (2):
 			return (inv[1] != null && inv[2] != null && inv[0] == null);
 		case (3):
-		if (alcReady && inv[1] != null && inv[0] == null && owner != null && inv[1].getTagCompound() != null) {
+		if (inv[1] != null && inv[0] == null && owner != null && inv[1].getTagCompound() != null) {
 			//Check owner's cache: Do they have everything they need?
 		  	NBTTagCompound nbttagcompound = inv[1].getTagCompound();
+		  	if (nbttagcompound == null || Item.itemsList[nbttagcompound.getInteger("contentID")] == null) {return false;}
 	    	GristSet set = GristRegistry.getGristConversion(new ItemStack(nbttagcompound.getInteger("contentID"),1,nbttagcompound.getInteger("contentMeta")));
 	    	if (set == null) {return false;}
 		    	Hashtable reqs = set.getTable();
@@ -234,12 +247,21 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 
 			NBTTagCompound nbttagcompound = new NBTTagCompound();
 			outputCard.setTagCompound(nbttagcompound);
-	        nbttagcompound.setInteger("contentID", outputItem.itemID);
-	        nbttagcompound.setInteger("contentMeta", outputItem.getItemDamage());
+			if (inv[1] == null) {
+		        nbttagcompound.setInteger("contentID", inv[2].itemID);
+		        nbttagcompound.setInteger("contentMeta", inv[2].getItemDamage());
+			} else if (inv[2]==null) {
+		        nbttagcompound.setInteger("contentID", inv[1].itemID);
+		        nbttagcompound.setInteger("contentMeta", inv[1].getItemDamage());
+			} else {
+		        nbttagcompound.setInteger("contentID", outputItem.itemID);
+		        nbttagcompound.setInteger("contentMeta", outputItem.getItemDamage());
+			}
+
 	        
 			setInventorySlotContents(0,outputCard);
-			decrStackSize(1, 1);
-			decrStackSize(2, 1);
+			//decrStackSize(1, 1);
+			//decrStackSize(2, 1);
 			decrStackSize(3, 1);
 			break;
 		case (2):
@@ -254,14 +276,14 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			doweltag.setInteger("contentMeta", cardtag.getInteger("contentMeta"));
 			outputDowel.setTagCompound(doweltag);
 			setInventorySlotContents(0,outputDowel);
-			decrStackSize(1, 1);
+			//decrStackSize(1, 1);
 			decrStackSize(2, 1);
 			break;
 		case (3):
 			nbttagcompound = inv[1].getTagCompound();
 			if (nbttagcompound == null) { break;}
 			setInventorySlotContents(0,new ItemStack(nbttagcompound.getInteger("contentID"),1,nbttagcompound.getInteger("contentMeta")));
-			decrStackSize(1, 1);
+			//decrStackSize(1, 1);
 	    	GristSet set = GristRegistry.getGristConversion(new ItemStack(nbttagcompound.getInteger("contentID"),1,nbttagcompound.getInteger("contentMeta")));
 		    Hashtable reqs = set.getTable();
 	    	if (reqs != null) {
@@ -270,9 +292,9 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 	                Map.Entry pairs = (Map.Entry)it.next();
 	                owner.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").setInteger(EntityGrist.gristTypes[(Integer) pairs.getKey()],owner.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(EntityGrist.gristTypes[(Integer)pairs.getKey()]) - (Integer)pairs.getValue());
 	            }
-	        alcReady = false;
 			break;
 	    	}
 		}
 	}
+	
 }
