@@ -43,6 +43,9 @@ public class GuiMachine extends GuiContainer {
 	private int buttonX = 24;
 	private int buttonY = 23;
 	private GuiButton modeButton;
+	private int goX;
+	private int goY;
+	private GuiButton goButton;
 
     public GuiMachine (InventoryPlayer inventoryPlayer,
             TileEntityMachine tileEntity) {
@@ -66,18 +69,24 @@ public class GuiMachine extends GuiContainer {
     	progressY = 38;
     	progressWidth = 43;
     	progressHeight = 17;
+    	goX = 84;
+    	goY = 55;
     	break;
     case (2):
     	progressX = 69;
     	progressY = 33;
     	progressWidth = 44;
     	progressHeight = 17;
+    	goX = 73;
+    	goY = 53;
     	break;
     case (3):
     	progressX = 54;
     	progressY = 23;
     	progressWidth = 71;
     	progressHeight = 10;
+    	goX = 72;
+    	goY = 31;
     	break;
     }
 }
@@ -148,25 +157,17 @@ public void initGui() {
         	modeButton = new GuiButton(1, (width - xSize) / 2 + buttonX, (height - ySize) / 2 + buttonY, 20, 20, te.mode ? "&&": "||");
         	buttonList.add(modeButton);
         }
-        if (metadata == 3) {
-        	//... and so does the Alchemiter.
-        	modeButton = new GuiButton(1, (width - xSize) / 2 + 72, (height - ySize) / 2 + 31, 30, 12, "GO!");
-        	buttonList.add(modeButton);
+        if (metadata != 0) {
+        	//All non-Cruxtruders need a Go button.
+        	goButton = new GuiButton(1, (width - xSize) / 2 + goX, (height - ySize) / 2 + goY, 30, 12, "GO!");
+        	buttonList.add(goButton);
         }
-//        if (metadata == 3) {
-//        	//If it's an Alchemiter, we need the player who placed it
-//    		Packet250CustomPayload packet = new Packet250CustomPayload();
-//    		packet.channel = "Minestuck";
-//    		packet.data = MinestuckPacket.makePacket(Type.MACHINEOWNER);
-//    		packet.length = packet.data.length;
-//    		this.mc.getNetHandler().addToSendQueue(packet);
-//        }
 }
 
 protected void actionPerformed(GuiButton guibutton) {
 
         
-	if (metadata == 1) {
+	if (guibutton == modeButton) {
 		//Sends new mode info to server
 		Packet250CustomPayload packet = new Packet250CustomPayload();
 		packet.channel = "Minestuck";
@@ -178,15 +179,15 @@ protected void actionPerformed(GuiButton guibutton) {
 		modeButton.displayString = te.mode ? "&&" : "||";
 	}
 	
-	if (metadata == 3) {
-		//Tell the Alchemiter to go
+	if (guibutton == goButton) {
+		//Tell the machine to go
 		Packet250CustomPayload packet = new Packet250CustomPayload();
 		packet.channel = "Minestuck";
 		packet.data = MinestuckPacket.makePacket(Type.GOBUTTON,true);
 		packet.length = packet.data.length;
 		this.mc.getNetHandler().addToSendQueue(packet);
 		
-		te.alcReady = true;
+		te.ready = true;
 	}
 }
 

@@ -56,6 +56,7 @@ import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.CombinationRegistry;
 import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
@@ -363,16 +364,10 @@ public class Minestuck
 		NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
 
 		//register recipes
-		GameRegistry.addRecipe(new ItemStack(blockStorage,1,0),new Object[]{ "XXX","XXX","XXX",'X',new ItemStack(rawCruxite, 1)});
-		GameRegistry.addRecipe(new ItemStack(blankCard,8,0),new Object[]{ "XXX","XYX","XXX",'Y',new ItemStack(rawCruxite, 1),'X',new ItemStack(Item.paper,1)});
 
-		//Set up Alchemiter recipes
-		GristRegistry.addGristConversion(lightGreyChessTileStack, new GristSet(new GristType[] {GristType.Build,GristType.Uranium}, new int[] {1,2})); //1 light grey tile is now worth 9 Build Grist. This is an example!
-		GristRegistry.addGristConversion(new ItemStack(Block.wood, 1, 3), new GristSet(new GristType[] {GristType.Build}, new int[] {3})); 
-
-		//Set up Punch Designex recipes
-		CombinationRegistry.addCombination(whiteChessTileStack, blackChessTileStack, true, lightGreyChessTileStack); //You can now combine black and white chess tiles to get grey ones. Also an example!
-		CombinationRegistry.addCombination(new ItemStack(Block.sapling, 1, 3), new ItemStack(Block.wood), true, true, false, new ItemStack(Block.wood, 1, 3));
+		AlchemyRecipeHandler.registerVanillaRecipes();
+		AlchemyRecipeHandler.registerMinestuckRecipes();
+		AlchemyRecipeHandler.registerModRecipes();
 	}
 
 	@EventHandler

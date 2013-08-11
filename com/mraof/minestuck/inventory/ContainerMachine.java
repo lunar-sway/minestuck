@@ -52,7 +52,7 @@ public class ContainerMachine extends Container {
         switch (metadata) {
         case (0):
         	addSlotToContainer(new SlotInput(tileEntity,1,cruxtruderInputX,cruxtruderInputY,Minestuck.rawCruxite.itemID));
-        	addSlotToContainer(new SlotOutput(tileEntity,0,cruxtruderOutputX,cruxtruderOutputY));
+    		addSlotToContainer(new SlotOutput(tileEntity,0,cruxtruderOutputX,cruxtruderOutputY));
         	break;
         case (1):
         	addSlotToContainer(new Slot(tileEntity,1,designexInput1X,designexInput1Y));
@@ -99,49 +99,98 @@ public class ContainerMachine extends Container {
     }
 
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
-//            ItemStack stack = null;
-//            Slot slotObject = (Slot) inventorySlots.get(slot);
-//
-//            //null checks and checks if the item can be stacked (maxStackSize > 1)
-//            if (slotObject != null && slotObject.getHasStack()) {
-//                    ItemStack stackInSlot = slotObject.getStack();
-//                    stack = stackInSlot.copy();
-//
-//                    //merges the item into player inventory since its in the tileEntity
-//                    if (slot < 4) {
-//                            if (!this.mergeItemStack(stackInSlot, 0, 35, true)) {
-//                                    return null;
-//                            }
-//                    }
-//                    //places it into the tileEntity is possible since its in the player inventory
-//                    else if (!this.mergeItemStack(stackInSlot, 1, 3, false)) {
-//                            return null;
-//                    }
-//
-//                    if (stackInSlot.stackSize == 0) {
-//                            slotObject.putStack(null);
-//                    } else {
-//                            slotObject.onSlotChanged();
-//                    }
-//
-//                    if (stackInSlot.stackSize == stack.stackSize) {
-//                            return null;
-//                    }
-//                    slotObject.onPickupFromSlot(player, stackInSlot);
-//            }
-//            return stack;
-    	return null;
+    public ItemStack transferStackInSlot(EntityPlayer player, int slotNumber) {
+        ItemStack itemstack = null;
+        Slot slot = (Slot)this.inventorySlots.get(slotNumber);
+        int allSlots = this.inventorySlots.size();
+        int invSlots = tileEntity.getSizeInventory();
+
+        if (slot != null && slot.getHasStack())
+        {
+        	ItemStack itemstackOrig = slot.getStack();
+            itemstack = itemstackOrig.copy();
+            boolean result = false;
+            
+            //System.out.println("[MINESTUCK] Shifing slot "+slotNumber);
+            
+            switch (metadata) {
+            case (0):
+            	if (slotNumber <= 1) {
+            		//if it's a machine slot
+            		result = mergeItemStack(itemstackOrig,2,allSlots,false);
+            	} else if (slotNumber > 1) {
+            		//if it's an inventory slot with valid contents
+            		//System.out.println("[MINESTUCK] item ID of " + itemstackOrig.itemID + ". Expected " + Minestuck.rawCruxite.itemID);
+            		if (itemstackOrig.itemID == Minestuck.rawCruxite.itemID) {
+            			//System.out.println("[MINESTUCK] Transferring...");
+            			result = mergeItemStack(itemstackOrig,0,1,false);
+            		}
+            	}
+            	break;
+            case (1):
+               	if (slotNumber <= 3) {
+            		//if it's a machine slot
+            		result = mergeItemStack(itemstackOrig,4,allSlots,false);
+            	} else if (slotNumber > 3) {
+            		//if it's an inventory slot with valid contents
+            		if (itemstackOrig.itemID == Minestuck.blankCard.itemID) {
+            			result = mergeItemStack(itemstackOrig,2,3,false);
+            		} else {
+            			result = mergeItemStack(itemstackOrig,0,2,false);
+            		}
+            	}
+            	break;
+            case (2):
+               	if (slotNumber <= 2) {
+            		//if it's a machine slot
+            		result = mergeItemStack(itemstackOrig,3,allSlots,false);
+            	} else if (slotNumber > 2) {
+            		//if it's an inventory slot with valid contents
+            		if (itemstackOrig.itemID == Minestuck.punchedCard.itemID) {
+            			result = mergeItemStack(itemstackOrig,0,1,false);
+            		} else if (itemstackOrig.itemID == Minestuck.cruxiteDowel.itemID) {
+            			result = mergeItemStack(itemstackOrig,1,2,false);
+            		}
+            	}
+            	break;
+            case (3):
+               	if (slotNumber <= 1) {
+            		//if it's a machine slot
+            		result = mergeItemStack(itemstackOrig,2,allSlots,false);
+            	} else if (slotNumber > 1) {
+            		//if it's an inventory slot with valid contents
+            		if (itemstackOrig.itemID == Minestuck.cruxiteDowelCarved.itemID) {
+            			result = mergeItemStack(itemstackOrig,0,1,false);
+            		}
+            	}
+            	break;
+            }
+            
+            if (!result) {
+            	return null;
+            }
+            
+            if (itemstackOrig.stackSize == 0)
+            {
+                slot.putStack((ItemStack)null);
+            }
+            else
+            {
+                slot.onSlotChanged();
+            }
+        }
+        
+		return itemstack;
     }
 
     public void addCraftingToCrafters(ICrafting par1ICrafting)
     {
     	super.addCraftingToCrafters(par1ICrafting);
-    	System.out.printf("addCraftingToCrafters running, the metadata is %d", this.metadata);
+    	System.out.printf("[MINESTUCK] addCraftingToCrafters running, the metadata is %d", this.metadata);
     	switch(this.metadata)
     	{
     	case 0:
-    		System.out.printf("Mode is %b \n", this.tileEntity.mode);
+    		System.out.printf("[MINESTUCK] Mode is %b \n", this.tileEntity.mode);
     		par1ICrafting.sendProgressBarUpdate(this, 0, this.tileEntity.mode ? 0 : 1);
     	}
     }

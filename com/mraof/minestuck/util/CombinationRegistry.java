@@ -9,7 +9,7 @@ import net.minecraft.util.Tuple;
 public class CombinationRegistry {
 	private static Hashtable combRecipes = new Hashtable();
 	
-	/*
+	/**
 	 * Creates an entry for a result of combining the cards of two items. Used in the Punch Designex.
 	 */
 	public static void addCombination(ItemStack input1, ItemStack input2, boolean mode, ItemStack output) {
@@ -22,11 +22,12 @@ public class CombinationRegistry {
 	}
 
 
-	/*
+	/**
 	 * Returns an entry for a result of combining the cards of two items. Used in the Punch Designex.
 	 */
 	public static ItemStack getCombination(ItemStack input1, ItemStack input2, boolean mode) {
 		Object temp;
+		if (input1 == null || input2 == null) {return null;}
 		if ((temp = combRecipes.get(Arrays.asList(input1.itemID, input1.getItemDamage(), input2.itemID, input2.getItemDamage(), mode, true, true))) != null);
 		else if ((temp = combRecipes.get(Arrays.asList(input1.itemID, 0, input2.itemID, input2.getItemDamage(), mode, false, true))) != null);
 		else if ((temp = combRecipes.get(Arrays.asList(input1.itemID, input1.getItemDamage(), input2.itemID, 0, mode, true, false))) != null);
