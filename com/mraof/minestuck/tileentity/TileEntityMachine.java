@@ -238,8 +238,8 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 	        nbttagcompound.setInteger("contentMeta", outputItem.getItemDamage());
 	        
 			setInventorySlotContents(0,outputCard);
-			decrStackSize(1, 1);
-			decrStackSize(2, 1);
+			//decrStackSize(1, 1);
+			//decrStackSize(2, 1);
 			decrStackSize(3, 1);
 			break;
 		case (2):
@@ -254,14 +254,14 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			doweltag.setInteger("contentMeta", cardtag.getInteger("contentMeta"));
 			outputDowel.setTagCompound(doweltag);
 			setInventorySlotContents(0,outputDowel);
-			decrStackSize(1, 1);
+			//decrStackSize(1, 1);
 			decrStackSize(2, 1);
 			break;
 		case (3):
 			nbttagcompound = inv[1].getTagCompound();
 			if (nbttagcompound == null) { break;}
 			setInventorySlotContents(0,new ItemStack(nbttagcompound.getInteger("contentID"),1,nbttagcompound.getInteger("contentMeta")));
-			decrStackSize(1, 1);
+			//decrStackSize(1, 1);
 	    	GristSet set = GristRegistry.getGristConversion(new ItemStack(nbttagcompound.getInteger("contentID"),1,nbttagcompound.getInteger("contentMeta")));
 		    Hashtable reqs = set.getTable();
 	    	if (reqs != null) {

@@ -137,11 +137,11 @@ public class ContainerMachine extends Container {
     public void addCraftingToCrafters(ICrafting par1ICrafting)
     {
     	super.addCraftingToCrafters(par1ICrafting);
-    	System.out.printf("addCraftingToCrafters running, the metadata is %d", this.metadata);
+    	System.out.printf("[MINESTUCK] addCraftingToCrafters running, the metadata is %d", this.metadata);
     	switch(this.metadata)
     	{
     	case 0:
-    		System.out.printf("Mode is %b \n", this.tileEntity.mode);
+    		System.out.printf("[MINESTUCK] Mode is %b \n", this.tileEntity.mode);
     		par1ICrafting.sendProgressBarUpdate(this, 0, this.tileEntity.mode ? 0 : 1);
     	}
     }
