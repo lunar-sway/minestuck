@@ -6,6 +6,7 @@ import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -201,6 +202,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		if (inv[1] != null && inv[0] == null && owner != null && inv[1].getTagCompound() != null) {
 			//Check owner's cache: Do they have everything they need?
 		  	NBTTagCompound nbttagcompound = inv[1].getTagCompound();
+		  	if (nbttagcompound == null || Item.itemsList[nbttagcompound.getInteger("contentID")] == null) {return false;}
 	    	GristSet set = GristRegistry.getGristConversion(new ItemStack(nbttagcompound.getInteger("contentID"),1,nbttagcompound.getInteger("contentMeta")));
 	    	if (set == null) {return false;}
 		    	Hashtable reqs = set.getTable();
@@ -290,9 +292,9 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 	                Map.Entry pairs = (Map.Entry)it.next();
 	                owner.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").setInteger(EntityGrist.gristTypes[(Integer) pairs.getKey()],owner.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(EntityGrist.gristTypes[(Integer)pairs.getKey()]) - (Integer)pairs.getValue());
 	            }
-	        ready = false;
 			break;
 	    	}
 		}
 	}
+	
 }
