@@ -15,6 +15,8 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 
 import com.mraof.minestuck.entity.consort.EntityNakagator;
+import com.mraof.minestuck.world.gen.lands.LandAspect;
+import com.mraof.minestuck.world.gen.lands.LandAspectFrost;
 
 public class ChunkProviderLands implements IChunkProvider 
 {
@@ -22,10 +24,13 @@ public class ChunkProviderLands implements IChunkProvider
 	World landWorld;
 	Random random;
 	private NoiseGeneratorOctaves noiseGens[] = new NoiseGeneratorOctaves[2];
+	LandAspect aspect0;
 
 	public ChunkProviderLands(World worldObj, long seed, boolean b) 
 	{
 		this.landWorld = worldObj;
+		aspect0 = new LandAspectFrost();
+		
 		this.random = new Random(seed);
 		this.consortList = new ArrayList();
 		this.consortList.add(new SpawnListEntry(EntityNakagator.class, 2, 1, 10));
@@ -49,7 +54,7 @@ public class ChunkProviderLands implements IChunkProvider
 		int[] topBlock = new int[256];
 		
 		generated0 = this.noiseGens[0].generateNoiseOctaves(generated0, chunkX*16, 10, chunkZ*16, 16, 1, 16, .1, 0, .1);
-		generated1 = this.noiseGens[1].generateNoiseOctaves(generated1, chunkX*16, 1, chunkZ*16, 16, 256, 16, .12, .11, .12);
+		generated1 = this.noiseGens[1].generateNoiseOctaves(generated1, chunkX*16, 2, chunkZ*16, 16, 256, 16, .12, .11, .12);
 		
 		for(int i = 0; i < 256; i++)
 		{
@@ -61,8 +66,17 @@ public class ChunkProviderLands implements IChunkProvider
 			for(int z = 0; z < 16; z++)
 			{
 				chunkIds[x + z * 16] = (short) Block.bedrock.blockID;
-				for(int y = 1; y < topBlock[x * 16 + z]; y++)
-					chunkIds[x + z * 16 + y * 256] = (short) (generated1[x + z * 256 + y * 16] + 99);
+				int y;
+				int currentBlockOffset;
+				for(y = 1; y < topBlock[x * 16 + z] - 1; y++)
+				{
+					currentBlockOffset = (int) Math.abs(generated1[x + z * 256 + y * 16]) % aspect0.getSurfaceBlocks()[0].length;
+					chunkIds[x + z * 16 + y * 256] = (short) aspect0.getUpperBlocks()[0][currentBlockOffset];
+					chunkMetadata[x + z * 16 + y * 256] = (byte) aspect0.getUpperBlocks()[1][currentBlockOffset];
+				}
+				currentBlockOffset = (int) Math.abs(generated1[x + z * 256 + y * 16]) % aspect0.getSurfaceBlocks()[0].length;
+				chunkIds[x + z * 16 + y * 256] = (short) aspect0.getSurfaceBlocks()[0][currentBlockOffset];
+				chunkMetadata[x + z * 16 + y * 256] = (byte) aspect0.getSurfaceBlocks()[1][currentBlockOffset];
 //					(short) (generated1[x + z * 256 + y * 16] < 0 ? Block.blockEmerald.blockID : Block.blockDiamond.blockID);
 				
 			}
