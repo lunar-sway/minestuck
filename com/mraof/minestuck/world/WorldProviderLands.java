@@ -28,6 +28,7 @@ public class WorldProviderLands extends WorldProvider
 	public void registerWorldChunkManager()
     {
 		super.registerWorldChunkManager();
+		isHellWorld = false;
         this.worldChunkMgr = new WorldChunkManagerHell(BiomeGenBase.plains, 0.5F, 0.5F);
     }
     public float calculateCelestialAngle(long par1, float par3)
