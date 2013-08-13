@@ -47,6 +47,7 @@ import com.mraof.minestuck.item.ItemClub;
 import com.mraof.minestuck.item.ItemCruxiteRaw;
 import com.mraof.minestuck.item.ItemDowelCarved;
 import com.mraof.minestuck.item.ItemDowelUncarved;
+import com.mraof.minestuck.item.ItemCruxiteArtifact;
 import com.mraof.minestuck.item.ItemHammer;
 import com.mraof.minestuck.item.ItemMachine;
 import com.mraof.minestuck.item.ItemSickle;
@@ -130,6 +131,7 @@ public class Minestuck
 	public static Item cruxiteDowelCarved;
 	public static Item blankCard;
 	public static Item punchedCard;
+	public static Item cruxiteArtifact;
 
 	public static Achievement getHammer;
 
@@ -226,6 +228,7 @@ public class Minestuck
 		cruxiteDowelCarved = new ItemDowelCarved(itemIdStart + 2);
 		blankCard = new ItemCardBlank(itemIdStart + 3);
 		punchedCard = new ItemCardPunched(itemIdStart + 4);
+		cruxiteArtifact = new ItemCruxiteArtifact(itemIdStart + 5, 1, false);
 
 		//achievements
 		getHammer = (new Achievement(413, "getHammer", 12, 15, Minestuck.clawHammer, (Achievement)null)).setIndependent().registerAchievement();
@@ -292,6 +295,7 @@ public class Minestuck
 		LanguageRegistry.addName(cruxiteDowelCarved, "Cruxite Dowel");
 		LanguageRegistry.addName(blankCard, "Captchalogue Card");
 		LanguageRegistry.addName(punchedCard, "Captchalogue Card");
+		LanguageRegistry.addName(cruxiteArtifact, "Cruxite Artifact");
 
 		//Same for blocks
 		LanguageRegistry.addName(blackChessTileStack, "Black Chess Tile");
