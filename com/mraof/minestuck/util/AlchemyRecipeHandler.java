@@ -1,6 +1,8 @@
 package com.mraof.minestuck.util;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.world.gen.lands.LandAspectFrost;
+import com.mraof.minestuck.world.gen.lands.LandAspectHelper;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -33,6 +35,8 @@ public class AlchemyRecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(Minestuck.blankCard,8,0),new Object[]{ "XXX","XYX","XXX",'Y',new ItemStack(Minestuck.rawCruxite, 1),'X',new ItemStack(Item.paper,1)});
 		
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.blockStorage, 1, 1), true, new GristSet(new GristType[] {GristType.Build}, new int[] {2})); 
+		
+		LandAspectHelper.registerLandAspect(new LandAspectFrost());
 		
 	}
 	
