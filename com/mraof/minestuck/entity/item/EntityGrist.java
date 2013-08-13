@@ -48,6 +48,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		this.motionX = (double)((float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
 		this.motionY = (double)((float)(Math.random() * 0.2D) * 2.0F);
 		this.motionZ = (double)((float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
+		this.isImmuneToFire = true;
 
 		this.gristType = type;
 	}
@@ -190,22 +191,23 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	 */
 	public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
 	{
-		if (this.isEntityInvulnerable())
-		{
-			return false;
-		}
-		else
-		{
-			this.setBeenAttacked();
-			this.gristHealth -= par2;
-
-			if (this.gristHealth <= 0)
-			{
-				this.setDead();
-			}
-
-			return false;
-		}
+		return false;
+//		if (this.isEntityInvulnerable())
+//		{
+//			return false;
+//		}
+//		else
+//		{
+//			this.setBeenAttacked();
+//			this.gristHealth -= par2;
+//
+//			if (this.gristHealth <= 0)
+//			{
+//				this.setDead();
+//			}
+//
+//			return false;
+//		}
 	}
 
 	/**

@@ -186,11 +186,11 @@ public class ContainerMachine extends Container {
     public void addCraftingToCrafters(ICrafting par1ICrafting)
     {
     	super.addCraftingToCrafters(par1ICrafting);
-    	System.out.printf("[MINESTUCK] addCraftingToCrafters running, the metadata is %d", this.metadata);
+//    	System.out.printf("[MINESTUCK] addCraftingToCrafters running, the metadata is %d\n", this.metadata);
     	switch(this.metadata)
     	{
-    	case 0:
-    		System.out.printf("[MINESTUCK] Mode is %b \n", this.tileEntity.mode);
+    	case 1:
+//    		System.out.printf("[MINESTUCK] Mode is %b \n", this.tileEntity.mode);
     		par1ICrafting.sendProgressBarUpdate(this, 0, this.tileEntity.mode ? 0 : 1);
     	}
     }
@@ -203,7 +203,7 @@ public class ContainerMachine extends Container {
     		ICrafting icrafting = (ICrafting)this.crafters.get(i);
     		switch(this.metadata)
     		{
-    		case 0:
+    		case 1:
     			if (this.operator != (this.tileEntity.mode))
     			{
     				icrafting.sendProgressBarUpdate(this, 0, this.tileEntity.mode ? 0 : 1);
@@ -215,9 +215,10 @@ public class ContainerMachine extends Container {
     @Override
     public void updateProgressBar(int par1, int par2) 
     {
-    	switch(par1)
+    	switch(this.metadata)
     	{
-    	case 0:
+    	case 1:
+//    		System.out.println("Mode on Client is now " + par2);
     		tileEntity.mode = par2 == 0;
     	}
     }
