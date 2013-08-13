@@ -15,8 +15,10 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 
 import com.mraof.minestuck.entity.consort.EntityNakagator;
+import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.world.gen.lands.LandAspect;
 import com.mraof.minestuck.world.gen.lands.LandAspectFrost;
+import com.mraof.minestuck.world.gen.lands.LandAspectHelper;
 
 public class ChunkProviderLands implements IChunkProvider 
 {
@@ -25,11 +27,13 @@ public class ChunkProviderLands implements IChunkProvider
 	Random random;
 	private NoiseGeneratorOctaves noiseGens[] = new NoiseGeneratorOctaves[2];
 	LandAspect aspect0;
+	LandAspect aspect1;
 
 	public ChunkProviderLands(World worldObj, long seed, boolean b) 
 	{
 		this.landWorld = worldObj;
-		aspect0 = new LandAspectFrost();
+		aspect0 = LandAspectHelper.getLandAspect(new Title(0, 0)); //TODO: Make it get player's actual title
+		//aspect1 = LandAspectHelper.getLandAspect(new Title(0, 0),aspect0);
 		
 		this.random = new Random(seed);
 		this.consortList = new ArrayList();
