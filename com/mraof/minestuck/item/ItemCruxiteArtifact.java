@@ -130,12 +130,14 @@ public class ItemCruxiteArtifact extends ItemFood
 		int x = (int) entity.posX;
 		int y = (int) entity.posY;
 		int z = (int) entity.posZ;
-		for(int blockX = x - 16; blockX < x + 16; blockX++)
+		int width = 16;
+		for(int blockX = x - width; blockX <= x + width; blockX++)
 		{
-			for(int blockZ = z - 16 - (int) (Math.random() * 3); blockZ < z + 16 + Math.random() * 5; blockZ++)
+			for(int blockZ = z - width; blockZ <= z + width; blockZ++)
 			{
 //				worldserver.setBlock(blockX, (int) y - 1, blockZ, Minestuck.chessTile.blockID, (blockX + blockZ) & 3, 3);
-				for(int blockY = y - 10 - (int) (Math.random() * 3); blockY < y + 22 && blockY < 256; blockY++)
+				double radius = Math.sqrt(((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2);
+				for(int blockY = y - (int) (Math.sqrt(width*width - radius*radius)); blockY < y + width && blockY < 256; blockY++)
 				{
 					int blockId = worldserver0.getBlockId(blockX, blockY, blockZ);
 					int metadata = worldserver0.getBlockMetadata(blockX, blockY, blockZ);
