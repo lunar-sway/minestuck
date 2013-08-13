@@ -2,6 +2,7 @@ package com.mraof.minestuck.item;
 
 import java.util.Iterator;
 
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
@@ -158,6 +159,11 @@ public class ItemCruxiteArtifact extends ItemFood
 					
 			}
 		}
+	}
+	@Override
+	public void registerIcons(IconRegister iconRegister) 
+	{
+		this.itemIcon = iconRegister.registerIcon("minestuck:CruxiteApple");
 	}
 	
 }
