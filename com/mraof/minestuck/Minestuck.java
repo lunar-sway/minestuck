@@ -16,6 +16,7 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 
 import com.mraof.minestuck.block.BlockChessTile;
+import com.mraof.minestuck.block.BlockComputer;
 import com.mraof.minestuck.block.BlockGatePortal;
 import com.mraof.minestuck.block.BlockMachine;
 import com.mraof.minestuck.block.BlockStorage;
@@ -44,6 +45,7 @@ import com.mraof.minestuck.item.ItemCardBlank;
 import com.mraof.minestuck.item.ItemCardPunched;
 import com.mraof.minestuck.item.ItemChessTile;
 import com.mraof.minestuck.item.ItemClub;
+import com.mraof.minestuck.item.ItemComputer;
 import com.mraof.minestuck.item.ItemCruxiteRaw;
 import com.mraof.minestuck.item.ItemDowelCarved;
 import com.mraof.minestuck.item.ItemDowelUncarved;
@@ -141,6 +143,7 @@ public class Minestuck
 	public static Block oreCruxite;
 	public static Block blockStorage;
 	public static Block blockMachine;
+	public static Block blockComputer;
 
 
 	// The instance of your mod that Forge uses.
@@ -190,6 +193,7 @@ public class Minestuck
 		oreCruxite = new OreCruxite(blockIdStart + 2);
 		blockStorage = new BlockStorage(blockIdStart + 3);
 		blockMachine = new BlockMachine(blockIdStart + 4);
+		blockComputer = new BlockComputer(blockIdStart + 5);
 		//hammers
 		clawHammer = new ItemHammer(toolIdStart, EnumHammerType.CLAW);
 		sledgeHammer = new ItemHammer(toolIdStart + 1, EnumHammerType.SLEDGE);
@@ -245,6 +249,7 @@ public class Minestuck
 		GameRegistry.registerBlock(oreCruxite,"oreCruxite");
 		GameRegistry.registerBlock(blockStorage,ItemStorageBlock.class,"blockStorage");
 		GameRegistry.registerBlock(blockMachine,ItemMachine.class,"blockMachine");
+		GameRegistry.registerBlock(blockComputer,ItemComputer.class,"blockComputer");
 		//metadata nonsense to conserve ids
 		ItemStack blackChessTileStack = new ItemStack(chessTile, 1, 0);
 		ItemStack whiteChessTileStack = new ItemStack(chessTile, 1, 1);
@@ -310,6 +315,7 @@ public class Minestuck
 		LanguageRegistry.addName(punchDesignexStack, "Punch Designex");
 		LanguageRegistry.addName(totemLatheStack, "Totem Lathe");
 		LanguageRegistry.addName(alchemiterStack, "Alchemiter");
+		LanguageRegistry.addName(blockComputer, "SBURB Computer");
 
 		//set translations for automatic names
 		LanguageRegistry.instance().addStringLocalization("entity.Salamander.name", "Salamander");
