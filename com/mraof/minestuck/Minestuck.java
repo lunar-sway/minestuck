@@ -47,6 +47,7 @@ import com.mraof.minestuck.item.ItemChessTile;
 import com.mraof.minestuck.item.ItemClub;
 import com.mraof.minestuck.item.ItemComputer;
 import com.mraof.minestuck.item.ItemCruxiteRaw;
+import com.mraof.minestuck.item.ItemDisk;
 import com.mraof.minestuck.item.ItemDowelCarved;
 import com.mraof.minestuck.item.ItemDowelUncarved;
 import com.mraof.minestuck.item.ItemCruxiteArtifact;
@@ -134,6 +135,7 @@ public class Minestuck
 	public static Item blankCard;
 	public static Item punchedCard;
 	public static Item cruxiteArtifact;
+	public static Item disk;
 
 	public static Achievement getHammer;
 
@@ -233,6 +235,7 @@ public class Minestuck
 		blankCard = new ItemCardBlank(itemIdStart + 3);
 		punchedCard = new ItemCardPunched(itemIdStart + 4);
 		cruxiteArtifact = new ItemCruxiteArtifact(itemIdStart + 5, 1, false);
+		disk = new ItemDisk(itemIdStart + 6);
 
 		//achievements
 		getHammer = (new Achievement(413, "getHammer", 12, 15, Minestuck.clawHammer, (Achievement)null)).setIndependent().registerAchievement();
@@ -261,6 +264,8 @@ public class Minestuck
 		ItemStack punchDesignexStack = new ItemStack(blockMachine,1,1);
 		ItemStack totemLatheStack = new ItemStack(blockMachine,1,2);
 		ItemStack alchemiterStack = new ItemStack(blockMachine,1,3);
+		ItemStack clientDiskStack = new ItemStack(disk,1,0);
+		ItemStack serverDiskStack = new ItemStack(disk,1,1);
 		//set harvest information for blocks
 		MinecraftForge.setBlockHarvestLevel(chessTile, "shovel", 0);
 		MinecraftForge.setBlockHarvestLevel(oreCruxite, "pickaxe", 1);
@@ -301,7 +306,9 @@ public class Minestuck
 		LanguageRegistry.addName(blankCard, "Captchalogue Card");
 		LanguageRegistry.addName(punchedCard, "Captchalogue Card");
 		LanguageRegistry.addName(cruxiteArtifact, "Cruxite Artifact");
-
+		LanguageRegistry.addName(clientDiskStack, "SBURB Client Disk");
+		LanguageRegistry.addName(serverDiskStack, "SBURB Server Disk");
+		
 		//Same for blocks
 		LanguageRegistry.addName(blackChessTileStack, "Black Chess Tile");
 		LanguageRegistry.addName(whiteChessTileStack, "White Chess Tile");
