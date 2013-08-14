@@ -66,7 +66,7 @@ public class ContainerMachine extends Container {
         	addSlotToContainer(new SlotOutput(tileEntity,0,latheOutputX,latheOutputY));
         	break;
         case (3):
-        	addSlotToContainer(new SlotInput(tileEntity,1,alchemiterInputX,alchemiterInputY,Minestuck.cruxiteDowelCarved.itemID));
+        	addSlotToContainer(new SlotDualInput(tileEntity,1,alchemiterInputX,alchemiterInputY,Minestuck.cruxiteDowelCarved.itemID,Minestuck.cruxiteDowel.itemID));
         	addSlotToContainer(new SlotOutput(tileEntity,0,alchemiterOutputX,alchemiterOutputY));
         	//break;
         }
@@ -159,7 +159,7 @@ public class ContainerMachine extends Container {
             		result = mergeItemStack(itemstackOrig,2,allSlots,false);
             	} else if (slotNumber > 1) {
             		//if it's an inventory slot with valid contents
-            		if (itemstackOrig.itemID == Minestuck.cruxiteDowelCarved.itemID) {
+            		if (itemstackOrig.itemID == Minestuck.cruxiteDowelCarved.itemID || itemstackOrig.itemID == Minestuck.cruxiteDowel.itemID) {
             			result = mergeItemStack(itemstackOrig,0,1,false);
             		}
             	}
@@ -190,7 +190,7 @@ public class ContainerMachine extends Container {
     	switch(this.metadata)
     	{
     	case 1:
-//    		System.out.printf("[MINESTUCK] Mode is %b \n", this.tileEntity.mode);
+//    		System.out.printf(". Mode is %b \n", this.tileEntity.mode);
     		par1ICrafting.sendProgressBarUpdate(this, 0, this.tileEntity.mode ? 0 : 1);
     	}
     }

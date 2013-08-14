@@ -11,6 +11,7 @@ import net.minecraft.block.BlockSapling;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class AlchemyRecipeHandler {
 	
@@ -34,8 +35,10 @@ public class AlchemyRecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(Minestuck.blockStorage,1,0),new Object[]{ "XXX","XXX","XXX",'X',new ItemStack(Minestuck.rawCruxite, 1)});
 		GameRegistry.addRecipe(new ItemStack(Minestuck.blankCard,8,0),new Object[]{ "XXX","XYX","XXX",'Y',new ItemStack(Minestuck.rawCruxite, 1),'X',new ItemStack(Item.paper,1)});
 		
+		//add grist conversions
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.blockStorage, 1, 1), true, new GristSet(new GristType[] {GristType.Build}, new int[] {2})); 
 		
+		//register land aspects
 		LandAspectHelper.registerLandAspect(new LandAspectFrost());
 		
 	}
@@ -55,6 +58,31 @@ public class AlchemyRecipeHandler {
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Given a punched card or a carved dowel, returns a new item that represents the encoded data.
+	 * 
+	 * @param card - The dowel or card with encoded data
+	 * @return An item, or null if the data was invalid.
+	 */
+	public static ItemStack getDecodedItem(ItemStack card) {
+		
+		if (card == null) {return null;}
+		//System.out.println("[MINESTUCK] Looking for an ID of" +  Minestuck.cruxiteDowel.itemID + ". Got an ID of " + card.itemID);
+		if (card.itemID == Minestuck.cruxiteDowel.itemID) {
+			//System.out.println("[MINESTUCK] Got a blank dowel as input. Returning a generic object");
+			return new ItemStack(Minestuck.blockStorage,1,1); //return a Perfectly Generic Object if it's a blank dowel
+		}
+		
+		//System.out.println("[MINESTUCK] Got a carved dowel. Returning encoded object");
+		NBTTagCompound tag = card.getTagCompound();
+		
+		if (tag == null || Item.itemsList[tag.getInteger("contentID")] == null) {return null;}
+		ItemStack newItem = new ItemStack(tag.getInteger("contentID"),1,tag.getInteger("contentMeta"));
+		
+		return newItem;
+		
 	}
 	
 }
