@@ -14,6 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.item.EntityGrist;
+import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.CombinationRegistry;
 import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
@@ -190,7 +191,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			return (inv[1] != null && (inv[0] == null || inv[0].stackSize < 64));
 		case (1):
 		 if (inv[1] != null && inv[2] != null) {
-			return (inv[3] != null && inv[0] == null && CombinationRegistry.getCombination(getDecodedItem(inv[1]), getDecodedItem(inv[2]),mode) != null);
+			return (inv[3] != null && inv[0] == null && CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(inv[1]), AlchemyRecipeHandler.getDecodedItem(inv[2]),mode) != null);
 		 } else if (inv[1] != null || inv[2] != null) {
 			return (inv[3] != null && inv[0] == null);
 		} else {
@@ -199,29 +200,29 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		case (2):
 			return (inv[1] != null && inv[2] != null && inv[0] == null);
 		case (3):
-		if (inv[1] != null && inv[0] == null && owner != null && inv[1].getTagCompound() != null) {
-			//Check owner's cache: Do they have everything they need?
-			ItemStack newItem = getDecodedItem(inv[1]);
-			if (newItem == null) {return false;}
-	    	GristSet set = GristRegistry.getGristConversion(newItem);
-	    	if (set == null) {return false;}
-		    	Hashtable reqs = set.getTable();
-		    	//System.out.println("reqs: " + reqs.size());
-		    	if (reqs != null) {
-		    	   	Iterator it = reqs.entrySet().iterator();
-		            while (it.hasNext()) {
-		                Map.Entry pairs = (Map.Entry)it.next();
-		                int type = (Integer) pairs.getKey();
-		                int need = (Integer) pairs.getValue();
-		                int have =  owner.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(EntityGrist.gristTypes[type]);
-		                
-		                if (need > have) {return false;}
-		        }
-	    	} else {return false;}
-	    	return true;
-		} else {
-			return false;
-		}
+			if (inv[1] != null && inv[0] == null && owner != null) {
+				//Check owner's cache: Do they have everything they need?
+				ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(inv[1]);
+				if (newItem == null) {return false;}
+		    	GristSet set = GristRegistry.getGristConversion(newItem);
+		    	if (set == null) {return false;}
+			    	Hashtable reqs = set.getTable();
+			    	//System.out.println("reqs: " + reqs.size());
+			    	if (reqs != null) {
+			    	   	Iterator it = reqs.entrySet().iterator();
+			            while (it.hasNext()) {
+			                Map.Entry pairs = (Map.Entry)it.next();
+			                int type = (Integer) pairs.getKey();
+			                int need = (Integer) pairs.getValue();
+			                int have =  owner.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(EntityGrist.gristTypes[type]);
+			                
+			                if (need > have) {return false;}
+			        }
+		    	} else {return false;}
+		    	return true;
+			} else {
+				return false;
+			}
 		}
 		return false;
 	}
@@ -242,7 +243,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			break;
 		case (1):
 			//Create a new card, using CombinationRegistry
-			ItemStack outputItem = CombinationRegistry.getCombination(getDecodedItem(inv[1]),getDecodedItem(inv[2]),mode);
+			ItemStack outputItem = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(inv[1]),AlchemyRecipeHandler.getDecodedItem(inv[2]),mode);
 			ItemStack outputCard = new ItemStack(Minestuck.punchedCard);
 
 			NBTTagCompound nbttagcompound = new NBTTagCompound();
@@ -280,7 +281,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			decrStackSize(2, 1);
 			break;
 		case (3):
-			ItemStack newItem = getDecodedItem(inv[1]);
+			ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(inv[1]);
 			setInventorySlotContents(0,newItem);
 			//decrStackSize(1, 1);
 	    	GristSet set = GristRegistry.getGristConversion(newItem);
@@ -294,23 +295,5 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			break;
 	    	}
 		}
-	}
-	
-	/**
-	 * Given a punched card or a carved dowel, returns a new item that represents the encoded data.
-	 * 
-	 * @param card - The dowel or card with encoded data
-	 * @return An item, or null if the data was invalid.
-	 */
-	public ItemStack getDecodedItem(ItemStack card) {
-		
-		if (card == null) {return null;}
-		NBTTagCompound tag = card.getTagCompound();
-		
-		if (tag == null || Item.itemsList[tag.getInteger("contentID")] == null) {return null;}
-		ItemStack newItem = new ItemStack(tag.getInteger("contentID"),1,tag.getInteger("contentMeta"));
-		
-		return newItem;
-		
 	}
 }
