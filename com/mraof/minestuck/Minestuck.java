@@ -16,6 +16,7 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 
 import com.mraof.minestuck.block.BlockChessTile;
+import com.mraof.minestuck.block.BlockComputer;
 import com.mraof.minestuck.block.BlockGatePortal;
 import com.mraof.minestuck.block.BlockMachine;
 import com.mraof.minestuck.block.BlockStorage;
@@ -44,7 +45,9 @@ import com.mraof.minestuck.item.ItemCardBlank;
 import com.mraof.minestuck.item.ItemCardPunched;
 import com.mraof.minestuck.item.ItemChessTile;
 import com.mraof.minestuck.item.ItemClub;
+import com.mraof.minestuck.item.ItemComputer;
 import com.mraof.minestuck.item.ItemCruxiteRaw;
+import com.mraof.minestuck.item.ItemDisk;
 import com.mraof.minestuck.item.ItemDowelCarved;
 import com.mraof.minestuck.item.ItemDowelUncarved;
 import com.mraof.minestuck.item.ItemCruxiteArtifact;
@@ -132,6 +135,7 @@ public class Minestuck
 	public static Item blankCard;
 	public static Item punchedCard;
 	public static Item cruxiteArtifact;
+	public static Item disk;
 
 	public static Achievement getHammer;
 
@@ -141,6 +145,7 @@ public class Minestuck
 	public static Block oreCruxite;
 	public static Block blockStorage;
 	public static Block blockMachine;
+	public static Block blockComputer;
 
 
 	// The instance of your mod that Forge uses.
@@ -190,6 +195,7 @@ public class Minestuck
 		oreCruxite = new OreCruxite(blockIdStart + 2);
 		blockStorage = new BlockStorage(blockIdStart + 3);
 		blockMachine = new BlockMachine(blockIdStart + 4);
+		blockComputer = new BlockComputer(blockIdStart + 5);
 		//hammers
 		clawHammer = new ItemHammer(toolIdStart, EnumHammerType.CLAW);
 		sledgeHammer = new ItemHammer(toolIdStart + 1, EnumHammerType.SLEDGE);
@@ -229,6 +235,7 @@ public class Minestuck
 		blankCard = new ItemCardBlank(itemIdStart + 3);
 		punchedCard = new ItemCardPunched(itemIdStart + 4);
 		cruxiteArtifact = new ItemCruxiteArtifact(itemIdStart + 5, 1, false);
+		disk = new ItemDisk(itemIdStart + 6);
 
 		//achievements
 		getHammer = (new Achievement(413, "getHammer", 12, 15, Minestuck.clawHammer, (Achievement)null)).setIndependent().registerAchievement();
@@ -245,6 +252,7 @@ public class Minestuck
 		GameRegistry.registerBlock(oreCruxite,"oreCruxite");
 		GameRegistry.registerBlock(blockStorage,ItemStorageBlock.class,"blockStorage");
 		GameRegistry.registerBlock(blockMachine,ItemMachine.class,"blockMachine");
+		GameRegistry.registerBlock(blockComputer,ItemComputer.class,"blockComputer");
 		//metadata nonsense to conserve ids
 		ItemStack blackChessTileStack = new ItemStack(chessTile, 1, 0);
 		ItemStack whiteChessTileStack = new ItemStack(chessTile, 1, 1);
@@ -256,6 +264,8 @@ public class Minestuck
 		ItemStack punchDesignexStack = new ItemStack(blockMachine,1,1);
 		ItemStack totemLatheStack = new ItemStack(blockMachine,1,2);
 		ItemStack alchemiterStack = new ItemStack(blockMachine,1,3);
+		ItemStack clientDiskStack = new ItemStack(disk,1,0);
+		ItemStack serverDiskStack = new ItemStack(disk,1,1);
 		//set harvest information for blocks
 		MinecraftForge.setBlockHarvestLevel(chessTile, "shovel", 0);
 		MinecraftForge.setBlockHarvestLevel(oreCruxite, "pickaxe", 1);
@@ -296,7 +306,9 @@ public class Minestuck
 		LanguageRegistry.addName(blankCard, "Captchalogue Card");
 		LanguageRegistry.addName(punchedCard, "Captchalogue Card");
 		LanguageRegistry.addName(cruxiteArtifact, "Cruxite Artifact");
-
+		LanguageRegistry.addName(clientDiskStack, "SBURB Client Disk");
+		LanguageRegistry.addName(serverDiskStack, "SBURB Server Disk");
+		
 		//Same for blocks
 		LanguageRegistry.addName(blackChessTileStack, "Black Chess Tile");
 		LanguageRegistry.addName(whiteChessTileStack, "White Chess Tile");
@@ -310,6 +322,7 @@ public class Minestuck
 		LanguageRegistry.addName(punchDesignexStack, "Punch Designex");
 		LanguageRegistry.addName(totemLatheStack, "Totem Lathe");
 		LanguageRegistry.addName(alchemiterStack, "Alchemiter");
+		LanguageRegistry.addName(blockComputer, "SBURB Computer");
 
 		//set translations for automatic names
 		LanguageRegistry.instance().addStringLocalization("entity.Salamander.name", "Salamander");
