@@ -159,7 +159,7 @@ public class ContainerMachine extends Container {
             		result = mergeItemStack(itemstackOrig,2,allSlots,false);
             	} else if (slotNumber > 1) {
             		//if it's an inventory slot with valid contents
-            		if (itemstackOrig.itemID == Minestuck.cruxiteDowelCarved.itemID) {
+            		if (itemstackOrig.itemID == Minestuck.cruxiteDowelCarved.itemID || itemstackOrig.itemID == Minestuck.cruxiteDowel.itemID) {
             			result = mergeItemStack(itemstackOrig,0,1,false);
             		}
             	}
