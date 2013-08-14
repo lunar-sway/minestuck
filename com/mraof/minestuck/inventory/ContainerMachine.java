@@ -190,7 +190,7 @@ public class ContainerMachine extends Container {
     	switch(this.metadata)
     	{
     	case 1:
-//    		System.out.printf("[MINESTUCK] Mode is %b \n", this.tileEntity.mode);
+//    		System.out.printf(". Mode is %b \n", this.tileEntity.mode);
     		par1ICrafting.sendProgressBarUpdate(this, 0, this.tileEntity.mode ? 0 : 1);
     	}
     }
