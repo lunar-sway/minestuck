@@ -34,7 +34,7 @@ public class RenderGatePortal extends TileEntitySpecialRenderer
         for (int var14 = 0; var14 < 16; ++var14)
         {
             GL11.glPushMatrix();
-            float var15 = (float)(16 - var14);
+            float var15 = 16 - var14;
             float var16 = 0.0625F;
             float var17 = 1.0F / (var15 + 1.0F);
 
@@ -56,11 +56,11 @@ public class RenderGatePortal extends TileEntitySpecialRenderer
                 var16 = 0.5F;
             }
 
-            float var18 = (float)(-(par4 + (double)var13));
+            float var18 = (float)(-(par4 + var13));
             float var19 = var18 + ActiveRenderInfo.objectY;
             float var20 = var18 + var15 + ActiveRenderInfo.objectY;
             float var21 = var19 / var20;
-            var21 += (float)(par4 + (double)var13);
+            var21 += (float)(par4 + var13);
             GL11.glTranslatef(var9, var21, var11);
             GL11.glTexGeni(GL11.GL_S, GL11.GL_TEXTURE_GEN_MODE, GL11.GL_OBJECT_LINEAR);
             GL11.glTexGeni(GL11.GL_T, GL11.GL_TEXTURE_GEN_MODE, GL11.GL_OBJECT_LINEAR);
@@ -78,10 +78,10 @@ public class RenderGatePortal extends TileEntitySpecialRenderer
             GL11.glMatrixMode(GL11.GL_TEXTURE);
             GL11.glPushMatrix();
             GL11.glLoadIdentity();
-            GL11.glTranslatef(0.0F, (float)(Minecraft.getSystemTime() % 700000L) / 700000.0F, 0.0F);
+            GL11.glTranslatef(0.0F, Minecraft.getSystemTime() % 700000L / 700000.0F, 0.0F);
             GL11.glScalef(var16, var16, var16);
             GL11.glTranslatef(0.5F, 0.5F, 0.0F);
-            GL11.glRotatef((float)(var14 * var14 * 4321 + var14 * 9) * 2.0F, 0.0F, 0.0F, 1.0F);
+            GL11.glRotatef((var14 * var14 * 4321 + var14 * 9) * 2.0F, 0.0F, 0.0F, 1.0F);
             GL11.glTranslatef(-0.5F, -0.5F, 0.0F);
             GL11.glTranslatef(-var9, -var11, -var10);
             var19 = var18 + ActiveRenderInfo.objectY;
@@ -100,10 +100,10 @@ public class RenderGatePortal extends TileEntitySpecialRenderer
             }
 
             var24.setColorRGBA_F(var21 * var17, var22 * var17, var23 * var17, 1.0F);
-            var24.addVertex(par2, par4 + (double)var13, par6);
-            var24.addVertex(par2, par4 + (double)var13, par6 + 1.0D);
-            var24.addVertex(par2 + 1.0D, par4 + (double)var13, par6 + 1.0D);
-            var24.addVertex(par2 + 1.0D, par4 + (double)var13, par6);
+            var24.addVertex(par2, par4 + var13, par6);
+            var24.addVertex(par2, par4 + var13, par6 + 1.0D);
+            var24.addVertex(par2 + 1.0D, par4 + var13, par6 + 1.0D);
+            var24.addVertex(par2 + 1.0D, par4 + var13, par6);
             var24.draw();
             GL11.glPopMatrix();
             GL11.glMatrixMode(GL11.GL_MODELVIEW);
@@ -124,7 +124,8 @@ public class RenderGatePortal extends TileEntitySpecialRenderer
         return this.floatBuffer;
     }
 
-    public void renderTileEntityAt(TileEntity par1TileEntity, double par2, double par4, double par6, float par8)
+    @Override
+	public void renderTileEntityAt(TileEntity par1TileEntity, double par2, double par4, double par6, float par8)
     {
         this.renderGatePortalTileEntity((TileEntityGatePortal)par1TileEntity, par2, par4, par6, par8);
     }
