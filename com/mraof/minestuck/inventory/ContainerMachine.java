@@ -66,7 +66,7 @@ public class ContainerMachine extends Container {
         	addSlotToContainer(new SlotOutput(tileEntity,0,latheOutputX,latheOutputY));
         	break;
         case (3):
-        	addSlotToContainer(new SlotInput(tileEntity,1,alchemiterInputX,alchemiterInputY,Minestuck.cruxiteDowelCarved.itemID));
+        	addSlotToContainer(new SlotDualInput(tileEntity,1,alchemiterInputX,alchemiterInputY,Minestuck.cruxiteDowelCarved.itemID,Minestuck.cruxiteDowel.itemID));
         	addSlotToContainer(new SlotOutput(tileEntity,0,alchemiterOutputX,alchemiterOutputY));
         	//break;
         }
