@@ -4,9 +4,6 @@ import java.util.List;
 import java.util.Random;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.client.gui.GuiMachine;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 
 import cpw.mods.fml.relauncher.Side;
@@ -17,11 +14,9 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
@@ -51,13 +46,33 @@ public class BlockMachine extends BlockContainer {
 		return metadata;
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(int unknown, CreativeTabs tab, List subItems) 
 	{
 		for(int i = 0; i < iconNames.length; i++)
 			subItems.add(new ItemStack(this, 1, i));
 	}
+	@Override
+	public boolean renderAsNormalBlock()
+	{
+		return false;
+	}
 
+	@Override
+	public int getRenderType()
+	{
+		return -1;
+	}
+
+	@Override
+	public boolean isOpaqueCube()
+	{
+		return false;
+	}
+
+
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister par1IconRegister)
 	{
@@ -77,7 +92,7 @@ public class BlockMachine extends BlockContainer {
 			return false;
 		}
 
-		
+
 		player.openGui(Minestuck.instance, 0, world, x, y, z);
 		return true;
 	}

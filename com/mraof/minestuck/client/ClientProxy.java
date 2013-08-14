@@ -17,6 +17,7 @@ import com.mraof.minestuck.client.renderer.entity.RenderEntityMinestuck;
 import com.mraof.minestuck.client.renderer.entity.RenderGrist;
 import com.mraof.minestuck.client.renderer.entity.RenderPawn;
 import com.mraof.minestuck.client.renderer.tileentity.RenderGatePortal;
+import com.mraof.minestuck.client.renderer.tileentity.TileEntityMachineRenderer;
 import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
 import com.mraof.minestuck.entity.carapacian.EntityBishop;
 import com.mraof.minestuck.entity.carapacian.EntityPawn;
@@ -27,6 +28,7 @@ import com.mraof.minestuck.entity.underling.EntityGiclops;
 import com.mraof.minestuck.entity.underling.EntityImp;
 import com.mraof.minestuck.entity.underling.EntityOgre;
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
+import com.mraof.minestuck.tileentity.TileEntityMachine;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.KeyBindingRegistry;
@@ -48,6 +50,7 @@ public class ClientProxy extends CommonProxy
             RenderingRegistry.registerEntityRenderingHandler(EntityBishop.class, new RenderEntityMinestuck(new ModelBishop(), 1.8F));
             RenderingRegistry.registerEntityRenderingHandler(EntityGrist.class, new RenderGrist());
             ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGatePortal.class, new RenderGatePortal());
+            ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachine.class, new TileEntityMachineRenderer());
     }
 	@SideOnly(Side.CLIENT)
 	public static void registerSided()

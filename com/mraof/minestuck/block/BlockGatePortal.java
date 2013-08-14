@@ -88,6 +88,7 @@ public class BlockGatePortal extends BlockContainer
 	/**
 	 * If this block doesn't render as an ordinary block it will return False (examples: signs, buttons, stairs, etc)
 	 */
+	@Override
 	public boolean renderAsNormalBlock()
 	{
 		return false;
@@ -96,12 +97,14 @@ public class BlockGatePortal extends BlockContainer
 	/**
 	 * Returns the quantity of items to drop on block destruction.
 	 */
+	@Override
 	public int quantityDropped(Random par1Random)
 	{
 		return 0;
 	}
 
 
+	@Override
 	@SideOnly(Side.CLIENT)
 
 	/**
@@ -115,6 +118,7 @@ public class BlockGatePortal extends BlockContainer
 	/**
 	 * The type of render function that is called for this block
 	 */
+	@Override
 	public int getRenderType()
 	{
 		return -1;
@@ -124,6 +128,7 @@ public class BlockGatePortal extends BlockContainer
 	 * Called whenever the block is added into the world. Args: world, x, y, z
 	 */
 
+	@Override
 	@SideOnly(Side.CLIENT)
 
 	/**
@@ -134,6 +139,7 @@ public class BlockGatePortal extends BlockContainer
 		return 0;
 	}
 	//this keeps portals that lead to the same world from existing
+	@Override
 	public void onBlockAdded(World par1World, int par2, int par3, int par4)
 	{
 		if (par1World.provider.dimensionId == destinationDimension)
@@ -144,28 +150,30 @@ public class BlockGatePortal extends BlockContainer
 				this.destinationDimension = Minestuck.skaiaDimensionId;
 		}
 	}
-    /**
-     * Called upon block activation (right click on the block.)
-     */
-    public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
-    {
-        if (par1World.isRemote)
-        {
-            return true;
-        }
-        int newDimension = ((TileEntityGatePortal) par1World.getBlockTileEntity(x, y, z)).destinationDimension + 1;
-        if(par1World.provider.dimensionId != newDimension && DimensionManager.isDimensionRegistered(newDimension))
-        {
-        	this.destinationDimension = newDimension;
-        	((TileEntityGatePortal) par1World.getBlockTileEntity(x, y, z)).destinationDimension = newDimension;
-        }
-        	
-        return true;
-    }
+	/**
+	 * Called upon block activation (right click on the block.)
+	 */
+	@Override
+	public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
+	{
+		if (par1World.isRemote)
+		{
+			return true;
+		}
+		int newDimension = ((TileEntityGatePortal) par1World.getBlockTileEntity(x, y, z)).destinationDimension + 1;
+		if(par1World.provider.dimensionId != newDimension && DimensionManager.isDimensionRegistered(newDimension))
+		{
+			this.destinationDimension = newDimension;
+			((TileEntityGatePortal) par1World.getBlockTileEntity(x, y, z)).destinationDimension = newDimension;
+		}
+
+		return true;
+	}
 	public void setDestinationDimension(World world, int x, int y, int z, int destinationDimension) 
 	{
 		((TileEntityGatePortal) world.getBlockTileEntity(x, y, z)).destinationDimension = destinationDimension;
 	}
+	@Override
 	@SideOnly(Side.CLIENT)
 
 	/**
