@@ -6,10 +6,12 @@ import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 
 import com.mraof.minestuck.Minestuck;
@@ -24,13 +26,14 @@ public class TileEntityMachine extends TileEntity implements IInventory {
     public ItemStack[] inv;
     public int progress = 0;
     public int maxProgress = 100;
+    public byte rotation = 0;
     //true if and, false if or
     public boolean mode = true;
     public EntityPlayer owner;
 	public boolean ready = false;
 
     public TileEntityMachine(){
-            inv = new ItemStack[4];
+            this.inv = new ItemStack[4];
             
     }
     
@@ -46,17 +49,17 @@ public class TileEntityMachine extends TileEntity implements IInventory {
     		case (3):
     			return 2;
     		}
-            return inv.length;
+            return this.inv.length;
     }
 
     @Override
     public ItemStack getStackInSlot(int slot) {
-            return inv[slot];
+            return this.inv[slot];
     }
     
     @Override
     public void setInventorySlotContents(int slot, ItemStack stack) {
-            inv[slot] = stack;
+            this.inv[slot] = stack;
             if (stack != null && stack.stackSize > getInventoryStackLimit()) {
                     stack.stackSize = getInventoryStackLimit();
             }               
@@ -94,8 +97,8 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
-            return worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) == this &&
-            player.getDistanceSq(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5) < 64;
+            return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) == this &&
+            player.getDistanceSq(this.xCoord + 0.5, this.yCoord + 0.5, this.zCoord + 0.5) < 64;
     }
 
     @Override
@@ -108,8 +111,9 @@ public class TileEntityMachine extends TileEntity implements IInventory {
     public void readFromNBT(NBTTagCompound tagCompound) {
             super.readFromNBT(tagCompound);
             
-            progress = tagCompound.getInteger("progress");
-            mode =  tagCompound.getBoolean("mode");
+            this.rotation = tagCompound.getByte("rotation");
+            this.progress = tagCompound.getInteger("progress");
+            this.mode =  tagCompound.getBoolean("mode");
             
             //String ownerName = tagCompound.getString("owner");
             
@@ -117,8 +121,8 @@ public class TileEntityMachine extends TileEntity implements IInventory {
             for (int i = 0; i < tagList.tagCount(); i++) {
                     NBTTagCompound tag = (NBTTagCompound) tagList.tagAt(i);
                     byte slot = tag.getByte("Slot");
-                    if (slot >= 0 && slot < inv.length) {
-                            inv[slot] = ItemStack.loadItemStackFromNBT(tag);
+                    if (slot >= 0 && slot < this.inv.length) {
+                            this.inv[slot] = ItemStack.loadItemStackFromNBT(tag);
                     }
             }
     }
@@ -127,13 +131,14 @@ public class TileEntityMachine extends TileEntity implements IInventory {
     public void writeToNBT(NBTTagCompound tagCompound) {
             super.writeToNBT(tagCompound);
                             
-            tagCompound.setInteger("progress", progress);
-            tagCompound.setBoolean("mode", mode);
+            tagCompound.setByte("rotation", this.rotation);
+            tagCompound.setInteger("progress", this.progress);
+            tagCompound.setBoolean("mode", this.mode);
             //tagCompound.setString("owner", owner.username);
             
             NBTTagList itemList = new NBTTagList();
-            for (int i = 0; i < inv.length; i++) {
-                    ItemStack stack = inv[i];
+            for (int i = 0; i < this.inv.length; i++) {
+                    ItemStack stack = this.inv[i];
                     if (stack != null) {
                             NBTTagCompound tag = new NBTTagCompound();
                             tag.setByte("Slot", (byte) i);
@@ -142,6 +147,18 @@ public class TileEntityMachine extends TileEntity implements IInventory {
                     }
             }
             tagCompound.setTag("Inventory", itemList);
+    }
+    @Override
+    public Packet getDescriptionPacket() 
+    {
+    	NBTTagCompound tagCompound = new NBTTagCompound();
+    	this.writeToNBT(tagCompound);
+    	return new Packet132TileEntityData(this.xCoord, this.yCoord, this.zCoord, 2, tagCompound);
+    }
+    @Override
+    public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) 
+    {
+    	this.readFromNBT(pkt.customParam1);
     }
 
     @Override
@@ -160,49 +177,49 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 	}
 
 	public int getMetadata() {
-		return worldObj.getBlockMetadata(xCoord,yCoord,zCoord);
+		return this.worldObj.getBlockMetadata(this.xCoord,this.yCoord,this.zCoord);
 	}
 	
 	@Override
 	public void updateEntity() {
 		
 		if (!contentsValid()) {
-			progress = 0;
-			ready = false;
+			this.progress = 0;
+			this.ready = false;
 			return;
 		}
 		
-		progress++;
+		this.progress++;
 		
-		if (progress == maxProgress) {
-			progress = 0;
-			ready = false;
+		if (this.progress == this.maxProgress) {
+			this.progress = 0;
+			this.ready = false;
 			processContents();
 		}
 	}
 	
 	public boolean contentsValid() {
 		
-		if (getMetadata() != 0 && !ready) {
+		if (getMetadata() != 0 && !this.ready) {
 			return false;
 		}
 		switch (getMetadata()) {
 		case (0):
-			return (inv[1] != null && (inv[0] == null || inv[0].stackSize < 64));
+			return (this.inv[1] != null && (this.inv[0] == null || this.inv[0].stackSize < 64));
 		case (1):
-		 if (inv[1] != null && inv[2] != null) {
-			return (inv[3] != null && inv[0] == null && CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(inv[1]), AlchemyRecipeHandler.getDecodedItem(inv[2]),mode) != null);
-		 } else if (inv[1] != null || inv[2] != null) {
-			return (inv[3] != null && inv[0] == null);
+		 if (this.inv[1] != null && this.inv[2] != null) {
+			return (this.inv[3] != null && this.inv[0] == null && CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(this.inv[1]), AlchemyRecipeHandler.getDecodedItem(this.inv[2]),this.mode) != null);
+		 } else if (this.inv[1] != null || this.inv[2] != null) {
+			return (this.inv[3] != null && this.inv[0] == null);
 		} else {
 			return false;
 		}
 		case (2):
-			return (inv[1] != null && inv[2] != null && inv[0] == null);
+			return (this.inv[1] != null && this.inv[2] != null && this.inv[0] == null);
 		case (3):
-			if (inv[1] != null && inv[0] == null && owner != null) {
+			if (this.inv[1] != null && this.inv[0] == null && this.owner != null) {
 				//Check owner's cache: Do they have everything they need?
-				ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(inv[1]);
+				ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(this.inv[1]);
 				if (newItem == null) {return false;}
 		    	GristSet set = GristRegistry.getGristConversion(newItem);
 		    	if (set == null) {return false;}
@@ -214,7 +231,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			                Map.Entry pairs = (Map.Entry)it.next();
 			                int type = (Integer) pairs.getKey();
 			                int need = (Integer) pairs.getValue();
-			                int have =  owner.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(EntityGrist.gristTypes[type]);
+			                int have =  this.owner.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(EntityGrist.gristTypes[type]);
 			                
 			                if (need > have) {return false;}
 			        }
@@ -232,28 +249,28 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		case (0):
 			// Process the Raw Cruxite
 			
-			if (inv[0] == null) {
+			if (this.inv[0] == null) {
 				setInventorySlotContents(0, new ItemStack(Minestuck.cruxiteDowel,1));
 			} else {
 				decrStackSize(0, -1);
 			}
 			decrStackSize(1, 1);
 			
-			progress++;
+			this.progress++;
 			break;
 		case (1):
 			//Create a new card, using CombinationRegistry
-			ItemStack outputItem = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(inv[1]),AlchemyRecipeHandler.getDecodedItem(inv[2]),mode);
+			ItemStack outputItem = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(this.inv[1]),AlchemyRecipeHandler.getDecodedItem(this.inv[2]),this.mode);
 			ItemStack outputCard = new ItemStack(Minestuck.punchedCard);
 
 			NBTTagCompound nbttagcompound = new NBTTagCompound();
 			outputCard.setTagCompound(nbttagcompound);
-			if (inv[1] == null) {
-		        nbttagcompound.setInteger("contentID", inv[2].itemID);
-		        nbttagcompound.setInteger("contentMeta", inv[2].getItemDamage());
-			} else if (inv[2]==null) {
-		        nbttagcompound.setInteger("contentID", inv[1].itemID);
-		        nbttagcompound.setInteger("contentMeta", inv[1].getItemDamage());
+			if (this.inv[1] == null) {
+		        nbttagcompound.setInteger("contentID", this.inv[2].itemID);
+		        nbttagcompound.setInteger("contentMeta", this.inv[2].getItemDamage());
+			} else if (this.inv[2]==null) {
+		        nbttagcompound.setInteger("contentID", this.inv[1].itemID);
+		        nbttagcompound.setInteger("contentMeta", this.inv[1].getItemDamage());
 			} else {
 		        nbttagcompound.setInteger("contentID", outputItem.itemID);
 		        nbttagcompound.setInteger("contentMeta", outputItem.getItemDamage());
@@ -268,7 +285,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		case (2):
 			ItemStack outputDowel = new ItemStack(Minestuck.cruxiteDowelCarved);
 			
-			NBTTagCompound cardtag = inv[1].getTagCompound();
+			NBTTagCompound cardtag = this.inv[1].getTagCompound();
 			if (cardtag == null) {
 				break;
 			}
@@ -281,7 +298,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			decrStackSize(2, 1);
 			break;
 		case (3):
-			ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(inv[1]);
+			ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(this.inv[1]);
 			setInventorySlotContents(0,newItem);
 			//decrStackSize(1, 1);
 	    	GristSet set = GristRegistry.getGristConversion(newItem);
@@ -290,7 +307,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 	    	   	Iterator it = reqs.entrySet().iterator();
 	            while (it.hasNext()) {
 	                Map.Entry pairs = (Map.Entry)it.next();
-	                owner.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").setInteger(EntityGrist.gristTypes[(Integer) pairs.getKey()],owner.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(EntityGrist.gristTypes[(Integer)pairs.getKey()]) - (Integer)pairs.getValue());
+	                this.owner.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").setInteger(EntityGrist.gristTypes[(Integer) pairs.getKey()],this.owner.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(EntityGrist.gristTypes[(Integer)pairs.getKey()]) - (Integer)pairs.getValue());
 	            }
 			break;
 	    	}
