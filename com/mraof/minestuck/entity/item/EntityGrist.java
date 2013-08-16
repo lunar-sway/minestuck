@@ -39,10 +39,10 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 
 	private int targetCycle;
 
-	public EntityGrist(World world, double x, double y, double z, GristAmount gristType2)
+	public EntityGrist(World world, double x, double y, double z, GristAmount gristData)
 	{
 		super(world);
-		this.gristValue = gristType2.getAmount();
+		this.gristValue = gristData.getAmount();
 		this.setSize(this.getSizeByValue(), 0.5F);
 		this.yOffset = this.height / 2.0F;
 		this.setPosition(x, y, z);
@@ -52,7 +52,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		this.motionZ = (double)((float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
 		this.isImmuneToFire = true;
 
-		this.gristType = gristType2.getType().getName();
+		this.gristType = gristData.getType().getName();
 	}
 
 	public EntityGrist(World par1World)
@@ -274,11 +274,9 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	}
 	public static int typeInt(String type)
 	{
-		for(int index = 0; index < GristType.allGrists; index++)
-			if(type.equals(GristType.values()[index]))
-				return index;
-		FMLLog.severe("\"%s\" is not a valid type of EntityGrist!", type);
-		return -1;
+
+				return GristType.getTypeFromString(type).ordinal();
+	
 	}
 
 	public float getSizeByValue() 

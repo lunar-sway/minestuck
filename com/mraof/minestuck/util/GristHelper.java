@@ -23,7 +23,7 @@ public class GristHelper {
 	 */
 	public static GristSet getRandomDrop(GristType primary,int multiplier) {
 		GristSet set = new GristSet();
-		set.addGrist(GristType.Build,random.nextInt(10)*multiplier);
+		set.addGrist(GristType.Build,random.nextInt(20)*multiplier);
 		set.addGrist(primary,random.nextInt(10)*multiplier);
 		set.addGrist(getPrimaryGrist(),random.nextInt(5)*multiplier);
 		return set;

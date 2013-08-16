@@ -9,14 +9,13 @@ import com.mraof.minestuck.entity.item.EntityGrist;
 
 public class GristSet {
 	
-	public static final int grists = GristType.allGrists;
 	private int[] gristTypes ;
 	
 	/**
 	 * Creates a blank set of grist values, used in setting up the Grist Registry.
 	 */
 	public GristSet() {
-		this.gristTypes = new int[grists];
+		this.gristTypes = new int[GristType.allGrists];
 	}
 	
 	/**
@@ -68,7 +67,7 @@ public class GristSet {
 	 */
 	public Hashtable getHashtable() {
 		Hashtable hs = new Hashtable();
-		for(int i = 0; i < grists; i++) {
+		for(int i = 0; i < GristType.allGrists; i++) {
 			if (gristTypes[i] != 0) {
 				hs.put(i,gristTypes[i]);
 			}
@@ -78,8 +77,9 @@ public class GristSet {
 	
 	public ArrayList getArray() {
 		ArrayList list = new ArrayList();
-		for(int i = 0; i < grists; i++) {
+		for(int i = 0; i < GristType.allGrists; i++) {
 			if (gristTypes[i] != 0) {
+				System.out.println("[MINESTUCK] Added "+gristTypes[i]+" of "+GristType.values()[i].getName());
 				list.add(new GristAmount(GristType.values()[i],gristTypes[i]));
 			}
 		}
