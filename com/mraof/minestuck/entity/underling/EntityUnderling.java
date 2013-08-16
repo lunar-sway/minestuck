@@ -10,6 +10,7 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
@@ -93,8 +94,6 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	@Override
 	public void moveEntity(double par1, double par3, double par5) 
 	{
-		//TODO Oh boy, trigonometry to make the bounding box the right size
-		 
 		super.moveEntity(par1, par3, par5);
 	}
 	@Override
@@ -118,7 +117,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	public void readSpawnData(ByteArrayDataInput data) 
 	{
 		this.type = type.getClass().getEnumConstants()[data.readInt()];
-//		texture = "minestuck:/textures/mobs/" + type.getTypeString() + underlingName + ".png";
+		this.textureResource = new ResourceLocation("minestuck:textures/mobs/" + type.getTypeString() + underlingName + ".png");
 	}
 
 

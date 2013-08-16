@@ -23,7 +23,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 {
-	public static final String[] gristTypes = {"Amber", "Amethyst", "Artifact", "Build", "Caulk", "Chalk", "Cobalt", "Diamond", "Garnet", "Gold", "Iodine", "Marble", "Mercury", "Quartz", "Ruby", "Rust", "Shale", "Sulfur", "Tar", "Uranium", "Zillion"};
+	public static final String[] gristTypes = {"Amber", "Amethyst", "Artifact", "Build", "Caulk", "Chalk", "Cobalt", "Diamond", "Garnet", "Gold", "Iodine", "Marble", "Mercury", "Quartz", "Ruby", "Rust", "Shale", "Sulfur", "Tar", "Uranium", "Zillium"};
 	public int cycle;
 
 	public int gristAge = 0;

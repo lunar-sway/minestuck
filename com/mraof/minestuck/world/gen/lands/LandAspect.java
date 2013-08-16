@@ -8,6 +8,12 @@ public abstract class LandAspect
 {
 		public abstract int[][] getSurfaceBlocks();
 		public abstract int[][] getUpperBlocks();
+		public abstract double[] generateMainTerrainMap();
+		public abstract double[] generateMinorTerrainMap();
+		public int getOceanBlock()
+		{
+			return Block.waterStill.blockID;
+		}
 		
 		/**
 		 * Returns the chance that it will be selected as an aspect, given a player's title. Is a percentage between 0 and 1.

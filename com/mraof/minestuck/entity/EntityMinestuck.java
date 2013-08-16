@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 
 public abstract class EntityMinestuck extends EntityCreature 
 {
-	ResourceLocation textureResource;
+	protected ResourceLocation textureResource;
 	public EntityMinestuck(World par1World, Object... objects) 
 	{
 		super(par1World);
