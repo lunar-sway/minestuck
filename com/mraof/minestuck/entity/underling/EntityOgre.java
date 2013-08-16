@@ -28,7 +28,7 @@ public class EntityOgre extends EntityUnderling
 		@Override
 		public IType getTypeFromString(String string) 
 		{
-			for(Type current : this.values())
+			for(Type current : Type.values())
 				if(current.typeString.equals(string))
 					return current;
 			return null;

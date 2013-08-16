@@ -32,4 +32,16 @@ public class LandAspectFrost extends LandAspect
 		}
 	}
 
+	@Override
+	public double[] generateMainTerrainMap() 
+	{
+		return null;
+	}
+
+	@Override
+	public double[] generateMinorTerrainMap() 
+	{
+		return null;
+	}
+
 }
