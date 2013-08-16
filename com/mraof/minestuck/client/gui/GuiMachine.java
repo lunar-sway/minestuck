@@ -25,6 +25,7 @@ import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
+import com.mraof.minestuck.util.GristType;
 
 public class GuiMachine extends GuiContainer {
 	
@@ -113,14 +114,14 @@ protected void drawGuiContainerForegroundLayer(int param1, int param2) {
                 Map.Entry pairs = (Map.Entry)it.next();
                 int type = (Integer) pairs.getKey();
                 int need = (Integer) pairs.getValue();
-                int have =  player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(EntityGrist.gristTypes[type]);
+                int have =  player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(GristType.values()[type].getName());
                 
                 int row = place % 3;
                 int col = place / 3;
                 
                 int color = need <= have ? 65280 : 16711680; //Green if we have enough grist, red if not
                 
-                fontRenderer.drawString(need + " " + EntityGrist.gristTypes[type] + " (" + have + ")", 9 + (80 * col),45 + (8 * (row)), color);
+                fontRenderer.drawString(need + " " + GristType.values()[type].getName() + " (" + have + ")", 9 + (80 * col),45 + (8 * (row)), color);
                 
                 place++;
                 

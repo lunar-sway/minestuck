@@ -15,6 +15,7 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.util.GristType;
 
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
@@ -23,7 +24,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 {
-	public static final String[] gristTypes = {"Amber", "Amethyst", "Artifact", "Build", "Caulk", "Chalk", "Cobalt", "Diamond", "Garnet", "Gold", "Iodine", "Marble", "Mercury", "Quartz", "Ruby", "Rust", "Shale", "Sulfur", "Tar", "Uranium", "Zillium"};
+	//public static final String[] gristTypes = {"Amber", "Amethyst", "Artifact", "Build", "Caulk", "Chalk", "Cobalt", "Diamond", "Garnet", "Gold", "Iodine", "Marble", "Mercury", "Quartz", "Ruby", "Rust", "Shale", "Sulfur", "Tar", "Uranium", "Zillium"};
 	public int cycle;
 
 	public int gristAge = 0;
@@ -272,8 +273,8 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	}
 	public static int typeInt(String type)
 	{
-		for(int index = 0; index < gristTypes.length; index++)
-			if(type.equals(gristTypes[index]))
+		for(int index = 0; index < GristType.allGrists; index++)
+			if(type.equals(GristType.values()[index]))
 				return index;
 		FMLLog.severe("\"%s\" is not a valid type of EntityGrist!", type);
 		return -1;
@@ -304,7 +305,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 			this.setDead();
 			return;
 		}
-		this.gristType = this.gristTypes[typeOffset];
+		this.gristType = GristType.values()[typeOffset].getName();
 		this.gristValue = data.readInt();
 		this.setSize(this.getSizeByValue(), 0.5F);
 		this.yOffset = this.height / 2.0F;

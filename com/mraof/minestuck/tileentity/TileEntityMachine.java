@@ -20,6 +20,7 @@ import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.CombinationRegistry;
 import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
+import com.mraof.minestuck.util.GristType;
 
 public class TileEntityMachine extends TileEntity implements IInventory {
 
@@ -231,7 +232,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			                Map.Entry pairs = (Map.Entry)it.next();
 			                int type = (Integer) pairs.getKey();
 			                int need = (Integer) pairs.getValue();
-			                int have =  this.owner.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(EntityGrist.gristTypes[type]);
+			                int have =  this.owner.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(GristType.values()[type].getName());
 			                
 			                if (need > have) {return false;}
 			        }
@@ -307,7 +308,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 	    	   	Iterator it = reqs.entrySet().iterator();
 	            while (it.hasNext()) {
 	                Map.Entry pairs = (Map.Entry)it.next();
-	                this.owner.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").setInteger(EntityGrist.gristTypes[(Integer) pairs.getKey()],this.owner.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(EntityGrist.gristTypes[(Integer)pairs.getKey()]) - (Integer)pairs.getValue());
+	                this.owner.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").setInteger(GristType.values()[(Integer) pairs.getKey()].getName(),this.owner.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(GristType.values()[(Integer)pairs.getKey()].getName()) - (Integer)pairs.getValue());
 	            }
 			break;
 	    	}

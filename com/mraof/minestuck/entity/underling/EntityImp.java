@@ -79,7 +79,7 @@ public class EntityImp extends EntityUnderling
 		if(this.deathTime == 20 && !this.worldObj.isRemote)
 		{
 			//For spawning all grist in debugging
-			//			for(String gristType : EntityGrist.gristTypes)
+			//			for(String gristType : GristType.values()[GristType.values()[EntityGrist.gristTypes)].getName()].getName()
 			//				for(int i = 0; i < rand.nextInt(5) + 1; i++)
 			//				this.worldObj.spawnEntityInWorld(new EntityGrist(worldObj, this.posX + this.rand.nextDouble() * 10 - 5, this.posY, this.posZ + this.rand.nextDouble() * 10 - 5, gristType, rand.nextInt(32) * rand.nextInt(32) + 1));
 			for(String gristType : this.getGristSpoils())

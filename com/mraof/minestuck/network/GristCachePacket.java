@@ -8,12 +8,13 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.mraof.minestuck.entity.item.EntityGrist;
+import com.mraof.minestuck.util.GristType;
 
 import cpw.mods.fml.common.network.Player;
 
 public class GristCachePacket extends MinestuckPacket 
 {
-	int[] values = new int[EntityGrist.gristTypes.length];
+	int[] values = new int[GristType.allGrists];
 
 	public GristCachePacket() 
 	{
@@ -49,7 +50,7 @@ public class GristCachePacket extends MinestuckPacket
 		if(entityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getTags().size() == 0)
 			entityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setCompoundTag("Grist", new NBTTagCompound("Grist"));
 		for(int typeInt = 0; typeInt < values.length; typeInt++)
-			entityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").setInteger(EntityGrist.gristTypes[typeInt], values[typeInt]);
+			entityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").setInteger(GristType.values()[typeInt].getName(), values[typeInt]);
 	}
 
 

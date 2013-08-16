@@ -26,7 +26,7 @@ public class LandAspectHelper {
 	public static LandAspect getLandAspect(Title playerTitle) {
 		while (true) {
 			LandAspect newAspect = (LandAspect)landAspects.get(random.nextInt(landAspects.size()));
-			if (newAspect.getWeight(playerTitle) < random.nextLong()) {
+			if (newAspect.getWeight(playerTitle) < random.nextFloat()) {
 				return newAspect;
 			}
 		}

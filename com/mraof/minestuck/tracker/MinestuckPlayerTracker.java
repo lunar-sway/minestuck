@@ -3,6 +3,7 @@ package com.mraof.minestuck.tracker;
 import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.util.TitleHelper;
 
@@ -46,9 +47,9 @@ public class MinestuckPlayerTracker implements IPlayerTracker
 	{
 		//set all the grist values to the correct amount
         Packet250CustomPayload packet = new Packet250CustomPayload();
-        int[] gristValues = new int[EntityGrist.gristTypes.length];
+        int[] gristValues = new int[GristType.allGrists];
         for(int typeInt = 0; typeInt < gristValues.length; typeInt++)
-        	gristValues[typeInt] = ((EntityPlayer)player).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(EntityGrist.gristTypes[typeInt]);
+        	gristValues[typeInt] = ((EntityPlayer)player).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(GristType.values()[typeInt].getName());
         packet.channel = "Minestuck";
         packet.data = MinestuckPacket.makePacket(Type.GRISTCACHE, gristValues);
         packet.length = packet.data.length;

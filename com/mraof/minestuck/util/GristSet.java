@@ -7,7 +7,7 @@ import com.mraof.minestuck.entity.item.EntityGrist;
 
 public class GristSet {
 	
-	public static final int grists = EntityGrist.gristTypes.length;
+	public static final int grists = GristType.allGrists;
 	private int[] gristTypes ;
 	
 	/**

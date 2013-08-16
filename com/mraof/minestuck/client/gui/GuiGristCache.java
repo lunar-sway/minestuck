@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
+import com.mraof.minestuck.util.GristType;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -85,7 +86,7 @@ public class GuiGristCache extends GuiScreen
 
 		int tooltip = -1;
 
-		for(int gristId = 0; gristId < EntityGrist.gristTypes.length; gristId++)
+		for(int gristId = 0; gristId < GristType.allGrists; gristId++)
 		{
 			int row = (int) (gristId / 7);
 			int column = (int) (gristId % 7);
@@ -99,8 +100,8 @@ public class GuiGristCache extends GuiScreen
 				tooltip = gristId;
 			}
 
-			this.drawGristIcon(gristXOffset, gristYOffset, EntityGrist.gristTypes[gristId]);
-			fontRenderer.drawString(Integer.toString(mc.thePlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(EntityGrist.gristTypes[gristId])),(this.width / 2)-(guiWidth / 2) + gristCountX + (gristCountXOffset * row - row), yOffset + gristCountY + (gristCountYOffset * column - column), 0xddddee);
+			this.drawGristIcon(gristXOffset, gristYOffset, GristType.values()[gristId].getName());
+			fontRenderer.drawString(Integer.toString(mc.thePlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(GristType.values()[gristId].getName())),(this.width / 2)-(guiWidth / 2) + gristCountX + (gristCountXOffset * row - row), yOffset + gristCountY + (gristCountYOffset * column - column), 0xddddee);
 			
 
 
@@ -108,7 +109,7 @@ public class GuiGristCache extends GuiScreen
 
 		if (tooltip != -1)
 		{
-			drawGristTooltip(EntityGrist.gristTypes[tooltip] + " Grist", xcor, ycor);
+			drawGristTooltip(GristType.values()[tooltip].getName() + " Grist", xcor, ycor);
 		}
 
 
@@ -121,7 +122,7 @@ public class GuiGristCache extends GuiScreen
 		//		int row = (int) (ycor - yOffset-gristIconY) / gristIconYOffset;
 		//		int gristKind = 7*column + row;
 		//		
-		//    	if (gristKind >= 0 && gristKind < EntityGrist.gristTypes.length && row < 7 && row >= 0 && xcor > (this.width / 2)-(guiWidth/2)+gristIconX+(gristIconXOffset*column-column) && xcor < (this.width / 2)-(guiWidth/2)+gristIconX+(gristIconXOffset*column-column)+16 && ycor > yOffset+gristIconY+(gristIconYOffset*row-row) && ycor < yOffset+gristIconY+(gristIconYOffset*row-row)+16)  {
+		//    	if (gristKind >= 0 && gristKind < GristType.allGrists && row < 7 && row >= 0 && xcor > (this.width / 2)-(guiWidth/2)+gristIconX+(gristIconXOffset*column-column) && xcor < (this.width / 2)-(guiWidth/2)+gristIconX+(gristIconXOffset*column-column)+16 && ycor > yOffset+gristIconY+(gristIconYOffset*row-row) && ycor < yOffset+gristIconY+(gristIconYOffset*row-row)+16)  {
 		//   		drawGristTooltip(EntityGrist.gristTypes[gristKind] + " Grist", xcor, ycor);
 		//    	}
 		////  drawGristTooltip(row + " " + column, xcor, ycor);

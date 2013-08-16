@@ -1,5 +1,62 @@
 package com.mraof.minestuck.util;
 
 public enum GristType {
-	Amber, Amethyst, Artifact, Build, Caulk, Chalk, Cobalt, Diamond, Garnet, Gold, Iodine, Marble, Mercury, Quartz, Ruby, Rust, Shale, Sulfur, Tar, Uranium, Zillium
+	Amber("Amber",0.5F,0), 
+	Amethyst("Amethyst",0.3F,0), 
+	Artifact("Artifact",0.0F,0),
+	Build("Build",0.0F,0),
+	Caulk("Caulk",0.5F,0),
+	Chalk("Chalk",0.5F,0),
+	Cobalt("Cobalt",0.3F,0),
+	Diamond("Diamond",0.1F,0),
+	Garnet("Garnet",0.3F,0),
+	Gold("Gold",0.1F,0), 
+	Iodine("Iodine",0.5F,0), 
+	Marble("Marble",0.5F,0), 
+	Mercury("Mercury",0.5F,0), 
+	Quartz("Quartz",0.3F,0), 
+	Ruby("Ruby",0.5F,0), 
+	Rust("Rust",0.3F,0), 
+	Shale("Shale",0.5F,0), 
+	Sulfur("Sulfur",0.5F,0), 
+	Tar("Tar",0.5F,0), 
+	Uranium("Uranium",0.1F,0), 
+	Zillium("Zillium",0.0F,0);
+	
+	final String name;
+	final float rarity;
+	final int color;
+	
+	public static int allGrists = 21;
+	
+	GristType(String name, float rarity, int color) {
+		this.name = name;
+		this.rarity = rarity;
+		this.color = color;
+	}
+	
+	/**
+	 * Returns the grist's full name.
+	 * @return
+	 */
+	public String getName() {
+		return name;
+	}
+	
+	/**
+	 * Returns the grist's rarity. Is a number from 0.0 to 1.0.
+	 * @return
+	 */
+	public float getRarity() {
+		return rarity;
+	}
+	
+	/**
+	 * Returns the grist's primary color. Used for coloring entity sprites.
+	 * @return
+	 */
+	public int getColor() {
+		return color;
+	}
+	
 }

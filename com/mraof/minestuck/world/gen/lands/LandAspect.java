@@ -21,5 +21,5 @@ public abstract class LandAspect
 		 * @param playerTitle
 		 * @return
 		 */
-		public abstract long getWeight(Title playerTitle);
+		public abstract float getWeight(Title playerTitle);
 }
