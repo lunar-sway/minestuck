@@ -224,7 +224,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 				if (newItem == null) {return false;}
 		    	GristSet set = GristRegistry.getGristConversion(newItem);
 		    	if (set == null) {return false;}
-			    	Hashtable reqs = set.getTable();
+			    	Hashtable reqs = set.getHashtable();
 			    	//System.out.println("reqs: " + reqs.size());
 			    	if (reqs != null) {
 			    	   	Iterator it = reqs.entrySet().iterator();
@@ -303,7 +303,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			setInventorySlotContents(0,newItem);
 			//decrStackSize(1, 1);
 	    	GristSet set = GristRegistry.getGristConversion(newItem);
-		    Hashtable reqs = set.getTable();
+		    Hashtable reqs = set.getHashtable();
 	    	if (reqs != null) {
 	    	   	Iterator it = reqs.entrySet().iterator();
 	            while (it.hasNext()) {

@@ -105,7 +105,7 @@ protected void drawGuiContainerForegroundLayer(int param1, int param2) {
     	GristSet set = GristRegistry.getGristConversion(AlchemyRecipeHandler.getDecodedItem(te.inv[1]));
     	
     	if (set == null) {return;}
-    	Hashtable reqs = set.getTable();
+    	Hashtable reqs = set.getHashtable();
     	//System.out.println("reqs: " + reqs.size());
     	if (reqs != null) {
     	   	Iterator it = reqs.entrySet().iterator();

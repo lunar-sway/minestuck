@@ -15,6 +15,7 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristType;
 
 import cpw.mods.fml.common.FMLLog;
@@ -38,10 +39,10 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 
 	private int targetCycle;
 
-	public EntityGrist(World world, double x, double y, double z, String type, int value)
+	public EntityGrist(World world, double x, double y, double z, GristAmount gristType2)
 	{
 		super(world);
-		this.gristValue = value;
+		this.gristValue = gristType2.getAmount();
 		this.setSize(this.getSizeByValue(), 0.5F);
 		this.yOffset = this.height / 2.0F;
 		this.setPosition(x, y, z);
@@ -51,7 +52,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		this.motionZ = (double)((float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
 		this.isImmuneToFire = true;
 
-		this.gristType = type;
+		this.gristType = gristType2.getType().getName();
 	}
 
 	public EntityGrist(World par1World)

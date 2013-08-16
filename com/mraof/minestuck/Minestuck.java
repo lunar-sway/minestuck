@@ -329,14 +329,14 @@ public class Minestuck
 		LanguageRegistry.instance().addStringLocalization("entity.Nakagator.name", "Nakagator");
 		LanguageRegistry.instance().addStringLocalization("entity.Imp.name", "Imp");
 		//Different names for different types of imps
-		for(EntityImp.Type impType : EntityImp.Type.values())
-			LanguageRegistry.instance().addStringLocalization("entity." + impType.getTypeString() + ".Imp.name", impType.getTypeString() + " Imp");
+		for(GristType impType : GristType.values())
+			LanguageRegistry.instance().addStringLocalization("entity." + impType.getName() + ".Imp.name", impType.getName() + " Imp");
 		LanguageRegistry.instance().addStringLocalization("entity.Ogre.name", "Ogre");
-		for(EntityOgre.Type ogreType : EntityOgre.Type.values())
-			LanguageRegistry.instance().addStringLocalization("entity." + ogreType.getTypeString() + ".Ogre.name", ogreType.getTypeString() + " Ogre");
+		for(GristType ogreType : GristType.values())
+			LanguageRegistry.instance().addStringLocalization("entity." + ogreType.getName() + ".Ogre.name", ogreType.getName() + " Ogre");
 		LanguageRegistry.instance().addStringLocalization("entity.Giclops.name", "Giclops");
-		for(EntityGiclops.Type giclopsType : EntityGiclops.Type.values())
-			LanguageRegistry.instance().addStringLocalization("entity." + giclopsType.getTypeString() + ".Giclops.name", giclopsType.getTypeString() + " Giclops");
+		for(GristType giclopsType : GristType.values())
+			LanguageRegistry.instance().addStringLocalization("entity." + giclopsType.getName() + ".Giclops.name", giclopsType.getName() + " Giclops");
 		LanguageRegistry.instance().addStringLocalization("entity.dersitePawn.name", "Dersite Pawn");
 		LanguageRegistry.instance().addStringLocalization("entity.prospitianPawn.name", "Prospitian Pawn");
 		LanguageRegistry.instance().addStringLocalization("entity.dersiteBishop.name", "Dersite Bishop");

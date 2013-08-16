@@ -14,11 +14,11 @@ public enum GristType {
 	Iodine("Iodine",0.5F,0), 
 	Marble("Marble",0.5F,0), 
 	Mercury("Mercury",0.5F,0), 
-	Quartz("Quartz",0.3F,0), 
-	Ruby("Ruby",0.5F,0), 
+	Quartz("Quartz",0.4F,0), 
+	Ruby("Ruby",0.3F,0), 
 	Rust("Rust",0.3F,0), 
 	Shale("Shale",0.5F,0), 
-	Sulfur("Sulfur",0.5F,0), 
+	Sulfur("Sulfur",0.4F,0), 
 	Tar("Tar",0.5F,0), 
 	Uranium("Uranium",0.1F,0), 
 	Zillium("Zillium",0.0F,0);
@@ -27,7 +27,7 @@ public enum GristType {
 	final float rarity;
 	final int color;
 	
-	public static int allGrists = 21;
+	public static final int allGrists = 21;
 	
 	GristType(String name, float rarity, int color) {
 		this.name = name;
@@ -59,4 +59,18 @@ public enum GristType {
 		return color;
 	}
 	
+	/**
+	 * Returns the power level of a underling of a grist's type. Don't call this with grists like Zillium or Build.
+	 */
+	public float getPower() {
+		return 1/rarity;
+	}
+	
+	public static GristType getTypeFromString(String string) 
+	{
+		for(GristType current : GristType.values())
+			if(current.getName().equals(string))
+				return current;
+		return null;
+	}
 }
