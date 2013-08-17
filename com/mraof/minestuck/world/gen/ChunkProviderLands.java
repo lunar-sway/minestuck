@@ -24,6 +24,7 @@ import com.mraof.minestuck.entity.consort.EntityNakagator;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.util.Title;
+import com.mraof.minestuck.world.gen.lands.ILandDecorator;
 import com.mraof.minestuck.world.gen.lands.LandAspect;
 import com.mraof.minestuck.world.gen.lands.LandAspectFrost;
 import com.mraof.minestuck.world.gen.lands.LandHelper;
@@ -39,11 +40,10 @@ public class ChunkProviderLands implements IChunkProvider
 	public LandHelper helper;
 	
 
-	int[][]surfaceBlocks;
-	int[][]upperBlocks;
+	int[] surfaceBlock;
+	int[] upperBlock;
 	int oceanBlock;
-	LandAspect majorTerrainMapper;
-	LandAspect minorTerrainMapper;
+	LandAspect terrainMapper;
 	ArrayList decorators;
 
 	public ChunkProviderLands(World worldObj, long seed, boolean b) 
@@ -78,11 +78,10 @@ public class ChunkProviderLands implements IChunkProvider
 		this.noiseGens[0] = new NoiseGeneratorOctaves(this.random, 7);
         this.noiseGens[1] = new NoiseGeneratorOctaves(this.random, 1);
         
-        this.surfaceBlocks = helper.pickOne(aspect1, aspect2).getSurfaceBlocks();
-        this.upperBlocks = helper.pickOne(aspect1, aspect2).getUpperBlocks();
+        this.surfaceBlock = helper.pickOne(aspect1, aspect2).getSurfaceBlock();
+        this.upperBlock = helper.pickOne(aspect1, aspect2).getUpperBlock();
         this.oceanBlock = helper.pickOne(aspect1, aspect2).getOceanBlock();
-        this.majorTerrainMapper = helper.pickOne(aspect1,aspect2);
-        this.minorTerrainMapper = helper.pickOne(aspect1,aspect2);
+        this.terrainMapper = helper.pickOne(aspect1,aspect2);
         this.decorators = helper.pickSubset(aspect1.getDecorators(),aspect2.getDecorators());
 	}
 
@@ -120,13 +119,13 @@ public class ChunkProviderLands implements IChunkProvider
 				int currentBlockOffset;
 				for(y = 1; y < topBlock[x * 16 + z] - 1; y++)
 				{
-					currentBlockOffset = (int) Math.abs(generated1[x + z * 256 + y * 16]) % surfaceBlocks[0].length;
-					chunkIds[x + z * 16 + y * 256] = (short) upperBlocks[0][currentBlockOffset];
-					chunkMetadata[x + z * 16 + y * 256] = (byte) upperBlocks[1][currentBlockOffset];
+					//currentBlockOffset = (int) Math.abs(generated1[x + z * 256 + y * 16]);
+					chunkIds[x + z * 16 + y * 256] = (short) upperBlock[0];
+					chunkMetadata[x + z * 16 + y * 256] = (byte) upperBlock[1];
 				}
-				currentBlockOffset = (int) Math.abs(generated1[x + z * 256 + y * 16]) % surfaceBlocks[0].length;
-				chunkIds[x + z * 16 + y * 256] = (short) surfaceBlocks[0][currentBlockOffset];
-				chunkMetadata[x + z * 16 + y * 256] = (byte) surfaceBlocks[1][currentBlockOffset];
+				//currentBlockOffset = (int) Math.abs(generated1[x + z * 256 + y * 16]) % surfaceBlock[0].length;
+				chunkIds[x + z * 16 + y * 256] = (short) surfaceBlock[0];
+				chunkMetadata[x + z * 16 + y * 256] = (byte) surfaceBlock[1];
 //					(short) (generated1[x + z * 256 + y * 16] < 0 ? Block.blockEmerald.blockID : Block.blockDiamond.blockID);
 				
 			}
@@ -142,6 +141,9 @@ public class ChunkProviderLands implements IChunkProvider
 
 	@Override
 	public void populate(IChunkProvider ichunkprovider, int i, int j) {
+		for (Object decorator : decorators) {
+			((ILandDecorator) decorator).generate(landWorld, random, i, j);
+		}
 	}
 
 	@Override

@@ -55,7 +55,7 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 		int x = (int) entity.posX;
 		int y = (int) entity.posY;
 		int z = (int) entity.posZ;
-		int width = 40;
+		int width = 24;
 		for(int blockX = x - width; blockX <= x + width; blockX++)
 		{
 			for(int blockZ = z - width; blockZ <= z + width; blockZ++)
