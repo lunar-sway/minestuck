@@ -4,11 +4,11 @@ Minestuck
 Minestuck is a mod for Minecraft that adds game elements from the webcomic Homestuck into Minecraft.
 
 We hope to implement:
-	* Punchcard alchemy
-	* Places like Skaia, Prospit and Derse
-	* Custom and unique lands for each player
-	* SBURB client/server chains
-	* Tons of Homestuck themed items
+* Punchcard alchemy
+* Places like Skaia, Prospit and Derse
+* Custom and unique lands for each player
+* SBURB client/server chains
+* Tons of Homestuck themed items
 
 Useful Links
 ============
