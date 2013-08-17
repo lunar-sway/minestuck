@@ -423,7 +423,7 @@ public class Minestuck
 		}
 		File[] files = directory.listFiles();
 		for (File file : files) {
-			System.out.println("found a file called " + file.getName());
+			//System.out.println("found a file called " + file.getName());
 			if (file.getName().contains("DIM")) {
 				int dim = Integer.valueOf(file.getName().substring(3));
 				if (DimensionManager.getWorld(dim) == null) {
