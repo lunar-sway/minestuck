@@ -2,7 +2,8 @@ package com.mraof.minestuck.util;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.lands.LandAspectFrost;
-import com.mraof.minestuck.world.gen.lands.LandAspectHelper;
+import com.mraof.minestuck.world.gen.lands.LandAspectHeat;
+import com.mraof.minestuck.world.gen.lands.LandHelper;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -415,8 +416,8 @@ public class AlchemyRecipeHandler {
 		//add grist conversions
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.blockStorage, 1, 1), true, new GristSet(new GristType[] {GristType.Build}, new int[] {2}));
 		//register land aspects
-		LandAspectHelper.registerLandAspect(new LandAspectFrost());
-		
+		LandHelper.registerLandAspect(new LandAspectFrost());
+		LandHelper.registerLandAspect(new LandAspectHeat());
 	}
 	
 	public static void registerModRecipes() 

@@ -4,14 +4,14 @@ import com.mraof.minestuck.util.Title;
 
 import net.minecraft.block.Block;
 
-public class LandAspectFrost extends LandAspect 
+public class LandAspectHeat extends LandAspect 
 {
 	
 	@Override
 	public int[][] getSurfaceBlocks() 
 	{
 		return new int[][] {
-				{Block.snow.blockID, 0},
+				{Block.netherrack.blockID, 0},
 				{0, 0}
 		};
 	}
@@ -25,8 +25,8 @@ public class LandAspectFrost extends LandAspect
 
 	@Override
 	public float getRarity(Title playerTitle) {
-		if (playerTitle.getHeroClass() == 10) { 
-			return (long) 0.75; //Only if player's a Witch
+		if (playerTitle.getHeroClass() == 6) { 
+			return (long) 0.75; //Only if player's a Knight
 		} else {
 			return (long) 0.25;
 		}
@@ -45,13 +45,19 @@ public class LandAspectFrost extends LandAspect
 	}
 	
 	@Override
+	public int getOceanBlock()
+	{
+		return Block.lavaStill.blockID;
+	}
+	
+	@Override
 	public String getPrimaryName() {
-		return "Frost";
+		return "Heat";
 	}
 	
 	@Override
 	public String[] getNames() {
-		return new String[] {"Frost","Cold","Ice"};
+		return new String[] {"Heat","Flame","Fire"};
 	}
 
 }

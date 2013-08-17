@@ -372,7 +372,7 @@ public class Minestuck
 		DimensionManager.registerProviderType(skaiaProviderTypeId, WorldProviderSkaia.class, true);
 		DimensionManager.registerDimension(skaiaDimensionId, skaiaProviderTypeId);
 		DimensionManager.registerProviderType(landProviderTypeIdStart, WorldProviderLands.class, true);
-		DimensionManager.registerDimension(landDimensionIdStart, landProviderTypeIdStart);
+		//DimensionManager.registerDimension(landDimensionIdStart, landProviderTypeIdStart);
 		GameRegistry.registerPlayerTracker(new MinestuckPlayerTracker());
 
 		//register ore generation

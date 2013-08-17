@@ -22,4 +22,15 @@ public abstract class LandAspect
 		 * @return
 		 */
 		public abstract float getRarity(Title playerTitle);
+		
+		/**
+		 * Returns a string that represents a unique name for a land, Used in saving and loading land data.
+		 * @return
+		 */
+		public abstract String getPrimaryName();
+		
+		/**
+		 * Returns a list of strings used in giving a land a random name.
+		 */
+		public abstract String[] getNames();
 }
