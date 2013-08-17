@@ -68,7 +68,6 @@ public class Teleport
 			int j = entity.dimension;
 			WorldServer worldserver = minecraftserver.worldServerForDimension(j);
 			WorldServer worldserver1 = minecraftserver.worldServerForDimension(destinationDimension);
-
 			entity.dimension = destinationDimension;
 			entity.worldObj.removeEntity(entity);
 			entity.isDead = false;

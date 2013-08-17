@@ -34,9 +34,10 @@ public class ChunkProviderLands implements IChunkProvider
 	World landWorld;
 	Random random;
 	private NoiseGeneratorOctaves noiseGens[] = new NoiseGeneratorOctaves[2];
-	LandAspect aspect1;
-	LandAspect aspect2;
-	LandHelper helper;
+	public LandAspect aspect1;
+	public LandAspect aspect2;
+	public int dimId;
+	public LandHelper helper;
 
 	public ChunkProviderLands(World worldObj, long seed, boolean b) 
 	{

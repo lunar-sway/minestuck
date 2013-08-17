@@ -9,17 +9,24 @@ import com.mraof.minestuck.world.gen.ChunkProviderLands;
 
 public class WorldProviderLands extends WorldProvider 
 {
-//	public int dimensionId = 2;
+	private ChunkProviderLands provider;
 
 	@Override
 	public String getDimensionName()
 	{
-		return "Land of ";
+		if (provider == null || provider.aspect1 == null || provider.aspect2 == null) {
+			return "Land";
+		} else {
+		return "Land of " + provider.aspect1.getPrimaryName() + " and " +  provider.aspect2.getPrimaryName();
+		}
 	}
 
 	public IChunkProvider createChunkGenerator()
 	{
-		return new ChunkProviderLands(this.worldObj, this.worldObj.getSeed(), true);
+		if (provider == null) {
+			provider = new ChunkProviderLands(this.worldObj, this.worldObj.getSeed()*dimensionId, true);
+		}
+		return provider;
 	}
 	@Override
 	public boolean isDaytime() {

@@ -110,7 +110,7 @@ public class LandHelper {
 			}
 		}
 		
-		DimensionManager.registerDimension(newLandId, Minestuck.landProviderTypeIdStart);
+		DimensionManager.registerDimension(newLandId, Minestuck.landProviderTypeId);
 		
 		return newLandId;
 	}
