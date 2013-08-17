@@ -36,10 +36,15 @@ public class ChunkProviderLands implements IChunkProvider
 	private NoiseGeneratorOctaves noiseGens[] = new NoiseGeneratorOctaves[2];
 	public LandAspect aspect1;
 	public LandAspect aspect2;
-	public int dimId;
 	public LandHelper helper;
 	
-	
+
+	int[][]surfaceBlocks;
+	int[][]upperBlocks;
+	int oceanBlock;
+	LandAspect majorTerrainMapper;
+	LandAspect minorTerrainMapper;
+	ArrayList decorators;
 
 	public ChunkProviderLands(World worldObj, long seed, boolean b) 
 	{
@@ -73,7 +78,12 @@ public class ChunkProviderLands implements IChunkProvider
 		this.noiseGens[0] = new NoiseGeneratorOctaves(this.random, 7);
         this.noiseGens[1] = new NoiseGeneratorOctaves(this.random, 1);
         
-        
+        this.surfaceBlocks = helper.pickOne(aspect1, aspect2).getSurfaceBlocks();
+        this.upperBlocks = helper.pickOne(aspect1, aspect2).getUpperBlocks();
+        this.oceanBlock = helper.pickOne(aspect1, aspect2).getOceanBlock();
+        this.majorTerrainMapper = helper.pickOne(aspect1,aspect2);
+        this.minorTerrainMapper = helper.pickOne(aspect1,aspect2);
+        this.decorators = helper.pickSubset(aspect1.getDecorators(),aspect2.getDecorators());
 	}
 
 	@Override
@@ -110,13 +120,13 @@ public class ChunkProviderLands implements IChunkProvider
 				int currentBlockOffset;
 				for(y = 1; y < topBlock[x * 16 + z] - 1; y++)
 				{
-					currentBlockOffset = (int) Math.abs(generated1[x + z * 256 + y * 16]) % aspect1.getSurfaceBlocks()[0].length;
-					chunkIds[x + z * 16 + y * 256] = (short) aspect1.getUpperBlocks()[0][currentBlockOffset];
-					chunkMetadata[x + z * 16 + y * 256] = (byte) aspect1.getUpperBlocks()[1][currentBlockOffset];
+					currentBlockOffset = (int) Math.abs(generated1[x + z * 256 + y * 16]) % surfaceBlocks[0].length;
+					chunkIds[x + z * 16 + y * 256] = (short) upperBlocks[0][currentBlockOffset];
+					chunkMetadata[x + z * 16 + y * 256] = (byte) upperBlocks[1][currentBlockOffset];
 				}
-				currentBlockOffset = (int) Math.abs(generated1[x + z * 256 + y * 16]) % aspect1.getSurfaceBlocks()[0].length;
-				chunkIds[x + z * 16 + y * 256] = (short) aspect1.getSurfaceBlocks()[0][currentBlockOffset];
-				chunkMetadata[x + z * 16 + y * 256] = (byte) aspect1.getSurfaceBlocks()[1][currentBlockOffset];
+				currentBlockOffset = (int) Math.abs(generated1[x + z * 256 + y * 16]) % surfaceBlocks[0].length;
+				chunkIds[x + z * 16 + y * 256] = (short) surfaceBlocks[0][currentBlockOffset];
+				chunkMetadata[x + z * 16 + y * 256] = (byte) surfaceBlocks[1][currentBlockOffset];
 //					(short) (generated1[x + z * 256 + y * 16] < 0 ? Block.blockEmerald.blockID : Block.blockDiamond.blockID);
 				
 			}

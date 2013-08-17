@@ -1,5 +1,7 @@
 package com.mraof.minestuck.world.gen.lands;
 
+import java.util.ArrayList;
+
 import com.mraof.minestuck.util.Title;
 
 import net.minecraft.block.Block;
@@ -11,7 +13,7 @@ public class LandAspectHeat extends LandAspect
 	public int[][] getSurfaceBlocks() 
 	{
 		return new int[][] {
-				{Block.netherrack.blockID, 0},
+				{Block.slowSand.blockID, 0},
 				{0, 0}
 		};
 	}
@@ -19,7 +21,7 @@ public class LandAspectHeat extends LandAspect
 	@Override
 	public int[][] getUpperBlocks() 
 	{
-		return new int[][] {{Block.stone.blockID, Block.dirt.blockID},
+		return new int[][] {{Block.netherrack.blockID, Block.glowStone.blockID},
 		{0, 0}};
 	}
 
@@ -55,5 +57,11 @@ public class LandAspectHeat extends LandAspect
 	public String[] getNames() {
 		return new String[] {"Heat","Flame","Fire"};
 	}
+	
+	@Override
+	public ArrayList getDecorators() {
+		return new ArrayList();
+	}
+
 
 }

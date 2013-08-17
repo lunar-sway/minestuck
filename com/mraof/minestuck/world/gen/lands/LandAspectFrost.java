@@ -1,5 +1,7 @@
 package com.mraof.minestuck.world.gen.lands;
 
+import java.util.ArrayList;
+
 import com.mraof.minestuck.util.Title;
 
 import net.minecraft.block.Block;
@@ -48,6 +50,11 @@ public class LandAspectFrost extends LandAspect
 	@Override
 	public String[] getNames() {
 		return new String[] {"Frost","Cold","Ice"};
+	}
+	
+	@Override
+	public ArrayList getDecorators() {
+		return new ArrayList();
 	}
 
 }

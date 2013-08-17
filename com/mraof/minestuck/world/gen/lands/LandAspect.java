@@ -1,5 +1,7 @@
 package com.mraof.minestuck.world.gen.lands;
 
+import java.util.ArrayList;
+
 import com.mraof.minestuck.util.Title;
 
 import net.minecraft.block.Block;
@@ -33,4 +35,10 @@ public abstract class LandAspect
 		 * Returns a list of strings used in giving a land a random name.
 		 */
 		public abstract String[] getNames();
+		
+		/**
+		 * Returns a list of possible worldgen structures a land can use.
+		 * @return
+		 */
+		public abstract ArrayList getDecorators();
 }
