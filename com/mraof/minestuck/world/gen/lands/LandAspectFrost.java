@@ -10,19 +10,15 @@ public class LandAspectFrost extends LandAspect
 {
 	
 	@Override
-	public int[][] getSurfaceBlocks() 
+	public int[] getSurfaceBlock() 
 	{
-		return new int[][] {
-				{Block.snow.blockID, 0},
-				{0, 0}
-		};
+		return new int[] {Block.snow.blockID, 0};
 	}
 
 	@Override
-	public int[][] getUpperBlocks() 
+	public int[] getUpperBlock() 
 	{
-		return new int[][] {{Block.stone.blockID, Block.dirt.blockID},
-		{0, 0}};
+		return new int[] {Block.stone.blockID,0};
 	}
 
 	@Override
@@ -31,13 +27,7 @@ public class LandAspectFrost extends LandAspect
 	}
 
 	@Override
-	public double[] generateMainTerrainMap() 
-	{
-		return null;
-	}
-
-	@Override
-	public double[] generateMinorTerrainMap() 
+	public double[] generateTerrainMap() 
 	{
 		return null;
 	}
@@ -53,8 +43,11 @@ public class LandAspectFrost extends LandAspect
 	}
 	
 	@Override
-	public ArrayList getDecorators() {
-		return new ArrayList();
+	public ArrayList<ILandDecorator> getDecorators() {
+		ArrayList list = new ArrayList<ILandDecorator>();
+		list.add(new DecoratorVien(Block.dirt.blockID, 10, 32));
+		list.add(new DecoratorVien(Block.ice.blockID, 5, 8));
+		return list;
 	}
 
 }

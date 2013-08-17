@@ -20,7 +20,7 @@ public class DecoratorVien implements ILandDecorator {
 	public void generate(World world, Random random, int chunkX, int chunkZ) {
 		// TODO Actaully make it do the thing correctly
 		for (int i = 1;i>amount;i++) {
-			vien.generate(world, random, chunkX*16, random.nextInt(64), chunkZ*16);
+			vien.generate(world, random, chunkX*16+random.nextInt(15), random.nextInt(64), chunkZ*16+random.nextInt(15));
 		}
 	}
 
