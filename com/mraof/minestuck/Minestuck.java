@@ -93,7 +93,7 @@ public class Minestuck
 	public static int itemIdStart = 6001;
 	public static int skaiaProviderTypeId = 2;
 	public static int skaiaDimensionId = 2;
-	public static int landProviderTypeIdStart = 3;
+	public static int landProviderTypeId = 3;
 	public static int landDimensionIdStart = 3;
 
 	//hammers
@@ -171,7 +171,7 @@ public class Minestuck
 		itemIdStart = config.get("Item Ids", "itemIdStart", 6001).getInt();
 		skaiaProviderTypeId = config.get("Provider Type Ids", "skaiaProviderTypeId", 2).getInt();
 		skaiaDimensionId = config.get("Dimension Ids", "skaiaDimensionId", 2).getInt();
-		landProviderTypeIdStart = config.get("Provider Type Ids", "landProviderTypeIdStart", 3).getInt();
+		landProviderTypeId = config.get("Provider Type Ids", "landProviderTypeIdStart", 3).getInt();
 		landDimensionIdStart = config.get("Dimension Ids", "landDimensionIdStart", 3).getInt();
 		config.save();
 	}
@@ -371,8 +371,8 @@ public class Minestuck
 		//register world generators
 		DimensionManager.registerProviderType(skaiaProviderTypeId, WorldProviderSkaia.class, true);
 		DimensionManager.registerDimension(skaiaDimensionId, skaiaProviderTypeId);
-		DimensionManager.registerProviderType(landProviderTypeIdStart, WorldProviderLands.class, true);
-		DimensionManager.registerDimension(landDimensionIdStart, landProviderTypeIdStart);
+		DimensionManager.registerProviderType(landProviderTypeId, WorldProviderLands.class, true);
+		//DimensionManager.registerDimension(landDimensionIdStart, landProviderTypeIdStart);
 		GameRegistry.registerPlayerTracker(new MinestuckPlayerTracker());
 
 		//register ore generation

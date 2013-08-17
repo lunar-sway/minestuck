@@ -23,6 +23,7 @@ import net.minecraft.world.WorldServer;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.ITeleporter;
 import com.mraof.minestuck.util.Teleport;
+import com.mraof.minestuck.world.gen.lands.LandHelper;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -43,9 +44,10 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
     }
 	@Override
 	protected void onFoodEaten(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {
-		if(!par2World.isRemote && par3EntityPlayer.worldObj.provider.dimensionId != this.destinationDimension)
+		if(!par2World.isRemote)
 		{
-			Teleport.teleportEntity(par3EntityPlayer, this.destinationDimension, this);
+			
+			Teleport.teleportEntity(par3EntityPlayer, LandHelper.createLand(), this);
 		}
 	}
 	public void makeDestination(Entity entity, WorldServer worldserver0, WorldServer worldserver1)

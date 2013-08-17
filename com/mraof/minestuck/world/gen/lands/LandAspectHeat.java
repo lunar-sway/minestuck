@@ -6,14 +6,14 @@ import com.mraof.minestuck.util.Title;
 
 import net.minecraft.block.Block;
 
-public class LandAspectFrost extends LandAspect 
+public class LandAspectHeat extends LandAspect 
 {
 	
 	@Override
 	public int[][] getSurfaceBlocks() 
 	{
 		return new int[][] {
-				{Block.snow.blockID, 0},
+				{Block.slowSand.blockID, 0},
 				{0, 0}
 		};
 	}
@@ -21,7 +21,7 @@ public class LandAspectFrost extends LandAspect
 	@Override
 	public int[][] getUpperBlocks() 
 	{
-		return new int[][] {{Block.stone.blockID, Block.dirt.blockID},
+		return new int[][] {{Block.netherrack.blockID, Block.glowStone.blockID},
 		{0, 0}};
 	}
 
@@ -43,18 +43,25 @@ public class LandAspectFrost extends LandAspect
 	}
 	
 	@Override
+	public int getOceanBlock()
+	{
+		return Block.lavaStill.blockID;
+	}
+	
+	@Override
 	public String getPrimaryName() {
-		return "Frost";
+		return "Heat";
 	}
 	
 	@Override
 	public String[] getNames() {
-		return new String[] {"Frost","Cold","Ice"};
+		return new String[] {"Heat","Flame","Fire"};
 	}
 	
 	@Override
 	public ArrayList getDecorators() {
 		return new ArrayList();
 	}
+
 
 }
