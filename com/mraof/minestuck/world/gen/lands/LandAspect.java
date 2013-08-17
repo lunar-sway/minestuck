@@ -40,5 +40,5 @@ public abstract class LandAspect
 		 * Returns a list of possible worldgen structures a land can use.
 		 * @return
 		 */
-		public abstract ArrayList getDecorators();
+		public abstract ArrayList<ILandDecorator> getDecorators();
 }
