@@ -1,71 +1,38 @@
 package com.mraof.minestuck.entity.underling;
 
+import java.util.ArrayList;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
 import com.mraof.minestuck.entity.item.EntityGrist;
+import com.mraof.minestuck.util.GristAmount;
+import com.mraof.minestuck.util.GristHelper;
+import com.mraof.minestuck.util.GristSet;
+import com.mraof.minestuck.util.GristType;
 
 public class EntityImp extends EntityUnderling
 {
-	//Some of this class will belong in EntityUnderling once I create that
-	public static enum Type implements IType
-	{
-		SHALE("Shale", 0),
-		MERCURY("Mercury", 1),
-		COBALT("Cobalt", 2),
-		AMBER("Amber", 0),
-		RUST("Rust", 1),
-		CHALK("Chalk", 0),
-		MARBLE("Marble", 1),
-		QUARTZ("Quartz", 1),
-		URANIUM("Uranium", 5);
-
-		final String typeString;
-		final int strength;
-		Type(String typeString, int strength)
-		{
-			this.typeString = typeString;
-			this.strength = strength;
-		}
-		@Override
-		public Type getTypeFromString(String string) 
-		{
-			for(Type current : this.values())
-				if(current.typeString.equals(string))
-					return current;
-			return null;
-		}
-		@Override
-		public String getTypeString() 
-		{
-			return typeString;
-		}
-		@Override
-		public int getStrength() 
-		{
-			return strength;
-		}
-	}
 	private EntityAIAttackOnCollideWithRate entityAIAttackOnCollideWithRate = new EntityAIAttackOnCollideWithRate(this, .4F, 20, false);
 
 	public EntityImp(World world) 
 	{
-		this(world, Type.values()[randStatic.nextInt(Type.values().length)]);
+		this(world, GristHelper.getPrimaryGrist());
 	}
-	public EntityImp(World world, Type type) 
+	public EntityImp(World world, GristType type) 
 	{
 		super(world, type, "Imp");
 		setSize(0.5F, 1.0F);
-		this.experienceValue = 3 * type.strength + 1;
+		this.experienceValue = (int) (3 * type.getPower() + 1);
 	}
 
 
 	@Override
 	public void onLivingUpdate() 
 	{
-		if(Type.URANIUM == this.type && this.rand.nextDouble() < .0001)
+		if(GristType.Uranium == this.type && this.rand.nextDouble() < .0001)
 		{
 			this.motionX += rand.nextInt(33) - 16;
 			this.motionZ += rand.nextInt(33) - 16;
@@ -79,46 +46,24 @@ public class EntityImp extends EntityUnderling
 		if(this.deathTime == 20 && !this.worldObj.isRemote)
 		{
 			//For spawning all grist in debugging
-			//			for(String gristType : EntityGrist.gristTypes)
+			//			for(String gristType : GristType.values()[GristType.values()[EntityGrist.gristTypes)].getName()].getName()
 			//				for(int i = 0; i < rand.nextInt(5) + 1; i++)
 			//				this.worldObj.spawnEntityInWorld(new EntityGrist(worldObj, this.posX + this.rand.nextDouble() * 10 - 5, this.posY, this.posZ + this.rand.nextDouble() * 10 - 5, gristType, rand.nextInt(32) * rand.nextInt(32) + 1));
-			for(String gristType : this.getGristSpoils())
-				this.worldObj.spawnEntityInWorld(new EntityGrist(worldObj, this.posX + this.rand.nextDouble() * this.width - this.width / 2, this.posY, this.posZ + this.rand.nextDouble() * this.width - this.width / 2, gristType, rand.nextInt(4 + type.getStrength()) + 2));
+			for(Object gristType : this.getGristSpoils().getArray())
+				this.worldObj.spawnEntityInWorld(new EntityGrist(worldObj, this.posX + this.rand.nextDouble() * this.width - this.width / 2, this.posY, this.posZ + this.rand.nextDouble() * this.width - this.width / 2, (GristAmount) gristType));
 		}
 	}
 
 	@Override
-	public String[] getGristSpoils()
+	public GristSet getGristSpoils()
 	{
-		switch((Type)this.type)
-		{
-		case SHALE:
-			return new String[] {"Build", "Shale", "Tar"};
-		case MERCURY:
-			return new String[] {"Build", "Mercury"};
-		case COBALT:
-			return new String[] {"Build", "Cobalt"};
-		case AMBER:
-			return new String[] {"Build", "Amber"};
-		case RUST:
-			return new String[] {"Build", "Rust"};
-		case CHALK:
-			return new String[] {"Build", "Chalk"};
-		case MARBLE:
-			return new String[] {"Build", "Marble"};
-		case QUARTZ:
-			return new String[] {"Quartz"};
-		case URANIUM:
-			return new String[] {"Uranium"};
-		default:
-			return new String[] {"Build"};
-		}
+		return GristHelper.getRandomDrop(type,1);
 	}
 
 	@Override
 	public boolean attackEntityAsMob(Entity par1Entity) 
 	{
-		boolean flag = par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this), (int) Math.ceil((double)(this.type.getStrength() + 1) / 2));
+		boolean flag = par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this), (int) Math.ceil((double)(this.type.getPower() + 1) / 2));
 		return flag;
 	}
 	@Override
@@ -137,7 +82,7 @@ public class EntityImp extends EntityUnderling
 	@Override
 	protected float getMaxHealth() 
 	{
-		return 4 * (type.getStrength() + 1) + 2;
+		return 4 * (type.getPower() + 1) + 2;
 	}
 
 }

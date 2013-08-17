@@ -8,6 +8,7 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.mraof.minestuck.entity.item.EntityGrist;
+import com.mraof.minestuck.util.GristType;
 
 import cpw.mods.fml.common.network.Player;
 
@@ -47,7 +48,7 @@ public class GristPacket extends MinestuckPacket
 			entityPlayer.getEntityData().setCompoundTag(EntityPlayer.PERSISTED_NBT_TAG, new NBTTagCompound());
 		if(entityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getTags().size() == 0)
 			entityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setCompoundTag("Grist", new NBTTagCompound("Grist"));
-		entityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").setInteger(EntityGrist.gristTypes[this.typeInt], this.gristTotal);
+		entityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").setInteger(GristType.values()[this.typeInt].getName(), this.gristTotal);
 //		((WorldClient) entityPlayer.worldObj).removeEntityFromWorld(this.gristEntityId);
 	}
 	

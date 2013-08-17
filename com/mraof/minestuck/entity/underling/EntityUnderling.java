@@ -18,28 +18,21 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.mraof.minestuck.entity.EntityMinestuck;
 import com.mraof.minestuck.entity.ai.EntityAINearestAttackableTargetWithHeight;
+import com.mraof.minestuck.util.GristSet;
+import com.mraof.minestuck.util.GristType;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public abstract class EntityUnderling extends EntityMinestuck implements IEntityAdditionalSpawnData, IMob
 {
-	public static interface IType
-	{
-		//returns the type that has that type string, used in loading the underling
-		public IType getTypeFromString(String string);
-		//The string for what the type is called, used in getting the texture, storing the underling and what the underling is named sometimes
-		public String getTypeString();
-		//used in determining variables regarding how strong the underling is
-		public int getStrength();
-	}
-	//Type of Underling, this should always be an enum
-	protected IType type;
+	//The type of the imp
+	protected GristType type;
 	//Name of underling, used in getting the texture and actually naming it
 	public String underlingName;
 	//random used in randomly choosing a type of creature
 	protected static Random randStatic = new Random();
 	
-	public EntityUnderling(World par1World, IType type, String underlingName) 
+	public EntityUnderling(World par1World, GristType type, String underlingName) 
 	{
 		super(par1World, type, underlingName);
 		
@@ -59,11 +52,11 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	@Override
 	protected void setCustomStartingVariables(Object[] objects) 
 	{
-		this.type = (IType)objects[0];
+		this.type = (GristType)objects[0];
 		this.underlingName = (String)objects[1];
 	}
 	//used when getting how much grist should be dropped on death
-	public abstract String[] getGristSpoils();
+	public abstract GristSet getGristSpoils();
 
 	protected abstract void setCombatTask();
 	
@@ -73,13 +66,13 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	@Override
 	public String getTexture() 
 	{
-		return "textures/mobs/" + type.getTypeString() + underlingName + ".png";
+		return "textures/mobs/" + type.getName() + underlingName + ".png";
 	}
 	//Gives each type of underling a unique name, so instead of all types being called entity.underlingName.name they are called entity.typeString.underlingName.name
 	@Override
 	public String getEntityName() 
 	{
-		String s = type.getTypeString() + "." + underlingName;
+		String s = type.getName() + "." + underlingName;
 		return StatCollector.translateToLocal("entity." + s + ".name");
 	}
 	@Override
@@ -100,7 +93,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	public void writeEntityToNBT(NBTTagCompound par1nbtTagCompound) 
 	{
 		super.writeEntityToNBT(par1nbtTagCompound);
-		par1nbtTagCompound.setString("Type", this.type.getTypeString());
+		par1nbtTagCompound.setString("Type", this.type.getName());
 	}
 	@Override
 	public void readEntityFromNBT(NBTTagCompound par1nbtTagCompound) 
@@ -117,7 +110,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	public void readSpawnData(ByteArrayDataInput data) 
 	{
 		this.type = type.getClass().getEnumConstants()[data.readInt()];
-		this.textureResource = new ResourceLocation("minestuck:textures/mobs/" + type.getTypeString() + underlingName + ".png");
+		this.textureResource = new ResourceLocation("minestuck:textures/mobs/" + type.getName() + underlingName + ".png");
 	}
 
 
