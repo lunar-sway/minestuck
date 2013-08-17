@@ -1,5 +1,7 @@
 package com.mraof.minestuck.world.gen.lands;
 
+import java.util.ArrayList;
+
 import com.mraof.minestuck.util.Title;
 
 import net.minecraft.block.Block;
@@ -16,10 +18,27 @@ public abstract class LandAspect
 		}
 		
 		/**
-		 * Returns the chance that it will be selected as an aspect, given a player's title. Is a percentage between 0 and 1.
+		 * Returns the chance that it will be selected as an aspect. Is a percentage between 0 and 1.
 		 * 
 		 * @param playerTitle
 		 * @return
 		 */
-		public abstract float getRarity(Title playerTitle);
+		public abstract float getRarity();
+		
+		/**
+		 * Returns a string that represents a unique name for a land, Used in saving and loading land data.
+		 * @return
+		 */
+		public abstract String getPrimaryName();
+		
+		/**
+		 * Returns a list of strings used in giving a land a random name.
+		 */
+		public abstract String[] getNames();
+		
+		/**
+		 * Returns a list of possible worldgen structures a land can use.
+		 * @return
+		 */
+		public abstract ArrayList getDecorators();
 }

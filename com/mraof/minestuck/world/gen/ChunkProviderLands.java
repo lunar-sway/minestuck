@@ -1,11 +1,17 @@
 package com.mraof.minestuck.world.gen;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.util.IProgressUpdate;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
@@ -15,10 +21,12 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 
 import com.mraof.minestuck.entity.consort.EntityNakagator;
+import com.mraof.minestuck.network.MinestuckPacket;
+import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.world.gen.lands.LandAspect;
 import com.mraof.minestuck.world.gen.lands.LandAspectFrost;
-import com.mraof.minestuck.world.gen.lands.LandAspectHelper;
+import com.mraof.minestuck.world.gen.lands.LandHelper;
 
 public class ChunkProviderLands implements IChunkProvider 
 {
@@ -26,20 +34,56 @@ public class ChunkProviderLands implements IChunkProvider
 	World landWorld;
 	Random random;
 	private NoiseGeneratorOctaves noiseGens[] = new NoiseGeneratorOctaves[2];
-	LandAspect aspect0;
-	LandAspect aspect1;
+	public LandAspect aspect1;
+	public LandAspect aspect2;
+	public LandHelper helper;
+	
+
+	int[][]surfaceBlocks;
+	int[][]upperBlocks;
+	int oceanBlock;
+	LandAspect majorTerrainMapper;
+	LandAspect minorTerrainMapper;
+	ArrayList decorators;
 
 	public ChunkProviderLands(World worldObj, long seed, boolean b) 
 	{
+		helper = new LandHelper(seed);
+		
+		NBTBase landDataTag = worldObj.getWorldInfo().getAdditionalProperty("LandData");
+
 		this.landWorld = worldObj;
-		aspect0 = LandAspectHelper.getLandAspect(new Title(0, 0)); //TODO: Make it get player's actual title
-		//aspect1 = LandAspectHelper.getLandAspect(new Title(0, 0),aspect0);
+
+		if (landDataTag == null) {
+			this.aspect1 = helper.getLandAspect();
+			this.aspect2 = helper.getLandAspect(aspect1);
+			Map<String, NBTBase> dataTag = new Hashtable<String,NBTBase>();
+			dataTag.put("LandData",LandHelper.toNBT(aspect1,aspect2));
+			worldObj.getWorldInfo().setAdditionalProperties(dataTag);
+
+//			// this packet code is wrong-sided, needs fixed, I don't even know if we need it anymore
+//			Packet250CustomPayload packet = new Packet250CustomPayload();
+//			packet.channel = "Minestuck";
+//			packet.data = MinestuckPacket.makePacket(Type.NEWLAND,aspect1.getPrimaryName(),aspect2.getPrimaryName(),3);
+//			packet.length = packet.data.length;
+//			Minecraft.getMinecraft().getNetHandler().addToSendQueue(packet);
+		} else {
+			aspect1 = helper.fromName(((NBTTagCompound) landDataTag).getString("aspect1"));
+			aspect2 = helper.fromName(((NBTTagCompound) landDataTag).getString("aspect2"));
+		}
 		
 		this.random = new Random(seed);
 		this.consortList = new ArrayList();
 		this.consortList.add(new SpawnListEntry(EntityNakagator.class, 2, 1, 10));
 		this.noiseGens[0] = new NoiseGeneratorOctaves(this.random, 7);
         this.noiseGens[1] = new NoiseGeneratorOctaves(this.random, 1);
+        
+        this.surfaceBlocks = helper.pickOne(aspect1, aspect2).getSurfaceBlocks();
+        this.upperBlocks = helper.pickOne(aspect1, aspect2).getUpperBlocks();
+        this.oceanBlock = helper.pickOne(aspect1, aspect2).getOceanBlock();
+        this.majorTerrainMapper = helper.pickOne(aspect1,aspect2);
+        this.minorTerrainMapper = helper.pickOne(aspect1,aspect2);
+        this.decorators = helper.pickSubset(aspect1.getDecorators(),aspect2.getDecorators());
 	}
 
 	@Override
@@ -51,6 +95,8 @@ public class ChunkProviderLands implements IChunkProvider
 	@Override
 	public Chunk provideChunk(int chunkX, int chunkZ) 
 	{
+		
+
 		short[] chunkIds = new short[65536];
 		byte[] chunkMetadata = new byte[65536];
 		double[] generated0 = new double[256];
@@ -74,13 +120,13 @@ public class ChunkProviderLands implements IChunkProvider
 				int currentBlockOffset;
 				for(y = 1; y < topBlock[x * 16 + z] - 1; y++)
 				{
-					currentBlockOffset = (int) Math.abs(generated1[x + z * 256 + y * 16]) % aspect0.getSurfaceBlocks()[0].length;
-					chunkIds[x + z * 16 + y * 256] = (short) aspect0.getUpperBlocks()[0][currentBlockOffset];
-					chunkMetadata[x + z * 16 + y * 256] = (byte) aspect0.getUpperBlocks()[1][currentBlockOffset];
+					currentBlockOffset = (int) Math.abs(generated1[x + z * 256 + y * 16]) % surfaceBlocks[0].length;
+					chunkIds[x + z * 16 + y * 256] = (short) upperBlocks[0][currentBlockOffset];
+					chunkMetadata[x + z * 16 + y * 256] = (byte) upperBlocks[1][currentBlockOffset];
 				}
-				currentBlockOffset = (int) Math.abs(generated1[x + z * 256 + y * 16]) % aspect0.getSurfaceBlocks()[0].length;
-				chunkIds[x + z * 16 + y * 256] = (short) aspect0.getSurfaceBlocks()[0][currentBlockOffset];
-				chunkMetadata[x + z * 16 + y * 256] = (byte) aspect0.getSurfaceBlocks()[1][currentBlockOffset];
+				currentBlockOffset = (int) Math.abs(generated1[x + z * 256 + y * 16]) % surfaceBlocks[0].length;
+				chunkIds[x + z * 16 + y * 256] = (short) surfaceBlocks[0][currentBlockOffset];
+				chunkMetadata[x + z * 16 + y * 256] = (byte) surfaceBlocks[1][currentBlockOffset];
 //					(short) (generated1[x + z * 256 + y * 16] < 0 ? Block.blockEmerald.blockID : Block.blockDiamond.blockID);
 				
 			}
