@@ -18,7 +18,7 @@ public class LandAspectHeat extends LandAspect
 	@Override
 	public int[] getUpperBlock() 
 	{
-		return new int[] {Block.netherrack.blockID};
+		return new int[] {Block.netherrack.blockID,0};
 	}
 
 	@Override

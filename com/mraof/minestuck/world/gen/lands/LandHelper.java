@@ -1,11 +1,13 @@
 package com.mraof.minestuck.world.gen.lands;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Random;
 
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.DimensionManager;
 
 import com.mraof.minestuck.Minestuck;
@@ -121,6 +123,11 @@ public class LandHelper {
 		}
 		
 		DimensionManager.registerDimension(newLandId, Minestuck.landProviderTypeId);
+		
+//		Configuration config = new Configuration(new File("lands.conf"));
+//		config.load();
+//		config.get("Lands","blockIdStart", new int[]{}).getIntList();
+//		config.save();
 		
 		return newLandId;
 	}

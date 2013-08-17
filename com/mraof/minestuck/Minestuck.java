@@ -383,7 +383,6 @@ public class Minestuck
 		NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
 
 		//register recipes
-
 		AlchemyRecipeHandler.registerVanillaRecipes();
 		AlchemyRecipeHandler.registerMinestuckRecipes();
 		AlchemyRecipeHandler.registerModRecipes();
