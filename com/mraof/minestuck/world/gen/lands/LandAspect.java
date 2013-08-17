@@ -8,10 +8,9 @@ import net.minecraft.block.Block;
 
 public abstract class LandAspect 
 {
-		public abstract int[][] getSurfaceBlocks();
-		public abstract int[][] getUpperBlocks();
-		public abstract double[] generateMainTerrainMap();
-		public abstract double[] generateMinorTerrainMap();
+		public abstract int[] getSurfaceBlock();
+		public abstract int[] getUpperBlock();
+		public abstract double[] generateTerrainMap();
 		public int getOceanBlock()
 		{
 			return Block.waterStill.blockID;
@@ -40,5 +39,5 @@ public abstract class LandAspect
 		 * Returns a list of possible worldgen structures a land can use.
 		 * @return
 		 */
-		public abstract ArrayList getDecorators();
+		public abstract ArrayList<ILandDecorator> getDecorators();
 }

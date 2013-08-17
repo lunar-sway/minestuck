@@ -2,6 +2,8 @@ package com.mraof.minestuck;
 
 
 
+import java.io.File;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -9,6 +11,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.stats.Achievement;
 import net.minecraft.world.WorldType;
 import net.minecraftforge.common.Configuration;
@@ -72,10 +75,12 @@ import com.mraof.minestuck.world.gen.OreHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.Mod.ServerStarting;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
@@ -372,7 +377,7 @@ public class Minestuck
 		DimensionManager.registerProviderType(skaiaProviderTypeId, WorldProviderSkaia.class, true);
 		DimensionManager.registerDimension(skaiaDimensionId, skaiaProviderTypeId);
 		DimensionManager.registerProviderType(landProviderTypeId, WorldProviderLands.class, true);
-		//DimensionManager.registerDimension(landDimensionIdStart, landProviderTypeIdStart);
+		//Register the player tracker
 		GameRegistry.registerPlayerTracker(new MinestuckPlayerTracker());
 
 		//register ore generation
@@ -383,7 +388,6 @@ public class Minestuck
 		NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
 
 		//register recipes
-
 		AlchemyRecipeHandler.registerVanillaRecipes();
 		AlchemyRecipeHandler.registerMinestuckRecipes();
 		AlchemyRecipeHandler.registerModRecipes();
@@ -404,5 +408,30 @@ public class Minestuck
 		EntityList.addMapping(entityClass, name, entityIdStart + currentEntityIdOffset, eggColor, eggSpotColor);
 		EntityRegistry.registerModEntity(entityClass, name, currentEntityIdOffset, this, trackingRange, updateFrequency, sendsVelocityUpdates);
 		currentEntityIdOffset++;
+	}
+	
+
+	@EventHandler
+	public void serverStarting(FMLServerStartingEvent event)
+	{
+		
+		MinecraftServer server = event.getServer();
+		//System.out.println(server.getFolderName());
+		File directory = new File("./saves/" + server.getFolderName());
+		if (!directory.exists()) {
+			directory = new File("./"+ server.getFolderName());
+		}
+		File[] files = directory.listFiles();
+		for (File file : files) {
+			//System.out.println("found a file called " + file.getName());
+			if (file.getName().contains("DIM")) {
+				int dim = Integer.valueOf(file.getName().substring(3));
+				if (DimensionManager.getWorld(dim) == null) {
+					System.out.println("[MINESTUCK] found a dimension with an id of" + dim);
+					DimensionManager.registerDimension(dim, Minestuck.landProviderTypeId);
+				}
+			}
+			
+		}
 	}
 }
