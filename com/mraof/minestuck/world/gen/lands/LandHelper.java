@@ -124,10 +124,6 @@ public class LandHelper {
 		
 		DimensionManager.registerDimension(newLandId, Minestuck.landProviderTypeId);
 		
-//		Configuration config = new Configuration(new File("lands.conf"));
-//		config.load();
-//		config.get("Lands","blockIdStart", new int[]{}).getIntList();
-//		config.save();
 		
 		return newLandId;
 	}
