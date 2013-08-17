@@ -64,30 +64,11 @@ public class Teleport
 		}
 		else if (!entity.worldObj.isRemote && !entity.isDead)
 		{
-			boolean newLand = DimensionManager.getWorld(destinationDimension) == null && destinationDimension >= Minestuck.landDimensionIdStart;
 			MinecraftServer minecraftserver = MinecraftServer.getServer();
 			int j = entity.dimension;
 			WorldServer worldserver = minecraftserver.worldServerForDimension(j);
 			WorldServer worldserver1 = minecraftserver.worldServerForDimension(destinationDimension);
-			if (newLand) {
-				
-				//DimensionManager.registerDimension(Minestuck.landDimensionIdStart, Minestuck.landProviderTypeIdStart);
-				
-//				//We need to generate the new world's aspects here...
-//				LandAspectHelper helper = new LandAspectHelper(worldserver.getSeed());
-//				LandAspect aspect1 = helper.getLandAspect(new Title(0,0));
-//				LandAspect aspect2 = helper.getLandAspect(new Title(0,0),aspect1);
-//				Map<String, NBTBase> dataTag = new Hashtable<String,NBTBase>();
-//				dataTag.put("LandData",LandAspectHelper.toNBT(aspect1,aspect2));
-//				worldserver1.getWorldInfo().setAdditionalProperties(dataTag);
-//				
-//				//...And then send a packet to sync.
-//				Packet250CustomPayload packet = new Packet250CustomPayload();
-//				packet.channel = "Minestuck";
-//				packet.data = MinestuckPacket.makePacket(Type.NEWLAND,aspect1.getPrimaryName(),aspect2.getPrimaryName(),destinationDimension);
-//				packet.length = packet.data.length;
-//				Minecraft.getMinecraft().getNetHandler().addToSendQueue(packet);
-			}
+
 			entity.dimension = destinationDimension;
 			entity.worldObj.removeEntity(entity);
 			entity.isDead = false;

@@ -53,7 +53,7 @@ public class ChunkProviderLands implements IChunkProvider
 			dataTag.put("LandData",LandHelper.toNBT(aspect1,aspect2));
 			worldObj.getWorldInfo().setAdditionalProperties(dataTag);
 
-//			// this packet code is wrong-sided, nees fixed, I don't even know if we ned it anymore
+//			// this packet code is wrong-sided, needs fixed, I don't even know if we need it anymore
 //			Packet250CustomPayload packet = new Packet250CustomPayload();
 //			packet.channel = "Minestuck";
 //			packet.data = MinestuckPacket.makePacket(Type.NEWLAND,aspect1.getPrimaryName(),aspect2.getPrimaryName(),3);
@@ -81,11 +81,7 @@ public class ChunkProviderLands implements IChunkProvider
 	public Chunk provideChunk(int chunkX, int chunkZ) 
 	{
 		
-		if (aspect1 == null || aspect2 == null) {
-//			NBTTagCompound tag = (NBTTagCompound) landWorld.getWorldInfo().getAdditionalProperty("LandData");
-//			aspect1 = helper.fromName(tag.getString("aspect1"));
-//			aspect2 = helper.fromName(tag.getString("aspect2"));
-		}
+
 		short[] chunkIds = new short[65536];
 		byte[] chunkMetadata = new byte[65536];
 		double[] generated0 = new double[256];
