@@ -66,6 +66,14 @@ public enum GristType {
 		return 1/rarity;
 	}
 	
+	public String getAltName() {
+		if (this == GristType.Shale) {
+			return "Crude";
+		} else {
+			return this.getName();
+		}
+	}
+	
 	public static GristType getTypeFromString(String string) 
 	{
 		for(GristType current : GristType.values())
