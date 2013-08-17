@@ -24,12 +24,8 @@ public class LandAspectFrost extends LandAspect
 	}
 
 	@Override
-	public float getRarity(Title playerTitle) {
-		if (playerTitle.getHeroClass() == 10) { 
-			return (long) 0.75; //Only if player's a Witch
-		} else {
-			return (long) 0.25;
-		}
+	public float getRarity() {
+		return 0.5F;
 	}
 
 	@Override

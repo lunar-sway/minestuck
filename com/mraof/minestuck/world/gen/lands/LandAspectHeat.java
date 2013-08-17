@@ -24,12 +24,8 @@ public class LandAspectHeat extends LandAspect
 	}
 
 	@Override
-	public float getRarity(Title playerTitle) {
-		if (playerTitle.getHeroClass() == 6) { 
-			return (long) 0.75; //Only if player's a Knight
-		} else {
-			return (long) 0.25;
-		}
+	public float getRarity() {
+		return 0.5F;
 	}
 
 	@Override

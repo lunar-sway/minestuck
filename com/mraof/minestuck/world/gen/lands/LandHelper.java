@@ -35,25 +35,25 @@ public class LandHelper {
 	 * @param playerTitle
 	 * @return
 	 */
-	public LandAspect getLandAspect(Title playerTitle) {
+	public LandAspect getLandAspect() {
 		while (true) {
 			LandAspect newAspect = (LandAspect)landAspects.get(random.nextInt(landAspects.size()));
-			if (newAspect.getRarity(playerTitle) < random.nextFloat()) {
+			if (newAspect.getRarity() < random.nextFloat()) {
 				return newAspect;
 			}
 		}
 	}
 	
 	/**
-	 * Generates a random land aspect, weighted based on a player's title. Used for getting a second aspect, as it will make sure not to repeat the aspect given.
+	 * Generates a random land aspect. Used for getting a second aspect, as it will make sure not to repeat the aspect given.
 	 * @param playerTitle
 	 * @param firstAspect
 	 * @return
 	 */
-	public LandAspect getLandAspect(Title playerTitle,LandAspect firstAspect) {
+	public LandAspect getLandAspect(LandAspect firstAspect) {
 		while (true) {
 			LandAspect newAspect = (LandAspect)landAspects.get(random.nextInt(landAspects.size()));
-			if (newAspect.getRarity(playerTitle) < random.nextLong() && newAspect != firstAspect) {
+			if (newAspect.getRarity() < random.nextLong() && newAspect != firstAspect) {
 				return newAspect;
 			}
 		}
@@ -86,6 +86,9 @@ public class LandHelper {
 		return result;
 	}
 	
+	/**
+	 * Converts aspect data to NBT tags for saving/loading.
+	 */
 	public static NBTBase toNBT(LandAspect aspect1,LandAspect aspect2) {
 		NBTTagCompound tag = new NBTTagCompound("LandData");
 		tag.setString("aspect1",aspect1.getPrimaryName());
@@ -93,11 +96,18 @@ public class LandHelper {
 		return tag;
 	}
 	
+	/**
+	 * Gets a land aspect from it's primary name. Used in loading from NBT.
+	 */
 	public static LandAspect fromName(String name) {
 		return (LandAspect)landNames.get(name);
 		
 	}
 	
+	/**
+	 * Registers a new dimension for a land. Returns the ID of the nearest open land ID.
+	 * 
+	 */
 	public static int createLand() {
 
 		int newLandId = Minestuck.landDimensionIdStart;
@@ -113,5 +123,9 @@ public class LandHelper {
 		DimensionManager.registerDimension(newLandId, Minestuck.landProviderTypeId);
 		
 		return newLandId;
+	}
+	
+	public String getAspectName(LandAspect aspect) {
+		return aspect.getNames()[random.nextInt(aspect.getNames().length)];
 	}
 }

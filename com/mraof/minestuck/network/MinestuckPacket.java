@@ -17,8 +17,7 @@ public abstract class MinestuckPacket
 		GRISTCACHE(GristCachePacket.class),
 		COMBOBUTTON(ComboButtonPacket.class),
 		GOBUTTON(GoButtonPacket.class),
-		TITLE(TitlePacket.class),
-		NEWLAND(NewLandPacket.class);
+		TITLE(TitlePacket.class);
 		Class<? extends MinestuckPacket> packetType;
 		private Type(Class<? extends MinestuckPacket> packetClass)
 		{

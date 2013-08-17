@@ -38,6 +38,8 @@ public class ChunkProviderLands implements IChunkProvider
 	public LandAspect aspect2;
 	public int dimId;
 	public LandHelper helper;
+	
+	
 
 	public ChunkProviderLands(World worldObj, long seed, boolean b) 
 	{
@@ -48,8 +50,8 @@ public class ChunkProviderLands implements IChunkProvider
 		this.landWorld = worldObj;
 
 		if (landDataTag == null) {
-			this.aspect1 = helper.getLandAspect(new Title(0,0));
-			this.aspect2 = helper.getLandAspect(new Title(0,0),aspect1);
+			this.aspect1 = helper.getLandAspect();
+			this.aspect2 = helper.getLandAspect(aspect1);
 			Map<String, NBTBase> dataTag = new Hashtable<String,NBTBase>();
 			dataTag.put("LandData",LandHelper.toNBT(aspect1,aspect2));
 			worldObj.getWorldInfo().setAdditionalProperties(dataTag);
@@ -70,6 +72,8 @@ public class ChunkProviderLands implements IChunkProvider
 		this.consortList.add(new SpawnListEntry(EntityNakagator.class, 2, 1, 10));
 		this.noiseGens[0] = new NoiseGeneratorOctaves(this.random, 7);
         this.noiseGens[1] = new NoiseGeneratorOctaves(this.random, 1);
+        
+        
 	}
 
 	@Override

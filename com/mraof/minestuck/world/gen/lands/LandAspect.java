@@ -16,12 +16,12 @@ public abstract class LandAspect
 		}
 		
 		/**
-		 * Returns the chance that it will be selected as an aspect, given a player's title. Is a percentage between 0 and 1.
+		 * Returns the chance that it will be selected as an aspect. Is a percentage between 0 and 1.
 		 * 
 		 * @param playerTitle
 		 * @return
 		 */
-		public abstract float getRarity(Title playerTitle);
+		public abstract float getRarity();
 		
 		/**
 		 * Returns a string that represents a unique name for a land, Used in saving and loading land data.
