@@ -1,20 +1,21 @@
 package com.mraof.minestuck.util;
 
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Hashtable;
 
 import com.mraof.minestuck.entity.item.EntityGrist;
 
 public class GristSet {
 	
-	public static final int grists = EntityGrist.gristTypes.length;
 	private int[] gristTypes ;
 	
 	/**
 	 * Creates a blank set of grist values, used in setting up the Grist Registry.
 	 */
 	public GristSet() {
-		this.gristTypes = new int[grists];
+		this.gristTypes = new int[GristType.allGrists];
 	}
 	
 	/**
@@ -54,15 +55,34 @@ public class GristSet {
 	}
 	
 	/**
+	 * Adds an amount of grist to a GristSet, given a grist type and amount.
+	 */
+	public GristSet addGrist(GristType type, int amount) {
+		this.gristTypes[type.ordinal()] += amount;
+		return this;
+	}
+	
+	/**
 	 * Returns a Hashtable with grist->amount pairs.
 	 */
-	public Hashtable getTable() {
+	public Hashtable getHashtable() {
 		Hashtable hs = new Hashtable();
-		for(int i = 0; i < grists; i++) {
+		for(int i = 0; i < GristType.allGrists; i++) {
 			if (gristTypes[i] != 0) {
 				hs.put(i,gristTypes[i]);
 			}
 		}
 		return hs;
+	}
+	
+	public ArrayList getArray() {
+		ArrayList list = new ArrayList();
+		for(int i = 0; i < GristType.allGrists; i++) {
+			if (gristTypes[i] != 0) {
+				System.out.println("[MINESTUCK] Added "+gristTypes[i]+" of "+GristType.values()[i].getName());
+				list.add(new GristAmount(GristType.values()[i],gristTypes[i]));
+			}
+		}
+		return list;
 	}
 }

@@ -26,7 +26,7 @@ public class LandAspectHelper {
 	public static LandAspect getLandAspect(Title playerTitle) {
 		while (true) {
 			LandAspect newAspect = (LandAspect)landAspects.get(random.nextInt(landAspects.size()));
-			if (newAspect.getWeight(playerTitle) < random.nextLong()) {
+			if (newAspect.getRarity(playerTitle) < random.nextFloat()) {
 				return newAspect;
 			}
 		}
@@ -41,7 +41,7 @@ public class LandAspectHelper {
 	public static LandAspect getLandAspect(Title playerTitle,LandAspect firstAspect) {
 		while (true) {
 			LandAspect newAspect = (LandAspect)landAspects.get(random.nextInt(landAspects.size()));
-			if (newAspect.getWeight(playerTitle) < random.nextLong() && newAspect != firstAspect) {
+			if (newAspect.getRarity(playerTitle) < random.nextLong() && newAspect != firstAspect) {
 				return newAspect;
 			}
 		}
