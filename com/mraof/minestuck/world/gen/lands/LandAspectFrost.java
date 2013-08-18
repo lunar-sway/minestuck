@@ -10,15 +10,15 @@ public class LandAspectFrost extends LandAspect
 {
 	
 	@Override
-	public int[] getSurfaceBlock() 
+	public int[][] getSurfaceBlocks() 
 	{
-		return new int[] {Block.snow.blockID, 0};
+		return new int[][] {{Block.snow.blockID, 0}};
 	}
 
 	@Override
-	public int[] getUpperBlock() 
+	public int[][] getUpperBlocks() 
 	{
-		return new int[] {Block.stone.blockID,0};
+		return new int[][] {{Block.stone.blockID,0}};
 	}
 
 	@Override

@@ -128,7 +128,10 @@ public class LandHelper {
 		return newLandId;
 	}
 	
-	public String getAspectName(LandAspect aspect) {
-		return aspect.getNames()[random.nextInt(aspect.getNames().length)];
+	/**
+	 * Returns one random element from a list.
+	 */
+	public Object pickElement(Object[] list) {
+		return list[random.nextInt(list.length)];
 	}
 }

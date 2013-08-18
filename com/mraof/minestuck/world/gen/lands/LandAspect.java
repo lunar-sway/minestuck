@@ -8,8 +8,8 @@ import net.minecraft.block.Block;
 
 public abstract class LandAspect 
 {
-		public abstract int[] getSurfaceBlock();
-		public abstract int[] getUpperBlock();
+		public abstract int[][] getSurfaceBlocks();
+		public abstract int[][] getUpperBlocks();
 		public abstract double[] generateTerrainMap();
 		public int getOceanBlock()
 		{
