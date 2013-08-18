@@ -2,12 +2,6 @@ package com.mraof.minestuck.block;
 
 import java.util.List;
 
-import com.mraof.minestuck.CommonProxy;
-import com.mraof.minestuck.Minestuck;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -16,6 +10,11 @@ import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+
+import com.mraof.minestuck.Minestuck;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockChessTile extends Block 
 {

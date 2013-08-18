@@ -22,8 +22,6 @@ import com.mraof.minestuck.entity.carapacian.EntityBlackBishop;
 import com.mraof.minestuck.entity.carapacian.EntityBlackPawn;
 import com.mraof.minestuck.entity.carapacian.EntityWhiteBishop;
 import com.mraof.minestuck.entity.carapacian.EntityWhitePawn;
-import com.mraof.minestuck.entity.consort.EntityConsort;
-import com.mraof.minestuck.entity.underling.EntityImp;
 import com.mraof.minestuck.world.gen.structure.MapGenCastle;
 
 /**

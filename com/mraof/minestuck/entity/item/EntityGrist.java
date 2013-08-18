@@ -18,7 +18,6 @@ import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristType;
 
-import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

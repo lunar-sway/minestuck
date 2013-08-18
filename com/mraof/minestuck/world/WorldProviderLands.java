@@ -17,7 +17,7 @@ public class WorldProviderLands extends WorldProvider
 		if (provider == null || provider.aspect1 == null || provider.aspect2 == null) {
 			return "Land";
 		} else {
-		return "Land of " + provider.helper.getAspectName(provider.aspect1) + " and " + provider.helper.getAspectName(provider.aspect2);
+		return "Land of " + provider.helper.pickElement(provider.aspect1.getNames()) + " and " + provider.helper.pickElement(provider.aspect2.getNames());
 		}
 	}
 

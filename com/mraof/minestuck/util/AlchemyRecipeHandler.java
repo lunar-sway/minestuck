@@ -1,5 +1,11 @@
 package com.mraof.minestuck.util;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockSapling;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.lands.LandAspectFrost;
 import com.mraof.minestuck.world.gen.lands.LandAspectHeat;
@@ -7,12 +13,6 @@ import com.mraof.minestuck.world.gen.lands.LandHelper;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockSapling;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class AlchemyRecipeHandler {
 	

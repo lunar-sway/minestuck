@@ -5,13 +5,13 @@ import java.util.ArrayList;
 public class LandAspectShade extends LandAspect {
 
 	@Override
-	public int[] getSurfaceBlock() {
+	public int[][] getSurfaceBlocks() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public int[] getUpperBlock() {
+	public int[][] getUpperBlocks() {
 		// TODO Auto-generated method stub
 		return null;
 	}

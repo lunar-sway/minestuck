@@ -2,23 +2,20 @@ package com.mraof.minestuck.world.gen.lands;
 
 import java.util.ArrayList;
 
-import com.mraof.minestuck.util.Title;
-
 import net.minecraft.block.Block;
 
 public class LandAspectHeat extends LandAspect 
 {
-	
 	@Override
-	public int[] getSurfaceBlock() 
+	public int[][] getSurfaceBlocks() 
 	{
-		return new int[] {Block.slowSand.blockID, Block.cobblestone.blockID, 0};
+		return new int[][] {{Block.slowSand.blockID, Block.cobblestone.blockID, 0}};
 	}
 
 	@Override
-	public int[] getUpperBlock() 
+	public int[][] getUpperBlocks() 
 	{
-		return new int[] {Block.netherrack.blockID, Block.obsidian.blockID, 0};
+		return new int[][] {{Block.netherrack.blockID, Block.obsidian.blockID, 0}};
 	}
 
 	@Override
