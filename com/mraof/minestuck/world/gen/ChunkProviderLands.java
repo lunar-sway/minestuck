@@ -7,11 +7,9 @@ import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.util.IProgressUpdate;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
@@ -21,17 +19,17 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 
 import com.mraof.minestuck.entity.consort.EntityNakagator;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
-import com.mraof.minestuck.util.Title;
+import com.mraof.minestuck.entity.underling.EntityGiclops;
+import com.mraof.minestuck.entity.underling.EntityImp;
+import com.mraof.minestuck.entity.underling.EntityOgre;
 import com.mraof.minestuck.world.gen.lands.ILandDecorator;
 import com.mraof.minestuck.world.gen.lands.LandAspect;
-import com.mraof.minestuck.world.gen.lands.LandAspectFrost;
 import com.mraof.minestuck.world.gen.lands.LandHelper;
 
 public class ChunkProviderLands implements IChunkProvider 
 {
 	List consortList;
+	List underlingList;
 	World landWorld;
 	Random random;
 	private NoiseGeneratorOctaves noiseGens[] = new NoiseGeneratorOctaves[2];
@@ -74,7 +72,11 @@ public class ChunkProviderLands implements IChunkProvider
 		
 		this.random = new Random(seed);
 		this.consortList = new ArrayList();
+		this.underlingList = new ArrayList();
 		this.consortList.add(new SpawnListEntry(EntityNakagator.class, 2, 1, 10));
+		this.underlingList.add(new SpawnListEntry(EntityImp.class, 5, 1, 10));
+		this.underlingList.add(new SpawnListEntry(EntityOgre.class, 3, 1, 2));
+		this.underlingList.add(new SpawnListEntry(EntityGiclops.class, 1, 1, 1));
 		this.noiseGens[0] = new NoiseGeneratorOctaves(this.random, 7);
         this.noiseGens[1] = new NoiseGeneratorOctaves(this.random, 1);
         
@@ -172,7 +174,7 @@ public class ChunkProviderLands implements IChunkProvider
 	@Override
 	public List getPossibleCreatures(EnumCreatureType enumcreaturetype, int i,
 			int j, int k) {
-		return enumcreaturetype == EnumCreatureType.creature ? this.consortList : null;
+		return enumcreaturetype == EnumCreatureType.creature ? this.consortList : enumcreaturetype == EnumCreatureType.monster ? this.underlingList : null;
 	}
 
 	@Override

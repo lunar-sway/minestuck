@@ -45,8 +45,8 @@ public class LandAspectFrost extends LandAspect
 	@Override
 	public ArrayList<ILandDecorator> getDecorators() {
 		ArrayList list = new ArrayList<ILandDecorator>();
-		list.add(new DecoratorVien(Block.dirt.blockID, 10, 32));
-		list.add(new DecoratorVien(Block.ice.blockID, 5, 8));
+		list.add(new DecoratorVein(Block.dirt.blockID, 10, 32));
+		list.add(new DecoratorVein(Block.ice.blockID, 5, 8));
 		return list;
 	}
 
