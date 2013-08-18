@@ -2,10 +2,7 @@ package com.mraof.minestuck.util;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Hashtable;
-
-import com.mraof.minestuck.entity.item.EntityGrist;
 
 public class GristSet {
 	

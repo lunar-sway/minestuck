@@ -2,11 +2,10 @@ package com.mraof.minestuck.world.gen.lands;
 
 import java.util.Random;
 
-import com.mraof.minestuck.world.gen.ChunkProviderLands;
-
-import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenMinable;
+
+import com.mraof.minestuck.world.gen.ChunkProviderLands;
 
 public class DecoratorVien implements ILandDecorator {
 

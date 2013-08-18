@@ -2,18 +2,13 @@ package com.mraof.minestuck.block;
 
 import java.util.Random;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.item.ItemCruxiteRaw;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.item.Item;
-import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+
+import com.mraof.minestuck.Minestuck;
 
 public class OreCruxite extends Block {
 	public OreCruxite(int id)

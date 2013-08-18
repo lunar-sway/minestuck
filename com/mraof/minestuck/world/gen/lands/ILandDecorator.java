@@ -2,9 +2,9 @@ package com.mraof.minestuck.world.gen.lands;
 
 import java.util.Random;
 
-import com.mraof.minestuck.world.gen.ChunkProviderLands;
-
 import net.minecraft.world.World;
+
+import com.mraof.minestuck.world.gen.ChunkProviderLands;
 
 public interface ILandDecorator {
 	/**

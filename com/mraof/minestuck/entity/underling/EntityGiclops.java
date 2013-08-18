@@ -1,16 +1,15 @@
 package com.mraof.minestuck.entity.underling;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.util.DamageSource;
+import net.minecraft.world.World;
+
 import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
 import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
 
 public class EntityGiclops extends EntityUnderling 
 {

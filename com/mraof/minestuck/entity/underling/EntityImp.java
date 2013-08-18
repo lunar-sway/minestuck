@@ -1,7 +1,5 @@
 package com.mraof.minestuck.entity.underling;
 
-import java.util.ArrayList;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;

@@ -10,12 +10,11 @@ import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
-import com.mraof.minestuck.util.GristType;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import com.mraof.minestuck.entity.item.EntityGrist;
+import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.Title;
 
 import cpw.mods.fml.relauncher.Side;

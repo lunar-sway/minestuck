@@ -1,11 +1,9 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.Minestuck;
-
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import net.minecraft.util.Icon;
+
+import com.mraof.minestuck.Minestuck;
 
 public class ItemDowelUncarved extends Item {
 

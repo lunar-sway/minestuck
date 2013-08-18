@@ -1,31 +1,20 @@
 package com.mraof.minestuck.item;
 
-import java.util.Iterator;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.packet.Packet41EntityEffect;
-import net.minecraft.network.packet.Packet9Respawn;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldServer;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.ITeleporter;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.gen.lands.LandHelper;
-
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 {
