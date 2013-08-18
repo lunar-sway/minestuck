@@ -1,17 +1,14 @@
 package com.mraof.minestuck.world.gen.lands;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Random;
 
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.DimensionManager;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.Title;
 
 public class LandHelper {
 	
@@ -128,7 +125,10 @@ public class LandHelper {
 		return newLandId;
 	}
 	
-	public String getAspectName(LandAspect aspect) {
-		return aspect.getNames()[random.nextInt(aspect.getNames().length)];
+	/**
+	 * Returns one random element from a list.
+	 */
+	public Object pickElement(Object[] list) {
+		return list[random.nextInt(list.length)];
 	}
 }

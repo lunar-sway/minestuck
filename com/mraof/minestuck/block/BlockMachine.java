@@ -3,11 +3,6 @@ package com.mraof.minestuck.block;
 import java.util.List;
 import java.util.Random;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.tileentity.TileEntityMachine;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -22,6 +17,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.tileentity.TileEntityMachine;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockMachine extends BlockContainer {
 

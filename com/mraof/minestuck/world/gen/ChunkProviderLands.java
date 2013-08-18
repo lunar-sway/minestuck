@@ -40,11 +40,11 @@ public class ChunkProviderLands implements IChunkProvider
 	public LandHelper helper;
 	
 
-	int[] surfaceBlock;
-	int[] upperBlock;
-	int oceanBlock;
-	LandAspect terrainMapper;
-	ArrayList decorators;
+	public int[] surfaceBlock;
+	public int[] upperBlock;
+	public int oceanBlock;
+	public LandAspect terrainMapper;
+	public ArrayList decorators;
 
 	public ChunkProviderLands(World worldObj, long seed, boolean b) 
 	{
@@ -78,11 +78,13 @@ public class ChunkProviderLands implements IChunkProvider
 		this.noiseGens[0] = new NoiseGeneratorOctaves(this.random, 7);
         this.noiseGens[1] = new NoiseGeneratorOctaves(this.random, 1);
         
-        this.surfaceBlock = helper.pickOne(aspect1, aspect2).getSurfaceBlock();
-        this.upperBlock = helper.pickOne(aspect1, aspect2).getUpperBlock();
+        this.surfaceBlock = (int[]) helper.pickElement(helper.pickOne(aspect1, aspect2).getSurfaceBlocks());
+        this.upperBlock = (int[]) helper.pickElement(helper.pickOne(aspect1, aspect2).getUpperBlocks());
         this.oceanBlock = helper.pickOne(aspect1, aspect2).getOceanBlock();
         this.terrainMapper = helper.pickOne(aspect1,aspect2);
         this.decorators = helper.pickSubset(aspect1.getDecorators(),aspect2.getDecorators());
+        
+        
 	}
 
 	@Override
@@ -142,7 +144,7 @@ public class ChunkProviderLands implements IChunkProvider
 	@Override
 	public void populate(IChunkProvider ichunkprovider, int i, int j) {
 		for (Object decorator : decorators) {
-			((ILandDecorator) decorator).generate(landWorld, random, i, j);
+			((ILandDecorator) decorator).generate(landWorld, random, i,  j, this);
 		}
 	}
 

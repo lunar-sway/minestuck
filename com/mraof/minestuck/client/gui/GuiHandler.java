@@ -1,11 +1,12 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mraof.minestuck.inventory.ContainerMachine;
-import com.mraof.minestuck.tileentity.TileEntityMachine;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
+import com.mraof.minestuck.inventory.ContainerMachine;
+import com.mraof.minestuck.tileentity.TileEntityMachine;
+
 import cpw.mods.fml.common.network.IGuiHandler;
 
 public class GuiHandler implements IGuiHandler {

@@ -13,8 +13,8 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
-import com.mraof.minestuck.entity.EntityMinestuck;
 import com.mraof.minestuck.entity.EntityListAttackFilter;
+import com.mraof.minestuck.entity.EntityMinestuck;
 import com.mraof.minestuck.entity.ai.EntityAINearestAttackableTargetWithHeight;
 
 public abstract class EntityCarapacian extends EntityMinestuck

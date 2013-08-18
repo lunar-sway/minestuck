@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Hashtable;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Tuple;
 
 public class CombinationRegistry {
 	private static Hashtable combRecipes = new Hashtable();

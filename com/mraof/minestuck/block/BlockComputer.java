@@ -1,7 +1,5 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.Minestuck;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -10,6 +8,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+
+import com.mraof.minestuck.Minestuck;
 
 public class BlockComputer extends Block {
 	

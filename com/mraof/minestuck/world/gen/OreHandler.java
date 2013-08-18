@@ -2,12 +2,13 @@ package com.mraof.minestuck.world.gen;
 
 import java.util.Random;
 
-import com.mraof.minestuck.Minestuck;
-
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenMinable;
+
+import com.mraof.minestuck.Minestuck;
+
 import cpw.mods.fml.common.IWorldGenerator;
 
 

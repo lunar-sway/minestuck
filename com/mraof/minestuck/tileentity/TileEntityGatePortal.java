@@ -1,26 +1,13 @@
 package com.mraof.minestuck.tileentity;
 
-import java.util.Iterator;
+import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.WorldServer;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.ITeleporter;
 import com.mraof.minestuck.util.Teleport;
-
-import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.packet.Packet41EntityEffect;
-import net.minecraft.network.packet.Packet9Respawn;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.WorldProvider;
-import net.minecraft.world.WorldServer;
 
 public class TileEntityGatePortal extends TileEntity implements ITeleporter
 {
