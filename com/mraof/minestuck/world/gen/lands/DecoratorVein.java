@@ -7,15 +7,16 @@ import net.minecraft.world.gen.feature.WorldGenMinable;
 
 import com.mraof.minestuck.world.gen.ChunkProviderLands;
 
-public class DecoratorVien implements ILandDecorator {
+public class DecoratorVein implements ILandDecorator {
 
-	//WorldGenMinable vien;
+	//WorldGenMinable vein;
 	int amount;
 	int id;
 	int meta = 0;
 	int size;
 	 
-	 public DecoratorVien(int blockId,int amount,int size) {
+	 public DecoratorVein(int blockId,int amount,int size) 
+	 {
 		 //vien = new WorldGenMinable(blockId,0, size,Block.stone.blockID);
 		 this.amount = amount;
 		 this.id = blockId;
@@ -23,7 +24,8 @@ public class DecoratorVien implements ILandDecorator {
 		 this.size = size;
 	 }
 	 
-	 public DecoratorVien(int blockId,int meta,int amount,int size) {
+	 public DecoratorVein(int blockId,int meta,int amount,int size) 
+	 {
 		 this(blockId,amount,size);
 		 this.meta = meta;
 	 }
