@@ -12,13 +12,13 @@ public class LandAspectHeat extends LandAspect
 	@Override
 	public int[] getSurfaceBlock() 
 	{
-		return new int[] {Block.slowSand.blockID, 0};
+		return new int[] {Block.slowSand.blockID, Block.cobblestone.blockID, 0};
 	}
 
 	@Override
 	public int[] getUpperBlock() 
 	{
-		return new int[] {Block.netherrack.blockID,0};
+		return new int[] {Block.netherrack.blockID, Block.obsidian.blockID, 0};
 	}
 
 	@Override
