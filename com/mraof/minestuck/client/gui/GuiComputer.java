@@ -40,6 +40,7 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 	private String programName = "";
 	private int program;
 	private boolean waiting = false;
+	private String displayName;
 
 	private Minecraft mc;
 	private TileEntityComputer te;
@@ -111,10 +112,17 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 	}
 
 	private void updateGui() {
+		
+		displayName = "";
+		String[] parts = te.connectedTo.split("\0");
+		for (String part : parts) {
+			displayName += part;
+		}
+		
 		switch(program) {
 		case(0):
 			if (te.connected) {
-				this.displayLine = "Connected to "+te.connectedTo+".";
+				this.displayLine = "Connected to "+displayName+".";
 		    	upButton.enabled = false;
 		    	downButton.enabled = false;
 		    	
@@ -159,7 +167,7 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 		    	}
 				
 				GuiButton button = selButtons.get(0);
-				displayLine = "Connected to "+te.connectedTo+".";
+				displayLine = "Connected to "+displayName+".";
 				button.displayString = "Give client items";
 				button.enabled = true;
 			} else {
@@ -188,8 +196,7 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 				
 			} else {
 				SburbConnection conn = SburbConnector.connect(mc.thePlayer.username, guibutton.displayString);
-				te.connectedTo = conn.getServerPlayer();
-				te.connected = true;
+
 				sendNewConnection(conn.getServerPlayer());
 			}
 			break;
@@ -209,8 +216,6 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 	@Override
 	public void onConnected(SburbConnection conn) {
 		if (!te.connected && conn.getServerPlayer() == mc.thePlayer.username) {
-			te.connected = true;
-			te.connectedTo = conn.getClientPlayer();
 			waiting = false;
 			sendNewConnection(conn.getClientPlayer());
 		}
@@ -223,6 +228,9 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 		packet.data = MinestuckPacket.makePacket(Type.SBURB,te.xCoord,te.yCoord,te.zCoord,connTo);
 		packet.length = packet.data.length;
 		this.mc.getNetHandler().addToSendQueue(packet);
+		
+		te.connectedTo = connTo;
+		te.connected = true;
 	}
 		
 }

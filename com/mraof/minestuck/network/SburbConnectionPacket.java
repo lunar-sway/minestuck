@@ -51,10 +51,15 @@ public class SburbConnectionPacket extends MinestuckPacket {
 	{
 		TileEntityComputer te = (TileEntityComputer)Minecraft.getMinecraft().theWorld.getBlockTileEntity(xCoord,yCoord,zCoord);
 				
-		if (te == null) {return;}
+		if (te == null) {
+			System.out.println("[MINESTUCK] Packet recieved, but TE isn't there!");
+			return;
+		}
 		
 		te.connectedTo = connectedTo;
 		te.connected = true;
+		
+		System.out.println("[MINESTUCK] Packet recieved. Connection set!");
 	}
 
 }
