@@ -28,7 +28,9 @@ public class TileEntityComputer extends TileEntity {
     public void writeToNBT(NBTTagCompound par1NBTTagCompound) {
     	super.writeToNBT(par1NBTTagCompound);
     	par1NBTTagCompound.setInteger("program",this.program);
-    	par1NBTTagCompound.setString("connectedTo",this.connectedTo);
+    	if (this.connectedTo != null && !this.connectedTo.equals("")) {
+    		par1NBTTagCompound.setString("connectedTo",this.connectedTo);
+    	}
 
     }
     

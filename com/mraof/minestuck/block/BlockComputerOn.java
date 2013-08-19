@@ -136,6 +136,12 @@ public class BlockComputerOn extends Block implements ITileEntityProvider {
 		}
 		
 		@Override
+		public int idPicked(World par1World, int par2, int par3, int par4) {
+			return Minestuck.blockComputerOff.blockID;
+			
+		}
+		
+		@Override
 		public void breakBlock(World world, int x, int y, int z, int par5, int par6) {
 			dropItems(world, x, y, z);
 			super.breakBlock(world, x, y, z, par5, par6);
