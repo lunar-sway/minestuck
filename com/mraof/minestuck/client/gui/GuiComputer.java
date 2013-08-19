@@ -7,12 +7,16 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.inventory.Container;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
@@ -44,6 +48,7 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 
 	private Minecraft mc;
 	private TileEntityComputer te;
+
 
 	public GuiComputer(Minecraft mc,TileEntityComputer te)
 	{
@@ -158,6 +163,15 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 				button.displayString = "";
 				button.enabled = false;
 				displayLine = "Waiting for client...";
+			} else if (te.givenItems) {
+			    	upButton.enabled = false;
+			    	downButton.enabled = false;
+			    	
+			    	for (Object button : selButtons) {
+			    		((GuiButton)button).enabled = false;
+			    	}
+			    	
+					displayLine = "Connected to "+displayName+".";
 			} else if (te.connected) {
 		    	upButton.enabled = false;
 		    	downButton.enabled = false;
@@ -202,7 +216,18 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 			break;
 		case(1):
 			if (te.connected) {
-				
+				Container items = mc.thePlayer.inventoryContainer;
+				ItemStack[] newItems = new ItemStack[5];
+				for (int i = 0;i < 4;i++) {
+					newItems[i] = new ItemStack(Minestuck.blockMachine.blockID,1,i);
+				}
+				ItemStack card = new ItemStack(Minestuck.punchedCard.itemID,1,0);
+				card.setTagCompound(new NBTTagCompound());
+				card.getTagCompound().setInteger("contentID",Minestuck.cruxiteArtifact.itemID);
+				card.getTagCompound().setInteger("contentMeta",0);
+				newItems[4] = card;
+				items.putStacksInSlots(newItems);
+				te.givenItems = true;
 			} else {
 				SburbConnector.addListener(this);
 				SburbConnector.addServer(mc.thePlayer.username);
@@ -225,7 +250,7 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 	private void sendNewConnection(String connTo) {
 		Packet250CustomPayload packet = new Packet250CustomPayload();
 		packet.channel = "Minestuck";
-		packet.data = MinestuckPacket.makePacket(Type.SBURB,te.xCoord,te.yCoord,te.zCoord,connTo);
+		packet.data = MinestuckPacket.makePacket(Type.SBURB_CONNECT,te.xCoord,te.yCoord,te.zCoord,connTo);
 		packet.length = packet.data.length;
 		this.mc.getNetHandler().addToSendQueue(packet);
 		

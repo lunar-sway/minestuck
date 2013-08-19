@@ -10,16 +10,16 @@ import com.mraof.minestuck.tileentity.TileEntityComputer;
 
 import cpw.mods.fml.common.network.Player;
 
-public class SburbConnectionPacket extends MinestuckPacket {
+public class SburbGiveItemsPacket extends MinestuckPacket {
 
 	public String connectedTo;
 	public int xCoord;
 	public int yCoord;
 	public int zCoord;
 	public int gristTotal;
-	public SburbConnectionPacket() 
+	public SburbGiveItemsPacket() 
 	{
-		super(Type.SBURB);
+		super(Type.SBURB_CONNECT);
 	}
 
 	@Override

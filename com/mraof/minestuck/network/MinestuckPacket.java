@@ -18,7 +18,9 @@ public abstract class MinestuckPacket
 		COMBOBUTTON(ComboButtonPacket.class),
 		GOBUTTON(GoButtonPacket.class),
 		TITLE(TitlePacket.class),
-		SBURB(SburbConnectionPacket.class);
+		SBURB_CONNECT(SburbConnectPacket.class),
+		SBURB_OPEN(SburbServerOpenPacket.class),
+		SBURB_GIVE(SburbGiveItemsPacket.class);
 		Class<? extends MinestuckPacket> packetType;
 		private Type(Class<? extends MinestuckPacket> packetClass)
 		{

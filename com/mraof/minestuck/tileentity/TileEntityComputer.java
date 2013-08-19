@@ -11,6 +11,7 @@ public class TileEntityComputer extends TileEntity {
 	public int program;
 	public boolean connected;
 	public String connectedTo;
+	public boolean givenItems = false;
 	
     public TileEntityComputer() {
             
@@ -21,6 +22,7 @@ public class TileEntityComputer extends TileEntity {
     	super.readFromNBT(par1NBTTagCompound);
     	 this.program = par1NBTTagCompound.getInteger("program");
     	 this.connectedTo = par1NBTTagCompound.getString("connectedTo");
+    	 this.givenItems = par1NBTTagCompound.getBoolean("givenItems");
     	 this.connected = connectedTo != "";
     }
     
@@ -28,6 +30,7 @@ public class TileEntityComputer extends TileEntity {
     public void writeToNBT(NBTTagCompound par1NBTTagCompound) {
     	super.writeToNBT(par1NBTTagCompound);
     	par1NBTTagCompound.setInteger("program",this.program);
+    	par1NBTTagCompound.setBoolean("givenItems",this.givenItems);
     	if (this.connectedTo != null && !this.connectedTo.equals("")) {
     		par1NBTTagCompound.setString("connectedTo",this.connectedTo);
     	}
