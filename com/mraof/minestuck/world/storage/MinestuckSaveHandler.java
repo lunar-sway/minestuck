@@ -4,39 +4,35 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.List;
 
-import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.WorldEvent;
 
 public class MinestuckSaveHandler 
 {
+	public static List<Byte> lands = new ArrayList<Byte>();
 	@ForgeSubscribe
 	public void onWorldSave(WorldEvent.Save event)
 	{
 		File landList = event.world.getSaveHandler().getMapFileFromName("minestuckLandList");
 		if (landList != null)
-        {
-            NBTTagCompound nbttagcompound = new NBTTagCompound();
-//            Iterator iterator = this.idCounts.keySet().iterator();
+		{
+			NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-//            while (iterator.hasNext())
-//            {
-//                String s1 = (String)iterator.next();
-//                short short1 = ((Short)this.idCounts.get(s1)).shortValue();
-//                nbttagcompound.setShort(s1, short1);
-//            }
-
-            try {
-            	DataOutputStream dataoutputstream = new DataOutputStream(new FileOutputStream(landList));
-            	CompressedStreamTools.write(nbttagcompound, dataoutputstream);
+			try 
+			{
+				DataOutputStream dataoutputstream = new DataOutputStream(new FileOutputStream(landList));
+				for(byte landId : lands)
+				{
+					dataoutputstream.writeByte(landId);
+				}
 				dataoutputstream.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-        }
+		}
 	}
 }
