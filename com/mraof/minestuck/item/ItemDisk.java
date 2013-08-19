@@ -55,7 +55,7 @@ public class ItemDisk extends Item {
 	@Override
     public boolean onItemUse(ItemStack item, EntityPlayer player, World world, int x, int y, int z, int side, float par8, float par9, float par10)
     {
-		if (world.getBlockId(x,y,z) == Minestuck.blockComputer.blockID) {
+		if (world.getBlockId(x,y,z) == Minestuck.blockComputerOn.blockID) {
 			TileEntityComputer te =  (TileEntityComputer) world.getBlockTileEntity(x, y, z);
 			if (te == null || te.programInstalled) {return false;}
 			te.programInstalled = true;
@@ -65,7 +65,7 @@ public class ItemDisk extends Item {
 			
 			System.out.println("[MINESTUCK] Installed program with id "+te.program);
 		}
-		return world.getBlockId(x,y,z) == Minestuck.blockComputer.blockID;
+		return world.getBlockId(x,y,z) == Minestuck.blockComputerOn.blockID;
     }
 	
 	@SideOnly(Side.CLIENT)

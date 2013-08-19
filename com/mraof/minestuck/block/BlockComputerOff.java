@@ -16,12 +16,12 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 
-public class BlockComputer extends BlockContainer {
+public class BlockComputerOff extends Block {
 	
 	private Icon frontIcon;
 	private Icon sideIcon;
 
-	public BlockComputer(int id)
+	public BlockComputerOff(int id)
 	{
 		super(id, Material.rock);
 		setUnlocalizedName("computer");
@@ -74,7 +74,7 @@ public class BlockComputer extends BlockContainer {
 	    @Override
 	    public void registerIcons(IconRegister par1IconRegister)
 	    {
-	            this.frontIcon = par1IconRegister.registerIcon("minestuck:ComputerFront");
+	            this.frontIcon = par1IconRegister.registerIcon("minestuck:ComputerFrontOff");
 	            this.sideIcon =  par1IconRegister.registerIcon("minestuck:PhernaliaFrame");
 	    }
 	    
@@ -110,21 +110,5 @@ public class BlockComputer extends BlockContainer {
 	        super.onBlockAdded(par1World, par2, par3, par4);
 	        this.setDefaultDirection(par1World, par2, par3, par4);
 	    }
-	    
-		@Override
-		public boolean onBlockActivated(World world, int x,int y,int z, EntityPlayer player,int par6, float par7, float par8, float par9) {
-			TileEntityComputer tileEntity = (TileEntityComputer) world.getBlockTileEntity(x, y, z);
-			if (tileEntity == null || player.isSneaking()) {
-				return false;
-			}
-
-
-			player.openGui(Minestuck.instance, 1, world, x, y, z);
-			return true;
-		}
-		
-		@Override
-		public TileEntity createNewTileEntity(World world) {
-			return new TileEntityComputer();
-		}
+	   
 }
