@@ -1,20 +1,15 @@
 package com.mraof.minestuck.block;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.tileentity.TileEntityComputer;
-import com.mraof.minestuck.tileentity.TileEntityMachine;
 
 public class BlockComputerOff extends Block {
 	

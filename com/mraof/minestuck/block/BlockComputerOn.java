@@ -3,16 +3,13 @@ package com.mraof.minestuck.block;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
@@ -20,7 +17,6 @@ import net.minecraft.world.World;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
-import com.mraof.minestuck.tileentity.TileEntityMachine;
 
 public class BlockComputerOn extends Block implements ITileEntityProvider {
 	

@@ -1,25 +1,10 @@
 package com.mraof.minestuck.tileentity;
 
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Map;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
-
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.CombinationRegistry;
-import com.mraof.minestuck.util.GristRegistry;
-import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.GristType;
 
 public class TileEntityComputer extends TileEntity {
 

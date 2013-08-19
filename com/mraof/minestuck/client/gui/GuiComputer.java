@@ -4,26 +4,21 @@ package com.mraof.minestuck.client.gui;
 import java.util.ArrayList;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import com.mraof.minestuck.network.MinestuckPacket;
+import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
-import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.IConnectionListener;
 import com.mraof.minestuck.util.SburbConnection;
 import com.mraof.minestuck.util.SburbConnector;
-import com.mraof.minestuck.util.Title;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -195,6 +190,7 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 				SburbConnection conn = SburbConnector.connect(mc.thePlayer.username, guibutton.displayString);
 				te.connectedTo = conn.getServerPlayer();
 				te.connected = true;
+				sendNewConnection(conn.getServerPlayer());
 			}
 			break;
 		case(1):
@@ -216,10 +212,17 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 			te.connected = true;
 			te.connectedTo = conn.getClientPlayer();
 			waiting = false;
-			updateGui();
+			sendNewConnection(conn.getClientPlayer());
 		}
-		
+		updateGui();
 	}
 
+	private void sendNewConnection(String connTo) {
+		Packet250CustomPayload packet = new Packet250CustomPayload();
+		packet.channel = "Minestuck";
+		packet.data = MinestuckPacket.makePacket(Type.SBURB,te.xCoord,te.yCoord,te.zCoord,connTo);
+		packet.length = packet.data.length;
+		this.mc.getNetHandler().addToSendQueue(packet);
+	}
 		
 }
