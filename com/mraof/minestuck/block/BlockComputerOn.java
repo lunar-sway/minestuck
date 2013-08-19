@@ -1,12 +1,18 @@
 package com.mraof.minestuck.block;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
@@ -16,7 +22,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 
-public class BlockComputerOn extends BlockContainer {
+public class BlockComputerOn extends Block implements ITileEntityProvider {
 	
 	private Icon frontIcon;
 	private Icon sideIcon;
@@ -125,5 +131,37 @@ public class BlockComputerOn extends BlockContainer {
 		@Override
 		public TileEntity createNewTileEntity(World world) {
 			return new TileEntityComputer();
+		}
+		
+		@Override
+		public int idDropped(int par1, Random random, int par2) {
+			return Minestuck.blockComputerOff.blockID;
+			
+		}
+		
+		@Override
+		public void breakBlock(World world, int x, int y, int z, int par5, int par6) {
+			dropItems(world, x, y, z);
+			super.breakBlock(world, x, y, z, par5, par6);
+		}
+
+		private void dropItems(World world, int x, int y, int z){
+			Random rand = new Random();
+			TileEntityComputer te = (TileEntityComputer) world.getBlockTileEntity(x, y, z);
+			if (te == null) {
+				return;
+			}
+
+			float rx = rand.nextFloat() * 0.8F + 0.1F;
+			float ry = rand.nextFloat() * 0.8F + 0.1F;
+			float rz = rand.nextFloat() * 0.8F + 0.1F;
+
+			EntityItem entityItem = new EntityItem(world, x + rx, y + ry, z + rz, new ItemStack(Minestuck.disk.itemID, 1, te.program));
+
+			float factor = 0.05F;
+			entityItem.motionX = rand.nextGaussian() * factor;
+			entityItem.motionY = rand.nextGaussian() * factor + 0.2F;
+			entityItem.motionZ = rand.nextGaussian() * factor;
+			world.spawnEntityInWorld(entityItem);
 		}
 }

@@ -43,4 +43,18 @@ public class TileEntityComputer extends TileEntity {
     	par1NBTTagCompound.setInteger("program",this.program);
     	//par1NBTTagCompound.setBoolean("programInstalled",this.programInstalled);
     }
+    
+    @Override
+    public Packet getDescriptionPacket() 
+    {
+    	NBTTagCompound tagCompound = new NBTTagCompound();
+    	this.writeToNBT(tagCompound);
+    	return new Packet132TileEntityData(this.xCoord, this.yCoord, this.zCoord, 2, tagCompound);
+    }
+    
+    @Override
+    public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) 
+    {
+    	this.readFromNBT(pkt.customParam1);
+    }
 }
