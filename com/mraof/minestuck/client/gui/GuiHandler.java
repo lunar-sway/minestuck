@@ -1,10 +1,12 @@
 package com.mraof.minestuck.client.gui;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.inventory.ContainerMachine;
+import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 
 import cpw.mods.fml.common.network.IGuiHandler;
@@ -29,6 +31,9 @@ public class GuiHandler implements IGuiHandler {
             if(tileEntity instanceof TileEntityMachine){
                     return new GuiMachine(player.inventory, (TileEntityMachine) tileEntity);
             }
+            if(tileEntity instanceof TileEntityComputer){
+                return new GuiComputer(Minecraft.getMinecraft());
+        }
             return null;
 
     }
