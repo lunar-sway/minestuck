@@ -20,7 +20,7 @@ public class TileEntityComputer extends TileEntity {
     public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
     	super.readFromNBT(par1NBTTagCompound);
     	 this.program = par1NBTTagCompound.getInteger("program");
-    	 this.connectedTo = par1NBTTagCompound.getString("conectedTo");
+    	 this.connectedTo = par1NBTTagCompound.getString("connectedTo");
     	 this.connected = connectedTo != "";
     }
     
