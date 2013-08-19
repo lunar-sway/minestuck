@@ -20,13 +20,16 @@ import org.lwjgl.opengl.GL12;
 
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.GristType;
+import com.mraof.minestuck.util.IConnectionListener;
+import com.mraof.minestuck.util.SburbConnection;
+import com.mraof.minestuck.util.SburbConnector;
 import com.mraof.minestuck.util.Title;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class GuiComputer extends GuiScreen
+public class GuiComputer extends GuiScreen implements IConnectionListener
 {
 
     private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/Sburb.png");
@@ -38,11 +41,13 @@ public class GuiComputer extends GuiScreen
 	private GuiButton downButton;
 	
 	private ArrayList<GuiButton> selButtons = new ArrayList<GuiButton>();
-	private String displayLine = "Starting Up...";
+	private String displayLine = "";
 	private String programName = "";
 	private int program;
+	private boolean waiting = false;
 
 	private Minecraft mc;
+	private TileEntityComputer te;
 
 	public GuiComputer(Minecraft mc,TileEntityComputer te)
 	{
@@ -50,6 +55,7 @@ public class GuiComputer extends GuiScreen
 
 		this.mc = mc;
 		this.fontRenderer = mc.fontRenderer;
+		this.te = te;
 		
 		this.program = te.program;
 		switch (program) {
@@ -96,14 +102,124 @@ public class GuiComputer extends GuiScreen
 	public void initGui() {
         super.initGui();
         for (int i=0;i<4;i++) {
-        	GuiButton button = new GuiButton(i, (width - xSize) / 2 +14, (height - ySize) / 2 +60 + i*24, 120, 20,"Option "+i);
+        	GuiButton button = new GuiButton(i, (width - xSize) / 2 +14, (height - ySize) / 2 +60 + i*24, 120, 20,"");
         	selButtons.add(button);
         	buttonList.add(button);
         }
+        
         upButton = new GuiButton(-1, (width - xSize) / 2 +140, (height - ySize) / 2 +60, 20, 20,"^");
         buttonList.add(upButton);
         downButton = new GuiButton(-1, (width - xSize) / 2 +140, (height - ySize) / 2 +132, 20, 20,"v");
         buttonList.add(downButton);
+        
+    	updateGui();
 	}
 
+	private void updateGui() {
+		switch(program) {
+		case(0):
+			if (te.connected) {
+				this.displayLine = "Connected to "+te.connectedTo+".";
+		    	upButton.enabled = false;
+		    	downButton.enabled = false;
+		    	
+		    	for (Object button : selButtons) {
+		    		((GuiButton)button).enabled = false;
+		    		((GuiButton)button).displayString = "";
+		    	}
+		    	
+			} else {
+				this.displayLine = "Select a server below.";
+		    	upButton.enabled = false;
+		    	downButton.enabled = false;
+		    	
+		    	for (Object button : selButtons) {
+		    		((GuiButton)button).enabled = false;
+		    	}
+		    	
+		    	int i = 0;
+		    	for (Object server : SburbConnector.getServersOpen()) {
+		    		if (selButtons.get(i) != null) {
+		    			selButtons.get(i).displayString = (String)server;
+		    			selButtons.get(i).enabled = true;
+		    			i++;
+		    		} else {
+		    			downButton.enabled = true;
+		    		}
+		    	}
+			}
+	    	break;
+		case(1):
+			if (waiting) {
+				GuiButton button = selButtons.get(0);
+				button.displayString = "";
+				button.enabled = false;
+				displayLine = "Waiting for client...";
+			} else if (te.connected) {
+		    	upButton.enabled = false;
+		    	downButton.enabled = false;
+		    	
+		    	for (Object button : selButtons) {
+		    		((GuiButton)button).enabled = false;
+		    	}
+				
+				GuiButton button = selButtons.get(0);
+				displayLine = "Connected to "+te.connectedTo+".";
+				button.displayString = "Give client items";
+				button.enabled = true;
+			} else {
+				this.displayLine = "Click the button below.";
+			
+		      	for (Object button : selButtons) {
+		    		if (((GuiButton)button).id != 0) {
+		    			((GuiButton)button).enabled = false;
+		    		} else {
+		    			((GuiButton)button).displayString = "Open to clients";
+		    		}
+		    	}
+		    	upButton.enabled = false;
+		    	downButton.enabled = false;
+			}
+	    	break;
+		}
+	}
+
+	protected void actionPerformed(GuiButton guibutton) {
+		switch(program) {
+		case(0):
+			if (guibutton == upButton) {
+				
+			} else if (guibutton == downButton) {
+				
+			} else {
+				SburbConnection conn = SburbConnector.connect(mc.thePlayer.username, guibutton.displayString);
+				te.connectedTo = conn.getServerPlayer();
+				te.connected = true;
+			}
+			break;
+		case(1):
+			if (te.connected) {
+				
+			} else {
+				SburbConnector.addListener(this);
+				SburbConnector.addServer(mc.thePlayer.username);
+				this.waiting  = true;
+			}
+			break;
+		}
+		updateGui();
+	}
+
+	@Override
+	public void onConnected(SburbConnection conn) {
+		if (!te.connected && conn.getServerPlayer() == mc.thePlayer.username) {
+			te.connected = true;
+			te.connectedTo = conn.getClientPlayer();
+			waiting = false;
+			updateGui();
+		}
+		
+	}
+
+		
 }

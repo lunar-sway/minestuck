@@ -1,5 +1,7 @@
 package com.mraof.minestuck.tracker;
 
+import java.util.ArrayList;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,6 +18,8 @@ import cpw.mods.fml.common.IPlayerTracker;
 public class MinestuckPlayerTracker implements IPlayerTracker 
 {
 
+
+	
 	@Override
 	public void onPlayerLogin(EntityPlayer player) 
 	{
@@ -26,7 +30,7 @@ public class MinestuckPlayerTracker implements IPlayerTracker
 	@Override
 	public void onPlayerLogout(EntityPlayer player) 
 	{
-
+		
 	}
 
 	@Override
