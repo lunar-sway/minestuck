@@ -55,17 +55,21 @@ public class ItemDisk extends Item {
 	@Override
     public boolean onItemUse(ItemStack item, EntityPlayer player, World world, int x, int y, int z, int side, float par8, float par9, float par10)
     {
-		if (world.getBlockId(x,y,z) == Minestuck.blockComputerOn.blockID) {
+		if (world.getBlockId(x,y,z) == Minestuck.blockComputerOff.blockID) {
+			int meta = world.getBlockMetadata(x,y,z);
+			world.setBlock(x,y,z,Minestuck.blockComputerOn.blockID);
+			world.setBlockMetadataWithNotify(x, y, z, meta, 2);
 			TileEntityComputer te =  (TileEntityComputer) world.getBlockTileEntity(x, y, z);
-			if (te == null || te.programInstalled) {return false;}
-			te.programInstalled = true;
+			if (te == null) {return false;}
+			//te.programInstalled = true;
 			te.program = item.getItemDamage();
 			
 			player.destroyCurrentEquippedItem();
 			
 			System.out.println("[MINESTUCK] Installed program with id "+te.program);
+			return true;
 		}
-		return world.getBlockId(x,y,z) == Minestuck.blockComputerOn.blockID;
+		return false;
     }
 	
 	@SideOnly(Side.CLIENT)

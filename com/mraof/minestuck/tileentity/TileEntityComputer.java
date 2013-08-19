@@ -24,7 +24,7 @@ import com.mraof.minestuck.util.GristType;
 public class TileEntityComputer extends TileEntity {
 
 	public int program = 0;
-	public boolean programInstalled = false;
+	//public boolean programInstalled = false;
 	
     public TileEntityComputer() {
             
@@ -34,13 +34,13 @@ public class TileEntityComputer extends TileEntity {
     public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
     	super.readFromNBT(par1NBTTagCompound);
     	 this.program = par1NBTTagCompound.getInteger("program");
-    	 this.programInstalled = par1NBTTagCompound.getBoolean("programInstalled");
+    	 //this.programInstalled = par1NBTTagCompound.getBoolean("programInstalled");
     }
     
     @Override
     public void writeToNBT(NBTTagCompound par1NBTTagCompound) {
     	super.writeToNBT(par1NBTTagCompound);
     	par1NBTTagCompound.setInteger("program",this.program);
-    	par1NBTTagCompound.setBoolean("programInstalled",this.programInstalled);
+    	//par1NBTTagCompound.setBoolean("programInstalled",this.programInstalled);
     }
 }
