@@ -23,7 +23,7 @@ import com.mraof.minestuck.util.GristType;
 
 public class TileEntityComputer extends TileEntity {
 
-	public int program = 0;
+	public int program;
 	//public boolean programInstalled = false;
 	
     public TileEntityComputer() {
@@ -57,4 +57,5 @@ public class TileEntityComputer extends TileEntity {
     {
     	this.readFromNBT(pkt.customParam1);
     }
+    
 }

@@ -32,7 +32,7 @@ public class GuiHandler implements IGuiHandler {
                     return new GuiMachine(player.inventory, (TileEntityMachine) tileEntity);
             }
             if(tileEntity instanceof TileEntityComputer){
-                return new GuiComputer(Minecraft.getMinecraft());
+                return new GuiComputer(Minecraft.getMinecraft(),(TileEntityComputer) tileEntity);
         }
             return null;
 
