@@ -528,6 +528,7 @@ public class AlchemyRecipeHandler {
 						return false;
 					}
 				}
+				set.scaleGrist(1/(float)newRecipe.getRecipeOutput().stackSize);
 				GristRegistry.addGristConversion(newRecipe.getRecipeOutput(),newRecipe.getRecipeOutput().getHasSubtypes(),set);
 			}
 		} else if ((recipe.getClass() == ShapelessRecipes.class)) {

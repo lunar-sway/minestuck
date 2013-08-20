@@ -103,9 +103,21 @@ public class GristSet {
 	/**
 	 * Adds an amount of grist to a GristSet, given a grist type and amount.
 	 */
-	private GristSet addGrist(GristAmount grist) {
+	public GristSet addGrist(GristAmount grist) {
 		Debug.print("		Adding "+grist.getAmount()+" of "+grist.getType().getName());
 		this.gristTypes[grist.getType().ordinal()] += grist.getAmount();
+		return this;
+	}
+	
+	/**
+	 * Multipleis all the grist amounts by a factor.
+	 */
+	public GristSet scaleGrist(float scale) {
+		
+		for (int i = 0;i < GristType.allGrists;i++) {
+			gristTypes[i] *= scale;
+		}
+		
 		return this;
 	}
 }
