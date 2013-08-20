@@ -217,10 +217,11 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		case (2):
 			return (this.inv[1] != null && this.inv[2] != null && this.inv[0] == null);
 		case (3):
-			if (this.inv[1] != null && this.inv[0] == null && this.owner != null) {
+			if (this.inv[1] != null && this.owner != null) {
 				//Check owner's cache: Do they have everything they need?
 				ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(this.inv[1]);
 				if (newItem == null) {return false;}
+				if (inv[0] != null && (inv[0].itemID != newItem.itemID || inv[0].getItemDamage() != newItem.getItemDamage())) {return false;}
 		    	GristSet set = GristRegistry.getGristConversion(newItem);
 		    	if (set == null) {return false;}
 			    	Hashtable reqs = set.getHashtable();
@@ -278,8 +279,10 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 
 	        
 			setInventorySlotContents(0,outputCard);
-			//decrStackSize(1, 1);
-			//decrStackSize(2, 1);
+			if (inv[1] == null || inv[2] == null) {
+				decrStackSize(1, 1);
+				decrStackSize(2, 1);
+			}
 			decrStackSize(3, 1);
 			break;
 		case (2):
@@ -299,7 +302,11 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			break;
 		case (3):
 			ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(this.inv[1]);
-			setInventorySlotContents(0,newItem);
+			if (inv[0] == null) {
+				setInventorySlotContents(0,newItem);
+			} else {
+				decrStackSize(0, -1);
+			}
 			//decrStackSize(1, 1);
 	    	GristSet set = GristRegistry.getGristConversion(newItem);
 		    Hashtable reqs = set.getHashtable();
