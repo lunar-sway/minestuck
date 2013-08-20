@@ -8,6 +8,7 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.Debug;
 
 public class ComponentCastleWallPiece extends ComponentCastlePiece 
 {
@@ -86,7 +87,7 @@ public class ComponentCastleWallPiece extends ComponentCastlePiece
 			this.getNextComponentNormal(startPiece, components, random, 0, -8, true);
 			break;
 		default:
-			System.out.println("[MINESTUCK] Wall done");
+			Debug.print("Wall done");
 		}
 		this.componentType = 3;
 //		if(!this.cornerPiece)
@@ -103,7 +104,7 @@ public class ComponentCastleWallPiece extends ComponentCastlePiece
 	{
 		int chessTileMetadata = startPiece.isBlack ? 0 : 1;
 		int chessTileMetadata1 = startPiece.isBlack ? 2 : 3;
-//		System.out.println("addComponentParts in ComponentCastleWallPiece running");
+//		Debug.print("addComponentParts in ComponentCastleWallPiece running");
 		if (startPiece.averageGroundLevel < 0)
 		{
 			startPiece.averageGroundLevel = startPiece.getAverageGroundLevel(par1World);
@@ -113,7 +114,7 @@ public class ComponentCastleWallPiece extends ComponentCastlePiece
 				return true;
 			}
 
-			System.out.println(startPiece.averageGroundLevel);
+			Debug.print(startPiece.averageGroundLevel);
 		}
 		if(this.boundingBox.minY < startPiece.averageGroundLevel - 1)
 			this.boundingBox.offset(0, startPiece.averageGroundLevel - 1, 0);
@@ -123,7 +124,7 @@ public class ComponentCastleWallPiece extends ComponentCastlePiece
 		}
 		else
 		{
-//			System.out.println("CCWP: " + startPiece.averageGroundLevel + " " + this.boundingBox.minX + " " + this.boundingBox.minY);
+//			Debug.print("CCWP: " + startPiece.averageGroundLevel + " " + this.boundingBox.minX + " " + this.boundingBox.minY);
 			if(!(this.direction == 5 && this.cornerPiece))
 			{
 				this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 0, 0, 7 ,6, 7, Minestuck.chessTile.blockID, chessTileMetadata, Minestuck.chessTile.blockID, chessTileMetadata1, false);

@@ -14,7 +14,6 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.stats.Achievement;
 import net.minecraft.world.WorldType;
 import net.minecraftforge.common.Configuration;
@@ -69,6 +68,7 @@ import com.mraof.minestuck.tileentity.TileEntityGatePortal;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.WorldProviderSkaia;
@@ -181,6 +181,7 @@ public class Minestuck
 		skaiaDimensionId = config.get("Dimension Ids", "skaiaDimensionId", 2).getInt();
 		landProviderTypeId = config.get("Provider Type Ids", "landProviderTypeIdStart", 3).getInt();
 		landDimensionIdStart = config.get("Dimension Ids", "landDimensionIdStart", 3).getInt();
+		Debug.isDebugMode = config.get("General","printDebugMessages",true).getBoolean(false);
 		config.save();
 	}
 
@@ -404,6 +405,8 @@ public class Minestuck
 	public void postInit(FMLPostInitializationEvent event) 
 	{
 		MinecraftForge.EVENT_BUS.register(new MinestuckSaveHandler());
+		
+		AlchemyRecipeHandler.registerDynamicRecipes();
 	}
 	//registers entity with forge and minecraft, and increases currentEntityIdOffset by one in order to prevent id collision
 	public void registerAndMapEntity(Class entityClass, String name, int eggColor, int eggSpotColor)
@@ -430,7 +433,7 @@ public class Minestuck
 				while((currentByte = dataInputStream.read()) != -1)
 				{
 					MinestuckSaveHandler.lands.add((byte)currentByte);
-					System.out.println(currentByte);
+					Debug.print(currentByte);
 					if(!DimensionManager.isDimensionRegistered(currentByte))
 					DimensionManager.registerDimension(currentByte, Minestuck.landProviderTypeId);
 				}
@@ -439,20 +442,21 @@ public class Minestuck
 				e.printStackTrace();
 			}
 		}
-//		
+
+//		//I'm sorry for this code. I really am
 //		MinecraftServer server = event.getServer();
-//		//System.out.println(server.getFolderName());
+//		//Debug.print(server.getFolderName());
 //		File directory = new File("./saves/" + server.getFolderName());
 //		if (!directory.exists()) {
 //			directory = new File("./"+ server.getFolderName());
 //		}
 //		File[] files = directory.listFiles();
 //		for (File file : files) {
-//			//System.out.println("found a file called " + file.getName());
+//			//Debug.print("found a file called " + file.getName());
 //			if (file.getName().contains("DIM")) {
 //				int dim = Integer.valueOf(file.getName().substring(3));
 //				if (DimensionManager.getWorld(dim) == null) {
-//					System.out.println("[MINESTUCK] found a dimension with an id of" + dim);
+//					Debug.print("found a dimension with an id of" + dim);
 //					DimensionManager.registerDimension(dim, Minestuck.landProviderTypeId);
 //				}
 //			}

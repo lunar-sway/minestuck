@@ -224,7 +224,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		    	GristSet set = GristRegistry.getGristConversion(newItem);
 		    	if (set == null) {return false;}
 			    	Hashtable reqs = set.getHashtable();
-			    	//System.out.println("reqs: " + reqs.size());
+			    	//Debug.print("reqs: " + reqs.size());
 			    	if (reqs != null) {
 			    	   	Iterator it = reqs.entrySet().iterator();
 			            while (it.hasNext()) {

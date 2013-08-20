@@ -104,8 +104,12 @@ protected void drawGuiContainerForegroundLayer(int param1, int param2) {
     	
     	if (set == null) {return;}
     	Hashtable reqs = set.getHashtable();
-    	//System.out.println("reqs: " + reqs.size());
+    	//Debug.print("reqs: " + reqs.size());
     	if (reqs != null) {
+    		if (reqs.size() == 0) {
+    			fontRenderer.drawString("Free!", 9,45, 65280);
+    			return;
+    		}
     	   	Iterator it = reqs.entrySet().iterator();
     	   	int place = 0;
             while (it.hasNext()) {
@@ -123,7 +127,7 @@ protected void drawGuiContainerForegroundLayer(int param1, int param2) {
                 
                 place++;
                 
-                //System.out.println("Need" + need + ". Have " + have);
+                //Debug.print("Need" + need + ". Have " + have);
             }
     	}
     }

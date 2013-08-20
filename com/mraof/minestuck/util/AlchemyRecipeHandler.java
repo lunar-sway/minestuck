@@ -1,9 +1,18 @@
 package com.mraof.minestuck.util;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSapling;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 
 import com.mraof.minestuck.Minestuck;
@@ -16,6 +25,8 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 public class AlchemyRecipeHandler {
 	
+	private static HashMap recipeList;
+
 	public static void registerVanillaRecipes() {
 		
 		//Set up Alchemiter recipes
@@ -71,7 +82,7 @@ public class AlchemyRecipeHandler {
 		GristRegistry.addGristConversion(new ItemStack(Block.mushroomBrown), false, new GristSet(new GristType[] {GristType.Iodine}, new int[] {2}));
 		GristRegistry.addGristConversion(new ItemStack(Block.mushroomRed), false, new GristSet(new GristType[] {GristType.Ruby}, new int[] {2}));
 		GristRegistry.addGristConversion(new ItemStack(Block.blockGold), false, new GristSet(new GristType[] {GristType.Gold}, new int[] {144}));
-		GristRegistry.addGristConversion(new ItemStack(Block.blockIron), false, new GristSet(new GristType[] {GristType.Rust}, new int[] {144}));
+		//GristRegistry.addGristConversion(new ItemStack(Block.blockIron), false, new GristSet(new GristType[] {GristType.Rust}, new int[] {144}));
 		GristRegistry.addGristConversion(new ItemStack(Block.stoneSingleSlab, 1, 0), true, new GristSet(new GristType[] {GristType.Build}, new int[] {1}));
 		GristRegistry.addGristConversion(new ItemStack(Block.stoneSingleSlab, 1, 1), true, new GristSet(new GristType[] {GristType.Shale}, new int[] {2}));
 		GristRegistry.addGristConversion(new ItemStack(Block.stoneSingleSlab, 1, 3), true, new GristSet(new GristType[] {GristType.Build}, new int[] {1}));
@@ -147,7 +158,7 @@ public class AlchemyRecipeHandler {
 		GristRegistry.addGristConversion(new ItemStack(Block.cobblestoneWall, 1, 0), true, new GristSet(new GristType[] {GristType.Build, GristType.Shale}, new int[] {8, 2}));
 		GristRegistry.addGristConversion(new ItemStack(Block.cobblestoneWall, 1, 1), true, new GristSet(new GristType[] {GristType.Build, GristType.Shale, GristType.Iodine}, new int[] {8, 1, 1}));
 		GristRegistry.addGristConversion(new ItemStack(Block.woodenButton), false, new GristSet(new GristType[] {GristType.Build, GristType.Garnet}, new int[] {2, 3}));
-		GristRegistry.addGristConversion(new ItemStack(Block.anvil), false, new GristSet(new GristType[] {GristType.Rust, GristType.Build}, new int[] {16, 4}));
+		//GristRegistry.addGristConversion(new ItemStack(Block.anvil), false, new GristSet(new GristType[] {GristType.Rust, GristType.Build}, new int[] {16, 4}));
 		GristRegistry.addGristConversion(new ItemStack(Block.chestTrapped), false, new GristSet(new GristType[] {GristType.Build, GristType.Garnet}, new int[] {8, 1}));
 		GristRegistry.addGristConversion(new ItemStack(Block.pressurePlateGold), false, new GristSet(new GristType[] {GristType.Gold, GristType.Garnet}, new int[] {3, 2}));
 		GristRegistry.addGristConversion(new ItemStack(Block.pressurePlateIron), false, new GristSet(new GristType[] {GristType.Rust, GristType.Garnet}, new int[] {3, 2}));
@@ -446,19 +457,73 @@ public class AlchemyRecipeHandler {
 	public static ItemStack getDecodedItem(ItemStack card) {
 		
 		if (card == null) {return null;}
-		//System.out.println("[MINESTUCK] Looking for an ID of" +  Minestuck.cruxiteDowel.itemID + ". Got an ID of " + card.itemID);
+		//Debug.print("Looking for an ID of" +  Minestuck.cruxiteDowel.itemID + ". Got an ID of " + card.itemID);
 		if (card.itemID == Minestuck.cruxiteDowel.itemID) {
-			//System.out.println("[MINESTUCK] Got a blank dowel as input. Returning a generic object");
+			//Debug.print("Got a blank dowel as input. Returning a generic object");
 			return new ItemStack(Minestuck.blockStorage,1,1); //return a Perfectly Generic Object if it's a blank dowel
 		}
 		
-		//System.out.println("[MINESTUCK] Got a carved dowel. Returning encoded object");
+		//Debug.print("Got a carved dowel. Returning encoded object");
 		NBTTagCompound tag = card.getTagCompound();
 		
 		if (tag == null || Item.itemsList[tag.getInteger("contentID")] == null) {return null;}
 		ItemStack newItem = new ItemStack(tag.getInteger("contentID"),1,tag.getInteger("contentMeta"));
 		
 		return newItem;
+		
+	}
+	
+	/**
+	 * Adds all the recipes that are based on the existing vanilla crafting registries, like grist conversions of items composed of oither things.
+	 */
+	public static void registerDynamicRecipes() {
+		
+		recipeList = new HashMap();
+		
+		for (Object recipe : CraftingManager.getInstance().getRecipeList()) {
+			if (recipe.getClass() == ShapedRecipes.class) {
+				ShapedRecipes newRecipe = (ShapedRecipes) recipe;
+				recipeList.put(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getItemDamage()), recipe);
+			}
+		}
+		
+	   	Iterator it = recipeList.entrySet().iterator();
+	   	int place = 0;
+        while (it.hasNext()) {
+        	Map.Entry pairs = (Map.Entry)it.next();
+        	getRecipe(pairs.getValue());
+        }
+	}
+	
+	private static void getRecipe(Object recipe) {
+		if (recipe.getClass() == ShapedRecipes.class) {
+			Debug.print("found shaped recipe. Output of "+((ShapedRecipes)recipe).getRecipeOutput().getDisplayName());
+			ShapedRecipes newRecipe = (ShapedRecipes) recipe;
+			if (GristRegistry.getGristConversion(newRecipe.getRecipeOutput()) != null) {return;};
+			GristSet set = new GristSet();
+			for (ItemStack item : newRecipe.recipeItems) {
+				if (GristRegistry.getGristConversion(item) != null) {
+					Debug.print("	Adding compo: "+item.getDisplayName());
+					set.addGrist(GristRegistry.getGristConversion(item));
+				} else if (item != null) {
+					Debug.print("	Could not find "+item.getDisplayName()+". Looking up subrecipe...");
+					Object subrecipe = recipeList.get(Arrays.asList(item.itemID,item.getItemDamage()));
+					if (subrecipe != null) {
+						getRecipe(subrecipe);
+						set.addGrist(GristRegistry.getGristConversion(item));
+					} else {
+						Debug.print("	Recipe failed!");
+						return;
+					}
+					//Code to do stuff recursively later
+				}
+				GristRegistry.addGristConversion(newRecipe.getRecipeOutput(),set);
+			}
+		} else if ((recipe.getClass() == ShapelessRecipes.class)) {
+			Debug.print("found shapeless recipe");
+		} else {
+			Debug.print("found other recipe class: "+recipe.getClass());
+		}
 		
 	}
 	

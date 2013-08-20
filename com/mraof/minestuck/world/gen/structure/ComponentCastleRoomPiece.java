@@ -69,7 +69,7 @@ public class ComponentCastleRoomPiece extends ComponentCastlePiece
 				return true;
 			}
 
-//			System.out.println(startPiece.averageGroundLevel);
+//			Debug.print(startPiece.averageGroundLevel);
 		}
 		if(this.boundingBox.minY < startPiece.averageGroundLevel - 1)
 		{

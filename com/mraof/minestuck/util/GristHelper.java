@@ -10,7 +10,7 @@ public class GristHelper {
 	 */
 	public static GristType getPrimaryGrist() {
 		while (true) {
-			//System.out.println("[MINESTUCK] Index is " + index);
+			//Debug.print("Index is " + index);
 			GristType randGrist = GristType.values()[random.nextInt(GristType.allGrists)];
 			if (randGrist.getRarity() > random.nextFloat()) {
 				return randGrist;
