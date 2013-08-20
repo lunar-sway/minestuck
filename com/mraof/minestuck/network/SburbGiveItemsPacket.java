@@ -12,6 +12,7 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.util.Debug;
 
 import cpw.mods.fml.common.network.Player;
 
@@ -57,7 +58,7 @@ public class SburbGiveItemsPacket extends MinestuckPacket {
 		TileEntityComputer te = (TileEntityComputer)Minecraft.getMinecraft().theWorld.getBlockTileEntity(xCoord,yCoord,zCoord);
 				
 		if (te == null) {
-			System.out.println("[MINESTUCK] Packet recieved, but TE isn't there!");
+			Debug.print("Packet recieved, but TE isn't there!");
 			return;
 		}
 		
@@ -74,7 +75,7 @@ public class SburbGiveItemsPacket extends MinestuckPacket {
 		items.putStacksInSlots(newItems);
 		te.givenItems = true;
 		
-		System.out.println("[MINESTUCK] Packet recieved. Items given!");
+		Debug.print("Packet recieved. Items given!");
 	}
 
 }

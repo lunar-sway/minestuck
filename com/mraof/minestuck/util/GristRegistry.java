@@ -16,7 +16,7 @@ public class GristRegistry {
 	}
 
 	public static void addGristConversion(ItemStack item,boolean useDamage,GristSet grist) {
-		System.out.printf("[MINESTUCK] adding grist conversion for id %d and metadata %d, %susing metadata\n", item.itemID, item.getItemDamage(), useDamage ? "" : "not ");
+		//System.out.printf("adding grist conversion for id %d and metadata %d, %susing metadata\n", item.itemID, item.getItemDamage(), useDamage ? "" : "not ");
 		gristRecipes.put(Arrays.asList(item.itemID,useDamage ? item.getItemDamage() : 0,useDamage), grist);
 	}
 	public static void addGristConversion(int id, GristSet grist)

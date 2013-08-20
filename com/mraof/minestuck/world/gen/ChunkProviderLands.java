@@ -107,6 +107,7 @@ public class ChunkProviderLands implements IChunkProvider
 		int[] topBlock = new int[256];
 		
 		generated0 = this.noiseGens[0].generateNoiseOctaves(generated0, chunkX*16, 10, chunkZ*16, 16, 1, 16, .1, 0, .1);
+		generated0 = this.noiseGens[0].generateNoiseOctaves(generated0, chunkX*16, 10, chunkZ*16, 16, 1, 16, 100.1, 50, 130.1);
 		generated1 = this.noiseGens[1].generateNoiseOctaves(generated1, chunkX*16, 2, chunkZ*16, 16, 256, 16, .12, .11, .12);
 		
 		for(int i = 0; i < 256; i++)
@@ -130,11 +131,9 @@ public class ChunkProviderLands implements IChunkProvider
 				//currentBlockOffset = (int) Math.abs(generated1[x + z * 256 + y * 16]) % surfaceBlock[0].length;
 				chunkIds[x + z * 16 + y * 256] = (short) surfaceBlock[0];
 				chunkMetadata[x + z * 16 + y * 256] = (byte) surfaceBlock[1];
-				for(; y < 64; y++)
+				for(; y < 63; y++)
 					chunkIds[x + z * 16 + y * 256] = (short) this.oceanBlock;
 					
-//					(short) (generated1[x + z * 256 + y * 16] < 0 ? Block.blockEmerald.blockID : Block.blockDiamond.blockID);
-				
 			}
 		Chunk chunk = new Chunk(this.landWorld, chunkIds, chunkMetadata, chunkX, chunkZ);
 		return chunk;

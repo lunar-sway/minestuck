@@ -72,14 +72,52 @@ public class GristSet {
 		return hs;
 	}
 	
+	/**
+	 * Returns a ArrayList containig GristAmount objects representing the set.
+	 * 
+	 */
 	public ArrayList getArray() {
 		ArrayList list = new ArrayList();
 		for(int i = 0; i < GristType.allGrists; i++) {
 			if (gristTypes[i] != 0) {
-//				System.out.println("[MINESTUCK] Added "+gristTypes[i]+" of "+GristType.values()[i].getName());
+				//Debug.print("Added "+gristTypes[i]+" of "+GristType.values()[i].getName());
 				list.add(new GristAmount(GristType.values()[i],gristTypes[i]));
 			}
 		}
+		//Debug.print("		Adding "+list.size()+" grist values...");
 		return list;
+	}
+
+	/**
+	 * Adds an amount of grist to a GristSet, given another set of grist.
+	 */
+	public GristSet addGrist(GristSet set) {
+		
+		for (Object grist : set.getArray()) {
+			this.addGrist((GristAmount) grist);
+		}
+		return this;
+		
+	}
+
+	/**
+	 * Adds an amount of grist to a GristSet, given a grist type and amount.
+	 */
+	public GristSet addGrist(GristAmount grist) {
+		//Debug.print("		Adding "+grist.getAmount()+" of "+grist.getType().getName());
+		this.gristTypes[grist.getType().ordinal()] += grist.getAmount();
+		return this;
+	}
+	
+	/**
+	 * Multipleis all the grist amounts by a factor.
+	 */
+	public GristSet scaleGrist(float scale) {
+		
+		for (int i = 0;i < GristType.allGrists;i++) {
+			gristTypes[i] *= scale;
+		}
+		
+		return this;
 	}
 }

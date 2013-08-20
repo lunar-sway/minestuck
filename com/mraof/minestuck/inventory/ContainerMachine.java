@@ -111,7 +111,7 @@ public class ContainerMachine extends Container {
             itemstack = itemstackOrig.copy();
             boolean result = false;
             
-            //System.out.println("[MINESTUCK] Shifing slot "+slotNumber);
+            //Debug.print("Shifing slot "+slotNumber);
             
             switch (metadata) {
             case (0):
@@ -120,9 +120,9 @@ public class ContainerMachine extends Container {
             		result = mergeItemStack(itemstackOrig,2,allSlots,false);
             	} else if (slotNumber > 1) {
             		//if it's an inventory slot with valid contents
-            		//System.out.println("[MINESTUCK] item ID of " + itemstackOrig.itemID + ". Expected " + Minestuck.rawCruxite.itemID);
+            		//Debug.print("item ID of " + itemstackOrig.itemID + ". Expected " + Minestuck.rawCruxite.itemID);
             		if (itemstackOrig.itemID == Minestuck.rawCruxite.itemID) {
-            			//System.out.println("[MINESTUCK] Transferring...");
+            			//Debug.print("Transferring...");
             			result = mergeItemStack(itemstackOrig,0,1,false);
             		}
             	}
@@ -186,7 +186,7 @@ public class ContainerMachine extends Container {
     public void addCraftingToCrafters(ICrafting par1ICrafting)
     {
     	super.addCraftingToCrafters(par1ICrafting);
-//    	System.out.printf("[MINESTUCK] addCraftingToCrafters running, the metadata is %d\n", this.metadata);
+//    	System.out.printf("addCraftingToCrafters running, the metadata is %d\n", this.metadata);
     	switch(this.metadata)
     	{
     	case 1:
@@ -218,7 +218,7 @@ public class ContainerMachine extends Container {
     	switch(this.metadata)
     	{
     	case 1:
-//    		System.out.println("Mode on Client is now " + par2);
+//    		Debug.print("Mode on Client is now " + par2);
     		tileEntity.mode = par2 == 0;
     	}
     }

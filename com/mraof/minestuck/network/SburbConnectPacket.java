@@ -1,12 +1,11 @@
 package com.mraof.minestuck.network;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.INetworkManager;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.SburbConnection;
 
 import cpw.mods.fml.common.network.Player;
@@ -46,7 +45,7 @@ public class SburbConnectPacket extends MinestuckPacket {
 		SburbConnection conn = new SburbConnection(server,false);
 		conn.connect(client);
 		
-		System.out.println("[MINESTUCK] Packet recieved. Connection set!");
+		Debug.print("Packet recieved. Connection set!");
 	}
 
 }

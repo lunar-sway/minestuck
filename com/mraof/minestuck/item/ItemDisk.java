@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.util.Debug;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -66,7 +67,7 @@ public class ItemDisk extends Item {
 			
 			player.destroyCurrentEquippedItem();
 			
-			System.out.println("[MINESTUCK] Installed program with id "+te.program);
+			Debug.print("Installed program with id "+te.program);
 			return true;
 		}
 		return false;

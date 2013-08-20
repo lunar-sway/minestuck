@@ -8,6 +8,7 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.mraof.minestuck.inventory.ContainerMachine;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
+import com.mraof.minestuck.util.Debug;
 
 import cpw.mods.fml.common.network.Player;
 
@@ -47,9 +48,9 @@ public class GoButtonPacket extends MinestuckPacket {
 				TileEntityMachine te = ((ContainerMachine) ((EntityPlayerMP)player).openContainer).tileEntity;
 		
 		if (te == null) {
-			System.out.println("[MINESTUCK] Invalid TE!");
+			Debug.print("Invalid TE!");
 		} else {
-			System.out.println("[MINESTUCK] Button pressed. Alchemiter going!");
+			Debug.print("Button pressed. Alchemiter going!");
 			te.ready = newMode;
 		}
 	}

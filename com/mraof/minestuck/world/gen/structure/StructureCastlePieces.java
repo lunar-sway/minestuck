@@ -16,8 +16,8 @@ public class StructureCastlePieces
 			if (newPiece != null)
 			{
 				par1List.add(newPiece);
-//				System.out.println(startPiece.pendingPieces);
-//				System.out.println(newPiece);
+//				Debug.print(startPiece.pendingPieces);
+//				Debug.print(newPiece);
 				startPiece.pendingPieces.add(newPiece);
 			}
 

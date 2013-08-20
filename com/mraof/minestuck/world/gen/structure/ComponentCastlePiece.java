@@ -77,13 +77,13 @@ public abstract class ComponentCastlePiece extends StructureComponent
 				{
 					if(((x + y + z) % 2 == 0) ^ b)
 					{
-//						System.out.println("Placing block at " + x + " " + y + " " + z + " " + blockID + " " + metadata1);
+//						Debug.print("Placing block at " + x + " " + y + " " + z + " " + blockID + " " + metadata1);
 						this.placeBlockAtCurrentPosition(world, blockID, metadata1, x, y, z, structureboundingbox);
 					}
 					else
 					{
 						this.placeBlockAtCurrentPosition(world, blockID2, metadata2, x, y, z, structureboundingbox);
-//						System.out.println("Placing block at " + x + " " + y + " " + z + " " + blockID2 + " " + metadata2);
+//						Debug.print("Placing block at " + x + " " + y + " " + z + " " + blockID2 + " " + metadata2);
 					}
 				}
 			}

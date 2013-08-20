@@ -48,7 +48,7 @@ public class ComponentCastleStartPiece extends ComponentCastlePiece
     {
     	int chessTileMetadata = this.isBlack ? 0 : 1;
     	int chessTileMetadata1 = this.isBlack ? 2 : 3;
-//    	System.out.println("addComponentParts in ComponentCastleStartPiece running");
+//    	Debug.print("addComponentParts in ComponentCastleStartPiece running");
         if (this.averageGroundLevel < 0)
         {
             this.averageGroundLevel = this.getAverageGroundLevel(world, structureBoundingBox);
@@ -66,8 +66,8 @@ public class ComponentCastleStartPiece extends ComponentCastlePiece
         }
         else
         {
-//        	System.out.println("CCSP: " + this.averageGroundLevel);
-//            System.out.println(structureBoundingBox.minX + ", " + structureBoundingBox.minY + ", " + structureBoundingBox.minZ + ", " + structureBoundingBox.maxX + ", " + structureBoundingBox.maxY + ", " + structureBoundingBox.maxZ);
+//        	Debug.print("CCSP: " + this.averageGroundLevel);
+//            Debug.print(structureBoundingBox.minX + ", " + structureBoundingBox.minY + ", " + structureBoundingBox.minZ + ", " + structureBoundingBox.maxX + ", " + structureBoundingBox.maxY + ", " + structureBoundingBox.maxZ);
             this.fillWithAlternatingBlocks(world, structureBoundingBox, 0, 0, 0, 7 ,6, 7, Minestuck.chessTile.blockID, chessTileMetadata,  Minestuck.chessTile.blockID, chessTileMetadata1, false);
             this.fillWithAlternatingBlocks(world, structureBoundingBox, 0, 0, 0, 7 ,7, 0, Minestuck.chessTile.blockID, chessTileMetadata, Minestuck.chessTile.blockID, chessTileMetadata1, false);
             this.fillWithAlternatingBlocks(world, structureBoundingBox, 0, 0, 7, 7 ,7, 7, Minestuck.chessTile.blockID, chessTileMetadata, Minestuck.chessTile.blockID, chessTileMetadata1, false);
