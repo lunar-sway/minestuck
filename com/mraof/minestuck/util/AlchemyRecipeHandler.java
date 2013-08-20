@@ -186,7 +186,7 @@ public class AlchemyRecipeHandler {
 		//GristRegistry.addGristConversion(new ItemStack(Item.axeIron), false, new GristSet(new GristType[] {GristType.Rust, GristType.Build}, new int[] {6, 2}));
 		//GristRegistry.addGristConversion(new ItemStack(Item.flintAndSteel), false, new GristSet(new GristType[] {GristType.Rust, GristType.Shale}, new int[] {16, 1}));
 		GristRegistry.addGristConversion(new ItemStack(Item.appleRed), false, new GristSet(new GristType[] {GristType.Amber, GristType.Shale}, new int[] {2, 2}));
-		//GristRegistry.addGristConversion(new ItemStack(Item.bow), false, new GristSet(new GristType[] {GristType.Chalk, GristType.Build}, new int[] {3, 3}));
+		GristRegistry.addGristConversion(new ItemStack(Item.bow), false, new GristSet(new GristType[] {GristType.Chalk, GristType.Build}, new int[] {3, 3}));
 		//GristRegistry.addGristConversion(new ItemStack(Item.arrow), false, new GristSet(new GristType[] {GristType.Shale, GristType.Build}, new int[] {1, 4}));
 		GristRegistry.addGristConversion(new ItemStack(Item.coal, 1, 0), true, new GristSet(new GristType[] {GristType.Tar}, new int[] {16}));
 		GristRegistry.addGristConversion(new ItemStack(Item.coal, 1, 1), true, new GristSet(new GristType[] {GristType.Tar, GristType.Amber}, new int[] {12, 4}));
@@ -524,6 +524,7 @@ public class AlchemyRecipeHandler {
 					Debug.print("	Adding compo: "+item.getDisplayName());
 					set.addGrist(GristRegistry.getGristConversion(item));
 				} else if (item != null) {
+					if (((Integer)item.getItemDamage()).equals(32767)) {item = item.copy(); item.setItemDamage(0);}
 					Object subrecipe = recipeList.get(Arrays.asList(item.itemID,item.getHasSubtypes() ? item.getItemDamage() : 0));
 					if (subrecipe != null) {
 						Debug.print("	Could not find "+item.getDisplayName()+". Looking up subrecipe... {");
@@ -557,6 +558,7 @@ public class AlchemyRecipeHandler {
 					Debug.print("	Adding compo: "+item.getDisplayName());
 					set.addGrist(GristRegistry.getGristConversion(item));
 				} else if (item != null) {
+					if (((Integer)item.getItemDamage()).equals(32767)) {item = item.copy(); item.setItemDamage(0);}
 					Object subrecipe = recipeList.get(Arrays.asList(item.itemID,item.getHasSubtypes() ? item.getItemDamage() : 0));
 					if (subrecipe != null) {
 						Debug.print("	Could not find "+item.getDisplayName()+". Looking up subrecipe... {");
@@ -596,6 +598,7 @@ public class AlchemyRecipeHandler {
 					Debug.print("	Adding compo: "+item.getDisplayName());
 					set.addGrist(GristRegistry.getGristConversion(item));
 				} else if (item != null) {
+					if (((Integer)item.getItemDamage()).equals(32767)) {item = item.copy(); item.setItemDamage(0);}
 					Object subrecipe = recipeList.get(Arrays.asList(item.itemID,item.getHasSubtypes() ? item.getItemDamage() : 0));
 					if (subrecipe != null) {
 						Debug.print("	Could not find "+item.getDisplayName()+". Looking up subrecipe... {");
@@ -635,6 +638,7 @@ public class AlchemyRecipeHandler {
 					Debug.print("	Adding compo: "+item.getDisplayName());
 					set.addGrist(GristRegistry.getGristConversion(item));
 				} else if (item != null) {
+					if (((Integer)item.getItemDamage()).equals(32767)) {item = item.copy(); item.setItemDamage(0);}
 					Object subrecipe = recipeList.get(Arrays.asList(item.itemID,item.getHasSubtypes() ? item.getItemDamage() : 0));
 					if (subrecipe != null) {
 						Debug.print("	Could not find "+item.getDisplayName()+". Looking up subrecipe... {");
