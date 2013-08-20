@@ -12,6 +12,7 @@ public class TileEntityComputer extends TileEntity {
 	public boolean connected;
 	public String connectedTo;
 	public boolean givenItems = false;
+	public boolean waiting = false;
 	
     public TileEntityComputer() {
             
