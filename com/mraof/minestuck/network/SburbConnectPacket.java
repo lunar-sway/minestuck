@@ -7,16 +7,14 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.util.SburbConnection;
 
 import cpw.mods.fml.common.network.Player;
 
 public class SburbConnectPacket extends MinestuckPacket {
 
-	public String connectedTo;
-	public int xCoord;
-	public int yCoord;
-	public int zCoord;
-	public int gristTotal;
+	public String client;
+	public String server;
 	public SburbConnectPacket() 
 	{
 		super(Type.SBURB_CONNECT);
@@ -26,10 +24,8 @@ public class SburbConnectPacket extends MinestuckPacket {
 	public byte[] generatePacket(Object... data) 
 	{
 		ByteArrayDataOutput dat = ByteStreams.newDataOutput();
-		dat.writeInt((Integer)data[0]);
-		dat.writeInt((Integer)data[1]);
-		dat.writeInt((Integer)data[2]);
-		dat.writeChars((String) data[3]);
+		dat.writeChars((String) data[0]);
+		dat.writeChars((String) data[1]);
 		return dat.toByteArray();
 	}
 
@@ -37,11 +33,9 @@ public class SburbConnectPacket extends MinestuckPacket {
 	public MinestuckPacket consumePacket(byte[] data) 
 	{
 		ByteArrayDataInput dat = ByteStreams.newDataInput(data);
-		
-		xCoord = dat.readInt();
-		yCoord = dat.readInt();
-		zCoord = dat.readInt();
-		connectedTo = dat.readLine();
+
+		client = dat.readLine();
+		server = dat.readLine();
 		
 		return this;
 	}
@@ -49,15 +43,8 @@ public class SburbConnectPacket extends MinestuckPacket {
 	@Override
 	public void execute(INetworkManager network, MinestuckPacketHandler handler, Player player, String userName)
 	{
-		TileEntityComputer te = (TileEntityComputer)Minecraft.getMinecraft().theWorld.getBlockTileEntity(xCoord,yCoord,zCoord);
-				
-		if (te == null) {
-			System.out.println("[MINESTUCK] Packet recieved, but TE isn't there!");
-			return;
-		}
-		
-		te.connectedTo = connectedTo;
-		te.connected = true;
+		SburbConnection conn = new SburbConnection(server,false);
+		conn.connect(client);
 		
 		System.out.println("[MINESTUCK] Packet recieved. Connection set!");
 	}

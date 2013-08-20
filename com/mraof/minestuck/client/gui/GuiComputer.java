@@ -22,7 +22,6 @@ import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.IConnectionListener;
 import com.mraof.minestuck.util.SburbConnection;
-import com.mraof.minestuck.util.SburbConnector;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -43,8 +42,8 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 	private String displayLine = "";
 	private String programName = "";
 	private int program;
-	private boolean waiting = false;
 	private String displayName;
+	private SburbConnection conn;
 
 	private Minecraft mc;
 	private TileEntityComputer te;
@@ -59,6 +58,7 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 		this.te = te;
 		
 		this.program = te.program;
+		conn = new SburbConnection(mc.thePlayer.username,program == 0);
 		switch (program) {
 		case(0):
 			this.programName = "Client";
@@ -124,31 +124,25 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 			displayName += part;
 		}
 		
+    	upButton.enabled = false;
+    	downButton.enabled = false;
+    	
+    	for (Object button : selButtons) {
+    		((GuiButton)button).enabled = false;
+    		((GuiButton)button).displayString = "";
+    	}
+    	
 		switch(program) {
 		case(0):
 			if (te.connected) {
-				this.displayLine = "Connected to "+displayName+".";
-		    	upButton.enabled = false;
-		    	downButton.enabled = false;
-		    	
-		    	for (Object button : selButtons) {
-		    		((GuiButton)button).enabled = false;
-		    		((GuiButton)button).displayString = "";
-		    	}
-		    	
+				this.displayLine = "Connected to "+displayName+".";		    	
 			} else {
 				this.displayLine = "Select a server below.";
-		    	upButton.enabled = false;
-		    	downButton.enabled = false;
-		    	
-		    	for (Object button : selButtons) {
-		    		((GuiButton)button).enabled = false;
-		    	}
 		    	
 		    	int i = 0;
-		    	for (Object server : SburbConnector.getServersOpen()) {
-		    		if (selButtons.get(i) != null) {
-		    			selButtons.get(i).displayString = (String)server;
+		    	for (Object server : SburbConnection.getServersOpen()) {
+		    		if (i < selButtons.size() && selButtons.get(i) != null) {
+		    			selButtons.get(i).displayString = ((SburbConnection) server).getServerPlayer();
 		    			selButtons.get(i).enabled = true;
 		    			i++;
 		    		} else {
@@ -158,29 +152,14 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 			}
 	    	break;
 		case(1):
-			if (waiting) {
+			if (te.waiting) {
 				GuiButton button = selButtons.get(0);
 				button.displayString = "";
 				button.enabled = false;
 				displayLine = "Waiting for client...";
 			} else if (te.givenItems) {
-			    	upButton.enabled = false;
-			    	downButton.enabled = false;
-			    	
-			    	for (Object button : selButtons) {
-			    		((GuiButton)button).enabled = false;
-			    		((GuiButton)button).displayString = "";
-			    	}
-			    	
 					displayLine = "Connected to "+displayName+".";
-			} else if (te.connected) {
-		    	upButton.enabled = false;
-		    	downButton.enabled = false;
-		    	
-		    	for (Object button : selButtons) {
-		    		((GuiButton)button).enabled = false;
-		    	}
-				
+			} else if (te.connected) {				
 				GuiButton button = selButtons.get(0);
 				displayLine = "Connected to "+displayName+".";
 				button.displayString = "Give client items";
@@ -189,14 +168,11 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 				this.displayLine = "Click the button below.";
 			
 		      	for (Object button : selButtons) {
-		    		if (((GuiButton)button).id != 0) {
-		    			((GuiButton)button).enabled = false;
-		    		} else {
+		    		if (((GuiButton)button).id == 0) {
+		    			((GuiButton)button).enabled = true;
 		    			((GuiButton)button).displayString = "Open to clients";
 		    		}
 		    	}
-		    	upButton.enabled = false;
-		    	downButton.enabled = false;
 			}
 	    	break;
 		}
@@ -210,16 +186,23 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 			} else if (guibutton == downButton) {
 				
 			} else {
-				SburbConnection conn = SburbConnector.connect(mc.thePlayer.username, guibutton.displayString);
+				conn.connect(mc.thePlayer.username);
 
-				sendNewConnection(conn.getServerPlayer());
+				te.connectedTo = conn.getServerPlayer();
+				te.connected = true;
 			}
 			break;
 		case(1):
 			if (te.connected) {
-				sendItemsGiven(te.connectedTo);
+				Packet250CustomPayload packet = new Packet250CustomPayload();
+				packet.channel = "Minestuck";
+				packet.data = MinestuckPacket.makePacket(Type.SBURB_GIVE,te.xCoord,te.yCoord,te.zCoord,te.connectedTo);
+				packet.length = packet.data.length;
+				this.mc.getNetHandler().addToSendQueue(packet);
 			} else {
-				sendServerOpen(mc.thePlayer.username);
+				conn.addListener(this);
+				SburbConnection.addServer(conn);
+				te.waiting  = true;
 			}
 			break;
 		}
@@ -228,55 +211,12 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 
 	@Override
 	public void onConnected(SburbConnection conn) {
-		if (!te.connected && conn.getServerPlayer() == mc.thePlayer.username) {
-			waiting = false;
-			sendNewConnection(conn.getClientPlayer());
-		}
-		updateGui();
-	}
 
-	private void sendNewConnection(String connTo) {
-//		Packet250CustomPayload packet = new Packet250CustomPayload();
-//		packet.channel = "Minestuck";
-//		packet.data = MinestuckPacket.makePacket(Type.SBURB_CONNECT,te.xCoord,te.yCoord,te.zCoord,connTo);
-//		packet.length = packet.data.length;
-//		this.mc.getNetHandler().addToSendQueue(packet);
-//		
-		te.connectedTo = connTo;
+		te.waiting = false;
+		te.connectedTo = conn.getClientPlayer();
 		te.connected = true;
-	}
-	
-	private void sendServerOpen(String connTo) {
-//		Packet250CustomPayload packet = new Packet250CustomPayload();
-//		packet.channel = "Minestuck";
-//		packet.data = MinestuckPacket.makePacket(Type.SBURB_OPEN,te.xCoord,te.yCoord,te.zCoord,connTo);
-//		packet.length = packet.data.length;
-//		this.mc.getNetHandler().addToSendQueue(packet);
 		
-		SburbConnector.addListener(this);
-		SburbConnector.addServer(mc.thePlayer.username);
-		this.waiting  = true;
-	}
-	
-	private void sendItemsGiven(String connTo) {
-		Packet250CustomPayload packet = new Packet250CustomPayload();
-		packet.channel = "Minestuck";
-		packet.data = MinestuckPacket.makePacket(Type.SBURB_GIVE,te.xCoord,te.yCoord,te.zCoord,connTo);
-		packet.length = packet.data.length;
-		this.mc.getNetHandler().addToSendQueue(packet);
-		
-//		Container items = mc.thePlayer.inventoryContainer;
-//		ItemStack[] newItems = new ItemStack[5];
-//		for (int i = 0;i < 4;i++) {
-//			newItems[i] = new ItemStack(Minestuck.blockMachine.blockID,1,i);
-//		}
-//		ItemStack card = new ItemStack(Minestuck.punchedCard.itemID,1,0);
-//		card.setTagCompound(new NBTTagCompound());
-//		card.getTagCompound().setInteger("contentID",Minestuck.cruxiteArtifact.itemID);
-//		card.getTagCompound().setInteger("contentMeta",0);
-//		newItems[4] = card;
-//		items.putStacksInSlots(newItems);
-//		te.givenItems = true;
+		updateGui();
 	}
 		
 }
