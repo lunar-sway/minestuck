@@ -442,25 +442,5 @@ public class Minestuck
 				e.printStackTrace();
 			}
 		}
-
-//		//I'm sorry for this code. I really am
-//		MinecraftServer server = event.getServer();
-//		//Debug.print(server.getFolderName());
-//		File directory = new File("./saves/" + server.getFolderName());
-//		if (!directory.exists()) {
-//			directory = new File("./"+ server.getFolderName());
-//		}
-//		File[] files = directory.listFiles();
-//		for (File file : files) {
-//			//Debug.print("found a file called " + file.getName());
-//			if (file.getName().contains("DIM")) {
-//				int dim = Integer.valueOf(file.getName().substring(3));
-//				if (DimensionManager.getWorld(dim) == null) {
-//					Debug.print("found a dimension with an id of" + dim);
-//					DimensionManager.registerDimension(dim, Minestuck.landProviderTypeId);
-//				}
-//			}
-//			
-//		}
 	}
 }
