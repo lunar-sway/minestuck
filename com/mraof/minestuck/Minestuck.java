@@ -22,7 +22,8 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 
 import com.mraof.minestuck.block.BlockChessTile;
-import com.mraof.minestuck.block.BlockComputer;
+import com.mraof.minestuck.block.BlockComputerOff;
+import com.mraof.minestuck.block.BlockComputerOn;
 import com.mraof.minestuck.block.BlockGatePortal;
 import com.mraof.minestuck.block.BlockMachine;
 import com.mraof.minestuck.block.BlockStorage;
@@ -51,7 +52,7 @@ import com.mraof.minestuck.item.ItemCardBlank;
 import com.mraof.minestuck.item.ItemCardPunched;
 import com.mraof.minestuck.item.ItemChessTile;
 import com.mraof.minestuck.item.ItemClub;
-import com.mraof.minestuck.item.ItemComputer;
+import com.mraof.minestuck.item.ItemComputerOff;
 import com.mraof.minestuck.item.ItemCruxiteArtifact;
 import com.mraof.minestuck.item.ItemCruxiteRaw;
 import com.mraof.minestuck.item.ItemDisk;
@@ -63,6 +64,7 @@ import com.mraof.minestuck.item.ItemSickle;
 import com.mraof.minestuck.item.ItemSpork;
 import com.mraof.minestuck.item.ItemStorageBlock;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
@@ -150,7 +152,8 @@ public class Minestuck
 	public static Block oreCruxite;
 	public static Block blockStorage;
 	public static Block blockMachine;
-	public static Block blockComputer;
+	public static Block blockComputerOn;
+	public static Block blockComputerOff;
 
 
 	// The instance of your mod that Forge uses.
@@ -200,7 +203,8 @@ public class Minestuck
 		oreCruxite = new OreCruxite(blockIdStart + 2);
 		blockStorage = new BlockStorage(blockIdStart + 3);
 		blockMachine = new BlockMachine(blockIdStart + 4);
-		blockComputer = new BlockComputer(blockIdStart + 5);
+		blockComputerOff = new BlockComputerOff(blockIdStart + 5);
+		blockComputerOn = new BlockComputerOn(blockIdStart + 6);
 		//hammers
 		clawHammer = new ItemHammer(toolIdStart, EnumHammerType.CLAW);
 		sledgeHammer = new ItemHammer(toolIdStart + 1, EnumHammerType.SLEDGE);
@@ -257,7 +261,8 @@ public class Minestuck
 		GameRegistry.registerBlock(oreCruxite,"oreCruxite");
 		GameRegistry.registerBlock(blockStorage,ItemStorageBlock.class,"blockStorage");
 		GameRegistry.registerBlock(blockMachine,ItemMachine.class,"blockMachine");
-		GameRegistry.registerBlock(blockComputer,ItemComputer.class,"blockComputer");
+		GameRegistry.registerBlock(blockComputerOff,ItemComputerOff.class,"blockComputer");
+		GameRegistry.registerBlock(blockComputerOn,"blockComputerOn");
 		//metadata nonsense to conserve ids
 		ItemStack blackChessTileStack = new ItemStack(chessTile, 1, 0);
 		ItemStack whiteChessTileStack = new ItemStack(chessTile, 1, 1);
@@ -327,7 +332,8 @@ public class Minestuck
 		LanguageRegistry.addName(punchDesignexStack, "Punch Designex");
 		LanguageRegistry.addName(totemLatheStack, "Totem Lathe");
 		LanguageRegistry.addName(alchemiterStack, "Alchemiter");
-		LanguageRegistry.addName(blockComputer, "SBURB Computer");
+		LanguageRegistry.addName(blockComputerOff, "SBURB Computer");
+		LanguageRegistry.addName(blockComputerOn, "SBURB Computer");
 
 		//set translations for automatic names
 		LanguageRegistry.instance().addStringLocalization("entity.Salamander.name", "Salamander");
@@ -373,6 +379,7 @@ public class Minestuck
 		//register Tile Entities
 		GameRegistry.registerTileEntity(TileEntityGatePortal.class, "gatePortal");
 		GameRegistry.registerTileEntity(TileEntityMachine.class, "containerMachine");
+		GameRegistry.registerTileEntity(TileEntityComputer.class, "computerSburb");
 		//register world generators
 		DimensionManager.registerProviderType(skaiaProviderTypeId, WorldProviderSkaia.class, true);
 		DimensionManager.registerDimension(skaiaDimensionId, skaiaProviderTypeId);
