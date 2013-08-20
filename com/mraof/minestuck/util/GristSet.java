@@ -115,7 +115,9 @@ public class GristSet {
 	public GristSet scaleGrist(float scale) {
 		
 		for (int i = 0;i < GristType.allGrists;i++) {
-			gristTypes[i] *= scale;
+			if (gristTypes[i] != 0) {
+				gristTypes[i] = (int) Math.max(gristTypes[i] *scale,1);
+			}
 		}
 		
 		return this;
