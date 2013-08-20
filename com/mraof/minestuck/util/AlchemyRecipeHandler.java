@@ -590,6 +590,10 @@ public class AlchemyRecipeHandler {
 				ItemStack item = null;
 				if (obj == null) {break;}
 				if (obj.getClass() != ItemStack.class) {
+					if (((ArrayList) obj).size() == 0) {
+						Debug.print("	Input list was empty!");
+						break;
+					}
 					item = (ItemStack) ((ArrayList) obj).get(0);
 				} else {
 					item = (ItemStack) obj;
@@ -630,6 +634,10 @@ public class AlchemyRecipeHandler {
 				ItemStack item = null;
 				if (obj == null) {break;}
 				if (obj.getClass() != ItemStack.class) {
+					if (((ArrayList) obj).size() == 0) {
+						Debug.print("	Input list was empty!");
+						break;
+					}
 					item = (ItemStack) ((ArrayList) obj).get(0);
 				} else {
 					item = (ItemStack) obj;
