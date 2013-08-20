@@ -1,5 +1,6 @@
 package com.mraof.minestuck.util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -14,6 +15,8 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.lands.LandAspectFrost;
@@ -35,7 +38,7 @@ public class AlchemyRecipeHandler {
 		GristRegistry.addGristConversion(new ItemStack(Block.grass), false, new GristSet(new GristType[] {GristType.Build}, new int[] {1}));
 		GristRegistry.addGristConversion(new ItemStack(Block.dirt), false, new GristSet(new GristType[] {GristType.Build}, new int[] {1}));
 		GristRegistry.addGristConversion(new ItemStack(Block.cobblestone), false, new GristSet(new GristType[] {GristType.Build}, new int[] {1}));
-		//GristRegistry.addGristConversion(new ItemStack(Block.planks), false, new GristSet(new GristType[] {GristType.Build}, new int[] {2}));
+		GristRegistry.addGristConversion(new ItemStack(Block.planks), false, new GristSet(new GristType[] {GristType.Build}, new int[] {2}));
 		GristRegistry.addGristConversion(new ItemStack(Block.sapling), false, new GristSet(new GristType[] {GristType.Build}, new int[] {16})); 
 		GristRegistry.addGristConversion(new ItemStack(Block.bedrock), false, new GristSet(new GristType[] {GristType.Artifact, GristType.Zillium}, new int[] {1, 1}));
 		GristRegistry.addGristConversion(new ItemStack(Block.sand), false, new GristSet(new GristType[] {GristType.Shale}, new int[] {1}));
@@ -90,7 +93,7 @@ public class AlchemyRecipeHandler {
 		//GristRegistry.addGristConversion(new ItemStack(Block.stoneSingleSlab, 1, 5), true, new GristSet(new GristType[] {GristType.Build, GristType.Shale}, new int[] {6, 2}));
 		//GristRegistry.addGristConversion(new ItemStack(Block.stoneSingleSlab, 1, 6), true, new GristSet(new GristType[] {GristType.Build, GristType.Tar}, new int[] {2, 4}));
 		//GristRegistry.addGristConversion(new ItemStack(Block.stoneSingleSlab, 1, 7), true, new GristSet(new GristType[] {GristType.Quartz, GristType.Marble}, new int[] {8, 2}));
-		//GristRegistry.addGristConversion(new ItemStack(Block.woodSingleSlab), false, new GristSet(new GristType[] {GristType.Build}, new int[] {1}));
+		GristRegistry.addGristConversion(new ItemStack(Block.woodSingleSlab), false, new GristSet(new GristType[] {GristType.Build}, new int[] {1}));
 		//GristRegistry.addGristConversion(new ItemStack(Block.brick), false, new GristSet(new GristType[] {GristType.Shale, GristType.Tar}, new int[] {16, 4}));
 		//GristRegistry.addGristConversion(new ItemStack(Block.bookShelf), false, new GristSet(new GristType[] {GristType.Chalk, GristType.Build}, new int[] {16, 8}));
 		//GristRegistry.addGristConversion(new ItemStack(Block.tnt), false, new GristSet(new GristType[] {GristType.Sulfur, GristType.Chalk, GristType.Shale}, new int[] {8, 8, 16}));
@@ -484,12 +487,22 @@ public class AlchemyRecipeHandler {
 		for (Object recipe : CraftingManager.getInstance().getRecipeList()) {
 			if (recipe.getClass() == ShapedRecipes.class) {
 				ShapedRecipes newRecipe = (ShapedRecipes) recipe;
-				Debug.print("Found the recipe for "+newRecipe.getRecipeOutput().getDisplayName()+", id "+newRecipe.getRecipeOutput().itemID+":"+newRecipe.getRecipeOutput().getItemDamage());
+				//Debug.print("Found the recipe for "+newRecipe.getRecipeOutput().getDisplayName()+", id "+newRecipe.getRecipeOutput().itemID+":"+newRecipe.getRecipeOutput().getItemDamage());
 				recipeList.put(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getItemDamage()), recipe);
 			} else if (recipe.getClass() == ShapelessRecipes.class) {
 				ShapelessRecipes newRecipe = (ShapelessRecipes) recipe;
-				Debug.print("Found the recipe for "+newRecipe.getRecipeOutput().getDisplayName()+", id "+newRecipe.getRecipeOutput().itemID+":"+newRecipe.getRecipeOutput().getItemDamage());
+				//Debug.print("Found the recipe for "+newRecipe.getRecipeOutput().getDisplayName()+", id "+newRecipe.getRecipeOutput().itemID+":"+newRecipe.getRecipeOutput().getItemDamage());
 				recipeList.put(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getItemDamage()), recipe);
+			} else if (recipe.getClass() == ShapedOreRecipe.class) {
+				ShapedOreRecipe newRecipe = (ShapedOreRecipe) recipe;
+				//Debug.print("Found the recipe for "+newRecipe.getRecipeOutput().getDisplayName()+", id "+newRecipe.getRecipeOutput().itemID+":"+newRecipe.getRecipeOutput().getItemDamage());
+				recipeList.put(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getItemDamage()), recipe);
+			} else if (recipe.getClass() == ShapelessOreRecipe.class) {
+				ShapelessOreRecipe newRecipe = (ShapelessOreRecipe) recipe;
+				//Debug.print("Found the recipe for "+newRecipe.getRecipeOutput().getDisplayName()+", id "+newRecipe.getRecipeOutput().itemID+":"+newRecipe.getRecipeOutput().getItemDamage());
+				recipeList.put(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getItemDamage()), recipe);
+			} else {
+				Debug.print("Found the recipe for unkown format: "+recipe.getClass());
 			}
 		}
 		
@@ -567,8 +580,85 @@ public class AlchemyRecipeHandler {
 				}
 				set.scaleGrist(1/(float)newRecipe.getRecipeOutput().stackSize);
 				GristRegistry.addGristConversion(newRecipe.getRecipeOutput(),newRecipe.getRecipeOutput().getHasSubtypes(),set);
-		}
-			Debug.print("found shapeless recipe");
+			}
+		} else if (recipe.getClass() == ShapedOreRecipe.class) {
+			Debug.print("found shaped oredict recipe. Output of "+((ShapedOreRecipe)recipe).getRecipeOutput().getDisplayName());
+			ShapedOreRecipe newRecipe = (ShapedOreRecipe) recipe;
+			if (GristRegistry.getGristConversion(newRecipe.getRecipeOutput()) != null) {return false;};
+			GristSet set = new GristSet();
+			for (Object obj : newRecipe.getInput()) {
+				ItemStack item = null;
+				if (obj == null) {break;}
+				if (obj.getClass() != ItemStack.class) {
+					item = (ItemStack) ((ArrayList) obj).get(0);
+				} else {
+					item = (ItemStack) obj;
+				}
+				if (GristRegistry.getGristConversion(item) != null) {
+					Debug.print("	Adding compo: "+item.getDisplayName());
+					set.addGrist(GristRegistry.getGristConversion(item));
+				} else if (item != null) {
+					Object subrecipe = recipeList.get(Arrays.asList(item.itemID,item.getHasSubtypes() ? item.getItemDamage() : 0));
+					if (subrecipe != null) {
+						Debug.print("	Could not find "+item.getDisplayName()+". Looking up subrecipe... {");
+						 if (getRecipe(subrecipe)) {
+							 if (GristRegistry.getGristConversion(item) == null) {
+								 Debug.print("	} Recipe failure! getRecipe did not return expeted boolean value.");
+								 return false;
+							 }
+							 set.addGrist(GristRegistry.getGristConversion(item));
+							 Debug.print("	}");
+						 } else {
+							 Debug.print("	}");
+							 return false;
+						 }
+					} else {
+						Debug.print("	Could not find "+item.getDisplayName()+" ("+item.itemID+":"+item.getItemDamage()+"). Recipe failed!");
+						return false;
+					}
+				}
+				set.scaleGrist(1/(float)newRecipe.getRecipeOutput().stackSize);
+				GristRegistry.addGristConversion(newRecipe.getRecipeOutput(),newRecipe.getRecipeOutput().getHasSubtypes(),set);
+			}
+		} else if (recipe.getClass() == ShapelessOreRecipe.class) {
+			Debug.print("found shapeless oredict recipe. Output of "+((ShapelessOreRecipe)recipe).getRecipeOutput().getDisplayName());
+			ShapelessOreRecipe newRecipe = (ShapelessOreRecipe) recipe;
+			if (GristRegistry.getGristConversion(newRecipe.getRecipeOutput()) != null) {return false;};
+			GristSet set = new GristSet();
+			for (Object obj : newRecipe.getInput()) {
+				ItemStack item = null;
+				if (obj == null) {break;}
+				if (obj.getClass() != ItemStack.class) {
+					item = (ItemStack) ((ArrayList) obj).get(0);
+				} else {
+					item = (ItemStack) obj;
+				}
+				if (GristRegistry.getGristConversion(item) != null) {
+					Debug.print("	Adding compo: "+item.getDisplayName());
+					set.addGrist(GristRegistry.getGristConversion(item));
+				} else if (item != null) {
+					Object subrecipe = recipeList.get(Arrays.asList(item.itemID,item.getHasSubtypes() ? item.getItemDamage() : 0));
+					if (subrecipe != null) {
+						Debug.print("	Could not find "+item.getDisplayName()+". Looking up subrecipe... {");
+						 if (getRecipe(subrecipe)) {
+							 if (GristRegistry.getGristConversion(item) == null) {
+								 Debug.print("	} Recipe failure! getRecipe did not return expeted boolean value.");
+								 return false;
+							 }
+							 set.addGrist(GristRegistry.getGristConversion(item));
+							 Debug.print("	}");
+						 } else {
+							 Debug.print("	}");
+							 return false;
+						 }
+					} else {
+						Debug.print("	Could not find "+item.getDisplayName()+" ("+item.itemID+":"+item.getItemDamage()+"). Recipe failed!");
+						return false;
+					}
+				}
+				set.scaleGrist(1/(float)newRecipe.getRecipeOutput().stackSize);
+				GristRegistry.addGristConversion(newRecipe.getRecipeOutput(),newRecipe.getRecipeOutput().getHasSubtypes(),set);
+			}
 		} else {
 			Debug.print("found other recipe class: "+recipe.getClass());
 		}
