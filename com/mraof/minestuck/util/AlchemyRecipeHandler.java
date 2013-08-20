@@ -3,7 +3,6 @@ package com.mraof.minestuck.util;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -43,7 +42,6 @@ public class AlchemyRecipeHandler {
 		GristRegistry.addGristConversion(new ItemStack(Block.bedrock), false, new GristSet(new GristType[] {GristType.Artifact, GristType.Zillium}, new int[] {1, 1}));
 		GristRegistry.addGristConversion(new ItemStack(Block.sand), false, new GristSet(new GristType[] {GristType.Shale}, new int[] {1}));
 		GristRegistry.addGristConversion(new ItemStack(Block.gravel), false, new GristSet(new GristType[] {GristType.Shale}, new int[] {1}));
-		GristRegistry.addGristConversion(new ItemStack(Block.sand), false, new GristSet(new GristType[] {GristType.Shale}, new int[] {1}));
 		GristRegistry.addGristConversion(new ItemStack(Block.gravel), false, new GristSet(new GristType[] {GristType.Shale}, new int[] {1}));
 		GristRegistry.addGristConversion(new ItemStack(Block.oreGold), false, new GristSet(new GristType[] {GristType.Build, GristType.Gold}, new int[] {4, 16}));
 		GristRegistry.addGristConversion(new ItemStack(Block.oreIron), false, new GristSet(new GristType[] {GristType.Build, GristType.Rust}, new int[] {4, 16}));
