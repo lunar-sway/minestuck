@@ -1,34 +1,42 @@
 package com.mraof.minestuck.block;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.tileentity.TileEntityComputer;
 
-public class BlockComputer extends Block {
+public class BlockComputerOn extends Block implements ITileEntityProvider {
 	
 	private Icon frontIcon;
 	private Icon sideIcon;
 
-	public BlockComputer(int id)
+	public BlockComputerOn(int id)
 	{
 		super(id, Material.rock);
 		setUnlocalizedName("computer");
 		setHardness(4.0F);
-		this.setCreativeTab(Minestuck.tabMinestuck);
+		//this.setCreativeTab(Minestuck.tabMinestuck);
 		
 	}
 	
 	@Override
 	 public Icon getIcon(int par1, int par2)
 	    {
-	        return par1 == 1 ? this.sideIcon : (par1 == 0 ? this.sideIcon : (par1 != par2 ? this.sideIcon : this.frontIcon));
+			if (par2 == 0 && par1 == 3) {return this.frontIcon;}
+	        return par1 != par2 ? this.sideIcon : this.frontIcon;
 	    }
 
 	    private void setDefaultDirection(World par1World, int par2, int par3, int par4)
@@ -104,4 +112,58 @@ public class BlockComputer extends Block {
 	        super.onBlockAdded(par1World, par2, par3, par4);
 	        this.setDefaultDirection(par1World, par2, par3, par4);
 	    }
+	    
+		@Override
+		public boolean onBlockActivated(World world, int x,int y,int z, EntityPlayer player,int par6, float par7, float par8, float par9) {
+			TileEntityComputer tileEntity = (TileEntityComputer) world.getBlockTileEntity(x, y, z);
+			if (tileEntity == null || player.isSneaking()) {
+				return false;
+			}
+
+			player.openGui(Minestuck.instance, 1, world, x, y, z);
+			return true;
+		}
+		
+		@Override
+		public TileEntity createNewTileEntity(World world) {
+			return new TileEntityComputer();
+		}
+		
+		@Override
+		public int idDropped(int par1, Random random, int par2) {
+			return Minestuck.blockComputerOff.blockID;
+			
+		}
+		
+		@Override
+		public int idPicked(World par1World, int par2, int par3, int par4) {
+			return Minestuck.blockComputerOff.blockID;
+			
+		}
+		
+		@Override
+		public void breakBlock(World world, int x, int y, int z, int par5, int par6) {
+			dropItems(world, x, y, z);
+			super.breakBlock(world, x, y, z, par5, par6);
+		}
+
+		private void dropItems(World world, int x, int y, int z){
+			Random rand = new Random();
+			TileEntityComputer te = (TileEntityComputer) world.getBlockTileEntity(x, y, z);
+			if (te == null) {
+				return;
+			}
+
+			float rx = rand.nextFloat() * 0.8F + 0.1F;
+			float ry = rand.nextFloat() * 0.8F + 0.1F;
+			float rz = rand.nextFloat() * 0.8F + 0.1F;
+
+			EntityItem entityItem = new EntityItem(world, x + rx, y + ry, z + rz, new ItemStack(Minestuck.disk.itemID, 1, te.program));
+
+			float factor = 0.05F;
+			entityItem.motionX = rand.nextGaussian() * factor;
+			entityItem.motionY = rand.nextGaussian() * factor + 0.2F;
+			entityItem.motionZ = rand.nextGaussian() * factor;
+			world.spawnEntityInWorld(entityItem);
+		}
 }
