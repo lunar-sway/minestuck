@@ -95,7 +95,7 @@ public class ItemHammer extends ItemWeapon
 		else if(hammerType.equals(EnumHammerType.SCARLET))
 			target.setFire(50);
 		else if(hammerType.equals(hammerType.POPAMATIC) )
-			target.attackEntityFrom(DamageSource.magic , (float) (Math.pow(( Math.random() * 5), 2)) );
+			target.attackEntityFrom(DamageSource.magic , (float) (Math.pow(( Math.random() * 6), 2)) );
 		return true;
 	}
 

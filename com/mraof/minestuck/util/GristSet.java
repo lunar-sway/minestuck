@@ -76,7 +76,7 @@ public class GristSet {
 		ArrayList list = new ArrayList();
 		for(int i = 0; i < GristType.allGrists; i++) {
 			if (gristTypes[i] != 0) {
-				System.out.println("[MINESTUCK] Added "+gristTypes[i]+" of "+GristType.values()[i].getName());
+//				System.out.println("[MINESTUCK] Added "+gristTypes[i]+" of "+GristType.values()[i].getName());
 				list.add(new GristAmount(GristType.values()[i],gristTypes[i]));
 			}
 		}

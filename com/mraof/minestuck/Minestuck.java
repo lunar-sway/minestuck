@@ -439,24 +439,5 @@ public class Minestuck
 				e.printStackTrace();
 			}
 		}
-//		
-//		MinecraftServer server = event.getServer();
-//		//System.out.println(server.getFolderName());
-//		File directory = new File("./saves/" + server.getFolderName());
-//		if (!directory.exists()) {
-//			directory = new File("./"+ server.getFolderName());
-//		}
-//		File[] files = directory.listFiles();
-//		for (File file : files) {
-//			//System.out.println("found a file called " + file.getName());
-//			if (file.getName().contains("DIM")) {
-//				int dim = Integer.valueOf(file.getName().substring(3));
-//				if (DimensionManager.getWorld(dim) == null) {
-//					System.out.println("[MINESTUCK] found a dimension with an id of" + dim);
-//					DimensionManager.registerDimension(dim, Minestuck.landProviderTypeId);
-//				}
-//			}
-//			
-//		}
 	}
 }

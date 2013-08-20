@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Random;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.DimensionManager;
@@ -106,14 +107,15 @@ public class LandHelper {
 	
 	/**
 	 * Registers a new dimension for a land. Returns the ID of the nearest open land ID.
+	 * @param player TODO
 	 * 
 	 */
-	public static int createLand() {
+	public static int createLand(EntityPlayer player) {
 
 		int newLandId = Minestuck.landDimensionIdStart;
 		
 		while (true) {
-			if (DimensionManager.getWorld(newLandId) == null) {
+			if (DimensionManager.getWorld(newLandId) == null && !MinestuckSaveHandler.lands.contains((byte)newLandId)) {
 				break;
 			} else {
 				newLandId++;
@@ -121,6 +123,7 @@ public class LandHelper {
 		}
 		DimensionManager.registerDimension(newLandId, Minestuck.landProviderTypeId);
 		System.out.println(newLandId);
+		player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("LandId", newLandId);
 		MinestuckSaveHandler.lands.add((byte) newLandId);
 		
 		return newLandId;
