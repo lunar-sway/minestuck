@@ -1,11 +1,16 @@
 package com.mraof.minestuck.network;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 
 import cpw.mods.fml.common.network.Player;
@@ -19,7 +24,7 @@ public class SburbGiveItemsPacket extends MinestuckPacket {
 	public int gristTotal;
 	public SburbGiveItemsPacket() 
 	{
-		super(Type.SBURB_CONNECT);
+		super(Type.SBURB_GIVE);
 	}
 
 	@Override
@@ -56,10 +61,20 @@ public class SburbGiveItemsPacket extends MinestuckPacket {
 			return;
 		}
 		
-		te.connectedTo = connectedTo;
-		te.connected = true;
+		Container items = ((EntityPlayer)player).inventoryContainer;
+		ItemStack[] newItems = new ItemStack[5];
+		for (int i = 0;i < 4;i++) {
+			newItems[i] = new ItemStack(Minestuck.blockMachine.blockID,1,i);
+		}
+		ItemStack card = new ItemStack(Minestuck.punchedCard.itemID,1,0);
+		card.setTagCompound(new NBTTagCompound());
+		card.getTagCompound().setInteger("contentID",Minestuck.cruxiteArtifact.itemID);
+		card.getTagCompound().setInteger("contentMeta",0);
+		newItems[4] = card;
+		items.putStacksInSlots(newItems);
+		te.givenItems = true;
 		
-		System.out.println("[MINESTUCK] Packet recieved. Connection set!");
+		System.out.println("[MINESTUCK] Packet recieved. Items given!");
 	}
 
 }

@@ -169,6 +169,7 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 			    	
 			    	for (Object button : selButtons) {
 			    		((GuiButton)button).enabled = false;
+			    		((GuiButton)button).displayString = "";
 			    	}
 			    	
 					displayLine = "Connected to "+displayName+".";
@@ -216,22 +217,9 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 			break;
 		case(1):
 			if (te.connected) {
-				Container items = mc.thePlayer.inventoryContainer;
-				ItemStack[] newItems = new ItemStack[5];
-				for (int i = 0;i < 4;i++) {
-					newItems[i] = new ItemStack(Minestuck.blockMachine.blockID,1,i);
-				}
-				ItemStack card = new ItemStack(Minestuck.punchedCard.itemID,1,0);
-				card.setTagCompound(new NBTTagCompound());
-				card.getTagCompound().setInteger("contentID",Minestuck.cruxiteArtifact.itemID);
-				card.getTagCompound().setInteger("contentMeta",0);
-				newItems[4] = card;
-				items.putStacksInSlots(newItems);
-				te.givenItems = true;
+				sendItemsGiven(te.connectedTo);
 			} else {
-				SburbConnector.addListener(this);
-				SburbConnector.addServer(mc.thePlayer.username);
-				this.waiting  = true;
+				sendServerOpen(mc.thePlayer.username);
 			}
 			break;
 		}
@@ -248,14 +236,47 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 	}
 
 	private void sendNewConnection(String connTo) {
+//		Packet250CustomPayload packet = new Packet250CustomPayload();
+//		packet.channel = "Minestuck";
+//		packet.data = MinestuckPacket.makePacket(Type.SBURB_CONNECT,te.xCoord,te.yCoord,te.zCoord,connTo);
+//		packet.length = packet.data.length;
+//		this.mc.getNetHandler().addToSendQueue(packet);
+//		
+		te.connectedTo = connTo;
+		te.connected = true;
+	}
+	
+	private void sendServerOpen(String connTo) {
+//		Packet250CustomPayload packet = new Packet250CustomPayload();
+//		packet.channel = "Minestuck";
+//		packet.data = MinestuckPacket.makePacket(Type.SBURB_OPEN,te.xCoord,te.yCoord,te.zCoord,connTo);
+//		packet.length = packet.data.length;
+//		this.mc.getNetHandler().addToSendQueue(packet);
+		
+		SburbConnector.addListener(this);
+		SburbConnector.addServer(mc.thePlayer.username);
+		this.waiting  = true;
+	}
+	
+	private void sendItemsGiven(String connTo) {
 		Packet250CustomPayload packet = new Packet250CustomPayload();
 		packet.channel = "Minestuck";
-		packet.data = MinestuckPacket.makePacket(Type.SBURB_CONNECT,te.xCoord,te.yCoord,te.zCoord,connTo);
+		packet.data = MinestuckPacket.makePacket(Type.SBURB_GIVE,te.xCoord,te.yCoord,te.zCoord,connTo);
 		packet.length = packet.data.length;
 		this.mc.getNetHandler().addToSendQueue(packet);
 		
-		te.connectedTo = connTo;
-		te.connected = true;
+//		Container items = mc.thePlayer.inventoryContainer;
+//		ItemStack[] newItems = new ItemStack[5];
+//		for (int i = 0;i < 4;i++) {
+//			newItems[i] = new ItemStack(Minestuck.blockMachine.blockID,1,i);
+//		}
+//		ItemStack card = new ItemStack(Minestuck.punchedCard.itemID,1,0);
+//		card.setTagCompound(new NBTTagCompound());
+//		card.getTagCompound().setInteger("contentID",Minestuck.cruxiteArtifact.itemID);
+//		card.getTagCompound().setInteger("contentMeta",0);
+//		newItems[4] = card;
+//		items.putStacksInSlots(newItems);
+//		te.givenItems = true;
 	}
 		
 }
