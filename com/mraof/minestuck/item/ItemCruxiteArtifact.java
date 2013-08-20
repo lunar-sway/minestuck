@@ -35,7 +35,6 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 	protected void onFoodEaten(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {
 		if(!par2World.isRemote)
 		{
-			
 			Teleport.teleportEntity(par3EntityPlayer, LandHelper.createLand(), this);
 		}
 	}

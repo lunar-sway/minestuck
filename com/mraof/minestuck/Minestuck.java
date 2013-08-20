@@ -2,7 +2,10 @@ package com.mraof.minestuck;
 
 
 
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -70,6 +73,7 @@ import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.WorldProviderSkaia;
 import com.mraof.minestuck.world.gen.OreHandler;
+import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -399,7 +403,7 @@ public class Minestuck
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) 
 	{
-
+		MinecraftForge.EVENT_BUS.register(new MinestuckSaveHandler());
 	}
 	//registers entity with forge and minecraft, and increases currentEntityIdOffset by one in order to prevent id collision
 	public void registerAndMapEntity(Class entityClass, String name, int eggColor, int eggSpotColor)
@@ -417,24 +421,42 @@ public class Minestuck
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event)
 	{
-		
-		MinecraftServer server = event.getServer();
-		//System.out.println(server.getFolderName());
-		File directory = new File("./saves/" + server.getFolderName());
-		if (!directory.exists()) {
-			directory = new File("./"+ server.getFolderName());
-		}
-		File[] files = directory.listFiles();
-		for (File file : files) {
-			//System.out.println("found a file called " + file.getName());
-			if (file.getName().contains("DIM")) {
-				int dim = Integer.valueOf(file.getName().substring(3));
-				if (DimensionManager.getWorld(dim) == null) {
-					System.out.println("[MINESTUCK] found a dimension with an id of" + dim);
-					DimensionManager.registerDimension(dim, Minestuck.landProviderTypeId);
+		File landList = event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("minestuckLandList");
+		if (landList != null && landList.exists())
+		{
+			try {
+				DataInputStream dataInputStream = new DataInputStream(new FileInputStream(landList));
+				int currentByte;
+				while((currentByte = dataInputStream.read()) != -1)
+				{
+					MinestuckSaveHandler.lands.add((byte)currentByte);
+					System.out.println(currentByte);
+					if(!DimensionManager.isDimensionRegistered(currentByte))
+					DimensionManager.registerDimension(currentByte, Minestuck.landProviderTypeId);
 				}
+				dataInputStream.close();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-			
 		}
+//		
+//		MinecraftServer server = event.getServer();
+//		//System.out.println(server.getFolderName());
+//		File directory = new File("./saves/" + server.getFolderName());
+//		if (!directory.exists()) {
+//			directory = new File("./"+ server.getFolderName());
+//		}
+//		File[] files = directory.listFiles();
+//		for (File file : files) {
+//			//System.out.println("found a file called " + file.getName());
+//			if (file.getName().contains("DIM")) {
+//				int dim = Integer.valueOf(file.getName().substring(3));
+//				if (DimensionManager.getWorld(dim) == null) {
+//					System.out.println("[MINESTUCK] found a dimension with an id of" + dim);
+//					DimensionManager.registerDimension(dim, Minestuck.landProviderTypeId);
+//				}
+//			}
+//			
+//		}
 	}
 }

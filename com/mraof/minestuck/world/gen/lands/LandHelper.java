@@ -9,6 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.DimensionManager;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 public class LandHelper {
 	
@@ -118,9 +119,9 @@ public class LandHelper {
 				newLandId++;
 			}
 		}
-		
 		DimensionManager.registerDimension(newLandId, Minestuck.landProviderTypeId);
-		
+		System.out.println(newLandId);
+		MinestuckSaveHandler.lands.add((byte) newLandId);
 		
 		return newLandId;
 	}
