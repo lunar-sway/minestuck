@@ -107,7 +107,7 @@ public class ChunkProviderLands implements IChunkProvider
 		int[] topBlock = new int[256];
 		
 		generated0 = this.noiseGens[0].generateNoiseOctaves(generated0, chunkX*16, 10, chunkZ*16, 16, 1, 16, .1, 0, .1);
-		generated0 = this.noiseGens[0].generateNoiseOctaves(generated0, chunkX*16, 10, chunkZ*16, 16, 1, 16, 100.1, 50, 130.1);
+		generated0 = this.noiseGens[0].generateNoiseOctaves(generated0, chunkX*16, 10, chunkZ*16, 16, 1, 16, -.1, 0, -.1);
 		generated1 = this.noiseGens[1].generateNoiseOctaves(generated1, chunkX*16, 2, chunkZ*16, 16, 256, 16, .12, .11, .12);
 		
 		for(int i = 0; i < 256; i++)

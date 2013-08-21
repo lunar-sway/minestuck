@@ -6,6 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
 import com.mraof.minestuck.entity.EntityMinestuck;
+import com.mraof.minestuck.util.Debug;
 
 public class RenderEntityMinestuck extends RenderLiving 
 {

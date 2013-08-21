@@ -4,7 +4,7 @@ import java.util.List;
 
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 
 public class EntityListAttackFilter implements IEntitySelector 
 {
@@ -14,7 +14,7 @@ public class EntityListAttackFilter implements IEntitySelector
     {
         return entitiesToAttack.contains(par1Entity.getClass());
     }
-	public EntityListAttackFilter(List<Class<? extends EntityLiving>> entitiesToAttack) 
+	public EntityListAttackFilter(List<Class<? extends EntityLivingBase>> entitiesToAttack) 
 	{
 		this.entitiesToAttack = entitiesToAttack;
 	}

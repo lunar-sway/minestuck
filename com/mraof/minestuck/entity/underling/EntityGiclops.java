@@ -4,8 +4,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
 import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
 import com.mraof.minestuck.entity.item.EntityGrist;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristSet;
@@ -13,8 +16,7 @@ import com.mraof.minestuck.util.GristType;
 
 public class EntityGiclops extends EntityUnderling 
 {
-
-
+	public float sizeMultiplier;
 	private EntityAIAttackOnCollideWithRate entityAIAttackOnCollideWithRate;
 
 	public EntityGiclops(World world)
@@ -24,7 +26,10 @@ public class EntityGiclops extends EntityUnderling
 	public EntityGiclops(World par1World, GristType gristType) 
 	{
 		super(par1World, gristType, "Giclops");
-		setSize(8.0F, 12.0F);
+		this.sizeMultiplier = 1F;
+//		this.sizeMultiplier = gristType.getPower() / 10 + 1; 
+		//TODO make giclops of variable size
+		setSize(8.0F * this.sizeMultiplier, 12.0F * this.sizeMultiplier);
 		this.experienceValue = (int) (5 * gristType.getPower() + 4);
 //		this.health = this.maxHealth;
 		this.stepHeight = 2;
@@ -62,6 +67,20 @@ public class EntityGiclops extends EntityUnderling
 		return 0.1F;
 	}
 	@Override
+	public void writeSpawnData(ByteArrayDataOutput data) 
+	{
+		super.writeSpawnData(data);
+	}
+	@Override
+	public void readSpawnData(ByteArrayDataInput data) 
+	{
+		super.readSpawnData(data);
+		this.sizeMultiplier = 1F;
+//		this.sizeMultiplier = this.type.getPower() / 10 + 1;
+		Debug.print(this.type + " has a size multiplier of " + this.sizeMultiplier);
+		setSize(8.0F * this.sizeMultiplier, 12.0F * this.sizeMultiplier);
+	}
+	@Override
 	public boolean attackEntityAsMob(Entity par1Entity) 
 	{
 		return par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this), (int) ((this.type.getPower() + 1) * 2.5 + 2));
@@ -69,7 +88,7 @@ public class EntityGiclops extends EntityUnderling
 	@Override
 	protected float getMaxHealth() 
 	{
-		return 28 * (type.getPower() + 1) + 18;
+		return 19 * (type.getPower() + 1) + 48;
 	}
 
 }

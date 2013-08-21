@@ -1,9 +1,13 @@
 package com.mraof.minestuck.client.model;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
+
+import com.mraof.minestuck.entity.underling.EntityGiclops;
 
 public class ModelGiclops extends ModelBase {
 
@@ -51,8 +55,12 @@ public class ModelGiclops extends ModelBase {
 	}
 	public void render(Entity entity, float par2, float par3, float par4, float par5, float par6, float par7)
 	{
+		float giclopsSize = ((EntityGiclops)entity).sizeMultiplier;
 		this.setRotationAngles(par2, par3, par4, par5, par6, par7, entity);
 		//this is where I can increase the size
+        GL11.glPushMatrix();
+        GL11.glScalef(giclopsSize, giclopsSize, giclopsSize);
+//        GL11.glTranslatef(0.0F, par7 * scaling, 0.0F);
 		this.body.render(par7 * scaling);
 		this.rightArm.render(par7 * scaling);
 		this.leftArm.render(par7 * scaling);
@@ -60,6 +68,7 @@ public class ModelGiclops extends ModelBase {
 		this.leftLeg.render(par7 * scaling);
 		this.head.render(par7 * scaling);
 		this.tail.render(par7 * scaling);
+		GL11.glPopMatrix();
 	}
 	/**
 	 * Sets the model's various rotation angles. For bipeds, par1 and par2 are used for animating the movement of arms

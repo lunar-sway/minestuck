@@ -7,7 +7,6 @@ import java.util.List;
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.entity.player.EntityPlayer;
@@ -77,7 +76,7 @@ public class EntityAINearestAttackableTargetWithHeight extends EntityAITarget
                 while (iterator.hasNext())
                 {
                     Entity entity = (Entity)iterator.next();
-                    EntityLiving entityliving = (EntityLiving)entity;
+                    EntityLivingBase entityliving = (EntityLivingBase)entity;
 
                     if (this.isSuitableTarget(entityliving, false))
                     {

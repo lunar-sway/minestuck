@@ -1,7 +1,6 @@
 package com.mraof.minestuck.entity.carapacian;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -125,7 +124,7 @@ public abstract class EntityBishop extends EntityCarapacian implements IRangedAt
 	@Override
 	EntityAINearestAttackableTargetWithHeight entityAINearestAttackableTargetWithHeight() 
 	{
-		EntityAINearestAttackableTargetWithHeight ai = new EntityAINearestAttackableTargetWithHeight(this, EntityLiving.class, 256.0F, 0, true, false, attackEntitySelector);
+		EntityAINearestAttackableTargetWithHeight ai = new EntityAINearestAttackableTargetWithHeight(this, EntityLivingBase.class, 256.0F, 0, true, false, attackEntitySelector);
 		ai.setTargetHeightDistance(64);
 		return ai;
 	}

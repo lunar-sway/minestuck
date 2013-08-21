@@ -51,6 +51,8 @@ public class ItemClub extends ItemWeapon
 	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase player)
 	{
 		itemStack.damageItem(1, player);
+		if(clubType.equals(EnumClubType.DEUCE))
+			player.heal(this.weaponDamage);
 		return true;
 	}
 

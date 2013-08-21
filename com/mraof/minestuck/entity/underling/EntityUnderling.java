@@ -1,7 +1,10 @@
 package com.mraof.minestuck.entity.underling;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAISwimming;
@@ -16,6 +19,7 @@ import net.minecraft.world.World;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+import com.mraof.minestuck.entity.EntityListAttackFilter;
 import com.mraof.minestuck.entity.EntityMinestuck;
 import com.mraof.minestuck.entity.ai.EntityAINearestAttackableTargetWithHeight;
 import com.mraof.minestuck.util.GristSet;
@@ -25,6 +29,9 @@ import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public abstract class EntityUnderling extends EntityMinestuck implements IEntityAdditionalSpawnData, IMob
 {
+
+	protected List<Class<? extends EntityLivingBase>> enemyClasses;
+	protected EntityListAttackFilter attackEntitySelector;
 	//The type of the imp
 	protected GristType type;
 	//Name of underling, used in getting the texture and actually naming it
@@ -36,8 +43,12 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	{
 		super(par1World, type, underlingName);
 		
+		enemyClasses = new ArrayList<Class<? extends EntityLivingBase>>();
+		enemyClasses.add(EntityPlayer.class);
+		setEnemies();
+
 		this.tasks.addTask(1, new EntityAISwimming(this));
-		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
+		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
 		this.targetTasks.addTask(2, this.entityAINearestAttackableTargetWithHeight());
 		this.tasks.addTask(5, new EntityAIWander(this, this.getWanderSpeed()));
 		this.tasks.addTask(6, new EntityAILookIdle(this));
@@ -80,10 +91,35 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	{
 		return true;
 	}
+	
+	@Override
+	public void setAttackTarget(EntityLivingBase par1EntityLivingBase) 
+	{
+		super.setAttackTarget(par1EntityLivingBase);
+		if(par1EntityLivingBase != null)
+		{
+			this.addEnemy(par1EntityLivingBase.getClass());
+		}
+	}
+	public void setEnemies()
+	{
+		attackEntitySelector = new EntityListAttackFilter(enemyClasses);
+	}
+
+	public void addEnemy(Class enemyClass)
+	{
+		if(!enemyClasses.contains(enemyClass))
+		{
+			enemyClasses.add(enemyClass);
+			this.setEnemies();
+			this.setCombatTask();
+		}
+	}
 	EntityAINearestAttackableTargetWithHeight entityAINearestAttackableTargetWithHeight()
 	{
-		return new EntityAINearestAttackableTargetWithHeight(this, EntityPlayer.class, 128.0F, 2, true, false);
+		return new EntityAINearestAttackableTargetWithHeight(this, EntityLivingBase.class, 128.0F, 2, true, false, attackEntitySelector);
 	}
+	
 	@Override
 	public void moveEntity(double par1, double par3, double par5) 
 	{
