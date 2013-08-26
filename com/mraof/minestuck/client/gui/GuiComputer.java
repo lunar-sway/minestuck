@@ -16,6 +16,7 @@ import org.lwjgl.opengl.GL12;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IConnectionListener;
 import com.mraof.minestuck.util.SburbConnection;
 
@@ -39,7 +40,6 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 	private String programName = "";
 	private int program;
 	private String displayName;
-	private SburbConnection conn;
 
 	private Minecraft mc;
 	private TileEntityComputer te;
@@ -54,7 +54,6 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 		this.te = te;
 		
 		this.program = te.program;
-		conn = new SburbConnection(mc.thePlayer.username,program == 0);
 		switch (program) {
 		case(0):
 			this.programName = "Client";
@@ -62,6 +61,11 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 		case(1):
 			this.programName = "Server";
 			break;
+		}
+		
+		if (te.conn == null) {
+			//Debug.print("It was null?");
+			te.conn = new SburbConnection(mc.thePlayer.username,program == 0);
 		}
 	}
 	
@@ -115,6 +119,7 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 	private void updateGui() {
 		
 		displayName = "";
+		Debug.print("Conn'd to "+te.connectedTo);
 		String[] parts = te.connectedTo.split("\0");
 		for (String part : parts) {
 			displayName += part;
@@ -130,7 +135,7 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
     	
 		switch(program) {
 		case(0):
-			if (te.connected) {
+			if (!te.connectedTo.equals("")) {
 				this.displayLine = "Connected to "+displayName+".";		    	
 			} else {
 				this.displayLine = "Select a server below.";
@@ -148,18 +153,18 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 			}
 	    	break;
 		case(1):
-			if (te.waiting) {
-				GuiButton button = selButtons.get(0);
-				button.displayString = "";
-				button.enabled = false;
-				displayLine = "Waiting for client...";
-			} else if (te.givenItems) {
+			if (te.givenItems) {
 					displayLine = "Connected to "+displayName+".";
-			} else if (te.connected) {				
+			} else if (!te.connectedTo.equals("")) {				
 				GuiButton button = selButtons.get(0);
 				displayLine = "Connected to "+displayName+".";
 				button.displayString = "Give client items";
 				button.enabled = true;
+			} else if (!te.owner.equals("") && te.connectedTo.equals("")) {
+					GuiButton button = selButtons.get(0);
+					button.displayString = "";
+					button.enabled = false;
+					displayLine = "Waiting for client...";
 			} else {
 				this.displayLine = "Click the button below.";
 			
@@ -182,23 +187,22 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 			} else if (guibutton == downButton) {
 				
 			} else {
-				conn.connect(mc.thePlayer.username);
+				//te.conn.connect(mc.thePlayer.username);
 
-				te.connectedTo = conn.getServerPlayer();
-				te.connected = true;
+				te.connectedTo = te.conn.getServerPlayer();
 			}
 			break;
 		case(1):
-			if (te.connected) {
+			if (!te.connectedTo.equals("")) {
 				Packet250CustomPayload packet = new Packet250CustomPayload();
 				packet.channel = "Minestuck";
 				packet.data = MinestuckPacket.makePacket(Type.SBURB_GIVE,te.xCoord,te.yCoord,te.zCoord,te.connectedTo);
 				packet.length = packet.data.length;
 				this.mc.getNetHandler().addToSendQueue(packet);
 			} else {
-				conn.addListener(this);
-				SburbConnection.addServer(conn);
-				te.waiting  = true;
+				//SburbConnection.addServer(te.conn);
+				te.owner  = mc.thePlayer.username;
+				te.conn.addListener(this);
 			}
 			break;
 		}
@@ -208,9 +212,7 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 	@Override
 	public void onConnected(SburbConnection conn) {
 
-		te.waiting = false;
 		te.connectedTo = conn.getClientPlayer();
-		te.connected = true;
 		
 		updateGui();
 	}
