@@ -14,8 +14,6 @@ import com.mraof.minestuck.util.GristType;
 //Makes non-stop ogre puns
 public class EntityOgre extends EntityUnderling 
 {
-
-
 	private EntityAIAttackOnCollideWithRate entityAIAttackOnCollideWithRate;
 	public EntityOgre(World world)
 	{
@@ -28,16 +26,7 @@ public class EntityOgre extends EntityUnderling
 		this.experienceValue = (int) (5 * gristType.getPower() + 4);
 		this.stepHeight = 1.0F;
 	}
-	@Override
-	protected void onDeathUpdate() 
-	{
-		super.onDeathUpdate();
-		if(this.deathTime == 20 && !this.worldObj.isRemote)
-		{
-			for(Object gristType : this.getGristSpoils().getArray())
-				this.worldObj.spawnEntityInWorld(new EntityGrist(worldObj, this.posX + this.rand.nextDouble() * this.width - this.width / 2, this.posY, this.posZ + this.rand.nextDouble() * this.width - this.width / 2, (GristAmount) gristType));
-		}
-	}
+
 	@Override
 	public GristSet getGristSpoils()
 	{

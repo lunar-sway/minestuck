@@ -22,6 +22,8 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.mraof.minestuck.entity.EntityListAttackFilter;
 import com.mraof.minestuck.entity.EntityMinestuck;
 import com.mraof.minestuck.entity.ai.EntityAINearestAttackableTargetWithHeight;
+import com.mraof.minestuck.entity.item.EntityGrist;
+import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
 
@@ -44,11 +46,11 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 		super(par1World, type, underlingName);
 		
 		enemyClasses = new ArrayList<Class<? extends EntityLivingBase>>();
-		enemyClasses.add(EntityPlayer.class);
 		setEnemies();
 
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
+		this.targetTasks.addTask(2, new EntityAINearestAttackableTargetWithHeight(this, EntityPlayer.class, 128.0F, 2, true, false));
 		this.targetTasks.addTask(2, this.entityAINearestAttackableTargetWithHeight());
 		this.tasks.addTask(5, new EntityAIWander(this, this.getWanderSpeed()));
 		this.tasks.addTask(6, new EntityAILookIdle(this));
@@ -74,6 +76,16 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	protected abstract float getMaxHealth();
 
 	protected abstract float getWanderSpeed();
+	@Override
+	protected void onDeathUpdate() 
+	{
+		super.onDeathUpdate();
+		if(this.deathTime == 20 && !this.worldObj.isRemote)
+		{
+			for(Object gristType : this.getGristSpoils().getArray())
+				this.worldObj.spawnEntityInWorld(new EntityGrist(worldObj, this.posX + this.rand.nextDouble() * this.width - this.width / 2, this.posY, this.posZ + this.rand.nextDouble() * this.width - this.width / 2, (GristAmount) gristType));
+		}
+	}
 	@Override
 	public String getTexture() 
 	{

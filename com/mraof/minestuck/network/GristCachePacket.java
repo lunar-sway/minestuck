@@ -23,7 +23,6 @@ public class GristCachePacket extends MinestuckPacket
 	@Override
 	public byte[] generatePacket(Object... data) 
 	{
-
 		ByteArrayDataOutput dat = ByteStreams.newDataOutput();
 		values = (int[]) data[0];
 		for(int currentValue : values)

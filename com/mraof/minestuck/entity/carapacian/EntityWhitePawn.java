@@ -1,5 +1,7 @@
 package com.mraof.minestuck.entity.carapacian;
 
+import com.mraof.minestuck.entity.underling.EntityUnderlingPart;
+
 import net.minecraft.world.World;
 
 public class EntityWhitePawn extends EntityPawn
@@ -16,6 +18,7 @@ public class EntityWhitePawn extends EntityPawn
 	public void setEnemies()
 	{
 		setEnemies(EnumEntityKingdom.PROSPITIAN);
+		this.enemyClasses.add(EntityUnderlingPart.class);
 		super.setEnemies();
 	}
 	@Override

@@ -9,5 +9,19 @@ public class Debug {
 			System.out.println("[MINESTUCK] "+text);
 		}
 	}
-	
+	public static void printf(String text, Object... args)
+	{
+		if (isDebugMode) 
+		{
+			System.out.printf("[MINESTUCK] " + text + "\n", args);
+		}
+	}
+	//Don't use this unless you want to crash the game
+	@SuppressWarnings("null")
+	public static void crash()
+	{
+		Object nullObj = null;
+		nullObj.toString();
+	}
+
 }

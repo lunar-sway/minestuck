@@ -36,9 +36,11 @@ import com.mraof.minestuck.entity.carapacian.EntityWhitePawn;
 import com.mraof.minestuck.entity.consort.EntityNakagator;
 import com.mraof.minestuck.entity.consort.EntitySalamander;
 import com.mraof.minestuck.entity.item.EntityGrist;
+import com.mraof.minestuck.entity.underling.EntityBasilisk;
 import com.mraof.minestuck.entity.underling.EntityGiclops;
 import com.mraof.minestuck.entity.underling.EntityImp;
 import com.mraof.minestuck.entity.underling.EntityOgre;
+import com.mraof.minestuck.entity.underling.EntityUnderlingPart;
 import com.mraof.minestuck.item.EnumBladeType;
 import com.mraof.minestuck.item.EnumCaneType;
 import com.mraof.minestuck.item.EnumClubType;
@@ -366,11 +368,13 @@ public class Minestuck
 		this.registerAndMapEntity(EntityNakagator.class, "Nakagator", 0xffe62e, 0xfffb53);
 		this.registerAndMapEntity(EntityImp.class, "Imp", 0x000000, 0xffffff);
 		this.registerAndMapEntity(EntityOgre.class, "Ogre", 0x000000, 0xffffff);
+		this.registerAndMapEntity(EntityBasilisk.class, "Basilisk", 0x400040, 0xffffff);
 		this.registerAndMapEntity(EntityGiclops.class, "Giclops", 0x000000, 0xffffff);
 		this.registerAndMapEntity(EntityBlackPawn.class, "dersitePawn", 0x0f0f0f, 0xf0f0f0);
 		this.registerAndMapEntity(EntityWhitePawn.class, "prospitianPawn", 0xf0f0f0, 0x0f0f0f);
 		this.registerAndMapEntity(EntityBlackBishop.class, "dersiteBishop", 0x000000, 0xc121d9);
 		this.registerAndMapEntity(EntityWhiteBishop.class, "prospitianBishop", 0xffffff, 0xfde500);
+		this.registerAndMapEntity(EntityUnderlingPart.class, "underlingPart", 0, 0);
 		//register entities with fml
 		EntityRegistry.registerModEntity(EntityGrist.class, "grist", currentEntityIdOffset, this, 512, 1, true);
 
@@ -435,7 +439,7 @@ public class Minestuck
 					MinestuckSaveHandler.lands.add((byte)currentByte);
 					Debug.print(currentByte);
 					if(!DimensionManager.isDimensionRegistered(currentByte))
-					DimensionManager.registerDimension(currentByte, Minestuck.landProviderTypeId);
+						DimensionManager.registerDimension(currentByte, Minestuck.landProviderTypeId);
 				}
 				dataInputStream.close();
 			} catch (IOException e) {

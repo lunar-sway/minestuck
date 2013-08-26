@@ -53,6 +53,10 @@ public class ItemCane extends ItemWeapon
 	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase player)
 	{
 		itemStack.damageItem(1, player);
+		if(this.caneType == EnumCaneType.CANE)
+		{
+			System.out.println(target.getClass());
+		}
 		return true;
 	}
 	

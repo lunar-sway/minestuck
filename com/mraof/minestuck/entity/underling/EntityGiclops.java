@@ -36,19 +36,9 @@ public class EntityGiclops extends EntityUnderling
 	}
 
 	@Override
-	protected void onDeathUpdate() 
-	{
-		super.onDeathUpdate();
-		if(this.deathTime == 20 && !this.worldObj.isRemote)
-		{
-			for(Object gristType : this.getGristSpoils().getArray())
-				this.worldObj.spawnEntityInWorld(new EntityGrist(worldObj, this.posX + this.rand.nextDouble() * this.width - this.width / 2, this.posY, this.posZ + this.rand.nextDouble() * this.width - this.width / 2, (GristAmount) gristType));		}
-	}
-	
-	@Override
 	public GristSet getGristSpoils()
 	{
-		return GristHelper.getRandomDrop(type,5);
+		return GristHelper.getRandomDrop(type, 5);
 	}
 
 	@Override
@@ -77,7 +67,7 @@ public class EntityGiclops extends EntityUnderling
 		super.readSpawnData(data);
 		this.sizeMultiplier = 1F;
 //		this.sizeMultiplier = this.type.getPower() / 10 + 1;
-		Debug.print(this.type + " has a size multiplier of " + this.sizeMultiplier);
+//		Debug.print(this.type + " has a size multiplier of " + this.sizeMultiplier);
 		setSize(8.0F * this.sizeMultiplier, 12.0F * this.sizeMultiplier);
 	}
 	@Override
