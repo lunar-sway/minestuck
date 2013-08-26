@@ -57,13 +57,13 @@ public class SburbConnection {
 	}
 	
 	public static SburbConnection addServer(SburbConnection conn) {
-		if (Minecraft.getMinecraft().theWorld.isRemote) {
-			Packet250CustomPayload packet = new Packet250CustomPayload();
-			packet.channel = "Minestuck";
-			packet.data = MinestuckPacket.makePacket(Type.SBURB_OPEN,conn.getServerPlayer());
-			packet.length = packet.data.length;
-			Minecraft.getMinecraft().getNetHandler().addToSendQueue(packet);
-		}
+//		if (Minecraft.getMinecraft().theWorld.isRemote) {
+//			Packet250CustomPayload packet = new Packet250CustomPayload();
+//			packet.channel = "Minestuck";
+//			packet.data = MinestuckPacket.makePacket(Type.SBURB_OPEN,conn.getServerPlayer());
+//			packet.length = packet.data.length;
+//			Minecraft.getMinecraft().getNetHandler().addToSendQueue(packet);
+//		}
 		
 		serversOpen.add(conn);
 		return conn;
@@ -75,13 +75,14 @@ public class SburbConnection {
 	}
 	
 	public SburbConnection connect(String player) {
-		if (Minecraft.getMinecraft().theWorld.isRemote) {
-			Packet250CustomPayload packet = new Packet250CustomPayload();
-			packet.channel = "Minestuck";
-			packet.data = MinestuckPacket.makePacket(Type.SBURB_CONNECT, this.clientPlayer == null ? player : this.getClientPlayer(),  this.serverPlayer == null ? player : this.getServerPlayer());
-			packet.length = packet.data.length;
-			Minecraft.getMinecraft().getNetHandler().addToSendQueue(packet);
-		}
+//		// NOTE: isRemote doesn't quite do it like that serverside
+//		if (Minecraft.getMinecraft().theWorld.isRemote) {
+//			Packet250CustomPayload packet = new Packet250CustomPayload();
+//			packet.channel = "Minestuck";
+//			packet.data = MinestuckPacket.makePacket(Type.SBURB_CONNECT, this.clientPlayer == null ? player : this.getClientPlayer(),  this.serverPlayer == null ? player : this.getServerPlayer());
+//			packet.length = packet.data.length;
+//			Minecraft.getMinecraft().getNetHandler().addToSendQueue(packet);
+//		}
 		
 		for (Object conn : serversOpen) {
 			if (((SburbConnection)conn).getServerPlayer() == this.getServerPlayer()) {

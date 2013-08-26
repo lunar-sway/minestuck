@@ -483,19 +483,19 @@ public class AlchemyRecipeHandler {
 		
 		Debug.print("PASS 1");
 		for (Object recipe : CraftingManager.getInstance().getRecipeList()) {
-			if (recipe.getClass() == ShapedRecipes.class) {
+			if (recipe instanceof ShapedRecipes) {
 				ShapedRecipes newRecipe = (ShapedRecipes) recipe;
 				//Debug.print("Found the recipe for "+newRecipe.getRecipeOutput().getDisplayName()+", id "+newRecipe.getRecipeOutput().itemID+":"+newRecipe.getRecipeOutput().getItemDamage());
 				recipeList.put(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getItemDamage()), recipe);
-			} else if (recipe.getClass() == ShapelessRecipes.class) {
+			} else if (recipe instanceof ShapelessRecipes) {
 				ShapelessRecipes newRecipe = (ShapelessRecipes) recipe;
 				//Debug.print("Found the recipe for "+newRecipe.getRecipeOutput().getDisplayName()+", id "+newRecipe.getRecipeOutput().itemID+":"+newRecipe.getRecipeOutput().getItemDamage());
 				recipeList.put(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getItemDamage()), recipe);
-			} else if (recipe.getClass() == ShapedOreRecipe.class) {
+			} else if (recipe instanceof ShapedOreRecipe) {
 				ShapedOreRecipe newRecipe = (ShapedOreRecipe) recipe;
 				//Debug.print("Found the recipe for "+newRecipe.getRecipeOutput().getDisplayName()+", id "+newRecipe.getRecipeOutput().itemID+":"+newRecipe.getRecipeOutput().getItemDamage());
 				recipeList.put(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getItemDamage()), recipe);
-			} else if (recipe.getClass() == ShapelessOreRecipe.class) {
+			} else if (recipe instanceof ShapelessOreRecipe) {
 				ShapelessOreRecipe newRecipe = (ShapelessOreRecipe) recipe;
 				//Debug.print("Found the recipe for "+newRecipe.getRecipeOutput().getDisplayName()+", id "+newRecipe.getRecipeOutput().itemID+":"+newRecipe.getRecipeOutput().getItemDamage());
 				recipeList.put(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getItemDamage()), recipe);
@@ -514,7 +514,7 @@ public class AlchemyRecipeHandler {
 	}
 	
 	private static boolean getRecipe(Object recipe) {
-		if (recipe.getClass() == ShapedRecipes.class) {
+		if (recipe instanceof ShapedRecipes) {
 			Debug.print("found shaped recipe. Output of "+((ShapedRecipes)recipe).getRecipeOutput().getDisplayName());
 			ShapedRecipes newRecipe = (ShapedRecipes) recipe;
 			if (GristRegistry.getGristConversion(newRecipe.getRecipeOutput()) != null) {return false;};
@@ -547,7 +547,7 @@ public class AlchemyRecipeHandler {
 				set.scaleGrist(1/(float)newRecipe.getRecipeOutput().stackSize);
 				GristRegistry.addGristConversion(newRecipe.getRecipeOutput(),newRecipe.getRecipeOutput().getHasSubtypes(),set);
 			}
-		} else if (recipe.getClass() == ShapelessRecipes.class) {
+		} else if (recipe instanceof ShapelessRecipes) {
 			Debug.print("found shapeless recipe. Output of "+((ShapelessRecipes)recipe).getRecipeOutput().getDisplayName());
 			ShapelessRecipes newRecipe = (ShapelessRecipes) recipe;
 			if (GristRegistry.getGristConversion(newRecipe.getRecipeOutput()) != null) {return false;};
@@ -581,7 +581,7 @@ public class AlchemyRecipeHandler {
 				set.scaleGrist(1/(float)newRecipe.getRecipeOutput().stackSize);
 				GristRegistry.addGristConversion(newRecipe.getRecipeOutput(),newRecipe.getRecipeOutput().getHasSubtypes(),set);
 			}
-		} else if (recipe.getClass() == ShapedOreRecipe.class) {
+		} else if (recipe instanceof ShapedOreRecipe) {
 			Debug.print("found shaped oredict recipe. Output of "+((ShapedOreRecipe)recipe).getRecipeOutput().getDisplayName());
 			ShapedOreRecipe newRecipe = (ShapedOreRecipe) recipe;
 			if (GristRegistry.getGristConversion(newRecipe.getRecipeOutput()) != null) {return false;};
@@ -589,7 +589,7 @@ public class AlchemyRecipeHandler {
 			for (Object obj : newRecipe.getInput()) {
 				ItemStack item = null;
 				if (obj == null) {break;}
-				if (obj.getClass() != ItemStack.class) {
+				if (obj instanceof ArrayList) {
 					if (((ArrayList) obj).size() == 0) {
 						Debug.print("	Input list was empty!");
 						break;
@@ -625,7 +625,7 @@ public class AlchemyRecipeHandler {
 				set.scaleGrist(1/(float)newRecipe.getRecipeOutput().stackSize);
 				GristRegistry.addGristConversion(newRecipe.getRecipeOutput(),newRecipe.getRecipeOutput().getHasSubtypes(),set);
 			}
-		} else if (recipe.getClass() == ShapelessOreRecipe.class) {
+		} else if (recipe instanceof ShapelessOreRecipe) {
 			Debug.print("found shapeless oredict recipe. Output of "+((ShapelessOreRecipe)recipe).getRecipeOutput().getDisplayName());
 			ShapelessOreRecipe newRecipe = (ShapelessOreRecipe) recipe;
 			if (GristRegistry.getGristConversion(newRecipe.getRecipeOutput()) != null) {return false;};
@@ -633,7 +633,7 @@ public class AlchemyRecipeHandler {
 			for (Object obj : newRecipe.getInput()) {
 				ItemStack item = null;
 				if (obj == null) {break;}
-				if (obj.getClass() != ItemStack.class) {
+				if (obj instanceof ArrayList) {
 					if (((ArrayList) obj).size() == 0) {
 						Debug.print("	Input list was empty!");
 						break;
