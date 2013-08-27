@@ -10,6 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.DimensionManager;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
@@ -108,7 +109,7 @@ public class LandHelper {
 	
 	/**
 	 * Registers a new dimension for a land. Returns the ID of the nearest open land ID.
-	 * @param player TODO
+	 * @param player 
 	 * 
 	 */
 	public static int createLand(EntityPlayer player) {
@@ -126,6 +127,7 @@ public class LandHelper {
 		Debug.print(newLandId);
 		player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("LandId", newLandId);
 		MinestuckSaveHandler.lands.add((byte) newLandId);
+		MinestuckPlayerTracker.updateLands();
 		
 		return newLandId;
 	}

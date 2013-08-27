@@ -1,5 +1,7 @@
 package com.mraof.minestuck.tracker;
 
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -10,8 +12,11 @@ import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.util.TitleHelper;
+import com.mraof.minestuck.world.gen.lands.LandHelper;
+import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 import cpw.mods.fml.common.IPlayerTracker;
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class MinestuckPlayerTracker implements IPlayerTracker 
 {
@@ -23,6 +28,7 @@ public class MinestuckPlayerTracker implements IPlayerTracker
 	{
 		updateGristCache(player);
 		updateTitle(player);
+		updateLands();
 	}
 
 	@Override
@@ -67,12 +73,21 @@ public class MinestuckPlayerTracker implements IPlayerTracker
 			}
 	        Packet250CustomPayload packet = new Packet250CustomPayload();
 	        packet.channel = "Minestuck";
-	        packet.data = MinestuckPacket.makePacket(Type.TITLE, newTitle.getHeroClass(),newTitle.getHeroAspect());
+	        packet.data = MinestuckPacket.makePacket(Type.TITLE, newTitle.getHeroClass(), newTitle.getHeroAspect());
 	        packet.length = packet.data.length;
 	        ((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(packet);
 			if(player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getTags().size() == 0)
 				player.getEntityData().setCompoundTag(EntityPlayer.PERSISTED_NBT_TAG, new NBTTagCompound());
 			player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Class", newTitle.getHeroClass());
 			player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Aspect", newTitle.getHeroAspect());
+	}
+	public static void updateLands()
+	{
+		List<Byte> lands = MinestuckSaveHandler.lands;
+		Packet250CustomPayload packet = new Packet250CustomPayload();
+		packet.channel = "Minestuck";
+		packet.data = MinestuckPacket.makePacket(Type.LANDREGISTER, lands.toArray());
+		packet.length = packet.data.length;
+		PacketDispatcher.sendPacketToAllPlayers(packet);
 	}
 }
