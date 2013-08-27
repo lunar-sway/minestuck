@@ -9,6 +9,8 @@ import com.mraof.minestuck.client.gui.GuiGristCache;
 
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.common.TickType;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class MinestuckKeyHandler extends KeyHandler 
 {

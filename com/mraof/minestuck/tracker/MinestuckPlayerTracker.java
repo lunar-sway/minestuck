@@ -1,7 +1,5 @@
 package com.mraof.minestuck.tracker;
 
-import java.util.List;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,7 +10,6 @@ import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.util.TitleHelper;
-import com.mraof.minestuck.world.gen.lands.LandHelper;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 import cpw.mods.fml.common.IPlayerTracker;
@@ -83,10 +80,12 @@ public class MinestuckPlayerTracker implements IPlayerTracker
 	}
 	public static void updateLands()
 	{
-		List<Byte> lands = MinestuckSaveHandler.lands;
+		byte[] lands = new byte[MinestuckSaveHandler.lands.size()];
+		for(int i = 0; i < lands.length; i++)
+			lands[i] = MinestuckSaveHandler.lands.get(i);
 		Packet250CustomPayload packet = new Packet250CustomPayload();
 		packet.channel = "Minestuck";
-		packet.data = MinestuckPacket.makePacket(Type.LANDREGISTER, lands.toArray());
+		packet.data = MinestuckPacket.makePacket(Type.LANDREGISTER, lands);
 		packet.length = packet.data.length;
 		PacketDispatcher.sendPacketToAllPlayers(packet);
 	}
