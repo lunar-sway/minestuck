@@ -1,12 +1,17 @@
 package com.mraof.minestuck.network;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet250CustomPayload;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.SburbConnection;
 
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 
 public class SburbConnectPacket extends MinestuckPacket {
@@ -41,10 +46,16 @@ public class SburbConnectPacket extends MinestuckPacket {
 	@Override
 	public void execute(INetworkManager network, MinestuckPacketHandler handler, Player player, String userName)
 	{
-		//SburbConnection conn = new SburbConnection(server,false);
-		//conn.connect(client);
+		SburbConnection.connect(client,server);
+		Debug.print("Got connect packet");
 		
-		Debug.print("Packet recieved. Connection set!");
+		if (Minecraft.getMinecraft().thePlayer == null) {
+			Packet250CustomPayload packet = new Packet250CustomPayload();
+			packet.channel = "Minestuck";
+			packet.data = MinestuckPacket.makePacket(Type.SBURB_OPEN,client,server);
+			packet.length = packet.data.length;
+			PacketDispatcher.sendPacketToAllPlayers(packet);
+		}
 	}
 
 }

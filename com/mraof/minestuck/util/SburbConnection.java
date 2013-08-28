@@ -4,38 +4,41 @@ import java.util.ArrayList;
 
 public class SburbConnection {
 
-	private static ArrayList<SburbConnection> serversOpen = new ArrayList<SburbConnection>();
-
-	public IConnectionListener listener;
-	public String server;
-	public String client;
-
-	public SburbConnection(IConnectionListener listener) {
-		this.listener = listener;
-	}
+	private static ArrayList serversOpen = new ArrayList();
+	private static ArrayList<IConnectionListener> listeners = new ArrayList<IConnectionListener>();
 
 	public static ArrayList getServersOpen() {
 		return serversOpen;
 	}
 	
-	public SburbConnection openServer(String player) {
-		this.server = player;
-		serversOpen.add(this);
-		return this;
-	}
-	
-	public SburbConnection connect(String client) {
+	public static void openServer(String player) {
 		
 		for (Object conn : serversOpen) {
-			if (((SburbConnection)conn).server == this.server) {
-				serversOpen.remove(conn);
+			if ((String)conn == player) {
+				return;
 			}
 		}
-
-		this.client = client;
-		if (this.listener != null) {
-			this.listener.onConnected(this);
+		
+		serversOpen.add(player);
+		
+		for (Object listener : listeners) {
+			((IConnectionListener)listener).onServerOpen(player);
 		}
-		return this;
+	}
+	
+	public static void connect(String client, String server) {
+		
+
+		serversOpen.remove(server);
+	
+
+		for (Object listener : listeners) {
+			((IConnectionListener)listener).onConnected(server,client);
+		}
+		
+	}
+	
+	public static void addListener(IConnectionListener listener) {
+		listeners.add(listener);
 	}
 }

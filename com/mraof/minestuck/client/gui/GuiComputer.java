@@ -39,7 +39,7 @@ public class GuiComputer extends GuiScreen
 	private int program;
 	private String displayName;
 
-	private Minecraft mc;
+	public Minecraft mc;
 	private TileEntityComputer te;
 
 
@@ -61,6 +61,7 @@ public class GuiComputer extends GuiScreen
 			this.programName = "Server";
 			break;
 		}
+		
 	}
 	
 	@Override
@@ -137,7 +138,7 @@ public class GuiComputer extends GuiScreen
 		    	int i = 0;
 		    	for (Object server : SburbConnection.getServersOpen()) {
 		    		if (i < selButtons.size() && selButtons.get(i) != null) {
-		    			selButtons.get(i).displayString = ((SburbConnection) server).server;
+		    			selButtons.get(i).displayString = (String)server;
 		    			selButtons.get(i).enabled = true;
 		    			i++;
 		    		} else {
@@ -154,7 +155,7 @@ public class GuiComputer extends GuiScreen
 				displayLine = "Connected to "+displayName+".";
 				button.displayString = "Give client items";
 				button.enabled = true;
-			} else if (!te.owner.equals("") && te.connectedTo.equals("")) {
+			} else if (!te.connectedFrom.equals("") && te.connectedTo.equals("")) {
 					GuiButton button = selButtons.get(0);
 					button.displayString = "";
 					button.enabled = false;
@@ -183,7 +184,8 @@ public class GuiComputer extends GuiScreen
 			} else {
 
 				te.connectedTo = guibutton.displayString;
-				//TODO: sync here
+				te.connectedFrom = mc.thePlayer.username;
+				
 				te.updateConnection();
 			}
 			break;
@@ -198,8 +200,7 @@ public class GuiComputer extends GuiScreen
 				te.givenItems = true;
 				te.updateConnection();
 			} else {
-				//TODO: Sync here
-				te.owner  = mc.thePlayer.username;
+				te.connectedFrom  = mc.thePlayer.username;
 				te.updateConnection();
 			}
 			break;
