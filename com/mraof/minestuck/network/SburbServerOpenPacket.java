@@ -54,7 +54,7 @@ public class SburbServerOpenPacket extends MinestuckPacket {
 		 SburbConnection.openServer(((EntityPlayer)player).username);
 		Debug.print("Got openserver packet");
 		
-		if (Minecraft.getMinecraft().thePlayer == null) {
+		if (!Minecraft.getMinecraft().theWorld.isRemote) {
 			Packet250CustomPayload packet = new Packet250CustomPayload();
 			packet.channel = "Minestuck";
 			packet.data = MinestuckPacket.makePacket(Type.SBURB_OPEN,connectedTo);

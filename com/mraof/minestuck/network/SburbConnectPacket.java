@@ -49,7 +49,7 @@ public class SburbConnectPacket extends MinestuckPacket {
 		SburbConnection.connect(client,server);
 		Debug.print("Got connect packet");
 		
-		if (Minecraft.getMinecraft().thePlayer == null) {
+		if (!Minecraft.getMinecraft().theWorld.isRemote) {
 			Packet250CustomPayload packet = new Packet250CustomPayload();
 			packet.channel = "Minestuck";
 			packet.data = MinestuckPacket.makePacket(Type.SBURB_OPEN,client,server);
