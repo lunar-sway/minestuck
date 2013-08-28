@@ -18,4 +18,5 @@ Useful Links
 * Download Link: http://adf.ly/H6wAE
 * Resources: http://minestuck.mraof.com
 * Test Server IP: mraof.com
+* Tumblr Development Blog: http://minestuckmod.tumblr.com/
 * Alchemy Data Spreadsheets: https://docs.google.com/spreadsheet/ccc?key=0AtQP0yOa5DOrdGJTekhGTUJ2azhxMUxsWjBiand0UVE&usp=sharing , https://docs.google.com/spreadsheet/ccc?key=0AtQP0yOa5DOrdFFRMmx4M2Z1QUhKRVZJZTRTdEZOdUE&usp=sharing
