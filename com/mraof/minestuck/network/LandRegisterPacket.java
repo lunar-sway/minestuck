@@ -1,5 +1,8 @@
 package com.mraof.minestuck.network;
 
+import net.minecraft.network.INetworkManager;
+import net.minecraftforge.common.DimensionManager;
+
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
@@ -7,8 +10,6 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
-import net.minecraft.network.INetworkManager;
-import net.minecraftforge.common.DimensionManager;
 import cpw.mods.fml.common.network.Player;
 
 public class LandRegisterPacket extends MinestuckPacket

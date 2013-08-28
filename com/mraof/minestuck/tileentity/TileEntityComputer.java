@@ -1,22 +1,21 @@
 package com.mraof.minestuck.tileentity;
 
-import com.mraof.minestuck.client.gui.GuiComputer;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.IConnectionListener;
-import com.mraof.minestuck.util.SburbConnection;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 
+import com.mraof.minestuck.client.gui.GuiComputer;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.IConnectionListener;
+import com.mraof.minestuck.util.SburbConnection;
+
 public class TileEntityComputer extends TileEntity implements IConnectionListener {
 
 	public int program;
 	public String connectedTo = "";
 	public boolean givenItems = false;
-	//public boolean waiting = false;
 	public String owner = "";
 	public boolean initialized = false;
 	public SburbConnection conn;
@@ -33,7 +32,6 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
     	 this.connectedTo = par1NBTTagCompound.getString("connectedTo");
     	 this.owner = par1NBTTagCompound.getString("owner");
     	 this.givenItems = par1NBTTagCompound.getBoolean("givenItems");
-    	//this.connected = connectedTo != "";
     }
     
     @Override
@@ -63,7 +61,6 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
     {
     	Debug.print("Data packet gotten "+net.getClass());
     	this.readFromNBT(pkt.customParam1);
-    	//updateConnection();
     }
     
     @Override
@@ -93,7 +90,7 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 
 	@Override
 	public void onConnected(SburbConnection conn) {
-		// TODO Auto-generated method stub
+		
 		this.connectedTo = conn.client;
 		updateConnection();
 	}

@@ -1,13 +1,8 @@
 package com.mraof.minestuck.client.model;
 
-import org.lwjgl.opengl.GL11;
-
-import com.mraof.minestuck.entity.underling.EntityGiclops;
-
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.MathHelper;
 
 public class ModelBasilisk extends ModelBase 
 {

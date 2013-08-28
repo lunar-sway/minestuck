@@ -2,13 +2,11 @@ package com.mraof.minestuck.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.model.ModelSnowMan;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.common.MinecraftForge;
 
 import com.mraof.minestuck.CommonProxy;
 import com.mraof.minestuck.client.gui.GuiGristCache;
-import com.mraof.minestuck.client.model.ModelAlchemiter;
 import com.mraof.minestuck.client.model.ModelBasilisk;
 import com.mraof.minestuck.client.model.ModelBishop;
 import com.mraof.minestuck.client.model.ModelGiclops;

@@ -1,8 +1,8 @@
 package com.mraof.minestuck.entity.carapacian;
 
-import com.mraof.minestuck.entity.underling.EntityUnderlingPart;
-
 import net.minecraft.world.World;
+
+import com.mraof.minestuck.entity.underling.EntityUnderlingPart;
 
 public class EntityWhitePawn extends EntityPawn
 {
