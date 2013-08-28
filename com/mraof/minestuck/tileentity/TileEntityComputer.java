@@ -125,12 +125,16 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 	@Override
 	public void onConnected(String server, String client) {
 		if (server == connectedFrom && program == 1) {
-			this.connectedTo = client;
-			updateConnection();
-
-			if (gui != null) {
-				gui.updateGui();
-			}
+				this.connectedTo = client;
+				this.connectedFrom = server;
+				updateConnection();
+	
+				if (gui != null) {
+					gui.updateGui();
+				}
+			} else if (owner == client && program == 0) {
+				this.connectedTo = server;
+				this.connectedFrom = client;
 		}
 	}
 
