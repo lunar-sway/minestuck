@@ -42,8 +42,8 @@ public class SburbConnectPacket extends MinestuckPacket {
 	@Override
 	public void execute(INetworkManager network, MinestuckPacketHandler handler, Player player, String userName)
 	{
-		SburbConnection conn = new SburbConnection(server,false);
-		conn.connect(client);
+		//SburbConnection conn = new SburbConnection(server,false);
+		//conn.connect(client);
 		
 		Debug.print("Packet recieved. Connection set!");
 	}

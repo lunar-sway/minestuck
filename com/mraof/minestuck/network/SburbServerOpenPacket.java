@@ -45,20 +45,20 @@ public class SburbServerOpenPacket extends MinestuckPacket implements IConnectio
 	@Override
 	public void execute(INetworkManager network, MinestuckPacketHandler handler, Player player, String userName)
 	{
-		this.player = player;
-		
-		SburbConnection conn = new SburbConnection(connectedTo,false);
-		conn.addListener(this);
-		SburbConnection.addServer(conn);
+//		this.player = player;
+//		
+//		SburbConnection conn = new SburbConnection(connectedTo,false);
+//		conn.addListener(this);
+//		SburbConnection.openServer(conn);
 	}
 
 	@Override
 	public void onConnected(SburbConnection conn) {
-		Packet250CustomPayload packet = new Packet250CustomPayload();
-		packet.channel = "Minestuck";
-		packet.data = MinestuckPacket.makePacket(Type.SBURB_CONNECT, conn.getClientPlayer(),conn.getServerPlayer());
-		packet.length = packet.data.length;
-		PacketDispatcher.sendPacketToPlayer(packet, player);
+//		Packet250CustomPayload packet = new Packet250CustomPayload();
+//		packet.channel = "Minestuck";
+//		packet.data = MinestuckPacket.makePacket(Type.SBURB_CONNECT, conn.getClientPlayer(),conn.getServerPlayer());
+//		packet.length = packet.data.length;
+//		PacketDispatcher.sendPacketToPlayer(packet, player);
 	}
 
 }

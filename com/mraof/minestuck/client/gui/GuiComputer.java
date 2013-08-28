@@ -24,7 +24,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class GuiComputer extends GuiScreen implements IConnectionListener
+public class GuiComputer extends GuiScreen
 {
 
     private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/Sburb.png");
@@ -52,6 +52,7 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 		this.mc = mc;
 		this.fontRenderer = mc.fontRenderer;
 		this.te = te;
+		te.gui = this;
 		
 		this.program = te.program;
 		switch (program) {
@@ -63,10 +64,10 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 			break;
 		}
 		
-		if (te.conn == null) {
-			//Debug.print("It was null?");
-			te.conn = new SburbConnection(mc.thePlayer.username,program == 0);
-		}
+//		if (te.conn == null) {
+//			//Debug.print("It was null?");
+//			te.conn = new SburbConnection(mc.thePlayer.username,program == 0);
+//		}
 	}
 	
 	@Override
@@ -116,10 +117,10 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
     	updateGui();
 	}
 
-	private void updateGui() {
+	public void updateGui() {
 		
 		displayName = "";
-		Debug.print("Conn'd to "+te.connectedTo);
+		//Debug.print("Conn'd to "+te.connectedTo);
 		String[] parts = te.connectedTo.split("\0");
 		for (String part : parts) {
 			displayName += part;
@@ -143,7 +144,7 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 		    	int i = 0;
 		    	for (Object server : SburbConnection.getServersOpen()) {
 		    		if (i < selButtons.size() && selButtons.get(i) != null) {
-		    			selButtons.get(i).displayString = ((SburbConnection) server).getServerPlayer();
+		    			selButtons.get(i).displayString = ((SburbConnection) server).server;
 		    			selButtons.get(i).enabled = true;
 		    			i++;
 		    		} else {
@@ -155,7 +156,7 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 		case(1):
 			if (te.givenItems) {
 					displayLine = "Connected to "+displayName+".";
-			} else if (!te.connectedTo.equals("")) {				
+			} else if (!te.connectedTo.equals("")) {
 				GuiButton button = selButtons.get(0);
 				displayLine = "Connected to "+displayName+".";
 				button.displayString = "Give client items";
@@ -187,34 +188,41 @@ public class GuiComputer extends GuiScreen implements IConnectionListener
 			} else if (guibutton == downButton) {
 				
 			} else {
-				//te.conn.connect(mc.thePlayer.username);
 
-				te.connectedTo = te.conn.getServerPlayer();
+				te.connectedTo = guibutton.displayString;
+				//TODO: sync here
+				te.updateConnection();
 			}
 			break;
 		case(1):
 			if (!te.connectedTo.equals("")) {
+				//TODO: This thing doesn't actually give items to the CLIENT player
 				Packet250CustomPayload packet = new Packet250CustomPayload();
 				packet.channel = "Minestuck";
 				packet.data = MinestuckPacket.makePacket(Type.SBURB_GIVE,te.xCoord,te.yCoord,te.zCoord,te.connectedTo);
 				packet.length = packet.data.length;
 				this.mc.getNetHandler().addToSendQueue(packet);
+				te.givenItems = true;
+				te.updateConnection();
 			} else {
 				//SburbConnection.addServer(te.conn);
 				te.owner  = mc.thePlayer.username;
-				te.conn.addListener(this);
+				//te.conn.addListener(this);
+				//TODO: sync here
+				te.updateConnection();
 			}
 			break;
 		}
 		updateGui();
 	}
 
-	@Override
-	public void onConnected(SburbConnection conn) {
-
-		te.connectedTo = conn.getClientPlayer();
-		
-		updateGui();
-	}
+//	@Override
+//	public void onConnected(SburbConnection conn) {
+//
+//		te.connectedTo = conn.client;
+//		
+//		
+//		updateGui();
+//	}
 		
 }

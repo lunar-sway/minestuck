@@ -11,52 +11,54 @@ import com.mraof.minestuck.network.MinestuckPacket.Type;
 public class SburbConnection {
 
 	private static ArrayList<SburbConnection> serversOpen = new ArrayList<SburbConnection>();
-	private static ArrayList<IConnectionListener> listeners = new ArrayList<IConnectionListener>();
+	//private static ArrayList<IConnectionListener> listeners = new ArrayList<IConnectionListener>();
 	
-	private String clientPlayer;
-	private String serverPlayer;
-	private IConnectionListener listener;
+	//private String clientPlayer;
+	//private String serverPlayer;
+	public IConnectionListener listener;
+	public String server;
+	public String client;
 	
-	public SburbConnection(String clientPlayer, String serverPlayer) {
-		this();
-		this.clientPlayer = clientPlayer;
-		this.serverPlayer = serverPlayer;
-	}
-	
-	public SburbConnection(String player,boolean isClient) {
-		this();
-		if (isClient) {
-			this.clientPlayer = player;
-		} else {
-			this.serverPlayer = player;
-		}
+//	public SburbConnection(String clientPlayer, String serverPlayer) {
+//		this();
+//		this.clientPlayer = clientPlayer;
+//		this.serverPlayer = serverPlayer;
+//	}
+//	
+//	public SburbConnection(String player,boolean isClient) {
+//		this();
+//		if (isClient) {
+//			this.clientPlayer = player;
+//		} else {
+//			this.serverPlayer = player;
+//		}
+//	}
+
+	public SburbConnection(IConnectionListener listener) {
+		this.listener = listener;
 	}
 
-	public SburbConnection() {
-		
-	}
-
-	public String getClientPlayer() {
-		return clientPlayer;
-	}
-	
-	public String getServerPlayer() {
-		return serverPlayer;
-	}
-	
-	private void setClientPlayer(String clientPlayer) {
-		this.clientPlayer = clientPlayer;
-	}
-
-	private void setServerPlayer(String serverPlayer) {
-		this.serverPlayer = serverPlayer;
-	}
+//	public String getClientPlayer() {
+//		return clientPlayer;
+//	}
+//	
+//	public String getServerPlayer() {
+//		return serverPlayer;
+//	}
+//	
+//	private void setClientPlayer(String clientPlayer) {
+//		this.clientPlayer = clientPlayer;
+//	}
+//
+//	private void setServerPlayer(String serverPlayer) {
+//		this.serverPlayer = serverPlayer;
+//	}
 
 	public static ArrayList getServersOpen() {
 		return serversOpen;
 	}
 	
-	public static SburbConnection addServer(SburbConnection conn) {
+	public SburbConnection openServer(String player) {
 //		if (Minecraft.getMinecraft().theWorld.isRemote) {
 //			Packet250CustomPayload packet = new Packet250CustomPayload();
 //			packet.channel = "Minestuck";
@@ -65,16 +67,17 @@ public class SburbConnection {
 //			Minecraft.getMinecraft().getNetHandler().addToSendQueue(packet);
 //		}
 		
-		serversOpen.add(conn);
-		return conn;
-	}
-	
-	public SburbConnection addListener(IConnectionListener listener) {
-		this.listener = listener;
+		this.server = player;
+		serversOpen.add(this);
 		return this;
 	}
 	
-	public SburbConnection connect(String player) {
+//	public SburbConnection addListener(IConnectionListener listener) {
+//		this.listener = listener;
+//		return this;
+//	}
+	
+	public SburbConnection connect(String client) {
 //		// NOTE: isRemote doesn't quite do it like that serverside
 //		if (Minecraft.getMinecraft().theWorld.isRemote) {
 //			Packet250CustomPayload packet = new Packet250CustomPayload();
@@ -85,15 +88,12 @@ public class SburbConnection {
 //		}
 		
 		for (Object conn : serversOpen) {
-			if (((SburbConnection)conn).getServerPlayer() == this.getServerPlayer()) {
+			if (((SburbConnection)conn).server == this.server) {
 				serversOpen.remove(conn);
 			}
 		}
-		if (this.clientPlayer == null) {
-			this.setClientPlayer(player);
-		} else {
-			this.setServerPlayer(player);
-		}
+
+		this.client = client;
 		if (this.listener != null) {
 			this.listener.onConnected(this);
 		}

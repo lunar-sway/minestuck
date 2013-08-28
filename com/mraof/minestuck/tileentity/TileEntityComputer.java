@@ -1,6 +1,8 @@
 package com.mraof.minestuck.tileentity;
 
+import com.mraof.minestuck.client.gui.GuiComputer;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.IConnectionListener;
 import com.mraof.minestuck.util.SburbConnection;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -9,7 +11,7 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileEntityComputer extends TileEntity {
+public class TileEntityComputer extends TileEntity implements IConnectionListener {
 
 	public int program;
 	public String connectedTo = "";
@@ -18,6 +20,7 @@ public class TileEntityComputer extends TileEntity {
 	public String owner = "";
 	public boolean initialized = false;
 	public SburbConnection conn;
+	public GuiComputer gui;
 	
     public TileEntityComputer() {
             
@@ -60,35 +63,39 @@ public class TileEntityComputer extends TileEntity {
     {
     	Debug.print("Data packet gotten "+net.getClass());
     	this.readFromNBT(pkt.customParam1);
-    	if (conn == null) {
-	   		if (connectedTo.equals("") && !owner.equals("") && program == 1) {
-				conn = new SburbConnection(owner,false);
-				SburbConnection.addServer(conn);
-			} else if (connectedTo.equals("") && !owner.equals("") && program == 0) {
-	   			conn = new SburbConnection(owner,true);
-			} else if (!connectedTo.equals("") && !owner.equals("")) {
-				conn = new SburbConnection(owner,program == 0);
-				conn.connect(connectedTo);
-			} 
-    	}
+    	//updateConnection();
     }
     
     @Override
     public void updateEntity() {
     	if (!initialized) {
-    		if (connectedTo.equals("") && !owner.equals("") && program == 1) {
-    			conn = new SburbConnection(owner,false);
-    			SburbConnection.addServer(conn);
-    			initialized = true;
-    		} else if (connectedTo.equals("") && !owner.equals("") && program == 0) {
-       			conn = new SburbConnection(owner,true);
-       			initialized = true;
-    		} else if (!connectedTo.equals("") && !owner.equals("")) {
-    			conn = new SburbConnection(owner,program == 0);
-    			conn.connect(connectedTo);
-    			initialized = true;
-    		} 
+    		updateConnection();
+    		initialized = true;
     	}
     }
+    
+    public void updateConnection() {
+    	if (!connectedTo.equals("") && !owner.equals("")) {
+			conn = new SburbConnection(this);
+			conn.connect(connectedTo);
+		} else if (connectedTo.equals("") && !owner.equals("")) {
+	  		if (program == 1) {
+				conn = new SburbConnection(this);
+				conn.openServer(owner);
+	  		}
+		} else {
+			conn = new SburbConnection(this);
+		}
+    	if (gui != null) {
+    		gui.updateGui();
+    	}
+    }
+
+	@Override
+	public void onConnected(SburbConnection conn) {
+		// TODO Auto-generated method stub
+		this.connectedTo = conn.client;
+		updateConnection();
+	}
     
 }
