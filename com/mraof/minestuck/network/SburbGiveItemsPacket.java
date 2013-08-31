@@ -2,6 +2,7 @@ package com.mraof.minestuck.network;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -62,17 +63,16 @@ public class SburbGiveItemsPacket extends MinestuckPacket {
 			return;
 		}
 		
-		Container items = ((EntityPlayer)player).inventoryContainer;
-		ItemStack[] newItems = new ItemStack[5];
+		InventoryPlayer items = ((EntityPlayer)player).inventory;
+		//ItemStack[] newItems = new ItemStack[5];
 		for (int i = 0;i < 4;i++) {
-			newItems[i] = new ItemStack(Minestuck.blockMachine.blockID,1,i);
+			items.addItemStackToInventory(new ItemStack(Minestuck.blockMachine.blockID,1,i));
 		}
 		ItemStack card = new ItemStack(Minestuck.punchedCard.itemID,1,0);
 		card.setTagCompound(new NBTTagCompound());
 		card.getTagCompound().setInteger("contentID",Minestuck.cruxiteArtifact.itemID);
 		card.getTagCompound().setInteger("contentMeta",0);
-		newItems[4] = card;
-		items.putStacksInSlots(newItems);
+		items.addItemStackToInventory(card);
 		te.givenItems = true;
 		
 		Debug.print("Packet recieved. Items given!");
