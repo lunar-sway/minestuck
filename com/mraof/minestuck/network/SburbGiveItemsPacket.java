@@ -3,10 +3,10 @@ package com.mraof.minestuck.network;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
+import net.minecraft.server.MinecraftServer;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -63,7 +63,27 @@ public class SburbGiveItemsPacket extends MinestuckPacket {
 			return;
 		}
 		
-		InventoryPlayer items = ((EntityPlayer)player).inventory;
+		String sendTo = "";
+		//Debug.print("Conn'd to "+te.connectedTo);
+		String[] parts = te.connectedTo.split("\0");
+		for (String part : parts) {
+			sendTo += part;
+		}
+		
+		InventoryPlayer items = null;
+		for (Object obj : MinecraftServer.getServer().getConfigurationManager().playerEntityList) {
+			if (((EntityPlayer)obj).username.equals(sendTo)) {
+				items = ((EntityPlayer)obj).inventory;
+			} else {
+				Debug.print("Not it: "+((EntityPlayer)obj).username);
+			}
+		}
+		if (items == null) {
+			Debug.print("Client player not found: " + sendTo);
+			return;
+		}
+			
+		//InventoryPlayer items = ((EntityPlayer)Minecraft.getMinecraft().theWorld.getPlayerEntityByName(connectedTo)).inventory;
 		//ItemStack[] newItems = new ItemStack[5];
 		for (int i = 0;i < 4;i++) {
 			items.addItemStackToInventory(new ItemStack(Minestuck.blockMachine.blockID,1,i));
