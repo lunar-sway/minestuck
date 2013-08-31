@@ -133,6 +133,8 @@ protected void drawGuiContainerForegroundLayer(int param1, int param2) {
     		fail();
     		return;
     	}
+    } else if (metadata == 1) {
+    	modeButton.drawButton = (te.inv[1] != null && te.inv[2] != null);
     }
 }
 
@@ -168,6 +170,7 @@ public void initGui() {
         	//The Designex's needs a button...
         	modeButton = new GuiButton(1, (width - xSize) / 2 + buttonX, (height - ySize) / 2 + buttonY, 20, 20, te.mode ? "&&": "||");
         	buttonList.add(modeButton);
+        	modeButton.drawButton = (te.inv[1] != null && te.inv[2] != null);
         }
         if (metadata != 0) {
         	//All non-Cruxtruders need a Go button.
