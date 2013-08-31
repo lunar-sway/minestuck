@@ -427,6 +427,11 @@ public class AlchemyRecipeHandler {
 		
 		//add grist conversions
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.blockStorage, 1, 1), true, new GristSet(new GristType[] {GristType.Build}, new int[] {2}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.cruxiteArtifact,1),false,new GristSet());
+		
+		//add Designex combinations
+		
+		
 		//register land aspects
 		LandHelper.registerLandAspect(new LandAspectFrost());
 		LandHelper.registerLandAspect(new LandAspectHeat());

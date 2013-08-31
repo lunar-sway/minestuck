@@ -102,7 +102,7 @@ protected void drawGuiContainerForegroundLayer(int param1, int param2) {
     	NBTTagCompound nbttagcompound = te.inv[1].getTagCompound();
     	GristSet set = GristRegistry.getGristConversion(AlchemyRecipeHandler.getDecodedItem(te.inv[1]));
     	
-    	if (set == null) {return;}
+    	if (set == null) {fail(); return;}
     	Hashtable reqs = set.getHashtable();
     	//Debug.print("reqs: " + reqs.size());
     	if (reqs != null) {
@@ -129,8 +129,15 @@ protected void drawGuiContainerForegroundLayer(int param1, int param2) {
                 
                 //Debug.print("Need" + need + ". Have " + have);
             }
+    	} else {
+    		fail();
+    		return;
     	}
     }
+}
+
+private void fail() {
+	fontRenderer.drawString("Not Alchemizable", 9,45, 16711680);
 }
 
 @Override
