@@ -100,7 +100,7 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	protected void updateFallState(double par1, boolean par3) 
 	{
 		if((tail.fallDistance > 0))
-			super.updateFallState(par1, par3);
+			super.updateFallState(par1, par3 || tail.onGround);
 	}
 	@Override
 	public void updatePartPositions() 
