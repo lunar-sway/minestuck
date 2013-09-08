@@ -191,7 +191,6 @@ public class GuiComputer extends GuiScreen
 			break;
 		case(1):
 			if (!te.connectedTo.equals("")) {
-				//TODO: This thing doesn't actually give items to the CLIENT player
 				Packet250CustomPayload packet = new Packet250CustomPayload();
 				packet.channel = "Minestuck";
 				packet.data = MinestuckPacket.makePacket(Type.SBURB_GIVE,te.xCoord,te.yCoord,te.zCoord,te.connectedTo);

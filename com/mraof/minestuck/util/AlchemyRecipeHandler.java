@@ -28,6 +28,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class AlchemyRecipeHandler {
 	
 	private static HashMap recipeList;
+	private static HashMap lookedOver;
 
 	public static void registerVanillaRecipes() {
 		
@@ -53,7 +54,7 @@ public class AlchemyRecipeHandler {
 		GristRegistry.addGristConversion(new ItemStack(Block.oreLapis), false, new GristSet(new GristType[] {GristType.Amethyst, GristType.Build}, new int[] {16, 4}));
 		GristRegistry.addGristConversion(new ItemStack(Block.blockLapis), false, new GristSet(new GristType[] {GristType.Amethyst}, new int[] {36}));
 		//GristRegistry.addGristConversion(new ItemStack(Block.dispenser), false, new GristSet(new GristType[] {GristType.Build, GristType.Garnet, GristType.Chalk}, new int[] {3, 4, 1}));
-		//GristRegistry.addGristConversion(new ItemStack(Block.sandStone), false, new GristSet(new GristType[] {GristType.Shale}, new int[] {4}));
+		GristRegistry.addGristConversion(new ItemStack(Block.sandStone), false, new GristSet(new GristType[] {GristType.Shale}, new int[] {4}));
 		GristRegistry.addGristConversion(new ItemStack(Block.music), false, new GristSet(new GristType[] {GristType.Build, GristType.Garnet}, new int[] {16, 4}));
 		//GristRegistry.addGristConversion(new ItemStack(Block.railPowered), false, new GristSet(new GristType[] {GristType.Build, GristType.Gold}, new int[] {4, 32}));
 		//GristRegistry.addGristConversion(new ItemStack(Block.railDetector), false, new GristSet(new GristType[] {GristType.Build, GristType.Garnet}, new int[] {4, 16}));
@@ -98,16 +99,16 @@ public class AlchemyRecipeHandler {
 		GristRegistry.addGristConversion(new ItemStack(Block.cobblestoneMossy), false, new GristSet(new GristType[] {GristType.Iodine, GristType.Build}, new int[] {1, 1}));
 		GristRegistry.addGristConversion(new ItemStack(Block.obsidian), false, new GristSet(new GristType[] {GristType.Cobalt, GristType.Tar, GristType.Build}, new int[] {1, 1, 6}));
 		//GristRegistry.addGristConversion(new ItemStack(Block.torchWood), false, new GristSet(new GristType[] {GristType.Tar}, new int[] {1}));
-		//GristRegistry.addGristConversion(new ItemStack(Block.stairsWoodOak), false, new GristSet(new GristType[] {GristType.Artifact, GristType.Build}, new int[] {1, 1}));
-		//GristRegistry.addGristConversion(new ItemStack(Block.stairsCobblestone), false, new GristSet(new GristType[] {GristType.Artifact, GristType.Build}, new int[] {1, 1}));
-		//GristRegistry.addGristConversion(new ItemStack(Block.stairsBrick), false, new GristSet(new GristType[] {GristType.Artifact, GristType.Build}, new int[] {1, 1}));
-		//GristRegistry.addGristConversion(new ItemStack(Block.stairsStoneBrick), false, new GristSet(new GristType[] {GristType.Artifact, GristType.Build}, new int[] {1, 1}));
-		//GristRegistry.addGristConversion(new ItemStack(Block.stairsNetherBrick), false, new GristSet(new GristType[] {GristType.Artifact, GristType.Build}, new int[] {1, 1}));
-		//GristRegistry.addGristConversion(new ItemStack(Block.stairsSandStone), false, new GristSet(new GristType[] {GristType.Artifact, GristType.Build}, new int[] {1, 1}));
-		//GristRegistry.addGristConversion(new ItemStack(Block.stairsWoodSpruce), false, new GristSet(new GristType[] {GristType.Artifact, GristType.Build}, new int[] {1, 1}));
-		//GristRegistry.addGristConversion(new ItemStack(Block.stairsWoodBirch), false, new GristSet(new GristType[] {GristType.Artifact, GristType.Build}, new int[] {1, 1}));
-		//GristRegistry.addGristConversion(new ItemStack(Block.stairsWoodJungle), false, new GristSet(new GristType[] {GristType.Artifact, GristType.Build}, new int[] {1, 1}));
-		//GristRegistry.addGristConversion(new ItemStack(Block.stairsNetherQuartz), false, new GristSet(new GristType[] {GristType.Artifact, GristType.Build}, new int[] {1, 1}));
+		GristRegistry.addGristConversion(new ItemStack(Block.stairsWoodOak), false, new GristSet(new GristType[] {GristType.Artifact, GristType.Build}, new int[] {1, 1}));
+		GristRegistry.addGristConversion(new ItemStack(Block.stairsCobblestone), false, new GristSet(new GristType[] {GristType.Artifact, GristType.Build}, new int[] {1, 1}));
+		GristRegistry.addGristConversion(new ItemStack(Block.stairsBrick), false, new GristSet(new GristType[] {GristType.Artifact, GristType.Build}, new int[] {1, 1}));
+		GristRegistry.addGristConversion(new ItemStack(Block.stairsStoneBrick), false, new GristSet(new GristType[] {GristType.Artifact, GristType.Build}, new int[] {1, 1}));
+		GristRegistry.addGristConversion(new ItemStack(Block.stairsNetherBrick), false, new GristSet(new GristType[] {GristType.Artifact, GristType.Build}, new int[] {1, 1}));
+		GristRegistry.addGristConversion(new ItemStack(Block.stairsSandStone), false, new GristSet(new GristType[] {GristType.Artifact, GristType.Build}, new int[] {1, 1}));
+		GristRegistry.addGristConversion(new ItemStack(Block.stairsWoodSpruce), false, new GristSet(new GristType[] {GristType.Artifact, GristType.Build}, new int[] {1, 1}));
+		GristRegistry.addGristConversion(new ItemStack(Block.stairsWoodBirch), false, new GristSet(new GristType[] {GristType.Artifact, GristType.Build}, new int[] {1, 1}));
+		GristRegistry.addGristConversion(new ItemStack(Block.stairsWoodJungle), false, new GristSet(new GristType[] {GristType.Artifact, GristType.Build}, new int[] {1, 1}));
+		GristRegistry.addGristConversion(new ItemStack(Block.stairsNetherQuartz), false, new GristSet(new GristType[] {GristType.Artifact, GristType.Build}, new int[] {1, 1}));
 		//GristRegistry.addGristConversion(new ItemStack(Block.chest), false, new GristSet(new GristType[] {GristType.Build}, new int[] {8}));
 		GristRegistry.addGristConversion(new ItemStack(Block.oreDiamond), false, new GristSet(new GristType[] {GristType.Diamond, GristType.Build}, new int[] {16, 4}));
 		//GristRegistry.addGristConversion(new ItemStack(Block.blockDiamond), false, new GristSet(new GristType[] {GristType.Diamond}, new int[] {144}));
@@ -120,7 +121,7 @@ public class AlchemyRecipeHandler {
 		//GristRegistry.addGristConversion(new ItemStack(Block.pressurePlatePlanks), false, new GristSet(new GristType[] {GristType.Build, GristType.Garnet}, new int[] {3, 2}));
 		GristRegistry.addGristConversion(new ItemStack(Block.oreRedstone), false, new GristSet(new GristType[] {GristType.Garnet, GristType.Build}, new int[] {16, 4}));
 		//GristRegistry.addGristConversion(new ItemStack(Block.torchRedstoneIdle), false, new GristSet(new GristType[] {GristType.Garnet}, new int[] {2}));
-		//GristRegistry.addGristConversion(new ItemStack(Block.stoneButton), false, new GristSet(new GristType[] {GristType.Build, GristType.Garnet}, new int[] {2, 3}));
+		GristRegistry.addGristConversion(new ItemStack(Block.stoneButton), false, new GristSet(new GristType[] {GristType.Build, GristType.Garnet}, new int[] {2, 3}));
 		GristRegistry.addGristConversion(new ItemStack(Block.snow), false, new GristSet(new GristType[] {GristType.Cobalt}, new int[] {4}));
 		GristRegistry.addGristConversion(new ItemStack(Block.ice), false, new GristSet(new GristType[] {GristType.Cobalt}, new int[] {8}));
 		GristRegistry.addGristConversion(new ItemStack(Block.blockSnow), false, new GristSet(new GristType[] {GristType.Cobalt, GristType.Build}, new int[] {4, 2}));
@@ -167,7 +168,7 @@ public class AlchemyRecipeHandler {
 		//GristRegistry.addGristConversion(new ItemStack(Block.blockRedstone), false, new GristSet(new GristType[] {GristType.Garnet}, new int[] {36}));
 		GristRegistry.addGristConversion(new ItemStack(Block.oreNetherQuartz), false, new GristSet(new GristType[] {GristType.Quartz, GristType.Marble, GristType.Build}, new int[] {8, 2, 2}));
 		//GristRegistry.addGristConversion(new ItemStack(Block.hopperBlock), false, new GristSet(new GristType[] {GristType.Rust, GristType.Garnet, GristType.Build}, new int[] {6, 2, 2}));
-		//GristRegistry.addGristConversion(new ItemStack(Block.blockNetherQuartz), false, new GristSet(new GristType[] {GristType.Quartz, GristType.Marble}, new int[] {16, 4}));
+		GristRegistry.addGristConversion(new ItemStack(Block.blockNetherQuartz), false, new GristSet(new GristType[] {GristType.Quartz, GristType.Marble}, new int[] {16, 4}));
 		//GristRegistry.addGristConversion(new ItemStack(Block.railActivator), false, new GristSet(new GristType[] {GristType.Sulfur, GristType.Chalk, GristType.Build}, new int[] {16, 16, 4}));
 		//GristRegistry.addGristConversion(new ItemStack(Block.dropper), false, new GristSet(new GristType[] {GristType.Build, GristType.Garnet, GristType.Chalk}, new int[] {4, 4, 1}));
 		GristRegistry.addGristConversion(new ItemStack(Block.field_111039_cA), false, new GristSet(new GristType[] {GristType.Shale, GristType.Marble}, new int[] {12, 8}));
@@ -514,6 +515,7 @@ public class AlchemyRecipeHandler {
         while (it.hasNext()) {
         	Map.Entry pairs = (Map.Entry)it.next();
         	//Debug.print("Getting recipe with key"+pairs.getKey()+" and value "+pairs.getValue());
+        	lookedOver = new HashMap();
         	getRecipe(pairs.getValue());
         }
 	}
@@ -522,6 +524,10 @@ public class AlchemyRecipeHandler {
 		if (recipe instanceof ShapedRecipes) {
 			Debug.print("found shaped recipe. Output of "+((ShapedRecipes)recipe).getRecipeOutput().getDisplayName());
 			ShapedRecipes newRecipe = (ShapedRecipes) recipe;
+			if (lookedOver.get(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getHasSubtypes() ? newRecipe.getRecipeOutput().getItemDamage() : 0)) != null) {
+				Debug.print("	Recursive recipe! Recipe failed.");
+				return false;
+			}
 			if (GristRegistry.getGristConversion(newRecipe.getRecipeOutput()) != null) {return false;};
 			GristSet set = new GristSet();
 			for (ItemStack item : newRecipe.recipeItems) {
@@ -552,9 +558,14 @@ public class AlchemyRecipeHandler {
 				set.scaleGrist(1/(float)newRecipe.getRecipeOutput().stackSize);
 				GristRegistry.addGristConversion(newRecipe.getRecipeOutput(),newRecipe.getRecipeOutput().getHasSubtypes(),set);
 			}
+			lookedOver.put(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getHasSubtypes() ? newRecipe.getRecipeOutput().getItemDamage() : 0),true);
 		} else if (recipe instanceof ShapelessRecipes) {
 			Debug.print("found shapeless recipe. Output of "+((ShapelessRecipes)recipe).getRecipeOutput().getDisplayName());
 			ShapelessRecipes newRecipe = (ShapelessRecipes) recipe;
+			if (lookedOver.get(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getHasSubtypes() ? newRecipe.getRecipeOutput().getItemDamage() : 0)) != null) {
+				Debug.print("	Recursive recipe! Recipe failed.");
+				return false;
+			}
 			if (GristRegistry.getGristConversion(newRecipe.getRecipeOutput()) != null) {return false;};
 			GristSet set = new GristSet();
 			for (Object obj : newRecipe.recipeItems) {
@@ -586,10 +597,15 @@ public class AlchemyRecipeHandler {
 				set.scaleGrist(1/(float)newRecipe.getRecipeOutput().stackSize);
 				GristRegistry.addGristConversion(newRecipe.getRecipeOutput(),newRecipe.getRecipeOutput().getHasSubtypes(),set);
 			}
+			lookedOver.put(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getHasSubtypes() ? newRecipe.getRecipeOutput().getItemDamage() : 0),true);
 		} else if (recipe instanceof ShapedOreRecipe) {
 			Debug.print("found shaped oredict recipe. Output of "+((ShapedOreRecipe)recipe).getRecipeOutput().getDisplayName());
 			ShapedOreRecipe newRecipe = (ShapedOreRecipe) recipe;
 			if (GristRegistry.getGristConversion(newRecipe.getRecipeOutput()) != null) {return false;};
+			if (lookedOver.get(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getHasSubtypes() ? newRecipe.getRecipeOutput().getItemDamage() : 0)) != null) {
+				Debug.print("	Recursive recipe! Recipe failed.");
+				return false;
+			}
 			GristSet set = new GristSet();
 			for (Object obj : newRecipe.getInput()) {
 				ItemStack item = null;
@@ -630,9 +646,14 @@ public class AlchemyRecipeHandler {
 				set.scaleGrist(1/(float)newRecipe.getRecipeOutput().stackSize);
 				GristRegistry.addGristConversion(newRecipe.getRecipeOutput(),newRecipe.getRecipeOutput().getHasSubtypes(),set);
 			}
+			lookedOver.put(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getHasSubtypes() ? newRecipe.getRecipeOutput().getItemDamage() : 0),true);
 		} else if (recipe instanceof ShapelessOreRecipe) {
 			Debug.print("found shapeless oredict recipe. Output of "+((ShapelessOreRecipe)recipe).getRecipeOutput().getDisplayName());
 			ShapelessOreRecipe newRecipe = (ShapelessOreRecipe) recipe;
+			if (lookedOver.get(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getHasSubtypes() ? newRecipe.getRecipeOutput().getItemDamage() : 0)) != null) {
+				Debug.print("	Recursive recipe! Recipe failed.");
+				return false;
+			}
 			if (GristRegistry.getGristConversion(newRecipe.getRecipeOutput()) != null) {return false;};
 			GristSet set = new GristSet();
 			for (Object obj : newRecipe.getInput()) {
@@ -674,6 +695,7 @@ public class AlchemyRecipeHandler {
 				set.scaleGrist(1/(float)newRecipe.getRecipeOutput().stackSize);
 				GristRegistry.addGristConversion(newRecipe.getRecipeOutput(),newRecipe.getRecipeOutput().getHasSubtypes(),set);
 			}
+			lookedOver.put(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getHasSubtypes() ? newRecipe.getRecipeOutput().getItemDamage() : 0),true);
 		} else {
 			Debug.print("found other recipe class: "+recipe.getClass());
 		}
