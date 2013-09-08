@@ -15,10 +15,7 @@ import cpw.mods.fml.common.network.Player;
 public class GoButtonPacket extends MinestuckPacket {
 
 	public boolean newMode;
-	public int xCoord;
-	public int yCoord;
-	public int zCoord;
-	public int gristTotal;
+	public boolean overrideStop;
 	public GoButtonPacket() 
 	{
 		super(Type.GOBUTTON);
@@ -29,6 +26,7 @@ public class GoButtonPacket extends MinestuckPacket {
 	{
 		ByteArrayDataOutput dat = ByteStreams.newDataOutput();
 		dat.writeBoolean((Boolean) data[0]);
+		dat.writeBoolean((Boolean) data[1]);
 		return dat.toByteArray();
 	}
 
@@ -38,6 +36,7 @@ public class GoButtonPacket extends MinestuckPacket {
 		ByteArrayDataInput dat = ByteStreams.newDataInput(data);
 		
 		newMode = dat.readBoolean();
+		overrideStop = dat.readBoolean();
 		
 		return this;
 	}
@@ -52,6 +51,7 @@ public class GoButtonPacket extends MinestuckPacket {
 		} else {
 			Debug.print("Button pressed. Alchemiter going!");
 			te.ready = newMode;
+			te.overrideStop = overrideStop;
 		}
 	}
 

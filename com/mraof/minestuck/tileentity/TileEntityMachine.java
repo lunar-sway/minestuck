@@ -31,6 +31,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
     public boolean mode = true;
     public EntityPlayer owner;
 	public boolean ready = false;
+	public boolean overrideStop = false;
 
     public TileEntityMachine(){
             this.inv = new ItemStack[4];
@@ -114,8 +115,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
             this.rotation = tagCompound.getByte("rotation");
             this.progress = tagCompound.getInteger("progress");
             this.mode =  tagCompound.getBoolean("mode");
-            
-            //String ownerName = tagCompound.getString("owner");
+            this.overrideStop = tagCompound.getBoolean("overrideStop");
             
             NBTTagList tagList = tagCompound.getTagList("Inventory");
             for (int i = 0; i < tagList.tagCount(); i++) {
@@ -134,7 +134,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
             tagCompound.setByte("rotation", this.rotation);
             tagCompound.setInteger("progress", this.progress);
             tagCompound.setBoolean("mode", this.mode);
-            //tagCompound.setString("owner", owner.username);
+            tagCompound.setBoolean("overrideStop", this.overrideStop);
             
             NBTTagList itemList = new NBTTagList();
             for (int i = 0; i < this.inv.length; i++) {
@@ -185,7 +185,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		
 		if (!contentsValid()) {
 			this.progress = 0;
-			this.ready = false;
+			this.ready = overrideStop;
 			return;
 		}
 		
@@ -193,7 +193,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		
 		if (this.progress == this.maxProgress) {
 			this.progress = 0;
-			this.ready = false;
+			this.ready = overrideStop;
 			processContents();
 		}
 	}

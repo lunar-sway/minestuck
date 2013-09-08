@@ -14,6 +14,7 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import com.mraof.minestuck.inventory.ContainerMachine;
@@ -102,7 +103,7 @@ protected void drawGuiContainerForegroundLayer(int param1, int param2) {
     	NBTTagCompound nbttagcompound = te.inv[1].getTagCompound();
     	GristSet set = GristRegistry.getGristConversion(AlchemyRecipeHandler.getDecodedItem(te.inv[1]));
     	
-    	if (set == null) {fail(); return;}
+    	if (set == null) {fontRenderer.drawString("Not Alchemizable", 9,45, 16711680); return;}
     	Hashtable reqs = set.getHashtable();
     	//Debug.print("reqs: " + reqs.size());
     	if (reqs != null) {
@@ -130,16 +131,12 @@ protected void drawGuiContainerForegroundLayer(int param1, int param2) {
                 //Debug.print("Need" + need + ". Have " + have);
             }
     	} else {
-    		fail();
+    		fontRenderer.drawString("Not Alchemizable", 9,45, 16711680);
     		return;
     	}
     } else if (metadata == 1) {
     	modeButton.drawButton = (te.inv[1] != null && te.inv[2] != null);
     }
-}
-
-private void fail() {
-	fontRenderer.drawString("Not Alchemizable", 9,45, 16711680);
 }
 
 @Override
@@ -174,7 +171,7 @@ public void initGui() {
         }
         if (metadata != 0) {
         	//All non-Cruxtruders need a Go button.
-        	goButton = new GuiButton(1, (width - xSize) / 2 + goX, (height - ySize) / 2 + goY, 30, 12, "GO!");
+        	goButton = new GuiButton(1, (width - xSize) / 2 + goX, (height - ySize) / 2 + goY, 30, 12, te.overrideStop ? "STOP" : "GO");
         	buttonList.add(goButton);
         }
 }
@@ -195,15 +192,48 @@ protected void actionPerformed(GuiButton guibutton) {
 	}
 	
 	if (guibutton == goButton) {
-		//Tell the machine to go
-		Packet250CustomPayload packet = new Packet250CustomPayload();
-		packet.channel = "Minestuck";
-		packet.data = MinestuckPacket.makePacket(Type.GOBUTTON,true);
-		packet.length = packet.data.length;
-		this.mc.getNetHandler().addToSendQueue(packet);
 		
-		te.ready = true;
+		if (Mouse.isButtonDown(0) && !te.overrideStop) {
+			//Tell the machine to go once
+			Packet250CustomPayload packet = new Packet250CustomPayload();
+			packet.channel = "Minestuck";
+			packet.data = MinestuckPacket.makePacket(Type.GOBUTTON,true,false);
+			packet.length = packet.data.length;
+			this.mc.getNetHandler().addToSendQueue(packet);
+			
+			te.ready = true;
+			goButton.displayString = te.overrideStop ? "STOP" : "GO";
+		} else if (Mouse.getEventButton() < 2) {
+			//Tell the machine to go until stopped
+			Packet250CustomPayload packet = new Packet250CustomPayload();
+			packet.channel = "Minestuck";
+			packet.data = MinestuckPacket.makePacket(Type.GOBUTTON,true,!te.overrideStop);
+			packet.length = packet.data.length;
+			this.mc.getNetHandler().addToSendQueue(packet);
+			
+			te.overrideStop = !te.overrideStop;
+			goButton.displayString = te.overrideStop ? "STOP" : "GO";
+		}
 	}
+}
+
+@Override
+protected void mouseClicked(int par1, int par2, int par3)
+{
+	super.mouseClicked(par1,par2,par3);
+    if (par3 == 1)
+    {
+        for (int l = 0; l < this.buttonList.size(); ++l)
+        {
+            GuiButton guibutton = (GuiButton)this.buttonList.get(l);
+
+            if (guibutton.mousePressed(this.mc, par1, par2) && guibutton == goButton)
+            {
+                this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
+                this.actionPerformed(guibutton);
+            }
+        }
+    }
 }
 
 /**
