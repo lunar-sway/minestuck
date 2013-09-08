@@ -156,6 +156,8 @@ public class Minestuck
 	public static Block blockMachine;
 	public static Block blockComputerOn;
 	public static Block blockComputerOff;
+	
+	public static boolean generateCruxiteOre;
 
 
 	// The instance of your mod that Forge uses.
@@ -170,6 +172,7 @@ public class Minestuck
 	public static CreativeTabs tabMinestuck;
 
 	public int currentEntityIdOffset = 0;
+	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) 
 	{
@@ -184,6 +187,7 @@ public class Minestuck
 		landProviderTypeId = config.get("Provider Type Ids", "landProviderTypeIdStart", 3).getInt();
 		landDimensionIdStart = config.get("Dimension Ids", "landDimensionIdStart", 3).getInt();
 		Debug.isDebugMode = config.get("General","printDebugMessages",true).getBoolean(false);
+		generateCruxiteOre = config.get("General","generateCruxiteOre",true).getBoolean(true);
 		config.save();
 	}
 
@@ -393,8 +397,10 @@ public class Minestuck
 		GameRegistry.registerPlayerTracker(new MinestuckPlayerTracker());
 
 		//register ore generation
-		OreHandler oreHandler = new OreHandler();
-		GameRegistry.registerWorldGenerator(oreHandler);
+		if (generateCruxiteOre) {
+			OreHandler oreHandler = new OreHandler();
+			GameRegistry.registerWorldGenerator(oreHandler);
+		}
 
 		//register machine GUIs
 		NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
