@@ -133,11 +133,6 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	}
 	
 	@Override
-	public void moveEntity(double par1, double par3, double par5) 
-	{
-		super.moveEntity(par1, par3, par5);
-	}
-	@Override
 	public void writeEntityToNBT(NBTTagCompound par1nbtTagCompound) 
 	{
 		super.writeEntityToNBT(par1nbtTagCompound);
@@ -158,7 +153,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	public void readSpawnData(ByteArrayDataInput data) 
 	{
 		this.type = type.getClass().getEnumConstants()[data.readInt()];
-		this.textureResource = new ResourceLocation("minestuck:textures/mobs/" + type.getName() + underlingName + ".png");
+		this.textureResource = new ResourceLocation("minestuck", this.getTexture());
 	}
 
 

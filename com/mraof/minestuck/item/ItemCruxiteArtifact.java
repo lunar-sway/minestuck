@@ -61,6 +61,13 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 			int y = (int) entity.posY;
 			int z = (int) entity.posZ;
 			int width = 24;
+			List list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.boundingBox.expand((double)width, width, (double)width));
+			Iterator iterator = list.iterator();
+
+			while (iterator.hasNext())
+			{
+				Teleport.teleportEntity((Entity)iterator.next(), worldserver1.provider.dimensionId, this);
+			}
 			for(int blockX = x - width; blockX <= x + width; blockX++)
 			{
 				for(int blockZ = z - width; blockZ <= z + width; blockZ++)
@@ -99,12 +106,12 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 					}
 				}
 			}
-			List list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.boundingBox.expand((double)width, width, (double)width));
-			Iterator iterator = list.iterator();
+			list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.boundingBox.expand((double)width, width, (double)width));
+			iterator = list.iterator();
 
 			while (iterator.hasNext())
 			{
-				Teleport.teleportEntity((Entity)iterator.next(), worldserver1.provider.dimensionId, this);
+				((Entity)iterator.next()).setDead();
 			}
 		}
 	}

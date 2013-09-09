@@ -13,7 +13,6 @@ public class EntityUnderlingPart extends EntityLiving
 {
 	public EntityLiving entityUnderlingObj;
 
-	/** The name of the Dragon Part */
 	public String name;
 
 	public EntityUnderlingPart(World world)

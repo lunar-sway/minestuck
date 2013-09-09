@@ -18,34 +18,36 @@ public class ModelBasilisk extends ModelBase
 	private ModelRenderer tail2;
 	public ModelBasilisk()
 	{
+		this.textureWidth = 128;
+		this.textureHeight = 128;
 		float offsetY = 24;
-		setTextureOffset("null.Tongue", 0, 0);
+		setTextureOffset("null.Tongue", 84, 0);
 		head = new ModelRenderer(this, 0, 0);
 		head.addBox(-15F, -16F, -6F, 30, 16, 12);
-		head.addBox("Tongue", -2, -3, -8, 4, 8, 2);
+		head.addBox("Tongue", -3, -5, -8, 6, 12, 2);
 		head.setRotationPoint(0F, -16 + offsetY, -24F);
-		body = new ModelRenderer(this, 0, 12);
+		body = new ModelRenderer(this, 0, 28);
 		body.addBox(-7, 0, -20, 14, 14, 40);
 		body.setRotationPoint(0F, -24 + offsetY, 0F);
-		leftFrontLeg = new ModelRenderer(this, 0, 12);
+		leftFrontLeg = new ModelRenderer(this, 100, 0);
 		leftFrontLeg.addBox(-2, 0, -2, 4, 14, 4);
 		leftFrontLeg.setRotationPoint(-9F, -14 + offsetY, -14);
-		rightFrontLeg = new ModelRenderer(this, 0, 12);
+		rightFrontLeg = new ModelRenderer(this, 100, 0);
 		rightFrontLeg.addBox(-2, 0, -2, 4, 14, 4);
 		rightFrontLeg.setRotationPoint(9F, -14 + offsetY, -14);
-		leftBackLeg = new ModelRenderer(this, 0, 12);
+		leftBackLeg = new ModelRenderer(this, 100, 0);
 		leftBackLeg.addBox(-2, 0, -2, 4, 14, 4);
 		leftBackLeg.setRotationPoint(-9F, -14 + offsetY, 14);
-		rightBackLeg = new ModelRenderer(this, 0, 12);
+		rightBackLeg = new ModelRenderer(this, 100, 0);
 		rightBackLeg.addBox(-2, 0, -2, 4, 14, 4);
 		rightBackLeg.setRotationPoint(9F, -14 + offsetY, 14);
-		tail0 = new ModelRenderer(this, 0, 14);
+		tail0 = new ModelRenderer(this, 0, 82);
 		tail0.addBox(-5, 0, -2, 10, 10, 20);
 		tail0.setRotationPoint(0F, -22 + offsetY, 18F);
-		tail1 = new ModelRenderer(this, 0, 14);
+		tail1 = new ModelRenderer(this, 60, 82);
 		tail1.addBox(-3, 0, -2, 6, 6, 20);
 		tail1.setRotationPoint(0F, -18 + offsetY, 36F);
-		tail2 = new ModelRenderer(this, 0, 14);
+		tail2 = new ModelRenderer(this, 68, 28);
 		tail2.addBox(-3, 0, -2, 4, 4, 20);
 		tail2.setRotationPoint(0F, -15 + offsetY, 54F);
 	}
@@ -71,7 +73,7 @@ public class ModelBasilisk extends ModelBase
 		this.rightFrontLeg.rotateAngleX = MathHelper.cos(par1 * 0.6662F + (float)Math.PI) * 0.7F * par2;
 		this.leftBackLeg.rotateAngleX = MathHelper.cos(par1 * 0.6662F) * 1.2F * par2 * 0.5F;
 		this.rightBackLeg.rotateAngleX = MathHelper.cos(par1 * 0.6662F + (float)Math.PI) * 1.2F * par2 * 0.5F;
-		this.tail0.rotateAngleY = MathHelper.cos(par1 + (float)Math.PI) * par2 / 3;
+		this.tail0.rotateAngleY = MathHelper.cos(par1 + (float)Math.PI) * par2 / 2;
 		this.tail1.rotationPointX = this.tail0.rotationPointX + 18 * MathHelper.sin(this.tail0.rotateAngleY);
 		this.tail1.rotationPointZ = this.tail0.rotationPointZ + 18 * MathHelper.cos(this.tail0.rotateAngleY);
 //		this.tail1.rotateAngleY = MathHelper.cos(par1 + (float)Math.PI) * -par2 / 2;

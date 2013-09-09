@@ -17,8 +17,8 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	EntityUnderlingPart tail;
 	public EntityBasilisk(World world) 
 	{
-		this(world, GristType.Tar);
-//		this(world, GristHelper.getPrimaryGrist());
+//		this(world, GristType.Tar);
+		this(world, GristHelper.getPrimaryGrist());
 	}
 	public EntityBasilisk(World par1World, GristType type) 
 	{
@@ -56,7 +56,7 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	}
 
 	@Override
-	protected float getWanderSpeed() 
+	protected float getWanderSpeed()
 	{
 		return .3F;
 	}
@@ -96,12 +96,12 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 		super.setPositionAndRotation(par1, par3, par5, par7, par8);
 		this.updatePartPositions();
 	}
-	@Override
-	protected void updateFallState(double par1, boolean par3) 
-	{
-		if((tail.fallDistance > 0))
-			super.updateFallState(par1, par3 || tail.onGround);
-	}
+//	@Override
+//	public void updateFallState(double par1, boolean par3) 
+//	{
+////		if((tail.fallDistance > 0))
+//			super.updateFallState(par1, par3);
+//	}
 	@Override
 	public void updatePartPositions() 
 	{
