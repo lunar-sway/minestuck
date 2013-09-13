@@ -54,5 +54,12 @@ public class EntityOgre extends EntityUnderling
 	{
 		return 16 * (type.getPower() + 1) + 8;
 	}
+	@Override
+	protected boolean useAltName() 
+	{
+		if(type.equals(GristType.Tar))
+			return true;
+		return super.useAltName();
+	}
 
 }

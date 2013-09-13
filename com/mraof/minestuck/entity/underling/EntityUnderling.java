@@ -76,6 +76,10 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	protected abstract float getMaxHealth();
 
 	protected abstract float getWanderSpeed();
+	protected boolean useAltName()
+	{
+		return false;
+	};
 	@Override
 	protected void onDeathUpdate() 
 	{
@@ -89,7 +93,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	@Override
 	public String getTexture() 
 	{
-		return "textures/mobs/" + type.getAltName() + underlingName + ".png";
+		return "textures/mobs/" + (useAltName() ? type.getAltName() : type.getName() )+ underlingName + ".png";
 	}
 	//Gives each type of underling a unique name, so instead of all types being called entity.underlingName.name they are called entity.typeString.underlingName.name
 	@Override
