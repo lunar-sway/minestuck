@@ -23,6 +23,7 @@ import com.mraof.minestuck.entity.underling.EntityBasilisk;
 import com.mraof.minestuck.entity.underling.EntityGiclops;
 import com.mraof.minestuck.entity.underling.EntityImp;
 import com.mraof.minestuck.entity.underling.EntityOgre;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.lands.ILandDecorator;
 import com.mraof.minestuck.world.gen.lands.LandAspect;
 import com.mraof.minestuck.world.gen.lands.LandHelper;
@@ -179,7 +180,8 @@ public class ChunkProviderLands implements IChunkProvider
 	@Override
 	public List getPossibleCreatures(EnumCreatureType enumcreaturetype, int i,
 			int j, int k) {
-		return enumcreaturetype == EnumCreatureType.creature ? this.consortList : enumcreaturetype == EnumCreatureType.monster ? this.underlingList : null;
+		//Debug.printf("Chosen to spawn! args: %s %d %d %d",enumcreaturetype,i,j,k);
+		return enumcreaturetype == EnumCreatureType.creature? this.consortList : (enumcreaturetype == EnumCreatureType.monster ? this.underlingList : null);
 	}
 
 	@Override
