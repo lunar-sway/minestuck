@@ -1,6 +1,7 @@
 package com.mraof.minestuck.world.gen.lands;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 
@@ -50,8 +51,7 @@ public class LandAspectFrost extends LandAspect
 
 	@Override
 	public int getDayCycleMode() {
-		// TODO Auto-generated method stub
-		return 0;
+		return (new Random()).nextInt(3); //Random cycle between 0 and 2
 	}
 
 }
