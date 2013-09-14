@@ -7,6 +7,9 @@ import net.minecraft.network.INetworkManager;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+import com.mraof.minestuck.util.EnumAspect;
+import com.mraof.minestuck.util.EnumClass;
+import com.mraof.minestuck.util.TitleHelper;
 
 import cpw.mods.fml.common.network.Player;
 
@@ -23,8 +26,8 @@ public class TitlePacket extends MinestuckPacket
 	public byte[] generatePacket(Object... data) 
 	{
 		ByteArrayDataOutput dat = ByteStreams.newDataOutput();
-		dat.writeInt((Integer) data[0]);
-		dat.writeInt((Integer) data[1]);
+		dat.writeInt(TitleHelper.getIntFromClass((EnumClass) data[0]));
+		dat.writeInt(TitleHelper.getIntFromAspect((EnumAspect) data[1]));
 		return dat.toByteArray();
 	}
 

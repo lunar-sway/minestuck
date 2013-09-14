@@ -2,24 +2,29 @@ package com.mraof.minestuck.util;
 
 public class Title {
 	
-	private int heroClass;
-	private int heroAspect;
+	private EnumClass heroClass;
+	private EnumAspect heroAspect;
 
-	public Title(int heroClass, int heroAspect) {
+	public Title(EnumClass heroClass, EnumAspect heroAspect) {
 		this.heroClass = heroClass;
 		this.heroAspect = heroAspect;
 	}
 	
-	public int getHeroClass() {
+	public EnumClass getHeroClass() {
 		return this.heroClass;
 	}
 	
-	public int getHeroAspect() {
+	public EnumAspect getHeroAspect() {
 		return this.heroAspect;
 	}
 	
 	public String getTitleName() {
-		return TitleHelper.classes[heroClass] + " of " + TitleHelper.aspects[heroAspect];
+		return this.toString();
 	}
-
+	
+	@Override
+	public String toString() {
+		return heroClass.toString() + " of " + heroAspect.toString();
+	}
+	
 }
