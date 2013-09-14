@@ -19,6 +19,7 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 
 import com.mraof.minestuck.entity.consort.EntityNakagator;
+import com.mraof.minestuck.entity.underling.EntityBasilisk;
 import com.mraof.minestuck.entity.underling.EntityGiclops;
 import com.mraof.minestuck.entity.underling.EntityImp;
 import com.mraof.minestuck.entity.underling.EntityOgre;
@@ -78,6 +79,7 @@ public class ChunkProviderLands implements IChunkProvider
 		this.underlingList.add(new SpawnListEntry(EntityImp.class, 5, 1, 10));
 		this.underlingList.add(new SpawnListEntry(EntityOgre.class, 3, 1, 2));
 		this.underlingList.add(new SpawnListEntry(EntityGiclops.class, 1, 1, 1));
+		this.underlingList.add(new SpawnListEntry(EntityBasilisk.class, 1, 1, 1));
 		this.noiseGens[0] = new NoiseGeneratorOctaves(this.random, 7);
         this.noiseGens[1] = new NoiseGeneratorOctaves(this.random, 1);
         
