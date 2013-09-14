@@ -5,6 +5,7 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.WorldChunkManagerHell;
 import net.minecraft.world.chunk.IChunkProvider;
 
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.ChunkProviderLands;
 
 public class WorldProviderLands extends WorldProvider 
@@ -41,6 +42,7 @@ public class WorldProviderLands extends WorldProvider
     		}
     		return true; //We should never reach this
     	} else {
+      		createChunkGenerator();
     		return true;
     	}
 	}
@@ -63,6 +65,7 @@ public class WorldProviderLands extends WorldProvider
     		}
     		return 12000.0F; //We should never reach this
     	} else {
+    		createChunkGenerator();
     		return 12000.0F;
     	}
     }

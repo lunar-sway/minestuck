@@ -446,7 +446,7 @@ public class Minestuck
 				while((currentByte = dataInputStream.read()) != -1)
 				{
 					MinestuckSaveHandler.lands.add((byte)currentByte);
-					Debug.printf("Found land dimension id of: ", currentByte);
+					Debug.printf("Found land dimension id of: %d", currentByte);
 					if(!DimensionManager.isDimensionRegistered(currentByte))
 						DimensionManager.registerDimension(currentByte, Minestuck.landProviderTypeId);
 				}
