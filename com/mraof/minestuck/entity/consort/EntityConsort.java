@@ -42,7 +42,7 @@ public abstract class EntityConsort extends EntityMinestuck
      int j = MathHelper.floor_double(this.boundingBox.minY);
      int k = MathHelper.floor_double(this.posZ);
 
-     if (this.worldObj.getSavedLightValue(EnumSkyBlock.Sky, i, j, k) > this.rand.nextInt(32))
+     if (this.worldObj.getSavedLightValue(EnumSkyBlock.Sky, i, j, k) < this.rand.nextInt(8))
      {
          return false;
      }

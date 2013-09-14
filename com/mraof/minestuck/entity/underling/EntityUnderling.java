@@ -166,6 +166,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	@Override
 	   public boolean getCanSpawnHere()
     {
+		Debug.print(super.getCanSpawnHere());
         return this.worldObj.difficultySetting > 0 && this.isValidLightLevel() && super.getCanSpawnHere();
     }
 	
@@ -173,12 +174,12 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
     {
     	
         int i = MathHelper.floor_double(this.posX);
-        int j = MathHelper.floor_double(this.boundingBox.minY);
+        int j = MathHelper.floor_double(this.boundingBox.minY)+1;
         int k = MathHelper.floor_double(this.posZ);
         
-        if (this.worldObj.getBlockLightOpacity(i, j, k) == 0) {
-        	return false;
-        }
+//        if (this.worldObj.getBlockLightOpacity(i, j, k) == 0) {
+//        	return false;
+//        }
         Debug.print("Spawning an entity...");
 
         Debug.print("Sunlight level is "+this.worldObj.getSavedLightValue(EnumSkyBlock.Sky, i, j, k));
@@ -201,9 +202,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 
             Debug.print("Light level calculated as " + l);
             
-            Debug.print("Succsess!");
-            //return l <= this.rand.nextInt(8);
-            return true;
+            return l <= this.rand.nextInt(8);
         }
     }
 }
