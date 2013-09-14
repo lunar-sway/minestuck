@@ -33,7 +33,7 @@ public class WorldProviderLands extends WorldProvider
 	   	if (provider != null) {
     		switch (provider.dayCycle) {
     		case (0):
-    			return true; //TODO: Day cycle code
+    			return super.isDaytime();
     		case (1):
     			return true;
     		case (2):
@@ -55,7 +55,7 @@ public class WorldProviderLands extends WorldProvider
     	if (provider != null) {
     		switch (provider.dayCycle) {
     		case (0):
-    			return 12000.0F; //TODO: Day cycle code
+    			return super.calculateCelestialAngle(par1,par3);
     		case (1):
     			return 12000.0F;
     		case (2):
