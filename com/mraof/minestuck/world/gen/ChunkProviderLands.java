@@ -43,6 +43,7 @@ public class ChunkProviderLands implements IChunkProvider
 	public int oceanBlock;
 	public LandAspect terrainMapper;
 	public ArrayList decorators;
+	public int dayCycle;
 
 	public ChunkProviderLands(World worldObj, long seed, boolean b) 
 	{
@@ -85,6 +86,7 @@ public class ChunkProviderLands implements IChunkProvider
         this.oceanBlock = helper.pickOne(aspect1, aspect2).getOceanBlock();
         this.terrainMapper = helper.pickOne(aspect1,aspect2);
         this.decorators = helper.pickSubset(aspect1.getDecorators(),aspect2.getDecorators());
+        this.dayCycle = helper.pickOne(aspect1,aspect2).getDayCycleMode();
         
         
 	}

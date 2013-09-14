@@ -48,4 +48,10 @@ public class LandAspectFrost extends LandAspect
 		return list;
 	}
 
+	@Override
+	public int getDayCycleMode() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

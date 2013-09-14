@@ -30,7 +30,19 @@ public class WorldProviderLands extends WorldProvider
 	}
 	@Override
 	public boolean isDaytime() {
-		return true;
+	   	if (provider != null) {
+    		switch (provider.dayCycle) {
+    		case (0):
+    			return true; //TODO: Day cycle code
+    		case (1):
+    			return true;
+    		case (2):
+    			return false;
+    		}
+    		return true; //We should never reach this
+    	} else {
+    		return true;
+    	}
 	}
 	public void registerWorldChunkManager()
     {
@@ -40,11 +52,23 @@ public class WorldProviderLands extends WorldProvider
     }
     public float calculateCelestialAngle(long par1, float par3)
     {
-        return 12000.0F;
+    	if (provider != null) {
+    		switch (provider.dayCycle) {
+    		case (0):
+    			return 12000.0F; //TODO: Day cycle code
+    		case (1):
+    			return 12000.0F;
+    		case (2):
+    			return 0.0F;
+    		}
+    		return 12000.0F; //We should never reach this
+    	} else {
+    		return 12000.0F;
+    	}
     }
     public boolean isSurfaceWorld()
     {
-        return false;
+        return true;
     }
 
 }
