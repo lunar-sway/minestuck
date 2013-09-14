@@ -25,6 +25,7 @@ import com.mraof.minestuck.entity.EntityListAttackFilter;
 import com.mraof.minestuck.entity.EntityMinestuck;
 import com.mraof.minestuck.entity.ai.EntityAINearestAttackableTargetWithHeight;
 import com.mraof.minestuck.entity.item.EntityGrist;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
@@ -173,7 +174,12 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
         int i = MathHelper.floor_double(this.posX);
         int j = MathHelper.floor_double(this.boundingBox.minY);
         int k = MathHelper.floor_double(this.posZ);
+        
+//        if (this.worldObj.getBlockLightOpacity(i, j, k) == 0) {
+//        	return false;
+//        }
 
+        Debug.print("Sunlight level is "+this.worldObj.getSavedLightValue(EnumSkyBlock.Sky, i, j, k));
         if (this.worldObj.getSavedLightValue(EnumSkyBlock.Sky, i, j, k) > this.rand.nextInt(32))
         {
             return false;
@@ -190,6 +196,8 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
                 this.worldObj.skylightSubtracted = i1;
             }
 
+            Debug.print("Light level calculated as " + l);
+            
             return l <= this.rand.nextInt(8);
         }
     }

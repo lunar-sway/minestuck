@@ -43,7 +43,7 @@ public class WorldProviderLands extends WorldProvider
     		return true; //We should never reach this
     	} else {
       		createChunkGenerator();
-    		return true;
+    		return this.isDaytime();
     	}
 	}
 	public void registerWorldChunkManager()
@@ -55,18 +55,19 @@ public class WorldProviderLands extends WorldProvider
     public float calculateCelestialAngle(long par1, float par3)
     {
     	if (provider != null) {
+    		//Debug.print("Time mode is "+provider.dayCycle);
     		switch (provider.dayCycle) {
     		case (0):
     			return super.calculateCelestialAngle(par1,par3);
     		case (1):
     			return 12000.0F;
     		case (2):
-    			return 0.0F;
+    			return 24000.0F;
     		}
     		return 12000.0F; //We should never reach this
     	} else {
     		createChunkGenerator();
-    		return 12000.0F;
+    		return this.calculateCelestialAngle(par1,par3);
     	}
     }
     public boolean isSurfaceWorld()
