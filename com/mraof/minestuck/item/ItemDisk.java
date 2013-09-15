@@ -55,29 +55,31 @@ public class ItemDisk extends Item {
 	
 	@Override
 	public boolean onItemUseFirst(ItemStack item, EntityPlayer player, World world, int x, int y, int z, int side, float par8, float par9, float par10) {
-		if (world.getBlockId(x,y,z) == Minestuck.blockComputerOff.blockID) {
-			int meta = world.getBlockMetadata(x,y,z);
-			world.setBlock(x,y,z,Minestuck.blockComputerOn.blockID);
-			world.setBlockMetadataWithNotify(x, y, z, meta, 2);
-		}
-		if(world.getBlockId(x,y,z) == Minestuck.blockComputerOn.blockID){
-			TileEntityComputer te =  (TileEntityComputer) world.getBlockTileEntity(x, y, z);
-			if (te == null) {return false;}
-			int i = item.getItemDamage();
-			if(i == 0)
-				if(te.hasClient)
+		if(!world.isRemote){
+			if (world.getBlockId(x,y,z) == Minestuck.blockComputerOff.blockID) {
+				int meta = world.getBlockMetadata(x,y,z);
+				world.setBlock(x,y,z,Minestuck.blockComputerOn.blockID);
+				world.setBlockMetadataWithNotify(x, y, z, meta, 2);
+			}
+			if(world.getBlockId(x,y,z) == Minestuck.blockComputerOn.blockID){
+				TileEntityComputer te =  (TileEntityComputer) world.getBlockTileEntity(x, y, z);
+				if (te == null) {return false;}
+				int i = item.getItemDamage();
+				if(i == 0)
+					if(te.hasClient)
+						return false;
+					else te.hasClient = true;
+				else if(te.hasServer)
 					return false;
-				else te.hasClient = true;
-			else if(te.hasServer)
-				return false;
-			else te.hasServer = true;
-			Debug.print("Installed program with id "+item.getItemDamage());
-			
-			player.destroyCurrentEquippedItem();
-			
-			if(te.gui != null)
-				te.gui.updateGui();
-			return true;
+				else te.hasServer = true;
+				Debug.print("Installed program with id "+item.getItemDamage());
+				
+				player.destroyCurrentEquippedItem();
+				
+				if(te.gui != null)
+					te.gui.updateGui();
+				return true;
+			}
 		}
 		return false;
 	}
