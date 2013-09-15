@@ -65,7 +65,7 @@ public class SburbGiveItemsPacket extends MinestuckPacket {
 		
 		String sendTo = "";
 		//Debug.print("Conn'd to "+te.connectedTo);
-		String[] parts = te.connectedTo.split("\0");
+		String[] parts = te.connectedClient.split("\0");
 		for (String part : parts) {
 			sendTo += part;
 		}

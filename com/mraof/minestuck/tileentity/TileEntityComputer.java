@@ -16,11 +16,13 @@ import com.mraof.minestuck.util.IConnectionListener;
 import com.mraof.minestuck.util.SburbConnection;
 
 public class TileEntityComputer extends TileEntity implements IConnectionListener {
-
-	public int program;
-	public String connectedTo = "";
+	
+	public volatile boolean hasClient = false;
+	public volatile boolean hasServer = false;
+	public boolean openToClients = false;
+	public String connectedClient = "";
 	public boolean givenItems = false;
-	public String connectedFrom = "";
+	public String connectedServer = "";
 	public boolean initialized = false;
 	public GuiComputer gui;
 	public String owner = "";
@@ -33,12 +35,14 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
             }
     }
     
-    @Override
-    public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
-    	super.readFromNBT(par1NBTTagCompound);
-    	 this.program = par1NBTTagCompound.getInteger("program");
-    	 this.connectedTo = par1NBTTagCompound.getString("connectedTo");
-    	 this.connectedFrom = par1NBTTagCompound.getString("conectedFrom");
+	@Override
+	public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
+		super.readFromNBT(par1NBTTagCompound);
+		int program = par1NBTTagCompound.getInteger("program");
+		hasClient =  (program & 1 << 0) != 0;
+		hasServer =  (program & 1 << 1) != 0;
+		this.connectedClient = par1NBTTagCompound.getString("connectedTo");
+    	 this.connectedServer = par1NBTTagCompound.getString("conectedFrom");
     	 this.owner = par1NBTTagCompound.getString("owner");
     	 this.givenItems = par1NBTTagCompound.getBoolean("givenItems");
     }
@@ -46,13 +50,13 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
     @Override
     public void writeToNBT(NBTTagCompound par1NBTTagCompound) {
     	super.writeToNBT(par1NBTTagCompound);
-    	par1NBTTagCompound.setInteger("program",this.program);
+    	par1NBTTagCompound.setInteger("program",(hasClient ? 2 : 0) + (hasServer ? 1 : 0));
     	par1NBTTagCompound.setBoolean("givenItems",this.givenItems);
-    	if (!this.connectedTo.equals("")) {
-    		par1NBTTagCompound.setString("connectedTo",this.connectedTo);
+    	if (!this.connectedClient.equals("")) {
+    		par1NBTTagCompound.setString("connectedTo",this.connectedClient);
     	}
-    	if (!this.connectedFrom.equals("")) {
-    		par1NBTTagCompound.setString("conectedFrom",this.connectedFrom);
+    	if (!this.connectedServer.equals("")) {
+    		par1NBTTagCompound.setString("conectedFrom",this.connectedServer);
     	}
     	if (!this.owner.equals("")) {
     		par1NBTTagCompound.setString("owner",this.owner);
@@ -84,33 +88,27 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
     }
     
     public void updateConnection() {
-    	if (gui == null) {
-    		//We're server side
-    		
-    	} else {
-    		//We're client side
-    		
-        	if (!connectedTo.equals("") && !connectedFrom.equals("")) {
-        		if (program == 0) {
-        			
-        			SburbConnection.connect(connectedFrom,connectedTo);
-        			
-        			Packet250CustomPayload packet = new Packet250CustomPayload();
-        			packet.channel = "Minestuck";
-        			packet.data = MinestuckPacket.makePacket(Type.SBURB_CONNECT,connectedFrom,connectedTo);
-        			packet.length = packet.data.length;
-        			mc.getNetHandler().addToSendQueue(packet);
+    	if (!connectedServer.equals("")) {
+    		if (hasClient) {
+    			
+    			SburbConnection.connect(connectedServer,mc.thePlayer.username);
+    			
+    			Packet250CustomPayload packet = new Packet250CustomPayload();
+    			packet.channel = "Minestuck";
+    			packet.data = MinestuckPacket.makePacket(Type.SBURB_CONNECT,connectedServer,mc.thePlayer.username);
+    			packet.length = packet.data.length;
+    			mc.getNetHandler().addToSendQueue(packet);
         			
         		} else {
         			
         		}
     			
-    		} else if (connectedTo.equals("") && !connectedFrom.equals("")) {
-    	  		if (program == 1) {
+    		} else if (connectedClient.equals("") && !connectedServer.equals("")) {
+    	  		if (hasServer) {
     				
         			Packet250CustomPayload packet = new Packet250CustomPayload();
         			packet.channel = "Minestuck";
-        			packet.data = MinestuckPacket.makePacket(Type.SBURB_OPEN,connectedFrom);
+        			packet.data = MinestuckPacket.makePacket(Type.SBURB_OPEN,connectedServer);
         			packet.length = packet.data.length;
         			mc.getNetHandler().addToSendQueue(packet);
     	  		} else {
@@ -118,30 +116,30 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
     	  		}
     		}
         	
+    	if(gui != null)
     		gui.updateGui();
     	}
-    }
 
 	@Override
 	public void onConnected(String server, String client) {
-		if (server == connectedFrom && program == 1) {
-				this.connectedTo = client;
-				this.connectedFrom = server;
+		if (server == connectedServer && hasServer) {
+				this.connectedClient = client;
+				this.connectedServer = server;
 				updateConnection();
 	
 				if (gui != null) {
 					gui.updateGui();
 				}
-			} else if (owner == client && program == 0) {
-				this.connectedTo = server;
-				this.connectedFrom = client;
+			} else if (owner == client && hasClient) {
+				this.connectedClient = server;
+				this.connectedServer = client;
 		}
 	}
 
 	@Override
 	public void onServerOpen(String server) {
-		if (server == this.owner && program == 1) {
-			this.connectedFrom = server;
+		if (server == this.owner && hasServer) {
+			this.connectedServer = server;
 			if (gui != null) {
 				gui.updateGui();
 			}
