@@ -23,8 +23,8 @@ public class EntityUnderlingPart extends EntityLiving
 	{
 		super(((IEntityMultiPart) par1IEntityMultiPart).getWorld());
 		this.setSize(par3, par4);
+		Debug.printf("Being created with %s, name is %s, vars %f and %f",par1IEntityMultiPart,par2Str,par3,par4);
 		this.entityUnderlingObj = par1IEntityMultiPart;
-		Debug.print(this.entityUnderlingObj);
 		this.name = par2Str;
 	}
 
@@ -99,8 +99,13 @@ public class EntityUnderlingPart extends EntityLiving
 	public void setDead() 
 	{
 		super.setDead();
+		Debug.print("Tail is dead");
 		if(this.entityUnderlingObj != null && !this.entityUnderlingObj.isDead)
 			entityUnderlingObj.setDead();
+		
+//		Debug.print("BEGIN STACK TRACE");
+//		Thread.dumpStack();
+//		Debug.print("END STACK TRACE");
 	}
 	/**
 	 * Returns true if Entity argument is equal to this Entity
@@ -116,6 +121,13 @@ public class EntityUnderlingPart extends EntityLiving
 		return this.inWater;
 		//		return super.handleWaterMovement();
 	}
+	
+	@Override
+	 protected boolean canDespawn()
+	 {
+	     return false;
+	 }
+	   
 	//	@Override
 	//	protected boolean pushOutOfBlocks(double par1, double par3, double par5) {
 	//		boolean flag = super.pushOutOfBlocks(par1, par3, par5);

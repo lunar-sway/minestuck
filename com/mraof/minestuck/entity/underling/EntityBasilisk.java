@@ -15,6 +15,7 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 {
 	private EntityAIAttackOnCollideWithRate entityAIAttackOnCollideWithRate;
 	EntityUnderlingPart tail;
+	
 	public EntityBasilisk(World world) 
 	{
 //		this(world, GristType.Tar);
@@ -24,6 +25,7 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	{
 		super(par1World, type, "Basilisk");
 		this.setSize(3F, 2F);
+		Debug.print("Creating a new part");
 		tail = new EntityUnderlingPart(this, "tail", 3F, 2F);
 		par1World.spawnEntityInWorld(tail);
 	}
@@ -77,7 +79,7 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	public boolean attackEntityFromPart(Entity entityPart, DamageSource source, float damage) 
 	{
 		boolean flag = this.attackEntityFrom(source, damage);
-		Debug.printf("Damage from %s, source is %s, amount of damage is %f, success is %b, isRemote is %b", entityPart, source, damage, flag, this.worldObj.isRemote);
+		//Debug.printf("Damage from %s, source is %s, amount of damage is %f, success is %b, isRemote is %b", entityPart, source, damage, flag, this.worldObj.isRemote);
 		return flag;
 	}
 	@Override
@@ -118,5 +120,15 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 			tail.entityUnderlingObj = this;
 		tail.setPositionAndRotation(tailPosX, this.posY, tailPosZ, this.rotationYaw, this.rotationPitch);
 	}
+	
+//	@Override
+//	public void setDead() {
+//		super.setDead();
+//		Debug.print("Body is dead");
+//		
+//		Debug.print("BEGIN STACK TRACE");
+//		Thread.dumpStack();
+//		Debug.print("END STACK TRACE");
+//	}
 
 }

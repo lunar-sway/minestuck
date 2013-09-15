@@ -355,6 +355,9 @@ public class Minestuck
 		LanguageRegistry.instance().addStringLocalization("entity.Giclops.name", "Giclops");
 		for(GristType giclopsType : GristType.values())
 			LanguageRegistry.instance().addStringLocalization("entity." + giclopsType.getAltName() + ".Giclops.name", giclopsType.getAltName() + " Giclops");
+		LanguageRegistry.instance().addStringLocalization("entity.Basilisk.name", "Basilisk");
+		for(GristType basliskType : GristType.values())
+			LanguageRegistry.instance().addStringLocalization("entity." + basliskType.getAltName() + ".Basilisk.name", basliskType.getAltName() + " Basilisk");
 		LanguageRegistry.instance().addStringLocalization("entity.dersitePawn.name", "Dersite Pawn");
 		LanguageRegistry.instance().addStringLocalization("entity.prospitianPawn.name", "Prospitian Pawn");
 		LanguageRegistry.instance().addStringLocalization("entity.dersiteBishop.name", "Dersite Bishop");
@@ -378,7 +381,7 @@ public class Minestuck
 		this.registerAndMapEntity(EntityWhitePawn.class, "prospitianPawn", 0xf0f0f0, 0x0f0f0f);
 		this.registerAndMapEntity(EntityBlackBishop.class, "dersiteBishop", 0x000000, 0xc121d9);
 		this.registerAndMapEntity(EntityWhiteBishop.class, "prospitianBishop", 0xffffff, 0xfde500);
-		this.registerAndMapEntity(EntityUnderlingPart.class, "underlingPart", 0, 0);
+		//this.registerAndMapEntity(EntityUnderlingPart.class, "underlingPart", 0, 0);
 		//register entities with fml
 		EntityRegistry.registerModEntity(EntityGrist.class, "grist", currentEntityIdOffset, this, 512, 1, true);
 
