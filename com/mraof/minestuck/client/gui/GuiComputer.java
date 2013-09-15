@@ -9,12 +9,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
@@ -41,15 +44,20 @@ public class GuiComputer extends GuiScreen
 	private ArrayList<GuiButton> selButtons = new ArrayList<GuiButton>();
 	private ArrayList<String> currentList;
 	private String displayName;
+	private String displayMessage = "";
 
 	public Minecraft mc;
+	public EntityPlayer player;
+	public World world;
 	private TileEntityComputer te;
 
 
-	public GuiComputer(Minecraft mc,TileEntityComputer te)
+	public GuiComputer(Minecraft mc,EntityPlayer player,World world,TileEntityComputer te)
 	{
 		super();
-
+		
+		this.world = world;
+		this.player = player;
 		this.mc = mc;
 		this.fontRenderer = mc.fontRenderer;
 		this.te = te;
@@ -69,9 +77,9 @@ public class GuiComputer extends GuiScreen
 		
 		int yOffset = (this.height / 2) - (ySize / 2);
 		this.drawTexturedModalRect((this.width / 2) - (xSize / 2), yOffset, 0, 0, xSize, ySize);
-		if(currentList.size() == 0){
+		if(te.programSelected == -1){
 			fontRenderer.drawString("Insert disk.", (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
-		} else fontRenderer.drawString(currentList.get(0), (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
+		} else fontRenderer.drawString(displayMessage, (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
 		
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		RenderHelper.disableStandardItemLighting();
@@ -137,30 +145,31 @@ public class GuiComputer extends GuiScreen
 		
 		if(te.programSelected == 0){
 			if (!te.connectedServer.equals("")) {
-				currentList.add("Connected to "+displayName);
+				displayMessage = "Connected to "+displayName;
 			} else {
-				currentList.add("Select a server below");
+				displayMessage = "Select a server below";
 		    	
-		    	int i = 0;
+		    	int i = 1;
 		    	for (Object server : SburbConnection.getServersOpen()) {
-		    		if (!(i < selButtons.size() && selButtons.get(i) != null))
-		    			downButton.enabled = true;
-		    		setButtonString(i, (String)server);
-		    		i++;
+		    		if (!(i < selButtons.size() && selButtons.get(i) != null)){
+		    			setButtonString(i, (String)server);
+		    			i++;
+		    		}
 		    	}
 			}
+			setButtonString(0, "View Gristcache");
 		}
 		else if(te.programSelected == 1){
 			if (!te.connectedClient.equals("")) {
-				currentList.add("Connected to "+displayName);
+				displayMessage = "Connected to "+displayName;
 				if(!te.givenItems)
 					setButtonString(0, "Give items");
 			} else if (te.openToClients && te.connectedClient.equals("")) {
-					currentList.add("Waiting for client...");
+				displayMessage = "Waiting for client...";
 			} else if(SburbConnection.getServersOpen().contains(te.owner))
-				currentList.add("Server with your name exists");
+				displayMessage = "Server with your name exists";
 			else {
-				currentList.add("Server offline");
+				displayMessage = "Server offline";
 				
 				setButtonString(0,"Open to clients");
 		    	}
@@ -182,9 +191,9 @@ public class GuiComputer extends GuiScreen
 	 * @return The string at position <code>index</> in the <code>currentList</code>.
 	 */
 	protected String getButtonString(int index){
-		if(index+1 >= currentList.size() || index+1 < 0)
+		if(index >= currentList.size() || index < 0)
 			return "";
-		else return currentList.get(index+1);
+		else return currentList.get(index);
 	}
 	
 	/**
@@ -194,11 +203,11 @@ public class GuiComputer extends GuiScreen
 	 * @param s The new string.
 	 */
 	protected void setButtonString(int index, String s){
-		if(index+1 < 0)
+		if(index < 0)
 			return;
-		while(index+1 >= currentList.size())
+		while(index >= currentList.size())
 			currentList.add("");
-		currentList.set(index+1, s);
+		currentList.set(index, s);
 	}
 	
 	protected void actionPerformed(GuiButton guibutton) {
@@ -211,8 +220,9 @@ public class GuiComputer extends GuiScreen
 				
 			} else if (guibutton == downButton) {
 				
+			} else if(guibutton.displayString.equals("View Gristcache")){
+				player.openGui(Minestuck.instance, 2, world, te.xCoord, te.yCoord, te.zCoord);
 			} else {
-				
 				te.connectedServer = guibutton.displayString;
 				
 				te.updateConnection();
