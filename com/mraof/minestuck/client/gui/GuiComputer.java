@@ -157,7 +157,9 @@ public class GuiComputer extends GuiScreen
 					setButtonString(0, "Give items");
 			} else if (te.openToClients && te.connectedClient.equals("")) {
 					currentList.add("Waiting for client...");
-			} else {
+			} else if(SburbConnection.getServersOpen().contains(te.owner))
+				currentList.add("Server with your name exists");
+			else {
 				currentList.add("Server offline");
 				
 				setButtonString(0,"Open to clients");
@@ -186,11 +188,10 @@ public class GuiComputer extends GuiScreen
 	}
 	
 	/**
-	 * Sets the position in the array list to the given string.
+	 * Sets the position in <code>currentList</code> to the given string.
 	 * Will add empty string if neccesary to avoid an <code>ArrayIndexOutOfBoundException</code>.
 	 * @param index The listed button string positions. Starting from the top, at 0.
 	 * @param s The new string.
-	 * @param list The list that <code>s</code> is added to.
 	 */
 	protected void setButtonString(int index, String s){
 		if(index+1 < 0)
@@ -217,7 +218,7 @@ public class GuiComputer extends GuiScreen
 				te.updateConnection();
 			}
 		} else if(te.programSelected == 1){
-			if (guibutton.displayString.equals("Give items")) {
+			if(guibutton.displayString.equals("Give items")){
 				Packet250CustomPayload packet = new Packet250CustomPayload();
 				packet.channel = "Minestuck";
 				packet.data = MinestuckPacket.makePacket(Type.SBURB_GIVE,te.xCoord,te.yCoord,te.zCoord,te.connectedClient);
@@ -225,6 +226,7 @@ public class GuiComputer extends GuiScreen
 				this.mc.getNetHandler().addToSendQueue(packet);
 				te.givenItems = true;
 			}
+				
 			te.updateConnection();
 		}
 		updateGui();

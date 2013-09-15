@@ -28,14 +28,13 @@ public class SburbConnection {
 	
 	public static void connect(String client, String server) {
 		
-
-		serversOpen.remove(server);
-	
-
-		for (Object listener : listeners) {
-			((IConnectionListener)listener).onConnected(server,client);
+		if(serversOpen.contains(server)){
+			serversOpen.remove(server);
+			
+			for (Object listener : listeners) {
+				((IConnectionListener)listener).onConnected(server,client);
+			}
 		}
-		
 	}
 	
 	public static void addListener(IConnectionListener listener) {

@@ -42,8 +42,8 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 		int program = par1NBTTagCompound.getInteger("program");
 		hasClient =  (program & 1 << 0) != 0;
 		hasServer =  (program & 1 << 1) != 0;
-		this.connectedClient = par1NBTTagCompound.getString("connectedTo");
-    	 this.connectedServer = par1NBTTagCompound.getString("conectedFrom");
+		this.connectedClient = par1NBTTagCompound.getString("client");
+    	 this.connectedServer = par1NBTTagCompound.getString("server");
     	 this.owner = par1NBTTagCompound.getString("owner");
     	 this.givenItems = par1NBTTagCompound.getBoolean("givenItems");
     }
@@ -54,10 +54,10 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
     	par1NBTTagCompound.setInteger("program",(hasClient ? 2 : 0) + (hasServer ? 1 : 0));
     	par1NBTTagCompound.setBoolean("givenItems",this.givenItems);
     	if (!this.connectedClient.equals("")) {
-    		par1NBTTagCompound.setString("connectedTo",this.connectedClient);
+    		par1NBTTagCompound.setString("client",this.connectedClient);
     	}
     	if (!this.connectedServer.equals("")) {
-    		par1NBTTagCompound.setString("conectedFrom",this.connectedServer);
+    		par1NBTTagCompound.setString("server",this.connectedServer);
     	}
     	if (!this.owner.equals("")) {
     		par1NBTTagCompound.setString("owner",this.owner);
@@ -89,61 +89,50 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
     }
     
     public void updateConnection() {
-    	if (!connectedServer.equals("")) {
-    		if (hasClient) {
-    			
-    			SburbConnection.connect(connectedServer,mc.thePlayer.username);
-    			
-    			Packet250CustomPayload packet = new Packet250CustomPayload();
-    			packet.channel = "Minestuck";
-    			packet.data = MinestuckPacket.makePacket(Type.SBURB_CONNECT,connectedServer,mc.thePlayer.username);
-    			packet.length = packet.data.length;
-    			mc.getNetHandler().addToSendQueue(packet);
-        			
-        		} else {
-        			
-        		}
-    			
-    		} else if (connectedClient.equals("") && !connectedServer.equals("")) {
-    	  		if (hasServer) {
-    				
-        			Packet250CustomPayload packet = new Packet250CustomPayload();
-        			packet.channel = "Minestuck";
-        			packet.data = MinestuckPacket.makePacket(Type.SBURB_OPEN,connectedServer);
-        			packet.length = packet.data.length;
-        			mc.getNetHandler().addToSendQueue(packet);
-    	  		} else {
-    	  			
-    	  		}
-    		}
+		if (programSelected == 0) {
+			
+			SburbConnection.connect(owner,connectedServer);
+			
+			Packet250CustomPayload packet = new Packet250CustomPayload();
+			packet.channel = "Minestuck";
+			packet.data = MinestuckPacket.makePacket(Type.SBURB_CONNECT,connectedServer,owner);
+			packet.length = packet.data.length;
+			mc.getNetHandler().addToSendQueue(packet);
+			
+			
+		} else if (programSelected == 1) {
+			if(connectedClient.equals("")){
+				Packet250CustomPayload packet = new Packet250CustomPayload();
+				packet.channel = "Minestuck";
+				packet.data = MinestuckPacket.makePacket(Type.SBURB_OPEN,connectedServer);
+				packet.length = packet.data.length;
+				mc.getNetHandler().addToSendQueue(packet);
+				openToClients = true;
+			}
+		}
         	
     	if(gui != null)
     		gui.updateGui();
-    	}
+	}
 
 	@Override
 	public void onConnected(String server, String client) {
-		if (server == connectedServer && hasServer) {
+		if (owner == server && hasServer && openToClients) {
 				this.connectedClient = client;
-				this.connectedServer = server;
-				updateConnection();
-	
+				openToClients = false;
+				
 				if (gui != null) {
 					gui.updateGui();
 				}
-			} else if (owner == client && hasClient) {
-				this.connectedClient = server;
-				this.connectedServer = client;
+		} else if (owner == client && hasClient) {
+			this.connectedServer = server;
 		}
 	}
 
 	@Override
 	public void onServerOpen(String server) {
-		if (server == this.owner && hasServer) {
-			this.connectedServer = server;
-			if (gui != null) {
-				gui.updateGui();
-			}
+		if (gui != null && programSelected == 0) {
+			gui.updateGui();
 		}
 	}
     
