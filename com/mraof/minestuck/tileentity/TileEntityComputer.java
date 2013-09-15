@@ -27,6 +27,7 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 	public GuiComputer gui;
 	public String owner = "";
 	private Minecraft mc = Minecraft.getMinecraft();
+	public int programSelected = -1;	//0 if client is selected, 1 if server.
 	
     public TileEntityComputer() {
             SburbConnection.addListener(this);

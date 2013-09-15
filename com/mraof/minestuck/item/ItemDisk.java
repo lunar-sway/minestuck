@@ -75,6 +75,8 @@ public class ItemDisk extends Item {
 			
 			player.destroyCurrentEquippedItem();
 			
+			if(te.gui != null)
+				te.gui.updateGui();
 			return true;
 		}
 		return false;

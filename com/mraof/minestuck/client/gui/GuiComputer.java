@@ -18,6 +18,7 @@ import org.lwjgl.opengl.GL12;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.SburbConnection;
 
 import cpw.mods.fml.relauncher.Side;
@@ -38,11 +39,8 @@ public class GuiComputer extends GuiScreen
 	private GuiButton serverButton;
 	
 	private ArrayList<GuiButton> selButtons = new ArrayList<GuiButton>();
-	private ArrayList<String> clientContent;
-	private ArrayList<String> serverContent;
 	private ArrayList<String> currentList;
 	private String displayName;
-	public int programSelected = -1;	//0 if client is selected, 1 if server.
 
 	public Minecraft mc;
 	private TileEntityComputer te;
@@ -56,15 +54,13 @@ public class GuiComputer extends GuiScreen
 		this.fontRenderer = mc.fontRenderer;
 		this.te = te;
 		te.gui = this;
-		clientContent = new ArrayList<String>();
-		serverContent = new ArrayList<String>();
 		currentList = new ArrayList<String>();
 	}
 	
 	@Override
 	public void drawScreen(int xcor, int ycor, float par3) 
 	{
-
+		
 		this.drawDefaultBackground();
 		
 		
@@ -109,14 +105,12 @@ public class GuiComputer extends GuiScreen
 		buttonList.add(upButton);
 		downButton = new GuiButton(-1, (width - xSize) / 2 +140, (height - ySize) / 2 +132, 20, 20,"v");
 		buttonList.add(downButton);
-		System.out.println("Init gui: Client active:"+te.hasClient+" Server active:"+te.hasServer);
-		if(te.hasClient){
-			programSelected = 0;
-			currentList = clientContent;
-		}
-		else if(te.hasServer){
-			programSelected = 1;
-		}
+		if(te.programSelected == -1)
+			if(te.hasClient)
+				te.programSelected = 0;
+			else if(te.hasServer)
+				te.programSelected = 1;
+		
 		updateGui();
 	}
 
@@ -130,50 +124,49 @@ public class GuiComputer extends GuiScreen
 		displayName = "";
 		//Debug.print("Conn'd to "+te.connectedTo);
 		String[] parts;
-		if(programSelected == 0)
+		if(te.programSelected == 0)
 			parts = te.connectedClient.split("\0");
-		else if(programSelected == 1)
+		else if(te.programSelected == 1)
 			parts = te.connectedServer.split("\0");
 		else parts = new String[0];
 		for (String part : parts) {
 			displayName += part;
 		}
 		
-		clientContent.clear();
-		serverContent.clear();
+		currentList.clear();
 		
-		if(te.hasClient){
+		if(te.programSelected == 0){
 			if (!te.connectedServer.equals("")) {
-				clientContent.add("Connected to "+displayName+".");
+				currentList.add("Connected to "+displayName);
 			} else {
-				clientContent.add("Select a server below.");
+				currentList.add("Select a server below");
 		    	
 		    	int i = 0;
 		    	for (Object server : SburbConnection.getServersOpen()) {
 		    		if (!(i < selButtons.size() && selButtons.get(i) != null))
 		    			downButton.enabled = true;
-		    		setButtonString(i, (String)server, clientContent);
+		    		setButtonString(i, (String)server);
 		    		i++;
 		    	}
 			}
 		}
-		if(te.hasServer){
+		else if(te.programSelected == 1){
 			if (!te.connectedClient.equals("")) {
-					serverContent.add("Connected to "+displayName+".");
-					if(!te.givenItems)
-						setButtonString(0, "Give items.",serverContent);
+				currentList.add("Connected to "+displayName);
+				if(!te.givenItems)
+					setButtonString(0, "Give items");
 			} else if (te.openToClients && te.connectedClient.equals("")) {
-					serverContent.add("Waiting for client...");
+					currentList.add("Waiting for client...");
 			} else {
-				serverContent.add("Server offline.");
-			
-				setButtonString(0,"Open to clients.",serverContent);
+				currentList.add("Server offline");
+				
+				setButtonString(0,"Open to clients");
 		    	}
 			}
     	
     	for (int i = 0; i < selButtons.size(); i++) {
     		GuiButton button = selButtons.get(i);
-    		String s = getButtonString(i+1);
+    		String s = getButtonString(i);
     		button.enabled = !s.equals("");
 			button.displayString = s;
 		}
@@ -199,22 +192,20 @@ public class GuiComputer extends GuiScreen
 	 * @param s The new string.
 	 * @param list The list that <code>s</code> is added to.
 	 */
-	protected void setButtonString(int index, String s, ArrayList<String> list){
+	protected void setButtonString(int index, String s){
 		if(index+1 < 0)
 			return;
-		while(index+1 >= list.size())
-			list.add("");
-		list.set(index+1, s);
+		while(index+1 >= currentList.size())
+			currentList.add("");
+		currentList.set(index+1, s);
 	}
 	
 	protected void actionPerformed(GuiButton guibutton) {
-		if(guibutton.equals(serverButton)){
-			programSelected = 1;
-			currentList = serverContent;
-		} else if(guibutton.equals(clientButton)){
-			programSelected = 0;
-			currentList = clientContent;
-		} else if(programSelected == 0){
+		if(guibutton.equals(serverButton))
+			te.programSelected = 1;
+		else if(guibutton.equals(clientButton))
+			te.programSelected = 0;
+		else if(te.programSelected == 0){
 			if (guibutton == upButton) {
 				
 			} else if (guibutton == downButton) {
@@ -225,18 +216,16 @@ public class GuiComputer extends GuiScreen
 				
 				te.updateConnection();
 			}
-		} else if(programSelected == 1){
-			if (!te.connectedClient.equals("") && !te.givenItems) {
+		} else if(te.programSelected == 1){
+			if (guibutton.displayString.equals("Give items")) {
 				Packet250CustomPayload packet = new Packet250CustomPayload();
 				packet.channel = "Minestuck";
 				packet.data = MinestuckPacket.makePacket(Type.SBURB_GIVE,te.xCoord,te.yCoord,te.zCoord,te.connectedClient);
 				packet.length = packet.data.length;
 				this.mc.getNetHandler().addToSendQueue(packet);
 				te.givenItems = true;
-				te.updateConnection();
-			} else {
-				te.updateConnection();
 			}
+			te.updateConnection();
 		}
 		updateGui();
 	}
