@@ -80,6 +80,7 @@ public class GuiGristCache extends GuiScreen
 		fontRenderer.drawString(cacheMessage, (this.width / 2) - fontRenderer.getStringWidth(cacheMessage) / 2, yOffset + 12, 0x404040);
 		fontRenderer.drawString(titleMessage, (this.width / 2) - fontRenderer.getStringWidth(titleMessage) / 2, yOffset + 22, 0x404040);
 
+		GL11.glColor3f(1,1,1);
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		RenderHelper.disableStandardItemLighting();
 		GL11.glDisable(GL11.GL_LIGHTING);
