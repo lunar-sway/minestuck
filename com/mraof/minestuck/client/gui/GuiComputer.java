@@ -133,9 +133,9 @@ public class GuiComputer extends GuiScreen
 		//Debug.print("Conn'd to "+te.connectedTo);
 		String[] parts;
 		if(te.programSelected == 0)
-			parts = te.connectedClient.split("\0");
-		else if(te.programSelected == 1)
 			parts = te.connectedServer.split("\0");
+		else if(te.programSelected == 1)
+			parts = te.connectedClient.split("\0");
 		else parts = new String[0];
 		for (String part : parts) {
 			displayName += part;
