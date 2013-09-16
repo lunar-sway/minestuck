@@ -54,7 +54,7 @@ public class ItemDisk extends Item {
 	}
 	
 	@Override
-	public boolean onItemUseFirst(ItemStack item, EntityPlayer player, World world, int x, int y, int z, int side, float par8, float par9, float par10) {
+	public boolean onItemUse(ItemStack item, EntityPlayer player, World world, int x, int y, int z, int side, float par8, float par9, float par10) {
 		if(!world.isRemote){
 			if (world.getBlockId(x,y,z) == Minestuck.blockComputerOff.blockID) {
 				int meta = world.getBlockMetadata(x,y,z);
@@ -72,6 +72,7 @@ public class ItemDisk extends Item {
 				else if(te.hasServer)
 					return false;
 				else te.hasServer = true;
+				world.markBlockForUpdate(x, y, z);
 				Debug.print("Installed program with id "+item.getItemDamage());
 				
 				player.destroyCurrentEquippedItem();

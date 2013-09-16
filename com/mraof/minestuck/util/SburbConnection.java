@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 public class SburbConnection {
 
-	private static ArrayList serversOpen = new ArrayList();
+	private static ArrayList<String> serversOpen = new ArrayList<String>();
 	private static ArrayList<IConnectionListener> listeners = new ArrayList<IConnectionListener>();
 
-	public static ArrayList getServersOpen() {
+	public static ArrayList<String> getServersOpen() {
 		return serversOpen;
 	}
 	

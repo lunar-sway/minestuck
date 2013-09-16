@@ -39,9 +39,8 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 	@Override
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
 		super.readFromNBT(par1NBTTagCompound);
-		int program = par1NBTTagCompound.getInteger("program");
-		hasClient =  (program & 1 << 0) != 0;
-		hasServer =  (program & 1 << 1) != 0;
+		this.hasClient = par1NBTTagCompound.getBoolean("hasClient");
+		this.hasServer = par1NBTTagCompound.getBoolean("hasServer");
 		this.connectedClient = par1NBTTagCompound.getString("client");
     	 this.connectedServer = par1NBTTagCompound.getString("server");
     	 this.owner = par1NBTTagCompound.getString("owner");
@@ -51,7 +50,8 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
     @Override
     public void writeToNBT(NBTTagCompound par1NBTTagCompound) {
     	super.writeToNBT(par1NBTTagCompound);
-    	par1NBTTagCompound.setInteger("program",(hasClient ? 2 : 0) + (hasServer ? 1 : 0));
+    	par1NBTTagCompound.setBoolean("hasClient",this.hasClient);
+    	par1NBTTagCompound.setBoolean("hasServer",this.hasServer);
     	par1NBTTagCompound.setBoolean("givenItems",this.givenItems);
     	if (!this.connectedClient.equals("")) {
     		par1NBTTagCompound.setString("client",this.connectedClient);
@@ -124,7 +124,7 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 				if (gui != null) {
 					gui.updateGui();
 				}
-		} else if (owner == client && hasClient) {
+		} else if (owner == client && hasClient && this.connectedServer.isEmpty()) {
 			this.connectedServer = server;
 		}
 	}

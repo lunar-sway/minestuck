@@ -43,7 +43,7 @@ public class GuiComputer extends GuiScreen
 	
 	private ArrayList<GuiButton> selButtons = new ArrayList<GuiButton>();
 	private ArrayList<String> currentList;
-	private String displayName;
+	private String displayText;
 	private String displayMessage = "";
 
 	public Minecraft mc;
@@ -129,7 +129,7 @@ public class GuiComputer extends GuiScreen
     	clientButton.enabled = te.hasClient;
     	serverButton.enabled = te.hasServer;
 		
-		displayName = "";
+		displayText = "";
 		//Debug.print("Conn'd to "+te.connectedTo);
 		String[] parts;
 		if(te.programSelected == 0)
@@ -138,21 +138,21 @@ public class GuiComputer extends GuiScreen
 			parts = te.connectedClient.split("\0");
 		else parts = new String[0];
 		for (String part : parts) {
-			displayName += part;
+			displayText += part;
 		}
 		
 		currentList.clear();
 		
 		if(te.programSelected == 0){
-			if (!te.connectedServer.equals("")) {
-				displayMessage = "Connected to "+displayName;
+			if (!te.connectedServer.isEmpty()) {
+				displayMessage = "Connected to "+displayText;
 			} else {
 				displayMessage = "Select a server below";
-		    	
+		    	System.out.println("Serverlist display, size: "+SburbConnection.getServersOpen().size());
 		    	int i = 1;
-		    	for (Object server : SburbConnection.getServersOpen()) {
-		    		if (!(i < selButtons.size() && selButtons.get(i) != null)){
-		    			setButtonString(i, (String)server);
+		    	for (String server : SburbConnection.getServersOpen()) {
+		    		if (i < selButtons.size() && selButtons.get(i) != null){
+		    			setButtonString(i, server);
 		    			i++;
 		    		}
 		    	}
@@ -161,10 +161,10 @@ public class GuiComputer extends GuiScreen
 		}
 		else if(te.programSelected == 1){
 			if (!te.connectedClient.equals("")) {
-				displayMessage = "Connected to "+displayName;
+				displayMessage = "Connected to "+displayText;
 				if(!te.givenItems)
 					setButtonString(0, "Give items");
-			} else if (te.openToClients && te.connectedClient.equals("")) {
+			} else if (te.openToClients && te.connectedClient.isEmpty()) {
 				displayMessage = "Waiting for client...";
 			} else if(SburbConnection.getServersOpen().contains(te.owner))
 				displayMessage = "Server with your name exists";
@@ -174,7 +174,7 @@ public class GuiComputer extends GuiScreen
 				setButtonString(0,"Open to clients");
 		    	}
 			}
-    	
+    	displayText = te.owner;
     	for (int i = 0; i < selButtons.size(); i++) {
     		GuiButton button = selButtons.get(i);
     		String s = getButtonString(i);
@@ -222,6 +222,8 @@ public class GuiComputer extends GuiScreen
 				
 			} else if(guibutton.displayString.equals("View Gristcache")){
 				player.openGui(Minestuck.instance, 2, world, te.xCoord, te.yCoord, te.zCoord);
+			} else if(guibutton.displayString.equals("Resume main connection")){
+				//Nothing here yet
 			} else {
 				te.connectedServer = guibutton.displayString;
 				
@@ -235,6 +237,8 @@ public class GuiComputer extends GuiScreen
 				packet.length = packet.data.length;
 				this.mc.getNetHandler().addToSendQueue(packet);
 				te.givenItems = true;
+			} else if(guibutton.displayString.equals("Resume main connection")){
+				//Nothing here yet
 			}
 				
 			te.updateConnection();
