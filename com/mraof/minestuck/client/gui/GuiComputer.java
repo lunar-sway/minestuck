@@ -43,8 +43,9 @@ public class GuiComputer extends GuiScreen
 	
 	private ArrayList<GuiButton> selButtons = new ArrayList<GuiButton>();
 	private ArrayList<String> currentList;
-	private String displayText;
+	private String displayPlayer;
 	private String displayMessage = "";
+	private int index = 0;
 
 	public Minecraft mc;
 	public EntityPlayer player;
@@ -77,10 +78,11 @@ public class GuiComputer extends GuiScreen
 		
 		int yOffset = (this.height / 2) - (ySize / 2);
 		this.drawTexturedModalRect((this.width / 2) - (xSize / 2), yOffset, 0, 0, xSize, ySize);
-		if(te.programSelected == -1){
-			fontRenderer.drawString("Insert disk.", (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
-		} else fontRenderer.drawString(displayMessage, (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
-		
+		if(te.latestmessage.isEmpty())
+			if(te.programSelected == -1){
+				fontRenderer.drawString("Insert disk.", (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
+			} else fontRenderer.drawString(displayMessage, (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
+		else fontRenderer.drawString(te.latestmessage, (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		RenderHelper.disableStandardItemLighting();
 		GL11.glDisable(GL11.GL_LIGHTING);
@@ -124,44 +126,34 @@ public class GuiComputer extends GuiScreen
 
 	public void updateGui() {
 		
-    	upButton.enabled = false;
-    	downButton.enabled = false;
     	clientButton.enabled = te.hasClient;
     	serverButton.enabled = te.hasServer;
 		
-		displayText = "";
 		//Debug.print("Conn'd to "+te.connectedTo);
-		String[] parts;
 		if(te.programSelected == 0)
-			parts = te.connectedServer.split("\0");
+			displayPlayer = te.connectedServer;
 		else if(te.programSelected == 1)
-			parts = te.connectedClient.split("\0");
-		else parts = new String[0];
-		for (String part : parts) {
-			displayText += part;
-		}
+			displayPlayer = te.connectedClient;
+		else displayPlayer = "ERROR";
 		
 		currentList.clear();
 		
 		if(te.programSelected == 0){
 			if (!te.connectedServer.isEmpty()) {
-				displayMessage = "Connected to "+displayText;
+				displayMessage = "Connected to "+displayPlayer;
 			} else {
 				displayMessage = "Select a server below";
-		    	System.out.println("Serverlist display, size: "+SburbConnection.getServersOpen().size());
 		    	int i = 1;
 		    	for (String server : SburbConnection.getServersOpen()) {
-		    		if (i < selButtons.size() && selButtons.get(i) != null){
-		    			setButtonString(i, server);
-		    			i++;
-		    		}
+		    		setButtonString(i, server);
+		    		i++;
 		    	}
 			}
 			setButtonString(0, "View Gristcache");
 		}
 		else if(te.programSelected == 1){
 			if (!te.connectedClient.equals("")) {
-				displayMessage = "Connected to "+displayText;
+				displayMessage = "Connected to "+displayPlayer;
 				if(!te.givenItems)
 					setButtonString(0, "Give items");
 			} else if (te.openToClients && te.connectedClient.isEmpty()) {
@@ -174,10 +166,11 @@ public class GuiComputer extends GuiScreen
 				setButtonString(0,"Open to clients");
 		    	}
 			}
-    	displayText = te.owner;
+    	upButton.enabled = index > 0;
+    	downButton.enabled = 4+index < currentList.size();
     	for (int i = 0; i < selButtons.size(); i++) {
     		GuiButton button = selButtons.get(i);
-    		String s = getButtonString(i);
+    		String s = getButtonString(i+index);
     		button.enabled = !s.equals("");
 			button.displayString = s;
 		}
@@ -211,37 +204,31 @@ public class GuiComputer extends GuiScreen
 	}
 	
 	protected void actionPerformed(GuiButton guibutton) {
+		te.latestmessage = "";
 		if(guibutton.equals(serverButton))
 			te.programSelected = 1;
 		else if(guibutton.equals(clientButton))
 			te.programSelected = 0;
 		else if(te.programSelected == 0){
 			if (guibutton == upButton) {
-				
+				index--;
 			} else if (guibutton == downButton) {
-				
+				index++;
 			} else if(guibutton.displayString.equals("View Gristcache")){
 				player.openGui(Minestuck.instance, 2, world, te.xCoord, te.yCoord, te.zCoord);
 			} else if(guibutton.displayString.equals("Resume main connection")){
 				//Nothing here yet
-			} else {
-				te.connectedServer = guibutton.displayString;
-				
-				te.updateConnection();
+			} else{
+				te.connectToServer(guibutton.displayString);
 			}
 		} else if(te.programSelected == 1){
 			if(guibutton.displayString.equals("Give items")){
-				Packet250CustomPayload packet = new Packet250CustomPayload();
-				packet.channel = "Minestuck";
-				packet.data = MinestuckPacket.makePacket(Type.SBURB_GIVE,te.xCoord,te.yCoord,te.zCoord,te.connectedClient);
-				packet.length = packet.data.length;
-				this.mc.getNetHandler().addToSendQueue(packet);
-				te.givenItems = true;
+				te.giveItems();
 			} else if(guibutton.displayString.equals("Resume main connection")){
 				//Nothing here yet
+			} else if(guibutton.displayString.equals("Open to clients")){
+				te.openServer();
 			}
-				
-			te.updateConnection();
 		}
 		updateGui();
 	}

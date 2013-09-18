@@ -19,10 +19,7 @@ import cpw.mods.fml.common.network.Player;
 
 public class SburbGiveItemsPacket extends MinestuckPacket {
 
-	public String connectedTo;
-	public int xCoord;
-	public int yCoord;
-	public int zCoord;
+	public String client;
 	public int gristTotal;
 	public SburbGiveItemsPacket() 
 	{
@@ -30,14 +27,8 @@ public class SburbGiveItemsPacket extends MinestuckPacket {
 	}
 
 	@Override
-	public byte[] generatePacket(Object... data) 
-	{
-		ByteArrayDataOutput dat = ByteStreams.newDataOutput();
-		dat.writeInt((Integer)data[0]);
-		dat.writeInt((Integer)data[1]);
-		dat.writeInt((Integer)data[2]);
-		dat.writeChars((String) data[3]);
-		return dat.toByteArray();
+	public byte[] generatePacket(Object... data) {
+		return data[0].toString().getBytes();
 	}
 
 	@Override
@@ -45,41 +36,24 @@ public class SburbGiveItemsPacket extends MinestuckPacket {
 	{
 		ByteArrayDataInput dat = ByteStreams.newDataInput(data);
 		
-		xCoord = dat.readInt();
-		yCoord = dat.readInt();
-		zCoord = dat.readInt();
-		connectedTo = dat.readLine();
+		client = dat.readLine();
 		
 		return this;
 	}
 
 	@Override
-	public void execute(INetworkManager network, MinestuckPacketHandler handler, Player player, String userName)
-	{
-		TileEntityComputer te = (TileEntityComputer)Minecraft.getMinecraft().theWorld.getBlockTileEntity(xCoord,yCoord,zCoord);
-				
-		if (te == null) {
-			Debug.print("Packet recieved, but TE isn't there!");
-			return;
-		}
-		
-		String sendTo = "";
-		//Debug.print("Conn'd to "+te.connectedTo);
-		String[] parts = te.connectedClient.split("\0");
-		for (String part : parts) {
-			sendTo += part;
-		}
+	public void execute(INetworkManager network, MinestuckPacketHandler handler, Player player, String userName) {
 		
 		InventoryPlayer items = null;
 		for (Object obj : MinecraftServer.getServer().getConfigurationManager().playerEntityList) {
-			if (((EntityPlayer)obj).username.equals(sendTo)) {
+			if (((EntityPlayer)obj).username.equals(client)) {
 				items = ((EntityPlayer)obj).inventory;
 			} else {
 				Debug.print("Not it: "+((EntityPlayer)obj).username);
 			}
 		}
 		if (items == null) {
-			Debug.print("Client player not found: " + sendTo);
+			Debug.print("Client player not found: " + client);
 			return;
 		}
 			
@@ -93,7 +67,6 @@ public class SburbGiveItemsPacket extends MinestuckPacket {
 		card.getTagCompound().setInteger("contentID",Minestuck.cruxiteArtifact.itemID);
 		card.getTagCompound().setInteger("contentMeta",0);
 		items.addItemStackToInventory(card);
-		te.givenItems = true;
 		
 		Debug.print("Packet recieved. Items given!");
 	}

@@ -155,6 +155,7 @@ public class BlockComputerOn extends Block implements ITileEntityProvider {
 			if (te == null) {
 				return;
 			}
+			te.closeConnection(true,true);
 			float factor = 0.05F;
 			if(te.hasClient) {
 				float rx = rand.nextFloat() * 0.8F + 0.1F;

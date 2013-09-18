@@ -6,4 +6,6 @@ public interface IConnectionListener {
 	
 	public abstract void onServerOpen(String server);
 	
+	public abstract void onConnectionClosed(String server, String client);
+	
 }

@@ -32,12 +32,24 @@ public class SburbConnection {
 			serversOpen.remove(server);
 			
 			for (Object listener : listeners) {
-				((IConnectionListener)listener).onConnected(server,client);
+				((IConnectionListener)listener).onConnected(client,server);
 			}
 		}
 	}
 	
+	public static void connectionClosed(String client, String server){
+		if(client.isEmpty())
+			serversOpen.remove(server);
+		for(IConnectionListener listener : listeners)
+			listener.onConnectionClosed(client, server);
+	}
+	
 	public static void addListener(IConnectionListener listener) {
-		listeners.add(listener);
+		if(!listeners.contains(listener))
+			listeners.add(listener);
+	}
+	
+	public static void removeListener(IConnectionListener listener){
+		listeners.remove(listener);
 	}
 }
