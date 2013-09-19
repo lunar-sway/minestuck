@@ -204,7 +204,6 @@ public class GuiComputer extends GuiScreen
 	}
 	
 	protected void actionPerformed(GuiButton guibutton) {
-		te.latestmessage = "";
 		if(guibutton.equals(serverButton))
 			te.programSelected = 1;
 		else if(guibutton.equals(clientButton))
@@ -231,5 +230,6 @@ public class GuiComputer extends GuiScreen
 			}
 		}
 		updateGui();
+		te.latestmessage = "";
 	}
 }

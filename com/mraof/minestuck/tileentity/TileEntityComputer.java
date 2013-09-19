@@ -30,10 +30,10 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 	public GuiComputer gui;
 	public String owner = "";
 	public String latestmessage = "";
-	private Minecraft mc = Minecraft.getMinecraft();public int id;
+	private Minecraft mc = Minecraft.getMinecraft();
 	public int programSelected = -1;	//0 if client is selected, 1 if server.
 	
-    public TileEntityComputer() {id = new Random().nextInt(100);
+    public TileEntityComputer() {
             SburbConnection.addListener(this);
             if (Minecraft.getMinecraft().thePlayer != null) {
             	owner = Minecraft.getMinecraft().thePlayer.username;
@@ -50,6 +50,8 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
     	 this.connectedServer = par1NBTTagCompound.getString("server");
     	 this.owner = par1NBTTagCompound.getString("owner");
     	 this.givenItems = par1NBTTagCompound.getBoolean("givenItems");
+    	 if(gui != null)
+    		 gui.updateGui();
     }
     
     @Override
@@ -70,7 +72,7 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
     	}
 
     }
-//    public void updateEntity(){if(hasServer)Debug.print(openToClients+","+id+","+worldObj.isRemote);}
+    
     @Override
     public Packet getDescriptionPacket() 
     {
@@ -88,9 +90,10 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
     
 	public void openServer(){
 		if(hasServer && !openToClients && connectedClient.isEmpty()){
+			openToClients = true;
 			Packet250CustomPayload packet = new Packet250CustomPayload();
 			packet.channel = "Minestuck";
-			packet.data = MinestuckPacket.makePacket(Type.SBURB_OPEN,xCoord,yCoord,zCoord);
+			packet.data = MinestuckPacket.makePacket(Type.SBURB_OPEN,owner,xCoord,yCoord,zCoord,worldObj.provider.dimensionId);
 			packet.length = packet.data.length;
 			mc.getNetHandler().addToSendQueue(packet);
 		}
@@ -98,11 +101,9 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 	
 	public void connectToServer(String server){
 		if(hasClient && connectedServer.isEmpty()){
-			connectedServer = server;
-			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			Packet250CustomPayload packet = new Packet250CustomPayload();
 			packet.channel = "Minestuck";
-			packet.data = MinestuckPacket.makePacket(Type.SBURB_CONNECT,owner,connectedServer);
+			packet.data = MinestuckPacket.makePacket(Type.SBURB_CONNECT,owner,xCoord,yCoord,zCoord,worldObj.provider.dimensionId,server);
 			packet.length = packet.data.length;
 			mc.getNetHandler().addToSendQueue(packet);
 		}
@@ -121,11 +122,11 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 	}
 	
 	public void closeConnection(boolean client, boolean server) {
-		if((server || client) && !worldObj.isRemote){Debug.print(connectedServer);
+		if((server || client) && !worldObj.isRemote){
 		if(server && client)
 			SburbConnection.removeListener(this);
 			if(this.hasClient && !connectedServer.isEmpty() && client){
-				SburbConnection.connectionClosed(this.connectedServer, this.owner);
+				SburbConnection.connectionClosed(this.owner, this.connectedServer);
 				Packet250CustomPayload packet = new Packet250CustomPayload();
 				packet.channel = "Minestuck";
 				packet.data = MinestuckPacket.makePacket(Type.SBURB_CLOSE,owner,connectedServer);
@@ -133,7 +134,7 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 				PacketDispatcher.sendPacketToAllPlayers(packet);
 			}
 			if(this.hasServer && server && (openToClients || !connectedClient.isEmpty())){
-				SburbConnection.connectionClosed(this.owner, this.connectedClient);
+				SburbConnection.connectionClosed(this.connectedClient, this.owner);
 				Packet250CustomPayload packet = new Packet250CustomPayload();
 				packet.channel = "Minestuck";
 				packet.data = MinestuckPacket.makePacket(Type.SBURB_CLOSE,connectedClient,owner);
@@ -159,13 +160,13 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 	
 	@Override
 	public void onConnected(String client, String server) {
-		if(!worldObj.isRemote){Debug.print("onConnected called:"+worldObj.isRemote+","+id+","+owner+","+client+","+server+","+","+hasClient+","+hasServer+","+openToClients+","+owner.equals(server) + hasServer + openToClients);
+		if(!worldObj.isRemote){
 		if (owner.equals(server) && hasServer && openToClients) {
-				this.connectedClient = client;Debug.print("client connected:"+connectedClient);
+				this.connectedClient = client;
 				openToClients = false;
 				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		} else if (owner.equals(client) && hasClient && this.connectedServer.isEmpty()) {
-			this.connectedServer = server;Debug.print("connected to server:"+connectedServer);
+			this.connectedServer = server;
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
 		if (gui != null)

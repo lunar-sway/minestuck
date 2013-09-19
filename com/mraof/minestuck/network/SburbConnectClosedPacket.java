@@ -8,7 +8,6 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.SburbConnection;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
