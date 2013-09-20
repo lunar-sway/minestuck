@@ -20,7 +20,6 @@ public class DecoratorVein implements ILandDecorator {
 		 //vien = new WorldGenMinable(blockId,0, size,Block.stone.blockID);
 		 this.amount = amount;
 		 this.id = blockId;
-		 this.amount = amount;
 		 this.size = size;
 	 }
 	 

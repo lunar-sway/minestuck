@@ -22,15 +22,19 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.Event.Result;
 import net.minecraftforge.event.terraingen.ChunkProviderEvent;
 
+import com.mraof.minestuck.entity.consort.EntityIguana;
 import com.mraof.minestuck.entity.consort.EntityNakagator;
 import com.mraof.minestuck.entity.consort.EntitySalamander;
 import com.mraof.minestuck.entity.underling.EntityBasilisk;
 import com.mraof.minestuck.entity.underling.EntityGiclops;
 import com.mraof.minestuck.entity.underling.EntityImp;
 import com.mraof.minestuck.entity.underling.EntityOgre;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.lands.ILandDecorator;
 import com.mraof.minestuck.world.gen.lands.LandAspect;
 import com.mraof.minestuck.world.gen.lands.LandHelper;
+
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ChunkProviderLands implements IChunkProvider 
 {
@@ -82,7 +86,7 @@ public class ChunkProviderLands implements IChunkProvider
 		this.underlingList = new ArrayList();
 		this.consortList.add(new SpawnListEntry(EntityNakagator.class, 2, 1, 10));
 		this.consortList.add(new SpawnListEntry(EntitySalamander.class, 2, 1, 10));
-		this.consortList.add(new SpawnListEntry(EntitySnowman.class, 2, 1, 10));
+		this.consortList.add(new SpawnListEntry(EntityIguana.class, 2, 1, 10));
 		this.underlingList.add(new SpawnListEntry(EntityImp.class, 6, 1, 10));
 		this.underlingList.add(new SpawnListEntry(EntityOgre.class, 4, 1, 2));
 		this.underlingList.add(new SpawnListEntry(EntityBasilisk.class, 3, 1, 2));
@@ -171,9 +175,22 @@ public class ChunkProviderLands implements IChunkProvider
 
 	@Override
 	public void populate(IChunkProvider ichunkprovider, int i, int j) {
-		for (Object decorator : decorators) {
-			((ILandDecorator) decorator).generate(landWorld, random, i,  j, this);
-		}
+		
+	     Chunk chunk = this.provideChunk(i, j);
+	        if (!chunk.isTerrainPopulated)
+	        {
+	        	Debug.print("Populating! We have "+decorators.size()+" decorators");
+	            chunk.isTerrainPopulated = true;
+
+	            if (ichunkprovider != null)
+	            {
+	            	ichunkprovider.populate(ichunkprovider, i, j);
+	            	for (Object decorator : decorators) {
+	        			((ILandDecorator) decorator).generate(landWorld, random, i,  j, this);
+	        		}
+	                chunk.setChunkModified();
+	            }
+	        }
 	}
 
 	@Override
