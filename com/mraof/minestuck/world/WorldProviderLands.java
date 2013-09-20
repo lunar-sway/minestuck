@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world;
 
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.WorldChunkManagerHell;
@@ -29,6 +30,7 @@ public class WorldProviderLands extends WorldProvider
 		}
 		return provider;
 	}
+	
 	@Override
 	public boolean isDaytime() {
 	   	if (provider != null) {
@@ -46,12 +48,16 @@ public class WorldProviderLands extends WorldProvider
     		return this.isDaytime();
     	}
 	}
+	
+	@Override
 	public void registerWorldChunkManager()
     {
 		super.registerWorldChunkManager();
 		isHellWorld = false;
         this.worldChunkMgr = new WorldChunkManagerHell(BiomeGenBase.plains, 0.5F, 0.5F);
     }
+	
+	@Override
     public float calculateCelestialAngle(long par1, float par3)
     {
     	if (provider != null) {
@@ -70,9 +76,16 @@ public class WorldProviderLands extends WorldProvider
     		return this.calculateCelestialAngle(par1,par3);
     	}
     }
+    
+    @Override
     public boolean isSurfaceWorld()
     {
         return true;
     }
-
+    
+    @Override
+    public int getRespawnDimension(EntityPlayerMP player)
+    {
+        return this.dimensionId;
+    }
 }

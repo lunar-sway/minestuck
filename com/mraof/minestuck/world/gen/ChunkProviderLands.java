@@ -179,7 +179,7 @@ public class ChunkProviderLands implements IChunkProvider
 	     Chunk chunk = this.provideChunk(i, j);
 	        if (!chunk.isTerrainPopulated)
 	        {
-	        	Debug.print("Populating! We have "+decorators.size()+" decorators");
+	        	//Debug.print("Populating! We have "+decorators.size()+" decorators");
 	            chunk.isTerrainPopulated = true;
 
 	            if (ichunkprovider != null)
