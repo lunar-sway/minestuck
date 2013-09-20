@@ -80,6 +80,7 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	{
 		boolean flag = this.attackEntityFrom(source, damage);
 		//Debug.printf("Damage from %s, source is %s, amount of damage is %f, success is %b, isRemote is %b", entityPart, source, damage, flag, this.worldObj.isRemote);
+
 		return flag;
 	}
 	@Override

@@ -8,6 +8,7 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.monster.EntitySnowman;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IProgressUpdate;
@@ -17,13 +18,16 @@ import net.minecraft.world.biome.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.Event.Result;
+import net.minecraftforge.event.terraingen.ChunkProviderEvent;
 
 import com.mraof.minestuck.entity.consort.EntityNakagator;
+import com.mraof.minestuck.entity.consort.EntitySalamander;
 import com.mraof.minestuck.entity.underling.EntityBasilisk;
 import com.mraof.minestuck.entity.underling.EntityGiclops;
 import com.mraof.minestuck.entity.underling.EntityImp;
 import com.mraof.minestuck.entity.underling.EntityOgre;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.lands.ILandDecorator;
 import com.mraof.minestuck.world.gen.lands.LandAspect;
 import com.mraof.minestuck.world.gen.lands.LandHelper;
@@ -77,8 +81,11 @@ public class ChunkProviderLands implements IChunkProvider
 		this.consortList = new ArrayList();
 		this.underlingList = new ArrayList();
 		this.consortList.add(new SpawnListEntry(EntityNakagator.class, 2, 1, 10));
-		this.underlingList.add(new SpawnListEntry(EntityImp.class, 5, 1, 10));
-		this.underlingList.add(new SpawnListEntry(EntityOgre.class, 3, 1, 2));
+		this.consortList.add(new SpawnListEntry(EntitySalamander.class, 2, 1, 10));
+		this.consortList.add(new SpawnListEntry(EntitySnowman.class, 2, 1, 10));
+		this.underlingList.add(new SpawnListEntry(EntityImp.class, 6, 1, 10));
+		this.underlingList.add(new SpawnListEntry(EntityOgre.class, 4, 1, 2));
+		this.underlingList.add(new SpawnListEntry(EntityBasilisk.class, 3, 1, 2));
 		this.underlingList.add(new SpawnListEntry(EntityGiclops.class, 1, 1, 1));
 		this.underlingList.add(new SpawnListEntry(EntityBasilisk.class, 1, 1, 1));
 		this.noiseGens[0] = new NoiseGeneratorOctaves(this.random, 7);
@@ -136,14 +143,26 @@ public class ChunkProviderLands implements IChunkProvider
 				//currentBlockOffset = (int) Math.abs(generated1[x + z * 256 + y * 16]) % surfaceBlock[0].length;
 				chunkIds[x + z * 16 + y * 256] = (short) surfaceBlock[0];
 				chunkMetadata[x + z * 16 + y * 256] = (byte) surfaceBlock[1];
-				for(; y < 63; y++)
+				for(y++; y < 63; y++)
 					chunkIds[x + z * 16 + y * 256] = (short) this.oceanBlock;
 					
 			}
 		Chunk chunk = new Chunk(this.landWorld, chunkIds, chunkMetadata, chunkX, chunkZ);
 		return chunk;
 	}
+	private double[] initializeNoiseField(double[] par1ArrayOfDouble, int par2, int par3, int par4, int par5, int par6, int par7)
+    {
+        ChunkProviderEvent.InitNoiseField event = new ChunkProviderEvent.InitNoiseField(this, par1ArrayOfDouble, par2, par3, par4, par5, par6, par7);
+        MinecraftForge.EVENT_BUS.post(event);
+        if (event.getResult() == Result.DENY) return event.noisefield;
 
+        if (par1ArrayOfDouble == null)
+        {
+            par1ArrayOfDouble = new double[par5 * par6 * par7];
+        }
+
+        return par1ArrayOfDouble;
+    }
 	@Override
 	public Chunk loadChunk(int chunkX, int chunkZ) 
 	{

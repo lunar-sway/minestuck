@@ -10,6 +10,7 @@ import com.mraof.minestuck.client.gui.GuiGristCache;
 import com.mraof.minestuck.client.model.ModelBasilisk;
 import com.mraof.minestuck.client.model.ModelBishop;
 import com.mraof.minestuck.client.model.ModelGiclops;
+import com.mraof.minestuck.client.model.ModelIguana;
 import com.mraof.minestuck.client.model.ModelImp;
 import com.mraof.minestuck.client.model.ModelNakagator;
 import com.mraof.minestuck.client.model.ModelOgre;
@@ -23,6 +24,7 @@ import com.mraof.minestuck.client.renderer.tileentity.TileEntityMachineRenderer;
 import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
 import com.mraof.minestuck.entity.carapacian.EntityBishop;
 import com.mraof.minestuck.entity.carapacian.EntityPawn;
+import com.mraof.minestuck.entity.consort.EntityIguana;
 import com.mraof.minestuck.entity.consort.EntityNakagator;
 import com.mraof.minestuck.entity.consort.EntitySalamander;
 import com.mraof.minestuck.entity.item.EntityGrist;
@@ -47,6 +49,7 @@ public class ClientProxy extends CommonProxy
 	{
             RenderingRegistry.registerEntityRenderingHandler(EntityNakagator.class, new RenderEntityMinestuck(new ModelNakagator(), 0.5F));
             RenderingRegistry.registerEntityRenderingHandler(EntitySalamander.class, new RenderEntityMinestuck(new ModelSalamander(), 0.5F));
+            RenderingRegistry.registerEntityRenderingHandler(EntityIguana.class, new RenderEntityMinestuck(new ModelIguana(), 0.5F));
             RenderingRegistry.registerEntityRenderingHandler(EntityImp.class, new RenderEntityMinestuck(new ModelImp(), 0.5F));
             RenderingRegistry.registerEntityRenderingHandler(EntityOgre.class, new RenderEntityMinestuck(new ModelOgre(), 2.8F));
             RenderingRegistry.registerEntityRenderingHandler(EntityBasilisk.class, new RenderEntityMinestuck(new ModelBasilisk(), 2.8F));
