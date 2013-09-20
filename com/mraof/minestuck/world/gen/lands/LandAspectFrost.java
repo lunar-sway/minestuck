@@ -51,8 +51,7 @@ public class LandAspectFrost extends LandAspect
 
 	@Override
 	public int getDayCycleMode() {
-		//return (new Random()).nextInt(3); //Random cycle between 0 and 2
-		return 0;
+		return (new Random()).nextInt(3); //Random cycle between 0 and 2
 	}
 
 }
