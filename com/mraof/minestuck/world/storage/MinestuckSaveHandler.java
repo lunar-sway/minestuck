@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mraof.minestuck.util.SburbConnection;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.WorldEvent;
@@ -33,6 +35,7 @@ public class MinestuckSaveHandler
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			SburbConnection.saveData(event.world.getSaveHandler().getMapFileFromName("connectionList"));
 		}
 	}
 }

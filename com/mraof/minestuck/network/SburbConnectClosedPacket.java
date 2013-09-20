@@ -50,7 +50,7 @@ public class SburbConnectClosedPacket extends MinestuckPacket {
 		if (!((EntityPlayer)player).worldObj.isRemote) {
 			Packet250CustomPayload packet = new Packet250CustomPayload();
 			packet.channel = "Minestuck";
-			packet.data = MinestuckPacket.makePacket(Type.SBURB_OPEN,client,server);
+			packet.data = MinestuckPacket.makePacket(Type.SBURB_CLOSE,client,server);
 			packet.length = packet.data.length;
 			PacketDispatcher.sendPacketToAllPlayers(packet);
 		}

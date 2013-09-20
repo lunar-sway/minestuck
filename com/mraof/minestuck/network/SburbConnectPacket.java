@@ -77,7 +77,7 @@ public class SburbConnectPacket extends MinestuckPacket {
 				return;
 			}
 			TileEntityComputer te = (TileEntityComputer)entity;
-			te.connectedServer = server;
+			te.serverConnected = true;
 			world.markBlockForUpdate(x, y, z);
 			Packet250CustomPayload packet = new Packet250CustomPayload();
 			packet.channel = "Minestuck";

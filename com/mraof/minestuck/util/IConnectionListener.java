@@ -8,4 +8,6 @@ public interface IConnectionListener {
 	
 	public abstract void onConnectionClosed(String server, String client);
 	
+	public abstract void newPermaConnection(String client, String server);
+	
 }

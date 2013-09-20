@@ -42,8 +42,8 @@ public class GuiComputer extends GuiScreen
 	private GuiButton serverButton;
 	
 	private ArrayList<GuiButton> selButtons = new ArrayList<GuiButton>();
-	private ArrayList<String> currentList;
-	private String displayPlayer;
+	private ArrayList<String> buttonStrings;
+	private String displayPlayer = "";
 	private String displayMessage = "";
 	private int index = 0;
 
@@ -63,7 +63,7 @@ public class GuiComputer extends GuiScreen
 		this.fontRenderer = mc.fontRenderer;
 		this.te = te;
 		te.gui = this;
-		currentList = new ArrayList<String>();
+		buttonStrings = new ArrayList<String>();
 	}
 	
 	@Override
@@ -130,44 +130,44 @@ public class GuiComputer extends GuiScreen
     	serverButton.enabled = te.hasServer;
 		
 		//Debug.print("Conn'd to "+te.connectedTo);
-		if(te.programSelected == 0)
-			displayPlayer = te.connectedServer;
-		else if(te.programSelected == 1)
-			displayPlayer = te.connectedClient;
-		else displayPlayer = "ERROR";
+		if(te.programSelected == 0 && te.server != null)
+			displayPlayer = te.server.getServer().getOwner();
+		else if(te.programSelected == 1 && te.client != null)
+			displayPlayer = te.client.getServer().getOwner();
+		else displayPlayer = "UNDEFINED";
 		
-		currentList.clear();
+		buttonStrings.clear();
 		
 		if(te.programSelected == 0){
-			if (!te.connectedServer.isEmpty()) {
+			SburbConnection c = SburbConnection.getClientConnection(te.owner);
+			if(c != null && c.enteredGame())
+				buttonStrings.add("View Gristcache");
+			if (te.server != null) {
 				displayMessage = "Connected to "+displayPlayer;
-			} else {
+			} else if(c == null){
 				displayMessage = "Select a server below";
-		    	int i = 1;
-		    	for (String server : SburbConnection.getServersOpen()) {
-		    		setButtonString(i, server);
-		    		i++;
-		    	}
-			}
-			setButtonString(0, "View Gristcache");
+		    	for (String server : SburbConnection.getServersOpen())
+		    		buttonStrings.add(server);
+			} else 
+				displayMessage = "A client is already active";
 		}
 		else if(te.programSelected == 1){
-			if (!te.connectedClient.equals("")) {
+			if (te.client != null) {
 				displayMessage = "Connected to "+displayPlayer;
-				if(!te.givenItems)
-					setButtonString(0, "Give items");
-			} else if (te.openToClients && te.connectedClient.isEmpty()) {
+				if(!te.client.givenItems())
+					buttonStrings.add("Give items");
+			} else if (te.openToClients && te.client == null) {
 				displayMessage = "Waiting for client...";
 			} else if(SburbConnection.getServersOpen().contains(te.owner))
 				displayMessage = "Server with your name exists";
 			else {
 				displayMessage = "Server offline";
 				
-				setButtonString(0,"Open to clients");
+				buttonStrings.add("Open to clients");
 		    	}
 			}
     	upButton.enabled = index > 0;
-    	downButton.enabled = 4+index < currentList.size();
+    	downButton.enabled = 4+index < buttonStrings.size();
     	for (int i = 0; i < selButtons.size(); i++) {
     		GuiButton button = selButtons.get(i);
     		String s = getButtonString(i+index);
@@ -184,23 +184,9 @@ public class GuiComputer extends GuiScreen
 	 * @return The string at position <code>index</> in the <code>currentList</code>.
 	 */
 	protected String getButtonString(int index){
-		if(index >= currentList.size() || index < 0)
+		if(index >= buttonStrings.size() || index < 0)
 			return "";
-		else return currentList.get(index);
-	}
-	
-	/**
-	 * Sets the position in <code>currentList</code> to the given string.
-	 * Will add empty string if neccesary to avoid an <code>ArrayIndexOutOfBoundException</code>.
-	 * @param index The listed button string positions. Starting from the top, at 0.
-	 * @param s The new string.
-	 */
-	protected void setButtonString(int index, String s){
-		if(index < 0)
-			return;
-		while(index >= currentList.size())
-			currentList.add("");
-		currentList.set(index, s);
+		else return buttonStrings.get(index);
 	}
 	
 	protected void actionPerformed(GuiButton guibutton) {
