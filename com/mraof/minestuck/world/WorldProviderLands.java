@@ -5,6 +5,7 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.WorldChunkManagerHell;
 import net.minecraft.world.chunk.IChunkProvider;
 
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.ChunkProviderLands;
 
 public class WorldProviderLands extends WorldProvider 
@@ -30,7 +31,20 @@ public class WorldProviderLands extends WorldProvider
 	}
 	@Override
 	public boolean isDaytime() {
-		return true;
+	   	if (provider != null) {
+    		switch (provider.dayCycle) {
+    		case (0):
+    			return super.isDaytime();
+    		case (1):
+    			return true;
+    		case (2):
+    			return false;
+    		}
+    		return true; //We should never reach this
+    	} else {
+      		createChunkGenerator();
+    		return this.isDaytime();
+    	}
 	}
 	public void registerWorldChunkManager()
     {
@@ -40,11 +54,25 @@ public class WorldProviderLands extends WorldProvider
     }
     public float calculateCelestialAngle(long par1, float par3)
     {
-        return 12000.0F;
+    	if (provider != null) {
+    		//Debug.print("Time mode is "+provider.dayCycle);
+    		switch (provider.dayCycle) {
+    		case (0):
+    			return super.calculateCelestialAngle(par1,par3);
+    		case (1):
+    			return 12000.0F;
+    		case (2):
+    			return 24000.0F;
+    		}
+    		return 12000.0F; //We should never reach this
+    	} else {
+    		createChunkGenerator();
+    		return this.calculateCelestialAngle(par1,par3);
+    	}
     }
     public boolean isSurfaceWorld()
     {
-        return false;
+        return true;
     }
 
 }

@@ -46,4 +46,10 @@ public class LandAspectShade extends LandAspect {
 		return null;
 	}
 
+	@Override
+	public int getDayCycleMode() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

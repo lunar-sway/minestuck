@@ -19,9 +19,11 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 
 import com.mraof.minestuck.entity.consort.EntityNakagator;
+import com.mraof.minestuck.entity.underling.EntityBasilisk;
 import com.mraof.minestuck.entity.underling.EntityGiclops;
 import com.mraof.minestuck.entity.underling.EntityImp;
 import com.mraof.minestuck.entity.underling.EntityOgre;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.lands.ILandDecorator;
 import com.mraof.minestuck.world.gen.lands.LandAspect;
 import com.mraof.minestuck.world.gen.lands.LandHelper;
@@ -43,6 +45,7 @@ public class ChunkProviderLands implements IChunkProvider
 	public int oceanBlock;
 	public LandAspect terrainMapper;
 	public ArrayList decorators;
+	public int dayCycle;
 
 	public ChunkProviderLands(World worldObj, long seed, boolean b) 
 	{
@@ -77,6 +80,7 @@ public class ChunkProviderLands implements IChunkProvider
 		this.underlingList.add(new SpawnListEntry(EntityImp.class, 5, 1, 10));
 		this.underlingList.add(new SpawnListEntry(EntityOgre.class, 3, 1, 2));
 		this.underlingList.add(new SpawnListEntry(EntityGiclops.class, 1, 1, 1));
+		this.underlingList.add(new SpawnListEntry(EntityBasilisk.class, 1, 1, 1));
 		this.noiseGens[0] = new NoiseGeneratorOctaves(this.random, 7);
         this.noiseGens[1] = new NoiseGeneratorOctaves(this.random, 1);
         
@@ -85,6 +89,7 @@ public class ChunkProviderLands implements IChunkProvider
         this.oceanBlock = helper.pickOne(aspect1, aspect2).getOceanBlock();
         this.terrainMapper = helper.pickOne(aspect1,aspect2);
         this.decorators = helper.pickSubset(aspect1.getDecorators(),aspect2.getDecorators());
+        this.dayCycle = helper.pickOne(aspect1,aspect2).getDayCycleMode();
         
         
 	}
@@ -175,7 +180,8 @@ public class ChunkProviderLands implements IChunkProvider
 	@Override
 	public List getPossibleCreatures(EnumCreatureType enumcreaturetype, int i,
 			int j, int k) {
-		return enumcreaturetype == EnumCreatureType.creature ? this.consortList : enumcreaturetype == EnumCreatureType.monster ? this.underlingList : null;
+		//Debug.printf("Chosen to spawn! args: %s %d %d %d",enumcreaturetype,i,j,k);
+		return enumcreaturetype == EnumCreatureType.creature? this.consortList : (enumcreaturetype == EnumCreatureType.monster ? this.underlingList : null);
 	}
 
 	@Override

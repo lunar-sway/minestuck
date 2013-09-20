@@ -1,6 +1,7 @@
 package com.mraof.minestuck.world.gen.lands;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 
@@ -51,6 +52,11 @@ public class LandAspectHeat extends LandAspect
 		list.add(new DecoratorVein(Block.slowSand.blockID, 10, 32));
 		list.add(new DecoratorVein(Block.glowStone.blockID, 5, 8));
 		return list;
+	}
+
+	@Override
+	public int getDayCycleMode() {
+		return (new Random()).nextInt(3); //Random cycle between 0 and 2
 	}
 
 
