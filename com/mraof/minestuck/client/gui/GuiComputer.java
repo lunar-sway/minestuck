@@ -130,25 +130,28 @@ public class GuiComputer extends GuiScreen
     	serverButton.enabled = te.hasServer;
 		
 		//Debug.print("Conn'd to "+te.connectedTo);
-		if(te.programSelected == 0 && te.server != null)
+		if(te.programSelected == 0 && te.server != null && te.server.getServer() != null)
 			displayPlayer = te.server.getServer().getOwner();
-		else if(te.programSelected == 1 && te.client != null)
+		else if(te.programSelected == 1 && te.client != null && te.client.getClient() != null)
 			displayPlayer = te.client.getServer().getOwner();
-		else displayPlayer = "UNDEFINED";
+		else displayPlayer = "UNDEFINED";	//Should not be shown
 		
 		buttonStrings.clear();
 		
 		if(te.programSelected == 0){
 			SburbConnection c = SburbConnection.getClientConnection(te.owner);
-			if(c != null && c.enteredGame())
+			if(c != null && c.enteredGame()) //if it should view the grist cache button.
 				buttonStrings.add("View Gristcache");
-			if (te.server != null) {
+			if (te.server != null) { //If it is connected to someone.
 				displayMessage = "Connected to "+displayPlayer;
 				buttonStrings.add("Disconnect");
-			} else if(c == null){
+			} else if(te.resumingClient){
+				displayMessage = "Waiting for server...";
+				buttonStrings.add("Disconnect");
+			} else if(c == null){ //If the player doesn't have an other active client
 				displayMessage = "Select a server below";
-				if(SburbConnection.hasMainClient(te.owner))
-					buttonStrings.add("Resume main connection");
+				if(SburbConnection.hasMainClient(te.owner)) //If it has a resumeable connection
+					buttonStrings.add("Resume connection");
 		    	for (String server : SburbConnection.getServersOpen())
 		    		buttonStrings.add(server);
 			} else 
@@ -169,7 +172,7 @@ public class GuiComputer extends GuiScreen
 				displayMessage = "Server offline";
 				buttonStrings.add("Open to clients");
 				if(SburbConnection.hasMainServer(te.owner))
-					buttonStrings.add("Resume main connection");
+					buttonStrings.add("Resume connection");
 		    	}
 			}
     	upButton.enabled = index > 0;
@@ -209,16 +212,16 @@ public class GuiComputer extends GuiScreen
 				index++;
 			} else if(guibutton.displayString.equals("View Gristcache")){
 				player.openGui(Minestuck.instance, 2, world, te.xCoord, te.yCoord, te.zCoord);
-			} else if(guibutton.displayString.equals("Resume main connection")){
-				//Nothing here yet
+			} else if(guibutton.displayString.equals("Resume connection")){
+				te.resume(true);
 			} else{
 				te.connectToServer(guibutton.displayString);
 			}
 		} else if(te.programSelected == 1){
 			if(guibutton.displayString.equals("Give items")){
 				te.giveItems();
-			} else if(guibutton.displayString.equals("Resume main connection")){
-				//Nothing here yet
+			} else if(guibutton.displayString.equals("Resume connection")){
+				te.resume(false);
 			} else if(guibutton.displayString.equals("Open to clients")){
 				te.openServer();
 			}

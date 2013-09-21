@@ -32,7 +32,8 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 	public String owner = "";
 	public String latestmessage = "";
 	private Minecraft mc = Minecraft.getMinecraft();
-	public int programSelected = -1;	//0 if client is selected, 1 if server.
+	public boolean resumingClient;
+	public int programSelected = -1;	//0 if client is selected, 1 if server. (client side varable)
 	
     public TileEntityComputer() {
             SburbConnection.addListener(this);
@@ -44,18 +45,19 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
     		server = SburbConnection.getClientConnection(owner);
     	if(client == null && !clientName.isEmpty())
     		client = SburbConnection.getClientConnection(clientName);
-    	if(openToClients && !SburbConnection.getServersOpen().contains(owner))
+    	if(openToClients && !SburbConnection.getServersOpen().contains(owner) && !SburbConnection.isResuming(owner, false))
     		SburbConnection.openServer(owner, xCoord, yCoord, zCoord, worldObj.provider.dimensionId);
     }
     
 	@Override
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
-		super.readFromNBT(par1NBTTagCompound);
+		super.readFromNBT(par1NBTTagCompound);	
 		this.hasClient = par1NBTTagCompound.getBoolean("hasClient");
 		this.hasServer = par1NBTTagCompound.getBoolean("hasServer");
 		this.clientName = par1NBTTagCompound.getString("connectClient");
 		this.serverConnected = par1NBTTagCompound.getBoolean("connectServer");
 		this.openToClients = par1NBTTagCompound.getBoolean("serverOpen");
+		this.resumingClient = par1NBTTagCompound.getBoolean("resumeClient");
     	 this.owner = par1NBTTagCompound.getString("owner");
     	if(!this.clientName.isEmpty() && client == null)
     		client = SburbConnection.getClientConnection(clientName);
@@ -73,6 +75,7 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
     	par1NBTTagCompound.setString("connectClient",this.clientName);
     	par1NBTTagCompound.setBoolean("connectServer", this.serverConnected);
     	par1NBTTagCompound.setBoolean("serverOpen", this.openToClients);
+    	par1NBTTagCompound.setBoolean("resumeClient",this.resumingClient);
     	if (!this.owner.isEmpty()) {
     		par1NBTTagCompound.setString("owner",this.owner);
     	}
@@ -92,6 +95,14 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
     {
     	Debug.print("Data packet gotten "+net.getClass());
     	this.readFromNBT(pkt.customParam1);
+    }
+    
+    public void resume(boolean isClient){
+    	Packet250CustomPayload packet = new Packet250CustomPayload();
+		packet.channel = "Minestuck";
+		packet.data = MinestuckPacket.makePacket(Type.SBURB_RESUME,owner,xCoord,yCoord,zCoord,worldObj.provider.dimensionId,isClient);
+		packet.length = packet.data.length;
+		mc.getNetHandler().addToSendQueue(packet);
     }
     
 	public void openServer(){
@@ -120,20 +131,22 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 		if(hasServer && client != null && !client.givenItems()){
 			Packet250CustomPayload packet = new Packet250CustomPayload();
 			packet.channel = "Minestuck";
-			packet.data = MinestuckPacket.makePacket(Type.SBURB_GIVE,client.getClient().getOwner());
+			packet.data = MinestuckPacket.makePacket(Type.SBURB_GIVE,client.getClientName());
 			packet.length = packet.data.length;
 			this.mc.getNetHandler().addToSendQueue(packet);
 		}
 	}
 	
 	public void closeConnection(boolean client, boolean server) {
-		if((server || client) && !worldObj.isRemote){
+		if(server || client){
 			if(server && client)
 				SburbConnection.removeListener(this);
-			if(this.hasClient && this.server != null && client){
+			if(this.hasClient && (this.server != null || this.resumingClient) && client){
 				Packet250CustomPayload packet = new Packet250CustomPayload();
 				packet.channel = "Minestuck";
-				packet.data = MinestuckPacket.makePacket(Type.SBURB_CLOSE,owner,this.server.getServer().getOwner());
+				if(resumingClient)
+					packet.data = MinestuckPacket.makePacket(Type.SBURB_CLOSE,owner,"");
+				else packet.data = MinestuckPacket.makePacket(Type.SBURB_CLOSE,owner,this.server.getServerName());
 				packet.length = packet.data.length;
 				if(worldObj.isRemote)
 					PacketDispatcher.sendPacketToAllPlayers(packet);
@@ -154,17 +167,25 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 	}
 	
 	public void onConnectionClosed(String client, String server){
-		if(this.hasClient && client.equals(this.owner) && this.server != null && server.equals(this.server.getServer().getOwner())){
-			latestmessage = "Server disconnected";
+		if(this.hasClient && client.equals(this.owner) && this.server != null && server.equals(this.server.getServerName())){
+			latestmessage = "Connection with server closed";
 			this.server = null;
+			serverConnected = false;
 		}
-		else if(this.hasServer && server.equals(this.owner) && this.client != null && client.equals(this.client.getClient().getOwner())){
-			latestmessage = "Client disconnected";
+		else if(this.hasServer && server.equals(this.owner) && this.client != null && client.equals(this.client.getClientName())){
+			latestmessage = "Connection with client closed";
 			this.client = null;
+			clientName = "";
+		}
+		else if(this.hasServer && server.equals(this.owner) && openToClients){
+			latestmessage = "Server closed";
+			this.openToClients = false;
+			
 		}
 		
 		if(gui != null)
 			gui.updateGui();
+		checkIfStillExisting();
 	}
 	
 	@Override
@@ -173,8 +194,13 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 			openToClients = false;
 			clientName = client;
 		}
+		else if(owner.equals(client) && hasClient && resumingClient){
+			resumingClient = false;
+			serverConnected = true;
+		}
 		if (gui != null)
 			gui.updateGui();
+		checkIfStillExisting();
 	}
 
 	@Override
@@ -182,6 +208,7 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 		if (gui != null) {
 			gui.updateGui();
 		}
+		checkIfStillExisting();
 	}
 	
 	@Override
@@ -189,7 +216,13 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 		if(gui != null) {
 			gui.updateGui();
 		}
-		
+		checkIfStillExisting();
 	}
     
+	public void checkIfStillExisting(){
+		TileEntity te = worldObj.getBlockTileEntity(xCoord, yCoord, zCoord);
+		if(!this.equals(te))
+			SburbConnection.removeListener(this);
+	}
+	
 }

@@ -22,6 +22,7 @@ public abstract class MinestuckPacket
 		SBURB_OPEN(SburbServerOpenPacket.class),
 		SBURB_GIVE(SburbGiveItemsPacket.class), 
 		SBURB_CLOSE(SburbConnectClosedPacket.class),
+		SBURB_RESUME(SburbResumePacket.class),
 		LANDREGISTER(LandRegisterPacket.class);
 		Class<? extends MinestuckPacket> packetType;
 		private Type(Class<? extends MinestuckPacket> packetClass)
