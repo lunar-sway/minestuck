@@ -6,9 +6,28 @@ import net.minecraft.block.Block;
 
 public abstract class LandAspect 
 {
+		/**
+		 * Returns the blocks that can possibly be use in the land's underground blocks.
+		 * @return
+		 */
 		public abstract int[][] getSurfaceBlocks();
+		
+		/**
+		 * Returns the blocks that can possibly be use in the land's topmost layer of blocks.
+		 * @return
+		 */
 		public abstract int[][] getUpperBlocks();
+		
+		/**
+		 * Unused currently. Will be used to generate the land's terrain.
+		 * @return
+		 */
 		public abstract double[] generateTerrainMap();
+		
+		/**
+		 * Returns the block that is a part of the land's ocean.
+		 * @return
+		 */
 		public int getOceanBlock()
 		{
 			return Block.waterStill.blockID;
@@ -38,4 +57,13 @@ public abstract class LandAspect
 		 * @return
 		 */
 		public abstract ArrayList<ILandDecorator> getDecorators();
+		
+		/**
+		 *  Returns a integer representing how they land's day cycle will proceed.
+		 *  
+		 *  0 = Normal day cycle;
+		 *  1 = Always day;
+		 *  2 = Always night.
+		 */
+		public abstract int getDayCycleMode();
 }

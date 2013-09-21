@@ -33,6 +33,7 @@ import com.mraof.minestuck.entity.carapacian.EntityBlackBishop;
 import com.mraof.minestuck.entity.carapacian.EntityBlackPawn;
 import com.mraof.minestuck.entity.carapacian.EntityWhiteBishop;
 import com.mraof.minestuck.entity.carapacian.EntityWhitePawn;
+import com.mraof.minestuck.entity.consort.EntityIguana;
 import com.mraof.minestuck.entity.consort.EntityNakagator;
 import com.mraof.minestuck.entity.consort.EntitySalamander;
 import com.mraof.minestuck.entity.item.EntityGrist;
@@ -40,7 +41,6 @@ import com.mraof.minestuck.entity.underling.EntityBasilisk;
 import com.mraof.minestuck.entity.underling.EntityGiclops;
 import com.mraof.minestuck.entity.underling.EntityImp;
 import com.mraof.minestuck.entity.underling.EntityOgre;
-import com.mraof.minestuck.entity.underling.EntityUnderlingPart;
 import com.mraof.minestuck.item.EnumBladeType;
 import com.mraof.minestuck.item.EnumCaneType;
 import com.mraof.minestuck.item.EnumClubType;
@@ -64,6 +64,7 @@ import com.mraof.minestuck.item.ItemMachine;
 import com.mraof.minestuck.item.ItemSickle;
 import com.mraof.minestuck.item.ItemSpork;
 import com.mraof.minestuck.item.ItemStorageBlock;
+import com.mraof.minestuck.network.MinestuckConnectionHandler;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
@@ -195,7 +196,6 @@ public class Minestuck
 	@EventHandler
 	public void load(FMLInitializationEvent event) 
 	{
-
 		//Register the Minestuck creative tab
 		this.tabMinestuck = new CreativeTabs("tabMinestuck")
 		{
@@ -346,6 +346,9 @@ public class Minestuck
 		//set translations for automatic names
 		LanguageRegistry.instance().addStringLocalization("entity.Salamander.name", "Salamander");
 		LanguageRegistry.instance().addStringLocalization("entity.Nakagator.name", "Nakagator");
+		LanguageRegistry.instance().addStringLocalization("entity.Iguana.name", "Iguana");
+		LanguageRegistry.instance().addStringLocalization("entity.Turtle.name", "Turtle");
+		
 		LanguageRegistry.instance().addStringLocalization("entity.Imp.name", "Imp");
 		//Different names for different types of imps
 		for(GristType impType : GristType.values())
@@ -373,7 +376,8 @@ public class Minestuck
 
 		//register entities
 		this.registerAndMapEntity(EntitySalamander.class, "Salamander", 0xffe62e, 0xfffb53);
-		this.registerAndMapEntity(EntityNakagator.class, "Nakagator", 0xffe62e, 0xfffb53);
+		this.registerAndMapEntity(EntityNakagator.class, "Nakagator", 0xff0000, 0xff6a00);
+		this.registerAndMapEntity(EntityIguana.class, "Iguana", 0x0026ff, 0x0094ff);
 		this.registerAndMapEntity(EntityImp.class, "Imp", 0x000000, 0xffffff);
 		this.registerAndMapEntity(EntityOgre.class, "Ogre", 0x000000, 0xffffff);
 		this.registerAndMapEntity(EntityBasilisk.class, "Basilisk", 0x400040, 0xffffff);
@@ -382,13 +386,14 @@ public class Minestuck
 		this.registerAndMapEntity(EntityWhitePawn.class, "prospitianPawn", 0xf0f0f0, 0x0f0f0f);
 		this.registerAndMapEntity(EntityBlackBishop.class, "dersiteBishop", 0x000000, 0xc121d9);
 		this.registerAndMapEntity(EntityWhiteBishop.class, "prospitianBishop", 0xffffff, 0xfde500);
-		//this.registerAndMapEntity(EntityUnderlingPart.class, "underlingPart", 0, 0);
 		//register entities with fml
 		EntityRegistry.registerModEntity(EntityGrist.class, "grist", currentEntityIdOffset, this, 512, 1, true);
 
 		EntityRegistry.addSpawn(EntityImp.class, 3, 3, 20, EnumCreatureType.monster, WorldType.base12Biomes);
 		EntityRegistry.addSpawn(EntityOgre.class, 2, 1, 1, EnumCreatureType.monster, WorldType.base12Biomes);
+		EntityRegistry.addSpawn(EntityBasilisk.class, 1, 1, 1, EnumCreatureType.monster, WorldType.base12Biomes);
 		EntityRegistry.addSpawn(EntityGiclops.class, 1, 1, 1, EnumCreatureType.monster, WorldType.base12Biomes);
+		
 		//register Tile Entities
 		GameRegistry.registerTileEntity(TileEntityGatePortal.class, "gatePortal");
 		GameRegistry.registerTileEntity(TileEntityMachine.class, "containerMachine");
@@ -408,6 +413,9 @@ public class Minestuck
 
 		//register machine GUIs
 		NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
+		
+		//register connection handler
+		NetworkRegistry.instance().registerConnectionHandler(new MinestuckConnectionHandler());
 
 		//register recipes
 		AlchemyRecipeHandler.registerVanillaRecipes();
@@ -419,7 +427,6 @@ public class Minestuck
 	public void postInit(FMLPostInitializationEvent event) 
 	{
 		MinecraftForge.EVENT_BUS.register(new MinestuckSaveHandler());
-		
 		AlchemyRecipeHandler.registerDynamicRecipes();
 	}
 	//registers entity with forge and minecraft, and increases currentEntityIdOffset by one in order to prevent id collision
@@ -447,7 +454,7 @@ public class Minestuck
 				while((currentByte = dataInputStream.read()) != -1)
 				{
 					MinestuckSaveHandler.lands.add((byte)currentByte);
-					Debug.printf("Found land dimension id of: ", currentByte);
+					Debug.printf("Found land dimension id of: %d", currentByte);
 					if(!DimensionManager.isDimensionRegistered(currentByte))
 						DimensionManager.registerDimension(currentByte, Minestuck.landProviderTypeId);
 				}

@@ -87,7 +87,7 @@ public class ComponentCastleWallPiece extends ComponentCastlePiece
 			this.getNextComponentNormal(startPiece, components, random, 0, -8, true);
 			break;
 		default:
-			Debug.print("Wall done");
+//			Debug.print("Wall done");
 		}
 		this.componentType = 3;
 //		if(!this.cornerPiece)
@@ -114,7 +114,7 @@ public class ComponentCastleWallPiece extends ComponentCastlePiece
 				return true;
 			}
 
-			Debug.print(startPiece.averageGroundLevel);
+//			Debug.print(startPiece.averageGroundLevel);
 		}
 		if(this.boundingBox.minY < startPiece.averageGroundLevel - 1)
 			this.boundingBox.offset(0, startPiece.averageGroundLevel - 1, 0);

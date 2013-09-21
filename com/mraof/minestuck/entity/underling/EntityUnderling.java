@@ -13,8 +13,10 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -23,6 +25,7 @@ import com.mraof.minestuck.entity.EntityListAttackFilter;
 import com.mraof.minestuck.entity.EntityMinestuck;
 import com.mraof.minestuck.entity.ai.EntityAINearestAttackableTargetWithHeight;
 import com.mraof.minestuck.entity.item.EntityGrist;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
@@ -160,5 +163,45 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 		this.textureResource = new ResourceLocation("minestuck", this.getTexture());
 	}
 
+	@Override
+	   public boolean getCanSpawnHere()
+    {
+        return this.worldObj.difficultySetting > 0 && this.isValidLightLevel() && super.getCanSpawnHere();
+    }
+	
+    protected boolean isValidLightLevel()
+    {
+    	
+        int i = MathHelper.floor_double(this.posX);
+        int j = MathHelper.floor_double(this.boundingBox.minY);
+        int k = MathHelper.floor_double(this.posZ);
+        
+       //	if (this.worldObj.getBlockLightOpacity(i, j, k) == 0) { //Prevents spawning IN blocks
+       //		return false;
+       //	}
+       // Debug.print("Spawning an entity...");
 
+        //Debug.print("Sunlight level is "+this.worldObj.getSavedLightValue(EnumSkyBlock.Sky, i, j, k));
+        if (this.worldObj.getSavedLightValue(EnumSkyBlock.Sky, i, j, k) > this.rand.nextInt(32))
+        {
+        	//Debug.print("Too much sun! Failed.");
+            return false;
+        }
+        else
+        {
+            int l = this.worldObj.getBlockLightValue(i, j, k);
+
+            if (this.worldObj.isThundering())
+            {
+                int i1 = this.worldObj.skylightSubtracted;
+                this.worldObj.skylightSubtracted = 10;
+                l = this.worldObj.getBlockLightValue(i, j, k);
+                this.worldObj.skylightSubtracted = i1;
+            }
+
+            //Debug.print("Light level calculated as " + l);
+            
+            return l <= this.rand.nextInt(8);
+        }
+    }
 }

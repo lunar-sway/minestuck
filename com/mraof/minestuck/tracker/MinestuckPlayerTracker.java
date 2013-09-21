@@ -7,6 +7,7 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.util.TitleHelper;
@@ -25,7 +26,7 @@ public class MinestuckPlayerTracker implements IPlayerTracker
 	{
 		updateGristCache(player);
 		updateTitle(player);
-		updateLands();
+		updateLands(player);
 	}
 
 	@Override
@@ -79,7 +80,7 @@ public class MinestuckPlayerTracker implements IPlayerTracker
 			player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Class", TitleHelper.getIntFromClass(newTitle.getHeroClass()));
 			player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Aspect", TitleHelper.getIntFromAspect(newTitle.getHeroAspect()));
 	}
-	public static void updateLands()
+	public static void updateLands(EntityPlayer player)
 	{
 		byte[] lands = new byte[MinestuckSaveHandler.lands.size()];
 		for(int i = 0; i < lands.length; i++)
@@ -88,6 +89,14 @@ public class MinestuckPlayerTracker implements IPlayerTracker
 		packet.channel = "Minestuck";
 		packet.data = MinestuckPacket.makePacket(Type.LANDREGISTER, lands);
 		packet.length = packet.data.length;
-		PacketDispatcher.sendPacketToAllPlayers(packet);
+		Debug.printf("Sending land packets to %s.", player == null ? "all players" : player.username);
+		if(player == null)
+			PacketDispatcher.sendPacketToAllPlayers(packet);
+		else
+			((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(packet);
+	}
+	public static void updateLands()
+	{
+		updateLands(null);
 	}
 }
