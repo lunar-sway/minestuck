@@ -36,9 +36,6 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 	
     public TileEntityComputer() {
             SburbConnection.addListener(this);
-            if (Minecraft.getMinecraft().thePlayer != null) {
-            	owner = Minecraft.getMinecraft().thePlayer.username;
-            }
     }
     
     @Override
@@ -47,6 +44,8 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
     		server = SburbConnection.getClientConnection(owner);
     	if(client == null && !clientName.isEmpty())
     		client = SburbConnection.getClientConnection(clientName);
+    	if(openToClients && !SburbConnection.getServersOpen().contains(owner))
+    		SburbConnection.openServer(owner, xCoord, yCoord, zCoord, worldObj.provider.dimensionId);
     }
     
 	@Override
@@ -62,8 +61,6 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
     		client = SburbConnection.getClientConnection(clientName);
     	if(this.serverConnected && server == null)
     		server = SburbConnection.getClientConnection(owner);
-    	if(openToClients && !SburbConnection.getServersOpen().contains(owner))
-    		SburbConnection.openServer(owner, xCoord, yCoord, zCoord, worldObj.provider.dimensionId);
     	 if(gui != null)
     		 gui.updateGui();
     }
@@ -172,6 +169,10 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 	
 	@Override
 	public void onConnected(String client, String server) {
+		if(owner.equals(server) && hasServer && this.client == null && openToClients){
+			openToClients = false;
+			clientName = client;
+		}
 		if (gui != null)
 			gui.updateGui();
 	}

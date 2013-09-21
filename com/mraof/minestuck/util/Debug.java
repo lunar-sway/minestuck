@@ -8,6 +8,10 @@ public class Debug {
 		if (isDebugMode) {
 			System.out.println("[MINESTUCK] "+text);
 		}
+		try{
+			if(text.toString().equals("false"))
+				throw new Exception();
+		} catch(Exception e){e.printStackTrace();}
 	}
 	public static void printf(String text, Object... args)
 	{

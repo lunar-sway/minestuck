@@ -7,15 +7,21 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.TreeMap;
 
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
+
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.World;
 
 public class SburbConnection {
 
 	private static TreeMap<String,ComputerData> serversOpen = new TreeMap<String,ComputerData>();
 	private static ArrayList<IConnectionListener> listeners = new ArrayList<IConnectionListener>();
 	private static ArrayList<SburbConnection> connections = new ArrayList<SburbConnection>();
+	private static HashMap<String,ComputerData> mainConnections = new HashMap<String,ComputerData>();
 
 	public static ArrayList<String> getServersOpen() {
 		return new ArrayList<String>(serversOpen.keySet());
@@ -26,6 +32,17 @@ public class SburbConnection {
 			if(c.client != null && c.client.owner.equals(client))
 				return c;
 		return null;
+	}
+	
+	public static boolean hasMainClient(String client){ //Returns true if a main connection has a client of the specified name
+		for(SburbConnection c : connections)
+			if(c.clientName.equals(client) || c.client != null && c.client.owner.equals(client))
+				return true;
+		return false;
+	}
+	
+	public static boolean hasMainServer(String server){
+		return false;
 	}
 	
 	public static void openServer(String player, int x, int y, int z,int dimension) {
@@ -43,14 +60,15 @@ public class SburbConnection {
 	public static void connect(String client, int x, int y, int z, int dimension, String server) {
 		
 		if(serversOpen.containsKey(server)){
-			for(SburbConnection c : connections)
-				if(c.client != null && c.client.owner.equals(client)){
-					Debug.print("Connection denied, client got an connection set up already, client:"+client);
-					return;
-				}
+			SburbConnection c = getClientConnection(client);
+			if(c != null && c.server != null){
+				Debug.print("Connection denied, client got an connection set up already, client:"+client+", connected to:"+c.server.owner);
+				return;
+			}
 			
 			connections.add(new SburbConnection(new ComputerData(client,x,y,z,dimension),serversOpen.remove(server)));
-			
+			if(MinestuckSaveHandler.lands.contains((byte) dimension))
+				connections.get(connections.size()-1).enteredGame = true;
 			for (Object listener : listeners) {
 				((IConnectionListener)listener).onConnected(client,server);
 			}
@@ -59,6 +77,8 @@ public class SburbConnection {
 	}
 	
 	public static void connectionClosed(String client, String server){
+		for(IConnectionListener listener : listeners)
+			listener.onConnectionClosed(client, server);
 		if(client.isEmpty())
 			serversOpen.remove(server);
 		else
@@ -72,8 +92,6 @@ public class SburbConnection {
 					}else connections.remove(connect);
 					break;
 				}
-		for(IConnectionListener listener : listeners)
-			listener.onConnectionClosed(client, server);
 	}
 	
 	public static boolean giveItems(String client){
@@ -87,10 +105,12 @@ public class SburbConnection {
 		return false;
 	}
 	
-	public static void enterMedium(String client){
+	public static void enterMedium(String client, int destination){
 		SburbConnection c = getClientConnection(client);
-		if(c != null)
+		if(c != null){
 			c.enteredGame = true;
+			c.client.dimension = destination;
+		}
 	}
 	
 	public static void addListener(IConnectionListener listener) {
@@ -121,6 +141,7 @@ public class SburbConnection {
 				}
 			}
 			stream.close();
+			Debug.print(connections.size()+" connections saved");
 		} catch(IOException e){
 			e.printStackTrace();
 		}
@@ -151,9 +172,30 @@ public class SburbConnection {
 					connections.add(c);
 				}
 				stream.close();
+				Debug.print(connections.size()+" connections loaded");
+				checkConnections();
 			}catch(IOException e){
 				e.printStackTrace();
 			}
+		}
+	}
+	
+	public static void checkConnections(){
+		for(SburbConnection c : connections){
+			if(c.client != null && c.server != null)
+				for(World world : MinecraftServer.getServer().worldServers){
+					if(world.provider.dimensionId == c.client.dimension && world.getBlockId(c.client.x, c.client.y, c.client.z) != Minestuck.blockComputerOn.blockID ||
+							world.provider.dimensionId == c.server.dimension && world.getBlockId(c.server.x, c.server.y, c.server.z) != Minestuck.blockComputerOn.blockID){
+						if(c.isMain){
+							c.clientName = c.client.owner;
+							c.client = null;
+							c.serverName = c.server.owner;
+							c.server = null;
+						} else {
+							connections.remove(c);
+						}
+					}
+				}
 		}
 	}
 	

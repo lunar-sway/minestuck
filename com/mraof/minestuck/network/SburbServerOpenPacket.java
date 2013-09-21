@@ -83,7 +83,8 @@ public class SburbServerOpenPacket extends MinestuckPacket {
 			PacketDispatcher.sendPacketToAllPlayers(packet);
 		}
 		
-		SburbConnection.openServer(server,x,y,z,dimensionId);
+		if(!Minecraft.getMinecraft().isSingleplayer() || !((EntityPlayer)player).worldObj.isRemote)
+			SburbConnection.openServer(server,x,y,z,dimensionId);
 		Debug.print("Got openserver packet, server:"+server);
 		
 	}

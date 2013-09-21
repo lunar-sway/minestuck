@@ -144,8 +144,11 @@ public class GuiComputer extends GuiScreen
 				buttonStrings.add("View Gristcache");
 			if (te.server != null) {
 				displayMessage = "Connected to "+displayPlayer;
+				buttonStrings.add("Disconnect");
 			} else if(c == null){
 				displayMessage = "Select a server below";
+				if(SburbConnection.hasMainClient(te.owner))
+					buttonStrings.add("Resume main connection");
 		    	for (String server : SburbConnection.getServersOpen())
 		    		buttonStrings.add(server);
 			} else 
@@ -154,16 +157,19 @@ public class GuiComputer extends GuiScreen
 		else if(te.programSelected == 1){
 			if (te.client != null) {
 				displayMessage = "Connected to "+displayPlayer;
+				buttonStrings.add("Disconnect");
 				if(!te.client.givenItems())
 					buttonStrings.add("Give items");
 			} else if (te.openToClients && te.client == null) {
 				displayMessage = "Waiting for client...";
+				buttonStrings.add("Disconnect");
 			} else if(SburbConnection.getServersOpen().contains(te.owner))
 				displayMessage = "Server with your name exists";
 			else {
 				displayMessage = "Server offline";
-				
 				buttonStrings.add("Open to clients");
+				if(SburbConnection.hasMainServer(te.owner))
+					buttonStrings.add("Resume main connection");
 		    	}
 			}
     	upButton.enabled = index > 0;
@@ -194,6 +200,8 @@ public class GuiComputer extends GuiScreen
 			te.programSelected = 1;
 		else if(guibutton.equals(clientButton))
 			te.programSelected = 0;
+		else if(guibutton.displayString.equals("Disconnect"))
+			te.closeConnection(te.programSelected == 0, te.programSelected == 1);
 		else if(te.programSelected == 0){
 			if (guibutton == upButton) {
 				index--;
