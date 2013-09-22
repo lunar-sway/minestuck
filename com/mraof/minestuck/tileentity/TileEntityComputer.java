@@ -168,12 +168,14 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 	
 	public void onConnectionClosed(String client, String server){
 		if(this.hasClient && client.equals(this.owner) && this.server != null && server.equals(this.server.getServerName())){
-			latestmessage = "Connection with server closed";
+			if(programSelected == 0)
+				latestmessage = "Connection with server closed";
 			this.server = null;
 			serverConnected = false;
 		}
-		else if(this.hasServer && server.equals(this.owner) && this.client != null && client.equals(this.client.getClientName())){
-			latestmessage = "Connection with client closed";
+		if(this.hasServer && server.equals(this.owner) && this.client != null && client.equals(this.client.getClientName())){
+			if(programSelected == 1)
+				latestmessage = "Connection with client closed";
 			this.client = null;
 			clientName = "";
 		}
@@ -185,7 +187,6 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 		
 		if(gui != null)
 			gui.updateGui();
-		checkIfStillExisting();
 	}
 	
 	@Override
@@ -200,7 +201,6 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 		}
 		if (gui != null)
 			gui.updateGui();
-		checkIfStillExisting();
 	}
 
 	@Override
@@ -208,7 +208,6 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 		if (gui != null) {
 			gui.updateGui();
 		}
-		checkIfStillExisting();
 	}
 	
 	@Override
@@ -216,13 +215,6 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 		if(gui != null) {
 			gui.updateGui();
 		}
-		checkIfStillExisting();
-	}
-    
-	public void checkIfStillExisting(){
-		TileEntity te = worldObj.getBlockTileEntity(xCoord, yCoord, zCoord);
-		if(!this.equals(te))
-			SburbConnection.removeListener(this);
 	}
 	
 }

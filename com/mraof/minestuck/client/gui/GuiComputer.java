@@ -134,7 +134,7 @@ public class GuiComputer extends GuiScreen
 			displayPlayer = te.server.getServer().getOwner();
 		else if(te.programSelected == 1 && te.client != null && te.client.getClient() != null)
 			displayPlayer = te.client.getServer().getOwner();
-		else displayPlayer = "UNDEFINED";	//Should not be shown
+		else displayPlayer = "UNDEFINED";	//Should never be shown
 		
 		buttonStrings.clear();
 		

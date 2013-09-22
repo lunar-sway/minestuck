@@ -125,9 +125,14 @@ public class SburbConnection {
 	}
 	
 	public static void connectionClosed(String client, String server){
-		if(client.isEmpty())
+		if(client.isEmpty()){	//PROBLEM How to know if the player wants to close an open server or stop resuming a connection
 			serversOpen.remove(server);
-		else
+		}
+		else if(server.isEmpty()){
+			ComputerData data = mainConnections.get(client);
+			if(data != null && data.isClient)
+				mainConnections.remove(client);
+		}else
 			for(SburbConnection connect : connections)
 				if(connect.client != null && connect.client.owner.equals(client)&&connect.server.owner.equals(server)){
 					if(connect.isMain){
