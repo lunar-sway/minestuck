@@ -166,7 +166,7 @@ public class GuiComputer extends GuiScreen
 			} else if (te.openToClients && te.client == null) {
 				displayMessage = "Waiting for client...";
 				buttonStrings.add("Disconnect");
-			} else if(SburbConnection.getServersOpen().contains(te.owner))
+			} else if(SburbConnection.isServerOpen(te.owner))
 				displayMessage = "Server with your name exists";
 			else {
 				displayMessage = "Server offline";

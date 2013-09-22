@@ -173,13 +173,17 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 			this.server = null;
 			serverConnected = false;
 		}
+		else if(this.hasClient && client.equals(this.owner) && this.resumingClient && server.isEmpty()){
+			latestmessage = "Stopped resuming";
+			this.resumingClient = false;
+		}
 		if(this.hasServer && server.equals(this.owner) && this.client != null && client.equals(this.client.getClientName())){
 			if(programSelected == 1)
 				latestmessage = "Connection with client closed";
 			this.client = null;
 			clientName = "";
 		}
-		else if(this.hasServer && server.equals(this.owner) && openToClients){
+		else if(this.hasServer && server.equals(this.owner) && openToClients && client.isEmpty()){
 			latestmessage = "Server closed";
 			this.openToClients = false;
 			
@@ -190,12 +194,12 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 	}
 	
 	@Override
-	public void onConnected(String client, String server) {
+	public void onConnected(String client, String server) {Debug.print(owner+","+server+","+hasServer+","+this.client+","+openToClients+","+this.worldObj.isRemote);
 		if(owner.equals(server) && hasServer && this.client == null && openToClients){
 			openToClients = false;
 			clientName = client;
 		}
-		else if(owner.equals(client) && hasClient && resumingClient){
+		if(owner.equals(client) && hasClient && resumingClient){
 			resumingClient = false;
 			serverConnected = true;
 		}

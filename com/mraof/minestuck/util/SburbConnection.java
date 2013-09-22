@@ -23,10 +23,15 @@ public class SburbConnection {
 	private static TreeMap<String,ComputerData> serversOpen = new TreeMap<String,ComputerData>();
 	private static List<IConnectionListener> listeners = Collections.synchronizedList(new ArrayList<IConnectionListener>());
 	private static ArrayList<SburbConnection> connections = new ArrayList<SburbConnection>();
-	private static HashMap<String,ComputerData> mainConnections = new HashMap<String,ComputerData>();	//Connections waiting for
+	private static HashMap<String,ComputerData>resumingClients = new HashMap<String,ComputerData>();
+	private static HashMap<String,ComputerData>resumingServers = new HashMap<String,ComputerData>();
 
 	public static ArrayList<String> getServersOpen() {
 		return new ArrayList<String>(serversOpen.keySet());
+	}
+	
+	public static boolean isServerOpen(String server){
+		return serversOpen.containsKey(server) || resumingServers.containsKey(server);
 	}
 	
 	public static SburbConnection getClientConnection(String client){
@@ -37,41 +42,37 @@ public class SburbConnection {
 	}
 	
 	public static boolean isResuming(String player, boolean isClient){
-		for(ComputerData data : mainConnections.values())
-			if(data.owner.equals(player) && data.isClient == isClient)
-				return true;
-		return false;
-				
+		if(isClient)
+			return resumingClients.containsKey(player);
+		else
+			return resumingServers.containsKey(player);
 	}
 	
 	public static void resumeConnection(String player, int x, int y, int z, int dimensionId, boolean isClient){
 		for(SburbConnection c : connections)
 			if(c.isMain && (isClient && c.clientName.equals(player) || !isClient && c.serverName.equals(player)))
 				if(isClient){
-					ComputerData data = mainConnections.get(c.serverName);
+					ComputerData data = resumingServers.get(c.serverName);
 					if(data == null)
-						mainConnections.put(player, new ComputerData(player, x, y, z, dimensionId,isClient));
+						resumingClients.put(player, new ComputerData(player, x, y, z, dimensionId));
 					else{
 						c.server = data;
-						mainConnections.remove(c.serverName);
-						c.client = new ComputerData(player, x, y, z, dimensionId,isClient);
-						synchronized(listeners){
-							for(IConnectionListener listener : listeners)
-								listener.onConnected(player,c.serverName);
-						}
+						resumingServers.remove(c.serverName);
+						c.client = new ComputerData(player, x, y, z, dimensionId);
+						for(IConnectionListener listener : listeners)
+							listener.onConnected(player,c.serverName);
 					}
 				}else{
-					ComputerData data = mainConnections.get(c.clientName);
+					ComputerData data = resumingClients.get(c.clientName);
 					if(data == null)
-						mainConnections.put(player, new ComputerData(player, x, y, z, dimensionId,isClient));
+						resumingServers.put(player, new ComputerData(player, x, y, z, dimensionId));
 					else{
 						c.client = data;
-						mainConnections.remove(c.clientName);
-						c.server = new ComputerData(player, x, y, z, dimensionId,isClient);
-						synchronized(listeners){
-							for(IConnectionListener listener : listeners)
-								listener.onConnected(c.clientName,player);
-						}
+						resumingClients.remove(c.clientName);
+						c.server = new ComputerData(player, x, y, z, dimensionId);
+						for(IConnectionListener listener : listeners)
+							listener.onConnected(c.clientName,player);
+						
 					}
 				}
 	}
@@ -95,43 +96,47 @@ public class SburbConnection {
 		if(serversOpen.containsKey(player))
 			return;
 		
-		serversOpen.put(player,new ComputerData(player,x,y,z,dimension,false));
+		serversOpen.put(player,new ComputerData(player,x,y,z,dimension));
 		
-		synchronized(listeners){
-			for (IConnectionListener listener : listeners) {
-				listener.onServerOpen(player);
-			}
+		for (IConnectionListener listener : listeners) {
+			listener.onServerOpen(player);
 		}
 	}
 	
 	public static void connect(String client, int x, int y, int z, int dimension, String server) {
 		
 		if(serversOpen.containsKey(server)){
-			SburbConnection c = getClientConnection(client);
-			if(c != null && c.server != null){
-				Debug.print("Connection denied, client got an connection set up already, client:"+client+", connected to:"+c.server.owner);
+			if(getClientConnection(client) != null){
+				Debug.print("Connection denied, client got an connection set up already, client:"+client+", connected to:"+getClientConnection(client).server.owner);
 				return;
 			}
-			
-			connections.add(new SburbConnection(new ComputerData(client,x,y,z,dimension,true),serversOpen.remove(server)));
-			if(MinestuckSaveHandler.lands.contains((byte) dimension))
+			SburbConnection c = null;
+			for(SburbConnection connection : connections)
+				if(connection.clientName.equals(client) && connection.serverName.equals(server)){	//If the players got an permanent connection, use that
+					c = connection;
+					c.server = serversOpen.remove(server);
+					c.client = new ComputerData(client,x,y,z,dimension);
+					break;
+				}
+			if(c == null)	//Else, do a new one.
+				c = new SburbConnection(new ComputerData(client,x,y,z,dimension),serversOpen.remove(server));
+			connections.add(c);
+			if(MinestuckSaveHandler.lands.contains((byte) dimension))	//if the client have entered the medium, set enteredGame to true.
 				connections.get(connections.size()-1).enteredGame = true;
-			synchronized(listeners){
-				for (IConnectionListener listener : listeners)
-					listener.onConnected(client,server);
-			}
+			for (IConnectionListener listener : listeners)
+				listener.onConnected(client,server);
 		}
 		else Debug.print("Connection denied, the specific server wasn't open, server:"+server);
 	}
 	
 	public static void connectionClosed(String client, String server){
-		if(client.isEmpty()){	//PROBLEM How to know if the player wants to close an open server or stop resuming a connection
-			serversOpen.remove(server);
+		if(client.isEmpty()){	//If an open server wants to close
+			if(resumingServers.containsKey(server))
+				resumingServers.remove(server);
+			else serversOpen.remove(server);
 		}
-		else if(server.isEmpty()){
-			ComputerData data = mainConnections.get(client);
-			if(data != null && data.isClient)
-				mainConnections.remove(client);
+		else if(server.isEmpty()){	//If a client wants to stop resuming
+			resumingClients.remove(client);
 		}else
 			for(SburbConnection connect : connections)
 				if(connect.client != null && connect.client.owner.equals(client)&&connect.server.owner.equals(server)){
@@ -143,20 +148,16 @@ public class SburbConnection {
 					}else connections.remove(connect);
 					break;
 				}
-		synchronized(listeners){
-			for(IConnectionListener listener : listeners)
-				listener.onConnectionClosed(client, server);
-		}
+		for(IConnectionListener listener : listeners)
+			listener.onConnectionClosed(client, server);
 	}
 	
 	public static boolean giveItems(String client){
 		for(SburbConnection connect : connections)
 			if(connect.client != null && connect.client.owner.equals(client) && !connect.isMain && !connect.enteredGame){
 				connect.isMain = true;
-				synchronized(listeners){
-					for(IConnectionListener listener : listeners)
-						listener.newPermaConnection(client, connect.server.owner);
-				}
+				for(IConnectionListener listener : listeners)
+					listener.newPermaConnection(client, connect.server.owner);
 				return true;
 			}
 		return false;
@@ -171,16 +172,12 @@ public class SburbConnection {
 	}
 	
 	public static void addListener(IConnectionListener listener) {
-		synchronized(listeners){
-			if(!listeners.contains(listener))
-				listeners.add(listener);
-		}
+		if(!listeners.contains(listener))
+			listeners.add(listener);
 	}
 	
 	public static void removeListener(IConnectionListener listener){
-		synchronized(listeners){
-			listeners.remove(listener);
-		}
+		listeners.remove(listener);
 	}
 	
 	public static void saveData(File file){
@@ -244,7 +241,7 @@ public class SburbConnection {
 		}
 	}
 	
-	public static void checkConnections(){
+	public static void checkConnections(){ //Just for safety
 		for(SburbConnection c : connections){
 			if(c.client != null && c.server != null)
 				for(World world : MinecraftServer.getServer().worldServers){
@@ -267,8 +264,7 @@ public class SburbConnection {
 		private int x, y, z;
 		private int dimension;
 		private String owner;
-		private boolean isClient;
-		private ComputerData(String owner,int x,int y,int z,int dimension,boolean isClient){
+		private ComputerData(String owner,int x,int y,int z,int dimension){
 			this.owner = owner;
 			this.x = x;
 			this.y = y;
