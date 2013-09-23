@@ -46,7 +46,6 @@ public class MapGenCastle extends MapGenStructure
 
 	@Override
 	public String func_143025_a() {
-		// TODO Auto-generated method stub
-		return null;
+		return "SkaiaCastle";
 	}
 }
