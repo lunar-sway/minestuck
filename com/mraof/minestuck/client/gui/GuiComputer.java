@@ -72,7 +72,7 @@ public class GuiComputer extends GuiScreen
 		
 		
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.func_110434_K().func_110577_a(guiBackground);
+        this.mc.getTextureManager().bindTexture(guiBackground);
 		
 		int yOffset = (this.height / 2) - (ySize / 2);
 		this.drawTexturedModalRect((this.width / 2) - (xSize / 2), yOffset, 0, 0, xSize, ySize);

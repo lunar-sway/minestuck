@@ -72,7 +72,7 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
     public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) 
     {
     	Debug.print("Data packet gotten "+net.getClass());
-    	this.readFromNBT(pkt.customParam1);
+    	this.readFromNBT(pkt.data);
     }
     
     @Override

@@ -43,7 +43,7 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 	}
 	
 	@Override
-	public float getMaxHealth() 
+	public float getMaximumHealth() 
 	{
 		return 20;
 	}
@@ -55,9 +55,9 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 	}
 	
 	@Override
-	public EntityLivingData func_110161_a(EntityLivingData par1EntityLivingData)
+	public EntityLivingData onSpawnWithEgg(EntityLivingData par1EntityLivingData)
 	{
-		par1EntityLivingData = super.func_110161_a(par1EntityLivingData);
+		par1EntityLivingData = super.onSpawnWithEgg(par1EntityLivingData);
 		this.addRandomArmor();
 			
 		if(this.pawnType == 1)
@@ -112,7 +112,7 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 
 		if (weapon != null)
 			damage += 
-			(float)this.func_110148_a(SharedMonsterAttributes.field_111264_e).func_111126_e();
+			(float)this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue();
 		
         damage += EnchantmentHelper.getEnchantmentModifierLiving(this, (EntityLivingBase)par1Entity);
 
@@ -180,10 +180,10 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 	}
 	
 	@Override
-    protected void func_110147_ax()
+    protected void applyEntityAttributes()
     {
-        super.func_110147_ax();
-        this.func_110140_aT().func_111150_b(SharedMonsterAttributes.field_111264_e);
+        super.applyEntityAttributes();
+        this.getAttributeMap().func_111150_b(SharedMonsterAttributes.attackDamage);
     }
 
 

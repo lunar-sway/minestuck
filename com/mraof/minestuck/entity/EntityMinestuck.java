@@ -14,8 +14,8 @@ public abstract class EntityMinestuck extends EntityCreature
 		
 		setCustomStartingVariables(objects);
 		
-        this.func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a((double)(this.getMaxHealth()));
-		this.setEntityHealth(this.getMaxHealth());
+        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setAttribute((double)(this.getMaximumHealth()));
+		this.setHealth(this.getMaximumHealth());
 		
 		this.textureResource = new ResourceLocation("minestuck", this.getTexture());
 	}
@@ -24,7 +24,7 @@ public abstract class EntityMinestuck extends EntityCreature
 	{
 		
 	}
-	protected abstract float getMaxHealth();
+	protected abstract float getMaximumHealth();
 
 	public abstract String getTexture();
 
