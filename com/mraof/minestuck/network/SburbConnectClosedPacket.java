@@ -45,7 +45,7 @@ public class SburbConnectClosedPacket extends MinestuckPacket {
 	}
 
 	@Override
-	public void execute(INetworkManager network, MinestuckPacketHandler handler, Player player, String userName) {assert server == null || client == null;
+	public void execute(INetworkManager network, MinestuckPacketHandler handler, Player player, String userName) {
 		SburbConnection.connectionClosed(client,server);
 		Debug.print("Got disconnect packet");
 		

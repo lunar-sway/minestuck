@@ -34,6 +34,23 @@ public class SburbConnection {
 		return serversOpen.containsKey(server) || resumingServers.containsKey(server);
 	}
 	
+	public static boolean enteredMedium(String client){
+		for(SburbConnection c : connections)
+			if(c.isMain && c.getClientName().equals(client))
+				return c.enteredGame;
+		return false;
+	}
+	
+	public static String getAssociatedPartner(String player, boolean isClient){
+		for(SburbConnection c : connections)
+			if(c.isMain)
+				if(isClient && c.getClientName().equals(player))
+					return c.getServerName();
+				else if(!isClient && c.getServerName().equals(player))
+				return c.getClientName();
+		return "";
+	}
+	
 	public static SburbConnection getClientConnection(String client){
 		for(SburbConnection c : connections)
 			if(c.client != null && c.client.owner.equals(client))
@@ -212,7 +229,7 @@ public class SburbConnection {
 		if(file.exists()){
 			try{
 				DataInputStream stream = new DataInputStream(new FileInputStream(file));
-				connections.clear();Debug.print(stream.available());
+				connections.clear();
 				while(stream.available() > 0){
 					boolean connected = stream.readBoolean();
 					SburbConnection c = new SburbConnection(null, null);

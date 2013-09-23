@@ -1,28 +1,21 @@
 package com.mraof.minestuck.client.gui;
 
-
 import java.util.ArrayList;
 
-import javax.jws.Oneway;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.util.SburbConnection;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
-import com.mraof.minestuck.tileentity.TileEntityComputer;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.SburbConnection;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -140,7 +133,7 @@ public class GuiComputer extends GuiScreen
 		
 		if(te.programSelected == 0){
 			SburbConnection c = SburbConnection.getClientConnection(te.owner);
-			if(c != null && c.enteredGame()) //if it should view the grist cache button.
+			if(SburbConnection.enteredMedium(te.owner)) //if it should view the grist cache button. NEW Now even if the player isn't connected (but you still need to have had a connection there.
 				buttonStrings.add("View Gristcache");
 			if (te.server != null) { //If it is connected to someone.
 				displayMessage = "Connected to "+displayPlayer;
@@ -148,7 +141,7 @@ public class GuiComputer extends GuiScreen
 			} else if(te.resumingClient){
 				displayMessage = "Waiting for server...";
 				buttonStrings.add("Disconnect");
-			} else if(c == null){ //If the player doesn't have an other active client
+			} else if(c == null && !SburbConnection.isResuming(te.owner, true)){ //If the player doesn't have an other active client
 				displayMessage = "Select a server below";
 				if(SburbConnection.hasMainClient(te.owner)) //If it has a resumeable connection
 					buttonStrings.add("Resume connection");
@@ -171,7 +164,7 @@ public class GuiComputer extends GuiScreen
 			else {
 				displayMessage = "Server offline";
 				buttonStrings.add("Open to clients");
-				if(SburbConnection.hasMainServer(te.owner))
+				if(SburbConnection.hasMainServer(te.owner) && SburbConnection.getClientConnection(SburbConnection.getAssociatedPartner(te.owner, false)) == null)
 					buttonStrings.add("Resume connection");
 		    	}
 			}

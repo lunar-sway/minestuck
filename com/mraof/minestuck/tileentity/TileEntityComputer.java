@@ -41,12 +41,16 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
     
     @Override
     public void updateEntity() {
-    	if(server == null && serverConnected)
+    	if(server == null && serverConnected){
     		server = SburbConnection.getClientConnection(owner);
-    	if(client == null && !clientName.isEmpty())
+    		if(gui != null)
+    			gui.updateGui();
+    	}
+    	if(client == null && !clientName.isEmpty()){
     		client = SburbConnection.getClientConnection(clientName);
-    	if(openToClients && !SburbConnection.getServersOpen().contains(owner) && !SburbConnection.isResuming(owner, false))
-    		SburbConnection.openServer(owner, xCoord, yCoord, zCoord, worldObj.provider.dimensionId);
+    		if(gui != null)
+    			gui.updateGui();
+    	}
     }
     
 	@Override
@@ -148,8 +152,12 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 					packet.data = MinestuckPacket.makePacket(Type.SBURB_CLOSE,owner,"");
 				else packet.data = MinestuckPacket.makePacket(Type.SBURB_CLOSE,owner,this.server.getServerName());
 				packet.length = packet.data.length;
-				if(worldObj.isRemote)
+				if(worldObj.isRemote){
+					if(resumingClient)
+						SburbConnection.connectionClosed(owner,"");
+					else SburbConnection.connectionClosed(owner,this.server.getServerName());
 					PacketDispatcher.sendPacketToAllPlayers(packet);
+				}
 				else this.mc.getNetHandler().addToSendQueue(packet);
 			}
 			if(this.hasServer && server && (openToClients || this.client != null)){
@@ -157,10 +165,14 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 				packet.channel = "Minestuck";
 				if(openToClients)
 					packet.data = MinestuckPacket.makePacket(Type.SBURB_CLOSE,"",owner);
-				else packet.data = MinestuckPacket.makePacket(Type.SBURB_CLOSE,this.client.getClient().getOwner(),owner);
+				else packet.data = MinestuckPacket.makePacket(Type.SBURB_CLOSE,this.client.getClientName(),owner);
 				packet.length = packet.data.length;
-				if(worldObj.isRemote)
+				if(worldObj.isRemote){
+					if(openToClients)
+						SburbConnection.connectionClosed("",owner);
+					else SburbConnection.connectionClosed(this.client.getClientName(),owner);
 					PacketDispatcher.sendPacketToAllPlayers(packet);
+				}
 				else this.mc.getNetHandler().addToSendQueue(packet);
 			}
 		}
@@ -194,7 +206,7 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 	}
 	
 	@Override
-	public void onConnected(String client, String server) {Debug.print(owner+","+server+","+hasServer+","+this.client+","+openToClients+","+this.worldObj.isRemote);
+	public void onConnected(String client, String server) {
 		if(owner.equals(server) && hasServer && this.client == null && openToClients){
 			openToClients = false;
 			clientName = client;
