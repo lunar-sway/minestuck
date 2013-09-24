@@ -17,6 +17,7 @@ import net.minecraft.world.World;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.util.Debug;
 
 public class BlockComputerOn extends Block implements ITileEntityProvider {
 	
@@ -116,7 +117,8 @@ public class BlockComputerOn extends Block implements ITileEntityProvider {
 		@Override
 		public boolean onBlockActivated(World world, int x,int y,int z, EntityPlayer player,int par6, float par7, float par8, float par9) {
 			TileEntityComputer tileEntity = (TileEntityComputer) world.getBlockTileEntity(x, y, z);
-			if (tileEntity == null || player.isSneaking()) {
+			ItemStack item = player.getCurrentEquippedItem();
+			if (tileEntity == null || player.isSneaking() || item != null && item.itemID == Minestuck.disk.itemID && (item.getItemDamage() == 0 && !tileEntity.hasClient || item.getItemDamage() == 1 && !tileEntity.hasServer)) {
 				return false;
 			}
 
@@ -153,17 +155,27 @@ public class BlockComputerOn extends Block implements ITileEntityProvider {
 			if (te == null) {
 				return;
 			}
-
-			float rx = rand.nextFloat() * 0.8F + 0.1F;
-			float ry = rand.nextFloat() * 0.8F + 0.1F;
-			float rz = rand.nextFloat() * 0.8F + 0.1F;
-
-			EntityItem entityItem = new EntityItem(world, x + rx, y + ry, z + rz, new ItemStack(Minestuck.disk.itemID, 1, te.program));
-
+			te.closeConnection(true,true);
 			float factor = 0.05F;
-			entityItem.motionX = rand.nextGaussian() * factor;
-			entityItem.motionY = rand.nextGaussian() * factor + 0.2F;
-			entityItem.motionZ = rand.nextGaussian() * factor;
-			world.spawnEntityInWorld(entityItem);
+			if(te.hasClient) {
+				float rx = rand.nextFloat() * 0.8F + 0.1F;
+				float ry = rand.nextFloat() * 0.8F + 0.1F;
+				float rz = rand.nextFloat() * 0.8F + 0.1F;
+				EntityItem entityItem = new EntityItem(world, x + rx, y + ry, z + rz, new ItemStack(Minestuck.disk.itemID, 1, 0));
+				entityItem.motionX = rand.nextGaussian() * factor;
+				entityItem.motionY = rand.nextGaussian() * factor + 0.2F;
+				entityItem.motionZ = rand.nextGaussian() * factor;
+				world.spawnEntityInWorld(entityItem);
+			}
+			if(te.hasServer) {
+				float rx = rand.nextFloat() * 0.8F + 0.1F;
+				float ry = rand.nextFloat() * 0.8F + 0.1F;
+				float rz = rand.nextFloat() * 0.8F + 0.1F;
+				EntityItem entityItem = new EntityItem(world, x + rx, y + ry, z + rz, new ItemStack(Minestuck.disk.itemID, 1, 1));
+				entityItem.motionX = rand.nextGaussian() * factor;
+				entityItem.motionY = rand.nextGaussian() * factor + 0.2F;
+				entityItem.motionZ = rand.nextGaussian() * factor;
+				world.spawnEntityInWorld(entityItem);
+			}
 		}
 }

@@ -67,7 +67,8 @@ public class MinestuckPlayerTracker implements IPlayerTracker
 			if (((EntityPlayer)player).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Class") == 0 || ((EntityPlayer)player).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Aspect") == 0) {
 				newTitle = TitleHelper.randomTitle();
 			} else {
-				newTitle = new Title(((EntityPlayer)player).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Class"),((EntityPlayer)player).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Aspect"));
+				newTitle = new Title(TitleHelper.getClassFromInt(((EntityPlayer)player).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Class")),
+						TitleHelper.getAspectFromInt(((EntityPlayer)player).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Aspect")));
 			}
 	        Packet250CustomPayload packet = new Packet250CustomPayload();
 	        packet.channel = "Minestuck";
@@ -76,8 +77,8 @@ public class MinestuckPlayerTracker implements IPlayerTracker
 	        ((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(packet);
 			if(player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getTags().size() == 0)
 				player.getEntityData().setCompoundTag(EntityPlayer.PERSISTED_NBT_TAG, new NBTTagCompound());
-			player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Class", newTitle.getHeroClass());
-			player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Aspect", newTitle.getHeroAspect());
+			player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Class", TitleHelper.getIntFromClass(newTitle.getHeroClass()));
+			player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Aspect", TitleHelper.getIntFromAspect(newTitle.getHeroAspect()));
 	}
 	public static void updateLands(EntityPlayer player)
 	{

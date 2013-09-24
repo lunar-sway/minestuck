@@ -28,12 +28,14 @@ public class GuiHandler implements IGuiHandler {
     public Object getClientGuiElement(int id, EntityPlayer player, World world,
                     int x, int y, int z) {
             TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
-            if(tileEntity instanceof TileEntityMachine){
+            if(tileEntity instanceof TileEntityMachine && id == 0){
                     return new GuiMachine(player.inventory, (TileEntityMachine) tileEntity);
             }
-            if(tileEntity instanceof TileEntityComputer){
+            if(tileEntity instanceof TileEntityComputer && id == 1){
                 return new GuiComputer(Minecraft.getMinecraft(),(TileEntityComputer) tileEntity);
-        }
+            }
+            if(id == 2)
+            	return new GuiGristCache(Minecraft.getMinecraft());
             return null;
 
     }

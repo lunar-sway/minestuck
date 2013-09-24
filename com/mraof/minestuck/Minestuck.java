@@ -75,6 +75,7 @@ import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristType;
+import com.mraof.minestuck.util.SburbConnection;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.WorldProviderSkaia;
 import com.mraof.minestuck.world.gen.OreHandler;
@@ -470,5 +471,6 @@ public class Minestuck
 				e.printStackTrace();
 			}
 		}
+		SburbConnection.loadData(event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("connectionList"));
 	}
 }
