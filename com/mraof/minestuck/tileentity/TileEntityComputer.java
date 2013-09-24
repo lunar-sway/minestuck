@@ -2,10 +2,13 @@ package com.mraof.minestuck.tileentity;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
@@ -67,8 +70,11 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 	@Override
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
 		super.readFromNBT(par1NBTTagCompound);	
-		installedPrograms.put(0,par1NBTTagCompound.getBoolean("hasClient"));
-		installedPrograms.put(1,par1NBTTagCompound.getBoolean("hasServer"));
+		if (par1NBTTagCompound.getCompoundTag("programs") != null) {
+			for (Object tag : par1NBTTagCompound.getCompoundTag("programs").getTags()) {
+				installedPrograms.put(((NBTTagInt)tag).data,true);
+			}
+		}
 		this.clientName = par1NBTTagCompound.getString("connectClient");
 		this.serverConnected = par1NBTTagCompound.getBoolean("connectServer");
 		this.openToClients = par1NBTTagCompound.getBoolean("serverOpen");
@@ -85,8 +91,16 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
     @Override
     public void writeToNBT(NBTTagCompound par1NBTTagCompound) {
     	super.writeToNBT(par1NBTTagCompound);
-    	par1NBTTagCompound.setBoolean("hasClient",this.hasClient());
-    	par1NBTTagCompound.setBoolean("hasServer",this.hasServer());
+    	NBTTagCompound programs = new NBTTagCompound();
+   	   	Iterator it = this.installedPrograms.entrySet().iterator();
+	   	int place = 0;
+	    while (it.hasNext()) {
+	        Map.Entry pairs = (Map.Entry)it.next();
+	        int program = (Integer) pairs.getKey();
+	        programs.setInteger("program"+program,program);
+	        place++;
+         }
+    	par1NBTTagCompound.setCompoundTag("programs",programs);
     	par1NBTTagCompound.setString("connectClient",this.clientName);
     	par1NBTTagCompound.setBoolean("connectServer", this.serverConnected);
     	par1NBTTagCompound.setBoolean("serverOpen", this.openToClients);

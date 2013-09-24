@@ -230,15 +230,12 @@ public class GuiComputer extends GuiScreen
         while (it.hasNext()) {
             Map.Entry pairs = (Map.Entry)it.next();
             int program = (Integer) pairs.getKey();
-            boolean installed = (Boolean) pairs.getValue();
-            if (installed) {
-	            if (found) {
-	            	return program;
-	            } else if (program==te.programSelected) {
-	            	found = true;
-	            } else {
-	            	lastProgram = program;
-	            }
+            if (found) {
+            	return program;
+            } else if (program==te.programSelected) {
+            	found = true;
+            } else {
+            	lastProgram = program;
             }
             place++;
         }
