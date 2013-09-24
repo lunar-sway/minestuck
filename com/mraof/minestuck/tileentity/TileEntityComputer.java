@@ -1,5 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
+import java.util.Random;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
@@ -15,46 +17,72 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IConnectionListener;
 import com.mraof.minestuck.util.SburbConnection;
 
-public class TileEntityComputer extends TileEntity implements IConnectionListener {
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
-	public int program;
-	public String connectedTo = "";
-	public boolean givenItems = false;
-	public String connectedFrom = "";
-	public boolean initialized = false;
+public class TileEntityComputer extends TileEntity implements IConnectionListener {
+	
+	public volatile boolean hasClient = false;
+	public volatile boolean hasServer = false;
+	public boolean openToClients = false;
+	public SburbConnection client;
+	public boolean serverConnected;	//To not be confused, serverConnected = if it has a server connected to it (so serverConnected can only be true if hasClient == true)
+	public String clientName = "";
+	public SburbConnection server;
 	public GuiComputer gui;
 	public String owner = "";
+	public String latestmessage = "";
 	private Minecraft mc = Minecraft.getMinecraft();
+	public boolean resumingClient;
+	public int programSelected = -1;	//0 if client is selected, 1 if server. (client side varable)
 	
     public TileEntityComputer() {
             SburbConnection.addListener(this);
-            if (Minecraft.getMinecraft().thePlayer != null) {
-            	owner = Minecraft.getMinecraft().thePlayer.username;
-            }
     }
     
     @Override
-    public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
-    	super.readFromNBT(par1NBTTagCompound);
-    	 this.program = par1NBTTagCompound.getInteger("program");
-    	 this.connectedTo = par1NBTTagCompound.getString("connectedTo");
-    	 this.connectedFrom = par1NBTTagCompound.getString("conectedFrom");
+    public void updateEntity() {
+    	if(server == null && serverConnected){
+    		server = SburbConnection.getClientConnection(owner);
+    		if(gui != null)
+    			gui.updateGui();
+    	}
+    	if(client == null && !clientName.isEmpty()){
+    		client = SburbConnection.getClientConnection(clientName);
+    		if(gui != null)
+    			gui.updateGui();
+    	}
+    }
+    
+	@Override
+	public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
+		super.readFromNBT(par1NBTTagCompound);	
+		this.hasClient = par1NBTTagCompound.getBoolean("hasClient");
+		this.hasServer = par1NBTTagCompound.getBoolean("hasServer");
+		this.clientName = par1NBTTagCompound.getString("connectClient");
+		this.serverConnected = par1NBTTagCompound.getBoolean("connectServer");
+		this.openToClients = par1NBTTagCompound.getBoolean("serverOpen");
+		this.resumingClient = par1NBTTagCompound.getBoolean("resumeClient");
     	 this.owner = par1NBTTagCompound.getString("owner");
-    	 this.givenItems = par1NBTTagCompound.getBoolean("givenItems");
+    	if(!this.clientName.isEmpty() && client == null)
+    		client = SburbConnection.getClientConnection(clientName);
+    	if(this.serverConnected && server == null)
+    		server = SburbConnection.getClientConnection(owner);
+    	 if(gui != null)
+    		 gui.updateGui();
     }
     
     @Override
     public void writeToNBT(NBTTagCompound par1NBTTagCompound) {
     	super.writeToNBT(par1NBTTagCompound);
-    	par1NBTTagCompound.setInteger("program",this.program);
-    	par1NBTTagCompound.setBoolean("givenItems",this.givenItems);
-    	if (!this.connectedTo.equals("")) {
-    		par1NBTTagCompound.setString("connectedTo",this.connectedTo);
-    	}
-    	if (!this.connectedFrom.equals("")) {
-    		par1NBTTagCompound.setString("conectedFrom",this.connectedFrom);
-    	}
-    	if (!this.owner.equals("")) {
+    	par1NBTTagCompound.setBoolean("hasClient",this.hasClient);
+    	par1NBTTagCompound.setBoolean("hasServer",this.hasServer);
+    	par1NBTTagCompound.setString("connectClient",this.clientName);
+    	par1NBTTagCompound.setBoolean("connectServer", this.serverConnected);
+    	par1NBTTagCompound.setBoolean("serverOpen", this.openToClients);
+    	par1NBTTagCompound.setBoolean("resumeClient",this.resumingClient);
+    	if (!this.owner.isEmpty()) {
     		par1NBTTagCompound.setString("owner",this.owner);
     	}
 
@@ -75,77 +103,140 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
     	this.readFromNBT(pkt.data);
     }
     
-    @Override
-    public void updateEntity() {
-    	if (!initialized) {
-    		updateConnection();
-    		initialized = true;
-    	}
+    @SideOnly(Side.CLIENT)
+    public void resume(boolean isClient){
+    	Packet250CustomPayload packet = new Packet250CustomPayload();
+		packet.channel = "Minestuck";
+		packet.data = MinestuckPacket.makePacket(Type.SBURB_RESUME,owner,xCoord,yCoord,zCoord,worldObj.provider.dimensionId,isClient);
+		packet.length = packet.data.length;
+		mc.getNetHandler().addToSendQueue(packet);
     }
     
-    public void updateConnection() {
-    	if (gui == null) {
-    		//We're server side
-    		
-    	} else {
-    		//We're client side
-    		
-        	if (!connectedTo.equals("") && !connectedFrom.equals("")) {
-        		if (program == 0) {
-        			
-        			SburbConnection.connect(connectedFrom,connectedTo);
-        			
-        			Packet250CustomPayload packet = new Packet250CustomPayload();
-        			packet.channel = "Minestuck";
-        			packet.data = MinestuckPacket.makePacket(Type.SBURB_CONNECT,connectedFrom,connectedTo);
-        			packet.length = packet.data.length;
-        			mc.getNetHandler().addToSendQueue(packet);
-        			
-        		} else {
-        			
-        		}
-    			
-    		} else if (connectedTo.equals("") && !connectedFrom.equals("")) {
-    	  		if (program == 1) {
-    				
-        			Packet250CustomPayload packet = new Packet250CustomPayload();
-        			packet.channel = "Minestuck";
-        			packet.data = MinestuckPacket.makePacket(Type.SBURB_OPEN,connectedFrom);
-        			packet.length = packet.data.length;
-        			mc.getNetHandler().addToSendQueue(packet);
-    	  		} else {
-    	  			
-    	  		}
-    		}
-        	
-    		gui.updateGui();
-    	}
-    }
-
-	@Override
-	public void onConnected(String server, String client) {
-		if (server == connectedFrom && program == 1) {
-				this.connectedTo = client;
-				this.connectedFrom = server;
-				updateConnection();
-	
-				if (gui != null) {
-					gui.updateGui();
-				}
-			} else if (owner == client && program == 0) {
-				this.connectedTo = server;
-				this.connectedFrom = client;
+    @SideOnly(Side.CLIENT)
+	public void openServer(){
+		if(hasServer && !openToClients && client == null){
+			openToClients = true;
+			Packet250CustomPayload packet = new Packet250CustomPayload();
+			packet.channel = "Minestuck";
+			packet.data = MinestuckPacket.makePacket(Type.SBURB_OPEN,owner,xCoord,yCoord,zCoord,worldObj.provider.dimensionId);
+			packet.length = packet.data.length;
+			mc.getNetHandler().addToSendQueue(packet);
 		}
+	}
+	
+    @SideOnly(Side.CLIENT)
+	public void connectToServer(String server){
+		if(hasClient && this.server == null){
+			this.serverConnected = true;
+			Packet250CustomPayload packet = new Packet250CustomPayload();
+			packet.channel = "Minestuck";
+			packet.data = MinestuckPacket.makePacket(Type.SBURB_CONNECT,owner,xCoord,yCoord,zCoord,worldObj.provider.dimensionId,server);
+			packet.length = packet.data.length;
+			mc.getNetHandler().addToSendQueue(packet);
+		}
+	}
+	
+    @SideOnly(Side.CLIENT)
+	public void giveItems(){
+		if(hasServer && client != null && !client.givenItems()){
+			Packet250CustomPayload packet = new Packet250CustomPayload();
+			packet.channel = "Minestuck";
+			packet.data = MinestuckPacket.makePacket(Type.SBURB_GIVE,client.getClientName());
+			packet.length = packet.data.length;
+			this.mc.getNetHandler().addToSendQueue(packet);
+		}
+	}
+	
+	public void closeConnection(boolean client, boolean server) { //Can be called when disconnecting through GUI or on destroying the block.
+		if(server || client){
+			if(server && client)
+				SburbConnection.removeListener(this);
+			if(this.hasClient && (this.server != null || this.resumingClient) && client){
+				Packet250CustomPayload packet = new Packet250CustomPayload();
+				packet.channel = "Minestuck";
+				if(resumingClient)
+					packet.data = MinestuckPacket.makePacket(Type.SBURB_CLOSE,owner,"");
+				else packet.data = MinestuckPacket.makePacket(Type.SBURB_CLOSE,owner,this.server.getServerName());
+				packet.length = packet.data.length;
+				if(worldObj.isRemote){
+					if(resumingClient)
+						SburbConnection.connectionClosed(owner,"");
+					else SburbConnection.connectionClosed(owner,this.server.getServerName());
+					PacketDispatcher.sendPacketToAllPlayers(packet);
+				}
+				else this.mc.getNetHandler().addToSendQueue(packet);
+			}
+			if(this.hasServer && server && (openToClients || this.client != null)){
+				Packet250CustomPayload packet = new Packet250CustomPayload();
+				packet.channel = "Minestuck";
+				if(openToClients)
+					packet.data = MinestuckPacket.makePacket(Type.SBURB_CLOSE,"",owner);
+				else packet.data = MinestuckPacket.makePacket(Type.SBURB_CLOSE,this.client.getClientName(),owner);
+				packet.length = packet.data.length;
+				if(worldObj.isRemote){
+					if(openToClients)
+						SburbConnection.connectionClosed("",owner);
+					else SburbConnection.connectionClosed(this.client.getClientName(),owner);
+					PacketDispatcher.sendPacketToAllPlayers(packet);
+				}
+				else this.mc.getNetHandler().addToSendQueue(packet);
+			}
+		}
+	}
+	
+	public void onConnectionClosed(String client, String server){
+		if(this.hasClient && client.equals(this.owner) && this.server != null && server.equals(this.server.getServerName())){
+			if(programSelected == 0)
+				latestmessage = "Connection with server closed";
+			this.server = null;
+			serverConnected = false;
+		}
+		else if(this.hasClient && client.equals(this.owner) && this.resumingClient && server.isEmpty()){
+			latestmessage = "Stopped resuming";
+			this.resumingClient = false;
+		}
+		if(this.hasServer && server.equals(this.owner) && this.client != null && client.equals(this.client.getClientName())){
+			if(programSelected == 1)
+				latestmessage = "Connection with client closed";
+			this.client = null;
+			clientName = "";
+		}
+		else if(this.hasServer && server.equals(this.owner) && openToClients && client.isEmpty()){
+			latestmessage = "Server closed";
+			this.openToClients = false;
+			
+		}
+		
+		if(gui != null)
+			gui.updateGui();
+	}
+	
+	@Override
+	public void onConnected(String client, String server) {
+		if(owner.equals(server) && hasServer && this.client == null && openToClients){
+			openToClients = false;
+			clientName = client;
+		}
+		if(owner.equals(client) && hasClient && resumingClient){
+			resumingClient = false;
+			serverConnected = true;
+		}
+		if (gui != null)
+			gui.updateGui();
 	}
 
 	@Override
 	public void onServerOpen(String server) {
-		if (server == this.owner && program == 1) {
-			this.connectedFrom = server;
-			if (gui != null) {
-				gui.updateGui();
-			}
+		if (gui != null) {
+			gui.updateGui();
 		}
 	}
-    
+	
+	@Override
+	public void newPermaConnection(String client, String server) {
+		if(gui != null) {
+			gui.updateGui();
+		}
+	}
+	
 }

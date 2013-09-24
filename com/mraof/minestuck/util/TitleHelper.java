@@ -4,12 +4,32 @@ import java.util.Random;
 
 public final class TitleHelper {
 	
-	public static String[] classes = {"INVALID","ROGUE","THIEF","HEIR","MAID","PAGE","KNIGHT","SEER","MAGE","SYLPH","WITCH","BARD","PRINCE"};
-	public static String[] aspects = {"INVALID","TIME","SPACE","VOID","LIGHT","MIND","HEART","RAGE","HOPE","DOOM","LIFE","BLOOD","BREATH"};
-	public static Title randomTitle() {
-		
-		Random random = new Random();
-		return new Title(random.nextInt(classes.length-1)+1,random.nextInt(aspects.length-1)+1);
-		
+	public static EnumClass getClassFromInt(int i){
+		return EnumClass.values()[i];
 	}
+	
+	public static EnumAspect getAspectFromInt(int i){
+		return EnumAspect.values()[i];
+	}
+	
+	public static int getIntFromClass(EnumClass e){
+		EnumClass[] list = EnumClass.values();
+		for(int i = 0; i < list.length; i++)
+			if(list[i].equals(e))
+				return i;
+		return -1;
+	}
+	
+	public static int getIntFromAspect(EnumAspect e){
+		EnumAspect[] list = EnumAspect.values();
+		for(int i = 0; i < list.length; i++)
+			if(list[i].equals(e))
+				return i;
+		return -1;
+	}
+	
+	public static Title randomTitle(){
+		return new Title(EnumClass.getRandomClass(null),EnumAspect.getRandomAspect(null));
+	}
+	
 }

@@ -18,6 +18,7 @@ import net.minecraft.world.WorldServer;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.ITeleporter;
+import com.mraof.minestuck.util.SburbConnection;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.gen.lands.LandHelper;
 
@@ -49,8 +50,10 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 		if(!par2World.isRemote)
 		{
 			int destinationId = player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("LandId") == 0 ? LandHelper.createLand(player) : player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("LandId");
-			if(player.worldObj.provider.dimensionId != destinationId)
+			if(player.worldObj.provider.dimensionId != destinationId) {
 				Teleport.teleportEntity(player, destinationId, this);
+				SburbConnection.enterMedium(player.username, destinationId);
+			}
 		}
 	}
 	public void makeDestination(Entity entity, WorldServer worldserver0, WorldServer worldserver1)

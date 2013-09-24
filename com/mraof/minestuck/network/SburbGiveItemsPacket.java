@@ -6,23 +6,24 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.server.MinecraftServer;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.SburbConnection;
 
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 
 public class SburbGiveItemsPacket extends MinestuckPacket {
 
-	public String connectedTo;
-	public int xCoord;
-	public int yCoord;
-	public int zCoord;
+	public String client;
 	public int gristTotal;
 	public SburbGiveItemsPacket() 
 	{
@@ -30,14 +31,8 @@ public class SburbGiveItemsPacket extends MinestuckPacket {
 	}
 
 	@Override
-	public byte[] generatePacket(Object... data) 
-	{
-		ByteArrayDataOutput dat = ByteStreams.newDataOutput();
-		dat.writeInt((Integer)data[0]);
-		dat.writeInt((Integer)data[1]);
-		dat.writeInt((Integer)data[2]);
-		dat.writeChars((String) data[3]);
-		return dat.toByteArray();
+	public byte[] generatePacket(Object... data) {
+		return data[0].toString().getBytes();
 	}
 
 	@Override
@@ -45,57 +40,44 @@ public class SburbGiveItemsPacket extends MinestuckPacket {
 	{
 		ByteArrayDataInput dat = ByteStreams.newDataInput(data);
 		
-		xCoord = dat.readInt();
-		yCoord = dat.readInt();
-		zCoord = dat.readInt();
-		connectedTo = dat.readLine();
+		client = dat.readLine();
 		
 		return this;
 	}
 
 	@Override
-	public void execute(INetworkManager network, MinestuckPacketHandler handler, Player player, String userName)
-	{
-		TileEntityComputer te = (TileEntityComputer)Minecraft.getMinecraft().theWorld.getBlockTileEntity(xCoord,yCoord,zCoord);
-				
-		if (te == null) {
-			Debug.print("Packet recieved, but TE isn't there!");
-			return;
-		}
-		
-		String sendTo = "";
-		//Debug.print("Conn'd to "+te.connectedTo);
-		String[] parts = te.connectedTo.split("\0");
-		for (String part : parts) {
-			sendTo += part;
-		}
-		
-		InventoryPlayer items = null;
-		for (Object obj : MinecraftServer.getServer().getConfigurationManager().playerEntityList) {
-			if (((EntityPlayer)obj).username.equals(sendTo)) {
-				items = ((EntityPlayer)obj).inventory;
-			} else {
-				Debug.print("Not it: "+((EntityPlayer)obj).username);
+	public void execute(INetworkManager network, MinestuckPacketHandler handler, Player player, String userName) {
+		boolean canGive = SburbConnection.giveItems(client);
+		if(!((EntityPlayer)player).worldObj.isRemote && canGive){
+			InventoryPlayer items = null;
+			for (Object obj : MinecraftServer.getServer().getConfigurationManager().playerEntityList) {
+				if (((EntityPlayer)obj).username.equals(client)) {
+					items = ((EntityPlayer)obj).inventory;
+				} else {
+					Debug.print("Not it: "+((EntityPlayer)obj).username);
+				}
 			}
-		}
-		if (items == null) {
-			Debug.print("Client player not found: " + sendTo);
-			return;
-		}
+			if (items == null) {
+				Debug.print("Client player not found: " + client);
+				return;
+			}
+			for (int i = 0;i < 4;i++) {
+				items.addItemStackToInventory(new ItemStack(Minestuck.blockMachine.blockID,1,i));
+			}
+			ItemStack card = new ItemStack(Minestuck.punchedCard.itemID,1,0);
+			card.setTagCompound(new NBTTagCompound());
+			card.getTagCompound().setInteger("contentID",Minestuck.cruxiteArtifact.itemID);
+			card.getTagCompound().setInteger("contentMeta",0);
+			items.addItemStackToInventory(card);
 			
-		//InventoryPlayer items = ((EntityPlayer)Minecraft.getMinecraft().theWorld.getPlayerEntityByName(connectedTo)).inventory;
-		//ItemStack[] newItems = new ItemStack[5];
-		for (int i = 0;i < 4;i++) {
-			items.addItemStackToInventory(new ItemStack(Minestuck.blockMachine.blockID,1,i));
+			Packet250CustomPayload packet = new Packet250CustomPayload();
+			packet.channel = "Minestuck";
+			packet.data = MinestuckPacket.makePacket(Type.SBURB_GIVE,client);
+			packet.length = packet.data.length;
+			PacketDispatcher.sendPacketToAllPlayers(packet);
+			
+			Debug.print("Packet recieved. Items given!");
 		}
-		ItemStack card = new ItemStack(Minestuck.punchedCard.itemID,1,0);
-		card.setTagCompound(new NBTTagCompound());
-		card.getTagCompound().setInteger("contentID",Minestuck.cruxiteArtifact.itemID);
-		card.getTagCompound().setInteger("contentMeta",0);
-		items.addItemStackToInventory(card);
-		te.givenItems = true;
-		
-		Debug.print("Packet recieved. Items given!");
 	}
 
 }

@@ -16,6 +16,7 @@ import org.lwjgl.opengl.GL12;
 
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.Title;
+import com.mraof.minestuck.util.TitleHelper;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -61,14 +62,15 @@ public class GuiGristCache extends GuiScreen
 	{
 		super.drawScreen(xcor, ycor, par3);
 		this.drawDefaultBackground();
-
-		if (titleMessage.isEmpty())
-			titleMessage = mc.thePlayer.username.toUpperCase() + " : " + title;
 		
 		if (title == null) {
-			title = new Title(((EntityPlayer)mc.thePlayer).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Class"),((EntityPlayer)mc.thePlayer).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Aspect"));
-			titleMessage = title.getTitleName();
+			title = new Title(TitleHelper.getClassFromInt(((EntityPlayer)mc.thePlayer).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Class")),
+					TitleHelper.getAspectFromInt(((EntityPlayer)mc.thePlayer).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Aspect")));
+			titleMessage = mc.thePlayer.username.toUpperCase() + " : " + title.getTitleName();
 		}
+		
+		if (titleMessage.isEmpty())
+			titleMessage = mc.thePlayer.username.toUpperCase() + " : " + title;
 		
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.getTextureManager().bindTexture(guiBackground);
@@ -78,6 +80,7 @@ public class GuiGristCache extends GuiScreen
 		fontRenderer.drawString(cacheMessage, (this.width / 2) - fontRenderer.getStringWidth(cacheMessage) / 2, yOffset + 12, 0x404040);
 		fontRenderer.drawString(titleMessage, (this.width / 2) - fontRenderer.getStringWidth(titleMessage) / 2, yOffset + 22, 0x404040);
 
+		GL11.glColor3f(1,1,1);
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		RenderHelper.disableStandardItemLighting();
 		GL11.glDisable(GL11.GL_LIGHTING);

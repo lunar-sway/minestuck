@@ -1,6 +1,13 @@
 package com.mraof.minestuck.network;
 
-import net.minecraft.client.Minecraft;
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
+import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.SburbConnection;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
@@ -8,58 +15,49 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
-import com.mraof.minestuck.tileentity.TileEntityComputer;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.SburbConnection;
-
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 
-public class SburbConnectPacket extends MinestuckPacket {
-
-	public String client;
-	public String server;
-	public int x, y, z;
-	public int dimensionId;
-	public SburbConnectPacket() 
-	{
-		super(Type.SBURB_CONNECT);
+public class SburbResumePacket extends MinestuckPacket {
+	
+	public SburbResumePacket() {
+		super(Type.SBURB_RESUME);
 	}
-
+	
+	private String player;
+	private int x, y, z;
+	private int dimensionId;
+	private boolean isClient;
+	
 	@Override
-	public byte[] generatePacket(Object... data) 
-	{
+	public byte[] generatePacket(Object... data) {
 		ByteArrayDataOutput dat = ByteStreams.newDataOutput();
 		dat.write((data[0].toString()+"\n").getBytes());
 		dat.writeInt((Integer)data[1]);
 		dat.writeInt((Integer)data[2]);
 		dat.writeInt((Integer)data[3]);
 		dat.writeInt((Integer)data[4]);
-		dat.write(data[5].toString().getBytes());
+		dat.writeBoolean((Boolean)data[5]);
 		return dat.toByteArray();
 	}
-
+	
 	@Override
-	public MinestuckPacket consumePacket(byte[] data) 
-	{
+	public MinestuckPacket consumePacket(byte[] data) {
 		ByteArrayDataInput dat = ByteStreams.newDataInput(data);
-
-		client = dat.readLine();
+		
+		player = dat.readLine();
 		x = dat.readInt();
 		y = dat.readInt();
 		z = dat.readInt();
 		dimensionId = dat.readInt();
-		server = dat.readLine();
+		isClient = dat.readBoolean();
 		
 		return this;
 	}
-
+	
 	@Override
-	public void execute(INetworkManager network, MinestuckPacketHandler handler, Player player, String userName) {
+	public void execute(INetworkManager network, MinestuckPacketHandler minestuckPacketHandler, Player player, String userName) {
+
 		if (!((EntityPlayer)player).worldObj.isRemote) {
 			World world = null;
 			for(WorldServer worldServ : MinecraftServer.getServer().worldServers)
@@ -77,18 +75,20 @@ public class SburbConnectPacket extends MinestuckPacket {
 				return;
 			}
 			TileEntityComputer te = (TileEntityComputer)entity;
-			te.serverConnected = true;
+			if(isClient)
+				te.resumingClient = true;
+			else{
+				te.openToClients = true;
+			}
 			world.markBlockForUpdate(x, y, z);
 			Packet250CustomPayload packet = new Packet250CustomPayload();
 			packet.channel = "Minestuck";
-			packet.data = MinestuckPacket.makePacket(Type.SBURB_CONNECT, client,x,y,z,dimensionId,server);
+			packet.data = MinestuckPacket.makePacket(Type.SBURB_RESUME, player,x,y,z,dimensionId,isClient);
 			packet.length = packet.data.length;
 			PacketDispatcher.sendPacketToAllPlayers(packet);
 		}
-		Debug.print("Got connect packet, client:"+client+" server:"+server);
-		SburbConnection.connect(client,x,y,z,dimensionId,server);
-		
-		
+		Debug.print("Got resume packet, player:"+this.player);
+		SburbConnection.resumeConnection(this.player,x,y,z,dimensionId,isClient);
 	}
 
 }
