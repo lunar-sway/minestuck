@@ -66,7 +66,7 @@ public class GuiGristCache extends GuiScreen
 		if (title == null) {
 			title = new Title(TitleHelper.getClassFromInt(((EntityPlayer)mc.thePlayer).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Class")),
 					TitleHelper.getAspectFromInt(((EntityPlayer)mc.thePlayer).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Aspect")));
-			titleMessage = title.getTitleName();
+			titleMessage = mc.thePlayer.username.toUpperCase() + " : " + title.getTitleName();
 		}
 		
 		if (titleMessage.isEmpty())

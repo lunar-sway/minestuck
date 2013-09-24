@@ -18,6 +18,8 @@ import com.mraof.minestuck.util.IConnectionListener;
 import com.mraof.minestuck.util.SburbConnection;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityComputer extends TileEntity implements IConnectionListener {
 	
@@ -101,6 +103,7 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
     	this.readFromNBT(pkt.data);
     }
     
+    @SideOnly(Side.CLIENT)
     public void resume(boolean isClient){
     	Packet250CustomPayload packet = new Packet250CustomPayload();
 		packet.channel = "Minestuck";
@@ -109,6 +112,7 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 		mc.getNetHandler().addToSendQueue(packet);
     }
     
+    @SideOnly(Side.CLIENT)
 	public void openServer(){
 		if(hasServer && !openToClients && client == null){
 			openToClients = true;
@@ -120,6 +124,7 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 		}
 	}
 	
+    @SideOnly(Side.CLIENT)
 	public void connectToServer(String server){
 		if(hasClient && this.server == null){
 			this.serverConnected = true;
@@ -131,6 +136,7 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 		}
 	}
 	
+    @SideOnly(Side.CLIENT)
 	public void giveItems(){
 		if(hasServer && client != null && !client.givenItems()){
 			Packet250CustomPayload packet = new Packet250CustomPayload();
@@ -141,7 +147,7 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 		}
 	}
 	
-	public void closeConnection(boolean client, boolean server) {
+	public void closeConnection(boolean client, boolean server) { //Can be called when disconnecting through GUI or on destroying the block.
 		if(server || client){
 			if(server && client)
 				SburbConnection.removeListener(this);

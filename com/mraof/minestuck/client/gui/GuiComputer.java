@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL12;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.SburbConnection;
 
 import net.minecraft.client.Minecraft;
@@ -41,17 +42,13 @@ public class GuiComputer extends GuiScreen
 	private int index = 0;
 
 	public Minecraft mc;
-	public EntityPlayer player;
-	public World world;
 	private TileEntityComputer te;
 
 
-	public GuiComputer(Minecraft mc,EntityPlayer player,World world,TileEntityComputer te)
+	public GuiComputer(Minecraft mc,TileEntityComputer te)
 	{
 		super();
 		
-		this.world = world;
-		this.player = player;
 		this.mc = mc;
 		this.fontRenderer = mc.fontRenderer;
 		this.te = te;
@@ -204,7 +201,7 @@ public class GuiComputer extends GuiScreen
 			} else if (guibutton == downButton) {
 				index++;
 			} else if(guibutton.displayString.equals("View Gristcache")){
-				player.openGui(Minestuck.instance, 2, world, te.xCoord, te.yCoord, te.zCoord);
+				mc.thePlayer.openGui(Minestuck.instance, 2, te.worldObj, te.xCoord, te.yCoord, te.zCoord);
 			} else if(guibutton.displayString.equals("Resume connection")){
 				te.resume(true);
 			} else{

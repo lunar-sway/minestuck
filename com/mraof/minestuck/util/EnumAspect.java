@@ -39,7 +39,7 @@ public enum EnumAspect {
 	@Override
 	public String toString() {
 		String s = this.name();
-		s.toLowerCase();
+		s = s.toLowerCase();
 		return s.replaceFirst(""+s.charAt(0), ""+Character.toUpperCase(s.charAt(0)));
 	}
 	
