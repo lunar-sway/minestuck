@@ -1,5 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
+import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Random;
 
 import net.minecraft.client.Minecraft;
@@ -23,11 +25,15 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityComputer extends TileEntity implements IConnectionListener {
 	
-	public volatile boolean hasClient = false;
-	public volatile boolean hasServer = false;
+	//public volatile boolean hasClient = false;
+	//public volatile boolean hasServer = false;
+	public Hashtable installedPrograms = new Hashtable();
 	public boolean openToClients = false;
 	public SburbConnection client;
-	public boolean serverConnected;	//To not be confused, serverConnected = if it has a server connected to it (so serverConnected can only be true if hasClient == true)
+	/**
+	 * To not be confused, serverConnected = if it has a server connected to it (so serverConnected can only be true if hasClient == true)
+	 */
+	public boolean serverConnected;
 	public String clientName = "";
 	public SburbConnection server;
 	public GuiComputer gui;
@@ -35,7 +41,10 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 	public String latestmessage = "";
 	private Minecraft mc = Minecraft.getMinecraft();
 	public boolean resumingClient;
-	public int programSelected = -1;	//0 if client is selected, 1 if server. (client side varable)
+	/**
+	 * 0 if client is selected, 1 if server. (client side varable)
+	 */
+	public int programSelected = -1;
 	
     public TileEntityComputer() {
             SburbConnection.addListener(this);
@@ -58,8 +67,8 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 	@Override
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
 		super.readFromNBT(par1NBTTagCompound);	
-		this.hasClient = par1NBTTagCompound.getBoolean("hasClient");
-		this.hasServer = par1NBTTagCompound.getBoolean("hasServer");
+		installedPrograms.put(0,par1NBTTagCompound.getBoolean("hasClient"));
+		installedPrograms.put(1,par1NBTTagCompound.getBoolean("hasServer"));
 		this.clientName = par1NBTTagCompound.getString("connectClient");
 		this.serverConnected = par1NBTTagCompound.getBoolean("connectServer");
 		this.openToClients = par1NBTTagCompound.getBoolean("serverOpen");
@@ -76,8 +85,8 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
     @Override
     public void writeToNBT(NBTTagCompound par1NBTTagCompound) {
     	super.writeToNBT(par1NBTTagCompound);
-    	par1NBTTagCompound.setBoolean("hasClient",this.hasClient);
-    	par1NBTTagCompound.setBoolean("hasServer",this.hasServer);
+    	par1NBTTagCompound.setBoolean("hasClient",this.hasClient());
+    	par1NBTTagCompound.setBoolean("hasServer",this.hasServer());
     	par1NBTTagCompound.setString("connectClient",this.clientName);
     	par1NBTTagCompound.setBoolean("connectServer", this.serverConnected);
     	par1NBTTagCompound.setBoolean("serverOpen", this.openToClients);
@@ -114,7 +123,7 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
     
     @SideOnly(Side.CLIENT)
 	public void openServer(){
-		if(hasServer && !openToClients && client == null){
+		if(hasServer() && !openToClients && client == null){
 			openToClients = true;
 			Packet250CustomPayload packet = new Packet250CustomPayload();
 			packet.channel = "Minestuck";
@@ -126,7 +135,7 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 	
     @SideOnly(Side.CLIENT)
 	public void connectToServer(String server){
-		if(hasClient && this.server == null){
+		if(hasClient() && this.server == null){
 			this.serverConnected = true;
 			Packet250CustomPayload packet = new Packet250CustomPayload();
 			packet.channel = "Minestuck";
@@ -138,7 +147,7 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 	
     @SideOnly(Side.CLIENT)
 	public void giveItems(){
-		if(hasServer && client != null && !client.givenItems()){
+		if(hasServer() && client != null && !client.givenItems()){
 			Packet250CustomPayload packet = new Packet250CustomPayload();
 			packet.channel = "Minestuck";
 			packet.data = MinestuckPacket.makePacket(Type.SBURB_GIVE,client.getClientName());
@@ -151,7 +160,7 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 		if(server || client){
 			if(server && client)
 				SburbConnection.removeListener(this);
-			if(this.hasClient && (this.server != null || this.resumingClient) && client){
+			if(this.hasClient() && (this.server != null || this.resumingClient) && client){
 				Packet250CustomPayload packet = new Packet250CustomPayload();
 				packet.channel = "Minestuck";
 				if(resumingClient)
@@ -166,7 +175,7 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 				}
 				else this.mc.getNetHandler().addToSendQueue(packet);
 			}
-			if(this.hasServer && server && (openToClients || this.client != null)){
+			if(this.hasServer() && server && (openToClients || this.client != null)){
 				Packet250CustomPayload packet = new Packet250CustomPayload();
 				packet.channel = "Minestuck";
 				if(openToClients)
@@ -185,23 +194,23 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 	}
 	
 	public void onConnectionClosed(String client, String server){
-		if(this.hasClient && client.equals(this.owner) && this.server != null && server.equals(this.server.getServerName())){
+		if(this.hasClient() && client.equals(this.owner) && this.server != null && server.equals(this.server.getServerName())){
 			if(programSelected == 0)
 				latestmessage = "Connection with server closed";
 			this.server = null;
 			serverConnected = false;
 		}
-		else if(this.hasClient && client.equals(this.owner) && this.resumingClient && server.isEmpty()){
+		else if(this.hasClient() && client.equals(this.owner) && this.resumingClient && server.isEmpty()){
 			latestmessage = "Stopped resuming";
 			this.resumingClient = false;
 		}
-		if(this.hasServer && server.equals(this.owner) && this.client != null && client.equals(this.client.getClientName())){
+		if(this.hasServer() && server.equals(this.owner) && this.client != null && client.equals(this.client.getClientName())){
 			if(programSelected == 1)
 				latestmessage = "Connection with client closed";
 			this.client = null;
 			clientName = "";
 		}
-		else if(this.hasServer && server.equals(this.owner) && openToClients && client.isEmpty()){
+		else if(this.hasServer() && server.equals(this.owner) && openToClients && client.isEmpty()){
 			latestmessage = "Server closed";
 			this.openToClients = false;
 			
@@ -213,11 +222,11 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 	
 	@Override
 	public void onConnected(String client, String server) {
-		if(owner.equals(server) && hasServer && this.client == null && openToClients){
+		if(owner.equals(server) && hasServer() && this.client == null && openToClients){
 			openToClients = false;
 			clientName = client;
 		}
-		if(owner.equals(client) && hasClient && resumingClient){
+		if(owner.equals(client) && hasClient() && resumingClient){
 			resumingClient = false;
 			serverConnected = true;
 		}
@@ -237,6 +246,14 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 		if(gui != null) {
 			gui.updateGui();
 		}
+	}
+	
+	public Boolean hasClient() {
+		return (Boolean)installedPrograms.get(0)==null?false:(Boolean)installedPrograms.get(0);
+	}
+	
+	public Boolean hasServer() {
+		return (Boolean)installedPrograms.get(1)==null?false:(Boolean)installedPrograms.get(1);
 	}
 	
 }

@@ -118,7 +118,7 @@ public class BlockComputerOn extends Block implements ITileEntityProvider {
 		public boolean onBlockActivated(World world, int x,int y,int z, EntityPlayer player,int par6, float par7, float par8, float par9) {
 			TileEntityComputer tileEntity = (TileEntityComputer) world.getBlockTileEntity(x, y, z);
 			ItemStack item = player.getCurrentEquippedItem();
-			if (tileEntity == null || player.isSneaking() || item != null && item.itemID == Minestuck.disk.itemID && (item.getItemDamage() == 0 && !tileEntity.hasClient || item.getItemDamage() == 1 && !tileEntity.hasServer)) {
+			if (tileEntity == null || player.isSneaking() || item != null && item.itemID == Minestuck.disk.itemID && (item.getItemDamage() == 0 && !tileEntity.hasClient() || item.getItemDamage() == 1 && !tileEntity.hasServer())) {
 				return false;
 			}
 
@@ -157,7 +157,7 @@ public class BlockComputerOn extends Block implements ITileEntityProvider {
 			}
 			te.closeConnection(true,true);
 			float factor = 0.05F;
-			if(te.hasClient) {
+			if(te.hasClient()) {
 				float rx = rand.nextFloat() * 0.8F + 0.1F;
 				float ry = rand.nextFloat() * 0.8F + 0.1F;
 				float rz = rand.nextFloat() * 0.8F + 0.1F;
@@ -167,7 +167,7 @@ public class BlockComputerOn extends Block implements ITileEntityProvider {
 				entityItem.motionZ = rand.nextGaussian() * factor;
 				world.spawnEntityInWorld(entityItem);
 			}
-			if(te.hasServer) {
+			if(te.hasServer()) {
 				float rx = rand.nextFloat() * 0.8F + 0.1F;
 				float ry = rand.nextFloat() * 0.8F + 0.1F;
 				float rz = rand.nextFloat() * 0.8F + 0.1F;

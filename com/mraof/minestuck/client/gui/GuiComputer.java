@@ -1,6 +1,8 @@
 package com.mraof.minestuck.client.gui;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -32,8 +34,7 @@ public class GuiComputer extends GuiScreen
 	
 	private GuiButton upButton;
 	private GuiButton downButton;
-	private GuiButton clientButton;
-	private GuiButton serverButton;
+	private GuiButton programButton;
 	
 	private ArrayList<GuiButton> selButtons = new ArrayList<GuiButton>();
 	private ArrayList<String> buttonStrings;
@@ -96,19 +97,17 @@ public class GuiComputer extends GuiScreen
 			buttonList.add(button);
 		}
 		
-		clientButton = new GuiButton(0, (width - xSize)/2 +95,(height - ySize)/2 +10,35,20, "Client");
-		buttonList.add(clientButton);
-		serverButton = new GuiButton(1, (width - xSize)/2 +128, (height - ySize)/2 +10, 40, 20, "Server");
-		buttonList.add(serverButton);
+		programButton = new GuiButton(0, (width - xSize)/2 +95,(height - ySize)/2 +10,70,20, "PROGRAM");
+		buttonList.add(programButton);
 		
 		upButton = new GuiButton(-1, (width - xSize) / 2 +140, (height - ySize) / 2 +60, 20, 20,"^");
 		buttonList.add(upButton);
 		downButton = new GuiButton(-1, (width - xSize) / 2 +140, (height - ySize) / 2 +132, 20, 20,"v");
 		buttonList.add(downButton);
 		if(te.programSelected == -1)
-			if(te.hasClient)
+			if(te.hasClient())
 				te.programSelected = 0;
-			else if(te.hasServer)
+			else if(te.hasServer())
 				te.programSelected = 1;
 		
 		updateGui();
@@ -116,8 +115,8 @@ public class GuiComputer extends GuiScreen
 
 	public void updateGui() {
 		
-    	clientButton.enabled = te.hasClient;
-    	serverButton.enabled = te.hasServer;
+    	//clientButton.enabled = te.hasClient();
+    	//serverButton.enabled = te.hasServer();
 		
 		//Debug.print("Conn'd to "+te.connectedTo);
 		if(te.programSelected == 0 && te.server != null && te.server.getServer() != null)
@@ -129,6 +128,7 @@ public class GuiComputer extends GuiScreen
 		buttonStrings.clear();
 		
 		if(te.programSelected == 0){
+			programButton.displayString = "Client";
 			SburbConnection c = SburbConnection.getClientConnection(te.owner);
 			if(SburbConnection.enteredMedium(te.owner)) //if it should view the grist cache button. NEW Now even if the player isn't connected (but you still need to have had a connection there.
 				buttonStrings.add("View Gristcache");
@@ -148,6 +148,7 @@ public class GuiComputer extends GuiScreen
 				displayMessage = "A client is already active";
 		}
 		else if(te.programSelected == 1){
+			programButton.displayString = "Server";
 			if (te.client != null) {
 				displayMessage = "Connected to "+displayPlayer;
 				buttonStrings.add("Disconnect");
@@ -189,10 +190,8 @@ public class GuiComputer extends GuiScreen
 	}
 	
 	protected void actionPerformed(GuiButton guibutton) {
-		if(guibutton.equals(serverButton))
-			te.programSelected = 1;
-		else if(guibutton.equals(clientButton))
-			te.programSelected = 0;
+		if(guibutton.equals(programButton))
+			te.programSelected = getNextProgram();
 		else if(guibutton.displayString.equals("Disconnect"))
 			te.closeConnection(te.programSelected == 0, te.programSelected == 1);
 		else if(te.programSelected == 0){
@@ -218,5 +217,31 @@ public class GuiComputer extends GuiScreen
 		}
 		updateGui();
 		te.latestmessage = "";
+	}
+
+	private int getNextProgram() {
+	   	if (te.installedPrograms.size() == 1) {
+	   		return te.programSelected;
+	   	}
+   	   	Iterator it = te.installedPrograms.entrySet().iterator();
+	   	int place = 0;
+	   	boolean found = false;
+	   	int lastProgram = te.programSelected;
+        while (it.hasNext()) {
+            Map.Entry pairs = (Map.Entry)it.next();
+            int program = (Integer) pairs.getKey();
+            boolean installed = (Boolean) pairs.getValue();
+            if (installed) {
+	            if (found) {
+	            	return program;
+	            } else if (program==te.programSelected) {
+	            	found = true;
+	            } else {
+	            	lastProgram = program;
+	            }
+            }
+            place++;
+        }
+		return lastProgram;
 	}
 }

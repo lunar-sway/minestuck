@@ -68,12 +68,12 @@ public class ItemDisk extends Item {
 					te.owner = player.username;
 				int i = item.getItemDamage();
 				if(i == 0)
-					if(te.hasClient)
+					if(te.hasClient())
 						return false;
-					else te.hasClient = true;
-				else if(te.hasServer)
+					else te.installedPrograms.put(0,true);
+				else if(te.hasServer())
 					return false;
-				else te.hasServer = true;
+				else te.installedPrograms.put(1,true);
 				world.markBlockForUpdate(x, y, z);
 				Debug.print("Installed program with id "+item.getItemDamage());
 				
