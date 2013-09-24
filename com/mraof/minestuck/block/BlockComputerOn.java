@@ -1,5 +1,7 @@
 package com.mraof.minestuck.block;
 
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -157,25 +159,23 @@ public class BlockComputerOn extends Block implements ITileEntityProvider {
 			}
 			te.closeConnection(true,true);
 			float factor = 0.05F;
-			if(te.hasClient()) {
+			
+			Iterator it = te.installedPrograms.entrySet().iterator();
+    	   	int place = 0;
+            while (it.hasNext()) {
+                Map.Entry pairs = (Map.Entry)it.next();
+                int program = (Integer) pairs.getKey();
+                
 				float rx = rand.nextFloat() * 0.8F + 0.1F;
 				float ry = rand.nextFloat() * 0.8F + 0.1F;
 				float rz = rand.nextFloat() * 0.8F + 0.1F;
-				EntityItem entityItem = new EntityItem(world, x + rx, y + ry, z + rz, new ItemStack(Minestuck.disk.itemID, 1, 0));
+				EntityItem entityItem = new EntityItem(world, x + rx, y + ry, z + rz, new ItemStack(Minestuck.disk.itemID, 1, program));
 				entityItem.motionX = rand.nextGaussian() * factor;
 				entityItem.motionY = rand.nextGaussian() * factor + 0.2F;
 				entityItem.motionZ = rand.nextGaussian() * factor;
 				world.spawnEntityInWorld(entityItem);
-			}
-			if(te.hasServer()) {
-				float rx = rand.nextFloat() * 0.8F + 0.1F;
-				float ry = rand.nextFloat() * 0.8F + 0.1F;
-				float rz = rand.nextFloat() * 0.8F + 0.1F;
-				EntityItem entityItem = new EntityItem(world, x + rx, y + ry, z + rz, new ItemStack(Minestuck.disk.itemID, 1, 1));
-				entityItem.motionX = rand.nextGaussian() * factor;
-				entityItem.motionY = rand.nextGaussian() * factor + 0.2F;
-				entityItem.motionZ = rand.nextGaussian() * factor;
-				world.spawnEntityInWorld(entityItem);
-			}
+                
+                place++;
+            }
 		}
 }
