@@ -52,7 +52,7 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	}
 	
 	@Override
-	protected float getMaxHealth() 
+	protected float getMaximumHealth() 
 	{
 		return 13 * (type.getPower() + 1) + 37;
 	}

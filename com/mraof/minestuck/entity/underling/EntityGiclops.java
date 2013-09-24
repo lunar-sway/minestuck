@@ -73,7 +73,7 @@ public class EntityGiclops extends EntityUnderling
 		return par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this), (int) ((this.type.getPower() + 1) * 2.5 + 2));
 	}
 	@Override
-	protected float getMaxHealth() 
+	protected float getMaximumHealth() 
 	{
 		return 19 * (type.getPower() + 1) + 48;
 	}

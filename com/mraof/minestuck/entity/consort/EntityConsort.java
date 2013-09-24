@@ -16,15 +16,15 @@ public abstract class EntityConsort extends EntityMinestuck
 		super(world);
 //		moveSpeed = 2.5F;
 		
-        this.func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a((double)(this.getMaxHealth()));
-		this.setEntityHealth(this.getMaxHealth());
+        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setAttribute((double)(this.getMaximumHealth()));
+		this.setHealth(this.getMaximumHealth());
 		
         setSize(0.6F, 1.5F);
         this.experienceValue = 1;
 	}
 
 	@Override
-	protected float getMaxHealth() 
+	protected float getMaximumHealth() 
 	{
 		return 10;
 	}

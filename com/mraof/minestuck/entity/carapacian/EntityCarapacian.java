@@ -31,8 +31,8 @@ public abstract class EntityCarapacian extends EntityMinestuck
 		setEnemies();
 		setAllies();
 
-		this.func_110148_a(SharedMonsterAttributes.field_111267_a).func_111128_a((double)(this.getMaxHealth()));
-		this.setEntityHealth(this.getMaxHealth());
+		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setAttribute((double)(this.getMaximumHealth()));
+		this.setHealth(this.getMaximumHealth());
 
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));

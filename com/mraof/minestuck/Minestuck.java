@@ -16,6 +16,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
 import net.minecraft.world.WorldType;
+import net.minecraft.world.gen.structure.ComponentScatteredFeaturePieces;
+import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -77,6 +79,8 @@ import com.mraof.minestuck.util.SburbConnection;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.WorldProviderSkaia;
 import com.mraof.minestuck.world.gen.OreHandler;
+import com.mraof.minestuck.world.gen.structure.StructureCastlePieces;
+import com.mraof.minestuck.world.gen.structure.StructureCastleStart;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 import cpw.mods.fml.common.Mod;
@@ -416,6 +420,10 @@ public class Minestuck
 		
 		//register connection handler
 		NetworkRegistry.instance().registerConnectionHandler(new MinestuckConnectionHandler());
+		
+		//Register structures
+		MapGenStructureIO.func_143034_b(StructureCastleStart.class, "SkaiaCastle");
+		StructureCastlePieces.func_143048_a();
 
 		//register recipes
 		AlchemyRecipeHandler.registerVanillaRecipes();

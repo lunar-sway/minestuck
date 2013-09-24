@@ -76,7 +76,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 
 	protected abstract void setCombatTask();
 	
-	protected abstract float getMaxHealth();
+	protected abstract float getMaximumHealth();
 
 	protected abstract float getWanderSpeed();
 	protected boolean useAltName()

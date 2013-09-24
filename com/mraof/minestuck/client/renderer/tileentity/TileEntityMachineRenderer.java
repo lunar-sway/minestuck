@@ -52,7 +52,7 @@ public class TileEntityMachineRenderer extends TileEntitySpecialRenderer {
 			machine = alchemiter;
 			texture = alchemiterTexture;
 		}
-		this.func_110628_a(texture);
+		this.bindTexture(texture);
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);

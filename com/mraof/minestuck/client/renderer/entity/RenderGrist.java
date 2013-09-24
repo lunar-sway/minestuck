@@ -22,7 +22,7 @@ public class RenderGrist extends Render {
 	{
         GL11.glPushMatrix();
         GL11.glTranslatef((float)d0, (float)d1, (float)d2);
-        this.func_110777_b(grist);
+        this.bindEntityTexture(grist);
         Tessellator tessellator = Tessellator.instance;
         float f2 = 0.0F;
         float f3 = 1.0F;
@@ -58,7 +58,7 @@ public class RenderGrist extends Render {
 		renderGrist((EntityGrist) entity, d0, d1, d2, f, f1);
 	}
 	@Override
-	protected ResourceLocation func_110775_a(Entity entity) 
+	protected ResourceLocation getEntityTexture(Entity entity) 
 	{
 		return new ResourceLocation("minestuck", "textures/grist/" + ((EntityGrist) entity).getType() + ".png");
 	}

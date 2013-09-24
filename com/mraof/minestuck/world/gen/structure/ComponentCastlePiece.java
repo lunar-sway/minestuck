@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
@@ -92,6 +93,15 @@ public abstract class ComponentCastlePiece extends StructureComponent
 	protected int getAverageGroundLevel(World world)
 	{
 		return this.getAverageGroundLevel(world, this.boundingBox);
+	}
+	//No idea what these do
+	@Override
+	protected void func_143012_a(NBTTagCompound nbttagcompound) 
+	{
+	}
+	@Override
+	protected void func_143011_b(NBTTagCompound nbttagcompound) 
+	{
 	}
 
 }

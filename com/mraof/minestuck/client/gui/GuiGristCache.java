@@ -72,8 +72,8 @@ public class GuiGristCache extends GuiScreen
 		if (titleMessage.isEmpty())
 			titleMessage = mc.thePlayer.username.toUpperCase() + " : " + title;
 		
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.mc.func_110434_K().func_110577_a(guiBackground);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        this.mc.getTextureManager().bindTexture(guiBackground);
 		
 		int yOffset = (this.height / 2) - (guiHeight / 2);
 		this.drawTexturedModalRect((this.width / 2) - (guiWidth / 2), yOffset, 0, 0, guiWidth, guiHeight);
@@ -133,7 +133,7 @@ public class GuiGristCache extends GuiScreen
 	private void drawGristIcon(int x,int y,String gristType) 
 	{
 //		this.mc.renderEngine.bindTexture("minestuck:/textures/grist/" + gristType + ".png");
-		this.mc.func_110434_K().func_110577_a(new ResourceLocation("minestuck","textures/grist/" + gristType + ".png"));
+		this.mc.getTextureManager().bindTexture(new ResourceLocation("minestuck","textures/grist/" + gristType + ".png"));
 
 		float scale = (float) 1/16;
 

@@ -62,7 +62,7 @@ public class EntityImp extends EntityUnderling
 		return .3F;
 	}
 	@Override
-	protected float getMaxHealth() 
+	protected float getMaximumHealth() 
 	{
 		return 4 * (type.getPower() + 1) + 2;
 	}

@@ -147,13 +147,13 @@ protected void drawGuiContainerBackgroundLayer(float par1, int par2,
     //this.mc.renderEngine.bindTexture(texture);
     
     //draw background
-    this.mc.func_110434_K().func_110577_a(guiBackground);
+    this.mc.getTextureManager().bindTexture(guiBackground);
     int x = (width - xSize) / 2;
     int y = (height - ySize) / 2;
     this.drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
     
     //draw progress bar
-    this.mc.func_110434_K().func_110577_a(guiProgress);
+    this.mc.getTextureManager().bindTexture(guiProgress);
     int width = metadata == 0 ? progressWidth : getScaledValue(te.progress,te.maxProgress,progressWidth);
     int height = metadata != 0 ? progressHeight : getScaledValue(te.progress,te.maxProgress,progressHeight);
     this.drawCustomBox(x+progressX, y+progressY, 0, 0, width, height,progressWidth,progressHeight);

@@ -40,7 +40,7 @@ public class RenderGatePortal extends TileEntitySpecialRenderer
 
             if (var14 == 0)
             {
-                this.func_110628_a(tunnel);
+                this.bindTexture(tunnel);
                 var17 = 0.1F;
                 var15 = 65.0F;
                 var16 = 0.125F;
@@ -50,7 +50,7 @@ public class RenderGatePortal extends TileEntitySpecialRenderer
 
             if (var14 == 1)
             {
-                this.func_110628_a(particlefield);
+                this.bindTexture(particlefield);
                 GL11.glEnable(GL11.GL_BLEND);
                 GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
                 var16 = 0.5F;
