@@ -5,14 +5,16 @@
         "url": "http://www.mspaforums.com/showthread.php?43888-Minestuck", 
         "logoFile": "/minestuck_logo.png", 
         "updateUrl": "", 
-        "credits": "Coded by Mraof and Iconmaster, graphics by many others; see forum page for full credits.", 
+        "credits": "Coded by Mraof, Iconmaster and others, graphics by many others; see forum page for full credits.", 
         "version": "0.0.6", 
         "modid": "Minestuck", 
         "authors": [
             "Mraof", 
             "Iconmaster"
+            "kirderf1"
+            "snuffysam"
         ], 
-        "mcversion": "1.6.2", 
+        "mcversion": "1.6.4", 
         "screenshots": [], 
         "dependencies": [
             "Forge"
