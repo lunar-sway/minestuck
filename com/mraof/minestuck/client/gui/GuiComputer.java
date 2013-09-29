@@ -8,9 +8,9 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.SburbConnection;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;

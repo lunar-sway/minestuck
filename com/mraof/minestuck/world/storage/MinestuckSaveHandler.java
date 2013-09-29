@@ -5,9 +5,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import com.mraof.minestuck.util.SburbConnection;
+import com.mraof.minestuck.skaianet.SburbConnection;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.ForgeSubscribe;
@@ -15,7 +16,7 @@ import net.minecraftforge.event.world.WorldEvent;
 
 public class MinestuckSaveHandler 
 {
-	public static List<Byte> lands = new ArrayList<Byte>();
+	public static List<Byte> lands = Collections.synchronizedList(new ArrayList<Byte>());
 	@ForgeSubscribe
 	public void onWorldSave(WorldEvent.Save event)
 	{

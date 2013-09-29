@@ -1,4 +1,4 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.skaianet;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.TreeMap;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.IConnectionListener;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 import net.minecraft.server.MinecraftServer;

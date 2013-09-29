@@ -18,9 +18,9 @@ import net.minecraft.tileentity.TileEntity;
 import com.mraof.minestuck.client.gui.GuiComputer;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IConnectionListener;
-import com.mraof.minestuck.util.SburbConnection;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;

@@ -221,7 +221,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 				//Check owner's cache: Do they have everything they need?
 				ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(this.inv[1]);
 				if (newItem == null) {return false;}
-				if (inv[0] != null && (inv[0].itemID != newItem.itemID || inv[0].getItemDamage() != newItem.getItemDamage())) {return false;}
+				if (inv[0] != null && (inv[0].itemID != newItem.itemID || inv[0].getItemDamage() != newItem.getItemDamage() || inv[0].getMaxStackSize() <= inv[0].stackSize)) {return false;}
 		    	GristSet set = GristRegistry.getGristConversion(newItem);
 		    	if (set == null) {return false;}
 			    	Hashtable reqs = set.getHashtable();
