@@ -1,5 +1,9 @@
 package com.mraof.minestuck.skaianet;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,11 +11,13 @@ public class Session {
 	
 	public static int maxSize;
 	
+	static List<Session> sessions = new ArrayList();
+	
 	static boolean canJoin(String client, String server){
 		Session cs = null;
 		Session ss = null;
 		for(Session s : sessions){
-			for(SburbConnection c : s.players){
+			for(SburbConnection c : s.connections){
 				if(c.getClientName().equals(client) || c.getServerName().equals(server))
 					return false;
 				if(c.getClientName().equals(server))
@@ -27,31 +33,60 @@ public class Session {
 		return true;
 	}
 	
-	static List<Session> sessions = new ArrayList();
-	
 	static Session merge(Session cs, Session ss, SburbConnection sb){
-		if(canMerge(cs, ss) && sb != null){
-			
+		if(canMerge(cs, ss) && sb != null && cs.containsPlayer(sb.getClientName(), false) && ss.containsPlayer(sb.getServerName(), true)){
+			cs.connections.add(sb);
+			cs.connections.addAll(ss.connections);
 		}
 		return null;
 	}
 	
 	static boolean canMerge(Session cs, Session ss){
-		if(cs != null && ss != null){
-			
-		}
-		return false;
+		return (cs != null && ss != null && cs.connections.size()+ss.connections.size()<=maxSize && !cs.completed && !ss.completed);
 	}
+	
+	static Session load(DataInputStream stream) throws IOException {
+		Session s = new Session();
+		byte size = stream.readByte();
+		s.completed = stream.readBoolean();
+		s.skaiaId = stream.readByte();
+		s.prospitId = stream.readByte();
+		s.derseId = stream.readByte();
+//		for(int i = 0; i < size; i++)
+//			s.connections.add(SburbConnection.load(stream));
+		return s;
+	}
+	
 	
 	//Non-static stuff
 	
-	List<SburbConnection> players;
-	boolean completed;
+	void save(DataOutputStream stream) throws IOException {
+		stream.writeByte(this.connections.size());
+		stream.writeBoolean(this.completed);
+		stream.writeByte(this.skaiaId);
+		stream.writeByte(this.prospitId);
+		stream.writeByte(this.derseId);
+//		for(SburbConnection c : this.connections)
+//			c.save(stream);
+	}
 	
-	int size;
+	List<SburbConnection> connections;
+	boolean completed;	//If the "connection circle" is whole, unused if globalSession == true.
 	
-	//Unused
+	//Unused, will later be 0 if not yet generated
 	int skaiaId;
 	int prospitId;
 	int derseId;
+	
+	Session(){
+		connections = new ArrayList<SburbConnection>();
+	}
+	
+	boolean containsPlayer(String s, boolean isClient){
+		for(SburbConnection c : connections)
+			if(s.equals(isClient?c.getClientName():c.getServerName()))
+				return true;
+		return false;
+	}
+	
 }

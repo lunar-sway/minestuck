@@ -22,11 +22,11 @@ import net.minecraft.world.World;
 
 public class SburbConnection {
 
-	private static TreeMap<String,ComputerData> serversOpen = new TreeMap<String,ComputerData>();
-	private static List<IConnectionListener> listeners = Collections.synchronizedList(new ArrayList<IConnectionListener>());
-	private static ArrayList<SburbConnection> connections = new ArrayList<SburbConnection>();
-	private static HashMap<String,ComputerData>resumingClients = new HashMap<String,ComputerData>();
-	private static HashMap<String,ComputerData>resumingServers = new HashMap<String,ComputerData>();
+	static TreeMap<String,ComputerData> serversOpen = new TreeMap<String,ComputerData>();
+	static List<IConnectionListener> listeners = Collections.synchronizedList(new ArrayList<IConnectionListener>());
+	static ArrayList<SburbConnection> connections = new ArrayList<SburbConnection>();
+	static HashMap<String,ComputerData>resumingClients = new HashMap<String,ComputerData>();
+	static HashMap<String,ComputerData>resumingServers = new HashMap<String,ComputerData>();
 
 	public static ArrayList<String> getServersOpen() {
 		return new ArrayList<String>(serversOpen.keySet());
@@ -280,10 +280,10 @@ public class SburbConnection {
 	}
 	
 	public static class ComputerData{
-		private int x, y, z;
-		private int dimension;
-		private String owner;
-		private ComputerData(String owner,int x,int y,int z,int dimension){
+		int x, y, z;
+		int dimension;
+		String owner;
+		ComputerData(String owner,int x,int y,int z,int dimension){
 			this.owner = owner;
 			this.x = x;
 			this.y = y;
@@ -293,7 +293,7 @@ public class SburbConnection {
 		
 		private ComputerData() {}
 		
-		private void save(DataOutputStream stream) throws IOException{
+		void save(DataOutputStream stream) throws IOException{
 			stream.writeInt(x);
 			stream.writeInt(y);
 			stream.writeInt(z);
@@ -301,7 +301,7 @@ public class SburbConnection {
 			stream.write((owner+"\n").getBytes());
 		}
 		
-		private static ComputerData load(DataInputStream stream) throws IOException{
+		static ComputerData load(DataInputStream stream) throws IOException{
 			ComputerData data = new ComputerData();
 			data.x = stream.readInt();
 			data.y = stream.readInt();
@@ -316,14 +316,14 @@ public class SburbConnection {
 	
 	//Non static stuff
 	
-	private ComputerData client;
-	private String clientName = "";
-	private ComputerData server;
-	private String serverName = "";
-	private boolean isMain;
-	private boolean enteredGame;
+	ComputerData client;
+	String clientName = "";
+	ComputerData server;
+	String serverName = "";
+	boolean isMain;
+	boolean enteredGame;
 	
-	private SburbConnection(ComputerData client, ComputerData server){
+	SburbConnection(ComputerData client, ComputerData server){
 		this.client = client;
 		this.server = server;
 	}

@@ -168,6 +168,8 @@ public class Minestuck
 	public static boolean generateCruxiteOre;
 	public static boolean acceptTitleCollision;	//Allows combinations like "Heir of Hope" and "Seer of Hope" to exist in the same session. Still not accepting duplicates.
 	public static boolean generateSpecialClasses;	//Allow generation of the "Lord" and "Muse" classes.
+	public static boolean globalSession;	//Makes only one session possible. Recommended to be true on small servers.
+		//Will be ignored when loading a world that already got 2+ sessions.
 
 	// The instance of your mod that Forge uses.
 	@Instance("Minestuck")
@@ -199,6 +201,7 @@ public class Minestuck
 		generateCruxiteOre = config.get("General","generateCruxiteOre",true).getBoolean(true);
 		acceptTitleCollision = config.get("General", "acceptTitleCollision", false).getBoolean(false);
 		generateSpecialClasses = config.get("General", "generateSpecialClasses", false).getBoolean(false);
+		globalSession = config.get("General", "globalSession", true).getBoolean(true);
 		config.save();
 	}
 
