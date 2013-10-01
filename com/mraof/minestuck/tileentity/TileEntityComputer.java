@@ -42,7 +42,6 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 	public GuiComputer gui;
 	public String owner = "";
 	public String latestmessage = "";
-	private Minecraft mc = Minecraft.getMinecraft();
 	public boolean resumingClient;
 	/**
 	 * 0 if client is selected, 1 if server. (client side varable)
@@ -132,7 +131,7 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 		packet.channel = "Minestuck";
 		packet.data = MinestuckPacket.makePacket(Type.SBURB_RESUME,owner,xCoord,yCoord,zCoord,worldObj.provider.dimensionId,isClient);
 		packet.length = packet.data.length;
-		mc.getNetHandler().addToSendQueue(packet);
+		Minecraft.getMinecraft().getNetHandler().addToSendQueue(packet);
     }
     
     @SideOnly(Side.CLIENT)
@@ -143,7 +142,7 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 			packet.channel = "Minestuck";
 			packet.data = MinestuckPacket.makePacket(Type.SBURB_OPEN,owner,xCoord,yCoord,zCoord,worldObj.provider.dimensionId);
 			packet.length = packet.data.length;
-			mc.getNetHandler().addToSendQueue(packet);
+			Minecraft.getMinecraft().getNetHandler().addToSendQueue(packet);
 		}
 	}
 	
@@ -155,7 +154,7 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 			packet.channel = "Minestuck";
 			packet.data = MinestuckPacket.makePacket(Type.SBURB_CONNECT,owner,xCoord,yCoord,zCoord,worldObj.provider.dimensionId,server);
 			packet.length = packet.data.length;
-			mc.getNetHandler().addToSendQueue(packet);
+			Minecraft.getMinecraft().getNetHandler().addToSendQueue(packet);
 		}
 	}
 	
@@ -166,7 +165,7 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 			packet.channel = "Minestuck";
 			packet.data = MinestuckPacket.makePacket(Type.SBURB_GIVE,client.getClientName());
 			packet.length = packet.data.length;
-			this.mc.getNetHandler().addToSendQueue(packet);
+			Minecraft.getMinecraft().getNetHandler().addToSendQueue(packet);
 		}
 	}
 	
@@ -181,13 +180,13 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 					packet.data = MinestuckPacket.makePacket(Type.SBURB_CLOSE,owner,"");
 				else packet.data = MinestuckPacket.makePacket(Type.SBURB_CLOSE,owner,this.server.getServerName());
 				packet.length = packet.data.length;
-				if(worldObj.isRemote){
+				if(!worldObj.isRemote){
 					if(resumingClient)
 						SburbConnection.connectionClosed(owner,"");
 					else SburbConnection.connectionClosed(owner,this.server.getServerName());
 					PacketDispatcher.sendPacketToAllPlayers(packet);
 				}
-				else this.mc.getNetHandler().addToSendQueue(packet);
+				else Minecraft.getMinecraft().getNetHandler().addToSendQueue(packet);
 			}
 			if(this.hasServer() && server && (openToClients || this.client != null)){
 				Packet250CustomPayload packet = new Packet250CustomPayload();
@@ -196,13 +195,13 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 					packet.data = MinestuckPacket.makePacket(Type.SBURB_CLOSE,"",owner);
 				else packet.data = MinestuckPacket.makePacket(Type.SBURB_CLOSE,this.client.getClientName(),owner);
 				packet.length = packet.data.length;
-				if(worldObj.isRemote){
+				if(!worldObj.isRemote){
 					if(openToClients)
 						SburbConnection.connectionClosed("",owner);
 					else SburbConnection.connectionClosed(this.client.getClientName(),owner);
 					PacketDispatcher.sendPacketToAllPlayers(packet);
 				}
-				else this.mc.getNetHandler().addToSendQueue(packet);
+				else Minecraft.getMinecraft().getNetHandler().addToSendQueue(packet);
 			}
 		}
 	}
