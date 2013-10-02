@@ -13,6 +13,7 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 
 import com.mraof.minestuck.client.gui.GuiComputer;
@@ -53,7 +54,7 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
     }
     
     @Override
-    public void updateEntity() {
+    public void updateEntity() {if(MinecraftServer.getServer() != null) Debug.print(MinecraftServer.getServer().worldServers.length);
     	if(server == null && serverConnected){
     		server = SburbConnection.getClientConnection(owner);
     		if(gui != null)
@@ -267,6 +268,18 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 	
 	public Boolean hasServer() {
 		return (Boolean)installedPrograms.get(1)==null?false:(Boolean)installedPrograms.get(1);
+	}
+	
+	public void connected(SburbConnection c, boolean isClient){
+		if(isClient){
+			this.server = c;
+			this.serverConnected = true;
+		}
+		else{
+			this.client = c;
+			this.clientName = c.getClientName();
+		}
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 	
 }

@@ -140,7 +140,7 @@ public class GuiComputer extends GuiScreen
 				buttonStrings.add("Disconnect");
 			} else if(c == null && !SburbConnection.isResuming(te.owner, true)){ //If the player doesn't have an other active client
 				displayMessage = "Select a server below";
-				if(SburbConnection.hasMainClient(te.owner)) //If it has a resumeable connection
+				if(!SburbConnection.getAssociatedPartner(te.owner, true).isEmpty()) //If it has a resumeable connection
 					buttonStrings.add("Resume connection");
 		    	for (String server : SburbConnection.getServersOpen())
 		    		buttonStrings.add(server);
@@ -162,7 +162,7 @@ public class GuiComputer extends GuiScreen
 			else {
 				displayMessage = "Server offline";
 				buttonStrings.add("Open to clients");
-				if(SburbConnection.hasMainServer(te.owner) && SburbConnection.getClientConnection(SburbConnection.getAssociatedPartner(te.owner, false)) == null)
+				if(!SburbConnection.getAssociatedPartner(te.owner, false).isEmpty() && SburbConnection.getClientConnection(SburbConnection.getAssociatedPartner(te.owner, false)) == null)
 					buttonStrings.add("Resume connection");
 		    	}
 			}

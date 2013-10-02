@@ -27,7 +27,9 @@ public class SburbConnection {
 	static ArrayList<SburbConnection> connections = new ArrayList<SburbConnection>();
 	static HashMap<String,ComputerData>resumingClients = new HashMap<String,ComputerData>();
 	static HashMap<String,ComputerData>resumingServers = new HashMap<String,ComputerData>();
-
+	
+	
+	
 	public static ArrayList<String> getServersOpen() {
 		return new ArrayList<String>(serversOpen.keySet());
 	}
@@ -94,20 +96,6 @@ public class SburbConnection {
 						
 					}
 				}
-	}
-	
-	public static boolean hasMainClient(String client){ //Returns true if a main connection has a client of the specified name
-		for(SburbConnection c : connections)
-			if(c.isMain && (c.clientName.equals(client) || c.client != null && c.client.owner.equals(client)))
-				return true;
-		return false;
-	}
-	
-	public static boolean hasMainServer(String server){
-		for(SburbConnection c : connections)
-			if(c.isMain && (c.serverName.equals(server) || c.server != null && c.server.owner.equals(server)))
-				return true;
-		return false;
 	}
 	
 	public static void openServer(String player, int x, int y, int z,int dimension) {
@@ -277,41 +265,6 @@ public class SburbConnection {
 					}
 				}
 		}
-	}
-	
-	public static class ComputerData{
-		int x, y, z;
-		int dimension;
-		String owner;
-		ComputerData(String owner,int x,int y,int z,int dimension){
-			this.owner = owner;
-			this.x = x;
-			this.y = y;
-			this.z = z;
-			this.dimension = dimension;
-		}
-		
-		private ComputerData() {}
-		
-		void save(DataOutputStream stream) throws IOException{
-			stream.writeInt(x);
-			stream.writeInt(y);
-			stream.writeInt(z);
-			stream.writeInt(dimension);
-			stream.write((owner+"\n").getBytes());
-		}
-		
-		static ComputerData load(DataInputStream stream) throws IOException{
-			ComputerData data = new ComputerData();
-			data.x = stream.readInt();
-			data.y = stream.readInt();
-			data.z = stream.readInt();
-			data.dimension = stream.readInt();
-			data.owner = stream.readLine(); //How should I read the string here without a deprecated method?
-			return data;
-		}
-		
-		public String getOwner(){return owner;}
 	}
 	
 	//Non static stuff
