@@ -45,8 +45,10 @@ public class SkaianetHandler {
 		return new ComputerData(te.owner, te.xCoord, te.yCoord, te.zCoord, te.worldObj.provider.dimensionId );
 	}
 	
-	public static SburbConnection getClientConnection(){
-		
+	public static SburbConnection getClientConnection(String client){
+		for(SburbConnection c : connections)
+			if(c.client != null && c.client.owner.equals(client))
+				return c;
 		return null;
 	}
 	
@@ -145,6 +147,10 @@ public class SkaianetHandler {
 		} catch(IOException e){
 			e.printStackTrace();
 		}
+	}
+	
+	public static void updateAll(){
+		
 	}
 	
 	static SburbConnection getConnection(String client, String server){

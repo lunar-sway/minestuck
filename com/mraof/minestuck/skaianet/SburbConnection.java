@@ -281,8 +281,6 @@ public class SburbConnection {
 		this.server = server;
 	}
 	
-	public ComputerData getClient(){return client;}
-	public ComputerData getServer(){return server;}
 	public String getClientName(){
 		if(clientName.isEmpty())
 			return client.owner;

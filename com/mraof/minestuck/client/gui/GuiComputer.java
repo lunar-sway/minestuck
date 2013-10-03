@@ -69,11 +69,11 @@ public class GuiComputer extends GuiScreen
 		
 		int yOffset = (this.height / 2) - (ySize / 2);
 		this.drawTexturedModalRect((this.width / 2) - (xSize / 2), yOffset, 0, 0, xSize, ySize);
-		if(te.latestmessage.isEmpty())
+		if(te.latestmessage.get(te.programSelected) == null || te.latestmessage.get(te.programSelected).isEmpty())
 			if(te.programSelected == -1){
 				fontRenderer.drawString("Insert disk.", (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
 			} else fontRenderer.drawString(displayMessage, (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
-		else fontRenderer.drawString(te.latestmessage, (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
+		else fontRenderer.drawString(te.latestmessage.get(te.programSelected), (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		RenderHelper.disableStandardItemLighting();
 		GL11.glDisable(GL11.GL_LIGHTING);
@@ -119,10 +119,10 @@ public class GuiComputer extends GuiScreen
     	//serverButton.enabled = te.hasServer();
 		
 		//Debug.print("Conn'd to "+te.connectedTo);
-		if(te.programSelected == 0 && te.server != null && te.server.getServer() != null)
-			displayPlayer = te.server.getServer().getOwner();
-		else if(te.programSelected == 1 && te.client != null && te.client.getClient() != null)
-			displayPlayer = te.client.getServer().getOwner();
+		if(te.programSelected == 0 && te.server != null)
+			displayPlayer = te.server.getServerName();
+		else if(te.programSelected == 1 && te.client != null)
+			displayPlayer = te.client.getServerName();
 		else displayPlayer = "UNDEFINED";	//Should never be shown
 		
 		buttonStrings.clear();
@@ -190,6 +190,7 @@ public class GuiComputer extends GuiScreen
 	}
 	
 	protected void actionPerformed(GuiButton guibutton) {
+		te.latestmessage.put(te.programSelected, "");
 		if(guibutton.equals(programButton))
 			te.programSelected = getNextProgram();
 		else if(guibutton.displayString.equals("Disconnect"))
@@ -216,7 +217,6 @@ public class GuiComputer extends GuiScreen
 			}
 		}
 		updateGui();
-		te.latestmessage = "";
 	}
 
 	private int getNextProgram() {

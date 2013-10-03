@@ -9,7 +9,7 @@ public class ComputerData{
 		int dimension;
 		String owner;
 		
-		ComputerData(String owner,int x,int y,int z,int dimension){
+		public ComputerData(String owner,int x,int y,int z,int dimension){
 			this.owner = owner;
 			this.x = x;
 			this.y = y;

@@ -31,7 +31,7 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 	
 	//public volatile boolean hasClient = false;
 	//public volatile boolean hasServer = false;
-	public Hashtable installedPrograms = new Hashtable();
+	public Hashtable<Integer, Boolean> installedPrograms = new Hashtable();
 	public boolean openToClients = false;
 	public SburbConnection client;
 	/**
@@ -42,10 +42,10 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 	public SburbConnection server;
 	public GuiComputer gui;
 	public String owner = "";
-	public String latestmessage = "";
+	public Hashtable<Integer,String> latestmessage = new Hashtable();
 	public boolean resumingClient;
 	/**
-	 * 0 if client is selected, 1 if server. (client side varable)
+	 * 0 if client is selected, 1 if server. (client side variable)
 	 */
 	public int programSelected = -1;
 	
@@ -54,7 +54,7 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
     }
     
     @Override
-    public void updateEntity() {if(MinecraftServer.getServer() != null) Debug.print(MinecraftServer.getServer().worldServers.length);
+    public void updateEntity() {
     	if(server == null && serverConnected){
     		server = SburbConnection.getClientConnection(owner);
     		if(gui != null)
@@ -209,23 +209,22 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 	
 	public void onConnectionClosed(String client, String server){
 		if(this.hasClient() && client.equals(this.owner) && this.server != null && server.equals(this.server.getServerName())){
-			if(programSelected == 0)
-				latestmessage = "Connection with server closed";
+			latestmessage.put(0, "Connection with server closed");
 			this.server = null;
 			serverConnected = false;
 		}
 		else if(this.hasClient() && client.equals(this.owner) && this.resumingClient && server.isEmpty()){
-			latestmessage = "Stopped resuming";
+			latestmessage.put(0, "Stopped resuming");
 			this.resumingClient = false;
 		}
 		if(this.hasServer() && server.equals(this.owner) && this.client != null && client.equals(this.client.getClientName())){
 			if(programSelected == 1)
-				latestmessage = "Connection with client closed";
+				latestmessage.put(1, "Connection with client closed");
 			this.client = null;
 			clientName = "";
 		}
 		else if(this.hasServer() && server.equals(this.owner) && openToClients && client.isEmpty()){
-			latestmessage = "Server closed";
+			latestmessage.put(1, "Server closed");
 			this.openToClients = false;
 			
 		}
@@ -263,11 +262,11 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 	}
 	
 	public Boolean hasClient() {
-		return (Boolean)installedPrograms.get(0)==null?false:(Boolean)installedPrograms.get(0);
+		return installedPrograms.get(0)==null?false:installedPrograms.get(0);
 	}
 	
 	public Boolean hasServer() {
-		return (Boolean)installedPrograms.get(1)==null?false:(Boolean)installedPrograms.get(1);
+		return installedPrograms.get(1)==null?false:installedPrograms.get(1);
 	}
 	
 	public void connected(SburbConnection c, boolean isClient){
