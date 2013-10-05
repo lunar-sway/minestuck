@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import net.minecraft.client.Minecraft;
@@ -75,6 +76,11 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 				installedPrograms.put(((NBTTagInt)tag).data,true);
 			}
 		}
+		if(hasClient())
+			latestmessage.put(0, par1NBTTagCompound.getString("text0"));
+		if(hasServer())
+			latestmessage.put(1, par1NBTTagCompound.getString("text1"));
+		
 		this.clientName = par1NBTTagCompound.getString("connectClient");
 		this.serverConnected = par1NBTTagCompound.getBoolean("connectServer");
 		this.openToClients = par1NBTTagCompound.getBoolean("serverOpen");
@@ -100,6 +106,8 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 	        programs.setInteger("program"+program,program);
 	        place++;
          }
+	    for(Entry<Integer, String> e : latestmessage.entrySet())
+	    	par1NBTTagCompound.setString("text"+e.getKey(), e.getValue());
     	par1NBTTagCompound.setCompoundTag("programs",programs);
     	par1NBTTagCompound.setString("connectClient",this.clientName);
     	par1NBTTagCompound.setBoolean("connectServer", this.serverConnected);
@@ -278,7 +286,6 @@ public class TileEntityComputer extends TileEntity implements IConnectionListene
 			this.client = c;
 			this.clientName = c.getClientName();
 		}
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 	
 }

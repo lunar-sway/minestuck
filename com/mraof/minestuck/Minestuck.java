@@ -68,8 +68,8 @@ import com.mraof.minestuck.item.ItemSpork;
 import com.mraof.minestuck.item.ItemStorageBlock;
 import com.mraof.minestuck.network.MinestuckConnectionHandler;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.Session;
+import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
@@ -481,6 +481,6 @@ public class Minestuck
 				e.printStackTrace();
 			}
 		}
-		SburbConnection.loadData(event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("connectionList"));
+		SkaianetHandler.loadData(event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("connectionList"));
 	}
 }

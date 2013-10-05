@@ -8,6 +8,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.network.ClearMessagePacket;
+import com.mraof.minestuck.skaianet.ComputerData;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.Debug;
@@ -122,7 +124,7 @@ public class GuiComputer extends GuiScreen
 		if(te.programSelected == 0 && te.server != null)
 			displayPlayer = te.server.getServerName();
 		else if(te.programSelected == 1 && te.client != null)
-			displayPlayer = te.client.getServerName();
+			displayPlayer = te.client.getClientName();
 		else displayPlayer = "UNDEFINED";	//Should never be shown
 		
 		buttonStrings.clear();
@@ -130,7 +132,7 @@ public class GuiComputer extends GuiScreen
 		if(te.programSelected == 0){
 			programButton.displayString = "Client";
 			SburbConnection c = SburbConnection.getClientConnection(te.owner);
-			if(SburbConnection.enteredMedium(te.owner)) //if it should view the grist cache button. NEW Now even if the player isn't connected (but you still need to have had a connection there.
+			if(SburbConnection.enteredMedium(te.owner)) //if it should view the grist cache button.
 				buttonStrings.add("View Gristcache");
 			if (te.server != null) { //If it is connected to someone.
 				displayMessage = "Connected to "+displayPlayer;
@@ -190,7 +192,10 @@ public class GuiComputer extends GuiScreen
 	}
 	
 	protected void actionPerformed(GuiButton guibutton) {
-		te.latestmessage.put(te.programSelected, "");
+		if(te.latestmessage.get(te.programSelected) != null && !te.latestmessage.get(te.programSelected).isEmpty()){
+			te.latestmessage.put(te.programSelected, "");
+			ClearMessagePacket.send(ComputerData.createData(te), te.programSelected);
+		}
 		if(guibutton.equals(programButton))
 			te.programSelected = getNextProgram();
 		else if(guibutton.displayString.equals("Disconnect"))

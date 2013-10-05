@@ -4,10 +4,16 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import com.mraof.minestuck.tileentity.TileEntityComputer;
+
 public class ComputerData{
 		int x, y, z;
 		int dimension;
 		String owner;
+		
+		public static ComputerData createData(TileEntityComputer te){
+			return new ComputerData(te.owner, te.xCoord, te.yCoord, te.zCoord, te.worldObj.provider.dimensionId );
+		}
 		
 		public ComputerData(String owner,int x,int y,int z,int dimension){
 			this.owner = owner;
@@ -38,4 +44,8 @@ public class ComputerData{
 		}
 		
 		public String getOwner(){return owner;}
+		public int getX(){return x;}
+		public int getY(){return y;}
+		public int getZ() {return z;}
+		public int getDimension() {return dimension;}
 	}

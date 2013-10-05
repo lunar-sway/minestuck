@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.SkaianetHandler;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.ForgeSubscribe;
@@ -36,7 +36,7 @@ public class MinestuckSaveHandler
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			SburbConnection.saveData(event.world.getSaveHandler().getMapFileFromName("connectionList"));
+			SkaianetHandler.saveData(event.world.getSaveHandler().getMapFileFromName("connectionList"));
 		}
 	}
 }

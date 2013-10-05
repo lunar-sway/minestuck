@@ -45,31 +45,21 @@ public class SkaiaClient {
 	}
 	
 	public static void sendConnectRequest(TileEntityComputer te, String otherPlayer, boolean isClient){	//Used for both connect, open server and resume
-		if(MinecraftServer.getServer() != null){
-			Debug.print("Sending connect request directly to SkaianetHandler");
-			SkaianetHandler.requestConnection(SkaianetHandler.createData(te), otherPlayer, isClient);
-		} else {
-			Debug.print("Sending connect packet to server");
-			Packet250CustomPayload packet = new Packet250CustomPayload();
-			packet.channel = "Minestuck";
-			packet.data = MinestuckPacket.makePacket(Type.SBURB_CONNECT, SkaianetHandler.createData(te), otherPlayer, isClient);
-			packet.length = packet.data.length;
-			PacketDispatcher.sendPacketToServer(packet);
-		}
+		Debug.print("Sending connect packet to server");
+		Packet250CustomPayload packet = new Packet250CustomPayload();
+		packet.channel = "Minestuck";
+		packet.data = MinestuckPacket.makePacket(Type.SBURB_CONNECT, ComputerData.createData(te), otherPlayer, isClient);
+		packet.length = packet.data.length;
+		PacketDispatcher.sendPacketToServer(packet);
 	}
 	
 	public static void sendCloseRequest(TileEntityComputer te, String otherPlayer, boolean isClient){
-		if(MinecraftServer.getServer() != null){
-			Debug.print("Sending disconnect request directly to SkaianetHandler");
-			
-		} else {
-			Debug.print("Sending close packet to server");
-			Packet250CustomPayload packet = new Packet250CustomPayload();
-			packet.channel = "Minestuck";
-			packet.data = MinestuckPacket.makePacket(Type.SBURB_CLOSE, SkaianetHandler.createData(te), otherPlayer, isClient);
-			packet.length = packet.data.length;
-			PacketDispatcher.sendPacketToServer(packet);
-		}
+		Debug.print("Sending close packet to server");
+		Packet250CustomPayload packet = new Packet250CustomPayload();
+		packet.channel = "Minestuck";
+		packet.data = MinestuckPacket.makePacket(Type.SBURB_CLOSE, ComputerData.createData(te), otherPlayer, isClient);
+		packet.length = packet.data.length;
+		PacketDispatcher.sendPacketToServer(packet);
 	}
 	
 	public static void consumePacket(SkaianetInfoPacket data){

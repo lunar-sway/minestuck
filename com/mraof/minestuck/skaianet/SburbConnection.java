@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 
+import com.google.common.io.ByteArrayDataInput;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IConnectionListener;
@@ -187,83 +188,15 @@ public class SburbConnection {
 		listeners.remove(listener);
 	}
 	
-	public static void saveData(File file){
-		if(file.exists()){
-			try{
-				DataOutputStream stream = new DataOutputStream(new FileOutputStream(file));
-				for(SburbConnection c : connections){
-					if(c.client != null && c.server != null){
-						stream.writeBoolean(true);
-						c.client.save(stream);
-						c.server.save(stream);
-						stream.writeBoolean(c.isMain);
-						if(c.isMain)
-							stream.writeBoolean(c.enteredGame);
-					}
-					else{
-						stream.writeBoolean(false);
-						stream.write((c.clientName+"\n").getBytes());
-						stream.write((c.serverName+"\n").getBytes());
-						stream.writeBoolean(c.enteredGame);
-					}
-				}
-				stream.close();
-				Debug.print(connections.size()+" connection(s) saved,"+stream.size());
-			} catch(IOException e){
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	public static void loadData(File file){
-		if(file.exists()){
-			try{
-				DataInputStream stream = new DataInputStream(new FileInputStream(file));
-				connections.clear();
-				while(stream.available() > 0){
-					boolean connected = stream.readBoolean();
-					SburbConnection c = new SburbConnection(null, null);
-					
-					if(connected){
-						c.client = ComputerData.load(stream);
-						c.server = ComputerData.load(stream);
-						c.isMain = stream.readBoolean();
-						if(c.isMain)
-							c.enteredGame = stream.readBoolean();
-					}
-					else{
-						c.isMain = true;
-						c.clientName = stream.readLine();
-						c.serverName = stream.readLine();
-						c.enteredGame = stream.readBoolean();
-					}
-					connections.add(c);
-				}
-				stream.close();
-				Debug.print(connections.size()+" connection(s) loaded");
-				checkConnections();
-			}catch(IOException e){
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	public static void checkConnections(){ //Just for safety
-		for(SburbConnection c : connections){
-			if(c.client != null && c.server != null)
-				for(World world : MinecraftServer.getServer().worldServers){
-					if(world.provider.dimensionId == c.client.dimension && world.getBlockId(c.client.x, c.client.y, c.client.z) != Minestuck.blockComputerOn.blockID ||
-							world.provider.dimensionId == c.server.dimension && world.getBlockId(c.server.x, c.server.y, c.server.z) != Minestuck.blockComputerOn.blockID){
-						if(c.isMain){
-							c.clientName = c.client.owner;
-							c.client = null;
-							c.serverName = c.server.owner;
-							c.server = null;
-						} else {
-							connections.remove(c);
-						}
-					}
-				}
+	public static SburbConnection loadConnection(ByteArrayDataInput data){
+		try{
+			SburbConnection s = new SburbConnection(null, null);
+			
+			
+			return s;
+		} catch(IllegalArgumentException e){
+			e.printStackTrace();
+			return null;
 		}
 	}
 	
@@ -293,5 +226,10 @@ public class SburbConnection {
 	}
 	public boolean givenItems(){return isMain;}
 	public boolean enteredGame(){return enteredGame;}
+
+	public byte[] getBytes() {
+		
+		return null;
+	}
 	
 }
