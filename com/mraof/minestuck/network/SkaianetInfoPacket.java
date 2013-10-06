@@ -7,9 +7,13 @@ import java.util.ArrayList;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+import com.mraof.minestuck.network.MinestuckPacket;
+import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaiaClient;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.util.Debug;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetworkManager;
@@ -24,6 +28,7 @@ public class SkaianetInfoPacket extends MinestuckPacket {
 	public String player;
 	public boolean isClientResuming, isServerResuming;
 	public ArrayList<String> openServers;
+	public ArrayList<SburbConnection> connections;
 	
 	@Override
 	public byte[] generatePacket(Object... data) {
@@ -39,7 +44,7 @@ public class SkaianetInfoPacket extends MinestuckPacket {
 		for(int i = 0; i < size; i++)
 			dat.write(((String)data[i+4]+'\n').getBytes());
 		
-		for(int i = size+3; i < data.length; i++){
+		for(int i = size+4; i < data.length; i++){
 			dat.write(((SburbConnection)data[i]).getBytes());
 		}
 		
@@ -58,7 +63,9 @@ public class SkaianetInfoPacket extends MinestuckPacket {
 			openServers = new ArrayList();
 			for(int i = 0; i < size; i++)
 				openServers.add(dat.readLine());
-			
+			connections = new ArrayList();
+			while(true)
+				connections.add(SkaiaClient.getConnection(dat));
 		} catch(IllegalStateException e){}	//Because I don't see a dat.available(); method or anything similar.
 		
 		return this;
@@ -66,6 +73,7 @@ public class SkaianetInfoPacket extends MinestuckPacket {
 
 	@Override
 	public void execute(INetworkManager network, MinestuckPacketHandler minestuckPacketHandler, Player player, String userName) {
+		Debug.print("Recived info packet: "+(((EntityPlayer)player).worldObj.isRemote?"data.":"request."));
 		
 		if(((EntityPlayer)player).worldObj.isRemote)
 			SkaiaClient.consumePacket(this);

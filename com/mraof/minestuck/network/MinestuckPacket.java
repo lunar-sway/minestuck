@@ -19,10 +19,8 @@ public abstract class MinestuckPacket
 		GOBUTTON(GoButtonPacket.class),
 		TITLE(TitlePacket.class),
 		SBURB_CONNECT(SburbConnectPacket.class),
-		SBURB_OPEN(SburbServerOpenPacket.class),
 		SBURB_GIVE(SburbGiveItemsPacket.class), 
 		SBURB_CLOSE(SburbConnectClosedPacket.class),
-		SBURB_RESUME(SburbResumePacket.class),
 		LANDREGISTER(LandRegisterPacket.class),
 		CLEAR(ClearMessagePacket.class),
 		SBURB_INFO(SkaianetInfoPacket.class);

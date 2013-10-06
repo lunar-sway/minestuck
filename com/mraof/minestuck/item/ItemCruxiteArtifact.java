@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.ITeleporter;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.gen.lands.LandHelper;
@@ -52,7 +52,7 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 			int destinationId = player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("LandId") == 0 ? LandHelper.createLand(player) : player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("LandId");
 			if(player.worldObj.provider.dimensionId != destinationId) {
 				Teleport.teleportEntity(player, destinationId, this);
-				SburbConnection.enterMedium(player.username, destinationId);
+				SkaianetHandler.enterMedium(player.username, destinationId);
 			}
 		}
 	}

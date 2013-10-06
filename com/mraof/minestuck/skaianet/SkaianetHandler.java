@@ -40,7 +40,7 @@ public class SkaianetHandler {
 	
 	public static SburbConnection getClientConnection(String client){
 		for(SburbConnection c : connections)
-			if(c.client != null && c.client.owner.equals(client))
+			if(c.isActive && c.client.owner.equals(client))
 				return c;
 		return null;
 	}
@@ -55,10 +55,23 @@ public class SkaianetHandler {
 		return "";
 	}
 	
+	public static boolean giveItems(String player){
+		SburbConnection c = getClientConnection(player);
+		if(c != null && !c.isMain){
+			c.isMain = true;
+			updatePlayer(c.getClientName());
+			updatePlayer(c.getServerName());
+			return true;
+		}
+		return false;
+	}
+	
 	public static void playerConnected(String player){
+		Debug.print("[SKAIANET] Player connected:"+player);
 		String[] s = new String[5];
 		s[0] = player;
 		infoToSend.put(player, s);
+		updatePlayer(player);
 	}
 	
 	public static void requestConnection(ComputerData player, String otherPlayer, boolean isClient){
@@ -106,14 +119,21 @@ public class SkaianetHandler {
 					te.latestmessage.put(0, "Stopped resuming");
 					te.worldObj.markBlockForUpdate(te.xCoord, te.yCoord, te.zCoord);
 				}
-			} else {
+			} else if(serversOpen.containsKey(player)){
 				TileEntityComputer te = getComputer(serversOpen.remove(player));
 				if(te != null){
 					te.openToClients = false;
 					te.latestmessage.put(1, "Closed server");
 					te.worldObj.markBlockForUpdate(te.xCoord, te.yCoord, te.zCoord);
 				}
-			}
+			} else if(resumingServers.containsKey(player)){
+				TileEntityComputer te = getComputer(resumingServers.remove(player));
+				if(te != null){
+					te.openToClients = false;
+					te.latestmessage.put(1, "Stopped resuming");
+					te.worldObj.markBlockForUpdate(te.xCoord, te.yCoord, te.zCoord);
+				}
+			} else Debug.print("[SKAIANET] Got disconnect request but server is not open! "+player);
 		} else {
 			SburbConnection c = isClient?getConnection(player, otherPlayer):getConnection(otherPlayer, player);
 			if(c != null){
@@ -160,7 +180,7 @@ public class SkaianetHandler {
 		if(isClient){
 			c = getConnection(player.owner, otherPlayer);
 			if(c == null){
-				c = new SburbConnection(null, null);
+				c = new SburbConnection();
 				connections.add(c);
 			}
 			c.client = player;
@@ -173,22 +193,28 @@ public class SkaianetHandler {
 			c.server = player;
 		}
 		
-		c1.connected(c, isClient);
-		c2.connected(c, !isClient);
+		c1.connected(isClient?c.getServerName():c.getClientName(), isClient);
+		c2.connected(!isClient?c.getServerName():c.getClientName(), !isClient);
 	}
 	
 	public static void requestInfo(String p0, String p1){
+		checkData();
 		String[] s = infoToSend.get(p0);
-		if(s == null)
+		if(s == null){
+			Debug.print("[SKAIANET] Player sent a request without being online!");
 			return;
+		}
 		int i = 0;
 		for(;i < s.length; i++){
 			if(s[i] == null)
 				break;
-			if(s[i].equals(p1))
+			if(s[i].equals(p1)){
+				Debug.print("[Skaianet] Player already got the requested data.");
+				updatePlayer(p0);	//Update anyway, to fix whatever went wrong
 				return;
+			}
 		}
-		if(i == s.length){
+		if(i == s.length){	//If the array is full, increase size with 5.
 			String[] newS = new String[s.length+5];
 			System.arraycopy(s, 0, newS, 0, s.length);
 			s = newS;
@@ -197,7 +223,6 @@ public class SkaianetHandler {
 		
 		s[i] = p1;
 		
-		checkData();
 		updatePlayer(p0);
 	}
 	
@@ -207,9 +232,9 @@ public class SkaianetHandler {
 				checkData();
 				
 				DataOutputStream stream = new DataOutputStream(new FileOutputStream(file));
-				for(SburbConnection c : SburbConnection.connections){
-					if(c.client != null && c.server != null){
-						stream.writeBoolean(true);
+				for(SburbConnection c : connections){
+					stream.writeBoolean(c.isActive);
+					if(c.isActive){
 						c.client.save(stream);
 						c.server.save(stream);
 						stream.writeBoolean(c.isMain);
@@ -217,7 +242,6 @@ public class SkaianetHandler {
 							stream.writeBoolean(c.enteredGame);
 					}
 					else{
-						stream.writeBoolean(false);
 						stream.write((c.clientName+"\n").getBytes());
 						stream.write((c.serverName+"\n").getBytes());
 						stream.writeBoolean(c.enteredGame);
@@ -229,7 +253,7 @@ public class SkaianetHandler {
 //				}
 				
 				stream.close();
-				Debug.print(SburbConnection.connections.size()+" connection(s) saved,"+stream.size());
+				Debug.print(connections.size()+" connection(s) saved,"+stream.size());
 			} catch(IOException e){
 				e.printStackTrace();
 			}
@@ -240,12 +264,12 @@ public class SkaianetHandler {
 		if(file.exists()){
 			try{
 				DataInputStream stream = new DataInputStream(new FileInputStream(file));
-				SburbConnection.connections.clear();
+				connections.clear();
 				while(stream.available() > 0){
-					boolean connected = stream.readBoolean();
-					SburbConnection c = new SburbConnection(null, null);
+					SburbConnection c = new SburbConnection();
+					c.isActive = stream.readBoolean();
 					
-					if(connected){
+					if(c.isActive){
 						c.client = ComputerData.load(stream);
 						c.server = ComputerData.load(stream);
 						c.isMain = stream.readBoolean();
@@ -258,7 +282,7 @@ public class SkaianetHandler {
 						c.serverName = stream.readLine();
 						c.enteredGame = stream.readBoolean();
 					}
-					SburbConnection.connections.add(c);
+					connections.add(c);
 				}
 				
 //				byte size = stream.readByte();
@@ -267,7 +291,7 @@ public class SkaianetHandler {
 //					Session.sessions.add(Session.load(stream));
 				
 				stream.close();
-				Debug.print(SburbConnection.connections.size()+" connection(s) loaded");
+				Debug.print(connections.size()+" connection(s) loaded");
 				checkData();
 			}catch(IOException e){
 				e.printStackTrace();
@@ -376,6 +400,20 @@ public class SkaianetHandler {
 		if(te == null || !(te instanceof TileEntityComputer))
 			return null;
 		else return (TileEntityComputer)te;
+	}
+
+	public static void enterMedium(String player, int dimensionId) {
+		SburbConnection c = getConnection(player, getAssociatedPartner(player, true));
+		if(c != null){
+			c.enteredGame = true;
+			for(SburbConnection sc : connections){	//TEMP Later make it only change the transferred computers instead
+				if(sc.client != null && sc.client.owner.equals(player))
+					sc.client.dimension = dimensionId;
+				if(sc.server != null && sc.server.owner.equals(player))
+					sc.server.dimension = dimensionId;
+			}
+			updateAll();
+		}
 	}
 	
 }
