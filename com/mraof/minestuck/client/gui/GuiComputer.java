@@ -213,7 +213,7 @@ public class GuiComputer extends GuiScreen
 			} else if(guibutton.displayString.equals("View Gristcache")){
 				mc.thePlayer.openGui(Minestuck.instance, 2, te.worldObj, te.xCoord, te.yCoord, te.zCoord);
 			} else if(guibutton.displayString.equals("Resume connection")){
-				SkaiaClient.sendConnectRequest(te, "", true);
+				SkaiaClient.sendConnectRequest(te, SkaiaClient.getAssociatedPartner(te.owner, true), true);
 			} else{
 				SkaiaClient.sendConnectRequest(te, guibutton.displayString, true);
 			}

@@ -127,7 +127,7 @@ public class TileEntityComputer extends TileEntity {
 	}
 
 	public void closeConnections() {
-		if(serverConnected)
+		if(serverConnected && SkaianetHandler.getClientConnection(owner) != null)
 			SkaianetHandler.closeConnection(owner, SkaianetHandler.getClientConnection(owner).getServerName(), true);
 		else if(resumingClient)
 			SkaianetHandler.closeConnection(owner, "", true);

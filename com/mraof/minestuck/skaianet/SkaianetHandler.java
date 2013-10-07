@@ -83,7 +83,7 @@ public class SkaianetHandler {
 				te.openToClients = true;
 				serversOpen.put(player.owner, player);
 			}
-			else if(getAssociatedPartner(player.owner, false).equals(otherPlayer)){	//Wants to resume
+			else if(!otherPlayer.isEmpty() && getAssociatedPartner(player.owner, false).equals(otherPlayer)){	//Wants to resume
 				if(resumingClients.containsKey(otherPlayer))	//The client is already waiting
 					connectTo(player, false, otherPlayer, resumingClients);
 				else {	//Client is not currently trying to resume
@@ -137,7 +137,7 @@ public class SkaianetHandler {
 		} else {
 			SburbConnection c = isClient?getConnection(player, otherPlayer):getConnection(otherPlayer, player);
 			if(c != null){
-					if(c.client != null){
+				if(c.isActive){
 					TileEntityComputer cc = getComputer(c.client), sc = getComputer(c.server);
 					if(cc != null){
 						cc.serverConnected = false;
@@ -154,6 +154,7 @@ public class SkaianetHandler {
 						c.serverName = c.server.owner;
 						c.client = null;
 						c.server = null;
+						c.isActive = false;
 					}
 					else connections.remove(c);
 				} else if(getAssociatedPartner(player, isClient).equals(otherPlayer)){
@@ -185,16 +186,20 @@ public class SkaianetHandler {
 			}
 			c.client = player;
 			c.server = map.remove(otherPlayer);
+			c.isActive = true;
 		} else {
 			c = getConnection(otherPlayer, player.owner);
 			if(c == null)
 				return;	//A server should only be able to resume
 			c.client = map.remove(otherPlayer);
 			c.server = player;
+			c.isActive = true;
 		}
 		
-		c1.connected(isClient?c.getServerName():c.getClientName(), isClient);
-		c2.connected(!isClient?c.getServerName():c.getClientName(), !isClient);
+		c1.connected(otherPlayer, isClient);
+		c2.connected(player.owner, !isClient);
+		if(c1 != c2)
+			c2.worldObj.markBlockForUpdate(c2.xCoord, c2.yCoord, c2.zCoord);
 	}
 	
 	public static void requestInfo(String p0, String p1){
@@ -227,36 +232,34 @@ public class SkaianetHandler {
 	}
 	
 	public static void saveData(File file){
-		if(file.exists()){
-			try{
-				checkData();
-				
-				DataOutputStream stream = new DataOutputStream(new FileOutputStream(file));
-				for(SburbConnection c : connections){
-					stream.writeBoolean(c.isActive);
-					if(c.isActive){
-						c.client.save(stream);
-						c.server.save(stream);
-						stream.writeBoolean(c.isMain);
-						if(c.isMain)
-							stream.writeBoolean(c.enteredGame);
-					}
-					else{
-						stream.write((c.clientName+"\n").getBytes());
-						stream.write((c.serverName+"\n").getBytes());
+		try{
+			checkData();
+			
+			DataOutputStream stream = new DataOutputStream(new FileOutputStream(file));
+			for(SburbConnection c : connections){
+				stream.writeBoolean(c.isActive);
+				if(c.isActive){
+					c.client.save(stream);
+					c.server.save(stream);
+					stream.writeBoolean(c.isMain);
+					if(c.isMain)
 						stream.writeBoolean(c.enteredGame);
-					}
 				}
-//				stream.writeByte(Session.sessions.size());
-//				for(Session s : Session.sessions){
-//					s.save(stream);
-//				}
-				
-				stream.close();
-				Debug.print(connections.size()+" connection(s) saved,"+stream.size());
-			} catch(IOException e){
-				e.printStackTrace();
+				else{
+					stream.write((c.clientName+"\n").getBytes());
+					stream.write((c.serverName+"\n").getBytes());
+					stream.writeBoolean(c.enteredGame);
+				}
 			}
+//			stream.writeByte(Session.sessions.size());
+//			for(Session s : Session.sessions){
+//				s.save(stream);
+//			}
+			
+			stream.close();
+			Debug.print(connections.size()+" connection"+(connections.size() == 0?"":"s")+" saved");
+		} catch(IOException e){
+			e.printStackTrace();
 		}
 	}
 	
@@ -401,7 +404,7 @@ public class SkaianetHandler {
 			return null;
 		else return (TileEntityComputer)te;
 	}
-
+	
 	public static void enterMedium(String player, int dimensionId) {
 		SburbConnection c = getConnection(player, getAssociatedPartner(player, true));
 		if(c != null){
