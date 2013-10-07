@@ -4,21 +4,21 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.tileentity.TileEntityComputer;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.SburbConnection;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.network.ClearMessagePacket;
+import com.mraof.minestuck.skaianet.ComputerData;
+import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.SkaiaClient;
+import com.mraof.minestuck.tileentity.TileEntityComputer;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -69,11 +69,11 @@ public class GuiComputer extends GuiScreen
 		
 		int yOffset = (this.height / 2) - (ySize / 2);
 		this.drawTexturedModalRect((this.width / 2) - (xSize / 2), yOffset, 0, 0, xSize, ySize);
-		if(te.latestmessage.isEmpty())
+		if(te.latestmessage.get(te.programSelected) == null || te.latestmessage.get(te.programSelected).isEmpty())
 			if(te.programSelected == -1){
 				fontRenderer.drawString("Insert disk.", (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
 			} else fontRenderer.drawString(displayMessage, (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
-		else fontRenderer.drawString(te.latestmessage, (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
+		else fontRenderer.drawString(te.latestmessage.get(te.programSelected), (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		RenderHelper.disableStandardItemLighting();
 		GL11.glDisable(GL11.GL_LIGHTING);
@@ -119,50 +119,50 @@ public class GuiComputer extends GuiScreen
     	//serverButton.enabled = te.hasServer();
 		
 		//Debug.print("Conn'd to "+te.connectedTo);
-		if(te.programSelected == 0 && te.server != null && te.server.getServer() != null)
-			displayPlayer = te.server.getServer().getOwner();
-		else if(te.programSelected == 1 && te.client != null && te.client.getClient() != null)
-			displayPlayer = te.client.getServer().getOwner();
+		if(te.programSelected == 0 && te.serverConnected && SkaiaClient.getClientConnection(te.owner) != null)
+			displayPlayer = SkaiaClient.getClientConnection(te.owner).getServerName();
+		else if(te.programSelected == 1 && !te.clientName.isEmpty())
+			displayPlayer = te.clientName;
 		else displayPlayer = "UNDEFINED";	//Should never be shown
 		
 		buttonStrings.clear();
 		
 		if(te.programSelected == 0){
 			programButton.displayString = "Client";
-			SburbConnection c = SburbConnection.getClientConnection(te.owner);
-			if(SburbConnection.enteredMedium(te.owner)) //if it should view the grist cache button. NEW Now even if the player isn't connected (but you still need to have had a connection there.
+			SburbConnection c = SkaiaClient.getClientConnection(te.owner);
+			if(SkaiaClient.enteredMedium(te.owner)) //if it should view the grist cache button.
 				buttonStrings.add("View Gristcache");
-			if (te.server != null) { //If it is connected to someone.
+			if (te.serverConnected && c != null) { //If it is connected to someone.
 				displayMessage = "Connected to "+displayPlayer;
 				buttonStrings.add("Disconnect");
 			} else if(te.resumingClient){
 				displayMessage = "Waiting for server...";
 				buttonStrings.add("Disconnect");
-			} else if(c == null && !SburbConnection.isResuming(te.owner, true)){ //If the player doesn't have an other active client
+			} else if(!SkaiaClient.isActive(te.owner, true)){ //If the player doesn't have an other active client
 				displayMessage = "Select a server below";
-				if(SburbConnection.hasMainClient(te.owner)) //If it has a resumeable connection
+				if(!SkaiaClient.getAssociatedPartner(te.owner, true).isEmpty()) //If it has a resumable connection
 					buttonStrings.add("Resume connection");
-		    	for (String server : SburbConnection.getServersOpen())
+				for (String server : SkaiaClient.getAvailableServers(te.owner))
 		    		buttonStrings.add(server);
 			} else 
 				displayMessage = "A client is already active";
 		}
 		else if(te.programSelected == 1){
 			programButton.displayString = "Server";
-			if (te.client != null) {
+			if (!te.clientName.isEmpty() && SkaiaClient.getClientConnection(te.clientName) != null) {
 				displayMessage = "Connected to "+displayPlayer;
 				buttonStrings.add("Disconnect");
-				if(!te.client.givenItems())
+				if(!SkaiaClient.getClientConnection(te.clientName).givenItems())
 					buttonStrings.add("Give items");
-			} else if (te.openToClients && te.client == null) {
+			} else if (te.openToClients) {
 				displayMessage = "Waiting for client...";
 				buttonStrings.add("Disconnect");
-			} else if(SburbConnection.isServerOpen(te.owner))
+			} else if(SkaiaClient.isActive(te.owner, false))
 				displayMessage = "Server with your name exists";
 			else {
 				displayMessage = "Server offline";
 				buttonStrings.add("Open to clients");
-				if(SburbConnection.hasMainServer(te.owner) && SburbConnection.getClientConnection(SburbConnection.getAssociatedPartner(te.owner, false)) == null)
+				if(!SkaiaClient.getAssociatedPartner(te.owner, false).isEmpty() && SkaiaClient.getClientConnection(SkaiaClient.getAssociatedPartner(te.owner, false)) == null)
 					buttonStrings.add("Resume connection");
 		    	}
 			}
@@ -189,11 +189,22 @@ public class GuiComputer extends GuiScreen
 		else return buttonStrings.get(index);
 	}
 	
+	protected void close(){
+		SkaiaClient.sendCloseRequest(te,
+				te.programSelected == 0?(te.resumingClient?"":SkaiaClient.getClientConnection(te.owner).getServerName()):
+					(te.openToClients?"":te.clientName),
+				te.programSelected == 0);
+	}
+	
 	protected void actionPerformed(GuiButton guibutton) {
+		if(te.latestmessage.get(te.programSelected) != null && !te.latestmessage.get(te.programSelected).isEmpty()){
+			te.latestmessage.put(te.programSelected, "");
+			ClearMessagePacket.send(ComputerData.createData(te), te.programSelected);
+		}
 		if(guibutton.equals(programButton))
 			te.programSelected = getNextProgram();
 		else if(guibutton.displayString.equals("Disconnect"))
-			te.closeConnection(te.programSelected == 0, te.programSelected == 1);
+			close();
 		else if(te.programSelected == 0){
 			if (guibutton == upButton) {
 				index--;
@@ -202,21 +213,20 @@ public class GuiComputer extends GuiScreen
 			} else if(guibutton.displayString.equals("View Gristcache")){
 				mc.thePlayer.openGui(Minestuck.instance, 2, te.worldObj, te.xCoord, te.yCoord, te.zCoord);
 			} else if(guibutton.displayString.equals("Resume connection")){
-				te.resume(true);
+				SkaiaClient.sendConnectRequest(te, SkaiaClient.getAssociatedPartner(te.owner, true), true);
 			} else{
-				te.connectToServer(guibutton.displayString);
+				SkaiaClient.sendConnectRequest(te, guibutton.displayString, true);
 			}
 		} else if(te.programSelected == 1){
 			if(guibutton.displayString.equals("Give items")){
-				te.giveItems();
+				SkaiaClient.giveItems(te.clientName);
 			} else if(guibutton.displayString.equals("Resume connection")){
-				te.resume(false);
+				SkaiaClient.sendConnectRequest(te, SkaiaClient.getAssociatedPartner(te.owner, false), false);
 			} else if(guibutton.displayString.equals("Open to clients")){
-				te.openServer();
+				SkaiaClient.sendConnectRequest(te, "", false);
 			}
 		}
 		updateGui();
-		te.latestmessage = "";
 	}
 
 	private int getNextProgram() {
