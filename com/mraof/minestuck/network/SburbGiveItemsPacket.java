@@ -14,7 +14,7 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.Debug;
 

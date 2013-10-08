@@ -3,8 +3,8 @@ package com.mraof.minestuck.network;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import com.mraof.minestuck.skaianet.ComputerData;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.network.skaianet.ComputerData;
+import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 
 import net.minecraft.network.INetworkManager;

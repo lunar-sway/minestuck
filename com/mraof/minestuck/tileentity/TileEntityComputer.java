@@ -18,7 +18,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 
 import com.mraof.minestuck.client.gui.GuiComputer;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 
 import cpw.mods.fml.common.network.PacketDispatcher;

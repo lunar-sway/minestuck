@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.ForgeSubscribe;

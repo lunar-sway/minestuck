@@ -18,8 +18,8 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.skaianet.SkaiaClient;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.network.skaianet.SkaiaClient;
+import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.Debug;
 
