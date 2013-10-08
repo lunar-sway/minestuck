@@ -18,6 +18,8 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.skaianet.SkaiaClient;
+import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.Debug;
 
@@ -120,11 +122,13 @@ public class BlockComputerOn extends Block implements ITileEntityProvider {
 		public boolean onBlockActivated(World world, int x,int y,int z, EntityPlayer player,int par6, float par7, float par8, float par9) {
 			TileEntityComputer tileEntity = (TileEntityComputer) world.getBlockTileEntity(x, y, z);
 			ItemStack item = player.getCurrentEquippedItem();
-			if (tileEntity == null || player.isSneaking() || item != null && item.itemID == Minestuck.disk.itemID && (item.getItemDamage() == 0 && !tileEntity.hasClient() || item.getItemDamage() == 1 && !tileEntity.hasServer())) {
+			if (tileEntity == null || !(tileEntity instanceof TileEntityComputer) || player.isSneaking() || item != null && item.itemID == Minestuck.disk.itemID && (item.getItemDamage() == 0 && !tileEntity.hasClient() || item.getItemDamage() == 1 && !tileEntity.hasServer())) {
 				return false;
 			}
-
-			player.openGui(Minestuck.instance, 1, world, x, y, z);
+			
+			if(world.isRemote && SkaiaClient.requestData((TileEntityComputer) tileEntity))
+				player.openGui(Minestuck.instance, 1, world, x, y, z);
+			
 			return true;
 		}
 		
@@ -157,7 +161,7 @@ public class BlockComputerOn extends Block implements ITileEntityProvider {
 			if (te == null) {
 				return;
 			}
-			te.closeConnection(true,true);
+			te.closeConnections();
 			float factor = 0.05F;
 			
 			Iterator it = te.installedPrograms.entrySet().iterator();

@@ -1,8 +1,11 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.NetLoginHandler;
 import net.minecraft.network.packet.NetHandler;
@@ -16,7 +19,7 @@ public class MinestuckConnectionHandler implements IConnectionHandler {
 
 	@Override
 	public void playerLoggedIn(Player player, NetHandler netHandler,INetworkManager manager) {
-
+		SkaianetHandler.playerConnected(((EntityPlayerMP)player).username);
 	}
 
 	@Override

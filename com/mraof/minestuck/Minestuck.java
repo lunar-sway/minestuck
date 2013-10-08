@@ -68,6 +68,8 @@ import com.mraof.minestuck.item.ItemSpork;
 import com.mraof.minestuck.item.ItemStorageBlock;
 import com.mraof.minestuck.network.MinestuckConnectionHandler;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.skaianet.Session;
+import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
@@ -75,7 +77,6 @@ import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristType;
-import com.mraof.minestuck.util.SburbConnection;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.WorldProviderSkaia;
 import com.mraof.minestuck.world.gen.OreHandler;
@@ -163,8 +164,12 @@ public class Minestuck
 	public static Block blockComputerOn;
 	public static Block blockComputerOff;
 	
+	//Booleans
 	public static boolean generateCruxiteOre;
-
+	public static boolean acceptTitleCollision;	//Allows combinations like "Heir of Hope" and "Seer of Hope" to exist in the same session. Still not accepting duplicates.
+	public static boolean generateSpecialClasses;	//Allow generation of the "Lord" and "Muse" classes.
+	public static boolean globalSession;	//Makes only one session possible. Recommended to be true on small servers.
+		//Will be ignored when loading a world that already got 2+ sessions.
 
 	// The instance of your mod that Forge uses.
 	@Instance("Minestuck")
@@ -194,6 +199,9 @@ public class Minestuck
 		landDimensionIdStart = config.get("Dimension Ids", "landDimensionIdStart", 3).getInt();
 		Debug.isDebugMode = config.get("General","printDebugMessages",true).getBoolean(false);
 		generateCruxiteOre = config.get("General","generateCruxiteOre",true).getBoolean(true);
+		acceptTitleCollision = config.get("General", "acceptTitleCollision", false).getBoolean(false);
+		generateSpecialClasses = config.get("General", "generateSpecialClasses", false).getBoolean(false);
+		globalSession = config.get("General", "globalSession", true).getBoolean(true);
 		config.save();
 	}
 
@@ -429,6 +437,8 @@ public class Minestuck
 		AlchemyRecipeHandler.registerVanillaRecipes();
 		AlchemyRecipeHandler.registerMinestuckRecipes();
 		AlchemyRecipeHandler.registerModRecipes();
+		
+		Session.maxSize = acceptTitleCollision?(generateSpecialClasses?168:144):12;
 	}
 
 	@EventHandler
@@ -471,6 +481,6 @@ public class Minestuck
 				e.printStackTrace();
 			}
 		}
-		SburbConnection.loadData(event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("connectionList"));
+		SkaianetHandler.loadData(event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("connectionList"));
 	}
 }
