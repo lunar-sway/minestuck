@@ -4,7 +4,7 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 
 import net.minecraft.client.Minecraft;

@@ -1,4 +1,4 @@
-package com.mraof.minestuck.skaianet;
+package com.mraof.minestuck.network.skaianet;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
