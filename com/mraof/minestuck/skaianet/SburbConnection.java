@@ -1,11 +1,13 @@
 package com.mraof.minestuck.skaianet;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -27,6 +29,27 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 
 public class SburbConnection {
+	
+	public static SburbConnection load(DataInputStream stream) throws IOException{
+		SburbConnection c = new SburbConnection();
+		c.isActive = stream.readBoolean();
+		
+		if(c.isActive){
+			c.client = ComputerData.load(stream);
+			c.server = ComputerData.load(stream);
+			c.isMain = stream.readBoolean();
+			if(c.isMain)
+				c.enteredGame = stream.readBoolean();
+		}
+		else{
+			BufferedReader d = new BufferedReader(new InputStreamReader(stream));	//This to avoid the deprecated method stream.readLine()
+			c.isMain = true;
+			c.clientName = d.readLine();
+			c.serverName = d.readLine();
+			c.enteredGame = stream.readBoolean();
+		}
+		return c;
+	}
 	
 //	@SideOnly(Side.SERVER)
 	ComputerData client;

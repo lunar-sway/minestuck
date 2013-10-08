@@ -4,6 +4,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 
 public class ComputerData{
@@ -23,8 +26,9 @@ public class ComputerData{
 			this.dimension = dimension;
 		}
 		
-		private ComputerData() {}
-		
+	
+	ComputerData() {}
+	
 		void save(DataOutputStream stream) throws IOException{
 			stream.writeInt(x);
 			stream.writeInt(y);
@@ -42,7 +46,25 @@ public class ComputerData{
 			data.owner = stream.readLine(); //How should I read the string here without a deprecated method?
 			return data;
 		}
-		
+	
+	void read(NBTTagCompound nbt){
+		owner = nbt.getString("name");
+		x = nbt.getInteger("x");
+		y = nbt.getInteger("y");
+		z = nbt.getInteger("z");
+		dimension = nbt.getInteger("dim");
+	}
+	
+	void write(NBTTagList nbt){
+		NBTTagCompound c = new NBTTagCompound(owner);
+		c.setString("name", owner);
+		c.setInteger("x", x);
+		c.setInteger("y", y);
+		c.setInteger("z", z);
+		c.setInteger("dim", dimension);
+		nbt.appendTag(c);
+	}
+	
 		public String getOwner(){return owner;}
 		public int getX(){return x;}
 		public int getY(){return y;}

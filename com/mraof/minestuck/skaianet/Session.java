@@ -13,6 +13,12 @@ public class Session {
 	
 	static List<Session> sessions = new ArrayList();
 	
+	static void registerConnection(SburbConnection c){
+		if(!canJoin(c.getClientName(), c.getServerName()))
+			return;
+		
+	}
+	
 	static boolean canJoin(String client, String server){
 		Session cs = null;
 		Session ss = null;
@@ -42,7 +48,7 @@ public class Session {
 	}
 	
 	static boolean canMerge(Session cs, Session ss){
-		return (cs != null && ss != null && cs.connections.size()+ss.connections.size()<=maxSize && !cs.completed && !ss.completed);
+		return (cs != null && ss != null && cs.getPlayerList().size()+ss.getPlayerList().size()<=maxSize && !cs.completed && !ss.completed);
 	}
 	
 	static Session load(DataInputStream stream) throws IOException {
@@ -52,8 +58,8 @@ public class Session {
 		s.skaiaId = stream.readByte();
 		s.prospitId = stream.readByte();
 		s.derseId = stream.readByte();
-//		for(int i = 0; i < size; i++)
-//			s.connections.add(SburbConnection.load(stream));
+		for(int i = 0; i < size; i++)
+			s.connections.add(SburbConnection.load(stream));
 		return s;
 	}
 	
@@ -87,6 +93,17 @@ public class Session {
 			if(s.equals(isClient?c.getClientName():c.getServerName()))
 				return true;
 		return false;
+	}
+	
+	List<String> getPlayerList(){
+		List<String> list = new ArrayList();
+		for(SburbConnection c : this.connections){
+			if(!list.contains(c.getClientName()))
+				list.add(c.getClientName());
+			if(!list.contains(c.getServerName()))
+				list.add(c.getServerName());
+		}
+		return list;
 	}
 	
 }

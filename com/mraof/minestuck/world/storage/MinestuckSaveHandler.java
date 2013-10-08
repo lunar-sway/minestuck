@@ -36,7 +36,7 @@ public class MinestuckSaveHandler
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			SkaianetHandler.saveData(event.world.getSaveHandler().getMapFileFromName("connectionList"));
+			SkaianetHandler.saveData(event.world.getSaveHandler().getMapFileFromName("connectionList"),event.world.getSaveHandler().getMapFileFromName("waitingConnections"));
 		}
 	}
 }

@@ -1,11 +1,13 @@
 package com.mraof.minestuck.skaianet;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -14,6 +16,9 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
@@ -36,7 +41,7 @@ public class SkaianetHandler {
 	static Map<String,ComputerData>resumingClients = new HashMap();
 	static Map<String,ComputerData>resumingServers = new HashMap();
 	static List<SburbConnection> connections = new ArrayList();
-	static Map<String, String[]> infoToSend = new HashMap();	//Key, player, value, data to send to player
+	static Map<String, String[]> infoToSend = new HashMap();	//Key: player, value: data to send to player
 	
 	public static SburbConnection getClientConnection(String client){
 		for(SburbConnection c : connections)
@@ -80,8 +85,12 @@ public class SkaianetHandler {
 			return;
 		if(!isClient){	//Is server
 			if(otherPlayer.isEmpty() && !serversOpen.containsKey(player.owner)){	//Wants to open
-				te.openToClients = true;
-				serversOpen.put(player.owner, player);
+				if(!getAssociatedPartner(player.owner, false).isEmpty() && resumingClients.containsKey(getAssociatedPartner(player.owner, false)))
+					connectTo(player, false, getAssociatedPartner(player.owner, false), resumingClients);
+				else{
+					te.openToClients = true;
+					serversOpen.put(player.owner, player);
+				}
 			}
 			else if(!otherPlayer.isEmpty() && getAssociatedPartner(player.owner, false).equals(otherPlayer)){	//Wants to resume
 				if(resumingClients.containsKey(otherPlayer))	//The client is already waiting
@@ -231,11 +240,11 @@ public class SkaianetHandler {
 		updatePlayer(p0);
 	}
 	
-	public static void saveData(File file){
+	public static void saveData(File file0, File file1){
 		try{
 			checkData();
 			
-			DataOutputStream stream = new DataOutputStream(new FileOutputStream(file));
+			DataOutputStream stream = new DataOutputStream(new FileOutputStream(file0));
 			for(SburbConnection c : connections){
 				stream.writeBoolean(c.isActive);
 				if(c.isActive){
@@ -251,55 +260,96 @@ public class SkaianetHandler {
 					stream.writeBoolean(c.enteredGame);
 				}
 			}
-//			stream.writeByte(Session.sessions.size());
 //			for(Session s : Session.sessions){
 //				s.save(stream);
 //			}
 			
 			stream.close();
-			Debug.print(connections.size()+" connection"+(connections.size() == 0?"":"s")+" saved");
+			Debug.print(connections.size()+" connection"+(connections.size() == 1?"":"s")+" saved");
 		} catch(IOException e){
+			e.printStackTrace();
+		}
+		
+		NBTTagCompound nbt = new NBTTagCompound();
+		
+		NBTTagList ls = new NBTTagList("serversOpen");
+		for(ComputerData c:serversOpen.values())
+			c.write(ls);
+		nbt.setTag("serversOpen", ls);
+		
+		ls = new NBTTagList("resumingClients");
+		for(ComputerData c:resumingClients.values())
+			c.write(ls);
+		nbt.setTag("resumingClients", ls);
+		
+		ls = new NBTTagList("resumingServers");
+		for(ComputerData c:resumingClients.values())
+			c.write(ls);
+		nbt.setTag("resumingServers", ls);
+		
+		try {
+			CompressedStreamTools.writeCompressed(nbt, new FileOutputStream(file1));
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static void loadData(File file){
-		if(file.exists()){
+	public static void loadData(File file0, File file1){
+		connections.clear();
+		serversOpen.clear();	
+		resumingClients.clear();
+		resumingServers.clear();
+		if(file0.exists()){
 			try{
-				DataInputStream stream = new DataInputStream(new FileInputStream(file));
-				connections.clear();
+				DataInputStream stream = new DataInputStream(new FileInputStream(file0));
 				while(stream.available() > 0){
-					SburbConnection c = new SburbConnection();
-					c.isActive = stream.readBoolean();
 					
-					if(c.isActive){
-						c.client = ComputerData.load(stream);
-						c.server = ComputerData.load(stream);
-						c.isMain = stream.readBoolean();
-						if(c.isMain)
-							c.enteredGame = stream.readBoolean();
-					}
-					else{
-						c.isMain = true;
-						c.clientName = stream.readLine();
-						c.serverName = stream.readLine();
-						c.enteredGame = stream.readBoolean();
-					}
-					connections.add(c);
+					connections.add(SburbConnection.load(stream));
 				}
 				
-//				byte size = stream.readByte();
 //				Session.sessions.clear();
-//				for(int i = 0; i < size; i++)
+//				while(stream.available() > 0)
 //					Session.sessions.add(Session.load(stream));
 				
 				stream.close();
 				Debug.print(connections.size()+" connection(s) loaded");
-				checkData();
 			}catch(IOException e){
 				e.printStackTrace();
 			}
 		}
+		
+		if(file1.exists()){
+			NBTTagCompound nbt = null;
+			try{
+				nbt = CompressedStreamTools.readCompressed(new FileInputStream(file1));
+			}catch(IOException e){
+				e.printStackTrace();
+			}
+			if(nbt != null){
+				NBTTagList ls = (NBTTagList)nbt.getTag("serversOpen");Debug.print(ls.tagCount());
+				for(int i = 0; i < ls.tagCount(); i++){
+					NBTTagCompound cmp = (NBTTagCompound)ls.tagAt(i);
+					ComputerData c = new ComputerData();
+					c.read(nbt);Debug.print("Added open server to list, "+c.owner);
+					serversOpen.put(c.owner, c);
+				}
+				ls = (NBTTagList)nbt.getTag("resumingClients");
+				for(int i = 0; i < ls.tagCount(); i++){
+					NBTTagCompound cmp = (NBTTagCompound)ls.tagAt(i);
+					ComputerData c = new ComputerData();
+					c.read(nbt);
+					resumingClients.put(c.owner, c);
+				}
+				ls = (NBTTagList)nbt.getTag("resumingServers");
+				for(int i = 0; i < ls.tagCount(); i++){
+					NBTTagCompound cmp = (NBTTagCompound)ls.tagAt(i);
+					ComputerData c = new ComputerData();
+					c.read(nbt);
+					resumingServers.put(c.owner, c);
+				}
+			}else{Debug.print("Nbt == null!");}
+		}
+		checkData();
 	}
 	
 	static void updateAll(){
