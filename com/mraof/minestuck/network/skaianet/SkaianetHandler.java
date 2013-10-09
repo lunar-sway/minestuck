@@ -225,7 +225,8 @@ public class SkaianetHandler {
 		}
 		if(Minestuck.privateComputers && !p0.equals(p1)){
 			ChatMessageComponent chatmessage = new ChatMessageComponent();
-			chatmessage.addText("[MINESTUCK] You are not allowed to access other players computers.");
+			//chatmessage.addText("[MINESTUCK] You are not allowed to access other players computers.");
+			chatmessage.addText("[MINESTUCK] Sorry, password protected.");	//Well, not really, but it is funnier this way.
 			chatmessage.setColor(EnumChatFormatting.RED);
 			player.sendChatToPlayer(chatmessage);
 			return;
@@ -253,50 +254,42 @@ public class SkaianetHandler {
 	}
 	
 	public static void saveData(File file0, File file1){
-		try{
-			checkData();
-			
-			DataOutputStream stream = new DataOutputStream(new FileOutputStream(file0));
-			for(SburbConnection c : connections){
-				stream.writeBoolean(c.isActive);
-				if(c.isActive){
-					c.client.save(stream);
-					c.server.save(stream);
-					stream.writeBoolean(c.isMain);
-					if(c.isMain)
-						stream.writeBoolean(c.enteredGame);
-				}
-				else{
-					stream.write((c.clientName+"\n").getBytes());
-					stream.write((c.serverName+"\n").getBytes());
-					stream.writeBoolean(c.enteredGame);
-				}
-			}
-//			for(Session s : Session.sessions){
-//				s.save(stream);
-//			}
-			
-			stream.close();
-			//Debug.print(connections.size()+" connection"+(connections.size() == 1?"":"s")+" saved");
-		} catch(IOException e){
+		checkData();
+		
+		NBTTagCompound nbt = new NBTTagCompound();
+		NBTTagList list = new NBTTagList();
+		
+		for(SburbConnection c : connections)
+			list.appendTag(c.write());
+		
+		//for(Session s : Session.sessions)
+			//list.appendTag(s.write());
+		
+		nbt.setTag("list", list);
+		
+		try {
+			CompressedStreamTools.writeCompressed(nbt, new FileOutputStream(file0));
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		NBTTagCompound nbt = new NBTTagCompound();
+		//Debug.print(connections.size()+" connection"+(connections.size() == 1?"":"s")+" saved");
+		
+		nbt = new NBTTagCompound();
 		
 		NBTTagList ls = new NBTTagList("serversOpen");
 		for(ComputerData c:serversOpen.values())
-			c.write(ls);
+			ls.appendTag(c.write());
 		nbt.setTag("serversOpen", ls);
 		
 		ls = new NBTTagList("resumingClients");
 		for(ComputerData c:resumingClients.values())
-			c.write(ls);
+			ls.appendTag(c.write());
 		nbt.setTag("resumingClients", ls);
 		
 		ls = new NBTTagList("resumingServers");
 		for(ComputerData c:resumingClients.values())
-			c.write(ls);
+			ls.appendTag(c.write());
 		nbt.setTag("resumingServers", ls);
 		
 		try {
@@ -312,21 +305,26 @@ public class SkaianetHandler {
 		resumingClients.clear();
 		resumingServers.clear();
 		if(file0.exists()){
+			NBTTagCompound nbt = null;
 			try{
-				DataInputStream stream = new DataInputStream(new FileInputStream(file0));
-				while(stream.available() > 0){
-					
-					connections.add(SburbConnection.load(stream));
+				nbt = CompressedStreamTools.readCompressed(new FileInputStream(file0));
+				
+			} catch(IOException e){
+				e.printStackTrace();
+			}
+			if(nbt != null){
+				NBTTagList list = nbt.getTagList("list");
+				for(int i = 0; i < list.tagCount(); i++){
+					NBTTagCompound tag = (NBTTagCompound) list.tagAt(i);
+					SburbConnection c = new SburbConnection();
+					c.read(tag);
+					connections.add(c);
+					//Session s = new Session();
+					//s.read(tag);
+					//Session.sessions.add(s);
 				}
 				
-//				Session.sessions.clear();
-//				while(stream.available() > 0)
-//					Session.sessions.add(Session.load(stream));
-				
-				stream.close();
 				//Debug.print(connections.size()+" connection(s) loaded");
-			}catch(IOException e){
-				e.printStackTrace();
 			}
 		}
 		

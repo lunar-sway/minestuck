@@ -25,6 +25,7 @@ import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 
@@ -90,6 +91,40 @@ public class SburbConnection {
 		data.write((getServerName()+"\n").getBytes());
 		
 		return data.toByteArray();
+	}
+
+	NBTTagCompound write() {
+		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setBoolean("isMain", isMain);
+		if(isMain){
+			nbt.setBoolean("isActive", isActive);
+			nbt.setBoolean("enteredGame", enteredGame);
+		}
+		if(isActive){
+			nbt.setCompoundTag("client", client.write());
+			nbt.setCompoundTag("server", server.write());
+		} else {
+			nbt.setString("client", clientName);
+			nbt.setString("server", serverName);
+		}
+		return nbt;
+	}
+	
+	void read(NBTTagCompound nbt) {
+		isMain = nbt.getBoolean("isMain");
+		if(isMain){
+			isActive = nbt.getBoolean("isActive");
+			enteredGame = nbt.getBoolean("enteredGame");
+		}
+		if(isActive){
+			client = new ComputerData();
+			server = new ComputerData();
+			client.read(nbt.getCompoundTag("client"));
+			server.read(nbt.getCompoundTag("server"));
+		} else {
+			clientName = nbt.getString("client");
+			serverName = nbt.getString("server");
+		}
 	}
 	
 }

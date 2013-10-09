@@ -5,7 +5,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 
@@ -55,14 +54,14 @@ public class ComputerData{
 		dimension = nbt.getInteger("dim");
 	}
 	
-	void write(NBTTagList nbt){
+	NBTTagCompound write(){
 		NBTTagCompound c = new NBTTagCompound(owner);
 		c.setString("name", owner);
 		c.setInteger("x", x);
 		c.setInteger("y", y);
 		c.setInteger("z", z);
 		c.setInteger("dim", dimension);
-		nbt.appendTag(c);
+		return c;
 	}
 	
 		public String getOwner(){return owner;}

@@ -166,7 +166,7 @@ public class Minestuck
 	
 	//Booleans
 	public static boolean generateCruxiteOre;
-	public static boolean privateComputers;	//If a player should be able to use other players computers.
+	public static boolean privateComputers;	//If a player should be able to use other players computers or not.
 	public static boolean acceptTitleCollision;	//Allows combinations like "Heir of Hope" and "Seer of Hope" to exist in the same session. Still not accepting duplicates.
 	public static boolean generateSpecialClasses;	//Allow generation of the "Lord" and "Muse" classes.
 	public static boolean globalSession;	//Makes only one session possible. Recommended to be true on small servers.
