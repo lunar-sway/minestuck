@@ -265,7 +265,7 @@ public class SkaianetHandler {
 //			}
 			
 			stream.close();
-			Debug.print(connections.size()+" connection"+(connections.size() == 1?"":"s")+" saved");
+			//Debug.print(connections.size()+" connection"+(connections.size() == 1?"":"s")+" saved");
 		} catch(IOException e){
 			e.printStackTrace();
 		}
@@ -312,7 +312,7 @@ public class SkaianetHandler {
 //					Session.sessions.add(Session.load(stream));
 				
 				stream.close();
-				Debug.print(connections.size()+" connection(s) loaded");
+				//Debug.print(connections.size()+" connection(s) loaded");
 			}catch(IOException e){
 				e.printStackTrace();
 			}
@@ -326,28 +326,28 @@ public class SkaianetHandler {
 				e.printStackTrace();
 			}
 			if(nbt != null){
-				NBTTagList ls = (NBTTagList)nbt.getTag("serversOpen");Debug.print(ls.tagCount());
+				NBTTagList ls = (NBTTagList)nbt.getTag("serversOpen");
 				for(int i = 0; i < ls.tagCount(); i++){
 					NBTTagCompound cmp = (NBTTagCompound)ls.tagAt(i);
 					ComputerData c = new ComputerData();
-					c.read(nbt);Debug.print("Added open server to list, "+c.owner);
+					c.read(cmp);
 					serversOpen.put(c.owner, c);
 				}
 				ls = (NBTTagList)nbt.getTag("resumingClients");
 				for(int i = 0; i < ls.tagCount(); i++){
 					NBTTagCompound cmp = (NBTTagCompound)ls.tagAt(i);
 					ComputerData c = new ComputerData();
-					c.read(nbt);
+					c.read(cmp);
 					resumingClients.put(c.owner, c);
 				}
 				ls = (NBTTagList)nbt.getTag("resumingServers");
 				for(int i = 0; i < ls.tagCount(); i++){
 					NBTTagCompound cmp = (NBTTagCompound)ls.tagAt(i);
 					ComputerData c = new ComputerData();
-					c.read(nbt);
+					c.read(cmp);
 					resumingServers.put(c.owner, c);
 				}
-			}else{Debug.print("Nbt == null!");}
+			}
 		}
 		checkData();
 	}
