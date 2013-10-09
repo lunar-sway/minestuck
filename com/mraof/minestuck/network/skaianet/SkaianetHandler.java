@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -23,9 +24,12 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatMessageComponent;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
@@ -214,8 +218,16 @@ public class SkaianetHandler {
 	public static void requestInfo(String p0, String p1){
 		checkData();
 		String[] s = infoToSend.get(p0);
-		if(s == null){
+		EntityPlayerMP player = MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(p0);
+		if(s == null || player == null){
 			Debug.print("[SKAIANET] Player sent a request without being online!");
+			return;
+		}
+		if(Minestuck.privateComputers && !p0.equals(p1)){
+			ChatMessageComponent chatmessage = new ChatMessageComponent();
+			chatmessage.addText("[MINESTUCK] You are not allowed to access other players computers.");
+			chatmessage.setColor(EnumChatFormatting.RED);
+			player.sendChatToPlayer(chatmessage);
 			return;
 		}
 		int i = 0;
@@ -426,6 +438,13 @@ public class SkaianetHandler {
 					}
 				}
 			}
+		}
+		
+		if(Minestuck.privateComputers){
+			for(Entry<String,String[]> entry : infoToSend.entrySet())
+				for(int i = 0; i < entry.getValue().length; i++)
+					if(entry.getValue()[i] != null && entry.getValue()[i] != entry.getKey())
+						entry.getValue()[i] = null;
 		}
 	}
 	

@@ -27,8 +27,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityComputer extends TileEntity {
 	
-	//public volatile boolean hasClient = false;
-	//public volatile boolean hasServer = false;
 	public Hashtable<Integer, Boolean> installedPrograms = new Hashtable();
 	public boolean openToClients = false;
 	/**

@@ -115,8 +115,7 @@ public class GuiComputer extends GuiScreen
 
 	public void updateGui() {
 		
-    	//clientButton.enabled = te.hasClient();
-    	//serverButton.enabled = te.hasServer();
+		programButton.enabled = te.installedPrograms.size() > 1;	//should this be implemented?
 		
 		//Debug.print("Conn'd to "+te.connectedTo);
 		if(te.programSelected == 0 && te.serverConnected && SkaiaClient.getClientConnection(te.owner) != null)
