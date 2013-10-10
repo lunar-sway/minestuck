@@ -315,15 +315,9 @@ public class SkaianetHandler {
 			}
 			if(nbt != null){
 				NBTTagList list = nbt.getTagList("list");
-				for(int i = 0; i < list.tagCount(); i++){
-					NBTTagCompound tag = (NBTTagCompound) list.tagAt(i);
-					SburbConnection c = new SburbConnection();
-					c.read(tag);
-					connections.add(c);
-					//Session s = new Session();
-					//s.read(tag);
-					//Session.sessions.add(s);
-				}
+				for(int i = 0; i < list.tagCount(); i++)
+					connections.add(new SburbConnection().read((NBTTagCompound) list.tagAt(i)));
+					//Session.sessions.add(new Session().read((NBTTagCompound) list.tagAt(i)));
 				
 				//Debug.print(connections.size()+" connection(s) loaded");
 			}

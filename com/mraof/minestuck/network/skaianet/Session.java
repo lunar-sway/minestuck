@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+
 public class Session {
 	
 	public static int maxSize;
@@ -104,6 +107,27 @@ public class Session {
 				list.add(c.getServerName());
 		}
 		return list;
+	}
+	
+	NBTTagCompound write() {
+		NBTTagCompound nbt = new NBTTagCompound();
+		NBTTagList list = new NBTTagList();
+		for(SburbConnection c : connections)
+			list.appendTag(c.write());
+		nbt.setTag("connections", list);
+		nbt.setInteger("skaiaId", skaiaId);
+		nbt.setInteger("derseId", derseId);
+		nbt.setInteger("prospitId", prospitId);
+		nbt.setBoolean("completed", completed);
+		return nbt;
+	}
+	
+	Session read(NBTTagCompound nbt) {
+		NBTTagList list = nbt.getTagList("connections");
+		for(int i = 0; i < list.tagCount(); i++)
+			connections.add(new SburbConnection().read((NBTTagCompound) list.tagAt(i)));
+		
+		return this;
 	}
 	
 }

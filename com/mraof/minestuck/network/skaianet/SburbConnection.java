@@ -110,21 +110,20 @@ public class SburbConnection {
 		return nbt;
 	}
 	
-	void read(NBTTagCompound nbt) {
+	SburbConnection read(NBTTagCompound nbt) {
 		isMain = nbt.getBoolean("isMain");
 		if(isMain){
 			isActive = nbt.getBoolean("isActive");
 			enteredGame = nbt.getBoolean("enteredGame");
 		}
 		if(isActive){
-			client = new ComputerData();
-			server = new ComputerData();
-			client.read(nbt.getCompoundTag("client"));
-			server.read(nbt.getCompoundTag("server"));
+			client = new ComputerData().read(nbt.getCompoundTag("client"));
+			server = new ComputerData().read(nbt.getCompoundTag("server"));
 		} else {
 			clientName = nbt.getString("client");
 			serverName = nbt.getString("server");
 		}
+		return this;
 	}
 	
 }

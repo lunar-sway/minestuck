@@ -46,12 +46,13 @@ public class ComputerData{
 			return data;
 		}
 	
-	void read(NBTTagCompound nbt){
+	ComputerData read(NBTTagCompound nbt){
 		owner = nbt.getString("name");
 		x = nbt.getInteger("x");
 		y = nbt.getInteger("y");
 		z = nbt.getInteger("z");
 		dimension = nbt.getInteger("dim");
+		return this;
 	}
 	
 	NBTTagCompound write(){
