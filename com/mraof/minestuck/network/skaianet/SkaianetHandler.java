@@ -224,11 +224,12 @@ public class SkaianetHandler {
 			return;
 		}
 		if(Minestuck.privateComputers && !p0.equals(p1)){
-			ChatMessageComponent chatmessage = new ChatMessageComponent();
-			//chatmessage.addText("[MINESTUCK] You are not allowed to access other players computers.");
-			chatmessage.addText("[MINESTUCK] Sorry, password protected.");	//Well, not really, but it is funnier this way.
-			chatmessage.setColor(EnumChatFormatting.RED);
-			player.sendChatToPlayer(chatmessage);
+			if(!Minestuck.privateMessage.isEmpty()){
+				ChatMessageComponent chatmessage = new ChatMessageComponent();
+				chatmessage.addText("[MINESTUCK] "+Minestuck.privateMessage);
+				chatmessage.setColor(EnumChatFormatting.RED);
+				player.sendChatToPlayer(chatmessage);
+			}
 			return;
 		}
 		int i = 0;

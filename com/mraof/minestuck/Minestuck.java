@@ -171,7 +171,9 @@ public class Minestuck
 	public static boolean generateSpecialClasses;	//Allow generation of the "Lord" and "Muse" classes.
 	public static boolean globalSession;	//Makes only one session possible. Recommended to be true on small servers.
 		//Will be ignored when loading a world that already got 2+ sessions.
-
+	
+	public static String privateMessage;
+	
 	// The instance of your mod that Forge uses.
 	@Instance("Minestuck")
 	public static Minestuck instance;
@@ -204,6 +206,8 @@ public class Minestuck
 		generateSpecialClasses = config.get("General", "generateSpecialClasses", false).getBoolean(false);
 		globalSession = config.get("General", "globalSession", true).getBoolean(true);
 		privateComputers = config.get("General", "privateComputers", false).getBoolean(false);
+		privateMessage = config.get("General", "privateMessage", "You are not allowed to access other players computers.").getString();
+		
 		config.save();
 	}
 
