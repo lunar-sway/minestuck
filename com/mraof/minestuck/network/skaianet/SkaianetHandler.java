@@ -223,7 +223,7 @@ public class SkaianetHandler {
 			Debug.print("[SKAIANET] Player sent a request without being online!");
 			return;
 		}
-		if(Minestuck.privateComputers && !p0.equals(p1)){
+		if(Minestuck.privateComputers && !p0.equals(p1) && !MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(p0)){
 			if(!Minestuck.privateMessage.isEmpty()){
 				ChatMessageComponent chatmessage = new ChatMessageComponent();
 				chatmessage.addText("[MINESTUCK] "+Minestuck.privateMessage);

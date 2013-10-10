@@ -1,56 +1,17 @@
 package com.mraof.minestuck.network.skaianet;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.TreeMap;
-
-import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import com.mraof.minestuck.Minestuck;
+
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.IConnectionListener;
-import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.World;
 
 public class SburbConnection {
 	
-	public static SburbConnection load(DataInputStream stream) throws IOException{
-		SburbConnection c = new SburbConnection();
-		c.isActive = stream.readBoolean();
-		
-		if(c.isActive){
-			c.client = ComputerData.load(stream);
-			c.server = ComputerData.load(stream);
-			c.isMain = stream.readBoolean();
-			if(c.isMain)
-				c.enteredGame = stream.readBoolean();
-		}
-		else{
-			BufferedReader d = new BufferedReader(new InputStreamReader(stream));	//This to avoid the deprecated method stream.readLine()
-			c.isMain = true;
-			c.clientName = d.readLine();
-			c.serverName = d.readLine();
-			c.enteredGame = stream.readBoolean();
-		}
-		return c;
-	}
 	
 //	@SideOnly(Side.SERVER)
 	ComputerData client;
@@ -61,6 +22,7 @@ public class SburbConnection {
 	boolean isActive;
 	boolean isMain;
 	boolean enteredGame;
+	boolean canSplit;
 	
 	SburbConnection(){
 		this.isActive = true;
@@ -99,6 +61,7 @@ public class SburbConnection {
 		if(isMain){
 			nbt.setBoolean("isActive", isActive);
 			nbt.setBoolean("enteredGame", enteredGame);
+			nbt.setBoolean("canSplit", canSplit);
 		}
 		if(isActive){
 			nbt.setCompoundTag("client", client.write());
@@ -115,6 +78,7 @@ public class SburbConnection {
 		if(isMain){
 			isActive = nbt.getBoolean("isActive");
 			enteredGame = nbt.getBoolean("enteredGame");
+			canSplit = nbt.getBoolean("canSplit");
 		}
 		if(isActive){
 			client = new ComputerData().read(nbt.getCompoundTag("client"));
