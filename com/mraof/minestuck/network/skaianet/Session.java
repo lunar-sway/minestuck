@@ -15,22 +15,61 @@ import net.minecraft.nbt.NBTTagList;
 
 public class Session {
 	
+	/**
+	 * The max numbers of players per session.
+	 */
 	public static int maxSize;
 	
+	/**
+	 * If the current Minecraft world will act as if Minestuck.globalSession is true or not.
+	 * Will be for example false even if Minestuck.globalSession is true if it can't merge all
+	 * sessions into a single session.
+	 */
+	public static boolean singleSession;
+	
+	/**
+	 * An array list of the current worlds sessions.
+	 */
 	static List<Session> sessions = new ArrayList();
 	
+	/**
+	 * Called when the server loads a new world, after
+	 * Minestuck has loaded the sessions from file.
+	 */
 	public static void serverStarted() {
+		singleSession = Minestuck.globalSession;
 		if(!Minestuck.globalSession)
 			split();
 		else mergeAll();
 	}
 	
+	/**
+	 * Merges all available sessions into one if it can.
+	 * Used in the conversion of a non-global session world
+	 * to a global session world.
+	 */
 	static void mergeAll() {
-		if(!canMergeAll() || sessions.size() < 2)
+		if(!canMergeAll() || sessions.size() < 2){
+			singleSession = sessions.size() < 2;
 			return;
+		}
 		
+		Session session = sessions.get(0);
+		for(int i = 1; i < sessions.size(); i++){
+			Session s = sessions.get(i);
+			session.connections.addAll(s.connections);
+			if(s.skaiaId != 0) session.skaiaId = s.skaiaId;
+			if(s.prospitId != 0) session.prospitId = s.prospitId;
+			if(s.derseId != 0) session.derseId = s.derseId;
+		}
+		session.completed = false;
 	}
 	
+	/**
+	 * Checks if it can merge all sessions in the current world into one.
+	 * @return False if all registered players is more than maxSize, or if there exists more
+	 * than one skaia, prospit, or derse dimension.
+	 */
 	static boolean canMergeAll() {
 		int players = 0;
 		boolean skaiaUsed = false, prospitUsed = false, derseUsed = false;
@@ -51,12 +90,23 @@ public class Session {
 		else return true;
 	}
 	
+	/**
+	 * UNFINISHED
+	 * Called when a new main connection is created.
+	 * @param c The connection created.
+	 */
 	static void registerConnection(SburbConnection c){
 		if(!canJoin(c.getClientName(), c.getServerName()))
 			return;
 		
 	}
 	
+	/**
+	 * Checks if the possible client-server pairing can be created.
+	 * @param client A string of the clients name.
+	 * @param server A string of the servers name.
+	 * @return If they should be able to connect. Includes temporal connections.
+	 */
 	static boolean canJoin(String client, String server){
 		Session cs = null;
 		Session ss = null;
@@ -72,7 +122,9 @@ public class Session {
 		}
 		
 		if(cs != null && ss != null)
-			return canMerge(cs, ss);
+			if(cs == ss)
+				return true;
+			else return canMerge(cs, ss);
 		
 		return true;
 	}
@@ -89,11 +141,22 @@ public class Session {
 		return null;
 	}
 	
-	static boolean canMerge(Session cs, Session ss){
-		return (cs != null && ss != null && cs.getPlayerList().size()+ss.getPlayerList().size()<=maxSize && !cs.completed && !ss.completed &&
-				(cs.skaiaId == 0 || ss.skaiaId == 0) && (cs.prospitId == 0 || ss.prospitId == 0) && (cs.derseId == 0 || ss.derseId == 0));
+	/**
+	 * If it can merge two sessions together.
+	 * @param s0 A session.
+	 * @param s1 A second session.
+	 * @return If they can be merged.
+	 */
+	static boolean canMerge(Session s0, Session s1){
+		return (s0 != null && s1 != null && s0.getPlayerList().size()+s1.getPlayerList().size()<=maxSize && !s0.completed && !s1.completed &&
+				(s0.skaiaId == 0 || s1.skaiaId == 0) && (s0.prospitId == 0 || s1.prospitId == 0) && (s0.derseId == 0 || s1.derseId == 0));
 	}
 	
+	/**
+	 * Splits up the main session into small sessions.
+	 * Used for the conversion of a global session world to
+	 * a non-global session.
+	 */
 	static void split() {
 		if(Minestuck.globalSession || sessions.size() != 1)
 			return;
@@ -129,8 +192,15 @@ public class Session {
 	
 	//Non-static stuff
 	
+	/**
+	 * Will only store main connections.
+	 */
 	List<SburbConnection> connections;
-	boolean completed;	//If the "connection circle" is whole, unused if globalSession == true.
+	
+	/**
+	 * If the "connection circle" is whole, unused if globalSession == true.
+	 */
+	boolean completed;
 	
 	//Unused, will later be 0 if not yet generated
 	int skaiaId;

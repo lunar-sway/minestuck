@@ -25,6 +25,7 @@ public class SburbConnection {
 	boolean canSplit;
 	
 	SburbConnection(){
+		this.canSplit = true;
 		this.isActive = true;
 	}
 	
@@ -78,7 +79,8 @@ public class SburbConnection {
 		if(isMain){
 			isActive = nbt.getBoolean("isActive");
 			enteredGame = nbt.getBoolean("enteredGame");
-			canSplit = nbt.getBoolean("canSplit");
+			if(nbt.hasKey("canSplit"))
+				canSplit = nbt.getBoolean("canSplit");
 		}
 		if(isActive){
 			client = new ComputerData().read(nbt.getCompoundTag("client"));
