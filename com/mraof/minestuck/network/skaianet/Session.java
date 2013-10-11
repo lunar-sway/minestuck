@@ -13,6 +13,10 @@ import com.mraof.minestuck.Minestuck;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
+/**
+ * An interface for the session system, or an object representing a session.
+ * @author kirderf1
+ */
 public class Session {
 	
 	/**
@@ -91,13 +95,36 @@ public class Session {
 	}
 	
 	/**
-	 * UNFINISHED
 	 * Called when a new main connection is created.
 	 * @param c The connection created.
 	 */
 	static void registerConnection(SburbConnection c){
 		if(!canJoin(c.getClientName(), c.getServerName()))
 			return;
+		
+		Session cs = null, ss = null;
+		for(Session s : sessions){
+			if(s.containsPlayer(c.getClientName()))
+				cs = s;
+			if(s.containsPlayer(c.getServerName()))
+				ss = s;
+		}
+		
+		if(cs != null && ss != null && cs != ss)
+			merge(cs, ss, c);
+		else if(cs != null){
+			cs.connections.add(c);
+			cs.checkIfCompleted();
+		} else if(ss != null){
+			ss.connections.add(c);
+			ss.checkIfCompleted();
+		} else if(singleSession && sessions.size() != 0){
+			sessions.get(0).connections.add(c);
+		} else {
+			Session s = new Session();
+			s.connections.add(c);
+			sessions.add(s);
+		}
 		
 	}
 	
@@ -125,7 +152,10 @@ public class Session {
 			if(cs == ss)
 				return true;
 			else return canMerge(cs, ss);
-		
+		else if(cs != null)
+			return cs.connections.size()+1 <= maxSize;
+		else if(ss != null)
+			return ss.connections.size()+1 <= maxSize;
 		return true;
 	}
 	
@@ -207,8 +237,11 @@ public class Session {
 	int prospitId;
 	int derseId;
 	
+	/**
+	 * Checks if the variable completed should be true or false.
+	 */
 	void checkIfCompleted(){
-		if(connections.isEmpty()){
+		if(connections.isEmpty() || singleSession){
 			completed = false;
 			return;
 		}
@@ -232,6 +265,11 @@ public class Session {
 		connections = new ArrayList<SburbConnection>();
 	}
 	
+	/**
+	 * Checks if a certain player is in the connection list.
+	 * @param s The username of the player.
+	 * @return If the player was found.
+	 */
 	boolean containsPlayer(String s){
 		for(SburbConnection c : connections)
 			if(s.equals(c.getClientName()) || s.equals(c.getServerName()))
@@ -239,6 +277,12 @@ public class Session {
 		return false;
 	}
 	
+	/**
+	 * Checks if a certain player is in the connection list.
+	 * @param s The username of the player.
+	 * @param isClient If the player is a client or server.
+	 * @return If the player was found, as the role given by isClient.
+	 */
 	boolean containsPlayer(String s, boolean isClient){
 		for(SburbConnection c : connections)
 			if(s.equals(isClient?c.getClientName():c.getServerName()))
@@ -246,6 +290,10 @@ public class Session {
 		return false;
 	}
 	
+	/**
+	 * Creates a list with all players in the session.
+	 * @return Returns a list with the players usernames.
+	 */
 	List<String> getPlayerList(){
 		List<String> list = new ArrayList();
 		for(SburbConnection c : this.connections){
@@ -257,6 +305,10 @@ public class Session {
 		return list;
 	}
 	
+	/**
+	 * Writes this session to an nbt tag.
+	 * @return An NBTTagCompound representing this session.
+	 */
 	NBTTagCompound write() {
 		NBTTagCompound nbt = new NBTTagCompound();
 		NBTTagList list = new NBTTagList();
@@ -270,6 +322,11 @@ public class Session {
 		return nbt;
 	}
 	
+	/**
+	 * Reads data from the given nbt tag.
+	 * @param nbt An NBTTagCompound to read from.
+	 * @return This.
+	 */
 	Session read(NBTTagCompound nbt) {
 		NBTTagList list = nbt.getTagList("connections");
 		for(int i = 0; i < list.tagCount(); i++)
