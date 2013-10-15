@@ -12,6 +12,9 @@ import com.mraof.minestuck.Minestuck;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChatMessageComponent;
+import net.minecraft.util.EnumChatFormatting;
 
 /**
  * An interface for the session system, or an object representing a session.
@@ -42,8 +45,14 @@ public class Session {
 	 */
 	public static void serverStarted() {
 		singleSession = Minestuck.globalSession;
-		if(!Minestuck.globalSession)
-			split();
+		if(!Minestuck.globalSession){
+//			split();
+			ChatMessageComponent message = new ChatMessageComponent();
+			message.addText("[MINESTUCK] Non-global session worlds is currently not yet a finished feature.");
+			message.setColor(EnumChatFormatting.YELLOW);
+			MinecraftServer.getServer().sendChatToPlayer(message);
+			singleSession = true;
+		}
 		else mergeAll();
 	}
 	
@@ -97,10 +106,11 @@ public class Session {
 	/**
 	 * Called when a new main connection is created.
 	 * @param c The connection created.
+	 * @return 
 	 */
-	static void registerConnection(SburbConnection c){
+	static boolean registerConnection(SburbConnection c){
 		if(!canJoin(c.getClientName(), c.getServerName()))
-			return;
+			return false;
 		
 		Session cs = null, ss = null;
 		for(Session s : sessions){
@@ -125,7 +135,7 @@ public class Session {
 			s.connections.add(c);
 			sessions.add(s);
 		}
-		
+		return true;
 	}
 	
 	/**

@@ -67,6 +67,8 @@ public class SkaianetHandler {
 	public static boolean giveItems(String player){
 		SburbConnection c = getClientConnection(player);
 		if(c != null && !c.isMain){
+//			if(!Session.registerConnection(c))
+//				return false;
 			c.isMain = true;
 			updatePlayer(c.getClientName());
 			updatePlayer(c.getServerName());
@@ -388,7 +390,8 @@ public class SkaianetHandler {
 		list.add(serversOpen.size());
 		
 		for(String s : serversOpen.keySet())
-			list.add(s);
+			if(Session.canJoin(player, s))
+				list.add(s);
 		
 		for(SburbConnection c : connections)
 			if(c.getClientName().equals(player) || c.getServerName().equals(player))

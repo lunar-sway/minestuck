@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
@@ -95,7 +96,9 @@ public class ItemHammer extends ItemWeapon
 		else if(hammerType.equals(EnumHammerType.SCARLET))
 			target.setFire(50);
 		else if(hammerType.equals(hammerType.POPAMATIC) )
-			target.attackEntityFrom(DamageSource.magic , (float) (Math.pow(( Math.random() * 6), 2)) );
+			target.attackEntityFrom(DamageSource.magic , (float) (player.worldObj.rand.nextInt(6)+1) * (player.worldObj.rand.nextInt(6)+1) );
+		else if(hammerType.equals(hammerType.FEARNOANVIL) && player.worldObj.rand.nextGaussian() > 0.9)
+			target.addPotionEffect(new PotionEffect(2,100,3));	//Would prefer it being triggered by a critical hit instead, if it can.
 		return true;
 	}
 
