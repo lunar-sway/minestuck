@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.Debug;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -104,7 +105,7 @@ public class Session {
 	}
 	
 	/**
-	 * Called when a new main connection is created.
+	 * Called when a new connection is created.
 	 * @param c The connection created.
 	 * @return 
 	 */
@@ -112,22 +113,15 @@ public class Session {
 		if(!canJoin(c.getClientName(), c.getServerName()))
 			return false;
 		
-		Session cs = null, ss = null;
-		for(Session s : sessions){
-			if(s.containsPlayer(c.getClientName()))
-				cs = s;
-			if(s.containsPlayer(c.getServerName()))
-				ss = s;
-		}
+		Session cs = getPlayerSession(c.getClientName()), ss = getPlayerSession(c.getClientName());
 		
-		if(cs != null && ss != null && cs != ss)
-			merge(cs, ss, c);
-		else if(cs != null){
+		if(cs != null && ss != null && cs != ss){
 			cs.connections.add(c);
-			cs.checkIfCompleted();
+			ss.connections.add(c);
+		} else if(cs != null){
+			cs.connections.add(c);
 		} else if(ss != null){
 			ss.connections.add(c);
-			ss.checkIfCompleted();
 		} else if(singleSession && sessions.size() != 0){
 			sessions.get(0).connections.add(c);
 		} else {
@@ -136,6 +130,19 @@ public class Session {
 			sessions.add(s);
 		}
 		return true;
+	}
+	
+	/**
+	 * Looks for the session that the player is a part of.
+	 * @param player A string of the player's username.
+	 * @return A session that contains at least one <b>main</b> connection, that the player is a part of.
+	 */
+	static Session getPlayerSession(String player){
+		for(Session s : sessions)
+			for(SburbConnection c : s.connections)
+				if(c.isMain && (c.getClientName().equals(player) || c.getServerName().equals(player)))
+					return s;
+		return null;
 	}
 	
 	/**
@@ -149,8 +156,8 @@ public class Session {
 		Session ss = null;
 		for(Session s : sessions){
 			for(SburbConnection c : s.connections){
-				if(c.getClientName().equals(client) || c.getServerName().equals(server))
-					return false;
+				if((c.getClientName().equals(client) || c.getServerName().equals(server))){Debug.print("Client|server exists!");
+					return false;}
 				if(c.getClientName().equals(server))
 					ss = s;
 				if(c.getServerName().equals(client))
@@ -170,8 +177,8 @@ public class Session {
 	}
 	
 	static Session merge(Session cs, Session ss, SburbConnection sb){
-		if(canMerge(cs, ss) && sb != null && cs.containsPlayer(sb.getClientName(), false) && ss.containsPlayer(sb.getServerName(), true)){
-			cs.connections.add(sb);
+		if(canMerge(cs, ss) && sb != null){
+			ss.connections.remove(sb);
 			cs.connections.addAll(ss.connections);
 			if(cs.skaiaId == 0) cs.skaiaId = ss.skaiaId;
 			if(cs.prospitId == 0) cs.prospitId = ss.prospitId;
@@ -183,6 +190,7 @@ public class Session {
 	
 	/**
 	 * If it can merge two sessions together.
+	 * It returns false if at least one parameter is null.
 	 * @param s0 A session.
 	 * @param s1 A second session.
 	 * @return If they can be merged.
@@ -227,6 +235,26 @@ public class Session {
 			s.checkIfCompleted();
 			sessions.add(s);
 			first = false;
+		}
+	}
+	
+	static void closeConnection(String client, String server){
+		Iterator<Session> iter0 = Session.sessions.iterator();
+		while(iter0.hasNext()){
+			Session s = iter0.next();
+			Iterator<SburbConnection> iter1 = s.connections.iterator();
+			while(iter1.hasNext()){
+				SburbConnection c = iter1.next();
+				if(c.getClientName().equals(client) && c.getServerName().equals(server)){
+					if(c.isMain){
+						c.isActive = false;
+						return;
+					} else iter1.remove();
+					break;
+				}
+			}
+			if(s.connections.size() == 0)
+				iter0.remove();
 		}
 	}
 	
@@ -281,23 +309,7 @@ public class Session {
 	 * @return If the player was found.
 	 */
 	boolean containsPlayer(String s){
-		for(SburbConnection c : connections)
-			if(s.equals(c.getClientName()) || s.equals(c.getServerName()))
-				return true;
-		return false;
-	}
-	
-	/**
-	 * Checks if a certain player is in the connection list.
-	 * @param s The username of the player.
-	 * @param isClient If the player is a client or server.
-	 * @return If the player was found, as the role given by isClient.
-	 */
-	boolean containsPlayer(String s, boolean isClient){
-		for(SburbConnection c : connections)
-			if(s.equals(isClient?c.getClientName():c.getServerName()))
-				return true;
-		return false;
+		return getPlayerList().contains(s);
 	}
 	
 	/**
@@ -341,8 +353,15 @@ public class Session {
 		NBTTagList list = nbt.getTagList("connections");
 		for(int i = 0; i < list.tagCount(); i++)
 			connections.add(new SburbConnection().read((NBTTagCompound) list.tagAt(i)));
-		
+		SkaianetHandler.connections.addAll(this.connections);
 		return this;
+	}
+	
+	SburbConnection getConnection(String client, String server){
+		for(SburbConnection c : connections)
+			if(c.getClientName().equals(client) && c.getServerName().equals(server))
+				return c;
+		return null;
 	}
 	
 }

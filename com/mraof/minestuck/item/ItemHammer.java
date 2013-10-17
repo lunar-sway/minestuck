@@ -97,7 +97,7 @@ public class ItemHammer extends ItemWeapon
 			target.setFire(50);
 		else if(hammerType.equals(hammerType.POPAMATIC) )
 			target.attackEntityFrom(DamageSource.magic , (float) (player.worldObj.rand.nextInt(6)+1) * (player.worldObj.rand.nextInt(6)+1) );
-		else if(hammerType.equals(hammerType.FEARNOANVIL) && player.worldObj.rand.nextGaussian() > 0.9)
+		else if(hammerType.equals(hammerType.FEARNOANVIL) && player.worldObj.rand.nextGaussian() > 0.9)	//Just a suggestion, keep it if you like it.
 			target.addPotionEffect(new PotionEffect(2,100,3));	//Would prefer it being triggered by a critical hit instead, if it can.
 		return true;
 	}

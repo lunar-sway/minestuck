@@ -92,4 +92,12 @@ public class SburbConnection {
 		return this;
 	}
 	
+	@Override
+		public boolean equals(Object obj) {
+		if(obj instanceof SburbConnection){
+			SburbConnection c = (SburbConnection)obj;
+			return this.getClientName() == c.getClientName() && this.getServerName() == c.getServerName();
+		}
+		return false;
+	}
 }

@@ -12,6 +12,7 @@ import net.minecraft.world.WorldServer;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.skaianet.ComputerData;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
@@ -61,7 +62,8 @@ public class SburbConnectPacket extends MinestuckPacket {
 
 	@Override
 	public void execute(INetworkManager network, MinestuckPacketHandler handler, Player player, String userName) {
-		SkaianetHandler.requestConnection(this.player, otherPlayer, isClient);
+		if(!Minestuck.privateComputers || ((EntityPlayer)player).username.equals(this.player))
+			SkaianetHandler.requestConnection(this.player, otherPlayer, isClient);
 	}
 
 }

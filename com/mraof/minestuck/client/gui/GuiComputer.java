@@ -129,6 +129,8 @@ public class GuiComputer extends GuiScreen
 		if(te.programSelected == 0){
 			programButton.displayString = "Client";
 			SburbConnection c = SkaiaClient.getClientConnection(te.owner);
+			if(!te.latestmessage.get(0).isEmpty())
+				buttonStrings.add("Clear message");
 			if(SkaiaClient.enteredMedium(te.owner)) //if it should view the grist cache button.
 				buttonStrings.add("View Gristcache");
 			if (te.serverConnected && c != null) { //If it is connected to someone.
@@ -148,6 +150,8 @@ public class GuiComputer extends GuiScreen
 		}
 		else if(te.programSelected == 1){
 			programButton.displayString = "Server";
+			if(!te.latestmessage.get(1).isEmpty())
+				buttonStrings.add("Clear message");
 			if (!te.clientName.isEmpty() && SkaiaClient.getClientConnection(te.clientName) != null) {
 				displayMessage = "Connected to "+displayPlayer;
 				buttonStrings.add("Disconnect");
@@ -196,14 +200,14 @@ public class GuiComputer extends GuiScreen
 	}
 	
 	protected void actionPerformed(GuiButton guibutton) {
-		if(te.latestmessage.get(te.programSelected) != null && !te.latestmessage.get(te.programSelected).isEmpty()){
-			te.latestmessage.put(te.programSelected, "");
+		if(!te.latestmessage.get(te.programSelected).isEmpty() && !guibutton.equals(programButton))
 			ClearMessagePacket.send(ComputerData.createData(te), te.programSelected);
-		}
 		if(guibutton.equals(programButton))
 			te.programSelected = getNextProgram();
 		else if(guibutton.displayString.equals("Disconnect"))
 			close();
+		else if(guibutton.displayString.equals("Clear message"))
+			return;
 		else if(te.programSelected == 0){
 			if (guibutton == upButton) {
 				index--;
