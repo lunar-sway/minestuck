@@ -101,7 +101,7 @@ public class TileEntityComputer extends TileEntity {
     @Override
     public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) 
     {
-    	Debug.print("Data packet gotten "+net.getClass());
+		//Debug.print("Data packet gotten "+net.getClass());
     	this.readFromNBT(pkt.data);
     }
     

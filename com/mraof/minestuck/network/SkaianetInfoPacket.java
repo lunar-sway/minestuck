@@ -37,7 +37,7 @@ public class SkaianetInfoPacket extends MinestuckPacket {
 		if(data.length == 1)	//If request from client
 			return dat.toByteArray();
 		dat.writeBoolean((Boolean)data[1]);
-		dat.writeBoolean((Boolean)data[2]);Debug.print(data[1]);
+		dat.writeBoolean((Boolean)data[2]);
 		
 		int size = (Integer)data[3];
 		dat.writeInt(size);
