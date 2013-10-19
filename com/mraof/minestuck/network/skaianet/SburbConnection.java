@@ -68,8 +68,8 @@ public class SburbConnection {
 			nbt.setCompoundTag("client", client.write());
 			nbt.setCompoundTag("server", server.write());
 		} else {
-			nbt.setString("client", clientName);
-			nbt.setString("server", serverName);
+			nbt.setString("client", getClientName());
+			nbt.setString("server", getServerName());
 		}
 		return nbt;
 	}

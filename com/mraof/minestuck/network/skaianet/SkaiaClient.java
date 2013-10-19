@@ -150,6 +150,7 @@ public class SkaiaClient {
 		
 		resumingClient.put(data.player, data.isClientResuming);
 		resumingServer.put(data.player, data.isServerResuming);
+		Debug.print("Information recived: "+data.isClientResuming+","+data.isServerResuming);
 		
 		Iterator<SburbConnection> i = connections.iterator();
 		while(i.hasNext()){

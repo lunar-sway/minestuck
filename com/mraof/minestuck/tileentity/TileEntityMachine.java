@@ -292,10 +292,16 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			if (cardtag == null) {
 				break;
 			}
-			NBTTagCompound doweltag = new NBTTagCompound();
-			doweltag.setInteger("contentID", cardtag.getInteger("contentID"));
-			doweltag.setInteger("contentMeta", cardtag.getInteger("contentMeta"));
-			outputDowel.setTagCompound(doweltag);
+			
+			if(cardtag.getInteger("contentID") == Minestuck.blockStorage.blockID &&
+					cardtag.getInteger("contentMeta") == 1)
+				outputDowel = new ItemStack(Minestuck.cruxiteDowel);
+			else {
+				NBTTagCompound doweltag = new NBTTagCompound();
+				doweltag.setInteger("contentID", cardtag.getInteger("contentID"));
+				doweltag.setInteger("contentMeta", cardtag.getInteger("contentMeta"));
+				outputDowel.setTagCompound(doweltag);
+			}
 			setInventorySlotContents(0,outputDowel);
 			//decrStackSize(1, 1);
 			decrStackSize(2, 1);

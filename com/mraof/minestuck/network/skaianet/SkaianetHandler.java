@@ -101,7 +101,9 @@ public class SkaianetHandler {
 		if(te == null)
 			return;
 		if(!isClient){	//Is server
-			if(otherPlayer.isEmpty() && !serversOpen.containsKey(player.owner)){	//Wants to open
+			if(serversOpen.containsKey(player.owner) || resumingServers.containsKey(player.owner))
+				return;
+			if(otherPlayer.isEmpty()){	//Wants to open
 				if(!getAssociatedPartner(player.owner, false).isEmpty() && resumingClients.containsKey(getAssociatedPartner(player.owner, false)))
 					connectTo(player, false, getAssociatedPartner(player.owner, false), resumingClients);
 				else{
@@ -117,8 +119,9 @@ public class SkaianetHandler {
 					resumingServers.put(player.owner, player);
 				}
 			}
+			else return;
 		} else {	//Is client
-			if(getClientConnection(player.owner) != null)
+			if(getClientConnection(player.owner) != null || resumingClients.containsKey(player.owner))
 				return;
 			String p = getAssociatedPartner(player.owner, true);
 			if(!p.isEmpty() && (otherPlayer.isEmpty() || p.equals(otherPlayer))){	//If trying to connect to the associated partner
@@ -339,9 +342,6 @@ public class SkaianetHandler {
 						connections.add(c);
 						Session.sessions.get(0).connections.add(c);
 					}
-					
-//					if(!Minestuck.globalSession)
-//						Session.split();
 				} else {
 					NBTTagList list = nbt.getTagList("sessions");
 					for(int i = 0; i < list.tagCount(); i++)
@@ -433,25 +433,34 @@ public class SkaianetHandler {
 		ServerConfigurationManager scm = MinecraftServer.getServer().getConfigurationManager();
 		Iterator<String> iter0 = infoToSend.keySet().iterator();
 		while(iter0.hasNext())
-			if(scm.getPlayerForUsername(iter0.next()) == null)
+			if(scm.getPlayerForUsername(iter0.next()) == null){
+				Debug.print("[SKAIANET] Player disconnected, removing data.");
 				iter0.remove();
+			}
 		
 		Iterator<ComputerData>[] iter1 = new Iterator[]{serversOpen.values().iterator(),resumingClients.values().iterator(),resumingServers.values().iterator()};
 		
 		for(Iterator<ComputerData> i : iter1)
 			while(i.hasNext()){
 				ComputerData data = i.next();
-				if(getComputer(data) == null || !getComputer(data).owner.equals(data.owner))
+				if(getComputer(data) == null || !getComputer(data).owner.equals(data.owner)){
+					Debug.print("[SKAIANET] Invalid computer in waiting list!");
 					i.remove();
+				}
 			}
 		
 		Iterator<SburbConnection> iter2 = connections.iterator();
 		while(iter2.hasNext()){
 			SburbConnection c = iter2.next();
-			if(c.client != null){
+			if(c.isActive){
 				TileEntityComputer cc = getComputer(c.client), sc = getComputer(c.server);
 				if(cc == null || sc == null){
-					iter2.remove();
+					Debug.print("[SKAIANET] Invalid computer in connection.");
+					if(!c.isMain)
+						iter2.remove();
+					else c.isActive = false;
+					Session.closeConnection(c.getClientName(), c.getServerName());
+					
 					if(cc != null){
 						cc.serverConnected = false;
 						cc.latestmessage.put(0, "Connection closed");

@@ -200,7 +200,8 @@ public class GuiComputer extends GuiScreen
 	}
 	
 	protected void actionPerformed(GuiButton guibutton) {
-		if(!te.latestmessage.get(te.programSelected).isEmpty() && !guibutton.equals(programButton))
+		if(!te.latestmessage.get(te.programSelected).isEmpty() && !guibutton.equals(programButton)
+				&& !guibutton.equals(upButton) && !guibutton.equals(downButton))
 			ClearMessagePacket.send(ComputerData.createData(te), te.programSelected);
 		if(guibutton.equals(programButton))
 			te.programSelected = getNextProgram();

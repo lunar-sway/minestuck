@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.mraof.minestuck.Minestuck;
+import static com.mraof.minestuck.network.skaianet.SkaianetHandler.getAssociatedPartner;
 import com.mraof.minestuck.util.Debug;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -151,28 +152,24 @@ public class Session {
 	 * @param server A string of the servers name.
 	 * @return If they should be able to connect. Includes temporal connections.
 	 */
-	static boolean canJoin(String client, String server){
-		Session cs = null;
-		Session ss = null;
-		for(Session s : sessions){
-			for(SburbConnection c : s.connections){
-				if((c.getClientName().equals(client) || c.getServerName().equals(server))){Debug.print("Client|server exists!");
-					return false;}
-				if(c.getClientName().equals(server))
-					ss = s;
-				if(c.getServerName().equals(client))
-					cs = s;
-			}
-		}
+	static boolean canJoin(String client, String server){	//Commented code is for the use of maxSize.
+		Session cs = getPlayerSession(client);
+		Session ss = getPlayerSession(server);
+		if(cs == null && ss == null)
+			if(singleSession && sessions.size() > 0){
+				Session s = sessions.get(0);
+				return true;	//maxSize >= s.getPlayerList().size()+(s.containsPlayer(client)?0:1)+(s.containsPlayer(server)?0:1);
+			} else return true;
 		
-		if(cs != null && ss != null)
-			if(cs == ss)
-				return true;
-			else return canMerge(cs, ss);
-		else if(cs != null)
-			return cs.connections.size()+1 <= maxSize;
-		else if(ss != null)
-			return ss.connections.size()+1 <= maxSize;
+		if(cs == null)
+			return true;	//maxSize >= ss.getPlayerList().size()+1;
+		if(ss == null)
+			return true;	//maxSize >= cs.getPlayerList().size()+1;
+		
+		if((!getAssociatedPartner(client, true).isEmpty() || !getAssociatedPartner(server, false).isEmpty()) && cs != ss)
+			return false;
+		if(cs != ss)
+			return canMerge(cs, ss);	// && maxSize >= cs.getPlayerList().size()+ss.getPlayerList().size();
 		return true;
 	}
 	
