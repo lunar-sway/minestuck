@@ -332,21 +332,13 @@ public class SkaianetHandler {
 				
 			} catch(IOException e){
 				e.printStackTrace();
+				Debug.print("[SKAIANET] Trying to load using the old format instead.");
+				loadOld(file0);
 			}
 			if(nbt != null){
-				if(nbt.hasKey("list")){	//Loading from an old save
-					Session.sessions.add(new Session());
-					NBTTagList list = nbt.getTagList("list");
-					for(int i = 0; i < list.tagCount(); i++){
-						SburbConnection c = new SburbConnection().read((NBTTagCompound) list.tagAt(i));
-						connections.add(c);
-						Session.sessions.get(0).connections.add(c);
-					}
-				} else {
-					NBTTagList list = nbt.getTagList("sessions");
-					for(int i = 0; i < list.tagCount(); i++)
-						Session.sessions.add(new Session().read((NBTTagCompound) list.tagAt(i)));
-				}
+				NBTTagList list = nbt.getTagList("sessions");
+				for(int i = 0; i < list.tagCount(); i++)
+					Session.sessions.add(new Session().read((NBTTagCompound) list.tagAt(i)));
 				//Debug.print(connections.size()+" connection(s) loaded");
 			}
 		}
@@ -386,6 +378,36 @@ public class SkaianetHandler {
 		Session.serverStarted();
 	}
 	
+	static void loadOld(File file) {
+		try{
+			DataInputStream stream = new DataInputStream(new FileInputStream(file));
+			Session s = new Session();
+			while(stream.available() > 0){
+				SburbConnection c = new SburbConnection();
+				c.isActive = stream.readBoolean();
+				
+				if(c.isActive){
+					c.client = ComputerData.load(stream);
+					c.server = ComputerData.load(stream);
+					c.isMain = stream.readBoolean();
+					if(c.isMain)
+						c.enteredGame = stream.readBoolean();
+				}
+				else{
+					c.isMain = true;
+					c.clientName = stream.readLine();
+					c.serverName = stream.readLine();
+					c.enteredGame = stream.readBoolean();
+				}
+				connections.add(c);
+				s.connections.add(c);
+			}
+			Session.sessions.add(s);
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+	}
+
 	static void updateAll(){
 		checkData();
 		for(String s : infoToSend.keySet())
