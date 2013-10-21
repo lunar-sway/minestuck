@@ -1,32 +1,17 @@
 package com.mraof.minestuck.network.skaianet;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.TreeMap;
-
-import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import com.mraof.minestuck.Minestuck;
+
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.IConnectionListener;
-import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.World;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class SburbConnection {
+	
 	
 //	@SideOnly(Side.SERVER)
 	ComputerData client;
@@ -37,8 +22,10 @@ public class SburbConnection {
 	boolean isActive;
 	boolean isMain;
 	boolean enteredGame;
+	boolean canSplit;
 	
 	SburbConnection(){
+		this.canSplit = true;
 		this.isActive = true;
 	}
 	
@@ -68,5 +55,49 @@ public class SburbConnection {
 		
 		return data.toByteArray();
 	}
+
+	NBTTagCompound write() {
+		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setBoolean("isMain", isMain);
+		if(isMain){
+			nbt.setBoolean("isActive", isActive);
+			nbt.setBoolean("enteredGame", enteredGame);
+			nbt.setBoolean("canSplit", canSplit);
+		}
+		if(isActive){
+			nbt.setCompoundTag("client", client.write());
+			nbt.setCompoundTag("server", server.write());
+		} else {
+			nbt.setString("client", getClientName());
+			nbt.setString("server", getServerName());
+		}
+		return nbt;
+	}
 	
+	SburbConnection read(NBTTagCompound nbt) {
+		isMain = nbt.getBoolean("isMain");
+		if(isMain){
+			isActive = nbt.getBoolean("isActive");
+			enteredGame = nbt.getBoolean("enteredGame");
+			if(nbt.hasKey("canSplit"))
+				canSplit = nbt.getBoolean("canSplit");
+		}
+		if(isActive){
+			client = new ComputerData().read(nbt.getCompoundTag("client"));
+			server = new ComputerData().read(nbt.getCompoundTag("server"));
+		} else {
+			clientName = nbt.getString("client");
+			serverName = nbt.getString("server");
+		}
+		return this;
+	}
+	
+	@Override
+		public boolean equals(Object obj) {
+		if(obj instanceof SburbConnection){
+			SburbConnection c = (SburbConnection)obj;
+			return this.getClientName() == c.getClientName() && this.getServerName() == c.getServerName();
+		}
+		return false;
+	}
 }
