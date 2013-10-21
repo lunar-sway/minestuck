@@ -23,7 +23,8 @@ public abstract class MinestuckPacket
 		SBURB_CLOSE(SburbConnectClosedPacket.class),
 		LANDREGISTER(LandRegisterPacket.class),
 		CLEAR(ClearMessagePacket.class),
-		SBURB_INFO(SkaianetInfoPacket.class);
+		SBURB_INFO(SkaianetInfoPacket.class),
+		SBURB_EDIT(SburbEditPacket.class);
 		Class<? extends MinestuckPacket> packetType;
 		private Type(Class<? extends MinestuckPacket> packetClass)
 		{

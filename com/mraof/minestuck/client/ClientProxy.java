@@ -2,6 +2,7 @@ package com.mraof.minestuck.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -22,6 +23,7 @@ import com.mraof.minestuck.client.renderer.entity.RenderShadow;
 import com.mraof.minestuck.client.renderer.tileentity.RenderGatePortal;
 import com.mraof.minestuck.client.renderer.tileentity.TileEntityMachineRenderer;
 import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
+import com.mraof.minestuck.entity.EntityDecoy;
 import com.mraof.minestuck.entity.carapacian.EntityBishop;
 import com.mraof.minestuck.entity.carapacian.EntityPawn;
 import com.mraof.minestuck.entity.consort.EntityIguana;
@@ -58,6 +60,7 @@ public class ClientProxy extends CommonProxy
             RenderingRegistry.registerEntityRenderingHandler(EntityPawn.class, new RenderPawn(new ModelBiped(), 0.5F));
             RenderingRegistry.registerEntityRenderingHandler(EntityBishop.class, new RenderEntityMinestuck(new ModelBishop(), 1.8F));
             RenderingRegistry.registerEntityRenderingHandler(EntityGrist.class, new RenderGrist());
+            RenderingRegistry.registerEntityRenderingHandler(EntityDecoy.class, new RenderPlayer());
             ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGatePortal.class, new RenderGatePortal());
             ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachine.class, new TileEntityMachineRenderer());
     }

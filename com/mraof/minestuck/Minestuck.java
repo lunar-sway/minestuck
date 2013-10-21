@@ -31,6 +31,7 @@ import com.mraof.minestuck.block.BlockStorage;
 import com.mraof.minestuck.block.OreCruxite;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.GuiHandler;
+import com.mraof.minestuck.entity.EntityDecoy;
 import com.mraof.minestuck.entity.carapacian.EntityBlackBishop;
 import com.mraof.minestuck.entity.carapacian.EntityBlackPawn;
 import com.mraof.minestuck.entity.carapacian.EntityWhiteBishop;
@@ -404,6 +405,7 @@ public class Minestuck
 		this.registerAndMapEntity(EntityWhitePawn.class, "prospitianPawn", 0xf0f0f0, 0x0f0f0f);
 		this.registerAndMapEntity(EntityBlackBishop.class, "dersiteBishop", 0x000000, 0xc121d9);
 		this.registerAndMapEntity(EntityWhiteBishop.class, "prospitianBishop", 0xffffff, 0xfde500);
+		this.registerAndMapEntity(EntityDecoy.class, "playerDecoy", 0x000000, 0x000000);
 		//register entities with fml
 		EntityRegistry.registerModEntity(EntityGrist.class, "grist", currentEntityIdOffset, this, 512, 1, true);
 

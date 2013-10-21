@@ -149,7 +149,7 @@ public class GuiComputer extends GuiScreen
 				displayMessage = "A client is already active";
 		}
 		else if(te.programSelected == 1){
-			programButton.displayString = "Server";
+			programButton.displayString = "Server";buttonStrings.add("test");
 			if(!te.latestmessage.get(1).isEmpty())
 				buttonStrings.add("Clear message");
 			if (!te.clientName.isEmpty() && SkaiaClient.getClientConnection(te.clientName) != null) {
@@ -199,7 +199,7 @@ public class GuiComputer extends GuiScreen
 				te.programSelected == 0);
 	}
 	
-	protected void actionPerformed(GuiButton guibutton) {
+	protected void actionPerformed(GuiButton guibutton) {if(guibutton.displayString.equals("test")) com.mraof.minestuck.util.SburbServerController.add(te.owner);
 		if(!te.latestmessage.get(te.programSelected).isEmpty() && !guibutton.equals(programButton)
 				&& !guibutton.equals(upButton) && !guibutton.equals(downButton))
 			ClearMessagePacket.send(ComputerData.createData(te), te.programSelected);
