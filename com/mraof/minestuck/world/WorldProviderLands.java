@@ -1,6 +1,7 @@
 package com.mraof.minestuck.world;
 
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.WorldChunkManagerHell;
@@ -76,6 +77,11 @@ public class WorldProviderLands extends WorldProvider
     		return this.calculateCelestialAngle(par1,par3);
     	}
     }
+	@Override
+	public ChunkCoordinates getSpawnPoint() 
+	{
+		return super.getSpawnPoint();//TODO make this where the player entered
+	}
     
     @Override
     public boolean isSurfaceWorld()

@@ -49,6 +49,7 @@ public class StructureCastlePieces
 
     public static void func_143048_a()
     {
+        MapGenStructureIO.func_143031_a(ComponentCastleStartPiece.class, "SkaiaCastleStart");
         MapGenStructureIO.func_143031_a(ComponentCastleLibraryPiece.class, "SkaiaCastleLibrary");
         MapGenStructureIO.func_143031_a(ComponentCastleRoomPiece.class, "SkaiaCastleRoom");
         MapGenStructureIO.func_143031_a(ComponentCastleSolidPiece.class, "SkaiaCastleSolid");
