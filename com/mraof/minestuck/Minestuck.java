@@ -471,6 +471,7 @@ public class Minestuck
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event)
 	{
+		MinestuckSaveHandler.lands.clear();
 		File landList = event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("minestuckLandList");
 		if (landList != null && landList.exists())
 		{
@@ -479,8 +480,11 @@ public class Minestuck
 				int currentByte;
 				while((currentByte = dataInputStream.read()) != -1)
 				{
+					if(MinestuckSaveHandler.lands.contains((byte)currentByte))
+							continue;
 					MinestuckSaveHandler.lands.add((byte)currentByte);
 					Debug.printf("Found land dimension id of: %d", currentByte);
+					
 					if(!DimensionManager.isDimensionRegistered(currentByte))
 						DimensionManager.registerDimension(currentByte, Minestuck.landProviderTypeId);
 				}

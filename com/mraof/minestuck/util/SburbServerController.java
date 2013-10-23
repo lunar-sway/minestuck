@@ -26,7 +26,7 @@ public class SburbServerController extends PlayerControllerMP{
 	public static void add(String username){	//Currently only for testing purposes
 		Debug.print("Adding player...");
 		Minecraft mc = Minecraft.getMinecraft();
-		mc.playerController = new SburbServerController(mc, mc.getNetHandler());
+//		mc.playerController = new SburbServerController(mc, mc.getNetHandler());
 		Packet250CustomPayload packet = new Packet250CustomPayload();
 		packet.channel = "Minestuck";
 		packet.data = MinestuckPacket.makePacket(Type.SBURB_EDIT, username);
