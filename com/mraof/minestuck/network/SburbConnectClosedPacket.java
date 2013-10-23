@@ -3,6 +3,7 @@ package com.mraof.minestuck.network;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
@@ -48,9 +49,8 @@ public class SburbConnectClosedPacket extends MinestuckPacket {
 
 	@Override
 	public void execute(INetworkManager network, MinestuckPacketHandler handler, Player player, String userName) {
-		SkaianetHandler.closeConnection(this.player,this.otherPlayer, isClient);
-		Debug.print("Got disconnect packet, player:"+this.player+", otherplayer:"+otherPlayer);
-		
+		if(!Minestuck.privateComputers || ((EntityPlayer)player).username.equals(this.player))
+			SkaianetHandler.closeConnection(this.player,this.otherPlayer, isClient);
 	}
 
 }

@@ -57,8 +57,8 @@ public class SkaianetInfoPacket extends MinestuckPacket {
 		
 		this.player = dat.readLine();
 		try{
-			dat.readBoolean();
-			dat.readBoolean();
+			isClientResuming = dat.readBoolean();
+			isServerResuming = dat.readBoolean();
 			int size = dat.readInt();
 			openServers = new ArrayList();
 			for(int i = 0; i < size; i++)

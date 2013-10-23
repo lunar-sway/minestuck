@@ -27,8 +27,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityComputer extends TileEntity {
 	
-	//public volatile boolean hasClient = false;
-	//public volatile boolean hasServer = false;
 	public Hashtable<Integer, Boolean> installedPrograms = new Hashtable();
 	public boolean openToClients = false;
 	/**
@@ -103,7 +101,7 @@ public class TileEntityComputer extends TileEntity {
     @Override
     public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) 
     {
-    	Debug.print("Data packet gotten "+net.getClass());
+		//Debug.print("Data packet gotten "+net.getClass());
     	this.readFromNBT(pkt.data);
     }
     

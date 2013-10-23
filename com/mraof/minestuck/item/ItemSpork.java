@@ -5,10 +5,13 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.Debug;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -19,7 +22,9 @@ public class ItemSpork extends ItemWeapon
 	private int weaponDamage;
 	private final EnumSporkType sporkType;
 	public float efficiencyOnProperMaterial = 4.0F;
-	//whether it's a spoon or a fork
+	/**
+	 * whether it's a spoon or a fork, unused for the crocker spork, as it depends on the meta.
+	 */
 	public boolean isSpoon;
 	private Icon[] crockerTypes = new Icon[2];
 
@@ -44,13 +49,13 @@ public class ItemSpork extends ItemWeapon
 		}
 		this.weaponDamage = 2 + sporkType.getDamageVsEntity();
 	}
-
+	
 	@Override
 	public int getAttackDamage() 
 	{
 		return isSpoon ? weaponDamage : weaponDamage + 2;
 	}
-
+	
 	@Override
 	public int getItemEnchantability()
 	{
@@ -60,8 +65,18 @@ public class ItemSpork extends ItemWeapon
 	@Override
 	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase player)
 	{
-		itemStack.damageItem((isSpoon && !sporkType.equals(sporkType.CROCKER)) ? 1 : 2, player);
+		if(sporkType.equals(sporkType.CROCKER) && !isSpoon(itemStack)){
+			target.hurtResistantTime = 0;	//A somewhat hackish way, but I find attributes too complicated, for now.
+			target.attackEntityFrom(DamageSource.causeMobDamage(player), 2F);
+		}
+			itemStack.damageItem(isSpoon(itemStack) ? 1 : 2, player);
 		return true;
+	}
+
+	public boolean isSpoon(ItemStack itemStack) {
+		if(sporkType.equals(sporkType.CROCKER))
+			return itemStack.stackTagCompound == null?true:itemStack.stackTagCompound.getBoolean("isSpoon");
+		else return isSpoon;
 	}
 
 	@Override
@@ -81,24 +96,45 @@ public class ItemSpork extends ItemWeapon
 	{
 		return true;
 	}
+	
 	public int getMaxItemUseDuration(ItemStack itemStack)
 	{
 		return 72000;
 	}
-
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) 
+	
+	@Override
+	public void onCreated(ItemStack stack, World world, EntityPlayer player) {
+		stack.stackTagCompound = new NBTTagCompound();
+		stack.stackTagCompound.setBoolean("isSpoon", true);
+	}
+	
+	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) 
 	{
 		if(!world.isRemote)
-			if(sporkType.equals(sporkType.CROCKER))
-			{
-				System.out.print("Spork Changed");
-				if(isSpoon)itemIcon = crockerTypes[1];
-				else itemIcon = crockerTypes[0];
-				isSpoon = !isSpoon;
-				return true;
+			if(sporkType.equals(sporkType.CROCKER)) {
+				if(stack.stackTagCompound == null){	//If the stack was created before this update, it wont have a stackTagCompound.
+					stack.stackTagCompound = new NBTTagCompound();
+					stack.stackTagCompound.setBoolean("isSpoon", true);
+				}
+				stack.stackTagCompound.setBoolean("isSpoon", !stack.stackTagCompound.getBoolean("isSpoon"));
+				return stack;
 			}
-		return false;
+		return stack;
 	}
+	
+	@Override
+	public Icon getIcon(ItemStack stack, int pass) {
+		return getIconIndex(stack);
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public Icon getIconIndex(ItemStack stack) {
+		if(sporkType.equals(sporkType.CROCKER))
+			return crockerTypes[isSpoon(stack)?0:1];
+		else return itemIcon;
+	}
+	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister iconRegister) 

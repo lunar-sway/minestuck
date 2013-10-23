@@ -20,6 +20,9 @@ public class MinestuckSaveHandler
 	@ForgeSubscribe
 	public void onWorldSave(WorldEvent.Save event)
 	{
+		if(event.world.provider.dimensionId != 0)	//Only save one time each world-save instead of one per dimension each world-save.
+			return;
+		
 		File landList = event.world.getSaveHandler().getMapFileFromName("minestuckLandList");
 		if (landList != null)
 		{
@@ -36,7 +39,7 @@ public class MinestuckSaveHandler
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			SkaianetHandler.saveData(event.world.getSaveHandler().getMapFileFromName("connectionList"));
+			SkaianetHandler.saveData(event.world.getSaveHandler().getMapFileFromName("connectionList"),event.world.getSaveHandler().getMapFileFromName("waitingConnections"));
 		}
 	}
 }
