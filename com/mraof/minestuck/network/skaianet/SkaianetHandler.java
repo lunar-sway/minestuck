@@ -374,7 +374,6 @@ public class SkaianetHandler {
 				}
 			}
 		}
-		checkData();
 		Session.serverStarted();
 	}
 	

@@ -23,13 +23,13 @@ public class SburbServerController extends PlayerControllerMP{
 		this.setGameType(EnumGameType.CREATIVE);
 	}
 	
-	public static void add(String username){	//Currently only for testing purposes
+	public static void add(String username, String target){	//TODO Move to EditHandler.
 		Debug.print("Adding player...");
 		Minecraft mc = Minecraft.getMinecraft();
 //		mc.playerController = new SburbServerController(mc, mc.getNetHandler());
 		Packet250CustomPayload packet = new Packet250CustomPayload();
 		packet.channel = "Minestuck";
-		packet.data = MinestuckPacket.makePacket(Type.SBURB_EDIT, username);
+		packet.data = MinestuckPacket.makePacket(Type.SBURB_EDIT, username, target);
 		packet.length = packet.data.length;
 		PacketDispatcher.sendPacketToServer(packet);
 	}

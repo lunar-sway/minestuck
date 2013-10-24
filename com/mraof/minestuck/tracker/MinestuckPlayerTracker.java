@@ -8,6 +8,7 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.EditHandler;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.util.TitleHelper;
@@ -24,6 +25,11 @@ public class MinestuckPlayerTracker implements IPlayerTracker
 	@Override
 	public void onPlayerLogin(EntityPlayer player) 
 	{
+		if(!player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).hasKey("Grist")){
+			NBTTagCompound nbt = new NBTTagCompound("Grist");
+			nbt.setInteger(GristType.Build.getName(), 20);	//20 starting build grist
+			player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setCompoundTag("Grist", nbt);
+		}
 		updateGristCache(player);
 		updateTitle(player);
 		updateLands(player);
@@ -32,7 +38,7 @@ public class MinestuckPlayerTracker implements IPlayerTracker
 	@Override
 	public void onPlayerLogout(EntityPlayer player) 
 	{
-		
+		EditHandler.onPlayerLogout(player);
 	}
 
 	@Override

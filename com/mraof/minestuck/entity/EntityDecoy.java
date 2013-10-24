@@ -3,15 +3,18 @@ package com.mraof.minestuck.entity;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.EditHandler;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.packet.Packet8UpdateHealth;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.FoodStats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.EnumGameType;
 import net.minecraft.world.World;
@@ -19,6 +22,9 @@ import net.minecraft.world.World;
 public class EntityDecoy extends EntityOtherPlayerMP{
 	
 	final static int USERNAME_OBJECT_ID = 22;
+	
+	boolean markedForDespawn;
+	boolean init;
 	
 	public EnumGameType gameType;
 	public String username;
@@ -31,8 +37,8 @@ public class EntityDecoy extends EntityOtherPlayerMP{
 		super(world, "DECOY");
 	}
 	
-	public EntityDecoy(World par1World, EntityPlayerMP player) {
-		super(par1World, player.username);
+	public EntityDecoy(World world, EntityPlayerMP player) {
+		super(world, player.username);
 		this.posX = player.posX;
 		this.chunkCoordX = player.chunkCoordX;
 		this.posY = player.posY;
@@ -41,17 +47,26 @@ public class EntityDecoy extends EntityOtherPlayerMP{
 		this.chunkCoordZ = player.chunkCoordZ;
 		this.rotationPitch = player.rotationPitch;
 		this.rotationYaw = player.rotationYaw;
+		this.cameraPitch = player.cameraPitch;
+		this.cameraYaw = player.cameraYaw;
 		this.rotationYawHead = player.rotationYawHead;
+		this.renderYawOffset = player.renderYawOffset;
+		this.field_70769_ao = player.field_70769_ao;
 		this.gameType = player.theItemInWorldManager.getGameType();
 		this.setHealth(player.getHealth());
-		this.username = player.username;
-		this.dataWatcher.updateObject(this.USERNAME_OBJECT_ID, username);
+		username = player.username;
+		this.foodStats.setFoodLevel(player.getFoodStats().getFoodLevel());
+		this.foodStats.setFoodSaturationLevel(player.getFoodStats().getSaturationLevel());
+		this.dataWatcher.updateObject(USERNAME_OBJECT_ID, username);
+		this.dataWatcher.updateObject(USERNAME_OBJECT_ID+1, this.rotationYawHead);	//Due to rotationYawHead didn't update correctly
+		Debug.print("Create:"+rotationYaw+","+rotationYawHead);
 	}
 	
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		this.dataWatcher.addObject(this.USERNAME_OBJECT_ID, "");
+		this.dataWatcher.addObject(USERNAME_OBJECT_ID, "");
+		this.dataWatcher.addObject(USERNAME_OBJECT_ID+1, 0F);
 	}
 	
 	@Override
@@ -88,15 +103,22 @@ public class EntityDecoy extends EntityOtherPlayerMP{
 	
 	@Override
 	public void onUpdate() {
-		super.onUpdate();
-		if(worldObj.isRemote && username == null) {
-			username = dataWatcher.getWatchableObjectString(USERNAME_OBJECT_ID);
-			if(username != null) {
-				setupCustomSkin();
-			}
+		if(markedForDespawn){
+			this.setDead();
+			return;
 		}
-		else if(!worldObj.isRemote && this.velocityChanged)
-			EditHandler.reset(null, 0, this, MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(this.username));
+		super.onUpdate();
+		if(worldObj.isRemote && !init){
+			username = this.dataWatcher.getWatchableObjectString(USERNAME_OBJECT_ID);
+			this.rotationYawHead = this.dataWatcher.getWatchableObjectFloat(USERNAME_OBJECT_ID+1);
+			this.rotationYaw = rotationYawHead+10;
+			setupCustomSkin();
+			init = true;
+		}
+		if(!worldObj.isRemote){
+			if(this.velocityChanged)
+				EditHandler.reset(null, 0, this, MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(this.username));
+		}
 	}
 	
 	@Override
@@ -112,7 +134,7 @@ public class EntityDecoy extends EntityOtherPlayerMP{
 	
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
-		this.setDead();
+		this.markedForDespawn = true;
 	}
 	
 	@Override
@@ -122,7 +144,7 @@ public class EntityDecoy extends EntityOtherPlayerMP{
 	
 	@Override
 	public boolean attackEntityFrom(DamageSource damageSource, float par2) {
-		if (!worldObj.isRemote && (!gameType.equals(EnumGameType.CREATIVE) || damageSource.equals(DamageSource.outOfWorld)))
+		if (!worldObj.isRemote /*&& (!gameType.equals(EnumGameType.CREATIVE) || damageSource.equals(DamageSource.outOfWorld))*/)	//To make debug testing easier
 			EditHandler.reset(damageSource, par2, this, MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(this.username));
 		return true;
 	}

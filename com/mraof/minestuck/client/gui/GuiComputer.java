@@ -149,12 +149,13 @@ public class GuiComputer extends GuiScreen
 				displayMessage = "A client is already active";
 		}
 		else if(te.programSelected == 1){
-			programButton.displayString = "Server";buttonStrings.add("test");
+			programButton.displayString = "Server";
 			if(!te.latestmessage.get(1).isEmpty())
 				buttonStrings.add("Clear message");
 			if (!te.clientName.isEmpty() && SkaiaClient.getClientConnection(te.clientName) != null) {
 				displayMessage = "Connected to "+displayPlayer;
 				buttonStrings.add("Disconnect");
+				buttonStrings.add("Experimental");
 				if(!SkaiaClient.getClientConnection(te.clientName).givenItems())
 					buttonStrings.add("Give items");
 			} else if (te.openToClients) {
@@ -199,7 +200,7 @@ public class GuiComputer extends GuiScreen
 				te.programSelected == 0);
 	}
 	
-	protected void actionPerformed(GuiButton guibutton) {if(guibutton.displayString.equals("test")) com.mraof.minestuck.util.SburbServerController.add(te.owner);
+	protected void actionPerformed(GuiButton guibutton) {
 		if(!te.latestmessage.get(te.programSelected).isEmpty() && !guibutton.equals(programButton)
 				&& !guibutton.equals(upButton) && !guibutton.equals(downButton))
 			ClearMessagePacket.send(ComputerData.createData(te), te.programSelected);
@@ -222,7 +223,9 @@ public class GuiComputer extends GuiScreen
 				SkaiaClient.sendConnectRequest(te, guibutton.displayString, true);
 			}
 		} else if(te.programSelected == 1){
-			if(guibutton.displayString.equals("Give items")){
+			if(guibutton.displayString.equals("Experimental")){
+				com.mraof.minestuck.util.SburbServerController.add(te.owner,te.clientName);
+			} else if(guibutton.displayString.equals("Give items")){
 				SkaiaClient.giveItems(te.clientName);
 			} else if(guibutton.displayString.equals("Resume connection")){
 				SkaiaClient.sendConnectRequest(te, SkaiaClient.getAssociatedPartner(te.owner, false), false);
