@@ -7,6 +7,8 @@ import net.minecraft.item.ItemStack;
 
 public class CombinationRegistry {
 	private static Hashtable combRecipes = new Hashtable();
+	public static final boolean MODE_AND  = true;
+	public static final boolean MODE_OR = false;
 	
 	/**
 	 * Creates an entry for a result of combining the cards of two items. Used in the Punch Designex.
