@@ -64,8 +64,7 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 			int x = (int) entity.posX;
 			int y = (int) entity.posY;
 			int z = (int) entity.posZ;
-			worldserver1.setSpawnLocation(x, y, z);
-			Debug.printf("Respawn location being set to: %d, %d, %d", x, y, z);
+
 			int width = 24;
 			List list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.boundingBox.expand((double)width, width, (double)width));
 			Iterator iterator = list.iterator();
@@ -119,6 +118,8 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 			{
 				((Entity)iterator.next()).setDead();
 			}
+			worldserver1.setSpawnLocation(x, y, z);
+			Debug.printf("Respawn location being set to: %d, %d, %d", x, y, z);
 		}
 	}
 	@Override

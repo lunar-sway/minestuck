@@ -143,7 +143,7 @@ public class ChunkProviderLands implements IChunkProvider
 				//currentBlockOffset = (int) Math.abs(generated1[x + z * 256 + y * 16]) % surfaceBlock[0].length;
 				chunkIds[x + z * 16 + y * 256] = (short) surfaceBlock[0];
 				chunkMetadata[x + z * 16 + y * 256] = (byte) surfaceBlock[1];
-				for(y++; y < 63; y++)
+				for(; y < 63; y++)
 					chunkIds[x + z * 16 + y * 256] = (short) this.oceanBlock;
 					
 			}
