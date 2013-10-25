@@ -3,10 +3,6 @@ package com.mraof.minestuck.world.gen.structure;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.world.gen.structure.ComponentMineshaftCorridor;
-import net.minecraft.world.gen.structure.ComponentMineshaftCross;
-import net.minecraft.world.gen.structure.ComponentMineshaftRoom;
-import net.minecraft.world.gen.structure.ComponentMineshaftStairs;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureComponent;
 

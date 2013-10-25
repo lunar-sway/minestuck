@@ -1,22 +1,18 @@
 package com.mraof.minestuck.network.skaianet;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.IOException;
+import static com.mraof.minestuck.network.skaianet.SkaianetHandler.getAssociatedPartner;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import com.mraof.minestuck.Minestuck;
-import static com.mraof.minestuck.network.skaianet.SkaianetHandler.getAssociatedPartner;
-import com.mraof.minestuck.util.Debug;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.util.EnumChatFormatting;
+
+import com.mraof.minestuck.Minestuck;
 
 /**
  * An interface for the session system, or an object representing a session.

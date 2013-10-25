@@ -1,10 +1,5 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.network.MinestuckPacket.Type;
-import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
-
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.NetLoginHandler;
@@ -12,6 +7,11 @@ import net.minecraft.network.packet.NetHandler;
 import net.minecraft.network.packet.Packet1Login;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.server.MinecraftServer;
+
+import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
+
 import cpw.mods.fml.common.network.IConnectionHandler;
 import cpw.mods.fml.common.network.Player;
 

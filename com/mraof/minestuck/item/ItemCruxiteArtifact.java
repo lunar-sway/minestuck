@@ -18,6 +18,7 @@ import net.minecraft.world.WorldServer;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.ITeleporter;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.gen.lands.LandHelper;
@@ -63,6 +64,8 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 			int x = (int) entity.posX;
 			int y = (int) entity.posY;
 			int z = (int) entity.posZ;
+			worldserver1.setSpawnLocation(x, y, z);
+			Debug.printf("Respawn location being set to: %d, %d, %d", x, y, z);
 			int width = 24;
 			List list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.boundingBox.expand((double)width, width, (double)width));
 			Iterator iterator = list.iterator();

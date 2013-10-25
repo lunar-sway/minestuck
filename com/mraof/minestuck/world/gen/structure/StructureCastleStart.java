@@ -6,11 +6,7 @@ package com.mraof.minestuck.world.gen.structure;
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.mraof.minestuck.util.Debug;
-
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureStart;
 

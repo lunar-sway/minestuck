@@ -8,11 +8,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.WorldEvent;
+
+import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 
 public class MinestuckSaveHandler 
 {
@@ -26,8 +25,6 @@ public class MinestuckSaveHandler
 		File landList = event.world.getSaveHandler().getMapFileFromName("minestuckLandList");
 		if (landList != null)
 		{
-			NBTTagCompound nbttagcompound = new NBTTagCompound();
-
 			try 
 			{
 				DataOutputStream dataoutputstream = new DataOutputStream(new FileOutputStream(landList));
