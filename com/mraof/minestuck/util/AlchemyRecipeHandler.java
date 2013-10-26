@@ -482,6 +482,7 @@ public class AlchemyRecipeHandler {
 		CombinationRegistry.addCombination(new ItemStack(Item.rottenFlesh),new ItemStack(Item.bucketWater),CombinationRegistry.MODE_OR, new ItemStack(Item.leather));
 		CombinationRegistry.addCombination(new ItemStack(Item.slimeBall),new ItemStack(Item.blazePowder),CombinationRegistry.MODE_AND, new ItemStack(Item.magmaCream));
 		CombinationRegistry.addCombination(new ItemStack(Item.eyeOfEnder),new ItemStack(Item.egg),CombinationRegistry.MODE_AND, new ItemStack(Block.dragonEgg));
+		
 	}
 	
 	public static void registerMinestuckRecipes() {
@@ -493,6 +494,8 @@ public class AlchemyRecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(Minestuck.disk,1,1),new Object[]{ "X X"," Y ","X X",'X',new ItemStack(Minestuck.rawCruxite, 1),'Y',new ItemStack(Item.ingotIron,1)});
 		GameRegistry.addRecipe(new ItemStack(Minestuck.blockComputerOff,1,0),new Object[]{ "XXX","XYX","XXX",'Y',new ItemStack(Minestuck.blockStorage, 1, 0),'X',new ItemStack(Item.ingotIron,1)});
 		GameRegistry.addShapelessRecipe(new ItemStack(Minestuck.rawCruxite, 9),new  ItemStack(Minestuck.blockStorage,1,0)); 
+		GameRegistry.addRecipe(new ItemStack(Minestuck.clawHammer),new Object[]{ " XX","XY "," Y ",'X',new ItemStack(Item.ingotIron),'Y',new ItemStack(Item.stick)});
+		GameRegistry.addRecipe(new ItemStack(Minestuck.component,1,0),new Object[]{ " X "," Y "," Y ",'X',new ItemStack(Item.bowlEmpty),'Y',new ItemStack(Item.stick)});
 		
 		
 		//add grist conversions
@@ -500,7 +503,11 @@ public class AlchemyRecipeHandler {
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.cruxiteArtifact,1),false,new GristSet());
 		
 		//add Designex combinations
-		
+		CombinationRegistry.addCombination(new ItemStack(Item.hoeIron),new ItemStack(Item.wheat),CombinationRegistry.MODE_AND, new ItemStack(Minestuck.sickle));
+		CombinationRegistry.addCombination(new ItemStack(Item.swordIron),new ItemStack(Item.rottenFlesh),CombinationRegistry.MODE_AND, new ItemStack(Minestuck.katana));
+		CombinationRegistry.addCombination(new ItemStack(Minestuck.clawHammer),new ItemStack(Block.brick),CombinationRegistry.MODE_AND, new ItemStack(Minestuck.katana));
+		CombinationRegistry.addCombination(new ItemStack(Minestuck.component,1,0),new ItemStack(Item.ingotIron),CombinationRegistry.MODE_AND, new ItemStack(Minestuck.component,1,1));
+		CombinationRegistry.addCombination(new ItemStack(Minestuck.component,1,1),new ItemStack(Item.cake),CombinationRegistry.MODE_AND, new ItemStack(Minestuck.crockerSpork));
 		
 		//register land aspects
 		LandHelper.registerLandAspect(new LandAspectFrost());

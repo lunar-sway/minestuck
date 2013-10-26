@@ -54,6 +54,7 @@ import com.mraof.minestuck.item.ItemCardBlank;
 import com.mraof.minestuck.item.ItemCardPunched;
 import com.mraof.minestuck.item.ItemChessTile;
 import com.mraof.minestuck.item.ItemClub;
+import com.mraof.minestuck.item.ItemComponent;
 import com.mraof.minestuck.item.ItemComputerOff;
 import com.mraof.minestuck.item.ItemCruxiteArtifact;
 import com.mraof.minestuck.item.ItemCruxiteRaw;
@@ -151,6 +152,7 @@ public class Minestuck
 	public static Item punchedCard;
 	public static Item cruxiteArtifact;
 	public static Item disk;
+	public static Item component;
 
 	public static Achievement getHammer;
 
@@ -270,6 +272,7 @@ public class Minestuck
 		punchedCard = new ItemCardPunched(itemIdStart + 4);
 		cruxiteArtifact = new ItemCruxiteArtifact(itemIdStart + 5, 1, false);
 		disk = new ItemDisk(itemIdStart + 6);
+		component = new ItemComponent(itemIdStart + 7);
 
 		//achievements
 		getHammer = (new Achievement(413, "getHammer", 12, 15, Minestuck.clawHammer, (Achievement)null)).setIndependent().registerAchievement();
@@ -301,6 +304,9 @@ public class Minestuck
 		ItemStack alchemiterStack = new ItemStack(blockMachine,1,3);
 		ItemStack clientDiskStack = new ItemStack(disk,1,0);
 		ItemStack serverDiskStack = new ItemStack(disk,1,1);
+		ItemStack woodenSpoonStack = new ItemStack(component,1,0);
+		ItemStack silverSpoonStack = new ItemStack(component,1,1);
+		ItemStack chessboardStack = new ItemStack(component,1,2);
 		//set harvest information for blocks
 		MinecraftForge.setBlockHarvestLevel(chessTile, "shovel", 0);
 		MinecraftForge.setBlockHarvestLevel(oreCruxite, "pickaxe", 1);
@@ -343,6 +349,9 @@ public class Minestuck
 		LanguageRegistry.addName(cruxiteArtifact, "Cruxite Artifact");
 		LanguageRegistry.addName(clientDiskStack, "SBURB Client Disk");
 		LanguageRegistry.addName(serverDiskStack, "SBURB Server Disk");
+		LanguageRegistry.addName(woodenSpoonStack, "Wooden Spoon");
+		LanguageRegistry.addName(silverSpoonStack, "Silver Spoon");
+		LanguageRegistry.addName(chessboardStack, "Chessboard");
 		
 		//Same for blocks
 		LanguageRegistry.addName(blackChessTileStack, "Black Chess Tile");

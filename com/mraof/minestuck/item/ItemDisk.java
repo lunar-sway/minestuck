@@ -20,7 +20,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ItemDisk extends Item {
 	
 	private Icon[] icons = new Icon[2];
-	private String[] subNames = {"client","server"};
+	private String[] subNames = {"Client","Server"};
 
 	public ItemDisk(int par1) {
 		super(par1);
@@ -37,8 +37,9 @@ public class ItemDisk extends Item {
 	
 	@Override
 	public void registerIcons(IconRegister par1IconRegister) {
-	   icons[0] = par1IconRegister.registerIcon("minestuck:ClientDisk");
-	   icons[1] = par1IconRegister.registerIcon("minestuck:ServerDisk");
+		for (int i = 0;i < subNames.length;i++) {
+			icons[i] = par1IconRegister.registerIcon("minestuck:"+subNames[i]+"Disk");
+		}
 	}
 	
 	@Override
