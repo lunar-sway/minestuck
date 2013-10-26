@@ -496,7 +496,8 @@ public class AlchemyRecipeHandler {
 		GameRegistry.addShapelessRecipe(new ItemStack(Minestuck.rawCruxite, 9),new  ItemStack(Minestuck.blockStorage,1,0)); 
 		GameRegistry.addRecipe(new ItemStack(Minestuck.clawHammer),new Object[]{ " XX","XY "," Y ",'X',new ItemStack(Item.ingotIron),'Y',new ItemStack(Item.stick)});
 		GameRegistry.addRecipe(new ItemStack(Minestuck.component,1,0),new Object[]{ " X "," Y "," Y ",'X',new ItemStack(Item.bowlEmpty),'Y',new ItemStack(Item.stick)});
-		
+		GameRegistry.addRecipe(new ItemStack(Minestuck.component,1,2),new Object[]{ "XYX","YXY","XYX",'X',new ItemStack(Block.stainedClay,1,0),'Y',new ItemStack(Block.stainedClay,1,15)});
+		GameRegistry.addRecipe(new ItemStack(Minestuck.component,1,2),new Object[]{ "XYX","YXY","XYX",'Y',new ItemStack(Block.stainedClay,1,0),'X',new ItemStack(Block.stainedClay,1,15)});
 		
 		//add grist conversions
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.blockStorage, 1, 1), true, new GristSet(new GristType[] {GristType.Build}, new int[] {2}));
@@ -505,13 +506,19 @@ public class AlchemyRecipeHandler {
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.sickle), true, new GristSet(new GristType[] {GristType.Build}, new int[] {10}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.katana), true, new GristSet(new GristType[] {GristType.Build,GristType.Quartz}, new int[] {10,5}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.crockerSpork), true, new GristSet(new GristType[] {GristType.Build,GristType.Iodine,GristType.Chalk,GristType.Ruby}, new int[] {100,48,48,12}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.pogoHammer), true, new GristSet(new GristType[] {GristType.Build,GristType.Shale}, new int[] {20,16}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.regisword), true, new GristSet(new GristType[] {GristType.Build,GristType.Tar,GristType.Gold}, new int[] {64,20,6}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.component,1,1), true, new GristSet(new GristType[] {GristType.Build,GristType.Mercury}, new int[] {3,9}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.component,1,1), true, new GristSet(new GristType[] {GristType.Shale,GristType.Marble}, new int[] {10,20}));
 		
 		//add Designex combinations
 		CombinationRegistry.addCombination(new ItemStack(Item.hoeIron),new ItemStack(Item.wheat),CombinationRegistry.MODE_AND, new ItemStack(Minestuck.sickle));
 		CombinationRegistry.addCombination(new ItemStack(Item.swordIron),new ItemStack(Item.rottenFlesh),CombinationRegistry.MODE_AND, new ItemStack(Minestuck.katana));
-		CombinationRegistry.addCombination(new ItemStack(Minestuck.clawHammer),new ItemStack(Block.brick),CombinationRegistry.MODE_AND, new ItemStack(Minestuck.katana));
+		CombinationRegistry.addCombination(new ItemStack(Minestuck.clawHammer),new ItemStack(Block.brick),CombinationRegistry.MODE_AND, new ItemStack(Minestuck.sledgeHammer));
 		CombinationRegistry.addCombination(new ItemStack(Minestuck.component,1,0),new ItemStack(Item.ingotIron),CombinationRegistry.MODE_AND, new ItemStack(Minestuck.component,1,1));
 		CombinationRegistry.addCombination(new ItemStack(Minestuck.component,1,1),new ItemStack(Item.cake),CombinationRegistry.MODE_AND, new ItemStack(Minestuck.crockerSpork));
+		CombinationRegistry.addCombination(new ItemStack(Item.slimeBall),new ItemStack(Minestuck.sledgeHammer),CombinationRegistry.MODE_AND, new ItemStack(Minestuck.pogoHammer));
+		CombinationRegistry.addCombination(new ItemStack(Item.swordIron),new ItemStack(Minestuck.component,1,2),CombinationRegistry.MODE_AND, new ItemStack(Minestuck.regisword));
 		
 		//register land aspects
 		LandHelper.registerLandAspect(new LandAspectFrost());
