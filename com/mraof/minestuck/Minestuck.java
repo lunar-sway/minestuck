@@ -390,6 +390,7 @@ public class Minestuck
 		LanguageRegistry.instance().addStringLocalization("achievement.getHammer.desc", "Get the Claw Hammer");
 
 		LanguageRegistry.instance().addStringLocalization("key.gristCache", "View Grist Cache");
+		LanguageRegistry.instance().addStringLocalization("key.exitEdit", "Exit Edit Mode");
 
 		LanguageRegistry.instance().addStringLocalization("itemGroup.tabMinestuck", "Minestuck");
 

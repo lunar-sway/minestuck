@@ -38,7 +38,7 @@ public class MinestuckPlayerTracker implements IPlayerTracker
 	@Override
 	public void onPlayerLogout(EntityPlayer player) 
 	{
-		EditHandler.onPlayerLogout(player);
+		EditHandler.onPlayerExit(player);
 	}
 
 	@Override

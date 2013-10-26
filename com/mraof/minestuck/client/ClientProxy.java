@@ -70,10 +70,12 @@ public class ClientProxy extends CommonProxy
 		KeyBinding[] bindings;
 		boolean[] keyRepeatings;
 		MinestuckKeyHandler keyHandler;
-		bindings = new KeyBinding[1];
+		bindings = new KeyBinding[2];
 		keyRepeatings = new boolean[bindings.length];
 		bindings[0] = new KeyBinding("key.gristCache", 34);
 		keyRepeatings[0] = false;
+		bindings[1] = new KeyBinding("key.exitEdit", 45);
+		keyRepeatings[1] = false;
 		keyHandler = new MinestuckKeyHandler(bindings, keyRepeatings);
 		KeyBindingRegistry.registerKeyBinding(keyHandler);
 		MinecraftForge.EVENT_BUS.register(new GuiGristCache(Minecraft.getMinecraft()));

@@ -6,6 +6,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.EntityDecoy;
 import com.mraof.minestuck.util.EditHandler;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.server.MinecraftServer;
@@ -23,11 +24,13 @@ public class SburbEditPacket extends MinestuckPacket {
 
 	@Override
 	public byte[] generatePacket(Object... data) {
-		return (data[0].toString()+'\n'+data[1].toString()).getBytes();
+		return data.length == 0?new byte[0]:(data[0].toString()+'\n'+data[1].toString()).getBytes();
 	}
 
 	@Override
 	public MinestuckPacket consumePacket(byte[] data) {
+		if(data.length == 0)
+			return this;
 		ByteArrayDataInput input = ByteStreams.newDataInput(data);
 		username = input.readLine();
 		target = input.readLine();
@@ -36,9 +39,15 @@ public class SburbEditPacket extends MinestuckPacket {
 
 	@Override
 	public void execute(INetworkManager network, MinestuckPacketHandler minestuckPacketHandler, Player player, String userName) {
-		EntityPlayerMP playerMP = (EntityPlayerMP)player;
-		if(!Minestuck.privateComputers || playerMP.username.equals(this.username))
-			EditHandler.newServerEditor(playerMP, username, target);
+		if(((EntityPlayer)player).worldObj.isRemote){
+			EditHandler.resetClient();
+		} else{
+			EntityPlayerMP playerMP = (EntityPlayerMP)player;
+			if(username == null)
+				EditHandler.onPlayerExit(playerMP);
+			if(!Minestuck.privateComputers || playerMP.username.equals(this.username))
+				EditHandler.newServerEditor(playerMP, username, target);
+		}
 	}
 
 }

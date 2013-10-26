@@ -6,6 +6,7 @@ import com.mraof.minestuck.util.EditHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet8UpdateHealth;
@@ -51,15 +52,16 @@ public class EntityDecoy extends EntityOtherPlayerMP{
 		this.cameraYaw = player.cameraYaw;
 		this.rotationYawHead = player.rotationYawHead;
 		this.renderYawOffset = player.renderYawOffset;
-		this.field_70769_ao = player.field_70769_ao;
+		this.inventory.copyInventory(player.inventory);
+		this.getHeldItem();
 		this.gameType = player.theItemInWorldManager.getGameType();
 		this.setHealth(player.getHealth());
 		username = player.username;
+		this.capabilities.isFlying = player.capabilities.isFlying;
 		this.foodStats.setFoodLevel(player.getFoodStats().getFoodLevel());
 		this.foodStats.setFoodSaturationLevel(player.getFoodStats().getSaturationLevel());
 		this.dataWatcher.updateObject(USERNAME_OBJECT_ID, username);
 		this.dataWatcher.updateObject(USERNAME_OBJECT_ID+1, this.rotationYawHead);	//Due to rotationYawHead didn't update correctly
-		Debug.print("Create:"+rotationYaw+","+rotationYawHead);
 	}
 	
 	@Override
@@ -107,19 +109,24 @@ public class EntityDecoy extends EntityOtherPlayerMP{
 			this.setDead();
 			return;
 		}
-		super.onUpdate();
+		foodStats.onUpdate(this);
 		if(worldObj.isRemote && !init){
 			username = this.dataWatcher.getWatchableObjectString(USERNAME_OBJECT_ID);
 			this.rotationYawHead = this.dataWatcher.getWatchableObjectFloat(USERNAME_OBJECT_ID+1);
-			this.rotationYaw = rotationYawHead+10;
+			this.rotationYaw = rotationYawHead;	//I don't know how much of this that is necessary
+			renderYawOffset = rotationYaw;
 			setupCustomSkin();
 			init = true;
 		}
+		super.onEntityUpdate();
+		super.onLivingUpdate();
 		if(!worldObj.isRemote){
 			if(this.velocityChanged)
 				EditHandler.reset(null, 0, this, MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(this.username));
 		}
 	}
+	
+	
 	
 	@Override
 	public void sendChatToPlayer(ChatMessageComponent chatmessagecomponent) {}
@@ -144,7 +151,7 @@ public class EntityDecoy extends EntityOtherPlayerMP{
 	
 	@Override
 	public boolean attackEntityFrom(DamageSource damageSource, float par2) {
-		if (!worldObj.isRemote /*&& (!gameType.equals(EnumGameType.CREATIVE) || damageSource.equals(DamageSource.outOfWorld))*/)	//To make debug testing easier
+		if (!worldObj.isRemote /*&& (!gameType.equals(EnumGameType.CREATIVE) || damageSource.canHarmInCreative())*/)	//To make debug testing easier
 			EditHandler.reset(damageSource, par2, this, MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(this.username));
 		return true;
 	}
