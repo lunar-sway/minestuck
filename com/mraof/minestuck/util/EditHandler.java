@@ -43,8 +43,12 @@ public class EditHandler {
 		PacketDispatcher.sendPacketToServer(packet);
 	}
 	
-	public static void resetClient() {
-		
+	public static void onClientPackage(boolean mode) {
+		if(mode) {	//Enable edit mode
+			
+		} else {	//Disable edit mode
+			
+		}
 	}
 	
 	//Server sided stuff
@@ -85,19 +89,24 @@ public class EditHandler {
 		if(!player.theItemInWorldManager.getGameType().equals(decoy.gameType))
 			player.setGameType(decoy.gameType);
 		player.setHealth(decoy.getHealth());
-		player.getFoodStats().setFoodLevel(decoy.getFoodStats().getFoodLevel());
-		player.getFoodStats().setFoodSaturationLevel(decoy.getFoodStats().getSaturationLevel());
+//		player.getFoodStats().setFoodLevel(decoy.getFoodStats().getFoodLevel());
+//		player.getFoodStats().setFoodSaturationLevel(decoy.getFoodStats().getSaturationLevel());
 		decoy.setDead();
+		Packet250CustomPayload packet = new Packet250CustomPayload();
+		packet.channel = "Minestuck";
+		packet.data = MinestuckPacket.makePacket(Type.SBURB_EDIT, false);
+		packet.length = packet.data.length;
+		player.playerNetServerHandler.sendPacketToPlayer(packet);
 		if(damageSource != null && damageSource.getSourceOfDamage() != player)
 			player.attackEntityFrom(damageSource, damage);
 	}
 	
 	public static void newServerEditor(EntityPlayerMP player, String computerOwner, String computerTarget) {
 		if(player.isRiding())
-			return;	//Don't want to bother making the decoy riding-able right now.
+			return;	//Don't want to bother making the decoy able to ride anything right now.
 		SburbConnection c = SkaianetHandler.getClientConnection(computerTarget);
 		Debug.print("Adding new decoy..");
-		if(c != null && c.getServerName().equals(computerOwner) && !map.containsKey(c)) {
+		if(c != null && c.getServerName().equals(computerOwner) && !map.containsKey(c) && getPlayerEntry(player.username) == null) {
 			EntityDecoy decoy = new EntityDecoy(player.worldObj, player);
 			if(!setPlayerStats(player, c))
 				return;
@@ -106,7 +115,7 @@ public class EditHandler {
 			map.put(c.getClientName(), decoy);
 			Packet250CustomPayload packet = new Packet250CustomPayload();
 			packet.channel = "Minestuck";
-			packet.data = MinestuckPacket.makePacket(Type.SBURB_EDIT);
+			packet.data = MinestuckPacket.makePacket(Type.SBURB_EDIT, true);
 			packet.length = packet.data.length;
 			player.playerNetServerHandler.sendPacketToPlayer(packet);
 		}

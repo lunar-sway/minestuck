@@ -2,26 +2,14 @@ package com.mraof.minestuck.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.common.MinecraftForge;
 
 import com.mraof.minestuck.CommonProxy;
 import com.mraof.minestuck.client.gui.GuiGristCache;
-import com.mraof.minestuck.client.model.ModelBasilisk;
-import com.mraof.minestuck.client.model.ModelBishop;
-import com.mraof.minestuck.client.model.ModelGiclops;
-import com.mraof.minestuck.client.model.ModelIguana;
-import com.mraof.minestuck.client.model.ModelImp;
-import com.mraof.minestuck.client.model.ModelNakagator;
-import com.mraof.minestuck.client.model.ModelOgre;
-import com.mraof.minestuck.client.model.ModelSalamander;
-import com.mraof.minestuck.client.renderer.entity.RenderEntityMinestuck;
-import com.mraof.minestuck.client.renderer.entity.RenderGrist;
-import com.mraof.minestuck.client.renderer.entity.RenderPawn;
-import com.mraof.minestuck.client.renderer.entity.RenderShadow;
-import com.mraof.minestuck.client.renderer.tileentity.RenderGatePortal;
-import com.mraof.minestuck.client.renderer.tileentity.TileEntityMachineRenderer;
+import com.mraof.minestuck.client.model.*;
+import com.mraof.minestuck.client.renderer.entity.*;
+import com.mraof.minestuck.client.renderer.tileentity.*;
 import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
 import com.mraof.minestuck.entity.EntityDecoy;
 import com.mraof.minestuck.entity.carapacian.EntityBishop;
@@ -30,11 +18,7 @@ import com.mraof.minestuck.entity.consort.EntityIguana;
 import com.mraof.minestuck.entity.consort.EntityNakagator;
 import com.mraof.minestuck.entity.consort.EntitySalamander;
 import com.mraof.minestuck.entity.item.EntityGrist;
-import com.mraof.minestuck.entity.underling.EntityBasilisk;
-import com.mraof.minestuck.entity.underling.EntityGiclops;
-import com.mraof.minestuck.entity.underling.EntityImp;
-import com.mraof.minestuck.entity.underling.EntityOgre;
-import com.mraof.minestuck.entity.underling.EntityUnderlingPart;
+import com.mraof.minestuck.entity.underling.*;
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 
@@ -60,7 +44,7 @@ public class ClientProxy extends CommonProxy
             RenderingRegistry.registerEntityRenderingHandler(EntityPawn.class, new RenderPawn(new ModelBiped(), 0.5F));
             RenderingRegistry.registerEntityRenderingHandler(EntityBishop.class, new RenderEntityMinestuck(new ModelBishop(), 1.8F));
             RenderingRegistry.registerEntityRenderingHandler(EntityGrist.class, new RenderGrist());
-            RenderingRegistry.registerEntityRenderingHandler(EntityDecoy.class, new RenderPlayer());
+            RenderingRegistry.registerEntityRenderingHandler(EntityDecoy.class, new RenderDecoy());
             ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGatePortal.class, new RenderGatePortal());
             ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachine.class, new TileEntityMachineRenderer());
     }

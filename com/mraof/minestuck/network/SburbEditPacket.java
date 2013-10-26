@@ -17,6 +17,7 @@ public class SburbEditPacket extends MinestuckPacket {
 	
 	String username;
 	String target;
+	boolean mode;	//Not really necessary, but securer that way
 	
 	public SburbEditPacket() {
 		super(Type.SBURB_EDIT);
@@ -24,24 +25,28 @@ public class SburbEditPacket extends MinestuckPacket {
 
 	@Override
 	public byte[] generatePacket(Object... data) {
-		return data.length == 0?new byte[0]:(data[0].toString()+'\n'+data[1].toString()).getBytes();
+		return data.length == 0?new byte[0]:	//Client pressing the exit button
+			data.length == 1?new byte[]{(byte) (((Boolean)data[0])?1:0)}:	//Server telling client to activate/deactivate edit mode
+				(data[0].toString()+'\n'+data[1].toString()).getBytes();	//Client requesting to enter edit mode
 	}
 
 	@Override
 	public MinestuckPacket consumePacket(byte[] data) {
-		if(data.length == 0)
-			return this;
-		ByteArrayDataInput input = ByteStreams.newDataInput(data);
-		username = input.readLine();
-		target = input.readLine();
+		if(data.length == 1)
+				mode = data[0] != 0;
+		else {
+			ByteArrayDataInput input = ByteStreams.newDataInput(data);
+			username = input.readLine();
+			target = input.readLine();
+		}
 		return this;
 	}
 
 	@Override
 	public void execute(INetworkManager network, MinestuckPacketHandler minestuckPacketHandler, Player player, String userName) {
-		if(((EntityPlayer)player).worldObj.isRemote){
-			EditHandler.resetClient();
-		} else{
+		if(((EntityPlayer)player).worldObj.isRemote) {
+			EditHandler.onClientPackage(mode);
+		} else {
 			EntityPlayerMP playerMP = (EntityPlayerMP)player;
 			if(username == null)
 				EditHandler.onPlayerExit(playerMP);
