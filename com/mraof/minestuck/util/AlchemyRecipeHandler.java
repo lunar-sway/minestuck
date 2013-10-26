@@ -501,6 +501,10 @@ public class AlchemyRecipeHandler {
 		//add grist conversions
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.blockStorage, 1, 1), true, new GristSet(new GristType[] {GristType.Build}, new int[] {2}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.cruxiteArtifact,1),false,new GristSet());
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.sledgeHammer), true, new GristSet(new GristType[] {GristType.Build,GristType.Shale}, new int[] {10,2}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.sickle), true, new GristSet(new GristType[] {GristType.Build}, new int[] {10}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.katana), true, new GristSet(new GristType[] {GristType.Build,GristType.Quartz}, new int[] {10,5}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.crockerSpork), true, new GristSet(new GristType[] {GristType.Build,GristType.Iodine,GristType.Chalk,GristType.Ruby}, new int[] {100,48,48,12}));
 		
 		//add Designex combinations
 		CombinationRegistry.addCombination(new ItemStack(Item.hoeIron),new ItemStack(Item.wheat),CombinationRegistry.MODE_AND, new ItemStack(Minestuck.sickle));
