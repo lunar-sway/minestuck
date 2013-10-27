@@ -164,6 +164,15 @@ public class Minestuck
 	public static Block blockMachine;
 	public static Block blockComputerOn;
 	public static Block blockComputerOff;
+
+	//Block IDs
+	public static int chessTileId;
+	public static int gatePortalId;
+	public static int oreCruxiteId;
+	public static int blockStorageId;
+	public static int blockMachineId;
+	public static int blockComputerOnId;
+	public static int blockComputerOffId;
 	
 	//Booleans
 	public static boolean generateCruxiteOre;
@@ -194,6 +203,7 @@ public class Minestuck
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 		config.load();
 		blockIdStart = config.get("Block Ids", "blockIdStart", 500).getInt();
+		if(config.get("Block Ids", "useBlockIdStart", true).getBoolean(true))
 		toolIdStart = config.get("Item Ids", "toolIdStart", 5001).getInt();
 		entityIdStart = config.get("Entity Ids", "entitydIdStart", 5050).getInt();
 		itemIdStart = config.get("Item Ids", "itemIdStart", 6001).getInt();
@@ -201,7 +211,7 @@ public class Minestuck
 		skaiaDimensionId = config.get("Dimension Ids", "skaiaDimensionId", 2).getInt();
 		landProviderTypeId = config.get("Provider Type Ids", "landProviderTypeIdStart", 3).getInt();
 		landDimensionIdStart = config.get("Dimension Ids", "landDimensionIdStart", 3).getInt();
-		Debug.isDebugMode = config.get("General","printDebugMessages",true).getBoolean(false);
+		Debug.isDebugMode = config.get("General","printDebugMessages",true).getBoolean(true);
 		generateCruxiteOre = config.get("General","generateCruxiteOre",true).getBoolean(true);
 		acceptTitleCollision = config.get("General", "acceptTitleCollision", false).getBoolean(false);
 		generateSpecialClasses = config.get("General", "generateSpecialClasses", false).getBoolean(false);
