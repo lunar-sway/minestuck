@@ -25,7 +25,6 @@ import com.mraof.minestuck.entity.EntityListAttackFilter;
 import com.mraof.minestuck.entity.EntityMinestuck;
 import com.mraof.minestuck.entity.ai.EntityAINearestAttackableTargetWithHeight;
 import com.mraof.minestuck.entity.item.EntityGrist;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;

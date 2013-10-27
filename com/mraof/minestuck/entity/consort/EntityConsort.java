@@ -1,6 +1,5 @@
 package com.mraof.minestuck.entity.consort;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumSkyBlock;

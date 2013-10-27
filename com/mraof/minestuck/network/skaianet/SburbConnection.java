@@ -1,14 +1,9 @@
 package com.mraof.minestuck.network.skaianet;
 
+import net.minecraft.nbt.NBTTagCompound;
+
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-
-import com.mraof.minestuck.util.Debug;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import net.minecraft.nbt.NBTTagCompound;
 
 public class SburbConnection {
 	

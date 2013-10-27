@@ -7,7 +7,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.entity.IEntityMultiPart;
-import com.mraof.minestuck.util.Debug;
 
 public class EntityUnderlingPart extends EntityLiving
 {

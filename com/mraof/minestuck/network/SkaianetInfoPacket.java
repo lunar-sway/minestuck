@@ -1,22 +1,18 @@
 package com.mraof.minestuck.network;
 
-import java.io.DataOutputStream;
-import java.io.EOFException;
 import java.util.ArrayList;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.INetworkManager;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.INetworkManager;
 import cpw.mods.fml.common.network.Player;
 
 public class SkaianetInfoPacket extends MinestuckPacket {

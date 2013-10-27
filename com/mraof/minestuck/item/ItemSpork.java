@@ -11,7 +11,6 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.Debug;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

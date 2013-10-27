@@ -3,10 +3,6 @@ package com.mraof.minestuck.world.gen.structure;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.world.gen.structure.ComponentMineshaftCorridor;
-import net.minecraft.world.gen.structure.ComponentMineshaftCross;
-import net.minecraft.world.gen.structure.ComponentMineshaftRoom;
-import net.minecraft.world.gen.structure.ComponentMineshaftStairs;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureComponent;
 
@@ -49,12 +45,14 @@ public class StructureCastlePieces
 
     public static void func_143048_a()
     {
+        MapGenStructureIO.func_143031_a(ComponentCastleStartPiece.class, "SkaiaCastleStart");
         MapGenStructureIO.func_143031_a(ComponentCastleLibraryPiece.class, "SkaiaCastleLibrary");
         MapGenStructureIO.func_143031_a(ComponentCastleRoomPiece.class, "SkaiaCastleRoom");
         MapGenStructureIO.func_143031_a(ComponentCastleSolidPiece.class, "SkaiaCastleSolid");
         MapGenStructureIO.func_143031_a(ComponentCastleStaircasePiece.class, "SkaiaCastleStaircase");
         MapGenStructureIO.func_143031_a(ComponentCastleWallPiece.class, "SkaiaCastleWall");
         MapGenStructureIO.func_143031_a(ComponentCastlePiece.class, "SkaiaCastleMain");
+        MapGenStructureIO.func_143031_a(ComponentCastleStartPiece.class, "SkaiaCastleStart");
     }
 
 

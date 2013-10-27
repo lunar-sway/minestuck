@@ -8,7 +8,6 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.entity.monster.EntitySnowman;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IProgressUpdate;
@@ -29,12 +28,9 @@ import com.mraof.minestuck.entity.underling.EntityBasilisk;
 import com.mraof.minestuck.entity.underling.EntityGiclops;
 import com.mraof.minestuck.entity.underling.EntityImp;
 import com.mraof.minestuck.entity.underling.EntityOgre;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.lands.ILandDecorator;
 import com.mraof.minestuck.world.gen.lands.LandAspect;
 import com.mraof.minestuck.world.gen.lands.LandHelper;
-
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ChunkProviderLands implements IChunkProvider 
 {
@@ -147,7 +143,7 @@ public class ChunkProviderLands implements IChunkProvider
 				//currentBlockOffset = (int) Math.abs(generated1[x + z * 256 + y * 16]) % surfaceBlock[0].length;
 				chunkIds[x + z * 16 + y * 256] = (short) surfaceBlock[0];
 				chunkMetadata[x + z * 16 + y * 256] = (byte) surfaceBlock[1];
-				for(y++; y < 63; y++)
+				for(; y < 63; y++)
 					chunkIds[x + z * 16 + y * 256] = (short) this.oceanBlock;
 					
 			}
@@ -217,7 +213,7 @@ public class ChunkProviderLands implements IChunkProvider
 	public List getPossibleCreatures(EnumCreatureType enumcreaturetype, int i,
 			int j, int k) {
 		//Debug.printf("Chosen to spawn! args: %s %d %d %d",enumcreaturetype,i,j,k);
-		return enumcreaturetype == EnumCreatureType.creature? this.consortList : (enumcreaturetype == EnumCreatureType.monster ? this.underlingList : null);
+		return enumcreaturetype == EnumCreatureType.creature ? this.consortList : (enumcreaturetype == EnumCreatureType.monster ? this.underlingList : null);
 	}
 
 	@Override

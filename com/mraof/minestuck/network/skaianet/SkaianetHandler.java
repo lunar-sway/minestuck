@@ -1,13 +1,10 @@
 package com.mraof.minestuck.network.skaianet;
 
-import java.io.BufferedReader;
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -34,9 +31,6 @@ import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.Debug;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 //@SideOnly(Side.SERVER)	//This crashes the game on execution of ClearMessagePacket?
 public class SkaianetHandler {
@@ -531,16 +525,28 @@ public class SkaianetHandler {
 	
 	public static void enterMedium(String player, int dimensionId) {
 		SburbConnection c = getConnection(player, getAssociatedPartner(player, true));
-		if(c != null){
-			c.enteredGame = true;
-			for(SburbConnection sc : connections){	//TEMP Later make it only change the transferred computers instead
-				if(sc.client != null && sc.client.owner.equals(player))
-					sc.client.dimension = dimensionId;
-				if(sc.server != null && sc.server.owner.equals(player))
-					sc.server.dimension = dimensionId;
-			}
-			updateAll();
+		if(c == null) {
+			c = getClientConnection(player);
+			if(c == null) {
+				c = new SburbConnection();
+				c.isActive = false;
+				c.isMain = true;
+				c.clientName = player;
+				c.serverName = player;
+				if(Session.registerConnection(c))
+					connections.add(c);
+			} else giveItems(player);
 		}
+		
+		for(SburbConnection sc : connections){	//TEMP Later make it only change the transferred computers instead
+			if(sc.client != null && sc.client.owner.equals(player))
+				sc.client.dimension = dimensionId;
+			if(sc.server != null && sc.server.owner.equals(player))
+				sc.server.dimension = dimensionId;
+		}
+		
+		c.enteredGame = true;
+		updateAll();
 	}
 	
 }

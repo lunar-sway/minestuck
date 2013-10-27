@@ -1,6 +1,5 @@
 package com.mraof.minestuck.util;
 
-import java.util.Random;
 
 public final class TitleHelper {
 	

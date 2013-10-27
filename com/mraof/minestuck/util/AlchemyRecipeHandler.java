@@ -409,11 +409,80 @@ public class AlchemyRecipeHandler {
 		
 		
 		//Set up Punch Designex recipes
-		for(int metadata = 0; metadata < BlockSapling.WOOD_TYPES.length; metadata++)
-		{
-			CombinationRegistry.addCombination(new ItemStack(Block.sapling, 1, metadata), new ItemStack(Block.wood), true, true, false, new ItemStack(Block.wood, 1, metadata));
-			CombinationRegistry.addCombination(new ItemStack(Block.wood, 1, metadata), new ItemStack(Block.sapling), false, true, false, new ItemStack(Block.sapling, 1, metadata));
+		
+		//metadata-based
+		for (int meta = 0; meta < BlockSapling.WOOD_TYPES.length; meta++) {
+			CombinationRegistry.addCombination(new ItemStack(Block.sapling, 1, meta), new ItemStack(Block.wood), CombinationRegistry.MODE_AND, true, false, new ItemStack(Block.wood, 1, meta));
+			CombinationRegistry.addCombination(new ItemStack(Block.wood, 1, meta), new ItemStack(Block.sapling), CombinationRegistry.MODE_OR, true, false, new ItemStack(Block.sapling, 1, meta));
 		}
+		for (int meta = 0;meta <= 15;meta++) {
+			CombinationRegistry.addCombination(new ItemStack(Item.dyePowder,1,meta),new ItemStack(Block.cloth),CombinationRegistry.MODE_AND, true,false, new ItemStack(Block.cloth,1,meta));
+			CombinationRegistry.addCombination(new ItemStack(Item.dyePowder),new ItemStack(Block.cloth,1,meta),CombinationRegistry.MODE_OR, false,true, new ItemStack(Item.dyePowder,1,meta));
+		}
+		
+		//ore related
+		CombinationRegistry.addCombination(new ItemStack(Item.ingotIron),new ItemStack(Block.stone),CombinationRegistry.MODE_AND, new ItemStack(Block.oreIron));
+		CombinationRegistry.addCombination(new ItemStack(Item.ingotGold),new ItemStack(Block.stone),CombinationRegistry.MODE_AND, new ItemStack(Block.oreGold));
+		CombinationRegistry.addCombination(new ItemStack(Item.coal),new ItemStack(Block.stone),CombinationRegistry.MODE_AND, new ItemStack(Block.oreCoal));
+		CombinationRegistry.addCombination(new ItemStack(Item.diamond),new ItemStack(Block.stone),CombinationRegistry.MODE_AND, new ItemStack(Block.oreDiamond));
+		CombinationRegistry.addCombination(new ItemStack(Item.emerald),new ItemStack(Block.stone),CombinationRegistry.MODE_AND, new ItemStack(Block.oreEmerald));
+		CombinationRegistry.addCombination(new ItemStack(Item.redstone),new ItemStack(Block.stone),CombinationRegistry.MODE_AND, new ItemStack(Block.oreRedstone));
+		CombinationRegistry.addCombination(new ItemStack(Item.dyePowder,1,8),new ItemStack(Block.stone),CombinationRegistry.MODE_AND, new ItemStack(Block.oreLapis));
+		CombinationRegistry.addCombination(new ItemStack(Item.netherQuartz),new ItemStack(Block.netherrack),CombinationRegistry.MODE_AND, new ItemStack(Block.oreNetherQuartz));
+		CombinationRegistry.addCombination(new ItemStack(Item.ingotIron),new ItemStack(Block.stone),CombinationRegistry.MODE_OR, new ItemStack(Block.blockIron));
+		CombinationRegistry.addCombination(new ItemStack(Item.ingotGold),new ItemStack(Block.stone),CombinationRegistry.MODE_OR, new ItemStack(Block.blockGold));
+		CombinationRegistry.addCombination(new ItemStack(Item.coal),new ItemStack(Block.stone),CombinationRegistry.MODE_OR, new ItemStack(Block.coalBlock));
+		CombinationRegistry.addCombination(new ItemStack(Item.diamond),new ItemStack(Block.stone),CombinationRegistry.MODE_OR, new ItemStack(Block.blockDiamond));
+		CombinationRegistry.addCombination(new ItemStack(Item.emerald),new ItemStack(Block.stone),CombinationRegistry.MODE_OR, new ItemStack(Block.blockEmerald));
+		CombinationRegistry.addCombination(new ItemStack(Item.redstone),new ItemStack(Block.stone),CombinationRegistry.MODE_OR, new ItemStack(Block.blockRedstone));
+		CombinationRegistry.addCombination(new ItemStack(Item.dyePowder,1,8),new ItemStack(Block.stone),CombinationRegistry.MODE_OR, new ItemStack(Block.blockLapis));
+		CombinationRegistry.addCombination(new ItemStack(Item.netherQuartz),new ItemStack(Block.netherrack),CombinationRegistry.MODE_OR, new ItemStack(Block.blockNetherQuartz));
+		
+		//misc
+		CombinationRegistry.addCombination(new ItemStack(Block.dirt),new ItemStack(Item.seeds),CombinationRegistry.MODE_AND, new ItemStack(Block.grass));
+		CombinationRegistry.addCombination(new ItemStack(Block.dirt),new ItemStack(Block.tallGrass),CombinationRegistry.MODE_OR, new ItemStack(Block.grass));
+		CombinationRegistry.addCombination(new ItemStack(Block.ladder),new ItemStack(Item.ingotIron),CombinationRegistry.MODE_AND, new ItemStack(Block.rail));
+		CombinationRegistry.addCombination(new ItemStack(Block.rail),new ItemStack(Block.planks),CombinationRegistry.MODE_AND, new ItemStack(Block.ladder));
+		CombinationRegistry.addCombination(new ItemStack(Block.grass),new ItemStack(Block.mushroomRed),CombinationRegistry.MODE_AND, new ItemStack(Block.mycelium));
+		CombinationRegistry.addCombination(new ItemStack(Block.grass),new ItemStack(Block.mushroomBrown),CombinationRegistry.MODE_AND, new ItemStack(Block.mycelium));
+		CombinationRegistry.addCombination(new ItemStack(Block.fence),new ItemStack(Block.netherBrick),CombinationRegistry.MODE_AND, new ItemStack(Block.netherFence));
+		CombinationRegistry.addCombination(new ItemStack(Block.netherFence),new ItemStack(Block.planks),CombinationRegistry.MODE_AND, new ItemStack(Block.fence));
+		CombinationRegistry.addCombination(new ItemStack(Item.doorWood),new ItemStack(Item.ingotIron),CombinationRegistry.MODE_AND, new ItemStack(Item.doorIron));
+		CombinationRegistry.addCombination(new ItemStack(Item.doorIron),new ItemStack(Block.planks),CombinationRegistry.MODE_AND, new ItemStack(Item.doorWood));
+		CombinationRegistry.addCombination(new ItemStack(Item.rottenFlesh),new ItemStack(Item.seeds),CombinationRegistry.MODE_OR, new ItemStack(Item.chickenRaw));
+		CombinationRegistry.addCombination(new ItemStack(Item.rottenFlesh),new ItemStack(Item.carrot),CombinationRegistry.MODE_OR, new ItemStack(Item.porkRaw));
+		CombinationRegistry.addCombination(new ItemStack(Item.rottenFlesh),new ItemStack(Item.wheat),CombinationRegistry.MODE_OR, new ItemStack(Item.beefRaw));
+		CombinationRegistry.addCombination(new ItemStack(Block.music),new ItemStack(Item.diamond),CombinationRegistry.MODE_AND, new ItemStack(Block.jukebox));
+		CombinationRegistry.addCombination(new ItemStack(Block.cobblestone),new ItemStack(Item.seeds),CombinationRegistry.MODE_OR, new ItemStack(Block.cobblestoneMossy));
+		CombinationRegistry.addCombination(new ItemStack(Block.stoneBrick),new ItemStack(Item.seeds),CombinationRegistry.MODE_OR, new ItemStack(Block.stoneBrick,1,2));
+		CombinationRegistry.addCombination(new ItemStack(Block.cobblestoneWall),new ItemStack(Item.seeds),CombinationRegistry.MODE_OR, new ItemStack(Block.cobblestoneWall,1,1));
+		CombinationRegistry.addCombination(new ItemStack(Item.stick),new ItemStack(Item.bucketLava),CombinationRegistry.MODE_AND, new ItemStack(Item.blazeRod));
+		CombinationRegistry.addCombination(new ItemStack(Item.ingotIron),new ItemStack(Item.saddle),CombinationRegistry.MODE_AND, new ItemStack(Item.horseArmorIron));
+		CombinationRegistry.addCombination(new ItemStack(Item.ingotGold),new ItemStack(Item.saddle),CombinationRegistry.MODE_AND, new ItemStack(Item.horseArmorGold));
+		CombinationRegistry.addCombination(new ItemStack(Item.diamond),new ItemStack(Item.saddle),CombinationRegistry.MODE_AND, new ItemStack(Item.horseArmorDiamond));
+		CombinationRegistry.addCombination(new ItemStack(Item.silk),new ItemStack(Item.leather),CombinationRegistry.MODE_AND, new ItemStack(Item.saddle));
+		CombinationRegistry.addCombination(new ItemStack(Item.enderPearl),new ItemStack(Item.blazePowder),CombinationRegistry.MODE_AND, new ItemStack(Item.eyeOfEnder));
+		CombinationRegistry.addCombination(new ItemStack(Block.netherrack),new ItemStack(Block.brick),CombinationRegistry.MODE_AND, new ItemStack(Item.netherrackBrick));
+		CombinationRegistry.addCombination(new ItemStack(Block.netherrack),new ItemStack(Block.brick),CombinationRegistry.MODE_OR, new ItemStack(Block.netherBrick));
+		CombinationRegistry.addCombination(new ItemStack(Block.netherrack),new ItemStack(Item.glowstone),CombinationRegistry.MODE_AND, new ItemStack(Block.glowStone));
+		CombinationRegistry.addCombination(new ItemStack(Block.stone),new ItemStack(Item.enderPearl),CombinationRegistry.MODE_AND, new ItemStack(Block.whiteStone));
+		CombinationRegistry.addCombination(new ItemStack(Block.cobblestone),new ItemStack(Item.coal),CombinationRegistry.MODE_AND, new ItemStack(Block.furnaceIdle));
+		CombinationRegistry.addCombination(new ItemStack(Block.gravel),new ItemStack(Block.stone),CombinationRegistry.MODE_AND, new ItemStack(Item.flint));
+		CombinationRegistry.addCombination(new ItemStack(Item.compass),new ItemStack(Item.ingotGold),CombinationRegistry.MODE_AND, new ItemStack(Item.itemsList[347]));
+		CombinationRegistry.addCombination(new ItemStack(Item.redstone),new ItemStack(Item.ingotGold),CombinationRegistry.MODE_OR, new ItemStack(Item.itemsList[347]));
+		CombinationRegistry.addCombination(new ItemStack(Item.itemsList[347]),new ItemStack(Item.ingotIron),CombinationRegistry.MODE_AND, new ItemStack(Item.compass));
+		CombinationRegistry.addCombination(new ItemStack(Item.redstone),new ItemStack(Item.ingotIron),CombinationRegistry.MODE_OR, new ItemStack(Item.compass));
+		CombinationRegistry.addCombination(new ItemStack(Item.bucketWater),new ItemStack(Item.bucketLava),CombinationRegistry.MODE_AND, new ItemStack(Block.obsidian));
+		CombinationRegistry.addCombination(new ItemStack(Item.ingotIron),new ItemStack(Block.tallGrass),CombinationRegistry.MODE_AND, new ItemStack(Item.shears));
+		CombinationRegistry.addCombination(new ItemStack(Block.sapling),new ItemStack(Item.seeds),CombinationRegistry.MODE_AND,true,false, new ItemStack(Item.appleRed));
+		CombinationRegistry.addCombination(new ItemStack(Item.appleRed),new ItemStack(Item.ingotGold),CombinationRegistry.MODE_AND, new ItemStack(Item.appleGold));
+		CombinationRegistry.addCombination(new ItemStack(Item.carrot),new ItemStack(Item.seeds),CombinationRegistry.MODE_AND, new ItemStack(Item.potato));
+		CombinationRegistry.addCombination(new ItemStack(Item.potato),new ItemStack(Item.seeds),CombinationRegistry.MODE_AND, new ItemStack(Item.carrot));
+		CombinationRegistry.addCombination(new ItemStack(Item.gunpowder),new ItemStack(Block.sand),CombinationRegistry.MODE_AND, new ItemStack(Block.tnt));
+		CombinationRegistry.addCombination(new ItemStack(Item.rottenFlesh),new ItemStack(Item.bucketWater),CombinationRegistry.MODE_OR, new ItemStack(Item.leather));
+		CombinationRegistry.addCombination(new ItemStack(Item.slimeBall),new ItemStack(Item.blazePowder),CombinationRegistry.MODE_AND, new ItemStack(Item.magmaCream));
+		CombinationRegistry.addCombination(new ItemStack(Item.eyeOfEnder),new ItemStack(Item.egg),CombinationRegistry.MODE_AND, new ItemStack(Block.dragonEgg));
+		
 	}
 	
 	public static void registerMinestuckRecipes() {
@@ -425,14 +494,31 @@ public class AlchemyRecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(Minestuck.disk,1,1),new Object[]{ "X X"," Y ","X X",'X',new ItemStack(Minestuck.rawCruxite, 1),'Y',new ItemStack(Item.ingotIron,1)});
 		GameRegistry.addRecipe(new ItemStack(Minestuck.blockComputerOff,1,0),new Object[]{ "XXX","XYX","XXX",'Y',new ItemStack(Minestuck.blockStorage, 1, 0),'X',new ItemStack(Item.ingotIron,1)});
 		GameRegistry.addShapelessRecipe(new ItemStack(Minestuck.rawCruxite, 9),new  ItemStack(Minestuck.blockStorage,1,0)); 
-		
+		GameRegistry.addRecipe(new ItemStack(Minestuck.clawHammer),new Object[]{ " XX","XY "," Y ",'X',new ItemStack(Item.ingotIron),'Y',new ItemStack(Item.stick)});
+		GameRegistry.addRecipe(new ItemStack(Minestuck.component,1,0),new Object[]{ " X "," Y "," Y ",'X',new ItemStack(Item.bowlEmpty),'Y',new ItemStack(Item.stick)});
+		GameRegistry.addRecipe(new ItemStack(Minestuck.component,1,2),new Object[]{ "XYX","YXY","XYX",'X',new ItemStack(Block.stainedClay,1,0),'Y',new ItemStack(Block.stainedClay,1,15)});
+		GameRegistry.addRecipe(new ItemStack(Minestuck.component,1,2),new Object[]{ "XYX","YXY","XYX",'Y',new ItemStack(Block.stainedClay,1,0),'X',new ItemStack(Block.stainedClay,1,15)});
 		
 		//add grist conversions
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.blockStorage, 1, 1), true, new GristSet(new GristType[] {GristType.Build}, new int[] {2}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.cruxiteArtifact,1),false,new GristSet());
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.sledgeHammer), true, new GristSet(new GristType[] {GristType.Build,GristType.Shale}, new int[] {10,2}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.sickle), true, new GristSet(new GristType[] {GristType.Build}, new int[] {10}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.katana), true, new GristSet(new GristType[] {GristType.Build,GristType.Quartz}, new int[] {10,5}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.crockerSpork), true, new GristSet(new GristType[] {GristType.Build,GristType.Iodine,GristType.Chalk,GristType.Ruby}, new int[] {100,48,48,12}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.pogoHammer), true, new GristSet(new GristType[] {GristType.Build,GristType.Shale}, new int[] {20,16}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.regisword), true, new GristSet(new GristType[] {GristType.Build,GristType.Tar,GristType.Gold}, new int[] {64,20,6}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.component,1,1), true, new GristSet(new GristType[] {GristType.Build,GristType.Mercury}, new int[] {3,9}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.component,1,1), true, new GristSet(new GristType[] {GristType.Shale,GristType.Marble}, new int[] {10,20}));
 		
 		//add Designex combinations
-		
+		CombinationRegistry.addCombination(new ItemStack(Item.hoeIron),new ItemStack(Item.wheat),CombinationRegistry.MODE_AND, new ItemStack(Minestuck.sickle));
+		CombinationRegistry.addCombination(new ItemStack(Item.swordIron),new ItemStack(Item.rottenFlesh),CombinationRegistry.MODE_AND, new ItemStack(Minestuck.katana));
+		CombinationRegistry.addCombination(new ItemStack(Minestuck.clawHammer),new ItemStack(Block.brick),CombinationRegistry.MODE_AND, new ItemStack(Minestuck.sledgeHammer));
+		CombinationRegistry.addCombination(new ItemStack(Minestuck.component,1,0),new ItemStack(Item.ingotIron),CombinationRegistry.MODE_AND, new ItemStack(Minestuck.component,1,1));
+		CombinationRegistry.addCombination(new ItemStack(Minestuck.component,1,1),new ItemStack(Item.cake),CombinationRegistry.MODE_AND, new ItemStack(Minestuck.crockerSpork));
+		CombinationRegistry.addCombination(new ItemStack(Item.slimeBall),new ItemStack(Minestuck.sledgeHammer),CombinationRegistry.MODE_AND, new ItemStack(Minestuck.pogoHammer));
+		CombinationRegistry.addCombination(new ItemStack(Item.swordIron),new ItemStack(Minestuck.component,1,2),CombinationRegistry.MODE_AND, new ItemStack(Minestuck.regisword));
 		
 		//register land aspects
 		LandHelper.registerLandAspect(new LandAspectFrost());

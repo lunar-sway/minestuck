@@ -1,18 +1,14 @@
 package com.mraof.minestuck.network;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.INetworkManager;
+
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.Debug;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet250CustomPayload;
-import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 
 public class SburbConnectClosedPacket extends MinestuckPacket {

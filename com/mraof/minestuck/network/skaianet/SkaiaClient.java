@@ -7,14 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.network.packet.Packet250CustomPayload;
-import net.minecraft.server.MinecraftServer;
 
 import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiComputer;
 import com.mraof.minestuck.network.MinestuckPacket;

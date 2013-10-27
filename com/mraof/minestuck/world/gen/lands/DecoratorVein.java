@@ -5,7 +5,6 @@ import java.util.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.ChunkProviderLands;
 
 public class DecoratorVein implements ILandDecorator {
