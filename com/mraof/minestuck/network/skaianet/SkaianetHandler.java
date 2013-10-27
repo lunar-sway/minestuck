@@ -536,10 +536,12 @@ public class SkaianetHandler {
 			if(c == null) {
 				c = new SburbConnection();
 				c.isActive = false;
+				c.isMain = true;
 				c.clientName = player;
 				c.serverName = player;
-			}
-			c.isMain = true;
+				if(Session.registerConnection(c))
+					connections.add(c);
+			} else giveItems(player);
 		}
 		
 		for(SburbConnection sc : connections){	//TEMP Later make it only change the transferred computers instead
