@@ -25,7 +25,9 @@ public class SburbServerController extends PlayerControllerMP {
 	
 	@Override
 	public boolean onPlayerDestroyBlock(int par1, int par2, int par3, int par4) {
-		return super.onPlayerDestroyBlock(par1, par2, par3, par4);
+		int grist = GristHelper.getGrist(Minecraft.getMinecraft().thePlayer, GristType.Build);
+		
+		return grist != 0 && super.onPlayerDestroyBlock(par1, par2, par3, par4);
 	}
 	
 	@Override

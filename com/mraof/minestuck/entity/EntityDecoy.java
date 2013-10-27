@@ -128,7 +128,7 @@ public class EntityDecoy extends EntityLiving {
 			return;
 		}
 		super.onUpdate();
-//		foodStats.onUpdate(this);
+		foodStats.onUpdate(player);
 		if(worldObj.isRemote && !init ){
 			username = this.dataWatcher.getWatchableObjectString(DATAWATCHER_ID_START);
 			this.rotationYawHead = this.dataWatcher.getWatchableObjectFloat(DATAWATCHER_ID_START+1);
@@ -218,6 +218,7 @@ public class EntityDecoy extends EntityLiving {
 		
 		DecoyPlayer(World par1World, EntityDecoy decoy) {
 			super(par1World, "");
+			this.decoy = decoy;
 			this.setHealth(decoy.getHealth());
 		}
 

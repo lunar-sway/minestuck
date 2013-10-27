@@ -13,10 +13,12 @@ import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -50,22 +52,26 @@ public class EditHandler {
 	}
 	
 	public static void onClientPackage(boolean mode) {
+		Minecraft mc = Minecraft.getMinecraft();
+		EntityClientPlayerMP player = mc.thePlayer;
 		if(mode) {	//Enable edit mode
 			if(controller == null) {
-				controller = Minecraft.getMinecraft().playerController;
-				Minecraft.getMinecraft().playerController = new SburbServerController(Minecraft.getMinecraft(), Minecraft.getMinecraft().getNetHandler());
+				controller = mc.playerController;
+				mc.playerController = new SburbServerController(mc, mc.getNetHandler());
 			}
 			if(capabilities == null) {
 				capabilities = new NBTTagCompound();
-				Minecraft.getMinecraft().thePlayer.capabilities.writeCapabilitiesToNBT(capabilities);
+				player.capabilities.writeCapabilitiesToNBT(capabilities);
 			}
 		} else {	//Disable edit mode
 			if(controller != null) {
-				Minecraft.getMinecraft().playerController = controller;
+				mc.playerController = controller;
 				controller = null;
 			}
 			if(capabilities != null) {
-				Minecraft.getMinecraft().thePlayer.capabilities.readCapabilitiesFromNBT(capabilities);
+				player.capabilities.readCapabilitiesFromNBT(capabilities);
+				player.capabilities.allowFlying = mc.playerController.isInCreativeMode();
+				player.capabilities.isFlying = player.capabilities.isFlying && player.capabilities.allowFlying;
 				capabilities = null;
 			}
 		}
