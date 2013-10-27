@@ -368,7 +368,6 @@ public class SkaianetHandler {
 				}
 			}
 		}
-		checkData();
 		Session.serverStarted();
 	}
 	
@@ -526,16 +525,28 @@ public class SkaianetHandler {
 	
 	public static void enterMedium(String player, int dimensionId) {
 		SburbConnection c = getConnection(player, getAssociatedPartner(player, true));
-		if(c != null){
-			c.enteredGame = true;
-			for(SburbConnection sc : connections){	//TEMP Later make it only change the transferred computers instead
-				if(sc.client != null && sc.client.owner.equals(player))
-					sc.client.dimension = dimensionId;
-				if(sc.server != null && sc.server.owner.equals(player))
-					sc.server.dimension = dimensionId;
-			}
-			updateAll();
+		if(c == null) {
+			c = getClientConnection(player);
+			if(c == null) {
+				c = new SburbConnection();
+				c.isActive = false;
+				c.isMain = true;
+				c.clientName = player;
+				c.serverName = player;
+				if(Session.registerConnection(c))
+					connections.add(c);
+			} else giveItems(player);
 		}
+		
+		for(SburbConnection sc : connections){	//TEMP Later make it only change the transferred computers instead
+			if(sc.client != null && sc.client.owner.equals(player))
+				sc.client.dimension = dimensionId;
+			if(sc.server != null && sc.server.owner.equals(player))
+				sc.server.dimension = dimensionId;
+		}
+		
+		c.enteredGame = true;
+		updateAll();
 	}
 	
 }

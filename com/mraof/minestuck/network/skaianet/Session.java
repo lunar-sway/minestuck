@@ -110,7 +110,7 @@ public class Session {
 		if(!canJoin(c.getClientName(), c.getServerName()))
 			return false;
 		
-		Session cs = getPlayerSession(c.getClientName()), ss = getPlayerSession(c.getClientName());
+		Session cs = getPlayerSession(c.getClientName()), ss = getPlayerSession(c.getServerName());
 		
 		if(cs != null && ss != null && cs != ss){
 			cs.connections.add(c);

@@ -21,6 +21,10 @@ import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 
+import codechicken.nei.api.API;
+import codechicken.nei.api.IConfigureNEI;
+import codechicken.nei.asm.NEIModContainer;
+
 import com.mraof.minestuck.block.BlockChessTile;
 import com.mraof.minestuck.block.BlockComputerOff;
 import com.mraof.minestuck.block.BlockComputerOn;
@@ -66,6 +70,8 @@ import com.mraof.minestuck.item.ItemMachine;
 import com.mraof.minestuck.item.ItemSickle;
 import com.mraof.minestuck.item.ItemSpork;
 import com.mraof.minestuck.item.ItemStorageBlock;
+import com.mraof.minestuck.nei.AlchemiterHandler;
+import com.mraof.minestuck.nei.NEIMinestuckConfig;
 import com.mraof.minestuck.network.MinestuckConnectionHandler;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
 import com.mraof.minestuck.network.skaianet.Session;
@@ -84,6 +90,7 @@ import com.mraof.minestuck.world.gen.structure.StructureCastlePieces;
 import com.mraof.minestuck.world.gen.structure.StructureCastleStart;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -470,6 +477,11 @@ public class Minestuck
 	{
 		MinecraftForge.EVENT_BUS.register(new MinestuckSaveHandler());
 		AlchemyRecipeHandler.registerDynamicRecipes();
+		
+		//register NEI stuff
+		if (Loader.isModLoaded("NotEnoughItems")) {
+			NEIModContainer.plugins.add(new NEIMinestuckConfig());
+		}
 	}
 	//registers entity with forge and minecraft, and increases currentEntityIdOffset by one in order to prevent id collision
 	public void registerAndMapEntity(Class entityClass, String name, int eggColor, int eggSpotColor)
@@ -496,7 +508,7 @@ public class Minestuck
 				while((currentByte = dataInputStream.read()) != -1)
 				{
 					MinestuckSaveHandler.lands.add((byte)currentByte);
-					Debug.printf("Found land dimension id of: %d", currentByte);
+					//Debug.printf("Found land dimension id of: %d", currentByte);
 					if(!DimensionManager.isDimensionRegistered(currentByte))
 						DimensionManager.registerDimension(currentByte, Minestuck.landProviderTypeId);
 				}
@@ -506,5 +518,6 @@ public class Minestuck
 			}
 		}
 		SkaianetHandler.loadData(event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("connectionList"),event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("waitingConnections"));
+	
 	}
 }

@@ -39,4 +39,8 @@ public class GristRegistry {
 			return (GristSet) gristRecipes.get(Arrays.asList(item.itemID,item.getItemDamage(),true));
 		}
 	}
+	
+	public static Hashtable getAllConversions() {
+		return gristRecipes;
+	}
 }

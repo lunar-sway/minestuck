@@ -45,7 +45,7 @@ public class LandRegisterPacket extends MinestuckPacket
 		for(byte dimensionId : landDimensions)
 		{
 			MinestuckSaveHandler.lands.add((byte)dimensionId);
-			Debug.print(dimensionId);
+			//Debug.print(dimensionId);
 			if(!DimensionManager.isDimensionRegistered(dimensionId))
 				DimensionManager.registerDimension(dimensionId, Minestuck.landProviderTypeId);
 		}
