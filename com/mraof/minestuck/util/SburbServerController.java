@@ -1,5 +1,7 @@
 package com.mraof.minestuck.util;
 
+import com.mraof.minestuck.grist.GristHelper;
+import com.mraof.minestuck.grist.GristType;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;

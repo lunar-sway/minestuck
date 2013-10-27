@@ -1,4 +1,4 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.grist;
 
 public enum GristType {
 	Amber("Amber",0.5F), 

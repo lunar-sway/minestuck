@@ -14,6 +14,8 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.Achievement;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
@@ -43,6 +45,8 @@ import com.mraof.minestuck.entity.underling.EntityBasilisk;
 import com.mraof.minestuck.entity.underling.EntityGiclops;
 import com.mraof.minestuck.entity.underling.EntityImp;
 import com.mraof.minestuck.entity.underling.EntityOgre;
+import com.mraof.minestuck.grist.GristStorage;
+import com.mraof.minestuck.grist.GristType;
 import com.mraof.minestuck.item.EnumBladeType;
 import com.mraof.minestuck.item.EnumCaneType;
 import com.mraof.minestuck.item.EnumClubType;
@@ -77,7 +81,6 @@ import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.WorldProviderSkaia;
 import com.mraof.minestuck.world.gen.OreHandler;
@@ -507,5 +510,18 @@ public class Minestuck
 			}
 		}
 		SkaianetHandler.loadData(event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("connectionList"),event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("waitingConnections"));
+		
+		File gristcache = event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("gristCache");
+		if(gristcache.exists()) {
+			NBTTagCompound nbt = null;
+			try{
+				nbt = CompressedStreamTools.readCompressed(new FileInputStream(gristcache));
+			} catch(IOException e){
+				e.printStackTrace();
+			}
+			
+			GristStorage.readFromNBT(nbt);
+			
+		}
 	}
 }

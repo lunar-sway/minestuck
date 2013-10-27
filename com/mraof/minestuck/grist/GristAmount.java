@@ -1,4 +1,5 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.grist;
+
 
 public class GristAmount {
 	private GristType type;

@@ -1,5 +1,8 @@
 package com.mraof.minestuck.util;
 
+import com.mraof.minestuck.grist.GristHelper;
+import com.mraof.minestuck.grist.GristRegistry;
+import com.mraof.minestuck.grist.GristType;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -32,7 +35,7 @@ public class SburbServerManager extends ItemInWorldManager{
 			new MinestuckPlayerTracker().updateGristCache(entityPlayer);
 			return true;
 		}
-		return super.activateBlockOrUseItem(entityPlayer, world, stack, par4, par5, par6, par7, par8, par9, par10);
+		return false;
 	}
 	
 	@Override

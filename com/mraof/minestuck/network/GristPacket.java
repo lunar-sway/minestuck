@@ -7,7 +7,7 @@ import net.minecraft.network.INetworkManager;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import com.mraof.minestuck.util.GristType;
+import com.mraof.minestuck.grist.GristType;
 
 import cpw.mods.fml.common.network.Player;
 

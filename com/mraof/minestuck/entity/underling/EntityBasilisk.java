@@ -6,9 +6,9 @@ import net.minecraft.world.World;
 
 import com.mraof.minestuck.entity.IEntityMultiPart;
 import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
-import com.mraof.minestuck.util.GristHelper;
-import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.GristType;
+import com.mraof.minestuck.grist.GristHelper;
+import com.mraof.minestuck.grist.GristSet;
+import com.mraof.minestuck.grist.GristType;
 
 public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart 
 {

@@ -13,10 +13,10 @@ import net.minecraft.world.World;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+import com.mraof.minestuck.grist.GristAmount;
+import com.mraof.minestuck.grist.GristType;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
-import com.mraof.minestuck.util.GristAmount;
-import com.mraof.minestuck.util.GristType;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;

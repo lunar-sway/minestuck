@@ -1,8 +1,9 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.grist;
 
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+
 
 public class GristSet {
 	

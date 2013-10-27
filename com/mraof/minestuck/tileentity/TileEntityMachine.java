@@ -15,12 +15,12 @@ import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.grist.GristHelper;
+import com.mraof.minestuck.grist.GristRegistry;
+import com.mraof.minestuck.grist.GristSet;
+import com.mraof.minestuck.grist.GristType;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.CombinationRegistry;
-import com.mraof.minestuck.util.GristHelper;
-import com.mraof.minestuck.util.GristRegistry;
-import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.GristType;
 
 public class TileEntityMachine extends TileEntity implements IInventory {
 

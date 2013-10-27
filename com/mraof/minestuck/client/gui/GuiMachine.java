@@ -17,14 +17,14 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import com.mraof.minestuck.grist.GristRegistry;
+import com.mraof.minestuck.grist.GristSet;
+import com.mraof.minestuck.grist.GristType;
 import com.mraof.minestuck.inventory.ContainerMachine;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.GristRegistry;
-import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.GristType;
 
 public class GuiMachine extends GuiContainer {
 	

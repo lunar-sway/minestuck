@@ -1,7 +1,8 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.grist;
 
 import java.util.Arrays;
 import java.util.Hashtable;
+
 
 import net.minecraft.item.ItemStack;
 

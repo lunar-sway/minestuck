@@ -18,6 +18,9 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.grist.GristRegistry;
+import com.mraof.minestuck.grist.GristSet;
+import com.mraof.minestuck.grist.GristType;
 import com.mraof.minestuck.world.gen.lands.LandAspectFrost;
 import com.mraof.minestuck.world.gen.lands.LandAspectHeat;
 import com.mraof.minestuck.world.gen.lands.LandHelper;

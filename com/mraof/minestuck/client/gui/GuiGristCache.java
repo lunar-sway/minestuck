@@ -14,7 +14,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import com.mraof.minestuck.util.GristType;
+import com.mraof.minestuck.grist.GristType;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.util.TitleHelper;
 

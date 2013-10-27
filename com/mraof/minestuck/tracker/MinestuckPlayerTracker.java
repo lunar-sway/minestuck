@@ -5,11 +5,13 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
 
+import com.mraof.minestuck.grist.GristSet;
+import com.mraof.minestuck.grist.GristStorage;
+import com.mraof.minestuck.grist.GristType;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.EditHandler;
-import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.util.TitleHelper;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
@@ -25,11 +27,9 @@ public class MinestuckPlayerTracker implements IPlayerTracker
 	@Override
 	public void onPlayerLogin(EntityPlayer player) 
 	{
-		if(!player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).hasKey("Grist")){
-			NBTTagCompound nbt = new NBTTagCompound("Grist");
-			nbt.setInteger(GristType.Build.getName(), 20);	//20 starting build grist
-			player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setCompoundTag("Grist", nbt);
-		}
+		if(GristStorage.getGrist(player.username) == null)
+			GristStorage.setGrist(player.username, new GristSet(GristType.Build, 20));
+		
 		updateGristCache(player);
 		updateTitle(player);
 		updateLands(player);
