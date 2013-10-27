@@ -18,6 +18,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
@@ -25,6 +26,9 @@ import net.minecraft.util.FoodStats;
 public class EditHandler {
 	
 	//Client sided stuff
+	static NBTTagCompound capabilities;
+	
+	
 	
 	public static void activate(String username, String target) {
 		Minecraft mc = Minecraft.getMinecraft();
@@ -45,9 +49,15 @@ public class EditHandler {
 	
 	public static void onClientPackage(boolean mode) {
 		if(mode) {	//Enable edit mode
-			
+			if(capabilities == null) {
+				capabilities = new NBTTagCompound();
+				Minecraft.getMinecraft().thePlayer.capabilities.writeCapabilitiesToNBT(capabilities);
+			}
 		} else {	//Disable edit mode
-			
+			if(capabilities != null) {
+				Minecraft.getMinecraft().thePlayer.capabilities.readCapabilitiesFromNBT(capabilities);
+				capabilities = null;
+			}
 		}
 	}
 	
@@ -88,9 +98,11 @@ public class EditHandler {
 		player.playerNetServerHandler.setPlayerLocation(decoy.posX, decoy.posY, decoy.posZ, decoy.rotationYaw, decoy.rotationPitch);
 		if(!player.theItemInWorldManager.getGameType().equals(decoy.gameType))
 			player.setGameType(decoy.gameType);
+		player.capabilities.readCapabilitiesFromNBT(decoy.capabilities);
 		player.setHealth(decoy.getHealth());
-//		player.getFoodStats().setFoodLevel(decoy.getFoodStats().getFoodLevel());
-//		player.getFoodStats().setFoodSaturationLevel(decoy.getFoodStats().getSaturationLevel());
+		NBTTagCompound nbt = new NBTTagCompound();
+		decoy.foodStats.writeNBT(nbt);
+		player.getFoodStats().readNBT(nbt);
 		decoy.setDead();
 		Packet250CustomPayload packet = new Packet250CustomPayload();
 		packet.channel = "Minestuck";

@@ -6,7 +6,9 @@ import com.mraof.minestuck.util.EditHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -22,29 +24,37 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.EnumGameType;
 import net.minecraft.world.World;
 
-public class EntityDecoy extends EntityLivingBase {
+public class EntityDecoy extends EntityLiving {
 	
-	final static int USERNAME_OBJECT_ID = 22;
+	final static int DATAWATCHER_ID_START = 22;
+	
+	public boolean isFlying;
+	public EnumGameType gameType;
+	public String username;
+	public FoodStats foodStats = new FoodStats();
+	public NBTTagCompound capabilities = new NBTTagCompound();
 	
 	boolean markedForDespawn;
 	boolean init;
-	FoodStats foodStats = new FoodStats();
+	double originX, originY, originZ;
+	DecoyPlayer player;
 	
-	public EnumGameType gameType;
-	public String username;
 	ResourceLocation locationSkin;
 	ResourceLocation locationCape;
 	ThreadDownloadImageData downloadImageSkin;
 	ThreadDownloadImageData downloadImageCape;
-	double originX, originY, originZ;
+	InventoryPlayer inventory;
 	
 	public EntityDecoy(World world){
 		super(world);
+		player = new DecoyPlayer(world, this);
+		inventory = new InventoryPlayer(player);
 	}
 	
 	public EntityDecoy(World world, EntityPlayerMP player) {
 		super(world);
 		this.boundingBox.setBB(player.boundingBox);
+		this.player = new DecoyPlayer(world, this);
 		this.posX = player.posX;
 		originX = posX;
 		this.chunkCoordX = player.chunkCoordX;
@@ -58,23 +68,29 @@ public class EntityDecoy extends EntityLivingBase {
 		this.rotationYaw = player.rotationYaw;
 		this.rotationYawHead = player.rotationYawHead;
 		this.renderYawOffset = player.renderYawOffset;
-//		this.inventory.copyInventory(player.inventory);
+		inventory = new InventoryPlayer(this.player);
+		this.inventory.copyInventory(player.inventory);
 		this.getHeldItem();
 		this.gameType = player.theItemInWorldManager.getGameType();
 		this.setHealth(player.getHealth());
 		username = player.username;
-//		this.capabilities.isFlying = player.capabilities.isFlying;
-		this.foodStats.setFoodLevel(player.getFoodStats().getFoodLevel());
-		this.foodStats.setFoodSaturationLevel(player.getFoodStats().getSaturationLevel());
-		this.dataWatcher.updateObject(USERNAME_OBJECT_ID, username);
-		this.dataWatcher.updateObject(USERNAME_OBJECT_ID+1, this.rotationYawHead);	//Due to rotationYawHead didn't update correctly
+		isFlying = player.capabilities.isFlying;
+		player.capabilities.writeCapabilitiesToNBT(this.capabilities);
+		NBTTagCompound nbt = new NBTTagCompound();
+		player.getFoodStats().writeNBT(nbt);
+		foodStats.readNBT(nbt);	//Exact copy of food stack
+		foodStats.setFoodSaturationLevel(player.getFoodStats().getSaturationLevel());
+		dataWatcher.updateObject(DATAWATCHER_ID_START, username);
+		dataWatcher.updateObject(DATAWATCHER_ID_START+1, this.rotationYawHead);	//Due to rotationYawHead didn't update correctly
+		dataWatcher.updateObject(DATAWATCHER_ID_START+2, (byte) (isFlying?1:0));
 	}
 	
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		this.dataWatcher.addObject(USERNAME_OBJECT_ID, "");
-		this.dataWatcher.addObject(USERNAME_OBJECT_ID+1, 0F);
+		this.dataWatcher.addObject(DATAWATCHER_ID_START, "");
+		this.dataWatcher.addObject(DATAWATCHER_ID_START+1, 0F);
+		dataWatcher.addObject(DATAWATCHER_ID_START+2, (byte)0);
 	}
 	
 	protected void setupCustomSkin() {	//Just copied from the AbstractClientPlayer, but with a non-final username string.
@@ -113,18 +129,22 @@ public class EntityDecoy extends EntityLivingBase {
 		super.onUpdate();
 //		foodStats.onUpdate(this);
 		if(worldObj.isRemote && !init ){
-			username = this.dataWatcher.getWatchableObjectString(USERNAME_OBJECT_ID);
-			this.rotationYawHead = this.dataWatcher.getWatchableObjectFloat(USERNAME_OBJECT_ID+1);
-			prevRotationYawHead = this.rotationYawHead;
+			username = this.dataWatcher.getWatchableObjectString(DATAWATCHER_ID_START);
+			this.rotationYawHead = this.dataWatcher.getWatchableObjectFloat(DATAWATCHER_ID_START+1);
+			prevRotationYawHead = rotationYawHead;
 			this.rotationYaw = rotationYawHead;	//I don't know how much of this that is necessary
 			prevRotationYaw = rotationYaw;
 			renderYawOffset = rotationYaw;
+			isFlying = dataWatcher.getWatchableObjectByte(DATAWATCHER_ID_START+2) != 0;
 			setupCustomSkin();
 			init = true;
 		}
+		rotationYawHead = prevRotationYawHead;	//Neutralize the effect of the LookHelper
 		rotationYaw = prevRotationYaw;
-		rotationYawHead = prevRotationYawHead;
 		rotationPitch = prevRotationPitch;
+		
+		if(isFlying)
+			posY = prevPosY;
 		
 		if(!worldObj.isRemote) {
 			if(this.locationChanged())
@@ -162,20 +182,58 @@ public class EntityDecoy extends EntityLivingBase {
 	
 	@Override
 	public ItemStack getHeldItem() {
-		return null;
+		return getCurrentItemOrArmor(0);
 	}
 
 	@Override
 	public ItemStack getCurrentItemOrArmor(int i) {
-		return null;
+		if(i == 0)
+			return inventory.mainInventory[inventory.currentItem];
+		else return inventory.armorInventory[i-1];
 	}
 
 	@Override
-	public void setCurrentItemOrArmor(int i, ItemStack itemstack) {}
-
+	public void setCurrentItemOrArmor(int i, ItemStack itemstack) {
+		if(i == 0)
+			inventory.mainInventory[inventory.currentItem] = itemstack;
+		else inventory.armorInventory[i-1] = itemstack;
+	}
+	
+	@Override
+	public void setHealth(float par1) {
+		if(player != null)
+			player.setHealth(par1);
+		super.setHealth(par1);
+	}
+	
 	@Override
 	public ItemStack[] getLastActiveItems() {
-		return new ItemStack[0];
+		return inventory.armorInventory;
+	}
+	
+	private static class DecoyPlayer extends EntityPlayer {	//Never spawned into the world. Only used for the InventoryPlayer and FoodStats.
+		
+		EntityDecoy decoy;
+		
+		DecoyPlayer(World par1World, EntityDecoy decoy) {
+			super(par1World, "");
+			this.setHealth(decoy.getHealth());
+		}
+
+		@Override
+		public void sendChatToPlayer(ChatMessageComponent chatmessagecomponent) {}
+
+		@Override
+		public boolean canCommandSenderUseCommand(int i, String s) {return false;}
+
+		@Override
+		public ChunkCoordinates getPlayerCoordinates() {return null;}
+		
+		@Override
+		public void heal(float par1) {
+			decoy.heal(par1);
+		}
+		
 	}
 	
 }
