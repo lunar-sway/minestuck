@@ -10,20 +10,19 @@ public class NEIMinestuckConfig implements IConfigureNEI {
 
 	@Override
 	public void loadConfig() {
-		// TODO Auto-generated method stub
 		API.registerRecipeHandler(new AlchemiterHandler());
 		
+		API.registerRecipeHandler(new DesignexHandler());
+		API.registerUsageHandler(new DesignexHandler());
 	}
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
 		return "Minestuck";
 	}
 
 	@Override
 	public String getVersion() {
-		// TODO Auto-generated method stub
 		return "1.0";
 	}
 

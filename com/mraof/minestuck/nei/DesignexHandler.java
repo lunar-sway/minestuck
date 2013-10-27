@@ -3,6 +3,7 @@ package com.mraof.minestuck.nei;
 import static codechicken.core.gui.GuiDraw.changeTexture;
 import static codechicken.core.gui.GuiDraw.drawTexturedModalRect;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.Set;
 import org.lwjgl.opengl.GL11;
 
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.util.CombinationRegistry;
 import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
@@ -27,98 +29,98 @@ import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 import codechicken.nei.recipe.TemplateRecipeHandler.CachedRecipe;
 
-public class AlchemiterHandler extends TemplateRecipeHandler {
+public class DesignexHandler extends TemplateRecipeHandler {
 
-	class CachedAlchemiterRecipe extends CachedRecipe {
+	class CachedDesignexRecipe extends CachedRecipe {
 
-		private ItemStack item;
-		public CachedAlchemiterRecipe(ItemStack input) {
-			this.item = input;
+		private ItemStack input1;
+		private ItemStack input2;
+		private boolean mode;
+		private ItemStack output;
+		public CachedDesignexRecipe(ItemStack input1,ItemStack input2,boolean mode,ItemStack output) {
+			this.input1 = input1;
+			this.input2 = input2;
+			this.mode = mode;
+			this.output = output;
 		}
 		
 		@Override
 		public PositionedStack getResult() {
-			return new PositionedStack(item,130,9);
+			return new PositionedStack(output,129,26);
 		}
 		
-		
+		@Override
+	       public List<PositionedStack> getIngredients()
+	        {
+				ArrayList<PositionedStack> stacks = new ArrayList<PositionedStack>();
+				stacks.add(new PositionedStack(input1,57,15));
+				stacks.add(new PositionedStack(input2,57,39));
+				return stacks;
+	        }
 	}
 
 	private GuiDraw fontRenderer = new GuiDraw();
 		
 	@Override
 	public String getRecipeName() {
-		return "Alchemiter";
+		return "Punch Designex";
 	}
 
 	@Override
 	public String getGuiTexture() {
-		return "minestuck:textures/gui/alchemiter.png";
+		return "minestuck:textures/gui/designex.png";
 	}
 	
 	@Override
 	public void loadCraftingRecipes(ItemStack result){
-//		for (Object item : GristRegistry.getAllConversions().entrySet()) {
-//			Map.Entry entry = (Map.Entry)item;
-//			List itemData = (List)entry.getKey();
-//			int id = (Integer)itemData.get(0);
-//			int meta = (Integer)itemData.get(1);
-//			arecipes.add(new CachedAlchemiterRecipe(new ItemStack(id,1,meta)));
-//		}
-		
-		if (GristRegistry.getGristConversion(result) != null) {
-			arecipes.add(new CachedAlchemiterRecipe(result));
+		for (Object item : CombinationRegistry.getAllConversions().entrySet()) {
+			Map.Entry entry = (Map.Entry)item;
+			List itemData = (List)entry.getKey();
+			int id1 = (Integer)itemData.get(0);
+			int meta1 = (Integer)itemData.get(1);
+			int id2 = (Integer)itemData.get(2);
+			int meta2 = (Integer)itemData.get(3);
+			boolean mode = (Boolean)itemData.get(4);
+			if (result.itemID == ((ItemStack)entry.getValue()).itemID && result.getItemDamage() == ((ItemStack)entry.getValue()).getItemDamage()) {
+				arecipes.add(new CachedDesignexRecipe(new ItemStack(id1,1,meta1),new ItemStack(id2,1,meta2),mode,(ItemStack)entry.getValue()));
+			}
 		}
 	}
+	
+	@Override
+	public void loadUsageRecipes(String inputId, Object... ingredients)
+    {
+		for (Object item : CombinationRegistry.getAllConversions().entrySet()) {
+			Map.Entry entry = (Map.Entry)item;
+			List itemData = (List)entry.getKey();
+			int id1 = (Integer)itemData.get(0);
+			int meta1 = (Integer)itemData.get(1);
+			int id2 = (Integer)itemData.get(2);
+			int meta2 = (Integer)itemData.get(3);
+			boolean mode = (Boolean)itemData.get(4);
+			ItemStack search1 = (ItemStack)ingredients[0];
+			//ItemStack search2 = (ItemStack)ingredients[1];
+			if ((search1.itemID == id1 && search1.getItemDamage() == meta1) || (search1.itemID == id2 && search1.getItemDamage() == meta2)) {
+				arecipes.add(new CachedDesignexRecipe(new ItemStack(id1,1,meta1),new ItemStack(id2,1,meta2),mode,(ItemStack)entry.getValue()));
+			}
+		}
+    }
 	
     @Override
     public void drawExtras(int recipe)
     {
+    	CachedDesignexRecipe crecipe = (CachedDesignexRecipe) arecipes.get(recipe);
     	
     	//render progress bar
-    	changeTexture("minestuck:textures/gui/progress/alchemiter.png");
-        drawProgressBar(49, 12, 0, 0, 71, 10, 50, 0);
+    	changeTexture("minestuck:textures/gui/progress/designex.png");
+        drawProgressBar(77, 27, 0, 0, 42, 17, 50, 0);
     	
-    	//render carved dowel
-    	changeTexture("minestuck:textures/items/CruxiteCarved.png");
-    	drawTexturedModalRect(22, 9, 0, 0, 16, 16,16,16);
-    	
-    	//Render grist requirements
-    	ItemStack result = arecipes.get(recipe).getResult().item;
-    	GristSet set = GristRegistry.getGristConversion(result);
-    	
-    	if (set == null) {fontRenderer.drawString("Not Alchemizable", 4,34, 16711680); return;}
-    	Hashtable reqs = set.getHashtable();
-    	//Debug.print("reqs: " + reqs.size());
-    	if (reqs != null) {
-    		if (reqs.size() == 0) {
-    			fontRenderer.drawString("Free!", 4,34, 65280);
-    			return;
-    		}
-    	   	Iterator it = reqs.entrySet().iterator();
-    	   	int place = 0;
-            while (it.hasNext()) {
-                Map.Entry pairs = (Map.Entry)it.next();
-                int type = (Integer) pairs.getKey();
-                int need = (Integer) pairs.getValue();
-                int have =  Minecraft.getMinecraft().thePlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(GristType.values()[type].getName());
-                
-                int row = place % 3;
-                int col = place / 3;
-                
-                int color = need <= have ? 65280 : 16711680; //Green if we have enough grist, red if not
-                
-                fontRenderer.drawString(need + " " + GristType.values()[type].getName() + " (" + have + ")", 4 + (80 * col),34 + (8 * (row)), color);
-                
-                place++;
-                
-                //Debug.print("Need" + need + ". Have " + have);
-            }
-    	} else {
-    		fontRenderer.drawString("Not Alchemizable", 4,34, 16711680);
-    		return;
-    	}
+    	//render blank card
+    	changeTexture("minestuck:textures/items/CardBlank.png");
+    	drawTexturedModalRect(21, 39, 0, 0, 16, 16,16,16);
 
+    	//render combo mode
+    	fontRenderer.drawString(crecipe.mode ? "&&" : "||", 22,18, 0);
     }
     
     
