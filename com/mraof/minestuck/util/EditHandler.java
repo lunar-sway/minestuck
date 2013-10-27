@@ -1,6 +1,8 @@
 package com.mraof.minestuck.util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -28,7 +30,7 @@ public class EditHandler {
 	//Client sided stuff
 	static NBTTagCompound capabilities;
 	
-	
+	static PlayerControllerMP controller;
 	
 	public static void activate(String username, String target) {
 		Minecraft mc = Minecraft.getMinecraft();
@@ -49,11 +51,19 @@ public class EditHandler {
 	
 	public static void onClientPackage(boolean mode) {
 		if(mode) {	//Enable edit mode
+			if(controller == null) {
+				controller = Minecraft.getMinecraft().playerController;
+				Minecraft.getMinecraft().playerController = new SburbServerController(Minecraft.getMinecraft(), Minecraft.getMinecraft().getNetHandler());
+			}
 			if(capabilities == null) {
 				capabilities = new NBTTagCompound();
 				Minecraft.getMinecraft().thePlayer.capabilities.writeCapabilitiesToNBT(capabilities);
 			}
 		} else {	//Disable edit mode
+			if(controller != null) {
+				Minecraft.getMinecraft().playerController = controller;
+				controller = null;
+			}
 			if(capabilities != null) {
 				Minecraft.getMinecraft().thePlayer.capabilities.readCapabilitiesFromNBT(capabilities);
 				capabilities = null;
@@ -63,7 +73,7 @@ public class EditHandler {
 	
 	//Server sided stuff
 	
-	static Map<String,EntityDecoy> map = new HashMap();
+	static List<EditData> list = new ArrayList();
 	
 	/**
 	 * Called both when any player logged out and when a player pressed the exit button.
@@ -71,8 +81,7 @@ public class EditHandler {
 	 */
 	public static void onPlayerExit(EntityPlayer player) {
 		if(!player.worldObj.isRemote) {
-			EntityDecoy decoy = getPlayerEntry(player.username) == null?null:getPlayerEntry(player.username).getValue();
-			if(decoy != null) reset(null, 0, decoy, (EntityPlayerMP)player);
+			reset(null, 0, getData(player.username));
 		}
 	}
 	
@@ -83,32 +92,34 @@ public class EditHandler {
 	 * @param decoy The decoy entity used.
 	 * @param player The player.
 	 */
-	public static void reset(DamageSource damageSource, float damage, EntityDecoy decoy, EntityPlayerMP player) {
-		if(player == null) {
-			Debug.print("Player is null! Can't reset the player's stats!");
-			decoy.setDead();
+	public static void reset(DamageSource damageSource, float damage, EditData data) {
+		if(data == null) {
 			return;
 		}
-		
-		Entry<String, EntityDecoy> entry = getPlayerEntry(decoy.username);
-		if(entry != null)
-			map.remove(entry.getKey());
+		EntityPlayerMP player = data.player;
+		EntityDecoy decoy = data.decoy;
 		if(player.dimension != decoy.dimension)
 			player.travelToDimension(decoy.dimension);
 		player.playerNetServerHandler.setPlayerLocation(decoy.posX, decoy.posY, decoy.posZ, decoy.rotationYaw, decoy.rotationPitch);
 		if(!player.theItemInWorldManager.getGameType().equals(decoy.gameType))
 			player.setGameType(decoy.gameType);
 		player.capabilities.readCapabilitiesFromNBT(decoy.capabilities);
+		player.sendPlayerAbilities();
 		player.setHealth(decoy.getHealth());
 		NBTTagCompound nbt = new NBTTagCompound();
 		decoy.foodStats.writeNBT(nbt);
 		player.getFoodStats().readNBT(nbt);
+		player.theItemInWorldManager = data.manager;
+		
 		decoy.setDead();
+		list.remove(data);
+		
 		Packet250CustomPayload packet = new Packet250CustomPayload();
 		packet.channel = "Minestuck";
 		packet.data = MinestuckPacket.makePacket(Type.SBURB_EDIT, false);
 		packet.length = packet.data.length;
 		player.playerNetServerHandler.sendPacketToPlayer(packet);
+		
 		if(damageSource != null && damageSource.getSourceOfDamage() != player)
 			player.attackEntityFrom(damageSource, damage);
 	}
@@ -118,13 +129,13 @@ public class EditHandler {
 			return;	//Don't want to bother making the decoy able to ride anything right now.
 		SburbConnection c = SkaianetHandler.getClientConnection(computerTarget);
 		Debug.print("Adding new decoy..");
-		if(c != null && c.getServerName().equals(computerOwner) && !map.containsKey(c) && getPlayerEntry(player.username) == null) {
+		if(c != null && c.getServerName().equals(computerOwner) && getData(c) == null && getData(player.username) == null) {
 			EntityDecoy decoy = new EntityDecoy(player.worldObj, player);
+			EditData data = new EditData(decoy, player, c);
 			if(!setPlayerStats(player, c))
 				return;
 			decoy.worldObj.spawnEntityInWorld(decoy);
-			decoy.worldObj.playerEntities.remove(decoy);
-			map.put(c.getClientName(), decoy);
+			list.add(data);
 			Packet250CustomPayload packet = new Packet250CustomPayload();
 			packet.channel = "Minestuck";
 			packet.data = MinestuckPacket.makePacket(Type.SBURB_EDIT, true);
@@ -134,18 +145,34 @@ public class EditHandler {
 	}
 	
 	static boolean setPlayerStats(EntityPlayerMP player, SburbConnection c) {
+		SburbServerManager manager = new SburbServerManager(player.worldObj, player);
+		player.theItemInWorldManager = manager;
 		//TODO Teleport the server player to the correct position at the client land/overworld position.
 		return true;
 	}
 	
-	public static void onDisconnect(String client, String server) {
-		
+	public static void onDisconnect(SburbConnection c) {
+		reset(null, 0, getData(c));
 	}
 	
-	public static Entry<String, EntityDecoy> getPlayerEntry(String player) {
-		for(Entry<String, EntityDecoy> entry : map.entrySet())
-			if(entry.getValue().username.equals(player))
-				return entry;
+	public static EditData getData(String editor) {
+		for(EditData data : list)
+			if(data.player.username == editor)
+				return data;
+		return null;
+	}
+	
+	public static EditData getData(SburbConnection c) {
+		for(EditData data : list)
+			if(data.connection == c)
+				return data;
+		return null;
+	}
+	
+	public static EditData getData(EntityDecoy decoy) {
+		for(EditData data : list)
+			if(data.decoy == decoy)
+				return data;
 		return null;
 	}
 	

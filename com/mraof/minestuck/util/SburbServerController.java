@@ -16,13 +16,17 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.EnumGameType;
 import net.minecraft.world.World;
 
-public class SburbServerController extends PlayerControllerMP{
+public class SburbServerController extends PlayerControllerMP {
 	
 	public SburbServerController(Minecraft mc, NetClientHandler netHandler) {
 		super(mc, netHandler);
 		this.setGameType(EnumGameType.CREATIVE);
 	}
 	
+	@Override
+	public boolean onPlayerDestroyBlock(int par1, int par2, int par3, int par4) {
+		return super.onPlayerDestroyBlock(par1, par2, par3, par4);
+	}
 	
 	@Override
 	public void attackEntity(EntityPlayer player, Entity entity) {}	//Server can't punch entities

@@ -11,7 +11,6 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderDecoy extends RenderBiped {
 	
-	
 	public RenderDecoy() {
 		super(new ModelBiped(), 0.5F);
 	}
@@ -20,7 +19,5 @@ public class RenderDecoy extends RenderBiped {
 	protected ResourceLocation getEntityTexture(Entity entity) {
 		return ((EntityDecoy)entity).getLocationSkin();
 	}
-	
-	
 	
 }

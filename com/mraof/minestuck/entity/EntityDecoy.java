@@ -54,6 +54,7 @@ public class EntityDecoy extends EntityLiving {
 	public EntityDecoy(World world, EntityPlayerMP player) {
 		super(world);
 		this.boundingBox.setBB(player.boundingBox);
+		height = player.height;
 		this.player = new DecoyPlayer(world, this);
 		this.posX = player.posX;
 		originX = posX;
@@ -148,14 +149,14 @@ public class EntityDecoy extends EntityLiving {
 		
 		if(!worldObj.isRemote) {
 			if(this.locationChanged())
-				EditHandler.reset(null, 0, this, MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(this.username));
+				EditHandler.reset(null, 0, EditHandler.getData(this));
 		}
 	}
 	
 	public boolean locationChanged() {
-		return originX > posX+1 || originX < posX-1 ||
-				originY > posY+1 || originY < posY-1 ||
-				originZ > posZ+1 || originZ < posZ-1;
+		return originX >= posX+1 || originX <= posX-1 ||
+				originY >= posY+1 || originY <= posY-1 ||
+				originZ >= posZ+1 || originZ <= posZ-1;
 	}
 	
 	@Override
@@ -166,7 +167,7 @@ public class EntityDecoy extends EntityLiving {
 	@Override
 	public boolean attackEntityFrom(DamageSource damageSource, float par2) {
 		if (!worldObj.isRemote && (!gameType.equals(EnumGameType.CREATIVE) || damageSource.canHarmInCreative()))
-			EditHandler.reset(damageSource, par2, this, MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(this.username));
+			EditHandler.reset(damageSource, par2, EditHandler.getData(this));
 		return true;
 	}
 	
