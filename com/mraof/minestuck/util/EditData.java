@@ -21,10 +21,18 @@ public class EditData {
 	
 	EntityDecoy decoy;
 	
-	ItemInWorldManager manager;
+	ItemInWorldManager manager;	//Old manager, that was used before entering edit mode.
 	
 	SburbConnection connection;
 	
 	EntityPlayerMP player;
+
+	public String getTarget() {
+		return connection.getClientName();
+	}
+
+	public EntityPlayerMP getEditor() {
+		return player;
+	}
 	
 }

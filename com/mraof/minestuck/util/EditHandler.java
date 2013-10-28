@@ -7,10 +7,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.mraof.minestuck.entity.EntityDecoy;
+import com.mraof.minestuck.grist.GristSet;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
@@ -34,6 +36,14 @@ public class EditHandler {
 	
 	static PlayerControllerMP controller;
 	
+	/**
+	 * Used to tell which gristcache it should show.
+	 * @return
+	 */
+	public static boolean isActive() {
+		return capabilities != null && controller != null;
+	}
+	
 	public static void activate(String username, String target) {
 		Minecraft mc = Minecraft.getMinecraft();
 		Packet250CustomPayload packet = new Packet250CustomPayload();
@@ -51,13 +61,14 @@ public class EditHandler {
 		PacketDispatcher.sendPacketToServer(packet);
 	}
 	
-	public static void onClientPackage(boolean mode) {
+	public static void onClientPackage(String target) {
 		Minecraft mc = Minecraft.getMinecraft();
 		EntityClientPlayerMP player = mc.thePlayer;
-		if(mode) {	//Enable edit mode
+		if(target != null) {	//Enable edit mode
 			if(controller == null) {
 				controller = mc.playerController;
 				mc.playerController = new SburbServerController(mc, mc.getNetHandler());
+				((SburbServerController)mc.playerController).client = target;
 			}
 			if(capabilities == null) {
 				capabilities = new NBTTagCompound();
@@ -122,7 +133,7 @@ public class EditHandler {
 		
 		Packet250CustomPayload packet = new Packet250CustomPayload();
 		packet.channel = "Minestuck";
-		packet.data = MinestuckPacket.makePacket(Type.SBURB_EDIT, false);
+		packet.data = MinestuckPacket.makePacket(Type.SBURB_EDIT, "");
 		packet.length = packet.data.length;
 		player.playerNetServerHandler.sendPacketToPlayer(packet);
 		
@@ -144,14 +155,16 @@ public class EditHandler {
 			list.add(data);
 			Packet250CustomPayload packet = new Packet250CustomPayload();
 			packet.channel = "Minestuck";
-			packet.data = MinestuckPacket.makePacket(Type.SBURB_EDIT, true);
+			packet.data = MinestuckPacket.makePacket(Type.SBURB_EDIT, computerTarget);Debug.print(computerTarget);
 			packet.length = packet.data.length;
 			player.playerNetServerHandler.sendPacketToPlayer(packet);
+			MinestuckPlayerTracker.updateGristCache(c.getClientName());
 		}
 	}
 	
 	static boolean setPlayerStats(EntityPlayerMP player, SburbConnection c) {
 		SburbServerManager manager = new SburbServerManager(player.worldObj, player);
+		manager.client = c.getClientName();
 		player.theItemInWorldManager = manager;
 		//TODO Teleport the server player to the correct position at the client land/overworld position.
 		return true;

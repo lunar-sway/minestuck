@@ -7,14 +7,16 @@ import net.minecraft.network.INetworkManager;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+import com.mraof.minestuck.grist.GristStorage;
 import com.mraof.minestuck.grist.GristType;
 
 import cpw.mods.fml.common.network.Player;
 
 public class GristCachePacket extends MinestuckPacket 
 {
-	int[] values = new int[GristType.allGrists];
-
+	public int[] values = new int[GristType.allGrists];
+	public boolean targetGrist;
+	
 	public GristCachePacket() 
 	{
 		super(Type.GRISTCACHE);
@@ -27,6 +29,7 @@ public class GristCachePacket extends MinestuckPacket
 		values = (int[]) data[0];
 		for(int currentValue : values)
 			dat.writeInt(currentValue);
+		dat.writeBoolean((Boolean)data[1]);
 		return dat.toByteArray();
 	}
 	
@@ -36,20 +39,13 @@ public class GristCachePacket extends MinestuckPacket
 		ByteArrayDataInput dat = ByteStreams.newDataInput(data);
 		for(int typeInt = 0; typeInt < values.length; typeInt++)
 			values[typeInt] = dat.readInt();
+		targetGrist = dat.readBoolean();
 		return this;
 	}
 
 	@Override
-	public void execute(INetworkManager network, MinestuckPacketHandler minestuckPacketHandler, Player player, String userName) 
-	{
-		EntityPlayer entityPlayer = (EntityPlayer)player;
-		if(entityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getTags().size() == 0)
-			entityPlayer.getEntityData().setCompoundTag(EntityPlayer.PERSISTED_NBT_TAG, new NBTTagCompound());
-		if(entityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getTags().size() == 0)
-			entityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setCompoundTag("Grist", new NBTTagCompound("Grist"));
-		for(int typeInt = 0; typeInt < values.length; typeInt++)
-			entityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").setInteger(GristType.values()[typeInt].getName(), values[typeInt]);
+	public void execute(INetworkManager network, MinestuckPacketHandler minestuckPacketHandler, Player player, String userName) {
+		GristStorage.onPacketRecived(this);
 	}
-
-
+	
 }

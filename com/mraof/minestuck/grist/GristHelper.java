@@ -40,11 +40,11 @@ public class GristHelper {
 	/**
 	 * A shortned statement to obtain a certain grist count.
 	 */
-	public static int getGrist(EntityPlayer player, GristType type) {
-		return player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(type.getName());
+	public static int getGrist(String player, GristType type) {
+		return GristStorage.getGristSet(player).getGrist(type);
 	}
 	
-	public static boolean canAfford(EntityPlayer player, ItemStack stack) {
+	public static boolean canAfford(String player, ItemStack stack) {
 		GristSet set = GristRegistry.getGristConversion(stack);
 		if (set == null) {return false;}
 		Hashtable reqs = set.getHashtable();
@@ -64,7 +64,7 @@ public class GristHelper {
 		return false;
 	}
 	
-	public static void decrease(EntityPlayer player, GristSet set) {
+	public static void decrease(String player, GristSet set) {
 		Hashtable reqs = set.getHashtable();
 		if (reqs != null) {
 			Iterator it = reqs.entrySet().iterator();
@@ -75,8 +75,8 @@ public class GristHelper {
 		}
 	}
 	
-	public static void setGrist(EntityPlayer player, GristType type, int i) {
-		player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").setInteger(type.getName(), i);
+	public static void setGrist(String player, GristType type, int i) {
+		GristStorage.getGristSet(player).setGrist(type, i);
 	}
 	
 	/**

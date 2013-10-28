@@ -4,12 +4,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.server.MinecraftServer;
 
+import com.mraof.minestuck.grist.GristHelper;
 import com.mraof.minestuck.grist.GristSet;
 import com.mraof.minestuck.grist.GristStorage;
 import com.mraof.minestuck.grist.GristType;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.network.skaianet.SburbConnection;
+import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.EditHandler;
 import com.mraof.minestuck.util.Title;
@@ -27,10 +31,10 @@ public class MinestuckPlayerTracker implements IPlayerTracker
 	@Override
 	public void onPlayerLogin(EntityPlayer player) 
 	{
-		if(GristStorage.getGrist(player.username) == null)
+		if(GristStorage.getGristSet(player.username) == null)
 			GristStorage.setGrist(player.username, new GristSet(GristType.Build, 20));
 		
-		updateGristCache(player);
+		updateGristCache(player.username);
 		updateTitle(player);
 		updateLands(player);
 	}
@@ -44,28 +48,43 @@ public class MinestuckPlayerTracker implements IPlayerTracker
 	@Override
 	public void onPlayerChangedDimension(EntityPlayer player) 
 	{
-		updateGristCache(player);
+		updateGristCache(player.username);
 		updateTitle(player);
 	}
 
 	@Override
 	public void onPlayerRespawn(EntityPlayer player) 
 	{
-		updateGristCache(player);
+		updateGristCache(player.username);
 		updateTitle(player);
 	}
 	
-	public void updateGristCache(EntityPlayer player)
-	{
-		//set all the grist values to the correct amount
-        Packet250CustomPayload packet = new Packet250CustomPayload();
-        int[] gristValues = new int[GristType.allGrists];
-        for(int typeInt = 0; typeInt < gristValues.length; typeInt++)
-        	gristValues[typeInt] = ((EntityPlayer)player).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(GristType.values()[typeInt].getName());
-        packet.channel = "Minestuck";
-        packet.data = MinestuckPacket.makePacket(Type.GRISTCACHE, gristValues);
-        packet.length = packet.data.length;
-        ((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(packet);
+	public static void updateGristCache(String player) {
+		
+		int[] gristValues = new int[GristType.allGrists];
+		for(int typeInt = 0; typeInt < gristValues.length; typeInt++)
+			gristValues[typeInt] = GristHelper.getGrist(player,GristType.values()[typeInt]);
+		
+		//The player
+		EntityPlayerMP playerMP = MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(player);
+		if(playerMP != null) {
+			Packet250CustomPayload packet = new Packet250CustomPayload();
+			packet.channel = "Minestuck";
+			packet.data = MinestuckPacket.makePacket(Type.GRISTCACHE, gristValues, false);
+			packet.length = packet.data.length;
+			playerMP.playerNetServerHandler.sendPacketToPlayer(packet);
+		}
+		
+		//The editing player, if there is any.
+		SburbConnection c = SkaianetHandler.getClientConnection(player);
+		if(c != null && EditHandler.getData(c) != null) {
+			EntityPlayerMP editor = EditHandler.getData(c).getEditor();
+			Packet250CustomPayload packet = new Packet250CustomPayload();
+			packet.channel = "Minestuck";
+			packet.data = MinestuckPacket.makePacket(Type.GRISTCACHE, gristValues, true);
+			packet.length = packet.data.length;
+			editor.playerNetServerHandler.sendPacketToPlayer(packet);
+		}
 	}
 	
 	public void updateTitle(EntityPlayer player) {

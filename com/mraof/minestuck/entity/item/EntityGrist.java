@@ -14,9 +14,11 @@ import net.minecraft.world.World;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.mraof.minestuck.grist.GristAmount;
+import com.mraof.minestuck.grist.GristHelper;
 import com.mraof.minestuck.grist.GristType;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
@@ -254,13 +256,9 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	}
 	public void addGrist(EntityPlayer entityPlayer)
 	{
-		int oldValue = entityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(this.gristType);
-		entityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").setInteger(this.gristType, oldValue + gristValue);
-		Packet250CustomPayload packet = new Packet250CustomPayload();
-		packet.channel = "Minestuck";
-		packet.data = MinestuckPacket.makePacket(Type.GRIST, typeInt(this.gristType), oldValue + gristValue);
-		packet.length = packet.data.length;
-		((EntityPlayerMP)entityPlayer).playerNetServerHandler.sendPacketToPlayer(packet);
+		int oldValue = GristHelper.getGrist(entityPlayer.username, GristType.getTypeFromString(this.gristType));
+		GristHelper.setGrist(entityPlayer.username, GristType.getTypeFromString(this.gristType), oldValue + gristValue);
+		MinestuckPlayerTracker.updateGristCache(entityPlayer.username);
 	}
 
 	public boolean canAttackWithItem()

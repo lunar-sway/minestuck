@@ -3,14 +3,39 @@ package com.mraof.minestuck.grist;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.mraof.minestuck.network.GristCachePacket;
+import com.mraof.minestuck.util.EditHandler;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
 public class GristStorage {
 	
+	//Client sided
+	
+	@SideOnly(Side.CLIENT)
+	static GristSet playerGrist;
+	@SideOnly(Side.CLIENT)
+	static GristSet targetGrist;
+	
+	public static void onPacketRecived(GristCachePacket packet) {
+		if(packet.targetGrist)
+			targetGrist = new GristSet(GristType.values(), packet.values);
+		else playerGrist = new GristSet(GristType.values(), packet.values);
+	}
+	
+	public static GristSet getClientGrist() {
+		return EditHandler.isActive()?targetGrist:playerGrist;
+	}
+	
+	//Server sided
+	
 	static Map<String, GristSet> gristMap = new HashMap();
 	
-	public static GristSet getGrist(String player) {
+	public static GristSet getGristSet(String player) {
 		return gristMap.get(player);
 	}
 	

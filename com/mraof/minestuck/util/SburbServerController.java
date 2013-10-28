@@ -24,6 +24,8 @@ import net.minecraft.world.World;
 
 public class SburbServerController extends PlayerControllerMP {
 	
+	public String client;
+	
 	public SburbServerController(Minecraft mc, NetClientHandler netHandler) {
 		super(mc, netHandler);
 		this.setGameType(EnumGameType.CREATIVE);
@@ -32,7 +34,7 @@ public class SburbServerController extends PlayerControllerMP {
 	@Override
 	public boolean onPlayerRightClick(EntityPlayer entityPlayer, World world, ItemStack stack, int par4, int par5, int par6, int par7, Vec3 par8Vec3) {
 		if(stack.getItem() instanceof ItemBlock)
-			if(!GristHelper.canAfford(entityPlayer, stack) || !super.onPlayerRightClick(entityPlayer, world, stack, par4, par5, par6, par7, par8Vec3))
+			if(!GristHelper.canAfford(client, stack) || !super.onPlayerRightClick(entityPlayer, world, stack, par4, par5, par6, par7, par8Vec3))
 				return false;
 			else return true;
 		return false;
@@ -40,12 +42,12 @@ public class SburbServerController extends PlayerControllerMP {
 	
 	@Override
 	public boolean onPlayerDestroyBlock(int par1, int par2, int par3, int par4) {
-		int grist = GristHelper.getGrist(Minecraft.getMinecraft().thePlayer, GristType.Build);
+		int grist = GristHelper.getGrist(client, GristType.Build);
 		
 		return grist != 0 && super.onPlayerDestroyBlock(par1, par2, par3, par4);
 	}
 	
 	@Override
-	public void attackEntity(EntityPlayer player, Entity entity) {}	//Server can't punch entities
+	public void attackEntity(EntityPlayer player, Entity entity) {}
 	
 }

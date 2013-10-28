@@ -26,26 +26,30 @@ public class SburbEditPacket extends MinestuckPacket {
 	@Override
 	public byte[] generatePacket(Object... data) {
 		return data.length == 0?new byte[0]:	//Client pressing the exit button
-			data.length == 1?new byte[]{(byte) (((Boolean)data[0])?1:0)}:	//Server telling client to activate/deactivate edit mode
+			data.length == 1?((String)data[0]).getBytes():	//Server telling client to activate/deactivate edit mode
 				(data[0].toString()+'\n'+data[1].toString()).getBytes();	//Client requesting to enter edit mode
 	}
 
 	@Override
 	public MinestuckPacket consumePacket(byte[] data) {
-		if(data.length == 1)
-				mode = data[0] != 0;
-		else {
+		try{
 			ByteArrayDataInput input = ByteStreams.newDataInput(data);
 			username = input.readLine();
 			target = input.readLine();
+		} catch(IllegalStateException e){}
+		
+		if(target == null){
+			target = username;
+			username = null;
 		}
+		
 		return this;
 	}
 
 	@Override
 	public void execute(INetworkManager network, MinestuckPacketHandler minestuckPacketHandler, Player player, String userName) {
 		if(((EntityPlayer)player).worldObj.isRemote) {
-			EditHandler.onClientPackage(mode);
+			EditHandler.onClientPackage(target);
 		} else {
 			EntityPlayerMP playerMP = (EntityPlayerMP)player;
 			if(username == null)

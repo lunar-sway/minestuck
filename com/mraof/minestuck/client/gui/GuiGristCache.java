@@ -14,7 +14,10 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import com.mraof.minestuck.grist.GristStorage;
 import com.mraof.minestuck.grist.GristType;
+import com.mraof.minestuck.util.EditHandler;
+import com.mraof.minestuck.util.SburbServerController;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.util.TitleHelper;
 
@@ -66,11 +69,15 @@ public class GuiGristCache extends GuiScreen
 		if (title == null) {
 			title = new Title(TitleHelper.getClassFromInt(((EntityPlayer)mc.thePlayer).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Class")),
 					TitleHelper.getAspectFromInt(((EntityPlayer)mc.thePlayer).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Aspect")));
-			titleMessage = mc.thePlayer.username.toUpperCase() + " : " + title.getTitleName();
+			if(EditHandler.isActive())
+				titleMessage = ((SburbServerController)mc.playerController).client.toUpperCase();
+			else titleMessage = mc.thePlayer.username.toUpperCase() + " : " + title.getTitleName();
 		}
 		
 		if (titleMessage.isEmpty())
-			titleMessage = mc.thePlayer.username.toUpperCase() + " : " + title;
+			if(EditHandler.isActive())
+				titleMessage = ((SburbServerController)mc.playerController).client.toUpperCase();
+			else titleMessage = mc.thePlayer.username.toUpperCase() + " : " + title.getTitleName();
 		
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.getTextureManager().bindTexture(guiBackground);
@@ -103,7 +110,7 @@ public class GuiGristCache extends GuiScreen
 			}
 
 			this.drawGristIcon(gristXOffset, gristYOffset, GristType.values()[gristId].getName());
-			fontRenderer.drawString(Integer.toString(mc.thePlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(GristType.values()[gristId].getName())),(this.width / 2)-(guiWidth / 2) + gristCountX + (gristCountXOffset * row - row), yOffset + gristCountY + (gristCountYOffset * column - column), 0xddddee);
+			fontRenderer.drawString(Integer.toString(GristStorage.getClientGrist().getGrist(GristType.values()[gristId])),(this.width / 2)-(guiWidth / 2) + gristCountX + (gristCountXOffset * row - row), yOffset + gristCountY + (gristCountYOffset * column - column), 0xddddee);
 			
 
 
