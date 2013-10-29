@@ -18,6 +18,7 @@ public class SburbConnection {
 	boolean isMain;
 	boolean enteredGame;
 	boolean canSplit;
+	int clientHomeLand;
 	
 	SburbConnection(){
 		this.canSplit = true;
@@ -34,6 +35,9 @@ public class SburbConnection {
 			return server.owner;
 		else return serverName;
 	}
+	
+	public ComputerData getClientData() {return client;}
+	public ComputerData getServerData() {return server;}
 	public boolean givenItems(){return isMain;}
 	public boolean enteredGame(){return enteredGame;}
 
@@ -58,6 +62,8 @@ public class SburbConnection {
 			nbt.setBoolean("isActive", isActive);
 			nbt.setBoolean("enteredGame", enteredGame);
 			nbt.setBoolean("canSplit", canSplit);
+			if(enteredGame)
+				nbt.setInteger("clientLand", clientHomeLand);
 		}
 		if(isActive){
 			nbt.setCompoundTag("client", client.write());
@@ -74,6 +80,8 @@ public class SburbConnection {
 		if(isMain){
 			isActive = nbt.getBoolean("isActive");
 			enteredGame = nbt.getBoolean("enteredGame");
+			if(enteredGame)
+				clientHomeLand = nbt.getInteger("clientLand");
 			if(nbt.hasKey("canSplit"))
 				canSplit = nbt.getBoolean("canSplit");
 		}
@@ -95,4 +103,5 @@ public class SburbConnection {
 		}
 		return false;
 	}
+	
 }

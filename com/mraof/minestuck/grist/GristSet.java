@@ -111,7 +111,7 @@ public class GristSet {
 	}
 	
 	/**
-	 * Multipleis all the grist amounts by a factor.
+	 * Multiplies all the grist amounts by a factor.
 	 */
 	public GristSet scaleGrist(float scale) {
 		
@@ -123,4 +123,15 @@ public class GristSet {
 		
 		return this;
 	}
+	
+	/**
+	 * Checks if this grist set is empty.
+	 */
+	public boolean isEmpty() {
+		for(int i : gristTypes)
+			if(i != 0)
+				return false;
+		return true;
+	}
+	
 }

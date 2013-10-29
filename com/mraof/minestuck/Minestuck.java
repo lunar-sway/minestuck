@@ -169,6 +169,11 @@ public class Minestuck
 	public static Block blockComputerOn;
 	public static Block blockComputerOff;
 	
+	public static int overworldEditRange;
+	public static int landEditRange;
+	
+	public static int clientOverworldEditRange;	//Edit range used by the client side.
+	public static int clientLandEditRange;		//changed by a MinestuckConfigPacket sent by the server on login.
 	//Booleans
 	public static boolean generateCruxiteOre;
 	public static boolean privateComputers;	//If a player should be able to use other players computers or not.
@@ -212,6 +217,8 @@ public class Minestuck
 		globalSession = config.get("General", "globalSession", true).getBoolean(true);
 		privateComputers = config.get("General", "privateComputers", false).getBoolean(false);
 		privateMessage = config.get("General", "privateMessage", "You are not allowed to access other players computers.").getString();
+		overworldEditRange = config.get("General", "overWorldEditRange", 26).getInt();
+		landEditRange = config.get("General", "landEditRange", 52).getInt();
 		
 		config.save();
 	}

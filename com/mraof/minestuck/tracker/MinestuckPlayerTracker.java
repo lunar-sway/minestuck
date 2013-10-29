@@ -23,16 +23,24 @@ import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 import cpw.mods.fml.common.IPlayerTracker;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
-public class MinestuckPlayerTracker implements IPlayerTracker 
-{
-
-
+public class MinestuckPlayerTracker implements IPlayerTracker {
 	
 	@Override
 	public void onPlayerLogin(EntityPlayer player) 
 	{
-		if(GristStorage.getGristSet(player.username) == null)
-			GristStorage.setGrist(player.username, new GristSet(GristType.Build, 20));
+		if(GristStorage.getGristSet(player.username) == null) {
+			if(player.getEntityData().hasKey("Grist")) {	//Load old grist format
+				NBTTagCompound nbt = player.getEntityData().getCompoundTag("Grist");
+				GristSet set = new GristSet();
+				for(GristType type : GristType.values())
+					set.addGrist(type, nbt.getInteger(type.getName()));
+				if(set.isEmpty())
+					set.addGrist(GristType.Build, 20);
+				
+				GristStorage.setGrist(player.username, set);
+				player.getEntityData().removeTag("Grist");
+			} else GristStorage.setGrist(player.username, new GristSet(GristType.Build, 20));
+		}
 		
 		updateGristCache(player.username);
 		updateTitle(player);
@@ -124,4 +132,13 @@ public class MinestuckPlayerTracker implements IPlayerTracker
 	{
 		updateLands(null);
 	}
+	
+	public static void sendConfigPacket(EntityPlayer player) {
+		Packet250CustomPayload packet = new Packet250CustomPayload();
+		packet.channel = "Minestuck";
+		packet.data = MinestuckPacket.makePacket(Type.CONFIG);
+		packet.length = packet.data.length;
+		((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(packet);
+	}
+	
 }

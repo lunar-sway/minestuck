@@ -31,6 +31,7 @@ import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.EditHandler;
 
 //@SideOnly(Side.SERVER)	//This crashes the game on execution of ClearMessagePacket?
 public class SkaianetHandler {
@@ -175,6 +176,7 @@ public class SkaianetHandler {
 						sc.worldObj.markBlockForUpdate(sc.xCoord, sc.yCoord, sc.zCoord);
 					}
 					Session.closeConnection(c.getClientName(), c.getServerName());
+					EditHandler.onDisconnect(c);
 					if(c.isMain)
 						c.isActive = false;	//That's everything that is neccesary.
 					else connections.remove(c);
@@ -444,7 +446,7 @@ public class SkaianetHandler {
 		return list.toArray();
 	}
 	
-	static void checkData(){
+	static void checkData() {
 		ServerConfigurationManager scm = MinecraftServer.getServer().getConfigurationManager();
 		Iterator<String> iter0 = infoToSend.keySet().iterator();
 		while(iter0.hasNext())
@@ -456,9 +458,9 @@ public class SkaianetHandler {
 		Iterator<ComputerData>[] iter1 = new Iterator[]{serversOpen.values().iterator(),resumingClients.values().iterator(),resumingServers.values().iterator()};
 		
 		for(Iterator<ComputerData> i : iter1)
-			while(i.hasNext()){
+			while(i.hasNext()) {
 				ComputerData data = i.next();
-				if(getComputer(data) == null || !getComputer(data).owner.equals(data.owner)){
+				if(getComputer(data) == null || !getComputer(data).owner.equals(data.owner)) {
 					Debug.print("[SKAIANET] Invalid computer in waiting list!");
 					i.remove();
 				}
@@ -486,6 +488,8 @@ public class SkaianetHandler {
 						sc.worldObj.markBlockForUpdate(sc.xCoord, sc.yCoord, sc.zCoord);
 					}
 				}
+				if(cc != null && c.enteredGame && c.clientHomeLand == 0)
+					c.clientHomeLand = c.client.dimension;
 			}
 		}
 		
@@ -537,12 +541,15 @@ public class SkaianetHandler {
 					connections.add(c);
 			} else giveItems(player);
 		}
+		c.clientHomeLand = dimensionId;
 		
-		for(SburbConnection sc : connections){	//TEMP Later make it only change the transferred computers instead
-			if(sc.client != null && sc.client.owner.equals(player))
-				sc.client.dimension = dimensionId;
-			if(sc.server != null && sc.server.owner.equals(player))
-				sc.server.dimension = dimensionId;
+		for(SburbConnection sc : connections) {	//TEMP Later make it only change the transferred computers instead
+			if(sc.isActive){
+				if(getComputer(sc.client) == null)
+					sc.client.dimension = dimensionId;
+				if(getComputer(sc.server) == null)
+					sc.server.dimension = dimensionId;
+			}
 		}
 		
 		c.enteredGame = true;

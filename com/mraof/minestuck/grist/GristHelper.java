@@ -45,9 +45,12 @@ public class GristHelper {
 	}
 	
 	public static boolean canAfford(String player, ItemStack stack) {
-		GristSet set = GristRegistry.getGristConversion(stack);
-		if (set == null) {return false;}
-		Hashtable reqs = set.getHashtable();
+		return canAfford(GristStorage.getGristSet(player), GristRegistry.getGristConversion(stack));
+	}
+	
+	public static boolean canAfford(GristSet base, GristSet cost) {
+		if (base == null || cost == null) {return false;}
+		Hashtable reqs = cost.getHashtable();
 		
 		if (reqs != null) {
 			Iterator it = reqs.entrySet().iterator();
@@ -55,7 +58,7 @@ public class GristHelper {
 				Map.Entry pairs = (Map.Entry)it.next();
 				int type = (Integer) pairs.getKey();
 				int need = (Integer) pairs.getValue();
-				int have = getGrist(player, GristType.values()[type]);
+				int have = base.getGrist(GristType.values()[type]);
 				
 				if (need > have) return false;
 			}

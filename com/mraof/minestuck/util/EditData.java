@@ -26,7 +26,10 @@ public class EditData {
 	SburbConnection connection;
 	
 	EntityPlayerMP player;
-
+	
+	int centerX;
+	int centerZ;
+	
 	public String getTarget() {
 		return connection.getClientName();
 	}

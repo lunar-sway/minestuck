@@ -1,6 +1,7 @@
 package com.mraof.minestuck.util;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,8 +13,11 @@ import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 
+import cpw.mods.fml.common.ITickHandler;
+import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
@@ -26,10 +30,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChatMessageComponent;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.FoodStats;
+import net.minecraft.world.World;
 
-public class EditHandler {
+public class EditHandler implements ITickHandler{
 	
 	//Client sided stuff
 	static NBTTagCompound capabilities;
@@ -145,12 +154,18 @@ public class EditHandler {
 		if(player.isRiding())
 			return;	//Don't want to bother making the decoy able to ride anything right now.
 		SburbConnection c = SkaianetHandler.getClientConnection(computerTarget);
-		Debug.print("Adding new decoy..");
 		if(c != null && c.getServerName().equals(computerOwner) && getData(c) == null && getData(player.username) == null) {
+			Debug.print("Activating edit mode on player \""+player.username+"\", target player: \""+computerTarget+"\".");
 			EntityDecoy decoy = new EntityDecoy(player.worldObj, player);
 			EditData data = new EditData(decoy, player, c);
-			if(!setPlayerStats(player, c))
+			if(!setPlayerStats(player, c)) {
+				player.theItemInWorldManager = data.manager;
+				ChatMessageComponent message = new ChatMessageComponent();
+				message.addText("Failed to activate edit mode.");
+				message.setColor(EnumChatFormatting.RED);
+				player.sendChatToPlayer(message);
 				return;
+			}
 			decoy.worldObj.spawnEntityInWorld(decoy);
 			list.add(data);
 			Packet250CustomPayload packet = new Packet250CustomPayload();
@@ -166,7 +181,25 @@ public class EditHandler {
 		SburbServerManager manager = new SburbServerManager(player.worldObj, player);
 		manager.client = c.getClientName();
 		player.theItemInWorldManager = manager;
+		ChunkCoordinates coord;
+		World world = MinecraftServer.getServer().worldServerForDimension(c.getClientData().getDimension());
+		if(c.enteredGame()) {
+			coord = world.getSpawnPoint();
+		} else {
+			TileEntityComputer te = SkaianetHandler.getComputer(c.getClientData());
+			coord = new ChunkCoordinates(te.xCoord, te.yCoord, te.zCoord);
+		}
+		coord.posY = world.getTopSolidOrLiquidBlock(coord.posX, coord.posZ);
+		
+		player.closeScreen();
+		
+		if(world.provider.dimensionId != player.worldObj.provider.dimensionId)
+			player.travelToDimension(world.provider.dimensionId);
+		
+		player.setPositionAndUpdate(coord.posX+0.5, coord.posY, coord.posZ+0.5);
+		
 		//TODO Teleport the server player to the correct position at the client land/overworld position.
+		
 		return true;
 	}
 	
@@ -182,9 +215,10 @@ public class EditHandler {
 	}
 	
 	public static EditData getData(SburbConnection c) {
-		for(EditData data : list)
-			if(data.connection == c)
-				return data;
+		Debug.print(list.size());
+		for(EditData data : list) {
+			if(data.connection.getClientName().equals(c.getClientName()) && data.connection.getServerName().equals(c.getServerName()))
+				return data;}
 		return null;
 	}
 	
@@ -193,6 +227,36 @@ public class EditHandler {
 			if(data.decoy == decoy)
 				return data;
 		return null;
+	}
+
+	@Override
+	public void tickStart(EnumSet<TickType> type, Object... tickData) {}
+
+	@Override
+	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
+		if(((World)tickData[1]).isRemote) {
+			EntityClientPlayerMP player = (EntityClientPlayerMP)tickData[0];
+			
+			
+			
+		} else {
+			EntityPlayerMP player = (EntityPlayerMP)tickData[0];
+			EditData data = getData(player.username);
+			
+			
+			
+		}
+		
+	}
+
+	@Override
+	public EnumSet<TickType> ticks() {
+		return EnumSet.of(TickType.PLAYER);
+	}
+
+	@Override
+	public String getLabel() {
+		return "TickEditHandler";
 	}
 	
 }

@@ -1,6 +1,8 @@
 package com.mraof.minestuck.util;
 
 import com.mraof.minestuck.grist.GristHelper;
+import com.mraof.minestuck.grist.GristRegistry;
+import com.mraof.minestuck.grist.GristStorage;
 import com.mraof.minestuck.grist.GristType;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
@@ -33,8 +35,8 @@ public class SburbServerController extends PlayerControllerMP {
 	
 	@Override
 	public boolean onPlayerRightClick(EntityPlayer entityPlayer, World world, ItemStack stack, int par4, int par5, int par6, int par7, Vec3 par8Vec3) {
-		if(stack.getItem() instanceof ItemBlock)
-			if(!GristHelper.canAfford(client, stack) || !super.onPlayerRightClick(entityPlayer, world, stack, par4, par5, par6, par7, par8Vec3))
+		if(stack != null && stack.getItem() instanceof ItemBlock)
+			if(!GristHelper.canAfford(GristStorage.getClientGrist(), GristRegistry.getGristConversion(stack)) || !super.onPlayerRightClick(entityPlayer, world, stack, par4, par5, par6, par7, par8Vec3))
 				return false;
 			else return true;
 		return false;
