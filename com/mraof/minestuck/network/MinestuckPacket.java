@@ -24,7 +24,8 @@ public abstract class MinestuckPacket
 		LANDREGISTER(LandRegisterPacket.class),
 		CLEAR(ClearMessagePacket.class),
 		SBURB_INFO(SkaianetInfoPacket.class),
-		SBURB_EDIT(SburbEditPacket.class),
+		CLIENT_EDIT(ClientEditPacket.class),
+		SERVER_EDIT(ServerEditPacket.class),
 		CONFIG(MinestuckConfigPacket.class);
 		
 		Class<? extends MinestuckPacket> packetType;

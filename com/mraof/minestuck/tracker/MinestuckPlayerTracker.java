@@ -45,6 +45,7 @@ public class MinestuckPlayerTracker implements IPlayerTracker {
 		updateGristCache(player.username);
 		updateTitle(player);
 		updateLands(player);
+		sendConfigPacket(player);
 	}
 
 	@Override

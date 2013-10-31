@@ -212,6 +212,11 @@ public class EntityDecoy extends EntityLiving {
 		return inventory.armorInventory;
 	}
 	
+	@Override
+	protected boolean canDespawn() {
+		return false;
+	}
+	
 	private static class DecoyPlayer extends EntityPlayer {	//Never spawned into the world. Only used for the InventoryPlayer and FoodStats.
 		
 		EntityDecoy decoy;

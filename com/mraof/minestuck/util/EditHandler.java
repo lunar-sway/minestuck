@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.EntityDecoy;
 import com.mraof.minestuck.grist.GristSet;
 import com.mraof.minestuck.network.MinestuckPacket;
@@ -15,6 +16,7 @@ import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
@@ -45,9 +47,10 @@ public class EditHandler implements ITickHandler{
 	
 	static PlayerControllerMP controller;
 	
+	static int centerX, centerZ;
+	
 	/**
-	 * Used to tell which gristcache it should show.
-	 * @return
+	 * Used to tell if the client is in edit mode or not.
 	 */
 	public static boolean isActive() {
 		return capabilities != null && controller != null;
@@ -57,7 +60,7 @@ public class EditHandler implements ITickHandler{
 		Minecraft mc = Minecraft.getMinecraft();
 		Packet250CustomPayload packet = new Packet250CustomPayload();
 		packet.channel = "Minestuck";
-		packet.data = MinestuckPacket.makePacket(Type.SBURB_EDIT, username, target);
+		packet.data = MinestuckPacket.makePacket(Type.CLIENT_EDIT, username, target);
 		packet.length = packet.data.length;
 		PacketDispatcher.sendPacketToServer(packet);
 	}
@@ -65,12 +68,12 @@ public class EditHandler implements ITickHandler{
 	public static void onKeyPressed() {
 		Packet250CustomPayload packet = new Packet250CustomPayload();
 		packet.channel = "Minestuck";
-		packet.data = MinestuckPacket.makePacket(Type.SBURB_EDIT);
+		packet.data = MinestuckPacket.makePacket(Type.CLIENT_EDIT);
 		packet.length = packet.data.length;
 		PacketDispatcher.sendPacketToServer(packet);
 	}
 	
-	public static void onClientPackage(String target) {
+	public static void onClientPackage(String target, int posX, int posZ) {
 		Minecraft mc = Minecraft.getMinecraft();
 		EntityClientPlayerMP player = mc.thePlayer;
 		if(target != null) {	//Enable edit mode
@@ -83,6 +86,8 @@ public class EditHandler implements ITickHandler{
 				capabilities = new NBTTagCompound();
 				player.capabilities.writeCapabilitiesToNBT(capabilities);
 			}
+			centerX = posX;
+			centerZ = posZ;
 		} else {	//Disable edit mode
 			if(controller != null) {
 				mc.playerController = controller;
@@ -142,7 +147,7 @@ public class EditHandler implements ITickHandler{
 		
 		Packet250CustomPayload packet = new Packet250CustomPayload();
 		packet.channel = "Minestuck";
-		packet.data = MinestuckPacket.makePacket(Type.SBURB_EDIT, "");
+		packet.data = MinestuckPacket.makePacket(Type.SERVER_EDIT);
 		packet.length = packet.data.length;
 		player.playerNetServerHandler.sendPacketToPlayer(packet);
 		
@@ -167,10 +172,12 @@ public class EditHandler implements ITickHandler{
 				return;
 			}
 			decoy.worldObj.spawnEntityInWorld(decoy);
+			data.centerX = (int)player.posX;
+			data.centerZ = (int)player.posZ;
 			list.add(data);
 			Packet250CustomPayload packet = new Packet250CustomPayload();
 			packet.channel = "Minestuck";
-			packet.data = MinestuckPacket.makePacket(Type.SBURB_EDIT, computerTarget);Debug.print(computerTarget);
+			packet.data = MinestuckPacket.makePacket(Type.SERVER_EDIT, computerTarget, data.centerX, data.centerZ);
 			packet.length = packet.data.length;
 			player.playerNetServerHandler.sendPacketToPlayer(packet);
 			MinestuckPlayerTracker.updateGristCache(c.getClientName());
@@ -182,7 +189,7 @@ public class EditHandler implements ITickHandler{
 		manager.client = c.getClientName();
 		player.theItemInWorldManager = manager;
 		ChunkCoordinates coord;
-		World world = MinecraftServer.getServer().worldServerForDimension(c.getClientData().getDimension());
+		World world = MinecraftServer.getServer().worldServerForDimension(c.enteredGame()?c.getClientDimension():c.getClientData().getDimension());
 		if(c.enteredGame()) {
 			coord = world.getSpawnPoint();
 		} else {
@@ -197,8 +204,6 @@ public class EditHandler implements ITickHandler{
 			player.travelToDimension(world.provider.dimensionId);
 		
 		player.setPositionAndUpdate(coord.posX+0.5, coord.posY, coord.posZ+0.5);
-		
-		//TODO Teleport the server player to the correct position at the client land/overworld position.
 		
 		return true;
 	}
@@ -228,24 +233,56 @@ public class EditHandler implements ITickHandler{
 				return data;
 		return null;
 	}
-
+	
+	//Both sided
+	
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {}
 
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
-		if(((World)tickData[1]).isRemote) {
-			EntityClientPlayerMP player = (EntityClientPlayerMP)tickData[0];
+		EntityPlayer player = (EntityPlayer)tickData[0];
+		double range;
+		int centerX, centerZ;
+		
+		if(player.worldObj.isRemote) {
+			if(!(tickData[0] == Minecraft.getMinecraft().thePlayer) || !this.isActive())
+				return;
 			
+			range = (MinestuckSaveHandler.lands.contains((byte)player.dimension)?Minestuck.clientLandEditRange:Minestuck.clientOverworldEditRange)/2;
 			
+			centerX = EditHandler.centerX;
+			centerZ = EditHandler.centerZ;
 			
 		} else {
-			EntityPlayerMP player = (EntityPlayerMP)tickData[0];
+			
 			EditData data = getData(player.username);
+			if(data == null)
+				return;
 			
+			range = (MinestuckSaveHandler.lands.contains((byte)player.dimension)?Minestuck.landEditRange:Minestuck.overworldEditRange)/2;
 			
+			centerX = data.centerX;
+			centerZ = data.centerZ;
 			
 		}
+		if(range < 1)
+			return;
+		double newX = player.posX;
+		double newZ = player.posZ;
+		double offset = player.boundingBox.maxX-player.posX;
+		if(player.posX > centerX+range-offset)
+			newX = centerX+range-offset;
+		else if(player.posX < centerX-range+offset)
+			newX = centerX-range+offset;
+		if(player.posZ > centerZ+range-offset)
+			newZ = centerZ+range-offset;
+		else if(player.posZ < centerZ-range+offset)
+			newZ = centerZ-range+offset;
+		
+		if(newX != player.posX || newZ != player.posZ)
+			player.setPositionAndUpdate(newX, player.posY-(double)player.yOffset, newZ);
+		
 		
 	}
 

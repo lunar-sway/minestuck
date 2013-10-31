@@ -81,6 +81,7 @@ import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.EditHandler;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.WorldProviderSkaia;
 import com.mraof.minestuck.world.gen.OreHandler;
@@ -101,6 +102,8 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
+import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = "Minestuck", name = "Minestuck")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false, packetHandler = MinestuckPacketHandler.class, channels = {"Minestuck"})
@@ -468,6 +471,9 @@ public class Minestuck
 		AlchemyRecipeHandler.registerVanillaRecipes();
 		AlchemyRecipeHandler.registerMinestuckRecipes();
 		AlchemyRecipeHandler.registerModRecipes();
+		
+		TickRegistry.registerTickHandler(new EditHandler(), Side.CLIENT);
+		TickRegistry.registerTickHandler(new EditHandler(), Side.SERVER);
 		
 		Session.maxSize = acceptTitleCollision?(generateSpecialClasses?168:144):12;
 	}

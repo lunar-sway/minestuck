@@ -40,7 +40,8 @@ public class SburbConnection {
 	public ComputerData getServerData() {return server;}
 	public boolean givenItems(){return isMain;}
 	public boolean enteredGame(){return enteredGame;}
-
+	public int getClientDimension() {return clientHomeLand;}
+	
 	public byte[] getBytes() {
 		ByteArrayDataOutput data = ByteStreams.newDataOutput();
 		

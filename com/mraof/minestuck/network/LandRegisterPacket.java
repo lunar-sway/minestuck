@@ -1,6 +1,8 @@
 package com.mraof.minestuck.network;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetworkManager;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.DimensionManager;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -42,6 +44,11 @@ public class LandRegisterPacket extends MinestuckPacket
 	@Override
 	public void execute(INetworkManager network, MinestuckPacketHandler minestuckPacketHandler, Player player, String userName) 
 	{
+		if(MinecraftServer.getServer() != null)
+			return;	//Nope, no editing the server's land list
+		
+		MinestuckSaveHandler.lands.clear();
+		
 		for(byte dimensionId : landDimensions)
 		{
 			MinestuckSaveHandler.lands.add((byte)dimensionId);
