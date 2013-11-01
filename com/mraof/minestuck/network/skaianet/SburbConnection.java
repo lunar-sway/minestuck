@@ -1,6 +1,7 @@
 package com.mraof.minestuck.network.skaianet;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
@@ -19,6 +20,14 @@ public class SburbConnection {
 	boolean enteredGame;
 	boolean canSplit;
 	int clientHomeLand;
+	
+	//Only used by the edit handler
+	public int centerX, centerZ;
+	public NBTTagList inventory;
+	
+	//Non-saved variables used by the edit handler
+	public double posX, posY, posZ;
+	public boolean useCoordinates;
 	
 	SburbConnection(){
 		this.canSplit = true;
@@ -59,12 +68,17 @@ public class SburbConnection {
 	NBTTagCompound write() {
 		NBTTagCompound nbt = new NBTTagCompound();
 		nbt.setBoolean("isMain", isMain);
+		if(inventory != null)
+			nbt.setTag("inventory", inventory);
 		if(isMain){
 			nbt.setBoolean("isActive", isActive);
 			nbt.setBoolean("enteredGame", enteredGame);
 			nbt.setBoolean("canSplit", canSplit);
-			if(enteredGame)
+			if(enteredGame){
 				nbt.setInteger("clientLand", clientHomeLand);
+				nbt.setInteger("centerX", centerX);
+				nbt.setInteger("centerZ", centerZ);
+			}
 		}
 		if(isActive){
 			nbt.setCompoundTag("client", client.write());
@@ -78,11 +92,16 @@ public class SburbConnection {
 	
 	SburbConnection read(NBTTagCompound nbt) {
 		isMain = nbt.getBoolean("isMain");
+		if(nbt.hasKey("inventory"))
+			inventory = nbt.getTagList("inventory");
 		if(isMain){
 			isActive = nbt.getBoolean("isActive");
 			enteredGame = nbt.getBoolean("enteredGame");
-			if(enteredGame)
+			if(enteredGame){
 				clientHomeLand = nbt.getInteger("clientLand");
+				centerX = nbt.getInteger("centerX");
+				centerZ = nbt.getInteger("centerZ");
+			}
 			if(nbt.hasKey("canSplit"))
 				canSplit = nbt.getBoolean("canSplit");
 		}

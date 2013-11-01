@@ -27,9 +27,6 @@ public class EditData {
 	
 	EntityPlayerMP player;
 	
-	int centerX;
-	int centerZ;
-	
 	public String getTarget() {
 		return connection.getClientName();
 	}

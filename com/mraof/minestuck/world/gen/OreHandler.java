@@ -31,7 +31,7 @@ public class OreHandler implements IWorldGenerator {
 	             int posX = blockXPos + random.nextInt(maxX);
 	             int posY = minY + random.nextInt(diffBtwnMinMaxY);
 	             int posZ = blockZPos + random.nextInt(maxZ);
-	             (new WorldGenMinable(block.blockID, maxVeinSize)).generate(world, random, posX, posY, posZ);
+	             (new WorldGenMinable(block.blockID, maxVeinSize)).generate(world, random, posX, posY, posZ);	//TODO Fix so it generates in the land's underground material instead of stone.
 	       }
 	}
 

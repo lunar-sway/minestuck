@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.EntityDecoy;
+import com.mraof.minestuck.grist.GristRegistry;
 import com.mraof.minestuck.grist.GristSet;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
@@ -25,12 +26,16 @@ import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatMessageComponent;
@@ -116,6 +121,11 @@ public class EditHandler implements ITickHandler{
 		}
 	}
 	
+	public static void onDisconnect(SburbConnection c) {
+		reset(null, 0, getData(c));
+		c.useCoordinates = false;
+	}
+	
 	/**
 	 * Called when the server stops editing the clients house.
 	 * @param damageSource If the process was cancelled by the decoy taking damage, this parameter will be the damage source. Else null.
@@ -141,6 +151,13 @@ public class EditHandler implements ITickHandler{
 		decoy.foodStats.writeNBT(nbt);
 		player.getFoodStats().readNBT(nbt);
 		player.theItemInWorldManager = data.manager;
+		data.connection.inventory = player.inventory.writeToNBT(new NBTTagList());
+		player.inventory.copyInventory(decoy.inventory);
+		
+		data.connection.useCoordinates = true;
+		data.connection.posX = decoy.posX;
+		data.connection.posY = decoy.posY;
+		data.connection.posZ = decoy.posZ;
 		
 		decoy.setDead();
 		list.remove(data);
@@ -171,13 +188,13 @@ public class EditHandler implements ITickHandler{
 				player.sendChatToPlayer(message);
 				return;
 			}
+			if(c.inventory != null)
+				player.inventory.readFromNBT(c.inventory);
 			decoy.worldObj.spawnEntityInWorld(decoy);
-			data.centerX = (int)player.posX;
-			data.centerZ = (int)player.posZ;
 			list.add(data);
 			Packet250CustomPayload packet = new Packet250CustomPayload();
 			packet.channel = "Minestuck";
-			packet.data = MinestuckPacket.makePacket(Type.SERVER_EDIT, computerTarget, data.centerX, data.centerZ);
+			packet.data = MinestuckPacket.makePacket(Type.SERVER_EDIT, computerTarget, c.centerX, c.centerZ);
 			packet.length = packet.data.length;
 			player.playerNetServerHandler.sendPacketToPlayer(packet);
 			MinestuckPlayerTracker.updateGristCache(c.getClientName());
@@ -185,31 +202,42 @@ public class EditHandler implements ITickHandler{
 	}
 	
 	static boolean setPlayerStats(EntityPlayerMP player, SburbConnection c) {
+		
+		double playerOffset = player.posX-player.boundingBox.maxX;
+		
 		SburbServerManager manager = new SburbServerManager(player.worldObj, player);
 		manager.client = c.getClientName();
 		player.theItemInWorldManager = manager;
-		ChunkCoordinates coord;
+		double posX, posY, posZ;
 		World world = MinecraftServer.getServer().worldServerForDimension(c.enteredGame()?c.getClientDimension():c.getClientData().getDimension());
-		if(c.enteredGame()) {
-			coord = world.getSpawnPoint();
-		} else {
-			TileEntityComputer te = SkaianetHandler.getComputer(c.getClientData());
-			coord = new ChunkCoordinates(te.xCoord, te.yCoord, te.zCoord);
-		}
-		coord.posY = world.getTopSolidOrLiquidBlock(coord.posX, coord.posZ);
-		
-		player.closeScreen();
 		
 		if(world.provider.dimensionId != player.worldObj.provider.dimensionId)
 			player.travelToDimension(world.provider.dimensionId);
 		
-		player.setPositionAndUpdate(coord.posX+0.5, coord.posY, coord.posZ+0.5);
+		if(c.useCoordinates) {
+			posX = c.posX;
+			posY = c.posY;
+			posZ = c.posZ;
+			player.setPosition(posX, posY, posZ);
+			if(!player.isInsideOfMaterial(Material.air))	//Should be improved
+				posY = world.getTopSolidOrLiquidBlock((int)posX, (int)posZ);
+		} else if(c.enteredGame()) {
+				posX = c.centerX + 0.5;
+				posY = world.getTopSolidOrLiquidBlock(c.centerX, c.centerZ);
+				posZ = c.centerZ + 0.5;
+			} else {
+				TileEntityComputer te = SkaianetHandler.getComputer(c.getClientData());
+				posX = te.xCoord + 0.5;
+				posY = world.getTopSolidOrLiquidBlock(te.xCoord, te.zCoord);
+				posZ = te.zCoord + 0.5;
+			}
+		
+		player.closeScreen();
+		player.inventory.clearInventory(-1, -1);
+		
+		player.setPositionAndUpdate(posX, posY, posZ);
 		
 		return true;
-	}
-	
-	public static void onDisconnect(SburbConnection c) {
-		reset(null, 0, getData(c));
 	}
 	
 	public static EditData getData(String editor) {
@@ -242,6 +270,13 @@ public class EditHandler implements ITickHandler{
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
 		EntityPlayer player = (EntityPlayer)tickData[0];
+		if(player.worldObj.isRemote && isActive() || !player.worldObj.isRemote && getData(player.username) != null)
+			for(int i = 0; i < player.inventory.mainInventory.length; i++) {
+				ItemStack stack = player.inventory.mainInventory[i];
+				if(stack != null && (GristRegistry.getGristConversion(stack) == null || !(stack.getItem() instanceof ItemBlock)))
+					player.inventory.mainInventory[i] = null;
+			}
+		
 		double range;
 		int centerX, centerZ;
 		
@@ -262,8 +297,8 @@ public class EditHandler implements ITickHandler{
 			
 			range = (MinestuckSaveHandler.lands.contains((byte)player.dimension)?Minestuck.landEditRange:Minestuck.overworldEditRange)/2;
 			
-			centerX = data.centerX;
-			centerZ = data.centerZ;
+			centerX = data.connection.centerX;
+			centerZ = data.connection.centerZ;
 			
 		}
 		if(range < 1)
@@ -282,7 +317,6 @@ public class EditHandler implements ITickHandler{
 		
 		if(newX != player.posX || newZ != player.posZ)
 			player.setPositionAndUpdate(newX, player.posY-(double)player.yOffset, newZ);
-		
 		
 	}
 

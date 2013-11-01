@@ -227,6 +227,15 @@ public class SkaianetHandler {
 				cte.latestmessage.put(0, "Connection failed");
 			map.put(c.server.owner, c.server);
 		}
+		if(newConnection && !getAssociatedPartner(c.getClientName(), true).isEmpty()) {	//Copy client associated variables
+			SburbConnection conn = getConnection(c.getClientName(), getAssociatedPartner(c.getClientName(), true));
+			c.enteredGame = conn.enteredGame;
+			c.canSplit = conn.canSplit;
+			c.centerX = conn.centerX;
+			c.centerZ = conn.centerZ;
+			c.clientHomeLand = conn.clientHomeLand;
+			//c.inventory = conn.inventory;
+		}
 		c1.connected(otherPlayer, isClient);
 		c2.connected(player.owner, !isClient);
 		if(c1 != c2)
@@ -527,23 +536,23 @@ public class SkaianetHandler {
 		else return (TileEntityComputer)te;
 	}
 	
-	public static void enterMedium(String player, int dimensionId) {
-		SburbConnection c = getConnection(player, getAssociatedPartner(player, true));
+	public static void enterMedium(EntityPlayerMP player, int dimensionId) {
+		SburbConnection c = getConnection(player.username, getAssociatedPartner(player.username, true));
 		if(c == null) {
-			c = getClientConnection(player);
+			c = getClientConnection(player.username);
 			if(c == null) {
 				c = new SburbConnection();
 				c.isActive = false;
 				c.isMain = true;
-				c.clientName = player;
-				c.serverName = player;
+				c.clientName = player.username;
+				c.serverName = player.username;
 				if(Session.registerConnection(c))
 					connections.add(c);
-			} else giveItems(player);
+			} else giveItems(player.username);
 		}
 		c.clientHomeLand = dimensionId;
 		
-		for(SburbConnection sc : connections) {	//TEMP Later make it only change the transferred computers instead
+		for(SburbConnection sc : connections) {
 			if(sc.isActive){
 				if(getComputer(sc.client) == null)
 					sc.client.dimension = dimensionId;
@@ -553,6 +562,8 @@ public class SkaianetHandler {
 		}
 		
 		c.enteredGame = true;
+		c.centerX = (int)player.posX;
+		c.centerZ = (int)player.posZ;
 		updateAll();
 	}
 	

@@ -43,7 +43,7 @@ public class EntityDecoy extends EntityLiving {
 	ResourceLocation locationCape;
 	ThreadDownloadImageData downloadImageSkin;
 	ThreadDownloadImageData downloadImageCape;
-	InventoryPlayer inventory;
+	public InventoryPlayer inventory;
 	
 	public EntityDecoy(World world){
 		super(world);
