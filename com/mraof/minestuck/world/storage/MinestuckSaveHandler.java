@@ -6,11 +6,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.WorldEvent;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 
 public class MinestuckSaveHandler 
@@ -39,4 +42,18 @@ public class MinestuckSaveHandler
 			SkaianetHandler.saveData(event.world.getSaveHandler().getMapFileFromName("connectionList"),event.world.getSaveHandler().getMapFileFromName("waitingConnections"));
 		}
 	}
+//	@ForgeSubscribe
+//	public void onWorldUnload(WorldEvent.Unload event)
+//	{
+//		if(event.world.isRemote)
+////		{
+//			for(Iterator iterator = lands.iterator(); iterator.hasNext(); )
+//			{
+//				int dim = ((Number)iterator.next()).intValue();
+//				if(DimensionManager.isDimensionRegistered(dim))
+//					DimensionManager.unregisterDimension(dim);
+//				iterator.remove();
+//			}
+////		}
+//	}
 }
