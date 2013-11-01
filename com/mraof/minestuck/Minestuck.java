@@ -6,6 +6,7 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Iterator;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -20,9 +21,6 @@ import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
-
-import codechicken.nei.api.API;
-import codechicken.nei.api.IConfigureNEI;
 import codechicken.nei.asm.NEIModContainer;
 
 import com.mraof.minestuck.block.BlockChessTile;
@@ -70,7 +68,6 @@ import com.mraof.minestuck.item.ItemMachine;
 import com.mraof.minestuck.item.ItemSickle;
 import com.mraof.minestuck.item.ItemSpork;
 import com.mraof.minestuck.item.ItemStorageBlock;
-import com.mraof.minestuck.nei.AlchemiterHandler;
 import com.mraof.minestuck.nei.NEIMinestuckConfig;
 import com.mraof.minestuck.network.MinestuckConnectionHandler;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
@@ -98,6 +95,7 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
@@ -105,7 +103,7 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "Minestuck", name = "Minestuck")
+@Mod(modid = "Minestuck", name = "Minestuck", version = "1.0")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false, packetHandler = MinestuckPacketHandler.class, channels = {"Minestuck"})
 public class Minestuck
 {
@@ -328,7 +326,7 @@ public class Minestuck
 			crockerSporkId = toolIdStart + 24;
 			skaiaForkId = toolIdStart + 25;
 		}
-		
+
 		itemIdStart = config.get("Item Ids", "itemIdStart", 6001).getInt();
 		rawCruxiteId = config.get("Item Ids", "rawCruxiteId", itemIdStart).getInt();
 		cruxiteDowelId = config.get("Item Ids", "cruxiteDowelId", itemIdStart + 1).getInt();
@@ -632,7 +630,21 @@ public class Minestuck
 		currentEntityIdOffset++;
 	}
 
-
+	@EventHandler 
+	public void serverAboutToStart(FMLServerAboutToStartEvent event)
+	{
+		//unregister lands that may not be in this save
+		for(Iterator iterator = MinestuckSaveHandler.lands.iterator(); iterator.hasNext(); )
+		{
+			int dim = ((Number)iterator.next()).intValue();
+			if(DimensionManager.isDimensionRegistered(dim))
+			{
+				DimensionManager.unregisterDimension(dim);
+//				Debug.print("Unregistering " + dim);
+			}
+			iterator.remove();
+		}
+	}
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event)
 	{
@@ -645,7 +657,7 @@ public class Minestuck
 				while((currentByte = dataInputStream.read()) != -1)
 				{
 					MinestuckSaveHandler.lands.add((byte)currentByte);
-					//Debug.printf("Found land dimension id of: %d", currentByte);
+					Debug.printf("Found land dimension id of: %d", currentByte);
 					if(!DimensionManager.isDimensionRegistered(currentByte))
 						DimensionManager.registerDimension(currentByte, Minestuck.landProviderTypeId);
 				}

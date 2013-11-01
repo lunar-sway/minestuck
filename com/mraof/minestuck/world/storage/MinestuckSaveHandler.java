@@ -42,18 +42,4 @@ public class MinestuckSaveHandler
 			SkaianetHandler.saveData(event.world.getSaveHandler().getMapFileFromName("connectionList"),event.world.getSaveHandler().getMapFileFromName("waitingConnections"));
 		}
 	}
-//	@ForgeSubscribe
-//	public void onWorldUnload(WorldEvent.Unload event)
-//	{
-//		if(event.world.isRemote)
-////		{
-//			for(Iterator iterator = lands.iterator(); iterator.hasNext(); )
-//			{
-//				int dim = ((Number)iterator.next()).intValue();
-//				if(DimensionManager.isDimensionRegistered(dim))
-//					DimensionManager.unregisterDimension(dim);
-//				iterator.remove();
-//			}
-////		}
-//	}
 }

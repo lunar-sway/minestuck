@@ -1,5 +1,7 @@
 package com.mraof.minestuck.network;
 
+import java.util.Iterator;
+
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.NetLoginHandler;
@@ -7,6 +9,7 @@ import net.minecraft.network.packet.NetHandler;
 import net.minecraft.network.packet.Packet1Login;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.common.DimensionManager;
 
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
@@ -38,11 +41,23 @@ public class MinestuckConnectionHandler implements IConnectionHandler {
 	}
 
 	@Override
-	public void connectionOpened(NetHandler netClientHandler, String server, int port, INetworkManager manager) {
+	public void connectionOpened(NetHandler netClientHandler, String server, int port, INetworkManager manager) 
+	{
+		for(Iterator iterator = MinestuckSaveHandler.lands.iterator(); iterator.hasNext(); )
+		{
+			int dim = ((Number)iterator.next()).intValue();
+			if(DimensionManager.isDimensionRegistered(dim))
+			{
+				DimensionManager.unregisterDimension(dim);
+//				Debug.print("Unregistering " + dim);
+			}
+			iterator.remove();
+		}
 	}
 
 	@Override
-	public void connectionOpened(NetHandler netClientHandler, MinecraftServer server, INetworkManager manager) {
+	public void connectionOpened(NetHandler netClientHandler, MinecraftServer server, INetworkManager manager) 
+	{
 	}
 
 	@Override
