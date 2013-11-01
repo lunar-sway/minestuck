@@ -39,4 +39,8 @@ public class CombinationRegistry {
 		else temp = combRecipes.get(Arrays.asList(input1.itemID, input1.getItemDamage(), input2.itemID, input2.getItemDamage(), mode, true, true));
 		return (ItemStack) temp;
 	}
+	
+	public static Hashtable getAllConversions() {
+		return combRecipes;
+	}
 }

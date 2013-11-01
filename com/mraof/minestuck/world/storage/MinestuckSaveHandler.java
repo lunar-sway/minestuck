@@ -7,13 +7,16 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.WorldEvent;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.grist.GristStorage;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 
