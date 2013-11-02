@@ -49,6 +49,8 @@ public class TileEntityMachine extends TileEntity implements IInventory {
     			return 3;
     		case (3):
     			return 2;
+    		case (4):
+    			return 2;
     		}
             return this.inv.length;
     }
@@ -241,6 +243,8 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			} else {
 				return false;
 			}
+		case (4):
+			return (this.inv[1] != null && this.owner != null && GristRegistry.getGristConversion(inv[1]) != null);
 		}
 		return false;
 	}
@@ -322,6 +326,24 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 	                Map.Entry pairs = (Map.Entry)it.next();
 	                this.owner.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").setInteger(GristType.values()[(Integer) pairs.getKey()].getName(),this.owner.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(GristType.values()[(Integer)pairs.getKey()].getName()) - (Integer)pairs.getValue());
 	            }
+			break;
+	    	}
+		case (4):
+			if (inv[0] == null) {
+				setInventorySlotContents(0,inv[1]);
+			} else {
+				decrStackSize(0, -1);
+			}
+			//decrStackSize(1, 1);
+	    	set = GristRegistry.getGristConversion(inv[1]);
+		    reqs = set.getHashtable();
+	    	if (reqs != null) {
+	    	   	Iterator it = reqs.entrySet().iterator();
+	            while (it.hasNext()) {
+	                Map.Entry pairs = (Map.Entry)it.next();
+	                this.owner.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").setInteger(GristType.values()[(Integer) pairs.getKey()].getName(),this.owner.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(GristType.values()[(Integer)pairs.getKey()].getName()) + (Integer)pairs.getValue());
+	            }
+	        this.decrStackSize(1, 1);
 			break;
 	    	}
 		}

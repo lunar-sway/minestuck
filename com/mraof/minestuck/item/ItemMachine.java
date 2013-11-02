@@ -7,8 +7,8 @@ import net.minecraft.util.Icon;
 
 public class ItemMachine extends ItemBlock {
 
-		private final static String[] subNames = {"cruxtruder","punchDesignex","totemLathe","alchemiter"};
-		private final static Icon[] icons = new Icon[4];
+		private final static String[] subNames = {"cruxtruder","punchDesignex","totemLathe","alchemiter","gristWidget"};
+		private final static Icon[] icons = new Icon[5];
 		
 		public ItemMachine(int par1) 
 		{
@@ -34,6 +34,7 @@ public class ItemMachine extends ItemBlock {
 			   icons[1] = par1IconRegister.registerIcon("minestuck:PunchDesignex");
 			   icons[2] = par1IconRegister.registerIcon("minestuck:TotemLathe");
 			   icons[3] = par1IconRegister.registerIcon("minestuck:Alchemiter");
+			   icons[4] = par1IconRegister.registerIcon("minestuck:GristWidget");
 		}
 		
 		@Override

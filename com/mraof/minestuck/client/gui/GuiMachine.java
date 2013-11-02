@@ -28,8 +28,8 @@ import com.mraof.minestuck.util.GristType;
 
 public class GuiMachine extends GuiContainer {
 	
-	private static final String[] guis = {"cruxtruder","designex","lathe","alchemiter"};
-	private static final String[] guiTitles = {"Cruxtruder","Punch Designex","Totem Lathe","Alchemiter"};
+	private static final String[] guis = {"cruxtruder","designex","lathe","alchemiter","widget"};
+	private static final String[] guiTitles = {"Cruxtruder","Punch Designex","Totem Lathe","Alchemiter","GristWidget 12000"};
 	
 	private ResourceLocation guiBackground;
 	private ResourceLocation guiProgress;
@@ -89,6 +89,14 @@ public class GuiMachine extends GuiContainer {
     	goX = 72;
     	goY = 31;
     	break;
+    case (4):
+       	progressX = 54;
+		progressY = 23;
+		progressWidth = 71;
+		progressHeight = 10;
+		goX = 72;
+		goY = 31;
+		break;
     }
 }
 
@@ -97,11 +105,11 @@ protected void drawGuiContainerForegroundLayer(int param1, int param2) {
     fontRenderer.drawString(guiTitles[metadata], 8, 6, 4210752);
     //draws "Inventory" or your regional equivalent
     fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
-    if (metadata == 3 && te.inv[1] != null) 
+    if ((metadata == 3 || metadata ==4) && te.inv[1] != null) 
     {
     	//Render grist requirements
     	NBTTagCompound nbttagcompound = te.inv[1].getTagCompound();
-    	GristSet set = GristRegistry.getGristConversion(AlchemyRecipeHandler.getDecodedItem(te.inv[1]));
+    	GristSet set = GristRegistry.getGristConversion(metadata == 3? AlchemyRecipeHandler.getDecodedItem(te.inv[1]) : te.inv[1]);
     	
     	if (set == null) {fontRenderer.drawString("Not Alchemizable", 9,45, 16711680); return;}
     	Hashtable reqs = set.getHashtable();
@@ -122,7 +130,7 @@ protected void drawGuiContainerForegroundLayer(int param1, int param2) {
                 int row = place % 3;
                 int col = place / 3;
                 
-                int color = need <= have ? 65280 : 16711680; //Green if we have enough grist, red if not
+                int color = metadata == 3 ? (need <= have ? 65280 : 16711680) : 0; //Green if we have enough grist, red if not, black if GristWidget
                 
                 fontRenderer.drawString(need + " " + GristType.values()[type].getName() + " (" + have + ")", 9 + (80 * col),45 + (8 * (row)), color);
                 

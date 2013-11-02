@@ -68,7 +68,11 @@ public class ContainerMachine extends Container {
         case (3):
         	addSlotToContainer(new SlotDualInput(tileEntity,1,alchemiterInputX,alchemiterInputY,Minestuck.cruxiteDowelCarved.itemID,Minestuck.cruxiteDowel.itemID));
         	addSlotToContainer(new SlotOutput(tileEntity,0,alchemiterOutputX,alchemiterOutputY));
-        	//break;
+        	break;
+        case (4):
+          	addSlotToContainer(new Slot(tileEntity,1,alchemiterInputX,alchemiterInputY));
+        	//addSlotToContainer(new SlotOutput(tileEntity,0,alchemiterOutputX,alchemiterOutputY));
+        	break;
         }
 //        for (int i = 0; i < 3; i++) {
 //                for (int j = 0; j < 3; j++) {
@@ -162,6 +166,15 @@ public class ContainerMachine extends Container {
             		if (itemstackOrig.itemID == Minestuck.cruxiteDowelCarved.itemID || itemstackOrig.itemID == Minestuck.cruxiteDowel.itemID) {
             			result = mergeItemStack(itemstackOrig,0,1,false);
             		}
+            	}
+            	break;
+            case (4):
+               	if (slotNumber <= 1) {
+            		//if it's a machine slot
+            		result = mergeItemStack(itemstackOrig,2,allSlots,false);
+            	} else if (slotNumber > 1) {
+            		//if it's an inventory slot with valid contents
+            		result = mergeItemStack(itemstackOrig,0,1,false);
             	}
             	break;
             }
