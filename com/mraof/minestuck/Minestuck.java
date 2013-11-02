@@ -103,7 +103,7 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "Minestuck", name = "Minestuck", version = "1.0")
+@Mod(modid = "Minestuck", name = "Minestuck")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false, packetHandler = MinestuckPacketHandler.class, channels = {"Minestuck"})
 public class Minestuck
 {
