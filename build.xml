@@ -27,7 +27,7 @@
 	<property name="forge.name"          value="minecraftforge-src-${mc.version}-${forge.version}.zip"/>
 
 	<property name="ccc.version"         value="0.9.0.7" />
-	<property name="nei.version"         value="1.6.1.5" />
+	<property name="nei.version"         value="1.6.1.5_d1" />
 
 	<available property="forge-exists" file="${download.dir}/${forge.name}"/>
 
@@ -70,8 +70,8 @@
 		<get src="http://www.chickenbones.craftsaddle.org/Files/goto.php?file=CodeChickenCore-dev&amp;version=${mc.version}" dest="${libs.dir}" />
 		<get src="http://www.chickenbones.craftsaddle.org/Files/goto.php?file=NotEnoughItems-dev&amp;version=${mc.version}" dest="${libs.dir}" />
 		-->
-		<get src="http://www.chickenbones.craftsaddle.org/Files/New_Versions/${mc.version}/CodeChickenCore-dev ${ccc.version}.jar" dest="${libs.dir}" />
-		<get src="http://www.chickenbones.craftsaddle.org/Files/New_Versions/${mc.version}/NotEnoughItems-dev ${nei.version}.jar" dest="${libs.dir}" />
+		<get src="http://www.chickenbones.craftsaddle.org/Files/New_Versions/${mc.version}/CodeChickenCore-dev ${ccc.version}.jar" dest="${libs.dir}" usetimestamp="True" />
+		<get src="http://www.chickenbones.craftsaddle.org/Files/New_Versions/${mc.version}/NotEnoughItems-dev ${nei.version}.jar" dest="${libs.dir}" usetimestamp="True" />
 	</target>
 
 	<!-- Setup mcp and forge -->
