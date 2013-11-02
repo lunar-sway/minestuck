@@ -70,8 +70,8 @@
 		<get src="http://www.chickenbones.craftsaddle.org/Files/goto.php?file=CodeChickenCore-dev&amp;version=${mc.version}" dest="${libs.dir}" />
 		<get src="http://www.chickenbones.craftsaddle.org/Files/goto.php?file=NotEnoughItems-dev&amp;version=${mc.version}" dest="${libs.dir}" />
 		-->
-		<get src="http://www.chickenbones.craftsaddle.org/Files/New_Versions/${mc.version}/CodeChickenCore-dev ${ccc.version}.jar" dest="${libs.dir}" usetimestamp="True" />
-		<get src="http://www.chickenbones.craftsaddle.org/Files/New_Versions/${mc.version}/NotEnoughItems-dev ${nei.version}.jar" dest="${libs.dir}" usetimestamp="True" />
+		<get src="http://www.chickenbones.craftsaddle.org/Files/New_Versions/${mc.version}/CodeChickenCore-dev%20${ccc.version}.jar" dest="${libs.dir}" usetimestamp="True" />
+		<get src="http://www.chickenbones.craftsaddle.org/Files/New_Versions/${mc.version}/NotEnoughItems-dev%20${nei.version}.jar" dest="${libs.dir}" usetimestamp="True" />
 	</target>
 
 	<!-- Setup mcp and forge -->
