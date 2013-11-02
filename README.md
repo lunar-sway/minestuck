@@ -15,7 +15,7 @@ Useful Links
 
 * MSPAF Thread: http://www.mspaforums.com/showthread.php?43888-Minestuck-Attempting-to-put-some-Homestuck-in-Minecraft-%28CODERS-NEEDED%21%29
 * MCF Thread: http://www.minecraftforum.net/topic/821039-idea-homestuck-related-mods-looking-for-help/
-* Download Link: http://adf.ly/H6wAE
+* Download Link: http://ci.mraof.com/job/Minestuck/
 * Resources: http://minestuck.mraof.com
 * Test Server IP: mraof.com
 * Tumblr Development Blog: http://minestuckmod.tumblr.com/
