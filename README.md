@@ -22,4 +22,4 @@ Useful Links
 * Alchemy Data Spreadsheets: https://docs.google.com/spreadsheet/ccc?key=0AtQP0yOa5DOrdGJTekhGTUJ2azhxMUxsWjBiand0UVE&usp=sharing , https://docs.google.com/spreadsheet/ccc?key=0AtQP0yOa5DOrdFFRMmx4M2Z1QUhKRVZJZTRTdEZOdUE&usp=sharing
 * To-Do List: https://docs.google.com/document/d/1-p0HTtQYYhFBdtoT5EU5L0nQpoQ25bKayz8qH-JVLQ0/edit?usp=sharing
 * Beginning Gameplay Guide: http://imgur.com/a/TkrEG
-* Installation Guide: Coming Soon!
+* Installation Guide: http://imgur.com/a/8itRt
