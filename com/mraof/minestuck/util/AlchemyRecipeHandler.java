@@ -575,25 +575,34 @@ public class AlchemyRecipeHandler {
 		recipeList = new HashMap();
 		
 		Debug.print("PASS 1");
-		for (Object recipe : CraftingManager.getInstance().getRecipeList()) {
-			if (recipe instanceof ShapedRecipes) {
-				ShapedRecipes newRecipe = (ShapedRecipes) recipe;
-				//Debug.print("Found the recipe for "+"ITEM"+", id "+newRecipe.getRecipeOutput().itemID+":"+newRecipe.getRecipeOutput().getItemDamage());
-				recipeList.put(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getItemDamage()), recipe);
-			} else if (recipe instanceof ShapelessRecipes) {
-				ShapelessRecipes newRecipe = (ShapelessRecipes) recipe;
-				//Debug.print("Found the recipe for "+"ITEM"+", id "+newRecipe.getRecipeOutput().itemID+":"+newRecipe.getRecipeOutput().getItemDamage());
-				recipeList.put(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getItemDamage()), recipe);
-			} else if (recipe instanceof ShapedOreRecipe) {
-				ShapedOreRecipe newRecipe = (ShapedOreRecipe) recipe;
-				//Debug.print("Found the recipe for "+"ITEM"+", id "+newRecipe.getRecipeOutput().itemID+":"+newRecipe.getRecipeOutput().getItemDamage());
-				recipeList.put(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getItemDamage()), recipe);
-			} else if (recipe instanceof ShapelessOreRecipe) {
-				ShapelessOreRecipe newRecipe = (ShapelessOreRecipe) recipe;
-				//Debug.print("Found the recipe for "+"ITEM"+", id "+newRecipe.getRecipeOutput().itemID+":"+newRecipe.getRecipeOutput().getItemDamage());
-				recipeList.put(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getItemDamage()), recipe);
-			} else {
-				Debug.print("Found the recipe for unkown format: "+recipe.getClass());
+		for (Object recipe : CraftingManager.getInstance().getRecipeList()) 
+		{
+			try
+			{
+				if (recipe instanceof ShapedRecipes) {
+					ShapedRecipes newRecipe = (ShapedRecipes) recipe;
+					//Debug.print("Found the recipe for "+"ITEM"+", id "+newRecipe.getRecipeOutput().itemID+":"+newRecipe.getRecipeOutput().getItemDamage());
+					recipeList.put(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getItemDamage()), recipe);
+				} else if (recipe instanceof ShapelessRecipes) {
+					ShapelessRecipes newRecipe = (ShapelessRecipes) recipe;
+					//Debug.print("Found the recipe for "+"ITEM"+", id "+newRecipe.getRecipeOutput().itemID+":"+newRecipe.getRecipeOutput().getItemDamage());
+					
+					recipeList.put(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getItemDamage()), recipe);
+				} else if (recipe instanceof ShapedOreRecipe) {
+					ShapedOreRecipe newRecipe = (ShapedOreRecipe) recipe;
+					//Debug.print("Found the recipe for "+"ITEM"+", id "+newRecipe.getRecipeOutput().itemID+":"+newRecipe.getRecipeOutput().getItemDamage());
+					recipeList.put(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getItemDamage()), recipe);
+				} else if (recipe instanceof ShapelessOreRecipe) {
+					ShapelessOreRecipe newRecipe = (ShapelessOreRecipe) recipe;
+					//Debug.print("Found the recipe for "+"ITEM"+", id "+newRecipe.getRecipeOutput().itemID+":"+newRecipe.getRecipeOutput().getItemDamage());
+					recipeList.put(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getItemDamage()), recipe);
+				} else {
+					Debug.print("Found the recipe for unknown format: "+recipe.getClass());
+				}
+			}
+			catch (NullPointerException e)
+			{
+				Debug.printf("a null pointer exception was thrown for %s", recipe);
 			}
 		}
 		
