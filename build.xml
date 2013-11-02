@@ -26,6 +26,9 @@
 
 	<property name="forge.name"          value="minecraftforge-src-${mc.version}-${forge.version}.zip"/>
 
+	<property name="ccc.version"         value="0.9.0.7" />
+	<property name="nei.version"         value="1.6.1.5" />
+
 	<available property="forge-exists" file="${download.dir}/${forge.name}"/>
 
 	<condition property="out-of-date">
@@ -63,8 +66,12 @@
 	<target name="download-libs" >
 		<delete dir="${libs.dir}"/>
 		<mkdir dir="${libs.dir}"/>
+		<!--
 		<get src="http://www.chickenbones.craftsaddle.org/Files/goto.php?file=CodeChickenCore-dev&amp;version=${mc.version}" dest="${libs.dir}" />
 		<get src="http://www.chickenbones.craftsaddle.org/Files/goto.php?file=NotEnoughItems-dev&amp;version=${mc.version}" dest="${libs.dir}" />
+		-->
+		<get src="http://www.chickenbones.craftsaddle.org/Files/New_Versions/${mc.version}/CodeChickenCore-dev ${ccc.version}.jar" dest="${libs.dir}" />
+		<get src="http://www.chickenbones.craftsaddle.org/Files/New_Versions/${mc.version}/NotEnoughItems-dev ${nei.version}.jar" dest="${libs.dir}" />
 	</target>
 
 	<!-- Setup mcp and forge -->
