@@ -47,6 +47,7 @@
 	<!-- Clear build directory -->
 	<target name="clean">
 		<delete dir="${build.dir}"/>
+		<delete dir="bin/" />
 	</target>
 
 	<!-- Set full version -->
