@@ -29,6 +29,7 @@ public class AlchemyRecipeHandler {
 	
 	private static HashMap recipeList;
 	private static HashMap lookedOver;
+	private static int returned = 0;
 
 	public static void registerVanillaRecipes() {
 		
@@ -573,8 +574,9 @@ public class AlchemyRecipeHandler {
 	public static void registerDynamicRecipes() {
 		
 		recipeList = new HashMap();
+		int invalid = 0;
 		
-		Debug.print("PASS 1");
+		Debug.print("Looking for dynamic grist conversions...");
 		for (Object recipe : CraftingManager.getInstance().getRecipeList()) {
 			if (recipe instanceof ShapedRecipes) {
 				ShapedRecipes newRecipe = (ShapedRecipes) recipe;
@@ -593,11 +595,13 @@ public class AlchemyRecipeHandler {
 				//Debug.print("Found the recipe for "+"ITEM"+", id "+newRecipe.getRecipeOutput().itemID+":"+newRecipe.getRecipeOutput().getItemDamage());
 				recipeList.put(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getItemDamage()), recipe);
 			} else {
-				Debug.print("Found the recipe for unkown format: "+recipe.getClass());
+				//Debug.print("Found the recipe for unkown format: "+recipe.getClass());
+				invalid++;
 			}
 		}
+		Debug.print("Found "+recipeList.size()+" valid recipes, and "+invalid+" unknown ones.");
 		
-		Debug.print("PASS 2");
+		Debug.print("Calculating grist conversion...");
 	   	Iterator it = recipeList.entrySet().iterator();
         while (it.hasNext()) {
         	Map.Entry pairs = (Map.Entry)it.next();
@@ -605,14 +609,16 @@ public class AlchemyRecipeHandler {
         	lookedOver = new HashMap();
         	getRecipe(pairs.getValue());
         }
+        
+        Debug.print("Done. Added "+returned+" grist conversions.");
 	}
 	
 	private static boolean getRecipe(Object recipe) {
 		if (recipe instanceof ShapedRecipes) {
-			Debug.print("found shaped recipe. Output of "+"ITEM");
+			////Debug.print("found shaped recipe. Output of "+"ITEM");
 			ShapedRecipes newRecipe = (ShapedRecipes) recipe;
 			if (lookedOver.get(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getHasSubtypes() ? newRecipe.getRecipeOutput().getItemDamage() : 0)) != null) {
-				Debug.print("	Recursive recipe! Recipe failed.");
+				////Debug.print("	Recursive recipe! Recipe failed.");
 				return false;
 			} else {
 				lookedOver.put(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getHasSubtypes() ? newRecipe.getRecipeOutput().getItemDamage() : 0),true);
@@ -621,25 +627,25 @@ public class AlchemyRecipeHandler {
 			GristSet set = new GristSet();
 			for (ItemStack item : newRecipe.recipeItems) {
 				if (GristRegistry.getGristConversion(item) != null) {
-					Debug.print("	Adding compo: "+"ITEM");
+					//Debug.print("	Adding compo: "+"ITEM");
 					set.addGrist(GristRegistry.getGristConversion(item));
 				} else if (item != null) {
 					Object subrecipe = recipeList.get(Arrays.asList(item.itemID,item.getHasSubtypes() && !((Integer)item.getItemDamage()).equals(32767) ? item.getItemDamage() : 0));
 					if (subrecipe != null) {
-						Debug.print("	Could not find "+"ITEM"+". Looking up subrecipe... {");
+						//Debug.print("	Could not find "+"ITEM"+". Looking up subrecipe... {");
 						 if (getRecipe(subrecipe)) {
 							 if (GristRegistry.getGristConversion(item) == null) {
-								 Debug.print("	} Recipe failure! getRecipe did not return expeted boolean value.");
+								 //Debug.print("	} Recipe failure! getRecipe did not return expeted boolean value.");
 								 return false;
 							 }
 							 set.addGrist(GristRegistry.getGristConversion(item));
-							 Debug.print("	}");
+							 //Debug.print("	}");
 						 } else {
-							 Debug.print("	}");
+							 //Debug.print("	}");
 							 return false;
 						 }
 					} else {
-						Debug.print("	Could not find "+"ITEM"+" ("+item.itemID+":"+item.getItemDamage()+"). Recipe failed!");
+						//Debug.print("	Could not find "+"ITEM"+" ("+item.itemID+":"+item.getItemDamage()+"). Recipe failed!");
 						return false;
 					}
 				}
@@ -647,10 +653,10 @@ public class AlchemyRecipeHandler {
 				GristRegistry.addGristConversion(newRecipe.getRecipeOutput(),newRecipe.getRecipeOutput().getHasSubtypes(),set);
 			}
 		} else if (recipe instanceof ShapelessRecipes) {
-			Debug.print("found shapeless recipe. Output of "+"ITEM");
+			//Debug.print("found shapeless recipe. Output of "+"ITEM");
 			ShapelessRecipes newRecipe = (ShapelessRecipes) recipe;
 			if (lookedOver.get(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getHasSubtypes() ? newRecipe.getRecipeOutput().getItemDamage() : 0)) != null) {
-				Debug.print("	Recursive recipe! Recipe failed.");
+				//Debug.print("	Recursive recipe! Recipe failed.");
 				return false;
 			} else {
 				lookedOver.put(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getHasSubtypes() ? newRecipe.getRecipeOutput().getItemDamage() : 0),true);
@@ -660,25 +666,25 @@ public class AlchemyRecipeHandler {
 			for (Object obj : newRecipe.recipeItems) {
 				ItemStack item = (ItemStack) obj;
 				if (GristRegistry.getGristConversion(item) != null) {
-					Debug.print("	Adding compo: "+"ITEM");
+					//Debug.print("	Adding compo: "+"ITEM");
 					set.addGrist(GristRegistry.getGristConversion(item));
 				} else if (item != null) {
 					Object subrecipe = recipeList.get(Arrays.asList(item.itemID,item.getHasSubtypes() && !((Integer)item.getItemDamage()).equals(32767) ? item.getItemDamage() : 0));
 					if (subrecipe != null) {
-						Debug.print("	Could not find "+"ITEM"+". Looking up subrecipe... {");
+						//Debug.print("	Could not find "+"ITEM"+". Looking up subrecipe... {");
 						 if (getRecipe(subrecipe)) {
 							 if (GristRegistry.getGristConversion(item) == null) {
-								 Debug.print("	} Recipe failure! getRecipe did not return expeted boolean value.");
+								 //Debug.print("	} Recipe failure! getRecipe did not return expeted boolean value.");
 								 return false;
 							 }
 							 set.addGrist(GristRegistry.getGristConversion(item));
-							 Debug.print("	}");
+							 //Debug.print("	}");
 						 } else {
-							 Debug.print("	}");
+							 //Debug.print("	}");
 							 return false;
 						 }
 					} else {
-						Debug.print("	Could not find "+"ITEM"+" ("+item.itemID+":"+item.getItemDamage()+"). Recipe failed!");
+						//Debug.print("	Could not find "+"ITEM"+" ("+item.itemID+":"+item.getItemDamage()+"). Recipe failed!");
 						return false;
 					}
 				}
@@ -686,11 +692,11 @@ public class AlchemyRecipeHandler {
 				GristRegistry.addGristConversion(newRecipe.getRecipeOutput(),newRecipe.getRecipeOutput().getHasSubtypes(),set);
 			}
 		} else if (recipe instanceof ShapedOreRecipe) {
-			Debug.print("found shaped oredict recipe. Output of "+"ITEM");
+			//Debug.print("found shaped oredict recipe. Output of "+"ITEM");
 			ShapedOreRecipe newRecipe = (ShapedOreRecipe) recipe;
 			if (GristRegistry.getGristConversion(newRecipe.getRecipeOutput()) != null) {return false;};
 			if (lookedOver.get(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getHasSubtypes() ? newRecipe.getRecipeOutput().getItemDamage() : 0)) != null) {
-				Debug.print("	Recursive recipe! Recipe failed.");
+				//Debug.print("	Recursive recipe! Recipe failed.");
 				return false;
 			} else {
 				lookedOver.put(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getHasSubtypes() ? newRecipe.getRecipeOutput().getItemDamage() : 0),true);
@@ -701,7 +707,7 @@ public class AlchemyRecipeHandler {
 				if (obj == null) {break;}
 				if (obj instanceof ArrayList) {
 					if (((ArrayList) obj).size() == 0) {
-						Debug.print("	Input list was empty!");
+						//Debug.print("	Input list was empty!");
 						break;
 					}
 					item = (ItemStack) ((ArrayList) obj).get(0);
@@ -709,25 +715,25 @@ public class AlchemyRecipeHandler {
 					item = (ItemStack) obj;
 				}
 				if (GristRegistry.getGristConversion(item) != null) {
-					Debug.print("	Adding compo: "+"ITEM");
+					//Debug.print("	Adding compo: "+"ITEM");
 					set.addGrist(GristRegistry.getGristConversion(item));
 				} else if (item != null) {
 					Object subrecipe = recipeList.get(Arrays.asList(item.itemID,item.getHasSubtypes() && !((Integer)item.getItemDamage()).equals(32767) ? item.getItemDamage() : 0));
 					if (subrecipe != null) {
-						Debug.print("	Could not find "+"ITEM"+". Looking up subrecipe... {");
+						//Debug.print("	Could not find "+"ITEM"+". Looking up subrecipe... {");
 						 if (getRecipe(subrecipe)) {
 							 if (GristRegistry.getGristConversion(item) == null) {
-								 Debug.print("	} Recipe failure! getRecipe did not return expeted boolean value.");
+								 //Debug.print("	} Recipe failure! getRecipe did not return expeted boolean value.");
 								 return false;
 							 }
 							 set.addGrist(GristRegistry.getGristConversion(item));
-							 Debug.print("	}");
+							 //Debug.print("	}");
 						 } else {
-							 Debug.print("	}");
+							 //Debug.print("	}");
 							 return false;
 						 }
 					} else {
-						Debug.print("	Could not find "+"ITEM"+" ("+item.itemID+":"+item.getItemDamage()+"). Recipe failed!");
+						//Debug.print("	Could not find "+"ITEM"+" ("+item.itemID+":"+item.getItemDamage()+"). Recipe failed!");
 						return false;
 					}
 				}
@@ -735,10 +741,10 @@ public class AlchemyRecipeHandler {
 				GristRegistry.addGristConversion(newRecipe.getRecipeOutput(),newRecipe.getRecipeOutput().getHasSubtypes(),set);
 			}
 		} else if (recipe instanceof ShapelessOreRecipe) {
-			Debug.print("found shapeless oredict recipe. Output of "+"ITEM");
+			//Debug.print("found shapeless oredict recipe. Output of "+"ITEM");
 			ShapelessOreRecipe newRecipe = (ShapelessOreRecipe) recipe;
 			if (lookedOver.get(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getHasSubtypes() ? newRecipe.getRecipeOutput().getItemDamage() : 0)) != null) {
-				Debug.print("	Recursive recipe! Recipe failed.");
+				//Debug.print("	Recursive recipe! Recipe failed.");
 				return false;
 			} else {
 				lookedOver.put(Arrays.asList(newRecipe.getRecipeOutput().itemID,newRecipe.getRecipeOutput().getHasSubtypes() ? newRecipe.getRecipeOutput().getItemDamage() : 0),true);
@@ -750,7 +756,7 @@ public class AlchemyRecipeHandler {
 				if (obj == null) {break;}
 				if (obj instanceof ArrayList) {
 					if (((ArrayList) obj).size() == 0) {
-						Debug.print("	Input list was empty!");
+						//Debug.print("	Input list was empty!");
 						break;
 					}
 					item = (ItemStack) ((ArrayList) obj).get(0);
@@ -758,25 +764,25 @@ public class AlchemyRecipeHandler {
 					item = (ItemStack) obj;
 				}
 				if (GristRegistry.getGristConversion(item) != null) {
-					Debug.print("	Adding compo: "+"ITEM");
+					//Debug.print("	Adding compo: "+"ITEM");
 					set.addGrist(GristRegistry.getGristConversion(item));
 				} else if (item != null) {
 					Object subrecipe = recipeList.get(Arrays.asList(item.itemID,item.getHasSubtypes() && !((Integer)item.getItemDamage()).equals(32767) ? item.getItemDamage() : 0));
 					if (subrecipe != null) {
-						Debug.print("	Could not find "+"ITEM"+". Looking up subrecipe... {");
+						//Debug.print("	Could not find "+"ITEM"+". Looking up subrecipe... {");
 						 if (getRecipe(subrecipe)) {
 							 if (GristRegistry.getGristConversion(item) == null) {
-								 Debug.print("	} Recipe failure! getRecipe did not return expeted boolean value.");
+								 //Debug.print("	} Recipe failure! getRecipe did not return expeted boolean value.");
 								 return false;
 							 }
 							 set.addGrist(GristRegistry.getGristConversion(item));
-							 Debug.print("	}");
+							 //Debug.print("	}");
 						 } else {
-							 Debug.print("	}");
+							 //Debug.print("	}");
 							 return false;
 						 }
 					} else {
-						Debug.print("	Could not find "+"ITEM"+" ("+item.itemID+":"+item.getItemDamage()+"). Recipe failed!");
+						//Debug.print("	Could not find "+"ITEM"+" ("+item.itemID+":"+item.getItemDamage()+"). Recipe failed!");
 						return false;
 					}
 				}
@@ -784,9 +790,10 @@ public class AlchemyRecipeHandler {
 				GristRegistry.addGristConversion(newRecipe.getRecipeOutput(),newRecipe.getRecipeOutput().getHasSubtypes(),set);
 			}
 		} else {
-			Debug.print("found other recipe class: "+recipe.getClass());
+			//Debug.print("found other recipe class: "+recipe.getClass());
 		}
 		
+		returned ++;
 		return true;
 	}
 	
