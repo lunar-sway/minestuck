@@ -329,12 +329,6 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			break;
 	    	}
 		case (4):
-			if (inv[0] == null) {
-				setInventorySlotContents(0,inv[1]);
-			} else {
-				decrStackSize(0, -1);
-			}
-			//decrStackSize(1, 1);
 	    	set = GristRegistry.getGristConversion(inv[1]);
 		    reqs = set.getHashtable();
 	    	if (reqs != null) {
