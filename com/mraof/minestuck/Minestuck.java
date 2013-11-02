@@ -1,7 +1,5 @@
 package com.mraof.minestuck;
 
-
-
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -218,15 +216,7 @@ public class Minestuck
 	public static Block blockMachine;
 	public static Block blockComputerOn;
 	public static Block blockComputerOff;
-<<<<<<< HEAD
 	
-	public static int overworldEditRange;
-	public static int landEditRange;
-	
-	public static int clientOverworldEditRange;	//Edit range used by the client side.
-	public static int clientLandEditRange;		//changed by a MinestuckConfigPacket sent by the server on login.
-=======
-
 	//Block IDs
 	public static int chessTileId;
 	public static int gatePortalId;
@@ -235,8 +225,14 @@ public class Minestuck
 	public static int blockMachineId;
 	public static int blockComputerOnId;
 	public static int blockComputerOffId;
-
->>>>>>> upstream/master
+	
+	
+	public static int overworldEditRange;
+	public static int landEditRange;
+	
+	public static int clientOverworldEditRange;	//Edit range used by the client side.
+	public static int clientLandEditRange;		//changed by a MinestuckConfigPacket sent by the server on login.
+	
 	//Booleans
 	public static boolean generateCruxiteOre;
 	public static boolean privateComputers;	//If a player should be able to use other players computers or not.
@@ -376,13 +372,9 @@ public class Minestuck
 		globalSession = config.get("General", "globalSession", true).getBoolean(true);
 		privateComputers = config.get("General", "privateComputers", false).getBoolean(false);
 		privateMessage = config.get("General", "privateMessage", "You are not allowed to access other players computers.").getString();
-<<<<<<< HEAD
 		overworldEditRange = config.get("General", "overWorldEditRange", 26).getInt();
 		landEditRange = config.get("General", "landEditRange", 52).getInt();
 		
-=======
-
->>>>>>> upstream/master
 		config.save();
 	}
 
@@ -631,14 +623,10 @@ public class Minestuck
 		AlchemyRecipeHandler.registerVanillaRecipes();
 		AlchemyRecipeHandler.registerMinestuckRecipes();
 		AlchemyRecipeHandler.registerModRecipes();
-<<<<<<< HEAD
 		
 		TickRegistry.registerTickHandler(new EditHandler(), Side.CLIENT);
 		TickRegistry.registerTickHandler(new EditHandler(), Side.SERVER);
 		
-=======
-
->>>>>>> upstream/master
 		Session.maxSize = acceptTitleCollision?(generateSpecialClasses?168:144):12;
 	}
 
@@ -706,7 +694,6 @@ public class Minestuck
 			}
 		}
 		SkaianetHandler.loadData(event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("connectionList"),event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("waitingConnections"));
-<<<<<<< HEAD
 		
 		File gristcache = event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("gristCache");
 		if(gristcache.exists()) {
@@ -720,8 +707,5 @@ public class Minestuck
 			GristStorage.readFromNBT(nbt);
 			
 		}
-=======
-
->>>>>>> upstream/master
 	}
 }

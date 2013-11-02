@@ -14,9 +14,9 @@ import org.lwjgl.opengl.GL11;
 
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.CombinationRegistry;
-import com.mraof.minestuck.util.GristRegistry;
-import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.GristType;
+import com.mraof.minestuck.grist.GristRegistry;
+import com.mraof.minestuck.grist.GristSet;
+import com.mraof.minestuck.grist.GristType;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
