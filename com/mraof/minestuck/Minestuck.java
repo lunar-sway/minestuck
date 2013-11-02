@@ -103,7 +103,7 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "Minestuck", name = "Minestuck")
+@Mod(modid = "Minestuck", name = "Minestuck", version = "@VERSION@")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false, packetHandler = MinestuckPacketHandler.class, channels = {"Minestuck"})
 public class Minestuck
 {
@@ -222,7 +222,7 @@ public class Minestuck
 	public static int blockComputerOffId;
 
 	//Booleans
-	public static boolean generateCruxiteOre;
+	public static boolean generateCruxiteOre; //If set to false, Curxite Ore will not generate
 	public static boolean privateComputers;	//If a player should be able to use other players computers or not.
 	public static boolean acceptTitleCollision;	//Allows combinations like "Heir of Hope" and "Seer of Hope" to exist in the same session. Still not accepting duplicates.
 	public static boolean generateSpecialClasses;	//Allow generation of the "Lord" and "Muse" classes.
