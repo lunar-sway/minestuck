@@ -1,14 +1,15 @@
 <!-- nallar's BuildCraft ant build script edited for Minestuck -->
-<project name="OpenPeripheral" default="main">
+<project name="Minestuck" default="main">
 	<property environment="env"/>
 	<!-- Properties -->
-	
+
 	<property name="env.BUILD_NUMBER"    value="0"/>
 
 	<property name="build.dir"           value="build"/>
-	<property name="src.dir"             value="src"/>
+	<property name="src.dir"             value="com"/>
 
 	<property name="download.dir"        value="download"/>
+	<property name="libs.dir"            value="${download.dir}/libs"/>
 
 	<property name="classes.dir"         value="${build.dir}/classes"/>
 	<property name="jar.dir"             value="${build.dir}/dist"/>
@@ -21,8 +22,8 @@
 	<property name="mc.version"          value="1.6.4"/>
 	<property name="forge.version"       value="9.11.0.883"/>
 	<property name="mod.version"         value="0.0.7"/>
-	<property name="mod.name"	     value="Minestuck"/>
-	
+	<property name="mod.name"	         value="Minestuck"/>
+
 	<property name="forge.name"          value="minecraftforge-src-${mc.version}-${forge.version}.zip"/>
 
 	<available property="forge-exists" file="${download.dir}/${forge.name}"/>
@@ -51,16 +52,24 @@
 	</target>
 
 	<!-- Download necessary files -->
-	<target name="download-files" depends="download-forge"/>
-	
+	<target name="download-files" depends="download-forge,download-libs"/>
+
 	<!-- Download forge (if it doesn't exist) -->
 	<target name="download-forge" unless="forge-exists" >
 		<get src="http://files.minecraftforge.net/${forge.name}" dest="${download.dir}" usetimestamp="True"/>
 	</target>
 
+	<!-- download libraries -->
+	<target name="download-libs" >
+		<delete dir="${libs.dir}"/>
+		<mkdir dir="${libs.dir}"/>
+		<get src="http://www.chickenbones.craftsaddle.org/Files/goto.php?file=CodeChickenCore-dev&amp;version=${mc.version}" dest="${libs.dir}" />
+		<get src="http://www.chickenbones.craftsaddle.org/Files/goto.php?file=NotEnoughItems-dev&amp;version=${mc.version}" dest="${libs.dir}" />
+	</target>
+
 	<!-- Setup mcp and forge -->
 	<target name="setup" depends="download-files" if="out-of-date">
-	
+
 		<delete dir="${mcp.dir}"/>
 		<delete dir="${forge.dir}"/>
 
@@ -76,13 +85,18 @@
 			<arg value="install.sh"/>
 		</exec>
 
+		<!-- copy libraries -->
+		<copy todir="${mcp.dir}/lib">
+			<fileset dir="${libs.dir}/"/>
+		</copy>
+
 	</target>
 
 	<target name="compile" depends="initialize-version,setup">
 
 		<delete dir="${classes.dir}"/>
 		<mkdir dir="${classes.dir}"/>
-		
+
 		<copy todir="${mcpsrc.dir}">
 			<fileset dir="${src.dir}"/>
 			<filterset>
@@ -112,7 +126,7 @@
 		<copy todir="${classes.dir}/com">
 			<fileset dir="${mcp.dir}/reobf/minecraft/com" />
 		</copy>
-		
+
 		<!-- Copy resources -->
 		<copy todir="${classes.dir}/assets/minestuck">
 			<fileset dir="assets/minestuck" />
