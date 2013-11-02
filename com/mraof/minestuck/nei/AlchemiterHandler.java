@@ -14,6 +14,7 @@ import org.lwjgl.opengl.GL11;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.grist.GristRegistry;
 import com.mraof.minestuck.grist.GristSet;
+import com.mraof.minestuck.grist.GristStorage;
 import com.mraof.minestuck.grist.GristType;
 
 import net.minecraft.client.Minecraft;
@@ -101,7 +102,7 @@ public class AlchemiterHandler extends TemplateRecipeHandler {
                 Map.Entry pairs = (Map.Entry)it.next();
                 int type = (Integer) pairs.getKey();
                 int need = (Integer) pairs.getValue();
-                int have =  Minecraft.getMinecraft().thePlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(GristType.values()[type].getName());
+                int have = GristStorage.getClientGrist().getGrist(GristType.values()[type]);
                 
                 int row = place % 3;
                 int col = place / 3;

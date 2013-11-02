@@ -49,6 +49,8 @@ public class EntityDecoy extends EntityLiving {
 		super(world);
 		player = new DecoyPlayer(world, this);
 		inventory = new InventoryPlayer(player);
+		if(!world.isRemote)	//If not spawned the way it should
+			markedForDespawn = true;
 	}
 	
 	public EntityDecoy(World world, EntityPlayerMP player) {
@@ -157,11 +159,6 @@ public class EntityDecoy extends EntityLiving {
 		return originX >= posX+1 || originX <= posX-1 ||
 				originY >= posY+1 || originY <= posY-1 ||
 				originZ >= posZ+1 || originZ <= posZ-1;
-	}
-	
-	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
-		this.markedForDespawn = true;
 	}
 	
 	@Override

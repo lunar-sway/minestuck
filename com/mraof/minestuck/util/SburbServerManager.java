@@ -5,6 +5,7 @@ import com.mraof.minestuck.grist.GristRegistry;
 import com.mraof.minestuck.grist.GristType;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemBlock;
@@ -43,6 +44,9 @@ public class SburbServerManager extends ItemInWorldManager{
 	
 	@Override
 	public boolean tryHarvestBlock(int par1, int par2, int par3) {
+		Block block = Block.blocksList[theWorld.getBlockId(par1, par2, par3)];
+		if(block.getBlockHardness(theWorld, par1, par2, par3) < 0)
+			return false;
 		int grist = GristHelper.getGrist(client, GristType.Build);
 		if(grist > 0 && super.tryHarvestBlock(par1, par2, par3)) {
 			GristHelper.setGrist(client, GristType.Build, grist-1);

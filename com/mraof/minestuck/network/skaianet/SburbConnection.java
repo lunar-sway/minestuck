@@ -26,7 +26,7 @@ public class SburbConnection {
 	public NBTTagList inventory;
 	
 	//Non-saved variables used by the edit handler
-	public double posX, posY, posZ;
+	public double posX, posZ;
 	public boolean useCoordinates;
 	
 	SburbConnection(){

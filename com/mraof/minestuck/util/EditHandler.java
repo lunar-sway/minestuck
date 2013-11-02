@@ -141,6 +141,11 @@ public class EditHandler implements ITickHandler{
 		EntityDecoy decoy = data.decoy;
 		if(player.dimension != decoy.dimension)
 			player.travelToDimension(decoy.dimension);
+		
+		data.connection.useCoordinates = true;
+		data.connection.posX = player.posX;
+		data.connection.posZ = player.posZ;
+		
 		player.playerNetServerHandler.setPlayerLocation(decoy.posX, decoy.posY, decoy.posZ, decoy.rotationYaw, decoy.rotationPitch);
 		if(!player.theItemInWorldManager.getGameType().equals(decoy.gameType))
 			player.setGameType(decoy.gameType);
@@ -153,11 +158,6 @@ public class EditHandler implements ITickHandler{
 		player.theItemInWorldManager = data.manager;
 		data.connection.inventory = player.inventory.writeToNBT(new NBTTagList());
 		player.inventory.copyInventory(decoy.inventory);
-		
-		data.connection.useCoordinates = true;
-		data.connection.posX = decoy.posX;
-		data.connection.posY = decoy.posY;
-		data.connection.posZ = decoy.posZ;
 		
 		decoy.setDead();
 		list.remove(data);
@@ -216,11 +216,8 @@ public class EditHandler implements ITickHandler{
 		
 		if(c.useCoordinates) {
 			posX = c.posX;
-			posY = c.posY;
 			posZ = c.posZ;
-			player.setPosition(posX, posY, posZ);
-			if(!player.isInsideOfMaterial(Material.air))	//Should be improved
-				posY = world.getTopSolidOrLiquidBlock((int)posX, (int)posZ);
+			posY = world.getTopSolidOrLiquidBlock((int)posX, (int)posZ);
 		} else if(c.enteredGame()) {
 				posX = c.centerX + 0.5;
 				posY = world.getTopSolidOrLiquidBlock(c.centerX, c.centerZ);
@@ -301,6 +298,9 @@ public class EditHandler implements ITickHandler{
 			centerZ = data.connection.centerZ;
 			
 		}
+		
+		player.captureDrops = true;
+		
 		if(range < 1)
 			return;
 		double newX = player.posX;

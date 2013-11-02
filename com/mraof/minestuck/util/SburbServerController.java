@@ -9,6 +9,7 @@ import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.NetClientHandler;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
@@ -44,6 +45,10 @@ public class SburbServerController extends PlayerControllerMP {
 	
 	@Override
 	public boolean onPlayerDestroyBlock(int par1, int par2, int par3, int par4) {
+		Block block = Block.blocksList[Minecraft.getMinecraft().theWorld.getBlockId(par1, par2, par3)];
+		if(block.getBlockHardness(Minecraft.getMinecraft().theWorld, par1, par2, par3) < 0)
+			return false;
+		
 		int grist = GristHelper.getGrist(client, GristType.Build);
 		
 		return grist != 0 && super.onPlayerDestroyBlock(par1, par2, par3, par4);
