@@ -267,12 +267,6 @@ public class EditHandler implements ITickHandler{
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
 		EntityPlayer player = (EntityPlayer)tickData[0];
-		if(player.worldObj.isRemote && isActive() || !player.worldObj.isRemote && getData(player.username) != null)
-			for(int i = 0; i < player.inventory.mainInventory.length; i++) {
-				ItemStack stack = player.inventory.mainInventory[i];
-				if(stack != null && (GristRegistry.getGristConversion(stack) == null || !(stack.getItem() instanceof ItemBlock)))
-					player.inventory.mainInventory[i] = null;
-			}
 		
 		double range;
 		int centerX, centerZ;
@@ -297,15 +291,25 @@ public class EditHandler implements ITickHandler{
 			centerX = data.connection.centerX;
 			centerZ = data.connection.centerZ;
 			
+		}	//From here, the player must be in edit mode.
+		
+		for(int i = 0; i < player.inventory.mainInventory.length; i++) {
+			ItemStack stack = player.inventory.mainInventory[i];
+			if(stack != null && (GristRegistry.getGristConversion(stack) == null || !(stack.getItem() instanceof ItemBlock)))
+				player.inventory.mainInventory[i] = null;
+		}
+		double y = player.posY-player.yOffset;
+		if(y < 0) {
+			y = 0;
+			player.motionY = 0;
+			player.capabilities.isFlying = true;
 		}
 		
-		player.captureDrops = true;
-		
-		if(range < 1)
-			return;
 		double newX = player.posX;
 		double newZ = player.posZ;
 		double offset = player.boundingBox.maxX-player.posX;
+		
+		if(range >= 1) {
 		if(player.posX > centerX+range-offset)
 			newX = centerX+range-offset;
 		else if(player.posX < centerX-range+offset)
@@ -314,9 +318,19 @@ public class EditHandler implements ITickHandler{
 			newZ = centerZ+range-offset;
 		else if(player.posZ < centerZ-range+offset)
 			newZ = centerZ-range+offset;
+		}
 		
-		if(newX != player.posX || newZ != player.posZ)
-			player.setPositionAndUpdate(newX, player.posY-(double)player.yOffset, newZ);
+		if(newX != player.posX)
+			player.motionX = 0;
+		
+		if(newZ != player.posZ)
+			player.motionZ = 0;
+		
+		if(newX != player.posX || newZ != player.posZ || y != player.posY-player.yOffset) {
+			player.setPositionAndUpdate(newX, y, newZ);
+			//Update gravity if the player is on ground
+			
+		}
 		
 	}
 
