@@ -44,6 +44,9 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.FoodStats;
 import net.minecraft.world.World;
+import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.entity.item.ItemTossEvent;
+import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 
 public class EditHandler implements ITickHandler{
 	
@@ -310,14 +313,14 @@ public class EditHandler implements ITickHandler{
 		double offset = player.boundingBox.maxX-player.posX;
 		
 		if(range >= 1) {
-		if(player.posX > centerX+range-offset)
-			newX = centerX+range-offset;
-		else if(player.posX < centerX-range+offset)
-			newX = centerX-range+offset;
-		if(player.posZ > centerZ+range-offset)
-			newZ = centerZ+range-offset;
-		else if(player.posZ < centerZ-range+offset)
-			newZ = centerZ-range+offset;
+			if(player.posX > centerX+range-offset)
+				newX = centerX+range-offset;
+			else if(player.posX < centerX-range+offset)
+				newX = centerX-range+offset;
+			if(player.posZ > centerZ+range-offset)
+				newZ = centerZ+range-offset;
+			else if(player.posZ < centerZ-range+offset)
+				newZ = centerZ-range+offset;
 		}
 		
 		if(newX != player.posX)
@@ -342,6 +345,28 @@ public class EditHandler implements ITickHandler{
 	@Override
 	public String getLabel() {
 		return "TickEditHandler";
+	}
+	
+	@ForgeSubscribe
+	public void onTossEvent(ItemTossEvent event) {
+		if(event.player.worldObj.isRemote) {
+			if(event.player == Minecraft.getMinecraft().thePlayer && isActive())
+				event.entityItem.setDead();
+		} else {
+			if(getData(event.player.username) != null)
+				event.entityItem.setDead();
+		}
+	}
+	
+	@ForgeSubscribe
+	public void onItemPickupEvent(EntityItemPickupEvent event) {
+		if(event.entityPlayer.worldObj.isRemote) {
+			if(event.entityPlayer == Minecraft.getMinecraft().thePlayer && isActive())
+				event.setCanceled(true);
+		} else {
+			if(getData(event.entityPlayer.username) != null)
+				event.setCanceled(true);
+		}
 	}
 	
 }

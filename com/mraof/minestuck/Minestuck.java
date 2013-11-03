@@ -634,6 +634,7 @@ public class Minestuck
 	public void postInit(FMLPostInitializationEvent event) 
 	{
 		MinecraftForge.EVENT_BUS.register(new MinestuckSaveHandler());
+		MinecraftForge.EVENT_BUS.register(new EditHandler());
 		AlchemyRecipeHandler.registerDynamicRecipes();
 
 		//register NEI stuff
