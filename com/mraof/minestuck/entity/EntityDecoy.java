@@ -34,7 +34,7 @@ public class EntityDecoy extends EntityLiving {
 	public FoodStats foodStats = new FoodStats();
 	public NBTTagCompound capabilities = new NBTTagCompound();
 	
-	boolean markedForDespawn;
+	public boolean markedForDespawn;
 	boolean init;
 	double originX, originY, originZ;
 	DecoyPlayer player;

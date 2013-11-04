@@ -44,11 +44,19 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.FoodStats;
 import net.minecraft.world.World;
+import net.minecraftforge.event.Event.Result;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
 public class EditHandler implements ITickHandler{
+	
+	public static boolean isActive(EntityPlayer player) {
+		if(player.worldObj.isRemote)
+			return player instanceof EntityClientPlayerMP && isActive();
+		else return getData(player.username) == null;
+	}
 	
 	//Client sided stuff
 	static NBTTagCompound capabilities;
@@ -162,7 +170,7 @@ public class EditHandler implements ITickHandler{
 		data.connection.inventory = player.inventory.writeToNBT(new NBTTagList());
 		player.inventory.copyInventory(decoy.inventory);
 		
-		decoy.setDead();
+		decoy.markedForDespawn = true;
 		list.remove(data);
 		
 		Packet250CustomPayload packet = new Packet250CustomPayload();
@@ -248,7 +256,6 @@ public class EditHandler implements ITickHandler{
 	}
 	
 	public static EditData getData(SburbConnection c) {
-		Debug.print(list.size());
 		for(EditData data : list) {
 			if(data.connection.getClientName().equals(c.getClientName()) && data.connection.getServerName().equals(c.getServerName()))
 				return data;}
@@ -262,7 +269,7 @@ public class EditHandler implements ITickHandler{
 		return null;
 	}
 	
-	//Both sided
+	//Non static
 	
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {}
@@ -301,6 +308,10 @@ public class EditHandler implements ITickHandler{
 			if(stack != null && (GristRegistry.getGristConversion(stack) == null || !(stack.getItem() instanceof ItemBlock)))
 				player.inventory.mainInventory[i] = null;
 		}
+		
+		if(player.openContainer != player.inventoryContainer)
+			player.closeScreen();
+		
 		double y = player.posY-player.yOffset;
 		if(y < 0) {
 			y = 0;
@@ -348,9 +359,9 @@ public class EditHandler implements ITickHandler{
 	}
 	
 	@ForgeSubscribe
-	public void onTossEvent(ItemTossEvent event) {
+	public void onTossEvent(ItemTossEvent event) {	//TODO Make it cancel and remove the item instead.
 		if(event.player.worldObj.isRemote) {
-			if(event.player == Minecraft.getMinecraft().thePlayer && isActive())
+			if(event.player instanceof EntityClientPlayerMP && isActive())
 				event.entityItem.setDead();
 		} else {
 			if(getData(event.player.username) != null)
@@ -361,12 +372,28 @@ public class EditHandler implements ITickHandler{
 	@ForgeSubscribe
 	public void onItemPickupEvent(EntityItemPickupEvent event) {
 		if(event.entityPlayer.worldObj.isRemote) {
-			if(event.entityPlayer == Minecraft.getMinecraft().thePlayer && isActive())
+			if(event.entityPlayer instanceof EntityClientPlayerMP && isActive())
 				event.setCanceled(true);
 		} else {
 			if(getData(event.entityPlayer.username) != null)
 				event.setCanceled(true);
 		}
 	}
+	
+//	@ForgeSubscribe
+//	public void onPlayerInteract(PlayerInteractEvent event) {
+//		if(event.action != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK)
+//			return;
+//		
+//		if(event.entityPlayer.worldObj.isRemote) {
+//			if(event.entityPlayer instanceof EntityClientPlayerMP && isActive()){
+//				event.useBlock = Result.DENY;
+//				event.useItem = Result.ALLOW;
+//			}
+//		} else if(getData(event.entityPlayer.username) != null) {
+//			event.useBlock = Result.DENY;
+//			event.useItem = Result.ALLOW;
+//		}
+//	}
 	
 }

@@ -35,11 +35,15 @@ public class SburbServerController extends PlayerControllerMP {
 	}
 	
 	@Override
+	public boolean isInCreativeMode() {	//Possibly fixes inventory type without any problems.
+		return false;
+	}
+	
+	@Override
 	public boolean onPlayerRightClick(EntityPlayer entityPlayer, World world, ItemStack stack, int par4, int par5, int par6, int par7, Vec3 par8Vec3) {
 		if(stack != null && stack.getItem() instanceof ItemBlock)
-			if(!GristHelper.canAfford(GristStorage.getClientGrist(), GristRegistry.getGristConversion(stack)) || !super.onPlayerRightClick(entityPlayer, world, stack, par4, par5, par6, par7, par8Vec3))
-				return false;
-			else return true;
+			if(GristHelper.canAfford(GristStorage.getClientGrist(), GristRegistry.getGristConversion(stack)) && super.onPlayerRightClick(entityPlayer, world, stack, par4, par5, par6, par7, par8Vec3))
+				return true;
 		return false;
 	}
 	
@@ -49,7 +53,7 @@ public class SburbServerController extends PlayerControllerMP {
 		if(block.getBlockHardness(Minecraft.getMinecraft().theWorld, par1, par2, par3) < 0)
 			return false;
 		
-		int grist = GristHelper.getGrist(client, GristType.Build);
+		int grist = GristStorage.getClientGrist().getGrist(GristType.Build);
 		
 		return grist != 0 && super.onPlayerDestroyBlock(par1, par2, par3, par4);
 	}

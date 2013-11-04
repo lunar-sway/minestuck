@@ -11,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemInWorldManager;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.packet.Packet53BlockChange;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.EnumGameType;
 import net.minecraft.world.World;
@@ -37,6 +38,7 @@ public class SburbServerManager extends ItemInWorldManager{
 				return false;
 			GristHelper.decrease(client, GristRegistry.getGristConversion(stack));
 			MinestuckPlayerTracker.updateGristCache(client);
+			thisPlayerMP.playerNetServerHandler.sendPacketToPlayer(new Packet53BlockChange(par4, par5, par6, theWorld));
 			return true;
 		}
 		return false;
@@ -45,7 +47,7 @@ public class SburbServerManager extends ItemInWorldManager{
 	@Override
 	public boolean tryHarvestBlock(int par1, int par2, int par3) {
 		Block block = Block.blocksList[theWorld.getBlockId(par1, par2, par3)];
-		if(block.getBlockHardness(theWorld, par1, par2, par3) < 0)
+		if(block == null || block.getBlockHardness(theWorld, par1, par2, par3) < 0)
 			return false;
 		int grist = GristHelper.getGrist(client, GristType.Build);
 		if(grist > 0 && super.tryHarvestBlock(par1, par2, par3)) {
