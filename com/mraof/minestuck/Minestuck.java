@@ -18,14 +18,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import codechicken.nei.asm.NEIModContainer;
 
 import com.mraof.minestuck.block.BlockChessTile;
 import com.mraof.minestuck.block.BlockComputerOff;
 import com.mraof.minestuck.block.BlockComputerOn;
+import com.mraof.minestuck.block.BlockFluidOil;
 import com.mraof.minestuck.block.BlockGatePortal;
 import com.mraof.minestuck.block.BlockMachine;
 import com.mraof.minestuck.block.BlockStorage;
@@ -211,6 +216,9 @@ public class Minestuck
 	public static Block blockMachine;
 	public static Block blockComputerOn;
 	public static Block blockComputerOff;
+	
+	public static Block blockOil;
+	public static Fluid fluidOil;
 
 	//Block IDs
 	public static int chessTileId;
@@ -220,6 +228,7 @@ public class Minestuck
 	public static int blockMachineId;
 	public static int blockComputerOnId;
 	public static int blockComputerOffId;
+	public static int blockOilId;
 
 	//Booleans
 	public static boolean generateCruxiteOre; //If set to false, Cruxite Ore will not generate
@@ -258,6 +267,7 @@ public class Minestuck
 		blockMachineId = config.get("Block Ids", "blockMachineId", blockIdStart + 4).getInt();
 		blockComputerOffId = config.get("Block Ids", "blockComputerOffId", blockIdStart + 5).getInt();
 		blockComputerOnId = config.get("Block Ids", "blockComputerOnId", blockIdStart + 6).getInt();
+		blockOilId = config.get("Block Ids", "blockOilId", blockIdStart + 7).getInt();
 		if(config.get("Block Ids", "useBlockIdStart", true).getBoolean(true))
 		{
 			chessTileId = blockIdStart;
@@ -267,6 +277,7 @@ public class Minestuck
 			blockMachineId = blockIdStart + 4;
 			blockComputerOffId = blockIdStart + 5;
 			blockComputerOnId = blockIdStart + 6;
+			blockOilId = blockIdStart + 7;
 		}
 
 		toolIdStart = config.get("Item Ids", "toolIdStart", 5001).getInt();
@@ -380,10 +391,16 @@ public class Minestuck
 		chessTile = new BlockChessTile(chessTileId);
 		gatePortal = new BlockGatePortal(gatePortalId, Material.portal);
 		oreCruxite = new OreCruxite(oreCruxiteId);
+		//machines
 		blockStorage = new BlockStorage(blockStorageId);
 		blockMachine = new BlockMachine(blockMachineId);
 		blockComputerOff = new BlockComputerOff(blockComputerOffId);
 		blockComputerOn = new BlockComputerOn(blockComputerOnId);
+		//fluids
+		fluidOil = new Fluid("Oil").setBlockID(blockOilId);
+		FluidRegistry.registerFluid(fluidOil);
+		blockOil = new BlockFluidOil(blockOilId, fluidOil, Material.water);
+		
 		//hammers
 		clawHammer = new ItemHammer(clawHammerId, EnumHammerType.CLAW);
 		sledgeHammer = new ItemHammer(sledgeHammerId, EnumHammerType.SLEDGE);
@@ -443,6 +460,8 @@ public class Minestuck
 		GameRegistry.registerBlock(blockMachine,ItemMachine.class,"blockMachine");
 		GameRegistry.registerBlock(blockComputerOff,ItemComputerOff.class,"blockComputer");
 		GameRegistry.registerBlock(blockComputerOn,"blockComputerOn");
+		//fluids
+		GameRegistry.registerBlock(blockOil, "blockOil");
 		//metadata nonsense to conserve ids
 		ItemStack blackChessTileStack = new ItemStack(chessTile, 1, 0);
 		ItemStack whiteChessTileStack = new ItemStack(chessTile, 1, 1);
@@ -466,6 +485,7 @@ public class Minestuck
 		MinecraftForge.setBlockHarvestLevel(blockStorage, "pickaxe", 1);
 		MinecraftForge.setBlockHarvestLevel(blockMachine, "pickaxe", 1);
 
+		fluidOil.setUnlocalizedName(blockOil.getUnlocalizedName());
 		//Give Items names to be displayed ingame
 
 		LanguageRegistry.addName(clawHammer, "Claw Hammer");
@@ -522,6 +542,7 @@ public class Minestuck
 		LanguageRegistry.addName(widgetStack, "GristWidget 12000");
 		LanguageRegistry.addName(blockComputerOff, "SBURB Computer");
 		LanguageRegistry.addName(blockComputerOn, "SBURB Computer");
+		LanguageRegistry.addName(blockOil, "Oil");
 
 		//set translations for automatic names
 		LanguageRegistry.instance().addStringLocalization("entity.Salamander.name", "Salamander");
@@ -669,6 +690,6 @@ public class Minestuck
 			}
 		}
 		SkaianetHandler.loadData(event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("connectionList"),event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("waitingConnections"));
-
 	}
+	
 }
