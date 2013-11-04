@@ -108,7 +108,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = "Minestuck", name = "Minestuck", version = "1.0")
+@Mod(modid = "Minestuck", name = "Minestuck", version = "@VERSION@")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false, packetHandler = MinestuckPacketHandler.class, channels = {"Minestuck"})
 public class Minestuck
 {
@@ -234,7 +234,7 @@ public class Minestuck
 	public static int clientLandEditRange;		//changed by a MinestuckConfigPacket sent by the server on login.
 	
 	//Booleans
-	public static boolean generateCruxiteOre;
+	public static boolean generateCruxiteOre; //If set to false, Cruxite Ore will not generate
 	public static boolean privateComputers;	//If a player should be able to use other players computers or not.
 	public static boolean acceptTitleCollision;	//Allows combinations like "Heir of Hope" and "Seer of Hope" to exist in the same session. Still not accepting duplicates.
 	public static boolean generateSpecialClasses;	//Allow generation of the "Lord" and "Muse" classes.
@@ -468,6 +468,7 @@ public class Minestuck
 		ItemStack punchDesignexStack = new ItemStack(blockMachine,1,1);
 		ItemStack totemLatheStack = new ItemStack(blockMachine,1,2);
 		ItemStack alchemiterStack = new ItemStack(blockMachine,1,3);
+		ItemStack widgetStack = new ItemStack(blockMachine,1,4);
 		ItemStack clientDiskStack = new ItemStack(disk,1,0);
 		ItemStack serverDiskStack = new ItemStack(disk,1,1);
 		ItemStack woodenSpoonStack = new ItemStack(component,1,0);
@@ -532,6 +533,7 @@ public class Minestuck
 		LanguageRegistry.addName(punchDesignexStack, "Punch Designex");
 		LanguageRegistry.addName(totemLatheStack, "Totem Lathe");
 		LanguageRegistry.addName(alchemiterStack, "Alchemiter");
+		LanguageRegistry.addName(widgetStack, "GristWidget 12000");
 		LanguageRegistry.addName(blockComputerOff, "SBURB Computer");
 		LanguageRegistry.addName(blockComputerOn, "SBURB Computer");
 

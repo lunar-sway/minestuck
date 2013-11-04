@@ -9,21 +9,24 @@ import org.lwjgl.opengl.GL12;
 
 import com.mraof.minestuck.client.model.ModelAlchemiter;
 import com.mraof.minestuck.client.model.ModelCruxtruder;
+import com.mraof.minestuck.client.model.ModelGristWidget;
 import com.mraof.minestuck.client.model.ModelMachine;
 import com.mraof.minestuck.client.model.ModelPunchDesignex;
 import com.mraof.minestuck.client.model.ModelTotemLathe;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 
-public class TileEntityMachineRenderer extends TileEntitySpecialRenderer {
+public class RenderMachine extends TileEntitySpecialRenderer {
 
 	private static final ResourceLocation cruxtruderTexture = new ResourceLocation("Minestuck:textures/machines/Cruxtruder.png");
 	private static final ResourceLocation punchDesignexTexture = new ResourceLocation("Minestuck:textures/machines/PunchDesignex.png");
 	private static final ResourceLocation totemLatheTexture = new ResourceLocation("Minestuck:textures/machines/TotemLathe.png");
 	private static final ResourceLocation alchemiterTexture = new ResourceLocation("Minestuck:textures/machines/Alchemiter.png");
+	private static final ResourceLocation gristWidgetTexture = new ResourceLocation("Minestuck:textures/machines/GristWidget.png");
 	private ModelCruxtruder cruxtruder = new ModelCruxtruder();
 	private ModelPunchDesignex punchDesignex = new ModelPunchDesignex();
 	private ModelTotemLathe totemLathe = new ModelTotemLathe();
 	private ModelAlchemiter alchemiter = new ModelAlchemiter();
+	private ModelGristWidget gristWidget = new ModelGristWidget();
 	public void renderMachineTileEntity(TileEntityMachine tileEntityMachine, double d0, double d1, double d2, float f)
 	{
         byte i = 0;
@@ -51,6 +54,11 @@ public class TileEntityMachineRenderer extends TileEntitySpecialRenderer {
 		case 3:
 			machine = alchemiter;
 			texture = alchemiterTexture;
+			break;
+		case 4:
+			machine = gristWidget;
+			texture = gristWidgetTexture;
+			break;
 		}
 		this.bindTexture(texture);
 

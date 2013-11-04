@@ -1,0 +1,173 @@
+<!-- nallar's BuildCraft ant build script edited for Minestuck -->
+<project name="Minestuck" default="main">
+	<property environment="env"/>
+	<!-- Properties -->
+
+	<property name="env.BUILD_NUMBER"    value="0"/>
+
+	<property name="build.dir"           value="build"/>
+	<property name="src.dir"             value="com"/>
+
+	<property name="download.dir"        value="download"/>
+	<property name="libs.dir"            value="${download.dir}/libs"/>
+
+	<property name="classes.dir"         value="${build.dir}/classes"/>
+	<property name="jar.dir"             value="${build.dir}/dist"/>
+
+	<property name="forge.dir"           value="${build.dir}/forge"/>
+	<property name="mcp.dir"             value="${forge.dir}/mcp"/>
+
+	<property name="mcpsrc.dir"          value="${mcp.dir}/src/minecraft"/>
+
+	<property name="mc.version"          value="1.6.4"/>
+	<property name="forge.version"       value="9.11.0.883"/>
+	<property name="mod.version"         value="0.0.7"/>
+	<property name="mod.name"	         value="Minestuck"/>
+
+	<property name="forge.name"          value="minecraftforge-src-${mc.version}-${forge.version}.zip"/>
+
+	<property name="ccc.version"         value="0.9.0.7" />
+	<property name="nei.version"         value="1.6.1.5_d1" />
+
+	<available property="forge-exists" file="${download.dir}/${forge.name}"/>
+
+	<condition property="out-of-date">
+		<not>
+			<and>
+				<available file="${download.dir}/${forge.name}"/>
+				<available file="${mcpsrc.dir}"/>
+			</and>
+		</not>
+	</condition>
+
+	<mkdir dir="${download.dir}"/>
+
+	<!-- Targets -->
+
+	<!-- Clear build directory -->
+	<target name="clean">
+		<delete dir="${build.dir}"/>
+		<delete dir="bin/" />
+	</target>
+
+	<!-- Set full version -->
+	<target name="initialize-version">
+		<echo message="Starting build for ${mod.name} v${mod.version}"/>
+	</target>
+
+	<!-- Download necessary files -->
+	<target name="download-files" depends="download-forge,download-libs"/>
+
+	<!-- Download forge (if it doesn't exist) -->
+	<target name="download-forge" unless="forge-exists" >
+		<get src="http://files.minecraftforge.net/${forge.name}" dest="${download.dir}" usetimestamp="True"/>
+	</target>
+
+	<!-- download libraries -->
+	<target name="download-libs" >
+		<delete dir="${libs.dir}"/>
+		<mkdir dir="${libs.dir}"/>
+		<!--
+		<get src="http://www.chickenbones.craftsaddle.org/Files/goto.php?file=CodeChickenCore-dev&amp;version=${mc.version}" dest="${libs.dir}" />
+		<get src="http://www.chickenbones.craftsaddle.org/Files/goto.php?file=NotEnoughItems-dev&amp;version=${mc.version}" dest="${libs.dir}" />
+		-->
+		<get src="http://www.chickenbones.craftsaddle.org/Files/New_Versions/${mc.version}/CodeChickenCore-dev%20${ccc.version}.jar" dest="${libs.dir}" usetimestamp="True" />
+		<get src="http://www.chickenbones.craftsaddle.org/Files/New_Versions/${mc.version}/NotEnoughItems-dev%20${nei.version}.jar" dest="${libs.dir}" usetimestamp="True" />
+	</target>
+
+	<!-- Setup mcp and forge -->
+	<target name="setup" depends="download-files" if="out-of-date">
+
+		<delete dir="${mcp.dir}"/>
+		<delete dir="${forge.dir}"/>
+
+		<!-- Unzip them -->
+		<unzip dest="${build.dir}" src="${download.dir}/${forge.name}"/>
+
+		<!-- Install forge -->
+		<exec dir="${forge.dir}" executable="cmd" osfamily="windows">
+			<arg line="/c install.cmd"/>
+		</exec>
+
+		<exec dir="${forge.dir}" executable="python2" osfamily="unix">
+			<arg value="install.py"/>
+		</exec>
+
+		<!-- copy libraries -->
+		<copy todir="${mcp.dir}/lib">
+			<fileset dir="${libs.dir}/"/>
+		</copy>
+
+	</target>
+
+	<target name="compile" depends="initialize-version,setup">
+
+		<delete dir="bin/" />
+		<delete dir="${classes.dir}"/>
+		<mkdir dir="${classes.dir}"/>
+
+		<copy todir="${mcpsrc.dir}">
+			<fileset dir="${src.dir}"/>
+			<filterset>
+				<filter token="VERSION" value="${mod.version}.${env.BUILD_NUMBER}"/>
+			</filterset>
+		</copy>
+
+		<!-- Recompile -->
+		<exec dir="${mcp.dir}" executable="cmd" osfamily="windows">
+			<arg line="/c recompile.bat"/>
+		</exec>
+
+		<exec dir="${mcp.dir}" executable="python2" osfamily="unix">
+			<arg value="runtime/recompile.py"/>
+		</exec>
+
+		<!-- Reobfuscate -->
+		<exec dir="${mcp.dir}" executable="cmd" osfamily="windows">
+			<arg line="/c reobfuscate_srg.bat"/>
+		</exec>
+
+		<exec dir="${mcp.dir}" executable="python2" osfamily="unix">
+			<arg value="runtime/reobfuscate.py"/>
+		</exec>
+
+		<!-- Copy classes -->
+		<copy todir="${classes.dir}/com">
+			<fileset dir="${mcp.dir}/reobf/minecraft/com" />
+		</copy>
+
+		<!-- Copy resources -->
+		<copy todir="${classes.dir}/assets/minestuck">
+			<fileset dir="assets/minestuck" />
+		</copy>
+
+		<!-- Copy resources -->
+		<copy todir="${classes.dir}">
+			<fileset dir="." includes="mcmod.info,minestuck_logo.png" />
+			<filterset>
+				<filter token="VERSION" value="${mod.version}.${env.BUILD_NUMBER}"/>
+			</filterset>
+		</copy>
+
+		<!-- Reset src dir to post-forge-install state -->
+		<delete dir="${mcpsrc.dir}/com"/>
+
+	</target>
+
+	<!-- Package the compiled files -->
+	<target name="package" depends="compile">
+
+		<delete dir="${jar.dir}"/>
+		<mkdir dir="${jar.dir}"/>
+		<jar destfile="${jar.dir}/${mod.name}-${mod.version}.${env.BUILD_NUMBER}.jar" basedir="${classes.dir}"/>
+
+	</target>
+
+	<!-- Default target to run -->
+	<target name="main" depends="package">
+		<copy todir="bin">
+			<fileset dir="${jar.dir}"/>
+		</copy>
+	</target>
+
+</project>

@@ -1,4 +1,3 @@
-
 package com.mraof.minestuck.client.model;
 
 import net.minecraft.client.model.ModelRenderer;

@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 
+import com.mraof.minestuck.util.Debug;
+
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -95,6 +97,17 @@ public class GristHelper {
 			else i += set.getGrist(type)*type.getPower();
 		}
 		return i;
+	}
+	
+	public static void increase(String username, GristSet set) {
+		Hashtable reqs = set.getHashtable();
+		if (reqs != null) {
+			Iterator it = reqs.entrySet().iterator();
+			while (it.hasNext()) {
+				Map.Entry pairs = (Map.Entry)it.next();
+				setGrist(username, GristType.values()[(Integer) pairs.getKey()], getGrist(username, GristType.values()[(Integer)pairs.getKey()]) + (Integer)pairs.getValue());
+			}
+		}
 	}
 	
 }

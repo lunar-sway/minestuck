@@ -46,7 +46,7 @@ public class ClientProxy extends CommonProxy
             RenderingRegistry.registerEntityRenderingHandler(EntityGrist.class, new RenderGrist());
             RenderingRegistry.registerEntityRenderingHandler(EntityDecoy.class, new RenderDecoy());
             ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGatePortal.class, new RenderGatePortal());
-            ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachine.class, new TileEntityMachineRenderer());
+            ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachine.class, new RenderMachine());
     }
 	@SideOnly(Side.CLIENT)
 	public static void registerSided()

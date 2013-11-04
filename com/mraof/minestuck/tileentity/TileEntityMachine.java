@@ -51,6 +51,8 @@ public class TileEntityMachine extends TileEntity implements IInventory {
     			return 3;
     		case (3):
     			return 2;
+    		case (4):
+    			return 2;
     		}
             return this.inv.length;
     }
@@ -228,6 +230,8 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			} else {
 				return false;
 			}
+		case (4):
+			return (this.inv[1] != null && this.owner != null && GristRegistry.getGristConversion(inv[1]) != null);
 		}
 		return false;
 	}
@@ -301,8 +305,18 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 				decrStackSize(0, -1);
 			}
 			//decrStackSize(1, 1);
-			GristHelper.decrease(this.owner.username, GristRegistry.getGristConversion(newItem));
-			MinestuckPlayerTracker.updateGristCache(this.owner.username);
+			if(!worldObj.isRemote) {
+				GristHelper.decrease(this.owner.username, GristRegistry.getGristConversion(newItem));
+				MinestuckPlayerTracker.updateGristCache(this.owner.username);
+			}
+			break;
+		case (4):
+			if(!worldObj.isRemote) {
+				GristHelper.increase(this.owner.username, GristRegistry.getGristConversion(inv[1]));
+				MinestuckPlayerTracker.updateGristCache(this.owner.username);
+			}
+			this.decrStackSize(1, 1);
+			break;
 		}
 	}
 }

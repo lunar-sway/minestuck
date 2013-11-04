@@ -26,7 +26,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockMachine extends BlockContainer {
 
-	public static final String[] iconNames = {"Cruxtruder","PunchDesignex","TotemLathe","Alchemiter"}; //PhernaliaFrame
+	public static final String[] iconNames = {"Cruxtruder","PunchDesignex","TotemLathe","Alchemiter","GristWidget"}; //PhernaliaFrame
 	private Icon[] textures;
 
 	public BlockMachine(int id) {
