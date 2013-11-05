@@ -19,6 +19,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemInWorldManager;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.packet.Packet15Place;
+import net.minecraft.network.packet.Packet16BlockItemSwitch;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Vec3;
@@ -29,8 +31,11 @@ public class SburbServerController extends PlayerControllerMP {
 	
 	public String client;
 	
+	public NetClientHandler netHandler;
+	
 	public SburbServerController(Minecraft mc, NetClientHandler netHandler) {
 		super(mc, netHandler);
+		this.netHandler = netHandler;
 		this.setGameType(EnumGameType.CREATIVE);
 	}
 	
@@ -38,12 +43,26 @@ public class SburbServerController extends PlayerControllerMP {
 	public boolean isInCreativeMode() {	//Possibly fixes inventory type without any problems.
 		return false;
 	}
-	
 	@Override
 	public boolean onPlayerRightClick(EntityPlayer entityPlayer, World world, ItemStack stack, int par4, int par5, int par6, int par7, Vec3 par8Vec3) {
-		if(stack != null && stack.getItem() instanceof ItemBlock)
-			if(GristHelper.canAfford(GristStorage.getClientGrist(), GristRegistry.getGristConversion(stack)) && super.onPlayerRightClick(entityPlayer, world, stack, par4, par5, par6, par7, par8Vec3))
-				return true;
+		float f = (float)par8Vec3.xCoord - (float)par4;
+		float f1 = (float)par8Vec3.yCoord - (float)par5;
+		float f2 = (float)par8Vec3.zCoord - (float)par6;
+		
+		if(stack != null && stack.getItem() instanceof ItemBlock && GristHelper.canAfford(GristStorage.getClientGrist(), GristRegistry.getGristConversion(stack))) {
+				ItemBlock item = (ItemBlock)stack.getItem();
+				if(!item.canPlaceItemBlockOnSide(world, par4, par5, par6, par7, entityPlayer, stack))
+					return false;
+				
+				netHandler.addToSendQueue(new Packet15Place(par4, par5, par6, par7, entityPlayer.inventory.getCurrentItem(), f, f1, f2));
+				
+				int d = stack.getItemDamage();
+				int size = stack.stackSize;
+				boolean result = stack.tryPlaceItemIntoWorld(entityPlayer, world, par4, par5, par6, par7, f, f1, f2);
+				stack.setItemDamage(d);
+				stack.stackSize = size;
+				return result;
+			}
 		return false;
 	}
 	
@@ -57,8 +76,5 @@ public class SburbServerController extends PlayerControllerMP {
 		
 		return grist != 0 && super.onPlayerDestroyBlock(par1, par2, par3, par4);
 	}
-	
-	@Override
-	public void attackEntity(EntityPlayer player, Entity entity) {}
 	
 }

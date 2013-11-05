@@ -29,6 +29,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.gui.GuiGameOver;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -44,9 +48,12 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.FoodStats;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.event.Event;
 import net.minecraftforge.event.Event.Result;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
@@ -55,7 +62,7 @@ public class EditHandler implements ITickHandler{
 	public static boolean isActive(EntityPlayer player) {
 		if(player.worldObj.isRemote)
 			return player instanceof EntityClientPlayerMP && isActive();
-		else return getData(player.username) == null;
+		else return getData(player.username) != null;
 	}
 	
 	//Client sided stuff
@@ -307,10 +314,9 @@ public class EditHandler implements ITickHandler{
 			ItemStack stack = player.inventory.mainInventory[i];
 			if(stack != null && (GristRegistry.getGristConversion(stack) == null || !(stack.getItem() instanceof ItemBlock)))
 				player.inventory.mainInventory[i] = null;
+			if(stack != null && stack.stackSize > 1)
+				stack.stackSize = 1;
 		}
-		
-		if(player.openContainer != player.inventoryContainer)
-			player.closeScreen();
 		
 		double y = player.posY-player.yOffset;
 		if(y < 0) {
@@ -360,40 +366,30 @@ public class EditHandler implements ITickHandler{
 	
 	@ForgeSubscribe
 	public void onTossEvent(ItemTossEvent event) {	//TODO Make it cancel and remove the item instead.
-		if(event.player.worldObj.isRemote) {
-			if(event.player instanceof EntityClientPlayerMP && isActive())
+		if(isActive(event.player))
 				event.entityItem.setDead();
-		} else {
-			if(getData(event.player.username) != null)
-				event.entityItem.setDead();
-		}
 	}
 	
 	@ForgeSubscribe
 	public void onItemPickupEvent(EntityItemPickupEvent event) {
-		if(event.entityPlayer.worldObj.isRemote) {
-			if(event.entityPlayer instanceof EntityClientPlayerMP && isActive())
-				event.setCanceled(true);
-		} else {
-			if(getData(event.entityPlayer.username) != null)
-				event.setCanceled(true);
+		if(isActive(event.entityPlayer))
+			event.setCanceled(true);
+	}
+	
+	@ForgeSubscribe
+	public void onInteractEvent(PlayerInteractEvent event) {
+		
+		if(isActive(event.entityPlayer) && event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
+			event.useBlock = Event.Result.DENY;
+			event.useItem = Event.Result.ALLOW;
 		}
 	}
 	
-//	@ForgeSubscribe
-//	public void onPlayerInteract(PlayerInteractEvent event) {
-//		if(event.action != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK)
-//			return;
-//		
-//		if(event.entityPlayer.worldObj.isRemote) {
-//			if(event.entityPlayer instanceof EntityClientPlayerMP && isActive()){
-//				event.useBlock = Result.DENY;
-//				event.useItem = Result.ALLOW;
-//			}
-//		} else if(getData(event.entityPlayer.username) != null) {
-//			event.useBlock = Result.DENY;
-//			event.useItem = Result.ALLOW;
-//		}
-//	}
+	@ForgeSubscribe
+	public void onAttackEvent(AttackEntityEvent event) {
+		if(isActive(event.entityPlayer)) {
+			event.setCanceled(true);
+		}
+	}
 	
 }

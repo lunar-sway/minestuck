@@ -132,8 +132,6 @@ public class GuiComputer extends GuiScreen
 			SburbConnection c = SkaiaClient.getClientConnection(te.owner);
 			if(!te.latestmessage.get(0).isEmpty())
 				buttonStrings.add("Clear message");
-			if(SkaiaClient.enteredMedium(te.owner)) //if it should view the grist cache button.
-				buttonStrings.add("View Gristcache");
 			if (te.serverConnected && c != null) { //If it is connected to someone.
 				displayMessage = "Connected to "+displayPlayer;
 				buttonStrings.add("Disconnect");
@@ -211,14 +209,12 @@ public class GuiComputer extends GuiScreen
 			close();
 		else if(guibutton.displayString.equals("Clear message"))
 			return;
+		else if (guibutton == upButton)
+			index--;
+		else if (guibutton == downButton)
+			index++;
 		else if(te.programSelected == 0){
-			if (guibutton == upButton) {
-				index--;
-			} else if (guibutton == downButton) {
-				index++;
-			} else if(guibutton.displayString.equals("View Gristcache")){
-				mc.thePlayer.openGui(Minestuck.instance, 2, te.worldObj, te.xCoord, te.yCoord, te.zCoord);
-			} else if(guibutton.displayString.equals("Resume connection")){
+			if(guibutton.displayString.equals("Resume connection")){
 				SkaiaClient.sendConnectRequest(te, SkaiaClient.getAssociatedPartner(te.owner, true), true);
 			} else{
 				SkaiaClient.sendConnectRequest(te, guibutton.displayString, true);
