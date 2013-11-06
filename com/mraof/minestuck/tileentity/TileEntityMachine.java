@@ -210,7 +210,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			return (this.inv[1] != null && (this.inv[0] == null || this.inv[0].stackSize < 64));
 		case (1):
 		 if (this.inv[1] != null && this.inv[2] != null) {
-			return (this.inv[3] != null && this.inv[0] == null && CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(this.inv[1]), AlchemyRecipeHandler.getDecodedItem(this.inv[2]),this.mode) != null);
+			return (this.inv[3] != null && this.inv[0] == null && CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(this.inv[1],true), AlchemyRecipeHandler.getDecodedItem(this.inv[2],true),this.mode) != null);
 		 } else if (this.inv[1] != null || this.inv[2] != null) {
 			return (this.inv[3] != null && this.inv[0] == null);
 		} else {
@@ -265,7 +265,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			break;
 		case (1):
 			//Create a new card, using CombinationRegistry
-			ItemStack outputItem = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(this.inv[1]),AlchemyRecipeHandler.getDecodedItem(this.inv[2]),this.mode);
+			ItemStack outputItem = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(this.inv[1],true),AlchemyRecipeHandler.getDecodedItem(this.inv[2],true),this.mode);
 			ItemStack outputCard = new ItemStack(Minestuck.punchedCard);
 
 			NBTTagCompound nbttagcompound = new NBTTagCompound();

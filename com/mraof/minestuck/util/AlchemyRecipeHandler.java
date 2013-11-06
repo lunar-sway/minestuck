@@ -573,6 +573,21 @@ public class AlchemyRecipeHandler {
 	}
 	
 	/**
+	 * Given a punched card or a carved dowel, returns a new item that represents the encoded data. If allowDirect is true,
+	 * it jst gives you the item directly if it's not a card.
+	 */
+	public static ItemStack getDecodedItem(ItemStack card,boolean allowDirect) {
+		
+		if (card == null) {return null;}
+		
+		if (card.itemID != Minestuck.punchedCard.itemID && Minestuck.easyDesignex) {
+			return card;
+		} else {
+			return getDecodedItem(card);
+		}
+	}
+	
+	/**
 	 * Adds all the recipes that are based on the existing vanilla crafting registries, like grist conversions of items composed of oither things.
 	 */
 	public static void registerDynamicRecipes() {
