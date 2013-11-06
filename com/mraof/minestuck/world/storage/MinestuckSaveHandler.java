@@ -41,9 +41,4 @@ public class MinestuckSaveHandler
 			SkaianetHandler.saveData(event.world.getSaveHandler().getMapFileFromName("connectionList"),event.world.getSaveHandler().getMapFileFromName("waitingConnections"));
 		}
 	}
-	@ForgeSubscribe
-	public void postStitch(TextureStitchEvent.Post event)
-	{
-	    Minestuck.fluidOil.setIcons(Minestuck.blockOil.getBlockTextureFromSide(0), Minestuck.blockOil.getBlockTextureFromSide(1));
-	}
 }

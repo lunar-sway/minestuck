@@ -18,11 +18,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import codechicken.nei.asm.NEIModContainer;
@@ -30,6 +28,7 @@ import codechicken.nei.asm.NEIModContainer;
 import com.mraof.minestuck.block.BlockChessTile;
 import com.mraof.minestuck.block.BlockComputerOff;
 import com.mraof.minestuck.block.BlockComputerOn;
+import com.mraof.minestuck.block.BlockFluidBlood;
 import com.mraof.minestuck.block.BlockFluidOil;
 import com.mraof.minestuck.block.BlockGatePortal;
 import com.mraof.minestuck.block.BlockMachine;
@@ -49,6 +48,7 @@ import com.mraof.minestuck.entity.underling.EntityBasilisk;
 import com.mraof.minestuck.entity.underling.EntityGiclops;
 import com.mraof.minestuck.entity.underling.EntityImp;
 import com.mraof.minestuck.entity.underling.EntityOgre;
+import com.mraof.minestuck.event.MinestuckFluidHandler;
 import com.mraof.minestuck.item.EnumBladeType;
 import com.mraof.minestuck.item.EnumCaneType;
 import com.mraof.minestuck.item.EnumClubType;
@@ -70,6 +70,7 @@ import com.mraof.minestuck.item.ItemDowelCarved;
 import com.mraof.minestuck.item.ItemDowelUncarved;
 import com.mraof.minestuck.item.ItemHammer;
 import com.mraof.minestuck.item.ItemMachine;
+import com.mraof.minestuck.item.ItemMinestuckBucket;
 import com.mraof.minestuck.item.ItemSickle;
 import com.mraof.minestuck.item.ItemSpork;
 import com.mraof.minestuck.item.ItemStorageBlock;
@@ -163,6 +164,7 @@ public class Minestuck
 	public static Item cruxiteArtifact;
 	public static Item disk;
 	public static Item component;
+	public static ItemMinestuckBucket minestuckBucket;
 
 	//hammers
 	public static int clawHammerId;
@@ -205,6 +207,7 @@ public class Minestuck
 	public static int cruxiteArtifactId;
 	public static int diskId;
 	public static int componentId;
+	public static int minestuckBucketId;
 
 	public static Achievement getHammer;
 
@@ -218,7 +221,9 @@ public class Minestuck
 	public static Block blockComputerOff;
 	
 	public static Block blockOil;
+	public static Block blockBlood;
 	public static Fluid fluidOil;
+	public static Fluid fluidBlood;
 
 	//Block IDs
 	public static int chessTileId;
@@ -229,6 +234,7 @@ public class Minestuck
 	public static int blockComputerOnId;
 	public static int blockComputerOffId;
 	public static int blockOilId;
+	public static int blockBloodId;
 
 	//Booleans
 	public static boolean generateCruxiteOre; //If set to false, Cruxite Ore will not generate
@@ -268,6 +274,7 @@ public class Minestuck
 		blockComputerOffId = config.get("Block Ids", "blockComputerOffId", blockIdStart + 5).getInt();
 		blockComputerOnId = config.get("Block Ids", "blockComputerOnId", blockIdStart + 6).getInt();
 		blockOilId = config.get("Block Ids", "blockOilId", blockIdStart + 7).getInt();
+		blockBloodId = config.get("Block Ids", "blockBloodId", blockIdStart + 8).getInt();
 		if(config.get("Block Ids", "useBlockIdStart", true).getBoolean(true))
 		{
 			chessTileId = blockIdStart;
@@ -278,7 +285,9 @@ public class Minestuck
 			blockComputerOffId = blockIdStart + 5;
 			blockComputerOnId = blockIdStart + 6;
 			blockOilId = blockIdStart + 7;
+			blockBloodId = blockIdStart + 8;
 		}
+		Debug.printf("Fluid Block Ids loaded, Blood id: %d, Oil id: %d", blockBloodId, blockOilId);
 
 		toolIdStart = config.get("Item Ids", "toolIdStart", 5001).getInt();
 		clawHammerId = config.get("Item Ids", "clawHammerId", toolIdStart).getInt();
@@ -347,6 +356,7 @@ public class Minestuck
 		cruxiteArtifactId = config.get("Item Ids", "cruxiteArtifactId", itemIdStart + 5).getInt();
 		diskId = config.get("Item Ids", "diskId", itemIdStart + 6).getInt();
 		componentId = config.get("Item Ids", "componentId", itemIdStart + 7).getInt();
+		minestuckBucketId = config.get("Item Ids", "minestuckBucketId", itemIdStart + 8).getInt();
 		if(config.get("Item Ids", "useItemIdStart", true).getBoolean(true));
 		{
 			rawCruxiteId = itemIdStart;
@@ -356,7 +366,8 @@ public class Minestuck
 			punchedCardId = itemIdStart + 4;
 			cruxiteArtifactId = itemIdStart + 5;
 			diskId = itemIdStart + 6;
-			componentId = itemIdStart + 7;			
+			componentId = itemIdStart + 7;	
+			minestuckBucketId = itemIdStart + 8;			
 		}
 
 		entityIdStart = config.get("Entity Ids", "entitydIdStart", 5050).getInt(); //The number 5050 might make it seem like this is meant to match up with item/block IDs, but it is not
@@ -399,8 +410,13 @@ public class Minestuck
 		//fluids
 		fluidOil = new Fluid("Oil").setBlockID(blockOilId);
 		FluidRegistry.registerFluid(fluidOil);
+		fluidBlood = new Fluid("Blood").setBlockID(blockBloodId);
+		FluidRegistry.registerFluid(fluidBlood);
 		blockOil = new BlockFluidOil(blockOilId, fluidOil, Material.water);
+		blockBlood = new BlockFluidBlood(blockBloodId, fluidBlood, Material.water);
+		Debug.printf("Blocks created, Blood id: %d, Oil id: %d", blockBloodId, blockOilId);
 		
+		//items
 		//hammers
 		clawHammer = new ItemHammer(clawHammerId, EnumHammerType.CLAW);
 		sledgeHammer = new ItemHammer(sledgeHammerId, EnumHammerType.SLEDGE);
@@ -442,6 +458,7 @@ public class Minestuck
 		cruxiteArtifact = new ItemCruxiteArtifact(cruxiteArtifactId, 1, false);
 		disk = new ItemDisk(diskId);
 		component = new ItemComponent(componentId);
+		minestuckBucket = new ItemMinestuckBucket(minestuckBucketId);
 
 		//achievements
 		getHammer = (new Achievement(413, "getHammer", 12, 15, Minestuck.clawHammer, (Achievement)null)).setIndependent().registerAchievement();
@@ -462,6 +479,7 @@ public class Minestuck
 		GameRegistry.registerBlock(blockComputerOn,"blockComputerOn");
 		//fluids
 		GameRegistry.registerBlock(blockOil, "blockOil");
+		GameRegistry.registerBlock(blockBlood, "blockBlood");
 		//metadata nonsense to conserve ids
 		ItemStack blackChessTileStack = new ItemStack(chessTile, 1, 0);
 		ItemStack whiteChessTileStack = new ItemStack(chessTile, 1, 1);
@@ -479,13 +497,20 @@ public class Minestuck
 		ItemStack woodenSpoonStack = new ItemStack(component,1,0);
 		ItemStack silverSpoonStack = new ItemStack(component,1,1);
 		ItemStack chessboardStack = new ItemStack(component,1,2);
+		ItemStack bloodBucket = new ItemStack(minestuckBucket, 1, blockBloodId);
+		ItemStack oilBucket = new ItemStack(minestuckBucket, 1, blockOilId);
+		Debug.printf("Itemstacks for buckets created, Blood id: %d, Oil id: %d", blockBloodId, blockOilId);
 		//set harvest information for blocks
 		MinecraftForge.setBlockHarvestLevel(chessTile, "shovel", 0);
 		MinecraftForge.setBlockHarvestLevel(oreCruxite, "pickaxe", 1);
 		MinecraftForge.setBlockHarvestLevel(blockStorage, "pickaxe", 1);
 		MinecraftForge.setBlockHarvestLevel(blockMachine, "pickaxe", 1);
 
+		minestuckBucket.fillFluids.add(blockBloodId);
+		minestuckBucket.fillFluids.add(blockOilId);
+
 		fluidOil.setUnlocalizedName(blockOil.getUnlocalizedName());
+		fluidBlood.setUnlocalizedName(blockBlood.getUnlocalizedName());
 		//Give Items names to be displayed ingame
 
 		LanguageRegistry.addName(clawHammer, "Claw Hammer");
@@ -525,6 +550,8 @@ public class Minestuck
 		LanguageRegistry.addName(woodenSpoonStack, "Wooden Spoon");
 		LanguageRegistry.addName(silverSpoonStack, "Silver Spoon");
 		LanguageRegistry.addName(chessboardStack, "Chessboard");
+		LanguageRegistry.addName(oilBucket, "Bucket of Oil");
+		LanguageRegistry.addName(bloodBucket, "Bucket of Blood");
 
 		//Same for blocks
 		LanguageRegistry.addName(blackChessTileStack, "Black Chess Tile");
@@ -543,6 +570,8 @@ public class Minestuck
 		LanguageRegistry.addName(blockComputerOff, "SBURB Computer");
 		LanguageRegistry.addName(blockComputerOn, "SBURB Computer");
 		LanguageRegistry.addName(blockOil, "Oil");
+		LanguageRegistry.addName(blockBlood, "Blood");
+		Debug.printf("Names added, Blood id: %d, Oil id: %d", blockBloodId, blockOilId);
 
 		//set translations for automatic names
 		LanguageRegistry.instance().addStringLocalization("entity.Salamander.name", "Salamander");
@@ -634,6 +663,7 @@ public class Minestuck
 	public void postInit(FMLPostInitializationEvent event) 
 	{
 		MinecraftForge.EVENT_BUS.register(new MinestuckSaveHandler());
+		MinecraftForge.EVENT_BUS.register(new MinestuckFluidHandler());
 		AlchemyRecipeHandler.registerDynamicRecipes();
 
 		//register NEI stuff
