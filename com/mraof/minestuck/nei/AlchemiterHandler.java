@@ -3,6 +3,8 @@ package com.mraof.minestuck.nei;
 import static codechicken.core.gui.GuiDraw.changeTexture;
 import static codechicken.core.gui.GuiDraw.drawTexturedModalRect;
 
+import java.awt.Rectangle;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -57,15 +59,25 @@ public class AlchemiterHandler extends TemplateRecipeHandler {
 	}
 	
 	@Override
+    public void loadCraftingRecipes(String outputId, Object... results)
+    {
+        if(outputId.equals("item"))
+            loadCraftingRecipes((ItemStack)results[0]);
+        else if (outputId.equals("allAlc")) {
+        	for (Object item : GristRegistry.getAllConversions().entrySet()) {
+    	    	Map.Entry entry = (Map.Entry)item;
+    	    	List itemData = (List)entry.getKey();
+    	    	int id = (Integer)itemData.get(0);
+    	    	int meta = (Integer)itemData.get(1);
+    	    	arecipes.add(new CachedAlchemiterRecipe(new ItemStack(id,1,meta)));
+        	}
+        }
+        	
+        	
+    }
+	
+	@Override
 	public void loadCraftingRecipes(ItemStack result){
-//		for (Object item : GristRegistry.getAllConversions().entrySet()) {
-//			Map.Entry entry = (Map.Entry)item;
-//			List itemData = (List)entry.getKey();
-//			int id = (Integer)itemData.get(0);
-//			int meta = (Integer)itemData.get(1);
-//			arecipes.add(new CachedAlchemiterRecipe(new ItemStack(id,1,meta)));
-//		}
-		
 		if (GristRegistry.getGristConversion(result) != null) {
 			arecipes.add(new CachedAlchemiterRecipe(result));
 		}
@@ -159,6 +171,12 @@ public class AlchemiterHandler extends TemplateRecipeHandler {
                 this.drawTexturedModalRect(x, y+h-var, tx, ty+h-var, w, var,w,h);
             break;        
         }
+    }
+    
+    @Override
+    public void loadTransferRects()
+    {
+    	transferRects.add(new RecipeTransferRect(new Rectangle(49, 12, 71, 10),"allAlc"));
     }
 
 }

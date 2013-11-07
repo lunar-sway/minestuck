@@ -3,6 +3,7 @@ package com.mraof.minestuck.nei;
 import static codechicken.core.gui.GuiDraw.changeTexture;
 import static codechicken.core.gui.GuiDraw.drawTexturedModalRect;
 
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -12,6 +13,7 @@ import java.util.Set;
 
 import org.lwjgl.opengl.GL11;
 
+import com.mraof.minestuck.nei.AlchemiterHandler.CachedAlchemiterRecipe;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.CombinationRegistry;
 import com.mraof.minestuck.util.GristRegistry;
@@ -28,6 +30,7 @@ import codechicken.core.gui.GuiDraw;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 import codechicken.nei.recipe.TemplateRecipeHandler.CachedRecipe;
+import codechicken.nei.recipe.TemplateRecipeHandler.RecipeTransferRect;
 
 public class DesignexHandler extends TemplateRecipeHandler {
 
@@ -72,6 +75,27 @@ public class DesignexHandler extends TemplateRecipeHandler {
 	}
 	
 	@Override
+    public void loadCraftingRecipes(String outputId, Object... results)
+    {
+        if(outputId.equals("item"))
+            loadCraftingRecipes((ItemStack)results[0]);
+        else if (outputId.equals("allDesignex")) {
+    		for (Object item : CombinationRegistry.getAllConversions().entrySet()) {
+    			Map.Entry entry = (Map.Entry)item;
+    			List itemData = (List)entry.getKey();
+    			int id1 = (Integer)itemData.get(0);
+    			int meta1 = (Integer)itemData.get(1);
+    			int id2 = (Integer)itemData.get(2);
+    			int meta2 = (Integer)itemData.get(3);
+    			boolean mode = (Boolean)itemData.get(4);
+    			arecipes.add(new CachedDesignexRecipe(new ItemStack(id1,1,meta1),new ItemStack(id2,1,meta2),mode,(ItemStack)entry.getValue()));
+    		}
+        }
+        	
+        	
+    }
+	
+	@Override
 	public void loadCraftingRecipes(ItemStack result){
 		for (Object item : CombinationRegistry.getAllConversions().entrySet()) {
 			Map.Entry entry = (Map.Entry)item;
@@ -90,6 +114,7 @@ public class DesignexHandler extends TemplateRecipeHandler {
 	@Override
 	public void loadUsageRecipes(String inputId, Object... ingredients)
     {
+		if (ingredients.length == 0) {return;}
 		for (Object item : CombinationRegistry.getAllConversions().entrySet()) {
 			Map.Entry entry = (Map.Entry)item;
 			List itemData = (List)entry.getKey();
@@ -161,6 +186,12 @@ public class DesignexHandler extends TemplateRecipeHandler {
                 this.drawTexturedModalRect(x, y+h-var, tx, ty+h-var, w, var,w,h);
             break;        
         }
+    }
+    
+    @Override
+    public void loadTransferRects()
+    {
+    	transferRects.add(new RecipeTransferRect(new Rectangle(77, 27, 42, 17),"allDesignex"));
     }
 
 }
