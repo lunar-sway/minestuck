@@ -154,9 +154,7 @@ public class GuiComputer extends GuiScreen
 			if (!te.clientName.isEmpty() && SkaiaClient.getClientConnection(te.clientName) != null) {
 				displayMessage = "Connected to "+displayPlayer;
 				buttonStrings.add("Disconnect");
-				buttonStrings.add("Experimental");
-				if(!SkaiaClient.getClientConnection(te.clientName).givenItems())
-					buttonStrings.add("Give items");
+				buttonStrings.add("Edit");
 			} else if (te.openToClients) {
 				displayMessage = "Waiting for client...";
 				buttonStrings.add("Disconnect");
@@ -220,10 +218,8 @@ public class GuiComputer extends GuiScreen
 				SkaiaClient.sendConnectRequest(te, guibutton.displayString, true);
 			}
 		} else if(te.programSelected == 1){
-			if(guibutton.displayString.equals("Experimental")){
+			if(guibutton.displayString.equals("Edit")){
 				EditHandler.activate(te.owner,te.clientName);
-			} else if(guibutton.displayString.equals("Give items")){
-				SkaiaClient.giveItems(te.clientName);
 			} else if(guibutton.displayString.equals("Resume connection")){
 				SkaiaClient.sendConnectRequest(te, SkaiaClient.getAssociatedPartner(te.owner, false), false);
 			} else if(guibutton.displayString.equals("Open to clients")){

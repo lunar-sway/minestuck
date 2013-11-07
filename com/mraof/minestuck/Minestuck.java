@@ -234,12 +234,14 @@ public class Minestuck
 	public static int clientLandEditRange;		//changed by a MinestuckConfigPacket sent by the server on login.
 	
 	//Booleans
+	public static boolean clientHardMode;
+	public static boolean hardMode = false;	//Future config option. Currently alters how easy the entry items are accessible after the first time. The machines cost 100 build and there will only be one card if this is true.
 	public static boolean generateCruxiteOre; //If set to false, Cruxite Ore will not generate
 	public static boolean privateComputers;	//If a player should be able to use other players computers or not.
 	public static boolean acceptTitleCollision;	//Allows combinations like "Heir of Hope" and "Seer of Hope" to exist in the same session. Still not accepting duplicates.
 	public static boolean generateSpecialClasses;	//Allow generation of the "Lord" and "Muse" classes.
 	public static boolean globalSession;	//Makes only one session possible. Recommended to be true on small servers.
-	//Will be ignored when loading a world that already got 2+ sessions.
+	//Will be ignored when loading a world that already got 2+ sessions if it can't merge all together.
 
 	public static String privateMessage;
 

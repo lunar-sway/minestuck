@@ -13,6 +13,8 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 	int overWorldEditRange;
 	int landEditRange;
 	
+	boolean hardMode;
+	
 	public MinestuckConfigPacket() {
 		super(Type.CONFIG);
 	}
@@ -22,6 +24,7 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 		ByteArrayDataOutput dat = ByteStreams.newDataOutput();
 		dat.writeInt(Minestuck.overworldEditRange);
 		dat.writeInt(Minestuck.landEditRange);
+		dat.writeBoolean(Minestuck.hardMode);
 		
 		return dat.toByteArray();
 	}
@@ -31,7 +34,7 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 		ByteArrayDataInput dat = ByteStreams.newDataInput(data);
 		overWorldEditRange = dat.readInt();
 		landEditRange = dat.readInt();
-		
+		hardMode = dat.readBoolean();
 		return this;
 	}
 
@@ -40,6 +43,7 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 		
 		Minestuck.clientOverworldEditRange = this.overWorldEditRange;
 		Minestuck.clientLandEditRange = this.landEditRange;
+		Minestuck.clientHardMode = this.hardMode;
 		
 	}
 

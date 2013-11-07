@@ -1,11 +1,14 @@
 package com.mraof.minestuck.util;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.grist.GristHelper;
 import com.mraof.minestuck.grist.GristRegistry;
 import com.mraof.minestuck.grist.GristStorage;
 import com.mraof.minestuck.grist.GristType;
+import com.mraof.minestuck.item.ItemMachine;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -29,8 +32,6 @@ import net.minecraft.world.World;
 
 public class SburbServerController extends PlayerControllerMP {
 	
-	public String client;
-	
 	public NetClientHandler netHandler;
 	
 	public SburbServerController(Minecraft mc, NetClientHandler netHandler) {
@@ -49,7 +50,9 @@ public class SburbServerController extends PlayerControllerMP {
 		float f1 = (float)par8Vec3.yCoord - (float)par5;
 		float f2 = (float)par8Vec3.zCoord - (float)par6;
 		
-		if(stack != null && stack.getItem() instanceof ItemBlock && GristHelper.canAfford(GristStorage.getClientGrist(), GristRegistry.getGristConversion(stack))) {
+		if(stack != null && stack.getItem() instanceof ItemBlock && (GristHelper.canAfford(GristStorage.getClientGrist(), GristRegistry.getGristConversion(stack))
+				|| stack.getItem() instanceof ItemMachine && stack.getItemDamage() < 4 &&
+				(!Minestuck.clientHardMode || !SkaiaClient.getClientConnection(EditHandler.client).givenItems()[stack.getItemDamage()] || GristStorage.getClientGrist().getGrist(GristType.Build) >= 100))) {
 				ItemBlock item = (ItemBlock)stack.getItem();
 				if(!item.canPlaceItemBlockOnSide(world, par4, par5, par6, par7, entityPlayer, stack))
 					return false;

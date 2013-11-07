@@ -92,14 +92,6 @@ public class SkaiaClient {
 	
 	//Methods called from the actionPerformed method in the gui.
 	
-	public static void giveItems(String player){
-		Packet250CustomPayload packet = new Packet250CustomPayload();
-		packet.channel = "Minestuck";
-		packet.data = MinestuckPacket.makePacket(Type.SBURB_GIVE, player);
-		packet.length = packet.data.length;
-		PacketDispatcher.sendPacketToServer(packet);
-	}
-	
 	public static SburbConnection getClientConnection(String client){
 		for(SburbConnection c : connections)
 			if(c.isActive && c.getClientName().equals(client))
@@ -133,6 +125,9 @@ public class SkaiaClient {
 		if(c.isMain){
 			c.isActive = data.readBoolean();
 			c.enteredGame = data.readBoolean();
+			
+			for(int i = 0; i < c.givenItemList.length; i++)
+				c.givenItemList[i] = data.readBoolean();
 		}
 		c.clientName = data.readLine();
 		c.serverName = data.readLine();

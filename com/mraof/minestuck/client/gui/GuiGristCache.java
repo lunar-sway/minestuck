@@ -70,13 +70,13 @@ public class GuiGristCache extends GuiScreen
 			title = new Title(TitleHelper.getClassFromInt(((EntityPlayer)mc.thePlayer).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Class")),
 					TitleHelper.getAspectFromInt(((EntityPlayer)mc.thePlayer).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Aspect")));
 			if(EditHandler.isActive())
-				titleMessage = ((SburbServerController)mc.playerController).client.toUpperCase();
+				titleMessage = EditHandler.client.toUpperCase();
 			else titleMessage = mc.thePlayer.username.toUpperCase() + " : " + title.getTitleName();
 		}
 		
 		if (titleMessage.isEmpty())
 			if(EditHandler.isActive())
-				titleMessage = ((SburbServerController)mc.playerController).client.toUpperCase();
+				titleMessage = EditHandler.client.toUpperCase();
 			else titleMessage = mc.thePlayer.username.toUpperCase() + " : " + title.getTitleName();
 		
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

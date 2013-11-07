@@ -11,9 +11,13 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.EntityDecoy;
 import com.mraof.minestuck.grist.GristRegistry;
 import com.mraof.minestuck.grist.GristSet;
+import com.mraof.minestuck.item.ItemCardPunched;
+import com.mraof.minestuck.item.ItemCruxiteArtifact;
+import com.mraof.minestuck.item.ItemMachine;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
+import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
@@ -72,6 +76,8 @@ public class EditHandler implements ITickHandler{
 	
 	static int centerX, centerZ;
 	
+	public static String client;
+	
 	/**
 	 * Used to tell if the client is in edit mode or not.
 	 */
@@ -103,7 +109,6 @@ public class EditHandler implements ITickHandler{
 			if(controller == null) {
 				controller = mc.playerController;
 				mc.playerController = new SburbServerController(mc, mc.getNetHandler());
-				((SburbServerController)mc.playerController).client = target;
 			}
 			if(capabilities == null) {
 				capabilities = new NBTTagCompound();
@@ -111,6 +116,7 @@ public class EditHandler implements ITickHandler{
 			}
 			centerX = posX;
 			centerZ = posZ;
+			client = target;
 		} else {	//Disable edit mode
 			if(controller != null) {
 				mc.playerController = controller;
@@ -284,6 +290,7 @@ public class EditHandler implements ITickHandler{
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
 		EntityPlayer player = (EntityPlayer)tickData[0];
+		SburbConnection c;
 		
 		double range;
 		int centerX, centerZ;
@@ -297,6 +304,8 @@ public class EditHandler implements ITickHandler{
 			centerX = EditHandler.centerX;
 			centerZ = EditHandler.centerZ;
 			
+			c = SkaiaClient.getClientConnection(client);
+			
 		} else {
 			
 			EditData data = getData(player.username);
@@ -308,14 +317,42 @@ public class EditHandler implements ITickHandler{
 			centerX = data.connection.centerX;
 			centerZ = data.connection.centerZ;
 			
+			c = data.connection;
+			
 		}	//From here, the player must be in edit mode.
 		
-		for(int i = 0; i < player.inventory.mainInventory.length; i++) {
-			ItemStack stack = player.inventory.mainInventory[i];
-			if(stack != null && (GristRegistry.getGristConversion(stack) == null || !(stack.getItem() instanceof ItemBlock)))
-				player.inventory.mainInventory[i] = null;
-			if(stack != null && stack.stackSize > 1)
-				stack.stackSize = 1;
+		if(c == null)
+			return;
+		
+		if(player.inventory.inventoryChanged) {
+			for(int i = 0; i < player.inventory.mainInventory.length; i++) {
+				ItemStack stack = player.inventory.mainInventory[i];
+				if(stack != null && (GristRegistry.getGristConversion(stack) == null || !(stack.getItem() instanceof ItemBlock)) && !(stack.getItem() instanceof ItemMachine ||
+						stack.getItem() instanceof ItemCardPunched && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact && (!Minestuck.hardMode || !c.givenItems()[4]) && !c.enteredGame())) {
+					player.inventory.mainInventory[i] = null;
+				}
+				if(stack != null && stack.stackSize > 1)
+					stack.stackSize = 1;
+			}
+			
+			for(int i = 0; i < 4; i++) {
+				ItemStack stack = new ItemStack(Minestuck.blockMachine, 1, i);
+				if(!player.inventory.hasItemStack(stack) && !(player.inventory.getItemStack() != null && player.inventory.getItemStack().isItemEqual(stack)))
+					player.inventory.addItemStackToInventory(stack);
+			}
+			
+			if(!c.enteredGame()) {
+				ItemStack stack = new ItemStack(Minestuck.punchedCard);
+				NBTTagCompound nbt = new NBTTagCompound();
+				stack.setTagCompound(nbt);
+				nbt.setInteger("contentID", Minestuck.cruxiteArtifact.itemID);
+				nbt.setInteger("contentMeta", 0);	//TODO Change this for when adding other artifact types
+				if(!player.inventory.hasItemStack(stack) && (player.inventory.getItemStack() == null ||
+						!player.inventory.getItemStack().isItemEqual(stack)))	//Works fine as long as the artifact card is the only allowed card.
+					player.inventory.addItemStackToInventory(stack);
+			}
+			
+			player.inventory.inventoryChanged = false;
 		}
 		
 		double y = player.posY-player.yOffset;
@@ -365,9 +402,21 @@ public class EditHandler implements ITickHandler{
 	}
 	
 	@ForgeSubscribe
-	public void onTossEvent(ItemTossEvent event) {	//TODO Make it cancel and remove the item instead.
-		if(isActive(event.player))
-				event.entityItem.setDead();
+	public void onTossEvent(ItemTossEvent event) {	//TODO Make it cancel and remove the item instead when setting dead.
+		if(isActive(event.player)) {
+			ItemStack stack = event.entityItem.getEntityItem();
+			if((stack.getItem() instanceof ItemMachine && stack.getItemDamage() < 4)) {
+				event.setCanceled(true);
+				if(event.player.inventory.getItemStack() != null)
+					event.player.inventory.inventoryChanged = true;
+			}
+			else if(stack.getItem() instanceof ItemCardPunched && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact) {
+				SburbConnection c = event.entity.worldObj.isRemote?SkaiaClient.getClientConnection(client):getData(event.player.username).connection;
+				c.givenItems()[4] = true;
+				if(!event.entity.worldObj.isRemote && !c.isMain())
+					SkaianetHandler.giveItems(client);
+			} else event.entityItem.setDead();
+		}
 	}
 	
 	@ForgeSubscribe
@@ -387,9 +436,8 @@ public class EditHandler implements ITickHandler{
 	
 	@ForgeSubscribe
 	public void onAttackEvent(AttackEntityEvent event) {
-		if(isActive(event.entityPlayer)) {
+		if(isActive(event.entityPlayer))
 			event.setCanceled(true);
-		}
 	}
 	
 }

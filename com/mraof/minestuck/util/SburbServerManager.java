@@ -1,8 +1,14 @@
 package com.mraof.minestuck.util;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.grist.GristHelper;
 import com.mraof.minestuck.grist.GristRegistry;
+import com.mraof.minestuck.grist.GristSet;
+import com.mraof.minestuck.grist.GristStorage;
 import com.mraof.minestuck.grist.GristType;
+import com.mraof.minestuck.item.ItemMachine;
+import com.mraof.minestuck.network.skaianet.SburbConnection;
+import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 
 import net.minecraft.block.Block;
@@ -33,9 +39,21 @@ public class SburbServerManager extends ItemInWorldManager{
 	
 	@Override
 	public boolean activateBlockOrUseItem(EntityPlayer entityPlayer, World world, ItemStack stack, int par4, int par5, int par6, int par7, float par8, float par9, float par10) {
-		if(stack.getItem() instanceof ItemBlock && client != null) {
-			if(!GristHelper.canAfford(client, stack) || !super.activateBlockOrUseItem(entityPlayer, world, stack, par4, par5, par6, par7, par8, par9, par10))
-				return false;
+		if(stack == null) return false;
+		
+		if(stack.getItem() instanceof ItemMachine && stack.getItemDamage() < 4) {
+			SburbConnection c = EditHandler.getData(thisPlayerMP.username).connection;
+			GristSet cost = Minestuck.hardMode && c.givenItems()[stack.getItemDamage()]?new GristSet(GristType.Build, 100):new GristSet();	//TODO Make it have an other grist cost for the punch designex.
+			if(GristHelper.canAfford(GristStorage.getGristSet(client), cost) && super.activateBlockOrUseItem(entityPlayer, world, stack, par4, par5, par6, par7, par8, par9, par10)) {
+				c.givenItems()[stack.getItemDamage()] = true;
+				if(!c.isMain())
+					SkaianetHandler.giveItems(client);
+				if(!cost.isEmpty())
+					GristHelper.decrease(client, cost);
+				return true;
+			}
+		} else if(stack.getItem() instanceof ItemBlock && client != null && GristHelper.canAfford(client, stack)
+				&& !super.activateBlockOrUseItem(entityPlayer, world, stack, par4, par5, par6, par7, par8, par9, par10)) {
 			GristHelper.decrease(client, GristRegistry.getGristConversion(stack));
 			MinestuckPlayerTracker.updateGristCache(client);
 			thisPlayerMP.playerNetServerHandler.sendPacketToPlayer(new Packet53BlockChange(par4, par5, par6, theWorld));
