@@ -21,6 +21,7 @@ public class BlockFluidOil extends BlockFluidClassic
 	public BlockFluidOil(int id, Fluid fluid, Material material) 
 	{
 		super(id, fluid, material);
+		setUnlocalizedName("oil");
 	}
 
 	@Override

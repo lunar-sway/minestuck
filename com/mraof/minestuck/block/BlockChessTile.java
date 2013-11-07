@@ -54,6 +54,7 @@ public class BlockChessTile extends Block
      * When this method is called, your block should register all the icons it needs with the given IconRegister. This
      * is the only chance you get to register icons.
      */
+    @Override
     public void registerIcons(IconRegister par1IconRegister)
     {
         this.textures = new Icon[iconNames.length];

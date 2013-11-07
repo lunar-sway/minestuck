@@ -1,29 +1,37 @@
 package com.mraof.minestuck.item;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumMovingObjectType;
+import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.Event;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
-import net.minecraftforge.fluids.BlockFluidBase;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemMinestuckBucket extends ItemBucket 
 {
 	public List<Integer> fillFluids = new ArrayList<Integer>();
-
+	public HashMap<Integer, String> textureFiles = new HashMap<Integer, String>();
+	HashMap<Integer, Icon> textures = new HashMap<Integer, Icon>();
 	public ItemMinestuckBucket(int par1) 
 	{
 		super(par1, 0);
+		setUnlocalizedName("minestuckBucket");
 	}
 
 	/**
@@ -144,6 +152,29 @@ public class ItemMinestuckBucket extends ItemBucket
 			return true;
 		}
 	}
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void getSubItems(int unknown, CreativeTabs tab, List subItems) 
+	{
+		for(Integer id : fillFluids)
+			subItems.add(new ItemStack(this, 1, id));
+	}
+	@Override
+	public String getUnlocalizedName(ItemStack par1ItemStack) 
+	{
+		return getUnlocalizedName() + "." + Block.blocksList[par1ItemStack.getItemDamage()].getUnlocalizedName();
+	}
+	@Override
+	public Icon getIconFromDamage(int damage) 
+	{
+		return this.textures.get(damage);
+	}
+	@Override
+	public void registerIcons(IconRegister par1IconRegister)
+    {
+        for (Entry<Integer, String> entry : textureFiles.entrySet())
+            this.textures.put(entry.getKey(), par1IconRegister.registerIcon("minestuck:" + entry.getValue()));
+    }
 
 
 }

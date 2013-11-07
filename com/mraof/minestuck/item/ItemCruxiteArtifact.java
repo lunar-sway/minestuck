@@ -31,6 +31,7 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 	{
 		super(par1, par2, par3);
 		this.setCreativeTab(Minestuck.tabMinestuck);
+		setUnlocalizedName("cruxiteArtifact");
 		commonBlocks.add(Block.stone.blockID);
 		commonBlocks.add(Block.grass.blockID);
 		commonBlocks.add(Block.dirt.blockID);

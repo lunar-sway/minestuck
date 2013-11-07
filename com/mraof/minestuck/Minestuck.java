@@ -508,7 +508,9 @@ public class Minestuck
 		MinecraftForge.setBlockHarvestLevel(blockMachine, "pickaxe", 1);
 
 		minestuckBucket.fillFluids.add(blockBloodId);
+		minestuckBucket.textureFiles.put(blockBloodId, "BucketBlood");
 		minestuckBucket.fillFluids.add(blockOilId);
+		minestuckBucket.textureFiles.put(blockOilId, "BucketOil");
 
 		fluidOil.setUnlocalizedName(blockOil.getUnlocalizedName());
 		fluidBlood.setUnlocalizedName(blockBlood.getUnlocalizedName());
