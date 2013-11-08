@@ -31,7 +31,7 @@ import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.EditHandler;
+import com.mraof.minestuck.util.ServerEditHandler;
 
 //@SideOnly(Side.SERVER)	//This crashes the game on execution of ClearMessagePacket?
 public class SkaianetHandler {
@@ -176,7 +176,7 @@ public class SkaianetHandler {
 						sc.worldObj.markBlockForUpdate(sc.xCoord, sc.yCoord, sc.zCoord);
 					}
 					Session.closeConnection(c.getClientName(), c.getServerName());
-					EditHandler.onDisconnect(c);
+					ServerEditHandler.onDisconnect(c);
 					if(c.isMain)
 						c.isActive = false;	//That's everything that is neccesary.
 					else connections.remove(c);
@@ -486,6 +486,7 @@ public class SkaianetHandler {
 						iter2.remove();
 					else c.isActive = false;
 					Session.closeConnection(c.getClientName(), c.getServerName());
+					ServerEditHandler.onDisconnect(c);
 					
 					if(cc != null){
 						cc.serverConnected = false;

@@ -81,8 +81,9 @@ import com.mraof.minestuck.tileentity.TileEntityGatePortal;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.util.ClientEditHandler;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.EditHandler;
+import com.mraof.minestuck.util.ServerEditHandler;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.WorldProviderSkaia;
 import com.mraof.minestuck.world.gen.OreHandler;
@@ -628,8 +629,10 @@ public class Minestuck
 		AlchemyRecipeHandler.registerMinestuckRecipes();
 		AlchemyRecipeHandler.registerModRecipes();
 		
-		TickRegistry.registerTickHandler(new EditHandler(), Side.CLIENT);
-		TickRegistry.registerTickHandler(new EditHandler(), Side.SERVER);
+		if(event.getSide().isClient())
+			TickRegistry.registerTickHandler(ClientEditHandler.instance, Side.CLIENT);
+//		if(event.getSide().isServer())
+		TickRegistry.registerTickHandler(ServerEditHandler.instance, Side.SERVER);
 		
 		Session.maxSize = acceptTitleCollision?(generateSpecialClasses?168:144):12;
 	}
@@ -638,7 +641,10 @@ public class Minestuck
 	public void postInit(FMLPostInitializationEvent event) 
 	{
 		MinecraftForge.EVENT_BUS.register(new MinestuckSaveHandler());
-		MinecraftForge.EVENT_BUS.register(new EditHandler());
+		if(event.getSide().isClient())
+			MinecraftForge.EVENT_BUS.register(ClientEditHandler.instance);
+//		if(event.getSide().isServer())
+		MinecraftForge.EVENT_BUS.register(ServerEditHandler.instance);
 		AlchemyRecipeHandler.registerDynamicRecipes();
 
 		//register NEI stuff

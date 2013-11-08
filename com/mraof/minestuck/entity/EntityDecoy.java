@@ -1,7 +1,7 @@
 package com.mraof.minestuck.entity;
 
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.EditHandler;
+import com.mraof.minestuck.util.ServerEditHandler;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -151,7 +151,7 @@ public class EntityDecoy extends EntityLiving {
 		
 		if(!worldObj.isRemote) {
 			if(this.locationChanged())
-				EditHandler.reset(null, 0, EditHandler.getData(this));
+				ServerEditHandler.reset(null, 0, ServerEditHandler.getData(this));
 		}
 	}
 	
@@ -164,7 +164,7 @@ public class EntityDecoy extends EntityLiving {
 	@Override
 	public boolean attackEntityFrom(DamageSource damageSource, float par2) {
 		if (!worldObj.isRemote && (!gameType.equals(EnumGameType.CREATIVE) || damageSource.canHarmInCreative()))
-			EditHandler.reset(damageSource, par2, EditHandler.getData(this));
+			ServerEditHandler.reset(damageSource, par2, ServerEditHandler.getData(this));
 		return true;
 	}
 	

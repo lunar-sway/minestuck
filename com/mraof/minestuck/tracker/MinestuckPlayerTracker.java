@@ -15,7 +15,7 @@ import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.EditHandler;
+import com.mraof.minestuck.util.ServerEditHandler;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.util.TitleHelper;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
@@ -51,7 +51,7 @@ public class MinestuckPlayerTracker implements IPlayerTracker {
 	@Override
 	public void onPlayerLogout(EntityPlayer player) 
 	{
-		EditHandler.onPlayerExit(player);
+		ServerEditHandler.onPlayerExit(player);
 	}
 
 	@Override
@@ -86,8 +86,8 @@ public class MinestuckPlayerTracker implements IPlayerTracker {
 		
 		//The editing player, if there is any.
 		SburbConnection c = SkaianetHandler.getClientConnection(player);
-		if(c != null && EditHandler.getData(c) != null) {
-			EntityPlayerMP editor = EditHandler.getData(c).getEditor();
+		if(c != null && ServerEditHandler.getData(c) != null) {
+			EntityPlayerMP editor = ServerEditHandler.getData(c).getEditor();
 			Packet250CustomPayload packet = new Packet250CustomPayload();
 			packet.channel = "Minestuck";
 			packet.data = MinestuckPacket.makePacket(Type.GRISTCACHE, gristValues, true);

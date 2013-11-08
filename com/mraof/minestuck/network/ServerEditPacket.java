@@ -5,7 +5,8 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.EntityDecoy;
-import com.mraof.minestuck.util.EditHandler;
+import com.mraof.minestuck.util.ClientEditHandler;
+import com.mraof.minestuck.util.ServerEditHandler;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -49,7 +50,7 @@ public class ServerEditPacket extends MinestuckPacket {
 
 	@Override
 	public void execute(INetworkManager network, MinestuckPacketHandler minestuckPacketHandler, Player player, String userName) {
-		EditHandler.onClientPackage(target, posX, posZ); 
+		ClientEditHandler.onClientPackage(target, posX, posZ); 
 	}
 
 }

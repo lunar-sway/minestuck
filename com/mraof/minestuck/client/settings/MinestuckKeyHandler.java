@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 
 import com.mraof.minestuck.client.gui.GuiGristCache;
-import com.mraof.minestuck.util.EditHandler;
+import com.mraof.minestuck.util.ClientEditHandler;
 
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.common.TickType;
@@ -44,7 +44,7 @@ public class MinestuckKeyHandler extends KeyHandler
 		}
 		else if(kb.keyDescription == "key.exitEdit")
 			if(!editHasBeenPressed) {
-				EditHandler.onKeyPressed();
+				ClientEditHandler.onKeyPressed();
 				editHasBeenPressed = true;
 			}
 	}

@@ -19,7 +19,7 @@ import com.mraof.minestuck.network.skaianet.ComputerData;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
-import com.mraof.minestuck.util.EditHandler;
+import com.mraof.minestuck.util.ClientEditHandler;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -219,7 +219,7 @@ public class GuiComputer extends GuiScreen
 			}
 		} else if(te.programSelected == 1){
 			if(guibutton.displayString.equals("Edit")){
-				EditHandler.activate(te.owner,te.clientName);
+				ClientEditHandler.activate(te.owner,te.clientName);
 			} else if(guibutton.displayString.equals("Resume connection")){
 				SkaiaClient.sendConnectRequest(te, SkaiaClient.getAssociatedPartner(te.owner, false), false);
 			} else if(guibutton.displayString.equals("Open to clients")){

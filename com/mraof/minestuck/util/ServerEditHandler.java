@@ -40,6 +40,7 @@ import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -61,77 +62,9 @@ import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
-public class EditHandler implements ITickHandler{
+public class ServerEditHandler implements ITickHandler{
 	
-	public static boolean isActive(EntityPlayer player) {
-		if(player.worldObj.isRemote)
-			return player instanceof EntityClientPlayerMP && isActive();
-		else return getData(player.username) != null;
-	}
-	
-	//Client sided stuff
-	static NBTTagCompound capabilities;
-	
-	static PlayerControllerMP controller;
-	
-	static int centerX, centerZ;
-	
-	public static String client;
-	
-	/**
-	 * Used to tell if the client is in edit mode or not.
-	 */
-	public static boolean isActive() {
-		return capabilities != null && controller != null;
-	}
-	
-	public static void activate(String username, String target) {
-		Minecraft mc = Minecraft.getMinecraft();
-		Packet250CustomPayload packet = new Packet250CustomPayload();
-		packet.channel = "Minestuck";
-		packet.data = MinestuckPacket.makePacket(Type.CLIENT_EDIT, username, target);
-		packet.length = packet.data.length;
-		PacketDispatcher.sendPacketToServer(packet);
-	}
-	
-	public static void onKeyPressed() {
-		Packet250CustomPayload packet = new Packet250CustomPayload();
-		packet.channel = "Minestuck";
-		packet.data = MinestuckPacket.makePacket(Type.CLIENT_EDIT);
-		packet.length = packet.data.length;
-		PacketDispatcher.sendPacketToServer(packet);
-	}
-	
-	public static void onClientPackage(String target, int posX, int posZ) {
-		Minecraft mc = Minecraft.getMinecraft();
-		EntityClientPlayerMP player = mc.thePlayer;
-		if(target != null) {	//Enable edit mode
-			if(controller == null) {
-				controller = mc.playerController;
-				mc.playerController = new SburbServerController(mc, mc.getNetHandler());
-			}
-			if(capabilities == null) {
-				capabilities = new NBTTagCompound();
-				player.capabilities.writeCapabilitiesToNBT(capabilities);
-			}
-			centerX = posX;
-			centerZ = posZ;
-			client = target;
-		} else {	//Disable edit mode
-			if(controller != null) {
-				mc.playerController = controller;
-				controller = null;
-			}
-			if(capabilities != null) {
-				player.capabilities.readCapabilitiesFromNBT(capabilities);
-				player.capabilities.allowFlying = mc.playerController.isInCreativeMode();
-				player.capabilities.isFlying = player.capabilities.isFlying && player.capabilities.allowFlying;
-				capabilities = null;
-			}
-		}
-	}
-	
-	//Server sided stuff
+	public static final ServerEditHandler instance = new ServerEditHandler();
 	
 	static List<EditData> list = new ArrayList();
 	
@@ -175,6 +108,7 @@ public class EditHandler implements ITickHandler{
 			player.setGameType(decoy.gameType);
 		player.capabilities.readCapabilitiesFromNBT(decoy.capabilities);
 		player.sendPlayerAbilities();
+		player.fallDistance = 0;
 		player.setHealth(decoy.getHealth());
 		NBTTagCompound nbt = new NBTTagCompound();
 		decoy.foodStats.writeNBT(nbt);
@@ -204,6 +138,10 @@ public class EditHandler implements ITickHandler{
 			Debug.print("Activating edit mode on player \""+player.username+"\", target player: \""+computerTarget+"\".");
 			EntityDecoy decoy = new EntityDecoy(player.worldObj, player);
 			EditData data = new EditData(decoy, player, c);
+			if(!c.enteredGame()) {
+				c.centerX = c.getClientData().getX();
+				c.centerZ = c.getClientData().getZ();
+			}
 			if(!setPlayerStats(player, c)) {
 				player.theItemInWorldManager = data.manager;
 				ChatMessageComponent message = new ChatMessageComponent();
@@ -242,15 +180,10 @@ public class EditHandler implements ITickHandler{
 			posX = c.posX;
 			posZ = c.posZ;
 			posY = world.getTopSolidOrLiquidBlock((int)posX, (int)posZ);
-		} else if(c.enteredGame()) {
+		} else {
 				posX = c.centerX + 0.5;
 				posY = world.getTopSolidOrLiquidBlock(c.centerX, c.centerZ);
 				posZ = c.centerZ + 0.5;
-			} else {
-				TileEntityComputer te = SkaianetHandler.getComputer(c.getClientData());
-				posX = te.xCoord + 0.5;
-				posY = world.getTopSolidOrLiquidBlock(te.xCoord, te.zCoord);
-				posZ = te.zCoord + 0.5;
 			}
 		
 		player.closeScreen();
@@ -282,79 +215,84 @@ public class EditHandler implements ITickHandler{
 		return null;
 	}
 	
-	//Non static
-	
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {}
 
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
 		EntityPlayer player = (EntityPlayer)tickData[0];
-		SburbConnection c;
 		
-		double range;
-		int centerX, centerZ;
-		
-		if(player.worldObj.isRemote) {
-			if(!(tickData[0] == Minecraft.getMinecraft().thePlayer) || !this.isActive())
-				return;
-			
-			range = (MinestuckSaveHandler.lands.contains((byte)player.dimension)?Minestuck.clientLandEditRange:Minestuck.clientOverworldEditRange)/2;
-			
-			centerX = EditHandler.centerX;
-			centerZ = EditHandler.centerZ;
-			
-			c = SkaiaClient.getClientConnection(client);
-			
-		} else {
-			
-			EditData data = getData(player.username);
-			if(data == null)
-				return;
-			
-			range = (MinestuckSaveHandler.lands.contains((byte)player.dimension)?Minestuck.landEditRange:Minestuck.overworldEditRange)/2;
-			
-			centerX = data.connection.centerX;
-			centerZ = data.connection.centerZ;
-			
-			c = data.connection;
-			
-		}	//From here, the player must be in edit mode.
-		
-		if(c == null)
+		EditData data = getData(player.username);
+		if(data == null)
 			return;
 		
-		if(player.inventory.inventoryChanged) {
-			for(int i = 0; i < player.inventory.mainInventory.length; i++) {
-				ItemStack stack = player.inventory.mainInventory[i];
-				if(stack != null && (GristRegistry.getGristConversion(stack) == null || !(stack.getItem() instanceof ItemBlock)) && !(stack.getItem() instanceof ItemMachine ||
-						stack.getItem() instanceof ItemCardPunched && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact && (!Minestuck.hardMode || !c.givenItems()[4]) && !c.enteredGame())) {
-					player.inventory.mainInventory[i] = null;
-				}
-				if(stack != null && stack.stackSize > 1)
-					stack.stackSize = 1;
-			}
-			
-			for(int i = 0; i < 4; i++) {
-				ItemStack stack = new ItemStack(Minestuck.blockMachine, 1, i);
-				if(!player.inventory.hasItemStack(stack) && !(player.inventory.getItemStack() != null && player.inventory.getItemStack().isItemEqual(stack)))
-					player.inventory.addItemStackToInventory(stack);
-			}
-			
-			if(!c.enteredGame()) {
-				ItemStack stack = new ItemStack(Minestuck.punchedCard);
-				NBTTagCompound nbt = new NBTTagCompound();
-				stack.setTagCompound(nbt);
-				nbt.setInteger("contentID", Minestuck.cruxiteArtifact.itemID);
-				nbt.setInteger("contentMeta", 0);	//TODO Change this for when adding other artifact types
-				if(!player.inventory.hasItemStack(stack) && (player.inventory.getItemStack() == null ||
-						!player.inventory.getItemStack().isItemEqual(stack)))	//Works fine as long as the artifact card is the only allowed card.
-					player.inventory.addItemStackToInventory(stack);
-			}
-			
-			player.inventory.inventoryChanged = false;
-		}
+		SburbConnection c = data.connection;
+		double range = (MinestuckSaveHandler.lands.contains((byte)player.dimension)?Minestuck.landEditRange:Minestuck.overworldEditRange)/2;
 		
+		updateInventory(player, c, Minestuck.hardMode);
+		updatePosition(player, range, c.centerX, c.centerZ);
+	}
+
+	@Override
+	public EnumSet<TickType> ticks() {
+		return EnumSet.of(TickType.PLAYER);
+	}
+
+	@Override
+	public String getLabel() {
+		return "TickEditHandler";
+	}
+	
+	@ForgeSubscribe
+	public void onTossEvent(ItemTossEvent event) {
+		if(!event.entity.worldObj.isRemote && getData(event.player.username) != null) {
+			InventoryPlayer inventory = event.player.inventory;
+			ItemStack stack = event.entityItem.getEntityItem();
+			if((stack.getItem() instanceof ItemMachine && stack.getItemDamage() < 4)) {
+				event.setCanceled(true);
+				if(inventory.getItemStack() != null)
+					inventory.inventoryChanged = true;
+			}
+			else if(stack.getItem() instanceof ItemCardPunched && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact) {
+				SburbConnection c = getData(event.player.username).connection;
+				c.givenItems()[4] = true;
+				if(!c.isMain())
+					SkaianetHandler.giveItems(c.getClientName());
+				if(!Minestuck.hardMode)
+					inventory.inventoryChanged = true;
+			} else {
+				event.setCanceled(true);
+				if(inventory.getItemStack() != null)
+					inventory.setItemStack(null);
+				else inventory.setInventorySlotContents(inventory.currentItem, null);
+			}
+		}
+	}
+	
+	@ForgeSubscribe
+	public void onItemPickupEvent(EntityItemPickupEvent event) {
+		if(!event.entity.worldObj.isRemote && getData(event.entityPlayer.username) != null)
+			event.setCanceled(true);
+	}
+	
+	@ForgeSubscribe
+	public void onInteractEvent(PlayerInteractEvent event) {
+		
+		if(!event.entity.worldObj.isRemote && getData(event.entityPlayer.username) != null && event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
+			event.useBlock = Event.Result.DENY;
+			event.useItem = Event.Result.ALLOW;
+		}
+	}
+	
+	@ForgeSubscribe
+	public void onAttackEvent(AttackEntityEvent event) {
+		if(!event.entity.worldObj.isRemote && getData(event.entityPlayer.username) != null)
+			event.setCanceled(true);
+	}
+	
+	//Both sided.
+	
+	public static void updatePosition(EntityPlayer player, double range, int centerX, int centerZ) {
 		double y = player.posY-player.yOffset;
 		if(y < 0) {
 			y = 0;
@@ -388,56 +326,39 @@ public class EditHandler implements ITickHandler{
 			//Update gravity if the player is on ground
 			
 		}
-		
-	}
-
-	@Override
-	public EnumSet<TickType> ticks() {
-		return EnumSet.of(TickType.PLAYER);
-	}
-
-	@Override
-	public String getLabel() {
-		return "TickEditHandler";
 	}
 	
-	@ForgeSubscribe
-	public void onTossEvent(ItemTossEvent event) {	//TODO Make it cancel and remove the item instead when setting dead.
-		if(isActive(event.player)) {
-			ItemStack stack = event.entityItem.getEntityItem();
-			if((stack.getItem() instanceof ItemMachine && stack.getItemDamage() < 4)) {
-				event.setCanceled(true);
-				if(event.player.inventory.getItemStack() != null)
-					event.player.inventory.inventoryChanged = true;
+	public static void updateInventory(EntityPlayer player, SburbConnection c, boolean isHardMode) {
+		if(player.inventory.inventoryChanged) {
+			for(int i = 0; i < player.inventory.mainInventory.length; i++) {
+				ItemStack stack = player.inventory.mainInventory[i];
+				if(stack != null && (GristRegistry.getGristConversion(stack) == null || !(stack.getItem() instanceof ItemBlock)) && !(stack.getItem() instanceof ItemMachine ||
+						stack.getItem() instanceof ItemCardPunched && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact && (!isHardMode || !c.givenItems()[4]) && !c.enteredGame())) {
+					player.inventory.mainInventory[i] = null;
+				}
+				if(stack != null && stack.stackSize > 1)
+					stack.stackSize = 1;
 			}
-			else if(stack.getItem() instanceof ItemCardPunched && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact) {
-				SburbConnection c = event.entity.worldObj.isRemote?SkaiaClient.getClientConnection(client):getData(event.player.username).connection;
-				c.givenItems()[4] = true;
-				if(!event.entity.worldObj.isRemote && !c.isMain())
-					SkaianetHandler.giveItems(client);
-			} else event.entityItem.setDead();
+			
+			for(int i = 0; i < 4; i++) {
+				ItemStack stack = new ItemStack(Minestuck.blockMachine, 1, i);
+				if(!player.inventory.hasItemStack(stack) && !(player.inventory.getItemStack() != null && player.inventory.getItemStack().isItemEqual(stack)))
+					player.inventory.addItemStackToInventory(stack);
+			}
+			
+			if(!c.enteredGame()) {
+				ItemStack stack = new ItemStack(Minestuck.punchedCard);
+				NBTTagCompound nbt = new NBTTagCompound();
+				stack.setTagCompound(nbt);
+				nbt.setInteger("contentID", Minestuck.cruxiteArtifact.itemID);
+				nbt.setInteger("contentMeta", 0);	//TODO Change this for when adding other artifact types
+				if(!player.inventory.hasItemStack(stack) && (player.inventory.getItemStack() == null ||
+						!player.inventory.getItemStack().isItemEqual(stack)))	//Works fine as long as the artifact card is the only allowed card.
+					player.inventory.addItemStackToInventory(stack);
+			}
+			
+			player.inventory.inventoryChanged = false;
 		}
-	}
-	
-	@ForgeSubscribe
-	public void onItemPickupEvent(EntityItemPickupEvent event) {
-		if(isActive(event.entityPlayer))
-			event.setCanceled(true);
-	}
-	
-	@ForgeSubscribe
-	public void onInteractEvent(PlayerInteractEvent event) {
-		
-		if(isActive(event.entityPlayer) && event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
-			event.useBlock = Event.Result.DENY;
-			event.useItem = Event.Result.ALLOW;
-		}
-	}
-	
-	@ForgeSubscribe
-	public void onAttackEvent(AttackEntityEvent event) {
-		if(isActive(event.entityPlayer))
-			event.setCanceled(true);
 	}
 	
 }

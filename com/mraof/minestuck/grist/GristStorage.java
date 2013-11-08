@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.mraof.minestuck.network.GristCachePacket;
-import com.mraof.minestuck.util.EditHandler;
+import com.mraof.minestuck.util.ClientEditHandler;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -28,7 +28,7 @@ public class GristStorage {
 	}
 	
 	public static GristSet getClientGrist() {
-		return EditHandler.isActive()?targetGrist:playerGrist;
+		return ClientEditHandler.isActive()?targetGrist:playerGrist;
 	}
 	
 	//Server sided

@@ -52,7 +52,7 @@ public class SburbServerController extends PlayerControllerMP {
 		
 		if(stack != null && stack.getItem() instanceof ItemBlock && (GristHelper.canAfford(GristStorage.getClientGrist(), GristRegistry.getGristConversion(stack))
 				|| stack.getItem() instanceof ItemMachine && stack.getItemDamage() < 4 &&
-				(!Minestuck.clientHardMode || !SkaiaClient.getClientConnection(EditHandler.client).givenItems()[stack.getItemDamage()] || GristStorage.getClientGrist().getGrist(GristType.Build) >= 100))) {
+				(!Minestuck.clientHardMode || !SkaiaClient.getClientConnection(ClientEditHandler.client).givenItems()[stack.getItemDamage()] || GristStorage.getClientGrist().getGrist(GristType.Build) >= 100))) {
 				ItemBlock item = (ItemBlock)stack.getItem();
 				if(!item.canPlaceItemBlockOnSide(world, par4, par5, par6, par7, entityPlayer, stack))
 					return false;

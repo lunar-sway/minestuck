@@ -16,8 +16,7 @@ import org.lwjgl.opengl.GL12;
 
 import com.mraof.minestuck.grist.GristStorage;
 import com.mraof.minestuck.grist.GristType;
-import com.mraof.minestuck.util.EditHandler;
-import com.mraof.minestuck.util.SburbServerController;
+import com.mraof.minestuck.util.ClientEditHandler;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.util.TitleHelper;
 
@@ -69,14 +68,14 @@ public class GuiGristCache extends GuiScreen
 		if (title == null) {
 			title = new Title(TitleHelper.getClassFromInt(((EntityPlayer)mc.thePlayer).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Class")),
 					TitleHelper.getAspectFromInt(((EntityPlayer)mc.thePlayer).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Aspect")));
-			if(EditHandler.isActive())
-				titleMessage = EditHandler.client.toUpperCase();
+			if(ClientEditHandler.isActive())
+				titleMessage = ClientEditHandler.client.toUpperCase();
 			else titleMessage = mc.thePlayer.username.toUpperCase() + " : " + title.getTitleName();
 		}
 		
 		if (titleMessage.isEmpty())
-			if(EditHandler.isActive())
-				titleMessage = EditHandler.client.toUpperCase();
+			if(ClientEditHandler.isActive())
+				titleMessage = ClientEditHandler.client.toUpperCase();
 			else titleMessage = mc.thePlayer.username.toUpperCase() + " : " + title.getTitleName();
 		
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

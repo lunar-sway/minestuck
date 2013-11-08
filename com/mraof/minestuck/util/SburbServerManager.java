@@ -42,7 +42,7 @@ public class SburbServerManager extends ItemInWorldManager{
 		if(stack == null) return false;
 		
 		if(stack.getItem() instanceof ItemMachine && stack.getItemDamage() < 4) {
-			SburbConnection c = EditHandler.getData(thisPlayerMP.username).connection;
+			SburbConnection c = ServerEditHandler.getData(thisPlayerMP.username).connection;
 			GristSet cost = Minestuck.hardMode && c.givenItems()[stack.getItemDamage()]?new GristSet(GristType.Build, 100):new GristSet();	//TODO Make it have an other grist cost for the punch designex.
 			if(GristHelper.canAfford(GristStorage.getGristSet(client), cost) && super.activateBlockOrUseItem(entityPlayer, world, stack, par4, par5, par6, par7, par8, par9, par10)) {
 				c.givenItems()[stack.getItemDamage()] = true;
@@ -52,8 +52,8 @@ public class SburbServerManager extends ItemInWorldManager{
 					GristHelper.decrease(client, cost);
 				return true;
 			}
-		} else if(stack.getItem() instanceof ItemBlock && client != null && GristHelper.canAfford(client, stack)
-				&& !super.activateBlockOrUseItem(entityPlayer, world, stack, par4, par5, par6, par7, par8, par9, par10)) {
+		} else if(stack.getItem() instanceof ItemBlock && GristHelper.canAfford(client, stack)
+				&& super.activateBlockOrUseItem(entityPlayer, world, stack, par4, par5, par6, par7, par8, par9, par10)) {
 			GristHelper.decrease(client, GristRegistry.getGristConversion(stack));
 			MinestuckPlayerTracker.updateGristCache(client);
 			thisPlayerMP.playerNetServerHandler.sendPacketToPlayer(new Packet53BlockChange(par4, par5, par6, theWorld));

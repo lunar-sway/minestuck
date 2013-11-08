@@ -3,7 +3,7 @@ package com.mraof.minestuck.network;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.EditHandler;
+import com.mraof.minestuck.util.ServerEditHandler;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.INetworkManager;
@@ -37,9 +37,9 @@ public class ClientEditPacket extends MinestuckPacket {
 	public void execute(INetworkManager network, MinestuckPacketHandler minestuckPacketHandler, Player player, String userName) {
 		EntityPlayerMP playerMP = (EntityPlayerMP)player;
 		if(username == null)
-			EditHandler.onPlayerExit(playerMP);
+			ServerEditHandler.onPlayerExit(playerMP);
 		if(!Minestuck.privateComputers || playerMP.username.equals(this.username))
-			EditHandler.newServerEditor(playerMP, username, target);
+			ServerEditHandler.newServerEditor(playerMP, username, target);
 	}
 
 }
