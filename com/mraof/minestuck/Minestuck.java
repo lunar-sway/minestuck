@@ -415,7 +415,6 @@ public class Minestuck
 		FluidRegistry.registerFluid(fluidBlood);
 		blockOil = new BlockFluidOil(blockOilId, fluidOil, Material.water);
 		blockBlood = new BlockFluidBlood(blockBloodId, fluidBlood, Material.water);
-		Debug.printf("Blocks created, Blood id: %d, Oil id: %d", blockBloodId, blockOilId);
 		
 		//items
 		//hammers
@@ -500,7 +499,6 @@ public class Minestuck
 		ItemStack chessboardStack = new ItemStack(component,1,2);
 		ItemStack bloodBucket = new ItemStack(minestuckBucket, 1, blockBloodId);
 		ItemStack oilBucket = new ItemStack(minestuckBucket, 1, blockOilId);
-		Debug.printf("Itemstacks for buckets created, Blood id: %d, Oil id: %d", blockBloodId, blockOilId);
 		//set harvest information for blocks
 		MinecraftForge.setBlockHarvestLevel(chessTile, "shovel", 0);
 		MinecraftForge.setBlockHarvestLevel(oreCruxite, "pickaxe", 1);

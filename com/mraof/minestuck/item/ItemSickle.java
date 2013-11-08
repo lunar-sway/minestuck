@@ -29,19 +29,15 @@ public class ItemSickle extends ItemWeapon
 		{
 		case SICKLE:
 			this.setUnlocalizedName("sickle");
-//			this.setIconIndex(15);
 			break;
 		case HOMES:
 			this.setUnlocalizedName("homesSmellYaLater");
-//			this.setIconIndex(16);
 			break;
 		case REGISICKLE:
 			this.setUnlocalizedName("regiSickle");
-//			this.setIconIndex(17);
 			break;
 		case CLAW:
 			this.setUnlocalizedName("clawSickle");
-//			this.setIconIndex(18);
 			break;
 		}
 		this.weaponDamage = 4 + sickleType.getDamageVsEntity();
