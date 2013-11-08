@@ -13,12 +13,12 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.ClearMessagePacket;
 import com.mraof.minestuck.network.skaianet.ComputerData;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.util.ClientEditHandler;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -131,8 +131,6 @@ public class GuiComputer extends GuiScreen
 			SburbConnection c = SkaiaClient.getClientConnection(te.owner);
 			if(!te.latestmessage.get(0).isEmpty())
 				buttonStrings.add("Clear message");
-			if(SkaiaClient.enteredMedium(te.owner)) //if it should view the grist cache button.
-				buttonStrings.add("View Gristcache");
 			if (te.serverConnected && c != null) { //If it is connected to someone.
 				displayMessage = "Connected to "+displayPlayer;
 				buttonStrings.add("Disconnect");
@@ -155,8 +153,7 @@ public class GuiComputer extends GuiScreen
 			if (!te.clientName.isEmpty() && SkaiaClient.getClientConnection(te.clientName) != null) {
 				displayMessage = "Connected to "+displayPlayer;
 				buttonStrings.add("Disconnect");
-				if(!SkaiaClient.getClientConnection(te.clientName).givenItems())
-					buttonStrings.add("Give items");
+				buttonStrings.add("Edit");
 			} else if (te.openToClients) {
 				displayMessage = "Waiting for client...";
 				buttonStrings.add("Disconnect");
@@ -209,21 +206,19 @@ public class GuiComputer extends GuiScreen
 			close();
 		else if(guibutton.displayString.equals("Clear message"))
 			return;
+		else if (guibutton == upButton)
+			index--;
+		else if (guibutton == downButton)
+			index++;
 		else if(te.programSelected == 0){
-			if (guibutton == upButton) {
-				index--;
-			} else if (guibutton == downButton) {
-				index++;
-			} else if(guibutton.displayString.equals("View Gristcache")){
-				mc.thePlayer.openGui(Minestuck.instance, 2, te.worldObj, te.xCoord, te.yCoord, te.zCoord);
-			} else if(guibutton.displayString.equals("Resume connection")){
+			if(guibutton.displayString.equals("Resume connection")){
 				SkaiaClient.sendConnectRequest(te, SkaiaClient.getAssociatedPartner(te.owner, true), true);
 			} else{
 				SkaiaClient.sendConnectRequest(te, guibutton.displayString, true);
 			}
 		} else if(te.programSelected == 1){
-			if(guibutton.displayString.equals("Give items")){
-				SkaiaClient.giveItems(te.clientName);
+			if(guibutton.displayString.equals("Edit")){
+				ClientEditHandler.activate(te.owner,te.clientName);
 			} else if(guibutton.displayString.equals("Resume connection")){
 				SkaiaClient.sendConnectRequest(te, SkaiaClient.getAssociatedPartner(te.owner, false), false);
 			} else if(guibutton.displayString.equals("Open to clients")){

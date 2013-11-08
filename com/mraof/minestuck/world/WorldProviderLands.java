@@ -8,7 +8,6 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.WorldChunkManagerHell;
 import net.minecraft.world.chunk.IChunkProvider;
 
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.ChunkProviderLands;
 
 public class WorldProviderLands extends WorldProvider 
@@ -51,7 +50,7 @@ public class WorldProviderLands extends WorldProvider
 		if (provider == null || provider.aspect1 == null || provider.aspect2 == null) {
 			return "Land";
 		} else {
-			return "Land of " + provider.helper.pickElement(provider.aspect1.getNames()) + " and " + provider.helper.pickElement(provider.aspect2.getNames());
+			return "Land of " + provider.aspect1.getNames()[provider.nameIndex1] + " and " + provider.aspect2.getNames()[provider.nameIndex2];
 		}
 	}
 

@@ -2,9 +2,6 @@ package com.mraof.minestuck.nei;
 
 import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
-import codechicken.nei.asm.NEIModContainer;
-
-import com.mraof.minestuck.util.Debug;
 
 public class NEIMinestuckConfig implements IConfigureNEI {
 

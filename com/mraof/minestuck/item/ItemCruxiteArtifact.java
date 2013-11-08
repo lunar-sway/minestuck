@@ -54,7 +54,7 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 			int destinationId = player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("LandId") == 0 ? LandHelper.createLand(player) : player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("LandId");
 			if(player.worldObj.provider.dimensionId != destinationId) {
 				Teleport.teleportEntity(player, destinationId, this);
-				SkaianetHandler.enterMedium(player.username, destinationId);
+				SkaianetHandler.enterMedium((EntityPlayerMP)player, destinationId);
 			}
 		}
 	}

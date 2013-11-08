@@ -1,7 +1,5 @@
 package com.mraof.minestuck;
 
-
-
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,6 +13,8 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.Achievement;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
@@ -36,6 +36,7 @@ import com.mraof.minestuck.block.BlockStorage;
 import com.mraof.minestuck.block.OreCruxite;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.GuiHandler;
+import com.mraof.minestuck.entity.EntityDecoy;
 import com.mraof.minestuck.entity.carapacian.EntityBlackBishop;
 import com.mraof.minestuck.entity.carapacian.EntityBlackPawn;
 import com.mraof.minestuck.entity.carapacian.EntityWhiteBishop;
@@ -84,8 +85,11 @@ import com.mraof.minestuck.tileentity.TileEntityGatePortal;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.util.ClientEditHandler;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.GristStorage;
 import com.mraof.minestuck.util.GristType;
+import com.mraof.minestuck.util.ServerEditHandler;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.WorldProviderSkaia;
 import com.mraof.minestuck.world.gen.OreHandler;
@@ -108,6 +112,8 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
+import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = "Minestuck", name = "Minestuck", version = "@VERSION@")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false, packetHandler = MinestuckPacketHandler.class, channels = {"Minestuck"})
@@ -235,8 +241,17 @@ public class Minestuck
 	public static int blockComputerOffId;
 	public static int blockOilId;
 	public static int blockBloodId;
-
+	
+	
+	public static int overworldEditRange;
+	public static int landEditRange;
+	
+	public static int clientOverworldEditRange;	//Edit range used by the client side.
+	public static int clientLandEditRange;		//changed by a MinestuckConfigPacket sent by the server on login.
+	
 	//Booleans
+	public static boolean clientHardMode;
+	public static boolean hardMode = false;	//Future config option. Currently alters how easy the entry items are accessible after the first time. The machines cost 100 build and there will only be one card if this is true.
 	public static boolean generateCruxiteOre; //If set to false, Cruxite Ore will not generate
 	public static boolean privateComputers;	//If a player should be able to use other players computers or not.
 	public static boolean acceptTitleCollision;	//Allows combinations like "Heir of Hope" and "Seer of Hope" to exist in the same session. Still not accepting duplicates.
@@ -383,7 +398,8 @@ public class Minestuck
 		privateComputers = config.get("General", "privateComputers", false).getBoolean(false);
 		privateMessage = config.get("General", "privateMessage", "You are not allowed to access other players computers.").getString();
 		easyDesignex  = config.get("General", "easyDesignex", true).getBoolean(true);
-
+		overworldEditRange = config.get("General", "overWorldEditRange", 26).getInt();
+		landEditRange = config.get("General", "landEditRange", 52).getInt();
 		config.save();
 	}
 
@@ -604,6 +620,7 @@ public class Minestuck
 		LanguageRegistry.instance().addStringLocalization("achievement.getHammer.desc", "Get the Claw Hammer");
 
 		LanguageRegistry.instance().addStringLocalization("key.gristCache", "View Grist Cache");
+		LanguageRegistry.instance().addStringLocalization("key.exitEdit", "Exit Edit Mode");
 
 		LanguageRegistry.instance().addStringLocalization("itemGroup.tabMinestuck", "Minestuck");
 
@@ -619,6 +636,11 @@ public class Minestuck
 		this.registerAndMapEntity(EntityWhitePawn.class, "prospitianPawn", 0xf0f0f0, 0x0f0f0f);
 		this.registerAndMapEntity(EntityBlackBishop.class, "dersiteBishop", 0x000000, 0xc121d9);
 		this.registerAndMapEntity(EntityWhiteBishop.class, "prospitianBishop", 0xffffff, 0xfde500);
+			//To not register this entity as spawnable using a mob egg.
+		EntityList.addMapping(EntityDecoy.class, "playerDecoy", entityIdStart + currentEntityIdOffset);
+		EntityRegistry.registerModEntity(EntityDecoy.class, "playerDecoy", currentEntityIdOffset, this, 80, 3, true);
+		currentEntityIdOffset++;
+		
 		//register entities with fml
 		EntityRegistry.registerModEntity(EntityGrist.class, "grist", currentEntityIdOffset, this, 512, 1, true);
 
@@ -658,7 +680,12 @@ public class Minestuck
 		AlchemyRecipeHandler.registerVanillaRecipes();
 		AlchemyRecipeHandler.registerMinestuckRecipes();
 		AlchemyRecipeHandler.registerModRecipes();
-
+		
+		if(event.getSide().isClient())
+			TickRegistry.registerTickHandler(ClientEditHandler.instance, Side.CLIENT);
+//		if(event.getSide().isServer())
+		TickRegistry.registerTickHandler(ServerEditHandler.instance, Side.SERVER);
+		
 		Session.maxSize = acceptTitleCollision?(generateSpecialClasses?168:144):12;
 	}
 
@@ -667,6 +694,10 @@ public class Minestuck
 	{
 		MinecraftForge.EVENT_BUS.register(new MinestuckSaveHandler());
 		MinecraftForge.EVENT_BUS.register(new MinestuckFluidHandler());
+		if(event.getSide().isClient())
+			MinecraftForge.EVENT_BUS.register(ClientEditHandler.instance);
+//		if(event.getSide().isServer())
+		MinecraftForge.EVENT_BUS.register(ServerEditHandler.instance);
 		AlchemyRecipeHandler.registerDynamicRecipes();
 
 		//register NEI stuff
@@ -704,6 +735,7 @@ public class Minestuck
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event)
 	{
+		MinestuckSaveHandler.lands.clear();
 		File landList = event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("minestuckLandList");
 		if (landList != null && landList.exists())
 		{
@@ -712,8 +744,11 @@ public class Minestuck
 				int currentByte;
 				while((currentByte = dataInputStream.read()) != -1)
 				{
+					if(MinestuckSaveHandler.lands.contains((byte)currentByte))
+							continue;
 					MinestuckSaveHandler.lands.add((byte)currentByte);
 					Debug.printf("Found land dimension id of: %d", currentByte);
+					
 					if(!DimensionManager.isDimensionRegistered(currentByte))
 						DimensionManager.registerDimension(currentByte, Minestuck.landProviderTypeId);
 				}
@@ -723,6 +758,19 @@ public class Minestuck
 			}
 		}
 		SkaianetHandler.loadData(event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("connectionList"),event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("waitingConnections"));
+		
+		File gristcache = event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("gristCache");
+		if(gristcache.exists()) {
+			NBTTagCompound nbt = null;
+			try{
+				nbt = CompressedStreamTools.readCompressed(new FileInputStream(gristcache));
+			} catch(IOException e){
+				e.printStackTrace();
+			}
+			
+			GristStorage.readFromNBT(nbt);
+			
+		}
 	}
 	
 }

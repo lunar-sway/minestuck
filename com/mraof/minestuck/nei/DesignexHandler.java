@@ -1,36 +1,19 @@
 package com.mraof.minestuck.nei;
 
 import static codechicken.core.gui.GuiDraw.changeTexture;
-import static codechicken.core.gui.GuiDraw.drawTexturedModalRect;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import org.lwjgl.opengl.GL11;
-
-import com.mraof.minestuck.nei.AlchemiterHandler.CachedAlchemiterRecipe;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.CombinationRegistry;
-import com.mraof.minestuck.util.GristRegistry;
-import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.GristType;
-
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import codechicken.core.gui.GuiDraw;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
-import codechicken.nei.recipe.TemplateRecipeHandler.CachedRecipe;
-import codechicken.nei.recipe.TemplateRecipeHandler.RecipeTransferRect;
+
+import com.mraof.minestuck.util.CombinationRegistry;
 
 public class DesignexHandler extends TemplateRecipeHandler {
 

@@ -4,18 +4,16 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.GristAmount;
+import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristType;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
@@ -254,13 +252,9 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	}
 	public void addGrist(EntityPlayer entityPlayer)
 	{
-		int oldValue = entityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(this.gristType);
-		entityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").setInteger(this.gristType, oldValue + gristValue);
-		Packet250CustomPayload packet = new Packet250CustomPayload();
-		packet.channel = "Minestuck";
-		packet.data = MinestuckPacket.makePacket(Type.GRIST, typeInt(this.gristType), oldValue + gristValue);
-		packet.length = packet.data.length;
-		((EntityPlayerMP)entityPlayer).playerNetServerHandler.sendPacketToPlayer(packet);
+		int oldValue = GristHelper.getGrist(entityPlayer.username, GristType.getTypeFromString(this.gristType));
+		GristHelper.setGrist(entityPlayer.username, GristType.getTypeFromString(this.gristType), oldValue + gristValue);
+		MinestuckPlayerTracker.updateGristCache(entityPlayer.username);
 	}
 
 	public boolean canAttackWithItem()

@@ -1,9 +1,5 @@
 package com.mraof.minestuck.tileentity;
 
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Map;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -15,11 +11,11 @@ import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.CombinationRegistry;
+import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristRegistry;
-import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.GristType;
 
 public class TileEntityMachine extends TileEntity implements IInventory {
 
@@ -224,22 +220,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 				ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(this.inv[1]);
 				if (newItem == null) {return false;}
 				if (inv[0] != null && (inv[0].itemID != newItem.itemID || inv[0].getItemDamage() != newItem.getItemDamage() || inv[0].getMaxStackSize() <= inv[0].stackSize)) {return false;}
-		    	GristSet set = GristRegistry.getGristConversion(newItem);
-		    	if (set == null) {return false;}
-			    	Hashtable reqs = set.getHashtable();
-			    	//Debug.print("reqs: " + reqs.size());
-			    	if (reqs != null) {
-			    	   	Iterator it = reqs.entrySet().iterator();
-			            while (it.hasNext()) {
-			                Map.Entry pairs = (Map.Entry)it.next();
-			                int type = (Integer) pairs.getKey();
-			                int need = (Integer) pairs.getValue();
-			                int have =  this.owner.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(GristType.values()[type].getName());
-			                
-			                if (need > have) {return false;}
-			        }
-		    	} else {return false;}
-		    	return true;
+				return GristHelper.canAfford(this.owner.username, newItem);
 			} else {
 				return false;
 			}
@@ -318,28 +299,18 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 				decrStackSize(0, -1);
 			}
 			//decrStackSize(1, 1);
-	    	GristSet set = GristRegistry.getGristConversion(newItem);
-		    Hashtable reqs = set.getHashtable();
-	    	if (reqs != null) {
-	    	   	Iterator it = reqs.entrySet().iterator();
-	            while (it.hasNext()) {
-	                Map.Entry pairs = (Map.Entry)it.next();
-	                this.owner.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").setInteger(GristType.values()[(Integer) pairs.getKey()].getName(),this.owner.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(GristType.values()[(Integer)pairs.getKey()].getName()) - (Integer)pairs.getValue());
-	            }
+			if(!worldObj.isRemote) {
+				GristHelper.decrease(this.owner.username, GristRegistry.getGristConversion(newItem));
+				MinestuckPlayerTracker.updateGristCache(this.owner.username);
+			}
 			break;
-	    	}
 		case (4):
-	    	set = GristRegistry.getGristConversion(inv[1]);
-		    reqs = set.getHashtable();
-	    	if (reqs != null) {
-	    	   	Iterator it = reqs.entrySet().iterator();
-	            while (it.hasNext()) {
-	                Map.Entry pairs = (Map.Entry)it.next();
-	                this.owner.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").setInteger(GristType.values()[(Integer) pairs.getKey()].getName(),this.owner.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getInteger(GristType.values()[(Integer)pairs.getKey()].getName()) + (Integer)pairs.getValue());
-	            }
-	        this.decrStackSize(1, 1);
+			if(!worldObj.isRemote) {
+				GristHelper.increase(this.owner.username, GristRegistry.getGristConversion(inv[1]));
+				MinestuckPlayerTracker.updateGristCache(this.owner.username);
+			}
+			this.decrStackSize(1, 1);
 			break;
-	    	}
 		}
 	}
 }

@@ -42,7 +42,7 @@ public class ChunkProviderLands implements IChunkProvider
 	public LandAspect aspect1;
 	public LandAspect aspect2;
 	public LandHelper helper;
-	
+	public int nameIndex1, nameIndex2;
 
 	public int[] surfaceBlock;
 	public int[] upperBlock;
@@ -62,6 +62,9 @@ public class ChunkProviderLands implements IChunkProvider
 		if (landDataTag == null) {
 			this.aspect1 = helper.getLandAspect();
 			this.aspect2 = helper.getLandAspect(aspect1);
+			Random rand = new Random();
+			nameIndex1 = rand.nextInt(aspect1.getNames().length);	//Better way to generate these?
+			nameIndex2 = rand.nextInt(aspect2.getNames().length);
 			Map<String, NBTBase> dataTag = new Hashtable<String,NBTBase>();
 			dataTag.put("LandData",LandHelper.toNBT(aspect1,aspect2));
 			worldObj.getWorldInfo().setAdditionalProperties(dataTag);
@@ -75,6 +78,8 @@ public class ChunkProviderLands implements IChunkProvider
 		} else {
 			aspect1 = helper.fromName(((NBTTagCompound) landDataTag).getString("aspect1"));
 			aspect2 = helper.fromName(((NBTTagCompound) landDataTag).getString("aspect2"));
+			nameIndex1 = ((NBTTagCompound) landDataTag).getInteger("aspectName1");
+			nameIndex2 = ((NBTTagCompound) landDataTag).getInteger("aspectName2");
 		}
 		
 		this.random = new Random(seed);

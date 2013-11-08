@@ -8,12 +8,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.WorldEvent;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.util.GristStorage;
 
 public class MinestuckSaveHandler 
 {
@@ -38,7 +39,18 @@ public class MinestuckSaveHandler
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			SkaianetHandler.saveData(event.world.getSaveHandler().getMapFileFromName("connectionList"),event.world.getSaveHandler().getMapFileFromName("waitingConnections"));
+		}
+		SkaianetHandler.saveData(event.world.getSaveHandler().getMapFileFromName("connectionList"),event.world.getSaveHandler().getMapFileFromName("waitingConnections"));
+		
+		File gristcache = event.world.getSaveHandler().getMapFileFromName("gristCache");
+		if(gristcache != null) {
+			try{
+				NBTTagCompound nbt = new NBTTagCompound();
+				GristStorage.writeToNBT(nbt);
+				CompressedStreamTools.writeCompressed(nbt, new FileOutputStream(gristcache));
+			} catch(IOException e){
+				e.printStackTrace();
+			}
 		}
 	}
 }

@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 
 import com.mraof.minestuck.client.gui.GuiGristCache;
+import com.mraof.minestuck.util.ClientEditHandler;
 
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.common.TickType;
@@ -14,6 +15,7 @@ public class MinestuckKeyHandler extends KeyHandler
 {
     private EnumSet tickTypes = EnumSet.of(TickType.CLIENT);
     boolean gristHasBeenPressed = false;
+	boolean editHasBeenPressed = false;
     
 	public MinestuckKeyHandler(KeyBinding[] keyBindings, boolean[] repeatings) 
 	{
@@ -40,12 +42,20 @@ public class MinestuckKeyHandler extends KeyHandler
 				gristHasBeenPressed = true;
 			}
 		}
+		else if(kb.keyDescription == "key.exitEdit")
+			if(!editHasBeenPressed) {
+				ClientEditHandler.onKeyPressed();
+				editHasBeenPressed = true;
+			}
 	}
 
 	@Override
 	public void keyUp(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd) 
 	{
-		gristHasBeenPressed = false;
+		if(kb.keyDescription == "key.gristCache")
+			gristHasBeenPressed = false;
+		else if(kb.keyDescription == "key.exitEdit")
+			editHasBeenPressed = false;
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import com.google.common.io.ByteStreams;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.skaianet.ComputerData;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.util.ServerEditHandler;
 
 import cpw.mods.fml.common.network.Player;
 
@@ -52,7 +53,7 @@ public class SburbConnectPacket extends MinestuckPacket {
 
 	@Override
 	public void execute(INetworkManager network, MinestuckPacketHandler handler, Player player, String userName) {
-		if(!Minestuck.privateComputers || ((EntityPlayer)player).username.equals(this.player))
+		if(!Minestuck.privateComputers || ((EntityPlayer)player).username.equals(this.player) && ServerEditHandler.getData(((EntityPlayer)player).username) == null)
 			SkaianetHandler.requestConnection(this.player, otherPlayer, isClient);
 	}
 

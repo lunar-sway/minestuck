@@ -13,7 +13,6 @@ import net.minecraftforge.common.DimensionManager;
 
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 import cpw.mods.fml.common.network.IConnectionHandler;

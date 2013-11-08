@@ -19,11 +19,14 @@ public abstract class MinestuckPacket
 		GOBUTTON(GoButtonPacket.class),
 		TITLE(TitlePacket.class),
 		SBURB_CONNECT(SburbConnectPacket.class),
-		SBURB_GIVE(SburbGiveItemsPacket.class), 
 		SBURB_CLOSE(SburbConnectClosedPacket.class),
 		LANDREGISTER(LandRegisterPacket.class),
 		CLEAR(ClearMessagePacket.class),
-		SBURB_INFO(SkaianetInfoPacket.class);
+		SBURB_INFO(SkaianetInfoPacket.class),
+		CLIENT_EDIT(ClientEditPacket.class),
+		SERVER_EDIT(ServerEditPacket.class),
+		CONFIG(MinestuckConfigPacket.class);
+		
 		Class<? extends MinestuckPacket> packetType;
 		private Type(Class<? extends MinestuckPacket> packetClass)
 		{
