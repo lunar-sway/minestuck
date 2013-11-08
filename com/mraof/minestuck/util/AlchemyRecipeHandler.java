@@ -20,6 +20,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.lands.LandAspectFrost;
 import com.mraof.minestuck.world.gen.lands.LandAspectHeat;
+import com.mraof.minestuck.world.gen.lands.LandAspectShade;
 import com.mraof.minestuck.world.gen.lands.LandHelper;
 
 import cpw.mods.fml.common.Loader;
@@ -527,6 +528,7 @@ public class AlchemyRecipeHandler {
 		//register land aspects
 		LandHelper.registerLandAspect(new LandAspectFrost());
 		LandHelper.registerLandAspect(new LandAspectHeat());
+		LandHelper.registerLandAspect(new LandAspectShade());
 	}
 	
 	public static void registerModRecipes() 

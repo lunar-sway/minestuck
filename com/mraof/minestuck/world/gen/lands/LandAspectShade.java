@@ -2,54 +2,60 @@ package com.mraof.minestuck.world.gen.lands;
 
 import java.util.ArrayList;
 
+import net.minecraft.block.Block;
+
+import com.mraof.minestuck.Minestuck;
+
 public class LandAspectShade extends LandAspect {
 
 	@Override
-	public int[][] getSurfaceBlocks() {
-		// TODO Auto-generated method stub
-		return null;
+	public int[][] getSurfaceBlocks() 
+	{
+		return new int[][] {{Block.blockLapis.blockID, 0}};
 	}
 
 	@Override
 	public int[][] getUpperBlocks() {
-		// TODO Auto-generated method stub
-		return null;
+		return new int[][] {{Block.stone.blockID, 0}};
+	}
+	
+	@Override
+	public int getOceanBlock() 
+	{
+		return Minestuck.blockOil.blockID;
 	}
 
 	@Override
 	public double[] generateTerrainMap() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public float getRarity() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 0.5F;
 	}
 
 	@Override
 	public String getPrimaryName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Shade";
 	}
 
 	@Override
 	public String[] getNames() {
-		// TODO Auto-generated method stub
-		return null;
+		return new String[] {"Shade"};
 	}
 
 	@Override
 	public ArrayList<ILandDecorator> getDecorators() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList list = new ArrayList<ILandDecorator>();
+		list.add(new DecoratorVein(Block.mushroomCapBrown.blockID, 10, 32));
+//		list.add(new DecoratorVein(Block.ice.blockID, 5, 8));
+		return list;
 	}
 
 	@Override
 	public int getDayCycleMode() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 2;
 	}
 
 }
