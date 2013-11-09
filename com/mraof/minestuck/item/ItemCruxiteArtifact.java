@@ -119,7 +119,7 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 			{
 				((Entity)iterator.next()).setDead();
 			}
-			worldserver1.setSpawnLocation(x, y, z);
+			worldserver1.provider.setSpawnPoint(x, y, z);
 			Debug.printf("Respawn location being set to: %d, %d, %d", x, y, z);
 		}
 	}
