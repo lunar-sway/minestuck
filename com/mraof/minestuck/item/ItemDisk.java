@@ -13,6 +13,7 @@ import net.minecraft.world.World;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.UsernameHandler;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -66,7 +67,7 @@ public class ItemDisk extends Item {
 				TileEntityComputer te =  (TileEntityComputer) world.getBlockTileEntity(x, y, z);
 				if (te == null) {return false;}
 				if(te.owner.isEmpty())
-					te.owner = player.username;
+					te.owner = UsernameHandler.encode(player.username);
 				int i = item.getItemDamage();
 				if (te.installedPrograms.get(i)!=null) {
 					return false;

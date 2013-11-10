@@ -5,6 +5,7 @@ import net.minecraft.nbt.NBTTagList;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+import com.mraof.minestuck.util.ServerEditHandler;
 
 public class SburbConnection {
 	
@@ -24,7 +25,7 @@ public class SburbConnection {
 	 * 0-3 = the machines
 	 * 4 = the card
 	 */
-	boolean[] givenItemList = new boolean[5];
+	boolean[] givenItemList = new boolean[ServerEditHandler.GIVEABLE_ITEMS];
 	
 	//Only used by the edit handler
 	public int centerX, centerZ;
@@ -71,9 +72,6 @@ public class SburbConnection {
 		if(isMain){
 			data.writeBoolean(isActive);
 			data.writeBoolean(enteredGame);
-			
-			for(boolean b : givenItemList)
-				data.writeBoolean(b);
 		}
 		data.write((getClientName()+"\n").getBytes());
 		data.write((getServerName()+"\n").getBytes());

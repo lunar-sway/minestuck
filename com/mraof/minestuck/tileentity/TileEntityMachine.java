@@ -16,6 +16,7 @@ import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.CombinationRegistry;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristRegistry;
+import com.mraof.minestuck.util.UsernameHandler;
 
 public class TileEntityMachine extends TileEntity implements IInventory {
 
@@ -220,7 +221,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 				ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(this.inv[1]);
 				if (newItem == null) {return false;}
 				if (inv[0] != null && (inv[0].itemID != newItem.itemID || inv[0].getItemDamage() != newItem.getItemDamage() || inv[0].getMaxStackSize() <= inv[0].stackSize)) {return false;}
-				return GristHelper.canAfford(this.owner.username, newItem);
+				return GristHelper.canAfford(UsernameHandler.encode(owner.username), newItem);
 			} else {
 				return false;
 			}
@@ -300,14 +301,14 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			}
 			//decrStackSize(1, 1);
 			if(!worldObj.isRemote) {
-				GristHelper.decrease(this.owner.username, GristRegistry.getGristConversion(newItem));
-				MinestuckPlayerTracker.updateGristCache(this.owner.username);
+				GristHelper.decrease(UsernameHandler.encode(owner.username), GristRegistry.getGristConversion(newItem));
+				MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(owner.username));
 			}
 			break;
 		case (4):
 			if(!worldObj.isRemote) {
-				GristHelper.increase(this.owner.username, GristRegistry.getGristConversion(inv[1]));
-				MinestuckPlayerTracker.updateGristCache(this.owner.username);
+				GristHelper.increase(UsernameHandler.encode(owner.username), GristRegistry.getGristConversion(inv[1]));
+				MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(owner.username));
 			}
 			this.decrStackSize(1, 1);
 			break;

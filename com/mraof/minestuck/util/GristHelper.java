@@ -36,12 +36,16 @@ public class GristHelper {
 	}
 	
 	/**
-	 * A shortned statement to obtain a certain grist count.
+	 * A shortened statement to obtain a certain grist count.
+	 * Uses the encoded version of the username!
 	 */
 	public static int getGrist(String player, GristType type) {
 		return GristStorage.getGristSet(player).getGrist(type);
 	}
 	
+	/**
+	 * Uses the encoded version of the username!
+	 */
 	public static boolean canAfford(String player, ItemStack stack) {
 		return canAfford(GristStorage.getGristSet(player), GristRegistry.getGristConversion(stack));
 	}
@@ -65,6 +69,9 @@ public class GristHelper {
 		return false;
 	}
 	
+	/**
+	 * Uses the encoded version of the username!
+	 */
 	public static void decrease(String player, GristSet set) {
 		Hashtable reqs = set.getHashtable();
 		if (reqs != null) {

@@ -1,5 +1,6 @@
 package com.mraof.minestuck.tracker;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,6 +19,7 @@ import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.ServerEditHandler;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.util.TitleHelper;
+import com.mraof.minestuck.util.UsernameHandler;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 import cpw.mods.fml.common.IPlayerTracker;
@@ -28,7 +30,11 @@ public class MinestuckPlayerTracker implements IPlayerTracker {
 	@Override
 	public void onPlayerLogin(EntityPlayer player) 
 	{
-		if(GristStorage.getGristSet(player.username) == null) {
+		MinecraftServer server = MinecraftServer.getServer();
+		if(!server.isDedicatedServer() && server.getConfigurationManager().playerEntityList.size() == 1)
+			UsernameHandler.host = ((EntityPlayer)server.getConfigurationManager().playerEntityList.get(0)).username;
+		
+		if(GristStorage.getGristSet(UsernameHandler.encode(player.username)) == null) {
 			if(player.getEntityData().hasKey("Grist")) {	//Load old grist format
 				NBTTagCompound nbt = player.getEntityData().getCompoundTag("Grist");
 				GristSet set = new GristSet();
@@ -37,12 +43,12 @@ public class MinestuckPlayerTracker implements IPlayerTracker {
 				if(set.isEmpty())
 					set.addGrist(GristType.Build, 20);
 				
-				GristStorage.setGrist(player.username, set);
+				GristStorage.setGrist(UsernameHandler.encode(player.username), set);
 				player.getEntityData().removeTag("Grist");
-			} else GristStorage.setGrist(player.username, new GristSet(GristType.Build, 20));
+			} else GristStorage.setGrist(UsernameHandler.encode(player.username), new GristSet(GristType.Build, 20));
 		}
 		
-		updateGristCache(player.username);
+		updateGristCache(UsernameHandler.encode(player.username));
 		updateTitle(player);
 		updateLands(player);
 		sendConfigPacket(player);
@@ -57,17 +63,20 @@ public class MinestuckPlayerTracker implements IPlayerTracker {
 	@Override
 	public void onPlayerChangedDimension(EntityPlayer player) 
 	{
-		updateGristCache(player.username);
+		updateGristCache(UsernameHandler.encode(player.username));
 		updateTitle(player);
 	}
 
 	@Override
 	public void onPlayerRespawn(EntityPlayer player) 
 	{
-		updateGristCache(player.username);
+		updateGristCache(UsernameHandler.encode(player.username));
 		updateTitle(player);
 	}
 	
+	/**
+	 * Uses an "encoded" username as parameter.
+	 */
 	public static void updateGristCache(String player) {
 		
 		int[] gristValues = new int[GristType.allGrists];
@@ -75,13 +84,15 @@ public class MinestuckPlayerTracker implements IPlayerTracker {
 			gristValues[typeInt] = GristHelper.getGrist(player,GristType.values()[typeInt]);
 		
 		//The player
-		EntityPlayerMP playerMP = MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(player);
-		if(playerMP != null) {
-			Packet250CustomPayload packet = new Packet250CustomPayload();
-			packet.channel = "Minestuck";
-			packet.data = MinestuckPacket.makePacket(Type.GRISTCACHE, gristValues, false);
-			packet.length = packet.data.length;
-			playerMP.playerNetServerHandler.sendPacketToPlayer(packet);
+		if(!player.equals(".client") || UsernameHandler.host != null) {
+			EntityPlayerMP playerMP = MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(UsernameHandler.decode(player));
+			if(playerMP != null) {
+				Packet250CustomPayload packet = new Packet250CustomPayload();
+				packet.channel = "Minestuck";
+				packet.data = MinestuckPacket.makePacket(Type.GRISTCACHE, gristValues, false);
+				packet.length = packet.data.length;
+				playerMP.playerNetServerHandler.sendPacketToPlayer(packet);
+			}
 		}
 		
 		//The editing player, if there is any.

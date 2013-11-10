@@ -36,6 +36,8 @@ public class ClientEditHandler implements ITickHandler{
 	
 	public final static ClientEditHandler instance = new ClientEditHandler();
 	
+	static boolean[] givenItems;
+	
 	static NBTTagCompound capabilities;
 	
 	static PlayerControllerMP controller;
@@ -68,16 +70,17 @@ public class ClientEditHandler implements ITickHandler{
 		PacketDispatcher.sendPacketToServer(packet);
 	}
 	
-	public static void onClientPackage(String target, int posX, int posZ) {
+	public static void onClientPackage(String target, int posX, int posZ, boolean[] items) {
 		Minecraft mc = Minecraft.getMinecraft();
 		EntityClientPlayerMP player = mc.thePlayer;
 		if(target != null) {	//Enable edit mode
-			if(controller == null) {
+			if(controller == null) {	//Prevent the server from screwing up the client too hard if called the wrong time.
 				controller = mc.playerController;
 				mc.playerController = new SburbServerController(mc, mc.getNetHandler());
 				capabilities = new NBTTagCompound();
 				player.capabilities.writeCapabilitiesToNBT(capabilities);
 			}
+			givenItems = items;
 			centerX = posX;
 			centerZ = posZ;
 			client = target;
@@ -105,9 +108,7 @@ public class ClientEditHandler implements ITickHandler{
 		
 		double range = (MinestuckSaveHandler.lands.contains((byte)player.dimension)?Minestuck.clientLandEditRange:Minestuck.clientOverworldEditRange)/2;
 		
-		SburbConnection c = SkaiaClient.getClientConnection(client);
-		
-		ServerEditHandler.updateInventory(player, c, Minestuck.clientHardMode);
+		ServerEditHandler.updateInventory(player, givenItems, MinestuckSaveHandler.lands.contains((byte)player.dimension), Minestuck.clientHardMode);
 		ServerEditHandler.updatePosition(player, range, centerX, centerZ);
 	}
 
@@ -133,7 +134,7 @@ public class ClientEditHandler implements ITickHandler{
 			}
 			else if(stack.getItem() instanceof ItemCardPunched && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact) {
 				SburbConnection c = SkaiaClient.getClientConnection(client);
-				c.givenItems()[4] = true;
+				givenItems[4] = true;
 				if(!Minestuck.clientHardMode)
 					inventory.inventoryChanged = true;
 			} else {

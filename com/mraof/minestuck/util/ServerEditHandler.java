@@ -41,6 +41,8 @@ import cpw.mods.fml.common.TickType;
 
 public class ServerEditHandler implements ITickHandler{
 	
+	public static final int GIVEABLE_ITEMS = 5;
+	
 	public static final ServerEditHandler instance = new ServerEditHandler();
 	
 	static List<EditData> list = new ArrayList();
@@ -133,7 +135,7 @@ public class ServerEditHandler implements ITickHandler{
 			list.add(data);
 			Packet250CustomPayload packet = new Packet250CustomPayload();
 			packet.channel = "Minestuck";
-			packet.data = MinestuckPacket.makePacket(Type.SERVER_EDIT, computerTarget, c.centerX, c.centerZ);
+			packet.data = MinestuckPacket.makePacket(Type.SERVER_EDIT, computerTarget, c.centerX, c.centerZ, c.givenItems());
 			packet.length = packet.data.length;
 			player.playerNetServerHandler.sendPacketToPlayer(packet);
 			MinestuckPlayerTracker.updateGristCache(c.getClientName());
@@ -206,7 +208,7 @@ public class ServerEditHandler implements ITickHandler{
 		SburbConnection c = data.connection;
 		double range = (MinestuckSaveHandler.lands.contains((byte)player.dimension)?Minestuck.landEditRange:Minestuck.overworldEditRange)/2;
 		
-		updateInventory(player, c, Minestuck.hardMode);
+		updateInventory(player, c.givenItems(), c.enteredGame(), Minestuck.hardMode);
 		updatePosition(player, range, c.centerX, c.centerZ);
 	}
 
@@ -305,12 +307,12 @@ public class ServerEditHandler implements ITickHandler{
 		}
 	}
 	
-	public static void updateInventory(EntityPlayer player, SburbConnection c, boolean isHardMode) {
+	public static void updateInventory(EntityPlayer player, boolean[] givenItems, boolean enteredGame, boolean isHardMode) {
 		if(player.inventory.inventoryChanged) {
 			for(int i = 0; i < player.inventory.mainInventory.length; i++) {
 				ItemStack stack = player.inventory.mainInventory[i];
 				if(stack != null && (GristRegistry.getGristConversion(stack) == null || !(stack.getItem() instanceof ItemBlock)) && !(stack.getItem() instanceof ItemMachine ||
-						stack.getItem() instanceof ItemCardPunched && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact && (!isHardMode || !c.givenItems()[4]) && !c.enteredGame())) {
+						stack.getItem() instanceof ItemCardPunched && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact && (!isHardMode || !givenItems[4]) && !enteredGame)) {
 					player.inventory.mainInventory[i] = null;
 				}
 				if(stack != null && stack.stackSize > 1)
@@ -323,7 +325,7 @@ public class ServerEditHandler implements ITickHandler{
 					player.inventory.addItemStackToInventory(stack);
 			}
 			
-			if(!c.enteredGame()) {
+			if(!enteredGame) {
 				ItemStack stack = new ItemStack(Minestuck.punchedCard);
 				NBTTagCompound nbt = new NBTTagCompound();
 				stack.setTagCompound(nbt);

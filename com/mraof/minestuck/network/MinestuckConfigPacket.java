@@ -6,6 +6,7 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.UsernameHandler;
 
 import cpw.mods.fml.common.network.Player;
 
@@ -15,6 +16,8 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 	int landEditRange;
 	
 	boolean hardMode;
+	
+	String lanHost;
 	
 	public MinestuckConfigPacket() {
 		super(Type.CONFIG);
@@ -26,6 +29,9 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 		dat.writeInt(Minestuck.overworldEditRange);
 		dat.writeInt(Minestuck.landEditRange);
 		dat.writeBoolean(Minestuck.hardMode);
+		if(UsernameHandler.host != null)
+			dat.write(UsernameHandler.host.getBytes());
+		dat.write('\n');
 		
 		return dat.toByteArray();
 	}
@@ -36,6 +42,9 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 		overWorldEditRange = dat.readInt();
 		landEditRange = dat.readInt();
 		hardMode = dat.readBoolean();
+		lanHost = dat.readLine();
+		if(lanHost.isEmpty())
+			lanHost = null;
 		return this;
 	}
 
@@ -45,6 +54,7 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 		Minestuck.clientOverworldEditRange = this.overWorldEditRange;
 		Minestuck.clientLandEditRange = this.landEditRange;
 		Minestuck.clientHardMode = this.hardMode;
+		UsernameHandler.host = lanHost;
 		
 	}
 

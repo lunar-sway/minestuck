@@ -50,6 +50,9 @@ public class SburbServerController extends PlayerControllerMP {
 				boolean result = stack.tryPlaceItemIntoWorld(entityPlayer, world, par4, par5, par6, par7, f, f1, f2);
 				stack.setItemDamage(d);
 				stack.stackSize = size;
+				
+				if(result && stack.getItem() instanceof ItemMachine && stack.getItemDamage() < 4)
+					ClientEditHandler.givenItems[stack.getItemDamage()] = true;
 				return result;
 			}
 		return false;
