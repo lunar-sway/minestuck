@@ -556,7 +556,11 @@ public class Minestuck
 		LanguageRegistry.addName(cane, "Cane");
 		LanguageRegistry.addName(spearCane, "Spear Cane");
 		LanguageRegistry.addName(dragonCane, "Dragon Cane");
-		LanguageRegistry.addName(crockerSpork, "Junior Battlemaster's Bowlbuster Stirring/Poking Solution 50000");
+		LanguageRegistry.addName(new ItemStack(crockerSpork), "Junior Battlemaster's Bowlbuster Stirring Solution 50000");
+		ItemStack stack = new ItemStack(crockerSpork);
+		stack.stackTagCompound = new NBTTagCompound();
+		stack.stackTagCompound.setBoolean("isSpoon", false);
+		LanguageRegistry.addName(stack, "Junior Battlemaster's Bowlbuster Poking Solution 50000");
 		LanguageRegistry.addName(skaiaFork, "Skaia War Fork");
 		LanguageRegistry.addName(rawCruxite, "Raw Cruxite");
 		LanguageRegistry.addName(cruxiteDowel, "Cruxite Dowel");

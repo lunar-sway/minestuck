@@ -2,15 +2,19 @@ package com.mraof.minestuck.item;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.Debug;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -101,22 +105,41 @@ public class ItemSpork extends ItemWeapon
 		return 72000;
 	}
 	
-	@Override
-	public void onCreated(ItemStack stack, World world, EntityPlayer player) {
-		stack.stackTagCompound = new NBTTagCompound();
-		stack.stackTagCompound.setBoolean("isSpoon", true);
-	}
-	
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) 
 	{
 		if(!world.isRemote)
 			if(sporkType.equals(sporkType.CROCKER)) {
-				if(stack.stackTagCompound == null){	//If the stack was created before this update, it wont have a stackTagCompound.
-					stack.stackTagCompound = new NBTTagCompound();
-					stack.stackTagCompound.setBoolean("isSpoon", true);
-				}
+				if(stack.stackTagCompound.getByte("delay") > 0)
+					return stack;
+				else stack.stackTagCompound.setByte("delay", (byte) 10);
+				
 				stack.stackTagCompound.setBoolean("isSpoon", !stack.stackTagCompound.getBoolean("isSpoon"));
-				return stack;
+				
+				
+				
+				if(!stack.stackTagCompound.hasKey("AttributeModifiers"))
+					stack.stackTagCompound.setTag("AttributeModifiers", new NBTTagList());
+				NBTTagList list = stack.stackTagCompound.getTagList("AttributeModifiers");
+				boolean found = false;
+				for(int i = 0; i < list.tagCount(); i++) {
+					NBTTagCompound nbt = (NBTTagCompound) list.tagAt(i);
+					if(nbt.getString("AttributeName").equals(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName())) {
+						nbt.setDouble("Amount", isSpoon(stack)?3:5);
+						found = true;
+						break;
+					}
+				}
+				
+				if(!found) {
+					NBTTagCompound nbt = new NBTTagCompound();
+					nbt.setString("AttributeName", SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName());
+					nbt.setLong("UUIDMost", field_111210_e.getMostSignificantBits());
+					nbt.setLong("UUIDLeast", field_111210_e.getLeastSignificantBits());
+					nbt.setString("Name", "Tool Modifier");
+					nbt.setDouble("Amount", isSpoon(stack)?3:5);
+					nbt.setInteger("Operation", 0);
+					list.appendTag(nbt);
+				}
 			}
 		return stack;
 	}
@@ -143,11 +166,35 @@ public class ItemSpork extends ItemWeapon
 		case CROCKER:
 			crockerTypes[0] = iconRegister.registerIcon("minestuck:CrockerSpoon");
 			crockerTypes[1] = iconRegister.registerIcon("minestuck:CrockerFork");
-			itemIcon = crockerTypes[0];
 			break;
 		case SKAIA:
 			itemIcon = iconRegister.registerIcon("minestuck:SkaianFork");
 			break;
 		}
 	}
+	
+	public void checkTagCompound(ItemStack stack) {
+		if(stack.stackTagCompound == null)
+			stack.stackTagCompound = new NBTTagCompound();
+		if(!stack.stackTagCompound.hasKey("isSpoon"))
+			stack.stackTagCompound.setBoolean("isSpoon", true);
+		if(!stack.stackTagCompound.hasKey("delay"))
+			stack.stackTagCompound.setByte("delay", (byte) 0);
+	}
+	
+	@Override
+	public String getUnlocalizedName(ItemStack stack) {
+		if(this.sporkType != EnumSporkType.CROCKER)
+			return getUnlocalizedName();
+		else return "item."+(isSpoon(stack)?"crockerSpoon":"crockerFork");
+	}
+	
+	@Override
+	public void onUpdate(ItemStack stack, World world, Entity entity, int par4, boolean par5) {
+		checkTagCompound(stack);
+		
+		if(stack.stackTagCompound.getByte("delay") > 0)
+			stack.stackTagCompound.setByte("delay", (byte) (stack.stackTagCompound.getByte("delay")-1));
+	}
+	
 }
