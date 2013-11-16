@@ -6,6 +6,7 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.mraof.minestuck.util.ClientEditHandler;
+import com.mraof.minestuck.util.ServerEditHandler;
 
 import cpw.mods.fml.common.network.Player;
 
@@ -13,6 +14,7 @@ public class ServerEditPacket extends MinestuckPacket {
 	
 	String target;
 	int posX, posZ;
+	boolean[] givenItems;
 	
 	public ServerEditPacket() {
 		super(Type.SERVER_EDIT);
@@ -26,7 +28,8 @@ public class ServerEditPacket extends MinestuckPacket {
 		dat.write((data[0].toString()+"\n").getBytes());
 		dat.writeInt((Integer)data[1]);
 		dat.writeInt((Integer)data[2]);
-		
+		for(boolean b : (boolean[])data[3])
+			dat.writeBoolean(b);
 		return dat.toByteArray();
 	}
 
@@ -38,13 +41,17 @@ public class ServerEditPacket extends MinestuckPacket {
 		target = input.readLine();
 		posX = input.readInt();
 		posZ = input.readInt();
+		givenItems = new boolean[ServerEditHandler.GIVEABLE_ITEMS];
+		for(int i = 0; i < givenItems.length; i++) {
+			givenItems[i] = input.readBoolean();
+		}
 		
 		return this;
 	}
 
 	@Override
 	public void execute(INetworkManager network, MinestuckPacketHandler minestuckPacketHandler, Player player, String userName) {
-		ClientEditHandler.onClientPackage(target, posX, posZ); 
+		ClientEditHandler.onClientPackage(target, posX, posZ, givenItems); 
 	}
 
 }

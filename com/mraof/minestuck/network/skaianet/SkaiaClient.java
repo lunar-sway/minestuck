@@ -118,16 +118,13 @@ public class SkaiaClient {
 	}
 	
 	//Methods used by the SkaianetInfoPacket.
-	public static SburbConnection getConnection(ByteArrayDataInput data){
+	public static SburbConnection getConnection(ByteArrayDataInput data) {
 		SburbConnection c = new SburbConnection();
 		
 		c.isMain = data.readBoolean();
-		if(c.isMain){
+		if(c.isMain) {
 			c.isActive = data.readBoolean();
 			c.enteredGame = data.readBoolean();
-			
-			for(int i = 0; i < c.givenItemList.length; i++)
-				c.givenItemList[i] = data.readBoolean();
 		}
 		c.clientName = data.readLine();
 		c.serverName = data.readLine();

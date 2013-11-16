@@ -16,6 +16,7 @@ import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.world.WorldEvent;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.ItemCardPunched;
@@ -35,6 +36,8 @@ public class ClientEditHandler implements ITickHandler{
 	
 	public final static ClientEditHandler instance = new ClientEditHandler();
 	
+	static boolean[] givenItems;
+	
 	static NBTTagCompound capabilities;
 	
 	static PlayerControllerMP controller;
@@ -47,7 +50,7 @@ public class ClientEditHandler implements ITickHandler{
 	 * Used to tell if the client is in edit mode or not.
 	 */
 	public static boolean isActive() {
-		return capabilities != null && controller != null;
+		return controller != null;
 	}
 	
 	public static void activate(String username, String target) {
@@ -67,18 +70,17 @@ public class ClientEditHandler implements ITickHandler{
 		PacketDispatcher.sendPacketToServer(packet);
 	}
 	
-	public static void onClientPackage(String target, int posX, int posZ) {
+	public static void onClientPackage(String target, int posX, int posZ, boolean[] items) {
 		Minecraft mc = Minecraft.getMinecraft();
 		EntityClientPlayerMP player = mc.thePlayer;
 		if(target != null) {	//Enable edit mode
-			if(controller == null) {
+			if(controller == null) {	//Prevent the server from screwing up the client too hard if called the wrong time.
 				controller = mc.playerController;
 				mc.playerController = new SburbServerController(mc, mc.getNetHandler());
-			}
-			if(capabilities == null) {
 				capabilities = new NBTTagCompound();
 				player.capabilities.writeCapabilitiesToNBT(capabilities);
 			}
+			givenItems = items;
 			centerX = posX;
 			centerZ = posZ;
 			client = target;
@@ -86,10 +88,9 @@ public class ClientEditHandler implements ITickHandler{
 			if(controller != null) {
 				mc.playerController = controller;
 				controller = null;
-			}
-			if(capabilities != null) {
 				player.capabilities.readCapabilitiesFromNBT(capabilities);
 				player.capabilities.allowFlying = mc.playerController.isInCreativeMode();
+				player.fallDistance = 0;
 				player.capabilities.isFlying = player.capabilities.isFlying && player.capabilities.allowFlying;
 				capabilities = null;
 			}
@@ -97,7 +98,6 @@ public class ClientEditHandler implements ITickHandler{
 	}
 
 	@Override
-	
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {}
 
 	@Override
@@ -108,9 +108,7 @@ public class ClientEditHandler implements ITickHandler{
 		
 		double range = (MinestuckSaveHandler.lands.contains((byte)player.dimension)?Minestuck.clientLandEditRange:Minestuck.clientOverworldEditRange)/2;
 		
-		SburbConnection c = SkaiaClient.getClientConnection(client);
-		
-		ServerEditHandler.updateInventory(player, c, Minestuck.clientHardMode);
+		ServerEditHandler.updateInventory(player, givenItems, MinestuckSaveHandler.lands.contains((byte)player.dimension), Minestuck.clientHardMode);
 		ServerEditHandler.updatePosition(player, range, centerX, centerZ);
 	}
 
@@ -136,7 +134,7 @@ public class ClientEditHandler implements ITickHandler{
 			}
 			else if(stack.getItem() instanceof ItemCardPunched && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact) {
 				SburbConnection c = SkaiaClient.getClientConnection(client);
-				c.givenItems()[4] = true;
+				givenItems[4] = true;
 				if(!Minestuck.clientHardMode)
 					inventory.inventoryChanged = true;
 			} else {
@@ -167,6 +165,15 @@ public class ClientEditHandler implements ITickHandler{
 	public void onAttackEvent(AttackEntityEvent event) {
 		if(event.entity.worldObj.isRemote && event.entityPlayer instanceof EntityClientPlayerMP && isActive())
 			event.setCanceled(true);
+	}
+	
+	@ForgeSubscribe
+	public void onWorldUnloadEvent(WorldEvent.Unload event) {
+		if(controller != null) {
+			Minecraft.getMinecraft().playerController = controller;
+			controller = null;
+			capabilities = null;
+		}
 	}
 	
 }

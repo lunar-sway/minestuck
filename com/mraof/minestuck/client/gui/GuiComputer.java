@@ -19,6 +19,7 @@ import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.ClientEditHandler;
+import com.mraof.minestuck.util.UsernameHandler;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -115,13 +116,13 @@ public class GuiComputer extends GuiScreen
 
 	public void updateGui() {
 		
-		programButton.enabled = te.installedPrograms.size() > 1;	//should this be implemented?
+		programButton.enabled = te.installedPrograms.size() > 1;
 		
 		//Debug.print("Conn'd to "+te.connectedTo);
 		if(te.programSelected == 0 && te.serverConnected && SkaiaClient.getClientConnection(te.owner) != null)
-			displayPlayer = SkaiaClient.getClientConnection(te.owner).getServerName();
+			displayPlayer = UsernameHandler.decode(SkaiaClient.getClientConnection(te.owner).getServerName());
 		else if(te.programSelected == 1 && !te.clientName.isEmpty())
-			displayPlayer = te.clientName;
+			displayPlayer = UsernameHandler.decode(te.clientName);
 		else displayPlayer = "UNDEFINED";	//Should never be shown
 		
 		buttonStrings.clear();
@@ -142,7 +143,7 @@ public class GuiComputer extends GuiScreen
 				if(!SkaiaClient.getAssociatedPartner(te.owner, true).isEmpty()) //If it has a resumable connection
 					buttonStrings.add("Resume connection");
 				for (String server : SkaiaClient.getAvailableServers(te.owner))
-		    		buttonStrings.add(server);
+		    		buttonStrings.add(UsernameHandler.decode(server));
 			} else 
 				displayMessage = "A client is already active";
 		}
@@ -153,7 +154,7 @@ public class GuiComputer extends GuiScreen
 			if (!te.clientName.isEmpty() && SkaiaClient.getClientConnection(te.clientName) != null) {
 				displayMessage = "Connected to "+displayPlayer;
 				buttonStrings.add("Disconnect");
-				buttonStrings.add("Edit");
+				buttonStrings.add("Activate Edit Mode");
 			} else if (te.openToClients) {
 				displayMessage = "Waiting for client...";
 				buttonStrings.add("Disconnect");
@@ -214,10 +215,10 @@ public class GuiComputer extends GuiScreen
 			if(guibutton.displayString.equals("Resume connection")){
 				SkaiaClient.sendConnectRequest(te, SkaiaClient.getAssociatedPartner(te.owner, true), true);
 			} else{
-				SkaiaClient.sendConnectRequest(te, guibutton.displayString, true);
+				SkaiaClient.sendConnectRequest(te, UsernameHandler.encode(guibutton.displayString), true);
 			}
 		} else if(te.programSelected == 1){
-			if(guibutton.displayString.equals("Edit")){
+			if(guibutton.displayString.equals("Activate Edit Mode")){
 				ClientEditHandler.activate(te.owner,te.clientName);
 			} else if(guibutton.displayString.equals("Resume connection")){
 				SkaiaClient.sendConnectRequest(te, SkaiaClient.getAssociatedPartner(te.owner, false), false);

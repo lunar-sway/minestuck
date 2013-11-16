@@ -505,7 +505,7 @@ public class AlchemyRecipeHandler {
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.cruxiteArtifact,1),false,new GristSet());
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.sledgeHammer), false, new GristSet(new GristType[] {GristType.Build,GristType.Shale}, new int[] {10,2}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.sickle), false, new GristSet(new GristType[] {GristType.Build}, new int[] {10}));
-		GristRegistry.addGristConversion(new ItemStack(Minestuck.katana), false, new GristSet(new GristType[] {GristType.Build,GristType.Quartz}, new int[] {10,5}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.ninjaSword), false, new GristSet(new GristType[] {GristType.Build,GristType.Quartz}, new int[] {10,5}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.crockerSpork), false, new GristSet(new GristType[] {GristType.Build,GristType.Iodine,GristType.Chalk,GristType.Ruby}, new int[] {100,48,48,12}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.pogoHammer), false, new GristSet(new GristType[] {GristType.Build,GristType.Shale}, new int[] {20,16}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.regisword), false, new GristSet(new GristType[] {GristType.Build,GristType.Tar,GristType.Gold}, new int[] {64,20,6}));
@@ -516,7 +516,7 @@ public class AlchemyRecipeHandler {
 		
 		//add Designex combinations
 		CombinationRegistry.addCombination(new ItemStack(Item.hoeIron),new ItemStack(Item.wheat),CombinationRegistry.MODE_AND, new ItemStack(Minestuck.sickle));
-		CombinationRegistry.addCombination(new ItemStack(Item.swordIron),new ItemStack(Item.rottenFlesh),CombinationRegistry.MODE_AND, new ItemStack(Minestuck.katana));
+		CombinationRegistry.addCombination(new ItemStack(Item.swordIron),new ItemStack(Item.rottenFlesh),CombinationRegistry.MODE_AND, new ItemStack(Minestuck.ninjaSword));
 		CombinationRegistry.addCombination(new ItemStack(Minestuck.clawHammer),new ItemStack(Block.brick),CombinationRegistry.MODE_AND, new ItemStack(Minestuck.sledgeHammer));
 		CombinationRegistry.addCombination(new ItemStack(Minestuck.component,1,0),new ItemStack(Item.ingotIron),CombinationRegistry.MODE_AND, new ItemStack(Minestuck.component,1,1));
 		CombinationRegistry.addCombination(new ItemStack(Minestuck.component,1,1),new ItemStack(Item.cake),CombinationRegistry.MODE_AND, new ItemStack(Minestuck.crockerSpork));

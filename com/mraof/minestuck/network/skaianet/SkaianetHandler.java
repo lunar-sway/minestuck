@@ -32,6 +32,7 @@ import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.ServerEditHandler;
+import com.mraof.minestuck.util.UsernameHandler;
 
 //@SideOnly(Side.SERVER)	//This crashes the game on execution of ClearMessagePacket?
 public class SkaianetHandler {
@@ -86,7 +87,7 @@ public class SkaianetHandler {
 	public static void playerConnected(String player){
 		Debug.print("[SKAIANET] Player connected:"+player);
 		String[] s = new String[5];
-		s[0] = player;
+		s[0] = UsernameHandler.encode(player);
 		infoToSend.put(player, s);
 		updatePlayer(player);
 	}
@@ -247,7 +248,7 @@ public class SkaianetHandler {
 		String[] s = infoToSend.get(p0);
 		EntityPlayerMP player = MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(p0);
 		if(s == null || player == null){
-			Debug.print("[SKAIANET] Player sent a request without being online!");
+			Debug.print("[SKAIANET] Player \""+p0+"\" sent a request without being online!");
 			return;
 		}
 		if(Minestuck.privateComputers && !p0.equals(p1) && !MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(p0)){
@@ -538,18 +539,19 @@ public class SkaianetHandler {
 	}
 	
 	public static void enterMedium(EntityPlayerMP player, int dimensionId) {
-		SburbConnection c = getConnection(player.username, getAssociatedPartner(player.username, true));
+		String username = UsernameHandler.encode(player.username);
+		SburbConnection c = getConnection(username, getAssociatedPartner(username, true));
 		if(c == null) {
-			c = getClientConnection(player.username);
+			c = getClientConnection(username);
 			if(c == null) {
 				c = new SburbConnection();
 				c.isActive = false;
 				c.isMain = true;
-				c.clientName = player.username;
-				c.serverName = player.username;
+				c.clientName = username;
+				c.serverName = username;
 				if(Session.registerConnection(c))
 					connections.add(c);
-			} else giveItems(player.username);
+			} else giveItems(username);
 		}
 		c.clientHomeLand = dimensionId;
 		
