@@ -119,19 +119,26 @@ public class ChunkProviderLands implements IChunkProvider
 
 		short[] chunkIds = new short[65536];
 		byte[] chunkMetadata = new byte[65536];
-		double[] generated0 = new double[256];
-		double[] generated1 = new double[65536];
+		double[] heightMap = new double[256];
+		double[] riverHeightMap = new double[65536];
 		int[] topBlock = new int[256];
+		int[] topRiverBlock = new int[256];
 		
-		generated0 = this.noiseGens[0].generateNoiseOctaves(generated0, chunkX*16, 10, chunkZ*16, 16, 1, 16, .1, 0, .1);
-		generated0 = this.noiseGens[0].generateNoiseOctaves(generated0, chunkX*16, 10, chunkZ*16, 16, 1, 16, -.1, 0, -.1);
-		generated1 = this.noiseGens[1].generateNoiseOctaves(generated1, chunkX*16, 2, chunkZ*16, 16, 256, 16, .12, .11, .12);
+		heightMap = this.noiseGens[0].generateNoiseOctaves(heightMap, chunkX*16, 10, chunkZ * 16, 16, 1, 16, .1, 0, .1);
+		heightMap = this.noiseGens[0].generateNoiseOctaves(heightMap, chunkX*16, 10, chunkZ * 16, 16, 1, 16, -.1, 0, -.1);
+		riverHeightMap = this.noiseGens[1].generateNoiseOctaves(riverHeightMap, chunkX * 16, 2, chunkZ * 16, 16, 1, 16, .012, .12, .012);
 		
 		for(int i = 0; i < 256; i++)
 		{
-			int y = (int)(64 + generated0[i]);
-			topBlock[i] = (y&511)<=255  ? y&255 : 255 - y&255;
+			int y = (int) (64 + heightMap[i] - riverHeightMap[i]);
+			topBlock[i] = (y & 511) <= 255  ? y & 255 : 255 - y & 255;
 		}
+		
+//		for(int i = 0; i < 256; i++)
+//		{
+//			int y = (int) (topBlock[i] - riverHeightMap[i]);
+//			topRiverBlock[i] = (y & 511) <= 255  ? y & 255 : 255 - y & 255;
+//		}
 		
 		for(int x = 0; x < 16; x++)
 			for(int z = 0; z < 16; z++)
@@ -145,6 +152,10 @@ public class ChunkProviderLands implements IChunkProvider
 					chunkIds[x + z * 16 + y * 256] = (short) upperBlock[0];
 					chunkMetadata[x + z * 16 + y * 256] = (byte) upperBlock[1];
 				}
+//				for(; y < topRiverBlock[x * 16 + z] - 1; y++)
+//				{
+//					chunkIds[x + z * 16 + y * 256] = (short) Block.stoneBrick.blockID;
+//				}
 				//currentBlockOffset = (int) Math.abs(generated1[x + z * 256 + y * 16]) % surfaceBlock[0].length;
 				chunkIds[x + z * 16 + y * 256] = (short) surfaceBlock[0];
 				chunkMetadata[x + z * 16 + y * 256] = (byte) surfaceBlock[1];

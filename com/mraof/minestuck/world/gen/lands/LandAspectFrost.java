@@ -11,7 +11,7 @@ public class LandAspectFrost extends LandAspect
 	@Override
 	public int[][] getSurfaceBlocks() 
 	{
-		return new int[][] {{Block.snow.blockID, 0}};
+		return new int[][] {{Block.grass.blockID, 0}};
 	}
 
 	@Override
