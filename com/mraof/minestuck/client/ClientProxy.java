@@ -6,6 +6,7 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.common.MinecraftForge;
 
 import com.mraof.minestuck.CommonProxy;
+import com.mraof.minestuck.client.event.MinestuckClientEventHandler;
 import com.mraof.minestuck.client.gui.GuiGristCache;
 import com.mraof.minestuck.client.model.ModelBasilisk;
 import com.mraof.minestuck.client.model.ModelBishop;
@@ -79,5 +80,6 @@ public class ClientProxy extends CommonProxy
 		keyHandler = new MinestuckKeyHandler(bindings, keyRepeatings);
 		KeyBindingRegistry.registerKeyBinding(keyHandler);
 		MinecraftForge.EVENT_BUS.register(new GuiGristCache(Minecraft.getMinecraft()));
+		MinecraftForge.EVENT_BUS.register(new MinestuckClientEventHandler());
 	}
 }
