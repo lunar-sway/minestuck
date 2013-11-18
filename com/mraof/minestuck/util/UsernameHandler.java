@@ -15,16 +15,16 @@ public class UsernameHandler {
 	public static String encode(String username) {
 		if(username.equals(host))
 			return ".client";
-		else return host;
+		else return username;
 	}
 	
 	/**
 	 * Used to decode an username for display. Actually only does something if the username equals ".client".
-	 * Returns "Sp User" if the world is moved to a server where there isn't a direct player that is the host.
+	 * Returns "SP Character" if the world is moved to a server where there isn't a direct player that is the host.
 	 */
 	public static String decode(String username) {
 		if(username.equals(".client"))
-			return host==null?"Sp User":host;
+			return host==null?"SP Character":host;
 		else return username;
 	}
 	
