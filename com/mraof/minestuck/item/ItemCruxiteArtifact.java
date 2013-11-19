@@ -66,20 +66,19 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 			int y = (int) entity.posY;
 			int z = (int) entity.posZ;
 
-			int width = 24;
-			List list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.boundingBox.expand((double)width, width, (double)width));
+			List list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.boundingBox.expand((double)Minestuck.artifactRange, Minestuck.artifactRange, (double)Minestuck.artifactRange));
 			Iterator iterator = list.iterator();
 
 			while (iterator.hasNext())
 			{
 				Teleport.teleportEntity((Entity)iterator.next(), worldserver1.provider.dimensionId, this);
 			}
-			for(int blockX = x - width; blockX <= x + width; blockX++)
+			for(int blockX = x - Minestuck.artifactRange; blockX <= x + Minestuck.artifactRange; blockX++)
 			{
-				for(int blockZ = z - width; blockZ <= z + width; blockZ++)
+				for(int blockZ = z - Minestuck.artifactRange; blockZ <= z + Minestuck.artifactRange; blockZ++)
 				{
 					double radius = Math.sqrt(((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2);
-					int minY =  y - (int) (Math.sqrt(width*width - radius*radius));
+					int minY =  y - (int) (Math.sqrt(Minestuck.artifactRange*Minestuck.artifactRange - radius*radius));
 					minY = minY < 0 ? 0 : minY;
 					int ids[] = new int[256];
 					int metadatas[] = new int[256];
@@ -88,7 +87,7 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 						ids[blockY] =  worldserver0.getBlockId(blockX, blockY, blockZ);
 						metadatas[blockY] = worldserver0.getBlockMetadata(blockX, blockY, blockZ);
 					}
-					for(int blockY = minY; blockY < y + width * 2 && blockY < 256; blockY++)
+					for(int blockY = minY; blockY < y + Minestuck.artifactRange * 2 && blockY < 256; blockY++)
 					{
 						int blockId = ids[blockY];
 						int metadata = metadatas[blockY];
@@ -112,7 +111,7 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 					}
 				}
 			}
-			list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.boundingBox.expand((double)width, width, (double)width));
+			list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.boundingBox.expand((double)Minestuck.artifactRange, Minestuck.artifactRange, (double)Minestuck.artifactRange));
 			iterator = list.iterator();
 
 			while (iterator.hasNext())
