@@ -20,7 +20,7 @@ public class GristAmount {
 	
 	@Override
 	public String toString() {
-		return "gristAmount:["+"type="+type.getName()+",amount="+amount+"]";
+		return "gristAmount:[type="+type.getName()+",amount="+amount+"]";
 	}
 	
 }

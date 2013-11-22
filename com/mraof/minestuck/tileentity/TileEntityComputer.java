@@ -17,6 +17,9 @@ import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 
 public class TileEntityComputer extends TileEntity {
 	
+	/**
+	 * 0 = client, 1 = server, -1 = secret easter egg
+	 */
 	public Hashtable<Integer, Boolean> installedPrograms = new Hashtable();
 	public boolean openToClients = false;
 	/**
@@ -101,6 +104,10 @@ public class TileEntityComputer extends TileEntity {
 	
 	public Boolean hasServer() {
 		return installedPrograms.get(1)==null?false:installedPrograms.get(1);
+	}
+	
+	public Boolean errored() {
+		return installedPrograms.get(-1)==null?false:installedPrograms.get(-1);
 	}
 	
 	public void connected(String player, boolean isClient){
