@@ -76,7 +76,6 @@ public class EntityDecoy extends EntityLiving {
 		NBTTagCompound nbt = new NBTTagCompound();
 		player.getFoodStats().writeNBT(nbt);
 		foodStats.readNBT(nbt);	//Exact copy of food stack
-		foodStats.setFoodSaturationLevel(player.getFoodStats().getSaturationLevel());
 		dataWatcher.updateObject(DATAWATCHER_ID_START, username);
 		dataWatcher.updateObject(DATAWATCHER_ID_START+1, this.rotationYawHead);	//Due to rotationYawHead didn't update correctly
 		dataWatcher.updateObject(DATAWATCHER_ID_START+2, (byte) (isFlying?1:0));

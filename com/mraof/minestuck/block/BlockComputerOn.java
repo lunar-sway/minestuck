@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
@@ -20,11 +21,13 @@ import net.minecraft.world.World;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.util.Debug;
 
 public class BlockComputerOn extends Block implements ITileEntityProvider {
 	
 	private Icon frontIcon;
 	private Icon sideIcon;
+	private Icon bsodIcon;
 
 	public BlockComputerOn(int id)
 	{
@@ -36,11 +39,20 @@ public class BlockComputerOn extends Block implements ITileEntityProvider {
 	}
 	
 	@Override
-	 public Icon getIcon(int par1, int par2)
-	    {
-			if (par2 == 0 && par1 == 3) {return this.frontIcon;}
-	        return par1 != par2 ? this.sideIcon : this.frontIcon;
-	    }
+	public Icon getIcon(int side, int meta)
+	{
+		int front = meta / 6;	//The texture displayed at front
+		int rotation = meta == 0?3:meta % 6;	//Rotation of the computer
+		
+		if(side != rotation)
+			return this.sideIcon;
+		else {
+			switch(front) {
+			case 1: return this.bsodIcon;
+			default: return this.frontIcon;
+			}
+		}
+	}
 
 	    private void setDefaultDirection(World par1World, int par2, int par3, int par4)
 	    {
@@ -81,6 +93,7 @@ public class BlockComputerOn extends Block implements ITileEntityProvider {
 	    {
 	            this.frontIcon = par1IconRegister.registerIcon("minestuck:ComputerFront");
 	            this.sideIcon =  par1IconRegister.registerIcon("minestuck:PhernaliaFrame");
+	            this.bsodIcon = par1IconRegister.registerIcon("minestuck:BsodFront");
 	    }
 	    
 	    @Override
@@ -120,7 +133,16 @@ public class BlockComputerOn extends Block implements ITileEntityProvider {
 		public boolean onBlockActivated(World world, int x,int y,int z, EntityPlayer player,int par6, float par7, float par8, float par9) {
 			TileEntityComputer tileEntity = (TileEntityComputer) world.getBlockTileEntity(x, y, z);
 			ItemStack item = player.getCurrentEquippedItem();
-			if (tileEntity == null || !(tileEntity instanceof TileEntityComputer) || player.isSneaking() || item != null && item.itemID == Minestuck.disk.itemID && (item.getItemDamage() == 0 && !tileEntity.hasClient() || item.getItemDamage() == 1 && !tileEntity.hasServer())) {
+			if(tileEntity != null && item != null && item.getItem() == Item.record11 && 
+					tileEntity.installedPrograms.size() < 2 && !tileEntity.errored()) {
+				player.destroyCurrentEquippedItem();
+				tileEntity.installedPrograms.put(-1, true);
+				tileEntity.closeConnections();
+				world.setBlockMetadataWithNotify(x, y, z, (world.getBlockMetadata(x, y, z) % 6) + 6, 2);
+				return true;
+			}
+			
+			if (tileEntity == null || player.isSneaking() || item != null && item.itemID == Minestuck.disk.itemID && (item.getItemDamage() == 0 && !tileEntity.hasClient() || item.getItemDamage() == 1 && !tileEntity.hasServer())) {
 				return false;
 			}
 			
@@ -171,7 +193,7 @@ public class BlockComputerOn extends Block implements ITileEntityProvider {
 				float rx = rand.nextFloat() * 0.8F + 0.1F;
 				float ry = rand.nextFloat() * 0.8F + 0.1F;
 				float rz = rand.nextFloat() * 0.8F + 0.1F;
-				EntityItem entityItem = new EntityItem(world, x + rx, y + ry, z + rz, new ItemStack(Minestuck.disk.itemID, 1, program));
+				EntityItem entityItem = new EntityItem(world, x + rx, y + ry, z + rz, program != -1?new ItemStack(Minestuck.disk.itemID, 1, program):new ItemStack(Item.record11,1));
 				entityItem.motionX = rand.nextGaussian() * factor;
 				entityItem.motionY = rand.nextGaussian() * factor + 0.2F;
 				entityItem.motionZ = rand.nextGaussian() * factor;

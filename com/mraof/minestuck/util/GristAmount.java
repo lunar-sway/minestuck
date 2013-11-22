@@ -17,4 +17,10 @@ public class GristAmount {
 	public int getAmount() {
 		return amount;
 	}
+	
+	@Override
+	public String toString() {
+		return "gristAmount:[type="+type.getName()+",amount="+amount+"]";
+	}
+	
 }

@@ -74,7 +74,7 @@ public class GristSet {
 	}
 	
 	/**
-	 * Returns a ArrayList containig GristAmount objects representing the set.
+	 * Returns a ArrayList containing GristAmount objects representing the set.
 	 * 
 	 */
 	public ArrayList getArray() {
@@ -132,6 +132,19 @@ public class GristSet {
 			if(i != 0)
 				return false;
 		return true;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder build = new StringBuilder();
+		build.append("gristSet:[");
+		
+		for(int i = 0; i < gristTypes.length; i++)
+			if(gristTypes[i] != 0)
+				build.append(GristType.values()[i].name()+"="+gristTypes[i]+",");
+		
+		build.append(']');
+		return build.toString();
 	}
 	
 }

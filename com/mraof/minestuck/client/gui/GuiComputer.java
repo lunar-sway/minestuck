@@ -29,6 +29,7 @@ public class GuiComputer extends GuiScreen
 {
 
     private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/Sburb.png");
+    private static final ResourceLocation guiBsod = new ResourceLocation("minestuck", "textures/gui/BsodMessage.png");
     
 	private static final int xSize = 176;
 	private static final int ySize = 166;
@@ -66,15 +67,16 @@ public class GuiComputer extends GuiScreen
 		
 		
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.getTextureManager().bindTexture(guiBackground);
+        this.mc.getTextureManager().bindTexture(!te.errored()?guiBackground:guiBsod);
 		
 		int yOffset = (this.height / 2) - (ySize / 2);
 		this.drawTexturedModalRect((this.width / 2) - (xSize / 2), yOffset, 0, 0, xSize, ySize);
-		if(te.latestmessage.get(te.programSelected) == null || te.latestmessage.get(te.programSelected).isEmpty())
-			if(te.programSelected == -1){
-				fontRenderer.drawString("Insert disk.", (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
-			} else fontRenderer.drawString(displayMessage, (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
-		else fontRenderer.drawString(te.latestmessage.get(te.programSelected), (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
+		if(!te.errored())
+			if(te.latestmessage.get(te.programSelected) == null || te.latestmessage.get(te.programSelected).isEmpty())
+				if(te.programSelected == -1){
+					fontRenderer.drawString("Insert disk.", (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
+				} else fontRenderer.drawString(displayMessage, (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
+			else fontRenderer.drawString(te.latestmessage.get(te.programSelected), (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		RenderHelper.disableStandardItemLighting();
 		GL11.glDisable(GL11.GL_LIGHTING);
@@ -117,6 +119,15 @@ public class GuiComputer extends GuiScreen
 	public void updateGui() {
 		
 		programButton.enabled = te.installedPrograms.size() > 1;
+		
+		if(te.errored()) {
+			buttonList.remove(upButton);
+			buttonList.remove(downButton);
+			for(GuiButton button : selButtons)
+				buttonList.remove(button);
+			programButton.displayString = "3RR0R";
+			return;
+		}
 		
 		//Debug.print("Conn'd to "+te.connectedTo);
 		if(te.programSelected == 0 && te.serverConnected && SkaiaClient.getClientConnection(te.owner) != null)
@@ -198,6 +209,8 @@ public class GuiComputer extends GuiScreen
 	}
 	
 	protected void actionPerformed(GuiButton guibutton) {
+		if(te.errored())
+			return;
 		if(!te.latestmessage.get(te.programSelected).isEmpty() && !guibutton.equals(programButton)
 				&& !guibutton.equals(upButton) && !guibutton.equals(downButton))
 			ClearMessagePacket.send(ComputerData.createData(te), te.programSelected);
