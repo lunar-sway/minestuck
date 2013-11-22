@@ -627,6 +627,7 @@ public class Minestuck
 		LanguageRegistry.instance().addStringLocalization("key.exitEdit", "Exit Edit Mode");
 
 		LanguageRegistry.instance().addStringLocalization("itemGroup.tabMinestuck", "Minestuck");
+		
 
 		//register entities
 		this.registerAndMapEntity(EntitySalamander.class, "Salamander", 0xffe62e, 0xfffb53);

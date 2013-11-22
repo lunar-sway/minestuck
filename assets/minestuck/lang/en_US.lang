@@ -1,0 +1,20 @@
+
+language.name=English
+language.region=US
+language.code=en_US
+
+computer.buttonClear=Clear message
+computer.buttonClose=Disconnect
+computer.buttonConnect=Connect to %s
+computer.buttonEdit=Activate edit mode
+computer.buttonOpen=Open to clients
+computer.buttonResume=Resume connection
+computer.messageConnect=Connected to %s
+computer.messageClientActive=Client is already active
+computer.messageOffline=Server offline
+computer.messageSelect=Select a server below
+computer.messageServerActive=Server with your name exists
+computer.messageResumeClient=Waiting for server...
+computer.messageResumeServer=Waiting for client...
+computer.programClient=Client
+computer.programServer=Server
