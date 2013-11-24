@@ -30,6 +30,11 @@ public class LandAspectFrost extends LandAspect
 	{
 		return null;
 	}
+	@Override
+	public int getRiverBlock() 
+	{
+		return Block.ice.blockID;
+	}
 	
 	@Override
 	public String getPrimaryName() {

@@ -39,6 +39,10 @@ public class LandAspectHeat extends LandAspect
 	{
 		return Block.lavaStill.blockID;
 	}
+	@Override
+	public int getRiverBlock() {
+		return Block.lavaMoving.blockID;
+	}
 	
 	@Override
 	public String getPrimaryName() {

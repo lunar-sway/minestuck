@@ -33,6 +33,11 @@ public abstract class LandAspect
 			return Block.waterStill.blockID;
 		}
 		
+		public int getRiverBlock()
+		{
+			return getOceanBlock();
+		}
+		
 		/**
 		 * Returns the chance that it will be selected as an aspect. Is a percentage between 0 and 1.
 		 * 
