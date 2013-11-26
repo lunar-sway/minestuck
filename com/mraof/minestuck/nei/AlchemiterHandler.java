@@ -110,7 +110,7 @@ public class AlchemiterHandler extends TemplateRecipeHandler {
                 
                 int color = need <= have ? 65280 : 16711680; //Green if we have enough grist, red if not
                 
-                fontRenderer.drawString(need + " " + GristType.values()[type].getName() + " (" + have + ")", 4 + (80 * col),34 + (8 * (row)), color);
+                fontRenderer.drawString(need + " " + GristType.values()[type].getDisplayName() + " (" + have + ")", 4 + (80 * col),34 + (8 * (row)), color);
                 
                 place++;
                 

@@ -3,6 +3,8 @@ package com.mraof.minestuck.util;
 import java.util.EnumSet;
 import java.util.Random;
 
+import net.minecraft.util.StatCollector;
+
 /**
  * An aspect version of <code>EnumClass</code> that works pretty much the same way as the <code>EnumClass</code> exept
  * that it doesn't have any special types.
@@ -41,6 +43,10 @@ public enum EnumAspect {
 		String s = this.name();
 		s = s.toLowerCase();
 		return s.replaceFirst(""+s.charAt(0), ""+Character.toUpperCase(s.charAt(0)));
+	}
+	
+	public String getDisplayName() {
+		return StatCollector.translateToLocal("title."+this.toString());
 	}
 	
 }

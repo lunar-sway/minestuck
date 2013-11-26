@@ -3,6 +3,8 @@ package com.mraof.minestuck.util;
 import java.util.EnumSet;
 import java.util.Random;
 
+import net.minecraft.util.StatCollector;
+
 /**
  * This class represents the 14 classes that exists in sburb,
  * (including lord and muse, but they are by default not generated in the <code>getRandomClass()</code> method,
@@ -53,6 +55,10 @@ public enum EnumClass {
 		String s = this.name();
 		s = s.toLowerCase();
 		return s.replaceFirst(""+s.charAt(0), ""+Character.toUpperCase(s.charAt(0)));
+	}
+	
+	public String getDisplayName() {
+		return StatCollector.translateToLocal("title."+this.toString());
 	}
 	
 }

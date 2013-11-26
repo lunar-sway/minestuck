@@ -30,7 +30,6 @@ import com.mraof.minestuck.util.GristType;
 public class GuiMachine extends GuiContainer {
 	
 	private static final String[] guis = {"cruxtruder","designex","lathe","alchemiter","widget"};
-	private static final String[] guiTitles = {"Cruxtruder","Punch Designex","Totem Lathe","Alchemiter","GristWidget 12000"};
 	
 	private ResourceLocation guiBackground;
 	private ResourceLocation guiProgress;
@@ -103,7 +102,7 @@ public class GuiMachine extends GuiContainer {
 
 @Override
 protected void drawGuiContainerForegroundLayer(int param1, int param2) {
-    fontRenderer.drawString(guiTitles[metadata], 8, 6, 4210752);
+    fontRenderer.drawString(StatCollector.translateToLocal("gui."+guis[metadata]+".name"), 8, 6, 4210752);
     //draws "Inventory" or your regional equivalent
     fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
     if ((metadata == 3 || metadata ==4) && te.inv[1] != null) 
@@ -133,7 +132,7 @@ protected void drawGuiContainerForegroundLayer(int param1, int param2) {
                 
                 int color = metadata == 3 ? (need <= have ? 65280 : 16711680) : 0; //Green if we have enough grist, red if not, black if GristWidget
                 
-                fontRenderer.drawString(need + " " + GristType.values()[type].getName() + " (" + have + ")", 9 + (80 * col),45 + (8 * (row)), color);
+                fontRenderer.drawString(need + " " + GristType.values()[type].getDisplayName() + " (" + have + ")", 9 + (80 * col),45 + (8 * (row)), color);
                 
                 place++;
                 

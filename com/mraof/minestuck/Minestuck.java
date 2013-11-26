@@ -17,6 +17,7 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.stats.Achievement;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.Configuration;
@@ -530,105 +531,9 @@ public class Minestuck
 
 		fluidOil.setUnlocalizedName(blockOil.getUnlocalizedName());
 		fluidBlood.setUnlocalizedName(blockBlood.getUnlocalizedName());
-		//Give Items names to be displayed ingame
-
-		LanguageRegistry.addName(clawHammer, "Claw Hammer");
-		LanguageRegistry.addName(sledgeHammer, "Sledgehammer");
-		LanguageRegistry.addName(pogoHammer, "Pogo Hammer");
-		LanguageRegistry.addName(telescopicSassacrusher, "Telescopic Sassacrusher");
-		LanguageRegistry.addName(fearNoAnvil, "Fear No Anvil");
-		LanguageRegistry.addName(zillyhooHammer, "The Warhammer of Zillyhoo");
-		LanguageRegistry.addName(popamaticVrillyhoo, "Pop-a-matic Vrillyhoo Hammer");
-		LanguageRegistry.addName(scarletZillyhoo, "Scarlet Zillyhoo");
-		LanguageRegistry.addName(sord, "Sord.....");
-		LanguageRegistry.addName(ninjaSword, "Katana");
-		LanguageRegistry.addName(katana, "Unbreakable Katana");
-		LanguageRegistry.addName(caledscratch, "Caledscratch");
-		LanguageRegistry.addName(royalDeringer, "Royal Deringer");
-		LanguageRegistry.addName(regisword, "Regisword");
-		LanguageRegistry.addName(scarletRibbitar, "Scarlet Ribbitar");
-		LanguageRegistry.addName(doggMachete, "Snoop Dogg Snow Cone Machete");
-		LanguageRegistry.addName(sickle, "Sickle");
-		LanguageRegistry.addName(homesSmellYaLater, "Homes Smell Ya Later");
-		LanguageRegistry.addName(regiSickle, "Regisickle");
-		LanguageRegistry.addName(clawSickle, "Clawsickle");
-		LanguageRegistry.addName(deuceClub, "Deuce Club");
-		LanguageRegistry.addName(cane, "Cane");
-		LanguageRegistry.addName(spearCane, "Spear Cane");
-		LanguageRegistry.addName(dragonCane, "Dragon Cane");
-		LanguageRegistry.addName(new ItemStack(crockerSpork), "Junior Battlemaster's Bowlbuster Stirring Solution 50000");
-		ItemStack stack = new ItemStack(crockerSpork);
-		stack.stackTagCompound = new NBTTagCompound();
-		stack.stackTagCompound.setBoolean("isSpoon", false);
-		LanguageRegistry.addName(stack, "Junior Battlemaster's Bowlbuster Poking Solution 50000");
-		LanguageRegistry.addName(skaiaFork, "Skaia War Fork");
-		LanguageRegistry.addName(rawCruxite, "Raw Cruxite");
-		LanguageRegistry.addName(cruxiteDowel, "Cruxite Dowel");
-		LanguageRegistry.addName(cruxiteDowelCarved, "Cruxite Dowel");
-		LanguageRegistry.addName(blankCard, "Captchalogue Card");
-		LanguageRegistry.addName(punchedCard, "Captchalogue Card");
-		LanguageRegistry.addName(cruxiteArtifact, "Cruxite Artifact");
-		LanguageRegistry.addName(clientDiskStack, "SBURB Client Disk");
-		LanguageRegistry.addName(serverDiskStack, "SBURB Server Disk");
-		LanguageRegistry.addName(woodenSpoonStack, "Wooden Spoon");
-		LanguageRegistry.addName(silverSpoonStack, "Silver Spoon");
-		LanguageRegistry.addName(chessboardStack, "Chessboard");
-		LanguageRegistry.addName(oilBucket, "Bucket of Oil");
-		LanguageRegistry.addName(bloodBucket, "Bucket of Blood");
-
-		//Same for blocks
-		LanguageRegistry.addName(blackChessTileStack, "Black Chess Tile");
-		LanguageRegistry.addName(whiteChessTileStack, "White Chess Tile");
-		LanguageRegistry.addName(lightGreyChessTileStack, "Light Grey Chess Tile");
-		LanguageRegistry.addName(darkGreyChessTileStack, "Dark Grey Chess Tile");
-		LanguageRegistry.addName(cruxiteBlockStack, "Cruxite Block");
-		LanguageRegistry.addName(genericObjectStack, "Perfectly Generic Object");
-		LanguageRegistry.addName(gatePortal, "Gate");
-		LanguageRegistry.addName(oreCruxite, "Cruxite Ore");
-		LanguageRegistry.addName(cruxtruderStack, "Cruxtruder");
-		LanguageRegistry.addName(punchDesignexStack, "Punch Designex");
-		LanguageRegistry.addName(totemLatheStack, "Totem Lathe");
-		LanguageRegistry.addName(alchemiterStack, "Alchemiter");
-		LanguageRegistry.addName(widgetStack, "GristWidget 12000");
-		LanguageRegistry.addName(blockComputerOff, "SBURB Computer");
-		LanguageRegistry.addName(blockComputerOn, "SBURB Computer");
-		LanguageRegistry.addName(blockOil, "Oil");
-		LanguageRegistry.addName(blockBlood, "Blood");
-		Debug.printf("Names added, Blood id: %d, Oil id: %d", blockBloodId, blockOilId);
-
-		//set translations for automatic names
-		LanguageRegistry.instance().addStringLocalization("entity.Salamander.name", "Salamander");
-		LanguageRegistry.instance().addStringLocalization("entity.Nakagator.name", "Nakagator");
-		LanguageRegistry.instance().addStringLocalization("entity.Iguana.name", "Iguana");
-		LanguageRegistry.instance().addStringLocalization("entity.Turtle.name", "Turtle");
-
-		LanguageRegistry.instance().addStringLocalization("entity.Imp.name", "Imp");
-		//Different names for different types of imps
-		for(GristType impType : GristType.values())
-			LanguageRegistry.instance().addStringLocalization("entity." + impType.getAltName() + ".Imp.name", impType.getAltName() + " Imp");
-		LanguageRegistry.instance().addStringLocalization("entity.Ogre.name", "Ogre");
-		for(GristType ogreType : GristType.values())
-			LanguageRegistry.instance().addStringLocalization("entity." + ogreType.getAltName() + ".Ogre.name", ogreType.getAltName() + " Ogre");
-		LanguageRegistry.instance().addStringLocalization("entity.Giclops.name", "Giclops");
-		for(GristType giclopsType : GristType.values())
-			LanguageRegistry.instance().addStringLocalization("entity." + giclopsType.getAltName() + ".Giclops.name", giclopsType.getAltName() + " Giclops");
-		LanguageRegistry.instance().addStringLocalization("entity.Basilisk.name", "Basilisk");
-		for(GristType basliskType : GristType.values())
-			LanguageRegistry.instance().addStringLocalization("entity." + basliskType.getAltName() + ".Basilisk.name", basliskType.getAltName() + " Basilisk");
-		LanguageRegistry.instance().addStringLocalization("entity.dersitePawn.name", "Dersite Pawn");
-		LanguageRegistry.instance().addStringLocalization("entity.prospitianPawn.name", "Prospitian Pawn");
-		LanguageRegistry.instance().addStringLocalization("entity.dersiteBishop.name", "Dersite Bishop");
-		LanguageRegistry.instance().addStringLocalization("entity.prospitianBishop.name", "Prospitian Bishop");
-
-		LanguageRegistry.instance().addStringLocalization("achievement.getHammer", "Get Hammer");
-		LanguageRegistry.instance().addStringLocalization("achievement.getHammer.desc", "Get the Claw Hammer");
-
-		LanguageRegistry.instance().addStringLocalization("key.gristCache", "View Grist Cache");
-		LanguageRegistry.instance().addStringLocalization("key.exitEdit", "Exit Edit Mode");
-
-		LanguageRegistry.instance().addStringLocalization("itemGroup.tabMinestuck", "Minestuck");
 		
-
+		Debug.printf("Blood id: %d, Oil id: %d", blockBloodId, blockOilId);
+		
 		//register entities
 		this.registerAndMapEntity(EntitySalamander.class, "Salamander", 0xffe62e, 0xfffb53);
 		this.registerAndMapEntity(EntityNakagator.class, "Nakagator", 0xff0000, 0xff6a00);

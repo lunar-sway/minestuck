@@ -13,7 +13,6 @@ public abstract class MinestuckPacket
 {
 	public enum Type
 	{
-		GRIST(GristPacket.class),
 		GRISTCACHE(GristCachePacket.class),
 		COMBOBUTTON(ComboButtonPacket.class),
 		GOBUTTON(GoButtonPacket.class),
