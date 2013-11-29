@@ -118,7 +118,7 @@ public class GuiGristCache extends GuiScreen
 
 		if (tooltip != -1)
 		{
-			drawGristTooltip(GristType.values()[tooltip].getDisplayName() + " Grist", xcor, ycor);
+			drawGristTooltip(StatCollector.translateToLocalFormatted("grist.format", GristType.values()[tooltip].getDisplayName()), xcor, ycor);
 		}
 
 

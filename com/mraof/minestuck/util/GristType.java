@@ -63,10 +63,10 @@ public enum GristType {
 	}
 	
 	public String getAltName() {
-		String s = "grist."+name+".altName";
-		if(!StatCollector.func_94522_b(s) || StatCollector.translateToLocal(s).isEmpty())
+//		String s = "grist."+name+".altName";	Disabled due to complications with checking if a language provides an alternative name.
+//		if(!StatCollector.func_94522_b(s) || StatCollector.translateToLocal(s).isEmpty())
 			return getDisplayName();
-		else return StatCollector.translateToLocal(s);
+//		else return StatCollector.translateToLocal(s);
 	}
 	
 	public static GristType getTypeFromString(String string) 

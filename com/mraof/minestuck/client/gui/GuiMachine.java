@@ -111,12 +111,12 @@ protected void drawGuiContainerForegroundLayer(int param1, int param2) {
     	NBTTagCompound nbttagcompound = te.inv[1].getTagCompound();
     	GristSet set = GristRegistry.getGristConversion(metadata == 3? AlchemyRecipeHandler.getDecodedItem(te.inv[1]) : te.inv[1]);
     	
-    	if (set == null) {fontRenderer.drawString("Not Alchemizable", 9,45, 16711680); return;}
+    	if (set == null) {fontRenderer.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 9,45, 16711680); return;}
     	Hashtable reqs = set.getHashtable();
     	//Debug.print("reqs: " + reqs.size());
     	if (reqs != null) {
     		if (reqs.size() == 0) {
-    			fontRenderer.drawString("Free!", 9,45, 65280);
+    			fontRenderer.drawString(StatCollector.translateToLocal("gui.free"), 9,45, 65280);
     			return;
     		}
     	   	Iterator it = reqs.entrySet().iterator();
@@ -139,7 +139,7 @@ protected void drawGuiContainerForegroundLayer(int param1, int param2) {
                 //Debug.print("Need" + need + ". Have " + have);
             }
     	} else {
-    		fontRenderer.drawString("Not Alchemizable", 9,45, 16711680);
+    		fontRenderer.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 9,45, 16711680);
     		return;
     	}
     } else if (metadata == 1) {
@@ -210,7 +210,7 @@ protected void actionPerformed(GuiButton guibutton) {
 			this.mc.getNetHandler().addToSendQueue(packet);
 			
 			te.ready = true;
-			goButton.displayString = te.overrideStop ? "STOP" : "GO";
+			goButton.displayString = StatCollector.translateToLocal(te.overrideStop ? "gui.buttonStop" : "gui.buttonGo");
 		} else if (Mouse.getEventButton() < 2) {
 			//Tell the machine to go until stopped
 			Packet250CustomPayload packet = new Packet250CustomPayload();
@@ -220,7 +220,7 @@ protected void actionPerformed(GuiButton guibutton) {
 			this.mc.getNetHandler().addToSendQueue(packet);
 			
 			te.overrideStop = !te.overrideStop;
-			goButton.displayString = te.overrideStop ? "STOP" : "GO";
+			goButton.displayString = StatCollector.translateToLocal(te.overrideStop ? "gui.buttonStop" : "gui.buttonGo");
 		}
 	}
 }
@@ -261,12 +261,12 @@ public void drawCustomBox(int par1, int par2, int par3, int par4, int par5, int 
 }
 
 /**
- * Returns a number to be used in calculation of progres bar legnth.
+ * Returns a number to be used in calculation of progress bar length.
  * 
  * @param progress the progress done.
- * @param max The maximim amount of progress.
- * @param imageMax The legnth of the progress bar image to scale to
- * @return The legnth the progress bar should be shown to
+ * @param max The maximum amount of progress.
+ * @param imageMax The length of the progress bar image to scale to
+ * @return The length the progress bar should be shown to
  */
 public int getScaledValue(int progress,int max,int imageMax) {
 	return (int) ((float) imageMax*((float)progress/(float)max));

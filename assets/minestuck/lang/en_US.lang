@@ -13,12 +13,16 @@ computer.buttonEdit=Activate edit mode
 computer.buttonOpen=Open to clients
 computer.buttonResume=Resume connection
 computer.messageConnect=Connected to %s
+computer.messageConnectFail=Connection failed
 computer.messageClientActive=Client is already active
+computer.messageClosed=Connection closed
+computer.messageClosedServer=Server closed
 computer.messageOffline=Server offline
 computer.messageSelect=Select a server below
 computer.messageServerActive=Server with your name exists
 computer.messageResumeClient=Waiting for server...
 computer.messageResumeServer=Waiting for client...
+computer.messageResumeStop=Stopped resuming
 computer.programClient=Client
 computer.programServer=Server
 
@@ -70,6 +74,10 @@ gui.designex.name=Punch Designex
 gui.lathe.name=Totem Lathe
 gui.alchemiter.name=Alchemiter
 gui.widget.name=GristWidget 12000
+gui.notAlchemizable=Not Alchemizable
+gui.free=Free!
+gui.buttonStop=STOP
+gui.buttonGo=GO
 
 item.clawHammer.name=Claw Hammer
 item.sledgeHammer.name=Sledgehammer

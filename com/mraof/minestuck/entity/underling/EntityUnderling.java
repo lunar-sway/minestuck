@@ -97,7 +97,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	{
 		return "textures/mobs/" + type.getName() + underlingName + ".png";
 	}
-	//Gives each type of underling a unique name, so instead of all types being called entity.underlingName.name they are called entity.typeString.underlingName.name
+	
 	@Override
 	public String getEntityName() 
 	{
