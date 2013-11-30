@@ -9,6 +9,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -21,6 +22,7 @@ import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.ClientEditHandler;
 import com.mraof.minestuck.util.UsernameHandler;
 
+import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -40,9 +42,17 @@ public class GuiComputer extends GuiScreen
 	
 	private ArrayList<GuiButton> selButtons = new ArrayList<GuiButton>();
 	private ArrayList<String> buttonStrings;
-	private String displayPlayer = "";
+	/**
+	 * Contains the usernames that possibly is displayed on the shown buttons.
+	 * Used by the client program when connecting to a server.
+	 */
+	private final String[] usernameList = new String[4];
 	private String displayMessage = "";
 	private int index = 0;
+	/**
+	 * Used to count which four button strings that will be added.
+	 */
+	private int stringIndex;
 
 	public Minecraft mc;
 	private TileEntityComputer te;
@@ -76,7 +86,7 @@ public class GuiComputer extends GuiScreen
 				if(te.programSelected == -1){
 					fontRenderer.drawString("Insert disk.", (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
 				} else fontRenderer.drawString(displayMessage, (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
-			else fontRenderer.drawString(te.latestmessage.get(te.programSelected), (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
+			else fontRenderer.drawString(StatCollector.translateToLocal(te.latestmessage.get(te.programSelected)), (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		RenderHelper.disableStandardItemLighting();
 		GL11.glDisable(GL11.GL_LIGHTING);
@@ -119,17 +129,14 @@ public class GuiComputer extends GuiScreen
 	public void updateGui() {
 		
 		programButton.enabled = te.installedPrograms.size() > 1;
+		stringIndex = 0;
 		
 		if(te.errored()) {
-			buttonList.remove(upButton);
-			buttonList.remove(downButton);
-			for(GuiButton button : selButtons)
-				buttonList.remove(button);
-			programButton.displayString = "3RR0R";
+			buttonList.clear();
 			return;
 		}
 		
-		//Debug.print("Conn'd to "+te.connectedTo);
+		String displayPlayer;
 		if(te.programSelected == 0 && te.serverConnected && SkaiaClient.getClientConnection(te.owner) != null)
 			displayPlayer = UsernameHandler.decode(SkaiaClient.getClientConnection(te.owner).getServerName());
 		else if(te.programSelected == 1 && !te.clientName.isEmpty())
@@ -138,67 +145,65 @@ public class GuiComputer extends GuiScreen
 		
 		buttonStrings.clear();
 		
+		for(GuiButton button : selButtons)
+			button.displayString = "";
+		
 		if(te.programSelected == 0){
-			programButton.displayString = "Client";
+			programButton.displayString = StatCollector.translateToLocal("computer.programClient");;
 			SburbConnection c = SkaiaClient.getClientConnection(te.owner);
 			if(!te.latestmessage.get(0).isEmpty())
-				buttonStrings.add("Clear message");
+				addButtonString("computer.buttonClear");
 			if (te.serverConnected && c != null) { //If it is connected to someone.
-				displayMessage = "Connected to "+displayPlayer;
-				buttonStrings.add("Disconnect");
+				displayMessage = StatCollector.translateToLocalFormatted("computer.buttonConnect", displayPlayer);
+				addButtonString("computer.buttonClose");
 			} else if(te.resumingClient){
-				displayMessage = "Waiting for server...";
-				buttonStrings.add("Disconnect");
+				displayMessage = StatCollector.translateToLocal("computer.messageResumeClient");
+				addButtonString("computer.buttonClose");
 			} else if(!SkaiaClient.isActive(te.owner, true)){ //If the player doesn't have an other active client
-				displayMessage = "Select a server below";
+				displayMessage = StatCollector.translateToLocal("computer.messageSelect");
 				if(!SkaiaClient.getAssociatedPartner(te.owner, true).isEmpty()) //If it has a resumable connection
-					buttonStrings.add("Resume connection");
+					addButtonString("computer.buttonResume");
 				for (String server : SkaiaClient.getAvailableServers(te.owner))
-		    		buttonStrings.add(UsernameHandler.decode(server));
+					addButtonString("computer.buttonConnect",UsernameHandler.decode(server));
 			} else 
-				displayMessage = "A client is already active";
+				displayMessage = StatCollector.translateToLocal("computer.messageClientActive");
 		}
 		else if(te.programSelected == 1){
-			programButton.displayString = "Server";
+			programButton.displayString = StatCollector.translateToLocal("computer.programServer");
 			if(!te.latestmessage.get(1).isEmpty())
-				buttonStrings.add("Clear message");
+				addButtonString("computer.buttonClear");
 			if (!te.clientName.isEmpty() && SkaiaClient.getClientConnection(te.clientName) != null) {
-				displayMessage = "Connected to "+displayPlayer;
-				buttonStrings.add("Disconnect");
-				buttonStrings.add("Activate Edit Mode");
+				displayMessage = StatCollector.translateToLocalFormatted("computer.messageConnect", displayPlayer);
+				addButtonString("computer.buttonClose");
+				addButtonString("computer.buttonEdit");
 			} else if (te.openToClients) {
-				displayMessage = "Waiting for client...";
-				buttonStrings.add("Disconnect");
+				displayMessage = StatCollector.translateToLocal("computer.messageResumeServer");
+				addButtonString("computer.buttonClose");
 			} else if(SkaiaClient.isActive(te.owner, false))
-				displayMessage = "Server with your name exists";
+				displayMessage = StatCollector.translateToLocal("computer.messageServerActive");
 			else {
-				displayMessage = "Server offline";
-				buttonStrings.add("Open to clients");
+				displayMessage = StatCollector.translateToLocal("computer.messageOffline");
+				addButtonString("computer.buttonOpen");
 				if(!SkaiaClient.getAssociatedPartner(te.owner, false).isEmpty() && SkaiaClient.getClientConnection(SkaiaClient.getAssociatedPartner(te.owner, false)) == null)
-					buttonStrings.add("Resume connection");
+					addButtonString("computer.buttonResume");
 		    	}
 			}
     	upButton.enabled = index > 0;
     	downButton.enabled = 4+index < buttonStrings.size();
-    	for (int i = 0; i < selButtons.size(); i++) {
-    		GuiButton button = selButtons.get(i);
-    		String s = getButtonString(i+index);
-    		button.enabled = !s.equals("");
-			button.displayString = s;
-		}
+    	
+    	for(GuiButton button : selButtons)
+			button.enabled = !button.displayString.isEmpty();
+    	
 	}
 	
-	/**
-	 * Returns a string from <code>currentList</code>.
-	 * This method returns an empty string if it otherwise would return an
-	 * <code>ArrayIndexOutOfBoundsException</code>.
-	 * @param index The index of the string wanted. Starts with the toopmost button of index 0.
-	 * @return The string at position <code>index</> in the <code>currentList</code>.
-	 */
-	protected String getButtonString(int index){
-		if(index >= buttonStrings.size() || index < 0)
-			return "";
-		else return buttonStrings.get(index);
+	public void addButtonString(String key, Object... objects) {
+		if(stringIndex >= index && stringIndex < index+4) {
+			buttonStrings.add(key);
+			selButtons.get(stringIndex-index).displayString = StatCollector.translateToLocalFormatted(key, objects);
+			if(key.equals("computer.buttonConnect"))
+				usernameList[stringIndex-index] = (String)objects[0];
+		}
+		stringIndex++;
 	}
 	
 	protected void close(){
@@ -214,28 +219,32 @@ public class GuiComputer extends GuiScreen
 		if(!te.latestmessage.get(te.programSelected).isEmpty() && !guibutton.equals(programButton)
 				&& !guibutton.equals(upButton) && !guibutton.equals(downButton))
 			ClearMessagePacket.send(ComputerData.createData(te), te.programSelected);
+		String buttonString = "";
+		for(int i = 0; i < selButtons.size(); i++)
+			if(guibutton.equals(selButtons.get(i))) {
+				buttonString = buttonStrings.get(i);
+				break;
+			}
 		if(guibutton.equals(programButton))
 			te.programSelected = getNextProgram();
-		else if(guibutton.displayString.equals("Disconnect"))
+		else if(buttonString.equals("computer.buttonClose"))
 			close();
-		else if(guibutton.displayString.equals("Clear message"))
-			return;
 		else if (guibutton == upButton)
 			index--;
 		else if (guibutton == downButton)
 			index++;
 		else if(te.programSelected == 0){
-			if(guibutton.displayString.equals("Resume connection")){
+			if(buttonString.equals("computer.buttonResume")){
 				SkaiaClient.sendConnectRequest(te, SkaiaClient.getAssociatedPartner(te.owner, true), true);
-			} else{
-				SkaiaClient.sendConnectRequest(te, UsernameHandler.encode(guibutton.displayString), true);
+			} else if(buttonString.equals("computer.buttonConnect")){
+				SkaiaClient.sendConnectRequest(te, UsernameHandler.encode(usernameList[selButtons.indexOf(guibutton)]), true);
 			}
 		} else if(te.programSelected == 1){
-			if(guibutton.displayString.equals("Activate Edit Mode")){
+			if(buttonString.equals("computer.buttonEdit")){
 				ClientEditHandler.activate(te.owner,te.clientName);
-			} else if(guibutton.displayString.equals("Resume connection")){
+			} else if(buttonString.equals("computer.buttonResume")){
 				SkaiaClient.sendConnectRequest(te, SkaiaClient.getAssociatedPartner(te.owner, false), false);
-			} else if(guibutton.displayString.equals("Open to clients")){
+			} else if(buttonString.equals("computer.buttonOpen")){
 				SkaiaClient.sendConnectRequest(te, "", false);
 			}
 		}

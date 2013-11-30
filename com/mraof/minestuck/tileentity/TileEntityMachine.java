@@ -299,6 +299,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			} else {
 				decrStackSize(0, -1);
 			}
+			
 			//decrStackSize(1, 1);
 			if(!worldObj.isRemote) {
 				GristHelper.decrease(UsernameHandler.encode(owner.username), GristRegistry.getGristConversion(newItem));

@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -31,7 +32,6 @@ public class GuiGristCache extends GuiScreen
     
 	private static final int guiWidth = 226;
 	private static final int guiHeight = 200;
-	private static final String cacheMessage = "Grist Cache";
 
 	private static final int gristIconX = 21;
 	private static final int gristIconY = 42;
@@ -81,6 +81,7 @@ public class GuiGristCache extends GuiScreen
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.getTextureManager().bindTexture(guiBackground);
 		
+		String cacheMessage = StatCollector.translateToLocal("gui.gristCache.name");
 		int yOffset = (this.height / 2) - (guiHeight / 2);
 		this.drawTexturedModalRect((this.width / 2) - (guiWidth / 2), yOffset, 0, 0, guiWidth, guiHeight);
 		fontRenderer.drawString(cacheMessage, (this.width / 2) - fontRenderer.getStringWidth(cacheMessage) / 2, yOffset + 12, 0x404040);
@@ -117,7 +118,7 @@ public class GuiGristCache extends GuiScreen
 
 		if (tooltip != -1)
 		{
-			drawGristTooltip(GristType.values()[tooltip].getName() + " Grist", xcor, ycor);
+			drawGristTooltip(StatCollector.translateToLocalFormatted("grist.format", GristType.values()[tooltip].getDisplayName()), xcor, ycor);
 		}
 
 

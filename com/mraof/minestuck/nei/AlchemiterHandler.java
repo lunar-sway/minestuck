@@ -10,6 +10,7 @@ import java.util.Map;
 
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 import codechicken.core.gui.GuiDraw;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
@@ -89,12 +90,12 @@ public class AlchemiterHandler extends TemplateRecipeHandler {
     	ItemStack result = arecipes.get(recipe).getResult().item;
     	GristSet set = GristRegistry.getGristConversion(result);
     	
-    	if (set == null) {fontRenderer.drawString("Not Alchemizable", 4,34, 16711680); return;}
+    	if (set == null) {fontRenderer.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 4,34, 16711680); return;}
     	Hashtable reqs = set.getHashtable();
     	//Debug.print("reqs: " + reqs.size());
     	if (reqs != null) {
     		if (reqs.size() == 0) {
-    			fontRenderer.drawString("Free!", 4,34, 65280);
+    			fontRenderer.drawString(StatCollector.translateToLocal("gui.free"), 4,34, 65280);
     			return;
     		}
     	   	Iterator it = reqs.entrySet().iterator();
@@ -110,14 +111,14 @@ public class AlchemiterHandler extends TemplateRecipeHandler {
                 
                 int color = need <= have ? 65280 : 16711680; //Green if we have enough grist, red if not
                 
-                fontRenderer.drawString(need + " " + GristType.values()[type].getName() + " (" + have + ")", 4 + (80 * col),34 + (8 * (row)), color);
+                fontRenderer.drawString(need + " " + GristType.values()[type].getDisplayName() + " (" + have + ")", 4 + (80 * col),34 + (8 * (row)), color);
                 
                 place++;
                 
                 //Debug.print("Need" + need + ". Have " + have);
             }
     	} else {
-    		fontRenderer.drawString("Not Alchemizable", 4,34, 16711680);
+    		fontRenderer.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 4,34, 16711680);
     		return;
     	}
 

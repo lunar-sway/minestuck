@@ -1,5 +1,7 @@
 package com.mraof.minestuck.item;
 
+import com.mraof.minestuck.Minestuck;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -59,6 +61,12 @@ public class ItemHammer extends ItemWeapon
 		this.weaponDamage = 3 + hammerType.getDamageVsEntity();
 	}
 	
+	@Override
+	public void onCreated(ItemStack stack, World world, EntityPlayer player) {
+		if(this.hammerType.equals(EnumHammerType.CLAW))
+				player.triggerAchievement(Minestuck.getHammer);
+	}
+    
     @Override
     public boolean canHarvestBlock(Block block) 
     {

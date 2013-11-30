@@ -30,7 +30,6 @@ import com.mraof.minestuck.util.GristType;
 public class GuiMachine extends GuiContainer {
 	
 	private static final String[] guis = {"cruxtruder","designex","lathe","alchemiter","widget"};
-	private static final String[] guiTitles = {"Cruxtruder","Punch Designex","Totem Lathe","Alchemiter","GristWidget 12000"};
 	
 	private ResourceLocation guiBackground;
 	private ResourceLocation guiProgress;
@@ -103,7 +102,7 @@ public class GuiMachine extends GuiContainer {
 
 @Override
 protected void drawGuiContainerForegroundLayer(int param1, int param2) {
-    fontRenderer.drawString(guiTitles[metadata], 8, 6, 4210752);
+    fontRenderer.drawString(StatCollector.translateToLocal("gui."+guis[metadata]+".name"), 8, 6, 4210752);
     //draws "Inventory" or your regional equivalent
     fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
     if ((metadata == 3 || metadata ==4) && te.inv[1] != null) 
@@ -112,12 +111,12 @@ protected void drawGuiContainerForegroundLayer(int param1, int param2) {
     	NBTTagCompound nbttagcompound = te.inv[1].getTagCompound();
     	GristSet set = GristRegistry.getGristConversion(metadata == 3? AlchemyRecipeHandler.getDecodedItem(te.inv[1]) : te.inv[1]);
     	
-    	if (set == null) {fontRenderer.drawString("Not Alchemizable", 9,45, 16711680); return;}
+    	if (set == null) {fontRenderer.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 9,45, 16711680); return;}
     	Hashtable reqs = set.getHashtable();
     	//Debug.print("reqs: " + reqs.size());
     	if (reqs != null) {
     		if (reqs.size() == 0) {
-    			fontRenderer.drawString("Free!", 9,45, 65280);
+    			fontRenderer.drawString(StatCollector.translateToLocal("gui.free"), 9,45, 65280);
     			return;
     		}
     	   	Iterator it = reqs.entrySet().iterator();
@@ -133,14 +132,14 @@ protected void drawGuiContainerForegroundLayer(int param1, int param2) {
                 
                 int color = metadata == 3 ? (need <= have ? 65280 : 16711680) : 0; //Green if we have enough grist, red if not, black if GristWidget
                 
-                fontRenderer.drawString(need + " " + GristType.values()[type].getName() + " (" + have + ")", 9 + (80 * col),45 + (8 * (row)), color);
+                fontRenderer.drawString(need + " " + GristType.values()[type].getDisplayName() + " (" + have + ")", 9 + (80 * col),45 + (8 * (row)), color);
                 
                 place++;
                 
                 //Debug.print("Need" + need + ". Have " + have);
             }
     	} else {
-    		fontRenderer.drawString("Not Alchemizable", 9,45, 16711680);
+    		fontRenderer.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 9,45, 16711680);
     		return;
     	}
     } else if (metadata == 1) {
@@ -211,7 +210,7 @@ protected void actionPerformed(GuiButton guibutton) {
 			this.mc.getNetHandler().addToSendQueue(packet);
 			
 			te.ready = true;
-			goButton.displayString = te.overrideStop ? "STOP" : "GO";
+			goButton.displayString = StatCollector.translateToLocal(te.overrideStop ? "gui.buttonStop" : "gui.buttonGo");
 		} else if (Mouse.getEventButton() < 2) {
 			//Tell the machine to go until stopped
 			Packet250CustomPayload packet = new Packet250CustomPayload();
@@ -221,7 +220,7 @@ protected void actionPerformed(GuiButton guibutton) {
 			this.mc.getNetHandler().addToSendQueue(packet);
 			
 			te.overrideStop = !te.overrideStop;
-			goButton.displayString = te.overrideStop ? "STOP" : "GO";
+			goButton.displayString = StatCollector.translateToLocal(te.overrideStop ? "gui.buttonStop" : "gui.buttonGo");
 		}
 	}
 }
@@ -262,12 +261,12 @@ public void drawCustomBox(int par1, int par2, int par3, int par4, int par5, int 
 }
 
 /**
- * Returns a number to be used in calculation of progres bar legnth.
+ * Returns a number to be used in calculation of progress bar length.
  * 
  * @param progress the progress done.
- * @param max The maximim amount of progress.
- * @param imageMax The legnth of the progress bar image to scale to
- * @return The legnth the progress bar should be shown to
+ * @param max The maximum amount of progress.
+ * @param imageMax The length of the progress bar image to scale to
+ * @return The length the progress bar should be shown to
  */
 public int getScaledValue(int progress,int max,int imageMax) {
 	return (int) ((float) imageMax*((float)progress/(float)max));

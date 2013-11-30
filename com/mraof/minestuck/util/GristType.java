@@ -1,5 +1,7 @@
 package com.mraof.minestuck.util;
 
+import net.minecraft.util.StatCollector;
+
 public enum GristType {
 	Amber("Amber",0.5F), 
 	Amethyst("Amethyst",0.3F), 
@@ -33,8 +35,12 @@ public enum GristType {
 		this.rarity = rarity;
 	}
 	
+	public String getDisplayName() {
+		return StatCollector.translateToLocal("grist."+name);
+	}
+	
 	/**
-	 * Returns the grist's full name.
+	 * Returns the grist's full unlocalized name.
 	 * @return
 	 */
 	public String getName() {
@@ -57,11 +63,10 @@ public enum GristType {
 	}
 	
 	public String getAltName() {
-		if (this == GristType.Shale) {
-			return "Crude";
-		} else {
-			return this.getName();
-		}
+//		String s = "grist."+name+".altName";	Disabled due to complications with checking if a language provides an alternative name.
+//		if(!StatCollector.func_94522_b(s) || StatCollector.translateToLocal(s).isEmpty())
+			return getDisplayName();
+//		else return StatCollector.translateToLocal(s);
 	}
 	
 	public static GristType getTypeFromString(String string) 

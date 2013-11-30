@@ -1,5 +1,7 @@
 package com.mraof.minestuck.util;
 
+import net.minecraft.util.StatCollector;
+
 public class Title {
 	
 	private EnumClass heroClass;
@@ -19,7 +21,7 @@ public class Title {
 	}
 	
 	public String getTitleName() {
-		return this.toString();
+		return StatCollector.translateToLocalFormatted("title.format", heroClass.getDisplayName(), heroAspect.getDisplayName());
 	}
 	
 	@Override
