@@ -60,7 +60,7 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 	}
 	public void makeDestination(Entity entity, WorldServer worldserver0, WorldServer worldserver1)
 	{
-		if(entity instanceof EntityPlayerMP)
+		if(entity instanceof EntityPlayerMP && entity.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("LandId") == worldserver1.provider.dimensionId)
 		{
 			int x = (int) entity.posX;
 			int y = (int) entity.posY;
