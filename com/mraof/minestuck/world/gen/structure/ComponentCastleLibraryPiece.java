@@ -9,7 +9,7 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
 
 public class ComponentCastleLibraryPiece extends ComponentCastleRoomPiece 
 {
-
+	public ComponentCastleLibraryPiece() {}
 	protected ComponentCastleLibraryPiece(int par1, ComponentCastleStartPiece startPiece,	StructureBoundingBox structureBoundingBox) 
 	{
 		super(par1, startPiece, structureBoundingBox);

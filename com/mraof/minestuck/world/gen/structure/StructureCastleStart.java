@@ -16,6 +16,7 @@ import net.minecraft.world.gen.structure.StructureStart;
  */
 public class StructureCastleStart extends StructureStart
 {
+	public StructureCastleStart(){} //this has to exist I guess?
     public StructureCastleStart(World world, Random random, int chunkX, int chunkZ, boolean isBlack)
     {
 //    	Debug.print("StructureCastleStart Running");

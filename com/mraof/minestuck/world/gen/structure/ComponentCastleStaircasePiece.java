@@ -11,7 +11,7 @@ import com.mraof.minestuck.Minestuck;
 
 public class ComponentCastleStaircasePiece extends ComponentCastleRoomPiece 
 {
-
+	public ComponentCastleStaircasePiece() {}
 	protected ComponentCastleStaircasePiece(int par1, ComponentCastleStartPiece startPiece,	StructureBoundingBox structureBoundingBox) 
 	{
 		super(par1, startPiece, structureBoundingBox);

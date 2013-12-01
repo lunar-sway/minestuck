@@ -14,6 +14,7 @@ public abstract class ComponentCastlePiece extends StructureComponent
 	protected ComponentCastleStartPiece startPiece;
 	protected int direction;
 	private List roomsLinkedToTheRoom = new LinkedList();
+	public ComponentCastlePiece() {}
 	protected ComponentCastlePiece(int par1, ComponentCastleStartPiece startPiece) 
 	{
 		super(par1);
