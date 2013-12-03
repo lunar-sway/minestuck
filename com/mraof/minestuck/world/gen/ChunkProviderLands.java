@@ -47,6 +47,7 @@ public class ChunkProviderLands implements IChunkProvider
 	public int[] surfaceBlock;
 	public int[] upperBlock;
 	public int oceanBlock;
+	public int riverBlock;
 	public LandAspect terrainMapper;
 	public ArrayList decorators;
 	public int dayCycle;
@@ -98,7 +99,9 @@ public class ChunkProviderLands implements IChunkProvider
         
         this.surfaceBlock = (int[]) helper.pickElement(helper.pickOne(aspect1, aspect2).getSurfaceBlocks());
         this.upperBlock = (int[]) helper.pickElement(helper.pickOne(aspect1, aspect2).getUpperBlocks());
-        this.oceanBlock = helper.pickOne(aspect1, aspect2).getOceanBlock();
+        LandAspect fluidAspect = helper.pickOne(aspect1, aspect2);
+        this.oceanBlock = fluidAspect.getOceanBlock();
+        this.riverBlock = fluidAspect.getRiverBlock();
         this.terrainMapper = helper.pickOne(aspect1,aspect2);
         this.decorators = helper.pickSubset(aspect1.getDecorators(),aspect2.getDecorators());
         this.dayCycle = helper.pickOne(aspect1,aspect2).getDayCycleMode();
@@ -120,25 +123,25 @@ public class ChunkProviderLands implements IChunkProvider
 		short[] chunkIds = new short[65536];
 		byte[] chunkMetadata = new byte[65536];
 		double[] heightMap = new double[256];
-		double[] riverHeightMap = new double[65536];
+		double[] riverHeightMap = new double[256];
 		int[] topBlock = new int[256];
 		int[] topRiverBlock = new int[256];
 		
-		heightMap = this.noiseGens[0].generateNoiseOctaves(heightMap, chunkX*16, 10, chunkZ * 16, 16, 1, 16, .1, 0, .1);
-		heightMap = this.noiseGens[0].generateNoiseOctaves(heightMap, chunkX*16, 10, chunkZ * 16, 16, 1, 16, -.1, 0, -.1);
-		riverHeightMap = this.noiseGens[1].generateNoiseOctaves(riverHeightMap, chunkX * 16, 2, chunkZ * 16, 16, 1, 16, .012, .12, .012);
+		heightMap = this.noiseGens[0].generateNoiseOctaves(heightMap, chunkX * 16, 10, chunkZ * 16, 16, 1, 16, .1, 0, .1);
+//		heightMap = this.noiseGens[0].generateNoiseOctaves(heightMap, chunkX * 16, 10, chunkZ * 16, 16, 1, 16, -.1, 0, -.1);
+		riverHeightMap = this.noiseGens[1].generateNoiseOctaves(riverHeightMap, chunkX * 16, 1, chunkZ * 16, 16, 1, 16, .003, 0, .003);
 		
 		for(int i = 0; i < 256; i++)
 		{
-			int y = (int) (64 + heightMap[i] - riverHeightMap[i]);
+			topRiverBlock[i] = (int) (.025 / ((5 * riverHeightMap[i]) * (5 * riverHeightMap[i]) + 0.005));
+		}
+		
+		for(int i = 0; i < 256; i++)
+		{
+			int y = (int) (64 + heightMap[i]) - topRiverBlock[i];
 			topBlock[i] = (y & 511) <= 255  ? y & 255 : 255 - y & 255;
 		}
 		
-//		for(int i = 0; i < 256; i++)
-//		{
-//			int y = (int) (topBlock[i] - riverHeightMap[i]);
-//			topRiverBlock[i] = (y & 511) <= 255  ? y & 255 : 255 - y & 255;
-//		}
 		
 		for(int x = 0; x < 16; x++)
 			for(int z = 0; z < 16; z++)
@@ -152,6 +155,7 @@ public class ChunkProviderLands implements IChunkProvider
 					chunkIds[x + z * 16 + y * 256] = (short) upperBlock[0];
 					chunkMetadata[x + z * 16 + y * 256] = (byte) upperBlock[1];
 				}
+						
 //				for(; y < topRiverBlock[x * 16 + z] - 1; y++)
 //				{
 //					chunkIds[x + z * 16 + y * 256] = (short) Block.stoneBrick.blockID;
@@ -159,6 +163,10 @@ public class ChunkProviderLands implements IChunkProvider
 				//currentBlockOffset = (int) Math.abs(generated1[x + z * 256 + y * 16]) % surfaceBlock[0].length;
 				chunkIds[x + z * 16 + y * 256] = (short) surfaceBlock[0];
 				chunkMetadata[x + z * 16 + y * 256] = (byte) surfaceBlock[1];
+
+					for(int i = y + topRiverBlock[x * 16 + z]; y < i; y++)
+						chunkIds[x + z * 16 + y * 256] = (short) this.riverBlock;
+				
 				for(; y < 63; y++)
 					chunkIds[x + z * 16 + y * 256] = (short) this.oceanBlock;
 					

@@ -20,6 +20,7 @@ public class BlockFluidBlood extends BlockFluidClassic
 	public BlockFluidBlood(int id, Fluid fluid, Material material) 
 	{
 		super(id, fluid, material);
+		this.setTickRandomly(true);
 		setUnlocalizedName("blood");
 	}
 

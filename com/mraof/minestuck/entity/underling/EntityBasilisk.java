@@ -67,6 +67,7 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	{
 		return this.worldObj;
 	}
+	
 	@Override
 	public void onEntityUpdate() 
 	{

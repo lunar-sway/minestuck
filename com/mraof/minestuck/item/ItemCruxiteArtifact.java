@@ -60,41 +60,40 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 	}
 	public void makeDestination(Entity entity, WorldServer worldserver0, WorldServer worldserver1)
 	{
-		if(entity instanceof EntityPlayerMP)
+		if(entity instanceof EntityPlayerMP && entity.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("LandId") == worldserver1.provider.dimensionId)
 		{
 			int x = (int) entity.posX;
 			int y = (int) entity.posY;
 			int z = (int) entity.posZ;
 
-			int width = 24;
-			List list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.boundingBox.expand((double)width, width, (double)width));
+			List list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.boundingBox.expand((double)Minestuck.artifactRange, Minestuck.artifactRange, (double)Minestuck.artifactRange));
 			Iterator iterator = list.iterator();
 
 			while (iterator.hasNext())
 			{
 				Teleport.teleportEntity((Entity)iterator.next(), worldserver1.provider.dimensionId, this);
 			}
-			for(int blockX = x - width; blockX <= x + width; blockX++)
+			int nextWidth = 0;
+			for(int blockX = x - Minestuck.artifactRange; blockX <= x + Minestuck.artifactRange; blockX++)
 			{
-				for(int blockZ = z - width; blockZ <= z + width; blockZ++)
+				int zWidth = nextWidth;
+				nextWidth = (int) Math.sqrt(Minestuck.artifactRange * Minestuck.artifactRange - (blockX - x + 1) * (blockX - x + 1));
+				for(int blockZ = z - zWidth; blockZ <= z + zWidth; blockZ++)
 				{
 					double radius = Math.sqrt(((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2);
-					int minY =  y - (int) (Math.sqrt(width*width - radius*radius));
+					int minY =  y - (int) (Math.sqrt(Minestuck.artifactRange * Minestuck.artifactRange - radius * radius));
 					minY = minY < 0 ? 0 : minY;
-					int ids[] = new int[256];
-					int metadatas[] = new int[256];
-					for(int blockY = 255; blockY >= minY; blockY--)
+					for(int blockY = minY; blockY < 256; blockY++)
 					{
-						ids[blockY] =  worldserver0.getBlockId(blockX, blockY, blockZ);
-						metadatas[blockY] = worldserver0.getBlockMetadata(blockX, blockY, blockZ);
-					}
-					for(int blockY = minY; blockY < y + width * 2 && blockY < 256; blockY++)
-					{
-						int blockId = ids[blockY];
-						int metadata = metadatas[blockY];
+						int blockId = worldserver0.getBlockId(blockX, blockY, blockZ);
+						int metadata = worldserver0.getBlockMetadata(blockX, blockY, blockZ);
 						TileEntity te = worldserver0.getBlockTileEntity(blockX, blockY, blockZ);
+						if(blockId != 0 && blockX < x + Minestuck.artifactRange && blockZ < z + nextWidth && blockZ > z - nextWidth)
+							worldserver1.setBlock(blockX + 1, blockY, blockZ, Block.dirt.blockID, 0, 0);
+						if(blockId != 0 && blockZ < z + zWidth)
+							worldserver1.setBlock(blockX, blockY, blockZ + 1, Block.stone.blockID, 0, 0);
 						if(blockId != Block.bedrock.blockID)
-							worldserver1.setBlock(blockX, blockY, blockZ, blockId, metadata, 3);
+							worldserver1.setBlock(blockX, blockY, blockZ, blockId, metadata, 2);
 						if((te) != null)
 						{
 							TileEntity te1 = null;
@@ -107,12 +106,27 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 							te1.yCoord++;//prevents TileEntity from being invalidated
 							worldserver1.setBlockTileEntity(blockX, blockY, blockZ, te1);
 						};
+					}
+				}
+			}
+			for(int blockX = x - Minestuck.artifactRange; blockX <= x + Minestuck.artifactRange; blockX++)
+			{
+				int zWidth = nextWidth;
+				nextWidth = (int) Math.sqrt(Minestuck.artifactRange * Minestuck.artifactRange - (blockX - x + 1) * (blockX - x + 1));
+				for(int blockZ = z - zWidth; blockZ <= z + zWidth; blockZ++)
+				{
+					double radius = Math.sqrt(((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2);
+					int minY =  y - (int) (Math.sqrt(Minestuck.artifactRange*Minestuck.artifactRange - radius*radius));
+					minY = minY < 0 ? 0 : minY;
+					for(int blockY = minY; blockY < 256; blockY++)
+					{
+						int blockId = worldserver0.getBlockId(blockX, blockY, blockZ);
 						if(blockId != Block.bedrock.blockID)
 							worldserver0.setBlockToAir(blockX, blockY, blockZ);
 					}
 				}
 			}
-			list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.boundingBox.expand((double)width, width, (double)width));
+			list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.boundingBox.expand((double)Minestuck.artifactRange, Minestuck.artifactRange, (double)Minestuck.artifactRange));
 			iterator = list.iterator();
 
 			while (iterator.hasNext())

@@ -20,6 +20,7 @@ public class ComponentCastleStartPiece extends ComponentCastlePiece
     public int castleWidth, castleLength, x, z, totalPieces;
     public ArrayList pendingPieces = new ArrayList();
     
+    public ComponentCastleStartPiece() {}
 	protected ComponentCastleStartPiece(int par1, int x, int z,  boolean isBlack) 
 	{
 		super(par1, (ComponentCastleStartPiece)null);

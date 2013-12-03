@@ -262,8 +262,8 @@ public class Minestuck
 	public static boolean generateSpecialClasses;	//Allow generation of the "Lord" and "Muse" classes.
 	public static boolean globalSession;	//Makes only one session possible. Recommended to be true on small servers. Will be ignored when loading a world that already got 2+ sessions.
 	public static boolean easyDesignex; //Makes it so you don't need to encode individual cards before combining them.
-
 	public static String privateMessage;
+	public static int artifactRange; //The range of the Cruxite Artifact in teleporting zones over to the new land
 
 	// The instance of your mod that Forge uses.
 	@Instance("Minestuck")
@@ -404,6 +404,7 @@ public class Minestuck
 		easyDesignex  = config.get("General", "easyDesignex", true).getBoolean(true);
 		overworldEditRange = config.get("General", "overWorldEditRange", 26).getInt();
 		landEditRange = config.get("General", "landEditRange", 52).getInt();
+		artifactRange = config.get("General", "artifcatRange", 30).getInt();
 		config.save();
 	}
 

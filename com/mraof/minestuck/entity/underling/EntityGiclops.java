@@ -6,15 +6,17 @@ import net.minecraft.world.World;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+import com.mraof.minestuck.entity.IEntityMultiPart;
 import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
 
-public class EntityGiclops extends EntityUnderling 
+public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 {
-	public float sizeMultiplier;
 	private EntityAIAttackOnCollideWithRate entityAIAttackOnCollideWithRate;
+	
+	EntityUnderlingPart topPart;
 
 	public EntityGiclops(World world)
 	{
@@ -23,13 +25,13 @@ public class EntityGiclops extends EntityUnderling
 	public EntityGiclops(World par1World, GristType gristType) 
 	{
 		super(par1World, gristType, "Giclops");
-		this.sizeMultiplier = 1F;
-//		this.sizeMultiplier = gristType.getPower() / 10 + 1; 
-		//TODO make giclops of variable size
-		setSize(8.0F * this.sizeMultiplier, 12.0F * this.sizeMultiplier);
+
+		setSize(8.0F, 12.0F);
 		this.experienceValue = (int) (5 * gristType.getPower() + 4);
 //		this.health = this.maxHealth;
 		this.stepHeight = 2;
+		topPart = new EntityUnderlingPart(this, "top", 6.0F, 7.0F);
+		par1World.spawnEntityInWorld(topPart);
 	}
 
 	@Override
@@ -53,20 +55,7 @@ public class EntityGiclops extends EntityUnderling
 	{
 		return 0.1F;
 	}
-	@Override
-	public void writeSpawnData(ByteArrayDataOutput data) 
-	{
-		super.writeSpawnData(data);
-	}
-	@Override
-	public void readSpawnData(ByteArrayDataInput data) 
-	{
-		super.readSpawnData(data);
-		this.sizeMultiplier = 1F;
-//		this.sizeMultiplier = this.type.getPower() / 10 + 1;
-//		Debug.print(this.type + " has a size multiplier of " + this.sizeMultiplier);
-		setSize(8.0F * this.sizeMultiplier, 12.0F * this.sizeMultiplier);
-	}
+	
 	@Override
 	public boolean attackEntityAsMob(Entity par1Entity) 
 	{
@@ -76,6 +65,51 @@ public class EntityGiclops extends EntityUnderling
 	protected float getMaximumHealth() 
 	{
 		return 19 * (type.getPower() + 1) + 48;
+	}
+	@Override
+	public void onEntityUpdate() 
+	{
+		super.onEntityUpdate();
+		this.updatePartPositions();
+	}
+
+	@Override
+	public void setPositionAndRotation(double par1, double par3, double par5, float par7, float par8) 
+	{
+		super.setPositionAndRotation(par1, par3, par5, par7, par8);
+		this.updatePartPositions();
+	}
+	@Override
+	public Entity[] getParts() 
+	{
+		return new Entity[] {topPart};
+	}
+	@Override
+	public World getWorld() 
+	{
+		return this.worldObj;
+	}
+	@Override
+	protected void collideWithEntity(Entity par1Entity) 
+	{
+		if(par1Entity != topPart)
+			super.collideWithEntity(par1Entity);
+	}
+	@Override
+	public boolean attackEntityFromPart(Entity entityPart, DamageSource source, float damage) 
+	{
+		return this.attackEntityFrom(source, damage);
+	}
+	@Override
+	public void updatePartPositions() 
+	{
+		float f1 = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw);
+		double topPartPosX = (this.posX + -Math.sin(f1 / 180.0 * Math.PI) * 2);
+		double topPartPosZ = (this.posZ + Math.cos(f1 / 180.0 * Math.PI) * 2);
+		
+		if(topPart.entityUnderlingObj == null)
+			topPart.entityUnderlingObj = this;
+		topPart.setPositionAndRotation(topPartPosX, this.posY + 6, topPartPosZ, this.rotationYaw, this.rotationPitch);
 	}
 
 }
