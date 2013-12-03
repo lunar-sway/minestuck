@@ -146,7 +146,7 @@ public class ServerEditHandler implements ITickHandler{
 		
 		double playerOffset = player.posX-player.boundingBox.maxX;
 		
-		SburbServerManager manager = new SburbServerManager(player.worldObj, player);
+		SburbEditManager manager = new SburbEditManager(player.worldObj, player);
 		manager.client = c.getClientName();
 		player.theItemInWorldManager = manager;
 		double posX, posY, posZ;
