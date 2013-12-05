@@ -19,6 +19,7 @@ import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.ServerEditHandler;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.util.TitleHelper;
+import com.mraof.minestuck.util.UpdateChecker;
 import com.mraof.minestuck.util.UsernameHandler;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
@@ -52,6 +53,8 @@ public class MinestuckPlayerTracker implements IPlayerTracker {
 		updateTitle(player);
 		updateLands(player);
 		sendConfigPacket(player);
+		if(UpdateChecker.outOfDate)
+			player.addChatMessage("New version of Minestuck: " + UpdateChecker.latestVersion + "\nChanges: " + UpdateChecker.updateChanges);
 	}
 
 	@Override

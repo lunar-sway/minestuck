@@ -92,6 +92,7 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristStorage;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.ServerEditHandler;
+import com.mraof.minestuck.util.UpdateChecker;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.WorldProviderSkaia;
 import com.mraof.minestuck.world.gen.OreHandler;
@@ -405,6 +406,8 @@ public class Minestuck
 		landEditRange = config.get("General", "landEditRange", 52).getInt();
 		artifactRange = config.get("General", "artifcatRange", 30).getInt();
 		config.save();
+		
+		(new UpdateChecker()).start();
 	}
 
 	@EventHandler
