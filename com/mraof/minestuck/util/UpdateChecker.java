@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 
 import com.mraof.minestuck.Minestuck;
 
@@ -26,7 +27,9 @@ public class UpdateChecker extends Thread
 	{
 		try {
 			URL versionURL = new URL("http://minestuck.mraof.com/version.php");
-			BufferedReader in = new BufferedReader(new InputStreamReader(versionURL.openStream()));
+			URLConnection connection = versionURL.openConnection();
+			connection.setUseCaches(false);
+			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			
 			String version = in.readLine();
 			in.close();
