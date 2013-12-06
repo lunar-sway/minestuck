@@ -30,7 +30,8 @@ public class UpdateChecker extends Thread
 			
 			String version = in.readLine();
 			in.close();
-			if(version != latestVersion)
+			
+			if(!version.equals(latestVersion))
 			{
 				outOfDate = true;
 				latestVersion = version;
