@@ -25,7 +25,7 @@ public class UpdateChecker extends Thread
 	public static void checkUpdates()
 	{
 		try {
-			URL versionURL = new URL("http://minestuck.mraof.com/version");
+			URL versionURL = new URL("http://minestuck.mraof.com/version.php");
 			BufferedReader in = new BufferedReader(new InputStreamReader(versionURL.openStream()));
 			
 			String version = in.readLine();
