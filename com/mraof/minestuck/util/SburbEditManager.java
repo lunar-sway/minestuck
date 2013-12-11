@@ -16,11 +16,11 @@ import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 
-public class SburbServerManager extends ItemInWorldManager{
+public class SburbEditManager extends ItemInWorldManager{
 	
 	String client;
 	
-	public SburbServerManager(World par1World, EntityPlayerMP player) {
+	public SburbEditManager(World par1World, EntityPlayerMP player) {
 		super(par1World);
 		this.thisPlayerMP = player;
 		this.setGameType(EnumGameType.CREATIVE);

@@ -76,7 +76,7 @@ public class ClientEditHandler implements ITickHandler{
 		if(target != null) {	//Enable edit mode
 			if(controller == null) {	//Prevent the server from screwing up the client too hard if called the wrong time.
 				controller = mc.playerController;
-				mc.playerController = new SburbServerController(mc, mc.getNetHandler());
+				mc.playerController = new SburbEditController(mc, mc.getNetHandler());
 				capabilities = new NBTTagCompound();
 				player.capabilities.writeCapabilitiesToNBT(capabilities);
 			}

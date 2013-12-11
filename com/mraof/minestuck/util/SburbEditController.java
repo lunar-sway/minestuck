@@ -16,11 +16,11 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.ItemMachine;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 
-public class SburbServerController extends PlayerControllerMP {
+public class SburbEditController extends PlayerControllerMP {
 	
 	public NetClientHandler netHandler;
 	
-	public SburbServerController(Minecraft mc, NetClientHandler netHandler) {
+	public SburbEditController(Minecraft mc, NetClientHandler netHandler) {
 		super(mc, netHandler);
 		this.netHandler = netHandler;
 		this.setGameType(EnumGameType.CREATIVE);

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -16,7 +17,9 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.Event;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
@@ -76,7 +79,8 @@ public class ServerEditHandler implements ITickHandler{
 		EntityPlayerMP player = data.player;
 		EntityDecoy decoy = data.decoy;
 		if(player.dimension != decoy.dimension)
-			player.travelToDimension(decoy.dimension);
+			player.mcServer.getConfigurationManager().transferPlayerToDimension(player, decoy.worldObj.provider.dimensionId, new Teleporter((WorldServer)decoy.worldObj) {
+				public void placeInPortal(Entity par1Entity, double par2, double par4, double par6, float par8) {}});
 		
 		data.connection.useCoordinates = true;
 		data.connection.posX = player.posX;
@@ -146,14 +150,16 @@ public class ServerEditHandler implements ITickHandler{
 		
 		double playerOffset = player.posX-player.boundingBox.maxX;
 		
-		SburbServerManager manager = new SburbServerManager(player.worldObj, player);
+		SburbEditManager manager = new SburbEditManager(player.worldObj, player);
 		manager.client = c.getClientName();
 		player.theItemInWorldManager = manager;
 		double posX, posY, posZ;
-		World world = MinecraftServer.getServer().worldServerForDimension(c.enteredGame()?c.getClientDimension():c.getClientData().getDimension());
+		WorldServer world = MinecraftServer.getServer().worldServerForDimension(c.enteredGame()?c.getClientDimension():c.getClientData().getDimension());
 		
 		if(world.provider.dimensionId != player.worldObj.provider.dimensionId)
-			player.travelToDimension(world.provider.dimensionId);
+			player.mcServer.getConfigurationManager().transferPlayerToDimension(player, world.provider.dimensionId, new Teleporter(world) {
+				public void placeInPortal(Entity par1Entity, double par2, double par4, double par6, float par8) {}	//To make sure no portal is placed
+			});
 		
 		if(c.useCoordinates) {
 			posX = c.posX;

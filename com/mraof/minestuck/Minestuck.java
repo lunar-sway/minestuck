@@ -91,6 +91,7 @@ import com.mraof.minestuck.util.ClientEditHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristStorage;
 import com.mraof.minestuck.util.GristType;
+import com.mraof.minestuck.util.KindAbstratusList;
 import com.mraof.minestuck.util.ServerEditHandler;
 import com.mraof.minestuck.util.UpdateChecker;
 import com.mraof.minestuck.world.WorldProviderLands;
@@ -599,6 +600,8 @@ public class Minestuck
 			TickRegistry.registerTickHandler(ClientEditHandler.instance, Side.CLIENT);
 //		if(event.getSide().isServer())
 		TickRegistry.registerTickHandler(ServerEditHandler.instance, Side.SERVER);
+		
+		KindAbstratusList.registerTypes();
 		
 		Session.maxSize = acceptTitleCollision?(generateSpecialClasses?168:144):12;
 	}
