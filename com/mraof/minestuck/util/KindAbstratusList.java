@@ -27,7 +27,7 @@ public class KindAbstratusList {
 		typeList.add(new KindAbstratusType("sword").addItemClass(ItemSword.class).addItemClass(ItemBlade.class));
 		typeList.add(new KindAbstratusType("bow").addItemClass(ItemBow.class));
 		typeList.add(new KindAbstratusType("pickaxe").addItemClass(ItemPickaxe.class));
-		typeList.add(new KindAbstratusType("hatchet").addItemClass(ItemAxe.class));
+		typeList.add(new KindAbstratusType("axe").addItemClass(ItemAxe.class));
 		typeList.add(new KindAbstratusType("hoe").addItemClass(ItemHoe.class));
 		typeList.add(new KindAbstratusType("shovel").addItemClass(ItemSpade.class));
 		typeList.add(new KindAbstratusType("hammer").addItemClass(ItemHammer.class));

@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.EnumGameType;
@@ -78,7 +79,8 @@ public class WorldProviderLands extends WorldProvider
 	@Override
 	public int getRespawnDimension(EntityPlayerMP player)
 	{
-		return this.dimensionId;
+		int dim = player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("LandId");
+		return dim == 0?this.dimensionId:dim;
 	}
 	@Override
 	public boolean isDaytime() {
