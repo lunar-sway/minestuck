@@ -39,6 +39,8 @@ public class ChunkProviderLands implements IChunkProvider
 	World landWorld;
 	Random random;
 	private NoiseGeneratorOctaves noiseGens[] = new NoiseGeneratorOctaves[2];
+	private NoiseGeneratorTriangle noiseGeneratorTriangle;
+	private NoiseGeneratorTriangle noiseGeneratorTriangle1;
 	public LandAspect aspect1;
 	public LandAspect aspect2;
 	public LandHelper helper;
@@ -55,7 +57,7 @@ public class ChunkProviderLands implements IChunkProvider
 	public ChunkProviderLands(World worldObj, long seed, boolean b) 
 	{
 		helper = new LandHelper(seed);
-		
+
 		NBTBase landDataTag = worldObj.getWorldInfo().getAdditionalProperty("LandData");
 
 		this.landWorld = worldObj;
@@ -70,19 +72,19 @@ public class ChunkProviderLands implements IChunkProvider
 			dataTag.put("LandData",LandHelper.toNBT(aspect1,aspect2));
 			worldObj.getWorldInfo().setAdditionalProperties(dataTag);
 
-//			// this packet code is wrong-sided, needs fixed, I don't even know if we need it anymore
-//			Packet250CustomPayload packet = new Packet250CustomPayload();
-//			packet.channel = "Minestuck";
-//			packet.data = MinestuckPacket.makePacket(Type.NEWLAND,aspect1.getPrimaryName(),aspect2.getPrimaryName(),3);
-//			packet.length = packet.data.length;
-//			Minecraft.getMinecraft().getNetHandler().addToSendQueue(packet);
+			//			// this packet code is wrong-sided, needs fixed, I don't even know if we need it anymore
+			//			Packet250CustomPayload packet = new Packet250CustomPayload();
+			//			packet.channel = "Minestuck";
+			//			packet.data = MinestuckPacket.makePacket(Type.NEWLAND,aspect1.getPrimaryName(),aspect2.getPrimaryName(),3);
+			//			packet.length = packet.data.length;
+			//			Minecraft.getMinecraft().getNetHandler().addToSendQueue(packet);
 		} else {
 			aspect1 = helper.fromName(((NBTTagCompound) landDataTag).getString("aspect1"));
 			aspect2 = helper.fromName(((NBTTagCompound) landDataTag).getString("aspect2"));
 			nameIndex1 = ((NBTTagCompound) landDataTag).getInteger("aspectName1");
 			nameIndex2 = ((NBTTagCompound) landDataTag).getInteger("aspectName2");
 		}
-		
+
 		this.random = new Random(seed);
 		this.consortList = new ArrayList();
 		this.underlingList = new ArrayList();
@@ -95,18 +97,20 @@ public class ChunkProviderLands implements IChunkProvider
 		this.underlingList.add(new SpawnListEntry(EntityGiclops.class, 1, 1, 1));
 		this.underlingList.add(new SpawnListEntry(EntityBasilisk.class, 1, 1, 1));
 		this.noiseGens[0] = new NoiseGeneratorOctaves(this.random, 7);
-        this.noiseGens[1] = new NoiseGeneratorOctaves(this.random, 1);
-        
-        this.surfaceBlock = (int[]) helper.pickElement(helper.pickOne(aspect1, aspect2).getSurfaceBlocks());
-        this.upperBlock = (int[]) helper.pickElement(helper.pickOne(aspect1, aspect2).getUpperBlocks());
-        LandAspect fluidAspect = helper.pickOne(aspect1, aspect2);
-        this.oceanBlock = fluidAspect.getOceanBlock();
-        this.riverBlock = fluidAspect.getRiverBlock();
-        this.terrainMapper = helper.pickOne(aspect1,aspect2);
-        this.decorators = helper.pickSubset(aspect1.getDecorators(),aspect2.getDecorators());
-        this.dayCycle = helper.pickOne(aspect1,aspect2).getDayCycleMode();
-        
-        
+		this.noiseGens[1] = new NoiseGeneratorOctaves(this.random, 1);
+		noiseGeneratorTriangle = new NoiseGeneratorTriangle(this.random);
+		noiseGeneratorTriangle1 = new NoiseGeneratorTriangle(this.random);
+
+		this.surfaceBlock = (int[]) helper.pickElement(helper.pickOne(aspect1, aspect2).getSurfaceBlocks());
+		this.upperBlock = (int[]) helper.pickElement(helper.pickOne(aspect1, aspect2).getUpperBlocks());
+		LandAspect fluidAspect = helper.pickOne(aspect1, aspect2);
+		this.oceanBlock = fluidAspect.getOceanBlock();
+		this.riverBlock = fluidAspect.getRiverBlock();
+		this.terrainMapper = helper.pickOne(aspect1,aspect2);
+		this.decorators = helper.pickSubset(aspect1.getDecorators(),aspect2.getDecorators());
+		this.dayCycle = helper.pickOne(aspect1,aspect2).getDayCycleMode();
+
+
 	}
 
 	@Override
@@ -118,31 +122,30 @@ public class ChunkProviderLands implements IChunkProvider
 	@Override
 	public Chunk provideChunk(int chunkX, int chunkZ) 
 	{
-		
-
 		short[] chunkIds = new short[65536];
 		byte[] chunkMetadata = new byte[65536];
 		double[] heightMap = new double[256];
+		double[] heightMapTriangles = new double[256];
 		double[] riverHeightMap = new double[256];
 		int[] topBlock = new int[256];
 		int[] topRiverBlock = new int[256];
-		
+
 		heightMap = this.noiseGens[0].generateNoiseOctaves(heightMap, chunkX * 16, 10, chunkZ * 16, 16, 1, 16, .1, 0, .1);
-//		heightMap = this.noiseGens[0].generateNoiseOctaves(heightMap, chunkX * 16, 10, chunkZ * 16, 16, 1, 16, -.1, 0, -.1);
 		riverHeightMap = this.noiseGens[1].generateNoiseOctaves(riverHeightMap, chunkX * 16, 1, chunkZ * 16, 16, 1, 16, .003, 0, .003);
-		
+		heightMapTriangles = noiseGeneratorTriangle.generateNoiseTriangle(heightMap, chunkX * 16, chunkZ * 16, 16, 16);
+
 		for(int i = 0; i < 256; i++)
 		{
 			topRiverBlock[i] = (int) (.025 / ((5 * riverHeightMap[i]) * (5 * riverHeightMap[i]) + 0.005));
 		}
-		
+
 		for(int i = 0; i < 256; i++)
 		{
-			int y = (int) (64 + heightMap[i]) - topRiverBlock[i];
-			topBlock[i] = (y & 511) <= 255  ? y & 255 : 255 - y & 255;
+			int y = (int) (64 + heightMap[i] + heightMapTriangles[i]);
+			topBlock[i] = ((y & 511) <= 255  ? y & 255 : 255 - y & 255) - topRiverBlock[i];
 		}
-		
-		
+
+
 		for(int x = 0; x < 16; x++)
 			for(int z = 0; z < 16; z++)
 			{
@@ -155,38 +158,34 @@ public class ChunkProviderLands implements IChunkProvider
 					chunkIds[x + z * 16 + y * 256] = (short) upperBlock[0];
 					chunkMetadata[x + z * 16 + y * 256] = (byte) upperBlock[1];
 				}
-						
-//				for(; y < topRiverBlock[x * 16 + z] - 1; y++)
-//				{
-//					chunkIds[x + z * 16 + y * 256] = (short) Block.stoneBrick.blockID;
-//				}
-				//currentBlockOffset = (int) Math.abs(generated1[x + z * 256 + y * 16]) % surfaceBlock[0].length;
+
+				
 				chunkIds[x + z * 16 + y * 256] = (short) surfaceBlock[0];
 				chunkMetadata[x + z * 16 + y * 256] = (byte) surfaceBlock[1];
 
-					for(int i = y + topRiverBlock[x * 16 + z]; y < i; y++)
-						chunkIds[x + z * 16 + y * 256] = (short) this.riverBlock;
-				
+				for(int i = y + topRiverBlock[x * 16 + z]; y < i; y++)
+					chunkIds[x + z * 16 + y * 256] = (short) this.riverBlock;
+
 				for(; y < 63; y++)
 					chunkIds[x + z * 16 + y * 256] = (short) this.oceanBlock;
-					
+
 			}
 		Chunk chunk = new Chunk(this.landWorld, chunkIds, chunkMetadata, chunkX, chunkZ);
 		return chunk;
 	}
 	private double[] initializeNoiseField(double[] par1ArrayOfDouble, int par2, int par3, int par4, int par5, int par6, int par7)
-    {
-        ChunkProviderEvent.InitNoiseField event = new ChunkProviderEvent.InitNoiseField(this, par1ArrayOfDouble, par2, par3, par4, par5, par6, par7);
-        MinecraftForge.EVENT_BUS.post(event);
-        if (event.getResult() == Result.DENY) return event.noisefield;
+	{
+		ChunkProviderEvent.InitNoiseField event = new ChunkProviderEvent.InitNoiseField(this, par1ArrayOfDouble, par2, par3, par4, par5, par6, par7);
+		MinecraftForge.EVENT_BUS.post(event);
+		if (event.getResult() == Result.DENY) return event.noisefield;
 
-        if (par1ArrayOfDouble == null)
-        {
-            par1ArrayOfDouble = new double[par5 * par6 * par7];
-        }
+		if (par1ArrayOfDouble == null)
+		{
+			par1ArrayOfDouble = new double[par5 * par6 * par7];
+		}
 
-        return par1ArrayOfDouble;
-    }
+		return par1ArrayOfDouble;
+	}
 	@Override
 	public Chunk loadChunk(int chunkX, int chunkZ) 
 	{
@@ -195,22 +194,22 @@ public class ChunkProviderLands implements IChunkProvider
 
 	@Override
 	public void populate(IChunkProvider ichunkprovider, int i, int j) {
-		
-	     Chunk chunk = this.provideChunk(i, j);
-	        if (!chunk.isTerrainPopulated)
-	        {
-	        	//Debug.print("Populating! We have "+decorators.size()+" decorators");
-	            chunk.isTerrainPopulated = true;
 
-	            if (ichunkprovider != null)
-	            {
-	            	ichunkprovider.populate(ichunkprovider, i, j);
-	            	for (Object decorator : decorators) {
-	        			((ILandDecorator) decorator).generate(landWorld, random, i,  j, this);
-	        		}
-	                chunk.setChunkModified();
-	            }
-	        }
+		Chunk chunk = this.provideChunk(i, j);
+		if (!chunk.isTerrainPopulated)
+		{
+			//Debug.print("Populating! We have "+decorators.size()+" decorators");
+			chunk.isTerrainPopulated = true;
+
+			if (ichunkprovider != null)
+			{
+				ichunkprovider.populate(ichunkprovider, i, j);
+				for (Object decorator : decorators) {
+					((ILandDecorator) decorator).generate(landWorld, random, i,  j, this);
+				}
+				chunk.setChunkModified();
+			}
+		}
 	}
 
 	@Override

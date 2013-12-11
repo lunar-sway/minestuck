@@ -21,7 +21,7 @@
 
 	<property name="mc.version"          value="1.6.4"/>
 	<property name="forge.version"       value="9.11.1.916"/>
-	<property name="mod.version"         value="0.0.7"/>
+	<!-- <property name="mod.version"         value="0.0.7"/> -->
 	<property name="mod.name"	         value="Minestuck"/>
 
 	<property name="forge.name"          value="minecraftforge-src-${mc.version}-${forge.version}.zip"/>
@@ -52,7 +52,7 @@
 
 	<!-- Set full version -->
 	<target name="initialize-version">
-		<echo message="Starting build for ${mod.name} v${mod.version}"/>
+		<echo message="Starting build for ${mod.name}"/>
 	</target>
 
 	<!-- Download necessary files -->
@@ -109,7 +109,7 @@
 		<copy todir="${mcpsrc.dir}">
 			<fileset dir="${src.dir}"/>
 			<filterset>
-				<filter token="VERSION" value="${mod.version}.${env.BUILD_NUMBER}"/>
+				<filter token="VERSION" value="${env.BUILD_NUMBER}"/>
 			</filterset>
 		</copy>
 
@@ -145,7 +145,7 @@
 		<copy todir="${classes.dir}">
 			<fileset dir="." includes="mcmod.info,minestuck_logo.png" />
 			<filterset>
-				<filter token="VERSION" value="${mod.version}.${env.BUILD_NUMBER}"/>
+				<filter token="VERSION" value="${env.BUILD_NUMBER}"/>
 			</filterset>
 		</copy>
 
@@ -159,7 +159,7 @@
 
 		<delete dir="${jar.dir}"/>
 		<mkdir dir="${jar.dir}"/>
-		<jar destfile="${jar.dir}/${mod.name}-${mod.version}.${env.BUILD_NUMBER}.jar" basedir="${classes.dir}"/>
+		<jar destfile="${jar.dir}/${mod.name}-${env.BUILD_NUMBER}.jar" basedir="${classes.dir}"/>
 
 	</target>
 
