@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.MinestuckStatsHandler;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -64,7 +65,7 @@ public class ItemHammer extends ItemWeapon
 	@Override
 	public void onCreated(ItemStack stack, World world, EntityPlayer player) {
 		if(this.hammerType.equals(EnumHammerType.CLAW))
-				player.triggerAchievement(Minestuck.getHammer);
+			player.triggerAchievement(MinestuckStatsHandler.getHammer);
 	}
     
     @Override

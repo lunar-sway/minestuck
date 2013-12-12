@@ -25,6 +25,9 @@ public class UpdateChecker extends Thread
 	
 	public static void checkUpdates()
 	{
+		if(latestVersion.equals("@VERSION@"))
+			return;
+		
 		try {
 			URL versionURL = new URL("http://minestuck.mraof.com/version.php");
 			URLConnection connection = versionURL.openConnection();

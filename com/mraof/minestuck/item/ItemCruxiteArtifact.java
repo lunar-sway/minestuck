@@ -20,6 +20,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.ITeleporter;
+import com.mraof.minestuck.util.MinestuckStatsHandler;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.gen.lands.LandHelper;
 
@@ -49,6 +50,7 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 	}
 	@Override
 	protected void onFoodEaten(ItemStack par1ItemStack, World par2World, EntityPlayer player) {
+		player.triggerAchievement(MinestuckStatsHandler.enterMedium);
 		if(!par2World.isRemote)
 		{
 			int destinationId = player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("LandId") == 0 ? LandHelper.createLand(player) : player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("LandId");

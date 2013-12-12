@@ -154,7 +154,7 @@ public class GuiComputer extends GuiScreen
 			if(!te.latestmessage.get(0).isEmpty())
 				addButtonString("computer.buttonClear");
 			if (te.serverConnected && c != null) { //If it is connected to someone.
-				displayMessage = StatCollector.translateToLocalFormatted("computer.buttonConnect", displayPlayer);
+				displayMessage = StatCollector.translateToLocalFormatted("computer.messageConnect", displayPlayer);
 				addButtonString("computer.buttonClose");
 			} else if(te.resumingClient){
 				displayMessage = StatCollector.translateToLocal("computer.messageResumeClient");

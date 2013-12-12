@@ -31,6 +31,7 @@ import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.MinestuckStatsHandler;
 import com.mraof.minestuck.util.ServerEditHandler;
 import com.mraof.minestuck.util.UsernameHandler;
 
@@ -424,6 +425,12 @@ public class SkaianetHandler {
 		EntityPlayerMP p = MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(player);
 		if(str == null || p == null)//If the player disconnected
 			return;
+		String playerEnc = UsernameHandler.encode(player);
+		for(SburbConnection c : connections)
+			if(c.isActive && (c.getClientName().equals(playerEnc) || c.getServerName().equals(playerEnc))) {
+				p.triggerAchievement(MinestuckStatsHandler.setupConnection);
+				break;
+			}
 		for(String s : str)
 			if(s != null){
 				Packet250CustomPayload packet = new Packet250CustomPayload();

@@ -16,6 +16,7 @@ import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.CombinationRegistry;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristRegistry;
+import com.mraof.minestuck.util.MinestuckStatsHandler;
 import com.mraof.minestuck.util.UsernameHandler;
 
 public class TileEntityMachine extends TileEntity implements IInventory {
@@ -300,7 +301,8 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 				decrStackSize(0, -1);
 			}
 			
-			//decrStackSize(1, 1);
+			MinestuckStatsHandler.onAlchemizedItem(newItem, owner);
+			
 			if(!worldObj.isRemote) {
 				GristHelper.decrease(UsernameHandler.encode(owner.username), GristRegistry.getGristConversion(newItem));
 				MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(owner.username));

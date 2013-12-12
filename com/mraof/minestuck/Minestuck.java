@@ -16,7 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.stats.Achievement;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
@@ -86,6 +85,7 @@ import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+import com.mraof.minestuck.util.MinestuckStatsHandler;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.ClientEditHandler;
 import com.mraof.minestuck.util.Debug;
@@ -219,9 +219,7 @@ public class Minestuck
 	public static int diskId;
 	public static int componentId;
 	public static int minestuckBucketId;
-
-	public static Achievement getHammer;
-
+	
 	//Blocks
 	public static Block chessTile;
 	public static Block gatePortal;
@@ -406,7 +404,10 @@ public class Minestuck
 		overworldEditRange = config.get("General", "overWorldEditRange", 26).getInt();
 		landEditRange = config.get("General", "landEditRange", 52).getInt();
 		artifactRange = config.get("General", "artifcatRange", 30).getInt();
+		MinestuckStatsHandler.idOffset = config.get("General", "statisticIdOffset", 413).getInt();
 		config.save();
+		
+		MinestuckStatsHandler.prepareAchievementPage();
 		
 		(new UpdateChecker()).start();
 	}
@@ -483,10 +484,7 @@ public class Minestuck
 		disk = new ItemDisk(diskId);
 		component = new ItemComponent(componentId);
 		minestuckBucket = new ItemMinestuckBucket(minestuckBucketId);
-
-		//achievements
-		getHammer = (new Achievement(413, "getHammer", 12, 15, Minestuck.clawHammer, (Achievement)null)).setIndependent().registerAchievement();
-
+		
 		//registers things for the client
 		ClientProxy.registerSided();
 		//server doesn't actually register any renderers for obvious reasons
@@ -615,6 +613,7 @@ public class Minestuck
 			MinecraftForge.EVENT_BUS.register(ClientEditHandler.instance);
 //		if(event.getSide().isServer())
 		MinecraftForge.EVENT_BUS.register(ServerEditHandler.instance);
+		MinecraftForge.EVENT_BUS.register(MinestuckStatsHandler.instance);
 		AlchemyRecipeHandler.registerDynamicRecipes();
 
 		//register NEI stuff
