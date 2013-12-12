@@ -31,6 +31,7 @@ public class MinestuckPlayerTracker implements IPlayerTracker {
 	@Override
 	public void onPlayerLogin(EntityPlayer player) 
 	{
+		SkaianetHandler.playerConnected(((EntityPlayerMP)player).username);
 		MinecraftServer server = MinecraftServer.getServer();
 		if(!server.isDedicatedServer() && server.getConfigurationManager().playerEntityList.size() == 1)
 			UsernameHandler.host = ((EntityPlayer)server.getConfigurationManager().playerEntityList.get(0)).username;

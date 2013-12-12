@@ -1,5 +1,7 @@
 package com.mraof.minestuck.network;
 
+import java.util.EnumSet;
+
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
 
@@ -13,6 +15,7 @@ import com.mraof.minestuck.util.Debug;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
+import cpw.mods.fml.relauncher.Side;
 
 /**
  * This packet tells the server to clear the message for the
@@ -54,7 +57,7 @@ public class ClearMessagePacket extends MinestuckPacket {
 	}
 
 	@Override
-	public MinestuckPacket consumePacket(byte[] data) {
+	public MinestuckPacket consumePacket(byte[] data, Side side) {
 		ByteArrayDataInput dat = ByteStreams.newDataInput(data);
 		for(byte b : data)
 			Debug.print(b);
@@ -73,6 +76,11 @@ public class ClearMessagePacket extends MinestuckPacket {
 			te.latestmessage.put(program, "");
 			te.worldObj.markBlockForUpdate(te.xCoord, te.yCoord, te.zCoord);
 		}
+	}
+	
+	@Override
+	public EnumSet<Side> getSenderSide() {
+		return EnumSet.of(Side.CLIENT);
 	}
 
 }

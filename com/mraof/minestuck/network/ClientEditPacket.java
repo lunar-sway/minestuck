@@ -1,5 +1,7 @@
 package com.mraof.minestuck.network;
 
+import java.util.EnumSet;
+
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.INetworkManager;
 
@@ -9,6 +11,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.ServerEditHandler;
 
 import cpw.mods.fml.common.network.Player;
+import cpw.mods.fml.relauncher.Side;
 
 public class ClientEditPacket extends MinestuckPacket {
 	
@@ -25,7 +28,7 @@ public class ClientEditPacket extends MinestuckPacket {
 	}
 
 	@Override
-	public MinestuckPacket consumePacket(byte[] data) {
+	public MinestuckPacket consumePacket(byte[] data, Side side) {
 		if(data.length == 0)
 			return this;
 		ByteArrayDataInput dat = ByteStreams.newDataInput(data);
@@ -41,6 +44,11 @@ public class ClientEditPacket extends MinestuckPacket {
 			ServerEditHandler.onPlayerExit(playerMP);
 		if(!Minestuck.privateComputers || playerMP.username.equals(this.username))
 			ServerEditHandler.newServerEditor(playerMP, username, target);
+	}
+
+	@Override
+	public EnumSet<Side> getSenderSide() {
+		return EnumSet.of(Side.CLIENT);
 	}
 
 }

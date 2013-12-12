@@ -21,21 +21,19 @@ import cpw.mods.fml.common.network.Player;
 public class MinestuckConnectionHandler implements IConnectionHandler {
 
 	@Override
-	public void playerLoggedIn(Player player, NetHandler netHandler,INetworkManager manager) {
-		SkaianetHandler.playerConnected(((EntityPlayerMP)player).username);
-	}
+	public void playerLoggedIn(Player player, NetHandler netHandler,INetworkManager manager) {}
 
 	@Override
 	public String connectionReceived(NetLoginHandler netHandler,INetworkManager manager) {
-		byte[] lands = new byte[MinestuckSaveHandler.lands.size()];
-		for(int i = 0; i < lands.length; i++)
-			lands[i] = MinestuckSaveHandler.lands.get(i);
-		Packet250CustomPayload packet = new Packet250CustomPayload();
-		packet.channel = "Minestuck";
-		packet.data = MinestuckPacket.makePacket(Type.LANDREGISTER, lands);
-		packet.length = packet.data.length;
-		
-		manager.addToSendQueue(packet);
+//		byte[] lands = new byte[MinestuckSaveHandler.lands.size()];	Done in the player tracker already?
+//		for(int i = 0; i < lands.length; i++)
+//			lands[i] = MinestuckSaveHandler.lands.get(i);
+//		Packet250CustomPayload packet = new Packet250CustomPayload();
+//		packet.channel = "Minestuck";
+//		packet.data = MinestuckPacket.makePacket(Type.LANDREGISTER, lands);
+//		packet.length = packet.data.length;
+//		
+//		manager.addToSendQueue(packet);
 		return null;
 	}
 

@@ -1,5 +1,7 @@
 package com.mraof.minestuck.network;
 
+import java.util.EnumSet;
+
 import net.minecraft.network.INetworkManager;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -9,6 +11,7 @@ import com.mraof.minestuck.util.ClientEditHandler;
 import com.mraof.minestuck.util.ServerEditHandler;
 
 import cpw.mods.fml.common.network.Player;
+import cpw.mods.fml.relauncher.Side;
 
 public class ServerEditPacket extends MinestuckPacket {
 	
@@ -34,7 +37,7 @@ public class ServerEditPacket extends MinestuckPacket {
 	}
 
 	@Override
-	public MinestuckPacket consumePacket(byte[] data) {
+	public MinestuckPacket consumePacket(byte[] data, Side side) {
 		if(data.length == 0)
 			return this;
 		ByteArrayDataInput input = ByteStreams.newDataInput(data);
@@ -52,6 +55,11 @@ public class ServerEditPacket extends MinestuckPacket {
 	@Override
 	public void execute(INetworkManager network, MinestuckPacketHandler minestuckPacketHandler, Player player, String userName) {
 		ClientEditHandler.onClientPackage(target, posX, posZ, givenItems); 
+	}
+
+	@Override
+	public EnumSet<Side> getSenderSide() {
+		return EnumSet.of(Side.SERVER);
 	}
 
 }

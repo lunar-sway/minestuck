@@ -1,5 +1,7 @@
 package com.mraof.minestuck.network;
 
+import java.util.EnumSet;
+
 import net.minecraft.network.INetworkManager;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -9,6 +11,7 @@ import com.mraof.minestuck.util.GristStorage;
 import com.mraof.minestuck.util.GristType;
 
 import cpw.mods.fml.common.network.Player;
+import cpw.mods.fml.relauncher.Side;
 
 public class GristCachePacket extends MinestuckPacket 
 {
@@ -32,7 +35,7 @@ public class GristCachePacket extends MinestuckPacket
 	}
 	
 	@Override
-	public MinestuckPacket consumePacket(byte[] data) 
+	public MinestuckPacket consumePacket(byte[] data, Side side) 
 	{
 		ByteArrayDataInput dat = ByteStreams.newDataInput(data);
 		for(int typeInt = 0; typeInt < values.length; typeInt++)
@@ -44,6 +47,11 @@ public class GristCachePacket extends MinestuckPacket
 	@Override
 	public void execute(INetworkManager network, MinestuckPacketHandler minestuckPacketHandler, Player player, String userName) {
 		GristStorage.onPacketRecived(this);
+	}
+
+	@Override
+	public EnumSet<Side> getSenderSide() {
+		return EnumSet.of(Side.SERVER);
 	}
 	
 }

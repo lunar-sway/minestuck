@@ -1,6 +1,7 @@
 package com.mraof.minestuck.network;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetworkManager;
@@ -14,6 +15,7 @@ import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 
 import cpw.mods.fml.common.network.Player;
+import cpw.mods.fml.relauncher.Side;
 
 public class SkaianetInfoPacket extends MinestuckPacket {
 
@@ -48,7 +50,7 @@ public class SkaianetInfoPacket extends MinestuckPacket {
 	}
 
 	@Override
-	public MinestuckPacket consumePacket(byte[] data) {
+	public MinestuckPacket consumePacket(byte[] data, Side side) {
 		ByteArrayDataInput dat = ByteStreams.newDataInput(data);
 		
 		this.player = dat.readLine();
@@ -75,6 +77,11 @@ public class SkaianetInfoPacket extends MinestuckPacket {
 			SkaiaClient.consumePacket(this);
 		else SkaianetHandler.requestInfo(((EntityPlayer)player).username, this.player);
 		
+	}
+
+	@Override
+	public EnumSet<Side> getSenderSide() {
+		return EnumSet.allOf(Side.class);
 	}
 
 }

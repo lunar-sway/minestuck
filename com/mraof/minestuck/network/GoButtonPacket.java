@@ -1,5 +1,7 @@
 package com.mraof.minestuck.network;
 
+import java.util.EnumSet;
+
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.INetworkManager;
 
@@ -11,6 +13,7 @@ import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.util.Debug;
 
 import cpw.mods.fml.common.network.Player;
+import cpw.mods.fml.relauncher.Side;
 
 public class GoButtonPacket extends MinestuckPacket {
 
@@ -31,7 +34,7 @@ public class GoButtonPacket extends MinestuckPacket {
 	}
 
 	@Override
-	public MinestuckPacket consumePacket(byte[] data) 
+	public MinestuckPacket consumePacket(byte[] data, Side side) 
 	{
 		ByteArrayDataInput dat = ByteStreams.newDataInput(data);
 		
@@ -53,6 +56,11 @@ public class GoButtonPacket extends MinestuckPacket {
 			te.ready = newMode;
 			te.overrideStop = overrideStop;
 		}
+	}
+
+	@Override
+	public EnumSet<Side> getSenderSide() {
+		return EnumSet.of(Side.CLIENT);
 	}
 
 }

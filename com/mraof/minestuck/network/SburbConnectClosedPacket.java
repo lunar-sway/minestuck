@@ -1,5 +1,7 @@
 package com.mraof.minestuck.network;
 
+import java.util.EnumSet;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetworkManager;
 
@@ -11,6 +13,7 @@ import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.ServerEditHandler;
 
 import cpw.mods.fml.common.network.Player;
+import cpw.mods.fml.relauncher.Side;
 
 public class SburbConnectClosedPacket extends MinestuckPacket {
 	
@@ -34,7 +37,7 @@ public class SburbConnectClosedPacket extends MinestuckPacket {
 	}
 
 	@Override
-	public MinestuckPacket consumePacket(byte[] data) {
+	public MinestuckPacket consumePacket(byte[] data, Side side) {
 		ByteArrayDataInput dat = ByteStreams.newDataInput(data);
 
 		player = dat.readLine();
@@ -48,6 +51,11 @@ public class SburbConnectClosedPacket extends MinestuckPacket {
 	public void execute(INetworkManager network, MinestuckPacketHandler handler, Player player, String userName) {
 		if(!Minestuck.privateComputers || ((EntityPlayer)player).username.equals(this.player) && ServerEditHandler.getData(((EntityPlayer)player).username) == null)
 			SkaianetHandler.closeConnection(this.player,this.otherPlayer, isClient);
+	}
+
+	@Override
+	public EnumSet<Side> getSenderSide() {
+		return EnumSet.of(Side.CLIENT);
 	}
 
 }

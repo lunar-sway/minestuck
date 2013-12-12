@@ -1,5 +1,7 @@
 package com.mraof.minestuck.network;
 
+import java.util.EnumSet;
+
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.INetworkManager;
 
@@ -11,6 +13,7 @@ import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.util.Debug;
 
 import cpw.mods.fml.common.network.Player;
+import cpw.mods.fml.relauncher.Side;
 
 public class ComboButtonPacket extends MinestuckPacket {
 
@@ -33,7 +36,7 @@ public class ComboButtonPacket extends MinestuckPacket {
 	}
 
 	@Override
-	public MinestuckPacket consumePacket(byte[] data) 
+	public MinestuckPacket consumePacket(byte[] data, Side side) 
 	{
 		ByteArrayDataInput dat = ByteStreams.newDataInput(data);
 		
@@ -53,6 +56,11 @@ public class ComboButtonPacket extends MinestuckPacket {
 			Debug.print("Button pressed. AND mode is " + newMode);
 			te.mode = newMode;
 		}
+	}
+
+	@Override
+	public EnumSet<Side> getSenderSide() {
+		return EnumSet.of(Side.CLIENT);
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.mraof.minestuck.network;
 
+import java.util.EnumSet;
+
 import net.minecraft.network.INetworkManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.DimensionManager;
@@ -11,6 +13,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 import cpw.mods.fml.common.network.Player;
+import cpw.mods.fml.relauncher.Side;
 
 public class LandRegisterPacket extends MinestuckPacket
 {
@@ -31,7 +34,7 @@ public class LandRegisterPacket extends MinestuckPacket
 	}
 
 	@Override
-	public MinestuckPacket consumePacket(byte[] data) 
+	public MinestuckPacket consumePacket(byte[] data, Side side) 
 	{
 		ByteArrayDataInput dat = ByteStreams.newDataInput(data);
 		landDimensions = new byte[data.length];
@@ -54,6 +57,11 @@ public class LandRegisterPacket extends MinestuckPacket
 			if(!DimensionManager.isDimensionRegistered(dimensionId))
 				DimensionManager.registerDimension(dimensionId, Minestuck.landProviderTypeId);
 		}
+	}
+
+	@Override
+	public EnumSet<Side> getSenderSide() {
+		return EnumSet.of(Side.SERVER);
 	}
 	
 }

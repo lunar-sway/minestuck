@@ -1,5 +1,7 @@
 package com.mraof.minestuck.network;
 
+import java.util.EnumSet;
+
 import net.minecraft.network.INetworkManager;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -9,6 +11,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.UsernameHandler;
 
 import cpw.mods.fml.common.network.Player;
+import cpw.mods.fml.relauncher.Side;
 
 public class MinestuckConfigPacket extends MinestuckPacket {
 	
@@ -37,7 +40,7 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 	}
 
 	@Override
-	public MinestuckPacket consumePacket(byte[] data) {
+	public MinestuckPacket consumePacket(byte[] data, Side side) {
 		ByteArrayDataInput dat = ByteStreams.newDataInput(data);
 		overWorldEditRange = dat.readInt();
 		landEditRange = dat.readInt();
@@ -56,6 +59,11 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 		Minestuck.clientHardMode = this.hardMode;
 		UsernameHandler.host = lanHost;
 		
+	}
+
+	@Override
+	public EnumSet<Side> getSenderSide() {
+		return EnumSet.of(Side.SERVER);
 	}
 
 }

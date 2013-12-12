@@ -1,5 +1,7 @@
 package com.mraof.minestuck.network;
 
+import java.util.EnumSet;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
@@ -12,6 +14,7 @@ import com.mraof.minestuck.util.EnumClass;
 import com.mraof.minestuck.util.TitleHelper;
 
 import cpw.mods.fml.common.network.Player;
+import cpw.mods.fml.relauncher.Side;
 
 public class TitlePacket extends MinestuckPacket 
 {
@@ -32,7 +35,7 @@ public class TitlePacket extends MinestuckPacket
 	}
 
 	@Override
-	public MinestuckPacket consumePacket(byte[] data) 
+	public MinestuckPacket consumePacket(byte[] data, Side side) 
 	{
 		ByteArrayDataInput dat = ByteStreams.newDataInput(data);
 		heroClass = dat.readInt();
@@ -49,6 +52,11 @@ public class TitlePacket extends MinestuckPacket
 			entityPlayer.getEntityData().setCompoundTag(EntityPlayer.PERSISTED_NBT_TAG, new NBTTagCompound());
 		entityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Class", this.heroClass);
 		entityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Aspect", this.heroAspect);
+	}
+
+	@Override
+	public EnumSet<Side> getSenderSide() {
+		return EnumSet.of(Side.SERVER);
 	}
 	
 }

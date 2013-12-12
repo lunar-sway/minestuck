@@ -5,6 +5,14 @@ language.code=en_US
 
 achievement.getHammer=Get Hammer
 achievement.getHammer.desc=Get the Claw Hammer
+achievement.mineCruxite=Mine Cruxite
+achievement.mineCruxite.desc=There's a new ore, get it!
+achievement.setupConnection=Connect
+achievement.setupConnection.desc=Create a connection with someone.
+achievement.enterMedium=A New World
+achievement.enterMedium.desc=Create, and use the Cruxite Artifact.
+achievement.alchemy=First Alchemy
+achievement.alchemy.desc=Use the punch designex to alchemize something else!
 
 computer.buttonClear=Clear message
 computer.buttonClose=Disconnect
@@ -124,6 +132,18 @@ itemGroup.tabMinestuck=Minestuck
 
 key.exitEdit=Exit Edit Mode
 key.gristCache=View Grist Cache
+
+strife.sword.name=Bladekind
+strife.bow.name=Bowkind
+strife.pickaxe.name=Pickaxekind
+strife.axe.name=Axekind
+strife.hoe.name=Hoekind
+strife.shovel.name=Spadekind
+strife.hammer.name=Hammerkind
+strife.cane.name=Canekind
+strife.club.name=Clubkind
+strife.sickle.name=Sicklekind
+strife.spork.name=Sporkkind
 
 tile.chessTile.black.name=Black Chess Tile
 tile.chessTile.white.name=White Chess Tile
