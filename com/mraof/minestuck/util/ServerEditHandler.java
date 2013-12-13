@@ -42,6 +42,11 @@ import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 
+/**
+ * Main class to handle the server side of edit mode.
+ * Also contains some methods used on both sides.
+ * @author kirderf1
+ */
 public class ServerEditHandler implements ITickHandler{
 	
 	public static final int GIVEABLE_ITEMS = 5;

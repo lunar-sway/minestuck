@@ -1,6 +1,8 @@
 package com.mraof.minestuck.util;
 
 import java.util.EnumSet;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
@@ -9,7 +11,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.event.Event;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
@@ -96,7 +102,42 @@ public class ClientEditHandler implements ITickHandler{
 			}
 		}
 	}
-
+	
+	public void addToolTip(EntityPlayer player, boolean[] givenItems) {
+		GristSet have = GristStorage.getClientGrist();
+		for(int i = 0; i < player.inventory.mainInventory.length; i++) {
+			ItemStack stack = player.inventory.mainInventory[i];
+			if(stack == null)
+				continue;
+			if(stack.stackTagCompound == null)
+				stack.stackTagCompound = new NBTTagCompound();
+			if(!stack.stackTagCompound.hasKey("display"))
+				stack.stackTagCompound.setCompoundTag("display", new NBTTagCompound());
+			NBTTagList list = new NBTTagList();
+			stack.stackTagCompound.getCompoundTag("display").setTag("Lore", list);
+			
+			GristSet cost;
+			if(stack.getItem() instanceof ItemMachine && stack.getItemDamage() < 4) {
+				if(stack.getItemDamage() == 1)
+					cost = new GristSet(GristType.Shale, 4);
+				else cost = Minestuck.clientHardMode&&givenItems[stack.getItemDamage()]?new GristSet(GristType.Build, 100):new GristSet();
+			}
+			else if(stack.getItem().equals(Minestuck.punchedCard))
+				cost = new GristSet();
+			else cost = GristRegistry.getGristConversion(stack);
+			
+			for(Entry entry : (Set<Entry>)cost.getHashtable().entrySet()) {
+				GristType grist = GristType.values()[(Integer)entry.getKey()];
+				String s = EnumChatFormatting.RESET+""+EnumChatFormatting.RESET;
+				s += (Integer)entry.getValue() <= have.getGrist(grist)?EnumChatFormatting.GREEN:EnumChatFormatting.RED;
+				list.appendTag(new NBTTagString("",s+entry.getValue()+" "+grist.getDisplayName()+" ("+have.getGrist(grist)+")"));
+			}
+			if(cost.isEmpty())
+				list.appendTag(new NBTTagString("",""+EnumChatFormatting.RESET+EnumChatFormatting.RESET+EnumChatFormatting.GREEN+
+						StatCollector.translateToLocal("gui.free")));
+		}
+	}
+	
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {}
 
@@ -110,6 +151,8 @@ public class ClientEditHandler implements ITickHandler{
 		
 		ServerEditHandler.updateInventory(player, givenItems, MinestuckSaveHandler.lands.contains((byte)player.dimension), Minestuck.clientHardMode);
 		ServerEditHandler.updatePosition(player, range, centerX, centerZ);
+		if(Minestuck.toolTipEnabled)
+			addToolTip(player, givenItems);
 	}
 
 	@Override

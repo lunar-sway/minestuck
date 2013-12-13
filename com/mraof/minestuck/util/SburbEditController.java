@@ -37,8 +37,8 @@ public class SburbEditController extends PlayerControllerMP {
 		float f2 = (float)par8Vec3.zCoord - (float)par6;
 		
 		if(stack != null && stack.getItem() instanceof ItemBlock && (GristHelper.canAfford(GristStorage.getClientGrist(), GristRegistry.getGristConversion(stack))
-				|| stack.getItem() instanceof ItemMachine && stack.getItemDamage() < 4 &&
-				(!Minestuck.clientHardMode || !SkaiaClient.getClientConnection(ClientEditHandler.client).givenItems()[stack.getItemDamage()] || GristStorage.getClientGrist().getGrist(GristType.Build) >= 100))) {
+				|| stack.getItem() instanceof ItemMachine && stack.getItemDamage() < 4 && (stack.getItemDamage() != 1 || GristStorage.getClientGrist().getGrist(GristType.Shale) >= 4) &&	//TODO This if-statement could require a cleanup
+				(!Minestuck.clientHardMode || stack.getItemDamage() == 1 || !SkaiaClient.getClientConnection(ClientEditHandler.client).givenItems()[stack.getItemDamage()] || GristStorage.getClientGrist().getGrist(GristType.Build) >= 100))) {
 				ItemBlock item = (ItemBlock)stack.getItem();
 				if(!item.canPlaceItemBlockOnSide(world, par4, par5, par6, par7, entityPlayer, stack))
 					return false;

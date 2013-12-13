@@ -37,7 +37,10 @@ public class SburbEditManager extends ItemInWorldManager{
 		
 		if(stack.getItem() instanceof ItemMachine && stack.getItemDamage() < 4) {
 			SburbConnection c = ServerEditHandler.getData(thisPlayerMP.username).connection;
-			GristSet cost = Minestuck.hardMode && c.givenItems()[stack.getItemDamage()]?new GristSet(GristType.Build, 100):new GristSet();	//TODO Make it have an other grist cost for the punch designex.
+			GristSet cost;
+			if(stack.getItemDamage() == 1)
+				cost = new GristSet(GristType.Shale, 4);
+			else cost = Minestuck.hardMode && c.givenItems()[stack.getItemDamage()]?new GristSet(GristType.Build, 100):new GristSet();
 			if(GristHelper.canAfford(GristStorage.getGristSet(client), cost) && super.activateBlockOrUseItem(entityPlayer, world, stack, par4, par5, par6, par7, par8, par9, par10)) {
 				c.givenItems()[stack.getItemDamage()] = true;
 				if(!c.isMain())
