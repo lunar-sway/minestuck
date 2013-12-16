@@ -1,4 +1,4 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.editmode;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -37,6 +37,9 @@ import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 import cpw.mods.fml.common.ITickHandler;
@@ -319,7 +322,7 @@ public class ServerEditHandler implements ITickHandler{
 	}
 	
 	public static void updateInventory(EntityPlayer player, boolean[] givenItems, boolean enteredGame, boolean isHardMode) {
-		if(player.inventory.inventoryChanged) {
+		if(!Minestuck.useInventoryChanged || player.inventory.inventoryChanged) {
 			for(int i = 0; i < player.inventory.mainInventory.length; i++) {
 				ItemStack stack = player.inventory.mainInventory[i];
 				if(stack != null && (GristRegistry.getGristConversion(stack) == null || !(stack.getItem() instanceof ItemBlock)) && !(stack.getItem() instanceof ItemMachine ||
@@ -330,8 +333,7 @@ public class ServerEditHandler implements ITickHandler{
 					stack.stackSize = 1;
 			}
 			
-			for(int i = 0; i < 4; i++) {
-				ItemStack stack = new ItemStack(Minestuck.blockMachine, 1, i);
+			for(ItemStack stack : DeployList.getItemList()) {
 				if(!player.inventory.hasItemStack(stack) && !(player.inventory.getItemStack() != null && player.inventory.getItemStack().isItemEqual(stack)))
 					player.inventory.addItemStackToInventory(stack);
 			}
@@ -343,11 +345,12 @@ public class ServerEditHandler implements ITickHandler{
 				nbt.setInteger("contentID", Minestuck.cruxiteArtifact.itemID);
 				nbt.setInteger("contentMeta", 0);	//TODO Change this for when adding other artifact types
 				if(!player.inventory.hasItemStack(stack) && (player.inventory.getItemStack() == null ||
-						!player.inventory.getItemStack().isItemEqual(stack)))	//Works fine as long as the artifact card is the only allowed card.
+						!ItemStack.areItemStacksEqual(player.inventory.getItemStack(), stack)))
 					player.inventory.addItemStackToInventory(stack);
 			}
 			
-			player.inventory.inventoryChanged = false;
+			if(Minestuck.useInventoryChanged)
+				player.inventory.inventoryChanged = false;
 		}
 	}
 	

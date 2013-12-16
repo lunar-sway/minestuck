@@ -1,4 +1,4 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.editmode;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -15,6 +15,10 @@ import net.minecraft.world.World;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.ItemMachine;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
+import com.mraof.minestuck.util.GristHelper;
+import com.mraof.minestuck.util.GristRegistry;
+import com.mraof.minestuck.util.GristStorage;
+import com.mraof.minestuck.util.GristType;
 
 public class SburbEditController extends PlayerControllerMP {
 	

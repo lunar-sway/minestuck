@@ -16,7 +16,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.EnumGameType;
 import net.minecraft.world.World;
 
-import com.mraof.minestuck.util.ServerEditHandler;
+import com.mraof.minestuck.editmode.ServerEditHandler;
 
 public class EntityDecoy extends EntityLiving {
 	

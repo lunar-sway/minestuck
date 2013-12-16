@@ -14,12 +14,12 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.network.ClearMessagePacket;
 import com.mraof.minestuck.network.skaianet.ComputerData;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
-import com.mraof.minestuck.util.ClientEditHandler;
 import com.mraof.minestuck.util.UsernameHandler;
 
 import cpw.mods.fml.common.registry.LanguageRegistry;

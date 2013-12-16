@@ -5,7 +5,7 @@ import net.minecraft.nbt.NBTTagList;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import com.mraof.minestuck.util.ServerEditHandler;
+import com.mraof.minestuck.editmode.ServerEditHandler;
 
 public class SburbConnection {
 	

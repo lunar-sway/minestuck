@@ -37,6 +37,8 @@ import com.mraof.minestuck.block.BlockStorage;
 import com.mraof.minestuck.block.OreCruxite;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.GuiHandler;
+import com.mraof.minestuck.editmode.ClientEditHandler;
+import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.EntityDecoy;
 import com.mraof.minestuck.entity.carapacian.EntityBlackBishop;
 import com.mraof.minestuck.entity.carapacian.EntityBlackPawn;
@@ -79,7 +81,7 @@ import com.mraof.minestuck.item.ItemStorageBlock;
 import com.mraof.minestuck.nei.NEIMinestuckConfig;
 import com.mraof.minestuck.network.MinestuckConnectionHandler;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.network.skaianet.Session;
+import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
@@ -87,12 +89,10 @@ import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.MinestuckStatsHandler;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.ClientEditHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristStorage;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.KindAbstratusList;
-import com.mraof.minestuck.util.ServerEditHandler;
 import com.mraof.minestuck.util.UpdateChecker;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.WorldProviderSkaia;
@@ -246,13 +246,11 @@ public class Minestuck
 	public static int blockBloodId;
 	
 	
-	public static int overworldEditRange;
-	public static int landEditRange;
-	
+	//Client config
 	public static int clientOverworldEditRange;	//Edit range used by the client side.
 	public static int clientLandEditRange;		//changed by a MinestuckConfigPacket sent by the server on login.
 	
-	//Booleans
+	//General
 	public static boolean clientHardMode;
 	public static boolean hardMode = false;	//Future config option. Currently alters how easy the entry items are accessible after the first time. The machines cost 100 build and there will only be one card if this is true.
 	public static boolean generateCruxiteOre; //If set to false, Cruxite Ore will not generate
@@ -264,7 +262,12 @@ public class Minestuck
 	public static boolean toolTipEnabled;
 	public static String privateMessage;
 	public static int artifactRange; //The range of the Cruxite Artifact in teleporting zones over to the new land
+	public static int overworldEditRange;
+	public static int landEditRange;
 
+	// Effiency and compability
+	public static boolean useInventoryChanged;	//If the EditHandler will check the inventory each tick, or use playerInventory.inventoryChanged, that may cause instability with other mods using it.
+	
 	// The instance of your mod that Forge uses.
 	@Instance("Minestuck")
 	public static Minestuck instance;
@@ -407,6 +410,7 @@ public class Minestuck
 		artifactRange = config.get("General", "artifcatRange", 30).getInt();
 		MinestuckStatsHandler.idOffset = config.get("General", "statisticIdOffset", 413).getInt();
 		toolTipEnabled = config.get("General", "toolTipEnabled", false).getBoolean(false);
+		useInventoryChanged = config.get("Effiency and Compability", "useInventoryChanged", true).getBoolean(true);
 		config.save();
 		
 		MinestuckStatsHandler.prepareAchievementPage();
@@ -603,7 +607,7 @@ public class Minestuck
 		
 		KindAbstratusList.registerTypes();
 		
-		Session.maxSize = acceptTitleCollision?(generateSpecialClasses?168:144):12;
+		SessionHandler.maxSize = acceptTitleCollision?(generateSpecialClasses?168:144):12;
 	}
 
 	@EventHandler

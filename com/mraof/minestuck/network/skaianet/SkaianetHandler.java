@@ -27,15 +27,18 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MinestuckStatsHandler;
-import com.mraof.minestuck.util.ServerEditHandler;
 import com.mraof.minestuck.util.UsernameHandler;
 
-//@SideOnly(Side.SERVER)	//This crashes the game on execution of ClearMessagePacket?
+/**
+ * This class handles server sided stuff about the sburb connection network.
+ * @author kirderf1
+ */
 public class SkaianetHandler {
 	
 	static Map<String,ComputerData> serversOpen = new TreeMap();
@@ -64,14 +67,14 @@ public class SkaianetHandler {
 	public static boolean giveItems(String player){
 		SburbConnection c = getClientConnection(player);
 		if(c != null && !c.isMain){
-			Session cs = Session.getPlayerSession(c.getClientName()), ss = Session.getPlayerSession(c.getServerName());
+			Session cs = SessionHandler.getPlayerSession(c.getClientName()), ss = SessionHandler.getPlayerSession(c.getServerName());
 			if(cs != null && ss != null && cs != ss){
-				Session session = Session.merge(cs, ss, c);
+				Session session = SessionHandler.merge(cs, ss, c);
 				if(session == null)
 					return false;
-				Session.sessions.remove(cs);
-				Session.sessions.remove(ss);
-				Session.sessions.add(session);
+				SessionHandler.sessions.remove(cs);
+				SessionHandler.sessions.remove(ss);
+				SessionHandler.sessions.add(session);
 			}
 			c.isMain = true;
 			updatePlayer(c.getClientName());
@@ -131,7 +134,7 @@ public class SkaianetHandler {
 					resumingClients.put(player.owner, player);
 				}
 			}
-			else if(serversOpen.containsKey(otherPlayer) && Session.canJoin(player.owner, otherPlayer))	//If the server is open.
+			else if(serversOpen.containsKey(otherPlayer) && SessionHandler.canJoin(player.owner, otherPlayer))	//If the server is open.
 				connectTo(player, true, otherPlayer, serversOpen);
 		}
 		te.worldObj.markBlockForUpdate(te.xCoord, te.yCoord, te.zCoord);
@@ -177,7 +180,7 @@ public class SkaianetHandler {
 						sc.latestmessage.put(1, "computer.messageClosed");
 						sc.worldObj.markBlockForUpdate(sc.xCoord, sc.yCoord, sc.zCoord);
 					}
-					Session.closeConnection(c.getClientName(), c.getServerName());
+					SessionHandler.closeConnection(c.getClientName(), c.getServerName());
 					ServerEditHandler.onDisconnect(c);
 					if(c.isMain)
 						c.isActive = false;	//That's everything that is neccesary.
@@ -222,7 +225,7 @@ public class SkaianetHandler {
 			c.server = player;
 			c.isActive = true;
 		}
-		if(newConnection && !Session.registerConnection(c)){
+		if(newConnection && !SessionHandler.registerConnection(c)){
 			connections.remove(c);
 			TileEntityComputer cte = getComputer(c.client);
 			if(cte != null)
@@ -289,7 +292,7 @@ public class SkaianetHandler {
 		NBTTagCompound nbt = new NBTTagCompound();
 		NBTTagList list = new NBTTagList();
 		
-		for(Session s : Session.sessions)
+		for(Session s : SessionHandler.sessions)
 			list.appendTag(s.write());
 		
 		nbt.setTag("sessions", list);
@@ -331,7 +334,7 @@ public class SkaianetHandler {
 		serversOpen.clear();	
 		resumingClients.clear();
 		resumingServers.clear();
-		Session.sessions.clear();
+		SessionHandler.sessions.clear();
 		if(file0.exists()){
 			NBTTagCompound nbt = null;
 			try{
@@ -345,7 +348,7 @@ public class SkaianetHandler {
 			if(nbt != null){
 				NBTTagList list = nbt.getTagList("sessions");
 				for(int i = 0; i < list.tagCount(); i++)
-					Session.sessions.add(new Session().read((NBTTagCompound) list.tagAt(i)));
+					SessionHandler.sessions.add(new Session().read((NBTTagCompound) list.tagAt(i)));
 				//Debug.print(connections.size()+" connection(s) loaded");
 			}
 		}
@@ -381,7 +384,7 @@ public class SkaianetHandler {
 				}
 			}
 		}
-		Session.serverStarted();
+		SessionHandler.serverStarted();
 	}
 	
 	static void loadOld(File file) {
@@ -408,7 +411,7 @@ public class SkaianetHandler {
 				connections.add(c);
 				s.connections.add(c);
 			}
-			Session.sessions.add(s);
+			SessionHandler.sessions.add(s);
 		}catch(IOException e){
 			e.printStackTrace();
 		}
@@ -450,7 +453,7 @@ public class SkaianetHandler {
 		
 		int i = 0;
 		for(String s : serversOpen.keySet())
-			if(Session.canJoin(player, s)){
+			if(SessionHandler.canJoin(player, s)){
 				list.add(s);
 				i++;
 			}
@@ -493,7 +496,7 @@ public class SkaianetHandler {
 					if(!c.isMain)
 						iter2.remove();
 					else c.isActive = false;
-					Session.closeConnection(c.getClientName(), c.getServerName());
+					SessionHandler.closeConnection(c.getClientName(), c.getServerName());
 					ServerEditHandler.onDisconnect(c);
 					
 					if(cc != null){
@@ -556,7 +559,7 @@ public class SkaianetHandler {
 				c.isMain = true;
 				c.clientName = username;
 				c.serverName = username;
-				if(Session.registerConnection(c))
+				if(SessionHandler.registerConnection(c))
 					connections.add(c);
 			} else giveItems(username);
 		}
@@ -575,6 +578,18 @@ public class SkaianetHandler {
 		c.centerX = (int)player.posX;
 		c.centerZ = (int)player.posZ;
 		updateAll();
+	}
+	
+	static boolean onConnectionCreated(SburbConnection connection) {
+		return false;
+	}
+	
+	static void onFirstItemGiven(SburbConnection connection) {
+		
+	}
+	
+	static void onGameEntered(SburbConnection connection) {
+		
 	}
 	
 }

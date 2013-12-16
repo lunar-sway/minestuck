@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 
 import com.mraof.minestuck.client.gui.GuiGristCache;
-import com.mraof.minestuck.util.ClientEditHandler;
+import com.mraof.minestuck.editmode.ClientEditHandler;
 
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.common.TickType;

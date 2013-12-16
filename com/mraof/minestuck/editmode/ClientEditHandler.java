@@ -1,4 +1,4 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.editmode;
 
 import java.util.EnumSet;
 import java.util.Set;
@@ -32,6 +32,11 @@ import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
+import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.util.GristRegistry;
+import com.mraof.minestuck.util.GristSet;
+import com.mraof.minestuck.util.GristStorage;
+import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 import cpw.mods.fml.common.ITickHandler;
