@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.util.EnumChatFormatting;
@@ -13,7 +15,7 @@ import net.minecraft.util.EnumChatFormatting;
 import com.mraof.minestuck.Minestuck;
 
 /**
- * Handles session related stuff like title generation, consort chooser, and other session management stuff.
+ * Handles session related stuff like title generation, consort choosing, and other session management stuff.
  * @author kirderf1
  */
 public class SessionHandler {
@@ -100,95 +102,35 @@ public class SessionHandler {
 	}
 	
 	/**
-	 * Called when a new connection is created.
-	 * @param c The connection created.
-	 * @return 
-	 */
-	static boolean registerConnection(SburbConnection c){
-		if(!canJoin(c.getClientName(), c.getServerName()))
-			return false;
-		
-		Session cs = getPlayerSession(c.getClientName()), ss = getPlayerSession(c.getServerName());
-		
-		if(cs != null && ss != null && cs != ss){
-			cs.connections.add(c);
-			ss.connections.add(c);
-		} else if(cs != null){
-			cs.connections.add(c);
-		} else if(ss != null){
-			ss.connections.add(c);
-		} else if(singleSession && sessions.size() != 0){
-			sessions.get(0).connections.add(c);
-		} else {
-			Session s = new Session();
-			s.connections.add(c);
-			sessions.add(s);
-		}
-		return true;
-	}
-	
-	/**
 	 * Looks for the session that the player is a part of.
 	 * @param player A string of the player's username.
-	 * @return A session that contains at least one <b>main</b> connection, that the player is a part of.
+	 * @return A session that contains at least one connection, that the player is a part of.
 	 */
 	static Session getPlayerSession(String player){
 		for(Session s : sessions)
 			for(SburbConnection c : s.connections)
-				if(c.isMain && (c.getClientName().equals(player) || c.getServerName().equals(player)))
+				if(c.getClientName().equals(player) || c.getServerName().equals(player))
 					return s;
 		return null;
 	}
 	
-	/**
-	 * Checks if the possible client-server pairing can be created.
-	 * @param client A string of the clients name.
-	 * @param server A string of the servers name.
-	 * @return If they should be able to connect. Includes temporal connections.
-	 */
-	static boolean canJoin(String client, String server){	//Commented code is for the use of maxSize.
-		Session cs = getPlayerSession(client);
-		Session ss = getPlayerSession(server);
-		if(cs == null && ss == null)
-			if(singleSession && sessions.size() > 0){
-				Session s = sessions.get(0);
-				return true;	//maxSize >= s.getPlayerList().size()+(s.containsPlayer(client)?0:1)+(s.containsPlayer(server)?0:1);
-			} else return true;
-		
-		if(cs == null)
-			return true;	//maxSize >= ss.getPlayerList().size()+1;
-		if(ss == null)
-			return true;	//maxSize >= cs.getPlayerList().size()+1;
-		
-		if((!getAssociatedPartner(client, true).isEmpty() || !getAssociatedPartner(server, false).isEmpty()) && cs != ss)
-			return false;
-		if(cs != ss)
-			return canMerge(cs, ss);	// && maxSize >= cs.getPlayerList().size()+ss.getPlayerList().size();
-		return true;
-	}
-	
-	static Session merge(Session cs, Session ss, SburbConnection sb){
-		if(canMerge(cs, ss) && sb != null){
+	static String merge(Session cs, Session ss, SburbConnection sb) {
+		String s = canMerge(cs, ss);
+		if(s == null) {
 			ss.connections.remove(sb);
 			cs.connections.addAll(ss.connections);
 			if(cs.skaiaId == 0) cs.skaiaId = ss.skaiaId;
 			if(cs.prospitId == 0) cs.prospitId = ss.prospitId;
 			if(cs.derseId == 0) cs.derseId = ss.derseId;
-			return cs;
+			return null;
 		}
-		return null;
+		return s;
 	}
 	
-	/**
-	 * If it can merge two sessions together.
-	 * It returns false if at least one parameter is null.
-	 * @param s0 A session.
-	 * @param s1 A second session.
-	 * @return If they can be merged.
-	 */
-	static boolean canMerge(Session s0, Session s1){
-		return (s0 != null && s1 != null && s0.getPlayerList().size()+s1.getPlayerList().size()<=maxSize && !s0.completed && !s1.completed &&
-				(s0.skaiaId == 0 || s1.skaiaId == 0) && (s0.prospitId == 0 || s1.prospitId == 0) && (s0.derseId == 0 || s1.derseId == 0));
+	static String canMerge(Session s0, Session s1){
+		if(s0.getPlayerList().size()+s1.getPlayerList().size()>maxSize)
+			return "session.bothSessionsFull";
+		return null;
 	}
 	
 	/**
@@ -200,7 +142,11 @@ public class SessionHandler {
 		if(Minestuck.globalSession || sessions.size() != 1)
 			return;
 		
-		Session session = sessions.remove(0);
+		split(sessions.get(0));
+	}
+	
+	static void split(Session session) {
+		sessions.remove(session);
 		boolean first = true;
 		while(!session.connections.isEmpty()){
 			Session s = new Session();
@@ -229,6 +175,7 @@ public class SessionHandler {
 		}
 	}
 	
+	//Being replaced
 	static void closeConnection(String client, String server){
 		Iterator<Session> iter0 = sessions.iterator();
 		while(iter0.hasNext()){
@@ -247,6 +194,97 @@ public class SessionHandler {
 			if(s.connections.size() == 0)
 				iter0.remove();
 		}
+	}
+	
+	//Empty
+	static void generateTitle(String player) {
+		
+	}
+	
+	/**
+	 * Will check if two players can connect based on their main connections and sessions.
+	 * Does NOT include session size checking.
+	 * @return True if client connection is not null and client and server session is the same or 
+	 * client connection is null and server connection is null.
+	 */
+	static boolean canConnect(String client, String server) {
+		Session sClient = getPlayerSession(client), sServer = getPlayerSession(server);
+		SburbConnection cClient = SkaianetHandler.getConnection(client, SkaianetHandler.getAssociatedPartner(client, true));
+		SburbConnection cServer = SkaianetHandler.getConnection(server, SkaianetHandler.getAssociatedPartner(server, false));
+		return cClient != null && sClient == sServer || cClient == null && cServer == null;
+	}
+	
+	/**
+	 * @return Null if successful or an unlocalized error message describing reason.
+	 */
+	static String onConnectionCreated(SburbConnection connection) {
+		if(!canConnect(connection.getClientName(), connection.getServerName()))
+			return "computer.messageConnectFailed";
+		if(singleSession) {
+			int i = (sessions.get(0).containsPlayer(connection.getClientName())?0:1)+(sessions.get(0).containsPlayer(connection.getServerName())?0:1);
+			if(Minestuck.forceMaxSize && sessions.get(0).getPlayerList().size()+i > maxSize)
+				return "computer.singleSessionFull";
+			else {
+				sessions.get(0).connections.add(connection);
+				return null;
+			}
+		} else {
+			Session sClient = getPlayerSession(connection.getClientName()), sServer = getPlayerSession(connection.getServerName());
+			if(sClient == null && sServer == null) {
+				Session s = new Session();
+				s.connections.add(connection);
+				s.checkIfCompleted();	//In case a player connects to himself.
+				return null;
+			} else if(sClient == null || sServer == null) {
+				if(Minestuck.forceMaxSize && (sClient == null?sServer:sClient).getPlayerList().size()+1 > maxSize)
+					return "computer."+(sClient == null?"server":"client")+"SessionFull";
+				(sClient == null?sServer:sClient).connections.add(connection);
+				return null;
+			} else {
+				String s = merge(sClient, sServer, connection);
+			}
+			return null;
+		}
+	}
+	
+	/**
+	 * @param normal If the connection was closed by normal means. (includes everything but getting crushed by a meteor)
+	 */
+	static void onConnectionClosed(SburbConnection connection, boolean normal) {
+		if(!connection.isMain && !singleSession)
+			split(getPlayerSession(connection.getClientName()));
+		else if(!normal) {
+			if(SkaianetHandler.getAssociatedPartner(connection.getClientName(), false) != null) {
+				SburbConnection c = SkaianetHandler.getConnection(SkaianetHandler.getAssociatedPartner(connection.getClientName(), false), connection.getClientName());
+				if(c == null) {
+					getPlayerSession(connection.getClientName()).connections.remove(connection);
+					SkaianetHandler.connections.remove(connection);
+				} //else	What should happen with that connection?
+			}
+		}
+	}
+	
+	static void onFirstItemGiven(SburbConnection connection) {
+		
+	}
+	
+	static void onGameEntered(SburbConnection connection) {
+		
+	}
+	
+	static void load(NBTTagList list) {
+		for(int i = 0; i < list.tagCount(); i++) {
+			sessions.add(new Session().read((NBTTagCompound) list.tagAt(i)));
+		}
+	}
+	
+	static List getServerList(String client) {
+		ArrayList list = new ArrayList();
+		for(String server : SkaianetHandler.serversOpen.keySet()) {
+			if(canConnect(client, server))
+				list.add(server);
+		}
+		return list;
 	}
 	
 }

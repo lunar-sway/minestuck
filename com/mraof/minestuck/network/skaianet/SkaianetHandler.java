@@ -67,16 +67,8 @@ public class SkaianetHandler {
 	public static boolean giveItems(String player){
 		SburbConnection c = getClientConnection(player);
 		if(c != null && !c.isMain){
-			Session cs = SessionHandler.getPlayerSession(c.getClientName()), ss = SessionHandler.getPlayerSession(c.getServerName());
-			if(cs != null && ss != null && cs != ss){
-				Session session = SessionHandler.merge(cs, ss, c);
-				if(session == null)
-					return false;
-				SessionHandler.sessions.remove(cs);
-				SessionHandler.sessions.remove(ss);
-				SessionHandler.sessions.add(session);
-			}
 			c.isMain = true;
+			SessionHandler.onFirstItemGiven(c);
 			updatePlayer(c.getClientName());
 			updatePlayer(c.getServerName());
 			return true;
@@ -134,7 +126,7 @@ public class SkaianetHandler {
 					resumingClients.put(player.owner, player);
 				}
 			}
-			else if(serversOpen.containsKey(otherPlayer) && SessionHandler.canJoin(player.owner, otherPlayer))	//If the server is open.
+			else if(serversOpen.containsKey(otherPlayer))	//If the server is open.
 				connectTo(player, true, otherPlayer, serversOpen);
 		}
 		te.worldObj.markBlockForUpdate(te.xCoord, te.yCoord, te.zCoord);
@@ -225,12 +217,16 @@ public class SkaianetHandler {
 			c.server = player;
 			c.isActive = true;
 		}
-		if(newConnection && !SessionHandler.registerConnection(c)){
-			connections.remove(c);
-			TileEntityComputer cte = getComputer(c.client);
-			if(cte != null)
-				cte.latestmessage.put(0, "computer.messageConnectFail");
-			map.put(c.server.owner, c.server);
+		if(newConnection){
+			String s = SessionHandler.onConnectionCreated(c);
+			if(s != null) {
+				connections.remove(c);
+				TileEntityComputer cte = getComputer(c.client);
+				if(cte != null)
+					cte.latestmessage.put(0, s);
+				map.put(c.server.owner, c.server);
+				return;
+			}
 		}
 		if(newConnection && !getAssociatedPartner(c.getClientName(), true).isEmpty()) {	//Copy client associated variables
 			SburbConnection conn = getConnection(c.getClientName(), getAssociatedPartner(c.getClientName(), true));
@@ -346,9 +342,11 @@ public class SkaianetHandler {
 				loadOld(file0);
 			}
 			if(nbt != null){
-				NBTTagList list = nbt.getTagList("sessions");
+				NBTTagList list = nbt.getTagList("connections");
 				for(int i = 0; i < list.tagCount(); i++)
-					SessionHandler.sessions.add(new Session().read((NBTTagCompound) list.tagAt(i)));
+					connections.add(new SburbConnection().read((NBTTagCompound) list.tagAt(i)));
+				
+				SessionHandler.load(nbt.getTagList("sessions"));
 				//Debug.print(connections.size()+" connection(s) loaded");
 			}
 		}
@@ -451,13 +449,9 @@ public class SkaianetHandler {
 		list.add(resumingClients.containsKey(player));
 		list.add(resumingServers.containsKey(player));
 		
-		int i = 0;
-		for(String s : serversOpen.keySet())
-			if(SessionHandler.canJoin(player, s)){
-				list.add(s);
-				i++;
-			}
-		list.add(3, i);
+		List playerList = SessionHandler.getServerList(player);
+		list.add(playerList.size());
+		list.addAll(playerList);
 		
 		for(SburbConnection c : connections)
 			if(c.getClientName().equals(player) || c.getServerName().equals(player))
@@ -559,8 +553,11 @@ public class SkaianetHandler {
 				c.isMain = true;
 				c.clientName = username;
 				c.serverName = username;
-				if(SessionHandler.registerConnection(c))
+				if(SessionHandler.onConnectionCreated(c) == null) {
+					SessionHandler.onFirstItemGiven(c);
+					SessionHandler.onGameEntered(c);
 					connections.add(c);
+				}
 			} else giveItems(username);
 		}
 		c.clientHomeLand = dimensionId;
@@ -578,18 +575,6 @@ public class SkaianetHandler {
 		c.centerX = (int)player.posX;
 		c.centerZ = (int)player.posZ;
 		updateAll();
-	}
-	
-	static boolean onConnectionCreated(SburbConnection connection) {
-		return false;
-	}
-	
-	static void onFirstItemGiven(SburbConnection connection) {
-		
-	}
-	
-	static void onGameEntered(SburbConnection connection) {
-		
 	}
 	
 }

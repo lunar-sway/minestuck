@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatMessageComponent;
@@ -90,18 +91,18 @@ public class Session {
 	
 	/**
 	 * Writes this session to an nbt tag.
+	 * Note that this will only work as long as <code>SkaianetHandler.connections</code> remains unmodified.
 	 * @return An NBTTagCompound representing this session.
 	 */
 	NBTTagCompound write() {
 		NBTTagCompound nbt = new NBTTagCompound();
-		NBTTagList list = new NBTTagList();
-		for(SburbConnection c : connections)
-			list.appendTag(c.write());
-		nbt.setTag("connections", list);
+		int[] list = new int[connections.size()];
+		for(int i = 0; i < list.length; i++)
+			list[i] = SkaianetHandler.connections.indexOf(connections.get(i));
+		nbt.setIntArray("connections", list);
 		nbt.setInteger("skaiaId", skaiaId);
 		nbt.setInteger("derseId", derseId);
 		nbt.setInteger("prospitId", prospitId);
-		nbt.setBoolean("completed", completed);
 		return nbt;
 	}
 	
@@ -111,10 +112,16 @@ public class Session {
 	 * @return This.
 	 */
 	Session read(NBTTagCompound nbt) {
-		NBTTagList list = nbt.getTagList("connections");
-		for(int i = 0; i < list.tagCount(); i++)
-			connections.add(new SburbConnection().read((NBTTagCompound) list.tagAt(i)));
-		SkaianetHandler.connections.addAll(this.connections);
+		if(nbt.getTag("connections") instanceof NBTTagIntArray)	//New nbt format
+			for(int i : nbt.getIntArray("connections"))
+				connections.add(SkaianetHandler.connections.get(i));
+		else {	//old nbt format
+			NBTTagList list = nbt.getTagList("connections");
+			for(int i = 0; i < list.tagCount(); i++)
+				connections.add(new SburbConnection().read((NBTTagCompound) list.tagAt(i)));
+			SkaianetHandler.connections.addAll(this.connections);
+		}
+		checkIfCompleted();
 		return this;
 	}
 	

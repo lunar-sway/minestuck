@@ -255,11 +255,12 @@ public class Minestuck
 	public static boolean hardMode = false;	//Future config option. Currently alters how easy the entry items are accessible after the first time. The machines cost 100 build and there will only be one card if this is true.
 	public static boolean generateCruxiteOre; //If set to false, Cruxite Ore will not generate
 	public static boolean privateComputers;	//If a player should be able to use other players computers or not.
-	public static boolean acceptTitleCollision;	//Allows combinations like "Heir of Hope" and "Seer of Hope" to exist in the same session. Still not accepting duplicates.
+	public static boolean acceptTitleCollision;	//Allows combinations like "Heir of Hope" and "Seer of Hope" to exist in the same session. Will try to avoid duplicates.
 	public static boolean generateSpecialClasses;	//Allow generation of the "Lord" and "Muse" classes.
 	public static boolean globalSession;	//Makes only one session possible. Recommended to be true on small servers. Will be ignored when loading a world that already got 2+ sessions.
 	public static boolean easyDesignex; //Makes it so you don't need to encode individual cards before combining them.
 	public static boolean toolTipEnabled;
+	public static boolean forceMaxSize;	//If it should prevent players from joining a session if there is no possible combinations left.
 	public static String privateMessage;
 	public static int artifactRange; //The range of the Cruxite Artifact in teleporting zones over to the new land
 	public static int overworldEditRange;
@@ -410,6 +411,8 @@ public class Minestuck
 		artifactRange = config.get("General", "artifcatRange", 30).getInt();
 		MinestuckStatsHandler.idOffset = config.get("General", "statisticIdOffset", 413).getInt();
 		toolTipEnabled = config.get("General", "toolTipEnabled", false).getBoolean(false);
+		hardMode = config.get("General", "hardMode", false).getBoolean(false);
+		forceMaxSize = config.get("General", "forceMaxSize", false).getBoolean(false);
 		useInventoryChanged = config.get("Effiency and Compability", "useInventoryChanged", true).getBoolean(true);
 		config.save();
 		
