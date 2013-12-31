@@ -47,6 +47,7 @@ public class ModelOgre extends ModelBase
 		rightLeg.setRotationPoint(-13F, 52F + offsetY, 0F);
 		rightLeg.mirror = true;
 	}
+	@Override
 	public void render(Entity entity, float par2, float par3, float par4, float par5, float par6, float par7)
 	{
 		this.setRotationAngles(par2, par3, par4, par5, par6, par7, entity);
@@ -71,7 +72,6 @@ public class ModelOgre extends ModelBase
 		this.rightLeg.rotateAngleX = MathHelper.cos(par1 * 0.6662F + (float)Math.PI) * 0.7F * par2;
 		this.leftArm.rotateAngleX = MathHelper.cos(par1 * 0.6662F) * 1.2F * par2 * 0.5F;
 		this.rightArm.rotateAngleX = MathHelper.cos(par1 * 0.6662F + (float)Math.PI) * 1.2F * par2 * 0.5F;
-
 	}
 
 }

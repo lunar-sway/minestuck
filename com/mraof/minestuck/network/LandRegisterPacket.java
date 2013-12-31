@@ -10,6 +10,7 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 import cpw.mods.fml.common.network.Player;
@@ -34,7 +35,7 @@ public class LandRegisterPacket extends MinestuckPacket
 	}
 
 	@Override
-	public MinestuckPacket consumePacket(byte[] data, Side side) 
+	public MinestuckPacket consumePacket(byte[] data) 
 	{
 		ByteArrayDataInput dat = ByteStreams.newDataInput(data);
 		landDimensions = new byte[data.length];
@@ -53,7 +54,7 @@ public class LandRegisterPacket extends MinestuckPacket
 		for(byte dimensionId : landDimensions)
 		{
 			MinestuckSaveHandler.lands.add((byte)dimensionId);
-			//Debug.print(dimensionId);
+			Debug.printf("Adding Land dimension with id of %d", dimensionId);
 			if(!DimensionManager.isDimensionRegistered(dimensionId))
 				DimensionManager.registerDimension(dimensionId, Minestuck.landProviderTypeId);
 		}

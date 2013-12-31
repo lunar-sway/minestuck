@@ -120,7 +120,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = "Minestuck", name = "Minestuck", version = "@VERSION@")
+@Mod(modid = "Minestuck", name = "Minestuck", version = "57")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false, packetHandler = MinestuckPacketHandler.class, channels = {"Minestuck"})
 public class Minestuck
 {
@@ -645,7 +645,7 @@ public class Minestuck
 			if(DimensionManager.isDimensionRegistered(dim))
 			{
 				DimensionManager.unregisterDimension(dim);
-//				Debug.print("Unregistering " + dim);
+				Debug.print("Server about to start, Unregistering " + dim);
 			}
 			iterator.remove();
 		}

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import com.mraof.minestuck.Minestuck;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -32,6 +34,7 @@ public class ItemMinestuckBucket extends ItemBucket
 	{
 		super(par1, 0);
 		setUnlocalizedName("minestuckBucket");
+		setCreativeTab(Minestuck.tabMinestuck);
 	}
 
 	/**

@@ -37,7 +37,7 @@ public class ServerEditPacket extends MinestuckPacket {
 	}
 
 	@Override
-	public MinestuckPacket consumePacket(byte[] data, Side side) {
+	public MinestuckPacket consumePacket(byte[] data) {
 		if(data.length == 0)
 			return this;
 		ByteArrayDataInput input = ByteStreams.newDataInput(data);
