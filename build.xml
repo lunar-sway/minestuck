@@ -29,7 +29,8 @@
 	<property name="ccc.version"         value="0.9.0.7" />
 	<property name="nei.version"         value="1.6.1.8" />
 
-	<available property="forge-exists" file="${download.dir}/${forge.name}"/>
+	<available property="forge-exists" file="${forge.dir}" type="dir"/>
+	<available property="nei-exists" file="${download.dir}/libs/" type="dir"/>
 
 	<condition property="out-of-date">
 		<not>
@@ -64,7 +65,7 @@
 	</target>
 
 	<!-- download libraries -->
-	<target name="download-libs" >
+	<target name="download-libs" unless="nei-exists">
 		<delete dir="${libs.dir}"/>
 		<mkdir dir="${libs.dir}"/>
 		<!--
