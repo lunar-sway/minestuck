@@ -19,6 +19,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.Debug;
@@ -147,7 +148,7 @@ public class BlockComputerOn extends Block implements ITileEntityProvider {
 			}
 			
 			if(world.isRemote && SkaiaClient.requestData((TileEntityComputer) tileEntity))
-				player.openGui(Minestuck.instance, 1, world, x, y, z);
+				player.openGui(Minestuck.instance, GuiHandler.GuiId.COMPUTER.ordinal(), world, x, y, z);
 			
 			return true;
 		}

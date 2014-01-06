@@ -1,6 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.WorldServer;
@@ -12,22 +13,34 @@ import com.mraof.minestuck.util.Teleport;
 public class TileEntityGatePortal extends TileEntity implements ITeleporter
 {
 	public int destinationDimension;
+	public int destinationX, destinationY, destinationZ;
 	@Override
 	public void readFromNBT(NBTTagCompound par1nbtTagCompound) 
 	{
-		//do not load invalid GatePortals
 		super.readFromNBT(par1nbtTagCompound);
 		this.destinationDimension = par1nbtTagCompound.getInteger("Destination");
+		this.destinationX = par1nbtTagCompound.getInteger("DestinationX");
+		this.destinationY = par1nbtTagCompound.getInteger("DestinationY");
+		this.destinationZ = par1nbtTagCompound.getInteger("DestinationZ");
 	}
 	@Override
 	public void writeToNBT(NBTTagCompound par1nbtTagCompound) 
 	{
 		super.writeToNBT(par1nbtTagCompound);
 		par1nbtTagCompound.setInteger("Destination", this.destinationDimension);
+		par1nbtTagCompound.setInteger("DestinationX", destinationX);
+		par1nbtTagCompound.setInteger("DestinationY", destinationY);
+		par1nbtTagCompound.setInteger("DestinationZ", destinationZ);
 	}
 	public void teleportEntity(Entity entity)
 	{
-		Teleport.teleportEntity(entity, this.destinationDimension, this);
+		entity.timeUntilPortal = entity.getPortalCooldown();
+		if(destinationDimension != this.worldObj.provider.dimensionId)
+			Teleport.teleportEntity(entity, this.destinationDimension, this);
+		if(entity instanceof EntityPlayerMP)
+			((EntityPlayerMP)entity).playerNetServerHandler.setPlayerLocation(destinationX, destinationY, destinationZ, entity.rotationYaw, entity.rotationPitch);
+		else
+			entity.setPosition(destinationX, destinationY, destinationZ);
 	}
 	public void makeDestination(Entity entity, WorldServer worldserver, WorldServer worldserver1)
 	{
@@ -46,6 +59,14 @@ public class TileEntityGatePortal extends TileEntity implements ITeleporter
 					
 			}
 		}
+	}
+	@Override
+	public void validate() 
+	{
+		super.validate();
+		this.destinationX = this.xCoord;
+		this.destinationY = this.yCoord;
+		this.destinationZ = this.zCoord;
 	}
 
 }
