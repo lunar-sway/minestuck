@@ -22,9 +22,6 @@ import com.mraof.minestuck.Minestuck;
  */
 public class Session {
 	
-	/**
-	 * 
-	 */
 	List<SburbConnection> connections;
 	
 	/**
@@ -96,10 +93,10 @@ public class Session {
 	 */
 	NBTTagCompound write() {
 		NBTTagCompound nbt = new NBTTagCompound();
-		int[] list = new int[connections.size()];
-		for(int i = 0; i < list.length; i++)
-			list[i] = SkaianetHandler.connections.indexOf(connections.get(i));
-		nbt.setIntArray("connections", list);
+		NBTTagList list = new NBTTagList();
+		for(SburbConnection c : connections)
+			list.appendTag(c.write());
+		nbt.setTag("connections", list);
 		nbt.setInteger("skaiaId", skaiaId);
 		nbt.setInteger("derseId", derseId);
 		nbt.setInteger("prospitId", prospitId);
@@ -112,15 +109,11 @@ public class Session {
 	 * @return This.
 	 */
 	Session read(NBTTagCompound nbt) {
-		if(nbt.getTag("connections") instanceof NBTTagIntArray)	//New nbt format
-			for(int i : nbt.getIntArray("connections"))
-				connections.add(SkaianetHandler.connections.get(i));
-		else {	//old nbt format
-			NBTTagList list = nbt.getTagList("connections");
-			for(int i = 0; i < list.tagCount(); i++)
-				connections.add(new SburbConnection().read((NBTTagCompound) list.tagAt(i)));
-			SkaianetHandler.connections.addAll(this.connections);
-		}
+		NBTTagList list = nbt.getTagList("connections");
+		for(int i = 0; i < list.tagCount(); i++)
+			connections.add(new SburbConnection().read((NBTTagCompound) list.tagAt(i)));
+		SkaianetHandler.connections.addAll(this.connections);
+		
 		checkIfCompleted();
 		return this;
 	}

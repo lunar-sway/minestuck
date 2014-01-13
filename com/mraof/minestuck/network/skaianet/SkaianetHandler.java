@@ -37,6 +37,7 @@ import com.mraof.minestuck.util.UsernameHandler;
 
 /**
  * This class handles server sided stuff about the sburb connection network.
+ * This class also handles the main saving and loading.
  * @author kirderf1
  */
 public class SkaianetHandler {
@@ -81,7 +82,7 @@ public class SkaianetHandler {
 	 * @param player
 	 */
 	public static void playerConnected(String player){
-		Debug.print("[SKAIANET] Player connected:"+player);
+		//Debug.print("[SKAIANET] Player connected:"+player);
 		String[] s = new String[5];
 		s[0] = UsernameHandler.encode(player);
 		infoToSend.put(player, s);
@@ -172,7 +173,7 @@ public class SkaianetHandler {
 						sc.latestmessage.put(1, "computer.messageClosed");
 						sc.worldObj.markBlockForUpdate(sc.xCoord, sc.yCoord, sc.zCoord);
 					}
-					SessionHandler.closeConnection(c.getClientName(), c.getServerName());
+					SessionHandler.onConnectionClosed(c, true);
 					ServerEditHandler.onDisconnect(c);
 					if(c.isMain)
 						c.isActive = false;	//That's everything that is neccesary.
@@ -282,7 +283,7 @@ public class SkaianetHandler {
 		updatePlayer(p0);
 	}
 	
-	public static void saveData(File file0, File file1){
+	public static void saveData(File file){
 		checkData();
 		
 		NBTTagCompound nbt = new NBTTagCompound();
@@ -293,95 +294,61 @@ public class SkaianetHandler {
 		
 		nbt.setTag("sessions", list);
 		
-		try {
-			CompressedStreamTools.writeCompressed(nbt, new FileOutputStream(file0));
-		} catch (IOException e) {
-			e.printStackTrace();
+		String[] s = {"serversOpen","resumingClients","resumingServers"};
+		Map<String, ComputerData>[] maps = new Map[]{serversOpen, resumingClients, resumingServers};
+		for(int i = 0; i < 3; i++) {
+			list = new NBTTagList();
+			for(ComputerData c:maps[i].values())
+				list.appendTag(c.write());
+			nbt.setTag(s[i], list);
 		}
 		
-		//Debug.print(connections.size()+" connection"+(connections.size() == 1?"":"s")+" saved");
-		
-		nbt = new NBTTagCompound();
-		
-		NBTTagList ls = new NBTTagList("serversOpen");
-		for(ComputerData c:serversOpen.values())
-			ls.appendTag(c.write());
-		nbt.setTag("serversOpen", ls);
-		
-		ls = new NBTTagList("resumingClients");
-		for(ComputerData c:resumingClients.values())
-			ls.appendTag(c.write());
-		nbt.setTag("resumingClients", ls);
-		
-		ls = new NBTTagList("resumingServers");
-		for(ComputerData c:resumingClients.values())
-			ls.appendTag(c.write());
-		nbt.setTag("resumingServers", ls);
-		
 		try {
-			CompressedStreamTools.writeCompressed(nbt, new FileOutputStream(file1));
+			CompressedStreamTools.writeCompressed(nbt, new FileOutputStream(file));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static void loadData(File file0, File file1){
+	public static void loadData(File file){
 		connections.clear();
 		serversOpen.clear();	
 		resumingClients.clear();
 		resumingServers.clear();
 		SessionHandler.sessions.clear();
-		if(file0.exists()){
+		if(file.exists()){
 			NBTTagCompound nbt = null;
 			try{
-				nbt = CompressedStreamTools.readCompressed(new FileInputStream(file0));
+				nbt = CompressedStreamTools.readCompressed(new FileInputStream(file));
 				
 			} catch(IOException e){
 				e.printStackTrace();
 				Debug.print("[SKAIANET] Trying to load using the old format instead.");
-				loadOld(file0);
+				loadOld(file);
 			}
 			if(nbt != null){
 				NBTTagList list = nbt.getTagList("connections");
 				for(int i = 0; i < list.tagCount(); i++)
 					connections.add(new SburbConnection().read((NBTTagCompound) list.tagAt(i)));
 				
-				SessionHandler.load(nbt.getTagList("sessions"));
-				//Debug.print(connections.size()+" connection(s) loaded");
+				list = nbt.getTagList("sessions");
+				for(int i = 0; i < list.tagCount(); i++)
+					SessionHandler.sessions.add(new Session().read((NBTTagCompound) list.tagAt(i)));
+				
+				String[] s = {"serversOpen","resumingClients","resumingServers"};
+				Map<String, ComputerData>[] maps = new Map[]{serversOpen, resumingClients, resumingServers};
+				for(int e = 0; e < 3; e++) {
+					list = (NBTTagList)nbt.getTag(s[e]);
+					for(int i = 0; i < list.tagCount(); i++){
+						NBTTagCompound cmp = (NBTTagCompound)list.tagAt(i);
+						ComputerData c = new ComputerData();
+						c.read(cmp);
+						maps[e].put(c.owner, c);
+					}
+				}
 			}
 		}
 		
-		if(file1.exists()){
-			NBTTagCompound nbt = null;
-			try{
-				nbt = CompressedStreamTools.readCompressed(new FileInputStream(file1));
-			}catch(IOException e){
-				e.printStackTrace();
-			}
-			if(nbt != null){
-				NBTTagList ls = (NBTTagList)nbt.getTag("serversOpen");
-				for(int i = 0; i < ls.tagCount(); i++){
-					NBTTagCompound cmp = (NBTTagCompound)ls.tagAt(i);
-					ComputerData c = new ComputerData();
-					c.read(cmp);
-					serversOpen.put(c.owner, c);
-				}
-				ls = (NBTTagList)nbt.getTag("resumingClients");
-				for(int i = 0; i < ls.tagCount(); i++){
-					NBTTagCompound cmp = (NBTTagCompound)ls.tagAt(i);
-					ComputerData c = new ComputerData();
-					c.read(cmp);
-					resumingClients.put(c.owner, c);
-				}
-				ls = (NBTTagList)nbt.getTag("resumingServers");
-				for(int i = 0; i < ls.tagCount(); i++){
-					NBTTagCompound cmp = (NBTTagCompound)ls.tagAt(i);
-					ComputerData c = new ComputerData();
-					c.read(cmp);
-					resumingServers.put(c.owner, c);
-				}
-			}
-		}
 		SessionHandler.serverStarted();
 	}
 	
@@ -490,7 +457,7 @@ public class SkaianetHandler {
 					if(!c.isMain)
 						iter2.remove();
 					else c.isActive = false;
-					SessionHandler.closeConnection(c.getClientName(), c.getServerName());
+					SessionHandler.onConnectionClosed(c, true);
 					ServerEditHandler.onDisconnect(c);
 					
 					if(cc != null){
@@ -555,12 +522,12 @@ public class SkaianetHandler {
 				c.serverName = username;
 				if(SessionHandler.onConnectionCreated(c) == null) {
 					SessionHandler.onFirstItemGiven(c);
-					SessionHandler.onGameEntered(c);
 					connections.add(c);
 				}
 			} else giveItems(username);
 		}
 		c.clientHomeLand = dimensionId;
+		SessionHandler.onGameEntered(c);
 		
 		for(SburbConnection sc : connections) {
 			if(sc.isActive){

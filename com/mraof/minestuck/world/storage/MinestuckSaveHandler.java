@@ -40,7 +40,7 @@ public class MinestuckSaveHandler
 				e.printStackTrace();
 			}
 		}
-		SkaianetHandler.saveData(event.world.getSaveHandler().getMapFileFromName("connectionList"),event.world.getSaveHandler().getMapFileFromName("waitingConnections"));
+		SkaianetHandler.saveData(event.world.getSaveHandler().getMapFileFromName("connectionList"));
 		
 		File gristcache = event.world.getSaveHandler().getMapFileFromName("gristCache");
 		if(gristcache != null) {

@@ -682,7 +682,7 @@ public class Minestuck
 				e.printStackTrace();
 			}
 		}
-		SkaianetHandler.loadData(event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("connectionList"),event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("waitingConnections"));
+		SkaianetHandler.loadData(event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("connectionList"));
 		
 		File gristcache = event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("gristCache");
 		if(gristcache.exists()) {

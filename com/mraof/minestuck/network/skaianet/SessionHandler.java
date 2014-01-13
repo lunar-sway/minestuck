@@ -13,6 +13,7 @@ import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.util.EnumChatFormatting;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.Debug;
 
 /**
  * Handles session related stuff like title generation, consort choosing, and other session management stuff.
@@ -44,14 +45,13 @@ public class SessionHandler {
 	public static void serverStarted() {
 		singleSession = Minestuck.globalSession;
 		if(!Minestuck.globalSession){
-//			split();
-			ChatMessageComponent message = new ChatMessageComponent();
-			message.addText("[MINESTUCK] Non-global session worlds is currently not yet a finished feature.");
-			message.setColor(EnumChatFormatting.YELLOW);
-			MinecraftServer.getServer().sendChatToPlayer(message);
-			singleSession = true;
+			split();
 		}
-		else mergeAll();
+		else {
+			mergeAll();
+			if(sessions.size() == 0)
+				sessions.add(new Session());
+		}
 	}
 	
 	/**
@@ -117,18 +117,18 @@ public class SessionHandler {
 	static String merge(Session cs, Session ss, SburbConnection sb) {
 		String s = canMerge(cs, ss);
 		if(s == null) {
-			ss.connections.remove(sb);
+			sessions.remove(ss);
+			cs.connections.add(sb);
 			cs.connections.addAll(ss.connections);
 			if(cs.skaiaId == 0) cs.skaiaId = ss.skaiaId;
 			if(cs.prospitId == 0) cs.prospitId = ss.prospitId;
 			if(cs.derseId == 0) cs.derseId = ss.derseId;
-			return null;
 		}
 		return s;
 	}
 	
 	static String canMerge(Session s0, Session s1){
-		if(s0.getPlayerList().size()+s1.getPlayerList().size()>maxSize)
+		if(Minestuck.forceMaxSize && s0.getPlayerList().size()+s1.getPlayerList().size()>maxSize)
 			return "session.bothSessionsFull";
 		return null;
 	}
@@ -170,33 +170,12 @@ public class SessionHandler {
 				}
 			} while(found);
 			s.checkIfCompleted();
-			sessions.add(s);
+			if(s.connections.size() > 0)
+				sessions.add(s);
 			first = false;
 		}
 	}
 	
-	//Being replaced
-	static void closeConnection(String client, String server){
-		Iterator<Session> iter0 = sessions.iterator();
-		while(iter0.hasNext()){
-			Session s = iter0.next();
-			Iterator<SburbConnection> iter1 = s.connections.iterator();
-			while(iter1.hasNext()){
-				SburbConnection c = iter1.next();
-				if(c.getClientName().equals(client) && c.getServerName().equals(server)){
-					if(c.isMain){
-						c.isActive = false;
-						return;
-					} else iter1.remove();
-					break;
-				}
-			}
-			if(s.connections.size() == 0)
-				iter0.remove();
-		}
-	}
-	
-	//Empty
 	static void generateTitle(String player) {
 		
 	}
@@ -232,6 +211,7 @@ public class SessionHandler {
 			Session sClient = getPlayerSession(connection.getClientName()), sServer = getPlayerSession(connection.getServerName());
 			if(sClient == null && sServer == null) {
 				Session s = new Session();
+				sessions.add(s);
 				s.connections.add(connection);
 				s.checkIfCompleted();	//In case a player connects to himself.
 				return null;
@@ -251,9 +231,12 @@ public class SessionHandler {
 	 * @param normal If the connection was closed by normal means. (includes everything but getting crushed by a meteor)
 	 */
 	static void onConnectionClosed(SburbConnection connection, boolean normal) {
-		if(!connection.isMain && !singleSession)
-			split(getPlayerSession(connection.getClientName()));
-		else if(!normal) {
+		if(!connection.isMain && !singleSession) {
+			Session s = getPlayerSession(connection.getClientName());
+			if(s.connections.size() == 1)
+				sessions.remove(s);
+			else split(s);
+		} else if(!normal) {
 			if(SkaianetHandler.getAssociatedPartner(connection.getClientName(), false) != null) {
 				SburbConnection c = SkaianetHandler.getConnection(SkaianetHandler.getAssociatedPartner(connection.getClientName(), false), connection.getClientName());
 				if(c == null) {
@@ -269,13 +252,8 @@ public class SessionHandler {
 	}
 	
 	static void onGameEntered(SburbConnection connection) {
+		generateTitle(connection.getClientName());
 		
-	}
-	
-	static void load(NBTTagList list) {
-		for(int i = 0; i < list.tagCount(); i++) {
-			sessions.add(new Session().read((NBTTagCompound) list.tagAt(i)));
-		}
 	}
 	
 	static List getServerList(String client) {

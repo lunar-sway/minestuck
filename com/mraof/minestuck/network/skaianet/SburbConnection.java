@@ -56,14 +56,7 @@ public class SburbConnection {
 	public boolean enteredGame(){return enteredGame;}
 	public boolean isMain(){return isMain;}
 	public int getClientDimension() {return clientHomeLand;}
-	
-	/**
-	 * Beware of changed use!
-	 * @return Now returns an boolean array containing if it have given certain items or not.
-	 */
-	public boolean[] givenItems(){
-		return givenItemList;
-	}
+	public boolean[] givenItems(){return givenItemList;}
 	
 	public byte[] getBytes() {
 		ByteArrayDataOutput data = ByteStreams.newDataOutput();
