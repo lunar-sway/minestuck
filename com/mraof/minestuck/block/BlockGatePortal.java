@@ -43,12 +43,7 @@ public class BlockGatePortal extends BlockContainer
 		if (par5Entity.ridingEntity == null && par5Entity.riddenByEntity == null && !par1World.isRemote && par5Entity.timeUntilPortal == 0)
 		{
 			TileEntityGatePortal portal = (TileEntityGatePortal) par1World.getBlockTileEntity(x, y, z);
-			if(par5Entity.dimension != portal.destinationDimension)
-			{
 				portal.teleportEntity(par5Entity);
-			}
-			else
-				par1World.setBlockToAir(x, y, z);
 		}
 	}
 

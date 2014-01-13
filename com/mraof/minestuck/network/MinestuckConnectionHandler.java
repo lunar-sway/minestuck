@@ -2,7 +2,7 @@ package com.mraof.minestuck.network;
 
 import java.util.Iterator;
 
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.NetLoginHandler;
 import net.minecraft.network.packet.NetHandler;
@@ -12,7 +12,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.DimensionManager;
 
 import com.mraof.minestuck.network.MinestuckPacket.Type;
-import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 import cpw.mods.fml.common.network.IConnectionHandler;
@@ -21,19 +22,26 @@ import cpw.mods.fml.common.network.Player;
 public class MinestuckConnectionHandler implements IConnectionHandler {
 
 	@Override
-	public void playerLoggedIn(Player player, NetHandler netHandler,INetworkManager manager) {}
+	public void playerLoggedIn(Player player, NetHandler netHandler,INetworkManager manager) {
+		Debug.print("This is when playerLoggedIn happens");
+//		MinestuckPlayerTracker.updateLands((EntityPlayer) player);
+	}
 
 	@Override
 	public String connectionReceived(NetLoginHandler netHandler,INetworkManager manager) {
-//		byte[] lands = new byte[MinestuckSaveHandler.lands.size()];	Done in the player tracker already?
-//		for(int i = 0; i < lands.length; i++)
-//			lands[i] = MinestuckSaveHandler.lands.get(i);
-//		Packet250CustomPayload packet = new Packet250CustomPayload();
-//		packet.channel = "Minestuck";
-//		packet.data = MinestuckPacket.makePacket(Type.LANDREGISTER, lands);
-//		packet.length = packet.data.length;
-//		
-//		manager.addToSendQueue(packet);
+		Debug.print("This is when connectionReceived happens");
+		Debug.print("Connection Recieved, sending lands");
+		byte[] lands = new byte[MinestuckSaveHandler.lands.size()];
+		for(int i = 0; i < lands.length; i++)
+			lands[i] = MinestuckSaveHandler.lands.get(i);
+		Packet250CustomPayload packet = new Packet250CustomPayload();
+		packet.channel = "Minestuck";
+		packet.data = MinestuckPacket.makePacket(Type.LANDREGISTER, lands);
+		packet.length = packet.data.length;
+		
+		manager.addToSendQueue(packet);
+//		Debug.printf("The player is %s", netHandler.getPlayer() == null ? "null" : netHandler.getPlayer().username);
+//		MinestuckPlayerTracker.updateLands(netHandler.getPlayer());
 		return null;
 	}
 
@@ -46,7 +54,7 @@ public class MinestuckConnectionHandler implements IConnectionHandler {
 			if(DimensionManager.isDimensionRegistered(dim))
 			{
 				DimensionManager.unregisterDimension(dim);
-//				Debug.print("Unregistering " + dim);
+				Debug.print("Connection opened, Unregistering " + dim);
 			}
 			iterator.remove();
 		}

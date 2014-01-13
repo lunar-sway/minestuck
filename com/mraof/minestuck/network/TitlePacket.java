@@ -35,7 +35,7 @@ public class TitlePacket extends MinestuckPacket
 	}
 
 	@Override
-	public MinestuckPacket consumePacket(byte[] data, Side side) 
+	public MinestuckPacket consumePacket(byte[] data) 
 	{
 		ByteArrayDataInput dat = ByteStreams.newDataInput(data);
 		heroClass = dat.readInt();

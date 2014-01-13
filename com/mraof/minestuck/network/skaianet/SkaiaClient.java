@@ -13,6 +13,7 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import com.google.common.io.ByteArrayDataInput;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiComputer;
+import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.SkaianetInfoPacket;
@@ -153,7 +154,7 @@ public class SkaiaClient {
 			((GuiComputer)gui).updateGui();
 		else if(te != null && te.owner.equals(data.player)){
 			if(!Minecraft.getMinecraft().thePlayer.isSneaking())
-				Minecraft.getMinecraft().thePlayer.openGui(Minestuck.instance, 1, te.worldObj, te.xCoord, te.yCoord, te.zCoord);
+				Minecraft.getMinecraft().thePlayer.openGui(Minestuck.instance, GuiHandler.GuiId.COMPUTER.ordinal(), te.worldObj, te.xCoord, te.yCoord, te.zCoord);
 			te = null;
 		}
 	}

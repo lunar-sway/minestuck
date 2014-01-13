@@ -19,6 +19,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 
 import cpw.mods.fml.relauncher.Side;
@@ -96,7 +97,7 @@ public class BlockMachine extends BlockContainer {
 		}
 
 
-		player.openGui(Minestuck.instance, 0, world, x, y, z);
+		player.openGui(Minestuck.instance, GuiHandler.GuiId.MACHINE.ordinal(), world, x, y, z);
 		return true;
 	}
 

@@ -652,7 +652,7 @@ public class Minestuck
 			if(DimensionManager.isDimensionRegistered(dim))
 			{
 				DimensionManager.unregisterDimension(dim);
-//				Debug.print("Unregistering " + dim);
+				Debug.print("Server about to start, Unregistering " + dim);
 			}
 			iterator.remove();
 		}

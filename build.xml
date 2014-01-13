@@ -20,16 +20,17 @@
 	<property name="mcpsrc.dir"          value="${mcp.dir}/src/minecraft"/>
 
 	<property name="mc.version"          value="1.6.4"/>
-	<property name="forge.version"       value="9.11.1.916"/>
+	<property name="forge.version"       value="9.11.1.953"/>
 	<!-- <property name="mod.version"         value="0.0.7"/> -->
 	<property name="mod.name"	         value="Minestuck"/>
 
-	<property name="forge.name"          value="minecraftforge-src-${mc.version}-${forge.version}.zip"/>
+	<property name="forge.name"          value="forge-${mc.version}-${forge.version}-src.zip"/>
 
 	<property name="ccc.version"         value="0.9.0.7" />
-	<property name="nei.version"         value="1.6.1.5_d1" />
+	<property name="nei.version"         value="1.6.1.8" />
 
-	<available property="forge-exists" file="${download.dir}/${forge.name}"/>
+	<available property="forge-exists" file="${forge.dir}" type="dir"/>
+	<available property="nei-exists" file="${download.dir}/libs/" type="dir"/>
 
 	<condition property="out-of-date">
 		<not>
@@ -60,11 +61,11 @@
 
 	<!-- Download forge (if it doesn't exist) -->
 	<target name="download-forge" unless="forge-exists" >
-		<get src="http://files.minecraftforge.net/${forge.name}" dest="${download.dir}" usetimestamp="True"/>
+		<get src="http://files.minecraftforge.net/maven/net/minecraftforge/forge/${mc.version}-${forge.version}/${forge.name}" dest="${download.dir}" usetimestamp="True"/>
 	</target>
 
 	<!-- download libraries -->
-	<target name="download-libs" >
+	<target name="download-libs" unless="nei-exists">
 		<delete dir="${libs.dir}"/>
 		<mkdir dir="${libs.dir}"/>
 		<!--

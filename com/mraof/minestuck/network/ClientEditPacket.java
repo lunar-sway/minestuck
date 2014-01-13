@@ -28,7 +28,7 @@ public class ClientEditPacket extends MinestuckPacket {
 	}
 
 	@Override
-	public MinestuckPacket consumePacket(byte[] data, Side side) {
+	public MinestuckPacket consumePacket(byte[] data) {
 		if(data.length == 0)
 			return this;
 		ByteArrayDataInput dat = ByteStreams.newDataInput(data);

@@ -20,7 +20,7 @@ public class ModelGiclops extends ModelBase {
 	private ModelRenderer tail;
 	float scaling = 2.0F;
 
-	public ModelGiclops() 
+	public ModelGiclops()
 	{
 		float offsetY = -96 + 24 / scaling;
 		this.textureWidth = 256;

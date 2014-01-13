@@ -11,8 +11,14 @@ import com.mraof.minestuck.tileentity.TileEntityMachine;
 
 import cpw.mods.fml.common.network.IGuiHandler;
 
-public class GuiHandler implements IGuiHandler {
-
+public class GuiHandler implements IGuiHandler 
+{
+	public static enum GuiId
+	{
+		MACHINE,
+		COMPUTER,
+		GRISTCACHE
+	}
     @Override
     public Object getServerGuiElement(int id, EntityPlayer player, World world,
                     int x, int y, int z) {
@@ -28,13 +34,13 @@ public class GuiHandler implements IGuiHandler {
     public Object getClientGuiElement(int id, EntityPlayer player, World world,
                     int x, int y, int z) {
             TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
-            if(tileEntity instanceof TileEntityMachine && id == 0){
+            if(tileEntity instanceof TileEntityMachine && id == GuiId.MACHINE.ordinal()){
                     return new GuiMachine(player.inventory, (TileEntityMachine) tileEntity);
             }
-            if(tileEntity instanceof TileEntityComputer && id == 1){
+            if(tileEntity instanceof TileEntityComputer && id == GuiId.COMPUTER.ordinal()){
                 return new GuiComputer(Minecraft.getMinecraft(),(TileEntityComputer) tileEntity);
             }
-            if(id == 2)
+            if(id == GuiId.GRISTCACHE.ordinal())
             	return new GuiGristCache(Minecraft.getMinecraft());
             return null;
 
