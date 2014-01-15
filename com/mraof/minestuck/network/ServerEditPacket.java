@@ -8,6 +8,7 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.mraof.minestuck.editmode.ClientEditHandler;
+import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 
 import cpw.mods.fml.common.network.Player;
@@ -44,7 +45,7 @@ public class ServerEditPacket extends MinestuckPacket {
 		target = input.readLine();
 		posX = input.readInt();
 		posZ = input.readInt();
-		givenItems = new boolean[ServerEditHandler.GIVEABLE_ITEMS];
+		givenItems = new boolean[DeployList.getItemList().size()+1];
 		for(int i = 0; i < givenItems.length; i++) {
 			givenItems[i] = input.readBoolean();
 		}

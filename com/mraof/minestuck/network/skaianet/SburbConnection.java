@@ -5,7 +5,7 @@ import net.minecraft.nbt.NBTTagList;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.editmode.DeployList;
 
 public class SburbConnection {
 	
@@ -25,7 +25,7 @@ public class SburbConnection {
 	 * 0-3 = the machines
 	 * 4 = the card
 	 */
-	boolean[] givenItemList = new boolean[ServerEditHandler.GIVEABLE_ITEMS];
+	boolean[] givenItemList = new boolean[DeployList.getItemList().size()+1];	//Plus one because the card is a special case.
 	
 	//Only used by the edit handler
 	public int centerX, centerZ;

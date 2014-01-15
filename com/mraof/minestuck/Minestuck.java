@@ -38,6 +38,7 @@ import com.mraof.minestuck.block.OreCruxite;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.editmode.ClientEditHandler;
+import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.EntityDecoy;
 import com.mraof.minestuck.entity.carapacian.EntityBlackBishop;
@@ -120,7 +121,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = "Minestuck", name = "Minestuck", version = "@VERSION@")
+@Mod(modid = "Minestuck", name = "Minestuck", version = "60")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false, packetHandler = MinestuckPacketHandler.class, channels = {"Minestuck"})
 public class Minestuck
 {
@@ -266,9 +267,6 @@ public class Minestuck
 	public static int overworldEditRange;
 	public static int landEditRange;
 
-	// Effiency and compability
-	public static boolean useInventoryChanged;	//If the EditHandler will check the inventory each tick, or use playerInventory.inventoryChanged, that may cause instability with other mods using it.
-	
 	// The instance of your mod that Forge uses.
 	@Instance("Minestuck")
 	public static Minestuck instance;
@@ -413,7 +411,6 @@ public class Minestuck
 		toolTipEnabled = config.get("General", "toolTipEnabled", false).getBoolean(false);
 		hardMode = config.get("General", "hardMode", false).getBoolean(false);
 		forceMaxSize = config.get("General", "forceMaxSize", false).getBoolean(false);
-		useInventoryChanged = config.get("Effiency and Compability", "useInventoryChanged", true).getBoolean(true);
 		config.save();
 		
 		MinestuckStatsHandler.prepareAchievementPage();
@@ -609,6 +606,7 @@ public class Minestuck
 		TickRegistry.registerTickHandler(ServerEditHandler.instance, Side.SERVER);
 		
 		KindAbstratusList.registerTypes();
+		DeployList.registerItems();
 		
 		SessionHandler.maxSize = acceptTitleCollision?(generateSpecialClasses?168:144):12;
 	}

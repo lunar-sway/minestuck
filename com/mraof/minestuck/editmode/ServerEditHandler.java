@@ -17,6 +17,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -51,8 +52,6 @@ import cpw.mods.fml.common.TickType;
  * @author kirderf1
  */
 public class ServerEditHandler implements ITickHandler{
-	
-	public static final int GIVEABLE_ITEMS = 5;
 	
 	public static final ServerEditHandler instance = new ServerEditHandler();
 	
@@ -213,7 +212,7 @@ public class ServerEditHandler implements ITickHandler{
 
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
-		EntityPlayer player = (EntityPlayer)tickData[0];
+		EntityPlayerMP player = (EntityPlayerMP)tickData[0];
 		
 		EditData data = getData(player.username);
 		if(data == null)
@@ -222,7 +221,7 @@ public class ServerEditHandler implements ITickHandler{
 		SburbConnection c = data.connection;
 		double range = (MinestuckSaveHandler.lands.contains((byte)player.dimension)?Minestuck.landEditRange:Minestuck.overworldEditRange)/2;
 		
-		updateInventory(player, c.givenItems(), c.enteredGame(), Minestuck.hardMode);
+		updateInventory(player, c.givenItems(), c.enteredGame());
 		updatePosition(player, range, c.centerX, c.centerZ);
 	}
 
@@ -241,18 +240,16 @@ public class ServerEditHandler implements ITickHandler{
 		if(!event.entity.worldObj.isRemote && getData(event.player.username) != null) {
 			InventoryPlayer inventory = event.player.inventory;
 			ItemStack stack = event.entityItem.getEntityItem();
-			if((stack.getItem() instanceof ItemMachine && stack.getItemDamage() < 4)) {
-				event.setCanceled(true);
-				if(inventory.getItemStack() != null)
-					inventory.inventoryChanged = true;
-			}
+			if(DeployList.containsItemStack(stack))
+					if(stack.getItem() instanceof ItemBlock)
+						event.setCanceled(true);
+//					else if()
+			
 			else if(stack.getItem() instanceof ItemCardPunched && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact) {
 				SburbConnection c = getData(event.player.username).connection;
 				c.givenItems()[4] = true;
 				if(!c.isMain())
 					SkaianetHandler.giveItems(c.getClientName());
-				if(!Minestuck.hardMode)
-					inventory.inventoryChanged = true;
 			} else {
 				event.setCanceled(true);
 				if(inventory.getItemStack() != null)
@@ -321,37 +318,45 @@ public class ServerEditHandler implements ITickHandler{
 		}
 	}
 	
-	public static void updateInventory(EntityPlayer player, boolean[] givenItems, boolean enteredGame, boolean isHardMode) {
-		if(!Minestuck.useInventoryChanged || player.inventory.inventoryChanged) {
-			for(int i = 0; i < player.inventory.mainInventory.length; i++) {
-				ItemStack stack = player.inventory.mainInventory[i];
-				if(stack != null && (GristRegistry.getGristConversion(stack) == null || !(stack.getItem() instanceof ItemBlock)) && !(stack.getItem() instanceof ItemMachine ||
-						stack.getItem() instanceof ItemCardPunched && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact && (!isHardMode || !givenItems[4]) && !enteredGame)) {
-					player.inventory.mainInventory[i] = null;
-				}
-				if(stack != null && stack.stackSize > 1)
-					stack.stackSize = 1;
+	/**
+	 * Server sided
+	 */
+	public static void updateInventory(EntityPlayerMP player, boolean[] givenItems, boolean enteredGame) {
+		boolean inventoryChanged = false;
+		for(int i = 0; i < player.inventory.mainInventory.length; i++) {
+			ItemStack stack = player.inventory.mainInventory[i];
+			if(stack != null && (GristRegistry.getGristConversion(stack) == null || !(stack.getItem() instanceof ItemBlock)) && !(DeployList.containsItemStack(stack) ||
+					stack.getItem() instanceof ItemCardPunched && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact && (!Minestuck.hardMode || !givenItems[4]) && !enteredGame)) {
+				player.inventory.mainInventory[i] = null;
+				inventoryChanged = true;
 			}
-			
-			for(ItemStack stack : DeployList.getItemList()) {
-				if(!player.inventory.hasItemStack(stack) && !(player.inventory.getItemStack() != null && player.inventory.getItemStack().isItemEqual(stack)))
-					player.inventory.addItemStackToInventory(stack);
+			if(stack != null && stack.stackSize > 1) {
+				stack.stackSize = 1;
+				inventoryChanged = true;
 			}
-			
-			if(!enteredGame) {
-				ItemStack stack = new ItemStack(Minestuck.punchedCard);
-				NBTTagCompound nbt = new NBTTagCompound();
-				stack.setTagCompound(nbt);
-				nbt.setInteger("contentID", Minestuck.cruxiteArtifact.itemID);
-				nbt.setInteger("contentMeta", 0);	//TODO Change this for when adding other artifact types
-				if(!player.inventory.hasItemStack(stack) && (player.inventory.getItemStack() == null ||
-						!ItemStack.areItemStacksEqual(player.inventory.getItemStack(), stack)))
-					player.inventory.addItemStackToInventory(stack);
-			}
-			
-			if(Minestuck.useInventoryChanged)
-				player.inventory.inventoryChanged = false;
 		}
+		
+		for(ItemStack stack : DeployList.getItemList()) {
+			if(!player.inventory.hasItemStack(stack) && !(player.inventory.getItemStack() != null && player.inventory.getItemStack().isItemEqual(stack))) {
+				if(player.inventory.addItemStackToInventory(stack))
+					inventoryChanged = true;
+			}
+		}
+		
+		if(!enteredGame) {
+			ItemStack stack = new ItemStack(Minestuck.punchedCard);
+			NBTTagCompound nbt = new NBTTagCompound();
+			stack.setTagCompound(nbt);
+			nbt.setInteger("contentID", Minestuck.cruxiteArtifact.itemID);
+			nbt.setInteger("contentMeta", 0);	//TODO Change this for when adding other artifact types
+			if(!player.inventory.hasItemStack(stack) && !(player.inventory.getItemStack() != null && player.inventory.getItemStack().isItemEqual(stack))) {
+				player.inventory.addItemStackToInventory(stack);
+				inventoryChanged = true;
+			}
+		}
+		
+		if(inventoryChanged)
+			MinecraftServer.getServer().getConfigurationManager().syncPlayerInventory(player);
 	}
 	
 }

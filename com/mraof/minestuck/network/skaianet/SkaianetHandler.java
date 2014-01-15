@@ -236,7 +236,8 @@ public class SkaianetHandler {
 			c.centerX = conn.centerX;
 			c.centerZ = conn.centerZ;
 			c.clientHomeLand = conn.clientHomeLand;
-			c.inventory = (NBTTagList) conn.inventory.copy();
+			if(c.inventory != null)
+				c.inventory = (NBTTagList) conn.inventory.copy();
 		}
 		c1.connected(otherPlayer, isClient);
 		c2.connected(player.owner, !isClient);
@@ -339,6 +340,8 @@ public class SkaianetHandler {
 				Map<String, ComputerData>[] maps = new Map[]{serversOpen, resumingClients, resumingServers};
 				for(int e = 0; e < 3; e++) {
 					list = (NBTTagList)nbt.getTag(s[e]);
+					if(list == null)
+						continue;
 					for(int i = 0; i < list.tagCount(); i++){
 						NBTTagCompound cmp = (NBTTagCompound)list.tagAt(i);
 						ComputerData c = new ComputerData();

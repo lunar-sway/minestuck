@@ -17,7 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
  */
 public class DeployList {
 	
-	private static List<DeployEntry> list = new ArrayList();
+	private static final List<DeployEntry> list = new ArrayList();
 	
 	public static void registerItems() {
 		registerItem(new ItemStack(Minestuck.blockMachine,1,0), new GristSet(), new GristSet(GristType.Build, 100), 0);
@@ -58,7 +58,7 @@ public class DeployList {
 	public static List<ItemStack> getItemList() {
 		List itemList = new ArrayList();
 		for(DeployEntry entry : list)
-			itemList.add(entry.item);
+			itemList.add(entry.item.copy());
 		return itemList;
 	}
 	
@@ -82,6 +82,13 @@ public class DeployList {
 			if(ItemStack.areItemStacksEqual(entry.item, stack))
 				return entry.cost2;
 		return null;
+	}
+	
+	public static boolean containsItemStack(ItemStack stack) {
+		for(DeployEntry entry : list)
+			if(ItemStack.areItemStacksEqual(entry.item, stack))
+				return true;
+		return false;
 	}
 	
 	private static class DeployEntry {

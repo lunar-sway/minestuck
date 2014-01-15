@@ -44,10 +44,9 @@ public class SessionHandler {
 	 */
 	public static void serverStarted() {
 		singleSession = Minestuck.globalSession;
-		if(!Minestuck.globalSession){
+		if(!Minestuck.globalSession) {
 			split();
-		}
-		else {
+		} else {
 			mergeAll();
 			if(sessions.size() == 0)
 				sessions.add(new Session());

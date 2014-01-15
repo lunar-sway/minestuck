@@ -154,7 +154,6 @@ public class ClientEditHandler implements ITickHandler{
 		
 		double range = (MinestuckSaveHandler.lands.contains((byte)player.dimension)?Minestuck.clientLandEditRange:Minestuck.clientOverworldEditRange)/2;
 		
-		ServerEditHandler.updateInventory(player, givenItems, MinestuckSaveHandler.lands.contains((byte)player.dimension), Minestuck.clientHardMode);
 		ServerEditHandler.updatePosition(player, range, centerX, centerZ);
 		if(Minestuck.toolTipEnabled)
 			addToolTip(player, givenItems);
@@ -177,14 +176,14 @@ public class ClientEditHandler implements ITickHandler{
 			ItemStack stack = event.entityItem.getEntityItem();
 			if((stack.getItem() instanceof ItemMachine && stack.getItemDamage() < 4)) {
 				event.setCanceled(true);
-				if(inventory.getItemStack() != null)
-					inventory.inventoryChanged = true;
+//				if(inventory.getItemStack() != null)
+//					inventory.inventoryChanged = true;
 			}
 			else if(stack.getItem() instanceof ItemCardPunched && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact) {
 				SburbConnection c = SkaiaClient.getClientConnection(client);
 				givenItems[4] = true;
-				if(!Minestuck.clientHardMode)
-					inventory.inventoryChanged = true;
+//				if(!Minestuck.clientHardMode)
+//					inventory.inventoryChanged = true;
 			} else {
 				event.setCanceled(true);
 				if(inventory.getItemStack() != null)
