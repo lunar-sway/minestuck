@@ -5,7 +5,7 @@ import net.minecraft.nbt.NBTTagList;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import com.mraof.minestuck.util.ServerEditHandler;
+import com.mraof.minestuck.editmode.DeployList;
 
 public class SburbConnection {
 	
@@ -25,7 +25,7 @@ public class SburbConnection {
 	 * 0-3 = the machines
 	 * 4 = the card
 	 */
-	boolean[] givenItemList = new boolean[ServerEditHandler.GIVEABLE_ITEMS];
+	boolean[] givenItemList = new boolean[DeployList.getItemList().size()+1];	//Plus one because the card is a special case.
 	
 	//Only used by the edit handler
 	public int centerX, centerZ;
@@ -56,14 +56,7 @@ public class SburbConnection {
 	public boolean enteredGame(){return enteredGame;}
 	public boolean isMain(){return isMain;}
 	public int getClientDimension() {return clientHomeLand;}
-	
-	/**
-	 * Beware of changed use!
-	 * @return Now returns an boolean array containing if it have given certain items or not.
-	 */
-	public boolean[] givenItems(){
-		return givenItemList;
-	}
+	public boolean[] givenItems(){return givenItemList;}
 	
 	public byte[] getBytes() {
 		ByteArrayDataOutput data = ByteStreams.newDataOutput();
@@ -137,15 +130,6 @@ public class SburbConnection {
 			serverName = nbt.getString("server");
 		}
 		return this;
-	}
-	
-	@Override
-		public boolean equals(Object obj) {
-		if(obj instanceof SburbConnection){
-			SburbConnection c = (SburbConnection)obj;
-			return this.getClientName() == c.getClientName() && this.getServerName() == c.getServerName();
-		}
-		return false;
 	}
 	
 }

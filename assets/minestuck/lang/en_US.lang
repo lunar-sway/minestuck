@@ -1,8 +1,4 @@
 
-language.name=English
-language.region=US
-language.code=en_US
-
 achievement.getHammer=Get Hammer
 achievement.getHammer.desc=Get the Claw Hammer
 achievement.mineCruxite=Mine Cruxite
@@ -33,6 +29,9 @@ computer.messageResumeServer=Waiting for client...
 computer.messageResumeStop=Stopped resuming
 computer.programClient=Client
 computer.programServer=Server
+computer.singleSessionFull=Game session is full
+computer.serverSessionFull=Server player's session is full
+computer.clientSessionFull=Client player's session is full
 
 entity.dersiteBishop.name=Dersite Bishop
 entity.dersitePawn.name=Dersite Pawn

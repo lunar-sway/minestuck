@@ -37,6 +37,9 @@ import com.mraof.minestuck.block.BlockStorage;
 import com.mraof.minestuck.block.OreCruxite;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.GuiHandler;
+import com.mraof.minestuck.editmode.ClientEditHandler;
+import com.mraof.minestuck.editmode.DeployList;
+import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.EntityDecoy;
 import com.mraof.minestuck.entity.carapacian.EntityBlackBishop;
 import com.mraof.minestuck.entity.carapacian.EntityBlackPawn;
@@ -79,7 +82,7 @@ import com.mraof.minestuck.item.ItemStorageBlock;
 import com.mraof.minestuck.nei.NEIMinestuckConfig;
 import com.mraof.minestuck.network.MinestuckConnectionHandler;
 import com.mraof.minestuck.network.MinestuckPacketHandler;
-import com.mraof.minestuck.network.skaianet.Session;
+import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
@@ -87,12 +90,10 @@ import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.MinestuckStatsHandler;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.ClientEditHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristStorage;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.KindAbstratusList;
-import com.mraof.minestuck.util.ServerEditHandler;
 import com.mraof.minestuck.util.UpdateChecker;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.WorldProviderSkaia;
@@ -246,24 +247,25 @@ public class Minestuck
 	public static int blockBloodId;
 	
 	
-	public static int overworldEditRange;
-	public static int landEditRange;
-	
+	//Client config
 	public static int clientOverworldEditRange;	//Edit range used by the client side.
 	public static int clientLandEditRange;		//changed by a MinestuckConfigPacket sent by the server on login.
 	
-	//Booleans
+	//General
 	public static boolean clientHardMode;
 	public static boolean hardMode = false;	//Future config option. Currently alters how easy the entry items are accessible after the first time. The machines cost 100 build and there will only be one card if this is true.
 	public static boolean generateCruxiteOre; //If set to false, Cruxite Ore will not generate
 	public static boolean privateComputers;	//If a player should be able to use other players computers or not.
-	public static boolean acceptTitleCollision;	//Allows combinations like "Heir of Hope" and "Seer of Hope" to exist in the same session. Still not accepting duplicates.
+	public static boolean acceptTitleCollision;	//Allows combinations like "Heir of Hope" and "Seer of Hope" to exist in the same session. Will try to avoid duplicates.
 	public static boolean generateSpecialClasses;	//Allow generation of the "Lord" and "Muse" classes.
 	public static boolean globalSession;	//Makes only one session possible. Recommended to be true on small servers. Will be ignored when loading a world that already got 2+ sessions.
 	public static boolean easyDesignex; //Makes it so you don't need to encode individual cards before combining them.
 	public static boolean toolTipEnabled;
+	public static boolean forceMaxSize;	//If it should prevent players from joining a session if there is no possible combinations left.
 	public static String privateMessage;
 	public static int artifactRange; //The range of the Cruxite Artifact in teleporting zones over to the new land
+	public static int overworldEditRange;
+	public static int landEditRange;
 
 	// The instance of your mod that Forge uses.
 	@Instance("Minestuck")
@@ -407,6 +409,8 @@ public class Minestuck
 		artifactRange = config.get("General", "artifcatRange", 30).getInt();
 		MinestuckStatsHandler.idOffset = config.get("General", "statisticIdOffset", 413).getInt();
 		toolTipEnabled = config.get("General", "toolTipEnabled", false).getBoolean(false);
+		hardMode = config.get("General", "hardMode", false).getBoolean(false);
+		forceMaxSize = config.get("General", "forceMaxSize", false).getBoolean(false);
 		config.save();
 		
 		MinestuckStatsHandler.prepareAchievementPage();
@@ -602,8 +606,9 @@ public class Minestuck
 		TickRegistry.registerTickHandler(ServerEditHandler.instance, Side.SERVER);
 		
 		KindAbstratusList.registerTypes();
+		DeployList.registerItems();
 		
-		Session.maxSize = acceptTitleCollision?(generateSpecialClasses?168:144):12;
+		SessionHandler.maxSize = acceptTitleCollision?(generateSpecialClasses?168:144):12;
 	}
 
 	@EventHandler
@@ -675,7 +680,7 @@ public class Minestuck
 				e.printStackTrace();
 			}
 		}
-		SkaianetHandler.loadData(event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("connectionList"),event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("waitingConnections"));
+		SkaianetHandler.loadData(event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("connectionList"));
 		
 		File gristcache = event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("gristCache");
 		if(gristcache.exists()) {

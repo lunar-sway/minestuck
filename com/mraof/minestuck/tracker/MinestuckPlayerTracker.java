@@ -7,6 +7,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.server.MinecraftServer;
 
+import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
@@ -16,7 +17,6 @@ import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristStorage;
 import com.mraof.minestuck.util.GristType;
-import com.mraof.minestuck.util.ServerEditHandler;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.util.TitleHelper;
 import com.mraof.minestuck.util.UpdateChecker;

@@ -27,15 +27,19 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MinestuckStatsHandler;
-import com.mraof.minestuck.util.ServerEditHandler;
 import com.mraof.minestuck.util.UsernameHandler;
 
-//@SideOnly(Side.SERVER)	//This crashes the game on execution of ClearMessagePacket?
+/**
+ * This class handles server sided stuff about the sburb connection network.
+ * This class also handles the main saving and loading.
+ * @author kirderf1
+ */
 public class SkaianetHandler {
 	
 	static Map<String,ComputerData> serversOpen = new TreeMap();
@@ -64,16 +68,8 @@ public class SkaianetHandler {
 	public static boolean giveItems(String player){
 		SburbConnection c = getClientConnection(player);
 		if(c != null && !c.isMain){
-			Session cs = Session.getPlayerSession(c.getClientName()), ss = Session.getPlayerSession(c.getServerName());
-			if(cs != null && ss != null && cs != ss){
-				Session session = Session.merge(cs, ss, c);
-				if(session == null)
-					return false;
-				Session.sessions.remove(cs);
-				Session.sessions.remove(ss);
-				Session.sessions.add(session);
-			}
 			c.isMain = true;
+			SessionHandler.onFirstItemGiven(c);
 			updatePlayer(c.getClientName());
 			updatePlayer(c.getServerName());
 			return true;
@@ -86,7 +82,7 @@ public class SkaianetHandler {
 	 * @param player
 	 */
 	public static void playerConnected(String player){
-		Debug.print("[SKAIANET] Player connected:"+player);
+		//Debug.print("[SKAIANET] Player connected:"+player);
 		String[] s = new String[5];
 		s[0] = UsernameHandler.encode(player);
 		infoToSend.put(player, s);
@@ -131,7 +127,7 @@ public class SkaianetHandler {
 					resumingClients.put(player.owner, player);
 				}
 			}
-			else if(serversOpen.containsKey(otherPlayer) && Session.canJoin(player.owner, otherPlayer))	//If the server is open.
+			else if(serversOpen.containsKey(otherPlayer))	//If the server is open.
 				connectTo(player, true, otherPlayer, serversOpen);
 		}
 		te.worldObj.markBlockForUpdate(te.xCoord, te.yCoord, te.zCoord);
@@ -177,7 +173,7 @@ public class SkaianetHandler {
 						sc.latestmessage.put(1, "computer.messageClosed");
 						sc.worldObj.markBlockForUpdate(sc.xCoord, sc.yCoord, sc.zCoord);
 					}
-					Session.closeConnection(c.getClientName(), c.getServerName());
+					SessionHandler.onConnectionClosed(c, true);
 					ServerEditHandler.onDisconnect(c);
 					if(c.isMain)
 						c.isActive = false;	//That's everything that is neccesary.
@@ -222,12 +218,16 @@ public class SkaianetHandler {
 			c.server = player;
 			c.isActive = true;
 		}
-		if(newConnection && !Session.registerConnection(c)){
-			connections.remove(c);
-			TileEntityComputer cte = getComputer(c.client);
-			if(cte != null)
-				cte.latestmessage.put(0, "computer.messageConnectFail");
-			map.put(c.server.owner, c.server);
+		if(newConnection){
+			String s = SessionHandler.onConnectionCreated(c);
+			if(s != null) {
+				connections.remove(c);
+				TileEntityComputer cte = getComputer(c.client);
+				if(cte != null)
+					cte.latestmessage.put(0, s);
+				map.put(c.server.owner, c.server);
+				return;
+			}
 		}
 		if(newConnection && !getAssociatedPartner(c.getClientName(), true).isEmpty()) {	//Copy client associated variables
 			SburbConnection conn = getConnection(c.getClientName(), getAssociatedPartner(c.getClientName(), true));
@@ -236,7 +236,8 @@ public class SkaianetHandler {
 			c.centerX = conn.centerX;
 			c.centerZ = conn.centerZ;
 			c.clientHomeLand = conn.clientHomeLand;
-			c.inventory = (NBTTagList) conn.inventory.copy();
+			if(c.inventory != null)
+				c.inventory = (NBTTagList) conn.inventory.copy();
 		}
 		c1.connected(otherPlayer, isClient);
 		c2.connected(player.owner, !isClient);
@@ -283,105 +284,75 @@ public class SkaianetHandler {
 		updatePlayer(p0);
 	}
 	
-	public static void saveData(File file0, File file1){
+	public static void saveData(File file){
 		checkData();
 		
 		NBTTagCompound nbt = new NBTTagCompound();
 		NBTTagList list = new NBTTagList();
 		
-		for(Session s : Session.sessions)
+		for(Session s : SessionHandler.sessions)
 			list.appendTag(s.write());
 		
 		nbt.setTag("sessions", list);
 		
-		try {
-			CompressedStreamTools.writeCompressed(nbt, new FileOutputStream(file0));
-		} catch (IOException e) {
-			e.printStackTrace();
+		String[] s = {"serversOpen","resumingClients","resumingServers"};
+		Map<String, ComputerData>[] maps = new Map[]{serversOpen, resumingClients, resumingServers};
+		for(int i = 0; i < 3; i++) {
+			list = new NBTTagList();
+			for(ComputerData c:maps[i].values())
+				list.appendTag(c.write());
+			nbt.setTag(s[i], list);
 		}
 		
-		//Debug.print(connections.size()+" connection"+(connections.size() == 1?"":"s")+" saved");
-		
-		nbt = new NBTTagCompound();
-		
-		NBTTagList ls = new NBTTagList("serversOpen");
-		for(ComputerData c:serversOpen.values())
-			ls.appendTag(c.write());
-		nbt.setTag("serversOpen", ls);
-		
-		ls = new NBTTagList("resumingClients");
-		for(ComputerData c:resumingClients.values())
-			ls.appendTag(c.write());
-		nbt.setTag("resumingClients", ls);
-		
-		ls = new NBTTagList("resumingServers");
-		for(ComputerData c:resumingClients.values())
-			ls.appendTag(c.write());
-		nbt.setTag("resumingServers", ls);
-		
 		try {
-			CompressedStreamTools.writeCompressed(nbt, new FileOutputStream(file1));
+			CompressedStreamTools.writeCompressed(nbt, new FileOutputStream(file));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static void loadData(File file0, File file1){
+	public static void loadData(File file){
 		connections.clear();
 		serversOpen.clear();	
 		resumingClients.clear();
 		resumingServers.clear();
-		Session.sessions.clear();
-		if(file0.exists()){
+		SessionHandler.sessions.clear();
+		if(file.exists()){
 			NBTTagCompound nbt = null;
 			try{
-				nbt = CompressedStreamTools.readCompressed(new FileInputStream(file0));
+				nbt = CompressedStreamTools.readCompressed(new FileInputStream(file));
 				
 			} catch(IOException e){
 				e.printStackTrace();
 				Debug.print("[SKAIANET] Trying to load using the old format instead.");
-				loadOld(file0);
+				loadOld(file);
 			}
 			if(nbt != null){
-				NBTTagList list = nbt.getTagList("sessions");
+				NBTTagList list = nbt.getTagList("connections");
 				for(int i = 0; i < list.tagCount(); i++)
-					Session.sessions.add(new Session().read((NBTTagCompound) list.tagAt(i)));
-				//Debug.print(connections.size()+" connection(s) loaded");
+					connections.add(new SburbConnection().read((NBTTagCompound) list.tagAt(i)));
+				
+				list = nbt.getTagList("sessions");
+				for(int i = 0; i < list.tagCount(); i++)
+					SessionHandler.sessions.add(new Session().read((NBTTagCompound) list.tagAt(i)));
+				
+				String[] s = {"serversOpen","resumingClients","resumingServers"};
+				Map<String, ComputerData>[] maps = new Map[]{serversOpen, resumingClients, resumingServers};
+				for(int e = 0; e < 3; e++) {
+					list = (NBTTagList)nbt.getTag(s[e]);
+					if(list == null)
+						continue;
+					for(int i = 0; i < list.tagCount(); i++){
+						NBTTagCompound cmp = (NBTTagCompound)list.tagAt(i);
+						ComputerData c = new ComputerData();
+						c.read(cmp);
+						maps[e].put(c.owner, c);
+					}
+				}
 			}
 		}
 		
-		if(file1.exists()){
-			NBTTagCompound nbt = null;
-			try{
-				nbt = CompressedStreamTools.readCompressed(new FileInputStream(file1));
-			}catch(IOException e){
-				e.printStackTrace();
-			}
-			if(nbt != null){
-				NBTTagList ls = (NBTTagList)nbt.getTag("serversOpen");
-				for(int i = 0; i < ls.tagCount(); i++){
-					NBTTagCompound cmp = (NBTTagCompound)ls.tagAt(i);
-					ComputerData c = new ComputerData();
-					c.read(cmp);
-					serversOpen.put(c.owner, c);
-				}
-				ls = (NBTTagList)nbt.getTag("resumingClients");
-				for(int i = 0; i < ls.tagCount(); i++){
-					NBTTagCompound cmp = (NBTTagCompound)ls.tagAt(i);
-					ComputerData c = new ComputerData();
-					c.read(cmp);
-					resumingClients.put(c.owner, c);
-				}
-				ls = (NBTTagList)nbt.getTag("resumingServers");
-				for(int i = 0; i < ls.tagCount(); i++){
-					NBTTagCompound cmp = (NBTTagCompound)ls.tagAt(i);
-					ComputerData c = new ComputerData();
-					c.read(cmp);
-					resumingServers.put(c.owner, c);
-				}
-			}
-		}
-		Session.serverStarted();
+		SessionHandler.serverStarted();
 	}
 	
 	static void loadOld(File file) {
@@ -408,7 +379,7 @@ public class SkaianetHandler {
 				connections.add(c);
 				s.connections.add(c);
 			}
-			Session.sessions.add(s);
+			SessionHandler.sessions.add(s);
 		}catch(IOException e){
 			e.printStackTrace();
 		}
@@ -448,13 +419,9 @@ public class SkaianetHandler {
 		list.add(resumingClients.containsKey(player));
 		list.add(resumingServers.containsKey(player));
 		
-		int i = 0;
-		for(String s : serversOpen.keySet())
-			if(Session.canJoin(player, s)){
-				list.add(s);
-				i++;
-			}
-		list.add(3, i);
+		List playerList = SessionHandler.getServerList(player);
+		list.add(playerList.size());
+		list.addAll(playerList);
 		
 		for(SburbConnection c : connections)
 			if(c.getClientName().equals(player) || c.getServerName().equals(player))
@@ -493,7 +460,7 @@ public class SkaianetHandler {
 					if(!c.isMain)
 						iter2.remove();
 					else c.isActive = false;
-					Session.closeConnection(c.getClientName(), c.getServerName());
+					SessionHandler.onConnectionClosed(c, true);
 					ServerEditHandler.onDisconnect(c);
 					
 					if(cc != null){
@@ -556,11 +523,14 @@ public class SkaianetHandler {
 				c.isMain = true;
 				c.clientName = username;
 				c.serverName = username;
-				if(Session.registerConnection(c))
+				if(SessionHandler.onConnectionCreated(c) == null) {
+					SessionHandler.onFirstItemGiven(c);
 					connections.add(c);
+				}
 			} else giveItems(username);
 		}
 		c.clientHomeLand = dimensionId;
+		SessionHandler.onGameEntered(c);
 		
 		for(SburbConnection sc : connections) {
 			if(sc.isActive){

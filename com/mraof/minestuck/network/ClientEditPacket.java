@@ -8,7 +8,7 @@ import net.minecraft.network.INetworkManager;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.ServerEditHandler;
+import com.mraof.minestuck.editmode.ServerEditHandler;
 
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;

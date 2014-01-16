@@ -59,8 +59,6 @@ public class ClearMessagePacket extends MinestuckPacket {
 	@Override
 	public MinestuckPacket consumePacket(byte[] data) {
 		ByteArrayDataInput dat = ByteStreams.newDataInput(data);
-		for(byte b : data)
-			Debug.print(b);
 		computer = new ComputerData("",dat.readInt(),dat.readInt(),dat.readInt(),dat.readInt());
 		program = dat.readInt();
 		

@@ -6,6 +6,7 @@ import java.util.Map;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
+import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.network.GristCachePacket;
 
 import cpw.mods.fml.relauncher.Side;

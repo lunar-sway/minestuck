@@ -15,11 +15,12 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import com.mraof.minestuck.util.ClientEditHandler;
+import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.util.GristStorage;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.util.TitleHelper;
+import com.mraof.minestuck.util.UsernameHandler;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -68,14 +69,11 @@ public class GuiGristCache extends GuiScreen
 		if (title == null) {
 			title = new Title(TitleHelper.getClassFromInt(((EntityPlayer)mc.thePlayer).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Class")),
 					TitleHelper.getAspectFromInt(((EntityPlayer)mc.thePlayer).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Aspect")));
-			if(ClientEditHandler.isActive())
-				titleMessage = ClientEditHandler.client.toUpperCase();
-			else titleMessage = mc.thePlayer.username.toUpperCase() + " : " + title.getTitleName();
 		}
 		
 		if (titleMessage.isEmpty())
 			if(ClientEditHandler.isActive())
-				titleMessage = ClientEditHandler.client.toUpperCase();
+				titleMessage = UsernameHandler.decode(ClientEditHandler.client).toUpperCase();
 			else titleMessage = mc.thePlayer.username.toUpperCase() + " : " + title.getTitleName();
 		
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
