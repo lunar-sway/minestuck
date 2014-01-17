@@ -1,7 +1,6 @@
 package com.mraof.minestuck.editmode;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.GristSet;
@@ -17,7 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
  */
 public class DeployList {
 	
-	private static final List<DeployEntry> list = new ArrayList();
+	private static final ArrayList<DeployEntry> list = new ArrayList();
 	
 	public static void registerItems() {
 		registerItem(new ItemStack(Minestuck.blockMachine,1,0), new GristSet(), new GristSet(GristType.Build, 100), 0);
@@ -55,15 +54,15 @@ public class DeployList {
 		list.add(new DeployEntry(stack, cost1, cost2, tier));
 	}
 	
-	public static List<ItemStack> getItemList() {
-		List itemList = new ArrayList();
+	public static ArrayList<ItemStack> getItemList() {
+		ArrayList itemList = new ArrayList();
 		for(DeployEntry entry : list)
 			itemList.add(entry.item.copy());
 		return itemList;
 	}
 	
-	public static List<ItemStack> getItemListByMaximumTier(int tier) {
-		List itemList = new ArrayList();
+	public static ArrayList<ItemStack> getItemListByMaximumTier(int tier) {
+		ArrayList itemList = new ArrayList();
 		for(DeployEntry entry : list)
 			if(entry.tier <= tier)
 				itemList.add(entry.item);
@@ -89,6 +88,13 @@ public class DeployList {
 			if(ItemStack.areItemStacksEqual(entry.item, stack))
 				return true;
 		return false;
+	}
+	
+	public static int getOrdinal(ItemStack stack) {
+		for(int i = 0; i < list.size(); i++)
+			if(list.get(i).item.isItemEqual(stack))
+				return i;
+		return -1;
 	}
 	
 	private static class DeployEntry {

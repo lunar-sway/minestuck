@@ -22,8 +22,9 @@ public class SburbConnection {
 	boolean canSplit;
 	int clientHomeLand;
 	/**
-	 * 0-3 = the machines
-	 * 4 = the card
+	 * 0 = card
+	 * 1+ = items in deploy list
+	 * If the client will have frog breeding as quest, the array will be extended and the new positions will hold the gear.
 	 */
 	boolean[] givenItemList = new boolean[DeployList.getItemList().size()+1];	//Plus one because the card is a special case.
 	
@@ -117,6 +118,12 @@ public class SburbConnection {
 				canSplit = nbt.getBoolean("canSplit");
 			if(nbt.hasKey("givenItems")) {
 				byte[] array = nbt.getByteArray("givenItems");
+				if(array.length == 5) {	//If the list is from an older version, move the card value to the first position
+					byte b = array[4];
+					for(int i = 2; i >= 0; i--)
+						array[i+1] = array[i];
+					array[0] = b;
+				}
 				for(int i = 0; i < array.length; i++)
 					givenItemList[i] = array[i] != 0;
 			} else for(int i = 0; i < 4; i++)

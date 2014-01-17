@@ -321,12 +321,12 @@ public class ServerEditHandler implements ITickHandler{
 	/**
 	 * Server sided
 	 */
-	public static void updateInventory(EntityPlayerMP player, boolean[] givenItems, boolean enteredGame) {
+	public static void updateInventory(EntityPlayerMP player, boolean[] givenItems, boolean enteredGame) {	//Could need to have better effiency
 		boolean inventoryChanged = false;
 		for(int i = 0; i < player.inventory.mainInventory.length; i++) {
 			ItemStack stack = player.inventory.mainInventory[i];
 			if(stack != null && (GristRegistry.getGristConversion(stack) == null || !(stack.getItem() instanceof ItemBlock)) && !(DeployList.containsItemStack(stack) ||
-					stack.getItem() instanceof ItemCardPunched && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact && (!Minestuck.hardMode || !givenItems[4]) && !enteredGame)) {
+					stack.getItem() instanceof ItemCardPunched && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact && (!Minestuck.hardMode || !givenItems[0]) && !enteredGame)) {
 				player.inventory.mainInventory[i] = null;
 				inventoryChanged = true;
 			}
@@ -335,12 +335,34 @@ public class ServerEditHandler implements ITickHandler{
 				inventoryChanged = true;
 			}
 		}
-		
+		ArrayList<ItemStack> itemsToRemove = new ArrayList();
 		for(ItemStack stack : DeployList.getItemList()) {
-			if(!player.inventory.hasItemStack(stack) && !(player.inventory.getItemStack() != null && player.inventory.getItemStack().isItemEqual(stack))) {
+			boolean shouldHave = !(Minestuck.hardMode && givenItems[DeployList.getOrdinal(stack)+1] && DeployList.getSecondaryCost(stack) == null);
+			if(shouldHave && !player.inventory.hasItemStack(stack) && !(player.inventory.getItemStack() != null && player.inventory.getItemStack().isItemEqual(stack))) {
 				if(player.inventory.addItemStackToInventory(stack))
 					inventoryChanged = true;
-			}
+			} else if(!shouldHave)
+				itemsToRemove.add(stack);
+		}
+		
+		if(player.inventory.getItemStack() != null)
+			for(ItemStack stack : itemsToRemove)
+				if(player.inventory.getItemStack().equals(stack)) {
+					player.inventory.setItemStack(null);
+					inventoryChanged = true;
+					break;
+				}
+		
+		for(int i = 0; i < player.inventory.mainInventory.length; i++) {
+			ItemStack stack = player.inventory.mainInventory[i];
+			if(stack == null)
+				continue;
+			for(ItemStack stack1 : itemsToRemove)
+				if(stack.isItemEqual(stack1)) {
+					player.inventory.mainInventory[i] = null;
+					inventoryChanged = true;
+					break;
+				}
 		}
 		
 		if(!enteredGame) {
