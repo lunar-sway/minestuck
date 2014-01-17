@@ -1,8 +1,11 @@
 package com.mraof.minestuck.entity.underling;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -56,6 +59,25 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 		return 0.1F;
 	}
 	
+	@Override
+	protected void jump() {
+		this.motionY = 0.41999998688697815D;
+
+        if (this.isPotionActive(Potion.jump))
+        {
+            this.motionY += (double)((float)(this.getActivePotionEffect(Potion.jump).getAmplifier() + 1) * 0.1F);
+        }
+
+        if (this.isSprinting())
+        {
+            float f = this.rotationYaw * 0.017453292F;
+            this.motionX -= (double)(MathHelper.sin(f) * 0.2F);
+            this.motionZ += (double)(MathHelper.cos(f) * 0.2F);
+        }
+
+        this.isAirBorne = true;
+        ForgeHooks.onLivingJump(this);
+	}
 	@Override
 	public boolean attackEntityAsMob(Entity par1Entity) 
 	{

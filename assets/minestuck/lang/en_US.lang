@@ -160,6 +160,7 @@ tile.blockMachine.gristWidget.name=GristWidget 12000
 tile.computer.name=SBURB Computer
 tile.oil.name=Oil
 tile.blood.name=Blood
+tile.layeredSand.name=Layered Sand
 
 title.format=%1$s of %2$s
 title.Bard=Bard

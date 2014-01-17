@@ -32,6 +32,7 @@ import com.mraof.minestuck.block.BlockComputerOn;
 import com.mraof.minestuck.block.BlockFluidBlood;
 import com.mraof.minestuck.block.BlockFluidOil;
 import com.mraof.minestuck.block.BlockGatePortal;
+import com.mraof.minestuck.block.BlockLayered;
 import com.mraof.minestuck.block.BlockMachine;
 import com.mraof.minestuck.block.BlockStorage;
 import com.mraof.minestuck.block.OreCruxite;
@@ -74,6 +75,7 @@ import com.mraof.minestuck.item.ItemDisk;
 import com.mraof.minestuck.item.ItemDowelCarved;
 import com.mraof.minestuck.item.ItemDowelUncarved;
 import com.mraof.minestuck.item.ItemHammer;
+import com.mraof.minestuck.item.ItemBlockLayered;
 import com.mraof.minestuck.item.ItemMachine;
 import com.mraof.minestuck.item.ItemMinestuckBucket;
 import com.mraof.minestuck.item.ItemSickle;
@@ -232,6 +234,8 @@ public class Minestuck
 	
 	public static Block blockOil;
 	public static Block blockBlood;
+	public static Block layeredSand;
+
 	public static Fluid fluidOil;
 	public static Fluid fluidBlood;
 
@@ -245,6 +249,7 @@ public class Minestuck
 	public static int blockComputerOffId;
 	public static int blockOilId;
 	public static int blockBloodId;
+	public static int layeredSandId;
 	
 	
 	//Client config
@@ -296,6 +301,7 @@ public class Minestuck
 		blockComputerOnId = config.get("Block Ids", "blockComputerOnId", blockIdStart + 6).getInt();
 		blockOilId = config.get("Block Ids", "blockOilId", blockIdStart + 7).getInt();
 		blockBloodId = config.get("Block Ids", "blockBloodId", blockIdStart + 8).getInt();
+		layeredSandId = config.get("Block Ids", "layeredSandId", blockIdStart + 9).getInt();
 		if(config.get("Block Ids", "useBlockIdStart", true).getBoolean(true))
 		{
 			chessTileId = blockIdStart;
@@ -307,6 +313,7 @@ public class Minestuck
 			blockComputerOnId = blockIdStart + 6;
 			blockOilId = blockIdStart + 7;
 			blockBloodId = blockIdStart + 8;
+			layeredSandId = blockIdStart + 9;
 		}
 		Debug.printf("Fluid Block Ids loaded, Blood id: %d, Oil id: %d", blockBloodId, blockOilId);
 
@@ -434,6 +441,7 @@ public class Minestuck
 		chessTile = new BlockChessTile(chessTileId);
 		gatePortal = new BlockGatePortal(gatePortalId, Material.portal);
 		oreCruxite = new OreCruxite(oreCruxiteId);
+		layeredSand = new BlockLayered(layeredSandId, Block.sand).setUnlocalizedName("layeredSand");
 		//machines
 		blockStorage = new BlockStorage(blockStorageId);
 		blockMachine = new BlockMachine(blockMachineId);
@@ -505,6 +513,7 @@ public class Minestuck
 		GameRegistry.registerBlock(blockMachine,ItemMachine.class,"blockMachine");
 		GameRegistry.registerBlock(blockComputerOff,ItemComputerOff.class,"blockComputer");
 		GameRegistry.registerBlock(blockComputerOn,"blockComputerOn");
+		GameRegistry.registerBlock(layeredSand, ItemBlockLayered.class, "layeredSand");
 		//fluids
 		GameRegistry.registerBlock(blockOil, "blockOil");
 		GameRegistry.registerBlock(blockBlood, "blockBlood");
@@ -527,6 +536,7 @@ public class Minestuck
 		ItemStack chessboardStack = new ItemStack(component,1,2);
 		ItemStack bloodBucket = new ItemStack(minestuckBucket, 1, blockBloodId);
 		ItemStack oilBucket = new ItemStack(minestuckBucket, 1, blockOilId);
+		ItemStack layeredSandStack = new ItemStack(layeredSand);
 		//set harvest information for blocks
 		MinecraftForge.setBlockHarvestLevel(chessTile, "shovel", 0);
 		MinecraftForge.setBlockHarvestLevel(oreCruxite, "pickaxe", 1);
