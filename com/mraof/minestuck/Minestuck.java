@@ -123,7 +123,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = "Minestuck", name = "Minestuck", version = "64")
+@Mod(modid = "Minestuck", name = "Minestuck", version = "@VERSION@")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false, packetHandler = MinestuckPacketHandler.class, channels = {"Minestuck"})
 public class Minestuck
 {

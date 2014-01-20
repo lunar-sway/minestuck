@@ -359,8 +359,6 @@ public class SkaianetHandler {
 			}
 		}
 		
-//		for(SburbConnection c : )
-		
 		SessionHandler.serverStarted();
 	}
 	
@@ -486,16 +484,22 @@ public class SkaianetHandler {
 					c.clientHomeLand = c.client.dimension;
 			}
 			if(c.enteredGame && !MinestuckSaveHandler.lands.contains((byte)c.clientHomeLand)) {
-				iter2.remove();
-				SessionHandler.onConnectionClosed(c, false);
-				if(c.isActive) {
-					TileEntityComputer cc = getComputer(c.client), sc = getComputer(c.server);
-					cc.serverConnected = false;
-					cc.latestmessage.put(0, "computer.messageClosed");
-					cc.worldObj.markBlockForUpdate(cc.xCoord, cc.yCoord, cc.zCoord);
-					sc.clientName = "";
-					sc.latestmessage.put(1, "computer.messageClosed");
-					sc.worldObj.markBlockForUpdate(sc.xCoord, sc.yCoord, sc.zCoord);
+				EntityPlayerMP player = MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(UsernameHandler.decode(c.getClientName()));
+				if(player != null) {
+					c.clientHomeLand = player.dimension;
+					if(!MinestuckSaveHandler.lands.contains((byte)c.clientHomeLand)) {
+						iter2.remove();
+						SessionHandler.onConnectionClosed(c, false);
+						if(c.isActive) {
+							TileEntityComputer cc = getComputer(c.client), sc = getComputer(c.server);
+							cc.serverConnected = false;
+							cc.latestmessage.put(0, "computer.messageClosed");
+							cc.worldObj.markBlockForUpdate(cc.xCoord, cc.yCoord, cc.zCoord);
+							sc.clientName = "";
+							sc.latestmessage.put(1, "computer.messageClosed");
+							sc.worldObj.markBlockForUpdate(sc.xCoord, sc.yCoord, sc.zCoord);
+						}
+					}
 				}
 			}
 		}
