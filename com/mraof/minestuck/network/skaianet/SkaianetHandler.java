@@ -480,6 +480,11 @@ public class SkaianetHandler {
 						sc.worldObj.markBlockForUpdate(sc.xCoord, sc.yCoord, sc.zCoord);
 					}
 				}
+				if(cc != null && c.enteredGame && c.inventory == null && c.centerX == 0 && c.centerZ == 0) {	//If the center location isn't defined
+					c.centerX = cc.xCoord;
+					c.centerZ = cc.zCoord;
+					c.inventory = new NBTTagList();
+				}
 				if(cc != null && c.enteredGame && !MinestuckSaveHandler.lands.contains((byte)c.clientHomeLand))
 					c.clientHomeLand = c.client.dimension;
 			}
