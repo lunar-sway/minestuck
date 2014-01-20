@@ -33,6 +33,7 @@ import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristStorage;
@@ -65,7 +66,6 @@ public class ClientEditHandler implements ITickHandler{
 	}
 	
 	public static void activate(String username, String target) {
-		Minecraft mc = Minecraft.getMinecraft();
 		Packet250CustomPayload packet = new Packet250CustomPayload();
 		packet.channel = "Minestuck";
 		packet.data = MinestuckPacket.makePacket(Type.CLIENT_EDIT, username, target);

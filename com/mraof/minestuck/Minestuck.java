@@ -123,7 +123,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = "Minestuck", name = "Minestuck", version = "@VERSION@")
+@Mod(modid = "Minestuck", name = "Minestuck", version = "64")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false, packetHandler = MinestuckPacketHandler.class, channels = {"Minestuck"})
 public class Minestuck
 {
@@ -271,6 +271,12 @@ public class Minestuck
 	public static int artifactRange; //The range of the Cruxite Artifact in teleporting zones over to the new land
 	public static int overworldEditRange;
 	public static int landEditRange;
+	/**
+	 * 0: Make the player's new server player his/her old server player's server player
+	 * 1: The player that lost his/her server player will have an idle main connection until someone without a client player connects to him/her.
+	 * (Will try to put a better explanation somewhere else later)
+	 */
+	public static int escapeFailureMode;	//What will happen if someone's server player fails to escape the overworld in time,
 
 	// The instance of your mod that Forge uses.
 	@Instance("Minestuck")
@@ -418,6 +424,9 @@ public class Minestuck
 		toolTipEnabled = config.get("General", "toolTipEnabled", false).getBoolean(false);
 		hardMode = config.get("General", "hardMode", false).getBoolean(false);
 		forceMaxSize = config.get("General", "forceMaxSize", false).getBoolean(false);
+		escapeFailureMode = config.get("General", "escapeFailureMode", 0).getInt();
+		if(escapeFailureMode > 2 || escapeFailureMode < 0)
+			escapeFailureMode = 0;
 		config.save();
 		
 		MinestuckStatsHandler.prepareAchievementPage();

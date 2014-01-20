@@ -80,7 +80,7 @@ public class Session {
 		for(SburbConnection c : this.connections){
 			if(!list.contains(c.getClientName()))
 				list.add(c.getClientName());
-			if(!list.contains(c.getServerName()))
+			if(!list.contains(c.getServerName()) && !c.getServerName().equals(".null"))
 				list.add(c.getServerName());
 		}
 		return list;
