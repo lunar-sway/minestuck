@@ -227,22 +227,34 @@ public class SessionHandler {
 	}
 	
 	/**
-	 * @param normal If the connection was closed by normal means. (includes everything but getting crushed by a meteor)
+	 * @param normal If the connection was closed by normal means.
+	 * (includes everything but getting crushed by a meteor and other reasons for removal of a main connection)
 	 */
 	static void onConnectionClosed(SburbConnection connection, boolean normal) {
+		Session s = getPlayerSession(connection.getClientName());
+		
 		if(!connection.isMain && !singleSession) {
-			Session s = getPlayerSession(connection.getClientName());
-			if(s.connections.size() == 1)
+			s.connections.remove(connection);
+			if(s.connections.size() == 0)
 				sessions.remove(s);
 			else split(s);
 		} else if(!normal) {
-			if(SkaianetHandler.getAssociatedPartner(connection.getClientName(), false) != null) {
+			s.connections.remove(connection);
+			if(!SkaianetHandler.getAssociatedPartner(connection.getClientName(), false).isEmpty() && !connection.getServerName().equals(".null")) {
 				SburbConnection c = SkaianetHandler.getConnection(SkaianetHandler.getAssociatedPartner(connection.getClientName(), false), connection.getClientName());
-				if(c == null) {
-					getPlayerSession(connection.getClientName()).connections.remove(connection);
-					SkaianetHandler.connections.remove(connection);
-				} //else	What should happen with that connection?
+				if(c.isActive)
+					SkaianetHandler.closeConnection(c.getClientName(), c.getServerName(), true);
+				switch(Minestuck.escapeFailureMode) {
+				case 0:
+					c.serverName = connection.getServerName();
+					break;
+				case 1:
+					c.serverName = ".null";
+					break;
+				}
 			}
+			if(s.connections.size() == 0)
+				sessions.remove(s);
 		}
 	}
 	

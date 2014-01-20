@@ -34,6 +34,7 @@ import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MinestuckStatsHandler;
 import com.mraof.minestuck.util.UsernameHandler;
+import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 /**
  * This class handles server sided stuff about the sburb connection network.
@@ -58,7 +59,7 @@ public class SkaianetHandler {
 	public static String getAssociatedPartner(String player, boolean isClient){
 		for(SburbConnection c : connections)
 			if(c.isMain)
-				if(isClient && c.getClientName().equals(player))
+				if(isClient && c.getClientName().equals(player) && !c.getServerName().equals(".null"))
 					return c.getServerName();
 				else if(!isClient && c.getServerName().equals(player))
 				return c.getClientName();
@@ -229,8 +230,14 @@ public class SkaianetHandler {
 				return;
 			}
 		}
-		if(newConnection && !getAssociatedPartner(c.getClientName(), true).isEmpty()) {	//Copy client associated variables
+		if(newConnection && (!getAssociatedPartner(c.getClientName(), true).isEmpty() || getConnection(c.getClientName(), ".null") != null)) {	//Copy client associated variables
 			SburbConnection conn = getConnection(c.getClientName(), getAssociatedPartner(c.getClientName(), true));
+			if(conn == null) {
+				conn = getConnection(c.getClientName(), ".null");
+				c.isMain = true;
+				connections.remove(conn);
+				SessionHandler.onConnectionClosed(conn, false);
+			}
 			c.enteredGame = conn.enteredGame;
 			c.canSplit = conn.canSplit;
 			c.centerX = conn.centerX;
@@ -424,7 +431,7 @@ public class SkaianetHandler {
 		list.addAll(playerList);
 		
 		for(SburbConnection c : connections)
-			if(c.getClientName().equals(player) || c.getServerName().equals(player))
+			if(c.getClientName().equals(player) && !c.getServerName().equals(".null") || c.getServerName().equals(player))
 				list.add(c);
 		
 		return list.toArray();
@@ -435,7 +442,7 @@ public class SkaianetHandler {
 		Iterator<String> iter0 = infoToSend.keySet().iterator();
 		while(iter0.hasNext())
 			if(scm.getPlayerForUsername(iter0.next()) == null){
-				Debug.print("[SKAIANET] Player disconnected, removing data.");
+				//Debug.print("[SKAIANET] Player disconnected, removing data.");
 				iter0.remove();
 			}
 		
@@ -444,7 +451,7 @@ public class SkaianetHandler {
 		for(Iterator<ComputerData> i : iter1)
 			while(i.hasNext()) {
 				ComputerData data = i.next();
-				if(getComputer(data) == null || !getComputer(data).owner.equals(data.owner)) {
+				if(getComputer(data) == null || !getComputer(data).owner.equals(data.owner) || !(resumingClients.containsValue(data)?getComputer(data).resumingClient:getComputer(data).openToClients)) {
 					Debug.print("[SKAIANET] Invalid computer in waiting list!");
 					i.remove();
 				}
@@ -455,7 +462,7 @@ public class SkaianetHandler {
 			SburbConnection c = iter2.next();
 			if(c.isActive){
 				TileEntityComputer cc = getComputer(c.client), sc = getComputer(c.server);
-				if(cc == null || sc == null){
+				if(cc == null || sc == null || !cc.owner.equals(c.getClientName()) || !sc.owner.equals(c.getServerName()) || !cc.serverConnected || !sc.clientName.equals(c.getClientName())){
 					Debug.print("[SKAIANET] Invalid computer in connection.");
 					if(!c.isMain)
 						iter2.remove();
@@ -473,8 +480,32 @@ public class SkaianetHandler {
 						sc.worldObj.markBlockForUpdate(sc.xCoord, sc.yCoord, sc.zCoord);
 					}
 				}
-				if(cc != null && c.enteredGame && c.clientHomeLand == 0)
+				if(cc != null && c.enteredGame && c.inventory == null && c.centerX == 0 && c.centerZ == 0) {	//If the center location isn't defined
+					c.centerX = cc.xCoord;
+					c.centerZ = cc.zCoord;
+					c.inventory = new NBTTagList();
+				}
+				if(cc != null && c.enteredGame && !MinestuckSaveHandler.lands.contains((byte)c.clientHomeLand))
 					c.clientHomeLand = c.client.dimension;
+			}
+			if(c.enteredGame && !MinestuckSaveHandler.lands.contains((byte)c.clientHomeLand)) {
+				EntityPlayerMP player = MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(UsernameHandler.decode(c.getClientName()));
+				if(player != null) {
+					c.clientHomeLand = player.dimension;
+					if(!MinestuckSaveHandler.lands.contains((byte)c.clientHomeLand)) {
+						iter2.remove();
+						SessionHandler.onConnectionClosed(c, false);
+						if(c.isActive) {
+							TileEntityComputer cc = getComputer(c.client), sc = getComputer(c.server);
+							cc.serverConnected = false;
+							cc.latestmessage.put(0, "computer.messageClosed");
+							cc.worldObj.markBlockForUpdate(cc.xCoord, cc.yCoord, cc.zCoord);
+							sc.clientName = "";
+							sc.latestmessage.put(1, "computer.messageClosed");
+							sc.worldObj.markBlockForUpdate(sc.xCoord, sc.yCoord, sc.zCoord);
+						}
+					}
+				}
 			}
 		}
 		
