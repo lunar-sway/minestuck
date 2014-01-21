@@ -41,7 +41,11 @@ import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristRegistry;
+import com.mraof.minestuck.util.GristSet;
+import com.mraof.minestuck.util.GristStorage;
+import com.mraof.minestuck.util.UsernameHandler;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 import cpw.mods.fml.common.ITickHandler;
@@ -239,16 +243,26 @@ public class ServerEditHandler implements ITickHandler{
 	@ForgeSubscribe
 	public void onTossEvent(ItemTossEvent event) {
 		if(!event.entity.worldObj.isRemote && getData(event.player.username) != null) {
+			EditData data = getData(event.player.username);
 			InventoryPlayer inventory = event.player.inventory;
 			ItemStack stack = event.entityItem.getEntityItem();
 			if(DeployList.containsItemStack(stack))
 					if(stack.getItem() instanceof ItemBlock)
 						event.setCanceled(true);
-//					else if()
+					else {
+						GristSet cost = Minestuck.hardMode && data.connection.givenItems()[DeployList.getOrdinal(stack)+1]
+								?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
+						if(GristHelper.canAfford(GristStorage.getGristSet(UsernameHandler.encode(event.player.username)), cost)) {
+							GristHelper.decrease(UsernameHandler.encode(event.player.username), cost);
+							data.connection.givenItems()[DeployList.getOrdinal(stack)+1] = true;
+							if(!data.connection.isMain())
+								SkaianetHandler.giveItems(data.connection.getClientName());
+						} else event.setCanceled(true);
+					}
 			
 			else if(stack.getItem() instanceof ItemCardPunched && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact) {
-				SburbConnection c = getData(event.player.username).connection;
-				c.givenItems()[4] = true;
+				SburbConnection c = data.connection;
+				c.givenItems()[0] = true;
 				if(!c.isMain())
 					SkaianetHandler.giveItems(c.getClientName());
 			} else {

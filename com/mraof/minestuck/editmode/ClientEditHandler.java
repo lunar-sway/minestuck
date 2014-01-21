@@ -35,6 +35,7 @@ import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristStorage;
@@ -182,12 +183,16 @@ public class ClientEditHandler implements ITickHandler{
 		if(event.entity.worldObj.isRemote && event.player instanceof EntityClientPlayerMP && isActive()) {
 			InventoryPlayer inventory = event.player.inventory;
 			ItemStack stack = event.entityItem.getEntityItem();
-			if((stack.getItem() instanceof ItemBlock && DeployList.containsItemStack(stack))) {
-				event.setCanceled(true);
-			}
+			int ordinal = DeployList.getOrdinal(stack)+1;
+			if(ordinal > 0)
+				if(stack.getItem() instanceof ItemBlock)
+					event.setCanceled(true);
+				else if(GristHelper.canAfford(GristStorage.getClientGrist(), Minestuck.clientHardMode&&givenItems[ordinal]
+						?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack)))
+					givenItems[ordinal] = true;
 			else if(stack.getItem() instanceof ItemCardPunched && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact) {
 				SburbConnection c = SkaiaClient.getClientConnection(client);
-				givenItems[4] = true;
+				givenItems[0] = true;
 			} else {
 				event.setCanceled(true);
 				if(inventory.getItemStack() != null)
