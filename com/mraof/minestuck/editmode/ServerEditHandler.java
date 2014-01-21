@@ -36,6 +36,7 @@ import com.mraof.minestuck.item.ItemMachine;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
+import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
@@ -365,17 +366,17 @@ public class ServerEditHandler implements ITickHandler{
 				}
 		}
 		
+		ItemStack stack = new ItemStack(Minestuck.punchedCard);
+		NBTTagCompound nbt = new NBTTagCompound();
+		stack.setTagCompound(nbt);
+		nbt.setInteger("contentID", Minestuck.cruxiteArtifact.itemID);
+		nbt.setInteger("contentMeta", SessionHandler.getEntryItem(player.username));
 		if(!enteredGame) {
-			ItemStack stack = new ItemStack(Minestuck.punchedCard);
-			NBTTagCompound nbt = new NBTTagCompound();
-			stack.setTagCompound(nbt);
-			nbt.setInteger("contentID", Minestuck.cruxiteArtifact.itemID);
-			nbt.setInteger("contentMeta", 0);	//TODO Change this for when adding other artifact types
 			if(!player.inventory.hasItemStack(stack) && !(player.inventory.getItemStack() != null && player.inventory.getItemStack().isItemEqual(stack))) {
 				player.inventory.addItemStackToInventory(stack);
 				inventoryChanged = true;
 			}
-		}
+		} else inventoryChanged = inventoryChanged || player.inventory.clearInventory(Minestuck.cruxiteArtifact.itemID, SessionHandler.getEntryItem(player.username)) != 0;
 		
 		if(inventoryChanged)
 			MinecraftServer.getServer().getConfigurationManager().syncPlayerInventory(player);

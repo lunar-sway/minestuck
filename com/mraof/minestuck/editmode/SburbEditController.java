@@ -17,6 +17,7 @@ import com.mraof.minestuck.item.ItemMachine;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristRegistry;
+import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristStorage;
 import com.mraof.minestuck.util.GristType;
 
@@ -40,9 +41,14 @@ public class SburbEditController extends PlayerControllerMP {
 		float f1 = (float)par8Vec3.yCoord - (float)par5;
 		float f2 = (float)par8Vec3.zCoord - (float)par6;
 		
-		if(stack != null && stack.getItem() instanceof ItemBlock && (GristHelper.canAfford(GristStorage.getClientGrist(), GristRegistry.getGristConversion(stack))
-				|| stack.getItem() instanceof ItemMachine && stack.getItemDamage() < 4 && (stack.getItemDamage() != 1 || GristStorage.getClientGrist().getGrist(GristType.Shale) >= 4) &&	//TODO This if-statement could require a cleanup
-				(!Minestuck.clientHardMode || stack.getItemDamage() == 1 || !SkaiaClient.getClientConnection(ClientEditHandler.client).givenItems()[stack.getItemDamage()] || GristStorage.getClientGrist().getGrist(GristType.Build) >= 100))) {
+		if(stack != null && stack.getItem() instanceof ItemBlock) {
+			GristSet cost;
+			if(DeployList.containsItemStack(stack))
+				if(Minestuck.clientHardMode && SkaiaClient.getClientConnection(ClientEditHandler.client).givenItems()[stack.getItemDamage()])
+					cost = DeployList.getSecondaryCost(stack);
+				else cost = DeployList.getPrimaryCost(stack);
+			else cost = GristRegistry.getGristConversion(stack);
+			if(GristHelper.canAfford(GristStorage.getClientGrist(), cost)) {
 				ItemBlock item = (ItemBlock)stack.getItem();
 				if(!item.canPlaceItemBlockOnSide(world, par4, par5, par6, par7, entityPlayer, stack))
 					return false;
@@ -55,10 +61,11 @@ public class SburbEditController extends PlayerControllerMP {
 				stack.setItemDamage(d);
 				stack.stackSize = size;
 				
-				if(result && stack.getItem() instanceof ItemMachine && stack.getItemDamage() < 4)
-					ClientEditHandler.givenItems[stack.getItemDamage()] = true;
+				if(result && DeployList.containsItemStack(stack))
+					ClientEditHandler.givenItems[DeployList.getOrdinal(stack)+1] = true;
 				return result;
 			}
+		}
 		return false;
 	}
 	

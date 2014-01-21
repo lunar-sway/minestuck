@@ -180,6 +180,14 @@ public class SessionHandler {
 	}
 	
 	/**
+	 * @param player The username of the player, not encoded.
+	 * @return Damage value for the entry item
+	 */
+	public static int getEntryItem(String player) {
+		return 0;
+	}
+	
+	/**
 	 * Will check if two players can connect based on their main connections and sessions.
 	 * Does NOT include session size checking.
 	 * @return True if client connection is not null and client and server session is the same or 

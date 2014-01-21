@@ -40,6 +40,7 @@ public class DeployList {
 	/**
 	 * Register the specific item as deployable.
 	 * @param item The item to be registered.
+	 * The itemstack can have nbt tags, with the exception of the display tag.
 	 * @param cost1 How much it costs the first time deployed.
 	 * @param cost2 How much it costs after the first times. Null if only deployable once.
 	 * First cost will always be used when not in hardmode.
@@ -47,10 +48,9 @@ public class DeployList {
 	 * All will be available to all players when the chain is complete.
 	 */
 	public static void registerItem(ItemStack stack, GristSet cost1, GristSet cost2, int tier) {
-		stack.stackSize = 1;
-		for(DeployEntry entry : list)
-			if(ItemStack.areItemStacksEqual(entry.item, stack))
-				throw new IllegalStateException("Item stack already added to the deploy list:"+stack);
+		stack = cleanStack(stack);
+		if(containsItemStack(stack))
+			throw new IllegalStateException("Item stack already added to the deploy list:"+stack);
 		list.add(new DeployEntry(stack, cost1, cost2, tier));
 	}
 	
@@ -69,7 +69,17 @@ public class DeployList {
 		return itemList;
 	}
 	
+	private static ItemStack cleanStack(ItemStack stack) {
+		stack = stack.copy();
+		stack.stackSize = 1;
+		if(stack.stackTagCompound == null)
+			stack.stackTagCompound = new NBTTagCompound();
+		else stack.stackTagCompound.removeTag("display");
+		return stack;
+	}
+	
 	public static GristSet getPrimaryCost(ItemStack stack) {
+		stack = cleanStack(stack);
 		for(DeployEntry entry : list)
 			if(ItemStack.areItemStacksEqual(entry.item, stack))
 				return entry.cost1;
@@ -77,6 +87,7 @@ public class DeployList {
 	}
 	
 	public static GristSet getSecondaryCost(ItemStack stack) {
+		stack = cleanStack(stack);
 		for(DeployEntry entry : list)
 			if(ItemStack.areItemStacksEqual(entry.item, stack))
 				return entry.cost2;
@@ -84,6 +95,7 @@ public class DeployList {
 	}
 	
 	public static boolean containsItemStack(ItemStack stack) {
+		stack = cleanStack(stack);
 		for(DeployEntry entry : list)
 			if(ItemStack.areItemStacksEqual(entry.item, stack))
 				return true;
@@ -91,8 +103,9 @@ public class DeployList {
 	}
 	
 	public static int getOrdinal(ItemStack stack) {
+		stack = cleanStack(stack);
 		for(int i = 0; i < list.size(); i++)
-			if(list.get(i).item.isItemEqual(stack))
+			if(ItemStack.areItemStacksEqual(list.get(i).item,stack))
 				return i;
 		return -1;
 	}

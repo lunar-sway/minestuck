@@ -9,6 +9,7 @@ import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -33,6 +34,7 @@ import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristStorage;
@@ -121,15 +123,21 @@ public class ClientEditHandler implements ITickHandler{
 			NBTTagList list = new NBTTagList();
 			stack.stackTagCompound.getCompoundTag("display").setTag("Lore", list);
 			
+			
 			GristSet cost;
-			if(stack.getItem() instanceof ItemMachine && stack.getItemDamage() < 4) {
-				if(stack.getItemDamage() == 1)
-					cost = new GristSet(GristType.Shale, 4);
-				else cost = Minestuck.clientHardMode&&givenItems[stack.getItemDamage()]?new GristSet(GristType.Build, 100):new GristSet();
-			}
+			ItemStack stack1 = stack.copy();
+			if(DeployList.containsItemStack(stack))
+				cost = Minestuck.clientHardMode&&givenItems[DeployList.getOrdinal(stack)+1]
+						?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
 			else if(stack.getItem().equals(Minestuck.punchedCard))
 				cost = new GristSet();
 			else cost = GristRegistry.getGristConversion(stack);
+			
+			if(cost == null) {
+				list.appendTag(new NBTTagString("",""+EnumChatFormatting.RESET+EnumChatFormatting.RESET
+						+EnumChatFormatting.RED+StatCollector.translateToLocal("gui.notAvailable")));
+				continue;
+			}
 			
 			for(Entry entry : (Set<Entry>)cost.getHashtable().entrySet()) {
 				GristType grist = GristType.values()[(Integer)entry.getKey()];
@@ -174,16 +182,12 @@ public class ClientEditHandler implements ITickHandler{
 		if(event.entity.worldObj.isRemote && event.player instanceof EntityClientPlayerMP && isActive()) {
 			InventoryPlayer inventory = event.player.inventory;
 			ItemStack stack = event.entityItem.getEntityItem();
-			if((stack.getItem() instanceof ItemMachine && stack.getItemDamage() < 4)) {
+			if((stack.getItem() instanceof ItemBlock && DeployList.containsItemStack(stack))) {
 				event.setCanceled(true);
-//				if(inventory.getItemStack() != null)
-//					inventory.inventoryChanged = true;
 			}
 			else if(stack.getItem() instanceof ItemCardPunched && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact) {
 				SburbConnection c = SkaiaClient.getClientConnection(client);
 				givenItems[4] = true;
-//				if(!Minestuck.clientHardMode)
-//					inventory.inventoryChanged = true;
 			} else {
 				event.setCanceled(true);
 				if(inventory.getItemStack() != null)
