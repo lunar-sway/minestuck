@@ -1,19 +1,20 @@
 package com.mraof.minestuck.network.skaianet;
 
+import java.util.ArrayList;
+
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.editmode.DeployList;
 
 public class SburbConnection {
 	
-	
-//	@SideOnly(Side.SERVER)
 	ComputerData client;
 	String clientName = "";
-//	@SideOnly(Side.SERVER)
 	ComputerData server;
 	String serverName = "";
 	boolean isActive;
@@ -22,10 +23,12 @@ public class SburbConnection {
 	boolean canSplit;
 	int clientHomeLand;
 	/**
-	 * 0-3 = the machines
-	 * 4 = the card
+	 * 0 = card
+	 * 1+ = items in deploy list
+	 * If the client will have frog breeding as quest, the array will be extended and the new positions will hold the gear.
 	 */
-	boolean[] givenItemList = new boolean[DeployList.getItemList().size()+1];	//Plus one because the card is a special case.
+	boolean[] givenItemList = new boolean[DeployList.getItemList().size()+1];
+	NBTTagList unregisteredItems = new NBTTagList();
 	
 	//Only used by the edit handler
 	public int centerX, centerZ;
@@ -81,10 +84,15 @@ public class SburbConnection {
 			nbt.setBoolean("isActive", isActive);
 			nbt.setBoolean("enteredGame", enteredGame);
 			nbt.setBoolean("canSplit", canSplit);
-			byte[] array = new byte[givenItemList.length];
-			for(int i = 0; i < givenItemList.length; i++)
-				array[i] = (byte) (givenItemList[i]?1:0);
-			nbt.setByteArray("givenItems", array);
+			nbt.setBoolean("givenCard", givenItemList[0]);
+			NBTTagList list = (NBTTagList) unregisteredItems.copy();
+			for(ItemStack stack : DeployList.getItemList()) {
+				NBTTagCompound itemData = stack.writeToNBT(new NBTTagCompound());
+				itemData.setBoolean("given", givenItemList[DeployList.getOrdinal(stack)+1]);
+				list.appendTag(itemData);
+			}
+			
+			nbt.setTag("givenItems", list);
 			if(enteredGame){
 				nbt.setInteger("clientLand", clientHomeLand);
 				nbt.setInteger("centerX", centerX);
@@ -115,12 +123,28 @@ public class SburbConnection {
 			}
 			if(nbt.hasKey("canSplit"))
 				canSplit = nbt.getBoolean("canSplit");
+			givenItemList[0] = nbt.getBoolean("givenCard");
 			if(nbt.hasKey("givenItems")) {
-				byte[] array = nbt.getByteArray("givenItems");
-				for(int i = 0; i < array.length; i++)
-					givenItemList[i] = array[i] != 0;
-			} else for(int i = 0; i < 4; i++)
-					givenItemList[i] = true;
+				if(nbt.getTag("givenItems") instanceof NBTTagList) {
+					NBTTagList list = nbt.getTagList("givenItems");
+					for(int i = 0; i < list.tagCount(); i++) {
+						NBTTagCompound itemTag = (NBTTagCompound) list.tagAt(i);
+						int ordinal = DeployList.getOrdinal(ItemStack.loadItemStackFromNBT(itemTag));
+						if(ordinal == -1)
+							unregisteredItems.appendTag(itemTag);
+						else givenItemList[ordinal+1] = itemTag.getBoolean("given");
+					}
+				} else {
+					byte[] array = nbt.getByteArray("givenItems");
+					givenItemList[0] = array[4] != 0;
+					for(int i = 0; i < 4; i++)
+						givenItemList[DeployList.getOrdinal(new ItemStack(Minestuck.blockMachine,1,i))+1] = array[i] != 0;
+				}
+			} else {
+				givenItemList[0] = true;
+				for(int i = 0; i < 4; i++)
+					givenItemList[DeployList.getOrdinal(new ItemStack(Minestuck.blockMachine,1,i))+1] = true;
+			}
 		}
 		if(isActive){
 			client = new ComputerData().read(nbt.getCompoundTag("client"));

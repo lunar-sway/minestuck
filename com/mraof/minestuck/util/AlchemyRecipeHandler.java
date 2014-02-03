@@ -418,8 +418,8 @@ public class AlchemyRecipeHandler {
 			CombinationRegistry.addCombination(new ItemStack(Block.wood, 1, meta), new ItemStack(Block.sapling), CombinationRegistry.MODE_OR, true, false, new ItemStack(Block.sapling, 1, meta));
 		}
 		for (int meta = 0;meta <= 15;meta++) {
-			CombinationRegistry.addCombination(new ItemStack(Item.dyePowder,1,meta),new ItemStack(Block.cloth),CombinationRegistry.MODE_AND, true,false, new ItemStack(Block.cloth,1,meta));
-			CombinationRegistry.addCombination(new ItemStack(Item.dyePowder),new ItemStack(Block.cloth,1,meta),CombinationRegistry.MODE_OR, false,true, new ItemStack(Item.dyePowder,1,meta));
+			CombinationRegistry.addCombination(new ItemStack(Item.dyePowder,1,meta^15),new ItemStack(Block.cloth),CombinationRegistry.MODE_AND, true,false, new ItemStack(Block.cloth,1,meta));
+			CombinationRegistry.addCombination(new ItemStack(Item.dyePowder),new ItemStack(Block.cloth,1,meta),CombinationRegistry.MODE_OR, false,true, new ItemStack(Item.dyePowder,1,meta^15));
 		}
 		
 		//ore related
@@ -429,7 +429,7 @@ public class AlchemyRecipeHandler {
 		CombinationRegistry.addCombination(new ItemStack(Item.diamond),new ItemStack(Block.stone),CombinationRegistry.MODE_AND, new ItemStack(Block.oreDiamond));
 		CombinationRegistry.addCombination(new ItemStack(Item.emerald),new ItemStack(Block.stone),CombinationRegistry.MODE_AND, new ItemStack(Block.oreEmerald));
 		CombinationRegistry.addCombination(new ItemStack(Item.redstone),new ItemStack(Block.stone),CombinationRegistry.MODE_AND, new ItemStack(Block.oreRedstone));
-		CombinationRegistry.addCombination(new ItemStack(Item.dyePowder,1,8),new ItemStack(Block.stone),CombinationRegistry.MODE_AND, new ItemStack(Block.oreLapis));
+		CombinationRegistry.addCombination(new ItemStack(Item.dyePowder,1,4),new ItemStack(Block.stone),CombinationRegistry.MODE_AND, new ItemStack(Block.oreLapis));
 		CombinationRegistry.addCombination(new ItemStack(Item.netherQuartz),new ItemStack(Block.netherrack),CombinationRegistry.MODE_AND, new ItemStack(Block.oreNetherQuartz));
 		CombinationRegistry.addCombination(new ItemStack(Item.ingotIron),new ItemStack(Block.stone),CombinationRegistry.MODE_OR, new ItemStack(Block.blockIron));
 		CombinationRegistry.addCombination(new ItemStack(Item.ingotGold),new ItemStack(Block.stone),CombinationRegistry.MODE_OR, new ItemStack(Block.blockGold));
@@ -437,7 +437,7 @@ public class AlchemyRecipeHandler {
 		CombinationRegistry.addCombination(new ItemStack(Item.diamond),new ItemStack(Block.stone),CombinationRegistry.MODE_OR, new ItemStack(Block.blockDiamond));
 		CombinationRegistry.addCombination(new ItemStack(Item.emerald),new ItemStack(Block.stone),CombinationRegistry.MODE_OR, new ItemStack(Block.blockEmerald));
 		CombinationRegistry.addCombination(new ItemStack(Item.redstone),new ItemStack(Block.stone),CombinationRegistry.MODE_OR, new ItemStack(Block.blockRedstone));
-		CombinationRegistry.addCombination(new ItemStack(Item.dyePowder,1,8),new ItemStack(Block.stone),CombinationRegistry.MODE_OR, new ItemStack(Block.blockLapis));
+		CombinationRegistry.addCombination(new ItemStack(Item.dyePowder,1,4),new ItemStack(Block.stone),CombinationRegistry.MODE_OR, new ItemStack(Block.blockLapis));
 		CombinationRegistry.addCombination(new ItemStack(Item.netherQuartz),new ItemStack(Block.netherrack),CombinationRegistry.MODE_OR, new ItemStack(Block.blockNetherQuartz));
 		
 		//misc

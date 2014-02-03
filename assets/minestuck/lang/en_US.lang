@@ -82,6 +82,7 @@ gui.lathe.name=Totem Lathe
 gui.alchemiter.name=Alchemiter
 gui.widget.name=GristWidget 12000
 gui.notAlchemizable=Not Alchemizable
+gui.notAvailable=Not Available
 gui.free=Free!
 gui.buttonStop=STOP
 gui.buttonGo=GO

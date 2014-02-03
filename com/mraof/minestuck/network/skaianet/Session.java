@@ -14,6 +14,7 @@ import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.util.EnumChatFormatting;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.Debug;
 
 /**
  * Was also an interface for the session system, but now just a data structure representing a session.
@@ -44,15 +45,20 @@ public class Session {
 		}
 		String start = connections.get(0).getClientName();
 		String current = start;
-		while(true){
-			for(SburbConnection c : connections)
-				if(c.getServerName().equals(current)){
+		main: while(true){
+			for(SburbConnection c : connections) {
+				if(!c.enteredGame) {
+					completed = false;
+					return;
+				}
+				if(c.getServerName().equals(current)) {
 					current = c.getClientName();
-					if(start.equals(current)){
+					if(start.equals(current)) {
 						completed = true;
 						return;
-					} else continue;
+					} else continue main;
 				}
+			}
 			completed = false;
 			return;
 		}

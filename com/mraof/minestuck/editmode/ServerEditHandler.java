@@ -36,11 +36,16 @@ import com.mraof.minestuck.item.ItemMachine;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
+import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristRegistry;
+import com.mraof.minestuck.util.GristSet;
+import com.mraof.minestuck.util.GristStorage;
+import com.mraof.minestuck.util.UsernameHandler;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 import cpw.mods.fml.common.ITickHandler;
@@ -219,9 +224,9 @@ public class ServerEditHandler implements ITickHandler{
 			return;
 		
 		SburbConnection c = data.connection;
-		double range = (MinestuckSaveHandler.lands.contains((byte)player.dimension)?Minestuck.landEditRange:Minestuck.overworldEditRange)/2;
+		int range = MinestuckSaveHandler.lands.contains((byte)player.dimension)?Minestuck.landEditRange:Minestuck.overworldEditRange;
 		
-		updateInventory(player, c.givenItems(), c.enteredGame());
+		updateInventory(player, c.givenItems(), c.enteredGame(), c.getClientName());
 		updatePosition(player, range, c.centerX, c.centerZ);
 	}
 
@@ -238,16 +243,27 @@ public class ServerEditHandler implements ITickHandler{
 	@ForgeSubscribe
 	public void onTossEvent(ItemTossEvent event) {
 		if(!event.entity.worldObj.isRemote && getData(event.player.username) != null) {
+			EditData data = getData(event.player.username);
 			InventoryPlayer inventory = event.player.inventory;
 			ItemStack stack = event.entityItem.getEntityItem();
 			if(DeployList.containsItemStack(stack))
 					if(stack.getItem() instanceof ItemBlock)
 						event.setCanceled(true);
-//					else if()
+					else {
+						GristSet cost = Minestuck.hardMode && data.connection.givenItems()[DeployList.getOrdinal(stack)+1]
+								?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
+						if(GristHelper.canAfford(GristStorage.getGristSet(data.connection.getClientName()), cost)) {
+							GristHelper.decrease(data.connection.getClientName(), cost);
+							MinestuckPlayerTracker.updateGristCache(data.connection.getClientName());
+							data.connection.givenItems()[DeployList.getOrdinal(stack)+1] = true;
+							if(!data.connection.isMain())
+								SkaianetHandler.giveItems(data.connection.getClientName());
+						} else event.setCanceled(true);
+					}
 			
 			else if(stack.getItem() instanceof ItemCardPunched && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact) {
-				SburbConnection c = getData(event.player.username).connection;
-				c.givenItems()[4] = true;
+				SburbConnection c = data.connection;
+				c.givenItems()[0] = true;
 				if(!c.isMain())
 					SkaianetHandler.giveItems(c.getClientName());
 			} else {
@@ -321,12 +337,12 @@ public class ServerEditHandler implements ITickHandler{
 	/**
 	 * Server sided
 	 */
-	public static void updateInventory(EntityPlayerMP player, boolean[] givenItems, boolean enteredGame) {
+	public static void updateInventory(EntityPlayerMP player, boolean[] givenItems, boolean enteredGame, String client) {	//Could need to have better effiency
 		boolean inventoryChanged = false;
 		for(int i = 0; i < player.inventory.mainInventory.length; i++) {
 			ItemStack stack = player.inventory.mainInventory[i];
 			if(stack != null && (GristRegistry.getGristConversion(stack) == null || !(stack.getItem() instanceof ItemBlock)) && !(DeployList.containsItemStack(stack) ||
-					stack.getItem() instanceof ItemCardPunched && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact && (!Minestuck.hardMode || !givenItems[4]) && !enteredGame)) {
+					stack.getItem() instanceof ItemCardPunched && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact && (!Minestuck.hardMode || !givenItems[0]) && !enteredGame)) {
 				player.inventory.mainInventory[i] = null;
 				inventoryChanged = true;
 			}
@@ -336,24 +352,49 @@ public class ServerEditHandler implements ITickHandler{
 			}
 		}
 		
+		ArrayList<ItemStack> itemsToRemove = new ArrayList();
 		for(ItemStack stack : DeployList.getItemList()) {
-			if(!player.inventory.hasItemStack(stack) && !(player.inventory.getItemStack() != null && player.inventory.getItemStack().isItemEqual(stack))) {
+			boolean shouldHave = !(Minestuck.hardMode && givenItems[DeployList.getOrdinal(stack)+1] && DeployList.getSecondaryCost(stack) == null
+					|| DeployList.getTier(stack) > SessionHandler.availableTier(client));
+			if(shouldHave && !player.inventory.hasItemStack(stack) && !(player.inventory.getItemStack() != null && player.inventory.getItemStack().isItemEqual(stack))) {
 				if(player.inventory.addItemStackToInventory(stack))
 					inventoryChanged = true;
-			}
+			} else if(!shouldHave)
+				itemsToRemove.add(stack);
 		}
 		
+		
+		if(player.inventory.getItemStack() != null)
+			for(ItemStack stack : itemsToRemove)
+				if(player.inventory.getItemStack().equals(stack)) {
+					player.inventory.setItemStack(null);
+					inventoryChanged = true;
+					break;
+				}
+		
+		for(int i = 0; i < player.inventory.mainInventory.length; i++) {
+			ItemStack stack = player.inventory.mainInventory[i];
+			if(stack == null)
+				continue;
+			for(ItemStack stack1 : itemsToRemove)
+				if(stack.isItemEqual(stack1)) {
+					player.inventory.mainInventory[i] = null;
+					inventoryChanged = true;
+					break;
+				}
+		}
+		
+		ItemStack stack = new ItemStack(Minestuck.punchedCard);
+		NBTTagCompound nbt = new NBTTagCompound();
+		stack.setTagCompound(nbt);
+		nbt.setInteger("contentID", Minestuck.cruxiteArtifact.itemID);
+		nbt.setInteger("contentMeta", SessionHandler.getEntryItem(client));
 		if(!enteredGame) {
-			ItemStack stack = new ItemStack(Minestuck.punchedCard);
-			NBTTagCompound nbt = new NBTTagCompound();
-			stack.setTagCompound(nbt);
-			nbt.setInteger("contentID", Minestuck.cruxiteArtifact.itemID);
-			nbt.setInteger("contentMeta", 0);	//TODO Change this for when adding other artifact types
 			if(!player.inventory.hasItemStack(stack) && !(player.inventory.getItemStack() != null && player.inventory.getItemStack().isItemEqual(stack))) {
 				player.inventory.addItemStackToInventory(stack);
 				inventoryChanged = true;
 			}
-		}
+		} else inventoryChanged = inventoryChanged || player.inventory.clearInventory(Minestuck.cruxiteArtifact.itemID, SessionHandler.getEntryItem(player.username)) != 0;
 		
 		if(inventoryChanged)
 			MinecraftServer.getServer().getConfigurationManager().syncPlayerInventory(player);

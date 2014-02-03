@@ -40,14 +40,12 @@ public class SburbEditManager extends ItemInWorldManager{
 	public boolean activateBlockOrUseItem(EntityPlayer entityPlayer, World world, ItemStack stack, int par4, int par5, int par6, int par7, float par8, float par9, float par10) {
 		if(stack == null) return false;
 		
-		if(stack.getItem() instanceof ItemMachine && stack.getItemDamage() < 4) {
+		if(DeployList.containsItemStack(stack)) {
 			SburbConnection c = ServerEditHandler.getData(thisPlayerMP.username).connection;
-			GristSet cost;
-			if(stack.getItemDamage() == 1)
-				cost = new GristSet(GristType.Shale, 4);
-			else cost = Minestuck.hardMode && c.givenItems()[stack.getItemDamage()]?new GristSet(GristType.Build, 100):new GristSet();
+			GristSet cost = Minestuck.hardMode && c.givenItems()[DeployList.getOrdinal(stack)+1]
+					?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
 			if(GristHelper.canAfford(GristStorage.getGristSet(client), cost) && super.activateBlockOrUseItem(entityPlayer, world, stack, par4, par5, par6, par7, par8, par9, par10)) {
-				c.givenItems()[stack.getItemDamage()] = true;
+				c.givenItems()[DeployList.getOrdinal(stack)] = true;
 				if(!c.isMain())
 					SkaianetHandler.giveItems(client);
 				if(!cost.isEmpty())
