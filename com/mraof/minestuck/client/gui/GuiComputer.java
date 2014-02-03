@@ -148,11 +148,14 @@ public class GuiComputer extends GuiScreen
 		for(GuiButton button : selButtons)
 			button.displayString = "";
 		
-		if(te.programSelected == 0){
-			programButton.displayString = StatCollector.translateToLocal("computer.programClient");;
+		if(!te.latestmessage.get(te.programSelected).isEmpty())
+			addButtonString("computer.buttonClear");
+		
+		programButton.displayString = StatCollector.translateToLocal("computer.program"+(te.programSelected == 0?"Client":"Server"));
+		if(te.worldObj.provider.dimensionId == -1) {
+			displayMessage = StatCollector.translateToLocal("computer.messageNether");
+		} else if(te.programSelected == 0) {
 			SburbConnection c = SkaiaClient.getClientConnection(te.owner);
-			if(!te.latestmessage.get(0).isEmpty())
-				addButtonString("computer.buttonClear");
 			if (te.serverConnected && c != null) { //If it is connected to someone.
 				displayMessage = StatCollector.translateToLocalFormatted("computer.messageConnect", displayPlayer);
 				addButtonString("computer.buttonClose");
@@ -169,9 +172,6 @@ public class GuiComputer extends GuiScreen
 				displayMessage = StatCollector.translateToLocal("computer.messageClientActive");
 		}
 		else if(te.programSelected == 1){
-			programButton.displayString = StatCollector.translateToLocal("computer.programServer");
-			if(!te.latestmessage.get(1).isEmpty())
-				addButtonString("computer.buttonClear");
 			if (!te.clientName.isEmpty() && SkaiaClient.getClientConnection(te.clientName) != null) {
 				displayMessage = StatCollector.translateToLocalFormatted("computer.messageConnect", displayPlayer);
 				addButtonString("computer.buttonClose");

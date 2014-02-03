@@ -50,11 +50,11 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 	}
 	@Override
 	protected void onFoodEaten(ItemStack par1ItemStack, World par2World, EntityPlayer player) {
-		player.triggerAchievement(MinestuckStatsHandler.enterMedium);
-		if(!par2World.isRemote)
-		{
+		if(!par2World.isRemote && player.worldObj.provider.dimensionId != -1) {
+			
 			int destinationId = player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("LandId") == 0 ? LandHelper.createLand(player) : player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("LandId");
 			if(player.worldObj.provider.dimensionId != destinationId) {
+				player.triggerAchievement(MinestuckStatsHandler.enterMedium);
 				Teleport.teleportEntity(player, destinationId, this);
 				SkaianetHandler.enterMedium((EntityPlayerMP)player, destinationId);
 			}

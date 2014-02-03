@@ -91,6 +91,8 @@ public class SkaianetHandler {
 	}
 	
 	public static void requestConnection(ComputerData player, String otherPlayer, boolean isClient){
+		if(player.dimension == -1)
+			return;
 		TileEntityComputer te = getComputer(player);
 		if(te == null)
 			return;
@@ -451,8 +453,8 @@ public class SkaianetHandler {
 		for(Iterator<ComputerData> i : iter1)
 			while(i.hasNext()) {
 				ComputerData data = i.next();
-				if(getComputer(data) == null || !getComputer(data).owner.equals(data.owner) || !(resumingClients.containsValue(data)?getComputer(data).resumingClient:getComputer(data).openToClients)) {
-					Debug.print("[SKAIANET] Invalid computer in waiting list!");
+				if(getComputer(data) == null || data.dimension == -1 || !getComputer(data).owner.equals(data.owner) || !(resumingClients.containsValue(data)?getComputer(data).resumingClient:getComputer(data).openToClients)) {
+					//Debug.print("[SKAIANET] Invalid computer in waiting list!");
 					i.remove();
 				}
 			}
@@ -462,8 +464,8 @@ public class SkaianetHandler {
 			SburbConnection c = iter2.next();
 			if(c.isActive){
 				TileEntityComputer cc = getComputer(c.client), sc = getComputer(c.server);
-				if(cc == null || sc == null || !cc.owner.equals(c.getClientName()) || !sc.owner.equals(c.getServerName()) || !cc.serverConnected || !sc.clientName.equals(c.getClientName())){
-					Debug.print("[SKAIANET] Invalid computer in connection.");
+				if(cc == null || sc == null || c.client.dimension == -1 || c.server.dimension == -1 || !cc.owner.equals(c.getClientName()) || !sc.owner.equals(c.getServerName()) || !cc.serverConnected || !sc.clientName.equals(c.getClientName())){
+					//Debug.print("[SKAIANET] Invalid computer in connection.");
 					if(!c.isMain)
 						iter2.remove();
 					else c.isActive = false;

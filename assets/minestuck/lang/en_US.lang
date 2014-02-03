@@ -21,6 +21,7 @@ computer.messageConnectFail=Connection failed
 computer.messageClientActive=Client is already active
 computer.messageClosed=Connection closed
 computer.messageClosedServer=Server closed
+computer.messageNether=Can't reach skaianet
 computer.messageOffline=Server offline
 computer.messageSelect=Select a server below
 computer.messageServerActive=Server with your name exists

@@ -421,12 +421,14 @@ public class Minestuck
 		landEditRange = config.get("General", "landEditRange", 30).getInt();	//Now radius
 		artifactRange = config.get("General", "artifactRange", 30).getInt();
 		MinestuckStatsHandler.idOffset = config.get("General", "statisticIdOffset", 413).getInt();
-		toolTipEnabled = config.get("General", "toolTipEnabled", false).getBoolean(false);
 		hardMode = config.get("General", "hardMode", false).getBoolean(false);
 		forceMaxSize = config.get("General", "forceMaxSize", false).getBoolean(false);
 		escapeFailureMode = config.get("General", "escapeFailureMode", 0).getInt();
 		if(escapeFailureMode > 2 || escapeFailureMode < 0)
 			escapeFailureMode = 0;
+		if(event.getSide().isClient()) {	//Client sided config values
+			toolTipEnabled = config.get("General", "editModeToolTip", false).getBoolean(false);
+		}
 		config.save();
 		
 		MinestuckStatsHandler.prepareAchievementPage();

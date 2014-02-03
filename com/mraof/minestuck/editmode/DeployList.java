@@ -19,10 +19,10 @@ public class DeployList {
 	private static final ArrayList<DeployEntry> list = new ArrayList();
 	
 	public static void registerItems() {
-		registerItem(new ItemStack(Minestuck.blockMachine,1,0), new GristSet(), new GristSet(GristType.Build, 100), 0);
+		registerItem(new ItemStack(Minestuck.blockMachine,1,0), new GristSet()/*, new GristSet(GristType.Build, 100) This should be improved somehow*/, 0);
 		registerItem(new ItemStack(Minestuck.blockMachine,1,1), new GristSet(GristType.Shale, 4), 0);
-		registerItem(new ItemStack(Minestuck.blockMachine,1,2), new GristSet(), new GristSet(GristType.Build, 100), 0);
-		registerItem(new ItemStack(Minestuck.blockMachine,1,3), new GristSet(), new GristSet(GristType.Build, 100), 0);
+		registerItem(new ItemStack(Minestuck.blockMachine,1,2), new GristSet()/*, new GristSet(GristType.Build, 100)*/, 0);
+		registerItem(new ItemStack(Minestuck.blockMachine,1,3), new GristSet()/*, new GristSet(GristType.Build, 100)*/, 0);
 	}
 	
 	public static void registerItem(ItemStack stack) {
