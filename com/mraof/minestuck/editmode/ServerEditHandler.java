@@ -224,9 +224,9 @@ public class ServerEditHandler implements ITickHandler{
 			return;
 		
 		SburbConnection c = data.connection;
-		double range = (MinestuckSaveHandler.lands.contains((byte)player.dimension)?Minestuck.landEditRange:Minestuck.overworldEditRange)/2;
+		int range = MinestuckSaveHandler.lands.contains((byte)player.dimension)?Minestuck.landEditRange:Minestuck.overworldEditRange;
 		
-		updateInventory(player, c.givenItems(), c.enteredGame());
+		updateInventory(player, c.givenItems(), c.enteredGame(), c.getClientName());
 		updatePosition(player, range, c.centerX, c.centerZ);
 	}
 
@@ -252,8 +252,9 @@ public class ServerEditHandler implements ITickHandler{
 					else {
 						GristSet cost = Minestuck.hardMode && data.connection.givenItems()[DeployList.getOrdinal(stack)+1]
 								?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
-						if(GristHelper.canAfford(GristStorage.getGristSet(UsernameHandler.encode(event.player.username)), cost)) {
-							GristHelper.decrease(UsernameHandler.encode(event.player.username), cost);
+						if(GristHelper.canAfford(GristStorage.getGristSet(data.connection.getClientName()), cost)) {
+							GristHelper.decrease(data.connection.getClientName(), cost);
+							MinestuckPlayerTracker.updateGristCache(data.connection.getClientName());
 							data.connection.givenItems()[DeployList.getOrdinal(stack)+1] = true;
 							if(!data.connection.isMain())
 								SkaianetHandler.giveItems(data.connection.getClientName());
@@ -336,7 +337,7 @@ public class ServerEditHandler implements ITickHandler{
 	/**
 	 * Server sided
 	 */
-	public static void updateInventory(EntityPlayerMP player, boolean[] givenItems, boolean enteredGame) {	//Could need to have better effiency
+	public static void updateInventory(EntityPlayerMP player, boolean[] givenItems, boolean enteredGame, String client) {	//Could need to have better effiency
 		boolean inventoryChanged = false;
 		for(int i = 0; i < player.inventory.mainInventory.length; i++) {
 			ItemStack stack = player.inventory.mainInventory[i];
@@ -350,15 +351,18 @@ public class ServerEditHandler implements ITickHandler{
 				inventoryChanged = true;
 			}
 		}
+		
 		ArrayList<ItemStack> itemsToRemove = new ArrayList();
 		for(ItemStack stack : DeployList.getItemList()) {
-			boolean shouldHave = !(Minestuck.hardMode && givenItems[DeployList.getOrdinal(stack)+1] && DeployList.getSecondaryCost(stack) == null);
+			boolean shouldHave = !(Minestuck.hardMode && givenItems[DeployList.getOrdinal(stack)+1] && DeployList.getSecondaryCost(stack) == null
+					|| DeployList.getTier(stack) > SessionHandler.availableTier(client));
 			if(shouldHave && !player.inventory.hasItemStack(stack) && !(player.inventory.getItemStack() != null && player.inventory.getItemStack().isItemEqual(stack))) {
 				if(player.inventory.addItemStackToInventory(stack))
 					inventoryChanged = true;
 			} else if(!shouldHave)
 				itemsToRemove.add(stack);
 		}
+		
 		
 		if(player.inventory.getItemStack() != null)
 			for(ItemStack stack : itemsToRemove)
@@ -384,7 +388,7 @@ public class ServerEditHandler implements ITickHandler{
 		NBTTagCompound nbt = new NBTTagCompound();
 		stack.setTagCompound(nbt);
 		nbt.setInteger("contentID", Minestuck.cruxiteArtifact.itemID);
-		nbt.setInteger("contentMeta", SessionHandler.getEntryItem(player.username));
+		nbt.setInteger("contentMeta", SessionHandler.getEntryItem(client));
 		if(!enteredGame) {
 			if(!player.inventory.hasItemStack(stack) && !(player.inventory.getItemStack() != null && player.inventory.getItemStack().isItemEqual(stack))) {
 				player.inventory.addItemStackToInventory(stack);

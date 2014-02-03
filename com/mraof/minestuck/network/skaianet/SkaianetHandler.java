@@ -504,6 +504,10 @@ public class SkaianetHandler {
 		if(data == null)
 			return null;
 		World world = DimensionManager.getWorld(data.dimension);
+		if(world == null) {
+			DimensionManager.initDimension(data.dimension);
+			world = DimensionManager.getWorld(data.dimension);
+		}
 		if(world == null)
 			return null;
 		TileEntity te = world.getBlockTileEntity(data.x, data.y, data.z);
@@ -526,6 +530,13 @@ public class SkaianetHandler {
 				if(SessionHandler.onConnectionCreated(c) == null) {
 					SessionHandler.onFirstItemGiven(c);
 					connections.add(c);
+				} else if(SessionHandler.singleSession) {
+					SessionHandler.singleSession = false;
+					SessionHandler.split();
+					if(SessionHandler.onConnectionCreated(c) == null) {
+						SessionHandler.onFirstItemGiven(c);
+						connections.add(c);
+					}
 				}
 			} else giveItems(username);
 		}

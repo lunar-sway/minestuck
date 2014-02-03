@@ -49,7 +49,6 @@ public class MinestuckStatsHandler {
 	@ForgeSubscribe
 	public void onItemPickupEvent(EntityItemPickupEvent event) {
 		Item item = event.item.getEntityItem().getItem();
-		Debug.print(item.equals(Minestuck.rawCruxite)+" pickup event, item:"+item.getUnlocalizedName());
 		if(item.equals(Minestuck.rawCruxite))
 			event.entityPlayer.triggerAchievement(mineCruxite);
 	}

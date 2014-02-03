@@ -23,10 +23,6 @@ public class DeployList {
 		registerItem(new ItemStack(Minestuck.blockMachine,1,1), new GristSet(GristType.Shale, 4), 0);
 		registerItem(new ItemStack(Minestuck.blockMachine,1,2), new GristSet(), new GristSet(GristType.Build, 100), 0);
 		registerItem(new ItemStack(Minestuck.blockMachine,1,3), new GristSet(), new GristSet(GristType.Build, 100), 0);
-//		ItemStack cardStack = new ItemStack(Minestuck.punchedCard);	Will be a special case instead.
-//		cardStack.stackTagCompound = new NBTTagCompound();
-//		cardStack.stackTagCompound.setInteger("contentID", Minestuck.cruxiteArtifact.itemID);
-//		registerItem(cardStack, new GristSet(), null);
 	}
 	
 	public static void registerItem(ItemStack stack) {
@@ -70,6 +66,8 @@ public class DeployList {
 	}
 	
 	private static ItemStack cleanStack(ItemStack stack) {
+		if(stack == null)
+			return null;
 		stack = stack.copy();
 		stack.stackSize = 1;
 		if(stack.stackTagCompound == null)
@@ -107,6 +105,14 @@ public class DeployList {
 		for(int i = 0; i < list.size(); i++)
 			if(ItemStack.areItemStacksEqual(list.get(i).item,stack))
 				return i;
+		return -1;
+	}
+	
+	public static int getTier(ItemStack stack) {
+		stack = cleanStack(stack);
+		for(DeployEntry entry : list)
+			if(ItemStack.areItemStacksEqual(entry.item, stack))
+				return entry.tier;
 		return -1;
 	}
 	

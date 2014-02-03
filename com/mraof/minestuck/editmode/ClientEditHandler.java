@@ -161,7 +161,7 @@ public class ClientEditHandler implements ITickHandler{
 		if(!(player instanceof EntityClientPlayerMP) || !isActive())
 			return;
 		
-		double range = (MinestuckSaveHandler.lands.contains((byte)player.dimension)?Minestuck.clientLandEditRange:Minestuck.clientOverworldEditRange)/2;
+		double range = MinestuckSaveHandler.lands.contains((byte)player.dimension)?Minestuck.clientLandEditRange:Minestuck.clientOverworldEditRange;
 		
 		ServerEditHandler.updatePosition(player, range, centerX, centerZ);
 		if(Minestuck.toolTipEnabled)

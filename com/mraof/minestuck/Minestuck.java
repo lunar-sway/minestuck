@@ -404,9 +404,9 @@ public class Minestuck
 		privateComputers = config.get("General", "privateComputers", false).getBoolean(false);
 		privateMessage = config.get("General", "privateMessage", "You are not allowed to access other players computers.").getString();
 		easyDesignex  = config.get("General", "easyDesignex", true).getBoolean(true);
-		overworldEditRange = config.get("General", "overWorldEditRange", 26).getInt();
-		landEditRange = config.get("General", "landEditRange", 52).getInt();
-		artifactRange = config.get("General", "artifcatRange", 30).getInt();
+		overworldEditRange = config.get("General", "overWorldEditRange", 15).getInt();
+		landEditRange = config.get("General", "landEditRange", 30).getInt();	//Now radius
+		artifactRange = config.get("General", "artifactRange", 30).getInt();
 		MinestuckStatsHandler.idOffset = config.get("General", "statisticIdOffset", 413).getInt();
 		toolTipEnabled = config.get("General", "toolTipEnabled", false).getBoolean(false);
 		hardMode = config.get("General", "hardMode", false).getBoolean(false);
