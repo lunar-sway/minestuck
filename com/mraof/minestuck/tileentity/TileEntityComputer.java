@@ -31,9 +31,7 @@ public class TileEntityComputer extends TileEntity {
 	public String owner = "";
 	public Hashtable<Integer,String> latestmessage = new Hashtable();
 	public boolean resumingClient;
-	/**
-	 * 0 if client is selected, 1 if server. (client side variable)
-	 */
+	public NBTTagCompound programData;
 	public int programSelected = -1;
 	
 	@Override
@@ -44,16 +42,23 @@ public class TileEntityComputer extends TileEntity {
 				installedPrograms.put(((NBTTagInt)tag).data,true);
 			}
 		}
-		if(hasClient())
-			latestmessage.put(0, par1NBTTagCompound.getString("text0"));
-		if(hasServer())
-			latestmessage.put(1, par1NBTTagCompound.getString("text1"));
 		
-		this.clientName = par1NBTTagCompound.getString("connectClient");
-		this.serverConnected = par1NBTTagCompound.getBoolean("connectServer");
-		this.openToClients = par1NBTTagCompound.getBoolean("serverOpen");
-		this.resumingClient = par1NBTTagCompound.getBoolean("resumeClient");
-    	 this.owner = par1NBTTagCompound.getString("owner");
+		latestmessage.clear();
+		for(Entry<Integer,Boolean> e : installedPrograms.entrySet())
+			if(e.getValue())
+				latestmessage.put(e.getKey(), par1NBTTagCompound.getString("text"+e.getKey()));
+		
+		programData = par1NBTTagCompound.getCompoundTag("programData");
+		
+		if(!par1NBTTagCompound.hasKey("programData")) {
+			NBTTagCompound nbt = new NBTTagCompound();
+			nbt.setBoolean("connectedToServer", par1NBTTagCompound.getBoolean("connectServer"));
+			programData.setCompoundTag("data0", nbt);
+			this.clientName = par1NBTTagCompound.getString("connectClient");
+			this.openToClients = par1NBTTagCompound.getBoolean("serverOpen");
+			this.resumingClient = par1NBTTagCompound.getBoolean("resumeClient");
+		}
+		this.owner = par1NBTTagCompound.getString("owner");
     	 if(gui != null)
     		 gui.updateGui();
     }

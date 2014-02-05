@@ -12,7 +12,7 @@ achievement.alchemy.desc=Use the punch designex to alchemize something else!
 
 computer.buttonClear=Clear message
 computer.buttonClose=Disconnect
-computer.buttonConnect=Connect to %s
+computer.buttonConnect=%s
 computer.buttonEdit=Activate edit mode
 computer.buttonOpen=Open to clients
 computer.buttonResume=Resume connection
