@@ -90,12 +90,15 @@ import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+import com.mraof.minestuck.util.ComputerProgram;
 import com.mraof.minestuck.util.MinestuckStatsHandler;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristStorage;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.KindAbstratusList;
+import com.mraof.minestuck.util.SburbClient;
+import com.mraof.minestuck.util.SburbServer;
 import com.mraof.minestuck.util.UpdateChecker;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.WorldProviderSkaia;
@@ -628,6 +631,11 @@ public class Minestuck
 		
 		KindAbstratusList.registerTypes();
 		DeployList.registerItems();
+		
+		if(event.getSide().isClient()) {
+			ComputerProgram.registerProgram(0, SburbClient.class, clientDiskStack);
+			ComputerProgram.registerProgram(1, SburbServer.class, serverDiskStack);
+		}
 		
 		SessionHandler.maxSize = acceptTitleCollision?(generateSpecialClasses?168:144):12;
 	}

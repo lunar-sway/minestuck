@@ -1,23 +1,20 @@
 package com.mraof.minestuck.util;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 
-public class SburbClient extends ComputerProgram {
+public class SburbClient extends ButtonListProgram {
 	
 	@Override
-	public boolean isButtonListProgram() {
-		return true;
-	}
-	
-	@Override
-	public HashMap<String, Object[]> getStringList(TileEntityComputer te) {
-		HashMap map = new HashMap();
+	public LinkedHashMap<String, Object[]> getStringList(TileEntityComputer te) {
+		LinkedHashMap map = new LinkedHashMap();
 		String displayPlayer= "UNDEFINED";
 		if(te.serverConnected && SkaiaClient.getClientConnection(te.owner) != null)
 			displayPlayer = UsernameHandler.decode(SkaiaClient.getClientConnection(te.owner).getServerName());
@@ -40,8 +37,11 @@ public class SburbClient extends ComputerProgram {
 	}
 	
 	@Override
-	public void onButtonPressed(TileEntityComputer computer, String buttonName, Object[] data) {
-		
+	public void onButtonPressed(TileEntityComputer te, String buttonName, Object[] data) {
+		if(buttonName.equals("computer.buttonResume"))
+			SkaiaClient.sendConnectRequest(te, SkaiaClient.getAssociatedPartner(te.owner, true), true);
+		else if(buttonName.equals("computer.buttonConnect"))
+			SkaiaClient.sendConnectRequest(te, UsernameHandler.encode((String)data[0]), true);
 	}
 	
 }

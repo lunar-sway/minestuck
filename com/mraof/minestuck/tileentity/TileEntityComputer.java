@@ -14,6 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 
 import com.mraof.minestuck.client.gui.GuiComputer;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.util.ComputerProgram;
 
 public class TileEntityComputer extends TileEntity {
 	
@@ -33,6 +34,8 @@ public class TileEntityComputer extends TileEntity {
 	public boolean resumingClient;
 	public NBTTagCompound programData;
 	public int programSelected = -1;
+	
+	public ComputerProgram program;
 	
 	@Override
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound) {

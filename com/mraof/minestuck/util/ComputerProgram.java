@@ -1,34 +1,67 @@
 package com.mraof.minestuck.util;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map.Entry;
 
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
+import com.mraof.minestuck.client.gui.GuiComputer;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+@SideOnly(Side.CLIENT)
 public abstract class ComputerProgram {
 	
-	private static HashMap<Integer, ComputerProgram> programs = new HashMap();
+	private static HashMap<Integer, Class<? extends ComputerProgram>> programs = new HashMap();
 	
-	public static void registerProgram(int id, ComputerProgram program) {
-		if(programs.containsKey(id))
+	private static HashMap<Integer, ItemStack> disks = new HashMap();
+	
+	public static void registerProgram(int id, Class<? extends ComputerProgram> program, ItemStack disk) {
+		if(programs.containsKey(id) && id != -1)
 			throw new IllegalArgumentException("Program id "+id+" is already used!");
 		programs.put(id, program);
+		disks.put(id, disk);
 	}
 	
 	public static ComputerProgram getProgram(int id) {
-		return programs.get(id);
+		try {
+			return programs.get(id).newInstance();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
-	//Should be moved into an abstract underclass instead, when I figure out more on how non-button list programs should works
-	public abstract boolean isButtonListProgram();
-	
 	/**
-	 * Used by button list programs.
-	 * @param computer The tile entity representing the computer.
-	 * @return An array with the current message at position 0, and the content of the buttons at 1+.
-	 * Only the first string should be localized.
+	 * 
+	 * @return -2 if the item does not correspond to any program.
 	 */
-	public HashMap<String, Object[]> getStringList(TileEntityComputer computer) {return new HashMap();}
+	public static int getProgramID(ItemStack item) {
+		if(item.getItem().equals(Item.record11))
+			return -1;
+		item.stackSize = 1;
+		for(int id : programs.keySet())
+			if(disks.get(id).isItemEqual(item))
+				return id;
+		return -2;
+	}
 	
-	public void onButtonPressed(TileEntityComputer computer, String buttonName, Object[] data) {}
+	public final int getId() {
+		for(Entry<Integer, Class<? extends ComputerProgram>> entry : programs.entrySet())
+			if(entry.getValue() == this.getClass())
+				return entry.getKey();
+		return -1;
+	}
+	
+	public void onButtonPressed(TileEntityComputer te, GuiButton button) {}
+	
+	public void onInitGui(GuiComputer gui, List buttonList, ComputerProgram prevProgram) {}
+	
+	public void onUpdateGui(GuiComputer gui, List buttonList) {}
 	
 }
