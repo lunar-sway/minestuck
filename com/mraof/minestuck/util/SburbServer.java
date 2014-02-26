@@ -1,6 +1,6 @@
 package com.mraof.minestuck.util;
 
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
@@ -13,25 +13,25 @@ import com.mraof.minestuck.tileentity.TileEntityComputer;
 public class SburbServer extends ButtonListProgram {
 	
 	@Override
-	public LinkedHashMap<String, Object[]> getStringList(TileEntityComputer te) {
-		LinkedHashMap map = new LinkedHashMap();
+	public ArrayList<UnlocalizedString> getStringList(TileEntityComputer te) {
+		ArrayList list = new ArrayList();
 		String displayPlayer= te.clientName.isEmpty()?"UNDEFINED":UsernameHandler.decode(te.clientName);
 		if (!te.clientName.isEmpty() && SkaiaClient.getClientConnection(te.clientName) != null) {
-			map.put("displayMessage", new Object[]{"computer.messageConnect", displayPlayer});
-			map.put("computer.buttonClose", null);
-			map.put("computer.buttonEdit", null);
+			list.add(new UnlocalizedString("computer.messageConnect", displayPlayer));
+			list.add(new UnlocalizedString("computer.buttonClose"));
+			list.add(new UnlocalizedString("computer.buttonEdit"));
 		} else if (te.openToClients) {
-			map.put("displayMessage", new Object[]{"computer.messageResumeServer"});
-			map.put("computer.buttonClose", null);
+			list.add(new UnlocalizedString("computer.messageResumeServer"));
+			list.add(new UnlocalizedString("computer.buttonClose"));
 		} else if(SkaiaClient.isActive(te.owner, false))
-			map.put("displayMessage", new Object[]{"computer.messageServerActive"});
+			list.add(new UnlocalizedString("computer.messageServerActive"));
 		else {
-			map.put("displayMessage", new Object[]{"computer.messageOffline"});
-			map.put("computer.buttonOpen", null);
+			list.add(new UnlocalizedString("computer.messageOffline"));
+			list.add(new UnlocalizedString("computer.buttonOpen"));
 			if(!SkaiaClient.getAssociatedPartner(te.owner, false).isEmpty() && SkaiaClient.getClientConnection(SkaiaClient.getAssociatedPartner(te.owner, false)) == null)
-				map.put("computer.buttonResume", null);
+				list.add(new UnlocalizedString("computer.buttonResume"));
 		}
-		return map;
+		return list;
 	}
 	
 	@Override
@@ -42,7 +42,13 @@ public class SburbServer extends ButtonListProgram {
 			SkaiaClient.sendConnectRequest(te, SkaiaClient.getAssociatedPartner(te.owner, false), false);
 		else if(buttonName.equals("computer.buttonOpen"))
 			SkaiaClient.sendConnectRequest(te, "", false);
-		
+		else if(buttonName.equals("computer.buttonClose"))
+			SkaiaClient.sendCloseRequest(te, te.openToClients?"":te.clientName, false);
+	}
+	
+	@Override
+	public String getName() {
+		return "computer.programServer";
 	}
 	
 }

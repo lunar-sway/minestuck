@@ -14,6 +14,7 @@ import com.mraof.minestuck.tileentity.TileEntityComputer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+//TODO Add javadoc to interface methods before pull request
 @SideOnly(Side.CLIENT)
 public abstract class ComputerProgram {
 	
@@ -63,5 +64,10 @@ public abstract class ComputerProgram {
 	public void onInitGui(GuiComputer gui, List buttonList, ComputerProgram prevProgram) {}
 	
 	public void onUpdateGui(GuiComputer gui, List buttonList) {}
+	
+	//TODO I believe that this needs to be improved, but I may be wrong.
+	public abstract void paintGui(GuiComputer gui, TileEntityComputer te);
+	
+	public abstract String getName();
 	
 }

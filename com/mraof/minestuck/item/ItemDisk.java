@@ -65,7 +65,7 @@ public class ItemDisk extends Item {
 			}
 			if(world.getBlockId(x,y,z) == Minestuck.blockComputerOn.blockID){
 				TileEntityComputer te =  (TileEntityComputer) world.getBlockTileEntity(x, y, z);
-				if (te == null || te.installedPrograms.size() >= 2 || te.errored()) {return false;}
+				if (te == null || te.installedPrograms.size() >= 2 || te.hasProgram(-1)) {return false;}
 				if(te.owner.isEmpty())
 					te.owner = UsernameHandler.encode(player.username);
 				int i = item.getItemDamage();

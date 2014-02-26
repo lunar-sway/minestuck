@@ -15,6 +15,10 @@ import net.minecraft.tileentity.TileEntity;
 import com.mraof.minestuck.client.gui.GuiComputer;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.ComputerProgram;
+import com.mraof.minestuck.util.Debug;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityComputer extends TileEntity {
 	
@@ -35,6 +39,7 @@ public class TileEntityComputer extends TileEntity {
 	public NBTTagCompound programData;
 	public int programSelected = -1;
 	
+	@SideOnly(Side.CLIENT)
 	public ComputerProgram program;
 	
 	@Override
@@ -53,14 +58,16 @@ public class TileEntityComputer extends TileEntity {
 		
 		programData = par1NBTTagCompound.getCompoundTag("programData");
 		
-		if(!par1NBTTagCompound.hasKey("programData")) {
+		//if(!par1NBTTagCompound.hasKey("programData")) {
+			programData = new NBTTagCompound();
 			NBTTagCompound nbt = new NBTTagCompound();
 			nbt.setBoolean("connectedToServer", par1NBTTagCompound.getBoolean("connectServer"));
 			programData.setCompoundTag("data0", nbt);
 			this.clientName = par1NBTTagCompound.getString("connectClient");
+			this.serverConnected = par1NBTTagCompound.getBoolean("connectServer");
 			this.openToClients = par1NBTTagCompound.getBoolean("serverOpen");
 			this.resumingClient = par1NBTTagCompound.getBoolean("resumeClient");
-		}
+		//}
 		this.owner = par1NBTTagCompound.getString("owner");
     	 if(gui != null)
     		 gui.updateGui();
@@ -81,6 +88,8 @@ public class TileEntityComputer extends TileEntity {
 	    for(Entry<Integer, String> e : latestmessage.entrySet())
 	    	par1NBTTagCompound.setString("text"+e.getKey(), e.getValue());
     	par1NBTTagCompound.setCompoundTag("programs",programs);
+		if(programData != null)
+			par1NBTTagCompound.setCompoundTag("programData", (NBTTagCompound) programData.copy());
     	par1NBTTagCompound.setString("connectClient",this.clientName);
     	par1NBTTagCompound.setBoolean("connectServer", this.serverConnected);
     	par1NBTTagCompound.setBoolean("serverOpen", this.openToClients);
@@ -105,17 +114,13 @@ public class TileEntityComputer extends TileEntity {
 		//Debug.print("Data packet gotten "+net.getClass());
     	this.readFromNBT(pkt.data);
     }
-    
-	public Boolean hasClient() {
-		return installedPrograms.get(0)==null?false:installedPrograms.get(0);
+	
+	public boolean hasProgram(int id) {
+		return installedPrograms.get(id)==null?false:installedPrograms.get(id);
 	}
 	
-	public Boolean hasServer() {
-		return installedPrograms.get(1)==null?false:installedPrograms.get(1);
-	}
-	
-	public Boolean errored() {
-		return installedPrograms.get(-1)==null?false:installedPrograms.get(-1);
+	public NBTTagCompound getData(int id) {
+		return programData.getCompoundTag("program_"+id);
 	}
 	
 	public void connected(String player, boolean isClient){

@@ -135,7 +135,7 @@ public class BlockComputerOn extends Block implements ITileEntityProvider {
 			TileEntityComputer tileEntity = (TileEntityComputer) world.getBlockTileEntity(x, y, z);
 			ItemStack item = player.getCurrentEquippedItem();
 			if(tileEntity != null && item != null && item.getItem() == Item.record11 && 
-					tileEntity.installedPrograms.size() < 2 && !tileEntity.errored()) {
+					tileEntity.installedPrograms.size() < 2 && !tileEntity.hasProgram(-1)) {
 				player.destroyCurrentEquippedItem();
 				tileEntity.installedPrograms.put(-1, true);
 				tileEntity.closeConnections();
@@ -143,7 +143,7 @@ public class BlockComputerOn extends Block implements ITileEntityProvider {
 				return true;
 			}
 			
-			if (tileEntity == null || player.isSneaking() || item != null && item.itemID == Minestuck.disk.itemID && (item.getItemDamage() == 0 && !tileEntity.hasClient() || item.getItemDamage() == 1 && !tileEntity.hasServer())) {
+			if (tileEntity == null || player.isSneaking() || item != null && item.itemID == Minestuck.disk.itemID && (item.getItemDamage() == 0 && !tileEntity.hasProgram(0) || item.getItemDamage() == 1 && !tileEntity.hasProgram(1))) {
 				return false;
 			}
 			

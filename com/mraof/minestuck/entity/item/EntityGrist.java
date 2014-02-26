@@ -11,6 +11,8 @@ import net.minecraft.world.World;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+import com.mraof.minestuck.editmode.ClientEditHandler;
+import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristHelper;
@@ -238,6 +240,9 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	 */
 	public void onCollideWithPlayer(EntityPlayer par1EntityPlayer)
 	{
+		if(this.worldObj.isRemote?ClientEditHandler.isActive():ServerEditHandler.getData(par1EntityPlayer.username) != null)
+			return;
+		
 		if (!this.worldObj.isRemote)
 		{
 			this.playSound("random.pop", 0.1F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F));
