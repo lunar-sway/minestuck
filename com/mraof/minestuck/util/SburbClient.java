@@ -3,6 +3,7 @@ package com.mraof.minestuck.util;
 import java.util.ArrayList;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 
 import com.mraof.minestuck.Minestuck;
@@ -15,14 +16,15 @@ public class SburbClient extends ButtonListProgram {
 	@Override
 	public ArrayList<UnlocalizedString> getStringList(TileEntityComputer te) {
 		ArrayList list = new ArrayList();
+		NBTTagCompound nbt = te.getData(getId());
 		String displayPlayer= "UNDEFINED";
-		if(te.serverConnected && SkaiaClient.getClientConnection(te.owner) != null)
+		if(nbt.getBoolean("connectedToServer") && SkaiaClient.getClientConnection(te.owner) != null)
 			displayPlayer = UsernameHandler.decode(SkaiaClient.getClientConnection(te.owner).getServerName());
 		SburbConnection c = SkaiaClient.getClientConnection(te.owner);
-		if (te.serverConnected && c != null) { //If it is connected to someone.
+		if (nbt.getBoolean("connectedToServer") && c != null) { //If it is connected to someone.
 			list.add(new UnlocalizedString("computer.messageConnect", displayPlayer));
 			list.add(new UnlocalizedString("computer.buttonClose"));
-		} else if(te.resumingClient) {
+		} else if(nbt.getBoolean("isResuming")) {
 			list.add(new UnlocalizedString("computer.messageResumeClient"));
 			list.add(new UnlocalizedString("computer.buttonClose"));
 		} else if(!SkaiaClient.isActive(te.owner, true)){ //If the player doesn't have an other active client
@@ -42,7 +44,7 @@ public class SburbClient extends ButtonListProgram {
 		else if(buttonName.equals("computer.buttonConnect"))
 			SkaiaClient.sendConnectRequest(te, UsernameHandler.encode((String)data[0]), true);
 		else if(buttonName.equals("computer.buttonClose"))
-			SkaiaClient.sendCloseRequest(te, te.resumingClient?"":SkaiaClient.getClientConnection(te.owner).getServerName(), true);
+			SkaiaClient.sendCloseRequest(te, te.getData(getId()).getBoolean("isResuming")?"":SkaiaClient.getClientConnection(te.owner).getServerName(), true);
 	}
 	
 	@Override

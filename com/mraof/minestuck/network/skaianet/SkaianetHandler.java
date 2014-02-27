@@ -103,7 +103,7 @@ public class SkaianetHandler {
 				if(!getAssociatedPartner(player.owner, false).isEmpty() && resumingClients.containsKey(getAssociatedPartner(player.owner, false)))
 					connectTo(player, false, getAssociatedPartner(player.owner, false), resumingClients);
 				else{
-					te.openToClients = true;
+					te.getData(1).setBoolean("isOpen", true);
 					serversOpen.put(player.owner, player);
 				}
 			}
@@ -111,7 +111,7 @@ public class SkaianetHandler {
 				if(resumingClients.containsKey(otherPlayer))	//The client is already waiting
 					connectTo(player, false, otherPlayer, resumingClients);
 				else {	//Client is not currently trying to resume
-					te.openToClients = true;
+					te.getData(1).setBoolean("isOpen", true);
 					resumingServers.put(player.owner, player);
 				}
 			}
@@ -126,7 +126,7 @@ public class SkaianetHandler {
 				} else if(serversOpen.containsKey(p))	//If server is normally open.
 					connectTo(player, true, p, serversOpen);
 				else {	//If server isn't open
-					te.resumingClient = true;
+					te.getData(0).setBoolean("isResuming", true);
 					resumingClients.put(player.owner, player);
 				}
 			}
@@ -142,21 +142,21 @@ public class SkaianetHandler {
 			if(isClient){
 				TileEntityComputer te = getComputer(resumingClients.remove(player));
 				if(te != null){
-					te.resumingClient = false;
+					te.getData(0).setBoolean("isResuming", false);
 					te.latestmessage.put(0, "computer.messageResumeStop");
 					te.worldObj.markBlockForUpdate(te.xCoord, te.yCoord, te.zCoord);
 				}
 			} else if(serversOpen.containsKey(player)){
 				TileEntityComputer te = getComputer(serversOpen.remove(player));
 				if(te != null){
-					te.openToClients = false;
+					te.getData(1).setBoolean("isOpen", false);
 					te.latestmessage.put(1, "computer.messageClosedServer");
 					te.worldObj.markBlockForUpdate(te.xCoord, te.yCoord, te.zCoord);
 				}
 			} else if(resumingServers.containsKey(player)){
 				TileEntityComputer te = getComputer(resumingServers.remove(player));
 				if(te != null){
-					te.openToClients = false;
+					te.getData(1).setBoolean("isOpen", false);
 					te.latestmessage.put(1, "computer.messageResumeStop");
 					te.worldObj.markBlockForUpdate(te.xCoord, te.yCoord, te.zCoord);
 				}
@@ -167,12 +167,12 @@ public class SkaianetHandler {
 				if(c.isActive){
 					TileEntityComputer cc = getComputer(c.client), sc = getComputer(c.server);
 					if(cc != null){
-						cc.serverConnected = false;
+						cc.getData(0).setBoolean("connectedToServer", false);
 						cc.latestmessage.put(0, "computer.messageClosed");
 						cc.worldObj.markBlockForUpdate(cc.xCoord, cc.yCoord, cc.zCoord);
 					}
 					if(sc != null){
-						sc.clientName = "";
+						sc.getData(1).setString("connectedClient", "");
 						sc.latestmessage.put(1, "computer.messageClosed");
 						sc.worldObj.markBlockForUpdate(sc.xCoord, sc.yCoord, sc.zCoord);
 					}
@@ -453,7 +453,9 @@ public class SkaianetHandler {
 		for(Iterator<ComputerData> i : iter1)
 			while(i.hasNext()) {
 				ComputerData data = i.next();
-				if(getComputer(data) == null || data.dimension == -1 || !getComputer(data).owner.equals(data.owner) || !(resumingClients.containsValue(data)?getComputer(data).resumingClient:getComputer(data).openToClients)) {
+				if(getComputer(data) == null || data.dimension == -1 || !getComputer(data).owner.equals(data.owner)
+						|| !(resumingClients.containsValue(data)?getComputer(data).getData(0).getBoolean("isResuming")
+								:getComputer(data).getData(1).getBoolean("isOpen"))) {
 					//Debug.print("[SKAIANET] Invalid computer in waiting list!");
 					i.remove();
 				}
@@ -464,7 +466,8 @@ public class SkaianetHandler {
 			SburbConnection c = iter2.next();
 			if(c.isActive){
 				TileEntityComputer cc = getComputer(c.client), sc = getComputer(c.server);
-				if(cc == null || sc == null || c.client.dimension == -1 || c.server.dimension == -1 || !cc.owner.equals(c.getClientName()) || !sc.owner.equals(c.getServerName()) || !cc.serverConnected || !sc.clientName.equals(c.getClientName())){
+				if(cc == null || sc == null || c.client.dimension == -1 || c.server.dimension == -1 || !cc.owner.equals(c.getClientName())
+						|| !sc.owner.equals(c.getServerName()) || !cc.getData(0).getBoolean("connectedToServer") || !sc.getData(1).getString("connectedClient").equals(c.getClientName())){
 					//Debug.print("[SKAIANET] Invalid computer in connection.");
 					if(!c.isMain)
 						iter2.remove();
@@ -473,11 +476,11 @@ public class SkaianetHandler {
 					ServerEditHandler.onDisconnect(c);
 					
 					if(cc != null){
-						cc.serverConnected = false;
+						cc.getData(0).setBoolean("connectedToServer", false);
 						cc.latestmessage.put(0, "computer.messageClosed");
 						cc.worldObj.markBlockForUpdate(cc.xCoord, cc.yCoord, cc.zCoord);
 					} else if(sc != null){
-						sc.clientName = "";
+						sc.getData(1).setString("connectedClient", "");
 						sc.latestmessage.put(1, "computer.messageClosed");
 						sc.worldObj.markBlockForUpdate(sc.xCoord, sc.yCoord, sc.zCoord);
 					}
@@ -499,10 +502,10 @@ public class SkaianetHandler {
 						SessionHandler.onConnectionClosed(c, false);
 						if(c.isActive) {
 							TileEntityComputer cc = getComputer(c.client), sc = getComputer(c.server);
-							cc.serverConnected = false;
+							cc.getData(0).setBoolean("connectedToServer", false);
 							cc.latestmessage.put(0, "computer.messageClosed");
 							cc.worldObj.markBlockForUpdate(cc.xCoord, cc.yCoord, cc.zCoord);
-							sc.clientName = "";
+							sc.getData(1).setString("connectedClient", "");
 							sc.latestmessage.put(1, "computer.messageClosed");
 							sc.worldObj.markBlockForUpdate(sc.xCoord, sc.yCoord, sc.zCoord);
 						}

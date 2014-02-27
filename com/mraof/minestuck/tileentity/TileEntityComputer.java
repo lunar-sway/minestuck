@@ -26,16 +26,9 @@ public class TileEntityComputer extends TileEntity {
 	 * 0 = client, 1 = server, -1 = secret easter egg
 	 */
 	public Hashtable<Integer, Boolean> installedPrograms = new Hashtable();
-	public boolean openToClients = false;
-	/**
-	 * To not be confused, serverConnected = if it has a server connected to it (so serverConnected can only be true if hasClient == true)
-	 */
-	public boolean serverConnected;
-	public String clientName = "";
 	public GuiComputer gui;
 	public String owner = "";
 	public Hashtable<Integer,String> latestmessage = new Hashtable();
-	public boolean resumingClient;
 	public NBTTagCompound programData;
 	public int programSelected = -1;
 	
@@ -58,16 +51,17 @@ public class TileEntityComputer extends TileEntity {
 		
 		programData = par1NBTTagCompound.getCompoundTag("programData");
 		
-		//if(!par1NBTTagCompound.hasKey("programData")) {
+		if(!par1NBTTagCompound.hasKey("programData")) {
 			programData = new NBTTagCompound();
 			NBTTagCompound nbt = new NBTTagCompound();
 			nbt.setBoolean("connectedToServer", par1NBTTagCompound.getBoolean("connectServer"));
-			programData.setCompoundTag("data0", nbt);
-			this.clientName = par1NBTTagCompound.getString("connectClient");
-			this.serverConnected = par1NBTTagCompound.getBoolean("connectServer");
-			this.openToClients = par1NBTTagCompound.getBoolean("serverOpen");
-			this.resumingClient = par1NBTTagCompound.getBoolean("resumeClient");
-		//}
+			nbt.setBoolean("isResuming", par1NBTTagCompound.getBoolean("resumeClient"));
+			programData.setCompoundTag("program_0", nbt);
+			nbt = new NBTTagCompound();
+			nbt.setString("connectedClient", par1NBTTagCompound.getString("connectClient"));
+			nbt.setBoolean("isOpen", par1NBTTagCompound.getBoolean("serverOpen"));
+			programData.setCompoundTag("program_1", nbt);
+		}
 		this.owner = par1NBTTagCompound.getString("owner");
     	 if(gui != null)
     		 gui.updateGui();
@@ -90,10 +84,6 @@ public class TileEntityComputer extends TileEntity {
     	par1NBTTagCompound.setCompoundTag("programs",programs);
 		if(programData != null)
 			par1NBTTagCompound.setCompoundTag("programData", (NBTTagCompound) programData.copy());
-    	par1NBTTagCompound.setString("connectClient",this.clientName);
-    	par1NBTTagCompound.setBoolean("connectServer", this.serverConnected);
-    	par1NBTTagCompound.setBoolean("serverOpen", this.openToClients);
-    	par1NBTTagCompound.setBoolean("resumeClient",this.resumingClient);
     	if (!this.owner.isEmpty()) {
     		par1NBTTagCompound.setString("owner",this.owner);
     	}
@@ -120,28 +110,30 @@ public class TileEntityComputer extends TileEntity {
 	}
 	
 	public NBTTagCompound getData(int id) {
+		if(!programData.hasKey("program_"+id))
+			programData.setCompoundTag("program_"+id, new NBTTagCompound());
 		return programData.getCompoundTag("program_"+id);
 	}
 	
 	public void connected(String player, boolean isClient){
 		if(isClient){
-			this.resumingClient = false;
-			this.serverConnected = true;
+			getData(0).setBoolean("isResuming", false);
+			getData(0).setBoolean("connectedToServer", true);
 		}
 		else{
-			this.openToClients = false;
-			this.clientName = player;
+			this.getData(1).setBoolean("isOpen", false);
+			this.getData(1).setString("connectedClient", player);
 		}
 	}
 
 	public void closeConnections() {
-		if(serverConnected && SkaianetHandler.getClientConnection(owner) != null)
+		if(getData(0).getBoolean("connectedToServer") && SkaianetHandler.getClientConnection(owner) != null)
 			SkaianetHandler.closeConnection(owner, SkaianetHandler.getClientConnection(owner).getServerName(), true);
-		else if(resumingClient)
+		else if(getData(0).getBoolean("isResuming"))
 			SkaianetHandler.closeConnection(owner, "", true);
-		if(!clientName.isEmpty())
-			SkaianetHandler.closeConnection(owner, clientName, false);
-		else if(openToClients)
+		if(!getData(1).getString("connectedClient").isEmpty())
+			SkaianetHandler.closeConnection(owner, getData(1).getString("connectedClient"), false);
+		else if(getData(1).getBoolean("isOpen"))
 			SkaianetHandler.closeConnection(owner, "", false);
 	}
 	
