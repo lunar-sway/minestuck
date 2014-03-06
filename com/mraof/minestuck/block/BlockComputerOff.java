@@ -4,12 +4,16 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.util.ComputerProgram;
+import com.mraof.minestuck.util.UsernameHandler;
 
 public class BlockComputerOff extends Block {
 	
@@ -73,6 +77,20 @@ public class BlockComputerOff extends Block {
 	            this.sideIcon =  par1IconRegister.registerIcon("minestuck:PhernaliaFrame");
 	    }
 	    
+		@Override
+		public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9) {
+			if(world.isRemote || player.isSneaking() || player.getHeldItem() != null && ComputerProgram.getProgramID(player.getHeldItem()) == -2)
+				return false;
+			
+			world.setBlock(x, y, z, Minestuck.blockComputerOn.blockID, world.getBlockMetadata(x, y, z), 2);
+			
+			TileEntityComputer te = (TileEntityComputer) world.getBlockTileEntity(x, y, z);
+			te.owner = UsernameHandler.encode(player.username);
+			Minestuck.blockComputerOn.onBlockActivated(world, x, y, z, player, par6, par7, par8, par9);
+			
+			return true;
+		}
+	    
 	    @Override
 	    public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLivingBase, ItemStack par6ItemStack)
 	    {
@@ -103,7 +121,8 @@ public class BlockComputerOff extends Block {
 	    public void onBlockAdded(World par1World, int par2, int par3, int par4)
 	    {
 	        super.onBlockAdded(par1World, par2, par3, par4);
-	        this.setDefaultDirection(par1World, par2, par3, par4);
+			if(par1World.getBlockMetadata(par2, par3, par4) == 0)
+				this.setDefaultDirection(par1World, par2, par3, par4);
 	    }
 	   
 }

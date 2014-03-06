@@ -22,6 +22,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.util.ComputerProgram;
 import com.mraof.minestuck.util.Debug;
 
 public class BlockComputerOn extends Block implements ITileEntityProvider {
@@ -127,27 +128,34 @@ public class BlockComputerOn extends Block implements ITileEntityProvider {
 	    public void onBlockAdded(World par1World, int par2, int par3, int par4)
 	    {
 	        super.onBlockAdded(par1World, par2, par3, par4);
-	        this.setDefaultDirection(par1World, par2, par3, par4);
+			if(par1World.getBlockMetadata(par2, par3, par4) == 0)
+				this.setDefaultDirection(par1World, par2, par3, par4);
 	    }
 	    
 		@Override
 		public boolean onBlockActivated(World world, int x,int y,int z, EntityPlayer player,int par6, float par7, float par8, float par9) {
 			TileEntityComputer tileEntity = (TileEntityComputer) world.getBlockTileEntity(x, y, z);
 			ItemStack item = player.getCurrentEquippedItem();
-			if(tileEntity != null && item != null && item.getItem() == Item.record11 && 
-					tileEntity.installedPrograms.size() < 2 && !tileEntity.hasProgram(-1)) {
-				player.destroyCurrentEquippedItem();
-				tileEntity.installedPrograms.put(-1, true);
-				tileEntity.closeConnections();
-				world.setBlockMetadataWithNotify(x, y, z, (world.getBlockMetadata(x, y, z) % 6) + 6, 2);
-				return true;
-			}
 			
-			if (tileEntity == null || player.isSneaking() || item != null && item.itemID == Minestuck.disk.itemID && (item.getItemDamage() == 0 && !tileEntity.hasProgram(0) || item.getItemDamage() == 1 && !tileEntity.hasProgram(1))) {
+			if (tileEntity == null || player.isSneaking()) {
 				return false;
 			}
 			
-			if(world.isRemote && SkaiaClient.requestData((TileEntityComputer) tileEntity))
+			int id = ComputerProgram.getProgramID(item);
+			if(id != -2 && !tileEntity.hasProgram(id) && tileEntity.installedPrograms.size() < 2 && !tileEntity.hasProgram(-1)) {
+				if(world.isRemote)
+					return true;
+				player.destroyCurrentEquippedItem();
+				if(id == -1) {
+					tileEntity.closeAll();
+					world.setBlockMetadataWithNotify(x, y, z, (world.getBlockMetadata(x, y, z) % 6) + 6, 2);
+				}
+				tileEntity.installedPrograms.put(id, true);
+				world.markBlockForUpdate(x, y, z);
+				return true;
+			}
+			
+			if(world.isRemote && SkaiaClient.requestData(tileEntity))
 				player.openGui(Minestuck.instance, GuiHandler.GuiId.COMPUTER.ordinal(), world, x, y, z);
 			
 			return true;
@@ -182,19 +190,21 @@ public class BlockComputerOn extends Block implements ITileEntityProvider {
 			if (te == null) {
 				return;
 			}
-			te.closeConnections();
+			te.closeAll();
 			float factor = 0.05F;
 			
 			Iterator it = te.installedPrograms.entrySet().iterator();
     	   	int place = 0;
             while (it.hasNext()) {
                 Map.Entry pairs = (Map.Entry)it.next();
+				if(!(Boolean) pairs.getValue())
+					continue;
                 int program = (Integer) pairs.getKey();
                 
 				float rx = rand.nextFloat() * 0.8F + 0.1F;
 				float ry = rand.nextFloat() * 0.8F + 0.1F;
 				float rz = rand.nextFloat() * 0.8F + 0.1F;
-				EntityItem entityItem = new EntityItem(world, x + rx, y + ry, z + rz, program != -1?new ItemStack(Minestuck.disk.itemID, 1, program):new ItemStack(Item.record11,1));
+				EntityItem entityItem = new EntityItem(world, x + rx, y + ry, z + rz, ComputerProgram.getItem(program));
 				entityItem.motionX = rand.nextGaussian() * factor;
 				entityItem.motionY = rand.nextGaussian() * factor + 0.2F;
 				entityItem.motionZ = rand.nextGaussian() * factor;

@@ -194,7 +194,6 @@ public class SessionHandler {
 	public static int availableTier(String client) {
 		Session s = getPlayerSession(client);
 		if(s == null) {
-			Debug.print("Session is null for "+client+"!");
 			return -1;
 		}
 		if(s.completed)

@@ -29,7 +29,7 @@ public class TileEntityComputer extends TileEntity {
 	public GuiComputer gui;
 	public String owner = "";
 	public Hashtable<Integer,String> latestmessage = new Hashtable();
-	public NBTTagCompound programData;
+	public NBTTagCompound programData = new NBTTagCompound();
 	public int programSelected = -1;
 	
 	@SideOnly(Side.CLIENT)
@@ -52,7 +52,6 @@ public class TileEntityComputer extends TileEntity {
 		programData = par1NBTTagCompound.getCompoundTag("programData");
 		
 		if(!par1NBTTagCompound.hasKey("programData")) {
-			programData = new NBTTagCompound();
 			NBTTagCompound nbt = new NBTTagCompound();
 			nbt.setBoolean("connectedToServer", par1NBTTagCompound.getBoolean("connectServer"));
 			nbt.setBoolean("isResuming", par1NBTTagCompound.getBoolean("resumeClient"));
@@ -82,9 +81,8 @@ public class TileEntityComputer extends TileEntity {
 	    for(Entry<Integer, String> e : latestmessage.entrySet())
 	    	par1NBTTagCompound.setString("text"+e.getKey(), e.getValue());
     	par1NBTTagCompound.setCompoundTag("programs",programs);
-		if(programData != null)
 			par1NBTTagCompound.setCompoundTag("programData", (NBTTagCompound) programData.copy());
-    	if (!this.owner.isEmpty()) {
+			if (!this.owner.isEmpty()) {
     		par1NBTTagCompound.setString("owner",this.owner);
     	}
 
@@ -115,6 +113,12 @@ public class TileEntityComputer extends TileEntity {
 		return programData.getCompoundTag("program_"+id);
 	}
 	
+	public void closeAll() {
+		for(Entry<Integer, Boolean> entry : installedPrograms.entrySet())
+			if(entry.getValue() && entry.getKey() != -1 && ComputerProgram.getProgram(entry.getKey()) != null)
+				ComputerProgram.getProgram(entry.getKey()).onClosed(this);
+	}
+	
 	public void connected(String player, boolean isClient){
 		if(isClient){
 			getData(0).setBoolean("isResuming", false);
@@ -124,17 +128,6 @@ public class TileEntityComputer extends TileEntity {
 			this.getData(1).setBoolean("isOpen", false);
 			this.getData(1).setString("connectedClient", player);
 		}
-	}
-
-	public void closeConnections() {
-		if(getData(0).getBoolean("connectedToServer") && SkaianetHandler.getClientConnection(owner) != null)
-			SkaianetHandler.closeConnection(owner, SkaianetHandler.getClientConnection(owner).getServerName(), true);
-		else if(getData(0).getBoolean("isResuming"))
-			SkaianetHandler.closeConnection(owner, "", true);
-		if(!getData(1).getString("connectedClient").isEmpty())
-			SkaianetHandler.closeConnection(owner, getData(1).getString("connectedClient"), false);
-		else if(getData(1).getBoolean("isOpen"))
-			SkaianetHandler.closeConnection(owner, "", false);
 	}
 	
 }

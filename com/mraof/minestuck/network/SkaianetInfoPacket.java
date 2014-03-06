@@ -71,7 +71,6 @@ public class SkaianetInfoPacket extends MinestuckPacket {
 
 	@Override
 	public void execute(INetworkManager network, MinestuckPacketHandler minestuckPacketHandler, Player player, String userName) {
-		Debug.print("Recived info packet: "+(((EntityPlayer)player).worldObj.isRemote?"data.":"request."));
 		
 		if(((EntityPlayer)player).worldObj.isRemote)
 			SkaiaClient.consumePacket(this);

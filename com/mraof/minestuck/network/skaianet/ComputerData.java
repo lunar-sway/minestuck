@@ -18,6 +18,7 @@ public class ComputerData{
 		}
 		
 		public ComputerData(String owner,int x,int y,int z,int dimension){
+			if(owner == null) throw new IllegalArgumentException("Owner is null!");
 			this.owner = owner;
 			this.x = x;
 			this.y = y;

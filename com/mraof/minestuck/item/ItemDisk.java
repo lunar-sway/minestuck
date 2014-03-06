@@ -55,37 +55,6 @@ public class ItemDisk extends Item {
 		return damageValue;
 	}
 	
-	@Override
-	public boolean onItemUse(ItemStack item, EntityPlayer player, World world, int x, int y, int z, int side, float par8, float par9, float par10) {
-		if(!world.isRemote){
-			if (world.getBlockId(x,y,z) == Minestuck.blockComputerOff.blockID) {
-				int meta = world.getBlockMetadata(x,y,z);
-				world.setBlock(x,y,z,Minestuck.blockComputerOn.blockID);
-				world.setBlockMetadataWithNotify(x, y, z, meta, 2);
-			}
-			if(world.getBlockId(x,y,z) == Minestuck.blockComputerOn.blockID){
-				TileEntityComputer te =  (TileEntityComputer) world.getBlockTileEntity(x, y, z);
-				if (te == null || te.installedPrograms.size() >= 2 || te.hasProgram(-1)) {return false;}
-				if(te.owner.isEmpty())
-					te.owner = UsernameHandler.encode(player.username);
-				int i = item.getItemDamage();
-				if (te.installedPrograms.contains(i)) {
-					return false;
-				}
-				te.installedPrograms.put(i,true);
-				world.markBlockForUpdate(x, y, z);
-				Debug.print("Installed program with id "+item.getItemDamage());
-				
-				player.destroyCurrentEquippedItem();
-				
-				if(te.gui != null)
-					te.gui.updateGui();
-				return true;
-			}
-		}
-		return false;
-	}
-	
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(int unknown, CreativeTabs tab, List subItems) 
 	{

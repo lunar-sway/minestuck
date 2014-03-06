@@ -324,7 +324,7 @@ public class Minestuck
 			blockBloodId = blockIdStart + 8;
 			layeredSandId = blockIdStart + 9;
 		}
-		Debug.printf("Fluid Block Ids loaded, Blood id: %d, Oil id: %d", blockBloodId, blockOilId);
+		//Debug.printf("Fluid Block Ids loaded, Blood id: %d, Oil id: %d", blockBloodId, blockOilId);
 
 		toolIdStart = config.get("Item Ids", "toolIdStart", 5001).getInt();
 		clawHammerId = config.get("Item Ids", "clawHammerId", toolIdStart).getInt();
@@ -565,7 +565,7 @@ public class Minestuck
 		fluidOil.setUnlocalizedName(blockOil.getUnlocalizedName());
 		fluidBlood.setUnlocalizedName(blockBlood.getUnlocalizedName());
 		
-		Debug.printf("Blood id: %d, Oil id: %d", blockBloodId, blockOilId);
+		//Debug.printf("Blood id: %d, Oil id: %d", blockBloodId, blockOilId);
 		
 		//register entities
 		this.registerAndMapEntity(EntitySalamander.class, "Salamander", 0xffe62e, 0xfffb53);
@@ -626,16 +626,13 @@ public class Minestuck
 		
 		if(event.getSide().isClient())
 			TickRegistry.registerTickHandler(ClientEditHandler.instance, Side.CLIENT);
-//		if(event.getSide().isServer())
 		TickRegistry.registerTickHandler(ServerEditHandler.instance, Side.SERVER);
 		
 		KindAbstratusList.registerTypes();
 		DeployList.registerItems();
 		
-		if(event.getSide().isClient()) {
-			ComputerProgram.registerProgram(0, SburbClient.class, clientDiskStack);
-			ComputerProgram.registerProgram(1, SburbServer.class, serverDiskStack);
-		}
+		ComputerProgram.registerProgram(0, SburbClient.class, clientDiskStack);
+		ComputerProgram.registerProgram(1, SburbServer.class, serverDiskStack);
 		
 		SessionHandler.maxSize = acceptTitleCollision?(generateSpecialClasses?168:144):12;
 	}
@@ -647,7 +644,6 @@ public class Minestuck
 		MinecraftForge.EVENT_BUS.register(new MinestuckFluidHandler());
 		if(event.getSide().isClient())
 			MinecraftForge.EVENT_BUS.register(ClientEditHandler.instance);
-//		if(event.getSide().isServer())
 		MinecraftForge.EVENT_BUS.register(ServerEditHandler.instance);
 		MinecraftForge.EVENT_BUS.register(MinestuckStatsHandler.instance);
 		AlchemyRecipeHandler.registerDynamicRecipes();
@@ -679,7 +675,7 @@ public class Minestuck
 			if(DimensionManager.isDimensionRegistered(dim))
 			{
 				DimensionManager.unregisterDimension(dim);
-				Debug.print("Server about to start, Unregistering " + dim);
+				//Debug.print("Server about to start, Unregistering " + dim);
 			}
 			iterator.remove();
 		}
@@ -699,7 +695,7 @@ public class Minestuck
 					if(MinestuckSaveHandler.lands.contains((byte)currentByte))
 							continue;
 					MinestuckSaveHandler.lands.add((byte)currentByte);
-					Debug.printf("Found land dimension id of: %d", currentByte);
+					//Debug.printf("Found land dimension id of: %d", currentByte);
 					
 					if(!DimensionManager.isDimensionRegistered(currentByte))
 						DimensionManager.registerDimension(currentByte, Minestuck.landProviderTypeId);

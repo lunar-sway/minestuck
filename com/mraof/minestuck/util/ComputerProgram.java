@@ -11,11 +11,7 @@ import net.minecraft.item.ItemStack;
 import com.mraof.minestuck.client.gui.GuiComputer;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 //TODO Add javadoc to interface methods before pull request
-@SideOnly(Side.CLIENT)
 public abstract class ComputerProgram {
 	
 	private static HashMap<Integer, Class<? extends ComputerProgram>> programs = new HashMap();
@@ -43,13 +39,22 @@ public abstract class ComputerProgram {
 	 * @return -2 if the item does not correspond to any program.
 	 */
 	public static int getProgramID(ItemStack item) {
+		if(item == null)
+			return -2;
+		item = item.copy();
 		if(item.getItem().equals(Item.record11))
 			return -1;
 		item.stackSize = 1;
-		for(int id : programs.keySet())
+		for(int id : disks.keySet())
 			if(disks.get(id).isItemEqual(item))
 				return id;
 		return -2;
+	}
+	
+	public static ItemStack getItem(int id) {
+		if(id == -1)
+			return new ItemStack(Item.record11);
+		return disks.get(id).copy();
 	}
 	
 	public final int getId() {
@@ -64,6 +69,8 @@ public abstract class ComputerProgram {
 	public void onInitGui(GuiComputer gui, List buttonList, ComputerProgram prevProgram) {}
 	
 	public void onUpdateGui(GuiComputer gui, List buttonList) {}
+	
+	public void onClosed(TileEntityComputer te) {} 
 	
 	//TODO I believe that this needs to be improved, but I may be wrong.
 	public abstract void paintGui(GuiComputer gui, TileEntityComputer te);

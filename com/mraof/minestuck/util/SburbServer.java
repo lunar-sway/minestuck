@@ -8,6 +8,7 @@ import net.minecraft.util.StatCollector;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
+import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 
 public class SburbServer extends ButtonListProgram {
@@ -50,6 +51,14 @@ public class SburbServer extends ButtonListProgram {
 	@Override
 	public String getName() {
 		return "computer.programServer";
+	}
+	
+	@Override
+	public void onClosed(TileEntityComputer te) {
+		if(!te.getData(1).getString("connectedClient").isEmpty())
+			SkaianetHandler.closeConnection(te.owner, te.getData(1).getString("connectedClient"), false);
+		else if(te.getData(1).getBoolean("isOpen"))
+			SkaianetHandler.closeConnection(te.owner, "", false);
 	}
 	
 }

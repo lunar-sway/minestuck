@@ -43,7 +43,6 @@ public class SkaiaClient {
 	public static boolean requestData(TileEntityComputer computer){
 		boolean b = openServers.get(computer.owner) != null;
 		if(!b){
-			Debug.print("Sending data request about the player \""+computer.owner+"\".");
 			Packet250CustomPayload packet = new Packet250CustomPayload();
 			packet.channel = "Minestuck";
 			packet.data = MinestuckPacket.makePacket(Type.SBURB_INFO, computer.owner);
