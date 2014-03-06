@@ -11,15 +11,25 @@ import net.minecraft.item.ItemStack;
 import com.mraof.minestuck.client.gui.GuiComputer;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 
-//TODO Add javadoc to interface methods before pull request
+/**
+ * The static interface will probably later be merged with DeployList,
+ * GristStorage and other similar classes that store static data.
+ * @author Kirderf1
+ */
 public abstract class ComputerProgram {
 	
 	private static HashMap<Integer, Class<? extends ComputerProgram>> programs = new HashMap();
 	
 	private static HashMap<Integer, ItemStack> disks = new HashMap();
 	
+	/**
+	 * Registers a program class to the list.
+	 * @param id The program id. If it is already used, the method will throw an IllegalArgumentException.
+	 * @param program The class of the program to be registered.
+	 * @param disk The item that will serve as the disk that installs the program.
+	 */
 	public static void registerProgram(int id, Class<? extends ComputerProgram> program, ItemStack disk) {
-		if(programs.containsKey(id) && id != -1)
+		if(programs.containsKey(id) || id == -1 || id == -2)
 			throw new IllegalArgumentException("Program id "+id+" is already used!");
 		programs.put(id, program);
 		disks.put(id, disk);
@@ -35,8 +45,8 @@ public abstract class ComputerProgram {
 	}
 	
 	/**
-	 * 
-	 * @return -2 if the item does not correspond to any program.
+	 * Returns the id of the program. Note that it returns -2 if the item
+	 * does not correspond to any program, as -1 is used for an easter egg.
 	 */
 	public static int getProgramID(ItemStack item) {
 		if(item == null)
@@ -66,15 +76,35 @@ public abstract class ComputerProgram {
 	
 	public void onButtonPressed(TileEntityComputer te, GuiButton button) {}
 	
+	/**
+	 * Called when the gui is created or if the player pressed the switch program button.
+	 * @param buttonList The button list. Note that the list isn't cleared if prevProgram isn't null,
+	 * so you have to clear it and re-add the program button if you're not going to re-use them.
+	 * (which you probably won't unless the previous program had a similar layout.)
+	 * @param prevProgram The previous program, or null if the gui was just created.
+	 */
 	public void onInitGui(GuiComputer gui, List buttonList, ComputerProgram prevProgram) {}
 	
+	/**
+	 * Called when some related data have changed that may affect the program.
+	 */
 	public void onUpdateGui(GuiComputer gui, List buttonList) {}
 	
+	/**
+	 * Called when something breaks the computer block. (or if the disk is ejected when that feature is added)
+	 */
 	public void onClosed(TileEntityComputer te) {} 
 	
-	//TODO I believe that this needs to be improved, but I may be wrong.
+	/**
+	 * Called when the gui is painted. This may not be a good way of doing this, but I do
+	 * not know since I do not know very much about minecraft graphics.
+	 */
 	public abstract void paintGui(GuiComputer gui, TileEntityComputer te);
 	
+	/**
+	 * Returns an unlocalized string of the name of the program.
+	 * Used for the program button.
+	 */
 	public abstract String getName();
 	
 }

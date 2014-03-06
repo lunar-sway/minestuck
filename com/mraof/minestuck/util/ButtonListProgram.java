@@ -22,8 +22,20 @@ public abstract class ButtonListProgram extends ComputerProgram {
 	
 	private int index = 0;
 	
+	/**
+	 * Creates an ArrayList of UnlocalizedString and returns it.
+	 * The first item in the list must be the message above the buttons, and then it continues with the topmost
+	 * button and down.
+	 * @param te The TileEntityComputer this program is associated with, for access to related data.
+	 */
 	protected abstract ArrayList<UnlocalizedString> getStringList(TileEntityComputer te);
 	
+	/**
+	 * Performs the action caused by pressing a button.
+	 * @param te The computer, if needed.
+	 * @param buttonName The unlocalized string from getStringList() associated with the pressed button.
+	 * @param data Format data provided by getStringList().
+	 */
 	protected abstract void onButtonPressed(TileEntityComputer te, String buttonName, Object[] data);
 	
 	@Override
@@ -112,6 +124,11 @@ public abstract class ButtonListProgram extends ComputerProgram {
 		else mc.fontRenderer.drawString(StatCollector.translateToLocal(te.latestmessage.get(te.programSelected)), (gui.width - gui.xSize) / 2 +15, (gui.height - gui.ySize) / 2 +45, 4210752);
 	}
 	
+	/**
+	 * Represents an unlocalized string and the possible format parameters.
+	 * Is used to represent the value on the buttons, but also the message shown above the buttons.
+	 * See getStringList().
+	 */
 	protected static class UnlocalizedString {
 		String string;
 		Object[] formatData;
