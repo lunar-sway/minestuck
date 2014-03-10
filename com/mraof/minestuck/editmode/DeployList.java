@@ -3,6 +3,7 @@ package com.mraof.minestuck.editmode;
 import java.util.ArrayList;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
 
@@ -72,6 +73,8 @@ public class DeployList {
 		stack.stackSize = 1;
 		if(stack.stackTagCompound == null)
 			stack.stackTagCompound = new NBTTagCompound();
+		if(stack.stackTagCompound.getName() == "")
+			stack.stackTagCompound.setName("tag");
 		else stack.stackTagCompound.removeTag("display");
 		return stack;
 	}

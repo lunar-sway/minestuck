@@ -10,6 +10,7 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.editmode.DeployList;
+import com.mraof.minestuck.util.Debug;
 
 public class SburbConnection {
 	
@@ -153,6 +154,7 @@ public class SburbConnection {
 			clientName = nbt.getString("client");
 			serverName = nbt.getString("server");
 		}
+		
 		return this;
 	}
 	
