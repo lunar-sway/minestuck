@@ -684,6 +684,32 @@ public class Minestuck
 	public void serverStarting(FMLServerStartingEvent event)
 	{
 		MinestuckSaveHandler.lands.clear();
+		File dataFile = event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("MinestuckData");
+		if(dataFile != null && dataFile.exists()) {
+			NBTTagCompound nbt = null;
+			try {
+				nbt = CompressedStreamTools.readCompressed(new FileInputStream(dataFile));
+			} catch(IOException e) {
+				e.printStackTrace();
+			}
+			if(nbt != null) {
+				for(byte landId : nbt.getByteArray("landList")) {
+					if(MinestuckSaveHandler.lands.contains((Byte)landId))
+						continue;
+					MinestuckSaveHandler.lands.add(landId);
+					
+					if(!DimensionManager.isDimensionRegistered(landId))
+						DimensionManager.registerDimension(landId, Minestuck.landProviderTypeId);
+				}
+				
+				SkaianetHandler.loadData(nbt.getCompoundTag("skaianet"));
+				
+				GristStorage.readFromNBT(nbt);
+				
+			}
+			return;
+		}
+		
 		File landList = event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("minestuckLandList");
 		if (landList != null && landList.exists())
 		{
@@ -705,10 +731,16 @@ public class Minestuck
 				e.printStackTrace();
 			}
 		}
-		SkaianetHandler.loadData(event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("connectionList"));
+		File connectionData = event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("connectionList");
+		if(connectionData != null && connectionData.exists())
+			try {
+				SkaianetHandler.loadData(CompressedStreamTools.readCompressed(new FileInputStream(connectionData)));
+			} catch(IOException e) {
+				e.printStackTrace();
+			}
 		
 		File gristcache = event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("gristCache");
-		if(gristcache.exists()) {
+		if(gristcache != null && gristcache.exists()) {
 			NBTTagCompound nbt = null;
 			try{
 				nbt = CompressedStreamTools.readCompressed(new FileInputStream(gristcache));

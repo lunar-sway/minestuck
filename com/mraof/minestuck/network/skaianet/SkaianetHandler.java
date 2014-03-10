@@ -293,7 +293,7 @@ public class SkaianetHandler {
 		updatePlayer(p0);
 	}
 	
-	public static void saveData(File file){
+	public static void saveData(NBTTagCompound data) {
 		checkData();
 		
 		NBTTagCompound nbt = new NBTTagCompound();
@@ -313,50 +313,35 @@ public class SkaianetHandler {
 			nbt.setTag(s[i], list);
 		}
 		
-		try {
-			CompressedStreamTools.writeCompressed(nbt, new FileOutputStream(file));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		data.setCompoundTag("skaianet", nbt);
 	}
 	
-	public static void loadData(File file){
+	public static void loadData(NBTTagCompound nbt){
 		connections.clear();
 		serversOpen.clear();	
 		resumingClients.clear();
 		resumingServers.clear();
 		SessionHandler.sessions.clear();
-		if(file.exists()){
-			NBTTagCompound nbt = null;
-			try{
-				nbt = CompressedStreamTools.readCompressed(new FileInputStream(file));
-				
-			} catch(IOException e){
-				e.printStackTrace();
-				Debug.print("[SKAIANET] Trying to load using the old format instead.");
-				loadOld(file);
-			}
-			if(nbt != null){
-				NBTTagList list = nbt.getTagList("connections");
-				for(int i = 0; i < list.tagCount(); i++)
-					connections.add(new SburbConnection().read((NBTTagCompound) list.tagAt(i)));
-				
-				list = nbt.getTagList("sessions");
-				for(int i = 0; i < list.tagCount(); i++)
-					SessionHandler.sessions.add(new Session().read((NBTTagCompound) list.tagAt(i)));
-				
-				String[] s = {"serversOpen","resumingClients","resumingServers"};
-				Map<String, ComputerData>[] maps = new Map[]{serversOpen, resumingClients, resumingServers};
-				for(int e = 0; e < 3; e++) {
-					list = (NBTTagList)nbt.getTag(s[e]);
-					if(list == null)
-						continue;
-					for(int i = 0; i < list.tagCount(); i++){
-						NBTTagCompound cmp = (NBTTagCompound)list.tagAt(i);
-						ComputerData c = new ComputerData();
-						c.read(cmp);
-						maps[e].put(c.owner, c);
-					}
+		if(nbt != null) {
+			NBTTagList list = nbt.getTagList("connections");
+			for(int i = 0; i < list.tagCount(); i++)
+				connections.add(new SburbConnection().read((NBTTagCompound) list.tagAt(i)));
+			
+			list = nbt.getTagList("sessions");
+			for(int i = 0; i < list.tagCount(); i++)
+				SessionHandler.sessions.add(new Session().read((NBTTagCompound) list.tagAt(i)));
+			
+			String[] s = {"serversOpen","resumingClients","resumingServers"};
+			Map<String, ComputerData>[] maps = new Map[]{serversOpen, resumingClients, resumingServers};
+			for(int e = 0; e < 3; e++) {
+				list = (NBTTagList)nbt.getTag(s[e]);
+				if(list == null)
+					continue;
+				for(int i = 0; i < list.tagCount(); i++){
+					NBTTagCompound cmp = (NBTTagCompound)list.tagAt(i);
+					ComputerData c = new ComputerData();
+					c.read(cmp);
+					maps[e].put(c.owner, c);
 				}
 			}
 		}
