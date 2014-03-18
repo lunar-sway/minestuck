@@ -2,25 +2,27 @@ package com.mraof.minestuck.block;
 
 import java.util.Random;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.Debug;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import com.mraof.minestuck.Minestuck;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockLayered extends Block
 {
 	public Block fullBlock;
 	
-	public BlockLayered(int par1, Block iconBlock)
+	public BlockLayered(Block iconBlock)
 	{
-		super(par1, Material.snow);
+		super(iconBlock.getMaterial());	//May work. Will atleast prevent snowy texture when placed on grass.
+		
 		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.125F, 1.0F);
 		this.setCreativeTab(Minestuck.tabMinestuck);
 		this.setBlockBoundsForDepth(0);
@@ -34,9 +36,8 @@ public class BlockLayered extends Block
      * When this method is called, your block should register all the icons it needs with the given IconRegister. This
      * is the only chance you get to register icons.
      */
-    public void registerIcons(IconRegister par1IconRegister)
+    public void registerBlockIcons(IIconRegister par1IconRegister)
     {
-//        this.blockIcon = par1IconRegister.registerIcon("snow");
         this.blockIcon = fullBlock.getIcon(0, 0);
     }
 
@@ -105,15 +106,14 @@ public class BlockLayered extends Block
     @Override
 	public boolean canPlaceBlockAt(World world, int x, int y, int z)
     {
-        int underneathBlockId = world.getBlockId(x, y - 1, z);        
-        Block block = Block.blocksList[underneathBlockId];
-        if (block == null)
+        Block underneathBlock = world.getBlock(x, y - 1, z);
+        if (underneathBlock == Blocks.air)
         	return false;
-        if (block == this && (world.getBlockMetadata(x, y - 1, z) & 7) == 7)
+        if (underneathBlock == this && (world.getBlockMetadata(x, y - 1, z) & 7) == 7)
         	return true;
-        if (!block.isLeaves(world, x, y - 1, z) && !Block.blocksList[underneathBlockId].isOpaqueCube())
+        if (underneathBlock.isLeaves(world, x, y - 1, z) && underneathBlock.isOpaqueCube())
         	return false;
-        return world.getBlockMaterial(x, y - 1, z).blocksMovement();
+        return underneathBlock.getMaterial().blocksMovement();
     }
     
     @Override
@@ -145,7 +145,7 @@ public class BlockLayered extends Block
      * @return True if the block is replaceable by another block
      */
     @Override
-    public boolean isBlockReplaceable(World world, int x, int y, int z)
+    public boolean isReplaceable(IBlockAccess world, int x, int y, int z)
     {
         int meta = world.getBlockMetadata(x, y, z);
         return (meta >= 7 ? false : blockMaterial.isReplaceable());
@@ -155,7 +155,7 @@ public class BlockLayered extends Block
     {
     	int depth = metadata & 7;
 //    	Debug.print("Setting ");
-    	return (depth != 7 ? world.setBlockMetadataWithNotify(x, y, z, depth, 2) : world.setBlock(x, y, z, this.fullBlock.blockID));
+    	return (depth != 7 ? world.setBlockMetadataWithNotify(x, y, z, depth, 2) : world.setBlock(x, y, z, this.fullBlock));
     }
 
 }

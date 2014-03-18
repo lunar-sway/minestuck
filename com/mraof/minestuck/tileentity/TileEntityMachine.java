@@ -2,22 +2,22 @@ package com.mraof.minestuck.tileentity;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+//import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.CombinationRegistry;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.MinestuckStatsHandler;
 import com.mraof.minestuck.util.UsernameHandler;
+
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class TileEntityMachine extends TileEntity implements IInventory {
 
@@ -98,15 +98,15 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
-            return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) == this &&
+            return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) == this &&
             player.getDistanceSq(this.xCoord + 0.5, this.yCoord + 0.5, this.zCoord + 0.5) < 64;
     }
 
-    @Override
-    public void openChest() {}
-
-    @Override
-    public void closeChest() {}
+//    @Override
+//    public void openChest() {}
+//
+//    @Override
+//    public void closeChest() {}
     
     @Override
     public void readFromNBT(NBTTagCompound tagCompound) {
@@ -117,9 +117,9 @@ public class TileEntityMachine extends TileEntity implements IInventory {
             this.mode =  tagCompound.getBoolean("mode");
             this.overrideStop = tagCompound.getBoolean("overrideStop");
             
-            NBTTagList tagList = tagCompound.getTagList("Inventory");
+            NBTTagList tagList = (NBTTagList) tagCompound.getTag("Inventory");
             for (int i = 0; i < tagList.tagCount(); i++) {
-                    NBTTagCompound tag = (NBTTagCompound) tagList.tagAt(i);
+                    NBTTagCompound tag = tagList.getCompoundTagAt(i);
                     byte slot = tag.getByte("Slot");
                     if (slot >= 0 && slot < this.inv.length) {
                             this.inv[slot] = ItemStack.loadItemStackFromNBT(tag);
@@ -148,26 +148,26 @@ public class TileEntityMachine extends TileEntity implements IInventory {
             }
             tagCompound.setTag("Inventory", itemList);
     }
-    @Override
-    public Packet getDescriptionPacket() 
-    {
-    	NBTTagCompound tagCompound = new NBTTagCompound();
-    	this.writeToNBT(tagCompound);
-    	return new Packet132TileEntityData(this.xCoord, this.yCoord, this.zCoord, 2, tagCompound);
-    }
-    @Override
-    public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) 
-    {
-    	this.readFromNBT(pkt.data);
-    }
+//    @Override
+//    public Packet getDescriptionPacket() 
+//    {
+//    	NBTTagCompound tagCompound = new NBTTagCompound();
+//    	this.func_145841_b(tagCompound);
+//    	return new Packet132TileEntityData(this.field_145851_c, this.field_145848_d, this.field_145849_e, 2, tagCompound);
+//    }
+//    @Override
+//    public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) 
+//    {
+//    	this.func_145839_a(pkt.data);
+//    }
 
     @Override
-    public String getInvName() {
+    public String getInventoryName() {
             return "Alchemy Machine";
     }
 
 	@Override
-	public boolean isInvNameLocalized() {
+	public boolean hasCustomInventoryName() {
 		return false;
 	}
 
@@ -221,8 +221,8 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 				//Check owner's cache: Do they have everything they need?
 				ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(this.inv[1]);
 				if (newItem == null) {return false;}
-				if (inv[0] != null && (inv[0].itemID != newItem.itemID || inv[0].getItemDamage() != newItem.getItemDamage() || inv[0].getMaxStackSize() <= inv[0].stackSize)) {return false;}
-				return GristHelper.canAfford(UsernameHandler.encode(owner.username), newItem);
+				if (inv[0] != null && (inv[0].getItem() != newItem.getItem() || inv[0].getItemDamage() != newItem.getItemDamage() || inv[0].getMaxStackSize() <= inv[0].stackSize)) {return false;}
+				return GristHelper.canAfford(UsernameHandler.encode(owner.getCommandSenderName()), newItem);
 			} else {
 				return false;
 			}
@@ -254,13 +254,13 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			NBTTagCompound nbttagcompound = new NBTTagCompound();
 			outputCard.setTagCompound(nbttagcompound);
 			if (this.inv[1] == null) {
-		        nbttagcompound.setInteger("contentID", this.inv[2].itemID);
+		        nbttagcompound.setString("contentID", Item.itemRegistry.getNameForObject(inv[2].getItem())); //This is how the itemStack is saved, so why not here too?
 		        nbttagcompound.setInteger("contentMeta", this.inv[2].getItemDamage());
 			} else if (this.inv[2]==null) {
-		        nbttagcompound.setInteger("contentID", this.inv[1].itemID);
+		        nbttagcompound.setString("contentID", Item.itemRegistry.getNameForObject(inv[1].getItem()));
 		        nbttagcompound.setInteger("contentMeta", this.inv[1].getItemDamage());
 			} else {
-		        nbttagcompound.setInteger("contentID", outputItem.itemID);
+		        nbttagcompound.setString("contentID", Item.itemRegistry.getNameForObject(outputItem.getItem()));
 		        nbttagcompound.setInteger("contentMeta", outputItem.getItemDamage());
 			}
 
@@ -280,12 +280,12 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 				break;
 			}
 			
-			if(cardtag.getInteger("contentID") == Minestuck.blockStorage.blockID &&
+			if(cardtag.getString("contentID") == GameRegistry.findUniqueIdentifierFor(Minestuck.blockStorage).name &&
 					cardtag.getInteger("contentMeta") == 1)
 				outputDowel = new ItemStack(Minestuck.cruxiteDowel);
 			else {
 				NBTTagCompound doweltag = new NBTTagCompound();
-				doweltag.setInteger("contentID", cardtag.getInteger("contentID"));
+				doweltag.setString("contentID", cardtag.getString("contentID"));
 				doweltag.setInteger("contentMeta", cardtag.getInteger("contentMeta"));
 				outputDowel.setTagCompound(doweltag);
 			}
@@ -304,17 +304,23 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			MinestuckStatsHandler.onAlchemizedItem(newItem, owner);
 			
 			if(!worldObj.isRemote) {
-				GristHelper.decrease(UsernameHandler.encode(owner.username), GristRegistry.getGristConversion(newItem));
-				MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(owner.username));
+				GristHelper.decrease(UsernameHandler.encode(owner.getCommandSenderName()), GristRegistry.getGristConversion(newItem));
+//				MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(owner.getCommandSenderName()));
 			}
 			break;
 		case (4):
 			if(!worldObj.isRemote) {
-				GristHelper.increase(UsernameHandler.encode(owner.username), GristRegistry.getGristConversion(inv[1]));
-				MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(owner.username));
+				GristHelper.increase(UsernameHandler.encode(owner.getCommandSenderName()), GristRegistry.getGristConversion(inv[1]));
+//				MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(owner.getCommandSenderName()));
 			}
 			this.decrStackSize(1, 1);
 			break;
 		}
 	}
+
+	@Override
+	public void closeInventory() {}
+
+	@Override
+	public void openInventory() {}
 }

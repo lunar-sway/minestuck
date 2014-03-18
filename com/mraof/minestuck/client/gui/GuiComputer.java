@@ -14,15 +14,17 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import com.mraof.minestuck.editmode.ClientEditHandler;
+//import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.network.ClearMessagePacket;
+import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.skaianet.ComputerData;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.UsernameHandler;
 
-import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -63,7 +65,7 @@ public class GuiComputer extends GuiScreen
 		super();
 		
 		this.mc = mc;
-		this.fontRenderer = mc.fontRenderer;
+		this.fontRendererObj = mc.fontRenderer;
 		this.te = te;
 		te.gui = this;
 		buttonStrings = new ArrayList<String>();
@@ -84,9 +86,9 @@ public class GuiComputer extends GuiScreen
 		if(!te.errored())
 			if(te.latestmessage.get(te.programSelected) == null || te.latestmessage.get(te.programSelected).isEmpty())
 				if(te.programSelected == -1){
-					fontRenderer.drawString("Insert disk.", (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
-				} else fontRenderer.drawString(displayMessage, (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
-			else fontRenderer.drawString(StatCollector.translateToLocal(te.latestmessage.get(te.programSelected)), (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
+					fontRendererObj.drawString("Insert disk.", (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
+				} else fontRendererObj.drawString(displayMessage, (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
+			else fontRendererObj.drawString(StatCollector.translateToLocal(te.latestmessage.get(te.programSelected)), (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		RenderHelper.disableStandardItemLighting();
 		GL11.glDisable(GL11.GL_LIGHTING);
@@ -105,17 +107,17 @@ public class GuiComputer extends GuiScreen
 	public void initGui() {
 		super.initGui();
 		for (int i=0;i<4;i++) {
-			GuiButton button = new GuiButton(i+2, (width - xSize) / 2 +14, (height - ySize) / 2 +60 + i*24, 120, 20,"");
+			GuiButton button = new GuiButton(i + 2, (width - xSize) / 2 + 14, (height - ySize) / 2 + 60 + i*24, 120, 20,"");
 			selButtons.add(button);
 			buttonList.add(button);
 		}
 		
-		programButton = new GuiButton(0, (width - xSize)/2 +95,(height - ySize)/2 +10,70,20, "PROGRAM");
+		programButton = new GuiButton(0, (width - xSize) / 2 + 95,(height - ySize)/2 + 10,70,20, "PROGRAM");
 		buttonList.add(programButton);
 		
-		upButton = new GuiButton(-1, (width - xSize) / 2 +140, (height - ySize) / 2 +60, 20, 20,"^");
+		upButton = new GuiButton(-1, (width - xSize) / 2 + 140, (height - ySize) / 2 + 60, 20, 20,"^");
 		buttonList.add(upButton);
-		downButton = new GuiButton(-1, (width - xSize) / 2 +140, (height - ySize) / 2 +132, 20, 20,"v");
+		downButton = new GuiButton(-1, (width - xSize) / 2 + 140, (height - ySize) / 2 + 132, 20, 20,"v");
 		buttonList.add(downButton);
 		if(te.programSelected == -1)
 			if(te.hasClient())
@@ -175,7 +177,7 @@ public class GuiComputer extends GuiScreen
 			if (!te.clientName.isEmpty() && SkaiaClient.getClientConnection(te.clientName) != null) {
 				displayMessage = StatCollector.translateToLocalFormatted("computer.messageConnect", displayPlayer);
 				addButtonString("computer.buttonClose");
-				addButtonString("computer.buttonEdit");
+				addButtonString("computer.buttonGive");
 			} else if (te.openToClients) {
 				displayMessage = StatCollector.translateToLocal("computer.messageResumeServer");
 				addButtonString("computer.buttonClose");
@@ -241,7 +243,10 @@ public class GuiComputer extends GuiScreen
 			}
 		} else if(te.programSelected == 1){
 			if(buttonString.equals("computer.buttonEdit")){
-				ClientEditHandler.activate(te.owner,te.clientName);
+//				ClientEditHandler.activate(te.owner,te.clientName);
+			} else if(buttonString.equals("computer.buttonGive")) {
+				MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CLIENT_EDIT, te.owner, te.clientName);
+				MinestuckChannelHandler.sendToServer(packet);
 			} else if(buttonString.equals("computer.buttonResume")){
 				SkaiaClient.sendConnectRequest(te, SkaiaClient.getAssociatedPartner(te.owner, false), false);
 			} else if(buttonString.equals("computer.buttonOpen")){

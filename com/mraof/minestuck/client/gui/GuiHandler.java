@@ -22,7 +22,7 @@ public class GuiHandler implements IGuiHandler
     @Override
     public Object getServerGuiElement(int id, EntityPlayer player, World world,
                     int x, int y, int z) {
-            TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
+            TileEntity tileEntity = world.getTileEntity(x, y, z);
             if(tileEntity instanceof TileEntityMachine){
                     return new ContainerMachine(player.inventory, (TileEntityMachine) tileEntity);
             }
@@ -33,7 +33,7 @@ public class GuiHandler implements IGuiHandler
     @Override
     public Object getClientGuiElement(int id, EntityPlayer player, World world,
                     int x, int y, int z) {
-            TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
+            TileEntity tileEntity = world.getTileEntity(x, y, z);
             if(tileEntity instanceof TileEntityMachine && id == GuiId.MACHINE.ordinal()){
                     return new GuiMachine(player.inventory, (TileEntityMachine) tileEntity);
             }

@@ -1,5 +1,7 @@
 package com.mraof.minestuck.entity.underling;
 
+import io.netty.buffer.ByteBuf;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -16,11 +18,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 import com.mraof.minestuck.entity.EntityListAttackFilter;
 import com.mraof.minestuck.entity.EntityMinestuck;
 import com.mraof.minestuck.entity.ai.EntityAINearestAttackableTargetWithHeight;
@@ -98,11 +99,11 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 		return "textures/mobs/" + type.getName() + underlingName + ".png";
 	}
 	
-	@Override
-	public String getEntityName() 
-	{
-		return StatCollector.translateToLocalFormatted("entity." + underlingName + ".type", type.getDisplayName());
-	}
+//	@Override
+//	public String getEntityName() 
+//	{
+//		return StatCollector.translateToLocalFormatted("entity." + underlingName + ".type", type.getDisplayName());
+//	}
 	@Override
 	protected boolean isAIEnabled()
 	{
@@ -150,12 +151,12 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 		this.type = type.getTypeFromString(par1nbtTagCompound.getString("Type"));
 	}
 	@Override
-	public void writeSpawnData(ByteArrayDataOutput data) 
+	public void writeSpawnData(ByteBuf data) 
 	{
 		data.writeInt(((Enum) type).ordinal());
 	}
 	@Override
-	public void readSpawnData(ByteArrayDataInput data) 
+	public void readSpawnData(ByteBuf data) 
 	{
 		this.type = type.getClass().getEnumConstants()[data.readInt()];
 		this.textureResource = new ResourceLocation("minestuck", this.getTexture());
@@ -164,7 +165,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	@Override
 	   public boolean getCanSpawnHere()
     {
-        return this.worldObj.difficultySetting > 0 && this.isValidLightLevel() && super.getCanSpawnHere();
+        return this.worldObj.difficultySetting != EnumDifficulty.PEACEFUL && this.isValidLightLevel() && super.getCanSpawnHere();
     }
 	
     protected boolean isValidLightLevel()

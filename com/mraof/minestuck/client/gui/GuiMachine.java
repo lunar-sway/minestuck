@@ -10,7 +10,6 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
@@ -18,6 +17,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import com.mraof.minestuck.inventory.ContainerMachine;
+import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
@@ -102,21 +102,21 @@ public class GuiMachine extends GuiContainer {
 
 @Override
 protected void drawGuiContainerForegroundLayer(int param1, int param2) {
-    fontRenderer.drawString(StatCollector.translateToLocal("gui."+guis[metadata]+".name"), 8, 6, 4210752);
+    fontRendererObj.drawString(StatCollector.translateToLocal("gui."+guis[metadata]+".name"), 8, 6, 4210752);
     //draws "Inventory" or your regional equivalent
-    fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
+    fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
     if ((metadata == 3 || metadata ==4) && te.inv[1] != null) 
     {
     	//Render grist requirements
     	NBTTagCompound nbttagcompound = te.inv[1].getTagCompound();
     	GristSet set = GristRegistry.getGristConversion(metadata == 3? AlchemyRecipeHandler.getDecodedItem(te.inv[1]) : te.inv[1]);
     	
-    	if (set == null) {fontRenderer.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 9,45, 16711680); return;}
+    	if (set == null) {fontRendererObj.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 9,45, 16711680); return;}
     	Hashtable reqs = set.getHashtable();
     	//Debug.print("reqs: " + reqs.size());
     	if (reqs != null) {
     		if (reqs.size() == 0) {
-    			fontRenderer.drawString(StatCollector.translateToLocal("gui.free"), 9,45, 65280);
+    			fontRendererObj.drawString(StatCollector.translateToLocal("gui.free"), 9,45, 65280);
     			return;
     		}
     	   	Iterator it = reqs.entrySet().iterator();
@@ -132,18 +132,18 @@ protected void drawGuiContainerForegroundLayer(int param1, int param2) {
                 
                 int color = metadata == 3 ? (need <= have ? 65280 : 16711680) : 0; //Green if we have enough grist, red if not, black if GristWidget
                 
-                fontRenderer.drawString(need + " " + GristType.values()[type].getDisplayName() + " (" + have + ")", 9 + (80 * col),45 + (8 * (row)), color);
+                fontRendererObj.drawString(need + " " + GristType.values()[type].getDisplayName() + " (" + have + ")", 9 + (80 * col),45 + (8 * (row)), color);
                 
                 place++;
                 
                 //Debug.print("Need" + need + ". Have " + have);
             }
     	} else {
-    		fontRenderer.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 9,45, 16711680);
+    		fontRendererObj.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 9,45, 16711680);
     		return;
     	}
     } else if (metadata == 1) {
-    	modeButton.drawButton = (te.inv[1] != null && te.inv[2] != null);
+		modeButton.visible = (te.inv[1] != null && te.inv[2] != null);
     }
 }
 
@@ -175,7 +175,7 @@ public void initGui() {
         	//The Designex's needs a button...
         	modeButton = new GuiButton(1, (width - xSize) / 2 + buttonX, (height - ySize) / 2 + buttonY, 20, 20, te.mode ? "&&": "||");
         	buttonList.add(modeButton);
-        	modeButton.drawButton = (te.inv[1] != null && te.inv[2] != null);
+        	modeButton.visible = (te.inv[1] != null && te.inv[2] != null);
         }
         if (metadata != 0) {
         	//All non-Cruxtruders need a Go button.
@@ -189,12 +189,8 @@ protected void actionPerformed(GuiButton guibutton) {
         
 	if (guibutton == modeButton) {
 		//Sends new mode info to server
-		Packet250CustomPayload packet = new Packet250CustomPayload();
-		packet.channel = "Minestuck";
-		packet.data = MinestuckPacket.makePacket(Type.COMBOBUTTON,te.mode ? false : true);
-		packet.length = packet.data.length;
-		this.mc.getNetHandler().addToSendQueue(packet);
-	
+		MinestuckPacket packet = MinestuckPacket.makePacket(Type.COMBOBUTTON,te.mode ? false : true);
+		MinestuckChannelHandler.sendToServer(packet);
 		te.mode = !te.mode;
 		modeButton.displayString = te.mode ? "&&" : "||";
 	}
@@ -203,21 +199,15 @@ protected void actionPerformed(GuiButton guibutton) {
 		
 		if (Mouse.isButtonDown(0) && !te.overrideStop) {
 			//Tell the machine to go once
-			Packet250CustomPayload packet = new Packet250CustomPayload();
-			packet.channel = "Minestuck";
-			packet.data = MinestuckPacket.makePacket(Type.GOBUTTON,true,false);
-			packet.length = packet.data.length;
-			this.mc.getNetHandler().addToSendQueue(packet);
+			MinestuckPacket packet = MinestuckPacket.makePacket(Type.GOBUTTON,true,false);
+			MinestuckChannelHandler.sendToServer(packet);
 			
 			te.ready = true;
 			goButton.displayString = StatCollector.translateToLocal(te.overrideStop ? "gui.buttonStop" : "gui.buttonGo");
 		} else if (Mouse.getEventButton() < 2) {
 			//Tell the machine to go until stopped
-			Packet250CustomPayload packet = new Packet250CustomPayload();
-			packet.channel = "Minestuck";
-			packet.data = MinestuckPacket.makePacket(Type.GOBUTTON,true,!te.overrideStop);
-			packet.length = packet.data.length;
-			this.mc.getNetHandler().addToSendQueue(packet);
+			MinestuckPacket packet = MinestuckPacket.makePacket(Type.GOBUTTON,true,!te.overrideStop);
+			MinestuckChannelHandler.sendToServer(packet);
 			
 			te.overrideStop = !te.overrideStop;
 			goButton.displayString = StatCollector.translateToLocal(te.overrideStop ? "gui.buttonStop" : "gui.buttonGo");
@@ -237,7 +227,8 @@ protected void mouseClicked(int par1, int par2, int par3)
 
             if (guibutton.mousePressed(this.mc, par1, par2) && guibutton == goButton)
             {
-                this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
+            	
+                guibutton.func_146113_a(this.mc.getSoundHandler());
                 this.actionPerformed(guibutton);
             }
         }

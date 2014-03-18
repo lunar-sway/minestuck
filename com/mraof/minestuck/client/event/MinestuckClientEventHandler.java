@@ -1,22 +1,17 @@
 package com.mraof.minestuck.client.event;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.MathHelper;
-import net.minecraftforge.client.GuiIngameForge;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
-import net.minecraftforge.event.ForgeSubscribe;
 
 import com.mraof.minestuck.Minestuck;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class MinestuckClientEventHandler 
 {
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void postStitch(TextureStitchEvent.Post event)
 	{
 		Minestuck.fluidOil.setIcons(Minestuck.blockOil.getBlockTextureFromSide(0), Minestuck.blockOil.getBlockTextureFromSide(1));
@@ -24,7 +19,7 @@ public class MinestuckClientEventHandler
 	}
 	
 /*	
-//	@ForgeSubscribe
+//	@SubscribeEvent
 	public void onRenderOverlay(RenderGameOverlayEvent.Pre event)
 	{
 //		Debug.print(event.type);
@@ -37,7 +32,7 @@ public class MinestuckClientEventHandler
 	        int viewBlockId = playerViewBlockId();
 //	        Debug.print(viewBlockId);
 
-	        if (viewBlockId == Minestuck.blockBlood.blockID || viewBlockId == Minestuck.blockOil.blockID)
+	        if (viewBlockId == Minestuck.blockBlood || viewBlockId == Minestuck.blockOil)
 	        {
 	        	event.setCanceled(true);
 	            int air = Minecraft.getMinecraft().thePlayer.getAir();

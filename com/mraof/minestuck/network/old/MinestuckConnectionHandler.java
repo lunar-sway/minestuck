@@ -1,23 +1,16 @@
-package com.mraof.minestuck.network;
+/*package com.mraof.minestuck.network.old;
+
+import ibxm.Player;
 
 import java.util.Iterator;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.NetLoginHandler;
-import net.minecraft.network.packet.NetHandler;
-import net.minecraft.network.packet.Packet1Login;
-import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.DimensionManager;
 
+import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
-import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
-
-import cpw.mods.fml.common.network.IConnectionHandler;
-import cpw.mods.fml.common.network.Player;
 
 public class MinestuckConnectionHandler implements IConnectionHandler {
 
@@ -75,4 +68,4 @@ public class MinestuckConnectionHandler implements IConnectionHandler {
 	public void clientLoggedIn(NetHandler clientHandler, INetworkManager manager, Packet1Login login) {
 	}
 
-}
+}*/

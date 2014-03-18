@@ -1,5 +1,6 @@
 package com.mraof.minestuck.item;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
@@ -7,7 +8,7 @@ public class ItemChessTile extends ItemBlock
 {
 	private final static String[] subNames = {"black", "white", "lightgrey", "darkgrey"};
 	
-	public ItemChessTile(int par1) 
+	public ItemChessTile(Block par1) 
 	{
 		super(par1);
 		setHasSubtypes(true);

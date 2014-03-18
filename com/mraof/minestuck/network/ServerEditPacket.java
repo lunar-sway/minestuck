@@ -1,17 +1,14 @@
 package com.mraof.minestuck.network;
 
+import io.netty.buffer.ByteBuf;
+
 import java.util.EnumSet;
 
-import net.minecraft.network.INetworkManager;
+import net.minecraft.entity.player.EntityPlayer;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
-import com.mraof.minestuck.editmode.ClientEditHandler;
+//import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.editmode.DeployList;
-import com.mraof.minestuck.editmode.ServerEditHandler;
 
-import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 
 public class ServerEditPacket extends MinestuckPacket {
@@ -25,37 +22,37 @@ public class ServerEditPacket extends MinestuckPacket {
 	}
 
 	@Override
-	public byte[] generatePacket(Object... data) {
-		if(data.length == 0)
-			return new byte[0];
-		ByteArrayDataOutput dat = ByteStreams.newDataOutput();
-		dat.write((data[0].toString()+"\n").getBytes());
-		dat.writeInt((Integer)data[1]);
-		dat.writeInt((Integer)data[2]);
-		for(boolean b : (boolean[])data[3])
-			dat.writeBoolean(b);
-		return dat.toByteArray();
+	public MinestuckPacket generatePacket(Object... dat) {
+		if(dat.length == 0) {
+			return this;
+		}
+		writeString(data,dat[0].toString()+"\n");
+		data.writeInt((Integer)dat[1]);
+		data.writeInt((Integer)dat[2]);
+		for(boolean b : (boolean[])dat[3])
+			data.writeBoolean(b);
+		
+		return this;
 	}
 
 	@Override
-	public MinestuckPacket consumePacket(byte[] data) {
-		if(data.length == 0)
+	public MinestuckPacket consumePacket(ByteBuf data) {
+		if(data.readableBytes() == 0)
 			return this;
-		ByteArrayDataInput input = ByteStreams.newDataInput(data);
-		target = input.readLine();
-		posX = input.readInt();
-		posZ = input.readInt();
+		target = readLine(data);
+		posX = data.readInt();
+		posZ = data.readInt();
 		givenItems = new boolean[DeployList.getItemList().size()+1];
 		for(int i = 0; i < givenItems.length; i++) {
-			givenItems[i] = input.readBoolean();
+			givenItems[i] = data.readBoolean();
 		}
 		
 		return this;
 	}
 
 	@Override
-	public void execute(INetworkManager network, MinestuckPacketHandler minestuckPacketHandler, Player player, String userName) {
-		ClientEditHandler.onClientPackage(target, posX, posZ, givenItems); 
+	public void execute(EntityPlayer player) {
+//		ClientEditHandler.onClientPackage(target, posX, posZ, givenItems);
 	}
 
 	@Override

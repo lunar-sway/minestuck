@@ -4,6 +4,8 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.Iterator;
 
 import net.minecraft.block.Block;
@@ -11,17 +13,16 @@ import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.StatCollector;
-import net.minecraft.world.WorldType;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
-import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import codechicken.nei.asm.NEIModContainer;
@@ -38,10 +39,10 @@ import com.mraof.minestuck.block.BlockStorage;
 import com.mraof.minestuck.block.OreCruxite;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.GuiHandler;
-import com.mraof.minestuck.editmode.ClientEditHandler;
+//import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.editmode.DeployList;
-import com.mraof.minestuck.editmode.ServerEditHandler;
-import com.mraof.minestuck.entity.EntityDecoy;
+//import com.mraof.minestuck.editmode.ServerEditHandler;
+//import com.mraof.minestuck.entity.EntityDecoy;
 import com.mraof.minestuck.entity.carapacian.EntityBlackBishop;
 import com.mraof.minestuck.entity.carapacian.EntityBlackPawn;
 import com.mraof.minestuck.entity.carapacian.EntityWhiteBishop;
@@ -62,6 +63,7 @@ import com.mraof.minestuck.item.EnumHammerType;
 import com.mraof.minestuck.item.EnumSickleType;
 import com.mraof.minestuck.item.EnumSporkType;
 import com.mraof.minestuck.item.ItemBlade;
+import com.mraof.minestuck.item.ItemBlockLayered;
 import com.mraof.minestuck.item.ItemCane;
 import com.mraof.minestuck.item.ItemCardBlank;
 import com.mraof.minestuck.item.ItemCardPunched;
@@ -75,27 +77,24 @@ import com.mraof.minestuck.item.ItemDisk;
 import com.mraof.minestuck.item.ItemDowelCarved;
 import com.mraof.minestuck.item.ItemDowelUncarved;
 import com.mraof.minestuck.item.ItemHammer;
-import com.mraof.minestuck.item.ItemBlockLayered;
 import com.mraof.minestuck.item.ItemMachine;
 import com.mraof.minestuck.item.ItemMinestuckBucket;
 import com.mraof.minestuck.item.ItemSickle;
 import com.mraof.minestuck.item.ItemSpork;
 import com.mraof.minestuck.item.ItemStorageBlock;
 import com.mraof.minestuck.nei.NEIMinestuckConfig;
-import com.mraof.minestuck.network.MinestuckConnectionHandler;
-import com.mraof.minestuck.network.MinestuckPacketHandler;
+import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
-import com.mraof.minestuck.util.MinestuckStatsHandler;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristStorage;
-import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.KindAbstratusList;
+import com.mraof.minestuck.util.MinestuckStatsHandler;
 import com.mraof.minestuck.util.UpdateChecker;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.WorldProviderSkaia;
@@ -104,6 +103,7 @@ import com.mraof.minestuck.world.gen.structure.StructureCastlePieces;
 import com.mraof.minestuck.world.gen.structure.StructureCastleStart;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -113,25 +113,19 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
-import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.network.FMLEmbeddedChannel;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
-import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
+
 @Mod(modid = "Minestuck", name = "Minestuck", version = "@VERSION@")
-@NetworkMod(clientSideRequired = true, serverSideRequired = false, packetHandler = MinestuckPacketHandler.class, channels = {"Minestuck"})
 public class Minestuck
 {
 	//these ids are in case I need to raise or lower ids for whatever reason
-	public static int toolIdStart = 5001;
 	public static int entityIdStart = 5050;
-	public static int blockIdStart = 500;
-	public static int itemIdStart = 6001;
 	public static int skaiaProviderTypeId = 2;
 	public static int skaiaDimensionId = 2;
 	public static int landProviderTypeId = 3;
@@ -180,48 +174,7 @@ public class Minestuck
 	public static Item component;
 	public static ItemMinestuckBucket minestuckBucket;
 
-	//hammers
-	public static int clawHammerId;
-	public static int sledgeHammerId;
-	public static int pogoHammerId;
-	public static int telescopicSassacrusherId;
-	public static int fearNoAnvilId;
-	public static int zillyhooHammerId;
-	public static int popamaticVrillyhooId;
-	public static int scarletZillyhooId;
-	//blades
-	public static int sordId;
-	public static int ninjaSwordId;
-	public static int katanaId;
-	public static int caledscratchId;
-	public static int royalDeringerId;
-	public static int regiswordId;
-	public static int scarletRibbitarId;
-	public static int doggMacheteId;
-	//sickles
-	public static int sickleId;
-	public static int homesSmellYaLaterId;
-	public static int regiSickleId;
-	public static int clawSickleId;
-	//clubs
-	public static int deuceClubId;
-	//canes
-	public static int caneId;
-	public static int spearCaneId;
-	public static int dragonCaneId;
-	//Spoons/forks
-	public static int crockerSporkId;
-	public static int skaiaForkId;
-	//Other
-	public static int rawCruxiteId;
-	public static int cruxiteDowelId;
-	public static int cruxiteDowelCarvedId;
-	public static int blankCardId;
-	public static int punchedCardId;
-	public static int cruxiteArtifactId;
-	public static int diskId;
-	public static int componentId;
-	public static int minestuckBucketId;
+
 	
 	//Blocks
 	public static Block chessTile;
@@ -239,17 +192,6 @@ public class Minestuck
 	public static Fluid fluidOil;
 	public static Fluid fluidBlood;
 
-	//Block IDs
-	public static int chessTileId;
-	public static int gatePortalId;
-	public static int oreCruxiteId;
-	public static int blockStorageId;
-	public static int blockMachineId;
-	public static int blockComputerOnId;
-	public static int blockComputerOffId;
-	public static int blockOilId;
-	public static int blockBloodId;
-	public static int layeredSandId;
 	
 	
 	//Client config
@@ -282,6 +224,7 @@ public class Minestuck
 	//The proxy to be used by client and server
 	public static CommonProxy proxy;
 	public static CreativeTabs tabMinestuck;
+	public static EnumMap<Side, FMLEmbeddedChannel> channels;
 
 	public int currentEntityIdOffset = 0;
 
@@ -290,113 +233,6 @@ public class Minestuck
 	{
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 		config.load();
-
-		blockIdStart = config.get("Block Ids", "blockIdStart", 500).getInt();
-		chessTileId = config.get("Block Ids", "chessTileId", blockIdStart).getInt();
-		gatePortalId = config.get("Block Ids", "gatePortalId", blockIdStart + 1).getInt();
-		oreCruxiteId = config.get("Block Ids", "oreCruxiteId", blockIdStart + 2).getInt();
-		blockStorageId = config.get("Block Ids", "blockStorageId", blockIdStart + 3).getInt();
-		blockMachineId = config.get("Block Ids", "blockMachineId", blockIdStart + 4).getInt();
-		blockComputerOffId = config.get("Block Ids", "blockComputerOffId", blockIdStart + 5).getInt();
-		blockComputerOnId = config.get("Block Ids", "blockComputerOnId", blockIdStart + 6).getInt();
-		blockOilId = config.get("Block Ids", "blockOilId", blockIdStart + 7).getInt();
-		blockBloodId = config.get("Block Ids", "blockBloodId", blockIdStart + 8).getInt();
-		layeredSandId = config.get("Block Ids", "layeredSandId", blockIdStart + 9).getInt();
-		if(config.get("Block Ids", "useBlockIdStart", true).getBoolean(true))
-		{
-			chessTileId = blockIdStart;
-			gatePortalId = blockIdStart + 1;
-			oreCruxiteId = blockIdStart + 2;
-			blockStorageId = blockIdStart + 3;
-			blockMachineId = blockIdStart + 4;
-			blockComputerOffId = blockIdStart + 5;
-			blockComputerOnId = blockIdStart + 6;
-			blockOilId = blockIdStart + 7;
-			blockBloodId = blockIdStart + 8;
-			layeredSandId = blockIdStart + 9;
-		}
-		Debug.printf("Fluid Block Ids loaded, Blood id: %d, Oil id: %d", blockBloodId, blockOilId);
-
-		toolIdStart = config.get("Item Ids", "toolIdStart", 5001).getInt();
-		clawHammerId = config.get("Item Ids", "clawHammerId", toolIdStart).getInt();
-		sledgeHammerId = config.get("Item Ids", "sledgeHammerId", toolIdStart + 1).getInt();
-		pogoHammerId = config.get("Item Ids", "pogoHammerId", toolIdStart + 2).getInt();
-		telescopicSassacrusherId = config.get("Item Ids", "telescopicSassacrusherId", toolIdStart + 3).getInt();
-		fearNoAnvilId = config.get("Item Ids", "fearNoAnvilId", toolIdStart + 4).getInt();
-		zillyhooHammerId = config.get("Item Ids", "zillyhooHammerId", toolIdStart + 5).getInt();
-		popamaticVrillyhooId = config.get("Item Ids", "popamaticVrillyhooId", toolIdStart + 6).getInt();
-		scarletZillyhooId = config.get("Item Ids", "scarletZillyhooId", toolIdStart + 7).getInt();
-		sordId = config.get("Item Ids", "sordId", toolIdStart + 8).getInt();
-		ninjaSwordId = config.get("Item Ids", "ninjaSwordId", toolIdStart + 9).getInt();
-		katanaId = config.get("Item Ids", "katanaId", toolIdStart + 10).getInt();
-		caledscratchId = config.get("Item Ids", "caledscratchId", toolIdStart + 11).getInt();
-		royalDeringerId = config.get("Item Ids", "royalDeringerId", toolIdStart + 12).getInt();
-		regiswordId = config.get("Item Ids", "regiswordId", toolIdStart + 13).getInt();
-		scarletRibbitarId = config.get("Item Ids", "scarletRibbitarId", toolIdStart + 14).getInt();
-		doggMacheteId = config.get("Item Ids", "doggMacheteId", toolIdStart + 15).getInt();
-		sickleId = config.get("Item Ids", "sickleId", toolIdStart + 16).getInt();
-		homesSmellYaLaterId = config.get("Item Ids", "homesSmellYaLaterId", toolIdStart + 17).getInt();
-		regiSickleId = config.get("Item Ids", "regiSickleId", toolIdStart + 18).getInt();
-		clawSickleId = config.get("Item Ids", "clawSickleId", toolIdStart + 19).getInt();
-		deuceClubId = config.get("Item Ids", "deuceClubId", toolIdStart + 20).getInt();
-		caneId = config.get("Item Ids", "caneId", toolIdStart + 21).getInt();
-		spearCaneId = config.get("Item Ids", "spearCaneId", toolIdStart + 22).getInt();
-		dragonCaneId = config.get("Item Ids", "dragonCaneId", toolIdStart + 23).getInt();
-		crockerSporkId = config.get("Item Ids", "crockerSporkId", toolIdStart + 24).getInt();
-		skaiaForkId = config.get("Item Ids", "skaiaForkId", toolIdStart + 25).getInt();
-
-		if(config.get("Item Ids", "useToolIdStart", true).getBoolean(true))
-		{
-			clawHammerId = toolIdStart;
-			sledgeHammerId = toolIdStart + 1;
-			pogoHammerId = toolIdStart + 2;
-			telescopicSassacrusherId = toolIdStart + 3;
-			fearNoAnvilId = toolIdStart + 4;
-			zillyhooHammerId = toolIdStart + 5;
-			popamaticVrillyhooId = toolIdStart + 6;
-			scarletZillyhooId = toolIdStart + 7;
-			sordId = toolIdStart + 8;
-			ninjaSwordId = toolIdStart + 9;
-			katanaId = toolIdStart + 10;
-			caledscratchId = toolIdStart + 11;
-			royalDeringerId = toolIdStart + 12;
-			regiswordId = toolIdStart + 13;
-			scarletRibbitarId = toolIdStart + 14;
-			doggMacheteId = toolIdStart + 15;
-			sickleId = toolIdStart + 16;
-			homesSmellYaLaterId = toolIdStart + 17;
-			regiSickleId = toolIdStart + 18;
-			clawSickleId = toolIdStart + 19;
-			deuceClubId = toolIdStart + 20;
-			caneId = toolIdStart + 21;
-			spearCaneId = toolIdStart + 22;
-			dragonCaneId = toolIdStart + 23;
-			crockerSporkId = toolIdStart + 24;
-			skaiaForkId = toolIdStart + 25;
-		}
-
-		itemIdStart = config.get("Item Ids", "itemIdStart", 6001).getInt();
-		rawCruxiteId = config.get("Item Ids", "rawCruxiteId", itemIdStart).getInt();
-		cruxiteDowelId = config.get("Item Ids", "cruxiteDowelId", itemIdStart + 1).getInt();
-		cruxiteDowelCarvedId = config.get("Item Ids", "cruxiteDowelCarvedId", itemIdStart + 2).getInt();
-		blankCardId = config.get("Item Ids", "blankCardId", itemIdStart + 3).getInt();
-		punchedCardId = config.get("Item Ids", "punchedCardId", itemIdStart + 4).getInt();
-		cruxiteArtifactId = config.get("Item Ids", "cruxiteArtifactId", itemIdStart + 5).getInt();
-		diskId = config.get("Item Ids", "diskId", itemIdStart + 6).getInt();
-		componentId = config.get("Item Ids", "componentId", itemIdStart + 7).getInt();
-		minestuckBucketId = config.get("Item Ids", "minestuckBucketId", itemIdStart + 8).getInt();
-		if(config.get("Item Ids", "useItemIdStart", true).getBoolean(true));
-		{
-			rawCruxiteId = itemIdStart;
-			cruxiteDowelId = itemIdStart + 1;
-			cruxiteDowelCarvedId = itemIdStart + 2;
-			blankCardId = itemIdStart + 3;
-			punchedCardId = itemIdStart + 4;
-			cruxiteArtifactId = itemIdStart + 5;
-			diskId = itemIdStart + 6;
-			componentId = itemIdStart + 7;	
-			minestuckBucketId = itemIdStart + 8;			
-		}
 
 		entityIdStart = config.get("Entity Ids", "entitydIdStart", 5050).getInt(); //The number 5050 might make it seem like this is meant to match up with item/block IDs, but it is not
 		skaiaProviderTypeId = config.get("Provider Type Ids", "skaiaProviderTypeId", 2).getInt();
@@ -420,103 +256,142 @@ public class Minestuck
 		forceMaxSize = config.get("General", "forceMaxSize", false).getBoolean(false);
 		config.save();
 		
+		(new UpdateChecker()).start();
+		
+		//Register the Minestuck creative tab
+		this.tabMinestuck = new CreativeTabs("tabMinestuck")
+		{
+			@Override
+			public Item getTabIconItem() {
+				return zillyhooHammer;
+			}
+		};
+		
+		//blocks
+		chessTile = GameRegistry.registerBlock(new BlockChessTile(), ItemChessTile.class, "chessTile");
+		gatePortal = GameRegistry.registerBlock(new BlockGatePortal(Material.portal), "gatePortal");
+		oreCruxite = GameRegistry.registerBlock(new OreCruxite(),"oreCruxite");
+		layeredSand = GameRegistry.registerBlock(new BlockLayered(Blocks.sand), "layeredSand").setBlockName("layeredSand");
+		//machines
+		blockStorage = GameRegistry.registerBlock(new BlockStorage(),ItemStorageBlock.class,"blockStorage");
+		blockMachine = GameRegistry.registerBlock(new BlockMachine(), ItemMachine.class,"blockMachine");
+		blockComputerOff = GameRegistry.registerBlock(new BlockComputerOff(),"blockComputer");
+		blockComputerOn = GameRegistry.registerBlock(new BlockComputerOn(),"blockComputerOn");
+		//fluids
+		fluidOil = new Fluid("Oil");
+		FluidRegistry.registerFluid(fluidOil);
+		fluidBlood = new Fluid("Blood");
+		FluidRegistry.registerFluid(fluidBlood);
+		blockOil = new BlockFluidOil(fluidOil, Material.water);
+		blockBlood = new BlockFluidBlood(fluidBlood, Material.water);
+		
+		//items
+		//hammers
+		clawHammer = new ItemHammer(EnumHammerType.CLAW);
+		sledgeHammer = new ItemHammer(EnumHammerType.SLEDGE);
+		pogoHammer = new ItemHammer(EnumHammerType.POGO);
+		telescopicSassacrusher = new ItemHammer(EnumHammerType.TELESCOPIC);
+		fearNoAnvil = new ItemHammer(EnumHammerType.FEARNOANVIL);
+		zillyhooHammer = new ItemHammer(EnumHammerType.ZILLYHOO);
+		popamaticVrillyhoo = new ItemHammer(EnumHammerType.POPAMATIC);
+		scarletZillyhoo = new ItemHammer(EnumHammerType.SCARLET);
+		//blades
+		sord = new ItemBlade(EnumBladeType.SORD);
+		ninjaSword = new ItemBlade(EnumBladeType.NINJA);
+		katana = new ItemBlade(EnumBladeType.KATANA);
+		caledscratch = new ItemBlade(EnumBladeType.CALEDSCRATCH);
+		royalDeringer = new ItemBlade(EnumBladeType.DERINGER);
+		regisword = new ItemBlade(EnumBladeType.REGISWORD);
+		scarletRibbitar = new ItemBlade(EnumBladeType.SCARLET);
+		doggMachete = new ItemBlade(EnumBladeType.DOGG);
+		//sickles
+		sickle = new ItemSickle(EnumSickleType.SICKLE);
+		homesSmellYaLater = new ItemSickle(EnumSickleType.HOMES);
+		regiSickle = new ItemSickle(EnumSickleType.REGISICKLE);
+		clawSickle = new ItemSickle(EnumSickleType.CLAW);
+		//clubs
+		deuceClub = new ItemClub(EnumClubType.DEUCE);
+		//canes
+		cane = new ItemCane(EnumCaneType.CANE);
+		spearCane = new ItemCane(EnumCaneType.SPEAR);
+		dragonCane = new ItemCane(EnumCaneType.DRAGON);
+		//Spoons/forks
+		crockerSpork = new ItemSpork(EnumSporkType.CROCKER);
+		skaiaFork = new ItemSpork(EnumSporkType.SKAIA);
+		//items
+		rawCruxite = new ItemCruxiteRaw();
+		cruxiteDowel = new ItemDowelUncarved();
+		cruxiteDowelCarved = new ItemDowelCarved();
+		blankCard = new ItemCardBlank();
+		punchedCard = new ItemCardPunched();
+		cruxiteArtifact = new ItemCruxiteArtifact(1, false);
+		disk = new ItemDisk();
+		component = new ItemComponent();
+		minestuckBucket = new ItemMinestuckBucket();
+		
+		minestuckBucket.addBlock(blockBlood, "BucketBlood");
+		minestuckBucket.addBlock(blockOil, "BucketOil");
+		
+		//registers things for the client
+		if(event.getSide().isClient()) {
+			ClientProxy.registerSided();
+			ClientProxy.registerRenderers();
+		}
+		
+		GameRegistry.registerItem(clawHammer, "clawHammer");
+		GameRegistry.registerItem(sledgeHammer, "sledgeHammer");
+		GameRegistry.registerItem(pogoHammer, "pogoHammer");
+		GameRegistry.registerItem(telescopicSassacrusher, "telescopicSassacrusher");
+		GameRegistry.registerItem(fearNoAnvil, "fearNoAnvil");
+		GameRegistry.registerItem(zillyhooHammer, "zillyhooHammer");
+		GameRegistry.registerItem(popamaticVrillyhoo, "popamaticVrillyhoo");
+		GameRegistry.registerItem(scarletZillyhoo, "scarletZillyhoo");
+		
+		GameRegistry.registerItem(sord, "sord");
+		GameRegistry.registerItem(ninjaSword, "ninjaSword");
+		GameRegistry.registerItem(katana, "katana");
+		GameRegistry.registerItem(caledscratch, "caledscratch");
+		GameRegistry.registerItem(royalDeringer, "royalDeringer");
+		GameRegistry.registerItem(regisword, "regisword");
+		GameRegistry.registerItem(scarletRibbitar, "scarletRibbitar");
+		GameRegistry.registerItem(doggMachete, "doggMachete");
+		
+		GameRegistry.registerItem(sickle, "sickle");
+		GameRegistry.registerItem(homesSmellYaLater, "homesSmellYaLater");
+		GameRegistry.registerItem(regiSickle, "regiSickle");
+		GameRegistry.registerItem(clawSickle, "clawSickle");
+		
+		GameRegistry.registerItem(deuceClub, "deuceClub");
+		
+		GameRegistry.registerItem(cane, "cane");
+		GameRegistry.registerItem(spearCane, "spearCane");
+		GameRegistry.registerItem(dragonCane, "dragonCane");
+		
+		GameRegistry.registerItem(crockerSpork, "crockerSpork");
+		GameRegistry.registerItem(skaiaFork, "skaiaFork");
+		
+		GameRegistry.registerItem(rawCruxite, "cruxiteRaw");
+		GameRegistry.registerItem(cruxiteDowel, "cruxiteDowel");
+		GameRegistry.registerItem(cruxiteDowelCarved, "cruxiteDowelCarved");
+		GameRegistry.registerItem(blankCard, "blankCard");
+		GameRegistry.registerItem(punchedCard, "punchedCard");
+		GameRegistry.registerItem(cruxiteArtifact, "cruxiteArtifact");
+		GameRegistry.registerItem(disk, "computerDisk");
+		GameRegistry.registerItem(component, "component");
+		GameRegistry.registerItem(minestuckBucket, "minestuckBucket");
+		
+		//fluids
+		GameRegistry.registerBlock(blockOil, "blockOil");
+		GameRegistry.registerBlock(blockBlood, "blockBlood");
+		
 		MinestuckStatsHandler.prepareAchievementPage();
 		
-		(new UpdateChecker()).start();
 	}
 
 	@EventHandler
 	public void load(FMLInitializationEvent event) 
 	{
-		//Register the Minestuck creative tab
-		this.tabMinestuck = new CreativeTabs("tabMinestuck")
-		{
-			public ItemStack getIconItemStack() 
-			{
-				return new ItemStack(zillyhooHammer,1);
-			}
-		};
-
-		//blocks
-		chessTile = new BlockChessTile(chessTileId);
-		gatePortal = new BlockGatePortal(gatePortalId, Material.portal);
-		oreCruxite = new OreCruxite(oreCruxiteId);
-		layeredSand = new BlockLayered(layeredSandId, Block.sand).setUnlocalizedName("layeredSand");
-		//machines
-		blockStorage = new BlockStorage(blockStorageId);
-		blockMachine = new BlockMachine(blockMachineId);
-		blockComputerOff = new BlockComputerOff(blockComputerOffId);
-		blockComputerOn = new BlockComputerOn(blockComputerOnId);
-		//fluids
-		fluidOil = new Fluid("Oil").setBlockID(blockOilId);
-		FluidRegistry.registerFluid(fluidOil);
-		fluidBlood = new Fluid("Blood").setBlockID(blockBloodId);
-		FluidRegistry.registerFluid(fluidBlood);
-		blockOil = new BlockFluidOil(blockOilId, fluidOil, Material.water);
-		blockBlood = new BlockFluidBlood(blockBloodId, fluidBlood, Material.water);
 		
-		//items
-		//hammers
-		clawHammer = new ItemHammer(clawHammerId, EnumHammerType.CLAW);
-		sledgeHammer = new ItemHammer(sledgeHammerId, EnumHammerType.SLEDGE);
-		pogoHammer = new ItemHammer(pogoHammerId, EnumHammerType.POGO);
-		telescopicSassacrusher = new ItemHammer(telescopicSassacrusherId, EnumHammerType.TELESCOPIC);
-		fearNoAnvil = new ItemHammer(fearNoAnvilId, EnumHammerType.FEARNOANVIL);
-		zillyhooHammer = new ItemHammer(zillyhooHammerId, EnumHammerType.ZILLYHOO);
-		popamaticVrillyhoo = new ItemHammer(popamaticVrillyhooId, EnumHammerType.POPAMATIC);
-		scarletZillyhoo = new ItemHammer(scarletZillyhooId, EnumHammerType.SCARLET);
-		//blades
-		sord = new ItemBlade(sordId, EnumBladeType.SORD);
-		ninjaSword = new ItemBlade(ninjaSwordId, EnumBladeType.NINJA);
-		katana = new ItemBlade(katanaId, EnumBladeType.KATANA);
-		caledscratch = new ItemBlade(caledscratchId, EnumBladeType.CALEDSCRATCH);
-		royalDeringer = new ItemBlade(royalDeringerId, EnumBladeType.DERINGER);
-		regisword = new ItemBlade(regiswordId, EnumBladeType.REGISWORD);
-		scarletRibbitar = new ItemBlade(scarletRibbitarId, EnumBladeType.SCARLET);
-		doggMachete = new ItemBlade(doggMacheteId, EnumBladeType.DOGG);
-		//sickles
-		sickle = new ItemSickle(sickleId, EnumSickleType.SICKLE);
-		homesSmellYaLater = new ItemSickle(homesSmellYaLaterId, EnumSickleType.HOMES);
-		regiSickle = new ItemSickle(regiSickleId, EnumSickleType.REGISICKLE);
-		clawSickle = new ItemSickle(clawSickleId, EnumSickleType.CLAW);
-		//clubs
-		deuceClub = new ItemClub(deuceClubId, EnumClubType.DEUCE);
-		//canes
-		cane = new ItemCane(caneId, EnumCaneType.CANE);
-		spearCane = new ItemCane(spearCaneId, EnumCaneType.SPEAR);
-		dragonCane = new ItemCane(dragonCaneId, EnumCaneType.DRAGON);
-		//Spoons/forks
-		crockerSpork = new ItemSpork(crockerSporkId, EnumSporkType.CROCKER);
-		skaiaFork = new ItemSpork(skaiaForkId, EnumSporkType.SKAIA);
-		//items
-		rawCruxite = new ItemCruxiteRaw(rawCruxiteId);
-		cruxiteDowel = new ItemDowelUncarved(cruxiteDowelId);
-		cruxiteDowelCarved = new ItemDowelCarved(cruxiteDowelCarvedId);
-		blankCard = new ItemCardBlank(blankCardId);
-		punchedCard = new ItemCardPunched(punchedCardId);
-		cruxiteArtifact = new ItemCruxiteArtifact(cruxiteArtifactId, 1, false);
-		disk = new ItemDisk(diskId);
-		component = new ItemComponent(componentId);
-		minestuckBucket = new ItemMinestuckBucket(minestuckBucketId);
-		
-		//registers things for the client
-		ClientProxy.registerSided();
-		//server doesn't actually register any renderers for obvious reasons
-		proxy.registerRenderers();
-		//the client does, however
-		ClientProxy.registerRenderers();
-		//register blocks
-		GameRegistry.registerBlock(chessTile, ItemChessTile.class, "chessTile");
-		GameRegistry.registerBlock(gatePortal, "gatePortal");
-		GameRegistry.registerBlock(oreCruxite,"oreCruxite");
-		GameRegistry.registerBlock(blockStorage,ItemStorageBlock.class,"blockStorage");
-		GameRegistry.registerBlock(blockMachine,ItemMachine.class,"blockMachine");
-		GameRegistry.registerBlock(blockComputerOff,ItemComputerOff.class,"blockComputer");
-		GameRegistry.registerBlock(blockComputerOn,"blockComputerOn");
-		GameRegistry.registerBlock(layeredSand, ItemBlockLayered.class, "layeredSand");
-		//fluids
-		GameRegistry.registerBlock(blockOil, "blockOil");
-		GameRegistry.registerBlock(blockBlood, "blockBlood");
 		//metadata nonsense to conserve ids
 		ItemStack blackChessTileStack = new ItemStack(chessTile, 1, 0);
 		ItemStack whiteChessTileStack = new ItemStack(chessTile, 1, 1);
@@ -534,24 +409,20 @@ public class Minestuck
 		ItemStack woodenSpoonStack = new ItemStack(component,1,0);
 		ItemStack silverSpoonStack = new ItemStack(component,1,1);
 		ItemStack chessboardStack = new ItemStack(component,1,2);
-		ItemStack bloodBucket = new ItemStack(minestuckBucket, 1, blockBloodId);
-		ItemStack oilBucket = new ItemStack(minestuckBucket, 1, blockOilId);
+//		ItemStack bloodBucket = new ItemStack(minestuckBucket, 1, minestuckBucket.FillFluidIds.get(blockBlood.getUnlocalizedName()));
+//		ItemStack oilBucket = new ItemStack(minestuckBucket, 1, minestuckBucket.FillFluidIds.get(blockOil.getUnlocalizedName()));
 		ItemStack layeredSandStack = new ItemStack(layeredSand);
 		//set harvest information for blocks
-		MinecraftForge.setBlockHarvestLevel(chessTile, "shovel", 0);
-		MinecraftForge.setBlockHarvestLevel(oreCruxite, "pickaxe", 1);
-		MinecraftForge.setBlockHarvestLevel(blockStorage, "pickaxe", 1);
-		MinecraftForge.setBlockHarvestLevel(blockMachine, "pickaxe", 1);
+//		MinecraftForge.setBlockHarvestLevel(chessTile, "shovel", 0);
+//		MinecraftForge.setBlockHarvestLevel(oreCruxite, "pickaxe", 1);
+//		MinecraftForge.setBlockHarvestLevel(blockStorage, "pickaxe", 1);
+//		MinecraftForge.setBlockHarvestLevel(blockMachine, "pickaxe", 1);
 
-		minestuckBucket.fillFluids.add(blockBloodId);
-		minestuckBucket.textureFiles.put(blockBloodId, "BucketBlood");
-		minestuckBucket.fillFluids.add(blockOilId);
-		minestuckBucket.textureFiles.put(blockOilId, "BucketOil");
 
 		fluidOil.setUnlocalizedName(blockOil.getUnlocalizedName());
 		fluidBlood.setUnlocalizedName(blockBlood.getUnlocalizedName());
 		
-		Debug.printf("Blood id: %d, Oil id: %d", blockBloodId, blockOilId);
+//		Debug.printf("Blood id: %d, Oil id: %d", blockBloodId, blockOilId);
 		
 		//register entities
 		this.registerAndMapEntity(EntitySalamander.class, "Salamander", 0xffe62e, 0xfffb53);
@@ -566,17 +437,17 @@ public class Minestuck
 		this.registerAndMapEntity(EntityBlackBishop.class, "dersiteBishop", 0x000000, 0xc121d9);
 		this.registerAndMapEntity(EntityWhiteBishop.class, "prospitianBishop", 0xffffff, 0xfde500);
 			//To not register this entity as spawnable using a mob egg.
-		EntityList.addMapping(EntityDecoy.class, "playerDecoy", entityIdStart + currentEntityIdOffset);
-		EntityRegistry.registerModEntity(EntityDecoy.class, "playerDecoy", currentEntityIdOffset, this, 80, 3, true);
+//		EntityList.addMapping(EntityDecoy.class, "playerDecoy", entityIdStart + currentEntityIdOffset);
+//		EntityRegistry.registerModEntity(EntityDecoy.class, "playerDecoy", currentEntityIdOffset, this, 80, 3, true);
 		currentEntityIdOffset++;
 		
 		//register entities with fml
 		EntityRegistry.registerModEntity(EntityGrist.class, "grist", currentEntityIdOffset, this, 512, 1, true);
 
-		EntityRegistry.addSpawn(EntityImp.class, 3, 3, 20, EnumCreatureType.monster, WorldType.base12Biomes);
-		EntityRegistry.addSpawn(EntityOgre.class, 2, 1, 1, EnumCreatureType.monster, WorldType.base12Biomes);
-		EntityRegistry.addSpawn(EntityBasilisk.class, 1, 1, 1, EnumCreatureType.monster, WorldType.base12Biomes);
-		EntityRegistry.addSpawn(EntityGiclops.class, 1, 1, 1, EnumCreatureType.monster, WorldType.base12Biomes);
+//		EntityRegistry.addSpawn(EntityImp.class, 3, 3, 20, EnumCreatureType.monster, BiomeGenBase.getBiomeGenArray());
+//		EntityRegistry.addSpawn(EntityOgre.class, 2, 1, 1, EnumCreatureType.monster, BiomeGenBase.getBiomeGenArray());
+//		EntityRegistry.addSpawn(EntityBasilisk.class, 1, 1, 1, EnumCreatureType.monster, BiomeGenBase.getBiomeGenArray());
+//		EntityRegistry.addSpawn(EntityGiclops.class, 1, 1, 1, EnumCreatureType.monster, BiomeGenBase.getBiomeGenArray());
 
 		//register Tile Entities
 		GameRegistry.registerTileEntity(TileEntityGatePortal.class, "gatePortal");
@@ -587,22 +458,33 @@ public class Minestuck
 		DimensionManager.registerDimension(skaiaDimensionId, skaiaProviderTypeId);
 		DimensionManager.registerProviderType(landProviderTypeId, WorldProviderLands.class, true);
 		//Register the player tracker
-		GameRegistry.registerPlayerTracker(new MinestuckPlayerTracker());
+//		GameRegistry.registerPlayerTracker(new MinestuckPlayerTracker());
 
 		//register ore generation
 		if (generateCruxiteOre) {
 			OreHandler oreHandler = new OreHandler();
-			GameRegistry.registerWorldGenerator(oreHandler);
+			GameRegistry.registerWorldGenerator(oreHandler, 0);
 		}
 
 		//register machine GUIs
-		NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
-
-		//register connection handler
-		NetworkRegistry.instance().registerConnectionHandler(new MinestuckConnectionHandler());
-
+		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
+		
+		//Register event handlers
+		MinecraftForge.EVENT_BUS.register(new MinestuckSaveHandler());
+		MinecraftForge.EVENT_BUS.register(new MinestuckFluidHandler());
+		FMLCommonHandler.instance().bus().register(MinestuckPlayerTracker.instance);
+		if(event.getSide().isClient())
+		{
+//			MinecraftForge.EVENT_BUS.register(ClientEditHandler.instance);
+		}
+//		MinecraftForge.EVENT_BUS.register(ServerEditHandler.instance);
+		MinecraftForge.EVENT_BUS.register(MinestuckStatsHandler.instance);
+		
+		//register channel handler
+		channels = NetworkRegistry.INSTANCE.newChannel("Minestuck", MinestuckChannelHandler.instance);
+		
 		//Register structures
-		MapGenStructureIO.func_143034_b(StructureCastleStart.class, "SkaiaCastle");
+		MapGenStructureIO.registerStructure(StructureCastleStart.class, "SkaiaCastle");
 		StructureCastlePieces.func_143048_a();
 
 		//register recipes
@@ -610,10 +492,7 @@ public class Minestuck
 		AlchemyRecipeHandler.registerMinestuckRecipes();
 		AlchemyRecipeHandler.registerModRecipes();
 		
-		if(event.getSide().isClient())
-			TickRegistry.registerTickHandler(ClientEditHandler.instance, Side.CLIENT);
 //		if(event.getSide().isServer())
-		TickRegistry.registerTickHandler(ServerEditHandler.instance, Side.SERVER);
 		
 		KindAbstratusList.registerTypes();
 		DeployList.registerItems();
@@ -624,13 +503,7 @@ public class Minestuck
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) 
 	{
-		MinecraftForge.EVENT_BUS.register(new MinestuckSaveHandler());
-		MinecraftForge.EVENT_BUS.register(new MinestuckFluidHandler());
-		if(event.getSide().isClient())
-			MinecraftForge.EVENT_BUS.register(ClientEditHandler.instance);
-//		if(event.getSide().isServer())
-		MinecraftForge.EVENT_BUS.register(ServerEditHandler.instance);
-		MinecraftForge.EVENT_BUS.register(MinestuckStatsHandler.instance);
+		
 		AlchemyRecipeHandler.registerDynamicRecipes();
 
 		//register NEI stuff

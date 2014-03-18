@@ -1,13 +1,14 @@
 package com.mraof.minestuck.tracker;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChatComponentText;
 
-import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.Minestuck;
+//import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
@@ -23,20 +24,29 @@ import com.mraof.minestuck.util.UpdateChecker;
 import com.mraof.minestuck.util.UsernameHandler;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
-import cpw.mods.fml.common.IPlayerTracker;
-import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
+import cpw.mods.fml.relauncher.Side;
 
-public class MinestuckPlayerTracker implements IPlayerTracker {
+public class MinestuckPlayerTracker {
 	
-	@Override
-	public void onPlayerLogin(EntityPlayer player) 
+	public static MinestuckPlayerTracker instance = new MinestuckPlayerTracker();
+	
+	@SubscribeEvent
+	public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) 
 	{
-		SkaianetHandler.playerConnected(((EntityPlayerMP)player).username);
+		EntityPlayer player = event.player;
+		Debug.print(player.getCommandSenderName()+" joined the game. Sending packets.");
 		MinecraftServer server = MinecraftServer.getServer();
-		if(!server.isDedicatedServer() && server.getConfigurationManager().playerEntityList.size() == 1)
-			UsernameHandler.host = ((EntityPlayer)server.getConfigurationManager().playerEntityList.get(0)).username;
+		if(!server.isDedicatedServer() && UsernameHandler.host == null)
+			UsernameHandler.host = event.player.getCommandSenderName();
 		
-		if(GristStorage.getGristSet(UsernameHandler.encode(player.username)) == null) {
+		sendConfigPacket(player);
+		
+		SkaianetHandler.playerConnected(player.getCommandSenderName());
+		
+		if(GristStorage.getGristSet(UsernameHandler.encode(player.getCommandSenderName())) == null) {
+			Debug.printf("Grist set is null for player %s.", player.getCommandSenderName());
 			if(player.getEntityData().hasKey("Grist")) {	//Load old grist format
 				NBTTagCompound nbt = player.getEntityData().getCompoundTag("Grist");
 				GristSet set = new GristSet();
@@ -44,117 +54,88 @@ public class MinestuckPlayerTracker implements IPlayerTracker {
 					set.addGrist(type, nbt.getInteger(type.getName()));
 				if(set.isEmpty())
 					set.addGrist(GristType.Build, 20);
-				
-				GristStorage.setGrist(UsernameHandler.encode(player.username), set);
+
+				GristStorage.setGrist(UsernameHandler.encode(player.getCommandSenderName()), set);
 				player.getEntityData().removeTag("Grist");
-			} else GristStorage.setGrist(UsernameHandler.encode(player.username), new GristSet(GristType.Build, 20));
+			} else GristStorage.setGrist(UsernameHandler.encode(player.getCommandSenderName()), new GristSet(GristType.Build, 20));
 		}
-		
-		updateGristCache(UsernameHandler.encode(player.username));
+
+		updateGristCache(UsernameHandler.encode(player.getCommandSenderName()));
 		updateTitle(player);
 		updateLands(player);
-		sendConfigPacket(player);
 		if(UpdateChecker.outOfDate)
-			player.addChatMessage("New version of Minestuck: " + UpdateChecker.latestVersion + "\nChanges: " + UpdateChecker.updateChanges);
+			player.addChatMessage(new ChatComponentText("New version of Minestuck: " + UpdateChecker.latestVersion + "\nChanges: " + UpdateChecker.updateChanges));
 	}
 
-	@Override
-	public void onPlayerLogout(EntityPlayer player) 
-	{
-		ServerEditHandler.onPlayerExit(player);
-	}
-
-	@Override
-	public void onPlayerChangedDimension(EntityPlayer player) 
-	{
-		updateGristCache(UsernameHandler.encode(player.username));
-		updateTitle(player);
-	}
-
-	@Override
-	public void onPlayerRespawn(EntityPlayer player) 
-	{
-		updateGristCache(UsernameHandler.encode(player.username));
-		updateTitle(player);
+	@SubscribeEvent
+	public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
+		
+//		ServerEditHandler.onPlayerExit(event.player);
 	}
 	
 	/**
 	 * Uses an "encoded" username as parameter.
 	 */
 	public static void updateGristCache(String player) {
-		
+
 		int[] gristValues = new int[GristType.allGrists];
 		for(int typeInt = 0; typeInt < gristValues.length; typeInt++)
 			gristValues[typeInt] = GristHelper.getGrist(player,GristType.values()[typeInt]);
-		
+
 		//The player
 		if(!player.equals(".client") || UsernameHandler.host != null) {
 			EntityPlayerMP playerMP = MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(UsernameHandler.decode(player));
 			if(playerMP != null) {
-				Packet250CustomPayload packet = new Packet250CustomPayload();
-				packet.channel = "Minestuck";
-				packet.data = MinestuckPacket.makePacket(Type.GRISTCACHE, gristValues, false);
-				packet.length = packet.data.length;
-				playerMP.playerNetServerHandler.sendPacketToPlayer(packet);
+				MinestuckPacket packet = MinestuckPacket.makePacket(Type.GRISTCACHE, gristValues, false);
+				MinestuckChannelHandler.sendToPlayer(packet, playerMP);
 			}
 		}
-		
+
 		//The editing player, if there is any.
 		SburbConnection c = SkaianetHandler.getClientConnection(player);
-		if(c != null && ServerEditHandler.getData(c) != null) {
-			EntityPlayerMP editor = ServerEditHandler.getData(c).getEditor();
-			Packet250CustomPayload packet = new Packet250CustomPayload();
-			packet.channel = "Minestuck";
-			packet.data = MinestuckPacket.makePacket(Type.GRISTCACHE, gristValues, true);
-			packet.length = packet.data.length;
-			editor.playerNetServerHandler.sendPacketToPlayer(packet);
-		}
+//		if(c != null && ServerEditHandler.getData(c) != null) {
+//			EntityPlayerMP editor = ServerEditHandler.getData(c).getEditor();
+//			MinestuckPacket packet = MinestuckPacket.makePacket(Type.GRISTCACHE, gristValues, true);
+//			MinestuckChannelHandler.sendToPlayer(packet, editor);
+//		}
 	}
-	
+
 	public void updateTitle(EntityPlayer player) {
-			Title newTitle;
-			if (((EntityPlayer)player).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Class") == 0 || ((EntityPlayer)player).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Aspect") == 0) {
-				newTitle = TitleHelper.randomTitle();
-			} else {
-				newTitle = new Title(TitleHelper.getClassFromInt(((EntityPlayer)player).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Class")),
-						TitleHelper.getAspectFromInt(((EntityPlayer)player).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Aspect")));
-			}
-	        Packet250CustomPayload packet = new Packet250CustomPayload();
-	        packet.channel = "Minestuck";
-	        packet.data = MinestuckPacket.makePacket(Type.TITLE, newTitle.getHeroClass(), newTitle.getHeroAspect());
-	        packet.length = packet.data.length;
-	        ((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(packet);
-			if(player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getTags().size() == 0)
-				player.getEntityData().setCompoundTag(EntityPlayer.PERSISTED_NBT_TAG, new NBTTagCompound());
-			player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Class", TitleHelper.getIntFromClass(newTitle.getHeroClass()));
-			player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Aspect", TitleHelper.getIntFromAspect(newTitle.getHeroAspect()));
+		Title newTitle;
+		if (!player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).hasKey("Class") || !player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).hasKey("Aspect")) {
+			newTitle = TitleHelper.randomTitle();
+		} else {
+			newTitle = new Title(TitleHelper.getClassFromInt(((EntityPlayer)player).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Class")),
+					TitleHelper.getAspectFromInt(((EntityPlayer)player).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Aspect")));
+		}
+		MinestuckPacket packet = MinestuckPacket.makePacket(Type.TITLE, newTitle.getHeroClass(), newTitle.getHeroAspect());
+		MinestuckChannelHandler.sendToPlayer(packet, player);
+		if(player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).hasNoTags())
+			player.getEntityData().setTag(EntityPlayer.PERSISTED_NBT_TAG, new NBTTagCompound());
+		player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Class", TitleHelper.getIntFromClass(newTitle.getHeroClass()));
+		player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Aspect", TitleHelper.getIntFromAspect(newTitle.getHeroAspect()));
 	}
 	public static void updateLands(EntityPlayer player)
 	{
 		byte[] lands = new byte[MinestuckSaveHandler.lands.size()];
 		for(int i = 0; i < lands.length; i++)
 			lands[i] = MinestuckSaveHandler.lands.get(i);
-		Packet250CustomPayload packet = new Packet250CustomPayload();
-		packet.channel = "Minestuck";
-		packet.data = MinestuckPacket.makePacket(Type.LANDREGISTER, lands);
-		packet.length = packet.data.length;
-		Debug.printf("Sending land packets to %s.", player == null ? "all players" : player.username);
+		
+		MinestuckPacket packet = MinestuckPacket.makePacket(Type.LANDREGISTER, lands);
+		Debug.printf("Sending land packets to %s.", player == null ? "all players" : player.getCommandSenderName());
 		if(player == null)
-			PacketDispatcher.sendPacketToAllPlayers(packet);
+			MinestuckChannelHandler.sendToAllPlayers(packet);
 		else
-			((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(packet);
+			MinestuckChannelHandler.sendToPlayer(packet, player);
 	}
 	public static void updateLands()
 	{
 		updateLands(null);
 	}
-	
+
 	public static void sendConfigPacket(EntityPlayer player) {
-		Packet250CustomPayload packet = new Packet250CustomPayload();
-		packet.channel = "Minestuck";
-		packet.data = MinestuckPacket.makePacket(Type.CONFIG);
-		packet.length = packet.data.length;
-		((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(packet);
+		MinestuckPacket packet = MinestuckPacket.makePacket(Type.CONFIG);
+		MinestuckChannelHandler.sendToPlayer(packet, player);
 	}
-	
+
 }

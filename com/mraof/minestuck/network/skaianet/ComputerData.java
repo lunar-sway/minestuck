@@ -14,7 +14,7 @@ public class ComputerData{
 		String owner;
 		
 		public static ComputerData createData(TileEntityComputer te){
-			return new ComputerData(te.owner, te.xCoord, te.yCoord, te.zCoord, te.worldObj.provider.dimensionId );
+			return new ComputerData(te.owner, te.xCoord, te.yCoord, te.zCoord, te.getWorldObj().provider.dimensionId );
 		}
 		
 		public ComputerData(String owner,int x,int y,int z,int dimension){
@@ -56,7 +56,7 @@ public class ComputerData{
 	}
 	
 	NBTTagCompound write(){
-		NBTTagCompound c = new NBTTagCompound(owner);
+		NBTTagCompound c = new NBTTagCompound();
 		c.setString("name", owner);
 		c.setInteger("x", x);
 		c.setInteger("y", y);

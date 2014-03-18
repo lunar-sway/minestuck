@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import codechicken.core.gui.GuiDraw;
 import codechicken.nei.PositionedStack;
@@ -65,13 +66,13 @@ public class DesignexHandler extends TemplateRecipeHandler {
         else if (outputId.equals("allDesignex")) {
     		for (Object item : CombinationRegistry.getAllConversions().entrySet()) {
     			Map.Entry entry = (Map.Entry)item;
-    			List itemData = (List)entry.getKey();
-    			int id1 = (Integer)itemData.get(0);
+    			List<Object> itemData = (List<Object>)entry.getKey();
+    			String id1 = (String)itemData.get(0);
     			int meta1 = (Integer)itemData.get(1);
-    			int id2 = (Integer)itemData.get(2);
+    			String id2 = (String)itemData.get(2);
     			int meta2 = (Integer)itemData.get(3);
     			boolean mode = (Boolean)itemData.get(4);
-    			arecipes.add(new CachedDesignexRecipe(new ItemStack(id1,1,meta1),new ItemStack(id2,1,meta2),mode,(ItemStack)entry.getValue()));
+    			arecipes.add(new CachedDesignexRecipe(new ItemStack((Item)Item.itemRegistry.getObject(id1),1,meta1),new ItemStack((Item)Item.itemRegistry.getObject(id2),1,meta2),mode,(ItemStack)entry.getValue()));
     		}
         }
         	
@@ -83,13 +84,13 @@ public class DesignexHandler extends TemplateRecipeHandler {
 		for (Object item : CombinationRegistry.getAllConversions().entrySet()) {
 			Map.Entry entry = (Map.Entry)item;
 			List itemData = (List)entry.getKey();
-			int id1 = (Integer)itemData.get(0);
+			String id1 = (String)itemData.get(0);
 			int meta1 = (Integer)itemData.get(1);
-			int id2 = (Integer)itemData.get(2);
+			String id2 = (String)itemData.get(2);
 			int meta2 = (Integer)itemData.get(3);
 			boolean mode = (Boolean)itemData.get(4);
-			if (result.itemID == ((ItemStack)entry.getValue()).itemID && result.getItemDamage() == ((ItemStack)entry.getValue()).getItemDamage()) {
-				arecipes.add(new CachedDesignexRecipe(new ItemStack(id1,1,meta1),new ItemStack(id2,1,meta2),mode,(ItemStack)entry.getValue()));
+			if (result.getItem() == ((ItemStack)entry.getValue()).getItem() && result.getItemDamage() == ((ItemStack)entry.getValue()).getItemDamage()) {
+				arecipes.add(new CachedDesignexRecipe(new ItemStack((Item)Item.itemRegistry.getObject(id1),1,meta1),new ItemStack((Item)Item.itemRegistry.getObject(id2),1,meta2),mode,(ItemStack)entry.getValue()));
 			}
 		}
 	}
@@ -101,15 +102,15 @@ public class DesignexHandler extends TemplateRecipeHandler {
 		for (Object item : CombinationRegistry.getAllConversions().entrySet()) {
 			Map.Entry entry = (Map.Entry)item;
 			List itemData = (List)entry.getKey();
-			int id1 = (Integer)itemData.get(0);
+			String id1 = (String)itemData.get(0);
 			int meta1 = (Integer)itemData.get(1);
-			int id2 = (Integer)itemData.get(2);
+			String id2 = (String)itemData.get(2);
 			int meta2 = (Integer)itemData.get(3);
 			boolean mode = (Boolean)itemData.get(4);
 			ItemStack search1 = (ItemStack)ingredients[0];
 			//ItemStack search2 = (ItemStack)ingredients[1];
-			if ((search1.itemID == id1 && search1.getItemDamage() == meta1) || (search1.itemID == id2 && search1.getItemDamage() == meta2)) {
-				arecipes.add(new CachedDesignexRecipe(new ItemStack(id1,1,meta1),new ItemStack(id2,1,meta2),mode,(ItemStack)entry.getValue()));
+			if ((search1.getItem() == Item.itemRegistry.getObject(id1) && search1.getItemDamage() == meta1) || (search1.getItem() == Item.itemRegistry.getObject(id2) && search1.getItemDamage() == meta2)) {
+				arecipes.add(new CachedDesignexRecipe(new ItemStack((Item)Item.itemRegistry.getObject(id1), 1, meta1),new ItemStack((Item)Item.itemRegistry.getObject(id2),1,meta2),mode,(ItemStack)entry.getValue()));
 			}
 		}
     }

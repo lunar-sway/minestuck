@@ -3,7 +3,7 @@ package com.mraof.minestuck.world.gen.structure;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
@@ -76,9 +76,9 @@ public class ComponentCastleRoomPiece extends ComponentCastlePiece
 //			System.out.print(this.boundingBox.minY);
 			this.boundingBox.offset(0, startPiece.averageGroundLevel - 1, 0);
 		}
-		this.fillWithAlternatingBlocks(world, structureboundingbox, 0, 0, 0, 7 ,7, 7, Minestuck.chessTile.blockID, chessTileMetadata,  Minestuck.chessTile.blockID, chessTileMetadata1, false);
-		this.fillWithBlocks(world, structureboundingbox, 0, 1, 0, 7, 6, 7, 0, 0, false);
-		this.placeBlockAtCurrentPosition(world, Block.torchWood.blockID, 5, 3, 1, 3, structureboundingbox);
+		this.fillWithAlternatingBlocks(world, structureboundingbox, 0, 0, 0, 7 ,7, 7, Minestuck.chessTile, chessTileMetadata,  Minestuck.chessTile, chessTileMetadata1, false);
+		this.fillWithBlocks(world, structureboundingbox, 0, 1, 0, 7, 6, 7, Blocks.air, Blocks.air, false);
+		this.placeBlockAtCurrentPosition(world, Blocks.torch, 5, 3, 1, 3, structureboundingbox);
 		return true;
 	}
 

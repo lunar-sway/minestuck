@@ -7,11 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.IProgressUpdate;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.SpawnListEntry;
+import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
@@ -66,7 +67,7 @@ public class ChunkProviderSkaia implements IChunkProvider
         this.noiseGen5 = new NoiseGeneratorOctaves(this.random, 16);
 
         NoiseGeneratorOctaves[] noiseGens = {noiseGen1, noiseGen2, noiseGen3, noiseGen4, noiseGen5};
-        noiseGens = TerrainGen.getModdedNoiseGenerators(world, this.random, noiseGens);
+        noiseGens = (NoiseGeneratorOctaves[]) TerrainGen.getModdedNoiseGenerators(world, this.random, noiseGens);
         this.noiseGen1 = noiseGens[0];
         this.noiseGen2 = noiseGens[1];
         this.noiseGen3 = noiseGens[2];
@@ -82,7 +83,7 @@ public class ChunkProviderSkaia implements IChunkProvider
 	@Override
 	public Chunk provideChunk(int chunkX, int chunkZ) 
 	{
-		short[] chunkIds = new short[65536];
+		Block[] chunkBlocks = new Block[65536];
 		byte[] chunkMetadata = new byte[65536];
 		double[] generated0 = new double[256];
 		double[] generated1 = new double[256];
@@ -98,17 +99,17 @@ public class ChunkProviderSkaia implements IChunkProvider
 			topBlock[i] = (y&511)<=255  ? y&255 : 255 - y&255;
 		}
 		byte chessTileMetadata = (byte) ((Math.abs(chunkX) + Math.abs(chunkZ)) % 2);
-		short chessTileId = (short)Minestuck.chessTile.blockID;
+		Block chessTile = Minestuck.chessTile;
 		for(int x = 0; x < 16; x++)
 			for(int z = 0; z < 16; z++)
 				for(int y = 0; y <= topBlock[x * 16 + z]; y++)
 				{
-					chunkIds[x + z * 16 + y * 256] = chessTileId;
+					chunkBlocks[x + z * 16 + y * 256] = chessTile;
 					chunkMetadata[x + z * 16 + y * 256] = chessTileMetadata;
 				}
 		//y * 256, z * 16, x
-		Chunk chunk = new Chunk(this.skaiaWorld, chunkIds, chunkMetadata, chunkX, chunkZ);
-		this.castleGenerator.generate(this, skaiaWorld, chunkX, chunkZ, new byte[65536]);
+		Chunk chunk = new Chunk(this.skaiaWorld, chunkBlocks, chunkMetadata, chunkX, chunkZ);
+		this.castleGenerator.func_151539_a(this, skaiaWorld, chunkX, chunkZ, new Block[65536]);
 		return chunk;
 	}
 
@@ -148,7 +149,7 @@ public class ChunkProviderSkaia implements IChunkProvider
 	}
 
 	@Override
-	public ChunkPosition findClosestStructure(World var1, String var2, int var3, int var4, int var5) 
+	public ChunkPosition func_147416_a(World var1, String var2, int var3, int var4, int var5) 
 	{
 		return null;
 	}

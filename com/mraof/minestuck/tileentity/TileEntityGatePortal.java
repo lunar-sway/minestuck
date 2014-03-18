@@ -22,6 +22,13 @@ public class TileEntityGatePortal extends TileEntity implements ITeleporter
 		this.destinationX = par1nbtTagCompound.getInteger("DestinationX");
 		this.destinationY = par1nbtTagCompound.getInteger("DestinationY");
 		this.destinationZ = par1nbtTagCompound.getInteger("DestinationZ");
+
+		if(destinationY == 0)
+		{
+			this.destinationX = this.xCoord;
+			this.destinationY = this.yCoord;
+			this.destinationZ = this.zCoord;
+		}
 	}
 	@Override
 	public void writeToNBT(NBTTagCompound par1nbtTagCompound) 
@@ -51,7 +58,7 @@ public class TileEntityGatePortal extends TileEntity implements ITeleporter
 		{
 			for(int blockZ = (int) z - 2; blockZ < z + 2; blockZ++)
 			{
-				worldserver1.setBlock(blockX, (int) y - 1, blockZ, Minestuck.chessTile.blockID, (blockX + blockZ) & 3, 3);
+				worldserver1.setBlock(blockX, (int) y - 1, blockZ, Minestuck.chessTile, (blockX + blockZ) & 3, 3);
 				for(int blockY = (int) y; blockY < y + 6; blockY++)
 					if(worldserver1.isBlockNormalCubeDefault(blockX, blockY, blockZ, true))
 						worldserver1.setBlockToAir(blockX, blockY, blockZ);
@@ -59,14 +66,6 @@ public class TileEntityGatePortal extends TileEntity implements ITeleporter
 					
 			}
 		}
-	}
-	@Override
-	public void validate() 
-	{
-		super.validate();
-		this.destinationX = this.xCoord;
-		this.destinationY = this.yCoord;
-		this.destinationZ = this.zCoord;
 	}
 
 }

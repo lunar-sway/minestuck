@@ -3,12 +3,11 @@ package com.mraof.minestuck.editmode;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.item.ItemStack;
+
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * This class will be used to keep track of all deployable

@@ -1,8 +1,8 @@
 package com.mraof.minestuck.block;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.util.Icon;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidClassic;
@@ -13,25 +13,26 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class BlockFluidOil extends BlockFluidClassic 
 {
 	@SideOnly(Side.CLIENT)
-	protected Icon stillIcon;
+	protected IIcon stillIcon;
 	@SideOnly(Side.CLIENT)
-	protected Icon flowingIcon;
+	protected IIcon flowingIcon;
 
-	public BlockFluidOil(int id, Fluid fluid, Material material) 
+	public BlockFluidOil(Fluid fluid, Material material) 
 	{
-		super(id, fluid, material);
-		setUnlocalizedName("oil");
+		super(fluid, material);
+		
+		setBlockName("oil");
 	}
 
 	@Override
-	public Icon getIcon(int side, int meta) 
+	public IIcon getIcon(int side, int meta) 
 	{
 		return (side == 0 || side == 1) ? stillIcon : flowingIcon;
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerIcons(IconRegister par1IconRegister) 
+	public void registerBlockIcons(IIconRegister par1IconRegister) 
 	{
 		stillIcon = par1IconRegister.registerIcon("minestuck:OilStill");
 		flowingIcon = par1IconRegister.registerIcon("minestuck:OilFlowing");
@@ -40,7 +41,7 @@ public class BlockFluidOil extends BlockFluidClassic
 	@Override
 	public boolean canDisplace(IBlockAccess world, int x, int y, int z) 
 	{
-		return world.getBlockMaterial(x,  y,  z).isLiquid() || super.canDisplace(world, x, y, z);
+		return world.getBlock(x,  y,  z).getMaterial().isLiquid() || super.canDisplace(world, x, y, z);
 	}
 
 	@Override

@@ -1,7 +1,7 @@
 package com.mraof.minestuck.item;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -10,11 +10,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.Debug;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -29,11 +28,11 @@ public class ItemSpork extends ItemWeapon
 	 * whether it's a spoon or a fork, unused for the crocker spork, as it depends on the meta.
 	 */
 	public boolean isSpoon;
-	private Icon[] crockerTypes = new Icon[2];
+	private IIcon[] crockerTypes = new IIcon[2];
 
-	public ItemSpork(int id, EnumSporkType sporkType) 
+	public ItemSpork(EnumSporkType sporkType) 
 	{
-		super(id);
+		super();
 		this.isSpoon = sporkType.getIsSpoon();
 		this.sporkType = sporkType;
 		this.maxStackSize = 1;
@@ -83,9 +82,9 @@ public class ItemSpork extends ItemWeapon
 	}
 
 	@Override
-	public boolean onBlockDestroyed(ItemStack itemStack, World world, int par3, int par4, int par5, int par6, EntityLivingBase par7EntityLiving)
+	public boolean onBlockDestroyed(ItemStack itemStack, World world, Block par3, int par4, int par5, int par6, EntityLivingBase par7EntityLiving)
 	{
-		if ((double)Block.blocksList[par3].getBlockHardness(world, par4, par5, par6) != 0.0D)
+		if ((double)par3.getBlockHardness(world, par4, par5, par6) != 0.0D)
 		{
 			itemStack.damageItem(2, par7EntityLiving);
 		}
@@ -119,10 +118,10 @@ public class ItemSpork extends ItemWeapon
 				
 				if(!stack.stackTagCompound.hasKey("AttributeModifiers"))
 					stack.stackTagCompound.setTag("AttributeModifiers", new NBTTagList());
-				NBTTagList list = stack.stackTagCompound.getTagList("AttributeModifiers");
+				NBTTagList list = stack.stackTagCompound.getTagList("AttributeModifiers", 10);
 				boolean found = false;
 				for(int i = 0; i < list.tagCount(); i++) {
-					NBTTagCompound nbt = (NBTTagCompound) list.tagAt(i);
+					NBTTagCompound nbt = (NBTTagCompound) list.getCompoundTagAt(i);
 					if(nbt.getString("AttributeName").equals(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName())) {
 						nbt.setDouble("Amount", isSpoon(stack)?3:5);
 						found = true;
@@ -145,13 +144,13 @@ public class ItemSpork extends ItemWeapon
 	}
 	
 	@Override
-	public Icon getIcon(ItemStack stack, int pass) {
+	public IIcon getIcon(ItemStack stack, int pass) {
 		return getIconIndex(stack);
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Icon getIconIndex(ItemStack stack) {
+	public IIcon getIconIndex(ItemStack stack) {
 		if(sporkType.equals(sporkType.CROCKER))
 			return crockerTypes[isSpoon(stack)?0:1];
 		else return itemIcon;
@@ -159,7 +158,7 @@ public class ItemSpork extends ItemWeapon
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister iconRegister) 
+	public void registerIcons(IIconRegister iconRegister) 
 	{
 		switch(sporkType)
 		{

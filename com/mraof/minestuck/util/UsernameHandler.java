@@ -13,6 +13,7 @@ public class UsernameHandler {
 	 * Used to convert a player username to a stored version.
 	 */
 	public static String encode(String username) {
+		
 		if(username.equals(host))
 			return ".client";
 		else return username;

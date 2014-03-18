@@ -9,7 +9,7 @@ public class BiomeSkaiaDecorator extends BiomeDecorator
 	public WorldGenerator grassGen;
 	public BiomeSkaiaDecorator(BiomeGenBase par1BiomeGenBase) 
 	{
-		super(par1BiomeGenBase);
+		super();
 	}
 
 }

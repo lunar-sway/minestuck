@@ -40,7 +40,7 @@ public class ComponentCastleSolidPiece extends ComponentCastlePiece
         if(this.boundingBox.minY < 1)
         	this.boundingBox.offset(0, startPiece.averageGroundLevel - 1, 0);
         
-        this.fillWithAlternatingBlocks(world, structureboundingbox, 0, 0, 0, 7 ,7, 7, Minestuck.chessTile.blockID, chessTileMetadata,  Minestuck.chessTile.blockID, chessTileMetadata1, false);
+        this.fillWithAlternatingBlocks(world, structureboundingbox, 0, 0, 0, 7 ,7, 7, Minestuck.chessTile, chessTileMetadata,  Minestuck.chessTile, chessTileMetadata1, false);
 
         return true;
 	}

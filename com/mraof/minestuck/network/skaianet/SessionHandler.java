@@ -1,19 +1,10 @@
 package com.mraof.minestuck.network.skaianet;
 
-import static com.mraof.minestuck.network.skaianet.SkaianetHandler.getAssociatedPartner;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatMessageComponent;
-import net.minecraft.util.EnumChatFormatting;
-
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.Debug;
 
 /**
  * Handles session related stuff like title generation, consort choosing, and other session management stuff.

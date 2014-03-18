@@ -3,26 +3,30 @@ package com.mraof.minestuck.world.gen.lands;
 import java.util.ArrayList;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 
 import com.mraof.minestuck.Minestuck;
 
-public class LandAspectPulse extends LandAspect {
-
+public class LandAspectPulse extends LandAspect 
+{
+	BlockWithMetadata[] upperBlocks = {new BlockWithMetadata(Blocks.netherrack)};
+	BlockWithMetadata[] surfaceBlocks = {new BlockWithMetadata(Blocks.obsidian)};
+	
 	@Override
-	public int[][] getSurfaceBlocks() 
+	public BlockWithMetadata[] getSurfaceBlocks() 
 	{
-		return new int[][] {{Block.obsidian.blockID, 0}};
+		return surfaceBlocks;
 	}
 
 	@Override
-	public int[][] getUpperBlocks() {
-		return new int[][] {{Block.netherrack.blockID, 0}};
+	public BlockWithMetadata[] getUpperBlocks() {
+		return upperBlocks;
 	}
 	
 	@Override
-	public int getOceanBlock() 
+	public Block getOceanBlock() 
 	{
-		return Minestuck.blockBlood.blockID;
+		return Minestuck.blockBlood;
 	}
 
 	@Override
@@ -48,8 +52,8 @@ public class LandAspectPulse extends LandAspect {
 	@Override
 	public ArrayList<ILandDecorator> getDecorators() {
 		ArrayList list = new ArrayList<ILandDecorator>();
-		list.add(new DecoratorVein(Block.mushroomCapBrown.blockID, 10, 32));
-//		list.add(new DecoratorVein(Block.ice.blockID, 5, 8));
+		list.add(new DecoratorVein(Blocks.nether_brick, 10, 32));
+//		list.add(new DecoratorVein(Block.ice, 5, 8));
 		return list;
 	}
 

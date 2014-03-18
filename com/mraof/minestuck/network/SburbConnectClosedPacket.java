@@ -1,18 +1,15 @@
 package com.mraof.minestuck.network;
 
+import io.netty.buffer.ByteBuf;
+
 import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.INetworkManager;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.editmode.ServerEditHandler;
+//import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 
-import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 
 public class SburbConnectClosedPacket extends MinestuckPacket {
@@ -26,30 +23,29 @@ public class SburbConnectClosedPacket extends MinestuckPacket {
 	}
 
 	@Override
-	public byte[] generatePacket(Object... data) {
-		ByteArrayDataOutput dat = ByteStreams.newDataOutput();
-		dat.write(data[0].toString().getBytes());
-		dat.write('\n');
-		dat.write(data[1].toString().getBytes());
-		dat.write('\n');
-		dat.writeBoolean((Boolean)data[2]);
-		return dat.toByteArray();
-	}
-
-	@Override
-	public MinestuckPacket consumePacket(byte[] data) {
-		ByteArrayDataInput dat = ByteStreams.newDataInput(data);
-
-		player = dat.readLine();
-		otherPlayer = dat.readLine();
-		isClient = dat.readBoolean();
+	public MinestuckPacket generatePacket(Object... dat) {
+		writeString(data,dat[0].toString());
+		data.writeChar('\n');
+		writeString(data,dat[1].toString());
+		data.writeChar('\n');
+		data.writeBoolean((Boolean)dat[2]);
 		
 		return this;
 	}
 
 	@Override
-	public void execute(INetworkManager network, MinestuckPacketHandler handler, Player player, String userName) {
-		if(!Minestuck.privateComputers || ((EntityPlayer)player).username.equals(this.player) && ServerEditHandler.getData(((EntityPlayer)player).username) == null)
+	public MinestuckPacket consumePacket(ByteBuf data) {
+
+		player = readLine(data);
+		otherPlayer = readLine(data);
+		isClient = data.readBoolean();
+		
+		return this;
+	}
+
+	@Override
+	public void execute(EntityPlayer player) {
+		if(!Minestuck.privateComputers || ((EntityPlayer)player).getCommandSenderName().equals(this.player) )//&& ServerEditHandler.getData(((EntityPlayer)player).getCommandSenderName()) == null)
 			SkaianetHandler.closeConnection(this.player,this.otherPlayer, isClient);
 	}
 

@@ -8,19 +8,18 @@ import java.util.Map;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.network.packet.Packet250CustomPayload;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiComputer;
 import com.mraof.minestuck.client.gui.GuiHandler;
+import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.SkaianetInfoPacket;
+import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.Debug;
 
-import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -42,13 +41,9 @@ public class SkaiaClient {
 	 */
 	public static boolean requestData(TileEntityComputer computer){
 		boolean b = openServers.get(computer.owner) != null;
-		if(!b){
-			Debug.print("Sending data request about the player \""+computer.owner+"\".");
-			Packet250CustomPayload packet = new Packet250CustomPayload();
-			packet.channel = "Minestuck";
-			packet.data = MinestuckPacket.makePacket(Type.SBURB_INFO, computer.owner);
-			packet.length = packet.data.length;
-			PacketDispatcher.sendPacketToServer(packet);
+		if(!b) {
+			MinestuckPacket packet = MinestuckPacket.makePacket(Type.SBURB_INFO, computer.owner);
+			MinestuckChannelHandler.sendToServer(packet);
 			te = computer;
 		}
 		return b;
@@ -101,21 +96,15 @@ public class SkaiaClient {
 	}
 	
 	public static void sendConnectRequest(TileEntityComputer te, String otherPlayer, boolean isClient){	//Used for both connect, open server and resume
-		Debug.print("Sending connect packet to server");
-		Packet250CustomPayload packet = new Packet250CustomPayload();
-		packet.channel = "Minestuck";
-		packet.data = MinestuckPacket.makePacket(Type.SBURB_CONNECT, ComputerData.createData(te), otherPlayer, isClient);
-		packet.length = packet.data.length;
-		PacketDispatcher.sendPacketToServer(packet);
+//		Debug.print("Sending connect packet to server");
+		MinestuckPacket packet = MinestuckPacket.makePacket(Type.SBURB_CONNECT, ComputerData.createData(te), otherPlayer, isClient);
+		MinestuckChannelHandler.sendToServer(packet);
 	}
 	
 	public static void sendCloseRequest(TileEntityComputer te, String otherPlayer, boolean isClient){
-		Debug.print("Sending close packet to server");
-		Packet250CustomPayload packet = new Packet250CustomPayload();
-		packet.channel = "Minestuck";
-		packet.data = MinestuckPacket.makePacket(Type.SBURB_CLOSE, te.owner, otherPlayer, isClient);
-		packet.length = packet.data.length;
-		PacketDispatcher.sendPacketToServer(packet);
+//		Debug.print("Sending close packet to server");
+		MinestuckPacket packet = MinestuckPacket.makePacket(Type.SBURB_CLOSE, te.owner, otherPlayer, isClient);
+		MinestuckChannelHandler.sendToServer(packet);
 	}
 	
 	//Methods used by the SkaianetInfoPacket.
@@ -146,7 +135,7 @@ public class SkaiaClient {
 			if(c.clientName.equals(data.player) || c.serverName.equals(data.player))
 				i.remove();
 		}
-		
+		Debug.print(data.connections);
 		connections.addAll(data.connections);
 		
 		GuiScreen gui = Minecraft.getMinecraft().currentScreen;
@@ -154,7 +143,7 @@ public class SkaiaClient {
 			((GuiComputer)gui).updateGui();
 		else if(te != null && te.owner.equals(data.player)){
 			if(!Minecraft.getMinecraft().thePlayer.isSneaking())
-				Minecraft.getMinecraft().thePlayer.openGui(Minestuck.instance, GuiHandler.GuiId.COMPUTER.ordinal(), te.worldObj, te.xCoord, te.yCoord, te.zCoord);
+				Minecraft.getMinecraft().thePlayer.openGui(Minestuck.instance, GuiHandler.GuiId.COMPUTER.ordinal(), te.getWorldObj(), te.xCoord, te.yCoord, te.zCoord);
 			te = null;
 		}
 	}

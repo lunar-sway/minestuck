@@ -1,17 +1,21 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.MinestuckStatsHandler;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+
+import com.google.common.collect.Sets;
+import com.mraof.minestuck.util.MinestuckStatsHandler;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -21,12 +25,12 @@ public class ItemHammer extends ItemWeapon
 	private int weaponDamage;
 	private final EnumHammerType hammerType;
     public float efficiencyOnProperMaterial = 4.0F;
-    public static final Block[] blocksEffectiveAgainst = new Block[] {Block.cobblestone, Block.stoneDoubleSlab, Block.stoneSingleSlab, Block.stone, Block.sandStone, Block.cobblestoneMossy, Block.oreIron, Block.blockIron, Block.oreCoal, Block.blockGold, Block.oreGold, Block.oreDiamond, Block.blockDiamond, Block.ice, Block.netherrack, Block.oreLapis, Block.blockLapis, Block.oreRedstone, Block.oreRedstoneGlowing, Block.rail, Block.railDetector, Block.railPowered};
+    public static final Set blocksEffectiveAgainst = Sets.newHashSet(new Block[] {Blocks.cobblestone, Blocks.double_stone_slab, Blocks.stone_slab, Blocks.stone, Blocks.sandstone, Blocks.mossy_cobblestone, Blocks.iron_ore, Blocks.iron_block, Blocks.coal_ore, Blocks.coal_block, Blocks.gold_block, Blocks.gold_ore, Blocks.diamond_ore, Blocks.diamond_block, Blocks.ice, Blocks.netherrack, Blocks.lapis_ore, Blocks.lapis_block, Blocks.redstone_ore, Blocks.rail, Blocks.detector_rail, Blocks.golden_rail});
 
 	
-    public ItemHammer(int id, EnumHammerType hammerType)
+    public ItemHammer(EnumHammerType hammerType)
 	{
-		super(id, blocksEffectiveAgainst);
+		super(blocksEffectiveAgainst);
 		
 		this.hammerType = hammerType;
 		this.setMaxDamage(hammerType.getMaxUses());
@@ -71,13 +75,13 @@ public class ItemHammer extends ItemWeapon
     @Override
     public boolean canHarvestBlock(Block block) 
     {
-		return block != null && (block.blockMaterial == Material.iron || block.blockMaterial == Material.anvil || block.blockMaterial == Material.rock);
+		return block != null && (block.getMaterial() == Material.iron || block.getMaterial() == Material.anvil || block.getMaterial() == Material.rock);
     }
 
     @Override
 	public float getStrVsBlock(ItemStack itemStack, Block block)
 	{
-		return block != null && (block.blockMaterial == Material.iron || block.blockMaterial == Material.anvil || block.blockMaterial == Material.rock) ? this.efficiencyOnProperMaterial : super.getStrVsBlock(itemStack, block);
+		return block != null && (block.getMaterial() == Material.iron || block.getMaterial() == Material.anvil || block.getMaterial() == Material.rock) ? this.efficiencyOnProperMaterial : super.getStrVsBlock(itemStack, block);
 	}
 
     @Override
@@ -112,9 +116,9 @@ public class ItemHammer extends ItemWeapon
 	}
 
     @Override
-	public boolean onBlockDestroyed(ItemStack itemStack, World world, int par3, int par4, int par5, int par6, EntityLivingBase par7EntityLiving)
+	public boolean onBlockDestroyed(ItemStack itemStack, World world, Block par3, int par4, int par5, int par6, EntityLivingBase par7EntityLiving)
 	{
-		if ((double)Block.blocksList[par3].getBlockHardness(world, par4, par5, par6) != 0.0D)
+		if ((double)par3.getBlockHardness(world, par4, par5, par6) != 0.0D)
 			itemStack.damageItem(2, par7EntityLiving);
 		
 		return true;
@@ -133,7 +137,7 @@ public class ItemHammer extends ItemWeapon
 
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) 
 	{
-		if(world.getBlockId(x, y, z) != 0)
+		if(world.getBlock(x, y, z) != Blocks.air)
 		{
 			if(hammerType.equals(hammerType.POGO))
 			{
@@ -148,7 +152,7 @@ public class ItemHammer extends ItemWeapon
     
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister iconRegister) 
+	public void registerIcons(IIconRegister iconRegister) 
 	{
 		switch(hammerType)
 		{

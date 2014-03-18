@@ -1,18 +1,22 @@
 package com.mraof.minestuck.item;
 
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
+
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.Debug;
 
 public class ItemMachine extends ItemBlock {
 
 		private final static String[] subNames = {"cruxtruder","punchDesignex","totemLathe","alchemiter","gristWidget"};
-		private final static Icon[] icons = new Icon[5];
+		private final static IIcon[] icons = new IIcon[5];
 		
-		public ItemMachine(int par1) 
+		public ItemMachine(Block block) 
 		{
-			super(par1);
+			super(block);
 			setHasSubtypes(true);
 			setUnlocalizedName("machine");
 		}
@@ -29,7 +33,7 @@ public class ItemMachine extends ItemBlock {
 		}
 		
 		@Override
-		public void registerIcons(IconRegister par1IconRegister) {
+		public void registerIcons(IIconRegister par1IconRegister) {
 			   icons[0] = par1IconRegister.registerIcon("minestuck:Cruxtruder");
 			   icons[1] = par1IconRegister.registerIcon("minestuck:PunchDesignex");
 			   icons[2] = par1IconRegister.registerIcon("minestuck:TotemLathe");
@@ -38,7 +42,7 @@ public class ItemMachine extends ItemBlock {
 		}
 		
 		@Override
-	    public Icon getIconFromDamage(int par1)
+	    public IIcon getIconFromDamage(int par1)
 	    {
 	        return icons[par1];
 	    }

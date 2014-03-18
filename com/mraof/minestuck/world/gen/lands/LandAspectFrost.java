@@ -4,20 +4,23 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 
 public class LandAspectFrost extends LandAspect 
 {
+	BlockWithMetadata[] surfaceBlocks = {new BlockWithMetadata(Blocks.grass)};
+	private BlockWithMetadata[] upperBlocks = {new BlockWithMetadata(Blocks.stone)};
 	
 	@Override
-	public int[][] getSurfaceBlocks() 
+	public BlockWithMetadata[] getSurfaceBlocks() 
 	{
-		return new int[][] {{Block.grass.blockID, 0}};
+		return surfaceBlocks;
 	}
 
 	@Override
-	public int[][] getUpperBlocks() 
+	public BlockWithMetadata[] getUpperBlocks() 
 	{
-		return new int[][] {{Block.stone.blockID,0}};
+		return upperBlocks ;
 	}
 
 	@Override
@@ -31,9 +34,9 @@ public class LandAspectFrost extends LandAspect
 		return null;
 	}
 	@Override
-	public int getRiverBlock() 
+	public Block getRiverBlock() 
 	{
-		return Block.ice.blockID;
+		return Blocks.ice;
 	}
 	
 	@Override
@@ -49,8 +52,8 @@ public class LandAspectFrost extends LandAspect
 	@Override
 	public ArrayList<ILandDecorator> getDecorators() {
 		ArrayList list = new ArrayList<ILandDecorator>();
-		list.add(new DecoratorVein(Block.dirt.blockID, 10, 32));
-		list.add(new DecoratorVein(Block.ice.blockID, 5, 8));
+		list.add(new DecoratorVein(Blocks.dirt, 10, 32));
+		list.add(new DecoratorVein(Blocks.ice, 5, 8));
 		return list;
 	}
 

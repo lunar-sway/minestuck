@@ -8,17 +8,17 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IProgressUpdate;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.SpawnListEntry;
+import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.Event.Result;
 import net.minecraftforge.event.terraingen.ChunkProviderEvent;
 
 import com.mraof.minestuck.entity.consort.EntityIguana;
@@ -28,9 +28,12 @@ import com.mraof.minestuck.entity.underling.EntityBasilisk;
 import com.mraof.minestuck.entity.underling.EntityGiclops;
 import com.mraof.minestuck.entity.underling.EntityImp;
 import com.mraof.minestuck.entity.underling.EntityOgre;
+import com.mraof.minestuck.world.gen.lands.BlockWithMetadata;
 import com.mraof.minestuck.world.gen.lands.ILandDecorator;
 import com.mraof.minestuck.world.gen.lands.LandAspect;
 import com.mraof.minestuck.world.gen.lands.LandHelper;
+
+import cpw.mods.fml.common.eventhandler.Event.Result;
 
 public class ChunkProviderLands implements IChunkProvider 
 {
@@ -46,10 +49,10 @@ public class ChunkProviderLands implements IChunkProvider
 	public LandHelper helper;
 	public int nameIndex1, nameIndex2;
 
-	public int[] surfaceBlock;
-	public int[] upperBlock;
-	public int oceanBlock;
-	public int riverBlock;
+	public BlockWithMetadata surfaceBlock;
+	public BlockWithMetadata upperBlock;
+	public Block oceanBlock;
+	public Block riverBlock;
 	public LandAspect terrainMapper;
 	public ArrayList decorators;
 	public int dayCycle;
@@ -101,8 +104,8 @@ public class ChunkProviderLands implements IChunkProvider
 		noiseGeneratorTriangle = new NoiseGeneratorTriangle(this.random);
 		noiseGeneratorTriangle1 = new NoiseGeneratorTriangle(this.random);
 
-		this.surfaceBlock = (int[]) helper.pickElement(helper.pickOne(aspect1, aspect2).getSurfaceBlocks());
-		this.upperBlock = (int[]) helper.pickElement(helper.pickOne(aspect1, aspect2).getUpperBlocks());
+		this.surfaceBlock = (BlockWithMetadata) helper.pickElement(helper.pickOne(aspect1, aspect2).getSurfaceBlocks());
+		this.upperBlock = (BlockWithMetadata) helper.pickElement(helper.pickOne(aspect1, aspect2).getUpperBlocks());
 		LandAspect fluidAspect = helper.pickOne(aspect1, aspect2);
 		this.oceanBlock = fluidAspect.getOceanBlock();
 		this.riverBlock = fluidAspect.getRiverBlock();
@@ -122,7 +125,7 @@ public class ChunkProviderLands implements IChunkProvider
 	@Override
 	public Chunk provideChunk(int chunkX, int chunkZ) 
 	{
-		short[] chunkIds = new short[65536];
+		Block[] chunkBlocks = new Block[65536];
 		byte[] chunkMetadata = new byte[65536];
 		double[] heightMap = new double[256];
 		double[] heightMapTriangles = new double[256];
@@ -149,28 +152,28 @@ public class ChunkProviderLands implements IChunkProvider
 		for(int x = 0; x < 16; x++)
 			for(int z = 0; z < 16; z++)
 			{
-				chunkIds[x + z * 16] = (short) Block.bedrock.blockID;
+				chunkBlocks[x + z * 16] = Blocks.bedrock;
 				int y;
 				int currentBlockOffset;
 				for(y = 1; y < topBlock[x * 16 + z] - 1; y++)
 				{
 					//currentBlockOffset = (int) Math.abs(generated1[x + z * 256 + y * 16]);
-					chunkIds[x + z * 16 + y * 256] = (short) upperBlock[0];
-					chunkMetadata[x + z * 16 + y * 256] = (byte) upperBlock[1];
+					chunkBlocks[x + z * 16 + y * 256] = upperBlock.block;
+					chunkMetadata[x + z * 16 + y * 256] = upperBlock.metadata;
 				}
 
 				
-				chunkIds[x + z * 16 + y * 256] = (short) surfaceBlock[0];
-				chunkMetadata[x + z * 16 + y * 256] = (byte) surfaceBlock[1];
+				chunkBlocks[x + z * 16 + y * 256] = surfaceBlock.block;
+				chunkMetadata[x + z * 16 + y * 256] = surfaceBlock.metadata;
 
 				for(int i = y + topRiverBlock[x * 16 + z]; y < i; y++)
-					chunkIds[x + z * 16 + y * 256] = (short) this.riverBlock;
+					chunkBlocks[x + z * 16 + y * 256] = this.riverBlock;
 
 				for(; y < 63; y++)
-					chunkIds[x + z * 16 + y * 256] = (short) this.oceanBlock;
+					chunkBlocks[x + z * 16 + y * 256] = this.oceanBlock;
 
 			}
-		Chunk chunk = new Chunk(this.landWorld, chunkIds, chunkMetadata, chunkX, chunkZ);
+		Chunk chunk = new Chunk(this.landWorld, chunkBlocks, chunkMetadata, chunkX, chunkZ);
 		return chunk;
 	}
 	private double[] initializeNoiseField(double[] par1ArrayOfDouble, int par2, int par3, int par4, int par5, int par6, int par7)
@@ -239,11 +242,10 @@ public class ChunkProviderLands implements IChunkProvider
 		return enumcreaturetype == EnumCreatureType.creature ? this.consortList : (enumcreaturetype == EnumCreatureType.monster ? this.underlingList : null);
 	}
 
-	@Override
-	public ChunkPosition findClosestStructure(World world, String s, int i,
-			int j, int k) {
+	/*@Override
+	public ChunkPosition findClosestStructure(World world, String s, int i,int j, int k) {
 		return null;
-	}
+	}*/
 
 	@Override
 	public int getLoadedChunkCount() {
@@ -256,6 +258,17 @@ public class ChunkProviderLands implements IChunkProvider
 
 	@Override
 	public void saveExtraData() {
+	}
+	
+	@Override
+	/**
+	 * Redirected to in World.findClosestStructure()
+	 * Only used in vanilla by ender eye when looking for a stronghold.
+	 * var1: The world object; var2: The name of the structure type;
+	 * var3: xCoord; var4: yCoord; var5: zCoord;
+	 */
+	public ChunkPosition func_147416_a(World var1, String var2, int var3, int var4, int var5) {
+		return null;
 	}
 
 }

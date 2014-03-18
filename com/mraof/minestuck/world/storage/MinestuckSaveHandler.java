@@ -10,16 +10,17 @@ import java.util.List;
 
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.WorldEvent;
 
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.GristStorage;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+
 public class MinestuckSaveHandler 
 {
 	public static List<Byte> lands = Collections.synchronizedList(new ArrayList<Byte>());
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onWorldSave(WorldEvent.Save event)
 	{
 		if(event.world.provider.dimensionId != 0)	//Only save one time each world-save instead of one per dimension each world-save.

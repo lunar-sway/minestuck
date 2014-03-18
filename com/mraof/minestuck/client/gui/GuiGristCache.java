@@ -15,7 +15,7 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import com.mraof.minestuck.editmode.ClientEditHandler;
+//import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.util.GristStorage;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.Title;
@@ -72,9 +72,9 @@ public class GuiGristCache extends GuiScreen
 		}
 		
 		if (titleMessage.isEmpty())
-			if(ClientEditHandler.isActive())
-				titleMessage = UsernameHandler.decode(ClientEditHandler.client).toUpperCase();
-			else titleMessage = mc.thePlayer.username.toUpperCase() + " : " + title.getTitleName();
+//			if(ClientEditHandler.isActive())
+//				titleMessage = UsernameHandler.decode(ClientEditHandler.client).toUpperCase();
+			/*else*/ titleMessage = mc.thePlayer.getCommandSenderName().toUpperCase() + " : " + title.getTitleName();
 		
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.getTextureManager().bindTexture(guiBackground);

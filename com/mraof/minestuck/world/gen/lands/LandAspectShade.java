@@ -3,26 +3,30 @@ package com.mraof.minestuck.world.gen.lands;
 import java.util.ArrayList;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 
 import com.mraof.minestuck.Minestuck;
 
-public class LandAspectShade extends LandAspect {
+public class LandAspectShade extends LandAspect 
+{
 
+	BlockWithMetadata[] surfaceBlocks = {new BlockWithMetadata(Blocks.lapis_block)};
+	BlockWithMetadata[] upperBlocks = {new BlockWithMetadata(Blocks.stone)};
+	
 	@Override
-	public int[][] getSurfaceBlocks() 
-	{
-		return new int[][] {{Block.blockLapis.blockID, 0}};
-	}
-
-	@Override
-	public int[][] getUpperBlocks() {
-		return new int[][] {{Block.stone.blockID, 0}};
+	public BlockWithMetadata[] getSurfaceBlocks() {
+		return surfaceBlocks;
 	}
 	
 	@Override
-	public int getOceanBlock() 
+	public BlockWithMetadata[] getUpperBlocks() {
+		return upperBlocks;
+	}
+	
+	@Override
+	public Block getOceanBlock() 
 	{
-		return Minestuck.blockOil.blockID;
+		return Minestuck.blockOil;
 	}
 
 	@Override
@@ -48,8 +52,8 @@ public class LandAspectShade extends LandAspect {
 	@Override
 	public ArrayList<ILandDecorator> getDecorators() {
 		ArrayList list = new ArrayList<ILandDecorator>();
-		list.add(new DecoratorVein(Block.mushroomCapBrown.blockID, 10, 32));
-//		list.add(new DecoratorVein(Block.ice.blockID, 5, 8));
+		list.add(new DecoratorVein(Blocks.brown_mushroom_block, 10, 32));
+//		list.add(new DecoratorVein(Block.ice, 5, 8));
 		return list;
 	}
 
@@ -57,5 +61,6 @@ public class LandAspectShade extends LandAspect {
 	public int getDayCycleMode() {
 		return 2;
 	}
+
 
 }

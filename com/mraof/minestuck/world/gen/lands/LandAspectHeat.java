@@ -4,23 +4,22 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 
 public class LandAspectHeat extends LandAspect 
 {
+	BlockWithMetadata[] upperBlocks = {new BlockWithMetadata(Blocks.netherrack), new BlockWithMetadata(Blocks.obsidian)};
+	BlockWithMetadata[] surfaceBlocks = {new BlockWithMetadata(Blocks.soul_sand), new BlockWithMetadata(Blocks.cobblestone)};
 	@Override
-	public int[][] getSurfaceBlocks() 
+	public BlockWithMetadata[] getSurfaceBlocks() 
 	{
-		return new int[][] {
-				{Block.slowSand.blockID, 0},
-				{Block.cobblestone.blockID, 0}};
+		return upperBlocks;
 	}
 
 	@Override
-	public int[][] getUpperBlocks() 
+	public BlockWithMetadata[] getUpperBlocks() 
 	{
-		return new int[][] {
-				{Block.netherrack.blockID, 0},
-				{Block.obsidian.blockID, 0}};
+		return upperBlocks;
 	}
 
 	@Override
@@ -33,32 +32,32 @@ public class LandAspectHeat extends LandAspect
 	{
 		return null;
 	}
-	
+
 	@Override
-	public int getOceanBlock()
+	public Block getOceanBlock()
 	{
-		return Block.lavaStill.blockID;
+		return Blocks.lava;
 	}
 	@Override
-	public int getRiverBlock() {
-		return Block.lavaMoving.blockID;
+	public Block getRiverBlock() {
+		return Blocks.flowing_lava;
 	}
-	
+
 	@Override
 	public String getPrimaryName() {
 		return "Heat";
 	}
-	
+
 	@Override
 	public String[] getNames() {
 		return new String[] {"Heat","Flame","Fire"};
 	}
-	
+
 	@Override
 	public ArrayList<ILandDecorator> getDecorators() {
 		ArrayList list = new ArrayList<ILandDecorator>();
-		list.add(new DecoratorVein(Block.slowSand.blockID, 10, 32));
-		list.add(new DecoratorVein(Block.glowStone.blockID, 5, 8));
+		list.add(new DecoratorVein(Blocks.soul_sand, 10, 32));
+		list.add(new DecoratorVein(Blocks.glowstone, 5, 8));
 		return list;
 	}
 

@@ -6,14 +6,14 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EntityLivingData;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIArrowAttack;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.item.Item;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
@@ -55,7 +55,7 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 	}
 	
 	@Override
-	public EntityLivingData onSpawnWithEgg(EntityLivingData par1EntityLivingData)
+	public IEntityLivingData onSpawnWithEgg(IEntityLivingData par1EntityLivingData)
 	{
 		par1EntityLivingData = super.onSpawnWithEgg(par1EntityLivingData);
 		this.addRandomArmor();
@@ -66,7 +66,7 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 		}
 		else
 			this.tasks.addTask(4, this.entityAIAttackOnCollide);
-		this.setCurrentItemOrArmor(0, new ItemStack(this.pawnType == 1 ? Item.bow : rand.nextDouble() < .2 ? Minestuck.regisword : rand.nextDouble() < .02 ? Minestuck.sord : Item.swordStone));
+		this.setCurrentItemOrArmor(0, new ItemStack(this.pawnType == 1 ? Items.bow : rand.nextDouble() < .2 ? Minestuck.regisword : rand.nextDouble() < .02 ? Minestuck.sord : Items.stone_sword));
 		this.enchantEquipment();
 		return par1EntityLivingData;
 	}
@@ -160,7 +160,7 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 		this.tasks.removeTask(this.entityAIAttackOnCollide);
 		ItemStack weapon = this.getHeldItem();
 
-		if (weapon != null && weapon.itemID == Item.bow.itemID)
+		if (weapon != null && weapon.getItem() == Items.bow)
 		{
 			this.tasks.addTask(4, this.entityAIArrowAttack);
 		}
@@ -183,7 +183,7 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
     protected void applyEntityAttributes()
     {
         super.applyEntityAttributes();
-        this.getAttributeMap().func_111150_b(SharedMonsterAttributes.attackDamage);
+        this.getAttributeMap().registerAttribute(SharedMonsterAttributes.attackDamage);
     }
 
 

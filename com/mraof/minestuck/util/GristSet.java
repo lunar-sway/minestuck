@@ -77,8 +77,8 @@ public class GristSet {
 	 * Returns a ArrayList containing GristAmount objects representing the set.
 	 * 
 	 */
-	public ArrayList getArray() {
-		ArrayList list = new ArrayList();
+	public ArrayList<GristAmount> getArray() {
+		ArrayList<GristAmount> list = new ArrayList();
 		for(int i = 0; i < GristType.allGrists; i++) {
 			if (gristTypes[i] != 0) {
 				//Debug.print("Added "+gristTypes[i]+" of "+GristType.values()[i].getName());

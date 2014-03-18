@@ -1,6 +1,6 @@
 package com.mraof.minestuck.entity.item;
 
-import net.minecraft.block.Block;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,8 +9,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristHelper;
@@ -100,7 +98,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		this.prevPosZ = this.posZ;
 		this.motionY -= 0.029999999329447746D;
 
-		if (this.worldObj.getBlockMaterial(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ)) == Material.lava)
+		if (this.worldObj.getBlock(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ)).getMaterial() == Material.lava)
 		{
 			this.motionY = 0.20000000298023224D;
 			this.motionX = (double)((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F);
@@ -108,10 +106,10 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 			this.playSound("random.fizz", 0.4F, 2.0F + this.rand.nextFloat() * 0.4F);
 		}
 
-		this.pushOutOfBlocks(this.posX, (this.boundingBox.minY + this.boundingBox.maxY) / 2.0D, this.posZ);
+		this.func_145771_j(this.posX, (this.boundingBox.minY + this.boundingBox.maxY) / 2.0D, this.posZ);
 		double d0 = this.getSizeByValue() * 2.0D;
 
-		if (this.targetCycle < this.cycle - 20 + this.entityId % 100) //Why should I care about the entityId
+		if (this.targetCycle < this.cycle - 20 + this.getEntityId() % 100) //Why should I care about the entityId
 		{
 			if (this.closestPlayer == null || this.closestPlayer.getDistanceSqToEntity(this) > d0 * d0)
 			{
@@ -142,13 +140,10 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 
 		if (this.onGround)
 		{
-			f = 0.58800006F;
-			int i = this.worldObj.getBlockId(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.boundingBox.minY) - 1, MathHelper.floor_double(this.posZ));
-
-			if (i > 0)
-			{
-				f = Block.blocksList[i].slipperiness * 0.98F;
-			}
+			if (this.onGround)	//Wait what?
+	        {
+	            f = this.worldObj.getBlock(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.boundingBox.minY) - 1, MathHelper.floor_double(this.posZ)).slipperiness * 0.98F;
+	        }
 		}
 
 		this.motionX *= (double)f;
@@ -172,6 +167,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	/**
 	 * Returns if this entity is in water and will end up adding the waters velocity to the entity
 	 */
+	@Override
 	public boolean handleWaterMovement()
 	{
 		return this.worldObj.handleMaterialAcceleration(this.boundingBox, Material.water, this);
@@ -242,10 +238,6 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		{
 			this.playSound("random.pop", 0.1F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F));
 			par1EntityPlayer.onItemPickup(this, 1);
-			if(par1EntityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getTags().size() == 0)
-				par1EntityPlayer.getEntityData().setCompoundTag(EntityPlayer.PERSISTED_NBT_TAG, new NBTTagCompound());
-			if(par1EntityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getCompoundTag("Grist").getTags().size() == 0)
-				par1EntityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setCompoundTag("Grist", new NBTTagCompound("Grist"));
 			this.addGrist(par1EntityPlayer);
 			this.setDead();
 		}
@@ -254,8 +246,8 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	}
 	public void addGrist(EntityPlayer entityPlayer)
 	{
-		GristHelper.increase(UsernameHandler.encode(entityPlayer.username), new GristSet(GristType.getTypeFromString(gristType), gristValue));
-		MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(entityPlayer.username));
+		GristHelper.increase(UsernameHandler.encode(entityPlayer.getCommandSenderName()), new GristSet(GristType.getTypeFromString(gristType), gristValue));
+		MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(entityPlayer.getCommandSenderName()));
 	}
 
 	public boolean canAttackWithItem()
@@ -279,7 +271,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	}
 
 	@Override
-	public void writeSpawnData(ByteArrayDataOutput data) 
+	public void writeSpawnData(ByteBuf data) 
 	{
 		if(this.typeInt(this.gristType) < 0)
 		{
@@ -290,7 +282,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	}
 
 	@Override
-	public void readSpawnData(ByteArrayDataInput data) 
+	public void readSpawnData(ByteBuf data) 
 	{
 		int typeOffset = data.readInt();
 		if(typeOffset < 0)

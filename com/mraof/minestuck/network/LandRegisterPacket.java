@@ -1,19 +1,17 @@
 package com.mraof.minestuck.network;
 
+import io.netty.buffer.ByteBuf;
+
 import java.util.EnumSet;
 
-import net.minecraft.network.INetworkManager;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.DimensionManager;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
-import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 
 public class LandRegisterPacket extends MinestuckPacket
@@ -26,25 +24,23 @@ public class LandRegisterPacket extends MinestuckPacket
 	}
 
 	@Override
-	public byte[] generatePacket(Object... data) 
+	public MinestuckPacket generatePacket(Object... dat) 
 	{
-		ByteArrayDataOutput dat = ByteStreams.newDataOutput();
-		landDimensions = (byte[]) data[0];
-			dat.write(landDimensions);
-		return dat.toByteArray();
-	}
-
-	@Override
-	public MinestuckPacket consumePacket(byte[] data) 
-	{
-		ByteArrayDataInput dat = ByteStreams.newDataInput(data);
-		landDimensions = new byte[data.length];
-		dat.readFully(landDimensions);
+		data.writeBytes((byte[]) dat[0]);
 		return this;
 	}
 
 	@Override
-	public void execute(INetworkManager network, MinestuckPacketHandler minestuckPacketHandler, Player player, String userName) 
+	public MinestuckPacket consumePacket(ByteBuf data) 
+	{
+		
+		landDimensions = new byte[data.readableBytes()];
+		data.readBytes(landDimensions);
+		return this;
+	}
+
+	@Override
+	public void execute(EntityPlayer player) 
 	{
 		if(MinecraftServer.getServer() != null)
 			return;	//Nope, no editing the server's land list

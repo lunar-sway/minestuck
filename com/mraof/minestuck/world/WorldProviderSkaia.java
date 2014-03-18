@@ -28,7 +28,7 @@ public class WorldProviderSkaia extends WorldProvider
 	public void registerWorldChunkManager()
     {
 		super.registerWorldChunkManager();
-        this.worldChunkMgr = new WorldChunkManagerHell(BiomeGenBase.plains, 0.5F, 0.5F);
+        this.worldChunkMgr = new WorldChunkManagerHell(BiomeGenBase.plains, 0.5F);
     }
     public float calculateCelestialAngle(long par1, float par3)
     {

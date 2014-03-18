@@ -15,7 +15,7 @@ public class EntityAINearestAttackableTargetWithHeight extends EntityAITarget
 {
 
 	EntityLivingBase targetEntity;
-    Class targetClass;
+    Class<? extends Entity> targetClass;
     int targetChance;
     private float targetHeightDistance;
     private final IEntitySelector field_82643_g;

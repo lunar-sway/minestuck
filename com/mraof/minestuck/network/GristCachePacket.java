@@ -1,16 +1,14 @@
 package com.mraof.minestuck.network;
 
+import io.netty.buffer.ByteBuf;
+
 import java.util.EnumSet;
 
-import net.minecraft.network.INetworkManager;
+import net.minecraft.entity.player.EntityPlayer;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
 import com.mraof.minestuck.util.GristStorage;
 import com.mraof.minestuck.util.GristType;
 
-import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 
 public class GristCachePacket extends MinestuckPacket 
@@ -24,28 +22,25 @@ public class GristCachePacket extends MinestuckPacket
 	}
 
 	@Override
-	public byte[] generatePacket(Object... data) 
+	public MinestuckPacket generatePacket(Object... dat) 
 	{
-		ByteArrayDataOutput dat = ByteStreams.newDataOutput();
-		values = (int[]) data[0];
-		for(int currentValue : values)
-			dat.writeInt(currentValue);
-		dat.writeBoolean((Boolean)data[1]);
-		return dat.toByteArray();
+		for(int i : (int[]) dat[0])
+			data.writeInt(i);
+		data.writeBoolean((Boolean)dat[1]);
+		return this;
 	}
 	
 	@Override
-	public MinestuckPacket consumePacket(byte[] data) 
+	public MinestuckPacket consumePacket(ByteBuf data) 
 	{
-		ByteArrayDataInput dat = ByteStreams.newDataInput(data);
 		for(int typeInt = 0; typeInt < values.length; typeInt++)
-			values[typeInt] = dat.readInt();
-		targetGrist = dat.readBoolean();
+			values[typeInt] = data.readInt();
+		targetGrist = data.readBoolean();
 		return this;
 	}
 
 	@Override
-	public void execute(INetworkManager network, MinestuckPacketHandler minestuckPacketHandler, Player player, String userName) {
+	public void execute(EntityPlayer player) {
 		GristStorage.onPacketRecived(this);
 	}
 

@@ -5,14 +5,13 @@ import java.util.Random;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.DimensionManager;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
@@ -23,10 +22,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class BlockGatePortal extends BlockContainer
 {
 	int destinationDimension;
-	public BlockGatePortal(int id, Material material) 
+	public BlockGatePortal(Material material) 
 	{
-		super(id, material);
-		setUnlocalizedName("gatePortal");
+		super(material);
+		
+		setBlockName("gatePortal");
 		this.setCreativeTab(Minestuck.tabMinestuck);
 		destinationDimension = 2;
 	}
@@ -42,14 +42,12 @@ public class BlockGatePortal extends BlockContainer
 	{
 		if (par5Entity.ridingEntity == null && par5Entity.riddenByEntity == null && !par1World.isRemote && par5Entity.timeUntilPortal == 0)
 		{
-			TileEntityGatePortal portal = (TileEntityGatePortal) par1World.getBlockTileEntity(x, y, z);
+			TileEntityGatePortal portal = (TileEntityGatePortal) par1World.getTileEntity(x, y, z);
 				portal.teleportEntity(par5Entity);
 		}
 	}
-
-
+	
 	@SideOnly(Side.CLIENT)
-
 	/**
 	 * Returns true if the given side of this block type should be rendered, if the adjacent block is at the given
 	 * coordinates.  Args: blockAccess, x, y, z, side
@@ -61,11 +59,15 @@ public class BlockGatePortal extends BlockContainer
 	}
 	
 	@Override
-	public boolean isOpaqueCube()
-	{
+	public boolean isOpaqueCube() {
 		return false;
 	}
-
+	
+	@Override
+	public TileEntity createNewTileEntity(World world, int metadata) {
+		return createTileEntity(world, metadata);
+	}
+	
 	@Override
 	public TileEntity createTileEntity(World world, int metadata) 
 	{
@@ -73,8 +75,8 @@ public class BlockGatePortal extends BlockContainer
 		tileEntity.destinationDimension = this.destinationDimension;
 		return tileEntity;
 	}
-	@Override
-	public TileEntity createNewTileEntity(World var1) 
+	
+	public TileEntity createNewTileEntity(World var1)
 	{
 		return new TileEntityGatePortal();
 	}
@@ -100,17 +102,6 @@ public class BlockGatePortal extends BlockContainer
 	}
 
 
-	@Override
-	@SideOnly(Side.CLIENT)
-
-	/**
-	 * A randomly called display update to be able to add particles or other items for display
-	 */
-	public void randomDisplayTick(World par1World, int par2, int par3, int par4, Random par5Random)
-	{
-
-	}
-
 	/**
 	 * The type of render function that is called for this block
 	 */
@@ -119,21 +110,20 @@ public class BlockGatePortal extends BlockContainer
 	{
 		return -1;
 	}
-
-	/**
-	 * Called whenever the block is added into the world. Args: world, x, y, z
-	 */
-
+	
 	@Override
 	@SideOnly(Side.CLIENT)
-
 	/**
 	 * only called by clickMiddleMouseButton , and passed to inventory.setCurrentItem (along with isCreative)
 	 */
-	public int idPicked(World par1World, int par2, int par3, int par4)
+	public Item getItem(World par1World, int par2, int par3, int par4)
 	{
-		return 0;
+		return null;
 	}
+	
+	/**
+	 * Called whenever the block is added into the world. Args: world, x, y, z
+	 */
 	//this keeps portals that lead to the same world from existing
 	@Override
 	public void onBlockAdded(World par1World, int par2, int par3, int par4)
@@ -168,7 +158,7 @@ public class BlockGatePortal extends BlockContainer
 	
 	public void setDestinationDimension(World world, int x, int y, int z, int destinationDimension) 
 	{
-		((TileEntityGatePortal) world.getBlockTileEntity(x, y, z)).destinationDimension = destinationDimension;
+		((TileEntityGatePortal) world.getTileEntity(x, y, z)).destinationDimension = destinationDimension;
 	}
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -177,7 +167,7 @@ public class BlockGatePortal extends BlockContainer
 	 * When this method is called, your block should register all the icons it needs with the given IconRegister. This
 	 * is the only chance you get to register icons.
 	 */
-	public void registerIcons(IconRegister par1IconRegister)
+	public void registerBlockIcons(IIconRegister par1IconRegister)
 	{
 		this.blockIcon = par1IconRegister.registerIcon("minestuck:GatePortal");
 	}

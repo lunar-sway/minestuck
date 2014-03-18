@@ -7,20 +7,21 @@ import java.util.Map.Entry;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet132TileEntityData;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
 import com.mraof.minestuck.client.gui.GuiComputer;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.util.Debug;
 
 public class TileEntityComputer extends TileEntity {
 	
 	/**
 	 * 0 = client, 1 = server, -1 = secret easter egg
 	 */
-	public Hashtable<Integer, Boolean> installedPrograms = new Hashtable();
+	public Hashtable<Integer, Boolean> installedPrograms = new Hashtable<Integer, Boolean>();
 	public boolean openToClients = false;
 	/**
 	 * To not be confused, serverConnected = if it has a server connected to it (so serverConnected can only be true if hasClient == true)
@@ -40,8 +41,9 @@ public class TileEntityComputer extends TileEntity {
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
 		super.readFromNBT(par1NBTTagCompound);	
 		if (par1NBTTagCompound.getCompoundTag("programs") != null) {
-			for (Object tag : par1NBTTagCompound.getCompoundTag("programs").getTags()) {
-				installedPrograms.put(((NBTTagInt)tag).data,true);
+			NBTTagCompound programs = par1NBTTagCompound.getCompoundTag("programs");
+			for (Object name : programs.func_150296_c()) {
+				installedPrograms.put(programs.getInteger((String)name),true);
 			}
 		}
 		if(hasClient())
@@ -72,7 +74,7 @@ public class TileEntityComputer extends TileEntity {
          }
 	    for(Entry<Integer, String> e : latestmessage.entrySet())
 	    	par1NBTTagCompound.setString("text"+e.getKey(), e.getValue());
-    	par1NBTTagCompound.setCompoundTag("programs",programs);
+    	par1NBTTagCompound.setTag("programs",programs);
     	par1NBTTagCompound.setString("connectClient",this.clientName);
     	par1NBTTagCompound.setBoolean("connectServer", this.serverConnected);
     	par1NBTTagCompound.setBoolean("serverOpen", this.openToClients);
@@ -88,14 +90,14 @@ public class TileEntityComputer extends TileEntity {
     {
     	NBTTagCompound tagCompound = new NBTTagCompound();
     	this.writeToNBT(tagCompound);
-    	return new Packet132TileEntityData(this.xCoord, this.yCoord, this.zCoord, 2, tagCompound);
+    	return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 2, tagCompound);
     }
     
     @Override
-    public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) 
+    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) 
     {
 		//Debug.print("Data packet gotten "+net.getClass());
-    	this.readFromNBT(pkt.data);
+    	this.readFromNBT(pkt.func_148857_g());
     }
     
 	public Boolean hasClient() {

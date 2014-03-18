@@ -5,13 +5,12 @@ import java.util.Iterator;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.packet.Packet41EntityEffect;
-import net.minecraft.network.packet.Packet9Respawn;
+import net.minecraft.network.play.server.S07PacketRespawn;
+import net.minecraft.network.play.server.S1DPacketEntityEffect;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldServer;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class Teleport 
 {
@@ -24,8 +23,10 @@ public class Teleport
 			WorldServer worldserver = par1EntityPlayerMP.mcServer.worldServerForDimension(par1EntityPlayerMP.dimension);
 			par1EntityPlayerMP.dimension = destinationDimension;
 			WorldServer worldserver1 = par1EntityPlayerMP.mcServer.worldServerForDimension(par1EntityPlayerMP.dimension);
-			Packet9Respawn respawnPacket = new Packet9Respawn(par1EntityPlayerMP.dimension, (byte)par1EntityPlayerMP.worldObj.difficultySetting, worldserver1.getWorldInfo().getTerrainType(), worldserver1.getHeight(), par1EntityPlayerMP.theItemInWorldManager.getGameType());
-			par1EntityPlayerMP.playerNetServerHandler.sendPacketToPlayer(respawnPacket);
+			S07PacketRespawn respawnPacket = new S07PacketRespawn(par1EntityPlayerMP.dimension, par1EntityPlayerMP.worldObj.difficultySetting, worldserver1.getWorldInfo().getTerrainType(), par1EntityPlayerMP.theItemInWorldManager.getGameType());
+			par1EntityPlayerMP.playerNetServerHandler.sendPacket(respawnPacket);			
+	        par1EntityPlayerMP.playerNetServerHandler.sendPacket(new S07PacketRespawn(par1EntityPlayerMP.dimension, par1EntityPlayerMP.worldObj.difficultySetting, par1EntityPlayerMP.worldObj.getWorldInfo().getTerrainType(), par1EntityPlayerMP.theItemInWorldManager.getGameType()));
+
 			worldserver.removePlayerEntityDangerously(par1EntityPlayerMP);
 			par1EntityPlayerMP.isDead = false;
 			transferEntityToWorld(par1EntityPlayerMP, j, worldserver, worldserver1, teleporter);
@@ -38,15 +39,15 @@ public class Teleport
 			par1EntityPlayerMP.theItemInWorldManager.setWorld(worldserver1);
 			par1EntityPlayerMP.mcServer.getConfigurationManager().updateTimeAndWeatherForPlayer(par1EntityPlayerMP, worldserver1);
 			par1EntityPlayerMP.mcServer.getConfigurationManager().syncPlayerInventory(par1EntityPlayerMP);
-			Iterator iterator = par1EntityPlayerMP.getActivePotionEffects().iterator();
+			Iterator<Object> iterator = par1EntityPlayerMP.getActivePotionEffects().iterator();
 
 			while (iterator.hasNext())
 			{
 				PotionEffect potioneffect = (PotionEffect)iterator.next();
-				par1EntityPlayerMP.playerNetServerHandler.sendPacketToPlayer(new Packet41EntityEffect(par1EntityPlayerMP.entityId, potioneffect));
+	            par1EntityPlayerMP.playerNetServerHandler.sendPacket(new S1DPacketEntityEffect(par1EntityPlayerMP.getEntityId(), potioneffect));
 			}
 
-			GameRegistry.onPlayerChangedDimension(par1EntityPlayerMP);
+//			GameRegistry.onPlayerChangedDimension(par1EntityPlayerMP);
 		}
 		else if (!entity.worldObj.isRemote && !entity.isDead)
 		{

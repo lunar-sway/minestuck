@@ -1,16 +1,22 @@
 package com.mraof.minestuck.network;
 
+import io.netty.buffer.ByteBuf;
+
 import java.util.EnumSet;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.INetworkManager;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteStreams;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.network.skaianet.SburbConnection;
+import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.util.UsernameHandler;
+//import com.mraof.minestuck.editmode.ServerEditHandler;
 
-import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 
 public class ClientEditPacket extends MinestuckPacket {
@@ -23,27 +29,50 @@ public class ClientEditPacket extends MinestuckPacket {
 	}
 
 	@Override
-	public byte[] generatePacket(Object... data) {
-		return data.length == 0?new byte[0]:(data[0].toString()+"\n"+data[1].toString()).getBytes();
-	}
-
-	@Override
-	public MinestuckPacket consumePacket(byte[] data) {
-		if(data.length == 0)
-			return this;
-		ByteArrayDataInput dat = ByteStreams.newDataInput(data);
-		username = dat.readLine();
-		target = dat.readLine();
+	public MinestuckPacket generatePacket(Object... dat) {
+		if(dat.length > 0)
+			writeString(data,dat[0].toString()+"\n"+dat[1].toString());
 		return this;
 	}
 
 	@Override
-	public void execute(INetworkManager network, MinestuckPacketHandler minestuckPacketHandler, Player player, String userName) {
-		EntityPlayerMP playerMP = (EntityPlayerMP)player;
-		if(username == null)
-			ServerEditHandler.onPlayerExit(playerMP);
-		if(!Minestuck.privateComputers || playerMP.username.equals(this.username))
-			ServerEditHandler.newServerEditor(playerMP, username, target);
+	public MinestuckPacket consumePacket(ByteBuf data) {
+		if(data.readableBytes() == 0)
+			return this;
+		username = readLine(data);
+		target = readLine(data);
+		return this;
+	}
+
+	@Override
+	public void execute(EntityPlayer player) {
+		
+		EntityPlayerMP playerMP = MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(UsernameHandler.decode(target));
+		if(playerMP != null && (!Minestuck.privateComputers || playerMP.getCommandSenderName().equals(this.username))) {
+			SburbConnection c = SkaianetHandler.getClientConnection(target);
+			if(c == null || !c.getServerName().equals(username) || !SkaianetHandler.giveItems(target))
+				return;
+			for(int i = 0; i < c.givenItems().length; i++)
+				if(i == 4) {
+					if(c.enteredGame())
+						continue;
+					ItemStack card = new ItemStack(Minestuck.punchedCard);
+					card.stackTagCompound = new NBTTagCompound();
+					card.stackTagCompound.setString("contentID", Item.itemRegistry.getNameForObject(Minestuck.cruxiteArtifact));
+					card.stackTagCompound.setInteger("contentMeta", 0);
+					if(!playerMP.inventory.hasItemStack(card))
+						c.givenItems()[i] = c.givenItems()[i] || playerMP.inventory.addItemStackToInventory(card);
+				} else {
+					ItemStack machine = new ItemStack(Minestuck.blockMachine, 1, i);
+					if(!playerMP.inventory.hasItemStack(machine))
+						c.givenItems()[i] = c.givenItems()[i] || playerMP.inventory.addItemStackToInventory(machine);
+				}
+		}
+		
+//		if(username == null)
+//			ServerEditHandler.onPlayerExit(playerMP);
+//		if(!Minestuck.privateComputers || playerMP.getCommandSenderName().equals(this.username))
+//			ServerEditHandler.newServerEditor(playerMP, username, target);
 	}
 
 	@Override

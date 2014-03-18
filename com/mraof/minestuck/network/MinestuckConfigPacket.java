@@ -1,16 +1,15 @@
 package com.mraof.minestuck.network;
 
+import io.netty.buffer.ByteBuf;
+
 import java.util.EnumSet;
 
-import net.minecraft.network.INetworkManager;
+import net.minecraft.entity.player.EntityPlayer;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.UsernameHandler;
 
-import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 
 public class MinestuckConfigPacket extends MinestuckPacket {
@@ -27,32 +26,30 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 	}
 
 	@Override
-	public byte[] generatePacket(Object... data) {
-		ByteArrayDataOutput dat = ByteStreams.newDataOutput();
-		dat.writeInt(Minestuck.overworldEditRange);
-		dat.writeInt(Minestuck.landEditRange);
-		dat.writeBoolean(Minestuck.hardMode);
+	public MinestuckPacket generatePacket(Object... dat) {
+		data.writeInt(Minestuck.overworldEditRange);
+		data.writeInt(Minestuck.landEditRange);
+		data.writeBoolean(Minestuck.hardMode);
 		if(UsernameHandler.host != null)
-			dat.write(UsernameHandler.host.getBytes());
-		dat.write('\n');
+			writeString(data,UsernameHandler.host);
 		
-		return dat.toByteArray();
+		return this;
 	}
-
+	
 	@Override
-	public MinestuckPacket consumePacket(byte[] data) {
-		ByteArrayDataInput dat = ByteStreams.newDataInput(data);
-		overWorldEditRange = dat.readInt();
-		landEditRange = dat.readInt();
-		hardMode = dat.readBoolean();
-		lanHost = dat.readLine();
+	public MinestuckPacket consumePacket(ByteBuf data) {
+		overWorldEditRange = data.readInt();
+		landEditRange = data.readInt();
+		hardMode = data.readBoolean();
+		lanHost = readLine(data);
 		if(lanHost.isEmpty())
 			lanHost = null;
+		Debug.print("Recived packet! Host is "+lanHost);
 		return this;
 	}
 
 	@Override
-	public void execute(INetworkManager network, MinestuckPacketHandler minestuckPacketHandler, Player player, String userName) {
+	public void execute(EntityPlayer player) {
 		
 		Minestuck.clientOverworldEditRange = this.overWorldEditRange;
 		Minestuck.clientLandEditRange = this.landEditRange;

@@ -8,7 +8,7 @@ import net.minecraft.entity.EntityLivingBase;
 
 public class EntityListAttackFilter implements IEntitySelector 
 {
-	public List entitiesToAttack;
+	public List<Class<? extends EntityLivingBase>> entitiesToAttack;
 	@Override
     public boolean isEntityApplicable(Entity par1Entity)
     {

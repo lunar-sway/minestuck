@@ -58,7 +58,7 @@ public class SburbConnection {
 	public int getClientDimension() {return clientHomeLand;}
 	public boolean[] givenItems(){return givenItemList;}
 	
-	public byte[] getBytes() {
+	public byte[] getBytes() { //TODO Make it write to an ByteBuf instead.
 		ByteArrayDataOutput data = ByteStreams.newDataOutput();
 		
 		data.writeBoolean(isMain);
@@ -92,8 +92,8 @@ public class SburbConnection {
 			}
 		}
 		if(isActive){
-			nbt.setCompoundTag("client", client.write());
-			nbt.setCompoundTag("server", server.write());
+			nbt.setTag("client", client.write());
+			nbt.setTag("server", server.write());
 		} else {
 			nbt.setString("client", getClientName());
 			nbt.setString("server", getServerName());
@@ -104,7 +104,7 @@ public class SburbConnection {
 	SburbConnection read(NBTTagCompound nbt) {
 		isMain = nbt.getBoolean("isMain");
 		if(nbt.hasKey("inventory"))
-			inventory = nbt.getTagList("inventory");
+			inventory = (NBTTagList) nbt.getTag("inventory");
 		if(isMain){
 			isActive = nbt.getBoolean("isActive");
 			enteredGame = nbt.getBoolean("enteredGame");

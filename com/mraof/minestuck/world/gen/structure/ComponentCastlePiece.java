@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
@@ -70,7 +71,7 @@ public abstract class ComponentCastlePiece extends StructureComponent
 				return 255 - 8;
 		}
 	}
-	protected void fillWithAlternatingBlocks(World world, StructureBoundingBox structureboundingbox, int x1, int y1, int z1, int x2, int y2, int z2, int blockID, int metadata1, int blockID2, int metadata2, boolean b) {
+	protected void fillWithAlternatingBlocks(World world, StructureBoundingBox structureboundingbox, int x1, int y1, int z1, int x2, int y2, int z2, Block block1, int metadata1, Block block2, int metadata2, boolean b) {
 		for (int y = y1; y <= y2; ++y)
 		{
 			for (int x = x1; x <= x2; ++x)
@@ -80,11 +81,11 @@ public abstract class ComponentCastlePiece extends StructureComponent
 					if(((x + y + z) % 2 == 0) ^ b)
 					{
 //						Debug.print("Placing block at " + x + " " + y + " " + z + " " + blockID + " " + metadata1);
-						this.placeBlockAtCurrentPosition(world, blockID, metadata1, x, y, z, structureboundingbox);
+						this.placeBlockAtCurrentPosition(world, block1, metadata1, x, y, z, structureboundingbox);
 					}
 					else
 					{
-						this.placeBlockAtCurrentPosition(world, blockID2, metadata2, x, y, z, structureboundingbox);
+						this.placeBlockAtCurrentPosition(world, block2, metadata2, x, y, z, structureboundingbox);
 //						Debug.print("Placing block at " + x + " " + y + " " + z + " " + blockID2 + " " + metadata2);
 					}
 				}

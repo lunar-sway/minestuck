@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import codechicken.core.gui.GuiDraw;
@@ -58,9 +59,9 @@ public class AlchemiterHandler extends TemplateRecipeHandler {
         	for (Object item : GristRegistry.getAllConversions().entrySet()) {
     	    	Map.Entry entry = (Map.Entry)item;
     	    	List itemData = (List)entry.getKey();
-    	    	int id = (Integer)itemData.get(0);
+    	    	String id = (String)itemData.get(0);
     	    	int meta = (Integer)itemData.get(1);
-    	    	arecipes.add(new CachedAlchemiterRecipe(new ItemStack(id,1,meta)));
+    	    	arecipes.add(new CachedAlchemiterRecipe(new ItemStack((Item) Item.itemRegistry.getObject(id),1,meta)));
         	}
         }
         	

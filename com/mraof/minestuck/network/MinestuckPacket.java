@@ -1,16 +1,17 @@
 package com.mraof.minestuck.network;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+
 import java.util.Arrays;
 import java.util.EnumSet;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.network.INetworkManager;
+import net.minecraft.entity.player.EntityPlayer;
 
 import com.google.common.primitives.Bytes;
 import com.google.common.primitives.UnsignedBytes;
 import com.mraof.minestuck.util.Debug;
 
-import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 
 public abstract class MinestuckPacket 
@@ -47,27 +48,55 @@ public abstract class MinestuckPacket
 		}
 	}
 	Type type;
+	
+	protected ByteBuf data = Unpooled.buffer();
+	
+	public MinestuckPacket()
+	{
+	}
 	public MinestuckPacket(Type type)
 	{
 		this.type = type;
 	}
-    public static byte[] makePacket(Type type, Object... data)
+    public static MinestuckPacket makePacket(Type type, Object... dat)
     {
-        byte[] packetData = type.make().generatePacket(data);
-        return Bytes.concat(new byte[] { UnsignedBytes.checkedCast(type.ordinal()) }, packetData );
+        return type.make().generatePacket(dat);
     }
+    
+	String readLine(ByteBuf data) {
+		StringBuilder str = new StringBuilder();
+		while(data.readableBytes() > 1) {
+			char c = data.readChar();
+//			Debug.print("Read char "+c+", packet "+this.getClass().getName());
+//			Debug.print(((short)c)+","+((short)".client".charAt(data.readerIndex()/2)));
+			if(c == '\n') {
+				break;
+			} else str.append(c);
+		}
+		
+		return str.toString();
+	}
+	
+	void writeString(ByteBuf data, String str) {
+		for(int i = 0; i < str.length(); i++)
+			data.writeChar(str.charAt(i));
+	}
+	
+	static void analyze() {
+		ByteBuf buf = Unpooled.buffer();
+		String s = ".client";
+		for(int i = 0; i < s.length(); i++) {
+			char prev = s.charAt(i);
+			Debug.print("Pre:"+prev+","+(short)prev);
+			buf.writeChar(prev);
+			char post = buf.readChar();
+			Debug.print("Post:"+post+","+(short)post);
+		}
+	}
+	
+    public abstract MinestuckPacket generatePacket(Object... data);
 
-    public static MinestuckPacket readPacket(INetworkManager network, byte[] payload)
-    {
-        int type = UnsignedBytes.toInt(payload[0]);
-        Type eType = Type.values()[type];
-        MinestuckPacket pkt;
-            pkt = eType.make();
-        return pkt.consumePacket(Arrays.copyOfRange(payload, 1, payload.length));
-    }
-    public abstract byte[] generatePacket(Object... data);
-
-    public abstract MinestuckPacket consumePacket(byte[] data);
-    public abstract void execute(INetworkManager network, MinestuckPacketHandler minestuckPacketHandler, Player player, String userName);
+    public abstract MinestuckPacket consumePacket(ByteBuf data);
+    public abstract void execute(EntityPlayer player);
     public abstract EnumSet<Side> getSenderSide();
 }

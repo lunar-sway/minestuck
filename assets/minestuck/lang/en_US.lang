@@ -14,6 +14,7 @@ computer.buttonClear=Clear message
 computer.buttonClose=Disconnect
 computer.buttonConnect=Connect to %s
 computer.buttonEdit=Activate edit mode
+computer.buttonGive=Give items
 computer.buttonOpen=Open to clients
 computer.buttonResume=Resume connection
 computer.messageConnect=Connected to %s
@@ -118,6 +119,8 @@ item.dowelCruxite.name=Cruxite Dowel
 item.dowelCruxiteCarved.name=Cruxite Dowel
 item.cardBlank.name=Captchalogue Card
 item.cardPunched.name=Captchalogue Card
+item.cardPunched.empty=no data
+item.cardPunched.invalid=invalid data
 item.cruxiteArtifact.name=Cruxite Artifact
 item.disk.Client.name=SBURB Client Disk
 item.disk.Server.name=SBURB Server Disk
@@ -129,6 +132,7 @@ item.minestuckBucket.blood.name=Bucket of Blood
 
 itemGroup.tabMinestuck=Minestuck
 
+key.categories.minestuck=Minestuck
 key.exitEdit=Exit Edit Mode
 key.gristCache=View Grist Cache
 

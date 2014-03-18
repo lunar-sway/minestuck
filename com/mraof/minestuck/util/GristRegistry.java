@@ -3,6 +3,7 @@ package com.mraof.minestuck.util;
 import java.util.Arrays;
 import java.util.Hashtable;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
 public class GristRegistry {
@@ -17,15 +18,15 @@ public class GristRegistry {
 
 	public static void addGristConversion(ItemStack item,boolean useDamage,GristSet grist) {
 		//System.out.printf("adding grist conversion for id %d and metadata %d, %susing metadata\n", item.itemID, item.getItemDamage(), useDamage ? "" : "not ");
-		gristRecipes.put(Arrays.asList(item.itemID,useDamage ? item.getItemDamage() : 0,useDamage), grist);
+		gristRecipes.put(Arrays.asList(item.getItem(), useDamage ? item.getItemDamage() : 0,useDamage), grist);
 	}
-	public static void addGristConversion(int id, GristSet grist)
+	public static void addGristConversion(Block block, GristSet grist)
 	{
-		addGristConversion(id, 0, false, grist);
+		addGristConversion(block, 0, false, grist);
 	}
-	public static void addGristConversion(int id, int metadata, boolean useDamage, GristSet grist)
+	public static void addGristConversion(Block block, int metadata, boolean useDamage, GristSet grist)
 	{
-		gristRecipes.put(Arrays.asList(id, useDamage ? metadata : 0, useDamage), grist);
+		gristRecipes.put(Arrays.asList(block, useDamage ? metadata : 0, useDamage), grist);
 	}
 	
 	/**
@@ -33,10 +34,10 @@ public class GristRegistry {
 	 */
 	public static GristSet getGristConversion(ItemStack item) {
 		if (item == null) {return null;}
-		if (gristRecipes.get(Arrays.asList(item.itemID,item.getItemDamage(),true)) == null) {
-			return (GristSet) gristRecipes.get(Arrays.asList(item.itemID,0,false));
+		if (gristRecipes.get(Arrays.asList(item.getItem(),item.getItemDamage(),true)) == null) {
+			return (GristSet) gristRecipes.get(Arrays.asList(item.getItem(),0,false));
 		} else {
-			return (GristSet) gristRecipes.get(Arrays.asList(item.itemID,item.getItemDamage(),true));
+			return (GristSet) gristRecipes.get(Arrays.asList(item.getItem(),item.getItemDamage(),true));
 		}
 	}
 	

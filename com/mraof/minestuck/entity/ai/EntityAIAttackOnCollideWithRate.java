@@ -1,5 +1,6 @@
 package com.mraof.minestuck.entity.ai;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -22,7 +23,7 @@ public class EntityAIAttackOnCollideWithRate extends EntityAIBase
 
     /** The PathEntity of our entity. */
     PathEntity entityPathEntity;
-    Class classTarget;
+    Class<? extends Entity> classTarget;
     private int movementTime;
 	private int attackRate;
 	private float distanceMultiplier = 2.0F;
@@ -73,7 +74,7 @@ public class EntityAIAttackOnCollideWithRate extends EntityAIBase
     public boolean continueExecuting()
     {
         EntityLivingBase entityliving = this.attacker.getAttackTarget();
-        return entityliving == null ? false : (!this.entityTarget.isEntityAlive() ? false : (!this.willSearch ? !this.attacker.getNavigator().noPath() : this.attacker.func_110176_b(MathHelper.floor_double(this.entityTarget.posX), MathHelper.floor_double(this.entityTarget.posY), MathHelper.floor_double(this.entityTarget.posZ))));
+        return entityliving == null ? false : (!this.entityTarget.isEntityAlive() ? false : (!this.willSearch ? !this.attacker.getNavigator().noPath() : this.attacker.isWithinHomeDistance(MathHelper.floor_double(this.entityTarget.posX), MathHelper.floor_double(this.entityTarget.posY), MathHelper.floor_double(this.entityTarget.posZ))));
     }
 
     /**

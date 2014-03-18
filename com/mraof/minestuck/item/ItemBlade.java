@@ -1,7 +1,9 @@
 package com.mraof.minestuck.item;
 
+import com.mraof.minestuck.Minestuck;
+
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -15,45 +17,38 @@ public class ItemBlade extends ItemWeapon
 	private final EnumBladeType bladeType;
     public float efficiencyOnProperMaterial = 4.0F;
     
-    public ItemBlade(int id, EnumBladeType bladeType)
+    public ItemBlade(EnumBladeType bladeType)
 	{
-		super(id);
+		super();
 		
+		setCreativeTab(Minestuck.tabMinestuck);
 		this.bladeType = bladeType;
 		this.setMaxDamage(bladeType.getMaxUses());
 		switch(bladeType)
 		{
 		case SORD:
 			this.setUnlocalizedName("sord");
-//			this.setIconIndex(8);
 			break;
 		case NINJA:
 			this.setUnlocalizedName("ninjaSword");
-//			this.setIconIndex(9);
 			break;
 		case KATANA:
 			this.setUnlocalizedName("katana");
-//			this.setIconIndex(10);
 			break;
 		case CALEDSCRATCH:
 			this.setUnlocalizedName("caledscratch");
-//			this.setIconIndex(10);
 			break;
 		case DERINGER:
 			this.setUnlocalizedName("royalDeringer");
-//			this.setIconIndex(11);
 			break	;
 		case REGISWORD:
 			this.setUnlocalizedName("regisword");
-//			this.setIconIndex(12);
 			break;
 		case SCARLET:
 			this.setUnlocalizedName("scarletRibbitar");
-//			this.setIconIndex(13);
 			break;
 		case DOGG:
 			this.setUnlocalizedName("doggMachete");
-//			this.setIconIndex(14);
 		}
 		this.weaponDamage = 4 + bladeType.getDamageVsEntity();
 	}
@@ -84,9 +79,9 @@ public class ItemBlade extends ItemWeapon
 	}
 
     @Override
-	public boolean onBlockDestroyed(ItemStack itemStack, World world, int par3, int par4, int par5, int par6, EntityLivingBase par7EntityLiving)
+	public boolean onBlockDestroyed(ItemStack itemStack, World world, Block par3, int par4, int par5, int par6, EntityLivingBase par7EntityLiving)
 	{
-		if ((double)Block.blocksList[par3].getBlockHardness(world, par4, par5, par6) != 0.0D)
+		if (par3.getBlockHardness(world, par4, par5, par6) != 0.0D)
 		{
 			itemStack.damageItem(2, par7EntityLiving);
 		}
@@ -103,7 +98,7 @@ public class ItemBlade extends ItemWeapon
     
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister iconRegister) 
+	public void registerIcons(IIconRegister iconRegister) 
 	{
 		switch(bladeType)
 		{

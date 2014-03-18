@@ -24,9 +24,9 @@ public class RenderGatePortal extends TileEntitySpecialRenderer
 
 	public void renderGatePortalTileEntity(TileEntityGatePortal par1TileEntityGatePortal, double par2, double par4, double par6, float par8)
     {
-        float var9 = (float)this.tileEntityRenderer.playerX;
-        float var10 = (float)this.tileEntityRenderer.playerY;
-        float var11 = (float)this.tileEntityRenderer.playerZ;
+        float var9 = (float)this.field_147501_a.field_147560_j;
+        float var10 = (float)this.field_147501_a.field_147561_k;
+        float var11 = (float)this.field_147501_a.field_147558_l;
         GL11.glDisable(GL11.GL_LIGHTING);
         Random var12 = new Random(31100L);
         float var13 = 0.75F;

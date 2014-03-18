@@ -7,8 +7,6 @@ import net.minecraft.util.MathHelper;
 
 import org.lwjgl.opengl.GL11;
 
-import com.mraof.minestuck.entity.underling.EntityGiclops;
-
 public class ModelGiclops extends ModelBase {
 
 	private ModelRenderer head;

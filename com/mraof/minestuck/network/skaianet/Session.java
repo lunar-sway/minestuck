@@ -1,19 +1,10 @@
 package com.mraof.minestuck.network.skaianet;
 
-import static com.mraof.minestuck.network.skaianet.SkaianetHandler.getAssociatedPartner;
-
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatMessageComponent;
-import net.minecraft.util.EnumChatFormatting;
-
-import com.mraof.minestuck.Minestuck;
 
 /**
  * Was also an interface for the session system, but now just a data structure representing a session.
@@ -109,9 +100,9 @@ public class Session {
 	 * @return This.
 	 */
 	Session read(NBTTagCompound nbt) {
-		NBTTagList list = nbt.getTagList("connections");
+		NBTTagList list = (NBTTagList) nbt.getTag("connections");
 		for(int i = 0; i < list.tagCount(); i++)
-			connections.add(new SburbConnection().read((NBTTagCompound) list.tagAt(i)));
+			connections.add(new SburbConnection().read(list.getCompoundTagAt(i)));
 		SkaianetHandler.connections.addAll(this.connections);
 		
 		checkIfCompleted();

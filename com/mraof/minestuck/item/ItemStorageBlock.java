@@ -1,5 +1,8 @@
 package com.mraof.minestuck.item;
 
+import com.mraof.minestuck.Minestuck;
+
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
@@ -7,9 +10,8 @@ public class ItemStorageBlock extends ItemBlock
 {
 	private final static String[] subNames = {"Cruxite","GenericObject"};
 	
-	public ItemStorageBlock(int par1) 
-	{
-		super(par1);
+	public ItemStorageBlock(Block block) {
+		super(block);
 		setHasSubtypes(true);
 		setUnlocalizedName("blockStorage");
 	}

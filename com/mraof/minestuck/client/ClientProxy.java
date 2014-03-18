@@ -16,7 +16,7 @@ import com.mraof.minestuck.client.model.ModelImp;
 import com.mraof.minestuck.client.model.ModelNakagator;
 import com.mraof.minestuck.client.model.ModelOgre;
 import com.mraof.minestuck.client.model.ModelSalamander;
-import com.mraof.minestuck.client.renderer.entity.RenderDecoy;
+//import com.mraof.minestuck.client.renderer.entity.RenderDecoy;
 import com.mraof.minestuck.client.renderer.entity.RenderEntityMinestuck;
 import com.mraof.minestuck.client.renderer.entity.RenderGrist;
 import com.mraof.minestuck.client.renderer.entity.RenderPawn;
@@ -24,7 +24,7 @@ import com.mraof.minestuck.client.renderer.entity.RenderShadow;
 import com.mraof.minestuck.client.renderer.tileentity.RenderGatePortal;
 import com.mraof.minestuck.client.renderer.tileentity.RenderMachine;
 import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
-import com.mraof.minestuck.entity.EntityDecoy;
+//import com.mraof.minestuck.entity.EntityDecoy;
 import com.mraof.minestuck.entity.carapacian.EntityBishop;
 import com.mraof.minestuck.entity.carapacian.EntityPawn;
 import com.mraof.minestuck.entity.consort.EntityIguana;
@@ -40,8 +40,8 @@ import com.mraof.minestuck.tileentity.TileEntityGatePortal;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -61,25 +61,15 @@ public class ClientProxy extends CommonProxy
             RenderingRegistry.registerEntityRenderingHandler(EntityPawn.class, new RenderPawn(new ModelBiped(), 0.5F));
             RenderingRegistry.registerEntityRenderingHandler(EntityBishop.class, new RenderEntityMinestuck(new ModelBishop(), 1.8F));
             RenderingRegistry.registerEntityRenderingHandler(EntityGrist.class, new RenderGrist());
-            RenderingRegistry.registerEntityRenderingHandler(EntityDecoy.class, new RenderDecoy());
+//            RenderingRegistry.registerEntityRenderingHandler(EntityDecoy.class, new RenderDecoy());
             ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGatePortal.class, new RenderGatePortal());
             ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachine.class, new RenderMachine());
     }
 	@SideOnly(Side.CLIENT)
-	public static void registerSided()
-	{
-		KeyBinding[] bindings;
-		boolean[] keyRepeatings;
-		MinestuckKeyHandler keyHandler;
-		bindings = new KeyBinding[2];
-		keyRepeatings = new boolean[bindings.length];
-		bindings[0] = new KeyBinding("key.gristCache", 34);
-		keyRepeatings[0] = false;
-		bindings[1] = new KeyBinding("key.exitEdit", 45);
-		keyRepeatings[1] = false;
-		keyHandler = new MinestuckKeyHandler(bindings, keyRepeatings);
-		KeyBindingRegistry.registerKeyBinding(keyHandler);
+	public static void registerSided() {
+		
 		MinecraftForge.EVENT_BUS.register(new GuiGristCache(Minecraft.getMinecraft()));
 		MinecraftForge.EVENT_BUS.register(new MinestuckClientEventHandler());
+		FMLCommonHandler.instance().bus().register(new MinestuckKeyHandler());
 	}
 }

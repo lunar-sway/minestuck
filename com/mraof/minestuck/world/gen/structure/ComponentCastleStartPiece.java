@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
@@ -69,10 +70,10 @@ public class ComponentCastleStartPiece extends ComponentCastlePiece
         {
 //        	Debug.print("CCSP: " + this.averageGroundLevel);
 //            Debug.print(structureBoundingBox.minX + ", " + structureBoundingBox.minY + ", " + structureBoundingBox.minZ + ", " + structureBoundingBox.maxX + ", " + structureBoundingBox.maxY + ", " + structureBoundingBox.maxZ);
-            this.fillWithAlternatingBlocks(world, structureBoundingBox, 0, 0, 0, 7 ,6, 7, Minestuck.chessTile.blockID, chessTileMetadata,  Minestuck.chessTile.blockID, chessTileMetadata1, false);
-            this.fillWithAlternatingBlocks(world, structureBoundingBox, 0, 0, 0, 7 ,7, 0, Minestuck.chessTile.blockID, chessTileMetadata, Minestuck.chessTile.blockID, chessTileMetadata1, false);
-            this.fillWithAlternatingBlocks(world, structureBoundingBox, 0, 0, 7, 7 ,7, 7, Minestuck.chessTile.blockID, chessTileMetadata, Minestuck.chessTile.blockID, chessTileMetadata1, false);
-            this.fillWithBlocks(world, structureBoundingBox, 2, 1, 0, 5, 5, 7, 0, 0, false);
+            this.fillWithAlternatingBlocks(world, structureBoundingBox, 0, 0, 0, 7 ,6, 7, Minestuck.chessTile, chessTileMetadata,  Minestuck.chessTile, chessTileMetadata1, false);
+            this.fillWithAlternatingBlocks(world, structureBoundingBox, 0, 0, 0, 7 ,7, 0, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
+            this.fillWithAlternatingBlocks(world, structureBoundingBox, 0, 0, 7, 7 ,7, 7, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
+            this.fillWithBlocks(world, structureBoundingBox, 2, 1, 0, 5, 5, 7, Blocks.air, Blocks.air, false);
 
             return true;
         }

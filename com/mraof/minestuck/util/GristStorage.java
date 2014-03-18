@@ -6,7 +6,7 @@ import java.util.Map;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
-import com.mraof.minestuck.editmode.ClientEditHandler;
+//import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.network.GristCachePacket;
 
 import cpw.mods.fml.relauncher.Side;
@@ -28,7 +28,7 @@ public class GristStorage {
 	}
 	
 	public static GristSet getClientGrist() {
-		return ClientEditHandler.isActive()?targetGrist:playerGrist;
+		return /*ClientEditHandler.isActive()?targetGrist:*/playerGrist;
 	}
 	
 	//Server sided
@@ -36,6 +36,8 @@ public class GristStorage {
 	static Map<String, GristSet> gristMap = new HashMap();
 	
 	public static GristSet getGristSet(String player) {
+		if(!gristMap.containsKey(player))
+			Debug.print("Failed to get grist cache for "+player);
 		return gristMap.get(player);
 	}
 	
@@ -59,9 +61,9 @@ public class GristStorage {
 		gristMap.clear();
 		if(nbt == null)
 			return;
-		NBTTagList list = nbt.getTagList("grist");
+		NBTTagList list = nbt.getTagList("grist", 10);
 		for(int i = 0; i < list.tagCount(); i++) {
-			NBTTagCompound gristCompound = (NBTTagCompound)list.tagAt(i);
+			NBTTagCompound gristCompound = list.getCompoundTagAt(i);
 			GristSet set = new GristSet();
 			for(GristType type : GristType.values())
 				set.addGrist(type, gristCompound.getInteger(type.getName()));

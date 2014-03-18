@@ -2,18 +2,17 @@ package com.mraof.minestuck.util;
 
 import java.util.ArrayList;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class KindAbstratusType {
 	
 	private String unlocalizedName;
 	
-	private ArrayList<ItemType> items = new ArrayList();
+	private ArrayList<ItemType> items = new ArrayList<ItemType>();
 	
 	public KindAbstratusType(String unlocName) {
 		this.unlocalizedName = unlocName;
@@ -24,10 +23,6 @@ public class KindAbstratusType {
 		return this;
 	}
 	
-	public KindAbstratusType addItemId(int id) {
-		items.add(new ItemIdType(id));
-		return this;
-	}
 	
 	@SideOnly(Side.CLIENT)
 	public String getDisplayName() {
@@ -61,21 +56,6 @@ public class KindAbstratusType {
 		
 		boolean partOf(ItemStack item) {
 			return this.itemClass.isInstance(item.getItem().getClass());
-		}
-		
-	}
-	
-	private static class ItemIdType extends ItemType {
-		
-		int itemId;
-		
-		ItemIdType(int id) {
-			this.itemId = id;
-		}
-		
-		@Override
-		boolean partOf(ItemStack item) {
-			return item.itemID == this.itemId;
 		}
 		
 	}

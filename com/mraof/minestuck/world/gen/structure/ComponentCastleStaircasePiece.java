@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.gen.structure;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
@@ -47,22 +48,22 @@ public class ComponentCastleStaircasePiece extends ComponentCastleRoomPiece
 		{
 			this.boundingBox.offset(0, startPiece.averageGroundLevel - 9, 0);
 		}
-		this.fillWithBlocks(world, structureboundingbox, 0, 1, 0, 7, 14, 7, 0, 0, false);
-		this.fillWithAlternatingBlocks(world, structureboundingbox, 0, 15, 0, 7, 15, 7, Minestuck.chessTile.blockID, chessTileMetadata, Minestuck.chessTile.blockID, chessTileMetadata1, false);
+		this.fillWithBlocks(world, structureboundingbox, 0, 1, 0, 7, 14, 7, Blocks.air, Blocks.air, false);
+		this.fillWithAlternatingBlocks(world, structureboundingbox, 0, 15, 0, 7, 15, 7, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
 		for(int step = 0; step < 8; step++) //Come on, step it up!
 			switch(this.direction)
 			{
 			case 0:
-				this.fillWithAlternatingBlocks(world, structureboundingbox, 0, step, step, 7, step, step, Minestuck.chessTile.blockID, chessTileMetadata, Minestuck.chessTile.blockID, chessTileMetadata1, false);
+				this.fillWithAlternatingBlocks(world, structureboundingbox, 0, step, step, 7, step, step, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
 				break;
 			case 1:
-				this.fillWithAlternatingBlocks(world, structureboundingbox, step, step, 0, step, step, 7, Minestuck.chessTile.blockID, chessTileMetadata, Minestuck.chessTile.blockID, chessTileMetadata1, false);
+				this.fillWithAlternatingBlocks(world, structureboundingbox, step, step, 0, step, step, 7, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
 				break;
 			case 2:
-				this.fillWithAlternatingBlocks(world, structureboundingbox, 0, step, 7 - step, 7, step, 7 - step, Minestuck.chessTile.blockID, chessTileMetadata, Minestuck.chessTile.blockID, chessTileMetadata1, false);
+				this.fillWithAlternatingBlocks(world, structureboundingbox, 0, step, 7 - step, 7, step, 7 - step, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
 				break;
 			case 3:
-				this.fillWithAlternatingBlocks(world, structureboundingbox, 7 - step, step, 0, 7 - step, step, 7, Minestuck.chessTile.blockID, chessTileMetadata, Minestuck.chessTile.blockID, chessTileMetadata1, false);
+				this.fillWithAlternatingBlocks(world, structureboundingbox, 7 - step, step, 0, 7 - step, step, 7, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
 				break;
 			}
 		return true;

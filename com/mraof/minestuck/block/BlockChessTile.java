@@ -4,14 +4,16 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.Debug;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -19,16 +21,15 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class BlockChessTile extends Block 
 {
 	public static final String[] iconNames = {"BlackChessTile", "WhiteChessTile", "DarkGreyChessTile", "LightGreyChessTile"};
-	private Icon[] textures;
-	public BlockChessTile(int id)
+	private IIcon[] textures;
+	public BlockChessTile()
 	{
-		super(id, Material.ground);
-		setUnlocalizedName("chessTile");
+		super(Material.ground);
 		setHardness(0.5F);
 		this.setCreativeTab(Minestuck.tabMinestuck);
 	}
 	@Override
-	public Icon getIcon(int side, int metadata) 
+	public IIcon getIcon(int side, int metadata) 
 	{
 		return textures[metadata];
 	}
@@ -43,8 +44,10 @@ public class BlockChessTile extends Block
 		for(int i = 0; i < iconNames.length; i++)
 			subItems.add(new ItemStack(this, 1, i));
 	}
+	
+	
 	@Override
-	public boolean canCreatureSpawn(EnumCreatureType type, World world, int x, int y, int z) 
+	public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z) 
 	{
 		return true;
 	}
@@ -55,9 +58,9 @@ public class BlockChessTile extends Block
      * is the only chance you get to register icons.
      */
     @Override
-    public void registerIcons(IconRegister par1IconRegister)
+    public void registerBlockIcons(IIconRegister par1IconRegister)
     {
-        this.textures = new Icon[iconNames.length];
+        this.textures = new IIcon[iconNames.length];
 
         for (int i = 0; i < this.textures.length; i++)
             this.textures[i] = par1IconRegister.registerIcon("minestuck:" + iconNames[i]);

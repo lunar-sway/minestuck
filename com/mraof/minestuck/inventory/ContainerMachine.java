@@ -51,22 +51,22 @@ public class ContainerMachine extends Container {
         //and the x-y coordinates it resides on-screen
         switch (metadata) {
         case (0):
-        	addSlotToContainer(new SlotInput(tileEntity,1,cruxtruderInputX,cruxtruderInputY,Minestuck.rawCruxite.itemID));
+        	addSlotToContainer(new SlotInput(tileEntity,1,cruxtruderInputX,cruxtruderInputY,Minestuck.rawCruxite));
     		addSlotToContainer(new SlotOutput(tileEntity,0,cruxtruderOutputX,cruxtruderOutputY));
         	break;
         case (1):
         	addSlotToContainer(new Slot(tileEntity,1,designexInput1X,designexInput1Y));
         	addSlotToContainer(new Slot(tileEntity,2,designexInput2X,designexInput2Y));
-        	addSlotToContainer(new SlotInput(tileEntity,3,designexCardsX,designexCardsY,Minestuck.blankCard.itemID));
+        	addSlotToContainer(new SlotInput(tileEntity,3,designexCardsX,designexCardsY,Minestuck.blankCard));
         	addSlotToContainer(new SlotOutput(tileEntity,0,designexOutputX,designexOutputY));
         	break;
         case (2):
-        	addSlotToContainer(new SlotInput(tileEntity,1,latheCardX,latheCardY,Minestuck.punchedCard.itemID));
-        	addSlotToContainer(new SlotInput(tileEntity,2,latheDowelX,latheDowelY,Minestuck.cruxiteDowel.itemID));
+        	addSlotToContainer(new SlotInput(tileEntity,1,latheCardX,latheCardY,Minestuck.punchedCard));
+        	addSlotToContainer(new SlotInput(tileEntity,2,latheDowelX,latheDowelY,Minestuck.cruxiteDowel));
         	addSlotToContainer(new SlotOutput(tileEntity,0,latheOutputX,latheOutputY));
         	break;
         case (3):
-        	addSlotToContainer(new SlotDualInput(tileEntity,1,alchemiterInputX,alchemiterInputY,Minestuck.cruxiteDowelCarved.itemID,Minestuck.cruxiteDowel.itemID));
+        	addSlotToContainer(new SlotDualInput(tileEntity,1,alchemiterInputX,alchemiterInputY, Minestuck.cruxiteDowelCarved, Minestuck.cruxiteDowel));
         	addSlotToContainer(new SlotOutput(tileEntity,0,alchemiterOutputX,alchemiterOutputY));
         	break;
         case (4):
@@ -125,7 +125,7 @@ public class ContainerMachine extends Container {
             	} else if (slotNumber > 1) {
             		//if it's an inventory slot with valid contents
             		//Debug.print("item ID of " + itemstackOrig.itemID + ". Expected " + Minestuck.rawCruxite.itemID);
-            		if (itemstackOrig.itemID == Minestuck.rawCruxite.itemID) {
+            		if (itemstackOrig.getItem() == Minestuck.rawCruxite) {
             			//Debug.print("Transferring...");
             			result = mergeItemStack(itemstackOrig,0,1,false);
             		}
@@ -137,7 +137,7 @@ public class ContainerMachine extends Container {
             		result = mergeItemStack(itemstackOrig,4,allSlots,false);
             	} else if (slotNumber > 3) {
             		//if it's an inventory slot with valid contents
-            		if (itemstackOrig.itemID == Minestuck.blankCard.itemID) {
+            		if (itemstackOrig.getItem() == Minestuck.blankCard) {
             			result = mergeItemStack(itemstackOrig,2,3,false);
             		} else {
             			result = mergeItemStack(itemstackOrig,0,2,false);
@@ -150,9 +150,9 @@ public class ContainerMachine extends Container {
             		result = mergeItemStack(itemstackOrig,3,allSlots,false);
             	} else if (slotNumber > 2) {
             		//if it's an inventory slot with valid contents
-            		if (itemstackOrig.itemID == Minestuck.punchedCard.itemID) {
+            		if (itemstackOrig.getItem() == Minestuck.punchedCard) {
             			result = mergeItemStack(itemstackOrig,0,1,false);
-            		} else if (itemstackOrig.itemID == Minestuck.cruxiteDowel.itemID) {
+            		} else if (itemstackOrig.getItem() == Minestuck.cruxiteDowel) {
             			result = mergeItemStack(itemstackOrig,1,2,false);
             		}
             	}
@@ -163,7 +163,7 @@ public class ContainerMachine extends Container {
             		result = mergeItemStack(itemstackOrig,2,allSlots,false);
             	} else if (slotNumber > 1) {
             		//if it's an inventory slot with valid contents
-            		if (itemstackOrig.itemID == Minestuck.cruxiteDowelCarved.itemID || itemstackOrig.itemID == Minestuck.cruxiteDowel.itemID) {
+            		if (itemstackOrig.getItem() == Minestuck.cruxiteDowelCarved || itemstackOrig.getItem() == Minestuck.cruxiteDowel) {
             			result = mergeItemStack(itemstackOrig,0,1,false);
             		}
             	}

@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.gen.lands;
 import java.util.ArrayList;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 
 public abstract class LandAspect 
 {
@@ -10,13 +11,13 @@ public abstract class LandAspect
 		 * Returns the blocks that can possibly be use in the land's underground blocks.
 		 * @return
 		 */
-		public abstract int[][] getSurfaceBlocks();
+		public abstract BlockWithMetadata[] getSurfaceBlocks();
 		
 		/**
 		 * Returns the blocks that can possibly be use in the land's topmost layer of blocks.
 		 * @return
 		 */
-		public abstract int[][] getUpperBlocks();
+		public abstract BlockWithMetadata[] getUpperBlocks();
 		
 		/**
 		 * Unused currently. Will be used to generate the land's terrain.
@@ -28,12 +29,12 @@ public abstract class LandAspect
 		 * Returns the block that is a part of the land's ocean.
 		 * @return
 		 */
-		public int getOceanBlock()
+		public Block getOceanBlock()
 		{
-			return Block.waterStill.blockID;
+			return Blocks.water;
 		}
 		
-		public int getRiverBlock()
+		public Block getRiverBlock()
 		{
 			return getOceanBlock();
 		}

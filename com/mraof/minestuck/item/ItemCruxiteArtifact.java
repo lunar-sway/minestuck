@@ -5,10 +5,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -26,20 +27,20 @@ import com.mraof.minestuck.world.gen.lands.LandHelper;
 
 public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 {
-	List<Integer> commonBlocks = new ArrayList<Integer>();
+	List<Block> commonBlocks = new ArrayList<Block>();
 	int destinationDimension = Minestuck.landDimensionIdStart;
-	public ItemCruxiteArtifact(int par1, int par2, boolean par3) 
+	public ItemCruxiteArtifact(int par2, boolean par3) 
 	{
-		super(par1, par2, par3);
+		super(1, par2, par3);
 		this.setCreativeTab(Minestuck.tabMinestuck);
 		setUnlocalizedName("cruxiteArtifact");
-		commonBlocks.add(Block.stone.blockID);
-		commonBlocks.add(Block.grass.blockID);
-		commonBlocks.add(Block.dirt.blockID);
-		commonBlocks.add(Block.sand.blockID);
-		commonBlocks.add(Block.sandStone.blockID);
-		commonBlocks.add(Block.waterStill.blockID);
-		commonBlocks.add(Block.waterMoving.blockID);
+		commonBlocks.add(Blocks.stone);
+		commonBlocks.add(Blocks.grass);
+		commonBlocks.add(Blocks.dirt);
+		commonBlocks.add(Blocks.sand);
+		commonBlocks.add(Blocks.sandstone);
+		commonBlocks.add(Blocks.water);
+		commonBlocks.add(Blocks.flowing_water);
 	}
 	@Override
 	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
@@ -87,15 +88,15 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 					minY = minY < 0 ? 0 : minY;
 					for(int blockY = minY; blockY < 256; blockY++)
 					{
-						int blockId = worldserver0.getBlockId(blockX, blockY, blockZ);
+						Block block = worldserver0.getBlock(blockX, blockY, blockZ);
 						int metadata = worldserver0.getBlockMetadata(blockX, blockY, blockZ);
-						TileEntity te = worldserver0.getBlockTileEntity(blockX, blockY, blockZ);
-						if(blockId != 0 && blockX < x + Minestuck.artifactRange && blockZ < z + nextWidth && blockZ > z - nextWidth)
-							worldserver1.setBlock(blockX + 1, blockY, blockZ, Block.dirt.blockID, 0, 0);
-						if(blockId != 0 && blockZ < z + zWidth)
-							worldserver1.setBlock(blockX, blockY, blockZ + 1, Block.stone.blockID, 0, 0);
-						if(blockId != Block.bedrock.blockID)
-							worldserver1.setBlock(blockX, blockY, blockZ, blockId, metadata, 2);
+						TileEntity te = worldserver0.getTileEntity(blockX, blockY, blockZ);
+						if(block != Blocks.air && blockX < x + Minestuck.artifactRange && blockZ < z + nextWidth && blockZ > z - nextWidth)
+							worldserver1.setBlock(blockX + 1, blockY, blockZ, Blocks.dirt, 0, 0);
+						if(block != Blocks.air && blockZ < z + zWidth)
+							worldserver1.setBlock(blockX, blockY, blockZ + 1, Blocks.stone, 0, 0);
+						if(block != Blocks.bedrock)
+							worldserver1.setBlock(blockX, blockY, blockZ, block, metadata, 2);
 						if((te) != null)
 						{
 							TileEntity te1 = null;
@@ -106,7 +107,7 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 							te.writeToNBT(nbt);
 							te1.readFromNBT(nbt);
 							te1.yCoord++;//prevents TileEntity from being invalidated
-							worldserver1.setBlockTileEntity(blockX, blockY, blockZ, te1);
+							worldserver1.setTileEntity(blockX, blockY, blockZ, te1);
 						};
 					}
 				}
@@ -118,12 +119,12 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 				for(int blockZ = z - zWidth; blockZ <= z + zWidth; blockZ++)
 				{
 					double radius = Math.sqrt(((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2);
-					int minY =  y - (int) (Math.sqrt(Minestuck.artifactRange*Minestuck.artifactRange - radius*radius));
+					int minY =  y - (int) (Math.sqrt(Minestuck.artifactRange * Minestuck.artifactRange - radius*radius));
 					minY = minY < 0 ? 0 : minY;
 					for(int blockY = minY; blockY < 256; blockY++)
 					{
-						int blockId = worldserver0.getBlockId(blockX, blockY, blockZ);
-						if(blockId != Block.bedrock.blockID)
+						Block block = worldserver0.getBlock(blockX, blockY, blockZ);
+						if(block != Blocks.bedrock)
 							worldserver0.setBlockToAir(blockX, blockY, blockZ);
 					}
 				}
@@ -140,7 +141,7 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 		}
 	}
 	@Override
-	public void registerIcons(IconRegister iconRegister) 
+	public void registerIcons(IIconRegister iconRegister) 
 	{
 		this.itemIcon = iconRegister.registerIcon("minestuck:CruxiteApple");
 	}

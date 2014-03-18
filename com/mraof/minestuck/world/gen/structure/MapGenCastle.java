@@ -6,7 +6,7 @@ package com.mraof.minestuck.world.gen.structure;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.world.biome.SpawnListEntry;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.StructureStart;
 
@@ -18,11 +18,11 @@ import com.mraof.minestuck.entity.carapacian.EntityBlackPawn;
  */
 public class MapGenCastle extends MapGenStructure
 {
-    private List spawnList = new ArrayList();
+    private List<BiomeGenBase.SpawnListEntry> spawnList = new ArrayList<BiomeGenBase.SpawnListEntry>();
 
     public MapGenCastle()
     {
-        this.spawnList.add(new SpawnListEntry(EntityBlackPawn.class, 10, 2, 3));
+        this.spawnList.add(new BiomeGenBase.SpawnListEntry(EntityBlackPawn.class, 10, 2, 3));
     }
 
     public List getSpawnList()

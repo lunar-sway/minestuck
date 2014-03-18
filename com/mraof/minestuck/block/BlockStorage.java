@@ -4,10 +4,11 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 
 import com.mraof.minestuck.Minestuck;
 
@@ -17,21 +18,22 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockStorage extends Block {
 	public static final String[] iconNames = {"CruxiteBlock","GenericObject"};
-	private Icon[] textures;
-	
-	public BlockStorage(int id) {
-		super(id,Material.rock);
+	private IIcon[] textures;
+
+	public BlockStorage() {
+		super(Material.rock);
 		
-		setUnlocalizedName("blockStorage");
+		setBlockName("blockStorage");
 		setHardness(3.0F);
 		this.setCreativeTab(Minestuck.tabMinestuck);
 	}
-	
+
 	@Override
-	public Icon getIcon(int side, int metadata) 
+	public IIcon getIcon(int side, int metadata) 
 	{
 		return textures[metadata];
 	}
+	
 	@Override
 	public int damageDropped(int metadata) 
 	{
@@ -39,18 +41,20 @@ public class BlockStorage extends Block {
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(int unknown, CreativeTabs tab, List subItems) 
+	@Override
+	public void getSubBlocks(Item unknown, CreativeTabs tab, List subItems) 
 	{
 		for(int i = 0; i < iconNames.length; i++)
 			subItems.add(new ItemStack(this, 1, i));
 	}
-	
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IconRegister par1IconRegister)
-    {
-        this.textures = new Icon[iconNames.length];
 
-        for (int i = 0; i < this.textures.length; i++)
-            this.textures[i] = par1IconRegister.registerIcon("minestuck:" + iconNames[i]);
-    }
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerBlockIcons(IIconRegister par1IconRegister)
+	{
+		this.textures = new IIcon[iconNames.length];
+
+		for (int i = 0; i < this.textures.length; i++)
+			this.textures[i] = par1IconRegister.registerIcon("minestuck:" + iconNames[i]);
+	}
 }

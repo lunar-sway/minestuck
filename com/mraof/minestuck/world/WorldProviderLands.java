@@ -3,8 +3,8 @@ package com.mraof.minestuck.world;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.world.EnumGameType;
 import net.minecraft.world.WorldProvider;
+import net.minecraft.world.WorldSettings.GameType;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.WorldChunkManagerHell;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -61,7 +61,7 @@ public class WorldProviderLands extends WorldProvider
 		ChunkCoordinates chunkcoordinates = new ChunkCoordinates(this.worldObj.getSpawnPoint());
 //		Debug.printf("Respawn Coordinates: %d, %d, %d", chunkcoordinates.posX, chunkcoordinates.posY, chunkcoordinates.posZ );
 
-		boolean isAdventure = worldObj.getWorldInfo().getGameType() == EnumGameType.ADVENTURE;
+		boolean isAdventure = worldObj.getWorldInfo().getGameType() == GameType.ADVENTURE;
 		int spawnFuzz = 12;
 		int spawnFuzzHalf = spawnFuzz / 2;
 
@@ -111,7 +111,7 @@ public class WorldProviderLands extends WorldProvider
 	{
 		super.registerWorldChunkManager();
 		isHellWorld = false;
-		this.worldChunkMgr = new WorldChunkManagerHell(BiomeGenBase.sky, 0.5F, 0.5F);
+		this.worldChunkMgr = new WorldChunkManagerHell(BiomeGenBase.sky, 0.5F);
 		this.hasNoSky = false;
 	}
 }

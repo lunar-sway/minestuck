@@ -1,20 +1,15 @@
 package com.mraof.minestuck.network;
 
+import io.netty.buffer.ByteBuf;
+
 import java.util.EnumSet;
 
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.entity.player.EntityPlayer;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
 import com.mraof.minestuck.network.skaianet.ComputerData;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
-import com.mraof.minestuck.util.Debug;
 
-import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 
 /**
@@ -31,11 +26,8 @@ public class ClearMessagePacket extends MinestuckPacket {
 	int program;
 	
 	public static void send(ComputerData data, int program){
-		Packet250CustomPayload packet = new Packet250CustomPayload();
-		packet.channel = "Minestuck";
-		packet.data = MinestuckPacket.makePacket(Type.CLEAR, data, program);
-		packet.length = packet.data.length;
-		PacketDispatcher.sendPacketToServer(packet);
+		MinestuckPacket packet = MinestuckPacket.makePacket(Type.CLEAR, data, program);
+		MinestuckChannelHandler.sendToServer(packet);
 	}
 	
 	public ClearMessagePacket() {
@@ -43,36 +35,35 @@ public class ClearMessagePacket extends MinestuckPacket {
 	}
 	
 	@Override
-	public byte[] generatePacket(Object... data) {
-		ByteArrayDataOutput dat = ByteStreams.newDataOutput();
-		ComputerData cd = (ComputerData)data[0];
+	public MinestuckPacket generatePacket(Object... dat) {
+		ComputerData cd = (ComputerData)dat[0];
 		
-		dat.writeInt(cd.getX());
-		dat.writeInt(cd.getY());
-		dat.writeInt(cd.getZ());
-		dat.writeInt(cd.getDimension());
-		dat.writeInt((Integer)data[1]);
-		
-		return dat.toByteArray();
-	}
-
-	@Override
-	public MinestuckPacket consumePacket(byte[] data) {
-		ByteArrayDataInput dat = ByteStreams.newDataInput(data);
-		computer = new ComputerData("",dat.readInt(),dat.readInt(),dat.readInt(),dat.readInt());
-		program = dat.readInt();
+		data.writeInt(cd.getX());
+		data.writeInt(cd.getY());
+		data.writeInt(cd.getZ());
+		data.writeInt(cd.getDimension());
+		data.writeInt((Integer)dat[1]);
 		
 		return this;
 	}
 
 	@Override
-	public void execute(INetworkManager network, MinestuckPacketHandler minestuckPacketHandler, Player player, String userName) {
+	public MinestuckPacket consumePacket(ByteBuf data) {
+		
+		computer = new ComputerData("",data.readInt(),data.readInt(),data.readInt(),data.readInt());
+		program = data.readInt();
+		
+		return this;
+	}
+
+	@Override
+	public void execute(EntityPlayer player) {
 		
 		TileEntityComputer te = SkaianetHandler.getComputer(computer);
 		
 		if(te != null){
 			te.latestmessage.put(program, "");
-			te.worldObj.markBlockForUpdate(te.xCoord, te.yCoord, te.zCoord);
+			te.getWorldObj().markBlockForUpdate(te.xCoord, te.yCoord, te.zCoord);
 		}
 	}
 	

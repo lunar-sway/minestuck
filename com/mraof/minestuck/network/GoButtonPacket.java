@@ -1,18 +1,16 @@
 package com.mraof.minestuck.network;
 
+import io.netty.buffer.ByteBuf;
+
 import java.util.EnumSet;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.INetworkManager;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
 import com.mraof.minestuck.inventory.ContainerMachine;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.util.Debug;
 
-import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 
 public class GoButtonPacket extends MinestuckPacket {
@@ -25,29 +23,27 @@ public class GoButtonPacket extends MinestuckPacket {
 	}
 
 	@Override
-	public byte[] generatePacket(Object... data) 
+	public MinestuckPacket generatePacket(Object... dat) 
 	{
-		ByteArrayDataOutput dat = ByteStreams.newDataOutput();
-		dat.writeBoolean((Boolean) data[0]);
-		dat.writeBoolean((Boolean) data[1]);
-		return dat.toByteArray();
-	}
-
-	@Override
-	public MinestuckPacket consumePacket(byte[] data) 
-	{
-		ByteArrayDataInput dat = ByteStreams.newDataInput(data);
-		
-		newMode = dat.readBoolean();
-		overrideStop = dat.readBoolean();
+		data.writeBoolean((Boolean) dat[0]);
+		data.writeBoolean((Boolean) dat[1]);
 		
 		return this;
 	}
 
 	@Override
-	public void execute(INetworkManager network, MinestuckPacketHandler handler, Player player, String userName)
+	public MinestuckPacket consumePacket(ByteBuf data) 
 	{
-				TileEntityMachine te = ((ContainerMachine) ((EntityPlayerMP)player).openContainer).tileEntity;
+		newMode = data.readBoolean();
+		overrideStop = data.readBoolean();
+		
+		return this;
+	}
+
+	@Override
+	public void execute(EntityPlayer player)
+	{
+		TileEntityMachine te = ((ContainerMachine) ((EntityPlayerMP)player).openContainer).tileEntity;
 		
 		if (te == null) {
 			Debug.print("Invalid TE!");

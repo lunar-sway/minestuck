@@ -1,20 +1,19 @@
 package com.mraof.minestuck.network;
 
+import io.netty.buffer.ByteBuf;
+
 import java.util.ArrayList;
 import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.INetworkManager;
 
 import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 
-import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 
 public class SkaianetInfoPacket extends MinestuckPacket {
@@ -29,53 +28,66 @@ public class SkaianetInfoPacket extends MinestuckPacket {
 	public ArrayList<SburbConnection> connections;
 	
 	@Override
-	public byte[] generatePacket(Object... data) {
-		ByteArrayDataOutput dat = ByteStreams.newDataOutput();
-		dat.write(((String)data[0]+'\n').getBytes());	//Player name
-		if(data.length == 1)	//If request from client
-			return dat.toByteArray();
-		dat.writeBoolean((Boolean)data[1]);
-		dat.writeBoolean((Boolean)data[2]);
+	public MinestuckPacket generatePacket(Object... dat) {
 		
-		int size = (Integer)data[3];
-		dat.writeInt(size);
-		for(int i = 0; i < size; i++)
-			dat.write(((String)data[i+4]+'\n').getBytes());
+		writeString(data, dat[0].toString()+'\n');
 		
-		for(int i = size+4; i < data.length; i++){
-			dat.write(((SburbConnection)data[i]).getBytes());
+		if(dat.length == 1) {	//If request from client
+			return this;
 		}
+		data.writeBoolean((Boolean)dat[1]);
+		data.writeBoolean((Boolean)dat[2]);
 		
-		return dat.toByteArray();
-	}
-
-	@Override
-	public MinestuckPacket consumePacket(byte[] data) {
-		ByteArrayDataInput dat = ByteStreams.newDataInput(data);
-		
-		this.player = dat.readLine();
-		try{
-			isClientResuming = dat.readBoolean();
-			isServerResuming = dat.readBoolean();
-			int size = dat.readInt();
-			openServers = new ArrayList();
-			for(int i = 0; i < size; i++)
-				openServers.add(dat.readLine());
-			connections = new ArrayList();
-			while(true)
-				connections.add(SkaiaClient.getConnection(dat));
-		} catch(IllegalStateException e){}	//Because I don't see a dat.available(); method or anything similar.
+		int size = (Integer)dat[3];
+		data.writeInt(size);
+		for(int i = 0; i < size; i++)
+			writeString(data,((String)dat[i+4]+'\n'));
+//		
+		for(int i = size+4; i < dat.length; i++){
+			data.writeBytes(((SburbConnection)dat[i]).getBytes());
+		}
+//		Debug.print("Generated a "+(data.writerIndex())+" bytes long packet.");
+//		data.readerIndex(0);
+//		Debug.print("Username reads: "+readLine(data)+", is supposed to be "+dat[0]);
 		
 		return this;
 	}
 
 	@Override
-	public void execute(INetworkManager network, MinestuckPacketHandler minestuckPacketHandler, Player player, String userName) {
+	public MinestuckPacket consumePacket(ByteBuf data) {
+		
+		this.player = readLine(data);
+		Debug.print(player);
+		if(!player.equals(".client"))
+			for(char c : player.toCharArray())
+				Debug.print(c+","+(short)c);
+		if(data.readableBytes() == 0)
+			return this;
+		isClientResuming = data.readBoolean();
+		isServerResuming = data.readBoolean();
+		int size = data.readInt();
+		openServers = new ArrayList();
+		for(int i = 0; i < size; i++)
+			openServers.add(readLine(data));
+		connections = new ArrayList<SburbConnection>();
+		byte[] b = new byte[data.readableBytes()];
+		data.readBytes(b);
+		ByteArrayDataInput dat = ByteStreams.newDataInput(b);
+		try{
+			while(true)
+				connections.add(SkaiaClient.getConnection(dat));	//TODO change parameter of this method.
+		} catch(IllegalStateException e){}
+		
+		return this;
+	}
+
+	@Override
+	public void execute(EntityPlayer player) {
 		Debug.print("Recived info packet: "+(((EntityPlayer)player).worldObj.isRemote?"data.":"request."));
 		
 		if(((EntityPlayer)player).worldObj.isRemote)
 			SkaiaClient.consumePacket(this);
-		else SkaianetHandler.requestInfo(((EntityPlayer)player).username, this.player);
+		else SkaianetHandler.requestInfo(((EntityPlayer)player).getCommandSenderName(), this.player);
 		
 	}
 

@@ -1,19 +1,16 @@
 package com.mraof.minestuck.network;
 
+import io.netty.buffer.ByteBuf;
+
 import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.INetworkManager;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.EnumClass;
 import com.mraof.minestuck.util.TitleHelper;
 
-import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 
 public class TitlePacket extends MinestuckPacket 
@@ -26,32 +23,29 @@ public class TitlePacket extends MinestuckPacket
 	}
 
 	@Override
-	public byte[] generatePacket(Object... data) 
+	public MinestuckPacket generatePacket(Object... dat) 
 	{
-		ByteArrayDataOutput dat = ByteStreams.newDataOutput();
-		dat.writeInt(TitleHelper.getIntFromClass((EnumClass) data[0]));
-		dat.writeInt(TitleHelper.getIntFromAspect((EnumAspect) data[1]));
-		return dat.toByteArray();
-	}
-
-	@Override
-	public MinestuckPacket consumePacket(byte[] data) 
-	{
-		ByteArrayDataInput dat = ByteStreams.newDataInput(data);
-		heroClass = dat.readInt();
-		heroAspect = dat.readInt();
+		data.writeInt(TitleHelper.getIntFromClass((EnumClass) dat[0]));
+		data.writeInt(TitleHelper.getIntFromAspect((EnumAspect) dat[1]));
+		
 		return this;
 	}
 
 	@Override
-	public void execute(INetworkManager network, MinestuckPacketHandler handler, Player player, String userName)
+	public MinestuckPacket consumePacket(ByteBuf data) 
 	{
-		EntityPlayer entityPlayer = (EntityPlayer)player;
-		
-		if(entityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getTags().size() == 0)
-			entityPlayer.getEntityData().setCompoundTag(EntityPlayer.PERSISTED_NBT_TAG, new NBTTagCompound());
-		entityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Class", this.heroClass);
-		entityPlayer.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Aspect", this.heroAspect);
+		heroClass = data.readInt();
+		heroAspect = data.readInt();
+		return this;
+	}
+
+	@Override
+	public void execute(EntityPlayer player)
+	{
+		if(player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).hasNoTags())
+			player.getEntityData().setTag(EntityPlayer.PERSISTED_NBT_TAG, new NBTTagCompound());
+		player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Class", this.heroClass);
+		player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Aspect", this.heroAspect);
 	}
 
 	@Override
