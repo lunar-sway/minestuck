@@ -28,6 +28,7 @@ import com.mraof.minestuck.entity.underling.EntityBasilisk;
 import com.mraof.minestuck.entity.underling.EntityGiclops;
 import com.mraof.minestuck.entity.underling.EntityImp;
 import com.mraof.minestuck.entity.underling.EntityOgre;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.lands.BlockWithMetadata;
 import com.mraof.minestuck.world.gen.lands.ILandDecorator;
 import com.mraof.minestuck.world.gen.lands.LandAspect;
@@ -152,25 +153,25 @@ public class ChunkProviderLands implements IChunkProvider
 		for(int x = 0; x < 16; x++)
 			for(int z = 0; z < 16; z++)
 			{
-				chunkBlocks[x + z * 16] = Blocks.bedrock;
+				chunkBlocks[x * 4096 | z * 256] = Blocks.bedrock;
 				int y;
 				int currentBlockOffset;
 				for(y = 1; y < topBlock[x * 16 + z] - 1; y++)
 				{
 					//currentBlockOffset = (int) Math.abs(generated1[x + z * 256 + y * 16]);
-					chunkBlocks[x + z * 16 + y * 256] = upperBlock.block;
-					chunkMetadata[x + z * 16 + y * 256] = upperBlock.metadata;
+					chunkBlocks[x * 4096 | z * 256 | y] = upperBlock.block;
+					chunkMetadata[x * 4096 | z * 256 | y] = upperBlock.metadata;
 				}
 
-				
-				chunkBlocks[x + z * 16 + y * 256] = surfaceBlock.block;
-				chunkMetadata[x + z * 16 + y * 256] = surfaceBlock.metadata;
+				//location copied from the chunk constructor: x * chunkBlocks.length/256 * 16 | z * blockSize/256 | y
+				chunkBlocks[x * 4096 | z * 256 | y] = surfaceBlock.block;
+				chunkMetadata[x * 4096 | z * 256 | y] = surfaceBlock.metadata;
 
 				for(int i = y + topRiverBlock[x * 16 + z]; y < i; y++)
-					chunkBlocks[x + z * 16 + y * 256] = this.riverBlock;
+					chunkBlocks[x * 4096 | z * 256 | y] = this.riverBlock;
 
 				for(; y < 63; y++)
-					chunkBlocks[x + z * 16 + y * 256] = this.oceanBlock;
+					chunkBlocks[x * 4096 | z * 256 | y] = this.oceanBlock;
 
 			}
 		Chunk chunk = new Chunk(this.landWorld, chunkBlocks, chunkMetadata, chunkX, chunkZ);

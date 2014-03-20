@@ -2,12 +2,12 @@ package com.mraof.minestuck.network;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetHandlerPlayServer;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.util.Debug;
 
@@ -25,6 +25,7 @@ public class MinestuckChannelHandler extends FMLIndexedMessageToMessageCodec<Min
 	public MinestuckChannelHandler() {
 		for(Type type : Type.values())
 			addDiscriminator(type.ordinal(), type.packetType);
+		Debug.print(this.getClass().getClassLoader().getClass().getName());
 	}
 	
 	@Override
@@ -39,7 +40,7 @@ public class MinestuckChannelHandler extends FMLIndexedMessageToMessageCodec<Min
 		msg.consumePacket(source);
 		switch (FMLCommonHandler.instance().getEffectiveSide()) {
 		case CLIENT:
-			msg.execute(Minecraft.getMinecraft().thePlayer);
+			msg.execute(ClientProxy.getPlayer()); //Prevents the classloader from crashing the server.
 			break;
 		case SERVER:
 			INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();

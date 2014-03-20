@@ -104,8 +104,8 @@ public class ChunkProviderSkaia implements IChunkProvider
 			for(int z = 0; z < 16; z++)
 				for(int y = 0; y <= topBlock[x * 16 + z]; y++)
 				{
-					chunkBlocks[x + z * 16 + y * 256] = chessTile;
-					chunkMetadata[x + z * 16 + y * 256] = chessTileMetadata;
+					chunkBlocks[x * 4096 | z * 256 | y] = chessTile;
+					chunkMetadata[x * 4096 | z * 256 | y] = chessTileMetadata;
 				}
 		//y * 256, z * 16, x
 		Chunk chunk = new Chunk(this.skaiaWorld, chunkBlocks, chunkMetadata, chunkX, chunkZ);

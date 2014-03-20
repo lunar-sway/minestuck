@@ -14,6 +14,7 @@ import net.minecraft.server.MinecraftServer;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.UsernameHandler;
 //import com.mraof.minestuck.editmode.ServerEditHandler;
 
@@ -46,11 +47,13 @@ public class ClientEditPacket extends MinestuckPacket {
 
 	@Override
 	public void execute(EntityPlayer player) {
-		
 		EntityPlayerMP playerMP = MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(UsernameHandler.decode(target));
-		if(playerMP != null && (!Minestuck.privateComputers || playerMP.getCommandSenderName().equals(this.username))) {
+		if(playerMP != null && (!Minestuck.privateComputers || player.getCommandSenderName().equals(UsernameHandler.decode(username)))) {
 			SburbConnection c = SkaianetHandler.getClientConnection(target);
-			if(c == null || !c.getServerName().equals(username) || !SkaianetHandler.giveItems(target))
+			Debug.print(c == null);
+			Debug.print(!c.getServerName().equals(username));
+			Debug.print(!(c.isMain() || SkaianetHandler.giveItems(target)));
+			if(c == null || !c.getServerName().equals(username) || !(c.isMain() || SkaianetHandler.giveItems(target)))
 				return;
 			for(int i = 0; i < c.givenItems().length; i++)
 				if(i == 4) {
@@ -61,12 +64,15 @@ public class ClientEditPacket extends MinestuckPacket {
 					card.stackTagCompound.setString("contentID", Item.itemRegistry.getNameForObject(Minestuck.cruxiteArtifact));
 					card.stackTagCompound.setInteger("contentMeta", 0);
 					if(!playerMP.inventory.hasItemStack(card))
-						c.givenItems()[i] = c.givenItems()[i] || playerMP.inventory.addItemStackToInventory(card);
+						c.givenItems()[i] = playerMP.inventory.addItemStackToInventory(card) || c.givenItems()[i];
 				} else {
 					ItemStack machine = new ItemStack(Minestuck.blockMachine, 1, i);
+					if(i == 1 && !c.enteredGame())
+						continue;
 					if(!playerMP.inventory.hasItemStack(machine))
-						c.givenItems()[i] = c.givenItems()[i] || playerMP.inventory.addItemStackToInventory(machine);
+						c.givenItems()[i] = playerMP.inventory.addItemStackToInventory(machine) || c.givenItems()[i];
 				}
+			MinecraftServer.getServer().getConfigurationManager().syncPlayerInventory(playerMP);
 		}
 		
 //		if(username == null)

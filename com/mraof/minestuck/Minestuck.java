@@ -479,9 +479,14 @@ public class Minestuck
 		}
 //		MinecraftForge.EVENT_BUS.register(ServerEditHandler.instance);
 		MinecraftForge.EVENT_BUS.register(MinestuckStatsHandler.instance);
-		
 		//register channel handler
-		channels = NetworkRegistry.INSTANCE.newChannel("Minestuck", MinestuckChannelHandler.instance);
+		channels = 
+				NetworkRegistry.
+				INSTANCE
+				.newChannel(
+						"Minestuck",
+						MinestuckChannelHandler.
+						instance);
 		
 		//Register structures
 		MapGenStructureIO.registerStructure(StructureCastleStart.class, "SkaiaCastle");

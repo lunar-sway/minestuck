@@ -3,6 +3,7 @@ package com.mraof.minestuck.client;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 
 import com.mraof.minestuck.CommonProxy;
@@ -47,6 +48,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ClientProxy extends CommonProxy
 {
+	
+	public static EntityPlayer getPlayer() {	//This seems to prevent the server from crashing on startup?
+		return Minecraft.getMinecraft().thePlayer;
+	}
+	
 	@SideOnly(Side.CLIENT)
     public static void registerRenderers() 
 	{

@@ -67,7 +67,8 @@ public class SkaianetHandler {
 	
 	public static boolean giveItems(String player){
 		SburbConnection c = getClientConnection(player);
-		if(c != null && !c.isMain){
+		if(c != null && !c.isMain && getAssociatedPartner(c.getClientName(), true).isEmpty()
+				&& getAssociatedPartner(c.getServerName(), false).isEmpty()) {
 			c.isMain = true;
 			SessionHandler.onFirstItemGiven(c);
 			updatePlayer(c.getClientName());

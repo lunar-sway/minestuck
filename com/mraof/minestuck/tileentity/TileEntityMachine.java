@@ -6,10 +6,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
 import com.mraof.minestuck.Minestuck;
-//import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.CombinationRegistry;
 import com.mraof.minestuck.util.GristHelper;
@@ -148,18 +151,18 @@ public class TileEntityMachine extends TileEntity implements IInventory {
             }
             tagCompound.setTag("Inventory", itemList);
     }
-//    @Override
-//    public Packet getDescriptionPacket() 
-//    {
-//    	NBTTagCompound tagCompound = new NBTTagCompound();
-//    	this.func_145841_b(tagCompound);
-//    	return new Packet132TileEntityData(this.field_145851_c, this.field_145848_d, this.field_145849_e, 2, tagCompound);
-//    }
-//    @Override
-//    public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) 
-//    {
-//    	this.func_145839_a(pkt.data);
-//    }
+    @Override
+    public Packet getDescriptionPacket() 
+    {
+    	NBTTagCompound tagCompound = new NBTTagCompound();
+    	this.writeToNBT(tagCompound);
+    	return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 2, tagCompound);
+    }
+    @Override
+    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) 
+    {
+    	this.readFromNBT(pkt.func_148857_g());
+    }
 
     @Override
     public String getInventoryName() {
@@ -305,13 +308,13 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			
 			if(!worldObj.isRemote) {
 				GristHelper.decrease(UsernameHandler.encode(owner.getCommandSenderName()), GristRegistry.getGristConversion(newItem));
-//				MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(owner.getCommandSenderName()));
+				MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(owner.getCommandSenderName()));
 			}
 			break;
 		case (4):
 			if(!worldObj.isRemote) {
 				GristHelper.increase(UsernameHandler.encode(owner.getCommandSenderName()), GristRegistry.getGristConversion(inv[1]));
-//				MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(owner.getCommandSenderName()));
+				MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(owner.getCommandSenderName()));
 			}
 			this.decrStackSize(1, 1);
 			break;
