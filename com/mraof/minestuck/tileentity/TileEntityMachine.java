@@ -210,15 +210,30 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		case (0):
 			return (this.inv[1] != null && (this.inv[0] == null || this.inv[0].stackSize < 64));
 		case (1):
-		 if (this.inv[1] != null && this.inv[2] != null) {
-			return (this.inv[3] != null && this.inv[0] == null && CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(this.inv[1],true), AlchemyRecipeHandler.getDecodedItem(this.inv[2],true),this.mode) != null);
-		 } else if (this.inv[1] != null || this.inv[2] != null) {
-			return (this.inv[3] != null && this.inv[0] == null);
+		if (this.inv[1] != null && this.inv[2] != null) {	//&& or || alchemy
+			if(inv[3] != null) {
+				ItemStack outputItem = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(this.inv[1],true), AlchemyRecipeHandler.getDecodedItem(this.inv[2],true),this.mode);
+				if(inv[3].hasTagCompound() && inv[3].getTagCompound().getBoolean("punched"))
+					outputItem = CombinationRegistry.getCombination(outputItem, AlchemyRecipeHandler.getDecodedItem(inv[3]), CombinationRegistry.MODE_OR);
+				if(outputItem != null)
+					return (this.inv[0] == null || inv[0].stackSize < 16 && outputItem.isItemEqual(AlchemyRecipeHandler.getDecodedItem(inv[0])));
+			}
+			return false;
+		} else if (this.inv[1] != null || this.inv[2] != null) {	//Register item to card
+			if(inv[3] != null) {
+				ItemStack input = (inv[1] == null?inv[2]:inv[1]);
+				ItemStack output = (input.getItem().equals(Minestuck.captchaCard)&&input.hasTagCompound()&&input.getTagCompound().getBoolean("punched")
+						?AlchemyRecipeHandler.getDecodedItem(input):input);
+				if(inv[3].hasTagCompound() && inv[3].getTagCompound().getBoolean("punched"))
+					output = CombinationRegistry.getCombination(output, AlchemyRecipeHandler.getDecodedItem(inv[3]), CombinationRegistry.MODE_OR);
+				return (output != null && (inv[0] == null || inv[0].stackSize < 16 && AlchemyRecipeHandler.getDecodedItem(inv[0]).isItemEqual(output)));
+			}
 		} else {
 			return false;
 		}
 		case (2):
-			return (this.inv[1] != null && this.inv[2] != null && this.inv[0] == null);
+			return (this.inv[1] != null && this.inv[2] != null && !(inv[2].hasTagCompound() && inv[2].getTagCompound().hasKey("contentID")) && (this.inv[0] == null ||
+			inv[0].stackSize < 16 && AlchemyRecipeHandler.getDecodedItem(inv[0]).isItemEqual(AlchemyRecipeHandler.getDecodedItem(inv[1]))));
 		case (3):
 			if (this.inv[1] != null && this.owner != null) {
 				//Check owner's cache: Do they have everything they need?
@@ -251,24 +266,30 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			break;
 		case (1):
 			//Create a new card, using CombinationRegistry
-			ItemStack outputItem = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(this.inv[1],true),AlchemyRecipeHandler.getDecodedItem(this.inv[2],true),this.mode);
-			ItemStack outputCard = new ItemStack(Minestuck.punchedCard);
-
-			NBTTagCompound nbttagcompound = new NBTTagCompound();
-			outputCard.setTagCompound(nbttagcompound);
-			if (this.inv[1] == null) {
-		        nbttagcompound.setString("contentID", Item.itemRegistry.getNameForObject(inv[2].getItem())); //This is how the itemStack is saved, so why not here too?
-		        nbttagcompound.setInteger("contentMeta", this.inv[2].getItemDamage());
-			} else if (this.inv[2]==null) {
-		        nbttagcompound.setString("contentID", Item.itemRegistry.getNameForObject(inv[1].getItem()));
-		        nbttagcompound.setInteger("contentMeta", this.inv[1].getItemDamage());
-			} else {
-		        nbttagcompound.setString("contentID", Item.itemRegistry.getNameForObject(outputItem.getItem()));
-		        nbttagcompound.setInteger("contentMeta", outputItem.getItemDamage());
+			if(inv[0] != null) {
+				decrStackSize(3, 1);
+				if(inv[1] != null && !(inv[1].getItem().equals(Minestuck.captchaCard) && inv[1].hasTagCompound() && inv[1].getTagCompound().getBoolean("punched")))
+					decrStackSize(1, 1);
+				if(inv[2] != null && !(inv[2].getItem().equals(Minestuck.captchaCard) && inv[2].hasTagCompound() && inv[2].getTagCompound().getBoolean("punched")))
+					decrStackSize(2, 1);
+				decrStackSize(0, -1);
+				break;
 			}
-
-	        
-			setInventorySlotContents(0,outputCard);
+			ItemStack outputItem = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(this.inv[1],true),AlchemyRecipeHandler.getDecodedItem(this.inv[2],true),this.mode);
+			boolean consumeItem = inv[1] == null || inv[2] == null;
+			
+			if (this.inv[1] == null) {
+				outputItem = inv[2];
+			} else if (this.inv[2]==null) {
+				outputItem = inv[1];
+			}
+			
+			if(inv[3].hasTagCompound() && inv[3].getTagCompound().getBoolean("punched")) {	//If you push the data onto a punched card, perform an OR alchemy
+				outputItem = CombinationRegistry.getCombination(outputItem, AlchemyRecipeHandler.getDecodedItem(inv[3]), CombinationRegistry.MODE_OR);
+				consumeItem = false;
+			}
+			
+			setInventorySlotContents(0,AlchemyRecipeHandler.createCard(outputItem, true));
 			if (inv[1] == null || inv[2] == null) {
 				decrStackSize(1, 1);
 				decrStackSize(2, 1);
@@ -276,17 +297,19 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			decrStackSize(3, 1);
 			break;
 		case (2):
-			ItemStack outputDowel = new ItemStack(Minestuck.cruxiteDowelCarved);
+			if(inv[0] != null) {
+				decrStackSize(0, -1);
+				decrStackSize(2, 1);
+			}
+			ItemStack outputDowel = new ItemStack(Minestuck.cruxiteDowel);
 			
 			NBTTagCompound cardtag = this.inv[1].getTagCompound();
-			if (cardtag == null) {
-				break;
-			}
 			
 			if(cardtag.getString("contentID") == GameRegistry.findUniqueIdentifierFor(Minestuck.blockStorage).name &&
 					cardtag.getInteger("contentMeta") == 1)
 				outputDowel = new ItemStack(Minestuck.cruxiteDowel);
-			else {
+			if(cardtag != null && !(cardtag.getString("contentID") == GameRegistry.findUniqueIdentifierFor(Minestuck.blockStorage).name &&
+					cardtag.getInteger("contentMeta") == 1)) {
 				NBTTagCompound doweltag = new NBTTagCompound();
 				doweltag.setString("contentID", cardtag.getString("contentID"));
 				doweltag.setInteger("contentMeta", cardtag.getInteger("contentMeta"));

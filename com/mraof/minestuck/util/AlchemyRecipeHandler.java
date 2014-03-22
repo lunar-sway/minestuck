@@ -493,7 +493,7 @@ public class AlchemyRecipeHandler {
 		
 		 //set up vanilla recipes
 		GameRegistry.addRecipe(new ItemStack(Minestuck.blockStorage,1,0),new Object[]{ "XXX","XXX","XXX",'X',new ItemStack(Minestuck.rawCruxite, 1)});
-		GameRegistry.addRecipe(new ItemStack(Minestuck.blankCard,8,0),new Object[]{ "XXX","XYX","XXX",'Y',new ItemStack(Minestuck.rawCruxite, 1),'X',new ItemStack(Items.paper,1)});
+		GameRegistry.addRecipe(new ItemStack(Minestuck.captchaCard,8,0),new Object[]{ "XXX","XYX","XXX",'Y',new ItemStack(Minestuck.rawCruxite, 1),'X',new ItemStack(Items.paper,1)});
 		GameRegistry.addRecipe(new ItemStack(Minestuck.disk,1,0),new Object[]{ " X ","XYX"," X ",'X',new ItemStack(Minestuck.rawCruxite, 1),'Y',new ItemStack(Items.iron_ingot,1)});
 		GameRegistry.addRecipe(new ItemStack(Minestuck.disk,1,1),new Object[]{ "X X"," Y ","X X",'X',new ItemStack(Minestuck.rawCruxite, 1),'Y',new ItemStack(Items.iron_ingot,1)});
 		GameRegistry.addRecipe(new ItemStack(Minestuck.blockComputerOff,1,0),new Object[]{ "XXX","XYX","XXX",'Y',new ItemStack(Minestuck.blockStorage, 1, 0),'X',new ItemStack(Items.iron_ingot,1)});
@@ -526,7 +526,7 @@ public class AlchemyRecipeHandler {
 		CombinationRegistry.addCombination(new ItemStack(Items.slime_ball),new ItemStack(Minestuck.sledgeHammer),CombinationRegistry.MODE_AND, new ItemStack(Minestuck.pogoHammer));
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_sword),new ItemStack(Minestuck.component,1,2),CombinationRegistry.MODE_AND, new ItemStack(Minestuck.regisword));
 		CombinationRegistry.addCombination(new ItemStack(Minestuck.sickle),new ItemStack(Minestuck.component,1,2),CombinationRegistry.MODE_AND, new ItemStack(Minestuck.regiSickle));
-		CombinationRegistry.addCombination(new ItemStack(Minestuck.crockerSpork),new ItemStack(Minestuck.blankCard),CombinationRegistry.MODE_AND, new ItemStack(Minestuck.blockMachine,1,4));
+		CombinationRegistry.addCombination(new ItemStack(Minestuck.crockerSpork),new ItemStack(Minestuck.captchaCard),CombinationRegistry.MODE_AND, new ItemStack(Minestuck.blockMachine,1,4));
 		
 		//register land aspects
 		LandHelper.registerLandAspect(new LandAspectFrost());
@@ -561,16 +561,14 @@ public class AlchemyRecipeHandler {
 	public static ItemStack getDecodedItem(ItemStack card) {
 		
 		if (card == null) {return null;}
-		//Debug.print("Looking for an ID of" +  Minestuck.cruxiteDowel.itemID + ". Got an ID of " + card.itemID);
-		if (card.getItem().equals(Minestuck.cruxiteDowel)) {
-			//Debug.print("Got a blank dowel as input. Returning a generic object");
-			return new ItemStack(Minestuck.blockStorage,1,1); //return a Perfectly Generic Object if it's a blank dowel
-		}
 		
-		//Debug.print("Got a carved dowel. Returning encoded object");
 		NBTTagCompound tag = card.getTagCompound();
 		
-		if (tag == null || !(Item.itemRegistry.getObject(tag.getString("contentID")) instanceof Item)) {return null;}
+		if (tag == null || !tag.hasKey("contentID")) {
+			return new ItemStack(Minestuck.blockStorage,1,1);
+		}
+		
+		if (!Item.itemRegistry.containsKey(tag.getString("contentID"))) {return null;}
 		ItemStack newItem = new ItemStack((Item)Item.itemRegistry.getObject(tag.getString(("contentID"))), 1, tag.getInteger("contentMeta"));
 		
 		return newItem;
@@ -585,11 +583,30 @@ public class AlchemyRecipeHandler {
 		
 		if (card == null) {return null;}
 		
-		if (!card.getItem().equals(Minestuck.punchedCard) && Minestuck.easyDesignex) {
+		if (!card.getItem().equals(Minestuck.captchaCard) && Minestuck.easyDesignex) {
 			return card;
 		} else {
 			return getDecodedItem(card);
 		}
+	}
+	
+	public static ItemStack createEncodedItem(ItemStack item, boolean registerToCard) {
+		NBTTagCompound nbt = null;
+		if(item != null) {
+			nbt = new NBTTagCompound();
+			nbt.setString("contentID", Item.itemRegistry.getNameForObject(item.getItem()));
+			nbt.setInteger("contentMeta", item.getItemDamage());
+		}
+		ItemStack stack = new ItemStack(registerToCard?Minestuck.captchaCard:Minestuck.cruxiteDowel);
+		stack.setTagCompound(nbt);
+		return stack;
+	}
+	
+	public static ItemStack createCard(ItemStack item, boolean punched) {
+		ItemStack stack = createEncodedItem(item, true);
+		if(stack.hasTagCompound())
+			stack.getTagCompound().setBoolean("punched", punched);
+		return stack;
 	}
 	
 	/**

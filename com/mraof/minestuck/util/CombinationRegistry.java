@@ -3,6 +3,8 @@ package com.mraof.minestuck.util;
 import java.util.Arrays;
 import java.util.Hashtable;
 
+import com.mraof.minestuck.Minestuck;
+
 import net.minecraft.item.ItemStack;
 
 public class CombinationRegistry {
@@ -37,6 +39,11 @@ public class CombinationRegistry {
 		else if ((temp = combRecipes.get(Arrays.asList(input2.getItem(), input2.getItemDamage(), input1.getItem(), 0, mode, true, false))) != null);
 		else if ((temp = combRecipes.get(Arrays.asList(input2.getItem(), 0, input1.getItem(), 0, mode, false, false))) != null);
 		else temp = combRecipes.get(Arrays.asList(input1.getItem(), input1.getItemDamage(), input2.getItem(), input2.getItemDamage(), mode, true, true));
+		if(temp == null)	//
+			if(input1.getItem().equals(Minestuck.blockStorage) && input1.getItemDamage() == 1)
+				return mode?input1:input2;
+			else if(input2.getItem().equals(Minestuck.blockStorage) && input2.getItemDamage() == 1)
+				return mode?input2:input1;
 		return (ItemStack) temp;
 	}
 	

@@ -66,7 +66,7 @@ import com.mraof.minestuck.item.ItemBlade;
 import com.mraof.minestuck.item.ItemBlockLayered;
 import com.mraof.minestuck.item.ItemCane;
 import com.mraof.minestuck.item.ItemCardBlank;
-import com.mraof.minestuck.item.ItemCardPunched;
+import com.mraof.minestuck.item.ItemCaptchaCard;
 import com.mraof.minestuck.item.ItemChessTile;
 import com.mraof.minestuck.item.ItemClub;
 import com.mraof.minestuck.item.ItemComponent;
@@ -74,7 +74,7 @@ import com.mraof.minestuck.item.ItemComputerOff;
 import com.mraof.minestuck.item.ItemCruxiteArtifact;
 import com.mraof.minestuck.item.ItemCruxiteRaw;
 import com.mraof.minestuck.item.ItemDisk;
-import com.mraof.minestuck.item.ItemDowelCarved;
+import com.mraof.minestuck.item.ItemDowel;
 import com.mraof.minestuck.item.ItemDowelUncarved;
 import com.mraof.minestuck.item.ItemHammer;
 import com.mraof.minestuck.item.ItemMachine;
@@ -166,9 +166,7 @@ public class Minestuck
 	//Other
 	public static Item rawCruxite;
 	public static Item cruxiteDowel;
-	public static Item cruxiteDowelCarved;
-	public static Item blankCard;
-	public static Item punchedCard;
+	public static Item captchaCard;
 	public static Item cruxiteArtifact;
 	public static Item disk;
 	public static Item component;
@@ -320,10 +318,8 @@ public class Minestuck
 		skaiaFork = new ItemSpork(EnumSporkType.SKAIA);
 		//items
 		rawCruxite = new ItemCruxiteRaw();
-		cruxiteDowel = new ItemDowelUncarved();
-		cruxiteDowelCarved = new ItemDowelCarved();
-		blankCard = new ItemCardBlank();
-		punchedCard = new ItemCardPunched();
+		cruxiteDowel = new ItemDowel();
+		captchaCard = new ItemCaptchaCard();
 		cruxiteArtifact = new ItemCruxiteArtifact(1, false);
 		disk = new ItemDisk();
 		component = new ItemComponent();
@@ -372,9 +368,7 @@ public class Minestuck
 		
 		GameRegistry.registerItem(rawCruxite, "cruxiteRaw");
 		GameRegistry.registerItem(cruxiteDowel, "cruxiteDowel");
-		GameRegistry.registerItem(cruxiteDowelCarved, "cruxiteDowelCarved");
-		GameRegistry.registerItem(blankCard, "blankCard");
-		GameRegistry.registerItem(punchedCard, "punchedCard");
+		GameRegistry.registerItem(captchaCard, "captchaCard");
 		GameRegistry.registerItem(cruxiteArtifact, "cruxiteArtifact");
 		GameRegistry.registerItem(disk, "computerDisk");
 		GameRegistry.registerItem(component, "component");
@@ -457,9 +451,7 @@ public class Minestuck
 		DimensionManager.registerProviderType(skaiaProviderTypeId, WorldProviderSkaia.class, true);
 		DimensionManager.registerDimension(skaiaDimensionId, skaiaProviderTypeId);
 		DimensionManager.registerProviderType(landProviderTypeId, WorldProviderLands.class, true);
-		//Register the player tracker
-//		GameRegistry.registerPlayerTracker(new MinestuckPlayerTracker());
-
+		
 		//register ore generation
 		if (generateCruxiteOre) {
 			OreHandler oreHandler = new OreHandler();
@@ -480,13 +472,7 @@ public class Minestuck
 //		MinecraftForge.EVENT_BUS.register(ServerEditHandler.instance);
 		MinecraftForge.EVENT_BUS.register(MinestuckStatsHandler.instance);
 		//register channel handler
-		channels = 
-				NetworkRegistry.
-				INSTANCE
-				.newChannel(
-						"Minestuck",
-						MinestuckChannelHandler.
-						instance);
+		channels = NetworkRegistry.INSTANCE.newChannel("Minestuck", MinestuckChannelHandler.instance);
 		
 		//Register structures
 		MapGenStructureIO.registerStructure(StructureCastleStart.class, "SkaiaCastle");
