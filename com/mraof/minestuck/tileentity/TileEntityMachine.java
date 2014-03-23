@@ -1,5 +1,9 @@
 package com.mraof.minestuck.tileentity;
 
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -11,11 +15,15 @@ import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.CombinationRegistry;
+import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristRegistry;
+import com.mraof.minestuck.util.GristSet;
+import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.MinestuckStatsHandler;
 import com.mraof.minestuck.util.UsernameHandler;
 
@@ -310,6 +318,22 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			break;
 		case (4):
 			if(!worldObj.isRemote) {
+				GristSet gristSet = GristRegistry.getGristConversion(inv[1]);
+				
+				Iterator iter = gristSet.getHashtable().entrySet().iterator();
+				while(iter.hasNext()) {
+					Map.Entry<Integer, Integer> entry = (Entry<Integer, Integer>) iter.next();
+					int grist = entry.getValue();
+					while(true) {
+						if(grist == 0)
+							break;
+						GristAmount gristAmount = new GristAmount(GristType.values()[entry.getKey()],grist<=3?grist:(worldObj.rand.nextInt(grist)+1));
+						worldObj.spawnEntityInWorld(new EntityGrist(worldObj, this.xCoord + 0.5 /* this.width - this.width / 2*/, this.yCoord+1, this.zCoord + 0.5 /* this.width - this.width / 2*/, gristAmount));
+						//Create grist entity of gristAmount
+						grist -= gristAmount.getAmount();
+					}
+				}
+				
 				GristHelper.increase(UsernameHandler.encode(owner.username), GristRegistry.getGristConversion(inv[1]));
 				MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(owner.username));
 			}

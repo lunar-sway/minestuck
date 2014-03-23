@@ -36,7 +36,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 
 	protected List<Class<? extends EntityLivingBase>> enemyClasses;
 	protected EntityListAttackFilter attackEntitySelector;
-	//The type of the imp
+	//The type of the underling
 	protected GristType type;
 	//Name of underling, used in getting the texture and actually naming it
 	public String underlingName;

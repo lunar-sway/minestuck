@@ -349,7 +349,7 @@ public class SkaianetHandler {
 		SessionHandler.serverStarted();
 	}
 	
-	static void loadOld(File file) {
+	public static void loadOld(File file) {
 		try{
 			DataInputStream stream = new DataInputStream(new FileInputStream(file));
 			Session s = new Session();

@@ -14,6 +14,7 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristSet;
@@ -48,9 +49,10 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		this.yOffset = this.height / 2.0F;
 		this.setPosition(x, y, z);
 		this.rotationYaw = (float)(Math.random() * 360.0D);
-		this.motionX = (double)((float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
-		this.motionY = (double)((float)(Math.random() * 0.2D) * 2.0F);
-		this.motionZ = (double)((float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
+		this.motionX = (double)((float)(world.rand.nextGaussian() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
+		Debug.print(motionX);
+		this.motionY = (double)((float)(world.rand.nextGaussian() * 0.2D) * 2.0F);
+		this.motionZ = (double)((float)(world.rand.nextGaussian() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
 		this.isImmuneToFire = true;
 
 		this.gristType = gristData.getType().getName();

@@ -737,6 +737,7 @@ public class Minestuck
 				SkaianetHandler.loadData(CompressedStreamTools.readCompressed(new FileInputStream(connectionData)));
 			} catch(IOException e) {
 				e.printStackTrace();
+				SkaianetHandler.loadOld(connectionData);
 			}
 		
 		File gristcache = event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("gristCache");
