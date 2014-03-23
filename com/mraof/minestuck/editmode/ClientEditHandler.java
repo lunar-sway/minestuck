@@ -22,7 +22,6 @@
 //import net.minecraftforge.event.world.WorldEvent;
 //
 //import com.mraof.minestuck.Minestuck;
-//import com.mraof.minestuck.item.ItemCardPunched;
 //import com.mraof.minestuck.item.ItemCruxiteArtifact;
 //import com.mraof.minestuck.item.ItemMachine;
 //import com.mraof.minestuck.network.MinestuckChannelHandler;
@@ -31,6 +30,7 @@
 //import com.mraof.minestuck.network.skaianet.SburbConnection;
 //import com.mraof.minestuck.network.skaianet.SkaiaClient;
 //import com.mraof.minestuck.util.AlchemyRecipeHandler;
+//import com.mraof.minestuck.util.Debug;
 //import com.mraof.minestuck.util.GristRegistry;
 //import com.mraof.minestuck.util.GristSet;
 //import com.mraof.minestuck.util.GristStorage;
@@ -168,7 +168,7 @@
 ////					inventory.inventoryChanged = true;
 //			} else {
 //				event.setCanceled(true);
-//				if(inventory.getItemStack() != null)
+//	//				if(inventory.getItemStack() != null)
 //					inventory.setItemStack(null);
 //				else inventory.setInventorySlotContents(inventory.currentItem, null);
 //			}
