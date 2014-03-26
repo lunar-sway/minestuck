@@ -39,10 +39,10 @@ import com.mraof.minestuck.block.BlockStorage;
 import com.mraof.minestuck.block.OreCruxite;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.GuiHandler;
-//import com.mraof.minestuck.editmode.ClientEditHandler;
+import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.editmode.DeployList;
-//import com.mraof.minestuck.editmode.ServerEditHandler;
-//import com.mraof.minestuck.entity.EntityDecoy;
+import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.entity.EntityDecoy;
 import com.mraof.minestuck.entity.carapacian.EntityBlackBishop;
 import com.mraof.minestuck.entity.carapacian.EntityBlackPawn;
 import com.mraof.minestuck.entity.carapacian.EntityWhiteBishop;
@@ -56,32 +56,31 @@ import com.mraof.minestuck.entity.underling.EntityGiclops;
 import com.mraof.minestuck.entity.underling.EntityImp;
 import com.mraof.minestuck.entity.underling.EntityOgre;
 import com.mraof.minestuck.event.MinestuckFluidHandler;
-import com.mraof.minestuck.item.EnumBladeType;
-import com.mraof.minestuck.item.EnumCaneType;
-import com.mraof.minestuck.item.EnumClubType;
-import com.mraof.minestuck.item.EnumHammerType;
-import com.mraof.minestuck.item.EnumSickleType;
-import com.mraof.minestuck.item.EnumSporkType;
-import com.mraof.minestuck.item.ItemBlade;
-import com.mraof.minestuck.item.ItemBlockLayered;
-import com.mraof.minestuck.item.ItemCane;
-import com.mraof.minestuck.item.ItemCardBlank;
 import com.mraof.minestuck.item.ItemCaptchaCard;
-import com.mraof.minestuck.item.ItemChessTile;
-import com.mraof.minestuck.item.ItemClub;
 import com.mraof.minestuck.item.ItemComponent;
-import com.mraof.minestuck.item.ItemComputerOff;
 import com.mraof.minestuck.item.ItemCruxiteArtifact;
 import com.mraof.minestuck.item.ItemCruxiteRaw;
 import com.mraof.minestuck.item.ItemDisk;
 import com.mraof.minestuck.item.ItemDowel;
 import com.mraof.minestuck.item.ItemDowelUncarved;
-import com.mraof.minestuck.item.ItemHammer;
-import com.mraof.minestuck.item.ItemMachine;
 import com.mraof.minestuck.item.ItemMinestuckBucket;
-import com.mraof.minestuck.item.ItemSickle;
-import com.mraof.minestuck.item.ItemSpork;
-import com.mraof.minestuck.item.ItemStorageBlock;
+import com.mraof.minestuck.item.block.ItemBlockLayered;
+import com.mraof.minestuck.item.block.ItemChessTile;
+import com.mraof.minestuck.item.block.ItemComputerOff;
+import com.mraof.minestuck.item.block.ItemMachine;
+import com.mraof.minestuck.item.block.ItemStorageBlock;
+import com.mraof.minestuck.item.weapon.EnumBladeType;
+import com.mraof.minestuck.item.weapon.EnumCaneType;
+import com.mraof.minestuck.item.weapon.EnumClubType;
+import com.mraof.minestuck.item.weapon.EnumHammerType;
+import com.mraof.minestuck.item.weapon.EnumSickleType;
+import com.mraof.minestuck.item.weapon.EnumSporkType;
+import com.mraof.minestuck.item.weapon.ItemBlade;
+import com.mraof.minestuck.item.weapon.ItemCane;
+import com.mraof.minestuck.item.weapon.ItemClub;
+import com.mraof.minestuck.item.weapon.ItemHammer;
+import com.mraof.minestuck.item.weapon.ItemSickle;
+import com.mraof.minestuck.item.weapon.ItemSpork;
 import com.mraof.minestuck.nei.NEIMinestuckConfig;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
@@ -195,9 +194,10 @@ public class Minestuck
 	//Client config
 	public static int clientOverworldEditRange;	//Edit range used by the client side.
 	public static int clientLandEditRange;		//changed by a MinestuckConfigPacket sent by the server on login.
+	public static boolean clientHardMode;
+	public static boolean clientGiveItems;
 	
 	//General
-	public static boolean clientHardMode;
 	public static boolean hardMode = false;	//Future config option. Currently alters how easy the entry items are accessible after the first time. The machines cost 100 build and there will only be one card if this is true.
 	public static boolean generateCruxiteOre; //If set to false, Cruxite Ore will not generate
 	public static boolean privateComputers;	//If a player should be able to use other players computers or not.
@@ -207,6 +207,7 @@ public class Minestuck
 	public static boolean easyDesignex; //Makes it so you don't need to encode individual cards before combining them.
 	public static boolean toolTipEnabled;
 	public static boolean forceMaxSize;	//If it should prevent players from joining a session if there is no possible combinations left.
+	public static boolean giveItems;
 	public static String privateMessage;
 	public static int artifactRange; //The range of the Cruxite Artifact in teleporting zones over to the new land
 	public static int overworldEditRange;
@@ -255,10 +256,12 @@ public class Minestuck
 		landEditRange = config.get("General", "landEditRange", 52).getInt();
 		artifactRange = config.get("General", "artifcatRange", 30).getInt();
 		MinestuckStatsHandler.idOffset = config.get("General", "statisticIdOffset", 413).getInt();
-		toolTipEnabled = config.get("General", "toolTipEnabled", false).getBoolean(false);
+		toolTipEnabled = config.get("General", "editmodeToolTip", false).getBoolean(false);
 		hardMode = config.get("General", "hardMode", false).getBoolean(false);
 		forceMaxSize = config.get("General", "forceMaxSize", false).getBoolean(false);
 		escapeFailureMode = config.get("General", "escapeFailureMode", 0).getInt();
+		giveItems = config.get("General", "giveItems", true, "Setting this to true replaces editmode with the old Give Items.").getBoolean(true);
+		//Default will be set to false when everything with edit mode is fixed
 		if(escapeFailureMode > 2 || escapeFailureMode < 0)
 			escapeFailureMode = 0;
 		config.save();
@@ -278,7 +281,7 @@ public class Minestuck
 		chessTile = GameRegistry.registerBlock(new BlockChessTile(), ItemChessTile.class, "chessTile");
 		gatePortal = GameRegistry.registerBlock(new BlockGatePortal(Material.portal), "gatePortal");
 		oreCruxite = GameRegistry.registerBlock(new OreCruxite(),"oreCruxite");
-		layeredSand = GameRegistry.registerBlock(new BlockLayered(Blocks.sand), "layeredSand").setBlockName("layeredSand");
+		layeredSand = GameRegistry.registerBlock(new BlockLayered(Blocks.sand), ItemBlockLayered.class, "layeredSand").setBlockName("layeredSand");
 		//machines
 		blockStorage = GameRegistry.registerBlock(new BlockStorage(),ItemStorageBlock.class,"blockStorage");
 		blockMachine = GameRegistry.registerBlock(new BlockMachine(), ItemMachine.class,"blockMachine");
@@ -441,7 +444,7 @@ public class Minestuck
 		this.registerAndMapEntity(EntityWhiteBishop.class, "prospitianBishop", 0xffffff, 0xfde500);
 			//To not register this entity as spawnable using a mob egg.
 //		EntityList.addMapping(EntityDecoy.class, "playerDecoy", entityIdStart + currentEntityIdOffset);
-//		EntityRegistry.registerModEntity(EntityDecoy.class, "playerDecoy", currentEntityIdOffset, this, 80, 3, true);
+		EntityRegistry.registerModEntity(EntityDecoy.class, "playerDecoy", currentEntityIdOffset, this, 80, 3, true);
 		currentEntityIdOffset++;
 		
 		//register entities with fml
@@ -476,9 +479,11 @@ public class Minestuck
 		FMLCommonHandler.instance().bus().register(MinestuckPlayerTracker.instance);
 		if(event.getSide().isClient())
 		{
-//			MinecraftForge.EVENT_BUS.register(ClientEditHandler.instance);
+			MinecraftForge.EVENT_BUS.register(ClientEditHandler.instance);
+			FMLCommonHandler.instance().bus().register(ClientEditHandler.instance);
 		}
-//		MinecraftForge.EVENT_BUS.register(ServerEditHandler.instance);
+		MinecraftForge.EVENT_BUS.register(ServerEditHandler.instance);
+		FMLCommonHandler.instance().bus().register(ServerEditHandler.instance);
 		MinecraftForge.EVENT_BUS.register(MinestuckStatsHandler.instance);
 		//register channel handler
 		channels = NetworkRegistry.INSTANCE.newChannel("Minestuck", MinestuckChannelHandler.instance);
@@ -491,8 +496,6 @@ public class Minestuck
 		AlchemyRecipeHandler.registerVanillaRecipes();
 		AlchemyRecipeHandler.registerMinestuckRecipes();
 		AlchemyRecipeHandler.registerModRecipes();
-		
-//		if(event.getSide().isServer())
 		
 		KindAbstratusList.registerTypes();
 		DeployList.registerItems();

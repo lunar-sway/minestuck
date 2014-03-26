@@ -1,4 +1,4 @@
-package com.mraof.minestuck.item;
+package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.Minestuck;
 

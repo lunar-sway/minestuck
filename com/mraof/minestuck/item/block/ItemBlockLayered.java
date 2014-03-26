@@ -1,4 +1,4 @@
-package com.mraof.minestuck.item;
+package com.mraof.minestuck.item.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,11 +10,11 @@ import com.mraof.minestuck.block.BlockLayered;
 
 public class ItemBlockLayered extends ItemBlockWithMetadata {
 
-	public Block theBlock;
+	public BlockLayered theBlock;
 	public ItemBlockLayered(Block par1)
 	{
 		super(par1, ((BlockLayered)par1).fullBlock);
-		theBlock = ((BlockLayered)par1).fullBlock;
+		theBlock = ((BlockLayered)par1);
 	}
 
     /**
@@ -41,7 +41,7 @@ public class ItemBlockLayered extends ItemBlockWithMetadata {
                 Block block = this.field_150939_a;
                 int metadata = world.getBlockMetadata(x, y, z);
 
-                if (/*depth <= 6 && */world.checkNoEntityCollision(block.getCollisionBoundingBoxFromPool(world, x, y, z)) && ((BlockLayered)theBlock).changeHeight(world, x, y, z, metadata + 1)) //changes full BlockLayered into full block
+                if (/*depth <= 6 && */world.checkNoEntityCollision(block.getCollisionBoundingBoxFromPool(world, x, y, z)) && (theBlock.changeHeight(world, x, y, z, metadata + 1))) //changes full BlockLayered into full block
                 {
                     world.playSoundEffect((double)x + 0.5, (double)y + 0.5, (double)z + 0.5, block.stepSound.getStepResourcePath(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
                     --itemStack.stackSize;

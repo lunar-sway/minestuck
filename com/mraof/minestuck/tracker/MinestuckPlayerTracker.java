@@ -7,7 +7,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 
 import com.mraof.minestuck.Minestuck;
-//import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
@@ -70,7 +70,7 @@ public class MinestuckPlayerTracker {
 	@SubscribeEvent
 	public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
 		
-//		ServerEditHandler.onPlayerExit(event.player);
+		ServerEditHandler.onPlayerExit(event.player);
 	}
 	
 	/**
@@ -93,11 +93,11 @@ public class MinestuckPlayerTracker {
 
 		//The editing player, if there is any.
 		SburbConnection c = SkaianetHandler.getClientConnection(player);
-//		if(c != null && ServerEditHandler.getData(c) != null) {
-//			EntityPlayerMP editor = ServerEditHandler.getData(c).getEditor();
-//			MinestuckPacket packet = MinestuckPacket.makePacket(Type.GRISTCACHE, gristValues, true);
-//			MinestuckChannelHandler.sendToPlayer(packet, editor);
-//		}
+		if(c != null && ServerEditHandler.getData(c) != null) {
+			EntityPlayerMP editor = ServerEditHandler.getData(c).getEditor();
+			MinestuckPacket packet = MinestuckPacket.makePacket(Type.GRISTCACHE, gristValues, true);
+			MinestuckChannelHandler.sendToPlayer(packet, editor);
+		}
 	}
 
 	public void updateTitle(EntityPlayer player) {

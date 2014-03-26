@@ -1,53 +1,44 @@
-package com.mraof.minestuck.item;
+package com.mraof.minestuck.item.weapon;
 
-public enum EnumSporkType 
+public enum EnumSickleType 
 {
-	CROCKER(3, 64, 4.0F, 1, 15, true),
-	SKAIA(3, 2048, 4.0F, 3, 10, false	);
+	SICKLE(1, 131, 4.0F, 0, 5),
+	HOMES(1, 200, 4.0F, 1, 10),
+	REGISICKLE(2, 256, 4.0F, 2, 1),
+	CLAW(3, 2048, 4.0F, 4, 15);
 	
 	private final int harvestLevel;
     private final int maxUses;
     private final float efficiencyOnProperMaterial;
     private final int damageVsEntity;
     private final int enchantability;
-    private final boolean isSpoon;
 	
-	private EnumSporkType(int harvestLevel, int maxUses, float efficiencyOnProperMaterial, int damageVsEntity, int enchantability, boolean isSpoon) 
+	private EnumSickleType(int harvestLevel, int maxUses, float efficiencyOnProperMaterial, int damageVsEntity, int enchantability) 
 	{
 		this.harvestLevel = harvestLevel;
         this.maxUses = maxUses;
         this.efficiencyOnProperMaterial = efficiencyOnProperMaterial;
         this.damageVsEntity = damageVsEntity;
         this.enchantability = enchantability;
-        this.isSpoon = isSpoon;
 	}
 	
-	public int getMaxUses() 
-	{
+	public int getMaxUses() {
 		return maxUses;
 	}
 	
-	public float getEfficiencyOnProperMaterial() 
-	{
+	public float getEfficiencyOnProperMaterial() {
 		return efficiencyOnProperMaterial;
 	}
 	
-	public int getDamageVsEntity() 
-	{
+	public int getDamageVsEntity() {
 		return damageVsEntity;
 	}
 	
-	public int getHarvestLevel() 
-	{
+	public int getHarvestLevel() {
 		return harvestLevel;
 	}
 	
-	public int getEnchantability() 
-	{
+	public int getEnchantability() {
 		return enchantability;
-	}
-	public boolean getIsSpoon()
-	{
-		return isSpoon;
 	}
 }

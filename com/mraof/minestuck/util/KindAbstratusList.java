@@ -9,12 +9,12 @@ import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemSword;
 
-import com.mraof.minestuck.item.ItemBlade;
-import com.mraof.minestuck.item.ItemCane;
-import com.mraof.minestuck.item.ItemClub;
-import com.mraof.minestuck.item.ItemHammer;
-import com.mraof.minestuck.item.ItemSickle;
-import com.mraof.minestuck.item.ItemSpork;
+import com.mraof.minestuck.item.weapon.ItemBlade;
+import com.mraof.minestuck.item.weapon.ItemCane;
+import com.mraof.minestuck.item.weapon.ItemClub;
+import com.mraof.minestuck.item.weapon.ItemHammer;
+import com.mraof.minestuck.item.weapon.ItemSickle;
+import com.mraof.minestuck.item.weapon.ItemSpork;
 
 public class KindAbstratusList {
 	
