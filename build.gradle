@@ -25,19 +25,16 @@ minecraft {
     version = "1.7.2-10.12.0.1047"
     assetDir = "eclipse/assets"
 
-    from(sourceSets.main.resources.srcDirs) {
-	replaceIn "com/mraof/minestuck/Minestuck.java"
-        replace "@VERSION@", project.version
-    }
+    replaceIn "com/mraof/minestuck/Minestuck.java"
+    replace "@VERSION@", project.version
 }
 sourceSets {
     main {
         java {
-            srcDir '.'
+            srcDir 'src'
         }
         resources {
-            srcDir '.'
-            exclude('build.gradle')
+            srcDir 'src'
         }
     }
 }
