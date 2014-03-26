@@ -4,9 +4,9 @@
         "parent": "", 
         "url": "http://www.mspaforums.com/showthread.php?43888-Minestuck", 
         "logoFile": "/minestuck_logo.png", 
-        "updateUrl": "", 
+        "updateUrl": "http://ci.mraof.com/job/Minestuck/", 
         "credits": "Coded by Mraof, Iconmaster and others, graphics by many others; see forum page for full credits.", 
-        "version": "@VERSION@", 
+        "version": "${version}", 
         "modid": "Minestuck", 
         "authors": [
             "Mraof", 
@@ -14,7 +14,7 @@
             "kirderf1",
             "snuffysam"
         ], 
-        "mcversion": "1.6.4", 
+        "mcversion": "${mcversion}", 
         "screenshots": [], 
         "dependencies": [
             "Forge"

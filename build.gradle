@@ -1,2 +1,59 @@
-ant.importBuild 'build.xml'
-defaultTasks 'main'
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.1-SNAPSHOT'
+    }
+}
+
+apply plugin: 'forge'
+
+version = System.getenv()['BUILD_NUMBER']
+group= "com.mraof.minestuck"
+archivesBaseName = "Minestuck"
+
+minecraft {
+    version = "1.7.2-10.12.0.1047"
+    assetDir = "eclipse/assets"
+
+    from(sourceSets.main.resources.srcDirs) {
+	replaceIn "com/mraof/minestuck/Minestuck.java"
+        replace "@VERSION@", project.version
+    }
+}
+sourceSets {
+    main {
+        java {
+            srcDir '.'
+        }
+        resources {
+            srcDir '.'
+            exclude('build.gradle')
+        }
+    }
+}
+processResources
+{
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+                
+        // replace version and mcversion
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+        
+    // copy everything else, thats not the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
