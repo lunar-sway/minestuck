@@ -63,8 +63,8 @@ public class GristSet {
 	/**
 	 * Returns a Hashtable with grist->amount pairs.
 	 */
-	public Hashtable getHashtable() {
-		Hashtable hs = new Hashtable();
+	public Hashtable<Integer, Integer> getHashtable() {
+		Hashtable<Integer, Integer> hs = new Hashtable<Integer, Integer>();
 		for(int i = 0; i < GristType.allGrists; i++) {
 			if (gristTypes[i] != 0) {
 				hs.put(i,gristTypes[i]);
@@ -78,7 +78,7 @@ public class GristSet {
 	 * 
 	 */
 	public ArrayList<GristAmount> getArray() {
-		ArrayList<GristAmount> list = new ArrayList();
+		ArrayList<GristAmount> list = new ArrayList<GristAmount>();
 		for(int i = 0; i < GristType.allGrists; i++) {
 			if (gristTypes[i] != 0) {
 				//Debug.print("Added "+gristTypes[i]+" of "+GristType.values()[i].getName());

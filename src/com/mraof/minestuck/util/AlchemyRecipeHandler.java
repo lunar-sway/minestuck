@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSapling;
@@ -31,8 +33,8 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 public class AlchemyRecipeHandler {
 	
-	private static HashMap recipeList;
-	private static HashMap lookedOver;
+	private static HashMap<List<Object>, Object> recipeList;
+	private static HashMap<List<Object>, Boolean> lookedOver;
 	private static int returned = 0;
 
 	public static void registerVanillaRecipes() {
@@ -614,7 +616,7 @@ public class AlchemyRecipeHandler {
 	 */
 	public static void registerDynamicRecipes() {
 		
-		recipeList = new HashMap();
+		recipeList = new HashMap<List<Object>, Object>();
 		int invalid = 0;
 		
 		Debug.print("Looking for dynamic grist conversions...");
@@ -651,11 +653,11 @@ public class AlchemyRecipeHandler {
 		Debug.print("Found "+recipeList.size()+" valid recipes, and "+invalid+" unknown ones.");
 		
 		Debug.print("Calculating grist conversion...");
-	   	Iterator it = recipeList.entrySet().iterator();
+		Iterator<Entry<List<Object>, Object>> it = recipeList.entrySet().iterator();
         while (it.hasNext()) {
-        	Map.Entry pairs = (Map.Entry)it.next();
+        	Map.Entry<List<Object>, Object> pairs = it.next();
         	//Debug.print("Getting recipe with key"+pairs.getKey()+" and value "+pairs.getValue());
-        	lookedOver = new HashMap();
+			lookedOver = new HashMap<List<Object>, Boolean>();
         	getRecipe(pairs.getValue());
         }
         
@@ -755,11 +757,11 @@ public class AlchemyRecipeHandler {
 				ItemStack item = null;
 				if (obj == null) {break;}
 				if (obj instanceof ArrayList) {
-					if (((ArrayList) obj).size() == 0) {
+					if (((ArrayList<?>) obj).size() == 0) {
 						//Debug.print("	Input list was empty!");
 						break;
 					}
-					item = (ItemStack) ((ArrayList) obj).get(0);
+					item = (ItemStack) ((ArrayList<?>) obj).get(0);
 				} else {
 					item = (ItemStack) obj;
 				}
@@ -804,11 +806,11 @@ public class AlchemyRecipeHandler {
 				ItemStack item = null;
 				if (obj == null) {break;}
 				if (obj instanceof ArrayList) {
-					if (((ArrayList) obj).size() == 0) {
+					if (((ArrayList<?>) obj).size() == 0) {
 						//Debug.print("	Input list was empty!");
 						break;
 					}
-					item = (ItemStack) ((ArrayList) obj).get(0);
+					item = (ItemStack) ((ArrayList<?>) obj).get(0);
 				} else {
 					item = (ItemStack) obj;
 				}

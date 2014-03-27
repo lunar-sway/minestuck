@@ -51,7 +51,7 @@ public class LandAspectPulse extends LandAspect
 
 	@Override
 	public ArrayList<ILandDecorator> getDecorators() {
-		ArrayList list = new ArrayList<ILandDecorator>();
+		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
 		list.add(new DecoratorVein(Blocks.nether_brick, 10, 32));
 //		list.add(new DecoratorVein(Block.ice, 5, 8));
 		return list;

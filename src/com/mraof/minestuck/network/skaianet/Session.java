@@ -67,7 +67,7 @@ public class Session {
 	 * @return Returns a list with the players usernames.
 	 */
 	List<String> getPlayerList(){
-		List<String> list = new ArrayList();
+		List<String> list = new ArrayList<String>();
 		for(SburbConnection c : this.connections){
 			if(!list.contains(c.getClientName()))
 				list.add(c.getClientName());

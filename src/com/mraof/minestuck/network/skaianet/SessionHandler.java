@@ -27,7 +27,7 @@ public class SessionHandler {
 	/**
 	 * An array list of the current worlds sessions.
 	 */
-	static List<Session> sessions = new ArrayList();
+	static List<Session> sessions = new ArrayList<Session>();
 	
 	/**
 	 * Called when the server loads a new world, after
@@ -211,7 +211,7 @@ public class SessionHandler {
 				(sClient == null?sServer:sClient).connections.add(connection);
 				return null;
 			} else {
-				String s = merge(sClient, sServer, connection);
+				/*String s = */merge(sClient, sServer, connection);
 			}
 			return null;
 		}
@@ -258,8 +258,8 @@ public class SessionHandler {
 		
 	}
 	
-	static List getServerList(String client) {
-		ArrayList list = new ArrayList();
+	static List<String> getServerList(String client) {
+		ArrayList<String> list = new ArrayList<String>();
 		for(String server : SkaianetHandler.serversOpen.keySet()) {
 			if(canConnect(client, server))
 				list.add(server);

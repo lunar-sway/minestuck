@@ -23,7 +23,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.Debug;
 
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.relauncher.Side;
@@ -161,9 +160,11 @@ public class ItemMinestuckBucket extends ItemBucket
 			return true;
 		}
 	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, List subItems) 
+	public void getSubItems(Item item, CreativeTabs tab, List subItems)
 	{
 		for(int id = 0; id < fillFluids.size(); id++)
 			subItems.add(new ItemStack(this, 1, id));

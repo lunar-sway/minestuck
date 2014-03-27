@@ -20,7 +20,6 @@ import com.mraof.minestuck.util.GristStorage;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.util.TitleHelper;
-import com.mraof.minestuck.util.UsernameHandler;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -236,8 +235,8 @@ public class GuiGristCache extends GuiScreen
 	}
 	protected boolean isPointInRegion(int par1, int par2, int par3, int par4, int par5, int par6)
 	{
-		int k1 = (this.width - this.guiWidth) / 2;
-		int l1 = (this.height - this.guiHeight) / 2;
+		int k1 = (this.width - guiWidth) / 2;
+		int l1 = (this.height - guiHeight) / 2;
 		par5 -= k1;
 		par6 -= l1;
 		return par5 >= par1 - 1 && par5 < par1 + par3 + 1 && par6 >= par2 - 1 && par6 < par2 + par4 + 1;

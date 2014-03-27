@@ -40,6 +40,7 @@ public class BlockStorage extends Block {
 		return metadata;
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void getSubBlocks(Item unknown, CreativeTabs tab, List subItems) 

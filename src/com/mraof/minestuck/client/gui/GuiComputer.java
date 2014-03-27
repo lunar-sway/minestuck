@@ -3,6 +3,7 @@ package com.mraof.minestuck.client.gui;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -14,7 +15,6 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-//import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.network.ClearMessagePacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
@@ -22,7 +22,6 @@ import com.mraof.minestuck.network.skaianet.ComputerData;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.UsernameHandler;
 
 import cpw.mods.fml.relauncher.Side;
@@ -103,6 +102,7 @@ public class GuiComputer extends GuiScreen
 		return false;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void initGui() {
 		super.initGui();
@@ -260,12 +260,13 @@ public class GuiComputer extends GuiScreen
 	   	if (te.installedPrograms.size() == 1) {
 	   		return te.programSelected;
 	   	}
-   	   	Iterator it = te.installedPrograms.entrySet().iterator();
-	   	int place = 0;
+		Iterator<Entry<Integer, Boolean>> it = te.installedPrograms.entrySet().iterator();
+		//int place = 0;
 	   	boolean found = false;
 	   	int lastProgram = te.programSelected;
         while (it.hasNext()) {
-            Map.Entry pairs = (Map.Entry)it.next();
+			Map.Entry<Integer, Boolean> pairs = (Entry<Integer, Boolean>) it
+					.next();
             int program = (Integer) pairs.getKey();
             if (found) {
             	return program;
@@ -274,7 +275,7 @@ public class GuiComputer extends GuiScreen
             } else {
             	lastProgram = program;
             }
-            place++;
+            //place++;
         }
 		return lastProgram;
 	}

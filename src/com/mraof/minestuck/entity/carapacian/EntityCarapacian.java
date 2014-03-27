@@ -69,7 +69,7 @@ public abstract class EntityCarapacian extends EntityMinestuck
 			enemyClasses.add(EntityWhiteBishop.class);
 		}
 	}
-	public void addEnemy(Class enemyClass)
+	public void addEnemy(Class<? extends EntityLivingBase> enemyClass)
 	{
 		if(canAttackClass(enemyClass) && !enemyClasses.contains(enemyClass))
 		{
@@ -101,9 +101,12 @@ public abstract class EntityCarapacian extends EntityMinestuck
 			this.addEnemy(par1EntityLivingBase.getClass());
 		}
 	}
+
+	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean canAttackClass(Class par1Class)
 	{
+
 		return !this.allyClasses.contains(par1Class);
 	}
 

@@ -16,7 +16,7 @@ import com.mraof.minestuck.util.GristType;
  */
 public class DeployList {
 	
-	private static final List<DeployEntry> list = new ArrayList();
+	private static final List<DeployEntry> list = new ArrayList<DeployEntry>();
 	
 	public static void registerItems() {
 		registerItem(new ItemStack(Minestuck.blockMachine,1,0), new GristSet(), new GristSet(GristType.Build, 100), 0);
@@ -55,14 +55,14 @@ public class DeployList {
 	}
 	
 	public static List<ItemStack> getItemList() {
-		List itemList = new ArrayList();
+		List<ItemStack> itemList = new ArrayList<ItemStack>();
 		for(DeployEntry entry : list)
 			itemList.add(entry.item.copy());
 		return itemList;
 	}
 	
 	public static List<ItemStack> getItemListByMaximumTier(int tier) {
-		List itemList = new ArrayList();
+		List<ItemStack> itemList = new ArrayList<ItemStack>();
 		for(DeployEntry entry : list)
 			if(entry.tier <= tier)
 				itemList.add(entry.item);

@@ -3,13 +3,10 @@ package com.mraof.minestuck.network;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
-import java.util.Arrays;
 import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
 
-import com.google.common.primitives.Bytes;
-import com.google.common.primitives.UnsignedBytes;
 import com.mraof.minestuck.util.Debug;
 
 import cpw.mods.fml.relauncher.Side;

@@ -67,7 +67,7 @@ public class ItemSpork extends ItemWeapon
 	@Override
 	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase player)
 	{
-		if(sporkType.equals(sporkType.CROCKER) && !isSpoon(itemStack)){
+		if (sporkType.equals(EnumSporkType.CROCKER) && !isSpoon(itemStack)){
 			target.hurtResistantTime = 0;	//A somewhat hackish way, but I find attributes too complicated, for now.
 			target.attackEntityFrom(DamageSource.causeMobDamage(player), 2F);
 		}
@@ -76,7 +76,7 @@ public class ItemSpork extends ItemWeapon
 	}
 
 	public boolean isSpoon(ItemStack itemStack) {
-		if(sporkType.equals(sporkType.CROCKER))
+		if (sporkType.equals(EnumSporkType.CROCKER))
 			return itemStack.stackTagCompound == null?true:itemStack.stackTagCompound.getBoolean("isSpoon");
 		else return isSpoon;
 	}
@@ -107,7 +107,7 @@ public class ItemSpork extends ItemWeapon
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) 
 	{
 		if(!world.isRemote)
-			if(sporkType.equals(sporkType.CROCKER)) {
+			if (sporkType.equals(EnumSporkType.CROCKER)) {
 				if(stack.stackTagCompound.getByte("delay") > 0)
 					return stack;
 				else stack.stackTagCompound.setByte("delay", (byte) 10);
@@ -151,7 +151,7 @@ public class ItemSpork extends ItemWeapon
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIconIndex(ItemStack stack) {
-		if(sporkType.equals(sporkType.CROCKER))
+		if (sporkType.equals(EnumSporkType.CROCKER))
 			return crockerTypes[isSpoon(stack)?0:1];
 		else return itemIcon;
 	}

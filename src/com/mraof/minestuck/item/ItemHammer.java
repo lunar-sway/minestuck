@@ -21,14 +21,14 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 
 public class ItemHammer extends ItemWeapon
-{    
+{	
 	private int weaponDamage;
 	private final EnumHammerType hammerType;
-    public float efficiencyOnProperMaterial = 4.0F;
-    public static final Set blocksEffectiveAgainst = Sets.newHashSet(new Block[] {Blocks.cobblestone, Blocks.double_stone_slab, Blocks.stone_slab, Blocks.stone, Blocks.sandstone, Blocks.mossy_cobblestone, Blocks.iron_ore, Blocks.iron_block, Blocks.coal_ore, Blocks.coal_block, Blocks.gold_block, Blocks.gold_ore, Blocks.diamond_ore, Blocks.diamond_block, Blocks.ice, Blocks.netherrack, Blocks.lapis_ore, Blocks.lapis_block, Blocks.redstone_ore, Blocks.rail, Blocks.detector_rail, Blocks.golden_rail});
+	public float efficiencyOnProperMaterial = 4.0F;
+	public static final Set<Block> blocksEffectiveAgainst = Sets.newHashSet(new Block[] {Blocks.cobblestone, Blocks.double_stone_slab, Blocks.stone_slab, Blocks.stone, Blocks.sandstone, Blocks.mossy_cobblestone, Blocks.iron_ore, Blocks.iron_block, Blocks.coal_ore, Blocks.coal_block, Blocks.gold_block, Blocks.gold_ore, Blocks.diamond_ore, Blocks.diamond_block, Blocks.ice, Blocks.netherrack, Blocks.lapis_ore, Blocks.lapis_block, Blocks.redstone_ore, Blocks.rail, Blocks.detector_rail, Blocks.golden_rail});
 
 	
-    public ItemHammer(EnumHammerType hammerType)
+	public ItemHammer(EnumHammerType hammerType)
 	{
 		super(blocksEffectiveAgainst);
 		
@@ -71,32 +71,32 @@ public class ItemHammer extends ItemWeapon
 		if(this.hammerType.equals(EnumHammerType.CLAW))
 			player.triggerAchievement(MinestuckStatsHandler.getHammer);
 	}
-    
-    @Override
-    public boolean canHarvestBlock(Block block) 
-    {
+	
+	@Override
+	public boolean canHarvestBlock(Block block) 
+	{
 		return block != null && (block.getMaterial() == Material.iron || block.getMaterial() == Material.anvil || block.getMaterial() == Material.rock);
-    }
+	}
 
-    @Override
+	@Override
 	public float getStrVsBlock(ItemStack itemStack, Block block)
 	{
 		return block != null && (block.getMaterial() == Material.iron || block.getMaterial() == Material.anvil || block.getMaterial() == Material.rock) ? this.efficiencyOnProperMaterial : super.getStrVsBlock(itemStack, block);
 	}
 
-    @Override
+	@Override
 	public int getAttackDamage()
 	{
-	    return this.weaponDamage;
+		return this.weaponDamage;
 	}
 
-    @Override
+	@Override
 	public int getItemEnchantability()
 	{
 		return this.hammerType.getEnchantability();
 	}
 
-    @Override
+	@Override
 	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase player)
 	{
 		itemStack.damageItem(1, player);
@@ -108,14 +108,14 @@ public class ItemHammer extends ItemWeapon
 		}
 		else if(hammerType.equals(EnumHammerType.SCARLET))
 			target.setFire(50);
-		else if(hammerType.equals(hammerType.POPAMATIC) )
+		else if (hammerType.equals(EnumHammerType.POPAMATIC) )
 			target.attackEntityFrom(DamageSource.magic , (float) (player.worldObj.rand.nextInt(6)+1) * (player.worldObj.rand.nextInt(6)+1) );
-		else if(hammerType.equals(hammerType.FEARNOANVIL) && player.worldObj.rand.nextGaussian() > 0.9)	//Just a suggestion, keep it if you like it.
+		else if (hammerType.equals(EnumHammerType.FEARNOANVIL) && player.worldObj.rand.nextGaussian() > 0.9)	//Just a suggestion, keep it if you like it.
 			target.addPotionEffect(new PotionEffect(2,100,3));	//Would prefer it being triggered by a critical hit instead, if it can.
 		return true;
 	}
 
-    @Override
+	@Override
 	public boolean onBlockDestroyed(ItemStack itemStack, World world, Block par3, int par4, int par5, int par6, EntityLivingBase par7EntityLiving)
 	{
 		if ((double)par3.getBlockHardness(world, par4, par5, par6) != 0.0D)
@@ -131,15 +131,15 @@ public class ItemHammer extends ItemWeapon
 	}
 	
 	public int getMaxItemUseDuration(ItemStack itemStack)
-    {
-        return Integer.MAX_VALUE;
-    }
+	{
+		return Integer.MAX_VALUE;
+	}
 
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) 
 	{
 		if(world.getBlock(x, y, z) != Blocks.air)
 		{
-			if(hammerType.equals(hammerType.POGO))
+			if (hammerType.equals(EnumHammerType.POGO))
 			{
 				player.motionY = Math.abs(player.motionY) + 0.5;
 				player.fallDistance = 0;
@@ -149,7 +149,7 @@ public class ItemHammer extends ItemWeapon
 		}
 		return false;
 	}
-    
+	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister iconRegister) 

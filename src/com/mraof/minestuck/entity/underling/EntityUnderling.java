@@ -17,7 +17,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
@@ -124,7 +123,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 		attackEntitySelector = new EntityListAttackFilter(enemyClasses);
 	}
 
-	public void addEnemy(Class enemyClass)
+	public void addEnemy(Class<? extends EntityLivingBase> enemyClass)
 	{
 		if(!enemyClasses.contains(enemyClass))
 		{
@@ -148,12 +147,12 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	public void readEntityFromNBT(NBTTagCompound par1nbtTagCompound) 
 	{
 		super.readEntityFromNBT(par1nbtTagCompound);
-		this.type = type.getTypeFromString(par1nbtTagCompound.getString("Type"));
+		this.type = GristType.getTypeFromString(par1nbtTagCompound.getString("Type"));
 	}
 	@Override
 	public void writeSpawnData(ByteBuf data) 
 	{
-		data.writeInt(((Enum) type).ordinal());
+		data.writeInt(((Enum<GristType>) type).ordinal());
 	}
 	@Override
 	public void readSpawnData(ByteBuf data) 
@@ -164,43 +163,43 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 
 	@Override
 	   public boolean getCanSpawnHere()
-    {
-        return this.worldObj.difficultySetting != EnumDifficulty.PEACEFUL && this.isValidLightLevel() && super.getCanSpawnHere();
-    }
+	{
+		return this.worldObj.difficultySetting != EnumDifficulty.PEACEFUL && this.isValidLightLevel() && super.getCanSpawnHere();
+	}
 	
-    protected boolean isValidLightLevel()
-    {
-    	
-        int i = MathHelper.floor_double(this.posX);
-        int j = MathHelper.floor_double(this.boundingBox.minY);
-        int k = MathHelper.floor_double(this.posZ);
-        
-       //	if (this.worldObj.getBlockLightOpacity(i, j, k) == 0) { //Prevents spawning IN blocks
-       //		return false;
-       //	}
-       // Debug.print("Spawning an entity...");
+	protected boolean isValidLightLevel()
+	{
+		
+		int i = MathHelper.floor_double(this.posX);
+		int j = MathHelper.floor_double(this.boundingBox.minY);
+		int k = MathHelper.floor_double(this.posZ);
+		
+	   //	if (this.worldObj.getBlockLightOpacity(i, j, k) == 0) { //Prevents spawning IN blocks
+	   //		return false;
+	   //	}
+	   // Debug.print("Spawning an entity...");
 
-        //Debug.print("Sunlight level is "+this.worldObj.getSavedLightValue(EnumSkyBlock.Sky, i, j, k));
-        if (this.worldObj.getSavedLightValue(EnumSkyBlock.Sky, i, j, k) > this.rand.nextInt(32))
-        {
-        	//Debug.print("Too much sun! Failed.");
-            return false;
-        }
-        else
-        {
-            int l = this.worldObj.getBlockLightValue(i, j, k);
+		//Debug.print("Sunlight level is "+this.worldObj.getSavedLightValue(EnumSkyBlock.Sky, i, j, k));
+		if (this.worldObj.getSavedLightValue(EnumSkyBlock.Sky, i, j, k) > this.rand.nextInt(32))
+		{
+			//Debug.print("Too much sun! Failed.");
+			return false;
+		}
+		else
+		{
+			int l = this.worldObj.getBlockLightValue(i, j, k);
 
-            if (this.worldObj.isThundering())
-            {
-                int i1 = this.worldObj.skylightSubtracted;
-                this.worldObj.skylightSubtracted = 10;
-                l = this.worldObj.getBlockLightValue(i, j, k);
-                this.worldObj.skylightSubtracted = i1;
-            }
+			if (this.worldObj.isThundering())
+			{
+				int i1 = this.worldObj.skylightSubtracted;
+				this.worldObj.skylightSubtracted = 10;
+				l = this.worldObj.getBlockLightValue(i, j, k);
+				this.worldObj.skylightSubtracted = i1;
+			}
 
-            //Debug.print("Light level calculated as " + l);
-            
-            return l <= this.rand.nextInt(8);
+			//Debug.print("Light level calculated as " + l);
+			
+			return l <= this.rand.nextInt(8);
         }
     }
 }

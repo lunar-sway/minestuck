@@ -2,7 +2,7 @@ package com.mraof.minestuck.util;
 
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import net.minecraft.item.ItemStack;
@@ -52,12 +52,12 @@ public class GristHelper {
 	
 	public static boolean canAfford(GristSet base, GristSet cost) {
 		if (base == null || cost == null) {return false;}
-		Hashtable reqs = cost.getHashtable();
+		Hashtable<Integer, Integer> reqs = cost.getHashtable();
 		
 		if (reqs != null) {
-			Iterator it = reqs.entrySet().iterator();
+			Iterator<Entry<Integer, Integer>> it = reqs.entrySet().iterator();
 			while (it.hasNext()) {
-				Map.Entry pairs = (Map.Entry)it.next();
+				Entry<Integer, Integer> pairs = it.next();
 				int type = (Integer) pairs.getKey();
 				int need = (Integer) pairs.getValue();
 				int have = base.getGrist(GristType.values()[type]);
@@ -73,11 +73,11 @@ public class GristHelper {
 	 * Uses the encoded version of the username!
 	 */
 	public static void decrease(String player, GristSet set) {
-		Hashtable reqs = set.getHashtable();
+		Hashtable<Integer, Integer> reqs = set.getHashtable();
 		if (reqs != null) {
-			Iterator it = reqs.entrySet().iterator();
+			Iterator<Entry<Integer, Integer>> it = reqs.entrySet().iterator();
 			while (it.hasNext()) {
-				Map.Entry pairs = (Map.Entry)it.next();
+				Entry<Integer, Integer> pairs = it.next();
 				setGrist(player, GristType.values()[(Integer) pairs.getKey()], getGrist(player, GristType.values()[(Integer)pairs.getKey()]) - (Integer)pairs.getValue());
 			}
 		}
@@ -103,11 +103,11 @@ public class GristHelper {
 	}
 	
 	public static void increase(String username, GristSet set) {
-		Hashtable reqs = set.getHashtable();
+		Hashtable<Integer, Integer> reqs = set.getHashtable();
 		if (reqs != null) {
-			Iterator it = reqs.entrySet().iterator();
+			Iterator<Entry<Integer, Integer>> it = reqs.entrySet().iterator();
 			while (it.hasNext()) {
-				Map.Entry pairs = (Map.Entry)it.next();
+				Entry<Integer, Integer> pairs = it.next();
 				setGrist(username, GristType.values()[(Integer) pairs.getKey()], getGrist(username, GristType.values()[(Integer)pairs.getKey()]) + (Integer)pairs.getValue());
 			}
 		}

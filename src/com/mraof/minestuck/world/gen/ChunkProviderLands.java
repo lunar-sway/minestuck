@@ -18,8 +18,6 @@ import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.terraingen.ChunkProviderEvent;
 
 import com.mraof.minestuck.entity.consort.EntityIguana;
 import com.mraof.minestuck.entity.consort.EntityNakagator;
@@ -28,23 +26,19 @@ import com.mraof.minestuck.entity.underling.EntityBasilisk;
 import com.mraof.minestuck.entity.underling.EntityGiclops;
 import com.mraof.minestuck.entity.underling.EntityImp;
 import com.mraof.minestuck.entity.underling.EntityOgre;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.lands.BlockWithMetadata;
 import com.mraof.minestuck.world.gen.lands.ILandDecorator;
 import com.mraof.minestuck.world.gen.lands.LandAspect;
 import com.mraof.minestuck.world.gen.lands.LandHelper;
 
-import cpw.mods.fml.common.eventhandler.Event.Result;
-
 public class ChunkProviderLands implements IChunkProvider 
 {
-	List consortList;
-	List underlingList;
+	List<SpawnListEntry> consortList;
+	List<SpawnListEntry> underlingList;
 	World landWorld;
 	Random random;
 	private NoiseGeneratorOctaves noiseGens[] = new NoiseGeneratorOctaves[2];
 	private NoiseGeneratorTriangle noiseGeneratorTriangle;
-	private NoiseGeneratorTriangle noiseGeneratorTriangle1;
 	public LandAspect aspect1;
 	public LandAspect aspect2;
 	public LandHelper helper;
@@ -55,10 +49,11 @@ public class ChunkProviderLands implements IChunkProvider
 	public Block oceanBlock;
 	public Block riverBlock;
 	public LandAspect terrainMapper;
-	public ArrayList decorators;
+	public ArrayList<ILandDecorator> decorators;
 	public int dayCycle;
 
-	public ChunkProviderLands(World worldObj, long seed, boolean b) 
+	@SuppressWarnings("unchecked")
+	public ChunkProviderLands(World worldObj, long seed, boolean b)
 	{
 		helper = new LandHelper(seed);
 
@@ -83,15 +78,15 @@ public class ChunkProviderLands implements IChunkProvider
 			//			packet.length = packet.data.length;
 			//			Minecraft.getMinecraft().getNetHandler().addToSendQueue(packet);
 		} else {
-			aspect1 = helper.fromName(((NBTTagCompound) landDataTag).getString("aspect1"));
-			aspect2 = helper.fromName(((NBTTagCompound) landDataTag).getString("aspect2"));
+			aspect1 = LandHelper.fromName(((NBTTagCompound) landDataTag).getString("aspect1"));
+			aspect2 = LandHelper.fromName(((NBTTagCompound) landDataTag).getString("aspect2"));
 			nameIndex1 = ((NBTTagCompound) landDataTag).getInteger("aspectName1");
 			nameIndex2 = ((NBTTagCompound) landDataTag).getInteger("aspectName2");
 		}
 
 		this.random = new Random(seed);
-		this.consortList = new ArrayList();
-		this.underlingList = new ArrayList();
+		this.consortList = new ArrayList<SpawnListEntry>();
+		this.underlingList = new ArrayList<SpawnListEntry>();
 		this.consortList.add(new SpawnListEntry(EntityNakagator.class, 2, 1, 10));
 		this.consortList.add(new SpawnListEntry(EntitySalamander.class, 2, 1, 10));
 		this.consortList.add(new SpawnListEntry(EntityIguana.class, 2, 1, 10));
@@ -103,7 +98,6 @@ public class ChunkProviderLands implements IChunkProvider
 		this.noiseGens[0] = new NoiseGeneratorOctaves(this.random, 7);
 		this.noiseGens[1] = new NoiseGeneratorOctaves(this.random, 1);
 		noiseGeneratorTriangle = new NoiseGeneratorTriangle(this.random);
-		noiseGeneratorTriangle1 = new NoiseGeneratorTriangle(this.random);
 
 		this.surfaceBlock = (BlockWithMetadata) helper.pickElement(helper.pickOne(aspect1, aspect2).getSurfaceBlocks());
 		this.upperBlock = (BlockWithMetadata) helper.pickElement(helper.pickOne(aspect1, aspect2).getUpperBlocks());
@@ -155,7 +149,6 @@ public class ChunkProviderLands implements IChunkProvider
 			{
 				chunkBlocks[x * 4096 | z * 256] = Blocks.bedrock;
 				int y;
-				int currentBlockOffset;
 				for(y = 1; y < topBlock[x * 16 + z] - 1; y++)
 				{
 					//currentBlockOffset = (int) Math.abs(generated1[x + z * 256 + y * 16]);
@@ -177,7 +170,7 @@ public class ChunkProviderLands implements IChunkProvider
 		Chunk chunk = new Chunk(this.landWorld, chunkBlocks, chunkMetadata, chunkX, chunkZ);
 		return chunk;
 	}
-	private double[] initializeNoiseField(double[] par1ArrayOfDouble, int par2, int par3, int par4, int par5, int par6, int par7)
+	/*private double[] initializeNoiseField(double[] par1ArrayOfDouble, int par2, int par3, int par4, int par5, int par6, int par7)
 	{
 		ChunkProviderEvent.InitNoiseField event = new ChunkProviderEvent.InitNoiseField(this, par1ArrayOfDouble, par2, par3, par4, par5, par6, par7);
 		MinecraftForge.EVENT_BUS.post(event);
@@ -189,7 +182,7 @@ public class ChunkProviderLands implements IChunkProvider
 		}
 
 		return par1ArrayOfDouble;
-	}
+	}*/
 	@Override
 	public Chunk loadChunk(int chunkX, int chunkZ) 
 	{
@@ -236,6 +229,7 @@ public class ChunkProviderLands implements IChunkProvider
 		return "LandRandomLevelSource";
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public List getPossibleCreatures(EnumCreatureType enumcreaturetype, int i,
 			int j, int k) {

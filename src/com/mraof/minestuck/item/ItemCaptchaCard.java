@@ -15,7 +15,6 @@ import net.minecraft.util.StatCollector;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.Debug;
 
 public class ItemCaptchaCard extends Item {
 	
@@ -54,14 +53,18 @@ public class ItemCaptchaCard extends Item {
 		} else return emptyIcon;
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void getSubItems(Item item, CreativeTabs tab, List itemList) {
 		itemList.add(new ItemStack(this));
 		itemList.add(AlchemyRecipeHandler.createCard(new ItemStack(Minestuck.cruxiteArtifact), true));
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
+	public void addInformation(ItemStack par1ItemStack,
+			EntityPlayer par2EntityPlayer,
+			@SuppressWarnings("rawtypes") List par3List, boolean par4) {
 		if (par1ItemStack.hasTagCompound()) {
 			NBTTagCompound nbttagcompound = par1ItemStack.getTagCompound();
 			NBTTagString contentID = (NBTTagString)nbttagcompound.getTag("contentID");

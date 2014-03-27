@@ -3,6 +3,7 @@ package com.mraof.minestuck.block;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -13,12 +14,10 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.Minestuck;
@@ -162,7 +161,7 @@ public class BlockComputerOn extends Block implements ITileEntityProvider {
 	
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
-		ArrayList list = new ArrayList();
+		ArrayList<ItemStack> list = new ArrayList<ItemStack>();
 		list.add(new ItemStack(Minestuck.blockComputerOff));
 		
 		return list;
@@ -184,10 +183,11 @@ public class BlockComputerOn extends Block implements ITileEntityProvider {
 		te.closeConnections();
 		float factor = 0.05F;
 		Debug.print("DropItems called");
-		Iterator it = te.installedPrograms.entrySet().iterator();
-	   	int place = 0;
+		Iterator<Entry<Integer, Boolean>> it = te.installedPrograms.entrySet().iterator();
+	   	//int place = 0;
         while (it.hasNext()) {
-            Map.Entry pairs = (Map.Entry)it.next();
+			Map.Entry<Integer, Boolean> pairs = (Entry<Integer, Boolean>) it
+					.next();
             int program = (Integer) pairs.getKey();
             
 			float rx = rand.nextFloat() * 0.8F + 0.1F;
@@ -199,7 +199,7 @@ public class BlockComputerOn extends Block implements ITileEntityProvider {
 			entityItem.motionZ = rand.nextGaussian() * factor;
 			world.spawnEntityInWorld(entityItem);
             
-            place++;
+            //place++;
         }
 	}
 	

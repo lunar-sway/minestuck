@@ -23,7 +23,7 @@ public class KindAbstratusList {
 	public static void registerTypes() {
 		if(typeList != null)
 			return;
-		typeList = new ArrayList();
+		typeList = new ArrayList<KindAbstratusType>();
 		typeList.add(new KindAbstratusType("sword").addItemClass(ItemSword.class).addItemClass(ItemBlade.class));
 		typeList.add(new KindAbstratusType("bow").addItemClass(ItemBow.class));
 		typeList.add(new KindAbstratusType("pickaxe").addItemClass(ItemPickaxe.class));

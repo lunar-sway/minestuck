@@ -36,7 +36,7 @@ public class DecoratorVein implements ILandDecorator {
 //			vien.generate(world, random, chunkX*16+random.nextInt(15), random.nextInt(128), chunkZ*16+random.nextInt(15));
 //		}
 		
-			int maxPossY = 0 + (60 - 1);
+			//int maxPossY = 0 + (60 - 1);
 			int diffBtwnMinMaxY = 60 - 0;
 			for(int x = 0; x < amount; x++)
 		   {

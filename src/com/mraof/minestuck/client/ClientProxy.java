@@ -2,7 +2,6 @@ package com.mraof.minestuck.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -17,7 +16,6 @@ import com.mraof.minestuck.client.model.ModelImp;
 import com.mraof.minestuck.client.model.ModelNakagator;
 import com.mraof.minestuck.client.model.ModelOgre;
 import com.mraof.minestuck.client.model.ModelSalamander;
-//import com.mraof.minestuck.client.renderer.entity.RenderDecoy;
 import com.mraof.minestuck.client.renderer.entity.RenderEntityMinestuck;
 import com.mraof.minestuck.client.renderer.entity.RenderGrist;
 import com.mraof.minestuck.client.renderer.entity.RenderPawn;
@@ -25,7 +23,6 @@ import com.mraof.minestuck.client.renderer.entity.RenderShadow;
 import com.mraof.minestuck.client.renderer.tileentity.RenderGatePortal;
 import com.mraof.minestuck.client.renderer.tileentity.RenderMachine;
 import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
-//import com.mraof.minestuck.entity.EntityDecoy;
 import com.mraof.minestuck.entity.carapacian.EntityBishop;
 import com.mraof.minestuck.entity.carapacian.EntityPawn;
 import com.mraof.minestuck.entity.consort.EntityIguana;

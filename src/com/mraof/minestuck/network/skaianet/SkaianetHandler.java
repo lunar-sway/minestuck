@@ -1,6 +1,5 @@
 package com.mraof.minestuck.network.skaianet;
 
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -43,11 +42,11 @@ import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
  */
 public class SkaianetHandler {
 	
-	static Map<String,ComputerData> serversOpen = new TreeMap();
-	static Map<String,ComputerData>resumingClients = new HashMap();
-	static Map<String,ComputerData>resumingServers = new HashMap();
-	static List<SburbConnection> connections = new ArrayList();
-	static Map<String, String[]> infoToSend = new HashMap();	//Key: player, value: data to send to player
+	static Map<String, ComputerData> serversOpen = new TreeMap<String, ComputerData>();
+	static Map<String, ComputerData> resumingClients = new HashMap<String, ComputerData>();
+	static Map<String, ComputerData> resumingServers = new HashMap<String, ComputerData>();
+	static List<SburbConnection> connections = new ArrayList<SburbConnection>();
+	static Map<String, String[]> infoToSend = new HashMap<String, String[]>();	//Key: player, value: data to send to player
 	
 	public static SburbConnection getClientConnection(String client){
 		for(SburbConnection c : connections)
@@ -300,6 +299,7 @@ public class SkaianetHandler {
 		nbt.setTag("sessions", list);
 		
 		String[] s = {"serversOpen","resumingClients","resumingServers"};
+		@SuppressWarnings("unchecked")
 		Map<String, ComputerData>[] maps = new Map[]{serversOpen, resumingClients, resumingServers};
 		for(int i = 0; i < 3; i++) {
 			list = new NBTTagList();
@@ -336,6 +336,7 @@ public class SkaianetHandler {
 					SessionHandler.sessions.add(new Session().read(list.getCompoundTagAt(i)));
 				
 				String[] s = {"serversOpen","resumingClients","resumingServers"};
+				@SuppressWarnings("unchecked")
 				Map<String, ComputerData>[] maps = new Map[]{serversOpen, resumingClients, resumingServers};
 				for(int e = 0; e < 3; e++) {
 					list = (NBTTagList)nbt.getTag(s[e]);
@@ -379,13 +380,13 @@ public class SkaianetHandler {
 	}
 	
 	static Object[] generateClientInfo(String player){
-		List list = new ArrayList();
+		List<Object> list = new ArrayList<Object>();
 		list.add(player);
 		
 		list.add(resumingClients.containsKey(player));
 		list.add(resumingServers.containsKey(player));
 		
-		List playerList = SessionHandler.getServerList(player);
+		List<String> playerList = SessionHandler.getServerList(player);
 		list.add(playerList.size());
 		list.addAll(playerList);
 		
@@ -405,6 +406,7 @@ public class SkaianetHandler {
 				iter0.remove();
 			}
 		
+		@SuppressWarnings("unchecked")
 		Iterator<ComputerData>[] iter1 = new Iterator[]{serversOpen.values().iterator(),resumingClients.values().iterator(),resumingServers.values().iterator()};
 		
 		for(Iterator<ComputerData> i : iter1)

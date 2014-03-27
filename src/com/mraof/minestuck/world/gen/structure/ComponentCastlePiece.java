@@ -1,6 +1,5 @@
 package com.mraof.minestuck.world.gen.structure;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -14,7 +13,7 @@ public abstract class ComponentCastlePiece extends StructureComponent
 {
 	protected ComponentCastleStartPiece startPiece;
 	protected int direction;
-	private List roomsLinkedToTheRoom = new LinkedList();
+	//private List roomsLinkedToTheRoom = new LinkedList();
 	public ComponentCastlePiece() {}
 	protected ComponentCastlePiece(int par1, ComponentCastleStartPiece startPiece) 
 	{

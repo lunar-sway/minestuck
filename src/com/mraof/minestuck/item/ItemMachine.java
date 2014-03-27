@@ -6,9 +6,6 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.Debug;
-
 public class ItemMachine extends ItemBlock {
 
 		private final static String[] subNames = {"cruxtruder","punchDesignex","totemLathe","alchemiter","gristWidget"};
@@ -42,9 +39,9 @@ public class ItemMachine extends ItemBlock {
 		}
 		
 		@Override
-	    public IIcon getIconFromDamage(int par1)
-	    {
-	        return icons[par1];
-	    }
+		public IIcon getIconFromDamage(int par1)
+		{
+			return icons[par1];
+		}
 		
 }

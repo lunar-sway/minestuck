@@ -51,7 +51,7 @@ public class LandAspectShade extends LandAspect
 
 	@Override
 	public ArrayList<ILandDecorator> getDecorators() {
-		ArrayList list = new ArrayList<ILandDecorator>();
+		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
 		list.add(new DecoratorVein(Blocks.brown_mushroom_block, 10, 32));
 //		list.add(new DecoratorVein(Block.ice, 5, 8));
 		return list;

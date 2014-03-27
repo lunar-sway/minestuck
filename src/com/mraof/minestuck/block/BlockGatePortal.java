@@ -90,7 +90,10 @@ public class BlockGatePortal extends BlockContainer
 		return false;
 	}
 
-	public void addCollisionBoxesToList(World par1World, int par2, int par3, int par4, AxisAlignedBB par5AxisAlignedBB, List par6List, Entity par7Entity) {}
+	@Override
+	public void addCollisionBoxesToList(World par1World, int par2, int par3,
+			int par4, AxisAlignedBB par5AxisAlignedBB,
+			@SuppressWarnings("rawtypes") List par6List, Entity par7Entity) {}
 	
 	/**
 	 * Returns the quantity of items to drop on block destruction.

@@ -69,8 +69,8 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 			int y = (int) entity.posY;
 			int z = (int) entity.posZ;
 
-			List list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.boundingBox.expand((double)Minestuck.artifactRange, Minestuck.artifactRange, (double)Minestuck.artifactRange));
-			Iterator iterator = list.iterator();
+			List<?> list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.boundingBox.expand((double)Minestuck.artifactRange, Minestuck.artifactRange, (double)Minestuck.artifactRange));
+			Iterator<?> iterator = list.iterator();
 
 			while (iterator.hasNext())
 			{

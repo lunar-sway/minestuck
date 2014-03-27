@@ -6,12 +6,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 
-import com.mraof.minestuck.Minestuck;
 //import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
-import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristHelper;
@@ -26,7 +24,6 @@ import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
-import cpw.mods.fml.relauncher.Side;
 
 public class MinestuckPlayerTracker {
 	
@@ -92,7 +89,7 @@ public class MinestuckPlayerTracker {
 		}
 
 		//The editing player, if there is any.
-		SburbConnection c = SkaianetHandler.getClientConnection(player);
+		/*SburbConnection c = */SkaianetHandler.getClientConnection(player);
 //		if(c != null && ServerEditHandler.getData(c) != null) {
 //			EntityPlayerMP editor = ServerEditHandler.getData(c).getEditor();
 //			MinestuckPacket packet = MinestuckPacket.makePacket(Type.GRISTCACHE, gristValues, true);

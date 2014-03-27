@@ -33,7 +33,7 @@ public class GristStorage {
 	
 	//Server sided
 	
-	static Map<String, GristSet> gristMap = new HashMap();
+	static Map<String, GristSet> gristMap = new HashMap<String, GristSet>();
 	
 	public static GristSet getGristSet(String player) {
 		if(!gristMap.containsKey(player))

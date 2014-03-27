@@ -273,11 +273,11 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public void writeSpawnData(ByteBuf data) 
 	{
-		if(this.typeInt(this.gristType) < 0)
+		if(typeInt(this.gristType) < 0)
 		{
 			this.setDead();
 		}
-		data.writeInt(this.typeInt(this.gristType));
+		data.writeInt(typeInt(this.gristType));
 		data.writeInt(this.gristValue);
 	}
 

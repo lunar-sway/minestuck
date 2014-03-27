@@ -54,6 +54,7 @@ public class ItemComponent extends Item {
 		return damageValue;
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item item, CreativeTabs tab, List subItems) 

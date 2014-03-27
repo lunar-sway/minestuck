@@ -15,9 +15,9 @@ public class ItemBlade extends ItemWeapon
 {
 	private int weaponDamage;
 	private final EnumBladeType bladeType;
-    public float efficiencyOnProperMaterial = 4.0F;
-    
-    public ItemBlade(EnumBladeType bladeType)
+	public float efficiencyOnProperMaterial = 4.0F;
+	
+	public ItemBlade(EnumBladeType bladeType)
 	{
 		super();
 		
@@ -58,17 +58,17 @@ public class ItemBlade extends ItemWeapon
 		return weaponDamage;
 	}
 	
-    @Override
+	@Override
 	public int getItemEnchantability()
 	{
 		return this.bladeType.getEnchantability();
 	}
 	 
-    @Override
+	@Override
 	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase attacker)
 	{
 		itemStack.damageItem(1, attacker);
-		if(bladeType.equals(bladeType.SORD) && Math.random() < .25)
+		if (bladeType.equals(EnumBladeType.SORD) && Math.random() < .25)
 		{
 			EntityItem sord = new EntityItem(attacker.worldObj, attacker.posX, attacker.posY, attacker.posZ, itemStack);
 			attacker.worldObj.spawnEntityInWorld(sord);
@@ -78,7 +78,7 @@ public class ItemBlade extends ItemWeapon
 		return true;
 	}
 
-    @Override
+	@Override
 	public boolean onBlockDestroyed(ItemStack itemStack, World world, Block par3, int par4, int par5, int par6, EntityLivingBase par7EntityLiving)
 	{
 		if (par3.getBlockHardness(world, par4, par5, par6) != 0.0D)
@@ -89,13 +89,13 @@ public class ItemBlade extends ItemWeapon
 		return true;
 	}
 
-    @Override
+	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean isFull3D()
 	{
 		return true;
 	}
-    
+	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister iconRegister) 

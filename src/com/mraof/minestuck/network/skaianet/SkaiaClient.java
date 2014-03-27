@@ -27,10 +27,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class SkaiaClient {
 	
 	//Variables
-	static Map<String,List<String>> openServers = new HashMap();
-	static List<SburbConnection> connections = new ArrayList();
-	static Map<String,Boolean> resumingServer = new HashMap();
-	static Map<String, Boolean> resumingClient = new HashMap();
+	static Map<String,List<String>> openServers = new HashMap<String, List<String>>();
+	static List<SburbConnection> connections = new ArrayList<SburbConnection>();
+	static Map<String, Boolean> resumingServer = new HashMap<String, Boolean>();
+	static Map<String, Boolean> resumingClient = new HashMap<String, Boolean>();
 	static TileEntityComputer te = null;
 	
 	/**

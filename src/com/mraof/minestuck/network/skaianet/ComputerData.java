@@ -33,7 +33,7 @@ public class ComputerData{
 			stream.writeInt(y);
 			stream.writeInt(z);
 			stream.writeInt(dimension);
-			stream.write((owner+"\n").getBytes());
+			stream.write(owner.getBytes());
 		}
 		
 		static ComputerData load(DataInputStream stream) throws IOException{
@@ -42,7 +42,13 @@ public class ComputerData{
 			data.y = stream.readInt();
 			data.z = stream.readInt();
 			data.dimension = stream.readInt();
-			data.owner = stream.readLine(); //How should I read the string here without a deprecated method?
+			byte[] ownerBytes = new byte[stream.available()];
+			stream.read(ownerBytes);
+			char[] ownerChars = new char[ownerBytes.length];
+			for(int i = 0; i < ownerChars.length; i++)
+				ownerChars[i] = (char) ownerBytes[i];
+			System.out.println(String.valueOf(ownerChars));
+			data.owner = String.valueOf(ownerChars); //This will break for non ASCII owners, hopefully none exist
 			return data;
 		}
 	

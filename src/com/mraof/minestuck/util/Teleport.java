@@ -25,26 +25,26 @@ public class Teleport
 			WorldServer worldserver1 = par1EntityPlayerMP.mcServer.worldServerForDimension(par1EntityPlayerMP.dimension);
 			S07PacketRespawn respawnPacket = new S07PacketRespawn(par1EntityPlayerMP.dimension, par1EntityPlayerMP.worldObj.difficultySetting, worldserver1.getWorldInfo().getTerrainType(), par1EntityPlayerMP.theItemInWorldManager.getGameType());
 			par1EntityPlayerMP.playerNetServerHandler.sendPacket(respawnPacket);			
-	        par1EntityPlayerMP.playerNetServerHandler.sendPacket(new S07PacketRespawn(par1EntityPlayerMP.dimension, par1EntityPlayerMP.worldObj.difficultySetting, par1EntityPlayerMP.worldObj.getWorldInfo().getTerrainType(), par1EntityPlayerMP.theItemInWorldManager.getGameType()));
+			par1EntityPlayerMP.playerNetServerHandler.sendPacket(new S07PacketRespawn(par1EntityPlayerMP.dimension, par1EntityPlayerMP.worldObj.difficultySetting, par1EntityPlayerMP.worldObj.getWorldInfo().getTerrainType(), par1EntityPlayerMP.theItemInWorldManager.getGameType()));
 
 			worldserver.removePlayerEntityDangerously(par1EntityPlayerMP);
 			par1EntityPlayerMP.isDead = false;
 			transferEntityToWorld(par1EntityPlayerMP, j, worldserver, worldserver1, teleporter);
-	        WorldServer worldserver2 = par1EntityPlayerMP.getServerForPlayer();
-	        worldserver.getPlayerManager().removePlayer(par1EntityPlayerMP);
-	        worldserver2.getPlayerManager().addPlayer(par1EntityPlayerMP);
-	        worldserver2.theChunkProviderServer.loadChunk((int)par1EntityPlayerMP.posX >> 4, (int)par1EntityPlayerMP.posZ >> 4);
-	        
+			WorldServer worldserver2 = par1EntityPlayerMP.getServerForPlayer();
+			worldserver.getPlayerManager().removePlayer(par1EntityPlayerMP);
+			worldserver2.getPlayerManager().addPlayer(par1EntityPlayerMP);
+			worldserver2.theChunkProviderServer.loadChunk((int)par1EntityPlayerMP.posX >> 4, (int)par1EntityPlayerMP.posZ >> 4);
+			
 			par1EntityPlayerMP.playerNetServerHandler.setPlayerLocation(par1EntityPlayerMP.posX, par1EntityPlayerMP.posY, par1EntityPlayerMP.posZ, par1EntityPlayerMP.rotationYaw, par1EntityPlayerMP.rotationPitch);
 			par1EntityPlayerMP.theItemInWorldManager.setWorld(worldserver1);
 			par1EntityPlayerMP.mcServer.getConfigurationManager().updateTimeAndWeatherForPlayer(par1EntityPlayerMP, worldserver1);
 			par1EntityPlayerMP.mcServer.getConfigurationManager().syncPlayerInventory(par1EntityPlayerMP);
-			Iterator<Object> iterator = par1EntityPlayerMP.getActivePotionEffects().iterator();
+			Iterator<?> iterator = par1EntityPlayerMP.getActivePotionEffects().iterator();
 
 			while (iterator.hasNext())
 			{
 				PotionEffect potioneffect = (PotionEffect)iterator.next();
-	            par1EntityPlayerMP.playerNetServerHandler.sendPacket(new S1DPacketEntityEffect(par1EntityPlayerMP.getEntityId(), potioneffect));
+				par1EntityPlayerMP.playerNetServerHandler.sendPacket(new S1DPacketEntityEffect(par1EntityPlayerMP.getEntityId(), potioneffect));
 			}
 
 //			GameRegistry.onPlayerChangedDimension(par1EntityPlayerMP);
@@ -74,25 +74,21 @@ public class Teleport
 	}
 	public static void transferEntityToWorld(Entity entity, int dimension, WorldServer worldserver, WorldServer worldserver1, ITeleporter teleporter)
 	{
-        WorldProvider pOld = worldserver.provider;
-        WorldProvider pNew = worldserver1.provider;
-        double moveFactor = pOld.getMovementFactor() / pNew.getMovementFactor();
-        double d0 = entity.posX * moveFactor;
-        double d1 = entity.posZ * moveFactor;
-        double d3 = entity.posX;
-        double d4 = entity.posY;
-        double d5 = entity.posZ;
-        float f = entity.rotationYaw;
+		WorldProvider pOld = worldserver.provider;
+		WorldProvider pNew = worldserver1.provider;
+		double moveFactor = pOld.getMovementFactor() / pNew.getMovementFactor();
+		double d0 = entity.posX * moveFactor;
+		double d1 = entity.posZ * moveFactor;
 
-            if (entity.isEntityAlive())
-            {
-                worldserver1.spawnEntityInWorld(entity);
-                entity.setLocationAndAngles(d0, entity.posY, d1, entity.rotationYaw, entity.rotationPitch);
-                worldserver1.updateEntityWithOptionalForce(entity, false);
-                teleporter.makeDestination(entity, worldserver, worldserver1);
-            }
+			if (entity.isEntityAlive())
+			{
+				worldserver1.spawnEntityInWorld(entity);
+				entity.setLocationAndAngles(d0, entity.posY, d1, entity.rotationYaw, entity.rotationPitch);
+				worldserver1.updateEntityWithOptionalForce(entity, false);
+				teleporter.makeDestination(entity, worldserver, worldserver1);
+			}
 
 
-        entity.setWorld(worldserver1);
+		entity.setWorld(worldserver1);
 	}
 }

@@ -4,27 +4,26 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Iterator;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+
 import codechicken.nei.asm.NEIModContainer;
 
 import com.mraof.minestuck.block.BlockChessTile;
@@ -63,19 +62,15 @@ import com.mraof.minestuck.item.EnumHammerType;
 import com.mraof.minestuck.item.EnumSickleType;
 import com.mraof.minestuck.item.EnumSporkType;
 import com.mraof.minestuck.item.ItemBlade;
-import com.mraof.minestuck.item.ItemBlockLayered;
 import com.mraof.minestuck.item.ItemCane;
-import com.mraof.minestuck.item.ItemCardBlank;
 import com.mraof.minestuck.item.ItemCaptchaCard;
 import com.mraof.minestuck.item.ItemChessTile;
 import com.mraof.minestuck.item.ItemClub;
 import com.mraof.minestuck.item.ItemComponent;
-import com.mraof.minestuck.item.ItemComputerOff;
 import com.mraof.minestuck.item.ItemCruxiteArtifact;
 import com.mraof.minestuck.item.ItemCruxiteRaw;
 import com.mraof.minestuck.item.ItemDisk;
 import com.mraof.minestuck.item.ItemDowel;
-import com.mraof.minestuck.item.ItemDowelUncarved;
 import com.mraof.minestuck.item.ItemHammer;
 import com.mraof.minestuck.item.ItemMachine;
 import com.mraof.minestuck.item.ItemMinestuckBucket;
@@ -266,7 +261,7 @@ public class Minestuck
 		(new UpdateChecker()).start();
 		
 		//Register the Minestuck creative tab
-		this.tabMinestuck = new CreativeTabs("tabMinestuck")
+		tabMinestuck = new CreativeTabs("tabMinestuck")
 		{
 			@Override
 			public Item getTabIconItem() {
@@ -391,11 +386,13 @@ public class Minestuck
 		
 	}
 
+	@SuppressWarnings("unused")
 	@EventHandler
 	public void load(FMLInitializationEvent event) 
 	{
 		
 		//metadata nonsense to conserve ids
+		//TODO Get these working again
 		ItemStack blackChessTileStack = new ItemStack(chessTile, 1, 0);
 		ItemStack whiteChessTileStack = new ItemStack(chessTile, 1, 1);
 		ItemStack darkGreyChessTileStack = new ItemStack(chessTile, 1, 2);
@@ -512,11 +509,12 @@ public class Minestuck
 		}
 	}
 	//registers entity with forge and minecraft, and increases currentEntityIdOffset by one in order to prevent id collision
-	public void registerAndMapEntity(Class entityClass, String name, int eggColor, int eggSpotColor)
+	public void registerAndMapEntity(Class<? extends Entity> entityClass, String name, int eggColor, int eggSpotColor)
 	{
 		this.registerAndMapEntity(entityClass, name, eggColor, eggSpotColor, 80, 3, true);
 	}
-	public void registerAndMapEntity(Class entityClass, String name, int eggColor, int eggSpotColor, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates)
+
+	public void registerAndMapEntity(Class<? extends Entity> entityClass, String name, int eggColor, int eggSpotColor, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates)
 	{
 		EntityList.addMapping(entityClass, name, entityIdStart + currentEntityIdOffset, eggColor, eggSpotColor);
 		EntityRegistry.registerModEntity(entityClass, name, currentEntityIdOffset, this, trackingRange, updateFrequency, sendsVelocityUpdates);
@@ -527,7 +525,7 @@ public class Minestuck
 	public void serverAboutToStart(FMLServerAboutToStartEvent event)
 	{
 		//unregister lands that may not be in this save
-		for(Iterator iterator = MinestuckSaveHandler.lands.iterator(); iterator.hasNext(); )
+		for (Iterator<Byte> iterator = MinestuckSaveHandler.lands.iterator(); iterator.hasNext(); )
 		{
 			int dim = ((Number)iterator.next()).intValue();
 			if(DimensionManager.isDimensionRegistered(dim))

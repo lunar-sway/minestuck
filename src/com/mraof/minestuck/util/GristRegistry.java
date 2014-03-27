@@ -2,12 +2,13 @@ package com.mraof.minestuck.util;
 
 import java.util.Arrays;
 import java.util.Hashtable;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
 public class GristRegistry {
-	private static Hashtable gristRecipes = new Hashtable();
+	private static Hashtable<List<Object>, GristSet> gristRecipes = new Hashtable<List<Object>, GristSet>();
 	
 	/**
 	 * Creates a item-grist conversion ratio for an ItemStack. Used in the Alchemiter and GristWidget.
@@ -41,7 +42,7 @@ public class GristRegistry {
 		}
 	}
 	
-	public static Hashtable getAllConversions() {
+	public static Hashtable<List<Object>, GristSet> getAllConversions() {
 		return gristRecipes;
 	}
 }

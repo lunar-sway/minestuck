@@ -44,8 +44,9 @@ public class ItemDowel extends Item {
 		else return this.uncarved;
 	}
 	
-	   @Override
-	    public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
 		   if (par1ItemStack.hasTagCompound()) {
 				NBTTagCompound nbttagcompound = par1ItemStack.getTagCompound();
 				NBTTagString contentID = (NBTTagString)nbttagcompound.getTag("contentID");

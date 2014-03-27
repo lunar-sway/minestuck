@@ -55,7 +55,7 @@ public class LandAspectHeat extends LandAspect
 
 	@Override
 	public ArrayList<ILandDecorator> getDecorators() {
-		ArrayList list = new ArrayList<ILandDecorator>();
+		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
 		list.add(new DecoratorVein(Blocks.soul_sand, 10, 32));
 		list.add(new DecoratorVein(Blocks.glowstone, 5, 8));
 		return list;

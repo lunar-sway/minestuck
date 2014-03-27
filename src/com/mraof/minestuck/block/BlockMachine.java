@@ -23,7 +23,6 @@ import net.minecraft.world.World;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
-import com.mraof.minestuck.util.Debug;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -54,6 +53,7 @@ public class BlockMachine extends BlockContainer {
 		return metadata;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(Item item, CreativeTabs tab, List subItems) 
@@ -161,7 +161,6 @@ public class BlockMachine extends BlockContainer {
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase par5EntityLivingBase, ItemStack par6ItemStack) 
 	{
 		super.onBlockPlacedBy(world, x, y, z, par5EntityLivingBase, par6ItemStack);
-		byte b0 = 0;
 		int l = MathHelper.floor_double((double)(par5EntityLivingBase.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 		TileEntityMachine tileEntity = (TileEntityMachine) world.getTileEntity(x, y, z);
 		tileEntity.rotation = (byte) l;

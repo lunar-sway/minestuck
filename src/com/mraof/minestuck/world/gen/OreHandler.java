@@ -24,7 +24,7 @@ public class OreHandler implements IWorldGenerator {
 	
 	public void addOreSpawn(Block block, World world, Random random, int blockXPos, int blockZPos, int maxX, int maxZ, int maxVeinSize, int chancesToSpawn, int minY, int maxY)
 	{
-	      int maxPossY = minY + (maxY - 1);
+	      //int maxPossY = minY + (maxY - 1);
 	      int diffBtwnMinMaxY = maxY - minY;
 	       for(int x = 0; x < chancesToSpawn; x++)
 	       {

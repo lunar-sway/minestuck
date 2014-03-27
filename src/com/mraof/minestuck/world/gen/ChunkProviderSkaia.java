@@ -47,15 +47,15 @@ public class ChunkProviderSkaia implements IChunkProvider
     double[] noiseData4;
     double[] noiseData5;
     
-	List spawnableWhiteList;
-	List spawnableBlackList;
+	List<SpawnListEntry> spawnableWhiteList;
+	List<SpawnListEntry> spawnableBlackList;
 
 	public ChunkProviderSkaia(World world, long seed, boolean structures)
 	{
 		this.skaiaWorld = world;
         this.random = new Random(seed);
-        this.spawnableBlackList = new ArrayList();
-        this.spawnableWhiteList = new ArrayList();
+		this.spawnableBlackList = new ArrayList<SpawnListEntry>();
+		this.spawnableWhiteList = new ArrayList<SpawnListEntry>();
         this.spawnableBlackList.add(new SpawnListEntry(EntityBlackPawn.class, 2, 1, 10));
         this.spawnableBlackList.add(new SpawnListEntry(EntityBlackBishop.class, 1, 1, 1));
         this.spawnableWhiteList.add(new SpawnListEntry(EntityWhitePawn.class, 2, 1, 10));
@@ -142,6 +142,7 @@ public class ChunkProviderSkaia implements IChunkProvider
 		return "SkaiaRandomLevelSource";
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public List getPossibleCreatures(EnumCreatureType par1EnumCreatureType, int var2, int var3, int var4) 
 	{

@@ -16,8 +16,8 @@ import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 public class LandHelper {
 	
-	private static ArrayList landAspects = new ArrayList<LandAspect>();
-	private static Hashtable landNames = new Hashtable<String,LandAspect>();
+	private static ArrayList<LandAspect> landAspects = new ArrayList<LandAspect>();
+	private static Hashtable<String, LandAspect> landNames = new Hashtable<String,LandAspect>();
 	private Random random;
 	
 	public LandHelper(long seed) {
@@ -76,8 +76,9 @@ public class LandHelper {
 	/**
 	 * Returns a ArrayList that is a random combination of the two input ArrayLists.
 	 */
+	@SuppressWarnings("rawtypes")
 	public ArrayList pickSubset(ArrayList list1, ArrayList list2) {
-		ArrayList result = new ArrayList();
+		ArrayList<Object> result = new ArrayList<Object>();
 		for (Object obj : list1) {
 			if (random.nextBoolean())
 				result.add(obj);

@@ -66,7 +66,7 @@ public class SkaianetInfoPacket extends MinestuckPacket {
 		isClientResuming = data.readBoolean();
 		isServerResuming = data.readBoolean();
 		int size = data.readInt();
-		openServers = new ArrayList();
+		openServers = new ArrayList<String>();
 		for(int i = 0; i < size; i++)
 			openServers.add(readLine(data));
 		connections = new ArrayList<SburbConnection>();

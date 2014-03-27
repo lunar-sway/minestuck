@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
@@ -14,7 +13,6 @@ import net.minecraft.tileentity.TileEntity;
 
 import com.mraof.minestuck.client.gui.GuiComputer;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.Debug;
 
 public class TileEntityComputer extends TileEntity {
 	
@@ -30,7 +28,7 @@ public class TileEntityComputer extends TileEntity {
 	public String clientName = "";
 	public GuiComputer gui;
 	public String owner = "";
-	public Hashtable<Integer,String> latestmessage = new Hashtable();
+	public Hashtable<Integer,String> latestmessage = new Hashtable<Integer,String>();
 	public boolean resumingClient;
 	/**
 	 * 0 if client is selected, 1 if server. (client side variable)
@@ -64,13 +62,14 @@ public class TileEntityComputer extends TileEntity {
     public void writeToNBT(NBTTagCompound par1NBTTagCompound) {
     	super.writeToNBT(par1NBTTagCompound);
     	NBTTagCompound programs = new NBTTagCompound();
-   	   	Iterator it = this.installedPrograms.entrySet().iterator();
-	   	int place = 0;
+		Iterator<Entry<Integer, Boolean>> it = this.installedPrograms.entrySet().iterator();
+	   	//int place = 0;
 	    while (it.hasNext()) {
-	        Map.Entry pairs = (Map.Entry)it.next();
+			Map.Entry<Integer, Boolean> pairs = (Entry<Integer, Boolean>) it
+					.next();
 	        int program = (Integer) pairs.getKey();
 	        programs.setInteger("program"+program,program);
-	        place++;
+	        //place++;
          }
 	    for(Entry<Integer, String> e : latestmessage.entrySet())
 	    	par1NBTTagCompound.setString("text"+e.getKey(), e.getValue());

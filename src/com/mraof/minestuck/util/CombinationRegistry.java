@@ -2,13 +2,14 @@ package com.mraof.minestuck.util;
 
 import java.util.Arrays;
 import java.util.Hashtable;
+import java.util.List;
 
 import com.mraof.minestuck.Minestuck;
 
 import net.minecraft.item.ItemStack;
 
 public class CombinationRegistry {
-	private static Hashtable combRecipes = new Hashtable();
+	private static Hashtable<List<Object>, ItemStack> combRecipes = new Hashtable<List<Object>, ItemStack>();
 	public static final boolean MODE_AND  = true;
 	public static final boolean MODE_OR = false;
 	
@@ -47,7 +48,7 @@ public class CombinationRegistry {
 		return (ItemStack) temp;
 	}
 	
-	public static Hashtable getAllConversions() {
+	public static Hashtable<List<Object>, ItemStack> getAllConversions() {
 		return combRecipes;
 	}
 }

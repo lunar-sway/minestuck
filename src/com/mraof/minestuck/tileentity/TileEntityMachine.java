@@ -2,7 +2,6 @@ package com.mraof.minestuck.tileentity;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -276,7 +275,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 				break;
 			}
 			ItemStack outputItem = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(this.inv[1],true),AlchemyRecipeHandler.getDecodedItem(this.inv[2],true),this.mode);
-			boolean consumeItem = inv[1] == null || inv[2] == null;
+			//boolean consumeItem = inv[1] == null || inv[2] == null;
 			
 			if (this.inv[1] == null) {
 				outputItem = inv[2];
@@ -286,7 +285,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			
 			if(inv[3].hasTagCompound() && inv[3].getTagCompound().getBoolean("punched")) {	//If you push the data onto a punched card, perform an OR alchemy
 				outputItem = CombinationRegistry.getCombination(outputItem, AlchemyRecipeHandler.getDecodedItem(inv[3]), CombinationRegistry.MODE_OR);
-				consumeItem = false;
+				//consumeItem = false;
 			}
 			
 			setInventorySlotContents(0,AlchemyRecipeHandler.createCard(outputItem, true));
