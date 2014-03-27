@@ -16,7 +16,6 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.network.ClearMessagePacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;

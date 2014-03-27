@@ -1,7 +1,6 @@
 package com.mraof.minestuck.editmode;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -27,7 +26,6 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.EntityDecoy;
-import com.mraof.minestuck.item.block.ItemMachine;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
@@ -46,11 +44,8 @@ import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
-import cpw.mods.fml.common.registry.GameData;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 /**
  * Main class to handle the server side of edit mode.

@@ -1,8 +1,6 @@
 package com.mraof.minestuck.editmode;
 
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.management.ItemInWorldManager;
 
 import com.mraof.minestuck.entity.EntityDecoy;
 import com.mraof.minestuck.network.skaianet.SburbConnection;

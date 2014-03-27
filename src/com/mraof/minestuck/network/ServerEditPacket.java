@@ -7,7 +7,6 @@ import java.util.EnumSet;
 import net.minecraft.entity.player.EntityPlayer;
 
 import com.mraof.minestuck.editmode.ClientEditHandler;
-import com.mraof.minestuck.editmode.DeployList;
 
 import cpw.mods.fml.relauncher.Side;
 

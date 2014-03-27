@@ -283,7 +283,7 @@ public class Minestuck
 		//machines
 		blockStorage = GameRegistry.registerBlock(new BlockStorage(),ItemStorageBlock.class,"blockStorage");
 		blockMachine = GameRegistry.registerBlock(new BlockMachine(), ItemMachine.class,"blockMachine");
-		blockComputerOff = GameRegistry.registerBlock(new BlockComputerOff(),"blockComputer");
+		blockComputerOff = GameRegistry.registerBlock(new BlockComputerOff(), ItemComputerOff.class,"blockComputer");
 		blockComputerOn = GameRegistry.registerBlock(new BlockComputerOn(),"blockComputerOn");
 		//fluids
 		fluidOil = new Fluid("Oil");
