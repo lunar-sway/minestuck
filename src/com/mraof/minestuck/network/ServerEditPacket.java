@@ -6,8 +6,7 @@ import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
 
-//import com.mraof.minestuck.editmode.ClientEditHandler;
-import com.mraof.minestuck.editmode.DeployList;
+import com.mraof.minestuck.editmode.ClientEditHandler;
 
 import cpw.mods.fml.relauncher.Side;
 
@@ -26,6 +25,13 @@ public class ServerEditPacket extends MinestuckPacket {
 		if(dat.length == 0) {
 			return this;
 		}
+		if(dat.length == 1) {
+			data.writeBoolean(true);
+			for(boolean b : (boolean[])dat[0])
+				data.writeBoolean(b);
+			return this;
+		}
+		data.writeBoolean(false);
 		writeString(data,dat[0].toString()+"\n");
 		data.writeInt((Integer)dat[1]);
 		data.writeInt((Integer)dat[2]);
@@ -39,10 +45,17 @@ public class ServerEditPacket extends MinestuckPacket {
 	public MinestuckPacket consumePacket(ByteBuf data) {
 		if(data.readableBytes() == 0)
 			return this;
+		if(data.readBoolean()) {
+			givenItems = new boolean[data.readableBytes()];
+			for(int i = 0; i < givenItems.length; i++) {
+				givenItems[i] = data.readBoolean();
+			}
+			return this;
+		}
 		target = readLine(data);
 		posX = data.readInt();
 		posZ = data.readInt();
-		givenItems = new boolean[DeployList.getItemList().size()+1];
+		givenItems = new boolean[data.readableBytes()];
 		for(int i = 0; i < givenItems.length; i++) {
 			givenItems[i] = data.readBoolean();
 		}
@@ -52,7 +65,7 @@ public class ServerEditPacket extends MinestuckPacket {
 
 	@Override
 	public void execute(EntityPlayer player) {
-//		ClientEditHandler.onClientPackage(target, posX, posZ, givenItems);
+		ClientEditHandler.onClientPackage(target, posX, posZ, givenItems);
 	}
 
 	@Override

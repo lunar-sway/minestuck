@@ -43,7 +43,7 @@ public class BlockStorage extends Block {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubBlocks(Item unknown, CreativeTabs tab, List subItems) 
+	public void getSubBlocks(Item item, CreativeTabs tab, List subItems) 
 	{
 		for(int i = 0; i < iconNames.length; i++)
 			subItems.add(new ItemStack(this, 1, i));

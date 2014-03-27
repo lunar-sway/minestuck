@@ -18,6 +18,7 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 	int landEditRange;
 	
 	boolean hardMode;
+	boolean giveItems;
 	
 	String lanHost;
 	
@@ -30,6 +31,7 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 		data.writeInt(Minestuck.overworldEditRange);
 		data.writeInt(Minestuck.landEditRange);
 		data.writeBoolean(Minestuck.hardMode);
+		data.writeBoolean(Minestuck.giveItems);
 		if(UsernameHandler.host != null)
 			writeString(data,UsernameHandler.host);
 		
@@ -41,6 +43,7 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 		overWorldEditRange = data.readInt();
 		landEditRange = data.readInt();
 		hardMode = data.readBoolean();
+		giveItems = data.readBoolean();
 		lanHost = readLine(data);
 		if(lanHost.isEmpty())
 			lanHost = null;
@@ -54,6 +57,7 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 		Minestuck.clientOverworldEditRange = this.overWorldEditRange;
 		Minestuck.clientLandEditRange = this.landEditRange;
 		Minestuck.clientHardMode = this.hardMode;
+		Minestuck.clientGiveItems = this.giveItems;
 		UsernameHandler.host = lanHost;
 		
 	}
