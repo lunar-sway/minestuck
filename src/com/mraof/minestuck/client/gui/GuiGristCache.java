@@ -1,6 +1,5 @@
 package com.mraof.minestuck.client.gui;
 
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
@@ -15,11 +14,12 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-//import com.mraof.minestuck.editmode.ClientEditHandler;
+import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.util.GristStorage;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.util.TitleHelper;
+import com.mraof.minestuck.util.UsernameHandler;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -71,9 +71,9 @@ public class GuiGristCache extends GuiScreen
 		}
 		
 		if (titleMessage.isEmpty())
-//			if(ClientEditHandler.isActive())
-//				titleMessage = UsernameHandler.decode(ClientEditHandler.client).toUpperCase();
-			/*else*/ titleMessage = mc.thePlayer.getCommandSenderName().toUpperCase() + " : " + title.getTitleName();
+			if(ClientEditHandler.isActive())
+				titleMessage = UsernameHandler.decode(ClientEditHandler.client).toUpperCase();
+			else titleMessage = mc.thePlayer.getCommandSenderName().toUpperCase() + " : " + title.getTitleName();
 		
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.getTextureManager().bindTexture(guiBackground);

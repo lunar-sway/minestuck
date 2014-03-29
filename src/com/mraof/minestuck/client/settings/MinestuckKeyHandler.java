@@ -4,7 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 
 import com.mraof.minestuck.client.gui.GuiGristCache;
-//import com.mraof.minestuck.editmode.ClientEditHandler;
+import com.mraof.minestuck.editmode.ClientEditHandler;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -35,8 +35,8 @@ public class MinestuckKeyHandler {
 			
 		} else if(editKey.getIsKeyPressed() && !editKeyPressed) {
 			
-//			if(Minecraft.getMinecraft().currentScreen == null)
-//				ClientEditHandler.onKeyPressed();
+			if(Minecraft.getMinecraft().currentScreen == null)
+				ClientEditHandler.onKeyPressed();
 			
 		}
 		

@@ -1,4 +1,4 @@
-package com.mraof.minestuck.item;
+package com.mraof.minestuck.item.weapon;
 
 import java.util.Set;
 

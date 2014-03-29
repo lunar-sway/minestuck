@@ -15,6 +15,7 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.ClearMessagePacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
@@ -177,7 +178,7 @@ public class GuiComputer extends GuiScreen
 			if (!te.clientName.isEmpty() && SkaiaClient.getClientConnection(te.clientName) != null) {
 				displayMessage = StatCollector.translateToLocalFormatted("computer.messageConnect", displayPlayer);
 				addButtonString("computer.buttonClose");
-				addButtonString("computer.buttonGive");
+				addButtonString((Minestuck.clientGiveItems?"computer.buttonGive":"computer.buttonEdit"));
 			} else if (te.openToClients) {
 				displayMessage = StatCollector.translateToLocal("computer.messageResumeServer");
 				addButtonString("computer.buttonClose");
@@ -242,9 +243,7 @@ public class GuiComputer extends GuiScreen
 				SkaiaClient.sendConnectRequest(te, UsernameHandler.encode(usernameList[selButtons.indexOf(guibutton)]), true);
 			}
 		} else if(te.programSelected == 1){
-			if(buttonString.equals("computer.buttonEdit")){
-//				ClientEditHandler.activate(te.owner,te.clientName);
-			} else if(buttonString.equals("computer.buttonGive")) {
+			if(buttonString.equals("computer.buttonEdit") || buttonString.equals("computer.buttonGive")) {
 				MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CLIENT_EDIT, te.owner, te.clientName);
 				MinestuckChannelHandler.sendToServer(packet);
 			} else if(buttonString.equals("computer.buttonResume")){

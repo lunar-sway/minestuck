@@ -25,7 +25,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 
 import com.mraof.minestuck.Minestuck;
-//import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
@@ -175,7 +175,7 @@ public class SkaianetHandler {
 						sc.getWorldObj().markBlockForUpdate(sc.xCoord, sc.yCoord, sc.zCoord);
 					}
 					SessionHandler.onConnectionClosed(c, true);
-//					ServerEditHandler.onDisconnect(c);
+					ServerEditHandler.onDisconnect(c);
 					if(c.isMain)
 						c.isActive = false;	//That's everything that is neccesary.
 					else connections.remove(c);
@@ -429,7 +429,7 @@ public class SkaianetHandler {
 						iter2.remove();
 					else c.isActive = false;
 					SessionHandler.onConnectionClosed(c, true);
-//					ServerEditHandler.onDisconnect(c);
+					ServerEditHandler.onDisconnect(c);
 					
 					if(cc != null){
 						cc.serverConnected = false;

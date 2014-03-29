@@ -7,6 +7,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
@@ -24,6 +25,8 @@ public class BlockChessTile extends Block
 	{
 		super(Material.ground);
 		setHardness(0.5F);
+		
+		setBlockName("chessTile");
 		this.setCreativeTab(Minestuck.tabMinestuck);
 	}
 	@Override
@@ -36,15 +39,15 @@ public class BlockChessTile extends Block
 	{
 		return metadata;
 	}
-
+	
+	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(int unknown, CreativeTabs tab, List subItems) 
+	public void getSubBlocks(Item item, CreativeTabs tab, List subItems) 
 	{
 		for(int i = 0; i < iconNames.length; i++)
 			subItems.add(new ItemStack(this, 1, i));
 	}
-	
 	
 	@Override
 	public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z) 
