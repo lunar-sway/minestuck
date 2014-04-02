@@ -105,7 +105,7 @@ public class Session {
 	 * @return This.
 	 */
 	Session read(NBTTagCompound nbt) {
-		NBTTagList list = (NBTTagList) nbt.getTag("connections");
+		NBTTagList list = nbt.getTagList("connections", 10);
 		for(int i = 0; i < list.tagCount(); i++)
 			connections.add(new SburbConnection().read(list.getCompoundTagAt(i)));
 		SkaianetHandler.connections.addAll(this.connections);

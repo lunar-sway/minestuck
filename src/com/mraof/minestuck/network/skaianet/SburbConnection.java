@@ -124,7 +124,7 @@ public class SburbConnection {
 			givenItemList[0] = nbt.getBoolean("givenCard");
 			if(nbt.hasKey("givenItems")) {
 				if(nbt.getTag("givenItems") instanceof NBTTagList) {
-					NBTTagList list = (NBTTagList) nbt.getTag("givenItems");
+					NBTTagList list = (NBTTagList) nbt.getTagList("givenItems", 10);
 					for(int i = 0; i < list.tagCount(); i++) {
 						NBTTagCompound itemTag = list.getCompoundTagAt(i);
 						int ordinal = DeployList.getOrdinal(ItemStack.loadItemStackFromNBT(itemTag));

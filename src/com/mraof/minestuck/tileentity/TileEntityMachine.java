@@ -127,7 +127,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
             this.mode =  tagCompound.getBoolean("mode");
             this.overrideStop = tagCompound.getBoolean("overrideStop");
             
-            NBTTagList tagList = (NBTTagList) tagCompound.getTag("Inventory");
+            NBTTagList tagList = tagCompound.getTagList("Inventory", 10);
             for (int i = 0; i < tagList.tagCount(); i++) {
                     NBTTagCompound tag = tagList.getCompoundTagAt(i);
                     byte slot = tag.getByte("Slot");
@@ -353,7 +353,11 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 						if(grist == 0)
 							break;
 						GristAmount gristAmount = new GristAmount(GristType.values()[entry.getKey()],grist<=3?grist:(worldObj.rand.nextInt(grist)+1));
-						worldObj.spawnEntityInWorld(new EntityGrist(worldObj, this.xCoord + 0.5 /* this.width - this.width / 2*/, this.yCoord+1, this.zCoord + 0.5 /* this.width - this.width / 2*/, gristAmount));
+						EntityGrist entity = new EntityGrist(worldObj, this.xCoord + 0.5 /* this.width - this.width / 2*/, this.yCoord+1, this.zCoord + 0.5 /* this.width - this.width / 2*/, gristAmount);
+						entity.motionX /= 2;
+						entity.motionY /= 2;
+						entity.motionZ /= 2;
+						worldObj.spawnEntityInWorld(entity);
 						//Create grist entity of gristAmount
 						grist -= gristAmount.getAmount();
 					}

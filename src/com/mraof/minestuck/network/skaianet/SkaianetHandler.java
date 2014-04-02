@@ -315,18 +315,14 @@ public class SkaianetHandler {
 		resumingServers.clear();
 		SessionHandler.sessions.clear();
 		if(nbt != null) {
-			NBTTagList list = (NBTTagList) nbt.getTag("connections");
-			for(int i = 0; i < list.tagCount(); i++)
-				connections.add(new SburbConnection().read(list.getCompoundTagAt(i)));
-			
-			list = (NBTTagList) nbt.getTag("sessions");
+			NBTTagList list = nbt.getTagList("sessions", 10);
 			for(int i = 0; i < list.tagCount(); i++)
 				SessionHandler.sessions.add(new Session().read(list.getCompoundTagAt(i)));
 			
 			String[] s = {"serversOpen","resumingClients","resumingServers"};
 			Map<String, ComputerData>[] maps = new Map[]{serversOpen, resumingClients, resumingServers};
 			for(int e = 0; e < 3; e++) {
-				list = (NBTTagList)nbt.getTag(s[e]);
+				list = nbt.getTagList(s[e], 10);
 				if(list == null)
 					continue;
 				for(int i = 0; i < list.tagCount(); i++){
