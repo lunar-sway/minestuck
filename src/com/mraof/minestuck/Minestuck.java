@@ -111,6 +111,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.FMLEmbeddedChannel;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
@@ -398,7 +399,6 @@ public class Minestuck
 	{
 		
 		//metadata nonsense to conserve ids
-		//TODO Get these working again
 		ItemStack blackChessTileStack = new ItemStack(chessTile, 1, 0);
 		ItemStack whiteChessTileStack = new ItemStack(chessTile, 1, 1);
 		ItemStack darkGreyChessTileStack = new ItemStack(chessTile, 1, 2);
@@ -583,4 +583,8 @@ public class Minestuck
 		}
 	}
 	
+	@EventHandler
+	public void serverStopping(FMLServerStoppingEvent event) {
+		ServerEditHandler.onServerStopping();
+	}
 }

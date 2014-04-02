@@ -19,11 +19,11 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.WorldSettings.GameType;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.EntityDecoy;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
@@ -94,6 +94,8 @@ public class ServerEditHandler
 		data.connection.useCoordinates = true;
 		data.connection.posX = player.posX;
 		data.connection.posZ = player.posZ;
+		
+		player.setGameType(decoy.gameType);
 		
 		player.playerNetServerHandler.setPlayerLocation(decoy.posX, decoy.posY, decoy.posZ, decoy.rotationYaw, decoy.rotationPitch);
 		player.capabilities.readCapabilitiesFromNBT(decoy.capabilities);
@@ -167,9 +169,7 @@ public class ServerEditHandler
 		player.closeScreen();
 		player.inventory.clearInventory(null, -1);
 		
-		player.capabilities.allowEdit = true;
-		player.capabilities.allowFlying = true;
-		player.capabilities.disableDamage = true;
+		player.setGameType(GameType.CREATIVE);
 		player.sendPlayerAbilities();
 		
 		player.setPositionAndUpdate(posX, posY, posZ);
@@ -223,7 +223,6 @@ public class ServerEditHandler
 			if(DeployList.containsItemStack(stack))
 					if(stack.getItem() instanceof ItemBlock)
 						event.setCanceled(true);
-//					else if()
 			
 			else if(stack.getItem().equals(Minestuck.captchaCard) && AlchemyRecipeHandler.getDecodedItem(stack).getItem().equals(Minestuck.cruxiteArtifact)) {
 				SburbConnection c = getData(event.player.getCommandSenderName()).connection;
@@ -237,6 +236,8 @@ public class ServerEditHandler
 				else inventory.setInventorySlotContents(inventory.currentItem, null);
 			}
 		}
+		if(event.isCanceled())
+			event.entityItem.setDead();
 	}
 	
 	@SubscribeEvent
@@ -256,6 +257,8 @@ public class ServerEditHandler
 			if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
 				event.useBlock = Result.DENY;
 				ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
+				if(stack == null)
+					return;
 				if(stack.getItem().equals(Item.getItemFromBlock(Minestuck.blockMachine)) && stack.getItemDamage() < 4) {
 					GristSet cost;
 					if(stack.getItemDamage() == 1)
@@ -267,6 +270,8 @@ public class ServerEditHandler
 				} else if(!(stack.getItem() instanceof ItemBlock) || !GristHelper.canAfford(data.connection.getClientName(), stack)) {
 					event.setCanceled(true);
 				}
+				if(event.useItem == Result.DEFAULT)
+					event.useItem = Result.ALLOW;
 			} else if(event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) {
 				Block block = event.entity.worldObj.getBlock(event.x, event.y, event.z);
 				if(block.getBlockHardness(event.entity.worldObj, event.x, event.y, event.z) < 0
@@ -287,7 +292,7 @@ public class ServerEditHandler
 				MinestuckChannelHandler.sendToPlayer(packet, event.entityPlayer);
 				return;
 			}
-			if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK && event.useItem != Result.DENY) {
+			if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK && event.useItem == Result.ALLOW) {
 				ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
 				if(stack.getItem().equals(Item.getItemFromBlock(Minestuck.blockMachine)) && stack.getItemDamage() < 4) {
 					SburbConnection c = data.connection;
@@ -389,6 +394,11 @@ public class ServerEditHandler
 		
 		if(inventoryChanged)
 			MinecraftServer.getServer().getConfigurationManager().syncPlayerInventory(player);
+	}
+	
+	public static void onServerStopping() {	
+		for(EditData data : new ArrayList<EditData>(list))
+			reset(null, 0, data);
 	}
 	
 }

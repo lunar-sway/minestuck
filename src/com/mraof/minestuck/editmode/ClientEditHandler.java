@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.renderer.InventoryEffectRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
@@ -15,6 +16,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
@@ -23,6 +25,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.WorldEvent;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.client.gui.GuiInventoryReplacer;
 import com.mraof.minestuck.item.ItemCruxiteArtifact;
 import com.mraof.minestuck.item.block.ItemMachine;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
@@ -123,20 +126,18 @@ public class ClientEditHandler {
 		}
 	}
 	
-
 	@SubscribeEvent
 	public void tickEnd(PlayerTickEvent event) {
-		if(event.phase != TickEvent.Phase.END || event.player != Minecraft.getMinecraft().thePlayer)
+		if(event.phase != TickEvent.Phase.END || event.player != Minecraft.getMinecraft().thePlayer || !isActive())
 			return;
 		EntityPlayer player = event.player;
-		if(!(player instanceof EntityClientPlayerMP) || !isActive())
-			return;
 		
 		double range = (MinestuckSaveHandler.lands.contains((byte)player.dimension)?Minestuck.clientLandEditRange:Minestuck.clientOverworldEditRange)/2;
 		
-//		ServerEditHandler.updatePosition(player, range, centerX, centerZ);
+		ServerEditHandler.updatePosition(player, range, centerX, centerZ);
 		if(Minestuck.toolTipEnabled)
 			addToolTip(player, givenItems);
+		
 	}
 	
 	@SubscribeEvent
@@ -146,16 +147,14 @@ public class ClientEditHandler {
 			ItemStack stack = event.entityItem.getEntityItem();
 			if((stack.getItem() instanceof ItemMachine && stack.getItemDamage() < 4)) {
 				event.setCanceled(true);
-//				if(inventory.getItemStack() != null)
-//					inventory.inventoryChanged = true;
+				event.entityItem.setDead();
 			}
 			else if(stack.getItem().equals(Minestuck.captchaCard) && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact) {
 				SburbConnection c = SkaiaClient.getClientConnection(client);
 				givenItems[4] = true;
-//				if(!Minestuck.clientHardMode)
-//					inventory.inventoryChanged = true;
 			} else {
 				event.setCanceled(true);
+				event.entityItem.setDead();
 				if(inventory.getItemStack() != null)
 					inventory.setItemStack(null);
 				else inventory.setInventorySlotContents(inventory.currentItem, null);
@@ -185,6 +184,8 @@ public class ClientEditHandler {
 						event.setCanceled(true);
 				} else if(!(stack.getItem() instanceof ItemBlock) || !GristHelper.canAfford(GristStorage.getClientGrist(), GristRegistry.getGristConversion(stack)))
 					event.setCanceled(true);
+				if(event.useItem == Result.DEFAULT)
+					event.useItem = Result.ALLOW;
 			} else if(event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) {
 				Block block = event.entity.worldObj.getBlock(event.x, event.y, event.z);
 				if(block.getBlockHardness(event.entity.worldObj, event.x, event.y, event.z) < 0
@@ -198,7 +199,7 @@ public class ClientEditHandler {
 	@SubscribeEvent(priority=EventPriority.LOWEST,receiveCanceled=false)
 	public void onBlockPlaced(PlayerInteractEvent event) {
 		if(event.entity.worldObj.isRemote && isActive() && event.entityPlayer.equals(Minecraft.getMinecraft().thePlayer)
-				&& event.action == Action.LEFT_CLICK_BLOCK && event.useItem != Result.DENY) {
+				&& event.action == Action.LEFT_CLICK_BLOCK && event.useItem == Result.ALLOW) {
 			ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
 			if(stack.getItem().equals(Item.getItemFromBlock(Minestuck.blockMachine)) && stack.getItemDamage() < 4)
 				givenItems[stack.getItemDamage()+1] = true;
@@ -213,7 +214,15 @@ public class ClientEditHandler {
 	
 	@SubscribeEvent
 	public void onWorldUnload(WorldEvent.Unload event) {
-		activated = false;
+		Debug.print("Client side:"+event.world.isRemote);
+		if(event.world.isRemote)
+			activated = false;
+	}
+	
+	@SubscribeEvent(priority=EventPriority.HIGH)
+	public void onGuiOpened(GuiOpenEvent event) {
+		if(isActive() && event.gui instanceof InventoryEffectRenderer && !(event.gui instanceof GuiInventoryReplacer))
+				event.gui = new GuiInventoryReplacer(Minecraft.getMinecraft().thePlayer);
 	}
 	
 }
