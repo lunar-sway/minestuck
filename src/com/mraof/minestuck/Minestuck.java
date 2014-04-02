@@ -259,7 +259,7 @@ public class Minestuck
 		hardMode = config.get("General", "hardMode", false).getBoolean(false);
 		forceMaxSize = config.get("General", "forceMaxSize", false).getBoolean(false);
 		escapeFailureMode = config.get("General", "escapeFailureMode", 0).getInt();
-		giveItems = config.get("General", "giveItems", true, "Setting this to true replaces editmode with the old Give Items.").getBoolean(true);
+		giveItems = config.get("General", "giveItems", false, "Setting this to true replaces editmode with the old Give Items.").getBoolean(false);
 		//Default will be set to false when everything with edit mode is fixed
 		if(escapeFailureMode > 2 || escapeFailureMode < 0)
 			escapeFailureMode = 0;
