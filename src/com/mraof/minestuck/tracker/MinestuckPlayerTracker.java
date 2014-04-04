@@ -6,6 +6,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
@@ -25,6 +26,10 @@ import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
+import cpw.mods.fml.common.network.FMLNetworkEvent;
+import cpw.mods.fml.common.network.FMLOutboundHandler;
+import cpw.mods.fml.common.network.handshake.NetworkDispatcher;
+import cpw.mods.fml.relauncher.Side;
 
 public class MinestuckPlayerTracker {
 	
@@ -60,11 +65,25 @@ public class MinestuckPlayerTracker {
 
 		updateGristCache(UsernameHandler.encode(player.getCommandSenderName()));
 		updateTitle(player);
-		updateLands(player);
+//		updateLands(player);
 		if(UpdateChecker.outOfDate)
 			player.addChatMessage(new ChatComponentText("New version of Minestuck: " + UpdateChecker.latestVersion + "\nChanges: " + UpdateChecker.updateChanges));
 	}
-
+	
+	@SubscribeEvent
+	public void onConnectionCreated(FMLNetworkEvent.ServerConnectionFromClientEvent event) {
+		byte[] lands = new byte[MinestuckSaveHandler.lands.size()];
+		for(int i = 0; i < lands.length; i++)
+			lands[i] = MinestuckSaveHandler.lands.get(i);
+		
+		MinestuckPacket packet = MinestuckPacket.makePacket(Type.LANDREGISTER, lands);
+		Debug.printf("Player logged in, sending land packet.");
+		
+		Minestuck.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.DISPATCHER);
+		Minestuck.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(event.manager.channel().attr(NetworkDispatcher.FML_DISPATCHER).get());
+		Minestuck.channels.get(Side.SERVER).writeOutbound(packet);
+	}
+	
 	@SubscribeEvent
 	public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
 		
