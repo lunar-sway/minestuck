@@ -218,7 +218,6 @@ public class ClientEditHandler {
 	
 	@SubscribeEvent
 	public void onWorldUnload(WorldEvent.Unload event) {
-		Debug.print("Client side:"+event.world.isRemote);
 		if(event.world.isRemote)
 			activated = false;
 	}
