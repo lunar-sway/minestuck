@@ -1,9 +1,8 @@
 package com.mraof.minestuck.util;
 
 /**
- * Used to encode/decode username's depending on if the
+ * Used to encode/decode player usernames, to handle uses with LAN.
  * @author kirderf1
- *
  */
 public class UsernameHandler {
 	

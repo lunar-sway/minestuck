@@ -35,15 +35,20 @@ public class Session {
 		}
 		String start = connections.get(0).getClientName();
 		String current = start;
-		while(true){
-			for(SburbConnection c : connections)
-				if(c.getServerName().equals(current)){
+		main: while(true){
+			for(SburbConnection c : connections) {
+				if(!c.enteredGame) {
+					completed = false;
+					return;
+				}
+				if(c.getServerName().equals(current)) {
 					current = c.getClientName();
-					if(start.equals(current)){
+					if(start.equals(current)) {
 						completed = true;
 						return;
-					} else continue;
+					} else continue main;
 				}
+			}
 			completed = false;
 			return;
 		}
@@ -100,7 +105,7 @@ public class Session {
 	 * @return This.
 	 */
 	Session read(NBTTagCompound nbt) {
-		NBTTagList list = (NBTTagList) nbt.getTag("connections");
+		NBTTagList list = nbt.getTagList("connections", 10);
 		for(int i = 0; i < list.tagCount(); i++)
 			connections.add(new SburbConnection().read(list.getCompoundTagAt(i)));
 		SkaianetHandler.connections.addAll(this.connections);

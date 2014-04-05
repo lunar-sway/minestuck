@@ -8,7 +8,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -30,6 +29,7 @@ import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
+import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
@@ -209,24 +209,36 @@ public class ServerEditHandler
 			return;
 		
 		SburbConnection c = data.connection;
-		double range = (MinestuckSaveHandler.lands.contains((byte)player.dimension)?Minestuck.landEditRange:Minestuck.overworldEditRange)/2;
+		int range = MinestuckSaveHandler.lands.contains((byte)player.dimension)?Minestuck.landEditRange:Minestuck.overworldEditRange;
 		
-		updateInventory(player, c.givenItems(), c.enteredGame());
+		updateInventory(player, c.givenItems(), c.enteredGame(), c.getClientName());
 		updatePosition(player, range, c.centerX, c.centerZ);
 	}
 	
 	@SubscribeEvent
 	public void onTossEvent(ItemTossEvent event) {
 		if(!event.entity.worldObj.isRemote && getData(event.player.getCommandSenderName()) != null) {
+			EditData data = getData(event.player.getCommandSenderName());
 			InventoryPlayer inventory = event.player.inventory;
 			ItemStack stack = event.entityItem.getEntityItem();
 			if(DeployList.containsItemStack(stack))
 					if(stack.getItem() instanceof ItemBlock)
 						event.setCanceled(true);
+					else {
+						GristSet cost = Minestuck.hardMode && data.connection.givenItems()[DeployList.getOrdinal(stack)+1]
+								?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
+						if(GristHelper.canAfford(GristStorage.getGristSet(data.connection.getClientName()), cost)) {
+							GristHelper.decrease(data.connection.getClientName(), cost);
+							MinestuckPlayerTracker.updateGristCache(data.connection.getClientName());
+							data.connection.givenItems()[DeployList.getOrdinal(stack)+1] = true;
+							if(!data.connection.isMain())
+								SkaianetHandler.giveItems(data.connection.getClientName());
+						} else event.setCanceled(true);
+					}
 			
-			else if(stack.getItem().equals(Minestuck.captchaCard) && AlchemyRecipeHandler.getDecodedItem(stack).getItem().equals(Minestuck.cruxiteArtifact)) {
-				SburbConnection c = getData(event.player.getCommandSenderName()).connection;
-				c.givenItems()[4] = true;
+			else if(stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack).getItem() == Minestuck.cruxiteArtifact) {
+				SburbConnection c = data.connection;
+				c.givenItems()[0] = true;
 				if(!c.isMain())
 					SkaianetHandler.giveItems(c.getClientName());
 			} else {
@@ -259,11 +271,9 @@ public class ServerEditHandler
 				ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
 				if(stack == null)
 					return;
-				if(stack.getItem().equals(Item.getItemFromBlock(Minestuck.blockMachine)) && stack.getItemDamage() < 4) {
-					GristSet cost;
-					if(stack.getItemDamage() == 1)
-						cost = new GristSet(GristType.Shale, 4);
-					else cost = Minestuck.hardMode && data.connection.givenItems()[stack.getItemDamage()]?new GristSet(GristType.Build, 100):new GristSet();
+				if(DeployList.containsItemStack(stack)) {
+					GristSet cost = Minestuck.hardMode && data.connection.givenItems()[DeployList.getOrdinal(stack)+1]
+							?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
 					if(!GristHelper.canAfford(GristStorage.getGristSet(data.connection.getClientName()), cost)) {
 						event.setCanceled(true);
 					}
@@ -294,13 +304,11 @@ public class ServerEditHandler
 			}
 			if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK && event.useItem == Result.ALLOW) {
 				ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
-				if(stack.getItem().equals(Item.getItemFromBlock(Minestuck.blockMachine)) && stack.getItemDamage() < 4) {
+				if(DeployList.containsItemStack(stack)) {
 					SburbConnection c = data.connection;
-					GristSet cost;
-					if(stack.getItemDamage() == 1)
-						cost = new GristSet(GristType.Shale, 4);
-					else cost = Minestuck.hardMode && c.givenItems()[stack.getItemDamage()]?new GristSet(GristType.Build, 100):new GristSet();
-					c.givenItems()[stack.getItemDamage()] = true;
+					GristSet cost = Minestuck.hardMode && c.givenItems()[DeployList.getOrdinal(stack)+1]
+							?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
+					c.givenItems()[DeployList.getOrdinal(stack)+1] = true;
 					if(!c.isMain())
 						SkaianetHandler.giveItems(c.getClientName());
 					if(!cost.isEmpty())
@@ -321,8 +329,9 @@ public class ServerEditHandler
 			event.setCanceled(true);
 	}
 	
-	//Both sided.
-	
+	/**
+	 * Used on both server and client side.
+	 */
 	public static void updatePosition(EntityPlayer player, double range, int centerX, int centerZ) {
 		double y = player.posY-player.yOffset;
 		if(y < 0) {
@@ -359,15 +368,12 @@ public class ServerEditHandler
 		}
 	}
 	
-	/**
-	 * Server sided
-	 */
-	public static void updateInventory(EntityPlayerMP player, boolean[] givenItems, boolean enteredGame) {
+	public static void updateInventory(EntityPlayerMP player, boolean[] givenItems, boolean enteredGame, String client) {	//Could need to have better effiency
 		boolean inventoryChanged = false;
 		for(int i = 0; i < player.inventory.mainInventory.length; i++) {
 			ItemStack stack = player.inventory.mainInventory[i];
 			if(stack != null && (GristRegistry.getGristConversion(stack) == null || !(stack.getItem() instanceof ItemBlock)) && !(DeployList.containsItemStack(stack) ||
-					stack.getItem().equals(Minestuck.captchaCard) && AlchemyRecipeHandler.getDecodedItem(stack).getItem().equals(Minestuck.cruxiteArtifact) && (!Minestuck.hardMode || !givenItems[4]) && !enteredGame)) {
+					stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack).getItem() == Minestuck.cruxiteArtifact && (!Minestuck.hardMode || !givenItems[0]) && !enteredGame)) {
 				player.inventory.mainInventory[i] = null;
 				inventoryChanged = true;
 			}
@@ -377,20 +383,45 @@ public class ServerEditHandler
 			}
 		}
 		
+		ArrayList<ItemStack> itemsToRemove = new ArrayList();
 		for(ItemStack stack : DeployList.getItemList()) {
-			if(!player.inventory.hasItemStack(stack) && !(player.inventory.getItemStack() != null && player.inventory.getItemStack().isItemEqual(stack))) {
+			boolean shouldHave = !(Minestuck.hardMode && givenItems[DeployList.getOrdinal(stack)+1] && DeployList.getSecondaryCost(stack) == null
+					|| DeployList.getTier(stack) > SessionHandler.availableTier(client));
+			if(shouldHave && !player.inventory.hasItemStack(stack) && !(player.inventory.getItemStack() != null && player.inventory.getItemStack().isItemEqual(stack))) {
 				if(player.inventory.addItemStackToInventory(stack))
 					inventoryChanged = true;
-			}
+			} else if(!shouldHave)
+				itemsToRemove.add(stack);
+		}
+		
+		
+		if(player.inventory.getItemStack() != null)
+			for(ItemStack stack : itemsToRemove)
+				if(player.inventory.getItemStack().equals(stack)) {
+					player.inventory.setItemStack(null);
+					inventoryChanged = true;
+					break;
+				}
+		
+		for(int i = 0; i < player.inventory.mainInventory.length; i++) {
+			ItemStack stack = player.inventory.mainInventory[i];
+			if(stack == null)
+				continue;
+			for(ItemStack stack1 : itemsToRemove)
+				if(stack.isItemEqual(stack1)) {
+					player.inventory.mainInventory[i] = null;
+					inventoryChanged = true;
+					break;
+				}
 		}
 		
 		if(!enteredGame) {
-			ItemStack stack = AlchemyRecipeHandler.createCard(new ItemStack(Minestuck.cruxiteArtifact), true);
+			ItemStack stack = AlchemyRecipeHandler.createCard(new ItemStack(Minestuck.cruxiteArtifact, 1, SessionHandler.getEntryItem(client)), true);
 			if(!player.inventory.hasItemStack(stack) && !(player.inventory.getItemStack() != null && player.inventory.getItemStack().isItemEqual(stack))) {
 				player.inventory.addItemStackToInventory(stack);
 				inventoryChanged = true;
 			}
-		}
+		} else inventoryChanged = player.inventory.clearInventory(Minestuck.captchaCard, -1) != 0 || inventoryChanged;
 		
 		if(inventoryChanged)
 			MinecraftServer.getServer().getConfigurationManager().syncPlayerInventory(player);

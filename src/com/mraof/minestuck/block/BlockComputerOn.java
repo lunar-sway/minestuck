@@ -13,7 +13,6 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
@@ -24,7 +23,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
-import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.ComputerProgram;
 
 public class BlockComputerOn extends Block implements ITileEntityProvider {
 	
@@ -123,32 +122,39 @@ public class BlockComputerOn extends Block implements ITileEntityProvider {
 	            par1World.setBlockMetadataWithNotify(par2, par3, par4, 4, 2);
 	        }
 	    }
-	    
-	    @Override
-	    public void onBlockAdded(World par1World, int par2, int par3, int par4)
-	    {
-	        super.onBlockAdded(par1World, par2, par3, par4);
-	        this.setDefaultDirection(par1World, par2, par3, par4);
-	    }
-	    
+	
+	@Override
+	public void onBlockAdded(World par1World, int par2, int par3, int par4) {
+		
+		super.onBlockAdded(par1World, par2, par3, par4);
+		if(par1World.getBlockMetadata(par2, par3, par4) == 0)
+			this.setDefaultDirection(par1World, par2, par3, par4);
+	}
+	
 	@Override
 	public boolean onBlockActivated(World world, int x,int y,int z, EntityPlayer player,int par6, float par7, float par8, float par9) {
 		TileEntityComputer tileEntity = (TileEntityComputer) world.getTileEntity(x, y, z);
 		ItemStack item = player.getCurrentEquippedItem();
-		if(tileEntity != null && item != null && item.getItem() == Items.record_11 && 
-				tileEntity.installedPrograms.size() < 2 && !tileEntity.errored()) {
-			player.destroyCurrentEquippedItem();
-			tileEntity.installedPrograms.put(-1, true);
-			tileEntity.closeConnections();
-			world.setBlockMetadataWithNotify(x, y, z, (world.getBlockMetadata(x, y, z) % 6) + 6, 2);
-			return true;
-		}
 		
-		if (tileEntity == null || player.isSneaking() || item != null && item.getItem() == Minestuck.disk && (item.getItemDamage() == 0 && !tileEntity.hasClient() || item.getItemDamage() == 1 && !tileEntity.hasServer())) {
+		if (tileEntity == null || player.isSneaking()) {
 			return false;
 		}
 		
-		if(world.isRemote && SkaiaClient.requestData((TileEntityComputer) tileEntity))
+		int id = ComputerProgram.getProgramID(item);
+		if(id != -2 && !tileEntity.hasProgram(id) && tileEntity.installedPrograms.size() < 2 && !tileEntity.hasProgram(-1)) {
+			if(world.isRemote)
+				return true;
+			player.destroyCurrentEquippedItem();
+			if(id == -1) {
+				tileEntity.closeAll();
+				world.setBlockMetadataWithNotify(x, y, z, (world.getBlockMetadata(x, y, z) % 6) + 6, 2);
+			}
+			tileEntity.installedPrograms.put(id, true);
+			world.markBlockForUpdate(x, y, z);
+			return true;
+		}
+		
+		if(world.isRemote && SkaiaClient.requestData(tileEntity))
 			player.openGui(Minestuck.instance, GuiHandler.GuiId.COMPUTER.ordinal(), world, x, y, z);
 		
 		return true;
@@ -169,7 +175,6 @@ public class BlockComputerOn extends Block implements ITileEntityProvider {
 	
 	@Override
 	public void breakBlock(World world, int x, int y, int z, Block block, int metaData) {
-		Debug.print("Break block");
 		dropItems(world, x, y, z);
 		super.breakBlock(world, x, y, z, block, metaData);
 	}
@@ -180,26 +185,24 @@ public class BlockComputerOn extends Block implements ITileEntityProvider {
 		if (te == null) {
 			return;
 		}
-		te.closeConnections();
+		te.closeAll();
 		float factor = 0.05F;
-		Debug.print("DropItems called");
+		
 		Iterator<Entry<Integer, Boolean>> it = te.installedPrograms.entrySet().iterator();
-	   	//int place = 0;
-        while (it.hasNext()) {
-			Map.Entry<Integer, Boolean> pairs = (Entry<Integer, Boolean>) it
-					.next();
-            int program = (Integer) pairs.getKey();
-            
+		while (it.hasNext()) {
+			Map.Entry pairs = (Map.Entry)it.next();
+			if(!(Boolean) pairs.getValue())
+				continue;
+			int program = (Integer) pairs.getKey();
+			
 			float rx = rand.nextFloat() * 0.8F + 0.1F;
 			float ry = rand.nextFloat() * 0.8F + 0.1F;
 			float rz = rand.nextFloat() * 0.8F + 0.1F;
-			EntityItem entityItem = new EntityItem(world, x + rx, y + ry, z + rz, program != -1?new ItemStack(Minestuck.disk, 1, program):new ItemStack(Items.record_11,1));
+			EntityItem entityItem = new EntityItem(world, x + rx, y + ry, z + rz, ComputerProgram.getItem(program));
 			entityItem.motionX = rand.nextGaussian() * factor;
 			entityItem.motionY = rand.nextGaussian() * factor + 0.2F;
 			entityItem.motionZ = rand.nextGaussian() * factor;
 			world.spawnEntityInWorld(entityItem);
-            
-            //place++;
         }
 	}
 	

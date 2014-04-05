@@ -42,13 +42,10 @@ public class SkaianetInfoPacket extends MinestuckPacket {
 		data.writeInt(size);
 		for(int i = 0; i < size; i++)
 			writeString(data,((String)dat[i+4]+'\n'));
-//		
+		
 		for(int i = size+4; i < dat.length; i++){
 			data.writeBytes(((SburbConnection)dat[i]).getBytes());
 		}
-//		Debug.print("Generated a "+(data.writerIndex())+" bytes long packet.");
-//		data.readerIndex(0);
-//		Debug.print("Username reads: "+readLine(data)+", is supposed to be "+dat[0]);
 		
 		return this;
 	}
@@ -57,7 +54,6 @@ public class SkaianetInfoPacket extends MinestuckPacket {
 	public MinestuckPacket consumePacket(ByteBuf data) {
 		
 		this.player = readLine(data);
-		Debug.print(player);
 		if(!player.equals(".client"))
 			for(char c : player.toCharArray())
 				Debug.print(c+","+(short)c);
@@ -83,7 +79,6 @@ public class SkaianetInfoPacket extends MinestuckPacket {
 
 	@Override
 	public void execute(EntityPlayer player) {
-		Debug.print("Recived info packet: "+(((EntityPlayer)player).worldObj.isRemote?"data.":"request."));
 		
 		if(((EntityPlayer)player).worldObj.isRemote)
 			SkaiaClient.consumePacket(this);

@@ -87,11 +87,14 @@ import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+import com.mraof.minestuck.util.ComputerProgram;
+import com.mraof.minestuck.util.MinestuckStatsHandler;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristStorage;
 import com.mraof.minestuck.util.KindAbstratusList;
-import com.mraof.minestuck.util.MinestuckStatsHandler;
+import com.mraof.minestuck.util.SburbClient;
+import com.mraof.minestuck.util.SburbServer;
 import com.mraof.minestuck.util.UpdateChecker;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.WorldProviderSkaia;
@@ -237,7 +240,7 @@ public class Minestuck
 	{
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 		config.load();
-
+		
 		entityIdStart = config.get("Entity Ids", "entitydIdStart", 5050).getInt(); //The number 5050 might make it seem like this is meant to match up with item/block IDs, but it is not
 		skaiaProviderTypeId = config.get("Provider Type Ids", "skaiaProviderTypeId", 2).getInt();
 		skaiaDimensionId = config.get("Dimension Ids", "skaiaDimensionId", 2).getInt();
@@ -251,9 +254,9 @@ public class Minestuck
 		privateComputers = config.get("General", "privateComputers", false).getBoolean(false);
 		privateMessage = config.get("General", "privateMessage", "You are not allowed to access other players computers.").getString();
 		easyDesignex  = config.get("General", "easyDesignex", true).getBoolean(true);
-		overworldEditRange = config.get("General", "overWorldEditRange", 26).getInt();
-		landEditRange = config.get("General", "landEditRange", 52).getInt();
-		artifactRange = config.get("General", "artifcatRange", 30).getInt();
+		overworldEditRange = config.get("General", "overWorldEditRange", 15).getInt();
+		landEditRange = config.get("General", "landEditRange", 30).getInt();	//Now radius
+		artifactRange = config.get("General", "artifactRange", 30).getInt();
 		MinestuckStatsHandler.idOffset = config.get("General", "statisticIdOffset", 413).getInt();
 		toolTipEnabled = config.get("General", "editmodeToolTip", false).getBoolean(false);
 		hardMode = config.get("General", "hardMode", false).getBoolean(false);
@@ -263,6 +266,9 @@ public class Minestuck
 		//Default will be set to false when everything with edit mode is fixed
 		if(escapeFailureMode > 2 || escapeFailureMode < 0)
 			escapeFailureMode = 0;
+		if(event.getSide().isClient()) {	//Client sided config values
+			toolTipEnabled = config.get("General", "editModeToolTip", false).getBoolean(false);
+		}
 		config.save();
 		
 		(new UpdateChecker()).start();
@@ -500,6 +506,9 @@ public class Minestuck
 		KindAbstratusList.registerTypes();
 		DeployList.registerItems();
 		
+		ComputerProgram.registerProgram(0, SburbClient.class, clientDiskStack);
+		ComputerProgram.registerProgram(1, SburbServer.class, serverDiskStack);
+		
 		SessionHandler.maxSize = acceptTitleCollision?(generateSpecialClasses?168:144):12;
 	}
 
@@ -537,7 +546,7 @@ public class Minestuck
 			if(DimensionManager.isDimensionRegistered(dim))
 			{
 				DimensionManager.unregisterDimension(dim);
-				Debug.print("Server about to start, Unregistering " + dim);
+				//Debug.print("Server about to start, Unregistering " + dim);
 			}
 			iterator.remove();
 		}
@@ -546,6 +555,32 @@ public class Minestuck
 	public void serverStarting(FMLServerStartingEvent event)
 	{
 		MinestuckSaveHandler.lands.clear();
+		File dataFile = event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("MinestuckData");
+		if(dataFile != null && dataFile.exists()) {
+			NBTTagCompound nbt = null;
+			try {
+				nbt = CompressedStreamTools.readCompressed(new FileInputStream(dataFile));
+			} catch(IOException e) {
+				e.printStackTrace();
+			}
+			if(nbt != null) {
+				for(byte landId : nbt.getByteArray("landList")) {
+					if(MinestuckSaveHandler.lands.contains((Byte)landId))
+						continue;
+					MinestuckSaveHandler.lands.add(landId);
+					
+					if(!DimensionManager.isDimensionRegistered(landId))
+						DimensionManager.registerDimension(landId, Minestuck.landProviderTypeId);
+				}
+				
+				SkaianetHandler.loadData(nbt.getCompoundTag("skaianet"));
+				
+				GristStorage.readFromNBT(nbt);
+				
+			}
+			return;
+		}
+		
 		File landList = event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("minestuckLandList");
 		if (landList != null && landList.exists())
 		{
@@ -557,7 +592,7 @@ public class Minestuck
 					if(MinestuckSaveHandler.lands.contains((byte)currentByte))
 							continue;
 					MinestuckSaveHandler.lands.add((byte)currentByte);
-					Debug.printf("Found land dimension id of: %d", currentByte);
+					//Debug.printf("Found land dimension id of: %d", currentByte);
 					
 					if(!DimensionManager.isDimensionRegistered(currentByte))
 						DimensionManager.registerDimension(currentByte, Minestuck.landProviderTypeId);
@@ -567,10 +602,16 @@ public class Minestuck
 				e.printStackTrace();
 			}
 		}
-		SkaianetHandler.loadData(event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("connectionList"));
+		File connectionData = event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("connectionList");
+		if(connectionData != null && connectionData.exists())
+			try {
+				SkaianetHandler.loadData(CompressedStreamTools.readCompressed(new FileInputStream(connectionData)));
+			} catch(IOException e) {
+				e.printStackTrace();
+			}
 		
 		File gristcache = event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("gristCache");
-		if(gristcache.exists()) {
+		if(gristcache != null && gristcache.exists()) {
 			NBTTagCompound nbt = null;
 			try{
 				nbt = CompressedStreamTools.readCompressed(new FileInputStream(gristcache));

@@ -57,7 +57,7 @@ public class SessionHandler {
 		
 		Session session = sessions.get(0);
 		for(int i = 1; i < sessions.size(); i++){
-			Session s = sessions.get(i);
+			Session s = sessions.remove(i);
 			session.connections.addAll(s.connections);
 			if(s.skaiaId != 0) session.skaiaId = s.skaiaId;
 			if(s.prospitId != 0) session.prospitId = s.prospitId;
@@ -171,6 +171,35 @@ public class SessionHandler {
 	}
 	
 	/**
+	 * @param player The username of the player, encoded.
+	 * @return Damage value for the entry item
+	 */
+	public static int getEntryItem(String player) {
+		return 0;
+	}
+	
+	/**
+	 * 
+	 * @param client The username of the player, encoded.
+	 */
+	public static int availableTier(String client) {
+		Session s = getPlayerSession(client);
+		if(s == null) {
+			return -1;
+		}
+		if(s.completed)
+			return Integer.MAX_VALUE;
+		SburbConnection c = SkaianetHandler.getClientConnection(client);
+		int count = -1;
+		for(SburbConnection conn : s.connections)
+			if(conn.enteredGame)
+				count++;
+		if(!c.enteredGame)
+			count++;
+		return count;
+	}
+	
+	/**
 	 * Will check if two players can connect based on their main connections and sessions.
 	 * Does NOT include session size checking.
 	 * @return True if client connection is not null and client and server session is the same or 
@@ -203,7 +232,6 @@ public class SessionHandler {
 				Session s = new Session();
 				sessions.add(s);
 				s.connections.add(connection);
-				s.checkIfCompleted();	//In case a player connects to himself.
 				return null;
 			} else if(sClient == null || sServer == null) {
 				if(Minestuck.forceMaxSize && (sClient == null?sServer:sClient).getPlayerList().size()+1 > maxSize)
@@ -211,9 +239,12 @@ public class SessionHandler {
 				(sClient == null?sServer:sClient).connections.add(connection);
 				return null;
 			} else {
-				/*String s = */merge(sClient, sServer, connection);
+				if(sClient == sServer) {
+					sClient.connections.add(connection);
+					return null;
+				}
+				else return merge(sClient, sServer, connection);
 			}
-			return null;
 		}
 	}
 	
@@ -255,7 +286,7 @@ public class SessionHandler {
 	
 	static void onGameEntered(SburbConnection connection) {
 		generateTitle(connection.getClientName());
-		
+		getPlayerSession(connection.getClientName()).checkIfCompleted();
 	}
 	
 	static List<String> getServerList(String client) {

@@ -12,7 +12,7 @@ achievement.alchemy.desc=Use the punch designex to alchemize something else!
 
 computer.buttonClear=Clear message
 computer.buttonClose=Disconnect
-computer.buttonConnect=Connect to %s
+computer.buttonConnect=%s
 computer.buttonEdit=Activate edit mode
 computer.buttonGive=Give items
 computer.buttonOpen=Open to clients
@@ -22,6 +22,7 @@ computer.messageConnectFail=Connection failed
 computer.messageClientActive=Client is already active
 computer.messageClosed=Connection closed
 computer.messageClosedServer=Server closed
+computer.messageNether=Can't reach skaianet
 computer.messageOffline=Server offline
 computer.messageSelect=Select a server below
 computer.messageServerActive=Server with your name exists
@@ -83,6 +84,7 @@ gui.lathe.name=Totem Lathe
 gui.alchemiter.name=Alchemiter
 gui.widget.name=GristWidget 12000
 gui.notAlchemizable=Not Alchemizable
+gui.notAvailable=Not Available
 gui.free=Free!
 gui.buttonStop=STOP
 gui.buttonGo=GO
@@ -126,8 +128,8 @@ item.disk.Server.name=SBURB Server Disk
 item.component.WoodenSpoon.name=Wooden Spoon
 item.component.SilverSpoon.name=Silver Spoon
 item.component.Chessboard.name=Chessboard
-item.minestuckBucket.oil.name=Bucket of Oil
-item.minestuckBucket.blood.name=Bucket of Blood
+item.minestuckBucket.tile.oil.name=Bucket of Oil
+item.minestuckBucket.tile.blood.name=Bucket of Blood
 
 itemGroup.tabMinestuck=Minestuck
 

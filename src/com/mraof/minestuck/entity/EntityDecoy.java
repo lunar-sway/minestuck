@@ -18,7 +18,6 @@ import net.minecraft.world.WorldSettings.GameType;
 
 import com.mojang.authlib.GameProfile;
 import com.mraof.minestuck.editmode.ServerEditHandler;
-import com.mraof.minestuck.util.Debug;
 
 public class EntityDecoy extends EntityLiving {
 	

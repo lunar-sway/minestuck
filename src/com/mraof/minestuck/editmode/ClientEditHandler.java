@@ -8,7 +8,6 @@ import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.renderer.InventoryEffectRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -26,8 +25,6 @@ import net.minecraftforge.event.world.WorldEvent;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiInventoryReplacer;
-import com.mraof.minestuck.item.ItemCruxiteArtifact;
-import com.mraof.minestuck.item.block.ItemMachine;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
@@ -102,18 +99,21 @@ public class ClientEditHandler {
 			NBTTagList list = new NBTTagList();
 			stack.stackTagCompound.getCompoundTag("display").setTag("Lore", list);
 			
+			
 			GristSet cost;
-			if(stack.getItem() instanceof ItemMachine && stack.getItemDamage() < 4) {
-				if(stack.getItemDamage() == 1)
-					cost = new GristSet(GristType.Shale, 4);
-				else cost = Minestuck.clientHardMode&&givenItems[stack.getItemDamage()]?new GristSet(GristType.Build, 100):new GristSet();
-			}
+			if(DeployList.containsItemStack(stack))
+				cost = Minestuck.clientHardMode&&givenItems[DeployList.getOrdinal(stack)+1]
+						?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
 			else if(stack.getItem().equals(Minestuck.captchaCard))
 				cost = new GristSet();
 			else cost = GristRegistry.getGristConversion(stack);
 			
-			if(cost == null)
+			if(cost == null) {
+				list.appendTag(new NBTTagString(""+EnumChatFormatting.RESET+EnumChatFormatting.RESET
+						+EnumChatFormatting.RED+StatCollector.translateToLocal("gui.notAvailable")));
 				continue;
+			}
+			
 			for(Entry entry : cost.getHashtable().entrySet()) {
 				GristType grist = GristType.values()[(Integer)entry.getKey()];
 				String s = EnumChatFormatting.RESET+""+EnumChatFormatting.RESET;
@@ -132,7 +132,7 @@ public class ClientEditHandler {
 			return;
 		EntityPlayer player = event.player;
 		
-		double range = (MinestuckSaveHandler.lands.contains((byte)player.dimension)?Minestuck.clientLandEditRange:Minestuck.clientOverworldEditRange)/2;
+		double range = MinestuckSaveHandler.lands.contains((byte)player.dimension)?Minestuck.clientLandEditRange:Minestuck.clientOverworldEditRange;
 		
 		ServerEditHandler.updatePosition(player, range, centerX, centerZ);
 		if(Minestuck.toolTipEnabled)
@@ -145,20 +145,25 @@ public class ClientEditHandler {
 		if(event.entity.worldObj.isRemote && event.player instanceof EntityClientPlayerMP && isActive()) {
 			InventoryPlayer inventory = event.player.inventory;
 			ItemStack stack = event.entityItem.getEntityItem();
-			if((stack.getItem() instanceof ItemMachine && stack.getItemDamage() < 4)) {
-				event.setCanceled(true);
-				event.entityItem.setDead();
-			}
-			else if(stack.getItem().equals(Minestuck.captchaCard) && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact) {
+			int ordinal = DeployList.getOrdinal(stack)+1;
+			if(ordinal > 0)
+				if(stack.getItem() instanceof ItemBlock)
+					event.setCanceled(true);
+				else if(GristHelper.canAfford(GristStorage.getClientGrist(), Minestuck.clientHardMode&&givenItems[ordinal]
+						?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack)))
+					givenItems[ordinal] = true;
+			else if(stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack).getItem() == Minestuck.cruxiteArtifact
+					&& stack.getTagCompound().getBoolean("punched")) {
 				SburbConnection c = SkaiaClient.getClientConnection(client);
-				givenItems[4] = true;
+				givenItems[0] = true;
 			} else {
 				event.setCanceled(true);
-				event.entityItem.setDead();
 				if(inventory.getItemStack() != null)
 					inventory.setItemStack(null);
 				else inventory.setInventorySlotContents(inventory.currentItem, null);
 			}
+			if(event.isCanceled())
+				event.entityItem.setDead();
 		}
 	}
 	
@@ -175,14 +180,13 @@ public class ClientEditHandler {
 			if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
 				event.useBlock = Result.DENY;
 				ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
-				if(stack.getItem().equals(Item.getItemFromBlock(Minestuck.blockMachine)) && stack.getItemDamage() < 4) {
-					GristSet cost;
-					if(stack.getItemDamage() == 1)
-						cost = new GristSet(GristType.Shale, 4);
-					else cost = Minestuck.clientHardMode && givenItems[stack.getItemDamage()]?new GristSet(GristType.Build, 100):new GristSet();
-					if(!GristHelper.canAfford(GristStorage.getClientGrist(), cost))
-						event.setCanceled(true);
-				} else if(!(stack.getItem() instanceof ItemBlock) || !GristHelper.canAfford(GristStorage.getClientGrist(), GristRegistry.getGristConversion(stack)))
+				GristSet cost;
+				if(DeployList.containsItemStack(stack))
+					if(Minestuck.clientHardMode && givenItems[DeployList.getOrdinal(stack)+1])
+						cost = DeployList.getSecondaryCost(stack);
+					else cost = DeployList.getPrimaryCost(stack);
+				else cost = GristRegistry.getGristConversion(stack);
+				if(!GristHelper.canAfford(GristStorage.getClientGrist(), cost))
 					event.setCanceled(true);
 				if(event.useItem == Result.DEFAULT)
 					event.useItem = Result.ALLOW;
@@ -201,8 +205,8 @@ public class ClientEditHandler {
 		if(event.entity.worldObj.isRemote && isActive() && event.entityPlayer.equals(Minecraft.getMinecraft().thePlayer)
 				&& event.action == Action.LEFT_CLICK_BLOCK && event.useItem == Result.ALLOW) {
 			ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
-			if(stack.getItem().equals(Item.getItemFromBlock(Minestuck.blockMachine)) && stack.getItemDamage() < 4)
-				givenItems[stack.getItemDamage()+1] = true;
+			if(DeployList.containsItemStack(stack))
+				givenItems[DeployList.getOrdinal(stack)+1] = true;
 		}
 	}
 	
@@ -214,7 +218,6 @@ public class ClientEditHandler {
 	
 	@SubscribeEvent
 	public void onWorldUnload(WorldEvent.Unload event) {
-		Debug.print("Client side:"+event.world.isRemote);
 		if(event.world.isRemote)
 			activated = false;
 	}

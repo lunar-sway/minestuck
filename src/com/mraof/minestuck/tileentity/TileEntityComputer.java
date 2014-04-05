@@ -12,28 +12,24 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
 import com.mraof.minestuck.client.gui.GuiComputer;
-import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.util.ComputerProgram;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityComputer extends TileEntity {
 	
 	/**
 	 * 0 = client, 1 = server, -1 = secret easter egg
 	 */
-	public Hashtable<Integer, Boolean> installedPrograms = new Hashtable<Integer, Boolean>();
-	public boolean openToClients = false;
-	/**
-	 * To not be confused, serverConnected = if it has a server connected to it (so serverConnected can only be true if hasClient == true)
-	 */
-	public boolean serverConnected;
-	public String clientName = "";
+	public Hashtable<Integer, Boolean> installedPrograms = new Hashtable();
 	public GuiComputer gui;
 	public String owner = "";
-	public Hashtable<Integer,String> latestmessage = new Hashtable<Integer,String>();
-	public boolean resumingClient;
-	/**
-	 * 0 if client is selected, 1 if server. (client side variable)
-	 */
+	public Hashtable<Integer,String> latestmessage = new Hashtable();
+	public NBTTagCompound programData = new NBTTagCompound();
 	public int programSelected = -1;
+	
+	@SideOnly(Side.CLIENT)
+	public ComputerProgram program;
 	
 	@Override
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
@@ -44,16 +40,25 @@ public class TileEntityComputer extends TileEntity {
 				installedPrograms.put(programs.getInteger((String)name),true);
 			}
 		}
-		if(hasClient())
-			latestmessage.put(0, par1NBTTagCompound.getString("text0"));
-		if(hasServer())
-			latestmessage.put(1, par1NBTTagCompound.getString("text1"));
 		
-		this.clientName = par1NBTTagCompound.getString("connectClient");
-		this.serverConnected = par1NBTTagCompound.getBoolean("connectServer");
-		this.openToClients = par1NBTTagCompound.getBoolean("serverOpen");
-		this.resumingClient = par1NBTTagCompound.getBoolean("resumeClient");
-    	 this.owner = par1NBTTagCompound.getString("owner");
+		latestmessage.clear();
+		for(Entry<Integer,Boolean> e : installedPrograms.entrySet())
+			if(e.getValue())
+				latestmessage.put(e.getKey(), par1NBTTagCompound.getString("text"+e.getKey()));
+		
+		programData = par1NBTTagCompound.getCompoundTag("programData");
+		
+		if(!par1NBTTagCompound.hasKey("programData")) {
+			NBTTagCompound nbt = new NBTTagCompound();
+			nbt.setBoolean("connectedToServer", par1NBTTagCompound.getBoolean("connectServer"));
+			nbt.setBoolean("isResuming", par1NBTTagCompound.getBoolean("resumeClient"));
+			programData.setTag("program_0", nbt);
+			nbt = new NBTTagCompound();
+			nbt.setString("connectedClient", par1NBTTagCompound.getString("connectClient"));
+			nbt.setBoolean("isOpen", par1NBTTagCompound.getBoolean("serverOpen"));
+			programData.setTag("program_1", nbt);
+		}
+		this.owner = par1NBTTagCompound.getString("owner");
     	 if(gui != null)
     		 gui.updateGui();
     }
@@ -73,12 +78,9 @@ public class TileEntityComputer extends TileEntity {
          }
 	    for(Entry<Integer, String> e : latestmessage.entrySet())
 	    	par1NBTTagCompound.setString("text"+e.getKey(), e.getValue());
-    	par1NBTTagCompound.setTag("programs",programs);
-    	par1NBTTagCompound.setString("connectClient",this.clientName);
-    	par1NBTTagCompound.setBoolean("connectServer", this.serverConnected);
-    	par1NBTTagCompound.setBoolean("serverOpen", this.openToClients);
-    	par1NBTTagCompound.setBoolean("resumeClient",this.resumingClient);
-    	if (!this.owner.isEmpty()) {
+		par1NBTTagCompound.setTag("programs",programs);
+			par1NBTTagCompound.setTag("programData", (NBTTagCompound) programData.copy());
+		if (!this.owner.isEmpty()) {
     		par1NBTTagCompound.setString("owner",this.owner);
     	}
 
@@ -98,39 +100,32 @@ public class TileEntityComputer extends TileEntity {
 		//Debug.print("Data packet gotten "+net.getClass());
     	this.readFromNBT(pkt.func_148857_g());
     }
-    
-	public Boolean hasClient() {
-		return installedPrograms.get(0)==null?false:installedPrograms.get(0);
+	
+	public boolean hasProgram(int id) {
+		return installedPrograms.get(id)==null?false:installedPrograms.get(id);
 	}
 	
-	public Boolean hasServer() {
-		return installedPrograms.get(1)==null?false:installedPrograms.get(1);
+	public NBTTagCompound getData(int id) {
+		if(!programData.hasKey("program_"+id))
+			programData.setTag("program_"+id, new NBTTagCompound());
+		return programData.getCompoundTag("program_"+id);
 	}
 	
-	public Boolean errored() {
-		return installedPrograms.get(-1)==null?false:installedPrograms.get(-1);
+	public void closeAll() {
+		for(Entry<Integer, Boolean> entry : installedPrograms.entrySet())
+			if(entry.getValue() && entry.getKey() != -1 && ComputerProgram.getProgram(entry.getKey()) != null)
+				ComputerProgram.getProgram(entry.getKey()).onClosed(this);
 	}
 	
 	public void connected(String player, boolean isClient){
 		if(isClient){
-			this.resumingClient = false;
-			this.serverConnected = true;
+			getData(0).setBoolean("isResuming", false);
+			getData(0).setBoolean("connectedToServer", true);
 		}
 		else{
-			this.openToClients = false;
-			this.clientName = player;
+			this.getData(1).setBoolean("isOpen", false);
+			this.getData(1).setString("connectedClient", player);
 		}
-	}
-
-	public void closeConnections() {
-		if(serverConnected && SkaianetHandler.getClientConnection(owner) != null)
-			SkaianetHandler.closeConnection(owner, SkaianetHandler.getClientConnection(owner).getServerName(), true);
-		else if(resumingClient)
-			SkaianetHandler.closeConnection(owner, "", true);
-		if(!clientName.isEmpty())
-			SkaianetHandler.closeConnection(owner, clientName, false);
-		else if(openToClients)
-			SkaianetHandler.closeConnection(owner, "", false);
 	}
 	
 }

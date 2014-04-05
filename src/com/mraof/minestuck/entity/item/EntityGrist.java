@@ -9,7 +9,10 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
+import com.mraof.minestuck.editmode.ClientEditHandler;
+import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristSet;
@@ -44,9 +47,10 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		this.yOffset = this.height / 2.0F;
 		this.setPosition(x, y, z);
 		this.rotationYaw = (float)(Math.random() * 360.0D);
-		this.motionX = (double)((float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
-		this.motionY = (double)((float)(Math.random() * 0.2D) * 2.0F);
-		this.motionZ = (double)((float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
+		this.motionX = (double)((float)(world.rand.nextGaussian() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
+		Debug.print(motionX);
+		this.motionY = (double)((float)(world.rand.nextGaussian() * 0.2D) * 2.0F);
+		this.motionZ = (double)((float)(world.rand.nextGaussian() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
 		this.isImmuneToFire = true;
 
 		this.gristType = gristData.getType().getName();
@@ -234,6 +238,9 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	 */
 	public void onCollideWithPlayer(EntityPlayer par1EntityPlayer)
 	{
+		if(this.worldObj.isRemote?ClientEditHandler.isActive():ServerEditHandler.getData(par1EntityPlayer.getCommandSenderName()) != null)
+			return;
+		
 		if (!this.worldObj.isRemote)
 		{
 			this.playSound("random.pop", 0.1F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F));

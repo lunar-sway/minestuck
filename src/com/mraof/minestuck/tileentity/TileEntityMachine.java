@@ -1,5 +1,9 @@
 package com.mraof.minestuck.tileentity;
 
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -11,11 +15,15 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.CombinationRegistry;
+import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristRegistry;
+import com.mraof.minestuck.util.GristSet;
+import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.MinestuckStatsHandler;
 import com.mraof.minestuck.util.UsernameHandler;
 
@@ -119,7 +127,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
             this.mode =  tagCompound.getBoolean("mode");
             this.overrideStop = tagCompound.getBoolean("overrideStop");
             
-            NBTTagList tagList = (NBTTagList) tagCompound.getTag("Inventory");
+            NBTTagList tagList = tagCompound.getTagList("Inventory", 10);
             for (int i = 0; i < tagList.tagCount(); i++) {
                     NBTTagCompound tag = tagList.getCompoundTagAt(i);
                     byte slot = tag.getByte("Slot");
@@ -335,8 +343,26 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			break;
 		case (4):
 			if(!worldObj.isRemote) {
-				GristHelper.increase(UsernameHandler.encode(owner.getCommandSenderName()), GristRegistry.getGristConversion(inv[1]));
-				MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(owner.getCommandSenderName()));
+				GristSet gristSet = GristRegistry.getGristConversion(inv[1]);
+				
+				Iterator iter = gristSet.getHashtable().entrySet().iterator();
+				while(iter.hasNext()) {
+					Map.Entry<Integer, Integer> entry = (Entry<Integer, Integer>) iter.next();
+					int grist = entry.getValue();
+					while(true) {
+						if(grist == 0)
+							break;
+						GristAmount gristAmount = new GristAmount(GristType.values()[entry.getKey()],grist<=3?grist:(worldObj.rand.nextInt(grist)+1));
+						EntityGrist entity = new EntityGrist(worldObj, this.xCoord + 0.5 /* this.width - this.width / 2*/, this.yCoord+1, this.zCoord + 0.5 /* this.width - this.width / 2*/, gristAmount);
+						entity.motionX /= 2;
+						entity.motionY /= 2;
+						entity.motionZ /= 2;
+						worldObj.spawnEntityInWorld(entity);
+						//Create grist entity of gristAmount
+						grist -= gristAmount.getAmount();
+					}
+				}
+				
 			}
 			this.decrStackSize(1, 1);
 			break;
