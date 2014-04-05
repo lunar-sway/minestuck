@@ -43,5 +43,13 @@ public class MinestuckSaveHandler
 				e.printStackTrace();
 			}
 		}
+		
+		String[] oldFiles = {"gristCache", "minestuckLandList", "connectionList"};
+		for(String s : oldFiles) {
+			dataFile = event.world.getSaveHandler().getMapFileFromName("gristCache");
+			if(dataFile != null && dataFile.exists())
+				dataFile.delete();
+		}
+		
 	}
 }
