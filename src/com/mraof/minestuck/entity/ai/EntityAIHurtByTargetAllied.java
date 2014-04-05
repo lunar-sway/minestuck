@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.util.AxisAlignedBB;
 
@@ -37,7 +38,7 @@ public class EntityAIHurtByTargetAllied extends EntityAITarget {
 		this.field_142052_b = this.taskOwner.func_142015_aE();
 
 		double d0 = this.getTargetDistance();
-		List<?> list = this.taskOwner.worldObj.selectEntitiesWithinAABB(this.taskOwner.getClass(), AxisAlignedBB.getAABBPool().getAABB(this.taskOwner.posX, this.taskOwner.posY, this.taskOwner.posZ, this.taskOwner.posX + 1.0D, this.taskOwner.posY + 1.0D, this.taskOwner.posZ + 1.0D).expand(d0, 10.0D, d0), entitySelector);
+		List<?> list = this.taskOwner.worldObj.selectEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getAABBPool().getAABB(this.taskOwner.posX, this.taskOwner.posY, this.taskOwner.posZ, this.taskOwner.posX + 1.0D, this.taskOwner.posY + 1.0D, this.taskOwner.posZ + 1.0D).expand(d0, 10.0D, d0), entitySelector);
 		Iterator<?> iterator = list.iterator();
 
 		while (iterator.hasNext())
