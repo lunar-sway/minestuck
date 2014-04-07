@@ -12,7 +12,7 @@ import com.mraof.minestuck.network.GristCachePacket;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class GristStorage {
+public class MinestuckPlayerData {
 	
 	//Client sided
 	
@@ -20,6 +20,9 @@ public class GristStorage {
 	static GristSet playerGrist;
 	@SideOnly(Side.CLIENT)
 	static GristSet targetGrist;
+	@SideOnly(Side.CLIENT)
+	public static Title title;
+	
 	
 	public static void onPacketRecived(GristCachePacket packet) {
 		if(packet.targetGrist)
@@ -35,6 +38,8 @@ public class GristStorage {
 	
 	static Map<String, GristSet> gristMap = new HashMap<String, GristSet>();
 	
+	static Map<String, Title> titles = new HashMap();
+	
 	public static GristSet getGristSet(String player) {
 		if(!gristMap.containsKey(player))
 			Debug.print("Failed to get grist cache for "+player);
@@ -45,30 +50,52 @@ public class GristStorage {
 		gristMap.put(player, set);
 	}
 	
+	public static Title getTitle(String player) {
+		return titles.get(player);
+	}
+	
 	public static void writeToNBT(NBTTagCompound nbt) {
 		NBTTagList list = new NBTTagList();
 		for(Map.Entry<String, GristSet> entry : gristMap.entrySet()) {
-			NBTTagCompound gristCompound = new NBTTagCompound();
-			gristCompound.setString("username", entry.getKey());
+			NBTTagCompound dataCompound = new NBTTagCompound();
+			dataCompound.setString("username", entry.getKey());
+			int[] grist = new int[GristType.allGrists];
 			for(GristType type : GristType.values())
-				gristCompound.setInteger(type.getName(), entry.getValue().getGrist(type));
-			list.appendTag(gristCompound);
+				grist[type.ordinal()] = entry.getValue().getGrist(type);
+			dataCompound.setIntArray("grist", grist);
+			list.appendTag(dataCompound);
 		}
-		nbt.setTag("grist", list);
+		nbt.setTag("playerData", list);
 	}
 	
 	public static void readFromNBT(NBTTagCompound nbt) {
 		gristMap.clear();
 		if(nbt == null)
 			return;
-		NBTTagList list = nbt.getTagList("grist", 10);
+		NBTTagList list;
+		if(nbt.hasKey("playerData"))
+			list = nbt.getTagList("playerData", 10);
+		else list = nbt.getTagList("grist", 10);
 		for(int i = 0; i < list.tagCount(); i++) {
-			NBTTagCompound gristCompound = list.getCompoundTagAt(i);
-			GristSet set = new GristSet();
-			for(GristType type : GristType.values())
-				set.addGrist(type, gristCompound.getInteger(type.getName()));
-			gristMap.put(gristCompound.getString("username"), set);
+			NBTTagCompound dataCompound = list.getCompoundTagAt(i);
+			String username = dataCompound.getString("username");
+			if(dataCompound.hasKey("grist")) {
+				GristSet set = new GristSet(GristType.values(), dataCompound.getIntArray("grist"));
+				gristMap.put(username, set);
+				Title title = new Title(TitleHelper.getClassFromInt(dataCompound.getByte("titleClass")), TitleHelper.getAspectFromInt(dataCompound.getByte("titleAspect")));
+				titles.put(username, title);
+			} else {
+				GristSet set = new GristSet();
+				for(GristType type : GristType.values())
+					set.addGrist(type, dataCompound.getInteger(type.getName()));
+				gristMap.put(username, set);
+			}
 		}
+	}
+
+	public static void setTitle(String player, Title newTitle) {
+		if(titles.get(player) == null)
+			titles.put(player, newTitle);
 	}
 	
 }

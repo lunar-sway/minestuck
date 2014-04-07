@@ -12,9 +12,9 @@ import com.mraof.minestuck.Minestuck;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
-public class MinestuckStatsHandler {
+public class MinestuckAchievementHandler {
 	
-	public static MinestuckStatsHandler instance = new MinestuckStatsHandler();
+	public static MinestuckAchievementHandler instance = new MinestuckAchievementHandler();
 	
 	public static int idOffset;
 	

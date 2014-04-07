@@ -14,7 +14,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 import com.google.common.collect.Sets;
-import com.mraof.minestuck.util.MinestuckStatsHandler;
+import com.mraof.minestuck.util.MinestuckAchievementHandler;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -69,7 +69,7 @@ public class ItemHammer extends ItemWeapon
 	@Override
 	public void onCreated(ItemStack stack, World world, EntityPlayer player) {
 		if(this.hammerType.equals(EnumHammerType.CLAW))
-			player.triggerAchievement(MinestuckStatsHandler.getHammer);
+			player.triggerAchievement(MinestuckAchievementHandler.getHammer);
 	}
 	
 	@Override

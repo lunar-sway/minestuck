@@ -6,7 +6,7 @@ import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
 
-import com.mraof.minestuck.util.GristStorage;
+import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.GristType;
 
 import cpw.mods.fml.relauncher.Side;
@@ -41,7 +41,7 @@ public class GristCachePacket extends MinestuckPacket
 
 	@Override
 	public void execute(EntityPlayer player) {
-		GristStorage.onPacketRecived(this);
+		MinestuckPlayerData.onPacketRecived(this);
 	}
 
 	@Override

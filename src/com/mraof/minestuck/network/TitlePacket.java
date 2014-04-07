@@ -9,6 +9,8 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.EnumClass;
+import com.mraof.minestuck.util.MinestuckPlayerData;
+import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.util.TitleHelper;
 
 import cpw.mods.fml.relauncher.Side;
@@ -42,10 +44,7 @@ public class TitlePacket extends MinestuckPacket
 	@Override
 	public void execute(EntityPlayer player)
 	{
-		if(player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).hasNoTags())
-			player.getEntityData().setTag(EntityPlayer.PERSISTED_NBT_TAG, new NBTTagCompound());
-		player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Class", this.heroClass);
-		player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Aspect", this.heroAspect);
+		MinestuckPlayerData.title = new Title(TitleHelper.getClassFromInt(heroClass), TitleHelper.getAspectFromInt(heroAspect));
 	}
 
 	@Override

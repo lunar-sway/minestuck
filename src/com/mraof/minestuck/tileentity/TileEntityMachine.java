@@ -24,7 +24,7 @@ import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
-import com.mraof.minestuck.util.MinestuckStatsHandler;
+import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.UsernameHandler;
 
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -334,7 +334,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 				decrStackSize(0, -1);
 			}
 			
-			MinestuckStatsHandler.onAlchemizedItem(newItem, owner);
+			MinestuckAchievementHandler.onAlchemizedItem(newItem, owner);
 			
 			if(!worldObj.isRemote) {
 				GristHelper.decrease(UsernameHandler.encode(owner.getCommandSenderName()), GristRegistry.getGristConversion(newItem));

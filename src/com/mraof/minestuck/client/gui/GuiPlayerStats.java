@@ -15,7 +15,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import com.mraof.minestuck.editmode.ClientEditHandler;
-import com.mraof.minestuck.util.GristStorage;
+import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.util.TitleHelper;
@@ -25,7 +25,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class GuiGristCache extends GuiScreen
+public class GuiPlayerStats extends GuiScreen
 {
 
     private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/GristCache.png");
@@ -52,7 +52,7 @@ public class GuiGristCache extends GuiScreen
 	private String titleMessage = "";
 
 
-	public GuiGristCache(Minecraft mc)
+	public GuiPlayerStats(Minecraft mc)
 	{
 		super();
 
@@ -66,8 +66,7 @@ public class GuiGristCache extends GuiScreen
 		this.drawDefaultBackground();
 		
 		if (title == null) {
-			title = new Title(TitleHelper.getClassFromInt(((EntityPlayer)mc.thePlayer).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Class")),
-					TitleHelper.getAspectFromInt(((EntityPlayer)mc.thePlayer).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Aspect")));
+			title = MinestuckPlayerData.title;
 		}
 		
 		if (titleMessage.isEmpty())
@@ -107,7 +106,7 @@ public class GuiGristCache extends GuiScreen
 			}
 
 			this.drawGristIcon(gristXOffset, gristYOffset, GristType.values()[gristId].getName());
-			fontRenderer.drawString(Integer.toString(GristStorage.getClientGrist().getGrist(GristType.values()[gristId])),(this.width / 2)-(guiWidth / 2) + gristCountX + (gristCountXOffset * row - row), yOffset + gristCountY + (gristCountYOffset * column - column), 0xddddee);
+			fontRenderer.drawString(Integer.toString(MinestuckPlayerData.getClientGrist().getGrist(GristType.values()[gristId])),(this.width / 2)-(guiWidth / 2) + gristCountX + (gristCountXOffset * row - row), yOffset + gristCountY + (gristCountYOffset * column - column), 0xddddee);
 			
 
 

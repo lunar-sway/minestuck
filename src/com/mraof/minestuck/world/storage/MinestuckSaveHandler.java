@@ -12,7 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.world.WorldEvent;
 
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.GristStorage;
+import com.mraof.minestuck.util.MinestuckPlayerData;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
@@ -35,7 +35,7 @@ public class MinestuckSaveHandler
 			
 			SkaianetHandler.saveData(nbt);
 			
-			GristStorage.writeToNBT(nbt);
+			MinestuckPlayerData.writeToNBT(nbt);
 			
 			try {
 				CompressedStreamTools.writeCompressed(nbt, new FileOutputStream(dataFile));

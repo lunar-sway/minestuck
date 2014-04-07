@@ -88,10 +88,10 @@ import com.mraof.minestuck.tileentity.TileEntityGatePortal;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.ComputerProgram;
-import com.mraof.minestuck.util.MinestuckStatsHandler;
+import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.GristStorage;
+import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.KindAbstratusList;
 import com.mraof.minestuck.util.SburbClient;
 import com.mraof.minestuck.util.SburbServer;
@@ -257,7 +257,7 @@ public class Minestuck
 		overworldEditRange = config.get("General", "overWorldEditRange", 15).getInt();
 		landEditRange = config.get("General", "landEditRange", 30).getInt();	//Now radius
 		artifactRange = config.get("General", "artifactRange", 30).getInt();
-		MinestuckStatsHandler.idOffset = config.get("General", "statisticIdOffset", 413).getInt();
+		MinestuckAchievementHandler.idOffset = config.get("General", "statisticIdOffset", 413).getInt();
 		toolTipEnabled = config.get("General", "editmodeToolTip", false).getBoolean(false);
 		hardMode = config.get("General", "hardMode", false).getBoolean(false);
 		forceMaxSize = config.get("General", "forceMaxSize", false).getBoolean(false);
@@ -395,35 +395,14 @@ public class Minestuck
 		GameRegistry.registerBlock(blockOil, "blockOil");
 		GameRegistry.registerBlock(blockBlood, "blockBlood");
 		
-		MinestuckStatsHandler.prepareAchievementPage();
+		MinestuckAchievementHandler.prepareAchievementPage();
 		
 	}
-
-	@SuppressWarnings("unused")
+	
 	@EventHandler
 	public void load(FMLInitializationEvent event) 
 	{
 		
-		//metadata nonsense to conserve ids
-		ItemStack blackChessTileStack = new ItemStack(chessTile, 1, 0);
-		ItemStack whiteChessTileStack = new ItemStack(chessTile, 1, 1);
-		ItemStack darkGreyChessTileStack = new ItemStack(chessTile, 1, 2);
-		ItemStack lightGreyChessTileStack = new ItemStack(chessTile, 1, 3);
-		ItemStack cruxiteBlockStack = new ItemStack(blockStorage,1,0);
-		ItemStack genericObjectStack = new ItemStack(blockStorage,1,1);
-		ItemStack cruxtruderStack = new ItemStack(blockMachine,1,0);
-		ItemStack punchDesignexStack = new ItemStack(blockMachine,1,1);
-		ItemStack totemLatheStack = new ItemStack(blockMachine,1,2);
-		ItemStack alchemiterStack = new ItemStack(blockMachine,1,3);
-		ItemStack widgetStack = new ItemStack(blockMachine,1,4);
-		ItemStack clientDiskStack = new ItemStack(disk,1,0);
-		ItemStack serverDiskStack = new ItemStack(disk,1,1);
-		ItemStack woodenSpoonStack = new ItemStack(component,1,0);
-		ItemStack silverSpoonStack = new ItemStack(component,1,1);
-		ItemStack chessboardStack = new ItemStack(component,1,2);
-//		ItemStack bloodBucket = new ItemStack(minestuckBucket, 1, minestuckBucket.FillFluidIds.get(blockBlood.getUnlocalizedName()));
-//		ItemStack oilBucket = new ItemStack(minestuckBucket, 1, minestuckBucket.FillFluidIds.get(blockOil.getUnlocalizedName()));
-		ItemStack layeredSandStack = new ItemStack(layeredSand);
 		//set harvest information for blocks
 //		MinecraftForge.setBlockHarvestLevel(chessTile, "shovel", 0);
 //		MinecraftForge.setBlockHarvestLevel(oreCruxite, "pickaxe", 1);
@@ -448,19 +427,12 @@ public class Minestuck
 		this.registerAndMapEntity(EntityWhitePawn.class, "prospitianPawn", 0xf0f0f0, 0x0f0f0f);
 		this.registerAndMapEntity(EntityBlackBishop.class, "dersiteBishop", 0x000000, 0xc121d9);
 		this.registerAndMapEntity(EntityWhiteBishop.class, "prospitianBishop", 0xffffff, 0xfde500);
-			//To not register this entity as spawnable using a mob egg.
-//		EntityList.addMapping(EntityDecoy.class, "playerDecoy", entityIdStart + currentEntityIdOffset);
 		EntityRegistry.registerModEntity(EntityDecoy.class, "playerDecoy", currentEntityIdOffset, this, 80, 3, true);
 		currentEntityIdOffset++;
 		
 		//register entities with fml
 		EntityRegistry.registerModEntity(EntityGrist.class, "grist", currentEntityIdOffset, this, 512, 1, true);
-
-//		EntityRegistry.addSpawn(EntityImp.class, 3, 3, 20, EnumCreatureType.monster, BiomeGenBase.getBiomeGenArray());
-//		EntityRegistry.addSpawn(EntityOgre.class, 2, 1, 1, EnumCreatureType.monster, BiomeGenBase.getBiomeGenArray());
-//		EntityRegistry.addSpawn(EntityBasilisk.class, 1, 1, 1, EnumCreatureType.monster, BiomeGenBase.getBiomeGenArray());
-//		EntityRegistry.addSpawn(EntityGiclops.class, 1, 1, 1, EnumCreatureType.monster, BiomeGenBase.getBiomeGenArray());
-
+		
 		//register Tile Entities
 		GameRegistry.registerTileEntity(TileEntityGatePortal.class, "gatePortal");
 		GameRegistry.registerTileEntity(TileEntityMachine.class, "containerMachine");
@@ -482,15 +454,18 @@ public class Minestuck
 		//Register event handlers
 		MinecraftForge.EVENT_BUS.register(new MinestuckSaveHandler());
 		MinecraftForge.EVENT_BUS.register(new MinestuckFluidHandler());
+		MinecraftForge.EVENT_BUS.register(ServerEditHandler.instance);
+		MinecraftForge.EVENT_BUS.register(MinestuckAchievementHandler.instance);
+		
 		FMLCommonHandler.instance().bus().register(MinestuckPlayerTracker.instance);
+		FMLCommonHandler.instance().bus().register(ServerEditHandler.instance);
+		
 		if(event.getSide().isClient())
 		{
 			MinecraftForge.EVENT_BUS.register(ClientEditHandler.instance);
 			FMLCommonHandler.instance().bus().register(ClientEditHandler.instance);
 		}
-		MinecraftForge.EVENT_BUS.register(ServerEditHandler.instance);
-		FMLCommonHandler.instance().bus().register(ServerEditHandler.instance);
-		MinecraftForge.EVENT_BUS.register(MinestuckStatsHandler.instance);
+		
 		//register channel handler
 		channels = NetworkRegistry.INSTANCE.newChannel("Minestuck", MinestuckChannelHandler.instance);
 		
@@ -506,8 +481,8 @@ public class Minestuck
 		KindAbstratusList.registerTypes();
 		DeployList.registerItems();
 		
-		ComputerProgram.registerProgram(0, SburbClient.class, clientDiskStack);
-		ComputerProgram.registerProgram(1, SburbServer.class, serverDiskStack);
+		ComputerProgram.registerProgram(0, SburbClient.class, new ItemStack(disk, 1, 0));
+		ComputerProgram.registerProgram(1, SburbServer.class, new ItemStack(disk, 1, 1));
 		
 		SessionHandler.maxSize = acceptTitleCollision?(generateSpecialClasses?168:144):12;
 	}
@@ -575,7 +550,7 @@ public class Minestuck
 				
 				SkaianetHandler.loadData(nbt.getCompoundTag("skaianet"));
 				
-				GristStorage.readFromNBT(nbt);
+				MinestuckPlayerData.readFromNBT(nbt);
 				
 			}
 			return;
@@ -613,13 +588,13 @@ public class Minestuck
 		File gristcache = event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("gristCache");
 		if(gristcache != null && gristcache.exists()) {
 			NBTTagCompound nbt = null;
-			try{
+			try {
 				nbt = CompressedStreamTools.readCompressed(new FileInputStream(gristcache));
 			} catch(IOException e){
 				e.printStackTrace();
 			}
 			
-			GristStorage.readFromNBT(nbt);
+			MinestuckPlayerData.readFromNBT(nbt);
 			
 		}
 	}
