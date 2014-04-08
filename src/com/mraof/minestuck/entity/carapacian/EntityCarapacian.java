@@ -13,7 +13,7 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
-import com.mraof.minestuck.entity.EntityListAttackFilter;
+import com.mraof.minestuck.entity.EntityListFilter;
 import com.mraof.minestuck.entity.EntityMinestuck;
 import com.mraof.minestuck.entity.ai.EntityAINearestAttackableTargetWithHeight;
 
@@ -21,7 +21,7 @@ public abstract class EntityCarapacian extends EntityMinestuck
 {
 	protected List<Class<? extends EntityLivingBase>> enemyClasses;
 	protected List<Class<? extends EntityLivingBase>> allyClasses;
-	protected EntityListAttackFilter attackEntitySelector;
+	protected EntityListFilter attackEntitySelector;
 
 	public EntityCarapacian(World par1World)
 	{
@@ -54,7 +54,7 @@ public abstract class EntityCarapacian extends EntityMinestuck
 
 	public void setEnemies()
 	{
-		attackEntitySelector = new EntityListAttackFilter(enemyClasses);
+		attackEntitySelector = new EntityListFilter(enemyClasses);
 	}
 	public void setEnemies(EnumEntityKingdom side)
 	{
