@@ -28,8 +28,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class GuiGristCache extends GuiScreen
 {
 
-    private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/GristCache.png");
-    
+	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/GristCache.png");
+
 	private static final int guiWidth = 226;
 	private static final int guiHeight = 200;
 
@@ -64,20 +64,20 @@ public class GuiGristCache extends GuiScreen
 	{
 		super.drawScreen(xcor, ycor, par3);
 		this.drawDefaultBackground();
-		
+
 		if (title == null) {
 			title = new Title(TitleHelper.getClassFromInt(((EntityPlayer)mc.thePlayer).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Class")),
 					TitleHelper.getAspectFromInt(((EntityPlayer)mc.thePlayer).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Aspect")));
 		}
-		
+
 		if (titleMessage.isEmpty())
 			if(ClientEditHandler.isActive())
 				titleMessage = UsernameHandler.decode(ClientEditHandler.client).toUpperCase();
 			else titleMessage = mc.thePlayer.getCommandSenderName().toUpperCase() + " : " + title.getTitleName();
-		
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.getTextureManager().bindTexture(guiBackground);
-		
+
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		this.mc.getTextureManager().bindTexture(guiBackground);
+
 		String cacheMessage = StatCollector.translateToLocal("gui.gristCache.name");
 		int yOffset = (this.height / 2) - (guiHeight / 2);
 		this.drawTexturedModalRect((this.width / 2) - (guiWidth / 2), yOffset, 0, 0, guiWidth, guiHeight);
@@ -102,13 +102,13 @@ public class GuiGristCache extends GuiScreen
 			if (xcor > gristXOffset && xcor < gristXOffset + 16 && ycor > gristYOffset && ycor < gristYOffset + 16)
 			{
 				if(this.isPointInRegion(gristXOffset, gristYOffset, 16, 16, xcor, ycor));
-					this.drawGradientRect(gristXOffset, gristYOffset, gristXOffset + 16, gristYOffset + 17, -2130706433, -2130706433);
+				this.drawGradientRect(gristXOffset, gristYOffset, gristXOffset + 16, gristYOffset + 17, -2130706433, -2130706433);
 				tooltip = gristId;
 			}
 
 			this.drawGristIcon(gristXOffset, gristYOffset, GristType.values()[gristId].getName());
 			fontRenderer.drawString(Integer.toString(GristStorage.getClientGrist().getGrist(GristType.values()[gristId])),(this.width / 2)-(guiWidth / 2) + gristCountX + (gristCountXOffset * row - row), yOffset + gristCountY + (gristCountYOffset * column - column), 0xddddee);
-			
+
 
 
 		}
@@ -136,7 +136,7 @@ public class GuiGristCache extends GuiScreen
 
 	private void drawGristIcon(int x,int y,String gristType) 
 	{
-//		this.mc.renderEngine.bindTexture("minestuck:/textures/grist/" + gristType + ".png");
+		//		this.mc.renderEngine.bindTexture("minestuck:/textures/grist/" + gristType + ".png");
 		this.mc.getTextureManager().bindTexture(new ResourceLocation("minestuck","textures/grist/" + gristType + ".png"));
 
 		float scale = (float) 1/16;

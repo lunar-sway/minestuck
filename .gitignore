@@ -2,6 +2,7 @@
 /download
 /build
 /bin
+/libs
 /gradle.properties
 .*
 /eclipse

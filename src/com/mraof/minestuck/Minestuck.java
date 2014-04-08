@@ -24,7 +24,7 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 
-import codechicken.nei.asm.NEIModContainer;
+import codechicken.nei.NEIModContainer;
 
 import com.mraof.minestuck.block.BlockChessTile;
 import com.mraof.minestuck.block.BlockComputerOff;
