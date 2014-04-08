@@ -1,12 +1,12 @@
 package com.mraof.minestuck.client.gui;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
@@ -14,12 +14,8 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.GristType;
-import com.mraof.minestuck.util.Title;
-import com.mraof.minestuck.util.TitleHelper;
-import com.mraof.minestuck.util.UsernameHandler;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -28,96 +24,121 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class GuiPlayerStats extends GuiScreen
 {
 
-    private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/GristCache.png");
-    
-	private static final int guiWidth = 226;
-	private static final int guiHeight = 200;
+	private static final ResourceLocation guiGristcache = new ResourceLocation("minestuck", "textures/gui/GristCache.png");
+	private static final ResourceLocation icons = new ResourceLocation("minestuck", "textures/gui/icons.png");
+	
+	private static final String[] tabNames = {"gui.captchaDeck.name","gui.strifeSpecibus.name","gui.gristCache.name",""};
+	private static final int[] guiWidths = {-1, -1, 226};
+	private static final int[] guiHeights = {-1, -1, 190};
+	private static final int tabWidth = 28, tabHeight = 32;
+	
+	private static final int tabs = 3;
+	
+	private int guiWidth = 226;
+	private int guiHeight = 190;
 
 	private static final int gristIconX = 21;
-	private static final int gristIconY = 42;
+	private static final int gristIconY = 32;
 	private static final int gristIconXOffset = 66;
 	private static final int gristIconYOffset = 21;
 
 	private static final int gristCountX = 44;
-	private static final int gristCountY = 46;
+	private static final int gristCountY = 36;
 	private static final int gristCountXOffset = 66;
 	private static final int gristCountYOffset = 21;
-
+	
+	private static int selectedTab = 2;
+	
 	private Minecraft mc;
 	private FontRenderer fontRenderer;
 	private static RenderItem itemRenderer = new RenderItem();
 	public static boolean visible = false;
-
-	private Title title;
-	private String titleMessage = "";
-
-
+	
 	public GuiPlayerStats(Minecraft mc)
 	{
 		super();
-
+		
 		this.mc = mc;
 		this.fontRenderer = mc.fontRenderer;
 	}
+	
 	@Override
 	public void drawScreen(int xcor, int ycor, float par3) 
 	{
 		super.drawScreen(xcor, ycor, par3);
 		this.drawDefaultBackground();
 		
-		if (title == null) {
-			title = MinestuckPlayerData.title;
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		
+		int xOffset = (width/2)-(guiWidth/2);
+		int yOffset = (height/2)-(guiHeight/2)+(tabHeight/2);
+		
+		int tabX = xOffset;
+		int currX = xOffset;
+		this.mc.getTextureManager().bindTexture(icons);
+		for(int i = 0; i < tabs; i++) {if(i != 0)
+				currX = currX+tabWidth+2;
+			if(selectedTab != i)
+				drawTexturedModalRect(currX,yOffset-tabHeight+4,i==0?0:28,0, tabWidth, tabHeight);
+			else tabX = currX;
 		}
 		
-		if (titleMessage.isEmpty())
-			if(ClientEditHandler.isActive())
-				titleMessage = UsernameHandler.decode(ClientEditHandler.client).toUpperCase();
-			else titleMessage = mc.thePlayer.getCommandSenderName().toUpperCase() + " : " + title.getTitleName();
+		this.mc.getTextureManager().bindTexture(guiGristcache);
 		
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.getTextureManager().bindTexture(guiBackground);
+		this.drawTexturedModalRect(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
-		String cacheMessage = StatCollector.translateToLocal("gui.gristCache.name");
-		int yOffset = (this.height / 2) - (guiHeight / 2);
-		this.drawTexturedModalRect((this.width / 2) - (guiWidth / 2), yOffset, 0, 0, guiWidth, guiHeight);
-		fontRenderer.drawString(cacheMessage, (this.width / 2) - fontRenderer.getStringWidth(cacheMessage) / 2, yOffset + 12, 0x404040);
-		fontRenderer.drawString(titleMessage, (this.width / 2) - fontRenderer.getStringWidth(titleMessage) / 2, yOffset + 22, 0x404040);
-
+		this.mc.getTextureManager().bindTexture(icons);
+		drawTexturedModalRect(tabX,yOffset-tabHeight+4,selectedTab==0?0:28,32, tabWidth, tabHeight);
+		
+		for(int i = 0; i < tabs; i++)
+			drawTexturedModalRect(xOffset+ (tabWidth/2 - 8) + (tabWidth+2)*i, yOffset - tabHeight + 12, i*16, 64, 16, 16);
+		
+		if(selectedTab == 2) {
+			String cacheMessage = StatCollector.translateToLocal("gui.gristCache.name");
+			fontRenderer.drawString(cacheMessage, (this.width / 2) - fontRenderer.getStringWidth(cacheMessage) / 2, yOffset + 12, 0x404040);
+		}
+		
 		GL11.glColor3f(1,1,1);
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		RenderHelper.disableStandardItemLighting();
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
-
-		int tooltip = -1;
-
-		for(int gristId = 0; gristId < GristType.allGrists; gristId++)
-		{
-			int row = (int) (gristId / 7);
-			int column = (int) (gristId % 7);
-			int gristXOffset = (this.width / 2) - (guiWidth / 2) + gristIconX + (gristIconXOffset * row - row);
-			int gristYOffset = yOffset + gristIconY + (gristIconYOffset * column - column);
-
-			if (xcor > gristXOffset && xcor < gristXOffset + 16 && ycor > gristYOffset && ycor < gristYOffset + 16)
-			{
-				if(this.isPointInRegion(gristXOffset, gristYOffset, 16, 16, xcor, ycor));
-					this.drawGradientRect(gristXOffset, gristYOffset, gristXOffset + 16, gristYOffset + 17, -2130706433, -2130706433);
-				tooltip = gristId;
-			}
-
-			this.drawGristIcon(gristXOffset, gristYOffset, GristType.values()[gristId].getName());
-			fontRenderer.drawString(Integer.toString(MinestuckPlayerData.getClientGrist().getGrist(GristType.values()[gristId])),(this.width / 2)-(guiWidth / 2) + gristCountX + (gristCountXOffset * row - row), yOffset + gristCountY + (gristCountYOffset * column - column), 0xddddee);
+		
+		if(selectedTab == 2) {
+			int tooltip = -1;
 			
-
-
+			for(int gristId = 0; gristId < GristType.allGrists; gristId++)
+			{
+				int row = (int) (gristId / 7);
+				int column = (int) (gristId % 7);
+				int gristXOffset = xOffset + gristIconX + (gristIconXOffset * row - row);
+				int gristYOffset = yOffset + gristIconY + (gristIconYOffset * column - column);
+				
+				if (xcor > gristXOffset && xcor < gristXOffset + 16 && ycor > gristYOffset && ycor < gristYOffset + 16)
+				{
+					if(this.isPointInRegion(gristXOffset, gristYOffset, 16, 16, xcor, ycor));
+					this.drawGradientRect(gristXOffset, gristYOffset, gristXOffset + 16, gristYOffset + 17, -2130706433, -2130706433);
+					tooltip = gristId;
+				}
+				
+				this.drawIcon(gristXOffset, gristYOffset, "textures/grist/" + GristType.values()[gristId].getName()+ ".png");
+				fontRenderer.drawString(Integer.toString(MinestuckPlayerData.getClientGrist().getGrist(GristType.values()[gristId])),xOffset + gristCountX + (gristCountXOffset * row - row), yOffset + gristCountY + (gristCountYOffset * column - column), 0xddddee);
+				
+			}
+			
+			if (tooltip != -1)
+			{
+				drawTooltip(StatCollector.translateToLocalFormatted("grist.format", GristType.values()[tooltip].getDisplayName()), xcor, ycor);
+			} 
 		}
-
-		if (tooltip != -1)
-		{
-			drawGristTooltip(StatCollector.translateToLocalFormatted("grist.format", GristType.values()[tooltip].getDisplayName()), xcor, ycor);
-		}
-
-
+		
+		if(ycor < yOffset && ycor > yOffset-tabHeight+4)
+			for(int i = 0; i < tabs; i++)
+				if(xcor < xOffset+i*(tabWidth+2))
+					break;
+				else if(xcor < xOffset+i*(tabWidth+2)+tabWidth)
+					drawTooltip(StatCollector.translateToLocal(tabNames[i]), xcor, ycor);
+		
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		RenderHelper.enableStandardItemLighting();
@@ -132,11 +153,32 @@ public class GuiPlayerStats extends GuiScreen
 		//    	}
 		////  drawGristTooltip(row + " " + column, xcor, ycor);
 	}
-
-	private void drawGristIcon(int x,int y,String gristType) 
+	
+	@Override
+	protected void mouseClicked(int xcor, int ycor, int mouseButton) {
+		
+		if(mouseButton == 0 && ycor < (height/2)-(guiHeight/2)+(tabHeight/2) && ycor > (height/2)-(guiHeight/2)-(tabHeight/2)+4) {
+			int xOffset = (width/2)-(guiWidth/2);
+			for(int i = 0; i < tabs; i++)
+				if(xcor < xOffset+i*(tabWidth+2))
+					break;
+				else if(xcor < xOffset+i*(tabWidth+2)+tabWidth) {
+					if(guiWidths[i] != -1) {
+						selectedTab = i;
+						guiWidth = guiWidths[i];
+						guiHeight = guiHeights[i];
+					}
+					mc.getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation("gui.button.press"), 1.0F));
+					return;
+				}
+		}
+		super.mouseClicked(xcor, ycor, mouseButton);
+	}
+	
+	private void drawIcon(int x,int y,String location) 
 	{
 //		this.mc.renderEngine.bindTexture("minestuck:/textures/grist/" + gristType + ".png");
-		this.mc.getTextureManager().bindTexture(new ResourceLocation("minestuck","textures/grist/" + gristType + ".png"));
+		this.mc.getTextureManager().bindTexture(new ResourceLocation("minestuck",location));
 
 		float scale = (float) 1/16;
 
@@ -160,7 +202,7 @@ public class GuiPlayerStats extends GuiScreen
 		return false;
 	}
 
-	private void drawGristTooltip(String text,int par2, int par3)
+	private void drawTooltip(String text,int par2, int par3)
 	{
 		String[] list = {text};
 
