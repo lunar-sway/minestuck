@@ -25,11 +25,12 @@ public class GuiPlayerStats extends GuiScreen
 {
 
 	private static final ResourceLocation guiGristcache = new ResourceLocation("minestuck", "textures/gui/GristCache.png");
+	private static final ResourceLocation guiCaptchaDeckEmpty = new ResourceLocation("minestuck", "textures/gui/CaptchaDeckEmpty.png");
 	private static final ResourceLocation icons = new ResourceLocation("minestuck", "textures/gui/icons.png");
 	
-	private static final String[] tabNames = {"gui.captchaDeck.name","gui.strifeSpecibus.name","gui.gristCache.name",""};
-	private static final int[] guiWidths = {-1, -1, 226};
-	private static final int[] guiHeights = {-1, -1, 190};
+	private static final String[] tabNames = {"gui.captchaDeck.name","gui.strifeSpecibus.name","gui.gristCache.name"};
+//	private static final int[] guiWidths = {-1, -1, 226};
+//	private static final int[] guiHeights = {-1, -1, 190};
 	private static final int tabWidth = 28, tabHeight = 32;
 	
 	private static final int tabs = 3;
@@ -83,7 +84,7 @@ public class GuiPlayerStats extends GuiScreen
 			else tabX = currX;
 		}
 		
-		this.mc.getTextureManager().bindTexture(guiGristcache);
+		this.mc.getTextureManager().bindTexture(selectedTab==0?guiCaptchaDeckEmpty:guiGristcache);
 		
 		this.drawTexturedModalRect(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
@@ -93,7 +94,10 @@ public class GuiPlayerStats extends GuiScreen
 		for(int i = 0; i < tabs; i++)
 			drawTexturedModalRect(xOffset+ (tabWidth/2 - 8) + (tabWidth+2)*i, yOffset - tabHeight + 12, i*16, 64, 16, 16);
 		
-		if(selectedTab == 2) {
+		if(selectedTab == 0) {
+			String message = StatCollector.translateToLocal("gui.captchaDeck.name");
+			fontRenderer.drawString(message, (this.width / 2) - fontRenderer.getStringWidth(message) / 2, yOffset + 12, 0x404040);
+		} else if(selectedTab == 2) {
 			String cacheMessage = StatCollector.translateToLocal("gui.gristCache.name");
 			fontRenderer.drawString(cacheMessage, (this.width / 2) - fontRenderer.getStringWidth(cacheMessage) / 2, yOffset + 12, 0x404040);
 		}
@@ -104,7 +108,10 @@ public class GuiPlayerStats extends GuiScreen
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		
-		if(selectedTab == 2) {
+		if(selectedTab == 0) {
+			if(isPointInRegion(xOffset+81, yOffset+32, 16, 16, xcor, ycor))
+				drawGradientRect(xOffset+81, yOffset+32, xOffset+81+16, yOffset+32+16, -2130706433, -2130706433);
+		} else if(selectedTab == 2) {
 			int tooltip = -1;
 			
 			for(int gristId = 0; gristId < GristType.allGrists; gristId++)
@@ -113,10 +120,8 @@ public class GuiPlayerStats extends GuiScreen
 				int column = (int) (gristId % 7);
 				int gristXOffset = xOffset + gristIconX + (gristIconXOffset * row - row);
 				int gristYOffset = yOffset + gristIconY + (gristIconYOffset * column - column);
-				
-				if (xcor > gristXOffset && xcor < gristXOffset + 16 && ycor > gristYOffset && ycor < gristYOffset + 16)
-				{
-					if(this.isPointInRegion(gristXOffset, gristYOffset, 16, 16, xcor, ycor));
+
+				if(this.isPointInRegion(gristXOffset, gristYOffset, 16, 16, xcor, ycor)) {
 					this.drawGradientRect(gristXOffset, gristYOffset, gristXOffset + 16, gristYOffset + 17, -2130706433, -2130706433);
 					tooltip = gristId;
 				}
@@ -163,10 +168,17 @@ public class GuiPlayerStats extends GuiScreen
 				if(xcor < xOffset+i*(tabWidth+2))
 					break;
 				else if(xcor < xOffset+i*(tabWidth+2)+tabWidth) {
-					if(guiWidths[i] != -1) {
+					if(i != 1) {
 						selectedTab = i;
-						guiWidth = guiWidths[i];
-						guiHeight = guiHeights[i];
+						switch(i) {
+						case 0:
+							guiWidth = 178;
+							guiHeight = 54;
+							break;
+						case 2:
+							guiWidth = 226;
+							guiHeight = 190;
+						}
 					}
 					mc.getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation("gui.button.press"), 1.0F));
 					return;
@@ -274,12 +286,8 @@ public class GuiPlayerStats extends GuiScreen
 			//		    GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		}
 	}
-	protected boolean isPointInRegion(int par1, int par2, int par3, int par4, int par5, int par6)
-	{
-		int k1 = (this.width - guiWidth) / 2;
-		int l1 = (this.height - guiHeight) / 2;
-		par5 -= k1;
-		par6 -= l1;
-		return par5 >= par1 - 1 && par5 < par1 + par3 + 1 && par6 >= par2 - 1 && par6 < par2 + par4 + 1;
+	
+	protected boolean isPointInRegion(int regionX, int regionY, int regionWidth, int regionHeight, int pointX, int pointY) {
+		return pointX >= regionX && pointX < regionX + regionWidth && pointY >= regionY && pointY < regionY + regionHeight;
 	}
 }
