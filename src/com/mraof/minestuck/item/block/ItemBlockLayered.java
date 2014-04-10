@@ -7,7 +7,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.block.BlockLayered;
-import com.mraof.minestuck.util.Debug;
 
 public class ItemBlockLayered extends ItemBlockWithMetadata {
 
@@ -37,15 +36,13 @@ public class ItemBlockLayered extends ItemBlockWithMetadata {
 		{
 			Block id = world.getBlock(x, y, z);
 
-			Debug.print(id.getUnlocalizedName());
-			if (id == theBlock)
+			if (id == this.field_150939_a)
 			{
-				Block block = this.field_150939_a;
 				int metadata = world.getBlockMetadata(x, y, z);
 
-				if (/*depth <= 6 && */world.checkNoEntityCollision(block.getCollisionBoundingBoxFromPool(world, x, y, z)) && ((BlockLayered)theBlock).changeHeight(world, x, y, z, metadata + 1)) //changes full BlockLayered into full block
+				if (/*depth <= 6 && */world.checkNoEntityCollision(this.field_150939_a.getCollisionBoundingBoxFromPool(world, x, y, z)) && ((BlockLayered)this.field_150939_a).changeHeight(world, x, y, z, metadata + 1)) //changes full BlockLayered into full block
 				{
-					world.playSoundEffect((double)x + 0.5, (double)y + 0.5, (double)z + 0.5, block.stepSound.getStepResourcePath(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
+					world.playSoundEffect((double)x + 0.5, (double)y + 0.5, (double)z + 0.5, this.field_150939_a.stepSound.getStepResourcePath(), (this.field_150939_a.stepSound.getVolume() + 1.0F) / 2.0F, this.field_150939_a.stepSound.getPitch() * 0.8F);
 					--itemStack.stackSize;
 					return true;
 				}
