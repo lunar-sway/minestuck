@@ -14,6 +14,9 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.KindAbstratusList;
+import com.mraof.minestuck.util.KindAbstratusType;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.GristType;
 
@@ -26,27 +29,28 @@ public class GuiPlayerStats extends GuiScreen
 
 	private static final ResourceLocation guiGristcache = new ResourceLocation("minestuck", "textures/gui/GristCache.png");
 	private static final ResourceLocation guiCaptchaDeckEmpty = new ResourceLocation("minestuck", "textures/gui/CaptchaDeckEmpty.png");
+	private static final ResourceLocation guiStrifeSelector = new ResourceLocation("minestuck", "textures/gui/StrifeSelector.png");
+	private static final ResourceLocation guiEcheladder = new ResourceLocation("minestuck", "textures/gui/echeladder.png");
 	private static final ResourceLocation icons = new ResourceLocation("minestuck", "textures/gui/icons.png");
 	
-	private static final String[] tabNames = {"gui.captchaDeck.name","gui.strifeSpecibus.name","gui.gristCache.name"};
-//	private static final int[] guiWidths = {-1, -1, 226};
-//	private static final int[] guiHeights = {-1, -1, 190};
+	private static final String[] tabNames = {"gui.captchaDeck.name","gui.strifeSpecibus.name","gui.gristCache.name","gui.echeladder.name"};
 	private static final int tabWidth = 28, tabHeight = 32;
 	
-	private static final int tabs = 3;
+	private static final int tabs = 4;
 	
-	private int guiWidth = 226;
-	private int guiHeight = 190;
-
-	private static final int gristIconX = 21;
-	private static final int gristIconY = 32;
-	private static final int gristIconXOffset = 66;
-	private static final int gristIconYOffset = 21;
-
-	private static final int gristCountX = 44;
-	private static final int gristCountY = 36;
-	private static final int gristCountXOffset = 66;
-	private static final int gristCountYOffset = 21;
+	//Grist gui
+	private static final int gristIconX = 21, gristIconY = 32;
+	private static final int gristIconXOffset = 66, gristIconYOffset = 21;
+	private static final int gristCountX = 44, gristCountY = 36;
+	private static final int gristCountXOffset = 66, gristCountYOffset = 21;
+	
+	//Abstratus selector
+	private static final int columnWidth = 70, columns = 3;
+	
+	//Echeladder
+	private static final int ladderXOffset = 163, ladderYOffset = 25;
+	private static final int rows = 12;
+	private int scrollIndex;
 	
 	private static int selectedTab = 2;
 	
@@ -71,22 +75,38 @@ public class GuiPlayerStats extends GuiScreen
 		
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		
-		int xOffset = (width/2)-(guiWidth/2);
-		int yOffset = (height/2)-(guiHeight/2)+(tabHeight/2);
+		int xOffset = (width-getGuiWidth())/2;
+		int yOffset = (height-(getGuiHeight()+tabHeight-4))/2 + tabHeight-4;
 		
 		int tabX = xOffset;
 		int currX = xOffset;
 		this.mc.getTextureManager().bindTexture(icons);
-		for(int i = 0; i < tabs; i++) {if(i != 0)
+		for(int i = 0; i < tabs; i++) {
+			if(i != 0)
 				currX = currX+tabWidth+2;
 			if(selectedTab != i)
 				drawTexturedModalRect(currX,yOffset-tabHeight+4,i==0?0:28,0, tabWidth, tabHeight);
 			else tabX = currX;
 		}
 		
-		this.mc.getTextureManager().bindTexture(selectedTab==0?guiCaptchaDeckEmpty:guiGristcache);
+		if(selectedTab == 3) {
+			if(scrollIndex == 13)
+				scrollIndex = 0;
+			else scrollIndex++;
+			this.mc.getTextureManager().bindTexture(guiEcheladder);
+			int index = scrollIndex % 14;
+			for(int i = 0; i < rows; i++)
+				drawTexturedModalRect(xOffset+90,yOffset+38-index+(i*14),0,212,146,14);
+			for(int i = 0; i < rows; i++) {
+				String s = "MethodOfScrollIndexAndI";
+				fontRenderer.drawString(s, xOffset+ladderXOffset - fontRenderer.getStringWidth(s) / 2, yOffset+40-index+(i*14), 0xFFFFFF);
+			}
+			GL11.glColor3f(1,1,1);
+		}
 		
-		this.drawTexturedModalRect(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
+		this.mc.getTextureManager().bindTexture(getGui());
+		
+		this.drawTexturedModalRect(xOffset, yOffset, 0, 0, getGuiWidth(), getGuiHeight());
 		
 		this.mc.getTextureManager().bindTexture(icons);
 		drawTexturedModalRect(tabX,yOffset-tabHeight+4,selectedTab==0?0:28,32, tabWidth, tabHeight);
@@ -97,6 +117,25 @@ public class GuiPlayerStats extends GuiScreen
 		if(selectedTab == 0) {
 			String message = StatCollector.translateToLocal("gui.captchaDeck.name");
 			fontRenderer.drawString(message, (this.width / 2) - fontRenderer.getStringWidth(message) / 2, yOffset + 12, 0x404040);
+		} else if(selectedTab == 1) {
+			String message = StatCollector.translateToLocal("gui.kindAbstrata.name");
+			fontRenderer.drawString(message, (this.width / 2) - fontRenderer.getStringWidth(message) / 2, yOffset + 12, 0x404040);
+			
+			int i = 0;
+			for(KindAbstratusType type : KindAbstratusList.getTypeList()) {
+				String typeName = type.getDisplayName().toLowerCase();
+				int xPos = xOffset+9+(columnWidth)*((i%columns)+1)-fontRenderer.getStringWidth(typeName);
+				int yPos = yOffset+35+(fontRenderer.FONT_HEIGHT+1)*(int)(i/columns);
+				
+				if(!isPointInRegion(xOffset+9+(columnWidth)*(i%columns)+1, yPos-1, columnWidth-1, fontRenderer.FONT_HEIGHT+1, xcor, ycor))
+					fontRenderer.drawString(typeName, xPos, yPos, 0xFFFFFF, false);
+				else {
+					drawRect(xOffset+9+(columnWidth)*(i%columns)+1, yPos-1, xOffset+9+(columnWidth)*((i%columns)+1), yPos+fontRenderer.FONT_HEIGHT, 0xFFAFAFAF);
+					fontRenderer.drawString(typeName, xPos, yPos, 0x000000, false);
+				}
+				i++;
+			}
+			
 		} else if(selectedTab == 2) {
 			String cacheMessage = StatCollector.translateToLocal("gui.gristCache.name");
 			fontRenderer.drawString(cacheMessage, (this.width / 2) - fontRenderer.getStringWidth(cacheMessage) / 2, yOffset + 12, 0x404040);
@@ -162,24 +201,13 @@ public class GuiPlayerStats extends GuiScreen
 	@Override
 	protected void mouseClicked(int xcor, int ycor, int mouseButton) {
 		
-		if(mouseButton == 0 && ycor < (height/2)-(guiHeight/2)+(tabHeight/2) && ycor > (height/2)-(guiHeight/2)-(tabHeight/2)+4) {
-			int xOffset = (width/2)-(guiWidth/2);
+		if(mouseButton == 0 && ycor < (height/2)-(getGuiHeight()/2)+(tabHeight/2) && ycor > (height/2)-(getGuiHeight()/2)-(tabHeight/2)+4) {
+			int xOffset = (width/2)-(getGuiWidth()/2);
 			for(int i = 0; i < tabs; i++)
 				if(xcor < xOffset+i*(tabWidth+2))
 					break;
 				else if(xcor < xOffset+i*(tabWidth+2)+tabWidth) {
-					if(i != 1) {
-						selectedTab = i;
-						switch(i) {
-						case 0:
-							guiWidth = 178;
-							guiHeight = 54;
-							break;
-						case 2:
-							guiWidth = 226;
-							guiHeight = 190;
-						}
-					}
+					selectedTab = i;
 					mc.getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation("gui.button.press"), 1.0F));
 					return;
 				}
@@ -284,6 +312,36 @@ public class GuiPlayerStats extends GuiScreen
 			//		    GL11.glEnable(GL11.GL_DEPTH_TEST);
 			//		    RenderHelper.enableStandardItemLighting();
 			//		    GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		}
+	}
+	
+	private ResourceLocation getGui() {
+		switch(selectedTab) {
+		case 0: return guiCaptchaDeckEmpty;
+		case 1: return guiStrifeSelector;
+		case 2: return guiGristcache;
+		case 3: return guiEcheladder;
+		default: return null;
+		}
+	}
+	
+	private int getGuiWidth() {
+		switch(selectedTab) {
+		case 0: return 178;
+		case 1: return 228;
+		case 2: return 226;
+		case 3: return 256;
+		default: return -1;
+		}
+	}
+	
+	private int getGuiHeight() {
+		switch(selectedTab) {
+		case 0: return 54;
+		case 1: return 150;
+		case 2: return 190;
+		case 3: return 212;
+		default: return -1;
 		}
 	}
 	

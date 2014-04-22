@@ -1,6 +1,7 @@
 package com.mraof.minestuck.util;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemBow;
@@ -47,6 +48,10 @@ public class KindAbstratusList {
 			if(type.getUnlocalizedName().equals(unlocName))
 				return type;
 		return null;
+	}
+	
+	public static List<KindAbstratusType> getTypeList() {
+		return (List) typeList.clone();
 	}
 	
 }
