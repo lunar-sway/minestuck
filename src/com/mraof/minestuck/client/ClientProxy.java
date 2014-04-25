@@ -3,9 +3,11 @@ package com.mraof.minestuck.client;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 
 import com.mraof.minestuck.CommonProxy;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.event.MinestuckClientEventHandler;
 import com.mraof.minestuck.client.gui.GuiPlayerStats;
 import com.mraof.minestuck.client.model.ModelBasilisk;
@@ -16,6 +18,7 @@ import com.mraof.minestuck.client.model.ModelImp;
 import com.mraof.minestuck.client.model.ModelNakagator;
 import com.mraof.minestuck.client.model.ModelOgre;
 import com.mraof.minestuck.client.model.ModelSalamander;
+import com.mraof.minestuck.client.renderer.RenderCard;
 import com.mraof.minestuck.client.renderer.entity.RenderDecoy;
 import com.mraof.minestuck.client.renderer.entity.RenderEntityMinestuck;
 import com.mraof.minestuck.client.renderer.entity.RenderGrist;
@@ -69,6 +72,7 @@ public class ClientProxy extends CommonProxy
             RenderingRegistry.registerEntityRenderingHandler(EntityDecoy.class, new RenderDecoy());
             ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGatePortal.class, new RenderGatePortal());
             ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachine.class, new RenderMachine());
+		MinecraftForgeClient.registerItemRenderer(Minestuck.captchaCard, new RenderCard());
     }
 	@SideOnly(Side.CLIENT)
 	public static void registerSided() {

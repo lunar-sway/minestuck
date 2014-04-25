@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -222,6 +223,10 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 				ItemStack outputItem = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(this.inv[1],true), AlchemyRecipeHandler.getDecodedItem(this.inv[2],true),this.mode);
 				if(inv[3].hasTagCompound() && inv[3].getTagCompound().getBoolean("punched"))
 					outputItem = CombinationRegistry.getCombination(outputItem, AlchemyRecipeHandler.getDecodedItem(inv[3]), CombinationRegistry.MODE_OR);
+				if(inv[3].hasTagCompound() && inv[3].getTagCompound().hasKey("displayID")) {
+					outputItem.getTagCompound().setString("displayID", inv[3].getTagCompound().getString("displayID"));
+					outputItem.getTagCompound().setInteger("displayMeta", inv[3].getTagCompound().getInteger("displayMeta"));
+				}
 				if(outputItem != null)
 					return (this.inv[0] == null || inv[0].stackSize < 16 && outputItem.isItemEqual(AlchemyRecipeHandler.getDecodedItem(inv[0])));
 			}
@@ -230,10 +235,18 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			if(inv[3] != null) {
 				ItemStack input = (inv[1] == null?inv[2]:inv[1]);
 				ItemStack output = (input.getItem().equals(Minestuck.captchaCard)&&input.hasTagCompound()&&input.getTagCompound().getBoolean("punched")
-						?AlchemyRecipeHandler.getDecodedItem(input):input);
-				if(inv[3].hasTagCompound() && inv[3].getTagCompound().getBoolean("punched"))
+						?input:AlchemyRecipeHandler.createCard(input, true));
+				if(inv[3].hasTagCompound() && inv[3].getTagCompound().getBoolean("punched")) {
 					output = CombinationRegistry.getCombination(output, AlchemyRecipeHandler.getDecodedItem(inv[3]), CombinationRegistry.MODE_OR);
-				return (output != null && (inv[0] == null || inv[0].stackSize < 16 && AlchemyRecipeHandler.getDecodedItem(inv[0]).isItemEqual(output)));
+					if(inv[3].getTagCompound().hasKey("displayID")) {
+						output.getTagCompound().setString("displayID", inv[3].getTagCompound().getString("displayID"));
+						output.getTagCompound().setInteger("displayMeta", inv[3].getTagCompound().getInteger("displayMeta"));
+					} else if(!(input.getItem().equals(Minestuck.captchaCard)&&input.hasTagCompound()&&input.getTagCompound().getBoolean("punched"))) {
+						output.getTagCompound().setString("displayID", Item.itemRegistry.getNameForObject(input.getItem()));
+						output.getTagCompound().setInteger("displayMeta", input.getItemDamage());
+					}
+				} else 
+				return (output != null && (inv[0] == null || inv[0].stackSize < 16 && inv[0].isItemEqual(output)));
 			}
 		} else {
 			return false;
@@ -291,12 +304,26 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 				outputItem = inv[1];
 			}
 			
+			
 			if(inv[3].hasTagCompound() && inv[3].getTagCompound().getBoolean("punched")) {	//If you push the data onto a punched card, perform an OR alchemy
 				outputItem = CombinationRegistry.getCombination(outputItem, AlchemyRecipeHandler.getDecodedItem(inv[3]), CombinationRegistry.MODE_OR);
-				//consumeItem = false;
 			}
 			
-			setInventorySlotContents(0,AlchemyRecipeHandler.createCard(outputItem, true));
+			//Create card
+			outputItem = AlchemyRecipeHandler.createCard(outputItem, true);
+			
+			if(inv[3].hasTagCompound() && inv[3].getTagCompound().hasKey("displayID")) {
+				outputItem.getTagCompound().setString("displayID", inv[3].getTagCompound().getString("displayID"));
+				outputItem.getTagCompound().setInteger("displayMeta", inv[3].getTagCompound().getInteger("displayMeta"));
+			} else if(inv[1] == null || inv[2] == null) {
+				ItemStack input = inv[1] == null?inv[2]:inv[1];
+				if(!(input.getItem().equals(Minestuck.captchaCard) && input.hasTagCompound() && input.getTagCompound().getBoolean("punched"))) {
+					outputItem.getTagCompound().setString("displayID", Item.itemRegistry.getNameForObject(input.getItem()));
+					outputItem.getTagCompound().setInteger("displayMeta", input.getItemDamage());
+				}
+			}
+			
+			setInventorySlotContents(0,outputItem);
 			if (inv[1] == null || inv[2] == null) {
 				decrStackSize(1, 1);
 				decrStackSize(2, 1);

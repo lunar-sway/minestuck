@@ -210,6 +210,7 @@ public class Minestuck
 	public static boolean toolTipEnabled;
 	public static boolean forceMaxSize;	//If it should prevent players from joining a session if there is no possible combinations left.
 	public static boolean giveItems;
+	public static boolean specialCardRenderer;
 	public static String privateMessage;
 	public static int artifactRange; //The range of the Cruxite Artifact in teleporting zones over to the new land
 	public static int overworldEditRange;
@@ -268,6 +269,7 @@ public class Minestuck
 			escapeFailureMode = 0;
 		if(event.getSide().isClient()) {	//Client sided config values
 			toolTipEnabled = config.get("General", "editModeToolTip", false).getBoolean(false);
+			specialCardRenderer = config.get("General", "specialCardRenderer", false).getBoolean(false);
 		}
 		config.save();
 		
