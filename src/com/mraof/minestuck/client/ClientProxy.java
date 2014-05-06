@@ -47,32 +47,32 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ClientProxy extends CommonProxy
 {
-	
+
 	public static EntityPlayer getPlayer() {	//This seems to prevent the server from crashing on startup?
 		return Minecraft.getMinecraft().thePlayer;
 	}
-	
+
 	@SideOnly(Side.CLIENT)
-    public static void registerRenderers() 
+	public static void registerRenderers() 
 	{
-            RenderingRegistry.registerEntityRenderingHandler(EntityNakagator.class, new RenderEntityMinestuck(new ModelNakagator(), 0.5F));
-            RenderingRegistry.registerEntityRenderingHandler(EntitySalamander.class, new RenderEntityMinestuck(new ModelSalamander(), 0.5F));
-            RenderingRegistry.registerEntityRenderingHandler(EntityIguana.class, new RenderEntityMinestuck(new ModelIguana(), 0.5F));
-            RenderingRegistry.registerEntityRenderingHandler(EntityImp.class, new RenderEntityMinestuck(new ModelImp(), 0.5F));
-            RenderingRegistry.registerEntityRenderingHandler(EntityOgre.class, new RenderEntityMinestuck(new ModelOgre(), 2.8F));
-            RenderingRegistry.registerEntityRenderingHandler(EntityBasilisk.class, new RenderEntityMinestuck(new ModelBasilisk(), 2.8F));
-            RenderingRegistry.registerEntityRenderingHandler(EntityUnderlingPart.class, new RenderShadow(2.8F));
-            RenderingRegistry.registerEntityRenderingHandler(EntityGiclops.class, new RenderEntityMinestuck(new ModelGiclops(), 7.6F));
-            RenderingRegistry.registerEntityRenderingHandler(EntityPawn.class, new RenderPawn(new ModelBiped(), 0.5F));
-            RenderingRegistry.registerEntityRenderingHandler(EntityBishop.class, new RenderEntityMinestuck(new ModelBishop(), 1.8F));
-            RenderingRegistry.registerEntityRenderingHandler(EntityGrist.class, new RenderGrist());
-            RenderingRegistry.registerEntityRenderingHandler(EntityDecoy.class, new RenderDecoy());
-            ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGatePortal.class, new RenderGatePortal());
-            ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachine.class, new RenderMachine());
-    }
+		RenderingRegistry.registerEntityRenderingHandler(EntityNakagator.class, new RenderEntityMinestuck(new ModelNakagator(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(EntitySalamander.class, new RenderEntityMinestuck(new ModelSalamander(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityIguana.class, new RenderEntityMinestuck(new ModelIguana(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityImp.class, new RenderEntityMinestuck(new ModelImp(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityOgre.class, new RenderEntityMinestuck(new ModelOgre(), 2.8F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityBasilisk.class, new RenderEntityMinestuck(new ModelBasilisk(), 2.8F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityUnderlingPart.class, new RenderShadow(2.8F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityGiclops.class, new RenderEntityMinestuck(new ModelGiclops(), 7.6F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityPawn.class, new RenderPawn(new ModelBiped(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityBishop.class, new RenderEntityMinestuck(new ModelBishop(), 1.8F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityGrist.class, new RenderGrist());
+		RenderingRegistry.registerEntityRenderingHandler(EntityDecoy.class, new RenderDecoy());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGatePortal.class, new RenderGatePortal());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachine.class, new RenderMachine());
+	}
 	@SideOnly(Side.CLIENT)
 	public static void registerSided() {
-		
+
 		MinecraftForge.EVENT_BUS.register(new GuiGristCache(Minecraft.getMinecraft()));
 		MinecraftForge.EVENT_BUS.register(new MinestuckClientEventHandler());
 		FMLCommonHandler.instance().bus().register(new MinestuckKeyHandler());

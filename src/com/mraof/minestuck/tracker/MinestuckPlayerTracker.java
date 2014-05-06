@@ -23,6 +23,8 @@ import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.util.TitleHelper;
 import com.mraof.minestuck.util.UpdateChecker;
 import com.mraof.minestuck.util.UsernameHandler;
+import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
+
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent;
@@ -71,6 +73,7 @@ public class MinestuckPlayerTracker {
 	@SubscribeEvent
 	public void onConnectionCreated(FMLNetworkEvent.ServerConnectionFromClientEvent event) {
 		MinestuckPacket packet = LandRegisterPacket.createPacket();
+		packet.generatePacket(MinestuckSaveHandler.lands.toArray());
 		Debug.printf("Player logged in, sending land packet.");
 		
 		Minestuck.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.DISPATCHER);
@@ -129,6 +132,7 @@ public class MinestuckPlayerTracker {
 	public static void updateLands(EntityPlayer player)
 	{
 		MinestuckPacket packet = LandRegisterPacket.createPacket();
+		packet.generatePacket(MinestuckSaveHandler.lands.toArray());
 		Debug.printf("Sending land packets to %s.", player == null ? "all players" : player.getCommandSenderName());
 		if(player == null)
 			MinestuckChannelHandler.sendToAllPlayers(packet);
