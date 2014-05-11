@@ -1,6 +1,6 @@
 package com.mraof.minestuck.nei;
 
-import static codechicken.core.gui.GuiDraw.changeTexture;
+import static codechicken.lib.gui.GuiDraw.changeTexture;
 
 import java.awt.Rectangle;
 import java.util.Hashtable;
@@ -14,7 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 
-import codechicken.core.gui.GuiDraw;
+import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 

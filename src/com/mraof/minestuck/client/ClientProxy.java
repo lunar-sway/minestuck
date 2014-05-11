@@ -73,7 +73,6 @@ public class ClientProxy extends CommonProxy
 	@SideOnly(Side.CLIENT)
 	public static void registerSided() {
 
-		MinecraftForge.EVENT_BUS.register(new GuiGristCache(Minecraft.getMinecraft()));
 		MinecraftForge.EVENT_BUS.register(new MinestuckClientEventHandler());
 		FMLCommonHandler.instance().bus().register(new MinestuckKeyHandler());
 	}
