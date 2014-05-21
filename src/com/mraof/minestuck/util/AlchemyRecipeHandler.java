@@ -630,9 +630,23 @@ public class AlchemyRecipeHandler {
 	}
 	
 	public static ItemStack createCard(ItemStack item, boolean punched) {
+		return createCard(item, item, punched);
+	}
+	
+	public static ItemStack createCard(ItemStack item, ItemStack displayItem, boolean punched) {
 		ItemStack stack = createEncodedItem(item, true);
-		if(stack.hasTagCompound())
+		if(stack.hasTagCompound()) {
 			stack.getTagCompound().setBoolean("punched", punched);
+			if(!punched && item.hasTagCompound()) {
+				stack.getTagCompound().setTag("contentTags", item.getTagCompound());
+			}
+			if(punched && displayItem != null) {
+				stack.getTagCompound().setString("displayID", Item.itemRegistry.getNameForObject(displayItem.getItem()));
+				stack.getTagCompound().setInteger("displayMeta", displayItem.getItemDamage());
+				if(displayItem.hasTagCompound())
+					stack.getTagCompound().setTag("displayTags", stack.getTagCompound());
+			}
+		}
 		return stack;
 	}
 	

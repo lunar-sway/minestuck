@@ -76,6 +76,7 @@ grist.Sulfur=Sulfur
 grist.Tar=Tar
 grist.Uranium=Uranium
 grist.Zillium=Zillium
+grist.missing=You do not have enough grist for that, and need: %s
 
 gui.gristCache.name=Grist Cache
 gui.cruxtruder.name=Cruxtruder

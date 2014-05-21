@@ -235,15 +235,15 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			if(inv[3] != null) {
 				ItemStack input = (inv[1] == null?inv[2]:inv[1]);
 				ItemStack output = (input.getItem().equals(Minestuck.captchaCard)&&input.hasTagCompound()&&input.getTagCompound().getBoolean("punched")
-						?input:AlchemyRecipeHandler.createCard(input, true));
+						?input.copy():AlchemyRecipeHandler.createCard(input, true));
 				if(inv[3].hasTagCompound() && inv[3].getTagCompound().getBoolean("punched")) {
 					output = CombinationRegistry.getCombination(output, AlchemyRecipeHandler.getDecodedItem(inv[3]), CombinationRegistry.MODE_OR);
 					if(inv[3].getTagCompound().hasKey("displayID")) {
 						output.getTagCompound().setString("displayID", inv[3].getTagCompound().getString("displayID"));
 						output.getTagCompound().setInteger("displayMeta", inv[3].getTagCompound().getInteger("displayMeta"));
-					} else if(!(input.getItem().equals(Minestuck.captchaCard)&&input.hasTagCompound()&&input.getTagCompound().getBoolean("punched"))) {
-						output.getTagCompound().setString("displayID", Item.itemRegistry.getNameForObject(input.getItem()));
-						output.getTagCompound().setInteger("displayMeta", input.getItemDamage());
+					} else if(input.getItem().equals(Minestuck.captchaCard)&&input.hasTagCompound()&&input.getTagCompound().getBoolean("punched")) {
+						output.getTagCompound().removeTag("displayID");
+						output.getTagCompound().removeTag("displayMeta");
 					}
 				} else 
 				return (output != null && (inv[0] == null || inv[0].stackSize < 16 && inv[0].isItemEqual(output)));
