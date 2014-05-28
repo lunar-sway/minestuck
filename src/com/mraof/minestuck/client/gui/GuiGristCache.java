@@ -6,7 +6,6 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
@@ -18,7 +17,7 @@ import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.util.GristStorage;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.Title;
-import com.mraof.minestuck.util.TitleHelper;
+import com.mraof.minestuck.util.TitleStorage;
 import com.mraof.minestuck.util.UsernameHandler;
 
 import cpw.mods.fml.relauncher.Side;
@@ -65,10 +64,8 @@ public class GuiGristCache extends GuiScreen
 		super.drawScreen(xcor, ycor, par3);
 		this.drawDefaultBackground();
 
-		if (title == null) {
-			title = new Title(TitleHelper.getClassFromInt(((EntityPlayer)mc.thePlayer).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Class")),
-					TitleHelper.getAspectFromInt(((EntityPlayer)mc.thePlayer).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Aspect")));
-		}
+		if (title == null)
+			title = TitleStorage.title;	
 
 		if (titleMessage.isEmpty())
 			if(ClientEditHandler.isActive())

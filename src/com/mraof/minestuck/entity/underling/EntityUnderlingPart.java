@@ -27,21 +27,6 @@ public class EntityUnderlingPart extends EntityLiving
 		this.name = par2Str;
 	}
 
-	@Override
-	protected void entityInit() 
-	{
-		super.entityInit();
-	}
-
-	/**
-	 * (abstract) Protected helper method to read subclass entity data from NBT.
-	 */
-	@Override
-	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound) 
-	{
-		super.readEntityFromNBT(par1NBTTagCompound);
-	}
-
 	/**
 	 * (abstract) Protected helper method to write subclass entity data to NBT.
 	 */
@@ -79,7 +64,6 @@ public class EntityUnderlingPart extends EntityLiving
 		super.onUpdate();
 		if(this.entityUnderlingObj == null || (this.entityUnderlingObj).isDead)
 		{
-//			Debug.printf("entity underling is %s, the side is %b", this.entityUnderlingObj, this.worldObj.isRemote);
 			this.setDead();
 		}
 		else

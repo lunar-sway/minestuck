@@ -5,11 +5,14 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.Vec3;
 
 public class LandAspectHeat extends LandAspect 
 {
 	BlockWithMetadata[] upperBlocks = {new BlockWithMetadata(Blocks.netherrack), new BlockWithMetadata(Blocks.obsidian)};
 	BlockWithMetadata[] surfaceBlocks = {new BlockWithMetadata(Blocks.soul_sand), new BlockWithMetadata(Blocks.cobblestone)};
+	static Vec3 skyColor = Vec3.fakePool.getVecFromPool(0.0D, 0.0D, 0.0D);
+
 	@Override
 	public BlockWithMetadata[] getSurfaceBlocks() 
 	{
@@ -66,5 +69,9 @@ public class LandAspectHeat extends LandAspect
 		return (new Random()).nextInt(3); //Random cycle between 0 and 2
 	}
 
-
+	@Override
+	public Vec3 getFogColor() 
+	{
+		return skyColor;
+	}
 }

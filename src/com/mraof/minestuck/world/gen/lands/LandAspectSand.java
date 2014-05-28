@@ -1,3 +1,4 @@
+
 package com.mraof.minestuck.world.gen.lands;
 
 import java.util.ArrayList;
@@ -6,13 +7,11 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Vec3;
 
-import com.mraof.minestuck.Minestuck;
-
-public class LandAspectPulse extends LandAspect 
+public class LandAspectSand extends LandAspect
 {
-	BlockWithMetadata[] upperBlocks = {new BlockWithMetadata(Blocks.netherrack)};
-	BlockWithMetadata[] surfaceBlocks = {new BlockWithMetadata(Blocks.obsidian)};
-	static Vec3 skyColor = Vec3.fakePool.getVecFromPool(0.36D, 0.01D, 0.01D);
+	BlockWithMetadata[] upperBlocks = {new BlockWithMetadata(Blocks.sandstone)};
+	BlockWithMetadata[] surfaceBlocks = {new BlockWithMetadata(Blocks.sand)};
+	static Vec3 skyColor = Vec3.fakePool.getVecFromPool(0.99D, 0.8D, 0.05D);
 	
 	@Override
 	public BlockWithMetadata[] getSurfaceBlocks() 
@@ -28,7 +27,7 @@ public class LandAspectPulse extends LandAspect
 	@Override
 	public Block getOceanBlock() 
 	{
-		return Minestuck.blockBlood;
+		return Blocks.sand;
 	}
 
 	@Override
@@ -43,18 +42,18 @@ public class LandAspectPulse extends LandAspect
 
 	@Override
 	public String getPrimaryName() {
-		return "Pulse";
+		return "Sand";
 	}
 
 	@Override
 	public String[] getNames() {
-		return new String[] {"Pulse"};
+		return new String[] {"Sand"};
 	}
 
 	@Override
 	public ArrayList<ILandDecorator> getDecorators() {
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
-		list.add(new DecoratorVein(Blocks.nether_brick, 10, 32));
+		list.add(new DecoratorVein(Blocks.stonebrick, 10, 32));
 //		list.add(new DecoratorVein(Block.ice, 5, 8));
 		return list;
 	}

@@ -297,9 +297,9 @@ public class Minestuck
 		FluidRegistry.registerFluid(fluidOil);
 		fluidBlood = new Fluid("Blood");
 		FluidRegistry.registerFluid(fluidBlood);
-		blockOil = new BlockFluidOil(fluidOil, Material.water);
-		blockBlood = new BlockFluidBlood(fluidBlood, Material.water);
-		
+		blockOil = GameRegistry.registerBlock(new BlockFluidOil(fluidOil, Material.water), "blockOil");
+		blockBlood = GameRegistry.registerBlock(new BlockFluidBlood(fluidBlood, Material.water), "blockBlood");
+
 		//items
 		//hammers
 		clawHammer = new ItemHammer(EnumHammerType.CLAW);
@@ -391,12 +391,8 @@ public class Minestuck
 		GameRegistry.registerItem(component, "component");
 		GameRegistry.registerItem(minestuckBucket, "minestuckBucket");
 		
-		//fluids
-		GameRegistry.registerBlock(blockOil, "blockOil");
-		GameRegistry.registerBlock(blockBlood, "blockBlood");
 		
 		MinestuckStatsHandler.prepareAchievementPage();
-		
 	}
 
 	@SuppressWarnings("unused")
