@@ -17,6 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
@@ -101,11 +102,11 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 		return "textures/mobs/" + type.getName() + underlingName + ".png";
 	}
 	
-//	@Override
-//	public String getEntityName() 
-//	{
-//		return StatCollector.translateToLocalFormatted("entity." + underlingName + ".type", type.getDisplayName());
-//	}
+	@Override
+	public String getCommandSenderName() 
+	{
+		return StatCollector.translateToLocalFormatted("entity." + underlingName + ".type", type.getDisplayName());
+	}
 	@Override
 	protected boolean isAIEnabled()
 	{

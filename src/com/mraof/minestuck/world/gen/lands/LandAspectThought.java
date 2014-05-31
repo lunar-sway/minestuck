@@ -3,15 +3,17 @@ package com.mraof.minestuck.world.gen.lands;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.mraof.minestuck.Minestuck;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Vec3;
 
-public class LandAspectFrost extends LandAspect 
+public class LandAspectThought extends LandAspect 
 {
-	BlockWithMetadata[] surfaceBlocks = {new BlockWithMetadata(Blocks.grass)};
+	BlockWithMetadata[] surfaceBlocks = {new BlockWithMetadata(Minestuck.coloredDirt, (byte) 1)};
 	private BlockWithMetadata[] upperBlocks = {new BlockWithMetadata(Blocks.stone)};
-	static Vec3 skyColor = Vec3.fakePool.getVecFromPool(0.45D, 0.5D, 0.98D);
+	static Vec3 skyColor = Vec3.fakePool.getVecFromPool(0.66, 0.39, 0.2);
 
 	@Override
 	public BlockWithMetadata[] getSurfaceBlocks() 
@@ -36,27 +38,25 @@ public class LandAspectFrost extends LandAspect
 		return null;
 	}
 	@Override
-	public Block getRiverBlock() 
+	public Block getOceanBlock() 
 	{
-		return Blocks.ice;
+		return Minestuck.blockBrainJuice;
 	}
 
 	@Override
 	public String getPrimaryName() 
 	{
-		return "Frost";
+		return "Thought";
 	}
 
 	@Override
 	public String[] getNames() {
-		return new String[] {"Frost","Cold","Ice"};
+		return new String[] {"Thought"};
 	}
 
 	@Override
 	public ArrayList<ILandDecorator> getDecorators() {
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
-		list.add(new DecoratorVein(Blocks.dirt, 10, 32));
-		list.add(new DecoratorVein(Blocks.ice, 5, 8));
 		return list;
 	}
 

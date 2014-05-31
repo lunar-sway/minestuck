@@ -2,18 +2,17 @@ package com.mraof.minestuck.entity.carapacian;
 
 import net.minecraft.world.World;
 
-public class EntityBlackBishop extends EntityBishop 
+public class EntityBlackRook extends EntityRook
 {
-
-	public EntityBlackBishop(World par1World)
+	public EntityBlackRook(World world) 
 	{
-		super(par1World);
+		super(world);
 	}
 
 	@Override
 	public String getTexture() 
 	{
-		return "textures/mobs/DersiteBishop.png";
+		return "textures/mobs/DersiteRook.png";
 	}
 
 	@Override

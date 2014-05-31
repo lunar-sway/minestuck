@@ -10,6 +10,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.LandRegisterPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckInfoPacket;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
@@ -79,6 +80,10 @@ public class MinestuckPlayerTracker {
 		Minestuck.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.DISPATCHER);
 		Minestuck.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(event.manager.channel().attr(NetworkDispatcher.FML_DISPATCHER).get());
 		Minestuck.channels.get(Side.SERVER).writeOutbound(packet);
+
+		MinestuckPacket infoPacket = MinestuckPacket.makePacket(Type.INFO);
+		
+		Minestuck.channels.get(Side.SERVER).writeOutbound(infoPacket);
 	}
 	
 	@SubscribeEvent

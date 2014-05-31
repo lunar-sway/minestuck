@@ -135,7 +135,7 @@ public class ChunkProviderLands implements IChunkProvider
 
 		for(int i = 0; i < 256; i++)
 		{
-			int y = (int) (64 + heightMap[i] + heightMapTriangles[i]);
+			int y = (int) (96 + heightMap[i] + heightMapTriangles[i]);
 			topBlock[i] = ((y & 511) <= 255  ? y & 255 : 255 - y & 255) - topRiverBlock[i];
 		}
 
@@ -143,24 +143,28 @@ public class ChunkProviderLands implements IChunkProvider
 		for(int x = 0; x < 16; x++)
 			for(int z = 0; z < 16; z++)
 			{
-				chunkBlocks[x * 4096 | z * 256] = Blocks.bedrock;
+				chunkBlocks[x << 12 | z << 8] = Blocks.bedrock;
 				int y;
-				for(y = 1; y < topBlock[x * 16 + z] - 1; y++)
+				int yMax = topBlock[x << 4 | z] - 2;
+				for(y = 1; y < yMax; y++)
 				{
-					//currentBlockOffset = (int) Math.abs(generated1[x + z * 256 + y * 16]);
-					chunkBlocks[x * 4096 | z * 256 | y] = upperBlock.block;
-					chunkMetadata[x * 4096 | z * 256 | y] = upperBlock.metadata;
+					//currentBlockOffset = (int) Math.abs(generated1[x + z << 8 + y * 16]);
+					chunkBlocks[x << 12 | z << 8 | y] = upperBlock.block;
+					chunkMetadata[x << 12 | z << 8 | y] = upperBlock.metadata;
 				}
 
 				//location copied from the chunk constructor: x * chunkBlocks.length/256 * 16 | z * blockSize/256 | y
-				chunkBlocks[x * 4096 | z * 256 | y] = surfaceBlock.block;
-				chunkMetadata[x * 4096 | z * 256 | y] = surfaceBlock.metadata;
+				for(; y < yMax + 2; y++)
+				{
+					chunkBlocks[x << 12 | z << 8 | y] = surfaceBlock.block;
+					chunkMetadata[x << 12 | z << 8 | y] = surfaceBlock.metadata;
+				}
 
 				for(int i = y + topRiverBlock[x * 16 + z]; y < i; y++)
-					chunkBlocks[x * 4096 | z * 256 | y] = this.riverBlock;
+					chunkBlocks[x << 12 | z << 8 | y] = this.riverBlock;
 
 				for(; y < 63; y++)
-					chunkBlocks[x * 4096 | z * 256 | y] = this.oceanBlock;
+					chunkBlocks[x << 12 | z << 8 | y] = this.oceanBlock;
 
 			}
 		Chunk chunk = new Chunk(this.landWorld, chunkBlocks, chunkMetadata, chunkX, chunkZ);

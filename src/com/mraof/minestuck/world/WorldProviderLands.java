@@ -10,6 +10,7 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.WorldChunkManagerHell;
 import net.minecraft.world.chunk.IChunkProvider;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.ChunkProviderLands;
 
@@ -44,7 +45,8 @@ public class WorldProviderLands extends WorldProvider
 	public IChunkProvider createChunkGenerator()
 	{
 		if (provider == null) {
-			provider = new ChunkProviderLands(this.worldObj, this.worldObj.getSeed(), true);
+			long seed = this.worldObj.isRemote ? Minestuck.worldSeed : this.worldObj.getSeed();
+			provider = new ChunkProviderLands(this.worldObj, seed, true);
 		}
 		return provider;
 	}

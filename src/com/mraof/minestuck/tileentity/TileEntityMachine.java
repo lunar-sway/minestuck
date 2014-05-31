@@ -276,9 +276,9 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			if(inv[0] != null) {
 				decrStackSize(3, 1);
 				if(inv[1] != null && !(inv[1].getItem().equals(Minestuck.captchaCard) && inv[1].hasTagCompound() && inv[1].getTagCompound().getBoolean("punched")))
-					decrStackSize(1, 1);
+					//decrStackSize(1, 1);
 				if(inv[2] != null && !(inv[2].getItem().equals(Minestuck.captchaCard) && inv[2].hasTagCompound() && inv[2].getTagCompound().getBoolean("punched")))
-					decrStackSize(2, 1);
+					//decrStackSize(2, 1);
 				decrStackSize(0, -1);
 				break;
 			}

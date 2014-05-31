@@ -5,7 +5,6 @@ import java.util.List;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
@@ -15,12 +14,27 @@ import net.minecraft.world.World;
 
 import com.mraof.minestuck.entity.EntityListFilter;
 import com.mraof.minestuck.entity.EntityMinestuck;
+import com.mraof.minestuck.entity.ai.EntityAIHurtByTargetAllied;
 import com.mraof.minestuck.entity.ai.EntityAINearestAttackableTargetWithHeight;
 
 public abstract class EntityCarapacian extends EntityMinestuck
 {
 	protected List<Class<? extends EntityLivingBase>> enemyClasses;
 	protected List<Class<? extends EntityLivingBase>> allyClasses;
+	protected static List<Class<? extends EntityLivingBase>> prospitianClasses = new ArrayList<Class<? extends EntityLivingBase>>(); 
+	protected static List<Class<? extends EntityLivingBase>> dersiteClasses = new ArrayList<Class<? extends EntityLivingBase>>(); 
+	protected static EntityListFilter prospitianSelector = new EntityListFilter(prospitianClasses);
+	protected static EntityListFilter dersiteSelector = new EntityListFilter(dersiteClasses);
+	static
+	{
+		dersiteClasses.add(EntityBlackPawn.class);
+		dersiteClasses.add(EntityBlackBishop.class);
+		dersiteClasses.add(EntityBlackRook.class);
+
+		prospitianClasses.add(EntityWhitePawn.class);
+		prospitianClasses.add(EntityWhiteBishop.class);
+		prospitianClasses.add(EntityWhiteRook.class);
+	}
 	protected EntityListFilter attackEntitySelector;
 
 	public EntityCarapacian(World par1World)
@@ -35,7 +49,7 @@ public abstract class EntityCarapacian extends EntityMinestuck
 		this.setHealth(this.getMaximumHealth());
 
 		this.tasks.addTask(1, new EntityAISwimming(this));
-		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
+		this.targetTasks.addTask(1, new EntityAIHurtByTargetAllied(this, this.getKingdom() == EnumEntityKingdom.PROSPITIAN ? prospitianSelector : dersiteSelector));
 		this.targetTasks.addTask(2, this.entityAINearestAttackableTargetWithHeight());
 		this.tasks.addTask(5, new EntityAIWander(this, this.getWanderSpeed()));
 		this.tasks.addTask(6, new EntityAILookIdle(this));
@@ -55,18 +69,13 @@ public abstract class EntityCarapacian extends EntityMinestuck
 	public void setEnemies()
 	{
 		attackEntitySelector = new EntityListFilter(enemyClasses);
-	}
-	public void setEnemies(EnumEntityKingdom side)
-	{
-		switch(side)
+		switch(this.getKingdom())
 		{
-		case PROSPITIAN:
-			enemyClasses.add(EntityBlackPawn.class);
-			enemyClasses.add(EntityBlackBishop.class);
-			break;
-		case DERSITE:
-			enemyClasses.add(EntityWhitePawn.class);
-			enemyClasses.add(EntityWhiteBishop.class);
+			case PROSPITIAN:
+				enemyClasses.addAll(dersiteClasses);
+				break;
+			case DERSITE:
+				enemyClasses.addAll(prospitianClasses);
 		}
 	}
 	public void addEnemy(Class<? extends EntityLivingBase> enemyClass)
@@ -78,18 +87,15 @@ public abstract class EntityCarapacian extends EntityMinestuck
 			this.setCombatTask();
 		}
 	}
-	public void setAllies() {}
-	public void setAllies(EnumEntityKingdom side)
+	public void setAllies() 
 	{
-		switch(side)
+		switch(this.getKingdom())
 		{
-		case PROSPITIAN:
-			allyClasses.add(EntityWhitePawn.class);
-			allyClasses.add(EntityWhiteBishop.class);
-			break;
-		case DERSITE:
-			allyClasses.add(EntityBlackPawn.class);
-			allyClasses.add(EntityBlackBishop.class);
+			case PROSPITIAN:
+				allyClasses.addAll(prospitianClasses);
+				break;
+			case DERSITE:
+				allyClasses.addAll(dersiteClasses);
 		}
 	}
 	@Override
@@ -119,5 +125,6 @@ public abstract class EntityCarapacian extends EntityMinestuck
 	{
 		return new EntityAINearestAttackableTargetWithHeight(this, EntityLivingBase.class, 256.0F, 0, true, false, attackEntitySelector);
 	}
+	public abstract EnumEntityKingdom getKingdom();
 
 }

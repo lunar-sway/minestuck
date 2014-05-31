@@ -27,9 +27,11 @@ import net.minecraftforge.fluids.FluidRegistry;
 import codechicken.nei.NEIModContainer;
 
 import com.mraof.minestuck.block.BlockChessTile;
+import com.mraof.minestuck.block.BlockColoredDirt;
 import com.mraof.minestuck.block.BlockComputerOff;
 import com.mraof.minestuck.block.BlockComputerOn;
 import com.mraof.minestuck.block.BlockFluidBlood;
+import com.mraof.minestuck.block.BlockFluidBrainJuice;
 import com.mraof.minestuck.block.BlockFluidOil;
 import com.mraof.minestuck.block.BlockGatePortal;
 import com.mraof.minestuck.block.BlockLayered;
@@ -44,8 +46,10 @@ import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.EntityDecoy;
 import com.mraof.minestuck.entity.carapacian.EntityBlackBishop;
 import com.mraof.minestuck.entity.carapacian.EntityBlackPawn;
+import com.mraof.minestuck.entity.carapacian.EntityBlackRook;
 import com.mraof.minestuck.entity.carapacian.EntityWhiteBishop;
 import com.mraof.minestuck.entity.carapacian.EntityWhitePawn;
+import com.mraof.minestuck.entity.carapacian.EntityWhiteRook;
 import com.mraof.minestuck.entity.consort.EntityIguana;
 import com.mraof.minestuck.entity.consort.EntityNakagator;
 import com.mraof.minestuck.entity.consort.EntitySalamander;
@@ -64,6 +68,7 @@ import com.mraof.minestuck.item.ItemDowel;
 import com.mraof.minestuck.item.ItemMinestuckBucket;
 import com.mraof.minestuck.item.block.ItemBlockLayered;
 import com.mraof.minestuck.item.block.ItemChessTile;
+import com.mraof.minestuck.item.block.ItemColoredDirt;
 import com.mraof.minestuck.item.block.ItemComputerOff;
 import com.mraof.minestuck.item.block.ItemMachine;
 import com.mraof.minestuck.item.block.ItemStorageBlock;
@@ -87,12 +92,12 @@ import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
-import com.mraof.minestuck.util.ComputerProgram;
-import com.mraof.minestuck.util.MinestuckStatsHandler;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.util.ComputerProgram;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristStorage;
 import com.mraof.minestuck.util.KindAbstratusList;
+import com.mraof.minestuck.util.MinestuckStatsHandler;
 import com.mraof.minestuck.util.SburbClient;
 import com.mraof.minestuck.util.SburbServer;
 import com.mraof.minestuck.util.UpdateChecker;
@@ -177,6 +182,7 @@ public class Minestuck
 	
 	//Blocks
 	public static Block chessTile;
+	public static Block coloredDirt;
 	public static Block gatePortal;
 	public static Block oreCruxite;
 	public static Block blockStorage;
@@ -186,10 +192,12 @@ public class Minestuck
 	
 	public static Block blockOil;
 	public static Block blockBlood;
+	public static Block blockBrainJuice;
 	public static Block layeredSand;
 
 	public static Fluid fluidOil;
 	public static Fluid fluidBlood;
+	public static Fluid fluidBrainJuice;
 
 	
 	
@@ -234,6 +242,7 @@ public class Minestuck
 	public static EnumMap<Side, FMLEmbeddedChannel> channels;
 
 	public int currentEntityIdOffset = 0;
+	public static long worldSeed = 0;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) 
@@ -287,6 +296,7 @@ public class Minestuck
 		gatePortal = GameRegistry.registerBlock(new BlockGatePortal(Material.portal), "gatePortal");
 		oreCruxite = GameRegistry.registerBlock(new OreCruxite(),"oreCruxite");
 		layeredSand = GameRegistry.registerBlock(new BlockLayered(Blocks.sand), ItemBlockLayered.class, "layeredSand").setBlockName("layeredSand");
+		coloredDirt = GameRegistry.registerBlock(new BlockColoredDirt(new String[] {"BlueDirt", "ThoughtDirt"}), ItemColoredDirt.class, "coloredDirt").setBlockName("coloredDirt").setHardness(0.5F);
 		//machines
 		blockStorage = GameRegistry.registerBlock(new BlockStorage(),ItemStorageBlock.class,"blockStorage");
 		blockMachine = GameRegistry.registerBlock(new BlockMachine(), ItemMachine.class,"blockMachine");
@@ -297,8 +307,11 @@ public class Minestuck
 		FluidRegistry.registerFluid(fluidOil);
 		fluidBlood = new Fluid("Blood");
 		FluidRegistry.registerFluid(fluidBlood);
+		fluidBrainJuice = new Fluid("BrainJuice");
+		FluidRegistry.registerFluid(fluidBrainJuice);
 		blockOil = GameRegistry.registerBlock(new BlockFluidOil(fluidOil, Material.water), "blockOil");
 		blockBlood = GameRegistry.registerBlock(new BlockFluidBlood(fluidBlood, Material.water), "blockBlood");
+		blockBrainJuice = GameRegistry.registerBlock(new BlockFluidBrainJuice(fluidBrainJuice, Material.water), "blockBrainJuice");
 
 		//items
 		//hammers
@@ -344,6 +357,7 @@ public class Minestuck
 		
 		minestuckBucket.addBlock(blockBlood, "BucketBlood");
 		minestuckBucket.addBlock(blockOil, "BucketOil");
+		minestuckBucket.addBlock(blockBrainJuice, "BucketBrainJuice");
 		
 		//registers things for the client
 		if(event.getSide().isClient()) {
@@ -405,6 +419,8 @@ public class Minestuck
 		ItemStack whiteChessTileStack = new ItemStack(chessTile, 1, 1);
 		ItemStack darkGreyChessTileStack = new ItemStack(chessTile, 1, 2);
 		ItemStack lightGreyChessTileStack = new ItemStack(chessTile, 1, 3);
+		ItemStack blueDirtStack = new ItemStack(coloredDirt, 1, 0);
+		ItemStack thoughtDirtStack = new ItemStack(coloredDirt, 1, 1);
 		ItemStack cruxiteBlockStack = new ItemStack(blockStorage,1,0);
 		ItemStack genericObjectStack = new ItemStack(blockStorage,1,1);
 		ItemStack cruxtruderStack = new ItemStack(blockMachine,1,0);
@@ -429,6 +445,7 @@ public class Minestuck
 
 		fluidOil.setUnlocalizedName(blockOil.getUnlocalizedName());
 		fluidBlood.setUnlocalizedName(blockBlood.getUnlocalizedName());
+		fluidBrainJuice.setUnlocalizedName(blockBrainJuice.getUnlocalizedName());
 		
 //		Debug.printf("Blood id: %d, Oil id: %d", blockBloodId, blockOilId);
 		
@@ -444,6 +461,8 @@ public class Minestuck
 		this.registerAndMapEntity(EntityWhitePawn.class, "prospitianPawn", 0xf0f0f0, 0x0f0f0f);
 		this.registerAndMapEntity(EntityBlackBishop.class, "dersiteBishop", 0x000000, 0xc121d9);
 		this.registerAndMapEntity(EntityWhiteBishop.class, "prospitianBishop", 0xffffff, 0xfde500);
+		this.registerAndMapEntity(EntityBlackRook.class, "dersiteRook", 0x000000, 0xc121d9);
+		this.registerAndMapEntity(EntityWhiteRook.class, "prospitianRook", 0xffffff, 0xfde500);
 			//To not register this entity as spawnable using a mob egg.
 //		EntityList.addMapping(EntityDecoy.class, "playerDecoy", entityIdStart + currentEntityIdOffset);
 		EntityRegistry.registerModEntity(EntityDecoy.class, "playerDecoy", currentEntityIdOffset, this, 80, 3, true);
@@ -550,6 +569,8 @@ public class Minestuck
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event)
 	{
+		worldSeed = event.getServer().worldServers[0].getSeed();
+
 		MinestuckSaveHandler.lands.clear();
 		File dataFile = event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("MinestuckData");
 		if(dataFile != null && dataFile.exists()) {

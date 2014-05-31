@@ -17,25 +17,26 @@ import com.mraof.minestuck.Minestuck;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockChessTile extends Block 
+public class BlockColoredDirt extends Block
 {
-	public static final String[] iconNames = {"BlackChessTile", "WhiteChessTile", "DarkGreyChessTile", "LightGreyChessTile"};
-	private IIcon[] textures;
-	public BlockChessTile()
+	public final String[] iconNames;
+	public IIcon[] textures;
+
+	public BlockColoredDirt(String[] iconNames)
 	{
 		super(Material.ground);
-		setHardness(0.5F);
-
-		setBlockName("chessTile");
 		this.setCreativeTab(Minestuck.tabMinestuck);
+		this.iconNames = iconNames;
 	}
+
 	@Override
-	public IIcon getIcon(int side, int metadata) 
+	public IIcon getIcon(int side, int metadata)
 	{
 		return textures[metadata];
 	}
+
 	@Override
-	public int damageDropped(int metadata) 
+	public int damageDropped(int metadata)
 	{
 		return metadata;
 	}
@@ -54,12 +55,8 @@ public class BlockChessTile extends Block
 	{
 		return true;
 	}
-	@SideOnly(Side.CLIENT)
 
-	/**
-	 * When this method is called, your block should register all the icons it needs with the given IconRegister. This
-	 * is the only chance you get to register icons.
-	 */
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerBlockIcons(IIconRegister par1IconRegister)
 	{
@@ -69,3 +66,4 @@ public class BlockChessTile extends Block
 			this.textures[i] = par1IconRegister.registerIcon("minestuck:" + iconNames[i]);
 	}
 }
+
