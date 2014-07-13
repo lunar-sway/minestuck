@@ -49,7 +49,7 @@ public class BlockLayered extends Block
 	{
 		int l = par1World.getBlockMetadata(par2, par3, par4) & 7;
 		float f = 0.125F;
-		return AxisAlignedBB.getAABBPool().getAABB(par2 + this.minX, par3 + this.minY, par4 + this.minZ, par2 + this.maxX, par3 + l * f, par4 + this.maxZ);
+		return AxisAlignedBB.getBoundingBox(par2 + this.minX, par3 + this.minY, par4 + this.minZ, par2 + this.maxX, par3 + l * f, par4 + this.maxZ);
 	}
 
 	/**

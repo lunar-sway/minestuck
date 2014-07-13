@@ -9,14 +9,16 @@ import net.minecraft.world.gen.structure.StructureComponent;
 public class StructureCastlePieces 
 {
 
-	public static StructureComponent getNextValidComponent(ComponentCastleStartPiece startPiece, List par1List, Random par2Random, int x, int y, int z, int par6, int componentType)
+	public static StructureComponent getNextValidComponent(
+			ComponentCastleStartPiece startPiece,
+			List<ComponentCastlePiece> par2List, Random par2Random, int x, int y, int z, int par6, int componentType)
 	{
 		{
-			ComponentCastlePiece newPiece = getNextComponent(startPiece, par1List, par2Random, x, y, z, par6, componentType);
+			ComponentCastlePiece newPiece = getNextComponent(startPiece, par2List, par2Random, x, y, z, par6, componentType);
 
 			if (newPiece != null)
 			{
-				par1List.add(newPiece);
+				par2List.add(newPiece);
 //				Debug.print(startPiece.pendingPieces);
 //				Debug.print(newPiece);
 				startPiece.pendingPieces.add(newPiece);
@@ -26,7 +28,7 @@ public class StructureCastlePieces
 		}
 	}
 
-	public static ComponentCastlePiece getNextComponent(ComponentCastleStartPiece startPiece, List par1List, Random par2Random, int x, int y, int z, int par6, int componentType) 
+	public static ComponentCastlePiece getNextComponent(ComponentCastleStartPiece startPiece, List<ComponentCastlePiece> par1List, Random par2Random, int x, int y, int z, int par6, int componentType) 
 	{
 		switch(componentType)
 		{

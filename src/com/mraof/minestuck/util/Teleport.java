@@ -69,7 +69,7 @@ public class Teleport
 			worldserver.resetUpdateEntityTick();
 			worldserver1.resetUpdateEntityTick();
 		}
-		entity.timeUntilPortal = entity.getPortalCooldown();
+		//entity.timeUntilPortal = entity.getPortalCooldown();
 	}
 	public static void transferEntityToWorld(Entity entity, int dimension, WorldServer worldserver, WorldServer worldserver1, ITeleporter teleporter)
 	{
@@ -79,13 +79,13 @@ public class Teleport
 		double d0 = entity.posX * moveFactor;
 		double d1 = entity.posZ * moveFactor;
 
-			if (entity.isEntityAlive())
-			{
-				worldserver1.spawnEntityInWorld(entity);
-				entity.setLocationAndAngles(d0, entity.posY, d1, entity.rotationYaw, entity.rotationPitch);
-				worldserver1.updateEntityWithOptionalForce(entity, false);
-				teleporter.makeDestination(entity, worldserver, worldserver1);
-			}
+		if (entity.isEntityAlive())
+		{
+			worldserver1.spawnEntityInWorld(entity);
+			entity.setLocationAndAngles(d0, entity.posY, d1, entity.rotationYaw, entity.rotationPitch);
+			worldserver1.updateEntityWithOptionalForce(entity, false);
+			teleporter.makeDestination(entity, worldserver, worldserver1);
+		}
 
 
 		entity.setWorld(worldserver1);

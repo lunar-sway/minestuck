@@ -125,6 +125,7 @@ public class WorldProviderLands extends WorldProvider
 		this.worldChunkMgr = new WorldChunkManagerHell(BiomeGenBase.sky, 0.5F);
 		this.hasNoSky = false;
 	}
+
 	@Override
 	public Vec3 getFogColor(float par1, float par2)
 	{

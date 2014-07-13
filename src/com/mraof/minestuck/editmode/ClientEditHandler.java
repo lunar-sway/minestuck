@@ -28,10 +28,7 @@ import com.mraof.minestuck.client.gui.GuiInventoryReplacer;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
-import com.mraof.minestuck.network.skaianet.SburbConnection;
-import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
@@ -114,11 +111,11 @@ public class ClientEditHandler {
 				continue;
 			}
 			
-			for(Entry entry : cost.getHashtable().entrySet()) {
-				GristType grist = GristType.values()[(Integer)entry.getKey()];
-				String s = EnumChatFormatting.RESET+""+EnumChatFormatting.RESET;
-				s += (Integer)entry.getValue() <= have.getGrist(grist)?EnumChatFormatting.GREEN:EnumChatFormatting.RED;
-				list.appendTag(new NBTTagString(s+entry.getValue()+" "+grist.getDisplayName()+" ("+have.getGrist(grist)+")"));
+			for(Entry<Integer, Integer> entry : cost.getHashtable().entrySet()) {
+				GristType grist = GristType.values()[entry.getKey()];
+				String s = EnumChatFormatting.RESET + "" + EnumChatFormatting.RESET;
+				s += entry.getValue() <= have.getGrist(grist) ? EnumChatFormatting.GREEN : EnumChatFormatting.RED;
+				list.appendTag(new NBTTagString(s + entry.getValue() + " " + grist.getDisplayName() + " (" + have.getGrist(grist) + ")"));
 			}
 			if(cost.isEmpty())
 				list.appendTag(new NBTTagString(""+EnumChatFormatting.RESET+EnumChatFormatting.RESET+EnumChatFormatting.GREEN+
@@ -154,7 +151,7 @@ public class ClientEditHandler {
 					givenItems[ordinal] = true;
 			else if(stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack).getItem() == Minestuck.cruxiteArtifact
 					&& stack.getTagCompound().getBoolean("punched")) {
-				SburbConnection c = SkaiaClient.getClientConnection(client);
+				//SburbConnection c = SkaiaClient.getClientConnection(client); //unused
 				givenItems[0] = true;
 			} else {
 				event.setCanceled(true);

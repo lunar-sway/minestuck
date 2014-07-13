@@ -40,8 +40,6 @@ public class AlchemiterHandler extends TemplateRecipeHandler {
 		
 	}
 
-	private GuiDraw fontRenderer = new GuiDraw();
-		
 	@Override
 	public String getRecipeName() {
 		return "Alchemiter";
@@ -92,12 +90,16 @@ public class AlchemiterHandler extends TemplateRecipeHandler {
 		ItemStack result = arecipes.get(recipe).getResult().item;
 		GristSet set = GristRegistry.getGristConversion(result);
 		
-		if (set == null) {fontRenderer.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 4,34, 16711680); return;}
+		if (set == null) 
+		{
+			GuiDraw.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 4,34, 16711680);
+		       	return;
+		}
 		Hashtable<Integer, Integer> reqs = set.getHashtable();
 		//Debug.print("reqs: " + reqs.size());
 		if (reqs != null) {
 			if (reqs.size() == 0) {
-				fontRenderer.drawString(StatCollector.translateToLocal("gui.free"), 4,34, 65280);
+				GuiDraw.drawString(StatCollector.translateToLocal("gui.free"), 4,34, 65280);
 				return;
 			}
 			Iterator<Entry<Integer, Integer>> it = reqs.entrySet().iterator();
@@ -113,14 +115,14 @@ public class AlchemiterHandler extends TemplateRecipeHandler {
 				
 				int color = need <= have ? 65280 : 16711680; //Green if we have enough grist, red if not
 				
-				fontRenderer.drawString(need + " " + GristType.values()[type].getDisplayName() + " (" + have + ")", 4 + (80 * col),34 + (8 * (row)), color);
+				GuiDraw.drawString(need + " " + GristType.values()[type].getDisplayName() + " (" + have + ")", 4 + (80 * col),34 + (8 * (row)), color);
 				
 				place++;
 				
 				//Debug.print("Need" + need + ". Have " + have);
 			}
 		} else {
-			fontRenderer.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 4,34, 16711680);
+			GuiDraw.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 4,34, 16711680);
 			return;
 		}
 

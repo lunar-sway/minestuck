@@ -37,6 +37,7 @@ import com.mraof.minestuck.block.BlockGatePortal;
 import com.mraof.minestuck.block.BlockLayered;
 import com.mraof.minestuck.block.BlockMachine;
 import com.mraof.minestuck.block.BlockStorage;
+import com.mraof.minestuck.block.BlockTransportalizer;
 import com.mraof.minestuck.block.OreCruxite;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.GuiHandler;
@@ -91,6 +92,7 @@ import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
+import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.ComputerProgram;
@@ -189,6 +191,7 @@ public class Minestuck
 	public static Block blockMachine;
 	public static Block blockComputerOn;
 	public static Block blockComputerOff;
+	public static Block transportalizer;
 	
 	public static Block blockOil;
 	public static Block blockBlood;
@@ -302,6 +305,7 @@ public class Minestuck
 		blockMachine = GameRegistry.registerBlock(new BlockMachine(), ItemMachine.class,"blockMachine");
 		blockComputerOff = GameRegistry.registerBlock(new BlockComputerOff(), ItemComputerOff.class,"blockComputer");
 		blockComputerOn = GameRegistry.registerBlock(new BlockComputerOn(),"blockComputerOn");
+		transportalizer = GameRegistry.registerBlock(new BlockTransportalizer(), "transportalizer");
 		//fluids
 		fluidOil = new Fluid("Oil");
 		FluidRegistry.registerFluid(fluidOil);
@@ -480,6 +484,7 @@ public class Minestuck
 		GameRegistry.registerTileEntity(TileEntityGatePortal.class, "gatePortal");
 		GameRegistry.registerTileEntity(TileEntityMachine.class, "containerMachine");
 		GameRegistry.registerTileEntity(TileEntityComputer.class, "computerSburb");
+		GameRegistry.registerTileEntity(TileEntityTransportalizer.class, "transportalizer");
 		//register world generators
 		DimensionManager.registerProviderType(skaiaProviderTypeId, WorldProviderSkaia.class, true);
 		DimensionManager.registerDimension(skaiaDimensionId, skaiaProviderTypeId);
@@ -565,6 +570,7 @@ public class Minestuck
 			}
 			iterator.remove();
 		}
+		TileEntityTransportalizer.transportalizers.clear();
 	}
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event)
@@ -593,6 +599,8 @@ public class Minestuck
 				SkaianetHandler.loadData(nbt.getCompoundTag("skaianet"));
 				
 				GristStorage.readFromNBT(nbt);
+
+				TileEntityTransportalizer.loadTransportalizers(nbt.getCompoundTag("transportalizers"));
 				
 			}
 			return;

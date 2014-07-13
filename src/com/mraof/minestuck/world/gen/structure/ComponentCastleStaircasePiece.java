@@ -17,13 +17,15 @@ public class ComponentCastleStaircasePiece extends ComponentCastleRoomPiece
 	{
 		super(par1, startPiece, structureBoundingBox);
 	}
-	public static ComponentCastleRoomPiece findValidPlacement(List par0List, ComponentCastleStartPiece startPiece, int par2, int par3, int par4, int par5, int par6)
+
+	public static ComponentCastleRoomPiece findValidPlacement(List<?> par0List, ComponentCastleStartPiece startPiece, int par2, int par3, int par4, int par5, int par6)
 	{
 		StructureBoundingBox structureboundingbox = new StructureBoundingBox(par2 + 0, par3 - 8, par4 + 0, par2 + 8 + 0, 0 + 7 + 0, par4 + 8 + 0);
 		return new ComponentCastleStaircasePiece(par6, startPiece, structureboundingbox);
 	}
 	@Override
-	public void buildComponent(StructureComponent par1StructureComponent, List components, Random random) 
+	public void buildComponent(StructureComponent par1StructureComponent,
+			@SuppressWarnings("rawtypes") List components, Random random)
 	{
 		this.direction = random.nextInt(4);
 	}

@@ -12,7 +12,7 @@ public class LandAspectPulse extends LandAspect
 {
 	BlockWithMetadata[] upperBlocks = {new BlockWithMetadata(Blocks.netherrack)};
 	BlockWithMetadata[] surfaceBlocks = {new BlockWithMetadata(Blocks.obsidian)};
-	static Vec3 skyColor = Vec3.fakePool.getVecFromPool(0.36D, 0.01D, 0.01D);
+	static Vec3 skyColor = Vec3.createVectorHelper(0.36D, 0.01D, 0.01D);
 	
 	@Override
 	public BlockWithMetadata[] getSurfaceBlocks() 

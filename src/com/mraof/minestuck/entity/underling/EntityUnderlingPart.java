@@ -131,4 +131,9 @@ public class EntityUnderlingPart extends EntityLiving implements IEntityAddition
 	{
 		super.setSize(width, height);
 	}
+
+	@Override
+	public void collideWithEntity(Entity par1Entity)
+	{
+	}
 }

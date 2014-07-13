@@ -17,13 +17,15 @@ import net.minecraft.world.gen.structure.StructureStart;
 public class StructureCastleStart extends StructureStart
 {
 	public StructureCastleStart(){} //this has to exist I guess?
-    public StructureCastleStart(World world, Random random, int chunkX, int chunkZ, boolean isBlack)
+
+	@SuppressWarnings("unchecked")
+	public StructureCastleStart(World world, Random random, int chunkX, int chunkZ, boolean isBlack)
     {
 //    	Debug.print("StructureCastleStart Running");
         ComponentCastleStartPiece startPiece = new ComponentCastleStartPiece(0, (chunkX << 4) + 0, (chunkZ << 4) + 0, isBlack);
         this.components.add(startPiece);
         startPiece.buildComponent(startPiece, this.components, random);
-        ArrayList pendingPieces = startPiece.pendingPieces;
+		ArrayList<ComponentCastlePiece> pendingPieces = startPiece.pendingPieces;
 //        Debug.print(pendingPieces.toString());
 //        Debug.print(startPiece.getBoundingBox().minX + ", " + startPiece.getBoundingBox().minY + ", " + startPiece.getBoundingBox().minZ + ", " + startPiece.getBoundingBox().maxX + ", " + startPiece.getBoundingBox().maxY + ", " + startPiece.getBoundingBox().maxZ);
         while(!pendingPieces.isEmpty())

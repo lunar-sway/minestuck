@@ -252,14 +252,15 @@ public class SkaianetHandler {
 	public static void requestInfo(String p0, String p1){
 		checkData();
 		String[] s = infoToSend.get(p0);
-		EntityPlayerMP player = MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(p0);
+		EntityPlayerMP player = MinecraftServer.getServer().getConfigurationManager().func_152612_a(p0);
 		if(s == null || player == null){
-			Debug.print("[SKAIANET] Player \""+p0+"\" sent a request without being online!");
+			Debug.print("[SKAIANET] Player \"" + p0 + "\" sent a request without being online!");
 			return;
 		}
-		if(Minestuck.privateComputers && !p0.equals(p1) && !MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(p0)){
+		if(Minestuck.privateComputers && !p0.equals(p1) && !MinecraftServer.getServer().getConfigurationManager().func_152596_g(player.getGameProfile()))
+		{
 			if(!Minestuck.privateMessage.isEmpty())
-				player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.RED+"[Minestuck] "+Minestuck.privateMessage));
+				player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.RED + "[Minestuck] " + Minestuck.privateMessage));
 			return;
 		}
 		int i = 0;
@@ -320,7 +321,10 @@ public class SkaianetHandler {
 				SessionHandler.sessions.add(new Session().read(list.getCompoundTagAt(i)));
 			
 			String[] s = {"serversOpen","resumingClients","resumingServers"};
-			Map<String, ComputerData>[] maps = new Map[]{serversOpen, resumingClients, resumingServers};
+			List<Map<String, ComputerData>> maps = new ArrayList<Map<String, ComputerData>>();
+			maps.add(serversOpen);
+			maps.add(resumingClients);
+			maps.add(resumingServers);
 			for(int e = 0; e < 3; e++) {
 				list = nbt.getTagList(s[e], 10);
 				if(list == null)
@@ -329,7 +333,7 @@ public class SkaianetHandler {
 					NBTTagCompound cmp = list.getCompoundTagAt(i);
 					ComputerData c = new ComputerData();
 					c.read(cmp);
-					maps[e].put(c.owner, c);
+					maps.get(e).put(c.owner, c);
 				}
 			}
 		}
@@ -345,7 +349,7 @@ public class SkaianetHandler {
 	
 	static void updatePlayer(String player){
 		String[] str = infoToSend.get(player);
-		EntityPlayerMP playerMP = MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(player);
+		EntityPlayerMP playerMP = MinecraftServer.getServer().getConfigurationManager().func_152612_a(player);
 		if(str == null || playerMP == null)//If the player disconnected
 			return;
 		String playerEnc = UsernameHandler.encode(player);
@@ -383,7 +387,7 @@ public class SkaianetHandler {
 		ServerConfigurationManager scm = MinecraftServer.getServer().getConfigurationManager();
 		Iterator<String> iter0 = infoToSend.keySet().iterator();
 		while(iter0.hasNext())
-			if(scm.getPlayerForUsername(iter0.next()) == null){
+			if(scm.func_152612_a(iter0.next()) == null){
 				//Debug.print("[SKAIANET] Player disconnected, removing data.");
 				iter0.remove();
 			}
@@ -435,7 +439,7 @@ public class SkaianetHandler {
 					c.clientHomeLand = c.client.dimension;
 			}
 			if(c.enteredGame && !MinestuckSaveHandler.lands.contains((byte)c.clientHomeLand)) {
-				EntityPlayerMP player = MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(UsernameHandler.decode(c.getClientName()));
+				EntityPlayerMP player = MinecraftServer.getServer().getConfigurationManager().func_152612_a(UsernameHandler.decode(c.getClientName()));
 				if(player != null) {
 					c.clientHomeLand = player.dimension;
 					if(!MinestuckSaveHandler.lands.contains((byte)c.clientHomeLand)) {

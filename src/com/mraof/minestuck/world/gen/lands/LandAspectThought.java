@@ -13,7 +13,7 @@ public class LandAspectThought extends LandAspect
 {
 	BlockWithMetadata[] surfaceBlocks = {new BlockWithMetadata(Minestuck.coloredDirt, (byte) 1)};
 	private BlockWithMetadata[] upperBlocks = {new BlockWithMetadata(Blocks.stone)};
-	static Vec3 skyColor = Vec3.fakePool.getVecFromPool(0.66, 0.39, 0.2);
+	static Vec3 skyColor = Vec3.createVectorHelper(0.66, 0.39, 0.2);
 
 	@Override
 	public BlockWithMetadata[] getSurfaceBlocks() 

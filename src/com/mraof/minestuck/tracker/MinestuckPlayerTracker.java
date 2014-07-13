@@ -10,7 +10,6 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.LandRegisterPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
-import com.mraof.minestuck.network.MinestuckInfoPacket;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
@@ -103,7 +102,7 @@ public class MinestuckPlayerTracker {
 
 		//The player
 		if(!player.equals(".client") || UsernameHandler.host != null) {
-			EntityPlayerMP playerMP = MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(UsernameHandler.decode(player));
+			EntityPlayerMP playerMP = MinecraftServer.getServer().getConfigurationManager().func_152612_a(UsernameHandler.decode(player));
 			if(playerMP != null) {
 				MinestuckPacket packet = MinestuckPacket.makePacket(Type.GRISTCACHE, gristValues, false);
 				MinestuckChannelHandler.sendToPlayer(packet, playerMP);

@@ -311,6 +311,8 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			ItemStack outputDowel = new ItemStack(Minestuck.cruxiteDowel);
 			
 			NBTTagCompound cardtag = this.inv[1].getTagCompound();
+			if(cardtag == null)
+				break;
 			
 			if(cardtag.getString("contentID") == GameRegistry.findUniqueIdentifierFor(Minestuck.blockStorage).name &&
 					cardtag.getInteger("contentMeta") == 1)
@@ -342,14 +344,17 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			}
 			break;
 		case (4):
-			if(!worldObj.isRemote) {
+			if(!worldObj.isRemote) 
+			{
 				GristSet gristSet = GristRegistry.getGristConversion(inv[1]);
 				
-				Iterator iter = gristSet.getHashtable().entrySet().iterator();
-				while(iter.hasNext()) {
+				Iterator<Entry<Integer, Integer>> iter = gristSet.getHashtable().entrySet().iterator();
+				while(iter.hasNext()) 
+				{
 					Map.Entry<Integer, Integer> entry = (Entry<Integer, Integer>) iter.next();
 					int grist = entry.getValue();
-					while(true) {
+					while(true) 
+					{
 						if(grist == 0)
 							break;
 						GristAmount gristAmount = new GristAmount(GristType.values()[entry.getKey()],grist<=3?grist:(worldObj.rand.nextInt(grist)+1));

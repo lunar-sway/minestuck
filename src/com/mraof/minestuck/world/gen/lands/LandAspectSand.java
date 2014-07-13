@@ -11,7 +11,7 @@ public class LandAspectSand extends LandAspect
 {
 	BlockWithMetadata[] upperBlocks = {new BlockWithMetadata(Blocks.sandstone)};
 	BlockWithMetadata[] surfaceBlocks = {new BlockWithMetadata(Blocks.sand)};
-	static Vec3 skyColor = Vec3.fakePool.getVecFromPool(0.99D, 0.8D, 0.05D);
+	static Vec3 skyColor = Vec3.createVectorHelper(0.99D, 0.8D, 0.05D);
 	
 	@Override
 	public BlockWithMetadata[] getSurfaceBlocks() 

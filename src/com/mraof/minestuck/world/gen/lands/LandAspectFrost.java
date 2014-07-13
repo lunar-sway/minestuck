@@ -11,7 +11,7 @@ public class LandAspectFrost extends LandAspect
 {
 	BlockWithMetadata[] surfaceBlocks = {new BlockWithMetadata(Blocks.grass)};
 	private BlockWithMetadata[] upperBlocks = {new BlockWithMetadata(Blocks.stone)};
-	static Vec3 skyColor = Vec3.fakePool.getVecFromPool(0.45D, 0.5D, 0.98D);
+	static Vec3 skyColor = Vec3.createVectorHelper(0.45D, 0.5D, 0.98D);
 
 	@Override
 	public BlockWithMetadata[] getSurfaceBlocks() 

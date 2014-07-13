@@ -5,7 +5,7 @@ import net.minecraft.util.StatCollector;
 public enum GristType {
 	Amber("Amber",0.5F), 
 	Amethyst("Amethyst",0.3F), 
-	Artifact("Artifact",0.0F),
+	Artifact("Artifact",0.01F),
 	Build("Build",0.0F),
 	Caulk("Caulk",0.5F),
 	Chalk("Chalk",0.5F),
