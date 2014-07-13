@@ -29,7 +29,7 @@ public class UpdateChecker extends Thread
 			return;
 		
 		try {
-			URL versionURL = new URL("http://minestuck.mraof.com/version.php?mc=1.7.2");
+			URL versionURL = new URL("http://minestuck.mraof.com/version.php?mc=1.7.10");
 			URLConnection connection = versionURL.openConnection();
 			connection.setUseCaches(false);
 			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
