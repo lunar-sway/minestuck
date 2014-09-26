@@ -13,18 +13,18 @@ public class EntityWhiteBishop extends EntityBishop
 	@Override
 	public void setEnemies() 
 	{
-		setEnemies(EnumEntityKingdom.PROSPITIAN);
-		enemyClasses.add(EntityGhast.class);
 		super.setEnemies();
-	}
-	@Override
-	public void setAllies() 
-	{
-		setAllies(EnumEntityKingdom.PROSPITIAN);
+		enemyClasses.add(EntityGhast.class);
 	}
 	@Override
 	public String getTexture() 
 	{
 		return "textures/mobs/ProspitianBishop.png";
+	}
+
+	@Override
+	public EnumEntityKingdom getKingdom()
+	{
+		return EnumEntityKingdom.PROSPITIAN;
 	}
 }

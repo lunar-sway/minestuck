@@ -30,7 +30,7 @@ public class ClientEditPacket extends MinestuckPacket {
 	@Override
 	public MinestuckPacket generatePacket(Object... dat) {
 		if(dat.length > 0)
-			writeString(data,dat[0].toString()+"\n"+dat[1].toString());
+			writeString(data, dat[0].toString() + "\n" + dat[1].toString());
 		return this;
 	}
 
@@ -53,7 +53,7 @@ public class ClientEditPacket extends MinestuckPacket {
 			return;
 		}
 		
-		EntityPlayerMP playerMP = MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(UsernameHandler.decode(target));
+		EntityPlayerMP playerMP = MinecraftServer.getServer().getConfigurationManager().func_152612_a(UsernameHandler.decode(target));
 		
 		if(playerMP != null && (!Minestuck.privateComputers || player.getCommandSenderName().equals(UsernameHandler.decode(username)))) {
 			SburbConnection c = SkaianetHandler.getClientConnection(target);

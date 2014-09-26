@@ -36,13 +36,13 @@ public class GuiComputer extends GuiScreen
 	 * Contains the usernames that possibly is displayed on the shown buttons.
 	 * Used by the client program when connecting to a server.
 	 */
-	private final String[] usernameList = new String[4];
+/*	private final String[] usernameList = new String[4];
 	private String displayMessage = "";
-	private int index = 0;
+	private int index = 0;*/ //unused
 	/**
 	 * Used to count which four button strings that will be added.
 	 */
-	private int stringIndex;
+	//private int stringIndex; //unused
 
 	public Minecraft mc;
 	public TileEntityComputer te;
@@ -111,6 +111,7 @@ public class GuiComputer extends GuiScreen
 		updateGui();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void updateGui() {
 		
 		programButton.enabled = te.installedPrograms.size() > 1;
@@ -127,16 +128,20 @@ public class GuiComputer extends GuiScreen
 		
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected void actionPerformed(GuiButton guibutton) {
 		if(te.hasProgram(-1))
 			return;
 		
-		if(guibutton == programButton) {
+		if(guibutton == programButton) 
+		{
 			te.programSelected = getNextProgram();
 			ComputerProgram program = te.program;
 			te.program = ComputerProgram.getProgram(te.programSelected);
 			te.program.onInitGui(this, buttonList, program);
-		} else te.program.onButtonPressed(te, guibutton);
+		}
+		else
+			te.program.onButtonPressed(te, guibutton);
 		updateGui();
 	}
 

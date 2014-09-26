@@ -6,7 +6,6 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
@@ -18,7 +17,6 @@ import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.Title;
-import com.mraof.minestuck.util.TitleHelper;
 import com.mraof.minestuck.util.UsernameHandler;
 
 import cpw.mods.fml.relauncher.Side;
@@ -28,8 +26,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class GuiPlayerStats extends GuiScreen
 {
 
-    private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/GristCache.png");
-    
+	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/GristCache.png");
+
 	private static final int guiWidth = 226;
 	private static final int guiHeight = 200;
 
@@ -46,7 +44,7 @@ public class GuiPlayerStats extends GuiScreen
 	private Minecraft mc;
 	private FontRenderer fontRenderer;
 	private static RenderItem itemRenderer = new RenderItem();
-	public static boolean visible = false;
+	//public static boolean visible = false;
 
 	private Title title;
 	private String titleMessage = "";
@@ -73,10 +71,10 @@ public class GuiPlayerStats extends GuiScreen
 			if(ClientEditHandler.isActive())
 				titleMessage = UsernameHandler.decode(ClientEditHandler.client).toUpperCase();
 			else titleMessage = mc.thePlayer.getCommandSenderName().toUpperCase() + " : " + title.getTitleName();
-		
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.getTextureManager().bindTexture(guiBackground);
-		
+
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		this.mc.getTextureManager().bindTexture(guiBackground);
+
 		String cacheMessage = StatCollector.translateToLocal("gui.gristCache.name");
 		int yOffset = (this.height / 2) - (guiHeight / 2);
 		this.drawTexturedModalRect((this.width / 2) - (guiWidth / 2), yOffset, 0, 0, guiWidth, guiHeight);
@@ -101,7 +99,7 @@ public class GuiPlayerStats extends GuiScreen
 			if (xcor > gristXOffset && xcor < gristXOffset + 16 && ycor > gristYOffset && ycor < gristYOffset + 16)
 			{
 				if(this.isPointInRegion(gristXOffset, gristYOffset, 16, 16, xcor, ycor));
-					this.drawGradientRect(gristXOffset, gristYOffset, gristXOffset + 16, gristYOffset + 17, -2130706433, -2130706433);
+				this.drawGradientRect(gristXOffset, gristYOffset, gristXOffset + 16, gristYOffset + 17, -2130706433, -2130706433);
 				tooltip = gristId;
 			}
 
@@ -123,19 +121,10 @@ public class GuiPlayerStats extends GuiScreen
 		RenderHelper.enableStandardItemLighting();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 
-		//  		int column = (int) (xcor - (this.width / 2)+(guiWidth/2)-gristIconX) / gristIconXOffset;
-		//		int row = (int) (ycor - yOffset-gristIconY) / gristIconYOffset;
-		//		int gristKind = 7*column + row;
-		//		
-		//    	if (gristKind >= 0 && gristKind < GristType.allGrists && row < 7 && row >= 0 && xcor > (this.width / 2)-(guiWidth/2)+gristIconX+(gristIconXOffset*column-column) && xcor < (this.width / 2)-(guiWidth/2)+gristIconX+(gristIconXOffset*column-column)+16 && ycor > yOffset+gristIconY+(gristIconYOffset*row-row) && ycor < yOffset+gristIconY+(gristIconYOffset*row-row)+16)  {
-		//   		drawGristTooltip(EntityGrist.gristTypes[gristKind] + " Grist", xcor, ycor);
-		//    	}
-		////  drawGristTooltip(row + " " + column, xcor, ycor);
 	}
 
 	private void drawGristIcon(int x,int y,String gristType) 
 	{
-//		this.mc.renderEngine.bindTexture("minestuck:/textures/grist/" + gristType + ".png");
 		this.mc.getTextureManager().bindTexture(new ResourceLocation("minestuck","textures/grist/" + gristType + ".png"));
 
 		float scale = (float) 1/16;
@@ -171,10 +160,6 @@ public class GuiPlayerStats extends GuiScreen
 
 		if (list.length != 0)
 		{
-			//		    GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-			//		    RenderHelper.disableStandardItemLighting();
-			//		    GL11.glDisable(GL11.GL_LIGHTING);
-			//		    GL11.glDisable(GL11.GL_DEPTH_TEST);
 			int k = fontRenderer.getStringWidth(text);
 
 			int i1 = par2 + 12;
@@ -226,10 +211,6 @@ public class GuiPlayerStats extends GuiScreen
 
 			this.zLevel = 0.0F;
 			itemRenderer.zLevel = 0.0F;
-			//		    GL11.glEnable(GL11.GL_LIGHTING);
-			//		    GL11.glEnable(GL11.GL_DEPTH_TEST);
-			//		    RenderHelper.enableStandardItemLighting();
-			//		    GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		}
 	}
 	protected boolean isPointInRegion(int par1, int par2, int par3, int par4, int par5, int par6)

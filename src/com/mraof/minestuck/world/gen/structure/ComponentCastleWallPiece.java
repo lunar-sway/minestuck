@@ -22,8 +22,11 @@ public class ComponentCastleWallPiece extends ComponentCastlePiece
 		this.componentType = 1;
 		this.cornerPiece = cornerPiece;
 	}
+
+	@SuppressWarnings("unchecked")
 	@Override
-	public void buildComponent(StructureComponent par1StructureComponent, List components, Random random) 
+	public void buildComponent(StructureComponent par1StructureComponent,
+			@SuppressWarnings("rawtypes") List components, Random random)
 	{
 //		if(Math.abs(this.startPiece.x - this.boundingBox.minX) >= this.startPiece.castleWidth && ((this.direction & 1) == 0) || (this.startPiece.z - this.boundingBox.minZ >= this.startPiece.castleLength && ((this.direction & 1) == 1)))
 //			direction++;
@@ -95,7 +98,8 @@ public class ComponentCastleWallPiece extends ComponentCastlePiece
 //			if((this.direction & 3) == 0)
 				
 	}
-	public static ComponentCastleWallPiece findValidPlacement(List par0List, ComponentCastleStartPiece startPiece, int x, int y, int z, int par5, int par6, boolean cornerPiece)
+
+	public static ComponentCastleWallPiece findValidPlacement(List<?> par0List, ComponentCastleStartPiece startPiece, int x, int y, int z, int par5, int par6, boolean cornerPiece)
 	{
 		StructureBoundingBox structureboundingbox = new StructureBoundingBox(x + 0, y + 0, z + 0, x + 8 + 0, 0 + 8 + 0, z + 8 + 0);
 		return new ComponentCastleWallPiece(par6, startPiece, structureboundingbox, par5, cornerPiece);

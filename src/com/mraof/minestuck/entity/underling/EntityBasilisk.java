@@ -25,7 +25,7 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 		super(par1World, type, "Basilisk");
 		this.setSize(3F, 2F);
 		//Debug.print("Creating a new part");
-		tail = new EntityUnderlingPart(this, "tail", 3F, 2F);
+		tail = new EntityUnderlingPart(this, 0, 3F, 2F);
 		par1World.spawnEntityInWorld(tail);
 	}
 
@@ -108,6 +108,8 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	@Override
 	public void updatePartPositions() 
 	{
+		if(tail == null)
+			return;
 		float f1 = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw);
 		double tailPosX = (this.posX +  Math.sin(f1 / 180.0 * Math.PI) * tail.width);
 		double tailPosZ = (this.posZ + -Math.cos(f1 / 180.0 * Math.PI) * tail.width);
@@ -117,9 +119,21 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 //			this.posY += tailPosY;
 //			this.motionY = 0;
 //		}
-		if(tail.entityUnderlingObj == null)
-			tail.entityUnderlingObj = this;
+
 		tail.setPositionAndRotation(tailPosX, this.posY, tailPosZ, this.rotationYaw, this.rotationPitch);
+	}
+
+	@Override
+	public void addPart(Entity entityPart, int id) 
+	{
+		this.tail = (EntityUnderlingPart) entityPart;
+		this.tail.setSize(3F, 2F);
+	}
+
+	@Override
+	public void onPartDeath(Entity entityPart, int id) 
+	{
+
 	}
 	
 //	@Override

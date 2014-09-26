@@ -16,12 +16,12 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 	
 	int overWorldEditRange;
 	int landEditRange;
-	
+
 	boolean hardMode;
 	boolean giveItems;
 	
 	String lanHost;
-	
+
 	public MinestuckConfigPacket() {
 		super(Type.CONFIG);
 	}

@@ -16,7 +16,7 @@ import com.mraof.minestuck.tileentity.TileEntityComputer;
 
 public abstract class ButtonListProgram extends ComputerProgram {
 	
-	private LinkedHashMap<GuiButton,UnlocalizedString> buttonMap = new LinkedHashMap();
+	private LinkedHashMap<GuiButton, UnlocalizedString> buttonMap = new LinkedHashMap<GuiButton, UnlocalizedString>();
 	private GuiButton upButton, downButton;
 	private String message;
 	
@@ -53,48 +53,60 @@ public abstract class ButtonListProgram extends ComputerProgram {
 	}
 	
 	@Override
-	public final void onInitGui(GuiComputer gui, List buttonList, ComputerProgram prevProgram) {
-		if(prevProgram instanceof ButtonListProgram) {
+	public final void onInitGui(GuiComputer gui, List<GuiButton> buttonList, ComputerProgram prevProgram)
+	{
+		if(prevProgram instanceof ButtonListProgram) 
+		{
 			ButtonListProgram program = (ButtonListProgram) prevProgram;
 			buttonMap = program.buttonMap;
 			downButton = program.downButton;
 			upButton = program.upButton;
-		} else {
-			if(prevProgram != null) {
+		}
+	       	else 
+		{
+			if(prevProgram != null)
+		       	{
 				buttonList.clear();
 				buttonList.add(gui.programButton);
 			}
 			buttonMap.clear();
 			for (int i = 0; i < 4; i++) {
-				GuiButton button = new GuiButton(i+2, (gui.width - gui.xSize) / 2 +14, (gui.height - gui.ySize) / 2 +60 + i*24, 120, 20,"");
+				GuiButton button = new GuiButton(i+2, (gui.width - GuiComputer.xSize) / 2 +14, (gui.height - GuiComputer.ySize) / 2 +60 + i*24, 120, 20,"");
 				buttonMap.put(button, new UnlocalizedString(""));
 				buttonList.add(button);
 			}
 			
-			upButton = new GuiButton(-1, (gui.width - gui.xSize) / 2 +140, (gui.height - gui.ySize) / 2 +60, 20, 20,"^");
+			upButton = new GuiButton(-1, (gui.width - GuiComputer.xSize) / 2 +140, (gui.height - GuiComputer.ySize) / 2 +60, 20, 20,"^");
 			buttonList.add(upButton);
-			downButton = new GuiButton(-1, (gui.width - gui.xSize) / 2 +140, (gui.height - gui.ySize) / 2 +132, 20, 20,"v");
+			downButton = new GuiButton(-1, (gui.width - GuiComputer.xSize) / 2 +140, (gui.height - GuiComputer.ySize) / 2 +132, 20, 20,"v");
 			buttonList.add(downButton);
 		}
 	}
 	
 	@Override
-	public final void onUpdateGui(GuiComputer gui, List buttonList) {
+	public final void onUpdateGui(GuiComputer gui, List<GuiButton> buttonList) 
+	{
 		downButton.enabled = false;
 		upButton.enabled = index > 0;
 		ArrayList<UnlocalizedString> list = getStringList(gui.te);
 		if(!gui.te.latestmessage.get(this.getId()).isEmpty())
 			list.add(1, new UnlocalizedString("computer.buttonClear"));
 		int pos = -1;
-		for(UnlocalizedString s : list) {
-			if(pos == -1) {
+		for(UnlocalizedString s : list) 
+		{
+			if(pos == -1) 
+			{
 				message = s.translate();
-			} else {
-				if(index > pos) {
+			}
+		       	else
+			{
+				if(index > pos) 
+				{
 					pos++;
 					continue;
 				}
-				if(pos == index+4) {
+				if(pos == index + 4) 
+				{
 					downButton.enabled = true;
 					break;
 				}
@@ -117,11 +129,12 @@ public abstract class ButtonListProgram extends ComputerProgram {
 	public final void paintGui(GuiComputer gui, TileEntityComputer te) {
 		Minecraft mc = Minecraft.getMinecraft();
 		mc.getTextureManager().bindTexture(GuiComputer.guiBackground);
-		int yOffset = (gui.height / 2) - (gui.ySize / 2);
-		gui.drawTexturedModalRect((gui.width / 2) - (gui.xSize / 2), yOffset, 0, 0, gui.xSize, gui.ySize);
+		int yOffset = (gui.height / 2) - (GuiComputer.ySize / 2);
+		gui.drawTexturedModalRect((gui.width / 2) - (GuiComputer.xSize / 2), yOffset, 0, 0, GuiComputer.xSize, GuiComputer.ySize);
 		if(te.latestmessage.get(te.programSelected) == null || te.latestmessage.get(te.programSelected).isEmpty())
-			mc.fontRenderer.drawString(message, (gui.width - gui.xSize) / 2 +15, (gui.height - gui.ySize) / 2 +45, 4210752);
-		else mc.fontRenderer.drawString(StatCollector.translateToLocal(te.latestmessage.get(te.programSelected)), (gui.width - gui.xSize) / 2 +15, (gui.height - gui.ySize) / 2 +45, 4210752);
+			mc.fontRenderer.drawString(message, (gui.width - GuiComputer.xSize) / 2 + 15, (gui.height - GuiComputer.ySize) / 2 + 45, 4210752);
+		else 
+			mc.fontRenderer.drawString(StatCollector.translateToLocal(te.latestmessage.get(te.programSelected)), (gui.width - GuiComputer.xSize) / 2  + 15, (gui.height - GuiComputer.ySize) / 2 + 45, 4210752);
 	}
 	
 	/**

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.Vec3;
 
 public abstract class LandAspect 
 {
@@ -72,4 +73,6 @@ public abstract class LandAspect
 		 *  2 = Always night.
 		 */
 		public abstract int getDayCycleMode();
+
+		public abstract Vec3 getFogColor();
 }

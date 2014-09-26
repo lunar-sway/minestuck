@@ -13,6 +13,7 @@ import net.minecraftforge.event.world.WorldEvent;
 
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.MinestuckPlayerData;
+import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
@@ -24,7 +25,7 @@ public class MinestuckSaveHandler
 	{
 		if(event.world.provider.dimensionId != 0)	//Only save one time each world-save instead of one per dimension each world-save.
 			return;
-		
+
 		File dataFile = event.world.getSaveHandler().getMapFileFromName("MinestuckData");
 		if (dataFile != null) {
 			NBTTagCompound nbt = new NBTTagCompound();
@@ -32,7 +33,9 @@ public class MinestuckSaveHandler
 			for(int i = 0; i < lands.size(); i++)
 				landArray[i] = lands.get(i);
 			nbt.setByteArray("landList", landArray);
-			
+
+			TileEntityTransportalizer.saveTransportalizers(nbt);
+
 			SkaianetHandler.saveData(nbt);
 			
 			MinestuckPlayerData.writeToNBT(nbt);
@@ -43,13 +46,13 @@ public class MinestuckSaveHandler
 				e.printStackTrace();
 			}
 		}
-		
-		String[] oldFiles = {"gristCache", "minestuckLandList", "connectionList"};
-		for(String s : oldFiles) {
-			dataFile = event.world.getSaveHandler().getMapFileFromName("gristCache");
-			if(dataFile != null && dataFile.exists())
-				dataFile.delete();
-		}
-		
+
+		//String[] oldFiles = {"gristCache", "minestuckLandList", "connectionList"};
+		//for(String s : oldFiles) {
+		dataFile = event.world.getSaveHandler().getMapFileFromName("gristCache");
+		if(dataFile != null && dataFile.exists())
+			dataFile.delete();
+		//}
+
 	}
 }

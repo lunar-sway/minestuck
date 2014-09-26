@@ -53,7 +53,7 @@ public class ItemClub extends ItemWeapon
 	{
 		itemStack.damageItem(1, player);
 		if(clubType.equals(EnumClubType.DEUCE))
-			player.heal(this.weaponDamage);
+			player.heal(this.weaponDamage / 3);
 		return true;
 	}
 

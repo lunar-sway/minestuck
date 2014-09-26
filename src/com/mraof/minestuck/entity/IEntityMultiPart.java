@@ -10,4 +10,6 @@ public interface IEntityMultiPart
 
     boolean attackEntityFromPart(Entity entityPart, DamageSource source, float damage);
     void updatePartPositions();
+    void addPart(Entity entityPart, int id);
+    void onPartDeath(Entity entityPart, int id);
 }

@@ -9,21 +9,16 @@ public class EntityBlackBishop extends EntityBishop
 	{
 		super(par1World);
 	}
-	@Override
-	public void setEnemies() 
-	{
-		setEnemies(EnumEntityKingdom.DERSITE);
-		super.setEnemies();
-	}
-	@Override
-	public void setAllies() 
-	{
-		setAllies(EnumEntityKingdom.DERSITE);
-	}
+
 	@Override
 	public String getTexture() 
 	{
 		return "textures/mobs/DersiteBishop.png";
 	}
 
+	@Override
+	public EnumEntityKingdom getKingdom()
+	{
+		return EnumEntityKingdom.DERSITE;
+	}
 }

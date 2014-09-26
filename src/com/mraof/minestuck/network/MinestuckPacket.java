@@ -26,7 +26,9 @@ public abstract class MinestuckPacket
 		SBURB_INFO(SkaianetInfoPacket.class),
 		CLIENT_EDIT(ClientEditPacket.class),
 		SERVER_EDIT(ServerEditPacket.class),
-		CONFIG(MinestuckConfigPacket.class);
+		CONFIG(MinestuckConfigPacket.class), 
+		INFO(MinestuckInfoPacket.class),
+		TRANSPORTALIZER(TransportalizerPacket.class);
 		
 		Class<? extends MinestuckPacket> packetType;
 		private Type(Class<? extends MinestuckPacket> packetClass)

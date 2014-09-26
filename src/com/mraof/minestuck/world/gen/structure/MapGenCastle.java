@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
 import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.StructureStart;
 
@@ -25,7 +26,7 @@ public class MapGenCastle extends MapGenStructure
         this.spawnList.add(new BiomeGenBase.SpawnListEntry(EntityBlackPawn.class, 10, 2, 3));
     }
 
-    public List getSpawnList()
+	public List<SpawnListEntry> getSpawnList()
     {
         return this.spawnList;
     }

@@ -12,6 +12,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IProgressUpdate;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
@@ -37,6 +38,7 @@ public class ChunkProviderLands implements IChunkProvider
 	List<SpawnListEntry> underlingList;
 	World landWorld;
 	Random random;
+	Vec3 skyColor;
 	private NoiseGeneratorOctaves noiseGens[] = new NoiseGeneratorOctaves[2];
 	private NoiseGeneratorTriangle noiseGeneratorTriangle;
 	public LandAspect aspect1;
@@ -55,6 +57,7 @@ public class ChunkProviderLands implements IChunkProvider
 	@SuppressWarnings("unchecked")
 	public ChunkProviderLands(World worldObj, long seed, boolean b)
 	{
+		seed *= worldObj.provider.dimensionId;
 		helper = new LandHelper(seed);
 
 		NBTBase landDataTag = worldObj.getWorldInfo().getAdditionalProperty("LandData");
@@ -64,19 +67,13 @@ public class ChunkProviderLands implements IChunkProvider
 		if (landDataTag == null) {
 			this.aspect1 = helper.getLandAspect();
 			this.aspect2 = helper.getLandAspect(aspect1);
-			Random rand = new Random();
+			Random rand = new Random(seed);
 			nameIndex1 = rand.nextInt(aspect1.getNames().length);	//Better way to generate these?
 			nameIndex2 = rand.nextInt(aspect2.getNames().length);
 			Map<String, NBTBase> dataTag = new Hashtable<String,NBTBase>();
 			dataTag.put("LandData",LandHelper.toNBT(aspect1,aspect2));
 			worldObj.getWorldInfo().setAdditionalProperties(dataTag);
 
-			//			// this packet code is wrong-sided, needs fixed, I don't even know if we need it anymore
-			//			Packet250CustomPayload packet = new Packet250CustomPayload();
-			//			packet.channel = "Minestuck";
-			//			packet.data = MinestuckPacket.makePacket(Type.NEWLAND,aspect1.getPrimaryName(),aspect2.getPrimaryName(),3);
-			//			packet.length = packet.data.length;
-			//			Minecraft.getMinecraft().getNetHandler().addToSendQueue(packet);
 		} else {
 			aspect1 = LandHelper.fromName(((NBTTagCompound) landDataTag).getString("aspect1"));
 			aspect2 = LandHelper.fromName(((NBTTagCompound) landDataTag).getString("aspect2"));
@@ -107,8 +104,7 @@ public class ChunkProviderLands implements IChunkProvider
 		this.terrainMapper = helper.pickOne(aspect1,aspect2);
 		this.decorators = helper.pickSubset(aspect1.getDecorators(),aspect2.getDecorators());
 		this.dayCycle = helper.pickOne(aspect1,aspect2).getDayCycleMode();
-
-
+		this.skyColor = helper.pickOne(aspect1, aspect2).getFogColor();
 	}
 
 	@Override
@@ -139,7 +135,7 @@ public class ChunkProviderLands implements IChunkProvider
 
 		for(int i = 0; i < 256; i++)
 		{
-			int y = (int) (64 + heightMap[i] + heightMapTriangles[i]);
+			int y = (int) (96 + heightMap[i] + heightMapTriangles[i]);
 			topBlock[i] = ((y & 511) <= 255  ? y & 255 : 255 - y & 255) - topRiverBlock[i];
 		}
 
@@ -147,42 +143,34 @@ public class ChunkProviderLands implements IChunkProvider
 		for(int x = 0; x < 16; x++)
 			for(int z = 0; z < 16; z++)
 			{
-				chunkBlocks[x * 4096 | z * 256] = Blocks.bedrock;
+				chunkBlocks[x << 12 | z << 8] = Blocks.bedrock;
 				int y;
-				for(y = 1; y < topBlock[x * 16 + z] - 1; y++)
+				int yMax = topBlock[x << 4 | z] - 2;
+				for(y = 1; y < yMax; y++)
 				{
-					//currentBlockOffset = (int) Math.abs(generated1[x + z * 256 + y * 16]);
-					chunkBlocks[x * 4096 | z * 256 | y] = upperBlock.block;
-					chunkMetadata[x * 4096 | z * 256 | y] = upperBlock.metadata;
+					//currentBlockOffset = (int) Math.abs(generated1[x + z << 8 + y * 16]);
+					chunkBlocks[x << 12 | z << 8 | y] = upperBlock.block;
+					chunkMetadata[x << 12 | z << 8 | y] = upperBlock.metadata;
 				}
 
 				//location copied from the chunk constructor: x * chunkBlocks.length/256 * 16 | z * blockSize/256 | y
-				chunkBlocks[x * 4096 | z * 256 | y] = surfaceBlock.block;
-				chunkMetadata[x * 4096 | z * 256 | y] = surfaceBlock.metadata;
+				for(; y < yMax + 2; y++)
+				{
+					chunkBlocks[x << 12 | z << 8 | y] = surfaceBlock.block;
+					chunkMetadata[x << 12 | z << 8 | y] = surfaceBlock.metadata;
+				}
 
 				for(int i = y + topRiverBlock[x * 16 + z]; y < i; y++)
-					chunkBlocks[x * 4096 | z * 256 | y] = this.riverBlock;
+					chunkBlocks[x << 12 | z << 8 | y] = this.riverBlock;
 
 				for(; y < 63; y++)
-					chunkBlocks[x * 4096 | z * 256 | y] = this.oceanBlock;
+					chunkBlocks[x << 12 | z << 8 | y] = this.oceanBlock;
 
 			}
 		Chunk chunk = new Chunk(this.landWorld, chunkBlocks, chunkMetadata, chunkX, chunkZ);
 		return chunk;
 	}
-	/*private double[] initializeNoiseField(double[] par1ArrayOfDouble, int par2, int par3, int par4, int par5, int par6, int par7)
-	{
-		ChunkProviderEvent.InitNoiseField event = new ChunkProviderEvent.InitNoiseField(this, par1ArrayOfDouble, par2, par3, par4, par5, par6, par7);
-		MinecraftForge.EVENT_BUS.post(event);
-		if (event.getResult() == Result.DENY) return event.noisefield;
 
-		if (par1ArrayOfDouble == null)
-		{
-			par1ArrayOfDouble = new double[par5 * par6 * par7];
-		}
-
-		return par1ArrayOfDouble;
-	}*/
 	@Override
 	public Chunk loadChunk(int chunkX, int chunkZ) 
 	{
@@ -190,12 +178,12 @@ public class ChunkProviderLands implements IChunkProvider
 	}
 
 	@Override
-	public void populate(IChunkProvider ichunkprovider, int i, int j) {
+	public void populate(IChunkProvider ichunkprovider, int i, int j) 
+	{
 
 		Chunk chunk = this.provideChunk(i, j);
 		if (!chunk.isTerrainPopulated)
 		{
-			//Debug.print("Populating! We have "+decorators.size()+" decorators");
 			chunk.isTerrainPopulated = true;
 
 			if (ichunkprovider != null)
@@ -231,16 +219,10 @@ public class ChunkProviderLands implements IChunkProvider
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public List getPossibleCreatures(EnumCreatureType enumcreaturetype, int i,
-			int j, int k) {
-		//Debug.printf("Chosen to spawn! args: %s %d %d %d",enumcreaturetype,i,j,k);
+	public List getPossibleCreatures(EnumCreatureType enumcreaturetype, int i, int j, int k) 
+	{
 		return enumcreaturetype == EnumCreatureType.creature ? this.consortList : (enumcreaturetype == EnumCreatureType.monster ? this.underlingList : null);
 	}
-
-	/*@Override
-	public ChunkPosition findClosestStructure(World world, String s, int i,int j, int k) {
-		return null;
-	}*/
 
 	@Override
 	public int getLoadedChunkCount() {
@@ -254,7 +236,7 @@ public class ChunkProviderLands implements IChunkProvider
 	@Override
 	public void saveExtraData() {
 	}
-	
+
 	@Override
 	/**
 	 * Redirected to in World.findClosestStructure()
@@ -264,6 +246,11 @@ public class ChunkProviderLands implements IChunkProvider
 	 */
 	public ChunkPosition func_147416_a(World var1, String var2, int var3, int var4, int var5) {
 		return null;
+	}
+
+	public Vec3 getFogColor()
+	{
+		return this.skyColor;
 	}
 
 }

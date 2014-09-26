@@ -17,17 +17,17 @@ import cpw.mods.fml.relauncher.Side;
 public class LandRegisterPacket extends MinestuckPacket
 {
 	byte[] landDimensions;
-	
+
 	public static MinestuckPacket createPacket() {
-		
+
 		LandRegisterPacket packet = new LandRegisterPacket();
 		packet.landDimensions = new byte[MinestuckSaveHandler.lands.size()];
 		for(int i = 0; i < packet.landDimensions.length; i++)
 			packet.landDimensions[i] = MinestuckSaveHandler.lands.get(i);
-		
+
 		return packet;
 	}
-	
+
 	public LandRegisterPacket() 
 	{
 		super(Type.LANDREGISTER);
@@ -36,14 +36,15 @@ public class LandRegisterPacket extends MinestuckPacket
 	@Override
 	public MinestuckPacket generatePacket(Object... dat) 
 	{
-		data.writeBytes((byte[]) dat[0]);
+		for(Object obj : dat)
+			data.writeByte((Byte) obj);
 		return this;
 	}
 
 	@Override
 	public MinestuckPacket consumePacket(ByteBuf data) 
 	{
-		
+
 		landDimensions = new byte[data.readableBytes()];
 		data.readBytes(landDimensions);
 		return this;
@@ -54,15 +55,17 @@ public class LandRegisterPacket extends MinestuckPacket
 	{
 		if(MinecraftServer.getServer() != null)
 			return;	//Nope, no editing the server's land list
-		
+
 		MinestuckSaveHandler.lands.clear();
-		
+
 		for(byte dimensionId : landDimensions)
 		{
 			MinestuckSaveHandler.lands.add((byte)dimensionId);
-			Debug.printf("Adding Land dimension with id of %d", dimensionId);
 			if(!DimensionManager.isDimensionRegistered(dimensionId))
+			{
+				Debug.printf("Adding Land dimension with id of %d", dimensionId);
 				DimensionManager.registerDimension(dimensionId, Minestuck.landProviderTypeId);
+			}
 		}
 	}
 
@@ -70,5 +73,5 @@ public class LandRegisterPacket extends MinestuckPacket
 	public EnumSet<Side> getSenderSide() {
 		return EnumSet.of(Side.SERVER);
 	}
-	
+
 }
