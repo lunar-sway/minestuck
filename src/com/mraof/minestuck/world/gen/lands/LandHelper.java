@@ -126,6 +126,8 @@ public class LandHelper {
 		}
 		DimensionManager.registerDimension(newLandId, Minestuck.landProviderTypeId);
 		Debug.print("Creating land with id of: " + newLandId);
+		if(!player.getEntityData().hasKey(EntityPlayer.PERSISTED_NBT_TAG))
+			player.getEntityData().setTag(EntityPlayer.PERSISTED_NBT_TAG, new NBTTagCompound());
 		player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("LandId", newLandId);
 		MinestuckSaveHandler.lands.add((byte) newLandId);
 		MinestuckPlayerTracker.updateLands();

@@ -125,7 +125,7 @@ public class TileEntityTransportalizer extends TileEntity implements ITeleporter
 			transportalizerTagCompound.setTag(entry.getKey(), locationTag);
 		}
 		tagCompound.setTag("transportalizers", transportalizerTagCompound);
-		Debug.print(transportalizerTagCompound);
+		Debug.print("Transportalizer data: "+transportalizerTagCompound);
 	}
 
 	public static void loadTransportalizers(NBTTagCompound tagCompound)

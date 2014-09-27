@@ -54,9 +54,6 @@ public class SkaianetInfoPacket extends MinestuckPacket {
 	public MinestuckPacket consumePacket(ByteBuf data) {
 		
 		this.player = readLine(data);
-		if(!player.equals(".client"))
-			for(char c : player.toCharArray())
-				Debug.print(c+","+(short)c);
 		if(data.readableBytes() == 0)
 			return this;
 		isClientResuming = data.readBoolean();
