@@ -25,7 +25,6 @@ public class Teleport
 			WorldServer worldserver1 = par1EntityPlayerMP.mcServer.worldServerForDimension(par1EntityPlayerMP.dimension);
 			S07PacketRespawn respawnPacket = new S07PacketRespawn(par1EntityPlayerMP.dimension, par1EntityPlayerMP.worldObj.difficultySetting, worldserver1.getWorldInfo().getTerrainType(), par1EntityPlayerMP.theItemInWorldManager.getGameType());
 			par1EntityPlayerMP.playerNetServerHandler.sendPacket(respawnPacket);			
-			par1EntityPlayerMP.playerNetServerHandler.sendPacket(new S07PacketRespawn(par1EntityPlayerMP.dimension, par1EntityPlayerMP.worldObj.difficultySetting, par1EntityPlayerMP.worldObj.getWorldInfo().getTerrainType(), par1EntityPlayerMP.theItemInWorldManager.getGameType()));
 
 			worldserver.removePlayerEntityDangerously(par1EntityPlayerMP);
 			par1EntityPlayerMP.isDead = false;
@@ -70,7 +69,7 @@ public class Teleport
 			worldserver.resetUpdateEntityTick();
 			worldserver1.resetUpdateEntityTick();
 		}
-		entity.timeUntilPortal = entity.getPortalCooldown();
+		//entity.timeUntilPortal = entity.getPortalCooldown();
 	}
 	public static void transferEntityToWorld(Entity entity, int dimension, WorldServer worldserver, WorldServer worldserver1, ITeleporter teleporter)
 	{
@@ -80,13 +79,13 @@ public class Teleport
 		double d0 = entity.posX * moveFactor;
 		double d1 = entity.posZ * moveFactor;
 
-			if (entity.isEntityAlive())
-			{
-				worldserver1.spawnEntityInWorld(entity);
-				entity.setLocationAndAngles(d0, entity.posY, d1, entity.rotationYaw, entity.rotationPitch);
-				worldserver1.updateEntityWithOptionalForce(entity, false);
-				teleporter.makeDestination(entity, worldserver, worldserver1);
-			}
+		if (entity.isEntityAlive())
+		{
+			worldserver1.spawnEntityInWorld(entity);
+			entity.setLocationAndAngles(d0, entity.posY, d1, entity.rotationYaw, entity.rotationPitch);
+			worldserver1.updateEntityWithOptionalForce(entity, false);
+			teleporter.makeDestination(entity, worldserver, worldserver1);
+		}
 
 
 		entity.setWorld(worldserver1);

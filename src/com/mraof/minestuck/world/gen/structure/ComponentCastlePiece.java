@@ -24,16 +24,20 @@ public abstract class ComponentCastlePiece extends StructureComponent
 		this.direction = 0;
 	}
 
-	protected StructureComponent getNextComponentNormal(ComponentCastleStartPiece castleStartPiece, List components, Random random, int xShift, int zShift, boolean par6)
+	protected StructureComponent getNextComponentNormal(
+			ComponentCastleStartPiece castleStartPiece, List<ComponentCastlePiece> components, Random random, int xShift, int zShift, boolean par6)
 	{
 		return getNextComponentNormal(castleStartPiece, components, random, xShift, 0, zShift, par6);
 	}
-	protected StructureComponent getNextComponentNormal(ComponentCastleStartPiece castleStartPiece, List components, Random random, int xShift, int yShift, int zShift, boolean par6)
+
+	protected StructureComponent getNextComponentNormal(
+			ComponentCastleStartPiece castleStartPiece, List<ComponentCastlePiece> components, Random random, int xShift, int yShift, int zShift, boolean par6)
 	{
 			return this.getNextComponent(castleStartPiece, components, random, this.boundingBox.minX + xShift, this.boundingBox.minY + yShift, this.boundingBox.minZ + zShift, this.direction, this.getComponentType(), par6);
 	}
 
-	protected StructureComponent getNextComponent(ComponentCastleStartPiece castleStartPiece, List par2List, Random par3Random, int i, int j, int k, int coordBaseMode, int componentType, boolean par6) 
+	protected StructureComponent getNextComponent(
+			ComponentCastleStartPiece castleStartPiece, List<ComponentCastlePiece> par2List, Random par3Random, int i, int j, int k, int coordBaseMode, int componentType, boolean par6)
 	{
 		return StructureCastlePieces.getNextValidComponent(castleStartPiece, par2List, par3Random, i, j, k, coordBaseMode, componentType);
 	}

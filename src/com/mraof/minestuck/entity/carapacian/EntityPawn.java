@@ -31,7 +31,7 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 
 	public EntityPawn(World world)
 	{
-			this(world, randStatic.nextDouble() < .25 ? 1 : 0);
+		this(world, randStatic.nextDouble() < .25 ? 1 : 0);
 	}
 	public EntityPawn(World world, int pawnType) 
 	{
@@ -41,25 +41,25 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 
 		this.pawnType = pawnType;
 	}
-	
+
 	@Override
 	public float getMaximumHealth() 
 	{
 		return 20;
 	}
-	
+
 	@Override
 	protected float getWanderSpeed() 
 	{
 		return .3F;
 	}
-	
+
 	@Override
 	public IEntityLivingData onSpawnWithEgg(IEntityLivingData par1EntityLivingData)
 	{
 		par1EntityLivingData = super.onSpawnWithEgg(par1EntityLivingData);
 		this.addRandomArmor();
-			
+
 		if(this.pawnType == 1)
 		{
 			this.targetTasks.addTask(4, entityAIArrowAttack);
@@ -70,7 +70,7 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 		this.enchantEquipment();
 		return par1EntityLivingData;
 	}
-	
+
 	@Override
 	public void attackEntityWithRangedAttack(EntityLivingBase entityLiving, float f1) 
 	{
@@ -94,14 +94,14 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 		}
 
 		this.playSound("random.bow", 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-//		EntityPawn pawn = this.getClass() == EntityWhitePawn.class ? new EntityWhitePawn(this.worldObj, 0) : new EntityBlackPawn(this.worldObj, 0);
-//		pawn.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
-//		pawn.initCreature();
-//		this.worldObj.spawnEntityInWorld(pawn);	
+		//		EntityPawn pawn = this.getClass() == EntityWhitePawn.class ? new EntityWhitePawn(this.worldObj, 0) : new EntityBlackPawn(this.worldObj, 0);
+		//		pawn.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
+		//		pawn.initCreature();
+		//		this.worldObj.spawnEntityInWorld(pawn);	
 		//I was just messing around to see if I could make an EntityLiving spawn more EntityLiving, it can
 		this.worldObj.spawnEntityInWorld(arrow);
 	}
-	
+
 	/**
 	 * Returns the amount of damage a mob should deal.
 	 */
@@ -112,32 +112,32 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 
 		if (weapon != null)
 			damage += 
-			(float)this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue();
-		
-        damage += EnchantmentHelper.getEnchantmentModifierLiving(this, (EntityLivingBase)par1Entity);
+				(float)this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue();
+
+		damage += EnchantmentHelper.getEnchantmentModifierLiving(this, (EntityLivingBase)par1Entity);
 
 		return damage;
 	}
-	
+
 	@Override
 	public boolean attackEntityAsMob(Entity par1Entity)
 	{
 		float damage = this.getAttackStrength(par1Entity);
 		int fireAspectLevel = EnchantmentHelper.getFireAspectModifier(this);
 		int knockback = EnchantmentHelper.getKnockbackModifier(this, (EntityLivingBase)par1Entity);
-   
-        if (fireAspectLevel > 0 && !par1Entity.isBurning())
-            par1Entity.setFire(1);
 
-        if (knockback > 0)
-            par1Entity.addVelocity((double)(-MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F) * (float)knockback * 0.5F), 0.1D, (double)(MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F) * (float)knockback * 0.5F));
+		if (fireAspectLevel > 0 && !par1Entity.isBurning())
+			par1Entity.setFire(1);
+
+		if (knockback > 0)
+			par1Entity.addVelocity((double)(-MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F) * (float)knockback * 0.5F), 0.1D, (double)(MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F) * (float)knockback * 0.5F));
 
 		return par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this), damage);
 	}
 	/**
 	 * Basic mob attack. Default to touch of death in EntityCreature. Overridden by each mob to define their attack.
 	 */
-	
+
 	@Override
 	protected void attackEntity(Entity par1Entity, float par2)
 	{
@@ -147,7 +147,7 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 			this.attackEntityAsMob(par1Entity);
 		}
 	}
-	
+
 	@Override
 	public void setCombatTask()
 	{
@@ -167,7 +167,7 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 		else
 			this.tasks.addTask(4, this.entityAIAttackOnCollide);
 	}
-	
+
 	@Override
 	public void setCurrentItemOrArmor(int slot, ItemStack par2ItemStack)
 	{
@@ -178,13 +178,13 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 			this.setCombatTask();
 		}
 	}
-	
+
 	@Override
-    protected void applyEntityAttributes()
-    {
-        super.applyEntityAttributes();
-        this.getAttributeMap().registerAttribute(SharedMonsterAttributes.attackDamage);
-    }
+	protected void applyEntityAttributes()
+	{
+		super.applyEntityAttributes();
+		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.attackDamage);
+	}
 
 
 }

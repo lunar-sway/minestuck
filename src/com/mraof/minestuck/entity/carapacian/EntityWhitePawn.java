@@ -2,8 +2,6 @@ package com.mraof.minestuck.entity.carapacian;
 
 import net.minecraft.world.World;
 
-import com.mraof.minestuck.entity.underling.EntityUnderlingPart;
-
 public class EntityWhitePawn extends EntityPawn
 {
 	public EntityWhitePawn(World world)
@@ -15,20 +13,14 @@ public class EntityWhitePawn extends EntityPawn
 		super(world, type);
 	}
 	@Override
-	public void setEnemies()
-	{
-		setEnemies(EnumEntityKingdom.PROSPITIAN);
-		this.enemyClasses.add(EntityUnderlingPart.class);
-		super.setEnemies();
-	}
-	@Override
-	public void setAllies()
-	{
-		setAllies(EnumEntityKingdom.PROSPITIAN);
-	}
-	@Override
 	public String getTexture() 
 	{
 		return "textures/mobs/ProspitianPawn.png";
+	}
+
+	@Override
+	public EnumEntityKingdom getKingdom()
+	{
+		return EnumEntityKingdom.PROSPITIAN;
 	}
 }

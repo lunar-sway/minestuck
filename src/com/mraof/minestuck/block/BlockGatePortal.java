@@ -38,12 +38,12 @@ public class BlockGatePortal extends BlockContainer
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World par1World, int x, int y, int z, Entity par5Entity) 
+	public void onEntityCollidedWithBlock(World par1World, int x, int y, int z, Entity entity) 
 	{
-		if (par5Entity.ridingEntity == null && par5Entity.riddenByEntity == null && !par1World.isRemote && par5Entity.timeUntilPortal == 0)
+		if (entity.ridingEntity == null && entity.riddenByEntity == null && !par1World.isRemote && entity.timeUntilPortal == 0)
 		{
 			TileEntityGatePortal portal = (TileEntityGatePortal) par1World.getTileEntity(x, y, z);
-				portal.teleportEntity(par5Entity);
+				portal.teleportEntity(entity);
 		}
 	}
 	

@@ -31,7 +31,7 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 		this.experienceValue = (int) (5 * gristType.getPower() + 4);
 //		this.health = this.maxHealth;
 		this.stepHeight = 2;
-		topPart = new EntityUnderlingPart(this, "top", 6.0F, 7.0F);
+		topPart = new EntityUnderlingPart(this, 0, 6.0F, 7.0F);
 		par1World.spawnEntityInWorld(topPart);
 	}
 
@@ -127,9 +127,20 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 		double topPartPosX = (this.posX + -Math.sin(f1 / 180.0 * Math.PI) * 2);
 		double topPartPosZ = (this.posZ + Math.cos(f1 / 180.0 * Math.PI) * 2);
 		
-		if(topPart.entityUnderlingObj == null)
-			topPart.entityUnderlingObj = this;
-		topPart.setPositionAndRotation(topPartPosX, this.posY + 6, topPartPosZ, this.rotationYaw, this.rotationPitch);
+		if(topPart != null)
+			topPart.setPositionAndRotation(topPartPosX, this.posY + 6, topPartPosZ, this.rotationYaw, this.rotationPitch);
+	}
+
+	@Override
+	public void addPart(Entity entityPart, int id) 
+	{
+		this.topPart = (EntityUnderlingPart) entityPart;
+	}
+
+	@Override
+	public void onPartDeath(Entity entityPart, int id) 
+	{
+
 	}
 
 }

@@ -14,7 +14,7 @@ public class SburbServer extends ButtonListProgram {
 	@Override
 	public ArrayList<UnlocalizedString> getStringList(TileEntityComputer te) {
 		String clientName = te.getData(1).getString("connectedClient");
-		ArrayList list = new ArrayList();
+		ArrayList<UnlocalizedString> list = new ArrayList<UnlocalizedString>();
 		String displayPlayer= clientName.isEmpty()?"UNDEFINED":UsernameHandler.decode(clientName);
 		if (!clientName.isEmpty() && SkaiaClient.getClientConnection(clientName) != null) {
 			list.add(new UnlocalizedString("computer.messageConnect", displayPlayer));

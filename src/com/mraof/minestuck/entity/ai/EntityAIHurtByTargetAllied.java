@@ -38,7 +38,7 @@ public class EntityAIHurtByTargetAllied extends EntityAITarget {
 		this.field_142052_b = this.taskOwner.func_142015_aE();
 
 		double d0 = this.getTargetDistance();
-		List<?> list = this.taskOwner.worldObj.selectEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getAABBPool().getAABB(this.taskOwner.posX, this.taskOwner.posY, this.taskOwner.posZ, this.taskOwner.posX + 1.0D, this.taskOwner.posY + 1.0D, this.taskOwner.posZ + 1.0D).expand(d0, 10.0D, d0), entitySelector);
+		List<?> list = this.taskOwner.worldObj.selectEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(this.taskOwner.posX, this.taskOwner.posY, this.taskOwner.posZ, this.taskOwner.posX + 1.0D, this.taskOwner.posY + 1.0D, this.taskOwner.posZ + 1.0D).expand(d0, 10.0D, d0), entitySelector);
 		Iterator<?> iterator = list.iterator();
 
 		while (iterator.hasNext())

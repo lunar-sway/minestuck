@@ -3,12 +3,15 @@ package com.mraof.minestuck.world;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldSettings.GameType;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.WorldChunkManagerHell;
 import net.minecraft.world.chunk.IChunkProvider;
 
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.ChunkProviderLands;
 
 public class WorldProviderLands extends WorldProvider 
@@ -18,9 +21,11 @@ public class WorldProviderLands extends WorldProvider
 	@Override
 	public float calculateCelestialAngle(long par1, float par3)
 	{
-		if (provider != null) {
+		if (provider != null) 
+		{
 			//Debug.print("Time mode is "+provider.dayCycle);
-			switch (provider.dayCycle) {
+			switch(provider.dayCycle) 
+			{
 			case (0):
 				return super.calculateCelestialAngle(par1,par3);
 			case (1):
@@ -40,7 +45,8 @@ public class WorldProviderLands extends WorldProvider
 	public IChunkProvider createChunkGenerator()
 	{
 		if (provider == null) {
-			provider = new ChunkProviderLands(this.worldObj, this.worldObj.getSeed()*dimensionId, true);
+			long seed = this.worldObj.isRemote ? Minestuck.worldSeed : this.worldObj.getSeed();
+			provider = new ChunkProviderLands(this.worldObj, seed, true);
 		}
 		return provider;
 	}
@@ -59,7 +65,6 @@ public class WorldProviderLands extends WorldProvider
 	public ChunkCoordinates getRandomizedSpawnPoint() 
 	{
 		ChunkCoordinates chunkcoordinates = new ChunkCoordinates(this.worldObj.getSpawnPoint());
-//		Debug.printf("Respawn Coordinates: %d, %d, %d", chunkcoordinates.posX, chunkcoordinates.posY, chunkcoordinates.posZ );
 
 		boolean isAdventure = worldObj.getWorldInfo().getGameType() == GameType.ADVENTURE;
 		int spawnFuzz = 12;
@@ -71,7 +76,6 @@ public class WorldProviderLands extends WorldProvider
 			chunkcoordinates.posZ += this.worldObj.rand.nextInt(spawnFuzz) - spawnFuzzHalf;
 			chunkcoordinates.posY = this.worldObj.getTopSolidOrLiquidBlock(chunkcoordinates.posX, chunkcoordinates.posZ);
 		}
-//		Debug.printf("Respawning at: %d, %d, %d", chunkcoordinates.posX, chunkcoordinates.posY, chunkcoordinates.posZ );
 
 		return chunkcoordinates;
 	}
@@ -80,8 +84,15 @@ public class WorldProviderLands extends WorldProvider
 	public int getRespawnDimension(EntityPlayerMP player)
 	{
 		int dim = player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("LandId");
-		return dim == 0?this.dimensionId:dim;
+		return dim == 0 ? this.dimensionId : dim;
 	}
+
+	@Override
+	public boolean canRespawnHere()
+	{
+		return true;
+	}
+
 	@Override
 	public boolean isDaytime() {
 		if (provider != null) {
@@ -113,5 +124,19 @@ public class WorldProviderLands extends WorldProvider
 		isHellWorld = false;
 		this.worldChunkMgr = new WorldChunkManagerHell(BiomeGenBase.sky, 0.5F);
 		this.hasNoSky = false;
+	}
+
+	@Override
+	public Vec3 getFogColor(float par1, float par2)
+	{
+		if(provider != null)
+		{
+			return provider.getFogColor();
+		}
+		else
+		{
+			Debug.print("Getting superclass fog color");
+			return super.getFogColor(par1, par2);
+		}
 	}
 }

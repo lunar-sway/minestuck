@@ -1,5 +1,6 @@
 package com.mraof.minestuck.entity.underling;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.nbt.NBTTagCompound;
@@ -8,38 +9,25 @@ import net.minecraft.world.World;
 
 import com.mraof.minestuck.entity.IEntityMultiPart;
 
-public class EntityUnderlingPart extends EntityLiving
-{
-	public EntityLiving entityUnderlingObj;
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
-	public String name;
+public class EntityUnderlingPart extends EntityLiving implements IEntityAdditionalSpawnData
+{
+	public IEntityMultiPart baseEntity;
+
+	public int id = -1;
+	private int headId = -1;
 
 	public EntityUnderlingPart(World world)
 	{
 		super(world);
 	}
-	public EntityUnderlingPart(EntityLiving par1IEntityMultiPart, String par2Str, float par3, float par4)
+	public EntityUnderlingPart(IEntityMultiPart par1IEntityMultiPart, int id, float par3, float par4)
 	{
-		super(((IEntityMultiPart) par1IEntityMultiPart).getWorld());
+		super(par1IEntityMultiPart.getWorld());
 		this.setSize(par3, par4);
-		//Debug.printf("Being created with %s, name is %s, vars %f and %f",par1IEntityMultiPart,par2Str,par3,par4);
-		this.entityUnderlingObj = par1IEntityMultiPart;
-		this.name = par2Str;
-	}
-
-	@Override
-	protected void entityInit() 
-	{
-		super.entityInit();
-	}
-
-	/**
-	 * (abstract) Protected helper method to read subclass entity data from NBT.
-	 */
-	@Override
-	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound) 
-	{
-		super.readEntityFromNBT(par1NBTTagCompound);
+		this.baseEntity = par1IEntityMultiPart;
+		this.id = id;
 	}
 
 	/**
@@ -48,7 +36,7 @@ public class EntityUnderlingPart extends EntityLiving
 	@Override
 	public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound) 
 	{
-		if(this.entityUnderlingObj != null)
+		if(this.baseEntity != null)
 			super.writeEntityToNBT(par1NBTTagCompound);
 		else
 			this.setDead();
@@ -69,37 +57,28 @@ public class EntityUnderlingPart extends EntityLiving
 	@Override
 	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
 	{
-		if(this.entityUnderlingObj == null || par1DamageSource == DamageSource.inWall)
+		if(this.baseEntity == null || par1DamageSource == DamageSource.inWall || par1DamageSource == DamageSource.drown || par1DamageSource == DamageSource.fall)
 			return false;
-		return ((IEntityMultiPart) this.entityUnderlingObj).attackEntityFromPart(this, par1DamageSource, par2);
+		return ((IEntityMultiPart) this.baseEntity).attackEntityFromPart(this, par1DamageSource, par2);
 	}
 	@Override
 	public void onUpdate() 
 	{
 		super.onUpdate();
-		if(this.entityUnderlingObj == null || (this.entityUnderlingObj).isDead)
+		if(this.baseEntity == null || ((Entity)this.baseEntity).isDead)
 		{
-//			Debug.printf("entity underling is %s, the side is %b", this.entityUnderlingObj, this.worldObj.isRemote);
 			this.setDead();
 		}
 		else
-		{
-			this.entityUnderlingObj.motionX += this.motionX;
-			this.entityUnderlingObj.motionY += this.motionY;
-			this.entityUnderlingObj.motionZ += this.motionZ;
-			this.motionX = 0;
-			this.motionY = 0;
-			this.motionZ = 0;
-			((IEntityMultiPart)this.entityUnderlingObj).updatePartPositions();
-		}
+			this.setBaseById(headId);
 	}
 
 	@Override
 	public void setDead() 
 	{
 		super.setDead();
-		if(this.entityUnderlingObj != null && !this.entityUnderlingObj.isDead)
-			entityUnderlingObj.setDead();
+		if(this.baseEntity != null)
+			baseEntity.onPartDeath(this, this.id);
 	}
 	/**
 	 * Returns true if Entity argument is equal to this Entity
@@ -107,46 +86,54 @@ public class EntityUnderlingPart extends EntityLiving
 	@Override
 	public boolean isEntityEqual(Entity par1Entity)
 	{
-		return this == par1Entity || this.entityUnderlingObj == par1Entity;
+		return this == par1Entity || this.baseEntity == par1Entity;
 	}
 	@Override
 	public boolean handleWaterMovement() 
 	{
-		return this.inWater;
-		//		return super.handleWaterMovement();
+		return false;
 	}
 	
 	@Override
 	 protected boolean canDespawn()
 	 {
 	     return false;
-	 }
-	   
-	//	@Override
-	//	protected boolean pushOutOfBlocks(double par1, double par3, double par5) {
-	//		boolean flag = super.pushOutOfBlocks(par1, par3, par5);
-	//		if(flag)
-	//		{
-	//			((EntityLiving)(this.entityUnderlingObj)).motionX += this.motionX;
-	//			((EntityLiving)(this.entityUnderlingObj)).motionY += this.motionY;
-	//			((EntityLiving)(this.entityUnderlingObj)).motionZ += this.motionZ;
-	//		}
-	//		return flag;
-	//	}
-	//	@Override
-	//	public ItemStack getHeldItem() {
-	//		return null;
-	//	}
-	//	@Override
-	//	public ItemStack getCurrentItemOrArmor(int i) {
-	//		return null;
-	//	}
-	//	@Override
-	//	public void setCurrentItemOrArmor(int i, ItemStack itemstack) {
-	//		
-	//	}
-	//	@Override
-	//	public ItemStack[] getLastActiveItems() {
-	//		return null;
-	//	}
+	}
+
+	@Override
+	public void writeSpawnData(ByteBuf buffer) 
+	{
+		buffer.writeInt(this.id);
+		if(this.baseEntity != null)
+			buffer.writeInt(((Entity)this.baseEntity).getEntityId());
+		else
+			buffer.writeInt(-1);
+	}
+
+	@Override
+	public void readSpawnData(ByteBuf additionalData) 
+	{
+		setBaseById(additionalData.readInt());
+	}
+	
+	public void setBaseById(int baseId)
+	{
+		Entity base = this.worldObj.getEntityByID(baseId);
+		if(base != null)
+		{
+			this.baseEntity = (IEntityMultiPart) base;
+			this.baseEntity.addPart(this, this.id);
+		}
+	}
+
+	@Override
+	public void setSize(float width, float height)
+	{
+		super.setSize(width, height);
+	}
+
+	@Override
+	public void collideWithEntity(Entity par1Entity)
+	{
+	}
 }

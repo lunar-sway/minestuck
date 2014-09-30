@@ -188,14 +188,6 @@ public class GuiPlayerStats extends GuiScreen
 		RenderHelper.enableStandardItemLighting();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 
-		//  		int column = (int) (xcor - (this.width / 2)+(guiWidth/2)-gristIconX) / gristIconXOffset;
-		//		int row = (int) (ycor - yOffset-gristIconY) / gristIconYOffset;
-		//		int gristKind = 7*column + row;
-		//		
-		//    	if (gristKind >= 0 && gristKind < GristType.allGrists && row < 7 && row >= 0 && xcor > (this.width / 2)-(guiWidth/2)+gristIconX+(gristIconXOffset*column-column) && xcor < (this.width / 2)-(guiWidth/2)+gristIconX+(gristIconXOffset*column-column)+16 && ycor > yOffset+gristIconY+(gristIconYOffset*row-row) && ycor < yOffset+gristIconY+(gristIconYOffset*row-row)+16)  {
-		//   		drawGristTooltip(EntityGrist.gristTypes[gristKind] + " Grist", xcor, ycor);
-		//    	}
-		////  drawGristTooltip(row + " " + column, xcor, ycor);
 	}
 	
 	@Override
@@ -253,10 +245,6 @@ public class GuiPlayerStats extends GuiScreen
 
 		if (list.length != 0)
 		{
-			//		    GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-			//		    RenderHelper.disableStandardItemLighting();
-			//		    GL11.glDisable(GL11.GL_LIGHTING);
-			//		    GL11.glDisable(GL11.GL_DEPTH_TEST);
 			int k = fontRenderer.getStringWidth(text);
 
 			int i1 = par2 + 12;
@@ -308,10 +296,6 @@ public class GuiPlayerStats extends GuiScreen
 
 			this.zLevel = 0.0F;
 			itemRenderer.zLevel = 0.0F;
-			//		    GL11.glEnable(GL11.GL_LIGHTING);
-			//		    GL11.glEnable(GL11.GL_DEPTH_TEST);
-			//		    RenderHelper.enableStandardItemLighting();
-			//		    GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		}
 	}
 	

@@ -23,3 +23,4 @@ Useful Links
 * To-Do List: https://docs.google.com/document/d/1-p0HTtQYYhFBdtoT5EU5L0nQpoQ25bKayz8qH-JVLQ0/edit?usp=sharing
 * Beginning Gameplay Guide: http://imgur.com/a/TkrEG
 * Installation Guide: http://imgur.com/a/8itRt
+* Mods.io Page: https://mods.io/mods/1050-minestuck

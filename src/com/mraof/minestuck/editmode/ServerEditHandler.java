@@ -57,7 +57,7 @@ public class ServerEditHandler
 	
 	public static final ServerEditHandler instance = new ServerEditHandler();
 	
-	static List<EditData> list = new ArrayList();
+	static List<EditData> list = new ArrayList<EditData>();
 	
 	/**
 	 * Called both when any player logged out and when a player pressed the exit button.
@@ -146,7 +146,7 @@ public class ServerEditHandler
 	
 	static boolean setPlayerStats(EntityPlayerMP player, SburbConnection c) {
 		
-		double playerOffset = player.posX-player.boundingBox.maxX;
+		//double playerOffset = player.posX - player.boundingBox.maxX; //unused
 		
 		double posX, posY, posZ;
 		WorldServer world = MinecraftServer.getServer().worldServerForDimension(c.enteredGame()?c.getClientDimension():c.getClientData().getDimension());
@@ -383,7 +383,7 @@ public class ServerEditHandler
 			}
 		}
 		
-		ArrayList<ItemStack> itemsToRemove = new ArrayList();
+		ArrayList<ItemStack> itemsToRemove = new ArrayList<ItemStack>();
 		for(ItemStack stack : DeployList.getItemList()) {
 			boolean shouldHave = !(Minestuck.hardMode && givenItems[DeployList.getOrdinal(stack)+1] && DeployList.getSecondaryCost(stack) == null
 					|| DeployList.getTier(stack) > SessionHandler.availableTier(client));
