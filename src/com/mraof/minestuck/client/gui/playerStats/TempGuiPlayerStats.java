@@ -1,4 +1,4 @@
-package com.mraof.minestuck.client.gui;
+package com.mraof.minestuck.client.gui.playerStats;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -24,12 +24,12 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class GuiPlayerStats extends GuiScreen
+public class TempGuiPlayerStats extends GuiScreen
 {
 
-	private static final ResourceLocation guiGristcache = new ResourceLocation("minestuck", "textures/gui/GristCache.png");
-	private static final ResourceLocation guiCaptchaDeckEmpty = new ResourceLocation("minestuck", "textures/gui/CaptchaDeckEmpty.png");
-	private static final ResourceLocation guiStrifeSelector = new ResourceLocation("minestuck", "textures/gui/StrifeSelector.png");
+	private static final ResourceLocation guiGristcache = new ResourceLocation("minestuck", "textures/gui/gristCache.png");
+	private static final ResourceLocation guiCaptchaDeckEmpty = new ResourceLocation("minestuck", "textures/gui/captchaDeckEmpty.png");
+	private static final ResourceLocation guiStrifeSelector = new ResourceLocation("minestuck", "textures/gui/strifeSelector.png");
 	private static final ResourceLocation guiEcheladder = new ResourceLocation("minestuck", "textures/gui/echeladder.png");
 	private static final ResourceLocation icons = new ResourceLocation("minestuck", "textures/gui/icons.png");
 	
@@ -59,7 +59,7 @@ public class GuiPlayerStats extends GuiScreen
 	private static RenderItem itemRenderer = new RenderItem();
 	public static boolean visible = false;
 	
-	public GuiPlayerStats(Minecraft mc)
+	public TempGuiPlayerStats(Minecraft mc)
 	{
 		super();
 		

@@ -5,6 +5,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import com.mraof.minestuck.client.gui.playerStats.TempGuiPlayerStats;
 import com.mraof.minestuck.inventory.ContainerMachine;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
@@ -43,10 +44,10 @@ public class GuiHandler implements IGuiHandler
 			return new GuiComputer(Minecraft.getMinecraft(),(TileEntityComputer) tileEntity);
 		}
 		if(id == GuiId.GRISTCACHE.ordinal())
-			return new GuiPlayerStats(Minecraft.getMinecraft());
+			return new TempGuiPlayerStats(Minecraft.getMinecraft());
 		if(id == GuiId.TRANSPORTALIZER.ordinal() && tileEntity instanceof TileEntityTransportalizer)
 			return new GuiTransportalizer(Minecraft.getMinecraft(), (TileEntityTransportalizer) tileEntity);
-return null;
+		return null;
 
 	}
 
