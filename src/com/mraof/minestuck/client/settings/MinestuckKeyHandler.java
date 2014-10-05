@@ -3,6 +3,8 @@ package com.mraof.minestuck.client.settings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 
+import com.mraof.minestuck.client.gui.playerStats.GuiGristCache;
+import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
 import com.mraof.minestuck.client.gui.playerStats.TempGuiPlayerStats;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 
@@ -28,10 +30,7 @@ public class MinestuckKeyHandler {
 	public void onTick(TickEvent.ClientTickEvent event) {
 		if(statKey.getIsKeyPressed() && !statKeyPressed) {
 			
-			if(Minecraft.getMinecraft().currentScreen == null)
-				Minecraft.getMinecraft().displayGuiScreen(new TempGuiPlayerStats(Minecraft.getMinecraft()));
-			else if(Minecraft.getMinecraft().currentScreen instanceof TempGuiPlayerStats)
-				Minecraft.getMinecraft().displayGuiScreen(null);
+			GuiPlayerStats.openGui(false);
 			
 		} else if(editKey.getIsKeyPressed() && !editKeyPressed) {
 			
