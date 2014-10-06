@@ -48,7 +48,7 @@ public class ComputerData{
 			char[] ownerChars = new char[ownerBytes.length];
 			for(int i = 0; i < ownerChars.length; i++)
 				ownerChars[i] = (char) ownerBytes[i];
-			System.out.println(String.valueOf(ownerChars));
+			//Debug.print(String.valueOf(ownerChars));
 			data.owner = String.valueOf(ownerChars); //This will break for non ASCII owners, hopefully none exist
 			return data;
 		}

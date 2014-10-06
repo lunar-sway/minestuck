@@ -18,7 +18,8 @@ public class ComponentCastleSolidPiece extends ComponentCastlePiece
 		this.componentType = 0;
 	}
 
-	public static ComponentCastleSolidPiece findValidPlacement(List par0List, ComponentCastleStartPiece startPiece, int par2, int par3, int par4, int par5, int par6)
+	public static ComponentCastleSolidPiece findValidPlacement(
+			List<?> par0List, ComponentCastleStartPiece startPiece, int par2, int par3, int par4, int par5, int par6)
     {
         StructureBoundingBox structureboundingbox = new StructureBoundingBox(par2 + 0, par3 + 0, par4 + 0, par2 + 8 + 0, 0 + 8 + 0, par4 + 8 + 0);
         return new ComponentCastleSolidPiece(par6, startPiece, structureboundingbox);

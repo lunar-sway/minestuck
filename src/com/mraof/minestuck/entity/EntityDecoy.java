@@ -93,9 +93,9 @@ public class EntityDecoy extends EntityLiving {
 	protected void setupCustomSkin() {
 		if (this.worldObj.isRemote && username != null && !username.isEmpty()){
 			locationSkin = AbstractClientPlayer.getLocationSkin(username);
-			locationCape = AbstractClientPlayer.getLocationCape(username);
+			//locationCape = AbstractClientPlayer.getLocationCape(username);
 			downloadImageSkin = AbstractClientPlayer.getDownloadImageSkin(locationSkin, username);
-			downloadImageCape = AbstractClientPlayer.getDownloadImageCape(locationCape, username);
+			//downloadImageCape = AbstractClientPlayer.getDownloadImageCape(locationCape, username);
 		}
 	}
 	
@@ -214,7 +214,7 @@ public class EntityDecoy extends EntityLiving {
 		EntityDecoy decoy;
 		
 		DecoyPlayer(World par1World, EntityDecoy decoy) {
-			super(par1World, new GameProfile("Decoy", "Decoy"));
+			super(par1World, new GameProfile(null, "Decoy"));
 			this.decoy = decoy;
 			this.setHealth(decoy.getHealth());
 		}

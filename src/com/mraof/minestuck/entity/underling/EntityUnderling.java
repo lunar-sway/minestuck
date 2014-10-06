@@ -3,11 +3,11 @@ package com.mraof.minestuck.entity.underling;
 import io.netty.buffer.ByteBuf;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
@@ -17,12 +17,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 
-import com.mraof.minestuck.entity.EntityListAttackFilter;
+import com.mraof.minestuck.entity.EntityListFilter;
 import com.mraof.minestuck.entity.EntityMinestuck;
+import com.mraof.minestuck.entity.ai.EntityAIHurtByTargetAllied;
 import com.mraof.minestuck.entity.ai.EntityAINearestAttackableTargetWithHeight;
 import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.util.GristAmount;
@@ -35,7 +37,9 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 {
 
 	protected List<Class<? extends EntityLivingBase>> enemyClasses;
-	protected EntityListAttackFilter attackEntitySelector;
+	@SuppressWarnings("unchecked")
+	protected static EntityListFilter underlingSelector = new EntityListFilter(Arrays.<Class<? extends EntityLivingBase>>asList(EntityImp.class, EntityOgre.class, EntityBasilisk.class, EntityGiclops.class));
+	protected EntityListFilter attackEntitySelector;
 	//The type of the underling
 	protected GristType type;
 	//Name of underling, used in getting the texture and actually naming it
@@ -51,7 +55,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 		setEnemies();
 
 		this.tasks.addTask(1, new EntityAISwimming(this));
-		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
+		this.targetTasks.addTask(1, new EntityAIHurtByTargetAllied(this, underlingSelector));
 		this.targetTasks.addTask(2, new EntityAINearestAttackableTargetWithHeight(this, EntityPlayer.class, 128.0F, 2, true, false));
 		this.targetTasks.addTask(2, this.entityAINearestAttackableTargetWithHeight());
 		this.tasks.addTask(5, new EntityAIWander(this, this.getWanderSpeed()));
@@ -98,11 +102,11 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 		return "textures/mobs/" + type.getName() + underlingName + ".png";
 	}
 	
-//	@Override
-//	public String getEntityName() 
-//	{
-//		return StatCollector.translateToLocalFormatted("entity." + underlingName + ".type", type.getDisplayName());
-//	}
+	@Override
+	public String getCommandSenderName() 
+	{
+		return StatCollector.translateToLocalFormatted("entity." + underlingName + ".type", type.getDisplayName());
+	}
 	@Override
 	protected boolean isAIEnabled()
 	{
@@ -120,7 +124,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	}
 	public void setEnemies()
 	{
-		attackEntitySelector = new EntityListAttackFilter(enemyClasses);
+		attackEntitySelector = new EntityListFilter(enemyClasses);
 	}
 
 	public void addEnemy(Class<? extends EntityLivingBase> enemyClass)

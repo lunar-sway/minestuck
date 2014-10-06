@@ -25,7 +25,6 @@ public class MinestuckChannelHandler extends FMLIndexedMessageToMessageCodec<Min
 	public MinestuckChannelHandler() {
 		for(Type type : Type.values())
 			addDiscriminator(type.ordinal(), type.packetType);
-		Debug.print(this.getClass().getClassLoader().getClass().getName());
 	}
 	
 	@Override

@@ -5,12 +5,14 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.Vec3;
 
 public class LandAspectFrost extends LandAspect 
 {
 	BlockWithMetadata[] surfaceBlocks = {new BlockWithMetadata(Blocks.grass)};
 	private BlockWithMetadata[] upperBlocks = {new BlockWithMetadata(Blocks.stone)};
-	
+	static Vec3 skyColor = Vec3.createVectorHelper(0.45D, 0.5D, 0.98D);
+
 	@Override
 	public BlockWithMetadata[] getSurfaceBlocks() 
 	{
@@ -38,17 +40,18 @@ public class LandAspectFrost extends LandAspect
 	{
 		return Blocks.ice;
 	}
-	
+
 	@Override
-	public String getPrimaryName() {
+	public String getPrimaryName() 
+	{
 		return "Frost";
 	}
-	
+
 	@Override
 	public String[] getNames() {
 		return new String[] {"Frost","Cold","Ice"};
 	}
-	
+
 	@Override
 	public ArrayList<ILandDecorator> getDecorators() {
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
@@ -60,6 +63,12 @@ public class LandAspectFrost extends LandAspect
 	@Override
 	public int getDayCycleMode() {
 		return (new Random()).nextInt(3); //Random cycle between 0 and 2
+	}
+
+	@Override
+	public Vec3 getFogColor() 
+	{
+		return skyColor;
 	}
 
 }

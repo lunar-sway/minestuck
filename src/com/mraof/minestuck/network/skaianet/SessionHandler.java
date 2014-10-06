@@ -219,6 +219,8 @@ public class SessionHandler {
 		if(!canConnect(connection.getClientName(), connection.getServerName()))
 			return "computer.messageConnectFailed";
 		if(singleSession) {
+			if(sessions.size() == 0)
+				return "computer.messageConnectFailed";
 			int i = (sessions.get(0).containsPlayer(connection.getClientName())?0:1)+(sessions.get(0).containsPlayer(connection.getServerName())?0:1);
 			if(Minestuck.forceMaxSize && sessions.get(0).getPlayerList().size()+i > maxSize)
 				return "computer.singleSessionFull";

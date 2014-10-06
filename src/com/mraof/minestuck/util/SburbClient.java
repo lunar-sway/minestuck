@@ -13,7 +13,7 @@ public class SburbClient extends ButtonListProgram {
 	
 	@Override
 	public ArrayList<UnlocalizedString> getStringList(TileEntityComputer te) {
-		ArrayList list = new ArrayList();
+		ArrayList<UnlocalizedString> list = new ArrayList<UnlocalizedString>();
 		NBTTagCompound nbt = te.getData(getId());
 		String displayPlayer= "UNDEFINED";
 		if(nbt.getBoolean("connectedToServer") && SkaiaClient.getClientConnection(te.owner) != null)

@@ -37,8 +37,10 @@ computer.clientSessionFull=Client player's session is full
 
 entity.dersiteBishop.name=Dersite Bishop
 entity.dersitePawn.name=Dersite Pawn
+entity.dersiteRook.name=Dersite Rook
 entity.prospitianBishop.name=Prospitan Bishop
 entity.prospitianPawn.name=Prospitian Pawn
+entity.prospitianRook.name=Prospitian Rook
 
 entity.Salamander.name=Salamander
 entity.Nakagator.name=Nakagator
@@ -167,6 +169,7 @@ tile.computer.name=SBURB Computer
 tile.oil.name=Oil
 tile.blood.name=Blood
 tile.layeredSand.name=Layered Sand
+tile.transportalizer.name=Transportalizer
 
 title.format=%1$s of %2$s
 title.Bard=Bard
@@ -176,7 +179,7 @@ title.Mage=Mage
 title.Maid=Maid
 title.Page=Page
 title.Prince=Prince
-title.Rouge=Rouge
+title.Rogue=Rogue
 title.Seer=Seer
 title.Sylph=Sylph
 title.Thief=Thief

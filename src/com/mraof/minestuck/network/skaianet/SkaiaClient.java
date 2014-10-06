@@ -135,7 +135,6 @@ public class SkaiaClient {
 			if(c.clientName.equals(data.player) || c.serverName.equals(data.player))
 				i.remove();
 		}
-		Debug.print(data.connections);
 		connections.addAll(data.connections);
 		
 		GuiScreen gui = Minecraft.getMinecraft().currentScreen;

@@ -25,6 +25,8 @@ import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.util.TitleHelper;
 import com.mraof.minestuck.util.UpdateChecker;
 import com.mraof.minestuck.util.UsernameHandler;
+import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
+
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent;
@@ -73,11 +75,16 @@ public class MinestuckPlayerTracker {
 	@SubscribeEvent
 	public void onConnectionCreated(FMLNetworkEvent.ServerConnectionFromClientEvent event) {
 		MinestuckPacket packet = LandRegisterPacket.createPacket();
+		packet.generatePacket(MinestuckSaveHandler.lands.toArray());
 		Debug.printf("Player logged in, sending land packet.");
 		
 		Minestuck.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.DISPATCHER);
 		Minestuck.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(event.manager.channel().attr(NetworkDispatcher.FML_DISPATCHER).get());
 		Minestuck.channels.get(Side.SERVER).writeOutbound(packet);
+
+		MinestuckPacket infoPacket = MinestuckPacket.makePacket(Type.INFO);
+		
+		Minestuck.channels.get(Side.SERVER).writeOutbound(infoPacket);
 	}
 	
 	@SubscribeEvent
@@ -97,7 +104,7 @@ public class MinestuckPlayerTracker {
 
 		//The player
 		if(!player.equals(".client") || UsernameHandler.host != null) {
-			EntityPlayerMP playerMP = MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(UsernameHandler.decode(player));
+			EntityPlayerMP playerMP = MinecraftServer.getServer().getConfigurationManager().func_152612_a(UsernameHandler.decode(player));
 			if(playerMP != null) {
 				MinestuckPacket packet = MinestuckPacket.makePacket(Type.GRISTCACHE, gristValues, false);
 				MinestuckChannelHandler.sendToPlayer(packet, playerMP);
@@ -128,6 +135,7 @@ public class MinestuckPlayerTracker {
 	public static void updateLands(EntityPlayer player)
 	{
 		MinestuckPacket packet = LandRegisterPacket.createPacket();
+		packet.generatePacket(MinestuckSaveHandler.lands.toArray());
 		Debug.printf("Sending land packets to %s.", player == null ? "all players" : player.getCommandSenderName());
 		if(player == null)
 			MinestuckChannelHandler.sendToAllPlayers(packet);

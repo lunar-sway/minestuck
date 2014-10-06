@@ -18,9 +18,9 @@ import com.mraof.minestuck.tileentity.TileEntityComputer;
  */
 public abstract class ComputerProgram {
 	
-	private static HashMap<Integer, Class<? extends ComputerProgram>> programs = new HashMap();
+	private static HashMap<Integer, Class<? extends ComputerProgram>> programs = new HashMap<Integer, Class<? extends ComputerProgram>>();
 	
-	private static HashMap<Integer, ItemStack> disks = new HashMap();
+	private static HashMap<Integer, ItemStack> disks = new HashMap<Integer, ItemStack>();
 	
 	/**
 	 * Registers a program class to the list.
@@ -83,12 +83,12 @@ public abstract class ComputerProgram {
 	 * (which you probably won't unless the previous program had a similar layout.)
 	 * @param prevProgram The previous program, or null if the gui was just created.
 	 */
-	public void onInitGui(GuiComputer gui, List buttonList, ComputerProgram prevProgram) {}
+	public void onInitGui(GuiComputer gui, List<GuiButton> buttonList, ComputerProgram prevProgram) {}
 	
 	/**
 	 * Called when some related data have changed that may affect the program.
 	 */
-	public void onUpdateGui(GuiComputer gui, List buttonList) {}
+	public void onUpdateGui(GuiComputer gui, List<GuiButton> buttonList) {}
 	
 	/**
 	 * Called when something breaks the computer block. (or if the disk is ejected when that feature is added)

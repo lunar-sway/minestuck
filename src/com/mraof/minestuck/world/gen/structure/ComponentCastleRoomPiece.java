@@ -19,8 +19,10 @@ public class ComponentCastleRoomPiece extends ComponentCastlePiece
 		this.boundingBox = structureBoundingBox;
 		this.componentType = 2;
 	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public void buildComponent(StructureComponent par1StructureComponent, List components, Random random) 
+	public void buildComponent(StructureComponent par1StructureComponent, List components, Random random)
 	{
 		if(this.startPiece.bottom)
 		{
@@ -28,7 +30,8 @@ public class ComponentCastleRoomPiece extends ComponentCastlePiece
 			this.getNextComponentNormal(startPiece, components, random, 0, -8, 0, true);
 		}
 	}
-	public static ComponentCastleRoomPiece createRandomRoom(List par0List, ComponentCastleStartPiece startPiece, int x, int y, int z, int par5, int par6, Random random)
+
+	public static ComponentCastleRoomPiece createRandomRoom(List<?> par0List, ComponentCastleStartPiece startPiece, int x, int y, int z, int par5, int par6, Random random)
 	{
 		ComponentCastleRoomPiece piece = null;
 		switch(random.nextInt(30))
@@ -49,7 +52,8 @@ public class ComponentCastleRoomPiece extends ComponentCastlePiece
 			System.out.printf("%d %d %d %d, ", x, y, z, par6);
 		return piece;
 	}
-	public static ComponentCastleRoomPiece findValidPlacement(List par0List, ComponentCastleStartPiece startPiece, int par2, int par3, int par4, int par5, int par6)
+
+	public static ComponentCastleRoomPiece findValidPlacement(List<?> par0List, ComponentCastleStartPiece startPiece, int par2, int par3, int par4, int par5, int par6)
 	{
 		StructureBoundingBox structureboundingbox = new StructureBoundingBox(par2 + 0, par3 + 0, par4 + 0, par2 + 8 + 0, 0 + 8 + 0, par4 + 8 + 0);
 		return new ComponentCastleRoomPiece(par6, startPiece, structureboundingbox);

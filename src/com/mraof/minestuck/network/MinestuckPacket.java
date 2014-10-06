@@ -26,7 +26,9 @@ public abstract class MinestuckPacket
 		SBURB_INFO(SkaianetInfoPacket.class),
 		CLIENT_EDIT(ClientEditPacket.class),
 		SERVER_EDIT(ServerEditPacket.class),
-		CONFIG(MinestuckConfigPacket.class);
+		CONFIG(MinestuckConfigPacket.class), 
+		INFO(MinestuckInfoPacket.class),
+		TRANSPORTALIZER(TransportalizerPacket.class);
 		
 		Class<? extends MinestuckPacket> packetType;
 		private Type(Class<? extends MinestuckPacket> packetClass)
@@ -77,18 +79,6 @@ public abstract class MinestuckPacket
 	void writeString(ByteBuf data, String str) {
 		for(int i = 0; i < str.length(); i++)
 			data.writeChar(str.charAt(i));
-	}
-	
-	static void analyze() {
-		ByteBuf buf = Unpooled.buffer();
-		String s = ".client";
-		for(int i = 0; i < s.length(); i++) {
-			char prev = s.charAt(i);
-			Debug.print("Pre:"+prev+","+(short)prev);
-			buf.writeChar(prev);
-			char post = buf.readChar();
-			Debug.print("Post:"+post+","+(short)post);
-		}
 	}
 	
     public abstract MinestuckPacket generatePacket(Object... data);

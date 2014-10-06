@@ -68,4 +68,10 @@ public class TileEntityGatePortal extends TileEntity implements ITeleporter
 		}
 	}
 
+	@Override
+	public boolean canUpdate()
+	{
+		return false;
+	}
+
 }

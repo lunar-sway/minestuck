@@ -19,7 +19,7 @@ public class ComponentCastleStartPiece extends ComponentCastlePiece
     protected boolean isBlack, bottom;
     public int averageGroundLevel = -1;
     public int castleWidth, castleLength, x, z, totalPieces;
-    public ArrayList pendingPieces = new ArrayList();
+    public ArrayList<ComponentCastlePiece> pendingPieces = new ArrayList<ComponentCastlePiece>();
     
     public ComponentCastleStartPiece() {}
 	protected ComponentCastleStartPiece(int par1, int x, int z,  boolean isBlack) 
@@ -28,12 +28,15 @@ public class ComponentCastleStartPiece extends ComponentCastlePiece
         this.boundingBox = new StructureBoundingBox(x, 0, z, x, 74, z);
         this.x = x;
         this.z = z;
-		if(pendingPieces == null)pendingPieces = new ArrayList();
+		if(pendingPieces == null)pendingPieces = new ArrayList<ComponentCastlePiece>();
  		this.isBlack = isBlack;
  		this.bottom = true;
 	}
+
+	@SuppressWarnings("unchecked")
 	@Override
-	public void buildComponent(StructureComponent structureComponent, List components, Random random) 
+	public void buildComponent(StructureComponent structureComponent,
+			@SuppressWarnings("rawtypes") List components, Random random)
 	{
 		this.castleWidth = (random.nextInt(12) + 4) * 16;
 		this.castleLength = (random.nextInt(24) + 8) * 16;

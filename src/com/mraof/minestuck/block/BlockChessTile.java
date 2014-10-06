@@ -25,7 +25,7 @@ public class BlockChessTile extends Block
 	{
 		super(Material.ground);
 		setHardness(0.5F);
-		
+
 		setBlockName("chessTile");
 		this.setCreativeTab(Minestuck.tabMinestuck);
 	}
@@ -39,7 +39,7 @@ public class BlockChessTile extends Block
 	{
 		return metadata;
 	}
-	
+
 	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@SideOnly(Side.CLIENT)
@@ -48,24 +48,24 @@ public class BlockChessTile extends Block
 		for(int i = 0; i < iconNames.length; i++)
 			subItems.add(new ItemStack(this, 1, i));
 	}
-	
+
 	@Override
 	public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z) 
 	{
 		return true;
 	}
-    @SideOnly(Side.CLIENT)
+	@SideOnly(Side.CLIENT)
 
-    /**
-     * When this method is called, your block should register all the icons it needs with the given IconRegister. This
-     * is the only chance you get to register icons.
-     */
-    @Override
-    public void registerBlockIcons(IIconRegister par1IconRegister)
-    {
-        this.textures = new IIcon[iconNames.length];
+	/**
+	 * When this method is called, your block should register all the icons it needs with the given IconRegister. This
+	 * is the only chance you get to register icons.
+	 */
+	@Override
+	public void registerBlockIcons(IIconRegister par1IconRegister)
+	{
+		this.textures = new IIcon[iconNames.length];
 
-        for (int i = 0; i < this.textures.length; i++)
-            this.textures[i] = par1IconRegister.registerIcon("minestuck:" + iconNames[i]);
-    }
+		for (int i = 0; i < this.textures.length; i++)
+			this.textures[i] = par1IconRegister.registerIcon("minestuck:" + iconNames[i]);
+	}
 }

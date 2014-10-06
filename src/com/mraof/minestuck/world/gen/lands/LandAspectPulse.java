@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.Vec3;
 
 import com.mraof.minestuck.Minestuck;
 
@@ -11,6 +12,7 @@ public class LandAspectPulse extends LandAspect
 {
 	BlockWithMetadata[] upperBlocks = {new BlockWithMetadata(Blocks.netherrack)};
 	BlockWithMetadata[] surfaceBlocks = {new BlockWithMetadata(Blocks.obsidian)};
+	static Vec3 skyColor = Vec3.createVectorHelper(0.36D, 0.01D, 0.01D);
 	
 	@Override
 	public BlockWithMetadata[] getSurfaceBlocks() 
@@ -62,4 +64,9 @@ public class LandAspectPulse extends LandAspect
 		return 0;
 	}
 
+	@Override
+	public Vec3 getFogColor() 
+	{
+		return skyColor;
+	}
 }
