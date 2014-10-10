@@ -5,7 +5,6 @@ import net.minecraft.client.settings.KeyBinding;
 
 import com.mraof.minestuck.client.gui.playerStats.GuiGristCache;
 import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
-import com.mraof.minestuck.client.gui.playerStats.TempGuiPlayerStats;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 
 import cpw.mods.fml.client.registry.ClientRegistry;

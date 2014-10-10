@@ -6,7 +6,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.client.gui.playerStats.GuiGristCache;
-import com.mraof.minestuck.client.gui.playerStats.TempGuiPlayerStats;
 import com.mraof.minestuck.inventory.ContainerMachine;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
@@ -20,7 +19,7 @@ public class GuiHandler implements IGuiHandler
 	{
 		MACHINE,
 		COMPUTER,
-		GRISTCACHE,
+//		GRISTCACHE,
 		TRANSPORTALIZER
 	}
 	@Override
@@ -44,8 +43,8 @@ public class GuiHandler implements IGuiHandler
 		if(tileEntity instanceof TileEntityComputer && id == GuiId.COMPUTER.ordinal()){
 			return new GuiComputer(Minecraft.getMinecraft(),(TileEntityComputer) tileEntity);
 		}
-		if(id == GuiId.GRISTCACHE.ordinal())
-			return new GuiGristCache();
+//		if(id == GuiId.GRISTCACHE.ordinal())
+//			return new GuiGristCache();
 		if(id == GuiId.TRANSPORTALIZER.ordinal() && tileEntity instanceof TileEntityTransportalizer)
 			return new GuiTransportalizer(Minecraft.getMinecraft(), (TileEntityTransportalizer) tileEntity);
 		return null;

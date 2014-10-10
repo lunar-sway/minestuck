@@ -98,8 +98,4 @@ public class GuiGristCache extends GuiPlayerStats {
 		tessellator.draw();
 	}
 	
-	protected boolean isPointInRegion(int regionX, int regionY, int regionWidth, int regionHeight, int pointX, int pointY) {
-		return pointX >= regionX && pointX < regionX + regionWidth && pointY >= regionY && pointY < regionY + regionHeight;
-	}
-	
 }

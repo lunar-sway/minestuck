@@ -7,7 +7,6 @@ import net.minecraftforge.common.MinecraftForge;
 
 import com.mraof.minestuck.CommonProxy;
 import com.mraof.minestuck.client.event.MinestuckClientEventHandler;
-import com.mraof.minestuck.client.gui.playerStats.TempGuiPlayerStats;
 import com.mraof.minestuck.client.model.ModelBasilisk;
 import com.mraof.minestuck.client.model.ModelBishop;
 import com.mraof.minestuck.client.model.ModelGiclops;
@@ -79,7 +78,6 @@ public class ClientProxy extends CommonProxy
 	@SideOnly(Side.CLIENT)
 	public static void registerSided() {
 		
-		MinecraftForge.EVENT_BUS.register(new TempGuiPlayerStats(Minecraft.getMinecraft()));
 		MinecraftForge.EVENT_BUS.register(new MinestuckClientEventHandler());
 		FMLCommonHandler.instance().bus().register(new MinestuckKeyHandler());
 	}
