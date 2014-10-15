@@ -140,7 +140,7 @@ itemGroup.tabMinestuck=Minestuck
 
 key.categories.minestuck=Minestuck
 key.exitEdit=Exit Edit Mode
-key.gristCache=View Grist Cache
+key.statsGui=View General Minestuck Gui
 
 strife.sword.name=Bladekind
 strife.bow.name=Bowkind

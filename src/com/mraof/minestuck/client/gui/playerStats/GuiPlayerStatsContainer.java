@@ -32,6 +32,7 @@ public abstract class GuiPlayerStatsContainer extends GuiContainer {
 		super.initGui();
 		xOffset = (width-guiWidth)/2;
 		yOffset = (height-guiHeight+tabHeight-tabOverlap)/2;
+		this.guiTop = yOffset;
 	}
 	
 	protected void drawTabs() {
@@ -91,7 +92,6 @@ public abstract class GuiPlayerStatsContainer extends GuiContainer {
 	}
 	
 	protected void drawTooltip(String text,int par2, int par3) {
-		Debug.print(par2+","+par3);
 		String[] list = {text};
 		
 		for (int k = 0; k < list.length; ++k) {

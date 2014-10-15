@@ -26,7 +26,7 @@ public abstract class GuiPlayerStats extends GuiScreen {
 	
 	static final ResourceLocation icons = new ResourceLocation("minestuck", "textures/gui/icons.png");
 	
-	static final Class<? extends GuiScreen>[] normalGuis = new Class[]{GuiCaptchaDeck.class, GuiStrifeSpecibus.class, GuiGristCache.class};
+	static final Class<? extends GuiScreen>[] normalGuis = new Class[]{GuiCaptchaDeck.class, GuiStrifeSpecibus.class, GuiGristCache.class, GuiInventoryEditmode.class};
 	static final Class<? extends GuiScreen>[] editmodeGuis = new Class[]{GuiGristCache.class};
 	static final String[] normalGuiNames = new String[]{"gui.captchaDeck.name","gui.strifeSpecibus.name","gui.gristCache.name","gui.echeladder.name"};
 	static final String[] editmodeGuiNames = new String[]{"gui.deployList.name","gui.blockList.name","gui.gristCache.name"};

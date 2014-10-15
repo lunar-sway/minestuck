@@ -19,7 +19,7 @@ public class MinestuckKeyHandler {
 	boolean editKeyPressed = false;
 	
 	public MinestuckKeyHandler() {
-		statKey = new KeyBinding("key.gristCache", 34, "key.categories.minestuck");
+		statKey = new KeyBinding("key.statsGui", 34, "key.categories.minestuck");
 		ClientRegistry.registerKeyBinding(statKey);
 		editKey = new KeyBinding("key.exitEdit", 45, "key.categories.minestuck");
 		ClientRegistry.registerKeyBinding(editKey);

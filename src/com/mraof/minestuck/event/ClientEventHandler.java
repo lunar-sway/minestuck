@@ -1,6 +1,7 @@
 package com.mraof.minestuck.event;
 
 import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
+import com.mraof.minestuck.inventory.ContainerInvEditmode;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
@@ -14,6 +15,7 @@ public class ClientEventHandler {
 	public void onConnectedToServer(ClientConnectedToServerEvent event) {
 		GuiPlayerStats.normalTab = 3;
 		GuiPlayerStats.editmodeTab = 0;
+		ContainerInvEditmode.scrollIndex = 0;
 	}
 	
 }
