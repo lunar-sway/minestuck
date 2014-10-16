@@ -61,11 +61,19 @@ public class MinestuckPlayerData {
 		{
 			NBTTagCompound dataCompound = new NBTTagCompound();
 			dataCompound.setString("username", entry.getKey());
+			
 			int[] grist = new int[GristType.allGrists];
 			for(GristType type : GristType.values())
 				grist[type.ordinal()] = entry.getValue().getGrist(type);
 			dataCompound.setIntArray("grist", grist);
 			list.appendTag(dataCompound);
+			
+			if(titles.containsKey(entry.getKey()))
+			{
+				Title title = titles.get(entry.getKey());
+				dataCompound.setByte("titleClass", (byte) title.getHeroClass().ordinal());
+				dataCompound.setByte("titleAspect", (byte) title.getHeroAspect().ordinal());
+			}
 		}
 		nbt.setTag("playerData", list);
 	}
