@@ -281,13 +281,15 @@ public class Minestuck
 		forceMaxSize = config.get("General", "forceMaxSize", false).getBoolean(false);
 		escapeFailureMode = config.get("General", "escapeFailureMode", 0).getInt();
 		giveItems = config.get("General", "giveItems", false, "Setting this to true replaces editmode with the old Give Items.").getBoolean(false);
-		//Default will be set to false when everything with edit mode is fixed
+		
 		if(escapeFailureMode > 2 || escapeFailureMode < 0)
 			escapeFailureMode = 0;
-		if(event.getSide().isClient()) {	//Client sided config values
+		if(event.getSide().isClient())	//Client sided config values
+		{
 			toolTipEnabled = config.get("General", "editModeToolTip", false).getBoolean(false);
 			specialCardRenderer = config.get("General", "specialCardRenderer", false).getBoolean(false);
-			if(Minestuck.specialCardRenderer && !GLContext.getCapabilities().GL_EXT_framebuffer_object) {
+			if(Minestuck.specialCardRenderer && !GLContext.getCapabilities().GL_EXT_framebuffer_object)
+			{
 				specialCardRenderer = false;
 				FMLLog.warning("[Minestuck] The FBO extension is not available and is required for the advanced rendering of captchalouge cards.");
 			}
