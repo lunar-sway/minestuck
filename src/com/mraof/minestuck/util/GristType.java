@@ -28,7 +28,7 @@ public enum GristType {
 	final String name;
 	final float rarity;
 	
-	public static final int allGrists = 21;
+	public static final int allGrists = values().length;
 	
 	GristType(String name, float rarity) {
 		this.name = name;

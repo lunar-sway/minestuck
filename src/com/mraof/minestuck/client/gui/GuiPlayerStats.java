@@ -14,17 +14,16 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import com.mraof.minestuck.editmode.ClientEditHandler;
-import com.mraof.minestuck.util.GristStorage;
+import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.Title;
-import com.mraof.minestuck.util.TitleStorage;
 import com.mraof.minestuck.util.UsernameHandler;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class GuiGristCache extends GuiScreen
+public class GuiPlayerStats extends GuiScreen
 {
 
 	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/GristCache.png");
@@ -51,7 +50,7 @@ public class GuiGristCache extends GuiScreen
 	private String titleMessage = "";
 
 
-	public GuiGristCache(Minecraft mc)
+	public GuiPlayerStats(Minecraft mc)
 	{
 		super();
 
@@ -63,10 +62,11 @@ public class GuiGristCache extends GuiScreen
 	{
 		super.drawScreen(xcor, ycor, par3);
 		this.drawDefaultBackground();
-
-		if (title == null)
-			title = TitleStorage.title;	
-
+		
+		if (title == null) {
+			title = MinestuckPlayerData.title;
+		}
+		
 		if (titleMessage.isEmpty())
 			if(ClientEditHandler.isActive())
 				titleMessage = UsernameHandler.decode(ClientEditHandler.client).toUpperCase();
@@ -104,8 +104,8 @@ public class GuiGristCache extends GuiScreen
 			}
 
 			this.drawGristIcon(gristXOffset, gristYOffset, GristType.values()[gristId].getName());
-			fontRenderer.drawString(Integer.toString(GristStorage.getClientGrist().getGrist(GristType.values()[gristId])),(this.width / 2)-(guiWidth / 2) + gristCountX + (gristCountXOffset * row - row), yOffset + gristCountY + (gristCountYOffset * column - column), 0xddddee);
-
+			fontRenderer.drawString(Integer.toString(MinestuckPlayerData.getClientGrist().getGrist(GristType.values()[gristId])),(this.width / 2)-(guiWidth / 2) + gristCountX + (gristCountXOffset * row - row), yOffset + gristCountY + (gristCountYOffset * column - column), 0xddddee);
+			
 
 
 		}

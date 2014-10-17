@@ -12,8 +12,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.world.WorldEvent;
 
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
-import com.mraof.minestuck.util.GristStorage;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
@@ -37,9 +37,9 @@ public class MinestuckSaveHandler
 			TileEntityTransportalizer.saveTransportalizers(nbt);
 
 			SkaianetHandler.saveData(nbt);
-
-			GristStorage.writeToNBT(nbt);
-
+			
+			MinestuckPlayerData.writeToNBT(nbt);
+			
 			try {
 				CompressedStreamTools.writeCompressed(nbt, new FileOutputStream(dataFile));
 			} catch(IOException e) {

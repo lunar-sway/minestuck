@@ -37,7 +37,7 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.GristStorage;
+import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
@@ -227,7 +227,7 @@ public class ServerEditHandler
 					else {
 						GristSet cost = Minestuck.hardMode && data.connection.givenItems()[DeployList.getOrdinal(stack)+1]
 								?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
-						if(GristHelper.canAfford(GristStorage.getGristSet(data.connection.getClientName()), cost)) {
+						if(GristHelper.canAfford(MinestuckPlayerData.getGristSet(data.connection.getClientName()), cost)) {
 							GristHelper.decrease(data.connection.getClientName(), cost);
 							MinestuckPlayerTracker.updateGristCache(data.connection.getClientName());
 							data.connection.givenItems()[DeployList.getOrdinal(stack)+1] = true;
@@ -274,7 +274,7 @@ public class ServerEditHandler
 				if(DeployList.containsItemStack(stack)) {
 					GristSet cost = Minestuck.hardMode && data.connection.givenItems()[DeployList.getOrdinal(stack)+1]
 							?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
-					if(!GristHelper.canAfford(GristStorage.getGristSet(data.connection.getClientName()), cost)) {
+					if(!GristHelper.canAfford(MinestuckPlayerData.getGristSet(data.connection.getClientName()), cost)) {
 						event.setCanceled(true);
 					}
 				} else if(!(stack.getItem() instanceof ItemBlock) || !GristHelper.canAfford(data.connection.getClientName(), stack)) {

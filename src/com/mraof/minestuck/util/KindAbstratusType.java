@@ -23,6 +23,10 @@ public class KindAbstratusType {
 		return this;
 	}
 	
+	public KindAbstratusType addItemId(Item item) {
+		items.add(new ItemIdType(item));
+		return this;
+	}
 	
 	@SideOnly(Side.CLIENT)
 	public String getDisplayName() {
@@ -56,6 +60,19 @@ public class KindAbstratusType {
 		
 		boolean partOf(ItemStack item) {
 			return this.itemClass.isInstance(item.getItem().getClass());
+		}
+		
+	}
+	
+	private static class ItemIdType extends ItemType {
+		final String itemId;
+		
+		ItemIdType(Item item) {
+			itemId = Item.itemRegistry.getNameForObject(item);
+		}
+		
+		boolean partOf(ItemStack item) {
+			return this.itemId == Item.itemRegistry.getNameForObject(item.getItem());
 		}
 		
 	}

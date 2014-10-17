@@ -32,7 +32,7 @@ import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.GristStorage;
+import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
@@ -84,7 +84,7 @@ public class ClientEditHandler {
 	}
 	
 	public void addToolTip(EntityPlayer player, boolean[] givenItems) {
-		GristSet have = GristStorage.getClientGrist();
+		GristSet have = MinestuckPlayerData.getClientGrist();
 		for(int i = 0; i < player.inventory.mainInventory.length; i++) {
 			ItemStack stack = player.inventory.mainInventory[i];
 			if(stack == null)
@@ -146,7 +146,7 @@ public class ClientEditHandler {
 			if(ordinal > 0)
 				if(stack.getItem() instanceof ItemBlock)
 					event.setCanceled(true);
-				else if(GristHelper.canAfford(GristStorage.getClientGrist(), Minestuck.clientHardMode&&givenItems[ordinal]
+				else if(GristHelper.canAfford(MinestuckPlayerData.getClientGrist(), Minestuck.clientHardMode&&givenItems[ordinal]
 						?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack)))
 					givenItems[ordinal] = true;
 			else if(stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack).getItem() == Minestuck.cruxiteArtifact
@@ -183,14 +183,14 @@ public class ClientEditHandler {
 						cost = DeployList.getSecondaryCost(stack);
 					else cost = DeployList.getPrimaryCost(stack);
 				else cost = GristRegistry.getGristConversion(stack);
-				if(!GristHelper.canAfford(GristStorage.getClientGrist(), cost))
+				if(!GristHelper.canAfford(MinestuckPlayerData.getClientGrist(), cost))
 					event.setCanceled(true);
 				if(event.useItem == Result.DEFAULT)
 					event.useItem = Result.ALLOW;
 			} else if(event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) {
 				Block block = event.entity.worldObj.getBlock(event.x, event.y, event.z);
 				if(block.getBlockHardness(event.entity.worldObj, event.x, event.y, event.z) < 0
-						|| GristStorage.getClientGrist().getGrist(GristType.Build) <= 0)
+						|| MinestuckPlayerData.getClientGrist().getGrist(GristType.Build) <= 0)
 					event.setCanceled(true);
 			} else if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR)
 				event.setCanceled(true);

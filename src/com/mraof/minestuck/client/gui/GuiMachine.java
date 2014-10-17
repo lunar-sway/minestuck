@@ -23,7 +23,7 @@ import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.GristStorage;
+import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.GristType;
 
 public class GuiMachine extends GuiContainer {
@@ -124,7 +124,7 @@ protected void drawGuiContainerForegroundLayer(int param1, int param2) {
 					Map.Entry<Integer, Integer> pairs = it.next();
 				int type = pairs.getKey();
 				int need = pairs.getValue();
-				int have = GristStorage.getClientGrist().getGrist(GristType.values()[type]);
+				int have = MinestuckPlayerData.getClientGrist().getGrist(GristType.values()[type]);
 				
 				int row = place % 3;
 				int col = place / 3;

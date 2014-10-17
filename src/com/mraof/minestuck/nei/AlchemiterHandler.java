@@ -20,7 +20,7 @@ import codechicken.nei.recipe.TemplateRecipeHandler;
 
 import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.GristStorage;
+import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.GristType;
 
 public class AlchemiterHandler extends TemplateRecipeHandler {
@@ -108,7 +108,7 @@ public class AlchemiterHandler extends TemplateRecipeHandler {
 				Map.Entry<Integer, Integer> pairs = it.next();
 				int type = (Integer) pairs.getKey();
 				int need = (Integer) pairs.getValue();
-				int have = GristStorage.getClientGrist().getGrist(GristType.values()[type]);
+				int have = MinestuckPlayerData.getClientGrist().getGrist(GristType.values()[type]);
 				
 				int row = place % 3;
 				int col = place / 3;

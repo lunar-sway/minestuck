@@ -17,7 +17,7 @@ import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.GristStorage;
+import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.util.TitleHelper;
@@ -49,7 +49,7 @@ public class MinestuckPlayerTracker {
 		
 		SkaianetHandler.playerConnected(player.getCommandSenderName());
 		
-		if(GristStorage.getGristSet(UsernameHandler.encode(player.getCommandSenderName())) == null) {
+		if(MinestuckPlayerData.getGristSet(UsernameHandler.encode(player.getCommandSenderName())) == null) {
 			Debug.printf("Grist set is null for player %s.", player.getCommandSenderName());
 			if(player.getEntityData().hasKey("Grist")) {	//Load old grist format
 				NBTTagCompound nbt = player.getEntityData().getCompoundTag("Grist");
@@ -59,9 +59,9 @@ public class MinestuckPlayerTracker {
 				if(set.isEmpty())
 					set.addGrist(GristType.Build, 20);
 
-				GristStorage.setGrist(UsernameHandler.encode(player.getCommandSenderName()), set);
+				MinestuckPlayerData.setGrist(UsernameHandler.encode(player.getCommandSenderName()), set);
 				player.getEntityData().removeTag("Grist");
-			} else GristStorage.setGrist(UsernameHandler.encode(player.getCommandSenderName()), new GristSet(GristType.Build, 20));
+			} else MinestuckPlayerData.setGrist(UsernameHandler.encode(player.getCommandSenderName()), new GristSet(GristType.Build, 20));
 		}
 
 		updateGristCache(UsernameHandler.encode(player.getCommandSenderName()));
@@ -120,18 +120,15 @@ public class MinestuckPlayerTracker {
 
 	public void updateTitle(EntityPlayer player) {
 		Title newTitle;
-		if (!player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).hasKey("Class") || !player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).hasKey("Aspect")) {
+		String username = UsernameHandler.encode(player.getCommandSenderName());
+		if (MinestuckPlayerData.getTitle(username) == null) {
 			newTitle = TitleHelper.randomTitle();
+			MinestuckPlayerData.setTitle(username, newTitle);
 		} else {
-			newTitle = new Title(TitleHelper.getClassFromInt(((EntityPlayer)player).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Class")),
-					TitleHelper.getAspectFromInt(((EntityPlayer)player).getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Aspect")));
+			newTitle = MinestuckPlayerData.getTitle(username);
 		}
 		MinestuckPacket packet = MinestuckPacket.makePacket(Type.TITLE, newTitle.getHeroClass(), newTitle.getHeroAspect());
 		MinestuckChannelHandler.sendToPlayer(packet, player);
-		if(player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).hasNoTags())
-			player.getEntityData().setTag(EntityPlayer.PERSISTED_NBT_TAG, new NBTTagCompound());
-		player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Class", TitleHelper.getIntFromClass(newTitle.getHeroClass()));
-		player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Aspect", TitleHelper.getIntFromAspect(newTitle.getHeroAspect()));
 	}
 	public static void updateLands(EntityPlayer player)
 	{

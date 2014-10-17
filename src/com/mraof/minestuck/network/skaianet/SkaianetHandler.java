@@ -26,7 +26,7 @@ import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.MinestuckStatsHandler;
+import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.UsernameHandler;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
@@ -355,7 +355,7 @@ public class SkaianetHandler {
 		String playerEnc = UsernameHandler.encode(player);
 		for(SburbConnection c : connections)
 			if(c.isActive && (c.getClientName().equals(playerEnc) || c.getServerName().equals(playerEnc))) {
-				playerMP.triggerAchievement(MinestuckStatsHandler.setupConnection);
+				playerMP.triggerAchievement(MinestuckAchievementHandler.setupConnection);
 				break;
 			}
 		for(String s : str)

@@ -86,14 +86,14 @@ public class GristHelper {
 	 * Uses the encoded version of the username!
 	 */
 	public static int getGrist(String player, GristType type) {
-		return GristStorage.getGristSet(player).getGrist(type);
+		return MinestuckPlayerData.getGristSet(player).getGrist(type);
 	}
 	
 	/**
 	 * Uses the encoded version of the username!
 	 */
 	public static boolean canAfford(String player, ItemStack stack) {
-		return canAfford(GristStorage.getGristSet(player), GristRegistry.getGristConversion(stack));
+		return canAfford(MinestuckPlayerData.getGristSet(player), GristRegistry.getGristConversion(stack));
 	}
 	
 	public static boolean canAfford(GristSet base, GristSet cost) {
@@ -130,7 +130,7 @@ public class GristHelper {
 	}
 	
 	public static void setGrist(String player, GristType type, int i) {
-		GristStorage.getGristSet(player).setGrist(type, i);
+		MinestuckPlayerData.getGristSet(player).setGrist(type, i);
 	}
 	
 	/**

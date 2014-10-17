@@ -43,10 +43,10 @@ public class GuiHandler implements IGuiHandler
 			return new GuiComputer(Minecraft.getMinecraft(),(TileEntityComputer) tileEntity);
 		}
 		if(id == GuiId.GRISTCACHE.ordinal())
-			return new GuiGristCache(Minecraft.getMinecraft());
+			return new GuiPlayerStats(Minecraft.getMinecraft());
 		if(id == GuiId.TRANSPORTALIZER.ordinal() && tileEntity instanceof TileEntityTransportalizer)
 			return new GuiTransportalizer(Minecraft.getMinecraft(), (TileEntityTransportalizer) tileEntity);
-		return null;
+return null;
 
 	}
 

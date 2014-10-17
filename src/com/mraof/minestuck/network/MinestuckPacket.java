@@ -81,18 +81,6 @@ public abstract class MinestuckPacket
 			data.writeChar(str.charAt(i));
 	}
 	
-	static void analyze() {
-		ByteBuf buf = Unpooled.buffer();
-		String s = ".client";
-		for(int i = 0; i < s.length(); i++) {
-			char prev = s.charAt(i);
-			Debug.print("Pre:"+prev+","+(short)prev);
-			buf.writeChar(prev);
-			char post = buf.readChar();
-			Debug.print("Post:"+post+","+(short)post);
-		}
-	}
-	
     public abstract MinestuckPacket generatePacket(Object... data);
 
     public abstract MinestuckPacket consumePacket(ByteBuf data);
