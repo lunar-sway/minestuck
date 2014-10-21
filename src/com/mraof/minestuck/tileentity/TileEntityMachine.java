@@ -223,30 +223,30 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 				ItemStack outputItem = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(this.inv[1],true), AlchemyRecipeHandler.getDecodedItem(this.inv[2],true),this.mode);
 				if(inv[3].hasTagCompound() && inv[3].getTagCompound().getBoolean("punched"))
 					outputItem = CombinationRegistry.getCombination(outputItem, AlchemyRecipeHandler.getDecodedItem(inv[3]), CombinationRegistry.MODE_OR);
-				if(inv[3].hasTagCompound() && inv[3].getTagCompound().hasKey("displayID")) {
-					outputItem.getTagCompound().setString("displayID", inv[3].getTagCompound().getString("displayID"));
-					outputItem.getTagCompound().setInteger("displayMeta", inv[3].getTagCompound().getInteger("displayMeta"));
-				}
+				if(outputItem == null)
+					return false;
+				outputItem = AlchemyRecipeHandler.createCard(outputItem, true);
 				if(outputItem != null)
-					return (this.inv[0] == null || inv[0].stackSize < 16 && outputItem.isItemEqual(AlchemyRecipeHandler.getDecodedItem(inv[0])));
+					return (this.inv[0] == null || inv[0].stackSize < 16 && outputItem.isItemEqual(inv[0]) && ItemStack.areItemStackTagsEqual(outputItem, inv[0]));
 			}
 			return false;
-		} else if (this.inv[1] != null || this.inv[2] != null) {	//Register item to card
-			if(inv[3] != null) {
+		} else if (this.inv[1] != null || this.inv[2] != null)	//Register item to card
+		{
+			if(inv[3] != null)
+			{
 				ItemStack input = (inv[1] == null?inv[2]:inv[1]);
 				ItemStack output = (input.getItem().equals(Minestuck.captchaCard)&&input.hasTagCompound()&&input.getTagCompound().getBoolean("punched")
-						?input.copy():AlchemyRecipeHandler.createCard(input, true));
-				if(inv[3].hasTagCompound() && inv[3].getTagCompound().getBoolean("punched")) {
-					output = CombinationRegistry.getCombination(output, AlchemyRecipeHandler.getDecodedItem(inv[3]), CombinationRegistry.MODE_OR);
-					if(inv[3].getTagCompound().hasKey("displayID")) {
-						output.getTagCompound().setString("displayID", inv[3].getTagCompound().getString("displayID"));
-						output.getTagCompound().setInteger("displayMeta", inv[3].getTagCompound().getInteger("displayMeta"));
-					} else if(input.getItem().equals(Minestuck.captchaCard)&&input.hasTagCompound()&&input.getTagCompound().getBoolean("punched")) {
-						output.getTagCompound().removeTag("displayID");
-						output.getTagCompound().removeTag("displayMeta");
-					}
-				} else 
-				return (output != null && (inv[0] == null || inv[0].stackSize < 16 && inv[0].isItemEqual(output)));
+						?AlchemyRecipeHandler.getDecodedItem(input):input);
+				if(inv[3].hasTagCompound() && inv[3].getTagCompound().getBoolean("punched"))
+				{
+					output = CombinationRegistry.getCombination(output,
+							AlchemyRecipeHandler.getDecodedItem(inv[3]), CombinationRegistry.MODE_OR);
+					
+				}
+				if(output == null)
+					return false;
+				output = AlchemyRecipeHandler.createCard(output, true);
+				return (inv[0] == null || inv[0].stackSize < 16 && ItemStack.areItemStackTagsEqual(inv[0], output));
 			}
 		} else {
 			return false;
@@ -289,45 +289,36 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			if(inv[0] != null) {
 				decrStackSize(3, 1);
 				if(inv[1] != null && !(inv[1].getItem().equals(Minestuck.captchaCard) && inv[1].hasTagCompound() && inv[1].getTagCompound().getBoolean("punched")))
-					//decrStackSize(1, 1);
+					decrStackSize(1, 1);
 				if(inv[2] != null && !(inv[2].getItem().equals(Minestuck.captchaCard) && inv[2].hasTagCompound() && inv[2].getTagCompound().getBoolean("punched")))
-					//decrStackSize(2, 1);
+					decrStackSize(2, 1);
 				decrStackSize(0, -1);
 				break;
 			}
-			ItemStack outputItem = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(this.inv[1],true),AlchemyRecipeHandler.getDecodedItem(this.inv[2],true),this.mode);
-			//boolean consumeItem = inv[1] == null || inv[2] == null;
 			
-			if (this.inv[1] == null) {
-				outputItem = inv[2];
-			} else if (this.inv[2]==null) {
-				outputItem = inv[1];
-			}
+			ItemStack inv1 = (inv[1] != null && inv[1].hasTagCompound() && inv[1].getTagCompound().hasKey("contentID"))
+					?AlchemyRecipeHandler.getDecodedItem(inv[1]):inv[1];
+			ItemStack inv2 = (inv[2] != null && inv[2].hasTagCompound() && inv[2].getTagCompound().hasKey("contentID"))
+					?AlchemyRecipeHandler.getDecodedItem(inv[2]):inv[2];
 			
+			ItemStack outputItem = CombinationRegistry.getCombination(inv1, inv2, this.mode);
 			
-			if(inv[3].hasTagCompound() && inv[3].getTagCompound().getBoolean("punched")) {	//If you push the data onto a punched card, perform an OR alchemy
+			if (inv1 == null)
+				outputItem = inv2;
+			else if (inv2 == null)
+				outputItem = inv1;
+			
+			if(inv[3].hasTagCompound() && inv[3].getTagCompound().getBoolean("punched"))	//If you push the data onto a punched card, perform an OR alchemy
 				outputItem = CombinationRegistry.getCombination(outputItem, AlchemyRecipeHandler.getDecodedItem(inv[3]), CombinationRegistry.MODE_OR);
-			}
 			
 			//Create card
 			outputItem = AlchemyRecipeHandler.createCard(outputItem, true);
 			
-			if(inv[3].hasTagCompound() && inv[3].getTagCompound().hasKey("displayID")) {
-				outputItem.getTagCompound().setString("displayID", inv[3].getTagCompound().getString("displayID"));
-				outputItem.getTagCompound().setInteger("displayMeta", inv[3].getTagCompound().getInteger("displayMeta"));
-			} else if(inv[1] == null || inv[2] == null) {
-				ItemStack input = inv[1] == null?inv[2]:inv[1];
-				if(!(input.getItem().equals(Minestuck.captchaCard) && input.hasTagCompound() && input.getTagCompound().getBoolean("punched"))) {
-					outputItem.getTagCompound().setString("displayID", Item.itemRegistry.getNameForObject(input.getItem()));
-					outputItem.getTagCompound().setInteger("displayMeta", input.getItemDamage());
-				}
-			}
-			
 			setInventorySlotContents(0,outputItem);
-			if (inv[1] == null || inv[2] == null) {
+			if(!(inv[1] != null && inv[1].hasTagCompound() && inv[1].getTagCompound().hasKey("contentID")))
 				decrStackSize(1, 1);
+			if(!(inv[2] != null && inv[2].hasTagCompound() && inv[2].getTagCompound().hasKey("contentID")))
 				decrStackSize(2, 1);
-			}
 			decrStackSize(3, 1);
 			break;
 		case (2):

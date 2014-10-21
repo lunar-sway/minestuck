@@ -6,6 +6,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.util.FBO;
+import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.Debug;
 
 import cpw.mods.fml.relauncher.Side;
@@ -41,6 +42,7 @@ public class RenderCard implements IItemRenderer
 	public boolean handleRenderType(ItemStack item, ItemRenderType type)
 	{
 		return Minestuck.specialCardRenderer && item.getItem().equals(Minestuck.captchaCard) &&
+				item.hasTagCompound() &&//TEMP
 				(type != ItemRenderType.ENTITY);
 	}
 	
@@ -55,7 +57,9 @@ public class RenderCard implements IItemRenderer
 	public void renderItem(ItemRenderType type, ItemStack card, Object... data)
 	{
 		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
-		ItemStack item = getDisplayItem(card);
+		ItemStack item = AlchemyRecipeHandler.getDecodedItem(card);
+		if(!card.hasTagCompound() || !card.getTagCompound().hasKey("contentID"))
+			item = null;
 		Tessellator t = Tessellator.instance;
 		
 		if(cardBuffer != null && (cardBuffer.height < cardIcon.getIconHeight() || cardBuffer.width < cardIcon.getIconWidth()))
@@ -95,7 +99,6 @@ public class RenderCard implements IItemRenderer
 				glEnable(GL_LIGHTING);
 				if (!ForgeHooksClient.renderInventoryItem((RenderBlocks)data[0], textureManager, item, itemRender.renderWithColor, itemRender.zLevel, 0, 0))
 					itemRender.renderItemIntoGUI(null, textureManager, item, 0, 0, false);
-				glDisable(GL_LIGHTING);
 			}
 		
 		itemBuffer.unbind();
@@ -154,6 +157,7 @@ public class RenderCard implements IItemRenderer
 		
 		glDisable(GL_CULL_FACE);
 		glEnable(GL_ALPHA_TEST);
+		glDisable(GL_LIGHTING);
 		
 		textureManager.bindTexture(TextureMap.locationItemsTexture);
 		renderIcon(0, 0, cardIcon, 16, 16);
@@ -298,19 +302,19 @@ public class RenderCard implements IItemRenderer
 		t.draw();
 	}
 	
-	public static ItemStack getDisplayItem(ItemStack card)
-	{
-		NBTTagCompound nbt = card.getTagCompound();
-		String source = nbt == null?"":nbt.getBoolean("punched")?"display":"content";
-		if(nbt == null || !nbt.hasKey(source+"ID"))
-			return null;
-		else
-		{
-			ItemStack stack = new ItemStack((Item) Item.itemRegistry.getObject(nbt.getString(source+"ID")),1 , nbt.getInteger(source+"Meta"));
-			if(nbt.hasKey(source+"Data"))
-				stack.stackTagCompound = nbt.getCompoundTag(source+"displayData");
-			return stack;
-		}
-	}
+//	public static ItemStack getDisplayItem(ItemStack card)
+//	{
+//		NBTTagCompound nbt = card.getTagCompound();
+//		String source = nbt == null?"":nbt.getBoolean("punched")?"display":"content";
+//		if(nbt == null || !nbt.hasKey(source+"ID"))
+//			return null;
+//		else
+//		{
+//			ItemStack stack = new ItemStack((Item) Item.itemRegistry.getObject(nbt.getString(source+"ID")),1 , nbt.getInteger(source+"Meta"));
+//			if(nbt.hasKey(source+"Data"))
+//				stack.stackTagCompound = nbt.getCompoundTag(source+"displayData");
+//			return stack;
+//		}
+//	}
 	
 }
