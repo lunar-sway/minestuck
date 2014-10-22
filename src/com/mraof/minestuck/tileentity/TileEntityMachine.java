@@ -218,8 +218,10 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		case (0):
 			return (this.inv[1] != null && (this.inv[0] == null || this.inv[0].stackSize < 64));
 		case (1):
-		if (this.inv[1] != null && this.inv[2] != null) {	//&& or || alchemy
-			if(inv[3] != null) {
+		if (this.inv[1] != null && this.inv[2] != null)	//&& or || alchemy
+		{
+			if(inv[3] != null)
+			{
 				ItemStack outputItem = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(this.inv[1],true), AlchemyRecipeHandler.getDecodedItem(this.inv[2],true),this.mode);
 				if(inv[3].hasTagCompound() && inv[3].getTagCompound().getBoolean("punched"))
 					outputItem = CombinationRegistry.getCombination(outputItem, AlchemyRecipeHandler.getDecodedItem(inv[3]), CombinationRegistry.MODE_OR);
@@ -248,7 +250,8 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 				output = AlchemyRecipeHandler.createCard(output, true);
 				return (inv[0] == null || inv[0].stackSize < 16 && ItemStack.areItemStackTagsEqual(inv[0], output));
 			}
-		} else {
+		} else
+		{
 			return false;
 		}
 		case (2):
@@ -286,7 +289,8 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			break;
 		case (1):
 			//Create a new card, using CombinationRegistry
-			if(inv[0] != null) {
+			if(inv[0] != null)
+			{
 				decrStackSize(3, 1);
 				if(inv[1] != null && !(inv[1].getItem().equals(Minestuck.captchaCard) && inv[1].hasTagCompound() && inv[1].getTagCompound().getBoolean("punched")))
 					decrStackSize(1, 1);

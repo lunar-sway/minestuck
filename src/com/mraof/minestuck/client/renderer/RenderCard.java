@@ -15,15 +15,18 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.IItemRenderer;
 
@@ -41,9 +44,9 @@ public class RenderCard implements IItemRenderer
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type)
 	{
-		return Minestuck.specialCardRenderer && item.getItem().equals(Minestuck.captchaCard) &&
-				item.hasTagCompound() &&//TEMP
-				(type != ItemRenderType.ENTITY);
+		return Minestuck.specialCardRenderer && item.getItem().equals(Minestuck.captchaCard)
+				&& item.hasTagCompound()//TEMP used for comparing with the default render method
+				&& (type != ItemRenderType.ENTITY);
 	}
 	
 	@Override
@@ -87,6 +90,10 @@ public class RenderCard implements IItemRenderer
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_ALPHA_TEST);
 		glDisable(GL_CULL_FACE);
+		float brightnessX = OpenGlHelper.lastBrightnessX;
+		float brightnessY = OpenGlHelper.lastBrightnessY;
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
+		RenderHelper.enableGUIStandardItemLighting();
 		
 		if(item != null)
 			if(item.getItem().equals(Minestuck.captchaCard))
@@ -94,7 +101,8 @@ public class RenderCard implements IItemRenderer
 				glDisable(GL_LIGHTING);
 				textureManager.bindTexture(TextureMap.locationItemsTexture);
 				renderIcon(0, 0, item.getIconIndex(), 16, 16);
-			} else
+			}
+			else
 			{
 				glEnable(GL_LIGHTING);
 				if (!ForgeHooksClient.renderInventoryItem((RenderBlocks)data[0], textureManager, item, itemRender.renderWithColor, itemRender.zLevel, 0, 0))
@@ -115,11 +123,14 @@ public class RenderCard implements IItemRenderer
 			Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
 		
 		glBindTexture(GL_TEXTURE_2D, cardBuffer.texId);
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, brightnessX, brightnessY);
+		
 		switch(type)
 		{
 		case EQUIPPED: case EQUIPPED_FIRST_PERSON:
 			
-//			TextureUtil.func_147950_a(false, false);
+//			TextureUtil.func_152777_a(false, false, 1.0F);
+			RenderHelper.enableStandardItemLighting();
  			render3DCard(card);
 //			TextureUtil.func_147945_b();
 			break;
@@ -158,6 +169,9 @@ public class RenderCard implements IItemRenderer
 		glDisable(GL_CULL_FACE);
 		glEnable(GL_ALPHA_TEST);
 		glDisable(GL_LIGHTING);
+		float brightnessX = OpenGlHelper.lastBrightnessX;
+		float brightnessY = OpenGlHelper.lastBrightnessY;
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
 		
 		textureManager.bindTexture(TextureMap.locationItemsTexture);
 		renderIcon(0, 0, cardIcon, 16, 16);
@@ -185,6 +199,8 @@ public class RenderCard implements IItemRenderer
 		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();
 		glMatrixMode(GL_MODELVIEW);
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, brightnessX, brightnessY);
+		glEnable(GL_LIGHTING);
 	}
 	
 	public static void renderIcon(int x, int y, IIcon icon, int width, int height)
