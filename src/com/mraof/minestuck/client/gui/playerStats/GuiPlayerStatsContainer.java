@@ -28,11 +28,18 @@ public abstract class GuiPlayerStatsContainer extends GuiContainer {
 	}
 	
 	@Override
-	public void initGui() {
+	public void initGui()
+	{
 		super.initGui();
 		xOffset = (width-guiWidth)/2;
 		yOffset = (height-guiHeight+tabHeight-tabOverlap)/2;
 		this.guiTop = yOffset;
+	}
+	
+	@Override
+	public boolean doesGuiPauseGame()
+	{
+		return false;
 	}
 	
 	protected void drawTabs() {

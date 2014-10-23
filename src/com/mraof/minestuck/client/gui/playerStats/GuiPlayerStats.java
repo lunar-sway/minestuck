@@ -9,7 +9,12 @@ import static com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats.tabWidth
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.editmode.ClientEditHandler;
+import com.mraof.minestuck.inventory.ContainerHandler;
+import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckPacket;
+import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.util.Debug;
 
 import net.minecraft.client.Minecraft;
@@ -26,8 +31,8 @@ public abstract class GuiPlayerStats extends GuiScreen {
 	
 	static final ResourceLocation icons = new ResourceLocation("minestuck", "textures/gui/icons.png");
 	
-	static final Class<? extends GuiScreen>[] normalGuis = new Class[]{GuiCaptchaDeck.class, GuiStrifeSpecibus.class, GuiGristCache.class, GuiInventoryEditmode.class};
-	static final Class<? extends GuiScreen>[] editmodeGuis = new Class[]{GuiGristCache.class};
+	static final Class<? extends GuiScreen>[] normalGuis = new Class[]{GuiCaptchaDeck.class, GuiStrifeSpecibus.class, GuiGristCache.class,};
+	static final Class<? extends GuiScreen>[] editmodeGuis = new Class[]{GuiInventoryEditmode.class, GuiInventoryEditmode.class, GuiGristCache.class};
 	static final String[] normalGuiNames = new String[]{"gui.captchaDeck.name","gui.strifeSpecibus.name","gui.gristCache.name","gui.echeladder.name"};
 	static final String[] editmodeGuiNames = new String[]{"gui.deployList.name","gui.blockList.name","gui.gristCache.name"};
 	
@@ -52,11 +57,18 @@ public abstract class GuiPlayerStats extends GuiScreen {
 	}
 	
 	@Override
-	public void initGui() {
+	public void initGui()
+	{
 		super.initGui();
 		xOffset = (width-guiWidth)/2;
 		yOffset = (height-guiHeight+tabHeight-tabOverlap)/2;
 		mc = Minecraft.getMinecraft();
+	}
+	
+	@Override
+	public boolean doesGuiPauseGame()
+	{
+		return false;
 	}
 	
 	protected void drawTabs() {
@@ -113,16 +125,28 @@ public abstract class GuiPlayerStats extends GuiScreen {
 		super.mouseClicked(xcor, ycor, mouseButton);
 	}
 	
-	public static void openGui(boolean reload) {
+	public static void openGui(boolean reload)
+	{
 		Minecraft mc = Minecraft.getMinecraft();
+		int id = ClientEditHandler.isActive()?editmodeTab:normalTab;
 		if(reload || mc.currentScreen == null)
-			try {
-				mc.displayGuiScreen((ClientEditHandler.isActive()?editmodeGuis[editmodeTab]:normalGuis[normalTab]).newInstance());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			if(ContainerHandler.getPlayerStatsContainer(mc.thePlayer, id, ClientEditHandler.isActive()) != null)
+				MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(Type.CONTAINER, id));
+			else mc.displayGuiScreen(createGuiInstance());
 		else if(mc.currentScreen instanceof GuiPlayerStats || mc.currentScreen instanceof GuiPlayerStatsContainer)
-			mc.currentScreen = null;
+			mc.displayGuiScreen(null);
+	}
+	
+	public static GuiScreen createGuiInstance()
+	{
+		try
+		{
+			return (ClientEditHandler.isActive()?editmodeGuis[editmodeTab]:normalGuis[normalTab]).newInstance();
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	protected void drawTooltip(String text,int par2, int par3) {

@@ -28,7 +28,8 @@ public abstract class MinestuckPacket
 		SERVER_EDIT(ServerEditPacket.class),
 		CONFIG(MinestuckConfigPacket.class), 
 		INFO(MinestuckInfoPacket.class),
-		TRANSPORTALIZER(TransportalizerPacket.class);
+		TRANSPORTALIZER(TransportalizerPacket.class),
+		CONTAINER(MiscContainerPacket.class);
 		
 		Class<? extends MinestuckPacket> packetType;
 		private Type(Class<? extends MinestuckPacket> packetClass)
