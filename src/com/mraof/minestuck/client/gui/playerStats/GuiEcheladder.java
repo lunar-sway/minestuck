@@ -4,7 +4,8 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.util.ResourceLocation;
 
-public class GuiEcheladder extends GuiPlayerStats {
+public class GuiEcheladder extends GuiPlayerStats
+{
 	
 	private static final ResourceLocation guiEcheladder = new ResourceLocation("minestuck", "textures/gui/echeladder.png");
 	
@@ -12,8 +13,9 @@ public class GuiEcheladder extends GuiPlayerStats {
 	private static final int rows = 12;
 	private int scrollIndex;
 	
-	public GuiEcheladder() {
-		super(true);
+	public GuiEcheladder()
+	{
+		super();
 		guiWidth = 256;
 		guiHeight = 212;
 	}

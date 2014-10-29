@@ -54,12 +54,15 @@ public class MiscContainerPacket extends MinestuckPacket
 		{
 			if(i1 != -1)
 				if(ClientEditHandler.isActive())
-					GuiPlayerStats.editmodeTab = i1;
-				else GuiPlayerStats.normalTab = i1;
-			GuiScreen gui = GuiPlayerStats.createGuiInstance();
-			Minecraft.getMinecraft().displayGuiScreen(gui);
+					GuiPlayerStats.editmodeTab = GuiPlayerStats.EditmodeGuiType.values()[i1];
+				else GuiPlayerStats.normalTab = GuiPlayerStats.NormalGuiType.values()[i1];
+			GuiScreen gui = ClientEditHandler.isActive()? GuiPlayerStats.editmodeTab.createGuiInstance():GuiPlayerStats.normalTab.createGuiInstance();
+			if(gui != null)
+				Minecraft.getMinecraft().displayGuiScreen(gui);
 			if(gui instanceof GuiContainer)
 				Minecraft.getMinecraft().thePlayer.openContainer.windowId = i;
+			if(gui == null)
+				player.closeScreen();
 		}
 		else if(player instanceof EntityPlayerMP)
 		{

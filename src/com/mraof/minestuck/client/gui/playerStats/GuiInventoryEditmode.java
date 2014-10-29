@@ -7,15 +7,17 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiInventoryEditmode extends GuiPlayerStatsContainer {
+public class GuiInventoryEditmode extends GuiPlayerStatsContainer
+{
 
 	private ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/guiInvEditmode.png");
 	private ResourceLocation icons = new ResourceLocation("minestuck", "textures/gui/icons.png");
 	
 	private static final int leftArrowX = 7, rightArrowX = 151, arrowY = 23;
 	
-	public GuiInventoryEditmode() {
-		super(new ContainerInvEditmode(GuiPlayerStats.editmodeTab == 0), false);
+	public GuiInventoryEditmode(Boolean type)
+	{
+		super(new ContainerInvEditmode(type));
 		guiWidth = 176;
 		guiHeight = 98;
 	}

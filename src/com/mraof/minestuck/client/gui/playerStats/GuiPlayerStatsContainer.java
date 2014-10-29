@@ -5,7 +5,12 @@ import static com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats.*;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats.EditmodeGuiType;
+import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats.NormalGuiType;
+import com.mraof.minestuck.editmode.ClientEditHandler;
+import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.UsernameHandler;
 
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -22,17 +27,18 @@ public abstract class GuiPlayerStatsContainer extends GuiContainer {
 	
 	private boolean mode;
 	
-	public GuiPlayerStatsContainer(Container container, boolean mode) {
+	public GuiPlayerStatsContainer(Container container)
+	{
 		super(container);
-		this.mode = mode;
+		this.mode = !ClientEditHandler.isActive();
 	}
 	
 	@Override
 	public void initGui()
 	{
 		super.initGui();
-		xOffset = (width-guiWidth)/2;
-		yOffset = (height-guiHeight+tabHeight-tabOverlap)/2;
+		xOffset = (width - guiWidth)/2;
+		yOffset = (height - guiHeight + tabHeight - tabOverlap)/2;
 		this.guiTop = yOffset;
 	}
 	
@@ -42,54 +48,83 @@ public abstract class GuiPlayerStatsContainer extends GuiContainer {
 		return false;
 	}
 	
-	protected void drawTabs() {
+	protected void drawTabs()
+	{
 		GL11.glColor3f(1,1,1);
 		
 		mc.getTextureManager().bindTexture(GuiPlayerStats.icons);
 		
-		for(int i = 0; i < (mode?normalGuis:editmodeGuis).length; i++)
-			if((mode?normalTab:editmodeTab) != i)
-				drawTexturedModalRect(xOffset+i*(tabWidth+2), yOffset-tabHeight+tabOverlap, i==0?0:tabWidth, 0, tabWidth, tabHeight);
+		if(mode)
+		{
+			for(NormalGuiType type : NormalGuiType.values())
+				if(type != normalTab && (!type.reqMedium || SkaiaClient.enteredMedium(UsernameHandler.encode(mc.thePlayer.getCommandSenderName()))))
+				{
+					int i = type.ordinal();
+					drawTexturedModalRect(xOffset + i*(tabWidth + 2), yOffset - tabHeight + tabOverlap, i==0? 0:tabWidth, 0, tabWidth, tabHeight);
+				}
+				
+		}
+		else
+		{
+			for(EditmodeGuiType type : EditmodeGuiType.values())
+				if(type != editmodeTab)
+				{
+					int i = type.ordinal();
+					drawTexturedModalRect(xOffset + i*(tabWidth + 2), yOffset - tabHeight + tabOverlap, i==0? 0:tabWidth, 0, tabWidth, tabHeight);
+				}
+		}
 	}
 	
-	protected void drawActiveTabAndIcons() {
+	protected void drawActiveTabAndIcons()
+	{
 		GL11.glColor3f(1,1,1);
 		
 		mc.getTextureManager().bindTexture(GuiPlayerStats.icons);
 		
-		drawTexturedModalRect(xOffset+(mode?normalTab:editmodeTab)*(tabWidth+2), yOffset-tabHeight+tabOverlap,
-				(mode?normalTab:editmodeTab)==0?0:tabWidth, tabHeight, tabWidth, tabHeight);
-		for(int i = 0; i < (mode?normalGuis:editmodeGuis).length; i++)
-			drawTexturedModalRect(xOffset + (tabWidth - 16)/2 + (tabWidth+2)*i, yOffset - tabHeight + tabOverlap + 8, i*16, tabHeight*2+(mode?0:16), 16, 16);
+		int index = (mode? normalTab:editmodeTab).ordinal();
+		drawTexturedModalRect(xOffset + index*(tabWidth+2), yOffset - tabHeight + tabOverlap,
+				index == 0? 0:tabWidth, tabHeight, tabWidth, tabHeight);
+		
+		for(int i = 0; i < (mode? NormalGuiType.values():EditmodeGuiType.values()).length; i++)
+			if(!mode || !NormalGuiType.values()[i].reqMedium || SkaiaClient.enteredMedium(UsernameHandler.encode(mc.thePlayer.getCommandSenderName())))
+				drawTexturedModalRect(xOffset + (tabWidth - 16)/2 + (tabWidth+2)*i, yOffset - tabHeight + tabOverlap + 8, i*16, tabHeight*2 + (mode? 0:16), 16, 16);
 	}
 	
-	protected void drawTabTooltip(int xcor, int ycor) {
+	protected void drawTabTooltip(int xcor, int ycor)
+	{
 		
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		RenderHelper.disableStandardItemLighting();
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		
-		if(ycor < yOffset && ycor > yOffset-tabHeight+4)
-			for(int i = 0; i < (mode?normalGuis:editmodeGuis).length; i++)
-				if(xcor < xOffset+i*(tabWidth+2))
+		if(ycor < yOffset && ycor > yOffset - tabHeight + 4)
+			for(int i = 0; i < (mode? NormalGuiType.values():EditmodeGuiType.values()).length; i++)
+				if(xcor < xOffset + i*(tabWidth + 2))
 					break;
-				else if(xcor < xOffset+i*(tabWidth+2)+tabWidth)
-					drawTooltip(StatCollector.translateToLocal((mode?normalGuiNames:editmodeGuiNames)[i]), xcor-guiLeft, ycor-guiTop);
+				else if(xcor < xOffset + i*(tabWidth + 2) + tabWidth
+						&& (!mode || !NormalGuiType.values()[i].reqMedium || SkaiaClient.enteredMedium(UsernameHandler.encode(mc.thePlayer.getCommandSenderName()))))
+					drawTooltip(StatCollector.translateToLocal(mode? NormalGuiType.values()[i].name:EditmodeGuiType.values()[i].name), xcor - guiLeft, ycor - guiTop);
 	}
 	
 	@Override
-	protected void mouseClicked(int xcor, int ycor, int mouseButton) {
-		if(mouseButton == 0 && ycor < (height-guiHeight+tabHeight-tabOverlap)/2 && ycor > (height-guiHeight-tabHeight+tabOverlap)/2) {
-			for(int i = 0; i < (mode?normalGuis:editmodeGuis).length; i++)
-				if(xcor < xOffset+i*(tabWidth+2))
+	protected void mouseClicked(int xcor, int ycor, int mouseButton)
+	{
+		if(mouseButton == 0 && ycor < (height - guiHeight + tabHeight - tabOverlap)/2 && ycor > (height - guiHeight - tabHeight + tabOverlap)/2)
+		{
+			for(int i = 0; i < (mode? NormalGuiType.values():EditmodeGuiType.values()).length; i++)
+				if(xcor < xOffset + i*(tabWidth + 2))
 					break;
-				else if(xcor < xOffset+i*(tabWidth+2)+tabWidth) {
+				else if(xcor < xOffset + i*(tabWidth + 2) + tabWidth)
+				{
+					if(mode && NormalGuiType.values()[i].reqMedium && !SkaiaClient.enteredMedium(UsernameHandler.encode(mc.thePlayer.getCommandSenderName())))
+						return;
 					mc.getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation("gui.button.press"), 1.0F));
-					if(i != (mode?normalTab:editmodeTab)) {
+					if(i != (mode? normalTab:editmodeTab).ordinal())
+					{
 						if(mode)
-							normalTab = i;
-						else editmodeTab = i;
+							normalTab = NormalGuiType.values()[i];
+						else editmodeTab = EditmodeGuiType.values()[i];
 						openGui(true);
 					}
 					return;
@@ -98,7 +133,8 @@ public abstract class GuiPlayerStatsContainer extends GuiContainer {
 		super.mouseClicked(xcor, ycor, mouseButton);
 	}
 	
-	protected void drawTooltip(String text,int par2, int par3) {
+	protected void drawTooltip(String text,int par2, int par3)
+	{
 		String[] list = {text};
 		
 		for (int k = 0; k < list.length; ++k) {

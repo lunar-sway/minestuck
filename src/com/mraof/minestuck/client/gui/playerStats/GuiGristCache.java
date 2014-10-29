@@ -14,7 +14,8 @@ import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 
-public class GuiGristCache extends GuiPlayerStats {
+public class GuiGristCache extends GuiPlayerStats
+{
 	
 	private static final ResourceLocation guiGristcache = new ResourceLocation("minestuck", "textures/gui/gristCache.png");
 	
@@ -23,8 +24,9 @@ public class GuiGristCache extends GuiPlayerStats {
 	private static final int gristCountX = 44, gristCountY = 36;
 	private static final int gristCountXOffset = 66, gristCountYOffset = 21;
 	
-	public GuiGristCache() {
-		super(!ClientEditHandler.isActive());
+	public GuiGristCache()
+	{
+		super();
 		guiWidth = 226;
 		guiHeight = 190;
 	}

@@ -7,12 +7,14 @@ import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
-public class GuiCaptchaDeck extends GuiPlayerStatsContainer {
+public class GuiCaptchaDeck extends GuiPlayerStatsContainer
+{
 	
 	private static final ResourceLocation guiCaptchaDeckEmpty = new ResourceLocation("minestuck", "textures/gui/captchaDeckEmpty.png");
 	
-	public GuiCaptchaDeck() {
-		super(new ContainerCaptchaDeck(), true);
+	public GuiCaptchaDeck()
+	{
+		super(new ContainerCaptchaDeck());
 		guiWidth = 178;
 		guiHeight= 54;
 	}

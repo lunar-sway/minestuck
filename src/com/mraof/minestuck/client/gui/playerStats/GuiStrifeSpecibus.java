@@ -8,14 +8,16 @@ import org.lwjgl.opengl.GL11;
 import com.mraof.minestuck.util.KindAbstratusList;
 import com.mraof.minestuck.util.KindAbstratusType;
 
-public class GuiStrifeSpecibus extends GuiPlayerStats {
+public class GuiStrifeSpecibus extends GuiPlayerStats
+{
 	
 	private static final ResourceLocation guiStrifeSelector = new ResourceLocation("minestuck", "textures/gui/strifeSelector.png");
 	
 	private static final int columnWidth = 70, columns = 3;
 	
-	public GuiStrifeSpecibus() {
-		super(true);
+	public GuiStrifeSpecibus()
+	{
+		super();
 		guiWidth = 228;
 		guiHeight = 150;
 	}

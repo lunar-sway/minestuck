@@ -13,8 +13,8 @@ public class ClientEventHandler {
 	
 	@SubscribeEvent
 	public void onConnectedToServer(ClientConnectedToServerEvent event) {
-		GuiPlayerStats.normalTab = 3;
-		GuiPlayerStats.editmodeTab = 0;
+		GuiPlayerStats.normalTab = GuiPlayerStats.NormalGuiType.CAPTCHA_DECK;
+		GuiPlayerStats.editmodeTab = GuiPlayerStats.EditmodeGuiType.DEPLOY_LIST;
 		ContainerInvEditmode.scrollIndex = 0;
 	}
 	
