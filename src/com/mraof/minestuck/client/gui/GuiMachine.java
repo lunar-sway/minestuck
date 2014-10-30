@@ -108,7 +108,7 @@ protected void drawGuiContainerForegroundLayer(int param1, int param2) {
 	{
 		//Render grist requirements
 		//NBTTagCompound nbttagcompound = te.inv[1].getTagCompound();
-		GristSet set = GristRegistry.getGristConversion(metadata == 3? AlchemyRecipeHandler.getDecodedItem(te.inv[1]) : te.inv[1]);
+		GristSet set = GristRegistry.getGristConversion(metadata == 3? AlchemyRecipeHandler.getDecodedItem(te.inv[1], true) : te.inv[1]);
 		
 		if (set == null) {fontRendererObj.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 9,45, 16711680); return;}
 			Hashtable<Integer, Integer> reqs = set.getHashtable();

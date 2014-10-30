@@ -20,6 +20,7 @@ import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.CombinationRegistry;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristRegistry;
@@ -222,9 +223,9 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		{
 			if(inv[3] != null)
 			{
-				ItemStack outputItem = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(this.inv[1],true), AlchemyRecipeHandler.getDecodedItem(this.inv[2],true),this.mode);
+				ItemStack outputItem = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(this.inv[1]), AlchemyRecipeHandler.getDecodedItem(this.inv[2]),this.mode);
 				if(inv[3].hasTagCompound() && inv[3].getTagCompound().getBoolean("punched"))
-					outputItem = CombinationRegistry.getCombination(outputItem, AlchemyRecipeHandler.getDecodedItem(inv[3]), CombinationRegistry.MODE_OR);
+					outputItem = CombinationRegistry.getCombination(outputItem, AlchemyRecipeHandler.getDecodedItem(inv[3], false), CombinationRegistry.MODE_OR);
 				if(outputItem == null)
 					return false;
 				outputItem = AlchemyRecipeHandler.createCard(outputItem, true);
@@ -238,11 +239,11 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			{
 				ItemStack input = (inv[1] == null?inv[2]:inv[1]);
 				ItemStack output = (input.getItem().equals(Minestuck.captchaCard)&&input.hasTagCompound()&&input.getTagCompound().getBoolean("punched")
-						?AlchemyRecipeHandler.getDecodedItem(input):input);
+						?AlchemyRecipeHandler.getDecodedItem(input, false):input);
 				if(inv[3].hasTagCompound() && inv[3].getTagCompound().getBoolean("punched"))
 				{
 					output = CombinationRegistry.getCombination(output,
-							AlchemyRecipeHandler.getDecodedItem(inv[3]), CombinationRegistry.MODE_OR);
+							AlchemyRecipeHandler.getDecodedItem(inv[3], false), CombinationRegistry.MODE_OR);
 					
 				}
 				if(output == null)
@@ -256,11 +257,11 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		}
 		case (2):
 			return (this.inv[1] != null && this.inv[2] != null && !(inv[2].hasTagCompound() && inv[2].getTagCompound().hasKey("contentID")) && (this.inv[0] == null ||
-			inv[0].stackSize < 16 && AlchemyRecipeHandler.getDecodedItem(inv[0]).isItemEqual(AlchemyRecipeHandler.getDecodedItem(inv[1]))));
+			inv[0].stackSize < 16 && AlchemyRecipeHandler.getDecodedItem(inv[0], true).isItemEqual(AlchemyRecipeHandler.getDecodedItem(inv[1], true))));
 		case (3):
 			if (this.inv[1] != null && this.owner != null) {
 				//Check owner's cache: Do they have everything they need?
-				ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(this.inv[1]);
+				ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(this.inv[1], true);
 				if (newItem == null) {return false;}
 				if (inv[0] != null && (inv[0].getItem() != newItem.getItem() || inv[0].getItemDamage() != newItem.getItemDamage() || inv[0].getMaxStackSize() <= inv[0].stackSize)) {return false;}
 				return GristHelper.canAfford(UsernameHandler.encode(owner.getCommandSenderName()), newItem);
@@ -300,10 +301,8 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 				break;
 			}
 			
-			ItemStack inv1 = (inv[1] != null && inv[1].hasTagCompound() && inv[1].getTagCompound().hasKey("contentID"))
-					?AlchemyRecipeHandler.getDecodedItem(inv[1]):inv[1];
-			ItemStack inv2 = (inv[2] != null && inv[2].hasTagCompound() && inv[2].getTagCompound().hasKey("contentID"))
-					?AlchemyRecipeHandler.getDecodedItem(inv[2]):inv[2];
+			ItemStack inv1 = AlchemyRecipeHandler.getDecodedItem(inv[1]);
+			ItemStack inv2 = AlchemyRecipeHandler.getDecodedItem(inv[2]);
 			
 			ItemStack outputItem = CombinationRegistry.getCombination(inv1, inv2, this.mode);
 			
@@ -313,7 +312,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 				outputItem = inv1;
 			
 			if(inv[3].hasTagCompound() && inv[3].getTagCompound().getBoolean("punched"))	//If you push the data onto a punched card, perform an OR alchemy
-				outputItem = CombinationRegistry.getCombination(outputItem, AlchemyRecipeHandler.getDecodedItem(inv[3]), CombinationRegistry.MODE_OR);
+				outputItem = CombinationRegistry.getCombination(outputItem, AlchemyRecipeHandler.getDecodedItem(inv[3], false), CombinationRegistry.MODE_OR);
 			
 			//Create card
 			outputItem = AlchemyRecipeHandler.createCard(outputItem, true);
@@ -326,35 +325,37 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			decrStackSize(3, 1);
 			break;
 		case (2):
-			if(inv[0] != null) {
+			if(inv[0] != null)
+			{
 				decrStackSize(0, -1);
 				decrStackSize(2, 1);
 			}
 			ItemStack outputDowel = new ItemStack(Minestuck.cruxiteDowel);
 			
 			NBTTagCompound cardtag = this.inv[1].getTagCompound();
-			if(cardtag == null)
-				break;
 			
-			if(cardtag.getString("contentID") == GameRegistry.findUniqueIdentifierFor(Minestuck.blockStorage).name &&
+			if(cardtag == null || cardtag.getString("contentID") == GameRegistry.findUniqueIdentifierFor(Minestuck.blockStorage).name &&
 					cardtag.getInteger("contentMeta") == 1)
 				outputDowel = new ItemStack(Minestuck.cruxiteDowel);
 			if(cardtag != null && !(cardtag.getString("contentID") == GameRegistry.findUniqueIdentifierFor(Minestuck.blockStorage).name &&
-					cardtag.getInteger("contentMeta") == 1)) {
+					cardtag.getInteger("contentMeta") == 1))
+			{
 				NBTTagCompound doweltag = new NBTTagCompound();
 				doweltag.setString("contentID", cardtag.getString("contentID"));
 				doweltag.setInteger("contentMeta", cardtag.getInteger("contentMeta"));
 				outputDowel.setTagCompound(doweltag);
 			}
 			setInventorySlotContents(0,outputDowel);
-			//decrStackSize(1, 1);
 			decrStackSize(2, 1);
 			break;
 		case (3):
-			ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(this.inv[1]);
-			if (inv[0] == null) {
+			ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(this.inv[1], true);
+			if (inv[0] == null)
+			{
 				setInventorySlotContents(0,newItem);
-			} else {
+			}
+			else
+			{
 				decrStackSize(0, -1);
 			}
 			

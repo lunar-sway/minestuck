@@ -68,9 +68,7 @@ public class RenderCard implements IItemRenderer
 	public void renderItem(ItemRenderType type, ItemStack card, Object... data)
 	{
 		TextureManager textureManager = mc.getTextureManager();
-		ItemStack item = AlchemyRecipeHandler.getDecodedItem(card);
-		if(!card.hasTagCompound() || !card.getTagCompound().hasKey("contentID"))
-			item = null;
+		ItemStack item = AlchemyRecipeHandler.getDecodedItem(card, false);
 		Tessellator t = Tessellator.instance;
 		
 		if(cardBuffer != null && (cardBuffer.height < cardIcon.getIconHeight() || cardBuffer.width < cardIcon.getIconWidth()))

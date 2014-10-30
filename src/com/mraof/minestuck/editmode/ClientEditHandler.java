@@ -153,7 +153,7 @@ public class ClientEditHandler {
 				else if(GristHelper.canAfford(MinestuckPlayerData.getClientGrist(), Minestuck.clientHardMode&&givenItems[ordinal]
 						?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack)))
 					givenItems[ordinal] = true;
-			else if(stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack).getItem() == Minestuck.cruxiteArtifact
+			else if(stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack, false).getItem() == Minestuck.cruxiteArtifact
 					&& stack.getTagCompound().getBoolean("punched")) {
 				//SburbConnection c = SkaiaClient.getClientConnection(client); //unused
 				givenItems[0] = true;

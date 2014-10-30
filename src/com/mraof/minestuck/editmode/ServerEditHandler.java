@@ -236,7 +236,8 @@ public class ServerEditHandler
 						} else event.setCanceled(true);
 					}
 			
-			else if(stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack).getItem() == Minestuck.cruxiteArtifact) {
+			else if(stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack, false).getItem() == Minestuck.cruxiteArtifact)
+			{
 				SburbConnection c = data.connection;
 				c.givenItems()[0] = true;
 				if(!c.isMain())
@@ -373,7 +374,8 @@ public class ServerEditHandler
 		for(int i = 0; i < player.inventory.mainInventory.length; i++) {
 			ItemStack stack = player.inventory.mainInventory[i];
 			if(stack != null && (GristRegistry.getGristConversion(stack) == null || !(stack.getItem() instanceof ItemBlock)) && !(DeployList.containsItemStack(stack) ||
-					stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack).getItem() == Minestuck.cruxiteArtifact && (!Minestuck.hardMode || !givenItems[0]) && !enteredGame)) {
+					stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack, false).getItem() == Minestuck.cruxiteArtifact && (!Minestuck.hardMode || !givenItems[0]) && !enteredGame))
+			{
 				player.inventory.mainInventory[i] = null;
 				inventoryChanged = true;
 			}

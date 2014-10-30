@@ -74,7 +74,7 @@ public class ItemCaptchaCard extends Item {
 			
 			if (contentID != null && contentMeta != null && Item.itemRegistry.containsKey(contentID.func_150285_a_())) {
 				//par3List.add("(" + contentID.data + ":" + contentMeta.data + ")");
-				par3List.add("(" + (AlchemyRecipeHandler.getDecodedItem(par1ItemStack)).getDisplayName() + ")");
+				par3List.add("(" + (AlchemyRecipeHandler.getDecodedItem(par1ItemStack, false)).getDisplayName() + ")");
 				if(nbttagcompound.getBoolean("punched") && !(Item.itemRegistry.getObject(contentID.func_150285_a_()) == Item.getItemFromBlock(Minestuck.blockStorage)
 						&& contentMeta.func_150287_d() == 1))
 					par3List.add("("+StatCollector.translateToLocal("item.captchaCard.punched")+")");
