@@ -87,5 +87,6 @@ public class ClientProxy extends CommonProxy
 		MinecraftForge.EVENT_BUS.register(new GuiPlayerStats(Minecraft.getMinecraft()));
 		MinecraftForge.EVENT_BUS.register(new MinestuckClientEventHandler());
 		FMLCommonHandler.instance().bus().register(new MinestuckKeyHandler());
+		FMLCommonHandler.instance().bus().register(new MinestuckClientEventHandler());
 	}
 }

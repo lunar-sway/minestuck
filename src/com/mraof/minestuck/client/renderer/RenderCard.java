@@ -4,7 +4,12 @@ import static org.lwjgl.opengl.EXTFramebufferObject.GL_FRAMEBUFFER_EXT;
 import static org.lwjgl.opengl.EXTFramebufferObject.glBindFramebufferEXT;
 import static org.lwjgl.opengl.GL11.*;
 
+import java.util.Random;
+
+import org.lwjgl.opengl.GL11;
+
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.client.event.MinestuckClientEventHandler;
 import com.mraof.minestuck.client.util.FBO;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.Debug;
@@ -13,14 +18,17 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.texture.TextureUtil;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -37,6 +45,7 @@ public class RenderCard implements IItemRenderer
 	public static IIcon cardIcon;
 	
 	public RenderItem itemRender = new RenderItem();
+	public Minecraft mc = Minecraft.getMinecraft();
 	
 	public FBO itemBuffer = new FBO((int)(8*Math.pow(2,Minestuck.cardResolution)),(int)(8*Math.pow(2,Minestuck.cardResolution)));
 	public FBO cardBuffer;
@@ -46,20 +55,21 @@ public class RenderCard implements IItemRenderer
 	{
 		return Minestuck.specialCardRenderer && item.getItem().equals(Minestuck.captchaCard)
 				&& item.hasTagCompound()//TEMP used for comparing with the default render method
-				&& (type != ItemRenderType.ENTITY);
+//				&& (type != ItemRenderType.ENTITY)
+				;
 	}
 	
 	@Override
 	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper)
 	{
-		return helper == ItemRendererHelper.ENTITY_BOBBING || helper == ItemRendererHelper.ENTITY_ROTATION;
+		return helper == ItemRendererHelper.ENTITY_BOBBING;
 	}
 	
 	@SuppressWarnings("incomplete-switch")
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack card, Object... data)
 	{
-		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+		TextureManager textureManager = mc.getTextureManager();
 		ItemStack item = AlchemyRecipeHandler.getDecodedItem(card);
 		if(!card.hasTagCompound() || !card.getTagCompound().hasKey("contentID"))
 			item = null;
@@ -76,7 +86,7 @@ public class RenderCard implements IItemRenderer
 		
 		glPushMatrix();
 		
-		itemBuffer.bind();	//glClear affects the other buffers glClear in some way.
+		itemBuffer.bind();
 		
 		glMatrixMode(GL_PROJECTION);
 		glPushMatrix();
@@ -93,6 +103,7 @@ public class RenderCard implements IItemRenderer
 		float brightnessX = OpenGlHelper.lastBrightnessX;
 		float brightnessY = OpenGlHelper.lastBrightnessY;
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
+		glPushAttrib(GL_LIGHTING_BIT);
 		RenderHelper.enableGUIStandardItemLighting();
 		
 		if(item != null)
@@ -104,7 +115,6 @@ public class RenderCard implements IItemRenderer
 			}
 			else
 			{
-				glEnable(GL_LIGHTING);
 				if (!ForgeHooksClient.renderInventoryItem((RenderBlocks)data[0], textureManager, item, itemRender.renderWithColor, itemRender.zLevel, 0, 0))
 					itemRender.renderItemIntoGUI(null, textureManager, item, 0, 0, false);
 			}
@@ -114,6 +124,8 @@ public class RenderCard implements IItemRenderer
 		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();
 		glMatrixMode(GL_MODELVIEW);
+		glPopAttrib();
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, brightnessX, brightnessY);
 		
 		renderContentToBuffer(card, item != null);
 		
@@ -123,14 +135,12 @@ public class RenderCard implements IItemRenderer
 			Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
 		
 		glBindTexture(GL_TEXTURE_2D, cardBuffer.texId);
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, brightnessX, brightnessY);
 		
 		switch(type)
 		{
 		case EQUIPPED: case EQUIPPED_FIRST_PERSON:
 			
 //			TextureUtil.func_152777_a(false, false, 1.0F);
-			RenderHelper.enableStandardItemLighting();
  			render3DCard(card);
 //			TextureUtil.func_147945_b();
 			break;
@@ -148,13 +158,18 @@ public class RenderCard implements IItemRenderer
 			t.draw();
 			
 			break;
+			
+		case ENTITY:
+			
+			this.renderEntityItem((EntityItem) data[1], new Random(187L));
+			break;
 		}
 		
 	}
 	
 	public void renderContentToBuffer(ItemStack card, boolean renderItem)
 	{
-		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+		TextureManager textureManager = mc.getTextureManager();
 		Tessellator t = Tessellator.instance;
 		
 		cardBuffer.bind();
@@ -168,10 +183,11 @@ public class RenderCard implements IItemRenderer
 		
 		glDisable(GL_CULL_FACE);
 		glEnable(GL_ALPHA_TEST);
-		glDisable(GL_LIGHTING);
 		float brightnessX = OpenGlHelper.lastBrightnessX;
 		float brightnessY = OpenGlHelper.lastBrightnessY;
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
+		glPushAttrib(GL_LIGHTING_BIT);
+		RenderHelper.disableStandardItemLighting();
 		
 		textureManager.bindTexture(TextureMap.locationItemsTexture);
 		renderIcon(0, 0, cardIcon, 16, 16);
@@ -199,8 +215,9 @@ public class RenderCard implements IItemRenderer
 		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();
 		glMatrixMode(GL_MODELVIEW);
+		
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, brightnessX, brightnessY);
-		glEnable(GL_LIGHTING);
+		glPopAttrib();
 	}
 	
 	public static void renderIcon(int x, int y, IIcon icon, int width, int height)
@@ -214,7 +231,8 @@ public class RenderCard implements IItemRenderer
 		t.draw();
 	}
 	
-	public static void renderPunchHoles(ItemStack card) {
+	public static void renderPunchHoles(ItemStack card)
+	{
 		
 		Tessellator t = Tessellator.instance;
 		glDisable(GL_TEXTURE_2D);
@@ -240,8 +258,75 @@ public class RenderCard implements IItemRenderer
 		
 	}
 	
-	//ItemRenderer.renderItemIn2D(t, cardIcon.getMaxU(), cardIcon.getMinV(), cardIcon.getMinU(), cardIcon.getMaxV(),
-	//cardIcon.getIconWidth(), cardIcon.getIconHeight(), 0.0625F);
+	//Methods generally copied from the RenderItem class.
+	
+	public void renderEntityItem(EntityItem item, Random random)
+	{
+		int stackSize = item.getEntityItem().stackSize;
+		
+		if (RenderItem.renderInFrame)
+		{
+			glScalef(2F, 2F, 2F);
+			glScalef(0.5128205F, 0.5128205F, 0.5128205F);
+			glTranslatef(0.0F, -0.05F, 0.0F);
+		}
+		
+		if(mc.gameSettings.fancyGraphics)
+		{
+			float rotation = (((float)item.age + MinestuckClientEventHandler.renderTick) / 20.0F + item.hoverStart) * (180F / (float)Math.PI);
+			byte count = 0;
+			if (stackSize < 2)
+				count = 1;
+			else if (stackSize < 16)
+				count = 2;
+			else
+				count = 3;
+			
+			GL11.glTranslatef(-0.5F, -0.25F, -(0.084375F * (float)count / 2.0F));
+			
+			//TODO Write(move) code here
+		}
+		else
+		{
+			byte count = 0;
+			if(stackSize < 2)
+				count = 1;
+			else if(stackSize < 6)
+				count = 2;
+			else
+				count = 3;
+			
+			for(int i = 0; i < count; i++)
+			{
+				glPushMatrix();
+				
+				if (i > 0)
+				{
+					float f10 = (random.nextFloat() * 2.0F - 1.0F) * 0.3F;
+					float f16 = (random.nextFloat() * 2.0F - 1.0F) * 0.3F;
+					float f17 = (random.nextFloat() * 2.0F - 1.0F) * 0.3F;
+					glTranslatef(f10, f16, f17);
+				}
+				
+				if (!RenderItem.renderInFrame)
+				{
+					glRotatef(180.0F - RenderManager.instance.playerViewY, 0.0F, 1.0F, 0.0F);
+				}
+				
+				Tessellator t = Tessellator.instance;
+				t.startDrawingQuads();
+				t.setNormal(0.0F, 1.0F, 0.0F);
+				t.addVertexWithUV((double)-0.5F, (double)-0.25F, 0.0D, 0, 1);
+				t.addVertexWithUV((double)0.5F, (double)-0.25F, 0.0D, 1, 1);
+				t.addVertexWithUV((double)0.5F, (double)0.75F, 0.0D, 1, 0);
+				t.addVertexWithUV((double)-0.5F, (double)0.75F, 0.0D, 0, 0);
+				t.draw();
+				GL11.glPopMatrix();
+				
+			}
+		}
+	}
+	
 	public void render3DCard(ItemStack card)
 	{
 		Tessellator t = Tessellator.instance;
@@ -308,7 +393,7 @@ public class RenderCard implements IItemRenderer
 		
 		renderContentToBuffer(card, false);
 		if(OpenGlHelper.isFramebufferEnabled())
-			Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
+			mc.getFramebuffer().bindFramebuffer(false);
 		t.startDrawingQuads();
 		t.setNormal(0.0F, 0.0F, 1.0F);
 		t.addVertexWithUV(0, 0, 0, 1, 1);
