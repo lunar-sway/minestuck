@@ -52,7 +52,7 @@ public class ItemCaptchaCard extends Item {
 					&& nbt.getInteger("contentMeta") == 1))
 				return punchedIcon;
 			else return fullIcon;
-		} else return RenderCard.cardIcon;//emptyIcon;
+		} else return emptyIcon;
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })

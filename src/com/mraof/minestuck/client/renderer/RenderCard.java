@@ -53,10 +53,7 @@ public class RenderCard implements IItemRenderer
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type)
 	{
-		return Minestuck.specialCardRenderer && item.getItem().equals(Minestuck.captchaCard)
-				&& item.hasTagCompound()//TEMP used for comparing with the default render method
-//				&& (type != ItemRenderType.ENTITY)
-				;
+		return Minestuck.specialCardRenderer && item.getItem().equals(Minestuck.captchaCard);
 	}
 	
 	@Override
@@ -138,9 +135,7 @@ public class RenderCard implements IItemRenderer
 		{
 		case EQUIPPED: case EQUIPPED_FIRST_PERSON:
 			
-//			TextureUtil.func_152777_a(false, false, 1.0F);
  			render3DCard(card);
-//			TextureUtil.func_147945_b();
 			break;
 			
 		case INVENTORY:
