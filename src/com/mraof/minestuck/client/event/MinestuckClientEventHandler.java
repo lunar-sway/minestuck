@@ -5,7 +5,6 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import com.mraof.minestuck.Minestuck;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -13,20 +12,13 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class MinestuckClientEventHandler 
 {
 	
-	public static float renderTick;
+	public static float renderTickTime;
 	
 	@SubscribeEvent
 	public void postStitch(TextureStitchEvent.Post event)
 	{
 		Minestuck.fluidOil.setIcons(Minestuck.blockOil.getBlockTextureFromSide(0), Minestuck.blockOil.getBlockTextureFromSide(1));
 		Minestuck.fluidBlood.setIcons(Minestuck.blockBlood.getBlockTextureFromSide(0), Minestuck.blockBlood.getBlockTextureFromSide(1));
-	}
-	
-	@SubscribeEvent
-	public void renderStart(TickEvent.RenderTickEvent event)
-	{
-		if(event.phase == TickEvent.Phase.START)
-			this.renderTick = event.renderTickTime;
 	}
 	
 }

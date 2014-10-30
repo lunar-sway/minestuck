@@ -62,7 +62,8 @@ public class RenderCard implements IItemRenderer
 	@Override
 	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper)
 	{
-		return helper == ItemRendererHelper.ENTITY_BOBBING;
+		return helper == ItemRendererHelper.ENTITY_BOBBING
+				|| helper == ItemRendererHelper.ENTITY_ROTATION && mc.gameSettings.fancyGraphics;
 	}
 	
 	@SuppressWarnings("incomplete-switch")
@@ -130,9 +131,6 @@ public class RenderCard implements IItemRenderer
 		renderContentToBuffer(card, item != null);
 		
 		glPopMatrix();
-		
-		if(OpenGlHelper.isFramebufferEnabled())
-			Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
 		
 		glBindTexture(GL_TEXTURE_2D, cardBuffer.texId);
 		
@@ -218,6 +216,8 @@ public class RenderCard implements IItemRenderer
 		
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, brightnessX, brightnessY);
 		glPopAttrib();
+		if(OpenGlHelper.isFramebufferEnabled())
+			mc.getFramebuffer().bindFramebuffer(false);
 	}
 	
 	public static void renderIcon(int x, int y, IIcon icon, int width, int height)
@@ -258,7 +258,7 @@ public class RenderCard implements IItemRenderer
 		
 	}
 	
-	//Methods generally copied from the RenderItem class.
+	//Methods generally copied from other classes.
 	
 	public void renderEntityItem(EntityItem item, Random random)
 	{
@@ -273,7 +273,12 @@ public class RenderCard implements IItemRenderer
 		
 		if(mc.gameSettings.fancyGraphics)
 		{
-			float rotation = (((float)item.age + MinestuckClientEventHandler.renderTick) / 20.0F + item.hoverStart) * (180F / (float)Math.PI);
+			
+			if (RenderItem.renderInFrame)
+			{
+				GL11.glRotatef(180.0F, 0.0F, 1.0F, 0.0F);
+			}
+			
 			byte count = 0;
 			if (stackSize < 2)
 				count = 1;
@@ -284,7 +289,25 @@ public class RenderCard implements IItemRenderer
 			
 			GL11.glTranslatef(-0.5F, -0.25F, -(0.084375F * (float)count / 2.0F));
 			
-			//TODO Write(move) code here
+			for (int k = 0; k < count; ++k)
+			{
+				// Makes items offset when in 3D, like when in 2D, looks much better. Considered a vanilla bug...
+				if (k > 0)
+				{
+					float x = (random.nextFloat() * 2.0F - 1.0F) * 0.3F / 0.5F;
+					float y = (random.nextFloat() * 2.0F - 1.0F) * 0.3F / 0.5F;
+					float z = (random.nextFloat() * 2.0F - 1.0F) * 0.3F / 0.5F;
+					GL11.glTranslatef(x, y, 0.084375F);
+					renderContentToBuffer(item.getEntityItem(), true);
+				}
+				else
+				{
+					GL11.glTranslatef(0F, 0F, 0.084375F);
+				}
+				
+				render3DCard(item.getEntityItem());
+				
+			}
 		}
 		else
 		{
@@ -392,8 +415,6 @@ public class RenderCard implements IItemRenderer
 		t.draw();
 		
 		renderContentToBuffer(card, false);
-		if(OpenGlHelper.isFramebufferEnabled())
-			mc.getFramebuffer().bindFramebuffer(false);
 		t.startDrawingQuads();
 		t.setNormal(0.0F, 0.0F, 1.0F);
 		t.addVertexWithUV(0, 0, 0, 1, 1);
