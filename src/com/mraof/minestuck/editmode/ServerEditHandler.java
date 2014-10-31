@@ -225,12 +225,12 @@ public class ServerEditHandler
 					if(stack.getItem() instanceof ItemBlock)
 						event.setCanceled(true);
 					else {
-						GristSet cost = Minestuck.hardMode && data.connection.givenItems()[DeployList.getOrdinal(stack)+1]
+						GristSet cost = Minestuck.hardMode && data.connection.givenItems()[DeployList.getOrdinal(stack)]
 								?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
 						if(GristHelper.canAfford(MinestuckPlayerData.getGristSet(data.connection.getClientName()), cost)) {
 							GristHelper.decrease(data.connection.getClientName(), cost);
 							MinestuckPlayerTracker.updateGristCache(data.connection.getClientName());
-							data.connection.givenItems()[DeployList.getOrdinal(stack)+1] = true;
+							data.connection.givenItems()[DeployList.getOrdinal(stack)] = true;
 							if(!data.connection.isMain())
 								SkaianetHandler.giveItems(data.connection.getClientName());
 						} else event.setCanceled(true);
@@ -272,7 +272,7 @@ public class ServerEditHandler
 				if(stack == null)
 					return;
 				if(DeployList.containsItemStack(stack)) {
-					GristSet cost = Minestuck.hardMode && data.connection.givenItems()[DeployList.getOrdinal(stack)+1]
+					GristSet cost = Minestuck.hardMode && data.connection.givenItems()[DeployList.getOrdinal(stack)]
 							?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
 					if(!GristHelper.canAfford(MinestuckPlayerData.getGristSet(data.connection.getClientName()), cost)) {
 						event.setCanceled(true);
@@ -306,9 +306,9 @@ public class ServerEditHandler
 				ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
 				if(DeployList.containsItemStack(stack)) {
 					SburbConnection c = data.connection;
-					GristSet cost = Minestuck.hardMode && c.givenItems()[DeployList.getOrdinal(stack)+1]
+					GristSet cost = Minestuck.hardMode && c.givenItems()[DeployList.getOrdinal(stack)]
 							?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
-					c.givenItems()[DeployList.getOrdinal(stack)+1] = true;
+					c.givenItems()[DeployList.getOrdinal(stack)] = true;
 					if(!c.isMain())
 						SkaianetHandler.giveItems(c.getClientName());
 					if(!cost.isEmpty())
@@ -368,66 +368,63 @@ public class ServerEditHandler
 		}
 	}
 	
-	public static void updateInventory(EntityPlayerMP player, boolean[] givenItems, boolean enteredGame, String client) {	//Could need to have better effiency
+	public static void updateInventory(EntityPlayerMP player, boolean[] givenItems, boolean enteredGame, String client)
+	{
 		boolean inventoryChanged = false;
-		for(int i = 0; i < player.inventory.mainInventory.length; i++) {
+		for(int i = 0; i < player.inventory.mainInventory.length; i++)
+		{
 			ItemStack stack = player.inventory.mainInventory[i];
 			if(stack != null && (GristRegistry.getGristConversion(stack) == null || !(stack.getItem() instanceof ItemBlock)) && !(DeployList.containsItemStack(stack) ||
-					stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack).getItem() == Minestuck.cruxiteArtifact && (!Minestuck.hardMode || !givenItems[0]) && !enteredGame)) {
+					stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack).getItem() == Minestuck.cruxiteArtifact && (!Minestuck.hardMode || !givenItems[0]) && !enteredGame))
+			{	//removes blocks without a grist value and all items from the inventory.
 				player.inventory.mainInventory[i] = null;
 				inventoryChanged = true;
 			}
-			if(stack != null && stack.stackSize > 1) {
+			if(stack != null && stack.stackSize > 1)
+			{
 				stack.stackSize = 1;
 				inventoryChanged = true;
 			}
 		}
 		
 		ArrayList<ItemStack> itemsToRemove = new ArrayList<ItemStack>();
-		for(ItemStack stack : DeployList.getItemList()) {
-			boolean shouldHave = !(Minestuck.hardMode && givenItems[DeployList.getOrdinal(stack)+1] && DeployList.getSecondaryCost(stack) == null
+		for(ItemStack stack : DeployList.getItemList())
+		{	//Find deploy list items that isn't available.
+			boolean shouldHave = !(Minestuck.hardMode && givenItems[DeployList.getOrdinal(stack)] && DeployList.getSecondaryCost(stack) == null
 					|| DeployList.getTier(stack) > SessionHandler.availableTier(client));
-			if(shouldHave && !player.inventory.hasItemStack(stack) && !(player.inventory.getItemStack() != null && player.inventory.getItemStack().isItemEqual(stack))) {
-				if(player.inventory.addItemStackToInventory(stack))
-					inventoryChanged = true;
-			} else if(!shouldHave)
+			if(!shouldHave)
 				itemsToRemove.add(stack);
 		}
 		
-		
 		if(player.inventory.getItemStack() != null)
 			for(ItemStack stack : itemsToRemove)
-				if(player.inventory.getItemStack().equals(stack)) {
+				if(player.inventory.getItemStack().equals(stack))
+				{
 					player.inventory.setItemStack(null);
 					inventoryChanged = true;
 					break;
 				}
 		
-		for(int i = 0; i < player.inventory.mainInventory.length; i++) {
+		for(int i = 0; i < player.inventory.mainInventory.length; i++)
+		{
 			ItemStack stack = player.inventory.mainInventory[i];
 			if(stack == null)
 				continue;
 			for(ItemStack stack1 : itemsToRemove)
-				if(stack.isItemEqual(stack1)) {
+				if(stack.isItemEqual(stack1))
+				{
 					player.inventory.mainInventory[i] = null;
 					inventoryChanged = true;
 					break;
 				}
 		}
 		
-		if(!enteredGame) {
-			ItemStack stack = AlchemyRecipeHandler.createCard(new ItemStack(Minestuck.cruxiteArtifact, 1, SessionHandler.getEntryItem(client)), true);
-			if(!player.inventory.hasItemStack(stack) && !(player.inventory.getItemStack() != null && player.inventory.getItemStack().isItemEqual(stack))) {
-				player.inventory.addItemStackToInventory(stack);
-				inventoryChanged = true;
-			}
-		} else inventoryChanged = player.inventory.clearInventory(Minestuck.captchaCard, -1) != 0 || inventoryChanged;
-		
 		if(inventoryChanged)
 			MinecraftServer.getServer().getConfigurationManager().syncPlayerInventory(player);
 	}
 	
-	public static void onServerStopping() {	
+	public static void onServerStopping()
+	{	
 		for(EditData data : new ArrayList<EditData>(list))
 			reset(null, 0, data);
 	}

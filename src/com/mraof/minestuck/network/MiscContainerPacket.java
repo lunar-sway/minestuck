@@ -69,10 +69,10 @@ public class MiscContainerPacket extends MinestuckPacket
 			EntityPlayerMP playerMP = (EntityPlayerMP) player;
 			playerMP.getNextWindowId();
 			int windowId = ((EntityPlayerMP) player).currentWindowId;
-			player.openContainer = ContainerHandler.getPlayerStatsContainer(playerMP, i, ServerEditHandler.getData(playerMP.getCommandSenderName()) != null);
-			player.openContainer.windowId = windowId;
 			MinestuckPacket packet = MinestuckPacket.makePacket(Type.CONTAINER, windowId);
 			MinestuckChannelHandler.sendToPlayer(packet, playerMP);
+			player.openContainer = ContainerHandler.getPlayerStatsContainer(playerMP, i, ServerEditHandler.getData(playerMP.getCommandSenderName()) != null);
+			player.openContainer.windowId = windowId;
 		}
 	}
 

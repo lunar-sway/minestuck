@@ -29,7 +29,8 @@ public abstract class MinestuckPacket
 		CONFIG(MinestuckConfigPacket.class), 
 		INFO(MinestuckInfoPacket.class),
 		TRANSPORTALIZER(TransportalizerPacket.class),
-		CONTAINER(MiscContainerPacket.class);
+		CONTAINER(MiscContainerPacket.class),
+		INVENTORY(InventoryChangedPacket.class);
 		
 		Class<? extends MinestuckPacket> packetType;
 		private Type(Class<? extends MinestuckPacket> packetClass)

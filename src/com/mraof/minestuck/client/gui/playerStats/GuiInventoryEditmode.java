@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
-import com.mraof.minestuck.inventory.ContainerInvEditmode;
+import com.mraof.minestuck.inventory.ContainerEditmode;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,7 +17,7 @@ public class GuiInventoryEditmode extends GuiPlayerStatsContainer
 	
 	public GuiInventoryEditmode(Boolean type)
 	{
-		super(new ContainerInvEditmode(type));
+		super(new ContainerEditmode(type));
 		guiWidth = 176;
 		guiHeight = 98;
 	}

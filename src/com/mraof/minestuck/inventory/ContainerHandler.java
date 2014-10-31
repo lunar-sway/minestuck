@@ -19,7 +19,7 @@ public class ContainerHandler
 		else
 			switch(id)
 			{
-			case 0: case 1: return new ContainerInvEditmode(player, id != 0);
+			case 0: case 1: return new ContainerEditmode(player, id == 0);
 			default: return null;
 			}
 	}
