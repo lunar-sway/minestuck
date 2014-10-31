@@ -54,7 +54,7 @@ public class ItemDowel extends Item {
 				
 				if (contentID != null && contentMeta != null && Item.itemRegistry.containsKey(contentID.func_150285_a_())) {
 					
-					par3List.add("(" + (AlchemyRecipeHandler.getDecodedItem(par1ItemStack)).getDisplayName() + ")");
+					par3List.add("(" + (AlchemyRecipeHandler.getDecodedItem(par1ItemStack, false)).getDisplayName() + ")");
 					
 					return;
 				}

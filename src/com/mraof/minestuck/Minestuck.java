@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.EnumMap;
 import java.util.Iterator;
 
+import org.lwjgl.opengl.GLContext;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -112,6 +114,7 @@ import com.mraof.minestuck.world.gen.structure.StructureCastleStart;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -222,10 +225,12 @@ public class Minestuck
 	public static boolean toolTipEnabled;
 	public static boolean forceMaxSize;	//If it should prevent players from joining a session if there is no possible combinations left.
 	public static boolean giveItems;
+	public static boolean specialCardRenderer;
 	public static String privateMessage;
 	public static int artifactRange; //The range of the Cruxite Artifact in teleporting zones over to the new land
 	public static int overworldEditRange;
 	public static int landEditRange;
+	public static int cardResolution;
 	/**
 	 * 0: Make the player's new server player his/her old server player's server player
 	 * 1: The player that lost his/her server player will have an idle main connection until someone without a client player connects to him/her.
@@ -276,11 +281,21 @@ public class Minestuck
 		forceMaxSize = config.get("General", "forceMaxSize", false).getBoolean(false);
 		escapeFailureMode = config.get("General", "escapeFailureMode", 0).getInt();
 		giveItems = config.get("General", "giveItems", false, "Setting this to true replaces editmode with the old Give Items.").getBoolean(false);
-		//Default will be set to false when everything with edit mode is fixed
+		
 		if(escapeFailureMode > 2 || escapeFailureMode < 0)
 			escapeFailureMode = 0;
-		if(event.getSide().isClient()) {	//Client sided config values
+		if(event.getSide().isClient())	//Client sided config values
+		{
 			toolTipEnabled = config.get("General", "editModeToolTip", false).getBoolean(false);
+			specialCardRenderer = config.get("General", "specialCardRenderer", false).getBoolean(false);
+			if(Minestuck.specialCardRenderer && !GLContext.getCapabilities().GL_EXT_framebuffer_object)
+			{
+				specialCardRenderer = false;
+				FMLLog.warning("[Minestuck] The FBO extension is not available and is required for the advanced rendering of captchalouge cards.");
+			}
+			cardResolution = config.get("General", "cardResolution", 1).getInt(1);
+			if(cardResolution < 0)
+				cardResolution = 0;
 		}
 		config.save();
 		
@@ -555,8 +570,6 @@ public class Minestuck
 		worldSeed = event.getServer().worldServers[0].getSeed();
 
 		MinestuckSaveHandler.lands.clear();
-		MinestuckPlayerData.onServerStarting();
-		
 		File dataFile = event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("MinestuckData");
 		if(dataFile != null && dataFile.exists()) {
 			NBTTagCompound nbt = null;
