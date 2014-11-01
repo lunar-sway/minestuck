@@ -1,5 +1,7 @@
 package com.mraof.minestuck.tracker;
 
+import org.lwjgl.opengl.GLContext;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;

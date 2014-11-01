@@ -436,16 +436,19 @@ public class AlchemyRecipeHandler {
 	 * Given a punched card or a carved dowel, returns a new item that represents the encoded data.
 	 * 
 	 * @param card - The dowel or card with encoded data
+	 * @param b - If it is used for a dowel in alchemy.
 	 * @return An item, or null if the data was invalid.
 	 */
-	public static ItemStack getDecodedItem(ItemStack card) {
+	public static ItemStack getDecodedItem(ItemStack card, boolean b)
+	{
 		
 		if (card == null) {return null;}
 		
 		NBTTagCompound tag = card.getTagCompound();
 		
-		if (tag == null || !tag.hasKey("contentID")) {
-			return new ItemStack(Minestuck.blockStorage,1,1);
+		if (tag == null || !tag.hasKey("contentID"))
+		{
+			return b? new ItemStack(Minestuck.blockStorage,1,1):null;
 		}
 		
 		if (!Item.itemRegistry.containsKey(tag.getString("contentID"))) {return null;}
@@ -456,17 +459,22 @@ public class AlchemyRecipeHandler {
 	}
 	
 	/**
-	 * Given a punched card or a carved dowel, returns a new item that represents the encoded data. If allowDirect is true,
-	 * it jst gives you the item directly if it's not a card.
+	 * Given a punched card or a carved dowel, returns a new item that represents the encoded data. If easyDesignex is true,
+	 * it just gives you the item directly if it's not a punched card.
 	 */
-	public static ItemStack getDecodedItem(ItemStack card,boolean allowDirect) {
+	public static ItemStack getDecodedItem(ItemStack card)
+	{
 		
 		if (card == null) {return null;}
 		
-		if (!card.getItem().equals(Minestuck.captchaCard) && Minestuck.easyDesignex) {
+		if (!(card.getItem().equals(Minestuck.captchaCard) && card.hasTagCompound() && card.getTagCompound().getBoolean("punched"))
+				&& Minestuck.easyDesignex)
+		{
 			return card;
-		} else {
-			return getDecodedItem(card);
+		}
+		else
+		{
+			return getDecodedItem(card, false);
 		}
 	}
 	
@@ -484,8 +492,12 @@ public class AlchemyRecipeHandler {
 	
 	public static ItemStack createCard(ItemStack item, boolean punched) {
 		ItemStack stack = createEncodedItem(item, true);
-		if(stack.hasTagCompound())
+		if(stack.hasTagCompound()) {
 			stack.getTagCompound().setBoolean("punched", punched);
+			if(!punched && item.hasTagCompound()) {
+				stack.getTagCompound().setTag("contentTags", item.getTagCompound());
+			}
+		}
 		return stack;
 	}
 	
