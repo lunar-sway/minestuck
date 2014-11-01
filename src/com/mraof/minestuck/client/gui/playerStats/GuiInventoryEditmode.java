@@ -15,9 +15,9 @@ public class GuiInventoryEditmode extends GuiPlayerStatsContainer
 	
 	private static final int leftArrowX = 7, rightArrowX = 151, arrowY = 23;
 	
-	public GuiInventoryEditmode(Boolean type)
+	public GuiInventoryEditmode()
 	{
-		super(new ContainerEditmode(type));
+		super(new ContainerEditmode());
 		guiWidth = 176;
 		guiHeight = 98;
 	}
