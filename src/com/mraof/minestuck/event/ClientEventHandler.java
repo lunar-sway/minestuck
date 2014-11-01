@@ -15,7 +15,7 @@ public class ClientEventHandler {
 	public void onConnectedToServer(ClientConnectedToServerEvent event) {
 		GuiPlayerStats.normalTab = GuiPlayerStats.NormalGuiType.CAPTCHA_DECK;
 		GuiPlayerStats.editmodeTab = GuiPlayerStats.EditmodeGuiType.DEPLOY_LIST;
-//		ContainerEditmode.scrollIndex = 0;
+		ContainerEditmode.clientScroll = 0;
 	}
 	
 }

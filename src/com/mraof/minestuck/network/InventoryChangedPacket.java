@@ -66,11 +66,14 @@ public class InventoryChangedPacket extends MinestuckPacket
 		case 0:
 			if(player.worldObj.isRemote && this.inventory != null && player.openContainer instanceof ContainerEditmode)
 			{
-				((ContainerEditmode)player.openContainer).inventoryItemStacks = this.inventory;
-				((ContainerEditmode)player.openContainer).inventory.items = (ArrayList<ItemStack>) this.inventory.clone();
+				for(int i = 0; i < inventory.size(); i++)
+				{
+					((ContainerEditmode)player.openContainer).inventoryItemStacks.set(i, inventory.get(i) == null? null:inventory.get(i).copy());
+					((ContainerEditmode)player.openContainer).inventory.setInventorySlotContents(i, inventory.get(i));
+				}
 			}
 			else if(!player.worldObj.isRemote && player.openContainer instanceof ContainerEditmode)
-				((ContainerEditmode)player.openContainer).inventory.scrollIndex = this.i;
+				((ContainerEditmode)player.openContainer).scroll = this.i;
 			break;
 		}
 		

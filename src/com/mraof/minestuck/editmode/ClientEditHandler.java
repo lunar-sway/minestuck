@@ -1,5 +1,7 @@
 package com.mraof.minestuck.editmode;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
@@ -25,6 +27,7 @@ import net.minecraftforge.event.world.WorldEvent;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiInventoryReplacer;
+import com.mraof.minestuck.inventory.ContainerEditmode;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
@@ -83,44 +86,60 @@ public class ClientEditHandler {
 		}
 	}
 	
-	public void addToolTip(EntityPlayer player, boolean[] givenItems) {
+	public void addToolTip(EntityPlayer player, boolean[] givenItems)
+	{
 		GristSet have = MinestuckPlayerData.getClientGrist();
-		for(int i = 0; i < player.inventory.mainInventory.length; i++) {
-			ItemStack stack = player.inventory.mainInventory[i];
-			if(stack == null)
-				continue;
-			if(stack.stackTagCompound == null)
-				stack.stackTagCompound = new NBTTagCompound();
-			if(!stack.stackTagCompound.hasKey("display"))
-				stack.stackTagCompound.setTag("display", new NBTTagCompound());
-			NBTTagList list = new NBTTagList();
-			stack.stackTagCompound.getCompoundTag("display").setTag("Lore", list);
-			
-			
-			GristSet cost;
-			if(DeployList.containsItemStack(stack))
-				cost = Minestuck.clientHardMode&&givenItems[DeployList.getOrdinal(stack)+1]
-						?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
-			else if(stack.getItem().equals(Minestuck.captchaCard))
-				cost = new GristSet();
-			else cost = GristRegistry.getGristConversion(stack);
-			
-			if(cost == null) {
-				list.appendTag(new NBTTagString(""+EnumChatFormatting.RESET+EnumChatFormatting.RESET
-						+EnumChatFormatting.RED+StatCollector.translateToLocal("gui.notAvailable")));
-				continue;
+		for(ItemStack stack : player.inventory.mainInventory)
+			addToolTip(stack, have, givenItems);
+		
+		if(player.openContainer instanceof ContainerEditmode)
+		{
+			ContainerEditmode container = (ContainerEditmode) player.openContainer;
+			for(int i = 0; i < container.inventory.getSizeInventory(); i++)
+			{
+				addToolTip(container.inventory.getStackInSlot(i), have, givenItems);
+				container.inventoryItemStacks.set(i, container.getSlot(i).getStack());
 			}
-			
-			for(Entry<Integer, Integer> entry : cost.getHashtable().entrySet()) {
-				GristType grist = GristType.values()[entry.getKey()];
-				String s = EnumChatFormatting.RESET + "" + EnumChatFormatting.RESET;
-				s += entry.getValue() <= have.getGrist(grist) ? EnumChatFormatting.GREEN : EnumChatFormatting.RED;
-				list.appendTag(new NBTTagString(s + entry.getValue() + " " + grist.getDisplayName() + " (" + have.getGrist(grist) + ")"));
-			}
-			if(cost.isEmpty())
-				list.appendTag(new NBTTagString(""+EnumChatFormatting.RESET+EnumChatFormatting.RESET+EnumChatFormatting.GREEN+
-						StatCollector.translateToLocal("gui.free")));
 		}
+	}
+	
+	public void addToolTip(ItemStack stack, GristSet have, boolean[] givenItems)
+	{
+		if(stack == null)
+			return;
+		if(stack.stackTagCompound == null)
+			stack.stackTagCompound = new NBTTagCompound();
+		if(!stack.stackTagCompound.hasKey("display"))
+			stack.stackTagCompound.setTag("display", new NBTTagCompound());
+		NBTTagList list = new NBTTagList();
+		stack.stackTagCompound.getCompoundTag("display").setTag("Lore", list);
+		
+		
+		GristSet cost;
+		if(DeployList.containsItemStack(stack))
+			cost = Minestuck.clientHardMode&&givenItems[DeployList.getOrdinal(stack)+1]
+					?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
+		else if(stack.getItem().equals(Minestuck.captchaCard))
+			cost = new GristSet();
+		else cost = GristRegistry.getGristConversion(stack);
+		
+		if(cost == null)
+		{
+			list.appendTag(new NBTTagString(""+EnumChatFormatting.RESET+EnumChatFormatting.RESET
+					+EnumChatFormatting.RED+StatCollector.translateToLocal("gui.notAvailable")));
+			return;
+		}
+		
+		for(Entry<Integer, Integer> entry : cost.getHashtable().entrySet())
+		{
+			GristType grist = GristType.values()[entry.getKey()];
+			String s = EnumChatFormatting.RESET + "" + EnumChatFormatting.RESET;
+			s += entry.getValue() <= have.getGrist(grist) ? EnumChatFormatting.GREEN : EnumChatFormatting.RED;
+			list.appendTag(new NBTTagString(s + entry.getValue() + " " + grist.getDisplayName() + " (" + have.getGrist(grist) + ")"));
+		}
+		if(cost.isEmpty())
+			list.appendTag(new NBTTagString(""+EnumChatFormatting.RESET+EnumChatFormatting.RESET+EnumChatFormatting.GREEN+
+					StatCollector.translateToLocal("gui.free")));
 	}
 	
 	@SubscribeEvent

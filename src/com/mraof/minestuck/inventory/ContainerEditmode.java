@@ -19,6 +19,7 @@ import com.mraof.minestuck.util.UsernameHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -26,8 +27,11 @@ import net.minecraft.item.ItemStack;
 public class ContainerEditmode extends Container {
 	
 	private EntityPlayer player;
-	public InventoryEditmode inventory = new InventoryEditmode();
+	public InventoryBasic inventory = new InventoryBasic("InventoryEditmode", false, 14);
+	public ArrayList<ItemStack> items  = new ArrayList<ItemStack>();
 	private boolean mode;
+	public int scroll;
+	public static int clientScroll;
 	
 	public ContainerEditmode(boolean mode)
 	{
@@ -46,7 +50,6 @@ public class ContainerEditmode extends Container {
 			addCraftingToCrafters((EntityPlayerMP) player);
 			updateInventory();
 		}
-		Debug.print("Slot 1:"+this.getSlot(1).getStack());
 	}
 	
 	@Override
@@ -79,10 +82,10 @@ public class ContainerEditmode extends Container {
 	{
 		
 		for(int i = 0; i < 14; i++)
-			addSlotToContainer(new Slot(inventory, i, 26+(i/2)*18, 16+(i%2)*18));
+			addSlotToContainer(new InventorySlot(inventory, i, 26+(i/2)*18, 16+(i%2)*18));
 		
 		for(int i = 0; i < 9; i++)
-			addSlotToContainer(new Slot(player.inventory, i, 8+i*18, 74));
+			addSlotToContainer(new ToolbarSlot(player.inventory, i, 8+i*18, 74));
 	}
 	
 	private void updateInventory()
@@ -104,8 +107,10 @@ public class ContainerEditmode extends Container {
 					iter.remove();
 				else if(Minestuck.hardMode && DeployList.getSecondaryCost(stack) == null && c.givenItems()[DeployList.getOrdinal(stack)])
 					iter.remove();
-				if(stack.getItem().equals(Minestuck.captchaCard))
-					stack.getTagCompound().setInteger("contentMeta", SessionHandler.getEntryItem(c.getClientName()));
+				else if(stack.getItem().equals(Minestuck.captchaCard))
+					if(c.enteredGame())
+						iter.remove();
+					else stack.getTagCompound().setInteger("contentMeta", SessionHandler.getEntryItem(c.getClientName()));
 			}
 			
 			for(int i = 0; i < Math.max(tools.size(), deployItems.size()); i++)
@@ -121,10 +126,10 @@ public class ContainerEditmode extends Container {
 		}
 		
 		boolean changed = false;
-		if(itemList.size() != inventory.items.size())
+		if(itemList.size() != this.items.size())
 			changed = true;
 		else for(int i = 0; i < itemList.size(); i++)
-			if(!ItemStack.areItemStacksEqual(itemList.get(i), inventory.items.get(i)))
+			if(!ItemStack.areItemStacksEqual(itemList.get(i), this.items.get(i)))
 			{
 				changed = true;
 				break;
@@ -132,10 +137,64 @@ public class ContainerEditmode extends Container {
 		
 		if(changed)
 		{
-			inventory.items = itemList;
-			MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.INVENTORY, 0, itemList), player);
+			this.items = itemList;
+			sendPacket();
 		}
-		Debug.print("Inventory:"+(inventory.items.size() < 2?null:inventory.items.get(1)));
+	}
+	
+	public void sendPacket()
+	{
+		ArrayList<ItemStack> itemList = new ArrayList<ItemStack>();
+		for(int i = 0; i < 14; i++)
+		{
+			itemList.add(this.items.size() <= i + scroll*2? null:this.items.get(i + scroll*2));
+			this.inventory.setInventorySlotContents(i, itemList.get(i));
+			this.inventoryItemStacks.set(i, itemList.get(i));
+		}
+		
+		MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.INVENTORY, 0, itemList), player);
+	}
+	
+	private static class ToolbarSlot extends Slot
+	{
+		
+		public ToolbarSlot(IInventory inventory, int index, int x, int y)
+		{
+			super(inventory, index, x, y);
+		}
+		
+		@Override
+		public int getSlotStackLimit()
+		{
+			return 1;
+		}
+		
+	}
+	
+	private static class InventorySlot extends ToolbarSlot
+	{
+		
+		public InventorySlot(IInventory inventory, int index, int x, int y)
+		{
+			super(inventory, index, x, y);
+		}
+		
+		@Override
+		public ItemStack decrStackSize(int index)
+		{
+			return this.getStack();
+		}
+		
+		@Override
+		public ItemStack getStack()
+		{
+			return this.inventory.getStackInSlot(this.slotNumber) ==  null?null:this.inventory.getStackInSlot(this.slotNumber).copy();
+		}
+		
+		@Override
+		public void putStack(ItemStack stack)
+		{}
+		
 	}
 	
 }
