@@ -213,6 +213,7 @@ public class Minestuck
 	public static int clientLandEditRange;		//changed by a MinestuckConfigPacket sent by the server on login.
 	public static boolean clientHardMode;
 	public static boolean clientGiveItems;
+	public static boolean clientEasyDesignix;
 	
 	//General
 	public static boolean hardMode = false;	//Future config option. Currently alters how easy the entry items are accessible after the first time. The machines cost 100 build and there will only be one card if this is true.
@@ -221,7 +222,7 @@ public class Minestuck
 	public static boolean acceptTitleCollision;	//Allows combinations like "Heir of Hope" and "Seer of Hope" to exist in the same session. Will try to avoid duplicates.
 	public static boolean generateSpecialClasses;	//Allow generation of the "Lord" and "Muse" classes.
 	public static boolean globalSession;	//Makes only one session possible. Recommended to be true on small servers. Will be ignored when loading a world that already got 2+ sessions.
-	public static boolean easyDesignex; //Makes it so you don't need to encode individual cards before combining them.
+	public static boolean easyDesignix; //Makes it so you don't need to encode individual cards before combining them.
 	public static boolean toolTipEnabled;
 	public static boolean forceMaxSize;	//If it should prevent players from joining a session if there is no possible combinations left.
 	public static boolean giveItems;
@@ -271,7 +272,7 @@ public class Minestuck
 		globalSession = config.get("General", "globalSession", true).getBoolean(true);
 		privateComputers = config.get("General", "privateComputers", false).getBoolean(false);
 		privateMessage = config.get("General", "privateMessage", "You are not allowed to access other players computers.").getString();
-		easyDesignex  = config.get("General", "easyDesignex", true).getBoolean(true);
+		easyDesignix  = config.get("General", "easyDesignix", true).getBoolean(true);
 		overworldEditRange = config.get("General", "overWorldEditRange", 15).getInt();
 		landEditRange = config.get("General", "landEditRange", 30).getInt();	//Now radius
 		artifactRange = config.get("General", "artifactRange", 30).getInt();

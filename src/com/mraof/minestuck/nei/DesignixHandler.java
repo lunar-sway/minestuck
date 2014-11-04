@@ -16,15 +16,15 @@ import codechicken.nei.recipe.TemplateRecipeHandler;
 
 import com.mraof.minestuck.util.CombinationRegistry;
 
-public class DesignexHandler extends TemplateRecipeHandler {
+public class DesignixHandler extends TemplateRecipeHandler {
 
-	class CachedDesignexRecipe extends CachedRecipe {
+	class CachedDesignixRecipe extends CachedRecipe {
 
 		private ItemStack input1;
 		private ItemStack input2;
 		private boolean mode;
 		private ItemStack output;
-		public CachedDesignexRecipe(ItemStack input1,ItemStack input2,boolean mode,ItemStack output) {
+		public CachedDesignixRecipe(ItemStack input1,ItemStack input2,boolean mode,ItemStack output) {
 			this.input1 = input1;
 			this.input2 = input2;
 			this.mode = mode;
@@ -48,12 +48,12 @@ public class DesignexHandler extends TemplateRecipeHandler {
 
 	@Override
 	public String getRecipeName() {
-		return "Punch Designex";
+		return "Punch Designix";
 	}
 
 	@Override
 	public String getGuiTexture() {
-		return "minestuck:textures/gui/designex.png";
+		return "minestuck:textures/gui/designix.png";
 	}
 	
 	@Override
@@ -61,7 +61,7 @@ public class DesignexHandler extends TemplateRecipeHandler {
 	{
 		if(outputId.equals("item"))
 			loadCraftingRecipes((ItemStack)results[0]);
-		else if (outputId.equals("allDesignex")) {
+		else if (outputId.equals("allDesignix")) {
 			for (Map.Entry<List<Object>, ItemStack> entry : CombinationRegistry.getAllConversions().entrySet()) {
 				List<Object> itemData = (List<Object>)entry.getKey();
 				Item id1 = (Item)itemData.get(0);
@@ -69,7 +69,7 @@ public class DesignexHandler extends TemplateRecipeHandler {
 				Item id2 = (Item)itemData.get(2);
 				int meta2 = (Integer)itemData.get(3);
 				boolean mode = (Boolean)itemData.get(4);
-				arecipes.add(new CachedDesignexRecipe(new ItemStack(id1,1,meta1),new ItemStack(id2,1,meta2),mode,(ItemStack)entry.getValue()));
+				arecipes.add(new CachedDesignixRecipe(new ItemStack(id1,1,meta1),new ItemStack(id2,1,meta2),mode,(ItemStack)entry.getValue()));
 			}
 		}
 			
@@ -86,7 +86,7 @@ public class DesignexHandler extends TemplateRecipeHandler {
 			int meta2 = (Integer)itemData.get(3);
 			boolean mode = (Boolean)itemData.get(4);
 			if (result.getItem() == (entry.getValue()).getItem() && result.getItemDamage() == (entry.getValue()).getItemDamage()) {
-				arecipes.add(new CachedDesignexRecipe(new ItemStack(id1,1,meta1),new ItemStack(id2,1,meta2),mode,(ItemStack)entry.getValue()));
+				arecipes.add(new CachedDesignixRecipe(new ItemStack(id1,1,meta1),new ItemStack(id2,1,meta2),mode,(ItemStack)entry.getValue()));
 			}
 		}
 	}
@@ -105,7 +105,7 @@ public class DesignexHandler extends TemplateRecipeHandler {
 			ItemStack search1 = (ItemStack)ingredients[0];
 			//ItemStack search2 = (ItemStack)ingredients[1];
 			if ((search1.getItem() == id1 && search1.getItemDamage() == meta1) || (search1.getItem() == id2 && search1.getItemDamage() == meta2)) {
-				arecipes.add(new CachedDesignexRecipe(new ItemStack(id1, 1, meta1),new ItemStack(id2,1,meta2),mode,(ItemStack)entry.getValue()));
+				arecipes.add(new CachedDesignixRecipe(new ItemStack(id1, 1, meta1),new ItemStack(id2,1,meta2),mode,(ItemStack)entry.getValue()));
 			}
 		}
 	}
@@ -113,10 +113,10 @@ public class DesignexHandler extends TemplateRecipeHandler {
 	@Override
 	public void drawExtras(int recipe)
 	{
-		CachedDesignexRecipe crecipe = (CachedDesignexRecipe) arecipes.get(recipe);
+		CachedDesignixRecipe crecipe = (CachedDesignixRecipe) arecipes.get(recipe);
 		
 		//render progress bar
-		changeTexture("minestuck:textures/gui/progress/designex.png");
+		changeTexture("minestuck:textures/gui/progress/designix.png");
 		drawProgressBar(77, 27, 0, 0, 42, 17, 50, 0);
 		
 		//render blank card
@@ -170,7 +170,7 @@ public class DesignexHandler extends TemplateRecipeHandler {
 	@Override
 	public void loadTransferRects()
 	{
-		transferRects.add(new RecipeTransferRect(new Rectangle(77, 27, 42, 17),"allDesignex"));
+		transferRects.add(new RecipeTransferRect(new Rectangle(77, 27, 42, 17),"allDesignix"));
 	}
 
 }
