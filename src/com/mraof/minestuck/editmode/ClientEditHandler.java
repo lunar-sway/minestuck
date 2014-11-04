@@ -13,6 +13,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.client.event.GuiOpenEvent;
@@ -29,6 +31,8 @@ import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
@@ -149,7 +153,7 @@ public class ClientEditHandler {
 				else if(GristHelper.canAfford(MinestuckPlayerData.getClientGrist(), Minestuck.clientHardMode&&givenItems[ordinal]
 						?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack)))
 					givenItems[ordinal] = true;
-			else if(stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack).getItem() == Minestuck.cruxiteArtifact
+			else if(stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack, false).getItem() == Minestuck.cruxiteArtifact
 					&& stack.getTagCompound().getBoolean("punched")) {
 				//SburbConnection c = SkaiaClient.getClientConnection(client); //unused
 				givenItems[0] = true;
@@ -183,8 +187,16 @@ public class ClientEditHandler {
 						cost = DeployList.getSecondaryCost(stack);
 					else cost = DeployList.getPrimaryCost(stack);
 				else cost = GristRegistry.getGristConversion(stack);
-				if(!GristHelper.canAfford(MinestuckPlayerData.getClientGrist(), cost))
+				if(!GristHelper.canAfford(MinestuckPlayerData.getClientGrist(), cost)) {
+					StringBuilder str = new StringBuilder();
+					for(GristAmount grist : cost.getArray()) {
+						if(cost.getArray().indexOf(grist) != 0)
+							str.append(", ");
+						str.append(grist.getAmount()+" "+grist.getType().getDisplayName());
+					}
+					event.entityPlayer.addChatMessage(new ChatComponentTranslation("grist.missing",str.toString()));
 					event.setCanceled(true);
+				}
 				if(event.useItem == Result.DEFAULT)
 					event.useItem = Result.ALLOW;
 			} else if(event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) {
