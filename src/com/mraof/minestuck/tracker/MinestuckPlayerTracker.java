@@ -74,7 +74,6 @@ public class MinestuckPlayerTracker {
 	@SubscribeEvent
 	public void onConnectionCreated(FMLNetworkEvent.ServerConnectionFromClientEvent event) {
 		MinestuckPacket packet = MinestuckPacket.makePacket(Type.LANDREGISTER, MinestuckSaveHandler.lands.toArray());
-		Debug.printf("Player logged in, sending land packet.");
 		
 		Minestuck.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.DISPATCHER);
 		Minestuck.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(event.manager.channel().attr(NetworkDispatcher.FML_DISPATCHER).get());

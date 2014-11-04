@@ -43,9 +43,8 @@ public class LandRegisterPacket extends MinestuckPacket
 	@Override
 	public void execute(EntityPlayer player) 
 	{
-		if(MinecraftServer.getServer() != null)
+		if(MinecraftServer.getServer() != null && MinecraftServer.getServer().isServerRunning())
 			return;	//Nope, no editing the server's land list
-		Debug.print("Got land packet.");
 
 		MinestuckSaveHandler.lands.clear();
 
