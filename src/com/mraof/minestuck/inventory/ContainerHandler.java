@@ -1,6 +1,7 @@
 package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.inventory.captchalouge.ContainerCaptchaDeck;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;

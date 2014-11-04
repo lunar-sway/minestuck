@@ -1,4 +1,4 @@
-package com.mraof.minestuck.inventory;
+package com.mraof.minestuck.inventory.captchalouge;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;

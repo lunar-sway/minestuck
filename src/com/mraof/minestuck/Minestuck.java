@@ -231,6 +231,7 @@ public class Minestuck
 	public static int overworldEditRange;
 	public static int landEditRange;
 	public static int cardResolution;
+	public static int defaultModusSize;
 	/**
 	 * 0: Make the player's new server player his/her old server player's server player
 	 * 1: The player that lost his/her server player will have an idle main connection until someone without a client player connects to him/her.
@@ -281,6 +282,7 @@ public class Minestuck
 		forceMaxSize = config.get("General", "forceMaxSize", false).getBoolean(false);
 		escapeFailureMode = config.get("General", "escapeFailureMode", 0).getInt();
 		giveItems = config.get("General", "giveItems", false, "Setting this to true replaces editmode with the old Give Items.").getBoolean(false);
+		defaultModusSize = config.get("General", "defaultModusSize", 5, "The initial size of a captchalouge deck.").getInt();
 		
 		if(escapeFailureMode > 2 || escapeFailureMode < 0)
 			escapeFailureMode = 0;

@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
-import com.mraof.minestuck.inventory.ContainerCaptchaDeck;
+import com.mraof.minestuck.inventory.captchalouge.ContainerCaptchaDeck;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.Container;
