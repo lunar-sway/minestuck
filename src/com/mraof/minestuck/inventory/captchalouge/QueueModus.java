@@ -10,7 +10,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class FifoModus extends FiloModus
+public class QueueModus extends StackModus
 {
 	
 	@Override

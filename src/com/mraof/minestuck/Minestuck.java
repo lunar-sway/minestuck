@@ -25,7 +25,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
-
 import codechicken.nei.NEIModContainer;
 
 import com.mraof.minestuck.block.BlockChessTile;
@@ -69,6 +68,7 @@ import com.mraof.minestuck.item.ItemCruxiteRaw;
 import com.mraof.minestuck.item.ItemDisk;
 import com.mraof.minestuck.item.ItemDowel;
 import com.mraof.minestuck.item.ItemMinestuckBucket;
+import com.mraof.minestuck.item.ItemModus;
 import com.mraof.minestuck.item.block.ItemBlockLayered;
 import com.mraof.minestuck.item.block.ItemChessTile;
 import com.mraof.minestuck.item.block.ItemColoredDirt;
@@ -182,6 +182,7 @@ public class Minestuck
 	public static Item cruxiteArtifact;
 	public static Item disk;
 	public static Item component;
+	public static Item captchaModus;
 	public static ItemMinestuckBucket minestuckBucket;
 
 
@@ -376,6 +377,7 @@ public class Minestuck
 		disk = new ItemDisk();
 		component = new ItemComponent();
 		minestuckBucket = new ItemMinestuckBucket();
+		captchaModus = new ItemModus();
 		
 		minestuckBucket.addBlock(blockBlood, "BucketBlood");
 		minestuckBucket.addBlock(blockOil, "BucketOil");
@@ -426,6 +428,7 @@ public class Minestuck
 		GameRegistry.registerItem(disk, "computerDisk");
 		GameRegistry.registerItem(component, "component");
 		GameRegistry.registerItem(minestuckBucket, "minestuckBucket");
+		GameRegistry.registerItem(captchaModus, "modusCard");
 		
 		
 		MinestuckAchievementHandler.prepareAchievementPage();

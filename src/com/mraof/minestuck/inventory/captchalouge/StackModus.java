@@ -10,7 +10,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class FiloModus extends CaptchalougeModus
+public class StackModus extends CaptchalougeModus
 {
 	
 	public static int modusMaxSize;

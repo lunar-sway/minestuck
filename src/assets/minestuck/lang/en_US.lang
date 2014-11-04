@@ -136,6 +136,10 @@ item.component.SilverSpoon.name=Silver Spoon
 item.component.Chessboard.name=Chessboard
 item.minestuckBucket.tile.oil.name=Bucket of Oil
 item.minestuckBucket.tile.blood.name=Bucket of Blood
+item.modusCard.stack.name=Stack Modus
+item.modusCard.queue.name=Queue Modus
+item.modusCard.tree.name=Tree Modus
+item.modusCard.hashmap.name=Hashmap Modus
 
 itemGroup.tabMinestuck=Minestuck
 
