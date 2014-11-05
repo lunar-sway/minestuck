@@ -571,6 +571,8 @@ public class Minestuck
 		worldSeed = event.getServer().worldServers[0].getSeed();
 
 		MinestuckSaveHandler.lands.clear();
+		MinestuckPlayerData.onServerStarting();
+		
 		File dataFile = event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("MinestuckData");
 		if(dataFile != null && dataFile.exists()) {
 			NBTTagCompound nbt = null;
