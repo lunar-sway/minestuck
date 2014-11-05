@@ -14,7 +14,7 @@ public class ContainerHandler
 		if(!editmode)
 			switch(id)
 			{
-			case 0: return new ContainerCaptchaDeck();
+			case 0: return new ContainerCaptchaDeck(player);
 			default: return null;
 			}
 		else

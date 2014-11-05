@@ -14,9 +14,9 @@ public class GuiCaptchaDeck extends GuiPlayerStatsContainer
 	
 	public GuiCaptchaDeck()
 	{
-		super(new ContainerCaptchaDeck());
+		super(new ContainerCaptchaDeck(Minecraft.getMinecraft().thePlayer));
 		guiWidth = 178;
-		guiHeight= 54;
+		guiHeight= 145;
 	}
 	
 	@Override
