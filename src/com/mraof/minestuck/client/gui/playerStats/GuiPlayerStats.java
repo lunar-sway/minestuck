@@ -214,7 +214,8 @@ public abstract class GuiPlayerStats extends GuiScreen
 					break;
 				else if(xcor < xOffset + i*(tabWidth + 2) + tabWidth
 						&& (!mode || !NormalGuiType.values()[i].reqMedium || SkaiaClient.enteredMedium(UsernameHandler.encode(mc.thePlayer.getCommandSenderName()))))
-					drawTooltip(StatCollector.translateToLocal(mode? NormalGuiType.values()[i].name:EditmodeGuiType.values()[i].name), xcor, ycor);
+					drawTooltip(StatCollector.translateToLocal(mode? NormalGuiType.values()[i].name:EditmodeGuiType.values()[i].name), xcor, ycor,
+							EnumChatFormatting.WHITE);
 	}
 	
 	@Override
@@ -255,11 +256,11 @@ public abstract class GuiPlayerStats extends GuiScreen
 			mc.displayGuiScreen(null);
 	}
 	
-	protected void drawTooltip(String text,int par2, int par3) {
+	protected void drawTooltip(String text,int par2, int par3, EnumChatFormatting color) {
 		String[] list = {text};
 		
 		for (int k = 0; k < list.length; ++k) {
-			list[k] = EnumChatFormatting.GRAY + list[k];
+			list[k] = color + list[k];
 		}
 		
 		if (list.length != 0) {

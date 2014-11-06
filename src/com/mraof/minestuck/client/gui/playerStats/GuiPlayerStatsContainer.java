@@ -40,6 +40,7 @@ public abstract class GuiPlayerStatsContainer extends GuiContainer {
 		xOffset = (width - guiWidth)/2;
 		yOffset = (height - guiHeight + tabHeight - tabOverlap)/2;
 		this.guiTop = yOffset;
+		this.guiLeft = xOffset;
 	}
 	
 	@Override
@@ -93,9 +94,7 @@ public abstract class GuiPlayerStatsContainer extends GuiContainer {
 	protected void drawTabTooltip(int xcor, int ycor)
 	{
 		
-		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-		RenderHelper.disableStandardItemLighting();
-		GL11.glDisable(GL11.GL_LIGHTING);
+//		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		
 		if(ycor < yOffset && ycor > yOffset - tabHeight + 4)
@@ -104,7 +103,9 @@ public abstract class GuiPlayerStatsContainer extends GuiContainer {
 					break;
 				else if(xcor < xOffset + i*(tabWidth + 2) + tabWidth
 						&& (!mode || !NormalGuiType.values()[i].reqMedium || SkaiaClient.enteredMedium(UsernameHandler.encode(mc.thePlayer.getCommandSenderName()))))
-					drawTooltip(StatCollector.translateToLocal(mode? NormalGuiType.values()[i].name:EditmodeGuiType.values()[i].name), xcor - guiLeft, ycor - guiTop);
+					drawTooltip(StatCollector.translateToLocal(mode? NormalGuiType.values()[i].name:EditmodeGuiType.values()[i].name), xcor - guiLeft, ycor - guiTop,
+							EnumChatFormatting.WHITE);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}
 	
 	@Override
@@ -133,12 +134,12 @@ public abstract class GuiPlayerStatsContainer extends GuiContainer {
 		super.mouseClicked(xcor, ycor, mouseButton);
 	}
 	
-	protected void drawTooltip(String text,int par2, int par3)
+	protected void drawTooltip(String text,int par2, int par3, EnumChatFormatting color)
 	{
 		String[] list = {text};
 		
 		for (int k = 0; k < list.length; ++k) {
-			list[k] = EnumChatFormatting.GRAY + list[k];
+			list[k] = color + list[k];
 		}
 		
 		if (list.length != 0) {

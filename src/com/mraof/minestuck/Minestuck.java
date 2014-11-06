@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.EnumMap;
 import java.util.Iterator;
+import java.util.Random;
 
 import org.lwjgl.opengl.GLContext;
 
@@ -61,6 +62,7 @@ import com.mraof.minestuck.entity.underling.EntityGiclops;
 import com.mraof.minestuck.entity.underling.EntityImp;
 import com.mraof.minestuck.entity.underling.EntityOgre;
 import com.mraof.minestuck.event.MinestuckFluidHandler;
+import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.item.ItemCaptchaCard;
 import com.mraof.minestuck.item.ItemComponent;
 import com.mraof.minestuck.item.ItemCruxiteArtifact;
@@ -233,6 +235,8 @@ public class Minestuck
 	public static int landEditRange;
 	public static int cardResolution;
 	public static int defaultModusSize;
+	public static int defaultModusType;
+	public static int modusMaxSize;
 	/**
 	 * 0: Make the player's new server player his/her old server player's server player
 	 * 1: The player that lost his/her server player will have an idle main connection until someone without a client player connects to him/her.
@@ -284,6 +288,9 @@ public class Minestuck
 		escapeFailureMode = config.get("General", "escapeFailureMode", 0).getInt();
 		giveItems = config.get("General", "giveItems", false, "Setting this to true replaces editmode with the old Give Items.").getBoolean(false);
 		defaultModusSize = config.get("General", "defaultModusSize", 5, "The initial size of a captchalouge deck.").getInt();
+		defaultModusType = config.get("General", "defaultModusType", -1,
+				"The type of modus that is given to players without one. -1: Random modus given. 0+: Certain modus given. Anything else: No modus given.").getInt();
+		modusMaxSize = config.get("General", "modusMaxSize", 0, "The max size on a modus. Ignored if the value is 0 or lower.").getInt();
 		
 		if(escapeFailureMode > 2 || escapeFailureMode < 0)
 			escapeFailureMode = 0;
@@ -568,6 +575,7 @@ public class Minestuck
 			iterator.remove();
 		}
 		TileEntityTransportalizer.transportalizers.clear();
+		CaptchaDeckHandler.rand = new Random();
 	}
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event)

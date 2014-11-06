@@ -31,12 +31,19 @@ public class ContainerCaptchaDeck extends Container
 	{
 		int columns = InventoryPlayer.getHotbarSize();
 		for(int i = 0; i < columns; i++)
-			addSlotToContainer(new Slot(player.inventory, i, 8 + i*18, 121));
+			addSlotToContainer(new Slot(player.inventory, i, 9 + i*18, 121));
 		for(int i = columns; i < player.inventory.mainInventory.length; i++)
 		{
-			addSlotToContainer(new Slot(player.inventory, i, 8 + (i%columns)*18, 63 + ((i - columns)/columns)*18));
+			addSlotToContainer(new Slot(player.inventory, i, 9 + (i%columns)*18, 63 + ((i - columns)/columns)*18));
 		}
-		addSlotToContainer(new SlotInput(this.inventory, 0, 81, 32, Minestuck.captchaModus));
+		addSlotToContainer(new SlotInput(this.inventory, 0, 81, 32, Minestuck.captchaModus)
+		{
+			@Override
+			public boolean isItemValid(ItemStack stack)
+			{
+				return super.isItemValid(stack) || stack.getItem().equals(Minestuck.captchaCard) && (!stack.hasTagCompound() || !stack.getTagCompound().getBoolean("punched"));
+			}
+		});
 	}
 	
 	@Override

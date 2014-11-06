@@ -75,7 +75,8 @@ public class GuiGristCache extends GuiPlayerStats
 		
 		if (tooltip != -1)
 		{
-			drawTooltip(StatCollector.translateToLocalFormatted("grist.format", GristType.values()[tooltip].getDisplayName()), xcor, ycor);
+			drawTooltip(StatCollector.translateToLocalFormatted("grist.format", GristType.values()[tooltip].getDisplayName()), xcor, ycor,
+					EnumChatFormatting.WHITE);
 		}
 	}
 	

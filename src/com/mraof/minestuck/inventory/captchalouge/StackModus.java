@@ -4,16 +4,16 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler.ModusType;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class StackModus extends CaptchalougeModus
+public class StackModus extends Modus
 {
 	
-	public static int modusMaxSize;
 	protected int size;
 	protected LinkedList<ItemStack> list;
 	
@@ -34,7 +34,7 @@ public class StackModus extends CaptchalougeModus
 			size  = prev.length;
 		}
 		else size = Minestuck.defaultModusSize;
-		if(side.isClient())
+		if(player.worldObj.isRemote)
 		{
 			items = new ItemStack[size];
 			changed = prev != null;
@@ -50,7 +50,7 @@ public class StackModus extends CaptchalougeModus
 			if(nbt.hasKey("item"+i))
 				list.add(ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("item"+i)));
 			else break;
-		if(side.isClient())
+		if(player != null && player.worldObj.isRemote)
 		{
 			items = new ItemStack[size];
 			changed = true;
@@ -81,7 +81,7 @@ public class StackModus extends CaptchalougeModus
 		else
 		{
 			list.add(item);
-			ModusHandler.launchItem(player, list.removeLast());
+			CaptchaDeckHandler.launchItem(player, list.removeLast());
 		}
 		
 		return true;
@@ -90,21 +90,33 @@ public class StackModus extends CaptchalougeModus
 	@Override
 	public ItemStack[] getItems()
 	{
+		if(player.worldObj.isRemote)	//Used only when replacing the modus
+		{
+			ItemStack[] items = new ItemStack[size];
+			fillList(items);
+			return items;
+		}
+		
 		if(changed)
 		{
-			Iterator<ItemStack> iter = list.iterator();
-			for(int i = 0; i < size; i++)
-				if(iter.hasNext())
-					items[i] = iter.next();
-				else items[i] = null;
+			fillList(items);
 		}
 		return items;
+	}
+	
+	protected void fillList(ItemStack[] items)
+	{
+		Iterator<ItemStack> iter = list.iterator();
+		for(int i = 0; i < size; i++)
+			if(iter.hasNext())
+				items[i] = iter.next();
+			else items[i] = null;
 	}
 	
 	@Override
 	public boolean increaseSize()
 	{
-		if(modusMaxSize > 0 && size >= modusMaxSize)
+		if(Minestuck.modusMaxSize > 0 && size >= Minestuck.modusMaxSize)
 			return false;
 		
 		size++;
@@ -116,6 +128,12 @@ public class StackModus extends CaptchalougeModus
 	public ItemStack getItem(int id)
 	{
 		return list.removeFirst();
+	}
+
+	@Override
+	public boolean canSwitchFrom(ModusType modus)
+	{
+		return modus == ModusType.QUEUE;
 	}
 	
 }

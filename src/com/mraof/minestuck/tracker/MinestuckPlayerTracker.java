@@ -1,7 +1,5 @@
 package com.mraof.minestuck.tracker;
 
-import org.lwjgl.opengl.GLContext;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -10,6 +8,9 @@ import net.minecraft.util.ChatComponentText;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
+import com.mraof.minestuck.inventory.captchalouge.Modus;
+import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.LandRegisterPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
@@ -43,6 +44,7 @@ public class MinestuckPlayerTracker {
 	{
 		EntityPlayer player = event.player;
 		Debug.print(player.getCommandSenderName()+" joined the game. Sending packets.");
+		String encUsername = UsernameHandler.encode(player.getCommandSenderName());
 		MinecraftServer server = MinecraftServer.getServer();
 		if(!server.isDedicatedServer() && UsernameHandler.host == null)
 			UsernameHandler.host = event.player.getCommandSenderName();
@@ -51,7 +53,8 @@ public class MinestuckPlayerTracker {
 		
 		SkaianetHandler.playerConnected(player.getCommandSenderName());
 		
-		if(MinestuckPlayerData.getGristSet(UsernameHandler.encode(player.getCommandSenderName())) == null) {
+		if(MinestuckPlayerData.getGristSet(encUsername) == null)
+		{
 			Debug.printf("Grist set is null for player %s.", player.getCommandSenderName());
 			if(player.getEntityData().hasKey("Grist")) {	//Load old grist format
 				NBTTagCompound nbt = player.getEntityData().getCompoundTag("Grist");
@@ -61,11 +64,36 @@ public class MinestuckPlayerTracker {
 				if(set.isEmpty())
 					set.addGrist(GristType.Build, 20);
 
-				MinestuckPlayerData.setGrist(UsernameHandler.encode(player.getCommandSenderName()), set);
+				MinestuckPlayerData.setGrist(encUsername, set);
 				player.getEntityData().removeTag("Grist");
-			} else MinestuckPlayerData.setGrist(UsernameHandler.encode(player.getCommandSenderName()), new GristSet(GristType.Build, 20));
+			} else MinestuckPlayerData.setGrist(encUsername, new GristSet(GristType.Build, 20));
 		}
-
+		
+		if(!CaptchaDeckHandler.playerMap.containsKey(encUsername))
+		{
+			if(Minestuck.defaultModusType == -1)
+			{
+				int index = player.worldObj.rand.nextInt(CaptchaDeckHandler.ModusType.values().length);
+				Modus modus = CaptchaDeckHandler.ModusType.values()[index].createInstance();
+				modus.player = player;
+				modus.initModus(null);
+				CaptchaDeckHandler.playerMap.put(encUsername, modus);
+			}
+			else if(Minestuck.defaultModusType >= 0 && Minestuck.defaultModusType < CaptchaDeckHandler.ModusType.values().length)
+			{
+				Modus modus = CaptchaDeckHandler.ModusType.values()[Minestuck.defaultModusType].createInstance();
+				modus.player = player;
+				modus.initModus(null);
+				CaptchaDeckHandler.playerMap.put(encUsername, modus);
+			}
+		}
+		else
+		{
+			Modus modus = CaptchaDeckHandler.playerMap.get(encUsername);
+			modus.player = player;
+			MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.CAPTCHA, CaptchaDeckPacket.DATA, modus.writeToNBT(new NBTTagCompound())), player);
+		}
+		
 		updateGristCache(UsernameHandler.encode(player.getCommandSenderName()));
 		updateTitle(player);
 		if(UpdateChecker.outOfDate)
@@ -91,6 +119,9 @@ public class MinestuckPlayerTracker {
 	public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
 		
 		ServerEditHandler.onPlayerExit(event.player);
+		Modus modus = CaptchaDeckHandler.playerMap.get(UsernameHandler.encode(event.player.getCommandSenderName()));
+		if(modus != null)
+			modus.player = null;
 	}
 	
 	/**
