@@ -28,7 +28,7 @@ import com.mraof.minestuck.util.GristType;
 
 public class GuiMachine extends GuiContainer {
 	
-	private static final String[] guis = {"cruxtruder","designex","lathe","alchemiter","widget"};
+	private static final String[] guis = {"cruxtruder","designix","lathe","alchemiter","widget"};
 	
 	private ResourceLocation guiBackground;
 	private ResourceLocation guiProgress;
@@ -172,7 +172,7 @@ public void initGui() {
 		super.initGui();
 		//make buttons:		id, x, y, width, height, text
 		if (metadata == 1) {
-			//The Designex's needs a button...
+			//The Designix's needs a button...
 			modeButton = new GuiButton(1, (width - xSize) / 2 + buttonX, (height - ySize) / 2 + buttonY, 20, 20, te.mode ? "&&": "||");
 			buttonList.add(modeButton);
 			modeButton.visible = (te.inv[1] != null && te.inv[2] != null);
