@@ -93,7 +93,7 @@ public class LandHelper {
 	/**
 	 * Converts aspect data to NBT tags for saving/loading.
 	 */
-	public static NBTBase toNBT(LandAspect aspect1,LandAspect aspect2) {
+	public static NBTTagCompound toNBT(LandAspect aspect1,LandAspect aspect2) {
 		NBTTagCompound tag = new NBTTagCompound();
 		tag.setString("aspect1",aspect1.getPrimaryName());
 		tag.setString("aspect2",aspect2.getPrimaryName());

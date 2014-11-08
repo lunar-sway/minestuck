@@ -23,6 +23,7 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.ITeleporter;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.Teleport;
+import com.mraof.minestuck.world.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.gen.lands.LandHelper;
 
 public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
@@ -68,7 +69,11 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 			int x = (int) entity.posX;
 			int y = (int) entity.posY;
 			int z = (int) entity.posZ;
-
+			
+			for(int chunkX = (x - Minestuck.artifactRange) >> 4; chunkX <= (x + Minestuck.artifactRange) >> 4; chunkX++)	//Prevent anything to generate on the piece that we move
+				for(int chunkZ = (z - Minestuck.artifactRange) >> 4; chunkZ <=(z + Minestuck.artifactRange) >> 4; chunkZ++)	//from the overworld.
+					worldserver1.theChunkProviderServer.loadChunk(chunkX, chunkZ);
+			
 			List<?> list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.boundingBox.expand((double)Minestuck.artifactRange, Minestuck.artifactRange, (double)Minestuck.artifactRange));
 			Iterator<?> iterator = list.iterator();
 
@@ -136,7 +141,13 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 			{
 				((Entity)iterator.next()).setDead();
 			}
-			worldserver1.provider.setSpawnPoint(x, y, z);
+			
+			ChunkProviderLands chunkProvider = (ChunkProviderLands) worldserver1.provider.createChunkGenerator();
+			chunkProvider.spawnX = x;
+			chunkProvider.spawnY = y;
+			chunkProvider.spawnZ = z;
+			chunkProvider.saveData();
+			
 			Debug.printf("Respawn location being set to: %d, %d, %d", x, y, z);
 		}
 	}
