@@ -53,26 +53,28 @@ public class ChunkProviderLands implements IChunkProvider
 	public LandAspect terrainMapper;
 	public ArrayList<ILandDecorator> decorators;
 	public int dayCycle;
+	public int spawnX, spawnY, spawnZ;
 
 	@SuppressWarnings("unchecked")
 	public ChunkProviderLands(World worldObj, long seed, boolean b)
 	{
 		seed *= worldObj.provider.dimensionId;
 		helper = new LandHelper(seed);
-
+		
 		NBTBase landDataTag = worldObj.getWorldInfo().getAdditionalProperty("LandData");
-
+		
 		this.landWorld = worldObj;
-
+		
 		if (landDataTag == null) {
+			spawnX = landWorld.getWorldInfo().getSpawnX();
+			spawnY = landWorld.getWorldInfo().getSpawnY();
+			spawnZ = landWorld.getWorldInfo().getSpawnZ();
 			this.aspect1 = helper.getLandAspect();
 			this.aspect2 = helper.getLandAspect(aspect1);
 			Random rand = new Random(seed);
 			nameIndex1 = rand.nextInt(aspect1.getNames().length);	//Better way to generate these?
 			nameIndex2 = rand.nextInt(aspect2.getNames().length);
-			Map<String, NBTBase> dataTag = new Hashtable<String,NBTBase>();
-			dataTag.put("LandData",LandHelper.toNBT(aspect1,aspect2));
-			worldObj.getWorldInfo().setAdditionalProperties(dataTag);
+			saveData();
 
 		} else {
 			aspect1 = LandHelper.fromName(((NBTTagCompound) landDataTag).getString("aspect1"));
@@ -80,7 +82,7 @@ public class ChunkProviderLands implements IChunkProvider
 			nameIndex1 = ((NBTTagCompound) landDataTag).getInteger("aspectName1");
 			nameIndex2 = ((NBTTagCompound) landDataTag).getInteger("aspectName2");
 		}
-
+		
 		this.random = new Random(seed);
 		this.consortList = new ArrayList<SpawnListEntry>();
 		this.underlingList = new ArrayList<SpawnListEntry>();
@@ -252,5 +254,18 @@ public class ChunkProviderLands implements IChunkProvider
 	{
 		return this.skyColor;
 	}
-
+	
+	public void saveData()
+	{
+		
+		NBTTagCompound nbt = LandHelper.toNBT(aspect1,aspect2);
+		nbt.setInteger("spawnX", spawnX);
+		nbt.setInteger("spawnY", spawnY);
+		nbt.setInteger("spawnZ", spawnZ);
+		
+		Map<String, NBTBase> dataTag = new Hashtable<String,NBTBase>();
+		dataTag.put("LandData", nbt);
+		landWorld.getWorldInfo().setAdditionalProperties(dataTag);
+	}
+	
 }

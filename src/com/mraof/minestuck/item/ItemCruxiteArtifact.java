@@ -23,6 +23,7 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.ITeleporter;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.Teleport;
+import com.mraof.minestuck.world.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.gen.lands.LandHelper;
 
 public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
@@ -136,7 +137,13 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 			{
 				((Entity)iterator.next()).setDead();
 			}
-			worldserver1.provider.setSpawnPoint(x, y, z);
+			
+			ChunkProviderLands chunkProvider = (ChunkProviderLands) worldserver1.provider.createChunkGenerator();
+			chunkProvider.spawnX = x;
+			chunkProvider.spawnY = y;
+			chunkProvider.spawnZ = z;
+			chunkProvider.saveData();
+			
 			Debug.printf("Respawn location being set to: %d, %d, %d", x, y, z);
 		}
 	}
