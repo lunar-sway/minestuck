@@ -69,7 +69,11 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 			int x = (int) entity.posX;
 			int y = (int) entity.posY;
 			int z = (int) entity.posZ;
-
+			
+			for(int chunkX = (x - Minestuck.artifactRange) >> 4; chunkX <= (x + Minestuck.artifactRange) >> 4; chunkX++)	//Prevent anything to generate on the piece that we move
+				for(int chunkZ = (z - Minestuck.artifactRange) >> 4; chunkZ <=(z + Minestuck.artifactRange) >> 4; chunkZ++)	//from the overworld.
+					worldserver1.theChunkProviderServer.loadChunk(chunkX, chunkZ);
+			
 			List<?> list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.boundingBox.expand((double)Minestuck.artifactRange, Minestuck.artifactRange, (double)Minestuck.artifactRange));
 			Iterator<?> iterator = list.iterator();
 
