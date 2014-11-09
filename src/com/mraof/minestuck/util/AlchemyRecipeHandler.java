@@ -278,7 +278,7 @@ public class AlchemyRecipeHandler {
 		GristRegistry.addGristConversion(new ItemStack(Items.wheat_seeds), false, new GristSet(new GristType[] {GristType.Amber, GristType.Iodine}, new int[] {1, 1}));
 		GristRegistry.addGristConversion(new ItemStack(Items.writable_book), false, new GristSet(new GristType[] {GristType.Chalk, GristType.Iodine}, new int[] {16, 2}));
 		
-		//Set up Punch Designex recipes
+		//Set up Punch Designix recipes
 		
 		//metadata-based
 		for (int meta = 0; meta < BlockSapling.field_149882_a.length; meta++) {
@@ -392,7 +392,7 @@ public class AlchemyRecipeHandler {
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.sledgeHammer), false, new GristSet(new GristType[] {GristType.Build, GristType.Shale}, new int[] {10,2}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.transportalizer), false, new GristSet(new GristType[] {GristType.Build, GristType.Garnet, GristType.Rust, GristType.Uranium}, new int[] {64, 10, 10, 8}));
 		
-		//add Designex combinations
+		//add Designix combinations
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_hoe), new ItemStack(Items.wheat), CombinationRegistry.MODE_AND, new ItemStack(Minestuck.sickle));
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_sword), new ItemStack(Items.rotten_flesh), CombinationRegistry.MODE_AND, new ItemStack(Minestuck.ninjaSword));
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_sword), new ItemStack(Minestuck.component, 1, 2), CombinationRegistry.MODE_AND, false, true, new ItemStack(Minestuck.regisword));
@@ -436,16 +436,19 @@ public class AlchemyRecipeHandler {
 	 * Given a punched card or a carved dowel, returns a new item that represents the encoded data.
 	 * 
 	 * @param card - The dowel or card with encoded data
+	 * @param b - If it is used for a dowel in alchemy.
 	 * @return An item, or null if the data was invalid.
 	 */
-	public static ItemStack getDecodedItem(ItemStack card) {
+	public static ItemStack getDecodedItem(ItemStack card, boolean b)
+	{
 		
 		if (card == null) {return null;}
 		
 		NBTTagCompound tag = card.getTagCompound();
 		
-		if (tag == null || !tag.hasKey("contentID")) {
-			return new ItemStack(Minestuck.blockStorage,1,1);
+		if (tag == null || !tag.hasKey("contentID"))
+		{
+			return b? new ItemStack(Minestuck.blockStorage,1,1):null;
 		}
 		
 		if (!Item.itemRegistry.containsKey(tag.getString("contentID"))) {return null;}
@@ -456,17 +459,22 @@ public class AlchemyRecipeHandler {
 	}
 	
 	/**
-	 * Given a punched card or a carved dowel, returns a new item that represents the encoded data. If allowDirect is true,
-	 * it jst gives you the item directly if it's not a card.
+	 * Given a punched card or a carved dowel, returns a new item that represents the encoded data. If easyDesignix is true,
+	 * it just gives you the item directly if it's not a punched card.
 	 */
-	public static ItemStack getDecodedItem(ItemStack card,boolean allowDirect) {
+	public static ItemStack getDecodedItemDesignix(ItemStack card, boolean clientSide)
+	{
 		
 		if (card == null) {return null;}
 		
-		if (!card.getItem().equals(Minestuck.captchaCard) && Minestuck.easyDesignex) {
+		if (!(card.getItem().equals(Minestuck.captchaCard) && card.hasTagCompound() && card.getTagCompound().getBoolean("punched"))
+				&& (clientSide ? Minestuck.clientEasyDesignix : Minestuck.easyDesignix))
+		{
 			return card;
-		} else {
-			return getDecodedItem(card);
+		}
+		else
+		{
+			return getDecodedItem(card, false);
 		}
 	}
 	
@@ -484,8 +492,12 @@ public class AlchemyRecipeHandler {
 	
 	public static ItemStack createCard(ItemStack item, boolean punched) {
 		ItemStack stack = createEncodedItem(item, true);
-		if(stack.hasTagCompound())
+		if(stack.hasTagCompound()) {
 			stack.getTagCompound().setBoolean("punched", punched);
+			if(!punched && item.hasTagCompound()) {
+				stack.getTagCompound().setTag("contentTags", item.getTagCompound());
+			}
+		}
 		return stack;
 	}
 	

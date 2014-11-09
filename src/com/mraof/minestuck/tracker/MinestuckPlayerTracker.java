@@ -1,5 +1,7 @@
 package com.mraof.minestuck.tracker;
 
+import org.lwjgl.opengl.GLContext;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -8,7 +10,6 @@ import net.minecraft.util.ChatComponentText;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.editmode.ServerEditHandler;
-import com.mraof.minestuck.network.LandRegisterPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
@@ -72,9 +73,7 @@ public class MinestuckPlayerTracker {
 	
 	@SubscribeEvent
 	public void onConnectionCreated(FMLNetworkEvent.ServerConnectionFromClientEvent event) {
-		MinestuckPacket packet = LandRegisterPacket.createPacket();
-		packet.generatePacket(MinestuckSaveHandler.lands.toArray());
-		Debug.printf("Player logged in, sending land packet.");
+		MinestuckPacket packet = MinestuckPacket.makePacket(Type.LANDREGISTER, MinestuckSaveHandler.lands.toArray());
 		
 		Minestuck.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.DISPATCHER);
 		Minestuck.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(event.manager.channel().attr(NetworkDispatcher.FML_DISPATCHER).get());
@@ -132,8 +131,7 @@ public class MinestuckPlayerTracker {
 	}
 	public static void updateLands(EntityPlayer player)
 	{
-		MinestuckPacket packet = LandRegisterPacket.createPacket();
-		packet.generatePacket(MinestuckSaveHandler.lands.toArray());
+		MinestuckPacket packet = MinestuckPacket.makePacket(Type.LANDREGISTER, MinestuckSaveHandler.lands.toArray());
 		Debug.printf("Sending land packets to %s.", player == null ? "all players" : player.getCommandSenderName());
 		if(player == null)
 			MinestuckChannelHandler.sendToAllPlayers(packet);

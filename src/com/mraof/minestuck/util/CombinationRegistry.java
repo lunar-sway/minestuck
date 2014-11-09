@@ -14,7 +14,7 @@ public class CombinationRegistry {
 	public static final boolean MODE_OR = false;
 	
 	/**
-	 * Creates an entry for a result of combining the cards of two items. Used in the Punch Designex.
+	 * Creates an entry for a result of combining the cards of two items. Used in the Punch Designix.
 	 */
 	public static void addCombination(ItemStack input1, ItemStack input2, boolean mode, ItemStack output) {
 		addCombination(input1, input2, mode, true, true, output);
@@ -27,7 +27,7 @@ public class CombinationRegistry {
 
 
 	/**
-	 * Returns an entry for a result of combining the cards of two items. Used in the Punch Designex.
+	 * Returns an entry for a result of combining the cards of two items. Used in the Punch Designix.
 	 */
 	public static ItemStack getCombination(ItemStack input1, ItemStack input2, boolean mode) {
 		Object temp;

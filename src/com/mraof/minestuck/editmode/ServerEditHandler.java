@@ -374,9 +374,10 @@ public class ServerEditHandler
 		for(int i = 0; i < player.inventory.mainInventory.length; i++)
 		{
 			ItemStack stack = player.inventory.mainInventory[i];
-			if(stack != null && (GristRegistry.getGristConversion(stack) == null || !(stack.getItem() instanceof ItemBlock)) && !(DeployList.containsItemStack(stack) ||
-					stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack).getItem() == Minestuck.cruxiteArtifact && (!Minestuck.hardMode || !givenItems[0]) && !enteredGame))
-			{	//removes blocks without a grist value and all items from the inventory.
+			if(stack != null && (DeployList.containsItemStack(stack) ? Minestuck.hardMode && givenItems[DeployList.getOrdinal(stack)] ||
+					stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack, false).getItem() == Minestuck.cruxiteArtifact && !enteredGame
+					: GristRegistry.getGristConversion(stack) == null || !(stack.getItem() instanceof ItemBlock)))
+			{
 				player.inventory.mainInventory[i] = null;
 				inventoryChanged = true;
 			}

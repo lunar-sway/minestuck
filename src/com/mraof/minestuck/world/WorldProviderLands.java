@@ -64,7 +64,8 @@ public class WorldProviderLands extends WorldProvider
 	@Override
 	public ChunkCoordinates getRandomizedSpawnPoint() 
 	{
-		ChunkCoordinates chunkcoordinates = new ChunkCoordinates(this.worldObj.getSpawnPoint());
+		createChunkGenerator();
+		ChunkCoordinates chunkcoordinates = new ChunkCoordinates(provider.spawnX, provider.spawnY, provider.spawnZ);
 
 		boolean isAdventure = worldObj.getWorldInfo().getGameType() == GameType.ADVENTURE;
 		int spawnFuzz = 12;
@@ -92,7 +93,7 @@ public class WorldProviderLands extends WorldProvider
 	{
 		return true;
 	}
-
+	
 	@Override
 	public boolean isDaytime() {
 		if (provider != null) {

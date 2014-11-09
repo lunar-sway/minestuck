@@ -28,7 +28,7 @@ import com.mraof.minestuck.util.GristType;
 
 public class GuiMachine extends GuiContainer {
 	
-	private static final String[] guis = {"cruxtruder","designex","lathe","alchemiter","widget"};
+	private static final String[] guis = {"cruxtruder","designix","lathe","alchemiter","widget"};
 	
 	private ResourceLocation guiBackground;
 	private ResourceLocation guiProgress;
@@ -108,7 +108,7 @@ protected void drawGuiContainerForegroundLayer(int param1, int param2) {
 	{
 		//Render grist requirements
 		//NBTTagCompound nbttagcompound = te.inv[1].getTagCompound();
-		GristSet set = GristRegistry.getGristConversion(metadata == 3? AlchemyRecipeHandler.getDecodedItem(te.inv[1]) : te.inv[1]);
+		GristSet set = GristRegistry.getGristConversion(metadata == 3? AlchemyRecipeHandler.getDecodedItem(te.inv[1], true) : te.inv[1]);
 		
 		if (set == null) {fontRendererObj.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 9,45, 16711680); return;}
 			Hashtable<Integer, Integer> reqs = set.getHashtable();
@@ -172,7 +172,7 @@ public void initGui() {
 		super.initGui();
 		//make buttons:		id, x, y, width, height, text
 		if (metadata == 1) {
-			//The Designex's needs a button...
+			//The Designix's needs a button...
 			modeButton = new GuiButton(1, (width - xSize) / 2 + buttonX, (height - ySize) / 2 + buttonY, 20, 20, te.mode ? "&&": "||");
 			buttonList.add(modeButton);
 			modeButton.visible = (te.inv[1] != null && te.inv[2] != null);
