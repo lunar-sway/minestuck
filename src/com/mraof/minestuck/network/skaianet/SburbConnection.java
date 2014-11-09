@@ -21,11 +21,9 @@ public class SburbConnection {
 	boolean canSplit;
 	int clientHomeLand;
 	/**
-	 * 0 = card
-	 * 1+ = items in deploy list
 	 * If the client will have frog breeding as quest, the array will be extended and the new positions will hold the gear.
 	 */
-	boolean[] givenItemList = new boolean[DeployList.getItemList().size()+1];
+	boolean[] givenItemList = new boolean[DeployList.getItemList().size()];
 	NBTTagList unregisteredItems = new NBTTagList();
 	
 	//Only used by the edit handler
@@ -73,81 +71,80 @@ public class SburbConnection {
 		return data.toByteArray();
 	}
 
-	NBTTagCompound write() {
+	NBTTagCompound write()
+	{
 		NBTTagCompound nbt = new NBTTagCompound();
 		nbt.setBoolean("isMain", isMain);
 		if(inventory != null)
 			nbt.setTag("inventory", inventory);
-		if(isMain){
+		if(isMain)
+		{
 			nbt.setBoolean("isActive", isActive);
 			nbt.setBoolean("enteredGame", enteredGame);
 			nbt.setBoolean("canSplit", canSplit);
-			nbt.setBoolean("givenCard", givenItemList[0]);
 			NBTTagList list = (NBTTagList) unregisteredItems.copy();
-			for(ItemStack stack : DeployList.getItemList()) {
+			for(ItemStack stack : DeployList.getItemList())
+			{
 				NBTTagCompound itemData = stack.writeToNBT(new NBTTagCompound());
-				itemData.setBoolean("given", givenItemList[DeployList.getOrdinal(stack)+1]);
+				itemData.setBoolean("given", givenItemList[DeployList.getOrdinal(stack)]);
 				list.appendTag(itemData);
 			}
 			
 			nbt.setTag("givenItems", list);
-			if(enteredGame){
+			if(enteredGame)
+			{
 				nbt.setInteger("clientLand", clientHomeLand);
 				nbt.setInteger("centerX", centerX);
 				nbt.setInteger("centerZ", centerZ);
 			}
 		}
-		if(isActive){
+		if(isActive)
+		{
 			nbt.setTag("client", client.write());
 			nbt.setTag("server", server.write());
-		} else {
+		}
+		else
+		{
 			nbt.setString("client", getClientName());
 			nbt.setString("server", getServerName());
 		}
 		return nbt;
 	}
 	
-	SburbConnection read(NBTTagCompound nbt) {
+	SburbConnection read(NBTTagCompound nbt)
+	{
 		isMain = nbt.getBoolean("isMain");
 		if(nbt.hasKey("inventory"))
 			inventory = (NBTTagList) nbt.getTag("inventory");
-		if(isMain){
+		if(isMain)
+		{
 			isActive = nbt.getBoolean("isActive");
 			enteredGame = nbt.getBoolean("enteredGame");
-			if(enteredGame){
+			if(enteredGame)
+			{
 				clientHomeLand = nbt.getInteger("clientLand");
 				centerX = nbt.getInteger("centerX");
 				centerZ = nbt.getInteger("centerZ");
 			}
 			if(nbt.hasKey("canSplit"))
 				canSplit = nbt.getBoolean("canSplit");
-			givenItemList[0] = nbt.getBoolean("givenCard");
-			if(nbt.hasKey("givenItems")) {
-				if(nbt.getTag("givenItems") instanceof NBTTagList) {
-					NBTTagList list = (NBTTagList) nbt.getTagList("givenItems", 10);
-					for(int i = 0; i < list.tagCount(); i++) {
-						NBTTagCompound itemTag = list.getCompoundTagAt(i);
-						int ordinal = DeployList.getOrdinal(ItemStack.loadItemStackFromNBT(itemTag));
-						if(ordinal == -1)
-							unregisteredItems.appendTag(itemTag);
-						else givenItemList[ordinal+1] = itemTag.getBoolean("given");
-					}
-				} else {
-					byte[] array = nbt.getByteArray("givenItems");
-					givenItemList[0] = array[4] != 0;
-					for(int i = 0; i < 4; i++)
-						givenItemList[DeployList.getOrdinal(new ItemStack(Minestuck.blockMachine,1,i))+1] = array[i] != 0;
-				}
-			} else {
-				givenItemList[0] = true;
-				for(int i = 0; i < 4; i++)
-					givenItemList[DeployList.getOrdinal(new ItemStack(Minestuck.blockMachine,1,i))+1] = true;
+			NBTTagList list = (NBTTagList) nbt.getTagList("givenItems", 10);
+			for(int i = 0; i < list.tagCount(); i++)
+			{
+				NBTTagCompound itemTag = list.getCompoundTagAt(i);
+				int ordinal = DeployList.getOrdinal(ItemStack.loadItemStackFromNBT(itemTag));
+				if(ordinal == -1)
+					unregisteredItems.appendTag(itemTag);
+				else givenItemList[ordinal] = itemTag.getBoolean("given");
 			}
 		}
-		if(isActive){
+		if(isActive)
+		{
 			client = new ComputerData().read(nbt.getCompoundTag("client"));
 			server = new ComputerData().read(nbt.getCompoundTag("server"));
-		} else {
+		}
+		else
+		{
 			clientName = nbt.getString("client");
 			serverName = nbt.getString("server");
 		}

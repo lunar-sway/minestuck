@@ -280,7 +280,7 @@ public class Minestuck
 		if(escapeFailureMode > 2 || escapeFailureMode < 0)
 			escapeFailureMode = 0;
 		if(event.getSide().isClient()) {	//Client sided config values
-			toolTipEnabled = config.get("General", "editModeToolTip", false).getBoolean(false);
+			toolTipEnabled = config.get("General", "editmodeToolTip", false).getBoolean(false);
 		}
 		config.save();
 		

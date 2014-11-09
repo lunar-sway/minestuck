@@ -86,6 +86,7 @@ public class ServerEditHandler
 			return;
 		}
 		EntityPlayerMP player = data.player;
+		player.closeScreen();
 		EntityDecoy decoy = data.decoy;
 		if(player.dimension != decoy.dimension)
 			player.mcServer.getConfigurationManager().transferPlayerToDimension(player, decoy.worldObj.provider.dimensionId, new Teleporter((WorldServer)decoy.worldObj) {
@@ -216,40 +217,39 @@ public class ServerEditHandler
 	}
 	
 	@SubscribeEvent
-	public void onTossEvent(ItemTossEvent event) {
-		if(!event.entity.worldObj.isRemote && getData(event.player.getCommandSenderName()) != null) {
+	public void onTossEvent(ItemTossEvent event)
+	{
+		InventoryPlayer inventory = event.player.inventory;
+		if(!event.entity.worldObj.isRemote && getData(event.player.getCommandSenderName()) != null)
+		{
 			EditData data = getData(event.player.getCommandSenderName());
-			InventoryPlayer inventory = event.player.inventory;
 			ItemStack stack = event.entityItem.getEntityItem();
-			if(DeployList.containsItemStack(stack))
-					if(stack.getItem() instanceof ItemBlock)
-						event.setCanceled(true);
-					else {
-						GristSet cost = Minestuck.hardMode && data.connection.givenItems()[DeployList.getOrdinal(stack)]
-								?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
-						if(GristHelper.canAfford(MinestuckPlayerData.getGristSet(data.connection.getClientName()), cost)) {
-							GristHelper.decrease(data.connection.getClientName(), cost);
-							MinestuckPlayerTracker.updateGristCache(data.connection.getClientName());
-							data.connection.givenItems()[DeployList.getOrdinal(stack)] = true;
-							if(!data.connection.isMain())
-								SkaianetHandler.giveItems(data.connection.getClientName());
-						} else event.setCanceled(true);
-					}
-			
-			else if(stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack).getItem() == Minestuck.cruxiteArtifact) {
-				SburbConnection c = data.connection;
-				c.givenItems()[0] = true;
-				if(!c.isMain())
-					SkaianetHandler.giveItems(c.getClientName());
-			} else {
+			if(DeployList.containsItemStack(stack) && !(stack.getItem() instanceof ItemBlock))
+			{
+				GristSet cost = Minestuck.hardMode && data.connection.givenItems()[DeployList.getOrdinal(stack)]
+						?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
+				if(GristHelper.canAfford(MinestuckPlayerData.getGristSet(data.connection.getClientName()), cost))
+				{
+					GristHelper.decrease(data.connection.getClientName(), cost);
+					MinestuckPlayerTracker.updateGristCache(data.connection.getClientName());
+					data.connection.givenItems()[DeployList.getOrdinal(stack)] = true;
+					if(!data.connection.isMain())
+						SkaianetHandler.giveItems(data.connection.getClientName());
+				}
+				else event.setCanceled(true);
+			}
+			else 
+			{
 				event.setCanceled(true);
-				if(inventory.getItemStack() != null)
-					inventory.setItemStack(null);
-				else inventory.setInventorySlotContents(inventory.currentItem, null);
 			}
 		}
 		if(event.isCanceled())
+		{
 			event.entityItem.setDead();
+			if(inventory.getItemStack() != null)
+				inventory.setItemStack(null);
+			else inventory.setInventorySlotContents(inventory.currentItem, null);
+		}
 	}
 	
 	@SubscribeEvent
@@ -269,11 +269,11 @@ public class ServerEditHandler
 			if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
 				event.useBlock = Result.DENY;
 				ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
-				if(stack == null)
+				if(stack == null || !(stack.getItem() instanceof ItemBlock))	//Is there a better way of checking if an item is a block item?
 					return;
 				if(DeployList.containsItemStack(stack)) {
 					GristSet cost = Minestuck.hardMode && data.connection.givenItems()[DeployList.getOrdinal(stack)]
-							?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
+							? DeployList.getSecondaryCost(stack) : DeployList.getPrimaryCost(stack);
 					if(!GristHelper.canAfford(MinestuckPlayerData.getGristSet(data.connection.getClientName()), cost)) {
 						event.setCanceled(true);
 					}

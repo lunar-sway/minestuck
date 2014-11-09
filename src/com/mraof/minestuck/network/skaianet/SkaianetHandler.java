@@ -219,6 +219,7 @@ public class SkaianetHandler {
 		if(newConnection){
 			String s = SessionHandler.onConnectionCreated(c);
 			if(s != null) {
+				Debug.print("SessionHandler denied, reason:"+s);
 				connections.remove(c);
 				TileEntityComputer cte = getComputer(c.client);
 				if(cte != null)

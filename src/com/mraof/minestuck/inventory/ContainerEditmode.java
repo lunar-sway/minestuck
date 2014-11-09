@@ -36,6 +36,7 @@ public class ContainerEditmode extends Container {
 	{
 		this.player = ClientProxy.getPlayer();
 		addSlots();
+		Debug.print("ContainerCreated:"+player.inventory.mainInventory[14]);
 	}
 	
 	public ContainerEditmode(EntityPlayer player)
@@ -44,7 +45,6 @@ public class ContainerEditmode extends Container {
 		addSlots();
 		if(player instanceof EntityPlayerMP)
 		{
-			addCraftingToCrafters((EntityPlayerMP) player);
 			updateInventory();
 		}
 	}
@@ -70,10 +70,19 @@ public class ContainerEditmode extends Container {
 			Slot slot = (Slot) this.inventorySlots.get(slotIndex);
 			ItemStack stack = slot.getStack();
 			if(stack != null)
-				mergeItemStack(stack.copy(), 14, this.inventorySlots.size(), false);
+				for(int i = 14; i < inventorySlots.size(); i++)
+					if(!getSlot(i).getHasStack())
+					{
+						getSlot(i).putStack(stack);
+						return stack;
+					}
 		}
 		return null;
 	}
+	
+	@Override
+	protected void retrySlotClick(int p_75133_1_, int p_75133_2_, boolean p_75133_3_, EntityPlayer player)
+	{}
 	
 	private void addSlots()
 	{
