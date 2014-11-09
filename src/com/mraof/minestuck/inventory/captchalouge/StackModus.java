@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler.ModusType;
+import com.mraof.minestuck.util.Debug;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -18,7 +19,7 @@ public class StackModus extends Modus
 	protected LinkedList<ItemStack> list;
 	
 	@SideOnly(Side.CLIENT)
-	protected boolean changed;
+	protected boolean changed = true;
 	@SideOnly(Side.CLIENT)
 	protected ItemStack[] items;
 	
@@ -72,15 +73,15 @@ public class StackModus extends Modus
 	@Override
 	public boolean putItemStack(ItemStack item)
 	{
-		ItemStack firstItem = list.getFirst();
-		if(firstItem.getItem() == item.getItem() && firstItem.getItemDamage() == item.getItemDamage() && ItemStack.areItemStackTagsEqual(firstItem, item)
+		ItemStack firstItem = list.size() > 0?list.getFirst() : null;
+		if(firstItem != null && firstItem.getItem() == item.getItem() && firstItem.getItemDamage() == item.getItemDamage() && ItemStack.areItemStackTagsEqual(firstItem, item)
 				&& firstItem.stackSize + item.stackSize <= firstItem.getMaxStackSize())
 			firstItem.stackSize += item.stackSize;
 		else if(list.size() < size)
-			list.add(item);
+			list.addFirst(item);
 		else
 		{
-			list.add(item);
+			list.addFirst(item);
 			CaptchaDeckHandler.launchItem(player, list.removeLast());
 		}
 		
@@ -90,7 +91,7 @@ public class StackModus extends Modus
 	@Override
 	public ItemStack[] getItems()
 	{
-		if(player.worldObj.isRemote)	//Used only when replacing the modus
+		if(!player.worldObj.isRemote)	//Used only when replacing the modus
 		{
 			ItemStack[] items = new ItemStack[size];
 			fillList(items);

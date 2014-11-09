@@ -87,7 +87,8 @@ public class MinestuckPlayerTracker {
 				CaptchaDeckHandler.playerMap.put(encUsername, modus);
 			}
 		}
-		else
+		
+		if(CaptchaDeckHandler.playerMap.containsKey(encUsername))
 		{
 			Modus modus = CaptchaDeckHandler.playerMap.get(encUsername);
 			modus.player = player;

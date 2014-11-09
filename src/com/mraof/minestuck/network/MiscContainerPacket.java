@@ -68,11 +68,12 @@ public class MiscContainerPacket extends MinestuckPacket
 		{
 			EntityPlayerMP playerMP = (EntityPlayerMP) player;
 			playerMP.getNextWindowId();
-			int windowId = ((EntityPlayerMP) player).currentWindowId;
+			int windowId = playerMP.currentWindowId;
 			MinestuckPacket packet = MinestuckPacket.makePacket(Type.CONTAINER, windowId);
 			MinestuckChannelHandler.sendToPlayer(packet, playerMP);
-			player.openContainer = ContainerHandler.getPlayerStatsContainer(playerMP, i, ServerEditHandler.getData(playerMP.getCommandSenderName()) != null);
-			player.openContainer.windowId = windowId;
+			playerMP.openContainer = ContainerHandler.getPlayerStatsContainer(playerMP, i, ServerEditHandler.getData(playerMP.getCommandSenderName()) != null);
+			playerMP.openContainer.windowId = windowId;
+			playerMP.addSelfToInternalCraftingInventory();	//Must be placed after setting the window id!!
 		}
 	}
 

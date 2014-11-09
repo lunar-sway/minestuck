@@ -45,11 +45,7 @@ public class ContainerEditmode extends Container {
 		this.player = player;
 		this.mode = mode;
 		addSlots();
-		if(player instanceof EntityPlayerMP)
-		{
-			addCraftingToCrafters((EntityPlayerMP) player);
-			updateInventory();
-		}
+		updateInventory();
 	}
 	
 	@Override

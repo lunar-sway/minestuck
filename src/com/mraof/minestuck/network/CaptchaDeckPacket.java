@@ -6,9 +6,11 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.EnumSet;
 
+import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalouge.ContainerCaptchaDeck;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import cpw.mods.fml.relauncher.Side;
@@ -97,24 +99,16 @@ public class CaptchaDeckPacket extends MinestuckPacket
 		if(!player.worldObj.isRemote)
 		{
 			if(this.type == MODUS && player.openContainer instanceof ContainerCaptchaDeck)
-			{
-				//Tell something to change/set the modus to the one in the container
-			}
+				CaptchaDeckHandler.useItem((EntityPlayerMP) player);
 			else if(this.type == CAPTCHALOUGE && player.getCurrentEquippedItem() != null)
-			{
-				//Captchalouge the current held item
-			}
+				CaptchaDeckHandler.captchalougeItem((EntityPlayerMP) player);
 			else if(this.type == GET)
-			{
-				//Get an item from the sylladex
-			}
+				CaptchaDeckHandler.getItem((EntityPlayerMP) player, itemIndex);
 		}
 		else
 		{
 			if(this.type == DATA)
-			{
-				//Load client modus from nbt
-			}
+				CaptchaDeckHandler.clientSideModus = CaptchaDeckHandler.readFromNBT(nbt, true);
 		}
 	}
 

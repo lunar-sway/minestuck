@@ -247,10 +247,10 @@ public abstract class GuiPlayerStats extends GuiScreen
 	public static void openGui(boolean reload)
 	{
 		Minecraft mc = Minecraft.getMinecraft();
-		int id = (ClientEditHandler.isActive()? editmodeTab:normalTab).ordinal();
 		if(reload || mc.currentScreen == null)
-			if(ContainerHandler.getPlayerStatsContainer(mc.thePlayer, id, ClientEditHandler.isActive()) != null)
-				MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(Type.CONTAINER, id));
+			if(ClientEditHandler.isActive() ? editmodeTab.isContainer : normalTab.isContainer)
+				MinestuckChannelHandler.sendToServer(
+						MinestuckPacket.makePacket(Type.CONTAINER, (ClientEditHandler.isActive() ? editmodeTab : normalTab).ordinal()));
 			else mc.displayGuiScreen(ClientEditHandler.isActive()? editmodeTab.createGuiInstance():normalTab.createGuiInstance());
 		else if(mc.currentScreen instanceof GuiPlayerStats || mc.currentScreen instanceof GuiPlayerStatsContainer)
 			mc.displayGuiScreen(null);
