@@ -86,8 +86,8 @@ public abstract class GuiPlayerStats extends GuiScreen
 	
 	public static enum EditmodeGuiType
 	{
-		DEPLOY_LIST(GuiInventoryEditmode.class, "gui.deployList.name", true, true),
-		BLOCK_LIST(GuiInventoryEditmode.class, "gui.blockList.name", true, false),
+		DEPLOY_LIST(GuiInventoryEditmode.class, "gui.deployList.name", true),
+//		BLOCK_LIST(GuiInventoryEditmode.class, "gui.blockList.name", true, false),
 		GRIST_CACHE(GuiGristCache.class, "gui.gristCache.name", false);
 		
 		final Class<? extends GuiScreen> guiClass;

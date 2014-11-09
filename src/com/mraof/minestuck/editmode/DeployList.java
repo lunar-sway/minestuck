@@ -67,7 +67,8 @@ public class DeployList {
 		return itemList;
 	}
 	
-	private static ItemStack cleanStack(ItemStack stack) {
+	private static ItemStack cleanStack(ItemStack stack)
+	{
 		if(stack == null)
 			return null;
 		stack = stack.copy();
@@ -76,7 +77,12 @@ public class DeployList {
 			stack.stackTagCompound = new NBTTagCompound();
 //		if(stack.stackTagCompound.getName() == "")
 //			stack.stackTagCompound.setName("tag");
-		else stack.stackTagCompound.removeTag("display");
+		else
+		{
+			stack.stackTagCompound.removeTag("display");
+			if(stack.getItem().equals(Minestuck.captchaCard))
+				stack.stackTagCompound.setInteger("contentMeta", 0);
+		}
 		return stack;
 	}
 	

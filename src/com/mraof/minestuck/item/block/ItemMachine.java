@@ -8,7 +8,7 @@ import net.minecraft.util.IIcon;
 
 public class ItemMachine extends ItemBlock {
 
-		private final static String[] subNames = {"cruxtruder","punchDesignex","totemLathe","alchemiter","gristWidget"};
+		private final static String[] subNames = {"cruxtruder","punchDesignix","totemLathe","alchemiter","gristWidget"};
 		private final static IIcon[] icons = new IIcon[5];
 		
 		public ItemMachine(Block block) 
@@ -32,7 +32,7 @@ public class ItemMachine extends ItemBlock {
 		@Override
 		public void registerIcons(IIconRegister par1IconRegister) {
 			   icons[0] = par1IconRegister.registerIcon("minestuck:Cruxtruder");
-			   icons[1] = par1IconRegister.registerIcon("minestuck:PunchDesignex");
+			   icons[1] = par1IconRegister.registerIcon("minestuck:PunchDesignix");
 			   icons[2] = par1IconRegister.registerIcon("minestuck:TotemLathe");
 			   icons[3] = par1IconRegister.registerIcon("minestuck:Alchemiter");
 			   icons[4] = par1IconRegister.registerIcon("minestuck:GristWidget");

@@ -278,7 +278,7 @@ public class AlchemyRecipeHandler {
 		GristRegistry.addGristConversion(new ItemStack(Items.wheat_seeds), false, new GristSet(new GristType[] {GristType.Amber, GristType.Iodine}, new int[] {1, 1}));
 		GristRegistry.addGristConversion(new ItemStack(Items.writable_book), false, new GristSet(new GristType[] {GristType.Chalk, GristType.Iodine}, new int[] {16, 2}));
 		
-		//Set up Punch Designex recipes
+		//Set up Punch Designix recipes
 		
 		//metadata-based
 		for (int meta = 0; meta < BlockSapling.field_149882_a.length; meta++) {
@@ -392,7 +392,7 @@ public class AlchemyRecipeHandler {
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.sledgeHammer), false, new GristSet(new GristType[] {GristType.Build, GristType.Shale}, new int[] {10,2}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.transportalizer), false, new GristSet(new GristType[] {GristType.Build, GristType.Garnet, GristType.Rust, GristType.Uranium}, new int[] {64, 10, 10, 8}));
 		
-		//add Designex combinations
+		//add Designix combinations
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_hoe), new ItemStack(Items.wheat), CombinationRegistry.MODE_AND, new ItemStack(Minestuck.sickle));
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_sword), new ItemStack(Items.rotten_flesh), CombinationRegistry.MODE_AND, new ItemStack(Minestuck.ninjaSword));
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_sword), new ItemStack(Minestuck.component, 1, 2), CombinationRegistry.MODE_AND, false, true, new ItemStack(Minestuck.regisword));
@@ -459,16 +459,16 @@ public class AlchemyRecipeHandler {
 	}
 	
 	/**
-	 * Given a punched card or a carved dowel, returns a new item that represents the encoded data. If easyDesignex is true,
+	 * Given a punched card or a carved dowel, returns a new item that represents the encoded data. If easyDesignix is true,
 	 * it just gives you the item directly if it's not a punched card.
 	 */
-	public static ItemStack getDecodedItem(ItemStack card)
+	public static ItemStack getDecodedItemDesignix(ItemStack card, boolean clientSide)
 	{
 		
 		if (card == null) {return null;}
 		
 		if (!(card.getItem().equals(Minestuck.captchaCard) && card.hasTagCompound() && card.getTagCompound().getBoolean("punched"))
-				&& Minestuck.easyDesignex)
+				&& (clientSide ? Minestuck.clientEasyDesignix : Minestuck.easyDesignix))
 		{
 			return card;
 		}

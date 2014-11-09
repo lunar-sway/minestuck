@@ -28,7 +28,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.WorldEvent;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.client.gui.GuiInventoryReplacer;
+import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
 import com.mraof.minestuck.inventory.ContainerEditmode;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
@@ -68,7 +68,8 @@ public class ClientEditHandler {
 		return activated;
 	}
 	
-	public static void onKeyPressed() {
+	public static void onKeyPressed()
+	{
 		MinestuckPacket packet = MinestuckPacket.makePacket(Type.CLIENT_EDIT);
 		MinestuckChannelHandler.sendToServer(packet);
 	}
@@ -84,7 +85,9 @@ public class ClientEditHandler {
 			client = target;
 		} else if(items != null) {
 			givenItems = items;
-		} else {	//Disable edit mode
+		}
+		else	//Disable edit mode
+		{
 			player.fallDistance = 0;
 			activated = false;
 		}
@@ -121,7 +124,7 @@ public class ClientEditHandler {
 		
 		GristSet cost;
 		if(DeployList.containsItemStack(stack))
-			cost = Minestuck.clientHardMode&&givenItems[DeployList.getOrdinal(stack)+1]
+			cost = Minestuck.clientHardMode&&givenItems[DeployList.getOrdinal(stack)]
 					?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
 		else if(stack.getItem().equals(Minestuck.captchaCard))
 			cost = new GristSet();
@@ -165,18 +168,12 @@ public class ClientEditHandler {
 		if(event.entity.worldObj.isRemote && event.player instanceof EntityClientPlayerMP && isActive()) {
 			InventoryPlayer inventory = event.player.inventory;
 			ItemStack stack = event.entityItem.getEntityItem();
-			int ordinal = DeployList.getOrdinal(stack)+1;
-			if(ordinal > 0)
-				if(stack.getItem() instanceof ItemBlock)
-					event.setCanceled(true);
-				else if(GristHelper.canAfford(MinestuckPlayerData.getClientGrist(), Minestuck.clientHardMode&&givenItems[ordinal]
-						?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack)))
+			int ordinal = DeployList.getOrdinal(stack);
+			if(ordinal >= 0)
+			{
+				if(GristHelper.canAfford(MinestuckPlayerData.getClientGrist(), Minestuck.clientHardMode && givenItems[ordinal]
+						? DeployList.getSecondaryCost(stack) : DeployList.getPrimaryCost(stack)))
 					givenItems[ordinal] = true;
-			else if(stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack, false).getItem() == Minestuck.cruxiteArtifact
-					&& stack.getTagCompound().getBoolean("punched")) {
-				//SburbConnection c = SkaiaClient.getClientConnection(client); //unused
-				givenItems[0] = true;
-			} else {
 				event.setCanceled(true);
 				if(inventory.getItemStack() != null)
 					inventory.setItemStack(null);
@@ -200,9 +197,14 @@ public class ClientEditHandler {
 			if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
 				event.useBlock = Result.DENY;
 				ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
+				if(stack == null || !(stack.getItem() instanceof ItemBlock))
+				{
+					event.setCanceled(true);
+					return;
+				}
 				GristSet cost;
 				if(DeployList.containsItemStack(stack))
-					if(Minestuck.clientHardMode && givenItems[DeployList.getOrdinal(stack)+1])
+					if(Minestuck.clientHardMode && givenItems[DeployList.getOrdinal(stack)])
 						cost = DeployList.getSecondaryCost(stack);
 					else cost = DeployList.getPrimaryCost(stack);
 				else cost = GristRegistry.getGristConversion(stack);
@@ -231,10 +233,10 @@ public class ClientEditHandler {
 	@SubscribeEvent(priority=EventPriority.LOWEST,receiveCanceled=false)
 	public void onBlockPlaced(PlayerInteractEvent event) {
 		if(event.entity.worldObj.isRemote && isActive() && event.entityPlayer.equals(Minecraft.getMinecraft().thePlayer)
-				&& event.action == Action.LEFT_CLICK_BLOCK && event.useItem == Result.ALLOW) {
+				&& event.action == Action.RIGHT_CLICK_BLOCK && event.useItem == Result.ALLOW) {
 			ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
 			if(DeployList.containsItemStack(stack))
-				givenItems[DeployList.getOrdinal(stack)+1] = true;
+				givenItems[DeployList.getOrdinal(stack)] = true;
 		}
 	}
 	
@@ -251,9 +253,14 @@ public class ClientEditHandler {
 	}
 	
 	@SubscribeEvent(priority=EventPriority.HIGH)
-	public void onGuiOpened(GuiOpenEvent event) {
-		if(isActive() && event.gui instanceof InventoryEffectRenderer && !(event.gui instanceof GuiInventoryReplacer))
-				event.gui = new GuiInventoryReplacer(Minecraft.getMinecraft().thePlayer);
+	public void onGuiOpened(GuiOpenEvent event)
+	{
+		if(isActive() && event.gui instanceof InventoryEffectRenderer)
+		{
+				event.setCanceled(true);
+				GuiPlayerStats.editmodeTab = GuiPlayerStats.EditmodeGuiType.DEPLOY_LIST;
+				MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(Type.CONTAINER, GuiPlayerStats.editmodeTab.ordinal()));
+		}
 	}
 	
 }

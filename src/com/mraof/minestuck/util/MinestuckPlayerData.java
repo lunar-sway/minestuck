@@ -54,29 +54,40 @@ public class MinestuckPlayerData {
 		return titles.get(player);
 	}
 	
-	public static void writeToNBT(NBTTagCompound nbt) {
+	public static void writeToNBT(NBTTagCompound nbt)
+	{
 		NBTTagList list = new NBTTagList();
-		for(Map.Entry<String, GristSet> entry : gristMap.entrySet()) {
+		for(Map.Entry<String, GristSet> entry : gristMap.entrySet())
+		{
 			NBTTagCompound dataCompound = new NBTTagCompound();
 			dataCompound.setString("username", entry.getKey());
+			
 			int[] grist = new int[GristType.allGrists];
 			for(GristType type : GristType.values())
 				grist[type.ordinal()] = entry.getValue().getGrist(type);
 			dataCompound.setIntArray("grist", grist);
 			list.appendTag(dataCompound);
+			
+			if(titles.containsKey(entry.getKey()))
+			{
+				Title title = titles.get(entry.getKey());
+				dataCompound.setByte("titleClass", (byte) title.getHeroClass().ordinal());
+				dataCompound.setByte("titleAspect", (byte) title.getHeroAspect().ordinal());
+			}
 		}
 		nbt.setTag("playerData", list);
 	}
 	
-	public static void readFromNBT(NBTTagCompound nbt) {
-		gristMap.clear();
+	public static void readFromNBT(NBTTagCompound nbt)
+	{
 		if(nbt == null)
 			return;
 		NBTTagList list;
 		if(nbt.hasKey("playerData"))
 			list = nbt.getTagList("playerData", 10);
 		else list = nbt.getTagList("grist", 10);
-		for(int i = 0; i < list.tagCount(); i++) {
+		for(int i = 0; i < list.tagCount(); i++)
+		{
 			NBTTagCompound dataCompound = list.getCompoundTagAt(i);
 			String username = dataCompound.getString("username");
 			if(dataCompound.hasKey("grist")) {
@@ -84,7 +95,8 @@ public class MinestuckPlayerData {
 				gristMap.put(username, set);
 				Title title = new Title(TitleHelper.getClassFromInt(dataCompound.getByte("titleClass")), TitleHelper.getAspectFromInt(dataCompound.getByte("titleAspect")));
 				titles.put(username, title);
-			} else {
+			} else
+			{
 				GristSet set = new GristSet();
 				for(GristType type : GristType.values())
 					set.addGrist(type, dataCompound.getInteger(type.getName()));
@@ -93,7 +105,14 @@ public class MinestuckPlayerData {
 		}
 	}
 
-	public static void setTitle(String player, Title newTitle) {
+	public static void onServerStarting()
+	{
+		gristMap.clear();
+		titles.clear();
+	}
+	
+	public static void setTitle(String player, Title newTitle)
+	{
 		if(titles.get(player) == null)
 			titles.put(player, newTitle);
 	}

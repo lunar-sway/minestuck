@@ -32,7 +32,6 @@ public class InventoryChangedPacket extends MinestuckPacket
 		if(data[1] instanceof ArrayList)
 		{
 			ArrayList<ItemStack> list = (ArrayList<ItemStack>) data[1];
-//			Debug.print("Writing list:"+list.get(1));
 			for(ItemStack stack : list)
 				ByteBufUtils.writeItemStack(this.data, stack);
 		} else this.data.writeInt((Integer) data[1]);

@@ -17,17 +17,7 @@ import cpw.mods.fml.relauncher.Side;
 public class LandRegisterPacket extends MinestuckPacket
 {
 	byte[] landDimensions;
-
-	public static MinestuckPacket createPacket() {
-
-		LandRegisterPacket packet = new LandRegisterPacket();
-		packet.landDimensions = new byte[MinestuckSaveHandler.lands.size()];
-		for(int i = 0; i < packet.landDimensions.length; i++)
-			packet.landDimensions[i] = MinestuckSaveHandler.lands.get(i);
-
-		return packet;
-	}
-
+	
 	public LandRegisterPacket() 
 	{
 		super(Type.LANDREGISTER);
@@ -53,7 +43,7 @@ public class LandRegisterPacket extends MinestuckPacket
 	@Override
 	public void execute(EntityPlayer player) 
 	{
-		if(MinecraftServer.getServer() != null)
+		if(MinecraftServer.getServer() != null && MinecraftServer.getServer().isServerRunning())
 			return;	//Nope, no editing the server's land list
 
 		MinestuckSaveHandler.lands.clear();

@@ -223,7 +223,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		{
 			if(inv[3] != null)
 			{
-				ItemStack outputItem = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(this.inv[1]), AlchemyRecipeHandler.getDecodedItem(this.inv[2]),this.mode);
+				ItemStack outputItem = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItemDesignix(this.inv[1], this.worldObj.isRemote), AlchemyRecipeHandler.getDecodedItemDesignix(this.inv[2], this.worldObj.isRemote),this.mode);
 				if(inv[3].hasTagCompound() && inv[3].getTagCompound().getBoolean("punched"))
 					outputItem = CombinationRegistry.getCombination(outputItem, AlchemyRecipeHandler.getDecodedItem(inv[3], false), CombinationRegistry.MODE_OR);
 				if(outputItem == null)
@@ -301,15 +301,17 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 				break;
 			}
 			
-			ItemStack inv1 = AlchemyRecipeHandler.getDecodedItem(inv[1]);
-			ItemStack inv2 = AlchemyRecipeHandler.getDecodedItem(inv[2]);
+			ItemStack inv1 = AlchemyRecipeHandler.getDecodedItemDesignix(inv[1], this.worldObj.isRemote);
+			ItemStack inv2 = AlchemyRecipeHandler.getDecodedItemDesignix(inv[2], this.worldObj.isRemote);
 			
 			ItemStack outputItem = CombinationRegistry.getCombination(inv1, inv2, this.mode);
 			
-			if (inv1 == null)
-				outputItem = inv2;
-			else if (inv2 == null)
-				outputItem = inv1;
+			if (inv[1] == null)
+				outputItem = (inv[2].getItem().equals(Minestuck.captchaCard) && inv[2].hasTagCompound() && inv[2].getTagCompound().getBoolean("punched"))
+				? AlchemyRecipeHandler.getDecodedItem(inv[2], false) : inv[2];
+			else if (inv[2] == null)
+				outputItem = (inv[1].getItem().equals(Minestuck.captchaCard) && inv[1].hasTagCompound() && inv[1].getTagCompound().getBoolean("punched"))
+						? AlchemyRecipeHandler.getDecodedItem(inv[1], false) : inv[1];
 			
 			if(inv[3].hasTagCompound() && inv[3].getTagCompound().getBoolean("punched"))	//If you push the data onto a punched card, perform an OR alchemy
 				outputItem = CombinationRegistry.getCombination(outputItem, AlchemyRecipeHandler.getDecodedItem(inv[3], false), CombinationRegistry.MODE_OR);

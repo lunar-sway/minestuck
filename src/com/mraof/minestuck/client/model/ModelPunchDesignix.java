@@ -2,7 +2,7 @@ package com.mraof.minestuck.client.model;
 
 import net.minecraft.client.model.ModelRenderer;
 
-public class ModelPunchDesignex extends ModelMachine
+public class ModelPunchDesignix extends ModelMachine
 {
 	//fields
 	ModelRenderer Leg1;
@@ -12,7 +12,7 @@ public class ModelPunchDesignex extends ModelMachine
 	ModelRenderer Top;
 	ModelRenderer Keyboard;
 
-	public ModelPunchDesignex()
+	public ModelPunchDesignix()
 	{
 		textureWidth = 128;
 		textureHeight = 128;

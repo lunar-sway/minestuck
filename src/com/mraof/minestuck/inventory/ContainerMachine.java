@@ -17,14 +17,14 @@ public class ContainerMachine extends Container {
 	private static final int cruxtruderOutputX = 79;
 	private static final int cruxtruderOutputY = 19;
 	
-	private static final int designexInput1X = 62;
-	private static final int designexInput1Y = 26;
-	private static final int designexInput2X = 62;
-	private static final int designexInput2Y = 50;
-	private static final int designexCardsX = 26;
-	private static final int designexCardsY = 50;
-	private static final int designexOutputX = 134;
-	private static final int designexOutputY = 37;
+	private static final int designixInput1X = 62;
+	private static final int designixInput1Y = 26;
+	private static final int designixInput2X = 62;
+	private static final int designixInput2Y = 50;
+	private static final int designixCardsX = 26;
+	private static final int designixCardsY = 50;
+	private static final int designixOutputX = 134;
+	private static final int designixOutputY = 37;
 	
 	private static final int latheCardX = 44;
 	private static final int latheCardY = 20;
@@ -55,10 +55,10 @@ public class ContainerMachine extends Container {
 			addSlotToContainer(new SlotOutput(tileEntity,0,cruxtruderOutputX,cruxtruderOutputY));
 			break;
 		case (1):
-			addSlotToContainer(new Slot(tileEntity,1,designexInput1X,designexInput1Y));
-			addSlotToContainer(new Slot(tileEntity,2,designexInput2X,designexInput2Y));
-			addSlotToContainer(new SlotInput(tileEntity,3,designexCardsX,designexCardsY,Minestuck.captchaCard));
-			addSlotToContainer(new SlotOutput(tileEntity,0,designexOutputX,designexOutputY));
+			addSlotToContainer(new Slot(tileEntity,1,designixInput1X,designixInput1Y));
+			addSlotToContainer(new Slot(tileEntity,2,designixInput2X,designixInput2Y));
+			addSlotToContainer(new SlotInput(tileEntity,3,designixCardsX,designixCardsY,Minestuck.captchaCard));
+			addSlotToContainer(new SlotOutput(tileEntity,0,designixOutputX,designixOutputY));
 			break;
 		case (2):
 			addSlotToContainer(new SlotInput(tileEntity,1,latheCardX,latheCardY,Minestuck.captchaCard));

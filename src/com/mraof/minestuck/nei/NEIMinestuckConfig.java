@@ -9,8 +9,8 @@ public class NEIMinestuckConfig implements IConfigureNEI {
 	public void loadConfig() {
 		API.registerRecipeHandler(new AlchemiterHandler());
 		
-		API.registerRecipeHandler(new DesignexHandler());
-		API.registerUsageHandler(new DesignexHandler());
+		API.registerRecipeHandler(new DesignixHandler());
+		API.registerUsageHandler(new DesignixHandler());
 	}
 
 	@Override

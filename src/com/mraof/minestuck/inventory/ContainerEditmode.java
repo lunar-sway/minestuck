@@ -29,23 +29,24 @@ public class ContainerEditmode extends Container {
 	private EntityPlayer player;
 	public InventoryBasic inventory = new InventoryBasic("InventoryEditmode", false, 14);
 	public ArrayList<ItemStack> items  = new ArrayList<ItemStack>();
-	private boolean mode;
 	public int scroll;
 	public static int clientScroll;
 	
-	public ContainerEditmode(boolean mode)
+	public ContainerEditmode()
 	{
 		this.player = ClientProxy.getPlayer();
-		this.mode = mode;
 		addSlots();
+		Debug.print("ContainerCreated:"+player.inventory.mainInventory[14]);
 	}
 	
-	public ContainerEditmode(EntityPlayer player, boolean mode)
+	public ContainerEditmode(EntityPlayer player)
 	{
 		this.player = player;
-		this.mode = mode;
 		addSlots();
-		updateInventory();
+		if(player instanceof EntityPlayerMP)
+		{
+			updateInventory();
+		}
 	}
 	
 	@Override
@@ -69,10 +70,19 @@ public class ContainerEditmode extends Container {
 			Slot slot = (Slot) this.inventorySlots.get(slotIndex);
 			ItemStack stack = slot.getStack();
 			if(stack != null)
-				mergeItemStack(stack.copy(), 14, this.inventorySlots.size(), false);
+				for(int i = 14; i < inventorySlots.size(); i++)
+					if(!getSlot(i).getHasStack())
+					{
+						getSlot(i).putStack(stack);
+						return stack;
+					}
 		}
 		return null;
 	}
+	
+	@Override
+	protected void retrySlotClick(int p_75133_1_, int p_75133_2_, boolean p_75133_3_, EntityPlayer player)
+	{}
 	
 	private void addSlots()
 	{
@@ -88,37 +98,29 @@ public class ContainerEditmode extends Container {
 	{
 		ArrayList<ItemStack> itemList = new ArrayList<ItemStack>();
 		SburbConnection c = SkaianetHandler.getClientConnection(ServerEditHandler.getData(player.getCommandSenderName()).getTarget());
-		if(mode)
+		ArrayList<ItemStack> tools = new ArrayList<ItemStack>();
+		//Fill list with tool items when implemented
+		
+		ArrayList<ItemStack> deployItems = DeployList.getItemList();
+		Iterator<ItemStack> iter = deployItems.iterator();
+		int playerTier = SessionHandler.availableTier(c.getClientName());
+		while(iter.hasNext())
 		{
-			ArrayList<ItemStack> tools = new ArrayList<ItemStack>();
-			//Fill list with tool items when implemented
-			
-			ArrayList<ItemStack> deployItems = DeployList.getItemList();
-			Iterator<ItemStack> iter = deployItems.iterator();
-			int playerTier = SessionHandler.availableTier(c.getClientName());
-			while(iter.hasNext())
-			{
-				ItemStack stack = iter.next();
-				if(DeployList.getTier(stack) > playerTier)
+			ItemStack stack = iter.next();
+			if(DeployList.getTier(stack) > playerTier)
+				iter.remove();
+			else if(Minestuck.hardMode && DeployList.getSecondaryCost(stack) == null && c.givenItems()[DeployList.getOrdinal(stack)])
+				iter.remove();
+			else if(stack.getItem().equals(Minestuck.captchaCard))
+				if(c.enteredGame())
 					iter.remove();
-				else if(Minestuck.hardMode && DeployList.getSecondaryCost(stack) == null && c.givenItems()[DeployList.getOrdinal(stack)])
-					iter.remove();
-				else if(stack.getItem().equals(Minestuck.captchaCard))
-					if(c.enteredGame())
-						iter.remove();
-					else stack.getTagCompound().setInteger("contentMeta", SessionHandler.getEntryItem(c.getClientName()));
-			}
-			
-			for(int i = 0; i < Math.max(tools.size(), deployItems.size()); i++)
-			{
-				itemList.add(i >= tools.size()? null:tools.get(i));
-				itemList.add(i >= deployItems.size()? null:deployItems.get(i));
-			}
-			
+				else stack.getTagCompound().setInteger("contentMeta", SessionHandler.getEntryItem(c.getClientName()));
 		}
-		else
+		
+		for(int i = 0; i < Math.max(tools.size(), deployItems.size()); i++)
 		{
-			//Some sort of block-list
+			itemList.add(i >= tools.size()? null:tools.get(i));
+			itemList.add(i >= deployItems.size()? null:deployItems.get(i));
 		}
 		
 		boolean changed = false;
