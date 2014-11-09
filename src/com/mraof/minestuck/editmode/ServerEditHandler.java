@@ -278,7 +278,7 @@ public class ServerEditHandler
 					if(!GristHelper.canAfford(MinestuckPlayerData.getGristSet(data.connection.getClientName()), cost)) {
 						event.setCanceled(true);
 					}
-				} else if(!(stack.getItem() instanceof ItemBlock) || !GristHelper.canAfford(data.connection.getClientName(), stack)) {
+				} else if(!(stack.getItem() instanceof ItemBlock) || !GristHelper.canAfford(data.connection.getClientName(), stack, false)) {
 					event.setCanceled(true);
 				}
 				if(event.useItem == Result.DEFAULT)
@@ -318,8 +318,11 @@ public class ServerEditHandler
 					GristHelper.decrease(data.connection.getClientName(), GristRegistry.getGristConversion(stack));
 					MinestuckPlayerTracker.updateGristCache(data.connection.getClientName());
 				}
-			} else if(event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) {
+			}
+			else if(event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK)
+			{
 				GristHelper.decrease(data.connection.getClientName(), new GristSet(GristType.Build,1));
+				MinestuckPlayerTracker.updateGristCache(data.connection.getClientName());
 			}
 		}
 	}
