@@ -283,7 +283,7 @@ public class ServerEditHandler
 				if(event.useItem == Result.DEFAULT)
 					event.useItem = Result.ALLOW;
 			} else if(event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) {
-				Block block = event.entity.worldObj.getBlock(event.x, event.y, event.z);
+				Block block = event.entity.worldObj.getBlock(event.x, event.y, event.z);  
 				if(block.getBlockHardness(event.entity.worldObj, event.x, event.y, event.z) < 0
 						|| GristHelper.getGrist(data.connection.getClientName(), GristType.Build) <= 0)
 					event.setCanceled(true);
@@ -375,7 +375,7 @@ public class ServerEditHandler
 		{
 			ItemStack stack = player.inventory.mainInventory[i];
 			if(stack != null && (DeployList.containsItemStack(stack) ? Minestuck.hardMode && givenItems[DeployList.getOrdinal(stack)] ||
-					stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack, false).getItem() == Minestuck.cruxiteArtifact && !enteredGame
+					stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack, false).getItem() == Minestuck.cruxiteArtifact && enteredGame
 					: GristRegistry.getGristConversion(stack) == null || !(stack.getItem() instanceof ItemBlock)))
 			{
 				player.inventory.mainInventory[i] = null;

@@ -70,7 +70,6 @@ public class ClientEditHandler {
 	
 	public static void onKeyPressed()
 	{
-		Debug.print("Button:"+Minecraft.getMinecraft().thePlayer.inventory.mainInventory[14]);
 		MinestuckPacket packet = MinestuckPacket.makePacket(Type.CLIENT_EDIT);
 		MinestuckChannelHandler.sendToServer(packet);
 	}
@@ -198,7 +197,7 @@ public class ClientEditHandler {
 			if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
 				event.useBlock = Result.DENY;
 				ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
-				if(!(stack.getItem() instanceof ItemBlock))
+				if(stack == null || !(stack.getItem() instanceof ItemBlock))
 				{
 					event.setCanceled(true);
 					return;

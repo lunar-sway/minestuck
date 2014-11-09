@@ -63,7 +63,6 @@ public class MiscContainerPacket extends MinestuckPacket
 				Minecraft.getMinecraft().thePlayer.openContainer.windowId = i;
 			if(gui == null)
 				player.closeScreen();
-			Debug.print("PacketPost:"+Minecraft.getMinecraft().thePlayer.inventory.mainInventory[14]);
 		}
 		else if(player instanceof EntityPlayerMP)
 		{
