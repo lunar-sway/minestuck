@@ -278,7 +278,7 @@ public class ServerEditHandler
 					if(!GristHelper.canAfford(MinestuckPlayerData.getGristSet(data.connection.getClientName()), cost)) {
 						event.setCanceled(true);
 					}
-				} else if(!(stack.getItem() instanceof ItemBlock) || !GristHelper.canAfford(data.connection.getClientName(), stack)) {
+				} else if(!(stack.getItem() instanceof ItemBlock) || !GristHelper.canAfford(data.connection.getClientName(), stack, false)) {
 					event.setCanceled(true);
 				}
 				if(event.useItem == Result.DEFAULT)
