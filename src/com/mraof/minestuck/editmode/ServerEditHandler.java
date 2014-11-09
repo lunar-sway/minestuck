@@ -318,8 +318,11 @@ public class ServerEditHandler
 					GristHelper.decrease(data.connection.getClientName(), GristRegistry.getGristConversion(stack));
 					MinestuckPlayerTracker.updateGristCache(data.connection.getClientName());
 				}
-			} else if(event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) {
+			}
+			else if(event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK)
+			{
 				GristHelper.decrease(data.connection.getClientName(), new GristSet(GristType.Build,1));
+				MinestuckPlayerTracker.updateGristCache(data.connection.getClientName());
 			}
 		}
 	}

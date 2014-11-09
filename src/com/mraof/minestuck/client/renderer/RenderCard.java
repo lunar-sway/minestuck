@@ -96,6 +96,8 @@ public class RenderCard implements IItemRenderer
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_ALPHA_TEST);
 		glDisable(GL_CULL_FACE);
+		glPushAttrib(GL_FOG_BIT);
+		glDisable(GL_FOG);
 		float brightnessX = OpenGlHelper.lastBrightnessX;
 		float brightnessY = OpenGlHelper.lastBrightnessY;
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
@@ -120,6 +122,7 @@ public class RenderCard implements IItemRenderer
 		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();
 		glMatrixMode(GL_MODELVIEW);
+		glPopAttrib();
 		glPopAttrib();
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, brightnessX, brightnessY);
 		
@@ -172,6 +175,8 @@ public class RenderCard implements IItemRenderer
 		glPushMatrix();
 		glLoadIdentity();
 		
+		glPushAttrib(GL_FOG_BIT);
+		glDisable(GL_FOG);
 		glDisable(GL_CULL_FACE);
 		glEnable(GL_ALPHA_TEST);
 		float brightnessX = OpenGlHelper.lastBrightnessX;
@@ -208,6 +213,7 @@ public class RenderCard implements IItemRenderer
 		glMatrixMode(GL_MODELVIEW);
 		
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, brightnessX, brightnessY);
+		glPopAttrib();
 		glPopAttrib();
 		if(OpenGlHelper.isFramebufferEnabled())
 			mc.getFramebuffer().bindFramebuffer(false);
