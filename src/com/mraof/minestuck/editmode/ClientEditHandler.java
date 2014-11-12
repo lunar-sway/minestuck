@@ -181,6 +181,8 @@ public class ClientEditHandler {
 			if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
 				event.useBlock = Result.DENY;
 				ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
+				if(stack == null)
+					return;
 				GristSet cost;
 				if(DeployList.containsItemStack(stack))
 					if(Minestuck.clientHardMode && givenItems[DeployList.getOrdinal(stack)+1])
@@ -189,10 +191,18 @@ public class ClientEditHandler {
 				else cost = GristRegistry.getGristConversion(stack);
 				if(!GristHelper.canAfford(MinestuckPlayerData.getClientGrist(), cost)) {
 					StringBuilder str = new StringBuilder();
-					for(GristAmount grist : cost.getArray()) {
-						if(cost.getArray().indexOf(grist) != 0)
-							str.append(", ");
-						str.append(grist.getAmount()+" "+grist.getType().getDisplayName());
+					if(cost != null)
+					{
+						for(GristAmount grist : cost.getArray())
+						{
+							if(cost.getArray().indexOf(grist) != 0)
+								str.append(", ");
+							str.append(grist.getAmount()+" "+grist.getType().getDisplayName());
+						}
+					}
+					else
+					{
+						str.append("null");
 					}
 					event.entityPlayer.addChatMessage(new ChatComponentTranslation("grist.missing",str.toString()));
 					event.setCanceled(true);
