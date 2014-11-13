@@ -199,12 +199,8 @@ public class ClientEditHandler {
 								str.append(", ");
 							str.append(grist.getAmount()+" "+grist.getType().getDisplayName());
 						}
+						event.entityPlayer.addChatMessage(new ChatComponentTranslation("grist.missing",str.toString()));
 					}
-					else
-					{
-						str.append("null");
-					}
-					event.entityPlayer.addChatMessage(new ChatComponentTranslation("grist.missing",str.toString()));
 					event.setCanceled(true);
 				}
 				if(event.useItem == Result.DEFAULT)

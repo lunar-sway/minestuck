@@ -36,7 +36,7 @@ public class BlockComputerOn extends Block implements ITileEntityProvider
 	{
 		super(Material.rock);
 		
-		setBlockName("computer");
+		setBlockName("sburbComputer");
 		setHardness(4.0F);
 	}
 	

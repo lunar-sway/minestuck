@@ -23,7 +23,7 @@ public class BlockComputerOff extends Block {
 	public BlockComputerOff()
 	{
 		super(Material.rock);
-		setBlockName("computer");
+		setBlockName("sburbComputer");
 		setHardness(4.0F);
 		this.setCreativeTab(Minestuck.tabMinestuck);
 		
