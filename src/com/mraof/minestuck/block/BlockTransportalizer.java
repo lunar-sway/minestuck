@@ -21,15 +21,10 @@ public class BlockTransportalizer extends BlockContainer
 	{
 		super(Material.iron);
 		this.setCreativeTab(Minestuck.tabMinestuck);
+		this.setBlockBounds(0F, 0F, 0F, 1F, 0.5F, 1F);
 		this.setBlockName("transportalizer");
 	}
-
-	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess blockAccess, int x, int y, int z)
-	{
-		this.setBlockBounds(0F, 0F, 0F, 1F, 0.5F, 1F);
-	}
-
+	
 	@Override
 	public TileEntity createNewTileEntity(World world, int metadata)
 	{

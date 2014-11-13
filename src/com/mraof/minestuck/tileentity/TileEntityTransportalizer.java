@@ -73,19 +73,13 @@ public class TileEntityTransportalizer extends TileEntity implements ITeleporter
 	{
 		transportalizers.put(key, location);
 	}
-
-	public void updateLocation(Location location)
-	{
-		if(worldObj != null || !worldObj.isRemote)
-			put(id, location);
-	}
-
-	public static void teleportTo(Entity entity, Location location)
+	
+	public void teleportTo(Entity entity, Location location)
 	{
 		entity.timeUntilPortal = 60;
-		double x = location.x + entity.posX % 1;
-		double y = location.y + entity.posY % 1;
-		double z = location.z + entity.posZ % 1;
+		double x = location.x + (entity.posX - xCoord);
+		double y = location.y + (entity.posY - yCoord);
+		double z = location.z + (entity.posZ - zCoord);
 		if(entity instanceof EntityPlayerMP)
 		{
 			((EntityPlayerMP) entity).setPositionAndUpdate(x, y, z);
@@ -192,7 +186,7 @@ public class TileEntityTransportalizer extends TileEntity implements ITeleporter
 	@Override
 	public void makeDestination(Entity entity, WorldServer worldserver, WorldServer worldserver1) 
 	{
-		entity.setLocationAndAngles(this.xCoord, this.yCoord, this.zCoord, entity.rotationYaw, entity.rotationPitch);
+		entity.setLocationAndAngles(this.xCoord + 0.5, this.yCoord + 0.6, this.zCoord + 0.5, entity.rotationYaw, entity.rotationPitch);
 		entity.timeUntilPortal = 60;
 	}
 
