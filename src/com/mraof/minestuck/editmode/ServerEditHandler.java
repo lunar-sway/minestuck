@@ -1,11 +1,11 @@
 package com.mraof.minestuck.editmode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import scala.actors.threadpool.Arrays;
 import net.minecraft.block.Block;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -97,7 +97,7 @@ public class ServerEditHandler
 	public static void reset(DamageSource damageSource, float damage, EditData data) {
 		if(data == null) {
 			return;
-		}Debug.print("Resetting player:"+data.player);
+		}
 		EntityPlayerMP player = data.player;
 		EntityDecoy decoy = data.decoy;
 		if(player.dimension != decoy.dimension)
