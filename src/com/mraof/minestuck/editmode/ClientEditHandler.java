@@ -8,7 +8,6 @@ import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.renderer.InventoryEffectRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -148,7 +147,7 @@ public class ClientEditHandler {
 			ItemStack stack = event.entityItem.getEntityItem();
 			int ordinal = DeployList.getOrdinal(stack)+1;
 			if(ordinal > 0)
-				if(stack.getItem() instanceof ItemBlock)
+				if(Block.getBlockFromItem(stack.getItem()) != null)
 					event.setCanceled(true);
 				else if(GristHelper.canAfford(MinestuckPlayerData.getClientGrist(), Minestuck.clientHardMode&&givenItems[ordinal]
 						?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack)))

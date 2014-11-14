@@ -15,7 +15,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -229,15 +228,18 @@ public class ServerEditHandler
 	}
 	
 	@SubscribeEvent
-	public void onTossEvent(ItemTossEvent event) {
-		if(!event.entity.worldObj.isRemote && getData(event.player.getCommandSenderName()) != null) {
+	public void onTossEvent(ItemTossEvent event)
+	{
+		if(!event.entity.worldObj.isRemote && getData(event.player.getCommandSenderName()) != null)
+		{
 			EditData data = getData(event.player.getCommandSenderName());
 			InventoryPlayer inventory = event.player.inventory;
 			ItemStack stack = event.entityItem.getEntityItem();
 			if(DeployList.containsItemStack(stack))
-					if(stack.getItem() instanceof ItemBlock)
+					if(Block.getBlockFromItem(stack.getItem()) != null)
 						event.setCanceled(true);
-					else {
+					else
+					{
 						GristSet cost = Minestuck.hardMode && data.connection.givenItems()[DeployList.getOrdinal(stack)+1]
 								?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
 						if(GristHelper.canAfford(MinestuckPlayerData.getGristSet(data.connection.getClientName()), cost)) {
@@ -255,7 +257,9 @@ public class ServerEditHandler
 				c.givenItems()[0] = true;
 				if(!c.isMain())
 					SkaianetHandler.giveItems(c.getClientName());
-			} else {
+			}
+			else
+			{
 				event.setCanceled(true);
 				if(inventory.getItemStack() != null)
 					inventory.setItemStack(null);
@@ -267,7 +271,7 @@ public class ServerEditHandler
 	}
 	
 	@SubscribeEvent
-	public void onItemPickupEvent(EntityItemPickupEvent event) {
+	public void onItemPickupEvent(EntityItemPickupEvent event){
 		if(!event.entity.worldObj.isRemote && getData(event.entityPlayer.getCommandSenderName()) != null)
 			event.setCanceled(true);
 	}
@@ -276,32 +280,42 @@ public class ServerEditHandler
 	 * Checks if the event should be canceled.
 	 */
 	@SubscribeEvent(priority=EventPriority.NORMAL)
-	public void onItemUseControl(PlayerInteractEvent event) {
+	public void onItemUseControl(PlayerInteractEvent event)
+	{
 		
-		if(!event.entity.worldObj.isRemote && getData(event.entityPlayer.getCommandSenderName()) != null) {
+		if(!event.entity.worldObj.isRemote && getData(event.entityPlayer.getCommandSenderName()) != null)
+		{
 			EditData data = getData(event.entityPlayer.getCommandSenderName());
-			if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
+			if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK)
+			{
 				event.useBlock = Result.DENY;
 				ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
 				if(stack == null)
 					return;
-				if(DeployList.containsItemStack(stack)) {
+				if(DeployList.containsItemStack(stack))
+				{
 					GristSet cost = Minestuck.hardMode && data.connection.givenItems()[DeployList.getOrdinal(stack)+1]
 							?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
-					if(!GristHelper.canAfford(MinestuckPlayerData.getGristSet(data.connection.getClientName()), cost)) {
+					if(!GristHelper.canAfford(MinestuckPlayerData.getGristSet(data.connection.getClientName()), cost))
+					{
 						event.setCanceled(true);
 					}
-				} else if(!(stack.getItem() instanceof ItemBlock) || !GristHelper.canAfford(data.connection.getClientName(), stack, false)) {
+				}
+				else if(Block.getBlockFromItem(stack.getItem()) == null || !GristHelper.canAfford(data.connection.getClientName(), stack, false))
+				{
 					event.setCanceled(true);
 				}
 				if(event.useItem == Result.DEFAULT)
 					event.useItem = Result.ALLOW;
-			} else if(event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) {
+			}
+			else if(event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK)
+			{
 				Block block = event.entity.worldObj.getBlock(event.x, event.y, event.z);
 				if(block.getBlockHardness(event.entity.worldObj, event.x, event.y, event.z) < 0
 						|| GristHelper.getGrist(data.connection.getClientName(), GristType.Build) <= 0)
 					event.setCanceled(true);
-			} else if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR)
+			}
+			else if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR)
 				event.setCanceled(true);
 		}
 	}
@@ -385,30 +399,36 @@ public class ServerEditHandler
 		}
 	}
 	
-	public static void updateInventory(EntityPlayerMP player, boolean[] givenItems, boolean enteredGame, String client) {	//Could need to have better effiency
+	public static void updateInventory(EntityPlayerMP player, boolean[] givenItems, boolean enteredGame, String client)
+	{
 		boolean inventoryChanged = false;
-		for(int i = 0; i < player.inventory.mainInventory.length; i++) {
+		for(int i = 0; i < player.inventory.mainInventory.length; i++)
+		{
 			ItemStack stack = player.inventory.mainInventory[i];
-			if(stack != null && (GristRegistry.getGristConversion(stack) == null || !(stack.getItem() instanceof ItemBlock)) && !(DeployList.containsItemStack(stack) ||
+			if(stack != null && (GristRegistry.getGristConversion(stack) == null || Block.getBlockFromItem(stack.getItem()) == null) && !(DeployList.containsItemStack(stack) ||
 					stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack, false).getItem() == Minestuck.cruxiteArtifact && (!Minestuck.hardMode || !givenItems[0]) && !enteredGame))
 			{
 				player.inventory.mainInventory[i] = null;
 				inventoryChanged = true;
 			}
-			if(stack != null && stack.stackSize > 1) {
+			if(stack != null && stack.stackSize > 1)
+			{
 				stack.stackSize = 1;
 				inventoryChanged = true;
 			}
 		}
 		
 		ArrayList<ItemStack> itemsToRemove = new ArrayList<ItemStack>();
-		for(ItemStack stack : DeployList.getItemList()) {
+		for(ItemStack stack : DeployList.getItemList())
+		{
 			boolean shouldHave = !(Minestuck.hardMode && givenItems[DeployList.getOrdinal(stack)+1] && DeployList.getSecondaryCost(stack) == null
 					|| DeployList.getTier(stack) > SessionHandler.availableTier(client));
-			if(shouldHave && !player.inventory.hasItemStack(stack) && !(player.inventory.getItemStack() != null && player.inventory.getItemStack().isItemEqual(stack))) {
+			if(shouldHave && !player.inventory.hasItemStack(stack) && !(player.inventory.getItemStack() != null && player.inventory.getItemStack().isItemEqual(stack)))
+			{
 				if(player.inventory.addItemStackToInventory(stack))
 					inventoryChanged = true;
-			} else if(!shouldHave)
+			}
+			else if(!shouldHave)
 				itemsToRemove.add(stack);
 		}
 		
