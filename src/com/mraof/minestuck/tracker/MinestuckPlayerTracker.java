@@ -43,10 +43,10 @@ public class MinestuckPlayerTracker {
 	{
 		EntityPlayer player = event.player;
 		Debug.print(player.getCommandSenderName()+" joined the game. Sending packets.");
-		String encUsername = UsernameHandler.encode(player.getCommandSenderName());
 		MinecraftServer server = MinecraftServer.getServer();
 		if(!server.isDedicatedServer() && UsernameHandler.host == null)
 			UsernameHandler.host = event.player.getCommandSenderName();
+		String encUsername = UsernameHandler.encode(player.getCommandSenderName());
 		
 		sendConfigPacket(player);
 		
@@ -91,7 +91,7 @@ public class MinestuckPlayerTracker {
 		{
 			Modus modus = CaptchaDeckHandler.playerMap.get(encUsername);
 			modus.player = player;
-			MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.CAPTCHA, CaptchaDeckPacket.DATA, modus.writeToNBT(new NBTTagCompound())), player);
+			MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.CAPTCHA, CaptchaDeckPacket.DATA, CaptchaDeckHandler.writeToNBT(modus)), player);
 		}
 		
 		updateGristCache(UsernameHandler.encode(player.getCommandSenderName()));

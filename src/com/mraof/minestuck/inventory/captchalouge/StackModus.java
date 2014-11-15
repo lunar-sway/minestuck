@@ -4,7 +4,10 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.client.gui.captchalouge.StackGuiHandler;
+import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler.ModusType;
+import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.Debug;
 
 import cpw.mods.fml.relauncher.Side;
@@ -22,6 +25,8 @@ public class StackModus extends Modus
 	protected boolean changed = true;
 	@SideOnly(Side.CLIENT)
 	protected ItemStack[] items;
+	@SideOnly(Side.CLIENT)
+	protected SylladexGuiHandler gui;
 	
 	@Override
 	public void initModus(ItemStack[] prev)
@@ -47,6 +52,7 @@ public class StackModus extends Modus
 	{
 		size = nbt.getInteger("size");
 		list = new LinkedList<ItemStack>();
+		
 		for(int i = 0; i < size; i++)
 			if(nbt.hasKey("item"+i))
 				list.add(ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("item"+i)));
@@ -61,6 +67,7 @@ public class StackModus extends Modus
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
 	{
+		nbt.setInteger("size", size);
 		Iterator<ItemStack> iter = list.iterator();
 		for(int i = 0; i < list.size(); i++)
 		{
@@ -73,7 +80,7 @@ public class StackModus extends Modus
 	@Override
 	public boolean putItemStack(ItemStack item)
 	{
-		ItemStack firstItem = list.size() > 0?list.getFirst() : null;
+		ItemStack firstItem = list.size() > 0 ? list.getFirst() : null;
 		if(firstItem != null && firstItem.getItem() == item.getItem() && firstItem.getItemDamage() == item.getItemDamage() && ItemStack.areItemStackTagsEqual(firstItem, item)
 				&& firstItem.stackSize + item.stackSize <= firstItem.getMaxStackSize())
 			firstItem.stackSize += item.stackSize;
@@ -126,15 +133,31 @@ public class StackModus extends Modus
 	}
 
 	@Override
-	public ItemStack getItem(int id)
+	public ItemStack getItem(int id, boolean asCard)
 	{
-		return list.removeFirst();
+		if(list.isEmpty())
+			return null;
+		
+		if(asCard)
+		{
+			size--;
+			return AlchemyRecipeHandler.createCard(list.removeFirst(), false);
+		}
+		else return list.removeFirst();
 	}
 
 	@Override
 	public boolean canSwitchFrom(ModusType modus)
 	{
 		return modus == ModusType.QUEUE;
+	}
+
+	@Override
+	public SylladexGuiHandler getGuiHandler()
+	{
+		if(gui == null)
+			gui = new StackGuiHandler(this);
+		return gui;
 	}
 	
 }

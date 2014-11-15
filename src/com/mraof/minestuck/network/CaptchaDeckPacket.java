@@ -103,12 +103,15 @@ public class CaptchaDeckPacket extends MinestuckPacket
 			else if(this.type == CAPTCHALOUGE && player.getCurrentEquippedItem() != null)
 				CaptchaDeckHandler.captchalougeItem((EntityPlayerMP) player);
 			else if(this.type == GET)
-				CaptchaDeckHandler.getItem((EntityPlayerMP) player, itemIndex);
+				CaptchaDeckHandler.getItem((EntityPlayerMP) player, itemIndex, getCard);
 		}
 		else
 		{
 			if(this.type == DATA)
+			{
 				CaptchaDeckHandler.clientSideModus = CaptchaDeckHandler.readFromNBT(nbt, true);
+				CaptchaDeckHandler.clientSideModus.getGuiHandler().updateContent();
+			}
 		}
 	}
 

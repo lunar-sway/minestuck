@@ -67,7 +67,13 @@ public class CaptchaDeckHandler
 	{
 		boolean b = true;
 		if(item.getItem().equals(Minestuck.captchaCard) && (!item.hasTagCompound() || !item.getTagCompound().hasKey("contentID")))
-			b = !playerMap.get(UsernameHandler.encode(player.getCommandSenderName())).increaseSize();
+			while(item.stackSize > 0)
+			{
+				b = !playerMap.get(UsernameHandler.encode(player.getCommandSenderName())).increaseSize();
+				if(!b)
+					item.stackSize--;
+				else break;
+			}
 		if(b)
 			launchAnyItem(player, item);
 	}
@@ -90,6 +96,7 @@ public class CaptchaDeckHandler
 			return;
 		ItemStack item = container.inventory.getStackInSlot(0);
 		Modus modus = playerMap.get(UsernameHandler.encode(player.getCommandSenderName()));
+		
 		if(item.getItem().equals(Minestuck.captchaModus) && ModusType.values().length > item.getItemDamage())
 		{
 			if(modus == null)
@@ -133,9 +140,11 @@ public class CaptchaDeckHandler
 				launchItem(player, content);
 		}
 		
-		container.detectAndSendChanges();
-		MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, modus.writeToNBT(new NBTTagCompound()));
-		MinestuckChannelHandler.sendToPlayer(packet, player);
+		if(modus != null)
+		{
+			MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, modus.writeToNBT(new NBTTagCompound()));
+			MinestuckChannelHandler.sendToPlayer(packet, player);
+		}
 	}
 	
 	public static void captchalougeItem(EntityPlayerMP player)
@@ -145,16 +154,18 @@ public class CaptchaDeckHandler
 		if(modus != null && item != null && modus.putItemStack(item))
 		{
 			player.setCurrentItemOrArmor(0, null);
-			player.inventoryContainer.detectAndSendChanges();
+			MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, modus.writeToNBT(new NBTTagCompound()));
+			MinestuckChannelHandler.sendToPlayer(packet, player);
 		}
+		
 	}
 	
-	public static void getItem(EntityPlayerMP player, int index)
+	public static void getItem(EntityPlayerMP player, int index, boolean asCard)
 	{
 		Modus modus = playerMap.get(UsernameHandler.encode(player.getCommandSenderName()));
 		if(modus == null)
 			return;
-		ItemStack stack = modus.getItem(index);
+		ItemStack stack = modus.getItem(index, asCard);
 		if(stack != null)
 		{
 			if(player.getCurrentEquippedItem() == null)
@@ -174,8 +185,9 @@ public class CaptchaDeckHandler
 				if(!placed)
 					launchAnyItem(player, stack);
 			}
-			player.inventoryContainer.detectAndSendChanges();
 		}
+		MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, modus.writeToNBT(new NBTTagCompound()));
+		MinestuckChannelHandler.sendToPlayer(packet, player);
 	}
 	
 	public static NBTTagCompound writeToNBT(Modus modus)
@@ -199,6 +211,17 @@ public class CaptchaDeckHandler
 		}
 		modus.readFromNBT(nbt);
 		return modus;
+	}
+	
+	public static void saveAll(NBTTagCompound nbt)
+	{
+		
+	}
+	
+	public static void loadAll(NBTTagCompound nbt)
+	{
+		playerMap.clear();
+		
 	}
 	
 }

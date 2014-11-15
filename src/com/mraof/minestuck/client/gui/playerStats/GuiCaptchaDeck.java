@@ -6,6 +6,7 @@ import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.util.Debug;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -35,7 +36,7 @@ public class GuiCaptchaDeck extends GuiPlayerStatsContainer
 	{
 		super.initGui();
 		modusButton = new GuiButton(1, xOffset + 102, yOffset + 31, 50, 18, StatCollector.translateToLocal("gui.useItem"));
-		sylladexMap = new GuiButton(1, xOffset + 6, yOffset + 31, 60, 18, StatCollector.translateToLocal("gui.viewSylladex"));
+		sylladexMap = new GuiButton(1, xOffset + 6, yOffset + 31, 60, 18, StatCollector.translateToLocal("gui.sylladex"));
 		buttonList.add(modusButton);
 		buttonList.add(sylladexMap);
 		sylladexMap.enabled = CaptchaDeckHandler.clientSideModus != null;
@@ -74,9 +75,9 @@ public class GuiCaptchaDeck extends GuiPlayerStatsContainer
 		{
 			MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(Type.CAPTCHA, CaptchaDeckPacket.MODUS));
 		}
-		else if(button == this.sylladexMap)
+		else if(button == this.sylladexMap && CaptchaDeckHandler.clientSideModus != null)
 		{
-			//Open sylladex
+			mc.displayGuiScreen(CaptchaDeckHandler.clientSideModus.getGuiHandler());
 		}
 	}
 	

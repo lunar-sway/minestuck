@@ -4,7 +4,10 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.client.gui.captchalouge.QueueGuiHandler;
+import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler.ModusType;
+import com.mraof.minestuck.util.AlchemyRecipeHandler;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -15,9 +18,17 @@ public class QueueModus extends StackModus
 {
 	
 	@Override
-	public ItemStack getItem(int id)
+	public ItemStack getItem(int id, boolean asCard)
 	{
-		return list.removeLast();
+		if(list.isEmpty())
+			return null;
+		
+		if(asCard)
+		{
+			size--;
+			return AlchemyRecipeHandler.createCard(list.removeLast(), false);
+		}
+		else return list.removeLast();
 	}
 	
 	@Override
@@ -34,6 +45,14 @@ public class QueueModus extends StackModus
 	public boolean canSwitchFrom(ModusType modus)
 	{
 		return modus == ModusType.STACK;
+	}
+	
+	@Override
+	public SylladexGuiHandler getGuiHandler()
+	{
+		if(gui == null)
+			gui = new QueueGuiHandler(this);
+		return gui;
 	}
 	
 }
