@@ -60,9 +60,9 @@ public class AlchemiterHandler extends TemplateRecipeHandler {
 			for (Map.Entry<List<Object>, GristSet> entry : GristRegistry.getAllConversions().entrySet())
 			{
 				List<Object> itemData = entry.getKey();
-				String id = (String)itemData.get(0);
+				Item item = (Item)itemData.get(0);
 				int meta = (Integer)itemData.get(1);
-				arecipes.add(new CachedAlchemiterRecipe(new ItemStack((Item) Item.itemRegistry.getObject(id),1,meta)));
+				arecipes.add(new CachedAlchemiterRecipe(new ItemStack(item, 1, meta)));
 			}
 		}
 			

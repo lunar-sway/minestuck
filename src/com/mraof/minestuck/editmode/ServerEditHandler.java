@@ -15,6 +15,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -236,7 +237,7 @@ public class ServerEditHandler
 			InventoryPlayer inventory = event.player.inventory;
 			ItemStack stack = event.entityItem.getEntityItem();
 			if(DeployList.containsItemStack(stack))
-					if(Block.getBlockFromItem(stack.getItem()) != null)
+					if(Block.getBlockFromItem(stack.getItem()) != Blocks.air)
 						event.setCanceled(true);
 					else
 					{
@@ -301,7 +302,7 @@ public class ServerEditHandler
 						event.setCanceled(true);
 					}
 				}
-				else if(Block.getBlockFromItem(stack.getItem()) == null || !GristHelper.canAfford(data.connection.getClientName(), stack, false))
+				else if(Block.getBlockFromItem(stack.getItem()) == Blocks.air || !GristHelper.canAfford(data.connection.getClientName(), stack, false))
 				{
 					event.setCanceled(true);
 				}
@@ -405,7 +406,7 @@ public class ServerEditHandler
 		for(int i = 0; i < player.inventory.mainInventory.length; i++)
 		{
 			ItemStack stack = player.inventory.mainInventory[i];
-			if(stack != null && (GristRegistry.getGristConversion(stack) == null || Block.getBlockFromItem(stack.getItem()) == null) && !(DeployList.containsItemStack(stack) ||
+			if(stack != null && (GristRegistry.getGristConversion(stack) == null || Block.getBlockFromItem(stack.getItem()) == Blocks.air) && !(DeployList.containsItemStack(stack) ||
 					stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack, false).getItem() == Minestuck.cruxiteArtifact && (!Minestuck.hardMode || !givenItems[0]) && !enteredGame))
 			{
 				player.inventory.mainInventory[i] = null;

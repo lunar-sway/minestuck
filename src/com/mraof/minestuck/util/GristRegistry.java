@@ -5,6 +5,7 @@ import java.util.Hashtable;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class GristRegistry {
@@ -27,7 +28,7 @@ public class GristRegistry {
 	}
 	public static void addGristConversion(Block block, int metadata, boolean useDamage, GristSet grist)
 	{
-		gristRecipes.put(Arrays.asList(block, useDamage ? metadata : 0, useDamage), grist);
+		gristRecipes.put(Arrays.asList(Item.getItemFromBlock(block), useDamage ? metadata : 0, useDamage), grist);
 	}
 	
 	/**
