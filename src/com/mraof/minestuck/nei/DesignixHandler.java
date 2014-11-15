@@ -4,31 +4,37 @@ import static codechicken.lib.gui.GuiDraw.changeTexture;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.CombinationRegistry;
 
 public class DesignixHandler extends TemplateRecipeHandler {
 
 	class CachedDesignixRecipe extends CachedRecipe {
 
-		private ItemStack input1;
-		private ItemStack input2;
+		private ArrayList<PositionedStack> stacks;
 		private boolean mode;
 		private ItemStack output;
-		public CachedDesignixRecipe(ItemStack input1,ItemStack input2,boolean mode,ItemStack output) {
-			this.input1 = input1;
-			this.input2 = input2;
+		
+		public CachedDesignixRecipe(Object input1, int damage1, Object input2, int damage2, boolean mode, ItemStack output)
+		{
 			this.mode = mode;
 			this.output = output;
+			stacks = new ArrayList<PositionedStack>();
+			stacks.add(new PositionedStack(AlchemyRecipeHandler.getItems(input1, damage1), 57, 15, true));
+			stacks.add(new PositionedStack(AlchemyRecipeHandler.getItems(input2, damage2), 57, 39, true));
 		}
 		
 		@Override
@@ -37,13 +43,11 @@ public class DesignixHandler extends TemplateRecipeHandler {
 		}
 		
 		@Override
-		   public List<PositionedStack> getIngredients()
-			{
-				ArrayList<PositionedStack> stacks = new ArrayList<PositionedStack>();
-				stacks.add(new PositionedStack(input1,57,15));
-				stacks.add(new PositionedStack(input2,57,39));
-				return stacks;
-			}
+		public List<PositionedStack> getIngredients()
+		{
+			return getCycledIngredients(cycleticks / 20, stacks);
+		}
+		
 	}
 
 	@Override
@@ -66,29 +70,28 @@ public class DesignixHandler extends TemplateRecipeHandler {
 			for (Map.Entry<List<Object>, ItemStack> entry : CombinationRegistry.getAllConversions().entrySet())
 			{
 				List<Object> itemData = (List<Object>)entry.getKey();
-				Item id1 = (Item)itemData.get(0);
+				Object id1 = itemData.get(0);
 				int meta1 = (Integer)itemData.get(1);
-				Item id2 = (Item)itemData.get(2);
+				Object id2 = itemData.get(2);
 				int meta2 = (Integer)itemData.get(3);
 				boolean mode = (Boolean)itemData.get(4);
-				arecipes.add(new CachedDesignixRecipe(new ItemStack(id1,1,meta1),new ItemStack(id2,1,meta2),mode,(ItemStack)entry.getValue()));
+				arecipes.add(new CachedDesignixRecipe(id1, meta1, id2, meta2, mode, (ItemStack)entry.getValue()));
 			}
 		}
-			
-			
 	}
 	
 	@Override
 	public void loadCraftingRecipes(ItemStack result){
 		for (Map.Entry<List<Object>, ItemStack> entry : CombinationRegistry.getAllConversions().entrySet()) {
 			List<Object> itemData = entry.getKey();
-			Item id1 = (Item)itemData.get(0);
+			Object id1 = itemData.get(0);
 			int meta1 = (Integer)itemData.get(1);
-			Item id2 = (Item)itemData.get(2);
+			Object id2 = itemData.get(2);
 			int meta2 = (Integer)itemData.get(3);
 			boolean mode = (Boolean)itemData.get(4);
-			if (result.getItem() == (entry.getValue()).getItem() && result.getItemDamage() == (entry.getValue()).getItemDamage()) {
-				arecipes.add(new CachedDesignixRecipe(new ItemStack(id1,1,meta1),new ItemStack(id2,1,meta2),mode,(ItemStack)entry.getValue()));
+			if (result.getItem() == (entry.getValue()).getItem() && result.getItemDamage() == (entry.getValue()).getItemDamage())
+			{
+				arecipes.add(new CachedDesignixRecipe(id1, meta1 , id2, meta2, mode, (ItemStack)entry.getValue()));
 			}
 		}
 	}
@@ -99,18 +102,46 @@ public class DesignixHandler extends TemplateRecipeHandler {
 		if (ingredients.length == 0 || !(ingredients[0] instanceof ItemStack))
 		{return;}
 		
-		for (Map.Entry<List<Object>, ItemStack> entry : CombinationRegistry.getAllConversions().entrySet())
+		ItemStack search = (ItemStack)ingredients[0];
+		if(search.getItem() == Minestuck.captchaCard && search.hasTagCompound() && search.getTagCompound().hasKey("contentID"))
+			search = AlchemyRecipeHandler.getDecodedItem(search, false);
+		
+		recipeLoop: for (Map.Entry<List<Object>, ItemStack> entry : CombinationRegistry.getAllConversions().entrySet())
 		{
 			List<Object> itemData = entry.getKey();
-			Item id1 = (Item)itemData.get(0);
+			Object id1 = itemData.get(0);
 			int meta1 = (Integer)itemData.get(1);
-			Item id2 = (Item)itemData.get(2);
+			Object id2 = itemData.get(2);
 			int meta2 = (Integer)itemData.get(3);
 			boolean mode = (Boolean)itemData.get(4);
-			ItemStack search1 = (ItemStack)ingredients[0];
-			//ItemStack search2 = (ItemStack)ingredients[1];
-			if ((search1.getItem() == id1 && search1.getItemDamage() == meta1) || (search1.getItem() == id2 && search1.getItemDamage() == meta2)) {
-				arecipes.add(new CachedDesignixRecipe(new ItemStack(id1, 1, meta1),new ItemStack(id2,1,meta2),mode,(ItemStack)entry.getValue()));
+			int[] ids = OreDictionary.getOreIDs(search);
+			if(id1 instanceof Item && search.getItem() == id1 && (meta1 == OreDictionary.WILDCARD_VALUE || meta1 == search.getItemDamage()))
+			{
+				arecipes.add(new CachedDesignixRecipe(search.getItem(), search.getItemDamage(), id2, meta2, mode, entry.getValue()));
+				continue recipeLoop;
+			}
+			else if(id1 instanceof String && (meta1 == OreDictionary.WILDCARD_VALUE || meta1 == search.getItemDamage()))
+			{
+				int id = OreDictionary.getOreID((String)id1);
+				for(int i : ids)
+					if(i == id)
+					{
+						arecipes.add(new CachedDesignixRecipe(search.getItem(), search.getItemDamage(), id2, meta2, mode, entry.getValue()));
+						continue recipeLoop;
+					}
+			}
+			
+			if(id2 instanceof Item && search.getItem() == id2 && (meta2 == OreDictionary.WILDCARD_VALUE || meta2 == search.getItemDamage()))
+				arecipes.add(new CachedDesignixRecipe(id1, meta1, search.getItem(), search.getItemDamage(), mode, entry.getValue()));
+			else if(id2 instanceof String && (meta2 == OreDictionary.WILDCARD_VALUE || meta2 == search.getItemDamage()))
+			{
+				int id = OreDictionary.getOreID((String)id2);
+				for(int i : ids)
+					if(i == id)
+					{
+						arecipes.add(new CachedDesignixRecipe(id1, meta1, search.getItem(), search.getItemDamage(), mode, entry.getValue()));
+						break;
+					}
 			}
 		}
 	}
@@ -129,7 +160,7 @@ public class DesignixHandler extends TemplateRecipeHandler {
 		drawTexturedModalRect(21, 39, 0, 0, 16, 16,16,16);
 
 		//render combo mode
-		GuiDraw.drawString(crecipe.mode ? "&&" : "||", 22,18, 0);
+		GuiDraw.drawString(crecipe.mode ? "&&" : "||", 22,18, 0x8B8B8B);
 	}
 	
 	

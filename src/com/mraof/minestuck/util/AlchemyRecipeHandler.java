@@ -18,6 +18,7 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
@@ -400,7 +401,7 @@ public class AlchemyRecipeHandler {
 		CombinationRegistry.addCombination(new ItemStack(Minestuck.clawHammer), new ItemStack(Blocks.brick_block), CombinationRegistry.MODE_AND, false, false, new ItemStack(Minestuck.sledgeHammer));
 		CombinationRegistry.addCombination(new ItemStack(Minestuck.component, 1, 0), new ItemStack(Items.iron_ingot), CombinationRegistry.MODE_AND, new ItemStack(Minestuck.component, 1, 1));
 		CombinationRegistry.addCombination(new ItemStack(Minestuck.component, 1, 1), new ItemStack(Items.cake), CombinationRegistry.MODE_AND, new ItemStack(Minestuck.crockerSpork));
-		CombinationRegistry.addCombination(new ItemStack(Minestuck.crockerSpork), new ItemStack(Minestuck.captchaCard), CombinationRegistry.MODE_AND, false, false, new ItemStack(Minestuck.blockMachine, 1, 4));
+		CombinationRegistry.addCombination(new ItemStack(Minestuck.crockerSpork), new ItemStack(Minestuck.captchaCard), CombinationRegistry.MODE_AND, false, true, new ItemStack(Minestuck.blockMachine, 1, 4));
 		CombinationRegistry.addCombination(new ItemStack(Minestuck.sickle), new ItemStack(Minestuck.component, 1, 2), CombinationRegistry.MODE_AND, false, true, new ItemStack(Minestuck.regiSickle));
 		CombinationRegistry.addCombination(new ItemStack(Minestuck.sickle), new ItemStack(Minestuck.clawHammer), CombinationRegistry.MODE_AND, false, false, new ItemStack(Minestuck.clawSickle));
 		CombinationRegistry.addCombination(new ItemStack(Minestuck.pogoHammer), new ItemStack(Blocks.anvil), CombinationRegistry.MODE_AND, false, false, new ItemStack(Minestuck.fearNoAnvil));
@@ -736,6 +737,22 @@ public class AlchemyRecipeHandler {
 		
 		returned ++;
 		return true;
+	}
+	
+	public static List<ItemStack> getItems(Object item, int damage)
+	{
+		if(item instanceof ItemStack)
+			return Arrays.asList((ItemStack)item);
+		if(item instanceof Item)
+			return Arrays.asList(new ItemStack((Item) item, 1, damage));
+		else
+		{
+			List<ItemStack> list = OreDictionary.getOres((String) item);
+			if(damage != OreDictionary.WILDCARD_VALUE)
+				for(ItemStack stack : list)
+					stack.setItemDamage(damage);
+			return list;
+		}
 	}
 	
 }
