@@ -59,10 +59,12 @@ public class DesignixHandler extends TemplateRecipeHandler {
 	@Override
 	public void loadCraftingRecipes(String outputId, Object... results)
 	{
-		if(outputId.equals("item"))
+		if(outputId.equals("item") && results[0] instanceof ItemStack)
 			loadCraftingRecipes((ItemStack)results[0]);
-		else if (outputId.equals("allDesignix")) {
-			for (Map.Entry<List<Object>, ItemStack> entry : CombinationRegistry.getAllConversions().entrySet()) {
+		else if (outputId.equals("allDesignix"))
+		{
+			for (Map.Entry<List<Object>, ItemStack> entry : CombinationRegistry.getAllConversions().entrySet())
+			{
 				List<Object> itemData = (List<Object>)entry.getKey();
 				Item id1 = (Item)itemData.get(0);
 				int meta1 = (Integer)itemData.get(1);
@@ -94,8 +96,11 @@ public class DesignixHandler extends TemplateRecipeHandler {
 	@Override
 	public void loadUsageRecipes(String inputId, Object... ingredients)
 	{
-		if (ingredients.length == 0) {return;}
-		for (Map.Entry<List<Object>, ItemStack> entry : CombinationRegistry.getAllConversions().entrySet()) {
+		if (ingredients.length == 0 || !(ingredients[0] instanceof ItemStack))
+		{return;}
+		
+		for (Map.Entry<List<Object>, ItemStack> entry : CombinationRegistry.getAllConversions().entrySet())
+		{
 			List<Object> itemData = entry.getKey();
 			Item id1 = (Item)itemData.get(0);
 			int meta1 = (Integer)itemData.get(1);

@@ -53,10 +53,12 @@ public class AlchemiterHandler extends TemplateRecipeHandler {
 	@Override
 	public void loadCraftingRecipes(String outputId, Object... results)
 	{
-		if(outputId.equals("item"))
+		if(outputId.equals("item") && results[0] instanceof ItemStack)
 			loadCraftingRecipes((ItemStack)results[0]);
-		else if (outputId.equals("allAlc")) {
-			for (Map.Entry<List<Object>, GristSet> entry : GristRegistry.getAllConversions().entrySet()) {
+		else if (outputId.equals("allAlc"))
+		{
+			for (Map.Entry<List<Object>, GristSet> entry : GristRegistry.getAllConversions().entrySet())
+			{
 				List<Object> itemData = entry.getKey();
 				String id = (String)itemData.get(0);
 				int meta = (Integer)itemData.get(1);
