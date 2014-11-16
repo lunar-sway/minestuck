@@ -10,6 +10,7 @@ import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.UsernameHandler;
 
 import cpw.mods.fml.relauncher.Side;
@@ -61,15 +62,13 @@ public class CaptchaDeckHandler
 	@SideOnly(Side.CLIENT)
 	public static Modus clientSideModus;
 	
-	public static HashMap<String, Modus> playerMap = new HashMap<String, Modus>();
-	
 	public static void launchItem(EntityPlayer player, ItemStack item)
 	{
 		boolean b = true;
 		if(item.getItem().equals(Minestuck.captchaCard) && (!item.hasTagCompound() || !item.getTagCompound().hasKey("contentID")))
 			while(item.stackSize > 0)
 			{
-				b = !playerMap.get(UsernameHandler.encode(player.getCommandSenderName())).increaseSize();
+				b = !getModus(player).increaseSize();
 				if(!b)
 					item.stackSize--;
 				else break;
@@ -95,7 +94,7 @@ public class CaptchaDeckHandler
 		if(container.inventory.getStackInSlot(0) == null)
 			return;
 		ItemStack item = container.inventory.getStackInSlot(0);
-		Modus modus = playerMap.get(UsernameHandler.encode(player.getCommandSenderName()));
+		Modus modus = getModus(player);
 		
 		if(item.getItem().equals(Minestuck.captchaModus) && ModusType.values().length > item.getItemDamage())
 		{
@@ -104,7 +103,7 @@ public class CaptchaDeckHandler
 				modus = ModusType.values()[item.getItemDamage()].createInstance();
 				modus.player = player;
 				modus.initModus(null);
-				playerMap.put(UsernameHandler.encode(player.getCommandSenderName()), modus);
+				setModus(player, modus);
 				container.inventory.setInventorySlotContents(0, null);
 			}
 			else
@@ -124,7 +123,7 @@ public class CaptchaDeckHandler
 					modus.initModus(null);
 				}
 				
-				playerMap.put(UsernameHandler.encode(player.getCommandSenderName()), modus);
+				setModus(player, modus);
 				item.setItemDamage(oldType.ordinal());
 			}
 			
@@ -150,7 +149,7 @@ public class CaptchaDeckHandler
 	public static void captchalougeItem(EntityPlayerMP player)
 	{
 		ItemStack item = player.getCurrentEquippedItem();
-		Modus modus = playerMap.get(UsernameHandler.encode(player.getCommandSenderName()));
+		Modus modus = getModus(player);
 		if(modus != null && item != null && modus.putItemStack(item))
 		{
 			player.setCurrentItemOrArmor(0, null);
@@ -162,7 +161,7 @@ public class CaptchaDeckHandler
 	
 	public static void getItem(EntityPlayerMP player, int index, boolean asCard)
 	{
-		Modus modus = playerMap.get(UsernameHandler.encode(player.getCommandSenderName()));
+		Modus modus = getModus(player);
 		if(modus == null)
 			return;
 		ItemStack stack = modus.getItem(index, asCard);
@@ -213,15 +212,14 @@ public class CaptchaDeckHandler
 		return modus;
 	}
 	
-	public static void saveAll(NBTTagCompound nbt)
+	public static Modus getModus(EntityPlayer player)
 	{
-		
+		return MinestuckPlayerData.getData(UsernameHandler.encode(player.getCommandSenderName())).modus;
 	}
 	
-	public static void loadAll(NBTTagCompound nbt)
+	public static void setModus(EntityPlayer player, Modus modus)
 	{
-		playerMap.clear();
-		
+		MinestuckPlayerData.getData(UsernameHandler.encode(player.getCommandSenderName())).modus = modus;
 	}
 	
 }

@@ -581,9 +581,8 @@ public class Minestuck
 	public void serverStarting(FMLServerStartingEvent event)
 	{
 		worldSeed = event.getServer().worldServers[0].getSeed();
-
+		
 		MinestuckSaveHandler.lands.clear();
-		MinestuckPlayerData.onServerStarting();
 		
 		File dataFile = event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("MinestuckData");
 		if(dataFile != null && dataFile.exists()) {
@@ -614,6 +613,7 @@ public class Minestuck
 		}
 		
 		SkaianetHandler.loadData(null);
+		MinestuckPlayerData.readFromNBT(null);
 		
 	}
 	

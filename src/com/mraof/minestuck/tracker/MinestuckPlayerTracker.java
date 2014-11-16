@@ -55,20 +55,10 @@ public class MinestuckPlayerTracker {
 		if(MinestuckPlayerData.getGristSet(encUsername) == null)
 		{
 			Debug.printf("Grist set is null for player %s.", player.getCommandSenderName());
-			if(player.getEntityData().hasKey("Grist")) {	//Load old grist format
-				NBTTagCompound nbt = player.getEntityData().getCompoundTag("Grist");
-				GristSet set = new GristSet();
-				for(GristType type : GristType.values())
-					set.addGrist(type, nbt.getInteger(type.getName()));
-				if(set.isEmpty())
-					set.addGrist(GristType.Build, 20);
-
-				MinestuckPlayerData.setGrist(encUsername, set);
-				player.getEntityData().removeTag("Grist");
-			} else MinestuckPlayerData.setGrist(encUsername, new GristSet(GristType.Build, 20));
+			MinestuckPlayerData.setGrist(encUsername, new GristSet(GristType.Build, 20));
 		}
 		
-		if(!CaptchaDeckHandler.playerMap.containsKey(encUsername))
+		if(CaptchaDeckHandler.getModus(player) == null)
 		{
 			if(Minestuck.defaultModusType == -1)
 			{
@@ -76,20 +66,20 @@ public class MinestuckPlayerTracker {
 				Modus modus = CaptchaDeckHandler.ModusType.values()[index].createInstance();
 				modus.player = player;
 				modus.initModus(null);
-				CaptchaDeckHandler.playerMap.put(encUsername, modus);
+				CaptchaDeckHandler.setModus(player, modus);
 			}
 			else if(Minestuck.defaultModusType >= 0 && Minestuck.defaultModusType < CaptchaDeckHandler.ModusType.values().length)
 			{
 				Modus modus = CaptchaDeckHandler.ModusType.values()[Minestuck.defaultModusType].createInstance();
 				modus.player = player;
 				modus.initModus(null);
-				CaptchaDeckHandler.playerMap.put(encUsername, modus);
+				CaptchaDeckHandler.setModus(player, modus);
 			}
 		}
 		
-		if(CaptchaDeckHandler.playerMap.containsKey(encUsername))
+		if(CaptchaDeckHandler.getModus(player) != null)
 		{
-			Modus modus = CaptchaDeckHandler.playerMap.get(encUsername);
+			Modus modus = CaptchaDeckHandler.getModus(player);
 			modus.player = player;
 			MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.CAPTCHA, CaptchaDeckPacket.DATA, CaptchaDeckHandler.writeToNBT(modus)), player);
 		}
@@ -117,7 +107,7 @@ public class MinestuckPlayerTracker {
 	public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
 		
 		ServerEditHandler.onPlayerExit(event.player);
-		Modus modus = CaptchaDeckHandler.playerMap.get(UsernameHandler.encode(event.player.getCommandSenderName()));
+		Modus modus = CaptchaDeckHandler.getModus(event.player);
 		if(modus != null)
 			modus.player = null;
 	}

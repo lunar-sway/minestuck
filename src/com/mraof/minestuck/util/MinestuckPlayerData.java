@@ -7,6 +7,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
 import com.mraof.minestuck.editmode.ClientEditHandler;
+import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
+import com.mraof.minestuck.inventory.captchalouge.Modus;
 import com.mraof.minestuck.network.GristCachePacket;
 
 import cpw.mods.fml.relauncher.Side;
@@ -36,85 +38,105 @@ public class MinestuckPlayerData {
 	
 	//Server sided
 	
-	static Map<String, GristSet> gristMap = new HashMap<String, GristSet>();
+	static Map<String, PlayerData> dataMap = new HashMap<String, PlayerData>();
 	
-	static Map<String, Title> titles = new HashMap();
-	
-	public static GristSet getGristSet(String player) {
-		if(!gristMap.containsKey(player))
-			Debug.print("Failed to get grist cache for "+player);
-		return gristMap.get(player);
+	public static GristSet getGristSet(String player)
+	{
+		return getData(player).gristCache;
 	}
 	
-	public static void setGrist(String player, GristSet set) {
-		gristMap.put(player, set);
+	public static void setGrist(String player, GristSet set)
+	{
+		getData(player).gristCache = set;
 	}
 	
-	public static Title getTitle(String player) {
-		return titles.get(player);
+	public static Title getTitle(String player)
+	{
+		return getData(player).title;
 	}
 	
 	public static void writeToNBT(NBTTagCompound nbt)
 	{
 		NBTTagList list = new NBTTagList();
-		for(Map.Entry<String, GristSet> entry : gristMap.entrySet())
-		{
-			NBTTagCompound dataCompound = new NBTTagCompound();
-			dataCompound.setString("username", entry.getKey());
-			
-			int[] grist = new int[GristType.allGrists];
-			for(GristType type : GristType.values())
-				grist[type.ordinal()] = entry.getValue().getGrist(type);
-			dataCompound.setIntArray("grist", grist);
-			list.appendTag(dataCompound);
-			
-			if(titles.containsKey(entry.getKey()))
-			{
-				Title title = titles.get(entry.getKey());
-				dataCompound.setByte("titleClass", (byte) title.getHeroClass().ordinal());
-				dataCompound.setByte("titleAspect", (byte) title.getHeroAspect().ordinal());
-			}
-		}
+		for(PlayerData data : dataMap.values())
+			list.appendTag(data.writeToNBT());
+		
 		nbt.setTag("playerData", list);
 	}
 	
 	public static void readFromNBT(NBTTagCompound nbt)
 	{
+		dataMap.clear();
 		if(nbt == null)
 			return;
-		NBTTagList list;
-		if(nbt.hasKey("playerData"))
-			list = nbt.getTagList("playerData", 10);
-		else list = nbt.getTagList("grist", 10);
+		
+		NBTTagList list = nbt.getTagList("playerData", 10);
 		for(int i = 0; i < list.tagCount(); i++)
 		{
 			NBTTagCompound dataCompound = list.getCompoundTagAt(i);
-			String username = dataCompound.getString("username");
-			if(dataCompound.hasKey("grist")) {
-				GristSet set = new GristSet(GristType.values(), dataCompound.getIntArray("grist"));
-				gristMap.put(username, set);
-				Title title = new Title(TitleHelper.getClassFromInt(dataCompound.getByte("titleClass")), TitleHelper.getAspectFromInt(dataCompound.getByte("titleAspect")));
-				titles.put(username, title);
-			} else
-			{
-				GristSet set = new GristSet();
-				for(GristType type : GristType.values())
-					set.addGrist(type, dataCompound.getInteger(type.getName()));
-				gristMap.put(username, set);
-			}
+			PlayerData data = new PlayerData();
+			data.readFromNBT(dataCompound);
+			dataMap.put(data.player, data);
 		}
-	}
-
-	public static void onServerStarting()
-	{
-		gristMap.clear();
-		titles.clear();
 	}
 	
 	public static void setTitle(String player, Title newTitle)
 	{
-		if(titles.get(player) == null)
-			titles.put(player, newTitle);
+		if(getData(player).title == null)
+			getData(player).title = newTitle;
+	}
+	
+	public static PlayerData getData(String player)
+	{
+		if(!dataMap.containsKey(player))
+		{
+			PlayerData data = new PlayerData();
+			data.player = player;
+			dataMap.put(player, data);
+		}
+		return dataMap.get(player);
+	}
+	
+	public static class PlayerData
+	{
+		
+		public String player;
+		public Title title;
+		public GristSet gristCache;
+		public Modus modus;
+		
+		private void readFromNBT(NBTTagCompound nbt)
+		{
+			this.player = nbt.getString("username");
+			if(nbt.hasKey("grist"))
+				this.gristCache = new GristSet(GristType.values(), nbt.getIntArray("grist"));
+			if(nbt.hasKey("titleClass"))
+				this.title = new Title(TitleHelper.getClassFromInt(nbt.getByte("titleClass")), TitleHelper.getAspectFromInt(nbt.getByte("titleAspect")));
+			if(nbt.hasKey("modus"))
+				this.modus = CaptchaDeckHandler.readFromNBT(nbt.getCompoundTag("modus"), false);
+		}
+		
+		private NBTTagCompound writeToNBT()
+		{
+			NBTTagCompound nbt = new NBTTagCompound();
+			nbt.setString("username", this.player);
+			if(this.gristCache != null)
+			{
+				int[] grist = new int[GristType.allGrists];
+				for(GristType type : GristType.values())
+					grist[type.ordinal()] = this.gristCache.getGrist(type);
+				nbt.setIntArray("grist", grist);
+			}
+			if(this.title != null)
+			{
+				nbt.setByte("titleClass", (byte) this.title.getHeroClass().ordinal());
+				nbt.setByte("titleAspect", (byte) this.title.getHeroAspect().ordinal());
+			}
+			if(this.modus != null)
+				nbt.setTag("modus", CaptchaDeckHandler.writeToNBT(modus));
+			return nbt;
+		}
+		
 	}
 	
 }
