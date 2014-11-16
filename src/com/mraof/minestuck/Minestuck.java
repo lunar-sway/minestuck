@@ -609,51 +609,12 @@ public class Minestuck
 
 				TileEntityTransportalizer.loadTransportalizers(nbt.getCompoundTag("transportalizers"));
 				
+				return;
 			}
-			return;
 		}
 		
-		File landList = event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("minestuckLandList");
-		if (landList != null && landList.exists())
-		{
-			try {
-				DataInputStream dataInputStream = new DataInputStream(new FileInputStream(landList));
-				int currentByte;
-				while((currentByte = dataInputStream.read()) != -1)
-				{
-					if(MinestuckSaveHandler.lands.contains((byte)currentByte))
-							continue;
-					MinestuckSaveHandler.lands.add((byte)currentByte);
-					//Debug.printf("Found land dimension id of: %d", currentByte);
-					
-					if(!DimensionManager.isDimensionRegistered(currentByte))
-						DimensionManager.registerDimension(currentByte, Minestuck.landProviderTypeId);
-				}
-				dataInputStream.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		File connectionData = event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("connectionList");
-		if(connectionData != null && connectionData.exists())
-			try {
-				SkaianetHandler.loadData(CompressedStreamTools.readCompressed(new FileInputStream(connectionData)));
-			} catch(IOException e) {
-				e.printStackTrace();
-			}
+		SkaianetHandler.loadData(null);
 		
-		File gristcache = event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("gristCache");
-		if(gristcache != null && gristcache.exists()) {
-			NBTTagCompound nbt = null;
-			try {
-				nbt = CompressedStreamTools.readCompressed(new FileInputStream(gristcache));
-			} catch(IOException e){
-				e.printStackTrace();
-			}
-			
-			MinestuckPlayerData.readFromNBT(nbt);
-			
-		}
 	}
 	
 	@EventHandler

@@ -5,7 +5,9 @@ import java.util.Hashtable;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class GristRegistry {
 	private static Hashtable<List<Object>, GristSet> gristRecipes = new Hashtable<List<Object>, GristSet>();
@@ -13,33 +15,46 @@ public class GristRegistry {
 	/**
 	 * Creates a item-grist conversion ratio for an ItemStack. Used in the Alchemiter and GristWidget.
 	 */
-	public static void addGristConversion(ItemStack item,GristSet grist) {
-		addGristConversion(item,true,grist);
+	public static void addGristConversion(ItemStack item, GristSet grist) {
+		addGristConversion(item, true, grist);
 	}
 
 	public static void addGristConversion(ItemStack item,boolean useDamage,GristSet grist) {
 		//System.out.printf("adding grist conversion for id %d and metadata %d, %susing metadata\n", item.itemID, item.getItemDamage(), useDamage ? "" : "not ");
-		gristRecipes.put(Arrays.asList(item.getItem(), useDamage ? item.getItemDamage() : 0,useDamage), grist);
+		gristRecipes.put(Arrays.asList(item.getItem(), useDamage ? item.getItemDamage() : OreDictionary.WILDCARD_VALUE), grist);
 	}
 	public static void addGristConversion(Block block, GristSet grist)
 	{
-		addGristConversion(block, 0, false, grist);
+		addGristConversion(block, OreDictionary.WILDCARD_VALUE, grist);
 	}
-	public static void addGristConversion(Block block, int metadata, boolean useDamage, GristSet grist)
+	public static void addGristConversion(Block block, int metadata, GristSet grist)
 	{
-		gristRecipes.put(Arrays.asList(block, useDamage ? metadata : 0, useDamage), grist);
+		gristRecipes.put(Arrays.asList(Item.getItemFromBlock(block), metadata), grist);
 	}
 	
 	/**
 	 * Returns a item-grist conversion ratio, given an ItemStack. Used in the Alchemiter and GristWidget.
 	 */
-	public static GristSet getGristConversion(ItemStack item) {
-		if (item == null || item.getItem() == null) {return null;}
-		if (gristRecipes.get(Arrays.asList(item.getItem(),item.getItemDamage(),true)) == null) {
-			return (GristSet) gristRecipes.get(Arrays.asList(item.getItem(),0,false));
-		} else {
-			return (GristSet) gristRecipes.get(Arrays.asList(item.getItem(),item.getItemDamage(),true));
+	public static GristSet getGristConversion(ItemStack item)
+	{
+		GristSet grist;
+		if(item == null || item.getItem() == null)
+		{return null;}
+		
+		if((grist = gristRecipes.get(Arrays.asList(item.getItem(),item.getItemDamage()))) != null);
+		else if((grist = gristRecipes.get(Arrays.asList(item.getItem(), OreDictionary.WILDCARD_VALUE))) != null);
+		else
+		{
+			String[] names = CombinationRegistry.getDictionaryNames(item);
+			for(String str : names)
+			{
+				if((grist = gristRecipes.get(Arrays.asList(str,item.getItemDamage()))) != null)
+					break;
+				else if((grist = gristRecipes.get(Arrays.asList(str, OreDictionary.WILDCARD_VALUE))) != null)
+					break;
+			}
 		}
+		return grist;
 	}
 	
 	public static Hashtable<List<Object>, GristSet> getAllConversions() {

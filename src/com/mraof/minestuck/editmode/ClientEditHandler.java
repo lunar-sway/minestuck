@@ -10,7 +10,7 @@ import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.renderer.InventoryEffectRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -171,16 +171,19 @@ public class ClientEditHandler {
 			int ordinal = DeployList.getOrdinal(stack);
 			if(ordinal >= 0)
 			{
-				if(GristHelper.canAfford(MinestuckPlayerData.getClientGrist(), Minestuck.clientHardMode && givenItems[ordinal]
+				if(Block.getBlockFromItem(stack.getItem()) == Blocks.air && GristHelper.canAfford(MinestuckPlayerData.getClientGrist(), Minestuck.clientHardMode && givenItems[ordinal]
 						? DeployList.getSecondaryCost(stack) : DeployList.getPrimaryCost(stack)))
 					givenItems[ordinal] = true;
-				event.setCanceled(true);
+				else event.setCanceled(true);
+				
+			}
+			if(event.isCanceled())
+			{
 				if(inventory.getItemStack() != null)
 					inventory.setItemStack(null);
 				else inventory.setInventorySlotContents(inventory.currentItem, null);
-			}
-			if(event.isCanceled())
 				event.entityItem.setDead();
+			}
 		}
 	}
 	
@@ -197,7 +200,7 @@ public class ClientEditHandler {
 			if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
 				event.useBlock = Result.DENY;
 				ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
-				if(stack == null || !(stack.getItem() instanceof ItemBlock))
+				if(stack == null || Block.getBlockFromItem(stack.getItem()) == Blocks.air)
 				{
 					event.setCanceled(true);
 					return;
@@ -210,12 +213,16 @@ public class ClientEditHandler {
 				else cost = GristRegistry.getGristConversion(stack);
 				if(!GristHelper.canAfford(MinestuckPlayerData.getClientGrist(), cost)) {
 					StringBuilder str = new StringBuilder();
-					for(GristAmount grist : cost.getArray()) {
-						if(cost.getArray().indexOf(grist) != 0)
-							str.append(", ");
-						str.append(grist.getAmount()+" "+grist.getType().getDisplayName());
+					if(cost != null)
+					{
+						for(GristAmount grist : cost.getArray())
+						{
+							if(cost.getArray().indexOf(grist) != 0)
+								str.append(", ");
+							str.append(grist.getAmount()+" "+grist.getType().getDisplayName());
+						}
+						event.entityPlayer.addChatMessage(new ChatComponentTranslation("grist.missing",str.toString()));
 					}
-					event.entityPlayer.addChatMessage(new ChatComponentTranslation("grist.missing",str.toString()));
 					event.setCanceled(true);
 				}
 				if(event.useItem == Result.DEFAULT)

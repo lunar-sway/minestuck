@@ -21,26 +21,40 @@ import com.mraof.minestuck.util.ITeleporter;
 import com.mraof.minestuck.util.Location;
 import com.mraof.minestuck.util.Teleport;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+
 public class TileEntityTransportalizer extends TileEntity implements ITeleporter
 {
 	public static HashMap<String, Location> transportalizers = new HashMap<String, Location>();
 	private static Random rand = new Random();
 	String id = "";
 	private String destId = "";
-	Location currentLocation = new Location();
-
+	
 	@Override
-	public void setWorldObj(World world)
+	public void validate()
 	{
-		super.setWorldObj(world);
-		if(!world.isRemote && id.isEmpty())
+		super.validate();
+		if(!worldObj.isRemote)
 		{
-			id = getUnusedId();
+			if(id.isEmpty())
+				id = getUnusedId();
+			put(id, new Location(this.xCoord, this.yCoord, this.zCoord, worldObj.provider.dimensionId));
 		}
-		put(id, new Location(this.xCoord, this.yCoord, this.zCoord, world.provider.dimensionId));
 	}
-
-	public static String getUnusedId()
+	
+	@Override
+	public void invalidate()
+	{
+		super.invalidate();
+		if(!worldObj.isRemote)
+		{
+			Location location = transportalizers.get(id);
+			if(location.x == this.xCoord && location.y == this.yCoord && location.z == this.zCoord && location.dim == this.worldObj.provider.dimensionId)
+				transportalizers.remove(id);
+		}
+	}
+	
+	public String getUnusedId()
 	{
 		String unusedId = "";
 		do
@@ -57,23 +71,15 @@ public class TileEntityTransportalizer extends TileEntity implements ITeleporter
 
 	public static void put(String key, Location location)
 	{
-		//Debug.print("Adding transportalizer with key " + key + " at " + location);
 		transportalizers.put(key, location);
 	}
-
-	public void updateLocation(Location location)
-	{
-		this.currentLocation = location;
-		if(worldObj != null || !worldObj.isRemote)
-			put(id, location);
-	}
-
-	public static void teleportTo(Entity entity, Location location)
+	
+	public void teleportTo(Entity entity, Location location)
 	{
 		entity.timeUntilPortal = 60;
-		double x = location.x + entity.posX % 1;
-		double y = location.y + entity.posY % 1;
-		double z = location.z + entity.posZ % 1;
+		double x = location.x + (entity.posX - xCoord);
+		double y = location.y + (entity.posY - yCoord);
+		double z = location.z + (entity.posZ - zCoord);
 		if(entity instanceof EntityPlayerMP)
 		{
 			((EntityPlayerMP) entity).setPositionAndUpdate(x, y, z);
@@ -82,7 +88,6 @@ public class TileEntityTransportalizer extends TileEntity implements ITeleporter
 		{
 			entity.setPosition(x, y, z);
 		}
-		//Debug.print("Teleported to " + location);
 	}
 
 	public void teleport(Entity entity)
@@ -103,10 +108,6 @@ public class TileEntityTransportalizer extends TileEntity implements ITeleporter
 			else
 				teleportTo(entity, transportalizers.get(this.destId));
 		}
-		else
-		{
-			//Debug.print(this.destId + " " + transportalizers);
-		}
 	}
 
 	public static void saveTransportalizers(NBTTagCompound tagCompound)
@@ -125,16 +126,13 @@ public class TileEntityTransportalizer extends TileEntity implements ITeleporter
 			transportalizerTagCompound.setTag(entry.getKey(), locationTag);
 		}
 		tagCompound.setTag("transportalizers", transportalizerTagCompound);
-		Debug.print("Transportalizer data: "+transportalizerTagCompound);
 	}
 
 	public static void loadTransportalizers(NBTTagCompound tagCompound)
 	{
-		System.out.println(tagCompound);
 		for(Object id : tagCompound.func_150296_c())
 		{
 			NBTTagCompound locationTag = tagCompound.getCompoundTag((String)id);
-			Debug.printf("Loaded transportalizer %s: %d, %d, %d, %d", (String)id, locationTag.getInteger("x"), locationTag.getInteger("y"), locationTag.getInteger("z"), locationTag.getInteger("dim"));
 			put((String)id, new Location(locationTag.getInteger("x"), locationTag.getInteger("y"), locationTag.getInteger("z"), locationTag.getInteger("dim")));
 		}
 	}
@@ -159,41 +157,15 @@ public class TileEntityTransportalizer extends TileEntity implements ITeleporter
 	{
 		super.readFromNBT(tagCompound);
 		this.destId = tagCompound.getString("destId");
-		String readId = tagCompound.getString("idString");
-		Debug.print("Id read is " + readId);
-		if(!readId.isEmpty())
-		{
-			transportalizers.remove(id);
-			id = readId;
-		}
-
-		int dimensionId = 0;
-
-		if(this.worldObj != null)
-		{
-			dimensionId = this.worldObj.provider.dimensionId;
-		}
-		else if(transportalizers.get(this.id) != null)
-		{
-			dimensionId = transportalizers.get(this.id).dim;
-		}
-		Debug.printf("%d, %d, %d, %d", this.xCoord, this.yCoord, this.zCoord, dimensionId);
-
-		put(this.id, new Location(this.xCoord, this.yCoord, this.zCoord, dimensionId));
-		destId = tagCompound.getString("destId");
+		this.id = tagCompound.getString("idString");
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tagCompound)
 	{
 		super.writeToNBT(tagCompound);
-		if(id.isEmpty())
-		{
-			id = getUnusedId();
-			put(id, new Location());
-		}
+		
 		tagCompound.setString("idString", id);
-		Debug.print("Saved id as " + id);
 		tagCompound.setString("destId", destId);
 	}
 
@@ -214,7 +186,7 @@ public class TileEntityTransportalizer extends TileEntity implements ITeleporter
 	@Override
 	public void makeDestination(Entity entity, WorldServer worldserver, WorldServer worldserver1) 
 	{
-		entity.setLocationAndAngles(this.xCoord, this.yCoord, this.zCoord, entity.rotationYaw, entity.rotationPitch);
+		entity.setLocationAndAngles(this.xCoord + 0.5, this.yCoord + 0.6, this.zCoord + 0.5, entity.rotationYaw, entity.rotationPitch);
 		entity.timeUntilPortal = 60;
 	}
 

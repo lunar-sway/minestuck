@@ -21,15 +21,10 @@ public class BlockTransportalizer extends BlockContainer
 	{
 		super(Material.iron);
 		this.setCreativeTab(Minestuck.tabMinestuck);
+		this.setBlockBounds(0F, 0F, 0F, 1F, 0.5F, 1F);
 		this.setBlockName("transportalizer");
 	}
-
-	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess blockAccess, int x, int y, int z)
-	{
-		this.setBlockBounds(0F, 0F, 0F, 1F, 0.5F, 1F);
-	}
-
+	
 	@Override
 	public TileEntity createNewTileEntity(World world, int metadata)
 	{
@@ -42,17 +37,11 @@ public class BlockTransportalizer extends BlockContainer
 		TileEntityTransportalizer tileEntity = new TileEntityTransportalizer();
 		return tileEntity;
 	}
-
-	@Override
-	public void onBlockAdded(World world, int x, int y, int z)
-	{
-		((TileEntityTransportalizer)world.getTileEntity(x, y, z)).updateLocation(new Location(x, y, z, world.provider.dimensionId));
-	}
-
+	
 	@Override
 	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) 
 	{
-		if (entity.ridingEntity == null && entity.riddenByEntity == null && !world.isRemote && entity.timeUntilPortal == 0)
+		if (!world.isRemote && entity.ridingEntity == null && entity.riddenByEntity == null && !world.isRemote && entity.timeUntilPortal == 0)
 		{
 			((TileEntityTransportalizer) world.getTileEntity(x, y, z)).teleport(entity);
 		}
@@ -85,18 +74,7 @@ public class BlockTransportalizer extends BlockContainer
 
 		return true;
 	}
-
-	@Override
-	public void breakBlock(World world, int x, int y, int z, Block block, int metadata)
-	{
-		TileEntityTransportalizer tileEntity = (TileEntityTransportalizer) world.getTileEntity(x, y, z);
-		if(tileEntity != null)
-		{
-			TileEntityTransportalizer.transportalizers.remove(tileEntity.getId());
-		}
-		super.breakBlock(world, x, y, z, block, metadata);
-	}
-
+	
 	@Override
 	public void registerBlockIcons(IIconRegister iconRegister)
 	{

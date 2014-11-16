@@ -1,29 +1,40 @@
 package com.mraof.minestuck.editmode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.block.Block;
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommand;
+import net.minecraft.command.PlayerSelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldSettings.GameType;
+import net.minecraftforge.event.CommandEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.entity.EntityDecoy;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
@@ -39,6 +50,7 @@ import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.GristType;
+import com.mraof.minestuck.util.UsernameHandler;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 import cpw.mods.fml.common.eventhandler.Event.Result;
@@ -55,6 +67,7 @@ import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 public class ServerEditHandler
 {
 	
+	public static final ArrayList<String> commands = new ArrayList<String>(Arrays.asList(new String[]{"effect", "gamemode", "defaultgamemode", "enchant", "xp", "tp", "spreadplayers", "kill", "clear", "spawnpoint", "setworldspawn", "give"}));
 	public static final ServerEditHandler instance = new ServerEditHandler();
 	
 	static List<EditData> list = new ArrayList<EditData>();
@@ -224,7 +237,7 @@ public class ServerEditHandler
 		{
 			EditData data = getData(event.player.getCommandSenderName());
 			ItemStack stack = event.entityItem.getEntityItem();
-			if(DeployList.containsItemStack(stack) && !(stack.getItem() instanceof ItemBlock))
+			if(DeployList.containsItemStack(stack) && Block.getBlockFromItem(stack.getItem()) == Blocks.air)
 			{
 				GristSet cost = Minestuck.hardMode && data.connection.givenItems()[DeployList.getOrdinal(stack)]
 						?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
@@ -238,7 +251,7 @@ public class ServerEditHandler
 				}
 				else event.setCanceled(true);
 			}
-			else 
+			else
 			{
 				event.setCanceled(true);
 			}
@@ -253,7 +266,7 @@ public class ServerEditHandler
 	}
 	
 	@SubscribeEvent
-	public void onItemPickupEvent(EntityItemPickupEvent event) {
+	public void onItemPickupEvent(EntityItemPickupEvent event){
 		if(!event.entity.worldObj.isRemote && getData(event.entityPlayer.getCommandSenderName()) != null)
 			event.setCanceled(true);
 	}
@@ -262,32 +275,42 @@ public class ServerEditHandler
 	 * Checks if the event should be canceled.
 	 */
 	@SubscribeEvent(priority=EventPriority.NORMAL)
-	public void onItemUseControl(PlayerInteractEvent event) {
+	public void onItemUseControl(PlayerInteractEvent event)
+	{
 		
-		if(!event.entity.worldObj.isRemote && getData(event.entityPlayer.getCommandSenderName()) != null) {
+		if(!event.entity.worldObj.isRemote && getData(event.entityPlayer.getCommandSenderName()) != null)
+		{
 			EditData data = getData(event.entityPlayer.getCommandSenderName());
-			if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
+			if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK)
+			{
 				event.useBlock = Result.DENY;
 				ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
-				if(stack == null || !(stack.getItem() instanceof ItemBlock))	//Is there a better way of checking if an item is a block item?
+				if(stack == null || Block.getBlockFromItem(stack.getItem()) == Blocks.air)
 					return;
-				if(DeployList.containsItemStack(stack)) {
+				if(DeployList.containsItemStack(stack))
+				{
 					GristSet cost = Minestuck.hardMode && data.connection.givenItems()[DeployList.getOrdinal(stack)]
 							? DeployList.getSecondaryCost(stack) : DeployList.getPrimaryCost(stack);
-					if(!GristHelper.canAfford(MinestuckPlayerData.getGristSet(data.connection.getClientName()), cost)) {
+					if(!GristHelper.canAfford(MinestuckPlayerData.getGristSet(data.connection.getClientName()), cost))
+					{
 						event.setCanceled(true);
 					}
-				} else if(!(stack.getItem() instanceof ItemBlock) || !GristHelper.canAfford(data.connection.getClientName(), stack)) {
+				}
+				else if(Block.getBlockFromItem(stack.getItem()) == Blocks.air || !GristHelper.canAfford(data.connection.getClientName(), stack, false))
+				{
 					event.setCanceled(true);
 				}
 				if(event.useItem == Result.DEFAULT)
 					event.useItem = Result.ALLOW;
-			} else if(event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) {
-				Block block = event.entity.worldObj.getBlock(event.x, event.y, event.z);  
+			}
+			else if(event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK)
+			{
+				Block block = event.entity.worldObj.getBlock(event.x, event.y, event.z);
 				if(block.getBlockHardness(event.entity.worldObj, event.x, event.y, event.z) < 0
 						|| GristHelper.getGrist(data.connection.getClientName(), GristType.Build) <= 0)
 					event.setCanceled(true);
-			} else if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR)
+			}
+			else if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR)
 				event.setCanceled(true);
 		}
 	}
@@ -317,8 +340,11 @@ public class ServerEditHandler
 					GristHelper.decrease(data.connection.getClientName(), GristRegistry.getGristConversion(stack));
 					MinestuckPlayerTracker.updateGristCache(data.connection.getClientName());
 				}
-			} else if(event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) {
+			}
+			else if(event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK)
+			{
 				GristHelper.decrease(data.connection.getClientName(), new GristSet(GristType.Build,1));
+				MinestuckPlayerTracker.updateGristCache(data.connection.getClientName());
 			}
 		}
 	}
@@ -376,7 +402,7 @@ public class ServerEditHandler
 			ItemStack stack = player.inventory.mainInventory[i];
 			if(stack != null && (DeployList.containsItemStack(stack) ? Minestuck.hardMode && givenItems[DeployList.getOrdinal(stack)] ||
 					stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack, false).getItem() == Minestuck.cruxiteArtifact && enteredGame
-					: GristRegistry.getGristConversion(stack) == null || !(stack.getItem() instanceof ItemBlock)))
+					: GristRegistry.getGristConversion(stack) == null || Block.getBlockFromItem(stack.getItem()) == Blocks.air))
 			{
 				player.inventory.mainInventory[i] = null;
 				inventoryChanged = true;
@@ -428,6 +454,69 @@ public class ServerEditHandler
 	{	
 		for(EditData data : new ArrayList<EditData>(list))
 			reset(null, 0, data);
+	}
+	
+	@SubscribeEvent(priority=EventPriority.LOWEST, receiveCanceled=false)
+	public void onCommandEvent(CommandEvent event)
+	{
+		if(list.isEmpty())
+			return;
+		try
+		{
+			if(commands.contains(event.command.getCommandName()))
+			{
+				String c = event.command.getCommandName();
+				EntityPlayer target;
+				Debug.print(c);
+				if(c.equals("kill") || (c.equals("clear") || c.equals("spawnpoint")) && event.parameters.length == 0
+						|| c.equals("tp") && event.parameters.length != 2 && event.parameters.length != 4
+						|| c.equals("setworldspawn") && (event.parameters.length == 0 || event.parameters.length == 3))
+					target = CommandBase.getCommandSenderAsPlayer(event.sender);
+				else if(c.equals("defaultgamemode") && MinecraftServer.getServer().getForceGamemode())
+				{
+					for(EditData data : (EditData[]) list.toArray())
+						reset(null, 0, data);
+					return;
+				}
+				else if(c.equals("spreadplayers"))
+				{
+					ArrayList<EntityPlayer> targets = new ArrayList<EntityPlayer>();
+					for(int i = 5; i < event.parameters.length; i++)
+					{
+						String s = event.parameters[i];
+						if(PlayerSelector.hasArguments(s))
+						{
+							EntityPlayer[] list = PlayerSelector.matchPlayers(event.sender, s);
+							if(list == null || list.length == 0)
+								return;
+							Collections.addAll(targets, list);
+						}
+						else
+						{
+							EntityPlayer player = MinecraftServer.getServer().getConfigurationManager().func_152612_a(s);
+							if(player == null)
+								return;
+							targets.add(player);
+						}
+					}
+					
+					for(EntityPlayer player : targets)
+						if(getData(player.getCommandSenderName()) != null)
+						{
+							reset(null, 0, getData(player.getCommandSenderName()));
+						}
+					return;
+				}
+				else if(c.equals("gamemode") || c.equals("xp"))
+					target = event.parameters.length >= 2 ? CommandBase.getPlayer(event.sender, event.parameters[1]) : CommandBase.getCommandSenderAsPlayer(event.sender);
+				else target = CommandBase.getPlayer(event.sender, event.parameters[0]);
+				
+				if(target != null && getData(target.getCommandSenderName()) != null)
+					reset(null, 0, getData(target.getCommandSenderName()));
+			}
+		}
+		catch(CommandException e)
+		{}
 	}
 	
 }

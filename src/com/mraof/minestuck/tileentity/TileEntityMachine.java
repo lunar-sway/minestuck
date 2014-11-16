@@ -27,6 +27,7 @@ import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
+import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.UsernameHandler;
 
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -263,9 +264,12 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 				//Check owner's cache: Do they have everything they need?
 				ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(this.inv[1], true);
 				if (newItem == null) {return false;}
-				if (inv[0] != null && (inv[0].getItem() != newItem.getItem() || inv[0].getItemDamage() != newItem.getItemDamage() || inv[0].getMaxStackSize() <= inv[0].stackSize)) {return false;}
-				return GristHelper.canAfford(UsernameHandler.encode(owner.getCommandSenderName()), newItem);
-			} else {
+				if (inv[0] != null && (inv[0].getItem() != newItem.getItem() || inv[0].getItemDamage() != newItem.getItemDamage() || inv[0].getMaxStackSize() <= inv[0].stackSize))
+				{return false;}
+				return GristHelper.canAfford(UsernameHandler.encode(owner.getCommandSenderName()), newItem, this.worldObj.isRemote);
+			}
+			else
+			{
 				return false;
 			}
 		case (4):
