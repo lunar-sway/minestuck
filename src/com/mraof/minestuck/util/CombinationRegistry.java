@@ -92,7 +92,7 @@ public class CombinationRegistry {
 		return item;
 	}
 	
-	private static String[] getDictionaryNames(ItemStack stack)
+	protected static String[] getDictionaryNames(ItemStack stack)
 	{
 		int[] itemIDs = OreDictionary.getOreIDs(stack);
 		String[] itemNames = new String[itemIDs.length];

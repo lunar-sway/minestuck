@@ -13,28 +13,39 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
-
 import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
+import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.GristType;
 
-public class AlchemiterHandler extends TemplateRecipeHandler {
+public class AlchemiterHandler extends TemplateRecipeHandler
+{
 
-	class CachedAlchemiterRecipe extends CachedRecipe {
+	class CachedAlchemiterRecipe extends CachedRecipe
+	{
 
-		private ItemStack item;
-		public CachedAlchemiterRecipe(ItemStack input) {
-			this.item = input;
+		private PositionedStack result;
+		
+		public CachedAlchemiterRecipe(ItemStack input)
+		{
+			result = new PositionedStack(input, 130, 9);
+		}
+		
+		public CachedAlchemiterRecipe(Object item, int damage)
+		{
+			result = new PositionedStack(AlchemyRecipeHandler.getItems(item, damage), 130, 9);
 		}
 		
 		@Override
-		public PositionedStack getResult() {
-			return new PositionedStack(item,130,9);
+		public PositionedStack getResult()
+		{
+			randomRenderPermutation(result, cycleticks / 20);
+			return result;
 		}
 		
 		
@@ -60,9 +71,9 @@ public class AlchemiterHandler extends TemplateRecipeHandler {
 			for (Map.Entry<List<Object>, GristSet> entry : GristRegistry.getAllConversions().entrySet())
 			{
 				List<Object> itemData = entry.getKey();
-				Item item = (Item)itemData.get(0);
+				Object item = itemData.get(0);
 				int meta = (Integer)itemData.get(1);
-				arecipes.add(new CachedAlchemiterRecipe(new ItemStack(item, 1, meta)));
+				arecipes.add(new CachedAlchemiterRecipe(item, meta));
 			}
 		}
 			
@@ -71,6 +82,8 @@ public class AlchemiterHandler extends TemplateRecipeHandler {
 	
 	@Override
 	public void loadCraftingRecipes(ItemStack result){
+		result = result.copy();
+		result.stackSize = 1;
 		if (GristRegistry.getGristConversion(result) != null) {
 			arecipes.add(new CachedAlchemiterRecipe(result));
 		}

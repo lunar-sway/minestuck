@@ -422,7 +422,7 @@ public class AlchemyRecipeHandler {
 			if(Loader.isModLoaded("IronChest"))
 			{
 				Block ironChest = ((Block) (Class.forName("cpw.mods.ironchest.IronChest").getField("ironChestBlock").get(null)));
-				GristRegistry.addGristConversion(ironChest, 0, true, new GristSet(new GristType[] {GristType.Build, GristType.Rust}, new int[] {16, 128}));
+				GristRegistry.addGristConversion(ironChest, 0, new GristSet(new GristType[] {GristType.Build, GristType.Rust}, new int[] {16, 128}));
 				CombinationRegistry.addCombination(new ItemStack(Blocks.chest), new ItemStack(Items.iron_ingot), true, new ItemStack(ironChest, 1, 0));
 			}
 		}
