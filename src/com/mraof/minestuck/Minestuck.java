@@ -575,12 +575,12 @@ public class Minestuck
 			iterator.remove();
 		}
 		TileEntityTransportalizer.transportalizers.clear();
-		CaptchaDeckHandler.rand = new Random();
 	}
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event)
 	{
 		worldSeed = event.getServer().worldServers[0].getSeed();
+		CaptchaDeckHandler.rand = new Random(worldSeed);	//Unsure whenether this will be better or not
 		
 		MinestuckSaveHandler.lands.clear();
 		

@@ -5,15 +5,17 @@ import static org.lwjgl.opengl.GL11.*;
 import java.util.ArrayList;
 
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
+import com.mraof.minestuck.network.CaptchaDeckPacket;
+import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckPacket;
+import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.util.Debug;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -110,6 +112,8 @@ public abstract class SylladexGuiHandler extends GuiScreen
 		
 		drawGuiMap(xcor, ycor);
 		
+		glColor4f(1F, 1F, 1F, 1F);
+		
 		ArrayList<GuiItem> visibleItems = new ArrayList<GuiItem>();
 		for(GuiItem item : items)
 			if(item.xPos + CARD_WIDTH > mapX && item.xPos < mapX + mapWidth 
@@ -152,6 +156,27 @@ public abstract class SylladexGuiHandler extends GuiScreen
 	}
 	
 	@Override
+	protected void mouseClicked(int xcor, int ycor, int mouseButton)
+	{
+		if(isMouseInContainer(xcor, ycor))
+		{
+			int xOffset = (width - GUI_WIDTH)/2;
+			int yOffset = (height - GUI_HEIGHT)/2;
+			int translX = (int) ((xcor - xOffset - X_OFFSET) * scroll);
+			int translY = (int) ((ycor - yOffset - Y_OFFSET) * scroll);
+			for(GuiItem item : this.items)
+				if(translX >= item.xPos + 2 - mapX && translX < item.xPos + 18 - mapX &&
+						translY >= item.yPos + 7 - mapY && translY < item.yPos + 23 - mapY)
+				{
+					item.onClick(mouseButton);
+					return;
+				}
+			return;
+		}
+		super.mouseClicked(xcor, ycor, mouseButton);
+	}
+	
+	@Override
 	public boolean doesGuiPauseGame()
 	{
 		return false;
@@ -160,8 +185,6 @@ public abstract class SylladexGuiHandler extends GuiScreen
 	public void drawGuiMap(int xcor, int ycor)
 	{
 		drawRect(0, 0, mapWidth, mapHeight, 0xFF8B8B8B);
-		
-		glColor4f(1F, 1F, 1F, 1F);
 	}
 	
 	private void prepareMap(int xOffset, int yOffset)
@@ -184,7 +207,11 @@ public abstract class SylladexGuiHandler extends GuiScreen
 				ycor >= yOffset + Y_OFFSET && ycor < yOffset + Y_OFFSET + MAP_HEIGHT;
 	}
 	
-	public abstract void updateContent();
+	public void updateContent()
+	{
+		mapX = Math.min(mapX, maxWidth - mapWidth);
+		mapY = Math.min(mapY, maxHeight - mapHeight);
+	}
 	
 	/**
 	 * Called when the player zooms in or out.
@@ -199,6 +226,9 @@ public abstract class SylladexGuiHandler extends GuiScreen
 		protected int index;
 		protected int xPos, yPos;
 		
+		protected GuiItem()
+		{}
+		
 		public GuiItem(ItemStack item, SylladexGuiHandler gui, int index, int xPos, int yPos)
 		{
 			this.gui = gui;
@@ -208,6 +238,21 @@ public abstract class SylladexGuiHandler extends GuiScreen
 			this.yPos = yPos;
 		}
 		
+		public void onClick(int mouseButton)
+		{
+			int toSend = -1;
+			if(this.item == null && mouseButton == 1)
+				toSend = CaptchaDeckHandler.EMPTY_CARD;
+			else if(this.index != -1 && (mouseButton == 0 || mouseButton == 1))
+				toSend = this.index;
+			
+			if(toSend != -1)
+			{
+				MinestuckPacket packet = MinestuckPacket.makePacket(Type.CAPTCHA, CaptchaDeckPacket.GET, toSend, mouseButton != 0);
+				MinestuckChannelHandler.sendToServer(packet);
+			}
+		}
+
 		protected void drawItemBackground()
 		{
 			gui.mc.getTextureManager().bindTexture(gui.cardTexture);

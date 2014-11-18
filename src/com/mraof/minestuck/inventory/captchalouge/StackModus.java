@@ -80,6 +80,9 @@ public class StackModus extends Modus
 	@Override
 	public boolean putItemStack(ItemStack item)
 	{
+		if(size == 0)
+			return false;
+		
 		ItemStack firstItem = list.size() > 0 ? list.getFirst() : null;
 		if(firstItem != null && firstItem.getItem() == item.getItem() && firstItem.getItemDamage() == item.getItemDamage() && ItemStack.areItemStackTagsEqual(firstItem, item)
 				&& firstItem.stackSize + item.stackSize <= firstItem.getMaxStackSize())
@@ -135,8 +138,25 @@ public class StackModus extends Modus
 	@Override
 	public ItemStack getItem(int id, boolean asCard)
 	{
+		if(id == CaptchaDeckHandler.EMPTY_CARD)
+		{
+			if(list.size() < size)
+			{
+				size--;
+				return new ItemStack(Minestuck.captchaCard);
+			} else return null;
+		}
+		
 		if(list.isEmpty())
 			return null;
+		
+		if(id == CaptchaDeckHandler.EMPTY_SYLLADEX)
+		{
+			for(ItemStack item : list)
+				CaptchaDeckHandler.launchAnyItem(player, item);
+			list.clear();
+			return null;
+		}
 		
 		if(asCard)
 		{

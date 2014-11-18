@@ -20,15 +20,33 @@ public class QueueModus extends StackModus
 	@Override
 	public ItemStack getItem(int id, boolean asCard)
 	{
+		if(id == CaptchaDeckHandler.EMPTY_CARD)
+		{
+			if(list.size() < size)
+			{
+				size--;
+				return new ItemStack(Minestuck.captchaCard);
+			} else return null;
+		}
+		
 		if(list.isEmpty())
 			return null;
 		
-		if(asCard)
+		if(id == CaptchaDeckHandler.EMPTY_SYLLADEX)
+		{
+			for(ItemStack item : list)
+				CaptchaDeckHandler.launchAnyItem(player, item);
+			list.clear();
+			return null;
+		}
+		
+		ItemStack item = list.removeLast();
+		if(asCard && !(item.getItem() == Minestuck.captchaCard && item.hasTagCompound() && !item.getTagCompound().getBoolean("punched") && item.getTagCompound().hasKey("id")))
 		{
 			size--;
-			return AlchemyRecipeHandler.createCard(list.removeLast(), false);
+			return AlchemyRecipeHandler.createCard(item, false);
 		}
-		else return list.removeLast();
+		else return item;
 	}
 	
 	@Override

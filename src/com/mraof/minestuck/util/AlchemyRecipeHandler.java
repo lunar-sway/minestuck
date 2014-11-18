@@ -454,6 +454,11 @@ public class AlchemyRecipeHandler {
 		if (!Item.itemRegistry.containsKey(tag.getString("contentID"))) {return null;}
 		ItemStack newItem = new ItemStack((Item)Item.itemRegistry.getObject(tag.getString(("contentID"))), 1, tag.getInteger("contentMeta"));
 		
+		if(tag.hasKey("contentTags"))
+			newItem.stackTagCompound = tag.getCompoundTag("contentTags");
+		if(tag.hasKey("contentSize"))
+			newItem.stackSize = tag.getInteger("contentSize");
+		
 		return newItem;
 		
 	}
@@ -467,7 +472,7 @@ public class AlchemyRecipeHandler {
 		
 		if (card == null) {return null;}
 		
-		if (!(card.getItem().equals(Minestuck.captchaCard) && card.hasTagCompound() && card.getTagCompound().getBoolean("punched"))
+		if (!(card.getItem().equals(Minestuck.captchaCard) && card.hasTagCompound() && card.getTagCompound().hasKey("contentID"))
 				&& (clientSide ? Minestuck.clientEasyDesignix : Minestuck.easyDesignix))
 		{
 			return card;
@@ -490,14 +495,19 @@ public class AlchemyRecipeHandler {
 		return stack;
 	}
 	
-	public static ItemStack createCard(ItemStack item, boolean punched) {
+	public static ItemStack createCard(ItemStack item, boolean punched)
+	{
 		ItemStack stack = createEncodedItem(item, true);
-		if(stack.hasTagCompound()) {
-			stack.getTagCompound().setBoolean("punched", punched);
-			if(!punched && item.hasTagCompound()) {
+		if(!stack.hasTagCompound())
+			stack.setTagCompound(new NBTTagCompound());
+		stack.getTagCompound().setBoolean("punched", punched);
+		if(!punched)
+		{
+			if(item.hasTagCompound())
 				stack.getTagCompound().setTag("contentTags", item.getTagCompound());
-			}
+			stack.getTagCompound().setInteger("contentSize", item.stackSize);
 		}
+		
 		return stack;
 	}
 	

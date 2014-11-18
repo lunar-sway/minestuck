@@ -311,10 +311,10 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			ItemStack outputItem = CombinationRegistry.getCombination(inv1, inv2, this.mode);
 			
 			if (inv[1] == null)
-				outputItem = (inv[2].getItem().equals(Minestuck.captchaCard) && inv[2].hasTagCompound() && inv[2].getTagCompound().getBoolean("punched"))
+				outputItem = (inv[2].getItem().equals(Minestuck.captchaCard) && inv[2].hasTagCompound() && inv[2].getTagCompound().hasKey("contentID"))
 				? AlchemyRecipeHandler.getDecodedItem(inv[2], false) : inv[2];
 			else if (inv[2] == null)
-				outputItem = (inv[1].getItem().equals(Minestuck.captchaCard) && inv[1].hasTagCompound() && inv[1].getTagCompound().getBoolean("punched"))
+				outputItem = (inv[1].getItem().equals(Minestuck.captchaCard) && inv[1].hasTagCompound() && inv[1].getTagCompound().hasKey("contentID"))
 						? AlchemyRecipeHandler.getDecodedItem(inv[1], false) : inv[1];
 			
 			if(inv[3].hasTagCompound() && inv[3].getTagCompound().getBoolean("punched"))	//If you push the data onto a punched card, perform an OR alchemy

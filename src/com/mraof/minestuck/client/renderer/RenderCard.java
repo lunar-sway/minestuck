@@ -1,7 +1,5 @@
 package com.mraof.minestuck.client.renderer;
 
-import static org.lwjgl.opengl.EXTFramebufferObject.GL_FRAMEBUFFER_EXT;
-import static org.lwjgl.opengl.EXTFramebufferObject.glBindFramebufferEXT;
 import static org.lwjgl.opengl.GL11.*;
 
 import java.util.Random;
@@ -9,16 +7,14 @@ import java.util.Random;
 import org.lwjgl.opengl.GL11;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.client.event.MinestuckClientEventHandler;
 import com.mraof.minestuck.client.util.FBO;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.Debug;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.RenderHelper;
@@ -27,14 +23,9 @@ import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.IItemRenderer;
 
@@ -232,15 +223,16 @@ public class RenderCard implements IItemRenderer
 	
 	public static void renderPunchHoles(ItemStack card)
 	{
+		if(card.getTagCompound().getString("contentID").equals(Block.blockRegistry.getNameForObject(Minestuck.blockStorage))
+				&& card.getTagCompound().getInteger("contentMeta") == 1)
+			return;
 		
 		Tessellator t = Tessellator.instance;
 		glDisable(GL_TEXTURE_2D);
 		t.startDrawingQuads();
 		t.setColorOpaque_I(0);
-		int hashCode = card.getTagCompound().getString("contentID").hashCode()+card.getTagCompound().getInteger("contentMeta");
-		if(card.getTagCompound().getString("contentID").equals(Item.itemRegistry.getNameForObject(Minestuck.blockStorage))
-				&& card.getTagCompound().getInteger("contentMeta") == 1)
-			hashCode = -1;
+		int hashCode = card.getTagCompound().getString("contentID").hashCode() + card.getTagCompound().getInteger("contentMeta");
+		
 		for(int i = 0; i < 12; i++)
 		{
 			if((hashCode & (1 << i)) != 0)

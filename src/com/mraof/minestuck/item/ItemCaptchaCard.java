@@ -72,11 +72,11 @@ public class ItemCaptchaCard extends Item {
 			NBTTagString contentID = (NBTTagString)nbttagcompound.getTag("contentID");
 			NBTTagInt contentMeta = (NBTTagInt)nbttagcompound.getTag("contentMeta");
 			
-			if (contentID != null && contentMeta != null && Item.itemRegistry.containsKey(contentID.func_150285_a_())) {
-				//par3List.add("(" + contentID.data + ":" + contentMeta.data + ")");
-				par3List.add("(" + (AlchemyRecipeHandler.getDecodedItem(par1ItemStack, false)).getDisplayName() + ")");
-				if(nbttagcompound.getBoolean("punched") && !(Item.itemRegistry.getObject(contentID.func_150285_a_()) == Item.getItemFromBlock(Minestuck.blockStorage)
-						&& contentMeta.func_150287_d() == 1))
+			if (contentID != null && contentMeta != null && Item.itemRegistry.containsKey(contentID.func_150285_a_()))
+			{
+				String stackSize = nbttagcompound.getBoolean("punched") ? "" : nbttagcompound.getInteger("contentSize") + "x";
+				par3List.add("(" + stackSize + (AlchemyRecipeHandler.getDecodedItem(par1ItemStack, false)).getDisplayName() + ")");
+				if(nbttagcompound.getBoolean("punched"))
 					par3List.add("("+StatCollector.translateToLocal("item.captchaCard.punched")+")");
 				return;
 			}
