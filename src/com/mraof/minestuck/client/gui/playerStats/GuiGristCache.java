@@ -1,5 +1,7 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
+import java.util.Arrays;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -75,14 +77,13 @@ public class GuiGristCache extends GuiPlayerStats
 		
 		if (tooltip != -1)
 		{
-			drawTooltip(StatCollector.translateToLocalFormatted("grist.format", GristType.values()[tooltip].getDisplayName()), xcor, ycor,
-					EnumChatFormatting.WHITE);
+			drawHoveringText(Arrays.asList(StatCollector.translateToLocalFormatted("grist.format", GristType.values()[tooltip].getDisplayName())),
+					xcor, ycor, fontRendererObj);
 		}
 	}
 	
 	private void drawIcon(int x,int y,String location) 
 	{
-//		this.mc.renderEngine.bindTexture("minestuck:/textures/grist/" + gristType + ".png");
 		this.mc.getTextureManager().bindTexture(new ResourceLocation("minestuck",location));
 
 		float scale = (float) 1/16;

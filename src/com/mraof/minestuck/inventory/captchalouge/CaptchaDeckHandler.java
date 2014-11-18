@@ -141,7 +141,7 @@ public class CaptchaDeckHandler
 		
 		if(modus != null)
 		{
-			MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, modus.writeToNBT(new NBTTagCompound()));
+			MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, writeToNBT(modus));
 			MinestuckChannelHandler.sendToPlayer(packet, player);
 		}
 	}
@@ -153,7 +153,7 @@ public class CaptchaDeckHandler
 		if(modus != null && item != null && modus.putItemStack(item))
 		{
 			player.setCurrentItemOrArmor(0, null);
-			MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, modus.writeToNBT(new NBTTagCompound()));
+			MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, writeToNBT(modus));
 			MinestuckChannelHandler.sendToPlayer(packet, player);
 		}
 		
@@ -185,7 +185,7 @@ public class CaptchaDeckHandler
 					launchAnyItem(player, stack);
 			}
 		}
-		MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, modus.writeToNBT(new NBTTagCompound()));
+		MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, writeToNBT(modus));
 		MinestuckChannelHandler.sendToPlayer(packet, player);
 	}
 	

@@ -5,6 +5,7 @@ import static org.lwjgl.opengl.GL11.*;
 import java.util.ArrayList;
 
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
@@ -13,6 +14,7 @@ import com.mraof.minestuck.util.Debug;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
@@ -68,12 +70,12 @@ public abstract class SylladexGuiHandler extends GuiScreen
 		
 		if(prevScroll != scroll)
 		{
-			int i1 = (mapX + 1) / mapWidth;
-			int i2 = (mapY + 1) / mapHeight;
+			double i1 = mapX + ((double)mapWidth)/2;
+			double i2 = mapY + ((double)mapHeight)/2;
 			mapWidth = Math.round(MAP_WIDTH*scroll);
 			mapHeight = Math.round(MAP_HEIGHT*scroll);
-			mapX = i1 * mapWidth - 1;
-			mapY = i2 * mapHeight - 1;
+			mapX = (int) (i1 - ((double)mapWidth)/2);
+			mapY = (int) (i2 - ((double)mapHeight)/2);
 			updatePosition();
 			mapX = Math.max(0, Math.min(maxWidth - mapWidth, mapX));
 			mapY = Math.max(0, Math.min(maxHeight - mapHeight, mapY));
@@ -118,15 +120,12 @@ public abstract class SylladexGuiHandler extends GuiScreen
 			item.drawItemBackground();
 		
 		RenderHelper.enableGUIStandardItemLighting();
-		glDisable(GL_LIGHTING);
 		glEnable(GL12.GL_RESCALE_NORMAL);
-		glEnable(GL_COLOR_MATERIAL);
-		glEnable(GL_LIGHTING);
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
 		for(GuiItem item : visibleItems)
 			item.drawItem();
-		glDisable(GL_LIGHTING);
-		glDepthMask(true);
-		glEnable(GL_DEPTH_TEST);
+		glDisable(GL_DEPTH_TEST);
+		RenderHelper.disableStandardItemLighting();
 		
 		finishMap();
 		
@@ -137,8 +136,19 @@ public abstract class SylladexGuiHandler extends GuiScreen
 		
 		String str = CaptchaDeckHandler.clientSideModus.getName();
 		mc.fontRenderer.drawString(str, xOffset + GUI_WIDTH - mc.fontRenderer.getStringWidth(str) - 16, yOffset + 5, 0x404040);
-		//Find mouseovered items and draw.
 		
+		if(isMouseInContainer(xcor, ycor))
+		{
+			int translX = (int) ((xcor - xOffset - X_OFFSET) * scroll);
+			int translY = (int) ((ycor - yOffset - Y_OFFSET) * scroll);
+			for(GuiItem item : visibleItems)
+				if(translX >= item.xPos + 2 - mapX && translX < item.xPos + 18 - mapX &&
+						translY >= item.yPos + 7 - mapY && translY < item.yPos + 23 - mapY)
+				{
+					item.drawTooltip(xcor, ycor);
+					break;
+				}
+		}
 	}
 	
 	@Override
@@ -149,7 +159,6 @@ public abstract class SylladexGuiHandler extends GuiScreen
 	
 	public void drawGuiMap(int xcor, int ycor)
 	{
-		Debug.print(mapHeight+","+scroll+","+MAP_HEIGHT*scroll);
 		drawRect(0, 0, mapWidth, mapHeight, 0xFF8B8B8B);
 		
 		glColor4f(1F, 1F, 1F, 1F);
@@ -157,16 +166,14 @@ public abstract class SylladexGuiHandler extends GuiScreen
 	
 	private void prepareMap(int xOffset, int yOffset)
 	{
-		glDepthFunc(GL_GEQUAL);
 		glPushMatrix();
-		glTranslatef((float)xOffset, (float)yOffset, -200.0F);
-		glScalef(1.0F / this.scroll, 1.0F / this.scroll, 0.0F);
+		glTranslatef((float)xOffset, (float)yOffset, 0F);
+		glScalef(1.0F / this.scroll, 1.0F / this.scroll, 1.0F);
 	}
 	
 	private void finishMap()
 	{
 		glPopMatrix();
-		glDepthFunc(GL_LEQUAL);
 	}
 	
 	private boolean isMouseInContainer(int xcor, int ycor)
@@ -220,6 +227,7 @@ public abstract class SylladexGuiHandler extends GuiScreen
 		
 		protected void drawItem()
 		{
+			glColor4f(1F, 1F, 1F, 1F);
 			if(this.item != null)
 			{
 				int x = this.xPos +2 - gui.mapX;
@@ -236,9 +244,16 @@ public abstract class SylladexGuiHandler extends GuiScreen
 					gui.mc.fontRenderer.drawStringWithShadow(stackSize, x + 16 - gui.mc.fontRenderer.getStringWidth(stackSize), y + 8, 0xC6C6C6);
 					glEnable(GL_LIGHTING);
 					glEnable(GL_DEPTH_TEST);
+					glEnable(GL_BLEND);
 				}
 				gui.itemRender.renderItemOverlayIntoGUI(gui.mc.fontRenderer, gui.mc.getTextureManager(), item, x, y, "");
 			}
+		}
+		
+		protected void drawTooltip(int mouseX, int mouseY)
+		{
+			if(item != null)
+				gui.renderToolTip(item, mouseX, mouseY);
 		}
 		
 	}

@@ -2,6 +2,8 @@ package com.mraof.minestuck.client.gui.playerStats;
 
 import static com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats.*;
 
+import java.util.Arrays;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -20,7 +22,8 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
-public abstract class GuiPlayerStatsContainer extends GuiContainer {
+public abstract class GuiPlayerStatsContainer extends GuiContainer
+{
 	
 	protected int guiWidth, guiHeight;
 	protected int xOffset, yOffset;
@@ -103,8 +106,8 @@ public abstract class GuiPlayerStatsContainer extends GuiContainer {
 					break;
 				else if(xcor < xOffset + i*(tabWidth + 2) + tabWidth
 						&& (!mode || !NormalGuiType.values()[i].reqMedium || SkaiaClient.enteredMedium(UsernameHandler.encode(mc.thePlayer.getCommandSenderName()))))
-					drawTooltip(StatCollector.translateToLocal(mode? NormalGuiType.values()[i].name:EditmodeGuiType.values()[i].name), xcor - guiLeft, ycor - guiTop,
-							EnumChatFormatting.WHITE);
+					drawHoveringText(Arrays.asList(StatCollector.translateToLocal(mode? NormalGuiType.values()[i].name:EditmodeGuiType.values()[i].name)),
+							xcor - guiLeft, ycor - guiTop, fontRendererObj);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}
 	
@@ -132,64 +135,6 @@ public abstract class GuiPlayerStatsContainer extends GuiContainer {
 				}
 		}
 		super.mouseClicked(xcor, ycor, mouseButton);
-	}
-	
-	protected void drawTooltip(String text,int par2, int par3, EnumChatFormatting color)
-	{
-		String[] list = {text};
-		
-		for (int k = 0; k < list.length; ++k) {
-			list[k] = color + list[k];
-		}
-		
-		if (list.length != 0) {
-			int k = mc.fontRenderer.getStringWidth(text);
-			
-			int i1 = par2 + 12;
-			int j1 = par3 - 12;
-			int k1 = 8;
-			
-			if (list.length > 1) {
-				k1 += 2 + (list.length - 1) * 10;
-			}
-			
-			if (i1 + k > this.width) {
-				i1 -= 28 + k;
-			}
-			
-			if (j1 + k1 + 6 > this.height) {
-				j1 = this.height - k1 - 6;
-			}
-			
-			this.zLevel = 300.0F;
-			itemRenderer.zLevel = 300.0F;
-			int l1 = -267386864;
-			this.drawGradientRect(i1 - 3, j1 - 4, i1 + k + 3, j1 - 3, l1, l1);
-			this.drawGradientRect(i1 - 3, j1 + k1 + 3, i1 + k + 3, j1 + k1 + 4, l1, l1);
-			this.drawGradientRect(i1 - 3, j1 - 3, i1 + k + 3, j1 + k1 + 3, l1, l1);
-			this.drawGradientRect(i1 - 4, j1 - 3, i1 - 3, j1 + k1 + 3, l1, l1);
-			this.drawGradientRect(i1 + k + 3, j1 - 3, i1 + k + 4, j1 + k1 + 3, l1, l1);
-			int i2 = 1347420415;
-			int j2 = (i2 & 16711422) >> 1 | i2 & -16777216;
-			this.drawGradientRect(i1 - 3, j1 - 3 + 1, i1 - 3 + 1, j1 + k1 + 3 - 1, i2, j2);
-			this.drawGradientRect(i1 + k + 2, j1 - 3 + 1, i1 + k + 3, j1 + k1 + 3 - 1, i2, j2);
-			this.drawGradientRect(i1 - 3, j1 - 3, i1 + k + 3, j1 - 3 + 1, i2, i2);
-			this.drawGradientRect(i1 - 3, j1 + k1 + 2, i1 + k + 3, j1 + k1 + 3, j2, j2);
-			
-			for (int k2 = 0; k2 < list.length; ++k2) {
-				String s1 = list[k2];
-				mc.fontRenderer.drawStringWithShadow(s1, i1, j1, -1);
-				
-				if (k2 == 0) {
-					j1 += 2;
-				}
-				
-				j1 += 10;
-			}
-			
-			this.zLevel = 0.0F;
-			itemRenderer.zLevel = 0.0F;
-		}
 	}
 	
 }

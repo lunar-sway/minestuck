@@ -24,7 +24,7 @@ public class StackGuiHandler extends SylladexGuiHandler
 		ItemStack[] stacks = modus.getItems();
 		this.items.clear();
 		this.maxWidth = Math.max(mapWidth, 10 + (stacks.length*CARD_WIDTH + (stacks.length - 1)*10));
-		this.maxHeight = mapHeight + 10;
+		this.maxHeight = mapHeight;
 		int start = Math.max(5, (mapWidth - (stacks.length*CARD_WIDTH + (stacks.length - 1)*10))/2);
 		
 		for(int i = 0; i < stacks.length; i++)
@@ -35,7 +35,7 @@ public class StackGuiHandler extends SylladexGuiHandler
 	public void updatePosition()
 	{
 		this.maxWidth = Math.max(mapWidth, 10 + (items.size()*CARD_WIDTH + (items.size() - 1)*10));
-		this.maxHeight = mapHeight + 10;
+		this.maxHeight = mapHeight;
 		int start = Math.max(5, (mapWidth - (items.size()*CARD_WIDTH + (items.size() - 1)*10))/2);
 		for(int i = 0; i < items.size(); i++)
 		{
