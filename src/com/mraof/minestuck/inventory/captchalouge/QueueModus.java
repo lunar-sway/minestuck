@@ -66,6 +66,7 @@ public class QueueModus extends StackModus
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public SylladexGuiHandler getGuiHandler()
 	{
 		if(gui == null)

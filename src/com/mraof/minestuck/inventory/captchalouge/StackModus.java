@@ -22,7 +22,7 @@ public class StackModus extends Modus
 	protected LinkedList<ItemStack> list;
 	
 	@SideOnly(Side.CLIENT)
-	protected boolean changed = true;
+	protected boolean changed;
 	@SideOnly(Side.CLIENT)
 	protected ItemStack[] items;
 	@SideOnly(Side.CLIENT)
@@ -173,6 +173,7 @@ public class StackModus extends Modus
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public SylladexGuiHandler getGuiHandler()
 	{
 		if(gui == null)

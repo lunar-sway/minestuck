@@ -6,6 +6,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.EnumSet;
 
+import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalouge.ContainerCaptchaDeck;
 
@@ -98,6 +99,9 @@ public class CaptchaDeckPacket extends MinestuckPacket
 	{
 		if(!player.worldObj.isRemote)
 		{
+			if(ServerEditHandler.getData(player.getCommandSenderName()) != null)
+				return;
+			
 			if(this.type == MODUS && player.openContainer instanceof ContainerCaptchaDeck)
 				CaptchaDeckHandler.useItem((EntityPlayerMP) player);
 			else if(this.type == CAPTCHALOUGE && player.getCurrentEquippedItem() != null)

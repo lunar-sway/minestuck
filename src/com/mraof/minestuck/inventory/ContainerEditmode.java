@@ -150,7 +150,7 @@ public class ContainerEditmode extends Container {
 			this.inventoryItemStacks.set(i, itemList.get(i));
 		}
 		
-		MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.INVENTORY, 0, itemList), player);
+		MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.INVENTORY, 0, itemList, scroll > 0, scroll*2 + 14 < items.size()), player);
 	}
 	
 	private static class ToolbarSlot extends Slot

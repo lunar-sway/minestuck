@@ -5,11 +5,13 @@ import io.netty.buffer.ByteBuf;
 import java.util.ArrayList;
 import java.util.EnumSet;
 
+import com.mraof.minestuck.client.gui.playerStats.GuiInventoryEditmode;
 import com.mraof.minestuck.inventory.ContainerEditmode;
 import com.mraof.minestuck.util.Debug;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.relauncher.Side;
 
@@ -17,7 +19,7 @@ public class InventoryChangedPacket extends MinestuckPacket
 {
 	
 	public int type;
-	public int i;
+	public boolean b1, b2;
 	public ArrayList<ItemStack> inventory;
 	
 	public InventoryChangedPacket()
@@ -31,10 +33,12 @@ public class InventoryChangedPacket extends MinestuckPacket
 		this.data.writeByte((Integer) data[0]);
 		if(data[1] instanceof ArrayList)
 		{
+			this.data.writeBoolean((Boolean) data[2]);
+			this.data.writeBoolean((Boolean) data[3]);
 			ArrayList<ItemStack> list = (ArrayList<ItemStack>) data[1];
 			for(ItemStack stack : list)
 				ByteBufUtils.writeItemStack(this.data, stack);
-		} else this.data.writeInt((Integer) data[1]);
+		} else this.data.writeBoolean((Boolean) data[1]);
 		
 		return this;
 	}
@@ -44,10 +48,12 @@ public class InventoryChangedPacket extends MinestuckPacket
 	{
 		this.type = data.readByte();
 		
-		if(data.readableBytes() == 4)
-			i = data.readInt();
+		if(data.readableBytes() == 1)
+			b1 = data.readBoolean();
 		else
 		{
+			b1 = data.readBoolean();
+			b2 = data.readBoolean();
 			inventory = new ArrayList<ItemStack>();
 			while(data.readableBytes() > 0)
 			{
@@ -69,10 +75,12 @@ public class InventoryChangedPacket extends MinestuckPacket
 				{
 					((ContainerEditmode)player.openContainer).inventoryItemStacks.set(i, inventory.get(i) == null? null:inventory.get(i).copy());
 					((ContainerEditmode)player.openContainer).inventory.setInventorySlotContents(i, inventory.get(i));
+					((GuiInventoryEditmode)FMLClientHandler.instance().getClient().currentScreen).less = b1;
+					((GuiInventoryEditmode)FMLClientHandler.instance().getClient().currentScreen).more = b2;
 				}
 			}
 			else if(!player.worldObj.isRemote && player.openContainer instanceof ContainerEditmode)
-				((ContainerEditmode)player.openContainer).scroll = this.i;
+				((ContainerEditmode)player.openContainer).scroll += b1 ? 1 : -1;
 			break;
 		}
 		
