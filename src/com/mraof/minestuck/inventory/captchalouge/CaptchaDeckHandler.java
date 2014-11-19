@@ -186,19 +186,29 @@ public class CaptchaDeckHandler
 		ItemStack stack = modus.getItem(index, asCard);
 		if(stack != null)
 		{
-			if(player.getCurrentEquippedItem() == null)
+			ItemStack otherStack = player.getCurrentEquippedItem();
+			if(otherStack == null)
 				player.setCurrentItemOrArmor(0, stack);
+			else if(stack.getItem() == otherStack.getItem() && stack.getItemDamage() == otherStack.getItemDamage()
+					&& ItemStack.areItemStackTagsEqual(stack, otherStack) && stack.stackSize + otherStack.stackSize <= stack.getMaxStackSize())
+			{
+				stack.stackSize += otherStack.stackSize;
+				player.setCurrentItemOrArmor(0, stack);
+			}
 			else
 			{
 				boolean placed = false;
 				for(int i = 0; i < player.inventory.mainInventory.length; i++)
 				{
-					if(player.inventory.mainInventory[i] == null)
-					{
-						player.inventory.mainInventory[i] = stack;
-						placed = true;
-						break;
-					}
+					otherStack = player.inventory.mainInventory[i];
+					if(otherStack != null && stack.getItem() == otherStack.getItem() && stack.getItemDamage() == otherStack.getItemDamage()
+							&& ItemStack.areItemStackTagsEqual(stack, otherStack) && stack.stackSize + otherStack.stackSize <= stack.getMaxStackSize())
+						stack.stackSize += otherStack.stackSize;
+					else if(otherStack != null) continue;
+					
+					player.inventory.mainInventory[i] = stack;
+					placed = true;
+					break;
 				}
 				if(!placed)
 					launchAnyItem(player, stack);

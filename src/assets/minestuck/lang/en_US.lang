@@ -141,8 +141,9 @@ item.minestuckBucket.blood.name=Bucket of Blood
 item.minestuckBucket.brainJuice.name=Bucket of Brain Juice
 item.modusCard.stack.name=Stack Modus
 item.modusCard.queue.name=Queue Modus
+item.modusCard.queuestack.name=Queue-Stack Modus
 item.modusCard.tree.name=Tree Modus
-item.modusCard.hashmap.name=Hashmap Modu
+item.modusCard.hashmap.name=Hashmap Modus
 
 itemGroup.tabMinestuck=Minestuck
 

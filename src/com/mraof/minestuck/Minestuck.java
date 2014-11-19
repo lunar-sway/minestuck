@@ -521,7 +521,7 @@ public class Minestuck
 		//Register structures
 		MapGenStructureIO.registerStructure(StructureCastleStart.class, "SkaiaCastle");
 		StructureCastlePieces.func_143048_a();
-
+		
 		//register recipes
 		AlchemyRecipeHandler.registerVanillaRecipes();
 		AlchemyRecipeHandler.registerMinestuckRecipes();
@@ -530,7 +530,7 @@ public class Minestuck
 		KindAbstratusList.registerTypes();
 		DeployList.registerItems();
 		
-		ComputerProgram.registerProgram(0, SburbClient.class, new ItemStack(disk, 1, 0));
+		ComputerProgram.registerProgram(0, SburbClient.class, new ItemStack(disk, 1, 0));	//This idea was kind of bad and should be replaced
 		ComputerProgram.registerProgram(1, SburbServer.class, new ItemStack(disk, 1, 1));
 		
 		SessionHandler.maxSize = acceptTitleCollision?(generateSpecialClasses?168:144):12;

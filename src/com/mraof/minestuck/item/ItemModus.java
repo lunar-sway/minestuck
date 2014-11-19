@@ -15,8 +15,8 @@ import net.minecraft.util.IIcon;
 public class ItemModus extends Item
 {
 	
-	public IIcon[] icons = new IIcon[4];
-	public String[] modusNames = {"stack", "queue", "tree", "hashmap"};
+	public IIcon[] icons = new IIcon[5];
+	public String[] modusNames = {"stack", "queue", "queuestack", "tree", "hashmap"};
 	
 	public ItemModus()
 	{
@@ -37,8 +37,9 @@ public class ItemModus extends Item
 	{
 		icons[0] = iconRegister.registerIcon("minestuck:StackModus");
 		icons[1] = iconRegister.registerIcon("minestuck:QueueModus");
-		icons[2] = iconRegister.registerIcon("minestuck:TreeModus");
-		icons[3] = iconRegister.registerIcon("minestuck:HashmapModus");
+		icons[2] = iconRegister.registerIcon("minestuck:QueuestackModus");
+		icons[3] = iconRegister.registerIcon("minestuck:TreeModus");
+		icons[4] = iconRegister.registerIcon("minestuck:HashmapModus");
 	}
 	
 	@Override

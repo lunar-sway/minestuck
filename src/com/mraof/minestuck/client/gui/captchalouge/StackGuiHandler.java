@@ -34,13 +34,13 @@ public class StackGuiHandler extends SylladexGuiHandler
 	@Override
 	public void updatePosition()
 	{
-		this.maxWidth = Math.max(mapWidth, 10 + (items.size()*CARD_WIDTH + (items.size() - 1)*10));
+		this.maxWidth = Math.max(mapWidth, 10 + (items.size()*CARD_WIDTH + (items.size() - 1)*5));
 		this.maxHeight = mapHeight;
-		int start = Math.max(5, (mapWidth - (items.size()*CARD_WIDTH + (items.size() - 1)*10))/2);
+		int start = Math.max(5, (mapWidth - (items.size()*CARD_WIDTH + (items.size() - 1)*5))/2);
 		for(int i = 0; i < items.size(); i++)
 		{
 			GuiItem item = items.get(i);
-			item.xPos = start + i*(CARD_WIDTH + 10);
+			item.xPos = start + i*(CARD_WIDTH + 5);
 			item.yPos = (mapHeight - CARD_HEIGHT)/2;
 		}
 	}
