@@ -19,7 +19,7 @@ import com.mraof.minestuck.util.MinestuckPlayerData;
 public class GuiGristCache extends GuiPlayerStats
 {
 	
-	private static final ResourceLocation guiGristcache = new ResourceLocation("minestuck", "textures/gui/gristCache.png");
+	private static final ResourceLocation guiGristcache = new ResourceLocation("minestuck", "textures/gui/GristCache.png");
 	
 	private static final int gristIconX = 21, gristIconY = 32;
 	private static final int gristIconXOffset = 66, gristIconYOffset = 21;

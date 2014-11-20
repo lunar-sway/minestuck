@@ -11,7 +11,7 @@ import com.mraof.minestuck.util.KindAbstratusType;
 public class GuiStrifeSpecibus extends GuiPlayerStats
 {
 	
-	private static final ResourceLocation guiStrifeSelector = new ResourceLocation("minestuck", "textures/gui/strifeSelector.png");
+	private static final ResourceLocation guiStrifeSelector = new ResourceLocation("minestuck", "textures/gui/StrifeSelector.png");
 	
 	private static final int columnWidth = 70, columns = 3;
 	

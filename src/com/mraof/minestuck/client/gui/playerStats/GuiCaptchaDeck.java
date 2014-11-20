@@ -20,7 +20,7 @@ import net.minecraft.util.StatCollector;
 public class GuiCaptchaDeck extends GuiPlayerStatsContainer
 {
 	
-	private static final ResourceLocation guiCaptchaDeck = new ResourceLocation("minestuck", "textures/gui/captchaDeck.png");
+	private static final ResourceLocation guiCaptchaDeck = new ResourceLocation("minestuck", "textures/gui/CaptchaDeck.png");
 	
 	private GuiButton modusButton, sylladexMap;
 	private ContainerCaptchaDeck container;
