@@ -402,6 +402,7 @@ public class AlchemyRecipeHandler {
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.sickle), false, new GristSet(new GristType[] {GristType.Build}, new int[] {10}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.sledgeHammer), false, new GristSet(new GristType[] {GristType.Build, GristType.Shale}, new int[] {10,2}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.transportalizer), false, new GristSet(new GristType[] {GristType.Build, GristType.Garnet, GristType.Rust, GristType.Uranium}, new int[] {64, 10, 10, 8}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.captchaModus, 1, 2), true, new GristSet(GristType.Build, 50));
 		
 		//add Designix combinations
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_hoe), new ItemStack(Items.wheat), CombinationRegistry.MODE_AND, new ItemStack(Minestuck.sickle));
@@ -416,6 +417,7 @@ public class AlchemyRecipeHandler {
 		CombinationRegistry.addCombination(new ItemStack(Minestuck.sickle), new ItemStack(Minestuck.clawHammer), CombinationRegistry.MODE_AND, false, false, new ItemStack(Minestuck.clawSickle));
 		CombinationRegistry.addCombination(new ItemStack(Minestuck.pogoHammer), new ItemStack(Blocks.anvil), CombinationRegistry.MODE_AND, false, false, new ItemStack(Minestuck.fearNoAnvil));
 		CombinationRegistry.addCombination(new ItemStack(Items.ender_pearl), new ItemStack(Blocks.iron_block), CombinationRegistry.MODE_AND, false, false, new ItemStack(Minestuck.transportalizer));
+		CombinationRegistry.addCombination(new ItemStack(Minestuck.captchaModus, 1, 0), new ItemStack(Minestuck.captchaModus, 1, 1), CombinationRegistry.MODE_AND, true, true, new ItemStack(Minestuck.captchaModus, 1, 2));
 		
 		//register land aspects
 		LandHelper.registerLandAspect(new LandAspectFrost());

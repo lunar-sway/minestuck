@@ -27,7 +27,8 @@ public class CaptchaDeckHandler
 	public static enum ModusType
 	{
 		STACK(StackModus.class),
-		QUEUE(QueueModus.class);
+		QUEUE(QueueModus.class),
+		QUEUE_STACK(QueuestackModus.class);
 		
 		private final Class<? extends Modus> c;
 		ModusType(Class<? extends Modus> c)
@@ -122,7 +123,8 @@ public class CaptchaDeckHandler
 				else
 				{
 					for(ItemStack content : oldModus.getItems())
-						launchAnyItem(player, content);
+						if(content != null)
+							launchAnyItem(player, content);
 					modus.initModus(null);
 				}
 				

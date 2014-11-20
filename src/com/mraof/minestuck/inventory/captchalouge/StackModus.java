@@ -169,7 +169,7 @@ public class StackModus extends Modus
 	@Override
 	public boolean canSwitchFrom(ModusType modus)
 	{
-		return modus == ModusType.QUEUE;
+		return modus == ModusType.QUEUE || modus == ModusType.QUEUE_STACK;
 	}
 
 	@Override
