@@ -73,7 +73,8 @@ public class AlchemiterHandler extends TemplateRecipeHandler
 				List<Object> itemData = entry.getKey();
 				Object item = itemData.get(0);
 				int meta = (Integer)itemData.get(1);
-				arecipes.add(new CachedAlchemiterRecipe(item, meta));
+				if(!AlchemyRecipeHandler.getItems(item, meta).isEmpty())
+					arecipes.add(new CachedAlchemiterRecipe(item, meta));
 			}
 		}
 			

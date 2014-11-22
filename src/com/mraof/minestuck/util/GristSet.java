@@ -147,4 +147,9 @@ public class GristSet {
 		return build.toString();
 	}
 	
+	public GristSet copy()
+	{
+		return new GristSet(GristType.values(), this.gristTypes);
+	}
+	
 }
