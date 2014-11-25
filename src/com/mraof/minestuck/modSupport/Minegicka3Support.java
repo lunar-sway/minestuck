@@ -15,10 +15,10 @@ import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
 
-public class Minegicka3Support
+public class Minegicka3Support extends ModSupport
 {
 	
-	public static void addRecipes() throws Exception
+	public void registerRecipes() throws Exception
 	{
 		Item thingy = ((Item) (Class.forName("com.williameze.minegicka3.ModBase").getField("thingy").get(null)));
 		Item thingy2 = ((Item) (Class.forName("com.williameze.minegicka3.ModBase").getField("thingyGood").get(null)));
@@ -36,7 +36,7 @@ public class Minegicka3Support
 		
 	}
 	
-	public static void registerDynamicRecipes() throws Exception
+	public void registerDynamicRecipes() throws Exception
 	{
 		Debug.print("Adding minegicka 3 recipes...");
 		Map<Integer, Object> recipes = ((Map<Integer, Object>) (Class.forName("com.williameze.minegicka3.mechanics.ClickCraft").getField("recipes").get(null)));

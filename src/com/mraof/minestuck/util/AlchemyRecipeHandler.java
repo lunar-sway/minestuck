@@ -26,7 +26,11 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.modSupport.ExtraUtilitiesSupport;
 import com.mraof.minestuck.modSupport.Minegicka3Support;
+import com.mraof.minestuck.modSupport.ModSupport;
+import com.mraof.minestuck.modSupport.NeverSayNetherSupport;
+import com.mraof.minestuck.modSupport.TinkersConstructSupport;
 import com.mraof.minestuck.world.gen.lands.LandAspectFrost;
 import com.mraof.minestuck.world.gen.lands.LandAspectHeat;
 import com.mraof.minestuck.world.gen.lands.LandAspectPulse;
@@ -467,16 +471,12 @@ public class AlchemyRecipeHandler {
 			Debug.print("Exception while getting things for mod \"IronChest\".");
 		}
 		
-		try
-		{
-			if(Loader.isModLoaded("minegicka3"))
-				Minegicka3Support.addRecipes();
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-			Debug.print("Exception while getting things for mod \"minegicka3\".");
-		}
+		
+		registerRecipes(new Minegicka3Support(), "minegicka3", false);
+		registerRecipes(new NeverSayNetherSupport(), "nsn", false);
+		registerRecipes(new ExtraUtilitiesSupport(), "ExtraUtilities", false);
+		registerRecipes(new TinkersConstructSupport(), "TConstruct", false);
+		
 	}
 	
 	public static ItemStack getFirstOreItem(String name)
@@ -614,16 +614,7 @@ public class AlchemyRecipeHandler {
         	getRecipe(pairs.getValue());
         }
 		
-		try
-		{
-			if(Loader.isModLoaded("minegicka3"))
-				Minegicka3Support.registerDynamicRecipes();
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-			Debug.print("Excetion while registering dynamic recipes for \"minegicka3\".");
-		}
+		registerRecipes(new Minegicka3Support(), "minegicka3", true);
 		
 		Debug.print("Done. Added "+returned+" grist conversions.");
 	}
@@ -644,7 +635,7 @@ public class AlchemyRecipeHandler {
 				if (GristRegistry.getGristConversion(item) != null) {
 					//Debug.print("	Adding compo: "+"ITEM");
 					set.addGrist(GristRegistry.getGristConversion(item));
-				} else if (item != null) {
+				} else if (item != null && item.getItem() != null) {
 					Object subrecipe = recipeList.get(Arrays.asList(item.getItem(),item.getHasSubtypes() && !((Integer)item.getItemDamage()).equals(32767) ? item.getItemDamage() : 0));
 					if (subrecipe != null) {
 						//Debug.print("	Could not find "+"ITEM"+". Looking up subrecipe... {");
@@ -810,6 +801,24 @@ public class AlchemyRecipeHandler {
 		
 		returned ++;
 		return true;
+	}
+	
+	private static void registerRecipes(ModSupport modSupport, String modname, boolean dynamic)
+	{
+		try
+		{
+			if(Loader.isModLoaded(modname))
+			{
+				if(dynamic)
+					modSupport.registerDynamicRecipes();
+				else modSupport.registerRecipes();
+			}
+		}
+		catch(Exception e)
+		{
+			Debug.print("Exception while creating recipes for mod \""+modname+"\":");
+			e.printStackTrace();
+		}
 	}
 	
 	public static List<ItemStack> getItems(Object item, int damage)
