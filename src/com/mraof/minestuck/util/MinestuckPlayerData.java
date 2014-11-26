@@ -3,6 +3,7 @@ package com.mraof.minestuck.util;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
@@ -137,6 +138,13 @@ public class MinestuckPlayerData {
 			return nbt;
 		}
 		
+	}
+	
+	public static GristSet getGristSet(EntityPlayer player)
+	{
+		if(player.worldObj.isRemote)
+			return getClientGrist();
+		else return getGristSet(UsernameHandler.encode(player.getCommandSenderName()));
 	}
 	
 }

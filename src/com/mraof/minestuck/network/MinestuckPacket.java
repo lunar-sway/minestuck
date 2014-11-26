@@ -16,7 +16,7 @@ public abstract class MinestuckPacket
 	public enum Type
 	{
 		GRISTCACHE(GristCachePacket.class),
-		COMBOBUTTON(ComboButtonPacket.class),
+		MACHINE_STATE(MachineStatePacket.class),
 		GOBUTTON(GoButtonPacket.class),
 		TITLE(TitlePacket.class),
 		SBURB_CONNECT(SburbConnectPacket.class),

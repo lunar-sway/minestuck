@@ -10,25 +10,28 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import com.mraof.minestuck.inventory.ContainerMachine;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.GristType;
 
 import cpw.mods.fml.relauncher.Side;
 
-public class ComboButtonPacket extends MinestuckPacket {
+public class MachineStatePacket extends MinestuckPacket {
 
 	public boolean newMode;
 	public int xCoord;
 	public int yCoord;
 	public int zCoord;
-	public int gristTotal;
-	public ComboButtonPacket() 
+	public int gristType = -1;
+	public MachineStatePacket() 
 	{
-		super(Type.COMBOBUTTON);
+		super(Type.MACHINE_STATE);
 	}
 
 	@Override
 	public MinestuckPacket generatePacket(Object... dat) 
 	{
-		data.writeBoolean((Boolean) dat[0]);
+		if(dat[0] instanceof Boolean)
+			data.writeBoolean((Boolean) dat[0]);
+		else data.writeInt((Integer) dat[0]);
 		
 		return this;
 	}
@@ -36,8 +39,9 @@ public class ComboButtonPacket extends MinestuckPacket {
 	@Override
 	public MinestuckPacket consumePacket(ByteBuf data) 
 	{
-		
-		newMode = data.readBoolean();
+		if(data.readableBytes() == 1)
+			newMode = data.readBoolean();
+		else gristType = data.readInt();
 		
 		return this;
 	}
@@ -45,13 +49,22 @@ public class ComboButtonPacket extends MinestuckPacket {
 	@Override
 	public void execute(EntityPlayer player)
 	{
-				TileEntityMachine te = ((ContainerMachine) ((EntityPlayerMP)player).openContainer).tileEntity;
+		TileEntityMachine te = ((ContainerMachine) ((EntityPlayerMP)player).openContainer).tileEntity;
 		
 		if (te == null) {
 			Debug.print("Invalid TE!");
-		} else {
-			Debug.print("Button pressed. AND mode is " + newMode);
-			te.mode = newMode;
+		}
+		else
+		{
+			if(gristType == -1)
+			{
+				Debug.print("Button pressed. AND mode is " + newMode);
+				te.mode = newMode;
+			}
+			else
+			{
+				te.selectedGrist = GristType.values()[gristType];
+			}
 		}
 	}
 

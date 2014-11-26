@@ -15,12 +15,14 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.inventory.ContainerMachine;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.MinestuckPlayerData;
@@ -33,7 +35,7 @@ public class GuiMachine extends GuiContainer {
 	private ResourceLocation guiBackground;
 	private ResourceLocation guiProgress;
 	private int metadata;
-	private TileEntityMachine te;
+	protected TileEntityMachine te;
 	//private EntityPlayer player;
 	
 	private int progressX;
@@ -99,17 +101,19 @@ public class GuiMachine extends GuiContainer {
 	}
 }
 
-@Override
-protected void drawGuiContainerForegroundLayer(int param1, int param2) {
-	fontRendererObj.drawString(StatCollector.translateToLocal("gui."+guis[metadata]+".name"), 8, 6, 4210752);
-	//draws "Inventory" or your regional equivalent
-	fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
-	if ((metadata == 3 || metadata ==4) && te.inv[1] != null) 
-	{
-		//Render grist requirements
-		//NBTTagCompound nbttagcompound = te.inv[1].getTagCompound();
-		GristSet set = GristRegistry.getGristConversion(metadata == 3? AlchemyRecipeHandler.getDecodedItem(te.inv[1], true) : te.inv[1]);
-		
+	@Override
+	protected void drawGuiContainerForegroundLayer(int param1, int param2) {
+		fontRendererObj.drawString(StatCollector.translateToLocal("gui."+guis[metadata]+".name"), 8, 6, 4210752);
+		//draws "Inventory" or your regional equivalent
+		fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
+		if ((metadata == 3 || metadata ==4) && te.inv[1] != null) 
+		{
+			//Render grist requirements
+			GristSet set = GristRegistry.getGristConversion(metadata == 3? AlchemyRecipeHandler.getDecodedItem(te.inv[1], true) : te.inv[1]);
+			boolean selectedType = metadata == 3 && AlchemyRecipeHandler.getDecodedItem(te.inv[1], true).getItem() == Minestuck.captchaCard;
+			if(selectedType)
+				set = new GristSet(te.selectedGrist, 1);
+			
 		if (set == null) {fontRendererObj.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 9,45, 16711680); return;}
 			Hashtable<Integer, Integer> reqs = set.getHashtable();
 		//Debug.print("reqs: " + reqs.size());
@@ -129,7 +133,7 @@ protected void drawGuiContainerForegroundLayer(int param1, int param2) {
 				int row = place % 3;
 				int col = place / 3;
 				
-				int color = metadata == 3 ? (need <= have ? 65280 : 16711680) : 0; //Green if we have enough grist, red if not, black if GristWidget
+				int color = metadata == 3 ? (selectedType ? 0xFF0000FF : need <= have ? 0x00FF00 : 0xFF0000) : 0; //Green if we have enough grist, red if not, black if GristWidget
 				
 				fontRendererObj.drawString(need + " " + GristType.values()[type].getDisplayName() + " (" + have + ")", 9 + (80 * col),45 + (8 * (row)), color);
 				
@@ -183,38 +187,43 @@ public void initGui() {
 			buttonList.add(goButton);
 		}
 }
-
-protected void actionPerformed(GuiButton guibutton) {
-
-		
-	if (guibutton == modeButton) {
-		//Sends new mode info to server
-		MinestuckPacket packet = MinestuckPacket.makePacket(Type.COMBOBUTTON,te.mode ? false : true);
-		MinestuckChannelHandler.sendToServer(packet);
-		te.mode = !te.mode;
-		modeButton.displayString = te.mode ? "&&" : "||";
-	}
 	
-	if (guibutton == goButton) {
+	protected void actionPerformed(GuiButton guibutton)
+	{
 		
-		if (Mouse.isButtonDown(0) && !te.overrideStop) {
-			//Tell the machine to go once
-			MinestuckPacket packet = MinestuckPacket.makePacket(Type.GOBUTTON,true,false);
+		if (guibutton == modeButton)
+		{
+			//Sends new mode info to server
+			te.mode = !te.mode;
+			MinestuckPacket packet = MinestuckPacket.makePacket(Type.MACHINE_STATE, te.mode);
 			MinestuckChannelHandler.sendToServer(packet);
-			
-			te.ready = true;
-			goButton.displayString = StatCollector.translateToLocal(te.overrideStop ? "gui.buttonStop" : "gui.buttonGo");
-		} else if (Mouse.getEventButton() < 2) {
-			//Tell the machine to go until stopped
-			MinestuckPacket packet = MinestuckPacket.makePacket(Type.GOBUTTON,true,!te.overrideStop);
-			MinestuckChannelHandler.sendToServer(packet);
-			
-			te.overrideStop = !te.overrideStop;
-			goButton.displayString = StatCollector.translateToLocal(te.overrideStop ? "gui.buttonStop" : "gui.buttonGo");
+			modeButton.displayString = te.mode ? "&&" : "||";
+		}
+		
+		if (guibutton == goButton)
+		{
+			if (Mouse.getEventButton() == 0 && !te.overrideStop)
+			{
+				//Tell the machine to go once
+				MinestuckPacket packet = MinestuckPacket.makePacket(Type.GOBUTTON,true,false);
+				MinestuckChannelHandler.sendToServer(packet);
+				
+				te.ready = true;
+				te.overrideStop = false;
+				goButton.displayString = StatCollector.translateToLocal(te.overrideStop ? "gui.buttonStop" : "gui.buttonGo");
+			}
+			else if (Mouse.getEventButton() == 1 && te.getBlockMetadata() > 2)
+			{
+				//Tell the machine to go until stopped
+				MinestuckPacket packet = MinestuckPacket.makePacket(Type.GOBUTTON,true,!te.overrideStop);
+				MinestuckChannelHandler.sendToServer(packet);
+				
+				te.overrideStop = !te.overrideStop;
+				goButton.displayString = StatCollector.translateToLocal(te.overrideStop ? "gui.buttonStop" : "gui.buttonGo");
+			}
 		}
 	}
-}
-
+	
 @Override
 protected void mouseClicked(int par1, int par2, int par3)
 {
@@ -232,6 +241,12 @@ protected void mouseClicked(int par1, int par2, int par3)
 				this.actionPerformed(guibutton);
 			}
 		}
+	}
+	else if(te.getBlockMetadata() == 3 && par3 == 0 && mc.thePlayer.inventory.getItemStack() == null && par1 >= guiLeft + 9 && par1 < guiLeft + 167 && par2 >= guiTop + 45 && par2 < guiTop + 70)
+	{
+		mc.currentScreen = new GuiGristSelector(this);
+		mc.currentScreen.initGui();
+		mc.currentScreen.setWorldAndResolution(mc, width, height);
 	}
 }
 

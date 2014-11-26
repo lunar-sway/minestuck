@@ -43,7 +43,8 @@ public class TileEntityMachine extends TileEntity implements IInventory {
     public EntityPlayer owner;
 	public boolean ready = false;
 	public boolean overrideStop = false;
-
+	public GristType selectedGrist = GristType.Build;
+	
     public TileEntityMachine(){
             this.inv = new ItemStack[4];
             
@@ -138,6 +139,8 @@ public class TileEntityMachine extends TileEntity implements IInventory {
                             this.inv[slot] = ItemStack.loadItemStackFromNBT(tag);
                     }
             }
+		if(tagCompound.hasKey("gristType"))
+			this.selectedGrist = GristType.values()[tagCompound.getInteger("gristType")];
     }
 
     @Override
@@ -160,6 +163,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
                     }
             }
             tagCompound.setTag("Inventory", itemList);
+		tagCompound.setInteger("gristType", selectedGrist.ordinal());
     }
     @Override
     public Packet getDescriptionPacket() 
@@ -266,7 +270,10 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 				if (newItem == null) {return false;}
 				if (inv[0] != null && (inv[0].getItem() != newItem.getItem() || inv[0].getItemDamage() != newItem.getItemDamage() || inv[0].getMaxStackSize() <= inv[0].stackSize))
 				{return false;}
-				return GristHelper.canAfford(UsernameHandler.encode(owner.getCommandSenderName()), newItem, this.worldObj.isRemote);
+				GristSet cost = GristRegistry.getGristConversion(newItem);
+				if(newItem.getItem() == Minestuck.captchaCard)
+					cost = new GristSet(selectedGrist, 1);
+				return GristHelper.canAfford(MinestuckPlayerData.getGristSet(this.owner), cost);
 			}
 			else
 			{
@@ -365,10 +372,14 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 				decrStackSize(0, -1);
 			}
 			
-			MinestuckAchievementHandler.onAlchemizedItem(newItem, owner);
-			
-			if(!worldObj.isRemote) {
-				GristHelper.decrease(UsernameHandler.encode(owner.getCommandSenderName()), GristRegistry.getGristConversion(newItem));
+			if(!worldObj.isRemote)
+			{
+				MinestuckAchievementHandler.onAlchemizedItem(newItem, owner);
+				
+				GristSet cost = GristRegistry.getGristConversion(newItem);
+				if(newItem.getItem() == Minestuck.captchaCard)
+					cost = new GristSet(selectedGrist, 1);
+				GristHelper.decrease(UsernameHandler.encode(owner.getCommandSenderName()), cost);
 				MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(owner.getCommandSenderName()));
 			}
 			break;
@@ -402,7 +413,18 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			break;
 		}
 	}
-
+	
+	@Override
+	public void markDirty()
+	{
+		if(getBlockMetadata() == 1)
+		{
+			this.progress = 0;
+			this.ready = false;
+		}
+		super.markDirty();
+	}
+	
 	@Override
 	public void closeInventory() {}
 

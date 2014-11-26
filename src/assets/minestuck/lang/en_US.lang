@@ -96,6 +96,7 @@ gui.notAvailable=Not Available
 gui.free=Free!
 gui.buttonStop=STOP
 gui.buttonGo=GO
+gui.selectGrist=Select Grist Type
 
 item.clawHammer.name=Claw Hammer
 item.sledgeHammer.name=Sledgehammer
@@ -150,6 +151,7 @@ itemGroup.tabMinestuck=Minestuck
 key.categories.minestuck=Minestuck
 key.exitEdit=Exit Edit Mode
 key.statsGui=View General Minestuck Gui
+key.captchalouge=Captchalouge Held Item
 
 strife.sword.name=Bladekind
 strife.bow.name=Bowkind

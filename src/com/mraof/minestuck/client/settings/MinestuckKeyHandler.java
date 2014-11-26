@@ -31,6 +31,7 @@ public class MinestuckKeyHandler
 		editKey = new KeyBinding("key.exitEdit", 45, "key.categories.minestuck");
 		ClientRegistry.registerKeyBinding(editKey);
 		captchaKey = new KeyBinding("key.captchalouge", 46, "key.categories.minestuck");
+		ClientRegistry.registerKeyBinding(captchaKey);
 	}
 	
 	@SubscribeEvent

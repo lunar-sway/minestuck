@@ -816,7 +816,7 @@ public class AlchemyRecipeHandler {
 		}
 		catch(Exception e)
 		{
-			Debug.print("Exception while creating recipes for mod \""+modname+"\":");
+			Debug.print("Exception while creating"+(dynamic?" dynamic":"")+" recipes for mod \""+modname+"\":");
 			e.printStackTrace();
 		}
 	}
