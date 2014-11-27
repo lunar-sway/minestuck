@@ -70,8 +70,14 @@ public class ContainerMachine extends Container {
 			addSlotToContainer(new SlotOutput(tileEntity,0,alchemiterOutputX,alchemiterOutputY));
 			break;
 		case (4):
-		  	addSlotToContainer(new Slot(tileEntity,1,alchemiterInputX,alchemiterInputY));
-			//addSlotToContainer(new SlotOutput(tileEntity,0,alchemiterOutputX,alchemiterOutputY));
+			addSlotToContainer(new SlotInput(tileEntity,1,alchemiterInputX,alchemiterInputY, Minestuck.captchaCard)
+			{
+				@Override
+				public boolean isItemValid(ItemStack stack)
+				{
+					return super.isItemValid(stack) && (stack.hasTagCompound() && stack.getTagCompound().hasKey("contentID") && !stack.getTagCompound().getBoolean("punched"));
+				}
+			});
 			break;
 		}
 //		for (int i = 0; i < 3; i++) {
@@ -169,12 +175,14 @@ public class ContainerMachine extends Container {
 				}
 				break;
 			case (4):
-			   	if (slotNumber <= 1) {
+				if (slotNumber <= 0) {
 					//if it's a machine slot
 					result = mergeItemStack(itemstackOrig,2,allSlots,false);
-				} else if (slotNumber > 1) {
+				}
+				else if (slotNumber > 0 && getSlot(0).isItemValid(itemstackOrig))
+				{
 					//if it's an inventory slot with valid contents
-					result = mergeItemStack(itemstackOrig,0,1,false);
+					result = mergeItemStack(itemstackOrig, 0, 1, false);
 				}
 				break;
 			}

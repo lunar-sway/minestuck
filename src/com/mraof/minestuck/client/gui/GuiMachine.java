@@ -109,10 +109,10 @@ public class GuiMachine extends GuiContainer {
 		if ((metadata == 3 || metadata ==4) && te.inv[1] != null) 
 		{
 			//Render grist requirements
-			GristSet set = GristRegistry.getGristConversion(metadata == 3? AlchemyRecipeHandler.getDecodedItem(te.inv[1], true) : te.inv[1]);
-			boolean selectedType = metadata == 3 && AlchemyRecipeHandler.getDecodedItem(te.inv[1], true).getItem() == Minestuck.captchaCard;
+			GristSet set = GristRegistry.getGristConversion(AlchemyRecipeHandler.getDecodedItem(te.inv[1], metadata == 3? true : false));
+			boolean selectedType = AlchemyRecipeHandler.getDecodedItem(te.inv[1], true).getItem() == Minestuck.captchaCard;
 			if(selectedType)
-				set = new GristSet(te.selectedGrist, 1);
+				set = metadata == 3 ? new GristSet(te.selectedGrist, 1) : null;
 			
 		if (set == null) {fontRendererObj.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 9,45, 16711680); return;}
 			Hashtable<Integer, Integer> reqs = set.getHashtable();
@@ -242,7 +242,9 @@ protected void mouseClicked(int par1, int par2, int par3)
 			}
 		}
 	}
-	else if(te.getBlockMetadata() == 3 && par3 == 0 && mc.thePlayer.inventory.getItemStack() == null && par1 >= guiLeft + 9 && par1 < guiLeft + 167 && par2 >= guiTop + 45 && par2 < guiTop + 70)
+	else if(te.getBlockMetadata() == 3 && par3 == 0 && mc.thePlayer.inventory.getItemStack() == null
+			&& te.inv[1] != null && AlchemyRecipeHandler.getDecodedItem(te.inv[1], true).getItem() == Minestuck.captchaCard
+			&& par1 >= guiLeft + 9 && par1 < guiLeft + 167 && par2 >= guiTop + 45 && par2 < guiTop + 70)
 	{
 		mc.currentScreen = new GuiGristSelector(this);
 		mc.currentScreen.initGui();

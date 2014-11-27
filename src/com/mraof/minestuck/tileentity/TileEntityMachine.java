@@ -280,7 +280,8 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 				return false;
 			}
 		case (4):
-			return (this.inv[1] != null && this.owner != null && GristRegistry.getGristConversion(inv[1]) != null);
+			return (this.inv[1] != null && this.owner != null && inv[1].getItem() == Minestuck.captchaCard && GristRegistry.getGristConversion(AlchemyRecipeHandler.getDecodedItem(inv[1], false)) != null
+			&& !inv[1].getTagCompound().getBoolean("punched") && AlchemyRecipeHandler.getDecodedItem(inv[1], false).getItem() != Minestuck.captchaCard);
 		}
 		return false;
 	}
@@ -386,7 +387,8 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		case (4):
 			if(!worldObj.isRemote) 
 			{
-				GristSet gristSet = GristRegistry.getGristConversion(inv[1]);
+				ItemStack item = AlchemyRecipeHandler.getDecodedItem(inv[1], false);
+				GristSet gristSet = GristRegistry.getGristConversion(item);
 				
 				Iterator<Entry<Integer, Integer>> iter = gristSet.getHashtable().entrySet().iterator();
 				while(iter.hasNext()) 
