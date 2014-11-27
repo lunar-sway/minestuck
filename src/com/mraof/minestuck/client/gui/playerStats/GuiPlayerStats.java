@@ -164,7 +164,7 @@ public abstract class GuiPlayerStats extends GuiScreen
 		if(mode)
 		{
 			for(NormalGuiType type : NormalGuiType.values())
-				if(type != normalTab && (!type.reqMedium || SkaiaClient.enteredMedium(UsernameHandler.encode(mc.thePlayer.getCommandSenderName()))))
+				if(type != normalTab && (!type.reqMedium || SkaiaClient.enteredMedium(UsernameHandler.encode(mc.thePlayer.getCommandSenderName())) || mc.playerController.isInCreativeMode()))
 				{
 					int i = type.ordinal();
 					drawTexturedModalRect(xOffset + i*(tabWidth + 2), yOffset - tabHeight + tabOverlap, i==0? 0:tabWidth, 0, tabWidth, tabHeight);
@@ -193,7 +193,7 @@ public abstract class GuiPlayerStats extends GuiScreen
 				index == 0? 0:tabWidth, tabHeight, tabWidth, tabHeight);
 		
 		for(int i = 0; i < (mode? NormalGuiType.values():EditmodeGuiType.values()).length; i++)
-			if(!mode || !NormalGuiType.values()[i].reqMedium || SkaiaClient.enteredMedium(UsernameHandler.encode(mc.thePlayer.getCommandSenderName())))
+			if(!mode || !NormalGuiType.values()[i].reqMedium || SkaiaClient.enteredMedium(UsernameHandler.encode(mc.thePlayer.getCommandSenderName())) || mc.playerController.isInCreativeMode())
 				drawTexturedModalRect(xOffset + (tabWidth - 16)/2 + (tabWidth+2)*i, yOffset - tabHeight + tabOverlap + 8, i*16, tabHeight*2 + (mode? 0:16), 16, 16);
 		
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
@@ -206,7 +206,7 @@ public abstract class GuiPlayerStats extends GuiScreen
 				if(xcor < xOffset + i*(tabWidth + 2))
 					break;
 				else if(xcor < xOffset + i*(tabWidth + 2) + tabWidth
-						&& (!mode || !NormalGuiType.values()[i].reqMedium || SkaiaClient.enteredMedium(UsernameHandler.encode(mc.thePlayer.getCommandSenderName()))))
+						&& (!mode || !NormalGuiType.values()[i].reqMedium || SkaiaClient.enteredMedium(UsernameHandler.encode(mc.thePlayer.getCommandSenderName())) || mc.playerController.isInCreativeMode()))
 					drawHoveringText(Arrays.asList(StatCollector.translateToLocal(mode? NormalGuiType.values()[i].name:EditmodeGuiType.values()[i].name)),
 							xcor, ycor, fontRendererObj);
 	}
@@ -221,7 +221,7 @@ public abstract class GuiPlayerStats extends GuiScreen
 					break;
 				else if(xcor < xOffset + i*(tabWidth + 2) + tabWidth)
 				{
-					if(mode && NormalGuiType.values()[i].reqMedium && !SkaiaClient.enteredMedium(UsernameHandler.encode(mc.thePlayer.getCommandSenderName())))
+					if(mode && NormalGuiType.values()[i].reqMedium && !SkaiaClient.enteredMedium(UsernameHandler.encode(mc.thePlayer.getCommandSenderName())) && mc.playerController.isNotCreative())
 						return;
 					mc.getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation("gui.button.press"), 1.0F));
 					if(i != (mode? normalTab:editmodeTab).ordinal())
