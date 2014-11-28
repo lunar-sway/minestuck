@@ -38,7 +38,7 @@ public class RenderCard implements IItemRenderer
 	public RenderItem itemRender = new RenderItem();
 	public Minecraft mc = Minecraft.getMinecraft();
 	
-	public FBO itemBuffer = new FBO((int)(8*Math.pow(2,Minestuck.cardResolution)),(int)(8*Math.pow(2,Minestuck.cardResolution)));
+	public FBO itemBuffer;
 	public FBO cardBuffer;
 	
 	@Override
@@ -61,6 +61,9 @@ public class RenderCard implements IItemRenderer
 		TextureManager textureManager = mc.getTextureManager();
 		ItemStack item = AlchemyRecipeHandler.getDecodedItem(card, false);
 		Tessellator t = Tessellator.instance;
+		
+		if(itemBuffer == null)
+			itemBuffer = new FBO((int)(8*Math.pow(2,Minestuck.cardResolution)),(int)(8*Math.pow(2,Minestuck.cardResolution)));
 		
 		if(cardBuffer != null && (cardBuffer.height < cardIcon.getIconHeight() || cardBuffer.width < cardIcon.getIconWidth()))
 		{
