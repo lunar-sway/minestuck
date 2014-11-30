@@ -33,10 +33,12 @@ import com.mraof.minestuck.modSupport.NeverSayNetherSupport;
 import com.mraof.minestuck.modSupport.TinkersConstructSupport;
 import com.mraof.minestuck.world.gen.lands.LandAspectFrost;
 import com.mraof.minestuck.world.gen.lands.LandAspectHeat;
+import com.mraof.minestuck.world.gen.lands.LandAspectLight;
 import com.mraof.minestuck.world.gen.lands.LandAspectPulse;
 import com.mraof.minestuck.world.gen.lands.LandAspectSand;
 import com.mraof.minestuck.world.gen.lands.LandAspectShade;
 import com.mraof.minestuck.world.gen.lands.LandAspectThought;
+import com.mraof.minestuck.world.gen.lands.LandAspectWind;
 import com.mraof.minestuck.world.gen.lands.LandHelper;
 
 import cpw.mods.fml.common.Loader;
@@ -431,6 +433,8 @@ public class AlchemyRecipeHandler {
 		LandHelper.registerLandAspect(new LandAspectShade());
 		LandHelper.registerLandAspect(new LandAspectSand());
 		LandHelper.registerLandAspect(new LandAspectThought());
+		LandHelper.registerLandAspect(new LandAspectWind(), EnumAspect.BREATH);
+		LandHelper.registerLandAspect(new LandAspectLight(), EnumAspect.LIGHT);
 	}
 	
 	public static void registerModRecipes() 

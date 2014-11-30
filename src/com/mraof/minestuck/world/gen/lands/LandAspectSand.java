@@ -7,7 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Vec3;
 
-public class LandAspectSand extends LandAspect
+public class LandAspectSand extends PrimaryAspect
 {
 	BlockWithMetadata[] upperBlocks = {new BlockWithMetadata(Blocks.sandstone)};
 	BlockWithMetadata[] surfaceBlocks = {new BlockWithMetadata(Blocks.sand)};

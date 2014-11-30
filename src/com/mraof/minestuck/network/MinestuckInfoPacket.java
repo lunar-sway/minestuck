@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBuf;
 import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
 
 import com.mraof.minestuck.Minestuck;
 
@@ -34,6 +35,8 @@ public class MinestuckInfoPacket extends MinestuckPacket
 	@Override
 	public void execute(EntityPlayer player) 
 	{
+		if(MinecraftServer.getServer() != null && MinecraftServer.getServer().isServerRunning())
+			return;
 		Minestuck.worldSeed = this.worldSeed;
 	}
 

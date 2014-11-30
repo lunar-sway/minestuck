@@ -8,7 +8,7 @@ import net.minecraft.util.Vec3;
 
 import com.mraof.minestuck.Minestuck;
 
-public class LandAspectShade extends LandAspect 
+public class LandAspectShade extends PrimaryAspect 
 {
 
 	BlockWithMetadata[] surfaceBlocks = {new BlockWithMetadata(Minestuck.coloredDirt, (byte) 0)};

@@ -498,46 +498,63 @@ public class SkaianetHandler {
 		else return (TileEntityComputer)te;
 	}
 	
-	public static void enterMedium(EntityPlayerMP player, int dimensionId) {
+	public static int enterMedium(EntityPlayerMP player, int dimensionId)
+	{
 		String username = UsernameHandler.encode(player.getCommandSenderName());
 		SburbConnection c = getConnection(username, getAssociatedPartner(username, true));
-		if(c == null) {
+		if(c == null)
+		{
 			c = getClientConnection(username);
-			if(c == null) {
+			if(c == null)
+			{
+				Debug.print("Player entered without connection. Creating connection with self... "+dimensionId);
 				c = new SburbConnection();
 				c.isActive = false;
 				c.isMain = true;
 				c.clientName = username;
 				c.serverName = username;
-				if(SessionHandler.onConnectionCreated(c) == null) {
+				if(SessionHandler.onConnectionCreated(c) == null)
+				{
+					Debug.print("Added");
 					SessionHandler.onFirstItemGiven(c);
 					connections.add(c);
-				} else if(SessionHandler.singleSession) {
+				}
+				else if(SessionHandler.singleSession)
+				{
 					SessionHandler.singleSession = false;
 					SessionHandler.split();
-					if(SessionHandler.onConnectionCreated(c) == null) {
+					if(SessionHandler.onConnectionCreated(c) == null)
+					{
+						Debug.print("Added");
 						SessionHandler.onFirstItemGiven(c);
 						connections.add(c);
 					}
 				}
-			} else giveItems(username);
+			}
+			else giveItems(username);
 		}
+		else if(c.enteredGame)
+		{
+			return c.clientHomeLand;
+		}
+		
 		c.clientHomeLand = dimensionId;
 		SessionHandler.onGameEntered(c);
 		
-		for(SburbConnection sc : connections) {
-			if(sc.isActive){
-				if(getComputer(sc.client) == null)
-					sc.client.dimension = dimensionId;
-				if(getComputer(sc.server) == null)
-					sc.server.dimension = dimensionId;
-			}
-		}
+//		for(SburbConnection sc : connections) {
+//			if(sc.isActive){
+//				if(getComputer(sc.client) == null)
+//					sc.client.dimension = dimensionId;
+//				if(getComputer(sc.server) == null)
+//					sc.server.dimension = dimensionId;
+//			}
+//		}
 		
 		c.enteredGame = true;
 		c.centerX = (int)player.posX;
 		c.centerZ = (int)player.posZ;
 		updateAll();
+		return dimensionId;
 	}
 	
 }

@@ -2,6 +2,8 @@ package com.mraof.minestuck.world;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldProvider;
@@ -11,13 +13,20 @@ import net.minecraft.world.biome.WorldChunkManagerHell;
 import net.minecraft.world.chunk.IChunkProvider;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.gen.lands.LandHelper;
+import com.mraof.minestuck.world.gen.lands.PrimaryAspect;
+import com.mraof.minestuck.world.gen.lands.SecondaryAspect;
 
 public class WorldProviderLands extends WorldProvider 
 {
 	private ChunkProviderLands provider;
-
+	public PrimaryAspect aspect1;
+	public SecondaryAspect aspect2;
+	public LandHelper landHelper;
+	
 	@Override
 	public float calculateCelestialAngle(long par1, float par3)
 	{
@@ -44,9 +53,23 @@ public class WorldProviderLands extends WorldProvider
 
 	public IChunkProvider createChunkGenerator()
 	{
-		if (provider == null) {
+		if (provider == null)
+		{
+			landHelper = new LandHelper(Minestuck.worldSeed/dimensionId);
+			NBTBase landDataTag = worldObj.getWorldInfo().getAdditionalProperty("LandData");
+			if(landDataTag == null)
+			{
+				aspect1 = landHelper.getLandAspect();
+				aspect2 = SessionHandler.getSecondaryAspect(landHelper, dimensionId);
+			}
+			else
+			{
+				aspect1 = LandHelper.fromName(((NBTTagCompound)landDataTag).getString("aspect1"));
+				aspect2 = LandHelper.fromName2(((NBTTagCompound)landDataTag).getString("aspect2"));
+			}
+			
 			long seed = this.worldObj.isRemote ? Minestuck.worldSeed : this.worldObj.getSeed();
-			provider = new ChunkProviderLands(this.worldObj, seed, true);
+			provider = aspect2.createChunkProvider(this);
 		}
 		return provider;
 	}

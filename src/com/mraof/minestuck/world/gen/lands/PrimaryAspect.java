@@ -6,7 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Vec3;
 
-public abstract class LandAspect 
+public abstract class PrimaryAspect 
 {
 		/**
 		 * Returns the blocks that can possibly be use in the land's underground blocks.

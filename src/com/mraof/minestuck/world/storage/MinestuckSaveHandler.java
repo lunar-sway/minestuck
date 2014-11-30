@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Hashtable;
 import java.util.List;
 
 import net.minecraft.nbt.CompressedStreamTools;
@@ -13,13 +14,16 @@ import net.minecraftforge.event.world.WorldEvent;
 
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.MinestuckPlayerData;
+import com.mraof.minestuck.world.gen.lands.LandHelper.AspectCombination;
 import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class MinestuckSaveHandler 
 {
-	public static List<Byte> lands = Collections.synchronizedList(new ArrayList<Byte>());
+	public static Hashtable<Byte, AspectCombination> lands = new Hashtable<Byte, AspectCombination>();
+	//Moved the aspects here due to the insecurity in getting the title aspect in the world provider.
+	
 	@SubscribeEvent
 	public void onWorldSave(WorldEvent.Save event)
 	{
@@ -27,15 +31,17 @@ public class MinestuckSaveHandler
 			return;
 
 		File dataFile = event.world.getSaveHandler().getMapFileFromName("MinestuckData");
-		if (dataFile != null) {
+		if (dataFile != null)
+		{
+			Byte[] landIDs = (Byte[])lands.keySet().toArray();
 			NBTTagCompound nbt = new NBTTagCompound();
-			byte[] landArray = new byte[lands.size()];
-			for(int i = 0; i < lands.size(); i++)
-				landArray[i] = lands.get(i);
+			byte[] landArray = new byte[landIDs.length];
+			for(int i = 0; i < landIDs.length; i++)
+				landArray[i] = landIDs[i];
 			nbt.setByteArray("landList", landArray);
-
+			
 			TileEntityTransportalizer.saveTransportalizers(nbt);
-
+			
 			SkaianetHandler.saveData(nbt);
 			
 			MinestuckPlayerData.writeToNBT(nbt);
@@ -53,6 +59,6 @@ public class MinestuckSaveHandler
 		if(dataFile != null && dataFile.exists())
 			dataFile.delete();
 		//}
-
+		
 	}
 }

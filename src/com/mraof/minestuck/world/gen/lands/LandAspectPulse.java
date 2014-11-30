@@ -8,7 +8,7 @@ import net.minecraft.util.Vec3;
 
 import com.mraof.minestuck.Minestuck;
 
-public class LandAspectPulse extends LandAspect 
+public class LandAspectPulse extends PrimaryAspect 
 {
 	BlockWithMetadata[] upperBlocks = {new BlockWithMetadata(Blocks.netherrack)};
 	BlockWithMetadata[] surfaceBlocks = {new BlockWithMetadata(Blocks.obsidian)};

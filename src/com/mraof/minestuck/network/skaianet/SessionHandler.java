@@ -5,6 +5,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.MinestuckPlayerData;
+import com.mraof.minestuck.util.Title;
+import com.mraof.minestuck.world.gen.lands.LandHelper;
+import com.mraof.minestuck.world.gen.lands.SecondaryAspect;
 
 /**
  * Handles session related stuff like title generation, consort choosing, and other session management stuff.
@@ -199,6 +204,25 @@ public class SessionHandler {
 		return count;
 	}
 	
+	public static SecondaryAspect getSecondaryAspect(LandHelper landHelper, int dimension)
+	{
+		SburbConnection clientConnection = null;
+		Debug.print(SkaianetHandler.connections.size());
+		for(SburbConnection connection : SkaianetHandler.connections)
+			if(connection.enteredGame && connection.clientHomeLand == dimension)
+			{
+				Debug.print("Using connection "+connection+", with dimension "+dimension);
+				clientConnection = connection;
+				break;
+			} else Debug.print(connection.enteredGame+","+connection.clientHomeLand+"!="+dimension);
+//		if(clientConnection == null)
+//			return null;
+		Title title = MinestuckPlayerData.getTitle(clientConnection.getClientName());
+//		if(someCondition)
+//			return landHelper.getFrogAspectorsomethinglikethat;
+		return landHelper.getLandAspect(title.getHeroAspect());
+	}
+	
 	/**
 	 * Will check if two players can connect based on their main connections and sessions.
 	 * Does NOT include session size checking.
@@ -287,6 +311,7 @@ public class SessionHandler {
 	}
 	
 	static void onGameEntered(SburbConnection connection) {
+		Debug.print("Player Entered:"+connection.clientHomeLand);
 		generateTitle(connection.getClientName());
 		getPlayerSession(connection.getClientName()).checkIfCompleted();
 	}

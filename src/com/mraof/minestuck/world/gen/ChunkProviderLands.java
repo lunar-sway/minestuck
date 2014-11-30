@@ -27,10 +27,12 @@ import com.mraof.minestuck.entity.underling.EntityBasilisk;
 import com.mraof.minestuck.entity.underling.EntityGiclops;
 import com.mraof.minestuck.entity.underling.EntityImp;
 import com.mraof.minestuck.entity.underling.EntityOgre;
+import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.gen.lands.BlockWithMetadata;
 import com.mraof.minestuck.world.gen.lands.ILandDecorator;
-import com.mraof.minestuck.world.gen.lands.LandAspect;
+import com.mraof.minestuck.world.gen.lands.PrimaryAspect;
 import com.mraof.minestuck.world.gen.lands.LandHelper;
+import com.mraof.minestuck.world.gen.lands.SecondaryAspect;
 
 public class ChunkProviderLands implements IChunkProvider 
 {
@@ -41,8 +43,8 @@ public class ChunkProviderLands implements IChunkProvider
 	Vec3 skyColor;
 	private NoiseGeneratorOctaves noiseGens[] = new NoiseGeneratorOctaves[2];
 	private NoiseGeneratorTriangle noiseGeneratorTriangle;
-	public LandAspect aspect1;
-	public LandAspect aspect2;
+	public PrimaryAspect aspect1;
+	public SecondaryAspect aspect2;
 	public LandHelper helper;
 	public int nameIndex1, nameIndex2;
 
@@ -50,35 +52,36 @@ public class ChunkProviderLands implements IChunkProvider
 	public BlockWithMetadata upperBlock;
 	public Block oceanBlock;
 	public Block riverBlock;
-	public LandAspect terrainMapper;
+	public PrimaryAspect terrainMapper;
 	public ArrayList<ILandDecorator> decorators;
 	public int dayCycle;
 	public int spawnX, spawnY, spawnZ;
 
 	@SuppressWarnings("unchecked")
-	public ChunkProviderLands(World worldObj, long seed, boolean b)
+	public ChunkProviderLands(World worldObj, WorldProviderLands worldProvider, long seed)
 	{
 		seed *= worldObj.provider.dimensionId;
 		helper = new LandHelper(seed);
+		aspect1 = worldProvider.aspect1;
+		aspect2 = worldProvider.aspect2;
 		
 		NBTBase landDataTag = worldObj.getWorldInfo().getAdditionalProperty("LandData");
 		
 		this.landWorld = worldObj;
 		
-		if (landDataTag == null) {
+		if (landDataTag == null)
+		{
 			spawnX = landWorld.getWorldInfo().getSpawnX();
 			spawnY = landWorld.getWorldInfo().getSpawnY();
 			spawnZ = landWorld.getWorldInfo().getSpawnZ();
-			this.aspect1 = helper.getLandAspect();
-			this.aspect2 = helper.getLandAspect(aspect1);
 			Random rand = new Random(seed);
 			nameIndex1 = rand.nextInt(aspect1.getNames().length);	//Better way to generate these?
 			nameIndex2 = rand.nextInt(aspect2.getNames().length);
 			saveData();
 
-		} else {
-			aspect1 = LandHelper.fromName(((NBTTagCompound) landDataTag).getString("aspect1"));
-			aspect2 = LandHelper.fromName(((NBTTagCompound) landDataTag).getString("aspect2"));
+		}
+		else
+		{
 			nameIndex1 = ((NBTTagCompound) landDataTag).getInteger("aspectName1");
 			nameIndex2 = ((NBTTagCompound) landDataTag).getInteger("aspectName2");
 		}
@@ -98,15 +101,15 @@ public class ChunkProviderLands implements IChunkProvider
 		this.noiseGens[1] = new NoiseGeneratorOctaves(this.random, 1);
 		noiseGeneratorTriangle = new NoiseGeneratorTriangle(this.random);
 
-		this.surfaceBlock = (BlockWithMetadata) helper.pickElement(helper.pickOne(aspect1, aspect2).getSurfaceBlocks());
-		this.upperBlock = (BlockWithMetadata) helper.pickElement(helper.pickOne(aspect1, aspect2).getUpperBlocks());
-		LandAspect fluidAspect = helper.pickOne(aspect1, aspect2);
+		this.surfaceBlock = (BlockWithMetadata) helper.pickElement(aspect1.getSurfaceBlocks());
+		this.upperBlock = (BlockWithMetadata) helper.pickElement(aspect1.getUpperBlocks());
+		PrimaryAspect fluidAspect = aspect1;
 		this.oceanBlock = fluidAspect.getOceanBlock();
 		this.riverBlock = fluidAspect.getRiverBlock();
-		this.terrainMapper = helper.pickOne(aspect1,aspect2);
-		this.decorators = helper.pickSubset(aspect1.getDecorators(),aspect2.getDecorators());
-		this.dayCycle = helper.pickOne(aspect1,aspect2).getDayCycleMode();
-		this.skyColor = helper.pickOne(aspect1, aspect2).getFogColor();
+		this.terrainMapper = aspect1;
+		this.decorators = helper.pickSubset(aspect1.getDecorators());
+		this.dayCycle = aspect1.getDayCycleMode();
+		this.skyColor = aspect1.getFogColor();
 	}
 
 	@Override

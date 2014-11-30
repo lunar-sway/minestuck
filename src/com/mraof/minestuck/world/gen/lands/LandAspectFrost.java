@@ -7,7 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Vec3;
 
-public class LandAspectFrost extends LandAspect 
+public class LandAspectFrost extends PrimaryAspect 
 {
 	BlockWithMetadata[] surfaceBlocks = {new BlockWithMetadata(Blocks.grass)};
 	private BlockWithMetadata[] upperBlocks = {new BlockWithMetadata(Blocks.stone)};
@@ -62,7 +62,7 @@ public class LandAspectFrost extends LandAspect
 
 	@Override
 	public int getDayCycleMode() {
-		return (new Random()).nextInt(3); //Random cycle between 0 and 2
+		return 0;
 	}
 
 	@Override

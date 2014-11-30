@@ -58,7 +58,6 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 			if(player.worldObj.provider.dimensionId != destinationId) {
 				player.triggerAchievement(MinestuckAchievementHandler.enterMedium);
 				Teleport.teleportEntity(player, destinationId, this);
-				SkaianetHandler.enterMedium((EntityPlayerMP)player, destinationId);
 			}
 		}
 	}

@@ -7,7 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Vec3;
 
-public class LandAspectHeat extends LandAspect 
+public class LandAspectHeat extends PrimaryAspect 
 {
 	BlockWithMetadata[] upperBlocks = {new BlockWithMetadata(Blocks.netherrack), new BlockWithMetadata(Blocks.obsidian)};
 	BlockWithMetadata[] surfaceBlocks = {new BlockWithMetadata(Blocks.soul_sand), new BlockWithMetadata(Blocks.cobblestone)};
@@ -66,7 +66,7 @@ public class LandAspectHeat extends LandAspect
 
 	@Override
 	public int getDayCycleMode() {
-		return (new Random()).nextInt(3); //Random cycle between 0 and 2
+		return 0;
 	}
 
 	@Override

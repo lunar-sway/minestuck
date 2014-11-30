@@ -45,7 +45,8 @@ public enum EnumAspect {
 		return s.replaceFirst(""+s.charAt(0), ""+Character.toUpperCase(s.charAt(0)));
 	}
 	
-	public String getDisplayName() {
+	public String getDisplayName()
+	{
 		return StatCollector.translateToLocal("title."+this.toString());
 	}
 	
