@@ -408,9 +408,17 @@ public class SkaianetHandler {
 			}
 		
 		Iterator<SburbConnection> iter2 = connections.iterator();
-		while(iter2.hasNext()){
+		while(iter2.hasNext())
+		{
 			SburbConnection c = iter2.next();
-			if(c.isActive){
+			if(c.getClientName().isEmpty() || c.getServerName().isEmpty())
+			{
+				Debug.print("Found a broken connection with the client \""+c.getClientName()+"\" and server \""+c.getServerName()+". If this message continues to show up, something isn't working as it should.");
+				iter2.remove();
+				continue;
+			}
+			if(c.isActive)
+			{
 				TileEntityComputer cc = getComputer(c.client), sc = getComputer(c.server);
 				if(cc == null || sc == null || c.client.dimension == -1 || c.server.dimension == -1 || !cc.owner.equals(c.getClientName())
 						|| !sc.owner.equals(c.getServerName()) || !cc.getData(0).getBoolean("connectedToServer") || !sc.getData(1).getString("connectedClient").equals(c.getClientName())){
