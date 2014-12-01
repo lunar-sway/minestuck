@@ -1,10 +1,10 @@
 package com.mraof.minestuck.util;
 
+import net.minecraft.util.BlockPos;
+
 public class Location
 {
-	public int x;
-	public int y;
-	public int z;
+	public BlockPos pos;
 	public int dim;
 
 	public Location()
@@ -13,16 +13,20 @@ public class Location
 	}
 	public Location(int x, int y, int z, int dim)
 	{
-		this.x = x;
-		this.y = y;
-		this.z = z;
+		this(new BlockPos(x, y, z), dim);
 		this.dim = dim;
 	}
-
+	
+	public Location(BlockPos pos, int dim)
+	{
+		this.pos = pos;
+		this.dim = dim;
+	}
+	
 	@Override
 	public String toString()
 	{
-		return "Dim " + dim + ": " + x + " " + y + " " + z;
+		return "Dim " + dim + ": " + pos.getX() + " " + pos.getY() + " " + pos.getZ();
 	}
 
 	@Override
@@ -31,6 +35,6 @@ public class Location
 		if(obj.getClass() != this.getClass())
 			return false;
 		Location loc = (Location) obj;
-		return loc.x == this.x && loc.y == this.y && loc.z == this.z && loc.dim == this.dim;
+		return loc.pos.equals(this.pos) && loc.dim == this.dim;
 	}
 }

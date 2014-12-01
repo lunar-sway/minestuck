@@ -3,7 +3,6 @@ package com.mraof.minestuck.block;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -22,7 +21,7 @@ public class BlockTransportalizer extends BlockContainer
 		super(Material.iron);
 		this.setCreativeTab(Minestuck.tabMinestuck);
 		this.setBlockBounds(0F, 0F, 0F, 1F, 0.5F, 1F);
-		this.setBlockName("transportalizer");
+		this.setUnlocalizedName("transportalizer");
 	}
 	
 	@Override
@@ -31,21 +30,21 @@ public class BlockTransportalizer extends BlockContainer
 		return createTileEntity(world, metadata);
 	}
 
-	@Override
+//	@Override
 	public TileEntity createTileEntity(World world, int metadata)
 	{
 		TileEntityTransportalizer tileEntity = new TileEntityTransportalizer();
 		return tileEntity;
 	}
 	
-	@Override
-	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) 
-	{
-		if (!world.isRemote && entity.ridingEntity == null && entity.riddenByEntity == null && !world.isRemote && entity.timeUntilPortal == 0)
-		{
-			((TileEntityTransportalizer) world.getTileEntity(x, y, z)).teleport(entity);
-		}
-	}
+//	@Override
+//	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) 
+//	{
+//		if (!world.isRemote && entity.ridingEntity == null && entity.riddenByEntity == null && !world.isRemote && entity.timeUntilPortal == 0)
+//		{
+//			((TileEntityTransportalizer) world.getTileEntity(x, y, z)).teleport(entity);
+//		}
+//	}
 	
 	@Override
 	public boolean isOpaqueCube() 
@@ -59,26 +58,26 @@ public class BlockTransportalizer extends BlockContainer
 		return -1;
 	}
 
-	@Override
-	public boolean onBlockActivated(World world, int x,int y,int z, EntityPlayer player,int par6, float par7, float par8, float par9)
-	{
-		TileEntityTransportalizer tileEntity = (TileEntityTransportalizer) world.getTileEntity(x, y, z);
-
-		if (tileEntity == null || player.isSneaking())
-		{
-			return false;
-		}
-
-		if(world.isRemote)
-			player.openGui(Minestuck.instance, GuiHandler.GuiId.TRANSPORTALIZER.ordinal(), world, x, y, z);
-
-		return true;
-	}
+//	@Override
+//	public boolean onBlockActivated(World world, int x,int y,int z, EntityPlayer player,int par6, float par7, float par8, float par9)
+//	{
+//		TileEntityTransportalizer tileEntity = (TileEntityTransportalizer) world.getTileEntity(x, y, z);
+//
+//		if (tileEntity == null || player.isSneaking())
+//		{
+//			return false;
+//		}
+//
+//		if(world.isRemote)
+//			player.openGui(Minestuck.instance, GuiHandler.GuiId.TRANSPORTALIZER.ordinal(), world, x, y, z);
+//
+//		return true;
+//	}
 	
-	@Override
-	public void registerBlockIcons(IIconRegister iconRegister)
-	{
-		this.blockIcon = iconRegister.registerIcon("minestuck:Transportalizer");
-	}
+//	@Override
+//	public void registerBlockIcons(IIconRegister iconRegister)
+//	{
+//		this.blockIcon = iconRegister.registerIcon("minestuck:Transportalizer");
+//	}
 
 }

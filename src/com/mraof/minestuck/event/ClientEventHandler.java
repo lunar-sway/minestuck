@@ -1,11 +1,11 @@
 package com.mraof.minestuck.event;
 
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
+
 import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
 import com.mraof.minestuck.inventory.ContainerEditmode;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
 
 /**
  * Used to track mixed client sided events.
@@ -13,7 +13,8 @@ import cpw.mods.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
 public class ClientEventHandler {
 	
 	@SubscribeEvent
-	public void onConnectedToServer(ClientConnectedToServerEvent event) {
+	public void onConnectedToServer(ClientConnectedToServerEvent event)
+	{
 		GuiPlayerStats.normalTab = GuiPlayerStats.NormalGuiType.CAPTCHA_DECK;
 		GuiPlayerStats.editmodeTab = GuiPlayerStats.EditmodeGuiType.DEPLOY_LIST;
 		ContainerEditmode.clientScroll = 0;

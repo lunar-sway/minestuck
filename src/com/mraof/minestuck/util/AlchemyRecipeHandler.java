@@ -20,6 +20,8 @@ import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -38,9 +40,6 @@ import com.mraof.minestuck.world.gen.lands.LandAspectSand;
 import com.mraof.minestuck.world.gen.lands.LandAspectShade;
 import com.mraof.minestuck.world.gen.lands.LandAspectThought;
 import com.mraof.minestuck.world.gen.lands.LandHelper;
-
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class AlchemyRecipeHandler {
 	
@@ -168,7 +167,7 @@ public class AlchemyRecipeHandler {
 		GristRegistry.addGristConversion(new ItemStack(Items.coal, 1, 1), true, new GristSet(new GristType[] {GristType.Tar, GristType.Amber}, new int[] {12, 4}));
 		GristRegistry.addGristConversion(new ItemStack(Items.cooked_beef), false, new GristSet(new GristType[] {GristType.Iodine, GristType.Tar}, new int[] {12, 1}));
 		GristRegistry.addGristConversion(new ItemStack(Items.cooked_chicken), false, new GristSet(new GristType[] {GristType.Iodine, GristType.Tar}, new int[] {10, 1}));
-		GristRegistry.addGristConversion(new ItemStack(Items.cooked_fished, 1, 0), true, new GristSet(new GristType[] {GristType.Caulk, GristType.Amber, GristType.Cobalt, GristType.Tar}, new int[] {4, 4, 2, 1}));
+		GristRegistry.addGristConversion(new ItemStack(Items.cooked_fish, 1, 0), true, new GristSet(new GristType[] {GristType.Caulk, GristType.Amber, GristType.Cobalt, GristType.Tar}, new int[] {4, 4, 2, 1}));
 		GristRegistry.addGristConversion(new ItemStack(Items.cooked_porkchop), false, new GristSet(new GristType[] {GristType.Iodine, GristType.Tar}, new int[] {10, 4}));
 		GristRegistry.addGristConversion(new ItemStack(Items.diamond), false, new GristSet(new GristType[] {GristType.Diamond}, new int[] {16}));
 		GristRegistry.addGristConversion(new ItemStack(Items.diamond_horse_armor), false, new GristSet(new GristType[] {GristType.Diamond}, new int[] {80}));
@@ -290,7 +289,7 @@ public class AlchemyRecipeHandler {
 		//Set up Punch Designix recipes
 		
 		//metadata-based
-		for (int meta = 0; meta < BlockSapling.field_149882_a.length; meta++) {
+		for (int meta = 0; meta < BlockSapling.TYPE_PROP.getAllowedValues().size(); meta++) {
 			ItemStack log = new ItemStack(meta < 4?Blocks.log:Blocks.log2, 1, meta < 4?meta:meta-4);	//I think that's how it works.
 			CombinationRegistry.addCombination(Item.getItemFromBlock(Blocks.sapling), meta, "logWood", OreDictionary.WILDCARD_VALUE, CombinationRegistry.MODE_AND, log);
 			CombinationRegistry.addCombination(log.getItem(), log.getItemDamage(), "treeSapling", OreDictionary.WILDCARD_VALUE, CombinationRegistry.MODE_OR, new ItemStack(Blocks.sapling, 1, meta));
@@ -298,6 +297,19 @@ public class AlchemyRecipeHandler {
 		for (int meta = 0;meta <= 15;meta++) {
 			CombinationRegistry.addCombination(new ItemStack(Items.dye,1,meta^15),new ItemStack(Blocks.wool),CombinationRegistry.MODE_AND, true,false, new ItemStack(Blocks.wool,1,meta));
 			CombinationRegistry.addCombination(new ItemStack(Items.dye),new ItemStack(Blocks.wool,1,meta),CombinationRegistry.MODE_OR, false,true, new ItemStack(Items.dye,1,meta^15));
+		}
+		Item[] items = {Items.oak_door, Items.birch_door, Items.spruce_door, Items.acacia_door, Items.dark_oak_door};	//I believe that's the right order
+		for(int meta = 0; meta < items.length; meta++)
+		{
+			CombinationRegistry.addCombination(new ItemStack(Items.iron_door), new ItemStack(Blocks.planks, 1, meta), CombinationRegistry.MODE_AND, new ItemStack(items[meta]));
+			CombinationRegistry.addCombination(new ItemStack(items[meta]),new ItemStack(Items.iron_ingot),CombinationRegistry.MODE_AND, new ItemStack(Items.iron_door));
+		}
+		
+		Block[] blocks = {Blocks.oak_fence, Blocks.birch_fence, Blocks.spruce_fence, Blocks.acacia_fence, Blocks.dark_oak_fence};
+		for(int meta = 0; meta < blocks.length; meta++)
+		{
+			CombinationRegistry.addCombination(new ItemStack(Blocks.nether_brick_fence),new ItemStack(Blocks.planks, 1, meta),CombinationRegistry.MODE_AND, new ItemStack(blocks[meta]));
+			CombinationRegistry.addCombination(new ItemStack(blocks[meta]),new ItemStack(Blocks.nether_brick),CombinationRegistry.MODE_AND, new ItemStack(Blocks.nether_brick_fence));
 		}
 		
 		//ore related
@@ -324,13 +336,11 @@ public class AlchemyRecipeHandler {
 		CombinationRegistry.addCombination(new ItemStack(Blocks.cobblestone_wall),new ItemStack(Items.wheat_seeds),CombinationRegistry.MODE_OR, new ItemStack(Blocks.cobblestone_wall,1,1));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.dirt),new ItemStack(Blocks.tallgrass),CombinationRegistry.MODE_OR, new ItemStack(Blocks.grass));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.dirt),new ItemStack(Items.wheat_seeds),CombinationRegistry.MODE_AND, new ItemStack(Blocks.grass));
-		CombinationRegistry.addCombination(new ItemStack(Blocks.fence),new ItemStack(Blocks.nether_brick),CombinationRegistry.MODE_AND, new ItemStack(Blocks.nether_brick_fence));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.grass),new ItemStack(Blocks.brown_mushroom),CombinationRegistry.MODE_AND, new ItemStack(Blocks.mycelium));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.grass),new ItemStack(Blocks.red_mushroom),CombinationRegistry.MODE_AND, new ItemStack(Blocks.mycelium));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.gravel),new ItemStack(Blocks.stone),CombinationRegistry.MODE_AND, new ItemStack(Items.flint));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.ladder),new ItemStack(Items.iron_ingot),CombinationRegistry.MODE_AND, new ItemStack(Blocks.rail));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.leaves, 1, 2), new ItemStack(Blocks.dirt), CombinationRegistry.MODE_AND, new ItemStack(Blocks.grass, 1, 1));
-		CombinationRegistry.addCombination(new ItemStack(Blocks.nether_brick_fence),new ItemStack(Blocks.planks),CombinationRegistry.MODE_AND, new ItemStack(Blocks.fence));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.netherrack),new ItemStack(Blocks.brick_block),CombinationRegistry.MODE_AND, new ItemStack(Items.netherbrick));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.netherrack),new ItemStack(Blocks.brick_block),CombinationRegistry.MODE_OR, new ItemStack(Blocks.nether_brick));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.netherrack),new ItemStack(Items.glowstone_dust),CombinationRegistry.MODE_AND, new ItemStack(Blocks.glowstone));
@@ -349,7 +359,6 @@ public class AlchemyRecipeHandler {
 		CombinationRegistry.addCombination(new ItemStack(Items.ender_pearl),new ItemStack(Items.blaze_powder),CombinationRegistry.MODE_AND, new ItemStack(Items.ender_eye));
 		CombinationRegistry.addCombination(new ItemStack(Items.gold_ingot),new ItemStack(Items.saddle),CombinationRegistry.MODE_AND, new ItemStack(Items.golden_horse_armor));
 		CombinationRegistry.addCombination(new ItemStack(Items.gunpowder),new ItemStack(Blocks.sand),CombinationRegistry.MODE_AND, new ItemStack(Blocks.tnt));
-		CombinationRegistry.addCombination(new ItemStack(Items.iron_door),new ItemStack(Blocks.planks),CombinationRegistry.MODE_AND, new ItemStack(Items.wooden_door));
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_ingot),new ItemStack(Blocks.tallgrass),CombinationRegistry.MODE_AND, new ItemStack(Items.shears));
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_ingot),new ItemStack(Items.saddle),CombinationRegistry.MODE_AND, new ItemStack(Items.iron_horse_armor));
 		CombinationRegistry.addCombination(new ItemStack(Items.potato),new ItemStack(Items.wheat_seeds),CombinationRegistry.MODE_OR, new ItemStack(Items.carrot));
@@ -363,7 +372,6 @@ public class AlchemyRecipeHandler {
 		CombinationRegistry.addCombination(new ItemStack(Items.stick),new ItemStack(Items.lava_bucket),CombinationRegistry.MODE_AND, new ItemStack(Items.blaze_rod));
 		CombinationRegistry.addCombination(new ItemStack(Items.string),new ItemStack(Items.leather),CombinationRegistry.MODE_AND, new ItemStack(Items.saddle));
 		CombinationRegistry.addCombination(new ItemStack(Items.water_bucket),new ItemStack(Items.lava_bucket),CombinationRegistry.MODE_AND, new ItemStack(Blocks.obsidian));
-		CombinationRegistry.addCombination(new ItemStack(Items.wooden_door),new ItemStack(Items.iron_ingot),CombinationRegistry.MODE_AND, new ItemStack(Items.iron_door));
 		
 	}
 	
@@ -508,7 +516,7 @@ public class AlchemyRecipeHandler {
 		ItemStack newItem = new ItemStack((Item)Item.itemRegistry.getObject(tag.getString(("contentID"))), 1, tag.getInteger("contentMeta"));
 		
 		if(tag.hasKey("contentTags"))
-			newItem.stackTagCompound = tag.getCompoundTag("contentTags");
+			newItem.setTagCompound(tag.getCompoundTag("contentTags"));
 		if(tag.hasKey("contentSize"))
 			newItem.stackSize = tag.getInteger("contentSize");
 		
@@ -540,7 +548,7 @@ public class AlchemyRecipeHandler {
 		NBTTagCompound nbt = null;
 		if(item != null) {
 			nbt = new NBTTagCompound();
-			nbt.setString("contentID", Item.itemRegistry.getNameForObject(item.getItem()));
+			nbt.setString("contentID", (String)Item.itemRegistry.getNameForObject(item.getItem()));
 			nbt.setInteger("contentMeta", item.getItemDamage());
 		}
 		ItemStack stack = new ItemStack(registerToCard?Minestuck.captchaCard:Minestuck.cruxiteDowel);

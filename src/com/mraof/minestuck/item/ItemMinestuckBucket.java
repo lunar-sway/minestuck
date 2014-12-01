@@ -7,7 +7,6 @@ import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -15,25 +14,25 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.network.play.server.S42PacketCombatEvent.Event;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
+import net.minecraftforge.fml.common.eventhandler.Event.Result;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mraof.minestuck.Minestuck;
-
-import cpw.mods.fml.common.eventhandler.Event;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemMinestuckBucket extends ItemBucket 
 {
 	public List<Block> fillFluids = new ArrayList<Block>();
 	public HashMap<Block, Integer> FillFluidIds = new HashMap<Block, Integer>();
 	public HashMap<String, String> textureFiles = new HashMap<String, String>();
-	HashMap<String, IIcon> textures = new HashMap<String, IIcon>();
+//	HashMap<String, IIcon> textures = new HashMap<String, IIcon>();
 	
 	public ItemMinestuckBucket() 
 	{
@@ -62,7 +61,7 @@ public class ItemMinestuckBucket extends ItemBucket
 				return par1ItemStack;
 			}
 
-			if (event.getResult() == Event.Result.ALLOW)
+			if (event.getResult() == Result.ALLOW)
 			{
 				if (par3EntityPlayer.capabilities.isCreativeMode)
 				{
@@ -84,11 +83,11 @@ public class ItemMinestuckBucket extends ItemBucket
 
 			if (movingobjectposition.typeOfHit == MovingObjectType.BLOCK)
 			{
-				int x = movingobjectposition.blockX;
-				int y = movingobjectposition.blockY;
-				int z = movingobjectposition.blockZ;
+				int x = movingobjectposition.func_178782_a().getX();
+				int y = movingobjectposition.func_178782_a().getY();
+				int z = movingobjectposition.func_178782_a().getZ();
 
-				if (!par2World.canMineBlock(par3EntityPlayer, x, y, z))
+				if (!par2World.canMineBlockBody(par3EntityPlayer, movingobjectposition.func_178782_a()))
 				{
 					return par1ItemStack;
 				}
@@ -98,7 +97,7 @@ public class ItemMinestuckBucket extends ItemBucket
 					return new ItemStack(Items.bucket);
 				}
 				
-				switch(movingobjectposition.sideHit)
+				switch(movingobjectposition.subHit)	//possibly this variable?!
 				{
 				case 0:
 					--y; 
@@ -121,10 +120,10 @@ public class ItemMinestuckBucket extends ItemBucket
 				}
 
 
-				if (!par3EntityPlayer.canPlayerEdit(x, y, z, movingobjectposition.sideHit, par1ItemStack))
-				{
-					return par1ItemStack;
-				}
+//				if (!par3EntityPlayer.canPlayerEdit(x, y, z, movingobjectposition.field_178784_b, par1ItemStack))
+//				{
+//					return par1ItemStack;
+//				}
 
 				if (this.tryPlaceContainedLiquid(par2World, x, y, z, fillFluids.get(par1ItemStack.getItemDamage())) && !par3EntityPlayer.capabilities.isCreativeMode)
 				{
@@ -141,10 +140,10 @@ public class ItemMinestuckBucket extends ItemBucket
 	 */
 	public boolean tryPlaceContainedLiquid(World par1World, int par2, int par3, int par4, Block block)
 	{
-		Material material = par1World.getBlock(par2, par3, par4).getMaterial();
+		Material material = par1World.getBlockState(new BlockPos(par2, par3, par4)).getBlock().getMaterial();
 		boolean flag = !material.isSolid();
 
-		if (!par1World.isAirBlock(par2, par3, par4) && !flag)
+		if (!par1World.isAirBlock(new BlockPos(par2, par3, par4)) && !flag)
 		{
 			return false;
 		}
@@ -152,10 +151,10 @@ public class ItemMinestuckBucket extends ItemBucket
 		{
 			if (!par1World.isRemote && flag && !material.isLiquid())
 			{
-				par1World.func_147480_a(par2, par3, par4, true);
+//				par1World.func_147480_a(par2, par3, par4, true);
 			}
 
-			par1World.setBlock(par2, par3, par4, block, 0, 3);
+//			par1World.setBlock(par2, par3, par4, block, 0, 3);
 
 			return true;
 		}
@@ -174,17 +173,17 @@ public class ItemMinestuckBucket extends ItemBucket
 	{
 		return getUnlocalizedName() + "." + fillFluids.get(par1ItemStack.getItemDamage()).getUnlocalizedName().replace("tile.", "");
 	}
-	@Override
-	public IIcon getIconFromDamage(int damage) 
-	{
-		return this.textures.get(fillFluids.get(damage).getUnlocalizedName());
-	}
-	@Override
-	public void registerIcons(IIconRegister par1IconRegister)
-    {
-        for (Entry<String, String> entry : textureFiles.entrySet())
-            this.textures.put(entry.getKey(), par1IconRegister.registerIcon("minestuck:" + entry.getValue()));
-    }
+//	@Override
+//	public IIcon getIconFromDamage(int damage) 
+//	{
+//		return this.textures.get(fillFluids.get(damage).getUnlocalizedName());
+//	}
+//	@Override
+//	public void registerIcons(IIconRegister par1IconRegister)
+//    {
+//        for (Entry<String, String> entry : textureFiles.entrySet())
+//            this.textures.put(entry.getKey(), par1IconRegister.registerIcon("minestuck:" + entry.getValue()));
+//    }
 	
 	public void addBlock(Block block, String textureFile)
 	{

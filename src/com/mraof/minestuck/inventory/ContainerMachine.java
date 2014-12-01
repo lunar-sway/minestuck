@@ -203,10 +203,11 @@ public class ContainerMachine extends Container {
 		
 		return itemstack;
 	}
-
-	public void addCraftingToCrafters(ICrafting par1ICrafting)
+	
+	@Override
+	public void onCraftGuiOpened(ICrafting par1ICrafting)
 	{
-		super.addCraftingToCrafters(par1ICrafting);
+		super.onCraftGuiOpened(par1ICrafting);
 //		System.out.printf("addCraftingToCrafters running, the metadata is %d\n", this.metadata);
 		switch(this.metadata)
 		{
@@ -215,6 +216,7 @@ public class ContainerMachine extends Container {
 			par1ICrafting.sendProgressBarUpdate(this, 0, this.tileEntity.mode ? 0 : 1);
 		}
 	}
+	
 	public void detectAndSendChanges()
 	{
 		super.detectAndSendChanges();

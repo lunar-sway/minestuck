@@ -1,14 +1,17 @@
 package com.mraof.minestuck.entity.item;
 
 import io.netty.buffer.ByteBuf;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.editmode.ServerEditHandler;
@@ -18,10 +21,6 @@ import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.UsernameHandler;
-
-import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 {
@@ -44,7 +43,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		super(world);
 		this.gristValue = gristData.getAmount();
 		this.setSize(this.getSizeByValue(), 0.5F);
-		this.yOffset = this.height / 2.0F;
+//		this.yOffset = this.height / 2.0F;
 		this.setPosition(x, y, z);
 		this.rotationYaw = (float)(Math.random() * 360.0D);
 		this.motionX = (double)((float)(world.rand.nextGaussian() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
@@ -102,7 +101,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		this.prevPosZ = this.posZ;
 		this.motionY -= 0.029999999329447746D;
 
-		if (this.worldObj.getBlock(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ)).getMaterial() == Material.lava)
+		if (this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ))).getBlock().getMaterial() == Material.lava)
 		{
 			this.motionY = 0.20000000298023224D;
 			this.motionX = (double)((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F);
@@ -110,7 +109,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 			this.playSound("random.fizz", 0.4F, 2.0F + this.rand.nextFloat() * 0.4F);
 		}
 
-		this.func_145771_j(this.posX, (this.boundingBox.minY + this.boundingBox.maxY) / 2.0D, this.posZ);
+		this.setPosition(this.posX, (this.getBoundingBox().minY + this.getBoundingBox().maxY) / 2.0D, this.posZ);
 		double d0 = this.getSizeByValue() * 2.0D;
 
 		if (this.targetCycle < this.cycle - 20 + this.getEntityId() % 100) //Why should I care about the entityId
@@ -146,7 +145,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		{
 			if (this.onGround)	//Wait what?
 	        {
-	            f = this.worldObj.getBlock(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.boundingBox.minY) - 1, MathHelper.floor_double(this.posZ)).slipperiness * 0.98F;
+				f = this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.getBoundingBox().minY) - 1, MathHelper.floor_double(this.posZ))).getBlock().slipperiness * 0.98F;
 	        }
 		}
 
@@ -174,7 +173,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public boolean handleWaterMovement()
 	{
-		return this.worldObj.handleMaterialAcceleration(this.boundingBox, Material.water, this);
+		return this.worldObj.handleMaterialAcceleration(this.getBoundingBox(), Material.water, this);
 	}
 
 	/**
@@ -238,7 +237,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	 */
 	public void onCollideWithPlayer(EntityPlayer par1EntityPlayer)
 	{
-		if(this.worldObj.isRemote?ClientEditHandler.isActive():ServerEditHandler.getData(par1EntityPlayer.getCommandSenderName()) != null)
+		if(this.worldObj.isRemote?ClientEditHandler.isActive():ServerEditHandler.getData(par1EntityPlayer.getName()) != null)
 			return;
 		
 		if (!this.worldObj.isRemote)
@@ -253,8 +252,8 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	}
 	public void addGrist(EntityPlayer entityPlayer)
 	{
-		GristHelper.increase(UsernameHandler.encode(entityPlayer.getCommandSenderName()), new GristSet(GristType.getTypeFromString(gristType), gristValue));
-		MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(entityPlayer.getCommandSenderName()));
+		GristHelper.increase(UsernameHandler.encode(entityPlayer.getName()), new GristSet(GristType.getTypeFromString(gristType), gristValue));
+		MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(entityPlayer.getName()));
 	}
 
 	public boolean canAttackWithItem()
@@ -300,6 +299,6 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		this.gristType = GristType.values()[typeOffset].getName();
 		this.gristValue = data.readInt();
 		this.setSize(this.getSizeByValue(), 0.5F);
-		this.yOffset = this.height / 2.0F;
+//		this.yOffset = this.height / 2.0F;
 	}
 }

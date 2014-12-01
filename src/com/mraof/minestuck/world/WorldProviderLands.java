@@ -2,7 +2,7 @@ package com.mraof.minestuck.world;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldSettings.GameType;
@@ -62,10 +62,10 @@ public class WorldProviderLands extends WorldProvider
 	}
 
 	@Override
-	public ChunkCoordinates getRandomizedSpawnPoint() 
+	public BlockPos getSpawnPoint() 
 	{
 		createChunkGenerator();
-		ChunkCoordinates chunkcoordinates = new ChunkCoordinates(provider.spawnX, provider.spawnY, provider.spawnZ);
+		BlockPos coordinates = new BlockPos(provider.spawnX, provider.spawnY, provider.spawnZ);
 
 		boolean isAdventure = worldObj.getWorldInfo().getGameType() == GameType.ADVENTURE;
 		int spawnFuzz = 12;
@@ -73,12 +73,13 @@ public class WorldProviderLands extends WorldProvider
 
 		if (!hasNoSky && !isAdventure)
 		{
-			chunkcoordinates.posX += this.worldObj.rand.nextInt(spawnFuzz) - spawnFuzzHalf;
-			chunkcoordinates.posZ += this.worldObj.rand.nextInt(spawnFuzz) - spawnFuzzHalf;
-			chunkcoordinates.posY = this.worldObj.getTopSolidOrLiquidBlock(chunkcoordinates.posX, chunkcoordinates.posZ);
+			coordinates.add(this.worldObj.rand.nextInt(spawnFuzz) - spawnFuzzHalf,
+					this.worldObj.rand.nextInt(spawnFuzz) - spawnFuzzHalf,
+					0);
+//			coordinates.posY = this.worldObj.getTopSolidOrLiquidBlock(chunkcoordinates.posX, chunkcoordinates.posZ);
 		}
 
-		return chunkcoordinates;
+		return coordinates;
 	}
 
 	@Override
@@ -139,5 +140,11 @@ public class WorldProviderLands extends WorldProvider
 			Debug.print("Getting superclass fog color");
 			return super.getFogColor(par1, par2);
 		}
+	}
+
+	@Override
+	public String getInternalNameSuffix() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

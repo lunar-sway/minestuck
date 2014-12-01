@@ -7,9 +7,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
-import com.mraof.minestuck.Minestuck;
+import net.minecraftforge.fml.common.Mod;
 
-import cpw.mods.fml.common.Mod;
+import com.mraof.minestuck.Minestuck;
 
 public class UpdateChecker extends Thread
 {

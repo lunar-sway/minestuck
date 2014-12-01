@@ -5,6 +5,12 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent;
+import net.minecraftforge.fml.common.network.FMLOutboundHandler;
+import net.minecraftforge.fml.common.network.handshake.NetworkDispatcher;
+import net.minecraftforge.fml.relauncher.Side;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.editmode.ServerEditHandler;
@@ -27,13 +33,6 @@ import com.mraof.minestuck.util.UpdateChecker;
 import com.mraof.minestuck.util.UsernameHandler;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
-import cpw.mods.fml.common.network.FMLNetworkEvent;
-import cpw.mods.fml.common.network.FMLOutboundHandler;
-import cpw.mods.fml.common.network.handshake.NetworkDispatcher;
-import cpw.mods.fml.relauncher.Side;
-
 public class MinestuckPlayerTracker {
 	
 	public static MinestuckPlayerTracker instance = new MinestuckPlayerTracker();
@@ -42,19 +41,19 @@ public class MinestuckPlayerTracker {
 	public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) 
 	{
 		EntityPlayer player = event.player;
-		Debug.print(player.getCommandSenderName()+" joined the game. Sending packets.");
+		Debug.print(player.getName()+" joined the game. Sending packets.");
 		MinecraftServer server = MinecraftServer.getServer();
 		if(!server.isDedicatedServer() && UsernameHandler.host == null)
-			UsernameHandler.host = event.player.getCommandSenderName();
-		String encUsername = UsernameHandler.encode(player.getCommandSenderName());
+			UsernameHandler.host = event.player.getName();
+		String encUsername = UsernameHandler.encode(player.getName());
 		
 		sendConfigPacket(player);
 		
-		SkaianetHandler.playerConnected(player.getCommandSenderName());
+		SkaianetHandler.playerConnected(player.getName());
 		
 		if(MinestuckPlayerData.getGristSet(encUsername) == null)
 		{
-			Debug.printf("Grist set is null for player %s.", player.getCommandSenderName());
+			Debug.printf("Grist set is null for player %s.", player.getName());
 			MinestuckPlayerData.setGrist(encUsername, new GristSet(GristType.Build, 20));
 		}
 		
@@ -84,7 +83,7 @@ public class MinestuckPlayerTracker {
 			MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.CAPTCHA, CaptchaDeckPacket.DATA, CaptchaDeckHandler.writeToNBT(modus)), player);
 		}
 		
-		updateGristCache(UsernameHandler.encode(player.getCommandSenderName()));
+		updateGristCache(UsernameHandler.encode(player.getName()));
 		updateTitle(player);
 		if(UpdateChecker.outOfDate)
 			player.addChatMessage(new ChatComponentText("New version of Minestuck: " + UpdateChecker.latestVersion + "\nChanges: " + UpdateChecker.updateChanges));
@@ -123,7 +122,7 @@ public class MinestuckPlayerTracker {
 
 		//The player
 		if(!player.equals(".client") || UsernameHandler.host != null) {
-			EntityPlayerMP playerMP = MinecraftServer.getServer().getConfigurationManager().func_152612_a(UsernameHandler.decode(player));
+			EntityPlayerMP playerMP = MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(UsernameHandler.decode(player));
 			if(playerMP != null) {
 				MinestuckPacket packet = MinestuckPacket.makePacket(Type.GRISTCACHE, gristValues, false);
 				MinestuckChannelHandler.sendToPlayer(packet, playerMP);
@@ -141,7 +140,7 @@ public class MinestuckPlayerTracker {
 
 	public void updateTitle(EntityPlayer player) {
 		Title newTitle;
-		String username = UsernameHandler.encode(player.getCommandSenderName());
+		String username = UsernameHandler.encode(player.getName());
 		if (MinestuckPlayerData.getTitle(username) == null) {
 			newTitle = TitleHelper.randomTitle();
 			MinestuckPlayerData.setTitle(username, newTitle);
@@ -154,7 +153,7 @@ public class MinestuckPlayerTracker {
 	public static void updateLands(EntityPlayer player)
 	{
 		MinestuckPacket packet = MinestuckPacket.makePacket(Type.LANDREGISTER, MinestuckSaveHandler.lands.toArray());
-		Debug.printf("Sending land packets to %s.", player == null ? "all players" : player.getCommandSenderName());
+		Debug.printf("Sending land packets to %s.", player == null ? "all players" : player.getName());
 		if(player == null)
 			MinestuckChannelHandler.sendToAllPlayers(packet);
 		else
