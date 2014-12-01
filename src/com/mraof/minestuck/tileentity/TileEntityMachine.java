@@ -388,7 +388,9 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			if(!worldObj.isRemote) 
 			{
 				ItemStack item = AlchemyRecipeHandler.getDecodedItem(inv[1], false);
-				GristSet gristSet = GristRegistry.getGristConversion(item);
+				GristSet gristSet = GristRegistry.getGristConversion(item).copy();
+				if(item.stackSize != 1)
+					gristSet.scaleGrist(item.stackSize);
 				
 				Iterator<Entry<Integer, Integer>> iter = gristSet.getHashtable().entrySet().iterator();
 				while(iter.hasNext()) 

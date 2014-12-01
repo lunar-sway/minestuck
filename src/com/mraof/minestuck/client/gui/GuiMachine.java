@@ -109,10 +109,16 @@ public class GuiMachine extends GuiContainer {
 		if ((metadata == 3 || metadata ==4) && te.inv[1] != null) 
 		{
 			//Render grist requirements
-			GristSet set = GristRegistry.getGristConversion(AlchemyRecipeHandler.getDecodedItem(te.inv[1], metadata == 3? true : false));
+			GristSet set = GristRegistry.getGristConversion(AlchemyRecipeHandler.getDecodedItem(te.inv[1], metadata == 3? true : false)).copy();
 			boolean selectedType = AlchemyRecipeHandler.getDecodedItem(te.inv[1], true).getItem() == Minestuck.captchaCard;
 			if(selectedType)
 				set = metadata == 3 ? new GristSet(te.selectedGrist, 1) : null;
+			if(metadata == 4 && set != null)
+			{
+				float multiplier = AlchemyRecipeHandler.getDecodedItem(te.inv[1], false).stackSize;
+				if(multiplier != 1)
+					set.scaleGrist(multiplier);
+			}
 			
 		if (set == null) {fontRendererObj.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 9,45, 16711680); return;}
 			Hashtable<Integer, Integer> reqs = set.getHashtable();
