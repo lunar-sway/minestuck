@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 
@@ -164,7 +165,7 @@ public abstract class GuiPlayerStats extends GuiScreen
 		if(mode)
 		{
 			for(NormalGuiType type : NormalGuiType.values())
-				if(type != normalTab && (!type.reqMedium || SkaiaClient.enteredMedium(UsernameHandler.encode(mc.thePlayer.getCommandSenderName())) || mc.playerController.isInCreativeMode()))
+				if(type != normalTab && (!type.reqMedium || SkaiaClient.enteredMedium(UsernameHandler.encode(mc.thePlayer.getName())) || mc.playerController.isInCreativeMode()))
 				{
 					int i = type.ordinal();
 					drawTexturedModalRect(xOffset + i*(tabWidth + 2), yOffset - tabHeight + tabOverlap, i==0? 0:tabWidth, 0, tabWidth, tabHeight);
@@ -193,7 +194,7 @@ public abstract class GuiPlayerStats extends GuiScreen
 				index == 0? 0:tabWidth, tabHeight, tabWidth, tabHeight);
 		
 		for(int i = 0; i < (mode? NormalGuiType.values():EditmodeGuiType.values()).length; i++)
-			if(!mode || !NormalGuiType.values()[i].reqMedium || SkaiaClient.enteredMedium(UsernameHandler.encode(mc.thePlayer.getCommandSenderName())) || mc.playerController.isInCreativeMode())
+			if(!mode || !NormalGuiType.values()[i].reqMedium || SkaiaClient.enteredMedium(UsernameHandler.encode(mc.thePlayer.getName())) || mc.playerController.isInCreativeMode())
 				drawTexturedModalRect(xOffset + (tabWidth - 16)/2 + (tabWidth+2)*i, yOffset - tabHeight + tabOverlap + 8, i*16, tabHeight*2 + (mode? 0:16), 16, 16);
 		
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
@@ -206,13 +207,13 @@ public abstract class GuiPlayerStats extends GuiScreen
 				if(xcor < xOffset + i*(tabWidth + 2))
 					break;
 				else if(xcor < xOffset + i*(tabWidth + 2) + tabWidth
-						&& (!mode || !NormalGuiType.values()[i].reqMedium || SkaiaClient.enteredMedium(UsernameHandler.encode(mc.thePlayer.getCommandSenderName())) || mc.playerController.isInCreativeMode()))
+						&& (!mode || !NormalGuiType.values()[i].reqMedium || SkaiaClient.enteredMedium(UsernameHandler.encode(mc.thePlayer.getName())) || mc.playerController.isInCreativeMode()))
 					drawHoveringText(Arrays.asList(StatCollector.translateToLocal(mode? NormalGuiType.values()[i].name:EditmodeGuiType.values()[i].name)),
 							xcor, ycor, fontRendererObj);
 	}
 	
 	@Override
-	protected void mouseClicked(int xcor, int ycor, int mouseButton)
+	protected void mouseClicked(int xcor, int ycor, int mouseButton) throws IOException
 	{
 		if(mouseButton == 0 && ycor < (height - guiHeight + tabHeight - tabOverlap)/2 && ycor > (height - guiHeight - tabHeight + tabOverlap)/2)
 		{
@@ -221,9 +222,9 @@ public abstract class GuiPlayerStats extends GuiScreen
 					break;
 				else if(xcor < xOffset + i*(tabWidth + 2) + tabWidth)
 				{
-					if(mode && NormalGuiType.values()[i].reqMedium && !SkaiaClient.enteredMedium(UsernameHandler.encode(mc.thePlayer.getCommandSenderName())) && mc.playerController.isNotCreative())
+					if(mode && NormalGuiType.values()[i].reqMedium && !SkaiaClient.enteredMedium(UsernameHandler.encode(mc.thePlayer.getName())) && mc.playerController.isNotCreative())
 						return;
-					mc.getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation("gui.button.press"), 1.0F));
+					mc.getSoundHandler().playSound(PositionedSoundRecord.createPositionedSoundRecord(new ResourceLocation("gui.button.press"), 1.0F));
 					if(i != (mode? normalTab:editmodeTab).ordinal())
 					{
 						if(mode)

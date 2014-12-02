@@ -60,23 +60,24 @@ public class ClientProxy extends CommonProxy
 	@SideOnly(Side.CLIENT)
 	public static void registerRenderers() 
 	{
-		RenderingRegistry.registerEntityRenderingHandler(EntityNakagator.class, new RenderEntityMinestuck(new ModelNakagator(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(EntitySalamander.class, new RenderEntityMinestuck(new ModelSalamander(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityIguana.class, new RenderEntityMinestuck(new ModelIguana(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityImp.class, new RenderEntityMinestuck(new ModelImp(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityOgre.class, new RenderEntityMinestuck(new ModelOgre(), 2.8F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityBasilisk.class, new RenderEntityMinestuck(new ModelBasilisk(), 2.8F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityUnderlingPart.class, new RenderShadow(2.8F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityGiclops.class, new RenderEntityMinestuck(new ModelGiclops(), 7.6F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityPawn.class, new RenderPawn(new ModelBiped(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityBishop.class, new RenderEntityMinestuck(new ModelBishop(), 1.8F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityRook.class, new RenderEntityMinestuck(new ModelRook(), 2.5F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityGrist.class, new RenderGrist());
-		RenderingRegistry.registerEntityRenderingHandler(EntityDecoy.class, new RenderDecoy());
+		Minecraft mc = Minecraft.getMinecraft();
+		RenderingRegistry.registerEntityRenderingHandler(EntityNakagator.class, new RenderEntityMinestuck(mc.getRenderManager(), new ModelNakagator(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(EntitySalamander.class, new RenderEntityMinestuck(mc.getRenderManager(), new ModelSalamander(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityIguana.class, new RenderEntityMinestuck(mc.getRenderManager(), new ModelIguana(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityImp.class, new RenderEntityMinestuck(mc.getRenderManager(), new ModelImp(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityOgre.class, new RenderEntityMinestuck(mc.getRenderManager(), new ModelOgre(), 2.8F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityBasilisk.class, new RenderEntityMinestuck(mc.getRenderManager(), new ModelBasilisk(), 2.8F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityUnderlingPart.class, new RenderShadow(mc.getRenderManager(), 2.8F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityGiclops.class, new RenderEntityMinestuck(mc.getRenderManager(), new ModelGiclops(), 7.6F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityPawn.class, new RenderPawn(mc.getRenderManager(), new ModelBiped(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityBishop.class, new RenderEntityMinestuck(mc.getRenderManager(), new ModelBishop(), 1.8F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityRook.class, new RenderEntityMinestuck(mc.getRenderManager(), new ModelRook(), 2.5F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityGrist.class, new RenderGrist(mc.getRenderManager()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityDecoy.class, new RenderDecoy(mc.getRenderManager()));
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGatePortal.class, new RenderGatePortal());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachine.class, new RenderMachine());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTransportalizer.class, new RenderTransportalizer());
-		MinecraftForgeClient.registerItemRenderer(Minestuck.captchaCard, new RenderCard());
+//		MinecraftForgeClient.registerItemRenderer(Minestuck.captchaCard, new RenderCard());
 	}
 	
 	@SideOnly(Side.CLIENT)

@@ -5,14 +5,13 @@ import io.netty.buffer.ByteBuf;
 import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.relauncher.Side;
 
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.EnumClass;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.util.TitleHelper;
-
-import cpw.mods.fml.relauncher.Side;
 
 public class TitlePacket extends MinestuckPacket 
 {

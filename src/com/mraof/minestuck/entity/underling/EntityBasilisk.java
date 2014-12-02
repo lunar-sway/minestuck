@@ -1,5 +1,6 @@
 package com.mraof.minestuck.entity.underling;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;

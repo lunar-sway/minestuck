@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
@@ -133,7 +134,7 @@ public class ComponentCastleWallPiece extends ComponentCastlePiece
 			if(!(this.direction == 5 && this.cornerPiece))
 			{
 				this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 0, 0, 7 ,6, 7, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
-				this.fillWithBlocks(par1World, structureBoundingBox, 0, 7, 0, 7, 6, 7, Blocks.air, Blocks.air, false);
+//				this.fillWithBlocks(par1World, structureBoundingBox, 0, 7, 0, 7, 6, 7, Blocks.air, Blocks.air, false);
 			}
 			if(!this.cornerPiece)
 				switch(this.direction)
@@ -183,6 +184,16 @@ public class ComponentCastleWallPiece extends ComponentCastlePiece
 				}
 				return true;
 		}
+	}
+	@Override
+	protected void writeStructureToNBT(NBTTagCompound p_143012_1_) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	protected void readStructureFromNBT(NBTTagCompound p_143011_1_) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

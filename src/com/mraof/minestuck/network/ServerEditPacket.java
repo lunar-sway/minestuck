@@ -5,10 +5,9 @@ import io.netty.buffer.ByteBuf;
 import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.relauncher.Side;
 
 import com.mraof.minestuck.editmode.ClientEditHandler;
-
-import cpw.mods.fml.relauncher.Side;
 
 public class ServerEditPacket extends MinestuckPacket {
 	

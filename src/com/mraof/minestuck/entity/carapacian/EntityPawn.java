@@ -54,22 +54,22 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 		return .3F;
 	}
 
-	@Override
-	public IEntityLivingData onSpawnWithEgg(IEntityLivingData par1EntityLivingData)
-	{
-		par1EntityLivingData = super.onSpawnWithEgg(par1EntityLivingData);
-		this.addRandomArmor();
-
-		if(this.pawnType == 1)
-		{
-			this.targetTasks.addTask(4, entityAIArrowAttack);
-		}
-		else
-			this.tasks.addTask(4, this.entityAIAttackOnCollide);
-		this.setCurrentItemOrArmor(0, new ItemStack(this.pawnType == 1 ? Items.bow : rand.nextDouble() < .2 ? Minestuck.regisword : rand.nextDouble() < .02 ? Minestuck.sord : Items.stone_sword));
-		this.enchantEquipment();
-		return par1EntityLivingData;
-	}
+//	@Override
+//	public IEntityLivingData onSpawnWithEgg(IEntityLivingData par1EntityLivingData)
+//	{
+//		par1EntityLivingData = super.onSpawnWithEgg(par1EntityLivingData);
+//		this.addRandomArmor();
+//
+//		if(this.pawnType == 1)
+//		{
+//			this.targetTasks.addTask(4, entityAIArrowAttack);
+//		}
+//		else
+//			this.tasks.addTask(4, this.entityAIAttackOnCollide);
+//		this.setCurrentItemOrArmor(0, new ItemStack(this.pawnType == 1 ? Items.bow : rand.nextDouble() < .2 ? Minestuck.regisword : rand.nextDouble() < .02 ? Minestuck.sord : Items.stone_sword));
+//		this.enchantEquipment();
+//		return par1EntityLivingData;
+//	}
 
 	@Override
 	public void attackEntityWithRangedAttack(EntityLivingBase entityLiving, float f1) 
@@ -114,7 +114,7 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 			damage += 
 				(float)this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue();
 
-		damage += EnchantmentHelper.getEnchantmentModifierLiving(this, (EntityLivingBase)par1Entity);
+//		damage += EnchantmentHelper.getEnchantmentModifierLiving(this, (EntityLivingBase)par1Entity);
 
 		return damage;
 	}
@@ -124,29 +124,29 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 	{
 		float damage = this.getAttackStrength(par1Entity);
 		int fireAspectLevel = EnchantmentHelper.getFireAspectModifier(this);
-		int knockback = EnchantmentHelper.getKnockbackModifier(this, (EntityLivingBase)par1Entity);
+//		int knockback = EnchantmentHelper.getKnockbackModifier(this, (EntityLivingBase)par1Entity);
 
 		if (fireAspectLevel > 0 && !par1Entity.isBurning())
 			par1Entity.setFire(1);
 
-		if (knockback > 0)
-			par1Entity.addVelocity((double)(-MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F) * (float)knockback * 0.5F), 0.1D, (double)(MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F) * (float)knockback * 0.5F));
+//		if (knockback > 0)
+//			par1Entity.addVelocity((double)(-MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F) * (float)knockback * 0.5F), 0.1D, (double)(MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F) * (float)knockback * 0.5F));
 
 		return par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this), damage);
 	}
-	/**
-	 * Basic mob attack. Default to touch of death in EntityCreature. Overridden by each mob to define their attack.
-	 */
-
-	@Override
-	protected void attackEntity(Entity par1Entity, float par2)
-	{
-		if (this.attackTime <= 0 && par2 < 2.0F && par1Entity.boundingBox.maxY > this.boundingBox.minY && par1Entity.boundingBox.minY < this.boundingBox.maxY)
-		{
-			this.attackTime = 20;
-			this.attackEntityAsMob(par1Entity);
-		}
-	}
+	
+//	/**
+//	 * Basic mob attack. Default to touch of death in EntityCreature. Overridden by each mob to define their attack.
+//	 */
+//	@Override
+//	protected void attackEntity(Entity par1Entity, float par2)
+//	{
+//		if (this.attackTime <= 0 && par2 < 2.0F && par1Entity.boundingBox.maxY > this.boundingBox.minY && par1Entity.boundingBox.minY < this.boundingBox.maxY)
+//		{
+//			this.attackTime = 20;
+//			this.attackEntityAsMob(par1Entity);
+//		}
+//	}
 
 	@Override
 	public void setCombatTask()

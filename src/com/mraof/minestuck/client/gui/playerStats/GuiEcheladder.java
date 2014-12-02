@@ -38,7 +38,7 @@ public class GuiEcheladder extends GuiPlayerStats
 			drawTexturedModalRect(xOffset+90,yOffset+38-index+(i*14),0,212,146,14);
 		for(int i = 0; i < rows; i++) {
 			String s = "MethodOfScrollIndexAndI";
-			mc.fontRenderer.drawString(s, xOffset+ladderXOffset - mc.fontRenderer.getStringWidth(s) / 2, yOffset+40-index+(i*14), 0xFFFFFF);
+			mc.fontRendererObj.drawString(s, xOffset+ladderXOffset - mc.fontRendererObj.getStringWidth(s) / 2, yOffset+40-index+(i*14), 0xFFFFFF);
 		}
 		GL11.glColor3f(1,1,1);
 		

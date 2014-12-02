@@ -8,7 +8,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
 import net.minecraft.util.IChatComponent;
@@ -50,7 +49,12 @@ public class EntityDecoy extends EntityLiving {
 	
 	public EntityDecoy(World world, EntityPlayerMP player) {
 		super(world);
-		this.boundingBox.setBB(player.boundingBox);
+//		this.getBoundingBox().maxX = player.getBoundingBox().maxX;
+//		this.getBoundingBox().maxY = player.getBoundingBox().maxY;
+//		this.getBoundingBox().maxZ = player.getBoundingBox().maxZ;
+//		this.getBoundingBox().minX = player.getBoundingBox().minX;
+//		this.getBoundingBox().minY = player.getBoundingBox().minY;
+//		this.getBoundingBox().minZ = player.getBoundingBox().minZ;
 		height = player.height;
 		this.player = new DecoyPlayer(world, this);
 		this.posX = player.posX;
@@ -71,7 +75,7 @@ public class EntityDecoy extends EntityLiving {
 		this.getHeldItem();
 		this.gameType = player.theItemInWorldManager.getGameType();
 		this.setHealth(player.getHealth());
-		username = player.getCommandSenderName();
+		username = player.getName();
 		isFlying = player.capabilities.isFlying;
 		player.capabilities.writeCapabilitiesToNBT(this.capabilities);
 		NBTTagCompound nbt = new NBTTagCompound();
@@ -108,8 +112,8 @@ public class EntityDecoy extends EntityLiving {
 	}
 	
 	public ResourceLocation getLocationSkin() {
-		if(locationSkin == null)
-			return AbstractClientPlayer.locationStevePng;
+//		if(locationSkin == null)
+//			return AbstractClientPlayer.locationStevePng;
 		return locationSkin;
 	}
 	
@@ -168,7 +172,7 @@ public class EntityDecoy extends EntityLiving {
 	}
 	
 	@Override
-	public String getCommandSenderName() 
+	public String getName() 
 	{
 		return username != null ? username : "DECOY";
 	}
@@ -199,10 +203,10 @@ public class EntityDecoy extends EntityLiving {
 		super.setHealth(par1);
 	}
 	
-	@Override
-	public ItemStack[] getLastActiveItems() {
-		return inventory.armorInventory;
-	}
+//	@Override
+//	public ItemStack[] getLastActiveItems() {
+//		return inventory.armorInventory;
+//	}
 	
 	@Override
 	protected boolean canDespawn() {
@@ -220,17 +224,23 @@ public class EntityDecoy extends EntityLiving {
 		}
 		
 		@Override
-		public boolean canCommandSenderUseCommand(int i, String s) {return false;}
+		public boolean canCommandSenderUseCommand(int i, String s)
+		{return false;}
 		
 		@Override
-		public void addChatMessage(IChatComponent var1) {}
+		public void addChatMessage(IChatComponent var1)
+		{}
 		
 		@Override
-		public ChunkCoordinates getPlayerCoordinates() {return null;}
-		
-		@Override
-		public void heal(float par1) {
+		public void heal(float par1)
+		{
 			decoy.heal(par1);
+		}
+		
+		@Override
+		public boolean func_175149_v()
+		{
+			return false;
 		}
 		
 	}

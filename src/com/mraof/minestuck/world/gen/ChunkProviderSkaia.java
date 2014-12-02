@@ -8,17 +8,20 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.IProgressUpdate;
-import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraftforge.event.terraingen.TerrainGen;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.BlockChessTile;
 import com.mraof.minestuck.entity.carapacian.EntityBlackBishop;
 import com.mraof.minestuck.entity.carapacian.EntityBlackPawn;
 import com.mraof.minestuck.entity.carapacian.EntityBlackRook;
@@ -86,8 +89,7 @@ public class ChunkProviderSkaia implements IChunkProvider
 	@Override
 	public Chunk provideChunk(int chunkX, int chunkZ) 
 	{
-		Block[] chunkBlocks = new Block[65536];
-		byte[] chunkMetadata = new byte[65536];
+		ChunkPrimer primer = new ChunkPrimer();
 		double[] generated0 = new double[256];
 		double[] generated1 = new double[256];
 		double[] generated2 = new double[256];
@@ -102,26 +104,19 @@ public class ChunkProviderSkaia implements IChunkProvider
 			topBlock[i] = (y&511)<=255  ? y&255 : 255 - y&255;
 		}
 		byte chessTileMetadata = (byte) ((Math.abs(chunkX) + Math.abs(chunkZ)) % 2);
-		Block chessTile = Minestuck.chessTile;
+		IBlockState block = Minestuck.chessTile.getDefaultState().withProperty(BlockChessTile.BLOCK_TYPE, chessTileMetadata);
 		for(int x = 0; x < 16; x++)
 			for(int z = 0; z < 16; z++)
 				for(int y = 0; y <= topBlock[x * 16 + z]; y++)
 				{
-					chunkBlocks[x * 4096 | z * 256 | y] = chessTile;
-					chunkMetadata[x * 4096 | z * 256 | y] = chessTileMetadata;
+					primer.setBlockState(x, y, z, block);
 				}
 		//y * 256, z * 16, x
-		Chunk chunk = new Chunk(this.skaiaWorld, chunkBlocks, chunkMetadata, chunkX, chunkZ);
+		Chunk chunk = new Chunk(this.skaiaWorld, primer, chunkX, chunkZ);
 		//this.castleGenerator.func_151539_a(this, skaiaWorld, chunkX, chunkZ, new Block[65536]);
 		return chunk;
 	}
-
-	@Override
-	public Chunk loadChunk(int var1, int var2) 
-	{
-		return this.provideChunk(var1, var2);
-	}
-
+	
 	@Override
 	public void populate(IChunkProvider var1, int var2, int var3) 
 	{
@@ -145,28 +140,28 @@ public class ChunkProviderSkaia implements IChunkProvider
 		return "SkaiaRandomLevelSource";
 	}
 
-	@SuppressWarnings("rawtypes")
-	@Override
-	public List getPossibleCreatures(EnumCreatureType par1EnumCreatureType, int var2, int var3, int var4) 
-	{
-		return (par1EnumCreatureType == EnumCreatureType.monster || par1EnumCreatureType == EnumCreatureType.creature) ? (var2 < 0 ? this.spawnableBlackList : this.spawnableWhiteList) : null;
-	}
+//	@SuppressWarnings("rawtypes")
+//	@Override
+//	public List getPossibleCreatures(EnumCreatureType par1EnumCreatureType, int var2, int var3, int var4) 
+//	{
+//		return (par1EnumCreatureType == EnumCreatureType.monster || par1EnumCreatureType == EnumCreatureType.creature) ? (var2 < 0 ? this.spawnableBlackList : this.spawnableWhiteList) : null;
+//	}
 
-	@Override
-	public ChunkPosition func_147416_a(World var1, String var2, int var3, int var4, int var5) 
-	{
-		return null;
-	}
+//	@Override
+//	public BlockPos func_147416_a(World var1, String var2, int var3, int var4, int var5) 
+//	{
+//		return null;
+//	}
 
 	@Override
 	public int getLoadedChunkCount() {
 		return 0;
 	}
 
-	@Override
-	public void recreateStructures(int var1, int var2) {
-
-	}
+//	@Override
+//	public void recreateStructures(int var1, int var2) {
+//
+//	}
 	@Override
 	public boolean unloadQueuedChunks() {
 		return false;
@@ -174,5 +169,33 @@ public class ChunkProviderSkaia implements IChunkProvider
 	@Override
 	public void saveExtraData() 
 	{
+	}
+	@Override
+	public Chunk func_177459_a(BlockPos p_177459_1_) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public boolean func_177460_a(IChunkProvider p_177460_1_, Chunk p_177460_2_,
+			int p_177460_3_, int p_177460_4_) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public List func_177458_a(EnumCreatureType p_177458_1_, BlockPos p_177458_2_) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public BlockPos func_180513_a(World worldIn, String p_180513_2_,
+			BlockPos p_180513_3_) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public void func_180514_a(Chunk p_180514_1_, int p_180514_2_,
+			int p_180514_3_) {
+		// TODO Auto-generated method stub
+		
 	}
 }

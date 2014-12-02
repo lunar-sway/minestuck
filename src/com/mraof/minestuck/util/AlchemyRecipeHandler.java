@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockSapling;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -19,6 +20,7 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -289,7 +291,7 @@ public class AlchemyRecipeHandler {
 		//Set up Punch Designix recipes
 		
 		//metadata-based
-		for (int meta = 0; meta < BlockSapling.TYPE_PROP.getAllowedValues().size(); meta++) {
+		for (int meta = 0; meta < BlockPlanks.EnumType.values().length; meta++) {
 			ItemStack log = new ItemStack(meta < 4?Blocks.log:Blocks.log2, 1, meta < 4?meta:meta-4);	//I think that's how it works.
 			CombinationRegistry.addCombination(Item.getItemFromBlock(Blocks.sapling), meta, "logWood", OreDictionary.WILDCARD_VALUE, CombinationRegistry.MODE_AND, log);
 			CombinationRegistry.addCombination(log.getItem(), log.getItemDamage(), "treeSapling", OreDictionary.WILDCARD_VALUE, CombinationRegistry.MODE_OR, new ItemStack(Blocks.sapling, 1, meta));
@@ -548,7 +550,7 @@ public class AlchemyRecipeHandler {
 		NBTTagCompound nbt = null;
 		if(item != null) {
 			nbt = new NBTTagCompound();
-			nbt.setString("contentID", (String)Item.itemRegistry.getNameForObject(item.getItem()));
+			nbt.setString("contentID", Item.itemRegistry.getNameForObject(item.getItem()).toString());
 			nbt.setInteger("contentMeta", item.getItemDamage());
 		}
 		ItemStack stack = new ItemStack(registerToCard?Minestuck.captchaCard:Minestuck.cruxiteDowel);

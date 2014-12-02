@@ -4,6 +4,9 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 //import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EnumCreatureType;
@@ -19,6 +22,7 @@ import com.mraof.minestuck.Minestuck;
 public class BlockChessTile extends Block 
 {
 	public static final String[] iconNames = {"BlackChessTile", "WhiteChessTile", "DarkGreyChessTile", "LightGreyChessTile"};
+	public static final PropertyInteger BLOCK_TYPE = PropertyInteger.create("blockType", 0, 3);
 //	private IIcon[] textures;
 	public BlockChessTile()
 	{
@@ -26,7 +30,26 @@ public class BlockChessTile extends Block
 		setHardness(0.5F);
 		
 		setUnlocalizedName("chessTile");
+		setDefaultState(getDefaultState().withProperty(BLOCK_TYPE, 0));
 		this.setCreativeTab(Minestuck.tabMinestuck);
+	}
+	
+	@Override
+	protected BlockState createBlockState()
+	{
+		return new BlockState(this, BLOCK_TYPE);
+	}
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta)
+	{
+		return getDefaultState().withProperty(BLOCK_TYPE, meta % BLOCK_TYPE.getAllowedValues().size());
+	}
+	
+	@Override
+	public int getMetaFromState(IBlockState state)
+	{
+		return (Integer) state.getValue(BLOCK_TYPE);
 	}
 	
 //	@Override

@@ -3,6 +3,7 @@ package com.mraof.minestuck.network;
 import io.netty.buffer.ByteBuf;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.EnumSet;
 
@@ -14,7 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class CaptchaDeckPacket extends MinestuckPacket
 {
@@ -47,7 +48,9 @@ public class CaptchaDeckPacket extends MinestuckPacket
 			{
 				try
 				{
-					this.data.writeBytes(CompressedStreamTools.compress((NBTTagCompound)data[1]));
+					ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+					CompressedStreamTools.writeCompressed((NBTTagCompound)data[1], bytes);
+					this.data.writeBytes(bytes.toByteArray());
 				}
 				catch (IOException e)
 				{
@@ -99,7 +102,7 @@ public class CaptchaDeckPacket extends MinestuckPacket
 	{
 		if(!player.worldObj.isRemote)
 		{
-			if(ServerEditHandler.getData(player.getCommandSenderName()) != null)
+			if(ServerEditHandler.getData(player.getName()) != null)
 				return;
 			
 			if(this.type == MODUS && player.openContainer instanceof ContainerCaptchaDeck)

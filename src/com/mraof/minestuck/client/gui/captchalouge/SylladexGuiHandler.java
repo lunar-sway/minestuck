@@ -2,6 +2,7 @@ package com.mraof.minestuck.client.gui.captchalouge;
 
 import static org.lwjgl.opengl.GL11.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.lwjgl.input.Mouse;
@@ -14,8 +15,6 @@ import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.util.Debug;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -25,6 +24,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public abstract class SylladexGuiHandler extends GuiScreen
@@ -38,7 +39,7 @@ public abstract class SylladexGuiHandler extends GuiScreen
 	protected static final int X_OFFSET = 16, Y_OFFSET = 17;
 	protected static final int CARD_WIDTH = 21, CARD_HEIGHT = 26;
 	
-	protected RenderItem itemRender = new RenderItem();
+	protected RenderItem itemRender;
 	protected ArrayList<GuiItem> items = new ArrayList<GuiItem>();
 	protected int textureIndex;
 	protected int maxWidth, maxHeight;
@@ -57,6 +58,11 @@ public abstract class SylladexGuiHandler extends GuiScreen
 	protected boolean mousePressed;
 	
 	protected Minecraft mc = Minecraft.getMinecraft();
+	
+	public SylladexGuiHandler()
+	{
+		itemRender = mc.getRenderItem();
+	}
 	
 	@Override
 	public void drawScreen(int xcor, int ycor, float f)
@@ -139,10 +145,10 @@ public abstract class SylladexGuiHandler extends GuiScreen
 		mc.getTextureManager().bindTexture(sylladexFrame);
 		drawTexturedModalRect(xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
-		mc.fontRenderer.drawString(StatCollector.translateToLocal("gui.sylladex"), xOffset + 15, yOffset + 5, 0x404040);
+		mc.fontRendererObj.drawString(StatCollector.translateToLocal("gui.sylladex"), xOffset + 15, yOffset + 5, 0x404040);
 		
 		String str = CaptchaDeckHandler.clientSideModus.getName();
-		mc.fontRenderer.drawString(str, xOffset + GUI_WIDTH - mc.fontRenderer.getStringWidth(str) - 16, yOffset + 5, 0x404040);
+		mc.fontRendererObj.drawString(str, xOffset + GUI_WIDTH - mc.fontRendererObj.getStringWidth(str) - 16, yOffset + 5, 0x404040);
 		
 		if(isMouseInContainer(xcor, ycor))
 		{
@@ -159,7 +165,7 @@ public abstract class SylladexGuiHandler extends GuiScreen
 	}
 	
 	@Override
-	protected void mouseClicked(int xcor, int ycor, int mouseButton)
+	protected void mouseClicked(int xcor, int ycor, int mouseButton) throws IOException
 	{
 		if(isMouseInContainer(xcor, ycor))
 		{
@@ -282,19 +288,19 @@ public abstract class SylladexGuiHandler extends GuiScreen
 				int y = this.yPos +7 - gui.mapY;
 				if(x >= gui.mapWidth || y >= gui.mapHeight || x + 16 < 0 || y + 16 < 0)
 					return;
-				gui.itemRender.renderItemAndEffectIntoGUI(gui.mc.fontRenderer, gui.mc.getTextureManager(), item, x, y);
+//				gui.itemRender.renderItemAndEffectIntoGUI(gui.mc.fontRendererObj, gui.mc.getTextureManager(), item, x, y);
 				if(item.stackSize > 1)
 				{
 					String stackSize = String.valueOf(item.stackSize);
 					glDisable(GL_LIGHTING);
 					glDisable(GL_DEPTH_TEST);
 					glDisable(GL_BLEND);
-					gui.mc.fontRenderer.drawStringWithShadow(stackSize, x + 16 - gui.mc.fontRenderer.getStringWidth(stackSize), y + 8, 0xC6C6C6);
+					gui.mc.fontRendererObj.func_175063_a(stackSize, x + 16 - gui.mc.fontRendererObj.getStringWidth(stackSize), y + 8, 0xC6C6C6);
 					glEnable(GL_LIGHTING);
 					glEnable(GL_DEPTH_TEST);
 					glEnable(GL_BLEND);
 				}
-				gui.itemRender.renderItemOverlayIntoGUI(gui.mc.fontRenderer, gui.mc.getTextureManager(), item, x, y, "");
+//				gui.itemRender.renderItemOverlayIntoGUI(gui.mc.fontRendererObj, gui.mc.getTextureManager(), item, x, y, "");
 			}
 		}
 		

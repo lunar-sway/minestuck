@@ -15,12 +15,14 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
 import com.mraof.minestuck.entity.EntityListFilter;
 import com.mraof.minestuck.entity.EntityMinestuck;
@@ -30,8 +32,6 @@ import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
-
-import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public abstract class EntityUnderling extends EntityMinestuck implements IEntityAdditionalSpawnData, IMob
 {
@@ -103,15 +103,15 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	}
 	
 	@Override
-	public String getCommandSenderName() 
+	public String getName() 
 	{
 		return StatCollector.translateToLocalFormatted("entity." + underlingName + ".type", type.getDisplayName());
 	}
-	@Override
-	protected boolean isAIEnabled()
-	{
-		return true;
-	}
+//	@Override
+//	protected boolean isAIEnabled()
+//	{
+//		return true;
+//	}
 	
 	@Override
 	public void setAttackTarget(EntityLivingBase par1EntityLivingBase) 
@@ -153,29 +153,29 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 		super.readEntityFromNBT(par1nbtTagCompound);
 		this.type = GristType.getTypeFromString(par1nbtTagCompound.getString("Type"));
 	}
-	@Override
-	public void writeSpawnData(ByteBuf data) 
-	{
-		data.writeInt(((Enum<GristType>) type).ordinal());
-	}
-	@Override
-	public void readSpawnData(ByteBuf data) 
-	{
-		this.type = type.getClass().getEnumConstants()[data.readInt()];
-		this.textureResource = new ResourceLocation("minestuck", this.getTexture());
-	}
+//	@Override
+//	public void writeSpawnData(ByteBuf data) 
+//	{
+//		data.writeInt(((Enum<GristType>) type).ordinal());
+//	}
+//	@Override
+//	public void readSpawnData(ByteBuf data) 
+//	{
+//		this.type = type.getClass().getEnumConstants()[data.readInt()];
+//		this.textureResource = new ResourceLocation("minestuck", this.getTexture());
+//	}
 
 	@Override
 	   public boolean getCanSpawnHere()
 	{
-		return this.worldObj.difficultySetting != EnumDifficulty.PEACEFUL && this.isValidLightLevel() && super.getCanSpawnHere();
+		return this.worldObj.getDifficulty() != EnumDifficulty.PEACEFUL && this.isValidLightLevel() && super.getCanSpawnHere();
 	}
 	
 	protected boolean isValidLightLevel()
 	{
 		
 		int i = MathHelper.floor_double(this.posX);
-		int j = MathHelper.floor_double(this.boundingBox.minY);
+		int j = MathHelper.floor_double(this.getBoundingBox().minY);
 		int k = MathHelper.floor_double(this.posZ);
 		
 	   //	if (this.worldObj.getBlockLightOpacity(i, j, k) == 0) { //Prevents spawning IN blocks
@@ -184,21 +184,21 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	   // Debug.print("Spawning an entity...");
 
 		//Debug.print("Sunlight level is "+this.worldObj.getSavedLightValue(EnumSkyBlock.Sky, i, j, k));
-		if (this.worldObj.getSavedLightValue(EnumSkyBlock.Sky, i, j, k) > this.rand.nextInt(32))
+//		if (this.worldObj.getSavedLightValue(EnumSkyBlock.SKY, i, j, k) > this.rand.nextInt(32))
+//		{	Don't know what to replace here
+//			//Debug.print("Too much sun! Failed.");
+//			return false;
+//		}
+//		else
 		{
-			//Debug.print("Too much sun! Failed.");
-			return false;
-		}
-		else
-		{
-			int l = this.worldObj.getBlockLightValue(i, j, k);
+			int l = this.worldObj.getBlockLightOpacity(new BlockPos(i, j, k));	//Might be wrong method
 
 			if (this.worldObj.isThundering())
 			{
-				int i1 = this.worldObj.skylightSubtracted;
-				this.worldObj.skylightSubtracted = 10;
-				l = this.worldObj.getBlockLightValue(i, j, k);
-				this.worldObj.skylightSubtracted = i1;
+				int i1 = this.worldObj.getSkylightSubtracted();
+				this.worldObj.setSkylightSubtracted(10);
+				l = this.worldObj.getBlockLightOpacity(new BlockPos(i, j, k));	//Might be wrong method
+				this.worldObj.setSkylightSubtracted(i1);
 			}
 
 			//Debug.print("Light level calculated as " + l);
@@ -206,4 +206,17 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 			return l <= this.rand.nextInt(8);
         }
     }
+	
+	@Override
+	public void writeSpawnData(ByteBuf buffer) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void readSpawnData(ByteBuf additionalData) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }

@@ -13,13 +13,13 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.UsernameHandler;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class CaptchaDeckHandler
 {
@@ -86,7 +86,7 @@ public class CaptchaDeckHandler
 		EntityItem entity = new EntityItem(player.worldObj, player.posX, player.posY+1, player.posZ, item);
 		entity.motionX = rand.nextDouble() - 0.5;
 		entity.motionZ = rand.nextDouble() - 0.5;
-		entity.delayBeforeCanPickup = 10;
+		entity.setDefaultPickupDelay();
 		player.worldObj.spawnEntityInWorld(entity);
 	}
 	
@@ -245,12 +245,12 @@ public class CaptchaDeckHandler
 	
 	public static Modus getModus(EntityPlayer player)
 	{
-		return MinestuckPlayerData.getData(UsernameHandler.encode(player.getCommandSenderName())).modus;
+		return MinestuckPlayerData.getData(UsernameHandler.encode(player.getName())).modus;
 	}
 	
 	public static void setModus(EntityPlayer player, Modus modus)
 	{
-		MinestuckPlayerData.getData(UsernameHandler.encode(player.getCommandSenderName())).modus = modus;
+		MinestuckPlayerData.getData(UsernameHandler.encode(player.getName())).modus = modus;
 	}
 	
 }

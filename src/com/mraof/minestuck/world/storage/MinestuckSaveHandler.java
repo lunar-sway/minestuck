@@ -10,12 +10,11 @@ import java.util.List;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class MinestuckSaveHandler 
 {
@@ -23,7 +22,7 @@ public class MinestuckSaveHandler
 	@SubscribeEvent
 	public void onWorldSave(WorldEvent.Save event)
 	{
-		if(event.world.provider.dimensionId != 0)	//Only save one time each world-save instead of one per dimension each world-save.
+		if(event.world.provider.getDimensionId() != 0)	//Only save one time each world-save instead of one per dimension each world-save.
 			return;
 
 		File dataFile = event.world.getSaveHandler().getMapFileFromName("MinestuckData");

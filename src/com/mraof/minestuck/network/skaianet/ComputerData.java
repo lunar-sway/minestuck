@@ -14,7 +14,7 @@ public class ComputerData{
 		String owner;
 		
 		public static ComputerData createData(TileEntityComputer te){
-			return new ComputerData(te.owner, te.xCoord, te.yCoord, te.zCoord, te.getWorldObj().provider.dimensionId );
+			return new ComputerData(te.owner, te.getPos().getX(), te.getPos().getY(), te.getPos().getZ(), te.getWorld().provider.getDimensionId() );
 		}
 		
 		public ComputerData(String owner,int x,int y,int z,int dimension){

@@ -73,15 +73,15 @@ public class DeployList {
 			return null;
 		stack = stack.copy();
 		stack.stackSize = 1;
-		if(stack.stackTagCompound == null)
-			stack.stackTagCompound = new NBTTagCompound();
+		if(!stack.hasTagCompound())
+			stack.setTagCompound(new NBTTagCompound());
 //		if(stack.stackTagCompound.getName() == "")
 //			stack.stackTagCompound.setName("tag");
 		else
 		{
-			stack.stackTagCompound.removeTag("display");
+			stack.getTagCompound().removeTag("display");
 			if(stack.getItem().equals(Minestuck.captchaCard))
-				stack.stackTagCompound.setInteger("contentMeta", 0);
+				stack.getTagCompound().setInteger("contentMeta", 0);
 		}
 		return stack;
 	}

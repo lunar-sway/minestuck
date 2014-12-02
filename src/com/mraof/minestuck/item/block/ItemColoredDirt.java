@@ -17,7 +17,7 @@ public class ItemColoredDirt extends ItemBlock
 	@Override
 	public String getUnlocalizedName(ItemStack itemstack) 
 	{
-		return getUnlocalizedName() + "." + ((BlockColoredDirt)field_150939_a).iconNames[itemstack.getItemDamage()];
+		return getUnlocalizedName() + "." + ((BlockColoredDirt)block).iconNames[itemstack.getItemDamage()];
 	}
 	@Override
 	public int getMetadata (int damageValue) 

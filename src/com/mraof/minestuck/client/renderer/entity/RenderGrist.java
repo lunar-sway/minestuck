@@ -2,7 +2,9 @@ package com.mraof.minestuck.client.renderer.entity;
 
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
@@ -13,17 +15,19 @@ import com.mraof.minestuck.entity.item.EntityGrist;
 
 public class RenderGrist extends Render {
 	
-	public RenderGrist()
+	public RenderGrist(RenderManager manager)
 	{
+		super(manager);
 		this.shadowSize = 0.15F;
 		this.shadowOpaque = .75F;
 	}
+	
 	public void renderGrist(EntityGrist grist, double d0, double d1, double d2, float f, float f1)
 	{
         GL11.glPushMatrix();
         GL11.glTranslatef((float)d0, (float)d1, (float)d2);
         this.bindEntityTexture(grist);
-        Tessellator tessellator = Tessellator.instance;
+		WorldRenderer render = Tessellator.getInstance().getWorldRenderer();
         float f2 = 0.0F;
         float f3 = 1.0F;
         float f4 = 0.0F;
@@ -40,13 +44,13 @@ public class RenderGrist extends Render {
         GL11.glRotatef(-this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
         float f11 = grist.getSizeByValue();
         GL11.glScalef(f11, f11, f11);
-        tessellator.startDrawingQuads();
-        tessellator.setNormal(0.0F, 1.0F, 0.0F);
-        tessellator.addVertexWithUV((double)(0.0F - f7), (double)(0.0F - f8), 0.0D, (double)f2, (double)f5);
-        tessellator.addVertexWithUV((double)(f6 - f7), (double)(0.0F - f8), 0.0D, (double)f3, (double)f5);
-        tessellator.addVertexWithUV((double)(f6 - f7), (double)(1.0F - f8), 0.0D, (double)f3, (double)f4);
-        tessellator.addVertexWithUV((double)(0.0F - f7), (double)(1.0F - f8), 0.0D, (double)f2, (double)f4);
-        tessellator.draw();
+		render.startDrawingQuads();
+//		render.setNormal(0.0F, 1.0F, 0.0F);
+		render.addVertexWithUV((double)(0.0F - f7), (double)(0.0F - f8), 0.0D, (double)f2, (double)f5);
+		render.addVertexWithUV((double)(f6 - f7), (double)(0.0F - f8), 0.0D, (double)f3, (double)f5);
+		render.addVertexWithUV((double)(f6 - f7), (double)(1.0F - f8), 0.0D, (double)f3, (double)f4);
+		render.addVertexWithUV((double)(0.0F - f7), (double)(1.0F - f8), 0.0D, (double)f2, (double)f4);
+		render.draw();
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glDisable(GL12.GL_RESCALE_NORMAL);
         GL11.glPopMatrix();

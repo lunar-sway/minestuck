@@ -14,6 +14,8 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IChatComponent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.item.EntityGrist;
@@ -29,8 +31,6 @@ import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.UsernameHandler;
-
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class TileEntityMachine extends TileEntity implements IInventory {
 
@@ -110,11 +110,12 @@ public class TileEntityMachine extends TileEntity implements IInventory {
             return 64;
     }
 
-    @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
-            return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) == this &&
-            player.getDistanceSq(this.xCoord + 0.5, this.yCoord + 0.5, this.zCoord + 0.5) < 64;
-    }
+	@Override
+	public boolean isUseableByPlayer(EntityPlayer player)
+	{
+		return this.worldObj.getTileEntity(pos) == this &&
+				player.getDistanceSq(this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5) < 64;
+	}
 
 //    @Override
 //    public void openChest() {}
@@ -170,34 +171,23 @@ public class TileEntityMachine extends TileEntity implements IInventory {
     {
     	NBTTagCompound tagCompound = new NBTTagCompound();
     	this.writeToNBT(tagCompound);
-    	return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 2, tagCompound);
+    	return new S35PacketUpdateTileEntity(this.pos, 2, tagCompound);
     }
     @Override
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) 
     {
-    	this.readFromNBT(pkt.func_148857_g());
+    	this.readFromNBT(pkt.getNbtCompound());
     }
-
-    @Override
-    public String getInventoryName() {
-            return "Alchemy Machine";
-    }
-
-	@Override
-	public boolean hasCustomInventoryName() {
-		return false;
-	}
-
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return true;
 	}
 
 	public int getMetadata() {
-		return this.worldObj.getBlockMetadata(this.xCoord,this.yCoord,this.zCoord);
+		return 0;//this.worldObj.getBlockMetadata(this.xCoord,this.yCoord,this.zCoord);
 	}
 	
-	@Override
+//	@Override
 	public void updateEntity() {
 		
 		if (!contentsValid()) {
@@ -380,8 +370,8 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 				GristSet cost = GristRegistry.getGristConversion(newItem);
 				if(newItem.getItem() == Minestuck.captchaCard)
 					cost = new GristSet(selectedGrist, 1);
-				GristHelper.decrease(UsernameHandler.encode(owner.getCommandSenderName()), cost);
-				MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(owner.getCommandSenderName()));
+				GristHelper.decrease(UsernameHandler.encode(owner.getName()), cost);
+				MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(owner.getName()));
 			}
 			break;
 		case (4):
@@ -400,7 +390,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 						if(grist == 0)
 							break;
 						GristAmount gristAmount = new GristAmount(GristType.values()[entry.getKey()],grist<=3?grist:(worldObj.rand.nextInt(grist)+1));
-						EntityGrist entity = new EntityGrist(worldObj, this.xCoord + 0.5 /* this.width - this.width / 2*/, this.yCoord+1, this.zCoord + 0.5 /* this.width - this.width / 2*/, gristAmount);
+						EntityGrist entity = new EntityGrist(worldObj, this.pos.getX() + 0.5 /* this.width - this.width / 2*/, this.pos.getY() + 1, this.pos.getZ() + 0.5 /* this.width - this.width / 2*/, gristAmount);
 						entity.motionX /= 2;
 						entity.motionY /= 2;
 						entity.motionZ /= 2;
@@ -426,10 +416,59 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		}
 		super.markDirty();
 	}
-	
-	@Override
-	public void closeInventory() {}
 
 	@Override
-	public void openInventory() {}
+	public String getName()
+	{
+		return "Alchemy Machine";
+	}
+
+	@Override
+	public boolean hasCustomName()
+	{
+		return false;
+	}
+
+	@Override
+	public IChatComponent getDisplayName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void openInventory(EntityPlayer playerIn) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void closeInventory(EntityPlayer playerIn) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getField(int id) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getFieldCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void clearInventory() {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }

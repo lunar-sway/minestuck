@@ -5,12 +5,11 @@ import io.netty.buffer.ByteBuf;
 import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.relauncher.Side;
 
 import com.mraof.minestuck.network.skaianet.ComputerData;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
-
-import cpw.mods.fml.relauncher.Side;
 
 /**
  * This packet tells the server to clear the message for the
@@ -57,13 +56,15 @@ public class ClearMessagePacket extends MinestuckPacket {
 	}
 
 	@Override
-	public void execute(EntityPlayer player) {
+	public void execute(EntityPlayer player)
+	{
 		
 		TileEntityComputer te = SkaianetHandler.getComputer(computer);
 		
-		if(te != null){
+		if(te != null)
+		{
 			te.latestmessage.put(program, "");
-			te.getWorldObj().markBlockForUpdate(te.xCoord, te.yCoord, te.zCoord);
+			te.getWorld().markBlockForUpdate(te.getPos());
 		}
 	}
 	

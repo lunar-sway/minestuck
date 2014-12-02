@@ -78,16 +78,16 @@ public class ItemSpork extends ItemWeapon
 		else return isSpoon;
 	}
 
-	@Override
-	public boolean onBlockDestroyed(ItemStack itemStack, World world, Block par3, int par4, int par5, int par6, EntityLivingBase par7EntityLiving)
-	{
+//	@Override
+//	public boolean onBlockDestroyed(ItemStack itemStack, World world, Block par3, int par4, int par5, int par6, EntityLivingBase par7EntityLiving)
+//	{
 //		if ((double)par3.getBlockHardness(world, par4, par5, par6) != 0.0D)
 //		{
 //			itemStack.damageItem(2, par7EntityLiving);
 //		}
-
-		return true;
-	}
+//
+//		return true;
+//	}
 
 	@Override	
 	@SideOnly(Side.CLIENT)

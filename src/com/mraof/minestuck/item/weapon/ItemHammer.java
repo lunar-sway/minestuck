@@ -4,21 +4,19 @@ import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.google.common.collect.Sets;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 
 public class ItemHammer extends ItemWeapon
 {	
@@ -115,20 +113,21 @@ public class ItemHammer extends ItemWeapon
 		return true;
 	}
 
-	@Override
-	public boolean onBlockDestroyed(ItemStack itemStack, World world, Block par3, int par4, int par5, int par6, EntityLivingBase par7EntityLiving)
-	{
-		if ((double)par3.getBlockHardness(world, par4, par5, par6) != 0.0D)
-			itemStack.damageItem(2, par7EntityLiving);
-		
-		return true;
-	}
+//	@Override
+//	public boolean onBlockDestroyed(ItemStack itemStack, World world, Block par3, int par4, int par5, int par6, EntityLivingBase par7EntityLiving)
+//	{
+//		if ((double)par3.getBlockHardness(world, par4, par5, par6) != 0.0D)
+//			itemStack.damageItem(2, par7EntityLiving);
+//		
+//		return true;
+//	}
 	
-	@SideOnly(Side.CLIENT)
-	public boolean isFull3D()
-	{
-		return true;
-	}
+//	@Override
+//	@SideOnly(Side.CLIENT)
+//	public boolean isFull3D()
+//	{
+//		return true;
+//	}
 	
 	public int getMaxItemUseDuration(ItemStack itemStack)
 	{
@@ -137,7 +136,7 @@ public class ItemHammer extends ItemWeapon
 
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) 
 	{
-		if(world.getBlock(x, y, z) != Blocks.air)
+		if(world.getBlockState(new BlockPos(x, y, z)).getBlock() != Blocks.air)
 		{
 			if (hammerType.equals(EnumHammerType.POGO))
 			{
@@ -150,37 +149,37 @@ public class ItemHammer extends ItemWeapon
 		return false;
 	}
 	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister iconRegister) 
-	{
-		switch(hammerType)
-		{
-		case CLAW:
-			itemIcon = iconRegister.registerIcon("minestuck:ClawHammer");
-			break;
-		case SLEDGE:
-			itemIcon = iconRegister.registerIcon("minestuck:SledgeHammer");
-			break;
-		case POGO:
-			itemIcon = iconRegister.registerIcon("minestuck:PogoHammer");
-			break;
-		case TELESCOPIC:
-			itemIcon = iconRegister.registerIcon("minestuck:TelescopicSassacrusher");
-			break;
-		case FEARNOANVIL:
-			itemIcon = iconRegister.registerIcon("minestuck:FearNoAnvil");
-			break	;
-		case ZILLYHOO:
-			itemIcon = iconRegister.registerIcon("minestuck:ZillyhooHammer");
-			break;
-		case POPAMATIC:
-			itemIcon = iconRegister.registerIcon("minestuck:Vrillyhoo");
-			break;
-		case SCARLET:
-			itemIcon = iconRegister.registerIcon("minestuck:ScarletZillyhoo");
-			break;
-		}
-	}
+//	@Override
+//	@SideOnly(Side.CLIENT)
+//	public void registerIcons(IIconRegister iconRegister) 
+//	{
+//		switch(hammerType)
+//		{
+//		case CLAW:
+//			itemIcon = iconRegister.registerIcon("minestuck:ClawHammer");
+//			break;
+//		case SLEDGE:
+//			itemIcon = iconRegister.registerIcon("minestuck:SledgeHammer");
+//			break;
+//		case POGO:
+//			itemIcon = iconRegister.registerIcon("minestuck:PogoHammer");
+//			break;
+//		case TELESCOPIC:
+//			itemIcon = iconRegister.registerIcon("minestuck:TelescopicSassacrusher");
+//			break;
+//		case FEARNOANVIL:
+//			itemIcon = iconRegister.registerIcon("minestuck:FearNoAnvil");
+//			break	;
+//		case ZILLYHOO:
+//			itemIcon = iconRegister.registerIcon("minestuck:ZillyhooHammer");
+//			break;
+//		case POPAMATIC:
+//			itemIcon = iconRegister.registerIcon("minestuck:Vrillyhoo");
+//			break;
+//		case SCARLET:
+//			itemIcon = iconRegister.registerIcon("minestuck:ScarletZillyhoo");
+//			break;
+//		}
+//	}
 
 }

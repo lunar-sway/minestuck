@@ -37,9 +37,9 @@ public abstract class EntityMinestuck extends EntityCreature
 		return textureResource;
 	}
 	
-	@Override
-	public void updateFallState(double par1, boolean par3) {
-		super.updateFallState(par1, par3);
-	}
+//	@Override
+//	public void updateFallState(double par1, boolean par3) {
+//		super.updateFallState(par1, par3);
+//	}
 
 }

@@ -4,25 +4,27 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.BlockColoredDirt;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Vec3;
 
 public class LandAspectThought extends LandAspect 
 {
-	BlockWithMetadata[] surfaceBlocks = {new BlockWithMetadata(Minestuck.coloredDirt, (byte) 1)};
-	private BlockWithMetadata[] upperBlocks = {new BlockWithMetadata(Blocks.stone)};
-	static Vec3 skyColor = Vec3.createVectorHelper(0.66, 0.39, 0.2);
+	IBlockState[] surfaceBlocks = {Minestuck.coloredDirt.getDefaultState().withProperty(BlockColoredDirt.BLOCK_TYPE, 1)};
+	private IBlockState[] upperBlocks = {Blocks.stone.getDefaultState()};
+	static Vec3 skyColor = new Vec3(0.66, 0.39, 0.2);
 
 	@Override
-	public BlockWithMetadata[] getSurfaceBlocks() 
+	public IBlockState[] getSurfaceBlocks() 
 	{
 		return surfaceBlocks;
 	}
 
 	@Override
-	public BlockWithMetadata[] getUpperBlocks() 
+	public IBlockState[] getUpperBlocks() 
 	{
 		return upperBlocks ;
 	}

@@ -2,6 +2,9 @@ package com.mraof.minestuck.client.settings;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import com.mraof.minestuck.client.gui.playerStats.GuiGristCache;
 import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
@@ -9,10 +12,6 @@ import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
-
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
 
 public class MinestuckKeyHandler
 {

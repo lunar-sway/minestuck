@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
+import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
@@ -8,6 +9,7 @@ import java.util.Map.Entry;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
@@ -225,7 +227,7 @@ public void initGui() {
 	}
 	
 @Override
-protected void mouseClicked(int par1, int par2, int par3)
+protected void mouseClicked(int par1, int par2, int par3) throws IOException
 {
 	super.mouseClicked(par1,par2,par3);
 	if (par3 == 1)
@@ -237,7 +239,7 @@ protected void mouseClicked(int par1, int par2, int par3)
 			if (guibutton.mousePressed(this.mc, par1, par2) && guibutton == goButton)
 			{
 				
-				guibutton.func_146113_a(this.mc.getSoundHandler());
+				guibutton.playPressSound(this.mc.getSoundHandler());
 				this.actionPerformed(guibutton);
 			}
 		}
@@ -259,13 +261,13 @@ public void drawCustomBox(int par1, int par2, int par3, int par4, int par5, int 
 {
 	float f = 1/(float)width;
 	float f1 = 1/(float)height;
-	Tessellator tessellator = Tessellator.instance;
-	tessellator.startDrawingQuads();
-	tessellator.addVertexWithUV((double)(par1 + 0), (double)(par2 + par6), (double)this.zLevel, (double)((float)(par3 + 0) * f), (double)((float)(par4 + par6) * f1));
-	tessellator.addVertexWithUV((double)(par1 + par5), (double)(par2 + par6), (double)this.zLevel, (double)((float)(par3 + par5) * f), (double)((float)(par4 + par6) * f1));
-	tessellator.addVertexWithUV((double)(par1 + par5), (double)(par2 + 0), (double)this.zLevel, (double)((float)(par3 + par5) * f), (double)((float)(par4 + 0) * f1));
-	tessellator.addVertexWithUV((double)(par1 + 0), (double)(par2 + 0), (double)this.zLevel, (double)((float)(par3 + 0) * f), (double)((float)(par4 + 0) * f1));
-	tessellator.draw();
+	WorldRenderer render = Tessellator.getInstance().getWorldRenderer();
+	render.startDrawingQuads();
+	render.addVertexWithUV((double)(par1 + 0), (double)(par2 + par6), (double)this.zLevel, (double)((float)(par3 + 0) * f), (double)((float)(par4 + par6) * f1));
+	render.addVertexWithUV((double)(par1 + par5), (double)(par2 + par6), (double)this.zLevel, (double)((float)(par3 + par5) * f), (double)((float)(par4 + par6) * f1));
+	render.addVertexWithUV((double)(par1 + par5), (double)(par2 + 0), (double)this.zLevel, (double)((float)(par3 + par5) * f), (double)((float)(par4 + 0) * f1));
+	render.addVertexWithUV((double)(par1 + 0), (double)(par2 + 0), (double)this.zLevel, (double)((float)(par3 + 0) * f), (double)((float)(par4 + 0) * f1));
+	render.draw();
 }
 
 /**

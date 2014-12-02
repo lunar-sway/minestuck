@@ -1,5 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
+import java.io.IOException;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -31,7 +33,7 @@ public class GuiTransportalizer extends GuiScreen
 		super();
 
 		this.mc = mc;
-		this.fontRendererObj = mc.fontRenderer;
+		this.fontRendererObj = mc.fontRendererObj;
 		this.te = te;
 	}
 
@@ -40,7 +42,7 @@ public class GuiTransportalizer extends GuiScreen
 	public void initGui()
 	{
 		int yOffset = (this.height / 2) - (guiHeight / 2);
-		this.destinationTextField = new GuiTextField(this.fontRendererObj, this.width / 2 - 20, yOffset + 25, 40, 20);
+		this.destinationTextField = new GuiTextField(0, this.fontRendererObj, this.width / 2 - 20, yOffset + 25, 40, 20);
 		this.destinationTextField.setMaxStringLength(4);
 		this.destinationTextField.setFocused(true);
 		this.destinationTextField.setText(this.te.getDestId());
@@ -64,7 +66,7 @@ public class GuiTransportalizer extends GuiScreen
 	 * Fired when a key is typed. This is the equivalent of KeyListener.keyTyped(KeyEvent e).
 	 */
 	@Override
-	protected void keyTyped(char character, int key)
+	protected void keyTyped(char character, int key) throws IOException
 	{
 		super.keyTyped(character, key);
 		this.destinationTextField.textboxKeyTyped(character, key);
@@ -77,7 +79,7 @@ public class GuiTransportalizer extends GuiScreen
 	 * Called when the mouse is clicked.
 	 */
 	@Override
-	protected void mouseClicked(int x, int y, int button)
+	protected void mouseClicked(int x, int y, int button) throws IOException
 	{
 		super.mouseClicked(x, y, button);
 		this.destinationTextField.mouseClicked(x, y, button);
@@ -90,7 +92,7 @@ public class GuiTransportalizer extends GuiScreen
 		{
 			//Debug.print("Sending transportalizer packet with destination of " + this.destinationTextField.getText());
 			MinestuckPacket packet = new TransportalizerPacket();
-			packet.generatePacket(te.xCoord, te.yCoord, te.zCoord, this.destinationTextField.getText().toUpperCase());
+			packet.generatePacket(te.getPos().getX(), te.getPos().getY(), te.getPos().getZ(), this.destinationTextField.getText().toUpperCase());
 			MinestuckChannelHandler.sendToServer(packet);
 			this.mc.displayGuiScreen((GuiScreen)null);
 		}

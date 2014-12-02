@@ -7,12 +7,11 @@ import java.util.EnumSet;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.fml.relauncher.Side;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
-
-import cpw.mods.fml.relauncher.Side;
 
 public class LandRegisterPacket extends MinestuckPacket
 {

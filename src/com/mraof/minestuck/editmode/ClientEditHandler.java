@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.InventoryEffectRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -26,8 +26,14 @@ import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.eventhandler.Event.Result;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
 import com.mraof.minestuck.inventory.ContainerEditmode;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
@@ -42,12 +48,6 @@ import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
-
-import cpw.mods.fml.common.eventhandler.Event.Result;
-import cpw.mods.fml.common.eventhandler.EventPriority;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 
 public class ClientEditHandler {
 	
@@ -76,7 +76,7 @@ public class ClientEditHandler {
 	
 	public static void onClientPackage(String target, int posX, int posZ, boolean[] items) {
 		Minecraft mc = Minecraft.getMinecraft();
-		EntityClientPlayerMP player = mc.thePlayer;
+		EntityPlayerSP player = mc.thePlayer;
 		if(target != null) {	//Enable edit mode
 			activated = true;
 			givenItems = items;
@@ -114,12 +114,12 @@ public class ClientEditHandler {
 	{
 		if(stack == null)
 			return;
-		if(stack.stackTagCompound == null)
-			stack.stackTagCompound = new NBTTagCompound();
-		if(!stack.stackTagCompound.hasKey("display"))
-			stack.stackTagCompound.setTag("display", new NBTTagCompound());
+		if(!stack.hasTagCompound())
+			stack.setTagCompound(new NBTTagCompound());
+		if(!stack.getTagCompound().hasKey("display"))
+			stack.getTagCompound().setTag("display", new NBTTagCompound());
 		NBTTagList list = new NBTTagList();
-		stack.stackTagCompound.getCompoundTag("display").setTag("Lore", list);
+		stack.getTagCompound().getCompoundTag("display").setTag("Lore", list);
 		
 		
 		GristSet cost;
@@ -165,7 +165,7 @@ public class ClientEditHandler {
 	
 	@SubscribeEvent
 	public void onTossEvent(ItemTossEvent event) {
-		if(event.entity.worldObj.isRemote && event.player instanceof EntityClientPlayerMP && isActive()) {
+		if(event.entity.worldObj.isRemote && event.player == ClientProxy.getPlayer() && isActive()) {
 			InventoryPlayer inventory = event.player.inventory;
 			ItemStack stack = event.entityItem.getEntityItem();
 			int ordinal = DeployList.getOrdinal(stack);
@@ -196,7 +196,7 @@ public class ClientEditHandler {
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public void onInteractEvent(PlayerInteractEvent event) {
 		
-		if(event.entity.worldObj.isRemote && event.entityPlayer instanceof EntityClientPlayerMP && isActive()) {
+		if(event.entity.worldObj.isRemote && event.entityPlayer == ClientProxy.getPlayer() && isActive()) {
 			if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
 				event.useBlock = Result.DENY;
 				ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
@@ -228,8 +228,8 @@ public class ClientEditHandler {
 				if(event.useItem == Result.DEFAULT)
 					event.useItem = Result.ALLOW;
 			} else if(event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) {
-				Block block = event.entity.worldObj.getBlock(event.x, event.y, event.z);
-				if(block.getBlockHardness(event.entity.worldObj, event.x, event.y, event.z) < 0
+				Block block = event.entity.worldObj.getBlockState(event.pos).getBlock();
+				if(block.getBlockHardness(event.entity.worldObj, event.pos) < 0
 						|| MinestuckPlayerData.getClientGrist().getGrist(GristType.Build) <= 0)
 					event.setCanceled(true);
 			} else if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR)
@@ -249,7 +249,7 @@ public class ClientEditHandler {
 	
 	@SubscribeEvent
 	public void onAttackEvent(AttackEntityEvent event) {
-		if(event.entity.worldObj.isRemote && event.entityPlayer instanceof EntityClientPlayerMP && isActive())
+		if(event.entity.worldObj.isRemote && event.entityPlayer == ClientProxy.getPlayer() && isActive())
 			event.setCanceled(true);
 	}
 	

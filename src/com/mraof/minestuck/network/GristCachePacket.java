@@ -5,11 +5,10 @@ import io.netty.buffer.ByteBuf;
 import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.relauncher.Side;
 
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.GristType;
-
-import cpw.mods.fml.relauncher.Side;
 
 public class GristCachePacket extends MinestuckPacket 
 {

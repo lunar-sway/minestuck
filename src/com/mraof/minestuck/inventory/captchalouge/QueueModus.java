@@ -9,10 +9,10 @@ import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler.ModusType;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class QueueModus extends StackModus
 {

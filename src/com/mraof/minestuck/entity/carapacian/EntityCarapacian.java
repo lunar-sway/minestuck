@@ -116,11 +116,11 @@ public abstract class EntityCarapacian extends EntityMinestuck
 		return !this.allyClasses.contains(par1Class);
 	}
 
-	@Override
-	protected boolean isAIEnabled()
-	{
-		return true;
-	}
+//	@Override
+//	protected boolean isAIEnabled()
+//	{
+//		return true;
+//	}
 	EntityAINearestAttackableTargetWithHeight entityAINearestAttackableTargetWithHeight()
 	{
 		return new EntityAINearestAttackableTargetWithHeight(this, EntityLivingBase.class, 256.0F, 0, true, false, attackEntitySelector);

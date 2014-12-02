@@ -81,7 +81,7 @@ public class RenderMachine extends TileEntitySpecialRenderer {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double d0, double d1, double d2, float f) 
+	public void renderTileEntityAt(TileEntity tileentity, double d0, double d1, double d2, float f, int i) 
 	{
 		this.renderMachineTileEntity((TileEntityMachine) tileentity, d0, d1, d2, f);
 	}

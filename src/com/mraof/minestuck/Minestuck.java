@@ -189,9 +189,9 @@ public class Minestuck
 	
 	//Blocks
 	public static Block chessTile;
-	public static Block coloredDirt;
+	public static BlockColoredDirt coloredDirt;
 	public static Block gatePortal;
-	public static Block oreCruxite;
+	public static OreCruxite oreCruxite;
 	public static Block blockStorage;
 	public static Block blockMachine;
 	public static Block blockComputerOn;
@@ -321,9 +321,9 @@ public class Minestuck
 		//blocks
 		chessTile = GameRegistry.registerBlock(new BlockChessTile(), ItemChessTile.class, "chessTile");
 		gatePortal = GameRegistry.registerBlock(new BlockGatePortal(Material.portal), "gatePortal");
-		oreCruxite = GameRegistry.registerBlock(new OreCruxite(),"oreCruxite");
+		oreCruxite = (OreCruxite) GameRegistry.registerBlock(new OreCruxite(),"oreCruxite");
 		layeredSand = GameRegistry.registerBlock(new BlockLayered(Blocks.sand), ItemBlockLayered.class, "layeredSand").setUnlocalizedName("layeredSand");
-		coloredDirt = GameRegistry.registerBlock(new BlockColoredDirt(new String[] {"BlueDirt", "ThoughtDirt"}), ItemColoredDirt.class, "coloredDirt").setUnlocalizedName("coloredDirt").setHardness(0.5F);
+		coloredDirt = (BlockColoredDirt) GameRegistry.registerBlock(new BlockColoredDirt(new String[] {"BlueDirt", "ThoughtDirt"}), ItemColoredDirt.class, "coloredDirt").setUnlocalizedName("coloredDirt").setHardness(0.5F);
 		//machines
 		blockStorage = GameRegistry.registerBlock(new BlockStorage(),ItemStorageBlock.class,"blockStorage");
 		blockMachine = GameRegistry.registerBlock(new BlockMachine(), ItemMachine.class,"blockMachine");
@@ -394,7 +394,7 @@ public class Minestuck
 			ClientProxy.registerRenderers();
 		}
 		
-		GameRegistry.registerItem(clawHammer, "clawHammer");
+		GameRegistry.registerItem(clawHammer, "claw_hammer");
 		GameRegistry.registerItem(sledgeHammer, "sledgeHammer");
 		GameRegistry.registerItem(pogoHammer, "pogoHammer");
 		GameRegistry.registerItem(telescopicSassacrusher, "telescopicSassacrusher");
@@ -518,7 +518,7 @@ public class Minestuck
 		
 		//Register structures
 		MapGenStructureIO.registerStructure(StructureCastleStart.class, "SkaiaCastle");
-		StructureCastlePieces.func_143048_a();
+		StructureCastlePieces.registerComponents();
 		
 		//register recipes
 		AlchemyRecipeHandler.registerVanillaRecipes();

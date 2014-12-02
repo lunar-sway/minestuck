@@ -50,7 +50,7 @@ public class ComponentCastleStaircasePiece extends ComponentCastleRoomPiece
 		{
 			this.boundingBox.offset(0, startPiece.averageGroundLevel - 9, 0);
 		}
-		this.fillWithBlocks(world, structureboundingbox, 0, 1, 0, 7, 14, 7, Blocks.air, Blocks.air, false);
+//		this.fillWithBlocks(world, structureboundingbox, 0, 1, 0, 7, 14, 7, Blocks.air, Blocks.air, false);
 		this.fillWithAlternatingBlocks(world, structureboundingbox, 0, 15, 0, 7, 15, 7, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
 		for(int step = 0; step < 8; step++) //Come on, step it up!
 			switch(this.direction)

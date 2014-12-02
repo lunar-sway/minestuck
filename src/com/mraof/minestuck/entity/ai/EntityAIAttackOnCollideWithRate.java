@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.pathfinding.PathEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
@@ -74,7 +75,7 @@ public class EntityAIAttackOnCollideWithRate extends EntityAIBase
 	public boolean continueExecuting()
 	{
 		EntityLivingBase entityliving = this.attacker.getAttackTarget();
-		return entityliving == null ? false : (!this.entityTarget.isEntityAlive() ? false : (!this.willSearch ? !this.attacker.getNavigator().noPath() : this.attacker.isWithinHomeDistance(MathHelper.floor_double(this.entityTarget.posX), MathHelper.floor_double(this.entityTarget.posY), MathHelper.floor_double(this.entityTarget.posZ))));
+		return entityliving == null ? false : (!this.entityTarget.isEntityAlive() ? false : (!this.willSearch ? !this.attacker.getNavigator().noPath() : this.attacker.func_180485_d(new BlockPos(MathHelper.floor_double(this.entityTarget.posX), MathHelper.floor_double(this.entityTarget.posY), MathHelper.floor_double(this.entityTarget.posZ)))));
 	}
 
 	/**
@@ -111,7 +112,7 @@ public class EntityAIAttackOnCollideWithRate extends EntityAIBase
 		this.attackTick = Math.max(this.attackTick - 1, 0);
 		double d0 = (double)(this.attacker.width * distanceMultiplier * this.attacker.width * distanceMultiplier);
 
-		if (this.attacker.getDistanceSq(this.entityTarget.posX, this.entityTarget.boundingBox.minY, this.entityTarget.posZ) - (entityTarget.width / 2 ) <= d0)
+		if (this.attacker.getDistanceSq(this.entityTarget.posX, this.entityTarget.getBoundingBox().minY, this.entityTarget.posZ) - (entityTarget.width / 2 ) <= d0)
 		{
 			if (this.attackTick <= 0)
 			{
