@@ -61,6 +61,7 @@ import com.mraof.minestuck.block.BlockTransportalizer;
 import com.mraof.minestuck.block.OreCruxite;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.GuiHandler;
+import com.mraof.minestuck.client.util.ItemTextures;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
@@ -495,8 +496,11 @@ public class Minestuck
 			GameRegistry.registerWorldGenerator(oreHandler, 0);
 		}
 
-		//register machine GUIs
+		//register GUI handler
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
+		
+		//Register textures
+		ItemTextures.registerTextures();
 		
 		//Register event handlers
 		MinecraftForge.EVENT_BUS.register(new MinestuckSaveHandler());
@@ -537,7 +541,6 @@ public class Minestuck
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) 
 	{
-		
 		AlchemyRecipeHandler.registerDynamicRecipes();
 
 		//register NEI stuff

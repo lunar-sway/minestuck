@@ -3,6 +3,7 @@ package com.mraof.minestuck.client;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -12,7 +13,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mraof.minestuck.CommonProxy;
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.event.MinestuckClientEventHandler;
 import com.mraof.minestuck.client.model.ModelBasilisk;
 import com.mraof.minestuck.client.model.ModelBishop;
@@ -49,6 +49,7 @@ import com.mraof.minestuck.entity.underling.EntityUnderlingPart;
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
+import com.mraof.minestuck.util.Debug;
 
 public class ClientProxy extends CommonProxy
 {
@@ -86,4 +87,5 @@ public class ClientProxy extends CommonProxy
 		MinecraftForge.EVENT_BUS.register(new MinestuckClientEventHandler());
 		FMLCommonHandler.instance().bus().register(new MinestuckKeyHandler());
 	}
+	
 }

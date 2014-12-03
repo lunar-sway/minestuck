@@ -288,7 +288,7 @@ public abstract class SylladexGuiHandler extends GuiScreen
 				int y = this.yPos +7 - gui.mapY;
 				if(x >= gui.mapWidth || y >= gui.mapHeight || x + 16 < 0 || y + 16 < 0)
 					return;
-//				gui.itemRender.renderItemAndEffectIntoGUI(gui.mc.fontRendererObj, gui.mc.getTextureManager(), item, x, y);
+				gui.itemRender.func_180450_b(item, x, y);
 				if(item.stackSize > 1)
 				{
 					String stackSize = String.valueOf(item.stackSize);
@@ -300,7 +300,7 @@ public abstract class SylladexGuiHandler extends GuiScreen
 					glEnable(GL_DEPTH_TEST);
 					glEnable(GL_BLEND);
 				}
-//				gui.itemRender.renderItemOverlayIntoGUI(gui.mc.fontRendererObj, gui.mc.getTextureManager(), item, x, y, "");
+				gui.itemRender.func_180453_a(gui.mc.fontRendererObj, item, x, y, "");
 			}
 		}
 		

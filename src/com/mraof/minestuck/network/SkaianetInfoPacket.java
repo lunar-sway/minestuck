@@ -76,9 +76,11 @@ public class SkaianetInfoPacket extends MinestuckPacket {
 	@Override
 	public void execute(EntityPlayer player) {
 		
-		if(((EntityPlayer)player).worldObj.isRemote)
+		if(player
+				.worldObj
+				.isRemote)
 			SkaiaClient.consumePacket(this);
-		else SkaianetHandler.requestInfo(((EntityPlayer)player).getName(), this.player);
+		else SkaianetHandler.requestInfo(player.getName(), this.player);
 		
 	}
 
