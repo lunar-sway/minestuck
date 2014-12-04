@@ -61,7 +61,7 @@ import com.mraof.minestuck.block.BlockTransportalizer;
 import com.mraof.minestuck.block.OreCruxite;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.GuiHandler;
-import com.mraof.minestuck.client.util.ItemTextures;
+import com.mraof.minestuck.client.util.MinestuckTextureManager;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
@@ -174,7 +174,7 @@ public class Minestuck
 	public static Item spearCane;
 	public static Item dragonCane;
 	//Spoons/forks
-	public static Item crockerSpork;
+	public static ItemSpork crockerSpork;
 	public static Item skaiaFork;
 	//Other
 	public static Item rawCruxite;
@@ -183,7 +183,7 @@ public class Minestuck
 	public static Item cruxiteArtifact;
 	public static Item disk;
 	public static Item component;
-	public static Item captchaModus;
+	public static ItemModus captchaModus;
 	public static ItemMinestuckBucket minestuckBucket;
 
 
@@ -320,16 +320,16 @@ public class Minestuck
 		};
 		
 		//blocks
-		chessTile = GameRegistry.registerBlock(new BlockChessTile(), ItemChessTile.class, "chessTile");
-		gatePortal = GameRegistry.registerBlock(new BlockGatePortal(Material.portal), "gatePortal");
-		oreCruxite = (OreCruxite) GameRegistry.registerBlock(new OreCruxite(),"oreCruxite");
-		layeredSand = GameRegistry.registerBlock(new BlockLayered(Blocks.sand), ItemBlockLayered.class, "layeredSand").setUnlocalizedName("layeredSand");
-		coloredDirt = (BlockColoredDirt) GameRegistry.registerBlock(new BlockColoredDirt(new String[] {"BlueDirt", "ThoughtDirt"}), ItemColoredDirt.class, "coloredDirt").setUnlocalizedName("coloredDirt").setHardness(0.5F);
+		chessTile = GameRegistry.registerBlock(new BlockChessTile(), ItemChessTile.class, "chess_tile");
+		gatePortal = GameRegistry.registerBlock(new BlockGatePortal(Material.portal), "gate_portal");
+		oreCruxite = (OreCruxite) GameRegistry.registerBlock(new OreCruxite(),"ore_cruxite");
+		layeredSand = GameRegistry.registerBlock(new BlockLayered(Blocks.sand), ItemBlockLayered.class, "layered_sand").setUnlocalizedName("layeredSand");
+		coloredDirt = (BlockColoredDirt) GameRegistry.registerBlock(new BlockColoredDirt(new String[] {"BlueDirt", "ThoughtDirt"}), ItemColoredDirt.class, "colored_dirt").setUnlocalizedName("coloredDirt").setHardness(0.5F);
 		//machines
-		blockStorage = GameRegistry.registerBlock(new BlockStorage(),ItemStorageBlock.class,"blockStorage");
-		blockMachine = GameRegistry.registerBlock(new BlockMachine(), ItemMachine.class,"blockMachine");
-		blockComputerOff = GameRegistry.registerBlock(new BlockComputerOff(), ItemComputerOff.class,"blockComputer");
-		blockComputerOn = GameRegistry.registerBlock(new BlockComputerOn(),"blockComputerOn");
+		blockStorage = GameRegistry.registerBlock(new BlockStorage(),ItemStorageBlock.class,"block_storage");
+		blockMachine = GameRegistry.registerBlock(new BlockMachine(), ItemMachine.class,"block_machine");
+		blockComputerOff = GameRegistry.registerBlock(new BlockComputerOff(), ItemComputerOff.class,"block_computer");
+		blockComputerOn = GameRegistry.registerBlock(new BlockComputerOn(),"block_computer_on");
 		transportalizer = GameRegistry.registerBlock(new BlockTransportalizer(), "transportalizer");
 		//fluids
 		fluidOil = new Fluid("Oil");
@@ -338,9 +338,9 @@ public class Minestuck
 		FluidRegistry.registerFluid(fluidBlood);
 		fluidBrainJuice = new Fluid("BrainJuice");
 		FluidRegistry.registerFluid(fluidBrainJuice);
-		blockOil = GameRegistry.registerBlock(new BlockFluidOil(fluidOil, Material.water), "blockOil");
-		blockBlood = GameRegistry.registerBlock(new BlockFluidBlood(fluidBlood, Material.water), "blockBlood");
-		blockBrainJuice = GameRegistry.registerBlock(new BlockFluidBrainJuice(fluidBrainJuice, Material.water), "blockBrainJuice");
+		blockOil = GameRegistry.registerBlock(new BlockFluidOil(fluidOil, Material.water), "block_oil");
+		blockBlood = GameRegistry.registerBlock(new BlockFluidBlood(fluidBlood, Material.water), "block_blood");
+		blockBrainJuice = GameRegistry.registerBlock(new BlockFluidBrainJuice(fluidBrainJuice, Material.water), "block_brain_juice");
 
 		//items
 		//hammers
@@ -385,57 +385,58 @@ public class Minestuck
 		minestuckBucket = new ItemMinestuckBucket();
 		captchaModus = new ItemModus();
 		
-		minestuckBucket.addBlock(blockBlood, "BucketBlood");
-		minestuckBucket.addBlock(blockOil, "BucketOil");
-		minestuckBucket.addBlock(blockBrainJuice, "BucketBrainJuice");
-		
-		//registers things for the client
-		if(event.getSide().isClient()) {
-			ClientProxy.registerSided();
-			ClientProxy.registerRenderers();
-		}
+		minestuckBucket.addBlock(blockBlood);
+		minestuckBucket.addBlock(blockOil);
+		minestuckBucket.addBlock(blockBrainJuice);
 		
 		GameRegistry.registerItem(clawHammer, "claw_hammer");
-		GameRegistry.registerItem(sledgeHammer, "sledgeHammer");
-		GameRegistry.registerItem(pogoHammer, "pogoHammer");
-		GameRegistry.registerItem(telescopicSassacrusher, "telescopicSassacrusher");
-		GameRegistry.registerItem(fearNoAnvil, "fearNoAnvil");
-		GameRegistry.registerItem(zillyhooHammer, "zillyhooHammer");
-		GameRegistry.registerItem(popamaticVrillyhoo, "popamaticVrillyhoo");
-		GameRegistry.registerItem(scarletZillyhoo, "scarletZillyhoo");
+		GameRegistry.registerItem(sledgeHammer, "sledge_hammer");
+		GameRegistry.registerItem(pogoHammer, "pogo_hammer");
+		GameRegistry.registerItem(telescopicSassacrusher, "telescopic_sassacrusher");
+		GameRegistry.registerItem(fearNoAnvil, "fear_no_anvil");
+		GameRegistry.registerItem(zillyhooHammer, "zillyhoo_hammer");
+		GameRegistry.registerItem(popamaticVrillyhoo, "popamatic_vrillyhoo");
+		GameRegistry.registerItem(scarletZillyhoo, "scarlet_zillyhoo");
 		
 		GameRegistry.registerItem(sord, "sord");
-		GameRegistry.registerItem(ninjaSword, "ninjaSword");
+		GameRegistry.registerItem(ninjaSword, "ninja_sword");
 		GameRegistry.registerItem(katana, "katana");
 		GameRegistry.registerItem(caledscratch, "caledscratch");
-		GameRegistry.registerItem(royalDeringer, "royalDeringer");
+		GameRegistry.registerItem(royalDeringer, "royal_deringer");
 		GameRegistry.registerItem(regisword, "regisword");
-		GameRegistry.registerItem(scarletRibbitar, "scarletRibbitar");
-		GameRegistry.registerItem(doggMachete, "doggMachete");
+		GameRegistry.registerItem(scarletRibbitar, "scarlet_ribbitar");
+		GameRegistry.registerItem(doggMachete, "dogg_machete");
 		
 		GameRegistry.registerItem(sickle, "sickle");
-		GameRegistry.registerItem(homesSmellYaLater, "homesSmellYaLater");
-		GameRegistry.registerItem(regiSickle, "regiSickle");
-		GameRegistry.registerItem(clawSickle, "clawSickle");
+		GameRegistry.registerItem(homesSmellYaLater, "homes_smell_ya_later");
+		GameRegistry.registerItem(regiSickle, "regi_sickle");
+		GameRegistry.registerItem(clawSickle, "claw_sickle");
 		
-		GameRegistry.registerItem(deuceClub, "deuceClub");
+		GameRegistry.registerItem(deuceClub, "deuce_club");
 		
 		GameRegistry.registerItem(cane, "cane");
-		GameRegistry.registerItem(spearCane, "spearCane");
-		GameRegistry.registerItem(dragonCane, "dragonCane");
+		GameRegistry.registerItem(spearCane, "spear_cane");
+		GameRegistry.registerItem(dragonCane, "dragon_cane");
 		
-		GameRegistry.registerItem(crockerSpork, "crockerSpork");
-		GameRegistry.registerItem(skaiaFork, "skaiaFork");
+		GameRegistry.registerItem(crockerSpork, "crocker_spork");
+		GameRegistry.registerItem(skaiaFork, "skaia_fork");
 		
-		GameRegistry.registerItem(rawCruxite, "cruxiteRaw");
-		GameRegistry.registerItem(cruxiteDowel, "cruxiteDowel");
-		GameRegistry.registerItem(captchaCard, "captchaCard");
-		GameRegistry.registerItem(cruxiteArtifact, "cruxiteArtifact");
-		GameRegistry.registerItem(disk, "computerDisk");
+		GameRegistry.registerItem(rawCruxite, "cruxite_raw");
+		GameRegistry.registerItem(cruxiteDowel, "cruxite_dowel");
+		GameRegistry.registerItem(captchaCard, "captcha_card");
+		GameRegistry.registerItem(cruxiteArtifact, "cruxite_artifact");
+		GameRegistry.registerItem(disk, "computer_disk");
 		GameRegistry.registerItem(component, "component");
-		GameRegistry.registerItem(minestuckBucket, "minestuckBucket");
-		GameRegistry.registerItem(captchaModus, "modusCard");
+		GameRegistry.registerItem(minestuckBucket, "minestuck_bucket");
+		GameRegistry.registerItem(captchaModus, "modus_card");
 		
+		//registers things for the client
+		if(event.getSide().isClient())
+		{
+			ClientProxy.registerSided();
+			ClientProxy.registerRenderers();
+			MinestuckTextureManager.registerVariants();
+		}
 		
 		MinestuckAchievementHandler.prepareAchievementPage();
 		
@@ -500,7 +501,8 @@ public class Minestuck
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 		
 		//Register textures
-		ItemTextures.registerTextures();
+		if(event.getSide().isClient())
+			MinestuckTextureManager.registerTextures();
 		
 		//Register event handlers
 		MinecraftForge.EVENT_BUS.register(new MinestuckSaveHandler());

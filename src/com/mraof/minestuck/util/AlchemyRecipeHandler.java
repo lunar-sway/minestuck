@@ -514,8 +514,8 @@ public class AlchemyRecipeHandler {
 			return b? new ItemStack(Minestuck.blockStorage,1,1):null;
 		}
 		
-		if (!Item.itemRegistry.containsKey(tag.getString("contentID"))) {return null;}
-		ItemStack newItem = new ItemStack((Item)Item.itemRegistry.getObject(tag.getString(("contentID"))), 1, tag.getInteger("contentMeta"));
+		if (!Item.itemRegistry.containsKey(new ResourceLocation(tag.getString("contentID")))) {return null;}
+		ItemStack newItem = new ItemStack((Item)Item.itemRegistry.getObject(new ResourceLocation(tag.getString(("contentID")))), 1, tag.getInteger("contentMeta"));
 		
 		if(tag.hasKey("contentTags"))
 			newItem.setTagCompound(tag.getCompoundTag("contentTags"));

@@ -122,12 +122,12 @@ public class ItemHammer extends ItemWeapon
 //		return true;
 //	}
 	
-//	@Override
-//	@SideOnly(Side.CLIENT)
-//	public boolean isFull3D()
-//	{
-//		return true;
-//	}
+	@Override
+	@SideOnly(Side.CLIENT)
+	public boolean isFull3D()
+	{
+		return true;
+	}
 	
 	public int getMaxItemUseDuration(ItemStack itemStack)
 	{
@@ -149,37 +149,4 @@ public class ItemHammer extends ItemWeapon
 		return false;
 	}
 	
-//	@Override
-//	@SideOnly(Side.CLIENT)
-//	public void registerIcons(IIconRegister iconRegister) 
-//	{
-//		switch(hammerType)
-//		{
-//		case CLAW:
-//			itemIcon = iconRegister.registerIcon("minestuck:ClawHammer");
-//			break;
-//		case SLEDGE:
-//			itemIcon = iconRegister.registerIcon("minestuck:SledgeHammer");
-//			break;
-//		case POGO:
-//			itemIcon = iconRegister.registerIcon("minestuck:PogoHammer");
-//			break;
-//		case TELESCOPIC:
-//			itemIcon = iconRegister.registerIcon("minestuck:TelescopicSassacrusher");
-//			break;
-//		case FEARNOANVIL:
-//			itemIcon = iconRegister.registerIcon("minestuck:FearNoAnvil");
-//			break	;
-//		case ZILLYHOO:
-//			itemIcon = iconRegister.registerIcon("minestuck:ZillyhooHammer");
-//			break;
-//		case POPAMATIC:
-//			itemIcon = iconRegister.registerIcon("minestuck:Vrillyhoo");
-//			break;
-//		case SCARLET:
-//			itemIcon = iconRegister.registerIcon("minestuck:ScarletZillyhoo");
-//			break;
-//		}
-//	}
-
 }

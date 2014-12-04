@@ -31,8 +31,6 @@ public class ItemMinestuckBucket extends ItemBucket
 {
 	public List<Block> fillFluids = new ArrayList<Block>();
 	public HashMap<Block, Integer> FillFluidIds = new HashMap<Block, Integer>();
-	public HashMap<String, String> textureFiles = new HashMap<String, String>();
-//	HashMap<String, IIcon> textures = new HashMap<String, IIcon>();
 	
 	public ItemMinestuckBucket() 
 	{
@@ -173,21 +171,9 @@ public class ItemMinestuckBucket extends ItemBucket
 	{
 		return getUnlocalizedName() + "." + fillFluids.get(par1ItemStack.getItemDamage()).getUnlocalizedName().replace("tile.", "");
 	}
-//	@Override
-//	public IIcon getIconFromDamage(int damage) 
-//	{
-//		return this.textures.get(fillFluids.get(damage).getUnlocalizedName());
-//	}
-//	@Override
-//	public void registerIcons(IIconRegister par1IconRegister)
-//    {
-//        for (Entry<String, String> entry : textureFiles.entrySet())
-//            this.textures.put(entry.getKey(), par1IconRegister.registerIcon("minestuck:" + entry.getValue()));
-//    }
 	
-	public void addBlock(Block block, String textureFile)
+	public void addBlock(Block block)
 	{
-		textureFiles.put(block.getUnlocalizedName(), textureFile);
 		fillFluids.add(block);
 		FillFluidIds.put(block, fillFluids.size() - 1);
 		//TODO make it actually work

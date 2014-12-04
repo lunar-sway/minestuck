@@ -10,6 +10,7 @@ import java.util.EnumSet;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalouge.ContainerCaptchaDeck;
+import com.mraof.minestuck.util.Debug;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -100,7 +101,7 @@ public class CaptchaDeckPacket extends MinestuckPacket
 	@Override
 	public void execute(EntityPlayer player)
 	{
-		if(!player.worldObj.isRemote)
+		if(player != null && player.worldObj != null && !player.worldObj.isRemote)
 		{
 			if(ServerEditHandler.getData(player.getName()) != null)
 				return;
@@ -111,13 +112,20 @@ public class CaptchaDeckPacket extends MinestuckPacket
 				CaptchaDeckHandler.captchalougeItem((EntityPlayerMP) player);
 			else if(this.type == GET)
 				CaptchaDeckHandler.getItem((EntityPlayerMP) player, itemIndex, getCard);
+			else if(this.type == DATA && CaptchaDeckHandler.getModus(player) != null)
+				MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.CAPTCHA, DATA, CaptchaDeckHandler.writeToNBT(CaptchaDeckHandler.getModus(player))), player);
 		}
 		else
 		{
 			if(this.type == DATA)
 			{
-				CaptchaDeckHandler.clientSideModus = CaptchaDeckHandler.readFromNBT(nbt, true);
-				CaptchaDeckHandler.clientSideModus.getGuiHandler().updateContent();
+				if(player == null)
+					MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(Type.CAPTCHA, DATA));
+				else
+				{
+					CaptchaDeckHandler.clientSideModus = CaptchaDeckHandler.readFromNBT(nbt, true);
+					CaptchaDeckHandler.clientSideModus.getGuiHandler().updateContent();
+				}
 			}
 		}
 	}

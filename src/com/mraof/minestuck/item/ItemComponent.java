@@ -20,30 +20,18 @@ import com.mraof.minestuck.Minestuck;
  * @author iconmaster
  *
  */
-public class ItemComponent extends Item {
+public class ItemComponent extends Item
+{
 	
-//	private IIcon[] icons = new IIcon[3];
 	private String[] subNames = {"WoodenSpoon","SilverSpoon","Chessboard"};
-
-	public ItemComponent() {
+	
+	public ItemComponent()
+	{
 		this.maxStackSize = 1;
 		this.setHasSubtypes(true);
 		this.setCreativeTab(Minestuck.tabMinestuck);
 		this.setUnlocalizedName("component");
 	}
-	
-//	@Override
-//	public IIcon getIconFromDamage(int meta) {
-//		return icons[meta];
-//	}
-	
-//	@Override
-//	public void registerIcons(IIconRegister par1IconRegister) {
-//		for (int i = 0;i < subNames.length;i++) {
-//			icons[i] = par1IconRegister.registerIcon("minestuck:Compo"+subNames[i]);
-//		}
-//	}
-	
 	
 	@Override
 	public String getUnlocalizedName(ItemStack itemstack) 

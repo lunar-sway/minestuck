@@ -36,7 +36,9 @@ public class MinestuckChannelHandler extends FMLIndexedMessageToMessageCodec<Min
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf source, MinestuckPacket msg) 
 	{
 		msg.consumePacket(source);
-		switch (FMLCommonHandler.instance().getEffectiveSide()) {
+		Side side = Thread.currentThread().getName().contains("Server") ? Side.SERVER : Side.CLIENT;
+		switch (side)
+		{
 		case CLIENT:
 			msg.execute(ClientProxy.getPlayer()); //Prevents the classloader from crashing the server.
 			break;

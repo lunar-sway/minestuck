@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -76,9 +77,7 @@ public class SkaianetInfoPacket extends MinestuckPacket {
 	@Override
 	public void execute(EntityPlayer player) {
 		
-		if(player
-				.worldObj
-				.isRemote)
+		if(FMLCommonHandler.instance().getEffectiveSide().isClient())
 			SkaiaClient.consumePacket(this);
 		else SkaianetHandler.requestInfo(player.getName(), this.player);
 		

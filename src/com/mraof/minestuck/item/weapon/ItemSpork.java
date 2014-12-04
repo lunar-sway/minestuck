@@ -25,7 +25,6 @@ public class ItemSpork extends ItemWeapon
 	 * whether it's a spoon or a fork, unused for the crocker spork, as it depends on the meta.
 	 */
 	public boolean isSpoon;
-//	private IIcon[] crockerTypes = new IIcon[2];
 
 	public ItemSpork(EnumSporkType sporkType) 
 	{
@@ -39,11 +38,9 @@ public class ItemSpork extends ItemWeapon
 		{
 		case CROCKER:
 			this.setUnlocalizedName("crockerSpork");
-			//			this.setIconIndex(23);
 			break;
 		case SKAIA:
 			this.setUnlocalizedName("skaiaFork");
-			//			this.setIconIndex(25);
 			break;
 		}
 		this.weaponDamage = 2 + sporkType.getDamageVsEntity();
@@ -64,10 +61,10 @@ public class ItemSpork extends ItemWeapon
 	@Override
 	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase player)
 	{
-		if (sporkType.equals(EnumSporkType.CROCKER) && !isSpoon(itemStack)){
-			target.hurtResistantTime = 0;	//A somewhat hackish way, but I find attributes too complicated, for now.
-			target.attackEntityFrom(DamageSource.causeMobDamage(player), 2F);
-		}
+//		if (sporkType.equals(EnumSporkType.CROCKER) && !isSpoon(itemStack)){
+//			target.hurtResistantTime = 0;	//A somewhat hackish way, but I find attributes too complicated, for now.
+//			target.attackEntityFrom(DamageSource.causeMobDamage(player), 2F);
+//		}
 			itemStack.damageItem(isSpoon(itemStack) ? 1 : 2, player);
 		return true;
 	}
