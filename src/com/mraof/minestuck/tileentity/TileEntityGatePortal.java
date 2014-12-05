@@ -16,6 +16,15 @@ import com.mraof.minestuck.util.Teleport;
 public class TileEntityGatePortal extends TileEntity implements ITeleporter
 {
 	public Location destination;
+	
+	@Override
+	public void setPos(BlockPos posIn)
+	{
+		super.setPos(posIn);
+		if(destination.pos.getY() < 0)
+			destination.pos = posIn;
+	}
+	
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) 
 	{

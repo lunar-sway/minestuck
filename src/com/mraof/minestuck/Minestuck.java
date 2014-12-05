@@ -95,6 +95,7 @@ import com.mraof.minestuck.item.block.ItemChessTile;
 import com.mraof.minestuck.item.block.ItemColoredDirt;
 import com.mraof.minestuck.item.block.ItemComputerOff;
 import com.mraof.minestuck.item.block.ItemMachine;
+import com.mraof.minestuck.item.block.ItemOreCruxite;
 import com.mraof.minestuck.item.block.ItemStorageBlock;
 import com.mraof.minestuck.item.weapon.EnumBladeType;
 import com.mraof.minestuck.item.weapon.EnumCaneType;
@@ -322,9 +323,9 @@ public class Minestuck
 		//blocks
 		chessTile = GameRegistry.registerBlock(new BlockChessTile(), ItemChessTile.class, "chess_tile");
 		gatePortal = GameRegistry.registerBlock(new BlockGatePortal(Material.portal), "gate_portal");
-		oreCruxite = (OreCruxite) GameRegistry.registerBlock(new OreCruxite(),"ore_cruxite");
+		oreCruxite = (OreCruxite) GameRegistry.registerBlock(new OreCruxite(), ItemOreCruxite.class, "ore_cruxite");
 		layeredSand = GameRegistry.registerBlock(new BlockLayered(Blocks.sand), ItemBlockLayered.class, "layered_sand").setUnlocalizedName("layeredSand");
-		coloredDirt = (BlockColoredDirt) GameRegistry.registerBlock(new BlockColoredDirt(new String[] {"BlueDirt", "ThoughtDirt"}), ItemColoredDirt.class, "colored_dirt").setUnlocalizedName("coloredDirt").setHardness(0.5F);
+		coloredDirt = (BlockColoredDirt) GameRegistry.registerBlock(new BlockColoredDirt(), ItemColoredDirt.class, "colored_dirt").setUnlocalizedName("coloredDirt").setHardness(0.5F);
 		//machines
 		blockStorage = GameRegistry.registerBlock(new BlockStorage(),ItemStorageBlock.class,"block_storage");
 		blockMachine = GameRegistry.registerBlock(new BlockMachine(), ItemMachine.class,"block_machine");
@@ -430,11 +431,9 @@ public class Minestuck
 		GameRegistry.registerItem(minestuckBucket, "minestuck_bucket");
 		GameRegistry.registerItem(captchaModus, "modus_card");
 		
-		//registers things for the client
 		if(event.getSide().isClient())
 		{
 			ClientProxy.registerSided();
-			ClientProxy.registerRenderers();
 			MinestuckTextureManager.registerVariants();
 		}
 		
@@ -500,9 +499,12 @@ public class Minestuck
 		//register GUI handler
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 		
-		//Register textures
+		//Register textures and renders
 		if(event.getSide().isClient())
+		{
 			MinestuckTextureManager.registerTextures();
+			ClientProxy.registerRenderers();
+		}
 		
 		//Register event handlers
 		MinecraftForge.EVENT_BUS.register(new MinestuckSaveHandler());

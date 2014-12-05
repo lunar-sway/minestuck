@@ -13,7 +13,7 @@ import net.minecraft.util.Vec3;
 
 public class LandAspectThought extends LandAspect 
 {
-	IBlockState[] surfaceBlocks = {Minestuck.coloredDirt.getDefaultState().withProperty(BlockColoredDirt.BLOCK_TYPE, 1)};
+	IBlockState[] surfaceBlocks = {Minestuck.coloredDirt.getDefaultState().withProperty(BlockColoredDirt.BLOCK_TYPE, BlockColoredDirt.BlockType.THOUGHT)};
 	private IBlockState[] upperBlocks = {Blocks.stone.getDefaultState()};
 	static Vec3 skyColor = new Vec3(0.66, 0.39, 0.2);
 

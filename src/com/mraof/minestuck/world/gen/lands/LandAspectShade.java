@@ -13,7 +13,7 @@ import com.mraof.minestuck.block.BlockColoredDirt;
 public class LandAspectShade extends LandAspect 
 {
 
-	IBlockState[] surfaceBlocks = {Minestuck.coloredDirt.getDefaultState().withProperty(BlockColoredDirt.BLOCK_TYPE, 0)};
+	IBlockState[] surfaceBlocks = {Minestuck.coloredDirt.getDefaultState().withProperty(BlockColoredDirt.BLOCK_TYPE, BlockColoredDirt.BlockType.BLUE)};
 	IBlockState[] upperBlocks = {Blocks.stone.getDefaultState()};
 	static Vec3 skyColor = new Vec3(0.16D, 0.38D, 0.54D);
 	

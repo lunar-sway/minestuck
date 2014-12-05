@@ -183,8 +183,8 @@ tile.oil.name=Oil
 tile.blood.name=Blood
 tile.layeredSand.name=Layered Sand
 tile.transportalizer.name=Transportalizer
-tile.coloredDirt.BlueDirt.name=Blue Dirt
-tile.coloredDirt.ThoughtDirt.name=Thought Dirt
+tile.coloredDirt.blue.name=Blue Dirt
+tile.coloredDirt.thought.name=Thought Dirt
 
 title.format=%1$s of %2$s
 title.Bard=Bard

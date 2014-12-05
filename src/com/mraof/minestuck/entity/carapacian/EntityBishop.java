@@ -51,16 +51,16 @@ public abstract class EntityBishop extends EntityCarapacian implements IRangedAt
 	{
 
         double distanceX = entityliving.posX - this.posX;
-        double distanceY = entityliving.getBoundingBox().minY + (double)(entityliving.height / 2.0F) - (this.posY + (double)(this.height / 2.0F));
+        double distanceY = entityliving.getEntityBoundingBox().minY + (double)(entityliving.height / 2.0F) - (this.posY + (double)(this.height / 2.0F));
         double distanceZ = entityliving.posZ - this.posZ;
 		
         EntityLargeFireball entitylargefireball = new EntityLargeFireball(this.worldObj, this, distanceX, distanceY, distanceZ);
         entitylargefireball.field_92057_e = 1;
         double d8 = (double)this.width;
         Vec3 vec3 = this.getLook(1.0F);
-        entitylargefireball.posX = (this.getBoundingBox().minX + this.getBoundingBox().maxX) / 2.0F  + vec3.xCoord * d8;
+        entitylargefireball.posX = (this.getEntityBoundingBox().minX + this.getEntityBoundingBox().maxX) / 2.0F  + vec3.xCoord * d8;
         entitylargefireball.posY = this.posY + (double)(this.height / 2.0F);
-        entitylargefireball.posZ = (this.getBoundingBox().minZ + this.getBoundingBox().maxZ) / 2.0F + vec3.zCoord * d8;
+        entitylargefireball.posZ = (this.getEntityBoundingBox().minZ + this.getEntityBoundingBox().maxZ) / 2.0F + vec3.zCoord * d8;
         this.worldObj.spawnEntityInWorld(entitylargefireball);
 	}
 	public int getAttackStrength(Entity par1Entity)

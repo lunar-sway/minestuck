@@ -105,7 +105,7 @@ public class EntityAIAttackByDistance extends EntityAIBase
 	 */
 	public void updateTask()
 	{
-		double d0 = this.entityHost.getDistanceSq(this.attackTarget.posX, this.attackTarget.getBoundingBox().minY, this.attackTarget.posZ);
+		double d0 = this.entityHost.getDistanceSq(this.attackTarget.posX, this.attackTarget.getEntityBoundingBox().minY, this.attackTarget.posZ);
 		boolean flag = this.entityHost.getEntitySenses().canSee(this.attackTarget);
 
 		if (flag)
@@ -163,7 +163,7 @@ public class EntityAIAttackByDistance extends EntityAIBase
 		else
 		{
 			this.rangedAttackTime = Math.max(this.rangedAttackTime - 1, 0);
-			if (this.attacker.getDistanceSq(this.attackTarget.posX, this.attackTarget.getBoundingBox().minY, this.attackTarget.posZ) <= d0)
+			if (this.attacker.getDistanceSq(this.attackTarget.posX, this.attackTarget.getEntityBoundingBox().minY, this.attackTarget.posZ) <= d0)
 			{
 				if (this.rangedAttackTime <= 0)
 				{

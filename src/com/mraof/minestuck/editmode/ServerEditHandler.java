@@ -369,7 +369,7 @@ public class ServerEditHandler
 		
 		double newX = player.posX;
 		double newZ = player.posZ;
-		double offset = player.getBoundingBox().maxX-player.posX;
+		double offset = player.getEntityBoundingBox().maxX-player.posX;
 		
 		if(range >= 1) {
 			if(player.posX > centerX+range-offset)

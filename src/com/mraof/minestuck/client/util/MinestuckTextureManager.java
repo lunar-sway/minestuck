@@ -1,8 +1,11 @@
 package com.mraof.minestuck.client.util;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BlockModelShapes;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.ItemModelMesher;
+import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -13,18 +16,26 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.BlockChessTile;
+import com.mraof.minestuck.block.BlockStorage;
+import com.mraof.minestuck.block.BlockChessTile.BlockType;
+import com.mraof.minestuck.block.BlockColoredDirt;
 import com.mraof.minestuck.util.Debug;
 
 @SideOnly(Side.CLIENT)
 public class MinestuckTextureManager
 {
 	
+	/**
+	 * Called during init.
+	 * Tells the game which models that are used for different item states.
+	 */
 	public static void registerTextures()
 	{
 		Minestuck ms = Minestuck.instance;
 		ItemModelMesher modelRegistry = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
 		
-		
+		//Items
 		register(Minestuck.clawHammer);
 		register(Minestuck.sledgeHammer);
 		register(Minestuck.pogoHammer);
@@ -71,10 +82,34 @@ public class MinestuckTextureManager
 		register(Minestuck.minestuckBucket, 2, "bucket_brain_juice");
 		for(int i = 0; i < Minestuck.captchaModus.modusNames.length; i++)
 			register(Minestuck.captchaModus, i, "modus_" + Minestuck.captchaModus.modusNames[i]);
+		
+		//Blocks
+		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())
+			register(Minestuck.chessTile, type.ordinal(), "chesstile_"+type.name);
+		register(Minestuck.gatePortal);
+		register(Minestuck.transportalizer);
+		register(Minestuck.blockComputerOff);
+		register(Minestuck.oreCruxite, 0, "cruxite_stone");
+		register(Minestuck.oreCruxite, 1, "cruxite_netherrack");
+		register(Minestuck.oreCruxite, 2, "cruxite_obsidian");
+		register(Minestuck.oreCruxite, 3, "cruxite_sandstone");
+		for(BlockColoredDirt.BlockType type : BlockColoredDirt.BlockType.values())
+			register(Minestuck.coloredDirt, type.ordinal(), "colored_dirt_"+type.name);
+		for(BlockStorage.BlockType type : BlockStorage.BlockType.values())
+			register(Minestuck.blockStorage, type.ordinal(), "block_storage_"+type.name);
+		register(Minestuck.layeredSand);
+		
+		//Register block states
+		BlockModelShapes blockModelRegistry = modelRegistry.getModelManager().getBlockModelShapes();
 	}
 	
+	/**
+	 * Called during pre-init after the blocks and items have been both created and registered.
+	 * Tells which models that should be loaded for the different items.
+	 */
 	public static void registerVariants()
 	{
+		//Items
 		ModelBakery.addVariantName(Minestuck.crockerSpork, "minestuck:crocker_fork", "minestuck:crocker_spoon");
 		ModelBakery.addVariantName(Minestuck.cruxiteDowel, "minestuck:dowel_uncarved", "minestuck:dowel_carved");
 		ModelBakery.addVariantName(Minestuck.cruxiteArtifact, "minestuck:cruxite_apple");
@@ -88,6 +123,15 @@ public class MinestuckTextureManager
 		for(int i = 0; i < str.length; i++)
 			str[i] = "minestuck:modus_"+Minestuck.captchaModus.modusNames[i];
 		ModelBakery.addVariantName(Minestuck.captchaModus, str);
+		
+		//Blocks
+		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())
+			ModelBakery.addVariantName(Item.getItemFromBlock(Minestuck.chessTile), "minestuck:chesstile_"+type.name);
+		ModelBakery.addVariantName(Item.getItemFromBlock(Minestuck.oreCruxite), "minestuck:cruxite_stone", "minestuck:cruxite_netherrack", "minestuck:cruxite_obsidian", "minestuck:cruxite_sandstone");
+		for(BlockColoredDirt.BlockType type : BlockColoredDirt.BlockType.values())
+			ModelBakery.addVariantName(Item.getItemFromBlock(Minestuck.coloredDirt), "minestuck:colored_dirt_"+type.name);
+		for(BlockStorage.BlockType type : BlockStorage.BlockType.values())
+			ModelBakery.addVariantName(Item.getItemFromBlock(Minestuck.blockStorage), "minestuck:block_storage_"+type.name);
 	}
 	
 	private static void register(Item item)
@@ -100,6 +144,16 @@ public class MinestuckTextureManager
 	{
 		ItemModelMesher modelRegistry = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
 		modelRegistry.register(item, meta, new ModelResourceLocation("minestuck:"+modelResource, "inventory"));
+	}
+	
+	private static void register(Block block)
+	{
+		register(Item.getItemFromBlock(block));
+	}
+	
+	private static void register(Block block, int meta, String modelResource)
+	{
+		register(Item.getItemFromBlock(block), meta, modelResource);
 	}
 	
 	private static class CrockerSporkDefinition implements ItemMeshDefinition

@@ -2,23 +2,36 @@ package com.mraof.minestuck.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
+import com.google.common.base.Predicate;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.ComputerProgram;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.UsernameHandler;
 
-public class BlockComputerOff extends Block {
-
-//	private IIcon frontIcon;
-//	private IIcon sideIcon;
-
+public class BlockComputerOff extends Block
+{
+	
+	public static final PropertyDirection DIRECTION = PropertyDirection.create("facing", new Predicate<EnumFacing>()
+			{
+				@Override
+				public boolean apply(EnumFacing input)
+				{
+					return input.getAxis().isHorizontal();
+				}
+	});
+	
 	public BlockComputerOff()
 	{
 		super(Material.rock);
@@ -28,100 +41,87 @@ public class BlockComputerOff extends Block {
 		
 	}
 	
-//	@Override
-//	public IIcon getIcon(int par1, int par2)
-//	{
-//		if (par2 == 0 && par1 == 3) {return this.frontIcon;}
-//		return par1 != par2 ? this.sideIcon : this.frontIcon;
-//	}
-
-	private void setDefaultDirection(World par1World, int par2, int par3, int par4)
+	@Override
+	protected BlockState createBlockState()
 	{
-		if (!par1World.isRemote)
+		return new BlockState(this, DIRECTION);
+	}
+	
+	@Override
+	public int getMetaFromState(IBlockState state)
+	{
+		return ((EnumFacing)state.getValue(DIRECTION)).ordinal() - 2;
+	}
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta)
+	{
+		return getDefaultState().withProperty(DIRECTION, EnumFacing.values()[meta + 2]);
+	}
+	
+	public static void setDefaultDirection(World world, int x, int y, int z)
+	{
+		if (!world.isRemote)
 		{
-			Block block = par1World.getBlockState(new BlockPos(par2, par3, par4 - 1)).getBlock();
-			Block block1 = par1World.getBlockState(new BlockPos(par2, par3, par4 + 1)).getBlock();
-			Block block2 = par1World.getBlockState(new BlockPos(par2 - 1, par3, par4)).getBlock();
-			Block block3 = par1World.getBlockState(new BlockPos(par2 + 1, par3, par4)).getBlock();
-			byte b0 = 3;
+			Block block = world.getBlockState(new BlockPos(x, y, z - 1)).getBlock();
+			Block block1 = world.getBlockState(new BlockPos(x, y, z + 1)).getBlock();
+			Block block2 = world.getBlockState(new BlockPos(x - 1, y, z)).getBlock();
+			Block block3 = world.getBlockState(new BlockPos(x + 1, y, z)).getBlock();
+			byte b0 = 0;
+
+			if (block.isFullBlock() && !block1.isFullBlock())
+			{
+				b0 = 3;
+			}
+
+			if (block1.isFullBlock() && !block.isFullBlock())
+			{
+				b0 = 2;
+			}
+
+			if (block2.isFullBlock() && !block3.isFullBlock())
+			{
+				b0 = 5;
+			}
+
+			if (block3.isFullBlock() && !block2.isFullBlock())
+			{
+				b0 = 4;
+			}
 			
-//			if (block.func_149730_j() && !block1.func_149730_j())
-//			{
-//				b0 = 3;
-//			}
-//			
-//			if (block1.func_149730_j() && !block.func_149730_j())
-//			{
-//				b0 = 2;
-//			}
-//			
-//			if (block2.func_149730_j() && !block3.func_149730_j())
-//			{
-//				b0 = 5;
-//			}
-//			
-//			if (block3.func_149730_j() && !block2.func_149730_j())
-//			{
-//				b0 = 4;
-//			}
+			if(b0 == 0)
+				b0 = (byte) (block3.isFullBlock() ? 2 : 5);
 			
-//			par1World.setBlockMetadataWithNotify(par2, par3, par4, b0, 2);
+			world.setBlockState(new BlockPos(x, y, z), world.getBlockState(new BlockPos(x, y, z)).withProperty(DIRECTION, EnumFacing.values()[b0]), 2);
 		}
 	}
 	
-//	@Override
-//	public void registerBlockIcons(IIconRegister par1IconRegister)
-//	{
-//		this.frontIcon = par1IconRegister.registerIcon("minestuck:ComputerFrontOff");
-//		this.sideIcon =  par1IconRegister.registerIcon("minestuck:PhernaliaFrame");
-//	}
+	@Override
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ)
+	{
+		if(player.isSneaking() || !state.getValue(DIRECTION).equals(side) || player.getHeldItem() != null && ComputerProgram.getProgramID(player.getHeldItem()) == -2)
+			return false;
+		
+		if(!world.isRemote)
+		{
+			world.setBlockState(pos, Minestuck.blockComputerOn.getDefaultState().withProperty(DIRECTION, side), 2);
+			
+			TileEntityComputer te = (TileEntityComputer) world.getTileEntity(pos);
+			te.owner = UsernameHandler.encode(player.getName());
+			Minestuck.blockComputerOn.onBlockActivated(world, pos, world.getBlockState(pos), player, side, hitX, hitY, hitZ);
+		}
+		
+		return true;
+	}
 	
-//	@Override
-//	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9) {
-//		if(world.isRemote || player.isSneaking() || player.getHeldItem() != null && ComputerProgram.getProgramID(player.getHeldItem()) == -2)
-//			return false;
-//		
-//		world.setBlock(x, y, z, Minestuck.blockComputerOn, world.getBlockMetadata(x, y, z), 2);
-//		
-//		TileEntityComputer te = (TileEntityComputer) world.getTileEntity(x, y, z);
-//		te.owner = UsernameHandler.encode(player.getCommandSenderName());
-//		Minestuck.blockComputerOn.onBlockActivated(world, x, y, z, player, par6, par7, par8, par9);
-//		
-//		return true;
-//	}
+	@Override
+	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
+	{
+		int l = MathHelper.floor_double((double)(placer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		
+		EnumFacing facing = new EnumFacing[]{EnumFacing.NORTH, EnumFacing.EAST, EnumFacing.SOUTH, EnumFacing.WEST}[l];
+		
+		worldIn.setBlockState(pos, state.withProperty(DIRECTION, facing), 2);
+	}
 	
-//	@Override
-//	public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLivingBase, ItemStack par6ItemStack)
-//	{
-//		int l = MathHelper.floor_double((double)(par5EntityLivingBase.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-//
-//		if (l == 0)
-//		{
-//			par1World.setBlockMetadataWithNotify(par2, par3, par4, 2, 2);
-//		}
-//
-//		if (l == 1)
-//		{
-//			par1World.setBlockMetadataWithNotify(par2, par3, par4, 5, 2);
-//		}
-//
-//		if (l == 2)
-//		{
-//			par1World.setBlockMetadataWithNotify(par2, par3, par4, 3, 2);
-//		}
-//
-//		if (l == 3)
-//		{
-//			par1World.setBlockMetadataWithNotify(par2, par3, par4, 4, 2);
-//		}
-//	}
-
-//	@Override
-//	public void onBlockAdded(World par1World, int par2, int par3, int par4)
-//	{
-//		super.onBlockAdded(par1World, par2, par3, par4);
-//		if(par1World.getBlockMetadata(par2, par3, par4) == 0)
-//			this.setDefaultDirection(par1World, par2, par3, par4);
-//	}
-
 }

@@ -77,7 +77,7 @@ public class SkaianetInfoPacket extends MinestuckPacket {
 	@Override
 	public void execute(EntityPlayer player) {
 		
-		if(FMLCommonHandler.instance().getEffectiveSide().isClient())
+		if(!Thread.currentThread().getName().contains("Server"))
 			SkaiaClient.consumePacket(this);
 		else SkaianetHandler.requestInfo(player.getName(), this.player);
 		

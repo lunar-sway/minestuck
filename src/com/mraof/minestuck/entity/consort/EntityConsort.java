@@ -38,7 +38,7 @@ public abstract class EntityConsort extends EntityMinestuck
  protected boolean isValidLightLevel()
  {
      int i = MathHelper.floor_double(this.posX);
-     int j = MathHelper.floor_double(this.getBoundingBox().minY);
+     int j = MathHelper.floor_double(this.getEntityBoundingBox().minY);
      int k = MathHelper.floor_double(this.posZ);
 
 //     if (this.worldObj.getSavedLightValue(EnumSkyBlock.SKY, i, j, k) < this.rand.nextInt(8))

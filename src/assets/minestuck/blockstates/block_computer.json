@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "minestuck:block_computer" },
+        "facing=east": { "model": "minestuck:block_computer", "y": 90 },
+        "facing=south": { "model": "minestuck:block_computer", "y": 180 },
+        "facing=west": { "model": "minestuck:block_computer", "y": 270 }
+    }
+}

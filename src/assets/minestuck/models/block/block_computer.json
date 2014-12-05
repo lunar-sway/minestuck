@@ -1,0 +1,8 @@
+{
+    "parent": "block/orientable",
+    "textures": {
+        "top": "minestuck:blocks/PhernaliaFrame",
+        "front": "minestuck:blocks/ComputerFrontOff",
+        "side": "minestuck:blocks/PhernaliaFrame"
+    }
+}

@@ -75,7 +75,7 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 				for(int chunkZ = (z - Minestuck.artifactRange) >> 4; chunkZ <=(z + Minestuck.artifactRange) >> 4; chunkZ++)	//from the overworld.
 					worldserver1.theChunkProviderServer.loadChunk(chunkX, chunkZ);
 			
-			List<?> list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.getBoundingBox().expand((double)Minestuck.artifactRange, Minestuck.artifactRange, (double)Minestuck.artifactRange));
+			List<?> list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().expand((double)Minestuck.artifactRange, Minestuck.artifactRange, (double)Minestuck.artifactRange));
 			Iterator<?> iterator = list.iterator();
 
 			while (iterator.hasNext())
@@ -134,7 +134,7 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 					}
 				}
 			}
-			list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.getBoundingBox().expand((double)Minestuck.artifactRange, Minestuck.artifactRange, (double)Minestuck.artifactRange));
+			list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().expand((double)Minestuck.artifactRange, Minestuck.artifactRange, (double)Minestuck.artifactRange));
 			iterator = list.iterator();
 
 			while (iterator.hasNext())

@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "blocktype=blue": { "model": "minestuck:colored_dirt_blue" },
+        "blocktype=thought": { "model": "minestuck:colored_dirt_thought" }
+    }
+}

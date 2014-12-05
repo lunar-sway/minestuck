@@ -112,7 +112,7 @@ public class EntityAIAttackOnCollideWithRate extends EntityAIBase
 		this.attackTick = Math.max(this.attackTick - 1, 0);
 		double d0 = (double)(this.attacker.width * distanceMultiplier * this.attacker.width * distanceMultiplier);
 
-		if (this.attacker.getDistanceSq(this.entityTarget.posX, this.entityTarget.getBoundingBox().minY, this.entityTarget.posZ) - (entityTarget.width / 2 ) <= d0)
+		if (this.attacker.getDistanceSq(this.entityTarget.posX, this.entityTarget.getEntityBoundingBox().minY, this.entityTarget.posZ) - (entityTarget.width / 2 ) <= d0)
 		{
 			if (this.attackTick <= 0)
 			{

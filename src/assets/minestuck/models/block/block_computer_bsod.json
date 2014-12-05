@@ -1,0 +1,6 @@
+{
+    "parent": "minestuck:block/block_computer",
+    "textures": {
+        "front": "minestuck:blocks/BsodFront"
+    }
+}

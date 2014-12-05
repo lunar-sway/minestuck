@@ -175,7 +175,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	{
 		
 		int i = MathHelper.floor_double(this.posX);
-		int j = MathHelper.floor_double(this.getBoundingBox().minY);
+		int j = MathHelper.floor_double(this.getEntityBoundingBox().minY);
 		int k = MathHelper.floor_double(this.posZ);
 		
 	   //	if (this.worldObj.getBlockLightOpacity(i, j, k) == 0) { //Prevents spawning IN blocks
