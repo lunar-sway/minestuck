@@ -1,7 +1,9 @@
 package com.mraof.minestuck.block;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
 
@@ -34,9 +36,20 @@ public class BlockFluidBrainJuice extends BlockFluidClassic
 //		flowingIcon = par1IconRegister.registerIcon("minestuck:BrainJuiceFlowing");
 //	}
 	
-//	@Override
-//	public boolean canDisplace(IBlockAccess world, int x, int y, int z) 
-//	{
-//		return world.getBlock(x,  y,  z).getMaterial().isLiquid() || super.canDisplace(world, x, y, z);
-//	}
+	@Override
+	public boolean canDisplace(IBlockAccess world, BlockPos pos)
+	{
+		return world.getBlockState(pos).getBlock().getMaterial().isLiquid() || super.canDisplace(world, pos);
+	}
+	
+	//Used to fix a bug in the fml code where the block isn't set to the liquid when flowing into another block.
+	@Override
+	public boolean displaceIfPossible(World world, BlockPos pos)
+	{
+		if(super.displaceIfPossible(world, pos))
+		{
+			world.setBlockState(pos, this.getDefaultState());
+			return true;
+		} else return false;
+	}
 }

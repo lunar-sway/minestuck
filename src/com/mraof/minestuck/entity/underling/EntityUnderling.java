@@ -107,6 +107,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	{
 		return StatCollector.translateToLocalFormatted("entity." + underlingName + ".type", type.getDisplayName());
 	}
+	
 //	@Override
 //	protected boolean isAIEnabled()
 //	{

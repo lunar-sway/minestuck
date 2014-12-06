@@ -104,7 +104,7 @@ public class ChunkProviderSkaia implements IChunkProvider
 			topBlock[i] = (y&511)<=255  ? y&255 : 255 - y&255;
 		}
 		byte chessTileMetadata = (byte) ((Math.abs(chunkX) + Math.abs(chunkZ)) % 2);
-		IBlockState block = Minestuck.chessTile.getDefaultState().withProperty(BlockChessTile.BLOCK_TYPE, chessTileMetadata);
+		IBlockState block = Minestuck.chessTile.getDefaultState().withProperty(BlockChessTile.BLOCK_TYPE, BlockChessTile.BlockType.values()[chessTileMetadata]);
 		for(int x = 0; x < 16; x++)
 			for(int z = 0; z < 16; z++)
 				for(int y = 0; y <= topBlock[x * 16 + z]; y++)

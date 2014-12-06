@@ -29,7 +29,7 @@ public class LandAspectPulse extends LandAspect
 	@Override
 	public Block getOceanBlock() 
 	{
-		return Minestuck.blockBlood;
+		return Blocks.water;//Minestuck.blockBlood;
 	}
 
 	@Override

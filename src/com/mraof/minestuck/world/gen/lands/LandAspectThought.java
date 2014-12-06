@@ -42,7 +42,7 @@ public class LandAspectThought extends LandAspect
 	@Override
 	public Block getOceanBlock() 
 	{
-		return Minestuck.blockBrainJuice;
+		return Blocks.water;//Minestuck.blockBrainJuice;
 	}
 
 	@Override

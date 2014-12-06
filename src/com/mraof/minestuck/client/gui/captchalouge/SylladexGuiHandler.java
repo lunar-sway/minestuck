@@ -1,12 +1,9 @@
 package com.mraof.minestuck.client.gui.captchalouge;
 
-import static org.lwjgl.opengl.GL11.*;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL12;
 
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
@@ -17,6 +14,7 @@ import com.mraof.minestuck.util.Debug;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -121,7 +119,7 @@ public abstract class SylladexGuiHandler extends GuiScreen
 		
 		drawGuiMap(xcor, ycor);
 		
-		glColor4f(1F, 1F, 1F, 1F);
+		GlStateManager.color(1F, 1F, 1F, 1F);
 		
 		ArrayList<GuiItem> visibleItems = new ArrayList<GuiItem>();
 		for(GuiItem item : items)
@@ -133,11 +131,11 @@ public abstract class SylladexGuiHandler extends GuiScreen
 			item.drawItemBackground();
 		
 		RenderHelper.enableGUIStandardItemLighting();
-		glEnable(GL12.GL_RESCALE_NORMAL);
+		GlStateManager.enableRescaleNormal();
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
 		for(GuiItem item : visibleItems)
 			item.drawItem();
-		glDisable(GL_DEPTH_TEST);
+		GlStateManager.disableDepth();
 		RenderHelper.disableStandardItemLighting();
 		
 		finishMap();
@@ -198,14 +196,14 @@ public abstract class SylladexGuiHandler extends GuiScreen
 	
 	private void prepareMap(int xOffset, int yOffset)
 	{
-		glPushMatrix();
-		glTranslatef((float)xOffset, (float)yOffset, 0F);
-		glScalef(1.0F / this.scroll, 1.0F / this.scroll, 1.0F);
+		GlStateManager.pushMatrix();
+		GlStateManager.translate((float)xOffset, (float)yOffset, 0F);
+		GlStateManager.scale(1.0F / this.scroll, 1.0F / this.scroll, 1.0F);
 	}
 	
 	private void finishMap()
 	{
-		glPopMatrix();
+		GlStateManager.popMatrix();
 	}
 	
 	private boolean isMouseInContainer(int xcor, int ycor)
@@ -281,7 +279,7 @@ public abstract class SylladexGuiHandler extends GuiScreen
 		
 		protected void drawItem()
 		{
-			glColor4f(1F, 1F, 1F, 1F);
+			GlStateManager.color(1F, 1F, 1F, 1F);
 			if(this.item != null)
 			{
 				int x = this.xPos +2 - gui.mapX;
@@ -292,13 +290,13 @@ public abstract class SylladexGuiHandler extends GuiScreen
 				if(item.stackSize > 1)
 				{
 					String stackSize = String.valueOf(item.stackSize);
-					glDisable(GL_LIGHTING);
-					glDisable(GL_DEPTH_TEST);
-					glDisable(GL_BLEND);
+					GlStateManager.disableLighting();
+					GlStateManager.disableDepth();
+					GlStateManager.disableBlend();
 					gui.mc.fontRendererObj.func_175063_a(stackSize, x + 16 - gui.mc.fontRendererObj.getStringWidth(stackSize), y + 8, 0xC6C6C6);
-					glEnable(GL_LIGHTING);
-					glEnable(GL_DEPTH_TEST);
-					glEnable(GL_BLEND);
+					GlStateManager.enableLighting();
+					GlStateManager.enableDepth();
+					GlStateManager.enableBlend();
 				}
 				gui.itemRender.func_180453_a(gui.mc.fontRendererObj, item, x, y, "");
 			}

@@ -30,7 +30,7 @@ import com.mraof.minestuck.world.gen.lands.LandHelper;
 public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 {
 	List<Block> commonBlocks = new ArrayList<Block>();
-	int destinationDimension = Minestuck.landDimensionIdStart;
+	
 	public ItemCruxiteArtifact(int par2, boolean par3) 
 	{
 		super(1, par2, par3);
@@ -151,10 +151,5 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 			Debug.printf("Respawn location being set to: %d, %d, %d", x, y, z);
 		}
 	}
-//	@Override
-//	public void registerIcons(IIconRegister iconRegister) 
-//	{
-//		this.itemIcon = iconRegister.registerIcon("minestuck:CruxiteApple");
-//	}
-
+	
 }

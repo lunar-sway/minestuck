@@ -5,6 +5,9 @@ import java.util.Random;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -15,11 +18,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import static com.mraof.minestuck.block.BlockComputerOff.DIRECTION;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiHandler;
@@ -28,8 +34,23 @@ import com.mraof.minestuck.tileentity.TileEntityMachine;
 public class BlockMachine extends BlockContainer {
 
 	public static final String[] iconNames = {"Cruxtruder","PunchDesignix","TotemLathe","Alchemiter","GristWidget"}; //PhernaliaFrame
-//	private IIcon[] textures;
-
+	
+	public static enum MachineTypes implements IStringSerializable
+	{
+		CRUXTRUDER,
+		PUNCH_DESIGNIX,
+		TOTEM_LATHE,
+		ALCHEMITER,
+		GRIST_WIDGET;
+		
+		public String getName()
+		{
+			return name().toLowerCase();
+		}
+	}
+	
+	public static final PropertyEnum MACHINE_TYPE = PropertyEnum.create("machine_type", MachineTypes.class);
+	
 	public BlockMachine() {
 		super(Material.rock);
 		
@@ -38,20 +59,32 @@ public class BlockMachine extends BlockContainer {
 		this.setCreativeTab(Minestuck.tabMinestuck);
 
 	}
-
-//	@Override
-//	public IIcon getIcon(int side, int metadata) 
-//	{
-//		return textures[metadata];
-//	}
 	
-//	@Override
-//	public int damageDropped(int metadata) 
-//	{
-//		return metadata;
-//	}
-
-//	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	protected BlockState createBlockState()
+	{
+		return new BlockState(this, MACHINE_TYPE);
+	}
+	
+	@Override
+	public int getMetaFromState(IBlockState state)
+	{
+		return ((MachineTypes) state.getValue(MACHINE_TYPE)).ordinal();
+	}
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta)
+	{
+		return getDefaultState().withProperty(MACHINE_TYPE, MachineTypes.values()[meta]);
+	}
+	
+	@Override
+	public int damageDropped(IBlockState state)
+	{
+		return ((MachineTypes)state.getValue(MACHINE_TYPE)).ordinal();
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(Item item, CreativeTabs tab, List subItems) 
@@ -59,12 +92,13 @@ public class BlockMachine extends BlockContainer {
 		for(int i = 0; i < iconNames.length; i++)
 			subItems.add(new ItemStack(this, 1, i));
 	}
-//	@Override
-//	public boolean renderAsNormalBlock()
-//	{
-//		return false;
-//	}
-
+	
+	@Override
+	public boolean isFullCube()
+	{
+		return false;
+	}
+	
 	@Override
 	public int getRenderType()
 	{
@@ -76,44 +110,37 @@ public class BlockMachine extends BlockContainer {
 	{
 		return false;
 	}
-
-
-//	@Override
-//	@SideOnly(Side.CLIENT)
-//	public void registerBlockIcons(IIconRegister par1IconRegister)
-//	{
-//		this.textures = new IIcon[iconNames.length];
-//
-//		for (int i = 0; i < this.textures.length; i++)
-//			this.textures[i] = par1IconRegister.registerIcon("minestuck:" + iconNames[i]);
-//	}
-
-//	@Override
-//	public boolean onBlockActivated(World world, int x,int y,int z, EntityPlayer player,int par6, float par7, float par8, float par9) {
-//		TileEntityMachine tileEntity = (TileEntityMachine) world.getTileEntity(x, y, z);
-//		if (!world.isRemote) {
-//			tileEntity.owner = player;
-//		}
-//		if (tileEntity == null || player.isSneaking()) {
-//			return false;
-//		}
-//
-//
-//		player.openGui(Minestuck.instance, GuiHandler.GuiId.MACHINE.ordinal(), world, x, y, z);
-//		return true;
-//	}
 	
-//	@Override
-//	public void onBlockDestroyedByExplosion(World world, int x, int y, int z, Explosion explosion) {
-//		dropItems(world, x, y, z);
-//		super.onBlockDestroyedByExplosion(world, x, y, z, explosion);
-//	}
+	@Override
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ)
+	{
+		TileEntityMachine tileEntity = (TileEntityMachine) worldIn.getTileEntity(pos);
+		if (!worldIn.isRemote)
+		{
+			tileEntity.owner = playerIn;
+		}
+		if (tileEntity == null || playerIn.isSneaking())
+		{
+			return false;
+		}
+		
+		playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.MACHINE.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
+		return true;
+	}
 	
-//	@Override
-//	public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int metaData) {
-//		dropItems(world, x, y, z);
-//		super.onBlockDestroyedByPlayer(world, x, y, z, metaData);
-//	}
+	@Override
+	public void onBlockDestroyedByExplosion(World worldIn, BlockPos pos, Explosion explosionIn)
+	{
+		dropItems(worldIn, pos.getX(), pos.getY(), pos.getZ());
+		super.onBlockDestroyedByExplosion(worldIn, pos, explosionIn);
+	}
+	
+	@Override
+	public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state)
+	{
+		dropItems(worldIn, pos.getX(), pos.getY(), pos.getZ());
+		super.onBlockDestroyedByPlayer(worldIn, pos, state);
+	}
 	
 	private void dropItems(World world, int x, int y, int z){
 		Random rand = new Random();
@@ -150,23 +177,18 @@ public class BlockMachine extends BlockContainer {
 		}
 	}
 	
-//	@Override
-	public TileEntity createTileEntity(World world, int metaData) {
-		return new TileEntityMachine();
+	@Override
+	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
+	{
+		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
+		int l = MathHelper.floor_double((double)(placer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		TileEntityMachine tileEntity = (TileEntityMachine) worldIn.getTileEntity(pos);
+		tileEntity.rotation = (byte) l;
+		
 	}
 	
-//	@Override
-//	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase par5EntityLivingBase, ItemStack par6ItemStack) 
-//	{
-//		super.onBlockPlacedBy(world, x, y, z, par5EntityLivingBase, par6ItemStack);
-//		int l = MathHelper.floor_double((double)(par5EntityLivingBase.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-//		TileEntityMachine tileEntity = (TileEntityMachine) world.getTileEntity(x, y, z);
-//		tileEntity.rotation = (byte) l;
-//
-//	}
-
 	@Override
 	public TileEntity createNewTileEntity(World world, int metaData) {
-		return createTileEntity(world, metaData);
+		return new TileEntityMachine();
 	}
 }

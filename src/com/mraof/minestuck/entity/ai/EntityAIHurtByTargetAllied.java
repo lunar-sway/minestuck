@@ -13,8 +13,8 @@ import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.util.AxisAlignedBB;
 
 public class EntityAIHurtByTargetAllied extends EntityAITarget {
-	Predicate<Entity> entitySelector;	
-	private int field_142052_b;
+	Predicate<Entity> entitySelector;
+	private int revengeTimer;
 
 	public EntityAIHurtByTargetAllied(EntityCreature par1EntityCreature, Predicate<Entity> entitySelector)
 	{
@@ -28,8 +28,8 @@ public class EntityAIHurtByTargetAllied extends EntityAITarget {
 	 */
 	public boolean shouldExecute()
 	{
-		int i = this.taskOwner.getAge();//func_142015_aE();
-		return i != this.field_142052_b && this.isSuitableTarget(this.taskOwner.getAITarget(), false);
+		int i = this.taskOwner.getRevengeTimer();
+		return i != this.revengeTimer && this.isSuitableTarget(this.taskOwner.getAITarget(), false);
 	}
 
 	/**
@@ -38,10 +38,10 @@ public class EntityAIHurtByTargetAllied extends EntityAITarget {
 	public void startExecuting()
 	{
 		this.taskOwner.setAttackTarget(this.taskOwner.getAITarget());
-		this.field_142052_b = this.taskOwner.getAge();//func_142015_aE(); Not sure if "getAge" is the correct method
+		this.revengeTimer = this.taskOwner.getRevengeTimer();
 
 		double d0 = this.getTargetDistance();
-		List<?> list = this.taskOwner.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.fromBounds(this.taskOwner.posX, this.taskOwner.posY, this.taskOwner.posZ, this.taskOwner.posX + 1.0D, this.taskOwner.posY + 1.0D, this.taskOwner.posZ + 1.0D).expand(d0, 10.0D, d0));
+		List<?> list = this.taskOwner.worldObj.func_175647_a(EntityLivingBase.class, AxisAlignedBB.fromBounds(this.taskOwner.posX, this.taskOwner.posY, this.taskOwner.posZ, this.taskOwner.posX + 1.0D, this.taskOwner.posY + 1.0D, this.taskOwner.posZ + 1.0D).expand(d0, 10.0D, d0), entitySelector);
 		Iterator<?> iterator = list.iterator();
 
 		while (iterator.hasNext())

@@ -13,12 +13,17 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.BlockMachine;
+import com.mraof.minestuck.block.BlockMachine.MachineTypes;
 import com.mraof.minestuck.entity.item.EntityGrist;
+import com.mraof.minestuck.item.block.ItemMachine;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.CombinationRegistry;
@@ -32,7 +37,8 @@ import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.UsernameHandler;
 
-public class TileEntityMachine extends TileEntity implements IInventory {
+public class TileEntityMachine extends TileEntity implements IInventory, IUpdatePlayerListBox
+{
 
     public ItemStack[] inv;
     public int progress = 0;
@@ -116,13 +122,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		return this.worldObj.getTileEntity(pos) == this &&
 				player.getDistanceSq(this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5) < 64;
 	}
-
-//    @Override
-//    public void openChest() {}
-//
-//    @Override
-//    public void closeChest() {}
-    
+	
     @Override
     public void readFromNBT(NBTTagCompound tagCompound) {
             super.readFromNBT(tagCompound);
@@ -183,14 +183,19 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		return true;
 	}
 
-	public int getMetadata() {
-		return 0;//this.worldObj.getBlockMetadata(this.xCoord,this.yCoord,this.zCoord);
+	public int getMetadata()
+	{
+		return ((MachineTypes) this.worldObj.getBlockState(this.pos).getValue(BlockMachine.MACHINE_TYPE)).ordinal();
 	}
 	
-//	@Override
-	public void updateEntity() {
+	@Override
+	public void update()
+	{
+		if(worldObj.getBlockState(pos).getBlock() != Minestuck.blockMachine)
+			return;
 		
-		if (!contentsValid()) {
+		if (!contentsValid())
+		{
 			this.progress = 0;
 			this.ready = overrideStop;
 			return;
@@ -198,7 +203,8 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		
 		this.progress++;
 		
-		if (this.progress == this.maxProgress) {
+		if (this.progress == this.maxProgress)
+		{
 			this.progress = 0;
 			this.ready = overrideStop;
 			processContents();
@@ -420,9 +426,9 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 	@Override
 	public String getName()
 	{
-		return "Alchemy Machine";
+		return "tile.blockMachine."+ItemMachine.subNames[getMetadata()]+".name";
 	}
-
+	
 	@Override
 	public boolean hasCustomName()
 	{
@@ -430,44 +436,35 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 	}
 
 	@Override
-	public IChatComponent getDisplayName() {
-		// TODO Auto-generated method stub
-		return null;
+	public IChatComponent getDisplayName()
+	{
+		return new ChatComponentTranslation(getName());
 	}
 
 	@Override
-	public void openInventory(EntityPlayer playerIn) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void openInventory(EntityPlayer playerIn) {}
 
 	@Override
-	public void closeInventory(EntityPlayer playerIn) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void closeInventory(EntityPlayer playerIn) {}
 
 	@Override
-	public int getField(int id) {
-		// TODO Auto-generated method stub
+	public int getField(int id)
+	{
 		return 0;
 	}
 
 	@Override
-	public void setField(int id, int value) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	public void setField(int id, int value) {}
+	
 	@Override
-	public int getFieldCount() {
-		// TODO Auto-generated method stub
+	public int getFieldCount()
+	{
 		return 0;
 	}
 
 	@Override
-	public void clearInventory() {
-		// TODO Auto-generated method stub
+	public void clearInventory()
+	{
 		
 	}
 	

@@ -1,9 +1,8 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
-
-import org.lwjgl.opengl.GL11;
 
 import com.mraof.minestuck.util.KindAbstratusList;
 import com.mraof.minestuck.util.KindAbstratusType;
@@ -27,7 +26,7 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
 		super.drawScreen(xcor, ycor, par3);
 		this.drawDefaultBackground();
 		
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		
 		drawTabs();
 		

@@ -2,9 +2,7 @@ package com.mraof.minestuck.client.gui.playerStats;
 
 import java.util.Arrays;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -39,7 +37,7 @@ public class GuiGristCache extends GuiPlayerStats
 		super.drawScreen(xcor, ycor, par3);
 		this.drawDefaultBackground();
 		
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		
 		drawTabs();
 		
@@ -51,11 +49,11 @@ public class GuiGristCache extends GuiPlayerStats
 		
 		drawActiveTabAndOther(xcor, ycor);
 		
-		GL11.glColor3f(1,1,1);
-		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+		GlStateManager.color(1,1,1);
+		GlStateManager.disableRescaleNormal();
 		RenderHelper.disableStandardItemLighting();
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GlStateManager.disableLighting();
+		GlStateManager.disableDepth();
 		
 		int tooltip = -1;
 		
@@ -100,7 +98,7 @@ public class GuiGristCache extends GuiPlayerStats
 		render.addVertexWithUV((double)(x + iconX), (double)(y +  iconY), (double)this.zLevel, (double)((float)(iconU + iconX) * scale), (double)((float)(iconV +  iconY) * scale));
 		render.addVertexWithUV((double)(x + iconX), (double)(y + 0), (double)this.zLevel, (double)((float)(iconU + iconX) * scale), (double)((float)(iconV + 0) * scale));
 		render.addVertexWithUV((double)(x + 0), (double)(y + 0), (double)this.zLevel, (double)((float)(iconU + 0) * scale), (double)((float)(iconV + 0) * scale));
-		render.draw();
+		Tessellator.getInstance().draw();
 	}
 	
 }

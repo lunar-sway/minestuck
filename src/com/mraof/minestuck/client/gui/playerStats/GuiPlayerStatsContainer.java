@@ -5,9 +5,6 @@ import static com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats.*;
 import java.io.IOException;
 import java.util.Arrays;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats.EditmodeGuiType;
 import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats.NormalGuiType;
 import com.mraof.minestuck.editmode.ClientEditHandler;
@@ -17,6 +14,7 @@ import com.mraof.minestuck.util.UsernameHandler;
 
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.EnumChatFormatting;
@@ -55,7 +53,7 @@ public abstract class GuiPlayerStatsContainer extends GuiContainer
 	
 	protected void drawTabs()
 	{
-		GL11.glColor3f(1,1,1);
+		GlStateManager.color(1,1,1);
 		
 		mc.getTextureManager().bindTexture(GuiPlayerStats.icons);
 		
@@ -82,7 +80,7 @@ public abstract class GuiPlayerStatsContainer extends GuiContainer
 	
 	protected void drawActiveTabAndIcons()
 	{
-		GL11.glColor3f(1,1,1);
+		GlStateManager.color(1,1,1);
 		
 		mc.getTextureManager().bindTexture(GuiPlayerStats.icons);
 		
@@ -98,8 +96,8 @@ public abstract class GuiPlayerStatsContainer extends GuiContainer
 	protected void drawTabTooltip(int xcor, int ycor)
 	{
 		
-//		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
+//		GlStateManager.disableRescaleNormal();
+		GlStateManager.disableDepth();
 		
 		if(ycor < yOffset && ycor > yOffset - tabHeight + 4)
 			for(int i = 0; i < (mode? NormalGuiType.values():EditmodeGuiType.values()).length; i++)
@@ -109,7 +107,7 @@ public abstract class GuiPlayerStatsContainer extends GuiContainer
 						&& (!mode || !NormalGuiType.values()[i].reqMedium || SkaiaClient.enteredMedium(UsernameHandler.encode(mc.thePlayer.getName())) || mc.playerController.isInCreativeMode()))
 					drawHoveringText(Arrays.asList(StatCollector.translateToLocal(mode? NormalGuiType.values()[i].name:EditmodeGuiType.values()[i].name)),
 							xcor - guiLeft, ycor - guiTop, fontRendererObj);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GlStateManager.enableDepth();
 	}
 	
 	@Override

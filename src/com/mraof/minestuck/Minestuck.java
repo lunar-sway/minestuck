@@ -93,7 +93,6 @@ import com.mraof.minestuck.item.ItemModus;
 import com.mraof.minestuck.item.block.ItemBlockLayered;
 import com.mraof.minestuck.item.block.ItemChessTile;
 import com.mraof.minestuck.item.block.ItemColoredDirt;
-import com.mraof.minestuck.item.block.ItemComputerOff;
 import com.mraof.minestuck.item.block.ItemMachine;
 import com.mraof.minestuck.item.block.ItemOreCruxite;
 import com.mraof.minestuck.item.block.ItemStorageBlock;
@@ -200,9 +199,9 @@ public class Minestuck
 	public static Block blockComputerOff;
 	public static Block transportalizer;
 	
-	public static Block blockOil;
-	public static Block blockBlood;
-	public static Block blockBrainJuice;
+//	public static Block blockOil;	Disabled these because I couldn't find any fluid rendering code.
+//	public static Block blockBlood;
+//	public static Block blockBrainJuice;
 	public static Block layeredSand;
 
 	public static Fluid fluidOil;
@@ -329,7 +328,7 @@ public class Minestuck
 		//machines
 		blockStorage = GameRegistry.registerBlock(new BlockStorage(),ItemStorageBlock.class,"block_storage");
 		blockMachine = GameRegistry.registerBlock(new BlockMachine(), ItemMachine.class,"block_machine");
-		blockComputerOff = GameRegistry.registerBlock(new BlockComputerOff(), ItemComputerOff.class,"block_computer");
+		blockComputerOff = GameRegistry.registerBlock(new BlockComputerOff(),"block_computer");
 		blockComputerOn = GameRegistry.registerBlock(new BlockComputerOn(),"block_computer_on");
 		transportalizer = GameRegistry.registerBlock(new BlockTransportalizer(), "transportalizer");
 		//fluids
@@ -339,9 +338,9 @@ public class Minestuck
 		FluidRegistry.registerFluid(fluidBlood);
 		fluidBrainJuice = new Fluid("BrainJuice");
 		FluidRegistry.registerFluid(fluidBrainJuice);
-		blockOil = GameRegistry.registerBlock(new BlockFluidOil(fluidOil, Material.water), "block_oil");
-		blockBlood = GameRegistry.registerBlock(new BlockFluidBlood(fluidBlood, Material.water), "block_blood");
-		blockBrainJuice = GameRegistry.registerBlock(new BlockFluidBrainJuice(fluidBrainJuice, Material.water), "block_brain_juice");
+//		blockOil = GameRegistry.registerBlock(new BlockFluidOil(fluidOil, Material.water), null, "block_oil");
+//		blockBlood = GameRegistry.registerBlock(new BlockFluidBlood(fluidBlood, Material.water), null, "block_blood");
+//		blockBrainJuice = GameRegistry.registerBlock(new BlockFluidBrainJuice(fluidBrainJuice, Material.water), null, "block_brain_juice");
 
 		//items
 		//hammers
@@ -386,9 +385,9 @@ public class Minestuck
 		minestuckBucket = new ItemMinestuckBucket();
 		captchaModus = new ItemModus();
 		
-		minestuckBucket.addBlock(blockBlood);
-		minestuckBucket.addBlock(blockOil);
-		minestuckBucket.addBlock(blockBrainJuice);
+//		minestuckBucket.addBlock(blockBlood);
+//		minestuckBucket.addBlock(blockOil);
+//		minestuckBucket.addBlock(blockBrainJuice);
 		
 		GameRegistry.registerItem(clawHammer, "claw_hammer");
 		GameRegistry.registerItem(sledgeHammer, "sledge_hammer");
@@ -452,9 +451,9 @@ public class Minestuck
 //		MinecraftForge.setBlockHarvestLevel(blockMachine, "pickaxe", 1);
 
 
-		fluidOil.setUnlocalizedName(blockOil.getUnlocalizedName());
-		fluidBlood.setUnlocalizedName(blockBlood.getUnlocalizedName());
-		fluidBrainJuice.setUnlocalizedName(blockBrainJuice.getUnlocalizedName());
+//		fluidOil.setUnlocalizedName(blockOil.getUnlocalizedName());
+//		fluidBlood.setUnlocalizedName(blockBlood.getUnlocalizedName());
+//		fluidBrainJuice.setUnlocalizedName(blockBrainJuice.getUnlocalizedName());
 		
 //		Debug.printf("Blood id: %d, Oil id: %d", blockBloodId, blockOilId);
 		

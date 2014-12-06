@@ -17,6 +17,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.BlockChessTile;
+import com.mraof.minestuck.block.BlockMachine;
 import com.mraof.minestuck.block.BlockStorage;
 import com.mraof.minestuck.block.BlockChessTile.BlockType;
 import com.mraof.minestuck.block.BlockColoredDirt;
@@ -98,9 +99,12 @@ public class MinestuckTextureManager
 		for(BlockStorage.BlockType type : BlockStorage.BlockType.values())
 			register(Minestuck.blockStorage, type.ordinal(), "block_storage_"+type.name);
 		register(Minestuck.layeredSand);
+		for(BlockMachine.MachineTypes type : BlockMachine.MachineTypes.values())
+			register(Minestuck.blockMachine, type.ordinal(), "machine_"+type.getName());
 		
 		//Register block states
 		BlockModelShapes blockModelRegistry = modelRegistry.getModelManager().getBlockModelShapes();
+		//Blocks are registered here that got state properties that doesn't affect rendering, or if some properties should have their own blockstates files.
 	}
 	
 	/**
@@ -132,6 +136,8 @@ public class MinestuckTextureManager
 			ModelBakery.addVariantName(Item.getItemFromBlock(Minestuck.coloredDirt), "minestuck:colored_dirt_"+type.name);
 		for(BlockStorage.BlockType type : BlockStorage.BlockType.values())
 			ModelBakery.addVariantName(Item.getItemFromBlock(Minestuck.blockStorage), "minestuck:block_storage_"+type.name);
+		for(BlockMachine.MachineTypes type : BlockMachine.MachineTypes.values())
+			ModelBakery.addVariantName(Item.getItemFromBlock(Minestuck.blockMachine), "minestuck:machine_"+type.getName());
 	}
 	
 	private static void register(Item item)

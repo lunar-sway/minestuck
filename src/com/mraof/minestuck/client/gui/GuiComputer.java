@@ -7,14 +7,12 @@ import java.util.Map.Entry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.ComputerProgram;
@@ -31,18 +29,6 @@ public class GuiComputer extends GuiScreen
 	
 	public GuiButton programButton;
 	
-	/**
-	 * Contains the usernames that possibly is displayed on the shown buttons.
-	 * Used by the client program when connecting to a server.
-	 */
-/*	private final String[] usernameList = new String[4];
-	private String displayMessage = "";
-	private int index = 0;*/ //unused
-	/**
-	 * Used to count which four button strings that will be added.
-	 */
-	//private int stringIndex; //unused
-
 	public Minecraft mc;
 	public TileEntityComputer te;
 
@@ -62,7 +48,7 @@ public class GuiComputer extends GuiScreen
 		
 		this.drawDefaultBackground();
 		
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		if(te.hasProgram(-1)) {
 			this.mc.getTextureManager().bindTexture(guiBsod);
 			int yOffset = (this.height / 2) - (ySize / 2);
@@ -75,10 +61,10 @@ public class GuiComputer extends GuiScreen
 			this.drawTexturedModalRect((this.width / 2) - (xSize / 2), yOffset, 0, 0, xSize, ySize);
 			fontRendererObj.drawString("Insert disk.", (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
 		}
-		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+		GlStateManager.disableRescaleNormal();
 		RenderHelper.disableStandardItemLighting();
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GlStateManager.disableLighting();
+		GlStateManager.disableDepth();
 
 		super.drawScreen(xcor, ycor, par3);
 	}

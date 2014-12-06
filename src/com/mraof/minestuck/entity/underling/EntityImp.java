@@ -28,11 +28,11 @@ public class EntityImp extends EntityUnderling
 	@Override
 	public void onLivingUpdate() 
 	{
-		if(GristType.Uranium == this.type && this.rand.nextDouble() < .0001)
-		{
-			this.motionX += rand.nextInt(33) - 16;
-			this.motionZ += rand.nextInt(33) - 16;
-		}
+//		if(GristType.Uranium == this.type && this.rand.nextDouble() < .0001)	I think someone misunderstood where the uranium imp's teleporting powers came from
+//		{
+//			this.motionX += rand.nextInt(33) - 16;
+//			this.motionZ += rand.nextInt(33) - 16;
+//		}
 		super.onLivingUpdate();
 	}
 

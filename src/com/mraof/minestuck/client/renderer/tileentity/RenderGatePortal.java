@@ -105,7 +105,7 @@ public class RenderGatePortal extends TileEntitySpecialRenderer
             var24.addVertex(par2, par4 + var13, par6 + 1.0D);
             var24.addVertex(par2 + 1.0D, par4 + var13, par6 + 1.0D);
             var24.addVertex(par2 + 1.0D, par4 + var13, par6);
-            var24.draw();
+			Tessellator.getInstance().draw();
             GL11.glPopMatrix();
             GL11.glMatrixMode(GL11.GL_MODELVIEW);
         }

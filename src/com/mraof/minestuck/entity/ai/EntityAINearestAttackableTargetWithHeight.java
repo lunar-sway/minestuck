@@ -20,7 +20,7 @@ public class EntityAINearestAttackableTargetWithHeight extends EntityAITarget
 	Class<? extends Entity> targetClass;
 	int targetChance;
 	private float targetHeightDistance;
-	private final Predicate field_82643_g;
+	private final Predicate targetPredicate;
 
 	/** Instance of EntityAINearestAttackableTargetSorter. */
 	private EntityAINearestAttackableTargetWithHeightSorter theNearestAttackableTargetWithHeightSorter;
@@ -45,7 +45,7 @@ public class EntityAINearestAttackableTargetWithHeight extends EntityAITarget
 		this.targetHeightDistance = 4;
 		this.targetChance = par4;
 		this.theNearestAttackableTargetWithHeightSorter = new EntityAINearestAttackableTargetWithHeightSorter(this, owner);
-		this.field_82643_g = par7IEntitySelector;
+		this.targetPredicate = par7IEntitySelector;
 		this.setMutexBits(1);
 	}
 
@@ -73,7 +73,7 @@ public class EntityAINearestAttackableTargetWithHeight extends EntityAITarget
 			}
 			else
 			{
-				List list = this.taskOwner.worldObj.getEntitiesWithinAABB(this.targetClass, this.taskOwner.getEntityBoundingBox().expand((double)this.targetDistance, this.targetHeightDistance, (double)this.targetDistance));
+				List list = this.taskOwner.worldObj.func_175647_a(this.targetClass, this.taskOwner.getEntityBoundingBox().expand((double)this.targetDistance, this.targetHeightDistance, (double)this.targetDistance), targetPredicate);
 				Collections.sort(list, this.theNearestAttackableTargetWithHeightSorter);
 				Iterator iterator = list.iterator();
 				
