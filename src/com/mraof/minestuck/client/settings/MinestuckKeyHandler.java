@@ -22,7 +22,6 @@ public class MinestuckKeyHandler
 	KeyBinding captchaKey;
 	boolean statKeyPressed = false;
 	boolean editKeyPressed = false;
-	boolean captchaPressed = false;
 	
 	public MinestuckKeyHandler()
 	{
@@ -37,28 +36,27 @@ public class MinestuckKeyHandler
 	@SubscribeEvent
 	public void onTick(TickEvent.ClientTickEvent event)
 	{
-		if(statKey.getIsKeyPressed() && !statKeyPressed)
+		if(statKey.isKeyDown() && !statKeyPressed)
 		{
 			
 			GuiPlayerStats.openGui(false);
 			
 		}
-		else if(editKey.getIsKeyPressed() && !editKeyPressed)
+		else if(editKey.isKeyDown() && !editKeyPressed)
 		{
 			
 			if(Minecraft.getMinecraft().currentScreen == null)
 				ClientEditHandler.onKeyPressed();
 			
 		}
-		else if(captchaKey.getIsKeyPressed() && !captchaPressed)
+		else if(captchaKey.isPressed())
 		{
-			if(Minecraft.getMinecraft().currentScreen == null)
+			if(Minecraft.getMinecraft().currentScreen == null && Minecraft.getMinecraft().thePlayer.getHeldItem() != null)
 				MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.CAPTCHALOUGE));
 		}
 		
-		statKeyPressed = statKey.getIsKeyPressed();
-		editKeyPressed = editKey.getIsKeyPressed();
-		captchaPressed = captchaKey.getIsKeyPressed();
+		statKeyPressed = statKey.isKeyDown();
+		editKeyPressed = editKey.isKeyDown();
 		
 	}
 	

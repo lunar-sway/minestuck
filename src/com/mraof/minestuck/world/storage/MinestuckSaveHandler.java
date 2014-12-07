@@ -54,4 +54,13 @@ public class MinestuckSaveHandler
 		//}
 
 	}
+	
+	//Remove when the issue MinecraftForge#1551 is resolved
+	@SubscribeEvent
+	public void onWorldLoad(WorldEvent.Load event)
+	{
+		if(!event.world.isRemote && event.world.villageCollectionObj == null)
+			event.world.init();
+	}
+	
 }

@@ -42,30 +42,5 @@ public abstract class ItemWeapon extends ItemTool
 		multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(this.itemModifierUUID, "Tool Modifier", (double)this.getAttackDamage(), 0));
 		return multimap;
 	}
-
-//	@Override
-//	public boolean onBlockDestroyed(ItemStack itemStack, World world, Block par3, int par4, int par5, int par6, EntityLivingBase par7EntityLiving) {
-//		return super.onBlockDestroyed(itemStack, world, par3, par4, par5, par6, par7EntityLiving);
-//	}
-
-//	@Override
-//	public float func_150893_a(ItemStack p_150893_1_, Block p_150893_2_) 
-//	{
-//		return getStrVsBlock(p_150893_1_, p_150893_2_);
-//	}
 	
-//	public float getStrVsBlock(ItemStack itemStack, Block block) 
-//	{
-//		return super.func_150893_a(itemStack, block);
-//	}
-
-//	@Override
-//	public boolean func_150897_b(Block p_150897_1_) {
-//		return canHarvestBlock(p_150897_1_);
-//	}
-//	
-//	public boolean canHarvestBlock(Block block) {
-//		return super.func_150897_b(block);
-//	}
-
 }

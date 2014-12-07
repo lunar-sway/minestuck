@@ -31,7 +31,7 @@ public class ItemBlockLayered extends ItemBlock {
 		{
 			return false;
 		}
-		else if (!playerIn.func_175151_a(pos, side, stack))	//Originally called "canPlayerEdit"
+		else if (!playerIn.canPlayerEdit(pos, side, stack))
 		{
 			return false;
 		}

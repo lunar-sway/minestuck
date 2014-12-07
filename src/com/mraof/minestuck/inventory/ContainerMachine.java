@@ -205,9 +205,9 @@ public class ContainerMachine extends Container {
 	}
 	
 	@Override
-	public void onCraftGuiOpened(ICrafting par1ICrafting)
+	public void addCraftingToCrafters(ICrafting par1ICrafting)
 	{
-		super.onCraftGuiOpened(par1ICrafting);
+		super.addCraftingToCrafters(par1ICrafting);
 //		System.out.printf("addCraftingToCrafters running, the metadata is %d\n", this.metadata);
 		switch(this.metadata)
 		{

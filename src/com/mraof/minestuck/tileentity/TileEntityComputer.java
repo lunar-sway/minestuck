@@ -140,9 +140,4 @@ public class TileEntityComputer extends TileEntity
 		}
 	}
 	
-//	@Override
-//	public boolean canUpdate()
-//	{
-//		return false;
-//	}
 }

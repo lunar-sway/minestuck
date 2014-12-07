@@ -64,20 +64,12 @@ public class TileEntityGatePortal extends TileEntity implements ITeleporter
 		{
 			for(int blockZ = (int) z - 2; blockZ < z + 2; blockZ++)
 			{
-				worldserver1.setBlockState(new BlockPos(blockX, (int) y - 1, blockZ), Minestuck.chessTile.getDefaultState().withProperty(BlockChessTile.BLOCK_TYPE, (blockX + blockZ) & 3), 3);
-//				for(int blockY = (int) y; blockY < y + 6; blockY++)
-//					if(worldserver1.isBlockNormalCubeDefault(blockX, blockY, blockZ, true))
-//						worldserver1.setBlockToAir(new BlockPos(blockX, blockY, blockZ));
-					
-					
+				worldserver1.setBlockState(new BlockPos(blockX, (int) y - 1, blockZ), Minestuck.chessTile.getDefaultState().withProperty(BlockChessTile.BLOCK_TYPE, BlockChessTile.BlockType.values()[(blockX + blockZ) & 3]), 3);
+				for(int blockY = (int) y; blockY < y + 6; blockY++)
+					if(worldserver1.isBlockNormalCube(new BlockPos(blockX, blockY, blockZ), true))
+						worldserver1.setBlockToAir(new BlockPos(blockX, blockY, blockZ));
 			}
 		}
 	}
-
-//	@Override
-//	public boolean canUpdate()
-//	{
-//		return false;
-//	}
-
+	
 }

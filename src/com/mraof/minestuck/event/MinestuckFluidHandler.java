@@ -5,6 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
+import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -30,11 +31,11 @@ public class MinestuckFluidHandler
 	private ItemStack fillCustomBucket(World world, MovingObjectPosition pos) 
 	{
 
-		Block block = world.getBlockState(pos.func_178782_a()).getBlock();
+		Block block = world.getBlockState(pos.getBlockPos()).getBlock();
 
-		if (Minestuck.minestuckBucket.fillFluids.contains(block) /*&& world.getBlockState(pos.func_178782_a()).getValue() == 0*/) 
+		if (Minestuck.minestuckBucket.fillFluids.contains(block) && ((Integer) world.getBlockState(pos.getBlockPos()).getValue(BlockFluidBase.LEVEL)) == 0) 
 		{
-			world.setBlockToAir(pos.func_178782_a());
+			world.setBlockToAir(pos.getBlockPos());
 			return new ItemStack(Minestuck.minestuckBucket, 1, Minestuck.minestuckBucket.FillFluidIds.get(block));
 		} else
 			return null;

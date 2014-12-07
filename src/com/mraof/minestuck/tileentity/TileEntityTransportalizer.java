@@ -187,11 +187,6 @@ public class TileEntityTransportalizer extends TileEntity implements ITeleporter
 		entity.setLocationAndAngles(this.pos.getX() + 0.5, this.pos.getY() + 0.6, this.pos.getZ() + 0.5, entity.rotationYaw, entity.rotationPitch);
 		entity.timeUntilPortal = 60;
 	}
-
-//	@Override
-//	public boolean canUpdate()
-//	{
-//		return false;
-//	}
+	
 }
 

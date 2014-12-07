@@ -41,7 +41,7 @@ public class EntityAIHurtByTargetAllied extends EntityAITarget {
 		this.revengeTimer = this.taskOwner.getRevengeTimer();
 
 		double d0 = this.getTargetDistance();
-		List<?> list = this.taskOwner.worldObj.func_175647_a(EntityLivingBase.class, AxisAlignedBB.fromBounds(this.taskOwner.posX, this.taskOwner.posY, this.taskOwner.posZ, this.taskOwner.posX + 1.0D, this.taskOwner.posY + 1.0D, this.taskOwner.posZ + 1.0D).expand(d0, 10.0D, d0), entitySelector);
+		List<?> list = this.taskOwner.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.fromBounds(this.taskOwner.posX, this.taskOwner.posY, this.taskOwner.posZ, this.taskOwner.posX + 1.0D, this.taskOwner.posY + 1.0D, this.taskOwner.posZ + 1.0D).expand(d0, 10.0D, d0), entitySelector);
 		Iterator<?> iterator = list.iterator();
 
 		while (iterator.hasNext())

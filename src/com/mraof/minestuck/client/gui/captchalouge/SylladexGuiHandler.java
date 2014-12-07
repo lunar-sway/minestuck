@@ -286,19 +286,19 @@ public abstract class SylladexGuiHandler extends GuiScreen
 				int y = this.yPos +7 - gui.mapY;
 				if(x >= gui.mapWidth || y >= gui.mapHeight || x + 16 < 0 || y + 16 < 0)
 					return;
-				gui.itemRender.func_180450_b(item, x, y);
+				gui.itemRender.renderItemAndEffectIntoGUI(item, x, y);
 				if(item.stackSize > 1)
 				{
 					String stackSize = String.valueOf(item.stackSize);
 					GlStateManager.disableLighting();
 					GlStateManager.disableDepth();
 					GlStateManager.disableBlend();
-					gui.mc.fontRendererObj.func_175063_a(stackSize, x + 16 - gui.mc.fontRendererObj.getStringWidth(stackSize), y + 8, 0xC6C6C6);
+					gui.mc.fontRendererObj.drawStringWithShadow(stackSize, x + 16 - gui.mc.fontRendererObj.getStringWidth(stackSize), y + 8, 0xC6C6C6);
 					GlStateManager.enableLighting();
 					GlStateManager.enableDepth();
 					GlStateManager.enableBlend();
 				}
-				gui.itemRender.func_180453_a(gui.mc.fontRendererObj, item, x, y, "");
+				gui.itemRender.renderItemOverlayIntoGUI(gui.mc.fontRendererObj, item, x, y, "");
 			}
 		}
 		

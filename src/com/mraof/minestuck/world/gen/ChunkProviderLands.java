@@ -211,38 +211,16 @@ public class ChunkProviderLands implements IChunkProvider
 	public String makeString() {
 		return "LandRandomLevelSource";
 	}
-
-//	@SuppressWarnings("rawtypes")
-//	@Override
-//	public List getPossibleCreatures(EnumCreatureType enumcreaturetype, int i, int j, int k) 
-//	{
-//		return enumcreaturetype == EnumCreatureType.creature ? this.consortList : (enumcreaturetype == EnumCreatureType.monster ? this.underlingList : null);
-//	}
-
+	
 	@Override
 	public int getLoadedChunkCount() {
 		return 0;
 	}
-
-//	@Override
-//	public void recreateStructures(int i, int j) {
-//	}
-
+	
 	@Override
 	public void saveExtraData() {
 	}
-
-//	@Override
-//	/**
-//	 * Redirected to in World.findClosestStructure()
-//	 * Only used in vanilla by ender eye when looking for a stronghold.
-//	 * var1: The world object; var2: The name of the structure type;
-//	 * var3: xCoord; var4: yCoord; var5: zCoord;
-//	 */
-//	public ChunkPosition func_147416_a(World var1, String var2, int var3, int var4, int var5) {
-//		return null;
-//	}
-
+	
 	public Vec3 getFogColor()
 	{
 		return this.skyColor;
@@ -262,9 +240,9 @@ public class ChunkProviderLands implements IChunkProvider
 	}
 
 	@Override
-	public Chunk func_177459_a(BlockPos p_177459_1_) {
-		// TODO Auto-generated method stub
-		return null;
+	public Chunk provideChunk(BlockPos pos)
+	{
+		return provideChunk(pos.getX() >> 4, pos.getZ() >> 4);
 	}
 
 	@Override
@@ -273,25 +251,26 @@ public class ChunkProviderLands implements IChunkProvider
 		// TODO Auto-generated method stub
 		return false;
 	}
-
+	
 	@Override
-	public List func_177458_a(EnumCreatureType p_177458_1_, BlockPos p_177458_2_) {
-		// TODO Auto-generated method stub
+	public List func_177458_a(EnumCreatureType creatureType, BlockPos pos)	//This was called "getPossibleCreatures" for future reference
+	{
+		return creatureType == EnumCreatureType.CREATURE ? this.consortList : (creatureType == EnumCreatureType.MONSTER ? this.underlingList : null);
+	}
+	
+	/**
+	 * Redirected to in World.findClosestStructure()
+	 * Only used in vanilla by ender eye when looking for a stronghold.
+	 * var1: The world object; var2: The name of the structure type;
+	 * var3: The locators position;
+	 */
+	@Override
+	public BlockPos getStrongholdGen(World worldIn, String structureName, BlockPos pos)
+	{
 		return null;
 	}
 
 	@Override
-	public BlockPos func_180513_a(World worldIn, String p_180513_2_,
-			BlockPos p_180513_3_) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void func_180514_a(Chunk p_180514_1_, int p_180514_2_,
-			int p_180514_3_) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void recreateStructures(Chunk chunk, int p_180514_2_, int p_180514_3_) {}
 	
 }

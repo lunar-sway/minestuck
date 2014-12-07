@@ -73,7 +73,7 @@ public class ItemMinestuckBucket extends ItemBucket
 
 				if (!par3EntityPlayer.inventory.addItemStackToInventory(event.result))
 				{
-					par3EntityPlayer.func_146097_a(event.result, false, false);
+					par3EntityPlayer.dropItem(event.result, false, false);
 				}
 
 				return par1ItemStack;
@@ -81,11 +81,9 @@ public class ItemMinestuckBucket extends ItemBucket
 
 			if (movingobjectposition.typeOfHit == MovingObjectType.BLOCK)
 			{
-				int x = movingobjectposition.func_178782_a().getX();
-				int y = movingobjectposition.func_178782_a().getY();
-				int z = movingobjectposition.func_178782_a().getZ();
+				BlockPos pos = movingobjectposition.getBlockPos();
 
-				if (!par2World.canMineBlockBody(par3EntityPlayer, movingobjectposition.func_178782_a()))
+				if (!par2World.canMineBlockBody(par3EntityPlayer, pos))
 				{
 					return par1ItemStack;
 				}
@@ -95,35 +93,14 @@ public class ItemMinestuckBucket extends ItemBucket
 					return new ItemStack(Items.bucket);
 				}
 				
-				switch(movingobjectposition.subHit)	//possibly this variable?!
+				pos = pos.offset(movingobjectposition.sideHit);
+				
+				if (!par3EntityPlayer.canPlayerEdit(pos, movingobjectposition.sideHit, par1ItemStack))
 				{
-				case 0:
-					--y; 
-					break;
-				case 1:
-					++y; 
-					break;
-				case 2:
-					--z; 
-					break;
-				case 3:
-					++z; 
-					break;
-				case 4:
-					--x; 
-					break;
-				case 5:
-					++x; 
-					break;
+					return par1ItemStack;
 				}
 
-
-//				if (!par3EntityPlayer.canPlayerEdit(x, y, z, movingobjectposition.field_178784_b, par1ItemStack))
-//				{
-//					return par1ItemStack;
-//				}
-
-				if (this.tryPlaceContainedLiquid(par2World, x, y, z, fillFluids.get(par1ItemStack.getItemDamage())) && !par3EntityPlayer.capabilities.isCreativeMode)
+				if (this.tryPlaceContainedLiquid(par2World, pos, fillFluids.get(par1ItemStack.getItemDamage())) && !par3EntityPlayer.capabilities.isCreativeMode)
 				{
 					return new ItemStack(Items.bucket);
 				}
@@ -136,12 +113,12 @@ public class ItemMinestuckBucket extends ItemBucket
 	/**
 	 * Attempts to place the liquid contained inside the bucket.
 	 */
-	public boolean tryPlaceContainedLiquid(World par1World, int par2, int par3, int par4, Block block)
+	public boolean tryPlaceContainedLiquid(World par1World, BlockPos pos, Block block)
 	{
-		Material material = par1World.getBlockState(new BlockPos(par2, par3, par4)).getBlock().getMaterial();
+		Material material = par1World.getBlockState(pos).getBlock().getMaterial();
 		boolean flag = !material.isSolid();
 
-		if (!par1World.isAirBlock(new BlockPos(par2, par3, par4)) && !flag)
+		if (!par1World.isAirBlock(pos) && !flag)
 		{
 			return false;
 		}
@@ -149,11 +126,11 @@ public class ItemMinestuckBucket extends ItemBucket
 		{
 			if (!par1World.isRemote && flag && !material.isLiquid())
 			{
-//				par1World.func_147480_a(par2, par3, par4, true);
+				par1World.destroyBlock(pos, true);
 			}
-
-//			par1World.setBlock(par2, par3, par4, block, 0, 3);
-
+			
+			par1World.setBlockState(pos, block.getDefaultState(), 3);
+			
 			return true;
 		}
 	}

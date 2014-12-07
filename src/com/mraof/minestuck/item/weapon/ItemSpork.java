@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -65,7 +66,8 @@ public class ItemSpork extends ItemWeapon
 //			target.hurtResistantTime = 0;	//A somewhat hackish way, but I find attributes too complicated, for now.
 //			target.attackEntityFrom(DamageSource.causeMobDamage(player), 2F);
 //		}
-			itemStack.damageItem(isSpoon(itemStack) ? 1 : 2, player);
+		
+		itemStack.damageItem(isSpoon(itemStack) ? 1 : 2, player);
 		return true;
 	}
 
@@ -74,17 +76,17 @@ public class ItemSpork extends ItemWeapon
 			return !itemStack.hasTagCompound() ? true : itemStack.getTagCompound().getBoolean("isSpoon");
 		else return isSpoon;
 	}
-
-//	@Override
-//	public boolean onBlockDestroyed(ItemStack itemStack, World world, Block par3, int par4, int par5, int par6, EntityLivingBase par7EntityLiving)
-//	{
-//		if ((double)par3.getBlockHardness(world, par4, par5, par6) != 0.0D)
-//		{
-//			itemStack.damageItem(2, par7EntityLiving);
-//		}
-//
-//		return true;
-//	}
+	
+	@Override
+	public boolean onBlockDestroyed(ItemStack stack, World worldIn, Block blockIn, BlockPos pos, EntityLivingBase playerIn)
+	{
+		if ((double)blockIn.getBlockHardness(worldIn, pos) != 0.0D)
+		{
+			stack.damageItem(2, playerIn);
+		}
+		
+		return true;
+	}
 
 	@Override	
 	@SideOnly(Side.CLIENT)
@@ -124,8 +126,8 @@ public class ItemSpork extends ItemWeapon
 				if(!found) {
 					NBTTagCompound nbt = new NBTTagCompound();
 					nbt.setString("AttributeName", SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName());
-//					nbt.setLong("UUIDMost", field_111210_e.getMostSignificantBits());
-//					nbt.setLong("UUIDLeast", field_111210_e.getLeastSignificantBits());
+					nbt.setLong("UUIDMost", itemModifierUUID.getMostSignificantBits());
+					nbt.setLong("UUIDLeast", itemModifierUUID.getLeastSignificantBits());
 					nbt.setString("Name", "Tool Modifier");
 					nbt.setDouble("Amount", isSpoon(stack)?3:5);
 					nbt.setInteger("Operation", 0);
@@ -134,35 +136,6 @@ public class ItemSpork extends ItemWeapon
 			}
 		return stack;
 	}
-	
-//	@Override
-//	public IIcon getIcon(ItemStack stack, int pass) {
-//		return getIconIndex(stack);
-//	}
-	
-//	@Override
-//	@SideOnly(Side.CLIENT)
-//	public IIcon getIconIndex(ItemStack stack) {
-//		if (sporkType.equals(EnumSporkType.CROCKER))
-//			return crockerTypes[isSpoon(stack)?0:1];
-//		else return itemIcon;
-//	}
-	
-//	@Override
-//	@SideOnly(Side.CLIENT)
-//	public void registerIcons(IIconRegister iconRegister) 
-//	{
-//		switch(sporkType)
-//		{
-//		case CROCKER:
-//			crockerTypes[0] = iconRegister.registerIcon("minestuck:CrockerSpoon");
-//			crockerTypes[1] = iconRegister.registerIcon("minestuck:CrockerFork");
-//			break;
-//		case SKAIA:
-//			itemIcon = iconRegister.registerIcon("minestuck:SkaianFork");
-//			break;
-//		}
-//	}
 	
 	public void checkTagCompound(ItemStack stack)
 	{

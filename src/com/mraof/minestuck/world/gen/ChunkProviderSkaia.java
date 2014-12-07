@@ -28,6 +28,7 @@ import com.mraof.minestuck.entity.carapacian.EntityBlackRook;
 import com.mraof.minestuck.entity.carapacian.EntityWhiteBishop;
 import com.mraof.minestuck.entity.carapacian.EntityWhitePawn;
 import com.mraof.minestuck.entity.carapacian.EntityWhiteRook;
+import com.mraof.minestuck.util.Debug;
 
 /**
  * @author Mraof
@@ -139,63 +140,49 @@ public class ChunkProviderSkaia implements IChunkProvider
 	public String makeString() {
 		return "SkaiaRandomLevelSource";
 	}
-
-//	@SuppressWarnings("rawtypes")
-//	@Override
-//	public List getPossibleCreatures(EnumCreatureType par1EnumCreatureType, int var2, int var3, int var4) 
-//	{
-//		return (par1EnumCreatureType == EnumCreatureType.monster || par1EnumCreatureType == EnumCreatureType.creature) ? (var2 < 0 ? this.spawnableBlackList : this.spawnableWhiteList) : null;
-//	}
-
-//	@Override
-//	public BlockPos func_147416_a(World var1, String var2, int var3, int var4, int var5) 
-//	{
-//		return null;
-//	}
-
+	
 	@Override
 	public int getLoadedChunkCount() {
 		return 0;
 	}
-
-//	@Override
-//	public void recreateStructures(int var1, int var2) {
-//
-//	}
+	
 	@Override
 	public boolean unloadQueuedChunks() {
 		return false;
 	}
+	
 	@Override
 	public void saveExtraData() 
 	{
 	}
+	
 	@Override
-	public Chunk func_177459_a(BlockPos p_177459_1_) {
-		// TODO Auto-generated method stub
-		return null;
+	public Chunk provideChunk(BlockPos pos)
+	{
+		return provideChunk(pos.getX() >> 4, pos.getZ() >> 4);
 	}
+	
 	@Override
 	public boolean func_177460_a(IChunkProvider p_177460_1_, Chunk p_177460_2_,
 			int p_177460_3_, int p_177460_4_) {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	@SuppressWarnings("rawtypes")
 	@Override
-	public List func_177458_a(EnumCreatureType p_177458_1_, BlockPos p_177458_2_) {
-		// TODO Auto-generated method stub
+	public List func_177458_a(EnumCreatureType creatureType, BlockPos pos)
+	{
+		return (creatureType == EnumCreatureType.MONSTER || creatureType == EnumCreatureType.CREATURE) ? (pos.getX() < 0 ? this.spawnableBlackList : this.spawnableWhiteList) : null;
+	}
+	
+	@Override
+	public BlockPos getStrongholdGen(World worldIn, String p_180513_2_, BlockPos p_180513_3_)
+	{
 		return null;
 	}
+	
 	@Override
-	public BlockPos func_180513_a(World worldIn, String p_180513_2_,
-			BlockPos p_180513_3_) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public void func_180514_a(Chunk p_180514_1_, int p_180514_2_,
-			int p_180514_3_) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void recreateStructures(Chunk chunk, int p_180514_2_, int p_180514_3_) {}
+	
 }

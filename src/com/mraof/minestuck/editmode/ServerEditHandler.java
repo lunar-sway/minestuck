@@ -181,7 +181,7 @@ public class ServerEditHandler
 			}
 		
 		player.closeScreen();
-		player.inventory.clearInventory();
+		player.inventory.clear();
 		
 		player.setGameType(GameType.CREATIVE);
 		player.sendPlayerAbilities();
@@ -464,9 +464,9 @@ public class ServerEditHandler
 			return;
 //		try
 //		{
-			if(commands.contains(event.command.getCommandName()))
+			if(commands.contains(event.command.getName()))
 			{
-				String c = event.command.getCommandName();
+				String c = event.command.getName();
 				EntityPlayer target;
 				Debug.print(c);
 				if(c.equals("kill") || (c.equals("clear") || c.equals("spawnpoint")) && event.parameters.length == 0

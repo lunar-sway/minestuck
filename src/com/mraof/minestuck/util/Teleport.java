@@ -62,7 +62,7 @@ public class Teleport
 
 			if (newEntity != null)
 			{
-				newEntity.func_180432_n(entity);
+				newEntity.copyDataFromOld(entity);
 				worldserver1.spawnEntityInWorld(newEntity);
 			}
 			entity.isDead = true;

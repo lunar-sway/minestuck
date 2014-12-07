@@ -17,6 +17,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.Minestuck;
@@ -53,23 +54,23 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 	{
 		return .3F;
 	}
-
-//	@Override
-//	public IEntityLivingData onSpawnWithEgg(IEntityLivingData par1EntityLivingData)
-//	{
-//		par1EntityLivingData = super.onSpawnWithEgg(par1EntityLivingData);
-//		this.addRandomArmor();
-//
-//		if(this.pawnType == 1)
-//		{
-//			this.targetTasks.addTask(4, entityAIArrowAttack);
-//		}
-//		else
-//			this.tasks.addTask(4, this.entityAIAttackOnCollide);
-//		this.setCurrentItemOrArmor(0, new ItemStack(this.pawnType == 1 ? Items.bow : rand.nextDouble() < .2 ? Minestuck.regisword : rand.nextDouble() < .02 ? Minestuck.sord : Items.stone_sword));
-//		this.enchantEquipment();
-//		return par1EntityLivingData;
-//	}
+	
+	@Override
+	public IEntityLivingData func_180482_a(DifficultyInstance difficulty, IEntityLivingData entityLivingData)	//was called "onSpawnWithEgg"
+	{	//TODO Use the difficulty instance to compute armor and weapons.
+		entityLivingData = super.func_180482_a(difficulty, entityLivingData);
+		this.addRandomArmor();
+		
+		if(this.pawnType == 1)
+		{
+			this.targetTasks.addTask(4, entityAIArrowAttack);
+		}
+		else
+			this.tasks.addTask(4, this.entityAIAttackOnCollide);
+		this.setCurrentItemOrArmor(0, new ItemStack(this.pawnType == 1 ? Items.bow : rand.nextDouble() < .2 ? Minestuck.regisword : rand.nextDouble() < .02 ? Minestuck.sord : Items.stone_sword));
+		this.func_180483_b(difficulty);	//was called "enchantEquipment"
+		return entityLivingData;
+	}
 
 	@Override
 	public void attackEntityWithRangedAttack(EntityLivingBase entityLiving, float f1) 
@@ -113,9 +114,9 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 		if (weapon != null)
 			damage += 
 				(float)this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue();
-
-//		damage += EnchantmentHelper.getEnchantmentModifierLiving(this, (EntityLivingBase)par1Entity);
-
+		
+		damage += EnchantmentHelper.func_152377_a(this.getHeldItem(), ((EntityLivingBase) par1Entity).getCreatureAttribute());
+		
 		return damage;
 	}
 
@@ -124,13 +125,13 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 	{
 		float damage = this.getAttackStrength(par1Entity);
 		int fireAspectLevel = EnchantmentHelper.getFireAspectModifier(this);
-//		int knockback = EnchantmentHelper.getKnockbackModifier(this, (EntityLivingBase)par1Entity);
+		int knockback = EnchantmentHelper.getKnockbackModifier(this);
 
 		if (fireAspectLevel > 0 && !par1Entity.isBurning())
 			par1Entity.setFire(1);
 
-//		if (knockback > 0)
-//			par1Entity.addVelocity((double)(-MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F) * (float)knockback * 0.5F), 0.1D, (double)(MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F) * (float)knockback * 0.5F));
+		if (knockback > 0)
+			par1Entity.addVelocity((double)(-MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F) * (float)knockback * 0.5F), 0.1D, (double)(MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F) * (float)knockback * 0.5F));
 
 		return par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this), damage);
 	}
@@ -141,13 +142,13 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 //	@Override
 //	protected void attackEntity(Entity par1Entity, float par2)
 //	{
-//		if (this.attackTime <= 0 && par2 < 2.0F && par1Entity.boundingBox.maxY > this.boundingBox.minY && par1Entity.boundingBox.minY < this.boundingBox.maxY)
+//		if (this.attackTime <= 0 && par2 < 2.0F && par1Entity.getEntityBoundingBox().maxY > this.getEntityBoundingBox().minY && par1Entity.getEntityBoundingBox().minY < this.getEntityBoundingBox().maxY)
 //		{
 //			this.attackTime = 20;
 //			this.attackEntityAsMob(par1Entity);
 //		}
 //	}
-
+	
 	@Override
 	public void setCombatTask()
 	{

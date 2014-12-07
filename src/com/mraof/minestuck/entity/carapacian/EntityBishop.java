@@ -55,7 +55,7 @@ public abstract class EntityBishop extends EntityCarapacian implements IRangedAt
         double distanceZ = entityliving.posZ - this.posZ;
 		
         EntityLargeFireball entitylargefireball = new EntityLargeFireball(this.worldObj, this, distanceX, distanceY, distanceZ);
-        entitylargefireball.field_92057_e = 1;
+		entitylargefireball.explosionPower = 1;
         double d8 = (double)this.width;
         Vec3 vec3 = this.getLook(1.0F);
         entitylargefireball.posX = (this.getEntityBoundingBox().minX + this.getEntityBoundingBox().maxX) / 2.0F  + vec3.xCoord * d8;

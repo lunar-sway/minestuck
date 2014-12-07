@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -77,16 +78,16 @@ public class ItemBlade extends ItemWeapon
 		return true;
 	}
 
-//	@Override
-//	public boolean onBlockDestroyed(ItemStack itemStack, World world, Block par3, int par4, int par5, int par6, EntityLivingBase par7EntityLiving)
-//	{
-//		if (par3.getBlockHardness(world, par4, par5, par6) != 0.0D)
-//		{
-//			itemStack.damageItem(2, par7EntityLiving);
-//		}
-//		
-//		return true;
-//	}
+	@Override
+	public boolean onBlockDestroyed(ItemStack stack, World worldIn, Block blockIn, BlockPos pos, EntityLivingBase playerIn)
+	{
+		if (blockIn.getBlockHardness(worldIn, pos) != 0.0D)
+		{
+			stack.damageItem(2, playerIn);
+		}
+		
+		return true;
+	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -94,35 +95,5 @@ public class ItemBlade extends ItemWeapon
 	{
 		return true;
 	}
-	
-//	@Override
-//	@SideOnly(Side.CLIENT)
-//	public void registerIcons(IIconRegister iconRegister) 
-//	{
-//		switch(bladeType)
-//		{
-//		case SORD:
-//			itemIcon = iconRegister.registerIcon("minestuck:Sord");
-//			break;
-//		case NINJA:
-//		case KATANA:
-//			itemIcon = iconRegister.registerIcon("minestuck:Katana");
-//			break;
-//		case CALEDSCRATCH:
-//			itemIcon = iconRegister.registerIcon("minestuck:Caledscratch");
-//			break;
-//		case DERINGER:
-//			itemIcon = iconRegister.registerIcon("minestuck:RoyalDeringer");
-//			break	;
-//		case REGISWORD:
-//			itemIcon = iconRegister.registerIcon("minestuck:Regisword");
-//			break;
-//		case SCARLET:
-//			itemIcon = iconRegister.registerIcon("minestuck:ScarletRibbitar");
-//			break;
-//		case DOGG:
-//			itemIcon = iconRegister.registerIcon("minestuck:SnoopDoggMachete");
-//		}
-//	}
 	
 }

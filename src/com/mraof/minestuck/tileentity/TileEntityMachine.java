@@ -463,9 +463,9 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 	}
 
 	@Override
-	public void clearInventory()
+	public void clear()
 	{
-		
+		inv = new ItemStack[4];
 	}
 	
 }

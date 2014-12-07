@@ -224,7 +224,7 @@ public class EntityDecoy extends EntityLiving {
 		}
 		
 		@Override
-		public boolean canCommandSenderUseCommand(int i, String s)
+		public boolean canUseCommand(int i, String s)
 		{return false;}
 		
 		@Override
@@ -238,7 +238,7 @@ public class EntityDecoy extends EntityLiving {
 		}
 		
 		@Override
-		public boolean func_175149_v()
+		public boolean isSpectator()
 		{
 			return false;
 		}

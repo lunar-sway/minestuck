@@ -7,6 +7,7 @@ package com.mraof.minestuck.item.weapon;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -29,7 +30,6 @@ public class ItemClub extends ItemWeapon
 		{
 		case DEUCE:
 			this.setUnlocalizedName("deuceClub");
-//			this.setIconIndex(19);
 			break;
 		}
 		this.weaponDamage = 2 + clubType.getDamageVsEntity();
@@ -55,17 +55,17 @@ public class ItemClub extends ItemWeapon
 			player.heal(this.weaponDamage / 3);
 		return true;
 	}
-
-//    @Override
-//	public boolean onBlockDestroyed(ItemStack itemStack, World world, Block par3, int par4, int par5, int par6, EntityLivingBase par7EntityLiving)
-//	{
-//		if ((double)par3.getBlockHardness(world, par4, par5, par6) != 0.0D)
-//		{
-//			itemStack.damageItem(2, par7EntityLiving);
-//		}
-//		
-//		return true;
-//	}
+	
+	@Override
+	public boolean onBlockDestroyed(ItemStack stack, World worldIn, Block blockIn, BlockPos pos, EntityLivingBase playerIn)
+	{
+		if ((double)blockIn.getBlockHardness(worldIn, pos) != 0.0D)
+		{
+			stack.damageItem(2, playerIn);
+		}
+		
+		return true;
+	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -73,9 +73,5 @@ public class ItemClub extends ItemWeapon
 	{
 		return true;
 	}
-//	@Override
-//	@SideOnly(Side.CLIENT)
-//	public void registerIcons(IIconRegister iconRegister) {
-//		itemIcon = iconRegister.registerIcon("minestuck:DeuceClub");
-//	}
+	
 }
