@@ -16,10 +16,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.DamageSource;
@@ -173,10 +175,10 @@ public class ServerEditHandler
 		if(c.useCoordinates) {
 			posX = c.posX;
 			posZ = c.posZ;
-//			posY = world.getTopSolidOrLiquidBlock((int)posX, (int)posZ);
+			posY = world.getTopSolidOrLiquidBlock(new BlockPos(posX, 0, posZ)).getY();
 		} else {
 				posX = c.centerX + 0.5;
-//				posY = world.getTopSolidOrLiquidBlock(c.centerX, c.centerZ);
+				posY = world.getTopSolidOrLiquidBlock(new BlockPos(c.centerX, 0, c.centerZ)).getY();
 				posZ = c.centerZ + 0.5;
 			}
 		
@@ -237,7 +239,7 @@ public class ServerEditHandler
 		{
 			EditData data = getData(event.player.getName());
 			ItemStack stack = event.entityItem.getEntityItem();
-			if(DeployList.containsItemStack(stack) && Block.getBlockFromItem(stack.getItem()) == Blocks.air)
+			if(DeployList.containsItemStack(stack) && Block.getBlockById(Item.getIdFromItem(stack.getItem())) == Blocks.air)
 			{
 				GristSet cost = Minestuck.hardMode && data.connection.givenItems()[DeployList.getOrdinal(stack)]
 						?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
@@ -286,7 +288,7 @@ public class ServerEditHandler
 			{
 				event.useBlock = Result.DENY;
 				ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
-				if(stack == null || Block.getBlockFromItem(stack.getItem()) == Blocks.air)
+				if(stack == null || Block.getBlockById(Item.getIdFromItem(stack.getItem())) == Blocks.air)
 					return;
 				if(DeployList.containsItemStack(stack))
 				{
@@ -297,7 +299,7 @@ public class ServerEditHandler
 						event.setCanceled(true);
 					}
 				}
-				else if(Block.getBlockFromItem(stack.getItem()) == Blocks.air || !GristHelper.canAfford(data.connection.getClientName(), stack, false))
+				else if(Block.getBlockById(Item.getIdFromItem(stack.getItem())) == Blocks.air || !GristHelper.canAfford(data.connection.getClientName(), stack, false))
 				{
 					event.setCanceled(true);
 				}
@@ -403,7 +405,7 @@ public class ServerEditHandler
 			ItemStack stack = player.inventory.mainInventory[i];
 			if(stack != null && (DeployList.containsItemStack(stack) ? Minestuck.hardMode && givenItems[DeployList.getOrdinal(stack)] ||
 					stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack, false).getItem() == Minestuck.cruxiteArtifact && enteredGame
-					: GristRegistry.getGristConversion(stack) == null || Block.getBlockFromItem(stack.getItem()) == Blocks.air))
+					: GristRegistry.getGristConversion(stack) == null || Block.getBlockById(Item.getIdFromItem(stack.getItem())) == Blocks.air))
 			{
 				player.inventory.mainInventory[i] = null;
 				inventoryChanged = true;
@@ -462,8 +464,8 @@ public class ServerEditHandler
 	{
 		if(list.isEmpty())
 			return;
-//		try
-//		{
+		try
+		{
 			if(commands.contains(event.command.getName()))
 			{
 				String c = event.command.getName();
@@ -472,7 +474,7 @@ public class ServerEditHandler
 				if(c.equals("kill") || (c.equals("clear") || c.equals("spawnpoint")) && event.parameters.length == 0
 						|| c.equals("tp") && event.parameters.length != 2 && event.parameters.length != 4
 						|| c.equals("setworldspawn") && (event.parameters.length == 0 || event.parameters.length == 3))
-					target = null;//CommandBase.getCommandSenderAsPlayer(event.sender);
+					target = CommandBase.getCommandSenderAsPlayer(event.sender);
 				else if(c.equals("defaultgamemode") && MinecraftServer.getServer().getForceGamemode())
 				{
 					for(EditData data : (EditData[]) list.toArray())
@@ -487,17 +489,19 @@ public class ServerEditHandler
 						String s = event.parameters[i];
 						if(PlayerSelector.hasArguments(s))
 						{
-//							EntityPlayer[] list = PlayerSelector.matchPlayers(event.sender, s);
-//							if(list == null || list.length == 0)
-//								return;
-//							Collections.addAll(targets, list);
+							Entity[] list = (Entity[]) PlayerSelector.matchEntities(event.sender, s, Entity.class).toArray();
+							if(list.length == 0)
+								return;
+							for(Entity e : list)
+								if(e instanceof EntityPlayer)
+									targets.add((EntityPlayer) e);
 						}
 						else
 						{
-//							EntityPlayer player = MinecraftServer.getServer().getConfigurationManager().func_152612_a(s);
-//							if(player == null)
-//								return;
-//							targets.add(player);
+							EntityPlayer player = MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(s);
+							if(player == null)
+								return;
+							targets.add(player);
 						}
 					}
 					
@@ -508,16 +512,16 @@ public class ServerEditHandler
 						}
 					return;
 				}
-//				else if(c.equals("gamemode") || c.equals("xp"))
-//					target = event.parameters.length >= 2 ? CommandBase.getPlayer(event.sender, event.parameters[1]) : CommandBase.getCommandSenderAsPlayer(event.sender);
-//				else target = CommandBase.getPlayer(event.sender, event.parameters[0]);
+				else if(c.equals("gamemode") || c.equals("xp"))
+					target = event.parameters.length >= 2 ? CommandBase.getPlayer(event.sender, event.parameters[1]) : CommandBase.getCommandSenderAsPlayer(event.sender);
+				else target = CommandBase.getPlayer(event.sender, event.parameters[0]);
 				
-//				if(target != null && getData(target.getName()) != null)
-//					reset(null, 0, getData(target.getName()));
+				if(target != null && getData(target.getName()) != null)
+					reset(null, 0, getData(target.getName()));
 			}
-//		}
-//		catch(CommandException e)
-//		{}
+		}
+		catch(CommandException e)
+		{}
 	}
 	
 }

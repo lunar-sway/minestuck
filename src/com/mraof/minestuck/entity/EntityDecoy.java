@@ -47,14 +47,10 @@ public class EntityDecoy extends EntityLiving {
 			markedForDespawn = true;
 	}
 	
-	public EntityDecoy(World world, EntityPlayerMP player) {
+	public EntityDecoy(World world, EntityPlayerMP player)
+	{
 		super(world);
-//		this.getBoundingBox().maxX = player.getBoundingBox().maxX;
-//		this.getBoundingBox().maxY = player.getBoundingBox().maxY;
-//		this.getBoundingBox().maxZ = player.getBoundingBox().maxZ;
-//		this.getBoundingBox().minX = player.getBoundingBox().minX;
-//		this.getBoundingBox().minY = player.getBoundingBox().minY;
-//		this.getBoundingBox().minZ = player.getBoundingBox().minZ;
+		this.setEntityBoundingBox(player.getEntityBoundingBox());
 		height = player.height;
 		this.player = new DecoyPlayer(world, this);
 		this.posX = player.posX;
@@ -203,10 +199,11 @@ public class EntityDecoy extends EntityLiving {
 		super.setHealth(par1);
 	}
 	
-//	@Override
-//	public ItemStack[] getLastActiveItems() {
-//		return inventory.armorInventory;
-//	}
+	@Override
+	public ItemStack[] getInventory()
+	{
+		return inventory.armorInventory;
+	}
 	
 	@Override
 	protected boolean canDespawn() {

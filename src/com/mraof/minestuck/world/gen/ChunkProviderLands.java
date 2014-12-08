@@ -147,7 +147,7 @@ public class ChunkProviderLands implements IChunkProvider
 			{
 				primer.setBlockState(x, 0, z, Blocks.bedrock.getDefaultState());
 				int y;
-				int yMax = topBlock[x << 4 | z] - 2;
+				int yMax = topBlock[x << 4 | z] - 2 - topRiverBlock[x << 4 | z];
 				for(y = 1; y < yMax; y++)
 				{
 					//currentBlockOffset = (int) Math.abs(generated1[x + z << 8 + y * 16]);
@@ -157,10 +157,10 @@ public class ChunkProviderLands implements IChunkProvider
 				//location copied from the chunk constructor: x * chunkBlocks.length/256 * 16 | z * blockSize/256 | y
 				for(; y < yMax + 2; y++)
 				{
-					primer.setBlockState(x, y, z, upperBlock);
+					primer.setBlockState(x, y, z, surfaceBlock);
 				}
 
-				for(int i = y + topRiverBlock[x * 16 + z]; y < i; y++)
+				for(int i = y + topRiverBlock[x << 4 | z]; y < i; y++)
 					primer.setBlockState(x, y, z, riverBlock.getDefaultState());
 
 				for(; y < 63; y++)

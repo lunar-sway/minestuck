@@ -24,7 +24,6 @@ import com.mraof.minestuck.util.UsernameHandler;
 
 public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 {
-	//public static final String[] gristTypes = {"Amber", "Amethyst", "Artifact", "Build", "Caulk", "Chalk", "Cobalt", "Diamond", "Garnet", "Gold", "Iodine", "Marble", "Mercury", "Quartz", "Ruby", "Rust", "Shale", "Sulfur", "Tar", "Uranium", "Zillium"};
 	public int cycle;
 
 	public int gristAge = 0;
@@ -47,7 +46,6 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		this.setPosition(x, y, z);
 		this.rotationYaw = (float)(Math.random() * 360.0D);
 		this.motionX = (double)((float)(world.rand.nextGaussian() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
-		//Debug.print(motionX);
 		this.motionY = (double)((float)(world.rand.nextGaussian() * 0.2D) * 2.0F);
 		this.motionZ = (double)((float)(world.rand.nextGaussian() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
 		this.isImmuneToFire = true;
@@ -140,15 +138,12 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 
 		this.moveEntity(this.motionX, this.motionY, this.motionZ);
 		float f = 0.98F;
-
-		if (this.onGround)
+		
+		if(this.onGround)
 		{
-			if (this.onGround)	//Wait what?
-	        {
-				f = this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.getEntityBoundingBox().minY) - 1, MathHelper.floor_double(this.posZ))).getBlock().slipperiness * 0.98F;
-	        }
+			f = this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.getEntityBoundingBox().minY) - 1, MathHelper.floor_double(this.posZ))).getBlock().slipperiness * 0.98F;
 		}
-
+		
 		this.motionX *= (double)f;
 		this.motionY *= 0.9800000190734863D;
 		this.motionZ *= (double)f;
@@ -192,22 +187,6 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
 	{
 		return false;
-//		if (this.isEntityInvulnerable())
-//		{
-//			return false;
-//		}
-//		else
-//		{
-//			this.setBeenAttacked();
-//			this.gristHealth -= par2;
-//
-//			if (this.gristHealth <= 0)
-//			{
-//				this.setDead();
-//			}
-//
-//			return false;
-//		}
 	}
 
 	/**

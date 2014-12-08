@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagString;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
 import com.mraof.minestuck.Minestuck;
@@ -33,7 +34,7 @@ public class ItemDowel extends Item
 			NBTTagString contentID = (NBTTagString)nbttagcompound.getTag("contentID");
 			NBTTagInt contentMeta = (NBTTagInt)nbttagcompound.getTag("contentMeta");
 			
-			if (contentID != null && contentMeta != null && Item.itemRegistry.containsKey(contentID.getString()))
+			if (contentID != null && contentMeta != null && Item.itemRegistry.containsKey(new ResourceLocation(contentID.getString())))
 			{
 				par3List.add("(" + (AlchemyRecipeHandler.getDecodedItem(par1ItemStack, false)).getDisplayName() + ")");
 				return;

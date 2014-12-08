@@ -45,7 +45,7 @@ public class RenderGrist extends Render {
         float f11 = grist.getSizeByValue();
         GL11.glScalef(f11, f11, f11);
 		render.startDrawingQuads();
-//		render.setNormal(0.0F, 1.0F, 0.0F);
+		render.setNormal(0.0F, 1.0F, 0.0F);
 		render.addVertexWithUV((double)(0.0F - f7), (double)(0.0F - f8), 0.0D, (double)f2, (double)f5);
 		render.addVertexWithUV((double)(f6 - f7), (double)(0.0F - f8), 0.0D, (double)f3, (double)f5);
 		render.addVertexWithUV((double)(f6 - f7), (double)(1.0F - f8), 0.0D, (double)f3, (double)f4);

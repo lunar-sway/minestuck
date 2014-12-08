@@ -39,7 +39,7 @@ public class DecoratorVein implements ILandDecorator
 			int posY = minY + random.nextInt(diffBtwnMinMaxY);
 			int posZ = chunkZ * 16 + random.nextInt(16);
 //			Debug.printf("Generating vien at %d %d %d",posX,posY,posZ);
-			(new WorldGenMinable(block, size/2 + random.nextInt(size*2), new OreHandler.BlockStatePredicate(provider.upperBlock))).generate(world, random, new BlockPos(posX, posY, posZ));
+			(new WorldGenMinable(block, size/2 + random.nextInt(size*2), new OreHandler.BlockStatePredicate(provider.surfaceBlock))).generate(world, random, new BlockPos(posX, posY, posZ));
 		}
 	}
 	

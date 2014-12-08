@@ -36,7 +36,6 @@ public class ContainerEditmode extends Container {
 	{
 		this.player = ClientProxy.getPlayer();
 		addSlots();
-		Debug.print("ContainerCreated:"+player.inventory.mainInventory[14]);
 	}
 	
 	public ContainerEditmode(EntityPlayer player)

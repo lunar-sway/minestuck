@@ -76,7 +76,7 @@ public class WorldProviderLands extends WorldProvider
 			coordinates.add(this.worldObj.rand.nextInt(spawnFuzz) - spawnFuzzHalf,
 					this.worldObj.rand.nextInt(spawnFuzz) - spawnFuzzHalf,
 					0);
-//			coordinates.posY = this.worldObj.getTopSolidOrLiquidBlock(chunkcoordinates.posX, chunkcoordinates.posZ);
+			coordinates = this.worldObj.getTopSolidOrLiquidBlock(coordinates);
 		}
 
 		return coordinates;
@@ -143,8 +143,8 @@ public class WorldProviderLands extends WorldProvider
 	}
 
 	@Override
-	public String getInternalNameSuffix() {
-		// TODO Auto-generated method stub
-		return null;
+	public String getInternalNameSuffix()
+	{
+		return "_minestuck";
 	}
 }

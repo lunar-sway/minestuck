@@ -29,20 +29,20 @@ import com.mraof.minestuck.world.gen.lands.LandHelper;
 
 public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 {
-	List<Block> commonBlocks = new ArrayList<Block>();
+	//List<Block> commonBlocks = new ArrayList<Block>();
 	
 	public ItemCruxiteArtifact(int par2, boolean par3) 
 	{
 		super(1, par2, par3);
 		this.setCreativeTab(Minestuck.tabMinestuck);
 		setUnlocalizedName("cruxiteArtifact");
-		commonBlocks.add(Blocks.stone);
-		commonBlocks.add(Blocks.grass);
-		commonBlocks.add(Blocks.dirt);
-		commonBlocks.add(Blocks.sand);
-		commonBlocks.add(Blocks.sandstone);
-		commonBlocks.add(Blocks.water);
-		commonBlocks.add(Blocks.flowing_water);
+		//commonBlocks.add(Blocks.stone);
+		//commonBlocks.add(Blocks.grass);
+		//commonBlocks.add(Blocks.dirt);
+		//commonBlocks.add(Blocks.sand);
+		//commonBlocks.add(Blocks.sandstone);
+		//commonBlocks.add(Blocks.water);
+		//commonBlocks.add(Blocks.flowing_water);
 	}
 	@Override
 	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)

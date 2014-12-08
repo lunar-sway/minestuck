@@ -1,6 +1,5 @@
 package com.mraof.minestuck.util;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -721,12 +720,12 @@ public class AlchemyRecipeHandler {
 			for (Object obj : newRecipe.getInput()) {
 				ItemStack item = null;
 				if (obj == null) {break;}
-				if (obj instanceof ArrayList) {
-					if (((ArrayList<?>) obj).size() == 0) {
+				if (obj instanceof List) {
+					if (((List<?>) obj).size() == 0) {
 						//Debug.print("	Input list was empty!");
 						break;
 					}
-					item = (ItemStack) ((ArrayList<?>) obj).get(0);
+					item = (ItemStack) ((List<?>) obj).get(0);
 				} else {
 					item = (ItemStack) obj;
 				}
@@ -770,12 +769,12 @@ public class AlchemyRecipeHandler {
 			for (Object obj : newRecipe.getInput()) {
 				ItemStack item = null;
 				if (obj == null) {break;}
-				if (obj instanceof ArrayList) {
-					if (((ArrayList<?>) obj).size() == 0) {
+				if (obj instanceof List) {
+					if (((List<?>) obj).size() == 0) {
 						//Debug.print("	Input list was empty!");
 						break;
 					}
-					item = (ItemStack) ((ArrayList<?>) obj).get(0);
+					item = (ItemStack) ((List<?>) obj).get(0);
 				} else {
 					item = (ItemStack) obj;
 				}

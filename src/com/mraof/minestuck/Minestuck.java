@@ -199,9 +199,9 @@ public class Minestuck
 	public static Block blockComputerOff;
 	public static Block transportalizer;
 	
-//	public static Block blockOil;	Disabled these because I couldn't find any fluid rendering code.
-//	public static Block blockBlood;
-//	public static Block blockBrainJuice;
+	public static Block blockOil;	//TODO Use fluid-rendering code when implemented
+	public static Block blockBlood;
+	public static Block blockBrainJuice;
 	public static Block layeredSand;
 
 	public static Fluid fluidOil;
@@ -221,8 +221,8 @@ public class Minestuck
 	public static boolean hardMode = false;	//Future config option. Currently alters how easy the entry items are accessible after the first time. The machines cost 100 build and there will only be one card if this is true.
 	public static boolean generateCruxiteOre; //If set to false, Cruxite Ore will not generate
 	public static boolean privateComputers;	//If a player should be able to use other players computers or not.
-	public static boolean acceptTitleCollision;	//Allows combinations like "Heir of Hope" and "Seer of Hope" to exist in the same session. Will try to avoid duplicates.
-	public static boolean generateSpecialClasses;	//Allow generation of the "Lord" and "Muse" classes.
+	//public static boolean acceptTitleCollision;	//Allows combinations like "Heir of Hope" and "Seer of Hope" to exist in the same session. Will try to avoid duplicates.
+	//public static boolean generateSpecialClasses;	//Allow generation of the "Lord" and "Muse" classes.
 	public static boolean globalSession;	//Makes only one session possible. Recommended to be true on small servers. Will be ignored when loading a world that already got 2+ sessions.
 	public static boolean easyDesignix; //Makes it so you don't need to encode individual cards before combining them.
 	public static boolean toolTipEnabled;
@@ -272,8 +272,8 @@ public class Minestuck
 		landDimensionIdStart = config.get("Dimension Ids", "landDimensionIdStart", 3).getInt();
 		Debug.isDebugMode = config.get("General","printDebugMessages",true).getBoolean(true);
 		generateCruxiteOre = config.get("General","generateCruxiteOre",true).getBoolean(true);
-		acceptTitleCollision = config.get("General", "acceptTitleCollision", false).getBoolean(false);
-		generateSpecialClasses = config.get("General", "generateSpecialClasses", false).getBoolean(false);
+		//acceptTitleCollision = config.get("General", "acceptTitleCollision", false).getBoolean(false);
+		//generateSpecialClasses = config.get("General", "generateSpecialClasses", false).getBoolean(false);
 		globalSession = config.get("General", "globalSession", true).getBoolean(true);
 		privateComputers = config.get("General", "privateComputers", false).getBoolean(false);
 		privateMessage = config.get("General", "privateMessage", "You are not allowed to access other players computers.").getString();
@@ -329,7 +329,7 @@ public class Minestuck
 		blockStorage = GameRegistry.registerBlock(new BlockStorage(),ItemStorageBlock.class,"block_storage");
 		blockMachine = GameRegistry.registerBlock(new BlockMachine(), ItemMachine.class,"block_machine");
 		blockComputerOff = GameRegistry.registerBlock(new BlockComputerOff(),"block_computer");
-		blockComputerOn = GameRegistry.registerBlock(new BlockComputerOn(),"block_computer_on");
+		blockComputerOn = GameRegistry.registerBlock(new BlockComputerOn(), null, "block_computer_on");
 		transportalizer = GameRegistry.registerBlock(new BlockTransportalizer(), "transportalizer");
 		//fluids
 		fluidOil = new Fluid("Oil");
@@ -444,18 +444,10 @@ public class Minestuck
 	public void load(FMLInitializationEvent event) 
 	{
 		
-		//set harvest information for blocks
-//		MinecraftForge.setBlockHarvestLevel(chessTile, "shovel", 0);
-//		MinecraftForge.setBlockHarvestLevel(oreCruxite, "pickaxe", 1);
-//		MinecraftForge.setBlockHarvestLevel(blockStorage, "pickaxe", 1);
-//		MinecraftForge.setBlockHarvestLevel(blockMachine, "pickaxe", 1);
-
-
 //		fluidOil.setUnlocalizedName(blockOil.getUnlocalizedName());
 //		fluidBlood.setUnlocalizedName(blockBlood.getUnlocalizedName());
 //		fluidBrainJuice.setUnlocalizedName(blockBrainJuice.getUnlocalizedName());
 		
-//		Debug.printf("Blood id: %d, Oil id: %d", blockBloodId, blockOilId);
 		
 		//register entities
 		this.registerAndMapEntity(EntitySalamander.class, "Salamander", 0xffe62e, 0xfffb53);
@@ -471,8 +463,6 @@ public class Minestuck
 		this.registerAndMapEntity(EntityWhiteBishop.class, "prospitianBishop", 0xffffff, 0xfde500);
 		this.registerAndMapEntity(EntityBlackRook.class, "dersiteRook", 0x000000, 0xc121d9);
 		this.registerAndMapEntity(EntityWhiteRook.class, "prospitianRook", 0xffffff, 0xfde500);
-			//To not register this entity as spawnable using a mob egg.
-//		EntityList.addMapping(EntityDecoy.class, "playerDecoy", entityIdStart + currentEntityIdOffset);
 		EntityRegistry.registerModEntity(EntityDecoy.class, "playerDecoy", currentEntityIdOffset, this, 80, 3, true);
 		currentEntityIdOffset++;
 		
@@ -538,7 +528,7 @@ public class Minestuck
 		ComputerProgram.registerProgram(0, SburbClient.class, new ItemStack(disk, 1, 0));	//This idea was kind of bad and should be replaced
 		ComputerProgram.registerProgram(1, SburbServer.class, new ItemStack(disk, 1, 1));
 		
-		SessionHandler.maxSize = acceptTitleCollision?(generateSpecialClasses?168:144):12;
+		SessionHandler.maxSize = Integer.MAX_VALUE;//acceptTitleCollision?(generateSpecialClasses?168:144):12;
 	}
 
 	@EventHandler

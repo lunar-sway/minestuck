@@ -75,8 +75,8 @@ public class DeployList {
 		stack.stackSize = 1;
 		if(!stack.hasTagCompound())
 			stack.setTagCompound(new NBTTagCompound());
-//		if(stack.stackTagCompound.getName() == "")
-//			stack.stackTagCompound.setName("tag");
+		//if(stack.stackTagCompound.getName() == "")
+			//stack.stackTagCompound.setName("tag");
 		else
 		{
 			stack.getTagCompound().removeTag("display");

@@ -86,7 +86,6 @@ public class EntityAIAttackByDistance extends EntityAIBase
 	 */
 	public boolean continueExecuting()
 	{
-//		EntityLivingBase entityliving = this.attacker.getAttackTarget();
 		return this.shouldExecute() || !this.entityHost.getNavigator().noPath();
 	}
 

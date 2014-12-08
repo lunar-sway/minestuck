@@ -154,18 +154,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 		super.readEntityFromNBT(par1nbtTagCompound);
 		this.type = GristType.getTypeFromString(par1nbtTagCompound.getString("Type"));
 	}
-//	@Override
-//	public void writeSpawnData(ByteBuf data) 
-//	{
-//		data.writeInt(((Enum<GristType>) type).ordinal());
-//	}
-//	@Override
-//	public void readSpawnData(ByteBuf data) 
-//	{
-//		this.type = type.getClass().getEnumConstants()[data.readInt()];
-//		this.textureResource = new ResourceLocation("minestuck", this.getTexture());
-//	}
-
+	
 	@Override
 	   public boolean getCanSpawnHere()
 	{
@@ -178,46 +167,48 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 		int i = MathHelper.floor_double(this.posX);
 		int j = MathHelper.floor_double(this.getEntityBoundingBox().minY);
 		int k = MathHelper.floor_double(this.posZ);
+		BlockPos pos = new BlockPos(i, j, k);
 		
-	   //	if (this.worldObj.getBlockLightOpacity(i, j, k) == 0) { //Prevents spawning IN blocks
-	   //		return false;
-	   //	}
-	   // Debug.print("Spawning an entity...");
-
+		//if (this.worldObj.getBlockLightOpacity(i, j, k) == 0) { //Prevents spawning IN blocks
+			//return false;
+			//}
+		//Debug.print("Spawning an entity...");
+		
 		//Debug.print("Sunlight level is "+this.worldObj.getSavedLightValue(EnumSkyBlock.Sky, i, j, k));
-//		if (this.worldObj.getSavedLightValue(EnumSkyBlock.SKY, i, j, k) > this.rand.nextInt(32))
-//		{	Don't know what to replace here
-//			//Debug.print("Too much sun! Failed.");
-//			return false;
-//		}
-//		else
+		if (this.worldObj.getLightFor(EnumSkyBlock.SKY, pos) > this.rand.nextInt(32))
 		{
-			int l = this.worldObj.getBlockLightOpacity(new BlockPos(i, j, k));	//Might be wrong method
-
+			//Debug.print("Too much sun! Failed.");
+			return false;
+		}
+		else
+		{
+			int l = this.worldObj.getLightFromNeighbors(pos);
+			
 			if (this.worldObj.isThundering())
 			{
 				int i1 = this.worldObj.getSkylightSubtracted();
 				this.worldObj.setSkylightSubtracted(10);
-				l = this.worldObj.getBlockLightOpacity(new BlockPos(i, j, k));	//Might be wrong method
+				l = this.worldObj.getLightFromNeighbors(pos);
 				this.worldObj.setSkylightSubtracted(i1);
 			}
-
+			
 			//Debug.print("Light level calculated as " + l);
 			
 			return l <= this.rand.nextInt(8);
-        }
-    }
-	
-	@Override
-	public void writeSpawnData(ByteBuf buffer) {
-		// TODO Auto-generated method stub
-		
+		}
 	}
 	
 	@Override
-	public void readSpawnData(ByteBuf additionalData) {
-		// TODO Auto-generated method stub
-		
+	public void writeSpawnData(ByteBuf buffer)
+	{
+		buffer.writeInt(((Enum<GristType>) type).ordinal());
+	}
+	
+	@Override
+	public void readSpawnData(ByteBuf additionalData)
+	{
+		this.type = type.getClass().getEnumConstants()[additionalData.readInt()];
+		this.textureResource = new ResourceLocation("minestuck", this.getTexture());
 	}
 	
 }

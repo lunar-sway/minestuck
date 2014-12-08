@@ -62,32 +62,6 @@ public class BlockComputerOn extends Block implements ITileEntityProvider
 		return getDefaultState().withProperty(BSOD, meta % 2 == 1).withProperty(BlockComputerOff.DIRECTION, EnumFacing.values()[(meta/2) + 2]);
 	}
 	
-//	@Override
-//	public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLivingBase, ItemStack par6ItemStack)
-//	{
-//		int l = MathHelper.floor_double((double)(par5EntityLivingBase.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-//
-//		if (l == 0)
-//		{
-//			par1World.setBlockMetadataWithNotify(par2, par3, par4, 2, 2);
-//		}
-//
-//		if (l == 1)
-//		{
-//			par1World.setBlockMetadataWithNotify(par2, par3, par4, 5, 2);
-//		}
-//
-//		if (l == 2)
-//		{
-//			par1World.setBlockMetadataWithNotify(par2, par3, par4, 3, 2);
-//		}
-//
-//		if (l == 3)
-//		{
-//			par1World.setBlockMetadataWithNotify(par2, par3, par4, 4, 2);
-//		}
-//	}
-	
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ)
 	{

@@ -18,14 +18,12 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	
 	public EntityBasilisk(World world) 
 	{
-//		this(world, GristType.Tar);
 		this(world, GristHelper.getPrimaryGrist());
 	}
 	public EntityBasilisk(World par1World, GristType type) 
 	{
 		super(par1World, type, "Basilisk");
 		this.setSize(3F, 2F);
-		//Debug.print("Creating a new part");
 		tail = new EntityUnderlingPart(this, 0, 3F, 2F);
 		par1World.spawnEntityInWorld(tail);
 	}
@@ -80,8 +78,7 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	public boolean attackEntityFromPart(Entity entityPart, DamageSource source, float damage) 
 	{
 		boolean flag = this.attackEntityFrom(source, damage);
-		//Debug.printf("Damage from %s, source is %s, amount of damage is %f, success is %b, isRemote is %b", entityPart, source, damage, flag, this.worldObj.isRemote);
-
+		
 		return flag;
 	}
 	@Override
@@ -100,12 +97,7 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 		super.setPositionAndRotation(par1, par3, par5, par7, par8);
 		this.updatePartPositions();
 	}
-//	@Override
-//	public void updateFallState(double par1, boolean par3) 
-//	{
-////		if((tail.fallDistance > 0))
-//			super.updateFallState(par1, par3);
-//	}
+	
 	@Override
 	public void updatePartPositions() 
 	{
@@ -114,12 +106,6 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 		float f1 = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw);
 		double tailPosX = (this.posX +  Math.sin(f1 / 180.0 * Math.PI) * tail.width);
 		double tailPosZ = (this.posZ + -Math.cos(f1 / 180.0 * Math.PI) * tail.width);
-//		double tailPosY = (tail.posY - this.posY) < -2  ? this.posY : tail.posY;
-//		if((tailPosY - this.posY) > 2)
-//		{
-//			this.posY += tailPosY;
-//			this.motionY = 0;
-//		}
 
 		tail.setPositionAndRotation(tailPosX, this.posY, tailPosZ, this.rotationYaw, this.rotationPitch);
 	}
@@ -137,14 +123,4 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 
 	}
 	
-//	@Override
-//	public void setDead() {
-//		super.setDead();
-//		Debug.print("Body is dead");
-//		
-//		Debug.print("BEGIN STACK TRACE");
-//		Thread.dumpStack();
-//		Debug.print("END STACK TRACE");
-//	}
-
 }

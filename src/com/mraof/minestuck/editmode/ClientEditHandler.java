@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.InventoryEffectRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -171,7 +172,7 @@ public class ClientEditHandler {
 			int ordinal = DeployList.getOrdinal(stack);
 			if(ordinal >= 0)
 			{
-				if(Block.getBlockFromItem(stack.getItem()) == Blocks.air && GristHelper.canAfford(MinestuckPlayerData.getClientGrist(), Minestuck.clientHardMode && givenItems[ordinal]
+				if(Block.getBlockById(Item.getIdFromItem(stack.getItem())) == Blocks.air && GristHelper.canAfford(MinestuckPlayerData.getClientGrist(), Minestuck.clientHardMode && givenItems[ordinal]
 						? DeployList.getSecondaryCost(stack) : DeployList.getPrimaryCost(stack)))
 					givenItems[ordinal] = true;
 				else event.setCanceled(true);
@@ -194,17 +195,21 @@ public class ClientEditHandler {
 	}
 	
 	@SubscribeEvent(priority=EventPriority.NORMAL)
-	public void onInteractEvent(PlayerInteractEvent event) {
+	public void onInteractEvent(PlayerInteractEvent event)
+	{
 		
-		if(event.entity.worldObj.isRemote && event.entityPlayer == ClientProxy.getPlayer() && isActive()) {
-			if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
+		if(event.entity.worldObj.isRemote && event.entityPlayer == ClientProxy.getPlayer() && isActive())
+		{
+			if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK)
+			{
 				event.useBlock = Result.DENY;
 				ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
-				if(stack == null || Block.getBlockFromItem(stack.getItem()) == Blocks.air)
+				if(stack == null || Block.getBlockById(Item.getIdFromItem(stack.getItem())) == Blocks.air)
 				{
 					event.setCanceled(true);
 					return;
 				}
+				
 				GristSet cost;
 				if(DeployList.containsItemStack(stack))
 					if(Minestuck.clientHardMode && givenItems[DeployList.getOrdinal(stack)])
