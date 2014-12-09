@@ -115,6 +115,7 @@ public class ChunkProviderSkaia implements IChunkProvider
 		//y * 256, z * 16, x
 		Chunk chunk = new Chunk(this.skaiaWorld, primer, chunkX, chunkZ);
 		//this.castleGenerator.func_151539_a(this, skaiaWorld, chunkX, chunkZ, new Block[65536]);
+		chunk.generateSkylightMap();
 		return chunk;
 	}
 	

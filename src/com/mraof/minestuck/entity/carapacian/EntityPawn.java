@@ -50,14 +50,14 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 	}
 
 	@Override
-	protected float getWanderSpeed() 
+	public float getWanderSpeed() 
 	{
 		return .3F;
 	}
 	
 	@Override
 	public IEntityLivingData func_180482_a(DifficultyInstance difficulty, IEntityLivingData entityLivingData)	//was called "onSpawnWithEgg"
-	{	//TODO Use the difficulty instance to compute armor and weapons.
+	{
 		entityLivingData = super.func_180482_a(difficulty, entityLivingData);
 		this.addRandomArmor();
 		
@@ -186,6 +186,5 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 		super.applyEntityAttributes();
 		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.attackDamage);
 	}
-
-
+	
 }

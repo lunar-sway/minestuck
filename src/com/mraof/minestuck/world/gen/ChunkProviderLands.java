@@ -169,6 +169,7 @@ public class ChunkProviderLands implements IChunkProvider
 			}
 		
 		Chunk chunk = new Chunk(this.landWorld, primer, chunkX, chunkZ);
+		chunk.generateSkylightMap();
 		return chunk;
 	}
 	

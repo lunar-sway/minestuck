@@ -362,7 +362,7 @@ public class ServerEditHandler
 	 * Used on both server and client side.
 	 */
 	public static void updatePosition(EntityPlayer player, double range, int centerX, int centerZ) {
-		double y = player.posY-player.getYOffset();
+		double y = player.posY;
 		if(y < 0) {
 			y = 0;
 			player.motionY = 0;
@@ -390,7 +390,7 @@ public class ServerEditHandler
 		if(newZ != player.posZ)
 			player.motionZ = 0;
 		
-		if(newX != player.posX || newZ != player.posZ || y != player.posY-player.getYOffset()) {
+		if(newX != player.posX || newZ != player.posZ || y != player.posY) {
 			player.setPositionAndUpdate(newX, y, newZ);
 			//Update gravity if the player is on ground
 			

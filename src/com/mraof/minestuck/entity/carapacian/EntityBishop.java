@@ -35,7 +35,7 @@ public abstract class EntityBishop extends EntityCarapacian implements IRangedAt
 	}
 	
 	@Override
-	protected float getWanderSpeed() 
+	public float getWanderSpeed() 
 	{
 		return .2F;
 	}
