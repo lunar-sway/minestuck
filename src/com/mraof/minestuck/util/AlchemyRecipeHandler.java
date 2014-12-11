@@ -308,7 +308,7 @@ public class AlchemyRecipeHandler {
 		
 		for(int list1 = 0; list1 < woodItems.length - 1; list1++)
 			for(int list2 = 0; list2 < woodItems[list1].length; list2++)
-				for(int list3 = list1; list3 < woodDict.length; list3++)
+				for(int list3 = list1 + 1; list3 < woodDict.length; list3++)
 				{
 					CombinationRegistry.addCombination(woodDict[list1], OreDictionary.WILDCARD_VALUE, woodItems[list3][list2].getItem(), woodItems[list3][list2].getItemDamage(), CombinationRegistry.MODE_AND, woodItems[list1][list2]);
 					CombinationRegistry.addCombination(woodDict[list3], OreDictionary.WILDCARD_VALUE, woodItems[list1][list2].getItem(), woodItems[list1][list2].getItemDamage(), CombinationRegistry.MODE_OR, woodItems[list3][list2]);
