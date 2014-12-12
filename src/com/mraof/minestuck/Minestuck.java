@@ -54,6 +54,7 @@ import com.mraof.minestuck.block.BlockFluidBlood;
 import com.mraof.minestuck.block.BlockFluidBrainJuice;
 import com.mraof.minestuck.block.BlockFluidOil;
 import com.mraof.minestuck.block.BlockGatePortal;
+import com.mraof.minestuck.block.BlockGoldSeeds;
 import com.mraof.minestuck.block.BlockLayered;
 import com.mraof.minestuck.block.BlockMachine;
 import com.mraof.minestuck.block.BlockStorage;
@@ -88,6 +89,7 @@ import com.mraof.minestuck.item.ItemCruxiteArtifact;
 import com.mraof.minestuck.item.ItemCruxiteRaw;
 import com.mraof.minestuck.item.ItemDisk;
 import com.mraof.minestuck.item.ItemDowel;
+import com.mraof.minestuck.item.ItemGoldSeeds;
 import com.mraof.minestuck.item.ItemMinestuckBucket;
 import com.mraof.minestuck.item.ItemModus;
 import com.mraof.minestuck.item.block.ItemBlockLayered;
@@ -185,8 +187,7 @@ public class Minestuck
 	public static Item component;
 	public static ItemModus captchaModus;
 	public static ItemMinestuckBucket minestuckBucket;
-
-
+	public static ItemGoldSeeds goldSeeds;	//This item is pretty much only a joke
 	
 	//Blocks
 	public static Block chessTile;
@@ -198,6 +199,7 @@ public class Minestuck
 	public static Block blockComputerOn;
 	public static Block blockComputerOff;
 	public static Block transportalizer;
+	public static BlockGoldSeeds blockGoldSeeds;
 	
 	public static Block blockOil;	//TODO Use fluid-rendering code when implemented
 	public static Block blockBlood;
@@ -332,6 +334,7 @@ public class Minestuck
 		blockComputerOff = GameRegistry.registerBlock(new BlockComputerOff(),"block_computer");
 		blockComputerOn = GameRegistry.registerBlock(new BlockComputerOn(), null, "block_computer_on");
 		transportalizer = GameRegistry.registerBlock(new BlockTransportalizer(), "transportalizer");
+		blockGoldSeeds = (BlockGoldSeeds) GameRegistry.registerBlock(new BlockGoldSeeds(), null, "gold_seeds");
 		//fluids
 		fluidOil = new Fluid("Oil");
 		FluidRegistry.registerFluid(fluidOil);
@@ -385,6 +388,7 @@ public class Minestuck
 		component = new ItemComponent();
 		minestuckBucket = new ItemMinestuckBucket();
 		captchaModus = new ItemModus();
+		goldSeeds = new ItemGoldSeeds();
 		
 //		minestuckBucket.addBlock(blockBlood);
 //		minestuckBucket.addBlock(blockOil);
@@ -430,6 +434,7 @@ public class Minestuck
 		GameRegistry.registerItem(component, "component");
 		GameRegistry.registerItem(minestuckBucket, "minestuck_bucket");
 		GameRegistry.registerItem(captchaModus, "modus_card");
+		GameRegistry.registerItem(goldSeeds, "gold_seeds");
 		
 		if(event.getSide().isClient())
 		{

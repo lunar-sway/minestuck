@@ -24,6 +24,7 @@ public class MinestuckAchievementHandler {
 	public static Achievement setupConnection;
 	public static Achievement enterMedium;
 	public static Achievement alchemy;
+	public static Achievement goldSeeds;
 	
 	public static void prepareAchievementPage()
 	{
@@ -31,7 +32,7 @@ public class MinestuckAchievementHandler {
 		AchievementPage.registerAchievementPage(achievementPage);
 		getHammer = (Achievement) (new Achievement("achievement.getHammer", "getHammer", 0, -2, new ItemStack(Minestuck.clawHammer,1,0), (Achievement)null)).registerStat().initIndependentStat();
 		achievementPage.getAchievements().add(getHammer);
-		mineCruxite = (Achievement) (new Achievement("achievement.mineCruxite", "mineCruxite", -2, 1, new ItemStack(Minestuck.rawCruxite,1,0), (Achievement)null)).registerStat();//.setIndependent();
+		mineCruxite = (Achievement) (new Achievement("achievement.mineCruxite", "mineCruxite", -2, 1, new ItemStack(Minestuck.rawCruxite,1,0), (Achievement)null)).registerStat();
 		achievementPage.getAchievements().add(mineCruxite);
 		setupConnection = (Achievement) (new Achievement("achievement.setupConnection", "setupConnection", 0, 0, new ItemStack(Minestuck.disk,1,0), mineCruxite)).registerStat();
 		achievementPage.getAchievements().add(setupConnection);
@@ -39,6 +40,8 @@ public class MinestuckAchievementHandler {
 		achievementPage.getAchievements().add(enterMedium);
 		alchemy = (Achievement) (new Achievement("achievement.alchemy", "alchemy", 4, 0, new ItemStack(Minestuck.blockMachine,1,3), enterMedium)).registerStat();
 		achievementPage.getAchievements().add(alchemy);
+		goldSeeds = (Achievement) new Achievement("achievement.goldSeeds", "goldSeeds", -2, -2, new ItemStack(Minestuck.goldSeeds), (Achievement)null).registerStat();
+		achievementPage.getAchievements().add(goldSeeds);
 	}
 	
 	public static void onAlchemizedItem(ItemStack stack, EntityPlayer player) {

@@ -9,6 +9,8 @@ achievement.enterMedium=A New World
 achievement.enterMedium.desc=Create, and use the Cruxite Artifact.
 achievement.alchemy=First Alchemy
 achievement.alchemy.desc=Use the punch designix to alchemize something else!
+achievement.goldSeeds=Gold Farming
+achievement.goldSeeds.desc=It begins to dawn on you that everything you are about to do may prove to have been a colossal waste of time.
 
 computer.buttonClear=Clear message
 computer.buttonClose=Disconnect
@@ -185,6 +187,7 @@ tile.layeredSand.name=Layered Sand
 tile.transportalizer.name=Transportalizer
 tile.coloredDirt.blue.name=Blue Dirt
 tile.coloredDirt.thought.name=Thought Dirt
+tile.goldSeeds.name=Golden seeds
 
 title.format=%1$s of %2$s
 title.Bard=Bard

@@ -83,6 +83,7 @@ public class MinestuckTextureManager
 		register(Minestuck.minestuckBucket, 2, "bucket_brain_juice");
 		for(int i = 0; i < Minestuck.captchaModus.modusNames.length; i++)
 			register(Minestuck.captchaModus, i, "modus_" + Minestuck.captchaModus.modusNames[i]);
+		register(Minestuck.goldSeeds);
 		
 		//Blocks
 		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())
