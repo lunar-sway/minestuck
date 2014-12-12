@@ -1,6 +1,7 @@
 package com.mraof.minestuck.editmode;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -124,6 +125,27 @@ public class DeployList {
 			if(ItemStack.areItemStacksEqual(entry.item, stack))
 				return entry.tier;
 		return -1;
+	}
+	
+	public static void applyConfigValues(boolean[] booleans)
+	{
+		ItemStack card = AlchemyRecipeHandler.createCard(new ItemStack(Minestuck.captchaCard), true);
+		if(booleans[0] && !containsItemStack(card))
+			registerItem(card, new GristSet(GristType.Build, 25), null, 0);
+		else if(!booleans[0] && containsItemStack(card))
+		{
+			Iterator<DeployEntry> iter = list.iterator();
+			while(iter.hasNext())
+			{
+				ItemStack stack = iter.next().item;
+				if(ItemStack.areItemsEqual(stack, card))
+				{
+					iter.remove();
+					break;
+				}
+			}
+		}
+		
 	}
 	
 	private static class DeployEntry {

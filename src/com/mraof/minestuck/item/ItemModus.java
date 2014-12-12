@@ -37,7 +37,7 @@ public class ItemModus extends Item
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item item, CreativeTabs tab, List itemList)
 	{
-		for(int i = 0; i < modusNames.length; i++)
+		for(int i = 0; i < 3; i++)
 			itemList.add(new ItemStack(this, 1, i));
 	}
 	

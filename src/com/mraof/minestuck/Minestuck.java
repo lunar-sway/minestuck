@@ -243,7 +243,9 @@ public class Minestuck
 	 * (Will try to put a better explanation somewhere else later)
 	 */
 	public static int escapeFailureMode;	//What will happen if someone's server player fails to escape the overworld in time,
-
+	
+	public static boolean[] deployConfigurations;
+	
 	// The instance of your mod that Forge uses.
 	@Instance("Minestuck")
 	public static Minestuck instance;
@@ -265,46 +267,45 @@ public class Minestuck
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 		config.load();
 		
-		entityIdStart = config.get("Entity Ids", "entitydIdStart", 5050).getInt(); //The number 5050 might make it seem like this is meant to match up with item/block IDs, but it is not
-		skaiaProviderTypeId = config.get("Provider Type Ids", "skaiaProviderTypeId", 2).getInt();
-		skaiaDimensionId = config.get("Dimension Ids", "skaiaDimensionId", 2).getInt();
-		landProviderTypeId = config.get("Provider Type Ids", "landProviderTypeIdStart", 3).getInt();
-		landDimensionIdStart = config.get("Dimension Ids", "landDimensionIdStart", 3).getInt();
-		Debug.isDebugMode = config.get("General","printDebugMessages",true).getBoolean(true);
-		generateCruxiteOre = config.get("General","generateCruxiteOre",true).getBoolean(true);
-		//acceptTitleCollision = config.get("General", "acceptTitleCollision", false).getBoolean(false);
+		entityIdStart = config.getInt("entitydIdStart", "Entity Ids", 5050, 0, Integer.MAX_VALUE, "From what id that minestuck entites should be registered with."); //The number 5050 might make it seem like this is meant to match up with item/block IDs, but it is not
+		skaiaProviderTypeId = config.getInt("skaiaProviderTypeId", "Provider Type Ids", 2, 2, Integer.MAX_VALUE, "The id to be registered for the skaia provider.");
+		skaiaDimensionId = config.getInt("skaiaDimensionId", "Dimension Ids", 2, 2, Integer.MAX_VALUE, "The id for the skaia dimension.");
+		landProviderTypeId = config.getInt("landProviderTypeId", "Provider Type Ids", 3, 2, Integer.MAX_VALUE, "The id for the land provider.");
+		landDimensionIdStart = config.getInt("landDimensionIdStart", "Dimension Ids", 3, 2, Integer.MAX_VALUE, "The starting id for the land dimensions.");
+		Debug.isDebugMode = config.getBoolean("printDebugMessages", "General", true, "Whenether the game should print debug messages or not.");
+		generateCruxiteOre = config.getBoolean("generateCruxiteOre", "General", true, "If cruxite ore should be generated in the overworld.");
+		//acceptTitleCollision = config.get("General", "acceptTitleCollision", false).getBoolean(false);	Unused
 		//generateSpecialClasses = config.get("General", "generateSpecialClasses", false).getBoolean(false);
-		globalSession = config.get("General", "globalSession", true).getBoolean(true);
-		privateComputers = config.get("General", "privateComputers", false).getBoolean(false);
-		privateMessage = config.get("General", "privateMessage", "You are not allowed to access other players computers.").getString();
-		easyDesignix  = config.get("General", "easyDesignix", true).getBoolean(true);
-		overworldEditRange = config.get("General", "overWorldEditRange", 15).getInt();
-		landEditRange = config.get("General", "landEditRange", 30).getInt();	//Now radius
-		artifactRange = config.get("General", "artifactRange", 30).getInt();
-		MinestuckAchievementHandler.idOffset = config.get("General", "statisticIdOffset", 413).getInt();
-		toolTipEnabled = config.get("General", "editmodeToolTip", false).getBoolean(false);
-		hardMode = config.get("General", "hardMode", false).getBoolean(false);
-		forceMaxSize = config.get("General", "forceMaxSize", false).getBoolean(false);
-		escapeFailureMode = config.get("General", "escapeFailureMode", 0).getInt();
-		giveItems = config.get("General", "giveItems", false, "Setting this to true replaces editmode with the old Give Items.").getBoolean(false);
-		defaultModusSize = config.get("General", "defaultModusSize", 5, "The initial size of a captchalouge deck.").getInt();
-		defaultModusType = config.get("General", "defaultModusType", -1,
-				"The type of modus that is given to players without one. -1: Random modus given. 0+: Certain modus given. Anything else: No modus given.").getInt();
-		modusMaxSize = config.get("General", "modusMaxSize", 0, "The max size on a modus. Ignored if the value is 0 or lower.").getInt();
+		globalSession = config.getBoolean("globalSession", "General", true, "Whenether all connetions should be put into a single session or not.");
+		privateComputers = config.getBoolean("privateComputers", "General", false, "True if computers should only be able to be used by the owner.");
+		privateMessage = config.getString("privateMessage", "General", "You are not allowed to access other players computers.", "The message sent when someone tries to access a computer that they aren't the owner of if 'privateComputers' is true.");
+		easyDesignix  = config.getBoolean("easyDesignix", "General", true, "If this is true, you can do combination alchemy without first putting the item in a card.");
+		overworldEditRange = config.getInt("overWorldEditRange", "General", 15, 3, 50, "A number that determines how far away from the computer an editmode player may be before entry.");
+		landEditRange = config.getInt("landEditRange", "General", 30, 3, 50, "A number that determines how far away from the center of the brought land that an editmode player may be after entry.");
+		artifactRange = config.getInt("artifactRange", "General", 30, 3, 50, "Radius of the land brought into the medium.");
+		MinestuckAchievementHandler.idOffset = config.getInt("statisticIdOffset", "General", 413, 100, Integer.MAX_VALUE, "The id offset used when registering achievements and other statistics.");
+		hardMode = config.getBoolean("hardMode", "General", false, "Used to determine if the editmode player can provide infinite cards. Will later also be used whenether there'll be a timer to enter the medium and things like that.");
+		//forceMaxSize = config.getBoolean("forceMaxSize", "General", false); Unused for now.
+		//escapeFailureMode = config.getInt("escapeFailureMode", "General", 0, 0, 2, "Used to determine what happens with related connections when a player fails to escape the meteor enabled by 'hardmode'.");
+		giveItems = config.getBoolean("giveItems", "General", false, "Setting this to true replaces editmode with the old Give Items button.");
+		defaultModusSize = config.getInt("defaultModusSize", "General", 5, 0, Integer.MAX_VALUE, "The initial size of a captchalouge deck.");
+		defaultModusType = config.getInt("defaultModusType", "General", -1, -2, CaptchaDeckHandler.ModusType.values().length - 1,
+				"The type of modus that is given to players without one. -1: Random modus given from a builtin list. -2: Any random modus. 0+: Certain modus given. Anything else: No modus given.");
+		modusMaxSize = config.getInt("modusMaxSize", "General", 0, 0, Integer.MAX_VALUE, "The max size on a modus. Ignored if the value is 0.");
+		if(defaultModusSize > modusMaxSize && modusMaxSize > 0)
+			defaultModusSize = modusMaxSize;
+		deployConfigurations = new boolean[1];
+		deployConfigurations[0] = config.getBoolean("cardInDeploylist", "General", false, "Determines if a card with a captcha card punched on it should be added to the deploy list or not.");
 		
-		if(escapeFailureMode > 2 || escapeFailureMode < 0)
-			escapeFailureMode = 0;
 		if(event.getSide().isClient()) {	//Client sided config values
-			toolTipEnabled = config.get("General", "editmodeToolTip", false).getBoolean(false);
-			specialCardRenderer = config.get("General", "specialCardRenderer", false).getBoolean(false);
+			toolTipEnabled = config.getBoolean("editmodeToolTip", "General", true, "True if the grist cost on items should be shown. This only applies for editmode.");
+			//specialCardRenderer = config.getBoolean("specialCardRenderer", "General", false, "Whenether to use the special render for cards or not.");
 			if(Minestuck.specialCardRenderer && !GLContext.getCapabilities().GL_EXT_framebuffer_object)
 			{
 				specialCardRenderer = false;
 				FMLLog.warning("[Minestuck] The FBO extension is not available and is required for the advanced rendering of captchalouge cards.");
 			}
-			cardResolution = config.get("General", "cardResolution", 1).getInt(1);
-			if(cardResolution < 0)
-				cardResolution = 0;
+			//cardResolution = config.getInt("General", "cardResolution", 1, 0, 5, "The resulotion of the item inside of a card. The width/height is computed by '8*2^x', where 'x' is this config value.");
 		}
 		config.save();
 		
@@ -480,11 +481,9 @@ public class Minestuck
 		DimensionManager.registerProviderType(landProviderTypeId, WorldProviderLands.class, true);
 		
 		//register ore generation
-		if (generateCruxiteOre) {
-			OreHandler oreHandler = new OreHandler();
-			GameRegistry.registerWorldGenerator(oreHandler, 0);
-		}
-
+		OreHandler oreHandler = new OreHandler();
+		GameRegistry.registerWorldGenerator(oreHandler, 0);
+		
 		//register GUI handler
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 		
@@ -569,6 +568,7 @@ public class Minestuck
 			iterator.remove();
 		}
 		TileEntityTransportalizer.transportalizers.clear();
+		DeployList.applyConfigValues(deployConfigurations);
 	}
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event)

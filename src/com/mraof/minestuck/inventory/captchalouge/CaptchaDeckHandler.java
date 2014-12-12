@@ -58,6 +58,8 @@ public class CaptchaDeckHandler
 		
 	}
 	
+	public static final ModusType[] modusList = {ModusType.STACK, ModusType.QUEUE};
+	
 	public static final int EMPTY_SYLLADEX = -1;
 	public static final int EMPTY_CARD = -2;
 	

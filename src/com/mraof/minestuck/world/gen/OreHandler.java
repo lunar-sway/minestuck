@@ -20,9 +20,9 @@ public class OreHandler implements IWorldGenerator
 {
 	
 	@Override
-	public void generate(Random random, int chunkX, int chunkZ, World world,
-			IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
-		if(world.provider.isSurfaceWorld())
+	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider)
+	{
+		if(world.provider.isSurfaceWorld() && (Minestuck.generateCruxiteOre || chunkGenerator instanceof ChunkProviderLands))
 		{
 			this.addOreSpawn(Minestuck.oreCruxite.getDefaultState(), world, random, chunkX * 16, chunkZ * 16, 16, 16, 6 + random.nextInt(3), 10, 0, 60);
 		}
