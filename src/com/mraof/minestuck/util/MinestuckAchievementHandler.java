@@ -4,6 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
+import net.minecraft.stats.AchievementList;
 import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -30,17 +31,17 @@ public class MinestuckAchievementHandler {
 	{
 		achievementPage = new AchievementPage("Minestuck");
 		AchievementPage.registerAchievementPage(achievementPage);
-		getHammer = (Achievement) (new Achievement("achievement.getHammer", "getHammer", 0, -2, new ItemStack(Minestuck.clawHammer,1,0), (Achievement)null)).registerStat().initIndependentStat();
+		getHammer = (Achievement) (new Achievement("achievement.getHammer", "getHammer", 0, -2, Minestuck.clawHammer, (Achievement)null)).registerStat().initIndependentStat();
 		achievementPage.getAchievements().add(getHammer);
-		mineCruxite = (Achievement) (new Achievement("achievement.mineCruxite", "mineCruxite", -2, 1, new ItemStack(Minestuck.rawCruxite,1,0), (Achievement)null)).registerStat();
+		mineCruxite = (Achievement) (new Achievement("achievement.mineCruxite", "mineCruxite", -2, 1, Minestuck.rawCruxite, (Achievement)null)).registerStat();
 		achievementPage.getAchievements().add(mineCruxite);
-		setupConnection = (Achievement) (new Achievement("achievement.setupConnection", "setupConnection", 0, 0, new ItemStack(Minestuck.disk,1,0), mineCruxite)).registerStat();
+		setupConnection = (Achievement) (new Achievement("achievement.setupConnection", "setupConnection", 0, 0, Minestuck.disk, mineCruxite)).registerStat();
 		achievementPage.getAchievements().add(setupConnection);
-		enterMedium = (Achievement) (new Achievement("achievement.enterMedium", "enterMedium", 2, 1, new ItemStack(Minestuck.cruxiteArtifact,1,0), setupConnection)).registerStat();
+		enterMedium = (Achievement) (new Achievement("achievement.enterMedium", "enterMedium", 2, 1, Minestuck.cruxiteArtifact, setupConnection)).registerStat();
 		achievementPage.getAchievements().add(enterMedium);
 		alchemy = (Achievement) (new Achievement("achievement.alchemy", "alchemy", 4, 0, new ItemStack(Minestuck.blockMachine,1,3), enterMedium)).registerStat();
 		achievementPage.getAchievements().add(alchemy);
-		goldSeeds = (Achievement) new Achievement("achievement.goldSeeds", "goldSeeds", -2, -2, new ItemStack(Minestuck.goldSeeds), (Achievement)null).registerStat();
+		goldSeeds = (Achievement) new Achievement("achievement.goldSeeds", "goldSeeds", -2, -2, Minestuck.goldSeeds, AchievementList.buildHoe).registerStat();
 		achievementPage.getAchievements().add(goldSeeds);
 	}
 	

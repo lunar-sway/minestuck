@@ -172,7 +172,7 @@ public class ClientEditHandler {
 			int ordinal = DeployList.getOrdinal(stack);
 			if(ordinal >= 0)
 			{
-				if(Block.getBlockById(Item.getIdFromItem(stack.getItem())) == Blocks.air && GristHelper.canAfford(MinestuckPlayerData.getClientGrist(), Minestuck.clientHardMode && givenItems[ordinal]
+				if(!ServerEditHandler.isBlockItem(stack.getItem()) && GristHelper.canAfford(MinestuckPlayerData.getClientGrist(), Minestuck.clientHardMode && givenItems[ordinal]
 						? DeployList.getSecondaryCost(stack) : DeployList.getPrimaryCost(stack)))
 					givenItems[ordinal] = true;
 				else event.setCanceled(true);
@@ -204,7 +204,7 @@ public class ClientEditHandler {
 			{
 				event.useBlock = Result.DENY;
 				ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
-				if(stack == null || Block.getBlockById(Item.getIdFromItem(stack.getItem())) == Blocks.air)
+				if(stack == null || !ServerEditHandler.isBlockItem(stack.getItem()))
 				{
 					event.setCanceled(true);
 					return;

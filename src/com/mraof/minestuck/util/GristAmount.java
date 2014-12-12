@@ -23,4 +23,19 @@ public class GristAmount {
 		return "gristAmount:[type="+type.getName()+",amount="+amount+"]";
 	}
 	
+	@Override
+	public boolean equals(Object obj)
+	{
+		if(!(obj instanceof GristAmount))
+			return false;
+		GristAmount grist = (GristAmount) obj;
+		return this.type == grist.type && this.amount == grist.amount;
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return type.hashCode() + new Integer(amount).hashCode();
+	}
+	
 }

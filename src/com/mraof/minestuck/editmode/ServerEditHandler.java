@@ -17,6 +17,10 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemDoor;
+import net.minecraft.item.ItemReed;
+import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -239,7 +243,7 @@ public class ServerEditHandler
 		{
 			EditData data = getData(event.player.getName());
 			ItemStack stack = event.entityItem.getEntityItem();
-			if(DeployList.containsItemStack(stack) && Block.getBlockById(Item.getIdFromItem(stack.getItem())) == Blocks.air)
+			if(DeployList.containsItemStack(stack) && !isBlockItem(stack.getItem()))
 			{
 				GristSet cost = Minestuck.hardMode && data.connection.givenItems()[DeployList.getOrdinal(stack)]
 						?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
@@ -288,7 +292,7 @@ public class ServerEditHandler
 			{
 				event.useBlock = Result.DENY;
 				ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
-				if(stack == null || Block.getBlockById(Item.getIdFromItem(stack.getItem())) == Blocks.air)
+				if(stack == null || !isBlockItem(stack.getItem()))
 					return;
 				if(DeployList.containsItemStack(stack))
 				{
@@ -299,7 +303,7 @@ public class ServerEditHandler
 						event.setCanceled(true);
 					}
 				}
-				else if(Block.getBlockById(Item.getIdFromItem(stack.getItem())) == Blocks.air || !GristHelper.canAfford(data.connection.getClientName(), stack, false))
+				else if(!isBlockItem(stack.getItem()) || !GristHelper.canAfford(data.connection.getClientName(), stack, false))
 				{
 					event.setCanceled(true);
 				}
@@ -405,7 +409,7 @@ public class ServerEditHandler
 			ItemStack stack = player.inventory.mainInventory[i];
 			if(stack != null && (DeployList.containsItemStack(stack) ? Minestuck.hardMode && givenItems[DeployList.getOrdinal(stack)] ||
 					stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack, false).getItem() == Minestuck.cruxiteArtifact && enteredGame
-					: GristRegistry.getGristConversion(stack) == null || Block.getBlockById(Item.getIdFromItem(stack.getItem())) == Blocks.air))
+					: GristRegistry.getGristConversion(stack) == null || !isBlockItem(stack.getItem())))
 			{
 				player.inventory.mainInventory[i] = null;
 				inventoryChanged = true;
@@ -522,6 +526,11 @@ public class ServerEditHandler
 		}
 		catch(CommandException e)
 		{}
+	}
+	
+	public static boolean isBlockItem(Item item)
+	{	//TODO Make sure it doesn't cost grist when the player fails to place the item
+		return item instanceof ItemBlock || item instanceof ItemDoor || item instanceof ItemReed;
 	}
 	
 }

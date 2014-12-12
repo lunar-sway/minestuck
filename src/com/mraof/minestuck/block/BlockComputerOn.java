@@ -16,6 +16,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -23,6 +24,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiHandler;
@@ -146,5 +149,12 @@ public class BlockComputerOn extends Block implements ITileEntityProvider
 			world.spawnEntityInWorld(entityItem);
 		}
 	}
-
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public Item getItem(World worldIn, BlockPos pos)
+	{
+		return Item.getItemFromBlock(Minestuck.blockComputerOff);
+	}
+	
 }
