@@ -28,7 +28,8 @@ public class CaptchaDeckHandler
 	{
 		STACK(StackModus.class),
 		QUEUE(QueueModus.class),
-		QUEUE_STACK(QueuestackModus.class);
+		QUEUE_STACK(QueuestackModus.class),
+		TREE(TreeModus.class);
 		
 		private final Class<? extends Modus> c;
 		ModusType(Class<? extends Modus> c)

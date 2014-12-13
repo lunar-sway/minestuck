@@ -137,6 +137,7 @@ public abstract class SylladexGuiHandler extends GuiScreen
 			item.drawItem();
 		GlStateManager.disableDepth();
 		RenderHelper.disableStandardItemLighting();
+		GlStateManager.color(1F, 1F, 1F, 1F);
 		
 		finishMap();
 		
@@ -271,7 +272,7 @@ public abstract class SylladexGuiHandler extends GuiScreen
 			if(this.yPos + minY < gui.mapY)
 				minY += gui.mapY - (this.yPos + minY);
 			else if(this.yPos + maxY > gui.mapY + gui.mapHeight)
-				maxX -= (this.yPos + maxY) - (gui.mapY + gui.mapHeight);
+				maxY -= (this.yPos + maxY) - (gui.mapY + gui.mapHeight);
 			gui.drawTexturedModalRect(this.xPos + minX - gui.mapX, this.yPos + minY - gui.mapY,	//Gui pos
 					gui.textureIndex*CARD_WIDTH + minX, 96 + minY,	//Texture pos
 					maxX - minX, maxY - minY);	//Size
@@ -310,4 +311,42 @@ public abstract class SylladexGuiHandler extends GuiScreen
 		
 	}
 	
+	protected class ModusSizeCard extends GuiItem
+	{
+		protected int size;
+		
+		public ModusSizeCard(SylladexGuiHandler gui, int size, int xPos, int yPos)
+		{
+			this.gui = gui;
+			this.index = -1;
+			this.size = size;
+			this.xPos = xPos;
+			this.yPos = yPos;
+		}
+		
+		@Override
+		protected void drawTooltip(int mouseX, int mouseY) {}
+		
+		@Override
+		protected void drawItem()
+		{
+			GlStateManager.color(1F, 1F, 1F, 1F);
+			if(size > 1)
+			{
+				String stackSize = String.valueOf(size);
+				int x = this.xPos - gui.mapX + 18 - gui.mc.fontRendererObj.getStringWidth(stackSize);
+				int y = this.yPos - gui.mapY + 15;
+				if(x >= gui.mapWidth || y >= gui.mapHeight || x + gui.mc.fontRendererObj.getStringWidth(stackSize) < 0 || y + gui.fontRendererObj.FONT_HEIGHT < 0)
+					return;
+				GlStateManager.disableLighting();
+				GlStateManager.disableDepth();
+				GlStateManager.disableBlend();
+				gui.mc.fontRendererObj.drawStringWithShadow(stackSize, x, y, 0xC6C6C6);
+				GlStateManager.enableLighting();
+				GlStateManager.enableDepth();
+				GlStateManager.enableBlend();
+			}
+		}
+		
+	}
 }

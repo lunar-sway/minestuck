@@ -21,6 +21,7 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 	boolean hardMode;
 	boolean giveItems;
 	boolean easyDesignix;
+	boolean infiniteTreeModus;
 	boolean[] deployValues;
 	
 	String lanHost;
@@ -36,6 +37,7 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 		data.writeBoolean(Minestuck.hardMode);
 		data.writeBoolean(Minestuck.giveItems);
 		data.writeBoolean(Minestuck.easyDesignix);
+		data.writeBoolean(Minestuck.infiniteTreeModus);
 		for(int i = 0; i < Minestuck.deployConfigurations.length; i++)
 			data.writeBoolean(Minestuck.deployConfigurations[i]);
 		if(UsernameHandler.host != null)
@@ -51,6 +53,7 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 		hardMode = data.readBoolean();
 		giveItems = data.readBoolean();
 		easyDesignix = data.readBoolean();
+		infiniteTreeModus = data.readBoolean();
 		deployValues = new boolean[Minestuck.deployConfigurations.length];
 		for(int i = 0; i < deployValues.length; i++)
 			deployValues[i] = data.readBoolean();
@@ -69,6 +72,7 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 		Minestuck.clientHardMode = this.hardMode;
 		Minestuck.clientGiveItems = this.giveItems;
 		Minestuck.clientEasyDesignix = this.easyDesignix;
+		Minestuck.clientInfTreeModus = infiniteTreeModus;
 		if(MinecraftServer.getServer() == null || !MinecraftServer.getServer().isServerRunning())
 		{
 			UsernameHandler.host = lanHost;

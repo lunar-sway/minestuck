@@ -218,6 +218,7 @@ public class Minestuck
 	public static boolean clientHardMode;
 	public static boolean clientGiveItems;
 	public static boolean clientEasyDesignix;
+	public static boolean clientInfTreeModus;
 	
 	//General
 	public static boolean hardMode = false;	//Future config option. Currently alters how easy the entry items are accessible after the first time. The machines cost 100 build and there will only be one card if this is true.
@@ -231,6 +232,7 @@ public class Minestuck
 	public static boolean forceMaxSize;	//If it should prevent players from joining a session if there is no possible combinations left.
 	public static boolean giveItems;
 	public static boolean specialCardRenderer;
+	public static boolean infiniteTreeModus;
 	public static String privateMessage;
 	public static int artifactRange; //The range of the Cruxite Artifact in teleporting zones over to the new land
 	public static int overworldEditRange;
@@ -507,6 +509,7 @@ public class Minestuck
 		
 		FMLCommonHandler.instance().bus().register(MinestuckPlayerTracker.instance);
 		FMLCommonHandler.instance().bus().register(ServerEditHandler.instance);
+		FMLCommonHandler.instance().bus().register(MinestuckChannelHandler.instance);
 		
 		if(event.getSide().isClient())
 		{

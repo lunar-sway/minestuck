@@ -1,11 +1,17 @@
 package com.mraof.minestuck.network;
 
+import java.util.LinkedList;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 import net.minecraftforge.fml.common.network.FMLIndexedMessageToMessageCodec;
 import net.minecraftforge.fml.common.network.FMLOutboundHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -20,6 +26,9 @@ public class MinestuckChannelHandler extends FMLIndexedMessageToMessageCodec<Min
 {
 	
 	public static MinestuckChannelHandler instance = new MinestuckChannelHandler();
+	
+	private static LinkedList<MinestuckPacket> serverQueue = new LinkedList<MinestuckPacket>(), clientQueue = new LinkedList<MinestuckPacket>();
+	private static LinkedList<EntityPlayer> serverPlayers = new LinkedList<EntityPlayer>();
 	
 	public MinestuckChannelHandler() {
 		for(Type type : Type.values())
@@ -40,11 +49,20 @@ public class MinestuckChannelHandler extends FMLIndexedMessageToMessageCodec<Min
 		switch (side)
 		{
 		case CLIENT:
-			msg.execute(ClientProxy.getPlayer()); //Prevents the classloader from crashing the server.
+			if(msg instanceof MinestuckInfoPacket || msg instanceof LandRegisterPacket)
+				msg.execute(null);
+			else synchronized(clientQueue)
+			{
+				clientQueue.addLast(msg);
+			}
 			break;
 		case SERVER:
-			INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
-			msg.execute(((NetHandlerPlayServer) netHandler).playerEntity);
+			synchronized(serverQueue)
+			{
+				INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
+				serverPlayers.addLast(((NetHandlerPlayServer) netHandler).playerEntity);
+				serverQueue.addLast(msg);
+			}
 			break;
 		}
 	}
@@ -66,6 +84,36 @@ public class MinestuckChannelHandler extends FMLIndexedMessageToMessageCodec<Min
 	{
 		Minestuck.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALL);
 		Minestuck.channels.get(Side.SERVER).writeOutbound(packet);
+	}
+	
+	@SubscribeEvent
+	public void tickServer(ServerTickEvent event)
+	{
+		if(event.phase != TickEvent.Phase.START)
+			return;
+		synchronized(serverQueue)
+		{
+			while(!serverQueue.isEmpty())
+			{
+				MinestuckPacket packet = serverQueue.removeFirst();
+				packet.execute(serverPlayers.removeFirst());
+			}
+		}
+	}
+	
+	@SubscribeEvent
+	public void tickClient(ClientTickEvent event)
+	{
+		if(event.phase != TickEvent.Phase.START)
+			return;
+		synchronized(clientQueue)
+		{
+			while(!clientQueue.isEmpty())
+			{
+				MinestuckPacket packet = clientQueue.removeFirst();
+				packet.execute(ClientProxy.getPlayer());
+			}
+		}
 	}
 	
 }
