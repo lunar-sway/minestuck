@@ -160,25 +160,38 @@ public class CaptchaDeckHandler
 		Modus modus = getModus(player);
 		if(modus != null && item != null)
 		{
-			boolean card = true;
+			boolean card1 = false, card2 = true;
 			if(item.getItem() == Minestuck.captchaCard && item.hasTagCompound() && !item.getTagCompound().getBoolean("punched"))
 			{
 				ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(item, false);
 				if(newItem != null)
 				{
+					card1 = true;
 					item = newItem;
-					card = modus.increaseSize();
-					player.setCurrentItemOrArmor(0, item);	//To prevent problems when increaseSize succeeds and putItemStack fails.
+					card2 = modus.increaseSize();
 				}
 			}
 			if(modus.putItemStack(item))
 			{
-				if(card)
-					player.setCurrentItemOrArmor(0, null);
-				else player.setCurrentItemOrArmor(0, new ItemStack(Minestuck.captchaCard));
-				MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, writeToNBT(modus));
-				MinestuckChannelHandler.sendToPlayer(packet, player);
+				if(!card2)
+					launchAnyItem(player, new ItemStack(Minestuck.captchaCard, 1));
+				
+				item = player.getCurrentEquippedItem();
+				if(card1 && item.stackSize > 1)
+					item.stackSize--;
+				else player.setCurrentItemOrArmor(0, null);
+				
 			}
+			else if(card1 && card2)
+			{
+				launchAnyItem(player, item);
+				item = player.getCurrentEquippedItem();
+				if(item.stackSize == 1)
+					player.setCurrentItemOrArmor(0, null);
+				else item.stackSize--;
+			}
+			MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, writeToNBT(modus));
+			MinestuckChannelHandler.sendToPlayer(packet, player);
 		}
 		
 	}
