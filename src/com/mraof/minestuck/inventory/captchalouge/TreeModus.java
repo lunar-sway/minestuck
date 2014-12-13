@@ -24,9 +24,9 @@ public class TreeModus extends Modus
 	protected TreeGuiHandler guiHandler;
 	
 	@Override
-	public void initModus(ItemStack[] prev)
+	public void initModus(ItemStack[] prev, int size)
 	{
-		size = Minestuck.defaultModusSize;
+		this.size = size;
 	}
 	
 	@Override
@@ -88,7 +88,7 @@ public class TreeModus extends Modus
 		ArrayList<ItemStack> list = node.getItems();
 		while(list.size() < size)
 			list.add(null);
-		return (ItemStack[]) list.toArray();
+		return list.toArray(new ItemStack[list.size()]);
 	}
 	
 	@Override
@@ -143,6 +143,12 @@ public class TreeModus extends Modus
 	public boolean canSwitchFrom(ModusType modus)
 	{
 		return false;
+	}
+	
+	@Override
+	public int getSize()
+	{
+		return size;
 	}
 	
 	@SideOnly(Side.CLIENT)

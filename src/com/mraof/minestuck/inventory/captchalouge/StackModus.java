@@ -29,17 +29,17 @@ public class StackModus extends Modus
 	protected SylladexGuiHandler gui;
 	
 	@Override
-	public void initModus(ItemStack[] prev)
+	public void initModus(ItemStack[] prev, int size)
 	{
+		this.size = size;
 		list = new LinkedList<ItemStack>();
 		if(prev != null)
 		{
 			for(ItemStack stack : prev)
 				if(stack != null)
 					list.add(stack);
-			size  = prev.length;
 		}
-		else size = Minestuck.defaultModusSize;
+		
 		if(player.worldObj.isRemote)
 		{
 			items = new ItemStack[size];
@@ -171,7 +171,13 @@ public class StackModus extends Modus
 	{
 		return modus == ModusType.QUEUE || modus == ModusType.QUEUE_STACK;
 	}
-
+	
+	@Override
+	public int getSize()
+	{
+		return size;
+	}
+	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public SylladexGuiHandler getGuiHandler()

@@ -75,11 +75,11 @@ public class TreeGuiHandler extends SylladexGuiHandler
 		{
 			GuiItem other = guiIndexList[index*2 + 1];
 			
-			if(mapX < item.xPos + 9 && mapX + mapWidth > item.xPos + 8 && mapY < item.yPos + CARD_HEIGHT + 6 && mapY + mapHeight > item.yPos + CARD_HEIGHT)
-				drawRect(item.xPos + 8 - mapX, item.yPos + CARD_HEIGHT - mapY, item.xPos + 9 - mapX, item.yPos + CARD_HEIGHT - mapY + 6, 0xFF000000);
+			if(mapX < item.xPos + 10 && mapX + mapWidth > item.xPos + 9 && mapY < item.yPos + CARD_HEIGHT + 6 && mapY + mapHeight > item.yPos + CARD_HEIGHT)
+				drawRect(item.xPos + 9 - mapX, item.yPos + CARD_HEIGHT - mapY, item.xPos + 10 - mapX, item.yPos + CARD_HEIGHT - mapY + 6, 0xFF000000);
 			
-			if(mapX < item.xPos + 9 && mapX + mapWidth > other.xPos + 10 && mapY < item.yPos + CARD_HEIGHT + 6 && mapY + mapHeight > item.yPos + CARD_HEIGHT + 5)
-				drawRect(Math.max(0, other.xPos - mapX + 10), item.yPos + CARD_HEIGHT - mapY + 5, Math.min(mapWidth, item.xPos + 9 - mapX), item.yPos + CARD_HEIGHT - mapY + 6, 0xFF000000);
+			if(mapX < item.xPos + 10 && mapX + mapWidth > other.xPos + 10 && mapY < item.yPos + CARD_HEIGHT + 6 && mapY + mapHeight > item.yPos + CARD_HEIGHT + 5)
+				drawRect(Math.max(0, other.xPos - mapX + 10), item.yPos + CARD_HEIGHT - mapY + 5, Math.min(mapWidth, item.xPos + 10 - mapX), item.yPos + CARD_HEIGHT - mapY + 6, 0xFF000000);
 			
 			if(mapX < other.xPos + 11 && mapX + mapWidth > other.xPos + 10 && mapY < other.yPos && mapY + mapHeight > item.yPos + CARD_HEIGHT + 5)
 				drawRect(other.xPos + 10 - mapX, item.yPos + CARD_HEIGHT + 5 - mapY, other.xPos + 11 - mapX, other.yPos - mapY, 0xFF000000);

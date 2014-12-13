@@ -13,7 +13,10 @@ import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.util.Debug;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiYesNo;
+import net.minecraft.client.gui.GuiYesNoCallback;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
@@ -26,7 +29,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public abstract class SylladexGuiHandler extends GuiScreen
+public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCallback
 {
 	
 	
@@ -55,6 +58,8 @@ public abstract class SylladexGuiHandler extends GuiScreen
 	protected int mousePosX, mousePosY;
 	protected boolean mousePressed;
 	
+	protected GuiButton emptySylladex;
+	
 	protected Minecraft mc = Minecraft.getMinecraft();
 	
 	public SylladexGuiHandler()
@@ -63,10 +68,19 @@ public abstract class SylladexGuiHandler extends GuiScreen
 	}
 	
 	@Override
+	public void initGui()
+	{
+		emptySylladex = new GuiButton(0, (width - GUI_WIDTH)/2 + 140, (height - GUI_HEIGHT)/2 + 175, 100, 20, StatCollector.translateToLocal("gui.emptySylladexButton"));
+		buttonList.add(emptySylladex);
+	}
+	
+	@Override
 	public void drawScreen(int xcor, int ycor, float f)
 	{
-		super.drawScreen(xcor, ycor, f);
 		this.drawDefaultBackground();
+		
+		emptySylladex.xPosition = (width - GUI_WIDTH)/2 + 140;
+		emptySylladex.yPosition = (height - GUI_HEIGHT)/2 + 175;
 		
 		int mouseWheel = Mouse.getDWheel();
 		float prevScroll = scroll;
@@ -149,6 +163,8 @@ public abstract class SylladexGuiHandler extends GuiScreen
 		String str = CaptchaDeckHandler.clientSideModus.getName();
 		mc.fontRendererObj.drawString(str, xOffset + GUI_WIDTH - mc.fontRendererObj.getStringWidth(str) - 16, yOffset + 5, 0x404040);
 		
+		super.drawScreen(xcor, ycor, f);
+		
 		if(isMouseInContainer(xcor, ycor))
 		{
 			int translX = (int) ((xcor - xOffset - X_OFFSET) * scroll);
@@ -182,6 +198,24 @@ public abstract class SylladexGuiHandler extends GuiScreen
 			return;
 		}
 		super.mouseClicked(xcor, ycor, mouseButton);
+	}
+	
+	@Override
+	protected void actionPerformed(GuiButton button) throws IOException
+	{
+		if(button == emptySylladex)
+		{
+			mc.currentScreen = new GuiYesNo(this, StatCollector.translateToLocal("gui.emptySylladex1"), StatCollector.translateToLocal("gui.emptySylladex2"), 0);
+			mc.currentScreen.setWorldAndResolution(mc, width, height);
+		}
+	}
+	
+	@Override
+	public void confirmClicked(boolean result, int id)
+	{
+		if(result)
+			MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(Type.CAPTCHA, CaptchaDeckPacket.GET, CaptchaDeckHandler.EMPTY_SYLLADEX, false));
+		mc.currentScreen = this;
 	}
 	
 	@Override
@@ -311,7 +345,7 @@ public abstract class SylladexGuiHandler extends GuiScreen
 		
 	}
 	
-	protected class ModusSizeCard extends GuiItem
+	protected static class ModusSizeCard extends GuiItem
 	{
 		protected int size;
 		

@@ -99,6 +99,9 @@ gui.free=Free!
 gui.buttonStop=STOP
 gui.buttonGo=GO
 gui.selectGrist=Select Grist Type
+gui.emptySylladex1=Are you sure you want to continue?
+gui.emptySylladex2=This will empty your sylladex.
+gui.emptySylladexButton=Empty Sylladex
 
 item.clawHammer.name=Claw Hammer
 item.sledgeHammer.name=Sledgehammer

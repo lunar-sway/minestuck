@@ -18,7 +18,7 @@ public abstract class Modus
 	/**
 	 * This is called when the modus is created without calling readFromNBT(nbt).
 	 */
-	public abstract void initModus(ItemStack[] prev);
+	public abstract void initModus(ItemStack[] prev, int size);
 	
 	public abstract void readFromNBT(NBTTagCompound nbt);
 	
@@ -33,6 +33,8 @@ public abstract class Modus
 	public abstract ItemStack getItem(int id, boolean asCard);
 	
 	public abstract boolean canSwitchFrom(ModusType modus);
+	
+	public abstract int getSize();
 	
 	@SideOnly(Side.CLIENT)
 	public abstract SylladexGuiHandler getGuiHandler();

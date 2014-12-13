@@ -247,7 +247,6 @@ protected void mouseClicked(int par1, int par2, int par3) throws IOException
 			&& par1 >= guiLeft + 9 && par1 < guiLeft + 167 && par2 >= guiTop + 45 && par2 < guiTop + 70)
 	{
 		mc.currentScreen = new GuiGristSelector(this);
-		mc.currentScreen.initGui();
 		mc.currentScreen.setWorldAndResolution(mc, width, height);
 	}
 }

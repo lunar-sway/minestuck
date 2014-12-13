@@ -109,7 +109,7 @@ public class CaptchaDeckHandler
 			{
 				modus = ModusType.values()[item.getItemDamage()].createInstance();
 				modus.player = player;
-				modus.initModus(null);
+				modus.initModus(null, Minestuck.defaultModusSize);
 				setModus(player, modus);
 				container.inventory.setInventorySlotContents(0, null);
 			}
@@ -122,13 +122,13 @@ public class CaptchaDeckHandler
 				modus = ModusType.values()[item.getItemDamage()].createInstance();
 				modus.player = player;
 				if(modus.canSwitchFrom(oldType))
-					modus.initModus(oldModus.getItems());
+					modus.initModus(oldModus.getItems(), oldModus.getSize());
 				else
 				{
 					for(ItemStack content : oldModus.getItems())
 						if(content != null)
 							launchAnyItem(player, content);
-					modus.initModus(null);
+					modus.initModus(null, oldModus.getSize());
 				}
 				
 				setModus(player, modus);
