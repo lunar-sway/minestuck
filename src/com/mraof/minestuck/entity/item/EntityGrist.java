@@ -16,6 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristSet;
@@ -107,7 +108,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 			this.playSound("random.fizz", 0.4F, 2.0F + this.rand.nextFloat() * 0.4F);
 		}
 
-		this.setPosition(this.posX, (this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxY) / 2.0D, this.posZ);
+		//this.setPosition(this.posX, (this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxY) / 2.0D, this.posZ);
 		double d0 = this.getSizeByValue() * 2.0D;
 
 		if (this.targetCycle < this.cycle - 20 + this.getEntityId() % 100) //Why should I care about the entityId
@@ -160,6 +161,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		{
 			this.setDead();
 		}
+		
 	}
 
 	/**

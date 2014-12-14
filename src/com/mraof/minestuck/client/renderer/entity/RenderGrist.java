@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.renderer.entity;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -24,8 +25,8 @@ public class RenderGrist extends Render {
 	
 	public void renderGrist(EntityGrist grist, double d0, double d1, double d2, float f, float f1)
 	{
-        GL11.glPushMatrix();
-        GL11.glTranslatef((float)d0, (float)d1, (float)d2);
+		GlStateManager.pushMatrix();
+		GlStateManager.translate((float)d0, (float)d1 + grist.getSizeByValue()/2, (float)d2);
         this.bindEntityTexture(grist);
 		WorldRenderer render = Tessellator.getInstance().getWorldRenderer();
         float f2 = 0.0F;
@@ -39,11 +40,11 @@ public class RenderGrist extends Render {
         int k = j % 65536;
         int l = j / 65536;
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)k / 1.0F, (float)l / 1.0F);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glRotatef(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-        GL11.glRotatef(-this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
-        float f11 = grist.getSizeByValue();
-        GL11.glScalef(f11, f11, f11);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+		GlStateManager.rotate(-this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+		float f11 = grist.getSizeByValue();
+		GlStateManager.scale(f11, f11, f11);
 		render.startDrawingQuads();
 		render.setNormal(0.0F, 1.0F, 0.0F);
 		render.addVertexWithUV((double)(0.0F - f7), (double)(0.0F - f8), 0.0D, (double)f2, (double)f5);
@@ -51,9 +52,9 @@ public class RenderGrist extends Render {
 		render.addVertexWithUV((double)(f6 - f7), (double)(1.0F - f8), 0.0D, (double)f3, (double)f4);
 		render.addVertexWithUV((double)(0.0F - f7), (double)(1.0F - f8), 0.0D, (double)f2, (double)f4);
 		Tessellator.getInstance().draw();
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-        GL11.glPopMatrix();
+		GlStateManager.disableBlend();
+		GlStateManager.disableRescaleNormal();
+		GlStateManager.popMatrix();
 		
 	}
 	@Override

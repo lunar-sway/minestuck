@@ -5,6 +5,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.entity.underling.EntityUnderling;
+import com.mraof.minestuck.util.GristHelper;
+import com.mraof.minestuck.util.GristType;
 
 /**
  * Handles session related stuff like title generation, consort choosing, and other session management stuff.
@@ -197,6 +200,11 @@ public class SessionHandler {
 		if(!c.enteredGame)
 			count++;
 		return count;
+	}
+	
+	public static GristType getUnderlingType(EntityUnderling entity)
+	{
+		return GristHelper.getPrimaryGrist();
 	}
 	
 	/**

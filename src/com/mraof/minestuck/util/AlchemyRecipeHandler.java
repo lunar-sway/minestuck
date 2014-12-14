@@ -409,6 +409,7 @@ public class AlchemyRecipeHandler {
 		CombinationRegistry.addCombination(new ItemStack(Items.redstone), new ItemStack(Items.lava_bucket), MODE_OR, new ItemStack(Items.blaze_powder));
 		CombinationRegistry.addCombination(new ItemStack(Items.redstone), new ItemStack(Blocks.netherrack), MODE_OR, new ItemStack(Items.blaze_powder));
 		CombinationRegistry.addCombination(Items.blaze_powder, WILDCARD_VALUE, "stickWood", WILDCARD_VALUE, MODE_AND, new ItemStack(Items.blaze_rod));
+		CombinationRegistry.addCombination(new ItemStack(Items.boat), new ItemStack(Blocks.rail), MODE_OR, new ItemStack(Items.minecart));
 		
 	}
 	

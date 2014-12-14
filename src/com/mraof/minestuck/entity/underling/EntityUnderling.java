@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
@@ -19,6 +21,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
@@ -29,6 +32,7 @@ import com.mraof.minestuck.entity.EntityMinestuck;
 import com.mraof.minestuck.entity.ai.EntityAIHurtByTargetAllied;
 import com.mraof.minestuck.entity.ai.EntityAINearestAttackableTargetWithHeight;
 import com.mraof.minestuck.entity.item.EntityGrist;
+import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
@@ -47,10 +51,11 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	//random used in randomly choosing a type of creature
 	protected static Random randStatic = new Random();
 	
-	public EntityUnderling(World par1World, GristType type, String underlingName) 
+	public EntityUnderling(World par1World, String underlingName) 
 	{
-		super(par1World, type, underlingName);
+		super(par1World);
 		
+		this.underlingName = underlingName;
 		enemyClasses = new ArrayList<Class<? extends EntityLivingBase>>();
 		setEnemies();
 
@@ -68,12 +73,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 		}
 
 	}
-	@Override
-	protected void setCustomStartingVariables(Object[] objects) 
-	{
-		this.type = (GristType)objects[0];
-		this.underlingName = (String)objects[1];
-	}
+	
 	//used when getting how much grist should be dropped on death
 	public abstract GristSet getGristSpoils();
 
@@ -107,12 +107,6 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	{
 		return StatCollector.translateToLocalFormatted("entity." + underlingName + ".type", type.getDisplayName());
 	}
-	
-//	@Override
-//	protected boolean isAIEnabled()
-//	{
-//		return true;
-//	}
 	
 	@Override
 	public void setAttackTarget(EntityLivingBase par1EntityLivingBase) 
@@ -153,6 +147,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	{
 		super.readEntityFromNBT(par1nbtTagCompound);
 		this.type = GristType.getTypeFromString(par1nbtTagCompound.getString("Type"));
+		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)(this.getMaximumHealth()));
 	}
 	
 	@Override
@@ -207,8 +202,37 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	@Override
 	public void readSpawnData(ByteBuf additionalData)
 	{
-		this.type = type.getClass().getEnumConstants()[additionalData.readInt()];
+		this.type = GristType.values()[additionalData.readInt()];
 		this.textureResource = new ResourceLocation("minestuck", this.getTexture());
+		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)(this.getMaximumHealth()));
+	}
+	
+	@Override
+	public IEntityLivingData func_180482_a(DifficultyInstance difficulty, IEntityLivingData livingData)
+	{
+		
+		if(!(livingData instanceof UnderlingData))
+		{
+			this.type = SessionHandler.getUnderlingType(this);
+			livingData = new UnderlingData(this.type);
+		}
+		else
+		{
+			this.type = ((UnderlingData)livingData).type;
+		}
+		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)(this.getMaximumHealth()));
+		this.setHealth(this.getMaximumHealth());
+		
+		return super.func_180482_a(difficulty, livingData);
+	}
+	
+	protected class UnderlingData implements IEntityLivingData
+	{
+		public final GristType type;
+		public UnderlingData(GristType type)
+		{
+			this.type = type;
+		}
 	}
 	
 }

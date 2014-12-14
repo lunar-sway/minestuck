@@ -1,7 +1,11 @@
 package com.mraof.minestuck.entity.underling;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
@@ -15,13 +19,8 @@ public class EntityImp extends EntityUnderling
 
 	public EntityImp(World world) 
 	{
-		this(world, GristHelper.getPrimaryGrist());
-	}
-	public EntityImp(World world, GristType type) 
-	{
-		super(world, type, "Imp");
+		super(world, "Imp");
 		setSize(0.5F, 1.0F);
-		this.experienceValue = (int) (3 * type.getPower() + 1);
 	}
 
 
@@ -64,7 +63,28 @@ public class EntityImp extends EntityUnderling
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return 4 * (type.getPower() + 1) + 2;
+		return type != null ? 4 * (type.getPower() + 1) + 2 : 0;
 	}
-
+	
+	@Override
+	public void readFromNBT(NBTTagCompound tagCompund)
+	{
+		super.readFromNBT(tagCompund);
+		this.experienceValue = (int) (3 * type.getPower() + 1);
+	}
+	
+	@Override
+	public void readSpawnData(ByteBuf additionalData)
+	{
+		super.readSpawnData(additionalData);
+		this.experienceValue = (int) (3 * type.getPower() + 1);
+	}
+	
+	@Override
+	public IEntityLivingData func_180482_a(DifficultyInstance difficulty, IEntityLivingData livingData)
+	{
+		livingData = super.func_180482_a(difficulty, livingData);
+		this.experienceValue = (int) (3 * type.getPower() + 1);
+		return livingData;
+	}
 }

@@ -1,10 +1,14 @@
 package com.mraof.minestuck.entity.underling;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
@@ -23,18 +27,12 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 
 	public EntityGiclops(World world)
 	{
-		this(world, GristHelper.getPrimaryGrist());
-	}
-	public EntityGiclops(World par1World, GristType gristType) 
-	{
-		super(par1World, gristType, "Giclops");
+		super(world, "Giclops");
 
 		setSize(8.0F, 12.0F);
-		this.experienceValue = (int) (5 * gristType.getPower() + 4);
-//		this.health = this.maxHealth;
 		this.stepHeight = 2;
 		topPart = new EntityUnderlingPart(this, 0, 6.0F, 7.0F);
-		par1World.spawnEntityInWorld(topPart);
+		world.spawnEntityInWorld(topPart);
 	}
 
 	@Override
@@ -86,7 +84,7 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return 19 * (type.getPower() + 1) + 48;
+		return type != null ? 19 * (type.getPower() + 1) + 48 : 0;
 	}
 	@Override
 	public void onEntityUpdate() 
@@ -154,6 +152,28 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 		{
 			((EntityPlayerMP) entity).triggerAchievement(MinestuckAchievementHandler.killGiclops);
 		}
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound tagCompund)
+	{
+		super.readFromNBT(tagCompund);
+		this.experienceValue = (int) (7 * type.getPower() + 5);
+	}
+	
+	@Override
+	public void readSpawnData(ByteBuf additionalData)
+	{
+		super.readSpawnData(additionalData);
+		this.experienceValue = (int) (7 * type.getPower() + 5);
+	}
+	
+	@Override
+	public IEntityLivingData func_180482_a(DifficultyInstance difficulty, IEntityLivingData livingData)
+	{
+		livingData = super.func_180482_a(difficulty, livingData);
+		this.experienceValue = (int) (7 * type.getPower() + 5);
+		return livingData;
 	}
 	
 }

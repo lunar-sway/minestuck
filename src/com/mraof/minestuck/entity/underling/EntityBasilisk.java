@@ -2,7 +2,10 @@ package com.mraof.minestuck.entity.underling;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.entity.IEntityMultiPart;
@@ -18,14 +21,10 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	
 	public EntityBasilisk(World world) 
 	{
-		this(world, GristHelper.getPrimaryGrist());
-	}
-	public EntityBasilisk(World par1World, GristType type) 
-	{
-		super(par1World, type, "Basilisk");
+		super(world, "Basilisk");
 		this.setSize(3F, 2F);
 		tail = new EntityUnderlingPart(this, 0, 3F, 2F);
-		par1World.spawnEntityInWorld(tail);
+		world.spawnEntityInWorld(tail);
 	}
 
 	@Override
@@ -52,7 +51,7 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return 13 * (type.getPower() + 1) + 37;
+		return type != null ? 13 * (type.getPower() + 1) + 37 : 0;
 	}
 
 	@Override
@@ -121,6 +120,28 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	public void onPartDeath(Entity entityPart, int id) 
 	{
 
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound tagCompund)
+	{
+		super.readFromNBT(tagCompund);
+		this.experienceValue = (int) (6 * type.getPower() + 4);
+	}
+	
+	@Override
+	public void readSpawnData(ByteBuf additionalData)
+	{
+		super.readSpawnData(additionalData);
+		this.experienceValue = (int) (6 * type.getPower() + 4);
+	}
+	
+	@Override
+	public IEntityLivingData func_180482_a(DifficultyInstance difficulty, IEntityLivingData livingData)
+	{
+		livingData = super.func_180482_a(difficulty, livingData);
+		this.experienceValue = (int) (6 * type.getPower() + 4);
+		return livingData;
 	}
 	
 }

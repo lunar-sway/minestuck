@@ -8,22 +8,15 @@ import net.minecraft.world.World;
 public abstract class EntityMinestuck extends EntityCreature 
 {
 	protected ResourceLocation textureResource;
-	public EntityMinestuck(World par1World, Object... objects) 
+	public EntityMinestuck(World par1World) 
 	{
 		super(par1World);
 		
-		setCustomStartingVariables(objects);
-		
-		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)(this.getMaximumHealth()));
+		if(this.getMaximumHealth() > 0)
+			this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)(this.getMaximumHealth()));
 		this.setHealth(this.getMaximumHealth());
-		
-		this.textureResource = this.getTexture() != null ? new ResourceLocation("minestuck", this.getTexture()) : null;
 	}
-
-	protected void setCustomStartingVariables(Object[] objects)
-	{
-		
-	}
+	
 	protected abstract float getMaximumHealth();
 	
 	/**
@@ -34,6 +27,8 @@ public abstract class EntityMinestuck extends EntityCreature
 
 	public ResourceLocation getTextureResource() 
 	{
+		if(textureResource == null && this.getTexture() != null)
+			textureResource = new ResourceLocation("minestuck", this.getTexture());
 		return textureResource;
 	}
 	
