@@ -26,14 +26,17 @@ public class MinestuckAchievementHandler {
 	public static Achievement enterMedium;
 	public static Achievement alchemy;
 	public static Achievement goldSeeds;
+	public static Achievement treeModus;
+	public static Achievement killOgre;
+	public static Achievement killGiclops;
 	
 	public static void prepareAchievementPage()
 	{
 		achievementPage = new AchievementPage("Minestuck");
 		AchievementPage.registerAchievementPage(achievementPage);
-		getHammer = (Achievement) (new Achievement("achievement.getHammer", "getHammer", 0, -2, Minestuck.clawHammer, (Achievement)null)).registerStat().initIndependentStat();
+		getHammer = (Achievement) (new Achievement("achievement.getHammer", "getHammer", 0, -2, Minestuck.clawHammer, AchievementList.buildWorkBench)).registerStat();
 		achievementPage.getAchievements().add(getHammer);
-		mineCruxite = (Achievement) (new Achievement("achievement.mineCruxite", "mineCruxite", -2, 1, Minestuck.rawCruxite, (Achievement)null)).registerStat();
+		mineCruxite = (Achievement) (new Achievement("achievement.mineCruxite", "mineCruxite", -2, 1, Minestuck.rawCruxite, AchievementList.buildPickaxe)).registerStat();
 		achievementPage.getAchievements().add(mineCruxite);
 		setupConnection = (Achievement) (new Achievement("achievement.setupConnection", "setupConnection", 0, 0, Minestuck.disk, mineCruxite)).registerStat();
 		achievementPage.getAchievements().add(setupConnection);
@@ -43,6 +46,12 @@ public class MinestuckAchievementHandler {
 		achievementPage.getAchievements().add(alchemy);
 		goldSeeds = (Achievement) new Achievement("achievement.goldSeeds", "goldSeeds", -2, -2, Minestuck.goldSeeds, AchievementList.buildHoe).registerStat();
 		achievementPage.getAchievements().add(goldSeeds);
+		treeModus = (Achievement) new Achievement("achievement.treeModus", "treeModus", 2, -2, new ItemStack(Minestuck.captchaModus, 1, 3), (Achievement)null).registerStat();
+		achievementPage.getAchievements().add(treeModus);
+		killOgre = (Achievement) new Achievement("achievement.killOgre", "killOgre", 1, 3, Minestuck.pogoHammer, enterMedium).registerStat();
+		achievementPage.getAchievements().add(killOgre);
+		killGiclops = (Achievement) new Achievement("achievement.killGiclops", "killGiclops", -1, 3, Minestuck.royalDeringer, killOgre).registerStat();
+		achievementPage.getAchievements().add(killGiclops);
 	}
 	
 	public static void onAlchemizedItem(ItemStack stack, EntityPlayer player) {

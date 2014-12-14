@@ -1,6 +1,7 @@
 package com.mraof.minestuck.entity.underling;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
@@ -8,6 +9,7 @@ import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
+import com.mraof.minestuck.util.MinestuckAchievementHandler;
 
 //Makes non-stop ogre puns
 public class EntityOgre extends EntityUnderling 
@@ -54,6 +56,18 @@ public class EntityOgre extends EntityUnderling
 	{
 		return 16 * (type.getPower() + 1) + 8;
 	}
+	
+	@Override
+	public void onDeath(DamageSource cause)
+	{
+		super.onDeath(cause);
+		Entity entity = cause.getEntity();
+		if(this.dead && entity != null && entity instanceof EntityPlayerMP)
+		{
+			((EntityPlayerMP) entity).triggerAchievement(MinestuckAchievementHandler.killOgre);
+		}
+	}
+	
 	@Override
 	protected boolean useAltName() 
 	{

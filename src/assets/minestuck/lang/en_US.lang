@@ -11,6 +11,12 @@ achievement.alchemy=First Alchemy
 achievement.alchemy.desc=Use the punch designix to alchemize something else!
 achievement.goldSeeds=Gold Farming
 achievement.goldSeeds.desc=It begins to dawn on you that everything you just did may have been a colossal waste of time.
+achievement.treeModus=Uprooting
+achievement.treeModus.desc=Remove the root card in a tree modus with a bunch of items.
+achievement.killOgre=The Big one
+achievement.killOgre.desc=Kill an ogre.
+achievement.killGiclops=The bigger one
+achievement.killGiclops.desc=Kill a giclops.
 
 computer.buttonClear=Clear message
 computer.buttonClose=Disconnect

@@ -455,6 +455,7 @@ public class AlchemyRecipeHandler {
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.transportalizer), false, new GristSet(new GristType[] {GristType.Build, GristType.Garnet, GristType.Rust, GristType.Uranium}, new int[] {64, 10, 10, 8}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.captchaModus, 1, 2), true, new GristSet(GristType.Build, 50));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.goldSeeds), new GristSet(GristType.Gold, 2));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.captchaModus, 1, 3), true, new GristSet(GristType.Build, 30));
 		
 		//add Designix combinations
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_hoe), new ItemStack(Items.wheat), MODE_AND, new ItemStack(Minestuck.sickle));
@@ -473,6 +474,9 @@ public class AlchemyRecipeHandler {
 		CombinationRegistry.addCombination(new ItemStack(Items.wheat_seeds), new ItemStack(Items.gold_nugget), MODE_AND, new ItemStack(Minestuck.goldSeeds));
 		CombinationRegistry.addCombination(new ItemStack(Items.wheat_seeds), new ItemStack(Items.gold_ingot), MODE_AND, new ItemStack(Minestuck.goldSeeds));
 		CombinationRegistry.addCombination(new ItemStack(Items.wheat_seeds), new ItemStack(Blocks.gold_block), MODE_AND, new ItemStack(Minestuck.goldSeeds));
+		CombinationRegistry.addCombination(new ItemStack(Minestuck.captchaModus), OreDictionary.WILDCARD_VALUE, "stickWood", OreDictionary.WILDCARD_VALUE, MODE_OR, new ItemStack(Minestuck.captchaModus, 1, 3));
+		CombinationRegistry.addCombination(new ItemStack(Minestuck.captchaModus), OreDictionary.WILDCARD_VALUE, "treeSapling", OreDictionary.WILDCARD_VALUE, MODE_OR, new ItemStack(Minestuck.captchaModus, 1, 3));
+		CombinationRegistry.addCombination(new ItemStack(Minestuck.captchaModus), OreDictionary.WILDCARD_VALUE, "treeLeaves", OreDictionary.WILDCARD_VALUE, MODE_OR, new ItemStack(Minestuck.captchaModus, 1, 3));	//Not planks and logs though. Too little branch-related.
 		
 		//register land aspects
 		LandHelper.registerLandAspect(new LandAspectFrost());

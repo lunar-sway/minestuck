@@ -1,6 +1,7 @@
 package com.mraof.minestuck.entity.underling;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
@@ -12,6 +13,7 @@ import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
+import com.mraof.minestuck.util.MinestuckAchievementHandler;
 
 public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 {
@@ -142,5 +144,16 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 	{
 
 	}
-
+	
+	@Override
+	public void onDeath(DamageSource cause)
+	{
+		super.onDeath(cause);
+		Entity entity = cause.getEntity();
+		if(this.dead && entity != null && entity instanceof EntityPlayerMP)
+		{
+			((EntityPlayerMP) entity).triggerAchievement(MinestuckAchievementHandler.killGiclops);
+		}
+	}
+	
 }

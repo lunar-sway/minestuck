@@ -19,6 +19,7 @@ import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.util.MinestuckAchievementHandler;
 
 public class TreeModus extends Modus
 {
@@ -135,6 +136,10 @@ public class TreeModus extends Modus
 				CaptchaDeckHandler.launchAnyItem(player, stack);
 			return null;
 		}
+		
+		if(id == 0 && node.getSize() >= 16)
+			player.triggerAchievement(MinestuckAchievementHandler.treeModus);
+		
 		
 		ArrayList<ItemStack> list = node.removeItems(id);
 		if(list.isEmpty())
