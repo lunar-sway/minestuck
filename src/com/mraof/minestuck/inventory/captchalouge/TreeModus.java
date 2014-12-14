@@ -1,7 +1,9 @@
 package com.mraof.minestuck.inventory.captchalouge;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import scala.actors.threadpool.Arrays;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -13,6 +15,9 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
 import com.mraof.minestuck.client.gui.captchalouge.TreeGuiHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler.ModusType;
+import com.mraof.minestuck.network.CaptchaDeckPacket;
+import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 
 public class TreeModus extends Modus
@@ -20,6 +25,8 @@ public class TreeModus extends Modus
 	
 	public TreeNode node;
 	public int size;
+	public boolean autobalance;
+	
 	@SideOnly(Side.CLIENT)
 	protected TreeGuiHandler guiHandler;
 	
@@ -27,13 +34,17 @@ public class TreeModus extends Modus
 	public void initModus(ItemStack[] prev, int size)
 	{
 		this.size = size;
+		autobalance = true;
 	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound nbt)
 	{
 		size = nbt.getInteger("size");
+		autobalance = nbt.getBoolean("autobalance");
 		node = readNode(nbt, 0, 0);
+		if(player == null || !player.worldObj.isRemote)
+			autobalance();
 	}
 	
 	private TreeNode readNode(NBTTagCompound nbt, int currentIndex, int level)
@@ -41,6 +52,7 @@ public class TreeModus extends Modus
 		if(nbt.hasKey("node"+currentIndex))
 		{
 			ItemStack stack = ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("node"+currentIndex));
+			if(stack == null) return null;	//Should not happen
 			TreeNode node = new TreeNode(stack);
 			node.node1 = readNode(nbt, currentIndex + (int) Math.pow(2, level), level + 1);
 			node.node2 = readNode(nbt, currentIndex + (int) Math.pow(2, level + 1), level + 1);
@@ -62,6 +74,7 @@ public class TreeModus extends Modus
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
 	{
 		nbt.setInteger("size", size);
+		nbt.setBoolean("autobalance", autobalance);
 		if(node != null)
 			saveNode(nbt, node, 0, 0);
 		
@@ -77,6 +90,7 @@ public class TreeModus extends Modus
 		if(node == null)
 			node = new TreeNode(item);
 		else node.addNode(new TreeNode(item));
+		autobalance();
 		return true;
 	}
 	
@@ -136,6 +150,7 @@ public class TreeModus extends Modus
 		}
 		if(id == 0)
 			node = null;
+		autobalance();
 		return stack;
 	}
 	
@@ -151,6 +166,19 @@ public class TreeModus extends Modus
 		return size;
 	}
 	
+	@Override
+	public void setValue(byte type, int value)
+	{
+		autobalance = value > 0;
+		if(autobalance)
+		{
+			TreeNode node = this.node;
+			autobalance();
+			if(node != this.node)
+				MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, CaptchaDeckHandler.writeToNBT(this)), player);
+		}
+	}
+	
 	@SideOnly(Side.CLIENT)
 	@Override
 	public SylladexGuiHandler getGuiHandler()
@@ -158,6 +186,42 @@ public class TreeModus extends Modus
 		if(guiHandler == null)
 			guiHandler = new TreeGuiHandler(this);
 		return guiHandler;
+	}
+	
+	protected void autobalance()
+	{
+		if(!autobalance && Minestuck.treeModusSetting != 1 || Minestuck.treeModusSetting == 2)
+			return;
+		
+		int minDepth = getDepth(node, true);
+		int maxDepth = getDepth(node, false);
+		
+		if(minDepth + 1 < maxDepth)
+		{
+			List<ItemStack> list = node.getItems();
+			
+			node = createNode(list);
+		}
+	}
+	
+	protected TreeNode createNode(List<ItemStack> list)	//Used only by autobalance
+	{
+		if(list.isEmpty())
+			return null;
+		int i = list.size()/2;
+		TreeNode node = new TreeNode(list.get(i));
+		node.node1 = createNode(list.subList(0, i));
+		node.node2 = createNode(list.subList(i+1, list.size()));
+		return node;
+	}
+	
+	protected int getDepth(TreeNode node, boolean min)
+	{
+		if(node == null)
+			return 0;
+		if(min)
+			return Math.min(getDepth(node.node1, true), getDepth(node.node2, true)) + 1;
+		else return Math.max(getDepth(node.node1, false), getDepth(node.node2, false)) + 1;
 	}
 	
 	public static class TreeNode

@@ -1,5 +1,5 @@
 {
-    "parent": "minestuck:block/block_computer",
+    "parent": "minestuck:block/computer_standard",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

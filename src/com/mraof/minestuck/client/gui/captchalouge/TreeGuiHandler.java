@@ -1,8 +1,16 @@
 package com.mraof.minestuck.client.gui.captchalouge;
 
+import java.io.IOException;
+
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.util.StatCollector;
+
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.inventory.captchalouge.TreeModus;
 import com.mraof.minestuck.inventory.captchalouge.TreeModus.TreeNode;
+import com.mraof.minestuck.network.CaptchaDeckPacket;
+import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.util.Debug;
 
 public class TreeGuiHandler extends SylladexGuiHandler
@@ -12,11 +20,31 @@ public class TreeGuiHandler extends SylladexGuiHandler
 	protected int maxDepth;
 	protected int xOffset, yOffset;
 	protected GuiItem[] guiIndexList;
+	protected GuiButton guiButton;
 	
 	public TreeGuiHandler(TreeModus modus)
 	{
 		this.modus = modus;
 		textureIndex = 3;
+	}
+	
+	@Override
+	public void initGui()
+	{
+		super.initGui();
+		guiButton = new GuiButton(0, (width - GUI_WIDTH)/2 + 15, (height - GUI_HEIGHT)/2 + 175, 120, 20, "");
+		buttonList.add(guiButton);
+	}
+	
+	@Override
+	public void drawScreen(int xcor, int ycor, float f)
+	{
+		guiButton.xPosition = (width - GUI_WIDTH)/2 + 15;
+		guiButton.yPosition = (height - GUI_HEIGHT)/2 + 175;
+		boolean autobalance = Minestuck.clientTreeAutobalance == 0 ? modus.autobalance : Minestuck.clientTreeAutobalance == 1;
+		guiButton.displayString = StatCollector.translateToLocal(autobalance ? "gui.autobalance.on" : "gui.autobalance.off");
+		guiButton.enabled = Minestuck.clientTreeAutobalance == 0;
+		super.drawScreen(xcor, ycor, f);
 	}
 	
 	@Override
@@ -62,6 +90,17 @@ public class TreeGuiHandler extends SylladexGuiHandler
 		super.drawGuiMap(xcor, ycor);
 		if(guiIndexList[0] != null)
 			drawNodeLines(0, 0);
+	}
+	
+	@Override
+	protected void actionPerformed(GuiButton button) throws IOException
+	{
+		super.actionPerformed(button);
+		if(button == this.guiButton && Minestuck.clientTreeAutobalance == 0)
+		{
+			modus.autobalance = !modus.autobalance;
+			MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.VALUE, (byte) 0, modus.autobalance ? 1 : 0)); 
+		}
 	}
 	
 	protected void drawNodeLines(int index, int depth)

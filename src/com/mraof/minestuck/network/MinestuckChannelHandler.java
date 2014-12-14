@@ -71,6 +71,7 @@ public class MinestuckChannelHandler extends FMLIndexedMessageToMessageCodec<Min
 	{
 		Minestuck.channels.get(Side.CLIENT).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.TOSERVER);
 		Minestuck.channels.get(Side.CLIENT).writeOutbound(packet);
+		Debug.print("ToServer:"+packet);
 	}
 	
 	public static void sendToPlayer(MinestuckPacket packet, EntityPlayer player)
@@ -78,12 +79,14 @@ public class MinestuckChannelHandler extends FMLIndexedMessageToMessageCodec<Min
 		Minestuck.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.PLAYER);
 		Minestuck.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player);
 		Minestuck.channels.get(Side.SERVER).writeOutbound(packet);
+		Debug.print("ToPlayer:"+packet);
 	}
 	
 	public static void sendToAllPlayers(MinestuckPacket packet)
 	{
 		Minestuck.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALL);
 		Minestuck.channels.get(Side.SERVER).writeOutbound(packet);
+		Debug.print("ToAll:"+packet);
 	}
 	
 	@SubscribeEvent

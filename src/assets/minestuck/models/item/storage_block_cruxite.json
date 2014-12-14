@@ -1,5 +1,5 @@
 {
-    "parent": "minestuck:block/block_storage_cruxite",
+    "parent": "minestuck:block/storage_block_cruxite",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

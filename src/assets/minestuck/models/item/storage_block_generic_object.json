@@ -1,5 +1,5 @@
 {
-    "parent": "minestuck:block/block_storage_generic_object",
+    "parent": "minestuck:block/storage_block_generic_object",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

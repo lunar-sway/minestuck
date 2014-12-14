@@ -98,7 +98,7 @@ public class MinestuckTextureManager
 		for(BlockColoredDirt.BlockType type : BlockColoredDirt.BlockType.values())
 			register(Minestuck.coloredDirt, type.ordinal(), "colored_dirt_"+type.name);
 		for(BlockStorage.BlockType type : BlockStorage.BlockType.values())
-			register(Minestuck.blockStorage, type.ordinal(), "block_storage_"+type.name);
+			register(Minestuck.blockStorage, type.ordinal(), "storage_block_"+type.name);
 		register(Minestuck.layeredSand);
 		for(BlockMachine.MachineTypes type : BlockMachine.MachineTypes.values())
 			register(Minestuck.blockMachine, type.ordinal(), "machine_"+type.getName());
@@ -136,7 +136,7 @@ public class MinestuckTextureManager
 		for(BlockColoredDirt.BlockType type : BlockColoredDirt.BlockType.values())
 			ModelBakery.addVariantName(Item.getItemFromBlock(Minestuck.coloredDirt), "minestuck:colored_dirt_"+type.name);
 		for(BlockStorage.BlockType type : BlockStorage.BlockType.values())
-			ModelBakery.addVariantName(Item.getItemFromBlock(Minestuck.blockStorage), "minestuck:block_storage_"+type.name);
+			ModelBakery.addVariantName(Item.getItemFromBlock(Minestuck.blockStorage), "minestuck:storage_block_"+type.name);
 		for(BlockMachine.MachineTypes type : BlockMachine.MachineTypes.values())
 			ModelBakery.addVariantName(Item.getItemFromBlock(Minestuck.blockMachine), "minestuck:machine_"+type.getName());
 	}

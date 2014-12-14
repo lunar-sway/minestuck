@@ -36,6 +36,8 @@ public abstract class Modus
 	
 	public abstract int getSize();
 	
+	public void setValue(byte type, int value) {}
+	
 	@SideOnly(Side.CLIENT)
 	public abstract SylladexGuiHandler getGuiHandler();
 	

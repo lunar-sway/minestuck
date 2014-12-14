@@ -158,10 +158,10 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	@Override
 	   public boolean getCanSpawnHere()
 	{
-		return this.worldObj.getDifficulty() != EnumDifficulty.PEACEFUL && this.isValidLightLevel() && super.getCanSpawnHere();
+		return this.worldObj.getDifficulty() != EnumDifficulty.PEACEFUL && /*this.isValidLightLevel() &&*/ super.getCanSpawnHere();
 	}
 	
-	protected boolean isValidLightLevel()
+	protected boolean isValidLightLevel()	//Underlings aren't night creatures, and shouldn't spawn depending on brightness.
 	{
 		
 		int i = MathHelper.floor_double(this.posX);

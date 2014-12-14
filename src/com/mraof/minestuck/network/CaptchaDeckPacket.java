@@ -25,6 +25,7 @@ public class CaptchaDeckPacket extends MinestuckPacket
 	public static final byte MODUS = 1;
 	public static final byte CAPTCHALOUGE = 2;
 	public static final byte GET = 3;
+	public static final byte VALUE = 4;
 	
 	public byte type;
 	
@@ -32,6 +33,9 @@ public class CaptchaDeckPacket extends MinestuckPacket
 	
 	public int itemIndex;
 	public boolean getCard;
+	
+	public byte valueType;
+	public int value;
 	
 	public CaptchaDeckPacket()
 	{
@@ -63,6 +67,11 @@ public class CaptchaDeckPacket extends MinestuckPacket
 				this.data.writeInt((Integer)data[1]);	//Client side index
 				this.data.writeBoolean((Boolean)data[2]);	//Retrive card
 			}
+			else if(type == VALUE)
+			{
+				this.data.writeByte((Byte)data[1]);
+				this.data.writeInt((Integer)data[2]);
+			}
 		}
 		
 		return this;
@@ -93,6 +102,11 @@ public class CaptchaDeckPacket extends MinestuckPacket
 				this.itemIndex = data.readInt();
 				this.getCard = data.readBoolean();
 			}
+			else if(this.type == VALUE)
+			{
+				this.valueType = data.readByte();
+				this.value = data.readInt();
+			}
 		}
 		
 		return this;
@@ -114,6 +128,8 @@ public class CaptchaDeckPacket extends MinestuckPacket
 				CaptchaDeckHandler.getItem((EntityPlayerMP) player, itemIndex, getCard);
 			else if(this.type == DATA && CaptchaDeckHandler.getModus(player) != null)
 				MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.CAPTCHA, DATA, CaptchaDeckHandler.writeToNBT(CaptchaDeckHandler.getModus(player))), player);
+			else if(this.type == VALUE && CaptchaDeckHandler.getModus(player) != null)
+				CaptchaDeckHandler.getModus(player).setValue(valueType, value);
 		}
 		else
 		{

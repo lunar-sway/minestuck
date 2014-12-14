@@ -214,7 +214,8 @@ public class Minestuck
 	
 	//Client config
 	public static int clientOverworldEditRange;	//Edit range used by the client side.
-	public static int clientLandEditRange;		//changed by a MinestuckConfigPacket sent by the server on login.
+	public static int clientLandEditRange;	//changed by a MinestuckConfigPacket sent by the server on login.
+	public static byte clientTreeAutobalance;
 	public static boolean clientHardMode;
 	public static boolean clientGiveItems;
 	public static boolean clientEasyDesignix;
@@ -247,6 +248,7 @@ public class Minestuck
 	 * (Will try to put a better explanation somewhere else later)
 	 */
 	public static int escapeFailureMode;	//What will happen if someone's server player fails to escape the overworld in time,
+	public static byte treeModusSetting;
 	
 	public static boolean[] deployConfigurations;
 	
@@ -292,14 +294,15 @@ public class Minestuck
 		//forceMaxSize = config.getBoolean("forceMaxSize", "General", false); Unused for now.
 		//escapeFailureMode = config.getInt("escapeFailureMode", "General", 0, 0, 2, "Used to determine what happens with related connections when a player fails to escape the meteor enabled by 'hardmode'.");
 		giveItems = config.getBoolean("giveItems", "General", false, "Setting this to true replaces editmode with the old Give Items button.");
-		defaultModusSize = config.getInt("defaultModusSize", "General", 5, 0, Integer.MAX_VALUE, "The initial size of a captchalouge deck.");
-		defaultModusType = config.getInt("defaultModusType", "General", -1, -2, CaptchaDeckHandler.ModusType.values().length - 1,
+		defaultModusSize = config.getInt("defaultModusSize", "Modus", 5, 0, Integer.MAX_VALUE, "The initial size of a captchalouge deck.");
+		defaultModusType = config.getInt("defaultModusType", "Modus", -1, -2, CaptchaDeckHandler.ModusType.values().length - 1,
 				"The type of modus that is given to players without one. -1: Random modus given from a builtin list. -2: Any random modus. 0+: Certain modus given. Anything else: No modus given.");
-		modusMaxSize = config.getInt("modusMaxSize", "General", 0, 0, Integer.MAX_VALUE, "The max size on a modus. Ignored if the value is 0.");
+		modusMaxSize = config.getInt("modusMaxSize", "Modus", 0, 0, Integer.MAX_VALUE, "The max size on a modus. Ignored if the value is 0.");
 		if(defaultModusSize > modusMaxSize && modusMaxSize > 0)
 			defaultModusSize = modusMaxSize;
 		deployConfigurations = new boolean[1];
 		deployConfigurations[0] = config.getBoolean("cardInDeploylist", "General", false, "Determines if a card with a captcha card punched on it should be added to the deploy list or not.");
+		treeModusSetting = (byte) config.getInt("treeModusSetting", "Modus", 0, 0, 2, "This determines how autobalance should be. 0 if the player should choose, 1 if forced at on, and 2 if forced at off.");
 		
 		if(event.getSide().isClient()) {	//Client sided config values
 			toolTipEnabled = config.getBoolean("editmodeToolTip", "General", true, "True if the grist cost on items should be shown. This only applies for editmode.");
@@ -331,10 +334,10 @@ public class Minestuck
 		layeredSand = GameRegistry.registerBlock(new BlockLayered(Blocks.sand), ItemBlockLayered.class, "layered_sand").setUnlocalizedName("layeredSand");
 		coloredDirt = (BlockColoredDirt) GameRegistry.registerBlock(new BlockColoredDirt(), ItemColoredDirt.class, "colored_dirt").setUnlocalizedName("coloredDirt").setHardness(0.5F);
 		//machines
-		blockStorage = GameRegistry.registerBlock(new BlockStorage(),ItemStorageBlock.class,"block_storage");
-		blockMachine = GameRegistry.registerBlock(new BlockMachine(), ItemMachine.class,"block_machine");
-		blockComputerOff = GameRegistry.registerBlock(new BlockComputerOff(),"block_computer");
-		blockComputerOn = GameRegistry.registerBlock(new BlockComputerOn(), null, "block_computer_on");
+		blockStorage = GameRegistry.registerBlock(new BlockStorage(),ItemStorageBlock.class,"storage_block");
+		blockMachine = GameRegistry.registerBlock(new BlockMachine(), ItemMachine.class,"machine_block");
+		blockComputerOff = GameRegistry.registerBlock(new BlockComputerOff(),"computer_standard");
+		blockComputerOn = GameRegistry.registerBlock(new BlockComputerOn(), null, "computer_standard_on");
 		transportalizer = GameRegistry.registerBlock(new BlockTransportalizer(), "transportalizer");
 		blockGoldSeeds = (BlockGoldSeeds) GameRegistry.registerBlock(new BlockGoldSeeds(), null, "gold_seeds");
 		//fluids
