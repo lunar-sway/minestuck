@@ -77,6 +77,7 @@ import com.mraof.minestuck.entity.consort.EntityIguana;
 import com.mraof.minestuck.entity.consort.EntityNakagator;
 import com.mraof.minestuck.entity.consort.EntitySalamander;
 import com.mraof.minestuck.entity.item.EntityGrist;
+import com.mraof.minestuck.entity.item.EntityMetalBoat;
 import com.mraof.minestuck.entity.underling.EntityBasilisk;
 import com.mraof.minestuck.entity.underling.EntityGiclops;
 import com.mraof.minestuck.entity.underling.EntityImp;
@@ -90,6 +91,7 @@ import com.mraof.minestuck.item.ItemCruxiteRaw;
 import com.mraof.minestuck.item.ItemDisk;
 import com.mraof.minestuck.item.ItemDowel;
 import com.mraof.minestuck.item.ItemGoldSeeds;
+import com.mraof.minestuck.item.ItemMetalBoat;
 import com.mraof.minestuck.item.ItemMinestuckBucket;
 import com.mraof.minestuck.item.ItemModus;
 import com.mraof.minestuck.item.block.ItemBlockLayered;
@@ -188,6 +190,7 @@ public class Minestuck
 	public static ItemModus captchaModus;
 	public static ItemMinestuckBucket minestuckBucket;
 	public static ItemGoldSeeds goldSeeds;	//This item is pretty much only a joke
+	public static ItemMetalBoat metalBoat;
 	
 	//Blocks
 	public static Block chessTile;
@@ -209,8 +212,6 @@ public class Minestuck
 	public static Fluid fluidOil;
 	public static Fluid fluidBlood;
 	public static Fluid fluidBrainJuice;
-
-	
 	
 	//Client config
 	public static int clientOverworldEditRange;	//Edit range used by the client side.
@@ -394,6 +395,7 @@ public class Minestuck
 		minestuckBucket = new ItemMinestuckBucket();
 		captchaModus = new ItemModus();
 		goldSeeds = new ItemGoldSeeds();
+		metalBoat = new ItemMetalBoat();
 		
 //		minestuckBucket.addBlock(blockBlood);
 //		minestuckBucket.addBlock(blockOil);
@@ -440,6 +442,7 @@ public class Minestuck
 		GameRegistry.registerItem(minestuckBucket, "minestuck_bucket");
 		GameRegistry.registerItem(captchaModus, "modus_card");
 		GameRegistry.registerItem(goldSeeds, "gold_seeds");
+		GameRegistry.registerItem(metalBoat, "metal_boat");
 		
 		if(event.getSide().isClient())
 		{
@@ -474,10 +477,12 @@ public class Minestuck
 		this.registerAndMapEntity(EntityWhiteBishop.class, "prospitianBishop", 0xffffff, 0xfde500);
 		this.registerAndMapEntity(EntityBlackRook.class, "dersiteRook", 0x000000, 0xc121d9);
 		this.registerAndMapEntity(EntityWhiteRook.class, "prospitianRook", 0xffffff, 0xfde500);
-		EntityRegistry.registerModEntity(EntityDecoy.class, "playerDecoy", currentEntityIdOffset, this, 80, 3, true);
-		currentEntityIdOffset++;
 		
 		//register entities with fml
+		EntityRegistry.registerModEntity(EntityDecoy.class, "playerDecoy", currentEntityIdOffset, this, 80, 3, true);
+		currentEntityIdOffset++;
+		EntityRegistry.registerModEntity(EntityMetalBoat.class, "metalBoat", currentEntityIdOffset, this, 80, 3, true);
+		currentEntityIdOffset++;
 		EntityRegistry.registerModEntity(EntityGrist.class, "grist", currentEntityIdOffset, this, 512, 1, true);
 		
 		//register Tile Entities

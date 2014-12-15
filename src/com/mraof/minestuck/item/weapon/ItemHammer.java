@@ -4,6 +4,8 @@ import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -102,7 +104,7 @@ public class ItemHammer extends ItemWeapon
 		itemStack.damageItem(1, player);
 		if(hammerType.equals(EnumHammerType.POGO))
 		{
-			target.motionY = Math.abs(player.motionY) + target.motionY + 0.5;
+			target.motionY = Math.abs(player.motionY) + target.motionY + getPogoMotion(itemStack);
 			player.motionY = 0;
 			player.fallDistance = 0;
 		}
@@ -143,13 +145,18 @@ public class ItemHammer extends ItemWeapon
 		{
 			if (hammerType.equals(EnumHammerType.POGO))
 			{
-				playerIn.motionY = Math.abs(playerIn.motionY) + 0.5;
+				playerIn.motionY = Math.abs(playerIn.motionY) + getPogoMotion(stack);
 				playerIn.fallDistance = 0;
 				stack.damageItem(1, playerIn);
 				return true;
 			} 
 		}
 		return false;
+	}
+	
+	protected double getPogoMotion(ItemStack stack)
+	{
+		return 0.5 + EnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency.effectId, stack)*0.1;
 	}
 	
 }

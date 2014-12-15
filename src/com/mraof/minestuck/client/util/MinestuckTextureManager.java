@@ -84,6 +84,8 @@ public class MinestuckTextureManager
 		for(int i = 0; i < Minestuck.captchaModus.modusNames.length; i++)
 			register(Minestuck.captchaModus, i, "modus_" + Minestuck.captchaModus.modusNames[i]);
 		register(Minestuck.goldSeeds);
+		for(int i = 0; i < Minestuck.metalBoat.names.length; i++)
+			register(Minestuck.metalBoat, i, "boat_"+Minestuck.metalBoat.names[i]);
 		
 		//Blocks
 		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())
@@ -128,6 +130,8 @@ public class MinestuckTextureManager
 		for(int i = 0; i < str.length; i++)
 			str[i] = "minestuck:modus_"+Minestuck.captchaModus.modusNames[i];
 		ModelBakery.addVariantName(Minestuck.captchaModus, str);
+		for(String s : Minestuck.metalBoat.names)
+			ModelBakery.addVariantName(Minestuck.metalBoat, "minestuck:boat_"+s);
 		
 		//Blocks
 		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())

@@ -13,9 +13,9 @@ achievement.goldSeeds=Gold Farming
 achievement.goldSeeds.desc=It begins to dawn on you that everything you just did may have been a colossal waste of time.
 achievement.treeModus=Uprooting
 achievement.treeModus.desc=Remove the root card in a tree modus with a bunch of items.
-achievement.killOgre=The Big one
+achievement.killOgre=The Big One
 achievement.killOgre.desc=Kill an ogre.
-achievement.killGiclops=The bigger one
+achievement.killGiclops=The bigger One
 achievement.killGiclops.desc=Kill a giclops.
 
 computer.buttonClear=Clear message
@@ -158,6 +158,7 @@ item.modusCard.queue.name=Queue Modus
 item.modusCard.queuestack.name=Queue-Stack Modus
 item.modusCard.tree.name=Tree Modus
 item.modusCard.hashmap.name=Hashmap Modus
+item.metalBoat.iron.name=Iron Boat
 
 itemGroup.tabMinestuck=Minestuck
 
