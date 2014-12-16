@@ -482,6 +482,9 @@ public class AlchemyRecipeHandler {
 		CombinationRegistry.addCombination(new ItemStack(Items.boat), new ItemStack(Items.minecart), MODE_OR, new ItemStack(Minestuck.metalBoat, 1, 0));
 		CombinationRegistry.addCombination(new ItemStack(Items.boat), new ItemStack(Items.iron_ingot), MODE_AND, new ItemStack(Minestuck.metalBoat, 1, 0));
 		CombinationRegistry.addCombination(new ItemStack(Items.boat), new ItemStack(Blocks.iron_block), MODE_AND, new ItemStack(Minestuck.metalBoat, 1, 0));
+		CombinationRegistry.addCombination(new ItemStack(Items.boat), new ItemStack(Items.gold_nugget), MODE_AND, new ItemStack(Minestuck.metalBoat, 1, 1));
+		CombinationRegistry.addCombination(new ItemStack(Items.boat), new ItemStack(Items.gold_ingot), MODE_AND, new ItemStack(Minestuck.metalBoat, 1, 1));
+		CombinationRegistry.addCombination(new ItemStack(Items.boat), new ItemStack(Blocks.gold_block), MODE_AND, new ItemStack(Minestuck.metalBoat, 1, 1));
 		
 		//register land aspects
 		LandHelper.registerLandAspect(new LandAspectFrost());

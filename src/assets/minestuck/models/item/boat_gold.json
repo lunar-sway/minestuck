@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "minestuck:items/BoatIron"
+        "layer0": "minestuck:items/BoatGold"
     },
     "display": {
         "thirdperson": {

@@ -11,6 +11,7 @@ public class RenderMetalBoat extends RenderBoat
 {
 	
 	private static final ResourceLocation ironVariant = new ResourceLocation("minestuck", "textures/entity/IronBoat.png");
+	private static final ResourceLocation goldVariant = new ResourceLocation("minestuck", "textures/entity/GoldBoat.png");
 	
 	public RenderMetalBoat(RenderManager manager)
 	{
@@ -22,7 +23,9 @@ public class RenderMetalBoat extends RenderBoat
 	{
 		EntityMetalBoat boat = (EntityMetalBoat) entity;
 		
-		return ironVariant;
+		if(boat.type == 1)
+			return goldVariant;
+		else return ironVariant;
 	}
 	
 }

@@ -1,5 +1,7 @@
 package com.mraof.minestuck.entity.item;
 
+import io.netty.buffer.ByteBuf;
+
 import java.util.Iterator;
 import java.util.List;
 
@@ -13,14 +15,20 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
-public class EntityMetalBoat extends EntityBoat
+public class EntityMetalBoat extends EntityBoat implements IEntityAdditionalSpawnData
 {
+	
+	public int type;
+	private boolean isDropping = false;
 	
 	public EntityMetalBoat(World world)
 	{
@@ -30,18 +38,16 @@ public class EntityMetalBoat extends EntityBoat
 	public EntityMetalBoat(World world, double x, double y, double z, int type)
 	{
 		super(world, x, y, z);
-	}
-	
-	@Override
-	public float getDamageTaken()
-	{
-		return super.getDamageTaken();
+		this.type = type;
 	}
 	
 	@Override
 	public void setDamageTaken(float damage)
 	{
-		super.setDamageTaken(damage/1.5F);
+		if(type == 0)
+			super.setDamageTaken(damage/1.5F);
+		else if(type == 1)
+			super.setDamageTaken(damage);
 	}
 	
 	@Override
@@ -54,12 +60,13 @@ public class EntityMetalBoat extends EntityBoat
 		super.onUpdate();
 		
 		captureDrops = false;
-		if(!capturedDrops.isEmpty())
+		if(isDropping || !capturedDrops.isEmpty())
 		{
 			double prevMotionX = posX - prevPosX, prevMotionZ = posZ - prevPosZ;
-			if(Math.sqrt(prevMotionX * prevMotionX + prevMotionZ * prevMotionZ) > 0.3)
+			double maxMotion = type == 0 ? 0.3 : 0.2;
+			if(isDropping || Math.sqrt(prevMotionX * prevMotionX + prevMotionZ * prevMotionZ) > maxMotion)
 				for(int i = 0; i < 3; i++)
-					dropItem(Items.iron_ingot, 1);
+					dropItem(getTypeItem(), 1);
 			else
 			{
 				isDead = false;
@@ -76,7 +83,7 @@ public class EntityMetalBoat extends EntityBoat
 		
 		this.motionY = motion;
 		setPosition(posX, pos, posZ);
-		this.motionY -= 0.04D;
+		this.motionY -= type == 0 ? 0.03D : 0.04D;
 		motionX /= 1.5;
 		motionY /= 1.5;
 		motionZ /= 1.5;
@@ -89,19 +96,16 @@ public class EntityMetalBoat extends EntityBoat
 	{
 		if (par2)
 		{
-			if (this.fallDistance > 5.0F)
+			float fall = type == 0 ? 5.0F : 3.0F;
+			if (this.fallDistance > fall)
 			{
 				this.fall(this.fallDistance, 1.0F);
 				
 				if (!this.worldObj.isRemote && !this.isDead)
 				{
 					this.setDead();
-					int i;
 					
-					for (i = 0; i < 3; ++i)
-					{
-						this.dropItemWithOffset(Items.iron_ingot, 1, 0.0F);
-					}
+					isDropping = true;
 				}
 				
 				this.fallDistance = 0.0F;
@@ -142,7 +146,7 @@ public class EntityMetalBoat extends EntityBoat
 					
 					if (!flag)
 					{
-						this.dropItemWithOffset(Minestuck.metalBoat, 1, 0.0F);
+						this.entityDropItem(new ItemStack(Minestuck.metalBoat, 1, this.type), 0.0F);
 					}
 					
 					this.setDead();
@@ -155,5 +159,40 @@ public class EntityMetalBoat extends EntityBoat
 		{
 			return true;
 		}
+	}
+	
+	private Item getTypeItem()
+	{
+		if(this.type == 0)
+			return Items.iron_ingot;
+		else if(this.type == 1)
+			return Items.gold_ingot;
+		return null;
+	}
+	
+	@Override
+	protected void writeEntityToNBT(NBTTagCompound tagCompound)
+	{
+		tagCompound.setByte("boatType", (byte) type);
+	}
+	
+	@Override
+	protected void readEntityFromNBT(NBTTagCompound tagCompund)
+	{
+		this.type = tagCompund.getByte("boatType");
+	}
+	
+
+	@Override
+	public void writeSpawnData(ByteBuf buffer)
+	{
+		buffer.writeByte(type);
+	}
+	
+
+	@Override
+	public void readSpawnData(ByteBuf additionalData)
+	{
+		this.type = additionalData.readByte();
 	}
 }
