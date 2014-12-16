@@ -74,13 +74,12 @@ public class EntityMetalBoat extends EntityBoat
 		if(!this.worldObj.isAABBInMaterial(this.getEntityBoundingBox(), Material.water))
 			return;
 		
-		if(!onGround)
-			motion -= 0.1;
-		
 		this.motionY = motion;
 		setPosition(posX, pos, posZ);
 		this.motionY -= 0.04D;
-			motionY /= 2;
+		motionX /= 1.5;
+		motionY /= 1.5;
+		motionZ /= 1.5;
 		
 		moveEntity(0, motionY, 0);
 		
