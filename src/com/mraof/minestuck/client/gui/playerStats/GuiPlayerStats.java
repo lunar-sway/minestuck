@@ -34,7 +34,7 @@ public abstract class GuiPlayerStats extends GuiScreen
 	{
 		
 		CAPTCHA_DECK(GuiCaptchaDeck.class, "gui.captchaDeck.name", true, false),
-		STRIFE_SPECIBUS(GuiStrifeSpecibus.class, "gui.strifeSpecibus.name", false, false),
+//		STRIFE_SPECIBUS(GuiStrifeSpecibus.class, "gui.strifeSpecibus.name", false, false),
 		GRIST_CACHE(GuiGristCache.class, "gui.gristCache.name", false, true);
 //		ECHELADDER(GuiEcheladder.class, "gui.echeladder.name", false, true);
 		

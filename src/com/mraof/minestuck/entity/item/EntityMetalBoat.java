@@ -47,44 +47,42 @@ public class EntityMetalBoat extends EntityBoat
 	@Override
 	public void onUpdate()
 	{
+		double pos = posY;
+		double motion = motionY;
+		captureDrops = true;
 		
 		super.onUpdate();
 		
-		double y = posY - prevPosY;
-		setPosition(posX, prevPosY, posZ);
-		List list1 = this.worldObj.getCollidingBoundingBoxes(this, this.getEntityBoundingBox().addCoord(0, y, 0));
-		AxisAlignedBB axisalignedbb1;
-		
-		for (Iterator iterator = list1.iterator(); iterator.hasNext(); y = axisalignedbb1.calculateYOffset(this.getEntityBoundingBox(), y))
+		captureDrops = false;
+		if(!capturedDrops.isEmpty())
 		{
-			axisalignedbb1 = (AxisAlignedBB)iterator.next();
-		}
-		setPosition(posX, posY + y, posZ);
-		
-		double d0 = 0.0D;
-		int b0 = 5;
-		
-		for (int i = 0; i < b0; ++i)
-		{
-			double d1 = this.getEntityBoundingBox().minY + (this.getEntityBoundingBox().maxY - this.getEntityBoundingBox().minY) * (double)(i + 0) / (double)b0 - 0.125D;
-			double d3 = this.getEntityBoundingBox().minY + (this.getEntityBoundingBox().maxY - this.getEntityBoundingBox().minY) * (double)(i + 1) / (double)b0 - 0.125D;
-			AxisAlignedBB axisalignedbb = new AxisAlignedBB(this.getEntityBoundingBox().minX, d1, this.getEntityBoundingBox().minZ, this.getEntityBoundingBox().maxX, d3, this.getEntityBoundingBox().maxZ);
-			
-			if (this.worldObj.isAABBInMaterial(axisalignedbb, Material.water))
+			double prevMotionX = posX - prevPosX, prevMotionZ = posZ - prevPosZ;
+			if(Math.sqrt(prevMotionX * prevMotionX + prevMotionZ * prevMotionZ) > 0.3)
+				for(int i = 0; i < 3; i++)
+					dropItem(Items.iron_ingot, 1);
+			else
 			{
-				d0 += 1.0D / (double)b0;
+				isDead = false;
+				this.motionX *= 0.9900000095367432D;
+				this.motionY *= 0.949999988079071D;
+				this.motionZ *= 0.9900000095367432D;
 			}
 		}
 		
-		this.motionY -= d0/8;
+		capturedDrops.clear();
 		
-		if(onGround && motionY < 0)
-			motionY = 0;
-		if(motionY > 0)
-			motionY = -motionY;
+		if(!this.worldObj.isAABBInMaterial(this.getEntityBoundingBox(), Material.water))
+			return;
 		
-		if(posY > prevPosY)
-			setPosition(posX, prevPosY, posZ);
+		if(!onGround)
+			motion -= 0.1;
+		
+		this.motionY = motion;
+		setPosition(posX, pos, posZ);
+		this.motionY -= 0.04D;
+			motionY /= 2;
+		
+		moveEntity(0, motionY, 0);
 		
 	}
 	
@@ -92,7 +90,7 @@ public class EntityMetalBoat extends EntityBoat
 	{
 		if (par2)
 		{
-			if (this.fallDistance > 3.0F)
+			if (this.fallDistance > 5.0F)
 			{
 				this.fall(this.fallDistance, 1.0F);
 				
