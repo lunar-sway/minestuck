@@ -2,13 +2,19 @@ package com.mraof.minestuck.item;
 
 import java.util.List;
 
+import net.minecraft.block.BlockDispenser;
+import net.minecraft.block.material.Material;
+import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
+import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
@@ -23,6 +29,7 @@ public abstract class ItemCustomBoat extends Item
 	{
 		this.maxStackSize = 1;
 		setCreativeTab(Minestuck.tabMinestuck);
+		BlockDispenser.dispenseBehaviorRegistry.putObject(this, new BehaivorDispenseCustomBoat());
 	}
 	
 	//This method is copied straight from the normal boat item.
@@ -113,4 +120,41 @@ public abstract class ItemCustomBoat extends Item
 	
 	protected abstract Entity createBoat(ItemStack stack, World world, double x, double y, double z);
 	
+	protected class BehaivorDispenseCustomBoat extends BehaviorDefaultDispenseItem
+	{
+		public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
+		{
+			EnumFacing enumfacing = BlockDispenser.getFacing(source.getBlockMetadata());
+			World world = source.getWorld();
+			double d0 = source.getX() + (double)((float)enumfacing.getFrontOffsetX() * 1.125F);
+			double d1 = source.getY() + (double)((float)enumfacing.getFrontOffsetY() * 1.125F);
+			double d2 = source.getZ() + (double)((float)enumfacing.getFrontOffsetZ() * 1.125F);
+			BlockPos blockpos = source.getBlockPos().offset(enumfacing);
+			Material material = world.getBlockState(blockpos).getBlock().getMaterial();
+			double d3;
+			
+			if (Material.water.equals(material))
+			{
+				d3 = 1.0D;
+			}
+			else
+			{
+				if (!Material.air.equals(material) || !Material.water.equals(world.getBlockState(blockpos.down()).getBlock().getMaterial()))
+				{
+					return this.dispense(source, stack);
+				}
+				
+				d3 = 0.0D;
+			}
+			
+			Entity entityboat = createBoat(stack, world, d0, d1 + d3, d2);
+			world.spawnEntityInWorld(entityboat);
+			stack.splitStack(1);
+			return stack;
+		}
+		protected void playDispenseSound(IBlockSource source)
+		{
+			source.getWorld().playAuxSFX(1000, source.getBlockPos(), 0);
+		}
+	}
 }

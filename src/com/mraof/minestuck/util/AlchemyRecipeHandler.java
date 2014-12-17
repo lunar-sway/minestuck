@@ -43,6 +43,7 @@ import com.mraof.minestuck.world.gen.lands.LandAspectSand;
 import com.mraof.minestuck.world.gen.lands.LandAspectShade;
 import com.mraof.minestuck.world.gen.lands.LandAspectThought;
 import com.mraof.minestuck.world.gen.lands.LandHelper;
+
 import static com.mraof.minestuck.util.CombinationRegistry.MODE_AND;
 import static com.mraof.minestuck.util.CombinationRegistry.MODE_OR;
 
@@ -371,7 +372,6 @@ public class AlchemyRecipeHandler {
 		CombinationRegistry.addCombination(new ItemStack(Blocks.grass),new ItemStack(Blocks.red_mushroom),MODE_AND, new ItemStack(Blocks.mycelium));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.gravel),new ItemStack(Blocks.stone),MODE_AND, new ItemStack(Items.flint));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.ladder),new ItemStack(Items.iron_ingot),MODE_AND, new ItemStack(Blocks.rail));
-		CombinationRegistry.addCombination(new ItemStack(Blocks.leaves, 1, 2), new ItemStack(Blocks.dirt), MODE_AND, new ItemStack(Blocks.grass, 1, 1));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.netherrack),new ItemStack(Blocks.brick_block),MODE_AND, new ItemStack(Items.netherbrick));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.netherrack),new ItemStack(Blocks.brick_block),MODE_OR, new ItemStack(Blocks.nether_brick));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.netherrack),new ItemStack(Items.glowstone_dust),MODE_AND, new ItemStack(Blocks.glowstone));
@@ -410,6 +410,22 @@ public class AlchemyRecipeHandler {
 		CombinationRegistry.addCombination(new ItemStack(Items.redstone), new ItemStack(Blocks.netherrack), MODE_OR, new ItemStack(Items.blaze_powder));
 		CombinationRegistry.addCombination(Items.blaze_powder, WILDCARD_VALUE, "stickWood", WILDCARD_VALUE, MODE_AND, new ItemStack(Items.blaze_rod));
 		CombinationRegistry.addCombination(new ItemStack(Items.boat), new ItemStack(Blocks.rail), MODE_OR, new ItemStack(Items.minecart));
+		CombinationRegistry.addCombination(new ItemStack(Items.iron_ingot), new ItemStack(Blocks.trapdoor), MODE_OR, new ItemStack(Blocks.iron_trapdoor));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.iron_block), new ItemStack(Blocks.trapdoor), MODE_OR, new ItemStack(Blocks.iron_trapdoor));
+		CombinationRegistry.addCombination("stickWood", WILDCARD_VALUE, Item.getItemFromBlock(Blocks.iron_bars), WILDCARD_VALUE, MODE_AND, new ItemStack(Blocks.rail));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.cobblestone_wall), new ItemStack(Blocks.mossy_cobblestone), MODE_OR, new ItemStack(Blocks.cobblestone_wall, 1, 1));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.dispenser), new ItemStack(Blocks.hopper), MODE_AND, new ItemStack(Blocks.dropper));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.torch), new ItemStack(Items.redstone), MODE_OR, new ItemStack(Blocks.redstone_torch));
+		CombinationRegistry.addCombination(new ItemStack(Items.minecart), new ItemStack(Blocks.chest), MODE_AND, new ItemStack(Items.chest_minecart));
+		CombinationRegistry.addCombination(new ItemStack(Items.minecart), new ItemStack(Blocks.furnace), MODE_AND, new ItemStack(Items.furnace_minecart));
+		CombinationRegistry.addCombination(new ItemStack(Items.minecart), new ItemStack(Blocks.tnt), MODE_AND, new ItemStack(Items.tnt_minecart));
+		CombinationRegistry.addCombination(new ItemStack(Items.minecart), new ItemStack(Blocks.hopper), MODE_AND, new ItemStack(Items.hopper_minecart));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.rail), new ItemStack(Blocks.redstone_torch), MODE_AND, new ItemStack(Blocks.activator_rail));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.rail), new ItemStack(Blocks.wooden_pressure_plate), MODE_AND, new ItemStack(Blocks.detector_rail));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.rail), new ItemStack(Blocks.stone_pressure_plate), MODE_AND, new ItemStack(Blocks.detector_rail));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.rail), new ItemStack(Blocks.light_weighted_pressure_plate), MODE_AND, new ItemStack(Blocks.detector_rail));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.rail), new ItemStack(Blocks.heavy_weighted_pressure_plate), MODE_AND, new ItemStack(Blocks.detector_rail));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.glowstone), new ItemStack(Blocks.redstone_torch), MODE_OR, new ItemStack(Blocks.redstone_lamp));
 		
 	}
 	
@@ -458,6 +474,7 @@ public class AlchemyRecipeHandler {
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.goldSeeds), new GristSet(GristType.Gold, 3));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.captchaModus, 1, 3), true, new GristSet(GristType.Build, 50));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.metalBoat, 1, 0), true, new GristSet(GristType.Rust, 65));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.metalBoat, 1, 1), true, new GristSet(GristType.Gold, 65));
 		
 		//add Designix combinations
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_hoe), new ItemStack(Items.wheat), MODE_AND, new ItemStack(Minestuck.sickle));
@@ -485,6 +502,8 @@ public class AlchemyRecipeHandler {
 		CombinationRegistry.addCombination(new ItemStack(Items.boat), new ItemStack(Items.gold_nugget), MODE_AND, new ItemStack(Minestuck.metalBoat, 1, 1));
 		CombinationRegistry.addCombination(new ItemStack(Items.boat), new ItemStack(Items.gold_ingot), MODE_AND, new ItemStack(Minestuck.metalBoat, 1, 1));
 		CombinationRegistry.addCombination(new ItemStack(Items.boat), new ItemStack(Blocks.gold_block), MODE_AND, new ItemStack(Minestuck.metalBoat, 1, 1));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.dirt), new ItemStack(Items.dye, 1, EnumDyeColor.BLUE.getDyeDamage()), MODE_OR, new ItemStack(Minestuck.coloredDirt, 1, 0));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.dirt), new ItemStack(Items.dye, 1, EnumDyeColor.LIME.getDyeDamage()), MODE_OR, new ItemStack(Minestuck.coloredDirt, 1, 1));
 		
 		//register land aspects
 		LandHelper.registerLandAspect(new LandAspectFrost());
