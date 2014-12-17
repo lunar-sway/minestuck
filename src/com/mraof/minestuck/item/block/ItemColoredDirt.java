@@ -15,14 +15,14 @@ public class ItemColoredDirt extends ItemBlock
 		setUnlocalizedName("coloredDirt");
 	}
 	@Override
-	public String getUnlocalizedName(ItemStack itemstack) 
+	public String getUnlocalizedName(ItemStack itemstack)
 	{
-		return getUnlocalizedName() + "." + ((BlockColoredDirt)field_150939_a).iconNames[itemstack.getItemDamage()];
+		return getUnlocalizedName() + "." + BlockColoredDirt.BlockType.values()[itemstack.getItemDamage()].name;
 	}
 	@Override
-	public int getMetadata (int damageValue) 
+	public int getMetadata(int damageValue)
 	{
-		return damageValue;
+		return damageValue % BlockColoredDirt.BlockType.values().length;
 	}
 	
 }

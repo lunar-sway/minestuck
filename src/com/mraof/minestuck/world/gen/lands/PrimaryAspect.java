@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.gen.lands;
 import java.util.ArrayList;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Vec3;
 
@@ -12,13 +13,13 @@ public abstract class PrimaryAspect
 		 * Returns the blocks that can possibly be use in the land's underground blocks.
 		 * @return
 		 */
-		public abstract BlockWithMetadata[] getSurfaceBlocks();
+		public abstract IBlockState[] getSurfaceBlocks();
 		
 		/**
 		 * Returns the blocks that can possibly be use in the land's topmost layer of blocks.
 		 * @return
 		 */
-		public abstract BlockWithMetadata[] getUpperBlocks();
+		public abstract IBlockState[] getUpperBlocks();
 		
 		/**
 		 * Unused currently. Will be used to generate the land's terrain.

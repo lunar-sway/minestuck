@@ -17,6 +17,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.Minestuck;
@@ -49,17 +50,17 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 	}
 
 	@Override
-	protected float getWanderSpeed() 
+	public float getWanderSpeed() 
 	{
 		return .3F;
 	}
-
+	
 	@Override
-	public IEntityLivingData onSpawnWithEgg(IEntityLivingData par1EntityLivingData)
+	public IEntityLivingData func_180482_a(DifficultyInstance difficulty, IEntityLivingData entityLivingData)	//was called "onSpawnWithEgg"
 	{
-		par1EntityLivingData = super.onSpawnWithEgg(par1EntityLivingData);
+		entityLivingData = super.func_180482_a(difficulty, entityLivingData);
 		this.addRandomArmor();
-
+		
 		if(this.pawnType == 1)
 		{
 			this.targetTasks.addTask(4, entityAIArrowAttack);
@@ -67,8 +68,8 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 		else
 			this.tasks.addTask(4, this.entityAIAttackOnCollide);
 		this.setCurrentItemOrArmor(0, new ItemStack(this.pawnType == 1 ? Items.bow : rand.nextDouble() < .2 ? Minestuck.regisword : rand.nextDouble() < .02 ? Minestuck.sord : Items.stone_sword));
-		this.enchantEquipment();
-		return par1EntityLivingData;
+		this.func_180483_b(difficulty);	//was called "enchantEquipment"
+		return entityLivingData;
 	}
 
 	@Override
@@ -113,9 +114,9 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 		if (weapon != null)
 			damage += 
 				(float)this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue();
-
-		damage += EnchantmentHelper.getEnchantmentModifierLiving(this, (EntityLivingBase)par1Entity);
-
+		
+		damage += EnchantmentHelper.func_152377_a(this.getHeldItem(), ((EntityLivingBase) par1Entity).getCreatureAttribute());
+		
 		return damage;
 	}
 
@@ -124,7 +125,7 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 	{
 		float damage = this.getAttackStrength(par1Entity);
 		int fireAspectLevel = EnchantmentHelper.getFireAspectModifier(this);
-		int knockback = EnchantmentHelper.getKnockbackModifier(this, (EntityLivingBase)par1Entity);
+		int knockback = EnchantmentHelper.getKnockbackModifier(this);
 
 		if (fireAspectLevel > 0 && !par1Entity.isBurning())
 			par1Entity.setFire(1);
@@ -134,20 +135,20 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 
 		return par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this), damage);
 	}
-	/**
-	 * Basic mob attack. Default to touch of death in EntityCreature. Overridden by each mob to define their attack.
-	 */
-
-	@Override
-	protected void attackEntity(Entity par1Entity, float par2)
-	{
-		if (this.attackTime <= 0 && par2 < 2.0F && par1Entity.boundingBox.maxY > this.boundingBox.minY && par1Entity.boundingBox.minY < this.boundingBox.maxY)
-		{
-			this.attackTime = 20;
-			this.attackEntityAsMob(par1Entity);
-		}
-	}
-
+	
+//	/**
+//	 * Basic mob attack. Default to touch of death in EntityCreature. Overridden by each mob to define their attack.
+//	 */
+//	@Override
+//	protected void attackEntity(Entity par1Entity, float par2)
+//	{
+//		if (this.attackTime <= 0 && par2 < 2.0F && par1Entity.getEntityBoundingBox().maxY > this.getEntityBoundingBox().minY && par1Entity.getEntityBoundingBox().minY < this.getEntityBoundingBox().maxY)
+//		{
+//			this.attackTime = 20;
+//			this.attackEntityAsMob(par1Entity);
+//		}
+//	}
+	
 	@Override
 	public void setCombatTask()
 	{
@@ -185,6 +186,5 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 		super.applyEntityAttributes();
 		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.attackDamage);
 	}
-
-
+	
 }

@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.gen.structure;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 
@@ -44,6 +45,16 @@ public class ComponentCastleSolidPiece extends ComponentCastlePiece
         this.fillWithAlternatingBlocks(world, structureboundingbox, 0, 0, 0, 7 ,7, 7, Minestuck.chessTile, chessTileMetadata,  Minestuck.chessTile, chessTileMetadata1, false);
 
         return true;
+	}
+	@Override
+	protected void writeStructureToNBT(NBTTagCompound p_143012_1_) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	protected void readStructureFromNBT(NBTTagCompound p_143011_1_) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

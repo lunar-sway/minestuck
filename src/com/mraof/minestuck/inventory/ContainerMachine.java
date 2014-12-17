@@ -203,7 +203,8 @@ public class ContainerMachine extends Container {
 		
 		return itemstack;
 	}
-
+	
+	@Override
 	public void addCraftingToCrafters(ICrafting par1ICrafting)
 	{
 		super.addCraftingToCrafters(par1ICrafting);
@@ -215,23 +216,10 @@ public class ContainerMachine extends Container {
 			par1ICrafting.sendProgressBarUpdate(this, 0, this.tileEntity.mode ? 0 : 1);
 		}
 	}
+	
 	public void detectAndSendChanges()
 	{
-		super.detectAndSendChanges();
-
-		for (int i = 0; i < this.crafters.size(); ++i)
-		{
-			ICrafting icrafting = (ICrafting)this.crafters.get(i);
-			switch(this.metadata)
-			{
-			case 1:
-				if (this.operator != (this.tileEntity.mode))
-				{
-					icrafting.sendProgressBarUpdate(this, 0, this.tileEntity.mode ? 0 : 1);
-					this.operator = this.tileEntity.mode;
-				}
-			}
-		}
+		//Nothing is actually needed here, since the tile entity sends all the necessary stuff
 	}
 	@Override
 	public void updateProgressBar(int par1, int par2) 

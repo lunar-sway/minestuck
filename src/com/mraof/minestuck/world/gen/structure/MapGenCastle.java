@@ -44,9 +44,11 @@ public class MapGenCastle extends MapGenStructure
     {
         return new StructureCastleStart(this.worldObj, this.rand, par1, par2, rand.nextBoolean());
     }
-
+    
 	@Override
-	public String func_143025_a() {
+	public String getStructureName()
+	{
 		return "SkaiaCastle";
 	}
+	
 }

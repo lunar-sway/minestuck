@@ -18,7 +18,7 @@ public abstract class SecondaryAspect
 	
 	public ChunkProviderLands createChunkProvider(WorldProviderLands land)
 	{
-		ChunkProviderLands chunkProvider = new ChunkProviderLands(land.worldObj, land, land.worldObj.isRemote ? Minestuck.worldSeed : land.getSeed());
+		ChunkProviderLands chunkProvider = new ChunkProviderLands(land.getWorld(), land, land.getWorld().isRemote ? Minestuck.worldSeed : land.getSeed());
 		prepareChunkProvider(chunkProvider);
 		return chunkProvider;
 	}

@@ -1,0 +1,9 @@
+{
+    "variants": {
+        "machine_type=cruxtruder": { "model": "minestuck:machine_cruxtruder" },
+        "machine_type=totem_lathe": { "model": "minestuck:machine_lathe" },
+        "machine_type=alchemiter": { "model": "minestuck:machine_alchemiter" },
+        "machine_type=punch_designix": { "model": "minestuck:machine_designix" },
+        "machine_type=grist_widget": { "model": "minestuck:machine_grist_widget" }
+    }
+}

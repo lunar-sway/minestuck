@@ -41,15 +41,15 @@ public abstract class EntityRook extends EntityCarapacian implements IMob
 		return entity.attackEntityFrom(DamageSource.causeMobDamage(this), damage);
 	}
 
-	@Override
-	protected void attackEntity(Entity entity, float par2)
-	{
-		if(this.attackTime <= 0	&& par2 < 2F && entity.boundingBox.maxY > this.boundingBox.minY && entity.boundingBox.minY < this.boundingBox.maxY)
-		{
-			this.attackTime = 20;
-			this.attackEntityAsMob(entity);
-		}
-	}
+//	@Override
+//	protected void attackEntity(Entity entity, float par2)
+//	{
+//		if(this.attackTime <= 0	&& par2 < 2F && entity.boundingBox.maxY > this.boundingBox.minY && entity.boundingBox.minY < this.boundingBox.maxY)
+//		{
+//			this.attackTime = 20;
+//			this.attackEntityAsMob(entity);
+//		}
+//	}
 
 	@Override
 	public void setCombatTask()

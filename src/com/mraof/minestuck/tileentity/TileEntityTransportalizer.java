@@ -21,8 +21,6 @@ import com.mraof.minestuck.util.ITeleporter;
 import com.mraof.minestuck.util.Location;
 import com.mraof.minestuck.util.Teleport;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-
 public class TileEntityTransportalizer extends TileEntity implements ITeleporter
 {
 	public static HashMap<String, Location> transportalizers = new HashMap<String, Location>();
@@ -38,7 +36,7 @@ public class TileEntityTransportalizer extends TileEntity implements ITeleporter
 		{
 			if(id.isEmpty())
 				id = getUnusedId();
-			put(id, new Location(this.xCoord, this.yCoord, this.zCoord, worldObj.provider.dimensionId));
+			put(id, new Location(this.pos, worldObj.provider.getDimensionId()));
 		}
 	}
 	
@@ -49,7 +47,7 @@ public class TileEntityTransportalizer extends TileEntity implements ITeleporter
 		if(!worldObj.isRemote)
 		{
 			Location location = transportalizers.get(id);
-			if(location.x == this.xCoord && location.y == this.yCoord && location.z == this.zCoord && location.dim == this.worldObj.provider.dimensionId)
+			if(location.equals(new Location(this.pos, this.worldObj.provider.getDimensionId())))
 				transportalizers.remove(id);
 		}
 	}
@@ -77,9 +75,9 @@ public class TileEntityTransportalizer extends TileEntity implements ITeleporter
 	public void teleportTo(Entity entity, Location location)
 	{
 		entity.timeUntilPortal = 60;
-		double x = location.x + (entity.posX - xCoord);
-		double y = location.y + (entity.posY - yCoord);
-		double z = location.z + (entity.posZ - zCoord);
+		double x = location.pos.getX() + (entity.posX - this.pos.getX());
+		double y = location.pos.getY() + (entity.posY - this.pos.getY());
+		double z = location.pos.getZ() + (entity.posZ - this.pos.getZ());
 		if(entity instanceof EntityPlayerMP)
 		{
 			((EntityPlayerMP) entity).setPositionAndUpdate(x, y, z);
@@ -93,9 +91,9 @@ public class TileEntityTransportalizer extends TileEntity implements ITeleporter
 	public void teleport(Entity entity)
 	{
 		Location location = transportalizers.get(this.destId);
-		if(location != null && location.y != -1)
+		if(location != null && location.pos.getY() != -1)
 		{
-			TileEntityTransportalizer destTransportalizer = (TileEntityTransportalizer) MinecraftServer.getServer().worldServerForDimension(location.dim).getTileEntity(location.x, location.y, location.z);
+			TileEntityTransportalizer destTransportalizer = (TileEntityTransportalizer) MinecraftServer.getServer().worldServerForDimension(location.dim).getTileEntity(location.pos);
 			if(destTransportalizer == null)
 			{
 				Debug.print("Invalid transportalizer in map: " + this.destId + " at " + location);
@@ -119,9 +117,9 @@ public class TileEntityTransportalizer extends TileEntity implements ITeleporter
 			Map.Entry<String, Location> entry = it.next();
 			Location location = entry.getValue();
 			NBTTagCompound locationTag = new NBTTagCompound();
-			locationTag.setInteger("x", location.x);
-			locationTag.setInteger("y", location.y);
-			locationTag.setInteger("z", location.z);
+			locationTag.setInteger("x", location.pos.getX());
+			locationTag.setInteger("y", location.pos.getY());
+			locationTag.setInteger("z", location.pos.getZ());
 			locationTag.setInteger("dim", location.dim);
 			transportalizerTagCompound.setTag(entry.getKey(), locationTag);
 		}
@@ -130,7 +128,7 @@ public class TileEntityTransportalizer extends TileEntity implements ITeleporter
 
 	public static void loadTransportalizers(NBTTagCompound tagCompound)
 	{
-		for(Object id : tagCompound.func_150296_c())
+		for(Object id : tagCompound.getKeySet())
 		{
 			NBTTagCompound locationTag = tagCompound.getCompoundTag((String)id);
 			put((String)id, new Location(locationTag.getInteger("x"), locationTag.getInteger("y"), locationTag.getInteger("z"), locationTag.getInteger("dim")));
@@ -174,26 +172,21 @@ public class TileEntityTransportalizer extends TileEntity implements ITeleporter
 	{
 		NBTTagCompound tagCompound = new NBTTagCompound();
 		this.writeToNBT(tagCompound);
-		return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 2, tagCompound);
+		return new S35PacketUpdateTileEntity(this.pos, 2, tagCompound);
 	}
 
 	@Override
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) 
 	{
-		this.readFromNBT(pkt.func_148857_g());
+		this.readFromNBT(pkt.getNbtCompound());
 	}
 
 	@Override
 	public void makeDestination(Entity entity, WorldServer worldserver, WorldServer worldserver1) 
 	{
-		entity.setLocationAndAngles(this.xCoord + 0.5, this.yCoord + 0.6, this.zCoord + 0.5, entity.rotationYaw, entity.rotationPitch);
+		entity.setLocationAndAngles(this.pos.getX() + 0.5, this.pos.getY() + 0.6, this.pos.getZ() + 0.5, entity.rotationYaw, entity.rotationPitch);
 		entity.timeUntilPortal = 60;
 	}
-
-	@Override
-	public boolean canUpdate()
-	{
-		return false;
-	}
+	
 }
 

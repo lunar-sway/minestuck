@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
@@ -13,8 +15,6 @@ import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
-
-import cpw.mods.fml.relauncher.Side;
 
 public class SkaianetInfoPacket extends MinestuckPacket {
 
@@ -77,9 +77,9 @@ public class SkaianetInfoPacket extends MinestuckPacket {
 	@Override
 	public void execute(EntityPlayer player) {
 		
-		if(((EntityPlayer)player).worldObj.isRemote)
+		if(!Thread.currentThread().getName().contains("Server"))
 			SkaiaClient.consumePacket(this);
-		else SkaianetHandler.requestInfo(((EntityPlayer)player).getCommandSenderName(), this.player);
+		else SkaianetHandler.requestInfo(player.getName(), this.player);
 		
 	}
 

@@ -1,7 +1,6 @@
 package com.mraof.minestuck.item.weapon;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -9,14 +8,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mraof.minestuck.Minestuck;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 //I called it a spork because it includes both
 public class ItemSpork extends ItemWeapon 
@@ -28,7 +26,6 @@ public class ItemSpork extends ItemWeapon
 	 * whether it's a spoon or a fork, unused for the crocker spork, as it depends on the meta.
 	 */
 	public boolean isSpoon;
-	private IIcon[] crockerTypes = new IIcon[2];
 
 	public ItemSpork(EnumSporkType sporkType) 
 	{
@@ -42,11 +39,9 @@ public class ItemSpork extends ItemWeapon
 		{
 		case CROCKER:
 			this.setUnlocalizedName("crockerSpork");
-			//			this.setIconIndex(23);
 			break;
 		case SKAIA:
 			this.setUnlocalizedName("skaiaFork");
-			//			this.setIconIndex(25);
 			break;
 		}
 		this.weaponDamage = 2 + sporkType.getDamageVsEntity();
@@ -67,28 +62,29 @@ public class ItemSpork extends ItemWeapon
 	@Override
 	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase player)
 	{
-		if (sporkType.equals(EnumSporkType.CROCKER) && !isSpoon(itemStack)){
-			target.hurtResistantTime = 0;	//A somewhat hackish way, but I find attributes too complicated, for now.
-			target.attackEntityFrom(DamageSource.causeMobDamage(player), 2F);
-		}
-			itemStack.damageItem(isSpoon(itemStack) ? 1 : 2, player);
+//		if (sporkType.equals(EnumSporkType.CROCKER) && !isSpoon(itemStack)){
+//			target.hurtResistantTime = 0;	//A somewhat hackish way, but I find attributes too complicated, for now.
+//			target.attackEntityFrom(DamageSource.causeMobDamage(player), 2F);
+//		}
+		
+		itemStack.damageItem(isSpoon(itemStack) ? 1 : 2, player);
 		return true;
 	}
 
 	public boolean isSpoon(ItemStack itemStack) {
 		if (sporkType.equals(EnumSporkType.CROCKER))
-			return itemStack.stackTagCompound == null?true:itemStack.stackTagCompound.getBoolean("isSpoon");
+			return !itemStack.hasTagCompound() ? true : itemStack.getTagCompound().getBoolean("isSpoon");
 		else return isSpoon;
 	}
-
+	
 	@Override
-	public boolean onBlockDestroyed(ItemStack itemStack, World world, Block par3, int par4, int par5, int par6, EntityLivingBase par7EntityLiving)
+	public boolean onBlockDestroyed(ItemStack stack, World worldIn, Block blockIn, BlockPos pos, EntityLivingBase playerIn)
 	{
-		if ((double)par3.getBlockHardness(world, par4, par5, par6) != 0.0D)
+		if ((double)blockIn.getBlockHardness(worldIn, pos) != 0.0D)
 		{
-			itemStack.damageItem(2, par7EntityLiving);
+			stack.damageItem(2, playerIn);
 		}
-
+		
 		return true;
 	}
 
@@ -108,17 +104,15 @@ public class ItemSpork extends ItemWeapon
 	{
 		if(!world.isRemote)
 			if (sporkType.equals(EnumSporkType.CROCKER)) {
-				if(stack.stackTagCompound.getByte("delay") > 0)
+				if(stack.getTagCompound().getByte("delay") > 0)
 					return stack;
-				else stack.stackTagCompound.setByte("delay", (byte) 10);
+				else stack.getTagCompound().setByte("delay", (byte) 10);
 				
-				stack.stackTagCompound.setBoolean("isSpoon", !stack.stackTagCompound.getBoolean("isSpoon"));
+				stack.getTagCompound().setBoolean("isSpoon", !stack.getTagCompound().getBoolean("isSpoon"));
 				
-				
-				
-				if(!stack.stackTagCompound.hasKey("AttributeModifiers"))
-					stack.stackTagCompound.setTag("AttributeModifiers", new NBTTagList());
-				NBTTagList list = stack.stackTagCompound.getTagList("AttributeModifiers", 10);
+				if(!stack.getTagCompound().hasKey("AttributeModifiers"))
+					stack.getTagCompound().setTag("AttributeModifiers", new NBTTagList());
+				NBTTagList list = stack.getTagCompound().getTagList("AttributeModifiers", 10);
 				boolean found = false;
 				for(int i = 0; i < list.tagCount(); i++) {
 					NBTTagCompound nbt = (NBTTagCompound) list.getCompoundTagAt(i);
@@ -132,8 +126,8 @@ public class ItemSpork extends ItemWeapon
 				if(!found) {
 					NBTTagCompound nbt = new NBTTagCompound();
 					nbt.setString("AttributeName", SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName());
-					nbt.setLong("UUIDMost", field_111210_e.getMostSignificantBits());
-					nbt.setLong("UUIDLeast", field_111210_e.getLeastSignificantBits());
+					nbt.setLong("UUIDMost", itemModifierUUID.getMostSignificantBits());
+					nbt.setLong("UUIDLeast", itemModifierUUID.getLeastSignificantBits());
 					nbt.setString("Name", "Tool Modifier");
 					nbt.setDouble("Amount", isSpoon(stack)?3:5);
 					nbt.setInteger("Operation", 0);
@@ -143,42 +137,14 @@ public class ItemSpork extends ItemWeapon
 		return stack;
 	}
 	
-	@Override
-	public IIcon getIcon(ItemStack stack, int pass) {
-		return getIconIndex(stack);
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIconIndex(ItemStack stack) {
-		if (sporkType.equals(EnumSporkType.CROCKER))
-			return crockerTypes[isSpoon(stack)?0:1];
-		else return itemIcon;
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister iconRegister) 
+	public void checkTagCompound(ItemStack stack)
 	{
-		switch(sporkType)
-		{
-		case CROCKER:
-			crockerTypes[0] = iconRegister.registerIcon("minestuck:CrockerSpoon");
-			crockerTypes[1] = iconRegister.registerIcon("minestuck:CrockerFork");
-			break;
-		case SKAIA:
-			itemIcon = iconRegister.registerIcon("minestuck:SkaianFork");
-			break;
-		}
-	}
-	
-	public void checkTagCompound(ItemStack stack) {
-		if(stack.stackTagCompound == null)
-			stack.stackTagCompound = new NBTTagCompound();
-		if(!stack.stackTagCompound.hasKey("isSpoon"))
-			stack.stackTagCompound.setBoolean("isSpoon", true);
-		if(!stack.stackTagCompound.hasKey("delay"))
-			stack.stackTagCompound.setByte("delay", (byte) 0);
+		if(!stack.hasTagCompound())
+			stack.setTagCompound(new NBTTagCompound());
+		if(!stack.getTagCompound().hasKey("isSpoon"))
+			stack.getTagCompound().setBoolean("isSpoon", true);
+		if(!stack.getTagCompound().hasKey("delay"))
+			stack.getTagCompound().setByte("delay", (byte) 0);
 	}
 	
 	@Override
@@ -189,11 +155,12 @@ public class ItemSpork extends ItemWeapon
 	}
 	
 	@Override
-	public void onUpdate(ItemStack stack, World world, Entity entity, int par4, boolean par5) {
+	public void onUpdate(ItemStack stack, World world, Entity entity, int par4, boolean par5)
+	{
 		checkTagCompound(stack);
 		
-		if(stack.stackTagCompound.getByte("delay") > 0)
-			stack.stackTagCompound.setByte("delay", (byte) (stack.stackTagCompound.getByte("delay")-1));
+		if(stack.getTagCompound().getByte("delay") > 0)
+			stack.getTagCompound().setByte("delay", (byte) (stack.getTagCompound().getByte("delay")-1));
 	}
 	
 }

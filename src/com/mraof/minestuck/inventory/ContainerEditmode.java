@@ -36,7 +36,6 @@ public class ContainerEditmode extends Container {
 	{
 		this.player = ClientProxy.getPlayer();
 		addSlots();
-		Debug.print("ContainerCreated:"+player.inventory.mainInventory[14]);
 	}
 	
 	public ContainerEditmode(EntityPlayer player)
@@ -97,7 +96,7 @@ public class ContainerEditmode extends Container {
 	private void updateInventory()
 	{
 		ArrayList<ItemStack> itemList = new ArrayList<ItemStack>();
-		SburbConnection c = SkaianetHandler.getClientConnection(ServerEditHandler.getData(player.getCommandSenderName()).getTarget());
+		SburbConnection c = SkaianetHandler.getClientConnection(ServerEditHandler.getData(player.getName()).getTarget());
 		ArrayList<ItemStack> tools = new ArrayList<ItemStack>();
 		//Fill list with tool items when implemented
 		

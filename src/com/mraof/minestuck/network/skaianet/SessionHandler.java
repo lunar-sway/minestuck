@@ -4,12 +4,25 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.Vec3i;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
+
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.world.gen.lands.LandHelper;
 import com.mraof.minestuck.world.gen.lands.SecondaryAspect;
+import com.mraof.minestuck.entity.underling.EntityBasilisk;
+import com.mraof.minestuck.entity.underling.EntityGiclops;
+import com.mraof.minestuck.entity.underling.EntityImp;
+import com.mraof.minestuck.entity.underling.EntityOgre;
+import com.mraof.minestuck.entity.underling.EntityUnderling;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.GristHelper;
+import com.mraof.minestuck.util.GristType;
 
 /**
  * Handles session related stuff like title generation, consort choosing, and other session management stuff.
@@ -221,6 +234,64 @@ public class SessionHandler {
 //		if(someCondition)
 //			return landHelper.getFrogAspectorsomethinglikethat;
 		return landHelper.getLandAspect(title.getHeroAspect());
+	}
+	
+	public static GristType getUnderlingType(EntityUnderling entity)
+	{
+		return GristHelper.getPrimaryGrist();
+	}
+	
+	private static List<SpawnListEntry>[] difficultyList = new ArrayList[31];
+	
+	public static List<SpawnListEntry> getUnderlingList(BlockPos pos, World world)
+	{
+		
+		BlockPos spawn = world.getSpawnPoint();
+		
+		int difficulty = (int) Math.round(Math.pow(new Vec3i(pos.getX() >> 4, 0, pos.getZ() >> 4).distanceSq(new Vec3i(spawn.getX() >> 4, 0, spawn.getZ() >> 4)), 0.5));
+		
+		difficulty = Math.min(30, difficulty/2);
+		
+		if(difficultyList[difficulty] != null)
+			return difficultyList[difficulty];
+		
+		ArrayList<SpawnListEntry> list = new ArrayList<SpawnListEntry>();
+		
+		int impWeight = 0, ogreWeight = 0, basiliskWeight = 0, giclopsWeight = 0;
+		
+		if(difficulty < 8)
+			impWeight = difficulty + 1;
+		else
+		{
+			impWeight = 8 - (difficulty - 8)/3;
+			if(difficulty < 20)
+				ogreWeight = (difficulty - 5)/3;
+			else ogreWeight = 5 - (difficulty - 20)/3;
+			
+			if(difficulty >= 16)
+			{
+				if(difficulty < 26)
+					basiliskWeight = (difficulty - 14)/2;
+				else basiliskWeight = 6;
+				if(difficulty >= 20)
+					if(difficulty < 30)
+						giclopsWeight = (difficulty - 17)/3;
+					else giclopsWeight = 5;
+			}
+		}
+		
+		if(impWeight > 0)
+			list.add(new SpawnListEntry(EntityImp.class, impWeight, Math.max(1, (int)(impWeight/2.5)), Math.max(3, impWeight)));
+		if(ogreWeight > 0)
+			list.add(new SpawnListEntry(EntityOgre.class, ogreWeight, ogreWeight >= 5 ? 2 : 1, Math.max(1, ogreWeight/2)));
+		if(basiliskWeight > 0)
+			list.add(new SpawnListEntry(EntityBasilisk.class, basiliskWeight, 1, Math.max(1, basiliskWeight/2)));
+		if(giclopsWeight > 0)
+			list.add(new SpawnListEntry(EntityGiclops.class, giclopsWeight, 1, Math.max(1, giclopsWeight/2)));
+		
+		difficultyList[difficulty] = list;
+		
+		return list;
 	}
 	
 	/**

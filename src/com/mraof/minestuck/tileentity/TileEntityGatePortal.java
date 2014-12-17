@@ -4,50 +4,56 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.WorldServer;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.BlockChessTile;
 import com.mraof.minestuck.util.ITeleporter;
+import com.mraof.minestuck.util.Location;
 import com.mraof.minestuck.util.Teleport;
 
 public class TileEntityGatePortal extends TileEntity implements ITeleporter
 {
-	public int destinationDimension;
-	public int destinationX, destinationY, destinationZ;
+	public Location destination;
+	
 	@Override
-	public void readFromNBT(NBTTagCompound par1nbtTagCompound) 
+	public void setPos(BlockPos posIn)
 	{
-		super.readFromNBT(par1nbtTagCompound);
-		this.destinationDimension = par1nbtTagCompound.getInteger("Destination");
-		this.destinationX = par1nbtTagCompound.getInteger("DestinationX");
-		this.destinationY = par1nbtTagCompound.getInteger("DestinationY");
-		this.destinationZ = par1nbtTagCompound.getInteger("DestinationZ");
-
-		if(destinationY == 0)
+		super.setPos(posIn);
+		if(destination.pos.getY() < 0)
+			destination.pos = posIn;
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound nbt) 
+	{
+		super.readFromNBT(nbt);
+		destination = new Location(nbt.getInteger("DestinationX"), nbt.getInteger("DestinationY"), nbt.getInteger("DestinationZ"), nbt.getInteger("Destination"));
+		
+		if(destination.pos.getY() == 0)
 		{
-			this.destinationX = this.xCoord;
-			this.destinationY = this.yCoord;
-			this.destinationZ = this.zCoord;
+			destination.pos = this.pos;
 		}
 	}
 	@Override
 	public void writeToNBT(NBTTagCompound par1nbtTagCompound) 
 	{
 		super.writeToNBT(par1nbtTagCompound);
-		par1nbtTagCompound.setInteger("Destination", this.destinationDimension);
-		par1nbtTagCompound.setInteger("DestinationX", destinationX);
-		par1nbtTagCompound.setInteger("DestinationY", destinationY);
-		par1nbtTagCompound.setInteger("DestinationZ", destinationZ);
+		par1nbtTagCompound.setInteger("Destination", this.destination.dim);
+		par1nbtTagCompound.setInteger("DestinationX", destination.pos.getX());
+		par1nbtTagCompound.setInteger("DestinationY", destination.pos.getY());
+		par1nbtTagCompound.setInteger("DestinationZ", destination.pos.getZ());
 	}
 	public void teleportEntity(Entity entity)
 	{
 		entity.timeUntilPortal = entity.getPortalCooldown();
-		if(destinationDimension != this.worldObj.provider.dimensionId)
-			Teleport.teleportEntity(entity, this.destinationDimension, this);
+		if(destination.dim != this.worldObj.provider.getDimensionId())
+			Teleport.teleportEntity(entity, this.destination.dim, this);
 		if(entity instanceof EntityPlayerMP)
-			((EntityPlayerMP)entity).playerNetServerHandler.setPlayerLocation(destinationX, destinationY, destinationZ, entity.rotationYaw, entity.rotationPitch);
+			((EntityPlayerMP)entity).playerNetServerHandler.setPlayerLocation(destination.pos.getX(), destination.pos.getY(), destination.pos.getZ(), entity.rotationYaw, entity.rotationPitch);
 		else
-			entity.setPosition(destinationX, destinationY, destinationZ);
+			entity.setPosition(destination.pos.getX(), destination.pos.getY(), destination.pos.getZ());
 	}
 	public void makeDestination(Entity entity, WorldServer worldserver, WorldServer worldserver1)
 	{
@@ -58,20 +64,12 @@ public class TileEntityGatePortal extends TileEntity implements ITeleporter
 		{
 			for(int blockZ = (int) z - 2; blockZ < z + 2; blockZ++)
 			{
-				worldserver1.setBlock(blockX, (int) y - 1, blockZ, Minestuck.chessTile, (blockX + blockZ) & 3, 3);
+				worldserver1.setBlockState(new BlockPos(blockX, (int) y - 1, blockZ), Minestuck.chessTile.getDefaultState().withProperty(BlockChessTile.BLOCK_TYPE, BlockChessTile.BlockType.values()[(blockX + blockZ) & 3]), 3);
 				for(int blockY = (int) y; blockY < y + 6; blockY++)
-					if(worldserver1.isBlockNormalCubeDefault(blockX, blockY, blockZ, true))
-						worldserver1.setBlockToAir(blockX, blockY, blockZ);
-					
-					
+					if(worldserver1.isBlockNormalCube(new BlockPos(blockX, blockY, blockZ), true))
+						worldserver1.setBlockToAir(new BlockPos(blockX, blockY, blockZ));
 			}
 		}
 	}
-
-	@Override
-	public boolean canUpdate()
-	{
-		return false;
-	}
-
+	
 }

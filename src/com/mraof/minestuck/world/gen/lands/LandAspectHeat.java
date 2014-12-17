@@ -4,23 +4,24 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Vec3;
 
 public class LandAspectHeat extends PrimaryAspect 
 {
-	BlockWithMetadata[] upperBlocks = {new BlockWithMetadata(Blocks.netherrack), new BlockWithMetadata(Blocks.obsidian)};
-	BlockWithMetadata[] surfaceBlocks = {new BlockWithMetadata(Blocks.soul_sand), new BlockWithMetadata(Blocks.cobblestone)};
-	static Vec3 skyColor = Vec3.createVectorHelper(0.0D, 0.0D, 0.0D);
+	IBlockState[] upperBlocks = {Blocks.netherrack.getDefaultState(), Blocks.obsidian.getDefaultState()};
+	IBlockState[] surfaceBlocks = {Blocks.soul_sand.getDefaultState(), Blocks.cobblestone.getDefaultState()};
+	static Vec3 skyColor = new Vec3(0.0D, 0.0D, 0.0D);
 
 	@Override
-	public BlockWithMetadata[] getSurfaceBlocks() 
+	public IBlockState[] getSurfaceBlocks() 
 	{
 		return upperBlocks;
 	}
 
 	@Override
-	public BlockWithMetadata[] getUpperBlocks() 
+	public IBlockState[] getUpperBlocks() 
 	{
 		return upperBlocks;
 	}
@@ -59,8 +60,8 @@ public class LandAspectHeat extends PrimaryAspect
 	@Override
 	public ArrayList<ILandDecorator> getDecorators() {
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
-		list.add(new DecoratorVein(Blocks.soul_sand, 10, 32));
-		list.add(new DecoratorVein(Blocks.glowstone, 5, 8));
+		list.add(new DecoratorVein(Blocks.soul_sand.getDefaultState(), 10, 32));
+		list.add(new DecoratorVein(Blocks.glowstone.getDefaultState(), 5, 8));
 		return list;
 	}
 

@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 
 public class ItemChessTile extends ItemBlock
 {
-	private final static String[] subNames = {"black", "white", "lightgrey", "darkgrey"};
+	private final static String[] subNames = {"black", "white", "darkgrey", "lightgrey"};
 	
 	public ItemChessTile(Block par1) 
 	{

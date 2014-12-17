@@ -6,10 +6,9 @@ import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.fml.relauncher.Side;
 
 import com.mraof.minestuck.Minestuck;
-
-import cpw.mods.fml.relauncher.Side;
 
 public class MinestuckInfoPacket extends MinestuckPacket 
 {

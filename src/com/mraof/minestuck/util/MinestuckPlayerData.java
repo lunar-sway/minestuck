@@ -6,14 +6,13 @@ import java.util.Map;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalouge.Modus;
 import com.mraof.minestuck.network.GristCachePacket;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class MinestuckPlayerData {
 	
@@ -144,7 +143,7 @@ public class MinestuckPlayerData {
 	{
 		if(player.worldObj.isRemote)
 			return getClientGrist();
-		else return getGristSet(UsernameHandler.encode(player.getCommandSenderName()));
+		else return getGristSet(UsernameHandler.encode(player.getName()));
 	}
 	
 }

@@ -154,7 +154,7 @@ public class LandHelper {
 		{
 			DimensionManager.registerDimension(newLandId, Minestuck.landProviderTypeId);
 			Debug.print("Creating land with id of: " + newLandId);
-			MinestuckSaveHandler.lands.add((byte) newLandId);
+			//MinestuckSaveHandler.lands.add((byte) newLandId);
 			MinestuckPlayerTracker.updateLands();
 		}
 		

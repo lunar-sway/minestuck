@@ -5,10 +5,11 @@ import java.util.ArrayList;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class KindAbstratusType {
+public class KindAbstratusType
+{
 	
 	private String unlocalizedName;
 	
@@ -68,7 +69,7 @@ public class KindAbstratusType {
 		final String itemId;
 		
 		ItemIdType(Item item) {
-			itemId = Item.itemRegistry.getNameForObject(item);
+			itemId = (String) Item.itemRegistry.getNameForObject(item);
 		}
 		
 		boolean partOf(ItemStack item) {

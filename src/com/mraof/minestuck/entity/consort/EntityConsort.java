@@ -1,6 +1,7 @@
 package com.mraof.minestuck.entity.consort;
 
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
@@ -30,34 +31,35 @@ public abstract class EntityConsort extends EntityMinestuck
 	
 
 	@Override
-	   public boolean getCanSpawnHere()
- {
-     return this.isValidLightLevel() && super.getCanSpawnHere();
- }
+	public boolean getCanSpawnHere()
+	{
+		return this.isValidLightLevel() && super.getCanSpawnHere();
+	}
 	
- protected boolean isValidLightLevel()
- {
-     int i = MathHelper.floor_double(this.posX);
-     int j = MathHelper.floor_double(this.boundingBox.minY);
-     int k = MathHelper.floor_double(this.posZ);
-
-     if (this.worldObj.getSavedLightValue(EnumSkyBlock.Sky, i, j, k) < this.rand.nextInt(8))
-     {
-         return false;
-     }
-     else
-     {
-         int l = this.worldObj.getBlockLightValue(i, j, k);
-
-         if (this.worldObj.isThundering())
-         {
-             int i1 = this.worldObj.skylightSubtracted;
-             this.worldObj.skylightSubtracted = 10;
-             l = this.worldObj.getBlockLightValue(i, j, k);
-             this.worldObj.skylightSubtracted = i1;
-         }
-
-         return l >= this.rand.nextInt(8);
-     }
- }
+	protected boolean isValidLightLevel()
+	{
+		int i = MathHelper.floor_double(this.posX);
+		int j = MathHelper.floor_double(this.getEntityBoundingBox().minY);
+		int k = MathHelper.floor_double(this.posZ);
+		BlockPos pos = new BlockPos(i, j, k);
+		
+		if (this.worldObj.getLightFor(EnumSkyBlock.SKY, pos) < this.rand.nextInt(8))
+		{
+			return false;
+		}
+		else
+		{
+			int l = this.worldObj.getLightFromNeighbors(pos);
+			
+			if (this.worldObj.isThundering())
+			{
+				int i1 = this.worldObj.getSkylightSubtracted();
+				this.worldObj.setSkylightSubtracted(10);
+				l = this.worldObj.getLightFromNeighbors(pos);
+				this.worldObj.setSkylightSubtracted(i1);
+			}
+			
+			return l >= this.rand.nextInt(8);
+		}
+	}
 }

@@ -1,0 +1,7 @@
+{
+    "parent": "minestuck:item/card_empty",
+    "textures": {
+        "layer0": "minestuck:items/CardPunched"
+    }
+}
+

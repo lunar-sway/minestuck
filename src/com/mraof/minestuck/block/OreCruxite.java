@@ -4,54 +4,47 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.world.gen.lands.BlockWithMetadata;
 
 public class OreCruxite extends Block 
 {
-	public IIcon[] icons = new IIcon[4];
-	public IIcon[] otherIcons = new IIcon[2];
+	public static final PropertyInteger BLOCK_TYPE = PropertyInteger.create("blockType", 0, 3);
 	
 	private Random rand = new Random();
 	public OreCruxite()
 	{
 		super(Material.rock);
 		
-		this.setBlockName("oreCruxite");
+		this.setUnlocalizedName("oreCruxite");
 		setHardness(3.0F);
+		setDefaultState(getBlockState(Blocks.stone.getDefaultState()));
 		this.setCreativeTab(Minestuck.tabMinestuck);
 	}
-
+	
 	@Override
-	public void registerBlockIcons(IIconRegister iconRegister)
+	public IBlockState getStateFromMeta(int meta)
 	{
-		this.blockIcon = iconRegister.registerIcon("minestuck:CruxiteStone");
-		icons[0] = blockIcon;
-		icons[1] = iconRegister.registerIcon("minestuck:CruxiteNetherrack");
-		icons[2] = iconRegister.registerIcon("minestuck:CruxiteObsidian");
-		icons[3] = iconRegister.registerIcon("minestuck:CruxiteSandstoneSide");
-		
-		otherIcons[0] = iconRegister.registerIcon("minestuck:CruxiteSandstoneBottom");
-		otherIcons[1] = iconRegister.registerIcon("minestuck:CruxiteSandstoneTop");
+		return getDefaultState().withProperty(BLOCK_TYPE, meta % BLOCK_TYPE.getAllowedValues().size());
 	}
 	
 	@Override
-	public IIcon getIcon(int side, int meta)
+	public int getMetaFromState(IBlockState state)
 	{
-		if(meta == 3 && side < 2)
-			return otherIcons[side];
-		return icons[meta];
+		return (Integer) state.getValue(BLOCK_TYPE);
 	}
 	
 	@Override
-	public Item getItemDropped(int p_149650_1_, Random random, int p_149650_3_) {
+	public Item getItemDropped(IBlockState state, Random rand, int fortune)
+	{
 		return Minestuck.rawCruxite;
 	}
 
@@ -78,23 +71,32 @@ public class OreCruxite extends Block
 			return this.quantityDropped(par2Random);
 		}
 	}
+	
 	@Override
-	public int getExpDrop(IBlockAccess world, int metadata, int fortune) {
+	public int getExpDrop(IBlockAccess world, BlockPos pos, int fortune)
+	{
 		return MathHelper.getRandomIntegerInRange(rand, 2, 5);
 	}
 	
-	public static int getMetadata(BlockWithMetadata ground)
+	@Override
+	protected BlockState createBlockState()
 	{
-		if(ground.block == Blocks.stone)
-			return 0;
-		if(ground.block == Blocks.netherrack)
-			return 1;
-		if(ground.block == Blocks.obsidian)
-			return 2;
-		if(ground.block == Blocks.sandstone)
-			return 3;
+		return new BlockState(this, BLOCK_TYPE);
+	}
+	
+	public IBlockState getBlockState(IBlockState ground)
+	{
+		int meta = 0;
+		if(ground.getBlock() == Blocks.stone)
+			meta = 0;
+		else if(ground.getBlock() == Blocks.netherrack)
+			meta = 1;
+		else if(ground.getBlock() == Blocks.obsidian)
+			meta = 2;
+		else if(ground.getBlock() == Blocks.sandstone)
+			meta = 3;
 		
-		return 0;
+		return getBlockState().getBaseState().withProperty(BLOCK_TYPE, meta);
 	}
 	
 }

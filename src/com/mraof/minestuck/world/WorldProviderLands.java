@@ -4,8 +4,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldSettings.GameType;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -85,23 +86,24 @@ public class WorldProviderLands extends WorldProvider
 	}
 
 	@Override
-	public ChunkCoordinates getRandomizedSpawnPoint() 
+	public BlockPos getRandomizedSpawnPoint() 
 	{
 		createChunkGenerator();
-		ChunkCoordinates chunkcoordinates = new ChunkCoordinates(provider.spawnX, provider.spawnY, provider.spawnZ);
+		BlockPos coordinates = new BlockPos(provider.spawnX, provider.spawnY, provider.spawnZ);
 
 		boolean isAdventure = worldObj.getWorldInfo().getGameType() == GameType.ADVENTURE;
 		int spawnFuzz = 12;
 		int spawnFuzzHalf = spawnFuzz / 2;
 
-		if (!hasNoSky && !isAdventure)
+		if (!isAdventure)
 		{
-			chunkcoordinates.posX += this.worldObj.rand.nextInt(spawnFuzz) - spawnFuzzHalf;
-			chunkcoordinates.posZ += this.worldObj.rand.nextInt(spawnFuzz) - spawnFuzzHalf;
-			chunkcoordinates.posY = this.worldObj.getTopSolidOrLiquidBlock(chunkcoordinates.posX, chunkcoordinates.posZ);
+			coordinates.add(this.worldObj.rand.nextInt(spawnFuzz) - spawnFuzzHalf,
+					this.worldObj.rand.nextInt(spawnFuzz) - spawnFuzzHalf,
+					0);
+			coordinates = this.worldObj.getTopSolidOrLiquidBlock(coordinates);
 		}
 
-		return chunkcoordinates;
+		return coordinates;
 	}
 
 	@Override
@@ -163,4 +165,16 @@ public class WorldProviderLands extends WorldProvider
 			return super.getFogColor(par1, par2);
 		}
 	}
+
+	@Override
+	public String getInternalNameSuffix()
+	{
+		return "_minestuck";
+	}
+	
+	public World getWorld()
+	{
+		return worldObj;
+	}
+	
 }

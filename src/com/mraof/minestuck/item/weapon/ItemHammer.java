@@ -4,21 +4,23 @@ import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.google.common.collect.Sets;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 
 public class ItemHammer extends ItemWeapon
 {	
@@ -44,7 +46,6 @@ public class ItemHammer extends ItemWeapon
 			this.setUnlocalizedName("sledgeHammer");
 			break;
 		case POGO:
-			//10 Build Grist, 16 Shale
 			this.setUnlocalizedName("pogoHammer");
 			break;
 		case TELESCOPIC:
@@ -67,7 +68,8 @@ public class ItemHammer extends ItemWeapon
 	}
 	
 	@Override
-	public void onCreated(ItemStack stack, World world, EntityPlayer player) {
+	public void onCreated(ItemStack stack, World world, EntityPlayer player)
+	{
 		if(this.hammerType.equals(EnumHammerType.CLAW))
 			player.triggerAchievement(MinestuckAchievementHandler.getHammer);
 	}
@@ -102,7 +104,7 @@ public class ItemHammer extends ItemWeapon
 		itemStack.damageItem(1, player);
 		if(hammerType.equals(EnumHammerType.POGO))
 		{
-			target.motionY = Math.abs(player.motionY) + target.motionY + 0.5;
+			target.motionY = Math.abs(player.motionY) + target.motionY + getPogoMotion(itemStack);
 			player.motionY = 0;
 			player.fallDistance = 0;
 		}
@@ -114,16 +116,17 @@ public class ItemHammer extends ItemWeapon
 			target.addPotionEffect(new PotionEffect(2,100,3));	//Would prefer it being triggered by a critical hit instead, if it can.
 		return true;
 	}
-
+	
 	@Override
-	public boolean onBlockDestroyed(ItemStack itemStack, World world, Block par3, int par4, int par5, int par6, EntityLivingBase par7EntityLiving)
+	public boolean onBlockDestroyed(ItemStack stack, World worldIn, Block blockIn, BlockPos pos, EntityLivingBase playerIn)
 	{
-		if ((double)par3.getBlockHardness(world, par4, par5, par6) != 0.0D)
-			itemStack.damageItem(2, par7EntityLiving);
+		if ((double)blockIn.getBlockHardness(worldIn, pos) != 0.0D)
+			stack.damageItem(2, playerIn);
 		
 		return true;
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean isFull3D()
 	{
@@ -134,53 +137,26 @@ public class ItemHammer extends ItemWeapon
 	{
 		return Integer.MAX_VALUE;
 	}
-
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) 
+	
+	@Override
+	public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
-		if(world.getBlock(x, y, z) != Blocks.air)
+		if(worldIn.getBlockState(new BlockPos(pos)).getBlock() != Blocks.air)
 		{
 			if (hammerType.equals(EnumHammerType.POGO))
 			{
-				player.motionY = Math.abs(player.motionY) + 0.5;
-				player.fallDistance = 0;
-				stack.damageItem(1, player);
+				playerIn.motionY = Math.abs(playerIn.motionY) + getPogoMotion(stack);
+				playerIn.fallDistance = 0;
+				stack.damageItem(1, playerIn);
 				return true;
 			} 
 		}
 		return false;
 	}
 	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister iconRegister) 
+	protected double getPogoMotion(ItemStack stack)
 	{
-		switch(hammerType)
-		{
-		case CLAW:
-			itemIcon = iconRegister.registerIcon("minestuck:ClawHammer");
-			break;
-		case SLEDGE:
-			itemIcon = iconRegister.registerIcon("minestuck:SledgeHammer");
-			break;
-		case POGO:
-			itemIcon = iconRegister.registerIcon("minestuck:PogoHammer");
-			break;
-		case TELESCOPIC:
-			itemIcon = iconRegister.registerIcon("minestuck:TelescopicSassacrusher");
-			break;
-		case FEARNOANVIL:
-			itemIcon = iconRegister.registerIcon("minestuck:FearNoAnvil");
-			break	;
-		case ZILLYHOO:
-			itemIcon = iconRegister.registerIcon("minestuck:ZillyhooHammer");
-			break;
-		case POPAMATIC:
-			itemIcon = iconRegister.registerIcon("minestuck:Vrillyhoo");
-			break;
-		case SCARLET:
-			itemIcon = iconRegister.registerIcon("minestuck:ScarletZillyhoo");
-			break;
-		}
+		return 0.5 + EnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency.effectId, stack)*0.1;
 	}
-
+	
 }

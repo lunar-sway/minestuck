@@ -1,13 +1,19 @@
 package com.mraof.minestuck.entity.underling;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
+import com.mraof.minestuck.util.MinestuckAchievementHandler;
 
 //Makes non-stop ogre puns
 public class EntityOgre extends EntityUnderling 
@@ -15,13 +21,8 @@ public class EntityOgre extends EntityUnderling
 	private EntityAIAttackOnCollideWithRate entityAIAttackOnCollideWithRate;
 	public EntityOgre(World world)
 	{
-		this(world, GristHelper.getPrimaryGrist());
-	}
-	public EntityOgre(World par1World, GristType gristType) 
-	{
-		super(par1World, gristType, "Ogre");
+		super(world, "Ogre");
 		setSize(3.0F, 4.5F);
-		this.experienceValue = (int) (5 * gristType.getPower() + 4);
 		this.stepHeight = 1.0F;
 	}
 
@@ -52,8 +53,20 @@ public class EntityOgre extends EntityUnderling
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return 16 * (type.getPower() + 1) + 8;
+		return type != null ? 16 * (type.getPower() + 1) + 8 : 0;
 	}
+	
+	@Override
+	public void onDeath(DamageSource cause)
+	{
+		super.onDeath(cause);
+		Entity entity = cause.getEntity();
+		if(this.dead && entity != null && entity instanceof EntityPlayerMP)
+		{
+			((EntityPlayerMP) entity).triggerAchievement(MinestuckAchievementHandler.killOgre);
+		}
+	}
+	
 	@Override
 	protected boolean useAltName() 
 	{
@@ -61,5 +74,26 @@ public class EntityOgre extends EntityUnderling
 			return true;
 		return super.useAltName();
 	}
-
+	
+	@Override
+	public void readFromNBT(NBTTagCompound tagCompund)
+	{
+		super.readFromNBT(tagCompund);
+		this.experienceValue = (int) (5 * type.getPower() + 4);
+	}
+	
+	@Override
+	public void readSpawnData(ByteBuf additionalData)
+	{
+		super.readSpawnData(additionalData);
+		this.experienceValue = (int) (5 * type.getPower() + 4);
+	}
+	
+	@Override
+	public IEntityLivingData func_180482_a(DifficultyInstance difficulty, IEntityLivingData livingData)
+	{
+		livingData = super.func_180482_a(difficulty, livingData);
+		this.experienceValue = (int) (5 * type.getPower() + 4);
+		return livingData;
+	}
 }

@@ -1,5 +1,7 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
+import java.io.IOException;
+
 import com.mraof.minestuck.inventory.ContainerEditmode;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
@@ -43,7 +45,7 @@ public class GuiInventoryEditmode extends GuiPlayerStatsContainer
 	}
 	
 	@Override
-	protected void mouseClicked(int xcor, int ycor, int mouseButton)
+	protected void mouseClicked(int xcor, int ycor, int mouseButton) throws IOException
 	{
 		if(ycor >= yOffset + arrowY && ycor < yOffset + arrowY + 18)
 		{

@@ -37,4 +37,10 @@ public class WorldProviderSkaia extends WorldProvider
 		return false;
 	}
 
+	@Override
+	public String getInternalNameSuffix()
+	{
+		return "Skaia";
+	}
+
 }

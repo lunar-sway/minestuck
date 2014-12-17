@@ -1,7 +1,11 @@
 package com.mraof.minestuck.entity.underling;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.entity.IEntityMultiPart;
@@ -17,16 +21,10 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	
 	public EntityBasilisk(World world) 
 	{
-//		this(world, GristType.Tar);
-		this(world, GristHelper.getPrimaryGrist());
-	}
-	public EntityBasilisk(World par1World, GristType type) 
-	{
-		super(par1World, type, "Basilisk");
+		super(world, "Basilisk");
 		this.setSize(3F, 2F);
-		//Debug.print("Creating a new part");
 		tail = new EntityUnderlingPart(this, 0, 3F, 2F);
-		par1World.spawnEntityInWorld(tail);
+		world.spawnEntityInWorld(tail);
 	}
 
 	@Override
@@ -53,7 +51,7 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return 13 * (type.getPower() + 1) + 37;
+		return type != null ? 13 * (type.getPower() + 1) + 37 : 0;
 	}
 
 	@Override
@@ -79,8 +77,7 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	public boolean attackEntityFromPart(Entity entityPart, DamageSource source, float damage) 
 	{
 		boolean flag = this.attackEntityFrom(source, damage);
-		//Debug.printf("Damage from %s, source is %s, amount of damage is %f, success is %b, isRemote is %b", entityPart, source, damage, flag, this.worldObj.isRemote);
-
+		
 		return flag;
 	}
 	@Override
@@ -99,12 +96,7 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 		super.setPositionAndRotation(par1, par3, par5, par7, par8);
 		this.updatePartPositions();
 	}
-//	@Override
-//	public void updateFallState(double par1, boolean par3) 
-//	{
-////		if((tail.fallDistance > 0))
-//			super.updateFallState(par1, par3);
-//	}
+	
 	@Override
 	public void updatePartPositions() 
 	{
@@ -113,12 +105,6 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 		float f1 = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw);
 		double tailPosX = (this.posX +  Math.sin(f1 / 180.0 * Math.PI) * tail.width);
 		double tailPosZ = (this.posZ + -Math.cos(f1 / 180.0 * Math.PI) * tail.width);
-//		double tailPosY = (tail.posY - this.posY) < -2  ? this.posY : tail.posY;
-//		if((tailPosY - this.posY) > 2)
-//		{
-//			this.posY += tailPosY;
-//			this.motionY = 0;
-//		}
 
 		tail.setPositionAndRotation(tailPosX, this.posY, tailPosZ, this.rotationYaw, this.rotationPitch);
 	}
@@ -136,14 +122,26 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 
 	}
 	
-//	@Override
-//	public void setDead() {
-//		super.setDead();
-//		Debug.print("Body is dead");
-//		
-//		Debug.print("BEGIN STACK TRACE");
-//		Thread.dumpStack();
-//		Debug.print("END STACK TRACE");
-//	}
-
+	@Override
+	public void readFromNBT(NBTTagCompound tagCompund)
+	{
+		super.readFromNBT(tagCompund);
+		this.experienceValue = (int) (6 * type.getPower() + 4);
+	}
+	
+	@Override
+	public void readSpawnData(ByteBuf additionalData)
+	{
+		super.readSpawnData(additionalData);
+		this.experienceValue = (int) (6 * type.getPower() + 4);
+	}
+	
+	@Override
+	public IEntityLivingData func_180482_a(DifficultyInstance difficulty, IEntityLivingData livingData)
+	{
+		livingData = super.func_180482_a(difficulty, livingData);
+		this.experienceValue = (int) (6 * type.getPower() + 4);
+		return livingData;
+	}
+	
 }

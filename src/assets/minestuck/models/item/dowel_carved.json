@@ -1,0 +1,7 @@
+{
+    "parent": "minestuck:item/dowel_uncarved",
+    "textures": {
+        "layer0": "minestuck:items/CruxiteCarved"
+    }
+}
+

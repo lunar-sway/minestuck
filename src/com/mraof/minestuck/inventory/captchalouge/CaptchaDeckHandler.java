@@ -13,13 +13,13 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.UsernameHandler;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class CaptchaDeckHandler
 {
@@ -28,7 +28,8 @@ public class CaptchaDeckHandler
 	{
 		STACK(StackModus.class),
 		QUEUE(QueueModus.class),
-		QUEUE_STACK(QueuestackModus.class);
+		QUEUE_STACK(QueuestackModus.class),
+		TREE(TreeModus.class);
 		
 		private final Class<? extends Modus> c;
 		ModusType(Class<? extends Modus> c)
@@ -58,6 +59,8 @@ public class CaptchaDeckHandler
 		
 	}
 	
+	public static final ModusType[] modusList = {ModusType.STACK, ModusType.QUEUE};
+	
 	public static final int EMPTY_SYLLADEX = -1;
 	public static final int EMPTY_CARD = -2;
 	
@@ -86,7 +89,7 @@ public class CaptchaDeckHandler
 		EntityItem entity = new EntityItem(player.worldObj, player.posX, player.posY+1, player.posZ, item);
 		entity.motionX = rand.nextDouble() - 0.5;
 		entity.motionZ = rand.nextDouble() - 0.5;
-		entity.delayBeforeCanPickup = 10;
+		entity.setDefaultPickupDelay();
 		player.worldObj.spawnEntityInWorld(entity);
 	}
 	
@@ -106,7 +109,7 @@ public class CaptchaDeckHandler
 			{
 				modus = ModusType.values()[item.getItemDamage()].createInstance();
 				modus.player = player;
-				modus.initModus(null);
+				modus.initModus(null, Minestuck.defaultModusSize);
 				setModus(player, modus);
 				container.inventory.setInventorySlotContents(0, null);
 			}
@@ -119,13 +122,13 @@ public class CaptchaDeckHandler
 				modus = ModusType.values()[item.getItemDamage()].createInstance();
 				modus.player = player;
 				if(modus.canSwitchFrom(oldType))
-					modus.initModus(oldModus.getItems());
+					modus.initModus(oldModus.getItems(), oldModus.getSize());
 				else
 				{
 					for(ItemStack content : oldModus.getItems())
 						if(content != null)
 							launchAnyItem(player, content);
-					modus.initModus(null);
+					modus.initModus(null, oldModus.getSize());
 				}
 				
 				setModus(player, modus);
@@ -157,25 +160,38 @@ public class CaptchaDeckHandler
 		Modus modus = getModus(player);
 		if(modus != null && item != null)
 		{
-			boolean card = true;
+			boolean card1 = false, card2 = true;
 			if(item.getItem() == Minestuck.captchaCard && item.hasTagCompound() && !item.getTagCompound().getBoolean("punched"))
 			{
 				ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(item, false);
 				if(newItem != null)
 				{
+					card1 = true;
 					item = newItem;
-					card = modus.increaseSize();
-					player.setCurrentItemOrArmor(0, item);	//To prevent problems when increaseSize succeeds and putItemStack fails.
+					card2 = modus.increaseSize();
 				}
 			}
 			if(modus.putItemStack(item))
 			{
-				if(card)
-					player.setCurrentItemOrArmor(0, null);
-				else player.setCurrentItemOrArmor(0, new ItemStack(Minestuck.captchaCard));
-				MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, writeToNBT(modus));
-				MinestuckChannelHandler.sendToPlayer(packet, player);
+				if(!card2)
+					launchAnyItem(player, new ItemStack(Minestuck.captchaCard, 1));
+				
+				item = player.getCurrentEquippedItem();
+				if(card1 && item.stackSize > 1)
+					item.stackSize--;
+				else player.setCurrentItemOrArmor(0, null);
+				
 			}
+			else if(card1 && card2)
+			{
+				launchAnyItem(player, item);
+				item = player.getCurrentEquippedItem();
+				if(item.stackSize == 1)
+					player.setCurrentItemOrArmor(0, null);
+				else item.stackSize--;
+			}
+			MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, writeToNBT(modus));
+			MinestuckChannelHandler.sendToPlayer(packet, player);
 		}
 		
 	}
@@ -245,12 +261,12 @@ public class CaptchaDeckHandler
 	
 	public static Modus getModus(EntityPlayer player)
 	{
-		return MinestuckPlayerData.getData(UsernameHandler.encode(player.getCommandSenderName())).modus;
+		return MinestuckPlayerData.getData(UsernameHandler.encode(player.getName())).modus;
 	}
 	
 	public static void setModus(EntityPlayer player, Modus modus)
 	{
-		MinestuckPlayerData.getData(UsernameHandler.encode(player.getCommandSenderName())).modus = modus;
+		MinestuckPlayerData.getData(UsernameHandler.encode(player.getName())).modus = modus;
 	}
 	
 }

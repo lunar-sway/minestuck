@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -24,9 +25,9 @@ public class RenderGatePortal extends TileEntitySpecialRenderer
 
 	public void renderGatePortalTileEntity(TileEntityGatePortal par1TileEntityGatePortal, double par2, double par4, double par6, float par8)
     {
-        float var9 = (float)this.field_147501_a.field_147560_j;
-        float var10 = (float)this.field_147501_a.field_147561_k;
-        float var11 = (float)this.field_147501_a.field_147558_l;
+		float var9 = (float)this.rendererDispatcher.entityX;
+		float var10 = (float)this.rendererDispatcher.entityY;
+		float var11 = (float)this.rendererDispatcher.entityZ;
         GL11.glDisable(GL11.GL_LIGHTING);
         Random var12 = new Random(31100L);
         float var13 = 0.75F;
@@ -56,12 +57,12 @@ public class RenderGatePortal extends TileEntitySpecialRenderer
                 var16 = 0.5F;
             }
 
-            float var18 = (float)(-(par4 + var13));
-            float var19 = var18 + ActiveRenderInfo.objectY;
-            float var20 = var18 + var15 + ActiveRenderInfo.objectY;
-            float var21 = var19 / var20;
-            var21 += (float)(par4 + var13);
-            GL11.glTranslatef(var9, var21, var11);
+            float var18 = (float) (-(par4 + var13));
+			float var19 = var18 + (float) ActiveRenderInfo.getPosition().yCoord;
+			float var20 = var18 + var15 + (float) ActiveRenderInfo.getPosition().yCoord;
+			float var21 = var19 / var20;
+			var21 += (float) (par4 + var13);
+			GL11.glTranslatef(var9, var21, var11);
             GL11.glTexGeni(GL11.GL_S, GL11.GL_TEXTURE_GEN_MODE, GL11.GL_OBJECT_LINEAR);
             GL11.glTexGeni(GL11.GL_T, GL11.GL_TEXTURE_GEN_MODE, GL11.GL_OBJECT_LINEAR);
             GL11.glTexGeni(GL11.GL_R, GL11.GL_TEXTURE_GEN_MODE, GL11.GL_OBJECT_LINEAR);
@@ -83,12 +84,12 @@ public class RenderGatePortal extends TileEntitySpecialRenderer
             GL11.glTranslatef(0.5F, 0.5F, 0.0F);
             GL11.glRotatef((var14 * var14 * 4321 + var14 * 9) * 2.0F, 0.0F, 0.0F, 1.0F);
             GL11.glTranslatef(-0.5F, -0.5F, 0.0F);
-            GL11.glTranslatef(-var9, -var11, -var10);
-            var19 = var18 + ActiveRenderInfo.objectY;
-            GL11.glTranslatef(ActiveRenderInfo.objectX * var15 / var19, ActiveRenderInfo.objectZ * var15 / var19, -var10);
-            Tessellator var24 = Tessellator.instance;
+			GL11.glTranslatef(-var9, -var11, -var10);
+			var19 = var18 + (float) ActiveRenderInfo.getPosition().xCoord;
+			GL11.glTranslatef(((float) ActiveRenderInfo.getPosition().xCoord) * var15 / var19, ((float) ActiveRenderInfo.getPosition().zCoord) * var15 / var19, -var10);
+			WorldRenderer var24 = Tessellator.getInstance().getWorldRenderer();
             var24.startDrawingQuads();
-            var21 = var12.nextFloat() * 0.5F + 0.1F;
+			var21 = var12.nextFloat() * 0.5F + 0.1F;
             float var22 = var12.nextFloat() * 0.5F + 0.4F;
             float var23 = var12.nextFloat() * 0.5F + 0.5F;
 
@@ -96,15 +97,15 @@ public class RenderGatePortal extends TileEntitySpecialRenderer
             {
                 var23 = 1.0F;
                 var22 = 1.0F;
-                var21 = 1.0F;
+				var21 = 1.0F;
             }
 
-            var24.setColorRGBA_F(var21 * var17, var22 * var17, var23 * var17, 1.0F);
+			var24.setColorRGBA_F(var21 * var17, var22 * var17, var23 * var17, 1.0F);
             var24.addVertex(par2, par4 + var13, par6);
             var24.addVertex(par2, par4 + var13, par6 + 1.0D);
             var24.addVertex(par2 + 1.0D, par4 + var13, par6 + 1.0D);
             var24.addVertex(par2 + 1.0D, par4 + var13, par6);
-            var24.draw();
+			Tessellator.getInstance().draw();
             GL11.glPopMatrix();
             GL11.glMatrixMode(GL11.GL_MODELVIEW);
         }
@@ -123,11 +124,11 @@ public class RenderGatePortal extends TileEntitySpecialRenderer
         this.floatBuffer.flip();
         return this.floatBuffer;
     }
-
-    @Override
-	public void renderTileEntityAt(TileEntity par1TileEntity, double par2, double par4, double par6, float par8)
-    {
-        this.renderGatePortalTileEntity((TileEntityGatePortal)par1TileEntity, par2, par4, par6, par8);
-    }
-
+	
+	@Override
+	public void renderTileEntityAt(TileEntity par1TileEntity, double par2, double par4, double par6, float par8, int par9)
+	{
+		this.renderGatePortalTileEntity((TileEntityGatePortal)par1TileEntity, par2, par4, par6, par8);
+	}
+	
 }

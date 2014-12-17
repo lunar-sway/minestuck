@@ -14,6 +14,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
@@ -128,7 +129,7 @@ public class SkaianetHandler {
 			else if(serversOpen.containsKey(otherPlayer))	//If the server is open.
 				connectTo(player, true, otherPlayer, serversOpen);
 		}
-		te.getWorldObj().markBlockForUpdate(te.xCoord, te.yCoord, te.zCoord);
+		te.getWorld().markBlockForUpdate(te.getPos());
 		updateAll();
 	}
 	
@@ -139,21 +140,21 @@ public class SkaianetHandler {
 				if(te != null){
 					te.getData(0).setBoolean("isResuming", false);
 					te.latestmessage.put(0, "computer.messageResumeStop");
-					te.getWorldObj().markBlockForUpdate(te.xCoord, te.yCoord, te.zCoord);
+					te.getWorld().markBlockForUpdate(te.getPos());
 				}
 			} else if(serversOpen.containsKey(player)){
 				TileEntityComputer te = getComputer(serversOpen.remove(player));
 				if(te != null){
 					te.getData(1).setBoolean("isOpen", false);
 					te.latestmessage.put(1, "computer.messageClosedServer");
-					te.getWorldObj().markBlockForUpdate(te.xCoord, te.yCoord, te.zCoord);
+					te.getWorld().markBlockForUpdate(te.getPos());
 				}
 			} else if(resumingServers.containsKey(player)){
 				TileEntityComputer te = getComputer(resumingServers.remove(player));
 				if(te != null){
 					te.getData(1).setBoolean("isOpen", false);
 					te.latestmessage.put(1, "computer.messageResumeStop");
-					te.getWorldObj().markBlockForUpdate(te.xCoord, te.yCoord, te.zCoord);
+					te.getWorld().markBlockForUpdate(te.getPos());
 				}
 			} else Debug.print("[SKAIANET] Got disconnect request but server is not open! "+player);
 		} else {
@@ -164,12 +165,12 @@ public class SkaianetHandler {
 					if(cc != null){
 						cc.getData(0).setBoolean("connectedToServer", false);
 						cc.latestmessage.put(0, "computer.messageClosed");
-						cc.getWorldObj().markBlockForUpdate(cc.xCoord, cc.yCoord, cc.zCoord);
+						cc.getWorld().markBlockForUpdate(cc.getPos());
 					}
 					if(sc != null){
 						sc.getData(1).setString("connectedClient", "");
 						sc.latestmessage.put(1, "computer.messageClosed");
-						sc.getWorldObj().markBlockForUpdate(sc.xCoord, sc.yCoord, sc.zCoord);
+						sc.getWorld().markBlockForUpdate(sc.getPos());
 					}
 					SessionHandler.onConnectionClosed(c, true);
 					ServerEditHandler.onDisconnect(c);
@@ -180,7 +181,7 @@ public class SkaianetHandler {
 					TileEntityComputer te = getComputer(isClient?resumingClients.remove(player):resumingServers.remove(player));
 					if(te != null){
 						te.latestmessage.put(isClient?0:1, "computer.messageResumeStop");
-						te.getWorldObj().markBlockForUpdate(te.xCoord, te.yCoord, te.zCoord);
+						te.getWorld().markBlockForUpdate(te.getPos());
 					}
 				}
 			}
@@ -247,18 +248,18 @@ public class SkaianetHandler {
 		c1.connected(otherPlayer, isClient);
 		c2.connected(player.owner, !isClient);
 		if(c1 != c2)
-			c2.getWorldObj().markBlockForUpdate(c2.xCoord, c2.yCoord, c2.zCoord);
+			c2.getWorld().markBlockForUpdate(c2.getPos());
 	}
 	
 	public static void requestInfo(String p0, String p1){
 		checkData();
 		String[] s = infoToSend.get(p0);
-		EntityPlayerMP player = MinecraftServer.getServer().getConfigurationManager().func_152612_a(p0);
+		EntityPlayerMP player = MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(p0);
 		if(s == null || player == null){
 			Debug.print("[SKAIANET] Player \"" + p0 + "\" sent a request without being online!");
 			return;
 		}
-		if(Minestuck.privateComputers && !p0.equals(p1) && !MinecraftServer.getServer().getConfigurationManager().func_152596_g(player.getGameProfile()))
+		if(Minestuck.privateComputers && !p0.equals(p1) && MinecraftServer.getServer().getConfigurationManager().getOppedPlayers().getEntry(player.getGameProfile()) == null)
 		{
 			if(!Minestuck.privateMessage.isEmpty())
 				player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.RED + "[Minestuck] " + Minestuck.privateMessage));
@@ -350,7 +351,7 @@ public class SkaianetHandler {
 	
 	static void updatePlayer(String player){
 		String[] str = infoToSend.get(player);
-		EntityPlayerMP playerMP = MinecraftServer.getServer().getConfigurationManager().func_152612_a(player);
+		EntityPlayerMP playerMP = MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(player);
 		if(str == null || playerMP == null)//If the player disconnected
 			return;
 		String playerEnc = UsernameHandler.encode(player);
@@ -388,7 +389,7 @@ public class SkaianetHandler {
 		ServerConfigurationManager scm = MinecraftServer.getServer().getConfigurationManager();
 		Iterator<String> iter0 = infoToSend.keySet().iterator();
 		while(iter0.hasNext())
-			if(scm.func_152612_a(iter0.next()) == null){
+			if(scm.getPlayerByUsername(iter0.next()) == null){
 				//Debug.print("[SKAIANET] Player disconnected, removing data.");
 				iter0.remove();
 			}
@@ -408,9 +409,17 @@ public class SkaianetHandler {
 			}
 		
 		Iterator<SburbConnection> iter2 = connections.iterator();
-		while(iter2.hasNext()){
+		while(iter2.hasNext())
+		{
 			SburbConnection c = iter2.next();
-			if(c.isActive){
+			if(c.getClientName().isEmpty() || c.getServerName().isEmpty())
+			{
+				Debug.print("Found a broken connection with the client \""+c.getClientName()+"\" and server \""+c.getServerName()+". If this message continues to show up, something isn't working as it should.");
+				iter2.remove();
+				continue;
+			}
+			if(c.isActive)
+			{
 				TileEntityComputer cc = getComputer(c.client), sc = getComputer(c.server);
 				if(cc == null || sc == null || c.client.dimension == -1 || c.server.dimension == -1 || !cc.owner.equals(c.getClientName())
 						|| !sc.owner.equals(c.getServerName()) || !cc.getData(0).getBoolean("connectedToServer") || !sc.getData(1).getString("connectedClient").equals(c.getClientName())){
@@ -424,23 +433,23 @@ public class SkaianetHandler {
 					if(cc != null){
 						cc.getData(0).setBoolean("connectedToServer", false);
 						cc.latestmessage.put(0, "computer.messageClosed");
-						cc.getWorldObj().markBlockForUpdate(cc.xCoord, cc.yCoord, cc.zCoord);
+						cc.getWorld().markBlockForUpdate(cc.getPos());
 					} else if(sc != null){
 						sc.getData(1).setString("connectedClient", "");
 						sc.latestmessage.put(1, "computer.messageClosed");
-						sc.getWorldObj().markBlockForUpdate(sc.xCoord, sc.yCoord, sc.zCoord);
+						sc.getWorld().markBlockForUpdate(sc.getPos());
 					}
 				}
 				if(cc != null && c.enteredGame && c.inventory == null && c.centerX == 0 && c.centerZ == 0) {	//If the center location isn't defined
-					c.centerX = cc.xCoord;
-					c.centerZ = cc.zCoord;
+					c.centerX = cc.getPos().getX();
+					c.centerZ = cc.getPos().getZ();
 					c.inventory = new NBTTagList();
 				}
 				if(cc != null && c.enteredGame && !MinestuckSaveHandler.lands.contains((byte)c.clientHomeLand))
 					c.clientHomeLand = c.client.dimension;
 			}
 			if(c.enteredGame && !MinestuckSaveHandler.lands.contains((byte)c.clientHomeLand)) {
-				EntityPlayerMP player = MinecraftServer.getServer().getConfigurationManager().func_152612_a(UsernameHandler.decode(c.getClientName()));
+				EntityPlayerMP player = MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(UsernameHandler.decode(c.getClientName()));
 				if(player != null) {
 					c.clientHomeLand = player.dimension;
 					if(!MinestuckSaveHandler.lands.contains((byte)c.clientHomeLand)) {
@@ -450,10 +459,10 @@ public class SkaianetHandler {
 							TileEntityComputer cc = getComputer(c.client), sc = getComputer(c.server);
 							cc.getData(0).setBoolean("connectedToServer", false);
 							cc.latestmessage.put(0, "computer.messageClosed");
-							cc.getWorldObj().markBlockForUpdate(cc.xCoord, cc.yCoord, cc.zCoord);
+							cc.getWorld().markBlockForUpdate(cc.getPos());
 							sc.getData(1).setString("connectedClient", "");
 							sc.latestmessage.put(1, "computer.messageClosed");
-							sc.getWorldObj().markBlockForUpdate(sc.xCoord, sc.yCoord, sc.zCoord);
+							sc.getWorld().markBlockForUpdate(sc.getPos());
 						}
 					}
 				}
@@ -492,7 +501,7 @@ public class SkaianetHandler {
 		}
 		if(world == null)
 			return null;
-		TileEntity te = world.getTileEntity(data.x, data.y, data.z);
+		TileEntity te = world.getTileEntity(new BlockPos(data.x, data.y, data.z));
 		if(te == null || !(te instanceof TileEntityComputer))
 			return null;
 		else return (TileEntityComputer)te;
@@ -500,7 +509,7 @@ public class SkaianetHandler {
 	
 	public static int enterMedium(EntityPlayerMP player, int dimensionId)
 	{
-		String username = UsernameHandler.encode(player.getCommandSenderName());
+		String username = UsernameHandler.encode(player.getName());
 		SburbConnection c = getConnection(username, getAssociatedPartner(username, true));
 		if(c == null)
 		{

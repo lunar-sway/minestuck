@@ -1,0 +1,7 @@
+{
+    "parent": "minestuck:item/spoon_wood",
+    "textures": {
+        "layer0": "minestuck:items/CompoSilverSpoon"
+    }
+}
+

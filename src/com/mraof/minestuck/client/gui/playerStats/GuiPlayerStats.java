@@ -1,10 +1,8 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.editmode.ClientEditHandler;
@@ -20,6 +18,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.util.EnumChatFormatting;
@@ -35,7 +34,7 @@ public abstract class GuiPlayerStats extends GuiScreen
 	{
 		
 		CAPTCHA_DECK(GuiCaptchaDeck.class, "gui.captchaDeck.name", true, false),
-		STRIFE_SPECIBUS(GuiStrifeSpecibus.class, "gui.strifeSpecibus.name", false, false),
+//		STRIFE_SPECIBUS(GuiStrifeSpecibus.class, "gui.strifeSpecibus.name", false, false),
 		GRIST_CACHE(GuiGristCache.class, "gui.gristCache.name", false, true);
 //		ECHELADDER(GuiEcheladder.class, "gui.echeladder.name", false, true);
 		
@@ -157,14 +156,14 @@ public abstract class GuiPlayerStats extends GuiScreen
 	
 	protected void drawTabs()
 	{
-		GL11.glColor3f(1,1,1);
+		GlStateManager.color(1,1,1);
 		
 		mc.getTextureManager().bindTexture(icons);
 		
 		if(mode)
 		{
 			for(NormalGuiType type : NormalGuiType.values())
-				if(type != normalTab && (!type.reqMedium || SkaiaClient.enteredMedium(UsernameHandler.encode(mc.thePlayer.getCommandSenderName())) || mc.playerController.isInCreativeMode()))
+				if(type != normalTab && (!type.reqMedium || SkaiaClient.enteredMedium(UsernameHandler.encode(mc.thePlayer.getName())) || mc.playerController.isInCreativeMode()))
 				{
 					int i = type.ordinal();
 					drawTexturedModalRect(xOffset + i*(tabWidth + 2), yOffset - tabHeight + tabOverlap, i==0? 0:tabWidth, 0, tabWidth, tabHeight);
@@ -184,7 +183,7 @@ public abstract class GuiPlayerStats extends GuiScreen
 	
 	protected void drawActiveTabAndOther(int xcor, int ycor)
 	{
-		GL11.glColor3f(1,1,1);
+		GlStateManager.color(1,1,1);
 		
 		mc.getTextureManager().bindTexture(icons);
 		
@@ -193,26 +192,26 @@ public abstract class GuiPlayerStats extends GuiScreen
 				index == 0? 0:tabWidth, tabHeight, tabWidth, tabHeight);
 		
 		for(int i = 0; i < (mode? NormalGuiType.values():EditmodeGuiType.values()).length; i++)
-			if(!mode || !NormalGuiType.values()[i].reqMedium || SkaiaClient.enteredMedium(UsernameHandler.encode(mc.thePlayer.getCommandSenderName())) || mc.playerController.isInCreativeMode())
+			if(!mode || !NormalGuiType.values()[i].reqMedium || SkaiaClient.enteredMedium(UsernameHandler.encode(mc.thePlayer.getName())) || mc.playerController.isInCreativeMode())
 				drawTexturedModalRect(xOffset + (tabWidth - 16)/2 + (tabWidth+2)*i, yOffset - tabHeight + tabOverlap + 8, i*16, tabHeight*2 + (mode? 0:16), 16, 16);
 		
-		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+		GlStateManager.disableRescaleNormal();
 		RenderHelper.disableStandardItemLighting();
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GlStateManager.disableLighting();
+		GlStateManager.disableDepth();
 		
 		if(ycor < yOffset && ycor > yOffset - tabHeight + 4)
 			for(int i = 0; i < (mode? NormalGuiType.values():EditmodeGuiType.values()).length; i++)
 				if(xcor < xOffset + i*(tabWidth + 2))
 					break;
 				else if(xcor < xOffset + i*(tabWidth + 2) + tabWidth
-						&& (!mode || !NormalGuiType.values()[i].reqMedium || SkaiaClient.enteredMedium(UsernameHandler.encode(mc.thePlayer.getCommandSenderName())) || mc.playerController.isInCreativeMode()))
+						&& (!mode || !NormalGuiType.values()[i].reqMedium || SkaiaClient.enteredMedium(UsernameHandler.encode(mc.thePlayer.getName())) || mc.playerController.isInCreativeMode()))
 					drawHoveringText(Arrays.asList(StatCollector.translateToLocal(mode? NormalGuiType.values()[i].name:EditmodeGuiType.values()[i].name)),
 							xcor, ycor, fontRendererObj);
 	}
 	
 	@Override
-	protected void mouseClicked(int xcor, int ycor, int mouseButton)
+	protected void mouseClicked(int xcor, int ycor, int mouseButton) throws IOException
 	{
 		if(mouseButton == 0 && ycor < (height - guiHeight + tabHeight - tabOverlap)/2 && ycor > (height - guiHeight - tabHeight + tabOverlap)/2)
 		{
@@ -221,9 +220,9 @@ public abstract class GuiPlayerStats extends GuiScreen
 					break;
 				else if(xcor < xOffset + i*(tabWidth + 2) + tabWidth)
 				{
-					if(mode && NormalGuiType.values()[i].reqMedium && !SkaiaClient.enteredMedium(UsernameHandler.encode(mc.thePlayer.getCommandSenderName())) && mc.playerController.isNotCreative())
+					if(mode && NormalGuiType.values()[i].reqMedium && !SkaiaClient.enteredMedium(UsernameHandler.encode(mc.thePlayer.getName())) && mc.playerController.isNotCreative())
 						return;
-					mc.getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation("gui.button.press"), 1.0F));
+					mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
 					if(i != (mode? normalTab:editmodeTab).ordinal())
 					{
 						if(mode)

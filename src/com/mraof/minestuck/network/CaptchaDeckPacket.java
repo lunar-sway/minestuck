@@ -3,18 +3,20 @@ package com.mraof.minestuck.network;
 import io.netty.buffer.ByteBuf;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.EnumSet;
 
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalouge.ContainerCaptchaDeck;
+import com.mraof.minestuck.util.Debug;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class CaptchaDeckPacket extends MinestuckPacket
 {
@@ -23,6 +25,7 @@ public class CaptchaDeckPacket extends MinestuckPacket
 	public static final byte MODUS = 1;
 	public static final byte CAPTCHALOUGE = 2;
 	public static final byte GET = 3;
+	public static final byte VALUE = 4;
 	
 	public byte type;
 	
@@ -30,6 +33,9 @@ public class CaptchaDeckPacket extends MinestuckPacket
 	
 	public int itemIndex;
 	public boolean getCard;
+	
+	public byte valueType;
+	public int value;
 	
 	public CaptchaDeckPacket()
 	{
@@ -47,7 +53,9 @@ public class CaptchaDeckPacket extends MinestuckPacket
 			{
 				try
 				{
-					this.data.writeBytes(CompressedStreamTools.compress((NBTTagCompound)data[1]));
+					ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+					CompressedStreamTools.writeCompressed((NBTTagCompound)data[1], bytes);
+					this.data.writeBytes(bytes.toByteArray());
 				}
 				catch (IOException e)
 				{
@@ -58,6 +66,11 @@ public class CaptchaDeckPacket extends MinestuckPacket
 			{
 				this.data.writeInt((Integer)data[1]);	//Client side index
 				this.data.writeBoolean((Boolean)data[2]);	//Retrive card
+			}
+			else if(type == VALUE)
+			{
+				this.data.writeByte((Byte)data[1]);
+				this.data.writeInt((Integer)data[2]);
 			}
 		}
 		
@@ -89,6 +102,11 @@ public class CaptchaDeckPacket extends MinestuckPacket
 				this.itemIndex = data.readInt();
 				this.getCard = data.readBoolean();
 			}
+			else if(this.type == VALUE)
+			{
+				this.valueType = data.readByte();
+				this.value = data.readInt();
+			}
 		}
 		
 		return this;
@@ -97,9 +115,9 @@ public class CaptchaDeckPacket extends MinestuckPacket
 	@Override
 	public void execute(EntityPlayer player)
 	{
-		if(!player.worldObj.isRemote)
+		if(player != null && player.worldObj != null && !player.worldObj.isRemote)
 		{
-			if(ServerEditHandler.getData(player.getCommandSenderName()) != null)
+			if(ServerEditHandler.getData(player.getName()) != null)
 				return;
 			
 			if(this.type == MODUS && player.openContainer instanceof ContainerCaptchaDeck)
@@ -108,13 +126,22 @@ public class CaptchaDeckPacket extends MinestuckPacket
 				CaptchaDeckHandler.captchalougeItem((EntityPlayerMP) player);
 			else if(this.type == GET)
 				CaptchaDeckHandler.getItem((EntityPlayerMP) player, itemIndex, getCard);
+			else if(this.type == DATA && CaptchaDeckHandler.getModus(player) != null)
+				MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.CAPTCHA, DATA, CaptchaDeckHandler.writeToNBT(CaptchaDeckHandler.getModus(player))), player);
+			else if(this.type == VALUE && CaptchaDeckHandler.getModus(player) != null)
+				CaptchaDeckHandler.getModus(player).setValue(valueType, value);
 		}
 		else
 		{
 			if(this.type == DATA)
 			{
-				CaptchaDeckHandler.clientSideModus = CaptchaDeckHandler.readFromNBT(nbt, true);
-				CaptchaDeckHandler.clientSideModus.getGuiHandler().updateContent();
+				if(player == null)
+					MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(Type.CAPTCHA, DATA));
+				else
+				{
+					CaptchaDeckHandler.clientSideModus = CaptchaDeckHandler.readFromNBT(nbt, true);
+					CaptchaDeckHandler.clientSideModus.getGuiHandler().updateContent();
+				}
 			}
 		}
 	}

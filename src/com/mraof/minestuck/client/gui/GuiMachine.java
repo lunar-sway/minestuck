@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
+import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
@@ -7,13 +8,14 @@ import java.util.Map.Entry;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.inventory.ContainerMachine;
@@ -109,10 +111,16 @@ public class GuiMachine extends GuiContainer {
 		if ((metadata == 3 || metadata ==4) && te.inv[1] != null) 
 		{
 			//Render grist requirements
-			GristSet set = GristRegistry.getGristConversion(AlchemyRecipeHandler.getDecodedItem(te.inv[1], metadata == 3? true : false));
+			GristSet set = GristRegistry.getGristConversion(AlchemyRecipeHandler.getDecodedItem(te.inv[1], metadata == 3? true : false)).copy();
 			boolean selectedType = AlchemyRecipeHandler.getDecodedItem(te.inv[1], true).getItem() == Minestuck.captchaCard;
 			if(selectedType)
 				set = metadata == 3 ? new GristSet(te.selectedGrist, 1) : null;
+			if(metadata == 4 && set != null)
+			{
+				float multiplier = AlchemyRecipeHandler.getDecodedItem(te.inv[1], false).stackSize;
+				if(multiplier != 1)
+					set.scaleGrist(multiplier);
+			}
 			
 		if (set == null) {fontRendererObj.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 9,45, 16711680); return;}
 			Hashtable<Integer, Integer> reqs = set.getHashtable();
@@ -150,25 +158,23 @@ public class GuiMachine extends GuiContainer {
 	}
 }
 
-@Override
-protected void drawGuiContainerBackgroundLayer(float par1, int par2,
-			int par3) {
-	//int texture = mc.renderEngine.getTexture("/gui/cruxtruder.png");
-	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-	//this.mc.renderEngine.bindTexture(texture);
-	
-	//draw background
-	this.mc.getTextureManager().bindTexture(guiBackground);
-	int x = (width - xSize) / 2;
-	int y = (height - ySize) / 2;
-	this.drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
-	
-	//draw progress bar
-	this.mc.getTextureManager().bindTexture(guiProgress);
-	int width = metadata == 0 ? progressWidth : getScaledValue(te.progress,te.maxProgress,progressWidth);
-	int height = metadata != 0 ? progressHeight : getScaledValue(te.progress,te.maxProgress,progressHeight);
-	this.drawCustomBox(x+progressX, y+progressY, 0, 0, width, height,progressWidth,progressHeight);
-}
+	@Override
+	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
+	{
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		
+		//draw background
+		this.mc.getTextureManager().bindTexture(guiBackground);
+		int x = (width - xSize) / 2;
+		int y = (height - ySize) / 2;
+		this.drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
+		
+		//draw progress bar
+		this.mc.getTextureManager().bindTexture(guiProgress);
+		int width = metadata == 0 ? progressWidth : getScaledValue(te.progress,te.maxProgress,progressWidth);
+		int height = metadata != 0 ? progressHeight : getScaledValue(te.progress,te.maxProgress,progressHeight);
+		this.drawCustomBox(x+progressX, y+progressY, 0, 0, width, height,progressWidth,progressHeight);
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -225,7 +231,7 @@ public void initGui() {
 	}
 	
 @Override
-protected void mouseClicked(int par1, int par2, int par3)
+protected void mouseClicked(int par1, int par2, int par3) throws IOException
 {
 	super.mouseClicked(par1,par2,par3);
 	if (par3 == 1)
@@ -237,7 +243,7 @@ protected void mouseClicked(int par1, int par2, int par3)
 			if (guibutton.mousePressed(this.mc, par1, par2) && guibutton == goButton)
 			{
 				
-				guibutton.func_146113_a(this.mc.getSoundHandler());
+				guibutton.playPressSound(this.mc.getSoundHandler());
 				this.actionPerformed(guibutton);
 			}
 		}
@@ -247,26 +253,25 @@ protected void mouseClicked(int par1, int par2, int par3)
 			&& par1 >= guiLeft + 9 && par1 < guiLeft + 167 && par2 >= guiTop + 45 && par2 < guiTop + 70)
 	{
 		mc.currentScreen = new GuiGristSelector(this);
-		mc.currentScreen.initGui();
 		mc.currentScreen.setWorldAndResolution(mc, width, height);
 	}
 }
 
-/**
- * Draws a box like drawModalRect, but with custom width and height values.
- */
-public void drawCustomBox(int par1, int par2, int par3, int par4, int par5, int par6, int width, int height)
-{
-	float f = 1/(float)width;
-	float f1 = 1/(float)height;
-	Tessellator tessellator = Tessellator.instance;
-	tessellator.startDrawingQuads();
-	tessellator.addVertexWithUV((double)(par1 + 0), (double)(par2 + par6), (double)this.zLevel, (double)((float)(par3 + 0) * f), (double)((float)(par4 + par6) * f1));
-	tessellator.addVertexWithUV((double)(par1 + par5), (double)(par2 + par6), (double)this.zLevel, (double)((float)(par3 + par5) * f), (double)((float)(par4 + par6) * f1));
-	tessellator.addVertexWithUV((double)(par1 + par5), (double)(par2 + 0), (double)this.zLevel, (double)((float)(par3 + par5) * f), (double)((float)(par4 + 0) * f1));
-	tessellator.addVertexWithUV((double)(par1 + 0), (double)(par2 + 0), (double)this.zLevel, (double)((float)(par3 + 0) * f), (double)((float)(par4 + 0) * f1));
-	tessellator.draw();
-}
+	/**
+	 * Draws a box like drawModalRect, but with custom width and height values.
+	 */
+	public void drawCustomBox(int par1, int par2, int par3, int par4, int par5, int par6, int width, int height)
+	{
+		float f = 1/(float)width;
+		float f1 = 1/(float)height;
+		WorldRenderer render = Tessellator.getInstance().getWorldRenderer();
+		render.startDrawingQuads();
+		render.addVertexWithUV((double)(par1 + 0), (double)(par2 + par6), (double)this.zLevel, (double)((float)(par3 + 0) * f), (double)((float)(par4 + par6) * f1));
+		render.addVertexWithUV((double)(par1 + par5), (double)(par2 + par6), (double)this.zLevel, (double)((float)(par3 + par5) * f), (double)((float)(par4 + par6) * f1));
+		render.addVertexWithUV((double)(par1 + par5), (double)(par2 + 0), (double)this.zLevel, (double)((float)(par3 + par5) * f), (double)((float)(par4 + 0) * f1));
+		render.addVertexWithUV((double)(par1 + 0), (double)(par2 + 0), (double)this.zLevel, (double)((float)(par3 + 0) * f), (double)((float)(par4 + 0) * f1));
+		Tessellator.getInstance().draw();
+	}
 
 /**
  * Returns a number to be used in calculation of progress bar length.

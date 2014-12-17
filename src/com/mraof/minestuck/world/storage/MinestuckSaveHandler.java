@@ -11,23 +11,20 @@ import java.util.List;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.world.gen.lands.LandHelper.AspectCombination;
 import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-
 public class MinestuckSaveHandler 
 {
-	public static Hashtable<Byte, AspectCombination> lands = new Hashtable<Byte, AspectCombination>();
-	//Moved the aspects here due to the insecurity in getting the title aspect in the world provider.
 	
 	@SubscribeEvent
 	public void onWorldSave(WorldEvent.Save event)
 	{
-		if(event.world.provider.dimensionId != 0)	//Only save one time each world-save instead of one per dimension each world-save.
+		if(event.world.provider.getDimensionId() != 0)	//Only save one time each world-save instead of one per dimension each world-save.
 			return;
 
 		File dataFile = event.world.getSaveHandler().getMapFileFromName("MinestuckData");
@@ -61,4 +58,13 @@ public class MinestuckSaveHandler
 		//}
 		
 	}
+	
+	//Remove when the issue MinecraftForge#1551 is resolved
+	@SubscribeEvent
+	public void onWorldLoad(WorldEvent.Load event)
+	{
+		if(!event.world.isRemote && event.world.villageCollectionObj == null)
+			event.world.init();
+	}
+	
 }

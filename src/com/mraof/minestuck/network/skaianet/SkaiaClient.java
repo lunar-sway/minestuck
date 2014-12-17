@@ -8,6 +8,8 @@ import java.util.Map;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.mraof.minestuck.Minestuck;
@@ -20,11 +22,9 @@ import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.Debug;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 @SideOnly(Side.CLIENT)
-public class SkaiaClient {
+public class SkaiaClient
+{
 	
 	//Variables
 	static Map<String,List<String>> openServers = new HashMap<String, List<String>>();
@@ -142,7 +142,7 @@ public class SkaiaClient {
 			((GuiComputer)gui).updateGui();
 		else if(te != null && te.owner.equals(data.player)){
 			if(!Minecraft.getMinecraft().thePlayer.isSneaking())
-				Minecraft.getMinecraft().thePlayer.openGui(Minestuck.instance, GuiHandler.GuiId.COMPUTER.ordinal(), te.getWorldObj(), te.xCoord, te.yCoord, te.zCoord);
+				Minecraft.getMinecraft().thePlayer.openGui(Minestuck.instance, GuiHandler.GuiId.COMPUTER.ordinal(), te.getWorld(), te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
 			te = null;
 		}
 	}
