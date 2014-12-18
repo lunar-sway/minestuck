@@ -25,7 +25,7 @@ import com.mraof.minestuck.util.ITeleporter;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.gen.ChunkProviderLands;
-import com.mraof.minestuck.world.gen.lands.LandHelper;
+import com.mraof.minestuck.world.gen.lands.LandAspectRegistry;
 
 public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 {
@@ -55,7 +55,7 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 	protected void onFoodEaten(ItemStack par1ItemStack, World par2World, EntityPlayer player) {
 		if(!par2World.isRemote && player.worldObj.provider.getDimensionId() != -1) {
 			
-			int destinationId = player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("LandId") == 0 ? LandHelper.createLand(player) : player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("LandId");
+			int destinationId = player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("LandId") == 0 ? LandAspectRegistry.createLand(player) : player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("LandId");
 			if(player.worldObj.provider.getDimensionId() != destinationId) {
 				player.triggerAchievement(MinestuckAchievementHandler.enterMedium);
 				Teleport.teleportEntity(player, destinationId, this);

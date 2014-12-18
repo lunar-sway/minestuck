@@ -7,7 +7,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import net.minecraftforge.fml.common.network.FMLOutboundHandler;
 import net.minecraftforge.fml.common.network.handshake.NetworkDispatcher;
 import net.minecraftforge.fml.relauncher.Side;
@@ -91,19 +90,6 @@ public class MinestuckPlayerTracker {
 	}
 	
 	@SubscribeEvent
-	public void onConnectionCreated(FMLNetworkEvent.ServerConnectionFromClientEvent event) {
-		MinestuckPacket packet = MinestuckPacket.makePacket(Type.LANDREGISTER, MinestuckSaveHandler.lands.toArray());
-		
-		Minestuck.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.DISPATCHER);
-		Minestuck.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(event.manager.channel().attr(NetworkDispatcher.FML_DISPATCHER).get());
-		Minestuck.channels.get(Side.SERVER).writeOutbound(packet);
-
-		MinestuckPacket infoPacket = MinestuckPacket.makePacket(Type.INFO);
-		
-		Minestuck.channels.get(Side.SERVER).writeOutbound(infoPacket);
-	}
-	
-	@SubscribeEvent
 	public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
 		
 		ServerEditHandler.onPlayerExit(event.player);
@@ -138,22 +124,19 @@ public class MinestuckPlayerTracker {
 			MinestuckChannelHandler.sendToPlayer(packet, editor);
 		}
 	}
-
-	public void updateTitle(EntityPlayer player) {
-		Title newTitle;
+	
+	public void updateTitle(EntityPlayer player)
+	{
 		String username = UsernameHandler.encode(player.getName());
-		if (MinestuckPlayerData.getTitle(username) == null) {
-			newTitle = TitleHelper.randomTitle();
-			MinestuckPlayerData.setTitle(username, newTitle);
-		} else {
-			newTitle = MinestuckPlayerData.getTitle(username);
-		}
+		Title newTitle = MinestuckPlayerData.getTitle(username);
+		if(newTitle == null)
+			return;
 		MinestuckPacket packet = MinestuckPacket.makePacket(Type.TITLE, newTitle.getHeroClass(), newTitle.getHeroAspect());
 		MinestuckChannelHandler.sendToPlayer(packet, player);
 	}
 	public static void updateLands(EntityPlayer player)
 	{
-		MinestuckPacket packet = MinestuckPacket.makePacket(Type.LANDREGISTER, MinestuckSaveHandler.lands.toArray());
+		MinestuckPacket packet = MinestuckPacket.makePacket(Type.LANDREGISTER);
 		Debug.printf("Sending land packets to %s.", player == null ? "all players" : player.getName());
 		if(player == null)
 			MinestuckChannelHandler.sendToAllPlayers(packet);
@@ -169,5 +152,5 @@ public class MinestuckPlayerTracker {
 		MinestuckPacket packet = MinestuckPacket.makePacket(Type.CONFIG);
 		MinestuckChannelHandler.sendToPlayer(packet, player);
 	}
-
+	
 }

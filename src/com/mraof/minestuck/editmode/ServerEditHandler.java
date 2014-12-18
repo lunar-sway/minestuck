@@ -62,6 +62,7 @@ import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.UsernameHandler;
+import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 /**
@@ -229,7 +230,7 @@ public class ServerEditHandler
 			return;
 		
 		SburbConnection c = data.connection;
-		int range = MinestuckSaveHandler.lands.contains((byte)player.dimension)?Minestuck.landEditRange:Minestuck.overworldEditRange;
+		int range = MinestuckDimensionHandler.isLandDimension((byte)player.dimension)?Minestuck.landEditRange:Minestuck.overworldEditRange;
 		
 		updateInventory(player, c.givenItems(), c.enteredGame(), c.getClientName());
 		updatePosition(player, range, c.centerX, c.centerZ);

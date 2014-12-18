@@ -1,13 +1,15 @@
-package com.mraof.minestuck.world.gen.lands;
+package com.mraof.minestuck.world.gen.lands.terrain;
 
 import java.util.ArrayList;
+
+import com.mraof.minestuck.world.gen.lands.ILandDecorator;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Vec3;
 
-public abstract class PrimaryAspect 
+public abstract class TerrainAspect 
 {
 		/**
 		 * Returns the blocks that can possibly be use in the land's underground blocks.

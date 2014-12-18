@@ -2,7 +2,9 @@ package com.mraof.minestuck.network;
 
 import io.netty.buffer.ByteBuf;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
@@ -11,11 +13,14 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import com.mraof.minestuck.world.gen.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 public class LandRegisterPacket extends MinestuckPacket
 {
-	byte[] landDimensions;
+	public ArrayList<Byte> ids;
+	public ArrayList<LandAspectRegistry.AspectCombination> aspects;
 	
 	public LandRegisterPacket() 
 	{
@@ -25,17 +30,30 @@ public class LandRegisterPacket extends MinestuckPacket
 	@Override
 	public MinestuckPacket generatePacket(Object... dat) 
 	{
-		for(Object obj : dat)
-			data.writeByte((Byte) obj);
+		for(Map.Entry<Byte, LandAspectRegistry.AspectCombination> entry : MinestuckDimensionHandler.getLandSet())
+		{
+			this.data.writeByte(entry.getKey());
+			writeString(data, entry.getValue().aspect1.getPrimaryName()+"\n");
+			writeString(data, entry.getValue().aspect2.getPrimaryName()+"\n");
+		}
 		return this;
 	}
 
 	@Override
 	public MinestuckPacket consumePacket(ByteBuf data) 
 	{
-
-		landDimensions = new byte[data.readableBytes()];
-		data.readBytes(landDimensions);
+		ids = new ArrayList<Byte>();
+		aspects = new ArrayList<LandAspectRegistry.AspectCombination>();
+		while(data.readableBytes() > 0)
+		{
+			byte dim = data.readByte();
+			String aspect1 = readLine(data);
+			String aspect2 = readLine(data);
+			ids.add(dim);
+			Debug.print(aspect1+","+aspect2);
+			aspects.add(new LandAspectRegistry.AspectCombination(LandAspectRegistry.fromName(aspect1), LandAspectRegistry.fromName2(aspect2)));
+		}
+		
 		return this;
 	}
 
@@ -44,18 +62,8 @@ public class LandRegisterPacket extends MinestuckPacket
 	{
 		if(MinecraftServer.getServer() != null && MinecraftServer.getServer().isServerRunning())
 			return;	//Nope, no editing the server's land list
-
-		MinestuckSaveHandler.lands.clear();
-
-		for(byte dimensionId : landDimensions)
-		{
-			MinestuckSaveHandler.lands.add((byte)dimensionId);
-			if(!DimensionManager.isDimensionRegistered(dimensionId))
-			{
-				Debug.printf("Adding Land dimension with id of %d", dimensionId);
-				DimensionManager.registerDimension(dimensionId, Minestuck.landProviderTypeId);
-			}
-		}
+		
+		MinestuckDimensionHandler.onLandPacket(this);
 	}
 
 	@Override

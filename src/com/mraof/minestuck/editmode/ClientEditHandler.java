@@ -48,6 +48,7 @@ import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.GristType;
+import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 public class ClientEditHandler {
@@ -156,7 +157,7 @@ public class ClientEditHandler {
 			return;
 		EntityPlayer player = event.player;
 		
-		double range = MinestuckSaveHandler.lands.contains((byte)player.dimension)?Minestuck.clientLandEditRange:Minestuck.clientOverworldEditRange;
+		double range = MinestuckDimensionHandler.isLandDimension((byte)player.dimension)?Minestuck.clientLandEditRange:Minestuck.clientOverworldEditRange;
 		
 		ServerEditHandler.updatePosition(player, range, centerX, centerZ);
 		if(Minestuck.toolTipEnabled)

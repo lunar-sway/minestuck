@@ -44,7 +44,10 @@ public class GuiGristCache extends GuiPlayerStats
 		this.mc.getTextureManager().bindTexture(guiGristcache);
 		this.drawTexturedModalRect(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
-		String cacheMessage = StatCollector.translateToLocal("gui.gristCache.name");
+		String cacheMessage;
+		if(ClientEditHandler.isActive() || MinestuckPlayerData.title == null)
+			cacheMessage = StatCollector.translateToLocal("gui.gristCache.name");
+		else cacheMessage = MinestuckPlayerData.title.getTitleName();
 		mc.fontRendererObj.drawString(cacheMessage, (this.width / 2) - mc.fontRendererObj.getStringWidth(cacheMessage) / 2, yOffset + 12, 0x404040);
 		
 		drawActiveTabAndOther(xcor, ycor);

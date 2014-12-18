@@ -17,16 +17,14 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.ChunkProviderLands;
-import com.mraof.minestuck.world.gen.lands.LandHelper;
-import com.mraof.minestuck.world.gen.lands.PrimaryAspect;
-import com.mraof.minestuck.world.gen.lands.SecondaryAspect;
+import com.mraof.minestuck.world.gen.lands.LandAspectRegistry;
+import com.mraof.minestuck.world.gen.lands.terrain.TerrainAspect;
+import com.mraof.minestuck.world.gen.lands.title.TitleAspect;
 
 public class WorldProviderLands extends WorldProvider 
 {
 	private ChunkProviderLands provider;
-	public PrimaryAspect aspect1;
-	public SecondaryAspect aspect2;
-	public LandHelper landHelper;
+	public LandAspectRegistry.AspectCombination landAspect;
 	
 	@Override
 	public float calculateCelestialAngle(long par1, float par3)
@@ -56,21 +54,10 @@ public class WorldProviderLands extends WorldProvider
 	{
 		if (provider == null)
 		{
-			landHelper = new LandHelper(Minestuck.worldSeed/dimensionId);
-			NBTBase landDataTag = worldObj.getWorldInfo().getAdditionalProperty("LandData");
-			if(landDataTag == null)
-			{
-				aspect1 = landHelper.getLandAspect();
-				aspect2 = SessionHandler.getSecondaryAspect(landHelper, dimensionId);
-			}
-			else
-			{
-				aspect1 = LandHelper.fromName(((NBTTagCompound)landDataTag).getString("aspect1"));
-				aspect2 = LandHelper.fromName2(((NBTTagCompound)landDataTag).getString("aspect2"));
-			}
+			landAspect = MinestuckDimensionHandler.getAspects((byte)dimensionId);
 			
 			long seed = this.worldObj.isRemote ? Minestuck.worldSeed : this.worldObj.getSeed();
-			provider = aspect2.createChunkProvider(this);
+			provider = landAspect.aspect2.createChunkProvider(this);
 		}
 		return provider;
 	}

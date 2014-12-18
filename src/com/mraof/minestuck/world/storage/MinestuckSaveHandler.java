@@ -15,7 +15,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.MinestuckPlayerData;
-import com.mraof.minestuck.world.gen.lands.LandHelper.AspectCombination;
+import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import com.mraof.minestuck.world.gen.lands.LandAspectRegistry.AspectCombination;
 import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 
 public class MinestuckSaveHandler 
@@ -30,17 +31,11 @@ public class MinestuckSaveHandler
 		File dataFile = event.world.getSaveHandler().getMapFileFromName("MinestuckData");
 		if (dataFile != null)
 		{
-			Byte[] landIDs = (Byte[])lands.keySet().toArray();
 			NBTTagCompound nbt = new NBTTagCompound();
-			byte[] landArray = new byte[landIDs.length];
-			for(int i = 0; i < landIDs.length; i++)
-				landArray[i] = landIDs[i];
-			nbt.setByteArray("landList", landArray);
 			
+			MinestuckDimensionHandler.saveData(nbt);
 			TileEntityTransportalizer.saveTransportalizers(nbt);
-			
 			SkaianetHandler.saveData(nbt);
-			
 			MinestuckPlayerData.writeToNBT(nbt);
 			
 			try {

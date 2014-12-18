@@ -1,4 +1,4 @@
-package com.mraof.minestuck.world.gen.lands;
+package com.mraof.minestuck.world.gen.lands.terrain;
 
 import java.util.ArrayList;
 
@@ -9,8 +9,10 @@ import net.minecraft.util.Vec3;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.BlockColoredDirt;
+import com.mraof.minestuck.world.gen.lands.DecoratorVein;
+import com.mraof.minestuck.world.gen.lands.ILandDecorator;
 
-public class LandAspectShade extends PrimaryAspect 
+public class LandAspectShade extends TerrainAspect 
 {
 
 	IBlockState[] surfaceBlocks = {Minestuck.coloredDirt.getDefaultState().withProperty(BlockColoredDirt.BLOCK_TYPE, BlockColoredDirt.BlockType.BLUE)};

@@ -38,6 +38,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppedEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 import net.minecraftforge.fml.common.network.FMLEmbeddedChannel;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -120,6 +121,7 @@ import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
+import com.mraof.minestuck.tracker.ConnectionListener;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.ComputerProgram;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
@@ -135,6 +137,7 @@ import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.WorldProviderSkaia;
 import com.mraof.minestuck.world.gen.OreHandler;
+import com.mraof.minestuck.world.gen.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.gen.structure.StructureCastlePieces;
 import com.mraof.minestuck.world.gen.structure.StructureCastleStart;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
@@ -519,6 +522,7 @@ public class Minestuck
 		FMLCommonHandler.instance().bus().register(MinestuckPlayerTracker.instance);
 		FMLCommonHandler.instance().bus().register(ServerEditHandler.instance);
 		FMLCommonHandler.instance().bus().register(MinestuckChannelHandler.instance);
+		FMLCommonHandler.instance().bus().register(new ConnectionListener());
 		
 		if(event.getSide().isClient())
 		{
@@ -537,6 +541,8 @@ public class Minestuck
 		AlchemyRecipeHandler.registerVanillaRecipes();
 		AlchemyRecipeHandler.registerMinestuckRecipes();
 		AlchemyRecipeHandler.registerModRecipes();
+		
+		LandAspectRegistry.registerLandAspects();
 		
 		KindAbstratusList.registerTypes();
 		DeployList.registerItems();
@@ -573,11 +579,16 @@ public class Minestuck
 	@EventHandler 
 	public void serverAboutToStart(FMLServerAboutToStartEvent event)
 	{
-		//unregister lands that may not be in this save
-		MinestuckDimensionHandler.onServerAboutToStart();
 		TileEntityTransportalizer.transportalizers.clear();
 		DeployList.applyConfigValues(deployConfigurations);
 	}
+	
+	@EventHandler
+	public void serverClosing(FMLServerStoppedEvent event)
+	{
+		MinestuckDimensionHandler.unregisterDimensions();
+	}
+	
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event)
 	{

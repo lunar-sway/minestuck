@@ -32,9 +32,9 @@ import com.mraof.minestuck.entity.underling.EntityOgre;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.world.gen.lands.ILandDecorator;
-import com.mraof.minestuck.world.gen.lands.PrimaryAspect;
-import com.mraof.minestuck.world.gen.lands.LandHelper;
-import com.mraof.minestuck.world.gen.lands.SecondaryAspect;
+import com.mraof.minestuck.world.gen.lands.LandAspectRegistry;
+import com.mraof.minestuck.world.gen.lands.terrain.TerrainAspect;
+import com.mraof.minestuck.world.gen.lands.title.TitleAspect;
 
 public class ChunkProviderLands implements IChunkProvider 
 {
@@ -45,16 +45,16 @@ public class ChunkProviderLands implements IChunkProvider
 	Vec3 skyColor;
 	private NoiseGeneratorOctaves noiseGens[] = new NoiseGeneratorOctaves[2];
 	private NoiseGeneratorTriangle noiseGeneratorTriangle;
-	public PrimaryAspect aspect1;
-	public SecondaryAspect aspect2;
-	public LandHelper helper;
+	public TerrainAspect aspect1;
+	public TitleAspect aspect2;
+	public LandAspectRegistry helper;
 	public int nameIndex1, nameIndex2;
 
 	public IBlockState surfaceBlock;
 	public IBlockState upperBlock;
 	public Block oceanBlock;
 	public Block riverBlock;
-	public PrimaryAspect terrainMapper;
+	public TerrainAspect terrainMapper;
 	public ArrayList<ILandDecorator> decorators;
 	public int dayCycle;
 	public int spawnX, spawnY, spawnZ;
@@ -63,11 +63,11 @@ public class ChunkProviderLands implements IChunkProvider
 	public ChunkProviderLands(World worldObj, WorldProviderLands worldProvider, long seed)
 	{
 		seed *= worldObj.provider.getDimensionId();
-		helper = new LandHelper(seed);
-		aspect1 = worldProvider.aspect1;
-		aspect2 = worldProvider.aspect2;
+		helper = new LandAspectRegistry(seed);
+		aspect1 = worldProvider.landAspect.aspect1;
+		aspect2 = worldProvider.landAspect.aspect2;
 		
-		NBTBase landDataTag = worldObj.getWorldInfo().getAdditionalProperty("LandData");
+		NBTTagCompound landDataTag = (NBTTagCompound) worldObj.getWorldInfo().getAdditionalProperty("LandData");
 		
 		this.landWorld = worldObj;
 		
@@ -84,8 +84,11 @@ public class ChunkProviderLands implements IChunkProvider
 		}
 		else
 		{
-			nameIndex1 = ((NBTTagCompound) landDataTag).getInteger("aspectName1");
-			nameIndex2 = ((NBTTagCompound) landDataTag).getInteger("aspectName2");
+			spawnX = landDataTag.getInteger("spawnX");
+			spawnY = landDataTag.getInteger("spawnY");
+			spawnZ = landDataTag.getInteger("spawnZ");
+			nameIndex1 = landDataTag.getInteger("aspectName1");
+			nameIndex2 = landDataTag.getInteger("aspectName2");
 		}
 		
 		this.random = new Random(seed);
@@ -105,7 +108,7 @@ public class ChunkProviderLands implements IChunkProvider
 		
 		this.surfaceBlock = (IBlockState) helper.pickElement(aspect1.getSurfaceBlocks());
 		this.upperBlock = (IBlockState) helper.pickElement(aspect1.getUpperBlocks());
-		PrimaryAspect fluidAspect = aspect1;
+		TerrainAspect fluidAspect = aspect1;
 		this.oceanBlock = fluidAspect.getOceanBlock();
 		this.riverBlock = fluidAspect.getRiverBlock();
 		this.terrainMapper = aspect1;
@@ -234,13 +237,15 @@ public class ChunkProviderLands implements IChunkProvider
 	public void saveData()
 	{
 		
-		NBTTagCompound nbt = LandHelper.toNBT(aspect1,aspect2);
+		NBTTagCompound nbt = new NBTTagCompound();
 		nbt.setInteger("spawnX", spawnX);
 		nbt.setInteger("spawnY", spawnY);
 		nbt.setInteger("spawnZ", spawnZ);
+		nbt.setInteger("aspectName1", nameIndex1);
+		nbt.setInteger("aspectName2", nameIndex2);
 		
 		Map<String, NBTBase> dataTag = new Hashtable<String,NBTBase>();
-		dataTag.put("LandData", nbt);
+		dataTag.put("landData", nbt);
 		landWorld.getWorldInfo().setAdditionalProperties(dataTag);
 	}
 

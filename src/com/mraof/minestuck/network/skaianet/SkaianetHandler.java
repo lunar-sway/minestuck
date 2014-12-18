@@ -29,6 +29,7 @@ import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.UsernameHandler;
+import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 /**
@@ -445,14 +446,14 @@ public class SkaianetHandler {
 					c.centerZ = cc.getPos().getZ();
 					c.inventory = new NBTTagList();
 				}
-				if(cc != null && c.enteredGame && !MinestuckSaveHandler.lands.contains((byte)c.clientHomeLand))
+				if(cc != null && c.enteredGame && !MinestuckDimensionHandler.isLandDimension((byte)c.clientHomeLand))
 					c.clientHomeLand = c.client.dimension;
 			}
-			if(c.enteredGame && !MinestuckSaveHandler.lands.contains((byte)c.clientHomeLand)) {
+			if(c.enteredGame && !MinestuckDimensionHandler.isLandDimension((byte)c.clientHomeLand)) {
 				EntityPlayerMP player = MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(UsernameHandler.decode(c.getClientName()));
 				if(player != null) {
 					c.clientHomeLand = player.dimension;
-					if(!MinestuckSaveHandler.lands.contains((byte)c.clientHomeLand)) {
+					if(!MinestuckDimensionHandler.isLandDimension((byte)c.clientHomeLand)) {
 						iter2.remove();
 						SessionHandler.onConnectionClosed(c, false);
 						if(c.isActive) {
@@ -527,6 +528,7 @@ public class SkaianetHandler {
 					Debug.print("Added");
 					SessionHandler.onFirstItemGiven(c);
 					connections.add(c);
+					Debug.print("1:"+connections.size());
 				}
 				else if(SessionHandler.singleSession)
 				{
@@ -548,18 +550,9 @@ public class SkaianetHandler {
 		}
 		
 		c.clientHomeLand = dimensionId;
+		c.enteredGame = true;
 		SessionHandler.onGameEntered(c);
 		
-//		for(SburbConnection sc : connections) {
-//			if(sc.isActive){
-//				if(getComputer(sc.client) == null)
-//					sc.client.dimension = dimensionId;
-//				if(getComputer(sc.server) == null)
-//					sc.server.dimension = dimensionId;
-//			}
-//		}
-		
-		c.enteredGame = true;
 		c.centerX = (int)player.posX;
 		c.centerZ = (int)player.posZ;
 		updateAll();

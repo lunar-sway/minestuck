@@ -4,17 +4,25 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
+import net.minecraftforge.common.DimensionManager;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.Title;
-import com.mraof.minestuck.world.gen.lands.LandHelper;
-import com.mraof.minestuck.world.gen.lands.SecondaryAspect;
+import com.mraof.minestuck.util.TitleHelper;
+import com.mraof.minestuck.util.UsernameHandler;
+import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import com.mraof.minestuck.world.gen.lands.LandAspectRegistry;
+import com.mraof.minestuck.world.gen.lands.LandAspectRegistry.AspectCombination;
+import com.mraof.minestuck.world.gen.lands.terrain.TerrainAspect;
+import com.mraof.minestuck.world.gen.lands.title.TitleAspect;
 import com.mraof.minestuck.entity.underling.EntityBasilisk;
 import com.mraof.minestuck.entity.underling.EntityGiclops;
 import com.mraof.minestuck.entity.underling.EntityImp;
@@ -184,8 +192,11 @@ public class SessionHandler {
 		}
 	}
 	
-	static void generateTitle(String player) {
-		
+	static void generateTitle(String player)
+	{
+		Title title = TitleHelper.randomTitle();
+		MinestuckPlayerData.setTitle(player, title);
+		MinestuckPlayerTracker.instance.updateTitle(MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(UsernameHandler.decode(player)));
 	}
 	
 	/**
@@ -217,22 +228,23 @@ public class SessionHandler {
 		return count;
 	}
 	
-	public static SecondaryAspect getSecondaryAspect(LandHelper landHelper, int dimension)
+	public static TitleAspect getSecondaryAspect(LandAspectRegistry landHelper, int dimension)
 	{
 		SburbConnection clientConnection = null;
-		Debug.print(SkaianetHandler.connections.size());
 		for(SburbConnection connection : SkaianetHandler.connections)
 			if(connection.enteredGame && connection.clientHomeLand == dimension)
 			{
-				Debug.print("Using connection "+connection+", with dimension "+dimension);
 				clientConnection = connection;
 				break;
-			} else Debug.print(connection.enteredGame+","+connection.clientHomeLand+"!="+dimension);
-//		if(clientConnection == null)
-//			return null;
+			} else Debug.print("Failed checking cor connection:"+connection.enteredGame+","+connection.clientHomeLand+","+dimension);
+		if(clientConnection == null)
+		{
+			Debug.print("This should not happen. Values:"+dimension+","+SkaianetHandler.connections.size());
+			return null;
+		}
 		Title title = MinestuckPlayerData.getTitle(clientConnection.getClientName());
 //		if(someCondition)
-//			return landHelper.getFrogAspectorsomethinglikethat;
+//			return landHelper.frogAspect;
 		return landHelper.getLandAspect(title.getHeroAspect());
 	}
 	
@@ -385,6 +397,11 @@ public class SessionHandler {
 		Debug.print("Player Entered:"+connection.clientHomeLand);
 		generateTitle(connection.getClientName());
 		getPlayerSession(connection.getClientName()).checkIfCompleted();
+		LandAspectRegistry aspectGen = new LandAspectRegistry(Minestuck.worldSeed/connection.clientHomeLand);
+		TitleAspect aspect2 = getSecondaryAspect(aspectGen, connection.clientHomeLand);
+		TerrainAspect aspect1 = aspectGen.getLandAspect(aspect2);
+		MinestuckDimensionHandler.registerLandDimension((byte) connection.clientHomeLand, new AspectCombination(aspect1, aspect2));
+		MinestuckPlayerTracker.updateLands();
 	}
 	
 	static List<String> getServerList(String client) {

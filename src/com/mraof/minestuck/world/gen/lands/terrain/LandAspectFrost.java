@@ -1,21 +1,21 @@
-package com.mraof.minestuck.world.gen.lands;
+package com.mraof.minestuck.world.gen.lands.terrain;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.BlockColoredDirt;
+import com.mraof.minestuck.world.gen.lands.DecoratorVein;
+import com.mraof.minestuck.world.gen.lands.ILandDecorator;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Vec3;
 
-public class LandAspectThought extends PrimaryAspect 
+public class LandAspectFrost extends TerrainAspect 
 {
-	IBlockState[] surfaceBlocks = {Minestuck.coloredDirt.getDefaultState().withProperty(BlockColoredDirt.BLOCK_TYPE, BlockColoredDirt.BlockType.THOUGHT)};
+	IBlockState[] surfaceBlocks = {Blocks.grass.getDefaultState()};
 	private IBlockState[] upperBlocks = {Blocks.stone.getDefaultState()};
-	static Vec3 skyColor = new Vec3(0.66, 0.39, 0.2);
+	static Vec3 skyColor = new Vec3(0.45D, 0.5D, 0.98D);
 
 	@Override
 	public IBlockState[] getSurfaceBlocks() 
@@ -40,25 +40,27 @@ public class LandAspectThought extends PrimaryAspect
 		return null;
 	}
 	@Override
-	public Block getOceanBlock() 
+	public Block getRiverBlock() 
 	{
-		return Blocks.water;//Minestuck.blockBrainJuice;
+		return Blocks.ice;
 	}
 
 	@Override
 	public String getPrimaryName() 
 	{
-		return "Thought";
+		return "Frost";
 	}
 
 	@Override
 	public String[] getNames() {
-		return new String[] {"Thought"};
+		return new String[] {"Frost","Cold","Ice"};
 	}
 
 	@Override
 	public ArrayList<ILandDecorator> getDecorators() {
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
+		list.add(new DecoratorVein(Blocks.dirt.getDefaultState(), 10, 32));
+		list.add(new DecoratorVein(Blocks.ice.getDefaultState(), 5, 8));
 		return list;
 	}
 

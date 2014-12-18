@@ -1,14 +1,17 @@
-package com.mraof.minestuck.world.gen.lands;
+package com.mraof.minestuck.world.gen.lands.terrain;
 
 import java.util.ArrayList;
 import java.util.Random;
+
+import com.mraof.minestuck.world.gen.lands.DecoratorVein;
+import com.mraof.minestuck.world.gen.lands.ILandDecorator;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Vec3;
 
-public class LandAspectHeat extends PrimaryAspect 
+public class LandAspectHeat extends TerrainAspect 
 {
 	IBlockState[] upperBlocks = {Blocks.netherrack.getDefaultState(), Blocks.obsidian.getDefaultState()};
 	IBlockState[] surfaceBlocks = {Blocks.soul_sand.getDefaultState(), Blocks.cobblestone.getDefaultState()};

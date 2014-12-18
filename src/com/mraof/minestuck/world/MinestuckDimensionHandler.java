@@ -3,19 +3,24 @@ package com.mraof.minestuck.world;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
-import com.mraof.minestuck.world.gen.lands.LandHelper.AspectCombination;
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.network.LandRegisterPacket;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.world.gen.lands.LandAspectRegistry;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.fml.common.FMLLog;
 
 public class MinestuckDimensionHandler
 {
 	
-	public static Hashtable<Byte, AspectCombination> lands = new Hashtable<Byte, AspectCombination>();
+	private static Hashtable<Byte, LandAspectRegistry.AspectCombination> lands = new Hashtable<Byte, LandAspectRegistry.AspectCombination>();
 	
-	public static void onServerAboutToStart()
+	public static void unregisterDimensions()
 	{
 		for(Iterator<Byte> iterator = lands.keySet().iterator(); iterator.hasNext();)
 		{
@@ -31,7 +36,7 @@ public class MinestuckDimensionHandler
 	public static void saveData(NBTTagCompound nbt)
 	{
 		NBTTagList list = new NBTTagList();
-		for(Map.Entry<Byte, AspectCombination> entry : lands.entrySet())
+		for(Map.Entry<Byte, LandAspectRegistry.AspectCombination> entry : lands.entrySet())
 		{
 			NBTTagCompound tagCompound = new NBTTagCompound();
 			tagCompound.setByte("dimID", entry.getKey());
@@ -49,7 +54,63 @@ public class MinestuckDimensionHandler
 		for(int i = 0; i < list.tagCount(); i++)
 		{
 			NBTTagCompound tagCompound = list.getCompoundTagAt(i);
-			
+			byte dim = tagCompound.getByte("dimID");
+			String type = tagCompound.getString("type");
+			if(type == "land")
+			{
+				String name1 = tagCompound.getString("aspect1");
+				String name2 = tagCompound.getString("aspect2");
+				LandAspectRegistry.AspectCombination aspects = new LandAspectRegistry.AspectCombination(LandAspectRegistry.fromName(name1), LandAspectRegistry.fromName2(name2));
+				
+				lands.put(dim, aspects);
+			}
+		}
+	}
+	
+	public static void registerLandDimension(byte dimensionId, LandAspectRegistry.AspectCombination landAspects)
+	{
+		if(landAspects == null)
+			throw new IllegalArgumentException("May not register a land aspect combination that is null");
+		if(!lands.containsKey(dimensionId) && !DimensionManager.isDimensionRegistered(dimensionId))
+		{
+			lands.put(dimensionId, landAspects);
+			DimensionManager.registerDimension(dimensionId, Minestuck.landProviderTypeId);
+		}
+		else FMLLog.warning("[Minestuck] Did not register land dimension with id %d.", dimensionId);
+	}
+	
+	public static LandAspectRegistry.AspectCombination getAspects(byte dimensionId)
+	{
+		LandAspectRegistry.AspectCombination aspects = lands.get(dimensionId);
+		
+		if(aspects == null)
+		{
+			FMLLog.warning("[Minestuck] Tried to access land aspect for dimension %d, but didn't find any!", dimensionId);
+		}
+		
+		return aspects;
+	}
+	
+	public static boolean isLandDimension(byte dimensionId)
+	{
+		return lands.containsKey(dimensionId);
+	}
+	
+	public static Set<Map.Entry<Byte, LandAspectRegistry.AspectCombination>> getLandSet()
+	{
+		return lands.entrySet();
+	}
+	
+	public static void onLandPacket(LandRegisterPacket packet)
+	{
+		lands.clear();
+		
+		for(int i = 0; i < packet.ids.size(); i++)
+		{
+			byte id = packet.ids.get(i);
+			lands.put(id, packet.aspects.get(i));
+			if(!DimensionManager.isDimensionRegistered(id))
+				DimensionManager.registerDimension(id, Minestuck.landProviderTypeId);
 		}
 	}
 	

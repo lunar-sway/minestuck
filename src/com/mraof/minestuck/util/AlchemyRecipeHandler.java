@@ -36,15 +36,15 @@ import com.mraof.minestuck.modSupport.Minegicka3Support;
 import com.mraof.minestuck.modSupport.ModSupport;
 import com.mraof.minestuck.modSupport.NeverSayNetherSupport;
 import com.mraof.minestuck.modSupport.TinkersConstructSupport;
-import com.mraof.minestuck.world.gen.lands.LandAspectFrost;
-import com.mraof.minestuck.world.gen.lands.LandAspectHeat;
-import com.mraof.minestuck.world.gen.lands.LandAspectLight;
-import com.mraof.minestuck.world.gen.lands.LandAspectPulse;
-import com.mraof.minestuck.world.gen.lands.LandAspectSand;
-import com.mraof.minestuck.world.gen.lands.LandAspectShade;
-import com.mraof.minestuck.world.gen.lands.LandAspectThought;
-import com.mraof.minestuck.world.gen.lands.LandAspectWind;
-import com.mraof.minestuck.world.gen.lands.LandHelper;
+import com.mraof.minestuck.world.gen.lands.LandAspectRegistry;
+import com.mraof.minestuck.world.gen.lands.terrain.LandAspectFrost;
+import com.mraof.minestuck.world.gen.lands.terrain.LandAspectHeat;
+import com.mraof.minestuck.world.gen.lands.terrain.LandAspectPulse;
+import com.mraof.minestuck.world.gen.lands.terrain.LandAspectSand;
+import com.mraof.minestuck.world.gen.lands.terrain.LandAspectShade;
+import com.mraof.minestuck.world.gen.lands.terrain.LandAspectThought;
+import com.mraof.minestuck.world.gen.lands.title.LandAspectLight;
+import com.mraof.minestuck.world.gen.lands.title.LandAspectWind;
 
 import static com.mraof.minestuck.util.CombinationRegistry.MODE_AND;
 import static com.mraof.minestuck.util.CombinationRegistry.MODE_OR;
@@ -507,15 +507,6 @@ public class AlchemyRecipeHandler {
 		CombinationRegistry.addCombination(new ItemStack(Blocks.dirt), new ItemStack(Items.dye, 1, EnumDyeColor.BLUE.getDyeDamage()), MODE_OR, new ItemStack(Minestuck.coloredDirt, 1, 0));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.dirt), new ItemStack(Items.dye, 1, EnumDyeColor.LIME.getDyeDamage()), MODE_OR, new ItemStack(Minestuck.coloredDirt, 1, 1));
 		
-		//register land aspects
-		LandHelper.registerLandAspect(new LandAspectFrost());
-		LandHelper.registerLandAspect(new LandAspectHeat());
-		LandHelper.registerLandAspect(new LandAspectPulse());
-		LandHelper.registerLandAspect(new LandAspectShade());
-		LandHelper.registerLandAspect(new LandAspectSand());
-		LandHelper.registerLandAspect(new LandAspectThought());
-		LandHelper.registerLandAspect(new LandAspectWind(), EnumAspect.BREATH);
-		LandHelper.registerLandAspect(new LandAspectLight(), EnumAspect.LIGHT);
 	}
 	
 	public static void registerModRecipes() 

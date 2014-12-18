@@ -6,6 +6,7 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToSe
 import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
 import com.mraof.minestuck.inventory.ContainerEditmode;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
+import com.mraof.minestuck.util.MinestuckPlayerData;
 
 /**
  * Used to track mixed client sided events.
@@ -19,6 +20,7 @@ public class ClientEventHandler {
 		GuiPlayerStats.editmodeTab = GuiPlayerStats.EditmodeGuiType.DEPLOY_LIST;
 		ContainerEditmode.clientScroll = 0;
 		CaptchaDeckHandler.clientSideModus = null;
+		MinestuckPlayerData.title = null;
 	}
 	
 }

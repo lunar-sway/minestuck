@@ -1,33 +1,32 @@
-package com.mraof.minestuck.world.gen.lands;
+package com.mraof.minestuck.world.gen.lands.title;
 
 import com.mraof.minestuck.world.gen.ChunkProviderLands;
 
-public class LandAspectNull extends SecondaryAspect
+public class LandAspectFrogs extends TitleAspect
 {
 	
 	@Override
 	public String getPrimaryName()
 	{
-		return "Null";
+		return "Frogs";
 	}
-
+	
 	@Override
 	public String[] getNames()
 	{
-		return new String[] {"Null", "Undefined"};
+		return new String[]{"Frogs"};
 	}
-
+	
 	@Override
 	public float getRarity()
 	{
-		return 0;
+		return 0;	//This aspect isn't assigned by random
 	}
-
+	
 	@Override
 	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
 		
-		
 	}
-
+	
 }

@@ -1,20 +1,20 @@
-package com.mraof.minestuck.world.gen.lands;
+package com.mraof.minestuck.world.gen.lands.title;
 
 import com.mraof.minestuck.world.gen.ChunkProviderLands;
 
-public class LandAspectLight extends SecondaryAspect
+public class LandAspectWind extends TitleAspect
 {
 	
 	@Override
 	public String getPrimaryName()
 	{
-		return "Light";
+		return "Wind";
 	}
 	
 	@Override
 	public String[] getNames()
 	{
-		return new String[] {"Light", "Brightness"};
+		return new String[] {"Breath", "Wind"};
 	}
 	
 	@Override
@@ -26,7 +26,7 @@ public class LandAspectLight extends SecondaryAspect
 	@Override
 	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
-		chunkProvider.dayCycle = 1;
+		
 	}
 	
 }
