@@ -1,4 +1,4 @@
-package com.mraof.minestuck.world.gen.lands;
+package com.mraof.minestuck.world.gen.lands.decorator;
 
 import java.util.Random;
 
@@ -41,6 +41,12 @@ public class DecoratorVein implements ILandDecorator
 //			Debug.printf("Generating vien at %d %d %d",posX,posY,posZ);
 			(new WorldGenMinable(block, size/2 + random.nextInt(size*2), new OreHandler.BlockStatePredicate(provider.surfaceBlock))).generate(world, random, new BlockPos(posX, posY, posZ));
 		}
+	}
+	
+	@Override
+	public float getPriority()
+	{
+		return 0.3F;
 	}
 	
 }

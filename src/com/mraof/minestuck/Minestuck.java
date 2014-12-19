@@ -84,6 +84,7 @@ import com.mraof.minestuck.entity.underling.EntityGiclops;
 import com.mraof.minestuck.entity.underling.EntityImp;
 import com.mraof.minestuck.entity.underling.EntityOgre;
 import com.mraof.minestuck.event.MinestuckFluidHandler;
+import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.item.ItemCaptchaCard;
 import com.mraof.minestuck.item.ItemComponent;
@@ -523,6 +524,7 @@ public class Minestuck
 		FMLCommonHandler.instance().bus().register(ServerEditHandler.instance);
 		FMLCommonHandler.instance().bus().register(MinestuckChannelHandler.instance);
 		FMLCommonHandler.instance().bus().register(new ConnectionListener());
+		FMLCommonHandler.instance().bus().register(new ServerEventHandler());
 		
 		if(event.getSide().isClient())
 		{
@@ -596,22 +598,21 @@ public class Minestuck
 		CaptchaDeckHandler.rand = new Random(worldSeed);	//Unsure whenether this will be better or not
 		
 		File dataFile = event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("MinestuckData");
-		if(dataFile != null && dataFile.exists()) {
+		if(dataFile != null && dataFile.exists())
+		{
 			NBTTagCompound nbt = null;
-			try {
+			try
+			{
 				nbt = CompressedStreamTools.readCompressed(new FileInputStream(dataFile));
-			} catch(IOException e) {
+			}
+			catch(IOException e)
+			{
 				e.printStackTrace();
 			}
-			if(nbt != null) {
-				for(byte landId : nbt.getByteArray("landList")) {
-					//if(MinestuckSaveHandler.lands.contains((Byte)landId))
-					//	continue;
-					//MinestuckSaveHandler.lands.add(landId);
-					
-					if(!DimensionManager.isDimensionRegistered(landId))
-						DimensionManager.registerDimension(landId, Minestuck.landProviderTypeId);
-				}
+			
+			if(nbt != null)
+			{
+				MinestuckDimensionHandler.loadData(nbt);
 				
 				SkaianetHandler.loadData(nbt.getCompoundTag("skaianet"));
 				

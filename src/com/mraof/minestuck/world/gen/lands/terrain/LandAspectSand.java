@@ -3,10 +3,11 @@ package com.mraof.minestuck.world.gen.lands.terrain;
 
 import java.util.ArrayList;
 
-import com.mraof.minestuck.world.gen.lands.DecoratorVein;
-import com.mraof.minestuck.world.gen.lands.ILandDecorator;
+import com.mraof.minestuck.world.gen.lands.decorator.DecoratorVein;
+import com.mraof.minestuck.world.gen.lands.decorator.ILandDecorator;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockSandStone;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Vec3;
@@ -14,6 +15,7 @@ import net.minecraft.util.Vec3;
 public class LandAspectSand extends TerrainAspect
 {
 	IBlockState[] upperBlocks = {Blocks.sandstone.getDefaultState()};
+	IBlockState[] structureBlocks = {Blocks.sandstone.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.SMOOTH), Blocks.stonebrick.getDefaultState()};
 	IBlockState[] surfaceBlocks = {Blocks.sand.getDefaultState()};
 	static Vec3 skyColor = new Vec3(0.99D, 0.8D, 0.05D);
 	
@@ -51,14 +53,13 @@ public class LandAspectSand extends TerrainAspect
 
 	@Override
 	public String[] getNames() {
-		return new String[] {"Sand"};
+		return new String[] {"Sand", "Dunes", "Deserts"};
 	}
 
 	@Override
 	public ArrayList<ILandDecorator> getDecorators() {
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
-		list.add(new DecoratorVein(Blocks.stonebrick.getDefaultState(), 10, 32));
-//		list.add(new DecoratorVein(Block.ice, 5, 8));
+//		list.add(new DecoratorVein(Blocks.stonebrick.getDefaultState(), 10, 32));
 		return list;
 	}
 
@@ -66,7 +67,13 @@ public class LandAspectSand extends TerrainAspect
 	public int getDayCycleMode() {
 		return 0;
 	}
-
+	
+	@Override
+	public IBlockState[] getStructureBlocks()
+	{
+		return structureBlocks;
+	}
+	
 	@Override
 	public Vec3 getFogColor() 
 	{

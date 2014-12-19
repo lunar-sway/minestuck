@@ -11,11 +11,13 @@ import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldSettings.GameType;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.WorldChunkManagerHell;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.world.biome.BiomeGenMinestuck;
 import com.mraof.minestuck.world.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.gen.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.gen.lands.terrain.TerrainAspect;
@@ -58,6 +60,20 @@ public class WorldProviderLands extends WorldProvider
 			
 			long seed = this.worldObj.isRemote ? Minestuck.worldSeed : this.worldObj.getSeed();
 			provider = landAspect.aspect2.createChunkProvider(this);
+			
+			if(BiomeGenBase.getBiome(dimensionId) == null)
+			{
+				BiomeGenBase biome = new BiomeGenMinestuck(dimensionId);
+				if(provider.weatherType == -1)
+					biome.setDisableRain();
+				else if((provider.weatherType & 1) != 0)
+				{
+					biome.setEnableSnow();
+					biome.setTemperatureRainfall(0.1F, 0.5F);
+				}
+				biome.setBiomeName(this.getDimensionName());
+			}
+			
 		}
 		return provider;
 	}
@@ -135,7 +151,9 @@ public class WorldProviderLands extends WorldProvider
 	{
 		super.registerWorldChunkManager();
 		isHellWorld = false;
-		this.worldChunkMgr = new WorldChunkManagerHell(BiomeGenBase.sky, 0.5F);
+		if(provider == null)
+			createChunkGenerator();
+		this.worldChunkMgr = new WorldChunkManagerHell(BiomeGenBase.getBiome(dimensionId), 0.5F);
 		this.hasNoSky = false;
 	}
 
@@ -152,7 +170,7 @@ public class WorldProviderLands extends WorldProvider
 			return super.getFogColor(par1, par2);
 		}
 	}
-
+	
 	@Override
 	public String getInternalNameSuffix()
 	{

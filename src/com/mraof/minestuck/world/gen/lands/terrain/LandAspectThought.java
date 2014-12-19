@@ -5,7 +5,7 @@ import java.util.Random;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.BlockColoredDirt;
-import com.mraof.minestuck.world.gen.lands.ILandDecorator;
+import com.mraof.minestuck.world.gen.lands.decorator.ILandDecorator;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

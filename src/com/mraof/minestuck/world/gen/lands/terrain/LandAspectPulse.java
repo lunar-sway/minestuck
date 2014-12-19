@@ -8,8 +8,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.Vec3;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.world.gen.lands.DecoratorVein;
-import com.mraof.minestuck.world.gen.lands.ILandDecorator;
+import com.mraof.minestuck.world.gen.lands.decorator.DecoratorVein;
+import com.mraof.minestuck.world.gen.lands.decorator.ILandDecorator;
 
 public class LandAspectPulse extends TerrainAspect 
 {

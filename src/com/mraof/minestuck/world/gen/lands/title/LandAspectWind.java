@@ -26,7 +26,8 @@ public class LandAspectWind extends TitleAspect
 	@Override
 	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
-		
+		if(chunkProvider.weatherType == -1)
+			chunkProvider.weatherType = 0;
 	}
 	
 }

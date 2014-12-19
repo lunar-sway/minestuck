@@ -3,8 +3,8 @@ package com.mraof.minestuck.world.gen.lands.terrain;
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.mraof.minestuck.world.gen.lands.DecoratorVein;
-import com.mraof.minestuck.world.gen.lands.ILandDecorator;
+import com.mraof.minestuck.world.gen.lands.decorator.DecoratorVein;
+import com.mraof.minestuck.world.gen.lands.decorator.ILandDecorator;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -15,12 +15,13 @@ public class LandAspectHeat extends TerrainAspect
 {
 	IBlockState[] upperBlocks = {Blocks.netherrack.getDefaultState(), Blocks.obsidian.getDefaultState()};
 	IBlockState[] surfaceBlocks = {Blocks.soul_sand.getDefaultState(), Blocks.cobblestone.getDefaultState()};
+	IBlockState[] structureBlocks = {Blocks.nether_brick.getDefaultState(), Blocks.obsidian.getDefaultState()};
 	static Vec3 skyColor = new Vec3(0.0D, 0.0D, 0.0D);
 
 	@Override
 	public IBlockState[] getSurfaceBlocks() 
 	{
-		return upperBlocks;
+		return surfaceBlocks;
 	}
 
 	@Override
@@ -78,4 +79,11 @@ public class LandAspectHeat extends TerrainAspect
 	{
 		return skyColor;
 	}
+	
+	@Override
+	public IBlockState[] getStructureBlocks()
+	{
+		return structureBlocks;
+	}
+	
 }

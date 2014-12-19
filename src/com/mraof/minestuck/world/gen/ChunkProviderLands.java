@@ -1,6 +1,8 @@
 package com.mraof.minestuck.world.gen;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -31,8 +33,8 @@ import com.mraof.minestuck.entity.underling.EntityImp;
 import com.mraof.minestuck.entity.underling.EntityOgre;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
-import com.mraof.minestuck.world.gen.lands.ILandDecorator;
 import com.mraof.minestuck.world.gen.lands.LandAspectRegistry;
+import com.mraof.minestuck.world.gen.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.gen.lands.terrain.TerrainAspect;
 import com.mraof.minestuck.world.gen.lands.title.TitleAspect;
 
@@ -43,6 +45,7 @@ public class ChunkProviderLands implements IChunkProvider
 	World landWorld;
 	Random random;
 	Vec3 skyColor;
+	long seed;
 	private NoiseGeneratorOctaves noiseGens[] = new NoiseGeneratorOctaves[2];
 	private NoiseGeneratorTriangle noiseGeneratorTriangle;
 	public TerrainAspect aspect1;
@@ -57,12 +60,14 @@ public class ChunkProviderLands implements IChunkProvider
 	public TerrainAspect terrainMapper;
 	public ArrayList<ILandDecorator> decorators;
 	public int dayCycle;
+	public int weatherType;	//-1:No weather &1: rainy or snowy &2:If thunder &4:If neverending
 	public int spawnX, spawnY, spawnZ;
 
 	@SuppressWarnings("unchecked")
 	public ChunkProviderLands(World worldObj, WorldProviderLands worldProvider, long seed)
 	{
 		seed *= worldObj.provider.getDimensionId();
+		this.seed = seed;
 		helper = new LandAspectRegistry(seed);
 		aspect1 = worldProvider.landAspect.aspect1;
 		aspect2 = worldProvider.landAspect.aspect2;
@@ -112,11 +117,22 @@ public class ChunkProviderLands implements IChunkProvider
 		this.oceanBlock = fluidAspect.getOceanBlock();
 		this.riverBlock = fluidAspect.getRiverBlock();
 		this.terrainMapper = aspect1;
-		this.decorators = helper.pickSubset(aspect1.getDecorators());
+		this.decorators = helper.pickSubset(aspect1.getDecorators(), 3, 5);
 		this.dayCycle = aspect1.getDayCycleMode();
 		this.skyColor = aspect1.getFogColor();
+		this.weatherType = aspect1.getWeatherType();
 	}
-
+	
+	public void sortDecorators()	//Called after an aspect have added elements to the decorators list.
+	{
+		Collections.sort(decorators, new Comparator<ILandDecorator>() {
+			@Override
+			public int compare(ILandDecorator o1, ILandDecorator o2)
+			{
+				return Float.compare(o1.getPriority(), o2.getPriority());
+			}});
+	}
+	
 	@Override
 	public boolean chunkExists(int i, int j) 
 	{
@@ -183,7 +199,12 @@ public class ChunkProviderLands implements IChunkProvider
 	@Override
 	public void populate(IChunkProvider ichunkprovider, int i, int j) 
 	{
-
+		
+		random.setSeed(seed);
+		long i1 = random.nextLong() / 2L * 2L + 1L;
+		long j1 = random.nextLong() / 2L * 2L + 1L;
+		this.random.setSeed((long)i * i1 + (long)j * j1 ^ seed);
+		
 		Chunk chunk = this.provideChunk(i, j);
 		if (!chunk.isTerrainPopulated())
 		{

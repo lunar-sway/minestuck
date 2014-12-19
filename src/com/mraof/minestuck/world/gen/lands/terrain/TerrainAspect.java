@@ -2,7 +2,7 @@ package com.mraof.minestuck.world.gen.lands.terrain;
 
 import java.util.ArrayList;
 
-import com.mraof.minestuck.world.gen.lands.ILandDecorator;
+import com.mraof.minestuck.world.gen.lands.decorator.ILandDecorator;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -78,4 +78,15 @@ public abstract class TerrainAspect
 		public abstract int getDayCycleMode();
 
 		public abstract Vec3 getFogColor();
+	
+	public IBlockState[] getStructureBlocks()
+	{
+		return getUpperBlocks();
+	}
+	
+	public int getWeatherType()
+	{
+		return -1;
+	}
+	
 }

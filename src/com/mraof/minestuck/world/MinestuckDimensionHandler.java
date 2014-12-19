@@ -8,10 +8,13 @@ import java.util.Set;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.LandRegisterPacket;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.world.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.gen.lands.LandAspectRegistry;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.FMLLog;
 
@@ -29,6 +32,7 @@ public class MinestuckDimensionHandler
 			{
 				DimensionManager.unregisterDimension(b);
 			}
+			BiomeGenBase.getBiomeGenArray()[b] = null;
 		}
 		lands.clear();
 	}
@@ -63,6 +67,7 @@ public class MinestuckDimensionHandler
 				LandAspectRegistry.AspectCombination aspects = new LandAspectRegistry.AspectCombination(LandAspectRegistry.fromName(name1), LandAspectRegistry.fromName2(name2));
 				
 				lands.put(dim, aspects);
+				DimensionManager.registerDimension(dim, Minestuck.landProviderTypeId);
 			}
 		}
 	}
@@ -111,6 +116,22 @@ public class MinestuckDimensionHandler
 			lands.put(id, packet.aspects.get(i));
 			if(!DimensionManager.isDimensionRegistered(id))
 				DimensionManager.registerDimension(id, Minestuck.landProviderTypeId);
+		}
+	}
+	
+	public static void worldTick(World world)
+	{
+		if(isLandDimension((byte)world.provider.getDimensionId()))
+		{
+			ChunkProviderLands chunkProvider = (ChunkProviderLands) world.provider.createChunkGenerator();
+			int weatherType = chunkProvider.weatherType;
+			if(weatherType != -1 && (weatherType & 4) != 0)
+			{
+				if(!world.isRaining())
+					world.getWorldInfo().setRaining(true);
+				if((weatherType & 2) != 0 && !world.isThundering())
+					world.getWorldInfo().setThundering(true);
+			}
 		}
 	}
 	

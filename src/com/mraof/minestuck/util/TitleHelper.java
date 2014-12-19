@@ -28,7 +28,7 @@ public final class TitleHelper {
 	}
 	
 	public static Title randomTitle(){
-		return new Title(EnumClass.getRandomClass(null),EnumAspect.getRandomAspect(null));
+		return new Title(EnumClass.getRandomClass(null),EnumAspect.TIME/*For debug purposes only EnumAspect.getRandomAspect(null)*/);
 	}
 	
 }

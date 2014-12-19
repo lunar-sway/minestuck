@@ -8,7 +8,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.fml.common.FMLLog;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
@@ -50,10 +52,10 @@ public class LandAspectRegistry
 	{
 		registerLandAspect(new LandAspectFrost());
 		registerLandAspect(new LandAspectHeat());
-		registerLandAspect(new LandAspectPulse());
+//		registerLandAspect(new LandAspectPulse());
 		registerLandAspect(new LandAspectShade());
 		registerLandAspect(new LandAspectSand());
-		registerLandAspect(new LandAspectThought());
+//		registerLandAspect(new LandAspectThought());
 		registerLandAspect(new LandAspectWind(), EnumAspect.BREATH);
 		registerLandAspect(new LandAspectLight(), EnumAspect.LIGHT);
 		registerLandAspect(new LandAspectClockwork(), EnumAspect.TIME);
@@ -132,12 +134,20 @@ public class LandAspectRegistry
 	/**
 	 * Returns a ArrayList that is a random combination of the two input ArrayLists.
 	 */
-	@SuppressWarnings("rawtypes")
-	public ArrayList pickSubset(ArrayList list1) {
-		ArrayList<Object> result = new ArrayList<Object>();
-		for (Object obj : list1) {
-			if (random.nextBoolean())
-				result.add(obj);
+	public <T> ArrayList<T> pickSubset(ArrayList<T> listIn, int min, int max)
+	{
+		ArrayList<T> result = new ArrayList<T>();
+		if(listIn.size() <= min)
+			result.addAll(listIn);
+		else
+		{
+			int size = min + random.nextInt(max - min + 1);
+			while(result.size() < size)
+			{
+				T object = listIn.get(random.nextInt(listIn.size()));
+				if(!result.contains(object))
+					result.add(object);
+			}
 		}
 		return result;
 	}
@@ -180,13 +190,18 @@ public class LandAspectRegistry
 		
 		while (true)
 		{
-			if (DimensionManager.getWorld(newLandId) == null && !MinestuckDimensionHandler.isLandDimension((byte)newLandId))
+			if (!DimensionManager.isDimensionRegistered(newLandId) && BiomeGenBase.getBiome(newLandId) == null)
 			{
 				break;
 			}
 			else
 			{
 				newLandId++;
+			}
+			if(newLandId > Byte.MAX_VALUE)
+			{
+				FMLLog.warning("[Minestuck] Ran out of land id's!");
+				return player.dimension;
 			}
 		}
 		int id = SkaianetHandler.enterMedium((EntityPlayerMP)player, newLandId);
@@ -207,7 +222,6 @@ public class LandAspectRegistry
 		return list[random.nextInt(list.length)];
 	}
 	
-
 	public static class AspectCombination
 	{
 		public AspectCombination(TerrainAspect aspect1, TitleAspect aspect2)
@@ -220,6 +234,5 @@ public class LandAspectRegistry
 		public TerrainAspect aspect1;
 		public TitleAspect aspect2;
 	}
-	
 	
 }

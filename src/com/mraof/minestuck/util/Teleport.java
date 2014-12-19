@@ -18,6 +18,7 @@ public class Teleport
 	{
 		if(entity instanceof EntityPlayerMP)
 		{
+			Debug.print("Teleporting player to dimension "+destinationDimension);
 			EntityPlayerMP par1EntityPlayerMP = (EntityPlayerMP) entity;
 			int j = par1EntityPlayerMP.dimension;
 			WorldServer worldserver = par1EntityPlayerMP.mcServer.worldServerForDimension(par1EntityPlayerMP.dimension);

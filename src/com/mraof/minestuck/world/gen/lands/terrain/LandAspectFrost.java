@@ -3,8 +3,9 @@ package com.mraof.minestuck.world.gen.lands.terrain;
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.mraof.minestuck.world.gen.lands.DecoratorVein;
-import com.mraof.minestuck.world.gen.lands.ILandDecorator;
+import com.mraof.minestuck.world.gen.lands.decorator.DecoratorVein;
+import com.mraof.minestuck.world.gen.lands.decorator.ILandDecorator;
+import com.mraof.minestuck.world.gen.lands.decorator.IceAndSnowDecorator;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -61,6 +62,7 @@ public class LandAspectFrost extends TerrainAspect
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
 		list.add(new DecoratorVein(Blocks.dirt.getDefaultState(), 10, 32));
 		list.add(new DecoratorVein(Blocks.ice.getDefaultState(), 5, 8));
+		list.add(new IceAndSnowDecorator());
 		return list;
 	}
 
@@ -74,5 +76,11 @@ public class LandAspectFrost extends TerrainAspect
 	{
 		return skyColor;
 	}
-
+	
+	@Override
+	public int getWeatherType()
+	{
+		return 1;
+	}
+	
 }
