@@ -21,15 +21,14 @@ import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.gen.lands.terrain.LandAspectFrost;
 import com.mraof.minestuck.world.gen.lands.terrain.LandAspectHeat;
-import com.mraof.minestuck.world.gen.lands.terrain.LandAspectPulse;
 import com.mraof.minestuck.world.gen.lands.terrain.LandAspectSand;
 import com.mraof.minestuck.world.gen.lands.terrain.LandAspectShade;
-import com.mraof.minestuck.world.gen.lands.terrain.LandAspectThought;
 import com.mraof.minestuck.world.gen.lands.terrain.TerrainAspect;
 import com.mraof.minestuck.world.gen.lands.title.LandAspectClockwork;
 import com.mraof.minestuck.world.gen.lands.title.LandAspectFrogs;
 import com.mraof.minestuck.world.gen.lands.title.LandAspectLight;
 import com.mraof.minestuck.world.gen.lands.title.LandAspectNull;
+import com.mraof.minestuck.world.gen.lands.title.LandAspectPulse;
 import com.mraof.minestuck.world.gen.lands.title.LandAspectSilence;
 import com.mraof.minestuck.world.gen.lands.title.LandAspectThunder;
 import com.mraof.minestuck.world.gen.lands.title.LandAspectWind;
@@ -61,6 +60,7 @@ public class LandAspectRegistry
 		registerLandAspect(new LandAspectClockwork(), EnumAspect.TIME);
 		registerLandAspect(new LandAspectSilence(), EnumAspect.VOID);
 		registerLandAspect(new LandAspectThunder(), EnumAspect.DOOM);
+		registerLandAspect(new LandAspectPulse(), EnumAspect.BLOOD);
 		
 		landNames2.put(nullAspect.getPrimaryName(), nullAspect);
 		landNames2.put(frogAspect.getPrimaryName(), frogAspect);

@@ -27,15 +27,13 @@ public class LandAspectThunder extends TitleAspect
 	@Override
 	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
-		if(chunkProvider.weatherType == -1)
-			chunkProvider.weatherType = 6;
-		else chunkProvider.weatherType |= 6;
+		chunkProvider.weatherType = 6;
 	}
 	
 	@Override
 	public boolean isAspectCompatible(TerrainAspect aspect)
 	{
-		return !aspect.getPrimaryName().equals("Rain");	//Enough with one aspect focused on keeping it rainy
+		return aspect.getWeatherType() == -1 || ((aspect.getWeatherType() & 1) == 0);
 	}
 	
 }

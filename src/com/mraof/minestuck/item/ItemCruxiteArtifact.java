@@ -70,10 +70,12 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 			int y = (int) entity.posY;
 			int z = (int) entity.posZ;
 			
-			for(int chunkX = (x - Minestuck.artifactRange) >> 4; chunkX <= (x + Minestuck.artifactRange) >> 4; chunkX++)	//Prevent anything to generate on the piece that we move
-				for(int chunkZ = (z - Minestuck.artifactRange) >> 4; chunkZ <=(z + Minestuck.artifactRange) >> 4; chunkZ++)	//from the overworld.
+			Debug.print("Loading spawn chunks...");
+			for(int chunkX = ((x - Minestuck.artifactRange) >> 4) - 1; chunkX <= ((x + Minestuck.artifactRange) >> 4) + 2; chunkX++)	//Prevent anything to generate on the piece that we move
+				for(int chunkZ = ((z - Minestuck.artifactRange) >> 4) - 1; chunkZ <= ((z + Minestuck.artifactRange) >> 4) + 2; chunkZ++)	//from the overworld.
 					worldserver1.theChunkProviderServer.loadChunk(chunkX, chunkZ);
 			
+			Debug.print("Teleporting entities...");
 			List<?> list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().expand((double)Minestuck.artifactRange, Minestuck.artifactRange, (double)Minestuck.artifactRange));
 			Iterator<?> iterator = list.iterator();
 
@@ -81,6 +83,8 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 			{
 				Teleport.teleportEntity((Entity)iterator.next(), worldserver1.provider.getDimensionId(), this);
 			}
+			
+			Debug.print("Placing blocks...");
 			int nextWidth = 0;
 			for(int blockX = x - Minestuck.artifactRange; blockX <= x + Minestuck.artifactRange; blockX++)
 			{
@@ -116,6 +120,8 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 					}
 				}
 			}
+			
+			Debug.print("Removing old blocks...");
 			for(int blockX = x - Minestuck.artifactRange; blockX <= x + Minestuck.artifactRange; blockX++)
 			{
 				int zWidth = nextWidth;
@@ -133,6 +139,8 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 					}
 				}
 			}
+			
+			Debug.print("Removing old entities and setting spawn point...");
 			list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().expand((double)Minestuck.artifactRange, Minestuck.artifactRange, (double)Minestuck.artifactRange));
 			iterator = list.iterator();
 
@@ -147,7 +155,7 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 			chunkProvider.spawnZ = z;
 			chunkProvider.saveData();
 			
-			Debug.printf("Respawn location being set to: %d, %d, %d", x, y, z);
+			Debug.printf("Respawn location being set to: %d, %d, %d.", x, y, z);
 		}
 	}
 	

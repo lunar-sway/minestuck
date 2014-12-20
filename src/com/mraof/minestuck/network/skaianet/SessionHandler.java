@@ -14,6 +14,7 @@ import net.minecraftforge.common.DimensionManager;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.util.TitleHelper;
@@ -228,7 +229,7 @@ public class SessionHandler {
 		return count;
 	}
 	
-	public static TitleAspect getSecondaryAspect(LandAspectRegistry landHelper, int dimension)
+	public static TitleAspect getTitleAspect(LandAspectRegistry landHelper, int dimension)
 	{
 		SburbConnection clientConnection = null;
 		for(SburbConnection connection : SkaianetHandler.connections)
@@ -236,15 +237,10 @@ public class SessionHandler {
 			{
 				clientConnection = connection;
 				break;
-			} else Debug.print("Failed checking cor connection:"+connection.enteredGame+","+connection.clientHomeLand+","+dimension);
-		if(clientConnection == null)
-		{
-			Debug.print("This should not happen. Values:"+dimension+","+SkaianetHandler.connections.size());
-			return null;
-		}
+			}
 		Title title = MinestuckPlayerData.getTitle(clientConnection.getClientName());
-//		if(someCondition)
-//			return landHelper.frogAspect;
+		if(title.getHeroAspect() == EnumAspect.SPACE)
+			return landHelper.frogAspect;
 		return landHelper.getLandAspect(title.getHeroAspect());
 	}
 	
@@ -398,7 +394,7 @@ public class SessionHandler {
 		generateTitle(connection.getClientName());
 		getPlayerSession(connection.getClientName()).checkIfCompleted();
 		LandAspectRegistry aspectGen = new LandAspectRegistry(Minestuck.worldSeed/connection.clientHomeLand);
-		TitleAspect aspect2 = getSecondaryAspect(aspectGen, connection.clientHomeLand);
+		TitleAspect aspect2 = getTitleAspect(aspectGen, connection.clientHomeLand);
 		TerrainAspect aspect1 = aspectGen.getLandAspect(aspect2);
 		MinestuckDimensionHandler.registerLandDimension((byte) connection.clientHomeLand, new AspectCombination(aspect1, aspect2));
 		MinestuckPlayerTracker.updateLands();

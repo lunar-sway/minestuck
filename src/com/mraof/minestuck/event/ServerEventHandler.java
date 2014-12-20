@@ -11,11 +11,7 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public void onWorldTick(TickEvent.WorldTickEvent event)
 	{
-		if(event.side.isServer() && event.phase == TickEvent.Phase.START)
-		{
-			MinestuckDimensionHandler.worldTick(event.world);
-			
-		}
+		
 	}
 	
 }

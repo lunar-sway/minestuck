@@ -63,7 +63,7 @@ public class WorldProviderLands extends WorldProvider
 			
 			if(BiomeGenBase.getBiome(dimensionId) == null)
 			{
-				BiomeGenBase biome = new BiomeGenMinestuck(dimensionId);
+				BiomeGenMinestuck biome = new BiomeGenMinestuck(dimensionId);
 				if(provider.weatherType == -1)
 					biome.setDisableRain();
 				else if((provider.weatherType & 1) != 0)
@@ -92,8 +92,8 @@ public class WorldProviderLands extends WorldProvider
 	public BlockPos getRandomizedSpawnPoint() 
 	{
 		createChunkGenerator();
-		BlockPos coordinates = new BlockPos(provider.spawnX, provider.spawnY, provider.spawnZ);
-
+		BlockPos coordinates = getSpawnPoint();
+		
 		boolean isAdventure = worldObj.getWorldInfo().getGameType() == GameType.ADVENTURE;
 		int spawnFuzz = 12;
 		int spawnFuzzHalf = spawnFuzz / 2;
@@ -108,14 +108,20 @@ public class WorldProviderLands extends WorldProvider
 
 		return coordinates;
 	}
-
+	
+	@Override
+	public BlockPos getSpawnPoint()
+	{
+		return new BlockPos(provider.spawnX, provider.spawnY, provider.spawnZ);
+	}
+	
 	@Override
 	public int getRespawnDimension(EntityPlayerMP player)
 	{
 		int dim = player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("LandId");
 		return dim == 0 ? this.dimensionId : dim;
 	}
-
+	
 	@Override
 	public boolean canRespawnHere()
 	{
@@ -156,7 +162,36 @@ public class WorldProviderLands extends WorldProvider
 		this.worldChunkMgr = new WorldChunkManagerHell(BiomeGenBase.getBiome(dimensionId), 0.5F);
 		this.hasNoSky = false;
 	}
-
+	
+	@Override
+	public void calculateInitialWeather()
+	{
+		super.calculateInitialWeather();
+		forceWeatherCheck();
+	}
+	
+	@Override
+	public void updateWeather()
+	{
+		super.updateWeather();
+		forceWeatherCheck();
+		if((provider.weatherType & 2) == 0)
+		{
+			worldObj.thunderingStrength = 0.0F;
+		}
+	}
+	
+	private void forceWeatherCheck()
+	{
+		if(provider.weatherType != -1 && (provider.weatherType & 4) != 0)
+		{
+//			Debug.print("Forcing weather to on. "+provider.weatherType);
+			worldObj.rainingStrength = 1.0F;
+			if((provider.weatherType & 2) != 0)
+				worldObj.thunderingStrength = 1.0F;
+		}
+	}
+	
 	@Override
 	public Vec3 getFogColor(float par1, float par2)
 	{

@@ -119,20 +119,4 @@ public class MinestuckDimensionHandler
 		}
 	}
 	
-	public static void worldTick(World world)
-	{
-		if(isLandDimension((byte)world.provider.getDimensionId()))
-		{
-			ChunkProviderLands chunkProvider = (ChunkProviderLands) world.provider.createChunkGenerator();
-			int weatherType = chunkProvider.weatherType;
-			if(weatherType != -1 && (weatherType & 4) != 0)
-			{
-				if(!world.isRaining())
-					world.getWorldInfo().setRaining(true);
-				if((weatherType & 2) != 0 && !world.isThundering())
-					world.getWorldInfo().setThundering(true);
-			}
-		}
-	}
-	
 }

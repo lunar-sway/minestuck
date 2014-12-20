@@ -16,6 +16,7 @@ public class LandAspectFrost extends TerrainAspect
 {
 	IBlockState[] surfaceBlocks = {Blocks.grass.getDefaultState()};
 	private IBlockState[] upperBlocks = {Blocks.stone.getDefaultState()};
+	IBlockState[] structureBlocks = {Blocks.stone.getDefaultState(), Blocks.stonebrick.getDefaultState()};
 	static Vec3 skyColor = new Vec3(0.45D, 0.5D, 0.98D);
 
 	@Override
@@ -27,9 +28,15 @@ public class LandAspectFrost extends TerrainAspect
 	@Override
 	public IBlockState[] getUpperBlocks() 
 	{
-		return upperBlocks ;
+		return upperBlocks;
 	}
-
+	
+	@Override
+	public IBlockState[] getStructureBlocks()
+	{
+		return structureBlocks;
+	}
+	
 	@Override
 	public float getRarity() {
 		return 0.5F;
@@ -54,7 +61,7 @@ public class LandAspectFrost extends TerrainAspect
 
 	@Override
 	public String[] getNames() {
-		return new String[] {"Frost","Cold","Ice"};
+		return new String[] {"Frost", "Ice", "Snow"};
 	}
 
 	@Override
