@@ -50,7 +50,6 @@ public class LandRegisterPacket extends MinestuckPacket
 			String aspect1 = readLine(data);
 			String aspect2 = readLine(data);
 			ids.add(dim);
-			Debug.print(aspect1+","+aspect2);
 			aspects.add(new LandAspectRegistry.AspectCombination(LandAspectRegistry.fromName(aspect1), LandAspectRegistry.fromName2(aspect2)));
 		}
 		

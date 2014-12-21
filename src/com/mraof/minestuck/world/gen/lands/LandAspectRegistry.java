@@ -19,20 +19,10 @@ import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
-import com.mraof.minestuck.world.gen.lands.terrain.LandAspectFrost;
-import com.mraof.minestuck.world.gen.lands.terrain.LandAspectHeat;
-import com.mraof.minestuck.world.gen.lands.terrain.LandAspectSand;
-import com.mraof.minestuck.world.gen.lands.terrain.LandAspectShade;
-import com.mraof.minestuck.world.gen.lands.terrain.TerrainAspect;
-import com.mraof.minestuck.world.gen.lands.title.LandAspectClockwork;
-import com.mraof.minestuck.world.gen.lands.title.LandAspectFrogs;
-import com.mraof.minestuck.world.gen.lands.title.LandAspectLight;
-import com.mraof.minestuck.world.gen.lands.title.LandAspectNull;
+import com.mraof.minestuck.world.gen.lands.terrain.*;
+import com.mraof.minestuck.world.gen.lands.title.*;
 import com.mraof.minestuck.world.gen.lands.title.LandAspectPulse;
-import com.mraof.minestuck.world.gen.lands.title.LandAspectSilence;
-import com.mraof.minestuck.world.gen.lands.title.LandAspectThunder;
-import com.mraof.minestuck.world.gen.lands.title.LandAspectWind;
-import com.mraof.minestuck.world.gen.lands.title.TitleAspect;
+import com.mraof.minestuck.world.gen.lands.title.LandAspectThought;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 public class LandAspectRegistry
@@ -61,6 +51,8 @@ public class LandAspectRegistry
 		registerLandAspect(new LandAspectSilence(), EnumAspect.VOID);
 		registerLandAspect(new LandAspectThunder(), EnumAspect.DOOM);
 		registerLandAspect(new LandAspectPulse(), EnumAspect.BLOOD);
+		registerLandAspect(new LandAspectThought(), EnumAspect.MIND);
+		registerLandAspect(new LandAspectBuckets(), EnumAspect.SPACE);	//containers are liquid-related, right?
 		
 		landNames2.put(nullAspect.getPrimaryName(), nullAspect);
 		landNames2.put(frogAspect.getPrimaryName(), frogAspect);

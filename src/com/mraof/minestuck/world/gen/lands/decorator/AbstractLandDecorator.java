@@ -18,10 +18,10 @@ public abstract class AbstractLandDecorator implements ILandDecorator
 					placeBlock(world, block, x, y, z);
 	}
 	
-	protected void placeBlock(World world, IBlockState block, int xOffset, int y, int zOffset)
+	protected void placeBlock(World world, IBlockState block, int xOffset, int yOffset, int zOffset)
 	{
 		int xPos = xCoord + (rotation ? zOffset : xOffset);
-		int yPos = yCoord + y;
+		int yPos = yCoord + yOffset;
 		int zPos = zCoord + (rotation ? xOffset : zOffset);
 		
 		world.setBlockState(new BlockPos(xPos, yPos, zPos), block, 2);

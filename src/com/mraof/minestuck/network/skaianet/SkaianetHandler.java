@@ -525,10 +525,8 @@ public class SkaianetHandler {
 				c.serverName = username;
 				if(SessionHandler.onConnectionCreated(c) == null)
 				{
-					Debug.print("Added");
 					SessionHandler.onFirstItemGiven(c);
 					connections.add(c);
-					Debug.print("1:"+connections.size());
 				}
 				else if(SessionHandler.singleSession)
 				{
@@ -536,7 +534,6 @@ public class SkaianetHandler {
 					SessionHandler.split();
 					if(SessionHandler.onConnectionCreated(c) == null)
 					{
-						Debug.print("Added");
 						SessionHandler.onFirstItemGiven(c);
 						connections.add(c);
 					}

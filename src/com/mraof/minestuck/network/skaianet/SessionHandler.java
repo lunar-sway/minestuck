@@ -239,8 +239,8 @@ public class SessionHandler {
 				break;
 			}
 		Title title = MinestuckPlayerData.getTitle(clientConnection.getClientName());
-		if(title.getHeroAspect() == EnumAspect.SPACE)
-			return landHelper.frogAspect;
+//		if(title.getHeroAspect() == EnumAspect.SPACE && ??)
+//			return landHelper.frogAspect;
 		return landHelper.getLandAspect(title.getHeroAspect());
 	}
 	

@@ -33,7 +33,7 @@ public class LandAspectLight extends TitleAspect
 	@Override
 	public boolean isAspectCompatible(TerrainAspect aspect)
 	{
-		return aspect.getDayCycleMode() != 2;
+		return aspect.getDayCycleMode() != 2 && (aspect.getWeatherType() == -1 || (aspect.getWeatherType() & 2) == 0);
 	}
 	
 }

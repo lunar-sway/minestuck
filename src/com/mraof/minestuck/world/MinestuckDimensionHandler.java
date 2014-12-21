@@ -60,7 +60,7 @@ public class MinestuckDimensionHandler
 			NBTTagCompound tagCompound = list.getCompoundTagAt(i);
 			byte dim = tagCompound.getByte("dimID");
 			String type = tagCompound.getString("type");
-			if(type == "land")
+			if(type.equals("land"))
 			{
 				String name1 = tagCompound.getString("aspect1");
 				String name2 = tagCompound.getString("aspect2");
