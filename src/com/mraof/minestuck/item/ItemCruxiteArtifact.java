@@ -99,12 +99,12 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 					{
 						IBlockState block = worldserver0.getBlockState(new BlockPos(blockX, blockY, blockZ));
 						TileEntity te = worldserver0.getTileEntity(new BlockPos(blockX, blockY, blockZ));
-						if(block != Blocks.air && blockX < x + Minestuck.artifactRange && blockZ < z + nextWidth && blockZ > z - nextWidth)
-							worldserver1.setBlockState(new BlockPos(blockX + 1, blockY, blockZ), Blocks.dirt.getDefaultState(), 0);
-						if(block != Blocks.air && blockZ < z + zWidth)
-							worldserver1.setBlockState(new BlockPos(blockX, blockY, blockZ + 1), Blocks.stone.getDefaultState(), 0);
+//						if(block != Blocks.air && blockX < x + Minestuck.artifactRange && blockZ < z + nextWidth && blockZ > z - nextWidth)
+//							worldserver1.setBlockState(new BlockPos(blockX + 1, blockY, blockZ), Blocks.dirt.getDefaultState(), 0);
+//						if(block != Blocks.air && blockZ < z + zWidth)
+//							worldserver1.setBlockState(new BlockPos(blockX, blockY, blockZ + 1), Blocks.stone.getDefaultState(), 0);
 						if(block != Blocks.bedrock)
-							worldserver1.setBlockState(new BlockPos(blockX, blockY, blockZ), block, 2);
+							worldserver1.setBlockState(new BlockPos(blockX, blockY, blockZ), block, 0);
 						if((te) != null)
 						{
 							TileEntity te1 = null;
@@ -135,7 +135,7 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 					{
 						Block block = worldserver0.getBlockState(new BlockPos(blockX, blockY, blockZ)).getBlock();
 						if(block != Blocks.bedrock)
-							worldserver0.setBlockToAir(new BlockPos(blockX, blockY, blockZ));
+							worldserver0.setBlockState(new BlockPos(blockX, blockY, blockZ), Blocks.air.getDefaultState(), 2);
 					}
 				}
 			}
