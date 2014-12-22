@@ -109,11 +109,9 @@ public class BlockLayered extends Block
 	@Override
 	public boolean canPlaceBlockAt(World world, BlockPos pos)
 	{
-		IBlockState underneathBlock = world.getBlockState(pos.add(0, -1, 0));
-		if (underneathBlock.getBlock() == Blocks.air)
+		IBlockState underneathBlock = world.getBlockState(pos.down());
+		if (underneathBlock.getBlock().isAir(world, pos.down()))
 			return false;
-//		if (underneathBlock.getBlock() == this && (((Integer) underneathBlock.getValue(SIZE)) & 7) == 7)
-//			return true;
 		if (underneathBlock.getBlock().isLeaves(world, pos.add(0, -1, 0)) && underneathBlock.getBlock().isOpaqueCube())
 			return false;
 		return underneathBlock.getBlock().getMaterial().blocksMovement();
@@ -153,7 +151,7 @@ public class BlockLayered extends Block
 
 	public boolean changeHeight(World world, BlockPos pos, int metadata)
 	{
-		IBlockState block = ((metadata & 7) > 7 ? getDefaultState().withProperty(SIZE, metadata & 7) : this.fullBlock.getDefaultState());
+		IBlockState block = (metadata <= 7 ? getDefaultState().withProperty(SIZE, metadata) : this.fullBlock.getDefaultState());
 		return  world.setBlockState(pos, block, 3);
 	}
 

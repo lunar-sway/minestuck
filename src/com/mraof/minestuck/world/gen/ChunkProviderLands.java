@@ -31,6 +31,7 @@ import com.mraof.minestuck.entity.underling.EntityBasilisk;
 import com.mraof.minestuck.entity.underling.EntityGiclops;
 import com.mraof.minestuck.entity.underling.EntityImp;
 import com.mraof.minestuck.entity.underling.EntityOgre;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.world.gen.lands.LandAspectRegistry;
@@ -117,7 +118,9 @@ public class ChunkProviderLands implements IChunkProvider
 		this.oceanBlock = fluidAspect.getOceanBlock();
 		this.riverBlock = fluidAspect.getRiverBlock();
 		this.terrainMapper = aspect1;
-		this.decorators = helper.pickSubset(aspect1.getDecorators(), 3, 5);
+		this.decorators = helper.pickSubset(aspect1.getOptionalDecorators(), 3, 5);
+		this.decorators.addAll(aspect1.getRequiredDecorators());
+		sortDecorators();
 		this.dayCycle = aspect1.getDayCycleMode();
 		this.skyColor = aspect1.getFogColor();
 		this.weatherType = aspect1.getWeatherType();

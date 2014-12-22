@@ -2,9 +2,12 @@
 package com.mraof.minestuck.world.gen.lands.terrain;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import com.mraof.minestuck.world.gen.lands.decorator.DecoratorVein;
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.world.gen.lands.decorator.SurfaceDecoratorVein;
 import com.mraof.minestuck.world.gen.lands.decorator.ILandDecorator;
+import com.mraof.minestuck.world.gen.lands.decorator.LayeredBlockDecorator;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSandStone;
@@ -57,12 +60,21 @@ public class LandAspectSand extends TerrainAspect
 	}
 
 	@Override
-	public ArrayList<ILandDecorator> getDecorators() {
+	public List<ILandDecorator> getOptionalDecorators()
+	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
 //		list.add(new DecoratorVein(Blocks.stonebrick.getDefaultState(), 10, 32));
 		return list;
 	}
-
+	
+	@Override
+	public List<ILandDecorator> getRequiredDecorators()
+	{
+		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
+//		list.add(new LayeredBlockDecorator(Minestuck.layeredSand, false));
+		return list;
+	}
+	
 	@Override
 	public int getDayCycleMode() {
 		return 0;

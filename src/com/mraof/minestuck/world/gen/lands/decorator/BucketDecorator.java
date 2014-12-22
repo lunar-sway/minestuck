@@ -81,5 +81,4 @@ public class BucketDecorator extends AbstractLandDecorator
 		return 0.5F;
 	}
 	
-	
 }

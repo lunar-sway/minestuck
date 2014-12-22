@@ -2,6 +2,7 @@ package com.mraof.minestuck.world.gen.lands;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,8 +22,6 @@ import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.gen.lands.terrain.*;
 import com.mraof.minestuck.world.gen.lands.title.*;
-import com.mraof.minestuck.world.gen.lands.title.LandAspectPulse;
-import com.mraof.minestuck.world.gen.lands.title.LandAspectThought;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 public class LandAspectRegistry
@@ -40,11 +39,9 @@ public class LandAspectRegistry
 	public static void registerLandAspects()
 	{
 		registerLandAspect(new LandAspectFrost());
-		registerLandAspect(new LandAspectHeat());
-//		registerLandAspect(new LandAspectPulse());
-		registerLandAspect(new LandAspectShade());
-		registerLandAspect(new LandAspectSand());
-//		registerLandAspect(new LandAspectThought());
+//		registerLandAspect(new LandAspectHeat());
+//		registerLandAspect(new LandAspectShade());
+//		registerLandAspect(new LandAspectSand());
 		registerLandAspect(new LandAspectWind(), EnumAspect.BREATH);
 		registerLandAspect(new LandAspectLight(), EnumAspect.LIGHT);
 		registerLandAspect(new LandAspectClockwork(), EnumAspect.TIME);
@@ -52,7 +49,7 @@ public class LandAspectRegistry
 		registerLandAspect(new LandAspectThunder(), EnumAspect.DOOM);
 		registerLandAspect(new LandAspectPulse(), EnumAspect.BLOOD);
 		registerLandAspect(new LandAspectThought(), EnumAspect.MIND);
-		registerLandAspect(new LandAspectBuckets(), EnumAspect.SPACE);	//containers are liquid-related, right?
+		registerLandAspect(new LandAspectBuckets(), EnumAspect.SPACE);	//buckets -> containers -> space, right?
 		
 		landNames2.put(nullAspect.getPrimaryName(), nullAspect);
 		landNames2.put(frogAspect.getPrimaryName(), frogAspect);
@@ -126,7 +123,7 @@ public class LandAspectRegistry
 	/**
 	 * Returns a ArrayList that is a random combination of the two input ArrayLists.
 	 */
-	public <T> ArrayList<T> pickSubset(ArrayList<T> listIn, int min, int max)
+	public <T> ArrayList<T> pickSubset(List<T> listIn, int min, int max)
 	{
 		ArrayList<T> result = new ArrayList<T>();
 		if(listIn.size() <= min)

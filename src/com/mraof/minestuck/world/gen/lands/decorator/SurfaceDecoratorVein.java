@@ -13,14 +13,14 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.gen.OreHandler;
 
-public class DecoratorVein implements ILandDecorator
+public class SurfaceDecoratorVein implements ILandDecorator
 {
 	
 	int amount;
 	IBlockState block;
 	int size;
 	
-	public DecoratorVein(IBlockState block,int amount,int size) 
+	public SurfaceDecoratorVein(IBlockState block,int amount,int size) 
 	{
 		this.amount = amount;
 		this.block = block;
@@ -38,7 +38,6 @@ public class DecoratorVein implements ILandDecorator
 			int posX = chunkX * 16 + random.nextInt(16);
 			int posY = minY + random.nextInt(diffBtwnMinMaxY);
 			int posZ = chunkZ * 16 + random.nextInt(16);
-//			Debug.printf("Generating vien at %d %d %d",posX,posY,posZ);
 			(new WorldGenMinable(block, size/2 + random.nextInt(size*2), new OreHandler.BlockStatePredicate(provider.surfaceBlock))).generate(world, random, new BlockPos(posX, posY, posZ));
 		}
 	}
@@ -46,7 +45,7 @@ public class DecoratorVein implements ILandDecorator
 	@Override
 	public float getPriority()
 	{
-		return 0.3F;
+		return 0.2F;
 	}
 	
 }

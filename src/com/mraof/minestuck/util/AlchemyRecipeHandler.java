@@ -36,15 +36,6 @@ import com.mraof.minestuck.modSupport.Minegicka3Support;
 import com.mraof.minestuck.modSupport.ModSupport;
 import com.mraof.minestuck.modSupport.NeverSayNetherSupport;
 import com.mraof.minestuck.modSupport.TinkersConstructSupport;
-import com.mraof.minestuck.world.gen.lands.LandAspectRegistry;
-import com.mraof.minestuck.world.gen.lands.terrain.LandAspectFrost;
-import com.mraof.minestuck.world.gen.lands.terrain.LandAspectHeat;
-import com.mraof.minestuck.world.gen.lands.terrain.LandAspectPulse;
-import com.mraof.minestuck.world.gen.lands.terrain.LandAspectSand;
-import com.mraof.minestuck.world.gen.lands.terrain.LandAspectShade;
-import com.mraof.minestuck.world.gen.lands.terrain.LandAspectThought;
-import com.mraof.minestuck.world.gen.lands.title.LandAspectLight;
-import com.mraof.minestuck.world.gen.lands.title.LandAspectWind;
 
 import static com.mraof.minestuck.util.CombinationRegistry.MODE_AND;
 import static com.mraof.minestuck.util.CombinationRegistry.MODE_OR;

@@ -29,7 +29,7 @@ public final class TitleHelper {
 	
 	public static Title randomTitle()
 	{
-		return new Title(EnumClass.getRandomClass(null), EnumAspect.SPACE/*EnumAspect.getRandomAspect(null)*/);
+		return new Title(EnumClass.getRandomClass(null), EnumAspect.TIME/*EnumAspect.getRandomAspect(null)*/);
 	}
 	
 }

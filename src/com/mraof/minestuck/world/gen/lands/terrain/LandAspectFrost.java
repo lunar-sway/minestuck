@@ -1,20 +1,24 @@
 package com.mraof.minestuck.world.gen.lands.terrain;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
-import com.mraof.minestuck.world.gen.lands.decorator.DecoratorVein;
+import com.mraof.minestuck.world.gen.lands.decorator.SurfaceDecoratorVein;
+import com.mraof.minestuck.world.gen.lands.decorator.GrassDecorator;
 import com.mraof.minestuck.world.gen.lands.decorator.ILandDecorator;
-import com.mraof.minestuck.world.gen.lands.decorator.IceAndSnowDecorator;
+import com.mraof.minestuck.world.gen.lands.decorator.IceDecorator;
+import com.mraof.minestuck.world.gen.lands.decorator.LayeredBlockDecorator;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDirt;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Vec3;
 
 public class LandAspectFrost extends TerrainAspect 
 {
-	IBlockState[] surfaceBlocks = {Blocks.grass.getDefaultState()};
+	IBlockState[] surfaceBlocks = {Blocks.dirt.getDefaultState()};
 	private IBlockState[] upperBlocks = {Blocks.stone.getDefaultState()};
 	IBlockState[] structureBlocks = {Blocks.stone.getDefaultState(), Blocks.stonebrick.getDefaultState()};
 	static Vec3 skyColor = new Vec3(0.45D, 0.5D, 0.98D);
@@ -65,14 +69,24 @@ public class LandAspectFrost extends TerrainAspect
 	}
 
 	@Override
-	public ArrayList<ILandDecorator> getDecorators() {
+	public List<ILandDecorator> getOptionalDecorators()
+	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
-		list.add(new DecoratorVein(Blocks.dirt.getDefaultState(), 10, 32));
-		list.add(new DecoratorVein(Blocks.ice.getDefaultState(), 5, 8));
-		list.add(new IceAndSnowDecorator());
+		list.add(new SurfaceDecoratorVein(Blocks.dirt.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.COARSE_DIRT), 10, 32));
+		list.add(new SurfaceDecoratorVein(Blocks.ice.getDefaultState(), 5, 8));
 		return list;
 	}
-
+	
+	@Override
+	public List<ILandDecorator> getRequiredDecorators()
+	{
+		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
+		list.add(new IceDecorator());
+		list.add(new LayeredBlockDecorator(Blocks.snow_layer, true));
+		list.add(new GrassDecorator());
+		return list;
+	}
+	
 	@Override
 	public int getDayCycleMode() {
 		return 0;

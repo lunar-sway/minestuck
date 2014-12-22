@@ -1,6 +1,7 @@
 package com.mraof.minestuck.world.gen.lands.terrain;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.mraof.minestuck.world.gen.lands.decorator.ILandDecorator;
 
@@ -66,7 +67,9 @@ public abstract class TerrainAspect
 		 * Returns a list of possible worldgen structures a land can use.
 		 * @return
 		 */
-		public abstract ArrayList<ILandDecorator> getDecorators();
+		public abstract List<ILandDecorator> getOptionalDecorators();
+		
+		public abstract List<ILandDecorator> getRequiredDecorators();
 		
 		/**
 		 *  Returns a integer representing how they land's day cycle will proceed.
