@@ -29,8 +29,8 @@ public class BlockChessTile extends Block
 	{
 		BLACK("black"),
 		WHITE("white"),
-		DARK_GREY("light_grey"),
-		LIGHT_GREY("dark_grey");
+		DARK_GREY("dark_grey"),
+		LIGHT_GREY("light_grey");
 		public final String name; 
 		BlockType(String resource)
 		{

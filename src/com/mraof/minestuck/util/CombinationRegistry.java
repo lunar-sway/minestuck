@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.mraof.minestuck.Minestuck;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -31,6 +33,10 @@ public class CombinationRegistry {
 	 */
 	public static void addCombination(Object input1, int damage1, Object input2, int damage2, boolean mode, ItemStack output)
 	{
+		if(input1 instanceof Block)
+			input1 = Item.getItemFromBlock((Block) input1);
+		if(input2 instanceof Block)
+			input2 = Item.getItemFromBlock((Block) input2);
 		if(input1.hashCode() >= input2.hashCode())
 			combRecipes.put(Arrays.asList(input1, damage1, input2, damage2, mode), output);
 		else combRecipes.put(Arrays.asList(input2, damage2, input1, damage1, mode), output);
