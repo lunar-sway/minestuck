@@ -11,7 +11,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
-public class BucketDecorator extends AbstractLandDecorator
+public class BucketDecorator extends SimpleStructureDecorator
 {
 	
 	private Block[] liquidBlocks = {Blocks.air, Blocks.water, Blocks.lava/*, Minestuck.blockBlood, Minestuck.blockOil, Minestuck.blockBrainJuice*/};

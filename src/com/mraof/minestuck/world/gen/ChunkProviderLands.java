@@ -203,27 +203,23 @@ public class ChunkProviderLands implements IChunkProvider
 	public void populate(IChunkProvider ichunkprovider, int i, int j) 
 	{
 		
+		this.random.setSeed(getSeedFor(i, j));
+		
+		ichunkprovider.populate(ichunkprovider, i, j);
+		for (Object decorator : decorators)
+		{
+			((ILandDecorator) decorator).generate(landWorld, random, i,  j, this);
+		}
+	}
+	
+	public long getSeedFor(int chunkX, int chunkZ)
+	{
 		random.setSeed(seed);
 		long i1 = random.nextLong() / 2L * 2L + 1L;
 		long j1 = random.nextLong() / 2L * 2L + 1L;
-		this.random.setSeed((long)i * i1 + (long)j * j1 ^ seed);
-		
-		Chunk chunk = this.provideChunk(i, j);
-		if (!chunk.isTerrainPopulated())
-		{
-			chunk.setTerrainPopulated(true);
-
-			if (ichunkprovider != null)
-			{
-				ichunkprovider.populate(ichunkprovider, i, j);
-				for (Object decorator : decorators) {
-					((ILandDecorator) decorator).generate(landWorld, random, i,  j, this);
-				}
-				chunk.setChunkModified();
-			}
-		}
+		return ((long)chunkX * i1 + (long)chunkZ * j1) ^ seed;
 	}
-
+	
 	@Override
 	public boolean saveChunks(boolean flag, IProgressUpdate iprogressupdate) {
 		return true;

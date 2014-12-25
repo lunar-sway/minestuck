@@ -4,7 +4,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
-public abstract class AbstractLandDecorator implements ILandDecorator
+public abstract class SimpleStructureDecorator implements ILandDecorator
 {
 	
 	protected boolean rotation;

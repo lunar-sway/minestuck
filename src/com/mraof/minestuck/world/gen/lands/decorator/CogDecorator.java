@@ -8,7 +8,7 @@ import net.minecraft.world.World;
 
 import com.mraof.minestuck.world.gen.ChunkProviderLands;
 
-public class CogDecorator extends AbstractLandDecorator
+public class CogDecorator extends SimpleStructureDecorator
 {
 	
 	@Override

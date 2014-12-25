@@ -174,10 +174,6 @@ public class WorldProviderLands extends WorldProvider
 	{
 		super.updateWeather();
 		forceWeatherCheck();
-		if((provider.weatherType & 2) == 0)
-		{
-			worldObj.thunderingStrength = 0.0F;
-		}
 	}
 	
 	private void forceWeatherCheck()
@@ -189,6 +185,11 @@ public class WorldProviderLands extends WorldProvider
 			if((provider.weatherType & 2) != 0)
 				worldObj.thunderingStrength = 1.0F;
 		}
+		else if(provider.weatherType == -1)
+			worldObj.rainingStrength = 0.0F;
+		
+		if(provider.weatherType == -1 || (provider.weatherType & 2) == 0)
+			worldObj.thunderingStrength = 0.0F;
 	}
 	
 	@Override

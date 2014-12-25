@@ -12,7 +12,7 @@ import com.mraof.minestuck.block.BlockLayered;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.ChunkProviderLands;
 
-public class LayeredBlockDecorator implements ILandDecorator
+public class LayeredBlockDecorator extends PostDecorator
 {
 	
 	private Block block;
@@ -25,7 +25,7 @@ public class LayeredBlockDecorator implements ILandDecorator
 	}
 	
 	@Override
-	public void generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
+	public void generateAtChunk(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
 	{
 //		byte[] heightMap = new byte[16*16];
 //		for(int x = 0; x < 16; x++)
@@ -55,7 +55,7 @@ public class LayeredBlockDecorator implements ILandDecorator
 		for(int x = 0; x < 16; x++)
 			for(int z = 0; z < 16; z++)
 			{
-				BlockPos pos = world.getTopSolidOrLiquidBlock(new BlockPos(x + (chunkX << 4) + 8, 0, z + (chunkZ << 4) + 8));
+				BlockPos pos = world.getTopSolidOrLiquidBlock(new BlockPos(x + (chunkX << 4), 0, z + (chunkZ << 4)));
 				if(world.getBlockState(pos).getBlock().isAir(world, pos) && block.canPlaceBlockAt(world, pos))
 					setBlock(world, pos, 1);
 			}

@@ -11,14 +11,14 @@ import net.minecraft.world.chunk.Chunk;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.ChunkProviderLands;
 
-public class IceDecorator implements ILandDecorator
+public class IceDecorator extends PostDecorator
 {
 	
 	@Override
-	public void generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
+	public void generateAtChunk(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
 	{
-		for(int x = (chunkX << 4) + 8; x < (chunkX+1 << 4) + 8; x++)
-			for(int z = (chunkZ << 4) + 8; z < (chunkZ+1 << 4) + 8; z++)
+		for(int x = (chunkX << 4); x < (chunkX+1 << 4); x++)
+			for(int z = (chunkZ << 4); z < (chunkZ+1 << 4); z++)
 			{
 				BlockPos pos = world.getPrecipitationHeight(new BlockPos(x, 0, z)).down();
 				Block block1 = world.getBlockState(pos).getBlock();
