@@ -94,14 +94,11 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 					minY = minY < 0 ? 0 : minY;
 					for(int blockY = minY; blockY < 256; blockY++)
 					{
-						IBlockState block = worldserver0.getBlockState(new BlockPos(blockX, blockY, blockZ));
-						TileEntity te = worldserver0.getTileEntity(new BlockPos(blockX, blockY, blockZ));
-//						if(block != Blocks.air && blockX < x + Minestuck.artifactRange && blockZ < z + nextWidth && blockZ > z - nextWidth)
-//							worldserver1.setBlockState(new BlockPos(blockX + 1, blockY, blockZ), Blocks.dirt.getDefaultState(), 0);
-//						if(block != Blocks.air && blockZ < z + zWidth)
-//							worldserver1.setBlockState(new BlockPos(blockX, blockY, blockZ + 1), Blocks.stone.getDefaultState(), 0);
+						BlockPos pos = new BlockPos(blockX, blockY, blockZ);
+						IBlockState block = worldserver0.getBlockState(pos);
+						TileEntity te = worldserver0.getTileEntity(pos);
 						if(block != Blocks.bedrock)
-							worldserver1.setBlockState(new BlockPos(blockX, blockY, blockZ), block, 0);
+							worldserver1.setBlockState(pos, block, 0);
 						if((te) != null)
 						{
 							TileEntity te1 = null;
@@ -111,8 +108,8 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 							NBTTagCompound nbt = new NBTTagCompound();
 							te.writeToNBT(nbt);
 							te1.readFromNBT(nbt);
-//							te1.yCoord++;//prevents TileEntity from being invalidated
-							worldserver1.setTileEntity(new BlockPos(blockX, blockY, blockZ), te1);
+							worldserver1.removeTileEntity(pos);
+							worldserver1.setTileEntity(pos, te1);
 						};
 					}
 				}

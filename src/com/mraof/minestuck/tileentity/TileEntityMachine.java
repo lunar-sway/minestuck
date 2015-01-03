@@ -57,8 +57,10 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
     }
     
     @Override
-    public int getSizeInventory() {
-    		switch (getMetadata()) {
+	public int getSizeInventory()
+    {
+		switch (getBlockMetadata())
+		{
     		case (0):
     			return 2;
     		case (1):
@@ -182,11 +184,6 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return true;
 	}
-
-	public int getMetadata()
-	{
-		return ((MachineTypes) this.worldObj.getBlockState(this.pos).getValue(BlockMachine.MACHINE_TYPE)).ordinal();
-	}
 	
 	@Override
 	public void update()
@@ -211,12 +208,15 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 		}
 	}
 	
-	public boolean contentsValid() {
+	public boolean contentsValid()
+	{
 		
-		if (getMetadata() != 0 && !this.ready) {
+		if (getBlockMetadata() != 0 && !this.ready)
+		{
 			return false;
 		}
-		switch (getMetadata()) {
+		switch (getBlockMetadata())
+		{
 		case (0):
 			return (this.inv[1] != null && (this.inv[0] == null || this.inv[0].stackSize < 64));
 		case (1):
@@ -282,8 +282,10 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 		return false;
 	}
 	
-	public void processContents() {
-		switch (getMetadata()) {
+	public void processContents()
+	{
+		switch (getBlockMetadata())
+		{
 		case (0):
 			// Process the Raw Cruxite
 			
@@ -428,7 +430,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 	@Override
 	public String getName()
 	{
-		return "tile.blockMachine."+ItemMachine.subNames[getMetadata()]+".name";
+		return "tile.blockMachine."+ItemMachine.subNames[getBlockMetadata()]+".name";
 	}
 	
 	@Override

@@ -42,11 +42,12 @@ public class ContainerMachine extends Container {
 	private int metadata;
 	private boolean operator = true;
 
-	public ContainerMachine(InventoryPlayer inventoryPlayer, TileEntityMachine te) {
+	public ContainerMachine(InventoryPlayer inventoryPlayer, TileEntityMachine te)
+	{
 		tileEntity = te;
-		metadata = te.getMetadata();
+		metadata = te.getBlockMetadata();
 		te.owner = inventoryPlayer.player;
-
+		
 		//the Slot constructor takes the IInventory and the slot number in that it binds to
 		//and the x-y coordinates it resides on-screen
 		switch (metadata) {

@@ -91,16 +91,20 @@ public class MinestuckPlayerTracker {
 	}
 	
 	@SubscribeEvent
-	public void onConnectionCreated(FMLNetworkEvent.ServerConnectionFromClientEvent event) {
+	public void onConnectionCreated(FMLNetworkEvent.ServerConnectionFromClientEvent event)
+	{
+		
+		Debug.print("Connection initiated. Sending packets to server..");
 		MinestuckPacket packet = MinestuckPacket.makePacket(Type.LANDREGISTER, MinestuckSaveHandler.lands.toArray());
 		
 		Minestuck.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.DISPATCHER);
 		Minestuck.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(event.manager.channel().attr(NetworkDispatcher.FML_DISPATCHER).get());
-		Minestuck.channels.get(Side.SERVER).writeOutbound(packet);
+		Debug.print("Landregister boolean:"+Minestuck.channels.get(Side.SERVER).writeOutbound(packet));
 
 		MinestuckPacket infoPacket = MinestuckPacket.makePacket(Type.INFO);
 		
 		Minestuck.channels.get(Side.SERVER).writeOutbound(infoPacket);
+		Debug.print("Queued info and land register packet to thew channel.");
 	}
 	
 	@SubscribeEvent

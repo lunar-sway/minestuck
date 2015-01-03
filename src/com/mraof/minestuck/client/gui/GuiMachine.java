@@ -55,7 +55,7 @@ public class GuiMachine extends GuiContainer {
 	{
 	super(new ContainerMachine(inventoryPlayer, tileEntity));
 	this.te = tileEntity;
-	this.metadata = tileEntity.getMetadata();
+	this.metadata = tileEntity.getBlockMetadata();
 	guiBackground = new ResourceLocation("minestuck:textures/gui/" + guis[metadata] + ".png");
 	guiProgress = new ResourceLocation("minestuck:textures/gui/progress/" + guis[metadata] + ".png");
 	//this.player = inventoryPlayer.player;

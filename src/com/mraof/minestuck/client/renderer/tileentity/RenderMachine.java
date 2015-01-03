@@ -36,7 +36,7 @@ public class RenderMachine extends TileEntitySpecialRenderer {
         
 		ResourceLocation texture;
 		ModelMachine machine;
-		switch(tileEntityMachine.getMetadata())
+		switch(tileEntityMachine.getBlockMetadata())
 		{
 		default:
 		case 0:

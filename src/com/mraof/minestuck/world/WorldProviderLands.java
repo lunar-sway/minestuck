@@ -23,17 +23,16 @@ public class WorldProviderLands extends WorldProvider
 	{
 		if (provider != null) 
 		{
-			//Debug.print("Time mode is "+provider.dayCycle);
 			switch(provider.dayCycle) 
 			{
 			case (0):
 				return super.calculateCelestialAngle(par1,par3);
 			case (1):
-				return 12000.0F;
+				return 1.0F;
 			case (2):
-				return 24000.0F;
+				return 0.5F;
 			}
-			return 12000.0F; //We should never reach this
+			return 1.0F; //We should never reach this
 		}
 		else 
 		{
