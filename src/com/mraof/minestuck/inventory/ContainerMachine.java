@@ -41,6 +41,7 @@ public class ContainerMachine extends Container {
 	public TileEntityMachine tileEntity;
 	private int metadata;
 	private boolean operator = true;
+	private int progress;
 
 	public ContainerMachine(InventoryPlayer inventoryPlayer, TileEntityMachine te)
 	{
@@ -209,26 +210,33 @@ public class ContainerMachine extends Container {
 	public void addCraftingToCrafters(ICrafting par1ICrafting)
 	{
 		super.addCraftingToCrafters(par1ICrafting);
-//		System.out.printf("addCraftingToCrafters running, the metadata is %d\n", this.metadata);
+		
 		switch(this.metadata)
 		{
 		case 1:
-//			System.out.printf(". Mode is %b \n", this.tileEntity.mode);
-			par1ICrafting.sendProgressBarUpdate(this, 0, this.tileEntity.mode ? 0 : 1);
+			par1ICrafting.sendProgressBarUpdate(this, 1, this.tileEntity.mode ? 0 : 1);
 		}
 	}
 	
 	public void detectAndSendChanges()
 	{
-		//Nothing is actually needed here, since the tile entity sends all the necessary stuff
+		if(this.progress != tileEntity.progress && tileEntity.progress != 0)
+			for(ICrafting crafter : (Iterable<ICrafting>) crafters)
+				crafter.sendProgressBarUpdate(this, 0, tileEntity.progress);
+		this.progress = tileEntity.progress;
 	}
 	@Override
 	public void updateProgressBar(int par1, int par2) 
 	{
+		if(par1 == 0)
+		{
+			tileEntity.progress = par2;
+			return;
+		}
+		
 		switch(this.metadata)
 		{
 		case 1:
-//			Debug.print("Mode on Client is now " + par2);
 			tileEntity.mode = par2 == 0;
 		}
 	}

@@ -34,7 +34,7 @@ public class GuiStrifeSpecibus extends GuiPlayerStats
 		
 		this.drawTexturedModalRect(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
-		String message = StatCollector.translateToLocal("gui.kindAbstrata.name");
+		String message = "This feature isn't implemented yet.";//StatCollector.translateToLocal("gui.kindAbstrata.name");
 		mc.fontRendererObj.drawString(message, (this.width / 2) - mc.fontRendererObj.getStringWidth(message) / 2, yOffset + 12, 0x404040);
 		
 		int i = 0;

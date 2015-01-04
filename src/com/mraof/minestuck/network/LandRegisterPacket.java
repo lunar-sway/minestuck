@@ -46,7 +46,6 @@ public class LandRegisterPacket extends MinestuckPacket
 	public void execute(EntityPlayer player) 
 	{
 		
-		
 		for(byte dimensionId : MinestuckSaveHandler.lands)
 			if(!containsId(dimensionId) && DimensionManager.isDimensionRegistered(dimensionId))
 				DimensionManager.unregisterDimension(dimensionId);

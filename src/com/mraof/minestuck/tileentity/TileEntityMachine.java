@@ -125,49 +125,44 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 				player.getDistanceSq(this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5) < 64;
 	}
 	
-    @Override
-    public void readFromNBT(NBTTagCompound tagCompound) {
-            super.readFromNBT(tagCompound);
-            
-            this.rotation = tagCompound.getByte("rotation");
-            this.progress = tagCompound.getInteger("progress");
-            this.mode =  tagCompound.getBoolean("mode");
-            this.overrideStop = tagCompound.getBoolean("overrideStop");
-            
-            NBTTagList tagList = tagCompound.getTagList("Inventory", 10);
-            for (int i = 0; i < tagList.tagCount(); i++) {
-                    NBTTagCompound tag = tagList.getCompoundTagAt(i);
-                    byte slot = tag.getByte("Slot");
-                    if (slot >= 0 && slot < this.inv.length) {
-                            this.inv[slot] = ItemStack.loadItemStackFromNBT(tag);
-                    }
-            }
+	@Override
+	public void readFromNBT(NBTTagCompound tagCompound) {
+		super.readFromNBT(tagCompound);
+		
+		this.rotation = tagCompound.getByte("rotation");
+		this.progress = tagCompound.getInteger("progress");
+		this.mode =  tagCompound.getBoolean("mode");
+		this.overrideStop = tagCompound.getBoolean("overrideStop");
+		
+		for (int i = 0; i < inv.length; i++)
+		{
+			NBTTagCompound tag = tagCompound.getCompoundTag("slot"+i);
+			this.inv[i] = ItemStack.loadItemStackFromNBT(tag);
+		}
 		if(tagCompound.hasKey("gristType"))
 			this.selectedGrist = GristType.values()[tagCompound.getInteger("gristType")];
-    }
-
-    @Override
-    public void writeToNBT(NBTTagCompound tagCompound) {
-            super.writeToNBT(tagCompound);
-                            
-            tagCompound.setByte("rotation", this.rotation);
-            tagCompound.setInteger("progress", this.progress);
-            tagCompound.setBoolean("mode", this.mode);
-            tagCompound.setBoolean("overrideStop", this.overrideStop);
-            
-            NBTTagList itemList = new NBTTagList();
-            for (int i = 0; i < this.inv.length; i++) {
-                    ItemStack stack = this.inv[i];
-                    if (stack != null) {
-                            NBTTagCompound tag = new NBTTagCompound();
-                            tag.setByte("Slot", (byte) i);
-                            stack.writeToNBT(tag);
-                            itemList.appendTag(tag);
-                    }
-            }
-            tagCompound.setTag("Inventory", itemList);
+	}
+	
+	@Override
+	public void writeToNBT(NBTTagCompound tagCompound) {
+		super.writeToNBT(tagCompound);
+		
+		tagCompound.setByte("rotation", this.rotation);
+		tagCompound.setInteger("progress", this.progress);
+		tagCompound.setBoolean("mode", this.mode);
+		tagCompound.setBoolean("overrideStop", this.overrideStop);
+		
+		for (int i = 0; i < this.inv.length; i++)
+		{
+			ItemStack stack = this.inv[i];
+			NBTTagCompound tag = new NBTTagCompound();
+			if (stack != null)
+				stack.writeToNBT(tag);
+			tagCompound.setTag("slot"+i, tag);
+		}
 		tagCompound.setInteger("gristType", selectedGrist.ordinal());
-    }
+	}
+	
     @Override
     public Packet getDescriptionPacket() 
     {
@@ -188,13 +183,16 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 	@Override
 	public void update()
 	{
-		if(worldObj.getBlockState(pos).getBlock() != Minestuck.blockMachine)
+		if(worldObj.getBlockState(pos).getBlock() != Minestuck.blockMachine || worldObj.isRemote)	//Processing is easier done on the server side only
 			return;
 		
 		if (!contentsValid())
 		{
+			boolean b = progress == 0;
 			this.progress = 0;
 			this.ready = overrideStop;
+			if(!b)
+				worldObj.markBlockForUpdate(pos);
 			return;
 		}
 		
@@ -205,6 +203,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 			this.progress = 0;
 			this.ready = overrideStop;
 			processContents();
+			worldObj.markBlockForUpdate(pos);
 		}
 	}
 	

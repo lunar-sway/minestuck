@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 import org.lwjgl.input.Mouse;
 
@@ -108,18 +109,19 @@ public class GuiMachine extends GuiContainer {
 		fontRendererObj.drawString(StatCollector.translateToLocal("gui."+guis[metadata]+".name"), 8, 6, 4210752);
 		//draws "Inventory" or your regional equivalent
 		fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
-		if ((metadata == 3 || metadata ==4) && te.inv[1] != null) 
+		if ((metadata == 3 || metadata == 4) && te.inv[1] != null) 
 		{
 			//Render grist requirements
-			GristSet set = GristRegistry.getGristConversion(AlchemyRecipeHandler.getDecodedItem(te.inv[1], metadata == 3? true : false)).copy();
-			boolean selectedType = AlchemyRecipeHandler.getDecodedItem(te.inv[1], true).getItem() == Minestuck.captchaCard;
-			if(selectedType)
+			GristSet set = GristRegistry.getGristConversion(AlchemyRecipeHandler.getDecodedItem(te.inv[1], metadata == 3? true : false));
+			
+			boolean useSelectedType = AlchemyRecipeHandler.getDecodedItem(te.inv[1], true).getItem() == Minestuck.captchaCard;
+			if(useSelectedType)
 				set = metadata == 3 ? new GristSet(te.selectedGrist, 1) : null;
 			if(metadata == 4 && set != null)
 			{
 				float multiplier = AlchemyRecipeHandler.getDecodedItem(te.inv[1], false).stackSize;
 				if(multiplier != 1)
-					set.scaleGrist(multiplier);
+					set = set.copy().scaleGrist(multiplier);
 			}
 			
 		if (set == null) {fontRendererObj.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 9,45, 16711680); return;}
@@ -141,7 +143,7 @@ public class GuiMachine extends GuiContainer {
 				int row = place % 3;
 				int col = place / 3;
 				
-				int color = metadata == 3 ? (selectedType ? 0xFF0000FF : need <= have ? 0x00FF00 : 0xFF0000) : 0; //Green if we have enough grist, red if not, black if GristWidget
+				int color = metadata == 3 ? (useSelectedType ? 0xFF0000FF : need <= have ? 0x00FF00 : 0xFF0000) : 0; //Green if we have enough grist, red if not, black if GristWidget
 				
 				fontRendererObj.drawString(need + " " + GristType.values()[type].getDisplayName() + " (" + have + ")", 9 + (80 * col),45 + (8 * (row)), color);
 				
@@ -189,7 +191,7 @@ public void initGui() {
 		}
 		if (metadata != 0) {
 			//All non-Cruxtruders need a Go button.
-			goButton = new GuiButton(1, (width - xSize) / 2 + goX, (height - ySize) / 2 + goY, 30, 12, te.overrideStop ? "STOP" : "GO");
+			goButton = new GuiButtonExt(1, (width - xSize) / 2 + goX, (height - ySize) / 2 + goY, 30, 12, te.overrideStop ? "STOP" : "GO");
 			buttonList.add(goButton);
 		}
 }
