@@ -80,11 +80,8 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 		Minestuck.clientInfTreeModus = infiniteTreeModus;
 		Minestuck.clientTreeAutobalance = treeModusSetting;
 		
-		if(MinecraftServer.getServer() == null || !MinecraftServer.getServer().isServerRunning())
-		{
-			UsernameHandler.host = lanHost;
-			DeployList.applyConfigValues(deployValues);
-		}
+		UsernameHandler.host = lanHost;
+		DeployList.applyConfigValues(deployValues);
 		
 	}
 
