@@ -43,26 +43,26 @@ computer.singleSessionFull=Game session is full
 computer.serverSessionFull=Server player's session is full
 computer.clientSessionFull=Client player's session is full
 
-entity.dersiteBishop.name=Dersite Bishop
-entity.dersitePawn.name=Dersite Pawn
-entity.dersiteRook.name=Dersite Rook
-entity.prospitianBishop.name=Prospitan Bishop
-entity.prospitianPawn.name=Prospitian Pawn
-entity.prospitianRook.name=Prospitian Rook
+entity.minestuck.dersiteBishop.name=Dersite Bishop
+entity.minestuck.dersitePawn.name=Dersite Pawn
+entity.minestuck.dersiteRook.name=Dersite Rook
+entity.minestuck.prospitianBishop.name=Prospitan Bishop
+entity.minestuck.prospitianPawn.name=Prospitian Pawn
+entity.minestuck.prospitianRook.name=Prospitian Rook
 
-entity.Salamander.name=Salamander
-entity.Nakagator.name=Nakagator
-entity.Iguana.name=Iguana
-entity.Turtle.name=Turtle
+entity.minestuck.Salamander.name=Salamander
+entity.minestuck.Nakagator.name=Nakagator
+entity.minestuck.Iguana.name=Iguana
+entity.minestuck.Turtle.name=Turtle
 
-entity.Imp.name=Imp
-entity.Imp.type=%s Imp
-entity.Ogre.name=Ogre
-entity.Ogre.type=%s Ogre
-entity.Giclops.name=Giclops
-entity.Giclops.type=%s Giclops
-entity.Basilisk.name=Basilisk
-entity.Basilisk.type=%s Basilisk
+entity.minestuck.Imp.name=Imp
+entity.minestuck.Imp.type=%s Imp
+entity.minestuck.Ogre.name=Ogre
+entity.minestuck.Ogre.type=%s Ogre
+entity.minestuck.Giclops.name=Giclops
+entity.minestuck.Giclops.type=%s Giclops
+entity.minestuck.Basilisk.name=Basilisk
+entity.minestuck.Basilisk.type=%s Basilisk
 
 grist.format=%s Grist
 grist.Amber=Amber

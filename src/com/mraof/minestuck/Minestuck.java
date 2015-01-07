@@ -479,17 +479,17 @@ public class Minestuck
 		this.registerAndMapEntity(EntityWhiteRook.class, "prospitianRook", 0xffffff, 0xfde500);
 		
 		//register entities with fml
-		EntityRegistry.registerModEntity(EntityDecoy.class, "playerDecoy", currentEntityIdOffset, this, 80, 3, true);
+		EntityRegistry.registerModEntity(EntityDecoy.class, "minestuck.playerDecoy", currentEntityIdOffset, this, 80, 3, true);
 		currentEntityIdOffset++;
-		EntityRegistry.registerModEntity(EntityMetalBoat.class, "metalBoat", currentEntityIdOffset, this, 80, 3, true);
+		EntityRegistry.registerModEntity(EntityMetalBoat.class, "minestuck.metalBoat", currentEntityIdOffset, this, 80, 3, true);
 		currentEntityIdOffset++;
-		EntityRegistry.registerModEntity(EntityGrist.class, "grist", currentEntityIdOffset, this, 512, 1, true);
+		EntityRegistry.registerModEntity(EntityGrist.class, "minestuck.grist", currentEntityIdOffset, this, 512, 1, true);
 		
 		//register Tile Entities
-		GameRegistry.registerTileEntity(TileEntityGatePortal.class, "gatePortal");
-		GameRegistry.registerTileEntity(TileEntityMachine.class, "containerMachine");
-		GameRegistry.registerTileEntity(TileEntityComputer.class, "computerSburb");
-		GameRegistry.registerTileEntity(TileEntityTransportalizer.class, "transportalizer");
+		GameRegistry.registerTileEntity(TileEntityGatePortal.class, "minstuck.gatePortal");
+		GameRegistry.registerTileEntity(TileEntityMachine.class, "minestuck.containerMachine");
+		GameRegistry.registerTileEntity(TileEntityComputer.class, "minestuck.computerSburb");
+		GameRegistry.registerTileEntity(TileEntityTransportalizer.class, "minestuck.transportalizer");
 		//register world generators
 		DimensionManager.registerProviderType(skaiaProviderTypeId, WorldProviderSkaia.class, true);
 		DimensionManager.registerDimension(skaiaDimensionId, skaiaProviderTypeId);
@@ -564,8 +564,8 @@ public class Minestuck
 
 	public void registerAndMapEntity(Class<? extends Entity> entityClass, String name, int eggColor, int eggSpotColor, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates)
 	{
-		EntityList.addMapping(entityClass, name, entityIdStart + currentEntityIdOffset, eggColor, eggSpotColor);
-		EntityRegistry.registerModEntity(entityClass, name, currentEntityIdOffset, this, trackingRange, updateFrequency, sendsVelocityUpdates);
+		EntityList.addMapping(entityClass, "minestuck."+name, entityIdStart + currentEntityIdOffset, eggColor, eggSpotColor);
+		EntityRegistry.registerModEntity(entityClass, "minestuck."+name, currentEntityIdOffset, this, trackingRange, updateFrequency, sendsVelocityUpdates);
 		currentEntityIdOffset++;
 	}
 

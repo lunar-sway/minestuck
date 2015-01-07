@@ -105,7 +105,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	@Override
 	public String getName() 
 	{
-		return StatCollector.translateToLocalFormatted("entity." + underlingName + ".type", type.getDisplayName());
+		return StatCollector.translateToLocalFormatted("entity.minestuck." + underlingName + ".type", type.getDisplayName());
 	}
 	
 	@Override
