@@ -473,16 +473,14 @@ public class Minestuck
 		this.registerAndMapEntity(EntityWhiteBishop.class, "prospitianBishop", 0xffffff, 0xfde500);
 		this.registerAndMapEntity(EntityBlackRook.class, "dersiteRook", 0x000000, 0xc121d9);
 		this.registerAndMapEntity(EntityWhiteRook.class, "prospitianRook", 0xffffff, 0xfde500);
-			//To not register this entity as spawnable using a mob egg.
-//		EntityList.addMapping(EntityDecoy.class, "playerDecoy", entityIdStart + currentEntityIdOffset);
-		EntityRegistry.registerModEntity(EntityDecoy.class, "playerDecoy", currentEntityIdOffset, this, 80, 3, true);
+		EntityRegistry.registerModEntity(EntityDecoy.class, "minestuck.playerDecoy", currentEntityIdOffset, this, 80, 3, true);
 		currentEntityIdOffset++;
 		
 		//register entities with fml
-		EntityRegistry.registerModEntity(EntityGrist.class, "grist", currentEntityIdOffset, this, 512, 1, true);
+		EntityRegistry.registerModEntity(EntityGrist.class, "minestuck.grist", currentEntityIdOffset, this, 512, 1, true);
 		
 		//register Tile Entities
-		GameRegistry.registerTileEntity(TileEntityGatePortal.class, "gatePortal");
+		GameRegistry.registerTileEntity(TileEntityGatePortal.class, "gatePortal");	//Didn't add prefix to these yet because that'd erase the content of the tile entities.
 		GameRegistry.registerTileEntity(TileEntityMachine.class, "containerMachine");
 		GameRegistry.registerTileEntity(TileEntityComputer.class, "computerSburb");
 		GameRegistry.registerTileEntity(TileEntityTransportalizer.class, "transportalizer");
@@ -555,8 +553,8 @@ public class Minestuck
 
 	public void registerAndMapEntity(Class<? extends Entity> entityClass, String name, int eggColor, int eggSpotColor, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates)
 	{
-		EntityList.addMapping(entityClass, name, entityIdStart + currentEntityIdOffset, eggColor, eggSpotColor);
-		EntityRegistry.registerModEntity(entityClass, name, currentEntityIdOffset, this, trackingRange, updateFrequency, sendsVelocityUpdates);
+		EntityList.addMapping(entityClass, "minestuck."+name, entityIdStart + currentEntityIdOffset, eggColor, eggSpotColor);
+		EntityRegistry.registerModEntity(entityClass, "minestuck."+name, currentEntityIdOffset, this, trackingRange, updateFrequency, sendsVelocityUpdates);
 		currentEntityIdOffset++;
 	}
 
