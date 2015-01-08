@@ -53,8 +53,8 @@ public class LandAspectRegistry
 		registerLandAspect(new LandAspectBuckets(), EnumAspect.SPACE);	//buckets -> containers -> space, right?
 		registerLandAspect(new LandAspectFear(), EnumAspect.RAGE);
 		registerLandAspect(new LandAspectCake(), EnumAspect.HEART);
-//		registerLandAspect(new LandAspectBunnies(), EnumAspect.LIFE);
-		
+		registerLandAspect(new LandAspectRabbits(), EnumAspect.LIFE);
+//		registerLandAspect(???, EnumAspect.HOPE);
 		
 		landNames2.put(nullAspect.getPrimaryName(), nullAspect);
 		landNames2.put(frogAspect.getPrimaryName(), frogAspect);

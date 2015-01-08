@@ -1,5 +1,7 @@
 package com.mraof.minestuck.util;
 
+import java.util.EnumSet;
+
 
 public final class TitleHelper {
 	
@@ -29,7 +31,7 @@ public final class TitleHelper {
 	
 	public static Title randomTitle()
 	{
-		return new Title(EnumClass.getRandomClass(null), EnumAspect.getRandomAspect(null));
+		return new Title(EnumClass.getRandomClass(null), EnumAspect.getRandomAspect(EnumSet.of(EnumAspect.HOPE)));
 	}
 	
 }
