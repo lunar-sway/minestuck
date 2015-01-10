@@ -70,7 +70,9 @@ public class ItemBlade extends ItemWeapon
 		itemStack.damageItem(1, attacker);
 		if (bladeType.equals(EnumBladeType.SORD) && Math.random() < .25)
 		{
-			EntityItem sord = new EntityItem(attacker.worldObj, attacker.posX, attacker.posY, attacker.posZ, itemStack);
+			EntityItem sord = new EntityItem(attacker.worldObj, attacker.posX, attacker.posY, attacker.posZ, itemStack.copy());
+			sord.getEntityItem().stackSize = 1;
+			sord.setPickupDelay(40);
 			attacker.worldObj.spawnEntityInWorld(sord);
 			itemStack.stackSize--;
 		}
