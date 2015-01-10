@@ -6,12 +6,11 @@ import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.fml.relauncher.Side;
 
 import com.mraof.minestuck.inventory.ContainerMachine;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.util.Debug;
-
-import cpw.mods.fml.relauncher.Side;
 
 public class GoButtonPacket extends MinestuckPacket {
 

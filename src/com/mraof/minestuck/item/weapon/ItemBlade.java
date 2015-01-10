@@ -3,13 +3,13 @@ package com.mraof.minestuck.item.weapon;
 import com.mraof.minestuck.Minestuck;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemBlade extends ItemWeapon
 {
@@ -70,7 +70,9 @@ public class ItemBlade extends ItemWeapon
 		itemStack.damageItem(1, attacker);
 		if (bladeType.equals(EnumBladeType.SORD) && Math.random() < .25)
 		{
-			EntityItem sord = new EntityItem(attacker.worldObj, attacker.posX, attacker.posY, attacker.posZ, itemStack);
+			EntityItem sord = new EntityItem(attacker.worldObj, attacker.posX, attacker.posY, attacker.posZ, itemStack.copy());
+			sord.getEntityItem().stackSize = 1;
+			sord.setPickupDelay(40);
 			attacker.worldObj.spawnEntityInWorld(sord);
 			itemStack.stackSize--;
 		}
@@ -79,11 +81,11 @@ public class ItemBlade extends ItemWeapon
 	}
 
 	@Override
-	public boolean onBlockDestroyed(ItemStack itemStack, World world, Block par3, int par4, int par5, int par6, EntityLivingBase par7EntityLiving)
+	public boolean onBlockDestroyed(ItemStack stack, World worldIn, Block blockIn, BlockPos pos, EntityLivingBase playerIn)
 	{
-		if (par3.getBlockHardness(world, par4, par5, par6) != 0.0D)
+		if (blockIn.getBlockHardness(worldIn, pos) != 0.0D)
 		{
-			itemStack.damageItem(2, par7EntityLiving);
+			stack.damageItem(2, playerIn);
 		}
 		
 		return true;
@@ -94,36 +96,6 @@ public class ItemBlade extends ItemWeapon
 	public boolean isFull3D()
 	{
 		return true;
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister iconRegister) 
-	{
-		switch(bladeType)
-		{
-		case SORD:
-			itemIcon = iconRegister.registerIcon("minestuck:Sord");
-			break;
-		case NINJA:
-		case KATANA:
-			itemIcon = iconRegister.registerIcon("minestuck:Katana");
-			break;
-		case CALEDSCRATCH:
-			itemIcon = iconRegister.registerIcon("minestuck:Caledscratch");
-			break;
-		case DERINGER:
-			itemIcon = iconRegister.registerIcon("minestuck:RoyalDeringer");
-			break	;
-		case REGISWORD:
-			itemIcon = iconRegister.registerIcon("minestuck:Regisword");
-			break;
-		case SCARLET:
-			itemIcon = iconRegister.registerIcon("minestuck:ScarletRibbitar");
-			break;
-		case DOGG:
-			itemIcon = iconRegister.registerIcon("minestuck:SnoopDoggMachete");
-		}
 	}
 	
 }

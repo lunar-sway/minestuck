@@ -8,7 +8,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
 import net.minecraft.util.IChatComponent;
@@ -48,9 +47,10 @@ public class EntityDecoy extends EntityLiving {
 			markedForDespawn = true;
 	}
 	
-	public EntityDecoy(World world, EntityPlayerMP player) {
+	public EntityDecoy(World world, EntityPlayerMP player)
+	{
 		super(world);
-		this.boundingBox.setBB(player.boundingBox);
+		this.setEntityBoundingBox(player.getEntityBoundingBox());
 		height = player.height;
 		this.player = new DecoyPlayer(world, this);
 		this.posX = player.posX;
@@ -71,7 +71,7 @@ public class EntityDecoy extends EntityLiving {
 		this.getHeldItem();
 		this.gameType = player.theItemInWorldManager.getGameType();
 		this.setHealth(player.getHealth());
-		username = player.getCommandSenderName();
+		username = player.getName();
 		isFlying = player.capabilities.isFlying;
 		player.capabilities.writeCapabilitiesToNBT(this.capabilities);
 		NBTTagCompound nbt = new NBTTagCompound();
@@ -108,8 +108,8 @@ public class EntityDecoy extends EntityLiving {
 	}
 	
 	public ResourceLocation getLocationSkin() {
-		if(locationSkin == null)
-			return AbstractClientPlayer.locationStevePng;
+//		if(locationSkin == null)
+//			return AbstractClientPlayer.locationStevePng;
 		return locationSkin;
 	}
 	
@@ -168,7 +168,7 @@ public class EntityDecoy extends EntityLiving {
 	}
 	
 	@Override
-	public String getCommandSenderName() 
+	public String getName() 
 	{
 		return username != null ? username : "DECOY";
 	}
@@ -200,7 +200,8 @@ public class EntityDecoy extends EntityLiving {
 	}
 	
 	@Override
-	public ItemStack[] getLastActiveItems() {
+	public ItemStack[] getInventory()
+	{
 		return inventory.armorInventory;
 	}
 	
@@ -220,17 +221,23 @@ public class EntityDecoy extends EntityLiving {
 		}
 		
 		@Override
-		public boolean canCommandSenderUseCommand(int i, String s) {return false;}
+		public boolean canUseCommand(int i, String s)
+		{return false;}
 		
 		@Override
-		public void addChatMessage(IChatComponent var1) {}
+		public void addChatMessage(IChatComponent var1)
+		{}
 		
 		@Override
-		public ChunkCoordinates getPlayerCoordinates() {return null;}
-		
-		@Override
-		public void heal(float par1) {
+		public void heal(float par1)
+		{
 			decoy.heal(par1);
+		}
+		
+		@Override
+		public boolean isSpectator()
+		{
+			return false;
 		}
 		
 	}

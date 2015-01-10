@@ -7,6 +7,7 @@ import java.util.Random;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraftforge.common.DimensionManager;
 
 import com.mraof.minestuck.Minestuck;
@@ -130,6 +131,7 @@ public class LandHelper {
 			player.getEntityData().setTag(EntityPlayer.PERSISTED_NBT_TAG, new NBTTagCompound());
 		player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("LandId", newLandId);
 		MinestuckSaveHandler.lands.add((byte) newLandId);
+		MinestuckSaveHandler.spawnpoints.put((byte) newLandId, new BlockPos(player.posX, player.posY, player.posZ));
 		MinestuckPlayerTracker.updateLands();
 		
 		return newLandId;

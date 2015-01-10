@@ -2,17 +2,18 @@ package com.mraof.minestuck.network;
 
 import io.netty.buffer.ByteBuf;
 
+import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.fml.relauncher.Side;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
-
-import cpw.mods.fml.relauncher.Side;
 
 public class LandRegisterPacket extends MinestuckPacket
 {
@@ -37,17 +38,20 @@ public class LandRegisterPacket extends MinestuckPacket
 
 		landDimensions = new byte[data.readableBytes()];
 		data.readBytes(landDimensions);
+		Debug.print("Consumed land packet with bytes "+landDimensions.length);
 		return this;
 	}
 
 	@Override
 	public void execute(EntityPlayer player) 
 	{
-		if(MinecraftServer.getServer() != null && MinecraftServer.getServer().isServerRunning())
-			return;	//Nope, no editing the server's land list
-
+		
+		for(byte dimensionId : MinestuckSaveHandler.lands)
+			if(!containsId(dimensionId) && DimensionManager.isDimensionRegistered(dimensionId))
+				DimensionManager.unregisterDimension(dimensionId);
+		
 		MinestuckSaveHandler.lands.clear();
-
+		
 		for(byte dimensionId : landDimensions)
 		{
 			MinestuckSaveHandler.lands.add((byte)dimensionId);
@@ -58,7 +62,15 @@ public class LandRegisterPacket extends MinestuckPacket
 			}
 		}
 	}
-
+	
+	private boolean containsId(byte id)
+	{
+		for(byte b : landDimensions)
+			if(b == id)
+				return true;
+		return false;
+	}
+	
 	@Override
 	public EnumSet<Side> getSenderSide() {
 		return EnumSet.of(Side.SERVER);

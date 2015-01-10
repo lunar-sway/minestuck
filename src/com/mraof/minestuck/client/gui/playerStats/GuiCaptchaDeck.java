@@ -2,6 +2,8 @@ package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalouge.ContainerCaptchaDeck;
+import com.mraof.minestuck.inventory.captchalouge.Modus;
+import com.mraof.minestuck.item.ItemModus;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
@@ -10,14 +12,18 @@ import com.mraof.minestuck.util.Debug;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiYesNo;
+import net.minecraft.client.gui.GuiYesNoCallback;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C0DPacketCloseWindow;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.fml.client.config.GuiButtonExt;
 
-public class GuiCaptchaDeck extends GuiPlayerStatsContainer
+public class GuiCaptchaDeck extends GuiPlayerStatsContainer implements GuiYesNoCallback
 {
 	
 	private static final ResourceLocation guiCaptchaDeck = new ResourceLocation("minestuck", "textures/gui/CaptchaDeck.png");
@@ -37,8 +43,8 @@ public class GuiCaptchaDeck extends GuiPlayerStatsContainer
 	public void initGui()
 	{
 		super.initGui();
-		modusButton = new GuiButton(1, xOffset + 102, yOffset + 31, 50, 18, StatCollector.translateToLocal("gui.useItem"));
-		sylladexMap = new GuiButton(1, xOffset + 6, yOffset + 31, 60, 18, StatCollector.translateToLocal("gui.sylladex"));
+		modusButton = new GuiButtonExt(1, xOffset + 102, yOffset + 31, 50, 18, StatCollector.translateToLocal("gui.useItem"));
+		sylladexMap = new GuiButtonExt(1, xOffset + 6, yOffset + 31, 60, 18, StatCollector.translateToLocal("gui.sylladex"));
 		buttonList.add(modusButton);
 		buttonList.add(sylladexMap);
 		sylladexMap.enabled = CaptchaDeckHandler.clientSideModus != null;
@@ -66,7 +72,7 @@ public class GuiCaptchaDeck extends GuiPlayerStatsContainer
 		drawTabTooltip(xcor, ycor);
 		
 		String message = StatCollector.translateToLocal("gui.captchaDeck.name");
-		mc.fontRenderer.drawString(message, (this.width / 2) - mc.fontRenderer.getStringWidth(message) / 2 - guiLeft, yOffset + 12 - guiTop, 0x404040);
+		mc.fontRendererObj.drawString(message, (this.width / 2) - mc.fontRendererObj.getStringWidth(message) / 2 - guiLeft, yOffset + 12 - guiTop, 0x404040);
 		
 	}
 	
@@ -75,6 +81,25 @@ public class GuiCaptchaDeck extends GuiPlayerStatsContainer
 	{
 		if(button == this.modusButton && container.inventory.getStackInSlot(0) != null)
 		{
+			ItemStack stack = container.inventory.getStackInSlot(0);
+			if(stack.getItem() instanceof ItemModus)
+			{
+				Modus newModus = CaptchaDeckHandler.ModusType.values()[stack.getItemDamage()].createInstance();
+				if(!newModus.canSwitchFrom(CaptchaDeckHandler.ModusType.getType(CaptchaDeckHandler.clientSideModus)))
+				{
+					mc.currentScreen = new GuiYesNo(this, StatCollector.translateToLocal("gui.emptySylladex1"), StatCollector.translateToLocal("gui.emptySylladex2"), 0)
+					{
+						@Override
+						public void onGuiClosed()
+						{
+							mc.currentScreen = (GuiScreen) parentScreen;
+							mc.thePlayer.closeScreen();
+						}
+					};
+					mc.currentScreen.setWorldAndResolution(mc, width, height);
+					return;
+				}
+			}
 			MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(Type.CAPTCHA, CaptchaDeckPacket.MODUS));
 		}
 		else if(button == this.sylladexMap && CaptchaDeckHandler.clientSideModus != null)
@@ -83,6 +108,14 @@ public class GuiCaptchaDeck extends GuiPlayerStatsContainer
 			mc.thePlayer.inventory.setItemStack((ItemStack)null);
 			mc.displayGuiScreen(CaptchaDeckHandler.clientSideModus.getGuiHandler());
 		}
+	}
+	
+	@Override
+	public void confirmClicked(boolean result, int id)
+	{
+		if(result && container.inventory.getStackInSlot(0) != null)
+			MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(Type.CAPTCHA, CaptchaDeckPacket.MODUS));
+		mc.currentScreen = this;
 	}
 	
 }

@@ -1,7 +1,6 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
-import org.lwjgl.opengl.GL11;
-
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiEcheladder extends GuiPlayerStats
@@ -25,7 +24,7 @@ public class GuiEcheladder extends GuiPlayerStats
 		super.drawScreen(xcor, ycor, par3);
 		this.drawDefaultBackground();
 		
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		
 		drawTabs();
 		
@@ -38,9 +37,9 @@ public class GuiEcheladder extends GuiPlayerStats
 			drawTexturedModalRect(xOffset+90,yOffset+38-index+(i*14),0,212,146,14);
 		for(int i = 0; i < rows; i++) {
 			String s = "MethodOfScrollIndexAndI";
-			mc.fontRenderer.drawString(s, xOffset+ladderXOffset - mc.fontRenderer.getStringWidth(s) / 2, yOffset+40-index+(i*14), 0xFFFFFF);
+			mc.fontRendererObj.drawString(s, xOffset+ladderXOffset - mc.fontRendererObj.getStringWidth(s) / 2, yOffset+40-index+(i*14), 0xFFFFFF);
 		}
-		GL11.glColor3f(1,1,1);
+		GlStateManager.color(1,1,1);
 		
 		this.mc.getTextureManager().bindTexture(guiEcheladder);
 		

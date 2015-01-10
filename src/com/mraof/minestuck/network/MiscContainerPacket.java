@@ -16,7 +16,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class MiscContainerPacket extends MinestuckPacket
 {
@@ -71,7 +71,7 @@ public class MiscContainerPacket extends MinestuckPacket
 			int windowId = playerMP.currentWindowId;
 			MinestuckPacket packet = MinestuckPacket.makePacket(Type.CONTAINER, windowId);
 			MinestuckChannelHandler.sendToPlayer(packet, playerMP);
-			playerMP.openContainer = ContainerHandler.getPlayerStatsContainer(playerMP, i, ServerEditHandler.getData(playerMP.getCommandSenderName()) != null);
+			playerMP.openContainer = ContainerHandler.getPlayerStatsContainer(playerMP, i, ServerEditHandler.getData(playerMP.getName()) != null);
 			playerMP.openContainer.windowId = windowId;
 			playerMP.addSelfToInternalCraftingInventory();	//Must be placed after setting the window id!!
 		}

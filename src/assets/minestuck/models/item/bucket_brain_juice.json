@@ -1,0 +1,7 @@
+{
+    "parent": "minestuck:item/bucket_blood",
+    "textures": {
+        "layer0": "minestuck:items/BucketBrainJuice"
+    }
+}
+

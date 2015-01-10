@@ -44,18 +44,17 @@ public class StructureCastlePieces
 			return null;
 		}
 	}
-
-    public static void func_143048_a()
-    {
-        MapGenStructureIO.func_143031_a(ComponentCastleStartPiece.class, "SkaiaCastleStart");
-        MapGenStructureIO.func_143031_a(ComponentCastleLibraryPiece.class, "SkaiaCastleLibrary");
-        MapGenStructureIO.func_143031_a(ComponentCastleRoomPiece.class, "SkaiaCastleRoom");
-        MapGenStructureIO.func_143031_a(ComponentCastleSolidPiece.class, "SkaiaCastleSolid");
-        MapGenStructureIO.func_143031_a(ComponentCastleStaircasePiece.class, "SkaiaCastleStaircase");
-        MapGenStructureIO.func_143031_a(ComponentCastleWallPiece.class, "SkaiaCastleWall");
-        MapGenStructureIO.func_143031_a(ComponentCastlePiece.class, "SkaiaCastleMain");
-        MapGenStructureIO.func_143031_a(ComponentCastleStartPiece.class, "SkaiaCastleStart");
-    }
-
-
+	
+	public static void registerComponents()
+	{
+		MapGenStructureIO.registerStructureComponent(ComponentCastleStartPiece.class, "SkaiaCastleStart");
+		MapGenStructureIO.registerStructureComponent(ComponentCastleLibraryPiece.class, "SkaiaCastleLibrary");
+		MapGenStructureIO.registerStructureComponent(ComponentCastleRoomPiece.class, "SkaiaCastleRoom");
+		MapGenStructureIO.registerStructureComponent(ComponentCastleSolidPiece.class, "SkaiaCastleSolid");
+		MapGenStructureIO.registerStructureComponent(ComponentCastleStaircasePiece.class, "SkaiaCastleStaircase");
+		MapGenStructureIO.registerStructureComponent(ComponentCastleWallPiece.class, "SkaiaCastleWall");
+		MapGenStructureIO.registerStructureComponent(ComponentCastlePiece.class, "SkaiaCastleMain");
+		MapGenStructureIO.registerStructureComponent(ComponentCastleStartPiece.class, "SkaiaCastleStart");
+	}
+	
 }

@@ -1,0 +1,7 @@
+{
+    "parent": "minestuck:item/disk_client",
+    "textures": {
+        "layer0": "minestuck:items/ServerDisk"
+    }
+}
+

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
@@ -76,10 +77,20 @@ public class ComponentCastleStartPiece extends ComponentCastlePiece
             this.fillWithAlternatingBlocks(world, structureBoundingBox, 0, 0, 0, 7 ,6, 7, Minestuck.chessTile, chessTileMetadata,  Minestuck.chessTile, chessTileMetadata1, false);
             this.fillWithAlternatingBlocks(world, structureBoundingBox, 0, 0, 0, 7 ,7, 0, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
             this.fillWithAlternatingBlocks(world, structureBoundingBox, 0, 0, 7, 7 ,7, 7, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
-            this.fillWithBlocks(world, structureBoundingBox, 2, 1, 0, 5, 5, 7, Blocks.air, Blocks.air, false);
+//            this.fillWithBlocks(world, structureBoundingBox, 2, 1, 0, 5, 5, 7, Blocks.air, Blocks.air, false);
 
             return true;
         }
     }
+	@Override
+	protected void writeStructureToNBT(NBTTagCompound p_143012_1_) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	protected void readStructureFromNBT(NBTTagCompound p_143011_1_) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

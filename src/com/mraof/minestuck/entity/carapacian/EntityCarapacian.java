@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import com.mraof.minestuck.entity.EntityListFilter;
 import com.mraof.minestuck.entity.EntityMinestuck;
 import com.mraof.minestuck.entity.ai.EntityAIHurtByTargetAllied;
+import com.mraof.minestuck.entity.ai.EntityAIMoveToBattle;
 import com.mraof.minestuck.entity.ai.EntityAINearestAttackableTargetWithHeight;
 
 public abstract class EntityCarapacian extends EntityMinestuck
@@ -49,6 +50,7 @@ public abstract class EntityCarapacian extends EntityMinestuck
 		this.setHealth(this.getMaximumHealth());
 
 		this.tasks.addTask(1, new EntityAISwimming(this));
+		this.tasks.addTask(4, new EntityAIMoveToBattle(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTargetAllied(this, this.getKingdom() == EnumEntityKingdom.PROSPITIAN ? prospitianSelector : dersiteSelector));
 		this.targetTasks.addTask(2, this.entityAINearestAttackableTargetWithHeight());
 		this.tasks.addTask(5, new EntityAIWander(this, this.getWanderSpeed()));
@@ -64,7 +66,7 @@ public abstract class EntityCarapacian extends EntityMinestuck
 
 	protected abstract void setCombatTask();
 
-	protected abstract float getWanderSpeed();
+	public abstract float getWanderSpeed();
 
 	public void setEnemies()
 	{
@@ -115,12 +117,7 @@ public abstract class EntityCarapacian extends EntityMinestuck
 
 		return !this.allyClasses.contains(par1Class);
 	}
-
-	@Override
-	protected boolean isAIEnabled()
-	{
-		return true;
-	}
+	
 	EntityAINearestAttackableTargetWithHeight entityAINearestAttackableTargetWithHeight()
 	{
 		return new EntityAINearestAttackableTargetWithHeight(this, EntityLivingBase.class, 256.0F, 0, true, false, attackEntitySelector);

@@ -10,11 +10,11 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mraof.minestuck.client.gui.GuiComputer;
 import com.mraof.minestuck.util.ComputerProgram;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityComputer extends TileEntity
 {
@@ -39,7 +39,7 @@ public class TileEntityComputer extends TileEntity
 		if (par1NBTTagCompound.getCompoundTag("programs") != null) 
 		{
 			NBTTagCompound programs = par1NBTTagCompound.getCompoundTag("programs");
-			for (Object name : programs.func_150296_c()) 
+			for (Object name : programs.getKeySet()) 
 			{
 				installedPrograms.put(programs.getInteger((String)name), true);
 			}
@@ -98,14 +98,14 @@ public class TileEntityComputer extends TileEntity
 	{
 		NBTTagCompound tagCompound = new NBTTagCompound();
 		this.writeToNBT(tagCompound);
-		return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 2, tagCompound);
+		return new S35PacketUpdateTileEntity(this.pos, 2, tagCompound);
 	}
 
 	@Override
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) 
 	{
 		//Debug.print("Data packet gotten "+net.getClass());
-		this.readFromNBT(pkt.func_148857_g());
+		this.readFromNBT(pkt.getNbtCompound());
 	}
 
 	public boolean hasProgram(int id) 
@@ -139,10 +139,5 @@ public class TileEntityComputer extends TileEntity
 			this.getData(1).setString("connectedClient", player);
 		}
 	}
-
-	@Override
-	public boolean canUpdate()
-	{
-		return false;
-	}
+	
 }

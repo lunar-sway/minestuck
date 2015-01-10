@@ -2,6 +2,7 @@ package com.mraof.minestuck.block;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -9,15 +10,22 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiHandler;
@@ -28,119 +36,39 @@ import com.mraof.minestuck.util.ComputerProgram;
 public class BlockComputerOn extends Block implements ITileEntityProvider
 {
 	
-	private IIcon frontIcon;
-	private IIcon sideIcon;
-	private IIcon bsodIcon;
-
+	public static final PropertyBool BSOD = PropertyBool.create("bsod");
+	
 	public BlockComputerOn()
 	{
 		super(Material.rock);
 		
-		setBlockName("sburbComputer");
+		setDefaultState(getDefaultState().withProperty(BSOD, false));
+		setUnlocalizedName("sburbComputer");
 		setHardness(4.0F);
 	}
 	
 	@Override
-	public IIcon getIcon(int side, int meta)
+	protected BlockState createBlockState()
 	{
-		int front = meta / 6;	//The texture displayed at front
-		int rotation = meta == 0 ? 3 : meta % 6;	//Rotation of the computer
-		
-		if(side != rotation)
-			return this.sideIcon;
-		else 
-		{
-			switch(front) 
-			{
-			case 1:
-				return this.bsodIcon;
-			default:
-				return this.frontIcon;
-			}
-		}
+		return new BlockState(this, BlockComputerOff.DIRECTION, BSOD);
 	}
-
-	private void setDefaultDirection(World par1World, int par2, int par3, int par4)
-	{
-		if (!par1World.isRemote)
-		{
-			Block block = par1World.getBlock(par2, par3, par4 - 1);
-			Block block1 = par1World.getBlock(par2, par3, par4 + 1);
-			Block block2 = par1World.getBlock(par2 - 1, par3, par4);
-			Block block3 = par1World.getBlock(par2 + 1, par3, par4);
-			byte b0 = 3;
-
-			if (block.func_149730_j() && !block1.func_149730_j())
-			{
-				b0 = 3;
-			}
-
-			if (block1.func_149730_j() && !block.func_149730_j())
-			{
-				b0 = 2;
-			}
-
-			if (block2.func_149730_j() && !block3.func_149730_j())
-			{
-				b0 = 5;
-			}
-
-			if (block3.func_149730_j() && !block2.func_149730_j())
-			{
-				b0 = 4;
-			}
-
-			par1World.setBlockMetadataWithNotify(par2, par3, par4, b0, 2);
-		}
-	}
-
+	
 	@Override
-	public void registerBlockIcons(IIconRegister par1IconRegister)
+	public int getMetaFromState(IBlockState state)
 	{
-		this.frontIcon = par1IconRegister.registerIcon("minestuck:ComputerFront");
-		this.sideIcon =  par1IconRegister.registerIcon("minestuck:PhernaliaFrame");
-		this.bsodIcon = par1IconRegister.registerIcon("minestuck:BsodFront");
+		return ((Boolean) state.getValue(BSOD) ? 1 : 0) + Minestuck.blockComputerOff.getMetaFromState(state)*2;	//I can't see why this wouldn't work
 	}
-
+	
 	@Override
-	public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLivingBase, ItemStack par6ItemStack)
+	public IBlockState getStateFromMeta(int meta)
 	{
-		int l = MathHelper.floor_double((double)(par5EntityLivingBase.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-
-		if (l == 0)
-		{
-			par1World.setBlockMetadataWithNotify(par2, par3, par4, 2, 2);
-		}
-
-		if (l == 1)
-		{
-			par1World.setBlockMetadataWithNotify(par2, par3, par4, 5, 2);
-		}
-
-		if (l == 2)
-		{
-			par1World.setBlockMetadataWithNotify(par2, par3, par4, 3, 2);
-		}
-
-		if (l == 3)
-		{
-			par1World.setBlockMetadataWithNotify(par2, par3, par4, 4, 2);
-		}
+		return getDefaultState().withProperty(BSOD, meta % 2 == 1).withProperty(BlockComputerOff.DIRECTION, EnumFacing.values()[(meta/2) + 2]);
 	}
-
+	
 	@Override
-	public void onBlockAdded(World par1World, int par2, int par3, int par4)
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
-
-		super.onBlockAdded(par1World, par2, par3, par4);
-		if(par1World.getBlockMetadata(par2, par3, par4) == 0)
-			this.setDefaultDirection(par1World, par2, par3, par4);
-	}
-
-	@Override
-	public boolean onBlockActivated(World world, int x,int y,int z, EntityPlayer player,int par6, float par7, float par8, float par9)
-	{
-		TileEntityComputer tileEntity = (TileEntityComputer) world.getTileEntity(x, y, z);
+		TileEntityComputer tileEntity = (TileEntityComputer) world.getTileEntity(pos);
 		ItemStack item = player.getCurrentEquippedItem();
 
 		if (tileEntity == null || player.isSneaking())
@@ -157,45 +85,45 @@ public class BlockComputerOn extends Block implements ITileEntityProvider
 			if(id == -1) 
 			{
 				tileEntity.closeAll();
-				world.setBlockMetadataWithNotify(x, y, z, (world.getBlockMetadata(x, y, z) % 6) + 6, 2);
+				world.setBlockState(pos, state.withProperty(BSOD, true), 2);
 			}
 			tileEntity.installedPrograms.put(id, true);
-			world.markBlockForUpdate(x, y, z);
+			world.markBlockForUpdate(pos);
 			return true;
 		}
 
 		if(world.isRemote && SkaiaClient.requestData(tileEntity))
-			player.openGui(Minestuck.instance, GuiHandler.GuiId.COMPUTER.ordinal(), world, x, y, z);
+			player.openGui(Minestuck.instance, GuiHandler.GuiId.COMPUTER.ordinal(), world, pos.getX(), pos.getY(), pos.getZ());
 
 		return true;
 	}
-
+	
 	@Override
 	public TileEntity createNewTileEntity(World var1, int var2)
 	{
 		return new TileEntityComputer();
 	}
-
+	
 	@Override
-	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) 
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
 	{
 		ArrayList<ItemStack> list = new ArrayList<ItemStack>();
 		list.add(new ItemStack(Minestuck.blockComputerOff));
-
+		
 		return list;
 	}
-
+	
 	@Override
-	public void breakBlock(World world, int x, int y, int z, Block block, int metaData)
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
-		dropItems(world, x, y, z);
-		super.breakBlock(world, x, y, z, block, metaData);
+		dropItems(worldIn, pos.getX(), pos.getY(), pos.getZ());
+		super.breakBlock(worldIn, pos, state);
 	}
-
+	
 	private void dropItems(World world, int x, int y, int z)
 	{
 		Random rand = new Random();
-		TileEntityComputer te = (TileEntityComputer) world.getTileEntity(x, y, z);
+		TileEntityComputer te = (TileEntityComputer) world.getTileEntity(new BlockPos(x, y, z));
 		if (te == null) 
 		{
 			return;
@@ -221,5 +149,12 @@ public class BlockComputerOn extends Block implements ITileEntityProvider
 			world.spawnEntityInWorld(entityItem);
 		}
 	}
-
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public Item getItem(World worldIn, BlockPos pos)
+	{
+		return Item.getItemFromBlock(Minestuck.blockComputerOff);
+	}
+	
 }

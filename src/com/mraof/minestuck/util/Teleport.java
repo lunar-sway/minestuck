@@ -23,7 +23,7 @@ public class Teleport
 			WorldServer worldserver = par1EntityPlayerMP.mcServer.worldServerForDimension(par1EntityPlayerMP.dimension);
 			par1EntityPlayerMP.dimension = destinationDimension;
 			WorldServer worldserver1 = par1EntityPlayerMP.mcServer.worldServerForDimension(par1EntityPlayerMP.dimension);
-			S07PacketRespawn respawnPacket = new S07PacketRespawn(par1EntityPlayerMP.dimension, par1EntityPlayerMP.worldObj.difficultySetting, worldserver1.getWorldInfo().getTerrainType(), par1EntityPlayerMP.theItemInWorldManager.getGameType());
+			S07PacketRespawn respawnPacket = new S07PacketRespawn(par1EntityPlayerMP.dimension, par1EntityPlayerMP.worldObj.getDifficulty(), worldserver1.getWorldInfo().getTerrainType(), par1EntityPlayerMP.theItemInWorldManager.getGameType());
 			par1EntityPlayerMP.playerNetServerHandler.sendPacket(respawnPacket);			
 
 			worldserver.removePlayerEntityDangerously(par1EntityPlayerMP);
@@ -62,7 +62,7 @@ public class Teleport
 
 			if (newEntity != null)
 			{
-				newEntity.copyDataFrom(entity, true);
+				newEntity.copyDataFromOld(entity);
 				worldserver1.spawnEntityInWorld(newEntity);
 			}
 			entity.isDead = true;

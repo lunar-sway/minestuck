@@ -20,7 +20,7 @@ public abstract class ComponentCastlePiece extends StructureComponent
 		super(par1);
 //		this.boundingBox = new StructureBoundingBox(0, 0, 0, 256, 7, 256);
 		this.startPiece = startPiece;
-		this.coordBaseMode = 0;
+//		this.coordBaseMode = 0;
 		this.direction = 0;
 	}
 
@@ -54,11 +54,11 @@ public abstract class ComponentCastlePiece extends StructureComponent
 		{
 			for (int var6 = this.boundingBox.minX; var6 <= this.boundingBox.maxX; ++var6)
 			{
-				if (par2StructureBoundingBox.isVecInside(var6, 64, var5))
-				{
-					var3 += par1World.getTopSolidOrLiquidBlock(var6, var5);
-					++var4;
-				}
+//				if (par2StructureBoundingBox.isVecInside(var6, 64, var5))
+//				{
+//					var3 += par1World.getTopSolidOrLiquidBlock(var6, var5);
+//					++var4;
+//				}
 			}
 		}
 		
@@ -84,11 +84,11 @@ public abstract class ComponentCastlePiece extends StructureComponent
 					if(((x + y + z) % 2 == 0) ^ b)
 					{
 //						Debug.print("Placing block at " + x + " " + y + " " + z + " " + blockID + " " + metadata1);
-						this.placeBlockAtCurrentPosition(world, block1, metadata1, x, y, z, structureboundingbox);
+//						this.placeBlockAtCurrentPosition(world, block1, metadata1, x, y, z, structureboundingbox);
 					}
 					else
 					{
-						this.placeBlockAtCurrentPosition(world, block2, metadata2, x, y, z, structureboundingbox);
+//						this.placeBlockAtCurrentPosition(world, block2, metadata2, x, y, z, structureboundingbox);
 //						Debug.print("Placing block at " + x + " " + y + " " + z + " " + blockID2 + " " + metadata2);
 					}
 				}
@@ -100,13 +100,13 @@ public abstract class ComponentCastlePiece extends StructureComponent
 		return this.getAverageGroundLevel(world, this.boundingBox);
 	}
 	//No idea what these do
-	@Override
-	protected void func_143012_a(NBTTagCompound nbttagcompound) 
-	{
-	}
-	@Override
-	protected void func_143011_b(NBTTagCompound nbttagcompound) 
-	{
-	}
+//	@Override
+//	protected void func_143012_a(NBTTagCompound nbttagcompound) 
+//	{
+//	}
+//	@Override
+//	protected void func_143011_b(NBTTagCompound nbttagcompound) 
+//	{
+//	}
 
 }

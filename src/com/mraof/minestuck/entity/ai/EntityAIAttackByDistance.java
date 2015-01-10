@@ -23,7 +23,7 @@ public class EntityAIAttackByDistance extends EntityAIBase
 	 */
 	private int rangedAttackTime;
 	private float entityMoveSpeed;
-	private int field_75318_f;
+	private int ticksSeeingTarget;
 	private int field_96561_g;
 
 	/**
@@ -41,7 +41,7 @@ public class EntityAIAttackByDistance extends EntityAIBase
 	public EntityAIAttackByDistance(IRangedAttackMob par1IRangedAttackMob, float par2, int par3, int par4, float par5)
 	{
 		this.rangedAttackTime = -1;
-		this.field_75318_f = 0;
+		this.ticksSeeingTarget = 0;
 
 		if (!(par1IRangedAttackMob instanceof EntityLiving))
 		{
@@ -86,7 +86,6 @@ public class EntityAIAttackByDistance extends EntityAIBase
 	 */
 	public boolean continueExecuting()
 	{
-//		EntityLivingBase entityliving = this.attacker.getAttackTarget();
 		return this.shouldExecute() || !this.entityHost.getNavigator().noPath();
 	}
 
@@ -96,7 +95,7 @@ public class EntityAIAttackByDistance extends EntityAIBase
 	public void resetTask()
 	{
 		this.attackTarget = null;
-		this.field_75318_f = 0;
+		this.ticksSeeingTarget = 0;
 		this.rangedAttackTime = -1;
 	}
 
@@ -105,19 +104,19 @@ public class EntityAIAttackByDistance extends EntityAIBase
 	 */
 	public void updateTask()
 	{
-		double d0 = this.entityHost.getDistanceSq(this.attackTarget.posX, this.attackTarget.boundingBox.minY, this.attackTarget.posZ);
+		double d0 = this.entityHost.getDistanceSq(this.attackTarget.posX, this.attackTarget.getEntityBoundingBox().minY, this.attackTarget.posZ);
 		boolean flag = this.entityHost.getEntitySenses().canSee(this.attackTarget);
 
 		if (flag)
 		{
-			++this.field_75318_f;
+			++this.ticksSeeingTarget;
 		}
 		else
 		{
-			this.field_75318_f = 0;
+			this.ticksSeeingTarget = 0;
 		}
 
-		if (d0 <= (double)this.field_82642_h && this.field_75318_f >= 20)
+		if (d0 <= (double)this.field_82642_h && this.ticksSeeingTarget >= 20)
 		{
 			this.entityHost.getNavigator().clearPathEntity();
 		}
@@ -163,7 +162,7 @@ public class EntityAIAttackByDistance extends EntityAIBase
 		else
 		{
 			this.rangedAttackTime = Math.max(this.rangedAttackTime - 1, 0);
-			if (this.attacker.getDistanceSq(this.attackTarget.posX, this.attackTarget.boundingBox.minY, this.attackTarget.posZ) <= d0)
+			if (this.attacker.getDistanceSq(this.attackTarget.posX, this.attackTarget.getEntityBoundingBox().minY, this.attackTarget.posZ) <= d0)
 			{
 				if (this.rangedAttackTime <= 0)
 				{

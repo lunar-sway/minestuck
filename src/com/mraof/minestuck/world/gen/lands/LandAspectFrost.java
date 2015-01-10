@@ -4,23 +4,24 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Vec3;
 
 public class LandAspectFrost extends LandAspect 
 {
-	BlockWithMetadata[] surfaceBlocks = {new BlockWithMetadata(Blocks.grass)};
-	private BlockWithMetadata[] upperBlocks = {new BlockWithMetadata(Blocks.stone)};
-	static Vec3 skyColor = Vec3.createVectorHelper(0.45D, 0.5D, 0.98D);
+	IBlockState[] surfaceBlocks = {Blocks.grass.getDefaultState()};
+	private IBlockState[] upperBlocks = {Blocks.stone.getDefaultState()};
+	static Vec3 skyColor = new Vec3(0.45D, 0.5D, 0.98D);
 
 	@Override
-	public BlockWithMetadata[] getSurfaceBlocks() 
+	public IBlockState[] getSurfaceBlocks() 
 	{
 		return surfaceBlocks;
 	}
 
 	@Override
-	public BlockWithMetadata[] getUpperBlocks() 
+	public IBlockState[] getUpperBlocks() 
 	{
 		return upperBlocks ;
 	}
@@ -55,8 +56,8 @@ public class LandAspectFrost extends LandAspect
 	@Override
 	public ArrayList<ILandDecorator> getDecorators() {
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
-		list.add(new DecoratorVein(Blocks.dirt, 10, 32));
-		list.add(new DecoratorVein(Blocks.ice, 5, 8));
+		list.add(new DecoratorVein(Blocks.dirt.getDefaultState(), 10, 32));
+		list.add(new DecoratorVein(Blocks.ice.getDefaultState(), 5, 8));
 		return list;
 	}
 

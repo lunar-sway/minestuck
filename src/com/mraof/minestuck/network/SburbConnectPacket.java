@@ -5,13 +5,12 @@ import io.netty.buffer.ByteBuf;
 import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.relauncher.Side;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.skaianet.ComputerData;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-
-import cpw.mods.fml.relauncher.Side;
 
 public class SburbConnectPacket extends MinestuckPacket {
 
@@ -51,7 +50,7 @@ public class SburbConnectPacket extends MinestuckPacket {
 
 	@Override
 	public void execute(EntityPlayer player) {
-		if(!Minestuck.privateComputers || ((EntityPlayer)player).getCommandSenderName().equals(this.player) && ServerEditHandler.getData(((EntityPlayer)player).getCommandSenderName()) == null)
+		if(!Minestuck.privateComputers || ((EntityPlayer)player).getName().equals(this.player) && ServerEditHandler.getData(((EntityPlayer)player).getName()) == null)
 			SkaianetHandler.requestConnection(this.player, otherPlayer, isClient);
 	}
 

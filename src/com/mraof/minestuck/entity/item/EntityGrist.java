@@ -1,31 +1,30 @@
 package com.mraof.minestuck.entity.item;
 
 import io.netty.buffer.ByteBuf;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.UsernameHandler;
 
-import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 {
-	//public static final String[] gristTypes = {"Amber", "Amethyst", "Artifact", "Build", "Caulk", "Chalk", "Cobalt", "Diamond", "Garnet", "Gold", "Iodine", "Marble", "Mercury", "Quartz", "Ruby", "Rust", "Shale", "Sulfur", "Tar", "Uranium", "Zillium"};
 	public int cycle;
 
 	public int gristAge = 0;
@@ -44,13 +43,12 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		super(world);
 		this.gristValue = gristData.getAmount();
 		this.setSize(this.getSizeByValue(), 0.5F);
-		this.yOffset = this.height / 2.0F;
+//		this.yOffset = this.height / 2.0F;
 		this.setPosition(x, y, z);
 		this.rotationYaw = (float)(Math.random() * 360.0D);
-		this.motionX = (double)((float)(world.rand.nextGaussian() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
-		//Debug.print(motionX);
-		this.motionY = (double)((float)(world.rand.nextGaussian() * 0.2D) * 2.0F);
-		this.motionZ = (double)((float)(world.rand.nextGaussian() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
+		this.motionX = (double)((float)(world.rand.nextGaussian() * 0.20000000298023224D - 0.10000000149011612D));
+		this.motionY = (double)((float)(world.rand.nextGaussian() * 0.2D));
+		this.motionZ = (double)((float)(world.rand.nextGaussian() * 0.20000000298023224D - 0.10000000149011612D));
 		this.isImmuneToFire = true;
 
 		this.gristType = gristData.getType().getName();
@@ -102,7 +100,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		this.prevPosZ = this.posZ;
 		this.motionY -= 0.029999999329447746D;
 
-		if (this.worldObj.getBlock(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ)).getMaterial() == Material.lava)
+		if (this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ))).getBlock().getMaterial() == Material.lava)
 		{
 			this.motionY = 0.20000000298023224D;
 			this.motionX = (double)((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F);
@@ -110,7 +108,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 			this.playSound("random.fizz", 0.4F, 2.0F + this.rand.nextFloat() * 0.4F);
 		}
 
-		this.func_145771_j(this.posX, (this.boundingBox.minY + this.boundingBox.maxY) / 2.0D, this.posZ);
+		//this.setPosition(this.posX, (this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxY) / 2.0D, this.posZ);
 		double d0 = this.getSizeByValue() * 2.0D;
 
 		if (this.targetCycle < this.cycle - 20 + this.getEntityId() % 100) //Why should I care about the entityId
@@ -141,15 +139,12 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 
 		this.moveEntity(this.motionX, this.motionY, this.motionZ);
 		float f = 0.98F;
-
-		if (this.onGround)
+		
+		if(this.onGround)
 		{
-			if (this.onGround)	//Wait what?
-	        {
-	            f = this.worldObj.getBlock(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.boundingBox.minY) - 1, MathHelper.floor_double(this.posZ)).slipperiness * 0.98F;
-	        }
+			f = this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.getEntityBoundingBox().minY) - 1, MathHelper.floor_double(this.posZ))).getBlock().slipperiness * 0.98F;
 		}
-
+		
 		this.motionX *= (double)f;
 		this.motionY *= 0.9800000190734863D;
 		this.motionZ *= (double)f;
@@ -166,6 +161,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		{
 			this.setDead();
 		}
+		
 	}
 
 	/**
@@ -174,7 +170,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public boolean handleWaterMovement()
 	{
-		return this.worldObj.handleMaterialAcceleration(this.boundingBox, Material.water, this);
+		return this.worldObj.handleMaterialAcceleration(this.getEntityBoundingBox(), Material.water, this);
 	}
 
 	/**
@@ -193,22 +189,6 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
 	{
 		return false;
-//		if (this.isEntityInvulnerable())
-//		{
-//			return false;
-//		}
-//		else
-//		{
-//			this.setBeenAttacked();
-//			this.gristHealth -= par2;
-//
-//			if (this.gristHealth <= 0)
-//			{
-//				this.setDead();
-//			}
-//
-//			return false;
-//		}
 	}
 
 	/**
@@ -238,7 +218,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	 */
 	public void onCollideWithPlayer(EntityPlayer par1EntityPlayer)
 	{
-		if(this.worldObj.isRemote?ClientEditHandler.isActive():ServerEditHandler.getData(par1EntityPlayer.getCommandSenderName()) != null)
+		if(this.worldObj.isRemote?ClientEditHandler.isActive():ServerEditHandler.getData(par1EntityPlayer.getName()) != null)
 			return;
 		
 		if (!this.worldObj.isRemote)
@@ -253,8 +233,8 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	}
 	public void addGrist(EntityPlayer entityPlayer)
 	{
-		GristHelper.increase(UsernameHandler.encode(entityPlayer.getCommandSenderName()), new GristSet(GristType.getTypeFromString(gristType), gristValue));
-		MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(entityPlayer.getCommandSenderName()));
+		GristHelper.increase(UsernameHandler.encode(entityPlayer.getName()), new GristSet(GristType.getTypeFromString(gristType), gristValue));
+		MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(entityPlayer.getName()));
 	}
 
 	public boolean canAttackWithItem()
@@ -300,6 +280,6 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		this.gristType = GristType.values()[typeOffset].getName();
 		this.gristValue = data.readInt();
 		this.setSize(this.getSizeByValue(), 0.5F);
-		this.yOffset = this.height / 2.0F;
+//		this.yOffset = this.height / 2.0F;
 	}
 }

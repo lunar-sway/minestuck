@@ -5,21 +5,25 @@ import io.netty.buffer.ByteBuf;
 import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.fml.relauncher.Side;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.UsernameHandler;
-
-import cpw.mods.fml.relauncher.Side;
 
 public class MinestuckConfigPacket extends MinestuckPacket {
 	
 	int overWorldEditRange;
 	int landEditRange;
+	byte treeModusSetting;
 
 	boolean hardMode;
 	boolean giveItems;
 	boolean easyDesignix;
+	boolean infiniteTreeModus;
+	boolean[] deployValues;
 	
 	String lanHost;
 
@@ -34,6 +38,11 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 		data.writeBoolean(Minestuck.hardMode);
 		data.writeBoolean(Minestuck.giveItems);
 		data.writeBoolean(Minestuck.easyDesignix);
+		data.writeBoolean(Minestuck.infiniteTreeModus);
+		data.writeByte(Minestuck.treeModusSetting);
+		
+		for(int i = 0; i < Minestuck.deployConfigurations.length; i++)
+			data.writeBoolean(Minestuck.deployConfigurations[i]);
 		if(UsernameHandler.host != null)
 			writeString(data,UsernameHandler.host);
 		
@@ -47,6 +56,12 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 		hardMode = data.readBoolean();
 		giveItems = data.readBoolean();
 		easyDesignix = data.readBoolean();
+		infiniteTreeModus = data.readBoolean();
+		treeModusSetting = data.readByte();
+		
+		deployValues = new boolean[Minestuck.deployConfigurations.length];
+		for(int i = 0; i < deployValues.length; i++)
+			deployValues[i] = data.readBoolean();
 		lanHost = readLine(data);
 		if(lanHost.isEmpty())
 			lanHost = null;
@@ -62,7 +77,11 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 		Minestuck.clientHardMode = this.hardMode;
 		Minestuck.clientGiveItems = this.giveItems;
 		Minestuck.clientEasyDesignix = this.easyDesignix;
+		Minestuck.clientInfTreeModus = infiniteTreeModus;
+		Minestuck.clientTreeAutobalance = treeModusSetting;
+		
 		UsernameHandler.host = lanHost;
+		DeployList.applyConfigValues(deployValues);
 		
 	}
 

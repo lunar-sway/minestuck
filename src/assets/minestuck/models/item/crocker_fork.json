@@ -1,0 +1,7 @@
+{
+    "parent": "minestuck:item/crocker_spoon",
+    "textures": {
+        "layer0": "minestuck:items/CrockerFork"
+    }
+}
+

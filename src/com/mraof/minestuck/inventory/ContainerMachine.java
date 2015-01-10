@@ -41,12 +41,14 @@ public class ContainerMachine extends Container {
 	public TileEntityMachine tileEntity;
 	private int metadata;
 	private boolean operator = true;
+	private int progress;
 
-	public ContainerMachine(InventoryPlayer inventoryPlayer, TileEntityMachine te) {
+	public ContainerMachine(InventoryPlayer inventoryPlayer, TileEntityMachine te)
+	{
 		tileEntity = te;
-		metadata = te.getMetadata();
+		metadata = te.getBlockMetadata();
 		te.owner = inventoryPlayer.player;
-
+		
 		//the Slot constructor takes the IInventory and the slot number in that it binds to
 		//and the x-y coordinates it resides on-screen
 		switch (metadata) {
@@ -203,43 +205,38 @@ public class ContainerMachine extends Container {
 		
 		return itemstack;
 	}
-
+	
+	@Override
 	public void addCraftingToCrafters(ICrafting par1ICrafting)
 	{
 		super.addCraftingToCrafters(par1ICrafting);
-//		System.out.printf("addCraftingToCrafters running, the metadata is %d\n", this.metadata);
+		
 		switch(this.metadata)
 		{
 		case 1:
-//			System.out.printf(". Mode is %b \n", this.tileEntity.mode);
-			par1ICrafting.sendProgressBarUpdate(this, 0, this.tileEntity.mode ? 0 : 1);
+			par1ICrafting.sendProgressBarUpdate(this, 1, this.tileEntity.mode ? 0 : 1);
 		}
 	}
+	
 	public void detectAndSendChanges()
 	{
-		super.detectAndSendChanges();
-
-		for (int i = 0; i < this.crafters.size(); ++i)
-		{
-			ICrafting icrafting = (ICrafting)this.crafters.get(i);
-			switch(this.metadata)
-			{
-			case 1:
-				if (this.operator != (this.tileEntity.mode))
-				{
-					icrafting.sendProgressBarUpdate(this, 0, this.tileEntity.mode ? 0 : 1);
-					this.operator = this.tileEntity.mode;
-				}
-			}
-		}
+		if(this.progress != tileEntity.progress && tileEntity.progress != 0)
+			for(ICrafting crafter : (Iterable<ICrafting>) crafters)
+				crafter.sendProgressBarUpdate(this, 0, tileEntity.progress);	//The server should update and send the progress bar to the client because client and server ticks aren't synchronized
+		this.progress = tileEntity.progress;
 	}
 	@Override
 	public void updateProgressBar(int par1, int par2) 
 	{
+		if(par1 == 0)
+		{
+			tileEntity.progress = par2;
+			return;
+		}
+		
 		switch(this.metadata)
 		{
 		case 1:
-//			Debug.print("Mode on Client is now " + par2);
 			tileEntity.mode = par2 == 0;
 		}
 	}

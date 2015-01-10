@@ -2,7 +2,7 @@ package com.mraof.minestuck.world;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldSettings.GameType;
@@ -13,6 +13,7 @@ import net.minecraft.world.chunk.IChunkProvider;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 public class WorldProviderLands extends WorldProvider 
 {
@@ -23,17 +24,16 @@ public class WorldProviderLands extends WorldProvider
 	{
 		if (provider != null) 
 		{
-			//Debug.print("Time mode is "+provider.dayCycle);
 			switch(provider.dayCycle) 
 			{
 			case (0):
 				return super.calculateCelestialAngle(par1,par3);
 			case (1):
-				return 12000.0F;
+				return 1.0F;
 			case (2):
-				return 24000.0F;
+				return 0.5F;
 			}
-			return 12000.0F; //We should never reach this
+			return 1.0F; //We should never reach this
 		}
 		else 
 		{
@@ -60,25 +60,38 @@ public class WorldProviderLands extends WorldProvider
 			return "Land of " + provider.aspect1.getNames()[provider.nameIndex1] + " and " + provider.aspect2.getNames()[provider.nameIndex2];
 		}
 	}
-
+	
 	@Override
-	public ChunkCoordinates getRandomizedSpawnPoint() 
+	public BlockPos getSpawnPoint() 
+	{
+		BlockPos spawn = MinestuckSaveHandler.spawnpoints.get((byte) this.getDimensionId());
+		if(spawn != null)
+			return spawn;
+		else
+		{
+			Debug.printf("Couldn't get special spawnpoint for dimension %d. This should not happen.", this.getDimensionId());
+			return super.getSpawnPoint();
+		}
+	}
+	
+	@Override
+	public BlockPos getRandomizedSpawnPoint()
 	{
 		createChunkGenerator();
-		ChunkCoordinates chunkcoordinates = new ChunkCoordinates(provider.spawnX, provider.spawnY, provider.spawnZ);
-
+		BlockPos coordinates = getSpawnPoint();
+		
 		boolean isAdventure = worldObj.getWorldInfo().getGameType() == GameType.ADVENTURE;
 		int spawnFuzz = 12;
 		int spawnFuzzHalf = spawnFuzz / 2;
-
-		if (!hasNoSky && !isAdventure)
+		
+		if (!isAdventure)
 		{
-			chunkcoordinates.posX += this.worldObj.rand.nextInt(spawnFuzz) - spawnFuzzHalf;
-			chunkcoordinates.posZ += this.worldObj.rand.nextInt(spawnFuzz) - spawnFuzzHalf;
-			chunkcoordinates.posY = this.worldObj.getTopSolidOrLiquidBlock(chunkcoordinates.posX, chunkcoordinates.posZ);
+			coordinates = coordinates.add(this.worldObj.rand.nextInt(spawnFuzz) - spawnFuzzHalf,
+					0, this.worldObj.rand.nextInt(spawnFuzz) - spawnFuzzHalf);
+			coordinates = this.worldObj.getTopSolidOrLiquidBlock(coordinates);
 		}
-
-		return chunkcoordinates;
+		
+		return coordinates;
 	}
 
 	@Override
@@ -139,5 +152,11 @@ public class WorldProviderLands extends WorldProvider
 			Debug.print("Getting superclass fog color");
 			return super.getFogColor(par1, par2);
 		}
+	}
+
+	@Override
+	public String getInternalNameSuffix()
+	{
+		return "_minestuck";
 	}
 }

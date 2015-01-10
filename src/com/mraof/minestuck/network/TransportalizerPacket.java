@@ -5,11 +5,11 @@ import io.netty.buffer.ByteBuf;
 import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
 
 import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 import com.mraof.minestuck.util.Debug;
-
-import cpw.mods.fml.relauncher.Side;
 
 public class TransportalizerPacket extends MinestuckPacket
 {
@@ -53,7 +53,7 @@ public class TransportalizerPacket extends MinestuckPacket
 	@Override
 	public void execute(EntityPlayer player)
 	{
-		TileEntityTransportalizer te = (TileEntityTransportalizer) player.worldObj.getTileEntity(x, y, z);
+		TileEntityTransportalizer te = (TileEntityTransportalizer) player.worldObj.getTileEntity(new BlockPos(x, y, z));
 		if(te != null)
 		{
 			te.setDestId(destId);

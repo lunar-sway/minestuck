@@ -20,12 +20,32 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
+import net.minecraftforge.fml.common.network.FMLEmbeddedChannel;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
 import codechicken.nei.NEIModContainer;
 
 import com.mraof.minestuck.block.BlockChessTile;
@@ -36,6 +56,7 @@ import com.mraof.minestuck.block.BlockFluidBlood;
 import com.mraof.minestuck.block.BlockFluidBrainJuice;
 import com.mraof.minestuck.block.BlockFluidOil;
 import com.mraof.minestuck.block.BlockGatePortal;
+import com.mraof.minestuck.block.BlockGoldSeeds;
 import com.mraof.minestuck.block.BlockLayered;
 import com.mraof.minestuck.block.BlockMachine;
 import com.mraof.minestuck.block.BlockStorage;
@@ -43,6 +64,7 @@ import com.mraof.minestuck.block.BlockTransportalizer;
 import com.mraof.minestuck.block.OreCruxite;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.GuiHandler;
+import com.mraof.minestuck.client.util.MinestuckTextureManager;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
@@ -57,6 +79,7 @@ import com.mraof.minestuck.entity.consort.EntityIguana;
 import com.mraof.minestuck.entity.consort.EntityNakagator;
 import com.mraof.minestuck.entity.consort.EntitySalamander;
 import com.mraof.minestuck.entity.item.EntityGrist;
+import com.mraof.minestuck.entity.item.EntityMetalBoat;
 import com.mraof.minestuck.entity.underling.EntityBasilisk;
 import com.mraof.minestuck.entity.underling.EntityGiclops;
 import com.mraof.minestuck.entity.underling.EntityImp;
@@ -69,13 +92,15 @@ import com.mraof.minestuck.item.ItemCruxiteArtifact;
 import com.mraof.minestuck.item.ItemCruxiteRaw;
 import com.mraof.minestuck.item.ItemDisk;
 import com.mraof.minestuck.item.ItemDowel;
+import com.mraof.minestuck.item.ItemGoldSeeds;
+import com.mraof.minestuck.item.ItemMetalBoat;
 import com.mraof.minestuck.item.ItemMinestuckBucket;
 import com.mraof.minestuck.item.ItemModus;
 import com.mraof.minestuck.item.block.ItemBlockLayered;
 import com.mraof.minestuck.item.block.ItemChessTile;
 import com.mraof.minestuck.item.block.ItemColoredDirt;
-import com.mraof.minestuck.item.block.ItemComputerOff;
 import com.mraof.minestuck.item.block.ItemMachine;
+import com.mraof.minestuck.item.block.ItemOreCruxite;
 import com.mraof.minestuck.item.block.ItemStorageBlock;
 import com.mraof.minestuck.item.weapon.EnumBladeType;
 import com.mraof.minestuck.item.weapon.EnumCaneType;
@@ -114,26 +139,6 @@ import com.mraof.minestuck.world.gen.OreHandler;
 import com.mraof.minestuck.world.gen.structure.StructureCastlePieces;
 import com.mraof.minestuck.world.gen.structure.StructureCastleStart;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
-
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.event.FMLServerStoppingEvent;
-import cpw.mods.fml.common.network.FMLEmbeddedChannel;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.registry.EntityRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-
 
 @Mod(modid = "Minestuck", name = "Minestuck", version = "@VERSION@")
 public class Minestuck
@@ -175,7 +180,7 @@ public class Minestuck
 	public static Item spearCane;
 	public static Item dragonCane;
 	//Spoons/forks
-	public static Item crockerSpork;
+	public static ItemSpork crockerSpork;
 	public static Item skaiaFork;
 	//Other
 	public static Item rawCruxite;
@@ -184,23 +189,24 @@ public class Minestuck
 	public static Item cruxiteArtifact;
 	public static Item disk;
 	public static Item component;
-	public static Item captchaModus;
+	public static ItemModus captchaModus;
 	public static ItemMinestuckBucket minestuckBucket;
-
-
+	public static ItemGoldSeeds goldSeeds;	//This item is pretty much only a joke
+	public static ItemMetalBoat metalBoat;
 	
 	//Blocks
 	public static Block chessTile;
-	public static Block coloredDirt;
+	public static BlockColoredDirt coloredDirt;
 	public static Block gatePortal;
-	public static Block oreCruxite;
+	public static OreCruxite oreCruxite;
 	public static Block blockStorage;
 	public static Block blockMachine;
 	public static Block blockComputerOn;
 	public static Block blockComputerOff;
 	public static Block transportalizer;
+	public static BlockGoldSeeds blockGoldSeeds;
 	
-	public static Block blockOil;
+	public static Block blockOil;	//TODO Use fluid-rendering code when implemented
 	public static Block blockBlood;
 	public static Block blockBrainJuice;
 	public static Block layeredSand;
@@ -208,28 +214,29 @@ public class Minestuck
 	public static Fluid fluidOil;
 	public static Fluid fluidBlood;
 	public static Fluid fluidBrainJuice;
-
-	
 	
 	//Client config
 	public static int clientOverworldEditRange;	//Edit range used by the client side.
-	public static int clientLandEditRange;		//changed by a MinestuckConfigPacket sent by the server on login.
+	public static int clientLandEditRange;	//changed by a MinestuckConfigPacket sent by the server on login.
+	public static byte clientTreeAutobalance;
 	public static boolean clientHardMode;
 	public static boolean clientGiveItems;
 	public static boolean clientEasyDesignix;
+	public static boolean clientInfTreeModus;
 	
 	//General
 	public static boolean hardMode = false;	//Future config option. Currently alters how easy the entry items are accessible after the first time. The machines cost 100 build and there will only be one card if this is true.
 	public static boolean generateCruxiteOre; //If set to false, Cruxite Ore will not generate
 	public static boolean privateComputers;	//If a player should be able to use other players computers or not.
-	public static boolean acceptTitleCollision;	//Allows combinations like "Heir of Hope" and "Seer of Hope" to exist in the same session. Will try to avoid duplicates.
-	public static boolean generateSpecialClasses;	//Allow generation of the "Lord" and "Muse" classes.
+	//public static boolean acceptTitleCollision;	//Allows combinations like "Heir of Hope" and "Seer of Hope" to exist in the same session. Will try to avoid duplicates.
+	//public static boolean generateSpecialClasses;	//Allow generation of the "Lord" and "Muse" classes.
 	public static boolean globalSession;	//Makes only one session possible. Recommended to be true on small servers. Will be ignored when loading a world that already got 2+ sessions.
 	public static boolean easyDesignix; //Makes it so you don't need to encode individual cards before combining them.
 	public static boolean toolTipEnabled;
 	public static boolean forceMaxSize;	//If it should prevent players from joining a session if there is no possible combinations left.
 	public static boolean giveItems;
 	public static boolean specialCardRenderer;
+	public static boolean infiniteTreeModus;
 	public static String privateMessage;
 	public static int artifactRange; //The range of the Cruxite Artifact in teleporting zones over to the new land
 	public static int overworldEditRange;
@@ -244,7 +251,10 @@ public class Minestuck
 	 * (Will try to put a better explanation somewhere else later)
 	 */
 	public static int escapeFailureMode;	//What will happen if someone's server player fails to escape the overworld in time,
-
+	public static byte treeModusSetting;
+	
+	public static boolean[] deployConfigurations;
+	
 	// The instance of your mod that Forge uses.
 	@Instance("Minestuck")
 	public static Minestuck instance;
@@ -266,46 +276,46 @@ public class Minestuck
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 		config.load();
 		
-		entityIdStart = config.get("Entity Ids", "entitydIdStart", 5050).getInt(); //The number 5050 might make it seem like this is meant to match up with item/block IDs, but it is not
-		skaiaProviderTypeId = config.get("Provider Type Ids", "skaiaProviderTypeId", 2).getInt();
-		skaiaDimensionId = config.get("Dimension Ids", "skaiaDimensionId", 2).getInt();
-		landProviderTypeId = config.get("Provider Type Ids", "landProviderTypeIdStart", 3).getInt();
-		landDimensionIdStart = config.get("Dimension Ids", "landDimensionIdStart", 3).getInt();
-		Debug.isDebugMode = config.get("General","printDebugMessages",true).getBoolean(true);
-		generateCruxiteOre = config.get("General","generateCruxiteOre",true).getBoolean(true);
-		acceptTitleCollision = config.get("General", "acceptTitleCollision", false).getBoolean(false);
-		generateSpecialClasses = config.get("General", "generateSpecialClasses", false).getBoolean(false);
-		globalSession = config.get("General", "globalSession", true).getBoolean(true);
-		privateComputers = config.get("General", "privateComputers", false).getBoolean(false);
-		privateMessage = config.get("General", "privateMessage", "You are not allowed to access other players computers.").getString();
-		easyDesignix  = config.get("General", "easyDesignix", true).getBoolean(true);
-		overworldEditRange = config.get("General", "overWorldEditRange", 15).getInt();
-		landEditRange = config.get("General", "landEditRange", 30).getInt();	//Now radius
-		artifactRange = config.get("General", "artifactRange", 30).getInt();
-		MinestuckAchievementHandler.idOffset = config.get("General", "statisticIdOffset", 413).getInt();
-		toolTipEnabled = config.get("General", "editmodeToolTip", false).getBoolean(false);
-		hardMode = config.get("General", "hardMode", false).getBoolean(false);
-		forceMaxSize = config.get("General", "forceMaxSize", false).getBoolean(false);
-		escapeFailureMode = config.get("General", "escapeFailureMode", 0).getInt();
-		giveItems = config.get("General", "giveItems", false, "Setting this to true replaces editmode with the old Give Items.").getBoolean(false);
-		defaultModusSize = config.get("General", "defaultModusSize", 5, "The initial size of a captchalouge deck.").getInt();
-		defaultModusType = config.get("General", "defaultModusType", -1,
-				"The type of modus that is given to players without one. -1: Random modus given. 0+: Certain modus given. Anything else: No modus given.").getInt();
-		modusMaxSize = config.get("General", "modusMaxSize", 0, "The max size on a modus. Ignored if the value is 0 or lower.").getInt();
+		entityIdStart = config.getInt("entitydIdStart", "Entity Ids", 5050, 0, Integer.MAX_VALUE, "From what id that minestuck entites should be registered with."); //The number 5050 might make it seem like this is meant to match up with item/block IDs, but it is not
+		skaiaProviderTypeId = config.getInt("skaiaProviderTypeId", "Provider Type Ids", 2, 2, Integer.MAX_VALUE, "The id to be registered for the skaia provider.");
+		skaiaDimensionId = config.getInt("skaiaDimensionId", "Dimension Ids", 2, 2, Integer.MAX_VALUE, "The id for the skaia dimension.");
+		landProviderTypeId = config.getInt("landProviderTypeId", "Provider Type Ids", 3, 2, Integer.MAX_VALUE, "The id for the land provider.");
+		landDimensionIdStart = config.getInt("landDimensionIdStart", "Dimension Ids", 3, 2, Integer.MAX_VALUE, "The starting id for the land dimensions.");
+		Debug.isDebugMode = config.getBoolean("printDebugMessages", "General", true, "Whenether the game should print debug messages or not.");
+		generateCruxiteOre = config.getBoolean("generateCruxiteOre", "General", true, "If cruxite ore should be generated in the overworld.");
+		//acceptTitleCollision = config.get("General", "acceptTitleCollision", false).getBoolean(false);	Unused
+		//generateSpecialClasses = config.get("General", "generateSpecialClasses", false).getBoolean(false);
+		globalSession = config.getBoolean("globalSession", "General", true, "Whenether all connetions should be put into a single session or not.");
+		privateComputers = config.getBoolean("privateComputers", "General", false, "True if computers should only be able to be used by the owner.");
+		privateMessage = config.getString("privateMessage", "General", "You are not allowed to access other players computers.", "The message sent when someone tries to access a computer that they aren't the owner of if 'privateComputers' is true.");
+		easyDesignix  = config.getBoolean("easyDesignix", "General", true, "If this is true, you can do combination alchemy without first putting the item in a card.");
+		overworldEditRange = config.getInt("overWorldEditRange", "General", 15, 3, 50, "A number that determines how far away from the computer an editmode player may be before entry.");
+		landEditRange = config.getInt("landEditRange", "General", 30, 3, 50, "A number that determines how far away from the center of the brought land that an editmode player may be after entry.");
+		artifactRange = config.getInt("artifactRange", "General", 30, 3, 50, "Radius of the land brought into the medium.");
+		MinestuckAchievementHandler.idOffset = config.getInt("statisticIdOffset", "General", 413, 100, Integer.MAX_VALUE, "The id offset used when registering achievements and other statistics.");
+		hardMode = config.getBoolean("hardMode", "General", false, "Used to determine if the editmode player can provide infinite cards. Will later also be used whenether there'll be a timer to enter the medium and things like that.");
+		//forceMaxSize = config.getBoolean("forceMaxSize", "General", false); Unused for now.
+		//escapeFailureMode = config.getInt("escapeFailureMode", "General", 0, 0, 2, "Used to determine what happens with related connections when a player fails to escape the meteor enabled by 'hardmode'.");
+		giveItems = config.getBoolean("giveItems", "General", false, "Setting this to true replaces editmode with the old Give Items button.");
+		defaultModusSize = config.getInt("defaultModusSize", "Modus", 5, 0, Integer.MAX_VALUE, "The initial size of a captchalouge deck.");
+		defaultModusType = config.getInt("defaultModusType", "Modus", -1, -2, CaptchaDeckHandler.ModusType.values().length - 1,
+				"The type of modus that is given to players without one. -1: Random modus given from a builtin list. -2: Any random modus. 0+: Certain modus given. Anything else: No modus given.");
+		modusMaxSize = config.getInt("modusMaxSize", "Modus", 0, 0, Integer.MAX_VALUE, "The max size on a modus. Ignored if the value is 0.");
+		if(defaultModusSize > modusMaxSize && modusMaxSize > 0)
+			defaultModusSize = modusMaxSize;
+		deployConfigurations = new boolean[1];
+		deployConfigurations[0] = config.getBoolean("cardInDeploylist", "General", false, "Determines if a card with a captcha card punched on it should be added to the deploy list or not.");
+		treeModusSetting = (byte) config.getInt("treeModusSetting", "Modus", 0, 0, 2, "This determines how autobalance should be. 0 if the player should choose, 1 if forced at on, and 2 if forced at off.");
 		
-		if(escapeFailureMode > 2 || escapeFailureMode < 0)
-			escapeFailureMode = 0;
 		if(event.getSide().isClient()) {	//Client sided config values
-			toolTipEnabled = config.get("General", "editmodeToolTip", false).getBoolean(false);
-			specialCardRenderer = config.get("General", "specialCardRenderer", false).getBoolean(false);
+			toolTipEnabled = config.getBoolean("editmodeToolTip", "General", true, "True if the grist cost on items should be shown. This only applies for editmode.");
+			//specialCardRenderer = config.getBoolean("specialCardRenderer", "General", false, "Whenether to use the special render for cards or not.");
 			if(Minestuck.specialCardRenderer && !GLContext.getCapabilities().GL_EXT_framebuffer_object)
 			{
 				specialCardRenderer = false;
 				FMLLog.warning("[Minestuck] The FBO extension is not available and is required for the advanced rendering of captchalouge cards.");
 			}
-			cardResolution = config.get("General", "cardResolution", 1).getInt(1);
-			if(cardResolution < 0)
-				cardResolution = 0;
+			//cardResolution = config.getInt("General", "cardResolution", 1, 0, 5, "The resulotion of the item inside of a card. The width/height is computed by '8*2^x', where 'x' is this config value.");
 		}
 		config.save();
 		
@@ -321,17 +331,18 @@ public class Minestuck
 		};
 		
 		//blocks
-		chessTile = GameRegistry.registerBlock(new BlockChessTile(), ItemChessTile.class, "chessTile");
-		gatePortal = GameRegistry.registerBlock(new BlockGatePortal(Material.portal), "gatePortal");
-		oreCruxite = GameRegistry.registerBlock(new OreCruxite(),"oreCruxite");
-		layeredSand = GameRegistry.registerBlock(new BlockLayered(Blocks.sand), ItemBlockLayered.class, "layeredSand").setBlockName("layeredSand");
-		coloredDirt = GameRegistry.registerBlock(new BlockColoredDirt(new String[] {"BlueDirt", "ThoughtDirt"}), ItemColoredDirt.class, "coloredDirt").setBlockName("coloredDirt").setHardness(0.5F);
+		chessTile = GameRegistry.registerBlock(new BlockChessTile(), ItemChessTile.class, "chess_tile");
+		gatePortal = GameRegistry.registerBlock(new BlockGatePortal(Material.portal), "gate_portal");
+		oreCruxite = (OreCruxite) GameRegistry.registerBlock(new OreCruxite(), ItemOreCruxite.class, "ore_cruxite");
+		layeredSand = GameRegistry.registerBlock(new BlockLayered(Blocks.sand), ItemBlockLayered.class, "layered_sand").setUnlocalizedName("layeredSand");
+		coloredDirt = (BlockColoredDirt) GameRegistry.registerBlock(new BlockColoredDirt(), ItemColoredDirt.class, "colored_dirt").setUnlocalizedName("coloredDirt").setHardness(0.5F);
 		//machines
-		blockStorage = GameRegistry.registerBlock(new BlockStorage(),ItemStorageBlock.class,"blockStorage");
-		blockMachine = GameRegistry.registerBlock(new BlockMachine(), ItemMachine.class,"blockMachine");
-		blockComputerOff = GameRegistry.registerBlock(new BlockComputerOff(), ItemComputerOff.class,"blockComputer");
-		blockComputerOn = GameRegistry.registerBlock(new BlockComputerOn(),"blockComputerOn");
+		blockStorage = GameRegistry.registerBlock(new BlockStorage(),ItemStorageBlock.class,"storage_block");
+		blockMachine = GameRegistry.registerBlock(new BlockMachine(), ItemMachine.class,"machine_block");
+		blockComputerOff = GameRegistry.registerBlock(new BlockComputerOff(),"computer_standard");
+		blockComputerOn = GameRegistry.registerBlock(new BlockComputerOn(), null, "computer_standard_on");
 		transportalizer = GameRegistry.registerBlock(new BlockTransportalizer(), "transportalizer");
+		blockGoldSeeds = (BlockGoldSeeds) GameRegistry.registerBlock(new BlockGoldSeeds(), null, "gold_seeds");
 		//fluids
 		fluidOil = new Fluid("Oil");
 		FluidRegistry.registerFluid(fluidOil);
@@ -339,9 +350,9 @@ public class Minestuck
 		FluidRegistry.registerFluid(fluidBlood);
 		fluidBrainJuice = new Fluid("BrainJuice");
 		FluidRegistry.registerFluid(fluidBrainJuice);
-		blockOil = GameRegistry.registerBlock(new BlockFluidOil(fluidOil, Material.water), "blockOil");
-		blockBlood = GameRegistry.registerBlock(new BlockFluidBlood(fluidBlood, Material.water), "blockBlood");
-		blockBrainJuice = GameRegistry.registerBlock(new BlockFluidBrainJuice(fluidBrainJuice, Material.water), "blockBrainJuice");
+//		blockOil = GameRegistry.registerBlock(new BlockFluidOil(fluidOil, Material.water), null, "block_oil");
+//		blockBlood = GameRegistry.registerBlock(new BlockFluidBlood(fluidBlood, Material.water), null, "block_blood");
+//		blockBrainJuice = GameRegistry.registerBlock(new BlockFluidBrainJuice(fluidBrainJuice, Material.water), null, "block_brain_juice");
 
 		//items
 		//hammers
@@ -385,58 +396,61 @@ public class Minestuck
 		component = new ItemComponent();
 		minestuckBucket = new ItemMinestuckBucket();
 		captchaModus = new ItemModus();
+		goldSeeds = new ItemGoldSeeds();
+		metalBoat = new ItemMetalBoat();
 		
-		minestuckBucket.addBlock(blockBlood, "BucketBlood");
-		minestuckBucket.addBlock(blockOil, "BucketOil");
-		minestuckBucket.addBlock(blockBrainJuice, "BucketBrainJuice");
+//		minestuckBucket.addBlock(blockBlood);
+//		minestuckBucket.addBlock(blockOil);
+//		minestuckBucket.addBlock(blockBrainJuice);
 		
-		//registers things for the client
-		if(event.getSide().isClient()) {
-			ClientProxy.registerSided();
-			ClientProxy.registerRenderers();
-		}
-		
-		GameRegistry.registerItem(clawHammer, "clawHammer");
-		GameRegistry.registerItem(sledgeHammer, "sledgeHammer");
-		GameRegistry.registerItem(pogoHammer, "pogoHammer");
-		GameRegistry.registerItem(telescopicSassacrusher, "telescopicSassacrusher");
-		GameRegistry.registerItem(fearNoAnvil, "fearNoAnvil");
-		GameRegistry.registerItem(zillyhooHammer, "zillyhooHammer");
-		GameRegistry.registerItem(popamaticVrillyhoo, "popamaticVrillyhoo");
-		GameRegistry.registerItem(scarletZillyhoo, "scarletZillyhoo");
+		GameRegistry.registerItem(clawHammer, "claw_hammer");
+		GameRegistry.registerItem(sledgeHammer, "sledge_hammer");
+		GameRegistry.registerItem(pogoHammer, "pogo_hammer");
+		GameRegistry.registerItem(telescopicSassacrusher, "telescopic_sassacrusher");
+		GameRegistry.registerItem(fearNoAnvil, "fear_no_anvil");
+		GameRegistry.registerItem(zillyhooHammer, "zillyhoo_hammer");
+		GameRegistry.registerItem(popamaticVrillyhoo, "popamatic_vrillyhoo");
+		GameRegistry.registerItem(scarletZillyhoo, "scarlet_zillyhoo");
 		
 		GameRegistry.registerItem(sord, "sord");
-		GameRegistry.registerItem(ninjaSword, "ninjaSword");
+		GameRegistry.registerItem(ninjaSword, "ninja_sword");
 		GameRegistry.registerItem(katana, "katana");
 		GameRegistry.registerItem(caledscratch, "caledscratch");
-		GameRegistry.registerItem(royalDeringer, "royalDeringer");
+		GameRegistry.registerItem(royalDeringer, "royal_deringer");
 		GameRegistry.registerItem(regisword, "regisword");
-		GameRegistry.registerItem(scarletRibbitar, "scarletRibbitar");
-		GameRegistry.registerItem(doggMachete, "doggMachete");
+		GameRegistry.registerItem(scarletRibbitar, "scarlet_ribbitar");
+		GameRegistry.registerItem(doggMachete, "dogg_machete");
 		
 		GameRegistry.registerItem(sickle, "sickle");
-		GameRegistry.registerItem(homesSmellYaLater, "homesSmellYaLater");
-		GameRegistry.registerItem(regiSickle, "regiSickle");
-		GameRegistry.registerItem(clawSickle, "clawSickle");
+		GameRegistry.registerItem(homesSmellYaLater, "homes_smell_ya_later");
+		GameRegistry.registerItem(regiSickle, "regi_sickle");
+		GameRegistry.registerItem(clawSickle, "claw_sickle");
 		
-		GameRegistry.registerItem(deuceClub, "deuceClub");
+		GameRegistry.registerItem(deuceClub, "deuce_club");
 		
 		GameRegistry.registerItem(cane, "cane");
-		GameRegistry.registerItem(spearCane, "spearCane");
-		GameRegistry.registerItem(dragonCane, "dragonCane");
+		GameRegistry.registerItem(spearCane, "spear_cane");
+		GameRegistry.registerItem(dragonCane, "dragon_cane");
 		
-		GameRegistry.registerItem(crockerSpork, "crockerSpork");
-		GameRegistry.registerItem(skaiaFork, "skaiaFork");
+		GameRegistry.registerItem(crockerSpork, "crocker_spork");
+		GameRegistry.registerItem(skaiaFork, "skaia_fork");
 		
-		GameRegistry.registerItem(rawCruxite, "cruxiteRaw");
-		GameRegistry.registerItem(cruxiteDowel, "cruxiteDowel");
-		GameRegistry.registerItem(captchaCard, "captchaCard");
-		GameRegistry.registerItem(cruxiteArtifact, "cruxiteArtifact");
-		GameRegistry.registerItem(disk, "computerDisk");
+		GameRegistry.registerItem(rawCruxite, "cruxite_raw");
+		GameRegistry.registerItem(cruxiteDowel, "cruxite_dowel");
+		GameRegistry.registerItem(captchaCard, "captcha_card");
+		GameRegistry.registerItem(cruxiteArtifact, "cruxite_artifact");
+		GameRegistry.registerItem(disk, "computer_disk");
 		GameRegistry.registerItem(component, "component");
-		GameRegistry.registerItem(minestuckBucket, "minestuckBucket");
-		GameRegistry.registerItem(captchaModus, "modusCard");
+		GameRegistry.registerItem(minestuckBucket, "minestuck_bucket");
+		GameRegistry.registerItem(captchaModus, "modus_card");
+		GameRegistry.registerItem(goldSeeds, "gold_seeds");
+		GameRegistry.registerItem(metalBoat, "metal_boat");
 		
+		if(event.getSide().isClient())
+		{
+			ClientProxy.registerSided();
+			MinestuckTextureManager.registerVariants();
+		}
 		
 		MinestuckAchievementHandler.prepareAchievementPage();
 		
@@ -446,18 +460,10 @@ public class Minestuck
 	public void load(FMLInitializationEvent event) 
 	{
 		
-		//set harvest information for blocks
-//		MinecraftForge.setBlockHarvestLevel(chessTile, "shovel", 0);
-//		MinecraftForge.setBlockHarvestLevel(oreCruxite, "pickaxe", 1);
-//		MinecraftForge.setBlockHarvestLevel(blockStorage, "pickaxe", 1);
-//		MinecraftForge.setBlockHarvestLevel(blockMachine, "pickaxe", 1);
-
-
-		fluidOil.setUnlocalizedName(blockOil.getUnlocalizedName());
-		fluidBlood.setUnlocalizedName(blockBlood.getUnlocalizedName());
-		fluidBrainJuice.setUnlocalizedName(blockBrainJuice.getUnlocalizedName());
+//		fluidOil.setUnlocalizedName(blockOil.getUnlocalizedName());
+//		fluidBlood.setUnlocalizedName(blockBlood.getUnlocalizedName());
+//		fluidBrainJuice.setUnlocalizedName(blockBrainJuice.getUnlocalizedName());
 		
-//		Debug.printf("Blood id: %d, Oil id: %d", blockBloodId, blockOilId);
 		
 		//register entities
 		this.registerAndMapEntity(EntitySalamander.class, "Salamander", 0xffe62e, 0xfffb53);
@@ -473,30 +479,37 @@ public class Minestuck
 		this.registerAndMapEntity(EntityWhiteBishop.class, "prospitianBishop", 0xffffff, 0xfde500);
 		this.registerAndMapEntity(EntityBlackRook.class, "dersiteRook", 0x000000, 0xc121d9);
 		this.registerAndMapEntity(EntityWhiteRook.class, "prospitianRook", 0xffffff, 0xfde500);
-		EntityRegistry.registerModEntity(EntityDecoy.class, "minestuck.playerDecoy", currentEntityIdOffset, this, 80, 3, true);
-		currentEntityIdOffset++;
 		
 		//register entities with fml
+		EntityRegistry.registerModEntity(EntityDecoy.class, "minestuck.playerDecoy", currentEntityIdOffset, this, 80, 3, true);
+		currentEntityIdOffset++;
+		EntityRegistry.registerModEntity(EntityMetalBoat.class, "minestuck.metalBoat", currentEntityIdOffset, this, 80, 3, true);
+		currentEntityIdOffset++;
 		EntityRegistry.registerModEntity(EntityGrist.class, "minestuck.grist", currentEntityIdOffset, this, 512, 1, true);
 		
 		//register Tile Entities
-		GameRegistry.registerTileEntity(TileEntityGatePortal.class, "gatePortal");	//Didn't add prefix to these yet because that'd erase the content of the tile entities.
-		GameRegistry.registerTileEntity(TileEntityMachine.class, "containerMachine");
-		GameRegistry.registerTileEntity(TileEntityComputer.class, "computerSburb");
-		GameRegistry.registerTileEntity(TileEntityTransportalizer.class, "transportalizer");
+		GameRegistry.registerTileEntity(TileEntityGatePortal.class, "minstuck.gatePortal");
+		GameRegistry.registerTileEntity(TileEntityMachine.class, "minestuck.containerMachine");
+		GameRegistry.registerTileEntity(TileEntityComputer.class, "minestuck.computerSburb");
+		GameRegistry.registerTileEntity(TileEntityTransportalizer.class, "minestuck.transportalizer");
 		//register world generators
 		DimensionManager.registerProviderType(skaiaProviderTypeId, WorldProviderSkaia.class, true);
 		DimensionManager.registerDimension(skaiaDimensionId, skaiaProviderTypeId);
 		DimensionManager.registerProviderType(landProviderTypeId, WorldProviderLands.class, true);
 		
 		//register ore generation
-		if (generateCruxiteOre) {
-			OreHandler oreHandler = new OreHandler();
-			GameRegistry.registerWorldGenerator(oreHandler, 0);
-		}
-
-		//register machine GUIs
+		OreHandler oreHandler = new OreHandler();
+		GameRegistry.registerWorldGenerator(oreHandler, 0);
+		
+		//register GUI handler
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
+		
+		//Register textures and renders
+		if(event.getSide().isClient())
+		{
+			MinestuckTextureManager.registerTextures();
+			ClientProxy.registerRenderers();
+		}
 		
 		//Register event handlers
 		MinecraftForge.EVENT_BUS.register(new MinestuckSaveHandler());
@@ -506,6 +519,7 @@ public class Minestuck
 		
 		FMLCommonHandler.instance().bus().register(MinestuckPlayerTracker.instance);
 		FMLCommonHandler.instance().bus().register(ServerEditHandler.instance);
+		FMLCommonHandler.instance().bus().register(MinestuckChannelHandler.instance);
 		
 		if(event.getSide().isClient())
 		{
@@ -518,7 +532,7 @@ public class Minestuck
 		
 		//Register structures
 		MapGenStructureIO.registerStructure(StructureCastleStart.class, "SkaiaCastle");
-		StructureCastlePieces.func_143048_a();
+		StructureCastlePieces.registerComponents();
 		
 		//register recipes
 		AlchemyRecipeHandler.registerVanillaRecipes();
@@ -531,13 +545,12 @@ public class Minestuck
 		ComputerProgram.registerProgram(0, SburbClient.class, new ItemStack(disk, 1, 0));	//This idea was kind of bad and should be replaced
 		ComputerProgram.registerProgram(1, SburbServer.class, new ItemStack(disk, 1, 1));
 		
-		SessionHandler.maxSize = acceptTitleCollision?(generateSpecialClasses?168:144):12;
+		SessionHandler.maxSize = Integer.MAX_VALUE;//acceptTitleCollision?(generateSpecialClasses?168:144):12;
 	}
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) 
 	{
-		
 		AlchemyRecipeHandler.registerDynamicRecipes();
 
 		//register NEI stuff
@@ -573,6 +586,7 @@ public class Minestuck
 			iterator.remove();
 		}
 		TileEntityTransportalizer.transportalizers.clear();
+		DeployList.applyConfigValues(deployConfigurations);
 	}
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event)
@@ -581,6 +595,7 @@ public class Minestuck
 		CaptchaDeckHandler.rand = new Random(worldSeed);	//Unsure whenether this will be better or not
 		
 		MinestuckSaveHandler.lands.clear();
+		MinestuckSaveHandler.spawnpoints.clear();
 		
 		File dataFile = event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("MinestuckData");
 		if(dataFile != null && dataFile.exists()) {
@@ -590,14 +605,22 @@ public class Minestuck
 			} catch(IOException e) {
 				e.printStackTrace();
 			}
-			if(nbt != null) {
-				for(byte landId : nbt.getByteArray("landList")) {
+			if(nbt != null)
+			{
+				NBTTagList landList = nbt.getTagList("landList", 10);
+				for(int i = 0; i < landList.tagCount(); i++)
+				{
+					NBTTagCompound landTag = landList.getCompoundTagAt(i);
+					byte landId = landTag.getByte("dimId");
+					Debug.printf("Loading dimension %d.",landId);
 					if(MinestuckSaveHandler.lands.contains((Byte)landId))
 						continue;
 					MinestuckSaveHandler.lands.add(landId);
 					
 					if(!DimensionManager.isDimensionRegistered(landId))
 						DimensionManager.registerDimension(landId, Minestuck.landProviderTypeId);
+					BlockPos spawn = new BlockPos(landTag.getInteger("spawnX"), landTag.getInteger("spawnY"), landTag.getInteger("spawnZ"));
+					MinestuckSaveHandler.spawnpoints.put(landId, spawn);
 				}
 				
 				SkaianetHandler.loadData(nbt.getCompoundTag("skaianet"));
@@ -616,7 +639,8 @@ public class Minestuck
 	}
 	
 	@EventHandler
-	public void serverStopping(FMLServerStoppingEvent event) {
+	public void serverStopping(FMLServerStoppingEvent event)
+	{
 		ServerEditHandler.onServerStopping();
 	}
 }

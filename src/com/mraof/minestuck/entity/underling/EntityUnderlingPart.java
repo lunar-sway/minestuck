@@ -6,10 +6,9 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
 import com.mraof.minestuck.entity.IEntityMultiPart;
-
-import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class EntityUnderlingPart extends EntityLiving implements IEntityAdditionalSpawnData
 {

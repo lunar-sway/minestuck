@@ -1,0 +1,7 @@
+{
+    "parent": "minestuck:item/modus_stack",
+    "textures": {
+        "layer0": "minestuck:items/HashmapModus"
+    }
+}
+

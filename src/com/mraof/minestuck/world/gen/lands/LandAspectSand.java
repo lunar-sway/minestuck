@@ -4,23 +4,24 @@ package com.mraof.minestuck.world.gen.lands;
 import java.util.ArrayList;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Vec3;
 
 public class LandAspectSand extends LandAspect
 {
-	BlockWithMetadata[] upperBlocks = {new BlockWithMetadata(Blocks.sandstone)};
-	BlockWithMetadata[] surfaceBlocks = {new BlockWithMetadata(Blocks.sand)};
-	static Vec3 skyColor = Vec3.createVectorHelper(0.99D, 0.8D, 0.05D);
+	IBlockState[] upperBlocks = {Blocks.sandstone.getDefaultState()};
+	IBlockState[] surfaceBlocks = {Blocks.sand.getDefaultState()};
+	static Vec3 skyColor = new Vec3(0.99D, 0.8D, 0.05D);
 	
 	@Override
-	public BlockWithMetadata[] getSurfaceBlocks() 
+	public IBlockState[] getSurfaceBlocks() 
 	{
 		return surfaceBlocks;
 	}
 
 	@Override
-	public BlockWithMetadata[] getUpperBlocks() {
+	public IBlockState[] getUpperBlocks() {
 		return upperBlocks;
 	}
 	
@@ -53,7 +54,7 @@ public class LandAspectSand extends LandAspect
 	@Override
 	public ArrayList<ILandDecorator> getDecorators() {
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
-		list.add(new DecoratorVein(Blocks.stonebrick, 10, 32));
+		list.add(new DecoratorVein(Blocks.stonebrick.getDefaultState(), 10, 32));
 //		list.add(new DecoratorVein(Block.ice, 5, 8));
 		return list;
 	}

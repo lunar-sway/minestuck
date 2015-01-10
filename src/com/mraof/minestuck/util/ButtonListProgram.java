@@ -132,9 +132,9 @@ public abstract class ButtonListProgram extends ComputerProgram {
 		int yOffset = (gui.height / 2) - (GuiComputer.ySize / 2);
 		gui.drawTexturedModalRect((gui.width / 2) - (GuiComputer.xSize / 2), yOffset, 0, 0, GuiComputer.xSize, GuiComputer.ySize);
 		if(te.latestmessage.get(te.programSelected) == null || te.latestmessage.get(te.programSelected).isEmpty())
-			mc.fontRenderer.drawString(message, (gui.width - GuiComputer.xSize) / 2 + 15, (gui.height - GuiComputer.ySize) / 2 + 45, 4210752);
+			mc.fontRendererObj.drawString(message, (gui.width - GuiComputer.xSize) / 2 + 15, (gui.height - GuiComputer.ySize) / 2 + 45, 4210752);
 		else 
-			mc.fontRenderer.drawString(StatCollector.translateToLocal(te.latestmessage.get(te.programSelected)), (gui.width - GuiComputer.xSize) / 2  + 15, (gui.height - GuiComputer.ySize) / 2 + 45, 4210752);
+			mc.fontRendererObj.drawString(StatCollector.translateToLocal(te.latestmessage.get(te.programSelected)), (gui.width - GuiComputer.xSize) / 2  + 15, (gui.height - GuiComputer.ySize) / 2 + 45, 4210752);
 	}
 	
 	/**

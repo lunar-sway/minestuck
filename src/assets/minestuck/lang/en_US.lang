@@ -9,6 +9,14 @@ achievement.enterMedium=A New World
 achievement.enterMedium.desc=Create, and use the Cruxite Artifact.
 achievement.alchemy=First Alchemy
 achievement.alchemy.desc=Use the punch designix to alchemize something else!
+achievement.goldSeeds=Gold Farming
+achievement.goldSeeds.desc=It begins to dawn on you that everything you just did may have been a colossal waste of time.
+achievement.treeModus=Uprooting
+achievement.treeModus.desc=Remove the root card in a tree modus with a bunch of items.
+achievement.killOgre=The Big One
+achievement.killOgre.desc=Kill an ogre.
+achievement.killGiclops=The bigger One
+achievement.killGiclops.desc=Kill a giclops.
 
 computer.buttonClear=Clear message
 computer.buttonClose=Disconnect
@@ -97,6 +105,11 @@ gui.free=Free!
 gui.buttonStop=STOP
 gui.buttonGo=GO
 gui.selectGrist=Select Grist Type
+gui.emptySylladex1=Are you sure you want to continue?
+gui.emptySylladex2=This will empty your sylladex.
+gui.emptySylladexButton=Empty Sylladex
+gui.autobalance.on=Autobalance Active
+gui.autobalance.off=Autobalance Inactive
 
 item.clawHammer.name=Claw Hammer
 item.sledgeHammer.name=Sledgehammer
@@ -145,6 +158,8 @@ item.modusCard.queue.name=Queue Modus
 item.modusCard.queuestack.name=Queue-Stack Modus
 item.modusCard.tree.name=Tree Modus
 item.modusCard.hashmap.name=Hashmap Modus
+item.metalBoat.iron.name=Iron Boat
+item.metalBoat.gold.name=Golden Boat
 
 itemGroup.tabMinestuck=Minestuck
 
@@ -183,8 +198,9 @@ tile.oil.name=Oil
 tile.blood.name=Blood
 tile.layeredSand.name=Layered Sand
 tile.transportalizer.name=Transportalizer
-tile.coloredDirt.BlueDirt.name=Blue Dirt
-tile.coloredDirt.ThoughtDirt.name=Thought Dirt
+tile.coloredDirt.blue.name=Blue Dirt
+tile.coloredDirt.thought.name=Thought Dirt
+tile.goldSeeds.name=Golden seeds
 
 title.format=%1$s of %2$s
 title.Bard=Bard

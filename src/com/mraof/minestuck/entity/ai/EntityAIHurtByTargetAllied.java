@@ -3,17 +3,20 @@ package com.mraof.minestuck.entity.ai;
 import java.util.Iterator;
 import java.util.List;
 
+import com.google.common.base.Predicate;
+
 import net.minecraft.command.IEntitySelector;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.util.AxisAlignedBB;
 
 public class EntityAIHurtByTargetAllied extends EntityAITarget {
-	IEntitySelector entitySelector;	
-	private int field_142052_b;
+	Predicate<Entity> entitySelector;
+	private int revengeTimer;
 
-	public EntityAIHurtByTargetAllied(EntityCreature par1EntityCreature, IEntitySelector entitySelector)
+	public EntityAIHurtByTargetAllied(EntityCreature par1EntityCreature, Predicate<Entity> entitySelector)
 	{
 		super(par1EntityCreature, false);
 		this.entitySelector = entitySelector;
@@ -25,8 +28,8 @@ public class EntityAIHurtByTargetAllied extends EntityAITarget {
 	 */
 	public boolean shouldExecute()
 	{
-		int i = this.taskOwner.func_142015_aE();
-		return i != this.field_142052_b && this.isSuitableTarget(this.taskOwner.getAITarget(), false);
+		int i = this.taskOwner.getRevengeTimer();
+		return i != this.revengeTimer && this.isSuitableTarget(this.taskOwner.getAITarget(), false);
 	}
 
 	/**
@@ -35,10 +38,10 @@ public class EntityAIHurtByTargetAllied extends EntityAITarget {
 	public void startExecuting()
 	{
 		this.taskOwner.setAttackTarget(this.taskOwner.getAITarget());
-		this.field_142052_b = this.taskOwner.func_142015_aE();
+		this.revengeTimer = this.taskOwner.getRevengeTimer();
 
 		double d0 = this.getTargetDistance();
-		List<?> list = this.taskOwner.worldObj.selectEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(this.taskOwner.posX, this.taskOwner.posY, this.taskOwner.posZ, this.taskOwner.posX + 1.0D, this.taskOwner.posY + 1.0D, this.taskOwner.posZ + 1.0D).expand(d0, 10.0D, d0), entitySelector);
+		List<?> list = this.taskOwner.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.fromBounds(this.taskOwner.posX, this.taskOwner.posY, this.taskOwner.posZ, this.taskOwner.posX + 1.0D, this.taskOwner.posY + 1.0D, this.taskOwner.posZ + 1.0D).expand(d0, 10.0D, d0), entitySelector);
 		Iterator<?> iterator = list.iterator();
 
 		while (iterator.hasNext())

@@ -3,31 +3,28 @@ package com.mraof.minestuck.world.gen.lands;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 
+import com.google.common.base.Predicate;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.gen.OreHandler;
 
 public class DecoratorVein implements ILandDecorator
 {
 	
 	int amount;
-	Block block;
-	int meta = 0;
+	IBlockState block;
 	int size;
 	
-	public DecoratorVein(Block block,int amount,int size) 
+	public DecoratorVein(IBlockState block,int amount,int size) 
 	{
 		this.amount = amount;
 		this.block = block;
 		this.size = size;
-	}
-	
-	public DecoratorVein(Block block,int meta,int amount,int size) 
-	{
-		this(block,amount,size);
-		this.meta = meta;
 	}
 	
 	@Override
@@ -42,7 +39,8 @@ public class DecoratorVein implements ILandDecorator
 			int posY = minY + random.nextInt(diffBtwnMinMaxY);
 			int posZ = chunkZ * 16 + random.nextInt(16);
 //			Debug.printf("Generating vien at %d %d %d",posX,posY,posZ);
-			(new WorldGenMinable(block, meta, size/2 + random.nextInt(size*2),provider.surfaceBlock.block)).generate(world, random, posX, posY, posZ);
+			(new WorldGenMinable(block, size/2 + random.nextInt(size*2), new OreHandler.BlockStatePredicate(provider.surfaceBlock))).generate(world, random, new BlockPos(posX, posY, posZ));
 		}
 	}
+	
 }

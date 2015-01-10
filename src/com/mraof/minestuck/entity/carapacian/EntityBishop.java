@@ -35,7 +35,7 @@ public abstract class EntityBishop extends EntityCarapacian implements IRangedAt
 	}
 	
 	@Override
-	protected float getWanderSpeed() 
+	public float getWanderSpeed() 
 	{
 		return .2F;
 	}
@@ -51,16 +51,16 @@ public abstract class EntityBishop extends EntityCarapacian implements IRangedAt
 	{
 
         double distanceX = entityliving.posX - this.posX;
-        double distanceY = entityliving.boundingBox.minY + (double)(entityliving.height / 2.0F) - (this.posY + (double)(this.height / 2.0F));
+        double distanceY = entityliving.getEntityBoundingBox().minY + (double)(entityliving.height / 2.0F) - (this.posY + (double)(this.height / 2.0F));
         double distanceZ = entityliving.posZ - this.posZ;
 		
         EntityLargeFireball entitylargefireball = new EntityLargeFireball(this.worldObj, this, distanceX, distanceY, distanceZ);
-        entitylargefireball.field_92057_e = 1;
+		entitylargefireball.explosionPower = 1;
         double d8 = (double)this.width;
         Vec3 vec3 = this.getLook(1.0F);
-        entitylargefireball.posX = (this.boundingBox.minX + this.boundingBox.maxX) / 2.0F  + vec3.xCoord * d8;
+        entitylargefireball.posX = (this.getEntityBoundingBox().minX + this.getEntityBoundingBox().maxX) / 2.0F  + vec3.xCoord * d8;
         entitylargefireball.posY = this.posY + (double)(this.height / 2.0F);
-        entitylargefireball.posZ = (this.boundingBox.minZ + this.boundingBox.maxZ) / 2.0F + vec3.zCoord * d8;
+        entitylargefireball.posZ = (this.getEntityBoundingBox().minZ + this.getEntityBoundingBox().maxZ) / 2.0F + vec3.zCoord * d8;
         this.worldObj.spawnEntityInWorld(entitylargefireball);
 	}
 	public int getAttackStrength(Entity par1Entity)
@@ -74,18 +74,18 @@ public abstract class EntityBishop extends EntityCarapacian implements IRangedAt
 		return var3;
 	}
 	
-	/**
-	 * Basic mob attack. Default to touch of death in EntityCreature. Overridden by each mob to define their attack.
-	 */
-	protected void attackEntity(Entity par1Entity, float par2)
-	{
-
-		if (this.attackTime <= 0 && par2 < 2.0F && par1Entity.boundingBox.maxY > this.boundingBox.minY && par1Entity.boundingBox.minY < this.boundingBox.maxY)
-		{
-			this.attackTime = 20;
-			this.attackEntityAsMob(par1Entity);
-		}
-	}
+//	/**
+//	 * Basic mob attack. Default to touch of death in EntityCreature. Overridden by each mob to define their attack.
+//	 */
+//	protected void attackEntity(Entity par1Entity, float par2)
+//	{
+//		
+//		if (this.attackTime <= 0 && par2 < 2.0F && par1Entity.getBoundingBox().maxY > this.getBoundingBox().minY && par1Entity.getBoundingBox().minY < this.getBoundingBox().maxY)
+//		{
+//			this.attackTime = 20;
+//			this.attackEntityAsMob(par1Entity);
+//		}
+//	}
 
 	public boolean attackEntityAsMob(Entity par1Entity)
 	{

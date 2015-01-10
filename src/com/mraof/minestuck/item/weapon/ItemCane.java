@@ -1,13 +1,12 @@
 package com.mraof.minestuck.item.weapon;
 
-
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemCane extends ItemWeapon
 {
@@ -24,15 +23,12 @@ public class ItemCane extends ItemWeapon
 		{
 		case CANE:
 			this.setUnlocalizedName("cane");
-//			this.setIconIndex(20);
 			break;
 		case SPEAR:
 			this.setUnlocalizedName("spearCane");
-//			this.setIconIndex(21);
 			break;
 		case DRAGON:
 			this.setUnlocalizedName("dragonCane");
-//			this.setIconIndex(22);
 			break;
 		}
 		this.weaponDamage = 2 + caneType.getDamageVsEntity();
@@ -62,11 +58,11 @@ public class ItemCane extends ItemWeapon
 	}
 	
 	@Override
-	public boolean onBlockDestroyed(ItemStack itemStack, World world, Block par3, int par4, int par5, int par6, EntityLivingBase par7EntityLiving)
+	public boolean onBlockDestroyed(ItemStack stack, World worldIn, Block blockIn, BlockPos pos, EntityLivingBase playerIn)
 	{
-		if ((double)par3.getBlockHardness(world, par4, par5, par6) != 0.0D)
+		if ((double)blockIn.getBlockHardness(worldIn, pos) != 0.0D)
 		{
-			itemStack.damageItem(2, par7EntityLiving);
+			stack.damageItem(2, playerIn);
 		}
 		
 		return true;
@@ -77,22 +73,5 @@ public class ItemCane extends ItemWeapon
 	public boolean isFull3D()
 	{
 		return true;
-	}
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister iconRegister) 
-	{
-		switch(caneType)
-		{
-		case CANE:
-			itemIcon = iconRegister.registerIcon("minestuck:Cane");
-			break;
-		case SPEAR:
-			itemIcon = iconRegister.registerIcon("minestuck:SpearCane");
-			break;
-		case DRAGON:
-			itemIcon = iconRegister.registerIcon("minestuck:DragonCane");
-			break;
-		}
 	}
 }
