@@ -13,6 +13,7 @@ import net.minecraft.world.chunk.IChunkProvider;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 public class WorldProviderLands extends WorldProvider 
 {
@@ -59,25 +60,37 @@ public class WorldProviderLands extends WorldProvider
 			return "Land of " + provider.aspect1.getNames()[provider.nameIndex1] + " and " + provider.aspect2.getNames()[provider.nameIndex2];
 		}
 	}
-
+	
 	@Override
 	public BlockPos getSpawnPoint() 
 	{
+		BlockPos spawn = MinestuckSaveHandler.spawnpoints.get((byte) this.getDimensionId());
+		if(spawn != null)
+			return spawn;
+		else
+		{
+			Debug.printf("Couldn't get special spawnpoint for dimension %d. This should not happen.", this.getDimensionId());
+			return super.getSpawnPoint();
+		}
+	}
+	
+	@Override
+	public BlockPos getRandomizedSpawnPoint()
+	{
 		createChunkGenerator();
-		BlockPos coordinates = new BlockPos(provider.spawnX, provider.spawnY, provider.spawnZ);
-
+		BlockPos coordinates = getSpawnPoint();
+		
 		boolean isAdventure = worldObj.getWorldInfo().getGameType() == GameType.ADVENTURE;
 		int spawnFuzz = 12;
 		int spawnFuzzHalf = spawnFuzz / 2;
-
-		if (!hasNoSky && !isAdventure)
+		
+		if (!isAdventure)
 		{
-			coordinates.add(this.worldObj.rand.nextInt(spawnFuzz) - spawnFuzzHalf,
-					this.worldObj.rand.nextInt(spawnFuzz) - spawnFuzzHalf,
-					0);
+			coordinates = coordinates.add(this.worldObj.rand.nextInt(spawnFuzz) - spawnFuzzHalf,
+					0, this.worldObj.rand.nextInt(spawnFuzz) - spawnFuzzHalf);
 			coordinates = this.worldObj.getTopSolidOrLiquidBlock(coordinates);
 		}
-
+		
 		return coordinates;
 	}
 

@@ -26,23 +26,16 @@ import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.gen.lands.LandHelper;
+import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 {
-	//List<Block> commonBlocks = new ArrayList<Block>();
 	
 	public ItemCruxiteArtifact(int par2, boolean par3) 
 	{
 		super(1, par2, par3);
 		this.setCreativeTab(Minestuck.tabMinestuck);
 		setUnlocalizedName("cruxiteArtifact");
-		//commonBlocks.add(Blocks.stone);
-		//commonBlocks.add(Blocks.grass);
-		//commonBlocks.add(Blocks.dirt);
-		//commonBlocks.add(Blocks.sand);
-		//commonBlocks.add(Blocks.sandstone);
-		//commonBlocks.add(Blocks.water);
-		//commonBlocks.add(Blocks.flowing_water);
 	}
 	@Override
 	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
@@ -139,13 +132,6 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 				((Entity)iterator.next()).setDead();
 			}
 			
-			ChunkProviderLands chunkProvider = (ChunkProviderLands) worldserver1.provider.createChunkGenerator();
-			chunkProvider.spawnX = x;
-			chunkProvider.spawnY = y;
-			chunkProvider.spawnZ = z;
-			chunkProvider.saveData();
-			
-			Debug.printf("Respawn location being set to: %d, %d, %d", x, y, z);
 		}
 	}
 	

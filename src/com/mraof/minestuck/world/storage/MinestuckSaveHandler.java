@@ -5,10 +5,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.BlockPos;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -19,6 +22,7 @@ import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 public class MinestuckSaveHandler 
 {
 	public static List<Byte> lands = Collections.synchronizedList(new ArrayList<Byte>());
+	public static HashMap<Byte, BlockPos> spawnpoints = new HashMap<Byte, BlockPos>();
 	@SubscribeEvent
 	public void onWorldSave(WorldEvent.Save event)
 	{
@@ -26,12 +30,22 @@ public class MinestuckSaveHandler
 			return;
 
 		File dataFile = event.world.getSaveHandler().getMapFileFromName("MinestuckData");
-		if (dataFile != null) {
+		if (dataFile != null)
+		{
 			NBTTagCompound nbt = new NBTTagCompound();
-			byte[] landArray = new byte[lands.size()];
+			
+			NBTTagList list = new NBTTagList();
 			for(int i = 0; i < lands.size(); i++)
-				landArray[i] = lands.get(i);
-			nbt.setByteArray("landList", landArray);
+			{
+				NBTTagCompound landTag = new NBTTagCompound();
+				landTag.setByte("dimId", lands.get(i));
+				BlockPos spawn = spawnpoints.get(lands.get(i));
+				landTag.setInteger("spawnX", spawn.getX());
+				landTag.setInteger("spawnY", spawn.getY());
+				landTag.setInteger("spawnZ", spawn.getZ());
+				list.appendTag(landTag);
+			}
+			nbt.setTag("landList", list);
 
 			TileEntityTransportalizer.saveTransportalizers(nbt);
 

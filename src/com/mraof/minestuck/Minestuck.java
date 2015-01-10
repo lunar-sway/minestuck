@@ -20,6 +20,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -593,6 +595,7 @@ public class Minestuck
 		CaptchaDeckHandler.rand = new Random(worldSeed);	//Unsure whenether this will be better or not
 		
 		MinestuckSaveHandler.lands.clear();
+		MinestuckSaveHandler.spawnpoints.clear();
 		
 		File dataFile = event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("MinestuckData");
 		if(dataFile != null && dataFile.exists()) {
@@ -602,14 +605,22 @@ public class Minestuck
 			} catch(IOException e) {
 				e.printStackTrace();
 			}
-			if(nbt != null) {
-				for(byte landId : nbt.getByteArray("landList")) {
+			if(nbt != null)
+			{
+				NBTTagList landList = nbt.getTagList("landList", 10);
+				for(int i = 0; i < landList.tagCount(); i++)
+				{
+					NBTTagCompound landTag = landList.getCompoundTagAt(i);
+					byte landId = landTag.getByte("dimId");
+					Debug.printf("Loading dimension %d.",landId);
 					if(MinestuckSaveHandler.lands.contains((Byte)landId))
 						continue;
 					MinestuckSaveHandler.lands.add(landId);
 					
 					if(!DimensionManager.isDimensionRegistered(landId))
 						DimensionManager.registerDimension(landId, Minestuck.landProviderTypeId);
+					BlockPos spawn = new BlockPos(landTag.getInteger("spawnX"), landTag.getInteger("spawnY"), landTag.getInteger("spawnZ"));
+					MinestuckSaveHandler.spawnpoints.put(landId, spawn);
 				}
 				
 				SkaianetHandler.loadData(nbt.getCompoundTag("skaianet"));

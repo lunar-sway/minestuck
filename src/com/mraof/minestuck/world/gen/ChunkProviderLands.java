@@ -55,7 +55,6 @@ public class ChunkProviderLands implements IChunkProvider
 	public LandAspect terrainMapper;
 	public ArrayList<ILandDecorator> decorators;
 	public int dayCycle;
-	public int spawnX, spawnY, spawnZ;
 
 	@SuppressWarnings("unchecked")
 	public ChunkProviderLands(World worldObj, long seed, boolean b)
@@ -68,9 +67,6 @@ public class ChunkProviderLands implements IChunkProvider
 		this.landWorld = worldObj;
 		
 		if (landDataTag == null) {
-			spawnX = landWorld.getWorldInfo().getSpawnX();
-			spawnY = landWorld.getWorldInfo().getSpawnY();
-			spawnZ = landWorld.getWorldInfo().getSpawnZ();
 			this.aspect1 = helper.getLandAspect();
 			this.aspect2 = helper.getLandAspect(aspect1);
 			Random rand = new Random(seed);
@@ -81,8 +77,8 @@ public class ChunkProviderLands implements IChunkProvider
 		} else {
 			aspect1 = LandHelper.fromName(((NBTTagCompound) landDataTag).getString("aspect1"));
 			aspect2 = LandHelper.fromName(((NBTTagCompound) landDataTag).getString("aspect2"));
-			nameIndex1 = ((NBTTagCompound) landDataTag).getInteger("aspectName1");
-			nameIndex2 = ((NBTTagCompound) landDataTag).getInteger("aspectName2");
+			nameIndex1 = ((NBTTagCompound) landDataTag).getByte("aspectName1");
+			nameIndex2 = ((NBTTagCompound) landDataTag).getByte("aspectName2");
 		}
 		
 		this.random = new Random(seed);
@@ -107,8 +103,11 @@ public class ChunkProviderLands implements IChunkProvider
 		this.riverBlock = fluidAspect.getRiverBlock();
 		this.terrainMapper = helper.pickOne(aspect1,aspect2);
 		this.decorators = helper.pickSubset(aspect1.getDecorators(),aspect2.getDecorators());
-		this.dayCycle = helper.pickOne(aspect1,aspect2).getDayCycleMode();
-		this.skyColor = helper.pickOne(aspect1, aspect2).getFogColor();
+		this.dayCycle = aspect1.getDayCycleMode() | aspect2.getDayCycleMode();
+		if(this.dayCycle == 3)
+			this.dayCycle = helper.pickOne(aspect1,aspect2).getDayCycleMode();
+		Vec3 combinedFogColor = aspect1.getFogColor().add(aspect2.getFogColor());
+		this.skyColor = new Vec3(combinedFogColor.xCoord/2, combinedFogColor.yCoord/2, combinedFogColor.zCoord/2);
 	}
 
 	@Override
@@ -232,9 +231,8 @@ public class ChunkProviderLands implements IChunkProvider
 	{
 		
 		NBTTagCompound nbt = LandHelper.toNBT(aspect1,aspect2);
-		nbt.setInteger("spawnX", spawnX);
-		nbt.setInteger("spawnY", spawnY);
-		nbt.setInteger("spawnZ", spawnZ);
+		nbt.setByte("aspectName1", (byte) nameIndex1);
+		nbt.setByte("aspectName2", (byte) nameIndex2);
 		
 		Map<String, NBTBase> dataTag = new Hashtable<String,NBTBase>();
 		dataTag.put("LandData", nbt);
