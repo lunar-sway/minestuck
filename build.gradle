@@ -22,7 +22,7 @@ group= "com.mraof.minestuck"
 archivesBaseName = "Minestuck"
 
 minecraft {
-    version = "1.8-11.14.0.1281"
+    version = "1.8-11.14.0.1285-1.8"
     assetDir = "eclipse/assets"
 
     replaceIn "com/mraof/minestuck/Minestuck.java"
