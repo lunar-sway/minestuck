@@ -25,6 +25,8 @@ minecraft {
     version = "1.8-11.14.0.1285-1.8"
     runDir = "eclipse"
 
+    mappings = "snapshot_nodoc_20141130"
+
     replaceIn "com/mraof/minestuck/Minestuck.java"
     replace "@VERSION@", project.version
 }
