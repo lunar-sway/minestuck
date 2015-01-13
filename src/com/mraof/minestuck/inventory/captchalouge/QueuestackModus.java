@@ -9,6 +9,9 @@ import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler.ModusType;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class QueuestackModus extends StackModus {
 	
 	@Override
@@ -49,6 +52,7 @@ public class QueuestackModus extends StackModus {
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public SylladexGuiHandler getGuiHandler()
 	{
 		if(gui == null)

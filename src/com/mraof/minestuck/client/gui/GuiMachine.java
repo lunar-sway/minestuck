@@ -109,7 +109,7 @@ public class GuiMachine extends GuiContainer {
 		if ((metadata == 3 || metadata ==4) && te.inv[1] != null) 
 		{
 			//Render grist requirements
-			GristSet set = GristRegistry.getGristConversion(AlchemyRecipeHandler.getDecodedItem(te.inv[1], metadata == 3? true : false)).copy();
+			GristSet set = GristRegistry.getGristConversion(AlchemyRecipeHandler.getDecodedItem(te.inv[1], metadata == 3? true : false));
 			boolean selectedType = AlchemyRecipeHandler.getDecodedItem(te.inv[1], true).getItem() == Minestuck.captchaCard;
 			if(selectedType)
 				set = metadata == 3 ? new GristSet(te.selectedGrist, 1) : null;
@@ -117,7 +117,7 @@ public class GuiMachine extends GuiContainer {
 			{
 				float multiplier = AlchemyRecipeHandler.getDecodedItem(te.inv[1], false).stackSize;
 				if(multiplier != 1)
-					set.scaleGrist(multiplier);
+					set = set.copy().scaleGrist(multiplier);
 			}
 			
 		if (set == null) {fontRendererObj.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 9,45, 16711680); return;}
