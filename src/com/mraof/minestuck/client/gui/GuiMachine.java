@@ -28,6 +28,8 @@ import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.GristType;
 
+import cpw.mods.fml.client.config.GuiButtonExt;
+
 public class GuiMachine extends GuiContainer {
 	
 	private static final String[] guis = {"cruxtruder","designix","lathe","alchemiter","widget"};
@@ -183,13 +185,13 @@ public void initGui() {
 		//make buttons:		id, x, y, width, height, text
 		if (metadata == 1) {
 			//The Designix's needs a button...
-			modeButton = new GuiButton(1, (width - xSize) / 2 + buttonX, (height - ySize) / 2 + buttonY, 20, 20, te.mode ? "&&": "||");
+			modeButton = new GuiButtonExt(1, (width - xSize) / 2 + buttonX, (height - ySize) / 2 + buttonY, 20, 20, te.mode ? "&&": "||");
 			buttonList.add(modeButton);
 			modeButton.visible = (te.inv[1] != null && te.inv[2] != null);
 		}
 		if (metadata != 0) {
 			//All non-Cruxtruders need a Go button.
-			goButton = new GuiButton(1, (width - xSize) / 2 + goX, (height - ySize) / 2 + goY, 30, 12, te.overrideStop ? "STOP" : "GO");
+			goButton = new GuiButtonExt(1, (width - xSize) / 2 + goX, (height - ySize) / 2 + goY, 30, 12, te.overrideStop ? "STOP" : "GO");
 			buttonList.add(goButton);
 		}
 }

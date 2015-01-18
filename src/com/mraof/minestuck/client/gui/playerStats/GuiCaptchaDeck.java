@@ -8,6 +8,7 @@ import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.util.Debug;
 
+import cpw.mods.fml.client.config.GuiButtonExt;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.RenderHelper;
@@ -37,8 +38,8 @@ public class GuiCaptchaDeck extends GuiPlayerStatsContainer
 	public void initGui()
 	{
 		super.initGui();
-		modusButton = new GuiButton(1, xOffset + 102, yOffset + 31, 50, 18, StatCollector.translateToLocal("gui.useItem"));
-		sylladexMap = new GuiButton(1, xOffset + 6, yOffset + 31, 60, 18, StatCollector.translateToLocal("gui.sylladex"));
+		modusButton = new GuiButtonExt(1, xOffset + 102, yOffset + 31, 50, 18, StatCollector.translateToLocal("gui.useItem"));
+		sylladexMap = new GuiButtonExt(1, xOffset + 6, yOffset + 31, 60, 18, StatCollector.translateToLocal("gui.sylladex"));
 		buttonList.add(modusButton);
 		buttonList.add(sylladexMap);
 		sylladexMap.enabled = CaptchaDeckHandler.clientSideModus != null;
