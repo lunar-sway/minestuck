@@ -41,7 +41,8 @@ public class ContainerMachine extends Container {
 	public TileEntityMachine tileEntity;
 	private int metadata;
 	private boolean operator = true;
-
+	private int progress;
+	
 	public ContainerMachine(InventoryPlayer inventoryPlayer, TileEntityMachine te) {
 		tileEntity = te;
 		metadata = te.getMetadata();
@@ -218,7 +219,7 @@ public class ContainerMachine extends Container {
 	public void detectAndSendChanges()
 	{
 		super.detectAndSendChanges();
-
+		
 		for (int i = 0; i < this.crafters.size(); ++i)
 		{
 			ICrafting icrafting = (ICrafting)this.crafters.get(i);
@@ -227,15 +228,24 @@ public class ContainerMachine extends Container {
 			case 1:
 				if (this.operator != (this.tileEntity.mode))
 				{
-					icrafting.sendProgressBarUpdate(this, 0, this.tileEntity.mode ? 0 : 1);
+					icrafting.sendProgressBarUpdate(this, 1, this.tileEntity.mode ? 0 : 1);
 					this.operator = this.tileEntity.mode;
 				}
 			}
+			if(this.progress != tileEntity.progress && tileEntity.progress != 0)
+				icrafting.sendProgressBarUpdate(this, 0, tileEntity.progress);
 		}
+		this.progress = tileEntity.progress;
 	}
 	@Override
 	public void updateProgressBar(int par1, int par2) 
 	{
+		if(par1 == 0)
+		{
+			tileEntity.progress = par2;
+			return;
+		}
+		
 		switch(this.metadata)
 		{
 		case 1:

@@ -131,6 +131,8 @@ public class TileEntityMachine extends TileEntity implements IInventory {
             this.mode =  tagCompound.getBoolean("mode");
             this.overrideStop = tagCompound.getBoolean("overrideStop");
             
+		for(int i = 0; i < inv.length; i++)
+			inv[i] = null;
             NBTTagList tagList = tagCompound.getTagList("Inventory", 10);
             for (int i = 0; i < tagList.tagCount(); i++) {
                     NBTTagCompound tag = tagList.getCompoundTagAt(i);
@@ -198,20 +200,30 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 	}
 	
 	@Override
-	public void updateEntity() {
+	public void updateEntity()
+	{
 		
-		if (!contentsValid()) {
+		if(worldObj.isRemote)
+			return;
+		
+		if (!contentsValid())
+		{
+			boolean b = progress == 0;
 			this.progress = 0;
 			this.ready = overrideStop;
+			if(!b)
+				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			return;
 		}
 		
 		this.progress++;
 		
-		if (this.progress == this.maxProgress) {
+		if (this.progress == this.maxProgress)
+		{
 			this.progress = 0;
 			this.ready = overrideStop;
 			processContents();
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
 	}
 	
