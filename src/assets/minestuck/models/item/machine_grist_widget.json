@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "minestuck:blocks/GristWidget"
+        "layer0": "minestuck:items/GristWidget"
     },
     "display": {
         "thirdperson": {

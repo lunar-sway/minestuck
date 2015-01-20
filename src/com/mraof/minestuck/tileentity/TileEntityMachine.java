@@ -43,7 +43,6 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
     public ItemStack[] inv;
     public int progress = 0;
     public int maxProgress = 100;
-    public byte rotation = 0;
     //true if and, false if or
     public boolean mode = true;
     public EntityPlayer owner;
@@ -59,7 +58,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
     @Override
 	public int getSizeInventory()
     {
-		switch (getBlockMetadata())
+		switch (getMachineType())
 		{
     		case (0):
     			return 2;
@@ -129,7 +128,6 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
 		
-		this.rotation = tagCompound.getByte("rotation");
 		this.progress = tagCompound.getInteger("progress");
 		this.mode =  tagCompound.getBoolean("mode");
 		this.overrideStop = tagCompound.getBoolean("overrideStop");
@@ -147,7 +145,6 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
 		
-		tagCompound.setByte("rotation", this.rotation);
 		tagCompound.setInteger("progress", this.progress);
 		tagCompound.setBoolean("mode", this.mode);
 		tagCompound.setBoolean("overrideStop", this.overrideStop);
@@ -210,11 +207,11 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 	public boolean contentsValid()
 	{
 		
-		if (getBlockMetadata() != 0 && !this.ready)
+		if (getMachineType() != 0 && !this.ready)
 		{
 			return false;
 		}
-		switch (getBlockMetadata())
+		switch (getMachineType())
 		{
 		case (0):
 			return (this.inv[1] != null && (this.inv[0] == null || this.inv[0].stackSize < 64));
@@ -283,7 +280,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 	
 	public void processContents()
 	{
-		switch (getBlockMetadata())
+		switch (getMachineType())
 		{
 		case (0):
 			// Process the Raw Cruxite
@@ -418,7 +415,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 	@Override
 	public void markDirty()
 	{
-		if(getBlockMetadata() == 1)
+		if(getMachineType() == 1)
 		{
 			this.progress = 0;
 			this.ready = false;
@@ -429,7 +426,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 	@Override
 	public String getName()
 	{
-		return "tile.blockMachine."+ItemMachine.subNames[getBlockMetadata()]+".name";
+		return "tile.blockMachine."+ItemMachine.subNames[getMachineType()]+".name";
 	}
 	
 	@Override
@@ -469,6 +466,11 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 	public void clear()
 	{
 		inv = new ItemStack[4];
+	}
+	
+	public int getMachineType()
+	{
+		return getBlockMetadata()/4;
 	}
 	
 }

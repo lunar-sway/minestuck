@@ -56,7 +56,7 @@ public class GuiMachine extends GuiContainer {
 	{
 	super(new ContainerMachine(inventoryPlayer, tileEntity));
 	this.te = tileEntity;
-	this.metadata = tileEntity.getBlockMetadata();
+	this.metadata = tileEntity.getMachineType();
 	guiBackground = new ResourceLocation("minestuck:textures/gui/" + guis[metadata] + ".png");
 	guiProgress = new ResourceLocation("minestuck:textures/gui/progress/" + guis[metadata] + ".png");
 	//this.player = inventoryPlayer.player;
@@ -220,7 +220,7 @@ public void initGui() {
 				te.overrideStop = false;
 				goButton.displayString = StatCollector.translateToLocal(te.overrideStop ? "gui.buttonStop" : "gui.buttonGo");
 			}
-			else if (Mouse.getEventButton() == 1 && te.getBlockMetadata() > 2)
+			else if (Mouse.getEventButton() == 1 && te.getMachineType() > 2)
 			{
 				//Tell the machine to go until stopped
 				MinestuckPacket packet = MinestuckPacket.makePacket(Type.GOBUTTON,true,!te.overrideStop);
@@ -250,7 +250,7 @@ protected void mouseClicked(int par1, int par2, int par3) throws IOException
 			}
 		}
 	}
-	else if(te.getBlockMetadata() == 3 && par3 == 0 && mc.thePlayer.inventory.getItemStack() == null
+	else if(te.getMachineType() == 3 && par3 == 0 && mc.thePlayer.inventory.getItemStack() == null
 			&& te.inv[1] != null && AlchemyRecipeHandler.getDecodedItem(te.inv[1], true).getItem() == Minestuck.captchaCard
 			&& par1 >= guiLeft + 9 && par1 < guiLeft + 167 && par2 >= guiTop + 45 && par2 < guiTop + 70)
 	{

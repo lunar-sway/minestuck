@@ -22,8 +22,7 @@ public class ItemMachine extends ItemBlock {
 		@Override
 		public int getMetadata (int damageValue) 
 		{
-			return damageValue;
-			
+			return damageValue*4;
 		}
 		
 }

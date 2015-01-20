@@ -46,7 +46,7 @@ public class ContainerMachine extends Container {
 	public ContainerMachine(InventoryPlayer inventoryPlayer, TileEntityMachine te)
 	{
 		tileEntity = te;
-		metadata = te.getBlockMetadata();
+		metadata = te.getMachineType();
 		te.owner = inventoryPlayer.player;
 		
 		//the Slot constructor takes the IInventory and the slot number in that it binds to

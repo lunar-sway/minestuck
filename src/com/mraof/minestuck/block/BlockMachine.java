@@ -5,6 +5,7 @@ import java.util.Random;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
@@ -25,8 +26,8 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import static com.mraof.minestuck.block.BlockComputerOff.DIRECTION;
 
+import com.google.common.base.Predicate;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
@@ -50,6 +51,14 @@ public class BlockMachine extends BlockContainer {
 	}
 	
 	public static final PropertyEnum MACHINE_TYPE = PropertyEnum.create("machine_type", MachineTypes.class);
+	public static final PropertyDirection DIRECTION = PropertyDirection.create("facing", new Predicate<EnumFacing>()
+			{
+				@Override
+				public boolean apply(EnumFacing input)
+				{
+					return input.getAxis().isHorizontal();
+				}
+			});
 	
 	public BlockMachine() {
 		super(Material.rock);
@@ -63,19 +72,19 @@ public class BlockMachine extends BlockContainer {
 	@Override
 	protected BlockState createBlockState()
 	{
-		return new BlockState(this, MACHINE_TYPE);
+		return new BlockState(this, MACHINE_TYPE, DIRECTION);
 	}
 	
 	@Override
 	public int getMetaFromState(IBlockState state)
 	{
-		return ((MachineTypes) state.getValue(MACHINE_TYPE)).ordinal();
+		return ((MachineTypes) state.getValue(MACHINE_TYPE)).ordinal()*4 + ((EnumFacing)state.getValue(DIRECTION)).ordinal() - 2;
 	}
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta)
 	{
-		return getDefaultState().withProperty(MACHINE_TYPE, MachineTypes.values()[meta]);
+		return getDefaultState().withProperty(MACHINE_TYPE, MachineTypes.values()[meta/4]).withProperty(DIRECTION, EnumFacing.values()[(meta%4) + 2]);
 	}
 	
 	@Override
@@ -102,7 +111,7 @@ public class BlockMachine extends BlockContainer {
 	@Override
 	public int getRenderType()
 	{
-		return -1;
+		return 3;
 	}
 
 	@Override
@@ -182,13 +191,33 @@ public class BlockMachine extends BlockContainer {
 	{
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 		int l = MathHelper.floor_double((double)(placer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-		TileEntityMachine tileEntity = (TileEntityMachine) worldIn.getTileEntity(pos);
-		tileEntity.rotation = (byte) l;
-		
+		EnumFacing[] directions = {EnumFacing.NORTH, EnumFacing.EAST, EnumFacing.SOUTH, EnumFacing.WEST};
+		worldIn.setBlockState(pos, state.withProperty(DIRECTION, directions[l]), 2);
 	}
 	
 	@Override
 	public TileEntity createNewTileEntity(World world, int metaData) {
 		return new TileEntityMachine();
+	}
+	
+	private int[] harvestLevel = new int[] {-1, -1, -1, -1, -1, -1, -1, -1};
+	private String[] harvestTool = new String[harvestLevel.length];
+	@Override
+	public void setHarvestLevel(String toolClass, int level, IBlockState state)
+	{
+		super.setHarvestLevel(toolClass, level, state);
+		int idx = this.getMetaFromState(state)/4;
+		this.harvestTool[idx] = toolClass;
+		this.harvestLevel[idx] = level;
+	}
+	@Override
+	public int getHarvestLevel(IBlockState state)
+	{
+		return harvestLevel[getMetaFromState(state)/4];
+	}
+	@Override
+	public String getHarvestTool(IBlockState state)
+	{
+		return harvestTool[getMetaFromState(state)/4];
 	}
 }

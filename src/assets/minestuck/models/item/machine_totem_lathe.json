@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "minestuck:blocks/TotemLathe"
+        "layer0": "minestuck:items/TotemLathe"
     },
     "display": {
         "thirdperson": {
