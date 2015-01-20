@@ -140,11 +140,22 @@ public class CaptchaDeckHandler
 				&& modus != null)
 		{
 			ItemStack content = AlchemyRecipeHandler.getDecodedItem(item, false);
-			if(!modus.increaseSize())
-				return;
-			container.inventory.setInventorySlotContents(0, null);
-			if(content != null && !modus.putItemStack(content))
-				launchItem(player, content);
+			int failed = 0;
+			for(int i = 0; i < item.stackSize; i++)
+				if(!modus.increaseSize())
+					failed++;
+			
+			if(content != null)
+				for(int i = 0; i < item.stackSize - failed; i++)
+				{
+					ItemStack toPut = content.copy();
+					if(!modus.putItemStack(toPut))
+						launchItem(player, toPut);
+				}
+			
+			if(failed == 0)
+				container.inventory.setInventorySlotContents(0, null);
+			else item.stackSize = failed;
 		}
 		
 		if(modus != null)

@@ -20,7 +20,7 @@ public class ItemModus extends Item
 	
 	public ItemModus()
 	{
-		this.maxStackSize = 16;
+		this.maxStackSize = 1;
 		this.setHasSubtypes(true);
 		this.setCreativeTab(Minestuck.tabMinestuck);
 		this.setUnlocalizedName("modusCard");

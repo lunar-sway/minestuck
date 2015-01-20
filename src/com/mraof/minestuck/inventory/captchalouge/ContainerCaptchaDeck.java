@@ -15,13 +15,7 @@ import net.minecraft.nbt.NBTTagList;
 public class ContainerCaptchaDeck extends Container
 {
 	
-	public InventoryBasic inventory = new InventoryBasic("ModusInventory", false, 1)
-	{
-		public int getInventoryStackLimit()
-		{
-			return 1;
-		}
-	};
+	public InventoryBasic inventory = new InventoryBasic("ModusInventory", false, 1);
 	
 	public ContainerCaptchaDeck(EntityPlayer player)
 	{
