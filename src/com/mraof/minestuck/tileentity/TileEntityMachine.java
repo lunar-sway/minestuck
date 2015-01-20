@@ -49,6 +49,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 	public boolean ready = false;
 	public boolean overrideStop = false;
 	public GristType selectedGrist = GristType.Build;
+	public byte rotation;
 	
     public TileEntityMachine(){
             this.inv = new ItemStack[4];
@@ -125,8 +126,11 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 	}
 	
 	@Override
-	public void readFromNBT(NBTTagCompound tagCompound) {
+	public void readFromNBT(NBTTagCompound tagCompound)
+	{
 		super.readFromNBT(tagCompound);
+		
+		this.rotation = tagCompound.getByte("rotation");
 		
 		this.progress = tagCompound.getInteger("progress");
 		this.mode =  tagCompound.getBoolean("mode");
@@ -144,6 +148,8 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 	@Override
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
+		
+		tagCompound.setByte("rotation", this.rotation);
 		
 		tagCompound.setInteger("progress", this.progress);
 		tagCompound.setBoolean("mode", this.mode);

@@ -63,11 +63,13 @@ public class BlockMachine extends BlockContainer {
 				}
 			});
 	
-	public BlockMachine() {
+	public BlockMachine()
+	{
 		super(Material.rock);
 		
 		setUnlocalizedName("blockMachine");
 		setHardness(3.0F);
+		setDefaultState(getDefaultState().withProperty(DIRECTION, EnumFacing.SOUTH));
 		this.setCreativeTab(Minestuck.tabMinestuck);
 
 	}
@@ -81,13 +83,24 @@ public class BlockMachine extends BlockContainer {
 	@Override
 	public int getMetaFromState(IBlockState state)
 	{
-		return ((MachineType) state.getValue(MACHINE_TYPE)).ordinal()*4 + ((EnumFacing)state.getValue(DIRECTION)).ordinal() - 2;
+		return ((MachineType) state.getValue(MACHINE_TYPE)).ordinal();
 	}
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta)
 	{
-		return getDefaultState().withProperty(MACHINE_TYPE, MachineType.values()[meta/4]).withProperty(DIRECTION, EnumFacing.values()[(meta%4) + 2]);
+		return getDefaultState().withProperty(MACHINE_TYPE, MachineType.values()[meta]);
+	}
+	
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos)
+	{
+		TileEntity tileEntity = worldIn.getTileEntity(pos);
+		if(tileEntity != null && tileEntity instanceof TileEntityMachine)
+		{
+			return state.withProperty(DIRECTION, EnumFacing.getHorizontal(((TileEntityMachine) tileEntity).rotation));
+		}
+		else return state;
 	}
 	
 	@Override
@@ -193,9 +206,9 @@ public class BlockMachine extends BlockContainer {
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
 	{
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-		int l = MathHelper.floor_double((double)(placer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-		EnumFacing[] directions = {EnumFacing.NORTH, EnumFacing.EAST, EnumFacing.SOUTH, EnumFacing.WEST};
-		worldIn.setBlockState(pos, state.withProperty(DIRECTION, directions[l]), 2);
+		byte l = (byte) ((MathHelper.floor_double((double)(placer.rotationYaw * 4.0F / 360.0F) + 0.5D) + 2) & 3);
+		TileEntityMachine machine = (TileEntityMachine) worldIn.getTileEntity(pos);
+		machine.rotation = l;
 	}
 	
 	@Override
@@ -206,14 +219,14 @@ public class BlockMachine extends BlockContainer {
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess worldIn, BlockPos pos)
 	{
-		AxisAlignedBB bb = getBoundingBox(worldIn.getBlockState(pos));
+		AxisAlignedBB bb = getBoundingBox(getActualState(worldIn.getBlockState(pos), worldIn, pos));
 		setBlockBounds((float) bb.minX, (float) bb.minY, (float) bb.minZ, (float) bb.maxX, (float) bb.maxY, (float) bb.maxZ);
 	}
 	
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state)
 	{
-		return getBoundingBox(state).offset(pos.getX(), pos.getY(), pos.getZ());
+		return getBoundingBox(getActualState(state, worldIn, pos)).offset(pos.getX(), pos.getY(), pos.getZ());
 	}
 	
 	@Override
@@ -223,7 +236,7 @@ public class BlockMachine extends BlockContainer {
 		if(state.getValue(MACHINE_TYPE).equals(MachineType.ALCHEMITER))
 		{
 			AxisAlignedBB bb = new AxisAlignedBB(0, 2/16D, 0, 4.5/16D, 1, 1/8D);
-			bb = rotate(bb, (EnumFacing) state.getValue(DIRECTION)).offset(pos.getX(), pos.getY(), pos.getZ());
+			bb = rotate(bb, (EnumFacing) getActualState(state, worldIn, pos).getValue(DIRECTION)).offset(pos.getX(), pos.getY(), pos.getZ());
 			if(mask.intersectsWith(bb))
 				list.add(bb);
 		}
@@ -272,24 +285,4 @@ public class BlockMachine extends BlockContainer {
 		}
 	}
 	
-	private int[] harvestLevel = new int[] {-1, -1, -1, -1, -1, -1, -1, -1};
-	private String[] harvestTool = new String[harvestLevel.length];
-	@Override
-	public void setHarvestLevel(String toolClass, int level, IBlockState state)
-	{
-		super.setHarvestLevel(toolClass, level, state);
-		int idx = this.getMetaFromState(state)/4;
-		this.harvestTool[idx] = toolClass;
-		this.harvestLevel[idx] = level;
-	}
-	@Override
-	public int getHarvestLevel(IBlockState state)
-	{
-		return harvestLevel[getMetaFromState(state)/4];
-	}
-	@Override
-	public String getHarvestTool(IBlockState state)
-	{
-		return harvestTool[getMetaFromState(state)/4];
-	}
 }
