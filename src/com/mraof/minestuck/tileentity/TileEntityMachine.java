@@ -21,7 +21,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.BlockMachine;
-import com.mraof.minestuck.block.BlockMachine.MachineTypes;
+import com.mraof.minestuck.block.BlockMachine.MachineType;
 import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.item.block.ItemMachine;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;

@@ -10,6 +10,7 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,11 +19,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.Explosion;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -36,7 +39,7 @@ public class BlockMachine extends BlockContainer {
 
 	public static final String[] iconNames = {"Cruxtruder","PunchDesignix","TotemLathe","Alchemiter","GristWidget"}; //PhernaliaFrame
 	
-	public static enum MachineTypes implements IStringSerializable
+	public static enum MachineType implements IStringSerializable
 	{
 		CRUXTRUDER,
 		PUNCH_DESIGNIX,
@@ -50,7 +53,7 @@ public class BlockMachine extends BlockContainer {
 		}
 	}
 	
-	public static final PropertyEnum MACHINE_TYPE = PropertyEnum.create("machine_type", MachineTypes.class);
+	public static final PropertyEnum MACHINE_TYPE = PropertyEnum.create("machine_type", MachineType.class);
 	public static final PropertyDirection DIRECTION = PropertyDirection.create("facing", new Predicate<EnumFacing>()
 			{
 				@Override
@@ -78,19 +81,19 @@ public class BlockMachine extends BlockContainer {
 	@Override
 	public int getMetaFromState(IBlockState state)
 	{
-		return ((MachineTypes) state.getValue(MACHINE_TYPE)).ordinal()*4 + ((EnumFacing)state.getValue(DIRECTION)).ordinal() - 2;
+		return ((MachineType) state.getValue(MACHINE_TYPE)).ordinal()*4 + ((EnumFacing)state.getValue(DIRECTION)).ordinal() - 2;
 	}
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta)
 	{
-		return getDefaultState().withProperty(MACHINE_TYPE, MachineTypes.values()[meta/4]).withProperty(DIRECTION, EnumFacing.values()[(meta%4) + 2]);
+		return getDefaultState().withProperty(MACHINE_TYPE, MachineType.values()[meta/4]).withProperty(DIRECTION, EnumFacing.values()[(meta%4) + 2]);
 	}
 	
 	@Override
 	public int damageDropped(IBlockState state)
 	{
-		return ((MachineTypes)state.getValue(MACHINE_TYPE)).ordinal();
+		return ((MachineType)state.getValue(MACHINE_TYPE)).ordinal();
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -198,6 +201,75 @@ public class BlockMachine extends BlockContainer {
 	@Override
 	public TileEntity createNewTileEntity(World world, int metaData) {
 		return new TileEntityMachine();
+	}
+	
+	@Override
+	public void setBlockBoundsBasedOnState(IBlockAccess worldIn, BlockPos pos)
+	{
+		AxisAlignedBB bb = getBoundingBox(worldIn.getBlockState(pos));
+		setBlockBounds((float) bb.minX, (float) bb.minY, (float) bb.minZ, (float) bb.maxX, (float) bb.maxY, (float) bb.maxZ);
+	}
+	
+	@Override
+	public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state)
+	{
+		return getBoundingBox(state).offset(pos.getX(), pos.getY(), pos.getZ());
+	}
+	
+	@Override
+	public void addCollisionBoxesToList(World worldIn, BlockPos pos, IBlockState state, AxisAlignedBB mask, List list, Entity collidingEntity)
+	{
+		super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity);
+		if(state.getValue(MACHINE_TYPE).equals(MachineType.ALCHEMITER))
+		{
+			AxisAlignedBB bb = new AxisAlignedBB(0, 2/16D, 0, 4.5/16D, 1, 1/8D);
+			bb = rotate(bb, (EnumFacing) state.getValue(DIRECTION)).offset(pos.getX(), pos.getY(), pos.getZ());
+			if(mask.intersectsWith(bb))
+				list.add(bb);
+		}
+	}
+	
+	public AxisAlignedBB getBoundingBox(IBlockState state)
+	{
+		EnumFacing rotation = (EnumFacing) state.getValue(DIRECTION);
+		MachineType type = (MachineType) state.getValue(MACHINE_TYPE);
+		AxisAlignedBB bb = null;
+		switch(type)
+		{
+		case ALCHEMITER:
+			bb = new AxisAlignedBB(0, 0, 0, 1, 1/2D, 1);
+			break;
+		case CRUXTRUDER:
+			bb = new AxisAlignedBB(0, 0, 0, 1, 15/16D, 1);
+			break;
+		case GRIST_WIDGET:
+			bb = new AxisAlignedBB(0, 0, 1/4D, 1, 1/4D, 3/4D);
+			break;
+		case PUNCH_DESIGNIX:
+			bb = new AxisAlignedBB(0, 0, 0, 1, 1, 5/8D);
+			break;
+		case TOTEM_LATHE:
+			bb = new AxisAlignedBB(0, 0, 5/16D, 1, 1, 11/16D);
+			break;
+		}
+		return rotate(bb, rotation);
+	}
+	
+	public static AxisAlignedBB rotate(AxisAlignedBB bb, EnumFacing facing)
+	{
+		switch(facing)
+		{
+		case SOUTH:
+			return bb;
+		case EAST:
+			return new AxisAlignedBB(bb.minZ, bb.minY, bb.minX, bb.maxZ, bb.maxY, bb.maxX);
+		case NORTH:
+			return new AxisAlignedBB(1-bb.maxX, bb.minY, 1-bb.maxZ, 1-bb.minX, bb.maxY, 1-bb.minZ);
+		case WEST:
+			return new AxisAlignedBB(1-bb.maxZ, bb.minY, 1-bb.maxX, 1-bb.minZ, bb.maxY, 1-bb.minX);
+		default:
+			return null;
+		}
 	}
 	
 	private int[] harvestLevel = new int[] {-1, -1, -1, -1, -1, -1, -1, -1};
