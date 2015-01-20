@@ -35,9 +35,17 @@ public class CombinationRegistry {
 	{
 		if(input1 instanceof Block)
 			input1 = Item.getItemFromBlock((Block) input1);
+		else if(input1 instanceof ItemStack)
+			input1 = ((ItemStack) input1).getItem();
 		if(input2 instanceof Block)
 			input2 = Item.getItemFromBlock((Block) input2);
-		if(input1.hashCode() >= input2.hashCode())
+		else if(input2 instanceof ItemStack)
+			input2 = ((ItemStack) input2).getItem();
+		
+		int index = input1.hashCode() - input2.hashCode();
+		if(index == 0)
+			index = damage1 - damage2;
+		if(index > 0)
 			combRecipes.put(Arrays.asList(input1, damage1, input2, damage2, mode), output);
 		else combRecipes.put(Arrays.asList(input2, damage2, input1, damage1, mode), output);
 	}
@@ -80,7 +88,10 @@ public class CombinationRegistry {
 	{
 		ItemStack item;
 		
-		if(input1.hashCode() >= input2.hashCode())
+		int index = input1.hashCode() - input2.hashCode();
+		if(index == 0)
+			index = damage1 - damage2;
+		if(index > 0)
 		{
 			if((item = combRecipes.get(Arrays.asList(input1, damage1, input2, damage2, mode))) != null);
 			else if((item = combRecipes.get(Arrays.asList(input1, damage1, input2, OreDictionary.WILDCARD_VALUE, mode))) != null);

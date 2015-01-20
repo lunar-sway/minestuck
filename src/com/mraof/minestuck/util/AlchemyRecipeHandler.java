@@ -536,9 +536,9 @@ public class AlchemyRecipeHandler {
 		CombinationRegistry.addCombination(new ItemStack(Items.wheat_seeds), new ItemStack(Items.gold_nugget), MODE_AND, new ItemStack(Minestuck.goldSeeds));
 		CombinationRegistry.addCombination(new ItemStack(Items.wheat_seeds), new ItemStack(Items.gold_ingot), MODE_AND, new ItemStack(Minestuck.goldSeeds));
 		CombinationRegistry.addCombination(new ItemStack(Items.wheat_seeds), new ItemStack(Blocks.gold_block), MODE_AND, new ItemStack(Minestuck.goldSeeds));
-		CombinationRegistry.addCombination(new ItemStack(Minestuck.captchaModus), OreDictionary.WILDCARD_VALUE, "stickWood", OreDictionary.WILDCARD_VALUE, MODE_OR, new ItemStack(Minestuck.captchaModus, 1, 3));
-		CombinationRegistry.addCombination(new ItemStack(Minestuck.captchaModus), OreDictionary.WILDCARD_VALUE, "treeSapling", OreDictionary.WILDCARD_VALUE, MODE_OR, new ItemStack(Minestuck.captchaModus, 1, 3));
-		CombinationRegistry.addCombination(new ItemStack(Minestuck.captchaModus), OreDictionary.WILDCARD_VALUE, "treeLeaves", OreDictionary.WILDCARD_VALUE, MODE_OR, new ItemStack(Minestuck.captchaModus, 1, 3));	//Not planks and logs though. Too little branch-related.
+		CombinationRegistry.addCombination(Minestuck.captchaModus, OreDictionary.WILDCARD_VALUE, "stickWood", OreDictionary.WILDCARD_VALUE, MODE_OR, new ItemStack(Minestuck.captchaModus, 1, 3));
+		CombinationRegistry.addCombination(Minestuck.captchaModus, OreDictionary.WILDCARD_VALUE, "treeSapling", OreDictionary.WILDCARD_VALUE, MODE_OR, new ItemStack(Minestuck.captchaModus, 1, 3));
+		CombinationRegistry.addCombination(Minestuck.captchaModus, OreDictionary.WILDCARD_VALUE, "treeLeaves", OreDictionary.WILDCARD_VALUE, MODE_OR, new ItemStack(Minestuck.captchaModus, 1, 3));	//Not planks and logs though. Too little branch-related.
 		CombinationRegistry.addCombination(new ItemStack(Items.boat), new ItemStack(Items.minecart), MODE_OR, new ItemStack(Minestuck.metalBoat, 1, 0));
 		CombinationRegistry.addCombination(new ItemStack(Items.boat), new ItemStack(Items.iron_ingot), MODE_AND, new ItemStack(Minestuck.metalBoat, 1, 0));
 		CombinationRegistry.addCombination(new ItemStack(Items.boat), new ItemStack(Blocks.iron_block), MODE_AND, new ItemStack(Minestuck.metalBoat, 1, 0));
