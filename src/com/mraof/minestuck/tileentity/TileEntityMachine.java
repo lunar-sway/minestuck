@@ -273,8 +273,9 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 			return false;
 		}
 		case (2):
-			return (this.inv[1] != null && this.inv[2] != null && !(inv[2].hasTagCompound() && inv[2].getTagCompound().hasKey("contentID")) && (this.inv[0] == null ||
-			inv[0].stackSize < 16 && AlchemyRecipeHandler.getDecodedItem(inv[0], true).isItemEqual(AlchemyRecipeHandler.getDecodedItem(inv[1], true))));
+			return (this.inv[1] != null && this.inv[2] != null && !(inv[2].hasTagCompound() && inv[2].getTagCompound().hasKey("contentID"))
+			&& !(inv[1].hasTagCompound() && !inv[1].getTagCompound().getBoolean("punched"))
+			&& (this.inv[0] == null || inv[0].stackSize < 16 && AlchemyRecipeHandler.getDecodedItem(inv[0], true).isItemEqual(AlchemyRecipeHandler.getDecodedItem(inv[1], true))));
 		case (3):
 			if (this.inv[1] != null && this.owner != null) {
 				//Check owner's cache: Do they have everything they need?
