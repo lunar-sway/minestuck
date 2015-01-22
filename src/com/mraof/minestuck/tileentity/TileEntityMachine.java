@@ -476,7 +476,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 	
 	public int getMachineType()
 	{
-		return getBlockMetadata()/4;
+		return getBlockMetadata();
 	}
 	
 }
