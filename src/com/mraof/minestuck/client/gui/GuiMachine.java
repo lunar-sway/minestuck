@@ -112,7 +112,7 @@ public class GuiMachine extends GuiContainer {
 		{
 			//Render grist requirements
 			ItemStack stack = AlchemyRecipeHandler.getDecodedItem(te.inv[1]);
-			if(metadata == 3 && !(te.inv[1].hasTagCompound() || !te.inv[1].getTagCompound().hasKey("contentID")))
+			if(metadata == 3 && !(te.inv[1].hasTagCompound() && te.inv[1].getTagCompound().hasKey("contentID")))
 				stack = new ItemStack(Minestuck.blockStorage, 1, 1);
 			
 			GristSet set = GristRegistry.getGristConversion(stack);
