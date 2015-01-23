@@ -63,8 +63,9 @@ public class LandAspectThought extends LandAspect
 	}
 
 	@Override
-	public int getDayCycleMode() {
-		return (new Random()).nextInt(3); //Random cycle between 0 and 2
+	public int getDayCycleMode()
+	{
+		return 0;
 	}
 
 	@Override
