@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
@@ -45,9 +46,6 @@ public class GuiMachine extends GuiContainer {
 	private int progressY;
 	private int progressWidth;
 	private int progressHeight;
-	private int buttonX = 24;
-	private int buttonY = 23;
-	private GuiButton modeButton;
 	private int goX;
 	private int goY;
 	private GuiButton goButton;
@@ -70,19 +68,19 @@ public class GuiMachine extends GuiContainer {
 		progressHeight = 13;
 		break;
 	case (1):
-		progressX = 81;
+		progressX = 63;
 		progressY = 38;
 		progressWidth = 43;
 		progressHeight = 17;
-		goX = 84;
+		goX = 66;
 		goY = 55;
 		break;
 	case (2):
-		progressX = 69;
+		progressX = 81;
 		progressY = 33;
 		progressWidth = 44;
 		progressHeight = 17;
-		goX = 73;
+		goX = 85;
 		goY = 53;
 		break;
 	case (3):
@@ -105,61 +103,66 @@ public class GuiMachine extends GuiContainer {
 }
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int param1, int param2) {
+	protected void drawGuiContainerForegroundLayer(int param1, int param2)
+	{
 		fontRendererObj.drawString(StatCollector.translateToLocal("gui."+guis[metadata]+".name"), 8, 6, 4210752);
 		//draws "Inventory" or your regional equivalent
 		fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
 		if ((metadata == 3 || metadata == 4) && te.inv[1] != null) 
 		{
 			//Render grist requirements
-			GristSet set = GristRegistry.getGristConversion(AlchemyRecipeHandler.getDecodedItem(te.inv[1], metadata == 3? true : false));
+			ItemStack stack = AlchemyRecipeHandler.getDecodedItem(te.inv[1]);
+			if(metadata == 3 && !(te.inv[1].hasTagCompound() || !te.inv[1].getTagCompound().hasKey("contentID")))
+				stack = new ItemStack(Minestuck.blockStorage, 1, 1);
 			
-			boolean useSelectedType = AlchemyRecipeHandler.getDecodedItem(te.inv[1], true).getItem() == Minestuck.captchaCard;
+			GristSet set = GristRegistry.getGristConversion(stack);
+			boolean useSelectedType = stack == null ? false : stack.getItem() == Minestuck.captchaCard;
 			if(useSelectedType)
 				set = metadata == 3 ? new GristSet(te.selectedGrist, 1) : null;
 			if(metadata == 4 && set != null)
 			{
-				float multiplier = AlchemyRecipeHandler.getDecodedItem(te.inv[1], false).stackSize;
+				float multiplier = stack.stackSize;
 				if(multiplier != 1)
 					set = set.copy().scaleGrist(multiplier);
 			}
 			
-		if (set == null) {fontRendererObj.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 9,45, 16711680); return;}
+			if (set == null) {fontRendererObj.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 9,45, 16711680); return;}
+			
 			Hashtable<Integer, Integer> reqs = set.getHashtable();
-		//Debug.print("reqs: " + reqs.size());
-		if (reqs != null) {
-			if (reqs.size() == 0) {
-				fontRendererObj.drawString(StatCollector.translateToLocal("gui.free"), 9,45, 65280);
+			if (reqs != null)
+			{
+				if (reqs.size() == 0)
+				{
+					fontRendererObj.drawString(StatCollector.translateToLocal("gui.free"), 9,45, 65280);
+					return;
+				}
+				Iterator<Entry<Integer, Integer>> it = reqs.entrySet().iterator();
+				int place = 0;
+				while (it.hasNext()) {
+					Map.Entry<Integer, Integer> pairs = it.next();
+					int type = pairs.getKey();
+					int need = pairs.getValue();
+					int have = MinestuckPlayerData.getClientGrist().getGrist(GristType.values()[type]);
+					
+					int row = place % 3;
+					int col = place / 3;
+					
+					int color = metadata == 3 ? (useSelectedType ? 0x0000FF : need <= have ? 0x00FF00 : 0xFF0000) : 0; //Green if we have enough grist, red if not, black if GristWidget
+					
+					fontRendererObj.drawString(need + " " + GristType.values()[type].getDisplayName() + " (" + have + ")", 9 + (80 * col),45 + (8 * (row)), color);
+					
+					place++;
+					
+				}
+			}
+			else
+			{
+				fontRendererObj.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 9,45, 16711680);
 				return;
 			}
-				Iterator<Entry<Integer, Integer>> it = reqs.entrySet().iterator();
-		   	int place = 0;
-			while (it.hasNext()) {
-					Map.Entry<Integer, Integer> pairs = it.next();
-				int type = pairs.getKey();
-				int need = pairs.getValue();
-				int have = MinestuckPlayerData.getClientGrist().getGrist(GristType.values()[type]);
-				
-				int row = place % 3;
-				int col = place / 3;
-				
-				int color = metadata == 3 ? (useSelectedType ? 0xFF0000FF : need <= have ? 0x00FF00 : 0xFF0000) : 0; //Green if we have enough grist, red if not, black if GristWidget
-				
-				fontRendererObj.drawString(need + " " + GristType.values()[type].getDisplayName() + " (" + have + ")", 9 + (80 * col),45 + (8 * (row)), color);
-				
-				place++;
-				
-				//Debug.print("Need" + need + ". Have " + have);
-			}
-		} else {
-			fontRendererObj.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 9,45, 16711680);
-			return;
 		}
-	} else if (metadata == 1) {
-		modeButton.visible = (te.inv[1] != null && te.inv[2] != null);
 	}
-}
-
+	
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
@@ -180,16 +183,12 @@ public class GuiMachine extends GuiContainer {
 
 	@SuppressWarnings("unchecked")
 	@Override
-public void initGui() {
+public void initGui()
+	{
 		super.initGui();
-		//make buttons:		id, x, y, width, height, text
-		if (metadata == 1) {
-			//The Designix's needs a button...
-			modeButton = new GuiButton(1, (width - xSize) / 2 + buttonX, (height - ySize) / 2 + buttonY, 20, 20, te.mode ? "&&": "||");
-			buttonList.add(modeButton);
-			modeButton.visible = (te.inv[1] != null && te.inv[2] != null);
-		}
-		if (metadata != 0) {
+		
+		if (metadata != 0)
+		{
 			//All non-Cruxtruders need a Go button.
 			goButton = new GuiButtonExt(1, (width - xSize) / 2 + goX, (height - ySize) / 2 + goY, 30, 12, te.overrideStop ? "STOP" : "GO");
 			buttonList.add(goButton);
@@ -198,15 +197,6 @@ public void initGui() {
 	
 	protected void actionPerformed(GuiButton guibutton)
 	{
-		
-		if (guibutton == modeButton)
-		{
-			//Sends new mode info to server
-			te.mode = !te.mode;
-			MinestuckPacket packet = MinestuckPacket.makePacket(Type.MACHINE_STATE, te.mode);
-			MinestuckChannelHandler.sendToServer(packet);
-			modeButton.displayString = te.mode ? "&&" : "||";
-		}
 		
 		if (guibutton == goButton)
 		{
@@ -251,7 +241,7 @@ protected void mouseClicked(int par1, int par2, int par3) throws IOException
 		}
 	}
 	else if(te.getMachineType() == 3 && par3 == 0 && mc.thePlayer.inventory.getItemStack() == null
-			&& te.inv[1] != null && AlchemyRecipeHandler.getDecodedItem(te.inv[1], true).getItem() == Minestuck.captchaCard
+			&& te.inv[1] != null && AlchemyRecipeHandler.getDecodedItem(te.inv[1]) != null && AlchemyRecipeHandler.getDecodedItem(te.inv[1]).getItem() == Minestuck.captchaCard
 			&& par1 >= guiLeft + 9 && par1 < guiLeft + 167 && par2 >= guiTop + 45 && par2 < guiTop + 70)
 	{
 		mc.currentScreen = new GuiGristSelector(this);

@@ -15,7 +15,6 @@ import com.mraof.minestuck.util.GristType;
 
 public class MachineStatePacket extends MinestuckPacket {
 
-	public boolean newMode;
 	public int xCoord;
 	public int yCoord;
 	public int zCoord;
@@ -28,9 +27,7 @@ public class MachineStatePacket extends MinestuckPacket {
 	@Override
 	public MinestuckPacket generatePacket(Object... dat) 
 	{
-		if(dat[0] instanceof Boolean)
-			data.writeBoolean((Boolean) dat[0]);
-		else data.writeInt((Integer) dat[0]);
+		data.writeInt((Integer) dat[0]);
 		
 		return this;
 	}
@@ -38,9 +35,7 @@ public class MachineStatePacket extends MinestuckPacket {
 	@Override
 	public MinestuckPacket consumePacket(ByteBuf data) 
 	{
-		if(data.readableBytes() == 1)
-			newMode = data.readBoolean();
-		else gristType = data.readInt();
+		gristType = data.readInt();
 		
 		return this;
 	}
@@ -55,15 +50,7 @@ public class MachineStatePacket extends MinestuckPacket {
 		}
 		else
 		{
-			if(gristType == -1)
-			{
-				Debug.print("Button pressed. AND mode is " + newMode);
-				te.mode = newMode;
-			}
-			else
-			{
-				te.selectedGrist = GristType.values()[gristType];
-			}
+			te.selectedGrist = GristType.values()[gristType];
 		}
 	}
 

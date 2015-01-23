@@ -21,7 +21,6 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 
 	boolean hardMode;
 	boolean giveItems;
-	boolean easyDesignix;
 	boolean infiniteTreeModus;
 	boolean[] deployValues;
 	
@@ -37,7 +36,6 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 		data.writeInt(Minestuck.landEditRange);
 		data.writeBoolean(Minestuck.hardMode);
 		data.writeBoolean(Minestuck.giveItems);
-		data.writeBoolean(Minestuck.easyDesignix);
 		data.writeBoolean(Minestuck.infiniteTreeModus);
 		data.writeByte(Minestuck.treeModusSetting);
 		
@@ -55,7 +53,6 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 		landEditRange = data.readInt();
 		hardMode = data.readBoolean();
 		giveItems = data.readBoolean();
-		easyDesignix = data.readBoolean();
 		infiniteTreeModus = data.readBoolean();
 		treeModusSetting = data.readByte();
 		
@@ -76,7 +73,6 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 		Minestuck.clientLandEditRange = this.landEditRange;
 		Minestuck.clientHardMode = this.hardMode;
 		Minestuck.clientGiveItems = this.giveItems;
-		Minestuck.clientEasyDesignix = this.easyDesignix;
 		Minestuck.clientInfTreeModus = infiniteTreeModus;
 		Minestuck.clientTreeAutobalance = treeModusSetting;
 		

@@ -221,7 +221,6 @@ public class Minestuck
 	public static byte clientTreeAutobalance;
 	public static boolean clientHardMode;
 	public static boolean clientGiveItems;
-	public static boolean clientEasyDesignix;
 	public static boolean clientInfTreeModus;
 	
 	//General
@@ -231,7 +230,6 @@ public class Minestuck
 	//public static boolean acceptTitleCollision;	//Allows combinations like "Heir of Hope" and "Seer of Hope" to exist in the same session. Will try to avoid duplicates.
 	//public static boolean generateSpecialClasses;	//Allow generation of the "Lord" and "Muse" classes.
 	public static boolean globalSession;	//Makes only one session possible. Recommended to be true on small servers. Will be ignored when loading a world that already got 2+ sessions.
-	public static boolean easyDesignix; //Makes it so you don't need to encode individual cards before combining them.
 	public static boolean toolTipEnabled;
 	public static boolean forceMaxSize;	//If it should prevent players from joining a session if there is no possible combinations left.
 	public static boolean giveItems;
@@ -288,7 +286,6 @@ public class Minestuck
 		globalSession = config.getBoolean("globalSession", "General", true, "Whenether all connetions should be put into a single session or not.");
 		privateComputers = config.getBoolean("privateComputers", "General", false, "True if computers should only be able to be used by the owner.");
 		privateMessage = config.getString("privateMessage", "General", "You are not allowed to access other players computers.", "The message sent when someone tries to access a computer that they aren't the owner of if 'privateComputers' is true.");
-		easyDesignix  = config.getBoolean("easyDesignix", "General", true, "If this is true, you can do combination alchemy without first putting the item in a card.");
 		overworldEditRange = config.getInt("overWorldEditRange", "General", 15, 3, 50, "A number that determines how far away from the computer an editmode player may be before entry.");
 		landEditRange = config.getInt("landEditRange", "General", 30, 3, 50, "A number that determines how far away from the center of the brought land that an editmode player may be after entry.");
 		artifactRange = config.getInt("artifactRange", "General", 30, 3, 50, "Radius of the land brought into the medium.");

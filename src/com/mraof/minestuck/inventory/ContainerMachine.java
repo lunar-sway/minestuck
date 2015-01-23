@@ -17,21 +17,21 @@ public class ContainerMachine extends Container {
 	private static final int cruxtruderOutputX = 79;
 	private static final int cruxtruderOutputY = 19;
 	
-	private static final int designixInput1X = 62;
-	private static final int designixInput1Y = 26;
-	private static final int designixInput2X = 62;
-	private static final int designixInput2Y = 50;
-	private static final int designixCardsX = 26;
+	private static final int designixInputX = 44;
+	private static final int designixInputY = 26;
+	private static final int designixCardsX = 44;
 	private static final int designixCardsY = 50;
-	private static final int designixOutputX = 134;
+	private static final int designixOutputX = 116;
 	private static final int designixOutputY = 37;
 	
-	private static final int latheCardX = 44;
-	private static final int latheCardY = 20;
-	private static final int latheDowelX = 44;
-	private static final int latheDowelY = 50;
-	private static final int latheOutputX = 122;
-	private static final int latheOutputY = 33;
+	private static final int latheCard1X = 26;
+	private static final int latheCard1Y = 25;
+	private static final int latheCard2X = 26;
+	private static final int latheCard2Y = 43;
+	private static final int latheDowelX = 62;
+	private static final int latheDowelY = 34;
+	private static final int latheOutputX = 134;
+	private static final int latheOutputY = 34;
 	
 	private static final int alchemiterInputX = 27;
 	private static final int alchemiterInputY = 20;
@@ -57,14 +57,14 @@ public class ContainerMachine extends Container {
 			addSlotToContainer(new SlotOutput(tileEntity,0,cruxtruderOutputX,cruxtruderOutputY));
 			break;
 		case (1):
-			addSlotToContainer(new Slot(tileEntity,1,designixInput1X,designixInput1Y));
-			addSlotToContainer(new Slot(tileEntity,2,designixInput2X,designixInput2Y));
-			addSlotToContainer(new SlotInput(tileEntity,3,designixCardsX,designixCardsY,Minestuck.captchaCard));
+			addSlotToContainer(new Slot(tileEntity,1,designixInputX,designixInputY));
+			addSlotToContainer(new SlotInput(tileEntity,2,designixCardsX,designixCardsY,Minestuck.captchaCard));
 			addSlotToContainer(new SlotOutput(tileEntity,0,designixOutputX,designixOutputY));
 			break;
 		case (2):
-			addSlotToContainer(new SlotInput(tileEntity,1,latheCardX,latheCardY,Minestuck.captchaCard));
-			addSlotToContainer(new SlotInput(tileEntity,2,latheDowelX,latheDowelY,Minestuck.cruxiteDowel));
+			addSlotToContainer(new SlotInput(tileEntity,1,latheCard1X,latheCard1Y,Minestuck.captchaCard));
+			addSlotToContainer(new SlotInput(tileEntity,2,latheCard2X,latheCard2Y,Minestuck.captchaCard));
+			addSlotToContainer(new SlotInput(tileEntity,3,latheDowelX,latheDowelY,Minestuck.cruxiteDowel));
 			addSlotToContainer(new SlotOutput(tileEntity,0,latheOutputX,latheOutputY));
 			break;
 		case (3):
@@ -140,29 +140,32 @@ public class ContainerMachine extends Container {
 				}
 				break;
 			case (1):
-			   	if (slotNumber <= 3) {
+				if (slotNumber <= 2)
+				{
 					//if it's a machine slot
-					result = mergeItemStack(itemstackOrig,4,allSlots,false);
-				} else if (slotNumber > 3) {
+					result = mergeItemStack(itemstackOrig,3,allSlots,false);
+				}
+				else if (slotNumber > 2)
+				{
 					//if it's an inventory slot with valid contents
-					if (itemstackOrig.getItem() == Minestuck.captchaCard) {
-						result = mergeItemStack(itemstackOrig,2,3,false);
-					} else {
-						result = mergeItemStack(itemstackOrig,0,2,false);
-					}
+					if (itemstackOrig.getItem() == Minestuck.captchaCard)
+						result = mergeItemStack(itemstackOrig,1,2,false);
+					else result = mergeItemStack(itemstackOrig,0,1,false);
 				}
 				break;
 			case (2):
-			   	if (slotNumber <= 2) {
+				if (slotNumber <= 3)
+				{
 					//if it's a machine slot
-					result = mergeItemStack(itemstackOrig,3,allSlots,false);
-				} else if (slotNumber > 2) {
+					result = mergeItemStack(itemstackOrig,4,allSlots,false);
+				}
+				else if (slotNumber > 3)
+				{
 					//if it's an inventory slot with valid contents
-					if (itemstackOrig.getItem() == Minestuck.captchaCard) {
-						result = mergeItemStack(itemstackOrig,0,1,false);
-					} else if (itemstackOrig.getItem() == Minestuck.cruxiteDowel) {
-						result = mergeItemStack(itemstackOrig,1,2,false);
-					}
+					if (itemstackOrig.getItem() == Minestuck.captchaCard) 
+						result = mergeItemStack(itemstackOrig,0,2,false);
+					else if (itemstackOrig.getItem() == Minestuck.cruxiteDowel)
+						result = mergeItemStack(itemstackOrig,2,3,false);
 				}
 				break;
 			case (3):
@@ -171,9 +174,8 @@ public class ContainerMachine extends Container {
 					result = mergeItemStack(itemstackOrig,2,allSlots,false);
 				} else if (slotNumber > 1) {
 					//if it's an inventory slot with valid contents
-					if (itemstackOrig.getItem() == Minestuck.cruxiteDowel || itemstackOrig.getItem() == Minestuck.cruxiteDowel) {
+					if (itemstackOrig.getItem() == Minestuck.cruxiteDowel)
 						result = mergeItemStack(itemstackOrig,0,1,false);
-					}
 				}
 				break;
 			case (4):
@@ -206,18 +208,6 @@ public class ContainerMachine extends Container {
 		return itemstack;
 	}
 	
-	@Override
-	public void addCraftingToCrafters(ICrafting par1ICrafting)
-	{
-		super.addCraftingToCrafters(par1ICrafting);
-		
-		switch(this.metadata)
-		{
-		case 1:
-			par1ICrafting.sendProgressBarUpdate(this, 1, this.tileEntity.mode ? 0 : 1);
-		}
-	}
-	
 	public void detectAndSendChanges()
 	{
 		if(this.progress != tileEntity.progress && tileEntity.progress != 0)
@@ -232,12 +222,6 @@ public class ContainerMachine extends Container {
 		{
 			tileEntity.progress = par2;
 			return;
-		}
-		
-		switch(this.metadata)
-		{
-		case 1:
-			tileEntity.mode = par2 == 0;
 		}
 	}
 }

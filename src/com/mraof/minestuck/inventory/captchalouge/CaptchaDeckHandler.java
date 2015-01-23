@@ -139,7 +139,7 @@ public class CaptchaDeckHandler
 		else if(item.getItem().equals(Minestuck.captchaCard) && (!item.hasTagCompound() || !item.getTagCompound().getBoolean("punched"))
 				&& modus != null)
 		{
-			ItemStack content = AlchemyRecipeHandler.getDecodedItem(item, false);
+			ItemStack content = AlchemyRecipeHandler.getDecodedItem(item);
 			int failed = 0;
 			for(int i = 0; i < item.stackSize; i++)
 				if(!modus.increaseSize())
@@ -174,7 +174,7 @@ public class CaptchaDeckHandler
 			boolean card1 = false, card2 = true;
 			if(item.getItem() == Minestuck.captchaCard && item.hasTagCompound() && !item.getTagCompound().getBoolean("punched"))
 			{
-				ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(item, false);
+				ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(item);
 				if(newItem != null)
 				{
 					card1 = true;

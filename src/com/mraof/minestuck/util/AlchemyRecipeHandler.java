@@ -620,7 +620,7 @@ public class AlchemyRecipeHandler {
 	 * @param b - If it is used for a dowel in alchemy.
 	 * @return An item, or null if the data was invalid.
 	 */
-	public static ItemStack getDecodedItem(ItemStack card, boolean b)
+	public static ItemStack getDecodedItem(ItemStack card)
 	{
 		
 		if (card == null) {return null;}
@@ -629,7 +629,7 @@ public class AlchemyRecipeHandler {
 		
 		if (tag == null || !tag.hasKey("contentID"))
 		{
-			return b? new ItemStack(Minestuck.blockStorage,1,1):null;
+			return null;
 		}
 		
 		if (!Item.itemRegistry.containsKey(new ResourceLocation(tag.getString("contentID")))) {return null;}
@@ -645,22 +645,21 @@ public class AlchemyRecipeHandler {
 	}
 	
 	/**
-	 * Given a punched card or a carved dowel, returns a new item that represents the encoded data. If easyDesignix is true,
-	 * it just gives you the item directly if it's not a punched card.
+	 * Given a punched card, this method returns a new item that represents the encoded data,
+	 * or it just returns the item directly if it's not a punched card.
 	 */
-	public static ItemStack getDecodedItemDesignix(ItemStack card, boolean clientSide)
+	public static ItemStack getDecodedItemDesignix(ItemStack card)
 	{
 		
 		if (card == null) {return null;}
 		
-		if (!(card.getItem().equals(Minestuck.captchaCard) && card.hasTagCompound() && card.getTagCompound().hasKey("contentID"))
-				&& (clientSide ? Minestuck.clientEasyDesignix : Minestuck.easyDesignix))
+		if (!(card.getItem().equals(Minestuck.captchaCard) && card.hasTagCompound() && card.getTagCompound().hasKey("contentID")))
 		{
 			return card;
 		}
 		else
 		{
-			return getDecodedItem(card, false);
+			return getDecodedItem(card);
 		}
 	}
 	
