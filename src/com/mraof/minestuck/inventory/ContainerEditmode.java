@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
@@ -108,7 +109,7 @@ public class ContainerEditmode extends Container {
 			ItemStack stack = iter.next();
 			if(DeployList.getTier(stack) > playerTier)
 				iter.remove();
-			else if(Minestuck.hardMode && DeployList.getSecondaryCost(stack) == null && c.givenItems()[DeployList.getOrdinal(stack)])
+			else if(MinestuckConfig.hardMode && DeployList.getSecondaryCost(stack) == null && c.givenItems()[DeployList.getOrdinal(stack)])
 				iter.remove();
 			else if(stack.getItem().equals(Minestuck.captchaCard))
 				if(c.enteredGame())

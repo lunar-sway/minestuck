@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.skaianet.ComputerData;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
@@ -50,7 +51,7 @@ public class SburbConnectPacket extends MinestuckPacket {
 
 	@Override
 	public void execute(EntityPlayer player) {
-		if(!Minestuck.privateComputers || ((EntityPlayer)player).getName().equals(this.player) && ServerEditHandler.getData(((EntityPlayer)player).getName()) == null)
+		if(!MinestuckConfig.privateComputers || ((EntityPlayer)player).getName().equals(this.player) && ServerEditHandler.getData(((EntityPlayer)player).getName()) == null)
 			SkaianetHandler.requestConnection(this.player, otherPlayer, isClient);
 	}
 

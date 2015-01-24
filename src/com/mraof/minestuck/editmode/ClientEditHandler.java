@@ -34,6 +34,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
 import com.mraof.minestuck.inventory.ContainerEditmode;
@@ -125,7 +126,7 @@ public class ClientEditHandler {
 		
 		GristSet cost;
 		if(DeployList.containsItemStack(stack))
-			cost = Minestuck.clientHardMode&&givenItems[DeployList.getOrdinal(stack)]
+			cost = MinestuckConfig.clientHardMode&&givenItems[DeployList.getOrdinal(stack)]
 					?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
 		else if(stack.getItem().equals(Minestuck.captchaCard))
 			cost = new GristSet();
@@ -156,10 +157,10 @@ public class ClientEditHandler {
 			return;
 		EntityPlayer player = event.player;
 		
-		double range = MinestuckSaveHandler.lands.contains((byte)player.dimension)?Minestuck.clientLandEditRange:Minestuck.clientOverworldEditRange;
+		double range = MinestuckSaveHandler.lands.contains((byte)player.dimension) ? MinestuckConfig.clientLandEditRange : MinestuckConfig.clientOverworldEditRange;
 		
 		ServerEditHandler.updatePosition(player, range, centerX, centerZ);
-		if(Minestuck.toolTipEnabled)
+		if(MinestuckConfig.editmodeToolTip)
 			addToolTip(player, givenItems);
 		
 	}
@@ -172,7 +173,7 @@ public class ClientEditHandler {
 			int ordinal = DeployList.getOrdinal(stack);
 			if(ordinal >= 0)
 			{
-				if(!ServerEditHandler.isBlockItem(stack.getItem()) && GristHelper.canAfford(MinestuckPlayerData.getClientGrist(), Minestuck.clientHardMode && givenItems[ordinal]
+				if(!ServerEditHandler.isBlockItem(stack.getItem()) && GristHelper.canAfford(MinestuckPlayerData.getClientGrist(), MinestuckConfig.clientHardMode && givenItems[ordinal]
 						? DeployList.getSecondaryCost(stack) : DeployList.getPrimaryCost(stack)))
 					givenItems[ordinal] = true;
 				else event.setCanceled(true);
@@ -212,7 +213,7 @@ public class ClientEditHandler {
 				
 				GristSet cost;
 				if(DeployList.containsItemStack(stack))
-					if(Minestuck.clientHardMode && givenItems[DeployList.getOrdinal(stack)])
+					if(MinestuckConfig.clientHardMode && givenItems[DeployList.getOrdinal(stack)])
 						cost = DeployList.getSecondaryCost(stack);
 					else cost = DeployList.getPrimaryCost(stack);
 				else cost = GristRegistry.getGristConversion(stack);

@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.underling.EntityBasilisk;
 import com.mraof.minestuck.entity.underling.EntityGiclops;
 import com.mraof.minestuck.entity.underling.EntityImp;
@@ -47,8 +48,8 @@ public class SessionHandler {
 	 * Minestuck has loaded the sessions from file.
 	 */
 	public static void serverStarted() {
-		singleSession = Minestuck.globalSession;
-		if(!Minestuck.globalSession) {
+		singleSession = MinestuckConfig.globalSession;
+		if(!MinestuckConfig.globalSession) {
 			split();
 		} else {
 			mergeAll();
@@ -131,7 +132,7 @@ public class SessionHandler {
 	}
 	
 	static String canMerge(Session s0, Session s1){
-		if(Minestuck.forceMaxSize && s0.getPlayerList().size()+s1.getPlayerList().size()>maxSize)
+		if(MinestuckConfig.forceMaxSize && s0.getPlayerList().size()+s1.getPlayerList().size()>maxSize)
 			return "session.bothSessionsFull";
 		return null;
 	}
@@ -142,7 +143,7 @@ public class SessionHandler {
 	 * a non-global session.
 	 */
 	static void split() {
-		if(Minestuck.globalSession || sessions.size() != 1)
+		if(MinestuckConfig.globalSession || sessions.size() != 1)
 			return;
 		
 		split(sessions.get(0));
@@ -293,7 +294,7 @@ public class SessionHandler {
 			if(sessions.size() == 0)
 				return "computer.messageConnectFailed";
 			int i = (sessions.get(0).containsPlayer(connection.getClientName())?0:1)+(sessions.get(0).containsPlayer(connection.getServerName())?0:1);
-			if(Minestuck.forceMaxSize && sessions.get(0).getPlayerList().size()+i > maxSize)
+			if(MinestuckConfig.forceMaxSize && sessions.get(0).getPlayerList().size()+i > maxSize)
 				return "computer.singleSessionFull";
 			else {
 				sessions.get(0).connections.add(connection);
@@ -307,7 +308,7 @@ public class SessionHandler {
 				s.connections.add(connection);
 				return null;
 			} else if(sClient == null || sServer == null) {
-				if(Minestuck.forceMaxSize && (sClient == null?sServer:sClient).getPlayerList().size()+1 > maxSize)
+				if(MinestuckConfig.forceMaxSize && (sClient == null?sServer:sClient).getPlayerList().size()+1 > maxSize)
 					return "computer."+(sClient == null?"server":"client")+"SessionFull";
 				(sClient == null?sServer:sClient).connections.add(connection);
 				return null;
@@ -339,7 +340,7 @@ public class SessionHandler {
 				SburbConnection c = SkaianetHandler.getConnection(SkaianetHandler.getAssociatedPartner(connection.getClientName(), false), connection.getClientName());
 				if(c.isActive)
 					SkaianetHandler.closeConnection(c.getClientName(), c.getServerName(), true);
-				switch(Minestuck.escapeFailureMode) {
+				switch(MinestuckConfig.escapeFailureMode) {
 				case 0:
 					c.serverName = connection.getServerName();
 					break;

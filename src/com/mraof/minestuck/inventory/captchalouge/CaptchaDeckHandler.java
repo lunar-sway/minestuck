@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
@@ -109,7 +110,7 @@ public class CaptchaDeckHandler
 			{
 				modus = ModusType.values()[item.getItemDamage()].createInstance();
 				modus.player = player;
-				modus.initModus(null, Minestuck.defaultModusSize);
+				modus.initModus(null, MinestuckConfig.defaultModusSize);
 				setModus(player, modus);
 				container.inventory.setInventorySlotContents(0, null);
 			}
