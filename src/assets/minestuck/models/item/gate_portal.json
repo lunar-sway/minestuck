@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "minestuck:blocks/GatePortal"
+        "layer0": "minestuck:items/GatePortal"
     },
     "display": {
         "thirdperson": {

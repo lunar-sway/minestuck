@@ -1,6 +1,6 @@
 {
     "parent": "block/cube_all",
     "textures": {
-        "all": "minestuck:blocks/GatePortal"
+        "all": "minestuck:items/GatePortal"
     }
 }

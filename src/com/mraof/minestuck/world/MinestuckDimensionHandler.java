@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world;
 
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
@@ -13,6 +14,7 @@ import com.mraof.minestuck.world.gen.lands.LandAspectRegistry;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.DimensionManager;
@@ -22,6 +24,7 @@ public class MinestuckDimensionHandler
 {
 	
 	private static Hashtable<Byte, LandAspectRegistry.AspectCombination> lands = new Hashtable<Byte, LandAspectRegistry.AspectCombination>();
+	private static HashMap<Byte, BlockPos> spawnpoints = new HashMap<Byte, BlockPos>();
 	
 	public static void unregisterDimensions()
 	{
@@ -35,6 +38,7 @@ public class MinestuckDimensionHandler
 			BiomeGenBase.getBiomeGenArray()[b] = null;
 		}
 		lands.clear();
+		spawnpoints.clear();
 	}
 	
 	public static void saveData(NBTTagCompound nbt)
@@ -47,6 +51,10 @@ public class MinestuckDimensionHandler
 			tagCompound.setString("type", "land");
 			tagCompound.setString("aspect1", entry.getValue().aspect1.getPrimaryName());
 			tagCompound.setString("aspect2", entry.getValue().aspect2.getPrimaryName());
+			BlockPos spawn = spawnpoints.get(entry.getKey());
+			tagCompound.setInteger("spawnX", spawn.getX());
+			tagCompound.setInteger("spawnY", spawn.getY());
+			tagCompound.setInteger("spawnZ", spawn.getZ());
 			list.appendTag(tagCompound);
 		}
 		nbt.setTag("dimensionData", list);
@@ -65,8 +73,10 @@ public class MinestuckDimensionHandler
 				String name1 = tagCompound.getString("aspect1");
 				String name2 = tagCompound.getString("aspect2");
 				LandAspectRegistry.AspectCombination aspects = new LandAspectRegistry.AspectCombination(LandAspectRegistry.fromName(name1), LandAspectRegistry.fromName2(name2));
+				BlockPos spawn = new BlockPos(tagCompound.getInteger("spawnX"), tagCompound.getInteger("spawnY"), tagCompound.getInteger("spawnZ"));
 				
 				lands.put(dim, aspects);
+				spawnpoints.put(dim, spawn);
 				DimensionManager.registerDimension(dim, Minestuck.landProviderTypeId);
 			}
 		}
@@ -119,4 +129,13 @@ public class MinestuckDimensionHandler
 		}
 	}
 	
+	public static BlockPos getSpawn(byte dim)
+	{
+		return spawnpoints.get(dim);
+	}
+	
+	public static void setSpawn(byte dim, BlockPos spawnpoint)
+	{
+		spawnpoints.put(dim, spawnpoint);
+	}
 }

@@ -86,9 +86,22 @@ public class WorldProviderLands extends WorldProvider
 			return "Land of " + provider.aspect1.getNames()[provider.nameIndex1] + " and " + provider.aspect2.getNames()[provider.nameIndex2];
 		}
 	}
-
+	
 	@Override
-	public BlockPos getRandomizedSpawnPoint() 
+	public BlockPos getSpawnPoint() 
+	{
+		BlockPos spawn = MinestuckDimensionHandler.getSpawn((byte) getDimensionId());
+		if(spawn != null)
+			return spawn;
+		else
+		{
+			Debug.printf("Couldn't get special spawnpoint for dimension %d. This should not happen.", this.getDimensionId());
+			return super.getSpawnPoint();
+		}
+	}
+	
+	@Override
+	public BlockPos getRandomizedSpawnPoint()
 	{
 		createChunkGenerator();
 		BlockPos coordinates = getSpawnPoint();
@@ -96,22 +109,15 @@ public class WorldProviderLands extends WorldProvider
 		boolean isAdventure = worldObj.getWorldInfo().getGameType() == GameType.ADVENTURE;
 		int spawnFuzz = 12;
 		int spawnFuzzHalf = spawnFuzz / 2;
-
+		
 		if (!isAdventure)
 		{
-			coordinates.add(this.worldObj.rand.nextInt(spawnFuzz) - spawnFuzzHalf,
-					this.worldObj.rand.nextInt(spawnFuzz) - spawnFuzzHalf,
-					0);
+			coordinates = coordinates.add(this.worldObj.rand.nextInt(spawnFuzz) - spawnFuzzHalf,
+					0, this.worldObj.rand.nextInt(spawnFuzz) - spawnFuzzHalf);
 			coordinates = this.worldObj.getTopSolidOrLiquidBlock(coordinates);
 		}
-
+		
 		return coordinates;
-	}
-	
-	@Override
-	public BlockPos getSpawnPoint()
-	{
-		return new BlockPos(provider.spawnX, provider.spawnY, provider.spawnZ);
 	}
 	
 	@Override

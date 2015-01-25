@@ -9,6 +9,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.relauncher.Side;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.UsernameHandler;
@@ -21,7 +22,6 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 
 	boolean hardMode;
 	boolean giveItems;
-	boolean easyDesignix;
 	boolean infiniteTreeModus;
 	boolean[] deployValues;
 	
@@ -33,16 +33,15 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 
 	@Override
 	public MinestuckPacket generatePacket(Object... dat) {
-		data.writeInt(Minestuck.overworldEditRange);
-		data.writeInt(Minestuck.landEditRange);
-		data.writeBoolean(Minestuck.hardMode);
-		data.writeBoolean(Minestuck.giveItems);
-		data.writeBoolean(Minestuck.easyDesignix);
-		data.writeBoolean(Minestuck.infiniteTreeModus);
-		data.writeByte(Minestuck.treeModusSetting);
+		data.writeInt(MinestuckConfig.overworldEditRange);
+		data.writeInt(MinestuckConfig.landEditRange);
+		data.writeBoolean(MinestuckConfig.hardMode);
+		data.writeBoolean(MinestuckConfig.giveItems);
+		data.writeBoolean(MinestuckConfig.infiniteTreeModus);
+		data.writeByte(MinestuckConfig.treeModusSetting);
 		
-		for(int i = 0; i < Minestuck.deployConfigurations.length; i++)
-			data.writeBoolean(Minestuck.deployConfigurations[i]);
+		for(int i = 0; i < MinestuckConfig.deployConfigurations.length; i++)
+			data.writeBoolean(MinestuckConfig.deployConfigurations[i]);
 		if(UsernameHandler.host != null)
 			writeString(data,UsernameHandler.host);
 		
@@ -55,11 +54,10 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 		landEditRange = data.readInt();
 		hardMode = data.readBoolean();
 		giveItems = data.readBoolean();
-		easyDesignix = data.readBoolean();
 		infiniteTreeModus = data.readBoolean();
 		treeModusSetting = data.readByte();
 		
-		deployValues = new boolean[Minestuck.deployConfigurations.length];
+		deployValues = new boolean[MinestuckConfig.deployConfigurations.length];
 		for(int i = 0; i < deployValues.length; i++)
 			deployValues[i] = data.readBoolean();
 		lanHost = readLine(data);
@@ -72,19 +70,15 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 	@Override
 	public void execute(EntityPlayer player) {
 		
-		Minestuck.clientOverworldEditRange = this.overWorldEditRange;
-		Minestuck.clientLandEditRange = this.landEditRange;
-		Minestuck.clientHardMode = this.hardMode;
-		Minestuck.clientGiveItems = this.giveItems;
-		Minestuck.clientEasyDesignix = this.easyDesignix;
-		Minestuck.clientInfTreeModus = infiniteTreeModus;
-		Minestuck.clientTreeAutobalance = treeModusSetting;
+		MinestuckConfig.clientOverworldEditRange = this.overWorldEditRange;
+		MinestuckConfig.clientLandEditRange = this.landEditRange;
+		MinestuckConfig.clientHardMode = this.hardMode;
+		MinestuckConfig.clientGiveItems = this.giveItems;
+		MinestuckConfig.clientInfTreeModus = infiniteTreeModus;
+		MinestuckConfig.clientTreeAutobalance = treeModusSetting;
 		
-		if(MinecraftServer.getServer() == null || !MinecraftServer.getServer().isServerRunning())
-		{
-			UsernameHandler.host = lanHost;
-			DeployList.applyConfigValues(deployValues);
-		}
+		UsernameHandler.host = lanHost;
+		DeployList.applyConfigValues(deployValues);
 		
 	}
 

@@ -17,6 +17,7 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.nbt.NBTTagCompound;
@@ -97,7 +98,7 @@ public class AlchemyRecipeHandler {
 		GristRegistry.addGristConversion(new ItemStack(Blocks.snow), false, new GristSet(new GristType[] {GristType.Cobalt, GristType.Build}, new int[] {4, 2}));
 		GristRegistry.addGristConversion(new ItemStack(Blocks.snow_layer), false, new GristSet(new GristType[] {GristType.Cobalt}, new int[] {4}));
 		GristRegistry.addGristConversion(new ItemStack(Blocks.soul_sand), false, new GristSet(new GristType[] {GristType.Tar, GristType.Shale}, new int[] {1, 1}));
-		GristRegistry.addGristConversion(new ItemStack(Blocks.sponge), false, new GristSet(new GristType[] {GristType.Amber, GristType.Sulfur}, new int[] {4, 4}));
+		GristRegistry.addGristConversion(new ItemStack(Blocks.sponge, 1, 0), false, new GristSet(new GristType[] {GristType.Amber, GristType.Sulfur}, new int[] {20, 30}));
 		GristRegistry.addGristConversion(new ItemStack(Blocks.stained_hardened_clay), false, new GristSet(new GristType[] {GristType.Shale, GristType.Marble}, new int[] {12, 8}));
 		GristRegistry.addGristConversion(new ItemStack(Blocks.stone), false, new GristSet(new GristType[] {GristType.Build}, new int[] {1}));
 		GristRegistry.addGristConversion(new ItemStack(Blocks.stone_button), false, new GristSet(new GristType[] {GristType.Build, GristType.Garnet}, new int[] {2, 3}));
@@ -205,7 +206,6 @@ public class AlchemyRecipeHandler {
 		GristRegistry.addGristConversion("ingotIron", new GristSet(new GristType[] {GristType.Rust}, new int[] {18}));
 		GristRegistry.addGristConversion(new ItemStack(Items.lava_bucket), false, new GristSet(new GristType[] {GristType.Rust, GristType.Tar}, new int[] {48, 16}));
 		GristRegistry.addGristConversion(new ItemStack(Items.lead), false, new GristSet(new GristType[] {GristType.Chalk, GristType.Caulk}, new int[] {8, 2}));
-		GristRegistry.addGristConversion(new ItemStack(Items.leather), false, new GristSet(new GristType[] {GristType.Iodine, GristType.Chalk}, new int[] {2, 2}));
 		GristRegistry.addGristConversion(new ItemStack(Items.map), false, new GristSet(new GristType[] {GristType.Rust, GristType.Chalk, GristType.Garnet}, new int[] {32, 10, 2}));
 		GristRegistry.addGristConversion(new ItemStack(Items.melon), false, new GristSet(new GristType[] {GristType.Amber, GristType.Caulk}, new int[] {1, 1}));
 		GristRegistry.addGristConversion(new ItemStack(Items.milk_bucket), false, new GristSet(new GristType[] {GristType.Rust, GristType.Chalk}, new int[] {48, 16}));
@@ -284,6 +284,14 @@ public class AlchemyRecipeHandler {
 		GristRegistry.addGristConversion(new ItemStack(Items.wheat), false, new GristSet(new GristType[] {GristType.Iodine}, new int[] {8}));
 		GristRegistry.addGristConversion(new ItemStack(Items.wheat_seeds), false, new GristSet(new GristType[] {GristType.Amber, GristType.Iodine}, new int[] {1, 1}));
 		GristRegistry.addGristConversion(new ItemStack(Items.writable_book), false, new GristSet(new GristType[] {GristType.Chalk, GristType.Iodine}, new int[] {16, 2}));
+		GristRegistry.addGristConversion(new ItemStack(Items.prismarine_crystals), new GristSet(new GristType[] {GristType.Cobalt, GristType.Diamond}, new int[] {10, 2}));
+		GristRegistry.addGristConversion(new ItemStack(Items.prismarine_shard), new GristSet(new GristType[] {GristType.Build, GristType.Cobalt}, new int[] {3, 5}));
+		GristRegistry.addGristConversion(new ItemStack(Items.rabbit_hide), new GristSet(new GristType[] {GristType.Iodine, GristType.Chalk}, new int[] {1, 1}));
+		GristRegistry.addGristConversion(new ItemStack(Items.rabbit), new GristSet(GristType.Iodine, 8));
+		GristRegistry.addGristConversion(new ItemStack(Items.cooked_rabbit), new GristSet(new GristType[] {GristType.Iodine, GristType.Tar}, new int[] {8, 1}));
+		GristRegistry.addGristConversion(new ItemStack(Items.mutton), new GristSet(GristType.Iodine, 10));
+		GristRegistry.addGristConversion(new ItemStack(Items.cooked_mutton), new GristSet(new GristType[] {GristType.Iodine, GristType.Tar}, new int[] {10, 1}));
+		GristRegistry.addGristConversion(new ItemStack(Blocks.sponge, 1, 1), new GristSet(new GristType[] {GristType.Amber, GristType.Sulfur, GristType.Cobalt}, new int[] {20, 30, 10}));
 		
 		//Set up Punch Designix recipes
 		
@@ -316,10 +324,14 @@ public class AlchemyRecipeHandler {
 		{
 			CombinationRegistry.addCombination(new ItemStack(Items.wheat_seeds), woodItems[5][meta], MODE_AND, new ItemStack(Blocks.sapling, 1, meta));
 			CombinationRegistry.addCombination(new ItemStack(Items.iron_door), new ItemStack(Blocks.planks, 1, meta), MODE_AND, woodItems[6][meta]);
-			CombinationRegistry.addCombination(woodItems[6][meta],new ItemStack(Items.iron_ingot),MODE_AND, new ItemStack(Items.iron_door));
 			CombinationRegistry.addCombination(new ItemStack(Blocks.nether_brick_fence),new ItemStack(Blocks.planks, 1, meta),MODE_AND, woodItems[7][meta]);
 			CombinationRegistry.addCombination(woodItems[7][meta],new ItemStack(Blocks.nether_brick),MODE_AND, new ItemStack(Blocks.nether_brick_fence));
 		}
+		CombinationRegistry.addCombination(woodDict[6], WILDCARD_VALUE, Items.iron_ingot, WILDCARD_VALUE, MODE_AND, new ItemStack(Items.iron_door));
+		CombinationRegistry.addCombination(woodDict[7], WILDCARD_VALUE, Blocks.nether_brick, WILDCARD_VALUE, MODE_AND, new ItemStack(Blocks.nether_brick_fence));
+		CombinationRegistry.addCombination(woodDict[3], WILDCARD_VALUE, Blocks.nether_brick, WILDCARD_VALUE, MODE_AND, new ItemStack(Blocks.nether_brick_stairs));
+		CombinationRegistry.addCombination(woodDict[7], WILDCARD_VALUE, Items.netherbrick, WILDCARD_VALUE, MODE_AND, new ItemStack(Blocks.nether_brick_fence));
+		CombinationRegistry.addCombination(woodDict[3], WILDCARD_VALUE, Items.netherbrick, WILDCARD_VALUE, MODE_AND, new ItemStack(Blocks.nether_brick_stairs));
 		
 		//Dye
 		Block[] coloredBlocks = {Blocks.wool, Blocks.stained_hardened_clay, Blocks.stained_glass, Blocks.stained_glass_pane};
@@ -364,6 +376,7 @@ public class AlchemyRecipeHandler {
 		CombinationRegistry.addCombination(new ItemStack(Blocks.grass),new ItemStack(Blocks.brown_mushroom),MODE_AND, new ItemStack(Blocks.mycelium));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.grass),new ItemStack(Blocks.red_mushroom),MODE_AND, new ItemStack(Blocks.mycelium));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.gravel),new ItemStack(Blocks.stone),MODE_AND, new ItemStack(Items.flint));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.gravel),new ItemStack(Blocks.cobblestone),MODE_AND, new ItemStack(Items.flint));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.ladder),new ItemStack(Items.iron_ingot),MODE_AND, new ItemStack(Blocks.rail));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.netherrack),new ItemStack(Blocks.brick_block),MODE_AND, new ItemStack(Items.netherbrick));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.netherrack),new ItemStack(Blocks.brick_block),MODE_OR, new ItemStack(Blocks.nether_brick));
@@ -385,7 +398,7 @@ public class AlchemyRecipeHandler {
 		CombinationRegistry.addCombination(new ItemStack(Items.ender_eye),new ItemStack(Items.egg),MODE_AND, new ItemStack(Blocks.dragon_egg));
 		CombinationRegistry.addCombination(new ItemStack(Items.ender_pearl),new ItemStack(Items.blaze_powder),MODE_AND, new ItemStack(Items.ender_eye));
 		CombinationRegistry.addCombination(new ItemStack(Items.gold_ingot),new ItemStack(Items.saddle),MODE_AND, new ItemStack(Items.golden_horse_armor));
-		CombinationRegistry.addCombination(new ItemStack(Items.gunpowder),new ItemStack(Blocks.sand),MODE_AND, new ItemStack(Blocks.tnt));
+		CombinationRegistry.addCombination(new ItemStack(Items.gunpowder),new ItemStack(Blocks.sand), true, false, MODE_AND, new ItemStack(Blocks.tnt));
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_ingot),new ItemStack(Blocks.tallgrass),MODE_AND, new ItemStack(Items.shears));
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_ingot),new ItemStack(Items.saddle),MODE_AND, new ItemStack(Items.iron_horse_armor));
 		CombinationRegistry.addCombination(new ItemStack(Items.potato),new ItemStack(Items.wheat_seeds),MODE_OR, new ItemStack(Items.carrot));
@@ -405,7 +418,7 @@ public class AlchemyRecipeHandler {
 		CombinationRegistry.addCombination(new ItemStack(Items.boat), new ItemStack(Blocks.rail), MODE_OR, new ItemStack(Items.minecart));
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_ingot), new ItemStack(Blocks.trapdoor), MODE_OR, new ItemStack(Blocks.iron_trapdoor));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.iron_block), new ItemStack(Blocks.trapdoor), MODE_OR, new ItemStack(Blocks.iron_trapdoor));
-		CombinationRegistry.addCombination("stickWood", WILDCARD_VALUE, Item.getItemFromBlock(Blocks.iron_bars), WILDCARD_VALUE, MODE_AND, new ItemStack(Blocks.rail));
+		CombinationRegistry.addCombination("stickWood", WILDCARD_VALUE, Blocks.iron_bars, WILDCARD_VALUE, MODE_AND, new ItemStack(Blocks.rail));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.cobblestone_wall), new ItemStack(Blocks.mossy_cobblestone), MODE_OR, new ItemStack(Blocks.cobblestone_wall, 1, 1));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.dispenser), new ItemStack(Blocks.hopper), MODE_AND, new ItemStack(Blocks.dropper));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.torch), new ItemStack(Items.redstone), MODE_OR, new ItemStack(Blocks.redstone_torch));
@@ -418,7 +431,37 @@ public class AlchemyRecipeHandler {
 		CombinationRegistry.addCombination(new ItemStack(Blocks.rail), new ItemStack(Blocks.stone_pressure_plate), MODE_AND, new ItemStack(Blocks.detector_rail));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.rail), new ItemStack(Blocks.light_weighted_pressure_plate), MODE_AND, new ItemStack(Blocks.detector_rail));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.rail), new ItemStack(Blocks.heavy_weighted_pressure_plate), MODE_AND, new ItemStack(Blocks.detector_rail));
-		CombinationRegistry.addCombination(new ItemStack(Blocks.glowstone), new ItemStack(Blocks.redstone_torch), MODE_OR, new ItemStack(Blocks.redstone_lamp));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.rail), new ItemStack(Items.gold_ingot), MODE_AND, new ItemStack(Blocks.golden_rail));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.rail), new ItemStack(Items.furnace_minecart), MODE_OR, new ItemStack(Blocks.golden_rail));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.glowstone), new ItemStack(Blocks.redstone_torch), MODE_AND, new ItemStack(Blocks.redstone_lamp));
+		CombinationRegistry.addCombination(new ItemStack(Items.prismarine_shard), new ItemStack(Items.diamond), MODE_OR, new ItemStack(Items.prismarine_crystals));
+		CombinationRegistry.addCombination(new ItemStack(Items.prismarine_shard), new ItemStack(Items.emerald), MODE_OR, new ItemStack(Items.prismarine_crystals));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.tallgrass), new ItemStack(Blocks.sand), false, false, MODE_OR, new ItemStack(Blocks.tallgrass, 1, 3));
+		CombinationRegistry.addCombination("treeSapling", WILDCARD_VALUE, Blocks.sand, WILDCARD_VALUE, MODE_AND, new ItemStack(Blocks.tallgrass, 1, 3));
+		CombinationRegistry.addCombination(new ItemStack(Items.ender_pearl), new ItemStack(Blocks.chest), MODE_AND, new ItemStack(Blocks.ender_chest));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.glass), new ItemStack(Blocks.snow), MODE_AND, new ItemStack(Blocks.ice));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.sponge, 1, 0), new ItemStack(Items.water_bucket), MODE_AND, new ItemStack(Blocks.sponge, 1, 1));
+		CombinationRegistry.addCombination(new ItemStack(Items.blaze_powder), new ItemStack(Items.gunpowder), MODE_OR, new ItemStack(Items.fire_charge));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.sand, 1, 0), new ItemStack(Blocks.cobblestone), MODE_OR, new ItemStack(Blocks.sandstone, 1, 0));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.sand, 1, 1), new ItemStack(Blocks.cobblestone), MODE_OR, new ItemStack(Blocks.red_sandstone, 1, 0));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.sand, 1, 0), new ItemStack(Blocks.stone), MODE_OR, new ItemStack(Blocks.sandstone, 1, 2));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.sand, 1, 1), new ItemStack(Blocks.stone), MODE_OR, new ItemStack(Blocks.red_sandstone, 1, 2));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.sand), new ItemStack(Blocks.stone), MODE_AND, new ItemStack(Blocks.cobblestone));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.sand), new ItemStack(Blocks.cobblestone), MODE_AND, new ItemStack(Blocks.gravel));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.stone), new ItemStack(Blocks.gravel), MODE_OR, new ItemStack(Blocks.cobblestone));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.sand, 1, 0), new ItemStack(Items.dye, 1, EnumDyeColor.RED.getDyeDamage()), MODE_AND, new ItemStack(Blocks.sand, 1, 1));
+		for(int i = 0; i <= 2; i++)
+			CombinationRegistry.addCombination(new ItemStack(Blocks.sandstone, 1, i), new ItemStack(Items.dye, 1, EnumDyeColor.RED.getDyeDamage()), MODE_AND, new ItemStack(Blocks.red_sandstone, 1, i));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.sandstone_stairs), new ItemStack(Items.dye, 1, EnumDyeColor.RED.getDyeDamage()), MODE_AND, new ItemStack(Blocks.red_sandstone_stairs));
+		CombinationRegistry.addCombination(new ItemStack(Items.book), new ItemStack(Blocks.planks), true, false, MODE_OR, new ItemStack(Blocks.bookshelf));
+		CombinationRegistry.addCombination("record", WILDCARD_VALUE, Blocks.noteblock, WILDCARD_VALUE, MODE_AND, new ItemStack(Blocks.jukebox));
+		CombinationRegistry.addCombination("stick", WILDCARD_VALUE, Blocks.vine, WILDCARD_VALUE, MODE_AND, new ItemStack(Blocks.ladder));
+		CombinationRegistry.addCombination(new ItemStack(Items.prismarine_shard), new ItemStack(Blocks.cobblestone), MODE_AND, new ItemStack(Blocks.prismarine, 1, 0));
+		CombinationRegistry.addCombination(new ItemStack(Items.prismarine_shard), new ItemStack(Blocks.stonebrick, 1, 0), MODE_AND, new ItemStack(Blocks.prismarine, 1, 1));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.prismarine), new ItemStack(Items.dye, 1, EnumDyeColor.BLACK.getDyeDamage()), MODE_AND, false, true, new ItemStack(Blocks.prismarine, 1, 2));
+		CombinationRegistry.addCombination(new ItemStack(Items.prismarine_crystals), new ItemStack(Blocks.glowstone), MODE_OR, new ItemStack(Blocks.sea_lantern));
+		CombinationRegistry.addCombination(new ItemStack(Items.prismarine_crystals), new ItemStack(Items.prismarine_shard), MODE_AND, new ItemStack(Blocks.sea_lantern));
+		CombinationRegistry.addCombination(new ItemStack(Items.prismarine_crystals), new ItemStack(Blocks.prismarine), MODE_AND, true, false, new ItemStack(Blocks.sea_lantern));
 		
 	}
 	
@@ -435,8 +478,8 @@ public class AlchemyRecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(Minestuck.component,1,0),new Object[]{ " X "," Y "," Y ",'X',new ItemStack(Items.bowl),'Y',new ItemStack(Items.stick)});
 		GameRegistry.addRecipe(new ItemStack(Minestuck.component,1,2),new Object[]{ "XYX","YXY","XYX",'X',new ItemStack(Blocks.stained_hardened_clay,1,0),'Y',new ItemStack(Blocks.stained_hardened_clay,1,15)});
 		GameRegistry.addRecipe(new ItemStack(Minestuck.component,1,2),new Object[]{ "XYX","YXY","XYX",'Y',new ItemStack(Blocks.stained_hardened_clay,1,0),'X',new ItemStack(Blocks.stained_hardened_clay,1,15)});
-		GameRegistry.addRecipe(new ItemStack(Minestuck.disk,1,0),new Object[]{ " X ","XYX"," X ",'X',new ItemStack(Minestuck.rawCruxite, 1),'Y',new ItemStack(Items.iron_ingot,1)});
-		GameRegistry.addRecipe(new ItemStack(Minestuck.disk,1,1),new Object[]{ "X X"," Y ","X X",'X',new ItemStack(Minestuck.rawCruxite, 1),'Y',new ItemStack(Items.iron_ingot,1)});
+		GameRegistry.addRecipe(new ItemStack(Minestuck.disk, 1, 0),new Object[]{ "X X"," Y ","X X",'X',new ItemStack(Minestuck.rawCruxite, 1),'Y',new ItemStack(Items.iron_ingot,1)});
+		GameRegistry.addRecipe(new ItemStack(Minestuck.disk, 1, 1),new Object[]{ " X ","XYX"," X ",'X',new ItemStack(Minestuck.rawCruxite, 1),'Y',new ItemStack(Items.iron_ingot,1)});
 		GameRegistry.addShapelessRecipe(new ItemStack(Minestuck.rawCruxite, 9),new  ItemStack(Minestuck.blockStorage,1,0));
 		GameRegistry.addRecipe(new ItemStack(Minestuck.cane, 1), new Object[] {"  X", " X ", "X  ", 'X', new ItemStack(Items.stick, 1)});
 		GameRegistry.addRecipe(new ItemStack(Minestuck.deuceClub, 1), new Object[] {"  Y", " X ", "X  ", 'X', new ItemStack(Items.stick, 1), 'Y', new ItemStack(Blocks.planks, 1)});
@@ -449,29 +492,30 @@ public class AlchemyRecipeHandler {
 		
 		//add grist conversions
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.coloredDirt, 1), false, new GristSet(new GristType[] {GristType. Build}, new int[] {1}));
-		GristRegistry.addGristConversion(new ItemStack(Minestuck.blockMachine,1,4), true, new GristSet(new GristType[] {GristType. Build,GristType.Garnet,GristType.Ruby}, new int[] {100,20,5}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.blockMachine,1,4), true, new GristSet(new GristType[] {GristType. Build,GristType.Garnet,GristType.Ruby}, new int[] {150, 25, 10}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.blockStorage, 1, 1), true, new GristSet(new GristType[] {GristType. Build}, new int[] {2}));
-		GristRegistry.addGristConversion(new ItemStack(Minestuck.component,1,1), true, new GristSet(new GristType[] {GristType.Build, GristType.Mercury}, new int[] {3,9}));
-		GristRegistry.addGristConversion(new ItemStack(Minestuck.component,1,1), true, new GristSet(new GristType[] {GristType.Shale, GristType.Marble}, new int[] {10,20}));
-		GristRegistry.addGristConversion(new ItemStack(Minestuck.crockerSpork), false, new GristSet(new GristType[] {GristType.Build, GristType.Iodine,GristType.Chalk,GristType.Ruby}, new int[] {100,48,48,12}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.component,1, 1), true, new GristSet(new GristType[] {GristType.Build, GristType.Mercury}, new int[] {5, 12}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.component,1, 2), true, new GristSet(new GristType[] {GristType.Shale, GristType.Marble}, new int[] {25, 25}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.crockerSpork), false, new GristSet(new GristType[] {GristType.Build, GristType.Iodine,GristType.Chalk,GristType.Ruby}, new int[] {70, 34, 34, 6}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.cruxiteArtifact, 1), false, new GristSet());
-		GristRegistry.addGristConversion(new ItemStack(Minestuck.fearNoAnvil), false, new GristSet(new GristType[] {GristType.Build, GristType.Garnet, GristType.Diamond, GristType.Gold, GristType.Quartz}, new int[] {50, 50, 5, 5, 1}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.clawHammer), false, new GristSet(GristType.Build, 5));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.fearNoAnvil), false, new GristSet(new GristType[] {GristType.Build, GristType.Garnet, GristType.Diamond, GristType.Gold, GristType.Quartz}, new int[] {120, 50, 5, 5, 1}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.ninjaSword), false, new GristSet(new GristType[] {GristType.Build, GristType.Quartz}, new int[] {10,5}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.pogoHammer), false, new GristSet(new GristType[] {GristType.Build, GristType.Shale}, new int[] {20,16}));
-		GristRegistry.addGristConversion(new ItemStack(Minestuck.regiSickle), false, new GristSet(new GristType[] {GristType.Build, GristType.Tar,GristType.Gold}, new int[] {60,15,8}));
-		GristRegistry.addGristConversion(new ItemStack(Minestuck.regisword), false, new GristSet(new GristType[] {GristType.Build, GristType.Tar,GristType.Gold}, new int[] {64,20,6}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.regiSickle), false, new GristSet(new GristType[] {GristType.Build, GristType.Tar,GristType.Gold}, new int[] {60, 15, 5}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.regisword), false, new GristSet(new GristType[] {GristType.Build, GristType.Tar,GristType.Gold}, new int[] {64, 20, 8}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.sickle), false, new GristSet(new GristType[] {GristType.Build}, new int[] {10}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.sledgeHammer), false, new GristSet(new GristType[] {GristType.Build, GristType.Shale}, new int[] {10,2}));
-		GristRegistry.addGristConversion(new ItemStack(Minestuck.transportalizer), false, new GristSet(new GristType[] {GristType.Build, GristType.Garnet, GristType.Rust, GristType.Uranium}, new int[] {64, 10, 10, 8}));
-		GristRegistry.addGristConversion(new ItemStack(Minestuck.captchaModus, 1, 2), true, new GristSet(GristType.Build, 150));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.transportalizer), false, new GristSet(new GristType[] {GristType.Build, GristType.Garnet, GristType.Rust, GristType.Uranium}, new int[] {110, 10, 10, 8}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.captchaModus, 1, 2), true, new GristSet(GristType.Build, 90));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.goldSeeds), new GristSet(GristType.Gold, 3));
-		GristRegistry.addGristConversion(new ItemStack(Minestuck.captchaModus, 1, 3), true, new GristSet(GristType.Build, 50));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.captchaModus, 1, 3), true, new GristSet(GristType.Build, 200));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.metalBoat, 1, 0), true, new GristSet(GristType.Rust, 65));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.metalBoat, 1, 1), true, new GristSet(GristType.Gold, 65));
 		
 		//add Designix combinations
-		CombinationRegistry.addCombination(new ItemStack(Items.iron_hoe), new ItemStack(Items.wheat), MODE_AND, new ItemStack(Minestuck.sickle));
-		CombinationRegistry.addCombination(new ItemStack(Items.iron_sword), new ItemStack(Items.rotten_flesh), MODE_AND, new ItemStack(Minestuck.ninjaSword));
+		CombinationRegistry.addCombination(new ItemStack(Items.iron_hoe), new ItemStack(Items.wheat), MODE_AND, false, true, new ItemStack(Minestuck.sickle));
+		CombinationRegistry.addCombination(new ItemStack(Items.iron_sword), new ItemStack(Items.rotten_flesh), MODE_AND, false, true, new ItemStack(Minestuck.ninjaSword));
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_sword), new ItemStack(Minestuck.component, 1, 2), MODE_AND, false, true, new ItemStack(Minestuck.regisword));
 		CombinationRegistry.addCombination(new ItemStack(Items.slime_ball), new ItemStack(Minestuck.sledgeHammer), MODE_AND, false, false, new ItemStack(Minestuck.pogoHammer));
 		CombinationRegistry.addCombination(new ItemStack(Minestuck.clawHammer), new ItemStack(Blocks.brick_block), MODE_AND, false, false, new ItemStack(Minestuck.sledgeHammer));
@@ -486,9 +530,9 @@ public class AlchemyRecipeHandler {
 		CombinationRegistry.addCombination(new ItemStack(Items.wheat_seeds), new ItemStack(Items.gold_nugget), MODE_AND, new ItemStack(Minestuck.goldSeeds));
 		CombinationRegistry.addCombination(new ItemStack(Items.wheat_seeds), new ItemStack(Items.gold_ingot), MODE_AND, new ItemStack(Minestuck.goldSeeds));
 		CombinationRegistry.addCombination(new ItemStack(Items.wheat_seeds), new ItemStack(Blocks.gold_block), MODE_AND, new ItemStack(Minestuck.goldSeeds));
-		CombinationRegistry.addCombination(new ItemStack(Minestuck.captchaModus), OreDictionary.WILDCARD_VALUE, "stickWood", OreDictionary.WILDCARD_VALUE, MODE_OR, new ItemStack(Minestuck.captchaModus, 1, 3));
-		CombinationRegistry.addCombination(new ItemStack(Minestuck.captchaModus), OreDictionary.WILDCARD_VALUE, "treeSapling", OreDictionary.WILDCARD_VALUE, MODE_OR, new ItemStack(Minestuck.captchaModus, 1, 3));
-		CombinationRegistry.addCombination(new ItemStack(Minestuck.captchaModus), OreDictionary.WILDCARD_VALUE, "treeLeaves", OreDictionary.WILDCARD_VALUE, MODE_OR, new ItemStack(Minestuck.captchaModus, 1, 3));	//Not planks and logs though. Too little branch-related.
+		CombinationRegistry.addCombination(Minestuck.captchaModus, OreDictionary.WILDCARD_VALUE, "stickWood", OreDictionary.WILDCARD_VALUE, MODE_OR, new ItemStack(Minestuck.captchaModus, 1, 3));
+		CombinationRegistry.addCombination(Minestuck.captchaModus, OreDictionary.WILDCARD_VALUE, "treeSapling", OreDictionary.WILDCARD_VALUE, MODE_OR, new ItemStack(Minestuck.captchaModus, 1, 3));
+		CombinationRegistry.addCombination(Minestuck.captchaModus, OreDictionary.WILDCARD_VALUE, "treeLeaves", OreDictionary.WILDCARD_VALUE, MODE_OR, new ItemStack(Minestuck.captchaModus, 1, 3));	//Not planks and logs though. Too little branch-related.
 		CombinationRegistry.addCombination(new ItemStack(Items.boat), new ItemStack(Items.minecart), MODE_OR, new ItemStack(Minestuck.metalBoat, 1, 0));
 		CombinationRegistry.addCombination(new ItemStack(Items.boat), new ItemStack(Items.iron_ingot), MODE_AND, new ItemStack(Minestuck.metalBoat, 1, 0));
 		CombinationRegistry.addCombination(new ItemStack(Items.boat), new ItemStack(Blocks.iron_block), MODE_AND, new ItemStack(Minestuck.metalBoat, 1, 0));
@@ -497,6 +541,7 @@ public class AlchemyRecipeHandler {
 		CombinationRegistry.addCombination(new ItemStack(Items.boat), new ItemStack(Blocks.gold_block), MODE_AND, new ItemStack(Minestuck.metalBoat, 1, 1));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.dirt), new ItemStack(Items.dye, 1, EnumDyeColor.BLUE.getDyeDamage()), MODE_OR, new ItemStack(Minestuck.coloredDirt, 1, 0));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.dirt), new ItemStack(Items.dye, 1, EnumDyeColor.LIME.getDyeDamage()), MODE_OR, new ItemStack(Minestuck.coloredDirt, 1, 1));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.sand), new ItemStack(Blocks.snow_layer), MODE_OR, new ItemStack(Minestuck.layeredSand));
 		
 	}
 	
@@ -505,23 +550,23 @@ public class AlchemyRecipeHandler {
 		
 		GristRegistry.addGristConversion("ingotCopper", new GristSet(new GristType[] {GristType.Rust, GristType.Cobalt}, new int[] {16, 3}));
 		GristRegistry.addGristConversion("oreCopper", new GristSet(new GristType[] {GristType.Rust, GristType.Cobalt, GristType.Build}, new int[] {16, 3, 4}));
-		GristRegistry.addGristConversion("ingotTin", new GristSet(new GristType[] {GristType.Rust, GristType.Caulk}, new int[] {16, 8}));
-		GristRegistry.addGristConversion("oreTin", new GristSet(new GristType[] {GristType.Rust, GristType.Caulk, GristType.Build}, new int[] {16, 8, 4}));
-		GristRegistry.addGristConversion("ingotSilver", new GristSet(new GristType[] {GristType.Rust, GristType.Mercury}, new int[] {16, 8}));
-		GristRegistry.addGristConversion("oreSilver", new GristSet(new GristType[] {GristType.Rust, GristType.Mercury, GristType.Build}, new int[] {16, 8, 4}));
-		GristRegistry.addGristConversion("ingotLead", new GristSet(new GristType[] {GristType.Rust, GristType.Cobalt, GristType.Shale}, new int[] {16, 4, 4}));
-		GristRegistry.addGristConversion("oreLead", new GristSet(new GristType[] {GristType.Rust, GristType.Cobalt, GristType.Shale, GristType.Build}, new int[] {16, 4, 4, 4}));
-		GristRegistry.addGristConversion("ingotNickel", new GristSet(new GristType[] {GristType.Rust, GristType.Sulfur}, new int[] {16, 8}));
-		GristRegistry.addGristConversion("oreNickel", new GristSet(new GristType[] {GristType.Rust, GristType.Sulfur, GristType.Build}, new int[] {16, 8, 4}));
-		GristRegistry.addGristConversion("ingotInvar", new GristSet(new GristType[] {GristType.Rust, GristType.Sulfur}, new int[] {16, 5}));
-		GristRegistry.addGristConversion("ingotAluminium", new GristSet(new GristType[] {GristType.Rust, GristType.Chalk}, new int[] {16, 6}));
-		GristRegistry.addGristConversion("oreAluminium", new GristSet(new GristType[] {GristType.Rust, GristType.Chalk, GristType.Build}, new int[] {16, 6, 4}));
+		GristRegistry.addGristConversion("ingotTin", new GristSet(new GristType[] {GristType.Rust, GristType.Caulk}, new int[] {12, 8}));
+		GristRegistry.addGristConversion("oreTin", new GristSet(new GristType[] {GristType.Rust, GristType.Caulk, GristType.Build}, new int[] {12, 8, 4}));
+		GristRegistry.addGristConversion("ingotSilver", new GristSet(new GristType[] {GristType.Rust, GristType.Mercury}, new int[] {12, 8}));
+		GristRegistry.addGristConversion("oreSilver", new GristSet(new GristType[] {GristType.Rust, GristType.Mercury, GristType.Build}, new int[] {12, 8, 4}));
+		GristRegistry.addGristConversion("ingotLead", new GristSet(new GristType[] {GristType.Rust, GristType.Cobalt, GristType.Shale}, new int[] {12, 4, 4}));
+		GristRegistry.addGristConversion("oreLead", new GristSet(new GristType[] {GristType.Rust, GristType.Cobalt, GristType.Shale, GristType.Build}, new int[] {12, 4, 4, 4}));
+		GristRegistry.addGristConversion("ingotNickel", new GristSet(new GristType[] {GristType.Rust, GristType.Sulfur}, new int[] {12, 8}));
+		GristRegistry.addGristConversion("oreNickel", new GristSet(new GristType[] {GristType.Rust, GristType.Sulfur, GristType.Build}, new int[] {12, 8, 4}));
+		GristRegistry.addGristConversion("ingotInvar", new GristSet(new GristType[] {GristType.Rust, GristType.Sulfur}, new int[] {12, 5}));
+		GristRegistry.addGristConversion("ingotAluminium", new GristSet(new GristType[] {GristType.Rust, GristType.Chalk}, new int[] {12, 6}));
+		GristRegistry.addGristConversion("oreAluminium", new GristSet(new GristType[] {GristType.Rust, GristType.Chalk, GristType.Build}, new int[] {12, 6, 4}));
 		
-		GristRegistry.addGristConversion("ingotCobalt", new GristSet(new GristType[] {GristType.Cobalt}, new int[] {16}));
-		GristRegistry.addGristConversion("oreCobalt", new GristSet(new GristType[] {GristType.Cobalt, GristType.Build}, new int[] {16, 4}));
+		GristRegistry.addGristConversion("ingotCobalt", new GristSet(new GristType[] {GristType.Cobalt}, new int[] {18}));
+		GristRegistry.addGristConversion("oreCobalt", new GristSet(new GristType[] {GristType.Cobalt, GristType.Build}, new int[] {18, 4}));
 		GristRegistry.addGristConversion("ingotArdite", new GristSet(new GristType[] {GristType.Garnet, GristType.Sulfur}, new int[] {12, 8}));
 		GristRegistry.addGristConversion("oreArdite", new GristSet(new GristType[] {GristType.Garnet, GristType.Sulfur, GristType.Build}, new int[] {12, 8, 4}));
-		GristRegistry.addGristConversion("ingotRedAlloy", new GristSet(new GristType[] {GristType.Rust, GristType.Garnet}, new int[] {16, 32}));
+		GristRegistry.addGristConversion("ingotRedAlloy", new GristSet(new GristType[] {GristType.Rust, GristType.Garnet}, new int[] {18, 32}));
 		if(!OreDictionary.getOres("ingotRedAlloy").isEmpty())
 			CombinationRegistry.addCombination(new ItemStack(Items.iron_ingot), new ItemStack(Items.redstone), MODE_OR, OreDictionary.getOres("ingotRedAlloy").get(0));
 		
@@ -561,7 +606,7 @@ public class AlchemyRecipeHandler {
 	 * @param b - If it is used for a dowel in alchemy.
 	 * @return An item, or null if the data was invalid.
 	 */
-	public static ItemStack getDecodedItem(ItemStack card, boolean b)
+	public static ItemStack getDecodedItem(ItemStack card)
 	{
 		
 		if (card == null) {return null;}
@@ -570,7 +615,7 @@ public class AlchemyRecipeHandler {
 		
 		if (tag == null || !tag.hasKey("contentID"))
 		{
-			return b? new ItemStack(Minestuck.blockStorage,1,1):null;
+			return null;
 		}
 		
 		if (!Item.itemRegistry.containsKey(new ResourceLocation(tag.getString("contentID")))) {return null;}
@@ -586,22 +631,21 @@ public class AlchemyRecipeHandler {
 	}
 	
 	/**
-	 * Given a punched card or a carved dowel, returns a new item that represents the encoded data. If easyDesignix is true,
-	 * it just gives you the item directly if it's not a punched card.
+	 * Given a punched card, this method returns a new item that represents the encoded data,
+	 * or it just returns the item directly if it's not a punched card.
 	 */
-	public static ItemStack getDecodedItemDesignix(ItemStack card, boolean clientSide)
+	public static ItemStack getDecodedItemDesignix(ItemStack card)
 	{
 		
 		if (card == null) {return null;}
 		
-		if (!(card.getItem().equals(Minestuck.captchaCard) && card.hasTagCompound() && card.getTagCompound().hasKey("contentID"))
-				&& (clientSide ? Minestuck.clientEasyDesignix : Minestuck.easyDesignix))
+		if (!(card.getItem().equals(Minestuck.captchaCard) && card.hasTagCompound() && card.getTagCompound().hasKey("contentID")))
 		{
 			return card;
 		}
 		else
 		{
-			return getDecodedItem(card, false);
+			return getDecodedItem(card);
 		}
 	}
 	
@@ -648,7 +692,7 @@ public class AlchemyRecipeHandler {
 			{
 				if (recipe instanceof ShapedRecipes) {
 					ShapedRecipes newRecipe = (ShapedRecipes) recipe;
-					//Debug.print("Found the recipe for "+"ITEM"+", id "+newRecipe.getRecipeOutput().itemID+":"+newRecipe.getRecipeOutput().getItemDamage());
+					//Debug.print("Found the recipe for "+"ITEM"+", id "+newRecipe.getRecipeOutput());
 					recipeList.put(Arrays.asList(newRecipe.getRecipeOutput().getItem(),newRecipe.getRecipeOutput().getItemDamage()), recipe);
 				} else if (recipe instanceof ShapelessRecipes) {
 					ShapelessRecipes newRecipe = (ShapelessRecipes) recipe;
@@ -690,8 +734,8 @@ public class AlchemyRecipeHandler {
 	
 	private static boolean getRecipe(Object recipe) {
 		if (recipe instanceof ShapedRecipes) {
-			////Debug.print("found shaped recipe. Output of "+"ITEM");
 			ShapedRecipes newRecipe = (ShapedRecipes) recipe;
+			//Debug.print("found shaped recipe. Output of "+newRecipe.getRecipeOutput());
 			if (lookedOver.get(Arrays.asList(newRecipe.getRecipeOutput().getItem(),newRecipe.getRecipeOutput().getHasSubtypes() ? newRecipe.getRecipeOutput().getItemDamage() : 0)) != null) {
 				////Debug.print("	Recursive recipe! Recipe failed.");
 				return false;
@@ -702,31 +746,31 @@ public class AlchemyRecipeHandler {
 			GristSet set = new GristSet();
 			for (ItemStack item : newRecipe.recipeItems) {
 				if (GristRegistry.getGristConversion(item) != null) {
-					//Debug.print("	Adding compo: "+"ITEM");
+					//Debug.print("	Adding compo: "+item);
 					set.addGrist(GristRegistry.getGristConversion(item));
 				} else if (item != null && item.getItem() != null) {
 					Object subrecipe = recipeList.get(Arrays.asList(item.getItem(),item.getHasSubtypes() && !((Integer)item.getItemDamage()).equals(32767) ? item.getItemDamage() : 0));
 					if (subrecipe != null) {
-						//Debug.print("	Could not find "+"ITEM"+". Looking up subrecipe... {");
+						//Debug.print("	Could not find "+item+". Looking up subrecipe... {");
 						 if (getRecipe(subrecipe)) {
 							 if (GristRegistry.getGristConversion(item) == null) {
-								 //Debug.print("	} Recipe failure! getRecipe did not return expeted boolean value.");
+								//Debug.print("	} Recipe failure! getRecipe did not return expeted boolean value.");
 								 return false;
 							 }
-							 set.addGrist(GristRegistry.getGristConversion(item));
-							 //Debug.print("	}");
+							set.addGrist(GristRegistry.getGristConversion(item));
+							//Debug.print("	}");
 						 } else {
-							 //Debug.print("	}");
+							//Debug.print("	}");
 							 return false;
 						 }
 					} else {
-						//Debug.print("	Could not find "+"ITEM"+" ("+item.itemID+":"+item.getItemDamage()+"). Recipe failed!");
+						//Debug.print("	Could not find "+"ITEM"+" ("+item+"). Recipe failed!");
 						return false;
 					}
 				}
-				set.scaleGrist(1/(float)newRecipe.getRecipeOutput().stackSize);
-				GristRegistry.addGristConversion(newRecipe.getRecipeOutput(),newRecipe.getRecipeOutput().getHasSubtypes(),set);
 			}
+			set.scaleGrist(1/(float)newRecipe.getRecipeOutput().stackSize);
+			GristRegistry.addGristConversion(newRecipe.getRecipeOutput(),newRecipe.getRecipeOutput().getHasSubtypes(),set);
 		} else if (recipe instanceof ShapelessRecipes) {
 			//Debug.print("found shapeless recipe. Output of "+"ITEM");
 			ShapelessRecipes newRecipe = (ShapelessRecipes) recipe;
@@ -763,12 +807,12 @@ public class AlchemyRecipeHandler {
 						return false;
 					}
 				}
-				set.scaleGrist(1/(float)newRecipe.getRecipeOutput().stackSize);
-				GristRegistry.addGristConversion(newRecipe.getRecipeOutput(),newRecipe.getRecipeOutput().getHasSubtypes(),set);
 			}
+			set.scaleGrist(1/(float)newRecipe.getRecipeOutput().stackSize);
+			GristRegistry.addGristConversion(newRecipe.getRecipeOutput(),newRecipe.getRecipeOutput().getHasSubtypes(),set);
 		} else if (recipe instanceof ShapedOreRecipe) {
-			//Debug.print("found shaped oredict recipe. Output of "+"ITEM");
 			ShapedOreRecipe newRecipe = (ShapedOreRecipe) recipe;
+			//Debug.print("found shaped oredict recipe. Output of "+newRecipe.getRecipeOutput());
 			if (GristRegistry.getGristConversion(newRecipe.getRecipeOutput()) != null) {return false;};
 			if (lookedOver.get(Arrays.asList(newRecipe.getRecipeOutput().getItem(),newRecipe.getRecipeOutput().getHasSubtypes() ? newRecipe.getRecipeOutput().getItemDamage() : 0)) != null) {
 				//Debug.print("	Recursive recipe! Recipe failed.");
@@ -777,12 +821,15 @@ public class AlchemyRecipeHandler {
 				lookedOver.put(Arrays.asList(newRecipe.getRecipeOutput().getItem(),newRecipe.getRecipeOutput().getHasSubtypes() ? newRecipe.getRecipeOutput().getItemDamage() : 0),true);
 			}
 			GristSet set = new GristSet();
-			for (Object obj : newRecipe.getInput()) {
+			for (Object obj : newRecipe.getInput())
+			{
 				ItemStack item = null;
-				if (obj == null) {break;}
-				if (obj instanceof List) {
-					if (((List<?>) obj).size() == 0) {
-						//Debug.print("	Input list was empty!");
+				if (obj == null)
+					continue;
+				if (obj instanceof List)
+				{
+					if (((List<?>) obj).size() == 0)
+					{
 						break;
 					}
 					item = (ItemStack) ((List<?>) obj).get(0);
@@ -790,31 +837,31 @@ public class AlchemyRecipeHandler {
 					item = (ItemStack) obj;
 				}
 				if (GristRegistry.getGristConversion(item) != null) {
-					//Debug.print("	Adding compo: "+"ITEM");
+					//Debug.print("	Adding compo: "+item);
 					set.addGrist(GristRegistry.getGristConversion(item));
 				} else if (item != null) {
 					Object subrecipe = recipeList.get(Arrays.asList(item.getItem(),item.getHasSubtypes() && !((Integer)item.getItemDamage()).equals(32767) ? item.getItemDamage() : 0));
 					if (subrecipe != null) {
-						//Debug.print("	Could not find "+"ITEM"+". Looking up subrecipe... {");
+						//Debug.print("	Could not find "+item+". Looking up subrecipe... {");
 						 if (getRecipe(subrecipe)) {
 							 if (GristRegistry.getGristConversion(item) == null) {
-								 //Debug.print("	} Recipe failure! getRecipe did not return expeted boolean value.");
+								//Debug.print("	} Recipe failure! getRecipe did not return expeted boolean value.");
 								 return false;
 							 }
 							 set.addGrist(GristRegistry.getGristConversion(item));
-							 //Debug.print("	}");
+							//Debug.print("	}");
 						 } else {
-							 //Debug.print("	}");
+							//Debug.print("	}");
 							 return false;
 						 }
 					} else {
-						//Debug.print("	Could not find "+"ITEM"+" ("+item.itemID+":"+item.getItemDamage()+"). Recipe failed!");
+						//Debug.print("	Could not find "+item+". Recipe failed!");
 						return false;
 					}
 				}
-				set.scaleGrist(1/(float)newRecipe.getRecipeOutput().stackSize);
-				GristRegistry.addGristConversion(newRecipe.getRecipeOutput(),newRecipe.getRecipeOutput().getHasSubtypes(),set);
 			}
+			set.scaleGrist(1/(float)newRecipe.getRecipeOutput().stackSize);
+			GristRegistry.addGristConversion(newRecipe.getRecipeOutput(),newRecipe.getRecipeOutput().getHasSubtypes(),set);
 		} else if (recipe instanceof ShapelessOreRecipe) {
 			//Debug.print("found shapeless oredict recipe. Output of "+"ITEM");
 			ShapelessOreRecipe newRecipe = (ShapelessOreRecipe) recipe;
@@ -861,9 +908,9 @@ public class AlchemyRecipeHandler {
 						return false;
 					}
 				}
-				set.scaleGrist(1/(float)newRecipe.getRecipeOutput().stackSize);
-				GristRegistry.addGristConversion(newRecipe.getRecipeOutput(),newRecipe.getRecipeOutput().getHasSubtypes(),set);
 			}
+			set.scaleGrist(1/(float)newRecipe.getRecipeOutput().stackSize);
+			GristRegistry.addGristConversion(newRecipe.getRecipeOutput(),newRecipe.getRecipeOutput().getHasSubtypes(),set);
 		} else {
 			//Debug.print("found other recipe class: "+recipe.getClass());
 		}

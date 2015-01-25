@@ -77,7 +77,8 @@ public class LandAspectHeat extends TerrainAspect
 	}
 	
 	@Override
-	public int getDayCycleMode() {
+	public int getDayCycleMode()
+	{
 		return 0;
 	}
 

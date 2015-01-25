@@ -62,7 +62,6 @@ public class ChunkProviderLands implements IChunkProvider
 	public ArrayList<ILandDecorator> decorators;
 	public int dayCycle;
 	public int weatherType;	//-1:No weather &1: rainy or snowy &2:If thunder &4:If neverending
-	public int spawnX, spawnY, spawnZ;
 
 	@SuppressWarnings("unchecked")
 	public ChunkProviderLands(World worldObj, WorldProviderLands worldProvider, long seed)
@@ -79,22 +78,15 @@ public class ChunkProviderLands implements IChunkProvider
 		
 		if (landDataTag == null)
 		{
-			spawnX = landWorld.getWorldInfo().getSpawnX();
-			spawnY = landWorld.getWorldInfo().getSpawnY();
-			spawnZ = landWorld.getWorldInfo().getSpawnZ();
 			Random rand = new Random(seed);
 			nameIndex1 = rand.nextInt(aspect1.getNames().length);	//Better way to generate these?
 			nameIndex2 = rand.nextInt(aspect2.getNames().length);
 			saveData();
-
 		}
 		else
 		{
-			spawnX = landDataTag.getInteger("spawnX");
-			spawnY = landDataTag.getInteger("spawnY");
-			spawnZ = landDataTag.getInteger("spawnZ");
-			nameIndex1 = landDataTag.getInteger("aspectName1");
-			nameIndex2 = landDataTag.getInteger("aspectName2");
+			nameIndex1 = landDataTag.getByte("aspectName1");
+			nameIndex2 = landDataTag.getByte("aspectName2");
 		}
 		
 		this.random = new Random(seed);
@@ -258,11 +250,8 @@ public class ChunkProviderLands implements IChunkProvider
 	{
 		
 		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setInteger("spawnX", spawnX);
-		nbt.setInteger("spawnY", spawnY);
-		nbt.setInteger("spawnZ", spawnZ);
-		nbt.setInteger("aspectName1", nameIndex1);
-		nbt.setInteger("aspectName2", nameIndex2);
+		nbt.setByte("aspectName1", (byte) nameIndex1);
+		nbt.setByte("aspectName2", (byte) nameIndex2);
 		
 		Map<String, NBTBase> dataTag = new Hashtable<String,NBTBase>();
 		dataTag.put("landData", nbt);

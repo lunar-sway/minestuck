@@ -105,7 +105,7 @@ public class DesignixHandler extends TemplateRecipeHandler {
 		
 		ItemStack search = (ItemStack)ingredients[0];
 		if(search.getItem() == Minestuck.captchaCard && search.hasTagCompound() && search.getTagCompound().hasKey("contentID"))
-			search = AlchemyRecipeHandler.getDecodedItem(search, false);
+			search = AlchemyRecipeHandler.getDecodedItem(search);
 		
 		recipeLoop: for (Map.Entry<List<Object>, ItemStack> entry : CombinationRegistry.getAllConversions().entrySet())
 		{

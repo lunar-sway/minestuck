@@ -12,6 +12,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
 import com.mraof.minestuck.client.gui.captchalouge.TreeGuiHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler.ModusType;
@@ -86,7 +87,7 @@ public class TreeModus extends Modus
 	public boolean putItemStack(ItemStack item)
 	{
 		int currentSize = node == null ? 0 : node.getSize();
-		if(item == null || currentSize >= size && !Minestuck.infiniteTreeModus)
+		if(item == null || currentSize >= size && !MinestuckConfig.infiniteTreeModus)
 			return false;
 		if(node == null)
 			node = new TreeNode(item);
@@ -109,7 +110,7 @@ public class TreeModus extends Modus
 	@Override
 	public boolean increaseSize()
 	{
-		if(Minestuck.modusMaxSize > 0 && size >= Minestuck.modusMaxSize)
+		if(MinestuckConfig.modusMaxSize > 0 && size >= MinestuckConfig.modusMaxSize)
 			return false;
 		
 		size++;
@@ -150,7 +151,7 @@ public class TreeModus extends Modus
 		if(asCard)
 		{
 			stack = AlchemyRecipeHandler.createCard(stack, false);
-			if(!Minestuck.infiniteTreeModus)
+			if(!MinestuckConfig.infiniteTreeModus)
 				size--;
 		}
 		if(id == 0)
@@ -195,7 +196,7 @@ public class TreeModus extends Modus
 	
 	protected void autobalance()
 	{
-		if(!autobalance && Minestuck.treeModusSetting != 1 || Minestuck.treeModusSetting == 2)
+		if(!autobalance && MinestuckConfig.treeModusSetting != 1 || MinestuckConfig.treeModusSetting == 2)
 			return;
 		
 		int minDepth = getDepth(node, true);

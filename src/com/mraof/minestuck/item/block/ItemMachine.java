@@ -23,7 +23,6 @@ public class ItemMachine extends ItemBlock {
 		public int getMetadata (int damageValue) 
 		{
 			return damageValue;
-			
 		}
 		
 }

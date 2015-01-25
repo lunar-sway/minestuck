@@ -46,9 +46,9 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 //		this.yOffset = this.height / 2.0F;
 		this.setPosition(x, y, z);
 		this.rotationYaw = (float)(Math.random() * 360.0D);
-		this.motionX = (double)((float)(world.rand.nextGaussian() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
-		this.motionY = (double)((float)(world.rand.nextGaussian() * 0.2D) * 2.0F);
-		this.motionZ = (double)((float)(world.rand.nextGaussian() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
+		this.motionX = (double)((float)(world.rand.nextGaussian() * 0.20000000298023224D - 0.10000000149011612D));
+		this.motionY = (double)((float)(world.rand.nextGaussian() * 0.2D));
+		this.motionZ = (double)((float)(world.rand.nextGaussian() * 0.20000000298023224D - 0.10000000149011612D));
 		this.isImmuneToFire = true;
 
 		this.gristType = gristData.getType().getName();

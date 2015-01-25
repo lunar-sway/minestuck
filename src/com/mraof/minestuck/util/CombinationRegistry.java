@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.mraof.minestuck.Minestuck;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -31,7 +33,19 @@ public class CombinationRegistry {
 	 */
 	public static void addCombination(Object input1, int damage1, Object input2, int damage2, boolean mode, ItemStack output)
 	{
-		if(input1.hashCode() >= input2.hashCode())
+		if(input1 instanceof Block)
+			input1 = Item.getItemFromBlock((Block) input1);
+		else if(input1 instanceof ItemStack)
+			input1 = ((ItemStack) input1).getItem();
+		if(input2 instanceof Block)
+			input2 = Item.getItemFromBlock((Block) input2);
+		else if(input2 instanceof ItemStack)
+			input2 = ((ItemStack) input2).getItem();
+		
+		int index = input1.hashCode() - input2.hashCode();
+		if(index == 0)
+			index = damage1 - damage2;
+		if(index > 0)
 			combRecipes.put(Arrays.asList(input1, damage1, input2, damage2, mode), output);
 		else combRecipes.put(Arrays.asList(input2, damage2, input1, damage1, mode), output);
 	}
@@ -74,7 +88,10 @@ public class CombinationRegistry {
 	{
 		ItemStack item;
 		
-		if(input1.hashCode() >= input2.hashCode())
+		int index = input1.hashCode() - input2.hashCode();
+		if(index == 0)
+			index = damage1 - damage2;
+		if(index > 0)
 		{
 			if((item = combRecipes.get(Arrays.asList(input1, damage1, input2, damage2, mode))) != null);
 			else if((item = combRecipes.get(Arrays.asList(input1, damage1, input2, OreDictionary.WILDCARD_VALUE, mode))) != null);

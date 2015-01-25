@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
@@ -109,7 +110,7 @@ public class CaptchaDeckHandler
 			{
 				modus = ModusType.values()[item.getItemDamage()].createInstance();
 				modus.player = player;
-				modus.initModus(null, Minestuck.defaultModusSize);
+				modus.initModus(null, MinestuckConfig.defaultModusSize);
 				setModus(player, modus);
 				container.inventory.setInventorySlotContents(0, null);
 			}
@@ -139,12 +140,23 @@ public class CaptchaDeckHandler
 		else if(item.getItem().equals(Minestuck.captchaCard) && (!item.hasTagCompound() || !item.getTagCompound().getBoolean("punched"))
 				&& modus != null)
 		{
-			ItemStack content = AlchemyRecipeHandler.getDecodedItem(item, false);
-			if(!modus.increaseSize())
-				return;
-			container.inventory.setInventorySlotContents(0, null);
-			if(content != null && !modus.putItemStack(content))
-				launchItem(player, content);
+			ItemStack content = AlchemyRecipeHandler.getDecodedItem(item);
+			int failed = 0;
+			for(int i = 0; i < item.stackSize; i++)
+				if(!modus.increaseSize())
+					failed++;
+			
+			if(content != null)
+				for(int i = 0; i < item.stackSize - failed; i++)
+				{
+					ItemStack toPut = content.copy();
+					if(!modus.putItemStack(toPut))
+						launchItem(player, toPut);
+				}
+			
+			if(failed == 0)
+				container.inventory.setInventorySlotContents(0, null);
+			else item.stackSize = failed;
 		}
 		
 		if(modus != null)
@@ -163,7 +175,7 @@ public class CaptchaDeckHandler
 			boolean card1 = false, card2 = true;
 			if(item.getItem() == Minestuck.captchaCard && item.hasTagCompound() && !item.getTagCompound().getBoolean("punched"))
 			{
-				ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(item, false);
+				ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(item);
 				if(newItem != null)
 				{
 					card1 = true;

@@ -3,13 +3,12 @@ package com.mraof.minestuck.world.storage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Hashtable;
 import java.util.List;
 
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.BlockPos;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -34,6 +33,7 @@ public class MinestuckSaveHandler
 			NBTTagCompound nbt = new NBTTagCompound();
 			
 			MinestuckDimensionHandler.saveData(nbt);
+
 			TileEntityTransportalizer.saveTransportalizers(nbt);
 			SkaianetHandler.saveData(nbt);
 			MinestuckPlayerData.writeToNBT(nbt);

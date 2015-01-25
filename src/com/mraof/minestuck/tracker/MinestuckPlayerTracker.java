@@ -12,6 +12,7 @@ import net.minecraftforge.fml.common.network.handshake.NetworkDispatcher;
 import net.minecraftforge.fml.relauncher.Side;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalouge.Modus;
@@ -58,20 +59,20 @@ public class MinestuckPlayerTracker {
 		
 		if(CaptchaDeckHandler.getModus(player) == null)
 		{
-			if(Minestuck.defaultModusType < 0)
+			if(MinestuckConfig.defaultModusType < 0)
 			{
-				CaptchaDeckHandler.ModusType[] list = Minestuck.defaultModusType == -1 ? CaptchaDeckHandler.modusList : CaptchaDeckHandler.ModusType.values();
+				CaptchaDeckHandler.ModusType[] list = MinestuckConfig.defaultModusType == -1 ? CaptchaDeckHandler.modusList : CaptchaDeckHandler.ModusType.values();
 				int index = player.worldObj.rand.nextInt(list.length);
 				Modus modus = list[index].createInstance();
 				modus.player = player;
-				modus.initModus(null, Minestuck.defaultModusSize);
+				modus.initModus(null, MinestuckConfig.defaultModusSize);
 				CaptchaDeckHandler.setModus(player, modus);
 			}
-			else if(Minestuck.defaultModusType >= 0 && Minestuck.defaultModusType < CaptchaDeckHandler.ModusType.values().length)
+			else if(MinestuckConfig.defaultModusType >= 0 && MinestuckConfig.defaultModusType < CaptchaDeckHandler.ModusType.values().length)
 			{
-				Modus modus = CaptchaDeckHandler.ModusType.values()[Minestuck.defaultModusType].createInstance();
+				Modus modus = CaptchaDeckHandler.ModusType.values()[MinestuckConfig.defaultModusType].createInstance();
 				modus.player = player;
-				modus.initModus(null, Minestuck.defaultModusSize);
+				modus.initModus(null, MinestuckConfig.defaultModusSize);
 				CaptchaDeckHandler.setModus(player, modus);
 			}
 		}

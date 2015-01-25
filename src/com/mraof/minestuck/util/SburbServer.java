@@ -3,6 +3,7 @@ package com.mraof.minestuck.util;
 import java.util.ArrayList;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
@@ -19,7 +20,7 @@ public class SburbServer extends ButtonListProgram {
 		if (!clientName.isEmpty() && SkaiaClient.getClientConnection(clientName) != null) {
 			list.add(new UnlocalizedString("computer.messageConnect", displayPlayer));
 			list.add(new UnlocalizedString("computer.buttonClose"));
-			list.add(new UnlocalizedString(Minestuck.clientGiveItems?"computer.buttonGive":"computer.buttonEdit"));
+			list.add(new UnlocalizedString(MinestuckConfig.clientGiveItems ? "computer.buttonGive" : "computer.buttonEdit"));
 		} else if (te.getData(getId()).getBoolean("isOpen")) {
 			list.add(new UnlocalizedString("computer.messageResumeServer"));
 			list.add(new UnlocalizedString("computer.buttonClose"));

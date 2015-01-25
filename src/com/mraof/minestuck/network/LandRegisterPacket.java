@@ -5,6 +5,9 @@ import io.netty.buffer.ByteBuf;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Map;
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
@@ -55,16 +58,13 @@ public class LandRegisterPacket extends MinestuckPacket
 		
 		return this;
 	}
-
+	
 	@Override
 	public void execute(EntityPlayer player) 
 	{
-		if(MinecraftServer.getServer() != null && MinecraftServer.getServer().isServerRunning())
-			return;	//Nope, no editing the server's land list
-		
 		MinestuckDimensionHandler.onLandPacket(this);
 	}
-
+	
 	@Override
 	public EnumSet<Side> getSenderSide() {
 		return EnumSet.of(Side.SERVER);

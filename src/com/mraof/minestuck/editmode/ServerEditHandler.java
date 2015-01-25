@@ -45,6 +45,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.entity.EntityDecoy;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
@@ -230,7 +231,7 @@ public class ServerEditHandler
 			return;
 		
 		SburbConnection c = data.connection;
-		int range = MinestuckDimensionHandler.isLandDimension((byte)player.dimension)?Minestuck.landEditRange:Minestuck.overworldEditRange;
+		int range = MinestuckDimensionHandler.isLandDimension((byte)player.dimension) ? MinestuckConfig.landEditRange : MinestuckConfig.overworldEditRange;
 		
 		updateInventory(player, c.givenItems(), c.enteredGame(), c.getClientName());
 		updatePosition(player, range, c.centerX, c.centerZ);
@@ -246,7 +247,7 @@ public class ServerEditHandler
 			ItemStack stack = event.entityItem.getEntityItem();
 			if(DeployList.containsItemStack(stack) && !isBlockItem(stack.getItem()))
 			{
-				GristSet cost = Minestuck.hardMode && data.connection.givenItems()[DeployList.getOrdinal(stack)]
+				GristSet cost = MinestuckConfig.hardMode && data.connection.givenItems()[DeployList.getOrdinal(stack)]
 						?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
 				if(GristHelper.canAfford(MinestuckPlayerData.getGristSet(data.connection.getClientName()), cost))
 				{
@@ -297,7 +298,7 @@ public class ServerEditHandler
 					return;
 				if(DeployList.containsItemStack(stack))
 				{
-					GristSet cost = Minestuck.hardMode && data.connection.givenItems()[DeployList.getOrdinal(stack)]
+					GristSet cost = MinestuckConfig.hardMode && data.connection.givenItems()[DeployList.getOrdinal(stack)]
 							? DeployList.getSecondaryCost(stack) : DeployList.getPrimaryCost(stack);
 					if(!GristHelper.canAfford(MinestuckPlayerData.getGristSet(data.connection.getClientName()), cost))
 					{
@@ -337,7 +338,7 @@ public class ServerEditHandler
 				ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
 				if(DeployList.containsItemStack(stack)) {
 					SburbConnection c = data.connection;
-					GristSet cost = Minestuck.hardMode && c.givenItems()[DeployList.getOrdinal(stack)]
+					GristSet cost = MinestuckConfig.hardMode && c.givenItems()[DeployList.getOrdinal(stack)]
 							?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
 					c.givenItems()[DeployList.getOrdinal(stack)] = true;
 					if(!c.isMain())
@@ -408,8 +409,8 @@ public class ServerEditHandler
 		for(int i = 0; i < player.inventory.mainInventory.length; i++)
 		{
 			ItemStack stack = player.inventory.mainInventory[i];
-			if(stack != null && (DeployList.containsItemStack(stack) ? Minestuck.hardMode && givenItems[DeployList.getOrdinal(stack)] ||
-					stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack, false).getItem() == Minestuck.cruxiteArtifact && enteredGame
+			if(stack != null && (DeployList.containsItemStack(stack) ? MinestuckConfig.hardMode && givenItems[DeployList.getOrdinal(stack)] ||
+					stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack).getItem() == Minestuck.cruxiteArtifact && enteredGame
 					: GristRegistry.getGristConversion(stack) == null || !isBlockItem(stack.getItem())))
 			{
 				player.inventory.mainInventory[i] = null;
@@ -425,7 +426,7 @@ public class ServerEditHandler
 		ArrayList<ItemStack> itemsToRemove = new ArrayList<ItemStack>();
 		for(ItemStack stack : DeployList.getItemList())
 		{	//Find deploy list items that isn't available.
-			boolean shouldHave = !(Minestuck.hardMode && givenItems[DeployList.getOrdinal(stack)] && DeployList.getSecondaryCost(stack) == null
+			boolean shouldHave = !(MinestuckConfig.hardMode && givenItems[DeployList.getOrdinal(stack)] && DeployList.getSecondaryCost(stack) == null
 					|| DeployList.getTier(stack) > SessionHandler.availableTier(client));
 			if(!shouldHave)
 				itemsToRemove.add(stack);

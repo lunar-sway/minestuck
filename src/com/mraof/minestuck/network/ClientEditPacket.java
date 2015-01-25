@@ -11,6 +11,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.relauncher.Side;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
@@ -43,18 +44,20 @@ public class ClientEditPacket extends MinestuckPacket {
 	}
 
 	@Override
-	public void execute(EntityPlayer player) {
-		if(!Minestuck.giveItems) {
+	public void execute(EntityPlayer player)
+	{
+		if(!MinestuckConfig.giveItems)
+		{
 			if(username == null)
 				ServerEditHandler.onPlayerExit(player);
-			if(!Minestuck.privateComputers || UsernameHandler.encode(player.getName()).equals(this.username))
+			if(!MinestuckConfig.privateComputers || UsernameHandler.encode(player.getName()).equals(this.username))
 				ServerEditHandler.newServerEditor((EntityPlayerMP) player, username, target);
 			return;
 		}
 		
 		EntityPlayerMP playerMP = MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(UsernameHandler.decode(target));
 		
-		if(playerMP != null && (!Minestuck.privateComputers || player.getName().equals(UsernameHandler.decode(username))))
+		if(playerMP != null && (!MinestuckConfig.privateComputers || player.getName().equals(UsernameHandler.decode(username))))
 		{
 			SburbConnection c = SkaianetHandler.getClientConnection(target);
 			if(c == null || !c.getServerName().equals(username) || !(c.isMain() || SkaianetHandler.giveItems(target)))

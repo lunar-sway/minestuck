@@ -21,6 +21,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
@@ -260,10 +261,10 @@ public class SkaianetHandler {
 			Debug.print("[SKAIANET] Player \"" + p0 + "\" sent a request without being online!");
 			return;
 		}
-		if(Minestuck.privateComputers && !p0.equals(p1) && MinecraftServer.getServer().getConfigurationManager().getOppedPlayers().getEntry(player.getGameProfile()) == null)
+		if(MinestuckConfig.privateComputers && !p0.equals(p1) && MinecraftServer.getServer().getConfigurationManager().getOppedPlayers().getEntry(player.getGameProfile()) == null)
 		{
-			if(!Minestuck.privateMessage.isEmpty())
-				player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.RED + "[Minestuck] " + Minestuck.privateMessage));
+			if(!MinestuckConfig.privateMessage.isEmpty())
+				player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.RED + "[Minestuck] " + MinestuckConfig.privateMessage));
 			return;
 		}
 		int i = 0;
@@ -470,7 +471,8 @@ public class SkaianetHandler {
 			}
 		}
 		
-		if(Minestuck.privateComputers){
+		if(MinestuckConfig.privateComputers)
+		{
 			for(Entry<String,String[]> entry : infoToSend.entrySet())
 				for(int i = 0; i < entry.getValue().length; i++)
 					if(entry.getValue()[i] != null && entry.getValue()[i] != entry.getKey())

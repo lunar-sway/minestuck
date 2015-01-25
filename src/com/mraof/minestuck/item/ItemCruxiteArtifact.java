@@ -19,6 +19,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
 import com.mraof.minestuck.Minestuck;
+import static com.mraof.minestuck.MinestuckConfig.artifactRange;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.ITeleporter;
@@ -29,20 +30,12 @@ import com.mraof.minestuck.world.gen.lands.LandAspectRegistry;
 
 public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 {
-	//List<Block> commonBlocks = new ArrayList<Block>();
 	
 	public ItemCruxiteArtifact(int par2, boolean par3) 
 	{
 		super(1, par2, par3);
 		this.setCreativeTab(Minestuck.tabMinestuck);
 		setUnlocalizedName("cruxiteArtifact");
-		//commonBlocks.add(Blocks.stone);
-		//commonBlocks.add(Blocks.grass);
-		//commonBlocks.add(Blocks.dirt);
-		//commonBlocks.add(Blocks.sand);
-		//commonBlocks.add(Blocks.sandstone);
-		//commonBlocks.add(Blocks.water);
-		//commonBlocks.add(Blocks.flowing_water);
 	}
 	@Override
 	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
@@ -71,12 +64,12 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 			int z = (int) entity.posZ;
 			
 			Debug.print("Loading spawn chunks...");
-			for(int chunkX = ((x - Minestuck.artifactRange) >> 4) - 1; chunkX <= ((x + Minestuck.artifactRange) >> 4) + 2; chunkX++)	//Prevent anything to generate on the piece that we move
-				for(int chunkZ = ((z - Minestuck.artifactRange) >> 4) - 1; chunkZ <= ((z + Minestuck.artifactRange) >> 4) + 2; chunkZ++)	//from the overworld.
+			for(int chunkX = ((x - artifactRange) >> 4) - 1; chunkX <= ((x + artifactRange) >> 4) + 2; chunkX++)	//Prevent anything to generate on the piece that we move
+				for(int chunkZ = ((z - artifactRange) >> 4) - 1; chunkZ <= ((z + artifactRange) >> 4) + 2; chunkZ++)	//from the overworld.
 					worldserver1.theChunkProviderServer.loadChunk(chunkX, chunkZ);
 			
 			Debug.print("Teleporting entities...");
-			List<?> list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().expand((double)Minestuck.artifactRange, Minestuck.artifactRange, (double)Minestuck.artifactRange));
+			List<?> list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().expand((double)artifactRange, artifactRange, (double)artifactRange));
 			Iterator<?> iterator = list.iterator();
 
 			while (iterator.hasNext())
@@ -86,25 +79,22 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 			
 			Debug.print("Placing blocks...");
 			int nextWidth = 0;
-			for(int blockX = x - Minestuck.artifactRange; blockX <= x + Minestuck.artifactRange; blockX++)
+			for(int blockX = x - artifactRange; blockX <= x + artifactRange; blockX++)
 			{
 				int zWidth = nextWidth;
-				nextWidth = (int) Math.sqrt(Minestuck.artifactRange * Minestuck.artifactRange - (blockX - x + 1) * (blockX - x + 1));
+				nextWidth = (int) Math.sqrt(artifactRange * artifactRange - (blockX - x + 1) * (blockX - x + 1));
 				for(int blockZ = z - zWidth; blockZ <= z + zWidth; blockZ++)
 				{
 					double radius = Math.sqrt(((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2);
-					int minY =  y - (int) (Math.sqrt(Minestuck.artifactRange * Minestuck.artifactRange - radius * radius));
+					int minY =  y - (int) (Math.sqrt(artifactRange * artifactRange - radius * radius));
 					minY = minY < 0 ? 0 : minY;
 					for(int blockY = minY; blockY < 256; blockY++)
 					{
-						IBlockState block = worldserver0.getBlockState(new BlockPos(blockX, blockY, blockZ));
-						TileEntity te = worldserver0.getTileEntity(new BlockPos(blockX, blockY, blockZ));
-//						if(block != Blocks.air && blockX < x + Minestuck.artifactRange && blockZ < z + nextWidth && blockZ > z - nextWidth)
-//							worldserver1.setBlockState(new BlockPos(blockX + 1, blockY, blockZ), Blocks.dirt.getDefaultState(), 0);
-//						if(block != Blocks.air && blockZ < z + zWidth)
-//							worldserver1.setBlockState(new BlockPos(blockX, blockY, blockZ + 1), Blocks.stone.getDefaultState(), 0);
+						BlockPos pos = new BlockPos(blockX, blockY, blockZ);
+						IBlockState block = worldserver0.getBlockState(pos);
+						TileEntity te = worldserver0.getTileEntity(pos);
 						if(block != Blocks.bedrock)
-							worldserver1.setBlockState(new BlockPos(blockX, blockY, blockZ), block, 0);
+							worldserver1.setBlockState(pos, block, 0);
 						if((te) != null)
 						{
 							TileEntity te1 = null;
@@ -114,22 +104,22 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 							NBTTagCompound nbt = new NBTTagCompound();
 							te.writeToNBT(nbt);
 							te1.readFromNBT(nbt);
-//							te1.yCoord++;//prevents TileEntity from being invalidated
-							worldserver1.setTileEntity(new BlockPos(blockX, blockY, blockZ), te1);
+							worldserver1.removeTileEntity(pos);
+							worldserver1.setTileEntity(pos, te1);
 						};
 					}
 				}
 			}
 			
 			Debug.print("Removing old blocks...");
-			for(int blockX = x - Minestuck.artifactRange; blockX <= x + Minestuck.artifactRange; blockX++)
+			for(int blockX = x - artifactRange; blockX <= x + artifactRange; blockX++)
 			{
 				int zWidth = nextWidth;
-				nextWidth = (int) Math.sqrt(Minestuck.artifactRange * Minestuck.artifactRange - (blockX - x + 1) * (blockX - x + 1));
+				nextWidth = (int) Math.sqrt(artifactRange * artifactRange - (blockX - x + 1) * (blockX - x + 1));
 				for(int blockZ = z - zWidth; blockZ <= z + zWidth; blockZ++)
 				{
 					double radius = Math.sqrt(((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2);
-					int minY =  y - (int) (Math.sqrt(Minestuck.artifactRange * Minestuck.artifactRange - radius*radius));
+					int minY =  y - (int) (Math.sqrt(artifactRange * artifactRange - radius*radius));
 					minY = minY < 0 ? 0 : minY;
 					for(int blockY = minY; blockY < 256; blockY++)
 					{
@@ -141,7 +131,7 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 			}
 			
 			Debug.print("Removing old entities and setting spawn point...");
-			list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().expand((double)Minestuck.artifactRange, Minestuck.artifactRange, (double)Minestuck.artifactRange));
+			list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().expand((double)artifactRange, artifactRange, (double)artifactRange));
 			iterator = list.iterator();
 
 			while (iterator.hasNext())
@@ -149,13 +139,6 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 				((Entity)iterator.next()).setDead();
 			}
 			
-			ChunkProviderLands chunkProvider = (ChunkProviderLands) worldserver1.provider.createChunkGenerator();
-			chunkProvider.spawnX = x;
-			chunkProvider.spawnY = y;
-			chunkProvider.spawnZ = z;
-			chunkProvider.saveData();
-			
-			Debug.printf("Respawn location being set to: %d, %d, %d.", x, y, z);
 		}
 	}
 	

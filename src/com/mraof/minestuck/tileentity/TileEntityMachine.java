@@ -21,7 +21,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.BlockMachine;
-import com.mraof.minestuck.block.BlockMachine.MachineTypes;
+import com.mraof.minestuck.block.BlockMachine.MachineType;
 import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.item.block.ItemMachine;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
@@ -43,13 +43,11 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
     public ItemStack[] inv;
     public int progress = 0;
     public int maxProgress = 100;
-    public byte rotation = 0;
-    //true if and, false if or
-    public boolean mode = true;
     public EntityPlayer owner;
 	public boolean ready = false;
 	public boolean overrideStop = false;
 	public GristType selectedGrist = GristType.Build;
+	public byte rotation;
 	
     public TileEntityMachine(){
             this.inv = new ItemStack[4];
@@ -57,14 +55,16 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
     }
     
     @Override
-    public int getSizeInventory() {
-    		switch (getMetadata()) {
+	public int getSizeInventory()
+    {
+		switch (getMachineType())
+		{
     		case (0):
     			return 2;
     		case (1):
-    			return 4;
-    		case (2):
     			return 3;
+    		case (2):
+    			return 4;
     		case (3):
     			return 2;
     		case (4):
@@ -123,49 +123,45 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 				player.getDistanceSq(this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5) < 64;
 	}
 	
-    @Override
-    public void readFromNBT(NBTTagCompound tagCompound) {
-            super.readFromNBT(tagCompound);
-            
-            this.rotation = tagCompound.getByte("rotation");
-            this.progress = tagCompound.getInteger("progress");
-            this.mode =  tagCompound.getBoolean("mode");
-            this.overrideStop = tagCompound.getBoolean("overrideStop");
-            
-            NBTTagList tagList = tagCompound.getTagList("Inventory", 10);
-            for (int i = 0; i < tagList.tagCount(); i++) {
-                    NBTTagCompound tag = tagList.getCompoundTagAt(i);
-                    byte slot = tag.getByte("Slot");
-                    if (slot >= 0 && slot < this.inv.length) {
-                            this.inv[slot] = ItemStack.loadItemStackFromNBT(tag);
-                    }
-            }
+	@Override
+	public void readFromNBT(NBTTagCompound tagCompound)
+	{
+		super.readFromNBT(tagCompound);
+		
+		this.rotation = tagCompound.getByte("rotation");
+		
+		this.progress = tagCompound.getInteger("progress");
+		this.overrideStop = tagCompound.getBoolean("overrideStop");
+		
+		for (int i = 0; i < inv.length; i++)
+		{
+			NBTTagCompound tag = tagCompound.getCompoundTag("slot"+i);
+			this.inv[i] = ItemStack.loadItemStackFromNBT(tag);
+		}
 		if(tagCompound.hasKey("gristType"))
 			this.selectedGrist = GristType.values()[tagCompound.getInteger("gristType")];
-    }
-
-    @Override
-    public void writeToNBT(NBTTagCompound tagCompound) {
-            super.writeToNBT(tagCompound);
-                            
-            tagCompound.setByte("rotation", this.rotation);
-            tagCompound.setInteger("progress", this.progress);
-            tagCompound.setBoolean("mode", this.mode);
-            tagCompound.setBoolean("overrideStop", this.overrideStop);
-            
-            NBTTagList itemList = new NBTTagList();
-            for (int i = 0; i < this.inv.length; i++) {
-                    ItemStack stack = this.inv[i];
-                    if (stack != null) {
-                            NBTTagCompound tag = new NBTTagCompound();
-                            tag.setByte("Slot", (byte) i);
-                            stack.writeToNBT(tag);
-                            itemList.appendTag(tag);
-                    }
-            }
-            tagCompound.setTag("Inventory", itemList);
+	}
+	
+	@Override
+	public void writeToNBT(NBTTagCompound tagCompound) {
+		super.writeToNBT(tagCompound);
+		
+		tagCompound.setByte("rotation", this.rotation);
+		
+		tagCompound.setInteger("progress", this.progress);
+		tagCompound.setBoolean("overrideStop", this.overrideStop);
+		
+		for (int i = 0; i < this.inv.length; i++)
+		{
+			ItemStack stack = this.inv[i];
+			NBTTagCompound tag = new NBTTagCompound();
+			if (stack != null)
+				stack.writeToNBT(tag);
+			tagCompound.setTag("slot"+i, tag);
+		}
 		tagCompound.setInteger("gristType", selectedGrist.ordinal());
-    }
+	}
+	
     @Override
     public Packet getDescriptionPacket() 
     {
@@ -182,22 +178,20 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return true;
 	}
-
-	public int getMetadata()
-	{
-		return ((MachineTypes) this.worldObj.getBlockState(this.pos).getValue(BlockMachine.MACHINE_TYPE)).ordinal();
-	}
 	
 	@Override
 	public void update()
 	{
-		if(worldObj.getBlockState(pos).getBlock() != Minestuck.blockMachine)
+		if(worldObj.getBlockState(pos).getBlock() != Minestuck.blockMachine || worldObj.isRemote)	//Processing is easier done on the server side only
 			return;
 		
 		if (!contentsValid())
 		{
+			boolean b = progress == 0;
 			this.progress = 0;
 			this.ready = overrideStop;
+			if(!b)
+				worldObj.markBlockForUpdate(pos);
 			return;
 		}
 		
@@ -208,62 +202,68 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 			this.progress = 0;
 			this.ready = overrideStop;
 			processContents();
+			worldObj.markBlockForUpdate(pos);
 		}
 	}
 	
-	public boolean contentsValid() {
+	public boolean contentsValid()
+	{
 		
-		if (getMetadata() != 0 && !this.ready) {
+		if (getMachineType() != 0 && !this.ready)
+		{
 			return false;
 		}
-		switch (getMetadata()) {
+		switch (getMachineType())
+		{
 		case (0):
 			return (this.inv[1] != null && (this.inv[0] == null || this.inv[0].stackSize < 64));
 		case (1):
-		if (this.inv[1] != null && this.inv[2] != null)	//&& or || alchemy
+		if (this.inv[1] != null && inv[2] != null)
 		{
-			if(inv[3] != null)
+			ItemStack output = AlchemyRecipeHandler.getDecodedItemDesignix(inv[1]);
+			if(inv[2].hasTagCompound() && inv[2].getTagCompound().getBoolean("punched"))
 			{
-				ItemStack outputItem = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItemDesignix(this.inv[1], this.worldObj.isRemote), AlchemyRecipeHandler.getDecodedItemDesignix(this.inv[2], this.worldObj.isRemote),this.mode);
-				if(inv[3].hasTagCompound() && inv[3].getTagCompound().getBoolean("punched"))
-					outputItem = CombinationRegistry.getCombination(outputItem, AlchemyRecipeHandler.getDecodedItem(inv[3], false), CombinationRegistry.MODE_OR);
-				if(outputItem == null)
-					return false;
-				outputItem = AlchemyRecipeHandler.createCard(outputItem, true);
-				if(outputItem != null)
-					return (this.inv[0] == null || inv[0].stackSize < 16 && outputItem.isItemEqual(inv[0]) && ItemStack.areItemStackTagsEqual(outputItem, inv[0]));
+				output = CombinationRegistry.getCombination(output,
+						AlchemyRecipeHandler.getDecodedItem(inv[2]), CombinationRegistry.MODE_OR);
 			}
-			return false;
-		} else if (this.inv[1] != null || this.inv[2] != null)	//Register item to card
-		{
-			if(inv[3] != null)
-			{
-				ItemStack input = (inv[1] == null?inv[2]:inv[1]);
-				ItemStack output = (input.getItem().equals(Minestuck.captchaCard)&&input.hasTagCompound()&&input.getTagCompound().getBoolean("punched")
-						?AlchemyRecipeHandler.getDecodedItem(input, false):input);
-				if(inv[3].hasTagCompound() && inv[3].getTagCompound().getBoolean("punched"))
-				{
-					output = CombinationRegistry.getCombination(output,
-							AlchemyRecipeHandler.getDecodedItem(inv[3], false), CombinationRegistry.MODE_OR);
-					
-				}
-				if(output == null)
-					return false;
-				output = AlchemyRecipeHandler.createCard(output, true);
-				return (inv[0] == null || inv[0].stackSize < 16 && ItemStack.areItemStackTagsEqual(inv[0], output));
-			}
-		} else
+			if(output == null)
+				return false;
+			output = AlchemyRecipeHandler.createCard(output, true);
+			return (inv[0] == null || inv[0].stackSize < 16 && ItemStack.areItemStackTagsEqual(inv[0], output));
+		}
+		else
 		{
 			return false;
 		}
 		case (2):
-			return (this.inv[1] != null && this.inv[2] != null && !(inv[2].hasTagCompound() && inv[2].getTagCompound().hasKey("contentID")) && (this.inv[0] == null ||
-			inv[0].stackSize < 16 && AlchemyRecipeHandler.getDecodedItem(inv[0], true).isItemEqual(AlchemyRecipeHandler.getDecodedItem(inv[1], true))));
+			if((inv[1] != null || inv[2] != null) && inv[3] != null && !(inv[3].hasTagCompound() && inv[3].getTagCompound().hasKey("contentID")))
+			{
+				if(inv[1] != null && inv[2] != null)
+				{
+					if(!inv[1].hasTagCompound() || !inv[1].getTagCompound().getBoolean("punched") || !inv[2].hasTagCompound() || !inv[2].getTagCompound().getBoolean("punched"))
+						return inv[0] == null || !(inv[0].hasTagCompound() && inv[0].getTagCompound().hasKey("contentID"));
+					else
+					{
+						ItemStack output = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(inv[1]), AlchemyRecipeHandler.getDecodedItem(inv[2]), CombinationRegistry.MODE_AND);
+						return output != null && (inv[0] == null || AlchemyRecipeHandler.getDecodedItem(inv[0]).isItemEqual(output) && inv[0].stackSize < inv[0].getMaxStackSize());
+					}
+				}
+				else
+				{
+					ItemStack input = inv[1] != null ? inv[1] : inv[2];
+					return (inv[0] == null || inv[0].stackSize < inv[0].getMaxStackSize() && (AlchemyRecipeHandler.getDecodedItem(inv[0]).isItemEqual(AlchemyRecipeHandler.getDecodedItem(input))
+							|| !(inv[2].hasTagCompound() && inv[2].getTagCompound().getBoolean("punched")) && !(inv[0].hasTagCompound() && inv[0].getTagCompound().hasKey("contentID"))));
+				}
+			}
+			else return false;
 		case (3):
 			if (this.inv[1] != null && this.owner != null) {
 				//Check owner's cache: Do they have everything they need?
-				ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(this.inv[1], true);
-				if (newItem == null) {return false;}
+				ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(this.inv[1]);
+				if (newItem == null)
+					if(!inv[1].hasTagCompound() || !inv[1].getTagCompound().hasKey("contentID"))
+						newItem = new ItemStack(Minestuck.blockStorage, 1, 1);
+					else return false;
 				if (inv[0] != null && (inv[0].getItem() != newItem.getItem() || inv[0].getItemDamage() != newItem.getItemDamage() || inv[0].getMaxStackSize() <= inv[0].stackSize))
 				{return false;}
 				GristSet cost = GristRegistry.getGristConversion(newItem);
@@ -276,14 +276,16 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 				return false;
 			}
 		case (4):
-			return (this.inv[1] != null && this.owner != null && inv[1].getItem() == Minestuck.captchaCard && GristRegistry.getGristConversion(AlchemyRecipeHandler.getDecodedItem(inv[1], false)) != null
-			&& !inv[1].getTagCompound().getBoolean("punched") && AlchemyRecipeHandler.getDecodedItem(inv[1], false).getItem() != Minestuck.captchaCard);
+			return (this.inv[1] != null && inv[1].getItem() == Minestuck.captchaCard && GristRegistry.getGristConversion(AlchemyRecipeHandler.getDecodedItem(inv[1])) != null
+			&& !inv[1].getTagCompound().getBoolean("punched") && AlchemyRecipeHandler.getDecodedItem(inv[1]).getItem() != Minestuck.captchaCard);
 		}
 		return false;
 	}
 	
-	public void processContents() {
-		switch (getMetadata()) {
+	public void processContents()
+	{
+		switch (getMachineType())
+		{
 		case (0):
 			// Process the Raw Cruxite
 			
@@ -300,29 +302,17 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 			//Create a new card, using CombinationRegistry
 			if(inv[0] != null)
 			{
-				decrStackSize(3, 1);
+				decrStackSize(2, 1);
 				if(inv[1] != null && !(inv[1].getItem().equals(Minestuck.captchaCard) && inv[1].hasTagCompound() && inv[1].getTagCompound().getBoolean("punched")))
 					decrStackSize(1, 1);
-				if(inv[2] != null && !(inv[2].getItem().equals(Minestuck.captchaCard) && inv[2].hasTagCompound() && inv[2].getTagCompound().getBoolean("punched")))
-					decrStackSize(2, 1);
 				decrStackSize(0, -1);
 				break;
 			}
 			
-			ItemStack inv1 = AlchemyRecipeHandler.getDecodedItemDesignix(inv[1], this.worldObj.isRemote);
-			ItemStack inv2 = AlchemyRecipeHandler.getDecodedItemDesignix(inv[2], this.worldObj.isRemote);
+			ItemStack outputItem = AlchemyRecipeHandler.getDecodedItemDesignix(inv[1]);
 			
-			ItemStack outputItem = CombinationRegistry.getCombination(inv1, inv2, this.mode);
-			
-			if (inv[1] == null)
-				outputItem = (inv[2].getItem().equals(Minestuck.captchaCard) && inv[2].hasTagCompound() && inv[2].getTagCompound().hasKey("contentID"))
-				? AlchemyRecipeHandler.getDecodedItem(inv[2], false) : inv[2];
-			else if (inv[2] == null)
-				outputItem = (inv[1].getItem().equals(Minestuck.captchaCard) && inv[1].hasTagCompound() && inv[1].getTagCompound().hasKey("contentID"))
-						? AlchemyRecipeHandler.getDecodedItem(inv[1], false) : inv[1];
-			
-			if(inv[3].hasTagCompound() && inv[3].getTagCompound().getBoolean("punched"))	//If you push the data onto a punched card, perform an OR alchemy
-				outputItem = CombinationRegistry.getCombination(outputItem, AlchemyRecipeHandler.getDecodedItem(inv[3], false), CombinationRegistry.MODE_OR);
+			if(inv[2].hasTagCompound() && inv[2].getTagCompound().getBoolean("punched"))
+				outputItem = CombinationRegistry.getCombination(outputItem, AlchemyRecipeHandler.getDecodedItem(inv[2]), CombinationRegistry.MODE_OR);
 			
 			//Create card
 			outputItem = AlchemyRecipeHandler.createCard(outputItem, true);
@@ -330,36 +320,41 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 			setInventorySlotContents(0,outputItem);
 			if(!(inv[1] != null && inv[1].hasTagCompound() && inv[1].getTagCompound().hasKey("contentID")))
 				decrStackSize(1, 1);
-			if(!(inv[2] != null && inv[2].hasTagCompound() && inv[2].getTagCompound().hasKey("contentID")))
-				decrStackSize(2, 1);
-			decrStackSize(3, 1);
+			decrStackSize(2, 1);
 			break;
 		case (2):
 			if(inv[0] != null)
 			{
 				decrStackSize(0, -1);
-				decrStackSize(2, 1);
+				decrStackSize(3, 1);
+				return;
 			}
-			ItemStack outputDowel = new ItemStack(Minestuck.cruxiteDowel);
 			
-			NBTTagCompound cardtag = this.inv[1].getTagCompound();
-			
-			if(cardtag == null || cardtag.getString("contentID") == GameRegistry.findUniqueIdentifierFor(Minestuck.blockStorage).name &&
-					cardtag.getInteger("contentMeta") == 1)
-				outputDowel = new ItemStack(Minestuck.cruxiteDowel);
-			if(cardtag != null && !(cardtag.getString("contentID") == GameRegistry.findUniqueIdentifierFor(Minestuck.blockStorage).name &&
-					cardtag.getInteger("contentMeta") == 1))
+			ItemStack output;
+			if(inv[1] != null && inv[2] != null)
+				if(!inv[1].hasTagCompound() || !inv[1].getTagCompound().getBoolean("punched") || !inv[2].hasTagCompound() || !inv[2].getTagCompound().getBoolean("punched"))
+					output = new ItemStack(Minestuck.blockStorage, 1, 1);
+				else output = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(inv[1]), AlchemyRecipeHandler.getDecodedItem(inv[2]), CombinationRegistry.MODE_AND);
+			else
 			{
-				NBTTagCompound doweltag = new NBTTagCompound();
-				doweltag.setString("contentID", cardtag.getString("contentID"));
-				doweltag.setInteger("contentMeta", cardtag.getInteger("contentMeta"));
-				outputDowel.setTagCompound(doweltag);
+				ItemStack input = inv[1] != null ? inv[1] : inv[2];
+				if(!input.hasTagCompound() || !input.getTagCompound().getBoolean("punched"))
+					output = new ItemStack(Minestuck.blockStorage, 1, 1);
+				else output = AlchemyRecipeHandler.getDecodedItem(input);
 			}
+			
+			ItemStack outputDowel = (output.getItem().equals(Item.getItemFromBlock(Minestuck.blockStorage)) && output.getItemDamage() == 1)
+					? new ItemStack(Minestuck.cruxiteDowel) : AlchemyRecipeHandler.createEncodedItem(output, false);
+			
 			setInventorySlotContents(0,outputDowel);
-			decrStackSize(2, 1);
+			decrStackSize(3, 1);
 			break;
 		case (3):
-			ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(this.inv[1], true);
+			ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(this.inv[1]);
+			
+			if(newItem == null)
+				newItem = new ItemStack(Minestuck.blockStorage, 1, 1);
+			
 			if (inv[0] == null)
 			{
 				setInventorySlotContents(0,newItem);
@@ -369,21 +364,18 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 				decrStackSize(0, -1);
 			}
 			
-			if(!worldObj.isRemote)
-			{
-				MinestuckAchievementHandler.onAlchemizedItem(newItem, owner);
-				
-				GristSet cost = GristRegistry.getGristConversion(newItem);
-				if(newItem.getItem() == Minestuck.captchaCard)
-					cost = new GristSet(selectedGrist, 1);
-				GristHelper.decrease(UsernameHandler.encode(owner.getName()), cost);
-				MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(owner.getName()));
-			}
+			MinestuckAchievementHandler.onAlchemizedItem(newItem, owner);
+			
+			GristSet cost = GristRegistry.getGristConversion(newItem);
+			if(newItem.getItem() == Minestuck.captchaCard)
+				cost = new GristSet(selectedGrist, 1);
+			GristHelper.decrease(UsernameHandler.encode(owner.getName()), cost);
+			MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(owner.getName()));
 			break;
 		case (4):
 			if(!worldObj.isRemote) 
 			{
-				ItemStack item = AlchemyRecipeHandler.getDecodedItem(inv[1], false);
+				ItemStack item = AlchemyRecipeHandler.getDecodedItem(inv[1]);
 				GristSet gristSet = GristRegistry.getGristConversion(item).copy();
 				if(item.stackSize != 1)
 					gristSet.scaleGrist(item.stackSize);
@@ -417,7 +409,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 	@Override
 	public void markDirty()
 	{
-		if(getBlockMetadata() == 1)
+		if(getMachineType() == 1 || getMachineType() == 2)
 		{
 			this.progress = 0;
 			this.ready = false;
@@ -428,7 +420,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 	@Override
 	public String getName()
 	{
-		return "tile.blockMachine."+ItemMachine.subNames[getMetadata()]+".name";
+		return "tile.blockMachine."+ItemMachine.subNames[getMachineType()]+".name";
 	}
 	
 	@Override
@@ -468,6 +460,11 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 	public void clear()
 	{
 		inv = new ItemStack[4];
+	}
+	
+	public int getMachineType()
+	{
+		return getBlockMetadata();
 	}
 	
 }
