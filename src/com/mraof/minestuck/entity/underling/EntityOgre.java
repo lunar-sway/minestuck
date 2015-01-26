@@ -46,9 +46,9 @@ public class EntityOgre extends EntityUnderling
 		this.tasks.addTask(4, entityAIAttackOnCollideWithRate);
 	}
 	@Override
-	protected float getWanderSpeed() 
+	protected double getWanderSpeed() 
 	{
-		return .1F;
+		return 0.4;
 	}
 	@Override
 	protected float getMaximumHealth() 

@@ -52,9 +52,9 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 	}
 
 	@Override
-	protected float getWanderSpeed() 
+	protected double getWanderSpeed() 
 	{
-		return 0.1F;
+		return 0.5;
 	}
 	
 	@Override

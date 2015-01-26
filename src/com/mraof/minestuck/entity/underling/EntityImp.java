@@ -56,9 +56,9 @@ public class EntityImp extends EntityUnderling
 		this.tasks.addTask(4, entityAIAttackOnCollideWithRate);
 	}
 	@Override
-	protected float getWanderSpeed() 
+	protected double getWanderSpeed() 
 	{
-		return .3F;
+		return 0.5;
 	}
 	@Override
 	protected float getMaximumHealth() 

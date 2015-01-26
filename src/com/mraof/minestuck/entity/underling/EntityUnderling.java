@@ -81,7 +81,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	
 	protected abstract float getMaximumHealth();
 
-	protected abstract float getWanderSpeed();
+	protected abstract double getWanderSpeed();
 	protected boolean useAltName()
 	{
 		return false;

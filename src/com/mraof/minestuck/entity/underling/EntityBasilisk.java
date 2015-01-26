@@ -55,9 +55,9 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	}
 
 	@Override
-	protected float getWanderSpeed()
+	protected double getWanderSpeed()
 	{
-		return .3F;
+		return 0.7;
 	}
 
 	@Override
