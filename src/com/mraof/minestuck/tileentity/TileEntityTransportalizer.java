@@ -148,6 +148,7 @@ public class TileEntityTransportalizer extends TileEntity implements ITeleporter
 	public void setDestId(String destId)
 	{
 		this.destId = destId;
+		worldObj.markBlockForUpdate(pos);
 	}
 
 	@Override
