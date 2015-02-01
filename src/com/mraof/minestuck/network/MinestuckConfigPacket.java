@@ -16,6 +16,7 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 	
 	int overWorldEditRange;
 	int landEditRange;
+	int cardCost;
 
 	boolean hardMode;
 	boolean giveItems;
@@ -23,14 +24,17 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 	
 	String lanHost;
 
-	public MinestuckConfigPacket() {
+	public MinestuckConfigPacket()
+	{
 		super(Type.CONFIG);
 	}
 
 	@Override
-	public MinestuckPacket generatePacket(Object... dat) {
+	public MinestuckPacket generatePacket(Object... dat)
+	{
 		data.writeInt(Minestuck.overworldEditRange);
 		data.writeInt(Minestuck.landEditRange);
+		data.writeInt(Minestuck.cardCost);
 		data.writeBoolean(Minestuck.hardMode);
 		data.writeBoolean(Minestuck.giveItems);
 		data.writeBoolean(Minestuck.easyDesignix);
@@ -41,9 +45,11 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 	}
 	
 	@Override
-	public MinestuckPacket consumePacket(ByteBuf data) {
+	public MinestuckPacket consumePacket(ByteBuf data)
+	{
 		overWorldEditRange = data.readInt();
 		landEditRange = data.readInt();
+		cardCost = data.readInt();
 		hardMode = data.readBoolean();
 		giveItems = data.readBoolean();
 		easyDesignix = data.readBoolean();
@@ -55,10 +61,12 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 	}
 
 	@Override
-	public void execute(EntityPlayer player) {
+	public void execute(EntityPlayer player)
+	{
 		
 		Minestuck.clientOverworldEditRange = this.overWorldEditRange;
 		Minestuck.clientLandEditRange = this.landEditRange;
+		Minestuck.clientCardCost = this.cardCost;
 		Minestuck.clientHardMode = this.hardMode;
 		Minestuck.clientGiveItems = this.giveItems;
 		Minestuck.clientEasyDesignix = this.easyDesignix;

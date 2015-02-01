@@ -214,6 +214,7 @@ public class Minestuck
 	//Client config
 	public static int clientOverworldEditRange;	//Edit range used by the client side.
 	public static int clientLandEditRange;		//changed by a MinestuckConfigPacket sent by the server on login.
+	public static int clientCardCost;
 	public static boolean clientHardMode;
 	public static boolean clientGiveItems;
 	public static boolean clientEasyDesignix;
@@ -238,6 +239,7 @@ public class Minestuck
 	public static int defaultModusSize;
 	public static int defaultModusType;
 	public static int modusMaxSize;
+	public static int cardCost;
 	/**
 	 * 0: Make the player's new server player his/her old server player's server player
 	 * 1: The player that lost his/her server player will have an idle main connection until someone without a client player connects to him/her.
@@ -292,6 +294,7 @@ public class Minestuck
 		defaultModusType = config.get("General", "defaultModusType", -1,
 				"The type of modus that is given to players without one. -1: Random modus given. 0+: Certain modus given. Anything else: No modus given.").getInt();
 		modusMaxSize = config.get("General", "modusMaxSize", 0, "The max size on a modus. Ignored if the value is 0 or lower.").getInt();
+		cardCost = Math.max(0, config.get("General", "cardCost", 1, "An integer that determines how much a captchalouge card costs to alchemize").getInt());
 		
 		if(escapeFailureMode > 2 || escapeFailureMode < 0)
 			escapeFailureMode = 0;

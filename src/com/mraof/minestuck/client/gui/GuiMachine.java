@@ -114,7 +114,7 @@ public class GuiMachine extends GuiContainer {
 			GristSet set = GristRegistry.getGristConversion(AlchemyRecipeHandler.getDecodedItem(te.inv[1], metadata == 3? true : false));
 			boolean selectedType = AlchemyRecipeHandler.getDecodedItem(te.inv[1], true).getItem() == Minestuck.captchaCard;
 			if(selectedType)
-				set = metadata == 3 ? new GristSet(te.selectedGrist, 1) : null;
+				set = metadata == 3 ? new GristSet(te.selectedGrist, Minestuck.clientCardCost) : null;
 			if(metadata == 4 && set != null)
 			{
 				float multiplier = AlchemyRecipeHandler.getDecodedItem(te.inv[1], false).stackSize;

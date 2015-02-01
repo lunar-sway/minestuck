@@ -285,7 +285,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 				{return false;}
 				GristSet cost = GristRegistry.getGristConversion(newItem);
 				if(newItem.getItem() == Minestuck.captchaCard)
-					cost = new GristSet(selectedGrist, 1);
+					cost = new GristSet(selectedGrist, Minestuck.cardCost);
 				return GristHelper.canAfford(MinestuckPlayerData.getGristSet(this.owner), cost);
 			}
 			else
@@ -392,7 +392,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 				
 				GristSet cost = GristRegistry.getGristConversion(newItem);
 				if(newItem.getItem() == Minestuck.captchaCard)
-					cost = new GristSet(selectedGrist, 1);
+					cost = new GristSet(selectedGrist, Minestuck.cardCost);
 				GristHelper.decrease(UsernameHandler.encode(owner.getCommandSenderName()), cost);
 				MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(owner.getCommandSenderName()));
 			}
