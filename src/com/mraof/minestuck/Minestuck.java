@@ -232,6 +232,7 @@ public class Minestuck
 	public static boolean giveItems;
 	public static boolean specialCardRenderer;
 	public static boolean cardRecipe;
+	public static boolean cardLoot;
 	public static String privateMessage;
 	public static int artifactRange; //The range of the Cruxite Artifact in teleporting zones over to the new land
 	public static int overworldEditRange;
@@ -296,7 +297,8 @@ public class Minestuck
 				"The type of modus that is given to players without one. -1: Random modus given. 0+: Certain modus given. Anything else: No modus given.").getInt();
 		modusMaxSize = config.get("General", "modusMaxSize", 0, "The max size on a modus. Ignored if the value is 0 or lower.").getInt();
 		cardCost = Math.max(0, config.get("General", "Card Cost", 1, "An integer that determines how much a captchalouge card costs to alchemize").getInt());
-		cardRecipe = config.get("General", "Include Captcha Card Recipe", true).getBoolean();
+		cardRecipe = config.getBoolean("Include Captcha Card Recipe", "General", true, "Set this to false to remove the captcha card crafting recipe.");
+		cardLoot = config.getBoolean("Generate Card As Loot", "General", false, "Set this to true to make captcha cards appear in dungeon and stronghold chests.");
 		
 		if(escapeFailureMode > 2 || escapeFailureMode < 0)
 			escapeFailureMode = 0;

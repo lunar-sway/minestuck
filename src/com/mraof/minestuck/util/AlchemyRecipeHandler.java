@@ -20,7 +20,9 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -435,6 +437,14 @@ public class AlchemyRecipeHandler {
 		LandHelper.registerLandAspect(new LandAspectShade());
 		LandHelper.registerLandAspect(new LandAspectSand());
 		LandHelper.registerLandAspect(new LandAspectThought());
+		
+		//Register chest loot
+		if(Minestuck.cardLoot)
+		{
+			ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(new WeightedRandomChestContent(Minestuck.captchaCard, 0, 1, 3, 10));
+			ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CROSSING).addItem(new WeightedRandomChestContent(Minestuck.captchaCard, 0, 1, 2, 8));
+			ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CORRIDOR).addItem(new WeightedRandomChestContent(Minestuck.captchaCard, 0, 1, 4, 10));
+		}
 	}
 	
 	public static void registerModRecipes() 
