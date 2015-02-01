@@ -1,5 +1,8 @@
 package com.mraof.minestuck.entity;
 
+import java.lang.reflect.Constructor;
+import java.util.Set;
+
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.entity.EntityLiving;
@@ -48,11 +51,14 @@ public class EntityDecoy extends EntityLiving {
 			markedForDespawn = true;
 	}
 	
-	public EntityDecoy(World world, EntityPlayerMP player) {
+	public EntityDecoy(World world, EntityPlayerMP player)
+	{
 		super(world);
 		this.boundingBox.setBB(player.boundingBox);
 		height = player.height;
 		this.player = new DecoyPlayer(world, this);
+		for(String key : (Set<String>) player.getEntityData().func_150296_c())
+			this.player.getEntityData().setTag(key, player.getEntityData().getTag(key).copy());
 		this.posX = player.posX;
 		originX = posX;
 		this.chunkCoordX = player.chunkCoordX;
@@ -66,10 +72,8 @@ public class EntityDecoy extends EntityLiving {
 		this.rotationYaw = player.rotationYaw;
 		this.rotationYawHead = player.rotationYawHead;
 		this.renderYawOffset = player.renderYawOffset;
-		inventory = new InventoryPlayer(this.player);
-		this.inventory.copyInventory(player.inventory);
-		this.getHeldItem();
 		this.gameType = player.theItemInWorldManager.getGameType();
+		initInventory(player);
 		this.setHealth(player.getHealth());
 		username = player.getCommandSenderName();
 		isFlying = player.capabilities.isFlying;
@@ -80,6 +84,27 @@ public class EntityDecoy extends EntityLiving {
 		dataWatcher.updateObject(DATAWATCHER_ID_START, username);
 		dataWatcher.updateObject(DATAWATCHER_ID_START+1, this.rotationYawHead);	//Due to rotationYawHead didn't update correctly
 		dataWatcher.updateObject(DATAWATCHER_ID_START+2, (byte) (isFlying?1:0));
+	}
+	
+	private void initInventory(EntityPlayerMP player)
+	{
+		inventory = new InventoryPlayer(this.player);
+		this.player.inventory = inventory;
+		if(player.inventory.getClass() != InventoryPlayer.class)	//Custom inventory class
+		{
+			Class<? extends InventoryPlayer> c = player.inventory.getClass();
+			try
+			{
+				Constructor<? extends InventoryPlayer> constructor = c.getConstructor(EntityPlayer.class);
+				inventory = constructor.newInstance(this.player);
+				this.player.inventory = inventory;
+			} catch(Exception e)
+			{
+				throw new IllegalStateException("The custom inventory class \""+c.getName()+"\" is not supported.");
+			}
+		}
+		
+		inventory.copyInventory(player.inventory);
 	}
 	
 	@Override

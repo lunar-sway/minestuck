@@ -20,7 +20,7 @@ public class ItemModus extends Item
 	
 	public ItemModus()
 	{
-		this.maxStackSize = 16;
+		this.maxStackSize = 1;
 		this.setHasSubtypes(true);
 		this.setCreativeTab(Minestuck.tabMinestuck);
 		this.setUnlocalizedName("modusCard");
@@ -53,7 +53,7 @@ public class ItemModus extends Item
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item item, CreativeTabs tab, List itemList)
 	{
-		for(int i = 0; i < icons.length; i++)
+		for(int i = 0; i < 3; i++)
 			itemList.add(new ItemStack(this, 1, i));
 	}
 	
