@@ -231,6 +231,7 @@ public class Minestuck
 	public static boolean forceMaxSize;	//If it should prevent players from joining a session if there is no possible combinations left.
 	public static boolean giveItems;
 	public static boolean specialCardRenderer;
+	public static boolean cardRecipe;
 	public static String privateMessage;
 	public static int artifactRange; //The range of the Cruxite Artifact in teleporting zones over to the new land
 	public static int overworldEditRange;
@@ -294,7 +295,8 @@ public class Minestuck
 		defaultModusType = config.get("General", "defaultModusType", -1,
 				"The type of modus that is given to players without one. -1: Random modus given. 0+: Certain modus given. Anything else: No modus given.").getInt();
 		modusMaxSize = config.get("General", "modusMaxSize", 0, "The max size on a modus. Ignored if the value is 0 or lower.").getInt();
-		cardCost = Math.max(0, config.get("General", "cardCost", 1, "An integer that determines how much a captchalouge card costs to alchemize").getInt());
+		cardCost = Math.max(0, config.get("General", "Card Cost", 1, "An integer that determines how much a captchalouge card costs to alchemize").getInt());
+		cardRecipe = config.get("General", "Include Captcha Card Recipe", true).getBoolean();
 		
 		if(escapeFailureMode > 2 || escapeFailureMode < 0)
 			escapeFailureMode = 0;
@@ -564,6 +566,7 @@ public class Minestuck
 	@EventHandler 
 	public void serverAboutToStart(FMLServerAboutToStartEvent event)
 	{
+		AlchemyRecipeHandler.addOrRemoveRecipes(cardRecipe);
 		//unregister lands that may not be in this save
 		for (Iterator<Byte> iterator = MinestuckSaveHandler.lands.iterator(); iterator.hasNext(); )
 		{

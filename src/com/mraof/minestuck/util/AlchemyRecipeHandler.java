@@ -16,6 +16,7 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.nbt.NBTTagCompound;
@@ -47,6 +48,8 @@ public class AlchemyRecipeHandler {
 	private static HashMap<List<Object>, Object> recipeList;
 	private static HashMap<List<Object>, Boolean> lookedOver;
 	private static int returned = 0;
+	private static IRecipe cardRecipe;
+	private volatile static boolean cardRecipeAdded;
 
 	public static void registerVanillaRecipes() {
 		
@@ -375,7 +378,8 @@ public class AlchemyRecipeHandler {
 		
 		GameRegistry.addRecipe(new ItemStack(Minestuck.blockComputerOff,1,0),new Object[]{ "XXX","XYX","XXX",'Y',new ItemStack(Minestuck.blockStorage, 1, 0),'X',new ItemStack(Items.iron_ingot,1)});
 		GameRegistry.addRecipe(new ItemStack(Minestuck.blockStorage,1,0),new Object[]{ "XXX","XXX","XXX",'X',new ItemStack(Minestuck.rawCruxite, 1)});
-		GameRegistry.addRecipe(new ItemStack(Minestuck.captchaCard,8,0),new Object[]{ "XXX","XYX","XXX",'Y',new ItemStack(Minestuck.rawCruxite, 1),'X',new ItemStack(Items.paper,1)});
+		cardRecipe = GameRegistry.addShapedRecipe(new ItemStack(Minestuck.captchaCard,8,0),new Object[]{ "XXX","XYX","XXX",'Y',new ItemStack(Minestuck.rawCruxite, 1),'X',new ItemStack(Items.paper,1)});
+		cardRecipeAdded = true;
 		GameRegistry.addRecipe(new ItemStack(Minestuck.clawHammer),new Object[]{ " XX","XY "," Y ",'X',new ItemStack(Items.iron_ingot),'Y',new ItemStack(Items.stick)});
 		GameRegistry.addRecipe(new ItemStack(Minestuck.component,1,0),new Object[]{ " X "," Y "," Y ",'X',new ItemStack(Items.bowl),'Y',new ItemStack(Items.stick)});
 		GameRegistry.addRecipe(new ItemStack(Minestuck.component,1,2),new Object[]{ "XYX","YXY","XYX",'X',new ItemStack(Blocks.stained_hardened_clay,1,0),'Y',new ItemStack(Blocks.stained_hardened_clay,1,15)});
@@ -834,6 +838,20 @@ public class AlchemyRecipeHandler {
 				for(ItemStack stack : list)
 					stack.setItemDamage(damage);
 			return list;
+		}
+	}
+	
+	public static void addOrRemoveRecipes(boolean addCardRecipe)
+	{
+		if(addCardRecipe && !cardRecipeAdded)
+		{
+			CraftingManager.getInstance().getRecipeList().add(cardRecipe);
+			cardRecipeAdded = true;
+		}
+		else if(!addCardRecipe && cardRecipeAdded)
+		{
+			CraftingManager.getInstance().getRecipeList().remove(cardRecipe);
+			cardRecipeAdded = false;
 		}
 	}
 	

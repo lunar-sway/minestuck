@@ -7,6 +7,7 @@ import java.util.EnumSet;
 import net.minecraft.entity.player.EntityPlayer;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.UsernameHandler;
 
@@ -21,6 +22,7 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 	boolean hardMode;
 	boolean giveItems;
 	boolean easyDesignix;
+	boolean cardRecipe;
 	
 	String lanHost;
 
@@ -38,6 +40,7 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 		data.writeBoolean(Minestuck.hardMode);
 		data.writeBoolean(Minestuck.giveItems);
 		data.writeBoolean(Minestuck.easyDesignix);
+		data.writeBoolean(Minestuck.cardRecipe);
 		if(UsernameHandler.host != null)
 			writeString(data,UsernameHandler.host);
 		
@@ -53,6 +56,7 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 		hardMode = data.readBoolean();
 		giveItems = data.readBoolean();
 		easyDesignix = data.readBoolean();
+		cardRecipe = data.readBoolean();
 		lanHost = readLine(data);
 		if(lanHost.isEmpty())
 			lanHost = null;
@@ -72,6 +76,7 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 		Minestuck.clientEasyDesignix = this.easyDesignix;
 		UsernameHandler.host = lanHost;
 		
+		AlchemyRecipeHandler.addOrRemoveRecipes(cardRecipe);
 	}
 
 	@Override
