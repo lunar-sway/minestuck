@@ -491,6 +491,7 @@ public class Minestuck
 	@EventHandler 
 	public void serverAboutToStart(FMLServerAboutToStartEvent event)
 	{
+		AlchemyRecipeHandler.addOrRemoveRecipes(MinestuckConfig.cardRecipe);
 		//unregister lands that may not be in this save
 		for (Iterator<Byte> iterator = MinestuckSaveHandler.lands.iterator(); iterator.hasNext(); )
 		{

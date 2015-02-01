@@ -25,6 +25,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.oredict.OreDictionary;
 import static net.minecraftforge.oredict.OreDictionary.WILDCARD_VALUE;
 import net.minecraftforge.oredict.RecipeSorter;
@@ -32,6 +34,7 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.modSupport.ExtraUtilitiesSupport;
 import com.mraof.minestuck.modSupport.Minegicka3Support;
 import com.mraof.minestuck.modSupport.ModSupport;
@@ -53,6 +56,8 @@ public class AlchemyRecipeHandler {
 	private static HashMap<List<Object>, Object> recipeList;
 	private static HashMap<List<Object>, Boolean> lookedOver;
 	private static int returned = 0;
+	private static IRecipe cardRecipe;
+	private volatile static boolean cardRecipeAdded;
 
 	public static void registerVanillaRecipes() {
 		
@@ -480,7 +485,8 @@ public class AlchemyRecipeHandler {
 		
 		GameRegistry.addRecipe(new ItemStack(Minestuck.blockComputerOff,1,0),new Object[]{ "XXX","XYX","XXX",'Y',new ItemStack(Minestuck.blockStorage, 1, 0),'X',new ItemStack(Items.iron_ingot,1)});
 		GameRegistry.addRecipe(new ItemStack(Minestuck.blockStorage,1,0),new Object[]{ "XXX","XXX","XXX",'X',new ItemStack(Minestuck.rawCruxite, 1)});
-		GameRegistry.addRecipe(new ItemStack(Minestuck.captchaCard,8,0),new Object[]{ "XXX","XYX","XXX",'Y',new ItemStack(Minestuck.rawCruxite, 1),'X',new ItemStack(Items.paper,1)});
+		cardRecipe = GameRegistry.addShapedRecipe(new ItemStack(Minestuck.captchaCard,8,0),new Object[]{ "XXX","XYX","XXX",'Y',new ItemStack(Minestuck.rawCruxite, 1),'X',new ItemStack(Items.paper,1)});
+		cardRecipeAdded = true;
 		GameRegistry.addRecipe(new ItemStack(Minestuck.clawHammer),new Object[]{ " XX","XY "," Y ",'X',new ItemStack(Items.iron_ingot),'Y',new ItemStack(Items.stick)});
 		GameRegistry.addRecipe(new ItemStack(Minestuck.component,1,0),new Object[]{ " X "," Y "," Y ",'X',new ItemStack(Items.bowl),'Y',new ItemStack(Items.stick)});
 		GameRegistry.addRecipe(new ItemStack(Minestuck.component,1,2),new Object[]{ "XYX","YXY","XYX",'X',new ItemStack(Blocks.stained_hardened_clay,1,0),'Y',new ItemStack(Blocks.stained_hardened_clay,1,15)});
@@ -557,6 +563,14 @@ public class AlchemyRecipeHandler {
 		LandHelper.registerLandAspect(new LandAspectShade());
 		LandHelper.registerLandAspect(new LandAspectSand());
 		LandHelper.registerLandAspect(new LandAspectThought());
+		
+		//Register chest loot
+		if(MinestuckConfig.cardLoot)
+		{
+			ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(new WeightedRandomChestContent(Minestuck.captchaCard, 0, 1, 3, 10));
+			ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CROSSING).addItem(new WeightedRandomChestContent(Minestuck.captchaCard, 0, 1, 2, 8));
+			ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CORRIDOR).addItem(new WeightedRandomChestContent(Minestuck.captchaCard, 0, 1, 4, 10));
+		}
 	}
 	
 	public static void registerModRecipes() 
@@ -985,6 +999,20 @@ public class AlchemyRecipeHandler {
 				return;
 		
 		OreDictionary.registerOre(name, item);
+	}
+	
+	public static void addOrRemoveRecipes(boolean addCardRecipe)
+	{
+		if(addCardRecipe && !cardRecipeAdded)
+		{
+			CraftingManager.getInstance().getRecipeList().add(cardRecipe);
+			cardRecipeAdded = true;
+		}
+		else if(!addCardRecipe && cardRecipeAdded)
+		{
+			CraftingManager.getInstance().getRecipeList().remove(cardRecipe);
+			cardRecipeAdded = false;
+		}
 	}
 	
 }

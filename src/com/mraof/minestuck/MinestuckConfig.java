@@ -21,6 +21,8 @@ public class MinestuckConfig
 	@SideOnly(Side.CLIENT)
 	public static int clientLandEditRange;
 	@SideOnly(Side.CLIENT)
+	public static int clientCardCost;
+	@SideOnly(Side.CLIENT)
 	public static byte clientTreeAutobalance;
 	@SideOnly(Side.CLIENT)
 	public static boolean clientHardMode;
@@ -39,6 +41,8 @@ public class MinestuckConfig
 	public static boolean giveItems;
 	public static boolean specialCardRenderer;
 	public static boolean infiniteTreeModus;
+	public static boolean cardRecipe;
+	public static boolean cardLoot;
 	public static String privateMessage;
 	public static int artifactRange;
 	public static int overworldEditRange;
@@ -47,6 +51,7 @@ public class MinestuckConfig
 	public static int defaultModusSize;
 	public static int defaultModusType;
 	public static int modusMaxSize;
+	public static int cardCost;
 	/**
 	 * 0: Make the player's new server player his/her old server player's server player
 	 * 1: The player that lost his/her server player will have an idle main connection until someone without a client player connects to him/her.
@@ -89,6 +94,10 @@ public class MinestuckConfig
 		deployConfigurations = new boolean[1];
 		deployConfigurations[0] = config.getBoolean("cardInDeploylist", "General", false, "Determines if a card with a captcha card punched on it should be added to the deploy list or not.");
 		treeModusSetting = (byte) config.getInt("treeModusSetting", "Modus", 0, 0, 2, "This determines how autobalance should be. 0 if the player should choose, 1 if forced at on, and 2 if forced at off.");
+		
+		cardCost = config.getInt("Card Cost", "General", 1, 1, Integer.MAX_VALUE, "An integer that determines how much a captchalouge card costs to alchemize");
+		cardRecipe = config.getBoolean("Include Captcha Card Recipe", "General", true, "Set this to false to remove the captcha card crafting recipe.");
+		cardLoot = config.getBoolean("Generate Card As Loot", "General", false, "Set this to true to make captcha cards appear in dungeon and stronghold chests.");
 		
 		if(side.isClient()) {	//Client sided config values
 			editmodeToolTip = config.getBoolean("editmodeToolTip", "General", true, "True if the grist cost on items should be shown. This only applies for editmode.");

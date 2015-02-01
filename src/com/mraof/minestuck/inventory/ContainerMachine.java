@@ -42,7 +42,7 @@ public class ContainerMachine extends Container {
 	private int metadata;
 	private boolean operator = true;
 	private int progress;
-
+	
 	public ContainerMachine(InventoryPlayer inventoryPlayer, TileEntityMachine te)
 	{
 		tileEntity = te;
