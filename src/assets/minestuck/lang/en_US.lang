@@ -108,8 +108,8 @@ gui.selectGrist=Select Grist Type
 gui.emptySylladex1=Are you sure you want to continue?
 gui.emptySylladex2=This will empty your sylladex.
 gui.emptySylladexButton=Empty Sylladex
-gui.autobalance.on=Autobalance Active
-gui.autobalance.off=Autobalance Inactive
+gui.autobalance.on=Auto-balance Active
+gui.autobalance.off=Auto-balance Inactive
 
 item.clawHammer.name=Claw Hammer
 item.sledgeHammer.name=Sledgehammer
@@ -167,6 +167,60 @@ key.categories.minestuck=Minestuck
 key.exitEdit=Exit Edit Mode
 key.statsGui=View General Minestuck Gui
 key.captchalouge=Captchalouge Held Item
+
+minestuck.config.title=Minestuck Configuration
+minestuck.config.entityIdStart=Entity Id Start
+minestuck.config.entityIdStart.tooltip=The starting id for minestuck entities
+minestuck.config.skaiaProviderTypeId=SkaiaProvider Type Id
+minestuck.config.skaiaProviderTypeId.tooltip=The id for the proider type for the skaia dimension
+minestuck.config.skaiaDimensionId=Skaia Dimension Id
+minestuck.config.skaiaDimensionId.tooltip=The id for the skaia dimension
+minestuck.config.landProviderTypeId=LandProvider Type Id
+minestuck.config.landProviderTypeId.tooltip=The id for the provider type for the land dimension
+minestuck.config.landDimensionIdStart=Land Dimension Id Start
+minestuck.config.landDimensionIdStart.tooltip=The starting id for land dimensions
+minestuck.config.statsIdStart=Statistic Id Offset
+minestuck.config.statsIdStart.tooltip=The starting id for minestuck achievements
+minestuck.config.IDs=IDs
+minestuck.config.IDs.tooltip=Various integer IDs
+
+minestuck.config.initialModusSize=Initial Modus Size
+minestuck.config.initialModusSize.tooltip=When a player is assigned a modus for the first time, that modus will have the size of this value.
+minestuck.config.defaultModusType=Default Modus Type
+minestuck.config.defaultModusType.tooltip=This option determines what possible moduses that may be given to players when they first join the game. (0: Stack, 1: Queue, 2: StackQueue, 3: Tree)
+minestuck.config.modusMaxSize=Modus Max Size
+minestuck.config.modusMaxSize.tooltip=The highest number of cards a modus can have. If the value is 0, a maximum size will be ignored.
+minestuck.config.forceAutobalance=Force Auto-balance
+minestuck.config.forceAutobalance.tooltip=Determines if and how the auto-balance option (for the tree modus) should be forced. 0: Not forced. 1: Forced at on. 2: Forced at off.
+minestuck.config.modus=Modus
+minestuck.config.modus.tooltip=Modus-related stuff
+
+minestuck.config.privateComputers=Private Computers
+minestuck.config.privateComputers.tooltip=Set this to true to make computers only accessible by the owner of the computer. (the player who turned on the computer)
+minestuck.config.privateComputerMessage=Private Message
+minestuck.config.privateComputerMessage.tooltip=The message displayed when a player tries to access a computer without permission. (only used when 'Private Computers' is turned on)
+minestuck.config.giveItems=Give Items Button
+minestuck.config.giveItems.tooltip=If this is set to true, the 'Activate Editmode' button will be replaced by the old 'Give Items' button.
+
+minestuck.config.deployCard=Card In Deploylist
+minestuck.config.deployCard.tooltip=Turn this to true to add a punched card (with a card punched to it) to the deploy list.
+minestuck.config.cardCost=Card Cost
+minestuck.config.cardCost.tooltip=An integer to control the cost of captchalouge cards.
+minestuck.config.cardRecipe=Include Captcha Card Recipe
+minestuck.config.cardRecipe.tooltip=Set this to false to remove the crafting recipe for captchalouge cards.
+minestuck.config.cardLoot=Generate Card As Loot
+minestuck.config.cardLoot.tooltip=Set this to true to make captchalouge cards generate in dungeon/stronghold chests.
+
+minestuck.config.generateCruxiteOre=Generate Cruxite Ore
+minestuck.config.generateCruxiteOre.tooltip=Determines if cruxite ore should be ganerated in the overworld.
+minestuck.config.globalSession=Global Session
+minestuck.config.globalSession.tooltip=If true, all players will be joining the same session. This doesn't do that much yet since nothingso far is dependent of the session structure.
+minestuck.config.overworldEditRange=Overworld Edit Range
+minestuck.config.overworldEditRange.tooltip=The maximum amount of blocks away from the computer an editmode player is allowed to be before entering the medium.
+minestuck.config.landEditRange=Land Edit Range
+minestuck.config.landEditRange.tooltip=The maximum amount of blocks away from the spawn an editmode player is allowed to be after entering the medium.
+minestuck.config.artifactRange=Artifact Range
+minestuck.config.artifactRange.tooltip=The radius of the area brought to the medium.
 
 strife.sword.name=Bladekind
 strife.bow.name=Bowkind

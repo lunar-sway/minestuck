@@ -140,7 +140,7 @@ import com.mraof.minestuck.world.gen.structure.StructureCastlePieces;
 import com.mraof.minestuck.world.gen.structure.StructureCastleStart;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
-@Mod(modid = "Minestuck", name = "Minestuck", version = "@VERSION@")
+@Mod(modid = "Minestuck", name = "Minestuck", version = "@VERSION@", guiFactory = "com.mraof.minestuck.client.gui.MinestuckGuiFactory")
 public class Minestuck
 {
 	
@@ -442,6 +442,7 @@ public class Minestuck
 		{
 			MinecraftForge.EVENT_BUS.register(ClientEditHandler.instance);
 			FMLCommonHandler.instance().bus().register(ClientEditHandler.instance);
+			FMLCommonHandler.instance().bus().register(new MinestuckConfig());
 		}
 		
 		//register channel handler
