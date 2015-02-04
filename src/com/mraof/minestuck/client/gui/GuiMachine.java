@@ -20,6 +20,7 @@ import net.minecraftforge.fml.client.config.GuiButtonExt;
 import org.lwjgl.input.Mouse;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.inventory.ContainerMachine;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
@@ -118,7 +119,7 @@ public class GuiMachine extends GuiContainer {
 			GristSet set = GristRegistry.getGristConversion(stack);
 			boolean useSelectedType = stack == null ? false : stack.getItem() == Minestuck.captchaCard;
 			if(useSelectedType)
-				set = metadata == 3 ? new GristSet(te.selectedGrist, 1) : null;
+				set = metadata == 3 ? new GristSet(te.selectedGrist, MinestuckConfig.clientCardCost) : null;
 			if(metadata == 4 && set != null)
 			{
 				float multiplier = stack.stackSize;

@@ -20,6 +20,7 @@ import net.minecraft.util.IChatComponent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.BlockMachine;
 import com.mraof.minestuck.block.BlockMachine.MachineType;
 import com.mraof.minestuck.entity.item.EntityGrist;
@@ -182,6 +183,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 	@Override
 	public void update()
 	{
+		
 		if(worldObj.getBlockState(pos).getBlock() != Minestuck.blockMachine || worldObj.isRemote)	//Processing is easier done on the server side only
 			return;
 		
@@ -268,7 +270,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 				{return false;}
 				GristSet cost = GristRegistry.getGristConversion(newItem);
 				if(newItem.getItem() == Minestuck.captchaCard)
-					cost = new GristSet(selectedGrist, 1);
+					cost = new GristSet(selectedGrist, MinestuckConfig.cardCost);
 				return GristHelper.canAfford(MinestuckPlayerData.getGristSet(this.owner), cost);
 			}
 			else
@@ -368,7 +370,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 			
 			GristSet cost = GristRegistry.getGristConversion(newItem);
 			if(newItem.getItem() == Minestuck.captchaCard)
-				cost = new GristSet(selectedGrist, 1);
+				cost = new GristSet(selectedGrist, MinestuckConfig.cardCost);
 			GristHelper.decrease(UsernameHandler.encode(owner.getName()), cost);
 			MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(owner.getName()));
 			break;

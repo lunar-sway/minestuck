@@ -235,7 +235,7 @@ public class BlockMachine extends BlockContainer {
 		super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity);
 		if(state.getValue(MACHINE_TYPE).equals(MachineType.ALCHEMITER))
 		{
-			AxisAlignedBB bb = new AxisAlignedBB(0, 2/16D, 0, 4.5/16D, 1, 1/8D);
+			AxisAlignedBB bb = new AxisAlignedBB(11.5/16D, 2/16D, 0, 1, 1, 1/8D);
 			bb = rotate(bb, (EnumFacing) getActualState(state, worldIn, pos).getValue(DIRECTION)).offset(pos.getX(), pos.getY(), pos.getZ());
 			if(mask.intersectsWith(bb))
 				list.add(bb);

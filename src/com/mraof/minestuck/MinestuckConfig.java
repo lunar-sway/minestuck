@@ -9,17 +9,25 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MinestuckConfig
 {
 	
+	public static Configuration config;
+	public static Side gameSide;
+	
 	@SideOnly(Side.CLIENT)
 	public static int clientOverworldEditRange;
 	@SideOnly(Side.CLIENT)
 	public static int clientLandEditRange;
+	@SideOnly(Side.CLIENT)
+	public static int clientCardCost;
 	@SideOnly(Side.CLIENT)
 	public static byte clientTreeAutobalance;
 	@SideOnly(Side.CLIENT)
@@ -28,8 +36,6 @@ public class MinestuckConfig
 	public static boolean clientGiveItems;
 	@SideOnly(Side.CLIENT)
 	public static boolean clientInfTreeModus;
-	@SideOnly(Side.CLIENT)
-	public static boolean editmodeToolTip;
 	
 	public static boolean hardMode = false;
 	public static boolean generateCruxiteOre;
@@ -39,14 +45,17 @@ public class MinestuckConfig
 	public static boolean giveItems;
 	public static boolean specialCardRenderer;
 	public static boolean infiniteTreeModus;
+	public static boolean cardRecipe;
+	public static boolean cardLoot;
 	public static String privateMessage;
 	public static int artifactRange;
 	public static int overworldEditRange;
 	public static int landEditRange;
 	public static int cardResolution;
-	public static int defaultModusSize;
-	public static int defaultModusType;
+	public static int initialModusSize;
+	public static int[] defaultModusTypes;
 	public static int modusMaxSize;
+	public static int cardCost;
 	/**
 	 * 0: Make the player's new server player his/her old server player's server player
 	 * 1: The player that lost his/her server player will have an idle main connection until someone without a client player connects to him/her.
@@ -59,48 +68,78 @@ public class MinestuckConfig
 	
 	static void loadConfigFile(File file, Side side)
 	{
-		Configuration config = new Configuration(file);
+		gameSide = side;
+		config = new Configuration(file, true);
 		config.load();
 		
-		Minestuck.entityIdStart = config.getInt("entitydIdStart", "Entity Ids", 5050, 0, Integer.MAX_VALUE, "From what id that minestuck entites should be registered with."); //The number 5050 might make it seem like this is meant to match up with item/block IDs, but it is not
-		Minestuck.skaiaProviderTypeId = config.getInt("skaiaProviderTypeId", "Provider Type Ids", 2, 2, Integer.MAX_VALUE, "The id to be registered for the skaia provider.");
-		Minestuck.skaiaDimensionId = config.getInt("skaiaDimensionId", "Dimension Ids", 2, 2, Integer.MAX_VALUE, "The id for the skaia dimension.");
-		Minestuck.landProviderTypeId = config.getInt("landProviderTypeId", "Provider Type Ids", 3, 2, Integer.MAX_VALUE, "The id for the land provider.");
-		Minestuck.landDimensionIdStart = config.getInt("landDimensionIdStart", "Dimension Ids", 3, 2, Integer.MAX_VALUE, "The starting id for the land dimensions.");
-		Debug.isDebugMode = config.getBoolean("printDebugMessages", "General", true, "Whenether the game should print debug messages or not.");
-		generateCruxiteOre = config.getBoolean("generateCruxiteOre", "General", true, "If cruxite ore should be generated in the overworld.");
-		globalSession = config.getBoolean("globalSession", "General", true, "Whenether all connetions should be put into a single session or not.");
-		privateComputers = config.getBoolean("privateComputers", "General", false, "True if computers should only be able to be used by the owner.");
-		privateMessage = config.getString("privateMessage", "General", "You are not allowed to access other players computers.", "The message sent when someone tries to access a computer that they aren't the owner of if 'privateComputers' is true.");
-		overworldEditRange = config.getInt("overWorldEditRange", "General", 15, 3, 50, "A number that determines how far away from the computer an editmode player may be before entry.");
-		landEditRange = config.getInt("landEditRange", "General", 30, 3, 50, "A number that determines how far away from the center of the brought land that an editmode player may be after entry.");
-		artifactRange = config.getInt("artifactRange", "General", 30, 3, 50, "Radius of the land brought into the medium.");
-		MinestuckAchievementHandler.idOffset = config.getInt("statisticIdOffset", "General", 413, 100, Integer.MAX_VALUE, "The id offset used when registering achievements and other statistics.");
-		//hardMode = config.getBoolean("hardMode", "General", false, "Used to determine if the editmode player can provide infinite cards. Will later also be used whenether there'll be a timer to enter the medium and things like that.");
-		//forceMaxSize = config.getBoolean("forceMaxSize", "General", false); Unused for now.
-		//escapeFailureMode = config.getInt("escapeFailureMode", "General", 0, 0, 2, "Used to determine what happens with related connections when a player fails to escape the meteor enabled by 'hardmode'.");
-		giveItems = config.getBoolean("giveItems", "General", false, "Setting this to true replaces editmode with the old Give Items button.");
-		defaultModusSize = config.getInt("defaultModusSize", "Modus", 5, 0, Integer.MAX_VALUE, "The initial size of a captchalouge deck.");
-		defaultModusType = config.getInt("defaultModusType", "Modus", -1, -2, CaptchaDeckHandler.ModusType.values().length - 1,
-				"The type of modus that is given to players without one. -1: Random modus given from a builtin list. -2: Any random modus. 0+: Certain modus given. Anything else: No modus given.");
-		modusMaxSize = config.getInt("modusMaxSize", "Modus", 0, 0, Integer.MAX_VALUE, "The max size on a modus. Ignored if the value is 0.");
-		if(defaultModusSize > modusMaxSize && modusMaxSize > 0)
-			defaultModusSize = modusMaxSize;
-		deployConfigurations = new boolean[1];
-		deployConfigurations[0] = config.getBoolean("cardInDeploylist", "General", false, "Determines if a card with a captcha card punched on it should be added to the deploy list or not.");
-		treeModusSetting = (byte) config.getInt("treeModusSetting", "Modus", 0, 0, 2, "This determines how autobalance should be. 0 if the player should choose, 1 if forced at on, and 2 if forced at off.");
+		Minestuck.entityIdStart = config.get("IDs", "entityIdStart", 5050).setLanguageKey("minestuck.config.entityIdStart").getInt();
+		Minestuck.skaiaProviderTypeId = config.get("IDs", "skaiaProviderTypeId", 2).setLanguageKey("minestuck.config.skaiaProviderTypeId").getInt();
+		Minestuck.skaiaDimensionId = config.get("IDs", "skaiaDimensionId", 2).setLanguageKey("minestuck.config.skaiaDimensionId").getInt();
+		Minestuck.landProviderTypeId = config.get("IDs", "landProviderTypeId", 3).setLanguageKey("minestuck.config.landProviderTypeId").getInt();
+		Minestuck.landDimensionIdStart = config.get("IDs", "landDimensionIdStart", 3).setLanguageKey("minestuck.config.landDimensionIdStart").getInt();
+		MinestuckAchievementHandler.idOffset = config.get("IDs", "statsIdStart", 413).setLanguageKey("minestuck.config.statsIdStart").getInt();
+		config.getCategory("IDs").setRequiresMcRestart(true).setLanguageKey("minestuck.config.IDs");
 		
-		if(side.isClient()) {	//Client sided config values
-			editmodeToolTip = config.getBoolean("editmodeToolTip", "General", true, "True if the grist cost on items should be shown. This only applies for editmode.");
+		Debug.isDebugMode = config.get("General", "Print Debug Messages", true, "Whenether the game should print debug messages or not.").setShowInGui(false).getBoolean();
+		
+		cardLoot = config.get("General", "cardLoot", false, "Set this to true to make captcha cards appear in dungeon and stronghold chests.").setLanguageKey("minestuck.config.cardLoot").setRequiresMcRestart(true).getBoolean();
+		
+		loadBasicConfigOptions();
+		
+		config.save();
+	}
+	
+	static void loadBasicConfigOptions()
+	{
+		initialModusSize = config.get("Modus", "initialModusSize", 5).setMinValue(0).setLanguageKey("minestuck.config.initialModusSize").getInt();
+		defaultModusTypes = config.get("Modus", "defaultModusType", new int[] {0, 1},
+				"An array with the possible modus types to be assigned. (0: Stack, 1: Queue, 2: QueueStack, 3: Tree)", 0, CaptchaDeckHandler.ModusType.values().length - 1).setLanguageKey("minestuck.config.defaultModusType").getIntList();
+		modusMaxSize = config.get("Modus", "modusMaxSize", 0, "The max size on a modus. Ignored if the value is 0.").setMinValue(0).setLanguageKey("minestuck.config.modusMaxSize").getInt();
+		if(initialModusSize > modusMaxSize && modusMaxSize > 0)
+			initialModusSize = modusMaxSize;
+		String setting = config.get("Modus", "forceAutobalance", "both", "This determines if auto-balance should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.", new String[] {"both", "off", "on"}).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.forceAutobalance").getString();
+		treeModusSetting = (byte) (setting.equals("Both") ? 0 : setting.equals("On") ? 1 : 2);
+		config.getCategory("Modus").setLanguageKey("minestuck.config.modus");
+		
+		privateComputers = config.get("General", "privateComputers", false, "True if computers should only be able to be used by the owner.").setLanguageKey("minestuck.config.privateComputers").getBoolean();
+		privateMessage = config.get("General", "privateComputerMessage", "You are not allowed to access other players computers.", "The message sent when someone tries to access a computer that they aren't the owner of if 'Private Computers' is true.").setLanguageKey("minestuck.config.privateComputerMessage").getString();
+		giveItems = config.get("General", "giveItems", false, "Setting this to true replaces editmode with the old Give Items button.").setLanguageKey("minestuck.config.giveItems").setRequiresWorldRestart(true).getBoolean();
+		
+		deployConfigurations = new boolean[1];
+		deployConfigurations[0] = config.get("General", "deployCard", false, "Determines if a card with a captcha card punched on it should be added to the deploy list or not.").setLanguageKey("minestuck.config.deployCard").setRequiresWorldRestart(true).getBoolean();
+		cardCost = config.get("General", "cardCost", 1, "An integer that determines how much a captchalouge card costs to alchemize").setMinValue(1).setLanguageKey("minestuck.config.cardCost").setRequiresWorldRestart(true).getInt();
+		cardRecipe = config.get("General", "cardRecipe", true, "Set this to false to remove the captcha card crafting recipe.").setLanguageKey("minestuck.config.cardRecipe").setRequiresWorldRestart(true).getBoolean();
+		
+		generateCruxiteOre = config.get("General", "generateCruxiteOre", true, "If cruxite ore should be generated in the overworld.").setRequiresWorldRestart(true).setLanguageKey("minestuck.config.generateCruxiteOre").getBoolean();
+		globalSession = config.get("General", "globalSession", true, "Whenether all connetions should be put into a single session or not.").setLanguageKey("minestuck.config.globalSession").getBoolean();
+		overworldEditRange = config.get("General", "overworldEditRange", 15, "A number that determines how far away from the computer an editmode player may be before entry.", 3, 50).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.overworldEditRange").getInt();
+		landEditRange = config.get("General", "landEditRange", 30, "A number that determines how far away from the center of the brought land that an editmode player may be after entry.", 3, 50).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.landEditRange").getInt();
+		artifactRange = config.get("General", "artifactRange", 30, "Radius of the land brought into the medium.", 3, 50).setLanguageKey("minestuck.config.artifactRange").getInt();
+		
+		if(gameSide.isClient())	//Client sided config values
+		{
 			//specialCardRenderer = config.getBoolean("specialCardRenderer", "General", false, "Whenether to use the special render for cards or not.");
 			if(specialCardRenderer && !GLContext.getCapabilities().GL_EXT_framebuffer_object)
 			{
 				specialCardRenderer = false;
 				FMLLog.warning("[Minestuck] The FBO extension is not available and is required for the advanced rendering of captchalouge cards.");
 			}
-			//cardResolution = config.getInt("General", "cardResolution", 1, 0, 5, "The resulotion of the item inside of a card. The width/height is computed by '8*2^x', where 'x' is this config value.");
+			//cardResolution = config.getInt("General", "cardResolution", 1, 0, 5, "The resolution of the item inside of a card. The width/height is computed by '8*2^x', where 'x' is this config value.");
 		}
-		config.save();
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
+	{
+		if(event.modID.equals(Minestuck.class.getAnnotation(Mod.class).modid()))
+		{
+			if(!event.isWorldRunning && !event.requiresMcRestart)
+				loadBasicConfigOptions();	//Haven't put up a method for changing config options while the world is running
+			
+			config.save();
+			
+		}
 	}
 	
 }

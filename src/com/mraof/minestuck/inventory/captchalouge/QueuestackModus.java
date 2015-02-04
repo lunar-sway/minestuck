@@ -2,6 +2,8 @@ package com.mraof.minestuck.inventory.captchalouge;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.captchalouge.QueuestackGuiHandler;
@@ -49,6 +51,7 @@ public class QueuestackModus extends StackModus {
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public SylladexGuiHandler getGuiHandler()
 	{
 		if(gui == null)

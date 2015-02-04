@@ -161,8 +161,7 @@ public class ClientEditHandler {
 		double range = MinestuckDimensionHandler.isLandDimension((byte)player.dimension) ? MinestuckConfig.clientLandEditRange : MinestuckConfig.clientOverworldEditRange;
 		
 		ServerEditHandler.updatePosition(player, range, centerX, centerZ);
-		if(MinestuckConfig.editmodeToolTip)
-			addToolTip(player, givenItems);
+		addToolTip(player, givenItems);
 		
 	}
 	

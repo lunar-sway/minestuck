@@ -57,24 +57,13 @@ public class MinestuckPlayerTracker {
 			MinestuckPlayerData.setGrist(encUsername, new GristSet(GristType.Build, 20));
 		}
 		
-		if(CaptchaDeckHandler.getModus(player) == null)
+		if(CaptchaDeckHandler.getModus(player) == null && MinestuckConfig.defaultModusTypes.length > 0)
 		{
-			if(MinestuckConfig.defaultModusType < 0)
-			{
-				CaptchaDeckHandler.ModusType[] list = MinestuckConfig.defaultModusType == -1 ? CaptchaDeckHandler.modusList : CaptchaDeckHandler.ModusType.values();
-				int index = player.worldObj.rand.nextInt(list.length);
-				Modus modus = list[index].createInstance();
-				modus.player = player;
-				modus.initModus(null, MinestuckConfig.defaultModusSize);
-				CaptchaDeckHandler.setModus(player, modus);
-			}
-			else if(MinestuckConfig.defaultModusType >= 0 && MinestuckConfig.defaultModusType < CaptchaDeckHandler.ModusType.values().length)
-			{
-				Modus modus = CaptchaDeckHandler.ModusType.values()[MinestuckConfig.defaultModusType].createInstance();
-				modus.player = player;
-				modus.initModus(null, MinestuckConfig.defaultModusSize);
-				CaptchaDeckHandler.setModus(player, modus);
-			}
+			int index = player.worldObj.rand.nextInt(MinestuckConfig.defaultModusTypes.length);
+			Modus modus = CaptchaDeckHandler.ModusType.values()[MinestuckConfig.defaultModusTypes[index]].createInstance();
+			modus.player = player;
+			modus.initModus(null, MinestuckConfig.initialModusSize);
+			CaptchaDeckHandler.setModus(player, modus);
 		}
 		
 		if(CaptchaDeckHandler.getModus(player) != null)

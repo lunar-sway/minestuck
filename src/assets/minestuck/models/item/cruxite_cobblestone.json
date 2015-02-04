@@ -1,5 +1,5 @@
 {
-    "parent": "minestuck:block/cruxite_obsidian",
+    "parent": "minestuck:block/cruxite_cobblestone",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

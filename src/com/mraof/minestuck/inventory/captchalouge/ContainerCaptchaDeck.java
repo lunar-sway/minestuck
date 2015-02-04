@@ -24,13 +24,10 @@ public class ContainerCaptchaDeck extends Container
 	
 	private void addSlots(EntityPlayer player)
 	{
-		int columns = InventoryPlayer.getHotbarSize();
-		for(int i = 0; i < columns; i++)
+		for(int i = 9; i < 36; i++)
+			addSlotToContainer(new Slot(player.inventory, i, 9 + (i%9)*18, 63 + ((i - 9)/9)*18));
+		for(int i = 0; i < 9; i++)
 			addSlotToContainer(new Slot(player.inventory, i, 9 + i*18, 121));
-		for(int i = columns; i < player.inventory.mainInventory.length; i++)
-		{
-			addSlotToContainer(new Slot(player.inventory, i, 9 + (i%columns)*18, 63 + ((i - columns)/columns)*18));
-		}
 		addSlotToContainer(new SlotInput(this.inventory, 0, 81, 32, Minestuck.captchaModus)
 		{
 			@Override
@@ -54,5 +51,27 @@ public class ContainerCaptchaDeck extends Container
 	{
 		return ((InventoryPlayer)this.getSlot(0).inventory).player == player;
 	}
-
+	
+	@Override
+	public ItemStack transferStackInSlot(EntityPlayer player, int slotNumber)
+	{
+		Slot slot = getSlot(slotNumber);
+		int slotCount = inventorySlots.size();
+		if(slot != null && slot.getHasStack())
+			if(slotNumber == slotCount - 1)
+			{
+				ItemStack stack1 = slot.getStack();
+				ItemStack stack2 = stack1.copy();
+				if(mergeItemStack(stack1, 0, slotCount - 1, false))
+					return stack2;
+			} else
+			{
+				ItemStack stack1 = slot.getStack();
+				ItemStack stack2 = stack1.copy();
+				if(getSlot(slotCount - 1).isItemValid(stack1) && mergeItemStack(stack1, slotCount - 1, slotCount, false))
+					return stack2;
+			}
+		return null;
+	}
+	
 }

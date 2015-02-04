@@ -11,6 +11,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.editmode.DeployList;
+import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.UsernameHandler;
 
@@ -18,25 +19,32 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 	
 	int overWorldEditRange;
 	int landEditRange;
+	int cardCost;
 	byte treeModusSetting;
-
+	
 	boolean hardMode;
 	boolean giveItems;
+	boolean easyDesignix;
+	boolean cardRecipe;
 	boolean infiniteTreeModus;
 	boolean[] deployValues;
 	
 	String lanHost;
 
-	public MinestuckConfigPacket() {
+	public MinestuckConfigPacket()
+	{
 		super(Type.CONFIG);
 	}
 
 	@Override
-	public MinestuckPacket generatePacket(Object... dat) {
+	public MinestuckPacket generatePacket(Object... dat)
+	{
 		data.writeInt(MinestuckConfig.overworldEditRange);
 		data.writeInt(MinestuckConfig.landEditRange);
+		data.writeInt(MinestuckConfig.cardCost);
 		data.writeBoolean(MinestuckConfig.hardMode);
 		data.writeBoolean(MinestuckConfig.giveItems);
+		data.writeBoolean(MinestuckConfig.cardRecipe);
 		data.writeBoolean(MinestuckConfig.infiniteTreeModus);
 		data.writeByte(MinestuckConfig.treeModusSetting);
 		
@@ -49,11 +57,14 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 	}
 	
 	@Override
-	public MinestuckPacket consumePacket(ByteBuf data) {
+	public MinestuckPacket consumePacket(ByteBuf data)
+	{
 		overWorldEditRange = data.readInt();
 		landEditRange = data.readInt();
+		cardCost = data.readInt();
 		hardMode = data.readBoolean();
 		giveItems = data.readBoolean();
+		cardRecipe = data.readBoolean();
 		infiniteTreeModus = data.readBoolean();
 		treeModusSetting = data.readByte();
 		
@@ -68,10 +79,12 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 	}
 
 	@Override
-	public void execute(EntityPlayer player) {
+	public void execute(EntityPlayer player)
+	{
 		
 		MinestuckConfig.clientOverworldEditRange = this.overWorldEditRange;
 		MinestuckConfig.clientLandEditRange = this.landEditRange;
+		MinestuckConfig.clientCardCost = this.cardCost;
 		MinestuckConfig.clientHardMode = this.hardMode;
 		MinestuckConfig.clientGiveItems = this.giveItems;
 		MinestuckConfig.clientInfTreeModus = infiniteTreeModus;
@@ -80,6 +93,7 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 		UsernameHandler.host = lanHost;
 		DeployList.applyConfigValues(deployValues);
 		
+		AlchemyRecipeHandler.addOrRemoveRecipes(cardRecipe);
 	}
 
 	@Override

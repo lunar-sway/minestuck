@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block;
 
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -7,8 +8,10 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
@@ -91,12 +94,19 @@ public class OreCruxite extends Block
 			meta = 0;
 		else if(ground.getBlock() == Blocks.netherrack)
 			meta = 1;
-		else if(ground.getBlock() == Blocks.obsidian)
+		else if(ground.getBlock() == Blocks.cobblestone)
 			meta = 2;
 		else if(ground.getBlock() == Blocks.sandstone)
 			meta = 3;
 		
 		return getBlockState().getBaseState().withProperty(BLOCK_TYPE, meta);
+	}
+	
+	@Override
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, List list)
+	{
+		for(int i = 0; i < 4; i++)
+			list.add(new ItemStack(itemIn, 1, i));
 	}
 	
 }
