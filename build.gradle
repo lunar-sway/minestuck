@@ -15,6 +15,13 @@ buildscript {
     }
 }
 
+repositories {
+    maven {
+        name = "chickenbones"
+        url = "http://chickenbones.net/maven/"
+    }
+}
+
 apply plugin: 'forge'
 
 version = System.getenv()['BUILD_NUMBER']
@@ -30,6 +37,16 @@ minecraft {
     replaceIn "com/mraof/minestuck/Minestuck.java"
     replace "@VERSION@", project.version
 }
+
+dependencies {
+    // http://files.minecraftforge.net/CodeChickenLib/
+    compile "codechicken:CodeChickenLib:1.8-1.1.2.115:dev"
+    
+    // http://chickenbones.net/maven
+    compile "codechicken:CodeChickenCore:1.8-1.0.5.34:dev"
+    compile "codechicken:NotEnoughItems:1.8-1.0.5.82:dev"
+}
+
 sourceSets {
     main {
         java {
