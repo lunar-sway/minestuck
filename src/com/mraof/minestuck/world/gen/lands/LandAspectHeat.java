@@ -10,7 +10,7 @@ import net.minecraft.util.Vec3;
 
 public class LandAspectHeat extends LandAspect 
 {
-	IBlockState[] upperBlocks = {Blocks.netherrack.getDefaultState(), Blocks.obsidian.getDefaultState()};
+	IBlockState[] upperBlocks = {Blocks.netherrack.getDefaultState()};
 	IBlockState[] surfaceBlocks = {Blocks.soul_sand.getDefaultState(), Blocks.cobblestone.getDefaultState()};
 	static Vec3 skyColor = new Vec3(0.0D, 0.0D, 0.0D);
 
