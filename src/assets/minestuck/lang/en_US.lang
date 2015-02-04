@@ -191,7 +191,7 @@ minestuck.config.defaultModusType.tooltip=This option determines what possible m
 minestuck.config.modusMaxSize=Modus Max Size
 minestuck.config.modusMaxSize.tooltip=The highest number of cards a modus can have. If the value is 0, a maximum size will be ignored.
 minestuck.config.forceAutobalance=Force Auto-balance
-minestuck.config.forceAutobalance.tooltip=Determines if and how the auto-balance option (for the tree modus) should be forced. 0: Not forced. 1: Forced at on. 2: Forced at off.
+minestuck.config.forceAutobalance.tooltip=Determines if and how the auto-balance option (for the tree modus) should be forced. 'Both': Both options are available. 'On': Forced at on. 'Off': Forced at off.
 minestuck.config.modus=Modus
 minestuck.config.modus.tooltip=Modus-related stuff
 
@@ -221,6 +221,10 @@ minestuck.config.landEditRange=Land Edit Range
 minestuck.config.landEditRange.tooltip=The maximum amount of blocks away from the spawn an editmode player is allowed to be after entering the medium.
 minestuck.config.artifactRange=Artifact Range
 minestuck.config.artifactRange.tooltip=The radius of the area brought to the medium.
+
+both=Both
+off=Off
+on=On
 
 strife.sword.name=Bladekind
 strife.bow.name=Bowkind

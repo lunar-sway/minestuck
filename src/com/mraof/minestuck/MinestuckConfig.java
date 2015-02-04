@@ -97,7 +97,8 @@ public class MinestuckConfig
 		modusMaxSize = config.get("Modus", "modusMaxSize", 0, "The max size on a modus. Ignored if the value is 0.").setMinValue(0).setLanguageKey("minestuck.config.modusMaxSize").getInt();
 		if(initialModusSize > modusMaxSize && modusMaxSize > 0)
 			initialModusSize = modusMaxSize;
-		String setting = config.get("Modus", "forceAutobalance", "Both", "This determines how autobalance should be. 'Both' if the player should choose, 'On' if forced at on, and 'Off' if forced at off.", new String[] {"Both", "Off", "On"}).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.forceAutobalance").getString();
+		String setting = config.get("Modus", "forceAutobalance", "both", "This determines if auto-balance should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.", new String[] {"both", "off", "on"}).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.forceAutobalance").getString();
+		treeModusSetting = (byte) (setting.equals("Both") ? 0 : setting.equals("On") ? 1 : 2);
 		config.getCategory("Modus").setLanguageKey("minestuck.config.modus");
 		
 		privateComputers = config.get("General", "privateComputers", false, "True if computers should only be able to be used by the owner.").setLanguageKey("minestuck.config.privateComputers").getBoolean();
