@@ -44,6 +44,8 @@ public class LandAspectRegistry
 		registerLandAspect(new LandAspectShade());
 		registerLandAspect(new LandAspectSand());
 		registerLandAspect(new LandAspectForest());
+		registerLandAspect(new LandAspectRock());
+		
 		registerLandAspect(new LandAspectWind(), EnumAspect.BREATH);
 		registerLandAspect(new LandAspectLight(), EnumAspect.LIGHT);
 		registerLandAspect(new LandAspectClockwork(), EnumAspect.TIME);
