@@ -16,7 +16,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.FMLLog;
 
@@ -35,7 +34,6 @@ public class MinestuckDimensionHandler
 			{
 				DimensionManager.unregisterDimension(b);
 			}
-			BiomeGenBase.getBiomeGenArray()[b] = null;
 		}
 		lands.clear();
 		spawnpoints.clear();

@@ -82,6 +82,11 @@ public class LandAspectShade extends TerrainAspect
 	{
 		return skyColor;
 	}
-
-
+	
+	@Override
+	public int getWeatherType()
+	{
+		return 0;
+	}
+	
 }

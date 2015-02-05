@@ -10,7 +10,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
-import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.FMLLog;
 
@@ -187,7 +186,7 @@ public class LandAspectRegistry
 		
 		while (true)
 		{
-			if (!DimensionManager.isDimensionRegistered(newLandId) && BiomeGenBase.getBiome(newLandId) == null)
+			if (!DimensionManager.isDimensionRegistered(newLandId))
 			{
 				break;
 			}

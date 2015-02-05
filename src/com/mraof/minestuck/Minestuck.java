@@ -139,6 +139,7 @@ import com.mraof.minestuck.util.UpdateChecker;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.WorldProviderSkaia;
+import com.mraof.minestuck.world.biome.BiomeGenMinestuck;
 import com.mraof.minestuck.world.gen.OreHandler;
 import com.mraof.minestuck.world.gen.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.gen.structure.StructureCastlePieces;
@@ -154,6 +155,7 @@ public class Minestuck
 	public static int skaiaDimensionId;
 	public static int landProviderTypeId;
 	public static int landDimensionIdStart;
+	public static int biomeIdStart;
 	
 	//hammers
 	public static Item clawHammer;
@@ -418,6 +420,9 @@ public class Minestuck
 		DimensionManager.registerProviderType(skaiaProviderTypeId, WorldProviderSkaia.class, true);
 		DimensionManager.registerDimension(skaiaDimensionId, skaiaProviderTypeId);
 		DimensionManager.registerProviderType(landProviderTypeId, WorldProviderLands.class, true);
+		
+		BiomeGenMinestuck.mediumNormal = new BiomeGenMinestuck(biomeIdStart).setBiomeName("The Medium");
+		BiomeGenMinestuck.mediumCold = new BiomeGenMinestuck(biomeIdStart+1).setBiomeName("The Medium (Cold)").setEnableSnow().setTemperatureRainfall(0.0F, 0.5F);
 		
 		//register ore generation
 		OreHandler oreHandler = new OreHandler();

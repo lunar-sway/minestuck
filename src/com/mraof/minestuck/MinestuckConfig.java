@@ -78,6 +78,7 @@ public class MinestuckConfig
 		Minestuck.landProviderTypeId = config.get("IDs", "landProviderTypeId", 3).setLanguageKey("minestuck.config.landProviderTypeId").getInt();
 		Minestuck.landDimensionIdStart = config.get("IDs", "landDimensionIdStart", 3).setLanguageKey("minestuck.config.landDimensionIdStart").getInt();
 		MinestuckAchievementHandler.idOffset = config.get("IDs", "statsIdStart", 413).setLanguageKey("minestuck.config.statsIdStart").getInt();
+		Minestuck.biomeIdStart = config.get("IDs", "biomeIdStart", 50).setMinValue(40).setMaxValue(120).setLanguageKey("minestuck.config.biomeIdStart").getInt();
 		config.getCategory("IDs").setRequiresMcRestart(true).setLanguageKey("minestuck.config.IDs");
 		
 		Debug.isDebugMode = config.get("General", "Print Debug Messages", true, "Whenether the game should print debug messages or not.").setShowInGui(false).getBoolean();

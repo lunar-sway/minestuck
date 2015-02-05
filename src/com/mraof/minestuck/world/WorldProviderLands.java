@@ -60,18 +60,7 @@ public class WorldProviderLands extends WorldProvider
 			long seed = this.worldObj.isRemote ? Minestuck.worldSeed : this.worldObj.getSeed();
 			provider = landAspect.aspect2.createChunkProvider(this);
 			
-			if(BiomeGenBase.getBiome(dimensionId) == null)
-			{
-				BiomeGenMinestuck biome = new BiomeGenMinestuck(dimensionId);
-				if(provider.weatherType == -1)
-					biome.setDisableRain();
-				else if((provider.weatherType & 1) != 0)
-				{
-					biome.setEnableSnow();
-					biome.setTemperatureRainfall(0.1F, 0.5F);
-				}
-				biome.setBiomeName(this.getDimensionName());
-			}
+			
 			
 		}
 		return provider;
@@ -164,7 +153,7 @@ public class WorldProviderLands extends WorldProvider
 		isHellWorld = false;
 		if(provider == null)
 			createChunkGenerator();
-		this.worldChunkMgr = new WorldChunkManagerHell(BiomeGenBase.getBiome(dimensionId), 0.5F);
+		this.worldChunkMgr = new WorldChunkManagerHell(provider.weatherType != -1 && (provider.weatherType&1) !=0 ? BiomeGenMinestuck.mediumCold : BiomeGenMinestuck.mediumNormal, 0.5F);
 		this.hasNoSky = false;
 	}
 	
