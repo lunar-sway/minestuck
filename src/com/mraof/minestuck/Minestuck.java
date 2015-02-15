@@ -477,7 +477,7 @@ public class Minestuck
 		ComputerProgram.registerProgram(0, SburbClient.class, new ItemStack(disk, 1, 0));	//This idea was kind of bad and should be replaced
 		ComputerProgram.registerProgram(1, SburbServer.class, new ItemStack(disk, 1, 1));
 		
-		SessionHandler.maxSize = Integer.MAX_VALUE;//acceptTitleCollision?(generateSpecialClasses?168:144):12;
+		SessionHandler.maxSize = 144;//acceptTitleCollision?(generateSpecialClasses?168:144):12;
 	}
 
 	@EventHandler

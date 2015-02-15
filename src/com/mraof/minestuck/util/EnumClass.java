@@ -16,8 +16,9 @@ public enum EnumClass {
 	BARD,HEIR,KNIGHT,MAGE,MAID,PAGE,PRINCE,ROGUE,SEER,SYLPH,THIEF,WITCH,
 	LORD,MUSE;	//Non-randomized classes
 	
-	public static EnumClass getRandomClass(EnumSet<EnumClass> unavailableClasses){
-		return getRandomClass(unavailableClasses, false);
+	public static EnumClass getRandomClass(EnumSet<EnumClass> unavailableClasses, Random rand)
+	{
+		return getRandomClass(unavailableClasses, rand, false);
 	}
 	
 	/**
@@ -29,7 +30,8 @@ public enum EnumClass {
 	 * @return  null if <code>unavailableClasses</code> contains 12 or more classes (14 or more is <code>includeSpecial</code> is set to <code>true</code>.)
 	 * or an <code>EnumClass</code> of the chosen class.
 	 */
-	public static EnumClass getRandomClass(EnumSet<EnumClass> unavailableClasses, boolean includeSpecial){
+	public static EnumClass getRandomClass(EnumSet<EnumClass> unavailableClasses, Random rand, boolean includeSpecial)
+	{
 		if(unavailableClasses == null)
 			unavailableClasses = EnumSet.noneOf(EnumClass.class);
 		if(!includeSpecial){
@@ -38,10 +40,11 @@ public enum EnumClass {
 		}
 		if(!(unavailableClasses.size() < 12) || includeSpecial && !(unavailableClasses.size() < 14))
 			return null;	//No class available to generate
-		int classInt = new Random().nextInt(12-unavailableClasses.size());
+		int classInt = rand.nextInt(12 - unavailableClasses.size());
 		EnumClass[] list = values();
 		for(int i = 0; i < list.length; i++)
-			if(!unavailableClasses.contains(list[i])){
+			if(!unavailableClasses.contains(list[i]))
+			{
 				classInt--;
 				if(classInt == -1)
 					return list[i];

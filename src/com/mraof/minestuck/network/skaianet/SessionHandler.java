@@ -1,8 +1,10 @@
 package com.mraof.minestuck.network.skaianet;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.BlockPos;
@@ -15,6 +17,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.EnumAspect;
+import com.mraof.minestuck.util.EnumClass;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.util.TitleHelper;
@@ -196,7 +199,62 @@ public class SessionHandler {
 	
 	static void generateTitle(String player)
 	{
-		Title title = TitleHelper.randomTitle();
+		Session session = getPlayerSession(player);
+		Random rand = new Random(Minestuck.worldSeed^player.hashCode());
+		ArrayList<Title> usedTitles = new ArrayList<Title>();
+		for(SburbConnection c : session.connections)
+			if(!c.getClientName().equals(player) && c.enteredGame)
+				usedTitles.add(MinestuckPlayerData.getTitle(c.getClientName()));
+		
+		Title title;
+		if(usedTitles.size() < 12)	//Focus on getting an unused aspect and an unused class
+		{
+			EnumSet<EnumClass> usedClasses = EnumSet.noneOf(EnumClass.class);
+			EnumSet<EnumAspect> usedAspects = EnumSet.noneOf(EnumAspect.class);
+			for(Title usedTitle : usedTitles)
+			{
+				usedClasses.add(usedTitle.getHeroClass());
+				usedAspects.add(usedTitle.getHeroAspect());
+			}
+			title = new Title(EnumClass.getRandomClass(usedClasses, rand), EnumAspect.getRandomAspect(usedAspects, rand));
+		}
+		else	//Focus only on getting an unused title
+		{
+			int[] classFrequency = new int[12];
+			for(Title usedTitle : usedTitles)
+				classFrequency[TitleHelper.getIntFromClass(usedTitle.getHeroClass())]++;
+			int titleIndex = rand.nextInt(144 - usedTitles.size());	//An identifier to identify which one of the (144 - usedTitles.size()) available titles that'll be given.
+			
+			EnumClass titleClass = null;
+			for(int classIndex = 0; classIndex < 12; classIndex++)	//The class is extracted from the titleIndex in this for loop. (and preparing the index for retrieval of the aspect)
+			{
+				int classChance = 12 - classFrequency[classIndex];
+				if(titleIndex <= classChance)
+				{
+					titleClass = TitleHelper.getClassFromInt(classIndex);
+					break;
+				}
+				titleIndex -= classChance;
+			}
+			
+			EnumSet<EnumAspect> usedAspects = EnumSet.noneOf(EnumAspect.class);
+			for(Title usedTitle : usedTitles)
+				if(usedTitle.getHeroClass() == titleClass)
+					usedAspects.add(usedTitle.getHeroAspect());
+			EnumAspect titleAspect = null;
+			for(EnumAspect aspect : EnumAspect.values())
+				if(!usedAspects.contains(aspect))
+				{
+					if(titleIndex == 0)
+					{
+						titleAspect = aspect;
+						break;
+					}
+					titleIndex--;
+				}
+			title = new Title(titleClass, titleAspect);
+		}
+		
 		MinestuckPlayerData.setTitle(player, title);
 		MinestuckPlayerTracker.instance.updateTitle(MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(UsernameHandler.decode(player)));
 	}

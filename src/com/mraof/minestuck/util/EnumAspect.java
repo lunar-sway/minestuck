@@ -22,15 +22,17 @@ public enum EnumAspect {
 	 * @return null if <code>unavailableAspects</code> contains 12 or more aspects or
 	 * an <code>EnumAspect</code> of the chosen aspect.
 	 */
-	public static EnumAspect getRandomAspect(EnumSet<EnumAspect> unavailableAspects){
+	public static EnumAspect getRandomAspect(EnumSet<EnumAspect> unavailableAspects, Random rand)
+	{
 		if(unavailableAspects == null)
 			unavailableAspects = EnumSet.noneOf(EnumAspect.class);
 		if(!(unavailableAspects.size() < 12))
 			return null;	//No aspect available to generate
-		int aspectInt = new Random().nextInt(12-unavailableAspects.size());
+		int aspectInt = rand.nextInt(12 - unavailableAspects.size());
 		EnumAspect[] list = values();
 		for(int i = 0; i < list.length; i++)
-			if(!unavailableAspects.contains(list[i])){
+			if(!unavailableAspects.contains(list[i]))
+			{
 				aspectInt--;
 				if(aspectInt == -1)
 					return list[i];
