@@ -33,7 +33,8 @@ public class MinestuckInfoPacket extends MinestuckPacket
 	@Override
 	public void execute(EntityPlayer player) 
 	{
-		Minestuck.worldSeed = this.worldSeed;
+		if(!Minestuck.isServerRunning)
+			Minestuck.worldSeed = this.worldSeed;
 	}
 
 	@Override

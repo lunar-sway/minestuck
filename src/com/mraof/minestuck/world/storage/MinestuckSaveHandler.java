@@ -5,7 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 
 import net.minecraft.nbt.CompressedStreamTools;
@@ -22,7 +22,7 @@ import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 public class MinestuckSaveHandler 
 {
 	public static List<Byte> lands = Collections.synchronizedList(new ArrayList<Byte>());
-	public static HashMap<Byte, BlockPos> spawnpoints = new HashMap<Byte, BlockPos>();
+	public static Hashtable<Byte, BlockPos> spawnpoints = new Hashtable<Byte, BlockPos>();
 	@SubscribeEvent
 	public void onWorldSave(WorldEvent.Save event)
 	{

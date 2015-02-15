@@ -90,10 +90,12 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 		MinestuckConfig.clientInfTreeModus = infiniteTreeModus;
 		MinestuckConfig.clientTreeAutobalance = treeModusSetting;
 		
-		UsernameHandler.host = lanHost;
-		DeployList.applyConfigValues(deployValues);
-		
-		AlchemyRecipeHandler.addOrRemoveRecipes(cardRecipe);
+		if(!Minestuck.isServerRunning)
+		{
+			UsernameHandler.host = lanHost;
+			DeployList.applyConfigValues(deployValues);
+			AlchemyRecipeHandler.addOrRemoveRecipes(cardRecipe);
+		}
 	}
 
 	@Override

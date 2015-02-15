@@ -45,6 +45,8 @@ public class LandRegisterPacket extends MinestuckPacket
 	@Override
 	public void execute(EntityPlayer player) 
 	{
+		if(Minestuck.isServerRunning)
+			return;	//The dimensions is already registered
 		
 		for(byte dimensionId : MinestuckSaveHandler.lands)
 			if(!containsId(dimensionId) && DimensionManager.isDimensionRegistered(dimensionId))
