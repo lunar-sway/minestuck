@@ -49,15 +49,16 @@ public class GristHelper {
 	/**
 	 * Returns a random grist type. Used for creating randomly aligned underlings.
 	 */
-	public static GristType getPrimaryGrist() {
-		while (true) {
-			//Debug.print("Index is " + index);
+	public static GristType getPrimaryGrist()
+	{
+		while (true)
+		{
 			GristType randGrist = GristType.values()[random.nextInt(GristType.allGrists)];
-			if (randGrist.getRarity() > random.nextFloat()) {
+			if (randGrist.getRarity() > random.nextFloat() && randGrist != GristType.Artifact)
 				return randGrist;
-			}
 		}
 	}
+	
 	/**
 	 * Returns a secondary grist type based on primary grist
 	 */

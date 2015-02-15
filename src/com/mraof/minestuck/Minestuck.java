@@ -243,7 +243,7 @@ public class Minestuck
 		
 		MinestuckConfig.loadConfigFile(event.getSuggestedConfigurationFile(), event.getSide());
 		
-		(new UpdateChecker()).start();
+		//(new UpdateChecker()).start();
 		
 		//Register the Minestuck creative tab
 		tabMinestuck = new CreativeTabs("tabMinestuck")
