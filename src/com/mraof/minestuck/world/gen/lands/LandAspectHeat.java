@@ -17,7 +17,7 @@ public class LandAspectHeat extends LandAspect
 	@Override
 	public IBlockState[] getSurfaceBlocks() 
 	{
-		return upperBlocks;
+		return surfaceBlocks;
 	}
 
 	@Override
