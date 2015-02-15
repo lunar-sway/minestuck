@@ -85,7 +85,7 @@ public class MinestuckPlayerTracker {
 	{
 		
 		Debug.print("Connection initiated. Sending packets to server..");
-		MinestuckPacket packet = MinestuckPacket.makePacket(Type.LANDREGISTER, MinestuckSaveHandler.lands.toArray());
+		MinestuckPacket packet = MinestuckPacket.makePacket(Type.LANDREGISTER);
 		
 		Minestuck.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.DISPATCHER);
 		Minestuck.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(event.manager.channel().attr(NetworkDispatcher.FML_DISPATCHER).get());
@@ -147,7 +147,7 @@ public class MinestuckPlayerTracker {
 	}
 	public static void updateLands(EntityPlayer player)
 	{
-		MinestuckPacket packet = MinestuckPacket.makePacket(Type.LANDREGISTER, MinestuckSaveHandler.lands.toArray());
+		MinestuckPacket packet = MinestuckPacket.makePacket(Type.LANDREGISTER);
 		Debug.printf("Sending land packets to %s.", player == null ? "all players" : player.getName());
 		if(player == null)
 			MinestuckChannelHandler.sendToAllPlayers(packet);
