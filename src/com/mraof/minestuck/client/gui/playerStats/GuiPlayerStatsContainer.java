@@ -96,9 +96,7 @@ public abstract class GuiPlayerStatsContainer extends GuiContainer
 	protected void drawTabTooltip(int xcor, int ycor)
 	{
 		
-//		GlStateManager.disableRescaleNormal();
 		GlStateManager.disableDepth();
-		
 		if(ycor < yOffset && ycor > yOffset - tabHeight + 4)
 			for(int i = 0; i < (mode? NormalGuiType.values():EditmodeGuiType.values()).length; i++)
 				if(xcor < xOffset + i*(tabWidth + 2))
@@ -108,6 +106,7 @@ public abstract class GuiPlayerStatsContainer extends GuiContainer
 					drawHoveringText(Arrays.asList(StatCollector.translateToLocal(mode? NormalGuiType.values()[i].name:EditmodeGuiType.values()[i].name)),
 							xcor - guiLeft, ycor - guiTop, fontRendererObj);
 		GlStateManager.enableDepth();
+		GlStateManager.disableLighting();
 	}
 	
 	@Override
