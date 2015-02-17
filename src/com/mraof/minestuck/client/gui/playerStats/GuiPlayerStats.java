@@ -18,9 +18,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.play.client.C0DPacketCloseWindow;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
@@ -240,10 +243,23 @@ public abstract class GuiPlayerStats extends GuiScreen
 	{
 		Minecraft mc = Minecraft.getMinecraft();
 		if(reload || mc.currentScreen == null)
+		{
+			if(mc.currentScreen != null && mc.currentScreen instanceof GuiContainer)
+			{
+				mc.thePlayer.sendQueue.addToSendQueue(new C0DPacketCloseWindow(mc.thePlayer.openContainer.windowId));
+				mc.thePlayer.inventory.setItemStack((ItemStack)null);
+			}
 			if(ClientEditHandler.isActive() ? editmodeTab.isContainer : normalTab.isContainer)
-				MinestuckChannelHandler.sendToServer(
-						MinestuckPacket.makePacket(Type.CONTAINER, (ClientEditHandler.isActive() ? editmodeTab : normalTab).ordinal()));
+			{
+				GuiPlayerStatsContainer guiContainer = (GuiPlayerStatsContainer) (ClientEditHandler.isActive() ? editmodeTab.createGuiInstance() : normalTab.createGuiInstance());
+				int ordinal = (ClientEditHandler.isActive() ? editmodeTab : normalTab).ordinal();
+				guiContainer.inventorySlots.windowId = ContainerHandler.clientWindowIdStart + ordinal;
+				
+				MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(Type.CONTAINER, ordinal));
+				mc.displayGuiScreen(guiContainer);
+			}
 			else mc.displayGuiScreen(ClientEditHandler.isActive()? editmodeTab.createGuiInstance():normalTab.createGuiInstance());
+		}
 		else if(mc.currentScreen instanceof GuiPlayerStats || mc.currentScreen instanceof GuiPlayerStatsContainer)
 			mc.displayGuiScreen(null);
 	}

@@ -95,24 +95,24 @@ public class ClientEditHandler {
 		}
 	}
 	
-	public void addToolTip(EntityPlayer player, boolean[] givenItems)
+	static void addToolTip(EntityPlayer player, boolean[] givenItems, GristSet have)
 	{
-		GristSet have = MinestuckPlayerData.getClientGrist();
+		boolean clientSide = player.worldObj.isRemote;
 		for(ItemStack stack : player.inventory.mainInventory)
-			addToolTip(stack, have, givenItems);
+			addToolTip(stack, have, givenItems, clientSide);
 		
 		if(player.openContainer instanceof ContainerEditmode)
 		{
 			ContainerEditmode container = (ContainerEditmode) player.openContainer;
 			for(int i = 0; i < container.inventory.getSizeInventory(); i++)
 			{
-				addToolTip(container.inventory.getStackInSlot(i), have, givenItems);
+				addToolTip(container.inventory.getStackInSlot(i), have, givenItems, clientSide);
 				container.inventoryItemStacks.set(i, container.getSlot(i).getStack());
 			}
 		}
 	}
 	
-	public void addToolTip(ItemStack stack, GristSet have, boolean[] givenItems)
+	static void addToolTip(ItemStack stack, GristSet have, boolean[] givenItems, boolean clientSide)
 	{
 		if(stack == null)
 			return;
@@ -126,7 +126,7 @@ public class ClientEditHandler {
 		
 		GristSet cost;
 		if(DeployList.containsItemStack(stack))
-			cost = MinestuckConfig.clientHardMode&&givenItems[DeployList.getOrdinal(stack)]
+			cost = (clientSide?MinestuckConfig.clientHardMode:MinestuckConfig.hardMode)&&givenItems[DeployList.getOrdinal(stack)]
 					?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
 		else if(stack.getItem().equals(Minestuck.captchaCard))
 			cost = new GristSet();
@@ -160,7 +160,7 @@ public class ClientEditHandler {
 		double range = MinestuckSaveHandler.lands.contains((byte)player.dimension) ? MinestuckConfig.clientLandEditRange : MinestuckConfig.clientOverworldEditRange;
 		
 		ServerEditHandler.updatePosition(player, range, centerX, centerZ);
-		addToolTip(player, givenItems);
+//		addToolTip(player, givenItems, MinestuckPlayerData.getClientGrist());
 		
 	}
 	
@@ -271,7 +271,7 @@ public class ClientEditHandler {
 		{
 				event.setCanceled(true);
 				GuiPlayerStats.editmodeTab = GuiPlayerStats.EditmodeGuiType.DEPLOY_LIST;
-				MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(Type.CONTAINER, GuiPlayerStats.editmodeTab.ordinal()));
+				GuiPlayerStats.openGui(true);
 		}
 	}
 	

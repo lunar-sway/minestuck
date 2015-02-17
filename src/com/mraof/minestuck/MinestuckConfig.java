@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.lwjgl.opengl.GLContext;
 
+import com.mraof.minestuck.inventory.ContainerHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
@@ -72,13 +73,13 @@ public class MinestuckConfig
 		config = new Configuration(file, true);
 		config.load();
 		
-		Minestuck.entityIdStart = config.get("IDs", "entityIdStart", 5050).setLanguageKey("minestuck.config.entityIdStart").getInt();
-		Minestuck.skaiaProviderTypeId = config.get("IDs", "skaiaProviderTypeId", 2).setLanguageKey("minestuck.config.skaiaProviderTypeId").getInt();
-		Minestuck.skaiaDimensionId = config.get("IDs", "skaiaDimensionId", 2).setLanguageKey("minestuck.config.skaiaDimensionId").getInt();
-		Minestuck.landProviderTypeId = config.get("IDs", "landProviderTypeId", 3).setLanguageKey("minestuck.config.landProviderTypeId").getInt();
-		Minestuck.landDimensionIdStart = config.get("IDs", "landDimensionIdStart", 3).setLanguageKey("minestuck.config.landDimensionIdStart").getInt();
-		MinestuckAchievementHandler.idOffset = config.get("IDs", "statsIdStart", 413).setLanguageKey("minestuck.config.statsIdStart").getInt();
-		config.getCategory("IDs").setRequiresMcRestart(true).setLanguageKey("minestuck.config.IDs");
+		Minestuck.entityIdStart = config.get("IDs", "entityIdStart", 5050).setRequiresMcRestart(true).setLanguageKey("minestuck.config.entityIdStart").getInt();
+		Minestuck.skaiaProviderTypeId = config.get("IDs", "skaiaProviderTypeId", 2).setRequiresMcRestart(true).setLanguageKey("minestuck.config.skaiaProviderTypeId").getInt();
+		Minestuck.skaiaDimensionId = config.get("IDs", "skaiaDimensionId", 2).setRequiresMcRestart(true).setLanguageKey("minestuck.config.skaiaDimensionId").getInt();
+		Minestuck.landProviderTypeId = config.get("IDs", "landProviderTypeId", 3).setRequiresMcRestart(true).setLanguageKey("minestuck.config.landProviderTypeId").getInt();
+		Minestuck.landDimensionIdStart = config.get("IDs", "landDimensionIdStart", 3).setRequiresMcRestart(true).setLanguageKey("minestuck.config.landDimensionIdStart").getInt();
+		MinestuckAchievementHandler.idOffset = config.get("IDs", "statsIdStart", 413).setRequiresMcRestart(true).setLanguageKey("minestuck.config.statsIdStart").getInt();
+		config.getCategory("IDs").setLanguageKey("minestuck.config.IDs");
 		
 		Debug.isDebugMode = config.get("General", "Print Debug Messages", true, "Whenether the game should print debug messages or not.").setShowInGui(false).getBoolean();
 		
@@ -91,6 +92,8 @@ public class MinestuckConfig
 	
 	static void loadBasicConfigOptions()
 	{
+		ContainerHandler.windowIdStart = config.get("IDs", "specialWindowIdStart", -10).setLanguageKey("minestuck.config.windowIdStart").setRequiresWorldRestart(true).getInt();
+		
 		initialModusSize = config.get("Modus", "initialModusSize", 5).setMinValue(0).setLanguageKey("minestuck.config.initialModusSize").getInt();
 		defaultModusTypes = config.get("Modus", "defaultModusType", new int[] {0, 1},
 				"An array with the possible modus types to be assigned. (0: Stack, 1: Queue, 2: QueueStack, 3: Tree)", 0, CaptchaDeckHandler.ModusType.values().length - 1).setLanguageKey("minestuck.config.defaultModusType").getIntList();

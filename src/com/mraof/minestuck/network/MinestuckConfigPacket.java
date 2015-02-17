@@ -11,15 +11,18 @@ import net.minecraftforge.fml.relauncher.Side;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.editmode.DeployList;
+import com.mraof.minestuck.inventory.ContainerHandler;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.UsernameHandler;
 
-public class MinestuckConfigPacket extends MinestuckPacket {
+public class MinestuckConfigPacket extends MinestuckPacket
+{
 	
 	int overWorldEditRange;
 	int landEditRange;
 	int cardCost;
+	int windowIdStart;
 	byte treeModusSetting;
 	
 	boolean hardMode;
@@ -42,6 +45,7 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 		data.writeInt(MinestuckConfig.overworldEditRange);
 		data.writeInt(MinestuckConfig.landEditRange);
 		data.writeInt(MinestuckConfig.cardCost);
+		data.writeInt(ContainerHandler.windowIdStart);
 		data.writeBoolean(MinestuckConfig.hardMode);
 		data.writeBoolean(MinestuckConfig.giveItems);
 		data.writeBoolean(MinestuckConfig.cardRecipe);
@@ -62,6 +66,7 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 		overWorldEditRange = data.readInt();
 		landEditRange = data.readInt();
 		cardCost = data.readInt();
+		windowIdStart = data.readInt();
 		hardMode = data.readBoolean();
 		giveItems = data.readBoolean();
 		cardRecipe = data.readBoolean();
@@ -89,6 +94,7 @@ public class MinestuckConfigPacket extends MinestuckPacket {
 		MinestuckConfig.clientGiveItems = this.giveItems;
 		MinestuckConfig.clientInfTreeModus = infiniteTreeModus;
 		MinestuckConfig.clientTreeAutobalance = treeModusSetting;
+		ContainerHandler.clientWindowIdStart = windowIdStart;
 		
 		if(!Minestuck.isServerRunning)
 		{
