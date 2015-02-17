@@ -234,7 +234,6 @@ public class ServerEditHandler
 		
 		updateInventory(player, c.givenItems(), c.enteredGame(), c.getClientName());
 		updatePosition(player, range, c.centerX, c.centerZ);
-//		ClientEditHandler.addToolTip(player, c.givenItems(), MinestuckPlayerData.getGristSet(c.getClientName()));
 	}
 	
 	@SubscribeEvent
@@ -269,12 +268,6 @@ public class ServerEditHandler
 				if(inventory.getItemStack() != null)
 					inventory.setItemStack(null);
 				else inventory.setInventorySlotContents(inventory.currentItem, null);
-			}
-			else
-			{
-//				stack.getTagCompound().removeTag("display");
-//				if(stack.getTagCompound().hasNoTags())
-//					stack.setTagCompound(null);
 			}
 		}
 	}
