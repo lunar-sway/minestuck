@@ -263,13 +263,13 @@ public class ServerEditHandler
 			{
 				event.setCanceled(true);
 			}
-		}
-		if(event.isCanceled())
-		{
-			event.entityItem.setDead();
-			if(inventory.getItemStack() != null)
-				inventory.setItemStack(null);
-			else inventory.setInventorySlotContents(inventory.currentItem, null);
+			if(event.isCanceled())
+			{
+				event.entityItem.setDead();
+				if(inventory.getItemStack() != null)
+					inventory.setItemStack(null);
+				else inventory.setInventorySlotContents(inventory.currentItem, null);
+			}
 		}
 	}
 	

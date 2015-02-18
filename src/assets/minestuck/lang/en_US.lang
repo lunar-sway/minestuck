@@ -183,6 +183,8 @@ minestuck.config.statsIdStart=Statistic Id Offset
 minestuck.config.statsIdStart.tooltip=The starting id for minestuck achievements
 minestuck.config.biomeIdStart=Biome Id Start
 minestuck.config.biomeIdStart.tooltip=The starting id for minestuck biomes
+minestuck.config.windowIdStart=Special Window Id Start
+minestuck.config.windowIdStart.tooltip=The starting window id for special containers
 minestuck.config.IDs=IDs
 minestuck.config.IDs.tooltip=Various integer IDs
 

@@ -24,6 +24,7 @@ import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.WorldEvent;
@@ -96,60 +97,44 @@ public class ClientEditHandler {
 		}
 	}
 	
-	public void addToolTip(EntityPlayer player, boolean[] givenItems)
+	@SubscribeEvent
+	public void addToolTip(ItemTooltipEvent event)
 	{
-		GristSet have = MinestuckPlayerData.getClientGrist();
-		for(ItemStack stack : player.inventory.mainInventory)
-			addToolTip(stack, have, givenItems);
+		EntityPlayer player = event.entityPlayer;
+		if(player != ClientProxy.getPlayer()/*Probably unnecessary*/ || !isActive())
+			return;
 		
-		if(player.openContainer instanceof ContainerEditmode)
-		{
-			ContainerEditmode container = (ContainerEditmode) player.openContainer;
-			for(int i = 0; i < container.inventory.getSizeInventory(); i++)
-			{
-				addToolTip(container.inventory.getStackInSlot(i), have, givenItems);
-				container.inventoryItemStacks.set(i, container.getSlot(i).getStack());
-			}
-		}
+		GristSet have = MinestuckPlayerData.getClientGrist();
+		
+		addToolTip(event.itemStack, event.toolTip, have, givenItems);
+		
 	}
 	
-	public void addToolTip(ItemStack stack, GristSet have, boolean[] givenItems)
+	static void addToolTip(ItemStack stack, List<String> toolTip, GristSet have, boolean[] givenItems)
 	{
-		if(stack == null)
-			return;
-		if(!stack.hasTagCompound())
-			stack.setTagCompound(new NBTTagCompound());
-		if(!stack.getTagCompound().hasKey("display"))
-			stack.getTagCompound().setTag("display", new NBTTagCompound());
-		NBTTagList list = new NBTTagList();
-		stack.getTagCompound().getCompoundTag("display").setTag("Lore", list);
-		
 		
 		GristSet cost;
 		if(DeployList.containsItemStack(stack))
-			cost = MinestuckConfig.clientHardMode&&givenItems[DeployList.getOrdinal(stack)]
-					?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
+			cost = MinestuckConfig.clientHardMode && givenItems[DeployList.getOrdinal(stack)]
+					? DeployList.getSecondaryCost(stack) : DeployList.getPrimaryCost(stack);
 		else if(stack.getItem().equals(Minestuck.captchaCard))
 			cost = new GristSet();
 		else cost = GristRegistry.getGristConversion(stack);
 		
 		if(cost == null)
 		{
-			list.appendTag(new NBTTagString(""+EnumChatFormatting.RESET+EnumChatFormatting.RESET
-					+EnumChatFormatting.RED+StatCollector.translateToLocal("gui.notAvailable")));
+			toolTip.add(EnumChatFormatting.RED + StatCollector.translateToLocal("gui.notAvailable"));
 			return;
 		}
 		
 		for(Entry<Integer, Integer> entry : cost.getHashtable().entrySet())
 		{
 			GristType grist = GristType.values()[entry.getKey()];
-			String s = EnumChatFormatting.RESET + "" + EnumChatFormatting.RESET;
-			s += entry.getValue() <= have.getGrist(grist) ? EnumChatFormatting.GREEN : EnumChatFormatting.RED;
-			list.appendTag(new NBTTagString(s + entry.getValue() + " " + grist.getDisplayName() + " (" + have.getGrist(grist) + ")"));
+			String s = "" + (entry.getValue() <= have.getGrist(grist) ? EnumChatFormatting.GREEN : EnumChatFormatting.RED);
+			toolTip.add(s + entry.getValue() + " " + grist.getDisplayName() + " (" + have.getGrist(grist) + ")");
 		}
 		if(cost.isEmpty())
-			list.appendTag(new NBTTagString(""+EnumChatFormatting.RESET+EnumChatFormatting.RESET+EnumChatFormatting.GREEN+
-					StatCollector.translateToLocal("gui.free")));
+			toolTip.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("gui.free"));
 	}
 	
 	@SubscribeEvent
@@ -161,7 +146,6 @@ public class ClientEditHandler {
 		double range = MinestuckDimensionHandler.isLandDimension((byte)player.dimension) ? MinestuckConfig.clientLandEditRange : MinestuckConfig.clientOverworldEditRange;
 		
 		ServerEditHandler.updatePosition(player, range, centerX, centerZ);
-		addToolTip(player, givenItems);
 		
 	}
 	
@@ -272,7 +256,7 @@ public class ClientEditHandler {
 		{
 				event.setCanceled(true);
 				GuiPlayerStats.editmodeTab = GuiPlayerStats.EditmodeGuiType.DEPLOY_LIST;
-				MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(Type.CONTAINER, GuiPlayerStats.editmodeTab.ordinal()));
+				GuiPlayerStats.openGui(true);
 		}
 	}
 	

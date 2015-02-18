@@ -20,7 +20,6 @@ import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 
 public class MinestuckSaveHandler 
 {
-	
 	@SubscribeEvent
 	public void onWorldSave(WorldEvent.Save event)
 	{

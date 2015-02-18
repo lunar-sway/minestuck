@@ -1,6 +1,5 @@
 package com.mraof.minestuck.world;
 
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
@@ -23,7 +22,7 @@ public class MinestuckDimensionHandler
 {
 	
 	private static Hashtable<Byte, LandAspectRegistry.AspectCombination> lands = new Hashtable<Byte, LandAspectRegistry.AspectCombination>();
-	private static HashMap<Byte, BlockPos> spawnpoints = new HashMap<Byte, BlockPos>();
+	private static Hashtable<Byte, BlockPos> spawnpoints = new Hashtable<Byte, BlockPos>();
 	
 	public static void unregisterDimensions()
 	{
@@ -116,14 +115,18 @@ public class MinestuckDimensionHandler
 	
 	public static void onLandPacket(LandRegisterPacket packet)
 	{
+		if(Minestuck.isServerRunning)
+			return;
 		lands.clear();
+		spawnpoints.clear();
 		
-		for(int i = 0; i < packet.ids.size(); i++)
+		lands.putAll(packet.aspectMap);
+		spawnpoints.putAll(packet.spawnMap);
+		
+		for(byte dim : lands.keySet())
 		{
-			byte id = packet.ids.get(i);
-			lands.put(id, packet.aspects.get(i));
-			if(!DimensionManager.isDimensionRegistered(id))
-				DimensionManager.registerDimension(id, Minestuck.landProviderTypeId);
+			if(!DimensionManager.isDimensionRegistered(dim))
+				DimensionManager.registerDimension(dim, Minestuck.landProviderTypeId);
 		}
 	}
 	

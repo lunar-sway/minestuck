@@ -150,6 +150,15 @@ import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 public class Minestuck
 {
 	
+	/**
+	 * True only if the minecraft application is client-sided
+	 */
+	public static boolean isClientRunning;
+	/**
+	 * True if the minecraft application is server-sided, or if there is an integrated server running
+	 */
+	public static volatile boolean isServerRunning;
+	
 	public static int entityIdStart;
 	public static int skaiaProviderTypeId;
 	public static int skaiaDimensionId;
@@ -240,6 +249,7 @@ public class Minestuck
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) 
 	{
+		isClientRunning = event.getSide().isClient();
 		
 		MinestuckConfig.loadConfigFile(event.getSuggestedConfigurationFile(), event.getSide());
 		
@@ -370,7 +380,7 @@ public class Minestuck
 		GameRegistry.registerItem(goldSeeds, "gold_seeds");
 		GameRegistry.registerItem(metalBoat, "metal_boat");
 		
-		if(event.getSide().isClient())
+		if(isClientRunning)
 		{
 			ClientProxy.registerSided();
 			MinestuckTextureManager.registerVariants();
@@ -432,7 +442,7 @@ public class Minestuck
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 		
 		//Register textures and renders
-		if(event.getSide().isClient())
+		if(isClientRunning)
 		{
 			MinestuckTextureManager.registerTextures();
 			ClientProxy.registerRenderers();
@@ -506,15 +516,17 @@ public class Minestuck
 	@EventHandler 
 	public void serverAboutToStart(FMLServerAboutToStartEvent event)
 	{
+		isServerRunning = true;
 		AlchemyRecipeHandler.addOrRemoveRecipes(MinestuckConfig.cardRecipe);
 		TileEntityTransportalizer.transportalizers.clear();
 		DeployList.applyConfigValues(MinestuckConfig.deployConfigurations);
 	}
 	
 	@EventHandler
-	public void serverClosing(FMLServerStoppedEvent event)
+	public void serverClosed(FMLServerStoppedEvent event)
 	{
 		MinestuckDimensionHandler.unregisterDimensions();
+		isServerRunning = !isClientRunning;
 	}
 	
 	@EventHandler

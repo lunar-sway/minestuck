@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -11,6 +12,7 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.BlockPos;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -22,8 +24,8 @@ import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 public class LandRegisterPacket extends MinestuckPacket
 {
-	public ArrayList<Byte> ids;
-	public ArrayList<LandAspectRegistry.AspectCombination> aspects;
+	public HashMap<Byte, LandAspectRegistry.AspectCombination> aspectMap;
+	public HashMap<Byte, BlockPos> spawnMap;
 	
 	public LandRegisterPacket() 
 	{
@@ -38,6 +40,10 @@ public class LandRegisterPacket extends MinestuckPacket
 			this.data.writeByte(entry.getKey());
 			writeString(data, entry.getValue().aspect1.getPrimaryName()+"\n");
 			writeString(data, entry.getValue().aspect2.getPrimaryName()+"\n");
+			BlockPos spawn = MinestuckDimensionHandler.getSpawn(entry.getKey());
+			data.writeInt(spawn.getX());
+			data.writeInt(spawn.getY());
+			data.writeInt(spawn.getZ());
 		}
 		return this;
 	}
@@ -45,15 +51,16 @@ public class LandRegisterPacket extends MinestuckPacket
 	@Override
 	public MinestuckPacket consumePacket(ByteBuf data) 
 	{
-		ids = new ArrayList<Byte>();
-		aspects = new ArrayList<LandAspectRegistry.AspectCombination>();
+		aspectMap = new HashMap<Byte, LandAspectRegistry.AspectCombination>();
+		spawnMap = new HashMap<Byte, BlockPos>();
 		while(data.readableBytes() > 0)
 		{
 			byte dim = data.readByte();
 			String aspect1 = readLine(data);
 			String aspect2 = readLine(data);
-			ids.add(dim);
-			aspects.add(new LandAspectRegistry.AspectCombination(LandAspectRegistry.fromName(aspect1), LandAspectRegistry.fromName2(aspect2)));
+			BlockPos spawn = new BlockPos(data.readInt(), data.readInt(), data.readInt());
+			aspectMap.put(dim, new LandAspectRegistry.AspectCombination(LandAspectRegistry.fromName(aspect1), LandAspectRegistry.fromName2(aspect2)));
+			spawnMap.put(dim, spawn);
 		}
 		
 		return this;
