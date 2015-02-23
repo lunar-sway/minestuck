@@ -17,13 +17,7 @@ public class LandAspectPulse extends TitleAspect
 	{
 		return new String[]{"Pulse", "Blood"};
 	}
-
-	@Override
-	public float getRarity()
-	{
-		return 0.5F;
-	}
-
+	
 	@Override
 	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{

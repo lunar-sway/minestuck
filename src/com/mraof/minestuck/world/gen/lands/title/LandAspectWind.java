@@ -18,12 +18,6 @@ public class LandAspectWind extends TitleAspect
 	}
 	
 	@Override
-	public float getRarity()
-	{
-		return 0.5F;
-	}
-	
-	@Override
 	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
 		if(chunkProvider.weatherType == -1)

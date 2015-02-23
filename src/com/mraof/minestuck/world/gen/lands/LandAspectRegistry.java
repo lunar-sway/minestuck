@@ -89,31 +89,58 @@ public class LandAspectRegistry
 	 * @param playerTitle
 	 * @return
 	 */
-	public TerrainAspect getLandAspect(TitleAspect aspect2)
+	public TerrainAspect getLandAspect(TitleAspect aspect2, List<TerrainAspect> usedAspects)
 	{
-		while (true)
-		{
-			TerrainAspect newAspect = (TerrainAspect)landAspects.get(random.nextInt(landAspects.size()));
-			if (newAspect.getRarity() < random.nextFloat() && aspect2.isAspectCompatible(newAspect))
-			{
-				return newAspect;
-			}
-		}
+		ArrayList<TerrainAspect> availableAspects = new ArrayList<TerrainAspect>();
+		for(TerrainAspect aspect : landAspects)
+			if(aspect2.isAspectCompatible(aspect))
+				availableAspects.add(aspect);
+		
+		return selectRandomAspect(availableAspects, usedAspects);
 	}
 	
-	public TitleAspect getLandAspect(EnumAspect titleAspect)
+	public TitleAspect getTitleAspect(EnumAspect titleAspect, List<TitleAspect> usedAspects)
 	{
 		ArrayList<TitleAspect> aspectList = titleAspects.get(titleAspect);
 		if(aspectList == null || aspectList.isEmpty())
 			return nullAspect;
-		while (true)
+		
+		return selectRandomAspect(aspectList, usedAspects);
+	}
+	
+	private <A extends ILandAspect> A selectRandomAspect(List<A> aspectList, List<A> usedAspects)
+	{
+		if(aspectList.size() == 1)
+			return aspectList.get(0);
+		
+		int[] useCount = new int[aspectList.size()];
+		for(A usedAspect : usedAspects)
 		{
-			TitleAspect newAspect = aspectList.get(random.nextInt(aspectList.size()));
-			if (newAspect.getRarity() < random.nextLong())
-			{
-				return newAspect;
-			}
+			int index = aspectList.indexOf(usedAspect);
+			if(index != -1)
+				useCount[index]++;
 		}
+		
+		ArrayList<A> list = new ArrayList<A>();
+		for(int i = 0; i < useCount.length; i++)	//Check for unused aspects
+			if(useCount[i] == 0)
+				list.add(aspectList.get(i));
+		
+		if(list.size() > 0)
+			return list.get(random.nextInt(list.size()));
+		
+		double randCap = 0;
+		for(int i = 0; 0 < useCount.length; i++)
+			randCap += 1D/useCount[i];
+		
+		double rand = random.nextDouble()*randCap;
+		
+		for(int i = 0; i < useCount.length; i++)
+			if(rand < 1D/useCount[i])
+				return aspectList.get(i);
+			else rand -= 1D/useCount[i];
+		
+		return null;	//Should not happen
 	}
 	
 	/**

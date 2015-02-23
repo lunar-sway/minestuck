@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.gen.lands.terrain;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mraof.minestuck.world.gen.lands.ILandAspect;
 import com.mraof.minestuck.world.gen.lands.decorator.ILandDecorator;
 
 import net.minecraft.block.Block;
@@ -10,7 +11,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Vec3;
 
-public abstract class TerrainAspect 
+public abstract class TerrainAspect implements ILandAspect
 {
 		/**
 		 * Returns the blocks that can possibly be use in the land's underground blocks.
@@ -43,25 +44,6 @@ public abstract class TerrainAspect
 		{
 			return getOceanBlock();
 		}
-		
-		/**
-		 * Returns the chance that it will be selected as an aspect. Is a percentage between 0 and 1.
-		 * 
-		 * @param playerTitle
-		 * @return
-		 */
-		public abstract float getRarity();
-		
-		/**
-		 * Returns a string that represents a unique name for a land, Used in saving and loading land data.
-		 * @return
-		 */
-		public abstract String getPrimaryName();
-		
-		/**
-		 * Returns a list of strings used in giving a land a random name.
-		 */
-		public abstract String[] getNames();
 		
 		/**
 		 * Returns a list of possible worldgen structures a land can use.

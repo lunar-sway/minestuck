@@ -19,11 +19,6 @@ public class LandAspectCake extends TitleAspect
 	}
 	
 	@Override
-	public float getRarity() {
-		return 0.5F;
-	}
-	
-	@Override
 	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.decorators.add(new CakeDecorator());

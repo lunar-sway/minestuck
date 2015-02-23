@@ -22,12 +22,6 @@ public class LandAspectThought extends TitleAspect
 	}
 	
 	@Override
-	public float getRarity()
-	{
-		return 0.5F;
-	}
-	
-	@Override
 	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
 		if(chunkProvider.surfaceBlock.getBlock().getMaterial() == Material.ground)

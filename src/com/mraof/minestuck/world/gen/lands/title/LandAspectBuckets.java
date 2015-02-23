@@ -17,13 +17,7 @@ public class LandAspectBuckets extends TitleAspect	//Yes, buckets
 	{
 		return new String[]{"Buckets"};
 	}
-
-	@Override
-	public float getRarity()
-	{
-		return 0.1F;
-	}
-
+	
 	@Override
 	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{

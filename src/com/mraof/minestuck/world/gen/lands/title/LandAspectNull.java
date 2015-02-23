@@ -16,13 +16,7 @@ public class LandAspectNull extends TitleAspect
 	{
 		return new String[] {"Null"};
 	}
-
-	@Override
-	public float getRarity()
-	{
-		return 0;
-	}
-
+	
 	@Override
 	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{

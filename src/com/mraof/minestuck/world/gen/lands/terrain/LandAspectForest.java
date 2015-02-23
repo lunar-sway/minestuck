@@ -35,12 +35,6 @@ public class LandAspectForest extends TerrainAspect
 	}
 	
 	@Override
-	public float getRarity()
-	{
-		return 0.5F;
-	}
-	
-	@Override
 	public String getPrimaryName()
 	{
 		return "Forest";

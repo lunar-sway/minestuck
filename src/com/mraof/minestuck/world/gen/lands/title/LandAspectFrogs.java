@@ -18,12 +18,6 @@ public class LandAspectFrogs extends TitleAspect
 	}
 	
 	@Override
-	public float getRarity()
-	{
-		return 0;	//This aspect isn't assigned by random
-	}
-	
-	@Override
 	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
 		

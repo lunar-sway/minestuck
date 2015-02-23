@@ -40,14 +40,10 @@ public class LandAspectShade extends TerrainAspect
 	public double[] generateTerrainMap() {
 		return null;
 	}
-
+	
 	@Override
-	public float getRarity() {
-		return 0.5F;
-	}
-
-	@Override
-	public String getPrimaryName() {
+	public String getPrimaryName()
+	{
 		return "Shade";
 	}
 

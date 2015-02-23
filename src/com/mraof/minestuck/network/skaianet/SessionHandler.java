@@ -288,19 +288,32 @@ public class SessionHandler {
 		return count;
 	}
 	
-	public static TitleAspect getTitleAspect(LandAspectRegistry landHelper, int dimension)
+	private static void genLandAspects(SburbConnection connection)
 	{
-		SburbConnection clientConnection = null;
-		for(SburbConnection connection : SkaianetHandler.connections)
-			if(connection.enteredGame && connection.clientHomeLand == dimension)
+		LandAspectRegistry aspectGen = new LandAspectRegistry(Minestuck.worldSeed/connection.clientHomeLand);
+		Session session = getPlayerSession(connection.getClientName());
+		Title title = MinestuckPlayerData.getTitle(connection.getClientName());
+		
+		boolean frogs = false;
+		ArrayList<TerrainAspect> usedTerrainAspects = new ArrayList<TerrainAspect>();
+		ArrayList<TitleAspect> usedTitleAspects = new ArrayList<TitleAspect>();
+		for(SburbConnection c : session.connections)
+			if(c.enteredGame)
 			{
-				clientConnection = connection;
-				break;
+				LandAspectRegistry.AspectCombination aspects = MinestuckDimensionHandler.getAspects((byte) c.clientHomeLand);
+				if(MinestuckDimensionHandler.getAspects((byte) c.clientHomeLand).aspect2 == LandAspectRegistry.frogAspect)
+					frogs = true;
+				else if(MinestuckPlayerData.getTitle(c.getClientName()).getHeroAspect() == title.getHeroAspect())
+					usedTitleAspects.add(aspects.aspect2);
+				usedTerrainAspects.add(aspects.aspect1);
 			}
-		Title title = MinestuckPlayerData.getTitle(clientConnection.getClientName());
-//		if(title.getHeroAspect() == EnumAspect.SPACE && ??)
+		
+//		if(title.getHeroAspect() == EnumAspect.SPACE && !frogs)
 //			return landHelper.frogAspect;
-		return landHelper.getLandAspect(title.getHeroAspect());
+		TitleAspect titleAspect = aspectGen.getTitleAspect(title.getHeroAspect(), usedTitleAspects);
+		TerrainAspect terrainAspect = aspectGen.getLandAspect(titleAspect, usedTerrainAspects);
+		MinestuckDimensionHandler.registerLandDimension((byte) connection.clientHomeLand, new AspectCombination(terrainAspect, titleAspect));
+		MinestuckPlayerTracker.updateLands();
 	}
 	
 	public static GristType getUnderlingType(EntityUnderling entity)
@@ -452,11 +465,7 @@ public class SessionHandler {
 		Debug.print("Player Entered:"+connection.clientHomeLand);
 		generateTitle(connection.getClientName());
 		getPlayerSession(connection.getClientName()).checkIfCompleted();
-		LandAspectRegistry aspectGen = new LandAspectRegistry(Minestuck.worldSeed/connection.clientHomeLand);
-		TitleAspect aspect2 = getTitleAspect(aspectGen, connection.clientHomeLand);
-		TerrainAspect aspect1 = aspectGen.getLandAspect(aspect2);
-		MinestuckDimensionHandler.registerLandDimension((byte) connection.clientHomeLand, new AspectCombination(aspect1, aspect2));
-		MinestuckPlayerTracker.updateLands();
+		genLandAspects(connection);
 	}
 	
 	static List<String> getServerList(String client) {

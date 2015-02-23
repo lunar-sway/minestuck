@@ -43,12 +43,7 @@ public class LandAspectSand extends TerrainAspect
 	public double[] generateTerrainMap() {
 		return null;
 	}
-
-	@Override
-	public float getRarity() {
-		return 0.5F;
-	}
-
+	
 	@Override
 	public String getPrimaryName() {
 		return "Sand";

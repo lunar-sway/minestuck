@@ -19,12 +19,6 @@ public class LandAspectThunder extends TitleAspect
 	}
 	
 	@Override
-	public float getRarity()
-	{
-		return 0.5F;
-	}
-	
-	@Override
 	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.weatherType = 6;

@@ -42,11 +42,6 @@ public class LandAspectFrost extends TerrainAspect
 	}
 	
 	@Override
-	public float getRarity() {
-		return 0.5F;
-	}
-
-	@Override
 	public double[] generateTerrainMap() 
 	{
 		return null;
