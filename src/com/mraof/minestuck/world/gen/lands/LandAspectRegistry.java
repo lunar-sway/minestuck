@@ -71,9 +71,12 @@ public class LandAspectRegistry
 	 * Adds a new Land aspect to the table of random aspects to generate.
 	 * @param newAspect
 	 */
-	public static void registerLandAspect(TerrainAspect newAspect) {
+	public static void registerLandAspect(TerrainAspect newAspect)
+	{
 		landAspects.add(newAspect);
 		landNames.put(newAspect.getPrimaryName(),newAspect);
+		for(ILandAspect variant : newAspect.getVariations())
+			landNames.put(variant.getPrimaryName(), (TerrainAspect) variant);
 	}
 	
 	public static void registerLandAspect(TitleAspect newAspect, EnumAspect titleAspect)
@@ -82,6 +85,8 @@ public class LandAspectRegistry
 			titleAspects.put(titleAspect, new ArrayList<TitleAspect>());
 		titleAspects.get(titleAspect).add(newAspect);
 		landNames2.put(newAspect.getPrimaryName(), newAspect);
+		for(ILandAspect variant : newAspect.getVariations())
+			landNames2.put(variant.getPrimaryName(), (TitleAspect) variant);
 	}
 	
 	/**
@@ -95,6 +100,9 @@ public class LandAspectRegistry
 		for(TerrainAspect aspect : landAspects)
 			if(aspect2.isAspectCompatible(aspect))
 				availableAspects.add(aspect);
+		
+		if(availableAspects.isEmpty())
+			throw new IllegalStateException("No land aspect is compatible with the title aspect "+aspect2.getPrimaryName()+"!");
 		
 		return selectRandomAspect(availableAspects, usedAspects);
 	}
@@ -111,11 +119,12 @@ public class LandAspectRegistry
 	private <A extends ILandAspect> A selectRandomAspect(List<A> aspectList, List<A> usedAspects)
 	{
 		if(aspectList.size() == 1)
-			return aspectList.get(0);
+			return getRandomVariant(aspectList.get(0));
 		
 		int[] useCount = new int[aspectList.size()];
 		for(A usedAspect : usedAspects)
 		{
+			usedAspect = (A) usedAspect.getPrimaryVariant();
 			int index = aspectList.indexOf(usedAspect);
 			if(index != -1)
 				useCount[index]++;
@@ -127,7 +136,7 @@ public class LandAspectRegistry
 				list.add(aspectList.get(i));
 		
 		if(list.size() > 0)
-			return list.get(random.nextInt(list.size()));
+			return getRandomVariant(list.get(random.nextInt(list.size())));
 		
 		double randCap = 0;
 		for(int i = 0; 0 < useCount.length; i++)
@@ -137,21 +146,18 @@ public class LandAspectRegistry
 		
 		for(int i = 0; i < useCount.length; i++)
 			if(rand < 1D/useCount[i])
-				return aspectList.get(i);
+			{
+				return getRandomVariant(aspectList.get(i));
+			}
 			else rand -= 1D/useCount[i];
 		
 		return null;	//Should not happen
 	}
 	
-	/**
-	 * Given two aspects, pick one ot random. Used in finding which aspect conrols what part of world gen.
-	 */
-	public TerrainAspect pickOne(TerrainAspect aspect1,TerrainAspect aspect2) {
-		if (random.nextBoolean()) {
-			return aspect1;
-		} else {
-			return aspect2;
-		}
+	private <A extends ILandAspect> A getRandomVariant(A aspect)
+	{
+		List<ILandAspect> variations = aspect.getVariations();
+		return (A) variations.get(random.nextInt(variations.size()));
 	}
 	
 	/**
@@ -230,8 +236,9 @@ public class LandAspectRegistry
 		int id = SkaianetHandler.enterMedium((EntityPlayerMP)player, newLandId);
 		if(id != newLandId)	//Player already got a land, but the tag was somehow lost?
 			newLandId = id;
+		else MinestuckDimensionHandler.setSpawn((byte) newLandId, new BlockPos(player.posX, player.posY, player.posZ));
 		
-		MinestuckDimensionHandler.setSpawn((byte) newLandId, new BlockPos(player.posX, player.posY, player.posZ));
+		MinestuckPlayerTracker.updateLands();
 		
 		if(!player.getEntityData().hasKey(EntityPlayer.PERSISTED_NBT_TAG))
 			player.getEntityData().setTag(EntityPlayer.PERSISTED_NBT_TAG, new NBTTagCompound());

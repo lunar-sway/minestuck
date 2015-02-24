@@ -1,5 +1,7 @@
 package com.mraof.minestuck.world.gen.lands;
 
+import java.util.List;
+
 public interface ILandAspect
 {
 	
@@ -13,4 +15,8 @@ public interface ILandAspect
 	 * Returns a list of strings used in giving a land a random name.
 	 */
 	public String[] getNames();
+	
+	List<ILandAspect> getVariations();
+	
+	ILandAspect getPrimaryVariant();
 }

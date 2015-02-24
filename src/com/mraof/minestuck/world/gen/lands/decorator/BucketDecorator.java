@@ -29,7 +29,7 @@ public class BucketDecorator extends SimpleStructureDecorator
 			IBlockState liquid;
 			if(random.nextBoolean())
 				liquid = liquidBlocks[random.nextInt(liquidBlocks.length)].getDefaultState();
-			else liquid = provider.oceanBlock.getDefaultState();
+			else liquid = provider.oceanBlock;
 			if(yCoord < 60)
 				return;
 			if(random.nextDouble() < 0.4)

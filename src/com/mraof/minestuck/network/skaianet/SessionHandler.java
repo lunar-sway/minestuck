@@ -300,8 +300,10 @@ public class SessionHandler {
 		for(SburbConnection c : session.connections)
 			if(c.enteredGame)
 			{
+				if(c == connection)
+					continue;
 				LandAspectRegistry.AspectCombination aspects = MinestuckDimensionHandler.getAspects((byte) c.clientHomeLand);
-				if(MinestuckDimensionHandler.getAspects((byte) c.clientHomeLand).aspect2 == LandAspectRegistry.frogAspect)
+				if(aspects.aspect2 == LandAspectRegistry.frogAspect)
 					frogs = true;
 				else if(MinestuckPlayerData.getTitle(c.getClientName()).getHeroAspect() == title.getHeroAspect())
 					usedTitleAspects.add(aspects.aspect2);
@@ -313,7 +315,7 @@ public class SessionHandler {
 		TitleAspect titleAspect = aspectGen.getTitleAspect(title.getHeroAspect(), usedTitleAspects);
 		TerrainAspect terrainAspect = aspectGen.getLandAspect(titleAspect, usedTerrainAspects);
 		MinestuckDimensionHandler.registerLandDimension((byte) connection.clientHomeLand, new AspectCombination(terrainAspect, titleAspect));
-		MinestuckPlayerTracker.updateLands();
+		//MinestuckPlayerTracker.updateLands(); Lands need to be updated after setting the spawnpoint
 	}
 	
 	public static GristType getUnderlingType(EntityUnderling entity)

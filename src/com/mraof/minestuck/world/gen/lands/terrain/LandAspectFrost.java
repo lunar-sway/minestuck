@@ -47,9 +47,9 @@ public class LandAspectFrost extends TerrainAspect
 		return null;
 	}
 	@Override
-	public Block getRiverBlock() 
+	public IBlockState getRiverBlock() 
 	{
-		return Blocks.ice;
+		return Blocks.ice.getDefaultState();
 	}
 
 	@Override

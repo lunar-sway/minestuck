@@ -35,12 +35,12 @@ public abstract class TerrainAspect implements ILandAspect
 		 * Returns the block that is a part of the land's ocean.
 		 * @return
 		 */
-		public Block getOceanBlock()
+		public IBlockState getOceanBlock()
 		{
-			return Blocks.water;
+			return Blocks.water.getDefaultState();
 		}
 		
-		public Block getRiverBlock()
+		public IBlockState getRiverBlock()
 		{
 			return getOceanBlock();
 		}
@@ -72,6 +72,20 @@ public abstract class TerrainAspect implements ILandAspect
 	public int getWeatherType()
 	{
 		return -1;
+	}
+	
+	@Override
+	public List<ILandAspect> getVariations()
+	{
+		ArrayList<ILandAspect> list = new ArrayList<ILandAspect>();
+		list.add(this);
+		return list;
+	}
+	
+	@Override
+	public ILandAspect getPrimaryVariant()
+	{
+		return this;
 	}
 	
 }

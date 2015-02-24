@@ -56,8 +56,8 @@ public class ChunkProviderLands implements IChunkProvider
 
 	public IBlockState surfaceBlock;
 	public IBlockState upperBlock;
-	public Block oceanBlock;
-	public Block riverBlock;
+	public IBlockState oceanBlock;
+	public IBlockState riverBlock;
 	public TerrainAspect terrainMapper;
 	public ArrayList<ILandDecorator> decorators;
 	public int dayCycle;
@@ -179,10 +179,10 @@ public class ChunkProviderLands implements IChunkProvider
 				}
 
 				for(int i = y + topRiverBlock[x << 4 | z]; y < i; y++)
-					primer.setBlockState(x, y, z, riverBlock.getDefaultState());
+					primer.setBlockState(x, y, z, riverBlock);
 
 				for(; y < 63; y++)
-					primer.setBlockState(x, y, z, oceanBlock.getDefaultState());
+					primer.setBlockState(x, y, z, oceanBlock);
 
 			}
 		

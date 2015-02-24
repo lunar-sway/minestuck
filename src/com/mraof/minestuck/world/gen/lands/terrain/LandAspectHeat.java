@@ -38,13 +38,14 @@ public class LandAspectHeat extends TerrainAspect
 	}
 
 	@Override
-	public Block getOceanBlock()
+	public IBlockState getOceanBlock()
 	{
-		return Blocks.lava;
+		return Blocks.lava.getDefaultState();
 	}
 	@Override
-	public Block getRiverBlock() {
-		return Blocks.flowing_lava;
+	public IBlockState getRiverBlock()
+	{
+		return Blocks.flowing_lava.getDefaultState();
 	}
 
 	@Override

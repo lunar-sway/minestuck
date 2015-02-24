@@ -1,5 +1,8 @@
 package com.mraof.minestuck.world.gen.lands.title;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.gen.ChunkProviderLands;
@@ -21,6 +24,20 @@ public abstract class TitleAspect implements ILandAspect
 		ChunkProviderLands chunkProvider = new ChunkProviderLands(land.getWorld(), land, land.getWorld().isRemote ? Minestuck.worldSeed : land.getSeed());
 		prepareChunkProvider(chunkProvider);
 		return chunkProvider;
+	}
+	
+	@Override
+	public List<ILandAspect> getVariations()
+	{
+		ArrayList<ILandAspect> list = new ArrayList<ILandAspect>();
+		list.add(this);
+		return list;
+	}
+	
+	@Override
+	public ILandAspect getPrimaryVariant()
+	{
+		return this;
 	}
 	
 }
