@@ -31,22 +31,26 @@ public class LandAspectSand extends TerrainAspect
 	
 	public LandAspectSand()
 	{
-		name = "Sand";
-		skyColor = new Vec3(0.99D, 0.8D, 0.05D);
-		
-		surfaceBlocks = new IBlockState[] {Blocks.sand.getDefaultState()};
-		upperBlocks = new IBlockState[] {Blocks.sandstone.getDefaultState()};
-		structureBlocks = new IBlockState[] {Blocks.sandstone.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.SMOOTH), Blocks.stonebrick.getDefaultState()};
-		
-		variations = new ArrayList<ILandAspect>();
-		variations.add(this);
-		variations.add(new LandAspectSand("SandRed"));
+		this("Sand");
 	}
 	
 	public LandAspectSand(String variation)
 	{
+		variations = new ArrayList<ILandAspect>();
 		name = variation;
 		
+		if(name.equals("Sand"))
+		{
+			skyColor = new Vec3(0.99D, 0.8D, 0.05D);
+			
+			surfaceBlocks = new IBlockState[] {Blocks.sand.getDefaultState()};
+			upperBlocks = new IBlockState[] {Blocks.sandstone.getDefaultState()};
+			structureBlocks = new IBlockState[] {Blocks.sandstone.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.SMOOTH), Blocks.stonebrick.getDefaultState()};
+			
+			variations.add(this);
+			variations.add(new LandAspectSand("SandRed"));
+		}
+		else
 		{
 			skyColor = new Vec3(0.99D, 0.6D, 0.05D);
 			
@@ -55,7 +59,6 @@ public class LandAspectSand extends TerrainAspect
 			structureBlocks = new IBlockState[] {Blocks.red_sandstone.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.SMOOTH), Blocks.stonebrick.getDefaultState()};
 		}
 		
-		variations = null;
 	}
 	
 	@Override
@@ -63,7 +66,7 @@ public class LandAspectSand extends TerrainAspect
 	{
 		return surfaceBlocks;
 	}
-
+	
 	@Override
 	public IBlockState[] getUpperBlocks()
 	{
@@ -71,7 +74,7 @@ public class LandAspectSand extends TerrainAspect
 	}
 	
 	@Override
-	public IBlockState getOceanBlock() 
+	public IBlockState getRiverBlock()
 	{
 		return surfaceBlocks[0];
 	}

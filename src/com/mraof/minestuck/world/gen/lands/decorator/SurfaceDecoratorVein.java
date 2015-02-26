@@ -16,9 +16,9 @@ import com.mraof.minestuck.world.gen.OreHandler;
 public class SurfaceDecoratorVein implements ILandDecorator
 {
 	
-	int amount;
-	IBlockState block;
-	int size;
+	public int amount;
+	public IBlockState block;
+	public int size;
 	
 	public SurfaceDecoratorVein(IBlockState block,int amount,int size) 
 	{

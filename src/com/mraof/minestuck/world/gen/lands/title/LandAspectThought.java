@@ -1,10 +1,16 @@
 package com.mraof.minestuck.world.gen.lands.title;
 
+import java.util.ArrayList;
+
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.BlockColoredDirt;
 import com.mraof.minestuck.world.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.gen.lands.decorator.ILandDecorator;
+import com.mraof.minestuck.world.gen.lands.decorator.SurfaceDecoratorVein;
+import com.mraof.minestuck.world.gen.lands.terrain.TerrainAspect;
 
 public class LandAspectThought extends TitleAspect
 {
@@ -27,12 +33,28 @@ public class LandAspectThought extends TitleAspect
 		if(chunkProvider.surfaceBlock.getBlock().getMaterial() == Material.ground)
 		{
 			chunkProvider.surfaceBlock = Minestuck.coloredDirt.getDefaultState().withProperty(BlockColoredDirt.BLOCK_TYPE, BlockColoredDirt.BlockType.THOUGHT);
+			ArrayList<ILandDecorator> decoratorsToRemove = new ArrayList<ILandDecorator>();
+			for(ILandDecorator decorator : chunkProvider.decorators)
+				if(decorator instanceof SurfaceDecoratorVein)
+				{
+					IBlockState blockState = ((SurfaceDecoratorVein)decorator).block;
+					if(blockState.getBlock().getMaterial() == Material.ground)
+						decoratorsToRemove.add(decorator);
+				}
+			if(!decoratorsToRemove.isEmpty())
+				chunkProvider.decorators.removeAll(decoratorsToRemove);
 		}
 		else
 		{
 //			chunkProvider.riverBlock = Minestuck.blockBrainJuice;
 //			chunkProvider.oceanBlock = Minestuck.blockBrainJuice;
 		}
+	}
+	
+	@Override
+	public boolean isAspectCompatible(TerrainAspect aspect)
+	{
+		return aspect.getOceanBlock().getBlock().getMaterial() != Material.lava;
 	}
 	
 }
