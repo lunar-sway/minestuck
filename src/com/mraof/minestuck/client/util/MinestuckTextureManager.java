@@ -97,6 +97,7 @@ public class MinestuckTextureManager
 		register(Minestuck.oreCruxite, 1, "cruxite_netherrack");
 		register(Minestuck.oreCruxite, 2, "cruxite_cobblestone");
 		register(Minestuck.oreCruxite, 3, "cruxite_sandstone");
+		register(Minestuck.oreCruxite, 4, "cruxite_sandstone_red");
 		for(BlockColoredDirt.BlockType type : BlockColoredDirt.BlockType.values())
 			register(Minestuck.coloredDirt, type.ordinal(), "colored_dirt_"+type.name);
 		for(BlockStorage.BlockType type : BlockStorage.BlockType.values())
@@ -136,7 +137,7 @@ public class MinestuckTextureManager
 		//Blocks
 		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())
 			ModelBakery.addVariantName(Item.getItemFromBlock(Minestuck.chessTile), "minestuck:chesstile_"+type.name);
-		ModelBakery.addVariantName(Item.getItemFromBlock(Minestuck.oreCruxite), "minestuck:cruxite_stone", "minestuck:cruxite_netherrack", "minestuck:cruxite_cobblestone", "minestuck:cruxite_sandstone");
+		ModelBakery.addVariantName(Item.getItemFromBlock(Minestuck.oreCruxite), "minestuck:cruxite_stone", "minestuck:cruxite_netherrack", "minestuck:cruxite_cobblestone", "minestuck:cruxite_sandstone", "minestuck:cruxite_sandstone_red");
 		for(BlockColoredDirt.BlockType type : BlockColoredDirt.BlockType.values())
 			ModelBakery.addVariantName(Item.getItemFromBlock(Minestuck.coloredDirt), "minestuck:colored_dirt_"+type.name);
 		for(BlockStorage.BlockType type : BlockStorage.BlockType.values())

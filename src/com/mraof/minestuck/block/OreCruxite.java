@@ -20,7 +20,7 @@ import com.mraof.minestuck.Minestuck;
 
 public class OreCruxite extends Block 
 {
-	public static final PropertyInteger BLOCK_TYPE = PropertyInteger.create("blockType", 0, 3);
+	public static final PropertyInteger BLOCK_TYPE = PropertyInteger.create("blockType", 0, 4);
 	
 	private Random rand = new Random();
 	public OreCruxite()
@@ -98,6 +98,8 @@ public class OreCruxite extends Block
 			meta = 2;
 		else if(ground.getBlock() == Blocks.sandstone)
 			meta = 3;
+		else if(ground.getBlock() == Blocks.red_sandstone)
+			meta = 4;
 		
 		return getBlockState().getBaseState().withProperty(BLOCK_TYPE, meta);
 	}
@@ -105,7 +107,7 @@ public class OreCruxite extends Block
 	@Override
 	public void getSubBlocks(Item itemIn, CreativeTabs tab, List list)
 	{
-		for(int i = 0; i < 4; i++)
+		for(int i = 0; i < 5; i++)
 			list.add(new ItemStack(itemIn, 1, i));
 	}
 	
