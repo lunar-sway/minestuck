@@ -88,4 +88,14 @@ public abstract class TerrainAspect implements ILandAspect
 		return this;
 	}
 	
+	/**
+	 * Returns a block state for use in decoration based on an other block state
+	 * @param state The state that will be primary used alongside the returned state. This parameter will always be a block state provided from getStructureBlocks()
+	 * @return The block to be used for decorative details in structures
+	 */
+	public IBlockState getDecorativeBlockFor(IBlockState state)
+	{
+		return state;
+	}
+	
 }

@@ -15,6 +15,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockRedSandstone;
 import net.minecraft.block.BlockSand;
 import net.minecraft.block.BlockSandStone;
+import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Vec3;
@@ -137,6 +138,16 @@ public class LandAspectSand extends TerrainAspect
 	public ILandAspect getPrimaryVariant()
 	{
 		return LandAspectRegistry.fromName("Sand");
+	}
+	
+	@Override
+	public IBlockState getDecorativeBlockFor(IBlockState state)
+	{
+		if(state.getBlock() == Blocks.stonebrick)
+			return Blocks.stonebrick.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED);
+		else if(state.getBlock() == Blocks.sandstone)
+			return Blocks.sandstone.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.CHISELED);
+		else return Blocks.red_sandstone.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.CHISELED);
 	}
 	
 }

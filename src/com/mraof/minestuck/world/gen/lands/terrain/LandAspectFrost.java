@@ -12,6 +12,7 @@ import com.mraof.minestuck.world.gen.lands.decorator.LayeredBlockDecorator;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirt;
+import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Vec3;
@@ -97,6 +98,14 @@ public class LandAspectFrost extends TerrainAspect
 	public int getWeatherType()
 	{
 		return 1;
+	}
+	
+	@Override
+	public IBlockState getDecorativeBlockFor(IBlockState state)
+	{
+		if(state.getBlock() == Blocks.stonebrick)
+			return Blocks.stonebrick.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED);
+		return state;
 	}
 	
 }

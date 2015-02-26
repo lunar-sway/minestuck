@@ -24,7 +24,7 @@ public class CakeDecorator implements ILandDecorator
 				
 				int x = random.nextInt(16) + (chunkX << 4) + 8;
 				int z = random.nextInt(16) + (chunkZ << 4) + 8;
-				BlockPos pos = world.getTopSolidOrLiquidBlock(new BlockPos(x, 0, z));
+				BlockPos pos = world.getHorizon(new BlockPos(x, 0, z));
 				int bits = Math.max(0, (int) (random.nextDouble()*10) - 6);
 				if(Blocks.cake.canPlaceBlockAt(world, pos) && !world.getBlockState(pos).getBlock().getMaterial().isLiquid() && world.getBlockState(pos).getBlock() != Blocks.cake)
 					world.setBlockState(pos, Blocks.cake.getDefaultState().withProperty(BlockCake.BITES, bits));

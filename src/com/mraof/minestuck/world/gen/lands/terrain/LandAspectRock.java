@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.gen.lands.terrain;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Vec3;
@@ -80,6 +81,14 @@ public class LandAspectRock extends TerrainAspect
 	public Vec3 getFogColor()
 	{
 		return new Vec3(0.5, 0.5, 0.55);
+	}
+	
+	@Override
+	public IBlockState getDecorativeBlockFor(IBlockState state)
+	{
+		if(state.getBlock() == Blocks.stonebrick)
+			return Blocks.stonebrick.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED);
+		return state;
 	}
 	
 }

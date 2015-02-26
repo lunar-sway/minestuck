@@ -21,7 +21,7 @@ public class CogDecorator extends SimpleStructureDecorator
 			rotation = random.nextBoolean();
 			xCoord = ((chunkX << 4) | random.nextInt(16)) + 8;
 			zCoord = ((chunkZ << 4) | random.nextInt(16)) + 8;
-			yCoord = world.getTopSolidOrLiquidBlock(new BlockPos(xCoord, 0, zCoord)).getY() - blocksDown;
+			yCoord = world.getHorizon(new BlockPos(xCoord, 0, zCoord)).getY() - blocksDown;
 			if(world.getBlockState(new BlockPos(xCoord, yCoord, zCoord)).getBlock().getMaterial().isLiquid())
 				return;
 			

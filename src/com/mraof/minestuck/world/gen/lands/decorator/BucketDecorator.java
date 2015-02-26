@@ -24,7 +24,7 @@ public class BucketDecorator extends SimpleStructureDecorator
 			rotation = random.nextBoolean();
 			xCoord = (chunkX << 4) + random.nextInt(16) + 8;
 			zCoord = (chunkZ << 4) + random.nextInt(16) + 8;
-			yCoord = world.getTopSolidOrLiquidBlock(new BlockPos(xCoord, 0, zCoord)).getY() - random.nextInt(3);
+			yCoord = world.getHorizon(new BlockPos(xCoord, 0, zCoord)).getY() - random.nextInt(3);
 			IBlockState block = random.nextDouble() < 0.3 ? Blocks.iron_block.getDefaultState() : Blocks.quartz_block.getDefaultState();
 			IBlockState liquid;
 			if(random.nextBoolean())
