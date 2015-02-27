@@ -15,7 +15,7 @@ public class LandAspectBuckets extends TitleAspect	//Yes, buckets
 	@Override
 	public String[] getNames()
 	{
-		return new String[]{"Buckets"};
+		return new String[]{"bucket"};
 	}
 	
 	@Override

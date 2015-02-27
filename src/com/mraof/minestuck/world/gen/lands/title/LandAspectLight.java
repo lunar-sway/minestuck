@@ -15,7 +15,7 @@ public class LandAspectLight extends TitleAspect
 	@Override
 	public String[] getNames()
 	{
-		return new String[] {"Light", "Brightness"};
+		return new String[] {"light", "brightness"};
 	}
 	
 	@Override

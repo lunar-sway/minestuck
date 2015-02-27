@@ -61,7 +61,7 @@ public class LandAspectFrost extends TerrainAspect
 
 	@Override
 	public String[] getNames() {
-		return new String[] {"Frost", "Ice", "Snow"};
+		return new String[] {"frost", "ice", "snow"};
 	}
 
 	@Override

@@ -55,7 +55,7 @@ public class LandAspectHeat extends TerrainAspect
 
 	@Override
 	public String[] getNames() {
-		return new String[] {"Heat","Flame","Fire"};
+		return new String[] {"heat","flame","fire"};
 	}
 
 	@Override

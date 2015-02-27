@@ -61,7 +61,7 @@ public class LandAspectSandstone extends TerrainAspect
 	@Override
 	public String[] getNames()
 	{
-		return new String[] {"Sandstone", "Stony Deserts"};
+		return new String[] {"sandstone", "desertStone"};
 	}
 	
 	@Override

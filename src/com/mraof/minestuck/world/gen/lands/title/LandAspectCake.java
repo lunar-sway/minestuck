@@ -15,7 +15,7 @@ public class LandAspectCake extends TitleAspect
 	@Override
 	public String[] getNames()
 	{
-		return new String[] {"Cake", "Desserts"};
+		return new String[] {"cake", "dessert"};
 	}
 	
 	@Override

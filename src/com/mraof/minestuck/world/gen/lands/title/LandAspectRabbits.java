@@ -15,7 +15,7 @@ public class LandAspectRabbits extends TitleAspect
 	@Override
 	public String[] getNames()
 	{
-		return new String[] {"Rabbits", "Bunnies"};
+		return new String[] {"rabbit", "bunny"};
 	}
 	
 	@Override

@@ -14,7 +14,7 @@ public class LandAspectWind extends TitleAspect
 	@Override
 	public String[] getNames()
 	{
-		return new String[] {"Wind"};
+		return new String[] {"wind"};
 	}
 	
 	@Override

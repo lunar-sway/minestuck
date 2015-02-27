@@ -49,7 +49,7 @@ public class LandAspectRock extends TerrainAspect
 	@Override
 	public String[] getNames()
 	{
-		return new String[] {"Rock", "Stone", "Ore"};
+		return new String[] {"rock", "stone", "ore"};
 	}
 	
 	@Override

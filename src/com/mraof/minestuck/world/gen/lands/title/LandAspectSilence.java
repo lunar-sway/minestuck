@@ -15,7 +15,7 @@ public class LandAspectSilence extends TitleAspect
 	@Override
 	public String[] getNames()
 	{
-		return new String[]{"Silence"};
+		return new String[]{"silence"};
 	}
 	
 	@Override

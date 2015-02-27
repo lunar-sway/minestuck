@@ -24,7 +24,7 @@ public class LandAspectThought extends TitleAspect
 	@Override
 	public String[] getNames()
 	{
-		return new String[]{"Thought"};
+		return new String[]{"thought"};
 	}
 	
 	@Override

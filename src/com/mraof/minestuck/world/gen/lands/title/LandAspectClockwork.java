@@ -15,7 +15,7 @@ public class LandAspectClockwork extends TitleAspect
 	@Override
 	public String[] getNames()
 	{
-		return new String[]{"Clockwork", "Gears"};
+		return new String[]{"clockwork", "gear"};
 	}
 	
 	@Override

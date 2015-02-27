@@ -43,7 +43,7 @@ public class LandAspectForest extends TerrainAspect
 	@Override
 	public String[] getNames()
 	{
-		return new String[] {"Forests", "Trees"};
+		return new String[] {"forest", "tree"};
 	}
 	
 	@Override

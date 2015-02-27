@@ -49,7 +49,7 @@ public class LandAspectShade extends TerrainAspect
 
 	@Override
 	public String[] getNames() {
-		return new String[] {"Shade"};
+		return new String[] {"shade"};
 	}
 
 	@Override

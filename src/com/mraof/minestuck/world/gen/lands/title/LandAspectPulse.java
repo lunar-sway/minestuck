@@ -15,7 +15,7 @@ public class LandAspectPulse extends TitleAspect
 	@Override
 	public String[] getNames()
 	{
-		return new String[]{"Pulse", "Blood"};
+		return new String[]{"pulse", "blood"};
 	}
 	
 	@Override

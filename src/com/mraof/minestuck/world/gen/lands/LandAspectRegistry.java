@@ -54,9 +54,9 @@ public class LandAspectRegistry
 		registerLandAspect(new LandAspectPulse(), EnumAspect.BLOOD);
 		registerLandAspect(new LandAspectThought(), EnumAspect.MIND);
 		registerLandAspect(new LandAspectBuckets(), EnumAspect.SPACE);	//buckets -> containers -> space, right?
-		registerLandAspect(new LandAspectFear(), EnumAspect.RAGE);
 		registerLandAspect(new LandAspectCake(), EnumAspect.HEART);
 		registerLandAspect(new LandAspectRabbits(), EnumAspect.LIFE);
+//		registerLandAspect(???, EnumAspect.RAGE);
 //		registerLandAspect(???, EnumAspect.HOPE);
 		
 		landNames2.put(nullAspect.getPrimaryName(), nullAspect);
