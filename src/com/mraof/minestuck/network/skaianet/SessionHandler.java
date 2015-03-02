@@ -302,19 +302,19 @@ public class SessionHandler {
 			{
 				if(c == connection)
 					continue;
-				LandAspectRegistry.AspectCombination aspects = MinestuckDimensionHandler.getAspects((byte) c.clientHomeLand);
-				if(aspects.aspect2 == LandAspectRegistry.frogAspect)
+				LandAspectRegistry.AspectCombination aspects = MinestuckDimensionHandler.getAspects(c.clientHomeLand);
+				if(aspects.aspectTitle == LandAspectRegistry.frogAspect)
 					frogs = true;
 				else if(MinestuckPlayerData.getTitle(c.getClientName()).getHeroAspect() == title.getHeroAspect())
-					usedTitleAspects.add(aspects.aspect2);
-				usedTerrainAspects.add(aspects.aspect1);
+					usedTitleAspects.add(aspects.aspectTitle);
+				usedTerrainAspects.add(aspects.aspectTerrain);
 			}
 		
 //		if(title.getHeroAspect() == EnumAspect.SPACE && !frogs)
 //			return landHelper.frogAspect;
 		TitleAspect titleAspect = aspectGen.getTitleAspect(title.getHeroAspect(), usedTitleAspects);
 		TerrainAspect terrainAspect = aspectGen.getLandAspect(titleAspect, usedTerrainAspects);
-		MinestuckDimensionHandler.registerLandDimension((byte) connection.clientHomeLand, new AspectCombination(terrainAspect, titleAspect));
+		MinestuckDimensionHandler.registerLandDimension(connection.clientHomeLand, new AspectCombination(terrainAspect, titleAspect));
 		//MinestuckPlayerTracker.updateLands(); Lands need to be updated after setting the spawnpoint
 	}
 	
@@ -464,10 +464,11 @@ public class SessionHandler {
 	}
 	
 	static void onGameEntered(SburbConnection connection) {
-		Debug.print("Player Entered:"+connection.clientHomeLand);
 		generateTitle(connection.getClientName());
 		getPlayerSession(connection.getClientName()).checkIfCompleted();
 		genLandAspects(connection);
+		
+		
 	}
 	
 	static List<String> getServerList(String client) {

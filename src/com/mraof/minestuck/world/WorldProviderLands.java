@@ -55,10 +55,10 @@ public class WorldProviderLands extends WorldProvider
 	{
 		if (provider == null)
 		{
-			landAspect = MinestuckDimensionHandler.getAspects((byte)dimensionId);
+			landAspect = MinestuckDimensionHandler.getAspects(dimensionId);
 			
 			long seed = this.worldObj.isRemote ? Minestuck.worldSeed : this.worldObj.getSeed();
-			provider = landAspect.aspect2.createChunkProvider(this);
+			provider = landAspect.aspectTitle.createChunkProvider(this);
 			
 			
 			
@@ -79,7 +79,7 @@ public class WorldProviderLands extends WorldProvider
 	@Override
 	public BlockPos getSpawnPoint() 
 	{
-		BlockPos spawn = MinestuckDimensionHandler.getSpawn((byte) getDimensionId());
+		BlockPos spawn = MinestuckDimensionHandler.getSpawn(getDimensionId());
 		if(spawn != null)
 			return spawn;
 		else

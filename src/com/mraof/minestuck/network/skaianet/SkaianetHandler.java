@@ -447,14 +447,17 @@ public class SkaianetHandler {
 					c.centerZ = cc.getPos().getZ();
 					c.inventory = new NBTTagList();
 				}
-				if(cc != null && c.enteredGame && !MinestuckDimensionHandler.isLandDimension((byte)c.clientHomeLand))
+				if(cc != null && c.enteredGame && !MinestuckDimensionHandler.isLandDimension(c.clientHomeLand))
 					c.clientHomeLand = c.client.dimension;
 			}
-			if(c.enteredGame && !MinestuckDimensionHandler.isLandDimension((byte)c.clientHomeLand)) {
+			if(c.enteredGame && !MinestuckDimensionHandler.isLandDimension(c.clientHomeLand))
+			{
 				EntityPlayerMP player = MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(UsernameHandler.decode(c.getClientName()));
-				if(player != null) {
+				if(player != null)
+				{
 					c.clientHomeLand = player.dimension;
-					if(!MinestuckDimensionHandler.isLandDimension((byte)c.clientHomeLand)) {
+					if(!MinestuckDimensionHandler.isLandDimension(c.clientHomeLand))
+					{
 						iter2.remove();
 						SessionHandler.onConnectionClosed(c, false);
 						if(c.isActive) {

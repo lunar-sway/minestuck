@@ -24,7 +24,7 @@ public class RabbitSpawner extends PostDecorator
 					continue;
 				
 				EntityRabbit entity = new EntityRabbit(world);
-				entity.setPosition(x, pos.getY(), z);
+				entity.setPosition(x + 0.5, pos.getY(), z + 0.5);
 				entity.func_180482_a(null, null);
 				world.spawnEntityInWorld(entity);
 			}

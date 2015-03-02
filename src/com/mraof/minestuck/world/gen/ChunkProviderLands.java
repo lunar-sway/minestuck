@@ -69,8 +69,8 @@ public class ChunkProviderLands implements IChunkProvider
 		seed *= worldObj.provider.getDimensionId();
 		this.seed = seed;
 		helper = new LandAspectRegistry(seed);
-		aspect1 = worldProvider.landAspect.aspect1;
-		aspect2 = worldProvider.landAspect.aspect2;
+		aspect1 = worldProvider.landAspect.aspectTerrain;
+		aspect2 = worldProvider.landAspect.aspectTitle;
 		
 		NBTTagCompound landDataTag = (NBTTagCompound) worldObj.getWorldInfo().getAdditionalProperty("LandData");
 		
@@ -104,8 +104,8 @@ public class ChunkProviderLands implements IChunkProvider
 		this.noiseGens[1] = new NoiseGeneratorOctaves(this.random, 1);
 		noiseGeneratorTriangle = new NoiseGeneratorTriangle(this.random);
 		
-		this.surfaceBlock = (IBlockState) helper.pickElement(aspect1.getSurfaceBlocks());
-		this.upperBlock = (IBlockState) helper.pickElement(aspect1.getUpperBlocks());
+		this.surfaceBlock = helper.pickElement(aspect1.getSurfaceBlocks());
+		this.upperBlock = helper.pickElement(aspect1.getUpperBlocks());
 		TerrainAspect fluidAspect = aspect1;
 		this.oceanBlock = fluidAspect.getOceanBlock();
 		this.riverBlock = fluidAspect.getRiverBlock();

@@ -237,7 +237,7 @@ public class LandAspectRegistry
 		int id = SkaianetHandler.enterMedium((EntityPlayerMP)player, newLandId);
 		if(id != newLandId)	//Player already got a land, but the tag was somehow lost?
 			newLandId = id;
-		else MinestuckDimensionHandler.setSpawn((byte) newLandId, new BlockPos(player.posX, player.posY, player.posZ));
+		else MinestuckDimensionHandler.setSpawn(newLandId, new BlockPos(player.posX, player.posY, player.posZ));
 		
 		MinestuckPlayerTracker.updateLands();
 		
@@ -250,22 +250,22 @@ public class LandAspectRegistry
 	/**
 	 * Returns one random element from a list.
 	 */
-	public Object pickElement(Object[] list)
+	public <T> T pickElement(T[] list)
 	{
 		return list[random.nextInt(list.length)];
 	}
 	
 	public static class AspectCombination
 	{
-		public AspectCombination(TerrainAspect aspect1, TitleAspect aspect2)
+		public AspectCombination(TerrainAspect terrainAspect, TitleAspect titleAspect)
 		{
-			if(aspect1 == null || aspect2 == null)
+			if(terrainAspect == null || titleAspect == null)
 				throw new IllegalArgumentException("Parameters may not be null");
-			this.aspect1 = aspect1;
-			this.aspect2 = aspect2;
+			this.aspectTerrain = terrainAspect;
+			this.aspectTitle = titleAspect;
 		}
-		public TerrainAspect aspect1;
-		public TitleAspect aspect2;
+		public TerrainAspect aspectTerrain;
+		public TitleAspect aspectTitle;
 	}
 	
 }

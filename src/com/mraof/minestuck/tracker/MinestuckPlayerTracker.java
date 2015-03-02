@@ -5,6 +5,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.IChatComponent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.network.FMLOutboundHandler;
@@ -31,6 +33,9 @@ import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.util.TitleHelper;
 import com.mraof.minestuck.util.UpdateChecker;
 import com.mraof.minestuck.util.UsernameHandler;
+import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import com.mraof.minestuck.world.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.gen.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 public class MinestuckPlayerTracker {
@@ -141,6 +146,19 @@ public class MinestuckPlayerTracker {
 	public static void sendConfigPacket(EntityPlayer player) {
 		MinestuckPacket packet = MinestuckPacket.makePacket(Type.CONFIG);
 		MinestuckChannelHandler.sendToPlayer(packet, player);
+	}
+	
+	public static void sendLandEntryMessage(EntityPlayer player)
+	{
+		if(MinestuckDimensionHandler.isLandDimension(player.dimension))
+		{
+			LandAspectRegistry.AspectCombination aspects = MinestuckDimensionHandler.getAspects(player.dimension);
+			ChunkProviderLands chunkProvider = (ChunkProviderLands) player.worldObj.provider.createChunkGenerator();
+			IChatComponent aspect1 = new ChatComponentTranslation("land."+aspects.aspectTerrain.getNames()[chunkProvider.nameIndex1]);
+			IChatComponent aspect2 = new ChatComponentTranslation("land."+aspects.aspectTitle.getNames()[chunkProvider.nameIndex2]);
+			IChatComponent toSend = new ChatComponentTranslation("land.message.entry", aspect1, aspect2);
+			player.addChatComponentMessage(toSend);
+		}
 	}
 	
 }

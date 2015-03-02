@@ -21,14 +21,14 @@ import net.minecraftforge.fml.common.FMLLog;
 public class MinestuckDimensionHandler
 {
 	
-	private static Hashtable<Byte, LandAspectRegistry.AspectCombination> lands = new Hashtable<Byte, LandAspectRegistry.AspectCombination>();
-	private static Hashtable<Byte, BlockPos> spawnpoints = new Hashtable<Byte, BlockPos>();
+	private static Hashtable<Integer, LandAspectRegistry.AspectCombination> lands = new Hashtable<Integer, LandAspectRegistry.AspectCombination>();
+	private static Hashtable<Integer, BlockPos> spawnpoints = new Hashtable<Integer, BlockPos>();
 	
 	public static void unregisterDimensions()
 	{
-		for(Iterator<Byte> iterator = lands.keySet().iterator(); iterator.hasNext();)
+		for(Iterator<Integer> iterator = lands.keySet().iterator(); iterator.hasNext();)
 		{
-			byte b = iterator.next();
+			int b = iterator.next();
 			if(DimensionManager.isDimensionRegistered(b))
 			{
 				DimensionManager.unregisterDimension(b);
@@ -41,13 +41,13 @@ public class MinestuckDimensionHandler
 	public static void saveData(NBTTagCompound nbt)
 	{
 		NBTTagList list = new NBTTagList();
-		for(Map.Entry<Byte, LandAspectRegistry.AspectCombination> entry : lands.entrySet())
+		for(Map.Entry<Integer, LandAspectRegistry.AspectCombination> entry : lands.entrySet())
 		{
 			NBTTagCompound tagCompound = new NBTTagCompound();
-			tagCompound.setByte("dimID", entry.getKey());
+			tagCompound.setInteger("dimID", entry.getKey());
 			tagCompound.setString("type", "land");
-			tagCompound.setString("aspect1", entry.getValue().aspect1.getPrimaryName());
-			tagCompound.setString("aspect2", entry.getValue().aspect2.getPrimaryName());
+			tagCompound.setString("aspect1", entry.getValue().aspectTerrain.getPrimaryName());
+			tagCompound.setString("aspect2", entry.getValue().aspectTitle.getPrimaryName());
 			BlockPos spawn = spawnpoints.get(entry.getKey());
 			tagCompound.setInteger("spawnX", spawn.getX());
 			tagCompound.setInteger("spawnY", spawn.getY());
@@ -63,7 +63,7 @@ public class MinestuckDimensionHandler
 		for(int i = 0; i < list.tagCount(); i++)
 		{
 			NBTTagCompound tagCompound = list.getCompoundTagAt(i);
-			byte dim = tagCompound.getByte("dimID");
+			int dim = tagCompound.getInteger("dimID");
 			String type = tagCompound.getString("type");
 			if(type.equals("land"))
 			{
@@ -79,7 +79,7 @@ public class MinestuckDimensionHandler
 		}
 	}
 	
-	public static void registerLandDimension(byte dimensionId, LandAspectRegistry.AspectCombination landAspects)
+	public static void registerLandDimension(int dimensionId, LandAspectRegistry.AspectCombination landAspects)
 	{
 		if(landAspects == null)
 			throw new IllegalArgumentException("May not register a land aspect combination that is null");
@@ -91,7 +91,7 @@ public class MinestuckDimensionHandler
 		else FMLLog.warning("[Minestuck] Did not register land dimension with id %d.", dimensionId);
 	}
 	
-	public static LandAspectRegistry.AspectCombination getAspects(byte dimensionId)
+	public static LandAspectRegistry.AspectCombination getAspects(int dimensionId)
 	{
 		LandAspectRegistry.AspectCombination aspects = lands.get(dimensionId);
 		
@@ -103,12 +103,12 @@ public class MinestuckDimensionHandler
 		return aspects;
 	}
 	
-	public static boolean isLandDimension(byte dimensionId)
+	public static boolean isLandDimension(int dimensionId)
 	{
 		return lands.containsKey(dimensionId);
 	}
 	
-	public static Set<Map.Entry<Byte, LandAspectRegistry.AspectCombination>> getLandSet()
+	public static Set<Map.Entry<Integer, LandAspectRegistry.AspectCombination>> getLandSet()
 	{
 		return lands.entrySet();
 	}
@@ -123,19 +123,19 @@ public class MinestuckDimensionHandler
 		lands.putAll(packet.aspectMap);
 		spawnpoints.putAll(packet.spawnMap);
 		
-		for(byte dim : lands.keySet())
+		for(int dim : lands.keySet())
 		{
 			if(!DimensionManager.isDimensionRegistered(dim))
 				DimensionManager.registerDimension(dim, Minestuck.landProviderTypeId);
 		}
 	}
 	
-	public static BlockPos getSpawn(byte dim)
+	public static BlockPos getSpawn(int dim)
 	{
 		return spawnpoints.get(dim);
 	}
 	
-	public static void setSpawn(byte dim, BlockPos spawnpoint)
+	public static void setSpawn(int dim, BlockPos spawnpoint)
 	{
 		spawnpoints.put(dim, spawnpoint);
 	}

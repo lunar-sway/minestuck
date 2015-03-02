@@ -19,8 +19,11 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
 import com.mraof.minestuck.Minestuck;
+
 import static com.mraof.minestuck.MinestuckConfig.artifactRange;
+
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.ITeleporter;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
@@ -52,6 +55,7 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 			if(player.worldObj.provider.getDimensionId() != destinationId) {
 				player.triggerAchievement(MinestuckAchievementHandler.enterMedium);
 				Teleport.teleportEntity(player, destinationId, this);
+				MinestuckPlayerTracker.sendLandEntryMessage(player);
 			}
 		}
 	}

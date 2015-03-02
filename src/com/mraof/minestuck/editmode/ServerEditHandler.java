@@ -231,7 +231,7 @@ public class ServerEditHandler
 			return;
 		
 		SburbConnection c = data.connection;
-		int range = MinestuckDimensionHandler.isLandDimension((byte)player.dimension) ? MinestuckConfig.landEditRange : MinestuckConfig.overworldEditRange;
+		int range = MinestuckDimensionHandler.isLandDimension(player.dimension) ? MinestuckConfig.landEditRange : MinestuckConfig.overworldEditRange;
 		
 		updateInventory(player, c.givenItems(), c.enteredGame(), c.getClientName());
 		updatePosition(player, range, c.centerX, c.centerZ);

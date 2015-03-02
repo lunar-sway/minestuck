@@ -24,8 +24,8 @@ import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 public class LandRegisterPacket extends MinestuckPacket
 {
-	public HashMap<Byte, LandAspectRegistry.AspectCombination> aspectMap;
-	public HashMap<Byte, BlockPos> spawnMap;
+	public HashMap<Integer, LandAspectRegistry.AspectCombination> aspectMap;
+	public HashMap<Integer, BlockPos> spawnMap;
 	
 	public LandRegisterPacket() 
 	{
@@ -35,11 +35,11 @@ public class LandRegisterPacket extends MinestuckPacket
 	@Override
 	public MinestuckPacket generatePacket(Object... dat) 
 	{
-		for(Map.Entry<Byte, LandAspectRegistry.AspectCombination> entry : MinestuckDimensionHandler.getLandSet())
+		for(Map.Entry<Integer, LandAspectRegistry.AspectCombination> entry : MinestuckDimensionHandler.getLandSet())
 		{
-			this.data.writeByte(entry.getKey());
-			writeString(data, entry.getValue().aspect1.getPrimaryName()+"\n");
-			writeString(data, entry.getValue().aspect2.getPrimaryName()+"\n");
+			this.data.writeInt(entry.getKey());
+			writeString(data, entry.getValue().aspectTerrain.getPrimaryName()+"\n");
+			writeString(data, entry.getValue().aspectTitle.getPrimaryName()+"\n");
 			BlockPos spawn = MinestuckDimensionHandler.getSpawn(entry.getKey());
 			data.writeInt(spawn.getX());
 			data.writeInt(spawn.getY());
@@ -51,11 +51,11 @@ public class LandRegisterPacket extends MinestuckPacket
 	@Override
 	public MinestuckPacket consumePacket(ByteBuf data) 
 	{
-		aspectMap = new HashMap<Byte, LandAspectRegistry.AspectCombination>();
-		spawnMap = new HashMap<Byte, BlockPos>();
+		aspectMap = new HashMap<Integer, LandAspectRegistry.AspectCombination>();
+		spawnMap = new HashMap<Integer, BlockPos>();
 		while(data.readableBytes() > 0)
 		{
-			byte dim = data.readByte();
+			int dim = data.readInt();
 			String aspect1 = readLine(data);
 			String aspect2 = readLine(data);
 			BlockPos spawn = new BlockPos(data.readInt(), data.readInt(), data.readInt());
