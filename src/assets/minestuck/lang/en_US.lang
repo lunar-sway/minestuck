@@ -18,6 +18,8 @@ achievement.killOgre.desc=Kill an ogre.
 achievement.killGiclops=The bigger One
 achievement.killGiclops.desc=Kill a giclops.
 
+commands.checkLand.usage=/checkLand
+
 computer.buttonClear=Clear message
 computer.buttonClose=Disconnect
 computer.buttonConnect=%s

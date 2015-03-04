@@ -126,6 +126,7 @@ import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 import com.mraof.minestuck.tracker.ConnectionListener;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+import com.mraof.minestuck.util.CommandCheckLand;
 import com.mraof.minestuck.util.ComputerProgram;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
@@ -532,6 +533,9 @@ public class Minestuck
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event)
 	{
+		
+		event.registerServerCommand(new CommandCheckLand());
+		
 		worldSeed = event.getServer().worldServers[0].getSeed();
 		CaptchaDeckHandler.rand = new Random(worldSeed);	//Unsure whenether this will be better or not
 		
