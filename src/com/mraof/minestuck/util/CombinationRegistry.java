@@ -26,12 +26,22 @@ public class CombinationRegistry {
 		addCombination(input1.getItem(), useDamage1 ? input1.getItemDamage() : OreDictionary.WILDCARD_VALUE, input2.getItem(), useDamage2 ? input2.getItemDamage() : OreDictionary.WILDCARD_VALUE, mode, output);
 	}
 	
-	/**
-	 * input1 and input2 is an "Item" or a "String"
-	 */
-	public static void addCombination(Object input1, int damage1, Object input2, int damage2, boolean mode, ItemStack output)
+	public static void addCombination(String oreDictInput, ItemStack itemInput, boolean useDamage, boolean mode, ItemStack output)
 	{
-		if(input1.hashCode() >= input2.hashCode())
+		addCombination(oreDictInput, OreDictionary.WILDCARD_VALUE, itemInput.getItem(), useDamage ? itemInput.getItemDamage() : OreDictionary.WILDCARD_VALUE, mode, output);
+	}
+	
+	public static void addcombination(String input1, String input2, boolean mode, ItemStack output)
+	{
+		addCombination(input1, OreDictionary.WILDCARD_VALUE, input2, OreDictionary.WILDCARD_VALUE, mode, output);
+	}
+	
+	private static void addCombination(Object input1, int damage1, Object input2, int damage2, boolean mode, ItemStack output)
+	{
+		int index = input1.hashCode() - input2.hashCode();
+		if(index == 0)
+			index = damage1 - damage2;
+		if(index > 0)
 			combRecipes.put(Arrays.asList(input1, damage1, input2, damage2, mode), output);
 		else combRecipes.put(Arrays.asList(input2, damage2, input1, damage1, mode), output);
 	}
@@ -48,17 +58,17 @@ public class CombinationRegistry {
 			String[] itemNames2 = getDictionaryNames(input2);
 			
 			for(String str2 : itemNames2)
-				if((item = getCombination(input1.getItem(), input1.getItemDamage(), str2, input2.getItemDamage(), mode)) != null)
+				if((item = getCombination(input1.getItem(), input1.getItemDamage(), str2, OreDictionary.WILDCARD_VALUE, mode)) != null)
 					return item;
 			
 			String[] itemNames1 = getDictionaryNames(input1);
 			for(String str1 : itemNames1)
-				if((item = getCombination(str1, input1.getItemDamage(), input2.getItem(), input2.getItemDamage(), mode)) != null)
+				if((item = getCombination(str1, OreDictionary.WILDCARD_VALUE, input2.getItem(), input2.getItemDamage(), mode)) != null)
 					return item;
 			
 			for(String str1 : itemNames1)
 				for(String str2 : itemNames2)
-					if((item = getCombination(str1, input1.getItemDamage(), str2, input2.getItemDamage(), mode)) != null)
+					if((item = getCombination(str1, OreDictionary.WILDCARD_VALUE, str2, OreDictionary.WILDCARD_VALUE, mode)) != null)
 						return item;
 		}
 		
@@ -73,20 +83,24 @@ public class CombinationRegistry {
 	private static ItemStack getCombination(Object input1, int damage1, Object input2, int damage2, boolean mode)
 	{
 		ItemStack item;
+		boolean b1 = damage1 == OreDictionary.WILDCARD_VALUE, b2 = damage1 == OreDictionary.WILDCARD_VALUE;
 		
-		if(input1.hashCode() >= input2.hashCode())
+		int index = input1.hashCode() - input2.hashCode();
+		if(index == 0)
+			index = damage1 - damage2;
+		if(index > 0)
 		{
 			if((item = combRecipes.get(Arrays.asList(input1, damage1, input2, damage2, mode))) != null);
-			else if((item = combRecipes.get(Arrays.asList(input1, damage1, input2, OreDictionary.WILDCARD_VALUE, mode))) != null);
-			else if((item = combRecipes.get(Arrays.asList(input1, OreDictionary.WILDCARD_VALUE, input2, damage2, mode))) != null);
-			else item = combRecipes.get(Arrays.asList(input1, OreDictionary.WILDCARD_VALUE, input2, OreDictionary.WILDCARD_VALUE, mode));
+			else if(b2 && (item = combRecipes.get(Arrays.asList(input1, damage1, input2, OreDictionary.WILDCARD_VALUE, mode))) != null);
+			else if(b1 && (item = combRecipes.get(Arrays.asList(input1, OreDictionary.WILDCARD_VALUE, input2, damage2, mode))) != null);
+			else if(b1 && b2) item = combRecipes.get(Arrays.asList(input1, OreDictionary.WILDCARD_VALUE, input2, OreDictionary.WILDCARD_VALUE, mode));
 		}
 		else
 		{
 			if((item = combRecipes.get(Arrays.asList(input2, damage2, input1, damage1, mode))) != null);
-			else if((item = combRecipes.get(Arrays.asList(input2, OreDictionary.WILDCARD_VALUE, input1, damage1, mode))) != null);
-			else if((item = combRecipes.get(Arrays.asList(input2, damage2, input1, OreDictionary.WILDCARD_VALUE, mode))) != null);
-			else item = combRecipes.get(Arrays.asList(input2, OreDictionary.WILDCARD_VALUE, input1, OreDictionary.WILDCARD_VALUE, mode));
+			else if(b2 && (item = combRecipes.get(Arrays.asList(input2, OreDictionary.WILDCARD_VALUE, input1, damage1, mode))) != null);
+			else if(b1 && (item = combRecipes.get(Arrays.asList(input2, damage2, input1, OreDictionary.WILDCARD_VALUE, mode))) != null);
+			else if(b1 && b2) item = combRecipes.get(Arrays.asList(input2, OreDictionary.WILDCARD_VALUE, input1, OreDictionary.WILDCARD_VALUE, mode));
 		}
 		
 		return item;

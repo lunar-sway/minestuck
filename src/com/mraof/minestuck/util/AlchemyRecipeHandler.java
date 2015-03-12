@@ -297,8 +297,8 @@ public class AlchemyRecipeHandler {
 		//metadata-based
 		for (int meta = 0; meta < BlockSapling.field_149882_a.length; meta++) {
 			ItemStack log = new ItemStack(meta < 4?Blocks.log:Blocks.log2, 1, meta < 4?meta:meta-4);	//I think that's how it works.
-			CombinationRegistry.addCombination(Item.getItemFromBlock(Blocks.sapling), meta, "logWood", OreDictionary.WILDCARD_VALUE, CombinationRegistry.MODE_AND, log);
-			CombinationRegistry.addCombination(log.getItem(), log.getItemDamage(), "treeSapling", OreDictionary.WILDCARD_VALUE, CombinationRegistry.MODE_OR, new ItemStack(Blocks.sapling, 1, meta));
+			CombinationRegistry.addCombination("logWood", new ItemStack(Blocks.sapling, 1, meta), true, CombinationRegistry.MODE_AND, log);
+			CombinationRegistry.addCombination("treeSapling", log, true, CombinationRegistry.MODE_OR, new ItemStack(Blocks.sapling, 1, meta));
 		}
 		for (int meta = 0;meta <= 15;meta++) {
 			CombinationRegistry.addCombination(new ItemStack(Items.dye,1,meta^15),new ItemStack(Blocks.wool),CombinationRegistry.MODE_AND, true,false, new ItemStack(Blocks.wool,1,meta));
