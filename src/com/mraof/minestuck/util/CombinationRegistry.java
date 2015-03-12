@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.mraof.minestuck.Minestuck;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -28,10 +29,15 @@ public class CombinationRegistry {
 	
 	public static void addCombination(String oreDictInput, ItemStack itemInput, boolean useDamage, boolean mode, ItemStack output)
 	{
-		addCombination(oreDictInput, OreDictionary.WILDCARD_VALUE, itemInput.getItem(), useDamage ? itemInput.getItemDamage() : OreDictionary.WILDCARD_VALUE, mode, output);
+		addCombination(oreDictInput, itemInput.getItem(), useDamage ? itemInput.getItemDamage() : OreDictionary.WILDCARD_VALUE, mode, output);
 	}
 	
-	public static void addcombination(String input1, String input2, boolean mode, ItemStack output)
+	public static void addCombination(String oreDictInput, Item item, int damage, boolean mode, ItemStack output)
+	{
+		addCombination(oreDictInput, OreDictionary.WILDCARD_VALUE, item, damage, mode, output);
+	}
+	
+	public static void addCombination(String input1, String input2, boolean mode, ItemStack output)
 	{
 		addCombination(input1, OreDictionary.WILDCARD_VALUE, input2, OreDictionary.WILDCARD_VALUE, mode, output);
 	}
