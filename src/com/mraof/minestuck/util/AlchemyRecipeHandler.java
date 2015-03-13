@@ -34,6 +34,7 @@ import com.mraof.minestuck.modSupport.Minegicka3Support;
 import com.mraof.minestuck.modSupport.ModSupport;
 import com.mraof.minestuck.modSupport.NeverSayNetherSupport;
 import com.mraof.minestuck.modSupport.TinkersConstructSupport;
+import com.mraof.minestuck.modSupport.minetweaker.Minetweaker3Support;
 import com.mraof.minestuck.world.gen.lands.LandAspectFrost;
 import com.mraof.minestuck.world.gen.lands.LandAspectHeat;
 import com.mraof.minestuck.world.gen.lands.LandAspectPulse;
@@ -490,6 +491,9 @@ public class AlchemyRecipeHandler {
 		registerRecipes(new NeverSayNetherSupport(), "nsn", false);
 		registerRecipes(new ExtraUtilitiesSupport(), "ExtraUtilities", false);
 		registerRecipes(new TinkersConstructSupport(), "TConstruct", false);
+		
+		if(Loader.isModLoaded("MineTweaker3"))
+			Minetweaker3Support.registerClasses();
 		
 	}
 	

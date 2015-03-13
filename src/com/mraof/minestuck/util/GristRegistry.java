@@ -34,12 +34,7 @@ public class GristRegistry {
 	
 	public static void addGristConversion(String name, GristSet grist)
 	{
-		addGristConversion(name, OreDictionary.WILDCARD_VALUE, grist);
-	}
-	
-	public static void addGristConversion(String name, int metadata, GristSet grist)
-	{
-		gristRecipes.put(Arrays.asList((Object)name, metadata), grist);
+		gristRecipes.put(Arrays.asList((Object) name, OreDictionary.WILDCARD_VALUE), grist);
 	}
 	
 	/**
@@ -57,12 +52,8 @@ public class GristRegistry {
 		{
 			String[] names = CombinationRegistry.getDictionaryNames(item);
 			for(String str : names)
-			{
-				if((grist = gristRecipes.get(Arrays.asList(str, item.getItemDamage()))) != null)
+				if((grist = gristRecipes.get(Arrays.asList(str, OreDictionary.WILDCARD_VALUE))) != null)
 					break;
-				else if((grist = gristRecipes.get(Arrays.asList(str, OreDictionary.WILDCARD_VALUE))) != null)
-					break;
-			}
 		}
 		return grist;
 	}
