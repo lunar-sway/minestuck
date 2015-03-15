@@ -37,6 +37,8 @@ public class MinestuckConfig
 	public static boolean clientGiveItems;
 	@SideOnly(Side.CLIENT)
 	public static boolean clientInfTreeModus;
+	@SideOnly(Side.CLIENT)
+	public static boolean oldItemModels;
 	
 	public static boolean hardMode = false;
 	public static boolean generateCruxiteOre;
@@ -121,6 +123,7 @@ public class MinestuckConfig
 		
 		if(gameSide.isClient())	//Client sided config values
 		{
+			oldItemModels = config.get("General", "oldItemModels", false, "Set this to true to have back all old 2D item models.").setRequiresMcRestart(true).setLanguageKey("minestuck.config.oldItemModels").getBoolean();
 			//specialCardRenderer = config.getBoolean("specialCardRenderer", "General", false, "Whenether to use the special render for cards or not.");
 			if(specialCardRenderer && !GLContext.getCapabilities().GL_EXT_framebuffer_object)
 			{

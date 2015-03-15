@@ -16,6 +16,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.BlockChessTile;
 import com.mraof.minestuck.block.BlockMachine;
 import com.mraof.minestuck.block.BlockStorage;
@@ -42,7 +43,6 @@ public class MinestuckTextureManager
 		register(Minestuck.pogoHammer);
 		register(Minestuck.telescopicSassacrusher);
 		register(Minestuck.fearNoAnvil);
-		register(Minestuck.zillyhooHammer);
 		register(Minestuck.popamaticVrillyhoo);
 		register(Minestuck.scarletZillyhoo);
 		
@@ -68,6 +68,14 @@ public class MinestuckTextureManager
 		
 		modelRegistry.register(Minestuck.crockerSpork, new CrockerSporkDefinition());
 		register(Minestuck.skaiaFork);
+		
+		if(MinestuckConfig.oldItemModels)
+		{
+			register(Minestuck.zillyhooHammer, 0, "zillyhoo_hammer_old");
+		} else
+		{
+			register(Minestuck.zillyhooHammer);
+		}
 		
 		register(Minestuck.rawCruxite);
 		modelRegistry.register(Minestuck.cruxiteDowel, new CruxiteDowelDefinition());
@@ -125,6 +133,10 @@ public class MinestuckTextureManager
 		ModelBakery.addVariantName(Minestuck.minestuckBucket, "minestuck:bucket_blood", "minestuck:bucket_oil", "minestuck:bucket_brain_juice");
 		ModelBakery.addVariantName(Minestuck.captchaCard, "minestuck:card_empty", "minestuck:card_full", "minestuck:card_punched");
 		ModelBakery.addVariantName(Minestuck.ninjaSword, "minestuck:katana");	//To prevent the game to try to load "minestuck:ninja_sword"
+		if(MinestuckConfig.oldItemModels)
+		{
+			ModelBakery.addVariantName(Minestuck.zillyhooHammer, "minestuck:zillyhoo_hammer_old");
+		}
 		
 		String[] str = new String[Minestuck.captchaModus.modusNames.length];
 		for(int i = 0; i < str.length; i++)

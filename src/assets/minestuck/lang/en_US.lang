@@ -224,6 +224,9 @@ minestuck.config.landEditRange.tooltip=The maximum amount of blocks away from th
 minestuck.config.artifactRange=Artifact Range
 minestuck.config.artifactRange.tooltip=The radius of the area brought to the medium.
 
+minestuck.config.oldItemModels=Use Old Item Models
+minestuck.config.oldItemModels.tooltip=Set this to true to have back all old 2D item models.
+
 both=Both
 off=Off
 on=On
