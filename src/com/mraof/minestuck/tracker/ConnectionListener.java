@@ -23,10 +23,6 @@ public class ConnectionListener
 		Minestuck.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.DISPATCHER);
 		Minestuck.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(event.manager.channel().attr(NetworkDispatcher.FML_DISPATCHER).get());
 		Minestuck.channels.get(Side.SERVER).writeOutbound(packet);
-		
-		MinestuckPacket infoPacket = MinestuckPacket.makePacket(Type.INFO);
-		
-		Minestuck.channels.get(Side.SERVER).writeOutbound(infoPacket);
 	}
 	
 	@SubscribeEvent

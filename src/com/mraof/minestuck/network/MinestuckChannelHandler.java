@@ -49,7 +49,7 @@ public class MinestuckChannelHandler extends FMLIndexedMessageToMessageCodec<Min
 		switch (side)
 		{
 		case CLIENT:
-			if(msg instanceof MinestuckInfoPacket || msg instanceof LandRegisterPacket)
+			if(msg instanceof LandRegisterPacket)
 				msg.execute(null);
 			else synchronized(clientQueue)
 			{

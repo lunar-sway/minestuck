@@ -21,8 +21,11 @@ public class LandAspectRabbits extends TitleAspect
 	@Override
 	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
-		chunkProvider.decorators.add(new RabbitSpawner());
-		chunkProvider.sortDecorators();
+		if(chunkProvider.decorators != null)
+		{
+			chunkProvider.decorators.add(new RabbitSpawner());
+			chunkProvider.sortDecorators();
+		}
 	}
 	
 }

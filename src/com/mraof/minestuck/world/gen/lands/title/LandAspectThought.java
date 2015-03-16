@@ -30,6 +30,9 @@ public class LandAspectThought extends TitleAspect
 	@Override
 	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
+		
+		if(chunkProvider.decorators == null)
+			return;
 		if(chunkProvider.surfaceBlock.getBlock().getMaterial() == Material.ground)
 		{
 			chunkProvider.surfaceBlock = Minestuck.coloredDirt.getDefaultState().withProperty(BlockColoredDirt.BLOCK_TYPE, BlockColoredDirt.BlockType.THOUGHT);

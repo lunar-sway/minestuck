@@ -21,7 +21,7 @@ public abstract class TitleAspect implements ILandAspect
 	
 	public ChunkProviderLands createChunkProvider(WorldProviderLands land)
 	{
-		ChunkProviderLands chunkProvider = new ChunkProviderLands(land.getWorld(), land, land.getWorld().isRemote ? Minestuck.worldSeed : land.getSeed());
+		ChunkProviderLands chunkProvider = new ChunkProviderLands(land.getWorld(), land, land.getWorld().isRemote);
 		prepareChunkProvider(chunkProvider);
 		return chunkProvider;
 	}

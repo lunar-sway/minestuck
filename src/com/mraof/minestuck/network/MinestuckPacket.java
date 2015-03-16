@@ -26,7 +26,6 @@ public abstract class MinestuckPacket
 		CLIENT_EDIT(ClientEditPacket.class),
 		SERVER_EDIT(ServerEditPacket.class),
 		CONFIG(MinestuckConfigPacket.class), 
-		INFO(MinestuckInfoPacket.class),
 		TRANSPORTALIZER(TransportalizerPacket.class),
 		CONTAINER(MiscContainerPacket.class),
 		INVENTORY(InventoryChangedPacket.class),

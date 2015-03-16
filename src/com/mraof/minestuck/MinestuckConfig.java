@@ -48,7 +48,6 @@ public class MinestuckConfig
 	public static boolean infiniteTreeModus;
 	public static boolean cardRecipe;
 	public static boolean cardLoot;
-	public static boolean simpleLandAspectGen;
 	public static String privateMessage;
 	public static int artifactRange;
 	public static int overworldEditRange;
@@ -120,7 +119,6 @@ public class MinestuckConfig
 		overworldEditRange = config.get("General", "overworldEditRange", 15, "A number that determines how far away from the computer an editmode player may be before entry.", 3, 50).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.overworldEditRange").getInt();
 		landEditRange = config.get("General", "landEditRange", 30, "A number that determines how far away from the center of the brought land that an editmode player may be after entry.", 3, 50).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.landEditRange").getInt();
 		artifactRange = config.get("General", "artifactRange", 30, "Radius of the land brought into the medium.", 3, 50).setLanguageKey("minestuck.config.artifactRange").getInt();
-		simpleLandAspectGen = config.get("General", "simpleLandAspectGen", true, "If this is disabled, land aspects").getBoolean();
 		
 		if(gameSide.isClient())	//Client sided config values
 		{

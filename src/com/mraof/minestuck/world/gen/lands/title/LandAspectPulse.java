@@ -21,8 +21,11 @@ public class LandAspectPulse extends TitleAspect
 	@Override
 	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
-//		chunkProvider.oceanBlock = Minestuck.blockBlood;	Enable when mod fluids work
-//		chunkProvider.riverBlock = Minestuck.blockBlood;
+		if(chunkProvider.decorators != null)
+		{
+//			chunkProvider.oceanBlock = Minestuck.blockBlood;	Enable when mod fluids work
+//			chunkProvider.riverBlock = Minestuck.blockBlood;
+		}
 	}
 
 }

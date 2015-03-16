@@ -24,6 +24,7 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.consort.EntityIguana;
 import com.mraof.minestuck.entity.consort.EntityNakagator;
 import com.mraof.minestuck.entity.consort.EntitySalamander;
@@ -58,38 +59,21 @@ public class ChunkProviderLands implements IChunkProvider
 	public IBlockState upperBlock;
 	public IBlockState oceanBlock;
 	public IBlockState riverBlock;
-	public TerrainAspect terrainMapper;
 	public ArrayList<ILandDecorator> decorators;
 	public int dayCycle;
 	public int weatherType;	//-1:No weather &1: rainy or snowy &2:If thunder &4:If neverending
 
 	@SuppressWarnings("unchecked")
-	public ChunkProviderLands(World worldObj, WorldProviderLands worldProvider, long seed)
+	public ChunkProviderLands(World worldObj, WorldProviderLands worldProvider, boolean clientSide)
 	{
-		seed *= worldObj.provider.getDimensionId();
-		this.seed = seed;
-		helper = new LandAspectRegistry(seed);
-		aspect1 = worldProvider.landAspect.aspectTerrain;
-		aspect2 = worldProvider.landAspect.aspectTitle;
+		
+		aspect1 = worldProvider.landAspects.aspectTerrain;
+		aspect2 = worldProvider.landAspects.aspectTitle;
 		
 		NBTTagCompound landDataTag = (NBTTagCompound) worldObj.getWorldInfo().getAdditionalProperty("LandData");
 		
 		this.landWorld = worldObj;
 		
-		if (landDataTag == null)
-		{
-			Random rand = new Random(seed);
-			nameIndex1 = rand.nextInt(aspect1.getNames().length);	//Better way to generate these?
-			nameIndex2 = rand.nextInt(aspect2.getNames().length);
-			saveData();
-		}
-		else
-		{
-			nameIndex1 = landDataTag.getByte("aspectName1");
-			nameIndex2 = landDataTag.getByte("aspectName2");
-		}
-		
-		this.random = new Random(seed);
 		this.consortList = new ArrayList<SpawnListEntry>();
 		this.underlingList = new ArrayList<SpawnListEntry>();
 		this.consortList.add(new SpawnListEntry(EntityNakagator.class, 2, 1, 10));
@@ -100,22 +84,32 @@ public class ChunkProviderLands implements IChunkProvider
 		this.underlingList.add(new SpawnListEntry(EntityBasilisk.class, 3, 1, 2));
 		this.underlingList.add(new SpawnListEntry(EntityGiclops.class, 1, 1, 1));
 		this.underlingList.add(new SpawnListEntry(EntityBasilisk.class, 1, 1, 1));
-		this.noiseGens[0] = new NoiseGeneratorOctaves(this.random, 7);
-		this.noiseGens[1] = new NoiseGeneratorOctaves(this.random, 1);
-		noiseGeneratorTriangle = new NoiseGeneratorTriangle(this.random);
 		
-		this.surfaceBlock = helper.pickElement(aspect1.getSurfaceBlocks());
-		this.upperBlock = helper.pickElement(aspect1.getUpperBlocks());
-		TerrainAspect fluidAspect = aspect1;
-		this.oceanBlock = fluidAspect.getOceanBlock();
-		this.riverBlock = fluidAspect.getRiverBlock();
-		this.terrainMapper = aspect1;
-		this.decorators = helper.pickSubset(aspect1.getOptionalDecorators(), 3, 5);
-		this.decorators.addAll(aspect1.getRequiredDecorators());
-		sortDecorators();
 		this.dayCycle = aspect1.getDayCycleMode();
 		this.skyColor = aspect1.getFogColor();
 		this.weatherType = aspect1.getWeatherType();
+		
+		if(!clientSide)
+		{
+			seed = worldObj.getSeed()*worldObj.provider.getDimensionId();
+			helper = new LandAspectRegistry(seed);
+			
+			Random rand = new Random(seed);
+			nameIndex1 = rand.nextInt(aspect1.getNames().length);
+			nameIndex2 = rand.nextInt(aspect2.getNames().length);
+			
+			this.random = new Random(seed);
+			this.noiseGens[0] = new NoiseGeneratorOctaves(this.random, 7);
+			this.noiseGens[1] = new NoiseGeneratorOctaves(this.random, 1);
+			noiseGeneratorTriangle = new NoiseGeneratorTriangle(this.random);
+			this.surfaceBlock = helper.pickElement(aspect1.getSurfaceBlocks());
+			this.upperBlock = helper.pickElement(aspect1.getUpperBlocks());
+			this.oceanBlock = aspect1.getOceanBlock();
+			this.riverBlock = aspect1.getRiverBlock();
+			this.decorators = helper.pickSubset(aspect1.getOptionalDecorators(), 3, 5);
+			this.decorators.addAll(aspect1.getRequiredDecorators());
+			sortDecorators();
+		}
 	}
 	
 	public void sortDecorators()	//Called after an aspect have added elements to the decorators list.
@@ -246,18 +240,6 @@ public class ChunkProviderLands implements IChunkProvider
 		return this.skyColor;
 	}
 	
-	public void saveData()
-	{
-		
-		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setByte("aspectName1", (byte) nameIndex1);
-		nbt.setByte("aspectName2", (byte) nameIndex2);
-		
-		Map<String, NBTBase> dataTag = new Hashtable<String,NBTBase>();
-		dataTag.put("landData", nbt);
-		landWorld.getWorldInfo().setAdditionalProperties(dataTag);
-	}
-
 	@Override
 	public Chunk provideChunk(BlockPos pos)
 	{

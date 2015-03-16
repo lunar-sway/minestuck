@@ -26,7 +26,7 @@ import com.mraof.minestuck.world.gen.lands.title.TitleAspect;
 public class WorldProviderLands extends WorldProvider 
 {
 	private ChunkProviderLands provider;
-	public LandAspectRegistry.AspectCombination landAspect;
+	public LandAspectRegistry.AspectCombination landAspects;
 	
 	@Override
 	public float calculateCelestialAngle(long par1, float par3)
@@ -55,12 +55,9 @@ public class WorldProviderLands extends WorldProvider
 	{
 		if (provider == null)
 		{
-			landAspect = MinestuckDimensionHandler.getAspects(dimensionId);
+			landAspects = MinestuckDimensionHandler.getAspects(dimensionId);
 			
-			long seed = this.worldObj.isRemote ? Minestuck.worldSeed : this.worldObj.getSeed();
-			provider = landAspect.aspectTitle.createChunkProvider(this);
-			
-			
+			provider = landAspects.aspectTitle.createChunkProvider(this);
 			
 		}
 		return provider;
