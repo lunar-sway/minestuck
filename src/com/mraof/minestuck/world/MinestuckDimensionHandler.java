@@ -9,7 +9,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.LandRegisterPacket;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.ChunkProviderLands;
-import com.mraof.minestuck.world.gen.lands.LandAspectRegistry;
+import com.mraof.minestuck.world.lands.LandAspectRegistry;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;

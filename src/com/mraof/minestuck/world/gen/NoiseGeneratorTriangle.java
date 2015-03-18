@@ -29,7 +29,7 @@ public class NoiseGeneratorTriangle
 		return (triangleNoise(x, amplitudes[0], frequencies[0]) + triangleNoise(x, amplitudes[1], frequencies[1]) + triangleNoise(x, amplitudes[2], frequencies[1]) + triangleNoise(z, amplitudes[3], frequencies[3]) + triangleNoise(z, amplitudes[4], frequencies[4])) / 5;
 	}
 	
-	double[] generateNoiseTriangle(double[] heightMap, double xOffset, double zOffset, int xSize, int zSize)
+	public double[] generateNoiseTriangle(double[] heightMap, double xOffset, double zOffset, int xSize, int zSize)
 	{
 		double[] noise = new double[xSize * zSize];
 		for(int x = 0; x < xSize; x++)

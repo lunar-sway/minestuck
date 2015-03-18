@@ -19,9 +19,9 @@ import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.biome.BiomeGenMinestuck;
 import com.mraof.minestuck.world.gen.ChunkProviderLands;
-import com.mraof.minestuck.world.gen.lands.LandAspectRegistry;
-import com.mraof.minestuck.world.gen.lands.terrain.TerrainAspect;
-import com.mraof.minestuck.world.gen.lands.title.TitleAspect;
+import com.mraof.minestuck.world.lands.LandAspectRegistry;
+import com.mraof.minestuck.world.lands.terrain.TerrainAspect;
+import com.mraof.minestuck.world.lands.title.TitleAspect;
 
 public class WorldProviderLands extends WorldProvider 
 {

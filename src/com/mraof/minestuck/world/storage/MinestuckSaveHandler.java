@@ -15,7 +15,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
-import com.mraof.minestuck.world.gen.lands.LandAspectRegistry.AspectCombination;
+import com.mraof.minestuck.world.lands.LandAspectRegistry.AspectCombination;
 import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 
 public class MinestuckSaveHandler 

@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.gen.ChunkProviderLands;
-import com.mraof.minestuck.world.gen.lands.LandAspectRegistry;
+import com.mraof.minestuck.world.lands.LandAspectRegistry;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;

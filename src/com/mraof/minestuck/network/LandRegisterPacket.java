@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
-import com.mraof.minestuck.world.gen.lands.LandAspectRegistry;
+import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 public class LandRegisterPacket extends MinestuckPacket

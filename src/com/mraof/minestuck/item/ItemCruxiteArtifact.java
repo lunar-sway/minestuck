@@ -29,7 +29,7 @@ import com.mraof.minestuck.util.ITeleporter;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.gen.ChunkProviderLands;
-import com.mraof.minestuck.world.gen.lands.LandAspectRegistry;
+import com.mraof.minestuck.world.lands.LandAspectRegistry;
 
 public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 {
