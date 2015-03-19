@@ -17,6 +17,7 @@ public abstract class Modus
 	
 	/**
 	 * This is called when the modus is created without calling readFromNBT(nbt).
+	 * Note that this method is used to clear the inventory/size after dropping stuff on death without creating a new instance.
 	 */
 	public abstract void initModus(ItemStack[] prev, int size);
 	
@@ -47,7 +48,7 @@ public abstract class Modus
 		ModusType type = ModusType.getType(this);
 		if(type == null)
 			return "";
-		else return new ItemStack(Minestuck.captchaModus, 1, type.ordinal()).getDisplayName();
+		else return new ItemStack(Minestuck.modusCard, 1, type.ordinal()).getDisplayName();
 	}
 	
 }

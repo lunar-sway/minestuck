@@ -199,7 +199,7 @@ public class Minestuck
 	public static Item cruxiteArtifact;
 	public static Item disk;
 	public static Item component;
-	public static ItemModus captchaModus;
+	public static ItemModus modusCard;
 	public static ItemMinestuckBucket minestuckBucket;
 	public static ItemGoldSeeds goldSeeds;	//This item is pretty much only a joke
 	public static ItemMetalBoat metalBoat;
@@ -323,7 +323,7 @@ public class Minestuck
 		disk = new ItemDisk();
 		component = new ItemComponent();
 		minestuckBucket = new ItemMinestuckBucket();
-		captchaModus = new ItemModus();
+		modusCard = new ItemModus();
 		goldSeeds = new ItemGoldSeeds();
 		metalBoat = new ItemMetalBoat();
 		
@@ -370,7 +370,7 @@ public class Minestuck
 		GameRegistry.registerItem(disk, "computer_disk");
 		GameRegistry.registerItem(component, "component");
 		GameRegistry.registerItem(minestuckBucket, "minestuck_bucket");
-		GameRegistry.registerItem(captchaModus, "modus_card");
+		GameRegistry.registerItem(modusCard, "modus_card");
 		GameRegistry.registerItem(goldSeeds, "gold_seeds");
 		GameRegistry.registerItem(metalBoat, "metal_boat");
 		
@@ -444,6 +444,7 @@ public class Minestuck
 		MinecraftForge.EVENT_BUS.register(new MinestuckFluidHandler());
 		MinecraftForge.EVENT_BUS.register(ServerEditHandler.instance);
 		MinecraftForge.EVENT_BUS.register(MinestuckAchievementHandler.instance);
+		MinecraftForge.EVENT_BUS.register(MinestuckPlayerTracker.instance);
 		
 		FMLCommonHandler.instance().bus().register(MinestuckPlayerTracker.instance);
 		FMLCommonHandler.instance().bus().register(ServerEditHandler.instance);

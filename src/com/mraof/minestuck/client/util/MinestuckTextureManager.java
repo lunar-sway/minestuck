@@ -89,8 +89,8 @@ public class MinestuckTextureManager
 		register(Minestuck.minestuckBucket, 0, "bucket_blood");
 		register(Minestuck.minestuckBucket, 1, "bucket_oil");
 		register(Minestuck.minestuckBucket, 2, "bucket_brain_juice");
-		for(int i = 0; i < Minestuck.captchaModus.modusNames.length; i++)
-			register(Minestuck.captchaModus, i, "modus_" + Minestuck.captchaModus.modusNames[i]);
+		for(int i = 0; i < Minestuck.modusCard.modusNames.length; i++)
+			register(Minestuck.modusCard, i, "modus_" + Minestuck.modusCard.modusNames[i]);
 		register(Minestuck.goldSeeds);
 		for(int i = 0; i < Minestuck.metalBoat.names.length; i++)
 			register(Minestuck.metalBoat, i, "boat_"+Minestuck.metalBoat.names[i]);
@@ -138,10 +138,10 @@ public class MinestuckTextureManager
 			ModelBakery.addVariantName(Minestuck.zillyhooHammer, "minestuck:zillyhoo_hammer_old");
 		}
 		
-		String[] str = new String[Minestuck.captchaModus.modusNames.length];
+		String[] str = new String[Minestuck.modusCard.modusNames.length];
 		for(int i = 0; i < str.length; i++)
-			str[i] = "minestuck:modus_"+Minestuck.captchaModus.modusNames[i];
-		ModelBakery.addVariantName(Minestuck.captchaModus, str);
+			str[i] = "minestuck:modus_"+Minestuck.modusCard.modusNames[i];
+		ModelBakery.addVariantName(Minestuck.modusCard, str);
 		for(String s : Minestuck.metalBoat.names)
 			ModelBakery.addVariantName(Minestuck.metalBoat, "minestuck:boat_"+s);
 		

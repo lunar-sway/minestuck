@@ -36,8 +36,6 @@ public class MinestuckConfig
 	@SideOnly(Side.CLIENT)
 	public static boolean clientGiveItems;
 	@SideOnly(Side.CLIENT)
-	public static boolean clientInfTreeModus;
-	@SideOnly(Side.CLIENT)
 	public static boolean oldItemModels;
 	
 	public static boolean hardMode = false;
@@ -47,9 +45,9 @@ public class MinestuckConfig
 	public static boolean forceMaxSize;
 	public static boolean giveItems;
 	public static boolean specialCardRenderer;
-	public static boolean infiniteTreeModus;
 	public static boolean cardRecipe;
 	public static boolean cardLoot;
+	public static boolean dropItemsInCards;
 	public static String privateMessage;
 	public static int artifactRange;
 	public static int overworldEditRange;
@@ -66,6 +64,11 @@ public class MinestuckConfig
 	 */
 	public static int escapeFailureMode;
 	public static byte treeModusSetting;
+	/**
+	 * An option related to dropping the sylladex on death
+	 * If 0: only captchalouged items are dropped. If 1: Both captchalouged items and cards are dropped. If 2: All items, including the actual modus.
+	 */
+	public static byte sylladexDropMode;
 	
 	public static boolean[] deployConfigurations;
 	
@@ -104,6 +107,15 @@ public class MinestuckConfig
 			initialModusSize = modusMaxSize;
 		String setting = config.get("Modus", "forceAutobalance", "both", "This determines if auto-balance should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.", new String[] {"both", "off", "on"}).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.forceAutobalance").getString();
 		treeModusSetting = (byte) (setting.equals("both") ? 0 : setting.equals("on") ? 1 : 2);
+		setting = config.get("Modus", "itemDropMode", "cardsAndItems", "Determines which items from the modus are dropped on death. \"items\": Only the items are dropped. \"cardsAndItems\": Both items and cards are dropped. \"all\": Everything is dropped, even the modus.", new String[] {"items", "cardsAndItems", "all"}).setLanguageKey("minestuck.config.itemDropMode").getString();
+		if(setting.equals("items"))
+			sylladexDropMode = 0;
+		if(setting.equals("cardsAndItems"))
+			sylladexDropMode = 1;
+		else if(setting.equals("all"))
+			sylladexDropMode = 2;
+		else Debug.print(setting);
+		dropItemsInCards = config.get("Modus", "dropItemsInCards", true, "When sylladexes are droppable, this option determines if items should be dropped inside of cards or items and cards as different stacks.").setLanguageKey("minestuck.config.dropItemsInCards").getBoolean();
 		config.getCategory("Modus").setLanguageKey("minestuck.config.modus");
 		
 		privateComputers = config.get("General", "privateComputers", false, "True if computers should only be able to be used by the owner.").setLanguageKey("minestuck.config.privateComputers").getBoolean();

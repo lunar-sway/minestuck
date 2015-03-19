@@ -46,7 +46,7 @@ public class MinestuckAchievementHandler {
 		achievementPage.getAchievements().add(alchemy);
 		goldSeeds = (Achievement) new Achievement("achievement.goldSeeds", "goldSeeds", -2, -2, Minestuck.goldSeeds, AchievementList.buildHoe).registerStat();
 		achievementPage.getAchievements().add(goldSeeds);
-		treeModus = (Achievement) new Achievement("achievement.treeModus", "treeModus", 2, -2, new ItemStack(Minestuck.captchaModus, 1, 3), (Achievement)null).registerStat();
+		treeModus = (Achievement) new Achievement("achievement.treeModus", "treeModus", 2, -2, new ItemStack(Minestuck.modusCard, 1, 3), (Achievement)null).registerStat();
 		achievementPage.getAchievements().add(treeModus);
 		killOgre = (Achievement) new Achievement("achievement.killOgre", "killOgre", 1, 3, Minestuck.pogoHammer, enterMedium).registerStat();
 		achievementPage.getAchievements().add(killOgre);

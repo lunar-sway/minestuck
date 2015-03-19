@@ -499,8 +499,8 @@ public class AlchemyRecipeHandler {
 		ItemStack crux = new ItemStack(Minestuck.rawCruxite);
 		ItemStack cruxBl = new ItemStack(Minestuck.blockStorage, 1, 0);
 		ItemStack card = new ItemStack(Minestuck.captchaCard);
-		GameRegistry.addRecipe(new Recipes.EmptyCardRecipe(3, 1, new ItemStack[]{cruxBl.copy(), card.copy(), crux.copy()}, new ItemStack(Minestuck.captchaModus, 1, 0)));
-		GameRegistry.addRecipe(new Recipes.EmptyCardRecipe(3, 1, new ItemStack[]{crux.copy(), card.copy(), cruxBl.copy()}, new ItemStack(Minestuck.captchaModus, 1, 1)));
+		GameRegistry.addRecipe(new Recipes.EmptyCardRecipe(3, 1, new ItemStack[]{cruxBl.copy(), card.copy(), crux.copy()}, new ItemStack(Minestuck.modusCard, 1, 0)));
+		GameRegistry.addRecipe(new Recipes.EmptyCardRecipe(3, 1, new ItemStack[]{crux.copy(), card.copy(), cruxBl.copy()}, new ItemStack(Minestuck.modusCard, 1, 1)));
 		GameRegistry.addSmelting(Minestuck.goldSeeds, new ItemStack(Items.gold_nugget), 0.1F);
 		
 		//add grist conversions
@@ -520,9 +520,9 @@ public class AlchemyRecipeHandler {
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.sickle), false, new GristSet(new GristType[] {GristType.Build}, new int[] {10}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.sledgeHammer), false, new GristSet(new GristType[] {GristType.Build, GristType.Shale}, new int[] {10,2}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.transportalizer), false, new GristSet(new GristType[] {GristType.Build, GristType.Garnet, GristType.Rust, GristType.Uranium}, new int[] {110, 10, 10, 8}));
-		GristRegistry.addGristConversion(new ItemStack(Minestuck.captchaModus, 1, 2), true, new GristSet(GristType.Build, 90));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.modusCard, 1, 2), true, new GristSet(GristType.Build, 90));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.goldSeeds), new GristSet(GristType.Gold, 3));
-		GristRegistry.addGristConversion(new ItemStack(Minestuck.captchaModus, 1, 3), true, new GristSet(GristType.Build, 200));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.modusCard, 1, 3), true, new GristSet(GristType.Build, 200));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.metalBoat, 1, 0), true, new GristSet(GristType.Rust, 65));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.metalBoat, 1, 1), true, new GristSet(GristType.Gold, 65));
 		
@@ -539,13 +539,13 @@ public class AlchemyRecipeHandler {
 		CombinationRegistry.addCombination(new ItemStack(Minestuck.sickle), new ItemStack(Minestuck.clawHammer), MODE_AND, false, false, new ItemStack(Minestuck.clawSickle));
 		CombinationRegistry.addCombination(new ItemStack(Minestuck.pogoHammer), new ItemStack(Blocks.anvil), MODE_AND, false, false, new ItemStack(Minestuck.fearNoAnvil));
 		CombinationRegistry.addCombination(new ItemStack(Items.ender_pearl), new ItemStack(Blocks.iron_block), MODE_AND, false, false, new ItemStack(Minestuck.transportalizer));
-		CombinationRegistry.addCombination(new ItemStack(Minestuck.captchaModus, 1, 0), new ItemStack(Minestuck.captchaModus, 1, 1), MODE_AND, true, true, new ItemStack(Minestuck.captchaModus, 1, 2));
+		CombinationRegistry.addCombination(new ItemStack(Minestuck.modusCard, 1, 0), new ItemStack(Minestuck.modusCard, 1, 1), MODE_AND, true, true, new ItemStack(Minestuck.modusCard, 1, 2));
 		CombinationRegistry.addCombination(new ItemStack(Items.wheat_seeds), new ItemStack(Items.gold_nugget), MODE_AND, new ItemStack(Minestuck.goldSeeds));
 		CombinationRegistry.addCombination(new ItemStack(Items.wheat_seeds), new ItemStack(Items.gold_ingot), MODE_AND, new ItemStack(Minestuck.goldSeeds));
 		CombinationRegistry.addCombination(new ItemStack(Items.wheat_seeds), new ItemStack(Blocks.gold_block), MODE_AND, new ItemStack(Minestuck.goldSeeds));
-		CombinationRegistry.addCombination(Minestuck.captchaModus, OreDictionary.WILDCARD_VALUE, "stickWood", OreDictionary.WILDCARD_VALUE, MODE_OR, new ItemStack(Minestuck.captchaModus, 1, 3));
-		CombinationRegistry.addCombination(Minestuck.captchaModus, OreDictionary.WILDCARD_VALUE, "treeSapling", OreDictionary.WILDCARD_VALUE, MODE_OR, new ItemStack(Minestuck.captchaModus, 1, 3));
-		CombinationRegistry.addCombination(Minestuck.captchaModus, OreDictionary.WILDCARD_VALUE, "treeLeaves", OreDictionary.WILDCARD_VALUE, MODE_OR, new ItemStack(Minestuck.captchaModus, 1, 3));	//Not planks and logs though. Too little branch-related.
+		CombinationRegistry.addCombination(Minestuck.modusCard, OreDictionary.WILDCARD_VALUE, "stickWood", OreDictionary.WILDCARD_VALUE, MODE_OR, new ItemStack(Minestuck.modusCard, 1, 3));
+		CombinationRegistry.addCombination(Minestuck.modusCard, OreDictionary.WILDCARD_VALUE, "treeSapling", OreDictionary.WILDCARD_VALUE, MODE_OR, new ItemStack(Minestuck.modusCard, 1, 3));
+		CombinationRegistry.addCombination(Minestuck.modusCard, OreDictionary.WILDCARD_VALUE, "treeLeaves", OreDictionary.WILDCARD_VALUE, MODE_OR, new ItemStack(Minestuck.modusCard, 1, 3));	//Not planks and logs though. Too little branch-related.
 		CombinationRegistry.addCombination(new ItemStack(Items.boat), new ItemStack(Items.minecart), MODE_OR, new ItemStack(Minestuck.metalBoat, 1, 0));
 		CombinationRegistry.addCombination(new ItemStack(Items.boat), new ItemStack(Items.iron_ingot), MODE_AND, new ItemStack(Minestuck.metalBoat, 1, 0));
 		CombinationRegistry.addCombination(new ItemStack(Items.boat), new ItemStack(Blocks.iron_block), MODE_AND, new ItemStack(Minestuck.metalBoat, 1, 0));

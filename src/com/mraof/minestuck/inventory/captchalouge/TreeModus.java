@@ -27,7 +27,7 @@ public class TreeModus extends Modus
 	
 	public TreeNode node;
 	public int size;
-	public boolean autobalance;
+	public boolean autobalance = true;
 	
 	@SideOnly(Side.CLIENT)
 	protected TreeGuiHandler guiHandler;
@@ -36,7 +36,6 @@ public class TreeModus extends Modus
 	public void initModus(ItemStack[] prev, int size)
 	{
 		this.size = size;
-		autobalance = true;
 	}
 	
 	@Override
@@ -87,7 +86,7 @@ public class TreeModus extends Modus
 	public boolean putItemStack(ItemStack item)
 	{
 		int currentSize = node == null ? 0 : node.getSize();
-		if(item == null || currentSize >= size && !MinestuckConfig.infiniteTreeModus)
+		if(item == null || currentSize >= size)
 			return false;
 		if(node == null)
 			node = new TreeNode(item);
@@ -149,11 +148,7 @@ public class TreeModus extends Modus
 		for(int i = 1; i < list.size(); i++)
 			CaptchaDeckHandler.launchAnyItem(player, list.get(i));
 		if(asCard)
-		{
 			stack = AlchemyRecipeHandler.createCard(stack, false);
-			if(!MinestuckConfig.infiniteTreeModus)
-				size--;
-		}
 		if(id == 0)
 			node = null;
 		autobalance();

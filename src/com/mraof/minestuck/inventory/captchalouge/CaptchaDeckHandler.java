@@ -102,7 +102,7 @@ public class CaptchaDeckHandler
 		ItemStack item = container.inventory.getStackInSlot(0);
 		Modus modus = getModus(player);
 		
-		if(item.getItem().equals(Minestuck.captchaModus) && ModusType.values().length > item.getItemDamage())
+		if(item.getItem().equals(Minestuck.modusCard) && ModusType.values().length > item.getItemDamage())
 		{
 			if(modus == null)
 			{
@@ -246,8 +246,48 @@ public class CaptchaDeckHandler
 		MinestuckChannelHandler.sendToPlayer(packet, player);
 	}
 	
+	public static void dropSylladex(EntityPlayer player)
+	{
+		Modus modus = getModus(player);
+		
+		if(modus == null)
+			return;
+		
+		ItemStack[] stacks = modus.getItems();
+		int size = modus.getSize();
+		
+		if(!MinestuckConfig.dropItemsInCards)
+		{
+			for(ItemStack stack : stacks)
+				if(stack != null)
+					player.dropItem(stack, true, false);
+		} else
+			for(ItemStack stack : stacks)
+				if(stack != null)
+				{
+					ItemStack card = AlchemyRecipeHandler.createCard(stack, false);
+					player.dropItem(card, true, false);
+					size--;
+				}
+		
+		if(MinestuckConfig.sylladexDropMode >= 1)
+			for(; size > 0; size = Math.max(size - 16, 0))
+				player.dropItem(new ItemStack(Minestuck.captchaCard, Math.min(16, size)), true, false);
+		
+		if(MinestuckConfig.sylladexDropMode == 2)
+		{
+			player.dropItem(new ItemStack(Minestuck.modusCard, 1, ModusType.getType(modus).ordinal()), true, false);
+			setModus(player, null);
+		} else modus.initModus(null, size);
+		
+		MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, writeToNBT(modus));
+		MinestuckChannelHandler.sendToPlayer(packet, player);
+	}
+	
 	public static NBTTagCompound writeToNBT(Modus modus)
 	{
+		if(modus == null)
+			return null;
 		int index = ModusType.getType(modus).ordinal();
 		NBTTagCompound nbt = modus.writeToNBT(new NBTTagCompound());
 		nbt.setInteger("type", index);
@@ -256,6 +296,8 @@ public class CaptchaDeckHandler
 	
 	public static Modus readFromNBT(NBTTagCompound nbt, boolean clientSide)
 	{
+		if(nbt == null)
+			return null;
 		Modus modus;
 		if(clientSide && clientSideModus != null && nbt.getInteger("type") == ModusType.getType(clientSideModus).ordinal())
 			modus = clientSideModus;
@@ -271,12 +313,15 @@ public class CaptchaDeckHandler
 	
 	public static Modus getModus(EntityPlayer player)
 	{
-		return MinestuckPlayerData.getData(UsernameHandler.encode(player.getName())).modus;
+		return MinestuckPlayerData.getData(player).modus;
 	}
 	
 	public static void setModus(EntityPlayer player, Modus modus)
 	{
-		MinestuckPlayerData.getData(UsernameHandler.encode(player.getName())).modus = modus;
+		MinestuckPlayerData.getData(player).modus = modus;
+		if(modus != null)
+			MinestuckPlayerData.getData(player).givenModus = true;
 	}
+	
 	
 }
