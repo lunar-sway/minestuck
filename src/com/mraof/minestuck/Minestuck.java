@@ -530,7 +530,7 @@ public class Minestuck
 	public void serverStarting(FMLServerStartingEvent event)
 	{
 		worldSeed = event.getServer().worldServers[0].getSeed();
-		CaptchaDeckHandler.rand = new Random(worldSeed);	//Unsure whenether this will be better or not
+		CaptchaDeckHandler.rand = new Random();
 		
 		MinestuckSaveHandler.lands.clear();
 		MinestuckSaveHandler.spawnpoints.clear();
