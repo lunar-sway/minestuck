@@ -126,6 +126,7 @@ public class CaptchaDeckPacket extends MinestuckPacket
 				CaptchaDeckHandler.captchalougeItem((EntityPlayerMP) player);
 			else if(this.type == GET)
 				CaptchaDeckHandler.getItem((EntityPlayerMP) player, itemIndex, getCard);
+//			else if(this.type == DATA)
 //				MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.CAPTCHA, DATA, CaptchaDeckHandler.writeToNBT(CaptchaDeckHandler.getModus(player))), player);
 			else if(this.type == VALUE && CaptchaDeckHandler.getModus(player) != null)
 				CaptchaDeckHandler.getModus(player).setValue(valueType, value);
@@ -141,6 +142,7 @@ public class CaptchaDeckPacket extends MinestuckPacket
 				CaptchaDeckHandler.clientSideModus = CaptchaDeckHandler.readFromNBT(nbt, true);
 				if(CaptchaDeckHandler.clientSideModus != null)
 					CaptchaDeckHandler.clientSideModus.getGuiHandler().updateContent();
+				else Debug.print("Lost modus");
 //				}
 			}
 		}

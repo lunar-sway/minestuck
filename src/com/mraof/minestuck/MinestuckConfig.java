@@ -112,9 +112,7 @@ public class MinestuckConfig
 			sylladexDropMode = 0;
 		if(setting.equals("cardsAndItems"))
 			sylladexDropMode = 1;
-		else if(setting.equals("all"))
-			sylladexDropMode = 2;
-		else Debug.print(setting);
+		else sylladexDropMode = 2;
 		dropItemsInCards = config.get("Modus", "dropItemsInCards", true, "When sylladexes are droppable, this option determines if items should be dropped inside of cards or items and cards as different stacks.").setLanguageKey("minestuck.config.dropItemsInCards").getBoolean();
 		config.getCategory("Modus").setLanguageKey("minestuck.config.modus");
 		

@@ -3,16 +3,17 @@ package com.mraof.minestuck.client.renderer.tileentity;
 import java.nio.FloatBuffer;
 import java.util.Random;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.GLAllocation;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
 
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
 
@@ -28,13 +29,13 @@ public class RenderGatePortal extends TileEntitySpecialRenderer
 		float var9 = (float)this.rendererDispatcher.entityX;
 		float var10 = (float)this.rendererDispatcher.entityY;
 		float var11 = (float)this.rendererDispatcher.entityZ;
-        GL11.glDisable(GL11.GL_LIGHTING);
+		GlStateManager.disableLighting();
         Random var12 = new Random(31100L);
         float var13 = 0.75F;
 
         for (int var14 = 0; var14 < 16; ++var14)
         {
-            GL11.glPushMatrix();
+			GlStateManager.pushMatrix();
             float var15 = 16 - var14;
             float var16 = 0.0625F;
             float var17 = 1.0F / (var15 + 1.0F);
@@ -45,15 +46,15 @@ public class RenderGatePortal extends TileEntitySpecialRenderer
                 var17 = 0.1F;
                 var15 = 65.0F;
                 var16 = 0.125F;
-                GL11.glEnable(GL11.GL_BLEND);
-                GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+				GlStateManager.enableBlend();
+				GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             }
 
             if (var14 == 1)
             {
                 this.bindTexture(particlefield);
-                GL11.glEnable(GL11.GL_BLEND);
-                GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
+				GlStateManager.enableBlend();
+				GlStateManager.blendFunc(GL11.GL_ONE, GL11.GL_ONE);
                 var16 = 0.5F;
             }
 
@@ -62,31 +63,31 @@ public class RenderGatePortal extends TileEntitySpecialRenderer
 			float var20 = var18 + var15 + (float) ActiveRenderInfo.getPosition().yCoord;
 			float var21 = var19 / var20;
 			var21 += (float) (par4 + var13);
-			GL11.glTranslatef(var9, var21, var11);
-            GL11.glTexGeni(GL11.GL_S, GL11.GL_TEXTURE_GEN_MODE, GL11.GL_OBJECT_LINEAR);
-            GL11.glTexGeni(GL11.GL_T, GL11.GL_TEXTURE_GEN_MODE, GL11.GL_OBJECT_LINEAR);
-            GL11.glTexGeni(GL11.GL_R, GL11.GL_TEXTURE_GEN_MODE, GL11.GL_OBJECT_LINEAR);
-            GL11.glTexGeni(GL11.GL_Q, GL11.GL_TEXTURE_GEN_MODE, GL11.GL_EYE_LINEAR);
-            GL11.glTexGen(GL11.GL_S, GL11.GL_OBJECT_PLANE, this.func_76907_a(1.0F, 0.0F, 0.0F, 0.0F));
-            GL11.glTexGen(GL11.GL_T, GL11.GL_OBJECT_PLANE, this.func_76907_a(0.0F, 0.0F, 1.0F, 0.0F));
-            GL11.glTexGen(GL11.GL_R, GL11.GL_OBJECT_PLANE, this.func_76907_a(0.0F, 0.0F, 0.0F, 1.0F));
-            GL11.glTexGen(GL11.GL_Q, GL11.GL_EYE_PLANE, this.func_76907_a(0.0F, 1.0F, 0.0F, 0.0F));
-            GL11.glEnable(GL11.GL_TEXTURE_GEN_S);
-            GL11.glEnable(GL11.GL_TEXTURE_GEN_T);
-            GL11.glEnable(GL11.GL_TEXTURE_GEN_R);
-            GL11.glEnable(GL11.GL_TEXTURE_GEN_Q);
-            GL11.glPopMatrix();
-            GL11.glMatrixMode(GL11.GL_TEXTURE);
-            GL11.glPushMatrix();
-            GL11.glLoadIdentity();
-            GL11.glTranslatef(0.0F, Minecraft.getSystemTime() % 700000L / 700000.0F, 0.0F);
-            GL11.glScalef(var16, var16, var16);
-            GL11.glTranslatef(0.5F, 0.5F, 0.0F);
-            GL11.glRotatef((var14 * var14 * 4321 + var14 * 9) * 2.0F, 0.0F, 0.0F, 1.0F);
-            GL11.glTranslatef(-0.5F, -0.5F, 0.0F);
-			GL11.glTranslatef(-var9, -var11, -var10);
+			GlStateManager.translate(var9, var21, var11);
+			GlStateManager.texGen(GlStateManager.TexGen.S, GL11.GL_OBJECT_LINEAR);
+			GlStateManager.texGen(GlStateManager.TexGen.T, GL11.GL_OBJECT_LINEAR);
+			GlStateManager.texGen(GlStateManager.TexGen.R, GL11.GL_OBJECT_LINEAR);
+			GlStateManager.texGen(GlStateManager.TexGen.Q, GL11.GL_EYE_LINEAR);
+			GlStateManager.func_179105_a(GlStateManager.TexGen.S, GL11.GL_OBJECT_PLANE, this.func_76907_a(1.0F, 0.0F, 0.0F, 0.0F));	//GL11.glTexGen
+			GlStateManager.func_179105_a(GlStateManager.TexGen.T, GL11.GL_OBJECT_PLANE, this.func_76907_a(0.0F, 0.0F, 1.0F, 0.0F));
+			GlStateManager.func_179105_a(GlStateManager.TexGen.R, GL11.GL_OBJECT_PLANE, this.func_76907_a(0.0F, 0.0F, 0.0F, 1.0F));
+			GlStateManager.func_179105_a(GlStateManager.TexGen.Q, GL11.GL_EYE_PLANE, this.func_76907_a(0.0F, 1.0F, 0.0F, 0.0F));
+			GlStateManager.enableTexGenCoord(GlStateManager.TexGen.S);
+			GlStateManager.enableTexGenCoord(GlStateManager.TexGen.T);
+			GlStateManager.enableTexGenCoord(GlStateManager.TexGen.R);
+			GlStateManager.enableTexGenCoord(GlStateManager.TexGen.Q);
+			GlStateManager.popMatrix();
+			GlStateManager.matrixMode(GL11.GL_TEXTURE);
+			GlStateManager.pushMatrix();
+			GlStateManager.loadIdentity();
+			GlStateManager.translate(0.0F, Minecraft.getSystemTime() % 700000L / 700000.0F, 0.0F);
+			GlStateManager.scale(var16, var16, var16);
+			GlStateManager.translate(0.5F, 0.5F, 0.0F);
+			GlStateManager.rotate((var14 * var14 * 4321 + var14 * 9) * 2.0F, 0.0F, 0.0F, 1.0F);
+			GlStateManager.translate(-0.5F, -0.5F, 0.0F);
+			GlStateManager.translate(-var9, -var11, -var10);
 			var19 = var18 + (float) ActiveRenderInfo.getPosition().xCoord;
-			GL11.glTranslatef(((float) ActiveRenderInfo.getPosition().xCoord) * var15 / var19, ((float) ActiveRenderInfo.getPosition().zCoord) * var15 / var19, -var10);
+			GlStateManager.translate(((float) ActiveRenderInfo.getPosition().xCoord) * var15 / var19, ((float) ActiveRenderInfo.getPosition().zCoord) * var15 / var19, -var10);
 			WorldRenderer var24 = Tessellator.getInstance().getWorldRenderer();
             var24.startDrawingQuads();
 			var21 = var12.nextFloat() * 0.5F + 0.1F;
@@ -106,16 +107,16 @@ public class RenderGatePortal extends TileEntitySpecialRenderer
             var24.addVertex(par2 + 1.0D, par4 + var13, par6 + 1.0D);
             var24.addVertex(par2 + 1.0D, par4 + var13, par6);
 			Tessellator.getInstance().draw();
-            GL11.glPopMatrix();
-            GL11.glMatrixMode(GL11.GL_MODELVIEW);
+			GlStateManager.popMatrix();
+			GlStateManager.matrixMode(GL11.GL_MODELVIEW);
         }
-
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_TEXTURE_GEN_S);
-        GL11.glDisable(GL11.GL_TEXTURE_GEN_T);
-        GL11.glDisable(GL11.GL_TEXTURE_GEN_R);
-        GL11.glDisable(GL11.GL_TEXTURE_GEN_Q);
-        GL11.glEnable(GL11.GL_LIGHTING);
+		
+		GlStateManager.disableBlend();
+		GlStateManager.disableTexGenCoord(GlStateManager.TexGen.S);
+		GlStateManager.disableTexGenCoord(GlStateManager.TexGen.T);
+		GlStateManager.disableTexGenCoord(GlStateManager.TexGen.R);
+		GlStateManager.disableTexGenCoord(GlStateManager.TexGen.Q);
+		GlStateManager.enableLighting();
     }
     private FloatBuffer func_76907_a(float par1, float par2, float par3, float par4)
     {

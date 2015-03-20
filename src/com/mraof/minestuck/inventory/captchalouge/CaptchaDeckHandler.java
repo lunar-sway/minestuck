@@ -280,7 +280,7 @@ public class CaptchaDeckHandler
 			setModus(player, null);
 		} else modus.initModus(null, size);
 		
-		MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, writeToNBT(modus));
+		MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, writeToNBT(getModus(player)));
 		MinestuckChannelHandler.sendToPlayer(packet, player);
 	}
 	

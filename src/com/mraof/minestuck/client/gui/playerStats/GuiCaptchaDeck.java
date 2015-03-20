@@ -85,7 +85,7 @@ public class GuiCaptchaDeck extends GuiPlayerStatsContainer implements GuiYesNoC
 			if(stack.getItem() instanceof ItemModus)
 			{
 				Modus newModus = CaptchaDeckHandler.ModusType.values()[stack.getItemDamage()].createInstance();
-				if(!newModus.canSwitchFrom(CaptchaDeckHandler.ModusType.getType(CaptchaDeckHandler.clientSideModus)))
+				if(CaptchaDeckHandler.clientSideModus != null && !newModus.canSwitchFrom(CaptchaDeckHandler.ModusType.getType(CaptchaDeckHandler.clientSideModus)))
 				{
 					mc.currentScreen = new GuiYesNo(this, StatCollector.translateToLocal("gui.emptySylladex1"), StatCollector.translateToLocal("gui.emptySylladex2"), 0)
 					{
