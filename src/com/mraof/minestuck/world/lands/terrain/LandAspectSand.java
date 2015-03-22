@@ -3,13 +3,17 @@ package com.mraof.minestuck.world.lands.terrain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.world.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.ILandAspect;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.LayeredBlockDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
+import com.mraof.minestuck.world.lands.gen.LandTerrainGenBase;
+import com.mraof.minestuck.world.lands.gen.RiverFreeTerrainGen;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRedSandstone;
@@ -151,6 +155,12 @@ public class LandAspectSand extends TerrainAspect
 		else if(state.getBlock() == Blocks.sandstone)
 			return Blocks.sandstone.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.CHISELED);
 		else return Blocks.red_sandstone.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.CHISELED);
+	}
+	
+	@Override
+	public LandTerrainGenBase createTerrainGenerator(ChunkProviderLands chunkProvider, Random rand)
+	{
+		return new RiverFreeTerrainGen(chunkProvider, rand);
 	}
 	
 }
