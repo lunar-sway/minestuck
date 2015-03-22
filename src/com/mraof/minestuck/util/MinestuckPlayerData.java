@@ -86,6 +86,11 @@ public class MinestuckPlayerData {
 			getData(player).title = newTitle;
 	}
 	
+	public static PlayerData getData(EntityPlayer player)
+	{
+		return getData(UsernameHandler.encode(player.getName()));
+	}
+	
 	public static PlayerData getData(String player)
 	{
 		if(!dataMap.containsKey(player))
@@ -104,6 +109,7 @@ public class MinestuckPlayerData {
 		public Title title;
 		public GristSet gristCache;
 		public Modus modus;
+		public boolean givenModus;
 		
 		private void readFromNBT(NBTTagCompound nbt)
 		{
@@ -113,7 +119,11 @@ public class MinestuckPlayerData {
 			if(nbt.hasKey("titleClass"))
 				this.title = new Title(TitleHelper.getClassFromInt(nbt.getByte("titleClass")), TitleHelper.getAspectFromInt(nbt.getByte("titleAspect")));
 			if(nbt.hasKey("modus"))
+			{
 				this.modus = CaptchaDeckHandler.readFromNBT(nbt.getCompoundTag("modus"), false);
+				givenModus = true;
+			}
+			else givenModus = nbt.getBoolean("givenModus");
 		}
 		
 		private NBTTagCompound writeToNBT()
@@ -134,6 +144,7 @@ public class MinestuckPlayerData {
 			}
 			if(this.modus != null)
 				nbt.setTag("modus", CaptchaDeckHandler.writeToNBT(modus));
+			else nbt.setBoolean("givenModus", givenModus);
 			return nbt;
 		}
 		

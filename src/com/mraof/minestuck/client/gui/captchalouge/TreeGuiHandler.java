@@ -61,9 +61,9 @@ public class TreeGuiHandler extends SylladexGuiHandler
 		addNodes(modus.node, 0, 0, 0);
 		
 		int size = modus.node == null ? 0 : modus.node.getSize();
-		if(MinestuckConfig.clientInfTreeModus || modus.size > size)
+		if(modus.size > size)
 		{
-			items.add(new ModusSizeCard(this, MinestuckConfig.clientInfTreeModus ? 1 : modus.size - size, 10, 10));
+			items.add(new ModusSizeCard(this, modus.size - size, 10, 10));
 		}
 		
 		super.updateContent();

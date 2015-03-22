@@ -49,7 +49,7 @@ public class CaptchaDeckPacket extends MinestuckPacket
 		this.data.writeByte(type);	//Packet type
 		if(data.length > 1)
 		{
-			if(type == DATA)	//Server side data
+			if(type == DATA && data[1] != null)	//Server side data
 			{
 				try
 				{
@@ -84,7 +84,7 @@ public class CaptchaDeckPacket extends MinestuckPacket
 		
 		if(data.readableBytes() > 0)
 		{
-			if(this.type == DATA)
+			if(this.type == DATA && data.readableBytes() > 0)
 			{
 				byte[] bytes = new byte[data.readableBytes()];
 				data.readBytes(bytes);
@@ -126,8 +126,8 @@ public class CaptchaDeckPacket extends MinestuckPacket
 				CaptchaDeckHandler.captchalougeItem((EntityPlayerMP) player);
 			else if(this.type == GET)
 				CaptchaDeckHandler.getItem((EntityPlayerMP) player, itemIndex, getCard);
-			else if(this.type == DATA && CaptchaDeckHandler.getModus(player) != null)
-				MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.CAPTCHA, DATA, CaptchaDeckHandler.writeToNBT(CaptchaDeckHandler.getModus(player))), player);
+//			else if(this.type == DATA)
+//				MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.CAPTCHA, DATA, CaptchaDeckHandler.writeToNBT(CaptchaDeckHandler.getModus(player))), player);
 			else if(this.type == VALUE && CaptchaDeckHandler.getModus(player) != null)
 				CaptchaDeckHandler.getModus(player).setValue(valueType, value);
 		}
@@ -135,13 +135,15 @@ public class CaptchaDeckPacket extends MinestuckPacket
 		{
 			if(this.type == DATA)
 			{
-				if(player == null)
-					MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(Type.CAPTCHA, DATA));
-				else
-				{
-					CaptchaDeckHandler.clientSideModus = CaptchaDeckHandler.readFromNBT(nbt, true);
+//				if(player == null) Should not be needed anymore
+//					MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(Type.CAPTCHA, DATA));
+//				else
+//				{
+				CaptchaDeckHandler.clientSideModus = CaptchaDeckHandler.readFromNBT(nbt, true);
+				if(CaptchaDeckHandler.clientSideModus != null)
 					CaptchaDeckHandler.clientSideModus.getGuiHandler().updateContent();
-				}
+				else Debug.print("Lost modus");
+//				}
 			}
 		}
 	}

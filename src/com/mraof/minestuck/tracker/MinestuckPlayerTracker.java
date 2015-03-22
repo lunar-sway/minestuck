@@ -7,6 +7,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IChatComponent;
+import net.minecraftforge.event.entity.player.PlayerDropsEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.network.FMLOutboundHandler;
@@ -62,7 +64,7 @@ public class MinestuckPlayerTracker {
 			MinestuckPlayerData.setGrist(encUsername, new GristSet(GristType.Build, 20));
 		}
 		
-		if(CaptchaDeckHandler.getModus(player) == null && MinestuckConfig.defaultModusTypes.length > 0)
+		if(CaptchaDeckHandler.getModus(player) == null && MinestuckConfig.defaultModusTypes.length > 0 && !MinestuckPlayerData.getData(player).givenModus)
 		{
 			int index = player.worldObj.rand.nextInt(MinestuckConfig.defaultModusTypes.length);
 			Modus modus = CaptchaDeckHandler.ModusType.values()[MinestuckConfig.defaultModusTypes[index]].createInstance();
@@ -91,6 +93,17 @@ public class MinestuckPlayerTracker {
 		Modus modus = CaptchaDeckHandler.getModus(event.player);
 		if(modus != null)
 			modus.player = null;
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
+	public void onPlayerDrops(PlayerDropsEvent event)
+	{
+		if(!event.entityPlayer.worldObj.isRemote)
+		{
+			CaptchaDeckHandler.dropSylladex(event.entityPlayer);
+			
+		}
+		
 	}
 	
 	/**

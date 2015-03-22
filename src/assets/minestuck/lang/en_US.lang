@@ -241,6 +241,10 @@ minestuck.config.modusMaxSize=Modus Max Size
 minestuck.config.modusMaxSize.tooltip=The highest number of cards a modus can have. If the value is 0, a maximum size will be ignored.
 minestuck.config.forceAutobalance=Force Auto-balance
 minestuck.config.forceAutobalance.tooltip=Determines if and how the auto-balance option (for the tree modus) should be forced. 'Both': Both options are available. 'On': Forced at on. 'Off': Forced at off.
+minestuck.config.itemDropMode=Item Drop Mode
+minestuck.config.itemDropMode.tooltip="Items": Only the captchalouged items will be dropped. "Cards And Items": The cards will also be dropped. "All": All items in the sylladex will be dropped. All of them.
+minestuck.config.dropItemsInCards=Drop Items In Cards
+minestuck.config.dropItemsInCards.tooltip=If then is true, then when items and cards are dropped on death, the items are dropped inside the cards. Otherwise, if this is false, items and cards will instead be dropped separately.
 minestuck.config.modus=Modus
 minestuck.config.modus.tooltip=Modus-related stuff
 
@@ -271,9 +275,15 @@ minestuck.config.landEditRange.tooltip=The maximum amount of blocks away from th
 minestuck.config.artifactRange=Artifact Range
 minestuck.config.artifactRange.tooltip=The radius of the area brought to the medium.
 
+minestuck.config.oldItemModels=Use Old Item Models
+minestuck.config.oldItemModels.tooltip=Set this to true to have back all old 2D item models.
+
 both=Both
 off=Off
 on=On
+items=Items
+cardsAndItems=Cards And Items
+all=All
 
 strife.sword.name=Bladekind
 strife.bow.name=Bowkind

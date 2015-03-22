@@ -16,6 +16,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.BlockChessTile;
 import com.mraof.minestuck.block.BlockMachine;
 import com.mraof.minestuck.block.BlockStorage;
@@ -42,7 +43,6 @@ public class MinestuckTextureManager
 		register(Minestuck.pogoHammer);
 		register(Minestuck.telescopicSassacrusher);
 		register(Minestuck.fearNoAnvil);
-		register(Minestuck.zillyhooHammer);
 		register(Minestuck.popamaticVrillyhoo);
 		register(Minestuck.scarletZillyhoo);
 		
@@ -69,6 +69,14 @@ public class MinestuckTextureManager
 		modelRegistry.register(Minestuck.crockerSpork, new CrockerSporkDefinition());
 		register(Minestuck.skaiaFork);
 		
+		if(MinestuckConfig.oldItemModels)
+		{
+			register(Minestuck.zillyhooHammer, 0, "zillyhoo_hammer_old");
+		} else
+		{
+			register(Minestuck.zillyhooHammer);
+		}
+		
 		register(Minestuck.rawCruxite);
 		modelRegistry.register(Minestuck.cruxiteDowel, new CruxiteDowelDefinition());
 		modelRegistry.register(Minestuck.captchaCard, new CaptchaCardDefinition());
@@ -81,8 +89,8 @@ public class MinestuckTextureManager
 		register(Minestuck.minestuckBucket, 0, "bucket_blood");
 		register(Minestuck.minestuckBucket, 1, "bucket_oil");
 		register(Minestuck.minestuckBucket, 2, "bucket_brain_juice");
-		for(int i = 0; i < Minestuck.captchaModus.modusNames.length; i++)
-			register(Minestuck.captchaModus, i, "modus_" + Minestuck.captchaModus.modusNames[i]);
+		for(int i = 0; i < Minestuck.modusCard.modusNames.length; i++)
+			register(Minestuck.modusCard, i, "modus_" + Minestuck.modusCard.modusNames[i]);
 		register(Minestuck.goldSeeds);
 		for(int i = 0; i < Minestuck.metalBoat.names.length; i++)
 			register(Minestuck.metalBoat, i, "boat_"+Minestuck.metalBoat.names[i]);
@@ -126,11 +134,15 @@ public class MinestuckTextureManager
 		ModelBakery.addVariantName(Minestuck.minestuckBucket, "minestuck:bucket_blood", "minestuck:bucket_oil", "minestuck:bucket_brain_juice");
 		ModelBakery.addVariantName(Minestuck.captchaCard, "minestuck:card_empty", "minestuck:card_full", "minestuck:card_punched");
 		ModelBakery.addVariantName(Minestuck.ninjaSword, "minestuck:katana");	//To prevent the game to try to load "minestuck:ninja_sword"
+		if(MinestuckConfig.oldItemModels)
+		{
+			ModelBakery.addVariantName(Minestuck.zillyhooHammer, "minestuck:zillyhoo_hammer_old");
+		}
 		
-		String[] str = new String[Minestuck.captchaModus.modusNames.length];
+		String[] str = new String[Minestuck.modusCard.modusNames.length];
 		for(int i = 0; i < str.length; i++)
-			str[i] = "minestuck:modus_"+Minestuck.captchaModus.modusNames[i];
-		ModelBakery.addVariantName(Minestuck.captchaModus, str);
+			str[i] = "minestuck:modus_"+Minestuck.modusCard.modusNames[i];
+		ModelBakery.addVariantName(Minestuck.modusCard, str);
 		for(String s : Minestuck.metalBoat.names)
 			ModelBakery.addVariantName(Minestuck.metalBoat, "minestuck:boat_"+s);
 		
