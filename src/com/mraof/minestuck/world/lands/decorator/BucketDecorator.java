@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.lands.decorator;
 import java.util.Random;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.ChunkProviderLands;
 
 import net.minecraft.block.Block;
@@ -24,14 +25,17 @@ public class BucketDecorator extends SimpleStructureDecorator
 			rotation = random.nextBoolean();
 			xCoord = (chunkX << 4) + random.nextInt(16) + 8;
 			zCoord = (chunkZ << 4) + random.nextInt(16) + 8;
-			yCoord = world.getHorizon(new BlockPos(xCoord, 0, zCoord)).getY() - random.nextInt(3);
+			yCoord = world.getHorizon(new BlockPos(xCoord, 0, zCoord)).getY();
+			if(world.getBlockState(new BlockPos(xCoord, yCoord - 1, zCoord)).getBlock().getMaterial().isLiquid())
+				return;
+			yCoord -= random.nextInt(3);
 			IBlockState block = random.nextDouble() < 0.3 ? Blocks.iron_block.getDefaultState() : Blocks.quartz_block.getDefaultState();
 			IBlockState liquid;
 			if(random.nextBoolean())
 				liquid = liquidBlocks[random.nextInt(liquidBlocks.length)].getDefaultState();
-			else liquid = provider.oceanBlock;
-			if(yCoord < 60)
-				return;
+			else if(random.nextBoolean())
+				liquid = provider.oceanBlock;
+			else liquid = provider.riverBlock;
 			if(random.nextDouble() < 0.4)
 			{
 				placeBlocks(world, block, -1, 0, -1, 2, 0, 2);
