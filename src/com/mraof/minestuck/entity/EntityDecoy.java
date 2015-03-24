@@ -1,6 +1,7 @@
 package com.mraof.minestuck.entity;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -21,6 +22,7 @@ import net.minecraft.world.WorldSettings.GameType;
 
 import com.mojang.authlib.GameProfile;
 import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.util.Debug;
 
 public class EntityDecoy extends EntityLiving {
 	
@@ -29,7 +31,7 @@ public class EntityDecoy extends EntityLiving {
 	public boolean isFlying;
 	public GameType gameType;
 	public String username;
-	public FoodStats foodStats = new FoodStats();
+	public FoodStats foodStats;
 	public NBTTagCompound capabilities = new NBTTagCompound();
 	
 	public boolean markedForDespawn;
@@ -80,6 +82,7 @@ public class EntityDecoy extends EntityLiving {
 		player.capabilities.writeCapabilitiesToNBT(this.capabilities);
 		NBTTagCompound nbt = new NBTTagCompound();
 		player.getFoodStats().writeNBT(nbt);
+		initFoodStats();
 		foodStats.readNBT(nbt);	//Exact copy of food stack
 		dataWatcher.updateObject(DATAWATCHER_ID_START, username);
 		dataWatcher.updateObject(DATAWATCHER_ID_START+1, this.rotationYawHead);	//Due to rotationYawHead didn't update correctly
@@ -105,6 +108,30 @@ public class EntityDecoy extends EntityLiving {
 		}
 		
 		inventory.copyInventory(player.inventory);
+	}
+	
+	private void initFoodStats()
+	{
+		try
+		{
+			foodStats = new FoodStats();
+		}
+		catch(NoSuchMethodError e)
+		{
+			Debug.print("Custom constructor detected for FoodStats. Trying with player as parameter...");
+			try
+			{
+				foodStats = FoodStats.class.getConstructor(EntityPlayer.class).newInstance(player);
+			}
+			catch(NoSuchMethodException ex)
+			{
+				throw new NoSuchMethodError("Found no known constructor for net.minecraft.util.FoodStats.");
+			}
+			catch(Exception ex)
+			{
+				throw new RuntimeException(ex);	//No idea what sort of exception that should go here
+			}
+		}
 	}
 	
 	@Override
@@ -149,7 +176,6 @@ public class EntityDecoy extends EntityLiving {
 			return;
 		}
 		super.onUpdate();
-		foodStats.onUpdate(player);
 		if(worldObj.isRemote && !init ){
 			username = this.dataWatcher.getWatchableObjectString(DATAWATCHER_ID_START);
 			this.rotationYawHead = this.dataWatcher.getWatchableObjectFloat(DATAWATCHER_ID_START+1);
@@ -168,7 +194,9 @@ public class EntityDecoy extends EntityLiving {
 		if(isFlying)
 			posY = prevPosY;
 		
-		if(!worldObj.isRemote) {
+		if(!worldObj.isRemote)
+		{
+			foodStats.onUpdate(player);
 			if(this.locationChanged())
 				ServerEditHandler.reset(null, 0, ServerEditHandler.getData(this));
 		}
