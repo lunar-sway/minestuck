@@ -5,14 +5,18 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import com.mraof.minestuck.block.BlockComputerOn;
 import com.mraof.minestuck.client.gui.GuiComputer;
 import com.mraof.minestuck.util.ComputerProgram;
 
@@ -20,7 +24,7 @@ public class TileEntityComputer extends TileEntity
 {
 
 	/**
-	 * 0 = client, 1 = server, -1 = secret easter egg
+	 * 0 = client, 1 = server
 	 */
 	public Hashtable<Integer, Boolean> installedPrograms = new Hashtable<Integer, Boolean>();
 	public GuiComputer gui;
@@ -110,6 +114,11 @@ public class TileEntityComputer extends TileEntity
 
 	public boolean hasProgram(int id) 
 	{
+		if(id == -1)
+		{
+			IBlockState state = worldObj.getBlockState(pos);
+			return (Boolean) state.getValue(BlockComputerOn.BSOD);
+		}
 		return installedPrograms.get(id) == null ? false:installedPrograms.get(id);
 	}
 
@@ -138,6 +147,12 @@ public class TileEntityComputer extends TileEntity
 			this.getData(1).setBoolean("isOpen", false);
 			this.getData(1).setString("connectedClient", player);
 		}
+	}
+	
+	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState)
+	{
+		return oldState.getBlock() != newState.getBlock();
 	}
 	
 }

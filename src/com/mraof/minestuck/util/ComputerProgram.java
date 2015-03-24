@@ -16,7 +16,7 @@ import com.mraof.minestuck.tileentity.TileEntityComputer;
  * GristStorage and other similar classes that store static data.
  * @author Kirderf1
  */
-public abstract class ComputerProgram {
+public abstract class ComputerProgram {	//This is an unnecessary abstract way of handling programs. Should be replaced
 	
 	private static HashMap<Integer, Class<? extends ComputerProgram>> programs = new HashMap<Integer, Class<? extends ComputerProgram>>();
 	

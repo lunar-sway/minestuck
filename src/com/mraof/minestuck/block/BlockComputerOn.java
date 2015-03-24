@@ -32,6 +32,7 @@ import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.ComputerProgram;
+import com.mraof.minestuck.util.Debug;
 
 public class BlockComputerOn extends Block implements ITileEntityProvider
 {
@@ -87,7 +88,7 @@ public class BlockComputerOn extends Block implements ITileEntityProvider
 				tileEntity.closeAll();
 				world.setBlockState(pos, state.withProperty(BSOD, true), 2);
 			}
-			tileEntity.installedPrograms.put(id, true);
+			else tileEntity.installedPrograms.put(id, true);
 			world.markBlockForUpdate(pos);
 			return true;
 		}
@@ -116,11 +117,11 @@ public class BlockComputerOn extends Block implements ITileEntityProvider
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
-		dropItems(worldIn, pos.getX(), pos.getY(), pos.getZ());
+		dropItems(worldIn, pos.getX(), pos.getY(), pos.getZ(), state);
 		super.breakBlock(worldIn, pos, state);
 	}
 	
-	private void dropItems(World world, int x, int y, int z)
+	private void dropItems(World world, int x, int y, int z, IBlockState state)
 	{
 		Random rand = new Random();
 		TileEntityComputer te = (TileEntityComputer) world.getTileEntity(new BlockPos(x, y, z));
@@ -143,6 +144,17 @@ public class BlockComputerOn extends Block implements ITileEntityProvider
 			float ry = rand.nextFloat() * 0.8F + 0.1F;
 			float rz = rand.nextFloat() * 0.8F + 0.1F;
 			EntityItem entityItem = new EntityItem(world, x + rx, y + ry, z + rz, ComputerProgram.getItem(program));
+			entityItem.motionX = rand.nextGaussian() * factor;
+			entityItem.motionY = rand.nextGaussian() * factor + 0.2F;
+			entityItem.motionZ = rand.nextGaussian() * factor;
+			world.spawnEntityInWorld(entityItem);
+		}
+		if((Boolean) state.getValue(BSOD))
+		{
+			float rx = rand.nextFloat() * 0.8F + 0.1F;
+			float ry = rand.nextFloat() * 0.8F + 0.1F;
+			float rz = rand.nextFloat() * 0.8F + 0.1F;
+			EntityItem entityItem = new EntityItem(world, x + rx, y + ry, z + rz, ComputerProgram.getItem(-1));
 			entityItem.motionX = rand.nextGaussian() * factor;
 			entityItem.motionY = rand.nextGaussian() * factor + 0.2F;
 			entityItem.motionZ = rand.nextGaussian() * factor;
