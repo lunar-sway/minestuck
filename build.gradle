@@ -22,8 +22,8 @@ group= "com.mraof.minestuck"
 archivesBaseName = "Minestuck"
 
 minecraft {
-    version = "1.7.10-10.13.0.1179"
-    assetDir = "eclipse/assets"
+    version = "1.7.10-10.13.2.1291"
+    runDir = "eclipse"
 
     replaceIn "com/mraof/minestuck/Minestuck.java"
     replace "@VERSION@", project.version
