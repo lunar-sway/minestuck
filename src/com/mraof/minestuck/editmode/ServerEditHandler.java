@@ -32,6 +32,7 @@ import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.world.BlockEvent;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.ClientProxy;
@@ -316,34 +317,44 @@ public class ServerEditHandler
 	}
 	
 	@SubscribeEvent(priority=EventPriority.LOWEST)
-	public void onItemUseRead(PlayerInteractEvent event) {
-		
-		if(!event.entity.worldObj.isRemote && getData(event.entityPlayer.getCommandSenderName()) != null) {
+	public void onItemUseRead(PlayerInteractEvent event)
+	{
+		if(!event.entity.worldObj.isRemote && getData(event.entityPlayer.getCommandSenderName()) != null
+				&& event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK)
+		{
 			EditData data = getData(event.entityPlayer.getCommandSenderName());
-			if(event.isCanceled()) {	//If the event was cancelled server side and not client side, notify the client.
+			GristHelper.decrease(data.connection.getClientName(), new GristSet(GristType.Build,1));
+			MinestuckPlayerTracker.updateGristCache(data.connection.getClientName());
+		}
+	}
+	
+	@SubscribeEvent(priority=EventPriority.LOWEST)
+	public void onBlockPlaced(BlockEvent.PlaceEvent event)
+	{
+		if(getData(event.player.getCommandSenderName()) != null)
+		{
+			EditData data = getData(event.player.getCommandSenderName());
+			if(event.isCanceled())	//If the event was cancelled server side and not client side, notify the client.
+			{
 				MinestuckPacket packet = MinestuckPacket.makePacket(Type.SERVER_EDIT, data.connection.givenItems());
-				MinestuckChannelHandler.sendToPlayer(packet, event.entityPlayer);
+				MinestuckChannelHandler.sendToPlayer(packet, event.player);
 				return;
 			}
-			if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK && event.useItem == Result.ALLOW) {
-				ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
-				if(DeployList.containsItemStack(stack)) {
-					SburbConnection c = data.connection;
-					GristSet cost = Minestuck.hardMode && c.givenItems()[DeployList.getOrdinal(stack)]
-							?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
-					c.givenItems()[DeployList.getOrdinal(stack)] = true;
-					if(!c.isMain())
-						SkaianetHandler.giveItems(c.getClientName());
-					if(!cost.isEmpty())
-						GristHelper.decrease(c.getClientName(), cost);
-				} else {
-					GristHelper.decrease(data.connection.getClientName(), GristRegistry.getGristConversion(stack));
-					MinestuckPlayerTracker.updateGristCache(data.connection.getClientName());
-				}
-			}
-			else if(event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK)
+			
+			ItemStack stack = event.itemInHand;
+			if(DeployList.containsItemStack(stack))
 			{
-				GristHelper.decrease(data.connection.getClientName(), new GristSet(GristType.Build,1));
+				SburbConnection c = data.connection;
+				GristSet cost = Minestuck.hardMode && c.givenItems()[DeployList.getOrdinal(stack)]
+						? DeployList.getSecondaryCost(stack) : DeployList.getPrimaryCost(stack);
+				c.givenItems()[DeployList.getOrdinal(stack)] = true;
+				if(!c.isMain())
+					SkaianetHandler.giveItems(c.getClientName());
+				if(!cost.isEmpty())
+					GristHelper.decrease(c.getClientName(), cost);
+			} else
+			{
+				GristHelper.decrease(data.connection.getClientName(), GristRegistry.getGristConversion(stack));
 				MinestuckPlayerTracker.updateGristCache(data.connection.getClientName());
 			}
 		}

@@ -227,7 +227,6 @@ public class Minestuck
 	public static boolean generateSpecialClasses;	//Allow generation of the "Lord" and "Muse" classes.
 	public static boolean globalSession;	//Makes only one session possible. Recommended to be true on small servers. Will be ignored when loading a world that already got 2+ sessions.
 	public static boolean easyDesignix; //Makes it so you don't need to encode individual cards before combining them.
-	public static boolean toolTipEnabled;
 	public static boolean forceMaxSize;	//If it should prevent players from joining a session if there is no possible combinations left.
 	public static boolean giveItems;
 	public static boolean specialCardRenderer;
@@ -287,7 +286,6 @@ public class Minestuck
 		landEditRange = config.get("General", "landEditRange", 30).getInt();	//Now radius
 		artifactRange = config.get("General", "artifactRange", 30).getInt();
 		MinestuckAchievementHandler.idOffset = config.get("General", "statisticIdOffset", 413).getInt();
-		toolTipEnabled = config.get("General", "editmodeToolTip", false).getBoolean(false);
 		hardMode = config.get("General", "hardMode", false).getBoolean(false);
 		forceMaxSize = config.get("General", "forceMaxSize", false).getBoolean(false);
 		escapeFailureMode = config.get("General", "escapeFailureMode", 0).getInt();
@@ -302,8 +300,8 @@ public class Minestuck
 		
 		if(escapeFailureMode > 2 || escapeFailureMode < 0)
 			escapeFailureMode = 0;
-		if(event.getSide().isClient()) {	//Client sided config values
-			toolTipEnabled = config.get("General", "editmodeToolTip", false).getBoolean(false);
+		if(event.getSide().isClient())	//Client sided config values
+		{
 			specialCardRenderer = config.get("General", "specialCardRenderer", false).getBoolean(false);
 			if(Minestuck.specialCardRenderer && !GLContext.getCapabilities().GL_EXT_framebuffer_object)
 			{
