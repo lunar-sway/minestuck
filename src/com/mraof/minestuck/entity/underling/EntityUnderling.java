@@ -17,6 +17,7 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
@@ -44,6 +45,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	@SuppressWarnings("unchecked")
 	protected static EntityListFilter underlingSelector = new EntityListFilter(Arrays.<Class<? extends EntityLivingBase>>asList(EntityImp.class, EntityOgre.class, EntityBasilisk.class, EntityGiclops.class));
 	protected EntityListFilter attackEntitySelector;
+	protected AxisAlignedBB areaToGuard;
 	//The type of the underling
 	protected GristType type;
 	//Name of underling, used in getting the texture and actually naming it
@@ -137,16 +139,36 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	}
 	
 	@Override
-	public void writeEntityToNBT(NBTTagCompound par1nbtTagCompound) 
+	public void writeEntityToNBT(NBTTagCompound tagCompound) 
 	{
-		super.writeEntityToNBT(par1nbtTagCompound);
-		par1nbtTagCompound.setString("Type", this.type.getName());
+		super.writeEntityToNBT(tagCompound);
+		tagCompound.setString("Type", this.type.getName());
+		if(this.areaToGuard != null)
+		{
+			NBTTagCompound nbt = new NBTTagCompound();
+			nbt.setInteger("minX", (int) this.areaToGuard.minX);
+			nbt.setInteger("minY", (int) this.areaToGuard.minY);
+			nbt.setInteger("minZ", (int) this.areaToGuard.minZ);
+			nbt.setInteger("maxX", (int) this.areaToGuard.maxX);
+			nbt.setInteger("maxY", (int) this.areaToGuard.maxY);
+			nbt.setInteger("maxZ", (int) this.areaToGuard.maxZ);
+			tagCompound.setTag("areaToGuard", nbt);
+		}
 	}
 	@Override
-	public void readEntityFromNBT(NBTTagCompound par1nbtTagCompound) 
+	public void readEntityFromNBT(NBTTagCompound tagCompound) 
 	{
-		super.readEntityFromNBT(par1nbtTagCompound);
-		this.type = GristType.getTypeFromString(par1nbtTagCompound.getString("Type"));
+		super.readEntityFromNBT(tagCompound);
+		this.type = GristType.getTypeFromString(tagCompound.getString("Type"));
+		if(tagCompound.hasKey("areaToGuard"))
+		{
+			NBTTagCompound nbt = new NBTTagCompound();
+			this.areaToGuard = new AxisAlignedBB(nbt.getInteger("minX"), nbt.getInteger("minY"), nbt.getInteger("minZ"),
+					nbt.getInteger("maxX"), nbt.getInteger("maxY"), nbt.getInteger("maxZ"));
+		} else
+		{
+			this.areaToGuard = null;
+		}
 		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)(this.getMaximumHealth()));
 	}
 	
@@ -224,6 +246,22 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 		this.setHealth(this.getMaximumHealth());
 		
 		return super.func_180482_a(difficulty, livingData);
+	}
+	
+	@Override
+	protected boolean canDespawn()
+	{
+		return this.areaToGuard == null;
+	}
+	
+	public AxisAlignedBB getAreaToGuard()
+	{
+		return this.areaToGuard;
+	}
+	
+	public void setAreaToGuard(AxisAlignedBB boundingBox)
+	{
+		this.areaToGuard = boundingBox;
 	}
 	
 	protected class UnderlingData implements IEntityLivingData
