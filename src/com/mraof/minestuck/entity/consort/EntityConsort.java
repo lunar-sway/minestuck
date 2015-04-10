@@ -16,9 +16,6 @@ public abstract class EntityConsort extends EntityMinestuck
 		super(world);
 //		moveSpeed = 2.5F;
 		
-        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)(this.getMaximumHealth()));
-		this.setHealth(this.getMaximumHealth());
-		
         setSize(0.6F, 1.5F);
         this.experienceValue = 1;
 	}

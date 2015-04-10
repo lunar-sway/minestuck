@@ -8,13 +8,17 @@ import net.minecraft.world.World;
 public abstract class EntityMinestuck extends EntityCreature 
 {
 	protected ResourceLocation textureResource;
+	
 	public EntityMinestuck(World par1World) 
 	{
 		super(par1World);
-		
-		if(this.getMaximumHealth() > 0)
-			this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)(this.getMaximumHealth()));
-		this.setHealth(this.getMaximumHealth());
+	}
+	
+	@Override
+	protected void applyEntityAttributes()
+	{
+		super.applyEntityAttributes();
+		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)(this.getMaximumHealth()));
 	}
 	
 	protected abstract float getMaximumHealth();

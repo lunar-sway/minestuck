@@ -58,7 +58,7 @@ public class EntityImp extends EntityUnderling
 	@Override
 	protected double getWanderSpeed() 
 	{
-		return 0.5;
+		return 0.3;
 	}
 	@Override
 	protected float getMaximumHealth() 

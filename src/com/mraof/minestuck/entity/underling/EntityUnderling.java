@@ -17,7 +17,6 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
@@ -45,7 +44,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	@SuppressWarnings("unchecked")
 	protected static EntityListFilter underlingSelector = new EntityListFilter(Arrays.<Class<? extends EntityLivingBase>>asList(EntityImp.class, EntityOgre.class, EntityBasilisk.class, EntityGiclops.class));
 	protected EntityListFilter attackEntitySelector;
-	protected AxisAlignedBB areaToGuard;
+//	protected AxisAlignedBB areaToGuard;
 	//The type of the underling
 	protected GristType type;
 	//Name of underling, used in getting the texture and actually naming it
@@ -74,6 +73,14 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 			this.setCombatTask();
 		}
 
+	}
+	
+	@Override
+	protected void applyEntityAttributes()
+	{
+		super.applyEntityAttributes();
+		
+		//TODO set different knockback resistance for different underlings
 	}
 	
 	//used when getting how much grist should be dropped on death
@@ -143,16 +150,15 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	{
 		super.writeEntityToNBT(tagCompound);
 		tagCompound.setString("Type", this.type.getName());
-		if(this.areaToGuard != null)
+		if(hasHome())
 		{
 			NBTTagCompound nbt = new NBTTagCompound();
-			nbt.setInteger("minX", (int) this.areaToGuard.minX);
-			nbt.setInteger("minY", (int) this.areaToGuard.minY);
-			nbt.setInteger("minZ", (int) this.areaToGuard.minZ);
-			nbt.setInteger("maxX", (int) this.areaToGuard.maxX);
-			nbt.setInteger("maxY", (int) this.areaToGuard.maxY);
-			nbt.setInteger("maxZ", (int) this.areaToGuard.maxZ);
-			tagCompound.setTag("areaToGuard", nbt);
+			BlockPos home = func_180486_cf();
+			nbt.setInteger("homeX", home.getX());
+			nbt.setInteger("homeY", home.getY());
+			nbt.setInteger("homeZ", home.getZ());
+			nbt.setInteger("maxHomeDistance", (int) getMaximumHomeDistance());
+			tagCompound.setTag("homePos", nbt);
 		}
 	}
 	@Override
@@ -163,12 +169,10 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 		if(tagCompound.hasKey("areaToGuard"))
 		{
 			NBTTagCompound nbt = new NBTTagCompound();
-			this.areaToGuard = new AxisAlignedBB(nbt.getInteger("minX"), nbt.getInteger("minY"), nbt.getInteger("minZ"),
-					nbt.getInteger("maxX"), nbt.getInteger("maxY"), nbt.getInteger("maxZ"));
-		} else
-		{
-			this.areaToGuard = null;
+			BlockPos pos = new BlockPos(nbt.getInteger("homeX"), nbt.getInteger("homeY"), nbt.getInteger("homeZ"));
+			func_175449_a(pos, nbt.getInteger("maxHomeDistance"));
 		}
+		
 		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)(this.getMaximumHealth()));
 	}
 	
@@ -226,7 +230,6 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	{
 		this.type = GristType.values()[additionalData.readInt()];
 		this.textureResource = new ResourceLocation("minestuck", this.getTexture());
-		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)(this.getMaximumHealth()));
 	}
 	
 	@Override
@@ -242,8 +245,9 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 		{
 			this.type = ((UnderlingData)livingData).type;
 		}
+		
 		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)(this.getMaximumHealth()));
-		this.setHealth(this.getMaximumHealth());
+		setHealth(this.getMaximumHealth());
 		
 		return super.func_180482_a(difficulty, livingData);
 	}
@@ -251,17 +255,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	@Override
 	protected boolean canDespawn()
 	{
-		return this.areaToGuard == null;
-	}
-	
-	public AxisAlignedBB getAreaToGuard()
-	{
-		return this.areaToGuard;
-	}
-	
-	public void setAreaToGuard(AxisAlignedBB boundingBox)
-	{
-		this.areaToGuard = boundingBox;
+		return !this.hasHome();
 	}
 	
 	protected class UnderlingData implements IEntityLivingData

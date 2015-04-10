@@ -48,7 +48,7 @@ public class EntityOgre extends EntityUnderling
 	@Override
 	protected double getWanderSpeed() 
 	{
-		return 0.4;
+		return 0.1;
 	}
 	@Override
 	protected float getMaximumHealth() 

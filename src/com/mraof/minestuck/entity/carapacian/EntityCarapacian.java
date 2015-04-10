@@ -45,10 +45,7 @@ public abstract class EntityCarapacian extends EntityMinestuck
 		allyClasses = new ArrayList<Class<? extends EntityLivingBase>>();
 		setEnemies();
 		setAllies();
-
-		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)(this.getMaximumHealth()));
-		this.setHealth(this.getMaximumHealth());
-
+		
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(4, new EntityAIMoveToBattle(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTargetAllied(this, this.getKingdom() == EnumEntityKingdom.PROSPITIAN ? prospitianSelector : dersiteSelector));
@@ -56,14 +53,13 @@ public abstract class EntityCarapacian extends EntityMinestuck
 		this.tasks.addTask(5, new EntityAIWander(this, this.getWanderSpeed()));
 		this.tasks.addTask(6, new EntityAILookIdle(this));
 		this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-
+		
 		if (par1World != null && !par1World.isRemote)
 		{
 			this.setCombatTask();
 		}
 	}
-
-
+	
 	protected abstract void setCombatTask();
 
 	public abstract float getWanderSpeed();

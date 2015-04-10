@@ -28,13 +28,6 @@ public abstract class EntityBishop extends EntityCarapacian implements IRangedAt
 	}
 	
 	@Override
-	protected void applyEntityAttributes() 
-	{
-		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(40.0D);
-	}
-	
-	@Override
 	public float getWanderSpeed() 
 	{
 		return .2F;

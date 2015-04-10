@@ -6,13 +6,15 @@ import com.mraof.minestuck.entity.carapacian.EnumEntityKingdom;
 import com.mraof.minestuck.util.Debug;
 
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.Vec3;
 
 public class EntityAIMoveToBattle extends EntityAIBase
 {
 	
 	private EntityCarapacian target;
-	protected int x, y, z;
+	protected Vec3 destination;
 	
 	public EntityAIMoveToBattle(EntityCarapacian entity)
 	{
@@ -32,19 +34,17 @@ public class EntityAIMoveToBattle extends EntityAIBase
 		if(type == EnumEntityKingdom.DERSITE && target.posX >= 0 || type == EnumEntityKingdom.PROSPITIAN && target.posX <= 0)
 			return false;
 		
-		x = target.getRNG().nextInt(10) + 5;
-		x = (int) (target.posX + (type == EnumEntityKingdom.DERSITE ? x : -x));
-		z = (int) (target.posZ + target.getRNG().nextInt(8) - 4);
-		y = target.worldObj.getTopSolidOrLiquidBlock(new BlockPos(x, 0, z)).up().getY();	//Wont work around castles
+		BlockPos pos = target.worldObj.getHorizon(new BlockPos(type == EnumEntityKingdom.DERSITE ? 5 : -5, 0, target.posY));
+		destination = RandomPositionGenerator.findRandomTargetBlockTowards(target, 10, 7, new Vec3(pos.getX(), pos.getY(), pos.getZ()));
 		
-		return true;
+		return destination != null;
 	}
 	
 	@Override
 	public void startExecuting()
 	{
 		
-		this.target.getNavigator().tryMoveToXYZ(this.x, this.y, this.z, target.getWanderSpeed());
+		this.target.getNavigator().tryMoveToXYZ(destination.xCoord, destination.yCoord, destination.zCoord, target.getWanderSpeed());
 	}
 	
 	@Override
