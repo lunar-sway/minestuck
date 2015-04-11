@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -11,6 +12,7 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.BlockChessTile;
 
 public class ComponentCastleStartPiece extends ComponentCastlePiece 
 {
@@ -52,8 +54,8 @@ public class ComponentCastleStartPiece extends ComponentCastlePiece
 	}
     public boolean addComponentParts(World world, Random random, StructureBoundingBox structureBoundingBox)
     {
-    	int chessTileMetadata = this.isBlack ? 0 : 1;
-    	int chessTileMetadata1 = this.isBlack ? 2 : 3;
+		IBlockState chessTile = getChessBlockState(this.isBlack ? 0 : 1);
+		IBlockState chessTile1 = getChessBlockState(this.isBlack ? 2 : 3);
 //    	Debug.print("addComponentParts in ComponentCastleStartPiece running");
         if (this.averageGroundLevel < 0)
         {
@@ -74,10 +76,10 @@ public class ComponentCastleStartPiece extends ComponentCastlePiece
         {
 //        	Debug.print("CCSP: " + this.averageGroundLevel);
 //            Debug.print(structureBoundingBox.minX + ", " + structureBoundingBox.minY + ", " + structureBoundingBox.minZ + ", " + structureBoundingBox.maxX + ", " + structureBoundingBox.maxY + ", " + structureBoundingBox.maxZ);
-            this.fillWithAlternatingBlocks(world, structureBoundingBox, 0, 0, 0, 7 ,6, 7, Minestuck.chessTile, chessTileMetadata,  Minestuck.chessTile, chessTileMetadata1, false);
-            this.fillWithAlternatingBlocks(world, structureBoundingBox, 0, 0, 0, 7 ,7, 0, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
-            this.fillWithAlternatingBlocks(world, structureBoundingBox, 0, 0, 7, 7 ,7, 7, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
-//            this.fillWithBlocks(world, structureBoundingBox, 2, 1, 0, 5, 5, 7, Blocks.air, Blocks.air, false);
+            this.fillWithAlternatingBlocks(world, structureBoundingBox, 0, 0, 0, 7 ,6, 7, chessTile,  chessTile1, false);
+            this.fillWithAlternatingBlocks(world, structureBoundingBox, 0, 0, 0, 7 ,7, 0, chessTile, chessTile1, false);
+            this.fillWithAlternatingBlocks(world, structureBoundingBox, 0, 0, 7, 7 ,7, 7, chessTile, chessTile1, false);
+            this.fillWithAir(world, structureBoundingBox, 2, 1, 0, 5, 5, 7);
 
             return true;
         }

@@ -12,6 +12,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.IProgressUpdate;
+import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
@@ -29,6 +30,7 @@ import com.mraof.minestuck.entity.carapacian.EntityWhiteBishop;
 import com.mraof.minestuck.entity.carapacian.EntityWhitePawn;
 import com.mraof.minestuck.entity.carapacian.EntityWhiteRook;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.world.gen.structure.MapGenCastle;
 
 /**
  * @author Mraof
@@ -44,7 +46,7 @@ public class ChunkProviderSkaia implements IChunkProvider
 	public NoiseGeneratorOctaves noiseGen4;
 	public NoiseGeneratorOctaves noiseGen5;
 
-	//private MapGenCastle castleGenerator = new MapGenCastle();
+	private MapGenCastle castleGenerator = new MapGenCastle();
 
 	double[] noiseData1;
 	double[] noiseData2;
@@ -114,7 +116,7 @@ public class ChunkProviderSkaia implements IChunkProvider
 				}
 		//y * 256, z * 16, x
 		Chunk chunk = new Chunk(this.skaiaWorld, primer, chunkX, chunkZ);
-		//this.castleGenerator.func_151539_a(this, skaiaWorld, chunkX, chunkZ, new Block[65536]);
+//		this.castleGenerator.func_175792_a(this, skaiaWorld, chunkX, chunkZ, primer);
 		chunk.generateSkylightMap();
 		return chunk;
 	}
@@ -122,15 +124,13 @@ public class ChunkProviderSkaia implements IChunkProvider
 	@Override
 	public void populate(IChunkProvider var1, int var2, int var3) 
 	{
-		//this.castleGenerator.generateStructuresInChunk(skaiaWorld, random, var2, var3);
+//		this.castleGenerator.func_175794_a(skaiaWorld, random, new ChunkCoordIntPair(var2, var3));	//was called "generateStructuresInChunk"
 	}
-
+	
 	@Override
 	public boolean saveChunks(boolean var1, IProgressUpdate var2) {
 		return true;
 	}
-
-
 
 	@Override
 	public boolean canSave() {

@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.gen.structure;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
@@ -27,8 +28,8 @@ public class ComponentCastleSolidPiece extends ComponentCastlePiece
     }
 	@Override
 	public boolean addComponentParts(World world, Random random, StructureBoundingBox structureboundingbox) {
-		int chessTileMetadata = startPiece.isBlack ? 0 : 1;
-    	int chessTileMetadata1 = startPiece.isBlack ? 2 : 3;
+		IBlockState chessTile = getChessBlockState(startPiece.isBlack ? 0 : 1);
+		IBlockState chessTile1 = getChessBlockState(startPiece.isBlack ? 2 : 3);
         if (startPiece.averageGroundLevel < 0)
         {
              startPiece.averageGroundLevel = startPiece.getAverageGroundLevel(world);
@@ -42,7 +43,7 @@ public class ComponentCastleSolidPiece extends ComponentCastlePiece
         if(this.boundingBox.minY < 1)
         	this.boundingBox.offset(0, startPiece.averageGroundLevel - 1, 0);
         
-        this.fillWithAlternatingBlocks(world, structureboundingbox, 0, 0, 0, 7 ,7, 7, Minestuck.chessTile, chessTileMetadata,  Minestuck.chessTile, chessTileMetadata1, false);
+		this.fillWithAlternatingBlocks(world, structureboundingbox, 0, 0, 0, 7 ,7, 7, chessTile, chessTile1, false);
 
         return true;
 	}

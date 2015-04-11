@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.gen.structure;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -63,8 +64,8 @@ public class ComponentCastleRoomPiece extends ComponentCastlePiece
 	@Override
 	public boolean addComponentParts(World world, Random random, StructureBoundingBox structureboundingbox) 
 	{
-		int chessTileMetadata = startPiece.isBlack ? 0 : 1;
-		int chessTileMetadata1 = startPiece.isBlack ? 2 : 3;
+		IBlockState chessTile = getChessBlockState(startPiece.isBlack ? 0 : 1);
+		IBlockState chessTile1 = getChessBlockState(startPiece.isBlack ? 2 : 3);
 		if (startPiece.averageGroundLevel < 0)
 		{
 			startPiece.averageGroundLevel = startPiece.getAverageGroundLevel(world);
@@ -81,9 +82,10 @@ public class ComponentCastleRoomPiece extends ComponentCastlePiece
 //			System.out.print(this.boundingBox.minY);
 			this.boundingBox.offset(0, startPiece.averageGroundLevel - 1, 0);
 		}
-		this.fillWithAlternatingBlocks(world, structureboundingbox, 0, 0, 0, 7 ,7, 7, Minestuck.chessTile, chessTileMetadata,  Minestuck.chessTile, chessTileMetadata1, false);
-//		this.fillWithBlocks(world, structureboundingbox, 0, 1, 0, 7, 6, 7, Blocks.air, Blocks.air, false);
-//		this.placeBlockAtCurrentPosition(world, Blocks.torch, 5, 3, 1, 3, structureboundingbox);
+		this.fillWithAlternatingBlocks(world, structureboundingbox, 0, 0, 0, 7 ,0, 7, chessTile,  chessTile1, false);
+		this.fillWithAlternatingBlocks(world, structureboundingbox, 0, 7, 0, 7 ,7, 7, chessTile,  chessTile1, false);
+		this.func_175804_a(world, structureboundingbox, 0, 1, 0, 7, 6, 7, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);	//fillWithBlocks
+		this.func_175811_a(world, Blocks.torch.getDefaultState(), 3, 1, 3, structureboundingbox);	//placeBlockAtCurrentPosition
 		return true;
 	}
 	@Override

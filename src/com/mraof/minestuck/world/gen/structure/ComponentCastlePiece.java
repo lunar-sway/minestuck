@@ -3,8 +3,12 @@ package com.mraof.minestuck.world.gen.structure;
 import java.util.List;
 import java.util.Random;
 
+import com.mraof.minestuck.Minestuck;
+
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
@@ -54,11 +58,11 @@ public abstract class ComponentCastlePiece extends StructureComponent
 		{
 			for (int var6 = this.boundingBox.minX; var6 <= this.boundingBox.maxX; ++var6)
 			{
-//				if (par2StructureBoundingBox.isVecInside(var6, 64, var5))
-//				{
-//					var3 += par1World.getTopSolidOrLiquidBlock(var6, var5);
-//					++var4;
-//				}
+				if (par2StructureBoundingBox.func_175898_b(new BlockPos(var6, 64, var5)))	//isVecInside
+				{
+					var3 += par1World.getTopSolidOrLiquidBlock(new BlockPos(var6, 0, var5)).getY();
+					++var4;
+				}
 			}
 		}
 		
@@ -74,7 +78,9 @@ public abstract class ComponentCastlePiece extends StructureComponent
 				return 255 - 8;
 		}
 	}
-	protected void fillWithAlternatingBlocks(World world, StructureBoundingBox structureboundingbox, int x1, int y1, int z1, int x2, int y2, int z2, Block block1, int metadata1, Block block2, int metadata2, boolean b) {
+	
+	protected void fillWithAlternatingBlocks(World world, StructureBoundingBox structureboundingbox, int x1, int y1, int z1, int x2, int y2, int z2, IBlockState block1, IBlockState block2, boolean b)
+	{
 		for (int y = y1; y <= y2; ++y)
 		{
 			for (int x = x1; x <= x2; ++x)
@@ -84,11 +90,11 @@ public abstract class ComponentCastlePiece extends StructureComponent
 					if(((x + y + z) % 2 == 0) ^ b)
 					{
 //						Debug.print("Placing block at " + x + " " + y + " " + z + " " + blockID + " " + metadata1);
-//						this.placeBlockAtCurrentPosition(world, block1, metadata1, x, y, z, structureboundingbox);
+						this.func_175811_a(world, block1, x, y, z, structureboundingbox);	//placeBlockAtCurrentPosition
 					}
 					else
 					{
-//						this.placeBlockAtCurrentPosition(world, block2, metadata2, x, y, z, structureboundingbox);
+						this.func_175811_a(world, block2, x, y, z, structureboundingbox);
 //						Debug.print("Placing block at " + x + " " + y + " " + z + " " + blockID2 + " " + metadata2);
 					}
 				}
@@ -99,14 +105,10 @@ public abstract class ComponentCastlePiece extends StructureComponent
 	{
 		return this.getAverageGroundLevel(world, this.boundingBox);
 	}
-	//No idea what these do
-//	@Override
-//	protected void func_143012_a(NBTTagCompound nbttagcompound) 
-//	{
-//	}
-//	@Override
-//	protected void func_143011_b(NBTTagCompound nbttagcompound) 
-//	{
-//	}
-
+	
+	protected IBlockState getChessBlockState(int meta)
+	{
+		return Minestuck.chessTile.getStateFromMeta(meta);
+	}
+	
 }

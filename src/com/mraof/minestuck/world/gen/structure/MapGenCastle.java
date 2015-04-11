@@ -19,18 +19,7 @@ import com.mraof.minestuck.entity.carapacian.EntityBlackPawn;
  */
 public class MapGenCastle extends MapGenStructure
 {
-    private List<BiomeGenBase.SpawnListEntry> spawnList = new ArrayList<BiomeGenBase.SpawnListEntry>();
-
-    public MapGenCastle()
-    {
-        this.spawnList.add(new BiomeGenBase.SpawnListEntry(EntityBlackPawn.class, 10, 2, 3));
-    }
-
-	public List<SpawnListEntry> getSpawnList()
-    {
-        return this.spawnList;
-    }
-
+	
     protected boolean canSpawnStructureAtCoords(int chunkX, int chunkY)
     {
         int var3 = chunkX >> 4;

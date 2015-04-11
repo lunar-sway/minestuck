@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.gen.structure;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -10,6 +11,7 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.Debug;
 
 public class ComponentCastleWallPiece extends ComponentCastlePiece 
 {
@@ -108,8 +110,8 @@ public class ComponentCastleWallPiece extends ComponentCastlePiece
 
 	public boolean addComponentParts(World par1World, Random par2Random, StructureBoundingBox structureBoundingBox)
 	{
-		int chessTileMetadata = startPiece.isBlack ? 0 : 1;
-		int chessTileMetadata1 = startPiece.isBlack ? 2 : 3;
+		IBlockState chessTile = getChessBlockState(startPiece.isBlack ? 0 : 1);
+    	IBlockState chessTile1 = getChessBlockState(startPiece.isBlack ? 2 : 3);
 //		Debug.print("addComponentParts in ComponentCastleWallPiece running");
 		if (startPiece.averageGroundLevel < 0)
 		{
@@ -120,7 +122,7 @@ public class ComponentCastleWallPiece extends ComponentCastlePiece
 				return true;
 			}
 
-//			Debug.print(startPiece.averageGroundLevel);
+			Debug.print(startPiece.averageGroundLevel);
 		}
 		if(this.boundingBox.minY < startPiece.averageGroundLevel - 1)
 			this.boundingBox.offset(0, startPiece.averageGroundLevel - 1, 0);
@@ -130,11 +132,11 @@ public class ComponentCastleWallPiece extends ComponentCastlePiece
 		}
 		else
 		{
-//			Debug.print("CCWP: " + startPiece.averageGroundLevel + " " + this.boundingBox.minX + " " + this.boundingBox.minY);
+			Debug.print("CCWP: " + startPiece.averageGroundLevel + " " + this.boundingBox.minX + " " + this.boundingBox.minY);
 			if(!(this.direction == 5 && this.cornerPiece))
 			{
-				this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 0, 0, 7 ,6, 7, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
-//				this.fillWithBlocks(par1World, structureBoundingBox, 0, 7, 0, 7, 6, 7, Blocks.air, Blocks.air, false);
+				this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 0, 0, 7 ,6, 7, chessTile, chessTile1, false);
+				this.fillWithAir(par1World, structureBoundingBox, 0, 7, 0, 7, 6, 7);
 			}
 			if(!this.cornerPiece)
 				switch(this.direction)
@@ -142,45 +144,45 @@ public class ComponentCastleWallPiece extends ComponentCastlePiece
 				case 0:
 				case 2:
 				case 4:
-					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 0, 0, 7 ,7, 0, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
-					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 0, 7, 7 ,7, 7, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
+					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 0, 0, 7 ,7, 0, chessTile, chessTile1, false);
+					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 0, 7, 7 ,7, 7, chessTile, chessTile1, false);
 					break;
 				case 1:
 				case 3:
-					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 7, 0, 0 ,7, 7, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
-					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 7, 7, 0, 7 ,7, 7, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
+					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 7, 0, 0 ,7, 7, chessTile, chessTile1, false);
+					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 7, 7, 0, 7 ,7, 7, chessTile, chessTile1, false);
 					break;
 				default:
-					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 7, 0, 7 ,7, 0, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
-					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 7, 7, 7 ,7, 7, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
-					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 7, 0, 0 ,7, 7, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
-					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 7, 7, 0, 7 ,7, 7, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
+					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 7, 0, 7 ,7, 0, chessTile, chessTile1, false);
+					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 7, 7, 7 ,7, 7, chessTile, chessTile1, false);
+					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 7, 0, 0 ,7, 7, chessTile, chessTile1, false);
+					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 7, 7, 0, 7 ,7, 7, chessTile, chessTile1, false);
 				}
 			else 
 				switch(this.direction)
 				{
 				case 0:
 				case 4:
-					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 0, 0, 7 ,7, 0, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
-					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 7, 0, 0 ,7, 7, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
+					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 0, 0, 7 ,7, 0, chessTile, chessTile1, false);
+					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 7, 0, 0 ,7, 7, chessTile, chessTile1, false);
 					break;
 				case 2:
-					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 0, 7, 7 ,7, 7, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
-					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 7, 7, 0, 7 ,7, 7, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
+					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 0, 7, 7 ,7, 7, chessTile, chessTile1, false);
+					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 7, 7, 0, 7 ,7, 7, chessTile, chessTile1, false);
 					break;
 				case 1:
-					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 7, 7, 0, 7 ,7, 7, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
-					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 0, 0, 7 ,7, 0, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
+					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 7, 7, 0, 7 ,7, 7, chessTile, chessTile1, false);
+					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 0, 0, 7 ,7, 0, chessTile, chessTile1, false);
 					break;
 				case 3:
-					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 7, 0, 0 ,7, 7, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
-					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 0, 7, 7 ,7, 7, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
+					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 7, 0, 0 ,7, 7, chessTile, chessTile1, false);
+					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 0, 7, 7 ,7, 7, chessTile, chessTile1, false);
 					break;
 				default:
-					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 7, 0, 7 ,7, 0, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
-					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 7, 7, 7 ,7, 7, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
-					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 7, 0, 0 ,7, 7, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
-					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 7, 7, 0, 7 ,7, 7, Minestuck.chessTile, chessTileMetadata, Minestuck.chessTile, chessTileMetadata1, false);
+					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 7, 0, 7 ,7, 0, chessTile, chessTile1, false);
+					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 7, 7, 7 ,7, 7, chessTile, chessTile1, false);
+					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 0, 7, 0, 0 ,7, 7, chessTile, chessTile1, false);
+					this.fillWithAlternatingBlocks(par1World, structureBoundingBox, 7, 7, 0, 7 ,7, 7, chessTile, chessTile1, false);
 				}
 				return true;
 		}
