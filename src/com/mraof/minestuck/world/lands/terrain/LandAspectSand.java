@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.Random;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.world.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.ILandAspect;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.LayeredBlockDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
+import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.gen.LandTerrainGenBase;
 import com.mraof.minestuck.world.lands.gen.RiverFreeTerrainGen;
 

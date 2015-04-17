@@ -1,7 +1,7 @@
 package com.mraof.minestuck.world.lands.title;
 
-import com.mraof.minestuck.world.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.decorator.BucketDecorator;
+import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 public class LandAspectBuckets extends TitleAspect	//Yes, buckets
 {

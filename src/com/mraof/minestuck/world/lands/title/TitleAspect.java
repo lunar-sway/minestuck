@@ -5,8 +5,8 @@ import java.util.List;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.WorldProviderLands;
-import com.mraof.minestuck.world.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.ILandAspect;
+import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.terrain.TerrainAspect;
 
 public abstract class TitleAspect implements ILandAspect

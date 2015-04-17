@@ -9,7 +9,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 public class IceDecorator extends PostDecorator
 {

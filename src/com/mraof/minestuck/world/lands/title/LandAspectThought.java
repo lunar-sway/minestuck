@@ -7,9 +7,9 @@ import net.minecraft.block.state.IBlockState;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.BlockColoredDirt;
-import com.mraof.minestuck.world.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
+import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.terrain.TerrainAspect;
 
 public class LandAspectThought extends TitleAspect

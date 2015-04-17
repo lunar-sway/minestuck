@@ -145,6 +145,7 @@ import com.mraof.minestuck.world.gen.OreHandler;
 import com.mraof.minestuck.world.gen.structure.StructureCastlePieces;
 import com.mraof.minestuck.world.gen.structure.StructureCastleStart;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
+import com.mraof.minestuck.world.lands.structure.LandStructureHandler;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 @Mod(modid = "Minestuck", name = "Minestuck", version = "@VERSION@", guiFactory = "com.mraof.minestuck.client.gui.MinestuckGuiFactory")
@@ -475,6 +476,7 @@ public class Minestuck
 		//Register structures
 		MapGenStructureIO.registerStructure(StructureCastleStart.class, "SkaiaCastle");
 		StructureCastlePieces.registerComponents();
+		LandStructureHandler.registerStructures();
 		
 		//register recipes
 		AlchemyRecipeHandler.registerVanillaRecipes();

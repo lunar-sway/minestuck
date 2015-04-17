@@ -8,8 +8,8 @@ import java.util.Set;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.LandRegisterPacket;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
+import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;

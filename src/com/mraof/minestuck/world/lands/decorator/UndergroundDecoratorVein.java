@@ -10,8 +10,8 @@ import net.minecraft.world.gen.feature.WorldGenMinable;
 
 import com.google.common.base.Predicate;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.gen.OreHandler;
+import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 public class UndergroundDecoratorVein implements ILandDecorator
 {

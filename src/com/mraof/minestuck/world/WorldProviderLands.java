@@ -18,8 +18,8 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.biome.BiomeGenMinestuck;
-import com.mraof.minestuck.world.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
+import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.terrain.TerrainAspect;
 import com.mraof.minestuck.world.lands.title.TitleAspect;
 

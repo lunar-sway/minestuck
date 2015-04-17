@@ -16,6 +16,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.OreCruxite;
 import com.mraof.minestuck.world.WorldProviderLands;
+import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 public class OreHandler implements IWorldGenerator
 {

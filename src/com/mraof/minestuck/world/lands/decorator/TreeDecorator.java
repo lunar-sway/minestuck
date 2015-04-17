@@ -9,7 +9,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import net.minecraft.world.gen.feature.WorldGenTrees;
 
-import com.mraof.minestuck.world.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 public class TreeDecorator implements ILandDecorator
 {

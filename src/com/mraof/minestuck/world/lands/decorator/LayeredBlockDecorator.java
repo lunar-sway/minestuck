@@ -10,7 +10,7 @@ import net.minecraft.world.World;
 
 import com.mraof.minestuck.block.BlockLayered;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 public class LayeredBlockDecorator extends PostDecorator
 {

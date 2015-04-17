@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.mraof.minestuck.world.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.ILandAspect;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
+import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.gen.DefaultTerrainGen;
 import com.mraof.minestuck.world.lands.gen.LandTerrainGenBase;
+import com.mraof.minestuck.world.lands.structure.LandStructureHandler;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -106,5 +107,8 @@ public abstract class TerrainAspect implements ILandAspect
 	{
 		return new DefaultTerrainGen(chunkProvider, rand);
 	}
+	
+	public void modifyStructureList(List<LandStructureHandler.StructureEntry> list)
+	{}
 	
 }

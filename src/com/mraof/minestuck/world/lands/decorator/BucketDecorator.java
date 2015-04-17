@@ -4,7 +4,7 @@ import java.util.Random;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

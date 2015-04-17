@@ -6,7 +6,7 @@ import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
-import com.mraof.minestuck.world.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 public class RabbitSpawner extends PostDecorator
 {

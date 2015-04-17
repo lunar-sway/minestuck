@@ -1,4 +1,4 @@
-package com.mraof.minestuck.world.gen;
+package com.mraof.minestuck.world.lands.gen;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,7 +37,7 @@ import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
-import com.mraof.minestuck.world.lands.gen.LandTerrainGenBase;
+import com.mraof.minestuck.world.lands.structure.LandStructureHandler;
 import com.mraof.minestuck.world.lands.terrain.TerrainAspect;
 import com.mraof.minestuck.world.lands.title.TitleAspect;
 
@@ -60,6 +60,7 @@ public class ChunkProviderLands implements IChunkProvider
 	public IBlockState riverBlock;
 	public ArrayList<ILandDecorator> decorators;
 	public LandTerrainGenBase terrainGenerator;
+	public LandStructureHandler structureHandler;
 	public int dayCycle;
 	public int weatherType;	//-1:No weather &1: rainy or snowy &2:If thunder &4:If neverending
 
@@ -100,6 +101,7 @@ public class ChunkProviderLands implements IChunkProvider
 			
 			this.random = new Random(seed);
 			this.terrainGenerator = aspect1.createTerrainGenerator(this, random);
+			this.structureHandler = new LandStructureHandler(this);
 			this.surfaceBlock = helper.pickElement(aspect1.getSurfaceBlocks());
 			this.upperBlock = helper.pickElement(aspect1.getUpperBlocks());
 			this.oceanBlock = aspect1.getOceanBlock();
