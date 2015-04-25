@@ -44,7 +44,7 @@ import com.mraof.minestuck.world.lands.title.TitleAspect;
 public class ChunkProviderLands implements IChunkProvider 
 {
 	List<SpawnListEntry> consortList;
-	List<SpawnListEntry> underlingList;
+	public List<SpawnListEntry> monsterList;
 	World landWorld;
 	Random random;
 	Vec3 skyColor;
@@ -76,15 +76,10 @@ public class ChunkProviderLands implements IChunkProvider
 		this.landWorld = worldObj;
 		
 		this.consortList = new ArrayList<SpawnListEntry>();
-		this.underlingList = new ArrayList<SpawnListEntry>();
+		this.monsterList = new ArrayList<SpawnListEntry>();
 		this.consortList.add(new SpawnListEntry(EntityNakagator.class, 2, 1, 10));
 		this.consortList.add(new SpawnListEntry(EntitySalamander.class, 2, 1, 10));
 		this.consortList.add(new SpawnListEntry(EntityIguana.class, 2, 1, 10));
-		this.underlingList.add(new SpawnListEntry(EntityImp.class, 6, 1, 10));
-		this.underlingList.add(new SpawnListEntry(EntityOgre.class, 4, 1, 2));
-		this.underlingList.add(new SpawnListEntry(EntityBasilisk.class, 3, 1, 2));
-		this.underlingList.add(new SpawnListEntry(EntityGiclops.class, 1, 1, 1));
-		this.underlingList.add(new SpawnListEntry(EntityBasilisk.class, 1, 1, 1));
 		
 		this.dayCycle = aspect1.getDayCycleMode();
 		this.skyColor = aspect1.getFogColor();
@@ -209,7 +204,14 @@ public class ChunkProviderLands implements IChunkProvider
 	@Override
 	public List func_177458_a(EnumCreatureType creatureType, BlockPos pos)	//This was called "getPossibleCreatures" for future reference
 	{
-		return creatureType == EnumCreatureType.CREATURE ? this.consortList : (creatureType == EnumCreatureType.MONSTER ? SessionHandler.getUnderlingList(pos, landWorld)/*this.underlingList*/ : null);
+		if(creatureType == EnumCreatureType.MONSTER)
+		{
+			List<SpawnListEntry> list = new ArrayList<SpawnListEntry>();
+			list.addAll(this.monsterList);
+			list.addAll(SessionHandler.getUnderlingList(pos, landWorld));
+			return list;
+		}
+		return creatureType == EnumCreatureType.CREATURE ? this.consortList : null;
 	}
 	
 	/**
