@@ -55,7 +55,7 @@ public class LandAspectSandstone extends TerrainAspect
 	@Override
 	public String getPrimaryName()
 	{
-		return "Sandstone";
+		return name;
 	}
 	
 	@Override

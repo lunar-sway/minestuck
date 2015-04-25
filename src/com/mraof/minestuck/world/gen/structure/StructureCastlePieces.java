@@ -54,7 +54,6 @@ public class StructureCastlePieces
 		MapGenStructureIO.registerStructureComponent(ComponentCastleStaircasePiece.class, "SkaiaCastleStaircase");
 		MapGenStructureIO.registerStructureComponent(ComponentCastleWallPiece.class, "SkaiaCastleWall");
 		MapGenStructureIO.registerStructureComponent(ComponentCastlePiece.class, "SkaiaCastleMain");
-		MapGenStructureIO.registerStructureComponent(ComponentCastleStartPiece.class, "SkaiaCastleStart");
 	}
 	
 }

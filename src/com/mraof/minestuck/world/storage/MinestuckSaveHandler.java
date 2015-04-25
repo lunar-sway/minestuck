@@ -43,22 +43,7 @@ public class MinestuckSaveHandler
 				e.printStackTrace();
 			}
 		}
-
-		//String[] oldFiles = {"gristCache", "minestuckLandList", "connectionList"};
-		//for(String s : oldFiles) {
-		dataFile = event.world.getSaveHandler().getMapFileFromName("gristCache");
-		if(dataFile != null && dataFile.exists())
-			dataFile.delete();
-		//}
 		
-	}
-	
-	//Remove when the issue MinecraftForge#1551 is resolved
-	@SubscribeEvent
-	public void onWorldLoad(WorldEvent.Load event)
-	{
-		if(!event.world.isRemote && event.world.villageCollectionObj == null)
-			event.world.init();
 	}
 	
 }

@@ -17,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.IProgressUpdate;
 import net.minecraft.util.Vec3;
+import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
@@ -130,20 +131,24 @@ public class ChunkProviderLands implements IChunkProvider
 		
 		Chunk chunk = new Chunk(this.landWorld, primer, chunkX, chunkZ);
 		chunk.generateSkylightMap();
+		structureHandler.func_175792_a(this, landWorld, chunkX, chunkZ, primer);
 		return chunk;
 	}
 	
 	@Override
-	public void populate(IChunkProvider ichunkprovider, int i, int j) 
+	public void populate(IChunkProvider ichunkprovider, int chunkX, int chunkZ) 
 	{
 		
-		this.random.setSeed(getSeedFor(i, j));
+		this.random.setSeed(getSeedFor(chunkX, chunkZ));
 		
-		ichunkprovider.populate(ichunkprovider, i, j);
+		ichunkprovider.populate(ichunkprovider, chunkX, chunkZ);
 		for (Object decorator : decorators)
 		{
-			((ILandDecorator) decorator).generate(landWorld, random, i,  j, this);
+			((ILandDecorator) decorator).generate(landWorld, random, chunkX,  chunkZ, this);
 		}
+		
+		structureHandler.func_175794_a(landWorld, random, new ChunkCoordIntPair(chunkX, chunkZ));
+		
 	}
 	
 	public long getSeedFor(int chunkX, int chunkZ)

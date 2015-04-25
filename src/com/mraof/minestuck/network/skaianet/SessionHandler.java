@@ -216,7 +216,7 @@ public class SessionHandler {
 				usedClasses.add(usedTitle.getHeroClass());
 				usedAspects.add(usedTitle.getHeroAspect());
 			}
-			title = new Title(EnumClass.getRandomClass(usedClasses, rand), EnumAspect.RAGE/*getRandomAspect(usedAspects, rand)*/);
+			title = new Title(EnumClass.getRandomClass(usedClasses, rand), EnumAspect.getRandomAspect(usedAspects, rand));
 		}
 		else	//Focus only on getting an unused title
 		{

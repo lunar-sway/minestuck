@@ -10,6 +10,7 @@ import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.MapGenStructure;
+import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureStart;
 
 public class LandStructureHandler extends MapGenStructure
@@ -23,7 +24,9 @@ public class LandStructureHandler extends MapGenStructure
 	
 	public static void registerStructures()
 	{
-		
+		genericStructures.add(new StructureEntry(DebugStructure.class, 1));
+		MapGenStructureIO.registerStructure(DebugStructure.class, "minestuckDebug");
+		MapGenStructureIO.registerStructureComponent(DebugStructure.DebugStructureGen.class, "minestuckDebugCompo");
 	}
 	
 	public LandStructureHandler(ChunkProviderLands chunkProvider)
@@ -34,8 +37,8 @@ public class LandStructureHandler extends MapGenStructure
 		chunkProvider.aspect1.modifyStructureList(structures);
 	}
 	
-	private static final int MAX_STRUCTURE_DISTANCE = 7;
-	private static final int MIN_STRUCTURE_DISTANCE = 2;
+	private static final int MAX_STRUCTURE_DISTANCE = 20;
+	private static final int MIN_STRUCTURE_DISTANCE = 4;
 	
 	@Override
 	protected boolean canSpawnStructureAtCoords(int chunkX, int chunkZ)	//This works very much like the scattered features in the overworld
@@ -57,10 +60,7 @@ public class LandStructureHandler extends MapGenStructure
 		z += random.nextInt(this.MAX_STRUCTURE_DISTANCE - this.MIN_STRUCTURE_DISTANCE);
 		
 		if (chunkX == x && chunkZ == z)
-		{
-			int[] terrainMap = chunkProvider.terrainGenerator.getHeightMap(chunkX, chunkZ);
-			
-		}
+			return true;
 		
 		return false;
 	}
@@ -104,10 +104,10 @@ public class LandStructureHandler extends MapGenStructure
 	
 	public static class StructureEntry
 	{
-		public final Class<StructureStart> structureStart;
+		public final Class<? extends StructureStart> structureStart;
 		public final float rarity;
 		
-		public StructureEntry(Class<StructureStart> structure, int rarity)
+		public StructureEntry(Class<? extends StructureStart> structure, int rarity)
 		{
 			this.structureStart = structure;
 			this.rarity = rarity;

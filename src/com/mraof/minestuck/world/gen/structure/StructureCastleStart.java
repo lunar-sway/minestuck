@@ -22,6 +22,7 @@ public class StructureCastleStart extends StructureStart
 	@SuppressWarnings("unchecked")
 	public StructureCastleStart(World world, Random random, int chunkX, int chunkZ, boolean isBlack)
 	{
+		super(chunkX, chunkZ);
 		Debug.print("StructureCastleStart Running");
 		ComponentCastleStartPiece startPiece = new ComponentCastleStartPiece(0, (chunkX << 4) + 0, (chunkZ << 4) + 0, isBlack);
 		this.components.add(startPiece);
