@@ -5,6 +5,7 @@ import java.util.Random;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.structure.StructureBoundingBox;
 
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
@@ -24,9 +25,15 @@ public class CogDecorator extends SimpleStructureDecorator
 			yCoord = world.getHorizon(new BlockPos(xCoord, 0, zCoord)).getY() - blocksDown;
 			if(world.getBlockState(new BlockPos(xCoord, yCoord, zCoord)).getBlock().getMaterial().isLiquid())
 				return;
-			
 			IBlockState[] materials = provider.aspect1.getStructureBlocks();
 			IBlockState block = materials[random.nextInt(materials.length)];
+			
+			StructureBoundingBox boundingBox;
+			if(!big)
+				boundingBox = new StructureBoundingBox(rotation?zCoord:xCoord - 2, yCoord, rotation?xCoord:zCoord, rotation?zCoord:xCoord + 2, yCoord + 4, rotation?xCoord:zCoord);
+			else boundingBox = new StructureBoundingBox(rotation?zCoord:xCoord - 3, yCoord, rotation?xCoord:zCoord, rotation?zCoord:xCoord + 4, yCoord + 7, rotation?xCoord:zCoord + 1);
+			if(provider.isBBInSpawn(boundingBox))
+				return;
 			
 			if(!big)
 			{

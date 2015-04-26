@@ -11,6 +11,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.structure.StructureBoundingBox;
 
 public class BucketDecorator extends SimpleStructureDecorator
 {
@@ -29,6 +30,7 @@ public class BucketDecorator extends SimpleStructureDecorator
 			if(world.getBlockState(new BlockPos(xCoord, yCoord - 1, zCoord)).getBlock().getMaterial().isLiquid())
 				return;
 			yCoord -= random.nextInt(3);
+			boolean variant = random.nextDouble() < 0.4;
 			IBlockState block = random.nextDouble() < 0.3 ? Blocks.iron_block.getDefaultState() : Blocks.quartz_block.getDefaultState();
 			IBlockState liquid;
 			if(random.nextBoolean())
@@ -36,7 +38,15 @@ public class BucketDecorator extends SimpleStructureDecorator
 			else if(random.nextBoolean())
 				liquid = provider.oceanBlock;
 			else liquid = provider.riverBlock;
-			if(random.nextDouble() < 0.4)
+			
+			StructureBoundingBox boundingBox;
+			if(variant)
+				boundingBox = new StructureBoundingBox(rotation?zCoord:xCoord - 2, yCoord, rotation?xCoord:zCoord - 2, rotation?zCoord:xCoord + 3, yCoord + 6, rotation?xCoord:zCoord + 3);
+			else boundingBox = new StructureBoundingBox(rotation?zCoord:xCoord - 2, yCoord, rotation?xCoord:zCoord - 2, rotation?zCoord:xCoord + 2, yCoord + 4, rotation?xCoord:zCoord + 2);
+			if(provider.isBBInSpawn(boundingBox))
+				return;
+			
+			if(variant)
 			{
 				placeBlocks(world, block, -1, 0, -1, 2, 0, 2);
 				placeBlocks(world, block, -1, 1, -1, -1, 3, -1);

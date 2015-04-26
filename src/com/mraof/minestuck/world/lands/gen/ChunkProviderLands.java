@@ -24,8 +24,10 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
+import net.minecraft.world.gen.structure.StructureBoundingBox;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.consort.EntityIguana;
 import com.mraof.minestuck.entity.consort.EntityNakagator;
 import com.mraof.minestuck.entity.consort.EntitySalamander;
@@ -233,5 +235,36 @@ public class ChunkProviderLands implements IChunkProvider
 
 	@Override
 	public void recreateStructures(Chunk chunk, int p_180514_2_, int p_180514_3_) {}
+	
+	public boolean isPositionInSpawn(int x, int z)
+	{
+		BlockPos spawn = this.landWorld.getSpawnPoint();
+		int radiusSqrd = MinestuckConfig.artifactRange*MinestuckConfig.artifactRange;
+		x -= spawn.getX();
+		z -= spawn.getZ();
+		
+		return radiusSqrd >= x*x + z*z;
+	}
+	
+	public boolean isBBInSpawn(StructureBoundingBox boundingBox)
+	{
+		BlockPos spawn = this.landWorld.getSpawnPoint();
+		
+		if(boundingBox.minX <= spawn.getX() + MinestuckConfig.artifactRange && boundingBox.maxX >= spawn.getX() - MinestuckConfig.artifactRange
+				&& boundingBox.minZ <= spawn.getZ() + MinestuckConfig.artifactRange && boundingBox.maxZ >= spawn.getZ() - MinestuckConfig.artifactRange)
+		{
+			int radiusSqrd = MinestuckConfig.artifactRange*MinestuckConfig.artifactRange;
+			
+			if(boundingBox.minX <= spawn.getX() && boundingBox.maxX >= spawn.getX() || boundingBox.minZ <= spawn.getZ() && boundingBox.maxZ >= spawn.getZ())
+				return true;
+			
+			int closestX = Math.min(Math.abs(boundingBox.minX - spawn.getX()), Math.abs(boundingBox.maxX - spawn.getX()));
+			int closestZ = Math.min(Math.abs(boundingBox.minZ - spawn.getZ()), Math.abs(boundingBox.maxZ - spawn.getZ()));
+			
+			return radiusSqrd >= closestX*closestX + closestZ*closestZ;
+		}
+		
+		return false;
+	}
 	
 }

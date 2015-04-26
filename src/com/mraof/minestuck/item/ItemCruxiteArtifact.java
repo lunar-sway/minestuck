@@ -39,6 +39,7 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 		super(1, par2, par3);
 		this.setCreativeTab(Minestuck.tabMinestuck);
 		setUnlocalizedName("cruxiteArtifact");
+		this.maxStackSize = 1;
 	}
 	@Override
 	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
@@ -82,11 +83,9 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 			}
 			
 			Debug.print("Placing blocks...");
-			int nextWidth = 0;
 			for(int blockX = x - artifactRange; blockX <= x + artifactRange; blockX++)
 			{
-				int zWidth = nextWidth;
-				nextWidth = (int) Math.sqrt(artifactRange * artifactRange - (blockX - x + 1) * (blockX - x + 1));
+				int zWidth = (int) Math.sqrt(artifactRange * artifactRange - (blockX - x) * (blockX - x));
 				for(int blockZ = z - zWidth; blockZ <= z + zWidth; blockZ++)
 				{
 					double radius = Math.sqrt(((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2);
@@ -118,8 +117,7 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 			Debug.print("Removing old blocks...");
 			for(int blockX = x - artifactRange; blockX <= x + artifactRange; blockX++)
 			{
-				int zWidth = nextWidth;
-				nextWidth = (int) Math.sqrt(artifactRange * artifactRange - (blockX - x + 1) * (blockX - x + 1));
+				int zWidth = (int) Math.sqrt(artifactRange * artifactRange - (blockX - x) * (blockX - x));
 				for(int blockZ = z - zWidth; blockZ <= z + zWidth; blockZ++)
 				{
 					double radius = Math.sqrt(((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2);

@@ -20,7 +20,7 @@ public class RabbitSpawner extends PostDecorator
 				int x = random.nextInt(16) + (chunkX << 4);
 				int z = random.nextInt(16) + (chunkZ << 4);
 				BlockPos pos = world.getTopSolidOrLiquidBlock(new BlockPos(x, 0, z));
-				if(world.getBlockState(pos).getBlock().getMaterial().isLiquid())
+				if(world.getBlockState(pos).getBlock().getMaterial().isLiquid() || provider.isPositionInSpawn(x, z))
 					continue;
 				
 				EntityRabbit entity = new EntityRabbit(world);
