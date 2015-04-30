@@ -89,7 +89,7 @@ public class CombinationRegistry {
 	private static ItemStack getCombination(Object input1, int damage1, Object input2, int damage2, boolean mode)
 	{
 		ItemStack item;
-		boolean b1 = damage1 == OreDictionary.WILDCARD_VALUE, b2 = damage1 == OreDictionary.WILDCARD_VALUE;
+		boolean b1 = damage1 != OreDictionary.WILDCARD_VALUE, b2 = damage2 != OreDictionary.WILDCARD_VALUE;
 		
 		int index = input1.hashCode() - input2.hashCode();
 		if(index == 0)
