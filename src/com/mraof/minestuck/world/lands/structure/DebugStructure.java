@@ -16,6 +16,9 @@ import net.minecraft.world.gen.structure.StructureStart;
 public class DebugStructure extends StructureStart
 {
 	
+	public DebugStructure()
+	{}
+	
 	public DebugStructure(ChunkProviderLands provider, World world, Random rand, int chunkX, int chunkZ)
 	{
 		super(chunkX, chunkZ);
@@ -26,6 +29,9 @@ public class DebugStructure extends StructureStart
 	
 	static class DebugStructureGen extends StructureComponent
 	{
+		
+		public DebugStructureGen()
+		{}
 		
 		public DebugStructureGen(int chunkX, int chunkZ)
 		{
