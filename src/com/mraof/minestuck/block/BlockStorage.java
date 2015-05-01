@@ -21,7 +21,7 @@ public class BlockStorage extends Block
 	public static enum BlockType implements IStringSerializable
 	{
 		CRUXITE("cruxite"),
-		GENERIC_OBJECT("Generic_object");
+		GENERIC_OBJECT("generic_object");
 		
 		public final String name;
 		BlockType(String name)
