@@ -24,9 +24,9 @@ public class LandStructureHandler extends MapGenStructure
 	
 	public static void registerStructures()
 	{
-		genericStructures.add(new StructureEntry(DebugStructure.class, 1));
-		MapGenStructureIO.registerStructure(DebugStructure.class, "minestuckDebug");
-		MapGenStructureIO.registerStructureComponent(DebugStructure.DebugStructureGen.class, "minestuckDebugCompo");
+		genericStructures.add(new StructureEntry(SmallRuinStart.class, 1));
+		MapGenStructureIO.registerStructure(SmallRuinStart.class, "minestuckSmallRuin");
+		MapGenStructureIO.registerStructureComponent(SmallRuinStart.SmallRuin.class, "minestuckSmallRuinCompo");
 	}
 	
 	public LandStructureHandler(ChunkProviderLands chunkProvider)
@@ -37,7 +37,7 @@ public class LandStructureHandler extends MapGenStructure
 		chunkProvider.aspect1.modifyStructureList(structures);
 	}
 	
-	private static final int MAX_STRUCTURE_DISTANCE = 20;
+	private static final int MAX_STRUCTURE_DISTANCE = 15;
 	private static final int MIN_STRUCTURE_DISTANCE = 4;
 	
 	@Override
