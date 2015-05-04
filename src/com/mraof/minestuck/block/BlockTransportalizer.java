@@ -25,6 +25,7 @@ public class BlockTransportalizer extends BlockContainer
 		this.setCreativeTab(Minestuck.tabMinestuck);
 		this.setBlockBounds(0F, 0F, 0F, 1F, 0.5F, 1F);
 		this.setUnlocalizedName("transportalizer");
+		this.setHardness(3.0F);
 	}
 	
 	@Override
