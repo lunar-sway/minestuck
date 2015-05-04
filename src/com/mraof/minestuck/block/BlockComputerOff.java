@@ -23,14 +23,7 @@ import com.mraof.minestuck.util.UsernameHandler;
 public class BlockComputerOff extends Block
 {
 	
-	public static final PropertyDirection DIRECTION = PropertyDirection.create("facing", new Predicate<EnumFacing>()
-			{
-				@Override
-				public boolean apply(EnumFacing input)
-				{
-					return input.getAxis().isHorizontal();
-				}
-	});
+	public static final PropertyDirection DIRECTION = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	
 	public BlockComputerOff()
 	{

@@ -54,14 +54,7 @@ public class BlockMachine extends BlockContainer {
 	}
 	
 	public static final PropertyEnum MACHINE_TYPE = PropertyEnum.create("machine_type", MachineType.class);
-	public static final PropertyDirection DIRECTION = PropertyDirection.create("facing", new Predicate<EnumFacing>()
-			{
-				@Override
-				public boolean apply(EnumFacing input)
-				{
-					return input.getAxis().isHorizontal();
-				}
-			});
+	public static final PropertyDirection DIRECTION = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	
 	public BlockMachine()
 	{
