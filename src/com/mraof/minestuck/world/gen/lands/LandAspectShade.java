@@ -30,7 +30,7 @@ public class LandAspectShade extends LandAspect
 	@Override
 	public Block getOceanBlock() 
 	{
-		return Blocks.water;//Minestuck.blockOil;
+		return Minestuck.blockOil;
 	}
 
 	@Override

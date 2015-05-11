@@ -1,7 +1,6 @@
 package com.mraof.minestuck.world.gen.lands;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.BlockColoredDirt;
@@ -42,7 +41,7 @@ public class LandAspectThought extends LandAspect
 	@Override
 	public Block getOceanBlock() 
 	{
-		return Blocks.water;//Minestuck.blockBrainJuice;
+		return Minestuck.blockBrainJuice;
 	}
 
 	@Override
