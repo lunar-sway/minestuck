@@ -33,7 +33,7 @@ public class LandAspectShade extends TerrainAspect
 	@Override
 	public IBlockState getOceanBlock() 
 	{
-		return Blocks.water.getDefaultState();//Minestuck.blockOil;
+		return Minestuck.blockOil.getDefaultState();
 	}
 
 	@Override

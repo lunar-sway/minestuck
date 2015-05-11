@@ -2,16 +2,20 @@ package com.mraof.minestuck.client.util;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockModelShapes;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.block.statemap.StateMap;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fluids.BlockFluidBase;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -20,12 +24,10 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.BlockChessTile;
 import com.mraof.minestuck.block.BlockMachine;
 import com.mraof.minestuck.block.BlockStorage;
-import com.mraof.minestuck.block.BlockChessTile.BlockType;
 import com.mraof.minestuck.block.BlockColoredDirt;
-import com.mraof.minestuck.util.Debug;
 
 @SideOnly(Side.CLIENT)
-public class MinestuckTextureManager
+public class MinestuckModelManager
 {
 	
 	/**
@@ -86,8 +88,8 @@ public class MinestuckTextureManager
 		register(Minestuck.component, 0, "spoon_wood");
 		register(Minestuck.component, 1, "spoon_silver");
 		register(Minestuck.component, 2, "chessboard");
-		register(Minestuck.minestuckBucket, 0, "bucket_blood");
-		register(Minestuck.minestuckBucket, 1, "bucket_oil");
+		register(Minestuck.minestuckBucket, 0, "bucket_oil");
+		register(Minestuck.minestuckBucket, 1, "bucket_blood");
 		register(Minestuck.minestuckBucket, 2, "bucket_brain_juice");
 		for(int i = 0; i < Minestuck.modusCard.modusNames.length; i++)
 			register(Minestuck.modusCard, i, "modus_" + Minestuck.modusCard.modusNames[i]);
@@ -114,9 +116,6 @@ public class MinestuckTextureManager
 		for(BlockMachine.MachineType type : BlockMachine.MachineType.values())
 			register(Minestuck.blockMachine, type.ordinal(), "machine_"+type.getName());
 		
-		//Register block states
-		BlockModelShapes blockModelRegistry = modelRegistry.getModelManager().getBlockModelShapes();
-		//Blocks are registered here that got state properties that doesn't affect rendering, or if some properties should have their own blockstates files.
 	}
 	
 	/**
@@ -156,6 +155,10 @@ public class MinestuckTextureManager
 			ModelBakery.addVariantName(Item.getItemFromBlock(Minestuck.blockStorage), "minestuck:storage_block_"+type.name);
 		for(BlockMachine.MachineType type : BlockMachine.MachineType.values())
 			ModelBakery.addVariantName(Item.getItemFromBlock(Minestuck.blockMachine), "minestuck:machine_"+type.getName());
+		
+		ModelLoader.setCustomStateMapper(Minestuck.blockOil, (new StateMap.Builder()).addPropertiesToIgnore(BlockFluidBase.LEVEL).build());
+		ModelLoader.setCustomStateMapper(Minestuck.blockBlood, (new StateMap.Builder()).addPropertiesToIgnore(BlockFluidBase.LEVEL).build());
+		ModelLoader.setCustomStateMapper(Minestuck.blockBrainJuice, (new StateMap.Builder()).addPropertiesToIgnore(BlockFluidBase.LEVEL).build());
 	}
 	
 	private static void register(Item item)
@@ -215,6 +218,19 @@ public class MinestuckTextureManager
 			else str = "card_empty";
 			return new ModelResourceLocation("minestuck:" + str, "inventory");
 		}
+	}
+	
+	@SubscribeEvent
+	public void onModelBakeEvent(ModelBakeEvent event)
+	{
+		event.modelRegistry.putObject(new ModelResourceLocation("minestuck:block_oil", "normal"), new FluidBlockModel());
+		event.modelRegistry.putObject(new ModelResourceLocation("minestuck:block_blood", "normal"), new FluidBlockModel());
+		event.modelRegistry.putObject(new ModelResourceLocation("minestuck:block_brain_juice", "normal"), new FluidBlockModel());
+		
+		TextureMap textureMap = Minecraft.getMinecraft().getTextureMapBlocks();
+		Minestuck.fluidOil.setIcons(textureMap.getAtlasSprite("minestuck:blocks/OilStill"), textureMap.getAtlasSprite("minestuck:blocks/OilFlowing"));
+		Minestuck.fluidBlood.setIcons(textureMap.getAtlasSprite("minestuck:blocks/BloodStill"), textureMap.getAtlasSprite("minestuck:blocks/BloodFlowing"));
+		Minestuck.fluidBrainJuice.setIcons(textureMap.getAtlasSprite("minestuck:blocks/BrainJuiceStill"), textureMap.getAtlasSprite("minestuck:blocks/BrainJuiceFlowing"));
 	}
 	
 }

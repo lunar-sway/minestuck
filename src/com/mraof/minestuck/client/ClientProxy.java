@@ -3,8 +3,6 @@ package com.mraof.minestuck.client;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -23,7 +21,6 @@ import com.mraof.minestuck.client.model.ModelNakagator;
 import com.mraof.minestuck.client.model.ModelOgre;
 import com.mraof.minestuck.client.model.ModelRook;
 import com.mraof.minestuck.client.model.ModelSalamander;
-import com.mraof.minestuck.client.renderer.RenderCard;
 import com.mraof.minestuck.client.renderer.entity.RenderDecoy;
 import com.mraof.minestuck.client.renderer.entity.RenderEntityMinestuck;
 import com.mraof.minestuck.client.renderer.entity.RenderGrist;
@@ -32,6 +29,7 @@ import com.mraof.minestuck.client.renderer.entity.RenderPawn;
 import com.mraof.minestuck.client.renderer.entity.RenderShadow;
 import com.mraof.minestuck.client.renderer.tileentity.RenderGatePortal;
 import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
+import com.mraof.minestuck.client.util.MinestuckModelManager;
 import com.mraof.minestuck.entity.EntityDecoy;
 import com.mraof.minestuck.entity.carapacian.EntityBishop;
 import com.mraof.minestuck.entity.carapacian.EntityPawn;
@@ -47,9 +45,6 @@ import com.mraof.minestuck.entity.underling.EntityImp;
 import com.mraof.minestuck.entity.underling.EntityOgre;
 import com.mraof.minestuck.entity.underling.EntityUnderlingPart;
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
-import com.mraof.minestuck.tileentity.TileEntityMachine;
-import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
-import com.mraof.minestuck.util.Debug;
 
 public class ClientProxy extends CommonProxy
 {
@@ -81,9 +76,11 @@ public class ClientProxy extends CommonProxy
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public static void registerSided() {
+	public static void registerSided()
+	{
 		
 		MinecraftForge.EVENT_BUS.register(new MinestuckClientEventHandler());
+		MinecraftForge.EVENT_BUS.register(new MinestuckModelManager());
 		FMLCommonHandler.instance().bus().register(new MinestuckKeyHandler());
 	}
 	

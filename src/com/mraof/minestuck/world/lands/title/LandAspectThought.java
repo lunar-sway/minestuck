@@ -31,8 +31,6 @@ public class LandAspectThought extends TitleAspect
 	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
 		
-		if(chunkProvider.decorators == null)
-			return;
 		if(chunkProvider.surfaceBlock.getBlock().getMaterial() == Material.ground)
 		{
 			chunkProvider.surfaceBlock = Minestuck.coloredDirt.getDefaultState().withProperty(BlockColoredDirt.BLOCK_TYPE, BlockColoredDirt.BlockType.THOUGHT);
@@ -47,11 +45,8 @@ public class LandAspectThought extends TitleAspect
 			if(!decoratorsToRemove.isEmpty())
 				chunkProvider.decorators.removeAll(decoratorsToRemove);
 		}
-		else
-		{
-//			chunkProvider.riverBlock = Minestuck.blockBrainJuice;
-//			chunkProvider.oceanBlock = Minestuck.blockBrainJuice;
-		}
+		chunkProvider.riverBlock = Minestuck.blockBrainJuice.getDefaultState();
+		chunkProvider.oceanBlock = Minestuck.blockBrainJuice.getDefaultState() ;
 	}
 	
 	@Override

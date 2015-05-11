@@ -1,14 +1,11 @@
 package com.mraof.minestuck;
 
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.Random;
-
-import org.lwjgl.opengl.GLContext;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -25,11 +22,9 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -53,9 +48,7 @@ import com.mraof.minestuck.block.BlockChessTile;
 import com.mraof.minestuck.block.BlockColoredDirt;
 import com.mraof.minestuck.block.BlockComputerOff;
 import com.mraof.minestuck.block.BlockComputerOn;
-import com.mraof.minestuck.block.BlockFluidBlood;
-import com.mraof.minestuck.block.BlockFluidBrainJuice;
-import com.mraof.minestuck.block.BlockFluidOil;
+import com.mraof.minestuck.block.BlockFluid;
 import com.mraof.minestuck.block.BlockGatePortal;
 import com.mraof.minestuck.block.BlockGoldSeeds;
 import com.mraof.minestuck.block.BlockLayered;
@@ -65,7 +58,7 @@ import com.mraof.minestuck.block.BlockTransportalizer;
 import com.mraof.minestuck.block.OreCruxite;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.GuiHandler;
-import com.mraof.minestuck.client.util.MinestuckTextureManager;
+import com.mraof.minestuck.client.util.MinestuckModelManager;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
@@ -130,7 +123,6 @@ import com.mraof.minestuck.util.CommandCheckLand;
 import com.mraof.minestuck.util.ComputerProgram;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.ComputerProgram;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.KindAbstratusList;
@@ -224,7 +216,7 @@ public class Minestuck
 	public static Block transportalizer;
 	public static BlockGoldSeeds blockGoldSeeds;
 	
-	public static Block blockOil;	//TODO Use fluid-rendering code when implemented
+	public static Block blockOil;
 	public static Block blockBlood;
 	public static Block blockBrainJuice;
 	public static Block layeredSand;
@@ -286,9 +278,9 @@ public class Minestuck
 		FluidRegistry.registerFluid(fluidBlood);
 		fluidBrainJuice = new Fluid("BrainJuice");
 		FluidRegistry.registerFluid(fluidBrainJuice);
-//		blockOil = GameRegistry.registerBlock(new BlockFluidOil(fluidOil, Material.water), null, "block_oil");
-//		blockBlood = GameRegistry.registerBlock(new BlockFluidBlood(fluidBlood, Material.water), null, "block_blood");
-//		blockBrainJuice = GameRegistry.registerBlock(new BlockFluidBrainJuice(fluidBrainJuice, Material.water), null, "block_brain_juice");
+		blockOil = GameRegistry.registerBlock(new BlockFluid(fluidOil, Material.water).setUnlocalizedName("oil"), null, "block_oil");
+		blockBlood = GameRegistry.registerBlock(new BlockFluid(fluidBlood, Material.water).setUnlocalizedName("blood"), null, "block_blood");
+		blockBrainJuice = GameRegistry.registerBlock(new BlockFluid(fluidBrainJuice, Material.water).setUnlocalizedName("brainJuice"), null, "block_brain_juice");
 
 		//items
 		//hammers
@@ -335,9 +327,9 @@ public class Minestuck
 		goldSeeds = new ItemGoldSeeds();
 		metalBoat = new ItemMetalBoat();
 		
-//		minestuckBucket.addBlock(blockBlood);
-//		minestuckBucket.addBlock(blockOil);
-//		minestuckBucket.addBlock(blockBrainJuice);
+		minestuckBucket.addBlock(blockOil);
+		minestuckBucket.addBlock(blockBlood);
+		minestuckBucket.addBlock(blockBrainJuice);
 		
 		GameRegistry.registerItem(clawHammer, "claw_hammer");
 		GameRegistry.registerItem(sledgeHammer, "sledge_hammer");
@@ -385,7 +377,7 @@ public class Minestuck
 		if(isClientRunning)
 		{
 			ClientProxy.registerSided();
-			MinestuckTextureManager.registerVariants();
+			MinestuckModelManager.registerVariants();
 		}
 		
 		MinestuckAchievementHandler.prepareAchievementPage();
@@ -396,9 +388,9 @@ public class Minestuck
 	public void load(FMLInitializationEvent event) 
 	{
 		
-//		fluidOil.setUnlocalizedName(blockOil.getUnlocalizedName());
-//		fluidBlood.setUnlocalizedName(blockBlood.getUnlocalizedName());
-//		fluidBrainJuice.setUnlocalizedName(blockBrainJuice.getUnlocalizedName());
+		fluidOil.setUnlocalizedName(blockOil.getUnlocalizedName());
+		fluidBlood.setUnlocalizedName(blockBlood.getUnlocalizedName());
+		fluidBrainJuice.setUnlocalizedName(blockBrainJuice.getUnlocalizedName());
 		
 		
 		//register entities
@@ -446,7 +438,7 @@ public class Minestuck
 		//Register textures and renders
 		if(isClientRunning)
 		{
-			MinestuckTextureManager.registerTextures();
+			MinestuckModelManager.registerTextures();
 			ClientProxy.registerRenderers();
 		}
 		
