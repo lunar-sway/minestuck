@@ -7,10 +7,10 @@ import java.util.Random;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
-import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
+import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureStart;
 
 public class LandStructureHandler extends MapGenStructure
@@ -60,7 +60,7 @@ public class LandStructureHandler extends MapGenStructure
 		z += random.nextInt(this.MAX_STRUCTURE_DISTANCE - this.MIN_STRUCTURE_DISTANCE);
 		
 		if (chunkX == x && chunkZ == z)
-			return true;
+			return !chunkProvider.isBBInSpawn(new StructureBoundingBox(chunkX*16 - 16, chunkZ*16 - 16, chunkX*16 + 32, chunkZ*16 + 32));	//This chunk and the chunks around it.
 		
 		return false;
 	}
