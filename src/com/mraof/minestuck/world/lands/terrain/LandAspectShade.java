@@ -3,7 +3,7 @@ package com.mraof.minestuck.world.lands.terrain;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Vec3;
@@ -26,19 +26,29 @@ public class LandAspectShade extends TerrainAspect
 	}
 	
 	@Override
-	public IBlockState[] getUpperBlocks() {
+	public IBlockState[] getUpperBlocks()
+	{
 		return upperBlocks;
+	}
+	
+	@Override
+	public IBlockState[] getStructureBlocks()
+	{
+		return new IBlockState[] {Blocks.stone.getDefaultState(), Blocks.stonebrick.getDefaultState()};
+	}
+	
+	@Override
+	public IBlockState getDecorativeBlockFor(IBlockState state)
+	{
+		if(state.getBlock() == Blocks.stonebrick)
+			return Blocks.stonebrick.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED);
+		else return state;
 	}
 	
 	@Override
 	public IBlockState getOceanBlock() 
 	{
 		return Minestuck.blockOil.getDefaultState();
-	}
-
-	@Override
-	public double[] generateTerrainMap() {
-		return null;
 	}
 	
 	@Override

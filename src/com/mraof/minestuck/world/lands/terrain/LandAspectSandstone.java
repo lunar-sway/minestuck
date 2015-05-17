@@ -77,12 +77,6 @@ public class LandAspectSandstone extends TerrainAspect
 	}
 	
 	@Override
-	public double[] generateTerrainMap()
-	{
-		return null;
-	}
-	
-	@Override
 	public List<ILandDecorator> getOptionalDecorators()
 	{
 		List<ILandDecorator> list = new ArrayList<ILandDecorator>();

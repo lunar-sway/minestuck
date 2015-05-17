@@ -35,7 +35,7 @@ public enum EnumAspect {
 			{
 				aspectInt--;
 				if(aspectInt == -1)
-					return list[i];
+					return EnumAspect.HOPE;//list[i];
 			}
 		return null;
 	}

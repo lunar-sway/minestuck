@@ -162,8 +162,6 @@ public class SmallRuinStart extends StructureStart
 			}
 			if(!onLand || maxY - minY > 5)
 				return false;
-			if(height < maxY)
-				height++;
 			
 			boundingBox.offset(0, height - boundingBox.minY, 0);
 			definedHeight = true;

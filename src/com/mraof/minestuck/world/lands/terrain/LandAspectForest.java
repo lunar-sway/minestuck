@@ -3,10 +3,10 @@ package com.mraof.minestuck.world.lands.terrain;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Vec3;
-import net.minecraft.util.Vec3i;
 
 import com.mraof.minestuck.world.lands.decorator.GrassDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
@@ -29,9 +29,17 @@ public class LandAspectForest extends TerrainAspect
 	}
 	
 	@Override
-	public double[] generateTerrainMap()
+	public IBlockState[] getStructureBlocks()
 	{
-		return null;
+		return new IBlockState[] {Blocks.stone.getDefaultState(), Blocks.stonebrick.getDefaultState()};
+	}
+	
+	@Override
+	public IBlockState getDecorativeBlockFor(IBlockState state)
+	{
+		if(state.getBlock() == Blocks.stonebrick)
+			return Blocks.stonebrick.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED);
+		else return state;
 	}
 	
 	@Override

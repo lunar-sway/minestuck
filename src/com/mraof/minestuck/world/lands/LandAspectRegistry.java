@@ -57,7 +57,7 @@ public class LandAspectRegistry
 		registerLandAspect(new LandAspectCake(), EnumAspect.HEART);
 		registerLandAspect(new LandAspectRabbits(), EnumAspect.LIFE);
 		registerLandAspect(new LandAspectMonsters(), EnumAspect.RAGE);
-//		registerLandAspect(???, EnumAspect.HOPE);
+		registerLandAspect(new LandAspectTowers(), EnumAspect.HOPE);
 		
 		landNames2.put(nullAspect.getPrimaryName(), nullAspect);
 		landNames2.put(frogAspect.getPrimaryName(), frogAspect);

@@ -208,6 +208,7 @@ land.lightning=Lightning
 land.storm=Storms
 land.wind=Wind
 land.monster=Monsters
+land.tower=Towers
 
 land.message.format=Land of %s and %s
 land.message.entry=Welcome to Land of %s and %s.

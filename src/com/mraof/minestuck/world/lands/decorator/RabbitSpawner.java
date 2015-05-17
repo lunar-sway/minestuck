@@ -8,17 +8,17 @@ import net.minecraft.world.World;
 
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
-public class RabbitSpawner extends PostDecorator
+public class RabbitSpawner implements ILandDecorator
 {
 	
 	@Override
-	public void generateAtChunk(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
+	public void generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
 	{
 		for(int i = 0; i < 8; i++)
 			if(random.nextDouble() < 0.2)
 			{
-				int x = random.nextInt(16) + (chunkX << 4);
-				int z = random.nextInt(16) + (chunkZ << 4);
+				int x = random.nextInt(16) + (chunkX << 4) + 8;
+				int z = random.nextInt(16) + (chunkZ << 4) + 8;
 				BlockPos pos = world.getTopSolidOrLiquidBlock(new BlockPos(x, 0, z));
 				if(world.getBlockState(pos).getBlock().getMaterial().isLiquid() || provider.isPositionInSpawn(x, z))
 					continue;
@@ -33,7 +33,7 @@ public class RabbitSpawner extends PostDecorator
 	@Override
 	public float getPriority()
 	{
-		return 0.7F;
+		return 0.2F;
 	}
 	
 }

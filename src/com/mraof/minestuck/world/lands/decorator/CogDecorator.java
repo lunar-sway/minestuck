@@ -22,7 +22,7 @@ public class CogDecorator extends SimpleStructureDecorator
 			rotation = random.nextBoolean();
 			xCoord = ((chunkX << 4) | random.nextInt(16)) + 8;
 			zCoord = ((chunkZ << 4) | random.nextInt(16)) + 8;
-			yCoord = world.getHorizon(new BlockPos(xCoord, 0, zCoord)).getY() - blocksDown;
+			yCoord = world.getPrecipitationHeight(new BlockPos(xCoord, 0, zCoord)).getY() - blocksDown;
 			if(world.getBlockState(new BlockPos(xCoord, yCoord - 1, zCoord)).getBlock().getMaterial().isLiquid())
 				return;
 			IBlockState[] materials = provider.aspect1.getStructureBlocks();

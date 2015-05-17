@@ -30,7 +30,7 @@ public class CakeDecorator implements ILandDecorator
 					continue;
 				
 				if(Blocks.cake.canPlaceBlockAt(world, pos) && !world.getBlockState(pos).getBlock().getMaterial().isLiquid() && world.getBlockState(pos).getBlock().isReplaceable(world, pos))
-					world.setBlockState(pos, Blocks.cake.getDefaultState().withProperty(BlockCake.BITES, bits));
+					world.setBlockState(pos, Blocks.cake.getDefaultState().withProperty(BlockCake.BITES, bits), 2);
 			}
 		}
 	}

@@ -2,12 +2,10 @@ package com.mraof.minestuck.world.lands.terrain;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Vec3;
@@ -31,12 +29,6 @@ public class LandAspectHeat extends TerrainAspect
 		return upperBlocks;
 	}
 	
-	@Override
-	public double[] generateTerrainMap() 
-	{
-		return null;
-	}
-
 	@Override
 	public IBlockState getOceanBlock()
 	{

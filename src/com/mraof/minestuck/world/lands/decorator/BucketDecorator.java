@@ -3,7 +3,6 @@ package com.mraof.minestuck.world.lands.decorator;
 import java.util.Random;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 import net.minecraft.block.Block;
@@ -16,7 +15,7 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
 public class BucketDecorator extends SimpleStructureDecorator
 {
 	
-	private Block[] liquidBlocks = {Blocks.air, Blocks.water, Blocks.lava/*, Minestuck.blockBlood, Minestuck.blockOil, Minestuck.blockBrainJuice*/};
+	private Block[] liquidBlocks = {Blocks.air, Blocks.water, Blocks.lava, Minestuck.blockBlood, Minestuck.blockOil, Minestuck.blockBrainJuice};
 	
 	@Override
 	public void generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
@@ -26,12 +25,12 @@ public class BucketDecorator extends SimpleStructureDecorator
 			rotation = random.nextBoolean();
 			xCoord = (chunkX << 4) + random.nextInt(16) + 8;
 			zCoord = (chunkZ << 4) + random.nextInt(16) + 8;
-			yCoord = world.getHorizon(new BlockPos(xCoord, 0, zCoord)).getY();
-			if(world.getBlockState(new BlockPos(xCoord, yCoord - 1, zCoord)).getBlock().getMaterial().isLiquid())
+			yCoord = world.getPrecipitationHeight(new BlockPos(xCoord, 0, zCoord)).getY();
+			if(world.getBlockState(new BlockPos(xCoord, yCoord, zCoord)).getBlock().getMaterial().isLiquid())
 				return;
 			yCoord -= random.nextInt(3);
 			boolean variant = random.nextDouble() < 0.4;
-			IBlockState block = random.nextDouble() < 0.3 ? Blocks.iron_block.getDefaultState() : Blocks.quartz_block.getDefaultState();
+			IBlockState block = random.nextDouble() < 0.3 ? Blocks.iron_block.getDefaultState() /*<- Should this continue to be a thing?*/ : Blocks.quartz_block.getDefaultState();
 			IBlockState liquid;
 			if(random.nextBoolean())
 				liquid = liquidBlocks[random.nextInt(liquidBlocks.length)].getDefaultState();

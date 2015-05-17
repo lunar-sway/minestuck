@@ -3,16 +3,13 @@ package com.mraof.minestuck.world.lands.decorator;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.block.BlockLayered;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
-public class LayeredBlockDecorator extends PostDecorator
+public class LayeredBlockDecorator implements ILandDecorator
 {
 	
 	private Block block;
@@ -25,7 +22,7 @@ public class LayeredBlockDecorator extends PostDecorator
 	}
 	
 	@Override
-	public void generateAtChunk(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
+	public void generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
 	{
 //		byte[] heightMap = new byte[16*16];
 //		for(int x = 0; x < 16; x++)
@@ -52,8 +49,8 @@ public class LayeredBlockDecorator extends PostDecorator
 //		for(int x = 0; x < 16; x++)
 //			for(int z = 0; z < 16; z++)
 //				setBlock(world, world.getTopSolidOrLiquidBlock(new BlockPos(x + (chunkX << 4) + 8, 0, z + (chunkZ << 4) + 8)), heightMap[(x << 4) | z]);
-		for(int x = 0; x < 16; x++)
-			for(int z = 0; z < 16; z++)
+		for(int x = 0; x < 32; x++)
+			for(int z = 0; z < 32; z++)
 			{
 				BlockPos pos = world.getTopSolidOrLiquidBlock(new BlockPos(x + (chunkX << 4), 0, z + (chunkZ << 4)));
 				if(world.getBlockState(pos).getBlock().isAir(world, pos) && block.canPlaceBlockAt(world, pos))
@@ -64,7 +61,7 @@ public class LayeredBlockDecorator extends PostDecorator
 	@Override
 	public float getPriority()
 	{
-		return 0.7F;
+		return 0.1F;
 	}
 	
 	private void setBlock(World world, BlockPos pos, int height)

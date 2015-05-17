@@ -6,19 +6,17 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
-public class IceDecorator extends PostDecorator
+public class IceDecorator implements ILandDecorator
 {
 	
 	@Override
-	public void generateAtChunk(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
+	public void generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
 	{
-		for(int x = (chunkX << 4); x < (chunkX+1 << 4); x++)
-			for(int z = (chunkZ << 4); z < (chunkZ+1 << 4); z++)
+		for(int x = (chunkX << 4) + 8; x < (chunkX+1 << 4) + 8; x++)
+			for(int z = (chunkZ << 4) + 8; z < (chunkZ+1 << 4) + 8; z++)
 			{
 				BlockPos pos = world.getPrecipitationHeight(new BlockPos(x, 0, z)).down();
 				Block block1 = world.getBlockState(pos).getBlock();
@@ -30,7 +28,7 @@ public class IceDecorator extends PostDecorator
 	@Override
 	public float getPriority()
 	{
-		return 1.0F;
+		return 0.1F;
 	}
 	
 }

@@ -31,12 +31,6 @@ public abstract class TerrainAspect implements ILandAspect
 		public abstract IBlockState[] getUpperBlocks();
 		
 		/**
-		 * Unused currently. Will be used to generate the land's terrain.
-		 * @return
-		 */
-		public abstract double[] generateTerrainMap();
-		
-		/**
 		 * Returns the block that is a part of the land's ocean.
 		 * @return
 		 */

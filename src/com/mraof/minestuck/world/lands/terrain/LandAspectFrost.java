@@ -2,7 +2,6 @@ package com.mraof.minestuck.world.lands.terrain;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import com.mraof.minestuck.world.lands.decorator.GrassDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
@@ -10,7 +9,6 @@ import com.mraof.minestuck.world.lands.decorator.IceDecorator;
 import com.mraof.minestuck.world.lands.decorator.LayeredBlockDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirt;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.state.IBlockState;
@@ -42,11 +40,6 @@ public class LandAspectFrost extends TerrainAspect
 		return structureBlocks;
 	}
 	
-	@Override
-	public double[] generateTerrainMap() 
-	{
-		return null;
-	}
 	@Override
 	public IBlockState getRiverBlock() 
 	{

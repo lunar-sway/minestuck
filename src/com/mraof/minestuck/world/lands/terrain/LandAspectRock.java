@@ -36,12 +36,6 @@ public class LandAspectRock extends TerrainAspect
 	}
 	
 	@Override
-	public double[] generateTerrainMap()
-	{
-		return null;
-	}
-	
-	@Override
 	public String getPrimaryName()
 	{
 		return "Rock";
