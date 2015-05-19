@@ -1,6 +1,5 @@
 package com.mraof.minestuck.world.lands.decorator;
 
-import java.util.EnumSet;
 import java.util.Random;
 
 import net.minecraft.block.BlockPlanks;
@@ -13,28 +12,28 @@ import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 public class TreeDecorator implements ILandDecorator
 {
-	EnumSet<BlockPlanks.EnumType> treeTypes;
+	int[] treeTypes;
 	
-	public TreeDecorator(EnumSet<BlockPlanks.EnumType> trees)
+	public TreeDecorator(int[] trees)
 	{
 		this.treeTypes = trees;
 	}
 	
-	public TreeDecorator(BlockPlanks.EnumType treeType)
+	public TreeDecorator(int treeType)
 	{
-		this(EnumSet.of(treeType));
+		this(new int[] {treeType});
 	}
 	
 	public TreeDecorator()
 	{
-		this(BlockPlanks.EnumType.OAK);
+		this(BlockPlanks.EnumType.OAK.getMetadata());
 	}
 	
 	@Override
 	public void generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
 	{
-		BlockPlanks.EnumType type = (BlockPlanks.EnumType) treeTypes.toArray()[random.nextInt(treeTypes.size())];
-		WorldGenTrees gen = new WorldGenTrees(false, 5, type.getMetadata(), type.getMetadata(), false);
+		int type = treeTypes[random.nextInt(treeTypes.length)];
+		WorldGenTrees gen = new WorldGenTrees(false, 5, type, type, false);
 		
 		int treeCount = random.nextInt(5) + 5;
 		for (int i = 0; i < treeCount; i++)
