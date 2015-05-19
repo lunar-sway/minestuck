@@ -40,7 +40,7 @@ minecraft {
 
 dependencies {
     // http://files.minecraftforge.net/CodeChickenLib/
-    compile "codechicken:CodeChickenLib:1.8-1.1.2.115:dev"
+    compile "codechicken:CodeChickenLib:1.8-1.1.2.133:dev"
     
     // http://chickenbones.net/maven
     compile "codechicken:CodeChickenCore:1.8-1.0.5.34:dev"
@@ -72,4 +72,3 @@ processResources
         exclude 'mcmod.info'
     }
 }
-

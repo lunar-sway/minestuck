@@ -26,7 +26,7 @@ public class BucketDecorator extends SimpleStructureDecorator
 			xCoord = (chunkX << 4) + random.nextInt(16) + 8;
 			zCoord = (chunkZ << 4) + random.nextInt(16) + 8;
 			yCoord = world.getPrecipitationHeight(new BlockPos(xCoord, 0, zCoord)).getY();
-			if(world.getBlockState(new BlockPos(xCoord, yCoord, zCoord)).getBlock().getMaterial().isLiquid())
+			if(world.getBlockState(new BlockPos(xCoord, yCoord -1, zCoord)).getBlock().getMaterial().isLiquid())
 				return;
 			yCoord -= random.nextInt(3);
 			boolean variant = random.nextDouble() < 0.4;

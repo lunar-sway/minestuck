@@ -6,3 +6,5 @@
 .*
 /eclipse
 *~
+/gradle
+*.bat
