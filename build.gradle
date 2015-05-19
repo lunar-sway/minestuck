@@ -29,7 +29,7 @@ group= "com.mraof.minestuck"
 archivesBaseName = "Minestuck"
 
 minecraft {
-    version = "1.8-11.14.0.1402"
+    version = "1.8-11.14.1.1402"
     runDir = "eclipse"
 
     mappings = "snapshot_nodoc_20141130"
