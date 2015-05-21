@@ -2,6 +2,7 @@ package com.mraof.minestuck.world.lands.structure;
 
 import java.util.Random;
 
+import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
@@ -16,6 +17,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureStart;
+import net.minecraftforge.common.ChestGenHooks;
 
 public class SmallRuinStart extends StructureStart
 {
@@ -105,16 +107,19 @@ public class SmallRuinStart extends StructureStart
 			
 			this.fillWithAir(worldIn, boundingBox, 1, 1, 0, 5, 3, 7);
 			this.fillWithAir(worldIn, boundingBox, 2, 1, 8, 4, 3, 8);
-			this.func_175811_a(worldIn, Blocks.chest.getDefaultState().withProperty(BlockChest.FACING, this.coordBaseMode.getOpposite()), 3, 1, 6, boundingBox);
+			this.func_180778_a(worldIn, boundingBox, rand, 3, 1, 6, ChestGenHooks.getItems(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, rand), rand.nextInt(3) + 5);
+			if(boundingBox.func_175898_b(new BlockPos(this.getXWithOffset(3, 6), this.getYWithOffset(1), this.getZWithOffset(3, 6))))
+				this.func_175811_a(worldIn, this.func_175807_a(worldIn, 3, 1, 6, boundingBox).withProperty(BlockChest.FACING, this.coordBaseMode.getOpposite()), 3, 1, 6, boundingBox);
 			
+			EnumFacing torchFacing = this.coordBaseMode.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE ? this.coordBaseMode.rotateY() : this.coordBaseMode.rotateYCCW();
 			if(torches[0])
-				this.func_175811_a(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, this.coordBaseMode.rotateYCCW()), 1, 2, 3, boundingBox);
+				this.func_175811_a(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, torchFacing), 1, 2, 3, boundingBox);
 			if(torches[1])
-				this.func_175811_a(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, this.coordBaseMode.rotateY()), 5, 2, 3, boundingBox);
+				this.func_175811_a(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, torchFacing.getOpposite()), 5, 2, 3, boundingBox);
 			if(torches[2])
-				this.func_175811_a(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, this.coordBaseMode.rotateYCCW()), 1, 2, 6, boundingBox);
+				this.func_175811_a(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, torchFacing), 1, 2, 6, boundingBox);
 			if(torches[3])
-				this.func_175811_a(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, this.coordBaseMode.rotateY()), 5, 2, 6, boundingBox);
+				this.func_175811_a(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, torchFacing.getOpposite()), 5, 2, 6, boundingBox);
 			
 			return true;
 		}

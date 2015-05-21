@@ -45,7 +45,10 @@ import com.mraof.minestuck.modSupport.minetweaker.Minetweaker3Support;
 import static com.mraof.minestuck.util.CombinationRegistry.MODE_AND;
 import static com.mraof.minestuck.util.CombinationRegistry.MODE_OR;
 
-public class AlchemyRecipeHandler {
+public class AlchemyRecipeHandler
+{
+	
+	public static final String BASIC_MEDIUM_CHEST = "minestuck:basicMediumChest";	//The ChestGenHooks key for basic medium loot that's available in all lands.
 	
 	private static HashMap<List<Object>, Object> recipeList;
 	private static HashMap<List<Object>, Boolean> lookedOver;
@@ -557,6 +560,21 @@ public class AlchemyRecipeHandler {
 			ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CROSSING).addItem(new WeightedRandomChestContent(Minestuck.captchaCard, 0, 1, 2, 8));
 			ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CORRIDOR).addItem(new WeightedRandomChestContent(Minestuck.captchaCard, 0, 1, 4, 10));
 		}
+		
+		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Items.experience_bottle, 0, 1, 2, 3));
+		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Items.iron_ingot, 0, 1, 4, 9));
+		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Items.bow, 0, 1, 1, 5));
+		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Items.redstone, 0, 1, 6, 7));
+		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Items.stone_sword, 0, 1, 1, 5));
+		
+		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Item.getItemFromBlock(Minestuck.blockStorage), 1, 1, 1, 3));
+		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Minestuck.sledgeHammer, 0, 1, 1, 5));
+		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Minestuck.sickle, 0, 1, 1, 5));
+		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Minestuck.ninjaSword, 0, 1, 1, 5));
+		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Minestuck.sledgeHammer, 0, 1, 1, 5));
+		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Minestuck.component, 1, 1, 1, 5));
+		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Minestuck.component, 2, 1, 2, 4));
+		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Item.getItemFromBlock(Minestuck.transportalizer), 0, 1, 1, 2));
 	}
 	
 	public static void registerModRecipes() 
