@@ -534,35 +534,7 @@ public class Minestuck
 		worldSeed = event.getServer().worldServers[0].getSeed();
 		CaptchaDeckHandler.rand = new Random();
 		
-		File dataFile = event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("MinestuckData");
-		if(dataFile != null && dataFile.exists())
-		{
-			NBTTagCompound nbt = null;
-			try
-			{
-				nbt = CompressedStreamTools.readCompressed(new FileInputStream(dataFile));
-			}
-			catch(IOException e)
-			{
-				e.printStackTrace();
-			}
-			if(nbt != null)
-			{
-				MinestuckDimensionHandler.loadData(nbt);
-				
-				SkaianetHandler.loadData(nbt.getCompoundTag("skaianet"));
-				
-				MinestuckPlayerData.readFromNBT(nbt);
-
-				TileEntityTransportalizer.loadTransportalizers(nbt.getCompoundTag("transportalizers"));
-				
-				return;
-			}
-		}
-		
-		SkaianetHandler.loadData(null);
-		MinestuckPlayerData.readFromNBT(null);
-		
+		MinestuckSaveHandler.onWorldLoad(event.getServer().worldServers[0].getSaveHandler());
 	}
 	
 	@EventHandler

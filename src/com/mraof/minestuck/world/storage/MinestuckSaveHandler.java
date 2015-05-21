@@ -1,6 +1,7 @@
 package com.mraof.minestuck.world.storage;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
@@ -9,6 +10,7 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.BlockPos;
+import net.minecraft.world.storage.ISaveHandler;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -20,6 +22,7 @@ import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 
 public class MinestuckSaveHandler 
 {
+	
 	@SubscribeEvent
 	public void onWorldSave(WorldEvent.Save event)
 	{
@@ -44,6 +47,38 @@ public class MinestuckSaveHandler
 			}
 		}
 		
+	}
+	
+	public static void onWorldLoad(ISaveHandler saveHandler)
+	{
+		File dataFile = saveHandler.getMapFileFromName("MinestuckData");
+		if(dataFile != null && dataFile.exists())
+		{
+			NBTTagCompound nbt = null;
+			try
+			{
+				nbt = CompressedStreamTools.readCompressed(new FileInputStream(dataFile));
+			}
+			catch(IOException e)
+			{
+				e.printStackTrace();
+			}
+			if(nbt != null)
+			{
+				MinestuckDimensionHandler.loadData(nbt);
+				
+				SkaianetHandler.loadData(nbt.getCompoundTag("skaianet"));
+				
+				MinestuckPlayerData.readFromNBT(nbt);
+
+				TileEntityTransportalizer.loadTransportalizers(nbt.getCompoundTag("transportalizers"));
+				
+				return;
+			}
+		}
+		
+		SkaianetHandler.loadData(null);
+		MinestuckPlayerData.readFromNBT(null);
 	}
 	
 }
