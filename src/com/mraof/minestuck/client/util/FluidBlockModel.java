@@ -24,11 +24,15 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+/**
+ * The fluid rendering setup associated with this class was originally created by kirderf1 for www.github.com/mraof/minestuck
+ * When copying this code, please keep this comment or refer back to the original source in another way, if possible.
+ */
 @SideOnly(Side.CLIENT)
 public class FluidBlockModel implements ISmartBlockModel
 {
 	
-	static final float RENDER_OFFSET = 0.001F;	//Copied from old forge fluid renderer
+	static final float RENDER_OFFSET = 0.001F;
 	
 	@Override
 	public List getFaceQuads(EnumFacing facing)
