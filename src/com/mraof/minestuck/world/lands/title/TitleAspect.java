@@ -9,7 +9,7 @@ import com.mraof.minestuck.world.lands.ILandAspect;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.terrain.TerrainAspect;
 
-public abstract class TitleAspect implements ILandAspect
+public abstract class TitleAspect implements ILandAspect<TitleAspect>
 {
 	
 	protected abstract void prepareChunkProvider(ChunkProviderLands chunkProvider);
@@ -27,15 +27,15 @@ public abstract class TitleAspect implements ILandAspect
 	}
 	
 	@Override
-	public List<ILandAspect> getVariations()
+	public List<TitleAspect> getVariations()
 	{
-		ArrayList<ILandAspect> list = new ArrayList<ILandAspect>();
+		ArrayList<TitleAspect> list = new ArrayList<TitleAspect>();
 		list.add(this);
 		return list;
 	}
 	
 	@Override
-	public ILandAspect getPrimaryVariant()
+	public TitleAspect getPrimaryVariant()
 	{
 		return this;
 	}

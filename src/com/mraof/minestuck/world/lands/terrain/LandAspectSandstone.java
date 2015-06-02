@@ -24,7 +24,7 @@ public class LandAspectSandstone extends TerrainAspect
 	private final IBlockState[] structureBlocks;
 	private final Vec3 skyColor;
 	private final String name;
-	private final List<ILandAspect> variations;
+	private final List<TerrainAspect> variations;
 	
 	public LandAspectSandstone()
 	{
@@ -33,7 +33,7 @@ public class LandAspectSandstone extends TerrainAspect
 	
 	public LandAspectSandstone(String name)
 	{
-		variations = new ArrayList<ILandAspect>();
+		variations = new ArrayList<TerrainAspect>();
 		this.name = name;
 		if(name.equals("Sandstone"))
 		{
@@ -124,13 +124,13 @@ public class LandAspectSandstone extends TerrainAspect
 	}
 	
 	@Override
-	public ILandAspect getPrimaryVariant()
+	public TerrainAspect getPrimaryVariant()
 	{
 		return LandAspectRegistry.fromName("Sandstone");
 	}
 	
 	@Override
-	public List<ILandAspect> getVariations()
+	public List<TerrainAspect> getVariations()
 	{
 		return variations;
 	}

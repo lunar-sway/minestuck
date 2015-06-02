@@ -16,7 +16,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Vec3;
 
-public abstract class TerrainAspect implements ILandAspect
+public abstract class TerrainAspect implements ILandAspect<TerrainAspect>
 {
 		/**
 		 * Returns the blocks that can possibly be use in the land's underground blocks.
@@ -74,15 +74,15 @@ public abstract class TerrainAspect implements ILandAspect
 	}
 	
 	@Override
-	public List<ILandAspect> getVariations()
+	public List<TerrainAspect> getVariations()
 	{
-		ArrayList<ILandAspect> list = new ArrayList<ILandAspect>();
+		ArrayList<TerrainAspect> list = new ArrayList<TerrainAspect>();
 		list.add(this);
 		return list;
 	}
 	
 	@Override
-	public ILandAspect getPrimaryVariant()
+	public TerrainAspect getPrimaryVariant()
 	{
 		return this;
 	}
