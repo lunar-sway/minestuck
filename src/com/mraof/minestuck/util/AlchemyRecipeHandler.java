@@ -8,11 +8,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockPlanks;
-import net.minecraft.block.BlockSapling;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -22,7 +19,6 @@ import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.util.WeightedRandomChestContent;
@@ -522,6 +518,7 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.modusCard, 1, 3), true, new GristSet(GristType.Build, 200));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.metalBoat, 1, 0), true, new GristSet(GristType.Rust, 65));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.metalBoat, 1, 1), true, new GristSet(GristType.Gold, 65));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.layeredSand), new GristSet(GristType.Shale, 1));
 		
 		//add Designix combinations
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_hoe), new ItemStack(Items.wheat), MODE_AND, false, true, new ItemStack(Minestuck.sickle));
@@ -568,10 +565,10 @@ public class AlchemyRecipeHandler
 		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Items.stone_sword, 0, 1, 1, 5));
 		
 		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Item.getItemFromBlock(Minestuck.blockStorage), 1, 1, 1, 3));
-		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Minestuck.sledgeHammer, 0, 1, 1, 5));
-		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Minestuck.sickle, 0, 1, 1, 5));
-		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Minestuck.ninjaSword, 0, 1, 1, 5));
-		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Minestuck.sledgeHammer, 0, 1, 1, 5));
+		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Minestuck.clawHammer, 0, 1, 1, 6));
+		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Minestuck.sickle, 0, 1, 1, 6));
+		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Minestuck.ninjaSword, 0, 1, 1, 6));
+		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Minestuck.sledgeHammer, 0, 1, 1, 4));
 		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Minestuck.component, 1, 1, 1, 5));
 		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Minestuck.component, 2, 1, 2, 4));
 		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Item.getItemFromBlock(Minestuck.transportalizer), 0, 1, 1, 2));

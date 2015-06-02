@@ -6,8 +6,12 @@ import java.util.List;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Vec3;
+import net.minecraft.util.WeightedRandomChestContent;
 
+import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 
@@ -16,6 +20,25 @@ public class LandAspectRock extends TerrainAspect
 	
 	private IBlockState[] surfaceBlocks = {Blocks.gravel.getDefaultState(), Blocks.cobblestone.getDefaultState()};
 	private IBlockState[] structureBlocks = {Blocks.cobblestone.getDefaultState(), Blocks.stonebrick.getDefaultState()};
+	
+	public LandAspectRock()
+	{
+		List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
+		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.stone, 1, 0), 2, 8, 4));
+		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.cobblestone, 1, 0), 4, 15, 5));
+		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.gravel, 1, 0), 2, 6, 4));
+		list.add(new WeightedRandomChestContent(new ItemStack(Items.brick, 1, 0), 2, 6, 3));
+		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.brick_block, 1, 0), 1, 3, 2));
+		list.add(new WeightedRandomChestContent(new ItemStack(Items.stone_pickaxe, 1, 0), 1, 1, 6));
+		list.add(new WeightedRandomChestContent(new ItemStack(Items.iron_pickaxe, 1, 0), 1, 1, 4));
+		list.add(new WeightedRandomChestContent(new ItemStack(Items.diamond_pickaxe, 1, 0), 1, 1, 1));
+		list.add(new WeightedRandomChestContent(new ItemStack(Items.iron_boots, 1, 0), 1, 1, 2));
+		list.add(new WeightedRandomChestContent(new ItemStack(Items.iron_leggings, 1, 0), 1, 1, 2));
+		list.add(new WeightedRandomChestContent(new ItemStack(Items.iron_chestplate, 1, 0), 1, 1, 2));
+		list.add(new WeightedRandomChestContent(new ItemStack(Items.iron_helmet, 1, 0), 1, 1, 2));
+		
+		lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);
+	}
 	
 	@Override
 	public IBlockState[] getSurfaceBlocks()

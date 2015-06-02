@@ -9,9 +9,11 @@ import net.minecraft.block.BlockSandStone;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Vec3;
+import net.minecraft.util.WeightedRandomChestContent;
 
-import com.mraof.minestuck.world.lands.ILandAspect;
+import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
@@ -41,6 +43,17 @@ public class LandAspectSandstone extends TerrainAspect
 			upperBlocks = new IBlockState[] {Blocks.stone.getDefaultState()};
 			structureBlocks = new IBlockState[] {Blocks.sandstone.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.SMOOTH), Blocks.stonebrick.getDefaultState()};
 			skyColor = new Vec3(0.9D, 0.7D, 0.05D);
+			
+			List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
+			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sandstone, 1, 0), 4, 15, 5));
+			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sandstone, 1, 1), 2, 7, 4));
+			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sandstone, 1, 2), 1, 4, 3));
+			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_sandstone, 1, 0), 2, 6, 3));
+			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_sandstone, 1, 1), 1, 3, 2));
+			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sand, 1, 0), 2, 7, 3));
+			
+			lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);
+			
 			variations.add(this);
 			variations.add(new LandAspectSandstone("SandstoneRed"));
 		}
@@ -50,6 +63,16 @@ public class LandAspectSandstone extends TerrainAspect
 			upperBlocks = new IBlockState[] {Blocks.stone.getDefaultState()};
 			structureBlocks = new IBlockState[] {Blocks.red_sandstone.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.SMOOTH), Blocks.stonebrick.getDefaultState()};
 			skyColor = new Vec3(0.9D, 0.5D, 0.05D);
+			
+			List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
+			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_sandstone, 1, 0), 4, 15, 5));
+			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_sandstone, 1, 1), 2, 7, 4));
+			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_sandstone, 1, 2), 1, 4, 3));
+			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sandstone, 1, 0), 2, 6, 3));
+			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sandstone, 1, 1), 1, 3, 2));
+			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sand, 1, 1), 2, 7, 3));
+			
+			lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);
 		}
 	}
 	

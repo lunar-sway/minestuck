@@ -3,39 +3,31 @@ package com.mraof.minestuck.world.lands.gen;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.IProgressUpdate;
 import net.minecraft.util.Vec3;
+import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.consort.EntityIguana;
 import com.mraof.minestuck.entity.consort.EntityNakagator;
 import com.mraof.minestuck.entity.consort.EntitySalamander;
-import com.mraof.minestuck.entity.underling.EntityBasilisk;
-import com.mraof.minestuck.entity.underling.EntityGiclops;
-import com.mraof.minestuck.entity.underling.EntityImp;
-import com.mraof.minestuck.entity.underling.EntityOgre;
-import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
@@ -57,6 +49,7 @@ public class ChunkProviderLands implements IChunkProvider
 	public LandAspectRegistry helper;
 	public int nameIndex1, nameIndex2;
 
+	public final Map<String, List<WeightedRandomChestContent>> lootMap = new HashMap<String, List<WeightedRandomChestContent>>();
 	public IBlockState surfaceBlock;
 	public IBlockState upperBlock;
 	public IBlockState oceanBlock;
@@ -107,6 +100,7 @@ public class ChunkProviderLands implements IChunkProvider
 			this.decorators = helper.pickSubset(aspect1.getOptionalDecorators(), 3, 5);
 			this.decorators.addAll(aspect1.getRequiredDecorators());
 			sortDecorators();
+			
 		}
 	}
 	

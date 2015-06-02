@@ -3,12 +3,16 @@ package com.mraof.minestuck.world.lands.terrain;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Vec3;
+import net.minecraft.util.WeightedRandomChestContent;
 
 public class LandAspectHeat extends TerrainAspect 
 {
@@ -16,7 +20,21 @@ public class LandAspectHeat extends TerrainAspect
 	IBlockState[] surfaceBlocks = {Blocks.soul_sand.getDefaultState(), Blocks.cobblestone.getDefaultState()};
 	IBlockState[] structureBlocks = {Blocks.nether_brick.getDefaultState(), Blocks.obsidian.getDefaultState()};
 	static Vec3 skyColor = new Vec3(0.0D, 0.0D, 0.0D);
-
+	
+	public LandAspectHeat()
+	{
+		List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
+		list.add(new WeightedRandomChestContent(new ItemStack(Items.blaze_powder, 1, 0), 2, 8, 5));
+		list.add(new WeightedRandomChestContent(new ItemStack(Items.blaze_rod, 1, 0), 1, 3, 4));
+		list.add(new WeightedRandomChestContent(new ItemStack(Items.magma_cream, 1, 0), 1, 3, 3));
+		list.add(new WeightedRandomChestContent(new ItemStack(Items.brick, 1, 0), 1, 2, 2));
+		list.add(new WeightedRandomChestContent(new ItemStack(Items.flint_and_steel, 1, 0), 1, 1, 2));
+		list.add(new WeightedRandomChestContent(new ItemStack(Items.lava_bucket, 1, 0), 1, 1, 3));
+		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.netherrack, 1, 0), 4, 15, 4));
+		
+		lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);
+	}
+	
 	@Override
 	public IBlockState[] getSurfaceBlocks() 
 	{
