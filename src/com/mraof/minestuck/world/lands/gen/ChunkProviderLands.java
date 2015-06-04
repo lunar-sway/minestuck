@@ -22,6 +22,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
+import net.minecraftforge.common.ChestGenHooks;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.consort.EntityIguana;
@@ -49,7 +50,7 @@ public class ChunkProviderLands implements IChunkProvider
 	public LandAspectRegistry helper;
 	public int nameIndex1, nameIndex2;
 
-	public final Map<String, List<WeightedRandomChestContent>> lootMap = new HashMap<String, List<WeightedRandomChestContent>>();
+	public final Map<String, ChestGenHooks> lootMap = new HashMap<String, ChestGenHooks>();
 	public IBlockState surfaceBlock;
 	public IBlockState upperBlock;
 	public IBlockState oceanBlock;
@@ -101,6 +102,9 @@ public class ChunkProviderLands implements IChunkProvider
 			this.decorators.addAll(aspect1.getRequiredDecorators());
 			sortDecorators();
 			
+			List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>(AlchemyRecipeHandler.basicMediumChest);
+			aspect1.modifyChestContent(list, AlchemyRecipeHandler.BASIC_MEDIUM_CHEST);
+			lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, new ChestGenHooks(null, list, 0, 0));	//Item count is handled separately by the structure
 		}
 	}
 	

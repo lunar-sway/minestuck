@@ -1,5 +1,6 @@
 package com.mraof.minestuck.util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -43,8 +44,8 @@ import static com.mraof.minestuck.util.CombinationRegistry.MODE_OR;
 
 public class AlchemyRecipeHandler
 {
-	
-	public static final String BASIC_MEDIUM_CHEST = "minestuck:basicMediumChest";	//The ChestGenHooks key for basic medium loot that's available in all lands.
+	public static final String BASIC_MEDIUM_CHEST = "minestuck:basicMediumChest";	//The ChestGenHooks key for basic medium loot. Now only an internal key.
+	public static final List<WeightedRandomChestContent> basicMediumChest = new ArrayList<WeightedRandomChestContent>();
 	
 	private static HashMap<List<Object>, Object> recipeList;
 	private static HashMap<List<Object>, Boolean> lookedOver;
@@ -558,20 +559,20 @@ public class AlchemyRecipeHandler
 			ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CORRIDOR).addItem(new WeightedRandomChestContent(Minestuck.captchaCard, 0, 1, 4, 10));
 		}
 		
-		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Items.experience_bottle, 0, 1, 2, 3));
-		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Items.iron_ingot, 0, 1, 4, 9));
-		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Items.bow, 0, 1, 1, 5));
-		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Items.redstone, 0, 1, 6, 7));
-		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Items.stone_sword, 0, 1, 1, 5));
+		basicMediumChest.add(new WeightedRandomChestContent(Items.experience_bottle, 0, 1, 2, 3));
+		basicMediumChest.add(new WeightedRandomChestContent(Items.iron_ingot, 0, 1, 4, 9));
+		basicMediumChest.add(new WeightedRandomChestContent(Items.bow, 0, 1, 1, 5));
+		basicMediumChest.add(new WeightedRandomChestContent(Items.redstone, 0, 1, 6, 7));
+		basicMediumChest.add(new WeightedRandomChestContent(Items.stone_sword, 0, 1, 1, 5));
 		
-		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Item.getItemFromBlock(Minestuck.blockStorage), 1, 1, 1, 3));
-		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Minestuck.clawHammer, 0, 1, 1, 6));
-		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Minestuck.sickle, 0, 1, 1, 6));
-		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Minestuck.ninjaSword, 0, 1, 1, 6));
-		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Minestuck.sledgeHammer, 0, 1, 1, 4));
-		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Minestuck.component, 1, 1, 1, 5));
-		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Minestuck.component, 2, 1, 2, 4));
-		ChestGenHooks.getInfo(BASIC_MEDIUM_CHEST).addItem(new WeightedRandomChestContent(Item.getItemFromBlock(Minestuck.transportalizer), 0, 1, 1, 2));
+		basicMediumChest.add(new WeightedRandomChestContent(Item.getItemFromBlock(Minestuck.blockStorage), 1, 1, 1, 3));
+		basicMediumChest.add(new WeightedRandomChestContent(Minestuck.clawHammer, 0, 1, 1, 6));
+		basicMediumChest.add(new WeightedRandomChestContent(Minestuck.sickle, 0, 1, 1, 6));
+		basicMediumChest.add(new WeightedRandomChestContent(Minestuck.ninjaSword, 0, 1, 1, 6));
+		basicMediumChest.add(new WeightedRandomChestContent(Minestuck.sledgeHammer, 0, 1, 1, 4));
+		basicMediumChest.add(new WeightedRandomChestContent(Minestuck.component, 1, 1, 1, 5));
+		basicMediumChest.add(new WeightedRandomChestContent(Minestuck.component, 2, 1, 2, 4));
+		basicMediumChest.add(new WeightedRandomChestContent(Item.getItemFromBlock(Minestuck.transportalizer), 0, 1, 1, 2));
 	}
 	
 	public static void registerModRecipes() 
