@@ -2,7 +2,6 @@ package com.mraof.minestuck.world.lands.structure;
 
 import java.util.Random;
 
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 import net.minecraft.block.BlockChest;
@@ -107,14 +106,15 @@ public class SmallRuinStart extends StructureStart
 			this.fillWithAir(worldIn, boundingBox, 2, 1, 8, 4, 3, 8);
 			this.func_175811_a(worldIn, Blocks.chest.getDefaultState().withProperty(BlockChest.FACING, this.coordBaseMode.getOpposite()), 3, 1, 6, boundingBox);
 			
+			EnumFacing torchFacing = this.coordBaseMode == EnumFacing.EAST || this.coordBaseMode == EnumFacing.NORTH ? this.coordBaseMode.rotateY() : this.coordBaseMode.rotateYCCW();
 			if(torches[0])
-				this.func_175811_a(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, this.coordBaseMode.rotateYCCW()), 1, 2, 3, boundingBox);
+				this.func_175811_a(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, torchFacing), 1, 2, 3, boundingBox);
 			if(torches[1])
-				this.func_175811_a(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, this.coordBaseMode.rotateY()), 5, 2, 3, boundingBox);
+				this.func_175811_a(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, torchFacing.getOpposite()), 5, 2, 3, boundingBox);
 			if(torches[2])
-				this.func_175811_a(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, this.coordBaseMode.rotateYCCW()), 1, 2, 6, boundingBox);
+				this.func_175811_a(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, torchFacing), 1, 2, 6, boundingBox);
 			if(torches[3])
-				this.func_175811_a(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, this.coordBaseMode.rotateY()), 5, 2, 6, boundingBox);
+				this.func_175811_a(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, torchFacing.getOpposite()), 5, 2, 6, boundingBox);
 			
 			return true;
 		}

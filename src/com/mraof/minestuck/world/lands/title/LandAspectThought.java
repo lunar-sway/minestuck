@@ -34,16 +34,19 @@ public class LandAspectThought extends TitleAspect
 		if(chunkProvider.surfaceBlock.getBlock().getMaterial() == Material.ground)
 		{
 			chunkProvider.surfaceBlock = Minestuck.coloredDirt.getDefaultState().withProperty(BlockColoredDirt.BLOCK_TYPE, BlockColoredDirt.BlockType.THOUGHT);
-			ArrayList<ILandDecorator> decoratorsToRemove = new ArrayList<ILandDecorator>();
-			for(ILandDecorator decorator : chunkProvider.decorators)
-				if(decorator instanceof SurfaceDecoratorVein)
-				{
-					IBlockState blockState = ((SurfaceDecoratorVein)decorator).block;
-					if(blockState.getBlock().getMaterial() == Material.ground)
-						decoratorsToRemove.add(decorator);
-				}
-			if(!decoratorsToRemove.isEmpty())
-				chunkProvider.decorators.removeAll(decoratorsToRemove);
+			if(chunkProvider.decorators != null)
+			{
+				ArrayList<ILandDecorator> decoratorsToRemove = new ArrayList<ILandDecorator>();
+				for(ILandDecorator decorator : chunkProvider.decorators)
+					if(decorator instanceof SurfaceDecoratorVein)
+					{
+						IBlockState blockState = ((SurfaceDecoratorVein)decorator).block;
+						if(blockState.getBlock().getMaterial() == Material.ground)
+							decoratorsToRemove.add(decorator);
+					}
+				if(!decoratorsToRemove.isEmpty())
+					chunkProvider.decorators.removeAll(decoratorsToRemove);
+			}
 		}
 		chunkProvider.riverBlock = Minestuck.blockBrainJuice.getDefaultState();
 		chunkProvider.oceanBlock = Minestuck.blockBrainJuice.getDefaultState() ;

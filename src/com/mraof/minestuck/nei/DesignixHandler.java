@@ -4,7 +4,6 @@ import static codechicken.lib.gui.GuiDraw.changeTexture;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -34,13 +33,13 @@ public class DesignixHandler extends TemplateRecipeHandler {
 			this.mode = mode;
 			this.output = output;
 			stacks = new ArrayList<PositionedStack>();
-			stacks.add(new PositionedStack(AlchemyRecipeHandler.getItems(input1, damage1), 57, 15, true));
-			stacks.add(new PositionedStack(AlchemyRecipeHandler.getItems(input2, damage2), 57, 39, true));
+			stacks.add(new PositionedStack(AlchemyRecipeHandler.getItems(input1, damage1), 39, 15, true));
+			stacks.add(new PositionedStack(AlchemyRecipeHandler.getItems(input2, damage2), 39, 39, true));
 		}
 		
 		@Override
 		public PositionedStack getResult() {
-			return new PositionedStack(output,129,26);
+			return new PositionedStack(output,111,26);
 		}
 		
 		@Override
@@ -154,12 +153,8 @@ public class DesignixHandler extends TemplateRecipeHandler {
 		
 		//render progress bar
 		changeTexture("minestuck:textures/gui/progress/designix.png");
-		drawProgressBar(77, 27, 0, 0, 42, 17, 50, 0);
+		drawProgressBar(59, 27, 0, 0, 42, 17, 50, 0);
 		
-		//render blank card
-		changeTexture("minestuck:textures/items/CardBlank.png");
-		drawTexturedModalRect(21, 39, 0, 0, 16, 16,16,16);
-
 		//render combo mode
 		GuiDraw.drawString(crecipe.mode ? "&&" : "||", 22,18, 0x8B8B8B);
 	}
