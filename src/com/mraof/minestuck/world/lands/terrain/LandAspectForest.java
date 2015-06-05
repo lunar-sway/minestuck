@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Vec3;
 import net.minecraft.util.WeightedRandomChestContent;
@@ -40,6 +41,9 @@ public class LandAspectForest extends TerrainAspect
 		list.add(new WeightedRandomChestContent(new ItemStack(Minestuck.component, 1, 0), 1, 2, 4));
 		list.add(new WeightedRandomChestContent(new ItemStack(Minestuck.deuceClub, 1, 0), 1, 1, 6));
 		list.add(new WeightedRandomChestContent(new ItemStack(Minestuck.cane, 1, 0), 1, 1, 6));
+		list.add(new WeightedRandomChestContent(new ItemStack(Items.stone_axe, 1, 0), 1, 1, 5));
+		list.add(new WeightedRandomChestContent(new ItemStack(Items.iron_axe, 1, 0), 1, 1, 3));
+		list.add(new WeightedRandomChestContent(new ItemStack(Items.diamond_axe, 1, 0), 1, 1, 1));
 		
 		this.lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);
 	}

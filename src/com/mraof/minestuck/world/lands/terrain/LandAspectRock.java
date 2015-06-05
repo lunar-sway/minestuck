@@ -24,12 +24,12 @@ public class LandAspectRock extends TerrainAspect
 	public LandAspectRock()
 	{
 		List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.stone, 1, 0), 2, 8, 4));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.cobblestone, 1, 0), 4, 15, 5));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.gravel, 1, 0), 2, 6, 4));
-		list.add(new WeightedRandomChestContent(new ItemStack(Items.brick, 1, 0), 2, 6, 3));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.brick_block, 1, 0), 1, 3, 2));
-		list.add(new WeightedRandomChestContent(new ItemStack(Items.stone_pickaxe, 1, 0), 1, 1, 6));
+		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.stone, 1, 0), 2, 8, 5));
+		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.cobblestone, 1, 0), 4, 15, 7));
+		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.gravel, 1, 0), 2, 6, 5));
+		list.add(new WeightedRandomChestContent(new ItemStack(Items.brick, 1, 0), 2, 6, 4));
+		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.brick_block, 1, 0), 1, 3, 3));
+		list.add(new WeightedRandomChestContent(new ItemStack(Items.stone_pickaxe, 1, 0), 1, 1, 7));
 		list.add(new WeightedRandomChestContent(new ItemStack(Items.iron_pickaxe, 1, 0), 1, 1, 4));
 		list.add(new WeightedRandomChestContent(new ItemStack(Items.diamond_pickaxe, 1, 0), 1, 1, 1));
 		list.add(new WeightedRandomChestContent(new ItemStack(Items.iron_boots, 1, 0), 1, 1, 2));

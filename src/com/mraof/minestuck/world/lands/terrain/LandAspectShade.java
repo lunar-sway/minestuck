@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Vec3;
 import net.minecraft.util.WeightedRandomChestContent;
@@ -26,9 +27,11 @@ public class LandAspectShade extends TerrainAspect
 	public LandAspectShade()
 	{
 		List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_mushroom, 1, 0), 1, 7, 5));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.brown_mushroom, 1, 0), 1, 7, 5));
-		list.add(new WeightedRandomChestContent(new ItemStack(Minestuck.coloredDirt, 1, 0), 4, 15, 3));
+		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_mushroom, 1, 0), 1, 7, 6));
+		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.brown_mushroom, 1, 0), 1, 7, 6));
+		list.add(new WeightedRandomChestContent(new ItemStack(Minestuck.coloredDirt, 1, 0), 4, 15, 5));
+		list.add(new WeightedRandomChestContent(new ItemStack(Items.mushroom_stew, 1, 0), 1, 1, 4));
+		list.add(new WeightedRandomChestContent(new ItemStack(Minestuck.minestuckBucket, 1, 0), 1, 1, 2));
 		
 		lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);
 	}

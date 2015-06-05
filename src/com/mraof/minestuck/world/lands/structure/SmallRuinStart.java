@@ -109,7 +109,7 @@ public class SmallRuinStart extends StructureStart
 			if(boundingBox.func_175898_b(new BlockPos(this.getXWithOffset(3, 6), this.getYWithOffset(1), this.getZWithOffset(3, 6))))
 				this.func_175811_a(worldIn, this.func_175807_a(worldIn, 3, 1, 6, boundingBox).withProperty(BlockChest.FACING, this.coordBaseMode.getOpposite()), 3, 1, 6, boundingBox);
 			
-			EnumFacing torchFacing = this.coordBaseMode.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE ? this.coordBaseMode.rotateY() : this.coordBaseMode.rotateYCCW();
+			EnumFacing torchFacing = coordBaseMode == EnumFacing.EAST || coordBaseMode == EnumFacing.NORTH ? this.coordBaseMode.rotateY() : this.coordBaseMode.rotateYCCW();
 			if(torches[0])
 				this.func_175811_a(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, torchFacing), 1, 2, 3, boundingBox);
 			if(torches[1])

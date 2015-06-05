@@ -559,20 +559,29 @@ public class AlchemyRecipeHandler
 			ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CORRIDOR).addItem(new WeightedRandomChestContent(Minestuck.captchaCard, 0, 1, 4, 10));
 		}
 		
-		basicMediumChest.add(new WeightedRandomChestContent(Items.experience_bottle, 0, 1, 2, 3));
-		basicMediumChest.add(new WeightedRandomChestContent(Items.iron_ingot, 0, 1, 4, 9));
-		basicMediumChest.add(new WeightedRandomChestContent(Items.bow, 0, 1, 1, 5));
-		basicMediumChest.add(new WeightedRandomChestContent(Items.redstone, 0, 1, 6, 7));
-		basicMediumChest.add(new WeightedRandomChestContent(Items.stone_sword, 0, 1, 1, 5));
+		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Items.experience_bottle, 1, 0), 1, 2, 3));
+		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Items.iron_ingot, 1, 0), 1, 5, 9));
+		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Items.bow, 1, 0), 1, 1, 5));
+		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Items.redstone, 1, 0), 1, 6, 7));
+		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Items.stone_sword, 1, 0), 1, 1, 5));
+		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Items.gold_ingot, 1, 0), 1, 3, 6));
+		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Items.diamond, 1, 0), 1, 2, 1));
+		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Items.saddle, 1, 0), 1, 1, 3));
+		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Items.iron_sword, 1, 0), 1, 1, 2));
+		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Items.ender_pearl, 1, 0), 1, 2, 1));
+		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Items.arrow, 1, 0), 2, 10, 6));
 		
-		basicMediumChest.add(new WeightedRandomChestContent(Item.getItemFromBlock(Minestuck.blockStorage), 1, 1, 1, 3));
-		basicMediumChest.add(new WeightedRandomChestContent(Minestuck.clawHammer, 0, 1, 1, 6));
-		basicMediumChest.add(new WeightedRandomChestContent(Minestuck.sickle, 0, 1, 1, 6));
-		basicMediumChest.add(new WeightedRandomChestContent(Minestuck.ninjaSword, 0, 1, 1, 6));
-		basicMediumChest.add(new WeightedRandomChestContent(Minestuck.sledgeHammer, 0, 1, 1, 4));
-		basicMediumChest.add(new WeightedRandomChestContent(Minestuck.component, 1, 1, 1, 5));
-		basicMediumChest.add(new WeightedRandomChestContent(Minestuck.component, 2, 1, 2, 4));
-		basicMediumChest.add(new WeightedRandomChestContent(Item.getItemFromBlock(Minestuck.transportalizer), 0, 1, 1, 2));
+		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Minestuck.blockStorage, 1, 1), 1, 1, 3));
+		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Minestuck.clawHammer, 1, 0), 1, 1, 5));
+		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Minestuck.sickle, 1, 0), 1, 1, 5));
+		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Minestuck.ninjaSword, 1, 0), 1, 1, 5));
+		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Minestuck.sledgeHammer, 1, 0), 1, 1, 4));
+		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Minestuck.component, 1, 0), 1, 1, 5));
+		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Minestuck.component, 1, 1), 1, 1, 4));
+		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Minestuck.transportalizer, 1, 0), 1, 1, 2));
+		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Minestuck.rawCruxite, 1, 0), 1, 5, 5));
+		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Minestuck.homesSmellYaLater, 1, 0), 1, 1, 3));
+		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Minestuck.pogoHammer, 1, 0), 1, 1, 2));
 	}
 	
 	public static void registerModRecipes() 

@@ -29,9 +29,9 @@ public class LandAspectFrost extends TerrainAspect
 	public LandAspectFrost()
 	{
 		List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
-		list.add(new WeightedRandomChestContent(new ItemStack(Items.snowball, 1, 0), 2, 8, 6));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.snow, 1, 0), 1, 4, 3));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.snow_layer, 1, 0), 2, 5, 3));
+		list.add(new WeightedRandomChestContent(new ItemStack(Items.snowball, 1, 0), 2, 8, 8));
+		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.snow, 1, 0), 1, 4, 5));
+		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.snow_layer, 1, 0), 2, 5, 4));
 		
 		lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);
 	}
