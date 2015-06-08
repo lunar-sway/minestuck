@@ -7,6 +7,8 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -28,20 +30,12 @@ import com.mraof.minestuck.world.gen.lands.LandHelper;
 
 public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 {
-	List<Block> commonBlocks = new ArrayList<Block>();
-	int destinationDimension = Minestuck.landDimensionIdStart;
+	
 	public ItemCruxiteArtifact(int par2, boolean par3) 
 	{
 		super(1, par2, par3);
 		this.setCreativeTab(Minestuck.tabMinestuck);
 		setUnlocalizedName("cruxiteArtifact");
-		commonBlocks.add(Blocks.stone);
-		commonBlocks.add(Blocks.grass);
-		commonBlocks.add(Blocks.dirt);
-		commonBlocks.add(Blocks.sand);
-		commonBlocks.add(Blocks.sandstone);
-		commonBlocks.add(Blocks.water);
-		commonBlocks.add(Blocks.flowing_water);
 	}
 	@Override
 	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
@@ -76,10 +70,22 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 			
 			List<?> list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.boundingBox.expand((double)Minestuck.artifactRange, Minestuck.artifactRange, (double)Minestuck.artifactRange));
 			Iterator<?> iterator = list.iterator();
-
+			
 			while (iterator.hasNext())
 			{
-				Teleport.teleportEntity((Entity)iterator.next(), worldserver1.provider.dimensionId, this);
+				Entity e = (Entity)iterator.next();
+				if(Minestuck.entryCrater || e instanceof EntityPlayer || e instanceof EntityItem)
+					Teleport.teleportEntity(e, worldserver1.provider.dimensionId, this);
+				else	//Copy instead of teleport
+				{
+					Entity newEntity = EntityList.createEntityByName(EntityList.getEntityString(entity), worldserver1);
+					if (newEntity != null)
+					{
+						newEntity.copyDataFrom(entity, true);
+						newEntity.dimension = worldserver1.provider.dimensionId;
+						worldserver1.spawnEntityInWorld(newEntity);
+					}
+				}
 			}
 			int nextWidth = 0;
 			for(int blockX = x - Minestuck.artifactRange; blockX <= x + Minestuck.artifactRange; blockX++)
@@ -107,7 +113,7 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 							TileEntity te1 = null;
 							try {
 								te1 = te.getClass().newInstance();
-							} catch (Exception e) {e.printStackTrace();	}
+							} catch (Exception e) {e.printStackTrace();	continue;}
 							NBTTagCompound nbt = new NBTTagCompound();
 							te.writeToNBT(nbt);
 							te1.readFromNBT(nbt);
@@ -117,6 +123,7 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 					}
 				}
 			}
+			
 			for(int blockX = x - Minestuck.artifactRange; blockX <= x + Minestuck.artifactRange; blockX++)
 			{
 				int zWidth = nextWidth;
@@ -128,18 +135,26 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 					minY = minY < 0 ? 0 : minY;
 					for(int blockY = minY; blockY < 256; blockY++)
 					{
-						Block block = worldserver0.getBlock(blockX, blockY, blockZ);
-						if(block != Blocks.bedrock)
-							worldserver0.setBlockToAir(blockX, blockY, blockZ);
+						if(Minestuck.entryCrater)
+						{
+							if(worldserver0.getBlock(blockX, blockY, blockZ) != Blocks.bedrock)
+								worldserver0.setBlockToAir(blockX, blockY, blockZ);
+						} else
+							if(worldserver0.getTileEntity(blockX, blockY, blockZ) != null)
+								worldserver0.setBlockToAir(blockX, blockY, blockZ);
 					}
 				}
 			}
-			list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.boundingBox.expand((double)Minestuck.artifactRange, Minestuck.artifactRange, (double)Minestuck.artifactRange));
-			iterator = list.iterator();
-
-			while (iterator.hasNext())
+			
+			if(Minestuck.entryCrater)
 			{
-				((Entity)iterator.next()).setDead();
+				list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.boundingBox.expand((double)Minestuck.artifactRange, Minestuck.artifactRange, (double)Minestuck.artifactRange));
+				iterator = list.iterator();
+				
+				while (iterator.hasNext())
+				{
+					((Entity)iterator.next()).setDead();
+				}
 			}
 			
 			ChunkProviderLands chunkProvider = (ChunkProviderLands) worldserver1.provider.createChunkGenerator();

@@ -232,6 +232,7 @@ public class Minestuck
 	public static boolean specialCardRenderer;
 	public static boolean cardRecipe;
 	public static boolean cardLoot;
+	public static boolean entryCrater;
 	public static String privateMessage;
 	public static int artifactRange; //The range of the Cruxite Artifact in teleporting zones over to the new land
 	public static int overworldEditRange;
@@ -297,6 +298,7 @@ public class Minestuck
 		cardCost = Math.max(0, config.get("General", "Card Cost", 1, "An integer that determines how much a captchalouge card costs to alchemize").getInt());
 		cardRecipe = config.getBoolean("Include Captcha Card Recipe", "General", true, "Set this to false to remove the captcha card crafting recipe.");
 		cardLoot = config.getBoolean("Generate Card As Loot", "General", false, "Set this to true to make captcha cards appear in dungeon and stronghold chests.");
+		entryCrater = config.get("General", "entryCrater", true, "Disable this to prevent craters from people entering the medium.").getBoolean();
 		
 		if(escapeFailureMode > 2 || escapeFailureMode < 0)
 			escapeFailureMode = 0;
