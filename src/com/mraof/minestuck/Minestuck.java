@@ -1,6 +1,5 @@
 package com.mraof.minestuck;
 
-import java.util.EnumMap;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -29,11 +28,9 @@ import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppedEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
-import net.minecraftforge.fml.common.network.FMLEmbeddedChannel;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
 import codechicken.nei.NEIModContainer;
 
 import com.mraof.minestuck.block.BlockChessTile;
@@ -224,7 +221,6 @@ public class Minestuck
 	//The proxy to be used by client and server
 	public static CommonProxy proxy;
 	public static CreativeTabs tabMinestuck;
-	public static EnumMap<Side, FMLEmbeddedChannel> channels;
 
 	public int currentEntityIdOffset = 0;
 	public static long worldSeed = 0;
@@ -452,7 +448,7 @@ public class Minestuck
 		}
 		
 		//register channel handler
-		channels = NetworkRegistry.INSTANCE.newChannel("Minestuck", MinestuckChannelHandler.instance);
+		MinestuckChannelHandler.setupChannel();
 		
 		//Register structures
 		MapGenStructureIO.registerStructure(StructureCastleStart.class, "SkaiaCastle");

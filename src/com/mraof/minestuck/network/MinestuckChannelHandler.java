@@ -1,23 +1,24 @@
 package com.mraof.minestuck.network;
 
 import java.util.LinkedList;
+import java.util.EnumMap;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetHandlerPlayServer;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
+import net.minecraftforge.fml.common.network.FMLEmbeddedChannel;
 import net.minecraftforge.fml.common.network.FMLIndexedMessageToMessageCodec;
 import net.minecraftforge.fml.common.network.FMLOutboundHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.util.Debug;
@@ -26,6 +27,7 @@ public class MinestuckChannelHandler extends FMLIndexedMessageToMessageCodec<Min
 {
 	
 	public static MinestuckChannelHandler instance = new MinestuckChannelHandler();
+	public static EnumMap<Side, FMLEmbeddedChannel> channels;
 	
 	private static LinkedList<MinestuckPacket> serverQueue = new LinkedList<MinestuckPacket>(), clientQueue = new LinkedList<MinestuckPacket>();
 	private static LinkedList<EntityPlayer> serverPlayers = new LinkedList<EntityPlayer>();
@@ -45,45 +47,69 @@ public class MinestuckChannelHandler extends FMLIndexedMessageToMessageCodec<Min
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf source, MinestuckPacket msg) 
 	{
 		msg.consumePacket(source);
-		Side side = Thread.currentThread().getName().contains("Server") ? Side.SERVER : Side.CLIENT;
-		switch (side)
+	}
+	
+	private static class MinestuckPacketHandler extends SimpleChannelInboundHandler<MinestuckPacket>
+	{
+		private final Side side;
+		private MinestuckPacketHandler(Side side)
 		{
-		case CLIENT:
-			if(msg instanceof LandRegisterPacket)
-				msg.execute(null);
-			else synchronized(clientQueue)
+			this.side = side;
+		}
+		@Override
+		protected void channelRead0(ChannelHandlerContext ctx, MinestuckPacket msg) throws Exception
+		{
+			switch (side)
 			{
-				clientQueue.addLast(msg);
+			case CLIENT:
+				if(msg instanceof LandRegisterPacket)
+					msg.execute(null);
+				else synchronized(clientQueue)
+				{
+					clientQueue.addLast(msg);
+				}
+				break;
+			case SERVER:
+				synchronized(serverQueue)
+				{
+					INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
+					serverPlayers.addLast(((NetHandlerPlayServer) netHandler).playerEntity);
+					serverQueue.addLast(msg);
+				}
+				break;
 			}
-			break;
-		case SERVER:
-			synchronized(serverQueue)
-			{
-				INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
-				serverPlayers.addLast(((NetHandlerPlayServer) netHandler).playerEntity);
-				serverQueue.addLast(msg);
-			}
-			break;
+		}
+	}
+	
+	public static void setupChannel()
+	{
+		if(channels == null)
+		{
+			channels = NetworkRegistry.INSTANCE.newChannel("Minestuck", MinestuckChannelHandler.instance);
+			String targetName = channels.get(Side.CLIENT).findChannelHandlerNameForType(MinestuckChannelHandler.class);
+			channels.get(Side.CLIENT).pipeline().addAfter(targetName, "MinestuckPacketHandler", new MinestuckPacketHandler(Side.CLIENT));
+			targetName = channels.get(Side.SERVER).findChannelHandlerNameForType(MinestuckChannelHandler.class);	//Not sure if this is necessary
+			channels.get(Side.SERVER).pipeline().addAfter(targetName, "MinestuckPacketHandler", new MinestuckPacketHandler(Side.SERVER));
 		}
 	}
 	
 	public static void sendToServer(MinestuckPacket packet)
 	{
-		Minestuck.channels.get(Side.CLIENT).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.TOSERVER);
-		Minestuck.channels.get(Side.CLIENT).writeOutbound(packet);
+		channels.get(Side.CLIENT).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.TOSERVER);
+		channels.get(Side.CLIENT).writeOutbound(packet);
 	}
 	
 	public static void sendToPlayer(MinestuckPacket packet, EntityPlayer player)
 	{
-		Minestuck.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.PLAYER);
-		Minestuck.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player);
-		Minestuck.channels.get(Side.SERVER).writeOutbound(packet);
+		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.PLAYER);
+		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player);
+		channels.get(Side.SERVER).writeOutbound(packet);
 	}
 	
 	public static void sendToAllPlayers(MinestuckPacket packet)
 	{
-		Minestuck.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALL);
-		Minestuck.channels.get(Side.SERVER).writeOutbound(packet);
+		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALL);
+		channels.get(Side.SERVER).writeOutbound(packet);
 	}
 	
 	@SubscribeEvent
