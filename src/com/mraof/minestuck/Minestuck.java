@@ -259,7 +259,6 @@ public class Minestuck
 	//The proxy to be used by client and server
 	public static CommonProxy proxy;
 	public static CreativeTabs tabMinestuck;
-	public static EnumMap<Side, FMLEmbeddedChannel> channels;
 
 	public int currentEntityIdOffset = 0;
 	public static long worldSeed = 0;
@@ -521,7 +520,7 @@ public class Minestuck
 		}
 		
 		//register channel handler
-		channels = NetworkRegistry.INSTANCE.newChannel("Minestuck", MinestuckChannelHandler.instance);
+		MinestuckChannelHandler.setupChannel();
 		
 		//Register structures
 		MapGenStructureIO.registerStructure(StructureCastleStart.class, "SkaiaCastle");

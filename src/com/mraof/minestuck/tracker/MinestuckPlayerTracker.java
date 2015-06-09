@@ -94,13 +94,13 @@ public class MinestuckPlayerTracker {
 	public void onConnectionCreated(FMLNetworkEvent.ServerConnectionFromClientEvent event) {
 		MinestuckPacket packet = MinestuckPacket.makePacket(Type.LANDREGISTER, MinestuckSaveHandler.lands.toArray());
 		
-		Minestuck.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.DISPATCHER);
-		Minestuck.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(event.manager.channel().attr(NetworkDispatcher.FML_DISPATCHER).get());
-		Minestuck.channels.get(Side.SERVER).writeOutbound(packet);
-
+		MinestuckChannelHandler.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.DISPATCHER);
+		MinestuckChannelHandler.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(event.manager.channel().attr(NetworkDispatcher.FML_DISPATCHER).get());
+		MinestuckChannelHandler.channels.get(Side.SERVER).writeOutbound(packet);
+		
 		MinestuckPacket infoPacket = MinestuckPacket.makePacket(Type.INFO);
 		
-		Minestuck.channels.get(Side.SERVER).writeOutbound(infoPacket);
+		MinestuckChannelHandler.channels.get(Side.SERVER).writeOutbound(infoPacket);
 	}
 	
 	@SubscribeEvent
