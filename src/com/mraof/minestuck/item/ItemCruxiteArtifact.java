@@ -1,12 +1,12 @@
 package com.mraof.minestuck.item;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -19,17 +19,16 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 
 import static com.mraof.minestuck.MinestuckConfig.artifactRange;
 
-import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.ITeleporter;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 {
@@ -76,10 +75,22 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 			Debug.print("Teleporting entities...");
 			List<?> list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().expand((double)artifactRange, artifactRange, (double)artifactRange));
 			Iterator<?> iterator = list.iterator();
-
+			
 			while (iterator.hasNext())
 			{
-				Teleport.teleportEntity((Entity)iterator.next(), worldserver1.provider.getDimensionId(), this);
+				Entity e = (Entity)iterator.next();
+				if(MinestuckConfig.entryCrater || e instanceof EntityPlayer || e instanceof EntityItem)
+					Teleport.teleportEntity(e, worldserver1.provider.getDimensionId(), this);
+				else	//Copy instead of teleport
+				{
+					Entity newEntity = EntityList.createEntityByName(EntityList.getEntityString(entity), worldserver1);
+					if (newEntity != null)
+					{
+						newEntity.copyDataFromOld(entity);
+						newEntity.dimension = worldserver1.provider.getDimensionId();
+						worldserver1.spawnEntityInWorld(newEntity);
+					}
+				}
 			}
 			
 			Debug.print("Placing blocks...");
@@ -103,7 +114,7 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 							TileEntity te1 = null;
 							try {
 								te1 = te.getClass().newInstance();
-							} catch (Exception e) {e.printStackTrace();	}
+							} catch (Exception e) {e.printStackTrace();	continue;}
 							NBTTagCompound nbt = new NBTTagCompound();
 							te.writeToNBT(nbt);
 							te1.readFromNBT(nbt);
@@ -125,22 +136,30 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 					minY = minY < 0 ? 0 : minY;
 					for(int blockY = minY; blockY < 256; blockY++)
 					{
-						Block block = worldserver0.getBlockState(new BlockPos(blockX, blockY, blockZ)).getBlock();
-						if(block != Blocks.bedrock)
-							worldserver0.setBlockState(new BlockPos(blockX, blockY, blockZ), Blocks.air.getDefaultState(), 2);
+						BlockPos pos = new BlockPos(blockX, blockY, blockZ);
+						if(MinestuckConfig.entryCrater)
+						{
+							if(worldserver0.getBlockState(pos).getBlock() != Blocks.bedrock)
+								worldserver0.setBlockState(pos, Blocks.air.getDefaultState(), 2);
+						} else
+							if(worldserver0.getTileEntity(pos) != null)
+								worldserver0.setBlockState(pos, Blocks.air.getDefaultState(), 2);
 					}
 				}
 			}
 			
-			Debug.print("Removing old entities and setting spawn point...");
+			Debug.print("Removing old entities...");
 			list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().expand((double)artifactRange, artifactRange, (double)artifactRange));
 			iterator = list.iterator();
-
 			while (iterator.hasNext())
-			{
-				((Entity)iterator.next()).setDead();
-			}
-			
+				if(MinestuckConfig.entryCrater)
+					((Entity)iterator.next()).setDead();
+				else
+				{
+					Entity e = (Entity) iterator.next();
+					if(e instanceof EntityItem)
+						e.setDead();
+				}
 		}
 	}
 	

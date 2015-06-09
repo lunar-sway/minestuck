@@ -1,10 +1,6 @@
 package com.mraof.minestuck;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.EnumMap;
-import java.util.Iterator;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -15,10 +11,6 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.BlockPos;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -112,7 +104,6 @@ import com.mraof.minestuck.item.weapon.ItemSpork;
 import com.mraof.minestuck.nei.NEIMinestuckConfig;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
-import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.tileentity.TileEntityGatePortal;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
@@ -123,8 +114,6 @@ import com.mraof.minestuck.util.CommandCheckLand;
 import com.mraof.minestuck.util.ComputerProgram;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.KindAbstratusList;
 import com.mraof.minestuck.util.SburbClient;
 import com.mraof.minestuck.util.SburbServer;

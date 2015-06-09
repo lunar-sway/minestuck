@@ -33,7 +33,7 @@ public class TinkersConstructSupport extends ModSupport
 			CombinationRegistry.addCombination("treeLeaves", items1[i], CombinationRegistry.MODE_AND, new ItemStack(oreBush1, 1, i));
 		
 		CombinationRegistry.addCombination("treeLeaves", "ingotAluminium", CombinationRegistry.MODE_AND, new ItemStack(oreBush2, 1, 0));
-		CombinationRegistry.addCombination("treeLeaves", Items.experience_bottle, 0, CombinationRegistry.MODE_AND, new ItemStack(oreBush2, 1, 0));
+		CombinationRegistry.addCombination("treeLeaves", Items.experience_bottle, 0, CombinationRegistry.MODE_AND, new ItemStack(oreBush2, 1, 1));
 	}
 	
 }
