@@ -73,11 +73,12 @@ public class GristHelper {
 	/**
 	 * Returns a GristSet representing the drops from an underling, given the underling's type and a static loot multiplier.
 	 */
-	public static GristSet getRandomDrop(GristType primary,int multiplier) {
+	public static GristSet getRandomDrop(GristType primary, double multiplier)
+	{
 		GristSet set = new GristSet();
-		set.addGrist(GristType.Build, random.nextInt(20)*multiplier);
-		set.addGrist(primary, random.nextInt(10)*multiplier);
-		set.addGrist(getSecondaryGrist(primary), random.nextInt(5)*multiplier);
+		set.addGrist(GristType.Build, (int)(2*multiplier + random.nextDouble()*18*multiplier));
+		set.addGrist(primary, (int)(1*multiplier + random.nextDouble()*9*multiplier));
+		set.addGrist(getSecondaryGrist(primary), (int)(0.5*multiplier + random.nextDouble()*4*multiplier));
 		return set;
 		
 	}

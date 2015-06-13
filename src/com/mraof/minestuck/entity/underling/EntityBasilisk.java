@@ -12,7 +12,6 @@ import com.mraof.minestuck.entity.IEntityMultiPart;
 import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.GristType;
 
 public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart 
 {
@@ -51,15 +50,21 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return type != null ? 13 * (type.getPower() + 1) + 37 : 0;
+		return type != null ? 12 * type.getPower() + 50 : 0;
 	}
 
 	@Override
 	protected double getWanderSpeed()
 	{
-		return 0.3;
+		return 0.7;
 	}
-
+	
+	@Override
+	protected float getKnockbackResistance()
+	{
+		return 0.6F;
+	}
+	
 	@Override
 	public World getWorld() 
 	{

@@ -5,14 +5,14 @@ import net.minecraft.util.StatCollector;
 public enum GristType {
 	Amber("Amber",0.5F), 
 	Amethyst("Amethyst",0.3F), 
-	Artifact("Artifact",0.01F),
+	Artifact("Artifact",0.1F),
 	Build("Build",0.0F),
 	Caulk("Caulk",0.5F),
 	Chalk("Chalk",0.5F),
 	Cobalt("Cobalt",0.3F),
-	Diamond("Diamond",0.1F),
+	Diamond("Diamond",0.2F),
 	Garnet("Garnet",0.3F),
-	Gold("Gold",0.1F), 
+	Gold("Gold",0.2F), 
 	Iodine("Iodine",0.5F), 
 	Marble("Marble",0.5F), 
 	Mercury("Mercury",0.5F), 
@@ -22,7 +22,7 @@ public enum GristType {
 	Shale("Shale",0.5F), 
 	Sulfur("Sulfur",0.4F), 
 	Tar("Tar",0.5F), 
-	Uranium("Uranium",0.1F), 
+	Uranium("Uranium",0.2F), 
 	Zillium("Zillium",0.0F);
 	
 	final String name;

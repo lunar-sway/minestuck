@@ -28,7 +28,13 @@ public class EntityUnderlingPart extends EntityLiving implements IEntityAddition
 		this.baseEntity = par1IEntityMultiPart;
 		this.id = id;
 	}
-
+	
+	@Override
+	public String getName()
+	{
+		return ((Entity) baseEntity).getName();
+	}
+	
 	/**
 	 * (abstract) Protected helper method to write subclass entity data to NBT.
 	 */

@@ -11,7 +11,6 @@ import net.minecraft.world.World;
 import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.GristType;
 
 public class EntityImp extends EntityUnderling
 {
@@ -22,19 +21,7 @@ public class EntityImp extends EntityUnderling
 		super(world, "Imp");
 		setSize(0.5F, 1.0F);
 	}
-
-
-	@Override
-	public void onLivingUpdate() 
-	{
-//		if(GristType.Uranium == this.type && this.rand.nextDouble() < .0001)	I think someone misunderstood where the uranium imp's teleporting powers came from
-//		{
-//			this.motionX += rand.nextInt(33) - 16;
-//			this.motionZ += rand.nextInt(33) - 16;
-//		}
-		super.onLivingUpdate();
-	}
-
+	
 	@Override
 	public GristSet getGristSpoils()
 	{
@@ -58,12 +45,18 @@ public class EntityImp extends EntityUnderling
 	@Override
 	protected double getWanderSpeed() 
 	{
-		return 0.3;
+		return 0.6;
 	}
 	@Override
 	protected float getMaximumHealth() 
 	{
 		return type != null ? 4 * (type.getPower() + 1) + 2 : 0;
+	}
+	
+	@Override
+	protected float getKnockbackResistance()
+	{
+		return 0;
 	}
 	
 	@Override
