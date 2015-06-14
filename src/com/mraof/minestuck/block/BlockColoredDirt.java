@@ -3,13 +3,12 @@ package com.mraof.minestuck.block;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.EntityLiving.SpawnPlacementType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -89,6 +88,17 @@ public class BlockColoredDirt extends Block
 	public boolean canCreatureSpawn(IBlockAccess world, BlockPos pos, SpawnPlacementType type)
 	{
 		return true;
+	}
+	
+	@Override
+	public MapColor getMapColor(IBlockState state)
+	{
+		switch((BlockType) state.getValue(BLOCK_TYPE))
+		{
+		case BLUE: return MapColor.blueColor;
+		case THOUGHT: return MapColor.limeColor;
+		default: return super.getMapColor(state);
+		}
 	}
 	
 }

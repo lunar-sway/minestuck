@@ -3,20 +3,17 @@ package com.mraof.minestuck.block;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
-//import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.EntityLiving.SpawnPlacementType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.IStringSerializable;
-//import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -94,4 +91,16 @@ public class BlockChessTile extends Block
 		return true;
 	}
 	
+	@Override
+	public MapColor getMapColor(IBlockState state)
+	{
+		switch((BlockType) state.getValue(BLOCK_TYPE))
+		{
+		case WHITE: return MapColor.snowColor;
+		case LIGHT_GREY: return MapColor.silverColor;
+		case DARK_GREY: return MapColor.grayColor;
+		case BLACK: return MapColor.blackColor;
+		default: return super.getMapColor(state);
+		}
+	}
 }
