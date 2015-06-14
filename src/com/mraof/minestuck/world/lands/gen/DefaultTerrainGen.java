@@ -4,8 +4,6 @@ import java.util.Random;
 
 import com.mraof.minestuck.world.gen.NoiseGeneratorTriangle;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 
 public class DefaultTerrainGen extends LandTerrainGenBase
@@ -51,6 +49,8 @@ public class DefaultTerrainGen extends LandTerrainGenBase
 		for(int i = 0; i < 256; i++)
 		{
 			topRiverBlock[i] = (int) (.025 / ((5 * riverHeightMap[i]) * (5 * riverHeightMap[i]) + 0.005));
+			if(topRiverBlock[i] == 1)
+				topRiverBlock[i] = 0;
 		}
 		
 		return topRiverBlock;

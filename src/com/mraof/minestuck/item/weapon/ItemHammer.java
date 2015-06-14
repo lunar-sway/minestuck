@@ -19,7 +19,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.google.common.collect.Sets;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 
 public class ItemHammer extends ItemWeapon
@@ -104,7 +103,7 @@ public class ItemHammer extends ItemWeapon
 		itemStack.damageItem(1, player);
 		if(hammerType.equals(EnumHammerType.POGO))
 		{
-			target.motionY = Math.abs(player.motionY) + target.motionY + getPogoMotion(itemStack);
+			target.motionY = Math.max(target.motionY, Math.min(getPogoMotion(itemStack)*2, Math.abs(player.motionY) + target.motionY + getPogoMotion(itemStack)));
 			player.motionY = 0;
 			player.fallDistance = 0;
 		}
@@ -145,7 +144,7 @@ public class ItemHammer extends ItemWeapon
 		{
 			if (hammerType.equals(EnumHammerType.POGO))
 			{
-				playerIn.motionY = Math.abs(playerIn.motionY) + getPogoMotion(stack);
+				playerIn.motionY = Math.max(playerIn.motionY, Math.min(getPogoMotion(stack)*2, Math.abs(playerIn.motionY) + getPogoMotion(stack)));
 				playerIn.fallDistance = 0;
 				stack.damageItem(1, playerIn);
 				return true;
