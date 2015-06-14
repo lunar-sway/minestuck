@@ -298,8 +298,8 @@ public class AlchemyRecipeHandler {
 		//Set up Punch Designix recipes
 		
 		//Wood
-		String[] woodDict = {"logWood","plankWood","slabWood","stairWood","treeSapling","treeLeaves","doorWood","fenceWood","fencegateWood"};
-		ItemStack[][] woodItems = {
+		final String[] woodDict = {"logWood","plankWood","slabWood","stairWood","treeSapling","treeLeaves","doorWood","fenceWood","fencegateWood"};
+		final ItemStack[][] woodItems = {
 				{new ItemStack(Blocks.log,1,0),new ItemStack(Blocks.log,1,1),new ItemStack(Blocks.log,1,2),new ItemStack(Blocks.log,1,3),new ItemStack(Blocks.log2,1,0),new ItemStack(Blocks.log2,1,1)},
 				{new ItemStack(Blocks.planks,1,0),new ItemStack(Blocks.planks,1,1),new ItemStack(Blocks.planks,1,2),new ItemStack(Blocks.planks,1,3),new ItemStack(Blocks.planks,1,4),new ItemStack(Blocks.planks,1,5)},
 				{new ItemStack(Blocks.wooden_slab,1,0),new ItemStack(Blocks.wooden_slab,1,1),new ItemStack(Blocks.wooden_slab,1,2),new ItemStack(Blocks.wooden_slab,1,3),new ItemStack(Blocks.wooden_slab,1,4),new ItemStack(Blocks.wooden_slab,1,5)},
@@ -309,45 +309,59 @@ public class AlchemyRecipeHandler {
 				{new ItemStack(Items.oak_door),new ItemStack(Items.spruce_door),new ItemStack(Items.birch_door),new ItemStack(Items.jungle_door),new ItemStack(Items.acacia_door),new ItemStack(Items.dark_oak_door)},
 				{new ItemStack(Blocks.oak_fence),new ItemStack(Blocks.spruce_fence),new ItemStack(Blocks.birch_fence),new ItemStack(Blocks.jungle_fence),new ItemStack(Blocks.acacia_fence),new ItemStack(Blocks.dark_oak_fence)},
 				{new ItemStack(Blocks.oak_fence_gate),new ItemStack(Blocks.spruce_fence_gate),new ItemStack(Blocks.birch_fence_gate),new ItemStack(Blocks.jungle_fence_gate),new ItemStack(Blocks.acacia_fence_gate),new ItemStack(Blocks.dark_oak_fence_gate)}};
-		
 		for(int i = 6; i < woodItems.length; i++)
 			for(ItemStack stack : woodItems[i])
 				checkRegistered(stack, woodDict[i]);
 		
-		for(int list1 = 0; list1 < woodItems.length - 1; list1++)
-			for(int list2 = 0; list2 < woodItems[list1].length; list2++)
-				for(int list3 = list1 + 1; list3 < woodDict.length; list3++)
-				{
-					CombinationRegistry.addCombination(woodDict[list1], woodItems[list3][list2].getItem(), woodItems[list3][list2].getItemDamage(), MODE_AND, woodItems[list1][list2]);
-					CombinationRegistry.addCombination(woodDict[list3], woodItems[list1][list2].getItem(), woodItems[list1][list2].getItemDamage(), MODE_OR, woodItems[list3][list2]);
-				}
-		
-		for (int meta = 0; meta < woodItems[0].length; meta++)
+		for(int i1 = 0; i1 < woodItems.length; i1++)
 		{
-			CombinationRegistry.addCombination(new ItemStack(Items.wheat_seeds), woodItems[5][meta], MODE_AND, new ItemStack(Blocks.sapling, 1, meta));
-			CombinationRegistry.addCombination(new ItemStack(Items.iron_door), new ItemStack(Blocks.planks, 1, meta), MODE_AND, woodItems[6][meta]);
-			CombinationRegistry.addCombination(new ItemStack(Blocks.nether_brick_fence),new ItemStack(Blocks.planks, 1, meta),MODE_AND, woodItems[7][meta]);
+			CombinationRegistry.addCombination(woodItems[i1][0], woodItems[i1][1], MODE_OR, woodItems[i1][5]);	//Oak | spruce -> dark oak
+			CombinationRegistry.addCombination(woodItems[i1][2], woodItems[i1][3], MODE_OR, woodItems[i1][4]);	//Birch | jungle -> acacia
 		}
-		CombinationRegistry.addCombination(woodDict[6], Items.iron_ingot, WILDCARD_VALUE, MODE_AND, new ItemStack(Items.iron_door));
-		CombinationRegistry.addCombination(woodDict[7], Blocks.nether_brick, WILDCARD_VALUE, MODE_AND, new ItemStack(Blocks.nether_brick_fence));
-		CombinationRegistry.addCombination(woodDict[3], Blocks.nether_brick, WILDCARD_VALUE, MODE_AND, new ItemStack(Blocks.nether_brick_stairs));
-		CombinationRegistry.addCombination(woodDict[7], Items.netherbrick, WILDCARD_VALUE, MODE_AND, new ItemStack(Blocks.nether_brick_fence));
-		CombinationRegistry.addCombination(woodDict[3], Items.netherbrick, WILDCARD_VALUE, MODE_AND, new ItemStack(Blocks.nether_brick_stairs));
+		for(int i2 = 0; i2 < woodItems[0].length; i2++)
+		{
+			CombinationRegistry.addCombination(woodItems[1][i2], woodItems[2][i2], MODE_OR, woodItems[3][i2]);	//plank | slab -> stair
+			CombinationRegistry.addCombination(woodItems[0][i2], woodItems[5][i2], MODE_OR, woodItems[4][i2]);	//leaf | log -> sapling
+			CombinationRegistry.addCombination(woodItems[6][i2], woodItems[7][i2], MODE_OR, woodItems[8][i2]);	//door | fence -> fence gate
+			CombinationRegistry.addCombination(new ItemStack(Items.wheat_seeds), woodItems[5][i2], MODE_AND, new ItemStack(Blocks.sapling, 1, i2));
+			CombinationRegistry.addCombination(new ItemStack(Items.stick), woodItems[5][i2], MODE_AND, new ItemStack(Blocks.sapling, 1, i2));
+		}
+		CombinationRegistry.addCombination(woodItems[1][0], woodItems[2][1], MODE_OR, woodItems[3][5]);
+		CombinationRegistry.addCombination(woodItems[2][0], woodItems[1][1], MODE_OR, woodItems[3][5]);
+		CombinationRegistry.addCombination(woodItems[0][0], woodItems[5][1], MODE_OR, woodItems[4][5]);
+		CombinationRegistry.addCombination(woodItems[5][0], woodItems[0][1], MODE_OR, woodItems[4][5]);
+		CombinationRegistry.addCombination(woodItems[6][0], woodItems[7][1], MODE_OR, woodItems[8][5]);
+		CombinationRegistry.addCombination(woodItems[7][0], woodItems[6][1], MODE_OR, woodItems[8][5]);
+		
+		CombinationRegistry.addCombination(woodItems[1][2], woodItems[2][3], MODE_OR, woodItems[3][4]);
+		CombinationRegistry.addCombination(woodItems[2][2], woodItems[1][3], MODE_OR, woodItems[3][4]);
+		CombinationRegistry.addCombination(woodItems[0][2], woodItems[5][3], MODE_OR, woodItems[4][4]);
+		CombinationRegistry.addCombination(woodItems[5][2], woodItems[0][3], MODE_OR, woodItems[4][4]);
+		CombinationRegistry.addCombination(woodItems[6][2], woodItems[7][3], MODE_OR, woodItems[8][4]);
+		CombinationRegistry.addCombination(woodItems[7][2], woodItems[6][3], MODE_OR, woodItems[8][4]);
+		
+		CombinationRegistry.addCombination("doorWood", Items.iron_ingot, WILDCARD_VALUE, MODE_AND, new ItemStack(Items.iron_door));
+		CombinationRegistry.addCombination("fenceWood", Blocks.nether_brick, WILDCARD_VALUE, MODE_AND, new ItemStack(Blocks.nether_brick_fence));
+		CombinationRegistry.addCombination("stairWood", Blocks.nether_brick, WILDCARD_VALUE, MODE_AND, new ItemStack(Blocks.nether_brick_stairs));
+		CombinationRegistry.addCombination("fenceWood", Items.netherbrick, WILDCARD_VALUE, MODE_AND, new ItemStack(Blocks.nether_brick_fence));
+		CombinationRegistry.addCombination("stairWood", Items.netherbrick, WILDCARD_VALUE, MODE_AND, new ItemStack(Blocks.nether_brick_stairs));
+		CombinationRegistry.addCombination("doorWood", "slabWood", MODE_AND, new ItemStack(Blocks.trapdoor));
 		
 		//Dye
 		Block[] coloredBlocks = {Blocks.wool, Blocks.stained_hardened_clay, Blocks.stained_glass, Blocks.stained_glass_pane};
+		for(int i1 = 0; i1 < coloredBlocks.length; i1++)
+		{
+			for (EnumDyeColor color : EnumDyeColor.values())
+			{
+				if(color != EnumDyeColor.WHITE)
+					CombinationRegistry.addCombination(new ItemStack(Items.dye, 1, color.getDyeDamage()), new ItemStack(coloredBlocks[i1], 1, EnumDyeColor.WHITE.getMetadata()), MODE_OR, new ItemStack(coloredBlocks[i1], 1, color.getMetadata()));
+			}
+		}
 		for (EnumDyeColor color : EnumDyeColor.values())
 		{
-			for(int i1 = 0; i1 < coloredBlocks.length; i1++)
-			{
-				CombinationRegistry.addCombination(new ItemStack(Items.dye, 1, color.getDyeDamage()), new ItemStack(coloredBlocks[i1]), MODE_AND, true, false, new ItemStack(coloredBlocks[i1], 1, color.getMetadata()));
-				CombinationRegistry.addCombination(new ItemStack(Items.dye), new ItemStack(coloredBlocks[i1], 1, color.getMetadata()), MODE_OR, false, true, new ItemStack(Items.dye, 1, color.getDyeDamage()));
-				for(int i2 = i1 + 1; i2 < coloredBlocks.length; i2++)
-				{
-					CombinationRegistry.addCombination(new ItemStack(coloredBlocks[i1]), new ItemStack(coloredBlocks[i2], 1, color.getMetadata()), false, true, MODE_AND, new ItemStack(coloredBlocks[i1], 1, color.getMetadata()));
-					CombinationRegistry.addCombination(new ItemStack(coloredBlocks[i1], 1, color.getMetadata()), new ItemStack(coloredBlocks[i2]), true, false, MODE_OR, new ItemStack(coloredBlocks[i2], 1, color.getMetadata()));
-				}
-			}
+			CombinationRegistry.addCombination(new ItemStack(Blocks.glass), new ItemStack(Items.dye, 1, color.getDyeDamage()), MODE_AND, new ItemStack(Blocks.stained_glass, 1, color.getMetadata()));
+			CombinationRegistry.addCombination(new ItemStack(Blocks.glass_pane), new ItemStack(Items.dye, 1, color.getDyeDamage()), MODE_AND, new ItemStack(Blocks.stained_glass_pane, 1, color.getMetadata()));
+			CombinationRegistry.addCombination(new ItemStack(Blocks.hardened_clay), new ItemStack(Items.dye, 1, color.getDyeDamage()), MODE_AND, new ItemStack(Blocks.stained_hardened_clay, 1, color.getMetadata()));
 		}
 		
 		//ore related
@@ -364,7 +378,7 @@ public class AlchemyRecipeHandler {
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_ingot),new ItemStack(Blocks.stone),MODE_AND, new ItemStack(Blocks.iron_ore));
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_ingot),new ItemStack(Blocks.stone),MODE_OR, new ItemStack(Blocks.iron_block));
 		CombinationRegistry.addCombination(new ItemStack(Items.quartz),new ItemStack(Blocks.netherrack),MODE_AND, new ItemStack(Blocks.quartz_ore));
-		CombinationRegistry.addCombination(new ItemStack(Items.quartz),new ItemStack(Blocks.netherrack),MODE_OR, new ItemStack(Blocks.quartz_block));
+		CombinationRegistry.addCombination(new ItemStack(Items.quartz),new ItemStack(Blocks.stone),MODE_OR, new ItemStack(Blocks.quartz_block));
 		CombinationRegistry.addCombination(new ItemStack(Items.redstone),new ItemStack(Blocks.stone),MODE_AND, new ItemStack(Blocks.redstone_ore));
 		CombinationRegistry.addCombination(new ItemStack(Items.redstone),new ItemStack(Blocks.stone),MODE_OR, new ItemStack(Blocks.redstone_block));
 		
@@ -382,6 +396,7 @@ public class AlchemyRecipeHandler {
 		CombinationRegistry.addCombination(new ItemStack(Blocks.netherrack), new ItemStack(Blocks.brick_block), MODE_AND, new ItemStack(Blocks.nether_brick));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.netherrack), new ItemStack(Items.brick), MODE_AND, new ItemStack(Blocks.nether_brick));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.netherrack), new ItemStack(Items.brick), MODE_OR, new ItemStack(Items.netherbrick));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.nether_brick), new ItemStack(Items.brick), MODE_OR, new ItemStack(Items.netherbrick));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.netherrack),new ItemStack(Items.glowstone_dust),MODE_AND, new ItemStack(Blocks.glowstone));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.noteblock),new ItemStack(Items.diamond),MODE_AND, new ItemStack(Blocks.jukebox));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.rail), new ItemStack(Blocks.planks), MODE_AND, true, false, new ItemStack(Blocks.ladder));
