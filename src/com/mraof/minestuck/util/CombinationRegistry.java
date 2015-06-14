@@ -9,6 +9,7 @@ import com.mraof.minestuck.Minestuck;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class CombinationRegistry {
@@ -50,6 +51,18 @@ public class CombinationRegistry {
 	
 	private static void addCombination(Object input1, int damage1, Object input2, int damage2, boolean mode, ItemStack output)
 	{
+		try
+		{
+			checkIsValid(input1);
+			checkIsValid(input2);
+			if(output == null || output.getItem() == null)
+				throw new IllegalArgumentException("Output is not defined.");
+		} catch(IllegalArgumentException e)
+		{
+			FMLLog.warning("[Minestuck] An argument for a combination recipe was found invalid. Reason: "+e.getMessage());
+			FMLLog.warning("[Minestuck] The recipe in question: %s %s %s -> %s", input1 instanceof Item ? ((Item) input1).getUnlocalizedName() : input1, mode ? "&&" : "||", input2 instanceof Item ? ((Item) input2).getUnlocalizedName() : input2, output == null || output.getItem() == null ? null : output);
+			return;
+		}
 		
 		int index = input1.hashCode() - input2.hashCode();
 		if(index == 0)
@@ -57,6 +70,15 @@ public class CombinationRegistry {
 		if(index > 0)
 			combRecipes.put(Arrays.asList(input1, damage1, input2, damage2, mode), output);
 		else combRecipes.put(Arrays.asList(input2, damage2, input1, damage1, mode), output);
+	}
+	
+	private static void checkIsValid(Object input) throws IllegalArgumentException
+	{
+		if(input == null)
+			throw new IllegalArgumentException("Input is null");
+		if(input instanceof String)
+			if(AlchemyRecipeHandler.getItems(input, 0).isEmpty())
+				throw new IllegalArgumentException("No oredict item found for \""+input+"\"");
 	}
 	
 	/**
