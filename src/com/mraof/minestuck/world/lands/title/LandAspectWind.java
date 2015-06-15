@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.lands.title;
 
+import com.mraof.minestuck.world.lands.decorator.RockDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 public class LandAspectWind extends TitleAspect
@@ -22,6 +23,10 @@ public class LandAspectWind extends TitleAspect
 	{
 		if(chunkProvider.weatherType == -1)
 			chunkProvider.weatherType = 0;
+		if(chunkProvider.decorators != null)
+		{
+			chunkProvider.decorators.add(new RockDecorator());
+		}
 	}
 	
 }
