@@ -54,7 +54,10 @@ public class CommandCheckLand extends CommandBase
 			ChunkProviderLands chunkProvider = (ChunkProviderLands) player.worldObj.provider.createChunkGenerator();
 			IChatComponent aspect1 = new ChatComponentTranslation("land."+aspects.aspectTerrain.getNames()[chunkProvider.nameIndex1]);
 			IChatComponent aspect2 = new ChatComponentTranslation("land."+aspects.aspectTitle.getNames()[chunkProvider.nameIndex2]);
-			IChatComponent toSend = new ChatComponentTranslation("land.message.check", aspect1, aspect2);
+			IChatComponent toSend;
+			if(chunkProvider.nameOrder)
+				toSend = new ChatComponentTranslation("land.message.check", aspect1, aspect2);
+			else toSend = new ChatComponentTranslation("land.message.check", aspect2, aspect1);
 			player.addChatMessage(toSend);
 		}
 		else

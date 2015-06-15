@@ -56,6 +56,7 @@ public class ChunkProviderLands implements IChunkProvider
 	public TitleAspect aspect2;
 	public LandAspectRegistry helper;
 	public int nameIndex1, nameIndex2;
+	public boolean nameOrder;
 
 	public IBlockState surfaceBlock;
 	public IBlockState upperBlock;
@@ -96,6 +97,7 @@ public class ChunkProviderLands implements IChunkProvider
 			Random rand = new Random(seed);
 			nameIndex1 = rand.nextInt(aspect1.getNames().length);
 			nameIndex2 = rand.nextInt(aspect2.getNames().length);
+			nameOrder = rand.nextBoolean();
 			
 			this.random = new Random(seed);
 			this.terrainGenerator = aspect1.createTerrainGenerator(this, random);
