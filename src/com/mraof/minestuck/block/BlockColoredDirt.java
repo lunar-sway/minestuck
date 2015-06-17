@@ -27,6 +27,7 @@ public class BlockColoredDirt extends Block
 		super(Material.ground);
 		this.setCreativeTab(Minestuck.tabMinestuck);
 		this.iconNames = iconNames;
+		this.stepSound = soundTypeGravel;
 	}
 
 	@Override

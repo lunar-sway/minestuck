@@ -28,6 +28,7 @@ public class BlockChessTile extends Block
 
 		setBlockName("chessTile");
 		this.setCreativeTab(Minestuck.tabMinestuck);
+		this.stepSound = soundTypeGravel;
 	}
 	@Override
 	public IIcon getIcon(int side, int metadata) 
