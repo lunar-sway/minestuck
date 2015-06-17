@@ -59,12 +59,13 @@ public class LandAspectThought extends LandAspect
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
 		return list;
 	}
-
+	
 	@Override
-	public int getDayCycleMode() {
-		return (new Random()).nextInt(3); //Random cycle between 0 and 2
+	public int getDayCycleMode()
+	{
+		return 0;
 	}
-
+	
 	@Override
 	public Vec3 getFogColor() 
 	{

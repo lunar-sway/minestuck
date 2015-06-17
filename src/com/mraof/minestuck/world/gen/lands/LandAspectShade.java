@@ -58,12 +58,13 @@ public class LandAspectShade extends LandAspect
 //		list.add(new DecoratorVein(Block.ice, 5, 8));
 		return list;
 	}
-
+	
 	@Override
-	public int getDayCycleMode() {
+	public int getDayCycleMode()
+	{
 		return 2;
 	}
-
+	
 	@Override
 	public Vec3 getFogColor() 
 	{

@@ -31,6 +31,7 @@ import com.mraof.minestuck.world.gen.lands.BlockWithMetadata;
 import com.mraof.minestuck.world.gen.lands.ILandDecorator;
 import com.mraof.minestuck.world.gen.lands.LandAspect;
 import com.mraof.minestuck.world.gen.lands.LandHelper;
+import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 public class ChunkProviderLands implements IChunkProvider 
 {
@@ -61,26 +62,30 @@ public class ChunkProviderLands implements IChunkProvider
 		seed *= worldObj.provider.dimensionId;
 		helper = new LandHelper(seed);
 		
-		NBTBase landDataTag = worldObj.getWorldInfo().getAdditionalProperty("LandData");
+		NBTTagCompound landDataTag = MinestuckSaveHandler.landData.get((byte) worldObj.provider.dimensionId);
 		
 		this.landWorld = worldObj;
 		
-		if (landDataTag == null) {
+		if (landDataTag == null)
+		{
 			spawnX = landWorld.getWorldInfo().getSpawnX();
 			spawnY = landWorld.getWorldInfo().getSpawnY();
 			spawnZ = landWorld.getWorldInfo().getSpawnZ();
 			this.aspect1 = helper.getLandAspect();
 			this.aspect2 = helper.getLandAspect(aspect1);
 			Random rand = new Random(seed);
-			nameIndex1 = rand.nextInt(aspect1.getNames().length);	//Better way to generate these?
+			nameIndex1 = rand.nextInt(aspect1.getNames().length);
 			nameIndex2 = rand.nextInt(aspect2.getNames().length);
 			saveData();
-
-		} else {
-			aspect1 = LandHelper.fromName(((NBTTagCompound) landDataTag).getString("aspect1"));
-			aspect2 = LandHelper.fromName(((NBTTagCompound) landDataTag).getString("aspect2"));
-			nameIndex1 = ((NBTTagCompound) landDataTag).getInteger("aspectName1");
-			nameIndex2 = ((NBTTagCompound) landDataTag).getInteger("aspectName2");
+		} else
+		{
+			aspect1 = LandHelper.fromName(landDataTag.getString("aspect1"));
+			aspect2 = LandHelper.fromName(landDataTag.getString("aspect2"));
+			nameIndex1 = landDataTag.getInteger("aspectName1");
+			nameIndex2 = landDataTag.getInteger("aspectName2");
+			spawnX = landDataTag.getInteger("spawnX");
+			spawnY = landDataTag.getInteger("spawnY");
+			spawnZ = landDataTag.getInteger("spawnZ");
 		}
 		
 		this.random = new Random(seed);
@@ -105,8 +110,11 @@ public class ChunkProviderLands implements IChunkProvider
 		this.riverBlock = fluidAspect.getRiverBlock();
 		this.terrainMapper = helper.pickOne(aspect1,aspect2);
 		this.decorators = helper.pickSubset(aspect1.getDecorators(),aspect2.getDecorators());
-		this.dayCycle = helper.pickOne(aspect1,aspect2).getDayCycleMode();
-		this.skyColor = helper.pickOne(aspect1, aspect2).getFogColor();
+		this.dayCycle = aspect1.getDayCycleMode() | aspect2.getDayCycleMode();
+		if(this.dayCycle == 3)
+			this.dayCycle = helper.pickOne(aspect1,aspect2).getDayCycleMode();
+		Vec3 combinedFogColor = aspect1.getFogColor().addVector(aspect2.getFogColor().xCoord, aspect2.getFogColor().yCoord, aspect2.getFogColor().zCoord);
+		this.skyColor = Vec3.createVectorHelper(combinedFogColor.xCoord/2, combinedFogColor.yCoord/2, combinedFogColor.zCoord/2);
 	}
 
 	@Override
@@ -262,10 +270,10 @@ public class ChunkProviderLands implements IChunkProvider
 		nbt.setInteger("spawnX", spawnX);
 		nbt.setInteger("spawnY", spawnY);
 		nbt.setInteger("spawnZ", spawnZ);
+		nbt.setInteger("aspectName1", nameIndex1);
+		nbt.setInteger("aspectName2", nameIndex2);
 		
-		Map<String, NBTBase> dataTag = new Hashtable<String,NBTBase>();
-		dataTag.put("LandData", nbt);
-		landWorld.getWorldInfo().setAdditionalProperties(dataTag);
+		MinestuckSaveHandler.landData.put((byte) landWorld.provider.dimensionId, nbt);
 	}
 	
 }

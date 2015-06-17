@@ -5,10 +5,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.event.world.WorldEvent;
 
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
@@ -20,20 +22,29 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 public class MinestuckSaveHandler 
 {
 	public static List<Byte> lands = Collections.synchronizedList(new ArrayList<Byte>());
+	public static HashMap<Byte, NBTTagCompound> landData = new HashMap<Byte, NBTTagCompound>();
 	@SubscribeEvent
 	public void onWorldSave(WorldEvent.Save event)
 	{
-		if(event.world.provider.dimensionId != 0)	//Only save one time each world-save instead of one per dimension each world-save.
+		if(event.world.provider.dimensionId != 0)	//Only save one time instead of one per dimension.
 			return;
 
 		File dataFile = event.world.getSaveHandler().getMapFileFromName("MinestuckData");
-		if (dataFile != null) {
+		if (dataFile != null)
+		{
 			NBTTagCompound nbt = new NBTTagCompound();
-			byte[] landArray = new byte[lands.size()];
+			
+			NBTTagList list = new NBTTagList();
 			for(int i = 0; i < lands.size(); i++)
-				landArray[i] = lands.get(i);
-			nbt.setByteArray("landList", landArray);
-
+			{
+				NBTTagCompound data = new NBTTagCompound();
+				data.setByte("dimId", lands.get(i));
+				if(landData.containsKey(lands.get(i)))
+					data.setTag("landData", landData.get(lands.get(i)));
+				list.appendTag(data);
+			}
+			nbt.setTag("landList", list);
+			
 			TileEntityTransportalizer.saveTransportalizers(nbt);
 
 			SkaianetHandler.saveData(nbt);

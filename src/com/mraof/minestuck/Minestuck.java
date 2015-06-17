@@ -20,6 +20,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -588,6 +589,7 @@ public class Minestuck
 		CaptchaDeckHandler.rand = new Random(worldSeed);	//Unsure whenether this will be better or not
 		
 		MinestuckSaveHandler.lands.clear();
+		MinestuckSaveHandler.landData.clear();
 		
 		File dataFile = event.getServer().worldServers[0].getSaveHandler().getMapFileFromName("MinestuckData");
 		if(dataFile != null && dataFile.exists()) {
@@ -597,8 +599,27 @@ public class Minestuck
 			} catch(IOException e) {
 				e.printStackTrace();
 			}
-			if(nbt != null) {
-				for(byte landId : nbt.getByteArray("landList")) {
+			if(nbt != null)
+			{
+				if(nbt.getTag("landList") instanceof NBTTagList)
+				{
+					NBTTagList list = nbt.getTagList("landList", new NBTTagCompound().getId());
+					for(int i = 0; i < list.tagCount(); i++)
+					{
+						NBTTagCompound landTag = list.getCompoundTagAt(i);
+						byte landId = landTag.getByte("dimId");
+						if(MinestuckSaveHandler.lands.contains((Byte)landId))
+							continue;
+						MinestuckSaveHandler.lands.add(landId);
+						
+						if(!DimensionManager.isDimensionRegistered(landId))
+							DimensionManager.registerDimension(landId, Minestuck.landProviderTypeId);
+						if(landTag.hasKey("landData"))
+							MinestuckSaveHandler.landData.put(landId, landTag.getCompoundTag("landData"));
+					}
+					
+				} else for(byte landId : nbt.getByteArray("landList"))
+				{
 					if(MinestuckSaveHandler.lands.contains((Byte)landId))
 						continue;
 					MinestuckSaveHandler.lands.add(landId);

@@ -59,12 +59,13 @@ public class LandAspectFrost extends LandAspect
 		list.add(new DecoratorVein(Blocks.ice, 5, 8));
 		return list;
 	}
-
+	
 	@Override
-	public int getDayCycleMode() {
-		return (new Random()).nextInt(3); //Random cycle between 0 and 2
+	public int getDayCycleMode()
+	{
+		return 0;
 	}
-
+	
 	@Override
 	public Vec3 getFogColor() 
 	{
