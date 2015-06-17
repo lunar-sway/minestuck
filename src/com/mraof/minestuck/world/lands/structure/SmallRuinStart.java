@@ -2,6 +2,8 @@ package com.mraof.minestuck.world.lands.structure;
 
 import java.util.Random;
 
+import com.mraof.minestuck.entity.underling.EntityOgre;
+import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 import net.minecraft.block.BlockChest;
@@ -104,7 +106,9 @@ public class SmallRuinStart extends StructureStart
 			
 			this.fillWithAir(worldIn, boundingBox, 1, 1, 0, 5, 3, 7);
 			this.fillWithAir(worldIn, boundingBox, 2, 1, 8, 4, 3, 8);
-			this.func_175811_a(worldIn, Blocks.chest.getDefaultState().withProperty(BlockChest.FACING, this.coordBaseMode.getOpposite()), 3, 1, 6, boundingBox);
+			this.func_180778_a(worldIn, boundingBox, rand, 3, 1, 6, provider.lootMap.get(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST).getItems(rand), rand.nextInt(3) + 5);
+			if(boundingBox.func_175898_b(new BlockPos(this.getXWithOffset(3, 6), this.getYWithOffset(1), this.getZWithOffset(3, 6))))
+				this.func_175811_a(worldIn, this.func_175807_a(worldIn, 3, 1, 6, boundingBox).withProperty(BlockChest.FACING, this.coordBaseMode.getOpposite()), 3, 1, 6, boundingBox);
 			
 			EnumFacing torchFacing = this.coordBaseMode == EnumFacing.EAST || this.coordBaseMode == EnumFacing.NORTH ? this.coordBaseMode.rotateY() : this.coordBaseMode.rotateYCCW();
 			if(torches[0])
@@ -115,6 +119,15 @@ public class SmallRuinStart extends StructureStart
 				this.func_175811_a(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, torchFacing), 1, 2, 6, boundingBox);
 			if(torches[3])
 				this.func_175811_a(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, torchFacing.getOpposite()), 5, 2, 6, boundingBox);
+			
+			if(boundingBox.intersectsWith(this.boundingBox.minX, this.boundingBox.minZ, this.boundingBox.minX, this.boundingBox.minZ))
+				placeUnderling(this.boundingBox.minX - 6, this.boundingBox.minZ - 6, worldIn, rand);
+			if(boundingBox.intersectsWith(this.boundingBox.maxX, this.boundingBox.minZ, this.boundingBox.maxX, this.boundingBox.minZ))
+				placeUnderling(this.boundingBox.maxX - 6, this.boundingBox.minZ - 6, worldIn, rand);
+			if(boundingBox.intersectsWith(this.boundingBox.minX, this.boundingBox.maxZ, this.boundingBox.minX, this.boundingBox.maxZ))
+				placeUnderling(this.boundingBox.minX - 6, this.boundingBox.maxZ - 6, worldIn, rand);
+			if(boundingBox.intersectsWith(this.boundingBox.maxX, this.boundingBox.maxZ, this.boundingBox.maxX, this.boundingBox.maxZ))
+				placeUnderling(this.boundingBox.maxX - 6, this.boundingBox.maxZ - 6, worldIn, rand);
 			
 			return true;
 		}
@@ -207,6 +220,41 @@ public class SmallRuinStart extends StructureStart
 			} while(this.boundingBox.minY + y >= 0 && !this.func_175807_a(world, x, y, z, boundingBox).getBlock().getMaterial().isSolid());
 			
 			return b;
+		}
+		
+		protected void placeUnderling(int minX, int minZ, World world, Random rand)
+		{
+			int i = 0;
+			while(i < 10)
+			{
+				int xPos = rand.nextInt(12) + minX;
+				int zPos = rand.nextInt(12) + minZ;
+				if(this.boundingBox.intersectsWith(xPos - 1, zPos - 1, xPos + 1, zPos + 1))
+					continue;
+				
+				int minY = 256, maxY = 0;
+				for(int x = xPos - 1; x <= xPos + 1; x++)
+					for(int z = zPos - 1; z <= zPos + 1; z++)
+					{
+						int y = world.getTopSolidOrLiquidBlock(new BlockPos(x, 0, z)).getY();
+						if(y < minY)
+							minY = y;
+						if(y > maxY)
+							maxY = y;
+					}
+				
+				if(maxY - minY < 3)
+				{
+					EntityOgre ogre = new EntityOgre(world);
+					ogre.setPositionAndRotation(xPos + 0.5, maxY, zPos + 0.5, rand.nextFloat()*360F, 0);
+					ogre.func_180482_a(null, null);
+					ogre.func_175449_a(new BlockPos(minX + 8, this.boundingBox.minY, minZ + 8), 10);
+					world.spawnEntityInWorld(ogre);
+					return;
+				}
+				
+				i++;
+			}
 		}
 		
 		@Override

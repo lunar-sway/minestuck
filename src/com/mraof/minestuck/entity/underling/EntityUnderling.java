@@ -18,12 +18,10 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
-import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
@@ -44,7 +42,6 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	@SuppressWarnings("unchecked")
 	protected static EntityListFilter underlingSelector = new EntityListFilter(Arrays.<Class<? extends EntityLivingBase>>asList(EntityImp.class, EntityOgre.class, EntityBasilisk.class, EntityGiclops.class));
 	protected EntityListFilter attackEntitySelector;
-//	protected AxisAlignedBB areaToGuard;
 	//The type of the underling
 	protected GristType type;
 	//Name of underling, used in getting the texture and actually naming it
@@ -79,8 +76,8 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	protected void applyEntityAttributes()
 	{
 		super.applyEntityAttributes();
-		
-		//TODO set different knockback resistance for different underlings
+		this.getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue((double)(this.getKnockbackResistance()));
+		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(this.getWanderSpeed());
 	}
 	
 	//used when getting how much grist should be dropped on death
@@ -89,8 +86,11 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	protected abstract void setCombatTask();
 	
 	protected abstract float getMaximumHealth();
-
+	
+	protected abstract float getKnockbackResistance();
+	
 	protected abstract double getWanderSpeed();
+	
 	protected boolean useAltName()
 	{
 		return false;
@@ -114,7 +114,9 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	@Override
 	public String getName() 
 	{
-		return StatCollector.translateToLocalFormatted("entity.minestuck." + underlingName + ".type", type.getDisplayName());
+		if(type != null)
+			return StatCollector.translateToLocalFormatted("entity.minestuck." + underlingName + ".type", type.getDisplayName());
+		else return StatCollector.translateToFallback("entity.minestuck." + underlingName + ".name");
 	}
 	
 	@Override
@@ -177,46 +179,9 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	}
 	
 	@Override
-	   public boolean getCanSpawnHere()
+	public boolean getCanSpawnHere()
 	{
-		return this.worldObj.getDifficulty() != EnumDifficulty.PEACEFUL && /*this.isValidLightLevel() &&*/ super.getCanSpawnHere();
-	}
-	
-	protected boolean isValidLightLevel()	//Underlings aren't night creatures, and shouldn't spawn depending on brightness.
-	{
-		
-		int i = MathHelper.floor_double(this.posX);
-		int j = MathHelper.floor_double(this.getEntityBoundingBox().minY);
-		int k = MathHelper.floor_double(this.posZ);
-		BlockPos pos = new BlockPos(i, j, k);
-		
-		//if (this.worldObj.getBlockLightOpacity(i, j, k) == 0) { //Prevents spawning IN blocks
-			//return false;
-			//}
-		//Debug.print("Spawning an entity...");
-		
-		//Debug.print("Sunlight level is "+this.worldObj.getSavedLightValue(EnumSkyBlock.Sky, i, j, k));
-		if (this.worldObj.getLightFor(EnumSkyBlock.SKY, pos) > this.rand.nextInt(32))
-		{
-			//Debug.print("Too much sun! Failed.");
-			return false;
-		}
-		else
-		{
-			int l = this.worldObj.getLightFromNeighbors(pos);
-			
-			if (this.worldObj.isThundering())
-			{
-				int i1 = this.worldObj.getSkylightSubtracted();
-				this.worldObj.setSkylightSubtracted(10);
-				l = this.worldObj.getLightFromNeighbors(pos);
-				this.worldObj.setSkylightSubtracted(i1);
-			}
-			
-			//Debug.print("Light level calculated as " + l);
-			
-			return l <= this.rand.nextInt(8);
-		}
+		return this.worldObj.getDifficulty() != EnumDifficulty.PEACEFUL && super.getCanSpawnHere();
 	}
 	
 	@Override

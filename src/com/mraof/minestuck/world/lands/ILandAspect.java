@@ -2,7 +2,7 @@ package com.mraof.minestuck.world.lands;
 
 import java.util.List;
 
-public interface ILandAspect
+public interface ILandAspect<A extends ILandAspect>
 {
 	
 	/**
@@ -16,7 +16,7 @@ public interface ILandAspect
 	 */
 	public String[] getNames();
 	
-	List<ILandAspect> getVariations();
+	List<A> getVariations();
 	
-	ILandAspect getPrimaryVariant();
+	A getPrimaryVariant();
 }

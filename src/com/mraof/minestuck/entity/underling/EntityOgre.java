@@ -12,7 +12,6 @@ import net.minecraft.world.World;
 import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 
 //Makes non-stop ogre puns
@@ -34,7 +33,7 @@ public class EntityOgre extends EntityUnderling
 	@Override
 	public boolean attackEntityAsMob(Entity par1Entity) 
 	{
-		return par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this), (this.type.getPower() + 1) * 2);
+		return par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this), (this.type.getPower()) * 1.5F + 3);
 	}
 	@Override
 	protected void setCombatTask() 
@@ -48,12 +47,18 @@ public class EntityOgre extends EntityUnderling
 	@Override
 	protected double getWanderSpeed() 
 	{
-		return 0.1;
+		return 0.6;
 	}
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return type != null ? 16 * (type.getPower() + 1) + 8 : 0;
+		return type != null ? 9 * type.getPower() + 28 : 0;
+	}
+	
+	@Override
+	protected float getKnockbackResistance()
+	{
+		return 0.4F;
 	}
 	
 	@Override
@@ -65,14 +70,6 @@ public class EntityOgre extends EntityUnderling
 		{
 			((EntityPlayerMP) entity).triggerAchievement(MinestuckAchievementHandler.killOgre);
 		}
-	}
-	
-	@Override
-	protected boolean useAltName() 
-	{
-		if(type.equals(GristType.Tar))
-			return true;
-		return super.useAltName();
 	}
 	
 	@Override
