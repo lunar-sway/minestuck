@@ -25,9 +25,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 {
-	//public static final String[] gristTypes = {"Amber", "Amethyst", "Artifact", "Build", "Caulk", "Chalk", "Cobalt", "Diamond", "Garnet", "Gold", "Iodine", "Marble", "Mercury", "Quartz", "Ruby", "Rust", "Shale", "Sulfur", "Tar", "Uranium", "Zillium"};
 	public int cycle;
-
+	
 	public int gristAge = 0;
 
 	private int gristHealth = 5;
@@ -47,10 +46,9 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		this.yOffset = this.height / 2.0F;
 		this.setPosition(x, y, z);
 		this.rotationYaw = (float)(Math.random() * 360.0D);
-		this.motionX = (double)((float)(world.rand.nextGaussian() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
-		//Debug.print(motionX);
-		this.motionY = (double)((float)(world.rand.nextGaussian() * 0.2D) * 2.0F);
-		this.motionZ = (double)((float)(world.rand.nextGaussian() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
+		this.motionX = (double)((float)(world.rand.nextGaussian() * 0.20000000298023224D - 0.10000000149011612D));
+		this.motionY = (double)((float)(world.rand.nextGaussian() * 0.2D));
+		this.motionZ = (double)((float)(world.rand.nextGaussian() * 0.20000000298023224D - 0.10000000149011612D));
 		this.isImmuneToFire = true;
 
 		this.gristType = gristData.getType().getName();
@@ -144,10 +142,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 
 		if (this.onGround)
 		{
-			if (this.onGround)	//Wait what?
-	        {
-	            f = this.worldObj.getBlock(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.boundingBox.minY) - 1, MathHelper.floor_double(this.posZ)).slipperiness * 0.98F;
-	        }
+			f = this.worldObj.getBlock(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.boundingBox.minY) - 1, MathHelper.floor_double(this.posZ)).slipperiness * 0.98F;
 		}
 
 		this.motionX *= (double)f;
