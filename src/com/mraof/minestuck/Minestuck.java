@@ -38,7 +38,8 @@ import com.mraof.minestuck.block.BlockColoredDirt;
 import com.mraof.minestuck.block.BlockComputerOff;
 import com.mraof.minestuck.block.BlockComputerOn;
 import com.mraof.minestuck.block.BlockFluid;
-import com.mraof.minestuck.block.BlockGatePortal;
+import com.mraof.minestuck.block.BlockReturnNode;
+import com.mraof.minestuck.block.BlockSkaiaPortal;
 import com.mraof.minestuck.block.BlockGoldSeeds;
 import com.mraof.minestuck.block.BlockLayered;
 import com.mraof.minestuck.block.BlockMachine;
@@ -102,7 +103,7 @@ import com.mraof.minestuck.nei.NEIMinestuckConfig;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
-import com.mraof.minestuck.tileentity.TileEntityGatePortal;
+import com.mraof.minestuck.tileentity.TileEntitySkaiaPortal;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 import com.mraof.minestuck.tracker.ConnectionListener;
@@ -201,6 +202,7 @@ public class Minestuck
 	public static Block blockComputerOff;
 	public static Block transportalizer;
 	public static BlockGoldSeeds blockGoldSeeds;
+	public static Block returnNode;
 	
 	public static Block blockOil;
 	public static Block blockBlood;
@@ -245,17 +247,17 @@ public class Minestuck
 		
 		//blocks
 		chessTile = GameRegistry.registerBlock(new BlockChessTile(), ItemChessTile.class, "chess_tile");
-		gatePortal = GameRegistry.registerBlock(new BlockGatePortal(Material.portal), "gate_portal");
+		gatePortal = GameRegistry.registerBlock(new BlockSkaiaPortal(Material.portal), "gate_portal");
 		oreCruxite = (OreCruxite) GameRegistry.registerBlock(new OreCruxite(), ItemOreCruxite.class, "ore_cruxite");
 		layeredSand = GameRegistry.registerBlock(new BlockLayered(Blocks.sand), ItemBlockLayered.class, "layered_sand").setUnlocalizedName("layeredSand");
 		coloredDirt = (BlockColoredDirt) GameRegistry.registerBlock(new BlockColoredDirt(), ItemColoredDirt.class, "colored_dirt").setUnlocalizedName("coloredDirt").setHardness(0.5F);
-		//machines
 		blockStorage = GameRegistry.registerBlock(new BlockStorage(),ItemStorageBlock.class,"storage_block");
 		blockMachine = GameRegistry.registerBlock(new BlockMachine(), ItemMachine.class,"machine_block");
 		blockComputerOff = GameRegistry.registerBlock(new BlockComputerOff(),"computer_standard");
 		blockComputerOn = GameRegistry.registerBlock(new BlockComputerOn(), null, "computer_standard_on");
 		transportalizer = GameRegistry.registerBlock(new BlockTransportalizer(), "transportalizer");
 		blockGoldSeeds = (BlockGoldSeeds) GameRegistry.registerBlock(new BlockGoldSeeds(), null, "gold_seeds");
+		returnNode = GameRegistry.registerBlock(new BlockReturnNode(), "return_node");
 		//fluids
 		fluidOil = new Fluid("Oil");
 		FluidRegistry.registerFluid(fluidOil);
@@ -401,7 +403,7 @@ public class Minestuck
 		EntityRegistry.registerModEntity(EntityGrist.class, "minestuck.grist", currentEntityIdOffset, this, 512, 1, true);
 		
 		//register Tile Entities
-		GameRegistry.registerTileEntity(TileEntityGatePortal.class, "minstuck.gatePortal");
+		GameRegistry.registerTileEntity(TileEntitySkaiaPortal.class, "minstuck.gatePortal");
 		GameRegistry.registerTileEntity(TileEntityMachine.class, "minestuck.containerMachine");
 		GameRegistry.registerTileEntity(TileEntityComputer.class, "minestuck.computerSburb");
 		GameRegistry.registerTileEntity(TileEntityTransportalizer.class, "minestuck.transportalizer");
