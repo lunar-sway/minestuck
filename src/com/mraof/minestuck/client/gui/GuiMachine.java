@@ -119,12 +119,12 @@ public class GuiMachine extends GuiContainer {
 			boolean useSelectedType = stack == null ? false : stack.getItem() == Minestuck.captchaCard;
 			if(useSelectedType)
 				set = metadata == 3 ? new GristSet(te.selectedGrist, MinestuckConfig.clientCardCost) : null;
-			if(set != null) set = set.copy();
 			if(metadata == 4 && set != null)
 			{
 				float multiplier = stack.stackSize;
 				if(multiplier != 1)
 					set = set.scaleGrist(multiplier);
+				set.scaleGrist(0.9F);
 			}
 			if(set != null && stack.isItemDamaged())
 			{

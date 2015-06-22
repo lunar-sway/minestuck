@@ -54,7 +54,7 @@ public class Minegicka3Support extends ModSupport
 					GristSet set = GristRegistry.getGristConversion(ingredient.getKey());
 					if(set != null)
 					{
-						set = set.copy().scaleGrist(ingredient.getValue());
+						set = set.scaleGrist(ingredient.getValue());
 						cost.addGrist(set);
 					}
 					else continue recipes;

@@ -55,7 +55,7 @@ public class GristRegistry {
 				if((grist = gristRecipes.get(Arrays.asList(str, OreDictionary.WILDCARD_VALUE))) != null)
 					break;
 		}
-		return grist;
+		return grist == null ? null : grist.copy();
 	}
 	
 	public static Hashtable<List<Object>, GristSet> getAllConversions() {

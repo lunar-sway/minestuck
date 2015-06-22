@@ -11,7 +11,6 @@ import java.util.Map.Entry;
 
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import codechicken.lib.gui.GuiDraw;
@@ -110,39 +109,39 @@ public class AlchemiterHandler extends TemplateRecipeHandler
 		if (set == null) 
 		{
 			GuiDraw.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 4,34, 16711680);
-		       	return;
-		}
-		Hashtable<Integer, Integer> reqs = set.getHashtable();
-		//Debug.print("reqs: " + reqs.size());
-		if (reqs != null) {
-			if (reqs.size() == 0) {
-				GuiDraw.drawString(StatCollector.translateToLocal("gui.free"), 4,34, 65280);
-				return;
-			}
-			Iterator<Entry<Integer, Integer>> it = reqs.entrySet().iterator();
-		   	int place = 0;
-			while (it.hasNext()) {
-				Map.Entry<Integer, Integer> pairs = it.next();
-				int type = (Integer) pairs.getKey();
-				int need = (Integer) pairs.getValue();
-				int have = MinestuckPlayerData.getClientGrist().getGrist(GristType.values()[type]);
-				
-				int row = place % 3;
-				int col = place / 3;
-				
-				int color = need <= have ? 65280 : 16711680; //Green if we have enough grist, red if not
-				
-				GuiDraw.drawString(need + " " + GristType.values()[type].getDisplayName() + " (" + have + ")", 4 + (80 * col),34 + (8 * (row)), color);
-				
-				place++;
-				
-				//Debug.print("Need" + need + ". Have " + have);
-			}
-		} else {
-			GuiDraw.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 4,34, 16711680);
 			return;
 		}
-
+		if(result.isItemDamaged())
+		{
+			float multiplier = 1 - result.getItem().getDamage(result)/((float) result.getMaxDamage());
+			for(int i = 0; i < set.gristTypes.length; i++)
+					set.gristTypes[i] = (int) Math.ceil(set.gristTypes[i]*multiplier);
+		}
+		
+		Hashtable<Integer, Integer> reqs = set.getHashtable();
+		if (reqs.size() == 0) {
+			GuiDraw.drawString(StatCollector.translateToLocal("gui.free"), 4,34, 65280);
+			return;
+		}
+		Iterator<Entry<Integer, Integer>> it = reqs.entrySet().iterator();
+		int place = 0;
+		while (it.hasNext())
+		{
+			Map.Entry<Integer, Integer> pairs = it.next();
+			int type = (Integer) pairs.getKey();
+			int need = (Integer) pairs.getValue();
+			int have = MinestuckPlayerData.getClientGrist().getGrist(GristType.values()[type]);
+			
+			int row = place % 3;
+			int col = place / 3;
+			
+			int color = need <= have ? 65280 : 16711680; //Green if we have enough grist, red if not
+			
+			GuiDraw.drawString(need + " " + GristType.values()[type].getDisplayName() + " (" + have + ")", 4 + (80 * col),34 + (8 * (row)), color);
+			
+			place++;
+			
+		}
 	}
 	
 	

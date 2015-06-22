@@ -385,9 +385,11 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 			if(!worldObj.isRemote) 
 			{
 				ItemStack item = AlchemyRecipeHandler.getDecodedItem(inv[1]);
-				GristSet gristSet = GristRegistry.getGristConversion(item).copy();
+				GristSet gristSet = GristRegistry.getGristConversion(item);
 				if(item.stackSize != 1)
 					gristSet.scaleGrist(item.stackSize);
+				
+				gristSet.scaleGrist(0.9F);
 				
 				if(item.isItemDamaged())
 				{
