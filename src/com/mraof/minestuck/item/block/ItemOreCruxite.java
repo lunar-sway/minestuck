@@ -11,6 +11,7 @@ public class ItemOreCruxite extends ItemBlock
 	public ItemOreCruxite(Block block)
 	{
 		super(block);
+		setHasSubtypes(true);
 	}
 	
 	@Override
