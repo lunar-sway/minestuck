@@ -49,6 +49,7 @@ public class MinestuckConfig
 	public static boolean cardLoot;
 	public static boolean dropItemsInCards;
 	public static boolean entryCrater;
+	public static boolean keepDimensionsLoaded;
 	public static String privateMessage;
 	public static int artifactRange;
 	public static int overworldEditRange;
@@ -133,6 +134,7 @@ public class MinestuckConfig
 		landEditRange = config.get("General", "landEditRange", 30, "A number that determines how far away from the center of the brought land that an editmode player may be after entry.", 3, 50).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.landEditRange").getInt();
 		artifactRange = config.get("General", "artifactRange", 30, "Radius of the land brought into the medium.", 3, 50).setLanguageKey("minestuck.config.artifactRange").getInt();
 		entryCrater = config.get("General", "entryCrater", true, "Disable this to prevent craters from people entering the medium.").setLanguageKey("minestuck.config.entryCrater").getBoolean();
+		keepDimensionsLoaded = config.get("General", "keepDimensionsLoaded", true, "").setLanguageKey("minestuck.config.keepDimensionsLoaded").setRequiresMcRestart(true).getBoolean();
 		
 		if(gameSide.isClient())	//Client sided config values
 		{

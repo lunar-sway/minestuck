@@ -276,7 +276,10 @@ minestuck.config.landEditRange=Land Edit Range
 minestuck.config.landEditRange.tooltip=The maximum amount of blocks away from the spawn an editmode player is allowed to be after entering the medium.
 minestuck.config.artifactRange=Artifact Range
 minestuck.config.artifactRange.tooltip=The radius of the area brought to the medium.
-
+minestuck.config.entryCrater=Create Crater on Entry
+minestuck.config.entryCrater.tooltip=Turning this off will prevent minestuck from creating craters when players enter the medium. Items and tile entities will still be removed from where the crater should be.
+minestuck.config.keepDimensionsLoaded=Keep the Medium Loaded
+minestuck.config.keepDimensionsLoadedtooltip=Having this on will make medium dimensions and the area around the spawn stay loaded.
 minestuck.config.oldItemModels=Use Old Item Models
 minestuck.config.oldItemModels.tooltip=Set this to true to have back all old 2D item models.
 

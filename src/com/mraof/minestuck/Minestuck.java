@@ -406,9 +406,9 @@ public class Minestuck
 		GameRegistry.registerTileEntity(TileEntityComputer.class, "minestuck.computerSburb");
 		GameRegistry.registerTileEntity(TileEntityTransportalizer.class, "minestuck.transportalizer");
 		//register world generators
-		DimensionManager.registerProviderType(skaiaProviderTypeId, WorldProviderSkaia.class, true);
+		DimensionManager.registerProviderType(skaiaProviderTypeId, WorldProviderSkaia.class, false);
 		DimensionManager.registerDimension(skaiaDimensionId, skaiaProviderTypeId);
-		DimensionManager.registerProviderType(landProviderTypeId, WorldProviderLands.class, true);
+		DimensionManager.registerProviderType(landProviderTypeId, WorldProviderLands.class, MinestuckConfig.keepDimensionsLoaded);
 		
 		BiomeGenMinestuck.mediumNormal = new BiomeGenMinestuck(biomeIdStart).setBiomeName("The Medium");
 		BiomeGenMinestuck.mediumCold = new BiomeGenMinestuck(biomeIdStart+1).setBiomeName("The Medium (Cold)").setEnableSnow().setTemperatureRainfall(0.0F, 0.5F);
