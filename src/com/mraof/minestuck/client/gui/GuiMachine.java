@@ -27,7 +27,6 @@ import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.MinestuckPlayerData;
@@ -120,11 +119,20 @@ public class GuiMachine extends GuiContainer {
 			boolean useSelectedType = stack == null ? false : stack.getItem() == Minestuck.captchaCard;
 			if(useSelectedType)
 				set = metadata == 3 ? new GristSet(te.selectedGrist, MinestuckConfig.clientCardCost) : null;
+			if(set != null) set = set.copy();
 			if(metadata == 4 && set != null)
 			{
 				float multiplier = stack.stackSize;
 				if(multiplier != 1)
-					set = set.copy().scaleGrist(multiplier);
+					set = set.scaleGrist(multiplier);
+			}
+			if(set != null && stack.isItemDamaged())
+			{
+				float multiplier = 1 - stack.getItem().getDamage(stack)/((float) stack.getMaxDamage());
+				for(int i = 0; i < set.gristTypes.length; i++)
+					if(metadata == 3)
+						set.gristTypes[i] = (int) Math.ceil(set.gristTypes[i]*multiplier);
+					else set.gristTypes[i] = (int) (set.gristTypes[i]*multiplier);
 			}
 			
 			if (set == null) {fontRendererObj.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 9,45, 16711680); return;}

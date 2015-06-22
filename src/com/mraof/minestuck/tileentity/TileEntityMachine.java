@@ -9,7 +9,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
@@ -17,18 +16,14 @@ import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IChatComponent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.block.BlockMachine;
-import com.mraof.minestuck.block.BlockMachine.MachineType;
 import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.item.block.ItemMachine;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.CombinationRegistry;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristRegistry;
@@ -271,6 +266,12 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 				GristSet cost = GristRegistry.getGristConversion(newItem);
 				if(newItem.getItem() == Minestuck.captchaCard)
 					cost = new GristSet(selectedGrist, MinestuckConfig.cardCost);
+				if(cost != null && newItem.isItemDamaged())
+				{
+					float multiplier = 1 - newItem.getItem().getDamage(newItem)/((float) newItem.getMaxDamage());
+					for(int i = 0; i < cost.gristTypes.length; i++)
+						cost.gristTypes[i] = (int) Math.ceil(cost.gristTypes[i]*multiplier);
+				}
 				return GristHelper.canAfford(MinestuckPlayerData.getGristSet(this.owner), cost);
 			}
 			else
@@ -371,6 +372,12 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 			GristSet cost = GristRegistry.getGristConversion(newItem);
 			if(newItem.getItem() == Minestuck.captchaCard)
 				cost = new GristSet(selectedGrist, MinestuckConfig.cardCost);
+			if(newItem.isItemDamaged())
+			{
+				float multiplier = 1 - newItem.getItem().getDamage(newItem)/((float) newItem.getMaxDamage());
+				for(int i = 0; i < cost.gristTypes.length; i++)
+					cost.gristTypes[i] = (int) Math.ceil(cost.gristTypes[i]*multiplier);
+			}
 			GristHelper.decrease(UsernameHandler.encode(owner.getName()), cost);
 			MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(owner.getName()));
 			break;
@@ -381,6 +388,13 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 				GristSet gristSet = GristRegistry.getGristConversion(item).copy();
 				if(item.stackSize != 1)
 					gristSet.scaleGrist(item.stackSize);
+				
+				if(item.isItemDamaged())
+				{
+					float multiplier = 1 - item.getItem().getDamage(item)/((float) item.getMaxDamage());
+					for(int i = 0; i < gristSet.gristTypes.length; i++)
+						gristSet.gristTypes[i] = (int) (gristSet.gristTypes[i]*multiplier);
+				}
 				
 				Iterator<Entry<Integer, Integer>> iter = gristSet.getHashtable().entrySet().iterator();
 				while(iter.hasNext()) 

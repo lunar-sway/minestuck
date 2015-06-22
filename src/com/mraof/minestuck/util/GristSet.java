@@ -7,7 +7,7 @@ import java.util.Hashtable;
 
 public class GristSet {
 	
-	private int[] gristTypes ;
+	public int[] gristTypes;
 	
 	/**
 	 * Creates a blank set of grist values, used in setting up the Grist Registry.
