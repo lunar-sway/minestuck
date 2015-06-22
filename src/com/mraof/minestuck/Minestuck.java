@@ -234,6 +234,7 @@ public class Minestuck
 	public static boolean cardRecipe;
 	public static boolean cardLoot;
 	public static boolean entryCrater;
+	public static boolean keepDimensionsLoaded;
 	public static String privateMessage;
 	public static int artifactRange; //The range of the Cruxite Artifact in teleporting zones over to the new land
 	public static int overworldEditRange;
@@ -299,6 +300,7 @@ public class Minestuck
 		cardRecipe = config.getBoolean("Include Captcha Card Recipe", "General", true, "Set this to false to remove the captcha card crafting recipe.");
 		cardLoot = config.getBoolean("Generate Card As Loot", "General", false, "Set this to true to make captcha cards appear in dungeon and stronghold chests.");
 		entryCrater = config.get("General", "entryCrater", true, "Disable this to prevent craters from people entering the medium.").getBoolean();
+		keepDimensionsLoaded = config.get("General", "keepDimensionsLoaded", true, "Set this to true to keep the medium loaded.").getBoolean();
 		
 		if(escapeFailureMode > 2 || escapeFailureMode < 0)
 			escapeFailureMode = 0;
@@ -492,9 +494,9 @@ public class Minestuck
 		GameRegistry.registerTileEntity(TileEntityComputer.class, "computerSburb");
 		GameRegistry.registerTileEntity(TileEntityTransportalizer.class, "transportalizer");
 		//register world generators
-		DimensionManager.registerProviderType(skaiaProviderTypeId, WorldProviderSkaia.class, true);
+		DimensionManager.registerProviderType(skaiaProviderTypeId, WorldProviderSkaia.class, false);
 		DimensionManager.registerDimension(skaiaDimensionId, skaiaProviderTypeId);
-		DimensionManager.registerProviderType(landProviderTypeId, WorldProviderLands.class, true);
+		DimensionManager.registerProviderType(landProviderTypeId, WorldProviderLands.class, keepDimensionsLoaded);
 		
 		//register ore generation
 		if (generateCruxiteOre) {
