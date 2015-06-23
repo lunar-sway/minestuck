@@ -30,7 +30,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.google.common.base.Predicate;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
@@ -228,7 +227,7 @@ public class BlockMachine extends BlockContainer {
 		super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity);
 		if(state.getValue(MACHINE_TYPE).equals(MachineType.ALCHEMITER))
 		{
-			AxisAlignedBB bb = new AxisAlignedBB(11.5/16D, 2/16D, 0, 1, 1, 1/8D);
+			AxisAlignedBB bb = new AxisAlignedBB(0, 2/16D, 0, 4.5/16D, 1, 1/8D);
 			bb = rotate(bb, (EnumFacing) getActualState(state, worldIn, pos).getValue(DIRECTION)).offset(pos.getX(), pos.getY(), pos.getZ());
 			if(mask.intersectsWith(bb))
 				list.add(bb);
@@ -268,11 +267,11 @@ public class BlockMachine extends BlockContainer {
 		case SOUTH:
 			return bb;
 		case EAST:
-			return new AxisAlignedBB(bb.minZ, bb.minY, bb.minX, bb.maxZ, bb.maxY, bb.maxX);
+			return new AxisAlignedBB(bb.minZ, bb.minY, 1-bb.maxX, bb.maxZ, bb.maxY, 1-bb.minX);
 		case NORTH:
 			return new AxisAlignedBB(1-bb.maxX, bb.minY, 1-bb.maxZ, 1-bb.minX, bb.maxY, 1-bb.minZ);
 		case WEST:
-			return new AxisAlignedBB(1-bb.maxZ, bb.minY, 1-bb.maxX, 1-bb.minZ, bb.maxY, 1-bb.minX);
+			return new AxisAlignedBB(1-bb.maxZ, bb.minY, bb.minX, 1-bb.minZ, bb.maxY, bb.maxX);
 		default:
 			return null;
 		}
