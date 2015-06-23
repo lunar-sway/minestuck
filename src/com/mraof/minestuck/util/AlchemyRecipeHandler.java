@@ -394,6 +394,30 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Items.redstone),new ItemStack(Blocks.stone),MODE_AND, new ItemStack(Blocks.redstone_ore));
 		CombinationRegistry.addCombination(new ItemStack(Items.redstone),new ItemStack(Blocks.stone),MODE_OR, new ItemStack(Blocks.redstone_block));
 		
+		//Recipes created by assigning bits to items and then combining them using && and ||
+		//Stone: 0011, stonebrick: 0001, flint: 0010, cobblestone: 1011, cracked stonebrick: 1001, gravel: 1010, smooth sandstone: 0111, sandstone: 1111, sand: 1110
+		CombinationRegistry.addCombination(new ItemStack(Blocks.stone), new ItemStack(Blocks.stonebrick, 1, 2), MODE_AND, new ItemStack(Blocks.stonebrick, 1, 0));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.stone), new ItemStack(Blocks.stonebrick, 1, 2), MODE_OR, new ItemStack(Blocks.cobblestone));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.stone), new ItemStack(Blocks.gravel), MODE_AND, new ItemStack(Items.flint));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.stone), new ItemStack(Blocks.gravel), MODE_OR, new ItemStack(Blocks.cobblestone));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.stone), new ItemStack(Blocks.sand), MODE_AND, true, false, new ItemStack(Items.flint));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.stone), new ItemStack(Blocks.sand, 1, 0), MODE_OR, new ItemStack(Blocks.sandstone, 1, 0));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.stonebrick, 1, 0), new ItemStack(Items.flint), MODE_OR, new ItemStack(Blocks.stone));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.stonebrick, 1, 0), new ItemStack(Blocks.gravel), MODE_OR, new ItemStack(Blocks.stone));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.stonebrick, 1, 0), new ItemStack(Blocks.sand), MODE_OR, new ItemStack(Blocks.sandstone, 1, 0));
+		CombinationRegistry.addCombination(new ItemStack(Items.flint), new ItemStack(Blocks.stonebrick, 1, 2), MODE_OR, new ItemStack(Blocks.cobblestone));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.cobblestone), new ItemStack(Blocks.sandstone, 1, 2), MODE_AND, new ItemStack(Blocks.stone));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.cobblestone), new ItemStack(Blocks.sandstone, 1, 2), MODE_OR, new ItemStack(Blocks.sandstone, 1, 0));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.cobblestone), new ItemStack(Blocks.sand), MODE_AND, true, false, new ItemStack(Blocks.gravel));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.cobblestone), new ItemStack(Blocks.sand, 1, 0), MODE_OR, new ItemStack(Blocks.sandstone, 1, 0));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.stonebrick, 1, 2), new ItemStack(Blocks.gravel), MODE_OR, new ItemStack(Blocks.cobblestone));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.stonebrick, 1, 2), new ItemStack(Blocks.sandstone, 1, 2), MODE_AND, new ItemStack(Blocks.stonebrick, 1, 0));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.stonebrick, 1, 2), new ItemStack(Blocks.sandstone, 1, 2), MODE_OR, new ItemStack(Blocks.sandstone, 1, 0));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.stonebrick, 1, 2), new ItemStack(Blocks.sand, 1, 0), MODE_OR, new ItemStack(Blocks.sandstone, 1, 0));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.gravel), new ItemStack(Blocks.sandstone, 1, 2), MODE_AND, new ItemStack(Items.flint));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.gravel), new ItemStack(Blocks.sandstone, 1, 2), MODE_OR, new ItemStack(Blocks.sandstone, 1, 0));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.sandstone, 1, 2), new ItemStack(Blocks.sand, 1, 0), MODE_OR, new ItemStack(Blocks.sandstone, 1, 0));
+		
 		//misc
 		CombinationRegistry.addCombination(new ItemStack(Blocks.cobblestone),new ItemStack(Items.coal),MODE_AND, new ItemStack(Blocks.furnace));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.cobblestone),new ItemStack(Items.wheat_seeds),MODE_OR, new ItemStack(Blocks.mossy_cobblestone));
@@ -402,8 +426,6 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Blocks.dirt),new ItemStack(Items.wheat_seeds),MODE_AND, new ItemStack(Blocks.grass));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.grass),new ItemStack(Blocks.brown_mushroom),MODE_AND, new ItemStack(Blocks.mycelium));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.grass),new ItemStack(Blocks.red_mushroom),MODE_AND, new ItemStack(Blocks.mycelium));
-		CombinationRegistry.addCombination(new ItemStack(Blocks.gravel),new ItemStack(Blocks.stone),MODE_OR, new ItemStack(Items.flint));
-		CombinationRegistry.addCombination(new ItemStack(Blocks.gravel),new ItemStack(Blocks.cobblestone),MODE_OR, new ItemStack(Items.flint));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.ladder),new ItemStack(Items.iron_ingot),MODE_AND, new ItemStack(Blocks.rail));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.netherrack), new ItemStack(Blocks.brick_block), MODE_AND, new ItemStack(Blocks.nether_brick));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.netherrack), new ItemStack(Items.brick), MODE_AND, new ItemStack(Blocks.nether_brick));
@@ -415,9 +437,7 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Blocks.sapling, 1, 0),new ItemStack(Items.wheat_seeds),MODE_AND,true,false, new ItemStack(Items.apple));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.leaves, 1, 0),new ItemStack(Items.wheat_seeds),MODE_OR, true, false, new ItemStack(Items.apple));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.stone),new ItemStack(Items.ender_pearl),MODE_AND, new ItemStack(Blocks.end_stone));
-		CombinationRegistry.addCombination(new ItemStack(Blocks.stonebrick), new ItemStack(Items.wheat_seeds), MODE_OR, new ItemStack(Blocks.stonebrick, 1, 1));
-		CombinationRegistry.addCombination(new ItemStack(Blocks.stonebrick, 1, 0), new ItemStack(Blocks.cobblestone), MODE_AND, new ItemStack(Blocks.stonebrick, 1, 2));
-		CombinationRegistry.addCombination(new ItemStack(Blocks.stonebrick, 1, 0), new ItemStack(Blocks.gravel), MODE_AND, new ItemStack(Blocks.stonebrick, 1, 2));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.stonebrick, 1, 0), new ItemStack(Items.wheat_seeds), MODE_OR, new ItemStack(Blocks.stonebrick, 1, 1));
 		CombinationRegistry.addCombination(new ItemStack(Items.apple),new ItemStack(Items.gold_ingot),MODE_AND, new ItemStack(Items.golden_apple, 1, 0));
 		CombinationRegistry.addCombination(new ItemStack(Items.apple),new ItemStack(Items.gold_nugget),MODE_AND, new ItemStack(Items.golden_apple, 1, 0));
 		CombinationRegistry.addCombination(new ItemStack(Items.apple),new ItemStack(Blocks.gold_block),MODE_AND, new ItemStack(Items.golden_apple, 1, 1));
@@ -473,15 +493,8 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Blocks.glass), new ItemStack(Blocks.snow), MODE_AND, new ItemStack(Blocks.ice));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.sponge, 1, 0), new ItemStack(Items.water_bucket), MODE_AND, new ItemStack(Blocks.sponge, 1, 1));
 		CombinationRegistry.addCombination(new ItemStack(Items.blaze_powder), new ItemStack(Items.gunpowder), MODE_OR, new ItemStack(Items.fire_charge));
-		CombinationRegistry.addCombination(new ItemStack(Blocks.sand, 1, 0), new ItemStack(Blocks.cobblestone), MODE_OR, new ItemStack(Blocks.sandstone, 1, 0));
-		CombinationRegistry.addCombination(new ItemStack(Blocks.sand, 1, 1), new ItemStack(Blocks.cobblestone), MODE_OR, new ItemStack(Blocks.red_sandstone, 1, 0));
-		CombinationRegistry.addCombination(new ItemStack(Blocks.sand, 1, 0), new ItemStack(Blocks.stone), MODE_OR, new ItemStack(Blocks.sandstone, 1, 2));
-		CombinationRegistry.addCombination(new ItemStack(Blocks.sand, 1, 1), new ItemStack(Blocks.stone), MODE_OR, new ItemStack(Blocks.red_sandstone, 1, 2));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.sand, 1, 0), new ItemStack(Blocks.stone_stairs), MODE_OR, new ItemStack(Blocks.sandstone_stairs));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.sand, 1, 1), new ItemStack(Blocks.stone_stairs), MODE_OR, new ItemStack(Blocks.red_sandstone_stairs));
-		CombinationRegistry.addCombination(new ItemStack(Blocks.sand), new ItemStack(Blocks.stone), MODE_AND, false, true, new ItemStack(Blocks.gravel));
-		CombinationRegistry.addCombination(new ItemStack(Blocks.sand), new ItemStack(Blocks.cobblestone), MODE_AND, false, true, new ItemStack(Blocks.gravel));
-		CombinationRegistry.addCombination(new ItemStack(Blocks.stone), new ItemStack(Blocks.gravel), MODE_OR, new ItemStack(Blocks.cobblestone));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.sand, 1, 0), new ItemStack(Items.dye, 1, EnumDyeColor.RED.getDyeDamage()), MODE_AND, new ItemStack(Blocks.sand, 1, 1));
 		for(int i = 0; i <= 2; i++)
 			CombinationRegistry.addCombination(new ItemStack(Blocks.sandstone, 1, i), new ItemStack(Items.dye, 1, EnumDyeColor.RED.getDyeDamage()), MODE_AND, new ItemStack(Blocks.red_sandstone, 1, i));
@@ -496,6 +509,7 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Items.prismarine_crystals), new ItemStack(Items.prismarine_shard), MODE_AND, new ItemStack(Blocks.sea_lantern));
 		CombinationRegistry.addCombination(new ItemStack(Items.prismarine_crystals), new ItemStack(Blocks.prismarine), MODE_AND, true, false, new ItemStack(Blocks.sea_lantern));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.red_mushroom), new ItemStack(Blocks.soul_sand), MODE_AND, new ItemStack(Items.nether_wart));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.prismarine), new ItemStack(Items.flint), MODE_OR, false, true, new ItemStack(Items.prismarine_shard));
 		
 	}
 	
