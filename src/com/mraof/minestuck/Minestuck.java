@@ -103,6 +103,7 @@ import com.mraof.minestuck.nei.NEIMinestuckConfig;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.tileentity.TileEntityGate;
 import com.mraof.minestuck.tileentity.TileEntitySkaiaPortal;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
@@ -407,6 +408,7 @@ public class Minestuck
 		GameRegistry.registerTileEntity(TileEntityMachine.class, "minestuck.containerMachine");
 		GameRegistry.registerTileEntity(TileEntityComputer.class, "minestuck.computerSburb");
 		GameRegistry.registerTileEntity(TileEntityTransportalizer.class, "minestuck.transportalizer");
+		GameRegistry.registerTileEntity(TileEntityGate.class, "minestuck.gate");
 		//register world generators
 		DimensionManager.registerProviderType(skaiaProviderTypeId, WorldProviderSkaia.class, true);
 		DimensionManager.registerDimension(skaiaDimensionId, skaiaProviderTypeId);
