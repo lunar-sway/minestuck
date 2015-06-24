@@ -8,10 +8,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 public class BlockGate extends Block implements ITileEntityProvider
@@ -24,6 +22,7 @@ public class BlockGate extends Block implements ITileEntityProvider
 		super(Material.portal);
 		setDefaultState(getDefaultState().withProperty(isMainComponent, false));
 		setLightLevel(0.75F);
+		setHardness(10.0F);
 	}
 	
 	@Override
@@ -101,9 +100,12 @@ public class BlockGate extends Block implements ITileEntityProvider
 		return true;
 	}
 	
-	protected void removePortal(BlockPos pos, World world, IBlockState state)
+	protected void removePortal(BlockPos pos, World world)
 	{
-		
+		for(int x = -1; x <= 1; x++)
+			for(int z = -1; z <= 1; z++)
+				if(world.getBlockState(pos.add(x, 0, z)).getBlock() == this)
+					world.setBlockToAir(pos.add(x, 0, z));
 	}
 	
 	protected BlockPos findMainComponent(BlockPos pos, World world)
@@ -125,12 +127,27 @@ public class BlockGate extends Block implements ITileEntityProvider
 	{
 		super.breakBlock(worldIn, pos, state);
 		if((Boolean) state.getValue(isMainComponent))
-			removePortal(pos, worldIn, state);
+			removePortal(pos, worldIn);
 		else
 		{
 			BlockPos mainPos = findMainComponent(pos, worldIn);
 			if(mainPos != null)
-				removePortal(mainPos, worldIn, state);
+				removePortal(mainPos, worldIn);
+		}
+	}
+	
+	@Override
+	public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock)
+	{
+		if(!this.isValid(pos, worldIn, state))
+		{
+			BlockPos mainPos = pos;
+			if(!(Boolean) state.getValue(isMainComponent))
+				mainPos = findMainComponent(pos, worldIn);
+			
+			if(mainPos == null)
+				worldIn.setBlockToAir(pos);
+			else removePortal(mainPos, worldIn);
 		}
 	}
 	

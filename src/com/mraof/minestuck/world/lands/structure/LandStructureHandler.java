@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
@@ -148,7 +149,7 @@ public class LandStructureHandler extends MapGenStructure
 		
 		x /= this.MAX_NODE_DISTANCE;
 		z /= this.MAX_NODE_DISTANCE;
-		Random random = this.worldObj.setRandomSeed(x, z, 32698602^worldObj.provider.getDimensionId());
+		Random random = world.setRandomSeed(x, z, 32698602^world.provider.getDimensionId());
 		x *= this.MAX_NODE_DISTANCE;
 		z *= this.MAX_NODE_DISTANCE;
 		x += random.nextInt(this.MAX_NODE_DISTANCE - this.MIN_NODE_DISTANCE);
@@ -175,7 +176,7 @@ public class LandStructureHandler extends MapGenStructure
 				{
 					world.setBlockState(pos, Minestuck.returnNode.getDefaultState().cycleProperty(BlockGate.isMainComponent), 2);
 					//Do something with the tile entity?
-				} else world.setBlockState(pos, Minestuck.returnNode.getDefaultState());
+				} else world.setBlockState(pos, Minestuck.returnNode.getDefaultState(), 2);
 			}
 		}
 	}
