@@ -4,9 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.BlockGate;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
@@ -39,6 +45,8 @@ public class LandStructureHandler extends MapGenStructure
 	
 	private static final int MAX_STRUCTURE_DISTANCE = 15;
 	private static final int MIN_STRUCTURE_DISTANCE = 4;
+	private static final int MAX_NODE_DISTANCE = 5;
+	private static final int MIN_NODE_DISTANCE = 2;
 	
 	@Override
 	protected boolean canSpawnStructureAtCoords(int chunkX, int chunkZ)	//This works very much like the scattered features in the overworld
@@ -124,6 +132,50 @@ public class LandStructureHandler extends MapGenStructure
 				e.printStackTrace();
 				Debug.print("Failed to create structure for "+structureStart.getName());
 				return null;
+			}
+		}
+	}
+	
+	public void placeReturnNodes(World world, Random rand, ChunkCoordIntPair coords)
+	{
+		int x = coords.chunkXPos;
+		int z = coords.chunkZPos;
+		
+		if (x < 0)
+			x -= this.MAX_NODE_DISTANCE - 1;
+		if (z < 0)
+			z -= this.MAX_NODE_DISTANCE - 1;
+		
+		x /= this.MAX_NODE_DISTANCE;
+		z /= this.MAX_NODE_DISTANCE;
+		Random random = this.worldObj.setRandomSeed(x, z, 32698602^worldObj.provider.getDimensionId());
+		x *= this.MAX_NODE_DISTANCE;
+		z *= this.MAX_NODE_DISTANCE;
+		x += random.nextInt(this.MAX_NODE_DISTANCE - this.MIN_NODE_DISTANCE);
+		z += random.nextInt(this.MAX_NODE_DISTANCE - this.MIN_NODE_DISTANCE);
+		
+		if(coords.chunkXPos == x && coords.chunkZPos == z)
+		{
+			int xPos = x*16 + 8 + random.nextInt(16);
+			int zPos = z*16 + 8 + random.nextInt(16);
+			int maxY = 0;
+			for(int i = 0; i < 4; i++)
+			{
+				int y = world.getTopSolidOrLiquidBlock(new BlockPos(xPos + (i % 2), 0, zPos + i/2)).getY();
+				Block block = world.getBlockState(new BlockPos(xPos + (i % 2), y, zPos + i/2)).getBlock();
+				if(block.getMaterial().isLiquid() || block == Blocks.ice)
+					return;
+				if(y > maxY)
+					maxY = y;
+			}
+			for(int i = 0; i < 4; i++)
+			{
+				BlockPos pos = new BlockPos(xPos + (i % 2), maxY, zPos + i/2);
+				if(i == 3)
+				{
+					world.setBlockState(pos, Minestuck.returnNode.getDefaultState().cycleProperty(BlockGate.isMainComponent), 2);
+					//Do something with the tile entity?
+				} else world.setBlockState(pos, Minestuck.returnNode.getDefaultState());
 			}
 		}
 	}

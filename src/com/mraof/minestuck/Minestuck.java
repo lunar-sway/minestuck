@@ -258,7 +258,7 @@ public class Minestuck
 		blockComputerOn = GameRegistry.registerBlock(new BlockComputerOn(), null, "computer_standard_on");
 		transportalizer = GameRegistry.registerBlock(new BlockTransportalizer(), "transportalizer");
 		blockGoldSeeds = (BlockGoldSeeds) GameRegistry.registerBlock(new BlockGoldSeeds(), null, "gold_seeds");
-		returnNode = GameRegistry.registerBlock(new BlockReturnNode(), "return_node");
+		returnNode = GameRegistry.registerBlock(new BlockReturnNode(), null, "return_node");
 		//fluids
 		fluidOil = new Fluid("Oil");
 		FluidRegistry.registerFluid(fluidOil);

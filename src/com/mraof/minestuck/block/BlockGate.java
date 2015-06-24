@@ -8,18 +8,22 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 public class BlockGate extends Block implements ITileEntityProvider
 {
 	
-	protected static PropertyBool isMainComponent = PropertyBool.create("mainComponent");
+	public static PropertyBool isMainComponent = PropertyBool.create("mainComponent");
 	
 	public BlockGate()
 	{
 		super(Material.portal);
+		setDefaultState(getDefaultState().withProperty(isMainComponent, false));
+		setLightLevel(0.75F);
 	}
 	
 	@Override
@@ -73,29 +77,60 @@ public class BlockGate extends Block implements ITileEntityProvider
 	protected boolean isValid(BlockPos pos, World world, IBlockState state)
 	{
 		if((Boolean) state.getValue(isMainComponent))
+			return isValid(pos, world);
+		else
 		{
-			for(int x = -1; x <= 1; x++)
-				for(int z = -1; z <= 1; z++)
-					if(x != 0 || z != 0)
-					{
-						IBlockState block = world.getBlockState(pos.add(x, 0, z));
-						if(block.getBlock() != this || (Boolean) block.getValue(isMainComponent))
-							return false;
-					}
-			
-			return true;
-		} else
+			BlockPos mainPos = findMainComponent(pos, world);
+			if(mainPos != null)
+				return isValid(mainPos, world);
+			else return false;
+		}
+	}
+	
+	protected boolean isValid(BlockPos pos, World world)
+	{
+		for(int x = -1; x <= 1; x++)
+			for(int z = -1; z <= 1; z++)
+				if(x != 0 || z != 0)
+				{
+					IBlockState block = world.getBlockState(pos.add(x, 0, z));
+					if(block.getBlock() != this || (Boolean) block.getValue(isMainComponent))
+						return false;
+				}
+		
+		return true;
+	}
+	
+	protected void removePortal(BlockPos pos, World world, IBlockState state)
+	{
+		
+	}
+	
+	protected BlockPos findMainComponent(BlockPos pos, World world)
+	{
+		for(int x = -1; x <= 1; x++)
+			for(int z = -1; z <= 1; z++)
+				if(x != 0 || z != 0)
+				{
+					IBlockState block = world.getBlockState(pos.add(x, 0, z));
+					if(block.getBlock() == this && (Boolean) block.getValue(isMainComponent))
+						return pos.add(x, 0, z);
+				}
+		
+		return null;
+	}
+	
+	@Override
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
+	{
+		super.breakBlock(worldIn, pos, state);
+		if((Boolean) state.getValue(isMainComponent))
+			removePortal(pos, worldIn, state);
+		else
 		{
-			for(int x = -1; x <= 1; x++)
-				for(int z = -1; z <= 1; z++)
-					if(x != 0 || z != 0)
-					{
-						IBlockState block = world.getBlockState(pos.add(x, 0, z));
-						if(block.getBlock() == this && (Boolean) block.getValue(isMainComponent))
-							return this.isValid(pos.add(x, 0, z), world, block);
-					}
-			
-			return false;
+			BlockPos mainPos = findMainComponent(pos, worldIn);
+			if(mainPos != null)
+				removePortal(mainPos, worldIn, state);
 		}
 	}
 	
