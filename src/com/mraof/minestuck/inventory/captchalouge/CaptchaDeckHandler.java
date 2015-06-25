@@ -1,6 +1,5 @@
 package com.mraof.minestuck.inventory.captchalouge;
 
-import java.util.HashMap;
 import java.util.Random;
 
 import com.mraof.minestuck.Minestuck;
@@ -10,9 +9,7 @@ import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MinestuckPlayerData;
-import com.mraof.minestuck.util.UsernameHandler;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -70,16 +67,14 @@ public class CaptchaDeckHandler
 	
 	public static void launchItem(EntityPlayer player, ItemStack item)
 	{
-		boolean b = true;
 		if(item.getItem().equals(Minestuck.captchaCard) && (!item.hasTagCompound() || !item.getTagCompound().hasKey("contentID")))
 			while(item.stackSize > 0)
 			{
-				b = !getModus(player).increaseSize();
-				if(!b)
+				if(getModus(player).increaseSize())
 					item.stackSize--;
 				else break;
 			}
-		if(b)
+		if(item.stackSize > 0)
 			launchAnyItem(player, item);
 	}
 	

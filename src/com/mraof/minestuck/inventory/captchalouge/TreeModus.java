@@ -3,7 +3,6 @@ package com.mraof.minestuck.inventory.captchalouge;
 import java.util.ArrayList;
 import java.util.List;
 
-import scala.actors.threadpool.Arrays;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -148,7 +147,10 @@ public class TreeModus extends Modus
 		for(int i = 1; i < list.size(); i++)
 			CaptchaDeckHandler.launchAnyItem(player, list.get(i));
 		if(asCard)
+		{
+			size--;
 			stack = AlchemyRecipeHandler.createCard(stack, false);
+		}
 		if(id == 0)
 			node = null;
 		autobalance();
