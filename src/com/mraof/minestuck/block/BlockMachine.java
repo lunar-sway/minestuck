@@ -24,7 +24,6 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -33,6 +32,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
+import com.mraof.minestuck.util.Debug;
 
 public class BlockMachine extends BlockContainer {
 
@@ -44,7 +44,7 @@ public class BlockMachine extends BlockContainer {
 		PUNCH_DESIGNIX,
 		TOTEM_LATHE,
 		ALCHEMITER,
-		GRIST_WIDGET;
+		GRIST_WIDGET;	//TODO: Make gristwidget into a new block and move rotation to the block state from the tile entity when there's no reason to worry about breaking existing save files 
 		
 		public String getName()
 		{
@@ -145,25 +145,21 @@ public class BlockMachine extends BlockContainer {
 		return true;
 	}
 	
-	@Override
-	public void onBlockDestroyedByExplosion(World worldIn, BlockPos pos, Explosion explosionIn)
-	{
-		dropItems(worldIn, pos.getX(), pos.getY(), pos.getZ());
-		super.onBlockDestroyedByExplosion(worldIn, pos, explosionIn);
-	}
 	
 	@Override
-	public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state)
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
-		dropItems(worldIn, pos.getX(), pos.getY(), pos.getZ());
-		super.onBlockDestroyedByPlayer(worldIn, pos, state);
+		dropItems(worldIn, pos);
+		super.breakBlock(worldIn, pos, state);
 	}
 	
-	private void dropItems(World world, int x, int y, int z){
+	private void dropItems(World world, BlockPos pos)
+	{
 		Random rand = new Random();
 
-		TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
-		if (!(tileEntity instanceof IInventory)) {
+		TileEntity tileEntity = world.getTileEntity(pos);
+		if (!(tileEntity instanceof IInventory))
+		{
 			return;
 		}
 		IInventory inventory = (IInventory) tileEntity;
@@ -177,7 +173,7 @@ public class BlockMachine extends BlockContainer {
 				float rz = rand.nextFloat() * 0.8F + 0.1F;
 
 				EntityItem entityItem = new EntityItem(world,
-						x + rx, y + ry, z + rz,
+						pos.getX() + rx, pos.getY() + ry, pos.getZ() + rz,
 						new ItemStack(item.getItem(), item.stackSize, item.getItemDamage()));
 
 				if (item.hasTagCompound()) {
@@ -190,6 +186,7 @@ public class BlockMachine extends BlockContainer {
 				entityItem.motionZ = rand.nextGaussian() * factor;
 				world.spawnEntityInWorld(entityItem);
 				item.stackSize = 0;
+				Debug.print("Spawning item "+entityItem.getEntityItem());
 			}
 		}
 	}
