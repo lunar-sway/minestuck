@@ -8,6 +8,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
@@ -58,7 +60,7 @@ public class BlockGate extends Block implements ITileEntityProvider
 	@Override
 	public IBlockState getStateFromMeta(int meta)
 	{
-		return this.getDefaultState().withProperty(isMainComponent, meta == 0 ? true : false);	//TODO Switch after rendering testing
+		return this.getDefaultState().withProperty(isMainComponent, meta == 0 ? true : false);
 	}
 	
 	@Override
@@ -71,6 +73,21 @@ public class BlockGate extends Block implements ITileEntityProvider
 	public boolean hasTileEntity(IBlockState state)
 	{
 		return (Boolean) state.getValue(isMainComponent);
+	}
+	
+	@Override
+	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn)
+	{
+		if(entityIn instanceof EntityPlayerMP && entityIn.ridingEntity == null && entityIn.riddenByEntity == null && entityIn.timeUntilPortal == 0)
+		{
+			BlockPos mainPos = pos;
+			if(!(Boolean) state.getValue(isMainComponent))
+				mainPos = this.findMainComponent(pos, worldIn);
+			
+			TileEntity te = worldIn.getTileEntity(mainPos);
+			if(te instanceof TileEntityGate)
+				((TileEntityGate) te).teleportEntity(worldIn, (EntityPlayerMP) entityIn, this);
+		}
 	}
 	
 	protected boolean isValid(BlockPos pos, World world, IBlockState state)
@@ -149,6 +166,12 @@ public class BlockGate extends Block implements ITileEntityProvider
 				worldIn.setBlockToAir(pos);
 			else removePortal(mainPos, worldIn);
 		}
+	}
+	
+	@Override
+	public int getLightValue()
+	{
+		return super.getLightValue();
 	}
 	
 }
