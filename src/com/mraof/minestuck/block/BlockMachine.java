@@ -3,6 +3,7 @@ package com.mraof.minestuck.block;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -106,15 +107,10 @@ public class BlockMachine extends BlockContainer {
 	}
 	
 	@Override
-	public void onBlockDestroyedByExplosion(World world, int x, int y, int z, Explosion explosion) {
+	public void breakBlock(World world, int x, int y, int z, Block block, int metadata)
+	{
 		dropItems(world, x, y, z);
-		super.onBlockDestroyedByExplosion(world, x, y, z, explosion);
-	}
-	
-	@Override
-	public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int metaData) {
-		dropItems(world, x, y, z);
-		super.onBlockDestroyedByPlayer(world, x, y, z, metaData);
+		super.breakBlock(world, x, y, z, block, metadata);
 	}
 	
 	private void dropItems(World world, int x, int y, int z){
