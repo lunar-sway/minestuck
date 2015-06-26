@@ -13,7 +13,6 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.ChunkCoordIntPair;
-import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
@@ -169,6 +168,13 @@ public class LandStructureHandler extends MapGenStructure
 				if(y > maxY)
 					maxY = y;
 			}
+			for(int i = 0; i < 4; i++)
+			{
+				BlockPos pos = new BlockPos(xPos + (i % 2), maxY, zPos + i/2);
+				if(!world.getBlockState(pos).getBlock().isReplaceable(world, pos))
+					return;
+			}
+			
 			for(int i = 0; i < 4; i++)
 			{
 				BlockPos pos = new BlockPos(xPos + (i % 2), maxY, zPos + i/2);
