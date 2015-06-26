@@ -19,11 +19,11 @@ public class RenderReturnNode extends TileEntitySpecialRenderer
 	@Override
 	public void renderTileEntityAt(TileEntity tileEntity, double posX, double posY, double posZ, float f, int p_180535_9_)
 	{
-		Random rand = new Random((long) (tileEntity.getPos().getX() * tileEntity.getPos().getZ()));
-		GlStateManager.color(rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
+//		Random rand = new Random((long) (tileEntity.getPos().getX() * tileEntity.getPos().getZ()));
+//		GlStateManager.color(rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
 		
 		GlStateManager.pushMatrix();
-//		GlStateManager.color(0.5F, 0.5F, 1.0F);
+		GlStateManager.color(0F, 5.5F/16F, 1.0F);
 		GlStateManager.disableCull();
 		GlStateManager.disableLighting();
 		WorldRenderer renderer = Tessellator.getInstance().getWorldRenderer();

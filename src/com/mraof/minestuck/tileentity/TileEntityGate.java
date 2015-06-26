@@ -19,9 +19,13 @@ public class TileEntityGate extends TileEntity implements ITeleporter
 	{
 		if(block == Minestuck.returnNode)
 		{
-			BlockPos pos = world.getSpawnPoint();
+			BlockPos pos = world.provider.getRandomizedSpawnPoint();
 			player.setPositionAndUpdate(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 			player.timeUntilPortal = 60;
+			player.motionX = 0;
+			player.motionY = 0;
+			player.motionZ = 0;
+			player.fallDistance = 0;
 		}
 	}
 	

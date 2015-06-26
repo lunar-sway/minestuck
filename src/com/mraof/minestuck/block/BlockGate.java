@@ -8,9 +8,11 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
@@ -25,6 +27,19 @@ public class BlockGate extends Block implements ITileEntityProvider
 		setDefaultState(getDefaultState().withProperty(isMainComponent, false));
 		setLightLevel(0.75F);
 		setHardness(10.0F);
+		this.setBlockBounds(0F, 0.45F, 0F, 1F, 0.55F, 1F);
+	}
+	
+	@Override
+	public boolean addDestroyEffects(World world, BlockPos pos, EffectRenderer effectRenderer)
+	{
+		return true;
+	}
+	
+	@Override
+	public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state)
+	{
+		return null;
 	}
 	
 	@Override

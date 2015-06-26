@@ -9,7 +9,6 @@ public class BlockReturnNode extends BlockGate
 	
 	public BlockReturnNode()
 	{
-		this.setBlockBounds(0F, 0.45F, 0F, 1F, 0.55F, 1F);
 		setHardness(5.0F);
 	}
 	
