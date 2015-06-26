@@ -72,4 +72,10 @@ public class BlockStorage extends Block
 			subItems.add(new ItemStack(this, 1, i));
 	}
 	
+	@Override
+	public int damageDropped(IBlockState state)
+	{
+		return this.getMetaFromState(state);
+	}
+	
 }
