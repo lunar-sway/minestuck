@@ -1,9 +1,13 @@
 package com.mraof.minestuck.client.util;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.ItemModelMesher;
+import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.model.ModelBakery;
@@ -159,6 +163,13 @@ public class MinestuckModelManager
 		ModelLoader.setCustomStateMapper(Minestuck.blockOil, (new StateMap.Builder()).addPropertiesToIgnore(BlockFluidBase.LEVEL).build());
 		ModelLoader.setCustomStateMapper(Minestuck.blockBlood, (new StateMap.Builder()).addPropertiesToIgnore(BlockFluidBase.LEVEL).build());
 		ModelLoader.setCustomStateMapper(Minestuck.blockBrainJuice, (new StateMap.Builder()).addPropertiesToIgnore(BlockFluidBase.LEVEL).build());
+		ModelLoader.setCustomStateMapper(Minestuck.returnNode, new IStateMapper()
+		{
+			@Override
+			public Map putStateModelLocations(Block block)
+			{
+				return new HashMap();	//We're not using any models for rendering the return node
+			}});
 	}
 	
 	private static void register(Item item)
