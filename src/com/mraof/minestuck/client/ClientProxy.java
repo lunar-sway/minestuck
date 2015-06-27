@@ -27,7 +27,8 @@ import com.mraof.minestuck.client.renderer.entity.RenderGrist;
 import com.mraof.minestuck.client.renderer.entity.RenderMetalBoat;
 import com.mraof.minestuck.client.renderer.entity.RenderPawn;
 import com.mraof.minestuck.client.renderer.entity.RenderShadow;
-import com.mraof.minestuck.client.renderer.tileentity.RenderGatePortal;
+import com.mraof.minestuck.client.renderer.tileentity.RenderReturnNode;
+import com.mraof.minestuck.client.renderer.tileentity.RenderSkaiaPortal;
 import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
 import com.mraof.minestuck.client.util.MinestuckModelManager;
 import com.mraof.minestuck.entity.EntityDecoy;
@@ -44,7 +45,8 @@ import com.mraof.minestuck.entity.underling.EntityGiclops;
 import com.mraof.minestuck.entity.underling.EntityImp;
 import com.mraof.minestuck.entity.underling.EntityOgre;
 import com.mraof.minestuck.entity.underling.EntityUnderlingPart;
-import com.mraof.minestuck.tileentity.TileEntityGatePortal;
+import com.mraof.minestuck.tileentity.TileEntityGate;
+import com.mraof.minestuck.tileentity.TileEntitySkaiaPortal;
 
 public class ClientProxy extends CommonProxy
 {
@@ -71,7 +73,8 @@ public class ClientProxy extends CommonProxy
 		RenderingRegistry.registerEntityRenderingHandler(EntityGrist.class, new RenderGrist(mc.getRenderManager()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityDecoy.class, new RenderDecoy(mc.getRenderManager()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityMetalBoat.class, new RenderMetalBoat(mc.getRenderManager()));
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGatePortal.class, new RenderGatePortal());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySkaiaPortal.class, new RenderSkaiaPortal());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGate.class, new RenderReturnNode());
 //		MinecraftForgeClient.registerItemRenderer(Minestuck.captchaCard, new RenderCard());
 	}
 	

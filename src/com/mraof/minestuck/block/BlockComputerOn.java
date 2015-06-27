@@ -57,7 +57,8 @@ public class BlockComputerOn extends Block implements ITileEntityProvider
 	@Override
 	public int getMetaFromState(IBlockState state)
 	{
-		return ((Boolean) state.getValue(BSOD) ? 1 : 0) + Minestuck.blockComputerOff.getMetaFromState(state)*2;	//I can't see why this wouldn't work
+		return ((Boolean) state.getValue(BSOD) ? 1 : 0) + Minestuck.blockComputerOff.getMetaFromState(state)*2;	//TODO: Now that I know about block.getActualState, the bsod doesn't have to be part of the block.
+			//Fix that when there is no need to worry about breaking existing save files
 	}
 	
 	@Override

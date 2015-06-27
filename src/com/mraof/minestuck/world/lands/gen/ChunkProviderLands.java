@@ -150,6 +150,7 @@ public class ChunkProviderLands implements IChunkProvider
 		}
 		
 		structureHandler.func_175794_a(landWorld, random, new ChunkCoordIntPair(chunkX, chunkZ));
+		structureHandler.placeReturnNodes(landWorld, random, new ChunkCoordIntPair(chunkX, chunkZ));
 		
 	}
 	

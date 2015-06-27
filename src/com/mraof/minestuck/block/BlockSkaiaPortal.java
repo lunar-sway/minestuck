@@ -20,13 +20,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.tileentity.TileEntityGatePortal;
+import com.mraof.minestuck.tileentity.TileEntitySkaiaPortal;
 import com.mraof.minestuck.util.Location;
 
-public class BlockGatePortal extends BlockContainer
+public class BlockSkaiaPortal extends BlockContainer
 {
 	int destinationDimension;
-	public BlockGatePortal(Material material) 
+	public BlockSkaiaPortal(Material material) 
 	{
 		super(material);
 		
@@ -47,7 +47,7 @@ public class BlockGatePortal extends BlockContainer
 	{
 		if (entity.ridingEntity == null && entity.riddenByEntity == null && !world.isRemote && entity.timeUntilPortal == 0)
 		{
-			TileEntityGatePortal portal = (TileEntityGatePortal) world.getTileEntity(pos);
+			TileEntitySkaiaPortal portal = (TileEntitySkaiaPortal) world.getTileEntity(pos);
 				portal.teleportEntity(entity);
 		}
 	}
@@ -71,7 +71,7 @@ public class BlockGatePortal extends BlockContainer
 	@Override
 	public TileEntity createNewTileEntity(World world, int metadata)
 	{
-		TileEntityGatePortal tileEntity = (TileEntityGatePortal) this.createNewTileEntity(world);
+		TileEntitySkaiaPortal tileEntity = (TileEntitySkaiaPortal) this.createNewTileEntity(world);
 		tileEntity.destination = new Location();
 		tileEntity.destination.dim = this.destinationDimension;
 		return tileEntity;
@@ -79,7 +79,7 @@ public class BlockGatePortal extends BlockContainer
 	
 	public TileEntity createNewTileEntity(World var1)
 	{
-		return new TileEntityGatePortal();
+		return new TileEntitySkaiaPortal();
 	}
 	
 	@Override
@@ -158,7 +158,7 @@ public class BlockGatePortal extends BlockContainer
 	
 	public void setDestinationDimension(World world, int x, int y, int z, int destinationDimension) 
 	{
-		((TileEntityGatePortal) world.getTileEntity(new BlockPos(x, y, z))).destination.dim = destinationDimension;
+		((TileEntitySkaiaPortal) world.getTileEntity(new BlockPos(x, y, z))).destination.dim = destinationDimension;
 	}
 	
 }

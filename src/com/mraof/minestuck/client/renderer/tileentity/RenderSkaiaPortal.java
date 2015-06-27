@@ -15,16 +15,16 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
-import com.mraof.minestuck.tileentity.TileEntityGatePortal;
+import com.mraof.minestuck.tileentity.TileEntitySkaiaPortal;
 
-public class RenderGatePortal extends TileEntitySpecialRenderer 
+public class RenderSkaiaPortal extends TileEntitySpecialRenderer 
 {
 	private static final ResourceLocation tunnel = new ResourceLocation("minestuck","textures/tunnel.png");
     private static final ResourceLocation particlefield = new ResourceLocation("minestuck","textures/particlefield.png");
     
     FloatBuffer floatBuffer = GLAllocation.createDirectFloatBuffer(16);
 
-	public void renderGatePortalTileEntity(TileEntityGatePortal par1TileEntityGatePortal, double par2, double par4, double par6, float par8)
+	public void renderGatePortalTileEntity(TileEntitySkaiaPortal par1TileEntityGatePortal, double par2, double par4, double par6, float par8)
     {
 		float var9 = (float)this.rendererDispatcher.entityX;
 		float var10 = (float)this.rendererDispatcher.entityY;
@@ -129,7 +129,7 @@ public class RenderGatePortal extends TileEntitySpecialRenderer
 	@Override
 	public void renderTileEntityAt(TileEntity par1TileEntity, double par2, double par4, double par6, float par8, int par9)
 	{
-		this.renderGatePortalTileEntity((TileEntityGatePortal)par1TileEntity, par2, par4, par6, par8);
+		this.renderGatePortalTileEntity((TileEntitySkaiaPortal)par1TileEntity, par2, par4, par6, par8);
 	}
 	
 }
