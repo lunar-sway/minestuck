@@ -13,6 +13,7 @@ import net.minecraft.util.StatCollector;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.util.ColorCollector;
 
 public class ItemDowel extends Item
 {
@@ -22,6 +23,7 @@ public class ItemDowel extends Item
 		this.maxStackSize = 16;
 		this.setCreativeTab(Minestuck.tabMinestuck);
 		this.setUnlocalizedName("dowelCruxite");
+		this.setHasSubtypes(true);
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -44,5 +46,11 @@ public class ItemDowel extends Item
 				par3List.add("("+StatCollector.translateToLocal("item.captchaCard.invalid")+")");
 			}
 		}
+	}
+	
+	@Override
+	public int getColorFromItemStack(ItemStack stack, int renderPass)
+	{
+		return ColorCollector.getColor(stack.getMetadata());
 	}
 }

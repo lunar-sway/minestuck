@@ -3,6 +3,7 @@ package com.mraof.minestuck.tileentity;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Random;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -44,6 +45,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 	public boolean overrideStop = false;
 	public GristType selectedGrist = GristType.Build;
 	public byte rotation;
+	public int color = new Random().nextInt(20);	//Temp
 	
     public TileEntityMachine(){
             this.inv = new ItemStack[4];
@@ -136,6 +138,8 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 		}
 		if(tagCompound.hasKey("gristType"))
 			this.selectedGrist = GristType.values()[tagCompound.getInteger("gristType")];
+		
+		this.color = tagCompound.getInteger("color");
 	}
 	
 	@Override
@@ -156,6 +160,8 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 			tagCompound.setTag("slot"+i, tag);
 		}
 		tagCompound.setInteger("gristType", selectedGrist.ordinal());
+		
+		tagCompound.setInteger("color", color);
 	}
 	
     @Override
@@ -293,7 +299,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 			// Process the Raw Cruxite
 			
 			if (this.inv[0] == null) {
-				setInventorySlotContents(0, new ItemStack(Minestuck.cruxiteDowel,1));
+				setInventorySlotContents(0, new ItemStack(Minestuck.cruxiteDowel,1,color));
 			} else {
 				decrStackSize(0, -1);
 			}
