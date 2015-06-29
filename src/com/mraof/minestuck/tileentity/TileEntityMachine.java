@@ -115,12 +115,6 @@ public class TileEntityMachine extends TileEntity implements IInventory {
             return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) == this &&
             player.getDistanceSq(this.xCoord + 0.5, this.yCoord + 0.5, this.zCoord + 0.5) < 64;
     }
-
-//    @Override
-//    public void openChest() {}
-//
-//    @Override
-//    public void closeChest() {}
     
     @Override
     public void readFromNBT(NBTTagCompound tagCompound) {
@@ -234,7 +228,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		}
 		switch (getMetadata()) {
 		case (0):
-			return (this.inv[1] != null && (this.inv[0] == null || this.inv[0].stackSize < 64));
+			return (this.inv[1] != null && (this.inv[0] == null || this.inv[0].stackSize < this.inv[0].getMaxStackSize()));
 		case (1):
 		if (this.inv[1] != null && this.inv[2] != null)	//&& or || alchemy
 		{
@@ -247,7 +241,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 					return false;
 				outputItem = AlchemyRecipeHandler.createCard(outputItem, true);
 				if(outputItem != null)
-					return (this.inv[0] == null || inv[0].stackSize < 16 && outputItem.isItemEqual(inv[0]) && ItemStack.areItemStackTagsEqual(outputItem, inv[0]));
+					return (this.inv[0] == null || inv[0].stackSize < inv[0].getMaxStackSize() && outputItem.isItemEqual(inv[0]) && ItemStack.areItemStackTagsEqual(outputItem, inv[0]));
 			}
 			return false;
 		} else if (this.inv[1] != null || this.inv[2] != null)	//Register item to card
@@ -266,7 +260,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 				if(output == null)
 					return false;
 				output = AlchemyRecipeHandler.createCard(output, true);
-				return (inv[0] == null || inv[0].stackSize < 16 && ItemStack.areItemStackTagsEqual(inv[0], output));
+				return (inv[0] == null || inv[0].stackSize < inv[0].getMaxStackSize() && ItemStack.areItemStackTagsEqual(inv[0], output));
 			}
 		} else
 		{
@@ -275,7 +269,7 @@ public class TileEntityMachine extends TileEntity implements IInventory {
 		case (2):
 			return (this.inv[1] != null && this.inv[2] != null && !(inv[2].hasTagCompound() && inv[2].getTagCompound().hasKey("contentID"))
 			&& !(inv[1].hasTagCompound() && !inv[1].getTagCompound().getBoolean("punched"))
-			&& (this.inv[0] == null || inv[0].stackSize < 16 && AlchemyRecipeHandler.getDecodedItem(inv[0], true).isItemEqual(AlchemyRecipeHandler.getDecodedItem(inv[1], true))));
+			&& (this.inv[0] == null || inv[0].stackSize < inv[0].getMaxStackSize() && AlchemyRecipeHandler.getDecodedItem(inv[0], true).isItemEqual(AlchemyRecipeHandler.getDecodedItem(inv[1], true))));
 		case (3):
 			if (this.inv[1] != null && this.owner != null) {
 				//Check owner's cache: Do they have everything they need?
