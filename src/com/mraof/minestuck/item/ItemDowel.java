@@ -51,6 +51,8 @@ public class ItemDowel extends Item
 	@Override
 	public int getColorFromItemStack(ItemStack stack, int renderPass)
 	{
-		return ColorCollector.getColor(stack.getMetadata());
+		if(stack.getMetadata() == 0)
+			return -1;
+		else return ColorCollector.getColor(stack.getMetadata() - 1);
 	}
 }

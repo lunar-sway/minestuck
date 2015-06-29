@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "minestuck:items/CruxiteDowel"
+        "layer0": "minestuck:items/CruxiteCarvedBlank"
     },
     "display": {
         "thirdperson": {

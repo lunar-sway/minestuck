@@ -219,7 +219,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 		switch (getMachineType())
 		{
 		case (0):
-			return (this.inv[1] != null && (this.inv[0] == null || this.inv[0].stackSize < 64));
+			return (this.inv[1] != null && (this.inv[0] == null || this.inv[0].stackSize < 64 && inv[0].getItemDamage() == this.color + 1));
 		case (1):
 		if (this.inv[1] != null && inv[2] != null)
 		{
@@ -244,11 +244,11 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 				if(inv[1] != null && inv[2] != null)
 				{
 					if(!inv[1].hasTagCompound() || !inv[1].getTagCompound().getBoolean("punched") || !inv[2].hasTagCompound() || !inv[2].getTagCompound().getBoolean("punched"))
-						return inv[0] == null || !(inv[0].hasTagCompound() && inv[0].getTagCompound().hasKey("contentID"));
+						return inv[0] == null || !(inv[0].hasTagCompound() && inv[0].getTagCompound().hasKey("contentID")) && inv[0].getItemDamage() == inv[3].getItemDamage();
 					else
 					{
 						ItemStack output = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(inv[1]), AlchemyRecipeHandler.getDecodedItem(inv[2]), CombinationRegistry.MODE_AND);
-						return output != null && (inv[0] == null || AlchemyRecipeHandler.getDecodedItem(inv[0]).isItemEqual(output) && inv[0].stackSize < inv[0].getMaxStackSize());
+						return output != null && (inv[0] == null || AlchemyRecipeHandler.getDecodedItem(inv[0]).isItemEqual(output) && inv[0].stackSize < inv[0].getMaxStackSize() && inv[0].getItemDamage() == inv[3].getItemDamage());
 					}
 				}
 				else
@@ -299,7 +299,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 			// Process the Raw Cruxite
 			
 			if (this.inv[0] == null) {
-				setInventorySlotContents(0, new ItemStack(Minestuck.cruxiteDowel,1,color));
+				setInventorySlotContents(0, new ItemStack(Minestuck.cruxiteDowel, 1, color + 1));
 			} else {
 				decrStackSize(0, -1);
 			}
@@ -354,6 +354,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 			
 			ItemStack outputDowel = (output.getItem().equals(Item.getItemFromBlock(Minestuck.blockStorage)) && output.getItemDamage() == 1)
 					? new ItemStack(Minestuck.cruxiteDowel) : AlchemyRecipeHandler.createEncodedItem(output, false);
+			outputDowel.setItemDamage(inv[3].getItemDamage());
 			
 			setInventorySlotContents(0,outputDowel);
 			decrStackSize(3, 1);

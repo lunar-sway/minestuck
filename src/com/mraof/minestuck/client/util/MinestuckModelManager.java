@@ -130,7 +130,7 @@ public class MinestuckModelManager
 	{
 		//Items
 		ModelBakery.addVariantName(Minestuck.crockerSpork, "minestuck:crocker_fork", "minestuck:crocker_spoon");
-		ModelBakery.addVariantName(Minestuck.cruxiteDowel, "minestuck:dowel_uncarved", "minestuck:dowel_carved");
+		ModelBakery.addVariantName(Minestuck.cruxiteDowel, "minestuck:dowel_uncarved", "minestuck:dowel_carved", "minestuck:dowel_uncarved_blank", "minestuck:dowel_carved_blank");
 		ModelBakery.addVariantName(Minestuck.cruxiteArtifact, "minestuck:cruxite_apple");
 		ModelBakery.addVariantName(Minestuck.disk, "minestuck:disk_client", "minestuck:disk_server");
 		ModelBakery.addVariantName(Minestuck.component, "minestuck:spoon_wood", "minestuck:spoon_silver", "minestuck:chessboard");
@@ -208,7 +208,8 @@ public class MinestuckModelManager
 		@Override
 		public ModelResourceLocation getModelLocation(ItemStack stack)
 		{
-			return new ModelResourceLocation("minestuck:"+(stack.hasTagCompound() && stack.getTagCompound().hasKey("contentID") ? "dowel_carved" : "dowel_uncarved"), "inventory");
+			String suffix = stack.getMetadata() == 0 ? "" : "_blank";
+			return new ModelResourceLocation("minestuck:"+(stack.hasTagCompound() && stack.getTagCompound().hasKey("contentID") ? "dowel_carved" : "dowel_uncarved")+suffix, "inventory");
 		}
 	}
 	
