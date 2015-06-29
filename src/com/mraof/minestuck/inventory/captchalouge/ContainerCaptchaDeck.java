@@ -58,19 +58,24 @@ public class ContainerCaptchaDeck extends Container
 		Slot slot = getSlot(slotNumber);
 		int slotCount = inventorySlots.size();
 		if(slot != null && slot.getHasStack())
+		{
+			ItemStack stack1 = slot.getStack();
+			ItemStack stack2 = stack1.copy();
 			if(slotNumber == slotCount - 1)
 			{
-				ItemStack stack1 = slot.getStack();
-				ItemStack stack2 = stack1.copy();
-				if(mergeItemStack(stack1, 0, slotCount - 1, false))
-					return stack2;
+				if(!mergeItemStack(stack1, 0, slotCount - 1, false))
+					return null;
 			} else
 			{
-				ItemStack stack1 = slot.getStack();
-				ItemStack stack2 = stack1.copy();
-				if(getSlot(slotCount - 1).isItemValid(stack1) && mergeItemStack(stack1, slotCount - 1, slotCount, false))
-					return stack2;
+				if(!getSlot(slotCount - 1).isItemValid(stack1) || !mergeItemStack(stack1, slotCount - 1, slotCount, false))
+					return null;
 			}
+			
+			if(stack1.stackSize == 0)
+				slot.putStack(null);
+			else slot.onSlotChanged();
+			return stack2;
+		}
 		return null;
 	}
 	
