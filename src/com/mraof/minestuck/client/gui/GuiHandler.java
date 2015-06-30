@@ -7,16 +7,10 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 
-import com.mraof.minestuck.client.gui.playerStats.GuiGristCache;
-import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
-import com.mraof.minestuck.editmode.ClientEditHandler;
-import com.mraof.minestuck.editmode.ServerEditHandler;
-import com.mraof.minestuck.inventory.ContainerHandler;
 import com.mraof.minestuck.inventory.ContainerMachine;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
-import com.mraof.minestuck.util.Debug;
 
 public class GuiHandler implements IGuiHandler 
 {
@@ -25,6 +19,7 @@ public class GuiHandler implements IGuiHandler
 		MACHINE,
 		COMPUTER,
 		TRANSPORTALIZER,
+		COLOR,
 	}
 	
 	@Override
@@ -51,6 +46,9 @@ public class GuiHandler implements IGuiHandler
 		
 		if(id == GuiId.TRANSPORTALIZER.ordinal() && tileEntity instanceof TileEntityTransportalizer)
 			return new GuiTransportalizer(Minecraft.getMinecraft(), (TileEntityTransportalizer) tileEntity);
+		
+		if(id == GuiId.COLOR.ordinal())
+			return new GuiColorSelector();
 		
 		return null;
 

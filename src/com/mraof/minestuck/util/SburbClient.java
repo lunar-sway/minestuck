@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 import net.minecraft.nbt.NBTTagCompound;
 
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.client.ClientProxy;
+import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
@@ -15,14 +18,15 @@ public class SburbClient extends ButtonListProgram {
 	public ArrayList<UnlocalizedString> getStringList(TileEntityComputer te) {
 		ArrayList<UnlocalizedString> list = new ArrayList<UnlocalizedString>();
 		NBTTagCompound nbt = te.getData(getId());
-		String displayPlayer= "UNDEFINED";
-		if(nbt.getBoolean("connectedToServer") && SkaiaClient.getClientConnection(te.owner) != null)
-			displayPlayer = UsernameHandler.decode(SkaiaClient.getClientConnection(te.owner).getServerName());
+		
 		SburbConnection c = SkaiaClient.getClientConnection(te.owner);
-		if (nbt.getBoolean("connectedToServer") && c != null) { //If it is connected to someone.
+		if(nbt.getBoolean("connectedToServer") && c != null) //If it is connected to someone.
+		{
+			String displayPlayer = UsernameHandler.decode(c.getServerName());
 			list.add(new UnlocalizedString("computer.messageConnect", displayPlayer));
 			list.add(new UnlocalizedString("computer.buttonClose"));
-		} else if(nbt.getBoolean("isResuming")) {
+		} else if(nbt.getBoolean("isResuming"))
+		{
 			list.add(new UnlocalizedString("computer.messageResumeClient"));
 			list.add(new UnlocalizedString("computer.buttonClose"));
 		} else if(!SkaiaClient.isActive(te.owner, true)){ //If the player doesn't have an other active client
@@ -32,6 +36,7 @@ public class SburbClient extends ButtonListProgram {
 			for (String server : SkaiaClient.getAvailableServers(te.owner))
 				list.add(new UnlocalizedString("computer.buttonConnect", UsernameHandler.decode(server)));
 		} else list.add(new UnlocalizedString("computer.messageClientActive"));
+		list.add(new UnlocalizedString("computer.selectColor"));
 		return list;
 	}
 	
@@ -43,6 +48,8 @@ public class SburbClient extends ButtonListProgram {
 			SkaiaClient.sendConnectRequest(te, UsernameHandler.encode((String)data[0]), true);
 		else if(buttonName.equals("computer.buttonClose"))
 			SkaiaClient.sendCloseRequest(te, te.getData(getId()).getBoolean("isResuming")?"":SkaiaClient.getClientConnection(te.owner).getServerName(), true);
+		else if(buttonName.equals("computer.selectColor"))
+			ClientProxy.getPlayer().openGui(Minestuck.instance, GuiHandler.GuiId.COLOR.ordinal(), ClientProxy.getPlayer().worldObj, te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
 	}
 	
 	@Override

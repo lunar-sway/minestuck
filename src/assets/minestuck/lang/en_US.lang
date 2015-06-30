@@ -42,6 +42,7 @@ computer.messageResumeStop=Stopped resuming
 computer.programClient=Client
 computer.programServer=Server
 computer.singleSessionFull=Game session is full
+computer.selectColor=Select a Color
 computer.serverSessionFull=Server player's session is full
 computer.clientSessionFull=Client player's session is full
 
@@ -107,6 +108,7 @@ gui.free=Free!
 gui.buttonStop=STOP
 gui.buttonGo=GO
 gui.selectGrist=Select Grist Type
+gui.selectColor=Select Color
 gui.emptySylladex1=Are you sure you want to continue?
 gui.emptySylladex2=This will empty your sylladex.
 gui.emptySylladexButton=Empty Sylladex

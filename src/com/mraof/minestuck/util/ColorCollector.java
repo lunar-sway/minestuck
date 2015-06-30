@@ -43,4 +43,9 @@ public class ColorCollector
 		return colors.get(index);
 	}
 	
+	public static int getColorSize()
+	{
+		return colors.size();
+	}
+	
 }
