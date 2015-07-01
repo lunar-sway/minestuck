@@ -110,6 +110,7 @@ public class MinestuckPlayerData {
 		public GristSet gristCache;
 		public Modus modus;
 		public boolean givenModus;
+		public int color = -1;
 		
 		private void readFromNBT(NBTTagCompound nbt)
 		{
@@ -124,6 +125,8 @@ public class MinestuckPlayerData {
 				givenModus = true;
 			}
 			else givenModus = nbt.getBoolean("givenModus");
+			if(nbt.hasKey("color"))
+				this.color = nbt.getInteger("color");
 		}
 		
 		private NBTTagCompound writeToNBT()
@@ -145,6 +148,7 @@ public class MinestuckPlayerData {
 			if(this.modus != null)
 				nbt.setTag("modus", CaptchaDeckHandler.writeToNBT(modus));
 			else nbt.setBoolean("givenModus", givenModus);
+			nbt.setInteger("color", this.color);
 			return nbt;
 		}
 		

@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.mraof.minestuck.util.ColorCollector;
 
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
@@ -13,8 +14,15 @@ public class GuiColorSelector extends GuiScreen
 {
 	
 	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/ColorSelector.png");
-	private static final int guiWidth = 176, guiHeight = 146;
+	private static final int guiWidth = 176, guiHeight = 157;
 	private int selectedColor = -1;
+	
+	@Override
+	public void initGui()
+	{
+		GuiButton button = new GuiButton(0, (width - guiWidth)/2 + 50, (height - guiHeight)/2 + 132, 76, 20, "Choose");
+		buttonList.add(button);
+	}
 	
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks)
@@ -89,11 +97,18 @@ public class GuiColorSelector extends GuiScreen
 						yPos += 3;
 					if(mouseX >= xPos && mouseX < xPos + 32 && mouseY >= yPos && mouseY < yPos + 16)
 					{
-						selectedColor = y*4 + x;
+						int index = y*4 + x;
+						selectedColor = index != selectedColor ? index : -1;
 						return;
 					}
 				}
 		}
+	}
+	
+	@Override
+	protected void actionPerformed(GuiButton button) throws IOException
+	{
+		
 	}
 	
 }
