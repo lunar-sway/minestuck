@@ -161,7 +161,7 @@ public class SmallRuinStart extends StructureStart
 				
 				for(int x = boundingBox.minX; x <= boundingBox.maxX; x++)
 				{
-					int y = worldIn.getTopSolidOrLiquidBlock(new BlockPos(x, 0, z)).getY();
+					int y = worldIn.getTopSolidOrLiquidBlock(new BlockPos(x, 0, z)).getY() - 1;
 					if(y < minY)
 						minY = y;
 					if(y > maxY)
