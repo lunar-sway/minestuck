@@ -101,7 +101,7 @@ public class ModelIguana extends ModelBase
 		upperJaw.render(f5);
 		lowerJaw.render(f5);
 		shape1.render(f5);
-		shape1.render(f5);
+		shape2.render(f5);
 	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z)

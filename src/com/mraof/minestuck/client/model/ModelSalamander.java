@@ -77,10 +77,10 @@ public class ModelSalamander extends ModelBase
 			GL11.glPushMatrix();
 			GL11.glScalef(1.5F / var8, 1.5F / var8, 1.5F / var8);
 			GL11.glTranslatef(0.0F, 16.0F * par7, 0.0F);
-		    head.render(par7);
-		    upperJaw.render(par7);
-		    lowerJaw.render(par7);
-		    hood.render(par7);
+			head.render(par7);
+			upperJaw.render(par7);
+			lowerJaw.render(par7);
+			hood.render(par7);
 			GL11.glPopMatrix();
 			GL11.glPushMatrix();
 			GL11.glScalef(1.0F / var8, 1.0F / var8, 1.0F / var8);
@@ -93,23 +93,26 @@ public class ModelSalamander extends ModelBase
 			this.body.render(par7);
 			this.rightLeg.render(par7);
 			this.leftLeg.render(par7);
+			this.upperTail.render(par7);
+			this.lowerTail.render(par7);
 			GL11.glPopMatrix();
 		}
 		else
 		{
-		    head.render(par7);
-		    upperJaw.render(par7);
-		    lowerJaw.render(par7);
-		    hood.render(par7);
+			head.render(par7);
+			upperJaw.render(par7);
+			lowerJaw.render(par7);
+			hood.render(par7);
 //			if(hasArms)
 //			{
 //				this.rightArm.render(par7);
 //				this.leftArm.render(par7);
 //			}
-		    this.body.render(par7);
+			this.body.render(par7);
 			this.rightLeg.render(par7);
 			this.leftLeg.render(par7);
-			this.head.render(par7);
+			this.upperTail.render(par7);
+			this.lowerTail.render(par7);
 		}
 	}
 	/**
