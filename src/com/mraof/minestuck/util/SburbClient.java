@@ -3,6 +3,7 @@ package com.mraof.minestuck.util;
 import java.util.ArrayList;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.client.FMLClientHandler;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.ClientProxy;
@@ -36,7 +37,8 @@ public class SburbClient extends ButtonListProgram {
 			for (String server : SkaiaClient.getAvailableServers(te.owner))
 				list.add(new UnlocalizedString("computer.buttonConnect", UsernameHandler.decode(server)));
 		} else list.add(new UnlocalizedString("computer.messageClientActive"));
-		list.add(new UnlocalizedString("computer.selectColor"));
+		if(SkaiaClient.canSelect(te.owner))
+			list.add(new UnlocalizedString("computer.selectColor"));
 		return list;
 	}
 	
@@ -49,7 +51,7 @@ public class SburbClient extends ButtonListProgram {
 		else if(buttonName.equals("computer.buttonClose"))
 			SkaiaClient.sendCloseRequest(te, te.getData(getId()).getBoolean("isResuming")?"":SkaiaClient.getClientConnection(te.owner).getServerName(), true);
 		else if(buttonName.equals("computer.selectColor"))
-			ClientProxy.getPlayer().openGui(Minestuck.instance, GuiHandler.GuiId.COLOR.ordinal(), ClientProxy.getPlayer().worldObj, te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
+			FMLClientHandler.instance().getClient().thePlayer.openGui(Minestuck.instance, GuiHandler.GuiId.COLOR.ordinal(), te.getWorld(), te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
 	}
 	
 	@Override

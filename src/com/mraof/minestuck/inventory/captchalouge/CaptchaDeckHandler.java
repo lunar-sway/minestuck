@@ -16,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -300,7 +301,7 @@ public class CaptchaDeckHandler
 		{
 			modus = ModusType.values()[nbt.getInteger("type")].createInstance();
 			if(clientSide)
-				modus.player = ClientProxy.getPlayer();
+				modus.player = FMLClientHandler.instance().getClient().thePlayer;
 		}
 		modus.readFromNBT(nbt);
 		return modus;

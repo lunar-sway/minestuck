@@ -8,6 +8,7 @@ import java.util.Map;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -20,7 +21,7 @@ import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.SkaianetInfoPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
-import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.UsernameHandler;
 
 @SideOnly(Side.CLIENT)
 public class SkaiaClient
@@ -84,6 +85,16 @@ public class SkaiaClient
 		if(isClient)
 			return getClientConnection(player) != null || resumingClient.get(player);
 		else return openServers.get(player).contains(player) || resumingServer.get(player);
+	}
+	
+	public static boolean canSelect(String player)
+	{
+		if(!player.equals(UsernameHandler.encode(FMLClientHandler.instance().getClient().thePlayer.getName())))
+			return false;
+		for(SburbConnection c : connections)
+			if(player.equals(c.getClientName()))
+				return false;
+		return true;
 	}
 	
 	//Methods called from the actionPerformed method in the gui.

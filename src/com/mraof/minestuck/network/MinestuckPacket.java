@@ -29,7 +29,8 @@ public abstract class MinestuckPacket
 		TRANSPORTALIZER(TransportalizerPacket.class),
 		CONTAINER(MiscContainerPacket.class),
 		INVENTORY(InventoryChangedPacket.class),
-		CAPTCHA(CaptchaDeckPacket.class);
+		CAPTCHA(CaptchaDeckPacket.class),
+		SELECTION(SelectionPacket.class);
 		
 		Class<? extends MinestuckPacket> packetType;
 		private Type(Class<? extends MinestuckPacket> packetClass)

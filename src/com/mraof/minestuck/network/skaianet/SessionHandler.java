@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3i;
@@ -478,6 +479,15 @@ public class SessionHandler {
 				list.add(server);
 		}
 		return list;
+	}
+	
+	public static boolean canSelect(EntityPlayerMP player)
+	{
+		String name = UsernameHandler.encode(player.getName());
+		for(SburbConnection c : SkaianetHandler.connections)
+			if(c.getClientName().equals(name))
+				return false;
+		return true;
 	}
 	
 }

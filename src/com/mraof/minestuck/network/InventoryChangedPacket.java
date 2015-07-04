@@ -75,6 +75,9 @@ public class InventoryChangedPacket extends MinestuckPacket
 				{
 					((ContainerEditmode)player.openContainer).inventoryItemStacks.set(i, inventory.get(i) == null? null:inventory.get(i).copy());
 					((ContainerEditmode)player.openContainer).inventory.setInventorySlotContents(i, inventory.get(i));
+				}
+				if(FMLClientHandler.instance().getClient().currentScreen instanceof GuiInventoryEditmode)
+				{
 					((GuiInventoryEditmode)FMLClientHandler.instance().getClient().currentScreen).less = b1;
 					((GuiInventoryEditmode)FMLClientHandler.instance().getClient().currentScreen).more = b2;
 				}

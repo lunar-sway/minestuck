@@ -9,6 +9,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetHandlerPlayServer;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
@@ -137,7 +138,7 @@ public class MinestuckChannelHandler extends FMLIndexedMessageToMessageCodec<Min
 			while(!clientQueue.isEmpty())
 			{
 				MinestuckPacket packet = clientQueue.removeFirst();
-				packet.execute(ClientProxy.getPlayer());
+				packet.execute(FMLClientHandler.instance().getClient().thePlayer);
 			}
 		}
 	}

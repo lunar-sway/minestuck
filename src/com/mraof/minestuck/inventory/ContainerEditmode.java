@@ -24,6 +24,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.client.FMLClientHandler;
 
 public class ContainerEditmode extends Container {
 	
@@ -35,7 +36,7 @@ public class ContainerEditmode extends Container {
 	
 	public ContainerEditmode()
 	{
-		this.player = ClientProxy.getPlayer();
+		this.player = FMLClientHandler.instance().getClient().thePlayer;
 		addSlots();
 	}
 	

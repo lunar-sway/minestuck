@@ -50,11 +50,7 @@ import com.mraof.minestuck.tileentity.TileEntitySkaiaPortal;
 
 public class ClientProxy extends CommonProxy
 {
-
-	public static EntityPlayer getPlayer() {	//This seems to prevent the server from crashing on startup?
-		return Minecraft.getMinecraft().thePlayer;
-	}
-
+	
 	@SideOnly(Side.CLIENT)
 	public static void registerRenderers() 
 	{

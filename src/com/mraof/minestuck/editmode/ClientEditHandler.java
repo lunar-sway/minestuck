@@ -28,6 +28,7 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -100,8 +101,7 @@ public class ClientEditHandler {
 	@SubscribeEvent
 	public void addToolTip(ItemTooltipEvent event)
 	{
-		EntityPlayer player = event.entityPlayer;
-		if(player != ClientProxy.getPlayer()/*Probably unnecessary*/ || !isActive())
+		if(!isActive())
 			return;
 		
 		GristSet have = MinestuckPlayerData.getClientGrist();
@@ -150,8 +150,10 @@ public class ClientEditHandler {
 	}
 	
 	@SubscribeEvent
-	public void onTossEvent(ItemTossEvent event) {
-		if(event.entity.worldObj.isRemote && event.player == ClientProxy.getPlayer() && isActive()) {
+	public void onTossEvent(ItemTossEvent event)
+	{
+		if(event.entity.worldObj.isRemote && event.player == FMLClientHandler.instance().getClient().thePlayer && isActive())
+		{
 			InventoryPlayer inventory = event.player.inventory;
 			ItemStack stack = event.entityItem.getEntityItem();
 			int ordinal = DeployList.getOrdinal(stack);
@@ -183,7 +185,7 @@ public class ClientEditHandler {
 	public void onInteractEvent(PlayerInteractEvent event)
 	{
 		
-		if(event.entity.worldObj.isRemote && event.entityPlayer == ClientProxy.getPlayer() && isActive())
+		if(event.entity.worldObj.isRemote && event.entityPlayer == FMLClientHandler.instance().getClient().thePlayer && isActive())
 		{
 			if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK)
 			{
@@ -238,8 +240,9 @@ public class ClientEditHandler {
 	}
 	
 	@SubscribeEvent
-	public void onAttackEvent(AttackEntityEvent event) {
-		if(event.entity.worldObj.isRemote && event.entityPlayer == ClientProxy.getPlayer() && isActive())
+	public void onAttackEvent(AttackEntityEvent event)
+	{
+		if(event.entity.worldObj.isRemote && event.entityPlayer == FMLClientHandler.instance().getClient().thePlayer && isActive())
 			event.setCanceled(true);
 	}
 	
