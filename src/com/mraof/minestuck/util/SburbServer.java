@@ -2,7 +2,6 @@ package com.mraof.minestuck.util;
 
 import java.util.ArrayList;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;

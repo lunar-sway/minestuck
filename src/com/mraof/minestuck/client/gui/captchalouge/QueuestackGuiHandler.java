@@ -1,7 +1,6 @@
 package com.mraof.minestuck.client.gui.captchalouge;
 
 import com.mraof.minestuck.inventory.captchalouge.Modus;
-import com.mraof.minestuck.util.Debug;
 
 public class QueuestackGuiHandler extends StackGuiHandler
 {

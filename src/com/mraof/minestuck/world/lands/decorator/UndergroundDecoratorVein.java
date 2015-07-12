@@ -2,14 +2,11 @@ package com.mraof.minestuck.world.lands.decorator;
 
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 
-import com.google.common.base.Predicate;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.OreHandler;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 

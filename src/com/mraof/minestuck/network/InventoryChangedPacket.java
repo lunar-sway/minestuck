@@ -7,7 +7,6 @@ import java.util.EnumSet;
 
 import com.mraof.minestuck.client.gui.playerStats.GuiInventoryEditmode;
 import com.mraof.minestuck.inventory.ContainerEditmode;
-import com.mraof.minestuck.util.Debug;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

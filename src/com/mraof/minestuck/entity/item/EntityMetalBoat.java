@@ -2,22 +2,16 @@ package com.mraof.minestuck.entity.item;
 
 import io.netty.buffer.ByteBuf;
 
-import java.util.Iterator;
-import java.util.List;
-
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.Debug;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;

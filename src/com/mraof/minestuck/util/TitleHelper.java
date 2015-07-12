@@ -1,9 +1,6 @@
 package com.mraof.minestuck.util;
 
-import java.util.EnumSet;
-
-
-public final class TitleHelper
+public final class TitleHelper	//I don't think we have any need for this
 {
 	
 	public static EnumClass getClassFromInt(int i)

@@ -1,7 +1,6 @@
 package com.mraof.minestuck.modSupport;
 
 import com.mraof.minestuck.util.CombinationRegistry;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
@@ -9,7 +8,6 @@ import com.mraof.minestuck.util.GristType;
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class TinkersConstructSupport extends ModSupport
 {

@@ -6,7 +6,6 @@ import net.minecraft.nbt.NBTTagList;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.editmode.DeployList;
 
 public class SburbConnection {

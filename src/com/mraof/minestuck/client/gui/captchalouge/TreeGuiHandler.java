@@ -11,7 +11,6 @@ import com.mraof.minestuck.inventory.captchalouge.TreeModus.TreeNode;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.util.Debug;
 
 public class TreeGuiHandler extends SylladexGuiHandler
 {

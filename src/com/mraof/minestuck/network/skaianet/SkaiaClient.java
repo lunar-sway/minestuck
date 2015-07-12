@@ -20,7 +20,6 @@ import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.SkaianetInfoPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
-import com.mraof.minestuck.util.Debug;
 
 @SideOnly(Side.CLIENT)
 public class SkaiaClient

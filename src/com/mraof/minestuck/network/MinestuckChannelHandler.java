@@ -21,7 +21,6 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
-import com.mraof.minestuck.util.Debug;
 
 public class MinestuckChannelHandler extends FMLIndexedMessageToMessageCodec<MinestuckPacket> 
 {

@@ -8,8 +8,6 @@ import java.util.EnumSet;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 
-import com.mraof.minestuck.util.Debug;
-
 public abstract class MinestuckPacket 
 {
 	public enum Type

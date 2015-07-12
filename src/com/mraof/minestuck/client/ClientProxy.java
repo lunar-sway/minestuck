@@ -11,7 +11,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mraof.minestuck.CommonProxy;
-import com.mraof.minestuck.client.event.MinestuckClientEventHandler;
 import com.mraof.minestuck.client.model.ModelBasilisk;
 import com.mraof.minestuck.client.model.ModelBishop;
 import com.mraof.minestuck.client.model.ModelGiclops;
@@ -82,7 +81,6 @@ public class ClientProxy extends CommonProxy
 	public static void registerSided()
 	{
 		
-		MinecraftForge.EVENT_BUS.register(new MinestuckClientEventHandler());
 		MinecraftForge.EVENT_BUS.register(new MinestuckModelManager());
 		FMLCommonHandler.instance().bus().register(new MinestuckKeyHandler());
 	}

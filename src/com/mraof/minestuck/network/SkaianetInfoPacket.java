@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -14,7 +13,6 @@ import com.google.common.io.ByteStreams;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.Debug;
 
 public class SkaianetInfoPacket extends MinestuckPacket {
 
