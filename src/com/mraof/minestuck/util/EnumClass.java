@@ -53,6 +53,16 @@ public enum EnumClass {
 		return null;
 	}
 	
+	public static EnumClass getClassFromInt(int i)
+	{
+		return EnumClass.values()[i];
+	}
+	
+	public static int getIntFromClass(EnumClass e)
+	{
+		return e.ordinal();
+	}
+	
 	@Override
 	public String toString() {
 		String s = this.name();

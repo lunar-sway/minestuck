@@ -38,7 +38,6 @@ public class LandAspectForest extends TerrainAspect
 		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.log2, 1, 0), 2, 5, 2));
 		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.log2, 1, 1), 2, 5, 4));
 		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.leaves, 1, 0), 1, 4, 2));
-		list.add(new WeightedRandomChestContent(new ItemStack(Minestuck.component, 1, 0), 1, 2, 4));
 		list.add(new WeightedRandomChestContent(new ItemStack(Minestuck.deuceClub, 1, 0), 1, 1, 6));
 		list.add(new WeightedRandomChestContent(new ItemStack(Minestuck.cane, 1, 0), 1, 1, 6));
 		list.add(new WeightedRandomChestContent(new ItemStack(Items.stone_axe, 1, 0), 1, 1, 5));

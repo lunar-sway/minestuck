@@ -3,7 +3,6 @@ package com.mraof.minestuck.item;
 import java.util.List;
 
 
-//import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -12,11 +11,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.ResourceLocation;
-//import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.client.renderer.RenderCard;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 
 public class ItemCaptchaCard extends Item

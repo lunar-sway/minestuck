@@ -10,8 +10,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 
-import com.mraof.minestuck.Minestuck;
-
 public class ComponentCastleRoomPiece extends ComponentCastlePiece 
 {
 	public ComponentCastleRoomPiece() {}

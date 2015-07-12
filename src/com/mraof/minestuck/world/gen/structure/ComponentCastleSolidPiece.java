@@ -8,8 +8,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 
-import com.mraof.minestuck.Minestuck;
-
 public class ComponentCastleSolidPiece extends ComponentCastlePiece 
 {
 	public ComponentCastleSolidPiece() {}

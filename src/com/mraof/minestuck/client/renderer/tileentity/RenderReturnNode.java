@@ -1,7 +1,5 @@
 package com.mraof.minestuck.client.renderer.tileentity;
 
-import java.util.Random;
-
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;

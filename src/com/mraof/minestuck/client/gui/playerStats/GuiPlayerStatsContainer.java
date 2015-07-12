@@ -9,15 +9,12 @@ import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats.EditmodeGuiType
 import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats.NormalGuiType;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.UsernameHandler;
 
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.inventory.Container;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 

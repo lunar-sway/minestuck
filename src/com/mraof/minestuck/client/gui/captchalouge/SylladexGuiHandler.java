@@ -10,7 +10,6 @@ import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
-import com.mraof.minestuck.util.Debug;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;

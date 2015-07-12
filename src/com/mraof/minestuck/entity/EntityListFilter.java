@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.google.common.base.Predicate;
 
-import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 

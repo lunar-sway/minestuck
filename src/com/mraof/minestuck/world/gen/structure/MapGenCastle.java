@@ -3,15 +3,8 @@
  */
 package com.mraof.minestuck.world.gen.structure;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
 import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.StructureStart;
-
-import com.mraof.minestuck.entity.carapacian.EntityBlackPawn;
 
 /**
  * @author mraof

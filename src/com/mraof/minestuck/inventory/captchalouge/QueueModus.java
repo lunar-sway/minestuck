@@ -1,7 +1,6 @@
 package com.mraof.minestuck.inventory.captchalouge;
 
 import java.util.Iterator;
-import java.util.LinkedList;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.captchalouge.QueueGuiHandler;
@@ -10,7 +9,6 @@ import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler.ModusType;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

@@ -12,16 +12,13 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
-import net.minecraftforge.common.DimensionManager;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.EnumClass;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.Title;
-import com.mraof.minestuck.util.TitleHelper;
 import com.mraof.minestuck.util.UsernameHandler;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
@@ -34,7 +31,6 @@ import com.mraof.minestuck.entity.underling.EntityGiclops;
 import com.mraof.minestuck.entity.underling.EntityImp;
 import com.mraof.minestuck.entity.underling.EntityOgre;
 import com.mraof.minestuck.entity.underling.EntityUnderling;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristType;
 
@@ -223,7 +219,7 @@ public class SessionHandler {
 		{
 			int[] classFrequency = new int[12];
 			for(Title usedTitle : usedTitles)
-				classFrequency[TitleHelper.getIntFromClass(usedTitle.getHeroClass())]++;
+				classFrequency[EnumClass.getIntFromClass(usedTitle.getHeroClass())]++;
 			int titleIndex = rand.nextInt(144 - usedTitles.size());	//An identifier to identify which one of the (144 - usedTitles.size()) available titles that'll be given.
 			
 			EnumClass titleClass = null;
@@ -232,7 +228,7 @@ public class SessionHandler {
 				int classChance = 12 - classFrequency[classIndex];
 				if(titleIndex <= classChance)
 				{
-					titleClass = TitleHelper.getClassFromInt(classIndex);
+					titleClass = EnumClass.getClassFromInt(classIndex);
 					break;
 				}
 				titleIndex -= classChance;

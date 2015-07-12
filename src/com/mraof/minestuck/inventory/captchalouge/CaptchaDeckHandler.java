@@ -4,7 +4,6 @@ import java.util.Random;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
@@ -232,6 +231,8 @@ public class CaptchaDeckHandler
 					
 					player.inventory.mainInventory[i] = stack;
 					placed = true;
+					player.inventory.markDirty();
+					player.inventoryContainer.detectAndSendChanges();
 					break;
 				}
 				if(!placed)

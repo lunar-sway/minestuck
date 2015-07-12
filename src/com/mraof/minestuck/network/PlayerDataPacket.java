@@ -12,7 +12,6 @@ import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.EnumClass;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.Title;
-import com.mraof.minestuck.util.TitleHelper;
 
 public class PlayerDataPacket extends MinestuckPacket 
 {
@@ -40,8 +39,8 @@ public class PlayerDataPacket extends MinestuckPacket
 		}
 		else if(type == TITLE)
 		{
-			data.writeInt(TitleHelper.getIntFromClass((EnumClass) dat[1]));
-			data.writeInt(TitleHelper.getIntFromAspect((EnumAspect) dat[2]));
+			data.writeInt(EnumClass.getIntFromClass((EnumClass) dat[1]));
+			data.writeInt(EnumAspect.getIntFromAspect((EnumAspect) dat[2]));
 		}
 		
 		return this;
@@ -79,7 +78,7 @@ public class PlayerDataPacket extends MinestuckPacket
 		}
 		else if(type == TITLE)
 		{
-			MinestuckPlayerData.title = new Title(TitleHelper.getClassFromInt(i1), TitleHelper.getAspectFromInt(i2));
+			MinestuckPlayerData.title = new Title(EnumClass.getClassFromInt(i1), EnumAspect.getAspectFromInt(i2));
 		}
 	}
 

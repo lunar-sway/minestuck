@@ -9,9 +9,6 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import com.mraof.minestuck.entity.item.EntityGrist;
 
 public class RenderGrist extends Render {

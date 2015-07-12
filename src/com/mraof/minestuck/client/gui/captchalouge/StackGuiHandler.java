@@ -3,7 +3,6 @@ package com.mraof.minestuck.client.gui.captchalouge;
 import net.minecraft.item.ItemStack;
 
 import com.mraof.minestuck.inventory.captchalouge.Modus;
-import com.mraof.minestuck.util.Debug;
 
 public class StackGuiHandler extends SylladexGuiHandler
 {

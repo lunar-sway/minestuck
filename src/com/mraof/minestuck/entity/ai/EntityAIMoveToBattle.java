@@ -3,7 +3,6 @@ package com.mraof.minestuck.entity.ai;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.carapacian.EntityCarapacian;
 import com.mraof.minestuck.entity.carapacian.EnumEntityKingdom;
-import com.mraof.minestuck.util.Debug;
 
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;

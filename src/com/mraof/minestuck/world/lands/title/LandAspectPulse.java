@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.lands.title;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandomChestContent;
@@ -8,6 +9,7 @@ import net.minecraftforge.common.ChestGenHooks;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.lands.terrain.TerrainAspect;
 
 public class LandAspectPulse extends TitleAspect
 {
@@ -37,5 +39,11 @@ public class LandAspectPulse extends TitleAspect
 			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Items.repeater, 1, 0), 1, 1, 1));
 		}
 	}
-
+	
+	@Override
+	public boolean isAspectCompatible(TerrainAspect aspect)
+	{
+		return aspect.getOceanBlock().getBlock().getMaterial() != Material.lava;	//Lava is likely a too important part of the terrain aspect to be replaced
+	}
+	
 }

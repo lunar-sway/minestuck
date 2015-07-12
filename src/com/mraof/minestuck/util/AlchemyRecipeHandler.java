@@ -394,27 +394,15 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Items.redstone),new ItemStack(Blocks.stone),MODE_AND, new ItemStack(Blocks.redstone_ore));
 		CombinationRegistry.addCombination(new ItemStack(Items.redstone),new ItemStack(Blocks.stone),MODE_OR, new ItemStack(Blocks.redstone_block));
 		
-		//Recipes created by assigning bits to items and then combining them using && and ||
-		//Stone: 0011, stonebrick: 0001, flint: 0010, cobblestone: 1011, cracked stonebrick: 1001, gravel: 1010, smooth sandstone: 0111, sandstone: 1111, sand: 1110
 		CombinationRegistry.addCombination(new ItemStack(Blocks.stone), new ItemStack(Blocks.stonebrick, 1, 2), MODE_AND, new ItemStack(Blocks.stonebrick, 1, 0));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.stone), new ItemStack(Blocks.stonebrick, 1, 2), MODE_OR, new ItemStack(Blocks.cobblestone));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.stone), new ItemStack(Blocks.gravel), MODE_AND, new ItemStack(Items.flint));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.stone), new ItemStack(Blocks.gravel), MODE_OR, new ItemStack(Blocks.cobblestone));
-		CombinationRegistry.addCombination(new ItemStack(Blocks.stone), new ItemStack(Blocks.sand), MODE_AND, true, false, new ItemStack(Items.flint));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.stone), new ItemStack(Blocks.sand, 1, 0), MODE_OR, new ItemStack(Blocks.sandstone, 1, 0));
-		CombinationRegistry.addCombination(new ItemStack(Blocks.stonebrick, 1, 0), new ItemStack(Items.flint), MODE_OR, new ItemStack(Blocks.stone));
-		CombinationRegistry.addCombination(new ItemStack(Blocks.stonebrick, 1, 0), new ItemStack(Blocks.gravel), MODE_OR, new ItemStack(Blocks.stone));
-		CombinationRegistry.addCombination(new ItemStack(Blocks.stonebrick, 1, 0), new ItemStack(Blocks.sand), MODE_OR, new ItemStack(Blocks.sandstone, 1, 0));
-		CombinationRegistry.addCombination(new ItemStack(Items.flint), new ItemStack(Blocks.stonebrick, 1, 2), MODE_OR, new ItemStack(Blocks.cobblestone));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.cobblestone), new ItemStack(Blocks.sandstone, 1, 2), MODE_AND, new ItemStack(Blocks.stone));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.cobblestone), new ItemStack(Blocks.sandstone, 1, 2), MODE_OR, new ItemStack(Blocks.sandstone, 1, 0));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.cobblestone), new ItemStack(Blocks.sand), MODE_AND, true, false, new ItemStack(Blocks.gravel));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.cobblestone), new ItemStack(Blocks.sand, 1, 0), MODE_OR, new ItemStack(Blocks.sandstone, 1, 0));
-		CombinationRegistry.addCombination(new ItemStack(Blocks.stonebrick, 1, 2), new ItemStack(Blocks.gravel), MODE_OR, new ItemStack(Blocks.cobblestone));
-		CombinationRegistry.addCombination(new ItemStack(Blocks.stonebrick, 1, 2), new ItemStack(Blocks.sandstone, 1, 2), MODE_AND, new ItemStack(Blocks.stonebrick, 1, 0));
-		CombinationRegistry.addCombination(new ItemStack(Blocks.stonebrick, 1, 2), new ItemStack(Blocks.sandstone, 1, 2), MODE_OR, new ItemStack(Blocks.sandstone, 1, 0));
-		CombinationRegistry.addCombination(new ItemStack(Blocks.stonebrick, 1, 2), new ItemStack(Blocks.sand, 1, 0), MODE_OR, new ItemStack(Blocks.sandstone, 1, 0));
-		CombinationRegistry.addCombination(new ItemStack(Blocks.gravel), new ItemStack(Blocks.sandstone, 1, 2), MODE_AND, new ItemStack(Items.flint));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.gravel), new ItemStack(Blocks.sandstone, 1, 2), MODE_OR, new ItemStack(Blocks.sandstone, 1, 0));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.sandstone, 1, 2), new ItemStack(Blocks.sand, 1, 0), MODE_OR, new ItemStack(Blocks.sandstone, 1, 0));
 		

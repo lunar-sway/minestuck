@@ -5,7 +5,6 @@ import java.util.Random;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import net.minecraft.world.gen.feature.WorldGenTrees;
 
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
