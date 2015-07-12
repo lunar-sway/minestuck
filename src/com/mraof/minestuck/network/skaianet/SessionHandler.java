@@ -18,7 +18,6 @@ import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.EnumClass;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.Title;
-import com.mraof.minestuck.util.TitleHelper;
 import com.mraof.minestuck.util.UsernameHandler;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
@@ -219,7 +218,7 @@ public class SessionHandler {
 		{
 			int[] classFrequency = new int[12];
 			for(Title usedTitle : usedTitles)
-				classFrequency[TitleHelper.getIntFromClass(usedTitle.getHeroClass())]++;
+				classFrequency[EnumClass.getIntFromClass(usedTitle.getHeroClass())]++;
 			int titleIndex = rand.nextInt(144 - usedTitles.size());	//An identifier to identify which one of the (144 - usedTitles.size()) available titles that'll be given.
 			
 			EnumClass titleClass = null;
@@ -228,7 +227,7 @@ public class SessionHandler {
 				int classChance = 12 - classFrequency[classIndex];
 				if(titleIndex <= classChance)
 				{
-					titleClass = TitleHelper.getClassFromInt(classIndex);
+					titleClass = EnumClass.getClassFromInt(classIndex);
 					break;
 				}
 				titleIndex -= classChance;

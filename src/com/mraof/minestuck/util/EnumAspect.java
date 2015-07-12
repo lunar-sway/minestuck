@@ -40,6 +40,16 @@ public enum EnumAspect {
 		return null;
 	}
 	
+	public static EnumAspect getAspectFromInt(int i)
+	{
+		return EnumAspect.values()[i];
+	}
+	
+	public static int getIntFromAspect(EnumAspect e)
+	{
+		return e.ordinal();
+	}
+	
 	@Override
 	public String toString() {
 		String s = this.name();

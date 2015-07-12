@@ -11,7 +11,6 @@ import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.EnumClass;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.Title;
-import com.mraof.minestuck.util.TitleHelper;
 
 public class TitlePacket extends MinestuckPacket 
 {
@@ -25,8 +24,8 @@ public class TitlePacket extends MinestuckPacket
 	@Override
 	public MinestuckPacket generatePacket(Object... dat) 
 	{
-		data.writeInt(TitleHelper.getIntFromClass((EnumClass) dat[0]));
-		data.writeInt(TitleHelper.getIntFromAspect((EnumAspect) dat[1]));
+		data.writeInt(EnumClass.getIntFromClass((EnumClass) dat[0]));
+		data.writeInt(EnumAspect.getIntFromAspect((EnumAspect) dat[1]));
 		
 		return this;
 	}
@@ -42,7 +41,7 @@ public class TitlePacket extends MinestuckPacket
 	@Override
 	public void execute(EntityPlayer player)
 	{
-		MinestuckPlayerData.title = new Title(TitleHelper.getClassFromInt(heroClass), TitleHelper.getAspectFromInt(heroAspect));
+		MinestuckPlayerData.title = new Title(EnumClass.getClassFromInt(heroClass), EnumAspect.getAspectFromInt(heroAspect));
 	}
 
 	@Override

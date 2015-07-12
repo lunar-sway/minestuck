@@ -117,7 +117,7 @@ public class MinestuckPlayerData {
 			if(nbt.hasKey("grist"))
 				this.gristCache = new GristSet(GristType.values(), nbt.getIntArray("grist"));
 			if(nbt.hasKey("titleClass"))
-				this.title = new Title(TitleHelper.getClassFromInt(nbt.getByte("titleClass")), TitleHelper.getAspectFromInt(nbt.getByte("titleAspect")));
+				this.title = new Title(EnumClass.getClassFromInt(nbt.getByte("titleClass")), EnumAspect.getAspectFromInt(nbt.getByte("titleAspect")));
 			if(nbt.hasKey("modus"))
 			{
 				this.modus = CaptchaDeckHandler.readFromNBT(nbt.getCompoundTag("modus"), false);
