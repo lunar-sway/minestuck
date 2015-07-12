@@ -8,8 +8,6 @@ import java.util.EnumSet;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 
-import com.mraof.minestuck.util.Debug;
-
 public abstract class MinestuckPacket 
 {
 	public enum Type
@@ -17,7 +15,7 @@ public abstract class MinestuckPacket
 		GRISTCACHE(GristCachePacket.class),
 		MACHINE_STATE(MachineStatePacket.class),
 		GOBUTTON(GoButtonPacket.class),
-		TITLE(TitlePacket.class),
+		PLAYER_DATA(PlayerDataPacket.class),
 		SBURB_CONNECT(SburbConnectPacket.class),
 		SBURB_CLOSE(SburbConnectClosedPacket.class),
 		LANDREGISTER(LandRegisterPacket.class),

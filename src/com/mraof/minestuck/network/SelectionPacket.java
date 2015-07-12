@@ -4,16 +4,16 @@ import io.netty.buffer.ByteBuf;
 
 import java.util.EnumSet;
 
-import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.UsernameHandler;
+import com.mraof.minestuck.network.skaianet.SessionHandler;
+import com.mraof.minestuck.util.MinestuckPlayerData;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class SelectionPacket extends MinestuckPacket
 {
 	public static final byte COLOR = 0;
-	
 	
 	public byte type;
 	public int color;
@@ -44,7 +44,8 @@ public class SelectionPacket extends MinestuckPacket
 	{
 		if(this.type == COLOR)
 		{
-			if(SkaianetHandler.getClientConnection(UsernameHandler.encode(player.getName())) == null);
+			if(SessionHandler.canSelect((EntityPlayerMP) player))
+				MinestuckPlayerData.getData(player).color = this.color;
 		}
 	}
 	

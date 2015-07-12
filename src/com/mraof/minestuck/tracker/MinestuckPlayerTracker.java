@@ -19,6 +19,7 @@ import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.network.PlayerDataPacket;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
@@ -50,11 +51,12 @@ public class MinestuckPlayerTracker {
 		sendConfigPacket(player);
 		
 		SkaianetHandler.playerConnected(player.getName());
-		
+		boolean firstTime = false;
 		if(MinestuckPlayerData.getGristSet(encUsername) == null)
 		{
-			Debug.printf("Grist set is null for player %s.", player.getName());
+			Debug.printf("Grist set is null for player %s. Handling it as first time in this world.", player.getName());
 			MinestuckPlayerData.setGrist(encUsername, new GristSet(GristType.Build, 20));
+			firstTime = true;
 		}
 		
 		if(CaptchaDeckHandler.getModus(player) == null && MinestuckConfig.defaultModusTypes.length > 0 && !MinestuckPlayerData.getData(player).givenModus)
@@ -75,6 +77,15 @@ public class MinestuckPlayerTracker {
 		
 		updateGristCache(UsernameHandler.encode(player.getName()));
 		updateTitle(player);
+		
+		if(firstTime)
+			MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.COLOR), player);
+		else
+		{
+			MinestuckPacket packet = MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.COLOR, MinestuckPlayerData.getData(player).color);
+			MinestuckChannelHandler.sendToPlayer(packet, player);
+		}
+		
 		if(UpdateChecker.outOfDate)
 			player.addChatMessage(new ChatComponentText("New version of Minestuck: " + UpdateChecker.latestVersion + "\nChanges: " + UpdateChecker.updateChanges));
 	}
@@ -132,7 +143,7 @@ public class MinestuckPlayerTracker {
 		Title newTitle = MinestuckPlayerData.getTitle(username);
 		if(newTitle == null)
 			return;
-		MinestuckPacket packet = MinestuckPacket.makePacket(Type.TITLE, newTitle.getHeroClass(), newTitle.getHeroAspect());
+		MinestuckPacket packet = MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.TITLE, newTitle.getHeroClass(), newTitle.getHeroAspect());
 		MinestuckChannelHandler.sendToPlayer(packet, player);
 	}
 	public static void updateLands(EntityPlayer player)

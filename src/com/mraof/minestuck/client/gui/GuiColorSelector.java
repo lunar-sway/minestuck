@@ -18,7 +18,12 @@ public class GuiColorSelector extends GuiScreen
 	
 	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/ColorSelector.png");
 	private static final int guiWidth = 176, guiHeight = 157;
-	private int selectedColor = -1;
+	private int selectedColor;
+	
+	public GuiColorSelector()
+	{
+		selectedColor = ColorCollector.playerColor;
+	}
 	
 	@Override
 	public void initGui()
@@ -112,6 +117,8 @@ public class GuiColorSelector extends GuiScreen
 	protected void actionPerformed(GuiButton button) throws IOException
 	{
 		MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.SELECTION, SelectionPacket.COLOR, this.selectedColor));
+		this.mc.displayGuiScreen(null);
+		ColorCollector.playerColor = selectedColor;
 	}
 	
 }

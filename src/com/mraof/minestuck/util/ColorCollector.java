@@ -3,10 +3,18 @@ package com.mraof.minestuck.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 public class ColorCollector
 {
 	protected static List<Integer> colors;
-	protected static boolean customColor;
+//	protected static boolean customColor;
+	
+	@SideOnly(Side.CLIENT)
+	public static int playerColor;
+	@SideOnly(Side.CLIENT)
+	public static boolean selectionGui;
 	
 	static
 	{
