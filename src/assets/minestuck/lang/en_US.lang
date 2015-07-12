@@ -285,6 +285,9 @@ minestuck.config.keepDimensionsLoadedtooltip=Having this on will make medium dim
 minestuck.config.oldItemModels=Use Old Item Models
 minestuck.config.oldItemModels.tooltip=Set this to true to have back all old 2D item models.
 
+message.selectDefaultColor=Default color selected. You can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!
+message.selectColor=If you want to change the color, you can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!
+
 both=Both
 off=Off
 on=On

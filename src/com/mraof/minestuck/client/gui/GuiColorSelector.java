@@ -10,6 +10,8 @@ import com.mraof.minestuck.util.ColorCollector;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
@@ -19,9 +21,11 @@ public class GuiColorSelector extends GuiScreen
 	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/ColorSelector.png");
 	private static final int guiWidth = 176, guiHeight = 157;
 	private int selectedColor;
+	private boolean firstTime;
 	
-	public GuiColorSelector()
+	public GuiColorSelector(boolean firstTime)
 	{
+		this.firstTime = firstTime;
 		selectedColor = ColorCollector.playerColor;
 	}
 	
@@ -117,8 +121,21 @@ public class GuiColorSelector extends GuiScreen
 	protected void actionPerformed(GuiButton button) throws IOException
 	{
 		MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.SELECTION, SelectionPacket.COLOR, this.selectedColor));
-		this.mc.displayGuiScreen(null);
 		ColorCollector.playerColor = selectedColor;
+		this.mc.displayGuiScreen(null);
+	}
+	
+	@Override
+	public void onGuiClosed()
+	{
+		if(firstTime)
+		{
+			IChatComponent message;
+			if(ColorCollector.playerColor == -1)
+				message = new ChatComponentTranslation("message.selectDefaultColor");
+			else message = new ChatComponentTranslation("message.selectColor");
+			this.mc.thePlayer.addChatMessage(message);
+		}
 	}
 	
 }

@@ -40,7 +40,7 @@ public class ClientEventHandler
 			if(ColorCollector.selectionGui && Minecraft.getMinecraft().currentScreen == null)
 			{
 				ColorCollector.selectionGui = false;
-				Minecraft.getMinecraft().displayGuiScreen(new GuiColorSelector());
+				Minecraft.getMinecraft().displayGuiScreen(new GuiColorSelector(true));
 			}
 			
 		}
