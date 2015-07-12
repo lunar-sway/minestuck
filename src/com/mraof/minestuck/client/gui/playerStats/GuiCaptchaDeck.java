@@ -107,6 +107,7 @@ public class GuiCaptchaDeck extends GuiPlayerStatsContainer implements GuiYesNoC
 			mc.thePlayer.sendQueue.addToSendQueue(new C0DPacketCloseWindow(mc.thePlayer.openContainer.windowId));
 			mc.thePlayer.inventory.setItemStack((ItemStack)null);
 			mc.displayGuiScreen(CaptchaDeckHandler.clientSideModus.getGuiHandler());
+			mc.thePlayer.openContainer = mc.thePlayer.inventoryContainer;
 		}
 	}
 	

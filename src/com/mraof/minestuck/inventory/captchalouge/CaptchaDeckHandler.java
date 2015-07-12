@@ -231,6 +231,8 @@ public class CaptchaDeckHandler
 					
 					player.inventory.mainInventory[i] = stack;
 					placed = true;
+					player.inventory.markDirty();
+					player.inventoryContainer.detectAndSendChanges();
 					break;
 				}
 				if(!placed)
