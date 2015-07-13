@@ -7,6 +7,7 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToSe
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.GuiColorSelector;
 import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
 import com.mraof.minestuck.inventory.ContainerEditmode;
@@ -30,6 +31,7 @@ public class ClientEventHandler
 		CaptchaDeckHandler.clientSideModus = null;
 		MinestuckPlayerData.title = null;
 		ColorCollector.playerColor = -1;
+		ColorCollector.displaySelectionGui = false;
 	}
 	
 	@SubscribeEvent
@@ -37,10 +39,11 @@ public class ClientEventHandler
 	{
 		if(event.phase == TickEvent.Phase.START)
 		{
-			if(ColorCollector.selectionGui && Minecraft.getMinecraft().currentScreen == null)
+			if(ColorCollector.displaySelectionGui && Minecraft.getMinecraft().currentScreen == null)
 			{
-				ColorCollector.selectionGui = false;
-				Minecraft.getMinecraft().displayGuiScreen(new GuiColorSelector(true));
+				ColorCollector.displaySelectionGui = false;
+				if(MinestuckConfig.loginColorSelector)
+					Minecraft.getMinecraft().displayGuiScreen(new GuiColorSelector(true));
 			}
 			
 		}

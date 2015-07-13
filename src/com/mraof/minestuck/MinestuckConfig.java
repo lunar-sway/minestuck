@@ -37,6 +37,8 @@ public class MinestuckConfig
 	public static boolean clientGiveItems;
 	@SideOnly(Side.CLIENT)
 	public static boolean oldItemModels;
+	@SideOnly(Side.CLIENT)
+	public static boolean loginColorSelector;
 	
 	public static boolean hardMode = false;
 	public static boolean generateCruxiteOre;
@@ -146,6 +148,7 @@ public class MinestuckConfig
 				FMLLog.warning("[Minestuck] The FBO extension is not available and is required for the advanced rendering of captchalouge cards.");
 			}
 			//cardResolution = config.getInt("General", "cardResolution", 1, 0, 5, "The resolution of the item inside of a card. The width/height is computed by '8*2^x', where 'x' is this config value.");
+			loginColorSelector = config.get("General", "loginColorSelector", true, "Determines if the color selector should be displayed when entering a save file for the first time.").setLanguageKey("minestuck.config.loginColorSelector").getBoolean();
 		}
 	}
 	

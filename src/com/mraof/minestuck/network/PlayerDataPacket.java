@@ -72,7 +72,7 @@ public class PlayerDataPacket extends MinestuckPacket
 			if(i1 == -2)
 			{
 				ColorCollector.playerColor = -1;
-				ColorCollector.selectionGui = true;
+				ColorCollector.displaySelectionGui = true;
 			}
 			else ColorCollector.playerColor = i1;
 		}

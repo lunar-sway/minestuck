@@ -284,6 +284,8 @@ minestuck.config.keepDimensionsLoaded=Keep the Medium Loaded
 minestuck.config.keepDimensionsLoadedtooltip=Having this on will make medium dimensions and the area around the spawn stay loaded.
 minestuck.config.oldItemModels=Use Old Item Models
 minestuck.config.oldItemModels.tooltip=Set this to true to have back all old 2D item models.
+minestuck.config.loginColorSelector=Display Color Selector on Login
+minestuck.config.loginColorSelector.tooltip=This option determines if the color selector should be displayed when entering a save file for the first time.
 
 message.selectDefaultColor=Default color selected. You can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!
 message.selectColor=If you want to change the color, you can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!

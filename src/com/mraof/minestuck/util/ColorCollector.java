@@ -14,7 +14,7 @@ public class ColorCollector
 	@SideOnly(Side.CLIENT)
 	public static int playerColor;
 	@SideOnly(Side.CLIENT)
-	public static boolean selectionGui;
+	public static boolean displaySelectionGui;
 	
 	static
 	{
