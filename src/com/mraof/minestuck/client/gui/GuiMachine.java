@@ -187,7 +187,9 @@ public class GuiMachine extends GuiContainer {
 		this.mc.getTextureManager().bindTexture(guiProgress);
 		int width = metadata == 0 ? progressWidth : getScaledValue(te.progress,te.maxProgress,progressWidth);
 		int height = metadata != 0 ? progressHeight : getScaledValue(te.progress,te.maxProgress,progressHeight);
-		this.drawCustomBox(x+progressX, y+progressY, 0, 0, width, height,progressWidth,progressHeight);
+		if(metadata != 0)
+			this.drawCustomBox(x+progressX, y+progressY, 0, 0, width, height,progressWidth,progressHeight);
+		else this.drawCustomBox(x+progressX, y+progressY+progressHeight-height, 0, progressHeight-height, width, height,progressWidth,progressHeight);
 	}
 
 	@SuppressWarnings("unchecked")
