@@ -1,5 +1,8 @@
 package com.mraof.minestuck.client.renderer.tileentity;
 
+import com.mraof.minestuck.tileentity.TileEntityGate;
+import com.mraof.minestuck.util.ColorCollector;
+
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -17,11 +20,18 @@ public class RenderReturnNode extends TileEntitySpecialRenderer
 	@Override
 	public void renderTileEntityAt(TileEntity tileEntity, double posX, double posY, double posZ, float f, int p_180535_9_)
 	{
-//		Random rand = new Random((long) (tileEntity.getPos().getX() * tileEntity.getPos().getZ()));
-//		GlStateManager.color(rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
+		TileEntityGate gate = (TileEntityGate) tileEntity;
+		
+		int color;
+		if(gate.colorIndex == -1)
+			color = 0x0057FF;
+		else color = ColorCollector.getColor(gate.colorIndex);
+		float r = ((color >> 16) & 255)/255F;
+		float g = ((color >> 8) & 255)/255F;
+		float b = (color & 255)/255F;
 		
 		GlStateManager.pushMatrix();
-		GlStateManager.color(0F, 5.5F/16F, 1.0F);
+		GlStateManager.color(r, g, b);
 		GlStateManager.disableCull();
 		GlStateManager.disableLighting();
 		WorldRenderer renderer = Tessellator.getInstance().getWorldRenderer();

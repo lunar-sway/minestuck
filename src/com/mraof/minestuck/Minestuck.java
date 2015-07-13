@@ -354,7 +354,7 @@ public class Minestuck
 		GameRegistry.registerItem(rawCruxite, "cruxite_raw");
 		GameRegistry.registerItem(cruxiteDowel, "cruxite_dowel");
 		GameRegistry.registerItem(captchaCard, "captcha_card");
-		GameRegistry.registerItem(cruxiteApple, "cruxite_artifact");
+		GameRegistry.registerItem(cruxiteApple, "cruxite_artifact");	//TODO change to "cruxite_apple" when there's no risk of messing with existing save files
 		GameRegistry.registerItem(disk, "computer_disk");
 		GameRegistry.registerItem(component, "component");
 		GameRegistry.registerItem(minestuckBucket, "minestuck_bucket");

@@ -266,6 +266,14 @@ public class SessionHandler {
 		return colorIndex + 1;
 	}
 	
+	public static int getColorForDimension(int dim)
+	{
+		for(SburbConnection c : SkaianetHandler.connections)
+			if(c.enteredGame && c.clientHomeLand == dim)
+				return MinestuckPlayerData.getData(c.getClientName()).color;
+		return -1;
+	}
+	
 	/**
 	 * 
 	 * @param client The username of the player, encoded.
