@@ -73,7 +73,7 @@ import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.item.ItemCaptchaCard;
 import com.mraof.minestuck.item.ItemComponent;
-import com.mraof.minestuck.item.ItemCruxiteArtifact;
+import com.mraof.minestuck.item.ItemCruxiteApple;
 import com.mraof.minestuck.item.ItemCruxiteRaw;
 import com.mraof.minestuck.item.ItemDisk;
 import com.mraof.minestuck.item.ItemDowel;
@@ -307,7 +307,7 @@ public class Minestuck
 		rawCruxite = new ItemCruxiteRaw();
 		cruxiteDowel = new ItemDowel();
 		captchaCard = new ItemCaptchaCard();
-		cruxiteApple = new ItemCruxiteArtifact(1);
+		cruxiteApple = new ItemCruxiteApple();
 		disk = new ItemDisk();
 		component = new ItemComponent();
 		minestuckBucket = new ItemMinestuckBucket();

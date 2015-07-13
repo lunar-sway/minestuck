@@ -10,7 +10,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemFood;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -31,36 +31,32 @@ import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 
-public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
+public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 {
 	
-	public ItemCruxiteArtifact(int par2) 
+	public ItemCruxiteArtifact() 
 	{
-		super(1, par2, false);
 		this.setCreativeTab(Minestuck.tabMinestuck);
 		setUnlocalizedName("cruxiteArtifact");
 		this.maxStackSize = 1;
 		setHasSubtypes(true);
 	}
-	@Override
-	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
+	
+	protected void onArtifactActivated(World world, EntityPlayer player)
 	{
-		par3EntityPlayer.setItemInUse(par1ItemStack, this.getMaxItemUseDuration(par1ItemStack));
-
-		return par1ItemStack;
-	}
-	@Override
-	protected void onFoodEaten(ItemStack par1ItemStack, World par2World, EntityPlayer player) {
-		if(!par2World.isRemote && player.worldObj.provider.getDimensionId() != -1) {
-			
+		if(!world.isRemote && player.worldObj.provider.getDimensionId() != -1)
+		{
 			int destinationId = player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("LandId") == 0 ? LandAspectRegistry.createLand(player) : player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("LandId");
-			if(player.worldObj.provider.getDimensionId() != destinationId) {
+			
+			if(player.worldObj.provider.getDimensionId() != destinationId)
+			{
 				player.triggerAchievement(MinestuckAchievementHandler.enterMedium);
 				Teleport.teleportEntity(player, destinationId, this);
 				MinestuckPlayerTracker.sendLandEntryMessage(player);
 			}
 		}
 	}
+	
 	public void makeDestination(Entity entity, WorldServer worldserver0, WorldServer worldserver1)
 	{
 		if(entity instanceof EntityPlayerMP && entity.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("LandId") == worldserver1.provider.getDimensionId())
@@ -170,17 +166,6 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 	{
 		if(stack.getMetadata() == 0)
 			return -1;
-		else
-		{
-			int color = ColorCollector.getColor(stack.getMetadata() - 1);
-			if(renderPass == 1)
-			{
-				int i0 = ((color & 255) + 255)/2;
-				int i1 = (((color >> 8) & 255) + 255)/2;
-				int i2 = (((color >> 16) & 255) + 255)/2;
-				color = i0 | (i1 << 8) | (i2 << 16); 
-			}
-			return color;
-		}
+		else return ColorCollector.getColor(stack.getMetadata() - 1);
 	}
 }
