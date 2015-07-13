@@ -3,7 +3,6 @@ package com.mraof.minestuck.tileentity;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Random;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -45,7 +44,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 	public boolean overrideStop = false;
 	public GristType selectedGrist = GristType.Build;
 	public byte rotation;
-	public int color = new Random().nextInt(20);	//Temp
+	public int color = -1;
 	
     public TileEntityMachine(){
             this.inv = new ItemStack[4];

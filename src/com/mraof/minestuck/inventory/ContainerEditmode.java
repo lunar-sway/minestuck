@@ -13,6 +13,7 @@ import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.util.MinestuckPlayerData;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -20,7 +21,9 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
 public class ContainerEditmode extends Container {
@@ -113,6 +116,13 @@ public class ContainerEditmode extends Container {
 				if(c.enteredGame())
 					iter.remove();
 				else stack.getTagCompound().setInteger("contentMeta", SessionHandler.getEntryItem(c.getClientName()));
+			else if(stack.getItem().equals(Item.getItemFromBlock(Minestuck.blockMachine)) && stack.getMetadata() == 0)
+			{
+				NBTTagCompound nbt = new NBTTagCompound();
+				nbt.setTag("BlockEntityTag", new NBTTagCompound());
+				nbt.getCompoundTag("BlockEntityTag").setInteger("color", MinestuckPlayerData.getData(c.getClientName()).color);
+				stack.setTagCompound(nbt);
+			}
 		}
 		
 		for(int i = 0; i < Math.max(tools.size(), deployItems.size()); i++)

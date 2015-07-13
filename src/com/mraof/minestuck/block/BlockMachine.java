@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -96,10 +97,23 @@ public class BlockMachine extends BlockContainer {
 	}
 	
 	@Override
-	public int damageDropped(IBlockState state)
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
 	{
-		return ((MachineType)state.getValue(MACHINE_TYPE)).ordinal();
+		List<ItemStack> list = new ArrayList<ItemStack>();
+		ItemStack stack = new ItemStack(Item.getItemFromBlock(this), 1, ((MachineType)state.getValue(MACHINE_TYPE)).ordinal());
+		
+		if(((MachineType)state.getValue(MACHINE_TYPE)) == MachineType.CRUXTRUDER && world.getTileEntity(pos) instanceof TileEntityMachine)
+		{
+			TileEntityMachine machine = (TileEntityMachine) world.getTileEntity(pos);
+			stack.setTagCompound(new NBTTagCompound());
+			stack.getTagCompound().setTag("BlockEntityTag", new NBTTagCompound());
+			stack.getTagCompound().getCompoundTag("BlockEntityTag").setInteger("color", machine.color);
+		}
+		list.add(stack);
+		
+		return list;
 	}
+	
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override

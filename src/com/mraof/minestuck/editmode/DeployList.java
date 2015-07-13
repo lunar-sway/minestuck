@@ -3,6 +3,7 @@ package com.mraof.minestuck.editmode;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -76,13 +77,13 @@ public class DeployList {
 		stack.stackSize = 1;
 		if(!stack.hasTagCompound())
 			stack.setTagCompound(new NBTTagCompound());
-		//if(stack.stackTagCompound.getName() == "")
-			//stack.stackTagCompound.setName("tag");
 		else
 		{
 			stack.getTagCompound().removeTag("display");
 			if(stack.getItem().equals(Minestuck.captchaCard))
 				stack.getTagCompound().setInteger("contentMeta", 0);
+			if(stack.getItem().equals(Item.getItemFromBlock(Minestuck.blockMachine)))
+				stack.getTagCompound().removeTag("BlockEntityTag");
 		}
 		return stack;
 	}
