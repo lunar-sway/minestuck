@@ -2,7 +2,6 @@ package com.mraof.minestuck.block;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -13,9 +12,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -33,7 +31,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
-import com.mraof.minestuck.util.Debug;
 
 public class BlockMachine extends BlockContainer {
 
@@ -99,21 +96,8 @@ public class BlockMachine extends BlockContainer {
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
 	{
-		List<ItemStack> list = new ArrayList<ItemStack>();
-		ItemStack stack = new ItemStack(Item.getItemFromBlock(this), 1, ((MachineType)state.getValue(MACHINE_TYPE)).ordinal());
-		
-		if(((MachineType)state.getValue(MACHINE_TYPE)) == MachineType.CRUXTRUDER && world.getTileEntity(pos) instanceof TileEntityMachine)
-		{
-			TileEntityMachine machine = (TileEntityMachine) world.getTileEntity(pos);
-			stack.setTagCompound(new NBTTagCompound());
-			stack.getTagCompound().setTag("BlockEntityTag", new NBTTagCompound());
-			stack.getTagCompound().getCompoundTag("BlockEntityTag").setInteger("color", machine.color);
-		}
-		list.add(stack);
-		
-		return list;
+		return new ArrayList<ItemStack>();
 	}
-	
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
@@ -159,53 +143,38 @@ public class BlockMachine extends BlockContainer {
 		return true;
 	}
 	
-	
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
-		dropItems(worldIn, pos);
+		TileEntityMachine te = (TileEntityMachine) worldIn.getTileEntity(pos);
+		InventoryHelper.dropInventoryItems(worldIn, pos, te);
+		
 		super.breakBlock(worldIn, pos, state);
 	}
 	
-	private void dropItems(World world, BlockPos pos)
+	@Override
+	public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest)
 	{
-		Random rand = new Random();
-
-		TileEntity tileEntity = world.getTileEntity(pos);
-		if (!(tileEntity instanceof IInventory))
+		TileEntityMachine te = (TileEntityMachine) world.getTileEntity(pos);
+		IBlockState state = world.getBlockState(pos);
+		
+		boolean b = super.removedByPlayer(world, pos, player, willHarvest);
+		
+		if(!world.isRemote && willHarvest && te != null)
 		{
-			return;
-		}
-		IInventory inventory = (IInventory) tileEntity;
-
-		for (int i = 0; i < inventory.getSizeInventory(); i++) {
-			ItemStack item = inventory.getStackInSlot(i);
-
-			if (item != null && item.stackSize > 0) {
-				float rx = rand.nextFloat() * 0.8F + 0.1F;
-				float ry = rand.nextFloat() * 0.8F + 0.1F;
-				float rz = rand.nextFloat() * 0.8F + 0.1F;
-
-				EntityItem entityItem = new EntityItem(world,
-						pos.getX() + rx, pos.getY() + ry, pos.getZ() + rz,
-						new ItemStack(item.getItem(), item.stackSize, item.getItemDamage()));
-
-				if (item.hasTagCompound()) {
-					entityItem.getEntityItem().setTagCompound((NBTTagCompound) item.getTagCompound().copy());
-				}
-
-				float factor = 0.05F;
-				entityItem.motionX = rand.nextGaussian() * factor;
-				entityItem.motionY = rand.nextGaussian() * factor + 0.2F;
-				entityItem.motionZ = rand.nextGaussian() * factor;
-				world.spawnEntityInWorld(entityItem);
-				item.stackSize = 0;
-				Debug.print("Spawning item "+entityItem.getEntityItem());
+			ItemStack stack = new ItemStack(Item.getItemFromBlock(this), 1, ((MachineType)state.getValue(MACHINE_TYPE)).ordinal());
+			if(((MachineType)state.getValue(MACHINE_TYPE)) == MachineType.CRUXTRUDER && te.color != -1)
+			{	//Moved this here because it's unnecessarily hard to check the tile entity in block.getDrops(), since it has been removed by then
+				stack.setTagCompound(new NBTTagCompound());
+				stack.getTagCompound().setTag("BlockEntityTag", new NBTTagCompound());
+				stack.getTagCompound().getCompoundTag("BlockEntityTag").setInteger("color", te.color);
 			}
+			spawnAsEntity(world, pos, stack);
 		}
+		
+		return b;
 	}
 	
-	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
 	{
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
