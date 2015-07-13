@@ -40,7 +40,7 @@ public class MinestuckAchievementHandler {
 		achievementPage.getAchievements().add(mineCruxite);
 		setupConnection = (Achievement) (new Achievement("achievement.setupConnection", "setupConnection", 0, 0, Minestuck.disk, mineCruxite)).registerStat();
 		achievementPage.getAchievements().add(setupConnection);
-		enterMedium = (Achievement) (new Achievement("achievement.enterMedium", "enterMedium", 2, 1, Minestuck.cruxiteArtifact, setupConnection)).registerStat();
+		enterMedium = (Achievement) (new Achievement("achievement.enterMedium", "enterMedium", 2, 1, Minestuck.cruxiteApple, setupConnection)).registerStat();
 		achievementPage.getAchievements().add(enterMedium);
 		alchemy = (Achievement) (new Achievement("achievement.alchemy", "alchemy", 4, 0, new ItemStack(Minestuck.blockMachine,1,3), enterMedium)).registerStat();
 		achievementPage.getAchievements().add(alchemy);
@@ -55,7 +55,7 @@ public class MinestuckAchievementHandler {
 	}
 	
 	public static void onAlchemizedItem(ItemStack stack, EntityPlayer player) {
-		if(!stack.getItem().equals(Minestuck.cruxiteArtifact))
+		if(!stack.getItem().equals(Minestuck.cruxiteApple))
 			player.triggerAchievement(alchemy);
 		if(stack.getItem().equals(Minestuck.clawHammer))
 			player.triggerAchievement(getHammer);

@@ -534,7 +534,7 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.component,1, 1), true, new GristSet(new GristType[] {GristType.Build, GristType.Mercury}, new int[] {5, 12}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.component,1, 2), true, new GristSet(new GristType[] {GristType.Shale, GristType.Marble}, new int[] {25, 25}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.crockerSpork), false, new GristSet(new GristType[] {GristType.Build, GristType.Iodine,GristType.Chalk,GristType.Ruby}, new int[] {70, 34, 34, 6}));
-		GristRegistry.addGristConversion(new ItemStack(Minestuck.cruxiteArtifact, 1), false, new GristSet());
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.cruxiteApple, 1), false, new GristSet());
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.clawHammer), false, new GristSet(GristType.Build, 5));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.fearNoAnvil), false, new GristSet(new GristType[] {GristType.Build, GristType.Garnet, GristType.Diamond, GristType.Gold, GristType.Quartz}, new int[] {120, 40, 5, 5, 10}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.ninjaSword), false, new GristSet(new GristType[] {GristType.Build, GristType.Quartz, GristType.Rust}, new int[] {20, 5, 4}));

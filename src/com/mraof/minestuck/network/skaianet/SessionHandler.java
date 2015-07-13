@@ -260,8 +260,10 @@ public class SessionHandler {
 	 * @param player The username of the player, encoded.
 	 * @return Damage value for the entry item
 	 */
-	public static int getEntryItem(String player) {
-		return 0;
+	public static int getEntryItem(String player)
+	{
+		int colorIndex = MinestuckPlayerData.getData(player).color;
+		return colorIndex + 1;
 	}
 	
 	/**

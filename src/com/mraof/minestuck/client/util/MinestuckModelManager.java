@@ -86,7 +86,7 @@ public class MinestuckModelManager
 		register(Minestuck.rawCruxite);
 		modelRegistry.register(Minestuck.cruxiteDowel, new CruxiteDowelDefinition());
 		modelRegistry.register(Minestuck.captchaCard, new CaptchaCardDefinition());
-		register(Minestuck.cruxiteArtifact, 0, "cruxite_apple");
+		modelRegistry.register(Minestuck.cruxiteApple, new ColoredItemDefinition("minestuck:cruxite_apple"));
 		register(Minestuck.disk, 0, "disk_client");
 		register(Minestuck.disk, 1, "disk_server");
 		register(Minestuck.component, 0, "spoon_wood");
@@ -131,7 +131,7 @@ public class MinestuckModelManager
 		//Items
 		ModelBakery.addVariantName(Minestuck.crockerSpork, "minestuck:crocker_fork", "minestuck:crocker_spoon");
 		ModelBakery.addVariantName(Minestuck.cruxiteDowel, "minestuck:dowel_uncarved", "minestuck:dowel_carved", "minestuck:dowel_uncarved_blank", "minestuck:dowel_carved_blank");
-		ModelBakery.addVariantName(Minestuck.cruxiteArtifact, "minestuck:cruxite_apple");
+		ModelBakery.addVariantName(Minestuck.cruxiteApple, "minestuck:cruxite_apple", "minestuck:cruxite_apple_blank");
 		ModelBakery.addVariantName(Minestuck.disk, "minestuck:disk_client", "minestuck:disk_server");
 		ModelBakery.addVariantName(Minestuck.component, "minestuck:spoon_wood", "minestuck:spoon_silver", "minestuck:chessboard");
 		ModelBakery.addVariantName(Minestuck.minestuckBucket, "minestuck:bucket_blood", "minestuck:bucket_oil", "minestuck:bucket_brain_juice");
@@ -210,6 +210,22 @@ public class MinestuckModelManager
 		{
 			String suffix = stack.getMetadata() == 0 ? "" : "_blank";
 			return new ModelResourceLocation("minestuck:"+(stack.hasTagCompound() && stack.getTagCompound().hasKey("contentID") ? "dowel_carved" : "dowel_uncarved")+suffix, "inventory");
+		}
+	}
+	
+	private static class ColoredItemDefinition implements ItemMeshDefinition
+	{
+		private String name;
+		ColoredItemDefinition(String name)
+		{
+			this.name = name;
+		}
+		@Override
+		public ModelResourceLocation getModelLocation(ItemStack stack)
+		{
+			if(stack.getMetadata() == 0)
+				return new ModelResourceLocation(name, "inventory");
+			else return new ModelResourceLocation(name + "_blank", "inventory");
 		}
 	}
 	

@@ -184,7 +184,7 @@ public class Minestuck
 	public static Item rawCruxite;
 	public static Item cruxiteDowel;
 	public static Item captchaCard;
-	public static Item cruxiteArtifact;
+	public static Item cruxiteApple;
 	public static Item disk;
 	public static Item component;
 	public static ItemModus modusCard;
@@ -307,7 +307,7 @@ public class Minestuck
 		rawCruxite = new ItemCruxiteRaw();
 		cruxiteDowel = new ItemDowel();
 		captchaCard = new ItemCaptchaCard();
-		cruxiteArtifact = new ItemCruxiteArtifact(1, false);
+		cruxiteApple = new ItemCruxiteArtifact(1);
 		disk = new ItemDisk();
 		component = new ItemComponent();
 		minestuckBucket = new ItemMinestuckBucket();
@@ -354,7 +354,7 @@ public class Minestuck
 		GameRegistry.registerItem(rawCruxite, "cruxite_raw");
 		GameRegistry.registerItem(cruxiteDowel, "cruxite_dowel");
 		GameRegistry.registerItem(captchaCard, "captcha_card");
-		GameRegistry.registerItem(cruxiteArtifact, "cruxite_artifact");
+		GameRegistry.registerItem(cruxiteApple, "cruxite_artifact");
 		GameRegistry.registerItem(disk, "computer_disk");
 		GameRegistry.registerItem(component, "component");
 		GameRegistry.registerItem(minestuckBucket, "minestuck_bucket");

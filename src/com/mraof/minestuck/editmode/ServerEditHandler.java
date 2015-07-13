@@ -411,7 +411,7 @@ public class ServerEditHandler
 		{
 			ItemStack stack = player.inventory.mainInventory[i];
 			if(stack != null && (DeployList.containsItemStack(stack) ? MinestuckConfig.hardMode && givenItems[DeployList.getOrdinal(stack)] ||
-					stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack).getItem() == Minestuck.cruxiteArtifact && enteredGame
+					stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack).getItem() == Minestuck.cruxiteApple && enteredGame
 					: GristRegistry.getGristConversion(stack) == null || !isBlockItem(stack.getItem())))
 			{
 				player.inventory.mainInventory[i] = null;

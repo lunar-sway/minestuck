@@ -66,7 +66,7 @@ public class ClientEditPacket extends MinestuckPacket {
 				if(i == 4) {
 					if(c.enteredGame())
 						continue;
-					ItemStack card = AlchemyRecipeHandler.createCard(new ItemStack(Minestuck.cruxiteArtifact), true);
+					ItemStack card = AlchemyRecipeHandler.createCard(new ItemStack(Minestuck.cruxiteApple), true);
 					if(!playerMP.inventory.hasItemStack(card))
 						c.givenItems()[i] = playerMP.inventory.addItemStackToInventory(card) || c.givenItems()[i];
 				} else {

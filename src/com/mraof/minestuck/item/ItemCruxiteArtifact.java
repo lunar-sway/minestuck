@@ -24,6 +24,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import static com.mraof.minestuck.MinestuckConfig.artifactRange;
 
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+import com.mraof.minestuck.util.ColorCollector;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.ITeleporter;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
@@ -33,12 +34,13 @@ import com.mraof.minestuck.world.lands.LandAspectRegistry;
 public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 {
 	
-	public ItemCruxiteArtifact(int par2, boolean par3) 
+	public ItemCruxiteArtifact(int par2) 
 	{
-		super(1, par2, par3);
+		super(1, par2, false);
 		this.setCreativeTab(Minestuck.tabMinestuck);
 		setUnlocalizedName("cruxiteArtifact");
 		this.maxStackSize = 1;
+		setHasSubtypes(true);
 	}
 	@Override
 	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
@@ -163,4 +165,22 @@ public class ItemCruxiteArtifact extends ItemFood implements ITeleporter
 		}
 	}
 	
+	@Override
+	public int getColorFromItemStack(ItemStack stack, int renderPass)
+	{
+		if(stack.getMetadata() == 0)
+			return -1;
+		else
+		{
+			int color = ColorCollector.getColor(stack.getMetadata() - 1);
+			if(renderPass == 1)
+			{
+				int i0 = ((color & 255) + 255)/2;
+				int i1 = (((color >> 8) & 255) + 255)/2;
+				int i2 = (((color >> 16) & 255) + 255)/2;
+				color = i0 | (i1 << 8) | (i2 << 16); 
+			}
+			return color;
+		}
+	}
 }
