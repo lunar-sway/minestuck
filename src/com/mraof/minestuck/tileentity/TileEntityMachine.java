@@ -218,7 +218,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 		switch (getMachineType())
 		{
 		case (0):
-			return (this.inv[1] != null && (this.inv[0] == null || this.inv[0].stackSize < this.inv[0].stackSize && inv[0].getItemDamage() == this.color + 1));
+			return (this.inv[1] != null && (this.inv[0] == null || this.inv[0].stackSize < this.inv[0].getMaxStackSize() && inv[0].getItemDamage() == this.color + 1));
 		case (1):
 		if (this.inv[1] != null && inv[2] != null)
 		{
