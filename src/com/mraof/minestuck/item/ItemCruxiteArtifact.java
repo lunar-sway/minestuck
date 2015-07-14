@@ -29,6 +29,7 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.ITeleporter;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.Teleport;
+import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 
 public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
@@ -46,7 +47,10 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 	{
 		if(!world.isRemote && player.worldObj.provider.getDimensionId() != -1)
 		{
-			int destinationId = player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("LandId") == 0 ? LandAspectRegistry.createLand(player) : player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("LandId");
+			int destinationId = player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("LandId");
+			
+			if(!MinestuckDimensionHandler.isLandDimension(destinationId))
+				destinationId = LandAspectRegistry.createLand(player);
 			
 			if(player.worldObj.provider.getDimensionId() != destinationId)
 			{
