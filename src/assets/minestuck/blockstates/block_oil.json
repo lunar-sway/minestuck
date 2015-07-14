@@ -1,5 +1,9 @@
 {
+    "forge_marker": 1,
     "variants": {
-        "normal": { "model": "minestuck:block_oil" }
+        "normal": {
+            "model": "forge:fluid",
+            "custom": { "fluid": "oil" }
+        }
     }
 }

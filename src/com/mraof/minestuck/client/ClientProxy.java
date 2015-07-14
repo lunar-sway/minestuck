@@ -2,7 +2,6 @@ package com.mraof.minestuck.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -28,7 +27,6 @@ import com.mraof.minestuck.client.renderer.entity.RenderShadow;
 import com.mraof.minestuck.client.renderer.tileentity.RenderReturnNode;
 import com.mraof.minestuck.client.renderer.tileentity.RenderSkaiaPortal;
 import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
-import com.mraof.minestuck.client.util.MinestuckModelManager;
 import com.mraof.minestuck.entity.EntityDecoy;
 import com.mraof.minestuck.entity.carapacian.EntityBishop;
 import com.mraof.minestuck.entity.carapacian.EntityPawn;
@@ -77,7 +75,6 @@ public class ClientProxy extends CommonProxy
 	public static void registerSided()
 	{
 		
-		MinecraftForge.EVENT_BUS.register(new MinestuckModelManager());
 		FMLCommonHandler.instance().bus().register(new MinestuckKeyHandler());
 		FMLCommonHandler.instance().bus().register(new ClientEventHandler());
 	}

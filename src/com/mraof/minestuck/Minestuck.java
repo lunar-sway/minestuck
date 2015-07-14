@@ -10,6 +10,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -260,11 +261,11 @@ public class Minestuck
 		blockGoldSeeds = (BlockGoldSeeds) GameRegistry.registerBlock(new BlockGoldSeeds(), null, "gold_seeds");
 		returnNode = GameRegistry.registerBlock(new BlockReturnNode(), null, "return_node");
 		//fluids
-		fluidOil = new Fluid("Oil");
+		fluidOil = new Fluid("Oil", new ResourceLocation("minestuck", "blocks/OilStill"), new ResourceLocation("minestuck", "blocks/OilFlowing"));
 		FluidRegistry.registerFluid(fluidOil);
-		fluidBlood = new Fluid("Blood");
+		fluidBlood = new Fluid("Blood", new ResourceLocation("minestuck", "blocks/BloodStill"), new ResourceLocation("minestuck", "blocks/BloodFlowing"));
 		FluidRegistry.registerFluid(fluidBlood);
-		fluidBrainJuice = new Fluid("BrainJuice");
+		fluidBrainJuice = new Fluid("BrainJuice", new ResourceLocation("minestuck", "blocks/BrainJuiceStill"), new ResourceLocation("minestuck", "blocks/BrainJuiceFlowing"));
 		FluidRegistry.registerFluid(fluidBrainJuice);
 		blockOil = GameRegistry.registerBlock(new BlockFluid(fluidOil, Material.water).setUnlocalizedName("oil"), null, "block_oil");
 		blockBlood = GameRegistry.registerBlock(new BlockFluid(fluidBlood, Material.water).setUnlocalizedName("blood"), null, "block_blood");

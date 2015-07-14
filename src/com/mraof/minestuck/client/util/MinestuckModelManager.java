@@ -9,17 +9,14 @@ import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.block.statemap.StateMap;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.BlockFluidBase;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -247,18 +244,4 @@ public class MinestuckModelManager
 			return new ModelResourceLocation("minestuck:" + str, "inventory");
 		}
 	}
-	
-	@SubscribeEvent
-	public void onModelBakeEvent(ModelBakeEvent event)
-	{
-		event.modelRegistry.putObject(new ModelResourceLocation("minestuck:block_oil", "normal"), new FluidBlockModel());
-		event.modelRegistry.putObject(new ModelResourceLocation("minestuck:block_blood", "normal"), new FluidBlockModel());
-		event.modelRegistry.putObject(new ModelResourceLocation("minestuck:block_brain_juice", "normal"), new FluidBlockModel());
-		
-		TextureMap textureMap = Minecraft.getMinecraft().getTextureMapBlocks();
-		Minestuck.fluidOil.setIcons(textureMap.getAtlasSprite("minestuck:blocks/OilStill"), textureMap.getAtlasSprite("minestuck:blocks/OilFlowing"));
-		Minestuck.fluidBlood.setIcons(textureMap.getAtlasSprite("minestuck:blocks/BloodStill"), textureMap.getAtlasSprite("minestuck:blocks/BloodFlowing"));
-		Minestuck.fluidBrainJuice.setIcons(textureMap.getAtlasSprite("minestuck:blocks/BrainJuiceStill"), textureMap.getAtlasSprite("minestuck:blocks/BrainJuiceFlowing"));
-	}
-	
 }
