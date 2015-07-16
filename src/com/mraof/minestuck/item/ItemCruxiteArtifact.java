@@ -102,9 +102,9 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 				for(int blockZ = z - zWidth; blockZ <= z + zWidth; blockZ++)
 				{
 					double radius = Math.sqrt(((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2);
-					int minY =  y - (int) (Math.sqrt(artifactRange * artifactRange - radius * radius));
-					minY = minY < 0 ? 0 : minY;
-					for(int blockY = minY; blockY < 256; blockY++)
+					int height = (int) (Math.sqrt(artifactRange * artifactRange - radius * radius));
+					int blockY;
+					for(blockY = Math.max(0, y - height); blockY < Math.min(256, y + height); blockY++)
 					{
 						BlockPos pos = new BlockPos(blockX, blockY, blockZ);
 						IBlockState block = worldserver0.getBlockState(pos);
@@ -124,6 +124,8 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 							worldserver1.setTileEntity(pos, te1);
 						};
 					}
+					for(; blockY < 256; blockY++)
+						worldserver1.setBlockState(new BlockPos(blockX, blockY, blockZ), Blocks.air.getDefaultState(), 0);
 				}
 			}
 			
