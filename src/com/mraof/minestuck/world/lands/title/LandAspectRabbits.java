@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.lands.title;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandomChestContent;
@@ -8,6 +9,7 @@ import net.minecraftforge.common.ChestGenHooks;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.RabbitSpawner;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.lands.terrain.TerrainAspect;
 
 public class LandAspectRabbits extends TitleAspect
 {
@@ -39,6 +41,12 @@ public class LandAspectRabbits extends TitleAspect
 			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Items.rabbit_foot, 1, 0), 1, 2, 2));
 			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Items.rabbit_stew, 1, 0), 1, 1, 2));
 		}
+	}
+	
+	@Override
+	public boolean isAspectCompatible(TerrainAspect aspect)
+	{
+		return !aspect.getOceanBlock().getBlock().getMaterial().equals(Material.lava);
 	}
 	
 }
