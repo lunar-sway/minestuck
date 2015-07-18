@@ -1,5 +1,7 @@
 package com.mraof.minestuck.world.lands.title;
 
+import net.minecraft.util.Vec3;
+
 import com.mraof.minestuck.world.lands.decorator.RockDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
@@ -27,6 +29,8 @@ public class LandAspectWind extends TitleAspect
 		{
 			chunkProvider.decorators.add(new RockDecorator());
 		}
+		
+		chunkProvider.mergeFogColor(new Vec3(0.1, 0.2, 0.8), 0.3F);
 	}
 	
 }

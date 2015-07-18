@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.lands.title;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Vec3;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
 
@@ -37,6 +38,8 @@ public class LandAspectLight extends TitleAspect
 			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Items.glowstone_dust, 1, 0), 2, 5, 3));
 			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Blocks.torch, 1, 0), 2, 10, 5));
 		}
+		
+		chunkProvider.mergeFogColor(new Vec3(1, 1, 0.8), 0.5F);
 	}
 	
 	@Override

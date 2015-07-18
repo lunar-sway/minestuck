@@ -2,6 +2,7 @@ package com.mraof.minestuck.world.lands.title;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Vec3;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
 
@@ -38,6 +39,7 @@ public class LandAspectClockwork extends TitleAspect
 			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Items.repeater, 1, 0), 1, 1, 1));
 		}
 		
+		chunkProvider.mergeFogColor(new Vec3(0.5, 0.5, 0.5), 0.5F);
 	}
 	
 }

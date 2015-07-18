@@ -120,6 +120,14 @@ public class ChunkProviderLands implements IChunkProvider
 			}});
 	}
 	
+	public void mergeFogColor(Vec3 fogColor, float strength)
+	{
+		double d1 = (this.skyColor.xCoord + fogColor.xCoord*strength)/(1 + strength);
+		double d2 = (this.skyColor.yCoord + fogColor.yCoord*strength)/(1 + strength);
+		double d3 = (this.skyColor.zCoord + fogColor.zCoord*strength)/(1 + strength);
+		this.skyColor = new Vec3(d1, d2, d3);
+	}
+	
 	@Override
 	public boolean chunkExists(int i, int j) 
 	{
