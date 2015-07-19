@@ -5,6 +5,7 @@ import java.util.Iterator;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
@@ -24,7 +25,6 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fml.client.FMLClientHandler;
 
 public class ContainerEditmode extends Container {
 	
@@ -36,7 +36,7 @@ public class ContainerEditmode extends Container {
 	
 	public ContainerEditmode()
 	{
-		this.player = FMLClientHandler.instance().getClient().thePlayer;
+		this.player = ClientProxy.getClientPlayer();
 		addSlots();
 	}
 	

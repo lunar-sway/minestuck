@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
@@ -15,7 +16,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -302,7 +302,7 @@ public class CaptchaDeckHandler
 		{
 			modus = ModusType.values()[nbt.getInteger("type")].createInstance();
 			if(clientSide)
-				modus.player = FMLClientHandler.instance().getClient().thePlayer;
+				modus.player = ClientProxy.getClientPlayer();
 		}
 		modus.readFromNBT(nbt);
 		return modus;
