@@ -17,7 +17,7 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 {
 	
 	@Override
-	public void generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
+	public BlockPos generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
 	{
 		if(random.nextFloat() < 0.05)
 		{
@@ -25,17 +25,17 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 			zCoord = chunkZ*16 + random.nextInt(16) + 8;
 			yCoord = getAverageHeight(world);
 			if(yCoord == -1)
-				return;
+				return null;
 			
 			IBlockState ground = world.getBlockState(new BlockPos(xCoord, yCoord - 1, zCoord));
 			if((ground.getBlock().getMaterial().isLiquid() || ground.getBlock().getMaterial() == Material.ice) && random.nextFloat() < 0.6)	//Make it uncommon, but not impossible for it to be placed in the sea.
-				return;
+				return null;
 			if(provider.isBBInSpawn(new StructureBoundingBox(xCoord - 4, zCoord - 4, xCoord + 4, zCoord + 4)))
-					return;
+					return null;
 			
 			int height = random.nextInt(7) + 12;
 			if(height + yCoord + 3 >= 256)
-				return;
+				return null;
 			IBlockState[] structureBlocks = provider.aspect1.getStructureBlocks();
 			int index1 = random.nextInt(structureBlocks.length);
 			int index2 = random.nextInt(Math.max(1, structureBlocks.length - 1));
@@ -156,16 +156,19 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 			
 			rotation = random.nextBoolean();
 			int stairOffset = random.nextInt(8);
+			BlockPos offset = null;
 			for(int y = 0; y <= height + 3; y++)
 			{
-				BlockPos offset = getStairOffset(y + stairOffset);
+				offset = getStairOffset(y + stairOffset);
 				this.placeBlock(world, floor, offset.getX(), Math.min(height, y) + 1, offset.getZ());
 			}
+			if(rotation)
+				offset = new BlockPos(offset.getZ(), 0, offset.getX());
 			
 			rotation = false;
 			if(torches)
 			{
-				for(int y = 5; y <= height; y += 5)	//Would it be better to have '<' instead of '<='? (If we do, there will always be at least a block between the top torch and the ceiling.)
+				for(int y = 5; y < height; y += 5)
 				{
 					this.placeBlock(world, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.EAST), -2, y, 0);
 					this.placeBlock(world, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.WEST), 2, y, 0);
@@ -173,7 +176,18 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 					this.placeBlock(world, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.NORTH), 0, y, 2);
 				}
 			}
+			
+			if(offset.getZ() == -1 && offset.getX() != 1)
+				offset = offset.north(2);
+			else if(offset.getX() == -1)
+				offset = offset.west(2).north();
+			else if(offset.getZ() == 1)
+				offset = offset.south().west();
+			else offset = offset.east();
+			
+			return new BlockPos(xCoord + offset.getX(), yCoord + height + 2, zCoord + offset.getZ());
 		}
+		return null;
 	}
 	
 	@Override

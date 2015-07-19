@@ -17,7 +17,7 @@ public class RockDecorator implements ILandDecorator
 {
 	
 	@Override
-	public void generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
+	public BlockPos generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
 	{
 		if(random.nextFloat() < 0.02)
 		{
@@ -26,11 +26,11 @@ public class RockDecorator implements ILandDecorator
 			BlockPos pos = world.getTopSolidOrLiquidBlock(new BlockPos(x, 0, z));
 			int height = random.nextInt(7) + 10;
 			
-			if(world.getBlockState(pos.up(height/3)).getBlock().getMaterial().isLiquid())	//At least 1/3rd of the height should be above the liquid surface
-				return;
+			if(world.getBlockState(pos.up(height*2/3)).getBlock().getMaterial().isLiquid())	//At least 1/3rd of the height should be above the liquid surface
+				return null;
 			float plateauSize = 0.2F + random.nextFloat()*(height/25F);
 			
-			generateRock(pos.up(height), height, plateauSize, world, random, provider);
+			BlockPos nodePos = generateRock(pos.up(height), height, plateauSize, world, random, provider);
 			
 /*			float rockRarity = plateauSize + height/15F + random.nextFloat()*0.5F - 0.5F;
 			
@@ -41,7 +41,10 @@ public class RockDecorator implements ILandDecorator
 			}
 			if(random.nextFloat() < rockRarity)
 				generateSubRock(pos, height, plateauSize, world, random, provider);*/
+			
+			return nodePos;
 		}
+		return null;
 	}
 	
 	private void generateSubRock(BlockPos pos, int heightOld, float plateauOld, World world, Random rand, ChunkProviderLands provider)
@@ -54,7 +57,7 @@ public class RockDecorator implements ILandDecorator
 		generateRock(newPos, height, plateauSize, world, rand, provider);
 	}
 	
-	private void generateRock(BlockPos rockPos, int height, float plateauSize, World world, Random random, ChunkProviderLands provider)
+	private BlockPos generateRock(BlockPos rockPos, int height, float plateauSize, World world, Random random, ChunkProviderLands provider)
 	{
 		float xSlope = random.nextFloat(), zSlope = random.nextFloat();
 		IBlockState block = provider.upperBlock;
@@ -140,6 +143,27 @@ public class RockDecorator implements ILandDecorator
 				pos = pos.down();
 			} while(!world.getBlockState(pos).equals(block));
 		}
+		
+		CoordPair nodePos = new CoordPair(rockPos.getX(), rockPos.getZ());
+		int maxBlocks = 0;
+		for(int i = 0; i < 9; i++)
+		{
+			CoordPair coords = new CoordPair(rockPos.getX() + (i % 3) - 1, rockPos.getZ() + i/3 - 1);
+			int blockCount = 0;
+			for(int i1 = 0; i1 < 4; i1++)
+			{
+				Integer coordsHeight = heightMap.get(new CoordPair(coords.x + (i1 % 2), coords.z + i1/2));
+				if(coordsHeight != null && coordsHeight == rockPos.getY())
+					blockCount++;
+			}
+			if(blockCount > maxBlocks)
+			{
+				nodePos = coords;
+				maxBlocks = blockCount;
+			}
+		}
+		
+		return new BlockPos(nodePos.x, rockPos.getY() + 1, nodePos.z);
 	}
 	
 	private static boolean checkCoord(CoordPair pair, Map<CoordPair, Integer> map)

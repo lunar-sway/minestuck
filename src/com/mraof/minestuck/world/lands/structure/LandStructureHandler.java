@@ -136,7 +136,7 @@ public class LandStructureHandler extends MapGenStructure
 		}
 	}
 	
-	public void placeReturnNodes(World world, Random rand, ChunkCoordIntPair coords)
+	public void placeReturnNodes(World world, Random rand, ChunkCoordIntPair coords, BlockPos decoratorPos)
 	{
 		int x = coords.chunkXPos;
 		int z = coords.chunkZPos;
@@ -156,28 +156,34 @@ public class LandStructureHandler extends MapGenStructure
 		
 		if(coords.chunkXPos == x && coords.chunkZPos == z)
 		{
-			int xPos = x*16 + 8 + random.nextInt(16);
-			int zPos = z*16 + 8 + random.nextInt(16);
-			int maxY = 0;
-			for(int i = 0; i < 4; i++)
+			BlockPos nodePos;
+			if(decoratorPos == null)
 			{
-				int y = world.getTopSolidOrLiquidBlock(new BlockPos(xPos + (i % 2), 0, zPos + i/2)).getY();
-				Block block = world.getBlockState(new BlockPos(xPos + (i % 2), y, zPos + i/2)).getBlock();
-				if(block.getMaterial().isLiquid() || block == Blocks.ice)
-					return;
-				if(y > maxY)
-					maxY = y;
+				int xPos = x*16 + 8 + random.nextInt(16);
+				int zPos = z*16 + 8 + random.nextInt(16);
+				int maxY = 0;
+				for(int i = 0; i < 4; i++)
+				{
+					int y = world.getTopSolidOrLiquidBlock(new BlockPos(xPos + (i % 2), 0, zPos + i/2)).getY();
+					Block block = world.getBlockState(new BlockPos(xPos + (i % 2), y, zPos + i/2)).getBlock();
+					if(block.getMaterial().isLiquid() || block == Blocks.ice)
+						return;
+					if(y > maxY)
+						maxY = y;
+				}
+				for(int i = 0; i < 4; i++)
+				{
+					BlockPos pos = new BlockPos(xPos + (i % 2), maxY, zPos + i/2);
+					if(!world.getBlockState(pos).getBlock().isReplaceable(world, pos))
+						return;
+				}
+				nodePos = new BlockPos(xPos, maxY, zPos);
 			}
-			for(int i = 0; i < 4; i++)
-			{
-				BlockPos pos = new BlockPos(xPos + (i % 2), maxY, zPos + i/2);
-				if(!world.getBlockState(pos).getBlock().isReplaceable(world, pos))
-					return;
-			}
+			else{ nodePos = decoratorPos;Debug.print("Spawning spacial node at: "+nodePos);}
 			
 			for(int i = 0; i < 4; i++)
 			{
-				BlockPos pos = new BlockPos(xPos + (i % 2), maxY, zPos + i/2);
+				BlockPos pos = nodePos.add(i % 2, 0, i/2);
 				if(i == 3)
 				{
 					world.setBlockState(pos, Minestuck.returnNode.getDefaultState().cycleProperty(BlockGate.isMainComponent), 2);

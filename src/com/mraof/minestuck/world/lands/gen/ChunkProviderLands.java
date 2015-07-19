@@ -152,13 +152,16 @@ public class ChunkProviderLands implements IChunkProvider
 		this.random.setSeed(getSeedFor(chunkX, chunkZ));
 		
 		ichunkprovider.populate(ichunkprovider, chunkX, chunkZ);
+		BlockPos pos = null;
 		for (Object decorator : decorators)
 		{
-			((ILandDecorator) decorator).generate(landWorld, random, chunkX,  chunkZ, this);
+			BlockPos tempPos = ((ILandDecorator) decorator).generate(landWorld, random, chunkX,  chunkZ, this);
+			if(tempPos != null)
+				pos = tempPos;
 		}
 		
 		structureHandler.func_175794_a(landWorld, random, new ChunkCoordIntPair(chunkX, chunkZ));
-		structureHandler.placeReturnNodes(landWorld, random, new ChunkCoordIntPair(chunkX, chunkZ));
+		structureHandler.placeReturnNodes(landWorld, random, new ChunkCoordIntPair(chunkX, chunkZ), pos);
 		
 	}
 	

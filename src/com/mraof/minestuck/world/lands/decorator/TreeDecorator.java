@@ -29,7 +29,7 @@ public class TreeDecorator implements ILandDecorator
 	}
 	
 	@Override
-	public void generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
+	public BlockPos generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
 	{
 		int type = treeTypes[random.nextInt(treeTypes.length)];
 		WorldGenTrees gen = new WorldGenTrees(false, 5, type, type, false);
@@ -46,6 +46,8 @@ public class TreeDecorator implements ILandDecorator
 				gen.func_180711_a(world, random, pos);
 			}
 		}
+		
+		return null;
 	}
 	
 	@Override
