@@ -254,8 +254,6 @@ minestuck.config.modus.tooltip=Modus-related stuff
 
 minestuck.config.privateComputers=Private Computers
 minestuck.config.privateComputers.tooltip=Set this to true to make computers only accessible by the owner of the computer. (the player who turned on the computer)
-minestuck.config.privateComputerMessage=Private Message
-minestuck.config.privateComputerMessage.tooltip=The message displayed when a player tries to access a computer without permission. (only used when 'Private Computers' is turned on)
 minestuck.config.giveItems=Give Items Button
 minestuck.config.giveItems.tooltip=If this is set to true, the 'Activate Editmode' button will be replaced by the old 'Give Items' button.
 
@@ -289,6 +287,7 @@ minestuck.config.loginColorSelector.tooltip=This option determines if the color 
 
 message.selectDefaultColor=Default color selected. You can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!
 message.selectColor=If you want to change the color, you can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!
+message.privateComputerMessage=You are not allowed to access other players computers.
 
 both=Both
 off=Off

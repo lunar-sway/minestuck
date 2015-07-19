@@ -16,6 +16,8 @@ import net.minecraft.server.management.ServerConfigurationManager;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
@@ -284,8 +286,7 @@ public class SkaianetHandler {
 		}
 		if(MinestuckConfig.privateComputers && !p0.equals(p1) && MinecraftServer.getServer().getConfigurationManager().getOppedPlayers().getEntry(player.getGameProfile()) == null)
 		{
-			if(!MinestuckConfig.privateMessage.isEmpty())
-				player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.RED + "[Minestuck] " + MinestuckConfig.privateMessage));
+			player.addChatComponentMessage(new ChatComponentText("[Minestuck] ").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)).appendSibling(new ChatComponentTranslation("message.privateComputerMessage")));
 			return;
 		}
 		int i = 0;
