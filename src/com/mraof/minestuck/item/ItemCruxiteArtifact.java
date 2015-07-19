@@ -136,8 +136,10 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 				for(int blockZ = z - zWidth; blockZ <= z + zWidth; blockZ++)
 				{
 					double radius = Math.sqrt(((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2);
-					int minY =  y - (int) (Math.sqrt(artifactRange * artifactRange - radius*radius));
+					int height = (int) (Math.sqrt(artifactRange * artifactRange - radius*radius));
+					int minY =  y - height;
 					minY = minY < 0 ? 0 : minY;
+					int maxY = MinestuckConfig.entryCrater ? y + height : 256;
 					for(int blockY = minY; blockY < 256; blockY++)
 					{
 						BlockPos pos = new BlockPos(blockX, blockY, blockZ);
