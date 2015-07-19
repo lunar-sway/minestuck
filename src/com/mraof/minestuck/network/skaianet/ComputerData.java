@@ -77,4 +77,16 @@ public class ComputerData{
 		public int getY(){return y;}
 		public int getZ() {return z;}
 		public int getDimension() {return dimension;}
+		
+		@Override
+		public boolean equals(Object obj)
+		{
+			if(obj instanceof ComputerData)
+			{
+				ComputerData otherData = (ComputerData) obj;
+				return this.owner.equals(otherData.owner) && this.x == otherData.x && this.y == otherData.y && this.z == otherData.z && this.dimension == otherData.dimension;
+			}
+			return false;
+		}
+		
 	}
