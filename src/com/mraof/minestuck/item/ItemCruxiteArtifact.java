@@ -56,6 +56,8 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 			{
 				player.triggerAchievement(MinestuckAchievementHandler.enterMedium);
 				Teleport.teleportEntity(player, destinationId, this);
+				int yDiff = 128 - artifactRange - (int) player.posY;
+				player.setPositionAndUpdate(player.posX, player.posY + yDiff, player.posZ);
 				MinestuckPlayerTracker.sendLandEntryMessage(player);
 			}
 		}
@@ -68,6 +70,8 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 			int x = (int) entity.posX;
 			int y = (int) entity.posY;
 			int z = (int) entity.posZ;
+			
+			int yDiff = 128 - artifactRange - y;
 			
 			Debug.print("Loading spawn chunks...");
 			for(int chunkX = ((x - artifactRange) >> 4) - 1; chunkX <= ((x + artifactRange) >> 4) + 2; chunkX++)	//Prevent anything to generate on the piece that we move
@@ -82,7 +86,10 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 			{
 				Entity e = (Entity)iterator.next();
 				if(MinestuckConfig.entryCrater || e instanceof EntityPlayer || e instanceof EntityItem)
+				{
+					e.setPosition(e.posX, e.posY + yDiff, e.posZ);
 					Teleport.teleportEntity(e, worldserver1.provider.getDimensionId(), this);
+				}
 				else	//Copy instead of teleport
 				{
 					Entity newEntity = EntityList.createEntityByName(EntityList.getEntityString(entity), worldserver1);
@@ -90,6 +97,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 					{
 						newEntity.copyDataFromOld(entity);
 						newEntity.dimension = worldserver1.provider.getDimensionId();
+						newEntity.setPosition(newEntity.posX, newEntity.posY + yDiff, newEntity.posZ);
 						worldserver1.spawnEntityInWorld(newEntity);
 					}
 				}
@@ -107,10 +115,11 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 					for(blockY = Math.max(0, y - height); blockY < Math.min(256, y + height); blockY++)
 					{
 						BlockPos pos = new BlockPos(blockX, blockY, blockZ);
+						BlockPos pos1 = pos.up(yDiff);
 						IBlockState block = worldserver0.getBlockState(pos);
 						TileEntity te = worldserver0.getTileEntity(pos);
 						if(block != Blocks.bedrock)
-							worldserver1.setBlockState(pos, block, 0);
+							worldserver1.setBlockState(pos1, block, 0);
 						if((te) != null)
 						{
 							TileEntity te1 = null;
@@ -119,9 +128,10 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 							} catch (Exception e) {e.printStackTrace();	continue;}
 							NBTTagCompound nbt = new NBTTagCompound();
 							te.writeToNBT(nbt);
+							nbt.setInteger("y", pos1.getY());
 							te1.readFromNBT(nbt);
 							worldserver1.removeTileEntity(pos);
-							worldserver1.setTileEntity(pos, te1);
+							worldserver1.setTileEntity(pos1, te1);
 						};
 					}
 					for(; blockY < 256; blockY++)
@@ -154,7 +164,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 				}
 			}
 			
-			Debug.print("Removing old entities...");
+			Debug.print("Making sure that old entities are removed...");
 			list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().expand((double)artifactRange, artifactRange, (double)artifactRange));
 			iterator = list.iterator();
 			while (iterator.hasNext())
