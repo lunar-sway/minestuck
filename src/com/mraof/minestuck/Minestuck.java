@@ -271,7 +271,7 @@ public class Minestuck
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 		config.load();
 		
-		entityIdStart = config.get("Entity Ids", "entitydIdStart", 5050).getInt(); //The number 5050 might make it seem like this is meant to match up with item/block IDs, but it is not
+		entityIdStart = config.get("Entity Ids", "entitydIdStart", 201).getInt();
 		skaiaProviderTypeId = config.get("Provider Type Ids", "skaiaProviderTypeId", 2).getInt();
 		skaiaDimensionId = config.get("Dimension Ids", "skaiaDimensionId", 2).getInt();
 		landProviderTypeId = config.get("Provider Type Ids", "landProviderTypeIdStart", 3).getInt();
