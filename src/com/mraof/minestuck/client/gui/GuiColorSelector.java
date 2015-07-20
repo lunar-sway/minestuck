@@ -10,6 +10,7 @@ import com.mraof.minestuck.util.ColorCollector;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ResourceLocation;
@@ -134,7 +135,7 @@ public class GuiColorSelector extends GuiScreen
 			if(ColorCollector.playerColor == -1)
 				message = new ChatComponentTranslation("message.selectDefaultColor");
 			else message = new ChatComponentTranslation("message.selectColor");
-			this.mc.thePlayer.addChatMessage(message);
+			this.mc.thePlayer.addChatMessage(new ChatComponentText("[Minestuck] ").appendSibling(message));
 		}
 	}
 	

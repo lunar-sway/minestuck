@@ -2,6 +2,8 @@ package com.mraof.minestuck.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -47,6 +49,11 @@ import com.mraof.minestuck.tileentity.TileEntitySkaiaPortal;
 
 public class ClientProxy extends CommonProxy
 {
+	
+	public static EntityPlayer getClientPlayer()	//Note: can't get the client player directly from FMLClientHandler either, as the server side will still crash because of the return type
+	{
+		return FMLClientHandler.instance().getClientPlayerEntity();
+	}
 	
 	@SideOnly(Side.CLIENT)
 	public static void registerRenderers() 

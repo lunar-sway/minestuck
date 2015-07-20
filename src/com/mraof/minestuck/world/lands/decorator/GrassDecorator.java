@@ -12,7 +12,7 @@ public class GrassDecorator implements ILandDecorator
 {
 	
 	@Override
-	public void generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
+	public BlockPos generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
 	{
 		for(int x = 0; x < 32; x++)
 			for(int z = 0; z < 32; z++)
@@ -25,6 +25,7 @@ public class GrassDecorator implements ILandDecorator
 				if(world.getBlockState(pos).equals(Blocks.dirt.getDefaultState()))
 					world.setBlockState(pos, Blocks.grass.getDefaultState(), 2);
 			}
+		return null;
 	}
 	
 	@Override

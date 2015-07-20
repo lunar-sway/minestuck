@@ -20,7 +20,7 @@ public class TileEntityGate extends TileEntity
 {
 	
 	@SideOnly(Side.CLIENT)
-	public int colorIndex = -1;
+	public int colorIndex;
 	
 	public void teleportEntity(World world, EntityPlayerMP player, Block block)
 	{

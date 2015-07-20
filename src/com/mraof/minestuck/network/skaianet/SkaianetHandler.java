@@ -16,6 +16,8 @@ import net.minecraft.server.management.ServerConfigurationManager;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
@@ -43,6 +45,7 @@ public class SkaianetHandler {
 	static Map<String, ComputerData> resumingServers = new HashMap<String, ComputerData>();
 	static List<SburbConnection> connections = new ArrayList<SburbConnection>();
 	static Map<String, String[]> infoToSend = new HashMap<String, String[]>();	//Key: player, value: data to send to player
+	static List<ComputerData> movingComputers = new ArrayList<ComputerData>();
 	
 	public static SburbConnection getClientConnection(String client){
 		for(SburbConnection c : connections)
@@ -135,23 +138,35 @@ public class SkaianetHandler {
 	
 	public static void closeConnection(String player, String otherPlayer, boolean isClient){
 		if(otherPlayer.isEmpty()){
-			if(isClient){
+			if(isClient)
+			{
+				if(movingComputers.contains(resumingClients.get(player)))
+					return;
 				TileEntityComputer te = getComputer(resumingClients.remove(player));
-				if(te != null){
+				if(te != null)
+				{
 					te.getData(0).setBoolean("isResuming", false);
 					te.latestmessage.put(0, "computer.messageResumeStop");
 					te.getWorld().markBlockForUpdate(te.getPos());
 				}
-			} else if(serversOpen.containsKey(player)){
+			} else if(serversOpen.containsKey(player))
+			{
+				if(movingComputers.contains(serversOpen.get(player)))
+					return;
 				TileEntityComputer te = getComputer(serversOpen.remove(player));
-				if(te != null){
+				if(te != null)
+				{
 					te.getData(1).setBoolean("isOpen", false);
 					te.latestmessage.put(1, "computer.messageClosedServer");
 					te.getWorld().markBlockForUpdate(te.getPos());
 				}
-			} else if(resumingServers.containsKey(player)){
+			} else if(resumingServers.containsKey(player))
+			{
+				if(movingComputers.contains(resumingServers.get(player)))
+					return;
 				TileEntityComputer te = getComputer(resumingServers.remove(player));
-				if(te != null){
+				if(te != null)
+				{
 					te.getData(1).setBoolean("isOpen", false);
 					te.latestmessage.put(1, "computer.messageResumeStop");
 					te.getWorld().markBlockForUpdate(te.getPos());
@@ -159,15 +174,21 @@ public class SkaianetHandler {
 			} else Debug.print("[SKAIANET] Got disconnect request but server is not open! "+player);
 		} else {
 			SburbConnection c = isClient?getConnection(player, otherPlayer):getConnection(otherPlayer, player);
-			if(c != null){
-				if(c.isActive){
+			if(c != null)
+			{
+				if(c.isActive)
+				{
+					if(movingComputers.contains(isClient ? c.client : c.server))
+						return;
 					TileEntityComputer cc = getComputer(c.client), sc = getComputer(c.server);
-					if(cc != null){
+					if(cc != null)
+					{
 						cc.getData(0).setBoolean("connectedToServer", false);
 						cc.latestmessage.put(0, "computer.messageClosed");
 						cc.getWorld().markBlockForUpdate(cc.getPos());
 					}
-					if(sc != null){
+					if(sc != null)
+					{
 						sc.getData(1).setString("connectedClient", "");
 						sc.latestmessage.put(1, "computer.messageClosed");
 						sc.getWorld().markBlockForUpdate(sc.getPos());
@@ -177,9 +198,13 @@ public class SkaianetHandler {
 					if(c.isMain)
 						c.isActive = false;	//That's everything that is neccesary.
 					else connections.remove(c);
-				} else if(getAssociatedPartner(player, isClient).equals(otherPlayer)){
+				} else if(getAssociatedPartner(player, isClient).equals(otherPlayer))
+				{
+					if(movingComputers.contains(isClient?resumingClients.get(player):resumingServers.get(player)))
+						return;
 					TileEntityComputer te = getComputer(isClient?resumingClients.remove(player):resumingServers.remove(player));
-					if(te != null){
+					if(te != null)
+					{
 						te.latestmessage.put(isClient?0:1, "computer.messageResumeStop");
 						te.getWorld().markBlockForUpdate(te.getPos());
 					}
@@ -261,8 +286,7 @@ public class SkaianetHandler {
 		}
 		if(MinestuckConfig.privateComputers && !p0.equals(p1) && MinecraftServer.getServer().getConfigurationManager().getOppedPlayers().getEntry(player.getGameProfile()) == null)
 		{
-			if(!MinestuckConfig.privateMessage.isEmpty())
-				player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.RED + "[Minestuck] " + MinestuckConfig.privateMessage));
+			player.addChatComponentMessage(new ChatComponentText("[Minestuck] ").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)).appendSibling(new ChatComponentTranslation("message.privateComputerMessage")));
 			return;
 		}
 		int i = 0;
@@ -557,6 +581,29 @@ public class SkaianetHandler {
 		c.centerZ = (int)player.posZ;
 		updateAll();
 		return dimensionId;
+	}
+	
+	public static void movingComputer(TileEntityComputer oldTE, TileEntityComputer newTE)
+	{
+		ComputerData dataOld = ComputerData.createData(oldTE), dataNew = ComputerData.createData(newTE);
+		for(SburbConnection c : connections)
+		{
+			if(dataOld.equals(c.client))
+				c.client = dataNew;
+			if(dataOld.equals(c.server))
+				c.server = dataNew;
+		}
+		
+		resumingClients.replace(dataOld.owner, dataOld, dataNew);
+		resumingServers.replace(dataOld.owner, dataOld, dataNew);
+		serversOpen.replace(dataOld.owner, dataOld, dataNew);
+		
+		movingComputers.add(dataNew);
+	}
+	
+	public static void clearMovingList()
+	{
+		movingComputers.clear();
 	}
 	
 }

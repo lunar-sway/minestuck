@@ -13,7 +13,7 @@ public class IceDecorator implements ILandDecorator
 {
 	
 	@Override
-	public void generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
+	public BlockPos generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
 	{
 		for(int x = (chunkX << 4) + 8; x < (chunkX+1 << 4) + 8; x++)
 			for(int z = (chunkZ << 4) + 8; z < (chunkZ+1 << 4) + 8; z++)
@@ -23,6 +23,7 @@ public class IceDecorator implements ILandDecorator
 				if(world.func_175675_v(pos))
 					world.setBlockState(pos, Blocks.ice.getDefaultState(), 2);
 			}
+		return null;
 	}
 	
 	@Override

@@ -23,6 +23,8 @@ import com.mraof.minestuck.MinestuckConfig;
 
 import static com.mraof.minestuck.MinestuckConfig.artifactRange;
 
+import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.ColorCollector;
 import com.mraof.minestuck.util.Debug;
@@ -131,7 +133,13 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 							nbt.setInteger("y", pos1.getY());
 							te1.readFromNBT(nbt);
 							worldserver1.removeTileEntity(pos);
+<<<<<<< HEAD
 							worldserver1.setTileEntity(pos1, te1);
+=======
+							worldserver1.setTileEntity(pos, te1);
+							if(te instanceof TileEntityComputer)
+								SkaianetHandler.movingComputer((TileEntityComputer) te, (TileEntityComputer) te1);
+>>>>>>> 1.8
 						};
 					}
 					for(; blockY < 256; blockY++)
@@ -163,6 +171,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 					}
 				}
 			}
+			SkaianetHandler.clearMovingList();
 			
 			Debug.print("Making sure that old entities are removed...");
 			list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().expand((double)artifactRange, artifactRange, (double)artifactRange));

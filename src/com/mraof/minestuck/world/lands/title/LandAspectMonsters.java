@@ -9,6 +9,7 @@ import net.minecraft.entity.monster.EntitySpider;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Vec3;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
 import net.minecraftforge.common.ChestGenHooks;
@@ -80,6 +81,8 @@ public class LandAspectMonsters extends TitleAspect
 			chestGen.removeItem(new ItemStack(Items.ender_pearl, 1, 0));	//Re-add ender pearl with a slightly higher priority and amount
 			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Items.ender_pearl, 1, 0), 1, 4, 2));
 		}
+		
+		chunkProvider.mergeFogColor(new Vec3(0.1, 0, 0), 0.5F);
 	}
 	
 	@Override

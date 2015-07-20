@@ -3,9 +3,9 @@ package com.mraof.minestuck.util;
 import java.util.ArrayList;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fml.client.FMLClientHandler;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
@@ -50,7 +50,7 @@ public class SburbClient extends ButtonListProgram {
 		else if(buttonName.equals("computer.buttonClose"))
 			SkaiaClient.sendCloseRequest(te, te.getData(getId()).getBoolean("isResuming")?"":SkaiaClient.getClientConnection(te.owner).getServerName(), true);
 		else if(buttonName.equals("computer.selectColor"))
-			FMLClientHandler.instance().getClient().thePlayer.openGui(Minestuck.instance, GuiHandler.GuiId.COLOR.ordinal(), te.getWorld(), te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
+			ClientProxy.getClientPlayer().openGui(Minestuck.instance, GuiHandler.GuiId.COLOR.ordinal(), te.getWorld(), te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
 	}
 	
 	@Override

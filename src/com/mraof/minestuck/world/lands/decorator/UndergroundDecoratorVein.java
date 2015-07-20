@@ -27,7 +27,7 @@ public class UndergroundDecoratorVein implements ILandDecorator
 	}
 	
 	@Override
-	public void generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
+	public BlockPos generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
 	{
 		int minY = 0;
 		int maxY = highestY;
@@ -39,6 +39,7 @@ public class UndergroundDecoratorVein implements ILandDecorator
 			int posZ = chunkZ * 16 + random.nextInt(16);
 			(new WorldGenMinable(block, size/2 + random.nextInt(size*2), new OreHandler.BlockStatePredicate(provider.upperBlock))).generate(world, random, new BlockPos(posX, posY, posZ));
 		}
+		return null;
 	}
 	
 	@Override

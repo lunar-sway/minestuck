@@ -50,7 +50,7 @@ public class SburbConnectPacket extends MinestuckPacket {
 
 	@Override
 	public void execute(EntityPlayer player) {
-		if(!MinestuckConfig.privateComputers || ((EntityPlayer)player).getName().equals(this.player) && ServerEditHandler.getData(((EntityPlayer)player).getName()) == null)
+		if((!MinestuckConfig.privateComputers || player.getName().equals(this.player.getOwner())) && ServerEditHandler.getData(((EntityPlayer)player).getName()) == null)
 			SkaianetHandler.requestConnection(this.player, otherPlayer, isClient);
 	}
 

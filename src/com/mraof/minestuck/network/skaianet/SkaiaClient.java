@@ -8,12 +8,12 @@ import java.util.Map;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.GuiComputer;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
@@ -89,7 +89,7 @@ public class SkaiaClient
 	
 	public static boolean canSelect(String player)
 	{
-		if(!player.equals(UsernameHandler.encode(FMLClientHandler.instance().getClient().thePlayer.getName())))
+		if(!player.equals(UsernameHandler.encode(ClientProxy.getClientPlayer().getName())))
 			return false;
 		for(SburbConnection c : connections)
 			if(player.equals(c.getClientName()))

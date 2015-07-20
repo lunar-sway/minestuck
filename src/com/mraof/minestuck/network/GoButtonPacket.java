@@ -42,6 +42,8 @@ public class GoButtonPacket extends MinestuckPacket {
 	@Override
 	public void execute(EntityPlayer player)
 	{
+		if(!(player.openContainer instanceof ContainerMachine))
+			return;
 		TileEntityMachine te = ((ContainerMachine) ((EntityPlayerMP)player).openContainer).tileEntity;
 		
 		if (te == null) {

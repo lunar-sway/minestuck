@@ -52,7 +52,6 @@ public class MinestuckConfig
 	public static boolean dropItemsInCards;
 	public static boolean entryCrater;
 	public static boolean keepDimensionsLoaded;
-	public static String privateMessage;
 	public static int artifactRange;
 	public static int overworldEditRange;
 	public static int landEditRange;
@@ -121,8 +120,7 @@ public class MinestuckConfig
 		dropItemsInCards = config.get("Modus", "dropItemsInCards", true, "When sylladexes are droppable, this option determines if items should be dropped inside of cards or items and cards as different stacks.").setLanguageKey("minestuck.config.dropItemsInCards").getBoolean();
 		config.getCategory("Modus").setLanguageKey("minestuck.config.modus");
 		
-		privateComputers = config.get("General", "privateComputers", false, "True if computers should only be able to be used by the owner.").setLanguageKey("minestuck.config.privateComputers").getBoolean();
-		privateMessage = config.get("General", "privateComputerMessage", "You are not allowed to access other players computers.", "The message sent when someone tries to access a computer that they aren't the owner of if 'Private Computers' is true.").setLanguageKey("minestuck.config.privateComputerMessage").getString();
+		privateComputers = config.get("General", "privateComputers", true, "True if computers should only be able to be used by the owner.").setLanguageKey("minestuck.config.privateComputers").getBoolean();
 		giveItems = config.get("General", "giveItems", false, "Setting this to true replaces editmode with the old Give Items button.").setLanguageKey("minestuck.config.giveItems").setRequiresWorldRestart(true).getBoolean();
 		
 		deployConfigurations = new boolean[1];

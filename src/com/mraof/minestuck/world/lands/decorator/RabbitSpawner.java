@@ -12,7 +12,7 @@ public class RabbitSpawner implements ILandDecorator
 {
 	
 	@Override
-	public void generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
+	public BlockPos generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
 	{
 		for(int i = 0; i < 8; i++)
 			if(random.nextDouble() < 0.2)
@@ -28,6 +28,7 @@ public class RabbitSpawner implements ILandDecorator
 				entity.func_180482_a(null, null);
 				world.spawnEntityInWorld(entity);
 			}
+		return null;
 	}
 	
 	@Override

@@ -2,6 +2,7 @@ package com.mraof.minestuck.world.lands.title;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Vec3;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
 
@@ -35,7 +36,9 @@ public class LandAspectThought extends TitleAspect
 			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Minestuck.coloredDirt, 1, 1), 4, 15, 4));
 		}
 		chunkProvider.riverBlock = Minestuck.blockBrainJuice.getDefaultState();
-		chunkProvider.oceanBlock = Minestuck.blockBrainJuice.getDefaultState() ;
+		chunkProvider.oceanBlock = Minestuck.blockBrainJuice.getDefaultState();
+		
+		chunkProvider.mergeFogColor(new Vec3(0.8, 0.3, 0.8), 0.8F);
 	}
 	
 	@Override

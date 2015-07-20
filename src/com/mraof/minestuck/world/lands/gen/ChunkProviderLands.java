@@ -120,6 +120,14 @@ public class ChunkProviderLands implements IChunkProvider
 			}});
 	}
 	
+	public void mergeFogColor(Vec3 fogColor, float strength)
+	{
+		double d1 = (this.skyColor.xCoord + fogColor.xCoord*strength)/(1 + strength);
+		double d2 = (this.skyColor.yCoord + fogColor.yCoord*strength)/(1 + strength);
+		double d3 = (this.skyColor.zCoord + fogColor.zCoord*strength)/(1 + strength);
+		this.skyColor = new Vec3(d1, d2, d3);
+	}
+	
 	@Override
 	public boolean chunkExists(int i, int j) 
 	{
@@ -144,13 +152,16 @@ public class ChunkProviderLands implements IChunkProvider
 		this.random.setSeed(getSeedFor(chunkX, chunkZ));
 		
 		ichunkprovider.populate(ichunkprovider, chunkX, chunkZ);
+		BlockPos pos = null;
 		for (Object decorator : decorators)
 		{
-			((ILandDecorator) decorator).generate(landWorld, random, chunkX,  chunkZ, this);
+			BlockPos tempPos = ((ILandDecorator) decorator).generate(landWorld, random, chunkX,  chunkZ, this);
+			if(tempPos != null)
+				pos = tempPos;
 		}
 		
 		structureHandler.func_175794_a(landWorld, random, new ChunkCoordIntPair(chunkX, chunkZ));
-		structureHandler.placeReturnNodes(landWorld, random, new ChunkCoordIntPair(chunkX, chunkZ));
+		structureHandler.placeReturnNodes(landWorld, random, new ChunkCoordIntPair(chunkX, chunkZ), pos);
 		
 	}
 	

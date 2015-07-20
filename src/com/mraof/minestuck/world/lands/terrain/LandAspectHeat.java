@@ -19,7 +19,7 @@ public class LandAspectHeat extends TerrainAspect
 	IBlockState[] upperBlocks = {Blocks.netherrack.getDefaultState()};
 	IBlockState[] surfaceBlocks = {Blocks.cobblestone.getDefaultState()};
 	IBlockState[] structureBlocks = {Blocks.nether_brick.getDefaultState(), Blocks.obsidian.getDefaultState()};
-	static Vec3 skyColor = new Vec3(0.0D, 0.0D, 0.0D);
+	static Vec3 skyColor = new Vec3(0.4D, 0.0D, 0.0D);
 	
 	public LandAspectHeat()
 	{

@@ -130,7 +130,7 @@ public class BlockMachine extends BlockContainer {
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
 		TileEntityMachine tileEntity = (TileEntityMachine) worldIn.getTileEntity(pos);
-		if (!worldIn.isRemote)
+		if (tileEntity != null && !worldIn.isRemote)
 		{
 			tileEntity.owner = playerIn;
 		}
@@ -139,7 +139,8 @@ public class BlockMachine extends BlockContainer {
 			return false;
 		}
 		
-		playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.MACHINE.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
+		if(!worldIn.isRemote)
+			playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.MACHINE.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
 		return true;
 	}
 	

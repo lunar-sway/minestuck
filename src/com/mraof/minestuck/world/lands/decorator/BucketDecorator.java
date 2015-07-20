@@ -18,7 +18,7 @@ public class BucketDecorator extends SimpleStructureDecorator
 	private Block[] liquidBlocks = {Blocks.air, Blocks.water, Blocks.lava, Minestuck.blockBlood, Minestuck.blockOil, Minestuck.blockBrainJuice};
 	
 	@Override
-	public void generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
+	public BlockPos generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
 	{
 		if(random.nextDouble() < 0.07F)
 		{
@@ -27,7 +27,7 @@ public class BucketDecorator extends SimpleStructureDecorator
 			zCoord = (chunkZ << 4) + random.nextInt(16) + 8;
 			yCoord = world.getPrecipitationHeight(new BlockPos(xCoord, 0, zCoord)).getY();
 			if(world.getBlockState(new BlockPos(xCoord, yCoord -1, zCoord)).getBlock().getMaterial().isLiquid())
-				return;
+				return null;
 			yCoord -= random.nextInt(3);
 			boolean variant = random.nextDouble() < 0.4;
 			IBlockState block = random.nextDouble() < 0.3 ? Blocks.iron_block.getDefaultState() /*<- Should this continue to be a thing?*/ : Blocks.quartz_block.getDefaultState();
@@ -43,7 +43,7 @@ public class BucketDecorator extends SimpleStructureDecorator
 				boundingBox = new StructureBoundingBox(rotation?zCoord:xCoord - 2, yCoord, rotation?xCoord:zCoord - 2, rotation?zCoord:xCoord + 3, yCoord + 6, rotation?xCoord:zCoord + 3);
 			else boundingBox = new StructureBoundingBox(rotation?zCoord:xCoord - 2, yCoord, rotation?xCoord:zCoord - 2, rotation?zCoord:xCoord + 2, yCoord + 4, rotation?xCoord:zCoord + 2);
 			if(provider.isBBInSpawn(boundingBox))
-				return;
+				return null;
 			
 			if(variant)
 			{
@@ -86,6 +86,7 @@ public class BucketDecorator extends SimpleStructureDecorator
 				placeBlocks(world, liquid, -1, 2, -1, 1, 3, 1);
 			}
 		}
+		return null;
 	}
 
 	@Override

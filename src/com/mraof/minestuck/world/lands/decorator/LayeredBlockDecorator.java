@@ -22,7 +22,7 @@ public class LayeredBlockDecorator implements ILandDecorator
 	}
 	
 	@Override
-	public void generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
+	public BlockPos generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
 	{
 //		byte[] heightMap = new byte[16*16];
 //		for(int x = 0; x < 16; x++)
@@ -56,6 +56,7 @@ public class LayeredBlockDecorator implements ILandDecorator
 				if(world.getBlockState(pos).getBlock().isAir(world, pos) && block.canPlaceBlockAt(world, pos))
 					setBlock(world, pos, 1);
 			}
+		return null;
 	}
 	
 	@Override

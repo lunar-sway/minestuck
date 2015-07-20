@@ -13,7 +13,7 @@ public class CogDecorator extends SimpleStructureDecorator
 {
 	
 	@Override
-	public void generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
+	public BlockPos generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
 	{
 		if(random.nextDouble() < 0.1)
 		{
@@ -24,7 +24,7 @@ public class CogDecorator extends SimpleStructureDecorator
 			zCoord = ((chunkZ << 4) | random.nextInt(16)) + 8;
 			yCoord = world.getPrecipitationHeight(new BlockPos(xCoord, 0, zCoord)).getY() - blocksDown;
 			if(world.getBlockState(new BlockPos(xCoord, yCoord - 1, zCoord)).getBlock().getMaterial().isLiquid())
-				return;
+				return null;
 			IBlockState[] materials = provider.aspect1.getStructureBlocks();
 			IBlockState block = materials[random.nextInt(materials.length)];
 			
@@ -33,7 +33,7 @@ public class CogDecorator extends SimpleStructureDecorator
 				boundingBox = new StructureBoundingBox(rotation?zCoord:xCoord - 2, yCoord, rotation?xCoord:zCoord, rotation?zCoord:xCoord + 2, yCoord + 4, rotation?xCoord:zCoord);
 			else boundingBox = new StructureBoundingBox(rotation?zCoord:xCoord - 3, yCoord, rotation?xCoord:zCoord, rotation?zCoord:xCoord + 4, yCoord + 7, rotation?xCoord:zCoord + 1);
 			if(provider.isBBInSpawn(boundingBox))
-				return;
+				return null;
 			
 			if(!big)
 			{
@@ -80,6 +80,7 @@ public class CogDecorator extends SimpleStructureDecorator
 				placeBlocks(world, block, 2, 3, 0, 2, 4, 1);
 			}
 		}
+		return null;
 	}
 	
 	@Override

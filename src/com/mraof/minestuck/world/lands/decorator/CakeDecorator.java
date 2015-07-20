@@ -13,7 +13,7 @@ public class CakeDecorator implements ILandDecorator
 {
 	
 	@Override
-	public void generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
+	public BlockPos generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
 	{
 		if(random.nextDouble() < 0.2)
 		{
@@ -33,6 +33,7 @@ public class CakeDecorator implements ILandDecorator
 					world.setBlockState(pos, Blocks.cake.getDefaultState().withProperty(BlockCake.BITES, bits), 2);
 			}
 		}
+		return null;
 	}
 	
 	@Override

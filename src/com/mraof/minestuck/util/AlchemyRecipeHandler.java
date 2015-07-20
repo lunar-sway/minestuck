@@ -555,23 +555,34 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.layeredSand), new GristSet(GristType.Shale, 1));
 		
 		//add Designix combinations
-		CombinationRegistry.addCombination(new ItemStack(Items.iron_hoe), new ItemStack(Items.wheat), MODE_AND, false, true, new ItemStack(Minestuck.sickle));
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_sword), new ItemStack(Items.rotten_flesh), MODE_AND, false, true, new ItemStack(Minestuck.ninjaSword));
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_sword), new ItemStack(Minestuck.component, 1, 2), MODE_AND, false, true, new ItemStack(Minestuck.regisword));
-		CombinationRegistry.addCombination(new ItemStack(Items.slime_ball), new ItemStack(Minestuck.sledgeHammer), MODE_AND, false, false, new ItemStack(Minestuck.pogoHammer));
+		CombinationRegistry.addCombination(new ItemStack(Minestuck.ninjaSword), new ItemStack(Minestuck.component, 1, 2), MODE_AND, false, true, new ItemStack(Minestuck.regisword));
+		CombinationRegistry.addCombination(new ItemStack(Minestuck.ninjaSword), new ItemStack(Blocks.obsidian), MODE_AND, new ItemStack(Minestuck.katana));
+		
+		CombinationRegistry.addCombination(new ItemStack(Items.iron_hoe), new ItemStack(Items.wheat), MODE_AND, false, true, new ItemStack(Minestuck.sickle));
+		CombinationRegistry.addCombination(new ItemStack(Minestuck.sickle), new ItemStack(Minestuck.component, 1, 2), MODE_AND, false, true, new ItemStack(Minestuck.regiSickle));
+		
 		CombinationRegistry.addCombination(new ItemStack(Minestuck.clawHammer), new ItemStack(Blocks.brick_block), MODE_AND, false, false, new ItemStack(Minestuck.sledgeHammer));
+		CombinationRegistry.addCombination(new ItemStack(Items.slime_ball), new ItemStack(Minestuck.sledgeHammer), MODE_AND, false, false, new ItemStack(Minestuck.pogoHammer));
+		CombinationRegistry.addCombination(new ItemStack(Minestuck.pogoHammer), new ItemStack(Blocks.anvil), MODE_AND, false, false, new ItemStack(Minestuck.fearNoAnvil));
+		
+		CombinationRegistry.addCombination(new ItemStack(Minestuck.cane), new ItemStack(Items.iron_sword), MODE_AND, new ItemStack(Minestuck.spearCane));
+		CombinationRegistry.addCombination(new ItemStack(Minestuck.cane), new ItemStack(Minestuck.ninjaSword), MODE_AND, new ItemStack(Minestuck.spearCane));
+		
 		CombinationRegistry.addCombination(new ItemStack(Minestuck.component, 1, 0), new ItemStack(Items.iron_ingot), MODE_AND, new ItemStack(Minestuck.component, 1, 1));
 		CombinationRegistry.addCombination(new ItemStack(Minestuck.component, 1, 1), new ItemStack(Items.cake), MODE_AND, new ItemStack(Minestuck.crockerSpork));
+		
 		CombinationRegistry.addCombination(new ItemStack(Minestuck.crockerSpork), new ItemStack(Minestuck.captchaCard), MODE_OR, false, true, new ItemStack(Minestuck.blockMachine, 1, 4));
-		CombinationRegistry.addCombination(new ItemStack(Minestuck.sickle), new ItemStack(Minestuck.component, 1, 2), MODE_AND, false, true, new ItemStack(Minestuck.regiSickle));
-		CombinationRegistry.addCombination(new ItemStack(Minestuck.pogoHammer), new ItemStack(Blocks.anvil), MODE_AND, false, false, new ItemStack(Minestuck.fearNoAnvil));
 		CombinationRegistry.addCombination(new ItemStack(Items.ender_pearl), new ItemStack(Blocks.iron_block), MODE_AND, false, false, new ItemStack(Minestuck.transportalizer));
+		
 		CombinationRegistry.addCombination(new ItemStack(Minestuck.modusCard, 1, 0), new ItemStack(Minestuck.modusCard, 1, 1), MODE_AND, true, true, new ItemStack(Minestuck.modusCard, 1, 2));
-		CombinationRegistry.addCombination(new ItemStack(Items.wheat_seeds), new ItemStack(Items.gold_nugget), MODE_AND, new ItemStack(Minestuck.goldSeeds));
-		CombinationRegistry.addCombination(new ItemStack(Items.wheat_seeds), new ItemStack(Items.gold_ingot), MODE_AND, new ItemStack(Minestuck.goldSeeds));
 		CombinationRegistry.addCombination("stickWood", Minestuck.modusCard, OreDictionary.WILDCARD_VALUE, MODE_OR, new ItemStack(Minestuck.modusCard, 1, 3));
 		CombinationRegistry.addCombination("treeSapling", Minestuck.modusCard, OreDictionary.WILDCARD_VALUE, MODE_OR, new ItemStack(Minestuck.modusCard, 1, 3));
 		CombinationRegistry.addCombination("treeLeaves", Minestuck.modusCard, OreDictionary.WILDCARD_VALUE, MODE_OR, new ItemStack(Minestuck.modusCard, 1, 3));	//Not planks and logs though. Too little branch-related.
+		
+		CombinationRegistry.addCombination(new ItemStack(Items.wheat_seeds), new ItemStack(Items.gold_nugget), MODE_AND, new ItemStack(Minestuck.goldSeeds));
+		CombinationRegistry.addCombination(new ItemStack(Items.wheat_seeds), new ItemStack(Items.gold_ingot), MODE_AND, new ItemStack(Minestuck.goldSeeds));
 		CombinationRegistry.addCombination(new ItemStack(Items.boat), new ItemStack(Items.minecart), MODE_OR, new ItemStack(Minestuck.metalBoat, 1, 0));
 		CombinationRegistry.addCombination(new ItemStack(Items.boat), new ItemStack(Items.iron_ingot), MODE_AND, new ItemStack(Minestuck.metalBoat, 1, 0));
 		CombinationRegistry.addCombination(new ItemStack(Items.boat), new ItemStack(Blocks.iron_block), MODE_AND, new ItemStack(Minestuck.metalBoat, 1, 0));
@@ -580,9 +591,6 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Blocks.dirt), new ItemStack(Items.dye, 1, EnumDyeColor.BLUE.getDyeDamage()), MODE_OR, new ItemStack(Minestuck.coloredDirt, 1, 0));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.dirt), new ItemStack(Items.dye, 1, EnumDyeColor.LIME.getDyeDamage()), MODE_OR, new ItemStack(Minestuck.coloredDirt, 1, 1));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.sand), new ItemStack(Blocks.snow_layer), MODE_OR, new ItemStack(Minestuck.layeredSand));
-		CombinationRegistry.addCombination(new ItemStack(Minestuck.cane), new ItemStack(Items.iron_sword), MODE_AND, new ItemStack(Minestuck.spearCane));
-		CombinationRegistry.addCombination(new ItemStack(Minestuck.cane), new ItemStack(Minestuck.ninjaSword), MODE_AND, new ItemStack(Minestuck.spearCane));
-		CombinationRegistry.addCombination(new ItemStack(Minestuck.ninjaSword), new ItemStack(Blocks.obsidian), MODE_AND, new ItemStack(Minestuck.katana));
 		
 		//Register chest loot
 		if(MinestuckConfig.cardLoot)
