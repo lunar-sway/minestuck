@@ -133,13 +133,9 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 							nbt.setInteger("y", pos1.getY());
 							te1.readFromNBT(nbt);
 							worldserver1.removeTileEntity(pos);
-<<<<<<< HEAD
 							worldserver1.setTileEntity(pos1, te1);
-=======
-							worldserver1.setTileEntity(pos, te1);
 							if(te instanceof TileEntityComputer)
 								SkaianetHandler.movingComputer((TileEntityComputer) te, (TileEntityComputer) te1);
->>>>>>> 1.8
 						};
 					}
 					for(; blockY < 256; blockY++)
