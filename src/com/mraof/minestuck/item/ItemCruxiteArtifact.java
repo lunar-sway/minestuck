@@ -26,6 +26,7 @@ import static com.mraof.minestuck.MinestuckConfig.artifactRange;
 import com.mraof.minestuck.block.BlockGate;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.tileentity.TileEntityGate;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.ColorCollector;
 import com.mraof.minestuck.util.Debug;
@@ -185,8 +186,12 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 			Debug.print("Placing gates...");
 			
 			for(int i = 0; i < 9; i++)
-				if(i == 4)	//y = 128 + 32
+				if(i == 4)
+				{
 					worldserver1.setBlockState(new BlockPos(x, 160, z), Minestuck.gate.getDefaultState().cycleProperty(BlockGate.isMainComponent), 0);
+					TileEntityGate tileEntity = (TileEntityGate) worldserver1.getTileEntity(new BlockPos(x, 160, z));
+					tileEntity.gateCount = 1;
+				}
 				else worldserver1.setBlockState(new BlockPos(x + (i % 3) - 1, 160, z + i/3 - 1), Minestuck.gate.getDefaultState(), 0);
 			
 			Debug.print("Entry finished");

@@ -22,6 +22,8 @@ public class TileEntityGate extends TileEntity
 	@SideOnly(Side.CLIENT)
 	public int colorIndex;
 	
+	public int gateCount;
+	
 	public void teleportEntity(World world, EntityPlayerMP player, Block block)
 	{
 		if(block == Minestuck.returnNode)
@@ -43,6 +45,22 @@ public class TileEntityGate extends TileEntity
 	}
 	
 	@Override
+	public void readFromNBT(NBTTagCompound compound)
+	{
+		super.readFromNBT(compound);
+		if(compound.hasKey("gateCount"))
+			this.gateCount = compound.getInteger("gateCount");
+	}
+	
+	@Override
+	public void writeToNBT(NBTTagCompound compound)
+	{
+		super.writeToNBT(compound);
+		if(this.gateCount != 0)
+			compound.setInteger("gateCount", gateCount);
+	}
+	
+	@Override
 	public Packet getDescriptionPacket()
 	{
 		NBTTagCompound nbt = new NBTTagCompound();
@@ -58,7 +76,14 @@ public class TileEntityGate extends TileEntity
 	
 	public boolean isGate()
 	{
-		return this.worldObj.getBlockState(this.getPos()).getBlock() != Minestuck.returnNode;
+		return this.worldObj != null ? this.worldObj.getBlockState(this.getPos()).getBlock() != Minestuck.returnNode : this.gateCount != 0;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public double getMaxRenderDistanceSquared()
+	{
+		return isGate() ? 65536.0D : 4096.0D;
 	}
 	
 }
