@@ -185,17 +185,23 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 			
 			Debug.print("Placing gates...");
 			
-			for(int i = 0; i < 9; i++)
-				if(i == 4)
-				{
-					worldserver1.setBlockState(new BlockPos(x, 160, z), Minestuck.gate.getDefaultState().cycleProperty(BlockGate.isMainComponent), 0);
-					TileEntityGate tileEntity = (TileEntityGate) worldserver1.getTileEntity(new BlockPos(x, 160, z));
-					tileEntity.gateCount = 1;
-				}
-				else worldserver1.setBlockState(new BlockPos(x + (i % 3) - 1, 160, z + i/3 - 1), Minestuck.gate.getDefaultState(), 0);
+			placeGate(1, new BlockPos(x, 144, z), worldserver1);
+			placeGate(2, new BlockPos(x, 192, z), worldserver1);
 			
 			Debug.print("Entry finished");
 		}
+	}
+	
+	private static void placeGate(int gateCount, BlockPos pos, WorldServer world)
+	{
+		for(int i = 0; i < 9; i++)
+			if(i == 4)
+			{
+				world.setBlockState(pos, Minestuck.gate.getDefaultState().cycleProperty(BlockGate.isMainComponent), 0);
+				TileEntityGate tileEntity = (TileEntityGate) world.getTileEntity(pos);
+				tileEntity.gateCount = gateCount;
+			}
+			else world.setBlockState(pos.add((i % 3) - 1, 0, i/3 - 1), Minestuck.gate.getDefaultState(), 0);
 	}
 	
 	@Override
