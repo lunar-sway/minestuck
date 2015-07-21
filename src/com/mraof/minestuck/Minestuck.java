@@ -39,6 +39,7 @@ import com.mraof.minestuck.block.BlockColoredDirt;
 import com.mraof.minestuck.block.BlockComputerOff;
 import com.mraof.minestuck.block.BlockComputerOn;
 import com.mraof.minestuck.block.BlockFluid;
+import com.mraof.minestuck.block.BlockGate;
 import com.mraof.minestuck.block.BlockReturnNode;
 import com.mraof.minestuck.block.BlockSkaiaPortal;
 import com.mraof.minestuck.block.BlockGoldSeeds;
@@ -196,7 +197,7 @@ public class Minestuck
 	//Blocks
 	public static Block chessTile;
 	public static BlockColoredDirt coloredDirt;
-	public static Block gatePortal;
+	public static Block skaiaPortal;
 	public static OreCruxite oreCruxite;
 	public static Block blockStorage;
 	public static Block blockMachine;
@@ -205,6 +206,7 @@ public class Minestuck
 	public static Block transportalizer;
 	public static BlockGoldSeeds blockGoldSeeds;
 	public static Block returnNode;
+	public static Block gate;
 	
 	public static Block blockOil;
 	public static Block blockBlood;
@@ -249,7 +251,7 @@ public class Minestuck
 		
 		//blocks
 		chessTile = GameRegistry.registerBlock(new BlockChessTile(), ItemChessTile.class, "chess_tile");
-		gatePortal = GameRegistry.registerBlock(new BlockSkaiaPortal(Material.portal), "gate_portal");
+		skaiaPortal = GameRegistry.registerBlock(new BlockSkaiaPortal(Material.portal), "skaia_portal");
 		oreCruxite = (OreCruxite) GameRegistry.registerBlock(new OreCruxite(), ItemOreCruxite.class, "ore_cruxite");
 		layeredSand = GameRegistry.registerBlock(new BlockLayered(Blocks.sand), ItemBlockLayered.class, "layered_sand").setUnlocalizedName("layeredSand");
 		coloredDirt = (BlockColoredDirt) GameRegistry.registerBlock(new BlockColoredDirt(), ItemColoredDirt.class, "colored_dirt").setUnlocalizedName("coloredDirt").setHardness(0.5F);
@@ -260,6 +262,7 @@ public class Minestuck
 		transportalizer = GameRegistry.registerBlock(new BlockTransportalizer(), "transportalizer");
 		blockGoldSeeds = (BlockGoldSeeds) GameRegistry.registerBlock(new BlockGoldSeeds(), null, "gold_seeds");
 		returnNode = GameRegistry.registerBlock(new BlockReturnNode(), null, "return_node");
+		gate = GameRegistry.registerBlock(new BlockGate(), null, "gate");
 		//fluids
 		fluidOil = new Fluid("Oil", new ResourceLocation("minestuck", "blocks/OilStill"), new ResourceLocation("minestuck", "blocks/OilFlowing"));
 		FluidRegistry.registerFluid(fluidOil);

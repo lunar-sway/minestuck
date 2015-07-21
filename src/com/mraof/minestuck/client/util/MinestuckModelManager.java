@@ -101,7 +101,7 @@ public class MinestuckModelManager
 		//Blocks
 		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())
 			register(Minestuck.chessTile, type.ordinal(), "chesstile_"+type.name);
-		register(Minestuck.gatePortal);
+		register(Minestuck.skaiaPortal);
 		register(Minestuck.transportalizer);
 		register(Minestuck.blockComputerOff);
 		register(Minestuck.oreCruxite, 0, "cruxite_stone");
@@ -166,6 +166,13 @@ public class MinestuckModelManager
 			public Map putStateModelLocations(Block block)
 			{
 				return new HashMap();	//We're not using any models for rendering the return node
+			}});
+		ModelLoader.setCustomStateMapper(Minestuck.gate, new IStateMapper()
+		{
+			@Override
+			public Map putStateModelLocations(Block block)
+			{
+				return new HashMap();
 			}});
 	}
 	

@@ -56,4 +56,9 @@ public class TileEntityGate extends TileEntity
 		this.colorIndex = pkt.getNbtCompound().getInteger("color");
 	}
 	
+	public boolean isGate()
+	{
+		return this.worldObj.getBlockState(this.getPos()).getBlock() != Minestuck.returnNode;
+	}
+	
 }

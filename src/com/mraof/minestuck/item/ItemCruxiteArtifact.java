@@ -23,6 +23,7 @@ import com.mraof.minestuck.MinestuckConfig;
 
 import static com.mraof.minestuck.MinestuckConfig.artifactRange;
 
+import com.mraof.minestuck.block.BlockGate;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
@@ -104,7 +105,6 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 					}
 				}
 			}
-			
 			Debug.print("Placing blocks...");
 			for(int blockX = x - artifactRange; blockX <= x + artifactRange; blockX++)
 			{
@@ -138,7 +138,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 								SkaianetHandler.movingComputer((TileEntityComputer) te, (TileEntityComputer) te1);
 						};
 					}
-					for(; blockY < 256; blockY++)
+					for(blockY += yDiff; blockY < 256; blockY++)
 						worldserver1.setBlockState(new BlockPos(blockX, blockY, blockZ), Blocks.air.getDefaultState(), 0);
 				}
 			}
@@ -181,6 +181,15 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 					if(e instanceof EntityItem)
 						e.setDead();
 				}
+			
+			Debug.print("Placing gates...");
+			
+			for(int i = 0; i < 9; i++)
+				if(i == 4)	//y = 128 + 32
+					worldserver1.setBlockState(new BlockPos(x, 160, z), Minestuck.gate.getDefaultState().cycleProperty(BlockGate.isMainComponent), 0);
+				else worldserver1.setBlockState(new BlockPos(x + (i % 3) - 1, 160, z + i/3 - 1), Minestuck.gate.getDefaultState(), 0);
+			
+			Debug.print("Entry finished");
 		}
 	}
 	
