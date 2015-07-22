@@ -500,12 +500,13 @@ public class SkaianetHandler {
 		{
 			for(Entry<String,String[]> entry : infoToSend.entrySet())
 				for(int i = 0; i < entry.getValue().length; i++)
-					if(entry.getValue()[i] != null && entry.getValue()[i] != entry.getKey())
+					if(entry.getValue()[i] != null && !entry.getValue()[i].equals(UsernameHandler.encode(entry.getKey())))
 						entry.getValue()[i] = null;
 		}
 	}
 	
-	static SburbConnection getConnection(String client, String server){
+	static SburbConnection getConnection(String client, String server)
+	{
 		for(SburbConnection c : connections)
 			if(c.getClientName().equals(client) && c.getServerName().equals(server))
 				return c;

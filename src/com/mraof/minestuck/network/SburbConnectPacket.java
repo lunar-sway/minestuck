@@ -11,6 +11,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.skaianet.ComputerData;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.util.UsernameHandler;
 
 public class SburbConnectPacket extends MinestuckPacket {
 
@@ -50,7 +51,7 @@ public class SburbConnectPacket extends MinestuckPacket {
 
 	@Override
 	public void execute(EntityPlayer player) {
-		if((!MinestuckConfig.privateComputers || player.getName().equals(this.player.getOwner())) && ServerEditHandler.getData(((EntityPlayer)player).getName()) == null)
+		if((!MinestuckConfig.privateComputers || UsernameHandler.encode(player.getName()).equals(this.player.getOwner())) && ServerEditHandler.getData(((EntityPlayer)player).getName()) == null)
 			SkaianetHandler.requestConnection(this.player, otherPlayer, isClient);
 	}
 
