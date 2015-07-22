@@ -17,6 +17,8 @@ achievement.killOgre=The Big One
 achievement.killOgre.desc=Kill an ogre.
 achievement.killGiclops=The bigger One
 achievement.killGiclops.desc=Kill a giclops.
+achievement.broBlade=The Blade of a Bro
+achievement.broBlade.desc=Alchemize a really sturdy katana.
 
 commands.checkLand.usage=/checkLand
 

@@ -29,6 +29,7 @@ public class MinestuckAchievementHandler {
 	public static Achievement treeModus;
 	public static Achievement killOgre;
 	public static Achievement killGiclops;
+	public static Achievement broBlade;
 	
 	public static void prepareAchievementPage()
 	{
@@ -52,13 +53,18 @@ public class MinestuckAchievementHandler {
 		achievementPage.getAchievements().add(killOgre);
 		killGiclops = (Achievement) new Achievement("achievement.killGiclops", "killGiclops", -1, 3, Minestuck.royalDeringer, killOgre).registerStat();
 		achievementPage.getAchievements().add(killGiclops);
+		broBlade = (Achievement) new Achievement("achievement.broBlade", "broBlade", 5, -2, Minestuck.katana, alchemy).registerStat();
+		achievementPage.getAchievements().add(broBlade);
 	}
 	
-	public static void onAlchemizedItem(ItemStack stack, EntityPlayer player) {
+	public static void onAlchemizedItem(ItemStack stack, EntityPlayer player)
+	{
 		if(!stack.getItem().equals(Minestuck.cruxiteApple))
 			player.triggerAchievement(alchemy);
 		if(stack.getItem().equals(Minestuck.clawHammer))
 			player.triggerAchievement(getHammer);
+		if(stack.getItem().equals(Minestuck.katana))
+			player.triggerAchievement(broBlade);
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
