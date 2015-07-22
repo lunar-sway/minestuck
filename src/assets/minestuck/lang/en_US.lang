@@ -17,6 +17,10 @@ achievement.killOgre=The Big One
 achievement.killOgre.desc=Kill an ogre.
 achievement.killGiclops=The bigger One
 achievement.killGiclops.desc=Kill a giclops.
+achievement.broBlade=The Blade of a Bro
+achievement.broBlade.desc=Alchemize a really sturdy Katana.
+achievement.returnNode=There's no place like home
+achievement.returnNode.desc=Find a Return Node and jump in to return home.
 
 commands.checkLand.usage=/checkLand
 
@@ -288,6 +292,7 @@ minestuck.config.loginColorSelector.tooltip=This option determines if the color 
 message.selectDefaultColor=Default color selected. You can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!
 message.selectColor=If you want to change the color, you can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!
 message.privateComputerMessage=You are not allowed to access other players computers.
+message.destinationBlocked=The destination seems to be blocked.
 
 both=Both
 off=Off
