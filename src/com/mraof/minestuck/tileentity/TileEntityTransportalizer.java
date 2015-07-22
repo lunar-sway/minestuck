@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -13,6 +14,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.WorldServer;
 
 import com.mraof.minestuck.util.Debug;
@@ -73,10 +75,9 @@ public class TileEntityTransportalizer extends TileEntity implements ITeleporter
 	
 	public void teleportTo(Entity entity, Location location)
 	{
-		entity.timeUntilPortal = 60;
-		double x = location.pos.getX() + (entity.posX - this.pos.getX());
-		double y = location.pos.getY() + (entity.posY - this.pos.getY());
-		double z = location.pos.getZ() + (entity.posZ - this.pos.getZ());
+		double x = location.pos.getX() + 0.5;
+		double y = location.pos.getY() + 0.6;
+		double z = location.pos.getZ() + 0.5;
 		if(entity instanceof EntityPlayerMP)
 		{
 			((EntityPlayerMP) entity).setPositionAndUpdate(x, y, z);
@@ -92,7 +93,8 @@ public class TileEntityTransportalizer extends TileEntity implements ITeleporter
 		Location location = transportalizers.get(this.destId);
 		if(location != null && location.pos.getY() != -1)
 		{
-			TileEntityTransportalizer destTransportalizer = (TileEntityTransportalizer) MinecraftServer.getServer().worldServerForDimension(location.dim).getTileEntity(location.pos);
+			WorldServer world = MinecraftServer.getServer().worldServerForDimension(location.dim);
+			TileEntityTransportalizer destTransportalizer = (TileEntityTransportalizer) world.getTileEntity(location.pos);
 			if(destTransportalizer == null)
 			{
 				Debug.print("Invalid transportalizer in map: " + this.destId + " at " + location);
@@ -100,6 +102,17 @@ public class TileEntityTransportalizer extends TileEntity implements ITeleporter
 				this.destId = "";
 				return;
 			}
+			entity.timeUntilPortal = 60;
+			
+			IBlockState block0 = world.getBlockState(location.pos.up());
+			IBlockState block1 = world.getBlockState(location.pos.up(2));
+			if(block0.getBlock().getMaterial().blocksMovement() || block1.getBlock().getMaterial().blocksMovement())
+			{
+				if(entity instanceof EntityPlayerMP)
+					((EntityPlayerMP) entity).addChatMessage(new ChatComponentTranslation("message.destinationBlocked"));
+				return;
+			}
+			
 			if(location.dim != entity.dimension)
 				Teleport.teleportEntity(entity, location.dim, destTransportalizer);
 			else
@@ -185,7 +198,7 @@ public class TileEntityTransportalizer extends TileEntity implements ITeleporter
 	public void makeDestination(Entity entity, WorldServer worldserver, WorldServer worldserver1) 
 	{
 		entity.setLocationAndAngles(this.pos.getX() + 0.5, this.pos.getY() + 0.6, this.pos.getZ() + 0.5, entity.rotationYaw, entity.rotationPitch);
-		entity.timeUntilPortal = 60;
+		entity.timeUntilPortal = 100;
 	}
 	
 }
