@@ -1,6 +1,7 @@
 package com.mraof.minestuck.util;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
@@ -30,6 +31,7 @@ public class MinestuckAchievementHandler {
 	public static Achievement killOgre;
 	public static Achievement killGiclops;
 	public static Achievement broBlade;
+	public static Achievement returnNode;
 	
 	public static void prepareAchievementPage()
 	{
@@ -55,6 +57,8 @@ public class MinestuckAchievementHandler {
 		achievementPage.getAchievements().add(killGiclops);
 		broBlade = (Achievement) new Achievement("achievement.broBlade", "broBlade", 5, -2, Minestuck.katana, alchemy).registerStat();
 		achievementPage.getAchievements().add(broBlade);
+		returnNode = (Achievement) new Achievement("achievement.returnNode", "returnNode", 4, 2, Items.bed, enterMedium).registerStat();
+		achievementPage.getAchievements().add(returnNode);
 	}
 	
 	public static void onAlchemizedItem(ItemStack stack, EntityPlayer player)

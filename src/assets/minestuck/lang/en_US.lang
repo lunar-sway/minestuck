@@ -18,7 +18,9 @@ achievement.killOgre.desc=Kill an ogre.
 achievement.killGiclops=The bigger One
 achievement.killGiclops.desc=Kill a giclops.
 achievement.broBlade=The Blade of a Bro
-achievement.broBlade.desc=Alchemize a really sturdy katana.
+achievement.broBlade.desc=Alchemize a really sturdy Katana.
+achievement.returnNode=There's no place like home
+achievement.returnNode.desc=Find a Return Node and jump in to return home.
 
 commands.checkLand.usage=/checkLand
 
