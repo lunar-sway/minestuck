@@ -105,13 +105,22 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 				{
 					double radius = Math.sqrt(((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2);
 					int minY =  y - (int) (Math.sqrt(artifactRange * artifactRange - radius * radius));
+					int heightX = (int) Math.sqrt(artifactRange * artifactRange - (((blockX - x + 1) * (blockX - x + 1) + (blockZ - z) * (blockZ - z)) / 2));
+					int heightZ = (int) Math.sqrt(artifactRange * artifactRange - (((blockX - x) * (blockX - x) + (blockZ - z + 1) * (blockZ - z + 1)) / 2));
 					minY = minY < 0 ? 0 : minY;
 					for(int blockY = minY; blockY < 256; blockY++)
 					{
 						BlockPos pos = new BlockPos(blockX, blockY, blockZ);
 						IBlockState block = worldserver0.getBlockState(pos);
 						TileEntity te = worldserver0.getTileEntity(pos);
-						if(block != Blocks.bedrock)
+						if(block.getBlock() != Blocks.air && !block.getBlock().isSolidFullCube()) //Place temp blocks to avoid things like torches breaking because of missing solid block
+						{
+							if(blockX < x + artifactRange && blockY >= y - heightX)
+								worldserver1.setBlockState(pos.east(), Blocks.stone.getDefaultState(), 0);
+							if(blockZ < z + zWidth && blockY >= y - heightZ)
+								worldserver1.setBlockState(pos.south(), Blocks.stone.getDefaultState(), 0);
+						}
+						if(block.getBlock() != Blocks.bedrock)
 							worldserver1.setBlockState(pos, block, 0);
 						if((te) != null)
 						{
