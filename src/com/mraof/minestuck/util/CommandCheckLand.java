@@ -72,4 +72,10 @@ public class CommandCheckLand extends CommandBase
 		return 0;
 	}
 	
+	@Override
+	public boolean canCommandSenderUse(ICommandSender sender)
+	{
+		return true;
+	}
+	
 }
