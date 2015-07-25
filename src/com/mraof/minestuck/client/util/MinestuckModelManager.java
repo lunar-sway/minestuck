@@ -97,6 +97,7 @@ public class MinestuckModelManager
 		register(Minestuck.goldSeeds);
 		for(int i = 0; i < Minestuck.metalBoat.names.length; i++)
 			register(Minestuck.metalBoat, i, "boat_"+Minestuck.metalBoat.names[i]);
+		register(Minestuck.obsidianBucket);
 		
 		//Blocks
 		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())

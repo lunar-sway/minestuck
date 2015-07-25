@@ -168,6 +168,7 @@ item.modusCard.tree.name=Tree Modus
 item.modusCard.hashmap.name=Hashmap Modus
 item.metalBoat.iron.name=Iron Boat
 item.metalBoat.gold.name=Golden Boat
+item.bucketObsidian.name=Obsidian Bucket
 
 itemGroup.tabMinestuck=Minestuck
 

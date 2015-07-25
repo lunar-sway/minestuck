@@ -82,6 +82,7 @@ import com.mraof.minestuck.item.ItemGoldSeeds;
 import com.mraof.minestuck.item.ItemMetalBoat;
 import com.mraof.minestuck.item.ItemMinestuckBucket;
 import com.mraof.minestuck.item.ItemModus;
+import com.mraof.minestuck.item.ItemObsidianBucket;
 import com.mraof.minestuck.item.block.ItemBlockLayered;
 import com.mraof.minestuck.item.block.ItemChessTile;
 import com.mraof.minestuck.item.block.ItemColoredDirt;
@@ -192,6 +193,7 @@ public class Minestuck
 	public static ItemMinestuckBucket minestuckBucket;
 	public static ItemGoldSeeds goldSeeds;	//This item is pretty much only a joke
 	public static ItemMetalBoat metalBoat;
+	public static Item obsidianBucket;
 	
 	//Blocks
 	public static Block chessTile;
@@ -312,6 +314,7 @@ public class Minestuck
 		disk = new ItemDisk();
 		component = new ItemComponent();
 		minestuckBucket = new ItemMinestuckBucket();
+		obsidianBucket = new ItemObsidianBucket();
 		modusCard = new ItemModus();
 		goldSeeds = new ItemGoldSeeds();
 		metalBoat = new ItemMetalBoat();
@@ -359,6 +362,7 @@ public class Minestuck
 		GameRegistry.registerItem(disk, "computer_disk");
 		GameRegistry.registerItem(component, "component");
 		GameRegistry.registerItem(minestuckBucket, "minestuck_bucket");
+		GameRegistry.registerItem(obsidianBucket, "bucket_obsidian");
 		GameRegistry.registerItem(modusCard, "modus_card");
 		GameRegistry.registerItem(goldSeeds, "gold_seeds");
 		GameRegistry.registerItem(metalBoat, "metal_boat");

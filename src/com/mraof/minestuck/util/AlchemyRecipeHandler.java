@@ -412,7 +412,6 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Items.slime_ball),new ItemStack(Items.blaze_powder),MODE_AND, new ItemStack(Items.magma_cream));
 		CombinationRegistry.addCombination("stickWood", Items.lava_bucket, WILDCARD_VALUE, MODE_AND, new ItemStack(Items.blaze_rod));
 		CombinationRegistry.addCombination(new ItemStack(Items.string),new ItemStack(Items.leather),MODE_AND, new ItemStack(Items.saddle));
-		CombinationRegistry.addCombination(new ItemStack(Items.water_bucket),new ItemStack(Items.lava_bucket),MODE_OR, new ItemStack(Blocks.obsidian));
 		CombinationRegistry.addCombination(new ItemStack(Items.redstone), new ItemStack(Items.lava_bucket), MODE_OR, new ItemStack(Items.blaze_powder));
 		CombinationRegistry.addCombination(new ItemStack(Items.redstone), new ItemStack(Blocks.netherrack), MODE_OR, new ItemStack(Items.blaze_powder));
 		CombinationRegistry.addCombination("stickWood", Items.blaze_powder, WILDCARD_VALUE, MODE_AND, new ItemStack(Items.blaze_rod));
@@ -517,9 +516,10 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.metalBoat, 1, 0), true, new GristSet(GristType.Rust, 65));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.metalBoat, 1, 1), true, new GristSet(GristType.Gold, 65));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.layeredSand), new GristSet(GristType.Shale, 1));
-		GristRegistry.addGristConversion(new ItemStack(Minestuck.minestuckBucket, 1, 0), true, new GristSet(new GristType[] {GristType.Rust, GristType.Tar, GristType.Shale}, new int[] {48, 8, 8}));
-		GristRegistry.addGristConversion(new ItemStack(Minestuck.minestuckBucket, 1, 1), true, new GristSet(new GristType[] {GristType.Rust, GristType.Garnet, GristType.Iodine}, new int[] {48, 8, 8}));
-		GristRegistry.addGristConversion(new ItemStack(Minestuck.minestuckBucket, 1, 2), true, new GristSet(new GristType[] {GristType.Rust, GristType.Amethyst, GristType.Chalk}, new int[] {48, 8, 8}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.minestuckBucket, 1, 0), true, new GristSet(new GristType[] {GristType.Rust, GristType.Tar, GristType.Shale}, new int[] {54, 8, 8}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.minestuckBucket, 1, 1), true, new GristSet(new GristType[] {GristType.Rust, GristType.Garnet, GristType.Iodine}, new int[] {54, 8, 8}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.minestuckBucket, 1, 2), true, new GristSet(new GristType[] {GristType.Rust, GristType.Amethyst, GristType.Chalk}, new int[] {54, 8, 8}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.obsidianBucket), new GristSet(new GristType[] {GristType.Rust, GristType.Cobalt, GristType.Tar, GristType.Build}, new int[] {54, 8, 16, 4}));
 		
 		//add Designix combinations
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_sword), new ItemStack(Items.rotten_flesh), MODE_AND, false, true, new ItemStack(Minestuck.ninjaSword));
@@ -558,6 +558,8 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Blocks.dirt), new ItemStack(Items.dye, 1, EnumDyeColor.BLUE.getDyeDamage()), MODE_OR, new ItemStack(Minestuck.coloredDirt, 1, 0));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.dirt), new ItemStack(Items.dye, 1, EnumDyeColor.LIME.getDyeDamage()), MODE_OR, new ItemStack(Minestuck.coloredDirt, 1, 1));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.sand), new ItemStack(Blocks.snow_layer), MODE_OR, new ItemStack(Minestuck.layeredSand));
+		CombinationRegistry.addCombination(new ItemStack(Items.water_bucket), new ItemStack(Items.lava_bucket), MODE_OR, new ItemStack(Minestuck.obsidianBucket));	//water_bucket && lava bucket could make a bucket with liquid obsidian? (from a mod that adds liquid obsidian)
+		CombinationRegistry.addCombination(new ItemStack(Items.bucket), new ItemStack(Blocks.obsidian), MODE_AND, new ItemStack(Minestuck.obsidianBucket));	//bucket || obsidian could make a bucket made out of obsidian
 		
 		//Register chest loot
 		if(MinestuckConfig.cardLoot)
