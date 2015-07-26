@@ -55,18 +55,13 @@ public class ItemBlade extends ItemSword	//To allow enchantments such as sharpne
 		case DOGG:
 			this.setUnlocalizedName("doggMachete");
 		}
-		this.weaponDamage = bladeType.getDamageVsEntity();
+		this.weaponDamage = bladeType.getDamageVsEntity() + 4;
 	}
 	
 	@Override
 	public float getDamageVsEntity()
 	{
 		return bladeType.getDamageVsEntity();
-	}
-
-	public int getAttackDamage() 
-	{
-		return weaponDamage;
 	}
 	
 	@Override
