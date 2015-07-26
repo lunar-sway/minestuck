@@ -1,17 +1,22 @@
 package com.mraof.minestuck.item.weapon;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import com.mraof.minestuck.Minestuck;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemBlade extends ItemWeapon
+public class ItemBlade extends ItemSword	//To allow enchantments such as sharpness
 {
 	private int weaponDamage;
 	private final EnumBladeType bladeType;
@@ -19,7 +24,7 @@ public class ItemBlade extends ItemWeapon
 	
 	public ItemBlade(EnumBladeType bladeType)
 	{
-		super();
+		super(ToolMaterial.IRON);
 		
 		setCreativeTab(Minestuck.tabMinestuck);
 		this.bladeType = bladeType;
@@ -50,7 +55,13 @@ public class ItemBlade extends ItemWeapon
 		case DOGG:
 			this.setUnlocalizedName("doggMachete");
 		}
-		this.weaponDamage = 4 + bladeType.getDamageVsEntity();
+		this.weaponDamage = bladeType.getDamageVsEntity();
+	}
+	
+	@Override
+	public float getDamageVsEntity()
+	{
+		return bladeType.getDamageVsEntity();
 	}
 
 	public int getAttackDamage() 
@@ -63,7 +74,13 @@ public class ItemBlade extends ItemWeapon
 	{
 		return this.bladeType.getEnchantability();
 	}
-	 
+	
+	@Override
+	public boolean getIsRepairable(ItemStack toRepair, ItemStack repair)
+	{
+		return false;
+	}
+	
 	@Override
 	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase attacker)
 	{
@@ -96,6 +113,14 @@ public class ItemBlade extends ItemWeapon
 	public boolean isFull3D()
 	{
 		return true;
+	}
+	
+	@Override
+	public Multimap getAttributeModifiers(ItemStack stack)
+	{
+		Multimap multimap = HashMultimap.create();
+		multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(itemModifierUUID, "Weapon modifier", (double)this.weaponDamage, 0));
+		return multimap;
 	}
 	
 }
