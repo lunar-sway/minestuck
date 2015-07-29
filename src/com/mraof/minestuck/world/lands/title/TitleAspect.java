@@ -22,6 +22,7 @@ public abstract class TitleAspect implements ILandAspect<TitleAspect>
 	{
 		ChunkProviderLands chunkProvider = new ChunkProviderLands(land.getWorld(), land, land.getWorld().isRemote);
 		prepareChunkProvider(chunkProvider);
+		chunkProvider.createBiomeGen();
 		return chunkProvider;
 	}
 	

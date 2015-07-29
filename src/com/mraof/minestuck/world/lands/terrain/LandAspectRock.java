@@ -96,6 +96,18 @@ public class LandAspectRock extends TerrainAspect
 	}
 	
 	@Override
+	public float getTemperature()
+	{
+		return 0.3F;
+	}
+	
+	@Override
+	public float getRainfall()
+	{
+		return 0.2F;
+	}
+	
+	@Override
 	public Vec3 getFogColor()
 	{
 		return new Vec3(0.5, 0.5, 0.55);

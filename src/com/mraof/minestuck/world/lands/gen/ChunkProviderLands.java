@@ -17,6 +17,7 @@ import net.minecraft.util.Vec3;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
@@ -31,6 +32,7 @@ import com.mraof.minestuck.entity.consort.EntitySalamander;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
+import com.mraof.minestuck.world.biome.BiomeGenMinestuck;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.structure.LandStructureHandler;
@@ -60,7 +62,9 @@ public class ChunkProviderLands implements IChunkProvider
 	public LandTerrainGenBase terrainGenerator;
 	public LandStructureHandler structureHandler;
 	public int dayCycle;
-	public int weatherType;	//-1:No weather &1: rainy or snowy &2:If thunder &4:If neverending
+	public int weatherType;	//-1:No weather &1: Force rain &2: If thunder &4: Force thunder
+	public float moisture, temperature;
+	protected BiomeGenBase biomeGenLands;
 
 	@SuppressWarnings("unchecked")
 	public ChunkProviderLands(World worldObj, WorldProviderLands worldProvider, boolean clientSide)
@@ -82,6 +86,8 @@ public class ChunkProviderLands implements IChunkProvider
 		this.dayCycle = aspect1.getDayCycleMode();
 		this.skyColor = aspect1.getFogColor();
 		this.weatherType = aspect1.getWeatherType();
+		this.moisture = aspect1.getRainfall();
+		this.temperature = aspect1.getTemperature();
 		
 		if(!clientSide)
 		{
@@ -108,6 +114,13 @@ public class ChunkProviderLands implements IChunkProvider
 			aspect1.modifyChestContent(list, AlchemyRecipeHandler.BASIC_MEDIUM_CHEST);
 			lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, new ChestGenHooks(null, list, 0, 0));	//Item count is handled separately by the structure
 		}
+	}
+	
+	public void createBiomeGen()
+	{
+		biomeGenLands = new BiomeGenMinestuck(BiomeGenMinestuck.mediumNormal.biomeID, false).setTemperatureRainfall(temperature, moisture).setBiomeName(this.landWorld.provider.getDimensionName());
+		if(temperature <= 0.1)
+			biomeGenLands.setEnableSnow();
 	}
 	
 	public void sortDecorators()	//Called after an aspect have added elements to the decorators list.
@@ -277,6 +290,11 @@ public class ChunkProviderLands implements IChunkProvider
 		}
 		
 		return false;
+	}
+	
+	public BiomeGenBase getBiomeGen()
+	{
+		return biomeGenLands;
 	}
 	
 }

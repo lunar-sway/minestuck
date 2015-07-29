@@ -7,6 +7,7 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldSettings.GameType;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.WorldChunkManagerHell;
 import net.minecraft.world.chunk.IChunkProvider;
 
@@ -142,7 +143,7 @@ public class WorldProviderLands extends WorldProvider
 		isHellWorld = false;
 		if(provider == null)
 			createChunkGenerator();
-		this.worldChunkMgr = new WorldChunkManagerHell(provider.weatherType != -1 && (provider.weatherType&1) !=0 ? BiomeGenMinestuck.mediumCold : BiomeGenMinestuck.mediumNormal, 0.5F);
+		this.worldChunkMgr = new WorldChunkManagerHell(BiomeGenMinestuck.mediumNormal, 0.5F);
 		this.hasNoSky = false;
 	}
 	
@@ -162,18 +163,15 @@ public class WorldProviderLands extends WorldProvider
 	
 	private void forceWeatherCheck()
 	{
-		if(provider.weatherType != -1 && (provider.weatherType & 4) != 0)
-		{
-//			Debug.print("Forcing weather to on. "+provider.weatherType);
-			worldObj.rainingStrength = 1.0F;
-			if((provider.weatherType & 2) != 0)
-				worldObj.thunderingStrength = 1.0F;
-		}
-		else if(provider.weatherType == -1)
+		if(provider.weatherType == -1)
 			worldObj.rainingStrength = 0.0F;
+		else if((provider.weatherType & 5) != 0)
+			worldObj.rainingStrength = 1.0F;
 		
-		if(provider.weatherType == -1 || (provider.weatherType & 2) == 0)
+		if(provider.weatherType == -1 || (provider.weatherType & 6) == 0)
 			worldObj.thunderingStrength = 0.0F;
+		else if((provider.weatherType & 4) != 0)
+			worldObj.thunderingStrength = 1.0F;
 	}
 	
 	@Override
@@ -199,6 +197,12 @@ public class WorldProviderLands extends WorldProvider
 	public World getWorld()
 	{
 		return worldObj;
+	}
+	
+	@Override
+	public BiomeGenBase getBiomeGenForCoords(BlockPos pos)
+	{
+		return provider.getBiomeGen();
 	}
 	
 }

@@ -100,4 +100,16 @@ public class LandAspectHeat extends TerrainAspect
 		return structureBlocks;
 	}
 	
+	@Override
+	public float getTemperature()
+	{
+		return 2.0F;
+	}
+	
+	@Override
+	public float getRainfall()
+	{
+		return 0.0F;
+	}
+	
 }

@@ -79,6 +79,16 @@ public abstract class TerrainAspect implements ILandAspect<TerrainAspect>
 		return -1;
 	}
 	
+	public float getRainfall()
+	{
+		return 0.5F;
+	}
+	
+	public float getTemperature()
+	{
+		return 0.7F;
+	}
+	
 	@Override
 	public List<TerrainAspect> getVariations()
 	{

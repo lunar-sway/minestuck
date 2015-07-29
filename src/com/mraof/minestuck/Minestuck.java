@@ -418,8 +418,8 @@ public class Minestuck
 		DimensionManager.registerDimension(skaiaDimensionId, skaiaProviderTypeId);
 		DimensionManager.registerProviderType(landProviderTypeId, WorldProviderLands.class, MinestuckConfig.keepDimensionsLoaded);
 		
-		BiomeGenMinestuck.mediumNormal = new BiomeGenMinestuck(biomeIdStart).setBiomeName("The Medium");
-		BiomeGenMinestuck.mediumCold = new BiomeGenMinestuck(biomeIdStart+1).setBiomeName("The Medium (Cold)").setEnableSnow().setTemperatureRainfall(0.0F, 0.5F);
+		BiomeGenMinestuck.mediumNormal = new BiomeGenMinestuck(biomeIdStart, true).setBiomeName("The Medium");
+		BiomeGenMinestuck.mediumOcean = new BiomeGenMinestuck(biomeIdStart+1, true).setBiomeName("The Medium (Ocean)");
 		
 		//register ore generation
 		OreHandler oreHandler = new OreHandler();

@@ -113,4 +113,10 @@ public class LandAspectForest extends TerrainAspect
 		return new Vec3(0.0D, 1.0D, 0.6D);
 	}
 	
+	@Override
+	public float getRainfall()	//Same as vanilla forest
+	{
+		return 0.8F;
+	}
+	
 }

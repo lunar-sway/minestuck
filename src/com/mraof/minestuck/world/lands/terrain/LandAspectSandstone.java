@@ -141,6 +141,18 @@ public class LandAspectSandstone extends TerrainAspect
 	}
 	
 	@Override
+	public float getTemperature()
+	{
+		return 1.8F;
+	}
+	
+	@Override
+	public float getRainfall()
+	{
+		return 0.0F;
+	}
+	
+	@Override
 	public Vec3 getFogColor()
 	{
 		return skyColor;

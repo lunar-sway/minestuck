@@ -135,6 +135,18 @@ public class LandAspectSand extends TerrainAspect
 	}
 	
 	@Override
+	public float getTemperature()
+	{
+		return 2.0F;
+	}
+	
+	@Override
+	public float getRainfall()
+	{
+		return 0.0F;
+	}
+	
+	@Override
 	public IBlockState[] getStructureBlocks()
 	{
 		return structureBlocks;

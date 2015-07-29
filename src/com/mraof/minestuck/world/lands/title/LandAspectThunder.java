@@ -23,7 +23,8 @@ public class LandAspectThunder extends TitleAspect
 	@Override
 	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
-		chunkProvider.weatherType = 6;
+		chunkProvider.weatherType = 4;
+		chunkProvider.moisture += 0.1F;
 		
 		chunkProvider.mergeFogColor(new Vec3(0.1, 0.1, 0.2), 0.5F);
 	}
@@ -31,7 +32,7 @@ public class LandAspectThunder extends TitleAspect
 	@Override
 	public boolean isAspectCompatible(TerrainAspect aspect)
 	{
-		return aspect.getWeatherType() == -1 || ((aspect.getWeatherType() & 1) == 0);
+		return aspect.getTemperature() >= 0.2;
 	}
 	
 }

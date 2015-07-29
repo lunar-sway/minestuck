@@ -108,6 +108,12 @@ public class LandAspectFrost extends TerrainAspect
 	}
 	
 	@Override
+	public float getTemperature()
+	{
+		return 0.0F;
+	}
+	
+	@Override
 	public IBlockState getDecorativeBlockFor(IBlockState state)
 	{
 		if(state.getBlock() == Blocks.stonebrick)
