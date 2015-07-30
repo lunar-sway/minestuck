@@ -69,6 +69,8 @@ public class MinestuckModelManager
 		register(Minestuck.spearCane);
 		register(Minestuck.dragonCane);
 		
+		register(Minestuck.woodenSpoon);
+		register(Minestuck.silverSpoon);
 		modelRegistry.register(Minestuck.crockerSpork, new CrockerSporkDefinition());
 		register(Minestuck.skaiaFork);
 		

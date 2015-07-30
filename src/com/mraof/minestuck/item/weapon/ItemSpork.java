@@ -1,7 +1,6 @@
 package com.mraof.minestuck.item.weapon;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -36,15 +35,7 @@ public class ItemSpork extends ItemWeapon
 		this.maxStackSize = 1;
 		this.setMaxDamage(sporkType.getMaxUses());
 		this.setCreativeTab(Minestuck.tabMinestuck);
-		switch(sporkType)
-		{
-		case CROCKER:
-			this.setUnlocalizedName("crockerSpork");
-			break;
-		case SKAIA:
-			this.setUnlocalizedName("skaiaFork");
-			break;
-		}
+		this.setUnlocalizedName(sporkType.getUnlocalizedName());
 		this.weaponDamage = 2 + sporkType.getDamageVsEntity();
 	}
 	
@@ -100,7 +91,10 @@ public class ItemSpork extends ItemWeapon
 	{
 		if(!world.isRemote)
 			if (sporkType.equals(EnumSporkType.CROCKER) && player.isSneaking())
+			{
+				checkTagCompound(stack);
 				stack.getTagCompound().setBoolean("isSpoon", !stack.getTagCompound().getBoolean("isSpoon"));
+			}
 		return stack;
 	}
 	

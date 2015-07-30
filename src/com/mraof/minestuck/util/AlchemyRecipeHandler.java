@@ -475,7 +475,7 @@ public class AlchemyRecipeHandler
 		cardRecipe = GameRegistry.addShapedRecipe(new ItemStack(Minestuck.captchaCard,8,0),new Object[]{ "XXX","XYX","XXX",'Y',new ItemStack(Minestuck.rawCruxite, 1),'X',new ItemStack(Items.paper,1)});
 		cardRecipeAdded = true;
 		GameRegistry.addRecipe(new ItemStack(Minestuck.clawHammer),new Object[]{ " XX","XY "," Y ",'X',new ItemStack(Items.iron_ingot),'Y',new ItemStack(Items.stick)});
-		GameRegistry.addRecipe(new ItemStack(Minestuck.component,1,0),new Object[]{ " X "," Y "," Y ",'X',new ItemStack(Items.bowl),'Y',new ItemStack(Items.stick)});
+		GameRegistry.addRecipe(new ItemStack(Minestuck.woodenSpoon),new Object[]{ " X "," Y "," Y ",'X',new ItemStack(Items.bowl),'Y',new ItemStack(Items.stick)});
 		GameRegistry.addRecipe(new ItemStack(Minestuck.component,1,2),new Object[]{ "XYX","YXY","XYX",'X',new ItemStack(Blocks.stained_hardened_clay,1,0),'Y',new ItemStack(Blocks.stained_hardened_clay,1,15)});
 		GameRegistry.addRecipe(new ItemStack(Minestuck.component,1,2),new Object[]{ "XYX","YXY","XYX",'Y',new ItemStack(Blocks.stained_hardened_clay,1,0),'X',new ItemStack(Blocks.stained_hardened_clay,1,15)});
 		GameRegistry.addRecipe(new ItemStack(Minestuck.disk, 1, 0),new Object[]{ "X X"," Y ","X X",'X',new ItemStack(Minestuck.rawCruxite, 1),'Y',new ItemStack(Items.iron_ingot,1)});
@@ -483,6 +483,8 @@ public class AlchemyRecipeHandler
 		GameRegistry.addShapelessRecipe(new ItemStack(Minestuck.rawCruxite, 9),new  ItemStack(Minestuck.blockStorage,1,0));
 		GameRegistry.addRecipe(new ItemStack(Minestuck.cane, 1), new Object[] {"  X", " X ", "X  ", 'X', new ItemStack(Items.stick, 1)});
 		GameRegistry.addRecipe(new ItemStack(Minestuck.deuceClub, 1), new Object[] {"  Y", " X ", "X  ", 'X', new ItemStack(Items.stick, 1), 'Y', new ItemStack(Blocks.planks, 1)});
+		GameRegistry.addShapelessRecipe(new ItemStack(Minestuck.woodenSpoon), new ItemStack(Minestuck.component, 1, 0));
+		GameRegistry.addShapelessRecipe(new ItemStack(Minestuck.silverSpoon), new ItemStack(Minestuck.component, 1, 1));
 		ItemStack crux = new ItemStack(Minestuck.rawCruxite);
 		ItemStack cruxBl = new ItemStack(Minestuck.blockStorage, 1, 0);
 		ItemStack card = new ItemStack(Minestuck.captchaCard);
@@ -494,7 +496,7 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.coloredDirt, 1), false, new GristSet(new GristType[] {GristType. Build}, new int[] {1}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.blockMachine,1,4), true, new GristSet(new GristType[] {GristType. Build,GristType.Garnet,GristType.Ruby}, new int[] {150, 25, 10}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.blockStorage, 1, 1), true, new GristSet(new GristType[] {GristType. Build}, new int[] {2}));
-		GristRegistry.addGristConversion(new ItemStack(Minestuck.component,1, 1), true, new GristSet(new GristType[] {GristType.Build, GristType.Mercury}, new int[] {5, 12}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.silverSpoon), false, new GristSet(new GristType[] {GristType.Build, GristType.Mercury}, new int[] {5, 12}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.component,1, 2), true, new GristSet(new GristType[] {GristType.Shale, GristType.Marble}, new int[] {25, 25}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.crockerSpork), false, new GristSet(new GristType[] {GristType.Build, GristType.Iodine,GristType.Chalk,GristType.Ruby}, new int[] {70, 34, 34, 6}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.cruxiteApple, 1), false, new GristSet());
@@ -537,8 +539,8 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Minestuck.cane), new ItemStack(Items.iron_sword), MODE_OR, new ItemStack(Minestuck.spearCane));
 		CombinationRegistry.addCombination(new ItemStack(Minestuck.cane), new ItemStack(Minestuck.ninjaSword), MODE_OR, new ItemStack(Minestuck.spearCane));
 		
-		CombinationRegistry.addCombination(new ItemStack(Minestuck.component, 1, 0), new ItemStack(Items.iron_ingot), MODE_AND, new ItemStack(Minestuck.component, 1, 1));
-		CombinationRegistry.addCombination(new ItemStack(Minestuck.component, 1, 1), new ItemStack(Items.cake), MODE_AND, new ItemStack(Minestuck.crockerSpork));
+		CombinationRegistry.addCombination(new ItemStack(Minestuck.woodenSpoon), new ItemStack(Items.iron_ingot), MODE_AND, false, false, new ItemStack(Minestuck.silverSpoon));
+		CombinationRegistry.addCombination(new ItemStack(Minestuck.silverSpoon), new ItemStack(Items.cake), MODE_AND, false, false, new ItemStack(Minestuck.crockerSpork));
 		
 		CombinationRegistry.addCombination(new ItemStack(Minestuck.crockerSpork), new ItemStack(Minestuck.captchaCard), MODE_OR, false, true, new ItemStack(Minestuck.blockMachine, 1, 4));
 		CombinationRegistry.addCombination(new ItemStack(Items.ender_pearl), new ItemStack(Blocks.iron_block), MODE_AND, false, false, new ItemStack(Minestuck.transportalizer));

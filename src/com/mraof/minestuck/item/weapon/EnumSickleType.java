@@ -4,7 +4,7 @@ public enum EnumSickleType
 {
 	SICKLE(1, 131, 4.0F, 0, 5),
 	HOMES(1, 200, 4.0F, 1, 10),
-	REGISICKLE(2, 256, 4.0F, 2, 1),
+	REGISICKLE(2, 512, 4.0F, 3, 1),
 	CLAW(3, 2048, 4.0F, 4, 15);
 	
 	private final int harvestLevel;

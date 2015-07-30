@@ -50,7 +50,7 @@ public class ItemComponent extends Item
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item item, CreativeTabs tab, List subItems) 
 	{
-		for(int i = 0; i < subNames.length; i++)
+		for(int i = 2; i < subNames.length; i++)
 			subItems.add(new ItemStack(this, 1, i));
 	}
 }

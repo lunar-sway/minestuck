@@ -7,7 +7,7 @@ public enum EnumBladeType
 	NINJA(1, 100, 4.0F, 1, 15),
 	KATANA(3, 3000, 4.0F, 3, 30),
 	CALEDSCRATCH(3, 1561, 4.0F, 3, 30),
-	REGISWORD(2, 256, 4.0F, 3, 1),
+	REGISWORD(2, 512, 4.0F, 3, 1),
 	DERINGER(3, 1561, 4.0F, 4, 30),
 	SCARLET(3, 2000, 4.0F, 4, 30),
 	DOGG(3, 1000, 4.0F, 2, 30);

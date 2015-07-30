@@ -180,6 +180,8 @@ public class Minestuck
 	public static Item spearCane;
 	public static Item dragonCane;
 	//Spoons/forks
+	public static Item woodenSpoon;
+	public static Item silverSpoon;
 	public static ItemSpork crockerSpork;
 	public static Item skaiaFork;
 	//Other
@@ -304,6 +306,8 @@ public class Minestuck
 		spearCane = new ItemCane(EnumCaneType.SPEAR);
 		dragonCane = new ItemCane(EnumCaneType.DRAGON);
 		//Spoons/forks
+		woodenSpoon = new ItemSpork(EnumSporkType.SPOON_WOOD);
+		silverSpoon = new ItemSpork(EnumSporkType.SPOON_SILVER);
 		crockerSpork = new ItemSpork(EnumSporkType.CROCKER);
 		skaiaFork = new ItemSpork(EnumSporkType.SKAIA);
 		//items
@@ -352,6 +356,8 @@ public class Minestuck
 		GameRegistry.registerItem(spearCane, "spear_cane");
 		GameRegistry.registerItem(dragonCane, "dragon_cane");
 		
+		GameRegistry.registerItem(woodenSpoon, "spoon_wood");
+		GameRegistry.registerItem(silverSpoon, "spoon_silver");
 		GameRegistry.registerItem(crockerSpork, "crocker_spork");
 		GameRegistry.registerItem(skaiaFork, "skaia_fork");
 		
