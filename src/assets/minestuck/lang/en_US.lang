@@ -337,6 +337,7 @@ tile.transportalizer.name=Transportalizer
 tile.coloredDirt.blue.name=Blue Dirt
 tile.coloredDirt.thought.name=Thought Dirt
 tile.goldSeeds.name=Golden seeds
+tile.glowingMushroom.name=Glowing Mushroom
 
 title.format=%1$s of %2$s
 title.Bard=Bard

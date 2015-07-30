@@ -107,7 +107,7 @@ public class BlockColoredDirt extends Block
 	@Override
 	public boolean canSustainPlant(IBlockAccess world, BlockPos pos, EnumFacing direction, IPlantable plantable)
 	{
-		return plantable == Blocks.sapling;
+		return plantable == Blocks.sapling || super.canSustainPlant(world, pos, direction, plantable);
 	}
 	
 }

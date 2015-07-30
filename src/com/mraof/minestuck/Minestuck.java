@@ -39,6 +39,7 @@ import com.mraof.minestuck.block.BlockColoredDirt;
 import com.mraof.minestuck.block.BlockComputerOff;
 import com.mraof.minestuck.block.BlockComputerOn;
 import com.mraof.minestuck.block.BlockFluid;
+import com.mraof.minestuck.block.BlockGlowingMushroom;
 import com.mraof.minestuck.block.BlockReturnNode;
 import com.mraof.minestuck.block.BlockSkaiaPortal;
 import com.mraof.minestuck.block.BlockGoldSeeds;
@@ -209,6 +210,7 @@ public class Minestuck
 	public static Block transportalizer;
 	public static BlockGoldSeeds blockGoldSeeds;
 	public static Block returnNode;
+	public static Block glowingMushroom;
 	
 	public static Block blockOil;
 	public static Block blockBlood;
@@ -264,6 +266,7 @@ public class Minestuck
 		transportalizer = GameRegistry.registerBlock(new BlockTransportalizer(), "transportalizer");
 		blockGoldSeeds = (BlockGoldSeeds) GameRegistry.registerBlock(new BlockGoldSeeds(), null, "gold_seeds");
 		returnNode = GameRegistry.registerBlock(new BlockReturnNode(), null, "return_node");
+		glowingMushroom = GameRegistry.registerBlock(new BlockGlowingMushroom(), "glowing_mushroom");
 		//fluids
 		fluidOil = new Fluid("Oil", new ResourceLocation("minestuck", "blocks/OilStill"), new ResourceLocation("minestuck", "blocks/OilFlowing"));
 		FluidRegistry.registerFluid(fluidOil);

@@ -119,6 +119,7 @@ public class MinestuckModelManager
 		register(Minestuck.layeredSand);
 		for(BlockMachine.MachineType type : BlockMachine.MachineType.values())
 			register(Minestuck.blockMachine, type.ordinal(), "machine_"+type.getName());
+		register(Minestuck.glowingMushroom);
 		
 	}
 	

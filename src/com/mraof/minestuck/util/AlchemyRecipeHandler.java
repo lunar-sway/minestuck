@@ -522,6 +522,7 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.minestuckBucket, 1, 1), true, new GristSet(new GristType[] {GristType.Rust, GristType.Garnet, GristType.Iodine}, new int[] {27, 8, 8}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.minestuckBucket, 1, 2), true, new GristSet(new GristType[] {GristType.Rust, GristType.Amethyst, GristType.Chalk}, new int[] {27, 8, 8}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.obsidianBucket), new GristSet(new GristType[] {GristType.Rust, GristType.Cobalt, GristType.Tar, GristType.Build}, new int[] {27, 8, 16, 4}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.glowingMushroom), new GristSet(new GristType[] {GristType.Build, GristType.Shale, GristType.Mercury}, new int[] {5, 3, 2}));
 		
 		//add Designix combinations
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_sword), new ItemStack(Items.rotten_flesh), MODE_AND, false, true, new ItemStack(Minestuck.ninjaSword));
