@@ -563,6 +563,7 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Blocks.sand), new ItemStack(Blocks.snow_layer), MODE_OR, new ItemStack(Minestuck.layeredSand));
 		CombinationRegistry.addCombination(new ItemStack(Items.water_bucket), new ItemStack(Items.lava_bucket), MODE_OR, new ItemStack(Minestuck.obsidianBucket));	//water_bucket && lava bucket could make a bucket with liquid obsidian? (from a mod that adds liquid obsidian)
 		CombinationRegistry.addCombination(new ItemStack(Items.bucket), new ItemStack(Blocks.obsidian), MODE_AND, new ItemStack(Minestuck.obsidianBucket));	//bucket || obsidian could make a bucket made out of obsidian
+		CombinationRegistry.addCombination(new ItemStack(Blocks.brown_mushroom), new ItemStack(Items.glowstone_dust), MODE_OR, new ItemStack(Minestuck.glowingMushroom));
 		
 		//Register chest loot
 		if(MinestuckConfig.cardLoot)

@@ -15,7 +15,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.BlockColoredDirt;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
-import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
+import com.mraof.minestuck.world.lands.decorator.SurfaceMushroomGenerator;
 
 public class LandAspectShade extends TerrainAspect 
 {
@@ -28,7 +28,8 @@ public class LandAspectShade extends TerrainAspect
 	{
 		List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
 		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_mushroom, 1, 0), 1, 7, 6));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.brown_mushroom, 1, 0), 1, 7, 6));
+		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_mushroom, 1, 0), 1, 4, 3));
+		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.brown_mushroom, 1, 0), 1, 4, 3));
 		list.add(new WeightedRandomChestContent(new ItemStack(Minestuck.coloredDirt, 1, 0), 4, 15, 5));
 		list.add(new WeightedRandomChestContent(new ItemStack(Items.mushroom_stew, 1, 0), 1, 1, 4));
 		list.add(new WeightedRandomChestContent(new ItemStack(Minestuck.minestuckBucket, 1, 0), 1, 1, 2));
@@ -82,16 +83,16 @@ public class LandAspectShade extends TerrainAspect
 	public List<ILandDecorator> getOptionalDecorators()
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
-		list.add(new SurfaceDecoratorVein(Blocks.brown_mushroom_block.getDefaultState(), 5, 32));
-		list.add(new SurfaceDecoratorVein(Blocks.red_mushroom_block.getDefaultState(), 5, 32));
-//		list.add(new DecoratorVein(Block.ice, 5, 8));
+		
 		return list;
 	}
 	
 	@Override
 	public List<ILandDecorator> getRequiredDecorators()
 	{
-		return new ArrayList<ILandDecorator>();
+		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
+		list.add(new SurfaceMushroomGenerator());
+		return list;
 	}
 
 	@Override
