@@ -601,8 +601,8 @@ public class AlchemyRecipeHandler
 		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Minestuck.sickle, 1, 0), 1, 1, 5));
 		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Minestuck.ninjaSword, 1, 0), 1, 1, 5));
 		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Minestuck.sledgeHammer, 1, 0), 1, 1, 4));
-		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Minestuck.component, 1, 0), 1, 1, 5));
-		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Minestuck.component, 1, 1), 1, 1, 4));
+		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Minestuck.woodenSpoon, 1, 0), 1, 1, 5));
+		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Minestuck.silverSpoon, 1, 0), 1, 1, 4));
 		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Minestuck.transportalizer, 1, 0), 1, 1, 2));
 		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Minestuck.rawCruxite, 1, 0), 1, 5, 5));
 		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Minestuck.homesSmellYaLater, 1, 0), 1, 1, 2));

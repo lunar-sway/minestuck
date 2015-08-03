@@ -341,7 +341,7 @@ public class Minestuck
 		goldSeeds = new ItemGoldSeeds();
 		metalBoat = new ItemMetalBoat();
 		
-		materialEmerald = EnumHelper.addToolMaterial("EMERALD", 3, 1120, 12.0F, 4.0F, 12);
+		materialEmerald = EnumHelper.addToolMaterial("EMERALD", 3, 1220, 12.0F, 4.0F, 12);
 		emeraldSword = new ItemSword(materialEmerald).setUnlocalizedName("swordEmerald").setCreativeTab(tabMinestuck);
 		emeraldAxe = new ItemMinestuckAxe(materialEmerald).setUnlocalizedName("hatchetEmerald").setCreativeTab(tabMinestuck);
 		emeraldPickaxe = new ItemMinestuckPickaxe(materialEmerald).setUnlocalizedName("pickaxeEmerald").setCreativeTab(tabMinestuck);
