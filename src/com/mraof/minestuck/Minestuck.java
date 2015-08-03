@@ -9,11 +9,17 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.Item.ToolMaterial;
+import net.minecraft.item.ItemAxe;
+import net.minecraft.item.ItemHoe;
+import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -81,7 +87,9 @@ import com.mraof.minestuck.item.ItemDisk;
 import com.mraof.minestuck.item.ItemDowel;
 import com.mraof.minestuck.item.ItemGoldSeeds;
 import com.mraof.minestuck.item.ItemMetalBoat;
+import com.mraof.minestuck.item.ItemMinestuckAxe;
 import com.mraof.minestuck.item.ItemMinestuckBucket;
+import com.mraof.minestuck.item.ItemMinestuckPickaxe;
 import com.mraof.minestuck.item.ItemModus;
 import com.mraof.minestuck.item.ItemObsidianBucket;
 import com.mraof.minestuck.item.block.ItemBlockLayered;
@@ -197,6 +205,11 @@ public class Minestuck
 	public static ItemGoldSeeds goldSeeds;	//This item is pretty much only a joke
 	public static ItemMetalBoat metalBoat;
 	public static Item obsidianBucket;
+	public static Item emeraldSword;
+	public static Item emeraldAxe;
+	public static Item emeraldPickaxe;
+	public static Item emeraldShovel;
+	public static Item emeraldHoe;
 	
 	//Blocks
 	public static Block chessTile;
@@ -216,10 +229,12 @@ public class Minestuck
 	public static Block blockBlood;
 	public static Block blockBrainJuice;
 	public static Block layeredSand;
-
+	
 	public static Fluid fluidOil;
 	public static Fluid fluidBlood;
 	public static Fluid fluidBrainJuice;
+	
+	public static ToolMaterial materialEmerald;
 	
 	// The instance of your mod that Forge uses.
 	@Instance("Minestuck")
@@ -277,7 +292,7 @@ public class Minestuck
 		blockOil = GameRegistry.registerBlock(new BlockFluid(fluidOil, Material.water).setUnlocalizedName("oil"), null, "block_oil");
 		blockBlood = GameRegistry.registerBlock(new BlockFluid(fluidBlood, Material.water).setUnlocalizedName("blood"), null, "block_blood");
 		blockBrainJuice = GameRegistry.registerBlock(new BlockFluid(fluidBrainJuice, Material.water).setUnlocalizedName("brainJuice"), null, "block_brain_juice");
-
+		
 		//items
 		//hammers
 		clawHammer = new ItemHammer(EnumHammerType.CLAW);
@@ -325,6 +340,13 @@ public class Minestuck
 		modusCard = new ItemModus();
 		goldSeeds = new ItemGoldSeeds();
 		metalBoat = new ItemMetalBoat();
+		
+		materialEmerald = EnumHelper.addToolMaterial("EMERALD", 3, 1120, 12.0F, 4.0F, 12);
+		emeraldSword = new ItemSword(materialEmerald).setUnlocalizedName("swordEmerald").setCreativeTab(tabMinestuck);
+		emeraldAxe = new ItemMinestuckAxe(materialEmerald).setUnlocalizedName("hatchetEmerald").setCreativeTab(tabMinestuck);
+		emeraldPickaxe = new ItemMinestuckPickaxe(materialEmerald).setUnlocalizedName("pickaxeEmerald").setCreativeTab(tabMinestuck);
+		emeraldShovel = new ItemSpade(materialEmerald).setUnlocalizedName("shovelEmerald").setCreativeTab(tabMinestuck);
+		emeraldHoe = new ItemHoe(materialEmerald).setUnlocalizedName("hoeEmerald").setCreativeTab(tabMinestuck);
 		
 		minestuckBucket.addBlock(blockOil);
 		minestuckBucket.addBlock(blockBlood);
@@ -375,6 +397,11 @@ public class Minestuck
 		GameRegistry.registerItem(modusCard, "modus_card");
 		GameRegistry.registerItem(goldSeeds, "gold_seeds");
 		GameRegistry.registerItem(metalBoat, "metal_boat");
+		GameRegistry.registerItem(emeraldSword, "emerald_sword");
+		GameRegistry.registerItem(emeraldAxe, "emerald_axe");
+		GameRegistry.registerItem(emeraldPickaxe, "emerald_pickaxe");
+		GameRegistry.registerItem(emeraldShovel, "emerald_shovel");
+		GameRegistry.registerItem(emeraldHoe, "emerald_hoe");
 		
 		if(isClientRunning)
 		{

@@ -171,6 +171,11 @@ item.modusCard.hashmap.name=Hashmap Modus
 item.metalBoat.iron.name=Iron Boat
 item.metalBoat.gold.name=Golden Boat
 item.bucketObsidian.name=Obsidian Bucket
+item.swordEmerald.name=Emerald Sword
+item.hatchetEmerald.name=Emerald Axe
+item.pickaxeEmerald.name=Emerald Pickaxe
+item.shovelEmerald.name=Emerald Shovel
+item.hoeEmerald.name=Emerald Hoe
 
 itemGroup.tabMinestuck=Minestuck
 

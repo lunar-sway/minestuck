@@ -101,6 +101,12 @@ public class MinestuckModelManager
 			register(Minestuck.metalBoat, i, "boat_"+Minestuck.metalBoat.names[i]);
 		register(Minestuck.obsidianBucket);
 		
+		register(Minestuck.emeraldSword);
+		register(Minestuck.emeraldAxe);
+		register(Minestuck.emeraldPickaxe);
+		register(Minestuck.emeraldShovel);
+		register(Minestuck.emeraldHoe);
+		
 		//Blocks
 		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())
 			register(Minestuck.chessTile, type.ordinal(), "chesstile_"+type.name);
