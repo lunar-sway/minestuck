@@ -1,30 +1,19 @@
 package com.mraof.minestuck.item.weapon;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import net.minecraft.block.Block;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemTool;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.mraof.minestuck.Minestuck;
 
-public abstract class ItemWeapon extends ItemTool
+public abstract class ItemWeapon extends Item
 {
 	protected int weaponDamage;
 	
 	public ItemWeapon() 
 	{
-		this(new HashSet<Block>());
-	}
-
-	public ItemWeapon(Set<Block> blocksEffectiveAgainst)
-	{
-		super(0, Item.ToolMaterial.IRON, blocksEffectiveAgainst);
 		this.maxStackSize = 1;
 		this.setCreativeTab(Minestuck.tabMinestuck);
 	}

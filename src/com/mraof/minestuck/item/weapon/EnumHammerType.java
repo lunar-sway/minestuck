@@ -1,14 +1,15 @@
 package com.mraof.minestuck.item.weapon;
 
-public enum EnumHammerType {
-	CLAW(0, 59, 2.0F, 0, 15),
-	SLEDGE(1, 131, 4.0F, 1, 5),
-	POGO(2, 250, 6.0F, 2, 14),
-	TELESCOPIC(3, 1561, 8.0F, 3, 10),
-	FEARNOANVIL(4, 2048, 12.0F, 4, 22),
+public enum EnumHammerType
+{
+	CLAW(0, 131, 2.0F, 1, 15),
+	SLEDGE(2, 250, 4.0F, 2, 5),
+	POGO(1, 400, 6.0F, 3, 14),
+	TELESCOPIC(2, 1024, 8.0F, 4, 10),
+	FEARNOANVIL(3, 2048, 12.0F, 5, 22),
 	SCARLET(3, 2000, 4.0F, 6, 30),
-	ZILLYHOO(5, 3000, 15.0F, 5, 30),
-	POPAMATIC(5, 3000, 15.0F, -3, 30);
+	ZILLYHOO(3, 3000, 15.0F, 6, 30),
+	POPAMATIC(3, 3000, 15.0F, -3, 30);
 
 	private final int harvestLevel;
 	private final int maxUses;

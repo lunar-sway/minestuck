@@ -21,7 +21,7 @@ public class ItemSpork extends ItemWeapon
 {
 	private int weaponDamage;
 	private final EnumSporkType sporkType;
-	public float efficiencyOnProperMaterial = 4.0F;
+	
 	/**
 	 * whether it's a spoon or a fork, unused for the crocker spork, as it depends on the meta.
 	 */

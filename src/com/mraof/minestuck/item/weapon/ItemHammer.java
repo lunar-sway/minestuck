@@ -1,7 +1,5 @@
 package com.mraof.minestuck.item.weapon;
 
-import java.util.Set;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
@@ -18,7 +16,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.google.common.collect.Sets;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 
 public class ItemHammer extends ItemWeapon
@@ -26,12 +23,10 @@ public class ItemHammer extends ItemWeapon
 	private int weaponDamage;
 	private final EnumHammerType hammerType;
 	public float efficiencyOnProperMaterial = 4.0F;
-	public static final Set<Block> blocksEffectiveAgainst = Sets.newHashSet(new Block[] {Blocks.cobblestone, Blocks.double_stone_slab, Blocks.stone_slab, Blocks.stone, Blocks.sandstone, Blocks.mossy_cobblestone, Blocks.iron_ore, Blocks.iron_block, Blocks.coal_ore, Blocks.coal_block, Blocks.gold_block, Blocks.gold_ore, Blocks.diamond_ore, Blocks.diamond_block, Blocks.ice, Blocks.netherrack, Blocks.lapis_ore, Blocks.lapis_block, Blocks.redstone_ore, Blocks.rail, Blocks.detector_rail, Blocks.golden_rail});
-
 	
 	public ItemHammer(EnumHammerType hammerType)
 	{
-		super(blocksEffectiveAgainst);
+		super();
 		
 		this.hammerType = hammerType;
 		this.setMaxDamage(hammerType.getMaxUses());
