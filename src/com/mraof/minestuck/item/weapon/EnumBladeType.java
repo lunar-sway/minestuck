@@ -3,37 +3,45 @@ package com.mraof.minestuck.item.weapon;
 public enum EnumBladeType 
 {
 
-	SORD(59, -1, 5),
-	NINJA(250, 2, 15),
-	KATANA(2200, 4, 20),
-	CALEDSCRATCH(1561, 3, 30),
-	REGISWORD(812, 3, 10),
-	DERINGER(1561, 4, 30),
-	SCARLET(2000, 5, 30),
-	DOGG(1000, 2, 30);
+	SORD(59, 3, 5, "sord"),
+	NINJA(250, 6, 15, "ninjaSword"),
+	KATANA(2200, 8, 20, "katana"),
+	CALEDSCRATCH(1561, 7, 30, "caledscratch"),
+	REGISWORD(812, 7, 10, "regisword"),
+	DERINGER(1561, 8, 30, "royalDeringer"),
+	SCARLET(2000, 9, 30, "scarletRibbitar"),
+	DOGG(1000, 6, 30, "doggMachete");
 	
-    private final int maxUses;
-    private final int damageVsEntity;
-    private final int enchantability;
+	private final int maxUses;
+	private final int damageVsEntity;
+	private final int enchantability;
+	private final String name;
 	
-	private EnumBladeType(int maxUses, int damageVsEntity, int enchantability) 
+	private EnumBladeType(int maxUses, int damageVsEntity, int enchantability, String name) 
 	{
-        this.maxUses = maxUses;
-        this.damageVsEntity = damageVsEntity;
-        this.enchantability = enchantability;
+		this.maxUses = maxUses;
+		this.damageVsEntity = damageVsEntity;
+		this.enchantability = enchantability;
+		this.name = name;
 	}
 	
-	public int getMaxUses() {
+	public int getMaxUses()
+	{
 		return maxUses;
 	}
 	
-	public int getDamageVsEntity() {
+	public int getDamageVsEntity()
+	{
 		return damageVsEntity;
 	}
 	
-	public int getEnchantability() {
+	public int getEnchantability()
+	{
 		return enchantability;
 	}
 	
-
+	public String getName()
+	{
+		return name;
+	}
 }

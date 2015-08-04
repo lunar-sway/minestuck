@@ -2,43 +2,41 @@ package com.mraof.minestuck.item.weapon;
 
 public enum EnumSickleType 
 {
-	SICKLE(1, 131, 4.0F, 0, 5),
-	HOMES(1, 200, 4.0F, 1, 10),
-	REGISICKLE(2, 512, 4.0F, 3, 1),
-	CLAW(3, 2048, 4.0F, 4, 15);
+	SICKLE(220, 4, 8, "sickle"),
+	HOMES(400, 6, 10, "homesSmellYaLater"),
+	REGISICKLE(812, 7, 5, "regiSickle"),
+	CLAW(2048, 8, 15, "clawSickle");
 	
-	private final int harvestLevel;
-    private final int maxUses;
-    private final float efficiencyOnProperMaterial;
-    private final int damageVsEntity;
-    private final int enchantability;
+	private final int maxUses;
+	private final int damageVsEntity;
+	private final int enchantability;
+	private final String name;
 	
-	private EnumSickleType(int harvestLevel, int maxUses, float efficiencyOnProperMaterial, int damageVsEntity, int enchantability) 
+	private EnumSickleType(int maxUses, int damageVsEntity, int enchantability, String name) 
 	{
-		this.harvestLevel = harvestLevel;
-        this.maxUses = maxUses;
-        this.efficiencyOnProperMaterial = efficiencyOnProperMaterial;
-        this.damageVsEntity = damageVsEntity;
-        this.enchantability = enchantability;
+		this.maxUses = maxUses;
+		this.damageVsEntity = damageVsEntity;
+		this.enchantability = enchantability;
+		this.name = name;
 	}
 	
-	public int getMaxUses() {
+	public int getMaxUses()
+	{
 		return maxUses;
 	}
 	
-	public float getEfficiencyOnProperMaterial() {
-		return efficiencyOnProperMaterial;
-	}
-	
-	public int getDamageVsEntity() {
+	public int getDamageVsEntity()
+	{
 		return damageVsEntity;
 	}
 	
-	public int getHarvestLevel() {
-		return harvestLevel;
+	public int getEnchantability()
+	{
+		return enchantability;
 	}
 	
-	public int getEnchantability() {
-		return enchantability;
+	public String getName()
+	{
+		return name;
 	}
 }

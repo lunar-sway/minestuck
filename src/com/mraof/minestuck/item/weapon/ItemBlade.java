@@ -29,33 +29,8 @@ public class ItemBlade extends ItemSword	//To allow enchantments such as sharpne
 		setCreativeTab(Minestuck.tabMinestuck);
 		this.bladeType = bladeType;
 		this.setMaxDamage(bladeType.getMaxUses());
-		switch(bladeType)
-		{
-		case SORD:
-			this.setUnlocalizedName("sord");
-			break;
-		case NINJA:
-			this.setUnlocalizedName("ninjaSword");
-			break;
-		case KATANA:
-			this.setUnlocalizedName("katana");
-			break;
-		case CALEDSCRATCH:
-			this.setUnlocalizedName("caledscratch");
-			break;
-		case DERINGER:
-			this.setUnlocalizedName("royalDeringer");
-			break	;
-		case REGISWORD:
-			this.setUnlocalizedName("regisword");
-			break;
-		case SCARLET:
-			this.setUnlocalizedName("scarletRibbitar");
-			break;
-		case DOGG:
-			this.setUnlocalizedName("doggMachete");
-		}
-		this.weaponDamage = bladeType.getDamageVsEntity() + 4;
+		this.setUnlocalizedName(bladeType.getName());
+		this.weaponDamage = bladeType.getDamageVsEntity();
 	}
 	
 	@Override

@@ -2,40 +2,38 @@ package com.mraof.minestuck.item.weapon;
 
 public enum EnumClubType 
 {
-	DEUCE(3, 1024, 20.0F, 2, 15);
+	DEUCE(1024, 4, 15, "deuceClub");
 	
-	private final int harvestLevel;
-    private final int maxUses;
-    private final float efficiencyOnProperMaterial;
-    private final int damageVsEntity;
-    private final int enchantability;
+	private final int maxUses;
+	private final int damageVsEntity;
+	private final int enchantability;
+	private final String name;
 	
-	private EnumClubType(int harvestLevel, int maxUses, float efficiencyOnProperMaterial, int damageVsEntity, int enchantability) 
+	private EnumClubType(int maxUses, int damageVsEntity, int enchantability, String name) 
 	{
-		this.harvestLevel = harvestLevel;
-        this.maxUses = maxUses;
-        this.efficiencyOnProperMaterial = efficiencyOnProperMaterial;
-        this.damageVsEntity = damageVsEntity;
-        this.enchantability = enchantability;
+		this.maxUses = maxUses;
+		this.damageVsEntity = damageVsEntity;
+		this.enchantability = enchantability;
+		this.name = name;
 	}
 	
-	public int getMaxUses() {
+	public int getMaxUses()
+	{
 		return maxUses;
 	}
 	
-	public float getEfficiencyOnProperMaterial() {
-		return efficiencyOnProperMaterial;
-	}
-	
-	public int getDamageVsEntity() {
+	public int getDamageVsEntity()
+	{
 		return damageVsEntity;
 	}
 	
-	public int getHarvestLevel() {
-		return harvestLevel;
+	public int getEnchantability()
+	{
+		return enchantability;
 	}
 	
-	public int getEnchantability() {
-		return enchantability;
+	public String getName()
+	{
+		return name;
 	}
 }

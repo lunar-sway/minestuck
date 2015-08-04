@@ -1,13 +1,11 @@
 package com.mraof.minestuck.item.weapon;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -36,13 +34,21 @@ public class ItemSpork extends ItemWeapon
 		this.setMaxDamage(sporkType.getMaxUses());
 		this.setCreativeTab(Minestuck.tabMinestuck);
 		this.setUnlocalizedName(sporkType.getUnlocalizedName());
-		this.weaponDamage = 2 + sporkType.getDamageVsEntity();
+		this.weaponDamage = sporkType.getDamageVsEntity();
 	}
 	
 	@Override
 	public int getAttackDamage() 
 	{
 		return weaponDamage;
+	}
+	
+	public int getAttackDamage(ItemStack stack)
+	{
+		int damage = weaponDamage;
+		if(this.sporkType == EnumSporkType.CROCKER && isSpoon(stack))
+			damage -= 2;
+		return damage;
 	}
 	
 	@Override
@@ -64,17 +70,6 @@ public class ItemSpork extends ItemWeapon
 		else return isSpoon;
 	}
 	
-	@Override
-	public boolean onBlockDestroyed(ItemStack stack, World worldIn, Block blockIn, BlockPos pos, EntityLivingBase playerIn)
-	{
-		if ((double)blockIn.getBlockHardness(worldIn, pos) != 0.0D)
-		{
-			stack.damageItem(2, playerIn);
-		}
-		
-		return true;
-	}
-
 	@Override	
 	@SideOnly(Side.CLIENT)
 	public boolean isFull3D()
@@ -117,7 +112,7 @@ public class ItemSpork extends ItemWeapon
 	public Multimap getAttributeModifiers(ItemStack stack)
 	{
 		Multimap multimap = HashMultimap.create();
-		multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(this.itemModifierUUID, "Tool Modifier", (double)this.getAttackDamage() + (isSpoon(stack)?0:2), 0));
+		multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(this.itemModifierUUID, "Tool Modifier", (double)this.getAttackDamage(stack), 0));
 		return multimap;
 	}
 	
