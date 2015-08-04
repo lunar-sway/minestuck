@@ -30,35 +30,10 @@ public class ItemHammer extends ItemWeapon
 		
 		this.hammerType = hammerType;
 		this.setMaxDamage(hammerType.getMaxUses());
+		this.setHarvestLevel("pickaxe", hammerType.getHarvestLevel());
 		this.efficiencyOnProperMaterial = hammerType.getEfficiencyOnProperMaterial();
-		switch(hammerType)
-		{
-		case CLAW:
-			this.setUnlocalizedName("clawHammer");
-			break;
-		case SLEDGE:
-			this.setUnlocalizedName("sledgeHammer");
-			break;
-		case POGO:
-			this.setUnlocalizedName("pogoHammer");
-			break;
-		case TELESCOPIC:
-			this.setUnlocalizedName("telescopicSassacrusher");
-			break;
-		case FEARNOANVIL:
-			this.setUnlocalizedName("fearNoAnvil");
-			break;
-		case ZILLYHOO:
-			this.setUnlocalizedName("zillyhooHammer");
-			break;
-		case POPAMATIC:
-			this.setUnlocalizedName("popamaticVrillyhoo");
-			break;
-		case SCARLET:
-			this.setUnlocalizedName("scarletZillyhoo");
-			break;
-		}
-		this.weaponDamage = 3 + hammerType.getDamageVsEntity();
+		this.setUnlocalizedName(hammerType.getName());
+		this.weaponDamage = hammerType.getDamageVsEntity();
 	}
 	
 	@Override
@@ -68,12 +43,6 @@ public class ItemHammer extends ItemWeapon
 			player.triggerAchievement(MinestuckAchievementHandler.getHammer);
 	}
 	
-	@Override
-	public boolean canHarvestBlock(Block block) 
-	{
-		return block != null && (block.getMaterial() == Material.iron || block.getMaterial() == Material.anvil || block.getMaterial() == Material.rock);
-	}
-
 	@Override
 	public float getStrVsBlock(ItemStack itemStack, Block block)
 	{
@@ -150,7 +119,8 @@ public class ItemHammer extends ItemWeapon
 	
 	protected double getPogoMotion(ItemStack stack)
 	{
-		return 0.5 + EnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency.effectId, stack)*0.1;
+//		return 0.5 + EnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency.effectId, stack)*0.1;
+		return 0.7;
 	}
 	
 }

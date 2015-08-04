@@ -500,17 +500,21 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.component,1, 2), true, new GristSet(new GristType[] {GristType.Shale, GristType.Marble}, new int[] {25, 25}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.crockerSpork), false, new GristSet(new GristType[] {GristType.Build, GristType.Iodine,GristType.Chalk,GristType.Ruby}, new int[] {70, 34, 34, 6}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.cruxiteApple, 1), false, new GristSet());
+		
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.clawHammer), false, new GristSet(GristType.Build, 5));
-		GristRegistry.addGristConversion(new ItemStack(Minestuck.fearNoAnvil), false, new GristSet(new GristType[] {GristType.Build, GristType.Garnet, GristType.Diamond, GristType.Gold, GristType.Quartz}, new int[] {120, 40, 5, 5, 10}));
-		GristRegistry.addGristConversion(new ItemStack(Minestuck.ninjaSword), false, new GristSet(new GristType[] {GristType.Build, GristType.Quartz, GristType.Rust}, new int[] {20, 5, 4}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.sledgeHammer), false, new GristSet(new GristType[] {GristType.Build, GristType.Shale}, new int[] {8, 3}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.pogoHammer), false, new GristSet(new GristType[] {GristType.Build, GristType.Shale}, new int[] {20, 10}));
-		GristRegistry.addGristConversion(new ItemStack(Minestuck.regiSickle), false, new GristSet(new GristType[] {GristType.Build, GristType.Tar,GristType.Gold}, new int[] {60, 15, 5}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.telescopicSassacrusher), false, new GristSet(new GristType[] {GristType.Shale, GristType.Tar, GristType.Mercury}, new int[] {20, 8, 13}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.fearNoAnvil), false, new GristSet(new GristType[] {GristType.Build, GristType.Garnet, GristType.Diamond, GristType.Gold, GristType.Quartz}, new int[] {120, 55, 20, 20, 1}));
+		
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.ninjaSword), false, new GristSet(new GristType[] {GristType.Build, GristType.Quartz, GristType.Rust}, new int[] {20, 5, 4}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.regisword), false, new GristSet(new GristType[] {GristType.Build, GristType.Tar,GristType.Gold}, new int[] {64, 20, 8}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.katana), false, new GristSet(new GristType[] {GristType.Build, GristType.Diamond, GristType.Quartz, GristType.Ruby}, new int[] {110, 24, 35, 18}));
+		
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.regiSickle), false, new GristSet(new GristType[] {GristType.Build, GristType.Tar,GristType.Gold}, new int[] {60, 15, 5}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.sickle), false, new GristSet(new GristType[] {GristType.Build}, new int[] {10}));
-		GristRegistry.addGristConversion(new ItemStack(Minestuck.sledgeHammer), false, new GristSet(new GristType[] {GristType.Build, GristType.Shale}, new int[] {10, 2}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.homesSmellYaLater), false, new GristSet(new GristType[] {GristType.Build, GristType.Amber, GristType.Amethyst}, new int[] {20, 8, 4}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.spearCane), false, new GristSet(new GristType[] {GristType.Build, GristType.Mercury, GristType.Quartz}, new int[] {20, 6, 3}));
-		GristRegistry.addGristConversion(new ItemStack(Minestuck.katana), false, new GristSet(new GristType[] {GristType.Build, GristType.Diamond, GristType.Quartz}, new int[] {80, 8, 20}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.transportalizer), false, new GristSet(new GristType[] {GristType.Build, GristType.Garnet, GristType.Rust, GristType.Uranium}, new int[] {110, 10, 10, 8}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.modusCard, 1, 2), true, new GristSet(GristType.Build, 90));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.goldSeeds), new GristSet(GristType.Gold, 3));
@@ -541,6 +545,7 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Minestuck.clawHammer), new ItemStack(Blocks.brick_block), MODE_AND, false, false, new ItemStack(Minestuck.sledgeHammer));
 		CombinationRegistry.addCombination(new ItemStack(Items.slime_ball), new ItemStack(Minestuck.sledgeHammer), MODE_AND, false, false, new ItemStack(Minestuck.pogoHammer));
 		CombinationRegistry.addCombination(new ItemStack(Minestuck.pogoHammer), new ItemStack(Blocks.anvil), MODE_AND, false, false, new ItemStack(Minestuck.fearNoAnvil));
+		CombinationRegistry.addCombination(new ItemStack(Minestuck.sledgeHammer), new ItemStack(Items.book), MODE_AND, false, false, new ItemStack(Minestuck.telescopicSassacrusher));
 		
 		CombinationRegistry.addCombination(new ItemStack(Minestuck.cane), new ItemStack(Items.iron_sword), MODE_OR, new ItemStack(Minestuck.spearCane));
 		CombinationRegistry.addCombination(new ItemStack(Minestuck.cane), new ItemStack(Minestuck.ninjaSword), MODE_OR, new ItemStack(Minestuck.spearCane));

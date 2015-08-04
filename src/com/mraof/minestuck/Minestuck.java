@@ -8,6 +8,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemHoe;
@@ -340,7 +341,7 @@ public class Minestuck
 		goldSeeds = new ItemGoldSeeds();
 		metalBoat = new ItemMetalBoat();
 		
-		materialEmerald = EnumHelper.addToolMaterial("EMERALD", 3, 1220, 12.0F, 4.0F, 12);
+		materialEmerald = EnumHelper.addToolMaterial("EMERALD", 3, 1220, 12.0F, 4.0F, 12).setRepairItem(new ItemStack(Items.emerald));
 		emeraldSword = new ItemSword(materialEmerald).setUnlocalizedName("swordEmerald").setCreativeTab(tabMinestuck);
 		emeraldAxe = new ItemMinestuckAxe(materialEmerald).setUnlocalizedName("hatchetEmerald").setCreativeTab(tabMinestuck);
 		emeraldPickaxe = new ItemMinestuckPickaxe(materialEmerald).setUnlocalizedName("pickaxeEmerald").setCreativeTab(tabMinestuck);
