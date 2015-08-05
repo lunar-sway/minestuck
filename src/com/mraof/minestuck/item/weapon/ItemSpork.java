@@ -60,7 +60,7 @@ public class ItemSpork extends ItemWeapon
 	@Override
 	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase player)
 	{
-		itemStack.damageItem(isSpoon(itemStack) ? 1 : 2, player);
+		itemStack.damageItem(1, player);
 		return true;
 	}
 
