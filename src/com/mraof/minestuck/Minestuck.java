@@ -10,7 +10,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.Item.ToolMaterial;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
@@ -210,6 +210,10 @@ public class Minestuck
 	public static Item emeraldPickaxe;
 	public static Item emeraldShovel;
 	public static Item emeraldHoe;
+	public static Item prismarine_helmet;
+	public static Item prismarine_chestplate;
+	public static Item prismarine_leggings;
+	public static Item prismarine_boots;
 	
 	//Blocks
 	public static Block chessTile;
@@ -234,7 +238,8 @@ public class Minestuck
 	public static Fluid fluidBlood;
 	public static Fluid fluidBrainJuice;
 	
-	public static ToolMaterial materialEmerald;
+	public static Item.ToolMaterial toolEmerald;
+	public static ItemArmor.ArmorMaterial armor_prismarine;
 	
 	// The instance of your mod that Forge uses.
 	@Instance("Minestuck")
@@ -341,12 +346,19 @@ public class Minestuck
 		goldSeeds = new ItemGoldSeeds();
 		metalBoat = new ItemMetalBoat();
 		
-		materialEmerald = EnumHelper.addToolMaterial("EMERALD", 3, 1220, 12.0F, 4.0F, 12).setRepairItem(new ItemStack(Items.emerald));
-		emeraldSword = new ItemSword(materialEmerald).setUnlocalizedName("swordEmerald").setCreativeTab(tabMinestuck);
-		emeraldAxe = new ItemMinestuckAxe(materialEmerald).setUnlocalizedName("hatchetEmerald").setCreativeTab(tabMinestuck);
-		emeraldPickaxe = new ItemMinestuckPickaxe(materialEmerald).setUnlocalizedName("pickaxeEmerald").setCreativeTab(tabMinestuck);
-		emeraldShovel = new ItemSpade(materialEmerald).setUnlocalizedName("shovelEmerald").setCreativeTab(tabMinestuck);
-		emeraldHoe = new ItemHoe(materialEmerald).setUnlocalizedName("hoeEmerald").setCreativeTab(tabMinestuck);
+		toolEmerald = EnumHelper.addToolMaterial("EMERALD", 3, 1220, 12.0F, 4.0F, 12).setRepairItem(new ItemStack(Items.emerald));
+		emeraldSword = new ItemSword(toolEmerald).setUnlocalizedName("swordEmerald").setCreativeTab(tabMinestuck);
+		emeraldAxe = new ItemMinestuckAxe(toolEmerald).setUnlocalizedName("hatchetEmerald").setCreativeTab(tabMinestuck);
+		emeraldPickaxe = new ItemMinestuckPickaxe(toolEmerald).setUnlocalizedName("pickaxeEmerald").setCreativeTab(tabMinestuck);
+		emeraldShovel = new ItemSpade(toolEmerald).setUnlocalizedName("shovelEmerald").setCreativeTab(tabMinestuck);
+		emeraldHoe = new ItemHoe(toolEmerald).setUnlocalizedName("hoeEmerald").setCreativeTab(tabMinestuck);
+		
+		armor_prismarine = EnumHelper.addArmorMaterial("PRISMARINE", "minestuck:prismarine", 22, new int[]{3, 7, 6, 2}, 13);
+		armor_prismarine.customCraftingMaterial = Items.prismarine_shard;
+		prismarine_helmet = new ItemArmor(armor_prismarine, 0, 0).setUnlocalizedName("helmetPrismarine").setCreativeTab(tabMinestuck);
+		prismarine_chestplate = new ItemArmor(armor_prismarine, 0, 1).setUnlocalizedName("chestplatePrismarine").setCreativeTab(tabMinestuck);
+		prismarine_leggings = new ItemArmor(armor_prismarine, 0, 2).setUnlocalizedName("leggingsPrismarine").setCreativeTab(tabMinestuck);
+		prismarine_boots = new ItemArmor(armor_prismarine, 0, 3).setUnlocalizedName("bootsPrismarine").setCreativeTab(tabMinestuck);
 		
 		minestuckBucket.addBlock(blockOil);
 		minestuckBucket.addBlock(blockBlood);
@@ -402,6 +414,10 @@ public class Minestuck
 		GameRegistry.registerItem(emeraldPickaxe, "emerald_pickaxe");
 		GameRegistry.registerItem(emeraldShovel, "emerald_shovel");
 		GameRegistry.registerItem(emeraldHoe, "emerald_hoe");
+		GameRegistry.registerItem(prismarine_helmet, "prismarine_helmet");
+		GameRegistry.registerItem(prismarine_chestplate, "prismarine_chestplate");
+		GameRegistry.registerItem(prismarine_leggings, "prismarine_leggings");
+		GameRegistry.registerItem(prismarine_boots, "prismarine_boots");
 		
 		if(isClientRunning)
 		{

@@ -176,6 +176,10 @@ item.hatchetEmerald.name=Emerald Axe
 item.pickaxeEmerald.name=Emerald Pickaxe
 item.shovelEmerald.name=Emerald Shovel
 item.hoeEmerald.name=Emerald Hoe
+item.helmetPrismarine.name=Prismarine Helmet
+item.chestplatePrismarine.name=Prismarine Chestplate
+item.leggingsPrismarine.name=Prismarine Leggings
+item.bootsPrismarine.name=Prismarine Boots
 
 itemGroup.tabMinestuck=Minestuck
 

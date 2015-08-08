@@ -106,6 +106,10 @@ public class MinestuckModelManager
 		register(Minestuck.emeraldPickaxe);
 		register(Minestuck.emeraldShovel);
 		register(Minestuck.emeraldHoe);
+		register(Minestuck.prismarine_helmet);
+		register(Minestuck.prismarine_chestplate);
+		register(Minestuck.prismarine_leggings);
+		register(Minestuck.prismarine_boots);
 		
 		//Blocks
 		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())
