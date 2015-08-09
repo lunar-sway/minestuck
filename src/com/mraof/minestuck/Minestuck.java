@@ -162,6 +162,7 @@ public class Minestuck
 	//hammers
 	public static Item clawHammer;
 	public static Item sledgeHammer;
+	public static Item blacksmith_hammer;
 	public static Item pogoHammer;
 	public static Item telescopicSassacrusher;
 	public static Item fearNoAnvil;
@@ -302,6 +303,7 @@ public class Minestuck
 		//hammers
 		clawHammer = new ItemHammer(EnumHammerType.CLAW);
 		sledgeHammer = new ItemHammer(EnumHammerType.SLEDGE);
+		blacksmith_hammer = new ItemHammer(EnumHammerType.BLACKSMITH);
 		pogoHammer = new ItemHammer(EnumHammerType.POGO);
 		telescopicSassacrusher = new ItemHammer(EnumHammerType.TELESCOPIC);
 		fearNoAnvil = new ItemHammer(EnumHammerType.FEARNOANVIL);
@@ -333,7 +335,21 @@ public class Minestuck
 		silverSpoon = new ItemSpork(EnumSporkType.SPOON_SILVER);
 		crockerSpork = new ItemSpork(EnumSporkType.CROCKER);
 		skaiaFork = new ItemSpork(EnumSporkType.SKAIA);
-		//items
+		
+		toolEmerald = EnumHelper.addToolMaterial("EMERALD", 3, 1220, 12.0F, 4.0F, 12).setRepairItem(new ItemStack(Items.emerald));
+		emeraldSword = new ItemSword(toolEmerald).setUnlocalizedName("swordEmerald").setCreativeTab(tabMinestuck);
+		emeraldAxe = new ItemMinestuckAxe(toolEmerald).setUnlocalizedName("hatchetEmerald").setCreativeTab(tabMinestuck);
+		emeraldPickaxe = new ItemMinestuckPickaxe(toolEmerald).setUnlocalizedName("pickaxeEmerald").setCreativeTab(tabMinestuck);
+		emeraldShovel = new ItemSpade(toolEmerald).setUnlocalizedName("shovelEmerald").setCreativeTab(tabMinestuck);
+		emeraldHoe = new ItemHoe(toolEmerald).setUnlocalizedName("hoeEmerald").setCreativeTab(tabMinestuck);
+		//armor
+		armor_prismarine = EnumHelper.addArmorMaterial("PRISMARINE", "minestuck:prismarine", 22, new int[]{3, 7, 6, 2}, 13);
+		armor_prismarine.customCraftingMaterial = Items.prismarine_shard;
+		prismarine_helmet = new ItemArmor(armor_prismarine, 0, 0).setUnlocalizedName("helmetPrismarine").setCreativeTab(tabMinestuck);
+		prismarine_chestplate = new ItemArmor(armor_prismarine, 0, 1).setUnlocalizedName("chestplatePrismarine").setCreativeTab(tabMinestuck);
+		prismarine_leggings = new ItemArmor(armor_prismarine, 0, 2).setUnlocalizedName("leggingsPrismarine").setCreativeTab(tabMinestuck);
+		prismarine_boots = new ItemArmor(armor_prismarine, 0, 3).setUnlocalizedName("bootsPrismarine").setCreativeTab(tabMinestuck);
+		//misc
 		rawCruxite = new ItemCruxiteRaw();
 		cruxiteDowel = new ItemDowel();
 		captchaCard = new ItemCaptchaCard();
@@ -346,26 +362,13 @@ public class Minestuck
 		goldSeeds = new ItemGoldSeeds();
 		metalBoat = new ItemMetalBoat();
 		
-		toolEmerald = EnumHelper.addToolMaterial("EMERALD", 3, 1220, 12.0F, 4.0F, 12).setRepairItem(new ItemStack(Items.emerald));
-		emeraldSword = new ItemSword(toolEmerald).setUnlocalizedName("swordEmerald").setCreativeTab(tabMinestuck);
-		emeraldAxe = new ItemMinestuckAxe(toolEmerald).setUnlocalizedName("hatchetEmerald").setCreativeTab(tabMinestuck);
-		emeraldPickaxe = new ItemMinestuckPickaxe(toolEmerald).setUnlocalizedName("pickaxeEmerald").setCreativeTab(tabMinestuck);
-		emeraldShovel = new ItemSpade(toolEmerald).setUnlocalizedName("shovelEmerald").setCreativeTab(tabMinestuck);
-		emeraldHoe = new ItemHoe(toolEmerald).setUnlocalizedName("hoeEmerald").setCreativeTab(tabMinestuck);
-		
-		armor_prismarine = EnumHelper.addArmorMaterial("PRISMARINE", "minestuck:prismarine", 22, new int[]{3, 7, 6, 2}, 13);
-		armor_prismarine.customCraftingMaterial = Items.prismarine_shard;
-		prismarine_helmet = new ItemArmor(armor_prismarine, 0, 0).setUnlocalizedName("helmetPrismarine").setCreativeTab(tabMinestuck);
-		prismarine_chestplate = new ItemArmor(armor_prismarine, 0, 1).setUnlocalizedName("chestplatePrismarine").setCreativeTab(tabMinestuck);
-		prismarine_leggings = new ItemArmor(armor_prismarine, 0, 2).setUnlocalizedName("leggingsPrismarine").setCreativeTab(tabMinestuck);
-		prismarine_boots = new ItemArmor(armor_prismarine, 0, 3).setUnlocalizedName("bootsPrismarine").setCreativeTab(tabMinestuck);
-		
 		minestuckBucket.addBlock(blockOil);
 		minestuckBucket.addBlock(blockBlood);
 		minestuckBucket.addBlock(blockBrainJuice);
 		
 		GameRegistry.registerItem(clawHammer, "claw_hammer");
 		GameRegistry.registerItem(sledgeHammer, "sledge_hammer");
+		GameRegistry.registerItem(blacksmith_hammer, "blacksmith_hammer");
 		GameRegistry.registerItem(pogoHammer, "pogo_hammer");
 		GameRegistry.registerItem(telescopicSassacrusher, "telescopic_sassacrusher");
 		GameRegistry.registerItem(fearNoAnvil, "fear_no_anvil");
@@ -398,6 +401,17 @@ public class Minestuck
 		GameRegistry.registerItem(crockerSpork, "crocker_spork");
 		GameRegistry.registerItem(skaiaFork, "skaia_fork");
 		
+		GameRegistry.registerItem(emeraldSword, "emerald_sword");
+		GameRegistry.registerItem(emeraldAxe, "emerald_axe");
+		GameRegistry.registerItem(emeraldPickaxe, "emerald_pickaxe");
+		GameRegistry.registerItem(emeraldShovel, "emerald_shovel");
+		GameRegistry.registerItem(emeraldHoe, "emerald_hoe");
+		
+		GameRegistry.registerItem(prismarine_helmet, "prismarine_helmet");
+		GameRegistry.registerItem(prismarine_chestplate, "prismarine_chestplate");
+		GameRegistry.registerItem(prismarine_leggings, "prismarine_leggings");
+		GameRegistry.registerItem(prismarine_boots, "prismarine_boots");
+		
 		GameRegistry.registerItem(rawCruxite, "cruxite_raw");
 		GameRegistry.registerItem(cruxiteDowel, "cruxite_dowel");
 		GameRegistry.registerItem(captchaCard, "captcha_card");
@@ -409,15 +423,6 @@ public class Minestuck
 		GameRegistry.registerItem(modusCard, "modus_card");
 		GameRegistry.registerItem(goldSeeds, "gold_seeds");
 		GameRegistry.registerItem(metalBoat, "metal_boat");
-		GameRegistry.registerItem(emeraldSword, "emerald_sword");
-		GameRegistry.registerItem(emeraldAxe, "emerald_axe");
-		GameRegistry.registerItem(emeraldPickaxe, "emerald_pickaxe");
-		GameRegistry.registerItem(emeraldShovel, "emerald_shovel");
-		GameRegistry.registerItem(emeraldHoe, "emerald_hoe");
-		GameRegistry.registerItem(prismarine_helmet, "prismarine_helmet");
-		GameRegistry.registerItem(prismarine_chestplate, "prismarine_chestplate");
-		GameRegistry.registerItem(prismarine_leggings, "prismarine_leggings");
-		GameRegistry.registerItem(prismarine_boots, "prismarine_boots");
 		
 		if(isClientRunning)
 		{

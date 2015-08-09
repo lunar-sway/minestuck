@@ -4,6 +4,7 @@ public enum EnumHammerType
 {
 	CLAW(0, 131, 1.0F, 4, 10, "clawHammer"),
 	SLEDGE(2, 250, 4.0F, 5, 8, "sledgeHammer"),
+	BLACKSMITH(2, 450, 3.5F, 6, 10, "blacksmithHammer"),
 	POGO(1, 400, 2.0F, 6, 8, "pogoHammer"),
 	TELESCOPIC(2, 1024, 5.0F, 7, 15, "telescopicSassacrusher"),
 	FEARNOANVIL(3, 2048, 7.0F, 8, 12, "fearNoAnvil"),

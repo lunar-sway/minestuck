@@ -121,6 +121,7 @@ gui.autobalance.off=Auto-balance Inactive
 
 item.clawHammer.name=Claw Hammer
 item.sledgeHammer.name=Sledgehammer
+item.blacksmithHammer.name=Blacksmith's Hammer
 item.pogoHammer.name=Pogo Hammer
 item.telescopicSassacrusher.name=Telescopic Sassacrusher
 item.fearNoAnvil.name=Fear No Anvil

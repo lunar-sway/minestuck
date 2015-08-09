@@ -43,6 +43,7 @@ public class MinestuckModelManager
 		//Items
 		register(Minestuck.clawHammer);
 		register(Minestuck.sledgeHammer);
+		register(Minestuck.blacksmith_hammer);
 		register(Minestuck.pogoHammer);
 		register(Minestuck.telescopicSassacrusher);
 		register(Minestuck.fearNoAnvil);
@@ -82,6 +83,17 @@ public class MinestuckModelManager
 			register(Minestuck.zillyhooHammer);
 		}
 		
+		register(Minestuck.emeraldSword);
+		register(Minestuck.emeraldAxe);
+		register(Minestuck.emeraldPickaxe);
+		register(Minestuck.emeraldShovel);
+		register(Minestuck.emeraldHoe);
+		
+		register(Minestuck.prismarine_helmet);
+		register(Minestuck.prismarine_chestplate);
+		register(Minestuck.prismarine_leggings);
+		register(Minestuck.prismarine_boots);
+		
 		register(Minestuck.rawCruxite);
 		modelRegistry.register(Minestuck.cruxiteDowel, new CruxiteDowelDefinition());
 		modelRegistry.register(Minestuck.captchaCard, new CaptchaCardDefinition());
@@ -101,15 +113,6 @@ public class MinestuckModelManager
 			register(Minestuck.metalBoat, i, "boat_"+Minestuck.metalBoat.names[i]);
 		register(Minestuck.obsidianBucket);
 		
-		register(Minestuck.emeraldSword);
-		register(Minestuck.emeraldAxe);
-		register(Minestuck.emeraldPickaxe);
-		register(Minestuck.emeraldShovel);
-		register(Minestuck.emeraldHoe);
-		register(Minestuck.prismarine_helmet);
-		register(Minestuck.prismarine_chestplate);
-		register(Minestuck.prismarine_leggings);
-		register(Minestuck.prismarine_boots);
 		
 		//Blocks
 		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())
