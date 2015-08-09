@@ -343,7 +343,7 @@ public class Minestuck
 		emeraldShovel = new ItemSpade(toolEmerald).setUnlocalizedName("shovelEmerald").setCreativeTab(tabMinestuck);
 		emeraldHoe = new ItemHoe(toolEmerald).setUnlocalizedName("hoeEmerald").setCreativeTab(tabMinestuck);
 		//armor
-		armor_prismarine = EnumHelper.addArmorMaterial("PRISMARINE", "minestuck:prismarine", 22, new int[]{3, 7, 6, 2}, 13);
+		armor_prismarine = EnumHelper.addArmorMaterial("PRISMARINE", "minestuck:prismarine", 20, new int[]{3, 7, 6, 2}, 15);
 		armor_prismarine.customCraftingMaterial = Items.prismarine_shard;
 		prismarine_helmet = new ItemArmor(armor_prismarine, 0, 0).setUnlocalizedName("helmetPrismarine").setCreativeTab(tabMinestuck);
 		prismarine_chestplate = new ItemArmor(armor_prismarine, 0, 1).setUnlocalizedName("chestplatePrismarine").setCreativeTab(tabMinestuck);

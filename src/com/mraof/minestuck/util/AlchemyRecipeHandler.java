@@ -456,7 +456,6 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Items.prismarine_shard), new ItemStack(Blocks.stonebrick, 1, 0), MODE_AND, new ItemStack(Blocks.prismarine, 1, 1));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.prismarine), new ItemStack(Items.dye, 1, EnumDyeColor.BLACK.getDyeDamage()), MODE_AND, false, true, new ItemStack(Blocks.prismarine, 1, 2));
 		CombinationRegistry.addCombination(new ItemStack(Items.prismarine_crystals), new ItemStack(Blocks.glowstone), MODE_OR, new ItemStack(Blocks.sea_lantern));
-		CombinationRegistry.addCombination(new ItemStack(Items.prismarine_crystals), new ItemStack(Items.prismarine_shard), MODE_AND, new ItemStack(Blocks.sea_lantern));
 		CombinationRegistry.addCombination(new ItemStack(Items.prismarine_crystals), new ItemStack(Blocks.prismarine), MODE_AND, true, false, new ItemStack(Blocks.sea_lantern));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.red_mushroom), new ItemStack(Blocks.soul_sand), MODE_AND, new ItemStack(Items.nether_wart));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.prismarine), new ItemStack(Items.flint), MODE_OR, false, true, new ItemStack(Items.prismarine_shard));
@@ -533,6 +532,10 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.emeraldPickaxe), false, new GristSet(new GristType[] {GristType.Build, GristType.Diamond, GristType.Ruby}, new int[] {130, 43, 40}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.emeraldShovel), false, new GristSet(new GristType[] {GristType.Build, GristType.Diamond, GristType.Ruby}, new int[] {100, 35, 34}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.emeraldHoe), false, new GristSet(new GristType[] {GristType.Build, GristType.Diamond, GristType.Ruby}, new int[] {80, 32, 28}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.prismarine_helmet), new GristSet(new GristType[] {GristType.Build, GristType.Cobalt, GristType.Marble}, new int[] {50, 25, 10}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.prismarine_chestplate), new GristSet(new GristType[] {GristType.Build, GristType.Cobalt, GristType.Marble}, new int[] {80, 40, 16}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.prismarine_leggings), new GristSet(new GristType[] {GristType.Build, GristType.Cobalt, GristType.Marble}, new int[] {70, 35, 14}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.prismarine_boots), new GristSet(new GristType[] {GristType.Build, GristType.Cobalt, GristType.Marble}, new int[] {40, 20, 8}));
 		
 		//add Designix combinations
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_sword), new ItemStack(Items.rotten_flesh), MODE_AND, false, true, new ItemStack(Minestuck.ninjaSword));
@@ -583,6 +586,16 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Items.diamond_pickaxe), new ItemStack(Items.emerald), MODE_OR, false, false, new ItemStack(Minestuck.emeraldPickaxe));
 		CombinationRegistry.addCombination(new ItemStack(Items.diamond_shovel), new ItemStack(Items.emerald), MODE_OR, false, false, new ItemStack(Minestuck.emeraldShovel));
 		CombinationRegistry.addCombination(new ItemStack(Items.diamond_hoe), new ItemStack(Items.emerald), MODE_OR, false, false, new ItemStack(Minestuck.emeraldHoe));
+		
+		CombinationRegistry.addCombination(new ItemStack(Items.iron_helmet), new ItemStack(Items.prismarine_shard), MODE_OR, false, false, new ItemStack(Minestuck.prismarine_helmet));
+		CombinationRegistry.addCombination(new ItemStack(Items.iron_helmet), new ItemStack(Blocks.prismarine), MODE_OR, false, false, new ItemStack(Minestuck.prismarine_helmet));
+		CombinationRegistry.addCombination(new ItemStack(Items.iron_chestplate), new ItemStack(Items.prismarine_shard), MODE_OR, false, false, new ItemStack(Minestuck.prismarine_chestplate));
+		CombinationRegistry.addCombination(new ItemStack(Items.iron_chestplate), new ItemStack(Blocks.prismarine), MODE_OR, false, false, new ItemStack(Minestuck.prismarine_chestplate));
+		CombinationRegistry.addCombination(new ItemStack(Items.iron_leggings), new ItemStack(Items.prismarine_shard), MODE_OR, false, false, new ItemStack(Minestuck.prismarine_leggings));
+		CombinationRegistry.addCombination(new ItemStack(Items.iron_leggings), new ItemStack(Blocks.prismarine), MODE_OR, false, false, new ItemStack(Minestuck.prismarine_leggings));
+		CombinationRegistry.addCombination(new ItemStack(Items.iron_boots), new ItemStack(Items.prismarine_shard), MODE_OR, false, false, new ItemStack(Minestuck.prismarine_boots));
+		CombinationRegistry.addCombination(new ItemStack(Items.iron_boots), new ItemStack(Blocks.prismarine), MODE_OR, false, false, new ItemStack(Minestuck.prismarine_boots));
+		
 		
 		//Register chest loot
 		if(MinestuckConfig.cardLoot)
