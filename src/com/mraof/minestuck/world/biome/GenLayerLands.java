@@ -2,6 +2,7 @@ package com.mraof.minestuck.world.biome;
 
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.GenLayerVoronoiZoom;
+import net.minecraft.world.gen.layer.GenLayerZoom;
 import net.minecraft.world.gen.layer.IntCache;
 
 public class GenLayerLands extends GenLayer
@@ -28,6 +29,11 @@ public class GenLayerLands extends GenLayer
 	public static GenLayer[] generateBiomeGenLayers(long seed)
 	{
 		GenLayer layer = new GenLayerLands(413L);
+		layer = new GenLayerZoom(1000L, layer);
+		layer = new GenLayerZoom(1001L, layer);
+		layer = new GenLayerZoom(1002L, layer);
+		layer = new GenLayerZoom(1003L, layer);
+		layer = new GenLayerZoom(1004L, layer);
 		
 		GenLayerVoronoiZoom voronoiZoom = new GenLayerVoronoiZoom(10L, layer);
 		layer.initWorldGenSeed(seed);
