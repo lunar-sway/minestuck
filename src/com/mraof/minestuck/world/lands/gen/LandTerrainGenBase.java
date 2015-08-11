@@ -47,19 +47,16 @@ public abstract class LandTerrainGenBase
 					primer.setBlockState(x, y, z, provider.oceanBlock);
 			}*/
 		provider.landWorld.getWorldChunkManager().getBiomesForGeneration(this.biomesForGeneration, chunkX * 4, chunkZ * 4, 4, 4);
-		BiomeGenBase[] biomes = provider.landWorld.getWorldChunkManager().getBiomeGenAt(null, chunkX*16, chunkZ*16, 16, 16, true);
 		
 		for(int x = 0; x < 16; x++)
 			for(int z = 0; z < 16; z++)
 			{
 				primer.setBlockState(x, 0, z, Blocks.bedrock.getDefaultState());
 				BiomeGenBase biome = biomesForGeneration[x/4 + z - (z%4)];
-				BiomeGenBase biome2 = biomes[x + z*16];
-				int height = biome == BiomeGenMinestuck.mediumNormal ? 70 : 69;
-				IBlockState block = biome2 == BiomeGenMinestuck.mediumNormal ? provider.surfaceBlock : provider.upperBlock;
-				for(int y = 1; y < height; y++)
+				for(int y = 1; y < 70; y++)
 					primer.setBlockState(x, y, z, provider.upperBlock);
-				primer.setBlockState(x, height, z, block);
+				if(biome == BiomeGenMinestuck.mediumNormal)
+					primer.setBlockState(x, 70, z, provider.surfaceBlock);
 			}
 		
 		return primer;
