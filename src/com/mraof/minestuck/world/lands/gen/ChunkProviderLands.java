@@ -63,7 +63,7 @@ public class ChunkProviderLands implements IChunkProvider
 	public LandStructureHandler structureHandler;
 	public int dayCycle;
 	public int weatherType;	//-1:No weather &1: Force rain &2: If thunder &4: Force thunder
-	public float moisture, temperature;
+	public float rainfall, temperature;
 	protected BiomeGenBase biomeGenLands;
 
 	@SuppressWarnings("unchecked")
@@ -86,7 +86,7 @@ public class ChunkProviderLands implements IChunkProvider
 		this.dayCycle = aspect1.getDayCycleMode();
 		this.skyColor = aspect1.getFogColor();
 		this.weatherType = aspect1.getWeatherType();
-		this.moisture = aspect1.getRainfall();
+		this.rainfall = aspect1.getRainfall();
 		this.temperature = aspect1.getTemperature();
 		
 		if(!clientSide)
@@ -118,7 +118,7 @@ public class ChunkProviderLands implements IChunkProvider
 	
 	public void createBiomeGen()
 	{
-		biomeGenLands = new BiomeGenMinestuck(BiomeGenMinestuck.mediumNormal.biomeID, false).setTemperatureRainfall(temperature, moisture).setBiomeName(this.landWorld.provider.getDimensionName());
+		biomeGenLands = new BiomeGenMinestuck(BiomeGenMinestuck.mediumNormal.biomeID, false).setTemperatureRainfall(temperature, rainfall).setBiomeName(this.landWorld.provider.getDimensionName());
 		if(temperature <= 0.1)
 			biomeGenLands.setEnableSnow();
 	}

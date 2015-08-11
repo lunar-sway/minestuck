@@ -8,11 +8,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldSettings.GameType;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.biome.WorldChunkManagerHell;
 import net.minecraft.world.chunk.IChunkProvider;
 
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.biome.BiomeGenMinestuck;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
@@ -143,7 +141,7 @@ public class WorldProviderLands extends WorldProvider
 		isHellWorld = false;
 		if(provider == null)
 			createChunkGenerator();
-		this.worldChunkMgr = new WorldChunkManagerHell(BiomeGenMinestuck.mediumNormal, 0.5F);
+		this.worldChunkMgr = new WorldChunkManagerLands(worldObj, provider.rainfall);
 		this.hasNoSky = false;
 	}
 	

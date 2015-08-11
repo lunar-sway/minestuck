@@ -24,7 +24,7 @@ public class LandAspectThunder extends TitleAspect
 	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.weatherType = 4;
-		chunkProvider.moisture += 0.1F;
+		chunkProvider.rainfall += 0.1F;
 		
 		chunkProvider.mergeFogColor(new Vec3(0.1, 0.1, 0.2), 0.5F);
 	}

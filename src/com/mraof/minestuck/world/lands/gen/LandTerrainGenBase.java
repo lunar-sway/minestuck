@@ -1,22 +1,27 @@
 package com.mraof.minestuck.world.lands.gen;
 
+import com.mraof.minestuck.world.biome.BiomeGenMinestuck;
+
 import net.minecraft.init.Blocks;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 public abstract class LandTerrainGenBase
 {
 	
 	protected ChunkProviderLands provider;
+	protected BiomeGenBase[] biomesForGeneration;
 	
 	public LandTerrainGenBase(ChunkProviderLands chunkProvider)
 	{
 		this.provider = chunkProvider;
+		this.biomesForGeneration = new BiomeGenBase[16];
 	}
 	
 	public ChunkPrimer createChunk(int chunkX, int chunkZ)
 	{
 		ChunkPrimer primer = new ChunkPrimer();
-		int[] topBlock = getHeightMap(chunkX, chunkZ);
+		/*int[] topBlock = getHeightMap(chunkX, chunkZ);
 		int[] topRiverBlock = getRiverHeightMap(chunkX, chunkZ);
 		
 		for(int x = 0; x < 16; x++)
@@ -39,6 +44,17 @@ public abstract class LandTerrainGenBase
 				
 				for(; y < 63; y++)
 					primer.setBlockState(x, y, z, provider.oceanBlock);
+			}*/
+		provider.landWorld.getWorldChunkManager().getBiomesForGeneration(this.biomesForGeneration, chunkX * 4, chunkZ * 4, 4, 4);
+		
+		for(int x = 0; x < 16; x++)
+			for(int z = 0; z < 16; z++)
+			{
+				primer.setBlockState(x, 0, z, Blocks.bedrock.getDefaultState());
+				BiomeGenBase biome = biomesForGeneration[x/4 + z - (z%4)];
+				int height = biome == BiomeGenMinestuck.mediumNormal ? 70 : 60;
+				for(int y = 1; y < height; y++)
+					primer.setBlockState(x, y, z, provider.surfaceBlock);
 			}
 		
 		return primer;
