@@ -6,6 +6,7 @@ import com.mraof.minestuck.Minestuck;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
@@ -61,6 +62,12 @@ public class BlockGlowingMushroom extends BlockBush
 	{
 		IBlockState soil = world.getBlockState(pos.down());
 		return soil.getBlock().equals(Minestuck.coloredDirt) && soil.getValue(BlockColoredDirt.BLOCK_TYPE).equals(BlockColoredDirt.BlockType.BLUE);
+	}
+	
+	@Override
+	public MapColor getMapColor(IBlockState state)
+	{
+		return MapColor.diamondColor;
 	}
 	
 }
