@@ -21,7 +21,7 @@ public class GenLayerLands extends GenLayer
 			for(int z = 0; z < areaHeight; z++)
 			{
 				initChunkSeed(areaX + x, areaZ + z);
-				biomeGen[x + z * areaHeight] = BiomeGenMinestuck.mediumNormal.biomeID + nextInt(2);
+				biomeGen[x + z * areaHeight] = BiomeGenMinestuck.mediumNormal.biomeID + (nextInt(3) == 0 ? 0 : 1);
 			}
 		return biomeGen;
 	}
@@ -34,6 +34,7 @@ public class GenLayerLands extends GenLayer
 		layer = new GenLayerZoom(1002L, layer);
 		layer = new GenLayerZoom(1003L, layer);
 		layer = new GenLayerZoom(1004L, layer);
+		layer = new GenLayerZoom(1005L, layer);
 		
 		GenLayerVoronoiZoom voronoiZoom = new GenLayerVoronoiZoom(10L, layer);
 		layer.initWorldGenSeed(seed);
