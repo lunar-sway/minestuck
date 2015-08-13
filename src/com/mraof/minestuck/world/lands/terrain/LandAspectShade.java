@@ -19,9 +19,7 @@ import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
 
 public class LandAspectShade extends TerrainAspect 
 {
-
-	IBlockState[] surfaceBlocks = {Minestuck.coloredDirt.getDefaultState().withProperty(BlockColoredDirt.BLOCK_TYPE, BlockColoredDirt.BlockType.BLUE)};
-	IBlockState[] upperBlocks = {Blocks.stone.getDefaultState()};
+	
 	static Vec3 skyColor = new Vec3(0.16D, 0.38D, 0.54D);
 	
 	public LandAspectShade()
@@ -37,14 +35,9 @@ public class LandAspectShade extends TerrainAspect
 	}
 	
 	@Override
-	public IBlockState[] getSurfaceBlocks() {
-		return surfaceBlocks;
-	}
-	
-	@Override
-	public IBlockState[] getUpperBlocks()
+	public IBlockState getUpperBlock()
 	{
-		return upperBlocks;
+		return Minestuck.coloredDirt.getDefaultState().withProperty(BlockColoredDirt.BLOCK_TYPE, BlockColoredDirt.BlockType.BLUE);
 	}
 	
 	@Override

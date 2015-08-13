@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.world.lands.decorator.GrassDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.IceDecorator;
 import com.mraof.minestuck.world.lands.decorator.LayeredBlockDecorator;
@@ -21,8 +20,6 @@ import net.minecraft.util.WeightedRandomChestContent;
 
 public class LandAspectFrost extends TerrainAspect 
 {
-	IBlockState[] surfaceBlocks = {Blocks.dirt.getDefaultState()};
-	private IBlockState[] upperBlocks = {Blocks.stone.getDefaultState()};
 	IBlockState[] structureBlocks = {Blocks.stone.getDefaultState(), Blocks.stonebrick.getDefaultState()};
 	static Vec3 skyColor = new Vec3(0.45D, 0.5D, 0.98D);
 	
@@ -37,15 +34,15 @@ public class LandAspectFrost extends TerrainAspect
 	}
 	
 	@Override
-	public IBlockState[] getSurfaceBlocks() 
+	public IBlockState getSurfaceBlock() 
 	{
-		return surfaceBlocks;
+		return Blocks.grass.getDefaultState();
 	}
 
 	@Override
-	public IBlockState[] getUpperBlocks() 
+	public IBlockState getUpperBlock() 
 	{
-		return upperBlocks;
+		return Blocks.dirt.getDefaultState();
 	}
 	
 	@Override
@@ -86,7 +83,6 @@ public class LandAspectFrost extends TerrainAspect
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
 		list.add(new IceDecorator());
 		list.add(new LayeredBlockDecorator(Blocks.snow_layer, true));
-		list.add(new GrassDecorator());
 		return list;
 	}
 	

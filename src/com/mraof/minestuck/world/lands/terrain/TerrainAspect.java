@@ -28,13 +28,16 @@ public abstract class TerrainAspect implements ILandAspect<TerrainAspect>
 		 * Returns the blocks that can possibly be use in the land's underground blocks.
 		 * @return
 		 */
-		public abstract IBlockState[] getSurfaceBlocks();
+		public IBlockState getSurfaceBlock()
+		{
+			return getUpperBlock();
+		}
 		
 		/**
 		 * Returns the blocks that can possibly be use in the land's topmost layer of blocks.
 		 * @return
 		 */
-		public abstract IBlockState[] getUpperBlocks();
+		public abstract IBlockState getUpperBlock();
 		
 		/**
 		 * Returns the block that is a part of the land's ocean.
@@ -71,7 +74,7 @@ public abstract class TerrainAspect implements ILandAspect<TerrainAspect>
 	
 	public IBlockState[] getStructureBlocks()
 	{
-		return getUpperBlocks();
+		return new IBlockState[] {getGroundBlock()};
 	}
 	
 	public int getWeatherType()
@@ -126,6 +129,11 @@ public abstract class TerrainAspect implements ILandAspect<TerrainAspect>
 		if(lootMap.containsKey(lootType))
 			content.addAll(lootMap.get(lootType));
 		else content.addAll(lootMap.get(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST)); //Default value
+	}
+
+	public IBlockState getGroundBlock()
+	{
+		return Blocks.stone.getDefaultState();
 	}
 	
 }

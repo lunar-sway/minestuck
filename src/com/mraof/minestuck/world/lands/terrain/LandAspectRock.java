@@ -18,7 +18,6 @@ import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 public class LandAspectRock extends TerrainAspect
 {
 	
-	private IBlockState[] surfaceBlocks = {Blocks.gravel.getDefaultState(), Blocks.cobblestone.getDefaultState()};
 	private IBlockState[] structureBlocks = {Blocks.cobblestone.getDefaultState(), Blocks.stonebrick.getDefaultState()};
 	
 	public LandAspectRock()
@@ -41,15 +40,15 @@ public class LandAspectRock extends TerrainAspect
 	}
 	
 	@Override
-	public IBlockState[] getSurfaceBlocks()
+	public IBlockState getSurfaceBlock()
 	{
-		return surfaceBlocks;
+		return Blocks.gravel.getDefaultState();
 	}
 	
 	@Override
-	public IBlockState[] getUpperBlocks()
+	public IBlockState getUpperBlock()
 	{
-		return new IBlockState[] {Blocks.stone.getDefaultState()};
+		return Blocks.cobblestone.getDefaultState();
 	}
 	
 	@Override

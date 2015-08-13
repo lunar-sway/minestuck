@@ -25,8 +25,8 @@ import net.minecraft.util.WeightedRandomChestContent;
 
 public class LandAspectSand extends TerrainAspect
 {
-	private final IBlockState[] surfaceBlocks;
-	private final IBlockState[] upperBlocks;
+	private final IBlockState upperBlock;
+	private final IBlockState groundBlock;
 	private final IBlockState[] structureBlocks;
 	private final Vec3 skyColor;
 	private final String name;
@@ -46,8 +46,8 @@ public class LandAspectSand extends TerrainAspect
 		{
 			skyColor = new Vec3(0.99D, 0.8D, 0.05D);
 			
-			surfaceBlocks = new IBlockState[] {Blocks.sand.getDefaultState()};
-			upperBlocks = new IBlockState[] {Blocks.sandstone.getDefaultState()};
+			upperBlock = Blocks.sand.getDefaultState();
+			groundBlock = Blocks.sandstone.getDefaultState();
 			structureBlocks = new IBlockState[] {Blocks.sandstone.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.SMOOTH), Blocks.stonebrick.getDefaultState()};
 			
 			List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
@@ -65,8 +65,8 @@ public class LandAspectSand extends TerrainAspect
 		{
 			skyColor = new Vec3(0.99D, 0.6D, 0.05D);
 			
-			surfaceBlocks = new IBlockState[] {Blocks.sand.getDefaultState().withProperty(BlockSand.VARIANT, BlockSand.EnumType.RED_SAND)};
-			upperBlocks = new IBlockState[] {Blocks.red_sandstone.getDefaultState()};
+			upperBlock = Blocks.sand.getDefaultState().withProperty(BlockSand.VARIANT, BlockSand.EnumType.RED_SAND);
+			groundBlock = Blocks.red_sandstone.getDefaultState();
 			structureBlocks = new IBlockState[] {Blocks.red_sandstone.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.SMOOTH), Blocks.stonebrick.getDefaultState()};
 			
 			List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
@@ -82,21 +82,21 @@ public class LandAspectSand extends TerrainAspect
 	}
 	
 	@Override
-	public IBlockState[] getSurfaceBlocks() 
+	public IBlockState getUpperBlock()
 	{
-		return surfaceBlocks;
+		return upperBlock;
 	}
 	
 	@Override
-	public IBlockState[] getUpperBlocks()
+	public IBlockState getGroundBlock()
 	{
-		return upperBlocks;
+		return groundBlock;
 	}
 	
 	@Override
 	public IBlockState getRiverBlock()
 	{
-		return surfaceBlocks[0];
+		return upperBlock;
 	}
 	
 	@Override

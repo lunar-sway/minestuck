@@ -16,8 +16,6 @@ import net.minecraft.util.WeightedRandomChestContent;
 
 public class LandAspectHeat extends TerrainAspect 
 {
-	IBlockState[] upperBlocks = {Blocks.netherrack.getDefaultState()};
-	IBlockState[] surfaceBlocks = {Blocks.cobblestone.getDefaultState()};
 	IBlockState[] structureBlocks = {Blocks.nether_brick.getDefaultState(), Blocks.obsidian.getDefaultState()};
 	static Vec3 skyColor = new Vec3(0.4D, 0.0D, 0.0D);
 	
@@ -36,15 +34,15 @@ public class LandAspectHeat extends TerrainAspect
 	}
 	
 	@Override
-	public IBlockState[] getSurfaceBlocks() 
+	public IBlockState getUpperBlock() 
 	{
-		return surfaceBlocks;
+		return Blocks.cobblestone.getDefaultState();
 	}
-
+	
 	@Override
-	public IBlockState[] getUpperBlocks() 
+	public IBlockState getGroundBlock()
 	{
-		return upperBlocks;
+		return Blocks.netherrack.getDefaultState();
 	}
 	
 	@Override

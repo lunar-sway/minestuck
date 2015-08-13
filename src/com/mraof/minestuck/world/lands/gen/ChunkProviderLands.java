@@ -56,6 +56,7 @@ public class ChunkProviderLands implements IChunkProvider
 	public final Map<String, ChestGenHooks> lootMap = new HashMap<String, ChestGenHooks>();
 	public IBlockState surfaceBlock;
 	public IBlockState upperBlock;
+	public IBlockState groundBlock;
 	public IBlockState oceanBlock;
 	public IBlockState riverBlock;
 	public ArrayList<ILandDecorator> decorators;
@@ -102,8 +103,9 @@ public class ChunkProviderLands implements IChunkProvider
 			this.random = new Random(seed);
 			this.terrainGenerator = aspect1.createTerrainGenerator(this, random);
 			this.structureHandler = new LandStructureHandler(this);
-			this.surfaceBlock = helper.pickElement(aspect1.getSurfaceBlocks());
-			this.upperBlock = helper.pickElement(aspect1.getUpperBlocks());
+			this.surfaceBlock = aspect1.getSurfaceBlock();
+			this.upperBlock = aspect1.getUpperBlock();
+			this.groundBlock = aspect1.getGroundBlock();
 			this.oceanBlock = aspect1.getOceanBlock();
 			this.riverBlock = aspect1.getRiverBlock();
 			this.decorators = helper.pickSubset(aspect1.getOptionalDecorators(), 3, 5);

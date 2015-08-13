@@ -13,7 +13,6 @@ import net.minecraft.util.WeightedRandomChestContent;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.world.lands.decorator.GrassDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.TreeDecorator;
 
@@ -48,15 +47,15 @@ public class LandAspectForest extends TerrainAspect
 	}
 	
 	@Override
-	public IBlockState[] getSurfaceBlocks()
+	public IBlockState getSurfaceBlock()
 	{
-		return new IBlockState[] {Blocks.dirt.getDefaultState()};
+		return Blocks.grass.getDefaultState();
 	}
 	
 	@Override
-	public IBlockState[] getUpperBlocks()
+	public IBlockState getUpperBlock()
 	{
-		return new IBlockState[] {Blocks.stone.getDefaultState()};
+		return Blocks.dirt.getDefaultState();
 	}
 	
 	@Override
@@ -89,7 +88,6 @@ public class LandAspectForest extends TerrainAspect
 	public List<ILandDecorator> getOptionalDecorators()
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
-		list.add(new GrassDecorator());
 		return list;
 	}
 	

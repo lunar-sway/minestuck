@@ -21,8 +21,7 @@ import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
 public class LandAspectSandstone extends TerrainAspect
 {
 	
-	private final IBlockState[] surfaceBlocks;
-	private final IBlockState[] upperBlocks;
+	private final IBlockState upperBlock;
 	private final IBlockState[] structureBlocks;
 	private final Vec3 skyColor;
 	private final String name;
@@ -39,8 +38,7 @@ public class LandAspectSandstone extends TerrainAspect
 		this.name = name;
 		if(name.equals("Sandstone"))
 		{
-			surfaceBlocks = new IBlockState[] {Blocks.sandstone.getDefaultState()};
-			upperBlocks = new IBlockState[] {Blocks.stone.getDefaultState()};
+			upperBlock = Blocks.sandstone.getDefaultState();
 			structureBlocks = new IBlockState[] {Blocks.sandstone.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.SMOOTH), Blocks.stonebrick.getDefaultState()};
 			skyColor = new Vec3(0.9D, 0.7D, 0.05D);
 			
@@ -59,8 +57,7 @@ public class LandAspectSandstone extends TerrainAspect
 		}
 		else
 		{
-			surfaceBlocks = new IBlockState[] {Blocks.red_sandstone.getDefaultState()};
-			upperBlocks = new IBlockState[] {Blocks.stone.getDefaultState()};
+			upperBlock = Blocks.red_sandstone.getDefaultState();
 			structureBlocks = new IBlockState[] {Blocks.red_sandstone.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.SMOOTH), Blocks.stonebrick.getDefaultState()};
 			skyColor = new Vec3(0.9D, 0.5D, 0.05D);
 			
@@ -89,15 +86,9 @@ public class LandAspectSandstone extends TerrainAspect
 	}
 	
 	@Override
-	public IBlockState[] getSurfaceBlocks()
+	public IBlockState getUpperBlock()
 	{
-		return surfaceBlocks;
-	}
-	
-	@Override
-	public IBlockState[] getUpperBlocks()
-	{
-		return upperBlocks;
+		return upperBlock;
 	}
 	
 	@Override
