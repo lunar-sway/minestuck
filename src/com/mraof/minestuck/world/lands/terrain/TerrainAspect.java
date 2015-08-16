@@ -11,7 +11,7 @@ import com.mraof.minestuck.world.lands.ILandAspect;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.gen.DefaultTerrainGen;
-import com.mraof.minestuck.world.lands.gen.LandTerrainGenBase;
+import com.mraof.minestuck.world.lands.gen.ILandTerrainGen;
 import com.mraof.minestuck.world.lands.structure.LandStructureHandler;
 
 import net.minecraft.block.state.IBlockState;
@@ -116,7 +116,7 @@ public abstract class TerrainAspect implements ILandAspect<TerrainAspect>
 		return state;
 	}
 	
-	public LandTerrainGenBase createTerrainGenerator(ChunkProviderLands chunkProvider, Random rand)
+	public ILandTerrainGen createTerrainGenerator(ChunkProviderLands chunkProvider, Random rand)
 	{
 		return new DefaultTerrainGen(chunkProvider, rand);
 	}

@@ -60,7 +60,7 @@ public class ChunkProviderLands implements IChunkProvider
 	public IBlockState oceanBlock;
 	public IBlockState riverBlock;
 	public ArrayList<ILandDecorator> decorators;
-	public LandTerrainGenBase terrainGenerator;
+	public ILandTerrainGen terrainGenerator;
 	public LandStructureHandler structureHandler;
 	public int dayCycle;
 	public int weatherType;	//-1:No weather &1: Force rain &2: If thunder &4: Force thunder
