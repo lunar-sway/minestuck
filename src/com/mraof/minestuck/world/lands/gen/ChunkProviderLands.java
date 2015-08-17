@@ -65,6 +65,7 @@ public class ChunkProviderLands implements IChunkProvider
 	public int dayCycle;
 	public int weatherType;	//-1:No weather &1: Force rain &2: If thunder &4: Force thunder
 	public float rainfall, temperature;
+	public float oceanChance;
 	protected BiomeGenBase biomeGenLands;
 
 	@SuppressWarnings("unchecked")
@@ -89,6 +90,7 @@ public class ChunkProviderLands implements IChunkProvider
 		this.weatherType = aspect1.getWeatherType();
 		this.rainfall = aspect1.getRainfall();
 		this.temperature = aspect1.getTemperature();
+		this.oceanChance = aspect1.getOceanChance();
 		
 		if(!clientSide)
 		{

@@ -7,9 +7,12 @@ import net.minecraft.world.gen.layer.IntCache;
 
 public class GenLayerLands extends GenLayer
 {
-	public GenLayerLands(long seed)
+	private float oceanChance;
+	
+	public GenLayerLands(long seed, float oceanChance)
 	{
 		super(seed);
+		this.oceanChance = oceanChance;
 	}
 	
 	@Override
@@ -26,9 +29,9 @@ public class GenLayerLands extends GenLayer
 		return biomeGen;
 	}
 	
-	public static GenLayer[] generateBiomeGenLayers(long seed)
+	public static GenLayer[] generateBiomeGenLayers(long seed, float oceanChance)
 	{
-		GenLayer layer = new GenLayerLands(413L);
+		GenLayer layer = new GenLayerLands(413L, oceanChance);
 		layer = new GenLayerZoom(1000L, layer);
 		layer = new GenLayerZoom(1001L, layer);
 		layer = new GenLayerZoom(1002L, layer);

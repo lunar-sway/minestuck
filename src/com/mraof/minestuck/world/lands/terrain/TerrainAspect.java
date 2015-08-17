@@ -39,6 +39,11 @@ public abstract class TerrainAspect implements ILandAspect<TerrainAspect>
 		 */
 		public abstract IBlockState getUpperBlock();
 		
+		public IBlockState getGroundBlock()
+		{
+			return Blocks.stone.getDefaultState();
+		}
+		
 		/**
 		 * Returns the block that is a part of the land's ocean.
 		 * @return
@@ -92,6 +97,11 @@ public abstract class TerrainAspect implements ILandAspect<TerrainAspect>
 		return 0.7F;
 	}
 	
+	public float getOceanChance()
+	{
+		return 2/3F;
+	}
+	
 	@Override
 	public List<TerrainAspect> getVariations()
 	{
@@ -129,11 +139,6 @@ public abstract class TerrainAspect implements ILandAspect<TerrainAspect>
 		if(lootMap.containsKey(lootType))
 			content.addAll(lootMap.get(lootType));
 		else content.addAll(lootMap.get(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST)); //Default value
-	}
-
-	public IBlockState getGroundBlock()
-	{
-		return Blocks.stone.getDefaultState();
 	}
 	
 }
