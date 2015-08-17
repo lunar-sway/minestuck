@@ -13,6 +13,9 @@ import net.minecraft.world.gen.NoiseGeneratorOctaves;
 public class DefaultTerrainGen extends LandTerrainGenBase
 {
 	
+	public float normalHeight = 0.4F, oceanHeight = -0.2F;
+	public float normalVariation = 0.6F, oceanVariation = 0.2F;
+	
 	protected NoiseGeneratorOctaves noiseGens[] = new NoiseGeneratorOctaves[2];
 	protected NoiseGeneratorTriangle noiseGeneratorTriangle;
 	protected int[] topBlock;	//It's easier to just re-use all arrays
@@ -69,11 +72,9 @@ public class DefaultTerrainGen extends LandTerrainGenBase
 					double biomeVariationDiff = (variation1 - variation0);
 					for(int z1 = 0; z1 < 4; z1++)
 					{
-						double height = 0;//heightMap[(x0*4 + x1)*16 + z0*4 + z1]/10D;
+						double height = heightMap[(x0*4 + x1)*16 + z0*4 + z1]/40D;
 						
 						topBlock[(x0*4 + x1)*16 + z0*4 + z1] = (int) (62 + 32*biomeHeight + height*biomeVariation);
-						
-//						Debug.print((x0*4 + x1)+","+(z0*4+z1)+","+topBlock[(x0*4 + x1)*16 + z0*4 + z1] + ", " + biomeHeight+","+biomeVariation);
 						
 						biomeHeight += biomeHeightDiff;
 						biomeVariation += biomeVariationDiff;
@@ -84,15 +85,7 @@ public class DefaultTerrainGen extends LandTerrainGenBase
 					variation1 += variation1Diff;
 				}
 			}
-		/*for(int i = 0; i < 256; i++)
-		{
-			int y = (int) (96 + heightMap[i]/10 + heightMapTriangles[i]);
-			if(y > 255)
-				Debug.print("y passed upper limit: " + y);
-			else if(y < 0)
-				Debug.print("y passed lower limit: " + y);
-			topBlock[i] = Math.max(0, Math.min(255, y));//((y & 511) <= 255  ? y & 255 : 255 - y & 255);
-		}*/
+		
 		return topBlock;
 	}
 	
@@ -101,14 +94,14 @@ public class DefaultTerrainGen extends LandTerrainGenBase
 	{
 		int[] topRiverBlock = new int[256];
 		
-		riverHeightMap = this.noiseGens[1].generateNoiseOctaves(riverHeightMap, chunkX * 16, 1, chunkZ * 16, 16, 1, 16, .003, 0, .003);
+		/*riverHeightMap = this.noiseGens[1].generateNoiseOctaves(riverHeightMap, chunkX * 16, 1, chunkZ * 16, 16, 1, 16, .003, 0, .003);
 		
 		for(int i = 0; i < 256; i++)
 		{
 			topRiverBlock[i] = (int) (.025 / ((5 * riverHeightMap[i]) * (5 * riverHeightMap[i]) + 0.005));
 			if(topRiverBlock[i] == 1)
 				topRiverBlock[i] = 0;
-		}
+		}*/
 		
 		return topRiverBlock;
 	}
@@ -145,12 +138,16 @@ public class DefaultTerrainGen extends LandTerrainGenBase
 	
 	protected float getBiomeHeight(BiomeGenBase biome)
 	{
-		return biome == BiomeGenMinestuck.mediumNormal ? 0.5F : 0.2F;
+		if(biome == BiomeGenMinestuck.mediumOcean)
+			return this.oceanHeight;
+		else return this.normalHeight;
 	}
 	
 	protected float getBiomeVariation(BiomeGenBase biome)
 	{
-		return biome == BiomeGenMinestuck.mediumNormal ? 0.5F : 0.2F;
+		if(biome == BiomeGenMinestuck.mediumOcean)
+			return this.oceanVariation;
+		else return this.normalVariation;
 	}
 	
 }
