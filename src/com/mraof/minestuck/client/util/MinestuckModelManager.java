@@ -43,6 +43,7 @@ public class MinestuckModelManager
 		//Items
 		register(Minestuck.clawHammer);
 		register(Minestuck.sledgeHammer);
+		register(Minestuck.blacksmith_hammer);
 		register(Minestuck.pogoHammer);
 		register(Minestuck.telescopicSassacrusher);
 		register(Minestuck.fearNoAnvil);
@@ -69,6 +70,8 @@ public class MinestuckModelManager
 		register(Minestuck.spearCane);
 		register(Minestuck.dragonCane);
 		
+		register(Minestuck.woodenSpoon);
+		register(Minestuck.silverSpoon);
 		modelRegistry.register(Minestuck.crockerSpork, new CrockerSporkDefinition());
 		register(Minestuck.skaiaFork);
 		
@@ -79,6 +82,17 @@ public class MinestuckModelManager
 		{
 			register(Minestuck.zillyhooHammer);
 		}
+		
+		register(Minestuck.emeraldSword);
+		register(Minestuck.emeraldAxe);
+		register(Minestuck.emeraldPickaxe);
+		register(Minestuck.emeraldShovel);
+		register(Minestuck.emeraldHoe);
+		
+		register(Minestuck.prismarine_helmet);
+		register(Minestuck.prismarine_chestplate);
+		register(Minestuck.prismarine_leggings);
+		register(Minestuck.prismarine_boots);
 		
 		register(Minestuck.rawCruxite);
 		modelRegistry.register(Minestuck.cruxiteDowel, new CruxiteDowelDefinition());
@@ -97,6 +111,8 @@ public class MinestuckModelManager
 		register(Minestuck.goldSeeds);
 		for(int i = 0; i < Minestuck.metalBoat.names.length; i++)
 			register(Minestuck.metalBoat, i, "boat_"+Minestuck.metalBoat.names[i]);
+		register(Minestuck.obsidianBucket);
+		
 		
 		//Blocks
 		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())
@@ -116,6 +132,7 @@ public class MinestuckModelManager
 		register(Minestuck.layeredSand);
 		for(BlockMachine.MachineType type : BlockMachine.MachineType.values())
 			register(Minestuck.blockMachine, type.ordinal(), "machine_"+type.getName());
+		register(Minestuck.glowingMushroom);
 		
 	}
 	

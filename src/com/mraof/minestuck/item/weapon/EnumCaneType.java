@@ -2,43 +2,41 @@ package com.mraof.minestuck.item.weapon;
 
 public enum EnumCaneType 
 {
-	CANE(0, 100, 2.0F, 0, 15),
-	SPEAR(1, 300, 4.0F, 3, 10),
-	DRAGON(1, 300, 4.0F, 4, 20);
+	CANE(100, 2, 15, "cane"),
+	SPEAR(300, 6, 13, "spearCane"),
+	DRAGON(300, 8, 20, "dragonCane");
 	
 	
-	private final int harvestLevel;
 	private final int maxUses;
-	private final float efficiencyOnProperMaterial;
 	private final int damageVsEntity;
 	private final int enchantability;
+	private final String name;
 	
-	private EnumCaneType(int harvestLevel, int maxUses, float efficiencyOnProperMaterial, int damageVsEntity, int enchantability) 
+	private EnumCaneType(int maxUses, int damageVsEntity, int enchantability, String name)
 	{
-		this.harvestLevel = harvestLevel;
-	    this.maxUses = maxUses;
-	    this.efficiencyOnProperMaterial = efficiencyOnProperMaterial;
-	    this.damageVsEntity = damageVsEntity;
-	    this.enchantability = enchantability;
+		this.maxUses = maxUses;
+		this.damageVsEntity = damageVsEntity;
+		this.enchantability = enchantability;
+		this.name = name;
 	}
 	
-	public int getMaxUses() {
+	public int getMaxUses()
+	{
 		return maxUses;
 	}
 	
-	public float getEfficiencyOnProperMaterial() {
-		return efficiencyOnProperMaterial;
-	}
-	
-	public int getDamageVsEntity() {
+	public int getDamageVsEntity()
+	{
 		return damageVsEntity;
 	}
 	
-	public int getHarvestLevel() {
-		return harvestLevel;
+	public int getEnchantability()
+	{
+		return enchantability;
 	}
 	
-	public int getEnchantability() {
-		return enchantability;
+	public String getName()
+	{
+		return name;
 	}
 }

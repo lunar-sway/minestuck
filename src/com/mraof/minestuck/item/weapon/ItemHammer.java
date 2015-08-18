@@ -1,7 +1,5 @@
 package com.mraof.minestuck.item.weapon;
 
-import java.util.Set;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
@@ -18,7 +16,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.google.common.collect.Sets;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 
 public class ItemHammer extends ItemWeapon
@@ -26,44 +23,17 @@ public class ItemHammer extends ItemWeapon
 	private int weaponDamage;
 	private final EnumHammerType hammerType;
 	public float efficiencyOnProperMaterial = 4.0F;
-	public static final Set<Block> blocksEffectiveAgainst = Sets.newHashSet(new Block[] {Blocks.cobblestone, Blocks.double_stone_slab, Blocks.stone_slab, Blocks.stone, Blocks.sandstone, Blocks.mossy_cobblestone, Blocks.iron_ore, Blocks.iron_block, Blocks.coal_ore, Blocks.coal_block, Blocks.gold_block, Blocks.gold_ore, Blocks.diamond_ore, Blocks.diamond_block, Blocks.ice, Blocks.netherrack, Blocks.lapis_ore, Blocks.lapis_block, Blocks.redstone_ore, Blocks.rail, Blocks.detector_rail, Blocks.golden_rail});
-
 	
 	public ItemHammer(EnumHammerType hammerType)
 	{
-		super(blocksEffectiveAgainst);
+		super();
 		
 		this.hammerType = hammerType;
 		this.setMaxDamage(hammerType.getMaxUses());
+		this.setHarvestLevel("pickaxe", hammerType.getHarvestLevel());
 		this.efficiencyOnProperMaterial = hammerType.getEfficiencyOnProperMaterial();
-		switch(hammerType)
-		{
-		case CLAW:
-			this.setUnlocalizedName("clawHammer");
-			break;
-		case SLEDGE:
-			this.setUnlocalizedName("sledgeHammer");
-			break;
-		case POGO:
-			this.setUnlocalizedName("pogoHammer");
-			break;
-		case TELESCOPIC:
-			this.setUnlocalizedName("telescopicSassacrusher");
-			break;
-		case FEARNOANVIL:
-			this.setUnlocalizedName("fearNoAnvil");
-			break;
-		case ZILLYHOO:
-			this.setUnlocalizedName("zillyhooHammer");
-			break;
-		case POPAMATIC:
-			this.setUnlocalizedName("popamaticVrillyhoo");
-			break;
-		case SCARLET:
-			this.setUnlocalizedName("scarletZillyhoo");
-			break;
-		}
-		this.weaponDamage = 3 + hammerType.getDamageVsEntity();
+		this.setUnlocalizedName(hammerType.getName());
+		this.weaponDamage = hammerType.getDamageVsEntity();
 	}
 	
 	@Override
@@ -73,12 +43,6 @@ public class ItemHammer extends ItemWeapon
 			player.triggerAchievement(MinestuckAchievementHandler.getHammer);
 	}
 	
-	@Override
-	public boolean canHarvestBlock(Block block) 
-	{
-		return block != null && (block.getMaterial() == Material.iron || block.getMaterial() == Material.anvil || block.getMaterial() == Material.rock);
-	}
-
 	@Override
 	public float getStrVsBlock(ItemStack itemStack, Block block)
 	{
@@ -155,7 +119,8 @@ public class ItemHammer extends ItemWeapon
 	
 	protected double getPogoMotion(ItemStack stack)
 	{
-		return 0.5 + EnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency.effectId, stack)*0.1;
+//		return 0.5 + EnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency.effectId, stack)*0.1;
+		return 0.7;
 	}
 	
 }

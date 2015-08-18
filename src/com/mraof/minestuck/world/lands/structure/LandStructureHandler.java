@@ -179,7 +179,11 @@ public class LandStructureHandler extends MapGenStructure
 				}
 				nodePos = new BlockPos(xPos, maxY, zPos);
 			}
-			else{ nodePos = decoratorPos;Debug.print("Spawning spacial node at: "+nodePos);}
+			else
+			{
+				nodePos = decoratorPos;
+				Debug.print("Spawning special node at: "+nodePos);
+				}
 			
 			for(int i = 0; i < 4; i++)
 			{

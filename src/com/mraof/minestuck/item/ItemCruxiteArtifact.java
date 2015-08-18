@@ -112,8 +112,9 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 				int zWidth = (int) Math.sqrt(artifactRange * artifactRange - (blockX - x) * (blockX - x));
 				for(int blockZ = z - zWidth; blockZ <= z + zWidth; blockZ++)
 				{
-					double radius = Math.sqrt(((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2);
-					int height = (int) (Math.sqrt(artifactRange * artifactRange - radius * radius));
+					int height = (int) Math.sqrt(artifactRange * artifactRange - (((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2));
+					int heightX = (int) Math.sqrt(artifactRange * artifactRange - (((blockX - x + 1) * (blockX - x + 1) + (blockZ - z) * (blockZ - z)) / 2));
+					int heightZ = (int) Math.sqrt(artifactRange * artifactRange - (((blockX - x) * (blockX - x) + (blockZ - z + 1) * (blockZ - z + 1)) / 2));
 					int blockY;
 					for(blockY = Math.max(0, y - height); blockY < Math.min(256, y + height); blockY++)
 					{
@@ -121,7 +122,14 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 						BlockPos pos1 = pos.up(yDiff);
 						IBlockState block = worldserver0.getBlockState(pos);
 						TileEntity te = worldserver0.getTileEntity(pos);
-						if(block != Blocks.bedrock)
+						if(block.getBlock() != Blocks.air && !block.getBlock().isSolidFullCube()) //Place temp blocks to avoid things like torches breaking because of missing solid block
+						{
+							if(blockX < x + artifactRange && blockY >= y - heightX)
+								worldserver1.setBlockState(pos1.east(), Blocks.stone.getDefaultState(), 0);
+							if(blockZ < z + zWidth && blockY >= y - heightZ)
+								worldserver1.setBlockState(pos1.south(), Blocks.stone.getDefaultState(), 0);
+						}
+						if(block.getBlock() != Blocks.bedrock)
 							worldserver1.setBlockState(pos1, block, 0);
 						if((te) != null)
 						{

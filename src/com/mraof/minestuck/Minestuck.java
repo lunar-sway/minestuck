@@ -8,12 +8,18 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemHoe;
+import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -40,6 +46,7 @@ import com.mraof.minestuck.block.BlockComputerOff;
 import com.mraof.minestuck.block.BlockComputerOn;
 import com.mraof.minestuck.block.BlockFluid;
 import com.mraof.minestuck.block.BlockGate;
+import com.mraof.minestuck.block.BlockGlowingMushroom;
 import com.mraof.minestuck.block.BlockReturnNode;
 import com.mraof.minestuck.block.BlockSkaiaPortal;
 import com.mraof.minestuck.block.BlockGoldSeeds;
@@ -81,8 +88,11 @@ import com.mraof.minestuck.item.ItemDisk;
 import com.mraof.minestuck.item.ItemDowel;
 import com.mraof.minestuck.item.ItemGoldSeeds;
 import com.mraof.minestuck.item.ItemMetalBoat;
+import com.mraof.minestuck.item.ItemMinestuckAxe;
 import com.mraof.minestuck.item.ItemMinestuckBucket;
+import com.mraof.minestuck.item.ItemMinestuckPickaxe;
 import com.mraof.minestuck.item.ItemModus;
+import com.mraof.minestuck.item.ItemObsidianBucket;
 import com.mraof.minestuck.item.block.ItemBlockLayered;
 import com.mraof.minestuck.item.block.ItemChessTile;
 import com.mraof.minestuck.item.block.ItemColoredDirt;
@@ -153,6 +163,7 @@ public class Minestuck
 	//hammers
 	public static Item clawHammer;
 	public static Item sledgeHammer;
+	public static Item blacksmith_hammer;
 	public static Item pogoHammer;
 	public static Item telescopicSassacrusher;
 	public static Item fearNoAnvil;
@@ -180,6 +191,8 @@ public class Minestuck
 	public static Item spearCane;
 	public static Item dragonCane;
 	//Spoons/forks
+	public static Item woodenSpoon;
+	public static Item silverSpoon;
 	public static ItemSpork crockerSpork;
 	public static Item skaiaFork;
 	//Other
@@ -193,6 +206,16 @@ public class Minestuck
 	public static ItemMinestuckBucket minestuckBucket;
 	public static ItemGoldSeeds goldSeeds;	//This item is pretty much only a joke
 	public static ItemMetalBoat metalBoat;
+	public static Item obsidianBucket;
+	public static Item emeraldSword;
+	public static Item emeraldAxe;
+	public static Item emeraldPickaxe;
+	public static Item emeraldShovel;
+	public static Item emeraldHoe;
+	public static Item prismarine_helmet;
+	public static Item prismarine_chestplate;
+	public static Item prismarine_leggings;
+	public static Item prismarine_boots;
 	
 	//Blocks
 	public static Block chessTile;
@@ -207,15 +230,19 @@ public class Minestuck
 	public static BlockGoldSeeds blockGoldSeeds;
 	public static Block returnNode;
 	public static Block gate;
+	public static BlockGlowingMushroom glowingMushroom;
 	
 	public static Block blockOil;
 	public static Block blockBlood;
 	public static Block blockBrainJuice;
 	public static Block layeredSand;
-
+	
 	public static Fluid fluidOil;
 	public static Fluid fluidBlood;
 	public static Fluid fluidBrainJuice;
+	
+	public static Item.ToolMaterial toolEmerald;
+	public static ItemArmor.ArmorMaterial armor_prismarine;
 	
 	// The instance of your mod that Forge uses.
 	@Instance("Minestuck")
@@ -263,6 +290,7 @@ public class Minestuck
 		blockGoldSeeds = (BlockGoldSeeds) GameRegistry.registerBlock(new BlockGoldSeeds(), null, "gold_seeds");
 		returnNode = GameRegistry.registerBlock(new BlockReturnNode(), null, "return_node");
 		gate = GameRegistry.registerBlock(new BlockGate(), null, "gate");
+		glowingMushroom = (BlockGlowingMushroom) GameRegistry.registerBlock(new BlockGlowingMushroom(), "glowing_mushroom");
 		//fluids
 		fluidOil = new Fluid("Oil", new ResourceLocation("minestuck", "blocks/OilStill"), new ResourceLocation("minestuck", "blocks/OilFlowing"));
 		FluidRegistry.registerFluid(fluidOil);
@@ -273,11 +301,12 @@ public class Minestuck
 		blockOil = GameRegistry.registerBlock(new BlockFluid(fluidOil, Material.water).setUnlocalizedName("oil"), null, "block_oil");
 		blockBlood = GameRegistry.registerBlock(new BlockFluid(fluidBlood, Material.water).setUnlocalizedName("blood"), null, "block_blood");
 		blockBrainJuice = GameRegistry.registerBlock(new BlockFluid(fluidBrainJuice, Material.water).setUnlocalizedName("brainJuice"), null, "block_brain_juice");
-
+		
 		//items
 		//hammers
 		clawHammer = new ItemHammer(EnumHammerType.CLAW);
 		sledgeHammer = new ItemHammer(EnumHammerType.SLEDGE);
+		blacksmith_hammer = new ItemHammer(EnumHammerType.BLACKSMITH);
 		pogoHammer = new ItemHammer(EnumHammerType.POGO);
 		telescopicSassacrusher = new ItemHammer(EnumHammerType.TELESCOPIC);
 		fearNoAnvil = new ItemHammer(EnumHammerType.FEARNOANVIL);
@@ -305,9 +334,25 @@ public class Minestuck
 		spearCane = new ItemCane(EnumCaneType.SPEAR);
 		dragonCane = new ItemCane(EnumCaneType.DRAGON);
 		//Spoons/forks
+		woodenSpoon = new ItemSpork(EnumSporkType.SPOON_WOOD);
+		silverSpoon = new ItemSpork(EnumSporkType.SPOON_SILVER);
 		crockerSpork = new ItemSpork(EnumSporkType.CROCKER);
 		skaiaFork = new ItemSpork(EnumSporkType.SKAIA);
-		//items
+		
+		toolEmerald = EnumHelper.addToolMaterial("EMERALD", 3, 1220, 12.0F, 4.0F, 12).setRepairItem(new ItemStack(Items.emerald));
+		emeraldSword = new ItemSword(toolEmerald).setUnlocalizedName("swordEmerald").setCreativeTab(tabMinestuck);
+		emeraldAxe = new ItemMinestuckAxe(toolEmerald).setUnlocalizedName("hatchetEmerald").setCreativeTab(tabMinestuck);
+		emeraldPickaxe = new ItemMinestuckPickaxe(toolEmerald).setUnlocalizedName("pickaxeEmerald").setCreativeTab(tabMinestuck);
+		emeraldShovel = new ItemSpade(toolEmerald).setUnlocalizedName("shovelEmerald").setCreativeTab(tabMinestuck);
+		emeraldHoe = new ItemHoe(toolEmerald).setUnlocalizedName("hoeEmerald").setCreativeTab(tabMinestuck);
+		//armor
+		armor_prismarine = EnumHelper.addArmorMaterial("PRISMARINE", "minestuck:prismarine", 20, new int[]{3, 7, 6, 2}, 15);
+		armor_prismarine.customCraftingMaterial = Items.prismarine_shard;
+		prismarine_helmet = new ItemArmor(armor_prismarine, 0, 0).setUnlocalizedName("helmetPrismarine").setCreativeTab(tabMinestuck);
+		prismarine_chestplate = new ItemArmor(armor_prismarine, 0, 1).setUnlocalizedName("chestplatePrismarine").setCreativeTab(tabMinestuck);
+		prismarine_leggings = new ItemArmor(armor_prismarine, 0, 2).setUnlocalizedName("leggingsPrismarine").setCreativeTab(tabMinestuck);
+		prismarine_boots = new ItemArmor(armor_prismarine, 0, 3).setUnlocalizedName("bootsPrismarine").setCreativeTab(tabMinestuck);
+		//misc
 		rawCruxite = new ItemCruxiteRaw();
 		cruxiteDowel = new ItemDowel();
 		captchaCard = new ItemCaptchaCard();
@@ -315,6 +360,7 @@ public class Minestuck
 		disk = new ItemDisk();
 		component = new ItemComponent();
 		minestuckBucket = new ItemMinestuckBucket();
+		obsidianBucket = new ItemObsidianBucket();
 		modusCard = new ItemModus();
 		goldSeeds = new ItemGoldSeeds();
 		metalBoat = new ItemMetalBoat();
@@ -325,6 +371,7 @@ public class Minestuck
 		
 		GameRegistry.registerItem(clawHammer, "claw_hammer");
 		GameRegistry.registerItem(sledgeHammer, "sledge_hammer");
+		GameRegistry.registerItem(blacksmith_hammer, "blacksmith_hammer");
 		GameRegistry.registerItem(pogoHammer, "pogo_hammer");
 		GameRegistry.registerItem(telescopicSassacrusher, "telescopic_sassacrusher");
 		GameRegistry.registerItem(fearNoAnvil, "fear_no_anvil");
@@ -352,8 +399,21 @@ public class Minestuck
 		GameRegistry.registerItem(spearCane, "spear_cane");
 		GameRegistry.registerItem(dragonCane, "dragon_cane");
 		
+		GameRegistry.registerItem(woodenSpoon, "spoon_wood");
+		GameRegistry.registerItem(silverSpoon, "spoon_silver");
 		GameRegistry.registerItem(crockerSpork, "crocker_spork");
 		GameRegistry.registerItem(skaiaFork, "skaia_fork");
+		
+		GameRegistry.registerItem(emeraldSword, "emerald_sword");
+		GameRegistry.registerItem(emeraldAxe, "emerald_axe");
+		GameRegistry.registerItem(emeraldPickaxe, "emerald_pickaxe");
+		GameRegistry.registerItem(emeraldShovel, "emerald_shovel");
+		GameRegistry.registerItem(emeraldHoe, "emerald_hoe");
+		
+		GameRegistry.registerItem(prismarine_helmet, "prismarine_helmet");
+		GameRegistry.registerItem(prismarine_chestplate, "prismarine_chestplate");
+		GameRegistry.registerItem(prismarine_leggings, "prismarine_leggings");
+		GameRegistry.registerItem(prismarine_boots, "prismarine_boots");
 		
 		GameRegistry.registerItem(rawCruxite, "cruxite_raw");
 		GameRegistry.registerItem(cruxiteDowel, "cruxite_dowel");
@@ -362,6 +422,7 @@ public class Minestuck
 		GameRegistry.registerItem(disk, "computer_disk");
 		GameRegistry.registerItem(component, "component");
 		GameRegistry.registerItem(minestuckBucket, "minestuck_bucket");
+		GameRegistry.registerItem(obsidianBucket, "bucket_obsidian");
 		GameRegistry.registerItem(modusCard, "modus_card");
 		GameRegistry.registerItem(goldSeeds, "gold_seeds");
 		GameRegistry.registerItem(metalBoat, "metal_boat");

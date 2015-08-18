@@ -3,49 +3,45 @@ package com.mraof.minestuck.item.weapon;
 public enum EnumBladeType 
 {
 
-	SORD(0, 59, 2.0F, -1, 5),
-	NINJA(1, 100, 4.0F, 1, 15),
-	KATANA(3, 3000, 4.0F, 3, 30),
-	CALEDSCRATCH(3, 1561, 4.0F, 3, 30),
-	REGISWORD(2, 256, 4.0F, 3, 1),
-	DERINGER(3, 1561, 4.0F, 4, 30),
-	SCARLET(3, 2000, 4.0F, 4, 30),
-	DOGG(3, 1000, 4.0F, 2, 30);
+	SORD(59, 3, 5, "sord"),
+	NINJA(250, 6, 15, "ninjaSword"),
+	KATANA(2200, 8, 20, "katana"),
+	CALEDSCRATCH(1561, 7, 30, "caledscratch"),
+	REGISWORD(812, 7, 10, "regisword"),
+	DERINGER(1561, 8, 30, "royalDeringer"),
+	SCARLET(2000, 9, 30, "scarletRibbitar"),
+	DOGG(1000, 6, 30, "doggMachete");
 	
-	private final int harvestLevel;
-    private final int maxUses;
-    private final float efficiencyOnProperMaterial;
-    private final int damageVsEntity;
-    private final int enchantability;
+	private final int maxUses;
+	private final int damageVsEntity;
+	private final int enchantability;
+	private final String name;
 	
-	private EnumBladeType(int harvestLevel, int maxUses, float efficiencyOnProperMaterial, int damageVsEntity, int enchantability) 
+	private EnumBladeType(int maxUses, int damageVsEntity, int enchantability, String name) 
 	{
-		this.harvestLevel = harvestLevel;
-        this.maxUses = maxUses;
-        this.efficiencyOnProperMaterial = efficiencyOnProperMaterial;
-        this.damageVsEntity = damageVsEntity;
-        this.enchantability = enchantability;
+		this.maxUses = maxUses;
+		this.damageVsEntity = damageVsEntity;
+		this.enchantability = enchantability;
+		this.name = name;
 	}
 	
-	public int getMaxUses() {
+	public int getMaxUses()
+	{
 		return maxUses;
 	}
 	
-	public float getEfficiencyOnProperMaterial() {
-		return efficiencyOnProperMaterial;
-	}
-	
-	public int getDamageVsEntity() {
+	public int getDamageVsEntity()
+	{
 		return damageVsEntity;
 	}
 	
-	public int getHarvestLevel() {
-		return harvestLevel;
-	}
-	
-	public int getEnchantability() {
+	public int getEnchantability()
+	{
 		return enchantability;
 	}
 	
-
+	public String getName()
+	{
+		return name;
+	}
 }

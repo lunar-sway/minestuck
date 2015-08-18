@@ -311,7 +311,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 			if(inv[0] != null)
 			{
 				decrStackSize(2, 1);
-				if(inv[1] != null && !(inv[1].getItem().equals(Minestuck.captchaCard) && inv[1].hasTagCompound() && inv[1].getTagCompound().getBoolean("punched")))
+				if(!(inv[1].hasTagCompound() && inv[1].getTagCompound().hasKey("contentID")))
 					decrStackSize(1, 1);
 				decrStackSize(0, -1);
 				break;
@@ -326,7 +326,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 			outputItem = AlchemyRecipeHandler.createCard(outputItem, true);
 			
 			setInventorySlotContents(0,outputItem);
-			if(!(inv[1] != null && inv[1].hasTagCompound() && inv[1].getTagCompound().hasKey("contentID")))
+			if(!(inv[1].hasTagCompound() && inv[1].getTagCompound().hasKey("contentID")))
 				decrStackSize(1, 1);
 			decrStackSize(2, 1);
 			break;
