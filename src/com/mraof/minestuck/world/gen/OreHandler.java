@@ -34,7 +34,7 @@ public class OreHandler implements IWorldGenerator
 		int diffBtwnMinMaxY = maxY - minY;
 		IBlockState groundType = Blocks.stone.getDefaultState();
 		if(world.provider instanceof WorldProviderLands)
-			groundType = ((ChunkProviderLands) world.provider.createChunkGenerator()).upperBlock;
+			groundType = ((ChunkProviderLands) world.provider.createChunkGenerator()).groundBlock;
 		if(block.getBlock() == Minestuck.oreCruxite)
 			block = Minestuck.oreCruxite.getBlockState(groundType);
 		for(int x = 0; x < chancesToSpawn; x++)
@@ -48,15 +48,18 @@ public class OreHandler implements IWorldGenerator
 	
 	public static class BlockStatePredicate implements Predicate
 	{
-		IBlockState state;
-		public BlockStatePredicate(IBlockState blockState)
+		IBlockState[] states;
+		public BlockStatePredicate(IBlockState... blockStates)
 		{
-			state = blockState;
+			states = blockStates;
 		}
 		@Override
 		public boolean apply(Object input)
 		{
-			return input.equals(state);
+			for(IBlockState state : states)
+				if(state.equals(input))
+					return true;
+			return false;
 		}
 	}
 }
