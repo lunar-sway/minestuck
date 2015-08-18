@@ -2,6 +2,7 @@ package com.mraof.minestuck.world.lands.terrain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.state.IBlockState;
@@ -14,6 +15,9 @@ import net.minecraft.util.WeightedRandomChestContent;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
+import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.lands.gen.DefaultTerrainGen;
+import com.mraof.minestuck.world.lands.gen.ILandTerrainGen;
 
 public class LandAspectRock extends TerrainAspect
 {
@@ -107,6 +111,12 @@ public class LandAspectRock extends TerrainAspect
 	}
 	
 	@Override
+	public float getOceanChance()
+	{
+		return 1/3F;
+	}
+	
+	@Override
 	public Vec3 getFogColor()
 	{
 		return new Vec3(0.5, 0.5, 0.55);
@@ -118,6 +128,15 @@ public class LandAspectRock extends TerrainAspect
 		if(state.getBlock() == Blocks.stonebrick)
 			return Blocks.stonebrick.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED);
 		return state;
+	}
+	
+	@Override
+	public ILandTerrainGen createTerrainGenerator(ChunkProviderLands chunkProvider, Random rand)
+	{
+		DefaultTerrainGen terrainGen = new DefaultTerrainGen(chunkProvider, rand);
+		terrainGen.normalVariation = 0.8F;
+		terrainGen.oceanVariation = 0.5F;
+		return terrainGen;
 	}
 	
 }

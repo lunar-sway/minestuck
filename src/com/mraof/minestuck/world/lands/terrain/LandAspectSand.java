@@ -147,6 +147,12 @@ public class LandAspectSand extends TerrainAspect
 	}
 	
 	@Override
+	public float getOceanChance()
+	{
+		return 0F;
+	}
+	
+	@Override
 	public IBlockState[] getStructureBlocks()
 	{
 		return structureBlocks;

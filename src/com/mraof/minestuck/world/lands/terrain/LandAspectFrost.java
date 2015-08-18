@@ -110,6 +110,12 @@ public class LandAspectFrost extends TerrainAspect
 	}
 	
 	@Override
+	public float getOceanChance()
+	{
+		return 1/3F;
+	}
+	
+	@Override
 	public IBlockState getDecorativeBlockFor(IBlockState state)
 	{
 		if(state.getBlock() == Blocks.stonebrick)

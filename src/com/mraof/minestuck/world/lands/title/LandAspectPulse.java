@@ -30,6 +30,8 @@ public class LandAspectPulse extends TitleAspect
 	@Override
 	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
+		chunkProvider.oceanChance = Math.max(chunkProvider.oceanChance, 0.2F);
+		
 		if(chunkProvider.decorators != null)
 		{
 			chunkProvider.oceanBlock = Minestuck.blockBlood.getDefaultState();

@@ -12,13 +12,13 @@ import net.minecraft.world.gen.layer.GenLayer;
 public class WorldChunkManagerLands extends WorldChunkManager
 {
 	private float rainfall;
-	private float oceanChance;
+	private GenLayerLands layerLands;
 	
 	public WorldChunkManagerLands(World world, float rainfall, float oceanChance)
 	{
 		super(world);
 		this.rainfall = rainfall;
-		this.oceanChance = oceanChance;
+		layerLands.setOceanChance(oceanChance);
 	}
 	
 	@Override
@@ -36,6 +36,8 @@ public class WorldChunkManagerLands extends WorldChunkManager
 	@Override
 	public GenLayer[] getModdedBiomeGenerators(WorldType worldType, long seed, GenLayer[] original)
 	{
-		return GenLayerLands.generateBiomeGenLayers(seed, this.oceanChance);
+		GenLayer[] layers = GenLayerLands.generateBiomeGenLayers(seed);
+		layerLands = (GenLayerLands) layers[0];
+		return new GenLayer[] {layers[1], layers[2]};
 	}
 }

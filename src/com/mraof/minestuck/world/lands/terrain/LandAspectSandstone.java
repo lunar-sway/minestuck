@@ -144,6 +144,12 @@ public class LandAspectSandstone extends TerrainAspect
 	}
 	
 	@Override
+	public float getOceanChance()
+	{
+		return 0.1F;
+	}
+	
+	@Override
 	public Vec3 getFogColor()
 	{
 		return skyColor;
