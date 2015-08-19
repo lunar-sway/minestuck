@@ -33,6 +33,7 @@ public class MinestuckDimensionHandler
 		}
 		lands.clear();
 		spawnpoints.clear();
+		GateHandler.gateData.clear();
 	}
 	
 	public static void saveData(NBTTagCompound nbt)
@@ -51,6 +52,7 @@ public class MinestuckDimensionHandler
 			tagCompound.setInteger("spawnZ", spawn.getZ());
 			list.appendTag(tagCompound);
 		}
+		GateHandler.saveData(list);
 		nbt.setTag("dimensionData", list);
 	}
 	
@@ -74,6 +76,7 @@ public class MinestuckDimensionHandler
 				DimensionManager.registerDimension(dim, Minestuck.landProviderTypeId);
 			}
 		}
+		GateHandler.loadData(list);
 	}
 	
 	public static void registerLandDimension(int dimensionId, LandAspectRegistry.AspectCombination landAspects)

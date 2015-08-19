@@ -3,6 +3,7 @@ package com.mraof.minestuck.tileentity;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
+import com.mraof.minestuck.world.GateHandler;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -37,6 +38,9 @@ public class TileEntityGate extends TileEntity
 			player.motionZ = 0;
 			player.fallDistance = 0;
 			player.triggerAchievement(MinestuckAchievementHandler.returnNode);
+		} else
+		{
+			GateHandler.teleport(gateCount, worldObj.provider.getDimensionId(), player);
 		}
 	}
 	

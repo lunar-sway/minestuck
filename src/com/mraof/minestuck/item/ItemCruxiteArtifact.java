@@ -33,6 +33,7 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.ITeleporter;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.Teleport;
+import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 
@@ -193,8 +194,8 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 			
 			Debug.print("Placing gates...");
 			
-			placeGate(1, new BlockPos(x, 144, z), worldserver1);
-			placeGate(2, new BlockPos(x, 192, z), worldserver1);
+			placeGate(1, new BlockPos(x, GateHandler.gateHeight1, z), worldserver1);
+			placeGate(2, new BlockPos(x, GateHandler.gateHeight2, z), worldserver1);
 			
 			Debug.print("Entry finished");
 		}
