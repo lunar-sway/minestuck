@@ -194,6 +194,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 			
 			Debug.print("Placing gates...");
 			
+			GateHandler.findGatePlacement(worldserver1);
 			placeGate(1, new BlockPos(x, GateHandler.gateHeight1, z), worldserver1);
 			placeGate(2, new BlockPos(x, GateHandler.gateHeight2, z), worldserver1);
 			

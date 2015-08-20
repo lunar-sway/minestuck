@@ -3,6 +3,7 @@ package com.mraof.minestuck.world;
 import java.util.Map;
 import java.util.Random;
 
+import com.google.common.collect.Lists;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
@@ -16,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 
 public class GateHandler
@@ -45,17 +47,53 @@ public class GateHandler
 					if(rand.nextBoolean()) z = -z;
 					
 					BlockPos placement = pos.add(x, 0, z);
-					double distance = placement.distanceSq(spawn.getX(), placement.getY(), spawn.getZ());
+					//double distance = placement.distanceSq(spawn.getX(), placement.getY(), spawn.getZ()); Not necessary as this position is placed at a minimum of 250 blocks away from spawn.
 					
-					if(player.worldObj.getBiomeGenForCoordsBody(placement) != BiomeGenMinestuck.mediumOcean && distance > 10000)
+					if(player.worldObj.getBiomeGenForCoordsBody(placement) != BiomeGenMinestuck.mediumOcean /*&& distance > 10000*/)
 						location = new Location(player.worldObj.getTopSolidOrLiquidBlock(placement), dim);
 					
-				} while(location == null);
+				} while(location == null);	//TODO replace with a more friendly version without a chance of freezing the game
 			else Debug.printf("Unexpected error: Couldn't find position for land gate for dimension %d.", dim);
 			
 		} else if(gateId == 2)
 		{
-			//TODO
+			SburbConnection landConnection = SessionHandler.getConnectionForDimension(dim);
+			if(landConnection != null)
+			{
+				SburbConnection clientConnection = SkaianetHandler.getConnection(SkaianetHandler.getAssociatedPartner(landConnection.getClientName(), false), landConnection.getServerName());
+				
+				if(clientConnection != null && clientConnection.enteredGame() && MinestuckDimensionHandler.isLandDimension(clientConnection.getClientDimension()))
+				{
+					int clientDim = clientConnection.getClientDimension();
+					BlockPos gatePos = getGatePos(-1, clientDim);
+					WorldServer world = DimensionManager.getWorld(clientDim);
+					if(world == null)
+					{
+						DimensionManager.initDimension(clientDim);
+						world = DimensionManager.getWorld(clientDim);
+					}
+					
+					if(gatePos == null)
+					{
+						findGatePlacement(world);
+						gatePos = getGatePos(-1, clientDim);
+						if(gatePos == null) {Debug.printf("Unexpected error: Can't initiaize land gate placement for dimension %d!", clientDim); return;}
+					}
+					
+					if(gatePos.getY() == -1)
+					{
+						world.theChunkProviderServer.loadChunk(gatePos.getX() >> 4, gatePos.getZ() >> 4);
+						world.theChunkProviderServer.loadChunk(gatePos.getX() >> 4 + 1, gatePos.getZ() >> 4);
+						world.theChunkProviderServer.loadChunk(gatePos.getX() >> 4, gatePos.getZ() >> 4 + 1);
+						world.theChunkProviderServer.loadChunk(gatePos.getX() >> 4 + 1, gatePos.getZ() >> 4 + 1);
+						gatePos = getGatePos(-1, clientDim);
+						if(gatePos.getY() == -1) {Debug.printf("Unexpected error: Gate didn't generate after loading chunks! Dim: %d", clientDim); return;}
+					}
+					
+					location = new Location(gatePos, clientDim);
+				}
+				
+			} else Debug.printf("Unexpected error: Can't find connection for dimension %d!", dim);
 		} else if(gateId == -1)
 		{
 			SburbConnection landConnection = SessionHandler.getConnectionForDimension(dim);
@@ -66,7 +104,7 @@ public class GateHandler
 				if(serverConnection != null && serverConnection.enteredGame() && MinestuckDimensionHandler.isLandDimension(serverConnection.getClientDimension()))	//Last shouldn't be necessary, but just in case something goes wrong elsewhere...
 				{
 					int serverDim = serverConnection.getClientDimension();
-					location = new Location(getGatePos(gateId, serverDim), serverDim);
+					location = new Location(getGatePos(2, serverDim), serverDim);
 					
 				} Debug.printf("Player %s tried to teleport through gate before their server player entered the game.", player.getName());
 				
@@ -89,8 +127,24 @@ public class GateHandler
 		{
 			BlockPos spawn = MinestuckDimensionHandler.getSpawn(dim);
 			
-			//TODO
+			BlockPos gatePos = null;
+			do
+			{
+				int distance = (500 + world.rand.nextInt(150));
+				distance *= distance;
+				double d = world.rand.nextDouble();
+				int x = (int) Math.sqrt(distance*d);
+				int z = (int) Math.sqrt(distance*(1-d));
+				
+				BlockPos pos = new BlockPos(spawn.getX() + x, -1, spawn.getZ() + z);
+				
+				if(!world.getChunkProvider().chunkExists(pos.getX() << 4, pos.getZ() << 4) && world.provider.getWorldChunkManager().areBiomesViable(pos.getX(), pos.getZ(), 50, Lists.newArrayList(BiomeGenMinestuck.mediumNormal)))
+					gatePos = pos;
+				
+			} while(gatePos == null);	//TODO replace with a more friendly version without a chance of freezing the game
 			
+			Debug.printf("Land gate will generate at %d %d.", gatePos.getX(), gatePos.getZ());
+			gateData.put(dim, gatePos);
 		}
 	}
 	
