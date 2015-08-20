@@ -1,10 +1,17 @@
 package com.mraof.minestuck.world;
 
 import java.util.Map;
+import java.util.Random;
 
+import com.mraof.minestuck.network.skaianet.SburbConnection;
+import com.mraof.minestuck.network.skaianet.SessionHandler;
+import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.Location;
+import com.mraof.minestuck.util.Teleport;
+import com.mraof.minestuck.world.biome.BiomeGenMinestuck;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.BlockPos;
@@ -18,9 +25,61 @@ public class GateHandler
 	
 	static Map<Integer, BlockPos> gateData;
 	
-	public static void teleport(int gateId, int dim, EntityPlayer player)
+	public static void teleport(int gateId, int dim, EntityPlayerMP player)
 	{
-		//TODO
+		Location location = null;
+		if(gateId == 1)
+		{
+			BlockPos pos = getGatePos(-1, dim);
+			Random rand = player.worldObj.rand;
+			BlockPos spawn = player.worldObj.provider.getSpawnPoint();
+			if(pos != null)
+				do
+				{
+					int radius = 150 + rand.nextInt(100);
+					double d = rand.nextDouble();
+					int i = radius*radius;
+					int x = (int) Math.sqrt(i*d);
+					int z = (int) Math.sqrt((1-i)*d);
+					if(rand.nextBoolean()) x = -x;
+					if(rand.nextBoolean()) z = -z;
+					
+					BlockPos placement = pos.add(x, 0, z);
+					double distance = placement.distanceSq(spawn.getX(), placement.getY(), spawn.getZ());
+					
+					if(player.worldObj.getBiomeGenForCoordsBody(placement) != BiomeGenMinestuck.mediumOcean && distance > 10000)
+						location = new Location(player.worldObj.getTopSolidOrLiquidBlock(placement), dim);
+					
+				} while(location == null);
+			else Debug.printf("Unexpected error: Couldn't find position for land gate for dimension %d.", dim);
+			
+		} else if(gateId == 2)
+		{
+			//TODO
+		} else if(gateId == -1)
+		{
+			SburbConnection landConnection = SessionHandler.getConnectionForDimension(dim);
+			if(landConnection != null)
+			{
+				SburbConnection serverConnection = SkaianetHandler.getConnection(landConnection.getServerName(), SkaianetHandler.getAssociatedPartner(landConnection.getServerName(), true));
+				
+				if(serverConnection != null && serverConnection.enteredGame() && MinestuckDimensionHandler.isLandDimension(serverConnection.getClientDimension()))	//Last shouldn't be necessary, but just in case something goes wrong elsewhere...
+				{
+					int serverDim = serverConnection.getClientDimension();
+					location = new Location(getGatePos(gateId, serverDim), serverDim);
+					
+				} Debug.printf("Player %s tried to teleport through gate before their server player entered the game.", player.getName());
+				
+			} else Debug.printf("Unexpected error: Can't find connection for dimension %d!", dim);
+		} else Debug.printf("Unexpected error: Gate id %d is out of bounds!", gateId);
+		
+		if(location != null)
+		{
+			player.timeUntilPortal = 60;
+			if(location.dim != dim)
+				Teleport.teleportEntity(player, location.dim, null);
+			player.playerNetServerHandler.setPlayerLocation(location.pos.getX() + 0.5, location.pos.getY(), location.pos.getZ() + 0.5, player.rotationYaw, player.rotationPitch);
+		}
 	}
 	
 	public static void findGatePlacement(World world)

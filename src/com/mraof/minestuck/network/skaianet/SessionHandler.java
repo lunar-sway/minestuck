@@ -268,10 +268,16 @@ public class SessionHandler {
 	
 	public static int getColorForDimension(int dim)
 	{
+		SburbConnection c = getConnectionForDimension(dim);
+		return c == null ? -1 : MinestuckPlayerData.getData(c.getClientName()).color;
+	}
+	
+	public static SburbConnection getConnectionForDimension(int dim)
+	{
 		for(SburbConnection c : SkaianetHandler.connections)
 			if(c.enteredGame && c.clientHomeLand == dim)
-				return MinestuckPlayerData.getData(c.getClientName()).color;
-		return -1;
+				return c;
+		return null;
 	}
 	
 	/**

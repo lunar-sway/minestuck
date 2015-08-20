@@ -505,7 +505,7 @@ public class SkaianetHandler {
 		}
 	}
 	
-	static SburbConnection getConnection(String client, String server)
+	public static SburbConnection getConnection(String client, String server)
 	{
 		for(SburbConnection c : connections)
 			if(c.getClientName().equals(client) && c.getServerName().equals(server))

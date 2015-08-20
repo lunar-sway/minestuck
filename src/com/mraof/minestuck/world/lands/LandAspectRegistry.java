@@ -13,6 +13,7 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.FMLLog;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.EnumAspect;
@@ -233,7 +234,7 @@ public class LandAspectRegistry
 		int id = SkaianetHandler.enterMedium((EntityPlayerMP)player, newLandId);
 		if(id != newLandId)	//Player already got a land, but the tag was somehow lost?
 			newLandId = id;
-		else MinestuckDimensionHandler.setSpawn(newLandId, new BlockPos(player.posX, player.posY, player.posZ));
+		else MinestuckDimensionHandler.setSpawn(newLandId, new BlockPos(player.posX, 128 - MinestuckConfig.artifactRange, player.posZ));
 		
 		MinestuckPlayerTracker.updateLands();
 		

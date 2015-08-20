@@ -12,7 +12,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldServer;
 
-public class Teleport 
+public class Teleport	//TODO Add method that takes a Location as parameter that also moves the entity to the desired destination
 {
 	public static void teleportEntity(Entity entity, int destinationDimension, ITeleporter teleporter)
 	{
