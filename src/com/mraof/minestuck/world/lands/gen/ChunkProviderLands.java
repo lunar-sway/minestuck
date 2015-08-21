@@ -25,16 +25,22 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraftforge.common.ChestGenHooks;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.block.BlockGate;
 import com.mraof.minestuck.entity.consort.EntityIguana;
 import com.mraof.minestuck.entity.consort.EntityNakagator;
 import com.mraof.minestuck.entity.consort.EntitySalamander;
+import com.mraof.minestuck.tileentity.TileEntityGate;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.world.biome.BiomeGenMinestuck;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
+import com.mraof.minestuck.world.lands.structure.DefaultGatePlacement;
+import com.mraof.minestuck.world.lands.structure.IGateStructure;
 import com.mraof.minestuck.world.lands.structure.LandStructureHandler;
 import com.mraof.minestuck.world.lands.terrain.TerrainAspect;
 import com.mraof.minestuck.world.lands.title.TitleAspect;
@@ -67,6 +73,8 @@ public class ChunkProviderLands implements IChunkProvider
 	public float rainfall, temperature;
 	public float oceanChance;
 	protected BiomeGenBase biomeGenLands;
+	
+	public boolean generatingStructure;
 
 	@SuppressWarnings("unchecked")
 	public ChunkProviderLands(World worldObj, WorldProviderLands worldProvider, boolean clientSide)
@@ -173,7 +181,19 @@ public class ChunkProviderLands implements IChunkProvider
 	public void populate(IChunkProvider ichunkprovider, int chunkX, int chunkZ) 
 	{
 		
+		BlockPos gatePos = GateHandler.getGatePos(-1, landWorld.provider.getDimensionId());
+		
+		boolean generatingGate = false;
+		if(gatePos != null)
+			if(gatePos.getX() >= chunkX << 4 && gatePos.getX() < chunkX << 4 + 32 && gatePos.getZ() >= chunkZ << 4 && gatePos.getZ() < chunkZ << 4 + 32)
+			{
+				generatingGate = true;
+				this.generatingStructure = true;
+			}
+		
 		this.random.setSeed(getSeedFor(chunkX, chunkZ));
+		
+		this.generatingStructure = structureHandler.func_175794_a(landWorld, random, new ChunkCoordIntPair(chunkX, chunkZ));
 		
 		ichunkprovider.populate(ichunkprovider, chunkX, chunkZ);
 		BlockPos pos = null;
@@ -184,9 +204,37 @@ public class ChunkProviderLands implements IChunkProvider
 				pos = tempPos;
 		}
 		
-		structureHandler.func_175794_a(landWorld, random, new ChunkCoordIntPair(chunkX, chunkZ));
-		structureHandler.placeReturnNodes(landWorld, random, new ChunkCoordIntPair(chunkX, chunkZ), pos);	//TODO generate land gate
+		if(!generatingGate)
+			structureHandler.placeReturnNodes(landWorld, random, new ChunkCoordIntPair(chunkX, chunkZ), pos);
+		else if(gatePos.getX() >= chunkX << 4 + 8 && gatePos.getX() < chunkX << 4 + 24 && gatePos.getZ() >= chunkZ << 4 + 8 && gatePos.getZ() < chunkZ << 4 + 24)
+		{
+			IGateStructure gate1 = aspect1.getGateStructure();
+			IGateStructure gate2 = aspect2.getGateStructure();
+			IGateStructure structure;
+			if(gate1 != null && gate2 != null)
+				structure = random.nextBoolean() ? gate1 : gate2;
+			else if(gate1 != null)
+				structure = gate1;
+			else if(gate2 != null)
+				structure = gate2;
+			else structure = new DefaultGatePlacement();
+			
+			gatePos = structure.generateGateStructure(landWorld, gatePos);
+			
+			GateHandler.setDefiniteGatePos(-1, landWorld.provider.getDimensionId(), gatePos);
+			for(int x = -1; x <= 1; x++)
+				for(int z = -1; z <= 1; z++)
+				{
+					if(x == 0 && z == 0)
+					{
+						landWorld.setBlockState(gatePos, Minestuck.gate.getDefaultState().cycleProperty(BlockGate.isMainComponent), 2);
+						TileEntityGate tileEntity = (TileEntityGate) landWorld.getTileEntity(gatePos);
+						tileEntity.gateCount = -1;
+					} else landWorld.setBlockState(gatePos.add(x, 0, z), Minestuck.gate.getDefaultState(), 2);
+				}
+		}
 		
+		this.generatingStructure = false;
 	}
 	
 	public long getSeedFor(int chunkX, int chunkZ)

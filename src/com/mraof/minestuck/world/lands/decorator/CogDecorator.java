@@ -13,7 +13,7 @@ public class CogDecorator extends SimpleStructureDecorator
 {
 	
 	@Override
-	public BlockPos generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
+	public BlockPos generateStructure(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
 	{
 		if(random.nextDouble() < 0.1)
 		{

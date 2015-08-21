@@ -2,6 +2,8 @@ package com.mraof.minestuck.world.lands;
 
 import java.util.List;
 
+import com.mraof.minestuck.world.lands.structure.IGateStructure;
+
 public interface ILandAspect<A extends ILandAspect>
 {
 	
@@ -15,6 +17,8 @@ public interface ILandAspect<A extends ILandAspect>
 	 * Returns a list of strings used in giving a land a random name.
 	 */
 	public String[] getNames();
+	
+	public IGateStructure getGateStructure();
 	
 	List<A> getVariations();
 	

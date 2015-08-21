@@ -6,6 +6,7 @@ import java.util.List;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.lands.ILandAspect;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.lands.structure.IGateStructure;
 import com.mraof.minestuck.world.lands.terrain.TerrainAspect;
 
 public abstract class TitleAspect implements ILandAspect<TitleAspect>
@@ -38,6 +39,12 @@ public abstract class TitleAspect implements ILandAspect<TitleAspect>
 	public TitleAspect getPrimaryVariant()
 	{
 		return this;
+	}
+	
+	@Override
+	public IGateStructure getGateStructure()
+	{
+		return null;
 	}
 	
 }

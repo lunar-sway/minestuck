@@ -18,7 +18,7 @@ public class BucketDecorator extends SimpleStructureDecorator
 	private Block[] liquidBlocks = {Blocks.air, Blocks.water, Blocks.lava, Minestuck.blockBlood, Minestuck.blockOil, Minestuck.blockBrainJuice};
 	
 	@Override
-	public BlockPos generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
+	public BlockPos generateStructure(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
 	{
 		if(random.nextDouble() < 0.07F)
 		{

@@ -12,6 +12,7 @@ import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.gen.DefaultTerrainGen;
 import com.mraof.minestuck.world.lands.gen.ILandTerrainGen;
+import com.mraof.minestuck.world.lands.structure.IGateStructure;
 import com.mraof.minestuck.world.lands.structure.LandStructureHandler;
 
 import net.minecraft.block.state.IBlockState;
@@ -139,6 +140,12 @@ public abstract class TerrainAspect implements ILandAspect<TerrainAspect>
 		if(lootMap.containsKey(lootType))
 			content.addAll(lootMap.get(lootType));
 		else content.addAll(lootMap.get(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST)); //Default value
+	}
+	
+	@Override
+	public IGateStructure getGateStructure()
+	{
+		return null;
 	}
 	
 }
