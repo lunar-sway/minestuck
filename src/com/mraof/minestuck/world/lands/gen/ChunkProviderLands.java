@@ -185,7 +185,7 @@ public class ChunkProviderLands implements IChunkProvider
 		
 		boolean generatingGate = false;
 		if(gatePos != null)
-			if(gatePos.getX() >= chunkX << 4 && gatePos.getX() < chunkX << 4 + 32 && gatePos.getZ() >= chunkZ << 4 && gatePos.getZ() < chunkZ << 4 + 32)
+			if(gatePos.getX() >= (chunkX << 4) && gatePos.getX() < (chunkX << 4) + 32 && gatePos.getZ() >= (chunkZ << 4) && gatePos.getZ() < (chunkZ << 4) + 32)
 			{
 				generatingGate = true;
 				this.generatingStructure = true;
@@ -206,7 +206,7 @@ public class ChunkProviderLands implements IChunkProvider
 		
 		if(!generatingGate)
 			structureHandler.placeReturnNodes(landWorld, random, new ChunkCoordIntPair(chunkX, chunkZ), pos);
-		else if(gatePos.getX() >= chunkX << 4 + 8 && gatePos.getX() < chunkX << 4 + 24 && gatePos.getZ() >= chunkZ << 4 + 8 && gatePos.getZ() < chunkZ << 4 + 24)
+		else if(gatePos.getX() >= (chunkX << 4) + 8 && gatePos.getX() < (chunkX << 4) + 24 && gatePos.getZ() >= (chunkZ << 4) + 8 && gatePos.getZ() < (chunkZ << 4) + 24)
 		{
 			IGateStructure gate1 = aspect1.getGateStructure();
 			IGateStructure gate2 = aspect2.getGateStructure();

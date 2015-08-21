@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.mraof.minestuck.entity.underling.EntityOgre;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 import net.minecraft.block.BlockChest;
@@ -30,6 +31,10 @@ public class SmallRuinStart extends StructureStart
 		
 		components.add(new SmallRuin(provider, chunkX, chunkZ, rand));
 		updateBoundingBox();
+		
+		BlockPos pos = GateHandler.getGatePos(-1, world.provider.getDimensionId());
+		if(this.getBoundingBox().intersectsWith(pos.getX() - 16, pos.getZ() - 16, pos.getX() + 16, pos.getZ() + 16))
+			components.clear();
 	}
 	
 	public static class SmallRuin extends StructureComponent

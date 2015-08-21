@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -25,11 +26,13 @@ public class GateHandler
 	
 	public static final int gateHeight1 = 144, gateHeight2 = 192;
 	
-	static Map<Integer, BlockPos> gateData;
+	static Map<Integer, BlockPos> gateData = new HashMap<Integer, BlockPos>();
 	
 	public static void teleport(int gateId, int dim, EntityPlayerMP player)
 	{
 		Location location = null;
+		player.timeUntilPortal = 10;	//Basically to avoid message spam when something goes wrong
+		
 		if(gateId == 1)
 		{
 			BlockPos pos = getGatePos(-1, dim);
@@ -38,7 +41,7 @@ public class GateHandler
 			if(pos != null)
 				do
 				{
-					int radius = 150 + rand.nextInt(100);
+					int radius = 75 + rand.nextInt(100);
 					double d = rand.nextDouble();
 					int i = radius*radius;
 					int x = (int) Math.sqrt(i*d);
@@ -47,9 +50,8 @@ public class GateHandler
 					if(rand.nextBoolean()) z = -z;
 					
 					BlockPos placement = pos.add(x, 0, z);
-					//double distance = placement.distanceSq(spawn.getX(), placement.getY(), spawn.getZ()); Not necessary as this position is placed at a minimum of 250 blocks away from spawn.
 					
-					if(player.worldObj.getBiomeGenForCoordsBody(placement) != BiomeGenMinestuck.mediumOcean /*&& distance > 10000*/)
+					if(player.worldObj.getBiomeGenForCoordsBody(placement) != BiomeGenMinestuck.mediumOcean)
 						location = new Location(player.worldObj.getTopSolidOrLiquidBlock(placement), dim);
 					
 				} while(location == null);	//TODO replace with a more friendly version without a chance of freezing the game
@@ -82,14 +84,14 @@ public class GateHandler
 					
 					if(gatePos.getY() == -1)
 					{
-						world.theChunkProviderServer.loadChunk(gatePos.getX() >> 4, gatePos.getZ() >> 4);
-						world.theChunkProviderServer.loadChunk(gatePos.getX() >> 4 + 1, gatePos.getZ() >> 4);
-						world.theChunkProviderServer.loadChunk(gatePos.getX() >> 4, gatePos.getZ() >> 4 + 1);
-						world.theChunkProviderServer.loadChunk(gatePos.getX() >> 4 + 1, gatePos.getZ() >> 4 + 1);
+						world.theChunkProviderServer.loadChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() - 8 >> 4);
+						world.theChunkProviderServer.loadChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() - 8 >> 4);
+						world.theChunkProviderServer.loadChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() + 8 >> 4);
+						world.theChunkProviderServer.loadChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() + 8 >> 4);
 						gatePos = getGatePos(-1, clientDim);
-						if(gatePos.getY() == -1) {Debug.printf("Unexpected error: Gate didn't generate after loading chunks! Dim: %d", clientDim); return;}
+						if(gatePos.getY() == -1) {Debug.printf("Unexpected error: Gate didn't generate after loading chunks! Dim: %d, pos: %s", clientDim, gatePos); return;}
 					}
-					
+					//TODO check if the destination gate is broken or not.
 					location = new Location(gatePos, clientDim);
 				}
 				
@@ -105,7 +107,7 @@ public class GateHandler
 				{
 					int serverDim = serverConnection.getClientDimension();
 					location = new Location(getGatePos(2, serverDim), serverDim);
-					
+					//TODO check if the destination gate is broken or not.
 				} Debug.printf("Player %s tried to teleport through gate before their server player entered the game.", player.getName());
 				
 			} else Debug.printf("Unexpected error: Can't find connection for dimension %d!", dim);
@@ -130,7 +132,7 @@ public class GateHandler
 			BlockPos gatePos = null;
 			do
 			{
-				int distance = (500 + world.rand.nextInt(150));
+				int distance = (500 + world.rand.nextInt(200));
 				distance *= distance;
 				double d = world.rand.nextDouble();
 				int x = (int) Math.sqrt(distance*d);
@@ -138,7 +140,7 @@ public class GateHandler
 				
 				BlockPos pos = new BlockPos(spawn.getX() + x, -1, spawn.getZ() + z);
 				
-				if(!world.getChunkProvider().chunkExists(pos.getX() << 4, pos.getZ() << 4) && world.provider.getWorldChunkManager().areBiomesViable(pos.getX(), pos.getZ(), 50, Lists.newArrayList(BiomeGenMinestuck.mediumNormal)))
+				if(!world.getChunkProvider().chunkExists(pos.getX() >> 4, pos.getZ() >> 4) && world.provider.getWorldChunkManager().areBiomesViable(pos.getX(), pos.getZ(), 50, Lists.newArrayList(BiomeGenMinestuck.mediumNormal)))
 					gatePos = pos;
 				
 			} while(gatePos == null);	//TODO replace with a more friendly version without a chance of freezing the game
