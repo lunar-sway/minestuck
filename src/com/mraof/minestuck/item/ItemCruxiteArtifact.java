@@ -98,13 +98,15 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 			}
 			
 			Debug.print("Placing blocks...");
+			int nextZWidth = 0;
 			for(int blockX = x - artifactRange; blockX <= x + artifactRange; blockX++)
 			{
-				int zWidth = (int) Math.sqrt(artifactRange * artifactRange - (blockX - x) * (blockX - x));
+				int zWidth = nextZWidth;
+				nextZWidth = (int) Math.sqrt(artifactRange * artifactRange - (blockX - x + 1) * (blockX - x + 1));
 				for(int blockZ = z - zWidth; blockZ <= z + zWidth; blockZ++)
 				{
-					double radius = Math.sqrt(((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2);
-					int minY =  y - (int) (Math.sqrt(artifactRange * artifactRange - radius * radius));
+					double radius = ((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2;
+					int minY =  y - (int) (Math.sqrt(artifactRange * artifactRange - radius));
 					int heightX = (int) Math.sqrt(artifactRange * artifactRange - (((blockX - x + 1) * (blockX - x + 1) + (blockZ - z) * (blockZ - z)) / 2));
 					int heightZ = (int) Math.sqrt(artifactRange * artifactRange - (((blockX - x) * (blockX - x) + (blockZ - z + 1) * (blockZ - z + 1)) / 2));
 					minY = minY < 0 ? 0 : minY;
@@ -115,9 +117,9 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 						TileEntity te = worldserver0.getTileEntity(pos);
 						if(block.getBlock() != Blocks.air && !block.getBlock().isSolidFullCube()) //Place temp blocks to avoid things like torches breaking because of missing solid block
 						{
-							if(blockX < x + artifactRange && blockY >= y - heightX && worldserver0.getBlockState(pos.east()).getBlock().isSolidFullCube())
+							if(worldserver0.getBlockState(pos.east()).getBlock().isSolidFullCube() && blockZ >= z - nextZWidth && blockZ <= z + nextZWidth && blockY >= y - heightX)
 								worldserver1.setBlockState(pos.east(), Blocks.stone.getDefaultState(), 0);
-							if(blockZ < z + zWidth && blockY >= y - heightZ && worldserver0.getBlockState(pos.south()).getBlock().isSolidFullCube())
+							if(worldserver0.getBlockState(pos.south()).getBlock().isSolidFullCube() && blockZ < z + zWidth && blockY >= y - heightZ)
 								worldserver1.setBlockState(pos.south(), Blocks.stone.getDefaultState(), 0);
 						}
 						if(block.getBlock() != Blocks.bedrock)

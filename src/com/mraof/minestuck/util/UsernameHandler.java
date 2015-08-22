@@ -6,7 +6,7 @@ package com.mraof.minestuck.util;
  */
 public class UsernameHandler {
 	
-	public static String host;
+	public static String host;	//This basically stores server.getServerOwner(), but for all players to access
 	
 	/**
 	 * Used to convert a player username to a stored version.

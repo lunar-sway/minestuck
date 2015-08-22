@@ -19,6 +19,7 @@ import com.mraof.minestuck.block.OreCruxite;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.client.util.MinestuckModelManager;
+import com.mraof.minestuck.command.CommandCheckLand;
 import com.mraof.minestuck.command.GristCommand;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.editmode.DeployList;
@@ -69,7 +70,6 @@ import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 import com.mraof.minestuck.tracker.ConnectionListener;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.CommandCheckLand;
 import com.mraof.minestuck.util.ComputerProgram;
 import com.mraof.minestuck.util.KindAbstratusList;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
@@ -87,7 +87,6 @@ import com.mraof.minestuck.world.lands.structure.LandStructureHandler;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
 import codechicken.nei.NEIModContainer;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -528,12 +527,12 @@ public class Minestuck
 	{
 		
 		event.registerServerCommand(new CommandCheckLand());
+		event.registerServerCommand(new GristCommand());
 		
 		worldSeed = event.getServer().worldServers[0].getSeed();
 		CaptchaDeckHandler.rand = new Random();
 		
 		MinestuckSaveHandler.onWorldLoad(event.getServer().worldServers[0].getSaveHandler());
-		event.registerServerCommand(new GristCommand());
 	}
 	
 	@EventHandler
