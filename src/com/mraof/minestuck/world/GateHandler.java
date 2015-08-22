@@ -91,7 +91,7 @@ public class GateHandler
 						gatePos = getGatePos(-1, clientDim);
 						if(gatePos.getY() == -1) {Debug.printf("Unexpected error: Gate didn't generate after loading chunks! Dim: %d, pos: %s", clientDim, gatePos); return;}
 					}
-					//TODO check if the destination gate is broken or not.
+					
 					location = new Location(gatePos, clientDim);
 				}
 				
@@ -107,14 +107,14 @@ public class GateHandler
 				{
 					int serverDim = serverConnection.getClientDimension();
 					location = new Location(getGatePos(2, serverDim), serverDim);
-					//TODO check if the destination gate is broken or not.
+					
 				} Debug.printf("Player %s tried to teleport through gate before their server player entered the game.", player.getName());
 				
 			} else Debug.printf("Unexpected error: Can't find connection for dimension %d!", dim);
 		} else Debug.printf("Unexpected error: Gate id %d is out of bounds!", gateId);
 		
 		if(location != null)
-		{
+		{	//TODO if gate id isn't 1, check if the destination gate is broken or not.
 			player.timeUntilPortal = 60;
 			if(location.dim != dim)
 				Teleport.teleportEntity(player, location.dim, null);
@@ -130,9 +130,10 @@ public class GateHandler
 			BlockPos spawn = MinestuckDimensionHandler.getSpawn(dim);
 			
 			BlockPos gatePos = null;
+			int tries = 0;
 			do
 			{
-				int distance = (500 + world.rand.nextInt(200));
+				int distance = (500 + world.rand.nextInt(200 + tries));	//The longer time it takes, the larger the area searched
 				distance *= distance;
 				double d = world.rand.nextDouble();
 				int x = (int) Math.sqrt(distance*d);
@@ -140,9 +141,10 @@ public class GateHandler
 				
 				BlockPos pos = new BlockPos(spawn.getX() + x, -1, spawn.getZ() + z);
 				
-				if(!world.getChunkProvider().chunkExists(pos.getX() >> 4, pos.getZ() >> 4) && world.provider.getWorldChunkManager().areBiomesViable(pos.getX(), pos.getZ(), 50, Lists.newArrayList(BiomeGenMinestuck.mediumNormal)))
+				if(!world.getChunkProvider().chunkExists(pos.getX() >> 4, pos.getZ() >> 4) && world.provider.getWorldChunkManager().areBiomesViable(pos.getX(), pos.getZ(), Math.max(20, 50 - tries), Lists.newArrayList(BiomeGenMinestuck.mediumNormal)))
 					gatePos = pos;
 				
+				tries++;
 			} while(gatePos == null);	//TODO replace with a more friendly version without a chance of freezing the game
 			
 			Debug.printf("Land gate will generate at %d %d.", gatePos.getX(), gatePos.getZ());

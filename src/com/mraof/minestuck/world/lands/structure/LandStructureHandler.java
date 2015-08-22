@@ -103,7 +103,7 @@ public class LandStructureHandler extends MapGenStructure
 		for(StructureEntry entry : structures)
 		{
 			if(index < entry.rarity)
-				return entry.createInstance(chunkProvider, worldObj, rand, chunkX, chunkZ);
+				return entry.createInstance(chunkProvider, worldObj, rand, chunkX, chunkZ);	//TODO The game handles a null return badly. Make sure to change this
 			index -= entry.rarity;
 		}
 		

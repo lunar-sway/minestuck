@@ -19,7 +19,7 @@ public abstract class SimpleStructureDecorator implements ILandDecorator
 	{
 		if(provider.generatingStructure)
 			return null;
-		else return generate(world, random, chunkX, chunkZ, provider);
+		else return generateStructure(world, random, chunkX, chunkZ, provider);
 	}
 	
 	protected abstract BlockPos generateStructure(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider);

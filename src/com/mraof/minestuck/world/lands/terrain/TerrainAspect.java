@@ -100,7 +100,7 @@ public abstract class TerrainAspect implements ILandAspect<TerrainAspect>
 	
 	public float getOceanChance()
 	{
-		return 2/3F;
+		return 1/2F;
 	}
 	
 	@Override

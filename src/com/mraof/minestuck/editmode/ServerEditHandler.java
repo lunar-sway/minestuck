@@ -3,6 +3,7 @@ package com.mraof.minestuck.editmode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -55,6 +56,7 @@ import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.GristType;
+import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 
 /**
@@ -100,8 +102,7 @@ public class ServerEditHandler
 		player.closeScreen();
 		EntityDecoy decoy = data.decoy;
 		if(player.dimension != decoy.dimension)
-			player.mcServer.getConfigurationManager().transferPlayerToDimension(player, decoy.worldObj.provider.getDimensionId(), new Teleporter((WorldServer)decoy.worldObj) {
-				public void placeInPortal(Entity par1Entity, double par2, double par4, double par6, float par8) {}});
+			Teleport.teleportEntity(player, decoy.dimension, null);
 		
 		data.connection.useCoordinates = true;
 		data.connection.posX = player.posX;
@@ -164,10 +165,7 @@ public class ServerEditHandler
 		WorldServer world = MinecraftServer.getServer().worldServerForDimension(c.enteredGame()?c.getClientDimension():c.getClientData().getDimension());
 		
 		if(world.provider.getDimensionId() != player.worldObj.provider.getDimensionId())
-			player.mcServer.getConfigurationManager().transferPlayerToDimension(player, world.provider.getDimensionId(), new Teleporter(world)
-			{
-				public void placeInPortal(Entity par1Entity, double par2, double par4, double par6, float par8) {}	//To make sure no portal is placed
-			});
+			Teleport.teleportEntity(player, world.provider.getDimensionId(), null);
 		
 		if(c.useCoordinates) {
 			posX = c.posX;

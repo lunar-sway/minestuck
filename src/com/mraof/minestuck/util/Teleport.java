@@ -11,6 +11,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class Teleport	//TODO Add method that takes a Location as parameter that also moves the entity to the desired destination
 {
@@ -19,35 +20,35 @@ public class Teleport	//TODO Add method that takes a Location as parameter that 
 		if(entity instanceof EntityPlayerMP)
 		{
 			Debug.print("Teleporting player to dimension "+destinationDimension);
-			EntityPlayerMP par1EntityPlayerMP = (EntityPlayerMP) entity;
-			int j = par1EntityPlayerMP.dimension;
-			WorldServer worldserver = par1EntityPlayerMP.mcServer.worldServerForDimension(par1EntityPlayerMP.dimension);
-			par1EntityPlayerMP.dimension = destinationDimension;
-			WorldServer worldserver1 = par1EntityPlayerMP.mcServer.worldServerForDimension(par1EntityPlayerMP.dimension);
-			S07PacketRespawn respawnPacket = new S07PacketRespawn(par1EntityPlayerMP.dimension, par1EntityPlayerMP.worldObj.getDifficulty(), worldserver1.getWorldInfo().getTerrainType(), par1EntityPlayerMP.theItemInWorldManager.getGameType());
-			par1EntityPlayerMP.playerNetServerHandler.sendPacket(respawnPacket);			
+			EntityPlayerMP player = (EntityPlayerMP) entity;
+			int j = player.dimension;
+			WorldServer worldserver = player.mcServer.worldServerForDimension(player.dimension);
+			player.dimension = destinationDimension;
+			WorldServer worldserver1 = player.mcServer.worldServerForDimension(player.dimension);
+			S07PacketRespawn respawnPacket = new S07PacketRespawn(player.dimension, player.worldObj.getDifficulty(), worldserver1.getWorldInfo().getTerrainType(), player.theItemInWorldManager.getGameType());
+			player.playerNetServerHandler.sendPacket(respawnPacket);			
 
-			worldserver.removePlayerEntityDangerously(par1EntityPlayerMP);
-			par1EntityPlayerMP.isDead = false;
-			transferEntityToWorld(par1EntityPlayerMP, j, worldserver, worldserver1, teleporter);
-			WorldServer worldserver2 = par1EntityPlayerMP.getServerForPlayer();
-			worldserver.getPlayerManager().removePlayer(par1EntityPlayerMP);
-			worldserver2.getPlayerManager().addPlayer(par1EntityPlayerMP);
-			worldserver2.theChunkProviderServer.loadChunk((int)par1EntityPlayerMP.posX >> 4, (int)par1EntityPlayerMP.posZ >> 4);
+			worldserver.removePlayerEntityDangerously(player);
+			player.isDead = false;
+			transferEntityToWorld(player, j, worldserver, worldserver1, teleporter);
+			WorldServer worldserver2 = player.getServerForPlayer();
+			worldserver.getPlayerManager().removePlayer(player);
+			worldserver2.getPlayerManager().addPlayer(player);
+			worldserver2.theChunkProviderServer.loadChunk((int)player.posX >> 4, (int)player.posZ >> 4);
 			
-			par1EntityPlayerMP.playerNetServerHandler.setPlayerLocation(par1EntityPlayerMP.posX, par1EntityPlayerMP.posY, par1EntityPlayerMP.posZ, par1EntityPlayerMP.rotationYaw, par1EntityPlayerMP.rotationPitch);
-			par1EntityPlayerMP.theItemInWorldManager.setWorld(worldserver1);
-			par1EntityPlayerMP.mcServer.getConfigurationManager().updateTimeAndWeatherForPlayer(par1EntityPlayerMP, worldserver1);
-			par1EntityPlayerMP.mcServer.getConfigurationManager().syncPlayerInventory(par1EntityPlayerMP);
-			Iterator<?> iterator = par1EntityPlayerMP.getActivePotionEffects().iterator();
+			player.playerNetServerHandler.setPlayerLocation(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
+			player.theItemInWorldManager.setWorld(worldserver1);
+			player.mcServer.getConfigurationManager().updateTimeAndWeatherForPlayer(player, worldserver1);
+			player.mcServer.getConfigurationManager().syncPlayerInventory(player);
+			Iterator<?> iterator = player.getActivePotionEffects().iterator();
 
 			while (iterator.hasNext())
 			{
 				PotionEffect potioneffect = (PotionEffect)iterator.next();
-				par1EntityPlayerMP.playerNetServerHandler.sendPacket(new S1DPacketEntityEffect(par1EntityPlayerMP.getEntityId(), potioneffect));
+				player.playerNetServerHandler.sendPacket(new S1DPacketEntityEffect(player.getEntityId(), potioneffect));
 			}
-
-//			GameRegistry.onPlayerChangedDimension(par1EntityPlayerMP);
+			
+			FMLCommonHandler.instance().firePlayerChangedDimensionEvent(player, j, destinationDimension);
 		}
 		else if (!entity.worldObj.isRemote && !entity.isDead)
 		{

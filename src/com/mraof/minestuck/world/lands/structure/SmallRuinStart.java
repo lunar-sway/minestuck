@@ -33,7 +33,7 @@ public class SmallRuinStart extends StructureStart
 		updateBoundingBox();
 		
 		BlockPos pos = GateHandler.getGatePos(-1, world.provider.getDimensionId());
-		if(this.getBoundingBox().intersectsWith(pos.getX() - 16, pos.getZ() - 16, pos.getX() + 16, pos.getZ() + 16))
+		if(pos != null && this.getBoundingBox().intersectsWith(pos.getX() - 16, pos.getZ() - 16, pos.getX() + 16, pos.getZ() + 16))
 			components.clear();
 	}
 	

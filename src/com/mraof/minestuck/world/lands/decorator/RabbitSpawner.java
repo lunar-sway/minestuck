@@ -6,6 +6,7 @@ import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
+import com.mraof.minestuck.world.biome.BiomeGenMinestuck;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 public class RabbitSpawner implements ILandDecorator
@@ -20,7 +21,7 @@ public class RabbitSpawner implements ILandDecorator
 				int x = random.nextInt(16) + (chunkX << 4) + 8;
 				int z = random.nextInt(16) + (chunkZ << 4) + 8;
 				BlockPos pos = world.getTopSolidOrLiquidBlock(new BlockPos(x, 0, z));
-				if(world.getBlockState(pos).getBlock().getMaterial().isLiquid() || provider.isPositionInSpawn(x, z))
+				if(world.getBlockState(pos).getBlock().getMaterial().isLiquid() || provider.isPositionInSpawn(x, z) || world.getBiomeGenForCoordsBody(pos) == BiomeGenMinestuck.mediumOcean)
 					continue;
 				
 				EntityRabbit entity = new EntityRabbit(world);
