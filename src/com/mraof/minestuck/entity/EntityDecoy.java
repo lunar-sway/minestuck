@@ -262,7 +262,7 @@ public class EntityDecoy extends EntityLiving {
 	}
 	
 	private static class DecoyPlayer extends EntityPlayer {	//Never spawned into the world. Only used for the InventoryPlayer and FoodStats.
-		
+			//TODO Check if you can use an implementation of net.minecraftforge.common.util.FakePlayer instead
 		EntityDecoy decoy;
 		
 		DecoyPlayer(World par1World, EntityDecoy decoy) {

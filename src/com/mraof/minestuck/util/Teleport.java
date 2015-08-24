@@ -86,7 +86,8 @@ public class Teleport	//TODO Add method that takes a Location as parameter that 
 			worldserver1.spawnEntityInWorld(entity);
 			entity.setLocationAndAngles(d0, entity.posY, d1, entity.rotationYaw, entity.rotationPitch);
 			worldserver1.updateEntityWithOptionalForce(entity, false);
-			teleporter.makeDestination(entity, worldserver, worldserver1);
+			if(teleporter != null)
+				teleporter.makeDestination(entity, worldserver, worldserver1);
 		}
 
 

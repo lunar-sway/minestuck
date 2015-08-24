@@ -7,10 +7,10 @@ import java.util.Random;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.BlockGate;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.world.biome.BiomeGenMinestuck;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
@@ -164,12 +164,12 @@ public class LandStructureHandler extends MapGenStructure
 				int maxY = 0;
 				for(int i = 0; i < 4; i++)
 				{
-					int y = world.getTopSolidOrLiquidBlock(new BlockPos(xPos + (i % 2), 0, zPos + i/2)).getY();
-					Block block = world.getBlockState(new BlockPos(xPos + (i % 2), y, zPos + i/2)).getBlock();
-					if(block.getMaterial().isLiquid() || block == Blocks.ice)
+					BlockPos pos = world.getTopSolidOrLiquidBlock(new BlockPos(xPos + (i % 2), 0, zPos + i/2));
+					Block block = world.getBlockState(pos).getBlock();
+					if(block.getMaterial().isLiquid() || world.getBiomeGenForCoordsBody(pos) == BiomeGenMinestuck.mediumOcean)
 						return;
-					if(y > maxY)
-						maxY = y;
+					if(pos.getY() > maxY)
+						maxY = pos.getY();
 				}
 				for(int i = 0; i < 4; i++)
 				{

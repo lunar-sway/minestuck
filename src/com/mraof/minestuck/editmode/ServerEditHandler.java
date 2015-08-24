@@ -24,7 +24,6 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.world.Teleporter;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldSettings.GameType;
 import net.minecraftforge.event.CommandEvent;
@@ -188,9 +187,10 @@ public class ServerEditHandler
 		return true;
 	}
 	
-	public static EditData getData(String editor) {
+	public static EditData getData(String editor)
+	{
 		for(EditData data : list)
-			if(data.player.getName() == editor)
+			if(data.player.getName().equals(editor))
 				return data;
 		return null;
 	}
@@ -219,6 +219,7 @@ public class ServerEditHandler
 		if(data == null)
 			return;
 		
+		player.timeUntilPortal = 60;
 		SburbConnection c = data.connection;
 		int range = MinestuckDimensionHandler.isLandDimension(player.dimension) ? MinestuckConfig.landEditRange : MinestuckConfig.overworldEditRange;
 		
@@ -395,10 +396,9 @@ public class ServerEditHandler
 		if(newZ != player.posZ)
 			player.motionZ = 0;
 		
-		if(newX != player.posX || newZ != player.posZ || y != player.posY) {
+		if(newX != player.posX || newZ != player.posZ || y != player.posY)
+		{
 			player.setPositionAndUpdate(newX, y, newZ);
-			//Update gravity if the player is on ground
-			
 		}
 	}
 	

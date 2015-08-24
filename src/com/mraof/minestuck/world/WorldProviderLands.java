@@ -84,7 +84,7 @@ public class WorldProviderLands extends WorldProvider
 		BlockPos coordinates = getSpawnPoint();
 		
 		boolean isAdventure = worldObj.getWorldInfo().getGameType() == GameType.ADVENTURE;
-		int spawnFuzz = 12;
+		int spawnFuzz = 12;	//TODO respect changed value of MinestuckConfig.artifactRange
 		int spawnFuzzHalf = spawnFuzz / 2;
 		
 		if (!isAdventure)

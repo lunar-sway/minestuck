@@ -41,11 +41,11 @@ public class GateHandler
 			if(pos != null)
 				do
 				{
-					int radius = 75 + rand.nextInt(100);
+					int radius = 128 + rand.nextInt(100);
 					double d = rand.nextDouble();
 					int i = radius*radius;
 					int x = (int) Math.sqrt(i*d);
-					int z = (int) Math.sqrt((1-i)*d);
+					int z = (int) Math.sqrt(i*(1-d));
 					if(rand.nextBoolean()) x = -x;
 					if(rand.nextBoolean()) z = -z;
 					
@@ -131,7 +131,7 @@ public class GateHandler
 			
 			BlockPos gatePos = null;
 			int tries = 0;
-			do
+			do	//TODO Use world + dimension-specific seed
 			{
 				int distance = (500 + world.rand.nextInt(200 + tries));	//The longer time it takes, the larger the area searched
 				distance *= distance;

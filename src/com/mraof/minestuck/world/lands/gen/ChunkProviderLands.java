@@ -33,6 +33,7 @@ import com.mraof.minestuck.entity.consort.EntityNakagator;
 import com.mraof.minestuck.entity.consort.EntitySalamander;
 import com.mraof.minestuck.tileentity.TileEntityGate;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
@@ -177,9 +178,16 @@ public class ChunkProviderLands implements IChunkProvider
 		return chunk;
 	}
 	
+	private static List<ChunkCoordIntPair> coords = new ArrayList<ChunkCoordIntPair>();
+	
 	@Override
 	public void populate(IChunkProvider ichunkprovider, int chunkX, int chunkZ) 
 	{
+		ChunkCoordIntPair coord = new ChunkCoordIntPair(chunkX, chunkZ);
+		
+		if(coords.contains(coord))
+			Debug.print("Re-populating chunk! This should not happen. Coords: "+coord);
+		else coords.add(coord);
 		
 		BlockPos gatePos = GateHandler.getGatePos(-1, landWorld.provider.getDimensionId());
 		

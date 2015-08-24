@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.tileentity.TileEntityGate;
 
 import net.minecraft.block.Block;
@@ -97,7 +98,9 @@ public class BlockGate extends Block implements ITileEntityProvider
 		{
 			BlockPos mainPos = pos;
 			if(!(Boolean) state.getValue(isMainComponent))
-				mainPos = this.findMainComponent(pos, worldIn);
+				if(this != Minestuck.gate)
+					mainPos = this.findMainComponent(pos, worldIn);
+				else return;
 			
 			TileEntity te = worldIn.getTileEntity(mainPos);
 			if(te instanceof TileEntityGate)
