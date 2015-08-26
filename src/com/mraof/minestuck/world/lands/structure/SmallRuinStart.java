@@ -74,7 +74,7 @@ public class SmallRuinStart extends StructureStart
 		@Override
 		public boolean addComponentParts(World worldIn, Random rand, StructureBoundingBox boundingBox)
 		{
-			if(!checkHeight(worldIn) || this.isLiquidInStructureBoundingBox(worldIn, boundingBox))
+			if(!checkHeight(worldIn, boundingBox) || this.isLiquidInStructureBoundingBox(worldIn, boundingBox))
 				return false;
 			
 			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
@@ -137,50 +137,36 @@ public class SmallRuinStart extends StructureStart
 			return true;
 		}
 		
-		protected boolean checkHeight(World worldIn)
+		protected boolean checkHeight(World worldIn, StructureBoundingBox bb)
 		{
 			if(definedHeight)
 				return true;
-			int minY = 256, maxY = 0;
+//			int minY = 256, maxY = 0;
 			int height = 0;
 			boolean onLand = false;
-			if(coordBaseMode.getAxis().equals(EnumFacing.Axis.X))
-			{
-				int x = coordBaseMode.getAxisDirection().equals(EnumFacing.AxisDirection.POSITIVE) ? boundingBox.minX : boundingBox.maxX;
-				
+			int i = 0;
+			
+			for(int x = boundingBox.minX; x <= boundingBox.maxX; x++)
 				for(int z = boundingBox.minZ; z <= boundingBox.maxZ; z++)
 				{
-					int y = worldIn.getTopSolidOrLiquidBlock(new BlockPos(x, 0, z)).getY() - 1;
-					if(y < minY)
+					if(!bb.func_175898_b(new BlockPos(x, 64, z)))
+						continue;
+					
+					int y = worldIn.getTopSolidOrLiquidBlock(new BlockPos(x, 0, z)).getY();
+					/*if(y < minY)
 						minY = y;
 					if(y > maxY)
-						maxY = y;
+						maxY = y;*/
 					height += y;
+					i++;
 					if(!worldIn.getBlockState(new BlockPos(x, y, z)).getBlock().equals(Blocks.ice))
 						onLand = true;	//used to prevent the structure from spawning in an ice-covered sea without any land nearby
 				}
-				height /= (boundingBox.maxZ - boundingBox.minZ + 1);
-			} else
-			{
-				int z = coordBaseMode.getAxisDirection().equals(EnumFacing.AxisDirection.POSITIVE) ? boundingBox.minZ : boundingBox.maxZ;
 				
-				for(int x = boundingBox.minX; x <= boundingBox.maxX; x++)
-				{
-					int y = worldIn.getTopSolidOrLiquidBlock(new BlockPos(x, 0, z)).getY() - 1;
-					if(y < minY)
-						minY = y;
-					if(y > maxY)
-						maxY = y;
-					height += y;
-					if(!worldIn.getBlockState(new BlockPos(x, y, z)).getBlock().equals(Blocks.ice))
-						onLand = true;
-				}
-				height /= (boundingBox.maxX - boundingBox.minX + 1);
-				
-			}
-			if(!onLand || maxY - minY > 5)
+			if(!onLand || i == 0/* || maxY - minY > 5*/)
 				return false;
 			
+			height /= i;
 			boundingBox.offset(0, height - boundingBox.minY, 0);
 			definedHeight = true;
 			return true;
