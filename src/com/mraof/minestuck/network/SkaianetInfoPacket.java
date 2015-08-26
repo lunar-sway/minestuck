@@ -77,7 +77,7 @@ public class SkaianetInfoPacket extends MinestuckPacket {
 		
 		if(!Thread.currentThread().getName().contains("Server"))
 			SkaiaClient.consumePacket(this);
-		else SkaianetHandler.requestInfo(player.getName(), this.player);
+		else SkaianetHandler.requestInfo(player.getCommandSenderName(), this.player);
 		
 	}
 

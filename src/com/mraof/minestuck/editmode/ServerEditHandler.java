@@ -76,7 +76,7 @@ public class ServerEditHandler
 	 */
 	public static void onPlayerExit(EntityPlayer player) {
 		if(!player.worldObj.isRemote) {
-			reset(null, 0, getData(player.getName()));
+			reset(null, 0, getData(player.getCommandSenderName()));
 		}
 	}
 	
@@ -134,8 +134,8 @@ public class ServerEditHandler
 		if(player.isRiding())
 			return;	//Don't want to bother making the decoy able to ride anything right now.
 		SburbConnection c = SkaianetHandler.getClientConnection(computerTarget);
-		if(c != null && c.getServerName().equals(computerOwner) && getData(c) == null && getData(player.getName()) == null) {
-			Debug.print("Activating edit mode on player \""+player.getName()+"\", target player: \""+computerTarget+"\".");
+		if(c != null && c.getServerName().equals(computerOwner) && getData(c) == null && getData(player.getCommandSenderName()) == null) {
+			Debug.print("Activating edit mode on player \""+player.getCommandSenderName()+"\", target player: \""+computerTarget+"\".");
 			EntityDecoy decoy = new EntityDecoy(player.worldObj, player);
 			EditData data = new EditData(decoy, player, c);
 			if(!c.enteredGame()) {
@@ -192,7 +192,7 @@ public class ServerEditHandler
 	
 	public static EditData getData(String editor) {
 		for(EditData data : list)
-			if(data.player.getName() == editor)
+			if(data.player.getCommandSenderName() == editor)
 				return data;
 		return null;
 	}
@@ -217,7 +217,7 @@ public class ServerEditHandler
 			return;
 		EntityPlayerMP player = (EntityPlayerMP)event.player;
 		
-		EditData data = getData(player.getName());
+		EditData data = getData(player.getCommandSenderName());
 		if(data == null)
 			return;
 		
@@ -232,9 +232,9 @@ public class ServerEditHandler
 	public void onTossEvent(ItemTossEvent event)
 	{
 		InventoryPlayer inventory = event.player.inventory;
-		if(!event.entity.worldObj.isRemote && getData(event.player.getName()) != null)
+		if(!event.entity.worldObj.isRemote && getData(event.player.getCommandSenderName()) != null)
 		{
-			EditData data = getData(event.player.getName());
+			EditData data = getData(event.player.getCommandSenderName());
 			ItemStack stack = event.entityItem.getEntityItem();
 			if(DeployList.containsItemStack(stack) && !isBlockItem(stack.getItem()))
 			{
@@ -267,7 +267,7 @@ public class ServerEditHandler
 	@SubscribeEvent
 	public void onItemPickupEvent(EntityItemPickupEvent event)
 	{
-		if(!event.entity.worldObj.isRemote && getData(event.entityPlayer.getName()) != null)
+		if(!event.entity.worldObj.isRemote && getData(event.entityPlayer.getCommandSenderName()) != null)
 			event.setCanceled(true);
 	}
 	
@@ -278,9 +278,9 @@ public class ServerEditHandler
 	public void onItemUseControl(PlayerInteractEvent event)
 	{
 		
-		if(!event.entity.worldObj.isRemote && getData(event.entityPlayer.getName()) != null)
+		if(!event.entity.worldObj.isRemote && getData(event.entityPlayer.getCommandSenderName()) != null)
 		{
-			EditData data = getData(event.entityPlayer.getName());
+			EditData data = getData(event.entityPlayer.getCommandSenderName());
 			if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK)
 			{
 				event.useBlock = Result.DENY;
@@ -318,10 +318,10 @@ public class ServerEditHandler
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public void onBlockBreak(PlayerInteractEvent event)
 	{
-		if(!event.entity.worldObj.isRemote && getData(event.entityPlayer.getName()) != null
+		if(!event.entity.worldObj.isRemote && getData(event.entityPlayer.getCommandSenderName()) != null
 				&& event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK)
 		{
-			EditData data = getData(event.entityPlayer.getName());
+			EditData data = getData(event.entityPlayer.getCommandSenderName());
 			GristHelper.decrease(data.connection.getClientName(), new GristSet(GristType.Build,1));
 			MinestuckPlayerTracker.updateGristCache(data.connection.getClientName());
 		}
@@ -330,9 +330,9 @@ public class ServerEditHandler
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public void onBlockPlaced(BlockEvent.PlaceEvent event)
 	{
-		if(getData(event.player.getName()) != null)
+		if(getData(event.player.getCommandSenderName()) != null)
 		{
-			EditData data = getData(event.player.getName());
+			EditData data = getData(event.player.getCommandSenderName());
 			if(event.isCanceled())	//If the event was cancelled server side and not client side, notify the client.
 			{
 				MinestuckPacket packet = MinestuckPacket.makePacket(Type.SERVER_EDIT, data.connection.givenItems());
@@ -361,7 +361,7 @@ public class ServerEditHandler
 	
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public void onAttackEvent(AttackEntityEvent event) {
-		if(!event.entity.worldObj.isRemote && getData(event.entityPlayer.getName()) != null)
+		if(!event.entity.worldObj.isRemote && getData(event.entityPlayer.getCommandSenderName()) != null)
 			event.setCanceled(true);
 	}
 	
@@ -473,9 +473,9 @@ public class ServerEditHandler
 			return;
 		try
 		{
-			if(commands.contains(event.command.getName()))
+			if(commands.contains(event.command.getCommandName()))
 			{
-				String c = event.command.getName();
+				String c = event.command.getCommandName();
 				EntityPlayer target;
 				Debug.print(c);
 				if(c.equals("kill") || (c.equals("clear") || c.equals("spawnpoint")) && event.parameters.length == 0
@@ -513,9 +513,9 @@ public class ServerEditHandler
 					}
 					
 					for(EntityPlayer player : targets)
-						if(getData(player.getName()) != null)
+						if(getData(player.getCommandSenderName()) != null)
 						{
-							reset(null, 0, getData(player.getName()));
+							reset(null, 0, getData(player.getCommandSenderName()));
 						}
 					return;
 				}
@@ -523,8 +523,8 @@ public class ServerEditHandler
 					target = event.parameters.length >= 2 ? CommandBase.getPlayer(event.sender, event.parameters[1]) : CommandBase.getCommandSenderAsPlayer(event.sender);
 				else target = CommandBase.getPlayer(event.sender, event.parameters[0]);
 				
-				if(target != null && getData(target.getName()) != null)
-					reset(null, 0, getData(target.getName()));
+				if(target != null && getData(target.getCommandSenderName()) != null)
+					reset(null, 0, getData(target.getCommandSenderName()));
 			}
 		}
 		catch(CommandException e)

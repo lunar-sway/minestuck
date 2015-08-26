@@ -142,9 +142,9 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	}
 	
 	@Override
-	public IEntityLivingData func_180482_a(DifficultyInstance difficulty, IEntityLivingData livingData)
+	public IEntityLivingData onSpawnFirstTime(DifficultyInstance difficulty, IEntityLivingData livingData)
 	{
-		livingData = super.func_180482_a(difficulty, livingData);
+		livingData = super.onSpawnFirstTime(difficulty, livingData);
 		this.experienceValue = (int) (6 * type.getPower() + 4);
 		return livingData;
 	}

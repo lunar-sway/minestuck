@@ -221,7 +221,7 @@ public class ChunkProviderLands implements IChunkProvider
 	}
 	
 	@Override
-	public List func_177458_a(EnumCreatureType creatureType, BlockPos pos)	//This was called "getPossibleCreatures" for future reference
+	public List getPossibleCreatures(EnumCreatureType creatureType, BlockPos pos)	//This was called "getPossibleCreatures" for future reference
 	{
 		if(creatureType == EnumCreatureType.MONSTER)
 		{

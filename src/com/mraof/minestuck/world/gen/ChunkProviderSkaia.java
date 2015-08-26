@@ -169,7 +169,7 @@ public class ChunkProviderSkaia implements IChunkProvider
 	
 	@SuppressWarnings("rawtypes")
 	@Override
-	public List func_177458_a(EnumCreatureType creatureType, BlockPos pos)
+	public List getPossibleCreatures(EnumCreatureType creatureType, BlockPos pos)
 	{
 		return (creatureType == EnumCreatureType.MONSTER || creatureType == EnumCreatureType.CREATURE) ? (pos.getX() < 0 ? this.spawnableBlackList : this.spawnableWhiteList) : null;
 	}
