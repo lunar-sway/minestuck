@@ -47,6 +47,8 @@ public class MinestuckSaveHandler
 	@SubscribeEvent
 	public void onWorldLoad(WorldEvent.Load event)
 	{
+		if(event.world.provider.getDimensionId() != 0)
+			return;
 		ISaveHandler saveHandler = event.world.getSaveHandler();
 		File dataFile = saveHandler.getMapFileFromName("MinestuckData");
 		if(dataFile != null && dataFile.exists())
