@@ -1,4 +1,4 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.command;
 
 import java.util.ArrayList;
 import java.util.List;

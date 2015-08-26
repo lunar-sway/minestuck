@@ -2,44 +2,6 @@ package com.mraof.minestuck;
 
 import java.util.Random;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemHoe;
-import net.minecraft.item.ItemSpade;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.gen.structure.MapGenStructureIO;
-import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.fml.common.event.FMLServerStoppedEvent;
-import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.registry.EntityRegistry;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import codechicken.nei.NEIModContainer;
-
 import com.mraof.minestuck.block.BlockChessTile;
 import com.mraof.minestuck.block.BlockColoredDirt;
 import com.mraof.minestuck.block.BlockComputerOff;
@@ -47,36 +9,23 @@ import com.mraof.minestuck.block.BlockComputerOn;
 import com.mraof.minestuck.block.BlockFluid;
 import com.mraof.minestuck.block.BlockGate;
 import com.mraof.minestuck.block.BlockGlowingMushroom;
-import com.mraof.minestuck.block.BlockReturnNode;
-import com.mraof.minestuck.block.BlockSkaiaPortal;
 import com.mraof.minestuck.block.BlockGoldSeeds;
 import com.mraof.minestuck.block.BlockLayered;
 import com.mraof.minestuck.block.BlockMachine;
+import com.mraof.minestuck.block.BlockReturnNode;
+import com.mraof.minestuck.block.BlockSkaiaPortal;
 import com.mraof.minestuck.block.BlockStorage;
 import com.mraof.minestuck.block.BlockTransportalizer;
 import com.mraof.minestuck.block.OreCruxite;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.client.util.MinestuckModelManager;
+import com.mraof.minestuck.command.CommandCheckLand;
+import com.mraof.minestuck.command.GristCommand;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
-import com.mraof.minestuck.entity.EntityDecoy;
-import com.mraof.minestuck.entity.carapacian.EntityBlackBishop;
-import com.mraof.minestuck.entity.carapacian.EntityBlackPawn;
-import com.mraof.minestuck.entity.carapacian.EntityBlackRook;
-import com.mraof.minestuck.entity.carapacian.EntityWhiteBishop;
-import com.mraof.minestuck.entity.carapacian.EntityWhitePawn;
-import com.mraof.minestuck.entity.carapacian.EntityWhiteRook;
-import com.mraof.minestuck.entity.consort.EntityIguana;
-import com.mraof.minestuck.entity.consort.EntityNakagator;
-import com.mraof.minestuck.entity.consort.EntitySalamander;
-import com.mraof.minestuck.entity.item.EntityGrist;
-import com.mraof.minestuck.entity.item.EntityMetalBoat;
-import com.mraof.minestuck.entity.underling.EntityBasilisk;
-import com.mraof.minestuck.entity.underling.EntityGiclops;
-import com.mraof.minestuck.entity.underling.EntityImp;
-import com.mraof.minestuck.entity.underling.EntityOgre;
+import com.mraof.minestuck.entity.MinestuckEntities;
 import com.mraof.minestuck.event.MinestuckFluidHandler;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
@@ -116,19 +65,17 @@ import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.tileentity.TileEntityGate;
-import com.mraof.minestuck.tileentity.TileEntitySkaiaPortal;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
+import com.mraof.minestuck.tileentity.TileEntitySkaiaPortal;
 import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 import com.mraof.minestuck.tracker.ConnectionListener;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
-import com.mraof.minestuck.util.CommandCheckLand;
-import com.mraof.minestuck.util.ComputerProgram;
-import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.util.ComputerProgram;
 import com.mraof.minestuck.util.KindAbstratusList;
+import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.SburbClient;
 import com.mraof.minestuck.util.SburbServer;
-import com.mraof.minestuck.util.UpdateChecker;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.WorldProviderSkaia;
@@ -139,6 +86,41 @@ import com.mraof.minestuck.world.gen.structure.StructureCastleStart;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.structure.LandStructureHandler;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
+
+import codechicken.nei.NEIModContainer;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemHoe;
+import net.minecraft.item.ItemSpade;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.gen.structure.MapGenStructureIO;
+import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppedEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @Mod(modid = "Minestuck", name = "Minestuck", version = "@VERSION@", guiFactory = "com.mraof.minestuck.client.gui.MinestuckGuiFactory")
 public class Minestuck
@@ -153,7 +135,6 @@ public class Minestuck
 	 */
 	public static volatile boolean isServerRunning;
 	
-	public static int entityIdStart;
 	public static int skaiaProviderTypeId;
 	public static int skaiaDimensionId;
 	public static int landProviderTypeId;
@@ -255,7 +236,6 @@ public class Minestuck
 	public static CommonProxy proxy;
 	public static CreativeTabs tabMinestuck;
 
-	public int currentEntityIdOffset = 0;
 	public static long worldSeed = 0;
 
 	@EventHandler
@@ -444,30 +424,7 @@ public class Minestuck
 		fluidOil.setUnlocalizedName(blockOil.getUnlocalizedName());
 		fluidBlood.setUnlocalizedName(blockBlood.getUnlocalizedName());
 		fluidBrainJuice.setUnlocalizedName(blockBrainJuice.getUnlocalizedName());
-		
-		
-		//register entities
-		this.registerAndMapEntity(EntitySalamander.class, "Salamander", 0xffe62e, 0xfffb53);
-		this.registerAndMapEntity(EntityNakagator.class, "Nakagator", 0xff0000, 0xff6a00);
-		this.registerAndMapEntity(EntityIguana.class, "Iguana", 0x0026ff, 0x0094ff);
-		this.registerAndMapEntity(EntityImp.class, "Imp", 0x000000, 0xffffff);
-		this.registerAndMapEntity(EntityOgre.class, "Ogre", 0x000000, 0xffffff);
-		this.registerAndMapEntity(EntityBasilisk.class, "Basilisk", 0x400040, 0xffffff);
-		this.registerAndMapEntity(EntityGiclops.class, "Giclops", 0x000000, 0xffffff);
-		this.registerAndMapEntity(EntityBlackPawn.class, "dersitePawn", 0x0f0f0f, 0xf0f0f0);
-		this.registerAndMapEntity(EntityWhitePawn.class, "prospitianPawn", 0xf0f0f0, 0x0f0f0f);
-		this.registerAndMapEntity(EntityBlackBishop.class, "dersiteBishop", 0x000000, 0xc121d9);
-		this.registerAndMapEntity(EntityWhiteBishop.class, "prospitianBishop", 0xffffff, 0xfde500);
-		this.registerAndMapEntity(EntityBlackRook.class, "dersiteRook", 0x000000, 0xc121d9);
-		this.registerAndMapEntity(EntityWhiteRook.class, "prospitianRook", 0xffffff, 0xfde500);
-		
-		//register entities with fml
-		EntityRegistry.registerModEntity(EntityDecoy.class, "minestuck.playerDecoy", currentEntityIdOffset, this, 80, 3, true);
-		currentEntityIdOffset++;
-		EntityRegistry.registerModEntity(EntityMetalBoat.class, "minestuck.metalBoat", currentEntityIdOffset, this, 80, 3, true);
-		currentEntityIdOffset++;
-		EntityRegistry.registerModEntity(EntityGrist.class, "minestuck.grist", currentEntityIdOffset, this, 512, 1, true);
-		
+		MinestuckEntities.registerEntities();
 		//register Tile Entities
 		GameRegistry.registerTileEntity(TileEntitySkaiaPortal.class, "minstuck.gatePortal");
 		GameRegistry.registerTileEntity(TileEntityMachine.class, "minestuck.containerMachine");
@@ -511,6 +468,7 @@ public class Minestuck
 		
 		if(event.getSide().isClient())
 		{
+		//register channel handler
 			MinecraftForge.EVENT_BUS.register(ClientEditHandler.instance);
 			FMLCommonHandler.instance().bus().register(ClientEditHandler.instance);
 			FMLCommonHandler.instance().bus().register(new MinestuckConfig());
@@ -550,18 +508,6 @@ public class Minestuck
 			NEIModContainer.plugins.add(new NEIMinestuckConfig());
 		}
 	}
-	//registers entity with forge and minecraft, and increases currentEntityIdOffset by one in order to prevent id collision
-	public void registerAndMapEntity(Class<? extends Entity> entityClass, String name, int eggColor, int eggSpotColor)
-	{
-		this.registerAndMapEntity(entityClass, name, eggColor, eggSpotColor, 80, 3, true);
-	}
-
-	public void registerAndMapEntity(Class<? extends Entity> entityClass, String name, int eggColor, int eggSpotColor, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates)
-	{
-		EntityList.addMapping(entityClass, "minestuck."+name, entityIdStart + currentEntityIdOffset, eggColor, eggSpotColor);
-		EntityRegistry.registerModEntity(entityClass, "minestuck."+name, currentEntityIdOffset, this, trackingRange, updateFrequency, sendsVelocityUpdates);
-		currentEntityIdOffset++;
-	}
 
 	@EventHandler 
 	public void serverAboutToStart(FMLServerAboutToStartEvent event)
@@ -584,6 +530,7 @@ public class Minestuck
 	{
 		MinestuckDimensionHandler.unregisterDimensions();
 		event.registerServerCommand(new CommandCheckLand());
+		event.registerServerCommand(new GristCommand());
 		
 		worldSeed = event.getServer().worldServers[0].getSeed();
 		CaptchaDeckHandler.rand = new Random();

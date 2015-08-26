@@ -81,7 +81,6 @@ public class MinestuckConfig
 		config = new Configuration(file, true);
 		config.load();
 		
-		Minestuck.entityIdStart = config.get("IDs", "entityIdStart", 201).setMinValue(0).setMaxValue(243).setRequiresMcRestart(true).setLanguageKey("minestuck.config.entityIdStart").getInt();
 		Minestuck.skaiaProviderTypeId = config.get("IDs", "skaiaProviderTypeId", 2).setRequiresMcRestart(true).setLanguageKey("minestuck.config.skaiaProviderTypeId").getInt();
 		Minestuck.skaiaDimensionId = config.get("IDs", "skaiaDimensionId", 2).setRequiresMcRestart(true).setLanguageKey("minestuck.config.skaiaDimensionId").getInt();
 		Minestuck.landProviderTypeId = config.get("IDs", "landProviderTypeId", 3).setRequiresMcRestart(true).setLanguageKey("minestuck.config.landProviderTypeId").getInt();

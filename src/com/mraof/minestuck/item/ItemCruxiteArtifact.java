@@ -108,9 +108,11 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 				}
 			}
 			Debug.print("Placing blocks...");
+			int nextZWidth = 0;
 			for(int blockX = x - artifactRange; blockX <= x + artifactRange; blockX++)
 			{
-				int zWidth = (int) Math.sqrt(artifactRange * artifactRange - (blockX - x) * (blockX - x));
+				int zWidth = nextZWidth;
+				nextZWidth = (int) Math.sqrt(artifactRange * artifactRange - (blockX - x + 1) * (blockX - x + 1));
 				for(int blockZ = z - zWidth; blockZ <= z + zWidth; blockZ++)
 				{
 					int height = (int) Math.sqrt(artifactRange * artifactRange - (((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2));
@@ -125,9 +127,9 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 						TileEntity te = worldserver0.getTileEntity(pos);
 						if(block.getBlock() != Blocks.air && !block.getBlock().isSolidFullCube()) //Place temp blocks to avoid things like torches breaking because of missing solid block
 						{
-							if(blockX < x + artifactRange && blockY >= y - heightX)
+							if(blockZ >= z - nextZWidth && blockZ <= z + nextZWidth && blockY >= y - heightX && blockY < y + heightX)
 								worldserver1.setBlockState(pos1.east(), Blocks.stone.getDefaultState(), 0);
-							if(blockZ < z + zWidth && blockY >= y - heightZ)
+							if(blockZ < z + zWidth && blockY >= y - heightZ && blockY < y + heightZ)
 								worldserver1.setBlockState(pos1.south(), Blocks.stone.getDefaultState(), 0);
 						}
 						if(block.getBlock() != Blocks.bedrock)

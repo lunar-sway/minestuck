@@ -77,15 +77,13 @@ public class GristSet {
 	 * Returns a ArrayList containing GristAmount objects representing the set.
 	 * 
 	 */
-	public ArrayList<GristAmount> getArray() {
+	public ArrayList<GristAmount> getArray()
+	{
 		ArrayList<GristAmount> list = new ArrayList<GristAmount>();
-		for(int i = 0; i < GristType.allGrists; i++) {
-			if (gristTypes[i] != 0) {
-				//Debug.print("Added "+gristTypes[i]+" of "+GristType.values()[i].getName());
+		for(int i = 0; i < GristType.allGrists; i++)
+			if (gristTypes[i] != 0)
 				list.add(new GristAmount(GristType.values()[i],gristTypes[i]));
-			}
-		}
-		//Debug.print("		Adding "+list.size()+" grist values...");
+		
 		return list;
 	}
 
@@ -139,9 +137,15 @@ public class GristSet {
 		StringBuilder build = new StringBuilder();
 		build.append("gristSet:[");
 		
+		boolean first = true;
 		for(int i = 0; i < gristTypes.length; i++)
 			if(gristTypes[i] != 0)
+			{
+				if(!first)
+					build.append(',');
 				build.append(GristType.values()[i].name()+"="+gristTypes[i]+",");
+				first = false;
+			}
 		
 		build.append(']');
 		return build.toString();
