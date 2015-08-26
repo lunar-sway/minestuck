@@ -2,6 +2,7 @@ package com.mraof.minestuck.world.lands.terrain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.BlockRedSandstone;
 import net.minecraft.block.BlockSand;
@@ -17,6 +18,9 @@ import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
+import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.lands.gen.DefaultTerrainGen;
+import com.mraof.minestuck.world.lands.gen.ILandTerrainGen;
 
 public class LandAspectSandstone extends TerrainAspect
 {
@@ -167,4 +171,12 @@ public class LandAspectSandstone extends TerrainAspect
 		return variations;
 	}
 	
+	@Override
+	public ILandTerrainGen createTerrainGenerator(ChunkProviderLands chunkProvider, Random rand)
+	{
+		DefaultTerrainGen terrainGen = new DefaultTerrainGen(chunkProvider, rand);
+		terrainGen.normalVariation = 0.7F;
+		terrainGen.oceanVariation = 0.3F;
+		return terrainGen;
+	}
 }
