@@ -40,11 +40,11 @@ minecraft {
 
 dependencies {
     // http://files.minecraftforge.net/CodeChickenLib/
-    compile "codechicken:CodeChickenLib:1.8-1.1.2.133:dev"
+    compile "codechicken:CodeChickenLib:1.8-1.1.2.133:universal"
     
     // http://chickenbones.net/maven
-    compile "codechicken:CodeChickenCore:1.8-1.0.5.34:dev"
-    compile "codechicken:NotEnoughItems:1.8-1.0.5.82:dev"
+    compile "codechicken:CodeChickenCore:1.8-1.0.5.34:universal"
+    compile "codechicken:NotEnoughItems:1.8-1.0.5.82:universal"
 }
 
 sourceSets {
