@@ -227,7 +227,7 @@ public class ChunkProviderLands implements IChunkProvider
 				structure = gate2;
 			else structure = new DefaultGatePlacement();
 			
-			gatePos = structure.generateGateStructure(landWorld, gatePos);
+			gatePos = structure.generateGateStructure(landWorld, gatePos, this);
 			
 			GateHandler.setDefiniteGatePos(-1, landWorld.provider.getDimensionId(), gatePos);
 			for(int x = -1; x <= 1; x++)

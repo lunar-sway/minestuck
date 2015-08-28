@@ -174,7 +174,7 @@ public class LandStructureHandler extends MapGenStructure
 				for(int i = 0; i < 4; i++)
 				{
 					BlockPos pos = new BlockPos(xPos + (i % 2), maxY, zPos + i/2);
-					if(!world.getBlockState(pos).getBlock().isReplaceable(world, pos))
+					if(world.getBlockState(pos).getBlock().isLeaves(world, pos))
 						return;
 				}
 				nodePos = new BlockPos(xPos, maxY, zPos);
