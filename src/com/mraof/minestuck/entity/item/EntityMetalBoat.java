@@ -86,7 +86,7 @@ public class EntityMetalBoat extends EntityBoat implements IEntityAdditionalSpaw
 		
 	}
 	
-	protected void func_180433_a(double par1, boolean par2, Block par3, BlockPos par4)
+	protected void updateFallState(double par1, boolean par2, Block par3, BlockPos par4)
 	{
 		if (par2)
 		{

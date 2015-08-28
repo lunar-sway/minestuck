@@ -89,7 +89,7 @@ public class SkaiaClient
 	
 	public static boolean canSelect(String player)
 	{
-		if(!player.equals(UsernameHandler.encode(ClientProxy.getClientPlayer().getName())))
+		if(!player.equals(UsernameHandler.encode(ClientProxy.getClientPlayer().getCommandSenderName())))
 			return false;
 		for(SburbConnection c : connections)
 			if(player.equals(c.getClientName()))

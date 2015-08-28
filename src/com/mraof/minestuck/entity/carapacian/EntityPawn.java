@@ -56,10 +56,10 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 	}
 	
 	@Override
-	public IEntityLivingData func_180482_a(DifficultyInstance difficulty, IEntityLivingData entityLivingData)	//was called "onSpawnWithEgg"
+	public IEntityLivingData onSpawnFirstTime(DifficultyInstance difficulty, IEntityLivingData entityLivingData)	//was called "onSpawnWithEgg"
 	{
-		entityLivingData = super.func_180482_a(difficulty, entityLivingData);
-		this.addRandomArmor();
+		entityLivingData = super.onSpawnFirstTime(difficulty, entityLivingData);
+		this.addRandomDrop();
 		
 		if(this.pawnType == 1)
 		{
@@ -68,7 +68,7 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 		else
 			this.tasks.addTask(4, this.entityAIAttackOnCollide);
 		this.setCurrentItemOrArmor(0, new ItemStack(this.pawnType == 1 ? Items.bow : rand.nextDouble() < .2 ? Minestuck.regisword : rand.nextDouble() < .02 ? Minestuck.sord : Items.stone_sword));
-		this.func_180483_b(difficulty);	//was called "enchantEquipment"
+		this.setEnchantmentBasedOnDifficulty(difficulty);	//was called "enchantEquipment"
 		return entityLivingData;
 	}
 

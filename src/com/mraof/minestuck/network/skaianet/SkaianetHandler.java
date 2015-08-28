@@ -538,7 +538,7 @@ public class SkaianetHandler {
 	
 	public static int enterMedium(EntityPlayerMP player, int dimensionId)
 	{
-		String username = UsernameHandler.encode(player.getName());
+		String username = UsernameHandler.encode(player.getCommandSenderName());
 		SburbConnection c = getConnection(username, getAssociatedPartner(username, true));
 		if(c == null)
 		{

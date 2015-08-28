@@ -108,7 +108,7 @@ public class GateHandler
 					int serverDim = serverConnection.getClientDimension();
 					location = new Location(getGatePos(2, serverDim), serverDim);
 					
-				} Debug.printf("Player %s tried to teleport through gate before their server player entered the game.", player.getName());
+				} Debug.printf("Player %s tried to teleport through gate before their server player entered the game.", player.getCommandSenderName());
 				
 			} else Debug.printf("Unexpected error: Can't find connection for dimension %d!", dim);
 		} else Debug.printf("Unexpected error: Gate id %d is out of bounds!", gateId);

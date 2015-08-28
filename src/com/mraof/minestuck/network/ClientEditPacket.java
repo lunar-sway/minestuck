@@ -50,14 +50,14 @@ public class ClientEditPacket extends MinestuckPacket {
 		{
 			if(username == null)
 				ServerEditHandler.onPlayerExit(player);
-			if(!MinestuckConfig.privateComputers || UsernameHandler.encode(player.getName()).equals(this.username))
+			if(!MinestuckConfig.privateComputers || UsernameHandler.encode(player.getCommandSenderName()).equals(this.username))
 				ServerEditHandler.newServerEditor((EntityPlayerMP) player, username, target);
 			return;
 		}
 		
 		EntityPlayerMP playerMP = MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(UsernameHandler.decode(target));
 		
-		if(playerMP != null && (!MinestuckConfig.privateComputers || player.getName().equals(UsernameHandler.decode(username))))
+		if(playerMP != null && (!MinestuckConfig.privateComputers || player.getCommandSenderName().equals(UsernameHandler.decode(username))))
 		{
 			SburbConnection c = SkaianetHandler.getClientConnection(target);
 			if(c == null || !c.getServerName().equals(username) || !(c.isMain() || SkaianetHandler.giveItems(target)))

@@ -39,7 +39,7 @@ public class TreeDecorator implements ILandDecorator
 		{
 			int x = random.nextInt(16) + 8;
 			int z = random.nextInt(16) + 8;
-			BlockPos pos = world.getHorizon(new BlockPos((chunkX << 4) + x, 0, (chunkZ << 4) + z));
+			BlockPos pos = world.getHeight(new BlockPos((chunkX << 4) + x, 0, (chunkZ << 4) + z));
 			
 			if (gen.generate(world, random, pos))
 			{

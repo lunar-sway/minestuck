@@ -19,6 +19,7 @@ import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.EnumClass;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.Title;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.UsernameHandler;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
@@ -306,6 +307,7 @@ public class SessionHandler {
 		LandAspectRegistry aspectGen = new LandAspectRegistry(Minestuck.worldSeed/connection.clientHomeLand);
 		Session session = getPlayerSession(connection.getClientName());
 		Title title = MinestuckPlayerData.getTitle(connection.getClientName());
+		Debug.printf("aspectGen: " + aspectGen + " session: " + session + " title " + title);
 		
 		boolean frogs = false;
 		ArrayList<TerrainAspect> usedTerrainAspects = new ArrayList<TerrainAspect>();
@@ -495,7 +497,7 @@ public class SessionHandler {
 	
 	public static boolean canSelect(EntityPlayerMP player)
 	{
-		String name = UsernameHandler.encode(player.getName());
+		String name = UsernameHandler.encode(player.getCommandSenderName());
 		for(SburbConnection c : SkaianetHandler.connections)
 			if(c.getClientName().equals(name))
 				return false;

@@ -75,7 +75,7 @@ public class EntityDecoy extends EntityLiving {
 		this.gameType = player.theItemInWorldManager.getGameType();
 		initInventory(player);
 		this.setHealth(player.getHealth());
-		username = player.getName();
+		username = player.getCommandSenderName();
 		isFlying = player.capabilities.isFlying;
 		player.capabilities.writeCapabilitiesToNBT(this.capabilities);
 		NBTTagCompound nbt = new NBTTagCompound();
@@ -219,7 +219,7 @@ public class EntityDecoy extends EntityLiving {
 	}
 	
 	@Override
-	public String getName() 
+	public String getCommandSenderName() 
 	{
 		return username != null ? username : "DECOY";
 	}
@@ -272,7 +272,7 @@ public class EntityDecoy extends EntityLiving {
 		}
 		
 		@Override
-		public boolean canUseCommand(int i, String s)
+		public boolean canCommandSenderUseCommand(int i, String s)
 		{return false;}
 		
 		@Override
