@@ -74,6 +74,7 @@ public class MinestuckModelManager
 		register(Minestuck.silverSpoon);
 		modelRegistry.register(Minestuck.crockerSpork, new CrockerSporkDefinition());
 		register(Minestuck.skaiaFork);
+		register(Minestuck.fork);
 		
 		if(MinestuckConfig.oldItemModels)
 		{
