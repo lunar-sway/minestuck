@@ -29,10 +29,10 @@ group= "com.mraof.minestuck"
 archivesBaseName = "Minestuck"
 
 minecraft {
-    version = "1.8-11.14.3.1487"
+    version = "1.8-11.14.3.1499"
     runDir = "eclipse"
 
-    mappings = "snapshot_nodoc_20141130"
+    mappings = "snapshot_20150301"
 
     replaceIn "com/mraof/minestuck/Minestuck.java"
     replace "@VERSION@", project.version
@@ -40,11 +40,11 @@ minecraft {
 
 dependencies {
     // http://files.minecraftforge.net/CodeChickenLib/
-    compile "codechicken:CodeChickenLib:1.8-1.1.2.133:dev"
+    compile "codechicken:CodeChickenLib:1.8-1.1.2.133:universal"
     
     // http://chickenbones.net/maven
-    compile "codechicken:CodeChickenCore:1.8-1.0.5.34:dev"
-    compile "codechicken:NotEnoughItems:1.8-1.0.5.82:dev"
+    compile "codechicken:CodeChickenCore:1.8-1.0.5.34:universal"
+    compile "codechicken:NotEnoughItems:1.8-1.0.5.82:universal"
 }
 
 sourceSets {

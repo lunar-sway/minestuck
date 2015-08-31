@@ -88,7 +88,7 @@ public class MinestuckPlayerData {
 	
 	public static PlayerData getData(EntityPlayer player)
 	{
-		return getData(UsernameHandler.encode(player.getName()));
+		return getData(UsernameHandler.encode(player.getCommandSenderName()));
 	}
 	
 	public static PlayerData getData(String player)
@@ -158,7 +158,7 @@ public class MinestuckPlayerData {
 	{
 		if(player.worldObj.isRemote)
 			return getClientGrist();
-		else return getGristSet(UsernameHandler.encode(player.getName()));
+		else return getGristSet(UsernameHandler.encode(player.getCommandSenderName()));
 	}
 	
 }

@@ -24,7 +24,7 @@ public class CakeDecorator implements ILandDecorator
 				
 				int x = random.nextInt(16) + (chunkX << 4) + 8;
 				int z = random.nextInt(16) + (chunkZ << 4) + 8;
-				BlockPos pos = world.getHorizon(new BlockPos(x, 0, z));
+				BlockPos pos = world.getHeight(new BlockPos(x, 0, z));
 				int bits = Math.max(0, (int) (random.nextDouble()*10) - 6);
 				if(provider.isPositionInSpawn(x, z))
 					continue;

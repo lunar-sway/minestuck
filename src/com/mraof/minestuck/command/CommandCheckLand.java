@@ -19,13 +19,13 @@ public class CommandCheckLand extends CommandBase
 {
 	
 	@Override
-	public String getName()
+	public String getCommandName()
 	{
 		return "checkLand";
 	}
 	
 	@Override
-	public List getAliases()
+	public List getCommandAliases()
 	{
 		ArrayList<String> list = new ArrayList<String>();
 		list.add("land");
@@ -42,7 +42,7 @@ public class CommandCheckLand extends CommandBase
 	}
 	
 	@Override
-	public void execute(ICommandSender sender, String[] args) throws CommandException
+	public void processCommand(ICommandSender sender, String[] args) throws CommandException
 	{
 		if(!(sender instanceof EntityPlayerMP))
 			throw new PlayerNotFoundException("This command is only useable by players.");
@@ -73,7 +73,7 @@ public class CommandCheckLand extends CommandBase
 	}
 	
 	@Override
-	public boolean canCommandSenderUse(ICommandSender sender)
+	public boolean canCommandSenderUseCommand(ICommandSender sender)
 	{
 		return true;
 	}

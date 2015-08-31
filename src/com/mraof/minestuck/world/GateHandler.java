@@ -108,7 +108,7 @@ public class GateHandler
 					int serverDim = serverConnection.getClientDimension();
 					location = new Location(getGatePos(2, serverDim), serverDim);
 					
-				} Debug.printf("Player %s tried to teleport through gate before their server player entered the game.", player.getName());
+				} Debug.printf("Player %s tried to teleport through gate before their server player entered the game.", player.getCommandSenderName());
 				
 			} else Debug.printf("Unexpected error: Can't find connection for dimension %d!", dim);
 		} else Debug.printf("Unexpected error: Gate id %d is out of bounds!", gateId);
@@ -128,14 +128,15 @@ public class GateHandler
 		if(MinestuckDimensionHandler.isLandDimension(dim) && !gateData.containsKey(dim))
 		{
 			BlockPos spawn = MinestuckDimensionHandler.getSpawn(dim);
+			Random rand = world.setRandomSeed(0, 0, 43839551^world.provider.getDimensionId());
 			
 			BlockPos gatePos = null;
 			int tries = 0;
-			do	//TODO Use world + dimension-specific seed
+			do
 			{
-				int distance = (500 + world.rand.nextInt(200 + tries));	//The longer time it takes, the larger the area searched
+				int distance = (500 + rand.nextInt(200 + tries));	//The longer time it takes, the larger the area searched
 				distance *= distance;
-				double d = world.rand.nextDouble();
+				double d = rand.nextDouble();
 				int x = (int) Math.sqrt(distance*d);
 				int z = (int) Math.sqrt(distance*(1-d));
 				

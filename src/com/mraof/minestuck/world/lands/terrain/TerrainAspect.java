@@ -12,6 +12,7 @@ import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.gen.DefaultTerrainGen;
 import com.mraof.minestuck.world.lands.gen.ILandTerrainGen;
+import com.mraof.minestuck.world.lands.structure.GateStructurePillar;
 import com.mraof.minestuck.world.lands.structure.IGateStructure;
 import com.mraof.minestuck.world.lands.structure.LandStructureHandler;
 
@@ -145,7 +146,7 @@ public abstract class TerrainAspect implements ILandAspect<TerrainAspect>
 	@Override
 	public IGateStructure getGateStructure()
 	{
-		return null;
+		return new GateStructurePillar();
 	}
 	
 }

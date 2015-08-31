@@ -16,7 +16,7 @@ import net.minecraft.util.ChatComponentTranslation;
 public class GristCommand extends CommandBase
 {
 	@Override
-	public String getName()
+	public String getCommandName()
 	{
 		return "grist";
 	}
@@ -28,7 +28,7 @@ public class GristCommand extends CommandBase
 	}
 
 	@Override
-	public void execute(ICommandSender sender, String[] args) throws CommandException
+	public void processCommand(ICommandSender sender, String[] args) throws CommandException
 	{
 		if(args.length < 1)
 		{
@@ -46,7 +46,7 @@ public class GristCommand extends CommandBase
 		} else
 		{
 			EntityPlayerMP player = this.getCommandSenderAsPlayer(sender);
-			name = UsernameHandler.encode(player.getName());
+			name = UsernameHandler.encode(player.getCommandSenderName());
 		}
 
 		if(command.equalsIgnoreCase("set"))

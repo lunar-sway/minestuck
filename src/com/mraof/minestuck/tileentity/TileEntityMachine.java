@@ -384,8 +384,8 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 				for(int i = 0; i < cost.gristTypes.length; i++)
 					cost.gristTypes[i] = (int) Math.ceil(cost.gristTypes[i]*multiplier);
 			}
-			GristHelper.decrease(UsernameHandler.encode(owner.getName()), cost);
-			MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(owner.getName()));
+			GristHelper.decrease(UsernameHandler.encode(owner.getCommandSenderName()), cost);
+			MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(owner.getCommandSenderName()));
 			break;
 		case (4):
 			if(!worldObj.isRemote) 
@@ -442,7 +442,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 	}
 
 	@Override
-	public String getName()
+	public String getCommandSenderName()
 	{
 		return "tile.blockMachine."+ItemMachine.subNames[getMachineType()]+".name";
 	}
@@ -456,7 +456,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 	@Override
 	public IChatComponent getDisplayName()
 	{
-		return new ChatComponentTranslation(getName());
+		return new ChatComponentTranslation(getCommandSenderName());
 	}
 
 	@Override

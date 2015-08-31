@@ -48,6 +48,8 @@ public class WorldProviderLands extends WorldProvider
 		{
 			landAspects = MinestuckDimensionHandler.getAspects(dimensionId);
 			
+			Debug.print("landAspects: " + landAspects);
+			Debug.print("landAspects.aspectTitle: " + landAspects.aspectTitle);
 			provider = landAspects.aspectTitle.createChunkProvider(this);
 			
 		}

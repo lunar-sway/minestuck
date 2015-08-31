@@ -114,7 +114,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	}
 	
 	@Override
-	public String getName() 
+	public String getCommandSenderName() 
 	{
 		if(type != null)
 			return StatCollector.translateToLocalFormatted("entity.minestuck." + underlingName + ".type", type.getDisplayName());
@@ -157,7 +157,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 		if(hasHome())
 		{
 			NBTTagCompound nbt = new NBTTagCompound();
-			BlockPos home = func_180486_cf();
+			BlockPos home = getHomePosition();
 			nbt.setInteger("homeX", home.getX());
 			nbt.setInteger("homeY", home.getY());
 			nbt.setInteger("homeZ", home.getZ());
@@ -174,7 +174,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 		{
 			NBTTagCompound nbt = new NBTTagCompound();
 			BlockPos pos = new BlockPos(nbt.getInteger("homeX"), nbt.getInteger("homeY"), nbt.getInteger("homeZ"));
-			func_175449_a(pos, nbt.getInteger("maxHomeDistance"));
+			setHomePosAndDistance(pos, nbt.getInteger("maxHomeDistance"));
 		}
 		
 		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)(this.getMaximumHealth()));
@@ -200,7 +200,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	}
 	
 	@Override
-	public IEntityLivingData func_180482_a(DifficultyInstance difficulty, IEntityLivingData livingData)
+	public IEntityLivingData onSpawnFirstTime(DifficultyInstance difficulty, IEntityLivingData livingData)
 	{
 		
 		if(!(livingData instanceof UnderlingData))
@@ -216,7 +216,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)(this.getMaximumHealth()));
 		setHealth(this.getMaximumHealth());
 		
-		return super.func_180482_a(difficulty, livingData);
+		return super.onSpawnFirstTime(difficulty, livingData);
 	}
 	
 	@Override

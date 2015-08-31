@@ -56,7 +56,7 @@ public abstract class ComponentCastlePiece extends StructureComponent
 		{
 			for (int var6 = this.boundingBox.minX; var6 <= this.boundingBox.maxX; ++var6)
 			{
-				if (par2StructureBoundingBox.func_175898_b(new BlockPos(var6, 64, var5)))	//isVecInside
+				if (par2StructureBoundingBox.isVecInside(new BlockPos(var6, 64, var5)))	//isVecInside
 				{
 					var3 += par1World.getTopSolidOrLiquidBlock(new BlockPos(var6, 0, var5)).getY();
 					++var4;
@@ -88,11 +88,11 @@ public abstract class ComponentCastlePiece extends StructureComponent
 					if(((x + y + z) % 2 == 0) ^ b)
 					{
 //						Debug.print("Placing block at " + x + " " + y + " " + z + " " + blockID + " " + metadata1);
-						this.func_175811_a(world, block1, x, y, z, structureboundingbox);	//placeBlockAtCurrentPosition
+						this.setBlockState(world, block1, x, y, z, structureboundingbox);	//placeBlockAtCurrentPosition
 					}
 					else
 					{
-						this.func_175811_a(world, block2, x, y, z, structureboundingbox);
+						this.setBlockState(world, block2, x, y, z, structureboundingbox);
 //						Debug.print("Placing block at " + x + " " + y + " " + z + " " + blockID2 + " " + metadata2);
 					}
 				}
