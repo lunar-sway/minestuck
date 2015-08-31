@@ -8,6 +8,7 @@ import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.IceDecorator;
 import com.mraof.minestuck.world.lands.decorator.LayeredBlockDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
+import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 
 import net.minecraft.block.BlockDirt;
 import net.minecraft.block.BlockStoneBrick;
@@ -74,6 +75,8 @@ public class LandAspectFrost extends TerrainAspect
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
 		list.add(new SurfaceDecoratorVein(Blocks.dirt.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.COARSE_DIRT), 10, 32));
 		list.add(new SurfaceDecoratorVein(Blocks.ice.getDefaultState(), 5, 8));
+		list.add(new SurfaceDecoratorVein(Blocks.snow.getDefaultState(), 10, 16));
+		list.add(new UndergroundDecoratorVein(Blocks.packed_ice.getDefaultState(), 20, 8, 128));
 		return list;
 	}
 	
