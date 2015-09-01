@@ -14,7 +14,7 @@ import net.minecraft.util.WeightedRandomChestContent;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
-import com.mraof.minestuck.world.lands.decorator.TreeDecorator;
+import com.mraof.minestuck.world.lands.decorator.BasicTreeDecorator;
 
 public class LandAspectForest extends TerrainAspect
 {
@@ -95,7 +95,7 @@ public class LandAspectForest extends TerrainAspect
 	public List<ILandDecorator> getRequiredDecorators()
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
-		list.add(new TreeDecorator());
+		list.add(new BasicTreeDecorator());
 		return list;
 	}
 	

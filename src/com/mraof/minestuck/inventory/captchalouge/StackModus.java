@@ -58,7 +58,7 @@ public class StackModus extends Modus
 			if(nbt.hasKey("item"+i))
 				list.add(ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("item"+i)));
 			else break;
-		if(player != null && player.worldObj.isRemote)
+		if(FMLCommonHandler.instance().getEffectiveSide().isClient())
 		{
 			items = new ItemStack[size];
 			changed = true;

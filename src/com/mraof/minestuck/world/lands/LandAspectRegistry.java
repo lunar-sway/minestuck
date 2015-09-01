@@ -163,12 +163,12 @@ public class LandAspectRegistry
 	 */
 	public <T> ArrayList<T> pickSubset(List<T> listIn, int min, int max)
 	{
+		int size = min + random.nextInt(max - min + 1);
 		ArrayList<T> result = new ArrayList<T>();
-		if(listIn.size() <= min)
+		if(listIn.size() <= size)
 			result.addAll(listIn);
 		else
 		{
-			int size = min + random.nextInt(max - min + 1);
 			while(result.size() < size)
 			{
 				T object = listIn.get(random.nextInt(listIn.size()));

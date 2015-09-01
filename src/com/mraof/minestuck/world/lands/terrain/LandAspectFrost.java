@@ -7,6 +7,7 @@ import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.IceDecorator;
 import com.mraof.minestuck.world.lands.decorator.LayeredBlockDecorator;
+import com.mraof.minestuck.world.lands.decorator.SpruceTreeDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 
@@ -86,6 +87,7 @@ public class LandAspectFrost extends TerrainAspect
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
 		list.add(new IceDecorator());
 		list.add(new LayeredBlockDecorator(Blocks.snow_layer, true));
+		list.add(new SpruceTreeDecorator());
 		return list;
 	}
 	
