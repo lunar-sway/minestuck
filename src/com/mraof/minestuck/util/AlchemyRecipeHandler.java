@@ -538,7 +538,9 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.prismarine_leggings), new GristSet(new GristType[] {GristType.Build, GristType.Cobalt, GristType.Marble}, new int[] {70, 35, 14}));
 		GristRegistry.addGristConversion(new ItemStack(Minestuck.prismarine_boots), new GristSet(new GristType[] {GristType.Build, GristType.Cobalt, GristType.Marble}, new int[] {40, 20, 8}));
 		
-		GristRegistry.addGristConversion(new ItemStack(Minestuck.skaiaFork), new GristSet(new GristType[] {GristType.Build, GristType.Quartz, GristType.Diamond}, new int[]{25,30,11}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.skaiaFork), new GristSet(new GristType[] {GristType.Build, GristType.Quartz, GristType.Gold, GristType.Amethyst}, new int[]{90,30,11,15}));
+		GristRegistry.addGristConversion(new ItemStack(Minestuck.spork), new GristSet(new GristType[]{GristType.Build}, new int[]{13}));
+		
 		
 		//add Designix combinations
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_sword), new ItemStack(Items.rotten_flesh), MODE_AND, false, true, new ItemStack(Minestuck.ninjaSword));
@@ -600,6 +602,7 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_boots), new ItemStack(Blocks.prismarine), MODE_OR, false, false, new ItemStack(Minestuck.prismarine_boots));
 		
 		CombinationRegistry.addCombination(new ItemStack(Minestuck.fork), new ItemStack(Minestuck.component, 1, 2), MODE_AND, false, true, new ItemStack(Minestuck.skaiaFork));
+		CombinationRegistry.addCombination(new ItemStack(Minestuck.fork),new ItemStack(Minestuck.woodenSpoon),MODE_OR, false, false, new ItemStack(Minestuck.spork));
 		
 		
 		//Register chest loot

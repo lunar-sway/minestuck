@@ -176,6 +176,7 @@ public class Minestuck
 	public static ItemSpork crockerSpork;
 	public static Item skaiaFork;
 	public static Item fork;
+	public static Item spork;
 	//Other
 	public static Item rawCruxite;
 	public static Item cruxiteDowel;
@@ -317,6 +318,7 @@ public class Minestuck
 		crockerSpork = new ItemSpork(EnumSporkType.CROCKER);
 		skaiaFork = new ItemSpork(EnumSporkType.SKAIA);
 		fork = new ItemSpork(EnumSporkType.FORK);
+		spork = new ItemSpork(EnumSporkType.SPORK);
 		
 		toolEmerald = EnumHelper.addToolMaterial("EMERALD", 3, 1220, 12.0F, 4.0F, 12).setRepairItem(new ItemStack(Items.emerald));
 		emeraldSword = new ItemSword(toolEmerald).setUnlocalizedName("swordEmerald").setCreativeTab(tabMinestuck);
@@ -383,6 +385,7 @@ public class Minestuck
 		GameRegistry.registerItem(crockerSpork, "crocker_spork");
 		GameRegistry.registerItem(skaiaFork, "skaia_fork");
 		GameRegistry.registerItem(fork, "fork");
+		GameRegistry.registerItem(spork,"spork");
 		
 		GameRegistry.registerItem(emeraldSword, "emerald_sword");
 		GameRegistry.registerItem(emeraldAxe, "emerald_axe");
