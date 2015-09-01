@@ -534,8 +534,6 @@ public class Minestuck
 		
 		worldSeed = event.getServer().worldServers[0].getSeed();
 		CaptchaDeckHandler.rand = new Random();
-		
-		//MinestuckSaveHandler.onWorldLoad(event.getServer().worldServers[0].getSaveHandler());
 	}
 	
 	@EventHandler
