@@ -41,7 +41,7 @@ public class GateHandler
 			if(pos != null)
 				do
 				{
-					int radius = 128 + rand.nextInt(100);
+					int radius = 160 + rand.nextInt(60);
 					double d = rand.nextDouble();
 					int i = radius*radius;
 					int x = (int) Math.sqrt(i*d);

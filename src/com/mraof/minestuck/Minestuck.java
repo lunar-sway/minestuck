@@ -531,14 +531,11 @@ public class Minestuck
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event)
 	{
-		MinestuckDimensionHandler.unregisterDimensions();
 		event.registerServerCommand(new CommandCheckLand());
 		event.registerServerCommand(new GristCommand());
 		
 		worldSeed = event.getServer().worldServers[0].getSeed();
 		CaptchaDeckHandler.rand = new Random();
-		
-		//MinestuckSaveHandler.onWorldLoad(event.getServer().worldServers[0].getSaveHandler());
 	}
 	
 	@EventHandler
