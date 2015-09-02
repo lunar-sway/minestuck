@@ -531,7 +531,6 @@ public class Minestuck
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event)
 	{
-		MinestuckDimensionHandler.unregisterDimensions();
 		event.registerServerCommand(new CommandCheckLand());
 		event.registerServerCommand(new GristCommand());
 		
