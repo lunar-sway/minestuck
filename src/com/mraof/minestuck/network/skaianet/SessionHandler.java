@@ -347,7 +347,7 @@ public class SessionHandler {
 		
 		int difficulty = (int) Math.round(Math.sqrt(new Vec3i(pos.getX() >> 4, 0, pos.getZ() >> 4).distanceSq(new Vec3i(spawn.getX() >> 4, 0, spawn.getZ() >> 4))));
 		
-		difficulty = Math.min(30, difficulty/3);	//252, 373
+		difficulty = Math.min(30, difficulty/3);
 		
 		if(difficultyList[difficulty] != null)
 			return difficultyList[difficulty];
