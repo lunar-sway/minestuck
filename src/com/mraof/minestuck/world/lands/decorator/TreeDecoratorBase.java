@@ -6,7 +6,6 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 public abstract class TreeDecoratorBase implements ILandDecorator
@@ -23,10 +22,8 @@ public abstract class TreeDecoratorBase implements ILandDecorator
 			BlockPos pos = world.getHeight(new BlockPos((chunkX << 4) + x, 0, (chunkZ << 4) + z));
 			
 			WorldGenAbstractTree gen = getTreeToGenerate(world, pos, random);
-			Debug.print("Trying to generate tree at "+pos);
 			if (gen.generate(world, random, pos))
 				gen.func_180711_a(world, random, pos);
-			else Debug.print("Tree placement failed at "+pos);
 		}
 		
 		return null;

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.world.lands.decorator.FireFieldDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
 
@@ -70,6 +71,7 @@ public class LandAspectHeat extends TerrainAspect
 	public List<ILandDecorator> getDecorators()
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
+		list.add(new FireFieldDecorator());
 		list.add(new SurfaceDecoratorVein(Blocks.soul_sand.getDefaultState(), 10, 32));
 		list.add(new SurfaceDecoratorVein(Blocks.glowstone.getDefaultState(), 5, 8));
 		return list;
