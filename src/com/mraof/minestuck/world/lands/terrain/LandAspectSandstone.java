@@ -112,14 +112,7 @@ public class LandAspectSandstone extends TerrainAspect
 	}
 	
 	@Override
-	public List<ILandDecorator> getOptionalDecorators()
-	{
-		List<ILandDecorator> list = new ArrayList<ILandDecorator>();
-		return list;
-	}
-	
-	@Override
-	public List<ILandDecorator> getRequiredDecorators()
+	public List<ILandDecorator> getDecorators()
 	{
 		List<ILandDecorator> list = new ArrayList<ILandDecorator>();
 		IBlockState sand = Blocks.sand.getDefaultState();

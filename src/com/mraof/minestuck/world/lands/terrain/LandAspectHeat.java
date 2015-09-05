@@ -65,19 +65,14 @@ public class LandAspectHeat extends TerrainAspect
 	public String[] getNames() {
 		return new String[] {"heat","flame","fire"};
 	}
-
+	
 	@Override
-	public List<ILandDecorator> getOptionalDecorators() {
+	public List<ILandDecorator> getDecorators()
+	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
 		list.add(new SurfaceDecoratorVein(Blocks.soul_sand.getDefaultState(), 10, 32));
 		list.add(new SurfaceDecoratorVein(Blocks.glowstone.getDefaultState(), 5, 8));
 		return list;
-	}
-	
-	@Override
-	public List<ILandDecorator> getRequiredDecorators()
-	{
-		return new ArrayList<ILandDecorator>();
 	}
 	
 	@Override

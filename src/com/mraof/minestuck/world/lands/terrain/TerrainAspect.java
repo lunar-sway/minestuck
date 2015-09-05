@@ -60,13 +60,7 @@ public abstract class TerrainAspect implements ILandAspect<TerrainAspect>
 			return getOceanBlock();
 		}
 		
-		/**
-		 * Returns a list of possible worldgen structures a land can use.
-		 * @return
-		 */
-		public abstract List<ILandDecorator> getOptionalDecorators();
-		
-		public abstract List<ILandDecorator> getRequiredDecorators();
+		public abstract List<ILandDecorator> getDecorators();
 		
 		/**
 		 *  Returns a integer representing how they land's day cycle will proceed.

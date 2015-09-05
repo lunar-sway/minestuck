@@ -74,7 +74,7 @@ public class LandAspectRock extends TerrainAspect
 	}
 	
 	@Override
-	public List<ILandDecorator> getOptionalDecorators()
+	public List<ILandDecorator> getDecorators()
 	{
 		List<ILandDecorator> decorators = new ArrayList<ILandDecorator>();
 		decorators.add(new UndergroundDecoratorVein(Blocks.coal_ore.getDefaultState(), 35, 8, 70));
@@ -84,12 +84,6 @@ public class LandAspectRock extends TerrainAspect
 		decorators.add(new UndergroundDecoratorVein(Blocks.lapis_ore.getDefaultState(), 10, 5, 35));
 		decorators.add(new UndergroundDecoratorVein(Blocks.diamond_ore.getDefaultState(), 9, 4, 25));
 		return decorators;
-	}
-	
-	@Override
-	public List<ILandDecorator> getRequiredDecorators()
-	{
-		return new ArrayList<ILandDecorator>();
 	}
 	
 	@Override

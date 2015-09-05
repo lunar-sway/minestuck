@@ -110,21 +110,13 @@ public class LandAspectSand extends TerrainAspect
 	{
 		return new String[] {"sand", "dune", "desert"};
 	}
-
+	
 	@Override
-	public List<ILandDecorator> getOptionalDecorators()
+	public List<ILandDecorator> getDecorators()
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
 		if(name.equals("SandRed"))
 			list.add(new SurfaceDecoratorVein(Blocks.sand.getDefaultState(), 10, 32));
-		return list;
-	}
-	
-	@Override
-	public List<ILandDecorator> getRequiredDecorators()
-	{
-		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
-//		list.add(new LayeredBlockDecorator(Minestuck.layeredSand, false));
 		return list;
 	}
 	

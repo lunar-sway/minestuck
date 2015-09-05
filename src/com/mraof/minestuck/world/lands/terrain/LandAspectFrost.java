@@ -12,6 +12,7 @@ import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 
 import net.minecraft.block.BlockDirt;
+import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -31,6 +32,7 @@ public class LandAspectFrost extends TerrainAspect
 		list.add(new WeightedRandomChestContent(new ItemStack(Items.snowball, 1, 0), 2, 8, 8));
 		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.snow, 1, 0), 1, 4, 5));
 		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.snow_layer, 1, 0), 2, 5, 4));
+		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sapling, 1, BlockPlanks.EnumType.SPRUCE.getMetadata()), 1, 4, 3));
 		
 		lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);
 	}
@@ -69,25 +71,19 @@ public class LandAspectFrost extends TerrainAspect
 	public String[] getNames() {
 		return new String[] {"frost", "ice", "snow"};
 	}
-
-	@Override
-	public List<ILandDecorator> getOptionalDecorators()
-	{
-		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
-		list.add(new SurfaceDecoratorVein(Blocks.dirt.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.COARSE_DIRT), 10, 32));
-		list.add(new SurfaceDecoratorVein(Blocks.ice.getDefaultState(), 5, 8));
-		list.add(new SurfaceDecoratorVein(Blocks.snow.getDefaultState(), 10, 16));
-		list.add(new UndergroundDecoratorVein(Blocks.packed_ice.getDefaultState(), 20, 8, 128));
-		return list;
-	}
 	
 	@Override
-	public List<ILandDecorator> getRequiredDecorators()
+	public List<ILandDecorator> getDecorators()
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
 		list.add(new IceDecorator());
 		list.add(new LayeredBlockDecorator(Blocks.snow_layer, true));
-		list.add(new SpruceTreeDecorator());
+//		list.add(new SpruceTreeDecorator());
+		
+		list.add(new SurfaceDecoratorVein(Blocks.dirt.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.COARSE_DIRT), 10, 32));
+		list.add(new SurfaceDecoratorVein(Blocks.ice.getDefaultState(), 5, 8));
+		list.add(new SurfaceDecoratorVein(Blocks.snow.getDefaultState(), 10, 16));
+		list.add(new UndergroundDecoratorVein(Blocks.packed_ice.getDefaultState(), 20, 8, 128));
 		return list;
 	}
 	

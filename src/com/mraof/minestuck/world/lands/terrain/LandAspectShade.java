@@ -71,17 +71,9 @@ public class LandAspectShade extends TerrainAspect
 	public String[] getNames() {
 		return new String[] {"shade"};
 	}
-
-	@Override
-	public List<ILandDecorator> getOptionalDecorators()
-	{
-		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
-		
-		return list;
-	}
 	
 	@Override
-	public List<ILandDecorator> getRequiredDecorators()
+	public List<ILandDecorator> getDecorators()
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
 		list.add(new SurfaceMushroomGenerator());

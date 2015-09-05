@@ -66,7 +66,7 @@ public class ChunkProviderLands implements IChunkProvider
 	public IBlockState groundBlock;
 	public IBlockState oceanBlock;
 	public IBlockState riverBlock;
-	public ArrayList<ILandDecorator> decorators;
+	public List<ILandDecorator> decorators;
 	public ILandTerrainGen terrainGenerator;
 	public LandStructureHandler structureHandler;
 	public int dayCycle;
@@ -119,8 +119,8 @@ public class ChunkProviderLands implements IChunkProvider
 			this.groundBlock = aspect1.getGroundBlock();
 			this.oceanBlock = aspect1.getOceanBlock();
 			this.riverBlock = aspect1.getRiverBlock();
-			this.decorators = helper.pickSubset(aspect1.getOptionalDecorators(), 3, 5);
-			this.decorators.addAll(aspect1.getRequiredDecorators());
+			this.decorators = new ArrayList<ILandDecorator>();
+			this.decorators.addAll(aspect1.getDecorators());
 			sortDecorators();
 			
 			List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>(AlchemyRecipeHandler.basicMediumChest);

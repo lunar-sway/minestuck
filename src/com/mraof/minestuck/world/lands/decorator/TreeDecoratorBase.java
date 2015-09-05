@@ -15,7 +15,7 @@ public abstract class TreeDecoratorBase implements ILandDecorator
 	@Override
 	public BlockPos generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
 	{
-		int treeCount = getTreesPerChunk(random);//x=-369, y=74, z=101
+		int treeCount = getTreesPerChunk(random);
 		for (int i = 0; i < treeCount; i++)
 		{
 			int x = random.nextInt(16) + 8;
