@@ -52,6 +52,7 @@ public class MinestuckConfig
 	public static boolean dropItemsInCards;
 	public static boolean entryCrater;
 	public static boolean keepDimensionsLoaded;
+	public static boolean adaptEntryBlockHeight;
 	public static int artifactRange;
 	public static int overworldEditRange;
 	public static int landEditRange;
@@ -134,6 +135,7 @@ public class MinestuckConfig
 		artifactRange = config.get("General", "artifactRange", 30, "Radius of the land brought into the medium.", 3, 50).setLanguageKey("minestuck.config.artifactRange").getInt();
 		entryCrater = config.get("General", "entryCrater", true, "Disable this to prevent craters from people entering the medium.").setLanguageKey("minestuck.config.entryCrater").getBoolean();
 		keepDimensionsLoaded = config.get("General", "keepDimensionsLoaded", true, "").setLanguageKey("minestuck.config.keepDimensionsLoaded").setRequiresMcRestart(true).getBoolean();
+		adaptEntryBlockHeight = config.get("General", "adaptEntryBlockHeight", true, "Adapt the transferred height to make the top non-air block to be placed at y:128. Makes entry take longer.").setLanguageKey("minestuck.config.adaptEntryBlockHeight").getBoolean();
 		
 		if(gameSide.isClient())	//Client sided config values
 		{

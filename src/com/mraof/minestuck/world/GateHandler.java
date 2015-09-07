@@ -117,7 +117,7 @@ public class GateHandler
 		{	//TODO if gate id isn't 1, check if the destination gate is broken or not.
 			player.timeUntilPortal = 60;
 			if(location.dim != dim)
-				Teleport.teleportEntity(player, location.dim, null);
+				Teleport.teleportEntity(player, location.dim, null, false);
 			player.playerNetServerHandler.setPlayerLocation(location.pos.getX() + 0.5, location.pos.getY(), location.pos.getZ() + 0.5, player.rotationYaw, player.rotationPitch);
 		}
 	}

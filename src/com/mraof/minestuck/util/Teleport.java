@@ -15,7 +15,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class Teleport	//TODO Add method that takes a Location as parameter that also moves the entity to the desired destination
 {
-	public static void teleportEntity(Entity entity, int destinationDimension, ITeleporter teleporter)
+	public static void teleportEntity(Entity entity, int destinationDimension, ITeleporter teleporter, boolean movementFactor)
 	{
 		if(entity instanceof EntityPlayerMP)
 		{
@@ -30,7 +30,7 @@ public class Teleport	//TODO Add method that takes a Location as parameter that 
 
 			worldserver.removePlayerEntityDangerously(player);
 			player.isDead = false;
-			transferEntityToWorld(player, j, worldserver, worldserver1, teleporter);
+			transferEntityToWorld(player, j, worldserver, worldserver1, teleporter, movementFactor);
 			WorldServer worldserver2 = player.getServerForPlayer();
 			worldserver.getPlayerManager().removePlayer(player);
 			worldserver2.getPlayerManager().addPlayer(player);
@@ -59,7 +59,7 @@ public class Teleport	//TODO Add method that takes a Location as parameter that 
 			entity.dimension = destinationDimension;
 			entity.worldObj.removeEntity(entity);
 			entity.isDead = false;
-			transferEntityToWorld(entity, j, worldserver, worldserver1, teleporter);
+			transferEntityToWorld(entity, j, worldserver, worldserver1, teleporter, movementFactor);
 			Entity newEntity = EntityList.createEntityByName(EntityList.getEntityString(entity), worldserver1);
 
 			if (newEntity != null)
@@ -73,11 +73,11 @@ public class Teleport	//TODO Add method that takes a Location as parameter that 
 		}
 		//entity.timeUntilPortal = entity.getPortalCooldown();
 	}
-	public static void transferEntityToWorld(Entity entity, int dimension, WorldServer worldserver, WorldServer worldserver1, ITeleporter teleporter)
+	public static void transferEntityToWorld(Entity entity, int dimension, WorldServer worldserver, WorldServer worldserver1, ITeleporter teleporter, boolean movementFactor)
 	{
 		WorldProvider pOld = worldserver.provider;
 		WorldProvider pNew = worldserver1.provider;
-		double moveFactor = pOld.getMovementFactor() / pNew.getMovementFactor();
+		double moveFactor = movementFactor ? pOld.getMovementFactor() / pNew.getMovementFactor() : 1;
 		double d0 = entity.posX * moveFactor;
 		double d1 = entity.posZ * moveFactor;
 

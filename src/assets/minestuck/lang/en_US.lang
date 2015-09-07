@@ -304,6 +304,8 @@ minestuck.config.oldItemModels=Use Old Item Models
 minestuck.config.oldItemModels.tooltip=Set this to true to have back all old 2D item models.
 minestuck.config.loginColorSelector=Display Color Selector on Login
 minestuck.config.loginColorSelector.tooltip=This option determines if the color selector should be displayed when entering a save file for the first time.
+minestuck.config.adaptEntryBlockHeight=Adapt Entry Block Height
+minestuck.config.adaptEntryBlockHeight.tooltip=When on, you will be moved up on entry enough to make the top transferred non-air block placed at y:128 and all blocks above it ignored. (Which shouldn't be troubling as the ignored blocks should be handled as air) This will however make the entering the medium take slightly longer time.
 
 message.selectDefaultColor=Default color selected. You can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!
 message.selectColor=If you want to change the color, you can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!

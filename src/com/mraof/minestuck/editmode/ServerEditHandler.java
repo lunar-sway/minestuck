@@ -101,7 +101,7 @@ public class ServerEditHandler
 		player.closeScreen();
 		EntityDecoy decoy = data.decoy;
 		if(player.dimension != decoy.dimension)
-			Teleport.teleportEntity(player, decoy.dimension, null);
+			Teleport.teleportEntity(player, decoy.dimension, null, false);
 		
 		data.connection.useCoordinates = true;
 		data.connection.posX = player.posX;
@@ -164,7 +164,7 @@ public class ServerEditHandler
 		WorldServer world = MinecraftServer.getServer().worldServerForDimension(c.enteredGame()?c.getClientDimension():c.getClientData().getDimension());
 		
 		if(world.provider.getDimensionId() != player.worldObj.provider.getDimensionId())
-			Teleport.teleportEntity(player, world.provider.getDimensionId(), null);
+			Teleport.teleportEntity(player, world.provider.getDimensionId(), null, false);
 		
 		if(c.useCoordinates) {
 			posX = c.posX;

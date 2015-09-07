@@ -234,7 +234,14 @@ public class LandAspectRegistry
 		int id = SkaianetHandler.enterMedium((EntityPlayerMP)player, newLandId);
 		if(id != newLandId)	//Player already got a land, but the tag was somehow lost?
 			newLandId = id;
-		else MinestuckDimensionHandler.setSpawn(newLandId, new BlockPos((int) player.posX, 128 - MinestuckConfig.artifactRange, (int) player.posZ));
+		else
+		{
+			int x = (int) player.posX;
+			if(player.posX < 0) x--;
+			int z = (int) player.posZ;
+			if (player.posZ < 0) z--;
+			MinestuckDimensionHandler.setSpawn(newLandId, new BlockPos(x, 128 - MinestuckConfig.artifactRange, z));
+		}
 		
 		MinestuckPlayerTracker.updateLands();
 		

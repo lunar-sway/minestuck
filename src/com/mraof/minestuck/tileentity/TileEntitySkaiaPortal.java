@@ -49,7 +49,7 @@ public class TileEntitySkaiaPortal extends TileEntity implements ITeleporter
 	{
 		entity.timeUntilPortal = entity.getPortalCooldown();
 		if(destination.dim != this.worldObj.provider.getDimensionId())
-			Teleport.teleportEntity(entity, this.destination.dim, this);
+			Teleport.teleportEntity(entity, this.destination.dim, this, false);
 		if(entity instanceof EntityPlayerMP)
 			((EntityPlayerMP)entity).playerNetServerHandler.setPlayerLocation(destination.pos.getX(), destination.pos.getY(), destination.pos.getZ(), entity.rotationYaw, entity.rotationPitch);
 		else

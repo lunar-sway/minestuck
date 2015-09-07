@@ -114,7 +114,7 @@ public class TileEntityTransportalizer extends TileEntity implements ITeleporter
 			}
 			
 			if(location.dim != entity.dimension)
-				Teleport.teleportEntity(entity, location.dim, destTransportalizer);
+				Teleport.teleportEntity(entity, location.dim, destTransportalizer, false);
 			else
 				teleportTo(entity, transportalizers.get(this.destId));
 		}

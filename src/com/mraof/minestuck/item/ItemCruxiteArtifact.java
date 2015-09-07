@@ -60,9 +60,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 			if(player.worldObj.provider.getDimensionId() != destinationId)
 			{
 				player.triggerAchievement(MinestuckAchievementHandler.enterMedium);
-				Teleport.teleportEntity(player, destinationId, this);
-				int yDiff = 128 - artifactRange - (int) player.posY;
-				player.setPositionAndUpdate(player.posX, player.posY + yDiff, player.posZ);
+				Teleport.teleportEntity(player, destinationId, this, false);
 				MinestuckPlayerTracker.sendLandEntryMessage(player);
 			}
 		}
@@ -73,10 +71,15 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 		if(entity instanceof EntityPlayerMP && entity.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("LandId") == worldserver1.provider.getDimensionId())
 		{
 			int x = (int) entity.posX;
+			if(entity.posX < 0) x--;
 			int y = (int) entity.posY;
 			int z = (int) entity.posZ;
+			if(entity.posZ < 0) z--;
 			
-			int yDiff = 128 - artifactRange - y;
+			int topY = MinestuckConfig.adaptEntryBlockHeight ? getTopHeight(worldserver0, x, y, z) : y + artifactRange;
+			int yDiff = 128 - topY;
+			entity.setPositionAndUpdate(entity.posX, entity.posY + yDiff, entity.posZ);
+			MinestuckDimensionHandler.setSpawn(worldserver1.provider.getDimensionId(), new BlockPos(x, y + yDiff, z));	//Set again, but with a more precise now that the y-coordinate is properly decided.
 			
 			Debug.print("Loading spawn chunks...");
 			for(int chunkX = ((x - artifactRange) >> 4) - 1; chunkX <= ((x + artifactRange) >> 4) + 2; chunkX++)	//Prevent anything to generate on the piece that we move
@@ -93,7 +96,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 				if(MinestuckConfig.entryCrater || e instanceof EntityPlayer || e instanceof EntityItem)
 				{
 					e.setPosition(e.posX, e.posY + yDiff, e.posZ);
-					Teleport.teleportEntity(e, worldserver1.provider.getDimensionId(), this);
+					Teleport.teleportEntity(e, worldserver1.provider.getDimensionId(), null, false);
 				}
 				else	//Copy instead of teleport
 				{
@@ -119,7 +122,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 					int heightX = (int) Math.sqrt(artifactRange * artifactRange - (((blockX - x + 1) * (blockX - x + 1) + (blockZ - z) * (blockZ - z)) / 2));
 					int heightZ = (int) Math.sqrt(artifactRange * artifactRange - (((blockX - x) * (blockX - x) + (blockZ - z + 1) * (blockZ - z + 1)) / 2));
 					int blockY;
-					for(blockY = Math.max(0, y - height); blockY < Math.min(256, y + height); blockY++)
+					for(blockY = Math.max(0, y - height); blockY <= Math.min(topY, y + height); blockY++)
 					{
 						BlockPos pos = new BlockPos(blockX, blockY, blockZ);
 						BlockPos pos1 = pos.up(yDiff);
@@ -127,9 +130,9 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 						TileEntity te = worldserver0.getTileEntity(pos);
 						if(block.getBlock() != Blocks.air && !block.getBlock().isBlockNormalCube()) //Place temp blocks to avoid things like torches breaking because of missing solid block
 						{
-							if(blockZ >= z - nextZWidth && blockX < x + artifactRange && blockZ <= z + nextZWidth && blockY >= y - heightX && blockY < y + heightX)
+							if(blockZ >= z - nextZWidth && blockX < x + artifactRange && blockZ <= z + nextZWidth && blockY >= y - heightX && blockY <= y + heightX)
 								worldserver1.setBlockState(pos1.east(), Blocks.stone.getDefaultState(), 0);
-							if(blockZ < z + zWidth && blockY >= y - heightZ && blockY < y + heightZ)
+							if(blockZ < z + zWidth && blockY >= y - heightZ && blockY <= y + heightZ)
 								worldserver1.setBlockState(pos1.south(), Blocks.stone.getDefaultState(), 0);
 						}
 						if(block.getBlock() != Blocks.bedrock)
@@ -165,8 +168,8 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 					int height = (int) (Math.sqrt(artifactRange * artifactRange - radius*radius));
 					int minY =  y - height;
 					minY = minY < 0 ? 0 : minY;
-					int maxY = MinestuckConfig.entryCrater ? y + height : 256;
-					for(int blockY = minY; blockY < 256; blockY++)
+					int maxY = MinestuckConfig.entryCrater ? Math.min(topY, y + height) + 1 : 256;
+					for(int blockY = minY; blockY < maxY; blockY++)
 					{
 						BlockPos pos = new BlockPos(blockX, blockY, blockZ);
 						if(MinestuckConfig.entryCrater)
@@ -202,6 +205,29 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 			
 			Debug.print("Entry finished");
 		}
+	}
+	
+	private int getTopHeight(WorldServer world, int x, int y, int z)
+	{
+		Debug.print("Getting maxY..");
+		int maxY = y;
+		for(int blockX = x - artifactRange; blockX <= x + artifactRange; blockX++)
+		{
+			int zWidth = (int) Math.sqrt(artifactRange * artifactRange - (blockX - x) * (blockX - x));
+			for(int blockZ = z - zWidth; blockZ <= z + zWidth; blockZ++)
+			{
+				int height = (int) (Math.sqrt(artifactRange * artifactRange - (((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2)));
+				for(int blockY = Math.min(255, y + height); blockY > maxY; blockY--)
+					if(!world.isAirBlock(new BlockPos(blockX, blockY, blockZ)))
+					{
+						maxY = blockY;
+						break;
+					}
+			}
+		}
+		
+		Debug.print("maxY: "+ maxY);
+		return maxY;
 	}
 	
 	private static void placeGate(int gateCount, BlockPos pos, WorldServer world)
