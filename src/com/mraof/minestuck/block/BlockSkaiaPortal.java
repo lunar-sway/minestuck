@@ -28,7 +28,7 @@ public class BlockSkaiaPortal extends BlockContainer
 	{
 		super(material);
 		
-		setUnlocalizedName("gatePortal");
+		setUnlocalizedName("skaiaPortal");
 		this.setCreativeTab(Minestuck.tabMinestuck);
 		destinationDimension = Minestuck.skaiaDimensionId;
 	}
