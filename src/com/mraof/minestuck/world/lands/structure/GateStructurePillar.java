@@ -16,7 +16,7 @@ public class GateStructurePillar implements IGateStructure
 		Random rand = world.setRandomSeed(pos.getX(), pos.getZ(), 1849234152^world.provider.getDimensionId());
 		pos = world.getTopSolidOrLiquidBlock(pos);
 		pos = pos.up(20);
-		BlockPos gatePos = pos.up(3);
+		BlockPos gatePos = pos.up(4);
 		
 		do
 		{

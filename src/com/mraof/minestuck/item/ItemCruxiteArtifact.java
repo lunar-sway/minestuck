@@ -127,7 +127,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 						TileEntity te = worldserver0.getTileEntity(pos);
 						if(block.getBlock() != Blocks.air && !block.getBlock().isBlockNormalCube()) //Place temp blocks to avoid things like torches breaking because of missing solid block
 						{
-							if(blockZ >= z - nextZWidth && blockZ <= z + nextZWidth && blockY >= y - heightX && blockY < y + heightX)
+							if(blockZ >= z - nextZWidth && blockX < x + artifactRange && blockZ <= z + nextZWidth && blockY >= y - heightX && blockY < y + heightX)
 								worldserver1.setBlockState(pos1.east(), Blocks.stone.getDefaultState(), 0);
 							if(blockZ < z + zWidth && blockY >= y - heightZ && blockY < y + heightZ)
 								worldserver1.setBlockState(pos1.south(), Blocks.stone.getDefaultState(), 0);
