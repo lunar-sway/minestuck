@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDoor;
+import net.minecraft.block.BlockTrapDoor;
+import net.minecraft.block.material.Material;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.PlayerSelector;
@@ -277,12 +280,13 @@ public class ServerEditHandler
 	public void onItemUseControl(PlayerInteractEvent event)
 	{
 		
-		if(!event.entity.worldObj.isRemote && getData(event.entityPlayer.getCommandSenderName()) != null)
+		if(!event.world.isRemote && getData(event.entityPlayer.getCommandSenderName()) != null)
 		{
 			EditData data = getData(event.entityPlayer.getCommandSenderName());
 			if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK)
 			{
-				event.useBlock = Result.DENY;
+				Block block = event.world.getBlockState(event.pos).getBlock();
+				event.useBlock = block instanceof BlockDoor || block instanceof BlockTrapDoor ? Result.ALLOW : Result.DENY;
 				ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
 				if(stack == null || !isBlockItem(stack.getItem()))
 					return;
@@ -304,8 +308,8 @@ public class ServerEditHandler
 			}
 			else if(event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK)
 			{
-				Block block = event.entity.worldObj.getBlockState(event.pos).getBlock();
-				if(block.getBlockHardness(event.entity.worldObj, event.pos) < 0
+				Block block = event.world.getBlockState(event.pos).getBlock();
+				if(block.getBlockHardness(event.world, event.pos) < 0 || block.getMaterial() == Material.portal
 						|| GristHelper.getGrist(data.connection.getClientName(), GristType.Build) <= 0)
 					event.setCanceled(true);
 			}

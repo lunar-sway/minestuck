@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDoor;
+import net.minecraft.block.BlockTrapDoor;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.InventoryEffectRenderer;
@@ -173,11 +176,12 @@ public class ClientEditHandler {
 	public void onInteractEvent(PlayerInteractEvent event)
 	{
 		
-		if(event.entity.worldObj.isRemote && event.entityPlayer == ClientProxy.getClientPlayer() && isActive())
+		if(event.world.isRemote && event.entityPlayer == ClientProxy.getClientPlayer() && isActive())
 		{
 			if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK)
 			{
-				event.useBlock = Result.DENY;
+				Block block = event.world.getBlockState(event.pos).getBlock();
+				event.useBlock = block instanceof BlockDoor || block instanceof BlockTrapDoor ? Result.ALLOW : Result.DENY;
 				ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
 				if(stack == null || !ServerEditHandler.isBlockItem(stack.getItem()))
 				{
@@ -208,8 +212,8 @@ public class ClientEditHandler {
 				if(event.useItem == Result.DEFAULT)
 					event.useItem = Result.ALLOW;
 			} else if(event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) {
-				Block block = event.entity.worldObj.getBlockState(event.pos).getBlock();
-				if(block.getBlockHardness(event.entity.worldObj, event.pos) < 0
+				Block block = event.world.getBlockState(event.pos).getBlock();
+				if(block.getBlockHardness(event.world, event.pos) < 0 || block.getMaterial() == Material.portal
 						|| MinestuckPlayerData.getClientGrist().getGrist(GristType.Build) <= 0)
 					event.setCanceled(true);
 			} else if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR)
@@ -219,7 +223,7 @@ public class ClientEditHandler {
 	
 	@SubscribeEvent(priority=EventPriority.LOWEST,receiveCanceled=false)
 	public void onBlockPlaced(PlayerInteractEvent event) {
-		if(event.entity.worldObj.isRemote && isActive() && event.entityPlayer.equals(Minecraft.getMinecraft().thePlayer)
+		if(event.world.isRemote && isActive() && event.entityPlayer.equals(Minecraft.getMinecraft().thePlayer)
 				&& event.action == Action.RIGHT_CLICK_BLOCK && event.useItem == Result.ALLOW) {
 			ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
 			if(DeployList.containsItemStack(stack))
