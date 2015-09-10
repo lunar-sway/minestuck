@@ -48,10 +48,9 @@ public class LandAspectSandstone extends TerrainAspect
 			
 			List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
 			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sandstone, 1, 0), 4, 15, 6));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sandstone, 1, 1), 2, 7, 4));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sandstone, 1, 2), 1, 4, 3));
+			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sandstone, 1, 2), 2, 7, 4));
+			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sandstone, 1, 1), 1, 4, 3));
 			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_sandstone, 1, 0), 2, 6, 3));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_sandstone, 1, 1), 1, 3, 2));
 			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sand, 1, 0), 2, 7, 4));
 			
 			lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);
@@ -67,10 +66,9 @@ public class LandAspectSandstone extends TerrainAspect
 			
 			List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
 			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_sandstone, 1, 0), 4, 15, 6));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_sandstone, 1, 1), 2, 7, 4));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_sandstone, 1, 2), 1, 4, 3));
+			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_sandstone, 1, 2), 2, 7, 4));
+			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_sandstone, 1, 1), 1, 4, 3));
 			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sandstone, 1, 0), 2, 6, 3));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sandstone, 1, 1), 1, 3, 2));
 			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sand, 1, 1), 2, 7, 4));
 			
 			lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);

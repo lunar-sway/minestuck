@@ -38,7 +38,7 @@ public class LandAspectMonsters extends TitleAspect
 		this.monsterList = new ArrayList<SpawnListEntry>();
 		if(this.name.equals("Monsters"))
 		{
-			monsterList.add(new SpawnListEntry(EntityCreeper.class, 1, 1, 2));
+			monsterList.add(new SpawnListEntry(EntityCreeper.class, 1, 1, 1));
 			monsterList.add(new SpawnListEntry(EntitySpider.class, 1, 1, 2));
 			monsterList.add(new SpawnListEntry(EntityZombie.class, 1, 1, 2));
 			variations.add(this);
@@ -67,9 +67,7 @@ public class LandAspectMonsters extends TitleAspect
 	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.dayCycle = 2;
-		chunkProvider.monsterList.add(new SpawnListEntry(EntityCreeper.class, 1, 1, 2));
-		chunkProvider.monsterList.add(new SpawnListEntry(EntitySpider.class, 1, 1, 2));
-		chunkProvider.monsterList.add(new SpawnListEntry(EntityZombie.class, 1, 1, 2));
+		chunkProvider.monsterList.addAll(this.monsterList);
 		
 		if(chunkProvider.decorators != null)
 		{
