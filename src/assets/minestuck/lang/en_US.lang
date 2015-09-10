@@ -311,6 +311,7 @@ message.selectDefaultColor=Default color selected. You can bring up the color se
 message.selectColor=If you want to change the color, you can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!
 message.privateComputerMessage=You are not allowed to access other players computers.
 message.destinationBlocked=The destination seems to be blocked.
+message.gateDestroyed=The destination gate seems to have been destroyed.
 
 both=Both
 off=Off

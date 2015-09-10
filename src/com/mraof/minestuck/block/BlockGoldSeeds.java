@@ -75,11 +75,4 @@ public class BlockGoldSeeds extends Block
 		return Minestuck.goldSeeds;
 	}
 	
-	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
-	{
-		// TODO Auto-generated method stub
-		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-	}
-	
 }

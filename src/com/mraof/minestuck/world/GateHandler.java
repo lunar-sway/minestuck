@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Random;
 
 import com.google.common.collect.Lists;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
@@ -13,10 +14,12 @@ import com.mraof.minestuck.util.Location;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.biome.BiomeGenMinestuck;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
@@ -68,12 +71,7 @@ public class GateHandler
 				{
 					int clientDim = clientConnection.getClientDimension();
 					BlockPos gatePos = getGatePos(-1, clientDim);
-					WorldServer world = DimensionManager.getWorld(clientDim);
-					if(world == null)
-					{
-						DimensionManager.initDimension(clientDim);
-						world = DimensionManager.getWorld(clientDim);
-					}
+					WorldServer world = player.mcServer.worldServerForDimension(clientDim);
 					
 					if(gatePos == null)
 					{
@@ -108,13 +106,27 @@ public class GateHandler
 					int serverDim = serverConnection.getClientDimension();
 					location = new Location(getGatePos(2, serverDim), serverDim);
 					
-				} Debug.printf("Player %s tried to teleport through gate before their server player entered the game.", player.getCommandSenderName());
+				} else Debug.printf("Player %s tried to teleport through gate before their server player entered the game.", player.getCommandSenderName());
 				
 			} else Debug.printf("Unexpected error: Can't find connection for dimension %d!", dim);
 		} else Debug.printf("Unexpected error: Gate id %d is out of bounds!", gateId);
 		
 		if(location != null)
-		{	//TODO if gate id isn't 1, check if the destination gate is broken or not.
+		{
+			if(gateId != 1)
+			{
+				WorldServer world = player.mcServer.worldServerForDimension(location.dim);
+				
+				IBlockState block = world.getBlockState(location.pos);
+				
+				if(block.getBlock() != Minestuck.gate)
+				{
+					Debug.print("Can't find destination gate. Probably destroyed.");
+					player.addChatMessage(new ChatComponentTranslation("message.gateDestroyed"));
+					return;
+				}
+			}
+			
 			player.timeUntilPortal = 60;
 			if(location.dim != dim)
 				Teleport.teleportEntity(player, location.dim, null, false);
