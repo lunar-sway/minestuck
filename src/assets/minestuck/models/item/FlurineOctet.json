@@ -2,6 +2,8 @@
     "parent": "builtin/generated",
     "textures": {
         "layer0": "minestuck:items/FlurineOctet"
+
+"
     },
     "display": {
         "thirdperson": {
