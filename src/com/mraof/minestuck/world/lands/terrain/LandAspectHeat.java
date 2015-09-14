@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.lands.terrain;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.FireFieldDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
@@ -30,6 +31,7 @@ public class LandAspectHeat extends TerrainAspect
 		list.add(new WeightedRandomChestContent(new ItemStack(Items.flint_and_steel, 1, 0), 1, 1, 4));
 		list.add(new WeightedRandomChestContent(new ItemStack(Items.lava_bucket, 1, 0), 1, 1, 3));
 		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.netherrack, 1, 0), 4, 15, 5));
+		list.add(new WeightedRandomChestContent(new ItemStack(Minestuck.blacksmith_hammer), 1, 1, 2));
 		
 		lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);
 	}

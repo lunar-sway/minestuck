@@ -2,13 +2,6 @@ package com.mraof.minestuck;
 
 import java.io.File;
 
-import org.lwjgl.opengl.GLContext;
-
-import com.mraof.minestuck.inventory.ContainerHandler;
-import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.MinestuckAchievementHandler;
-
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.FMLLog;
@@ -16,6 +9,13 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import org.lwjgl.opengl.GLContext;
+
+import com.mraof.minestuck.inventory.ContainerHandler;
+import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.MinestuckAchievementHandler;
 
 public class MinestuckConfig
 {
