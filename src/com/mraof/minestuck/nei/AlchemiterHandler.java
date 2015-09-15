@@ -82,10 +82,15 @@ public class AlchemiterHandler extends TemplateRecipeHandler
 	}
 	
 	@Override
-	public void loadCraftingRecipes(ItemStack result){
+	public void loadCraftingRecipes(ItemStack result)
+	{
 		result = result.copy();
 		result.stackSize = 1;
-		if (GristRegistry.getGristConversion(result) != null) {
+		if(result.getItem().isDamageable())
+			result.setItemDamage(0);
+		result.setTagCompound(null);
+		if (GristRegistry.getGristConversion(result) != null)
+		{
 			arecipes.add(new CachedAlchemiterRecipe(result));
 		}
 	}
@@ -110,12 +115,6 @@ public class AlchemiterHandler extends TemplateRecipeHandler
 		{
 			GuiDraw.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 4,34, 16711680);
 			return;
-		}
-		if(result.isItemDamaged())
-		{
-			float multiplier = 1 - result.getItem().getDamage(result)/((float) result.getMaxDamage());
-			for(int i = 0; i < set.gristTypes.length; i++)
-					set.gristTypes[i] = (int) Math.ceil(set.gristTypes[i]*multiplier);
 		}
 		
 		Hashtable<Integer, Integer> reqs = set.getHashtable();

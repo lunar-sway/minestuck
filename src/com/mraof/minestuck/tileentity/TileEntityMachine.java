@@ -230,6 +230,8 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 			}
 			if(output == null)
 				return false;
+			if(output.getItem().isDamageable())
+				output.setItemDamage(0);
 			output = AlchemyRecipeHandler.createCard(output, true);
 			return (inv[0] == null || inv[0].stackSize < 16 && ItemStack.areItemStackTagsEqual(inv[0], output));
 		}
@@ -321,6 +323,8 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 			
 			if(inv[2].hasTagCompound() && inv[2].getTagCompound().getBoolean("punched"))
 				outputItem = CombinationRegistry.getCombination(outputItem, AlchemyRecipeHandler.getDecodedItem(inv[2]), CombinationRegistry.MODE_OR);
+			if(outputItem.getItem().isDamageable())
+				outputItem.setItemDamage(0);
 			
 			//Create card
 			outputItem = AlchemyRecipeHandler.createCard(outputItem, true);

@@ -740,7 +740,7 @@ public class AlchemyRecipeHandler
 		
 		if (!(card.getItem().equals(Minestuck.captchaCard) && card.hasTagCompound() && card.getTagCompound().hasKey("contentID")))
 		{
-			return card;
+			return card.copy();
 		}
 		else
 		{
