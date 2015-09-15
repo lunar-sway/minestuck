@@ -148,7 +148,8 @@ public class ContainerMachine extends Container {
 				else if (slotNumber > 2)
 				{
 					//if it's an inventory slot with valid contents
-					if (itemstackOrig.getItem() == Minestuck.captchaCard)
+					if (itemstackOrig.getItem() == Minestuck.captchaCard && (itemstackOrig.getTagCompound() == null
+							|| !itemstackOrig.getTagCompound().hasKey("contentID") || itemstackOrig.getTagCompound().getBoolean("punched")))
 						result = mergeItemStack(itemstackOrig,1,2,false);
 					else result = mergeItemStack(itemstackOrig,0,1,false);
 				}
