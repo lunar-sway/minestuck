@@ -493,7 +493,7 @@ public class AlchemyRecipeHandler
 		GameRegistry.addRecipe(new ItemStack(Minestuck.cane, 1), new Object[] {"  X", " X ", "X  ", 'X', new ItemStack(Items.stick, 1)});
 		GameRegistry.addRecipe(new ItemStack(Minestuck.deuceClub, 1), new Object[] {"  Y", " X ", "X  ", 'X', new ItemStack(Items.stick, 1), 'Y', new ItemStack(Blocks.planks, 1)});
 		GameRegistry.addRecipe(new ItemStack(Minestuck.fork, 1), new Object[] {"X X"," X "," X ", 'X', new ItemStack(Blocks.stone,1)});
-//		GameRegistry.addShapelessRecipe(new ItemStack(Minestuck.woodenSpoon), new ItemStack(Minestuck.component, 1, 0));
+		GameRegistry.addShapelessRecipe(new ItemStack(Minestuck.woodenSpoon), new ItemStack(Minestuck.component, 1, 0));
 		GameRegistry.addShapelessRecipe(new ItemStack(Minestuck.silverSpoon), new ItemStack(Minestuck.component, 1, 1));
 		ItemStack crux = new ItemStack(Minestuck.rawCruxite);
 		ItemStack cruxBl = new ItemStack(Minestuck.blockStorage, 1, 0);
