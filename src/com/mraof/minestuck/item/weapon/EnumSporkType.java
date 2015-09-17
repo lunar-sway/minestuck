@@ -6,7 +6,8 @@ public enum EnumSporkType
 	SPOON_SILVER(250, 3, 12, true, "silverSpoon"),
 	CROCKER(512, 6, 15, true, "crockerSpork"),
 	SKAIA(2048, 8, 10, false, "skaiaFork"),
-	FORK(100, 4, 3, false, "fork");	
+	FORK(100, 4, 3, false, "fork"),
+	SPORK(120, 5, 5, true, "spork");
 	
 	private final int maxUses;
 	private final int damageVsEntity;
