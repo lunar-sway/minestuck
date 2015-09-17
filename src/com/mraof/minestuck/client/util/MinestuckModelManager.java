@@ -59,8 +59,8 @@ public class MinestuckModelManager
 		register(Minestuck.scarletRibbitar);
 		register(Minestuck.doggMachete);
 		
-		register(Minestuck.Dice);
-		register(Minestuck.FlurineOctet);
+		register(Minestuck.dice);
+		register(Minestuck.fluorite_octet);
 		
 		register(Minestuck.sickle);
 		register(Minestuck.homesSmellYaLater);

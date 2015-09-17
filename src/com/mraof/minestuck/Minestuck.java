@@ -162,8 +162,8 @@ public class Minestuck
 	public static Item scarletRibbitar;
 	public static Item doggMachete;
 	//Dice
-	public static Item Dice;
-	public static Item FlurineOctet;
+	public static Item dice;
+	public static Item fluorite_octet;
 	//sickles
 	public static Item sickle;
 	public static Item homesSmellYaLater;
@@ -306,8 +306,8 @@ public class Minestuck
 		scarletRibbitar = new ItemBlade(EnumBladeType.SCARLET);
 		doggMachete = new ItemBlade(EnumBladeType.DOGG);
 		//Dice
-		Dice=new ItemDice(EnumDiceType.NormalDice);
-		FlurineOctet= new ItemDice(EnumDiceType.NormalDice);
+		dice = new ItemDice(EnumDiceType.DICE);
+		fluorite_octet = new ItemDice(EnumDiceType.FLUORITE_OCTET);
 		
 		//sickles
 		sickle = new ItemSickle(EnumSickleType.SICKLE);
@@ -376,8 +376,8 @@ public class Minestuck
 		GameRegistry.registerItem(scarletRibbitar, "scarlet_ribbitar");
 		GameRegistry.registerItem(doggMachete, "dogg_machete");
 		
-		GameRegistry.registerItem(Dice,"Dice");
-		GameRegistry.registerItem(FlurineOctet, "flurine Octet");
+		GameRegistry.registerItem(dice,"dice");
+		GameRegistry.registerItem(fluorite_octet, "fluorite_octet");
 		
 		GameRegistry.registerItem(sickle, "sickle");
 		GameRegistry.registerItem(homesSmellYaLater, "homes_smell_ya_later");

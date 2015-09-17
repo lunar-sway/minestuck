@@ -3,13 +3,13 @@ package com.mraof.minestuck.item.weapon;
 public enum EnumDiceType 
 {
 
-	NormalDice(51,6,3,6,"Dice"),
-	FlurineOctet(67,15,6,8,"Flurine Octet");
+	DICE(51, 6, 3, 6, "dice"),
+	FLUORITE_OCTET(67, 15, 6, 8, "fluoriteOctet");
 	
 	private final int maxUses;
 	private final int damageVsEntity;
 	private final int enchantability;
-	private final int probibility;
+	private final int probability;
 	private final String name;
 	
 	private EnumDiceType(int maxUses, int damageVsEntity, int enchantability,int probibility, String name) 
@@ -18,7 +18,7 @@ public enum EnumDiceType
 		this.damageVsEntity = damageVsEntity;
 		this.enchantability = enchantability;
 		this.name = name;
-		this.probibility=probibility;
+		this.probability = probibility;
 	}
 	
 	public int getMaxUses()
@@ -29,7 +29,7 @@ public enum EnumDiceType
 	public int getDamageVsEntity()
 	{
 		int damage=damageVsEntity;
-		damage+=(Math.ceil( Math.random()*probibility)-(probibility/2));
+		damage+=(Math.ceil( Math.random()*probability)-(probability/2));
 		return damage;
 	}
 
@@ -44,6 +44,6 @@ public enum EnumDiceType
 		return name;
 	}
 	public int getProbibility(){
-		return probibility;
+		return probability;
 	}
 }

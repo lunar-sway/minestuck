@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "minestuck:items/FlurineOctet"
+        "layer0": "minestuck:items/fluorite_octet"
     },
     "display": {
         "thirdperson": {

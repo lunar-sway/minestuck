@@ -20,15 +20,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemDice extends ItemSword	//To allow enchantments such as sharpness
 {
 	private int weaponDamage;
-	private final EnumDiceType DiceType;
-	public float efficiencyOnProperMaterial = 4.0F;
+	private final EnumDiceType diceType;
 	
 	public ItemDice(EnumDiceType DiceType)
 	{
 		super(ToolMaterial.STONE);
 		
 		setCreativeTab(Minestuck.tabMinestuck);
-		this.DiceType = DiceType;
+		this.diceType = DiceType;
 		this.setMaxDamage(DiceType.getMaxUses());
 		this.setUnlocalizedName(DiceType.getName());
 		this.weaponDamage = DiceType.getDamageVsEntity();
@@ -37,8 +36,8 @@ public class ItemDice extends ItemSword	//To allow enchantments such as sharpnes
 	@Override
 	public float getDamageVsEntity()
 	{
-		int damage=DiceType.getDamageVsEntity();
-		damage+=(Math.ceil( Math.random()*DiceType.getProbibility())-(DiceType.getProbibility()/2));
+		int damage=diceType.getDamageVsEntity();
+		damage+=(Math.ceil( Math.random()*diceType.getProbibility())-(diceType.getProbibility()/2));
 		System.out.println("damage");
 		return 0;
 	}
@@ -46,7 +45,7 @@ public class ItemDice extends ItemSword	//To allow enchantments such as sharpnes
 	@Override
 	public int getItemEnchantability()
 	{
-		return this.DiceType.getEnchantability();
+		return this.diceType.getEnchantability();
 	}
 	
 	@Override
@@ -59,14 +58,6 @@ public class ItemDice extends ItemSword	//To allow enchantments such as sharpnes
 	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase attacker)
 	{
 		itemStack.damageItem(1, attacker);
-		/*if (DiceType.equals(EnumDiceType.NormalDice) && Math.random() < .25)
-		{
-			EntityItem sord = new EntityItem(attacker.worldObj, attacker.posX, attacker.posY, attacker.posZ, itemStack.copy());
-			sord.getEntityItem().stackSize = 1;
-			sord.setPickupDelay(40);
-			attacker.worldObj.spawnEntityInWorld(sord);
-			itemStack.stackSize--;
-		}*/
 		
 		return true;
 	}
@@ -86,7 +77,7 @@ public class ItemDice extends ItemSword	//To allow enchantments such as sharpnes
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer playerIn,Entity entity) {
 		// TODO Auto-generated method stub
 		System.out.println("HIHIHIHIHIHIHIHIHIHIHIHIHIHIHIHIH");
-		this.weaponDamage=DiceType.getDamageVsEntity();
+		this.weaponDamage=diceType.getDamageVsEntity();
 		return super.onLeftClickEntity(stack, playerIn, entity);
 	}
 	

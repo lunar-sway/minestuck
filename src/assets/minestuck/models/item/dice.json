@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "minestuck:items/Dice"
+        "layer0": "minestuck:items/dice"
     },
     "display": {
         "thirdperson": {
