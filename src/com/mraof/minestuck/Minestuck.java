@@ -89,12 +89,14 @@ import com.mraof.minestuck.item.weapon.EnumClubType;
 import com.mraof.minestuck.item.weapon.EnumHammerType;
 import com.mraof.minestuck.item.weapon.EnumSickleType;
 import com.mraof.minestuck.item.weapon.EnumSporkType;
+import com.mraof.minestuck.item.weapon.EnumDiceType;
 import com.mraof.minestuck.item.weapon.ItemBlade;
 import com.mraof.minestuck.item.weapon.ItemCane;
 import com.mraof.minestuck.item.weapon.ItemClub;
 import com.mraof.minestuck.item.weapon.ItemHammer;
 import com.mraof.minestuck.item.weapon.ItemSickle;
 import com.mraof.minestuck.item.weapon.ItemSpork;
+import com.mraof.minestuck.item.weapon.ItemDice;
 import com.mraof.minestuck.nei.NEIMinestuckConfig;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
@@ -160,6 +162,9 @@ public class Minestuck
 	public static Item regisword;
 	public static Item scarletRibbitar;
 	public static Item doggMachete;
+	//Dice
+	public static Item dice;
+	public static Item fluorite_octet;
 	//sickles
 	public static Item sickle;
 	public static Item homesSmellYaLater;
@@ -177,6 +182,7 @@ public class Minestuck
 	public static ItemSpork crockerSpork;
 	public static Item skaiaFork;
 	public static Item fork;
+	public static Item spork;
 	//Other
 	public static Item rawCruxite;
 	public static Item cruxiteDowel;
@@ -303,6 +309,10 @@ public class Minestuck
 		regisword = new ItemBlade(EnumBladeType.REGISWORD);
 		scarletRibbitar = new ItemBlade(EnumBladeType.SCARLET);
 		doggMachete = new ItemBlade(EnumBladeType.DOGG);
+		//Dice
+		dice = new ItemDice(EnumDiceType.DICE);
+		fluorite_octet = new ItemDice(EnumDiceType.FLUORITE_OCTET);
+		
 		//sickles
 		sickle = new ItemSickle(EnumSickleType.SICKLE);
 		homesSmellYaLater = new ItemSickle(EnumSickleType.HOMES);
@@ -320,6 +330,7 @@ public class Minestuck
 		crockerSpork = new ItemSpork(EnumSporkType.CROCKER);
 		skaiaFork = new ItemSpork(EnumSporkType.SKAIA);
 		fork = new ItemSpork(EnumSporkType.FORK);
+		spork = new ItemSpork(EnumSporkType.SPORK);
 		
 		toolEmerald = EnumHelper.addToolMaterial("EMERALD", 3, 1220, 12.0F, 4.0F, 12).setRepairItem(new ItemStack(Items.emerald));
 		emeraldSword = new ItemSword(toolEmerald).setUnlocalizedName("swordEmerald").setCreativeTab(tabMinestuck);
@@ -370,6 +381,9 @@ public class Minestuck
 		GameRegistry.registerItem(scarletRibbitar, "scarlet_ribbitar");
 		GameRegistry.registerItem(doggMachete, "dogg_machete");
 		
+		GameRegistry.registerItem(dice,"dice");
+		GameRegistry.registerItem(fluorite_octet, "fluorite_octet");
+		
 		GameRegistry.registerItem(sickle, "sickle");
 		GameRegistry.registerItem(homesSmellYaLater, "homes_smell_ya_later");
 		GameRegistry.registerItem(regiSickle, "regi_sickle");
@@ -386,6 +400,7 @@ public class Minestuck
 		GameRegistry.registerItem(crockerSpork, "crocker_spork");
 		GameRegistry.registerItem(skaiaFork, "skaia_fork");
 		GameRegistry.registerItem(fork, "fork");
+		GameRegistry.registerItem(spork,"spork");
 		
 		GameRegistry.registerItem(emeraldSword, "emerald_sword");
 		GameRegistry.registerItem(emeraldAxe, "emerald_axe");

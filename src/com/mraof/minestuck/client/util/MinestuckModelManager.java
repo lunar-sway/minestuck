@@ -59,6 +59,9 @@ public class MinestuckModelManager
 		register(Minestuck.scarletRibbitar);
 		register(Minestuck.doggMachete);
 		
+		register(Minestuck.dice);
+		register(Minestuck.fluorite_octet);
+		
 		register(Minestuck.sickle);
 		register(Minestuck.homesSmellYaLater);
 		register(Minestuck.regiSickle);
@@ -75,6 +78,7 @@ public class MinestuckModelManager
 		modelRegistry.register(Minestuck.crockerSpork, new CrockerSporkDefinition());
 		register(Minestuck.skaiaFork);
 		register(Minestuck.fork);
+		register(Minestuck.spork);
 		
 		if(MinestuckConfig.oldItemModels)
 		{
