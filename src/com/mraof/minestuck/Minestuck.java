@@ -53,12 +53,14 @@ import com.mraof.minestuck.item.weapon.EnumClubType;
 import com.mraof.minestuck.item.weapon.EnumHammerType;
 import com.mraof.minestuck.item.weapon.EnumSickleType;
 import com.mraof.minestuck.item.weapon.EnumSporkType;
+import com.mraof.minestuck.item.weapon.EnumDiceType;
 import com.mraof.minestuck.item.weapon.ItemBlade;
 import com.mraof.minestuck.item.weapon.ItemCane;
 import com.mraof.minestuck.item.weapon.ItemClub;
 import com.mraof.minestuck.item.weapon.ItemHammer;
 import com.mraof.minestuck.item.weapon.ItemSickle;
 import com.mraof.minestuck.item.weapon.ItemSpork;
+import com.mraof.minestuck.item.weapon.ItemDice;
 import com.mraof.minestuck.nei.NEIMinestuckConfig;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
@@ -159,6 +161,9 @@ public class Minestuck
 	public static Item regisword;
 	public static Item scarletRibbitar;
 	public static Item doggMachete;
+	//Dice
+	public static Item Dice;
+	public static Item FlurineOctet;
 	//sickles
 	public static Item sickle;
 	public static Item homesSmellYaLater;
@@ -300,6 +305,10 @@ public class Minestuck
 		regisword = new ItemBlade(EnumBladeType.REGISWORD);
 		scarletRibbitar = new ItemBlade(EnumBladeType.SCARLET);
 		doggMachete = new ItemBlade(EnumBladeType.DOGG);
+		//Dice
+		Dice=new ItemDice(EnumDiceType.NormalDice);
+		FlurineOctet= new ItemDice(EnumDiceType.NormalDice);
+		
 		//sickles
 		sickle = new ItemSickle(EnumSickleType.SICKLE);
 		homesSmellYaLater = new ItemSickle(EnumSickleType.HOMES);
@@ -366,6 +375,9 @@ public class Minestuck
 		GameRegistry.registerItem(regisword, "regisword");
 		GameRegistry.registerItem(scarletRibbitar, "scarlet_ribbitar");
 		GameRegistry.registerItem(doggMachete, "dogg_machete");
+		
+		GameRegistry.registerItem(Dice,"Dice");
+		GameRegistry.registerItem(FlurineOctet, "flurine Octet");
 		
 		GameRegistry.registerItem(sickle, "sickle");
 		GameRegistry.registerItem(homesSmellYaLater, "homes_smell_ya_later");
