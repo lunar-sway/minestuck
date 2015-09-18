@@ -1,5 +1,7 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
+import java.awt.Point;
+import java.io.IOException;
 import java.util.Arrays;
 
 import net.minecraft.client.renderer.GlStateManager;
@@ -8,6 +10,10 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.fml.common.Loader;
+import codechicken.lib.gui.GuiDraw;
+import codechicken.nei.NEIClientConfig;
+import codechicken.nei.recipe.GuiCraftingRecipe;
 
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.util.GristType;
@@ -100,6 +106,29 @@ public class GuiGristCache extends GuiPlayerStats
 		render.addVertexWithUV((double)(x + iconX), (double)(y + 0), (double)this.zLevel, (double)((float)(iconU + iconX) * scale), (double)((float)(iconV + 0) * scale));
 		render.addVertexWithUV((double)(x + 0), (double)(y + 0), (double)this.zLevel, (double)((float)(iconU + 0) * scale), (double)((float)(iconV + 0) * scale));
 		Tessellator.getInstance().draw();
+	}
+	
+	@Override
+	protected void keyTyped(char typedChar, int keyCode) throws IOException
+	{
+		super.keyTyped(typedChar, keyCode);
+		if(Loader.isModLoaded("NotEnoughItems") && keyCode == NEIClientConfig.getKeyBinding("gui.usage"))
+		{
+			Point mousePos = GuiDraw.getMousePosition();
+			for(int gristId = 0; gristId < GristType.allGrists; gristId++)
+			{
+				int row = (int) (gristId / 7);
+				int column = (int) (gristId % 7);
+				int gristXOffset = xOffset + gristIconX + (gristIconXOffset * row - row);
+				int gristYOffset = yOffset + gristIconY + (gristIconYOffset * column - column);
+
+				if(this.isPointInRegion(gristXOffset, gristYOffset, 16, 16, mousePos.x, mousePos.y))
+				{
+					GuiCraftingRecipe.openRecipeGui("grist:"+GristType.values()[gristId].getName());
+					return;
+				}
+			}
+		}
 	}
 	
 }

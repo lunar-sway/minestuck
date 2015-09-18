@@ -66,9 +66,8 @@ public class AlchemiterHandler extends TemplateRecipeHandler
 	{
 		if(outputId.equals("item") && results[0] instanceof ItemStack)
 			loadCraftingRecipes((ItemStack)results[0]);
-		else if (outputId.equals("allAlc"))
-		{
-			for (Map.Entry<List<Object>, GristSet> entry : GristRegistry.getAllConversions().entrySet())
+		else if(outputId.equals("allAlc"))
+			for(Map.Entry<List<Object>, GristSet> entry : GristRegistry.getAllConversions().entrySet())
 			{
 				List<Object> itemData = entry.getKey();
 				Object item = itemData.get(0);
@@ -76,9 +75,20 @@ public class AlchemiterHandler extends TemplateRecipeHandler
 				if(!AlchemyRecipeHandler.getItems(item, meta).isEmpty())
 					arecipes.add(new CachedAlchemiterRecipe(item, meta));
 			}
+		else if(outputId.startsWith("grist:"))
+		{
+			String gristName = outputId.substring(6);
+			GristType gristType = GristType.getTypeFromString(gristName);
+			if(gristType != null)
+				for(Map.Entry<List<Object>, GristSet> entry : GristRegistry.getAllConversions().entrySet())
+				{
+					List<Object> itemData = entry.getKey();
+					Object item = itemData.get(0);
+					int meta = (Integer)itemData.get(1);
+					if(!AlchemyRecipeHandler.getItems(item, meta).isEmpty() && entry.getValue().getGrist(gristType) != 0)
+						arecipes.add(new CachedAlchemiterRecipe(item, meta));
+				}
 		}
-			
-			
 	}
 	
 	@Override
