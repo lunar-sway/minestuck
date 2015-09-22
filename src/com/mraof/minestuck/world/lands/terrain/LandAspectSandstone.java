@@ -13,11 +13,13 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Vec3;
 import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.world.gen.feature.WorldGenDeadBush;
 
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
+import com.mraof.minestuck.world.lands.decorator.WorldGenDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.gen.DefaultTerrainGen;
 import com.mraof.minestuck.world.lands.gen.ILandTerrainGen;
@@ -117,6 +119,7 @@ public class LandAspectSandstone extends TerrainAspect
 		if(name.equals("SandstoneRed"))
 				sand = sand.withProperty(BlockSand.VARIANT, BlockSand.EnumType.RED_SAND);
 		list.add(new SurfaceDecoratorVein(sand, 10, 32));
+		list.add(new WorldGenDecorator(new WorldGenDeadBush(), 15, 0.4F));	//Will be especially uncommon because it only spawns on sand
 		return list;
 	}
 	

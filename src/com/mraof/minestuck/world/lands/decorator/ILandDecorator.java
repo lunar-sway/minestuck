@@ -15,6 +15,6 @@ public interface ILandDecorator
 	 */
 	public BlockPos generate(World world,Random random, int chunkX, int chunkZ, ChunkProviderLands provider);
 	
-	public float getPriority();
+	public float getPriority();	//TODO Figure out some sort of guideline for determining what this should return.
 	
 }

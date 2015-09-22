@@ -7,7 +7,7 @@ import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
 
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.world.lands.decorator.CogDecorator;
+import com.mraof.minestuck.world.lands.decorator.structure.CogDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 public class LandAspectClockwork extends TitleAspect

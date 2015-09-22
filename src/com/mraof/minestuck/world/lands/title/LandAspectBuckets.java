@@ -7,7 +7,7 @@ import net.minecraftforge.common.ChestGenHooks;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.world.lands.decorator.BucketDecorator;
+import com.mraof.minestuck.world.lands.decorator.structure.BucketDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 public class LandAspectBuckets extends TitleAspect	//Yes, buckets

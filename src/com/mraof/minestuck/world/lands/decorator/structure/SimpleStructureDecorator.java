@@ -1,7 +1,8 @@
-package com.mraof.minestuck.world.lands.decorator;
+package com.mraof.minestuck.world.lands.decorator.structure;
 
 import java.util.Random;
 
+import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 import net.minecraft.block.state.IBlockState;

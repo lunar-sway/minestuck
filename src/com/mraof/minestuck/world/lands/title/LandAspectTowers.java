@@ -6,7 +6,7 @@ import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
 
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.world.lands.decorator.BasicTowerDecorator;
+import com.mraof.minestuck.world.lands.decorator.structure.BasicTowerDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 public class LandAspectTowers extends TitleAspect

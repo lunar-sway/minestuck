@@ -9,6 +9,7 @@ import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
+import com.mraof.minestuck.world.lands.decorator.WorldGenDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.gen.LandTerrainGenBase;
 import com.mraof.minestuck.world.lands.gen.RiverFreeTerrainGen;
@@ -22,6 +23,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Vec3;
 import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.world.gen.feature.WorldGenCactus;
+import net.minecraft.world.gen.feature.WorldGenDeadBush;
 
 public class LandAspectSand extends TerrainAspect
 {
@@ -117,6 +120,9 @@ public class LandAspectSand extends TerrainAspect
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
 		if(name.equals("SandRed"))
 			list.add(new SurfaceDecoratorVein(Blocks.sand.getDefaultState(), 10, 32));
+		list.add(new WorldGenDecorator(new WorldGenCactus(), 15, 0.4F));
+		list.add(new WorldGenDecorator(new WorldGenDeadBush(), 10, 0.4F));
+		
 		return list;
 	}
 	

@@ -1,4 +1,4 @@
-package com.mraof.minestuck.world.lands.decorator;
+package com.mraof.minestuck.world.lands.decorator.structure;
 
 import java.util.Random;
 
