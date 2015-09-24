@@ -35,13 +35,13 @@ public class LandAspectRegistry
 	
 	public static void registerLandAspects()
 	{
-//		registerLandAspect(new LandAspectFrost());
-//		registerLandAspect(new LandAspectHeat());
-//		registerLandAspect(new LandAspectShade());
-//		registerLandAspect(new LandAspectSand());
+		registerLandAspect(new LandAspectFrost());
+		registerLandAspect(new LandAspectHeat());
+		registerLandAspect(new LandAspectShade());
+		registerLandAspect(new LandAspectSand());
 		registerLandAspect(new LandAspectSandstone());
-//		registerLandAspect(new LandAspectForest());
-//		registerLandAspect(new LandAspectRock());
+		registerLandAspect(new LandAspectForest());
+		registerLandAspect(new LandAspectRock());
 		
 		registerLandAspect(new LandAspectWind(), EnumAspect.BREATH);
 		registerLandAspect(new LandAspectLight(), EnumAspect.LIGHT);

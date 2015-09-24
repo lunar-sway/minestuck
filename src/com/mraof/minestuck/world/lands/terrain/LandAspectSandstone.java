@@ -17,6 +17,7 @@ import net.minecraft.world.gen.feature.WorldGenDeadBush;
 
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
+import com.mraof.minestuck.world.lands.decorator.BlockBlobDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
 import com.mraof.minestuck.world.lands.decorator.WorldGenDecorator;
@@ -116,9 +117,14 @@ public class LandAspectSandstone extends TerrainAspect
 	{
 		List<ILandDecorator> list = new ArrayList<ILandDecorator>();
 		IBlockState sand = Blocks.sand.getDefaultState();
+		IBlockState sandstone = Blocks.sandstone.getDefaultState();
 		if(name.equals("SandstoneRed"))
-				sand = sand.withProperty(BlockSand.VARIANT, BlockSand.EnumType.RED_SAND);
+		{
+			sand = sand.withProperty(BlockSand.VARIANT, BlockSand.EnumType.RED_SAND);
+			sandstone = Blocks.red_sandstone.getDefaultState();
+		}
 		list.add(new SurfaceDecoratorVein(sand, 10, 32));
+		list.add(new BlockBlobDecorator(sandstone, 0));
 		list.add(new WorldGenDecorator(new WorldGenDeadBush(), 15, 0.4F));	//Will be especially uncommon because it only spawns on sand
 		return list;
 	}

@@ -186,7 +186,10 @@ public class ChunkProviderLands implements IChunkProvider
 		ChunkCoordIntPair coord = new ChunkCoordIntPair(chunkX, chunkZ);
 		
 		if(coords.contains(coord))
-			Debug.print("Re-populating chunk! This should not happen. Coords: "+coord);
+		{
+			Debug.print("Re-populating chunk! This is likely caused by poorly-coded structures/decorators. Coords: "+coord+", stacktrace:");
+			Thread.dumpStack();
+		}
 		else coords.add(coord);
 		
 		BlockPos gatePos = GateHandler.getGatePos(-1, landWorld.provider.getDimensionId());

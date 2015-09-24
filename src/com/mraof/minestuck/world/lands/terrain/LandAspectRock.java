@@ -13,6 +13,7 @@ import net.minecraft.util.Vec3;
 import net.minecraft.util.WeightedRandomChestContent;
 
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.world.lands.decorator.BlockBlobDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
@@ -83,13 +84,15 @@ public class LandAspectRock extends TerrainAspect
 		decorators.add(new UndergroundDecoratorVein(Blocks.redstone_ore.getDefaultState(), 13, 4, 40));
 		decorators.add(new UndergroundDecoratorVein(Blocks.lapis_ore.getDefaultState(), 10, 5, 35));
 		decorators.add(new UndergroundDecoratorVein(Blocks.diamond_ore.getDefaultState(), 9, 4, 25));
+		
+		decorators.add(new BlockBlobDecorator(Blocks.cobblestone.getDefaultState(), 0));
 		return decorators;
 	}
 	
 	@Override
 	public int getDayCycleMode()
 	{
-		return 2;
+		return 0;
 	}
 	
 	@Override
