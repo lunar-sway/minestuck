@@ -6,6 +6,7 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
+import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.block.material.Material;
 import net.minecraft.command.CommandBase;
@@ -286,10 +287,15 @@ public class ServerEditHandler
 			if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK)
 			{
 				Block block = event.world.getBlockState(event.pos).getBlock();
-				event.useBlock = block instanceof BlockDoor || block instanceof BlockTrapDoor ? Result.ALLOW : Result.DENY;
 				ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
-				if(stack == null || !isBlockItem(stack.getItem()))
+				event.useBlock = stack == null && (block instanceof BlockDoor || block instanceof BlockTrapDoor || block instanceof BlockFenceGate) ? Result.ALLOW : Result.DENY;
+				if(event.useBlock == Result.ALLOW)
 					return;
+				if(stack == null || !isBlockItem(stack.getItem()))
+				{
+					event.setCanceled(true);
+					return;
+				}
 				
 				cleanStackNBT(stack);
 				
