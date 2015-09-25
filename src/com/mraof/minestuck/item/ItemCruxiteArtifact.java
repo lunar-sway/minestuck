@@ -78,7 +78,6 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 			
 			int topY = MinestuckConfig.adaptEntryBlockHeight ? getTopHeight(worldserver0, x, y, z) : y + artifactRange;
 			int yDiff = 128 - topY;
-			entity.setPositionAndUpdate(entity.posX, entity.posY + yDiff, entity.posZ);
 			MinestuckDimensionHandler.setSpawn(worldserver1.provider.getDimensionId(), new BlockPos(x, y + yDiff, z));	//Set again, but with a more precise now that the y-coordinate is properly decided.
 			
 			Debug.print("Loading spawn chunks...");
@@ -90,6 +89,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 			List<?> list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().expand((double)artifactRange, artifactRange, (double)artifactRange));
 			Iterator<?> iterator = list.iterator();
 			
+			entity.setPositionAndUpdate(entity.posX, entity.posY + yDiff, entity.posZ);
 			while (iterator.hasNext())
 			{
 				Entity e = (Entity)iterator.next();
