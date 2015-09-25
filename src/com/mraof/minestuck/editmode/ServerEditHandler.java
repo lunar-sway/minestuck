@@ -290,6 +290,9 @@ public class ServerEditHandler
 				ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
 				if(stack == null || !isBlockItem(stack.getItem()))
 					return;
+				
+				cleanStackNBT(stack);
+				
 				if(DeployList.containsItemStack(stack))
 				{
 					GristSet cost = MinestuckConfig.hardMode && data.connection.givenItems()[DeployList.getOrdinal(stack)]
@@ -449,6 +452,7 @@ public class ServerEditHandler
 			ItemStack stack = player.inventory.mainInventory[i];
 			if(stack == null)
 				continue;
+			cleanStackNBT(stack);
 			for(ItemStack stack1 : itemsToRemove)
 				if(stack.isItemEqual(stack1))
 				{
@@ -534,8 +538,29 @@ public class ServerEditHandler
 	}
 	
 	public static boolean isBlockItem(Item item)
-	{	//TODO Make sure it doesn't cost grist when the player fails to place the item
+	{
 		return item instanceof ItemBlock || item instanceof ItemDoor || item instanceof ItemReed;
+	}
+	
+	public static void cleanStackNBT(ItemStack stack)
+	{
+		NBTTagCompound nbt = stack.getTagCompound();
+		if(nbt != null)
+		{
+			if(nbt.hasKey("BlockEntityTag"))
+				if(stack.getItem().equals(Item.getItemFromBlock(Minestuck.blockMachine)) && stack.getMetadata() == 0)
+				{
+					for(Object key : nbt.getCompoundTag("BlockEntityTag").getKeySet())
+						if(!key.equals("color"))
+							nbt.getCompoundTag("BlockEntityTag").removeTag((String) key);
+				} else nbt.removeTag("BlockEntityTag");
+			
+			nbt.removeTag("ench");
+			nbt.removeTag("display");
+			
+			if(nbt.hasNoTags())
+				stack.setTagCompound(null);
+		}
 	}
 	
 }
