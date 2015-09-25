@@ -111,7 +111,7 @@ public class MinestuckConfig
 			initialModusSize = modusMaxSize;
 		String setting = config.get("Modus", "forceAutobalance", "both", "This determines if auto-balance should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.", new String[] {"both", "off", "on"}).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.forceAutobalance").getString();
 		treeModusSetting = (byte) (setting.equals("both") ? 0 : setting.equals("on") ? 1 : 2);
-		setting = config.get("Modus", "itemDropMode", "cardsAndItems", "Determines which items from the modus are dropped on death. \"items\": Only the items are dropped. \"cardsAndItems\": Both items and cards are dropped. \"all\": Everything is dropped, even the modus.", new String[] {"items", "cardsAndItems", "all"}).setLanguageKey("minestuck.config.itemDropMode").getString();
+		setting = config.get("Modus", "itemDropMode", "items", "Determines which items from the modus are dropped on death. \"items\": Only the items are dropped. \"cardsAndItems\": Both items and cards are dropped. \"all\": Everything is dropped, even the modus.", new String[] {"items", "cardsAndItems", "all"}).setLanguageKey("minestuck.config.itemDropMode").getString();
 		if(setting.equals("items"))
 			sylladexDropMode = 0;
 		if(setting.equals("cardsAndItems"))
