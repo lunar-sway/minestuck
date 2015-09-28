@@ -37,6 +37,13 @@ public class GristSet {
 		}
 	}
 	
+	public GristSet(GristAmount... grist)
+	{
+		this();
+		for(GristAmount amount : grist)
+			this.gristTypes[amount.getType().ordinal()] = amount.getAmount();
+	}
+	
 	/**
 	 * Gets the amount of grist, given a type of grist.
 	 */

@@ -56,7 +56,7 @@ import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.client.util.MinestuckModelManager;
 import com.mraof.minestuck.command.CommandCheckLand;
-import com.mraof.minestuck.command.GristCommand;
+import com.mraof.minestuck.command.CommandGrist;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
@@ -547,7 +547,7 @@ public class Minestuck
 	public void serverStarting(FMLServerStartingEvent event)
 	{
 		event.registerServerCommand(new CommandCheckLand());
-		event.registerServerCommand(new GristCommand());
+		event.registerServerCommand(new CommandGrist());
 		
 		worldSeed = event.getServer().worldServers[0].getSeed();
 		CaptchaDeckHandler.rand = new Random();
