@@ -24,6 +24,10 @@ achievement.returnNode.desc=Find a Return Node and jump in to return home.
 
 commands.checkLand.usage=/checkLand
 commands.grist.usage=/grist [player] <add|set> <gristtype value ...> OR /grist [player] get
+commands.grist.get=%s has:%s
+commands.grist.invalidSyntax=Invalid grist name: %s
+commands.grist.addSuccess=Successfully increased grist value for "%s"
+commands.grist.setSuccess=Successfully changed grist value for "%s"
 
 computer.buttonClear=Clear message
 computer.buttonClose=Disconnect
@@ -95,8 +99,6 @@ grist.Tar=Tar
 grist.Uranium=Uranium
 grist.Zillium=Zillium
 grist.missing=You do not have enough grist for that, and need: %s
-grist.get=%s has:%s
-grist.invalidSyntax=Invalid grist name: %s
 
 gui.gristCache.name=Grist Cache
 gui.strifeSpecibus.name=Strife Specibus

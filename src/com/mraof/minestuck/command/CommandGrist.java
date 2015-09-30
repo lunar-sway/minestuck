@@ -61,12 +61,14 @@ public class CommandGrist extends CommandBase
 			for(GristAmount amount : grist)
 				GristHelper.setGrist(name, amount.getType(), amount.getAmount());
 			MinestuckPlayerTracker.updateGristCache(name);
+			notifyOperators(sender, this, "commands.grist.setSuccess", name);
 		}
 		else if(command.equalsIgnoreCase("add"))
 		{
 			GristSet grist = new GristSet(parseGrist(args, offset));
 			GristHelper.increase(name, grist);
 			MinestuckPlayerTracker.updateGristCache(name);
+			notifyOperators(sender, this, "commands.grist.addSuccess", name);
 		}
 		else if(command.equalsIgnoreCase("get"))
 		{
@@ -75,7 +77,7 @@ public class CommandGrist extends CommandBase
 			for(GristAmount amount : MinestuckPlayerData.getGristSet(name).getArray())
 				grist.append("\n" + amount.getAmount() + " " + amount.getType().getDisplayName());	//TODO properly translate display name for client side
 			
-			sender.addChatMessage(new ChatComponentTranslation("grist.get", displayName, grist.toString()));
+			sender.addChatMessage(new ChatComponentTranslation("commands.grist.get", displayName, grist.toString()));
 		}
 	}
 
@@ -86,7 +88,7 @@ public class CommandGrist extends CommandBase
 		{
 			GristType type = GristType.getTypeFromString(args[i].substring(0,1).toUpperCase() + args[i].substring(1).toLowerCase());
 			if(type == null)
-				throw new SyntaxErrorException("grist.invalidSyntax", args[i]);
+				throw new SyntaxErrorException("commands.grist.invalidSyntax", args[i]);
 			grist[(i - startOffset)/2] = new GristAmount(type, parseInt(args[i + 1]));
 		}
 		
