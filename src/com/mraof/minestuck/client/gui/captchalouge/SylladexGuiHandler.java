@@ -1,9 +1,16 @@
 package com.mraof.minestuck.client.gui.captchalouge;
 
+import java.awt.Point;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import org.lwjgl.input.Mouse;
+
+import codechicken.lib.gui.GuiDraw;
+import codechicken.nei.NEIClientConfig;
+import codechicken.nei.NEIClientUtils;
+import codechicken.nei.recipe.GuiCraftingRecipe;
+import codechicken.nei.recipe.GuiUsageRecipe;
 
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
@@ -24,6 +31,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -40,7 +48,7 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 	protected static final int CARD_WIDTH = 21, CARD_HEIGHT = 26;
 	
 	protected RenderItem itemRender;
-	protected ArrayList<GuiItem> items = new ArrayList<GuiItem>();
+	protected ArrayList<GuiCard> cards = new ArrayList<GuiCard>();
 	protected int textureIndex;
 	protected int maxWidth, maxHeight;
 	
@@ -134,20 +142,20 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 		
 		GlStateManager.color(1F, 1F, 1F, 1F);
 		
-		ArrayList<GuiItem> visibleItems = new ArrayList<GuiItem>();
-		for(GuiItem item : items)
-			if(item.xPos + CARD_WIDTH > mapX && item.xPos < mapX + mapWidth 
-					&& item.yPos + CARD_HEIGHT > mapY && item.yPos < mapY + mapHeight)
-				visibleItems.add(item);
+		ArrayList<GuiCard> visibleCards = new ArrayList<GuiCard>();
+		for(GuiCard card : cards)
+			if(card.xPos + CARD_WIDTH > mapX && card.xPos < mapX + mapWidth 
+					&& card.yPos + CARD_HEIGHT > mapY && card.yPos < mapY + mapHeight)
+				visibleCards.add(card);
 		
-		for(GuiItem item : visibleItems)
-			item.drawItemBackground();
+		for(GuiCard card : visibleCards)
+			card.drawItemBackground();
 		
 		RenderHelper.enableGUIStandardItemLighting();
 		GlStateManager.enableRescaleNormal();
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
-		for(GuiItem item : visibleItems)
-			item.drawItem();
+		for(GuiCard card : visibleCards)
+			card.drawItem();
 		GlStateManager.disableDepth();
 		RenderHelper.disableStandardItemLighting();
 		GlStateManager.color(1F, 1F, 1F, 1F);
@@ -168,11 +176,11 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 		{
 			int translX = (int) ((xcor - xOffset - X_OFFSET) * scroll);
 			int translY = (int) ((ycor - yOffset - Y_OFFSET) * scroll);
-			for(GuiItem item : visibleItems)
-				if(translX >= item.xPos + 2 - mapX && translX < item.xPos + 18 - mapX &&
-						translY >= item.yPos + 7 - mapY && translY < item.yPos + 23 - mapY)
+			for(GuiCard card : visibleCards)
+				if(translX >= card.xPos + 2 - mapX && translX < card.xPos + 18 - mapX &&
+						translY >= card.yPos + 7 - mapY && translY < card.yPos + 23 - mapY)
 				{
-					item.drawTooltip(xcor, ycor);
+					card.drawTooltip(xcor, ycor);
 					break;
 				}
 		}
@@ -187,11 +195,11 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 			int yOffset = (height - GUI_HEIGHT)/2;
 			int translX = (int) ((xcor - xOffset - X_OFFSET) * scroll);
 			int translY = (int) ((ycor - yOffset - Y_OFFSET) * scroll);
-			for(GuiItem item : this.items)
-				if(translX >= item.xPos + 2 - mapX && translX < item.xPos + 18 - mapX &&
-						translY >= item.yPos + 7 - mapY && translY < item.yPos + 23 - mapY)
+			for(GuiCard card : this.cards)
+				if(translX >= card.xPos + 2 - mapX && translX < card.xPos + 18 - mapX &&
+						translY >= card.yPos + 7 - mapY && translY < card.yPos + 23 - mapY)
 				{
-					item.onClick(mouseButton);
+					card.onClick(mouseButton);
 					return;
 				}
 			return;
@@ -206,6 +214,40 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 		{
 			mc.currentScreen = new GuiYesNo(this, StatCollector.translateToLocal("gui.emptySylladex1"), StatCollector.translateToLocal("gui.emptySylladex2"), 0);
 			mc.currentScreen.setWorldAndResolution(mc, width, height);
+		}
+	}
+	
+	@Override
+	protected void keyTyped(char typedChar, int keyCode) throws IOException
+	{
+		super.keyTyped(typedChar, keyCode);
+		if(Loader.isModLoaded("NotEnoughItems"))
+		{
+			boolean usage = keyCode == NEIClientConfig.getKeyBinding("gui.usage") || (keyCode == NEIClientConfig.getKeyBinding("gui.recipe") && NEIClientUtils.shiftKey());
+			boolean recipe = keyCode == NEIClientConfig.getKeyBinding("gui.recipe");
+			
+			if(usage || recipe)
+			{
+				Point mousePos = GuiDraw.getMousePosition();
+				int xcor = mousePos.x;
+				int ycor = mousePos.y;
+				
+				if(isMouseInContainer(xcor, ycor))
+				{
+					int translX = (int) ((xcor - (width - GUI_WIDTH)/2 - X_OFFSET) * scroll);
+					int translY = (int) ((ycor - (height - GUI_HEIGHT)/2 - Y_OFFSET) * scroll);
+					for(GuiCard card : cards)
+						if(translX >= card.xPos + 2 - mapX && translX < card.xPos + 18 - mapX &&
+								translY >= card.yPos + 7 - mapY && translY < card.yPos + 23 - mapY)
+						{
+							if(card.item != null)
+								if(usage)
+									GuiUsageRecipe.openRecipeGui("item", card.item.copy());
+								else GuiCraftingRecipe.openRecipeGui("item", card.item.copy());
+							return;
+						}
+				}
+			}
 		}
 	}
 	
@@ -259,7 +301,7 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 	 */
 	public abstract void updatePosition();
 	
-	protected static class GuiItem
+	protected static class GuiCard
 	{
 		
 		protected SylladexGuiHandler gui;
@@ -267,10 +309,10 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 		protected int index;
 		protected int xPos, yPos;
 		
-		protected GuiItem()
+		protected GuiCard()
 		{}
 		
-		public GuiItem(ItemStack item, SylladexGuiHandler gui, int index, int xPos, int yPos)
+		public GuiCard(ItemStack item, SylladexGuiHandler gui, int index, int xPos, int yPos)
 		{
 			this.gui = gui;
 			this.item = item;
@@ -344,7 +386,7 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 		
 	}
 	
-	protected static class ModusSizeCard extends GuiItem
+	protected static class ModusSizeCard extends GuiCard
 	{
 		protected int size;
 		

@@ -15,10 +15,10 @@ public class QueuestackGuiHandler extends StackGuiHandler
 	public void updateContent()
 	{
 		super.updateContent();
-		for(int i = items.size() - 1; i > 0; i--)
-			if(items.get(i).item != null)
+		for(int i = cards.size() - 1; i > 0; i--)
+			if(cards.get(i).item != null)
 			{
-				items.get(i).index = 1;
+				cards.get(i).index = 1;
 				break;
 			}
 	}

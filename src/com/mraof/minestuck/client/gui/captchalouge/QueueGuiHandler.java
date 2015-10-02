@@ -14,10 +14,10 @@ public class QueueGuiHandler extends StackGuiHandler {
 	public void updateContent()
 	{
 		super.updateContent();
-		if(!items.isEmpty())
+		if(!cards.isEmpty())
 		{
-			items.get(0).index = -1;
-			items.get(items.size() - 1).index = 0;
+			cards.get(0).index = -1;
+			cards.get(cards.size() - 1).index = 0;
 		}
 	}
 	
