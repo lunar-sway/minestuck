@@ -13,10 +13,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
-import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldSettings.GameType;
+import net.minecraftforge.common.util.FakePlayer;
 
 import com.mojang.authlib.GameProfile;
 import com.mraof.minestuck.editmode.ServerEditHandler;
@@ -43,15 +44,15 @@ public class EntityDecoy extends EntityLiving {
 	ThreadDownloadImageData downloadImageCape;
 	public InventoryPlayer inventory;
 	
-	public EntityDecoy(World world){
+	public EntityDecoy(World world)
+	{
 		super(world);
-		player = new DecoyPlayer(world, this);
-		inventory = new InventoryPlayer(player);
+		inventory = new InventoryPlayer(null);
 		if(!world.isRemote)	//If not spawned the way it should
 			markedForDespawn = true;
 	}
 	
-	public EntityDecoy(World world, EntityPlayerMP player)
+	public EntityDecoy(WorldServer world, EntityPlayerMP player)
 	{
 		super(world);
 		this.setEntityBoundingBox(player.getEntityBoundingBox());
@@ -261,36 +262,22 @@ public class EntityDecoy extends EntityLiving {
 		return false;
 	}
 	
-	private static class DecoyPlayer extends EntityPlayer {	//Never spawned into the world. Only used for the InventoryPlayer and FoodStats.
-			//TODO Check if you can use an implementation of net.minecraftforge.common.util.FakePlayer instead
+	private static class DecoyPlayer extends FakePlayer	//Never spawned into the world. Only used for the InventoryPlayer and FoodStats.
+	{
+		
 		EntityDecoy decoy;
 		
-		DecoyPlayer(World par1World, EntityDecoy decoy) {
+		DecoyPlayer(WorldServer par1World, EntityDecoy decoy)
+		{
 			super(par1World, new GameProfile(null, "Decoy"));
 			this.decoy = decoy;
 			this.setHealth(decoy.getHealth());
 		}
 		
 		@Override
-		public boolean canCommandSenderUseCommand(int i, String s)
-		{return false;}
-		
-		@Override
-		public void addChatMessage(IChatComponent var1)
-		{}
-		
-		@Override
 		public void heal(float par1)
 		{
 			decoy.heal(par1);
 		}
-		
-		@Override
-		public boolean isSpectator()
-		{
-			return false;
-		}
-		
 	}
-	
 }

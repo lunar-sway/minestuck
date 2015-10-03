@@ -140,7 +140,7 @@ public class ServerEditHandler
 		SburbConnection c = SkaianetHandler.getClientConnection(computerTarget);
 		if(c != null && c.getServerName().equals(computerOwner) && getData(c) == null && getData(player.getCommandSenderName()) == null) {
 			Debug.print("Activating edit mode on player \""+player.getCommandSenderName()+"\", target player: \""+computerTarget+"\".");
-			EntityDecoy decoy = new EntityDecoy(player.worldObj, player);
+			EntityDecoy decoy = new EntityDecoy((WorldServer) player.worldObj, player);
 			EditData data = new EditData(decoy, player, c);
 			if(!c.enteredGame()) {
 				c.centerX = c.getClientData().getX();
