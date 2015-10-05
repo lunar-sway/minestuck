@@ -28,6 +28,7 @@ public class BlockComputerOff extends Block
 		super(Material.rock);
 		setUnlocalizedName("sburbComputer");
 		setHardness(4.0F);
+		setHarvestLevel("pickaxe", 0);
 		this.setCreativeTab(Minestuck.tabMinestuck);
 		
 	}

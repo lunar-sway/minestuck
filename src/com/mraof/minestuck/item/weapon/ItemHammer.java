@@ -2,8 +2,6 @@ package com.mraof.minestuck.item.weapon;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -22,7 +20,7 @@ public class ItemHammer extends ItemWeapon
 {	
 	private int weaponDamage;
 	private final EnumHammerType hammerType;
-	public float efficiencyOnProperMaterial = 4.0F;
+	public float efficiencyOnProperMaterial;
 	
 	public ItemHammer(EnumHammerType hammerType)
 	{

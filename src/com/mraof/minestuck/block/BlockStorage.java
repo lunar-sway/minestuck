@@ -42,6 +42,7 @@ public class BlockStorage extends Block
 		
 		setUnlocalizedName("blockStorage");
 		setHardness(3.0F);
+		setHarvestLevel("pickaxe", 0);
 		this.setCreativeTab(Minestuck.tabMinestuck);
 	}
 	

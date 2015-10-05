@@ -29,6 +29,7 @@ public class OreCruxite extends Block
 		
 		this.setUnlocalizedName("oreCruxite");
 		setHardness(3.0F);
+		setHarvestLevel("pickaxe", 0);
 		setDefaultState(getBlockState(Blocks.stone.getDefaultState()));
 		this.setCreativeTab(Minestuck.tabMinestuck);
 	}

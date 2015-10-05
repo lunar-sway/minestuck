@@ -23,6 +23,7 @@ public class BlockTransportalizer extends BlockContainer
 		this.setBlockBounds(0F, 0F, 0F, 1F, 0.5F, 1F);
 		this.setUnlocalizedName("transportalizer");
 		this.setHardness(3.0F);
+		setHarvestLevel("pickaxe", 0);
 	}
 	
 	@Override

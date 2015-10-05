@@ -59,6 +59,7 @@ public class BlockMachine extends BlockContainer {
 		
 		setUnlocalizedName("blockMachine");
 		setHardness(3.0F);
+		setHarvestLevel("pickaxe", 0);
 		setDefaultState(getDefaultState().withProperty(DIRECTION, EnumFacing.SOUTH));
 		this.setCreativeTab(Minestuck.tabMinestuck);
 

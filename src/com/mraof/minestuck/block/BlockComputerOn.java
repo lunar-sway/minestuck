@@ -43,6 +43,7 @@ public class BlockComputerOn extends Block implements ITileEntityProvider
 		setDefaultState(getDefaultState().withProperty(BSOD, false));
 		setUnlocalizedName("sburbComputer");
 		setHardness(4.0F);
+		setHarvestLevel("pickaxe", 0);
 	}
 	
 	@Override
