@@ -107,7 +107,7 @@ public class ClientEditHandler {
 		
 		GristSet cost;
 		if(DeployList.containsItemStack(stack))
-			cost = MinestuckConfig.clientHardMode && givenItems[DeployList.getOrdinal(stack)]
+			cost = givenItems[DeployList.getOrdinal(stack)]
 					? DeployList.getSecondaryCost(stack) : DeployList.getPrimaryCost(stack);
 		else if(stack.getItem().equals(Minestuck.captchaCard))
 			cost = new GristSet();
@@ -151,7 +151,7 @@ public class ClientEditHandler {
 			int ordinal = DeployList.getOrdinal(stack);
 			if(ordinal >= 0)
 			{
-				if(!ServerEditHandler.isBlockItem(stack.getItem()) && GristHelper.canAfford(MinestuckPlayerData.getClientGrist(), MinestuckConfig.clientHardMode && givenItems[ordinal]
+				if(!ServerEditHandler.isBlockItem(stack.getItem()) && GristHelper.canAfford(MinestuckPlayerData.getClientGrist(), givenItems[ordinal]
 						? DeployList.getSecondaryCost(stack) : DeployList.getPrimaryCost(stack)))
 					givenItems[ordinal] = true;
 				else event.setCanceled(true);
@@ -194,7 +194,7 @@ public class ClientEditHandler {
 				
 				GristSet cost;
 				if(DeployList.containsItemStack(stack))
-					if(MinestuckConfig.clientHardMode && givenItems[DeployList.getOrdinal(stack)])
+					if(givenItems[DeployList.getOrdinal(stack)])
 						cost = DeployList.getSecondaryCost(stack);
 					else cost = DeployList.getPrimaryCost(stack);
 				else cost = GristRegistry.getGristConversion(stack);

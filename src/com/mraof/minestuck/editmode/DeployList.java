@@ -17,23 +17,27 @@ import com.mraof.minestuck.util.GristType;
  * items accessible by the server.
  * @author kirderf1
  */
-public class DeployList {
+public class DeployList
+{
 	
 	private static final ArrayList<DeployEntry> list = new ArrayList<DeployEntry>();
 	
-	public static void registerItems() {
-		registerItem(new ItemStack(Minestuck.blockMachine,1,0), new GristSet()/*, new GristSet(GristType.Build, 100) This should be improved somehow*/, 0);
-		registerItem(new ItemStack(Minestuck.blockMachine,1,2), new GristSet()/*, new GristSet(GristType.Build, 100)*/, 0);
+	public static void registerItems()
+	{
+		registerItem(new ItemStack(Minestuck.blockMachine,1,0), new GristSet(), new GristSet(GristType.Build, 100), 0);
+		registerItem(new ItemStack(Minestuck.blockMachine,1,2), new GristSet(), new GristSet(GristType.Build, 100), 0);
 		registerItem(AlchemyRecipeHandler.createCard(new ItemStack(Minestuck.cruxiteApple), true), new GristSet(), null, 0);
-		registerItem(new ItemStack(Minestuck.blockMachine,1,3), new GristSet()/*, new GristSet(GristType.Build, 100)*/, 0);
+		registerItem(new ItemStack(Minestuck.blockMachine,1,3), new GristSet(), new GristSet(GristType.Build, 100), 0);
 		registerItem(new ItemStack(Minestuck.blockMachine,1,1), new GristSet(GristType.Shale, 4), 0);
 	}
 	
-	public static void registerItem(ItemStack stack) {
+	public static void registerItem(ItemStack stack)
+	{
 		registerItem(stack, new GristSet(), 0);
 	}
 	
-	public static void registerItem(ItemStack stack, GristSet cost, int tier) {
+	public static void registerItem(ItemStack stack, GristSet cost, int tier)
+	{
 		registerItem(stack, cost, cost, tier);
 	}
 	

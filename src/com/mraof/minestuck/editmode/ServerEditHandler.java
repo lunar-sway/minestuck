@@ -45,6 +45,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.EntityDecoy;
+import com.mraof.minestuck.item.ItemCruxiteArtifact;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
@@ -241,7 +242,7 @@ public class ServerEditHandler
 			ItemStack stack = event.entityItem.getEntityItem();
 			if(DeployList.containsItemStack(stack) && !isBlockItem(stack.getItem()))
 			{
-				GristSet cost = MinestuckConfig.hardMode && data.connection.givenItems()[DeployList.getOrdinal(stack)]
+				GristSet cost = data.connection.givenItems()[DeployList.getOrdinal(stack)]
 						?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
 				if(GristHelper.canAfford(MinestuckPlayerData.getGristSet(data.connection.getClientName()), cost))
 				{
@@ -301,7 +302,7 @@ public class ServerEditHandler
 				
 				if(DeployList.containsItemStack(stack))
 				{
-					GristSet cost = MinestuckConfig.hardMode && data.connection.givenItems()[DeployList.getOrdinal(stack)]
+					GristSet cost = data.connection.givenItems()[DeployList.getOrdinal(stack)]
 							? DeployList.getSecondaryCost(stack) : DeployList.getPrimaryCost(stack);
 					if(!GristHelper.canAfford(MinestuckPlayerData.getGristSet(data.connection.getClientName()), cost))
 					{
@@ -356,7 +357,7 @@ public class ServerEditHandler
 			if(DeployList.containsItemStack(stack))
 			{
 				SburbConnection c = data.connection;
-				GristSet cost = MinestuckConfig.hardMode && c.givenItems()[DeployList.getOrdinal(stack)]
+				GristSet cost = c.givenItems()[DeployList.getOrdinal(stack)]
 						? DeployList.getSecondaryCost(stack) : DeployList.getPrimaryCost(stack);
 				c.givenItems()[DeployList.getOrdinal(stack)] = true;
 				if(!c.isMain())
@@ -421,8 +422,8 @@ public class ServerEditHandler
 		for(int i = 0; i < player.inventory.mainInventory.length; i++)
 		{
 			ItemStack stack = player.inventory.mainInventory[i];
-			if(stack != null && (DeployList.containsItemStack(stack) ? MinestuckConfig.hardMode && givenItems[DeployList.getOrdinal(stack)] ||
-					stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack).getItem() == Minestuck.cruxiteApple && enteredGame
+			if(stack != null && (DeployList.containsItemStack(stack) ? givenItems[DeployList.getOrdinal(stack)] ||
+					stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact && enteredGame
 					: GristRegistry.getGristConversion(stack) == null || !isBlockItem(stack.getItem())))
 			{
 				player.inventory.mainInventory[i] = null;
@@ -438,7 +439,7 @@ public class ServerEditHandler
 		ArrayList<ItemStack> itemsToRemove = new ArrayList<ItemStack>();
 		for(ItemStack stack : DeployList.getItemList())
 		{	//Find deploy list items that isn't available.
-			boolean shouldHave = !(MinestuckConfig.hardMode && givenItems[DeployList.getOrdinal(stack)] && DeployList.getSecondaryCost(stack) == null
+			boolean shouldHave = !(givenItems[DeployList.getOrdinal(stack)] && DeployList.getSecondaryCost(stack) == null
 					|| DeployList.getTier(stack) > SessionHandler.availableTier(client));
 			if(!shouldHave)
 				itemsToRemove.add(stack);

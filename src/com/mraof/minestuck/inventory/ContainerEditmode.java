@@ -110,7 +110,7 @@ public class ContainerEditmode extends Container {
 			ItemStack stack = iter.next();
 			if(DeployList.getTier(stack) > playerTier)
 				iter.remove();
-			else if(MinestuckConfig.hardMode && DeployList.getSecondaryCost(stack) == null && c.givenItems()[DeployList.getOrdinal(stack)])
+			else if(DeployList.getSecondaryCost(stack) == null && c.givenItems()[DeployList.getOrdinal(stack)])
 				iter.remove();
 			else if(stack.getItem().equals(Minestuck.captchaCard))
 				if(c.enteredGame())

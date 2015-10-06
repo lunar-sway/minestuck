@@ -13,6 +13,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
+import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.UsernameHandler;
@@ -63,10 +64,11 @@ public class ClientEditPacket extends MinestuckPacket {
 			if(c == null || !c.getServerName().equals(username) || !(c.isMain() || SkaianetHandler.giveItems(target)))
 				return;
 			for(int i = 0; i < c.givenItems().length; i++)
-				if(i == 4) {
+				if(i == 4)
+				{
 					if(c.enteredGame())
 						continue;
-					ItemStack card = AlchemyRecipeHandler.createCard(new ItemStack(Minestuck.cruxiteApple), true);
+					ItemStack card = AlchemyRecipeHandler.createCard(new ItemStack(Minestuck.cruxiteApple, 1, SessionHandler.getEntryItem(c.getClientName())), true);
 					if(!playerMP.inventory.hasItemStack(card))
 						c.givenItems()[i] = playerMP.inventory.addItemStackToInventory(card) || c.givenItems()[i];
 				} else {
