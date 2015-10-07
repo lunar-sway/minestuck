@@ -546,10 +546,14 @@ public class Minestuck
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event)
 	{
+		if(!event.getServer().isDedicatedServer() && Minestuck.class.getAnnotation(Mod.class).version().startsWith("@"))
+			event.getServer().setOnlineMode(false);	//Makes it possible to use LAN in a development environment
+		
 		event.registerServerCommand(new CommandCheckLand());
 		event.registerServerCommand(new CommandGrist());
 		
 		worldSeed = event.getServer().worldServers[0].getSeed();
+		ServerEventHandler.lastDay = event.getServer().worldServers[0].getWorldTime() / 24000L;
 		CaptchaDeckHandler.rand = new Random();
 	}
 	

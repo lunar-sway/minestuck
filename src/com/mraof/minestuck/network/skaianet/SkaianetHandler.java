@@ -584,6 +584,20 @@ public class SkaianetHandler {
 		return dimensionId;
 	}
 	
+	public static void resetGivenItems()
+	{
+		for(SburbConnection c : connections)
+		{
+			for(int i = 0; i < c.givenItemList.length; i++)
+				c.givenItemList[i] = false;
+			if(ServerEditHandler.getData(c) != null)
+			{
+				MinestuckPacket packet = MinestuckPacket.makePacket(Type.SERVER_EDIT, c.givenItemList);
+				MinestuckChannelHandler.sendToPlayer(packet, ServerEditHandler.getData(c).getEditor());
+			}
+		}
+	}
+	
 	public static void movingComputer(TileEntityComputer oldTE, TileEntityComputer newTE)
 	{
 		ComputerData dataOld = ComputerData.createData(oldTE), dataNew = ComputerData.createData(newTE);

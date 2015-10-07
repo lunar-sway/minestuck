@@ -422,9 +422,9 @@ public class ServerEditHandler
 		for(int i = 0; i < player.inventory.mainInventory.length; i++)
 		{
 			ItemStack stack = player.inventory.mainInventory[i];
-			if(stack != null && (DeployList.containsItemStack(stack) ? givenItems[DeployList.getOrdinal(stack)] ||
-					stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact && enteredGame
-					: GristRegistry.getGristConversion(stack) == null || !isBlockItem(stack.getItem())))
+			if(stack != null &&
+					(stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact && enteredGame
+					|| !DeployList.containsItemStack(stack) && (GristRegistry.getGristConversion(stack) == null || !isBlockItem(stack.getItem()))))
 			{
 				player.inventory.mainInventory[i] = null;
 				inventoryChanged = true;
@@ -437,13 +437,11 @@ public class ServerEditHandler
 		}
 		
 		ArrayList<ItemStack> itemsToRemove = new ArrayList<ItemStack>();
+		int availableTier = SessionHandler.availableTier(client);
 		for(ItemStack stack : DeployList.getItemList())
-		{	//Find deploy list items that isn't available.
-			boolean shouldHave = !(givenItems[DeployList.getOrdinal(stack)] && DeployList.getSecondaryCost(stack) == null
-					|| DeployList.getTier(stack) > SessionHandler.availableTier(client));
-			if(!shouldHave)
+			if(givenItems[DeployList.getOrdinal(stack)] && DeployList.getSecondaryCost(stack) == null
+					|| DeployList.getTier(stack) > availableTier)
 				itemsToRemove.add(stack);
-		}
 		
 		if(player.inventory.getItemStack() != null)
 			for(ItemStack stack : itemsToRemove)
