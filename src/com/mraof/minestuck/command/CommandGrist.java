@@ -23,13 +23,19 @@ public class CommandGrist extends CommandBase
 	{
 		return "grist";
 	}
-
+	
 	@Override
 	public String getCommandUsage(ICommandSender sender)
 	{
 		return "commands.grist.usage";
 	}
-
+	
+	@Override
+	public int getRequiredPermissionLevel()
+	{
+		return 2;	//Same as /give
+	}
+	
 	@Override
 	public void processCommand(ICommandSender sender, String[] args) throws CommandException
 	{

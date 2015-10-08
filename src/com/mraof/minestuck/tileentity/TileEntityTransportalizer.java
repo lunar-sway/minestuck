@@ -73,7 +73,7 @@ public class TileEntityTransportalizer extends TileEntity implements ITeleporter
 		transportalizers.put(key, location);
 	}
 	
-	public void teleportTo(Entity entity, Location location)
+	public static void teleportTo(Entity entity, Location location)
 	{
 		double x = location.pos.getX() + 0.5;
 		double y = location.pos.getY() + 0.6;
@@ -109,7 +109,7 @@ public class TileEntityTransportalizer extends TileEntity implements ITeleporter
 			if(block0.getBlock().getMaterial().blocksMovement() || block1.getBlock().getMaterial().blocksMovement())
 			{
 				if(entity instanceof EntityPlayerMP)
-					((EntityPlayerMP) entity).addChatMessage(new ChatComponentTranslation("message.destinationBlocked"));
+					((EntityPlayerMP) entity).addChatMessage(new ChatComponentTranslation("message.transportalizer.destinationBlocked"));
 				return;
 			}
 			
