@@ -65,7 +65,7 @@ public class GateHandler
 			SburbConnection landConnection = SessionHandler.getConnectionForDimension(dim);
 			if(landConnection != null)
 			{
-				SburbConnection clientConnection = SkaianetHandler.getConnection(SkaianetHandler.getAssociatedPartner(landConnection.getClientName(), false), landConnection.getClientName());
+				SburbConnection clientConnection = SkaianetHandler.getMainConnection(landConnection.getClientName(), false);
 				
 				if(clientConnection != null && clientConnection.enteredGame() && MinestuckDimensionHandler.isLandDimension(clientConnection.getClientDimension()))
 				{
@@ -99,7 +99,7 @@ public class GateHandler
 			SburbConnection landConnection = SessionHandler.getConnectionForDimension(dim);
 			if(landConnection != null)
 			{
-				SburbConnection serverConnection = SkaianetHandler.getConnection(landConnection.getServerName(), SkaianetHandler.getAssociatedPartner(landConnection.getServerName(), true));
+				SburbConnection serverConnection = SkaianetHandler.getMainConnection(landConnection.getServerName(), true);
 				
 				if(serverConnection != null && serverConnection.enteredGame() && MinestuckDimensionHandler.isLandDimension(serverConnection.getClientDimension()))	//Last shouldn't be necessary, but just in case something goes wrong elsewhere...
 				{

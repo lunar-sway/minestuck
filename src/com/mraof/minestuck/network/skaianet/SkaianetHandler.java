@@ -64,6 +64,16 @@ public class SkaianetHandler {
 		return "";
 	}
 	
+	public static SburbConnection getMainConnection(String player, boolean isClient)
+	{
+		for(SburbConnection c : connections)
+			if(c.isMain)
+				if(isClient ? (c.getClientName().equals(player))
+						: c.getServerName().equals(player))
+					return c;
+		return null;
+	}
+	
 	public static boolean giveItems(String player){
 		SburbConnection c = getClientConnection(player);
 		if(c != null && !c.isMain && getAssociatedPartner(c.getClientName(), true).isEmpty()
@@ -99,7 +109,7 @@ public class SkaianetHandler {
 			if(serversOpen.containsKey(player.owner) || resumingServers.containsKey(player.owner))
 				return;
 			if(otherPlayer.isEmpty()){	//Wants to open
-				if(!getAssociatedPartner(player.owner, false).isEmpty() && resumingClients.containsKey(getAssociatedPartner(player.owner, false)))
+				if(resumingClients.containsKey(getAssociatedPartner(player.owner, false)))
 					connectTo(player, false, getAssociatedPartner(player.owner, false), resumingClients);
 				else{
 					te.getData(1).setBoolean("isOpen", true);
@@ -254,10 +264,11 @@ public class SkaianetHandler {
 				return;
 			}
 		}
-		if(newConnection && (!getAssociatedPartner(c.getClientName(), true).isEmpty() || getConnection(c.getClientName(), ".null") != null)) {	//Copy client associated variables
-			SburbConnection conn = getConnection(c.getClientName(), getAssociatedPartner(c.getClientName(), true));
-			if(conn == null) {
-				conn = getConnection(c.getClientName(), ".null");
+		SburbConnection conn;
+		if(newConnection && (conn = getMainConnection(c.getClientName(), true)) != null)	//Copy client associated variables
+		{
+			if(conn.getServerName().equals(".null"))
+			{
 				c.isMain = true;
 				connections.remove(conn);
 				SessionHandler.onConnectionClosed(conn, false);
@@ -539,7 +550,7 @@ public class SkaianetHandler {
 	public static int enterMedium(EntityPlayerMP player, int dimensionId)
 	{
 		String username = UsernameHandler.encode(player.getCommandSenderName());
-		SburbConnection c = getConnection(username, getAssociatedPartner(username, true));
+		SburbConnection c = getMainConnection(username, true);
 		if(c == null)
 		{
 			c = getClientConnection(username);

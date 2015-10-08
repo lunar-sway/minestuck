@@ -399,8 +399,8 @@ public class SessionHandler {
 	 */
 	static boolean canConnect(String client, String server) {
 		Session sClient = getPlayerSession(client), sServer = getPlayerSession(server);
-		SburbConnection cClient = SkaianetHandler.getConnection(client, SkaianetHandler.getAssociatedPartner(client, true));
-		SburbConnection cServer = SkaianetHandler.getConnection(server, SkaianetHandler.getAssociatedPartner(server, false));
+		SburbConnection cClient = SkaianetHandler.getMainConnection(client, true);
+		SburbConnection cServer = SkaianetHandler.getMainConnection(server, false);
 		return cClient != null && sClient == sServer || cClient == null && cServer == null;
 	}
 	
@@ -457,7 +457,7 @@ public class SessionHandler {
 		} else if(!normal) {
 			s.connections.remove(connection);
 			if(!SkaianetHandler.getAssociatedPartner(connection.getClientName(), false).isEmpty() && !connection.getServerName().equals(".null")) {
-				SburbConnection c = SkaianetHandler.getConnection(SkaianetHandler.getAssociatedPartner(connection.getClientName(), false), connection.getClientName());
+				SburbConnection c = SkaianetHandler.getMainConnection(connection.getClientName(), false);
 				if(c.isActive)
 					SkaianetHandler.closeConnection(c.getClientName(), c.getServerName(), true);
 				switch(MinestuckConfig.escapeFailureMode) {
