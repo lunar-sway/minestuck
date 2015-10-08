@@ -401,7 +401,7 @@ public class SessionHandler {
 		Session sClient = getPlayerSession(client), sServer = getPlayerSession(server);
 		SburbConnection cClient = SkaianetHandler.getMainConnection(client, true);
 		SburbConnection cServer = SkaianetHandler.getMainConnection(server, false);
-		return cClient != null && sClient == sServer || cClient == null && cServer == null;
+		return cClient != null && sClient == sServer && (MinestuckConfig.allowSecondaryConnections || cClient == cServer) || cClient == null && cServer == null;
 	}
 	
 	/**

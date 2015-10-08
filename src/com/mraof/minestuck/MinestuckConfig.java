@@ -53,6 +53,7 @@ public class MinestuckConfig
 	public static boolean entryCrater;
 	public static boolean keepDimensionsLoaded;
 	public static boolean adaptEntryBlockHeight;
+	public static boolean allowSecondaryConnections;	//TODO make open server not an option after having a main connection (for when this is set to false)
 	public static int artifactRange;
 	public static int overworldEditRange;
 	public static int landEditRange;
@@ -136,6 +137,7 @@ public class MinestuckConfig
 		entryCrater = config.get("General", "entryCrater", true, "Disable this to prevent craters from people entering the medium.").setLanguageKey("minestuck.config.entryCrater").getBoolean();
 		keepDimensionsLoaded = config.get("General", "keepDimensionsLoaded", true, "").setLanguageKey("minestuck.config.keepDimensionsLoaded").setRequiresMcRestart(true).getBoolean();
 		adaptEntryBlockHeight = config.get("General", "adaptEntryBlockHeight", true, "Adapt the transferred height to make the top non-air block to be placed at y:128. Makes entry take longer.").setLanguageKey("minestuck.config.adaptEntryBlockHeight").getBoolean();
+		allowSecondaryConnections = config.get("General", "secondaryConnections", true, "Set this to true to allow so-called 'secondary connections' to be created.").setLanguageKey("minestuck.config.secondaryConnections").getBoolean();	//Server lists need to be updated if this gets changeable in-game
 		
 		if(gameSide.isClient())	//Client sided config values
 		{
