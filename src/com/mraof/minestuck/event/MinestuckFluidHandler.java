@@ -9,7 +9,7 @@ import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.item.MinestuckItems;
 
 public class MinestuckFluidHandler 
 {
@@ -33,10 +33,10 @@ public class MinestuckFluidHandler
 
 		Block block = world.getBlockState(pos.getBlockPos()).getBlock();
 
-		if (Minestuck.minestuckBucket.fillFluids.contains(block) && ((Integer) world.getBlockState(pos.getBlockPos()).getValue(BlockFluidBase.LEVEL)) == 0) 
+		if (MinestuckItems.minestuckBucket.fillFluids.contains(block) && ((Integer) world.getBlockState(pos.getBlockPos()).getValue(BlockFluidBase.LEVEL)) == 0) 
 		{
 			world.setBlockToAir(pos.getBlockPos());
-			return new ItemStack(Minestuck.minestuckBucket, 1, Minestuck.minestuckBucket.fillFluids.indexOf(block));
+			return new ItemStack(MinestuckItems.minestuckBucket, 1, MinestuckItems.minestuckBucket.fillFluids.indexOf(block));
 		} else
 			return null;
 

@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
@@ -26,7 +26,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class ContainerEditmode extends Container {
+public class ContainerEditmode extends Container
+{
 	
 	private EntityPlayer player;
 	public InventoryBasic inventory = new InventoryBasic("InventoryEditmode", false, 14);
@@ -112,7 +113,7 @@ public class ContainerEditmode extends Container {
 				iter.remove();
 			else if(DeployList.getSecondaryCost(stack) == null && c.givenItems()[DeployList.getOrdinal(stack)])
 				iter.remove();
-			else if(stack.getItem().equals(Minestuck.captchaCard))
+			else if(stack.getItem().equals(MinestuckItems.captchaCard))
 				if(c.enteredGame())
 					iter.remove();
 				else stack.getTagCompound().setInteger("contentMeta", SessionHandler.getEntryItem(c.getClientName()));

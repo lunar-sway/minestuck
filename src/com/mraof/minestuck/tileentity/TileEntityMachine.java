@@ -20,6 +20,7 @@ import net.minecraft.util.IChatComponent;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.item.EntityGrist;
+import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.item.block.ItemMachine;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
@@ -271,7 +272,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 				if (inv[0] != null && (inv[0].getItem() != newItem.getItem() || inv[0].getItemDamage() != newItem.getItemDamage() || inv[0].getMaxStackSize() <= inv[0].stackSize))
 				{return false;}
 				GristSet cost = GristRegistry.getGristConversion(newItem);
-				if(newItem.getItem() == Minestuck.captchaCard)
+				if(newItem.getItem() == MinestuckItems.captchaCard)
 					cost = new GristSet(selectedGrist, MinestuckConfig.cardCost);
 				if(cost != null && newItem.isItemDamaged())
 				{
@@ -286,8 +287,8 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 				return false;
 			}
 		case (4):
-			return (this.inv[1] != null && inv[1].getItem() == Minestuck.captchaCard && GristRegistry.getGristConversion(AlchemyRecipeHandler.getDecodedItem(inv[1])) != null
-			&& !inv[1].getTagCompound().getBoolean("punched") && AlchemyRecipeHandler.getDecodedItem(inv[1]).getItem() != Minestuck.captchaCard);
+			return (this.inv[1] != null && inv[1].getItem() == MinestuckItems.captchaCard && GristRegistry.getGristConversion(AlchemyRecipeHandler.getDecodedItem(inv[1])) != null
+			&& !inv[1].getTagCompound().getBoolean("punched") && AlchemyRecipeHandler.getDecodedItem(inv[1]).getItem() != MinestuckItems.captchaCard);
 		}
 		return false;
 	}
@@ -299,11 +300,9 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 		case (0):
 			// Process the Raw Cruxite
 			
-			if (this.inv[0] == null) {
-				setInventorySlotContents(0, new ItemStack(Minestuck.cruxiteDowel, 1, color + 1));
-			} else {
-				decrStackSize(0, -1);
-			}
+			if (this.inv[0] == null)
+				setInventorySlotContents(0, new ItemStack(MinestuckItems.cruxiteDowel, 1, color + 1));
+			else decrStackSize(0, -1);
 			decrStackSize(1, 1);
 			
 			this.progress++;
@@ -356,7 +355,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 			}
 			
 			ItemStack outputDowel = (output.getItem().equals(Item.getItemFromBlock(Minestuck.blockStorage)) && output.getItemDamage() == 1)
-					? new ItemStack(Minestuck.cruxiteDowel) : AlchemyRecipeHandler.createEncodedItem(output, false);
+					? new ItemStack(MinestuckItems.cruxiteDowel) : AlchemyRecipeHandler.createEncodedItem(output, false);
 			outputDowel.setItemDamage(inv[3].getItemDamage());
 			
 			setInventorySlotContents(0,outputDowel);
@@ -380,7 +379,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 			MinestuckAchievementHandler.onAlchemizedItem(newItem, owner);
 			
 			GristSet cost = GristRegistry.getGristConversion(newItem);
-			if(newItem.getItem() == Minestuck.captchaCard)
+			if(newItem.getItem() == MinestuckItems.captchaCard)
 				cost = new GristSet(selectedGrist, MinestuckConfig.cardCost);
 			if(newItem.isItemDamaged())
 			{

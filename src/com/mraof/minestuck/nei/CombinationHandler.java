@@ -16,14 +16,16 @@ import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
-import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.CombinationRegistry;
 
-public class CombinationHandler extends TemplateRecipeHandler {
-
-	class CachedCombinationRecipe extends CachedRecipe {
-
+public class CombinationHandler extends TemplateRecipeHandler
+{
+	
+	class CachedCombinationRecipe extends CachedRecipe
+	{
+		
 		private ArrayList<PositionedStack> stacks;
 		private boolean mode;
 		private ItemStack output;
@@ -103,7 +105,7 @@ public class CombinationHandler extends TemplateRecipeHandler {
 		{return;}
 		
 		ItemStack search = (ItemStack)ingredients[0];
-		if(search.getItem() == Minestuck.captchaCard && search.hasTagCompound() && search.getTagCompound().hasKey("contentID"))
+		if(search.getItem() == MinestuckItems.captchaCard && search.hasTagCompound() && search.getTagCompound().hasKey("contentID"))
 			search = AlchemyRecipeHandler.getDecodedItem(search);
 		
 		recipeLoop: for (Map.Entry<List<Object>, ItemStack> entry : CombinationRegistry.getAllConversions().entrySet())

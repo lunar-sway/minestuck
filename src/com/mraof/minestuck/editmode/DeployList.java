@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
@@ -26,7 +27,7 @@ public class DeployList
 	{
 		registerItem(new ItemStack(Minestuck.blockMachine,1,0), new GristSet(), new GristSet(GristType.Build, 100), 0);
 		registerItem(new ItemStack(Minestuck.blockMachine,1,2), new GristSet(), new GristSet(GristType.Build, 100), 0);
-		registerItem(AlchemyRecipeHandler.createCard(new ItemStack(Minestuck.cruxiteApple), true), new GristSet(), null, 0);
+		registerItem(AlchemyRecipeHandler.createCard(new ItemStack(MinestuckItems.cruxiteApple), true), new GristSet(), null, 0);
 		registerItem(new ItemStack(Minestuck.blockMachine,1,3), new GristSet(), new GristSet(GristType.Build, 100), 0);
 		registerItem(new ItemStack(Minestuck.blockMachine,1,1), new GristSet(GristType.Shale, 4), 0);
 	}
@@ -84,7 +85,7 @@ public class DeployList
 		else
 		{
 			stack.getTagCompound().removeTag("display");
-			if(stack.getItem().equals(Minestuck.captchaCard))
+			if(stack.getItem().equals(MinestuckItems.captchaCard))
 				stack.getTagCompound().setInteger("contentMeta", 0);
 			if(stack.getItem().equals(Item.getItemFromBlock(Minestuck.blockMachine)))
 				stack.getTagCompound().removeTag("BlockEntityTag");
@@ -134,7 +135,7 @@ public class DeployList
 	
 	public static void applyConfigValues(boolean[] booleans)
 	{
-		ItemStack card = AlchemyRecipeHandler.createCard(new ItemStack(Minestuck.captchaCard), true);
+		ItemStack card = AlchemyRecipeHandler.createCard(new ItemStack(MinestuckItems.captchaCard), true);
 		if(booleans[0] && !containsItemStack(card))
 			registerItem(card, new GristSet(GristType.Build, 25), null, 0);
 		else if(!booleans[0] && containsItemStack(card))

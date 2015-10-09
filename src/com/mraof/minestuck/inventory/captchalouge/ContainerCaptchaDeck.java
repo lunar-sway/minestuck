@@ -1,7 +1,7 @@
 package com.mraof.minestuck.inventory.captchalouge;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.inventory.SlotInput;
+import com.mraof.minestuck.item.MinestuckItems;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -26,12 +26,12 @@ public class ContainerCaptchaDeck extends Container
 			addSlotToContainer(new Slot(player.inventory, i, 9 + (i%9)*18, 63 + ((i - 9)/9)*18));
 		for(int i = 0; i < 9; i++)
 			addSlotToContainer(new Slot(player.inventory, i, 9 + i*18, 121));
-		addSlotToContainer(new SlotInput(this.inventory, 0, 81, 32, Minestuck.modusCard)
+		addSlotToContainer(new SlotInput(this.inventory, 0, 81, 32, MinestuckItems.modusCard)
 		{
 			@Override
 			public boolean isItemValid(ItemStack stack)
 			{
-				return super.isItemValid(stack) || stack.getItem().equals(Minestuck.captchaCard) && (!stack.hasTagCompound() || !stack.getTagCompound().getBoolean("punched"));
+				return super.isItemValid(stack) || stack.getItem().equals(MinestuckItems.captchaCard) && (!stack.hasTagCompound() || !stack.getTagCompound().getBoolean("punched"));
 			}
 		});
 	}

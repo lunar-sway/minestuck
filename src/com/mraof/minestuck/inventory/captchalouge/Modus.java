@@ -1,8 +1,8 @@
 package com.mraof.minestuck.inventory.captchalouge;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler.ModusType;
+import com.mraof.minestuck.item.MinestuckItems;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -48,7 +48,7 @@ public abstract class Modus
 		ModusType type = ModusType.getType(this);
 		if(type == null)
 			return "";
-		else return new ItemStack(Minestuck.modusCard, 1, type.ordinal()).getDisplayName();
+		else return new ItemStack(MinestuckItems.modusCard, 1, type.ordinal()).getDisplayName();
 	}
 	
 }

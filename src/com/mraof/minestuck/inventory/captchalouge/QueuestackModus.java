@@ -4,10 +4,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.captchalouge.QueuestackGuiHandler;
 import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler.ModusType;
+import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 
 public class QueuestackModus extends StackModus {
@@ -20,7 +20,7 @@ public class QueuestackModus extends StackModus {
 			if(list.size() < size)
 			{
 				size--;
-				return new ItemStack(Minestuck.captchaCard);
+				return new ItemStack(MinestuckItems.captchaCard);
 			} else return null;
 		}
 		

@@ -31,10 +31,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
+import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
@@ -109,7 +109,7 @@ public class ClientEditHandler {
 		if(DeployList.containsItemStack(stack))
 			cost = givenItems[DeployList.getOrdinal(stack)]
 					? DeployList.getSecondaryCost(stack) : DeployList.getPrimaryCost(stack);
-		else if(stack.getItem().equals(Minestuck.captchaCard))
+		else if(stack.getItem().equals(MinestuckItems.captchaCard))
 			cost = new GristSet();
 		else cost = GristRegistry.getGristConversion(stack);
 		

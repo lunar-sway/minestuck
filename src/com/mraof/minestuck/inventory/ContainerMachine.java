@@ -7,7 +7,7 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 
 public class ContainerMachine extends Container {
@@ -53,26 +53,26 @@ public class ContainerMachine extends Container {
 		//and the x-y coordinates it resides on-screen
 		switch (metadata) {
 		case (0):
-			addSlotToContainer(new SlotInput(tileEntity,1,cruxtruderInputX,cruxtruderInputY,Minestuck.rawCruxite));
-			addSlotToContainer(new SlotOutput(tileEntity,0,cruxtruderOutputX,cruxtruderOutputY));
+			addSlotToContainer(new SlotInput(tileEntity, 1, cruxtruderInputX, cruxtruderInputY, MinestuckItems.rawCruxite));
+			addSlotToContainer(new SlotOutput(tileEntity, 0, cruxtruderOutputX, cruxtruderOutputY));
 			break;
 		case (1):
-			addSlotToContainer(new Slot(tileEntity,1,designixInputX,designixInputY));
-			addSlotToContainer(new SlotInput(tileEntity,2,designixCardsX,designixCardsY,Minestuck.captchaCard));
-			addSlotToContainer(new SlotOutput(tileEntity,0,designixOutputX,designixOutputY));
+			addSlotToContainer(new Slot(tileEntity, 1, designixInputX, designixInputY));
+			addSlotToContainer(new SlotInput(tileEntity, 2, designixCardsX, designixCardsY, MinestuckItems.captchaCard));
+			addSlotToContainer(new SlotOutput(tileEntity, 0, designixOutputX, designixOutputY));
 			break;
 		case (2):
-			addSlotToContainer(new SlotInput(tileEntity,1,latheCard1X,latheCard1Y,Minestuck.captchaCard));
-			addSlotToContainer(new SlotInput(tileEntity,2,latheCard2X,latheCard2Y,Minestuck.captchaCard));
-			addSlotToContainer(new SlotInput(tileEntity,3,latheDowelX,latheDowelY,Minestuck.cruxiteDowel));
-			addSlotToContainer(new SlotOutput(tileEntity,0,latheOutputX,latheOutputY));
+			addSlotToContainer(new SlotInput(tileEntity, 1, latheCard1X, latheCard1Y, MinestuckItems.captchaCard));
+			addSlotToContainer(new SlotInput(tileEntity, 2, latheCard2X, latheCard2Y, MinestuckItems.captchaCard));
+			addSlotToContainer(new SlotInput(tileEntity, 3, latheDowelX, latheDowelY, MinestuckItems.cruxiteDowel));
+			addSlotToContainer(new SlotOutput(tileEntity, 0, latheOutputX, latheOutputY));
 			break;
 		case (3):
-			addSlotToContainer(new SlotInput(tileEntity,1,alchemiterInputX,alchemiterInputY, Minestuck.cruxiteDowel));
-			addSlotToContainer(new SlotOutput(tileEntity,0,alchemiterOutputX,alchemiterOutputY));
+			addSlotToContainer(new SlotInput(tileEntity, 1, alchemiterInputX, alchemiterInputY, MinestuckItems.cruxiteDowel));
+			addSlotToContainer(new SlotOutput(tileEntity, 0, alchemiterOutputX, alchemiterOutputY));
 			break;
 		case (4):
-			addSlotToContainer(new SlotInput(tileEntity,1,alchemiterInputX,alchemiterInputY, Minestuck.captchaCard)
+			addSlotToContainer(new SlotInput(tileEntity, 1, alchemiterInputX, alchemiterInputY, MinestuckItems.captchaCard)
 			{
 				@Override
 				public boolean isItemValid(ItemStack stack)
@@ -82,13 +82,7 @@ public class ContainerMachine extends Container {
 			});
 			break;
 		}
-//		for (int i = 0; i < 3; i++) {
-//				for (int j = 0; j < 3; j++) {
-//						addSlotToContainer(new Slot(tileEntity, j + i * 3, 62 + j * 18, 17 + i * 18));
-//				}
-//		}
-
-		//commonly used vanilla code that adds the player's inventory
+		
 		bindPlayerInventory(inventoryPlayer);
 	}
 	@Override
@@ -133,7 +127,8 @@ public class ContainerMachine extends Container {
 				} else if (slotNumber > 1) {
 					//if it's an inventory slot with valid contents
 					//Debug.print("item ID of " + itemstackOrig.itemID + ". Expected " + Minestuck.rawCruxite.itemID);
-					if (itemstackOrig.getItem() == Minestuck.rawCruxite) {
+					if (itemstackOrig.getItem() == MinestuckItems.rawCruxite)
+					{
 						//Debug.print("Transferring...");
 						result = mergeItemStack(itemstackOrig,0,1,false);
 					}
@@ -148,7 +143,7 @@ public class ContainerMachine extends Container {
 				else if (slotNumber > 2)
 				{
 					//if it's an inventory slot with valid contents
-					if (itemstackOrig.getItem() == Minestuck.captchaCard && (itemstackOrig.getTagCompound() == null
+					if (itemstackOrig.getItem() == MinestuckItems.captchaCard && (itemstackOrig.getTagCompound() == null
 							|| !itemstackOrig.getTagCompound().hasKey("contentID") || itemstackOrig.getTagCompound().getBoolean("punched")))
 						result = mergeItemStack(itemstackOrig,1,2,false);
 					else result = mergeItemStack(itemstackOrig,0,1,false);
@@ -163,9 +158,9 @@ public class ContainerMachine extends Container {
 				else if (slotNumber > 3)
 				{
 					//if it's an inventory slot with valid contents
-					if (itemstackOrig.getItem() == Minestuck.captchaCard) 
+					if (itemstackOrig.getItem() == MinestuckItems.captchaCard) 
 						result = mergeItemStack(itemstackOrig,0,2,false);
-					else if (itemstackOrig.getItem() == Minestuck.cruxiteDowel)
+					else if (itemstackOrig.getItem() == MinestuckItems.cruxiteDowel)
 						result = mergeItemStack(itemstackOrig,2,3,false);
 				}
 				break;
@@ -175,7 +170,7 @@ public class ContainerMachine extends Container {
 					result = mergeItemStack(itemstackOrig,2,allSlots,false);
 				} else if (slotNumber > 1) {
 					//if it's an inventory slot with valid contents
-					if (itemstackOrig.getItem() == Minestuck.cruxiteDowel)
+					if (itemstackOrig.getItem() == MinestuckItems.cruxiteDowel)
 						result = mergeItemStack(itemstackOrig,0,1,false);
 				}
 				break;

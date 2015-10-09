@@ -46,6 +46,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.EntityDecoy;
 import com.mraof.minestuck.item.ItemCruxiteArtifact;
+import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
@@ -423,7 +424,7 @@ public class ServerEditHandler
 		{
 			ItemStack stack = player.inventory.mainInventory[i];
 			if(stack != null &&
-					(stack.getItem() == Minestuck.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact && enteredGame
+					(stack.getItem() == MinestuckItems.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact && enteredGame
 					|| !DeployList.containsItemStack(stack) && (GristRegistry.getGristConversion(stack) == null || !isBlockItem(stack.getItem()))))
 			{
 				player.inventory.mainInventory[i] = null;

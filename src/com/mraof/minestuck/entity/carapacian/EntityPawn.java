@@ -20,7 +20,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
-import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.item.MinestuckItems;
 
 public abstract class EntityPawn extends EntityCarapacian implements IRangedAttackMob, IMob
 {
@@ -67,7 +67,7 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 		}
 		else
 			this.tasks.addTask(4, this.entityAIAttackOnCollide);
-		this.setCurrentItemOrArmor(0, new ItemStack(this.pawnType == 1 ? Items.bow : rand.nextDouble() < .2 ? Minestuck.regisword : rand.nextDouble() < .02 ? Minestuck.sord : Items.stone_sword));
+		this.setCurrentItemOrArmor(0, new ItemStack(this.pawnType == 1 ? Items.bow : rand.nextDouble() < .2 ? MinestuckItems.regisword : rand.nextDouble() < .02 ? MinestuckItems.sord : Items.stone_sword));
 		this.setEnchantmentBasedOnDifficulty(difficulty);	//was called "enchantEquipment"
 		return entityLivingData;
 	}

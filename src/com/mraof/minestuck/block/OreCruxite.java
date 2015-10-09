@@ -17,6 +17,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.item.MinestuckItems;
 
 public class OreCruxite extends Block 
 {
@@ -49,7 +50,7 @@ public class OreCruxite extends Block
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune)
 	{
-		return Minestuck.rawCruxite;
+		return MinestuckItems.rawCruxite;
 	}
 
 	public int quantityDropped(Random random)

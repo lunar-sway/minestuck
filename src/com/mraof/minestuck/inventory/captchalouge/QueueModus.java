@@ -2,10 +2,10 @@ package com.mraof.minestuck.inventory.captchalouge;
 
 import java.util.Iterator;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.captchalouge.QueueGuiHandler;
 import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler.ModusType;
+import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 
 import net.minecraft.item.ItemStack;
@@ -23,7 +23,7 @@ public class QueueModus extends StackModus
 			if(list.size() < size)
 			{
 				size--;
-				return new ItemStack(Minestuck.captchaCard);
+				return new ItemStack(MinestuckItems.captchaCard);
 			} else return null;
 		}
 		
@@ -39,7 +39,7 @@ public class QueueModus extends StackModus
 		}
 		
 		ItemStack item = list.removeLast();
-		if(asCard && !(item.getItem() == Minestuck.captchaCard && item.hasTagCompound() && !item.getTagCompound().getBoolean("punched") && item.getTagCompound().hasKey("id")))
+		if(asCard && !(item.getItem() == MinestuckItems.captchaCard && item.hasTagCompound() && !item.getTagCompound().getBoolean("punched") && item.getTagCompound().hasKey("id")))
 		{
 			size--;
 			return AlchemyRecipeHandler.createCard(item, false);

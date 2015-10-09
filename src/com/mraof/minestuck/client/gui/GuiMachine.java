@@ -22,6 +22,7 @@ import org.lwjgl.input.Mouse;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.inventory.ContainerMachine;
+import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
@@ -116,7 +117,7 @@ public class GuiMachine extends GuiContainer {
 				stack = new ItemStack(Minestuck.blockStorage, 1, 1);
 			
 			GristSet set = GristRegistry.getGristConversion(stack);
-			boolean useSelectedType = stack == null ? false : stack.getItem() == Minestuck.captchaCard;
+			boolean useSelectedType = stack == null ? false : stack.getItem() == MinestuckItems.captchaCard;
 			if(useSelectedType)
 				set = metadata == 3 ? new GristSet(te.selectedGrist, MinestuckConfig.clientCardCost) : null;
 			if(metadata == 4 && set != null)
@@ -252,7 +253,7 @@ protected void mouseClicked(int par1, int par2, int par3) throws IOException
 		}
 	}
 	else if(te.getMachineType() == 3 && par3 == 0 && mc.thePlayer.inventory.getItemStack() == null
-			&& te.inv[1] != null && AlchemyRecipeHandler.getDecodedItem(te.inv[1]) != null && AlchemyRecipeHandler.getDecodedItem(te.inv[1]).getItem() == Minestuck.captchaCard
+			&& te.inv[1] != null && AlchemyRecipeHandler.getDecodedItem(te.inv[1]) != null && AlchemyRecipeHandler.getDecodedItem(te.inv[1]).getItem() == MinestuckItems.captchaCard
 			&& par1 >= guiLeft + 9 && par1 < guiLeft + 167 && par2 >= guiTop + 45 && par2 < guiTop + 70)
 	{
 		mc.currentScreen = new GuiGristSelector(this);

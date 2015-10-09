@@ -3,11 +3,11 @@ package com.mraof.minestuck.inventory.captchalouge;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.captchalouge.StackGuiHandler;
 import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler.ModusType;
+import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 
 import net.minecraft.item.ItemStack;
@@ -144,7 +144,7 @@ public class StackModus extends Modus
 			if(list.size() < size)
 			{
 				size--;
-				return new ItemStack(Minestuck.captchaCard);
+				return new ItemStack(MinestuckItems.captchaCard);
 			} else return null;
 		}
 		

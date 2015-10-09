@@ -7,6 +7,7 @@ import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.terrain.TerrainAspect;
@@ -34,7 +35,7 @@ public class LandAspectThought extends TitleAspect
 		if(chunkProvider.decorators != null)
 		{
 			ChestGenHooks chestGen = chunkProvider.lootMap.get(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST);
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Minestuck.minestuckBucket, 1, 2), 1, 1, 3));
+			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(MinestuckItems.minestuckBucket, 1, 2), 1, 1, 3));
 			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Minestuck.coloredDirt, 1, 1), 4, 15, 4));
 		}
 		chunkProvider.riverBlock = Minestuck.blockBrainJuice.getDefaultState();

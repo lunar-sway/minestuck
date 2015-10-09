@@ -13,6 +13,7 @@ import net.minecraft.util.WeightedRandomChestContent;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.BlockColoredDirt;
+import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceMushroomGenerator;
@@ -30,7 +31,7 @@ public class LandAspectShade extends TerrainAspect
 		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.brown_mushroom, 1, 0), 1, 4, 3));
 		list.add(new WeightedRandomChestContent(new ItemStack(Minestuck.coloredDirt, 1, 0), 4, 15, 5));
 		list.add(new WeightedRandomChestContent(new ItemStack(Items.mushroom_stew, 1, 0), 1, 1, 4));
-		list.add(new WeightedRandomChestContent(new ItemStack(Minestuck.minestuckBucket, 1, 0), 1, 1, 2));
+		list.add(new WeightedRandomChestContent(new ItemStack(MinestuckItems.minestuckBucket, 1, 0), 1, 1, 2));
 		
 		lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);
 	}

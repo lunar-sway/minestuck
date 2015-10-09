@@ -2,7 +2,7 @@ package com.mraof.minestuck.entity.item;
 
 import io.netty.buffer.ByteBuf;
 
-import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.item.MinestuckItems;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -114,15 +114,11 @@ public class EntityMetalBoat extends EntityBoat implements IEntityAdditionalSpaw
 	public boolean attackEntityFrom(DamageSource source, float amount)
 	{
 		if (this.isEntityInvulnerable(source))
-		{
 			return false;
-		}
 		else if (!this.worldObj.isRemote && !this.isDead)
 		{
 			if (this.riddenByEntity != null && this.riddenByEntity == source.getEntity() && source instanceof EntityDamageSourceIndirect)
-			{
 				return false;
-			}
 			else
 			{
 				this.setForwardDirection(-this.getForwardDirection());
@@ -134,14 +130,10 @@ public class EntityMetalBoat extends EntityBoat implements IEntityAdditionalSpaw
 				if (flag || this.getDamageTaken() > 40.0F)
 				{
 					if (this.riddenByEntity != null)
-					{
 						this.riddenByEntity.mountEntity(this);
-					}
 					
 					if (!flag)
-					{
-						this.entityDropItem(new ItemStack(Minestuck.metalBoat, 1, this.type), 0.0F);
-					}
+						this.entityDropItem(new ItemStack(MinestuckItems.metalBoat, 1, this.type), 0.0F);
 					
 					this.setDead();
 				}
@@ -149,10 +141,7 @@ public class EntityMetalBoat extends EntityBoat implements IEntityAdditionalSpaw
 				return true;
 			}
 		}
-		else
-		{
-			return true;
-		}
+		else return true;
 	}
 	
 	private Item getTypeItem()

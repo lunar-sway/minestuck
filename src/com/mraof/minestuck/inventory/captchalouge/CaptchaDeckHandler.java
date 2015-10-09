@@ -2,9 +2,9 @@ package com.mraof.minestuck.inventory.captchalouge;
 
 import java.util.Random;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.ClientProxy;
+import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
@@ -67,7 +67,7 @@ public class CaptchaDeckHandler
 	
 	public static void launchItem(EntityPlayer player, ItemStack item)
 	{
-		if(item.getItem().equals(Minestuck.captchaCard) && (!item.hasTagCompound() || !item.getTagCompound().hasKey("contentID")))
+		if(item.getItem().equals(MinestuckItems.captchaCard) && (!item.hasTagCompound() || !item.getTagCompound().hasKey("contentID")))
 			while(item.stackSize > 0)
 			{
 				if(getModus(player).increaseSize())
@@ -97,7 +97,7 @@ public class CaptchaDeckHandler
 		ItemStack item = container.inventory.getStackInSlot(0);
 		Modus modus = getModus(player);
 		
-		if(item.getItem().equals(Minestuck.modusCard) && ModusType.values().length > item.getItemDamage())
+		if(item.getItem().equals(MinestuckItems.modusCard) && ModusType.values().length > item.getItemDamage())
 		{
 			if(modus == null)
 			{
@@ -130,7 +130,7 @@ public class CaptchaDeckHandler
 			}
 			
 		}
-		else if(item.getItem().equals(Minestuck.captchaCard) && (!item.hasTagCompound() || !item.getTagCompound().getBoolean("punched"))
+		else if(item.getItem().equals(MinestuckItems.captchaCard) && (!item.hasTagCompound() || !item.getTagCompound().getBoolean("punched"))
 				&& modus != null)
 		{
 			ItemStack content = AlchemyRecipeHandler.getDecodedItem(item);
@@ -166,7 +166,7 @@ public class CaptchaDeckHandler
 		if(modus != null && item != null)
 		{
 			boolean card1 = false, card2 = true;
-			if(item.getItem() == Minestuck.captchaCard && item.hasTagCompound() && !item.getTagCompound().getBoolean("punched"))
+			if(item.getItem() == MinestuckItems.captchaCard && item.hasTagCompound() && !item.getTagCompound().getBoolean("punched"))
 			{
 				ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(item);
 				if(newItem != null)
@@ -179,7 +179,7 @@ public class CaptchaDeckHandler
 			if(modus.putItemStack(item))
 			{
 				if(!card2)
-					launchAnyItem(player, new ItemStack(Minestuck.captchaCard, 1));
+					launchAnyItem(player, new ItemStack(MinestuckItems.captchaCard, 1));
 				
 				item = player.getCurrentEquippedItem();
 				if(card1 && item.stackSize > 1)
@@ -269,11 +269,11 @@ public class CaptchaDeckHandler
 		
 		if(MinestuckConfig.sylladexDropMode >= 1)
 			for(; size > 0; size = Math.max(size - 16, 0))
-				player.dropItem(new ItemStack(Minestuck.captchaCard, Math.min(16, size)), true, false);
+				player.dropItem(new ItemStack(MinestuckItems.captchaCard, Math.min(16, size)), true, false);
 		
 		if(MinestuckConfig.sylladexDropMode == 2)
 		{
-			player.dropItem(new ItemStack(Minestuck.modusCard, 1, ModusType.getType(modus).ordinal()), true, false);
+			player.dropItem(new ItemStack(MinestuckItems.modusCard, 1, ModusType.getType(modus).ordinal()), true, false);
 			setModus(player, null);
 		} else modus.initModus(null, size);
 		

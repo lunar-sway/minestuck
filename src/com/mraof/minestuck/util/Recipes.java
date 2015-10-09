@@ -1,6 +1,6 @@
 package com.mraof.minestuck.util;
 
-import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.item.MinestuckItems;
 
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
@@ -83,7 +83,7 @@ public class Recipes
 			for(int i = 0; i < crafting.getSizeInventory(); i++)
 			{
 				ItemStack stack = crafting.getStackInSlot(i);
-				if(stack != null && stack.getItem() == Minestuck.captchaCard && stack.hasTagCompound() && stack.getTagCompound().hasKey("contentID"))
+				if(stack != null && stack.getItem() == MinestuckItems.captchaCard && stack.hasTagCompound() && stack.getTagCompound().hasKey("contentID"))
 					return false;
 			}
 			return super.matches(crafting, world);

@@ -2,15 +2,13 @@ package com.mraof.minestuck.block;
 
 import java.util.Random;
 
-import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.item.MinestuckItems;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumWorldBlockLayer;
@@ -33,7 +31,7 @@ public class BlockGoldSeeds extends Block
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune)
 	{
-		return Minestuck.goldSeeds;
+		return MinestuckItems.goldSeeds;
 	}
 	
 	@Override
@@ -72,7 +70,7 @@ public class BlockGoldSeeds extends Block
 	@Override
 	public Item getItem(World worldIn, BlockPos pos)
 	{
-		return Minestuck.goldSeeds;
+		return MinestuckItems.goldSeeds;
 	}
 	
 }

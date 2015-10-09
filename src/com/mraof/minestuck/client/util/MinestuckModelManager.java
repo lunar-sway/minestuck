@@ -27,6 +27,8 @@ import com.mraof.minestuck.block.BlockMachine;
 import com.mraof.minestuck.block.BlockStorage;
 import com.mraof.minestuck.block.BlockColoredDirt;
 
+import static com.mraof.minestuck.item.MinestuckItems.*;
+
 @SideOnly(Side.CLIENT)
 public class MinestuckModelManager
 {
@@ -41,82 +43,82 @@ public class MinestuckModelManager
 		ItemModelMesher modelRegistry = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
 		
 		//Items
-		register(Minestuck.clawHammer);
-		register(Minestuck.sledgeHammer);
-		register(Minestuck.blacksmith_hammer);
-		register(Minestuck.pogoHammer);
-		register(Minestuck.telescopicSassacrusher);
-		register(Minestuck.fearNoAnvil);
-		register(Minestuck.popamaticVrillyhoo);
-		register(Minestuck.scarletZillyhoo);
+		register(clawHammer);
+		register(sledgeHammer);
+		register(blacksmithHammer);
+		register(pogoHammer);
+		register(telescopicSassacrusher);
+		register(fearNoAnvil);
+		register(popamaticVrillyhoo);
+		register(scarletZillyhoo);
 		
-		register(Minestuck.sord);
-		register(Minestuck.ninjaSword, 0, "katana");
-		register(Minestuck.katana);
-		register(Minestuck.caledscratch);
-		register(Minestuck.royalDeringer);
-		register(Minestuck.regisword);
-		register(Minestuck.scarletRibbitar);
-		register(Minestuck.doggMachete);
+		register(sord);
+		register(ninjaSword, 0, "katana");
+		register(katana);
+		register(caledscratch);
+		register(royalDeringer);
+		register(regisword);
+		register(scarletRibbitar);
+		register(doggMachete);
 		
-		register(Minestuck.dice);
-		register(Minestuck.fluorite_octet);
+		register(dice);
+		register(fluoriteOctet);
 		
-		register(Minestuck.sickle);
-		register(Minestuck.homesSmellYaLater);
-		register(Minestuck.regiSickle);
-		register(Minestuck.clawSickle);
+		register(sickle);
+		register(homesSmellYaLater);
+		register(regiSickle);
+		register(clawSickle);
 		
-		register(Minestuck.deuceClub);
+		register(deuceClub);
 		
-		register(Minestuck.cane);
-		register(Minestuck.spearCane);
-		register(Minestuck.dragonCane);
+		register(cane);
+		register(spearCane);
+		register(dragonCane);
 		
-		register(Minestuck.woodenSpoon);
-		register(Minestuck.silverSpoon);
-		modelRegistry.register(Minestuck.crockerSpork, new CrockerSporkDefinition());
-		register(Minestuck.skaiaFork);
-		register(Minestuck.fork);
-		register(Minestuck.spork);
+		register(woodenSpoon);
+		register(silverSpoon);
+		modelRegistry.register(crockerSpork, new CrockerSporkDefinition());
+		register(skaiaFork);
+		register(fork);
+		register(spork);
 		
 		if(MinestuckConfig.oldItemModels)
 		{
-			register(Minestuck.zillyhooHammer, 0, "zillyhoo_hammer_old");
+			register(zillyhooHammer, 0, "zillyhoo_hammer_old");
 		} else
 		{
-			register(Minestuck.zillyhooHammer);
+			register(zillyhooHammer);
 		}
 		
-		register(Minestuck.emeraldSword);
-		register(Minestuck.emeraldAxe);
-		register(Minestuck.emeraldPickaxe);
-		register(Minestuck.emeraldShovel);
-		register(Minestuck.emeraldHoe);
+		register(emeraldSword);
+		register(emeraldAxe);
+		register(emeraldPickaxe);
+		register(emeraldShovel);
+		register(emeraldHoe);
 		
-		register(Minestuck.prismarine_helmet);
-		register(Minestuck.prismarine_chestplate);
-		register(Minestuck.prismarine_leggings);
-		register(Minestuck.prismarine_boots);
+		register(prismarineHelmet);
+		register(prismarineChestplate);
+		register(prismarineLeggings);
+		register(prismarineBoots);
 		
-		register(Minestuck.rawCruxite);
-		modelRegistry.register(Minestuck.cruxiteDowel, new CruxiteDowelDefinition());
-		modelRegistry.register(Minestuck.captchaCard, new CaptchaCardDefinition());
-		modelRegistry.register(Minestuck.cruxiteApple, new ColoredItemDefinition("minestuck:cruxite_apple"));
-		register(Minestuck.disk, 0, "disk_client");
-		register(Minestuck.disk, 1, "disk_server");
-		register(Minestuck.component, 0, "spoon_wood");
-		register(Minestuck.component, 1, "spoon_silver");
-		register(Minestuck.component, 2, "chessboard");
-		register(Minestuck.minestuckBucket, 0, "bucket_oil");
-		register(Minestuck.minestuckBucket, 1, "bucket_blood");
-		register(Minestuck.minestuckBucket, 2, "bucket_brain_juice");
-		for(int i = 0; i < Minestuck.modusCard.modusNames.length; i++)
-			register(Minestuck.modusCard, i, "modus_" + Minestuck.modusCard.modusNames[i]);
-		register(Minestuck.goldSeeds);
-		for(int i = 0; i < Minestuck.metalBoat.names.length; i++)
-			register(Minestuck.metalBoat, i, "boat_"+Minestuck.metalBoat.names[i]);
-		register(Minestuck.obsidianBucket);
+		register(rawCruxite);
+		modelRegistry.register(cruxiteDowel, new CruxiteDowelDefinition());
+		modelRegistry.register(captchaCard, new CaptchaCardDefinition());
+		modelRegistry.register(cruxiteApple, new ColoredItemDefinition("minestuck:cruxite_apple"));
+		register(disk, 0, "disk_client");
+		register(disk, 1, "disk_server");
+		register(component, 0, "spoon_wood");
+		register(component, 1, "spoon_silver");
+		register(component, 2, "chessboard");
+		register(minestuckBucket, 0, "bucket_oil");
+		register(minestuckBucket, 1, "bucket_blood");
+		register(minestuckBucket, 2, "bucket_brain_juice");
+		for(int i = 0; i < modusCard.modusNames.length; i++)
+			register(modusCard, i, "modus_" + modusCard.modusNames[i]);
+		register(goldSeeds);
+		for(int i = 0; i < metalBoat.names.length; i++)
+			register(metalBoat, i, "boat_" + metalBoat.names[i]);
+		register(obsidianBucket);
 		
 		
 		//Blocks
@@ -148,25 +150,25 @@ public class MinestuckModelManager
 	public static void registerVariants()
 	{
 		//Items
-		ModelBakery.addVariantName(Minestuck.crockerSpork, "minestuck:crocker_fork", "minestuck:crocker_spoon");
-		ModelBakery.addVariantName(Minestuck.cruxiteDowel, "minestuck:dowel_uncarved", "minestuck:dowel_carved", "minestuck:dowel_uncarved_blank", "minestuck:dowel_carved_blank");
-		ModelBakery.addVariantName(Minestuck.cruxiteApple, "minestuck:cruxite_apple", "minestuck:cruxite_apple_blank");
-		ModelBakery.addVariantName(Minestuck.disk, "minestuck:disk_client", "minestuck:disk_server");
-		ModelBakery.addVariantName(Minestuck.component, "minestuck:spoon_wood", "minestuck:spoon_silver", "minestuck:chessboard");
-		ModelBakery.addVariantName(Minestuck.minestuckBucket, "minestuck:bucket_blood", "minestuck:bucket_oil", "minestuck:bucket_brain_juice");
-		ModelBakery.addVariantName(Minestuck.captchaCard, "minestuck:card_empty", "minestuck:card_full", "minestuck:card_punched");
-		ModelBakery.addVariantName(Minestuck.ninjaSword, "minestuck:katana");	//To prevent the game to try to load "minestuck:ninja_sword"
+		ModelBakery.addVariantName(crockerSpork, "minestuck:crocker_fork", "minestuck:crocker_spoon");
+		ModelBakery.addVariantName(cruxiteDowel, "minestuck:dowel_uncarved", "minestuck:dowel_carved", "minestuck:dowel_uncarved_blank", "minestuck:dowel_carved_blank");
+		ModelBakery.addVariantName(cruxiteApple, "minestuck:cruxite_apple", "minestuck:cruxite_apple_blank");
+		ModelBakery.addVariantName(disk, "minestuck:disk_client", "minestuck:disk_server");
+		ModelBakery.addVariantName(component, "minestuck:spoon_wood", "minestuck:spoon_silver", "minestuck:chessboard");
+		ModelBakery.addVariantName(minestuckBucket, "minestuck:bucket_blood", "minestuck:bucket_oil", "minestuck:bucket_brain_juice");
+		ModelBakery.addVariantName(captchaCard, "minestuck:card_empty", "minestuck:card_full", "minestuck:card_punched");
+		ModelBakery.addVariantName(ninjaSword, "minestuck:katana");	//To prevent the game to try to load "minestuck:ninja_sword"
 		if(MinestuckConfig.oldItemModels)
 		{
-			ModelBakery.addVariantName(Minestuck.zillyhooHammer, "minestuck:zillyhoo_hammer_old");
+			ModelBakery.addVariantName(zillyhooHammer, "minestuck:zillyhoo_hammer_old");
 		}
 		
-		String[] str = new String[Minestuck.modusCard.modusNames.length];
+		String[] str = new String[modusCard.modusNames.length];
 		for(int i = 0; i < str.length; i++)
-			str[i] = "minestuck:modus_"+Minestuck.modusCard.modusNames[i];
-		ModelBakery.addVariantName(Minestuck.modusCard, str);
-		for(String s : Minestuck.metalBoat.names)
-			ModelBakery.addVariantName(Minestuck.metalBoat, "minestuck:boat_"+s);
+			str[i] = "minestuck:modus_" + modusCard.modusNames[i];
+		ModelBakery.addVariantName(modusCard, str);
+		for(String s : metalBoat.names)
+			ModelBakery.addVariantName(metalBoat, "minestuck:boat_" + s);
 		
 		//Blocks
 		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())
@@ -225,7 +227,7 @@ public class MinestuckModelManager
 		@Override
 		public ModelResourceLocation getModelLocation(ItemStack stack)
 		{
-			return new ModelResourceLocation("minestuck:"+(Minestuck.crockerSpork.isSpoon(stack) ? "crocker_spoon" : "crocker_fork"), "inventory");
+			return new ModelResourceLocation("minestuck:" + (crockerSpork.isSpoon(stack) ? "crocker_spoon" : "crocker_fork"), "inventory");
 		}
 	}
 	

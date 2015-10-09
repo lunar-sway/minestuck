@@ -12,6 +12,7 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.item.MinestuckItems;
 
 public class MinestuckAchievementHandler {
 	
@@ -37,25 +38,25 @@ public class MinestuckAchievementHandler {
 	{
 		achievementPage = new AchievementPage("Minestuck");
 		AchievementPage.registerAchievementPage(achievementPage);
-		getHammer = (Achievement) (new Achievement("achievement.getHammer", "getHammer", 0, -2, Minestuck.clawHammer, AchievementList.buildWorkBench)).registerStat();
+		getHammer = (Achievement) (new Achievement("achievement.getHammer", "getHammer", 0, -2, MinestuckItems.clawHammer, AchievementList.buildWorkBench)).registerStat();
 		achievementPage.getAchievements().add(getHammer);
-		mineCruxite = (Achievement) (new Achievement("achievement.mineCruxite", "mineCruxite", -2, 1, Minestuck.rawCruxite, AchievementList.buildPickaxe)).registerStat();
+		mineCruxite = (Achievement) (new Achievement("achievement.mineCruxite", "mineCruxite", -2, 1, MinestuckItems.rawCruxite, AchievementList.buildPickaxe)).registerStat();
 		achievementPage.getAchievements().add(mineCruxite);
-		setupConnection = (Achievement) (new Achievement("achievement.setupConnection", "setupConnection", 0, 0, Minestuck.disk, mineCruxite)).registerStat();
+		setupConnection = (Achievement) (new Achievement("achievement.setupConnection", "setupConnection", 0, 0, MinestuckItems.disk, mineCruxite)).registerStat();
 		achievementPage.getAchievements().add(setupConnection);
-		enterMedium = (Achievement) (new Achievement("achievement.enterMedium", "enterMedium", 2, 1, Minestuck.cruxiteApple, setupConnection)).registerStat();
+		enterMedium = (Achievement) (new Achievement("achievement.enterMedium", "enterMedium", 2, 1, MinestuckItems.cruxiteApple, setupConnection)).registerStat();
 		achievementPage.getAchievements().add(enterMedium);
-		alchemy = (Achievement) (new Achievement("achievement.alchemy", "alchemy", 4, 0, new ItemStack(Minestuck.blockMachine,1,3), enterMedium)).registerStat();
+		alchemy = (Achievement) (new Achievement("achievement.alchemy", "alchemy", 4, 0, new ItemStack(Minestuck.blockMachine, 1, 3), enterMedium)).registerStat();
 		achievementPage.getAchievements().add(alchemy);
-		goldSeeds = (Achievement) new Achievement("achievement.goldSeeds", "goldSeeds", -2, -2, Minestuck.goldSeeds, AchievementList.buildHoe).registerStat();
+		goldSeeds = (Achievement) new Achievement("achievement.goldSeeds", "goldSeeds", -2, -2, MinestuckItems.goldSeeds, AchievementList.buildHoe).registerStat();
 		achievementPage.getAchievements().add(goldSeeds);
-		treeModus = (Achievement) new Achievement("achievement.treeModus", "treeModus", 2, -2, new ItemStack(Minestuck.modusCard, 1, 3), (Achievement)null).registerStat();
+		treeModus = (Achievement) new Achievement("achievement.treeModus", "treeModus", 2, -2, new ItemStack(MinestuckItems.modusCard, 1, 3), (Achievement)null).registerStat();
 		achievementPage.getAchievements().add(treeModus);
-		killOgre = (Achievement) new Achievement("achievement.killOgre", "killOgre", 1, 3, Minestuck.pogoHammer, enterMedium).registerStat();
+		killOgre = (Achievement) new Achievement("achievement.killOgre", "killOgre", 1, 3, MinestuckItems.pogoHammer, enterMedium).registerStat();
 		achievementPage.getAchievements().add(killOgre);
-		killGiclops = (Achievement) new Achievement("achievement.killGiclops", "killGiclops", -1, 3, Minestuck.royalDeringer, killOgre).registerStat();
+		killGiclops = (Achievement) new Achievement("achievement.killGiclops", "killGiclops", -1, 3, MinestuckItems.royalDeringer, killOgre).registerStat();
 		achievementPage.getAchievements().add(killGiclops);
-		broBlade = (Achievement) new Achievement("achievement.broBlade", "broBlade", 5, -2, Minestuck.katana, alchemy).registerStat();
+		broBlade = (Achievement) new Achievement("achievement.broBlade", "broBlade", 5, -2, MinestuckItems.katana, alchemy).registerStat();
 		achievementPage.getAchievements().add(broBlade);
 		returnNode = (Achievement) new Achievement("achievement.returnNode", "returnNode", 4, 2, Items.bed, enterMedium).registerStat();
 		achievementPage.getAchievements().add(returnNode);
@@ -63,18 +64,19 @@ public class MinestuckAchievementHandler {
 	
 	public static void onAlchemizedItem(ItemStack stack, EntityPlayer player)
 	{
-		if(!stack.getItem().equals(Minestuck.cruxiteApple))
+		if(!stack.getItem().equals(MinestuckItems.cruxiteApple))
 			player.triggerAchievement(alchemy);
-		if(stack.getItem().equals(Minestuck.clawHammer))
+		if(stack.getItem().equals(MinestuckItems.clawHammer))
 			player.triggerAchievement(getHammer);
-		if(stack.getItem().equals(Minestuck.katana))
+		if(stack.getItem().equals(MinestuckItems.katana))
 			player.triggerAchievement(broBlade);
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
-	public void onItemPickupEvent(EntityItemPickupEvent event) {
+	public void onItemPickupEvent(EntityItemPickupEvent event)
+	{
 		Item item = event.item.getEntityItem().getItem();
-		if(item.equals(Minestuck.rawCruxite))
+		if(item.equals(MinestuckItems.rawCruxite))
 			event.entityPlayer.triggerAchievement(mineCruxite);
 	}
 	

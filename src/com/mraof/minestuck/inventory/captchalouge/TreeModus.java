@@ -10,11 +10,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
 import com.mraof.minestuck.client.gui.captchalouge.TreeGuiHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler.ModusType;
+import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
@@ -123,7 +123,7 @@ public class TreeModus extends Modus
 			if(size <= 0)
 				return null;
 			size--;
-			return new ItemStack(Minestuck.captchaCard);
+			return new ItemStack(MinestuckItems.captchaCard);
 		}
 		if(node == null)
 			return null;
