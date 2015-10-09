@@ -42,8 +42,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.EntityDecoy;
 import com.mraof.minestuck.item.ItemCruxiteArtifact;
 import com.mraof.minestuck.item.MinestuckItems;
@@ -554,7 +554,7 @@ public class ServerEditHandler
 		if(nbt != null)
 		{
 			if(nbt.hasKey("BlockEntityTag"))
-				if(stack.getItem().equals(Item.getItemFromBlock(Minestuck.blockMachine)) && stack.getMetadata() == 0)
+				if(stack.getItem().equals(Item.getItemFromBlock(MinestuckBlocks.blockMachine)) && stack.getMetadata() == 0)
 				{
 					for(Object key : nbt.getCompoundTag("BlockEntityTag").getKeySet())
 						if(!key.equals("color"))

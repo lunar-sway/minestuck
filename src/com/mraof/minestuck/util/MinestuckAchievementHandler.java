@@ -11,7 +11,7 @@ import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
 
 public class MinestuckAchievementHandler {
@@ -46,7 +46,7 @@ public class MinestuckAchievementHandler {
 		achievementPage.getAchievements().add(setupConnection);
 		enterMedium = (Achievement) (new Achievement("achievement.enterMedium", "enterMedium", 2, 1, MinestuckItems.cruxiteApple, setupConnection)).registerStat();
 		achievementPage.getAchievements().add(enterMedium);
-		alchemy = (Achievement) (new Achievement("achievement.alchemy", "alchemy", 4, 0, new ItemStack(Minestuck.blockMachine, 1, 3), enterMedium)).registerStat();
+		alchemy = (Achievement) (new Achievement("achievement.alchemy", "alchemy", 4, 0, new ItemStack(MinestuckBlocks.blockMachine, 1, 3), enterMedium)).registerStat();
 		achievementPage.getAchievements().add(alchemy);
 		goldSeeds = (Achievement) new Achievement("achievement.goldSeeds", "goldSeeds", -2, -2, MinestuckItems.goldSeeds, AchievementList.buildHoe).registerStat();
 		achievementPage.getAchievements().add(goldSeeds);

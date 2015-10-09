@@ -17,8 +17,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IChatComponent;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.item.block.ItemMachine;
@@ -185,7 +185,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 	public void update()
 	{
 		
-		if(worldObj.getBlockState(pos).getBlock() != Minestuck.blockMachine || worldObj.isRemote)	//Processing is easier done on the server side only
+		if(worldObj.getBlockState(pos).getBlock() != MinestuckBlocks.blockMachine || worldObj.isRemote)	//Processing is easier done on the server side only
 			return;
 		
 		if (!contentsValid())
@@ -267,7 +267,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 				ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(this.inv[1]);
 				if (newItem == null)
 					if(!inv[1].hasTagCompound() || !inv[1].getTagCompound().hasKey("contentID"))
-						newItem = new ItemStack(Minestuck.blockStorage, 1, 1);
+						newItem = new ItemStack(MinestuckBlocks.blockStorage, 1, 1);
 					else return false;
 				if (inv[0] != null && (inv[0].getItem() != newItem.getItem() || inv[0].getItemDamage() != newItem.getItemDamage() || inv[0].getMaxStackSize() <= inv[0].stackSize))
 				{return false;}
@@ -344,17 +344,17 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 			ItemStack output;
 			if(inv[1] != null && inv[2] != null)
 				if(!inv[1].hasTagCompound() || !inv[1].getTagCompound().getBoolean("punched") || !inv[2].hasTagCompound() || !inv[2].getTagCompound().getBoolean("punched"))
-					output = new ItemStack(Minestuck.blockStorage, 1, 1);
+					output = new ItemStack(MinestuckBlocks.blockStorage, 1, 1);
 				else output = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(inv[1]), AlchemyRecipeHandler.getDecodedItem(inv[2]), CombinationRegistry.MODE_AND);
 			else
 			{
 				ItemStack input = inv[1] != null ? inv[1] : inv[2];
 				if(!input.hasTagCompound() || !input.getTagCompound().getBoolean("punched"))
-					output = new ItemStack(Minestuck.blockStorage, 1, 1);
+					output = new ItemStack(MinestuckBlocks.blockStorage, 1, 1);
 				else output = AlchemyRecipeHandler.getDecodedItem(input);
 			}
 			
-			ItemStack outputDowel = (output.getItem().equals(Item.getItemFromBlock(Minestuck.blockStorage)) && output.getItemDamage() == 1)
+			ItemStack outputDowel = (output.getItem().equals(Item.getItemFromBlock(MinestuckBlocks.blockStorage)) && output.getItemDamage() == 1)
 					? new ItemStack(MinestuckItems.cruxiteDowel) : AlchemyRecipeHandler.createEncodedItem(output, false);
 			outputDowel.setItemDamage(inv[3].getItemDamage());
 			
@@ -365,7 +365,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 			ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(this.inv[1]);
 			
 			if(newItem == null)
-				newItem = new ItemStack(Minestuck.blockStorage, 1, 1);
+				newItem = new ItemStack(MinestuckBlocks.blockStorage, 1, 1);
 			
 			if (inv[0] == null)
 			{

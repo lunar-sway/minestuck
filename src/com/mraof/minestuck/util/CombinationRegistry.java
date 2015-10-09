@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
 
-import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.MinestuckBlocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -108,9 +108,9 @@ public class CombinationRegistry {
 		}
 		
 		if(item == null)
-			if(input1.getItem().equals(Minestuck.blockStorage) && input1.getItemDamage() == 1)
+			if(input1.getItem().equals(MinestuckBlocks.blockStorage) && input1.getItemDamage() == 1)
 				return mode?input1:input2;
-			else if(input2.getItem().equals(Minestuck.blockStorage) && input2.getItemDamage() == 1)
+			else if(input2.getItem().equals(MinestuckBlocks.blockStorage) && input2.getItemDamage() == 1)
 				return mode?input2:input1;
 		return item;
 	}

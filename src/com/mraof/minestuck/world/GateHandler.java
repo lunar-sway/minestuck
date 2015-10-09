@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Random;
 
 import com.google.common.collect.Lists;
-import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
@@ -119,7 +119,7 @@ public class GateHandler
 				
 				IBlockState block = world.getBlockState(location.pos);
 				
-				if(block.getBlock() != Minestuck.gate)
+				if(block.getBlock() != MinestuckBlocks.gate)
 				{
 					Debug.print("Can't find destination gate. Probably destroyed.");
 					player.addChatMessage(new ChatComponentTranslation("message.gateDestroyed"));

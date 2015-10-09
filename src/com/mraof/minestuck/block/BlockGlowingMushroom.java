@@ -61,7 +61,7 @@ public class BlockGlowingMushroom extends BlockBush
 	public boolean canSpread(World world, BlockPos pos, IBlockState state)
 	{
 		IBlockState soil = world.getBlockState(pos.down());
-		return soil.getBlock().equals(Minestuck.coloredDirt) && soil.getValue(BlockColoredDirt.BLOCK_TYPE).equals(BlockColoredDirt.BlockType.BLUE);
+		return soil.getBlock().equals(MinestuckBlocks.coloredDirt) && soil.getValue(BlockColoredDirt.BLOCK_TYPE).equals(BlockColoredDirt.BlockType.BLUE);
 	}
 	
 	@Override

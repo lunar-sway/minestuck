@@ -1,6 +1,6 @@
 package com.mraof.minestuck.tileentity;
 
-import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.world.GateHandler;
@@ -28,7 +28,7 @@ public class TileEntityGate extends TileEntity
 	
 	public void teleportEntity(World world, EntityPlayerMP player, Block block)
 	{
-		if(block == Minestuck.returnNode)
+		if(block == MinestuckBlocks.returnNode)
 		{
 			BlockPos pos = world.provider.getRandomizedSpawnPoint();
 			player.setPositionAndUpdate(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
@@ -82,7 +82,7 @@ public class TileEntityGate extends TileEntity
 	
 	public boolean isGate()
 	{
-		return this.worldObj != null ? this.worldObj.getBlockState(this.getPos()).getBlock() != Minestuck.returnNode : this.gateCount != 0;
+		return this.worldObj != null ? this.worldObj.getBlockState(this.getPos()).getBlock() != MinestuckBlocks.returnNode : this.gateCount != 0;
 	}
 	
 	@SideOnly(Side.CLIENT)

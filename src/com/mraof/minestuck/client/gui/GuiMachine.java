@@ -19,8 +19,8 @@ import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 import org.lwjgl.input.Mouse;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.inventory.ContainerMachine;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
@@ -114,7 +114,7 @@ public class GuiMachine extends GuiContainer {
 			//Render grist requirements
 			ItemStack stack = AlchemyRecipeHandler.getDecodedItem(te.inv[1]);
 			if(metadata == 3 && !(te.inv[1].hasTagCompound() && te.inv[1].getTagCompound().hasKey("contentID")))
-				stack = new ItemStack(Minestuck.blockStorage, 1, 1);
+				stack = new ItemStack(MinestuckBlocks.blockStorage, 1, 1);
 			
 			GristSet set = GristRegistry.getGristConversion(stack);
 			boolean useSelectedType = stack == null ? false : stack.getItem() == MinestuckItems.captchaCard;

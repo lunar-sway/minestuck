@@ -11,8 +11,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Vec3;
 import net.minecraft.util.WeightedRandomChestContent;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.BlockColoredDirt;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
@@ -29,7 +29,7 @@ public class LandAspectShade extends TerrainAspect
 		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_mushroom, 1, 0), 1, 7, 6));
 		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_mushroom, 1, 0), 1, 4, 3));
 		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.brown_mushroom, 1, 0), 1, 4, 3));
-		list.add(new WeightedRandomChestContent(new ItemStack(Minestuck.coloredDirt, 1, 0), 4, 15, 5));
+		list.add(new WeightedRandomChestContent(new ItemStack(MinestuckBlocks.coloredDirt, 1, 0), 4, 15, 5));
 		list.add(new WeightedRandomChestContent(new ItemStack(Items.mushroom_stew, 1, 0), 1, 1, 4));
 		list.add(new WeightedRandomChestContent(new ItemStack(MinestuckItems.minestuckBucket, 1, 0), 1, 1, 2));
 		
@@ -39,7 +39,7 @@ public class LandAspectShade extends TerrainAspect
 	@Override
 	public IBlockState getUpperBlock()
 	{
-		return Minestuck.coloredDirt.getDefaultState().withProperty(BlockColoredDirt.BLOCK_TYPE, BlockColoredDirt.BlockType.BLUE);
+		return MinestuckBlocks.coloredDirt.getDefaultState().withProperty(BlockColoredDirt.BLOCK_TYPE, BlockColoredDirt.BlockType.BLUE);
 	}
 	
 	@Override
@@ -59,7 +59,7 @@ public class LandAspectShade extends TerrainAspect
 	@Override
 	public IBlockState getOceanBlock() 
 	{
-		return Minestuck.blockOil.getDefaultState();
+		return MinestuckBlocks.blockOil.getDefaultState();
 	}
 	
 	@Override

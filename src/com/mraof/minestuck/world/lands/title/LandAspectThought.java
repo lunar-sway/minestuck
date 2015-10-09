@@ -6,7 +6,7 @@ import net.minecraft.util.Vec3;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
 
-import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
@@ -36,10 +36,10 @@ public class LandAspectThought extends TitleAspect
 		{
 			ChestGenHooks chestGen = chunkProvider.lootMap.get(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST);
 			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(MinestuckItems.minestuckBucket, 1, 2), 1, 1, 3));
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Minestuck.coloredDirt, 1, 1), 4, 15, 4));
+			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(MinestuckBlocks.coloredDirt, 1, 1), 4, 15, 4));
 		}
-		chunkProvider.riverBlock = Minestuck.blockBrainJuice.getDefaultState();
-		chunkProvider.oceanBlock = Minestuck.blockBrainJuice.getDefaultState();
+		chunkProvider.riverBlock = MinestuckBlocks.blockBrainJuice.getDefaultState();
+		chunkProvider.oceanBlock = MinestuckBlocks.blockBrainJuice.getDefaultState();
 		
 		chunkProvider.mergeFogColor(new Vec3(0.8, 0.3, 0.8), 0.8F);
 	}

@@ -11,8 +11,8 @@ import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraftforge.fml.common.IWorldGenerator;
 
 import com.google.common.base.Predicate;
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
@@ -24,7 +24,7 @@ public class OreHandler implements IWorldGenerator
 	{
 		if(world.provider.isSurfaceWorld() && (MinestuckConfig.generateCruxiteOre || chunkGenerator instanceof ChunkProviderLands))
 		{
-			this.addOreSpawn(Minestuck.oreCruxite.getDefaultState(), world, random, chunkX * 16, chunkZ * 16, 16, 16, 6 + random.nextInt(3), 10, 0, 60);
+			this.addOreSpawn(MinestuckBlocks.oreCruxite.getDefaultState(), world, random, chunkX * 16, chunkZ * 16, 16, 16, 6 + random.nextInt(3), 10, 0, 60);
 		}
 	}
 	
@@ -35,8 +35,8 @@ public class OreHandler implements IWorldGenerator
 		IBlockState groundType = Blocks.stone.getDefaultState();
 		if(world.provider instanceof WorldProviderLands)
 			groundType = ((ChunkProviderLands) world.provider.createChunkGenerator()).groundBlock;
-		if(block.getBlock() == Minestuck.oreCruxite)
-			block = Minestuck.oreCruxite.getBlockState(groundType);
+		if(block.getBlock() == MinestuckBlocks.oreCruxite)
+			block = MinestuckBlocks.oreCruxite.getBlockState(groundType);
 		for(int x = 0; x < chancesToSpawn; x++)
 		{
 			int posX = blockXPos + random.nextInt(maxX);

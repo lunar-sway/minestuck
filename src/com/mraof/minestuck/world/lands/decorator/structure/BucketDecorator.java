@@ -2,7 +2,7 @@ package com.mraof.minestuck.world.lands.decorator.structure;
 
 import java.util.Random;
 
-import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 import net.minecraft.block.Block;
@@ -15,7 +15,7 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
 public class BucketDecorator extends SimpleStructureDecorator
 {
 	
-	private Block[] liquidBlocks = {Blocks.air, Blocks.water, Blocks.lava, Minestuck.blockBlood, Minestuck.blockOil, Minestuck.blockBrainJuice};
+	private Block[] liquidBlocks = {Blocks.air, Blocks.water, Blocks.lava, MinestuckBlocks.blockBlood, MinestuckBlocks.blockOil, MinestuckBlocks.blockBrainJuice};
 	
 	@Override
 	public BlockPos generateStructure(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)

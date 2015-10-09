@@ -7,7 +7,7 @@ import net.minecraft.util.Vec3;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
 
-import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
@@ -35,8 +35,8 @@ public class LandAspectPulse extends TitleAspect
 		
 		if(chunkProvider.decorators != null)
 		{
-			chunkProvider.oceanBlock = Minestuck.blockBlood.getDefaultState();
-			chunkProvider.riverBlock = Minestuck.blockBlood.getDefaultState();
+			chunkProvider.oceanBlock = MinestuckBlocks.blockBlood.getDefaultState();
+			chunkProvider.riverBlock = MinestuckBlocks.blockBlood.getDefaultState();
 			
 			ChestGenHooks chestGen = chunkProvider.lootMap.get(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST);
 			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(MinestuckItems.minestuckBucket, 1, 1), 1, 1, 3));

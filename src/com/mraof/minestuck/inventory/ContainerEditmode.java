@@ -3,7 +3,7 @@ package com.mraof.minestuck.inventory;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
@@ -117,7 +117,7 @@ public class ContainerEditmode extends Container
 				if(c.enteredGame())
 					iter.remove();
 				else stack.getTagCompound().setInteger("contentMeta", SessionHandler.getEntryItem(c.getClientName()));
-			else if(stack.getItem().equals(Item.getItemFromBlock(Minestuck.blockMachine)) && stack.getMetadata() == 0)
+			else if(stack.getItem().equals(Item.getItemFromBlock(MinestuckBlocks.blockMachine)) && stack.getMetadata() == 0)
 			{
 				NBTTagCompound nbt = new NBTTagCompound();
 				nbt.setTag("BlockEntityTag", new NBTTagCompound());

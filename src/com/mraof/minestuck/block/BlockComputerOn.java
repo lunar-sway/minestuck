@@ -55,7 +55,7 @@ public class BlockComputerOn extends Block implements ITileEntityProvider
 	@Override
 	public int getMetaFromState(IBlockState state)
 	{
-		return ((Boolean) state.getValue(BSOD) ? 1 : 0) + Minestuck.blockComputerOff.getMetaFromState(state)*2;	//TODO: Now that I know about block.getActualState, the bsod doesn't have to be part of the block.
+		return ((Boolean) state.getValue(BSOD) ? 1 : 0) + MinestuckBlocks.blockComputerOff.getMetaFromState(state)*2;	//TODO: Now that I know about block.getActualState, the bsod doesn't have to be part of the block.
 			//Fix that when there is no need to worry about breaking existing save files
 	}
 	
@@ -108,7 +108,7 @@ public class BlockComputerOn extends Block implements ITileEntityProvider
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
 	{
 		ArrayList<ItemStack> list = new ArrayList<ItemStack>();
-		list.add(new ItemStack(Minestuck.blockComputerOff));
+		list.add(new ItemStack(MinestuckBlocks.blockComputerOff));
 		
 		return list;
 	}
@@ -165,7 +165,7 @@ public class BlockComputerOn extends Block implements ITileEntityProvider
 	@Override
 	public Item getItem(World worldIn, BlockPos pos)
 	{
-		return Item.getItemFromBlock(Minestuck.blockComputerOff);
+		return Item.getItemFromBlock(MinestuckBlocks.blockComputerOff);
 	}
 	
 }

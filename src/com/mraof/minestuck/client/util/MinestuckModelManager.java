@@ -20,13 +20,13 @@ import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.BlockChessTile;
 import com.mraof.minestuck.block.BlockMachine;
 import com.mraof.minestuck.block.BlockStorage;
 import com.mraof.minestuck.block.BlockColoredDirt;
 
+import static com.mraof.minestuck.block.MinestuckBlocks.*;
 import static com.mraof.minestuck.item.MinestuckItems.*;
 
 @SideOnly(Side.CLIENT)
@@ -39,7 +39,6 @@ public class MinestuckModelManager
 	 */
 	public static void registerTextures()
 	{
-		Minestuck ms = Minestuck.instance;
 		ItemModelMesher modelRegistry = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
 		
 		//Items
@@ -123,23 +122,23 @@ public class MinestuckModelManager
 		
 		//Blocks
 		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())
-			register(Minestuck.chessTile, type.ordinal(), "chesstile_"+type.name);
-		register(Minestuck.skaiaPortal);
-		register(Minestuck.transportalizer);
-		register(Minestuck.blockComputerOff);
-		register(Minestuck.oreCruxite, 0, "cruxite_stone");
-		register(Minestuck.oreCruxite, 1, "cruxite_netherrack");
-		register(Minestuck.oreCruxite, 2, "cruxite_cobblestone");
-		register(Minestuck.oreCruxite, 3, "cruxite_sandstone");
-		register(Minestuck.oreCruxite, 4, "cruxite_sandstone_red");
+			register(chessTile, type.ordinal(), "chesstile_"+type.name);
+		register(skaiaPortal);
+		register(transportalizer);
+		register(blockComputerOff);
+		register(oreCruxite, 0, "cruxite_stone");
+		register(oreCruxite, 1, "cruxite_netherrack");
+		register(oreCruxite, 2, "cruxite_cobblestone");
+		register(oreCruxite, 3, "cruxite_sandstone");
+		register(oreCruxite, 4, "cruxite_sandstone_red");
 		for(BlockColoredDirt.BlockType type : BlockColoredDirt.BlockType.values())
-			register(Minestuck.coloredDirt, type.ordinal(), "colored_dirt_"+type.name);
+			register(coloredDirt, type.ordinal(), "colored_dirt_"+type.name);
 		for(BlockStorage.BlockType type : BlockStorage.BlockType.values())
-			register(Minestuck.blockStorage, type.ordinal(), "storage_block_"+type.name);
-		register(Minestuck.layeredSand);
+			register(blockStorage, type.ordinal(), "storage_block_"+type.name);
+		register(layeredSand);
 		for(BlockMachine.MachineType type : BlockMachine.MachineType.values())
-			register(Minestuck.blockMachine, type.ordinal(), "machine_"+type.getName());
-		register(Minestuck.glowingMushroom);
+			register(blockMachine, type.ordinal(), "machine_"+type.getName());
+		register(glowingMushroom);
 		
 	}
 	
@@ -172,26 +171,26 @@ public class MinestuckModelManager
 		
 		//Blocks
 		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())
-			ModelBakery.addVariantName(Item.getItemFromBlock(Minestuck.chessTile), "minestuck:chesstile_"+type.name);
-		ModelBakery.addVariantName(Item.getItemFromBlock(Minestuck.oreCruxite), "minestuck:cruxite_stone", "minestuck:cruxite_netherrack", "minestuck:cruxite_cobblestone", "minestuck:cruxite_sandstone", "minestuck:cruxite_sandstone_red");
+			ModelBakery.addVariantName(Item.getItemFromBlock(chessTile), "minestuck:chesstile_"+type.name);
+		ModelBakery.addVariantName(Item.getItemFromBlock(oreCruxite), "minestuck:cruxite_stone", "minestuck:cruxite_netherrack", "minestuck:cruxite_cobblestone", "minestuck:cruxite_sandstone", "minestuck:cruxite_sandstone_red");
 		for(BlockColoredDirt.BlockType type : BlockColoredDirt.BlockType.values())
-			ModelBakery.addVariantName(Item.getItemFromBlock(Minestuck.coloredDirt), "minestuck:colored_dirt_"+type.name);
+			ModelBakery.addVariantName(Item.getItemFromBlock(coloredDirt), "minestuck:colored_dirt_"+type.name);
 		for(BlockStorage.BlockType type : BlockStorage.BlockType.values())
-			ModelBakery.addVariantName(Item.getItemFromBlock(Minestuck.blockStorage), "minestuck:storage_block_"+type.name);
+			ModelBakery.addVariantName(Item.getItemFromBlock(blockStorage), "minestuck:storage_block_"+type.name);
 		for(BlockMachine.MachineType type : BlockMachine.MachineType.values())
-			ModelBakery.addVariantName(Item.getItemFromBlock(Minestuck.blockMachine), "minestuck:machine_"+type.getName());
+			ModelBakery.addVariantName(Item.getItemFromBlock(blockMachine), "minestuck:machine_"+type.getName());
 		
-		ModelLoader.setCustomStateMapper(Minestuck.blockOil, (new StateMap.Builder()).addPropertiesToIgnore(BlockFluidBase.LEVEL).build());
-		ModelLoader.setCustomStateMapper(Minestuck.blockBlood, (new StateMap.Builder()).addPropertiesToIgnore(BlockFluidBase.LEVEL).build());
-		ModelLoader.setCustomStateMapper(Minestuck.blockBrainJuice, (new StateMap.Builder()).addPropertiesToIgnore(BlockFluidBase.LEVEL).build());
-		ModelLoader.setCustomStateMapper(Minestuck.returnNode, new IStateMapper()
+		ModelLoader.setCustomStateMapper(blockOil, (new StateMap.Builder()).addPropertiesToIgnore(BlockFluidBase.LEVEL).build());
+		ModelLoader.setCustomStateMapper(blockBlood, (new StateMap.Builder()).addPropertiesToIgnore(BlockFluidBase.LEVEL).build());
+		ModelLoader.setCustomStateMapper(blockBrainJuice, (new StateMap.Builder()).addPropertiesToIgnore(BlockFluidBase.LEVEL).build());
+		ModelLoader.setCustomStateMapper(returnNode, new IStateMapper()
 		{
 			@Override
 			public Map putStateModelLocations(Block block)
 			{
 				return new HashMap();	//We're not using any models for rendering the return node
 			}});
-		ModelLoader.setCustomStateMapper(Minestuck.gate, new IStateMapper()
+		ModelLoader.setCustomStateMapper(gate, new IStateMapper()
 		{
 			@Override
 			public Map putStateModelLocations(Block block)
@@ -266,7 +265,7 @@ public class MinestuckModelManager
 			String str;
 			if(nbt != null && nbt.hasKey("contentID"))
 			{
-				if(nbt.getBoolean("punched") && !(Item.itemRegistry.getObject(new ResourceLocation(nbt.getString("contentID"))) == Item.getItemFromBlock(Minestuck.blockStorage)
+				if(nbt.getBoolean("punched") && !(Item.itemRegistry.getObject(new ResourceLocation(nbt.getString("contentID"))) == Item.getItemFromBlock(blockStorage)
 						&& nbt.getInteger("contentMeta") == 1))
 					str = "card_punched";
 				else str = "card_full";

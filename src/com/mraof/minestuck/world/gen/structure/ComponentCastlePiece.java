@@ -3,7 +3,7 @@ package com.mraof.minestuck.world.gen.structure;
 import java.util.List;
 import java.util.Random;
 
-import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.MinestuckBlocks;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
@@ -106,7 +106,7 @@ public abstract class ComponentCastlePiece extends StructureComponent
 	
 	protected IBlockState getChessBlockState(int meta)
 	{
-		return Minestuck.chessTile.getStateFromMeta(meta);
+		return MinestuckBlocks.chessTile.getStateFromMeta(meta);
 	}
 	
 }

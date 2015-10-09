@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,14 +17,14 @@ public class ItemGoldSeeds extends ItemSeeds
 
 	public ItemGoldSeeds()
 	{
-		super(Minestuck.blockGoldSeeds, Blocks.farmland);
+		super(MinestuckBlocks.blockGoldSeeds, Blocks.farmland);
 		setCreativeTab(Minestuck.tabMinestuck);
 	}
 	
 	@Override
 	public String getUnlocalizedName()
 	{
-		return Minestuck.blockGoldSeeds.getUnlocalizedName();
+		return MinestuckBlocks.blockGoldSeeds.getUnlocalizedName();
 	}
 	
 	@Override

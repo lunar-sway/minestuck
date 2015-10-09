@@ -10,13 +10,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.relauncher.Side;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.UsernameHandler;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.item.MinestuckItems;
 
@@ -73,7 +73,7 @@ public class ClientEditPacket extends MinestuckPacket {
 					if(!playerMP.inventory.hasItemStack(card))
 						c.givenItems()[i] = playerMP.inventory.addItemStackToInventory(card) || c.givenItems()[i];
 				} else {
-					ItemStack machine = new ItemStack(Minestuck.blockMachine, 1, i);
+					ItemStack machine = new ItemStack(MinestuckBlocks.blockMachine, 1, i);
 					if(i == 1 && !c.enteredGame())
 						continue;
 					if(!playerMP.inventory.hasItemStack(machine))

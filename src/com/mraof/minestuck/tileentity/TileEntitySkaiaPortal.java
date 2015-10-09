@@ -7,8 +7,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.WorldServer;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.BlockChessTile;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.util.ITeleporter;
 import com.mraof.minestuck.util.Location;
 import com.mraof.minestuck.util.Teleport;
@@ -64,7 +64,7 @@ public class TileEntitySkaiaPortal extends TileEntity implements ITeleporter
 		{
 			for(int blockZ = (int) z - 2; blockZ < z + 2; blockZ++)
 			{
-				worldserver1.setBlockState(new BlockPos(blockX, (int) y - 1, blockZ), Minestuck.chessTile.getDefaultState().withProperty(BlockChessTile.BLOCK_TYPE, BlockChessTile.BlockType.values()[(blockX + blockZ) & 3]), 3);
+				worldserver1.setBlockState(new BlockPos(blockX, (int) y - 1, blockZ), MinestuckBlocks.chessTile.getDefaultState().withProperty(BlockChessTile.BLOCK_TYPE, BlockChessTile.BlockType.values()[(blockX + blockZ) & 3]), 3);
 				for(int blockY = (int) y; blockY < y + 6; blockY++)
 					if(worldserver1.isBlockNormalCube(new BlockPos(blockX, blockY, blockZ), true))
 						worldserver1.setBlockToAir(new BlockPos(blockX, blockY, blockZ));

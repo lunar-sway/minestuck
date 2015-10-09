@@ -11,6 +11,7 @@ import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.weapon.EnumBladeType;
 import com.mraof.minestuck.item.weapon.EnumCaneType;
 import com.mraof.minestuck.item.weapon.EnumClubType;
@@ -164,9 +165,9 @@ public class MinestuckItems
 				goldSeeds = new ItemGoldSeeds();
 				metalBoat = new ItemMetalBoat();
 				
-				minestuckBucket.addBlock(Minestuck.blockOil);
-				minestuckBucket.addBlock(Minestuck.blockBlood);
-				minestuckBucket.addBlock(Minestuck.blockBrainJuice);
+				minestuckBucket.addBlock(MinestuckBlocks.blockOil);
+				minestuckBucket.addBlock(MinestuckBlocks.blockBlood);
+				minestuckBucket.addBlock(MinestuckBlocks.blockBrainJuice);
 				
 				GameRegistry.registerItem(clawHammer, "claw_hammer");
 				GameRegistry.registerItem(sledgeHammer, "sledge_hammer");

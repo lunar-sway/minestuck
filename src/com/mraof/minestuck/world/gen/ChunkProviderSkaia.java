@@ -19,8 +19,8 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraftforge.event.terraingen.TerrainGen;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.BlockChessTile;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.carapacian.EntityBlackBishop;
 import com.mraof.minestuck.entity.carapacian.EntityBlackPawn;
 import com.mraof.minestuck.entity.carapacian.EntityBlackRook;
@@ -104,7 +104,7 @@ public class ChunkProviderSkaia implements IChunkProvider
 			topBlock[i] = (y&511)<=255  ? y&255 : 255 - y&255;
 		}
 		byte chessTileMetadata = (byte) ((Math.abs(chunkX) + Math.abs(chunkZ)) % 2);
-		IBlockState block = Minestuck.chessTile.getDefaultState().withProperty(BlockChessTile.BLOCK_TYPE, BlockChessTile.BlockType.values()[chessTileMetadata]);
+		IBlockState block = MinestuckBlocks.chessTile.getDefaultState().withProperty(BlockChessTile.BLOCK_TYPE, BlockChessTile.BlockType.values()[chessTileMetadata]);
 		for(int x = 0; x < 16; x++)
 			for(int z = 0; z < 16; z++)
 				for(int y = 0; y <= topBlock[x * 16 + z]; y++)

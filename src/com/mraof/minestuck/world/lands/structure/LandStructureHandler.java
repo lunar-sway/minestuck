@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.BlockGate;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.biome.BiomeGenMinestuck;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
@@ -189,9 +189,9 @@ public class LandStructureHandler extends MapGenStructure
 				BlockPos pos = nodePos.add(i % 2, 0, i/2);
 				if(i == 3)
 				{
-					world.setBlockState(pos, Minestuck.returnNode.getDefaultState().cycleProperty(BlockGate.isMainComponent), 2);
+					world.setBlockState(pos, MinestuckBlocks.returnNode.getDefaultState().cycleProperty(BlockGate.isMainComponent), 2);
 					//Do something with the tile entity?
-				} else world.setBlockState(pos, Minestuck.returnNode.getDefaultState(), 2);
+				} else world.setBlockState(pos, MinestuckBlocks.returnNode.getDefaultState(), 2);
 			}
 		}
 	}

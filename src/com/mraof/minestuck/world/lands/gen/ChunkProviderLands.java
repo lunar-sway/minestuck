@@ -25,9 +25,9 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraftforge.common.ChestGenHooks;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.BlockGate;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.consort.EntityIguana;
 import com.mraof.minestuck.entity.consort.EntityNakagator;
 import com.mraof.minestuck.entity.consort.EntitySalamander;
@@ -238,10 +238,10 @@ public class ChunkProviderLands implements IChunkProvider
 				{
 					if(x == 0 && z == 0)
 					{
-						landWorld.setBlockState(gatePos, Minestuck.gate.getDefaultState().cycleProperty(BlockGate.isMainComponent), 2);
+						landWorld.setBlockState(gatePos, MinestuckBlocks.gate.getDefaultState().cycleProperty(BlockGate.isMainComponent), 2);
 						TileEntityGate tileEntity = (TileEntityGate) landWorld.getTileEntity(gatePos);
 						tileEntity.gateCount = -1;
-					} else landWorld.setBlockState(gatePos.add(x, 0, z), Minestuck.gate.getDefaultState(), 2);
+					} else landWorld.setBlockState(gatePos.add(x, 0, z), MinestuckBlocks.gate.getDefaultState(), 2);
 				}
 		}
 		
