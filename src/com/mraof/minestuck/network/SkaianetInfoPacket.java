@@ -9,8 +9,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteStreams;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
@@ -42,9 +40,8 @@ public class SkaianetInfoPacket extends MinestuckPacket {
 		for(int i = 0; i < size; i++)
 			writeString(data,((String)dat[i+4]+'\n'));
 		
-		for(int i = size+4; i < dat.length; i++){
-			data.writeBytes(((SburbConnection)dat[i]).getBytes());
-		}
+		for(int i = size+4; i < dat.length; i++)
+			((SburbConnection)dat[i]).writeBytes(data);
 		
 		return this;
 	}
@@ -62,13 +59,14 @@ public class SkaianetInfoPacket extends MinestuckPacket {
 		for(int i = 0; i < size; i++)
 			openServers.add(readLine(data));
 		connections = new ArrayList<SburbConnection>();
-		byte[] b = new byte[data.readableBytes()];
-		data.readBytes(b);
-		ByteArrayDataInput dat = ByteStreams.newDataInput(b);
-		try{
-			while(true)
-				connections.add(SkaiaClient.getConnection(dat));	//TODO change parameter of this method.
-		} catch(IllegalStateException e){}
+		try
+		{
+			while(data.readableBytes() > 0)
+				connections.add(SkaiaClient.getConnection(data));
+		} catch(IllegalStateException e)
+		{
+			e.printStackTrace();
+		}
 		
 		return this;
 	}

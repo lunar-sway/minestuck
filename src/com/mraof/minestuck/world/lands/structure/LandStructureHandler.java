@@ -103,11 +103,11 @@ public class LandStructureHandler extends MapGenStructure
 		for(StructureEntry entry : structures)
 		{
 			if(index < entry.rarity)
-				return entry.createInstance(chunkProvider, worldObj, rand, chunkX, chunkZ);	//TODO The game handles a null return badly. Make sure to change this
+				return entry.createInstance(chunkProvider, worldObj, rand, chunkX, chunkZ);
 			index -= entry.rarity;
 		}
 		
-		return null;
+		throw new IllegalStateException("Index out of bounds! Total rarity '"+totalRarity+"' must be incorrectly calculated.");
 	}
 	
 	public static class StructureEntry
@@ -129,9 +129,8 @@ public class LandStructureHandler extends MapGenStructure
 			}
 			catch(Exception e)
 			{
-				e.printStackTrace();
 				Debug.print("Failed to create structure for "+structureStart.getName());
-				return null;
+				throw new IllegalStateException(e);	//The best exception I can think about right now.
 			}
 		}
 	}

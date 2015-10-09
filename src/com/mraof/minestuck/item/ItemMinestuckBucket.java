@@ -1,7 +1,6 @@
 package com.mraof.minestuck.item;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -28,7 +27,6 @@ import com.mraof.minestuck.Minestuck;
 public class ItemMinestuckBucket extends ItemBucket 
 {
 	public List<Block> fillFluids = new ArrayList<Block>();
-	public HashMap<Block, Integer> FillFluidIds = new HashMap<Block, Integer>();
 	
 	public ItemMinestuckBucket() 
 	{
@@ -150,8 +148,6 @@ public class ItemMinestuckBucket extends ItemBucket
 	public void addBlock(Block block)
 	{
 		fillFluids.add(block);
-		FillFluidIds.put(block, fillFluids.size() - 1);
-		//TODO make it actually work
 	}
 
 

@@ -1,11 +1,10 @@
 package com.mraof.minestuck.network.skaianet;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
 import com.mraof.minestuck.editmode.DeployList;
 
 public class SburbConnection {
@@ -56,18 +55,15 @@ public class SburbConnection {
 	public int getClientDimension() {return clientHomeLand;}
 	public boolean[] givenItems(){return givenItemList;}
 	
-	public byte[] getBytes() { //TODO Make it write to an ByteBuf instead.
-		ByteArrayDataOutput data = ByteStreams.newDataOutput();
-		
+	public void writeBytes(ByteBuf data)
+	{
 		data.writeBoolean(isMain);
 		if(isMain){
 			data.writeBoolean(isActive);
 			data.writeBoolean(enteredGame);
 		}
-		data.write((getClientName()+"\n").getBytes());
-		data.write((getServerName()+"\n").getBytes());
-		
-		return data.toByteArray();
+		data.writeBytes((getClientName()+"\n").getBytes());
+		data.writeBytes((getServerName()+"\n").getBytes());
 	}
 
 	NBTTagCompound write()

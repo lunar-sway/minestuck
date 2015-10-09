@@ -1,5 +1,7 @@
 package com.mraof.minestuck.network.skaianet;
 
+import io.netty.buffer.ByteBuf;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -11,7 +13,6 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.google.common.io.ByteArrayDataInput;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.GuiComputer;
@@ -119,16 +120,18 @@ public class SkaiaClient
 	}
 	
 	//Methods used by the SkaianetInfoPacket.
-	public static SburbConnection getConnection(ByteArrayDataInput data) {
+	public static SburbConnection getConnection(ByteBuf data)
+	{
 		SburbConnection c = new SburbConnection();
 		
 		c.isMain = data.readBoolean();
-		if(c.isMain) {
+		if(c.isMain)
+		{
 			c.isActive = data.readBoolean();
 			c.enteredGame = data.readBoolean();
 		}
-		c.clientName = data.readLine();
-		c.serverName = data.readLine();
+		c.clientName = MinestuckPacket.readLine(data);
+		c.serverName = MinestuckPacket.readLine(data);
 		
 		return c;
 	}

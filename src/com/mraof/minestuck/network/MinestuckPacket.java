@@ -61,16 +61,16 @@ public abstract class MinestuckPacket
     {
         return type.make().generatePacket(dat);
     }
-    
-	String readLine(ByteBuf data) {
+	
+	public static String readLine(ByteBuf data)
+	{
 		StringBuilder str = new StringBuilder();
-		while(data.readableBytes() > 1) {
+		while(data.readableBytes() > 1)
+		{
 			char c = data.readChar();
-//			Debug.print("Read char "+c+", packet "+this.getClass().getName());
-//			Debug.print(((short)c)+","+((short)".client".charAt(data.readerIndex()/2)));
-			if(c == '\n') {
+			if(c == '\n')
 				break;
-			} else str.append(c);
+			else str.append(c);
 		}
 		
 		return str.toString();

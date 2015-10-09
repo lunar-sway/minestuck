@@ -36,7 +36,7 @@ public class MinestuckFluidHandler
 		if (Minestuck.minestuckBucket.fillFluids.contains(block) && ((Integer) world.getBlockState(pos.getBlockPos()).getValue(BlockFluidBase.LEVEL)) == 0) 
 		{
 			world.setBlockToAir(pos.getBlockPos());
-			return new ItemStack(Minestuck.minestuckBucket, 1, Minestuck.minestuckBucket.FillFluidIds.get(block));
+			return new ItemStack(Minestuck.minestuckBucket, 1, Minestuck.minestuckBucket.fillFluids.indexOf(block));
 		} else
 			return null;
 
