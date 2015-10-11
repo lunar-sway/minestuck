@@ -6,6 +6,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
 import com.mraof.minestuck.editmode.DeployList;
+import com.mraof.minestuck.network.MinestuckPacket;
 
 public class SburbConnection {
 	
@@ -62,8 +63,8 @@ public class SburbConnection {
 			data.writeBoolean(isActive);
 			data.writeBoolean(enteredGame);
 		}
-		data.writeBytes((getClientName()+"\n").getBytes());
-		data.writeBytes((getServerName()+"\n").getBytes());
+		MinestuckPacket.writeString(data, getClientName()+"\n");
+		MinestuckPacket.writeString(data, getServerName()+"\n");
 	}
 
 	NBTTagCompound write()

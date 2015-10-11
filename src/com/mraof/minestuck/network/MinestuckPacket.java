@@ -65,7 +65,7 @@ public abstract class MinestuckPacket
 	public static String readLine(ByteBuf data)
 	{
 		StringBuilder str = new StringBuilder();
-		while(data.readableBytes() > 1)
+		while(data.readableBytes() > 0)
 		{
 			char c = data.readChar();
 			if(c == '\n')
@@ -76,7 +76,8 @@ public abstract class MinestuckPacket
 		return str.toString();
 	}
 	
-	void writeString(ByteBuf data, String str) {
+	public static void writeString(ByteBuf data, String str)
+	{
 		for(int i = 0; i < str.length(); i++)
 			data.writeChar(str.charAt(i));
 	}
