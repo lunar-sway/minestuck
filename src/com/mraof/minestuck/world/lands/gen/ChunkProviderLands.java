@@ -178,7 +178,7 @@ public class ChunkProviderLands implements IChunkProvider
 		return chunk;
 	}
 	
-	private static List<ChunkCoordIntPair> coords = new ArrayList<ChunkCoordIntPair>();
+	private List<ChunkCoordIntPair> coords = new ArrayList<ChunkCoordIntPair>();
 	
 	@Override
 	public void populate(IChunkProvider ichunkprovider, int chunkX, int chunkZ) 

@@ -48,8 +48,6 @@ public class WorldProviderLands extends WorldProvider
 		{
 			landAspects = MinestuckDimensionHandler.getAspects(dimensionId);
 			
-			Debug.print("landAspects: " + landAspects);
-			Debug.print("landAspects.aspectTitle: " + landAspects.aspectTitle);
 			provider = landAspects.aspectTitle.createChunkProvider(this);
 			
 		}
@@ -100,7 +98,7 @@ public class WorldProviderLands extends WorldProvider
 	}
 	
 	@Override
-	public int getRespawnDimension(EntityPlayerMP player)
+	public int getRespawnDimension(EntityPlayerMP player)	//actually only called when the provider says that you can't respawn in that dimension, which also causes beds to explode
 	{
 		int dim = player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("LandId");
 		return dim == 0 ? this.dimensionId : dim;
