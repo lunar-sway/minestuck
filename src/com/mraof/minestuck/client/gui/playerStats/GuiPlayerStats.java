@@ -166,9 +166,7 @@ public abstract class GuiPlayerStats extends GuiScreen
 					int i = type.ordinal();
 					drawTexturedModalRect(xOffset + i*(tabWidth + 2), yOffset - tabHeight + tabOverlap, i==0? 0:tabWidth, 0, tabWidth, tabHeight);
 				}
-				
-		}
-		else
+		} else
 		{
 			for(EditmodeGuiType type : EditmodeGuiType.values())
 				if(type != editmodeTab)
@@ -177,6 +175,8 @@ public abstract class GuiPlayerStats extends GuiScreen
 					drawTexturedModalRect(xOffset + i*(tabWidth + 2), yOffset - tabHeight + tabOverlap, i==0? 0:tabWidth, 0, tabWidth, tabHeight);
 				}
 		}
+		
+		drawTexturedModalRect(xOffset + guiWidth - tabWidth, yOffset -tabHeight + tabOverlap, 2*tabWidth, 0, tabWidth, tabHeight);
 	}
 	
 	protected void drawActiveTabAndOther(int xcor, int ycor)
@@ -192,6 +192,8 @@ public abstract class GuiPlayerStats extends GuiScreen
 		for(int i = 0; i < (mode? NormalGuiType.values():EditmodeGuiType.values()).length; i++)
 			if(!mode || !NormalGuiType.values()[i].reqMedium || SkaiaClient.enteredMedium(UsernameHandler.encode(mc.thePlayer.getCommandSenderName())) || mc.playerController.isInCreativeMode())
 				drawTexturedModalRect(xOffset + (tabWidth - 16)/2 + (tabWidth+2)*i, yOffset - tabHeight + tabOverlap + 8, i*16, tabHeight*2 + (mode? 0:16), 16, 16);
+		
+		drawTexturedModalRect(xOffset + guiWidth + (tabWidth - 16)/2 - tabWidth, yOffset - tabHeight + tabOverlap + 8, 5*16, tabHeight*2, 16, 16);
 		
 		GlStateManager.disableRescaleNormal();
 		RenderHelper.disableStandardItemLighting();
@@ -230,6 +232,8 @@ public abstract class GuiPlayerStats extends GuiScreen
 					}
 					return;
 				}
+			if(xcor < xOffset + guiWidth && xcor >= xOffset + guiWidth - tabWidth)
+				mc.displayGuiScreen(new GuiDataChecker());
 		}
 		super.mouseClicked(xcor, ycor, mouseButton);
 	}
