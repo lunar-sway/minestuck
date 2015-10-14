@@ -28,6 +28,7 @@ public class MinestuckConfigPacket extends MinestuckPacket
 	boolean giveItems;
 	boolean easyDesignix;
 	boolean cardRecipe;
+	boolean disableGristWidget;
 	boolean[] deployValues;
 	
 	String lanHost;
@@ -47,6 +48,7 @@ public class MinestuckConfigPacket extends MinestuckPacket
 		data.writeBoolean(MinestuckConfig.hardMode);
 		data.writeBoolean(MinestuckConfig.giveItems);
 		data.writeBoolean(MinestuckConfig.cardRecipe);
+		data.writeBoolean(MinestuckConfig.disableGristWidget);
 		data.writeByte(MinestuckConfig.treeModusSetting);
 		
 		for(int i = 0; i < MinestuckConfig.deployConfigurations.length; i++)
@@ -67,6 +69,7 @@ public class MinestuckConfigPacket extends MinestuckPacket
 		hardMode = data.readBoolean();
 		giveItems = data.readBoolean();
 		cardRecipe = data.readBoolean();
+		disableGristWidget = data.readBoolean();
 		treeModusSetting = data.readByte();
 		
 		deployValues = new boolean[MinestuckConfig.deployConfigurations.length];
@@ -83,11 +86,12 @@ public class MinestuckConfigPacket extends MinestuckPacket
 	public void execute(EntityPlayer player)
 	{
 		
-		MinestuckConfig.clientOverworldEditRange = this.overWorldEditRange;
-		MinestuckConfig.clientLandEditRange = this.landEditRange;
-		MinestuckConfig.clientCardCost = this.cardCost;
-		MinestuckConfig.clientHardMode = this.hardMode;
-		MinestuckConfig.clientGiveItems = this.giveItems;
+		MinestuckConfig.clientOverworldEditRange = overWorldEditRange;
+		MinestuckConfig.clientLandEditRange = landEditRange;
+		MinestuckConfig.clientCardCost = cardCost;
+		MinestuckConfig.clientHardMode = hardMode;
+		MinestuckConfig.clientGiveItems = giveItems;
+		MinestuckConfig.clientDisableGristWidget = disableGristWidget;
 		MinestuckConfig.clientTreeAutobalance = treeModusSetting;
 		ContainerHandler.clientWindowIdStart = windowIdStart;
 		

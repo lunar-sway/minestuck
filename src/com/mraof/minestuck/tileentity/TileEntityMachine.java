@@ -287,6 +287,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 				return false;
 			}
 		case (4):
+			if(MinestuckConfig.disableGristWidget) return false;
 			return (this.inv[1] != null && inv[1].getItem() == MinestuckItems.captchaCard && GristRegistry.getGristConversion(AlchemyRecipeHandler.getDecodedItem(inv[1])) != null
 			&& !inv[1].getTagCompound().getBoolean("punched") && AlchemyRecipeHandler.getDecodedItem(inv[1]).getItem() != MinestuckItems.captchaCard);
 		}
