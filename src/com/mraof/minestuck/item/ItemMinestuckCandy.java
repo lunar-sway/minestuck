@@ -9,12 +9,9 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemMinestuckCandy extends ItemFood
 {
-	@SideOnly(Side.CLIENT)
 	public static String[] modelNames = new String[]{"candy_corn","amber_gummy_worm","amethyst_hard_candy","artifact_war_head","build_gusher",
 		"caulk_pretzel","chalk_candy_cigarette","cobalt_gum","diamond_mint","garnet_twix","gold_candy_ribbon",
 		"iodine_licorice","marble_jawbreaker","mercury_sixlets","quartz_jelly_bean","ruby_lollipop","rust_gummy_eye",
