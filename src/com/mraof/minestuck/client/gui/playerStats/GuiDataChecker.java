@@ -1,7 +1,10 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.lwjgl.input.Mouse;
 
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
@@ -9,6 +12,7 @@ import com.mraof.minestuck.network.MinestuckPacket;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiDataChecker extends GuiScreen
@@ -21,6 +25,7 @@ public class GuiDataChecker extends GuiScreen
 	private IDataComponent guiComponent;
 	private GuiButton[] buttons = new GuiButton[5];
 	private int index;
+	private float displayIndex;
 	
 	@Override
 	public boolean doesGuiPauseGame()
@@ -43,6 +48,7 @@ public class GuiDataChecker extends GuiScreen
 		MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.DATA_CHECKER));
 		
 		index = 0;
+		displayIndex = 0F;
 		guiComponent = activeComponent;
 		updateGuiButtons();
 	}
@@ -58,9 +64,9 @@ public class GuiDataChecker extends GuiScreen
 		
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		
+		this.mc.getTextureManager().bindTexture(guiBackground);
 		if(guiComponent != null)
 		{
-			this.mc.getTextureManager().bindTexture(guiBackground);
 			List<IDataComponent> list = guiComponent.getComponentList();
 			for(int i = 0; i < 5; i++)
 			{
@@ -73,6 +79,10 @@ public class GuiDataChecker extends GuiScreen
 				}
 			}
 		}
+		
+		GlStateManager.color(1, 1, 1);
+		int textureIndex = guiComponent != null && guiComponent.getComponentList().size() > 5 ? 232 : 244;
+		drawTexturedModalRect((width - GUI_WIDTH)/2 + 190, (height - GUI_HEIGHT)/2 + 21 + displayIndex*91, textureIndex, 0, 12, 15);
 	}
 	
 	@Override
@@ -81,8 +91,35 @@ public class GuiDataChecker extends GuiScreen
 		if(guiComponent != activeComponent)
 		{
 			index = 0;
+			displayIndex = 0F;
 			guiComponent = activeComponent;
 			updateGuiButtons();
+		}
+	}
+	
+	@Override
+	public void handleMouseInput() throws IOException
+	{
+		super.handleMouseInput();
+		int i = Mouse.getEventDWheel();
+		
+		if(i != 0 && guiComponent != null)
+		{
+			int size = guiComponent.getComponentList().size();
+			if(size <= 5)
+				return;
+			
+			int prevIndex = index;
+			if(i > 0)
+				index -= 1;
+			else index += 1;
+			index = MathHelper.clamp_int(index, 0, size - 5);
+			
+			if(index != prevIndex)
+			{
+				displayIndex = index/((float) size - 5);
+				updateGuiButtons();
+			}
 		}
 	}
 	
@@ -167,6 +204,10 @@ public class GuiDataChecker extends GuiScreen
 				SessionComponent session = new SessionComponent(this, String.valueOf(i + 1), sessionSizeData[i*2], sessionSizeData[i*2 + 1]);
 				list.add(session);
 			}
+			list.add(new SessionComponent(this, "Filler", 2, -1));
+			list.add(new SessionComponent(this, "Filler", 3, 0));
+			list.add(new SessionComponent(this, "Filler", -7, 8));
+			list.add(new SessionComponent(this, "Filler", 1, 1));
 		}
 		
 		@Override
