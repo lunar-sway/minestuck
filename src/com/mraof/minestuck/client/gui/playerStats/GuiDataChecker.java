@@ -8,6 +8,7 @@ import com.mraof.minestuck.network.MinestuckPacket;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiDataChecker extends GuiScreen
@@ -56,6 +57,22 @@ public class GuiDataChecker extends GuiScreen
 		drawTexturedModalRect((width - GUI_WIDTH)/2, (height - GUI_HEIGHT)/2, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
 		super.drawScreen(mouseX, mouseY, partialTicks);
+		
+		if(guiComponent != null)
+		{
+			this.mc.getTextureManager().bindTexture(guiBackground);
+			List<IDataComponent> list = guiComponent.getComponentList();
+			for(int i = 0; i < 5; i++)
+			{
+				IDataComponent component = i + index < list.size() ? list.get(i + index) : null;
+				if(component != null && !component.isButton())
+				{
+					GlStateManager.color(1, 1, 1);
+					drawTexturedModalRect((width - GUI_WIDTH)/2 + 5, (height - GUI_HEIGHT)/2 + 20 + i*22, 0, 236, 180, 20);
+					mc.fontRendererObj.drawString(component.getName(), (width - GUI_WIDTH)/2 + 9, (height - GUI_HEIGHT)/2 + 30 - mc.fontRendererObj.FONT_HEIGHT/2 + i*22, 0);
+				}
+			}
+		}
 	}
 	
 	@Override
@@ -216,7 +233,7 @@ public class GuiDataChecker extends GuiScreen
 		@Override
 		public String getName()
 		{
-			return String.format("Session %s (%d/%d)", name, players, playersEntered);
+			return String.format("Session %s (%d/%d)", name, playersEntered, players);
 		}
 	}
 }
