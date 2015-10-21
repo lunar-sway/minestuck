@@ -2,6 +2,7 @@ package com.mraof.minestuck.network.skaianet;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -504,4 +505,24 @@ public class SessionHandler {
 		return true;
 	}
 	
+	public static Object[] createDataObjects()
+	{
+		Object[] data = new Object[sessions.size()*2 + 1];
+		for(int i = 0; i < sessions.size(); i++)
+		{
+			Session session = sessions.get(i);
+			HashSet<String> set = new HashSet<String>();
+			int playersEntered = 0;
+			for(SburbConnection c :session.connections)
+			{
+				set.add(c.getClientName());
+				set.add(c.getServerName());
+				if(c.isMain && c.enteredGame)
+					playersEntered++;
+			}
+			data[i*2 + 1] = set.size();
+			data[i*2 + 2] = playersEntered;
+		}
+		return data;
+	}
 }

@@ -28,7 +28,8 @@ public abstract class MinestuckPacket
 		CONTAINER(MiscContainerPacket.class),
 		INVENTORY(InventoryChangedPacket.class),
 		CAPTCHA(CaptchaDeckPacket.class),
-		SELECTION(SelectionPacket.class);
+		SELECTION(SelectionPacket.class),
+		DATA_CHECKER(DataCheckerPacket.class);
 		
 		Class<? extends MinestuckPacket> packetType;
 		private Type(Class<? extends MinestuckPacket> packetClass)
@@ -46,17 +47,9 @@ public abstract class MinestuckPacket
 			}
 		}
 	}
-	Type type;
 	
 	protected ByteBuf data = Unpooled.buffer();
 	
-	public MinestuckPacket()
-	{
-	}
-	public MinestuckPacket(Type type)
-	{
-		this.type = type;
-	}
     public static MinestuckPacket makePacket(Type type, Object... dat)
     {
         return type.make().generatePacket(dat);

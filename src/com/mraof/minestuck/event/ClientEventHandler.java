@@ -9,6 +9,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.GuiColorSelector;
+import com.mraof.minestuck.client.gui.playerStats.GuiDataChecker;
 import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
 import com.mraof.minestuck.inventory.ContainerEditmode;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
@@ -23,7 +24,7 @@ public class ClientEventHandler
 {
 	
 	@SubscribeEvent
-	public void onConnectedToServer(ClientConnectedToServerEvent event)
+	public void onConnectedToServer(ClientConnectedToServerEvent event)	//Reset all static client-side data here
 	{
 		GuiPlayerStats.normalTab = GuiPlayerStats.NormalGuiType.CAPTCHA_DECK;
 		GuiPlayerStats.editmodeTab = GuiPlayerStats.EditmodeGuiType.DEPLOY_LIST;
@@ -32,6 +33,7 @@ public class ClientEventHandler
 		MinestuckPlayerData.title = null;
 		ColorCollector.playerColor = -1;
 		ColorCollector.displaySelectionGui = false;
+		GuiDataChecker.activeComponent = null;
 	}
 	
 	@SubscribeEvent

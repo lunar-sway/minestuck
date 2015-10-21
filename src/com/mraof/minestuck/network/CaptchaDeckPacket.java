@@ -37,11 +37,6 @@ public class CaptchaDeckPacket extends MinestuckPacket
 	public byte valueType;
 	public int value;
 	
-	public CaptchaDeckPacket()
-	{
-		super(Type.CAPTCHA);
-	}
-
 	@Override
 	public MinestuckPacket generatePacket(Object... data)
 	{

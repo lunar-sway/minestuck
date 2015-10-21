@@ -13,11 +13,8 @@ import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 
-public class SkaianetInfoPacket extends MinestuckPacket {
-
-	public SkaianetInfoPacket() {
-		super(Type.SBURB_INFO);
-	}
+public class SkaianetInfoPacket extends MinestuckPacket
+{
 	
 	public String player;
 	public boolean isClientResuming, isServerResuming;

@@ -21,11 +21,6 @@ public class InventoryChangedPacket extends MinestuckPacket
 	public boolean b1, b2;
 	public ArrayList<ItemStack> inventory;
 	
-	public InventoryChangedPacket()
-	{
-		super(Type.INVENTORY);
-	}
-	
 	@Override
 	public MinestuckPacket generatePacket(Object... data)
 	{

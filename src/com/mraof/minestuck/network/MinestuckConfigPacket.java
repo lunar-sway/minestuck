@@ -31,12 +31,7 @@ public class MinestuckConfigPacket extends MinestuckPacket
 	boolean[] deployValues;
 	
 	String lanHost;
-
-	public MinestuckConfigPacket()
-	{
-		super(Type.CONFIG);
-	}
-
+	
 	@Override
 	public MinestuckPacket generatePacket(Object... dat)
 	{

@@ -19,11 +19,7 @@ public class MachineStatePacket extends MinestuckPacket {
 	public int yCoord;
 	public int zCoord;
 	public int gristType = -1;
-	public MachineStatePacket() 
-	{
-		super(Type.MACHINE_STATE);
-	}
-
+	
 	@Override
 	public MinestuckPacket generatePacket(Object... dat) 
 	{

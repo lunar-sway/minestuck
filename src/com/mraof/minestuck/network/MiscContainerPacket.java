@@ -16,11 +16,6 @@ public class MiscContainerPacket extends MinestuckPacket
 	
 	int i;
 	
-	public MiscContainerPacket()
-	{
-		super(Type.CONTAINER);
-	}
-	
 	@Override
 	public MinestuckPacket generatePacket(Object... data)
 	{

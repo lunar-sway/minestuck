@@ -29,10 +29,6 @@ public class ClearMessagePacket extends MinestuckPacket {
 		MinestuckChannelHandler.sendToServer(packet);
 	}
 	
-	public ClearMessagePacket() {
-		super(Type.SBURB_CLOSE);
-	}
-	
 	@Override
 	public MinestuckPacket generatePacket(Object... dat) {
 		ComputerData cd = (ComputerData)dat[0];

@@ -18,11 +18,6 @@ public class LandRegisterPacket extends MinestuckPacket
 	public HashMap<Integer, LandAspectRegistry.AspectCombination> aspectMap;
 	public HashMap<Integer, BlockPos> spawnMap;
 	
-	public LandRegisterPacket() 
-	{
-		super(Type.LANDREGISTER);
-	}
-
 	@Override
 	public MinestuckPacket generatePacket(Object... dat) 
 	{

@@ -25,10 +25,6 @@ public class ClientEditPacket extends MinestuckPacket {
 	String username;
 	String target;
 	
-	public ClientEditPacket() {
-		super(Type.CLIENT_EDIT);
-	}
-
 	@Override
 	public MinestuckPacket generatePacket(Object... dat) {
 		if(dat.length > 0)
