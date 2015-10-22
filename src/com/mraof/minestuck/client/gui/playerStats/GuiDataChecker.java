@@ -26,6 +26,7 @@ public class GuiDataChecker extends GuiScreen
 	private GuiButton[] buttons = new GuiButton[5];
 	private int index;
 	private float displayIndex;
+	private boolean wasClicking, isScrolling;
 	
 	@Override
 	public boolean doesGuiPauseGame()
@@ -39,7 +40,7 @@ public class GuiDataChecker extends GuiScreen
 		for(int i = 0; i < 5; i++)
 		{
 			GuiButton button = new GuiButton(i, (width - GUI_WIDTH)/2 + 5, (height - GUI_HEIGHT)/2 + 20 + i*22, 180, 20, "");
-			buttons[i] = button;
+			buttons[i] = button;	//TODO check buttons for when resizing the minecraft window	(when "width" and "height" is changed)
 			this.buttonList.add(button);
 		}
 		
@@ -56,15 +57,40 @@ public class GuiDataChecker extends GuiScreen
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks)
 	{
+		int xOffset = (width - GUI_WIDTH)/2;
+		int yOffset = (height - GUI_HEIGHT)/2;
+		boolean canScroll = guiComponent != null && guiComponent.getComponentList().size() > 5 ? true : false;
+		
+		boolean mouseButtonDown = Mouse.isButtonDown(0);
+		if(canScroll)
+		{
+			if(!wasClicking && mouseButtonDown && mouseX > xOffset + 190 && mouseX < xOffset + 202 && mouseY > yOffset + 21 && mouseY < yOffset + 127)
+				isScrolling = true;
+			else if(!mouseButtonDown)
+				isScrolling = false;
+			
+			if(isScrolling)
+			{
+				displayIndex = (mouseY -  yOffset - 28.5F)/91;
+				displayIndex = MathHelper.clamp_float(displayIndex, 0.0F, 1.0F);
+				int newIndex = (int) ((guiComponent.getComponentList().size() - 5)*displayIndex + 0.5);
+				if(newIndex != index)
+				{
+					index = newIndex;
+					updateGuiButtons();
+				}
+			}
+		} else isScrolling = false;
+		wasClicking = mouseButtonDown;
+		
 		drawDefaultBackground();
 		
 		this.mc.getTextureManager().bindTexture(guiBackground);
 		
-		drawTexturedModalRect((width - GUI_WIDTH)/2, (height - GUI_HEIGHT)/2, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+		drawTexturedModalRect(xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		
-		this.mc.getTextureManager().bindTexture(guiBackground);
 		if(guiComponent != null)
 		{
 			List<IDataComponent> list = guiComponent.getComponentList();
@@ -74,14 +100,16 @@ public class GuiDataChecker extends GuiScreen
 				if(component != null && !component.isButton())
 				{
 					GlStateManager.color(1, 1, 1);
-					drawTexturedModalRect((width - GUI_WIDTH)/2 + 5, (height - GUI_HEIGHT)/2 + 20 + i*22, 0, 236, 180, 20);
-					mc.fontRendererObj.drawString(component.getName(), (width - GUI_WIDTH)/2 + 9, (height - GUI_HEIGHT)/2 + 30 - mc.fontRendererObj.FONT_HEIGHT/2 + i*22, 0);
+					this.mc.getTextureManager().bindTexture(guiBackground);
+					drawTexturedModalRect(xOffset + 5, yOffset + 20 + i*22, 0, 236, 180, 20);
+					mc.fontRendererObj.drawString(component.getName(), xOffset + 9, yOffset + 30 - mc.fontRendererObj.FONT_HEIGHT/2 + i*22, 0);
 				}
 			}
 		}
 		
 		GlStateManager.color(1, 1, 1);
-		int textureIndex = guiComponent != null && guiComponent.getComponentList().size() > 5 ? 232 : 244;
+		int textureIndex = canScroll ? 232 : 244;
+		this.mc.getTextureManager().bindTexture(guiBackground);
 		drawTexturedModalRect((width - GUI_WIDTH)/2 + 190, (height - GUI_HEIGHT)/2 + 21 + displayIndex*91, textureIndex, 0, 12, 15);
 	}
 	
@@ -204,6 +232,7 @@ public class GuiDataChecker extends GuiScreen
 				SessionComponent session = new SessionComponent(this, String.valueOf(i + 1), sessionSizeData[i*2], sessionSizeData[i*2 + 1]);
 				list.add(session);
 			}
+			list.add(new TextField("Scrollbar debug entries:"));
 			list.add(new SessionComponent(this, "Filler", 2, -1));
 			list.add(new SessionComponent(this, "Filler", 3, 0));
 			list.add(new SessionComponent(this, "Filler", -7, 8));
