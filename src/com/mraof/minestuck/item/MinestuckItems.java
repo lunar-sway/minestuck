@@ -90,6 +90,7 @@ public class MinestuckItems
 	public static Item prismarineChestplate;
 	public static Item prismarineLeggings;
 	public static Item prismarineBoots;
+	public static Item candy;
 	
 	public static Item.ToolMaterial toolEmerald;
 	public static ItemArmor.ArmorMaterial armorPrismarine;
@@ -164,6 +165,7 @@ public class MinestuckItems
 				modusCard = new ItemModus();
 				goldSeeds = new ItemGoldSeeds();
 				metalBoat = new ItemMetalBoat();
+				candy = new ItemMinestuckCandy();
 				
 				minestuckBucket.addBlock(MinestuckBlocks.blockOil);
 				minestuckBucket.addBlock(MinestuckBlocks.blockBlood);
@@ -231,7 +233,6 @@ public class MinestuckItems
 				GameRegistry.registerItem(modusCard, "modus_card");
 				GameRegistry.registerItem(goldSeeds, "gold_seeds");
 				GameRegistry.registerItem(metalBoat, "metal_boat");
+				GameRegistry.registerItem(candy, "candy");
 	}
-	
-	
 }

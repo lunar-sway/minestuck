@@ -204,6 +204,8 @@ public void initGui()
 			//All non-Cruxtruders need a Go button.
 			goButton = new GuiButtonExt(1, (width - xSize) / 2 + goX, (height - ySize) / 2 + goY, 30, 12, te.overrideStop ? "STOP" : "GO");
 			buttonList.add(goButton);
+			if(metadata == 4 && MinestuckConfig.clientDisableGristWidget)
+				goButton.enabled = false;
 		}
 }
 	

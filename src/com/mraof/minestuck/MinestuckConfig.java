@@ -36,6 +36,8 @@ public class MinestuckConfig
 	@SideOnly(Side.CLIENT)
 	public static boolean clientGiveItems;
 	@SideOnly(Side.CLIENT)
+	public static boolean clientDisableGristWidget;
+	@SideOnly(Side.CLIENT)
 	public static boolean oldItemModels;
 	@SideOnly(Side.CLIENT)
 	public static boolean loginColorSelector;
@@ -54,6 +56,7 @@ public class MinestuckConfig
 	public static boolean keepDimensionsLoaded;
 	public static boolean adaptEntryBlockHeight;
 	public static boolean allowSecondaryConnections;	//TODO make open server not an option after having a main connection (for when this is set to false)
+	public static boolean disableGristWidget;
 	public static int artifactRange;
 	public static int overworldEditRange;
 	public static int landEditRange;
@@ -138,6 +141,7 @@ public class MinestuckConfig
 		keepDimensionsLoaded = config.get("General", "keepDimensionsLoaded", true, "").setLanguageKey("minestuck.config.keepDimensionsLoaded").setRequiresMcRestart(true).getBoolean();
 		adaptEntryBlockHeight = config.get("General", "adaptEntryBlockHeight", true, "Adapt the transferred height to make the top non-air block to be placed at y:128. Makes entry take longer.").setLanguageKey("minestuck.config.adaptEntryBlockHeight").getBoolean();
 		allowSecondaryConnections = config.get("General", "secondaryConnections", true, "Set this to true to allow so-called 'secondary connections' to be created.").setLanguageKey("minestuck.config.secondaryConnections").getBoolean();	//Server lists need to be updated if this gets changeable in-game
+		disableGristWidget = config.get("General", "disableGristWidget", false).setLanguageKey("minestuck.config.disableGristWidget").setRequiresWorldRestart(true).getBoolean();
 		
 		if(gameSide.isClient())	//Client sided config values
 		{

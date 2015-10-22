@@ -194,6 +194,28 @@ item.leggingsPrismarine.name=Prismarine Leggings
 item.bootsPrismarine.name=Prismarine Boots
 item.fork.name=Fork
 item.spork.name=Spork 
+item.candyCorn.name=Candy Corn
+item.candyAmber.name=Amber Gummy Worm
+item.candyAmethyst.name=Amethyst Hard Candy
+item.candyArtifact.name=Artifact War Head
+item.candyBuild.name=Build Gusher
+item.candyCaulk.name=Caulk Pretzel
+item.candyChalk.name=Chalk Candy Cigarette
+item.candyCobalt.name=Cobalt Gum
+item.candyDiamond.name=Diamond Mint
+item.candyGarnet.name=Garnet Twix
+item.candyGold.name=Gold Candy Ribbon
+item.candyIodine.name=Iodine Licorice
+item.candyMarble.name=Marble Jawbreaker
+item.candyMercury.name=Mercury Sixlets
+item.candyQuartz.name=Quartz Jelly Bean
+item.candyRuby.name=Ruby Lollipop
+item.candyRust.name=Rust Gummy Eye
+item.candyShale.name=Shale Peep
+item.candySulfur.name=Sulfur Candy Apple
+item.candyTar.name=Tar Black Licorice
+item.candyUranium.name=Uranium Gummy Bear
+item.candyZillium.name=Zillium Skittles
 
 itemGroup.tabMinestuck=Minestuck
 
@@ -318,6 +340,8 @@ minestuck.config.adaptEntryBlockHeight=Adapt Entry Block Height
 minestuck.config.adaptEntryBlockHeight.tooltip=When on, you will be moved up on entry enough to make the top transferred non-air block placed at y:128 and all blocks above it ignored. (Which shouldn't be troubling as the ignored blocks should be handled as air) This will however make the entering the medium take slightly longer time.
 minestuck.config.secondaryConnections=Allow Secondary Connections
 minestuck.config.secondaryConnections.tooltip=If this is set to true, other players in your session are allowed to act as your server player temporarily.
+minestuck.config.disableGristWidget=Disable Grist Widget
+minestuck.config.disableGristWidget.tooltip=If you want to disable grist widgets because of exploits caused by other mods, you can do it here.
 
 message.selectDefaultColor=Default color selected. You can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!
 message.selectColor=If you want to change the color, you can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!

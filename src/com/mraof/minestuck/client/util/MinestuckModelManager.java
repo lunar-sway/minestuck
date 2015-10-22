@@ -25,6 +25,7 @@ import com.mraof.minestuck.block.BlockChessTile;
 import com.mraof.minestuck.block.BlockMachine;
 import com.mraof.minestuck.block.BlockStorage;
 import com.mraof.minestuck.block.BlockColoredDirt;
+import com.mraof.minestuck.item.ItemMinestuckCandy;
 
 import static com.mraof.minestuck.block.MinestuckBlocks.*;
 import static com.mraof.minestuck.item.MinestuckItems.*;
@@ -118,7 +119,8 @@ public class MinestuckModelManager
 		for(int i = 0; i < metalBoat.names.length; i++)
 			register(metalBoat, i, "boat_" + metalBoat.names[i]);
 		register(obsidianBucket);
-		
+		for(int i = 0; i < ItemMinestuckCandy.modelNames.length; i++)
+			register(candy, i, ItemMinestuckCandy.modelNames[i]);
 		
 		//Blocks
 		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())
@@ -168,6 +170,8 @@ public class MinestuckModelManager
 		ModelBakery.addVariantName(modusCard, str);
 		for(String s : metalBoat.names)
 			ModelBakery.addVariantName(metalBoat, "minestuck:boat_" + s);
+		for(String s : ItemMinestuckCandy.modelNames)
+			ModelBakery.addVariantName(candy, "minestuck:"+s);
 		
 		//Blocks
 		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())
