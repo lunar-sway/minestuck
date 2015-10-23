@@ -2,6 +2,7 @@ package com.mraof.minestuck.client.gui.playerStats;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.lwjgl.input.Mouse;
@@ -322,11 +323,21 @@ public class GuiDataChecker extends GuiScreen
 		{
 			this.parent = parent;
 			this.name = sessionTag.getString("name");
-			this.players = sessionTag.getInteger("playerCount");
-			this.playersEntered = sessionTag.getInteger("landCount");
+			HashSet<String> playerSet = new HashSet<String>();
 			NBTTagList connectionList = sessionTag.getTagList("connections", 10);
 			for(int i = 0; i < connectionList.tagCount(); i++)
-				list.add(new ConnectionComponent(this, connectionList.getCompoundTagAt(i), dataTag));
+			{
+				ConnectionComponent connection = new ConnectionComponent(this, connectionList.getCompoundTagAt(i), dataTag);
+				list.add(connection);
+				
+				if(connection.landDim != 0)
+					playersEntered++;
+				playerSet.add(connection.client);
+				playerSet.add(connection.server);
+			}
+			
+			playerSet.remove(".null");
+			players = playerSet.size();
 		}
 		
 		@Override

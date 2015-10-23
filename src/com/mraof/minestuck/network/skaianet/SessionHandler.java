@@ -2,7 +2,6 @@ package com.mraof.minestuck.network.skaianet;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -515,16 +514,9 @@ public class SessionHandler {
 		for(int i = 0; i < sessions.size(); i++)
 		{
 			Session session = sessions.get(i);
-			HashSet<String> set = new HashSet<String>();
-			int playersEntered = 0;
 			NBTTagList connectionList = new NBTTagList();
 			for(SburbConnection c :session.connections)
 			{
-				set.add(c.getClientName());
-				set.add(c.getServerName());
-				if(c.isMain && c.enteredGame)
-					playersEntered++;
-				
 				NBTTagCompound connectionTag = new NBTTagCompound();
 				connectionTag.setString("client", c.getClientName());
 				connectionTag.setString("server", c.getServerName());
@@ -537,8 +529,6 @@ public class SessionHandler {
 			
 			NBTTagCompound sessionTag = new NBTTagCompound();
 			sessionTag.setString("name", String.valueOf(i + 1));
-			sessionTag.setInteger("playerCount", set.size());
-			sessionTag.setInteger("landCount", playersEntered);
 			sessionTag.setTag("connections", connectionList);
 			sessionList.appendTag(sessionTag);
 		}
