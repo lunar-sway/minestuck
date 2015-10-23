@@ -2,19 +2,24 @@ package com.mraof.minestuck.network;
 
 import io.netty.buffer.ByteBuf;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.EnumSet;
 
 import com.mraof.minestuck.client.gui.playerStats.GuiDataChecker;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class DataCheckerPacket extends MinestuckPacket
 {
 	
 	public static int index = 0;
-	public static int[] sessionSize;
+	public static NBTTagCompound nbtData;
 	
 	/**
 	 * Used to avoid confusion when the client sends several requests during a short period
@@ -30,10 +35,17 @@ public class DataCheckerPacket extends MinestuckPacket
 		{
 			data.writeByte((Integer) dat[0]);
 			
-			for(int i = 1; i < dat.length; i++)
-				data.writeByte((Integer) dat[i]);
-			
-			//TODO nbt is probably the best way of transferring the data
+			try
+			{
+				ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+				CompressedStreamTools.writeCompressed((NBTTagCompound)dat[1], bytes);
+				this.data.writeBytes(bytes.toByteArray());
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+				return null;
+			}
 		}
 		
 		return this;
@@ -46,11 +58,17 @@ public class DataCheckerPacket extends MinestuckPacket
 		
 		if(data.readableBytes() > 0)
 		{
-			sessionSize = new int[data.readableBytes()];
-			for(int i = 0; i < sessionSize.length; i++)
-				sessionSize[i] = data.readByte();
-			
-			//Starting with session size only while getting the gui properly working.
+			byte[] bytes = new byte[data.readableBytes()];
+			data.readBytes(bytes);
+			try
+			{
+				this.nbtData = CompressedStreamTools.readCompressed(new ByteArrayInputStream(bytes));
+			}
+			catch(IOException e)
+			{
+				e.printStackTrace();
+				return null;
+			}
 		}
 		
 		return this;
@@ -62,12 +80,11 @@ public class DataCheckerPacket extends MinestuckPacket
 		if(player.worldObj.isRemote)
 		{
 			if(packetIndex == index)
-				GuiDataChecker.activeComponent = new GuiDataChecker.MainComponent(sessionSize);
+				GuiDataChecker.activeComponent = new GuiDataChecker.MainComponent(nbtData);
 		} else
 		{
-			Object[] data = SessionHandler.createDataObjects();
-			data[0] = index;
-			MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.DATA_CHECKER, data), player);
+			NBTTagCompound data = SessionHandler.createDataTag();
+			MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.DATA_CHECKER, index, data), player);
 		}
 	}
 	

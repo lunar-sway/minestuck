@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3i;
@@ -505,9 +507,11 @@ public class SessionHandler {
 		return true;
 	}
 	
-	public static Object[] createDataObjects()
+	public static NBTTagCompound createDataTag()
 	{
-		Object[] data = new Object[sessions.size()*2 + 1];
+		NBTTagCompound nbt = new NBTTagCompound();
+		NBTTagList sessionList = new NBTTagList();
+		nbt.setTag("sessions", sessionList);
 		for(int i = 0; i < sessions.size(); i++)
 		{
 			Session session = sessions.get(i);
@@ -520,9 +524,12 @@ public class SessionHandler {
 				if(c.isMain && c.enteredGame)
 					playersEntered++;
 			}
-			data[i*2 + 1] = set.size();
-			data[i*2 + 2] = playersEntered;
+			NBTTagCompound sessionTag = new NBTTagCompound();
+			sessionTag.setString("name", String.valueOf(i + 1));
+			sessionTag.setInteger("playerCount", set.size());
+			sessionTag.setInteger("landCount", playersEntered);
+			sessionList.appendTag(sessionTag);
 		}
-		return data;
+		return nbt;
 	}
 }

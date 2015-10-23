@@ -12,6 +12,8 @@ import com.mraof.minestuck.network.MinestuckPacket;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
@@ -263,18 +265,18 @@ public class GuiDataChecker extends GuiScreen
 	{
 		List<IDataComponent> list = new ArrayList<IDataComponent>();
 		
-		public MainComponent(int[] sessionSizeData)
+		public MainComponent(NBTTagCompound data)
 		{
-			for(int i = 0; i < sessionSizeData.length/2; i++)
+			if(data == null || data.hasNoTags())
+				return;
+			
+			NBTTagList sessionList = data.getTagList("sessions", 10);
+			for(int i = 0; i < sessionList.tagCount(); i++)
 			{
-				SessionComponent session = new SessionComponent(this, String.valueOf(i + 1), sessionSizeData[i*2], sessionSizeData[i*2 + 1]);
+				NBTTagCompound sessionTag = sessionList.getCompoundTagAt(i);
+				SessionComponent session = new SessionComponent(this, sessionTag, data);
 				list.add(session);
 			}
-			list.add(new TextField("Scrollbar debug entries:"));
-			list.add(new SessionComponent(this, "Filler", 2, -1));
-			list.add(new SessionComponent(this, "Filler", 3, 0));
-			list.add(new SessionComponent(this, "Filler", -7, 8));
-			list.add(new SessionComponent(this, "Filler", 1, 1));
 		}
 		
 		@Override
@@ -310,12 +312,12 @@ public class GuiDataChecker extends GuiScreen
 		String name;
 		int players, playersEntered;
 		
-		public SessionComponent(MainComponent parent, String name, int players, int playersEntered)
+		public SessionComponent(MainComponent parent, NBTTagCompound sessionTag, NBTTagCompound dataTag)
 		{
 			this.parent = parent;
-			this.name = name;
-			this.players = players;
-			this.playersEntered = playersEntered;
+			this.name = sessionTag.getString("name");
+			this.players = sessionTag.getInteger("playerCount");
+			this.playersEntered = sessionTag.getInteger("landCount");
 		}
 		
 		@Override
