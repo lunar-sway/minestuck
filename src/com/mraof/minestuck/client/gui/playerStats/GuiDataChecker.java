@@ -229,6 +229,11 @@ public class GuiDataChecker extends GuiScreen
 	public static class TextField implements IDataComponent
 	{
 		private String message;
+		
+		public TextField(String message, Object... args)
+		{
+			this(String.format(message, args));
+		}
 		public TextField(String message)
 		{
 			this.message = message;
@@ -308,6 +313,7 @@ public class GuiDataChecker extends GuiScreen
 	
 	public static class SessionComponent implements IDataComponent
 	{
+		List<IDataComponent> list = new ArrayList<IDataComponent>();
 		MainComponent parent;
 		String name;
 		int players, playersEntered;
@@ -318,6 +324,9 @@ public class GuiDataChecker extends GuiScreen
 			this.name = sessionTag.getString("name");
 			this.players = sessionTag.getInteger("playerCount");
 			this.playersEntered = sessionTag.getInteger("landCount");
+			NBTTagList connectionList = sessionTag.getTagList("connections", 10);
+			for(int i = 0; i < connectionList.tagCount(); i++)
+				list.add(new ConnectionComponent(this, connectionList.getCompoundTagAt(i), dataTag));
 		}
 		
 		@Override
@@ -328,7 +337,7 @@ public class GuiDataChecker extends GuiScreen
 		@Override
 		public List<IDataComponent> getComponentList()
 		{
-			return new ArrayList<IDataComponent>();
+			return list;
 		}
 		@Override
 		public IDataComponent onButtonPressed()
@@ -344,6 +353,62 @@ public class GuiDataChecker extends GuiScreen
 		public String getName()
 		{
 			return String.format("Session %s (%d/%d)", name, playersEntered, players);
+		}
+	}
+	
+	public static class ConnectionComponent implements IDataComponent
+	{
+		List<IDataComponent> list = new ArrayList<IDataComponent>();
+		SessionComponent parent;
+		String client;
+		String server;
+		boolean isActive;
+		boolean isMain;
+		int landDim;
+		
+		public ConnectionComponent(SessionComponent parent, NBTTagCompound connectionTag, NBTTagCompound dataTag)
+		{
+			this.parent = parent;
+			this.client = connectionTag.getString("client");
+			this.server = connectionTag.getString("server");
+			this.isActive = connectionTag.getBoolean("isActive");
+			this.isMain = connectionTag.getBoolean("isMain");
+			if(isMain)
+				landDim = connectionTag.getInteger("clientDim");
+			
+			list.add(new TextField("Client Player: '%s'", client));
+			list.add(new TextField("Server Player: '%s'", server));
+			list.add(new TextField("Is Active: %b", isActive));
+			list.add(new TextField("Is Primary Connection: %b", isMain));
+			if(isMain)
+				list.add(new TextField("Land dimension: %s", (landDim != 0 ? String.valueOf(landDim) : "Pre-entry")));
+		}
+		@Override
+		public IDataComponent getParentComponent()
+		{
+			return parent;
+		}
+		@Override
+		public List<IDataComponent> getComponentList()
+		{
+			return list;
+		}
+		@Override
+		public IDataComponent onButtonPressed()
+		{
+			return this;
+		}
+		@Override
+		public boolean isButton()
+		{
+			return true;
+		}
+		@Override
+		public String getName()
+		{
+			if(isMain)
+				return String.format("'%s' - '%s'", client, server);
+			else return String.format("('%s' - '%s')", client, server);
 		}
 	}
 }

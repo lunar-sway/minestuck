@@ -517,17 +517,29 @@ public class SessionHandler {
 			Session session = sessions.get(i);
 			HashSet<String> set = new HashSet<String>();
 			int playersEntered = 0;
+			NBTTagList connectionList = new NBTTagList();
 			for(SburbConnection c :session.connections)
 			{
 				set.add(c.getClientName());
 				set.add(c.getServerName());
 				if(c.isMain && c.enteredGame)
 					playersEntered++;
+				
+				NBTTagCompound connectionTag = new NBTTagCompound();
+				connectionTag.setString("client", c.getClientName());
+				connectionTag.setString("server", c.getServerName());
+				connectionTag.setBoolean("isMain", c.isMain);
+				connectionTag.setBoolean("isActive", c.isActive);
+				if(c.isMain)
+					connectionTag.setInteger("clientDim", c.enteredGame ? c.clientHomeLand : 0);
+				connectionList.appendTag(connectionTag);
 			}
+			
 			NBTTagCompound sessionTag = new NBTTagCompound();
 			sessionTag.setString("name", String.valueOf(i + 1));
 			sessionTag.setInteger("playerCount", set.size());
 			sessionTag.setInteger("landCount", playersEntered);
+			sessionTag.setTag("connections", connectionList);
 			sessionList.appendTag(sessionTag);
 		}
 		return nbt;
