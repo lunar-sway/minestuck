@@ -14,16 +14,19 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 public class GuiDataChecker extends GuiScreen
 {
 	
 	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/DataCheck.png");
-	private static final int GUI_WIDTH = 210, GUI_HEIGHT = 135;
+	private static final int GUI_WIDTH = 210, GUI_HEIGHT = 140;
+	private static final int LIST_Y = 25;
 	
 	public static IDataComponent activeComponent = null;
 	private IDataComponent guiComponent;
 	private GuiButton[] buttons = new GuiButton[5];
+	private GuiButton returnButton, refreshButton;
 	private int index;
 	private float displayIndex;
 	private boolean wasClicking, isScrolling;
@@ -37,21 +40,23 @@ public class GuiDataChecker extends GuiScreen
 	@Override
 	public void initGui()
 	{
+		int xOffset = (width - GUI_WIDTH)/2;
+		int yOffset = (height - GUI_HEIGHT)/2;
 		for(int i = 0; i < 5; i++)
 		{
-			GuiButton button = new GuiButton(i, (width - GUI_WIDTH)/2 + 5, (height - GUI_HEIGHT)/2 + 20 + i*22, 180, 20, "");
+			GuiButton button = new GuiButton(i, xOffset + 5, yOffset + LIST_Y + i*22, 180, 20, "");
 			buttons[i] = button;	//TODO check buttons for when resizing the minecraft window	(when "width" and "height" is changed)
 			this.buttonList.add(button);
 		}
+		returnButton = new GuiButtonExt(5, xOffset + GUI_WIDTH - 25, yOffset + 5, 18, 18, "");
+		this.buttonList.add(returnButton);
+		refreshButton = new GuiButtonExt(6, xOffset + GUI_WIDTH - 45, yOffset + 5, 18, 18, "");
+		this.buttonList.add(refreshButton);
 		
-		activeComponent = null;	//Remove after adding refresh button
-//		if(activeComponent == null)
-		MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.DATA_CHECKER));
+		if(activeComponent == null)
+			MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.DATA_CHECKER));
 		
-		index = 0;
-		displayIndex = 0F;
-		guiComponent = activeComponent;
-		updateGuiButtons();
+		componentChanged();
 	}
 	
 	@Override
@@ -64,7 +69,7 @@ public class GuiDataChecker extends GuiScreen
 		boolean mouseButtonDown = Mouse.isButtonDown(0);
 		if(canScroll)
 		{
-			if(!wasClicking && mouseButtonDown && mouseX > xOffset + 190 && mouseX < xOffset + 202 && mouseY > yOffset + 21 && mouseY < yOffset + 127)
+			if(!wasClicking && mouseButtonDown && mouseX >= xOffset + 190 && mouseX < xOffset + 202 && mouseY >= yOffset + LIST_Y + 1 && mouseY < yOffset + LIST_Y + 102)
 				isScrolling = true;
 			else if(!mouseButtonDown)
 				isScrolling = false;
@@ -96,33 +101,29 @@ public class GuiDataChecker extends GuiScreen
 			List<IDataComponent> list = guiComponent.getComponentList();
 			for(int i = 0; i < 5; i++)
 			{
+				 mc.fontRendererObj.drawString(guiComponent.getName(), xOffset + 9, yOffset + 15 - mc.fontRendererObj.FONT_HEIGHT/2, 0);
 				IDataComponent component = i + index < list.size() ? list.get(i + index) : null;
 				if(component != null && !component.isButton())
 				{
 					GlStateManager.color(1, 1, 1);
 					this.mc.getTextureManager().bindTexture(guiBackground);
-					drawTexturedModalRect(xOffset + 5, yOffset + 20 + i*22, 0, 236, 180, 20);
-					mc.fontRendererObj.drawString(component.getName(), xOffset + 9, yOffset + 30 - mc.fontRendererObj.FONT_HEIGHT/2 + i*22, 0);
+					drawTexturedModalRect(xOffset + 5, yOffset + LIST_Y + i*22, 0, 236, 180, 20);
+					mc.fontRendererObj.drawString(component.getName(), xOffset + 9, yOffset + LIST_Y + 10 - mc.fontRendererObj.FONT_HEIGHT/2 + i*22, 0);
 				}
 			}
-		}
+		} else mc.fontRendererObj.drawString("Retrieving data from server...", xOffset + 9, yOffset + 15 - mc.fontRendererObj.FONT_HEIGHT/2, 0);
 		
 		GlStateManager.color(1, 1, 1);
 		int textureIndex = canScroll ? 232 : 244;
 		this.mc.getTextureManager().bindTexture(guiBackground);
-		drawTexturedModalRect((width - GUI_WIDTH)/2 + 190, (height - GUI_HEIGHT)/2 + 21 + displayIndex*91, textureIndex, 0, 12, 15);
+		drawTexturedModalRect((width - GUI_WIDTH)/2 + 190, (height - GUI_HEIGHT)/2 + LIST_Y + 1 + displayIndex*91, textureIndex, 0, 12, 15);
 	}
 	
 	@Override
 	public void updateScreen()
 	{
 		if(guiComponent != activeComponent)
-		{
-			index = 0;
-			displayIndex = 0F;
-			guiComponent = activeComponent;
-			updateGuiButtons();
-		}
+			componentChanged();
 	}
 	
 	@Override
@@ -149,6 +150,43 @@ public class GuiDataChecker extends GuiScreen
 				updateGuiButtons();
 			}
 		}
+	}
+	
+	@Override
+	protected void actionPerformed(GuiButton button) throws IOException
+	{
+		if(button.id >= 0 && button.id < 5)
+		{
+			int buttonIndex = index + button.id;
+			if(buttonIndex < guiComponent.getComponentList().size() && guiComponent.getComponentList().get(buttonIndex) != null)
+			{
+				IDataComponent component = guiComponent.getComponentList().get(buttonIndex).onButtonPressed();
+				if(component != null)
+				{
+					activeComponent = component;
+					componentChanged();
+				}
+			}
+		} else if(button.id == 5 && guiComponent != null && guiComponent.getParentComponent() != null)
+		{
+			activeComponent = guiComponent.getParentComponent();
+			componentChanged();
+		} else if(button.id == 6)
+		{
+			MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.DATA_CHECKER));
+			activeComponent = null;
+			componentChanged();
+		}
+	}
+	
+	public void componentChanged()
+	{
+		index = 0;
+		displayIndex = 0F;
+		guiComponent = activeComponent;
+		returnButton.enabled = guiComponent != null && guiComponent.getParentComponent() != null;
+		refreshButton.enabled = guiComponent != null;
+		updateGuiButtons();
 	}
 	
 	public void updateGuiButtons()
@@ -262,7 +300,7 @@ public class GuiDataChecker extends GuiScreen
 		@Override
 		public String getName()
 		{
-			return "main";
+			return "Data Checker";	//Either "Data Checker" or "Sessions"
 		}
 	}
 	
