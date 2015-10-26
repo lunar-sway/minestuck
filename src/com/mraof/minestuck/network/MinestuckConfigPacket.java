@@ -12,11 +12,12 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.inventory.ContainerHandler;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.UsernameHandler;
 
 public class MinestuckConfigPacket extends MinestuckPacket
 {
+	
+	boolean mode;
 	
 	int overWorldEditRange;
 	int landEditRange;
@@ -24,11 +25,11 @@ public class MinestuckConfigPacket extends MinestuckPacket
 	int windowIdStart;
 	byte treeModusSetting;
 	
-	boolean hardMode;
 	boolean giveItems;
 	boolean easyDesignix;
 	boolean cardRecipe;
 	boolean disableGristWidget;
+	boolean dataChecker;
 	boolean[] deployValues;
 	
 	String lanHost;
@@ -36,20 +37,27 @@ public class MinestuckConfigPacket extends MinestuckPacket
 	@Override
 	public MinestuckPacket generatePacket(Object... dat)
 	{
-		data.writeInt(MinestuckConfig.overworldEditRange);
-		data.writeInt(MinestuckConfig.landEditRange);
-		data.writeInt(MinestuckConfig.cardCost);
-		data.writeInt(ContainerHandler.windowIdStart);
-		data.writeBoolean(MinestuckConfig.hardMode);
-		data.writeBoolean(MinestuckConfig.giveItems);
-		data.writeBoolean(MinestuckConfig.cardRecipe);
-		data.writeBoolean(MinestuckConfig.disableGristWidget);
-		data.writeByte(MinestuckConfig.treeModusSetting);
-		
-		for(int i = 0; i < MinestuckConfig.deployConfigurations.length; i++)
-			data.writeBoolean(MinestuckConfig.deployConfigurations[i]);
-		if(UsernameHandler.host != null)
-			writeString(data,UsernameHandler.host);
+		boolean mode = (Boolean) dat[0];
+		data.writeBoolean(mode);
+		if(mode)	//Values that shouldn't be changed while the game is running, and should because of that only be sent once
+		{
+			data.writeInt(MinestuckConfig.overworldEditRange);
+			data.writeInt(MinestuckConfig.landEditRange);
+			data.writeInt(ContainerHandler.windowIdStart);
+			data.writeBoolean(MinestuckConfig.giveItems);
+			data.writeBoolean(MinestuckConfig.cardRecipe);
+			
+			for(int i = 0; i < MinestuckConfig.deployConfigurations.length; i++)
+				data.writeBoolean(MinestuckConfig.deployConfigurations[i]);
+			if(UsernameHandler.host != null)
+				writeString(data,UsernameHandler.host);
+		} else
+		{
+			data.writeInt(MinestuckConfig.cardCost);
+			data.writeBoolean(MinestuckConfig.disableGristWidget);
+			data.writeByte(MinestuckConfig.treeModusSetting);
+			data.writeBoolean((Boolean) dat[1]);
+		}
 		
 		return this;
 	}
@@ -57,44 +65,55 @@ public class MinestuckConfigPacket extends MinestuckPacket
 	@Override
 	public MinestuckPacket consumePacket(ByteBuf data)
 	{
-		overWorldEditRange = data.readInt();
-		landEditRange = data.readInt();
-		cardCost = data.readInt();
-		windowIdStart = data.readInt();
-		hardMode = data.readBoolean();
-		giveItems = data.readBoolean();
-		cardRecipe = data.readBoolean();
-		disableGristWidget = data.readBoolean();
-		treeModusSetting = data.readByte();
+		mode = data.readBoolean();
 		
-		deployValues = new boolean[MinestuckConfig.deployConfigurations.length];
-		for(int i = 0; i < deployValues.length; i++)
-			deployValues[i] = data.readBoolean();
-		lanHost = readLine(data);
-		if(lanHost.isEmpty())
-			lanHost = null;
-		Debug.print("Recived packet! Host is "+lanHost);
+		if(mode)
+		{
+			overWorldEditRange = data.readInt();
+			landEditRange = data.readInt();
+			windowIdStart = data.readInt();
+			giveItems = data.readBoolean();
+			cardRecipe = data.readBoolean();
+			
+			deployValues = new boolean[MinestuckConfig.deployConfigurations.length];
+			for(int i = 0; i < deployValues.length; i++)
+				deployValues[i] = data.readBoolean();
+			lanHost = readLine(data);
+			if(lanHost.isEmpty())
+				lanHost = null;
+		} else
+		{
+			cardCost = data.readInt();
+			disableGristWidget = data.readBoolean();
+			treeModusSetting = data.readByte();
+			dataChecker = data.readBoolean();
+		}
+		
 		return this;
 	}
 
 	@Override
 	public void execute(EntityPlayer player)
 	{
-		
-		MinestuckConfig.clientOverworldEditRange = overWorldEditRange;
-		MinestuckConfig.clientLandEditRange = landEditRange;
-		MinestuckConfig.clientCardCost = cardCost;
-		MinestuckConfig.clientHardMode = hardMode;
-		MinestuckConfig.clientGiveItems = giveItems;
-		MinestuckConfig.clientDisableGristWidget = disableGristWidget;
-		MinestuckConfig.clientTreeAutobalance = treeModusSetting;
-		ContainerHandler.clientWindowIdStart = windowIdStart;
-		
-		if(!Minestuck.isServerRunning)
+		if(mode)
 		{
-			UsernameHandler.host = lanHost;
-			DeployList.applyConfigValues(deployValues);
-			AlchemyRecipeHandler.addOrRemoveRecipes(cardRecipe);
+			MinestuckConfig.clientOverworldEditRange = overWorldEditRange;
+			MinestuckConfig.clientLandEditRange = landEditRange;
+			MinestuckConfig.clientGiveItems = giveItems;
+			ContainerHandler.clientWindowIdStart = windowIdStart;
+			
+			if(!Minestuck.isServerRunning)
+			{
+				UsernameHandler.host = lanHost;
+				DeployList.applyConfigValues(deployValues);
+				AlchemyRecipeHandler.addOrRemoveRecipes(cardRecipe);
+			}
+		} else
+		{
+			MinestuckConfig.clientCardCost = cardCost;
+			MinestuckConfig.clientDisableGristWidget = disableGristWidget;
+			MinestuckConfig.clientTreeAutobalance = treeModusSetting;
+			MinestuckConfig.dataCheckerAccess = dataChecker;
 		}
 	}
 

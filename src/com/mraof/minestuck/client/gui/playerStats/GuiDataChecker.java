@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.lwjgl.input.Mouse;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 
@@ -127,6 +128,8 @@ public class GuiDataChecker extends GuiScreen
 	{
 		if(guiComponent != activeComponent)
 			componentChanged();
+		if(!MinestuckConfig.dataCheckerAccess)
+			mc.displayGuiScreen(null);
 	}
 	
 	@Override

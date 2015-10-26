@@ -1,5 +1,8 @@
 package com.mraof.minestuck.tracker;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
@@ -10,6 +13,7 @@ import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.editmode.ServerEditHandler;
@@ -48,7 +52,8 @@ public class MinestuckPlayerTracker {
 			UsernameHandler.host = event.player.getCommandSenderName();
 		String encUsername = UsernameHandler.encode(player.getCommandSenderName());
 		
-		sendConfigPacket(player);
+		sendConfigPacket((EntityPlayerMP) player, true);
+		sendConfigPacket((EntityPlayerMP) player, false);
 		
 		SkaianetHandler.playerConnected(player.getCommandSenderName());
 		boolean firstTime = false;
@@ -97,6 +102,7 @@ public class MinestuckPlayerTracker {
 		Modus modus = CaptchaDeckHandler.getModus(event.player);
 		if(modus != null)
 			modus.player = null;
+		dataCheckerPermission.remove(event.player.getCommandSenderName());
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
@@ -108,6 +114,28 @@ public class MinestuckPlayerTracker {
 			
 		}
 		
+	}
+	
+	@SubscribeEvent
+	public void onPlayerTick(TickEvent.PlayerTickEvent event)
+	{
+		if(event.side.isServer() && event.phase == TickEvent.Phase.END && event.player instanceof EntityPlayerMP)
+		{
+			EntityPlayerMP player = (EntityPlayerMP) event.player;
+			if(shouldUpdateConfigurations(player))
+				sendConfigPacket(player, false);
+		}
+	}
+	
+	public static Set<String> dataCheckerPermission = new HashSet<String>();
+	
+	private static boolean shouldUpdateConfigurations(EntityPlayerMP player)
+	{
+		boolean permission = MinestuckConfig.getDataCheckerPermissionFor(player);
+		if(permission != dataCheckerPermission.contains(player.getCommandSenderName()))
+			return true;
+		
+		return false;
 	}
 	
 	/**
@@ -160,8 +188,19 @@ public class MinestuckPlayerTracker {
 		updateLands(null);
 	}
 
-	public static void sendConfigPacket(EntityPlayer player) {
-		MinestuckPacket packet = MinestuckPacket.makePacket(Type.CONFIG);
+	public static void sendConfigPacket(EntityPlayerMP player, boolean mode)
+	{
+		MinestuckPacket packet;
+		if(mode)
+			packet = MinestuckPacket.makePacket(Type.CONFIG, true);
+		else
+		{
+			boolean permission = MinestuckConfig.getDataCheckerPermissionFor(player);
+			packet = MinestuckPacket.makePacket(Type.CONFIG, false, permission);
+			if(permission)
+				dataCheckerPermission.add(player.getCommandSenderName());
+			else dataCheckerPermission.remove(player.getCommandSenderName());
+		}
 		MinestuckChannelHandler.sendToPlayer(packet, player);
 	}
 	

@@ -23,12 +23,18 @@ public class EditData {
 	
 	EntityPlayerMP player;
 	
-	public String getTarget() {
+	public String getTarget()
+	{
 		return connection.getClientName();
 	}
 
-	public EntityPlayerMP getEditor() {
+	public EntityPlayerMP getEditor()
+	{
 		return player;
 	}
 	
+	public EntityDecoy getDecoy()
+	{
+		return decoy;
+	}
 }

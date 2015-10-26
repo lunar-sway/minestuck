@@ -7,10 +7,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.EnumSet;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.playerStats.GuiDataChecker;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
@@ -81,7 +83,7 @@ public class DataCheckerPacket extends MinestuckPacket
 		{
 			if(packetIndex == index)
 				GuiDataChecker.activeComponent = new GuiDataChecker.MainComponent(nbtData);
-		} else
+		} else if(player instanceof EntityPlayerMP && MinestuckConfig.getDataCheckerPermissionFor((EntityPlayerMP) player))
 		{
 			NBTTagCompound data = SessionHandler.createDataTag();
 			MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.DATA_CHECKER, index, data), player);
