@@ -629,7 +629,14 @@ public class AlchemyRecipeHandler {
         	Map.Entry<List<Object>, Object> pairs = it.next();
         	//Debug.print("Getting recipe with key"+pairs.getKey()+" and value "+pairs.getValue());
 			lookedOver = new HashMap<List<Object>, Boolean>();
-        	getRecipe(pairs.getValue());
+			try
+			{
+				getRecipe(pairs.getValue());
+			} catch(Exception e)
+			{
+				Debug.printf("Failed to look over recipe \"%s\" for \"%s\":%d. Cause:", pairs.getValue(), pairs.getKey().get(0), pairs.getKey().get(1));
+				e.printStackTrace();
+			}
         }
 		
 		registerRecipes(new Minegicka3Support(), "minegicka3", true);
