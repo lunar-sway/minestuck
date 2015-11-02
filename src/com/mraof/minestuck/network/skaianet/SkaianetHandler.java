@@ -20,7 +20,6 @@ import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.common.DimensionManager;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.editmode.ServerEditHandler;
@@ -531,14 +530,11 @@ public class SkaianetHandler {
 	 * @return The <code>TileEntityComputer</code> at the given position,
 	 * or <code>null</code> if there isn't one there.
 	 */
-	public static TileEntityComputer getComputer(ComputerData data){
+	public static TileEntityComputer getComputer(ComputerData data)
+	{
 		if(data == null)
 			return null;
-		World world = DimensionManager.getWorld(data.dimension);
-		if(world == null) {
-			DimensionManager.initDimension(data.dimension);
-			world = DimensionManager.getWorld(data.dimension);
-		}
+		World world = MinecraftServer.getServer().worldServerForDimension(data.dimension);
 		if(world == null)
 			return null;
 		TileEntity te = world.getTileEntity(new BlockPos(data.x, data.y, data.z));

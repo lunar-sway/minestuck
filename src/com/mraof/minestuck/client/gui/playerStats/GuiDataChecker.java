@@ -10,6 +10,7 @@ import org.lwjgl.input.Mouse;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
+import com.mraof.minestuck.util.LocalizedObject;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -18,6 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 public class GuiDataChecker extends GuiScreen
@@ -232,7 +234,7 @@ public class GuiDataChecker extends GuiScreen
 	
 	public static class TextField implements IDataComponent
 	{
-		private String message;
+		String message;
 		
 		public TextField(String message, Object... args)
 		{
@@ -267,6 +269,21 @@ public class GuiDataChecker extends GuiScreen
 		public String getName()
 		{
 			return message;
+		}
+	}
+	
+	public static class LocalizedTextField extends TextField
+	{
+		Object[] params;
+		public LocalizedTextField(String message, Object... params)
+		{
+			super(message);
+			this.params = params;
+		}
+		@Override
+		public String getName()
+		{
+			return StatCollector.translateToLocalFormatted(message, params);
 		}
 	}
 	
@@ -379,6 +396,7 @@ public class GuiDataChecker extends GuiScreen
 		boolean isActive;
 		boolean isMain;
 		int landDim;
+		String aspect1, aspect2;
 		
 		public ConnectionComponent(SessionComponent parent, NBTTagCompound connectionTag, NBTTagCompound dataTag)
 		{
@@ -389,13 +407,24 @@ public class GuiDataChecker extends GuiScreen
 			this.isMain = connectionTag.getBoolean("isMain");
 			if(isMain)
 				landDim = connectionTag.getInteger("clientDim");
+			if(landDim != 0 && connectionTag.hasKey("aspect1"))
+			{
+				aspect1 = connectionTag.getString("aspect1");
+				aspect2 = connectionTag.getString("aspect2");
+			}
 			
 			list.add(new TextField("Client Player: '%s'", client));
 			list.add(new TextField("Server Player: '%s'", server));
 			list.add(new TextField("Is Active: %b", isActive));
 			list.add(new TextField("Is Primary Connection: %b", isMain));
+			
 			if(isMain)
+			{
+				list.add(null);
 				list.add(new TextField("Land dimension: %s", (landDim != 0 ? String.valueOf(landDim) : "Pre-entry")));
+				if(aspect1 != null)
+					list.add(new LocalizedTextField("land.message.format", new LocalizedObject("land."+aspect1), new LocalizedObject("land."+aspect2)));
+			}
 		}
 		@Override
 		public IDataComponent getParentComponent()
