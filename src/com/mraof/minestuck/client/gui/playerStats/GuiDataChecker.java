@@ -10,6 +10,8 @@ import org.lwjgl.input.Mouse;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
+import com.mraof.minestuck.util.EnumAspect;
+import com.mraof.minestuck.util.EnumClass;
 import com.mraof.minestuck.util.LocalizedObject;
 
 import net.minecraft.client.Minecraft;
@@ -395,37 +397,35 @@ public class GuiDataChecker extends GuiScreen
 		SessionComponent parent;
 		String client;
 		String server;
-		boolean isActive;
 		boolean isMain;
 		int landDim;
-		String aspect1, aspect2;
 		
 		public ConnectionComponent(SessionComponent parent, NBTTagCompound connectionTag, NBTTagCompound dataTag)
 		{
 			this.parent = parent;
 			this.client = connectionTag.getString("client");
 			this.server = connectionTag.getString("server");
-			this.isActive = connectionTag.getBoolean("isActive");
 			this.isMain = connectionTag.getBoolean("isMain");
 			if(isMain)
 				landDim = connectionTag.getInteger("clientDim");
-			if(landDim != 0 && connectionTag.hasKey("aspect1"))
-			{
-				aspect1 = connectionTag.getString("aspect1");
-				aspect2 = connectionTag.getString("aspect2");
-			}
 			
 			list.add(new TextField("Client Player: '%s'", client));
 			list.add(new TextField("Server Player: '%s'", server));
-			list.add(new TextField("Is Active: %b", isActive));
+			list.add(new TextField("Is Active: %b", connectionTag.getBoolean("isActive")));
 			list.add(new TextField("Is Primary Connection: %b", isMain));
 			
 			list.add(null);
 			if(isMain)
 			{
 				list.add(new TextField("Land dimension: %s", (landDim != 0 ? String.valueOf(landDim) : "Pre-entry")));
-				if(aspect1 != null)
-					list.add(new LocalizedTextField("land.message.format", new LocalizedObject("land."+aspect1), new LocalizedObject("land."+aspect2)));
+				if(landDim != 0 && connectionTag.hasKey("aspect1"))
+					list.add(new LocalizedTextField("land.message.format", new LocalizedObject("land."+connectionTag.getString("aspect1")), new LocalizedObject("land."+connectionTag.getString("aspect2"))));
+				if(connectionTag.hasKey("class"))
+				{
+					String titleClass = "title."+EnumClass.values()[connectionTag.getByte("class")].toString();
+					String titleAspect = "title."+EnumAspect.values()[connectionTag.getByte("aspect")].toString();
+					list.add(new LocalizedTextField("title.format", new LocalizedObject(titleClass), new LocalizedObject(titleAspect)));
+				}
 			}
 			list.add(new GristCacheButton(client));
 		}

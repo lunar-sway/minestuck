@@ -545,6 +545,9 @@ public class SessionHandler {
 								connectionTag.setString("aspect2", aspects.aspectTerrain.getNames()[landChunkGen.nameIndex1]);
 							}
 						}
+						Title title = MinestuckPlayerData.getTitle(c.getClientName());
+						connectionTag.setByte("class", (byte) title.getHeroClass().ordinal());
+						connectionTag.setByte("aspect", (byte) title.getHeroAspect().ordinal());
 					}
 				}
 				connectionList.appendTag(connectionTag);
