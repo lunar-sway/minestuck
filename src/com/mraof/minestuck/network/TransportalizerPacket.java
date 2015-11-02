@@ -18,12 +18,7 @@ public class TransportalizerPacket extends MinestuckPacket
 	int z;
 	int dim;
 	String destId;
-
-	public TransportalizerPacket()
-	{
-		super(Type.TRANSPORTALIZER);
-	}
-
+	
 	@Override
 	public MinestuckPacket generatePacket(Object... dat)
 	{

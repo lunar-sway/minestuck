@@ -7,11 +7,15 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
+import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraftforge.common.DimensionManager;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
@@ -24,6 +28,7 @@ import com.mraof.minestuck.util.UsernameHandler;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.LandAspectRegistry.AspectCombination;
+import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.terrain.TerrainAspect;
 import com.mraof.minestuck.world.lands.title.TitleAspect;
 import com.mraof.minestuck.MinestuckConfig;
@@ -504,4 +509,55 @@ public class SessionHandler {
 		return true;
 	}
 	
+	public static NBTTagCompound createDataTag()
+	{
+		NBTTagCompound nbt = new NBTTagCompound();
+		NBTTagList sessionList = new NBTTagList();
+		nbt.setTag("sessions", sessionList);
+		for(int i = 0; i < sessions.size(); i++)
+		{
+			Session session = sessions.get(i);
+			NBTTagList connectionList = new NBTTagList();
+			for(SburbConnection c :session.connections)
+			{
+				NBTTagCompound connectionTag = new NBTTagCompound();
+				connectionTag.setString("client", c.getClientName());
+				connectionTag.setString("server", c.getServerName());
+				connectionTag.setBoolean("isMain", c.isMain);
+				connectionTag.setBoolean("isActive", c.isActive);
+				if(c.isMain)
+				{
+					connectionTag.setInteger("clientDim", c.enteredGame ? c.clientHomeLand : 0);
+					if(c.enteredGame && DimensionManager.isDimensionRegistered(c.clientHomeLand))
+					{
+						LandAspectRegistry.AspectCombination aspects = MinestuckDimensionHandler.getAspects(c.clientHomeLand);
+						IChunkProvider chunkGen = MinecraftServer.getServer().worldServerForDimension(c.clientHomeLand).provider.createChunkGenerator();
+						if(chunkGen instanceof ChunkProviderLands)
+						{
+							ChunkProviderLands landChunkGen = (ChunkProviderLands) chunkGen;
+							if(landChunkGen.nameOrder)
+							{
+								connectionTag.setString("aspect1", aspects.aspectTerrain.getNames()[landChunkGen.nameIndex1]);
+								connectionTag.setString("aspect2", aspects.aspectTitle.getNames()[landChunkGen.nameIndex2]);
+							} else
+							{
+								connectionTag.setString("aspect1", aspects.aspectTitle.getNames()[landChunkGen.nameIndex2]);
+								connectionTag.setString("aspect2", aspects.aspectTerrain.getNames()[landChunkGen.nameIndex1]);
+							}
+						}
+						Title title = MinestuckPlayerData.getTitle(c.getClientName());
+						connectionTag.setByte("class", (byte) title.getHeroClass().ordinal());
+						connectionTag.setByte("aspect", (byte) title.getHeroAspect().ordinal());
+					}
+				}
+				connectionList.appendTag(connectionTag);
+			}
+			
+			NBTTagCompound sessionTag = new NBTTagCompound();
+			sessionTag.setString("name", String.valueOf(i + 1));
+			sessionTag.setTag("connections", connectionList);
+			sessionList.appendTag(sessionTag);
+		}
+		return nbt;
+	}
 }

@@ -13,17 +13,13 @@ import com.mraof.minestuck.network.skaianet.ComputerData;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.UsernameHandler;
 
-public class SburbConnectPacket extends MinestuckPacket {
-
+public class SburbConnectPacket extends MinestuckPacket
+{
+	
 	ComputerData player;
 	String otherPlayer;
 	boolean isClient;
 	
-	public SburbConnectPacket() 
-	{
-		super(Type.SBURB_CONNECT);
-	}
-
 	@Override
 	public MinestuckPacket generatePacket(Object... dat) 
 	{

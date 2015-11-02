@@ -22,11 +22,6 @@ public class PlayerDataPacket extends MinestuckPacket
 	public int i1;
 	public int i2;
 	
-	public PlayerDataPacket() 
-	{
-		super(Type.PLAYER_DATA);
-	}
-
 	@Override
 	public MinestuckPacket generatePacket(Object... dat) 
 	{

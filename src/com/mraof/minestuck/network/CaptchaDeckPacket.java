@@ -37,11 +37,6 @@ public class CaptchaDeckPacket extends MinestuckPacket
 	public byte valueType;
 	public int value;
 	
-	public CaptchaDeckPacket()
-	{
-		super(Type.CAPTCHA);
-	}
-
 	@Override
 	public MinestuckPacket generatePacket(Object... data)
 	{
@@ -60,6 +55,7 @@ public class CaptchaDeckPacket extends MinestuckPacket
 				catch (IOException e)
 				{
 					e.printStackTrace();
+					return null;
 				}
 			}
 			else if(type == GET)
@@ -84,7 +80,7 @@ public class CaptchaDeckPacket extends MinestuckPacket
 		
 		if(data.readableBytes() > 0)
 		{
-			if(this.type == DATA && data.readableBytes() > 0)
+			if(this.type == DATA)
 			{
 				byte[] bytes = new byte[data.readableBytes()];
 				data.readBytes(bytes);
@@ -95,6 +91,7 @@ public class CaptchaDeckPacket extends MinestuckPacket
 				catch(IOException e)
 				{
 					e.printStackTrace();
+					return null;
 				}
 			}
 			else if(this.type == GET)

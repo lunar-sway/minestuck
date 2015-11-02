@@ -232,6 +232,7 @@ public class Minestuck
 	{
 		MinestuckDimensionHandler.unregisterDimensions();
 		isServerRunning = !isClientRunning;
+		MinestuckPlayerTracker.dataCheckerPermission.clear();
 	}
 	
 	@EventHandler

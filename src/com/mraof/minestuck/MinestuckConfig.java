@@ -2,6 +2,10 @@ package com.mraof.minestuck;
 
 import java.io.File;
 
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.management.UserListOpsEntry;
+import net.minecraft.world.WorldSettings.GameType;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.FMLLog;
@@ -12,6 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.lwjgl.opengl.GLContext;
 
+import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.inventory.ContainerHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.util.Debug;
@@ -32,8 +37,6 @@ public class MinestuckConfig
 	@SideOnly(Side.CLIENT)
 	public static byte clientTreeAutobalance;
 	@SideOnly(Side.CLIENT)
-	public static boolean clientHardMode;
-	@SideOnly(Side.CLIENT)
 	public static boolean clientGiveItems;
 	@SideOnly(Side.CLIENT)
 	public static boolean clientDisableGristWidget;
@@ -41,6 +44,8 @@ public class MinestuckConfig
 	public static boolean oldItemModels;
 	@SideOnly(Side.CLIENT)
 	public static boolean loginColorSelector;
+	@SideOnly(Side.CLIENT)
+	public static boolean dataCheckerAccess;
 	
 	public static boolean hardMode = false;
 	public static boolean generateCruxiteOre;
@@ -77,6 +82,7 @@ public class MinestuckConfig
 	 * If 0: only captchalouged items are dropped. If 1: Both captchalouged items and cards are dropped. If 2: All items, including the actual modus.
 	 */
 	public static byte sylladexDropMode;
+	public static byte dataCheckerPermission;
 	
 	public static boolean[] deployConfigurations;
 	
@@ -142,6 +148,12 @@ public class MinestuckConfig
 		adaptEntryBlockHeight = config.get("General", "adaptEntryBlockHeight", true, "Adapt the transferred height to make the top non-air block to be placed at y:128. Makes entry take longer.").setLanguageKey("minestuck.config.adaptEntryBlockHeight").getBoolean();
 		allowSecondaryConnections = config.get("General", "secondaryConnections", true, "Set this to true to allow so-called 'secondary connections' to be created.").setLanguageKey("minestuck.config.secondaryConnections").getBoolean();	//Server lists need to be updated if this gets changeable in-game
 		disableGristWidget = config.get("General", "disableGristWidget", false).setLanguageKey("minestuck.config.disableGristWidget").setRequiresWorldRestart(true).getBoolean();
+		setting = config.get("General", "dataCheckerPermission", "opsAndGamemode", "Determines who's allowed to access the data checker. \"none\": No one is allowed. \"ops\": only those with a command permission of level 2 or more may access the data ckecker. (for single player, that would be if cheats are turned on) \"gamemode\": Only players with the creative or spectator gamemode may view the data checker. \"opsAndGamemode\": Combination of \"ops\" and \"gamemode\". \"anyone\": No access restrictions are used.", new String[] {"none", "ops", "gamemode", "opsAndGamemode", "anyone"}).getString();
+		if(setting.equals("none")) dataCheckerPermission = 0;
+		else if(setting.equals("ops")) dataCheckerPermission = 1;
+		else if(setting.equals("gamemode")) dataCheckerPermission = 2;
+		else if(setting.equals("opsAndGamemode")) dataCheckerPermission = 3;
+		else dataCheckerPermission = 4;
 		
 		if(gameSide.isClient())	//Client sided config values
 		{
@@ -169,6 +181,32 @@ public class MinestuckConfig
 			config.save();
 			
 		}
+	}
+	
+	public static boolean getDataCheckerPermissionFor(EntityPlayerMP player)
+	{
+		if((dataCheckerPermission & 3) != 0)
+		{
+			if((dataCheckerPermission & 1) != 0)
+			{
+				MinecraftServer server = MinecraftServer.getServer();
+				if (server.getConfigurationManager().canSendCommands(player.getGameProfile()))
+				{
+					UserListOpsEntry userlistopsentry = (UserListOpsEntry)server.getConfigurationManager().getOppedPlayers().getEntry(player.getGameProfile());
+					if((userlistopsentry != null ? userlistopsentry.getPermissionLevel() : server.getOpPermissionLevel()) >= 2)
+						return true;
+				}
+			}
+			if((dataCheckerPermission & 2) != 0)
+			{
+				GameType gameType = player.theItemInWorldManager.getGameType();
+				if(ServerEditHandler.getData(player.getCommandSenderName()) != null)
+					gameType = ServerEditHandler.getData(player.getCommandSenderName()).getDecoy().gameType;
+				if(!gameType.isSurvivalOrAdventure())
+					return true;
+			}
+			return false;
+		} else return dataCheckerPermission != 0;
 	}
 	
 }

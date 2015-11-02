@@ -18,10 +18,6 @@ public class SburbConnectClosedPacket extends MinestuckPacket {
 	public String otherPlayer;
 	public boolean isClient;
 	
-	public SburbConnectClosedPacket() {
-		super(Type.SBURB_CLOSE);
-	}
-
 	@Override
 	public MinestuckPacket generatePacket(Object... dat) {
 		writeString(data,dat[0].toString());

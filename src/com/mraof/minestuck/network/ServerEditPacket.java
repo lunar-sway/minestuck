@@ -9,16 +9,13 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import com.mraof.minestuck.editmode.ClientEditHandler;
 
-public class ServerEditPacket extends MinestuckPacket {
+public class ServerEditPacket extends MinestuckPacket
+{
 	
 	String target;
 	int posX, posZ;
 	boolean[] givenItems;
 	
-	public ServerEditPacket() {
-		super(Type.SERVER_EDIT);
-	}
-
 	@Override
 	public MinestuckPacket generatePacket(Object... dat) {
 		if(dat.length == 0) {

@@ -12,15 +12,12 @@ import com.mraof.minestuck.inventory.ContainerMachine;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.util.Debug;
 
-public class GoButtonPacket extends MinestuckPacket {
-
+public class GoButtonPacket extends MinestuckPacket
+{
+	
 	public boolean newMode;
 	public boolean overrideStop;
-	public GoButtonPacket() 
-	{
-		super(Type.GOBUTTON);
-	}
-
+	
 	@Override
 	public MinestuckPacket generatePacket(Object... dat) 
 	{

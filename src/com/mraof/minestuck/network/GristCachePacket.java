@@ -15,11 +15,6 @@ public class GristCachePacket extends MinestuckPacket
 	public int[] values = new int[GristType.allGrists];
 	public boolean targetGrist;
 	
-	public GristCachePacket() 
-	{
-		super(Type.GRISTCACHE);
-	}
-
 	@Override
 	public MinestuckPacket generatePacket(Object... dat) 
 	{
