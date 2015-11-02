@@ -12,7 +12,9 @@ import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.util.LocalizedObject;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.nbt.NBTTagCompound;
@@ -418,13 +420,14 @@ public class GuiDataChecker extends GuiScreen
 			list.add(new TextField("Is Active: %b", isActive));
 			list.add(new TextField("Is Primary Connection: %b", isMain));
 			
+			list.add(null);
 			if(isMain)
 			{
-				list.add(null);
 				list.add(new TextField("Land dimension: %s", (landDim != 0 ? String.valueOf(landDim) : "Pre-entry")));
 				if(aspect1 != null)
 					list.add(new LocalizedTextField("land.message.format", new LocalizedObject("land."+aspect1), new LocalizedObject("land."+aspect2)));
 			}
+			list.add(new GristCacheButton(client));
 		}
 		@Override
 		public IDataComponent getParentComponent()
@@ -452,6 +455,42 @@ public class GuiDataChecker extends GuiScreen
 			if(isMain)
 				return String.format("'%s' - '%s'", client, server);
 			else return String.format("('%s' - '%s')", client, server);
+		}
+	}
+	
+	public static class GristCacheButton implements IDataComponent
+	{
+		String name;
+		public GristCacheButton(String name)
+		{
+			this.name = name;
+		}
+		@Override
+		public IDataComponent getParentComponent()
+		{
+			return null;
+		}
+		@Override
+		public List<IDataComponent> getComponentList()
+		{
+			return null;
+		}
+		@Override
+		public IDataComponent onButtonPressed()
+		{
+			GuiChat chat = new GuiChat("/grist "+name+" get");
+			Minecraft.getMinecraft().displayGuiScreen(chat);
+			return null;
+		}
+		@Override
+		public boolean isButton()
+		{
+			return true;
+		}
+		@Override
+		public String getName()
+		{
+			return "View Grist Cache";
 		}
 	}
 }
