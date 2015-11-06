@@ -36,7 +36,7 @@ import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.WorldProviderLands;
-import com.mraof.minestuck.network.skaianet.SessionHandler;
+import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.world.biome.BiomeGenMinestuck;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
@@ -310,7 +310,7 @@ public class ChunkProviderLands implements IChunkProvider
 		{
 			List<SpawnListEntry> list = new ArrayList<SpawnListEntry>();
 			list.addAll(this.monsterList);
-			list.addAll(SessionHandler.getUnderlingList(pos, landWorld));
+			list.addAll(SburbHandler.getUnderlingList(pos, landWorld));
 			return list;
 		}
 		return creatureType == EnumCreatureType.CREATURE ? this.consortList : null;

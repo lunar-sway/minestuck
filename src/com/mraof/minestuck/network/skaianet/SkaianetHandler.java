@@ -78,7 +78,7 @@ public class SkaianetHandler {
 		if(c != null && !c.isMain && getAssociatedPartner(c.getClientName(), true).isEmpty()
 				&& getAssociatedPartner(c.getServerName(), false).isEmpty()) {
 			c.isMain = true;
-			SessionHandler.onFirstItemGiven(c);
+			SburbHandler.onFirstItemGiven(c);
 			updatePlayer(c.getClientName());
 			updatePlayer(c.getServerName());
 			return true;
@@ -571,7 +571,7 @@ public class SkaianetHandler {
 				c.serverName = username;
 				if(SessionHandler.onConnectionCreated(c) == null)
 				{
-					SessionHandler.onFirstItemGiven(c);
+					SburbHandler.onFirstItemGiven(c);
 					connections.add(c);
 				}
 				else if(SessionHandler.singleSession)
@@ -580,7 +580,7 @@ public class SkaianetHandler {
 					SessionHandler.split();
 					if(SessionHandler.onConnectionCreated(c) == null)
 					{
-						SessionHandler.onFirstItemGiven(c);
+						SburbHandler.onFirstItemGiven(c);
 						connections.add(c);
 					}
 				}
@@ -594,7 +594,7 @@ public class SkaianetHandler {
 		
 		c.clientHomeLand = dimensionId;
 		c.enteredGame = true;
-		SessionHandler.onGameEntered(c);
+		SburbHandler.onGameEntered(c);
 		
 		c.centerX = (int)player.posX;
 		c.centerZ = (int)player.posZ;

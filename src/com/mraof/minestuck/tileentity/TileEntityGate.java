@@ -1,7 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.network.skaianet.SessionHandler;
+import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.world.GateHandler;
 
@@ -70,7 +70,7 @@ public class TileEntityGate extends TileEntity
 	public Packet getDescriptionPacket()
 	{
 		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setInteger("color", SessionHandler.getColorForDimension(this.worldObj.provider.getDimensionId()));
+		nbt.setInteger("color", SburbHandler.getColorForDimension(this.worldObj.provider.getDimensionId()));
 		return new S35PacketUpdateTileEntity(this.pos, 0, nbt);
 	}
 	

@@ -51,7 +51,7 @@ import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
-import com.mraof.minestuck.network.skaianet.SessionHandler;
+import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
@@ -438,7 +438,7 @@ public class ServerEditHandler
 		}
 		
 		ArrayList<ItemStack> itemsToRemove = new ArrayList<ItemStack>();
-		int availableTier = SessionHandler.availableTier(client);
+		int availableTier = SburbHandler.availableTier(client);
 		for(ItemStack stack : DeployList.getItemList())
 			if(givenItems[DeployList.getOrdinal(stack)] && DeployList.getSecondaryCost(stack) == null
 					|| DeployList.getTier(stack) > availableTier)
