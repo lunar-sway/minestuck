@@ -301,10 +301,18 @@ public class GuiDataChecker extends GuiScreen
 				return;
 			
 			NBTTagList sessionList = data.getTagList("sessions", 10);
+			int nameIndex = 1;
 			for(int i = 0; i < sessionList.tagCount(); i++)
 			{
 				NBTTagCompound sessionTag = sessionList.getCompoundTagAt(i);
 				SessionComponent session = new SessionComponent(this, sessionTag, data);
+				if(sessionTag.hasKey("name", 8))
+					session.name = sessionTag.getString("name");
+				else
+				{
+					session.name = "Session " + String.valueOf(nameIndex);
+					nameIndex++;
+				}
 				list.add(session);
 			}
 		}
@@ -346,7 +354,6 @@ public class GuiDataChecker extends GuiScreen
 		public SessionComponent(MainComponent parent, NBTTagCompound sessionTag, NBTTagCompound dataTag)
 		{
 			this.parent = parent;
-			this.name = sessionTag.getString("name");
 			HashSet<String> playerSet = new HashSet<String>();
 			NBTTagList connectionList = sessionTag.getTagList("connections", 10);
 			for(int i = 0; i < connectionList.tagCount(); i++)
@@ -387,7 +394,7 @@ public class GuiDataChecker extends GuiScreen
 		@Override
 		public String getName()
 		{
-			return String.format("Session %s (%d/%d)", name, playersEntered, players);
+			return String.format("%s (%d/%d)", name, playersEntered, players);
 		}
 	}
 	

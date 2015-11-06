@@ -44,7 +44,7 @@ public class SelectionPacket extends MinestuckPacket
 	{
 		if(this.type == COLOR)
 		{
-			if(SessionHandler.canSelect((EntityPlayerMP) player))
+			if(SessionHandler.canSelectColor((EntityPlayerMP) player))
 				MinestuckPlayerData.getData(player).color = this.color;
 		}
 	}

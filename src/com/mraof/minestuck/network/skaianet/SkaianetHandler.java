@@ -351,10 +351,21 @@ public class SkaianetHandler {
 		resumingClients.clear();
 		resumingServers.clear();
 		SessionHandler.sessions.clear();
-		if(nbt != null) {
+		SessionHandler.sessionsByName.clear();
+		if(nbt != null)
+		{
 			NBTTagList list = nbt.getTagList("sessions", 10);
 			for(int i = 0; i < list.tagCount(); i++)
-				SessionHandler.sessions.add(new Session().read(list.getCompoundTagAt(i)));
+			{
+				Session session = new Session().read(list.getCompoundTagAt(i));
+				SessionHandler.sessions.add(session);
+				if(session.isCustom())
+				{
+					if(SessionHandler.sessionsByName.containsKey(session.name))
+						Debug.printf("A session with a duplicate name has been loaded! (Session '%s') Either a bug or someone messing with the data file.", session.name);
+					SessionHandler.sessionsByName.put(session.name, session);
+				}
+			}
 			
 			String[] s = {"serversOpen","resumingClients","resumingServers"};
 			List<Map<String, ComputerData>> maps = new ArrayList<Map<String, ComputerData>>();

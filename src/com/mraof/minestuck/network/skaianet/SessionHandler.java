@@ -2,8 +2,10 @@ package com.mraof.minestuck.network.skaianet;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -46,6 +48,8 @@ import com.mraof.minestuck.util.GristType;
  */
 public class SessionHandler {
 	
+	public static final String GLOBAL_SESSION_NAME = "global";
+	
 	/**
 	 * The max numbers of players per session.
 	 */
@@ -62,6 +66,7 @@ public class SessionHandler {
 	 * An array list of the current worlds sessions.
 	 */
 	static List<Session> sessions = new ArrayList<Session>();
+	static Map<String, Session> sessionsByName = new HashMap<String, Session>();
 	
 	/**
 	 * Called when the server loads a new world, after
@@ -71,10 +76,16 @@ public class SessionHandler {
 		singleSession = MinestuckConfig.globalSession;
 		if(!MinestuckConfig.globalSession) {
 			split();
-		} else {
+		} else
+		{
 			mergeAll();
 			if(sessions.size() == 0)
-				sessions.add(new Session());
+			{
+				Session mainSession = new Session();
+				mainSession.name = GLOBAL_SESSION_NAME;
+				sessions.add(mainSession);
+				sessionsByName.put(mainSession.name, mainSession);
+			}
 		}
 	}
 	
@@ -84,19 +95,25 @@ public class SessionHandler {
 	 * to a global session world.
 	 */
 	static void mergeAll() {
-		if(!canMergeAll() || sessions.size() < 2){
-			singleSession = sessions.size() < 2;
+		if(!canMergeAll() || sessions.size() == 0)
+		{
+			singleSession = sessions.size() == 0;
 			return;
 		}
 		
 		Session session = sessions.get(0);
-		for(int i = 1; i < sessions.size(); i++){
+		for(int i = 1; i < sessions.size(); i++)
+		{
 			Session s = sessions.remove(i);
 			session.connections.addAll(s.connections);
 			if(s.skaiaId != 0) session.skaiaId = s.skaiaId;
 			if(s.prospitId != 0) session.prospitId = s.prospitId;
 			if(s.derseId != 0) session.derseId = s.derseId;
 		}
+		session.name = GLOBAL_SESSION_NAME;
+		sessionsByName.clear();
+		sessionsByName.put(session.name, session);
+		
 		session.completed = false;
 	}
 	
@@ -105,10 +122,12 @@ public class SessionHandler {
 	 * @return False if all registered players is more than maxSize, or if there exists more
 	 * than one skaia, prospit, or derse dimension.
 	 */
-	static boolean canMergeAll() {
+	static boolean canMergeAll()
+	{
 		int players = 0;
-		boolean skaiaUsed = false, prospitUsed = false, derseUsed = false;
-		for(Session s : sessions) {
+		boolean skaiaUsed = false, prospitUsed = false, derseUsed = false, customSession = false, customUsed = false;
+		for(Session s : sessions)
+		{
 			if(s.skaiaId != 0)
 				if(skaiaUsed) return false;
 				else skaiaUsed = true;
@@ -118,6 +137,9 @@ public class SessionHandler {
 			if(s.derseId != 0)
 				if(derseUsed) return false;
 				else derseUsed = true;
+			if(s.isCustom())
+				if(customUsed) return false;
+				else customUsed = true;
 			players += s.getPlayerList().size();
 		}
 		if(players > maxSize)
@@ -138,20 +160,33 @@ public class SessionHandler {
 		return null;
 	}
 	
-	static String merge(Session cs, Session ss, SburbConnection sb) {
+	static String merge(Session cs, Session ss, SburbConnection sb)
+	{
 		String s = canMerge(cs, ss);
-		if(s == null) {
+		if(s == null)
+		{
 			sessions.remove(ss);
 			cs.connections.add(sb);
 			cs.connections.addAll(ss.connections);
 			if(cs.skaiaId == 0) cs.skaiaId = ss.skaiaId;
 			if(cs.prospitId == 0) cs.prospitId = ss.prospitId;
 			if(cs.derseId == 0) cs.derseId = ss.derseId;
+			
+			if(ss.isCustom())
+			{
+				sessionsByName.remove(ss.name);
+				cs.name = ss.name;
+				sessionsByName.put(cs.name, cs);
+			}
+			
 		}
 		return s;
 	}
 	
-	static String canMerge(Session s0, Session s1){
+	static String canMerge(Session s0, Session s1)
+	{
+		if(s0.isCustom() && s1.isCustom())
+			return "computer.messageConnectFail";
 		if(MinestuckConfig.forceMaxSize && s0.getPlayerList().size()+s1.getPlayerList().size()>maxSize)
 			return "session.bothSessionsFull";
 		return null;
@@ -169,13 +204,21 @@ public class SessionHandler {
 		split(sessions.get(0));
 	}
 	
-	static void split(Session session) {
+	static void split(Session session)
+	{
 		sessions.remove(session);
+		if(session.isCustom())
+			sessionsByName.remove(session.name);
 		boolean first = true;
 		while(!session.connections.isEmpty()){
 			Session s = new Session();
-			if(!first) s.connections.add(session.connections.remove(0));
-			else {
+			if(!first)
+			{
+				s.connections.add(session.connections.remove(0));
+				
+			} else
+			{
+				s.name = session.name;
 				s.skaiaId = session.skaiaId;
 				s.prospitId = session.prospitId;
 				s.derseId = session.derseId;
@@ -427,7 +470,8 @@ public class SessionHandler {
 			}
 		} else {
 			Session sClient = getPlayerSession(connection.getClientName()), sServer = getPlayerSession(connection.getServerName());
-			if(sClient == null && sServer == null) {
+			if(sClient == null && sServer == null)
+			{
 				Session s = new Session();
 				sessions.add(s);
 				s.connections.add(connection);
@@ -500,7 +544,7 @@ public class SessionHandler {
 		return list;
 	}
 	
-	public static boolean canSelect(EntityPlayerMP player)
+	public static boolean canSelectColor(EntityPlayerMP player)
 	{
 		String name = UsernameHandler.encode(player.getCommandSenderName());
 		for(SburbConnection c : SkaianetHandler.connections)
@@ -514,6 +558,7 @@ public class SessionHandler {
 		NBTTagCompound nbt = new NBTTagCompound();
 		NBTTagList sessionList = new NBTTagList();
 		nbt.setTag("sessions", sessionList);
+		int nameIndex = 1;
 		for(int i = 0; i < sessions.size(); i++)
 		{
 			Session session = sessions.get(i);
@@ -554,7 +599,8 @@ public class SessionHandler {
 			}
 			
 			NBTTagCompound sessionTag = new NBTTagCompound();
-			sessionTag.setString("name", String.valueOf(i + 1));
+			if(session.name != null)
+				sessionTag.setString("name", session.name);
 			sessionTag.setTag("connections", connectionList);
 			sessionList.appendTag(sessionTag);
 		}

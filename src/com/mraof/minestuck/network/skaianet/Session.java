@@ -14,6 +14,7 @@ import net.minecraft.nbt.NBTTagList;
 public class Session {
 	
 	List<SburbConnection> connections;
+	String name;
 	
 	/**
 	 * If the "connection circle" is whole, unused if globalSession == true.
@@ -87,8 +88,12 @@ public class Session {
 	 * Note that this will only work as long as <code>SkaianetHandler.connections</code> remains unmodified.
 	 * @return An NBTTagCompound representing this session.
 	 */
-	NBTTagCompound write() {
+	NBTTagCompound write()
+	{
 		NBTTagCompound nbt = new NBTTagCompound();
+		
+		if(isCustom())
+			nbt.setString("name", name);
 		NBTTagList list = new NBTTagList();
 		for(SburbConnection c : connections)
 			list.appendTag(c.write());
@@ -104,7 +109,11 @@ public class Session {
 	 * @param nbt An NBTTagCompound to read from.
 	 * @return This.
 	 */
-	Session read(NBTTagCompound nbt) {
+	Session read(NBTTagCompound nbt)
+	{
+		if(nbt.hasKey("name", 8))
+			name = nbt.getString("name");
+		else name = null;
 		NBTTagList list = nbt.getTagList("connections", 10);
 		for(int i = 0; i < list.tagCount(); i++)
 			connections.add(new SburbConnection().read(list.getCompoundTagAt(i)));
@@ -121,4 +130,8 @@ public class Session {
 		return null;
 	}
 	
+	boolean isCustom()
+	{
+		return name != null;
+	}
 }
