@@ -6,9 +6,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommand;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatStyle;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.common.DimensionManager;
 
@@ -102,7 +109,7 @@ public class SessionHandler {
 	static boolean canMergeAll()
 	{
 		int players = 0;
-		boolean skaiaUsed = false, prospitUsed = false, derseUsed = false, customSession = false, customUsed = false;
+		boolean skaiaUsed = false, prospitUsed = false, derseUsed = false, customSession = false;
 		for(Session s : sessions)
 		{
 			if(s.skaiaId != 0)
@@ -115,8 +122,7 @@ public class SessionHandler {
 				if(derseUsed) return false;
 				else derseUsed = true;
 			if(s.isCustom())
-				if(customUsed) return false;
-				else customUsed = true;
+				return false;
 			players += s.getPlayerList().size();
 		}
 		if(players > maxSize)
@@ -129,11 +135,11 @@ public class SessionHandler {
 	 * @param player A string of the player's username.
 	 * @return A session that contains at least one connection, that the player is a part of.
 	 */
-	static Session getPlayerSession(String player){
+	static Session getPlayerSession(String player)
+	{
 		for(Session s : sessions)
-			for(SburbConnection c : s.connections)
-				if(c.getClientName().equals(player) || c.getServerName().equals(player))
-					return s;
+			if(s.containsPlayer(player))
+				return s;
 		return null;
 	}
 	
@@ -143,7 +149,8 @@ public class SessionHandler {
 		if(s == null)
 		{
 			sessions.remove(ss);
-			cs.connections.add(sb);
+			if(sb != null)
+				cs.connections.add(sb);
 			cs.connections.addAll(ss.connections);
 			if(cs.skaiaId == 0) cs.skaiaId = ss.skaiaId;
 			if(cs.prospitId == 0) cs.prospitId = ss.prospitId;
@@ -302,6 +309,86 @@ public class SessionHandler {
 			if(s.connections.size() == 0)
 				sessions.remove(s);
 		}
+	}
+	
+	public static void managePredefinedSession(ICommandSender sender, ICommand command, String sessionName, String[] playerNames, boolean finish) throws CommandException
+	{
+		Session session = sessionsByName.get(sessionName);
+		if(session == null)
+		{
+			if(finish && playerNames.length == 0)
+				throw new CommandException("Couldn't find session with that name. Aborting the finalizing process.", sessionName);
+			sender.addChatMessage(new ChatComponentText("Couldn't find session with that name, creating a new session..."));
+			session = new Session();
+			session.name = sessionName;
+			sessions.add(session);
+			sessionsByName.put(session.name, session);
+		}
+		
+		int handled = 0;
+		boolean skipFinishing = false;
+		for(String playerName : playerNames)
+		{
+			if(playerName.startsWith("!"))
+			{
+				playerName = playerName.substring(1);
+				if(!session.containsPlayer(playerName))
+				{
+					sender.addChatMessage(new ChatComponentText("Failed to remove player \""+playerName+"\": Player isn't in session.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+					continue;
+				}
+				
+				if(!session.predefinedPlayers.remove(playerName))
+				{
+					sender.addChatMessage(new ChatComponentText("Failed to remove player \""+playerName+"\": Player isn't registered with the session.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+					continue;
+				}
+				
+				handled++;
+				
+				if(session.containsPlayer(playerName))
+				{
+					sender.addChatMessage(new ChatComponentText("Removed player \""+playerName+"\", but they are still part of a connection in the session and will therefore be part of the session unless the connection is discarded.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.YELLOW)));
+					skipFinishing = true;
+					continue;
+				}
+			} else
+			{
+				if(session.predefinedPlayers.contains(playerName))
+				{
+					sender.addChatMessage(new ChatComponentText("Failed to add player \""+playerName+"\": Player is already registered with session.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+					continue;
+				}
+				
+				Session playerSession = getPlayerSession(playerName);
+				
+				if(playerSession != null)
+				{
+					if(merge(session, playerSession, null) != null)
+					{
+						sender.addChatMessage(new ChatComponentText("Failed to add player \""+playerName+"\": Can't merge with the session that the player is already in.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+						continue;
+					}
+				} else if(MinestuckConfig.forceMaxSize && session.getPlayerList().size() + 1 > maxSize)
+				{
+					sender.addChatMessage(new ChatComponentText("Failed to add player \""+playerName+"\": The session can't accept more players with the current configurations.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+					continue;
+				}
+				
+				session.predefinedPlayers.add(playerName);
+				handled++;
+			}
+		}
+		
+		if(playerNames.length > 0)
+			CommandBase.notifyOperators(sender, command, "commands.sburbSession.addSuccess", handled, playerNames.length);
+		
+		if(finish)
+			if(!skipFinishing && handled == playerNames.length)
+			{
+				
+				
+			} else throw new CommandException("Skipping to finalize the session due to one or more issues while adding players.");
 	}
 	
 	static List<String> getServerList(String client) {

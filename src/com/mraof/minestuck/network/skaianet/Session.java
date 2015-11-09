@@ -1,10 +1,13 @@
 package com.mraof.minestuck.network.skaianet;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 
 /**
  * Was also an interface for the session system, but now just a data structure representing a session.
@@ -13,6 +16,7 @@ import net.minecraft.nbt.NBTTagList;
  */
 public class Session {
 	
+	Set<String> predefinedPlayers;
 	List<SburbConnection> connections;
 	String name;
 	
@@ -57,29 +61,38 @@ public class Session {
 	
 	Session(){
 		connections = new ArrayList<SburbConnection>();
+		predefinedPlayers = new HashSet<String>();
 	}
 	
 	/**
 	 * Checks if a certain player is in the connection list.
-	 * @param s The username of the player.
+	 * @param player The username of the player.
 	 * @return If the player was found.
 	 */
-	boolean containsPlayer(String s){
-		return getPlayerList().contains(s);
+	boolean containsPlayer(String player)
+	{
+		if(predefinedPlayers.contains(player))
+			return true;
+		for(SburbConnection c : connections)
+			if(c.getClientName().equals(player) || c.getServerName().equals(player))
+				return true;
+		return false;
 	}
 	
 	/**
 	 * Creates a list with all players in the session.
 	 * @return Returns a list with the players usernames.
 	 */
-	List<String> getPlayerList(){
-		List<String> list = new ArrayList<String>();
-		for(SburbConnection c : this.connections){
-			if(!list.contains(c.getClientName()))
-				list.add(c.getClientName());
-			if(!list.contains(c.getServerName()) && !c.getServerName().equals(".null"))
+	Set<String> getPlayerList()
+	{
+		Set<String> list = new HashSet<String>();
+		for(SburbConnection c : this.connections)
+		{
+			list.add(c.getClientName());
+			if(!c.getServerName().equals(".null"))
 				list.add(c.getServerName());
 		}
+		list.addAll(predefinedPlayers);
 		return list;
 	}
 	
@@ -98,6 +111,10 @@ public class Session {
 		for(SburbConnection c : connections)
 			list.appendTag(c.write());
 		nbt.setTag("connections", list);
+		list = new NBTTagList();
+		for(String player : predefinedPlayers)
+			list.appendTag(new NBTTagString(player));
+		nbt.setTag("predefinedPlayers", list);
 		nbt.setInteger("skaiaId", skaiaId);
 		nbt.setInteger("derseId", derseId);
 		nbt.setInteger("prospitId", prospitId);
@@ -117,6 +134,9 @@ public class Session {
 		NBTTagList list = nbt.getTagList("connections", 10);
 		for(int i = 0; i < list.tagCount(); i++)
 			connections.add(new SburbConnection().read(list.getCompoundTagAt(i)));
+		list = nbt.getTagList("predefinedPlayers", 8);
+		for(int i = 0; i < list.tagCount(); i++)
+			predefinedPlayers.add(list.getStringTagAt(i));
 		SkaianetHandler.connections.addAll(this.connections);
 		
 		checkIfCompleted();
