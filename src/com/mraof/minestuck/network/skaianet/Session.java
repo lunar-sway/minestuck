@@ -23,7 +23,7 @@ public class Session {
 	/**
 	 * If the "connection circle" is whole, unused if globalSession == true.
 	 */
-	boolean completed;
+	boolean completed, locked;
 	
 	//Unused, will later be 0 if not yet generated
 	int skaiaId;
@@ -115,6 +115,7 @@ public class Session {
 		for(String player : predefinedPlayers)
 			list.appendTag(new NBTTagString(player));
 		nbt.setTag("predefinedPlayers", list);
+		nbt.setBoolean("locked", locked);
 		nbt.setInteger("skaiaId", skaiaId);
 		nbt.setInteger("derseId", derseId);
 		nbt.setInteger("prospitId", prospitId);
@@ -135,6 +136,7 @@ public class Session {
 		for(int i = 0; i < list.tagCount(); i++)
 			connections.add(new SburbConnection().read(list.getCompoundTagAt(i)));
 		list = nbt.getTagList("predefinedPlayers", 8);
+		locked = nbt.getBoolean("locked");
 		for(int i = 0; i < list.tagCount(); i++)
 			predefinedPlayers.add(list.getStringTagAt(i));
 		SkaianetHandler.connections.addAll(this.connections);
@@ -150,6 +152,9 @@ public class Session {
 		return null;
 	}
 	
+	/**
+	 * With being custom,
+	 */
 	boolean isCustom()
 	{
 		return name != null;

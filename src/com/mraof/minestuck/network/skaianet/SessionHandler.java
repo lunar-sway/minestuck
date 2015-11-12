@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -169,7 +170,7 @@ public class SessionHandler {
 	
 	static String canMerge(Session s0, Session s1)
 	{
-		if(s0.isCustom() && s1.isCustom())
+		if(s0.isCustom() && s1.isCustom() || s0.locked || s1.locked)
 			return "computer.messageConnectFail";
 		if(MinestuckConfig.forceMaxSize && s0.getPlayerList().size()+s1.getPlayerList().size()>maxSize)
 			return "session.bothSessionsFull";
@@ -181,15 +182,21 @@ public class SessionHandler {
 	 * Used for the conversion of a global session world to
 	 * a non-global session.
 	 */
-	static void split() {
+	static void split()
+	{
 		if(MinestuckConfig.globalSession || sessions.size() != 1)
 			return;
 		
-		split(sessions.get(0));
+		Session s = sessions.get(0);
+		s.name = null;
+		split(s);
 	}
 	
 	static void split(Session session)
 	{
+		if(session.locked)
+			return;
+		
 		sessions.remove(session);
 		if(session.isCustom())
 			sessionsByName.remove(session.name);
@@ -202,7 +209,12 @@ public class SessionHandler {
 				
 			} else
 			{
-				s.name = session.name;
+				if(session.isCustom())
+				{
+					s.name = session.name;
+					s.predefinedPlayers.addAll(session.predefinedPlayers);
+					sessionsByName.put(s.name, s);
+				}
 				s.skaiaId = session.skaiaId;
 				s.prospitId = session.prospitId;
 				s.derseId = session.derseId;
@@ -221,7 +233,7 @@ public class SessionHandler {
 				}
 			} while(found);
 			s.checkIfCompleted();
-			if(s.connections.size() > 0)
+			if(s.connections.size() > 0 || s.isCustom())
 				sessions.add(s);
 			first = false;
 		}
@@ -237,7 +249,8 @@ public class SessionHandler {
 		Session sClient = getPlayerSession(client), sServer = getPlayerSession(server);
 		SburbConnection cClient = SkaianetHandler.getMainConnection(client, true);
 		SburbConnection cServer = SkaianetHandler.getMainConnection(server, false);
-		return cClient != null && sClient == sServer && (MinestuckConfig.allowSecondaryConnections || cClient == cServer) || cClient == null && cServer == null;
+		return cClient != null && sClient == sServer && (MinestuckConfig.allowSecondaryConnections || cClient == cServer)
+				|| cClient == null && cServer == null && !(sClient != null && sClient.locked) && !(sServer != null && sServer.locked);
 	}
 	
 	/**
@@ -265,7 +278,7 @@ public class SessionHandler {
 				s.connections.add(connection);
 				return null;
 			} else if(sClient == null || sServer == null) {
-				if(MinestuckConfig.forceMaxSize && (sClient == null?sServer:sClient).getPlayerList().size()+1 > maxSize)
+				if((sClient == null?sServer:sClient).locked || MinestuckConfig.forceMaxSize && (sClient == null?sServer:sClient).getPlayerList().size()+1 > maxSize)
 					return "computer."+(sClient == null?"server":"client")+"SessionFull";
 				(sClient == null?sServer:sClient).connections.add(connection);
 				return null;
@@ -286,11 +299,13 @@ public class SessionHandler {
 	static void onConnectionClosed(SburbConnection connection, boolean normal) {
 		Session s = getPlayerSession(connection.getClientName());
 		
-		if(!connection.isMain && !singleSession) {
+		if(!connection.isMain)
+		{
 			s.connections.remove(connection);
-			if(s.connections.size() == 0)
-				sessions.remove(s);
-			else split(s);
+			if(!singleSession)
+				if(s.connections.size() == 0 && !s.isCustom())
+					sessions.remove(s);
+				else split(s);
 		} else if(!normal) {
 			s.connections.remove(connection);
 			if(!SkaianetHandler.getAssociatedPartner(connection.getClientName(), false).isEmpty() && !connection.getServerName().equals(".null")) {
@@ -306,7 +321,7 @@ public class SessionHandler {
 					break;
 				}
 			}
-			if(s.connections.size() == 0)
+			if(s.connections.size() == 0 && !s.isCustom())
 				sessions.remove(s);
 		}
 	}
@@ -386,9 +401,34 @@ public class SessionHandler {
 		if(finish)
 			if(!skipFinishing && handled == playerNames.length)
 			{
-				
+				finishSession(sender, command, session);
 				
 			} else throw new CommandException("Skipping to finalize the session due to one or more issues while adding players.");
+	}
+	
+	static void finishSession(ICommandSender sender, ICommand command, Session session) throws CommandException
+	{
+		if(session.locked)
+			throw new CommandException("That session should already be fully predefined.");
+		
+		Set<String> unregisteredPlayers = session.getPlayerList();
+		unregisteredPlayers.removeAll(session.predefinedPlayers);
+		if(!unregisteredPlayers.isEmpty())
+		{
+			StringBuilder str = new StringBuilder();
+			Iterator<String> iter = unregisteredPlayers.iterator();
+			str.append(iter.next());
+			while(iter.hasNext())
+			{
+				str.append(", ");
+				str.append(iter.next());
+			}
+			throw new CommandException("Found players in session that isn't registered. Add them or disconnect them from the session to proceed: %s", str.toString());
+		}
+		
+		//generate titles, land aspects etc. here
+		
+		session.locked = true;
 	}
 	
 	static List<String> getServerList(String client) {
