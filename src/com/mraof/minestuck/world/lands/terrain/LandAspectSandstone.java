@@ -25,14 +25,14 @@ import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.gen.DefaultTerrainGen;
 import com.mraof.minestuck.world.lands.gen.ILandTerrainGen;
 
-public class LandAspectSandstone extends TerrainAspect
+public class LandAspectSandstone extends TerrainLandAspect
 {
 	
 	private final IBlockState upperBlock;
 	private final IBlockState[] structureBlocks;
 	private final Vec3 skyColor;
 	private final String name;
-	private final List<TerrainAspect> variations;
+	private final List<TerrainLandAspect> variations;
 	
 	public LandAspectSandstone()
 	{
@@ -41,7 +41,7 @@ public class LandAspectSandstone extends TerrainAspect
 	
 	public LandAspectSandstone(String name)
 	{
-		variations = new ArrayList<TerrainAspect>();
+		variations = new ArrayList<TerrainLandAspect>();
 		this.name = name;
 		if(name.equals("Sandstone"))
 		{
@@ -160,13 +160,13 @@ public class LandAspectSandstone extends TerrainAspect
 	}
 	
 	@Override
-	public TerrainAspect getPrimaryVariant()
+	public TerrainLandAspect getPrimaryVariant()
 	{
-		return LandAspectRegistry.fromName("Sandstone");
+		return LandAspectRegistry.fromNameTerrain("Sandstone");
 	}
 	
 	@Override
-	public List<TerrainAspect> getVariations()
+	public List<TerrainLandAspect> getVariations()
 	{
 		return variations;
 	}

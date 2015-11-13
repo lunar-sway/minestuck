@@ -3,9 +3,9 @@ package com.mraof.minestuck.world.lands.title;
 import net.minecraft.util.Vec3;
 
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import com.mraof.minestuck.world.lands.terrain.TerrainAspect;
+import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 
-public class LandAspectThunder extends TitleAspect
+public class LandAspectThunder extends TitleLandAspect
 {
 	
 	@Override
@@ -32,7 +32,7 @@ public class LandAspectThunder extends TitleAspect
 	}
 	
 	@Override
-	public boolean isAspectCompatible(TerrainAspect aspect)
+	public boolean isAspectCompatible(TerrainLandAspect aspect)
 	{
 		return aspect.getTemperature() >= 0.2;
 	}

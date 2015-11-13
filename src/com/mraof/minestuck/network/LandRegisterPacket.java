@@ -45,7 +45,7 @@ public class LandRegisterPacket extends MinestuckPacket
 			String aspect1 = readLine(data);
 			String aspect2 = readLine(data);
 			BlockPos spawn = new BlockPos(data.readInt(), data.readInt(), data.readInt());
-			aspectMap.put(dim, new LandAspectRegistry.AspectCombination(LandAspectRegistry.fromName(aspect1), LandAspectRegistry.fromName2(aspect2)));
+			aspectMap.put(dim, new LandAspectRegistry.AspectCombination(LandAspectRegistry.fromNameTerrain(aspect1), LandAspectRegistry.fromNameTitle(aspect2)));
 			spawnMap.put(dim, spawn);
 		}
 		

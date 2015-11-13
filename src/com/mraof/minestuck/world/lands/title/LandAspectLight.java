@@ -9,9 +9,9 @@ import net.minecraftforge.common.ChestGenHooks;
 
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import com.mraof.minestuck.world.lands.terrain.TerrainAspect;
+import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 
-public class LandAspectLight extends TitleAspect
+public class LandAspectLight extends TitleLandAspect
 {
 	
 	@Override
@@ -43,7 +43,7 @@ public class LandAspectLight extends TitleAspect
 	}
 	
 	@Override
-	public boolean isAspectCompatible(TerrainAspect aspect)
+	public boolean isAspectCompatible(TerrainLandAspect aspect)
 	{
 		return aspect.getDayCycleMode() != 2 && (aspect.getWeatherType() == -1 || (aspect.getWeatherType() & 2) == 0);
 	}

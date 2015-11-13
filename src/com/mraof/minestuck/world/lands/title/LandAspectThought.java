@@ -10,9 +10,9 @@ import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import com.mraof.minestuck.world.lands.terrain.TerrainAspect;
+import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 
-public class LandAspectThought extends TitleAspect
+public class LandAspectThought extends TitleLandAspect
 {
 	
 	@Override
@@ -45,7 +45,7 @@ public class LandAspectThought extends TitleAspect
 	}
 	
 	@Override
-	public boolean isAspectCompatible(TerrainAspect aspect)
+	public boolean isAspectCompatible(TerrainLandAspect aspect)
 	{
 		return aspect.getOceanBlock().getBlock().getMaterial() != Material.lava;
 	}

@@ -10,7 +10,7 @@ import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.structure.CogDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
-public class LandAspectClockwork extends TitleAspect
+public class LandAspectClockwork extends TitleLandAspect
 {
 	
 	@Override

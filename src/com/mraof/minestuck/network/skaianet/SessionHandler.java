@@ -212,7 +212,7 @@ public class SessionHandler {
 				if(session.isCustom())
 				{
 					s.name = session.name;
-					s.predefinedPlayers.addAll(session.predefinedPlayers);
+					s.predefinedPlayers.putAll(session.predefinedPlayers);
 					sessionsByName.put(s.name, s);
 				}
 				s.skaiaId = session.skaiaId;
@@ -340,6 +340,9 @@ public class SessionHandler {
 			sessionsByName.put(session.name, session);
 		}
 		
+		if(session.locked)
+			throw new CommandException("That session should already be fully predefined.");
+		
 		int handled = 0;
 		boolean skipFinishing = false;
 		for(String playerName : playerNames)
@@ -353,7 +356,7 @@ public class SessionHandler {
 					continue;
 				}
 				
-				if(!session.predefinedPlayers.remove(playerName))
+				if(session.predefinedPlayers.remove(playerName) != null)
 				{
 					sender.addChatMessage(new ChatComponentText("Failed to remove player \""+playerName+"\": Player isn't registered with the session.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
 					continue;
@@ -369,7 +372,7 @@ public class SessionHandler {
 				}
 			} else
 			{
-				if(session.predefinedPlayers.contains(playerName))
+				if(session.predefinedPlayers.containsKey(playerName))
 				{
 					sender.addChatMessage(new ChatComponentText("Failed to add player \""+playerName+"\": Player is already registered with session.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
 					continue;
@@ -390,7 +393,7 @@ public class SessionHandler {
 					continue;
 				}
 				
-				session.predefinedPlayers.add(playerName);
+				session.predefinedPlayers.put(playerName, new PredefineData());
 				handled++;
 			}
 		}
@@ -408,11 +411,8 @@ public class SessionHandler {
 	
 	static void finishSession(ICommandSender sender, ICommand command, Session session) throws CommandException
 	{
-		if(session.locked)
-			throw new CommandException("That session should already be fully predefined.");
-		
 		Set<String> unregisteredPlayers = session.getPlayerList();
-		unregisteredPlayers.removeAll(session.predefinedPlayers);
+		unregisteredPlayers.removeAll(session.predefinedPlayers.keySet());
 		if(!unregisteredPlayers.isEmpty())
 		{
 			StringBuilder str = new StringBuilder();
@@ -427,6 +427,7 @@ public class SessionHandler {
 		}
 		
 		//generate titles, land aspects etc. here
+		//order of generation: title -> land aspect title -> land aspect terrain
 		
 		session.locked = true;
 	}

@@ -21,7 +21,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.Vec3;
 import net.minecraft.util.WeightedRandomChestContent;
 
-public abstract class TerrainAspect implements ILandAspect<TerrainAspect>
+public abstract class TerrainLandAspect implements ILandAspect<TerrainLandAspect>
 {
 	
 	public final Map<String, List<WeightedRandomChestContent>> lootMap = new HashMap<String, List<WeightedRandomChestContent>>();
@@ -99,15 +99,15 @@ public abstract class TerrainAspect implements ILandAspect<TerrainAspect>
 	}
 	
 	@Override
-	public List<TerrainAspect> getVariations()
+	public List<TerrainLandAspect> getVariations()
 	{
-		ArrayList<TerrainAspect> list = new ArrayList<TerrainAspect>();
+		ArrayList<TerrainLandAspect> list = new ArrayList<TerrainLandAspect>();
 		list.add(this);
 		return list;
 	}
 	
 	@Override
-	public TerrainAspect getPrimaryVariant()
+	public TerrainLandAspect getPrimaryVariant()
 	{
 		return this;
 	}

@@ -11,9 +11,9 @@ import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import com.mraof.minestuck.world.lands.terrain.TerrainAspect;
+import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 
-public class LandAspectPulse extends TitleAspect
+public class LandAspectPulse extends TitleLandAspect
 {
 
 	@Override
@@ -47,7 +47,7 @@ public class LandAspectPulse extends TitleAspect
 	}
 	
 	@Override
-	public boolean isAspectCompatible(TerrainAspect aspect)
+	public boolean isAspectCompatible(TerrainLandAspect aspect)
 	{
 		return aspect.getOceanBlock().getBlock().getMaterial() != Material.lava;	//Lava is likely a too important part of the terrain aspect to be replaced
 	}

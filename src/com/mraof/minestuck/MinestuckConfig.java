@@ -51,7 +51,7 @@ public class MinestuckConfig
 	public static boolean generateCruxiteOre;
 	public static boolean privateComputers;
 	public static boolean globalSession;
-	public static boolean forceMaxSize;
+	public static boolean forceMaxSize = true;
 	public static boolean giveItems;
 	public static boolean specialCardRenderer;
 	public static boolean cardRecipe;

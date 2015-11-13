@@ -2,7 +2,7 @@ package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
-public class LandAspectNull extends TitleAspect
+public class LandAspectNull extends TitleLandAspect
 {
 	
 	@Override

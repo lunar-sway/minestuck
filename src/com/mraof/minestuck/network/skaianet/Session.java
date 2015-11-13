@@ -1,13 +1,14 @@
 package com.mraof.minestuck.network.skaianet;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagString;
 
 /**
  * Was also an interface for the session system, but now just a data structure representing a session.
@@ -16,7 +17,7 @@ import net.minecraft.nbt.NBTTagString;
  */
 public class Session {
 	
-	Set<String> predefinedPlayers;
+	Map<String, PredefineData> predefinedPlayers;
 	List<SburbConnection> connections;
 	String name;
 	
@@ -61,7 +62,7 @@ public class Session {
 	
 	Session(){
 		connections = new ArrayList<SburbConnection>();
-		predefinedPlayers = new HashSet<String>();
+		predefinedPlayers = new HashMap<String, PredefineData>();
 	}
 	
 	/**
@@ -71,7 +72,7 @@ public class Session {
 	 */
 	boolean containsPlayer(String player)
 	{
-		if(predefinedPlayers.contains(player))
+		if(predefinedPlayers.containsKey(player))
 			return true;
 		for(SburbConnection c : connections)
 			if(c.getClientName().equals(player) || c.getServerName().equals(player))
@@ -92,7 +93,7 @@ public class Session {
 			if(!c.getServerName().equals(".null"))
 				list.add(c.getServerName());
 		}
-		list.addAll(predefinedPlayers);
+		list.addAll(predefinedPlayers.keySet());
 		return list;
 	}
 	
@@ -111,10 +112,10 @@ public class Session {
 		for(SburbConnection c : connections)
 			list.appendTag(c.write());
 		nbt.setTag("connections", list);
-		list = new NBTTagList();
-		for(String player : predefinedPlayers)
-			list.appendTag(new NBTTagString(player));
-		nbt.setTag("predefinedPlayers", list);
+		NBTTagCompound predefineTag = new NBTTagCompound();
+		for(Map.Entry<String, PredefineData> entry : predefinedPlayers.entrySet())
+			predefineTag.setTag(entry.getKey(), entry.getValue().write());
+		nbt.setTag("predefinedPlayers", predefineTag);
 		nbt.setBoolean("locked", locked);
 		nbt.setInteger("skaiaId", skaiaId);
 		nbt.setInteger("derseId", derseId);
@@ -135,11 +136,11 @@ public class Session {
 		NBTTagList list = nbt.getTagList("connections", 10);
 		for(int i = 0; i < list.tagCount(); i++)
 			connections.add(new SburbConnection().read(list.getCompoundTagAt(i)));
-		list = nbt.getTagList("predefinedPlayers", 8);
-		locked = nbt.getBoolean("locked");
-		for(int i = 0; i < list.tagCount(); i++)
-			predefinedPlayers.add(list.getStringTagAt(i));
+		NBTTagCompound predefineTag = nbt.getCompoundTag("predefinedPlayers");
+		for(String player : (Set<String>) predefineTag.getKeySet())
+			predefinedPlayers.put(player, new PredefineData().read(predefineTag.getCompoundTag(player)));
 		SkaianetHandler.connections.addAll(this.connections);
+		locked = nbt.getBoolean("locked");
 		
 		checkIfCompleted();
 		return this;

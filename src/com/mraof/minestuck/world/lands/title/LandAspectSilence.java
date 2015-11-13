@@ -12,9 +12,9 @@ import net.minecraft.world.World;
 
 import com.mraof.minestuck.world.lands.decorator.SingleBlockDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import com.mraof.minestuck.world.lands.terrain.TerrainAspect;
+import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 
-public class LandAspectSilence extends TitleAspect
+public class LandAspectSilence extends TitleLandAspect
 {
 	
 	@Override
@@ -43,7 +43,7 @@ public class LandAspectSilence extends TitleAspect
 	}
 	
 	@Override
-	public boolean isAspectCompatible(TerrainAspect aspect)
+	public boolean isAspectCompatible(TerrainLandAspect aspect)
 	{
 		return (aspect.getWeatherType() == -1 || (aspect.getWeatherType() & 1) != 0)/*rain is noisy*/ && aspect.getDayCycleMode() != 1;
 	}

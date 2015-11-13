@@ -9,9 +9,9 @@ import net.minecraftforge.common.ChestGenHooks;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.RabbitSpawner;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import com.mraof.minestuck.world.lands.terrain.TerrainAspect;
+import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 
-public class LandAspectRabbits extends TitleAspect
+public class LandAspectRabbits extends TitleLandAspect
 {
 	
 	@Override
@@ -44,7 +44,7 @@ public class LandAspectRabbits extends TitleAspect
 	}
 	
 	@Override
-	public boolean isAspectCompatible(TerrainAspect aspect)
+	public boolean isAspectCompatible(TerrainLandAspect aspect)
 	{
 		return !aspect.getOceanBlock().getBlock().getMaterial().equals(Material.lava);
 	}

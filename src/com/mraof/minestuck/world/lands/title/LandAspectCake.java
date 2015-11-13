@@ -17,7 +17,7 @@ import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.SingleBlockDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
-public class LandAspectCake extends TitleAspect
+public class LandAspectCake extends TitleLandAspect
 {
 	
 	@Override

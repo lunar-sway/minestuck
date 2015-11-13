@@ -43,8 +43,8 @@ import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.structure.DefaultGatePlacement;
 import com.mraof.minestuck.world.lands.structure.IGateStructure;
 import com.mraof.minestuck.world.lands.structure.LandStructureHandler;
-import com.mraof.minestuck.world.lands.terrain.TerrainAspect;
-import com.mraof.minestuck.world.lands.title.TitleAspect;
+import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
+import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 
 public class ChunkProviderLands implements IChunkProvider 
 {
@@ -54,8 +54,8 @@ public class ChunkProviderLands implements IChunkProvider
 	Random random;
 	Vec3 skyColor;
 	long seed;
-	public TerrainAspect aspect1;
-	public TitleAspect aspect2;
+	public TerrainLandAspect aspect1;
+	public TitleLandAspect aspect2;
 	public LandAspectRegistry helper;
 	public int nameIndex1, nameIndex2;
 	public boolean nameOrder;

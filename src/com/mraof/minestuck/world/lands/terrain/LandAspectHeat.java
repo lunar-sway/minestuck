@@ -16,7 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Vec3;
 import net.minecraft.util.WeightedRandomChestContent;
 
-public class LandAspectHeat extends TerrainAspect 
+public class LandAspectHeat extends TerrainLandAspect 
 {
 	IBlockState[] structureBlocks = {Blocks.nether_brick.getDefaultState(), Blocks.obsidian.getDefaultState()};
 	static Vec3 skyColor = new Vec3(0.4D, 0.0D, 0.0D);

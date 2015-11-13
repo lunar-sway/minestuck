@@ -10,7 +10,7 @@ import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.structure.BucketDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
-public class LandAspectBuckets extends TitleAspect	//Yes, buckets
+public class LandAspectBuckets extends TitleLandAspect	//Yes, buckets
 {
 
 	@Override

@@ -9,7 +9,7 @@ import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.structure.BasicTowerDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
-public class LandAspectTowers extends TitleAspect
+public class LandAspectTowers extends TitleLandAspect
 {
 	
 	@Override

@@ -17,7 +17,7 @@ import com.mraof.minestuck.world.lands.decorator.TallGrassDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.BasicTreeDecorator;
 
-public class LandAspectForest extends TerrainAspect
+public class LandAspectForest extends TerrainLandAspect
 {
 	
 	public LandAspectForest()

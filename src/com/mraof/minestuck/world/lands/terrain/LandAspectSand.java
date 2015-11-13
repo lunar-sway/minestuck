@@ -26,14 +26,14 @@ import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.gen.feature.WorldGenCactus;
 import net.minecraft.world.gen.feature.WorldGenDeadBush;
 
-public class LandAspectSand extends TerrainAspect
+public class LandAspectSand extends TerrainLandAspect
 {
 	private final IBlockState upperBlock;
 	private final IBlockState groundBlock;
 	private final IBlockState[] structureBlocks;
 	private final Vec3 skyColor;
 	private final String name;
-	private final List<TerrainAspect> variations;
+	private final List<TerrainLandAspect> variations;
 	
 	public LandAspectSand()
 	{
@@ -42,7 +42,7 @@ public class LandAspectSand extends TerrainAspect
 	
 	public LandAspectSand(String variation)
 	{
-		variations = new ArrayList<TerrainAspect>();
+		variations = new ArrayList<TerrainLandAspect>();
 		name = variation;
 		
 		if(name.equals("Sand"))
@@ -163,15 +163,15 @@ public class LandAspectSand extends TerrainAspect
 	}
 	
 	@Override
-	public List<TerrainAspect> getVariations()
+	public List<TerrainLandAspect> getVariations()
 	{
 		return variations;
 	}
 	
 	@Override
-	public TerrainAspect getPrimaryVariant()
+	public TerrainLandAspect getPrimaryVariant()
 	{
-		return LandAspectRegistry.fromName("Sand");
+		return LandAspectRegistry.fromNameTerrain("Sand");
 	}
 	
 	@Override
