@@ -16,6 +16,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.terrain.*;
@@ -92,7 +93,7 @@ public class LandAspectRegistry
 	 * @param playerTitle
 	 * @return
 	 */
-	public TerrainLandAspect getLandAspect(TitleLandAspect aspect2, List<TerrainLandAspect> usedAspects)
+	public TerrainLandAspect getTerrainAspect(TitleLandAspect aspect2, List<TerrainLandAspect> usedAspects)
 	{
 		ArrayList<TerrainLandAspect> availableAspects = new ArrayList<TerrainLandAspect>();
 		for(TerrainLandAspect aspect : landAspects)
@@ -105,13 +106,26 @@ public class LandAspectRegistry
 		return selectRandomAspect(availableAspects, usedAspects);
 	}
 	
-	public TitleLandAspect getTitleAspect(EnumAspect titleAspect, List<TitleLandAspect> usedAspects)
+	public TitleLandAspect getTitleAspect(TerrainLandAspect aspectTerrain, EnumAspect titleAspect, List<TitleLandAspect> usedAspects)
 	{
 		ArrayList<TitleLandAspect> aspectList = titleAspects.get(titleAspect);
+		ArrayList<TitleLandAspect> availableAspects = new ArrayList<TitleLandAspect>();
 		if(aspectList == null || aspectList.isEmpty())
 			return nullAspect;
 		
-		return selectRandomAspect(aspectList, usedAspects);
+		if(aspectTerrain == null)
+			availableAspects.addAll(aspectList);
+		else for(TitleLandAspect aspect : aspectList)
+			if(aspect.isAspectCompatible(aspectTerrain))
+				availableAspects.add(aspect);
+		
+		if(availableAspects.isEmpty())
+		{
+			Debug.printf("Failed to find a title land aspect compatible with \"%s\". Forced to use a poorly compatible land aspect instead.");
+			availableAspects.addAll(aspectList);
+		}
+		
+		return selectRandomAspect(availableAspects, usedAspects);
 	}
 	
 	private <A extends ILandAspect> A selectRandomAspect(List<A> aspectList, List<A> usedAspects)
@@ -269,6 +283,9 @@ public class LandAspectRegistry
 			this.aspectTitle = titleAspect;
 		}
 		public TerrainLandAspect aspectTerrain;
+		/**
+		 * Not to be confused with EnumAspect.
+		 */
 		public TitleLandAspect aspectTitle;
 	}
 	

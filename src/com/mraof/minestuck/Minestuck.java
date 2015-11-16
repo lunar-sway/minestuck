@@ -97,7 +97,7 @@ public class Minestuck
 	public static CommonProxy proxy;
 	public static CreativeTabs tabMinestuck;
 
-	public static long worldSeed = 0;
+	public static long worldSeed = 0;	//TODO proper usage of seed when generating titles, land aspects, and land dimension data
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) 

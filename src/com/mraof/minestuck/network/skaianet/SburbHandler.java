@@ -22,7 +22,6 @@ import com.mraof.minestuck.entity.underling.EntityImp;
 import com.mraof.minestuck.entity.underling.EntityOgre;
 import com.mraof.minestuck.entity.underling.EntityUnderling;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.EnumClass;
 import com.mraof.minestuck.util.GristHelper;
@@ -227,30 +226,47 @@ public class SburbHandler
 		LandAspectRegistry aspectGen = new LandAspectRegistry(Minestuck.worldSeed/connection.clientHomeLand);
 		Session session = SessionHandler.getPlayerSession(connection.getClientName());
 		Title title = MinestuckPlayerData.getTitle(connection.getClientName());
-		Debug.printf("aspectGen: " + aspectGen + " session: " + session + " title " + title);
+		TitleLandAspect titleAspect = null;
+		TerrainLandAspect terrainAspect = null;
+		
+		if(session.predefinedPlayers.containsKey(connection.getClientName()))
+		{
+			PredefineData data = session.predefinedPlayers.get(connection.getClientName());
+			if(data.landTitle != null)
+				titleAspect = data.landTitle;
+			if(data.landTerrain != null)
+				terrainAspect = data.landTerrain;
+		}
 		
 		boolean frogs = false;
 		ArrayList<TerrainLandAspect> usedTerrainAspects = new ArrayList<TerrainLandAspect>();
 		ArrayList<TitleLandAspect> usedTitleAspects = new ArrayList<TitleLandAspect>();
 		for(SburbConnection c : session.connections)
-			if(c.enteredGame)
+			if(c.enteredGame && c != connection)
 			{
-				if(c == connection)
-					continue;
 				LandAspectRegistry.AspectCombination aspects = MinestuckDimensionHandler.getAspects(c.clientHomeLand);
 				if(aspects.aspectTitle == LandAspectRegistry.frogAspect)
 					frogs = true;
-				else if(MinestuckPlayerData.getTitle(c.getClientName()).getHeroAspect() == title.getHeroAspect())
-					usedTitleAspects.add(aspects.aspectTitle);
+				usedTitleAspects.add(aspects.aspectTitle);
 				usedTerrainAspects.add(aspects.aspectTerrain);
 			}
+		for(PredefineData data : session.predefinedPlayers.values())
+		{
+			if(data.landTerrain != null)
+				usedTerrainAspects.add(data.landTerrain);
+			if(data.landTitle != null)
+			{
+				usedTitleAspects.add(data.landTitle);
+				if(data.landTitle == LandAspectRegistry.frogAspect)
+					frogs = true;
+			}
+		}
 		
-//		if(title.getHeroAspect() == EnumAspect.SPACE && !frogs)
-//			return landHelper.frogAspect;
-		TitleLandAspect titleAspect = aspectGen.getTitleAspect(title.getHeroAspect(), usedTitleAspects);
-		TerrainLandAspect terrainAspect = aspectGen.getLandAspect(titleAspect, usedTerrainAspects);
+		if(titleAspect == null)
+			titleAspect = aspectGen.getTitleAspect(terrainAspect, title.getHeroAspect(), usedTitleAspects);
+		if(terrainAspect == null)
+			terrainAspect = aspectGen.getTerrainAspect(titleAspect, usedTerrainAspects);
 		MinestuckDimensionHandler.registerLandDimension(connection.clientHomeLand, new AspectCombination(terrainAspect, titleAspect));
-		//MinestuckPlayerTracker.updateLands(); Lands need to be updated after setting the spawnpoint
 	}
 	
 	public static GristType getUnderlingType(EntityUnderling entity)
