@@ -3,11 +3,15 @@ package com.mraof.minestuck.network.skaianet;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommand;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.BlockPos;
@@ -173,6 +177,78 @@ public class SburbHandler
 		
 		MinestuckPlayerData.setTitle(player, new Title(titleClass, titleAspect));
 		MinestuckPlayerTracker.instance.updateTitle(MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(UsernameHandler.decode(player)));
+	}
+	
+	static void finishSession(ICommandSender sender, ICommand command, Session session) throws CommandException
+	{
+		Random rand = new Random();	//What seed?
+		Set<String> unregisteredPlayers = session.getPlayerList();
+		unregisteredPlayers.removeAll(session.predefinedPlayers.keySet());
+		if(!unregisteredPlayers.isEmpty())
+		{
+			StringBuilder str = new StringBuilder();
+			Iterator<String> iter = unregisteredPlayers.iterator();
+			str.append(iter.next());
+			while(iter.hasNext())
+			{
+				str.append(", ");
+				str.append(iter.next());
+			}
+			throw new CommandException("Found players in session that isn't registered. Add them or disconnect them from the session to proceed: %s", str.toString());
+		}
+		
+		for(SburbConnection c : session.connections)	//Add data to predefined registry
+			if(c.isMain && c.enteredGame)
+			{
+				PredefineData data = session.predefinedPlayers.get(c.getClientName());
+				Title title = MinestuckPlayerData.getTitle(c.getClientName());
+				AspectCombination landAspects = MinestuckDimensionHandler.getAspects(c.getClientDimension());
+				data.titleClass = title.getHeroClass();
+				data.titleAspect = title.getHeroAspect();
+				data.landTitle = landAspects.aspectTitle;
+				data.landTerrain = landAspects.aspectTerrain;
+			}
+		
+		{	//Titles
+			int specialClasses = 0;
+			int[] classFrequencies = new int[12], aspectFrequencies = new int[12];
+			for(PredefineData data : session.predefinedPlayers.values())
+			{
+				if(data.titleClass != null)
+					if(data.titleClass.ordinal() < 12)
+						classFrequencies[data.titleClass.ordinal()]++;
+					else specialClasses++;
+				if(data.titleAspect != null)
+					aspectFrequencies[data.titleAspect.ordinal()]++;
+			}
+
+			int minAspects = session.predefinedPlayers.size()/12;	//If evenly placed, the minimum amounts of each aspect used
+			int additionalAspects = session.predefinedPlayers.size()%12;	//How many additional aspects that need to be used over the minAspects*12.
+			int minClasses = (session.predefinedPlayers.size() - specialClasses)/12;
+			int additionalClasses = (session.predefinedPlayers.size() - specialClasses)%12;
+			int classOffset = 0, aspectOffset = 0;	//How many titles that are already assigned above the minimum.
+			for(int i = 0; i < 12; i++)
+			{
+				if(classFrequencies[i] > minClasses)
+					classOffset += classFrequencies[i] - minClasses;
+				if(aspectFrequencies[i] > minAspects)
+					aspectOffset += aspectFrequencies[i] - minAspects;
+			}
+			
+			if(classOffset > additionalClasses)	//if this is true, then it can't assign at least "minClassses" of each class.
+			{
+				int levelOffset = (classOffset - additionalClasses + 11)/12;
+				minClasses -= levelOffset;
+				additionalClasses += levelOffset*12;
+				for(int i = 0; i < 12; i++)
+					if(classFrequencies[i] > minClasses)
+						additionalClasses -= Math.min(levelOffset, classFrequencies[i] - minClasses);
+			}
+		}
+		//generate titles, land aspects etc. here
+		//order of generation: title -> land aspect title -> land aspect terrain
+		
+		session.locked = true;
 	}
 	
 	/**

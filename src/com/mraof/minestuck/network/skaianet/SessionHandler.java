@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -404,32 +403,9 @@ public class SessionHandler {
 		if(finish)
 			if(!skipFinishing && handled == playerNames.length)
 			{
-				finishSession(sender, command, session);
+				SburbHandler.finishSession(sender, command, session);
 				
 			} else throw new CommandException("Skipping to finalize the session due to one or more issues while adding players.");
-	}
-	
-	static void finishSession(ICommandSender sender, ICommand command, Session session) throws CommandException
-	{
-		Set<String> unregisteredPlayers = session.getPlayerList();
-		unregisteredPlayers.removeAll(session.predefinedPlayers.keySet());
-		if(!unregisteredPlayers.isEmpty())
-		{
-			StringBuilder str = new StringBuilder();
-			Iterator<String> iter = unregisteredPlayers.iterator();
-			str.append(iter.next());
-			while(iter.hasNext())
-			{
-				str.append(", ");
-				str.append(iter.next());
-			}
-			throw new CommandException("Found players in session that isn't registered. Add them or disconnect them from the session to proceed: %s", str.toString());
-		}
-		
-		//generate titles, land aspects etc. here
-		//order of generation: title -> land aspect title -> land aspect terrain
-		
-		session.locked = true;
 	}
 	
 	static List<String> getServerList(String client) {
