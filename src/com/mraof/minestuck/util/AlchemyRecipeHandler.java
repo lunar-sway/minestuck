@@ -14,6 +14,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
@@ -476,6 +477,12 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Items.nether_wart), new ItemStack(Blocks.sand), MODE_OR, new ItemStack(Blocks.soul_sand));
 		CombinationRegistry.addCombination(new ItemStack(Items.book), new ItemStack(Blocks.chest), MODE_AND, new ItemStack(Blocks.bookshelf));
 		CombinationRegistry.addCombination(new ItemStack(Items.water_bucket), new ItemStack(Blocks.wool, 1, EnumDyeColor.YELLOW.getMetadata()), MODE_AND, new ItemStack(Blocks.sponge, 1, 1));
+		CombinationRegistry.addCombination(new ItemStack(Items.book), new ItemStack(Items.experience_bottle), MODE_AND, new ItemStack(Blocks.enchanting_table));
+		CombinationRegistry.addCombination("treeLeaves", new ItemStack(Items.water_bucket), true, MODE_OR, new ItemStack(Blocks.waterlily));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.crafting_table), new ItemStack(Blocks.iron_block), MODE_OR, new ItemStack(Blocks.anvil));
+		CombinationRegistry.addCombination(new ItemStack(Items.wooden_sword), new ItemStack(Items.arrow), MODE_OR, new ItemStack(Items.bow));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.red_flower), new ItemStack(Items.brick), false, true, MODE_AND, new ItemStack(Items.flower_pot));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.yellow_flower), new ItemStack(Items.brick), false, true, MODE_AND, new ItemStack(Items.flower_pot));
 		
 	}
 	
@@ -611,14 +618,18 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Items.diamond_shovel), new ItemStack(Items.emerald), MODE_OR, false, false, new ItemStack(emeraldShovel));
 		CombinationRegistry.addCombination(new ItemStack(Items.diamond_hoe), new ItemStack(Items.emerald), MODE_OR, false, false, new ItemStack(emeraldHoe));
 		
-		CombinationRegistry.addCombination(new ItemStack(Items.iron_helmet), new ItemStack(Items.prismarine_shard), MODE_OR, false, false, new ItemStack(prismarineHelmet));
-		CombinationRegistry.addCombination(new ItemStack(Items.iron_helmet), new ItemStack(Blocks.prismarine), MODE_OR, false, false, new ItemStack(prismarineHelmet));
-		CombinationRegistry.addCombination(new ItemStack(Items.iron_chestplate), new ItemStack(Items.prismarine_shard), MODE_OR, false, false, new ItemStack(prismarineChestplate));
-		CombinationRegistry.addCombination(new ItemStack(Items.iron_chestplate), new ItemStack(Blocks.prismarine), MODE_OR, false, false, new ItemStack(prismarineChestplate));
-		CombinationRegistry.addCombination(new ItemStack(Items.iron_leggings), new ItemStack(Items.prismarine_shard), MODE_OR, false, false, new ItemStack(prismarineLeggings));
-		CombinationRegistry.addCombination(new ItemStack(Items.iron_leggings), new ItemStack(Blocks.prismarine), MODE_OR, false, false, new ItemStack(prismarineLeggings));
-		CombinationRegistry.addCombination(new ItemStack(Items.iron_boots), new ItemStack(Items.prismarine_shard), MODE_OR, false, false, new ItemStack(prismarineBoots));
-		CombinationRegistry.addCombination(new ItemStack(Items.iron_boots), new ItemStack(Blocks.prismarine), MODE_OR, false, false, new ItemStack(prismarineBoots));
+		ItemArmor[] metalHelmets = new ItemArmor[] {Items.iron_helmet, Items.golden_helmet, Items.diamond_helmet};
+		ItemArmor[] metalChestplates = new ItemArmor[] {Items.iron_chestplate, Items.golden_chestplate, Items.diamond_chestplate};
+		ItemArmor[] metalLeggings = new ItemArmor[] {Items.iron_leggings, Items.golden_leggings, Items.diamond_leggings};
+		ItemArmor[] metalBoots = new ItemArmor[] {Items.iron_boots, Items.golden_boots, Items.diamond_boots};
+		for(int i = 0; i < metalHelmets.length; i++)	//Two out of three possible for-loops is enough for me
+			for(ItemStack prismarine : new ItemStack[]{new ItemStack(Items.prismarine_shard), new ItemStack(Blocks.prismarine)})
+			{
+				CombinationRegistry.addCombination(new ItemStack(metalHelmets[i]), prismarine, MODE_OR, false, false, new ItemStack(prismarineHelmet));
+				CombinationRegistry.addCombination(new ItemStack(metalChestplates[i]), prismarine, MODE_OR, false, false, new ItemStack(prismarineChestplate));
+				CombinationRegistry.addCombination(new ItemStack(metalLeggings[i]), prismarine, MODE_OR, false, false, new ItemStack(prismarineLeggings));
+				CombinationRegistry.addCombination(new ItemStack(metalBoots[i]), prismarine, MODE_OR, false, false, new ItemStack(prismarineBoots));
+			}
 		
 		CombinationRegistry.addCombination(new ItemStack(fork), new ItemStack(component, 1, 2), MODE_AND, false, true, new ItemStack(skaiaFork));
 		CombinationRegistry.addCombination(new ItemStack(fork),new ItemStack(woodenSpoon),MODE_OR, false, false, new ItemStack(spork));
