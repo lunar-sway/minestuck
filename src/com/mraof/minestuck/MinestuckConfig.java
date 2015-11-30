@@ -62,6 +62,7 @@ public class MinestuckConfig
 	public static boolean adaptEntryBlockHeight;
 	public static boolean allowSecondaryConnections;	//TODO make open server not an option after having a main connection (for when this is set to false)
 	public static boolean disableGristWidget;
+	public static boolean alchemyIcons = true;
 	public static int artifactRange;
 	public static int overworldEditRange;
 	public static int landEditRange;

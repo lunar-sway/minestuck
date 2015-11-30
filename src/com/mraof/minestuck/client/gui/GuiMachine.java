@@ -1,8 +1,10 @@
 package com.mraof.minestuck.client.gui;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -28,6 +30,7 @@ import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.MinestuckPlayerData;
@@ -136,40 +139,7 @@ public class GuiMachine extends GuiContainer {
 					else set.gristTypes[i] = (int) (set.gristTypes[i]*multiplier);
 			}
 			
-			if (set == null) {fontRendererObj.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 9,45, 16711680); return;}
-			
-			Hashtable<Integer, Integer> reqs = set.getHashtable();
-			if (reqs != null)
-			{
-				if (reqs.size() == 0)
-				{
-					fontRendererObj.drawString(StatCollector.translateToLocal("gui.free"), 9,45, 65280);
-					return;
-				}
-				Iterator<Entry<Integer, Integer>> it = reqs.entrySet().iterator();
-				int place = 0;
-				while (it.hasNext()) {
-					Map.Entry<Integer, Integer> pairs = it.next();
-					int type = pairs.getKey();
-					int need = pairs.getValue();
-					int have = MinestuckPlayerData.getClientGrist().getGrist(GristType.values()[type]);
-					
-					int row = place % 3;
-					int col = place / 3;
-					
-					int color = metadata == 3 ? (useSelectedType ? 0x0000FF : need <= have ? 0x00FF00 : 0xFF0000) : 0; //Green if we have enough grist, red if not, black if GristWidget
-					
-					fontRendererObj.drawString(need + " " + GristType.values()[type].getDisplayName() + " (" + have + ")", 9 + (80 * col),45 + (8 * (row)), color);
-					
-					place++;
-					
-				}
-			}
-			else
-			{
-				fontRendererObj.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 9,45, 16711680);
-				return;
-			}
+			drawGristBoard(set, useSelectedType);
 		}
 	}
 	
@@ -279,16 +249,93 @@ protected void mouseClicked(int par1, int par2, int par3) throws IOException
 		Tessellator.getInstance().draw();
 	}
 
-/**
- * Returns a number to be used in calculation of progress bar length.
- * 
- * @param progress the progress done.
- * @param max The maximum amount of progress.
- * @param imageMax The length of the progress bar image to scale to
- * @return The length the progress bar should be shown to
- */
-public int getScaledValue(int progress,int max,int imageMax) {
-	return (int) ((float) imageMax*((float)progress/(float)max));
-}
-
+	/**
+	 * Returns a number to be used in calculation of progress bar length.
+	 * 
+	 * @param progress the progress done.
+	 * @param max The maximum amount of progress.
+	 * @param imageMax The length of the progress bar image to scale to
+	 * @return The length the progress bar should be shown to
+	 */
+	public int getScaledValue(int progress,int max,int imageMax)
+	{
+		return (int) ((float) imageMax*((float)progress/(float)max));
+	}
+	
+	private void drawGristBoard(GristSet cost, boolean selectiveType)
+	{
+		if (cost == null)
+		{
+			fontRendererObj.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 9,45, 16711680);
+			return;
+		}
+		GristSet playerGrist = MinestuckPlayerData.getClientGrist();
+		
+		Hashtable<Integer, Integer> reqs = cost.getHashtable();
+		if (reqs.size() == 0)
+		{
+			fontRendererObj.drawString(StatCollector.translateToLocal("gui.free"), 9,45, 65280);
+			return;
+		}
+		Iterator<Entry<Integer, Integer>> it = reqs.entrySet().iterator();
+		if(!MinestuckConfig.alchemyIcons)
+		{
+			int place = 0;
+			while (it.hasNext())
+			{
+				Map.Entry<Integer, Integer> pairs = it.next();
+				int type = pairs.getKey();
+				int need = pairs.getValue();
+				int have = playerGrist.getGrist(GristType.values()[type]);
+				
+				int row = place % 3;
+				int col = place / 3;
+				
+				int color = metadata == 3 ? (selectiveType ? 0x0000FF : need <= have ? 0x00FF00 : 0xFF0000) : 0; //Green if we have enough grist, red if not, black if GristWidget
+				
+				fontRendererObj.drawString(need + " " + GristType.values()[type].getDisplayName() + " (" + have + ")", 9 + (80 * col),45 + (8 * (row)), color);
+				
+				place++;
+				
+			}
+		} else
+		{
+			iconLength.clear();
+			
+			int index = 0;
+			while(it.hasNext())
+			{
+				Map.Entry<Integer, Integer> pairs = it.next();
+				GristType type = GristType.values()[pairs.getKey()];
+				int need = pairs.getValue();
+				int have = playerGrist.getGrist(type);
+				int row = index/158;
+				int color = metadata == 3 ? (selectiveType ? 0x0000FF : need <= have ? 0x00FF00 : 0xFF0000) : 0;
+				
+				String needStr = String.valueOf(need), haveStr = "("+have+")";
+				int needStrWidth = fontRendererObj.getStringWidth(needStr);
+				if(index + needStrWidth + 10 + fontRendererObj.getStringWidth(haveStr) > (row + 1)*158)
+				{
+					row++;
+					index = row*158;
+				}
+				fontRendererObj.drawString(needStr, 9 + index%158, 45 + 8*row, color);
+				fontRendererObj.drawString(haveStr, needStrWidth + 19 + index%158, 45 + (8 * (row)), color);
+				
+				GlStateManager.color(1, 1, 1);
+				this.mc.getTextureManager().bindTexture(new ResourceLocation("minestuck", "textures/grist/" + type.getName()+ ".png"));
+				drawCustomBox(needStrWidth + 10 + index%158, 45 + 8*row, 0, 0, 8, 8, 8, 8);
+				
+				iconLength.add(new GristAmount(type, index));
+				
+				index += needStrWidth + 10 + fontRendererObj.getStringWidth(haveStr);
+				if(index + 5 > (row + 1)*158)
+					index = (row + 1)*158;
+				else index += 5;
+			}
+		}
+	}
+	
+	private List<GristAmount> iconLength = new ArrayList<GristAmount>();	//The amount is made out of a grist type and a value for the x-coordinate.
+	
 }
