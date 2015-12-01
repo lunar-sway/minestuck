@@ -2,6 +2,7 @@ package com.mraof.minestuck.client.gui;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -107,7 +108,7 @@ public class GuiMachine extends GuiContainer {
 }
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int param1, int param2)
+	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
 	{
 		fontRendererObj.drawString(StatCollector.translateToLocal("gui."+guis[metadata]+".name"), 8, 6, 4210752);
 		//draws "Inventory" or your regional equivalent
@@ -140,6 +141,21 @@ public class GuiMachine extends GuiContainer {
 			}
 			
 			drawGristBoard(set, useSelectedType);
+			
+			int posX = mouseX - this.guiLeft, posY = mouseY - this.guiTop;
+			if(MinestuckConfig.alchemyIcons && posX >= 9 && posY >= 45 && posX < 167 && posY < 69)
+			{	//Grist icon tooltips
+				for(GristAmount amount : iconLength)
+				{
+					int x = 9 + amount.getAmount()%158;
+					int y = 45 + 8*(amount.getAmount()/158);
+					if(posX >= x && posX < x + 8 && posY >= y && posY < y + 8)
+					{
+						this.drawHoveringText(Arrays.asList(amount.getType().getDisplayName()), posX, posY, fontRendererObj);
+						break;
+					}
+				}
+			}
 		}
 	}
 	
@@ -326,12 +342,10 @@ protected void mouseClicked(int par1, int par2, int par3) throws IOException
 				this.mc.getTextureManager().bindTexture(new ResourceLocation("minestuck", "textures/grist/" + type.getName()+ ".png"));
 				drawCustomBox(needStrWidth + 10 + index%158, 45 + 8*row, 0, 0, 8, 8, 8, 8);
 				
-				iconLength.add(new GristAmount(type, index));
+				iconLength.add(new GristAmount(type, index + needStrWidth + 1));
 				
 				index += needStrWidth + 10 + fontRendererObj.getStringWidth(haveStr);
-				if(index + 5 > (row + 1)*158)
-					index = (row + 1)*158;
-				else index += 5;
+				index = Math.min(index + 6, (row + 1)*158);
 			}
 		}
 	}
