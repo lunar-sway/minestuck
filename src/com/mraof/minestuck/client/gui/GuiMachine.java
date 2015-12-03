@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -20,6 +21,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import com.mraof.minestuck.MinestuckConfig;
@@ -222,33 +224,48 @@ public void initGui()
 		}
 	}
 	
-@Override
-protected void mouseClicked(int par1, int par2, int par3) throws IOException
-{
-	super.mouseClicked(par1,par2,par3);
-	if (par3 == 1)
+	@Override
+	protected void mouseClicked(int par1, int par2, int par3) throws IOException
 	{
-		for (int l = 0; l < this.buttonList.size(); ++l)
+		super.mouseClicked(par1,par2,par3);
+		if (par3 == 1)
 		{
-			GuiButton guibutton = (GuiButton)this.buttonList.get(l);
-
-			if (guibutton.mousePressed(this.mc, par1, par2) && guibutton == goButton)
+			if (goButton.mousePressed(this.mc, par1, par2))
 			{
 				
-				guibutton.playPressSound(this.mc.getSoundHandler());
-				this.actionPerformed(guibutton);
+				goButton.playPressSound(this.mc.getSoundHandler());
+				this.actionPerformed(goButton);
 			}
 		}
+		else if(te.getMachineType() == 3 && par3 == 0 && mc.thePlayer.inventory.getItemStack() == null
+				&& te.inv[1] != null && AlchemyRecipeHandler.getDecodedItem(te.inv[1]) != null && AlchemyRecipeHandler.getDecodedItem(te.inv[1]).getItem() == MinestuckItems.captchaCard
+				&& par1 >= guiLeft + 9 && par1 < guiLeft + 167 && par2 >= guiTop + 45 && par2 < guiTop + 70)
+		{
+			mc.currentScreen = new GuiGristSelector(this);
+			mc.currentScreen.setWorldAndResolution(mc, width, height);
+		}
 	}
-	else if(te.getMachineType() == 3 && par3 == 0 && mc.thePlayer.inventory.getItemStack() == null
-			&& te.inv[1] != null && AlchemyRecipeHandler.getDecodedItem(te.inv[1]) != null && AlchemyRecipeHandler.getDecodedItem(te.inv[1]).getItem() == MinestuckItems.captchaCard
-			&& par1 >= guiLeft + 9 && par1 < guiLeft + 167 && par2 >= guiTop + 45 && par2 < guiTop + 70)
+	
+	@Override
+	protected void keyTyped(char typedChar, int keyCode) throws IOException
 	{
-		mc.currentScreen = new GuiGristSelector(this);
-		mc.currentScreen.setWorldAndResolution(mc, width, height);
+		super.keyTyped(typedChar, keyCode);
+		
+		if(keyCode == 28)
+		{
+			this.mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
+			
+			boolean mode = te.getMachineType() > 2 && (Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54));
+			MinestuckPacket packet = MinestuckPacket.makePacket(Type.GOBUTTON,true, mode && !te.overrideStop);
+			MinestuckChannelHandler.sendToServer(packet);
+			
+			if(!mode)
+				te.ready = true;
+			te.overrideStop = mode && !te.overrideStop;
+			goButton.displayString = StatCollector.translateToLocal(te.overrideStop ? "gui.buttonStop" : "gui.buttonGo");
+		}
 	}
-}
-
+	
 	/**
 	 * Draws a box like drawModalRect, but with custom width and height values.
 	 */
