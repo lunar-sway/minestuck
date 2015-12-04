@@ -4,24 +4,21 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.EnumClass;
+import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 
 public class PredefineData
 {
-	
-	EnumAspect titleAspect;
-	EnumClass titleClass;
+	Title title;
 	TerrainLandAspect landTerrain;
 	TitleLandAspect landTitle;
 	
 	PredefineData read(NBTTagCompound nbt)
 	{
 		if(nbt.hasKey("titleAspect", 99))
-			titleAspect = EnumAspect.values()[nbt.getByte("titleAspect")];
-		if(nbt.hasKey("titleClass", 99))
-			titleClass = EnumClass.values()[nbt.getByte("titleClass")];
+			title = new Title(EnumClass.values()[nbt.getByte("titleClass")], EnumAspect.values()[nbt.getByte("titleAspect")]);
 		if(nbt.hasKey("landTerrain", 8))
 			landTerrain = LandAspectRegistry.fromNameTerrain(nbt.getString("landTerrain"));
 		if(nbt.hasKey("landTitle", 8))
@@ -33,10 +30,11 @@ public class PredefineData
 	NBTTagCompound write()
 	{
 		NBTTagCompound nbt = new NBTTagCompound();
-		if(titleAspect != null)
-			nbt.setByte("titleAspect", (byte) titleAspect.ordinal());
-		if(titleClass != null)
-			nbt.setByte("titleClass", (byte) titleClass.ordinal());
+		if(title != null)
+		{
+			nbt.setByte("titleClass", (byte) title.getHeroClass().ordinal());
+			nbt.setByte("titleAspect", (byte) title.getHeroAspect().ordinal());
+		}
 		if(landTerrain != null)
 			nbt.setString("landTerrain", landTerrain.getPrimaryName());
 		if(landTitle != null)

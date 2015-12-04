@@ -50,18 +50,14 @@ public class SburbHandler
 	static void generateTitle(String player)
 	{
 		Session session = SessionHandler.getPlayerSession(player);
-		EnumClass titleClass = null;
-		EnumAspect titleAspect = null;
+		Title title = null;
 		if(session.predefinedPlayers.containsKey(player))
 		{
 			PredefineData data = session.predefinedPlayers.get(player);
-			if(data.titleClass != null)
-				titleClass = data.titleClass;
-			if(data.titleAspect != null)
-				titleAspect = data.titleAspect;
+			title = data.title;
 		}
 		
-		if(titleClass == null || titleAspect == null)
+		if(title == null)
 		{
 			Random rand = new Random(Minestuck.worldSeed^player.hashCode());
 			
@@ -76,106 +72,67 @@ public class SburbHandler
 				}
 			
 			for(Map.Entry<String, PredefineData> entry : session.predefinedPlayers.entrySet())
-				if(!playersEntered.contains(entry.getKey()) && (entry.getValue().titleClass != null || entry.getValue().titleAspect != null))
-					usedTitles.add(new Title(entry.getValue().titleClass, entry.getValue().titleAspect));
+				if(!playersEntered.contains(entry.getKey()) && entry.getValue().title != null)
+					usedTitles.add(entry.getValue().title);
 			
 			if(usedTitles.size() < 12)	//Focus on getting an unused aspect and an unused class
 			{
-				if(titleClass == null)
+				EnumSet<EnumClass> usedClasses = EnumSet.noneOf(EnumClass.class);
+				EnumSet<EnumAspect> usedAspects = EnumSet.noneOf(EnumAspect.class);
+				for(Title usedTitle : usedTitles)
 				{
-					EnumSet<EnumClass> usedClasses = EnumSet.noneOf(EnumClass.class);
-					for(Title usedTitle : usedTitles)
-						if(usedTitle.getHeroClass() != null)
-							usedClasses.add(usedTitle.getHeroClass());
-					
-					titleClass = EnumClass.getRandomClass(usedClasses, rand);
+					usedClasses.add(usedTitle.getHeroClass());
+					usedAspects.add(usedTitle.getHeroAspect());
 				}
-				if(titleAspect == null)
-				{
-					EnumSet<EnumAspect> usedAspects = EnumSet.noneOf(EnumAspect.class);
-					for(Title usedTitle : usedTitles)
-						if(usedTitle.getHeroAspect() != null)
-							usedAspects.add(usedTitle.getHeroAspect());
-					
-					titleAspect = EnumAspect.getRandomAspect(usedAspects, rand);
-				}
+				
+				title = new Title(EnumClass.getRandomClass(usedClasses, rand), EnumAspect.getRandomAspect(usedAspects, rand));
 			}
 			else if(usedTitles.size() < 144)	//Focus only on getting an unused title
 			{
-				if(titleClass == null)
+				
+				int[] classFrequency = new int[12];
+				for(Title usedTitle : usedTitles)
+					if(usedTitle.getHeroClass().ordinal() < 12)
+						classFrequency[usedTitle.getHeroClass().ordinal()]++;
+				
+				EnumClass titleClass = null;
+				int titleIndex = rand.nextInt(144 - usedTitles.size());
+				for(int classIndex = 0; classIndex < 12; classIndex++)
 				{
-					int[] classFrequency = new int[12];
-					int count = 0;
-					for(Title usedTitle : usedTitles)
-						if(usedTitle.getHeroClass() != null && usedTitle.getHeroClass().ordinal() < 12 && classFrequency[usedTitle.getHeroClass().ordinal()] != -1)
-						{
-							if(titleAspect == null || !titleAspect.equals(usedTitle.getHeroAspect()))
-							{
-								classFrequency[usedTitle.getHeroClass().ordinal()]++;
-								count++;
-							} else
-							{
-								count += 12 - classFrequency[usedTitle.getHeroClass().ordinal()];
-								classFrequency[usedTitle.getHeroClass().ordinal()] = -1;
-							}
-						}
-					
-					int titleIndex = rand.nextInt(144 - count);
-					
-					for(int classIndex = 0; classIndex < 12; classIndex++)
+					int classChance = 12 - classFrequency[classIndex];
+					if(titleIndex <= classChance)
 					{
-						if(classFrequency[classIndex] == -1)
-							continue;
-						int classChance = 12 - classFrequency[classIndex];
-						if(titleIndex <= classChance)
-						{
-							titleClass = EnumClass.getClassFromInt(classIndex);
-							break;
-						}
-						titleIndex -= classChance;
+						titleClass = EnumClass.getClassFromInt(classIndex);
+						break;
 					}
-					if(titleClass == null)
-						throw new IllegalStateException("Finished for loop without generating a title class. This should not happen and is likely a bug.");
-					
-				} else if(titleAspect == null)
-				{
-					int[] aspectFrequency = new int[12];
-					int count = 0;
-					for(Title usedTitle : usedTitles)
-						if(usedTitle.getHeroAspect() != null && aspectFrequency[usedTitle.getHeroAspect().ordinal()] != -1)
-						{
-							if(!titleClass.equals(usedTitle.getHeroClass()))
-							{
-								aspectFrequency[usedTitle.getHeroAspect().ordinal()]++;
-								count++;
-							} else
-							{
-								count += 12 - aspectFrequency[usedTitle.getHeroAspect().ordinal()];
-								aspectFrequency[usedTitle.getHeroAspect().ordinal()] = -1;
-							}
-						}
-					
-					int titleIndex = rand.nextInt(144 - count);
-					
-					for(int aspectIndex = 0; aspectIndex < 12; aspectIndex++)
-					{
-						if(aspectFrequency[aspectIndex] == -1)
-							continue;
-						int aspectChance = 12 - aspectFrequency[aspectIndex];
-						if(titleIndex <= aspectChance)
-						{
-							titleAspect = EnumAspect.getAspectFromInt(aspectIndex);
-							break;
-						}
-						titleIndex -= aspectChance;
-					}
-					if(titleAspect == null)
-						throw new IllegalStateException("Finished for loop without generating a title aspect. This should not happen and is likely a bug.");
+					titleIndex -= classChance;
 				}
+				if(titleClass == null)
+					throw new IllegalStateException("Finished for loop without generating a title class. This should not happen and is likely a bug.");
+				
+				EnumSet<EnumAspect> usedAspects = EnumSet.noneOf(EnumAspect.class);
+				for(Title usedTitle : usedTitles)
+					if(usedTitle.getHeroClass() == titleClass)
+						usedAspects.add(usedTitle.getHeroAspect());
+				EnumAspect titleAspect = null;
+				for(EnumAspect aspect : EnumAspect.values())
+					if(!usedAspects.contains(aspect))
+					{
+						if(titleIndex == 0)
+						{
+							titleAspect = aspect;
+							break;
+						}
+						titleIndex--;
+					}
+				if(titleAspect == null)
+					throw new IllegalStateException("Finished for loop without generating a title aspect. This should not happen and is likely a bug.");
+				
+				title = new Title(titleClass, titleAspect);
 			}
 		}
 		
-		MinestuckPlayerData.setTitle(player, new Title(titleClass, titleAspect));
+		MinestuckPlayerData.setTitle(player, title);
 		MinestuckPlayerTracker.instance.updateTitle(MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(UsernameHandler.decode(player)));
 	}
 	
@@ -203,8 +160,7 @@ public class SburbHandler
 				PredefineData data = session.predefinedPlayers.get(c.getClientName());
 				Title title = MinestuckPlayerData.getTitle(c.getClientName());
 				AspectCombination landAspects = MinestuckDimensionHandler.getAspects(c.getClientDimension());
-				data.titleClass = title.getHeroClass();
-				data.titleAspect = title.getHeroAspect();
+				data.title = title;
 				data.landTitle = landAspects.aspectTitle;
 				data.landTerrain = landAspects.aspectTerrain;
 			}
@@ -213,15 +169,14 @@ public class SburbHandler
 			int specialClasses = 0;
 			int[] classFrequencies = new int[12], aspectFrequencies = new int[12];
 			for(PredefineData data : session.predefinedPlayers.values())
-			{
-				if(data.titleClass != null)
-					if(data.titleClass.ordinal() < 12)
-						classFrequencies[data.titleClass.ordinal()]++;
+				if(data.title != null)
+				{
+					if(data.title.getHeroClass().ordinal() < 12)
+						classFrequencies[data.title.getHeroClass().ordinal()]++;
 					else specialClasses++;
-				if(data.titleAspect != null)
-					aspectFrequencies[data.titleAspect.ordinal()]++;
-			}
-
+					aspectFrequencies[data.title.getHeroAspect().ordinal()]++;
+				}
+			
 			int minAspects = session.predefinedPlayers.size()/12;	//If evenly placed, the minimum amounts of each aspect used
 			int additionalAspects = session.predefinedPlayers.size()%12;	//How many additional aspects that need to be used over the minAspects*12.
 			int minClasses = (session.predefinedPlayers.size() - specialClasses)/12;
