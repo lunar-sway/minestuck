@@ -168,7 +168,7 @@ public class MinestuckConfig
 			}
 			//cardResolution = config.getInt("General", "cardResolution", 1, 0, 5, "The resolution of the item inside of a card. The width/height is computed by '8*2^x', where 'x' is this config value.");
 			loginColorSelector = config.get("General", "loginColorSelector", true, "Determines if the color selector should be displayed when entering a save file for the first time.").setLanguageKey("minestuck.config.loginColorSelector").getBoolean();
-			alchemyIcons = config.get("General", "alchemyIcons", false, "Set this to true to replace grist names in alchemiter/grist widget with the grist icon.").setLanguageKey("minestuck.config.alchemyIcons").getBoolean();
+			alchemyIcons = config.get("General", "alchemyIcons", true, "Set this to true to replace grist names in alchemiter/grist widget with the grist icon.").setLanguageKey("minestuck.config.alchemyIcons").getBoolean();
 		}
 	}
 	

@@ -75,7 +75,7 @@ public class GuiGristSelector extends GuiScreen
 				tooltip = gristId*2;
 			}
 			if(!String.valueOf(clientGrist.getGrist(GristType.values()[gristId])).equals(amount)
-					&& this.isPointInRegion(gristXOffset + gristCountX, gristYOffset + gristCountY, 35, 10, xcor, ycor))
+					&& this.isPointInRegion(gristXOffset + gristCountX - 1, gristYOffset + gristCountY - 1, 35, 10, xcor, ycor))
 				tooltip = gristId*2 + 1;
 			
 			this.drawIcon(gristXOffset + gristIconX, gristYOffset + gristIconY, "textures/grist/" + GristType.values()[gristId].getName()+ ".png");

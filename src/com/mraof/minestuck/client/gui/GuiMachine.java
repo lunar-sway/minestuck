@@ -1,7 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -33,7 +32,6 @@ import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.MinestuckPlayerData;
@@ -142,22 +140,8 @@ public class GuiMachine extends GuiContainer {
 					else set.gristTypes[i] = (int) (set.gristTypes[i]*multiplier);
 			}
 			
-			drawGristBoard(set, useSelectedType);
+			drawGristBoard(set, useSelectedType, mouseX - this.guiLeft, mouseY - this.guiTop);	//Includes tooltips, so keep this last
 			
-			int posX = mouseX - this.guiLeft, posY = mouseY - this.guiTop;
-			if(MinestuckConfig.alchemyIcons && posX >= 9 && posY >= 45 && posX < 167 && posY < 69)
-			{	//Grist icon tooltips
-				for(GristAmount amount : iconLength)
-				{
-					int x = 9 + amount.getAmount()%158;
-					int y = 45 + 8*(amount.getAmount()/158);
-					if(posX >= x && posX < x + 8 && posY >= y && posY < y + 8)
-					{
-						this.drawHoveringText(Arrays.asList(amount.getType().getDisplayName()), posX, posY, fontRendererObj);
-						break;
-					}
-				}
-			}
 		}
 	}
 	
@@ -295,7 +279,7 @@ public void initGui()
 		return (int) ((float) imageMax*((float)progress/(float)max));
 	}
 	
-	private void drawGristBoard(GristSet cost, boolean selectiveType)
+	private void drawGristBoard(GristSet cost, boolean selectiveType, int mouseX, int mouseY)
 	{
 		if (cost == null)
 		{
@@ -310,6 +294,7 @@ public void initGui()
 			fontRendererObj.drawString(StatCollector.translateToLocal("gui.free"), 9,45, 65280);
 			return;
 		}
+		List<String> tooltip= null;
 		Iterator<Entry<Integer, Integer>> it = reqs.entrySet().iterator();
 		if(!MinestuckConfig.alchemyIcons)
 		{
@@ -317,24 +302,32 @@ public void initGui()
 			while (it.hasNext())
 			{
 				Map.Entry<Integer, Integer> pairs = it.next();
-				int type = pairs.getKey();
+				GristType type = GristType.values()[pairs.getKey()];
 				int need = pairs.getValue();
-				int have = playerGrist.getGrist(GristType.values()[type]);
+				int have = playerGrist.getGrist(type);
 				
 				int row = place % 3;
 				int col = place / 3;
 				
 				int color = metadata == 3 ? (selectiveType ? 0x0000FF : need <= have ? 0x00FF00 : 0xFF0000) : 0; //Green if we have enough grist, red if not, black if GristWidget
 				
-				fontRendererObj.drawString(need + " " + GristType.values()[type].getDisplayName() + " (" + have + ")", 9 + (80 * col),45 + (8 * (row)), color);
+				String needStr = GuiHandler.addSuffix(need), haveStr = GuiHandler.addSuffix(have);
+				fontRendererObj.drawString(needStr + " " + type.getDisplayName() + " (" + haveStr + ")", 9 + 79*col, 45 + 8*row, color);
+				
+				if(tooltip == null && mouseY >= 45 + 8*row && mouseY < 53 + 8*row)
+				{
+					int width = fontRendererObj.getStringWidth(needStr + " " + type.getDisplayName() + " (");
+					if(!needStr.equals(String.valueOf(need)) && mouseX >= 9 + 79*col && mouseX < 9 + 79*col + fontRendererObj.getStringWidth(needStr))
+						tooltip = Arrays.asList(String.valueOf(need));
+					else if(!haveStr.equals(String.valueOf(have)) && mouseX >= 9 + 79*col + width && mouseX < 9 + 79*col + width + fontRendererObj.getStringWidth(haveStr))
+						tooltip = Arrays.asList(String.valueOf(have));
+				}
 				
 				place++;
 				
 			}
 		} else
 		{
-			iconLength.clear();
-			
 			int index = 0;
 			while(it.hasNext())
 			{
@@ -345,7 +338,10 @@ public void initGui()
 				int row = index/158;
 				int color = metadata == 3 ? (selectiveType ? 0x0000FF : need <= have ? 0x00FF00 : 0xFF0000) : 0;
 				
-				String needStr = String.valueOf(need), haveStr = "("+have+")";
+				String needStr = GuiHandler.addSuffix(need), haveStr = GuiHandler.addSuffix(have);
+				boolean prefixHave = !haveStr.equals(String.valueOf(have));
+				int haveStrWidth = fontRendererObj.getStringWidth(haveStr);
+				haveStr = '('+haveStr+')';
 				int needStrWidth = fontRendererObj.getStringWidth(needStr);
 				if(index + needStrWidth + 10 + fontRendererObj.getStringWidth(haveStr) > (row + 1)*158)
 				{
@@ -353,20 +349,29 @@ public void initGui()
 					index = row*158;
 				}
 				fontRendererObj.drawString(needStr, 9 + index%158, 45 + 8*row, color);
-				fontRendererObj.drawString(haveStr, needStrWidth + 19 + index%158, 45 + (8 * (row)), color);
+				fontRendererObj.drawString(haveStr, needStrWidth + 19 + index%158, 45 + 8*row, color);
 				
 				GlStateManager.color(1, 1, 1);
+				GlStateManager.disableLighting();
 				this.mc.getTextureManager().bindTexture(new ResourceLocation("minestuck", "textures/grist/" + type.getName()+ ".png"));
 				drawCustomBox(needStrWidth + 10 + index%158, 45 + 8*row, 0, 0, 8, 8, 8, 8);
 				
-				iconLength.add(new GristAmount(type, index + needStrWidth + 1));
+				if(tooltip == null && mouseY >= 45 + 8*row && mouseY < 53 + 8*row)
+				{
+					if(!needStr.equals(String.valueOf(need)) && mouseX >= 9 + index%158 && mouseX < 9 + index%158 + needStrWidth)
+						tooltip = Arrays.asList(String.valueOf(need));
+					else if(mouseX >= 10 + index%158 + needStrWidth && mouseX < 18 + index%158 + needStrWidth)
+						tooltip = Arrays.asList(type.getDisplayName());
+					else if(prefixHave && mouseX >= 19 + index%158 + needStrWidth + fontRendererObj.getCharWidth('(') && mouseX < 19 + index%158 + needStrWidth + fontRendererObj.getCharWidth('(') + haveStrWidth)
+						tooltip = Arrays.asList(String.valueOf(have));
+				}
 				
 				index += needStrWidth + 10 + fontRendererObj.getStringWidth(haveStr);
 				index = Math.min(index + 6, (row + 1)*158);
 			}
 		}
+		if(tooltip != null)
+			this.drawHoveringText(tooltip, mouseX, mouseY, fontRendererObj);
 	}
-	
-	private List<GristAmount> iconLength = new ArrayList<GristAmount>();	//The amount is made out of a grist type and a value for the x-coordinate.
 	
 }
