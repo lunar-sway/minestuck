@@ -53,5 +53,14 @@ public class GuiHandler implements IGuiHandler
 		return null;
 
 	}
-
+	
+	public static String addSuffix(int n)
+	{
+		if(n < 10000)
+			return String.valueOf(n);
+		else if(n < 10000000)
+			return (n/1000) + "K";
+		else return (n/1000000) + "M";
+	}
+	
 }

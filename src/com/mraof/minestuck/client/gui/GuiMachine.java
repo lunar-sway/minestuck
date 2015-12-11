@@ -1,11 +1,14 @@
 package com.mraof.minestuck.client.gui;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -17,6 +20,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import com.mraof.minestuck.MinestuckConfig;
@@ -104,7 +108,7 @@ public class GuiMachine extends GuiContainer {
 }
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int param1, int param2)
+	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
 	{
 		fontRendererObj.drawString(StatCollector.translateToLocal("gui."+guis[metadata]+".name"), 8, 6, 4210752);
 		//draws "Inventory" or your regional equivalent
@@ -136,40 +140,8 @@ public class GuiMachine extends GuiContainer {
 					else set.gristTypes[i] = (int) (set.gristTypes[i]*multiplier);
 			}
 			
-			if (set == null) {fontRendererObj.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 9,45, 16711680); return;}
+			drawGristBoard(set, useSelectedType, mouseX - this.guiLeft, mouseY - this.guiTop);	//Includes tooltips, so keep this last
 			
-			Hashtable<Integer, Integer> reqs = set.getHashtable();
-			if (reqs != null)
-			{
-				if (reqs.size() == 0)
-				{
-					fontRendererObj.drawString(StatCollector.translateToLocal("gui.free"), 9,45, 65280);
-					return;
-				}
-				Iterator<Entry<Integer, Integer>> it = reqs.entrySet().iterator();
-				int place = 0;
-				while (it.hasNext()) {
-					Map.Entry<Integer, Integer> pairs = it.next();
-					int type = pairs.getKey();
-					int need = pairs.getValue();
-					int have = MinestuckPlayerData.getClientGrist().getGrist(GristType.values()[type]);
-					
-					int row = place % 3;
-					int col = place / 3;
-					
-					int color = metadata == 3 ? (useSelectedType ? 0x0000FF : need <= have ? 0x00FF00 : 0xFF0000) : 0; //Green if we have enough grist, red if not, black if GristWidget
-					
-					fontRendererObj.drawString(need + " " + GristType.values()[type].getDisplayName() + " (" + have + ")", 9 + (80 * col),45 + (8 * (row)), color);
-					
-					place++;
-					
-				}
-			}
-			else
-			{
-				fontRendererObj.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 9,45, 16711680);
-				return;
-			}
 		}
 	}
 	
@@ -236,33 +208,48 @@ public void initGui()
 		}
 	}
 	
-@Override
-protected void mouseClicked(int par1, int par2, int par3) throws IOException
-{
-	super.mouseClicked(par1,par2,par3);
-	if (par3 == 1)
+	@Override
+	protected void mouseClicked(int par1, int par2, int par3) throws IOException
 	{
-		for (int l = 0; l < this.buttonList.size(); ++l)
+		super.mouseClicked(par1,par2,par3);
+		if (par3 == 1)
 		{
-			GuiButton guibutton = (GuiButton)this.buttonList.get(l);
-
-			if (guibutton.mousePressed(this.mc, par1, par2) && guibutton == goButton)
+			if (goButton.mousePressed(this.mc, par1, par2))
 			{
 				
-				guibutton.playPressSound(this.mc.getSoundHandler());
-				this.actionPerformed(guibutton);
+				goButton.playPressSound(this.mc.getSoundHandler());
+				this.actionPerformed(goButton);
 			}
 		}
+		else if(te.getMachineType() == 3 && par3 == 0 && mc.thePlayer.inventory.getItemStack() == null
+				&& te.inv[1] != null && AlchemyRecipeHandler.getDecodedItem(te.inv[1]) != null && AlchemyRecipeHandler.getDecodedItem(te.inv[1]).getItem() == MinestuckItems.captchaCard
+				&& par1 >= guiLeft + 9 && par1 < guiLeft + 167 && par2 >= guiTop + 45 && par2 < guiTop + 70)
+		{
+			mc.currentScreen = new GuiGristSelector(this);
+			mc.currentScreen.setWorldAndResolution(mc, width, height);
+		}
 	}
-	else if(te.getMachineType() == 3 && par3 == 0 && mc.thePlayer.inventory.getItemStack() == null
-			&& te.inv[1] != null && AlchemyRecipeHandler.getDecodedItem(te.inv[1]) != null && AlchemyRecipeHandler.getDecodedItem(te.inv[1]).getItem() == MinestuckItems.captchaCard
-			&& par1 >= guiLeft + 9 && par1 < guiLeft + 167 && par2 >= guiTop + 45 && par2 < guiTop + 70)
+	
+	@Override
+	protected void keyTyped(char typedChar, int keyCode) throws IOException
 	{
-		mc.currentScreen = new GuiGristSelector(this);
-		mc.currentScreen.setWorldAndResolution(mc, width, height);
+		super.keyTyped(typedChar, keyCode);
+		
+		if(keyCode == 28)
+		{
+			this.mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
+			
+			boolean mode = te.getMachineType() > 2 && (Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54));
+			MinestuckPacket packet = MinestuckPacket.makePacket(Type.GOBUTTON,true, mode && !te.overrideStop);
+			MinestuckChannelHandler.sendToServer(packet);
+			
+			if(!mode)
+				te.ready = true;
+			te.overrideStop = mode && !te.overrideStop;
+			goButton.displayString = StatCollector.translateToLocal(te.overrideStop ? "gui.buttonStop" : "gui.buttonGo");
+		}
 	}
-}
-
+	
 	/**
 	 * Draws a box like drawModalRect, but with custom width and height values.
 	 */
@@ -279,16 +266,112 @@ protected void mouseClicked(int par1, int par2, int par3) throws IOException
 		Tessellator.getInstance().draw();
 	}
 
-/**
- * Returns a number to be used in calculation of progress bar length.
- * 
- * @param progress the progress done.
- * @param max The maximum amount of progress.
- * @param imageMax The length of the progress bar image to scale to
- * @return The length the progress bar should be shown to
- */
-public int getScaledValue(int progress,int max,int imageMax) {
-	return (int) ((float) imageMax*((float)progress/(float)max));
-}
-
+	/**
+	 * Returns a number to be used in calculation of progress bar length.
+	 * 
+	 * @param progress the progress done.
+	 * @param max The maximum amount of progress.
+	 * @param imageMax The length of the progress bar image to scale to
+	 * @return The length the progress bar should be shown to
+	 */
+	public int getScaledValue(int progress,int max,int imageMax)
+	{
+		return (int) ((float) imageMax*((float)progress/(float)max));
+	}
+	
+	private void drawGristBoard(GristSet cost, boolean selectiveType, int mouseX, int mouseY)
+	{
+		if (cost == null)
+		{
+			fontRendererObj.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 9,45, 16711680);
+			return;
+		}
+		GristSet playerGrist = MinestuckPlayerData.getClientGrist();
+		
+		Hashtable<Integer, Integer> reqs = cost.getHashtable();
+		if (reqs.size() == 0)
+		{
+			fontRendererObj.drawString(StatCollector.translateToLocal("gui.free"), 9,45, 65280);
+			return;
+		}
+		List<String> tooltip= null;
+		Iterator<Entry<Integer, Integer>> it = reqs.entrySet().iterator();
+		if(!MinestuckConfig.alchemyIcons)
+		{
+			int place = 0;
+			while (it.hasNext())
+			{
+				Map.Entry<Integer, Integer> pairs = it.next();
+				GristType type = GristType.values()[pairs.getKey()];
+				int need = pairs.getValue();
+				int have = playerGrist.getGrist(type);
+				
+				int row = place % 3;
+				int col = place / 3;
+				
+				int color = metadata == 3 ? (selectiveType ? 0x0000FF : need <= have ? 0x00FF00 : 0xFF0000) : 0; //Green if we have enough grist, red if not, black if GristWidget
+				
+				String needStr = GuiHandler.addSuffix(need), haveStr = GuiHandler.addSuffix(have);
+				fontRendererObj.drawString(needStr + " " + type.getDisplayName() + " (" + haveStr + ")", 9 + 79*col, 45 + 8*row, color);
+				
+				if(tooltip == null && mouseY >= 45 + 8*row && mouseY < 53 + 8*row)
+				{
+					int width = fontRendererObj.getStringWidth(needStr + " " + type.getDisplayName() + " (");
+					if(!needStr.equals(String.valueOf(need)) && mouseX >= 9 + 79*col && mouseX < 9 + 79*col + fontRendererObj.getStringWidth(needStr))
+						tooltip = Arrays.asList(String.valueOf(need));
+					else if(!haveStr.equals(String.valueOf(have)) && mouseX >= 9 + 79*col + width && mouseX < 9 + 79*col + width + fontRendererObj.getStringWidth(haveStr))
+						tooltip = Arrays.asList(String.valueOf(have));
+				}
+				
+				place++;
+				
+			}
+		} else
+		{
+			int index = 0;
+			while(it.hasNext())
+			{
+				Map.Entry<Integer, Integer> pairs = it.next();
+				GristType type = GristType.values()[pairs.getKey()];
+				int need = pairs.getValue();
+				int have = playerGrist.getGrist(type);
+				int row = index/158;
+				int color = metadata == 3 ? (selectiveType ? 0x0000FF : need <= have ? 0x00FF00 : 0xFF0000) : 0;
+				
+				String needStr = GuiHandler.addSuffix(need), haveStr = GuiHandler.addSuffix(have);
+				boolean prefixHave = !haveStr.equals(String.valueOf(have));
+				int haveStrWidth = fontRendererObj.getStringWidth(haveStr);
+				haveStr = '('+haveStr+')';
+				int needStrWidth = fontRendererObj.getStringWidth(needStr);
+				if(index + needStrWidth + 10 + fontRendererObj.getStringWidth(haveStr) > (row + 1)*158)
+				{
+					row++;
+					index = row*158;
+				}
+				fontRendererObj.drawString(needStr, 9 + index%158, 45 + 8*row, color);
+				fontRendererObj.drawString(haveStr, needStrWidth + 19 + index%158, 45 + 8*row, color);
+				
+				GlStateManager.color(1, 1, 1);
+				GlStateManager.disableLighting();
+				this.mc.getTextureManager().bindTexture(new ResourceLocation("minestuck", "textures/grist/" + type.getName()+ ".png"));
+				drawCustomBox(needStrWidth + 10 + index%158, 45 + 8*row, 0, 0, 8, 8, 8, 8);
+				
+				if(tooltip == null && mouseY >= 45 + 8*row && mouseY < 53 + 8*row)
+				{
+					if(!needStr.equals(String.valueOf(need)) && mouseX >= 9 + index%158 && mouseX < 9 + index%158 + needStrWidth)
+						tooltip = Arrays.asList(String.valueOf(need));
+					else if(mouseX >= 10 + index%158 + needStrWidth && mouseX < 18 + index%158 + needStrWidth)
+						tooltip = Arrays.asList(type.getDisplayName());
+					else if(prefixHave && mouseX >= 19 + index%158 + needStrWidth + fontRendererObj.getCharWidth('(') && mouseX < 19 + index%158 + needStrWidth + fontRendererObj.getCharWidth('(') + haveStrWidth)
+						tooltip = Arrays.asList(String.valueOf(have));
+				}
+				
+				index += needStrWidth + 10 + fontRendererObj.getStringWidth(haveStr);
+				index = Math.min(index + 6, (row + 1)*158);
+			}
+		}
+		if(tooltip != null)
+			this.drawHoveringText(tooltip, mouseX, mouseY, fontRendererObj);
+	}
+	
 }

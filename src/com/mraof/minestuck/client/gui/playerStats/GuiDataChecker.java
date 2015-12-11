@@ -28,7 +28,7 @@ import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 public class GuiDataChecker extends GuiScreen
 {
-	
+	private static final ResourceLocation icons = new ResourceLocation("minestuck", "textures/gui/icons.png");
 	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/DataCheck.png");
 	private static final int GUI_WIDTH = 210, GUI_HEIGHT = 140;
 	private static final int LIST_Y = 25;
@@ -105,6 +105,17 @@ public class GuiDataChecker extends GuiScreen
 		drawTexturedModalRect(xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
 		super.drawScreen(mouseX, mouseY, partialTicks);
+		
+		this.mc.getTextureManager().bindTexture(icons);
+		
+		if(this.returnButton.enabled)
+			GlStateManager.color(1, 1, 1);
+		else GlStateManager.color(.5F, .5F, .5F);
+		drawTexturedModalRect(xOffset + GUI_WIDTH - 24, yOffset + 6, 240, 0, 16, 16);
+		if(this.refreshButton.enabled)
+			GlStateManager.color(1, 1, 1);
+		else GlStateManager.color(.5F, .5F, .5F);
+		drawTexturedModalRect(xOffset + GUI_WIDTH - 44, yOffset + 6, 224, 0, 16, 16);
 		
 		if(guiComponent != null)
 		{

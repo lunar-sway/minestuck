@@ -6,6 +6,7 @@ import java.util.Arrays;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 
@@ -23,9 +24,8 @@ public class GuiGristSelector extends GuiScreen
 	private static final ResourceLocation guiGristcache = new ResourceLocation("minestuck", "textures/gui/GristCache.png");
 	
 	private static final int gristIconX = 21, gristIconY = 32;
-	private static final int gristIconXOffset = 66, gristIconYOffset = 21;
+	private static final int gristDisplayXOffset = 66, gristDisplayYOffset = 21;
 	private static final int gristCountX = 44, gristCountY = 36;
-	private static final int gristCountXOffset = 66, gristCountYOffset = 21;
 	private static final int guiWidth = 226, guiHeight = 190;
 	
 	private GuiMachine otherGui;
@@ -60,28 +60,34 @@ public class GuiGristSelector extends GuiScreen
 		
 		int tooltip = -1;
 		
+		GristSet clientGrist = MinestuckPlayerData.getClientGrist();
 		for(int gristId = 0; gristId < GristType.allGrists; gristId++)
 		{
 			int row = (int) (gristId / 7);
 			int column = (int) (gristId % 7);
-			int gristXOffset = xOffset + gristIconX + (gristIconXOffset * row - row);
-			int gristYOffset = yOffset + gristIconY + (gristIconYOffset * column - column);
+			int gristXOffset = xOffset + (gristDisplayXOffset * row - row);
+			int gristYOffset = yOffset + (gristDisplayYOffset * column - column);
+			String amount = GuiHandler.addSuffix(clientGrist.getGrist(GristType.values()[gristId]));
 
-			if(this.isPointInRegion(gristXOffset, gristYOffset, 16, 16, xcor, ycor)) {
-				this.drawGradientRect(gristXOffset, gristYOffset, gristXOffset + 16, gristYOffset + 17, -2130706433, -2130706433);
-				tooltip = gristId;
+			if(this.isPointInRegion(gristXOffset + gristIconX, gristYOffset + gristIconY, 16, 16, xcor, ycor))
+			{
+				this.drawGradientRect(gristXOffset + gristIconX, gristYOffset + gristIconY, gristXOffset + gristIconX + 16, gristYOffset + gristIconY + 17, -2130706433, -2130706433);
+				tooltip = gristId*2;
 			}
+			if(!String.valueOf(clientGrist.getGrist(GristType.values()[gristId])).equals(amount)
+					&& this.isPointInRegion(gristXOffset + gristCountX - 1, gristYOffset + gristCountY - 1, 35, 10, xcor, ycor))
+				tooltip = gristId*2 + 1;
 			
-			this.drawIcon(gristXOffset, gristYOffset, "textures/grist/" + GristType.values()[gristId].getName()+ ".png");
-			mc.fontRendererObj.drawString(Integer.toString(MinestuckPlayerData.getClientGrist().getGrist(GristType.values()[gristId])),xOffset + gristCountX + (gristCountXOffset * row - row), yOffset + gristCountY + (gristCountYOffset * column - column), 0xddddee);
+			this.drawIcon(gristXOffset + gristIconX, gristYOffset + gristIconY, "textures/grist/" + GristType.values()[gristId].getName()+ ".png");
+			mc.fontRendererObj.drawString(amount, gristXOffset + gristCountX, gristYOffset + gristCountY, 0xddddee);
 			
 		}
 		
 		if (tooltip != -1)
-		{
-			drawHoveringText(Arrays.asList(StatCollector.translateToLocalFormatted("grist.format", GristType.values()[tooltip].getDisplayName())),
-					xcor, ycor, fontRendererObj);
-		}
+			if(tooltip % 2 == 0)
+				drawHoveringText(Arrays.asList(StatCollector.translateToLocalFormatted("grist.format", GristType.values()[tooltip/2].getDisplayName())),
+						xcor, ycor, fontRendererObj);
+			else drawHoveringText(Arrays.asList(String.valueOf(clientGrist.getGrist(GristType.values()[tooltip/2]))), xcor, ycor, fontRendererObj);
 	}
 	
 	private void drawIcon(int x,int y,String location) 
@@ -116,8 +122,8 @@ public class GuiGristSelector extends GuiScreen
 			{
 				int row = (int) (gristId / 7);
 				int column = (int) (gristId % 7);
-				int gristXOffset = xOffset + gristIconX + (gristIconXOffset * row - row);
-				int gristYOffset = yOffset + gristIconY + (gristIconYOffset * column - column);
+				int gristXOffset = xOffset + gristIconX + (gristDisplayXOffset * row - row);
+				int gristYOffset = yOffset + gristIconY + (gristDisplayYOffset * column - column);
 				if(isPointInRegion(gristXOffset, gristYOffset, 16, 16, xcor, ycor))
 				{
 					otherGui.te.selectedGrist = GristType.values()[gristId];
