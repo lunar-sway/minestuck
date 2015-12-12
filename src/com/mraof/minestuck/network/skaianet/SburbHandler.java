@@ -136,6 +136,9 @@ public class SburbHandler
 		MinestuckPlayerTracker.instance.updateTitle(MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(UsernameHandler.decode(player)));
 	}
 	
+	//Decided to skip completing this because I couldn't figure out the algorithms,
+	//and I didn't want it to slow down session predefine more than it already have
+	//Continue if you think you can do it.
 	static void finishSession(ICommandSender sender, ICommand command, Session session) throws CommandException
 	{
 		Random rand = new Random();	//What seed?

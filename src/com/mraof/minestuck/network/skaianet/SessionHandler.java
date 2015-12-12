@@ -21,6 +21,7 @@ import net.minecraftforge.common.DimensionManager;
 
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.Title;
+import com.mraof.minestuck.util.UsernameHandler;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
@@ -400,12 +401,26 @@ public class SessionHandler {
 		if(playerNames.length > 0)
 			CommandBase.notifyOperators(sender, command, "commands.sburbSession.addSuccess", handled, playerNames.length);
 		
-		if(finish)
+		/*if(finish)
 			if(!skipFinishing && handled == playerNames.length)
 			{
 				SburbHandler.finishSession(sender, command, session);
 				
-			} else throw new CommandException("Skipping to finalize the session due to one or more issues while adding players.");
+			} else throw new CommandException("Skipping to finalize the session due to one or more issues while adding players.");*/
+	}
+	
+	public static void sessionName(ICommandSender sender, ICommand command, String player, String sessionName) throws CommandException
+	{
+		Session s = getPlayerSession(player);
+		if(s == null)
+			throw new CommandException("Couldn't find session for player \"%s\"", player);
+		
+		String prevName = s.name;
+		s.name = sessionName;
+		
+		if(prevName != null)
+			CommandBase.notifyOperators(sender, command, "commands.sburbSession.rename", prevName, sessionName, UsernameHandler.decode(player));
+		else CommandBase.notifyOperators(sender, command, "commands.sburbSession.name", sessionName, UsernameHandler.decode(player));
 	}
 	
 	static List<String> getServerList(String client) {

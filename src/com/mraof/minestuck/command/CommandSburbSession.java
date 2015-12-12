@@ -9,7 +9,7 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 
-public class CommandCreateSession extends CommandBase
+public class CommandSburbSession extends CommandBase
 {
 	
 	@Override
@@ -27,19 +27,20 @@ public class CommandCreateSession extends CommandBase
 	@Override
 	public void processCommand(ICommandSender sender, String[] args) throws CommandException
 	{
-		if(args.length < 2 || args.length < 3 && !args[1].equalsIgnoreCase("finish"))
+		if(args.length < 2 || args.length < 3 && args[1].equalsIgnoreCase("add"))
 			throw new WrongUsageException(this.getCommandUsage(sender));
 		String sessionName = args[0];
 		String command = args[1];
 		
 		if(command.equalsIgnoreCase("name"))
 		{
-			String playerName = args[2];
+			String playerName = args.length < 2 ? getCommandSenderAsPlayer(sender).getCommandSenderName() : args[2];
+			SessionHandler.sessionName(sender, this, playerName, sessionName);
 			
-		} else if(command.equalsIgnoreCase("add") || command.equalsIgnoreCase("finish"))
+		} else if(command.equalsIgnoreCase("add")/* || command.equalsIgnoreCase("finish")*/)
 		{
 			String[] params = Arrays.copyOfRange(args, 2, args.length);
-			SessionHandler.managePredefinedSession(sender, this, sessionName, params, command.equalsIgnoreCase("finish"));
+			SessionHandler.managePredefinedSession(sender, this, sessionName, params, false);//command.equalsIgnoreCase("finish"));
 		}
 	}
 }
