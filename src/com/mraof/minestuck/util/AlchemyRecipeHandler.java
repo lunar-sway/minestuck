@@ -469,7 +469,12 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Blocks.red_mushroom), new ItemStack(Blocks.soul_sand), MODE_AND, new ItemStack(Items.nether_wart));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.prismarine), new ItemStack(Items.flint), MODE_OR, false, true, new ItemStack(Items.prismarine_shard));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.cobblestone), new ItemStack(Blocks.stonebrick, 1, 0), MODE_AND, new ItemStack(Blocks.stonebrick, 1, 2));
-		CombinationRegistry.addCombination(new ItemStack(Items.gunpowder), new ItemStack(Items.dye, 1, EnumDyeColor.RED.getDyeDamage()), MODE_OR, new ItemStack(Items.redstone));
+		CombinationRegistry.addCombination(new ItemStack(Items.gunpowder), new ItemStack(Blocks.stone_button), MODE_OR, new ItemStack(Items.redstone));
+		CombinationRegistry.addCombination(new ItemStack(Items.gunpowder), new ItemStack(Blocks.stone_pressure_plate), MODE_OR, new ItemStack(Items.redstone));
+		CombinationRegistry.addCombination(new ItemStack(Items.gunpowder), new ItemStack(Blocks.lever), MODE_OR, new ItemStack(Items.redstone));
+		CombinationRegistry.addCombination(new ItemStack(Items.gunpowder), new ItemStack(Blocks.wooden_button), MODE_OR, new ItemStack(Blocks.redstone_torch));
+		CombinationRegistry.addCombination(new ItemStack(Items.gunpowder), new ItemStack(Blocks.wooden_pressure_plate), MODE_OR, new ItemStack(Blocks.redstone_torch));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.gravel), new ItemStack(Items.dye, 1, EnumDyeColor.RED.getDyeDamage()), MODE_AND, new ItemStack(Items.redstone));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.melon_block), new ItemStack(Items.carrot), MODE_AND, new ItemStack(Blocks.pumpkin));
 		CombinationRegistry.addCombination(new ItemStack(Items.skull, 1, 1), new ItemStack(Items.bone), MODE_AND, new ItemStack(Items.skull, 1, 0));
 		CombinationRegistry.addCombination(new ItemStack(Items.skull, 1, 1), new ItemStack(Items.dye, 1, EnumDyeColor.WHITE.getDyeDamage()), MODE_AND, new ItemStack(Items.skull, 1, 0));
