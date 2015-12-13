@@ -235,7 +235,7 @@ public class AlchemiterHandler extends TemplateRecipeHandler
 				changeTexture("minestuck:textures/grist/" + type.getName()+ ".png");
 				drawTexturedModalRect(needStrWidth + 5 + index%158, 34 + 8*row, 0, 0, 8, 8, 8, 8);
 				
-				tooltips.add(new Pair<Rectangle, String>(new Rectangle(needStrWidth + 4 + index%158, 34 + 8*row, 8, 8), type.getDisplayName()));
+				tooltips.add(new Pair<Rectangle, String>(new Rectangle(needStrWidth + 5 + index%158, 34 + 8*row, 8, 8), type.getDisplayName()));
 				if(!needStr.equals(String.valueOf(need)))
 					tooltips.add(new Pair<Rectangle, String>(new Rectangle(4 + index%158, 34 + 8*row, needStrWidth, 8), String.valueOf(need)));
 				if(prefixHave)
