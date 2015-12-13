@@ -423,6 +423,42 @@ public class SessionHandler {
 		else CommandBase.notifyOperators(sender, command, "commands.sburbSession.name", sessionName, UsernameHandler.decode(player));
 	}
 	
+	public static void predefineTitle(ICommandSender sender, ICommand command, String player, String sessionName, Title title) throws CommandException
+	{
+		predefineCheck(sender, player, sessionName);
+		
+		Title playerTitle = MinestuckPlayerData.getTitle(player);
+		if(playerTitle != null)
+			throw new CommandException("You can't change your title after having entered the medium.");
+		
+		Session session = sessionsByName.get(sessionName);
+		for(SburbConnection c : session.connections)
+			if(c.isMain && c.enteredGame && title.equals(MinestuckPlayerData.getTitle(c.getClientName())))
+				throw new CommandException("This title is already used by %s.", c.getClientName());
+		for(Map.Entry<String, PredefineData> entry : session.predefinedPlayers.entrySet())
+			if(entry.getValue().title != null && title.equals(entry.getValue().title))
+				throw new CommandException("This title is already assigned to %s.", entry.getKey());
+		
+		PredefineData data = session.predefinedPlayers.get(player);
+		data.title = title;
+		CommandBase.notifyOperators(sender, command, "commands.sburbSession.titleSuccess", player, title.getTitleName());
+	}
+	
+	private static void predefineCheck(ICommandSender sender, String player, String sessionName) throws CommandException
+	{
+		Session session = sessionsByName.get(sessionName), playerSession = getPlayerSession(player);
+		if(session == null)
+			throw new CommandException("Couldn't find session with the name %s", sessionName);
+		if(playerSession != null && session != playerSession)
+			throw new CommandException("The player is already in another session!");
+		if(playerSession == null || !session.predefinedPlayers.containsKey(player))
+		{
+			if(sender.sendCommandFeedback())
+				sender.addChatMessage(new ChatComponentText("Couldn't find session for player or player isn't registered with this session yet. Adding player to session "+sessionName));
+			session.predefinedPlayers.put(player, new PredefineData());
+		}
+	}
+	
 	static List<String> getServerList(String client) {
 		ArrayList<String> list = new ArrayList<String>();
 		for(String server : SkaianetHandler.serversOpen.keySet()) {

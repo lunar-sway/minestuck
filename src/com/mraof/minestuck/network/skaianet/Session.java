@@ -24,7 +24,8 @@ public class Session {
 	/**
 	 * If the "connection circle" is whole, unused if globalSession == true.
 	 */
-	boolean completed, locked;
+	boolean completed;
+	boolean locked;
 	
 	//Unused, will later be 0 if not yet generated
 	int skaiaId;
