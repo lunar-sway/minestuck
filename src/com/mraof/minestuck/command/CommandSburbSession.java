@@ -6,13 +6,16 @@ import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.EnumClass;
 import com.mraof.minestuck.util.Title;
+import com.mraof.minestuck.world.lands.LandAspectRegistry;
+import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
+import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 
-public class CommandSburbSession extends CommandBase
+public class CommandSburbSession extends CommandBase	//TODO properly localize all messages related to this command
 {
 	
 	@Override
@@ -30,7 +33,9 @@ public class CommandSburbSession extends CommandBase
 	@Override
 	public void processCommand(ICommandSender sender, String[] args) throws CommandException
 	{
-		if(args.length < 2 || args.length < 3 && args[1].equalsIgnoreCase("add") || args.length != 5 && (args[1].equalsIgnoreCase("title") || args[1].equalsIgnoreCase("land")))
+		if(args.length < 2 || args.length < 3 && args[1].equalsIgnoreCase("add")
+				|| args.length != 4 && (args[1].equalsIgnoreCase("landTerrain") || args[1].equalsIgnoreCase("landTitle"))
+				|| args.length != 5 && args[1].equalsIgnoreCase("title"))
 			throw new WrongUsageException(this.getCommandUsage(sender));
 		String sessionName = args[0];
 		String command = args[1];
@@ -91,8 +96,25 @@ public class CommandSburbSession extends CommandBase
 			
 			SessionHandler.predefineTitle(sender, this, playerName, sessionName, new Title(titleClass, titleAspect));
 			
-		} else if(command.equalsIgnoreCase("land"))
+		} else if(command.equalsIgnoreCase("landTerrain"))
 		{
+			String playerName = args[2];
+			
+			TerrainLandAspect landAspect = LandAspectRegistry.fromNameTerrain(args[3]);
+			if(landAspect == null)
+				throw new CommandException("Can't find terrain land aspect by the name %s", args[3]);
+			
+			SessionHandler.predefineTerrainLandAspect(sender, this, playerName, sessionName, landAspect);
+			
+		} else if(command.equalsIgnoreCase("landTitle"))
+		{
+			String playerName = args[2];
+			
+			TitleLandAspect landAspect = LandAspectRegistry.fromNameTitle(args[3]);
+			if(landAspect == null)
+				throw new CommandException("Can't find title land aspect by the name %s", args[3]);
+			
+			SessionHandler.predefineTitleLandAspect(sender, this, playerName, sessionName, landAspect);
 			
 		} else throw new WrongUsageException(this.getCommandUsage(sender));
 	}

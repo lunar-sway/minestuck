@@ -25,6 +25,8 @@ import com.mraof.minestuck.util.UsernameHandler;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
+import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 import com.mraof.minestuck.MinestuckConfig;
 
 /**
@@ -442,6 +444,52 @@ public class SessionHandler {
 		PredefineData data = session.predefinedPlayers.get(player);
 		data.title = title;
 		CommandBase.notifyOperators(sender, command, "commands.sburbSession.titleSuccess", player, title.getTitleName());
+	}
+	
+	public static void predefineTerrainLandAspect(ICommandSender sender, ICommand command, String player, String sessionName, TerrainLandAspect aspect) throws CommandException
+	{
+		predefineCheck(sender, player, sessionName);
+		
+		Session session = sessionsByName.get(sessionName);
+		SburbConnection clientConnection = SkaianetHandler.getClientConnection(player);
+		PredefineData data = session.predefinedPlayers.get(player);
+		
+		if(clientConnection != null && clientConnection.enteredGame())
+			throw new CommandException("You can't change your land aspects after having entered the medium.");
+		if(data.landTitle == null)
+			throw new CommandException("You should define the other land aspect before this one.");
+		if(!data.landTitle.isAspectCompatible(aspect))
+			throw new CommandException("That terrain land aspect isn't compatible with the other land aspect.");
+		
+		data.landTerrain = aspect;
+		CommandBase.notifyOperators(sender, command, "commands.sburbSession.landTerrainSuccess", player, aspect.getPrimaryName());
+	}
+	
+	public static void predefineTitleLandAspect(ICommandSender sender, ICommand command, String player, String sessionName, TitleLandAspect aspect) throws CommandException
+	{
+		predefineCheck(sender, player, sessionName);
+		
+		Session session = sessionsByName.get(sessionName);
+		SburbConnection clientConnection = SkaianetHandler.getClientConnection(player);
+		PredefineData data = session.predefinedPlayers.get(player);
+		
+		if(clientConnection != null && clientConnection.enteredGame())
+			throw new CommandException("You can't change your land aspects after having entered the medium.");
+		if(sender.sendCommandFeedback())
+			if(data.title == null)
+				sender.addChatMessage(new ChatComponentText("Beware that the title generated might not be suited for this land aspect.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.YELLOW)));
+			else if(!LandAspectRegistry.containsTitleLandAspect(data.title.getHeroAspect(), aspect))
+				sender.addChatMessage(new ChatComponentText("Beware that the title predefined isn't suited for this land aspect.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.YELLOW)));
+		
+		if(data.landTerrain != null && !aspect.isAspectCompatible(data.landTerrain))
+		{
+			data.landTerrain = null;
+			if(sender.sendCommandFeedback())
+				sender.addChatMessage(new ChatComponentText("The terrain aspect previously chosen isn't compatible with this land aspect, and has therefore been removed.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.YELLOW)));
+		}
+		
+		data.landTitle = aspect;
+		CommandBase.notifyOperators(sender, command, "commands.sburbSession.landTitleSuccess", player, aspect.getPrimaryName());
 	}
 	
 	private static void predefineCheck(ICommandSender sender, String player, String sessionName) throws CommandException

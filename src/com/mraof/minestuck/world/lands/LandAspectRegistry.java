@@ -219,6 +219,11 @@ public class LandAspectRegistry
 		return landNames2.get(name);
 	}
 	
+	public static boolean containsTitleLandAspect(EnumAspect titleAspect, TitleLandAspect landAspect)
+	{
+		return titleAspects.get(titleAspect).contains(landAspect);
+	}
+	
 	/**
 	 * Registers a new dimension for a land. Returns the ID of the nearest open land ID.
 	 * @param player 
