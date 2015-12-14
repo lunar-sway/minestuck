@@ -2,9 +2,11 @@ package com.mraof.minestuck.network.skaianet;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -521,6 +523,9 @@ public class SessionHandler {
 		return list;
 	}
 	
+	/**
+	 * Creates data to be used for the data checker
+	 */
 	public static NBTTagCompound createDataTag()
 	{
 		NBTTagCompound nbt = new NBTTagCompound();
@@ -531,8 +536,11 @@ public class SessionHandler {
 		{
 			Session session = sessions.get(i);
 			NBTTagList connectionList = new NBTTagList();
+			Set<String> playerSet = new HashSet<String>();
 			for(SburbConnection c :session.connections)
 			{
+				if(c.isMain)
+					playerSet.add(c.getClientName());
 				NBTTagCompound connectionTag = new NBTTagCompound();
 				connectionTag.setString("client", c.getClientName());
 				connectionTag.setString("server", c.getServerName());
@@ -561,8 +569,50 @@ public class SessionHandler {
 						Title title = MinestuckPlayerData.getTitle(c.getClientName());
 						connectionTag.setByte("class", (byte) title.getHeroClass().ordinal());
 						connectionTag.setByte("aspect", (byte) title.getHeroAspect().ordinal());
+					} else if(session.predefinedPlayers.containsKey(c.getClientName()))
+					{
+						PredefineData data = session.predefinedPlayers.get(c.getClientName());
+						
+						if(data.title != null)
+						{
+							connectionTag.setByte("class", (byte) data.title.getHeroClass().ordinal());
+							connectionTag.setByte("aspect", (byte) data.title.getHeroAspect().ordinal());
+						}
+						
+						if(data.landTerrain != null)
+							connectionTag.setString("aspectTerrain", data.landTerrain.getPrimaryName());
+						if(data.landTitle != null)
+							connectionTag.setString("aspectTitle", data.landTitle.getPrimaryName());
 					}
 				}
+				connectionList.appendTag(connectionTag);
+			}
+			
+			for(Map.Entry<String, PredefineData> entry : session.predefinedPlayers.entrySet())
+			{
+				if(playerSet.contains(entry.getKey()))
+					continue;
+				
+				NBTTagCompound connectionTag = new NBTTagCompound();
+				
+				connectionTag.setString("client", entry.getKey());
+				connectionTag.setBoolean("isMain", true);
+				connectionTag.setBoolean("isActive", false);
+				connectionTag.setInteger("clientDim", 0);
+				
+				PredefineData data = entry.getValue();
+				
+				if(data.title != null)
+				{
+					connectionTag.setByte("class", (byte) data.title.getHeroClass().ordinal());
+					connectionTag.setByte("aspect", (byte) data.title.getHeroAspect().ordinal());
+				}
+				
+				if(data.landTerrain != null)
+					connectionTag.setString("aspectTerrain", data.landTerrain.getPrimaryName());
+				if(data.landTitle != null)
+					connectionTag.setString("aspectTitle", data.landTitle.getPrimaryName());
+				
 				connectionList.appendTag(connectionTag);
 			}
 			

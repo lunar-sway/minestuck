@@ -428,7 +428,8 @@ public class GuiDataChecker extends GuiScreen
 				landDim = connectionTag.getInteger("clientDim");
 			
 			list.add(new TextField("Client Player: '%s'", client));
-			list.add(new TextField("Server Player: '%s'", server));
+			if(!server.isEmpty())
+				list.add(new TextField("Server Player: %s", server));
 			list.add(new TextField("Is Active: %b", connectionTag.getBoolean("isActive")));
 			list.add(new TextField("Is Primary Connection: %b", isMain));
 			
@@ -444,6 +445,11 @@ public class GuiDataChecker extends GuiScreen
 					String titleAspect = "title."+EnumAspect.values()[connectionTag.getByte("aspect")].toString();
 					list.add(new LocalizedTextField("title.format", new LocalizedObject(titleClass), new LocalizedObject(titleAspect)));
 				}
+				
+				if(connectionTag.hasKey("aspectTitle"))
+					list.add(new TextField("Title aspect: %s", connectionTag.getString("aspectTitle")));
+				if(connectionTag.hasKey("aspectTerrain"))
+					list.add(new TextField("Terrain aspect: %s", connectionTag.getString("aspectTerrain")));
 			}
 			list.add(new GristCacheButton(client));
 		}
@@ -471,7 +477,7 @@ public class GuiDataChecker extends GuiScreen
 		public String getName()
 		{
 			if(isMain)
-				return String.format("'%s' - '%s'", client, server);
+				return String.format("'%s' - %s", client, server.isEmpty() ? '?' : '\'' + server + '\'');
 			else return String.format("('%s' - '%s')", client, server);
 		}
 	}
