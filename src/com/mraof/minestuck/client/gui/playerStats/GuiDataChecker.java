@@ -55,7 +55,7 @@ public class GuiDataChecker extends GuiScreen
 		for(int i = 0; i < 5; i++)
 		{
 			GuiButton button = new GuiButton(i, xOffset + 5, yOffset + LIST_Y + i*22, 180, 20, "");
-			buttons[i] = button;	//TODO check buttons for when resizing the minecraft window	(when "width" and "height" is changed)
+			buttons[i] = button;
 			this.buttonList.add(button);
 		}
 		returnButton = new GuiButtonExt(5, xOffset + GUI_WIDTH - 25, yOffset + 5, 18, 18, "");
@@ -379,6 +379,7 @@ public class GuiDataChecker extends GuiScreen
 			}
 			
 			playerSet.remove(".null");
+			playerSet.remove("");
 			players = playerSet.size();
 		}
 		

@@ -154,9 +154,6 @@ public class Session {
 		return null;
 	}
 	
-	/**
-	 * With being custom,
-	 */
 	boolean isCustom()
 	{
 		return name != null;

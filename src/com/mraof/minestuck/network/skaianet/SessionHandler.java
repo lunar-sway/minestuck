@@ -192,7 +192,6 @@ public class SessionHandler {
 			return;
 		
 		Session s = sessions.get(0);
-		s.name = null;
 		split(s);
 	}
 	
@@ -205,7 +204,8 @@ public class SessionHandler {
 		if(session.isCustom())
 			sessionsByName.remove(session.name);
 		boolean first = true;
-		while(!session.connections.isEmpty()){
+		while(!session.connections.isEmpty() || first)
+		{
 			Session s = new Session();
 			if(!first)
 			{
@@ -213,7 +213,7 @@ public class SessionHandler {
 				
 			} else
 			{
-				if(session.isCustom())
+				if(session.isCustom() && (!session.name.equals(GLOBAL_SESSION_NAME) || !session.predefinedPlayers.isEmpty()))
 				{
 					s.name = session.name;
 					s.predefinedPlayers.putAll(session.predefinedPlayers);
@@ -223,6 +223,7 @@ public class SessionHandler {
 				s.prospitId = session.prospitId;
 				s.derseId = session.derseId;
 			}
+			
 			boolean found;
 			do {
 				found = false;
@@ -360,7 +361,7 @@ public class SessionHandler {
 					continue;
 				}
 				
-				if(session.predefinedPlayers.remove(playerName) != null)
+				if(session.predefinedPlayers.remove(playerName) == null)
 				{
 					sender.addChatMessage(new ChatComponentText("Failed to remove player \""+playerName+"\": Player isn't registered with the session.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
 					continue;
