@@ -413,12 +413,17 @@ public class SessionHandler {
 	
 	public static void sessionName(ICommandSender sender, ICommand command, String player, String sessionName) throws CommandException
 	{
-		Session s = getPlayerSession(player);
-		if(s == null)
+		Session playerSession = getPlayerSession(player), session = sessionsByName.get(sessionName);
+		if(playerSession == null)
 			throw new CommandException("Couldn't find session for player \"%s\"", player);
+		if(session != null)
+			throw new CommandException("That session name is already taken.");
 		
-		String prevName = s.name;
-		s.name = sessionName;
+		if(playerSession.name != null)
+			sessionsByName.remove(playerSession.name);
+		String prevName = playerSession.name;
+		playerSession.name = sessionName;
+		sessionsByName.put(playerSession.name, playerSession);
 		
 		if(prevName != null)
 			CommandBase.notifyOperators(sender, command, "commands.sburbSession.rename", prevName, sessionName, UsernameHandler.decode(player));
