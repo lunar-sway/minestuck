@@ -371,9 +371,14 @@ public class SessionHandler {
 				
 				if(session.containsPlayer(playerName))
 				{
-					sender.addChatMessage(new ChatComponentText("Removed player \""+playerName+"\", but they are still part of a connection in the session and will therefore be part of the session unless the connection is discarded.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.YELLOW)));
-					skipFinishing = true;
-					continue;
+					split(session);
+					session = sessionsByName.get(sessionName);
+					if(session.containsPlayer(playerName))
+					{
+						sender.addChatMessage(new ChatComponentText("Removed player \""+playerName+"\", but they are still part of a connection in the session and will therefore be part of the session unless the connection is discarded.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.YELLOW)));
+						skipFinishing = true;
+						continue;
+					}
 				}
 			} else
 			{
