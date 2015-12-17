@@ -11,8 +11,16 @@ import com.mraof.minestuck.network.MinestuckPacket;
 public class SburbConnection {
 	
 	ComputerData client;
+	/**
+	 * Name for the client player. Beware that this might be an empty string if connection.client isn't null
+	 * It is recommended to use connection.getClientName() instead if possible
+	 */
 	String clientName = "";
 	ComputerData server;
+	/**
+	 * Name for the server player. Beware that this might be an empty string if connection.server isn't null
+	 * It is recommended to use connection.getServerName() instead if possible
+	 */
 	String serverName = "";
 	boolean isActive;
 	boolean isMain;

@@ -6,7 +6,7 @@ import com.mraof.minestuck.world.lands.decorator.RockDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.gen.DefaultTerrainGen;
 
-public class LandAspectWind extends TitleAspect
+public class LandAspectWind extends TitleLandAspect
 {
 	
 	@Override

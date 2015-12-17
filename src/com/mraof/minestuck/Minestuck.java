@@ -30,6 +30,7 @@ import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.client.util.MinestuckModelManager;
 import com.mraof.minestuck.command.CommandCheckLand;
+import com.mraof.minestuck.command.CommandSburbSession;
 import com.mraof.minestuck.command.CommandGrist;
 import com.mraof.minestuck.command.CommandTransportalizer;
 import com.mraof.minestuck.editmode.ClientEditHandler;
@@ -97,7 +98,7 @@ public class Minestuck
 	public static CommonProxy proxy;
 	public static CreativeTabs tabMinestuck;
 
-	public static long worldSeed = 0;
+	public static long worldSeed = 0;	//TODO proper usage of seed when generating titles, land aspects, and land dimension data
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) 
@@ -244,6 +245,7 @@ public class Minestuck
 		event.registerServerCommand(new CommandCheckLand());
 		event.registerServerCommand(new CommandGrist());
 		event.registerServerCommand(new CommandTransportalizer());
+		event.registerServerCommand(new CommandSburbSession());
 		
 		worldSeed = event.getServer().worldServers[0].getSeed();
 		ServerEventHandler.lastDay = event.getServer().worldServers[0].getWorldTime() / 24000L;

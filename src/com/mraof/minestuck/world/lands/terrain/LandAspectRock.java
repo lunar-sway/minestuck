@@ -20,7 +20,7 @@ import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.gen.DefaultTerrainGen;
 import com.mraof.minestuck.world.lands.gen.ILandTerrainGen;
 
-public class LandAspectRock extends TerrainAspect
+public class LandAspectRock extends TerrainLandAspect
 {
 	
 	private IBlockState[] structureBlocks = {Blocks.cobblestone.getDefaultState(), Blocks.stonebrick.getDefaultState()};

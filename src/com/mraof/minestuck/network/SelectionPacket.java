@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 
 import java.util.EnumSet;
 
-import com.mraof.minestuck.network.skaianet.SessionHandler;
+import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -44,7 +44,7 @@ public class SelectionPacket extends MinestuckPacket
 	{
 		if(this.type == COLOR)
 		{
-			if(SessionHandler.canSelect((EntityPlayerMP) player))
+			if(SburbHandler.canSelectColor((EntityPlayerMP) player))
 				MinestuckPlayerData.getData(player).color = this.color;
 		}
 	}

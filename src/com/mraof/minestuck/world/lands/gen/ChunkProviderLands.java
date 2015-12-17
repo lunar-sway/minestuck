@@ -36,15 +36,15 @@ import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.WorldProviderLands;
-import com.mraof.minestuck.network.skaianet.SessionHandler;
+import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.world.biome.BiomeGenMinestuck;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.structure.DefaultGatePlacement;
 import com.mraof.minestuck.world.lands.structure.IGateStructure;
 import com.mraof.minestuck.world.lands.structure.LandStructureHandler;
-import com.mraof.minestuck.world.lands.terrain.TerrainAspect;
-import com.mraof.minestuck.world.lands.title.TitleAspect;
+import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
+import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 
 public class ChunkProviderLands implements IChunkProvider 
 {
@@ -54,8 +54,8 @@ public class ChunkProviderLands implements IChunkProvider
 	Random random;
 	Vec3 skyColor;
 	long seed;
-	public TerrainAspect aspect1;
-	public TitleAspect aspect2;
+	public TerrainLandAspect aspect1;
+	public TitleLandAspect aspect2;
 	public LandAspectRegistry helper;
 	public int nameIndex1, nameIndex2;
 	public boolean nameOrder;
@@ -310,7 +310,7 @@ public class ChunkProviderLands implements IChunkProvider
 		{
 			List<SpawnListEntry> list = new ArrayList<SpawnListEntry>();
 			list.addAll(this.monsterList);
-			list.addAll(SessionHandler.getUnderlingList(pos, landWorld));
+			list.addAll(SburbHandler.getUnderlingList(pos, landWorld));
 			return list;
 		}
 		return creatureType == EnumCreatureType.CREATURE ? this.consortList : null;

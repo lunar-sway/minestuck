@@ -84,7 +84,7 @@ public class CommandGrist extends CommandBase
 				grist.append("\n" + amount.getAmount() + " " + amount.getType().getDisplayName());	//TODO properly translate display name for client side
 			
 			sender.addChatMessage(new ChatComponentTranslation("commands.grist.get", displayName, grist.toString()));
-		}
+		} else throw new WrongUsageException("commands.invalidSubCommand", command);
 	}
 
 	public GristAmount[] parseGrist(String[] args, int startOffset) throws CommandException

@@ -7,14 +7,14 @@ import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.lands.ILandAspect;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.structure.IGateStructure;
-import com.mraof.minestuck.world.lands.terrain.TerrainAspect;
+import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 
-public abstract class TitleAspect implements ILandAspect<TitleAspect>
+public abstract class TitleLandAspect implements ILandAspect<TitleLandAspect>
 {
 	
 	protected abstract void prepareChunkProvider(ChunkProviderLands chunkProvider);
 	
-	public boolean isAspectCompatible(TerrainAspect aspect)
+	public boolean isAspectCompatible(TerrainLandAspect aspect)
 	{
 		return true;
 	}
@@ -28,15 +28,15 @@ public abstract class TitleAspect implements ILandAspect<TitleAspect>
 	}
 	
 	@Override
-	public List<TitleAspect> getVariations()
+	public List<TitleLandAspect> getVariations()
 	{
-		ArrayList<TitleAspect> list = new ArrayList<TitleAspect>();
+		ArrayList<TitleLandAspect> list = new ArrayList<TitleLandAspect>();
 		list.add(this);
 		return list;
 	}
 	
 	@Override
-	public TitleAspect getPrimaryVariant()
+	public TitleLandAspect getPrimaryVariant()
 	{
 		return this;
 	}

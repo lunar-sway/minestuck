@@ -30,7 +30,7 @@ import com.mraof.minestuck.entity.EntityMinestuck;
 import com.mraof.minestuck.entity.ai.EntityAIHurtByTargetAllied;
 import com.mraof.minestuck.entity.ai.EntityAINearestAttackableTargetWithHeight;
 import com.mraof.minestuck.entity.item.EntityGrist;
-import com.mraof.minestuck.network.skaianet.SessionHandler;
+import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
@@ -205,7 +205,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 		
 		if(!(livingData instanceof UnderlingData))
 		{
-			this.type = SessionHandler.getUnderlingType(this);
+			this.type = SburbHandler.getUnderlingType(this);
 			livingData = new UnderlingData(this.type);
 		}
 		else

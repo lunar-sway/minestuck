@@ -55,7 +55,7 @@ public class GuiDataChecker extends GuiScreen
 		for(int i = 0; i < 5; i++)
 		{
 			GuiButton button = new GuiButton(i, xOffset + 5, yOffset + LIST_Y + i*22, 180, 20, "");
-			buttons[i] = button;	//TODO check buttons for when resizing the minecraft window	(when "width" and "height" is changed)
+			buttons[i] = button;
 			this.buttonList.add(button);
 		}
 		returnButton = new GuiButtonExt(5, xOffset + GUI_WIDTH - 25, yOffset + 5, 18, 18, "");
@@ -312,10 +312,18 @@ public class GuiDataChecker extends GuiScreen
 				return;
 			
 			NBTTagList sessionList = data.getTagList("sessions", 10);
+			int nameIndex = 1;
 			for(int i = 0; i < sessionList.tagCount(); i++)
 			{
 				NBTTagCompound sessionTag = sessionList.getCompoundTagAt(i);
 				SessionComponent session = new SessionComponent(this, sessionTag, data);
+				if(sessionTag.hasKey("name", 8))
+					session.name = sessionTag.getString("name");
+				else
+				{
+					session.name = "Session " + String.valueOf(nameIndex);
+					nameIndex++;
+				}
 				list.add(session);
 			}
 		}
@@ -357,7 +365,6 @@ public class GuiDataChecker extends GuiScreen
 		public SessionComponent(MainComponent parent, NBTTagCompound sessionTag, NBTTagCompound dataTag)
 		{
 			this.parent = parent;
-			this.name = sessionTag.getString("name");
 			HashSet<String> playerSet = new HashSet<String>();
 			NBTTagList connectionList = sessionTag.getTagList("connections", 10);
 			for(int i = 0; i < connectionList.tagCount(); i++)
@@ -372,6 +379,7 @@ public class GuiDataChecker extends GuiScreen
 			}
 			
 			playerSet.remove(".null");
+			playerSet.remove("");
 			players = playerSet.size();
 		}
 		
@@ -398,7 +406,7 @@ public class GuiDataChecker extends GuiScreen
 		@Override
 		public String getName()
 		{
-			return String.format("Session %s (%d/%d)", name, playersEntered, players);
+			return String.format("%s (%d/%d)", name, playersEntered, players);
 		}
 	}
 	
@@ -421,7 +429,8 @@ public class GuiDataChecker extends GuiScreen
 				landDim = connectionTag.getInteger("clientDim");
 			
 			list.add(new TextField("Client Player: '%s'", client));
-			list.add(new TextField("Server Player: '%s'", server));
+			if(!server.isEmpty())
+				list.add(new TextField("Server Player: %s", server));
 			list.add(new TextField("Is Active: %b", connectionTag.getBoolean("isActive")));
 			list.add(new TextField("Is Primary Connection: %b", isMain));
 			
@@ -437,6 +446,11 @@ public class GuiDataChecker extends GuiScreen
 					String titleAspect = "title."+EnumAspect.values()[connectionTag.getByte("aspect")].toString();
 					list.add(new LocalizedTextField("title.format", new LocalizedObject(titleClass), new LocalizedObject(titleAspect)));
 				}
+				
+				if(connectionTag.hasKey("aspectTitle"))
+					list.add(new TextField("Title aspect: %s", connectionTag.getString("aspectTitle")));
+				if(connectionTag.hasKey("aspectTerrain"))
+					list.add(new TextField("Terrain aspect: %s", connectionTag.getString("aspectTerrain")));
 			}
 			list.add(new GristCacheButton(client));
 		}
@@ -464,7 +478,7 @@ public class GuiDataChecker extends GuiScreen
 		public String getName()
 		{
 			if(isMain)
-				return String.format("'%s' - '%s'", client, server);
+				return String.format("'%s' - %s", client, server.isEmpty() ? '?' : '\'' + server + '\'');
 			else return String.format("('%s' - '%s')", client, server);
 		}
 	}

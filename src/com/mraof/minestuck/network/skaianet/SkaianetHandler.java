@@ -78,7 +78,7 @@ public class SkaianetHandler {
 		if(c != null && !c.isMain && getAssociatedPartner(c.getClientName(), true).isEmpty()
 				&& getAssociatedPartner(c.getServerName(), false).isEmpty()) {
 			c.isMain = true;
-			SessionHandler.onFirstItemGiven(c);
+			SburbHandler.onFirstItemGiven(c);
 			updatePlayer(c.getClientName());
 			updatePlayer(c.getServerName());
 			return true;
@@ -351,10 +351,21 @@ public class SkaianetHandler {
 		resumingClients.clear();
 		resumingServers.clear();
 		SessionHandler.sessions.clear();
-		if(nbt != null) {
+		SessionHandler.sessionsByName.clear();
+		if(nbt != null)
+		{
 			NBTTagList list = nbt.getTagList("sessions", 10);
 			for(int i = 0; i < list.tagCount(); i++)
-				SessionHandler.sessions.add(new Session().read(list.getCompoundTagAt(i)));
+			{
+				Session session = new Session().read(list.getCompoundTagAt(i));
+				SessionHandler.sessions.add(session);
+				if(session.isCustom())
+				{
+					if(SessionHandler.sessionsByName.containsKey(session.name))
+						Debug.printf("A session with a duplicate name has been loaded! (Session '%s') Either a bug or someone messing with the data file.", session.name);
+					SessionHandler.sessionsByName.put(session.name, session);
+				}
+			}
 			
 			String[] s = {"serversOpen","resumingClients","resumingServers"};
 			List<Map<String, ComputerData>> maps = new ArrayList<Map<String, ComputerData>>();
@@ -560,7 +571,7 @@ public class SkaianetHandler {
 				c.serverName = username;
 				if(SessionHandler.onConnectionCreated(c) == null)
 				{
-					SessionHandler.onFirstItemGiven(c);
+					SburbHandler.onFirstItemGiven(c);
 					connections.add(c);
 				}
 				else if(SessionHandler.singleSession)
@@ -569,7 +580,7 @@ public class SkaianetHandler {
 					SessionHandler.split();
 					if(SessionHandler.onConnectionCreated(c) == null)
 					{
-						SessionHandler.onFirstItemGiven(c);
+						SburbHandler.onFirstItemGiven(c);
 						connections.add(c);
 					}
 				}
@@ -583,7 +594,7 @@ public class SkaianetHandler {
 		
 		c.clientHomeLand = dimensionId;
 		c.enteredGame = true;
-		SessionHandler.onGameEntered(c);
+		SburbHandler.onGameEntered(c);
 		
 		c.centerX = (int)player.posX;
 		c.centerZ = (int)player.posZ;

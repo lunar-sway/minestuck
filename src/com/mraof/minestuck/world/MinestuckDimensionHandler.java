@@ -68,7 +68,7 @@ public class MinestuckDimensionHandler
 			{
 				String name1 = tagCompound.getString("aspect1");
 				String name2 = tagCompound.getString("aspect2");
-				LandAspectRegistry.AspectCombination aspects = new LandAspectRegistry.AspectCombination(LandAspectRegistry.fromName(name1), LandAspectRegistry.fromName2(name2));
+				LandAspectRegistry.AspectCombination aspects = new LandAspectRegistry.AspectCombination(LandAspectRegistry.fromNameTerrain(name1), LandAspectRegistry.fromNameTitle(name2));
 				BlockPos spawn = new BlockPos(tagCompound.getInteger("spawnX"), tagCompound.getInteger("spawnY"), tagCompound.getInteger("spawnZ"));
 				
 				lands.put(dim, aspects);

@@ -16,6 +16,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.terrain.*;
@@ -24,12 +25,12 @@ import com.mraof.minestuck.world.lands.title.*;
 public class LandAspectRegistry
 {
 	
-	private static ArrayList<TerrainAspect> landAspects = new ArrayList<TerrainAspect>();
-	private static Hashtable<EnumAspect, ArrayList<TitleAspect>> titleAspects = new Hashtable<EnumAspect, ArrayList<TitleAspect>>();
-	private static Hashtable<String, TerrainAspect> landNames = new Hashtable<String,TerrainAspect>();
-	private static Hashtable<String, TitleAspect> landNames2 = new Hashtable<String,TitleAspect>();
-	private static TitleAspect nullAspect = new LandAspectNull();
-	public static TitleAspect frogAspect = new LandAspectFrogs();
+	private static ArrayList<TerrainLandAspect> landAspects = new ArrayList<TerrainLandAspect>();
+	private static Hashtable<EnumAspect, ArrayList<TitleLandAspect>> titleAspects = new Hashtable<EnumAspect, ArrayList<TitleLandAspect>>();
+	private static Hashtable<String, TerrainLandAspect> landNames = new Hashtable<String,TerrainLandAspect>();
+	private static Hashtable<String, TitleLandAspect> landNames2 = new Hashtable<String,TitleLandAspect>();
+	private static TitleLandAspect nullAspect = new LandAspectNull();
+	public static TitleLandAspect frogAspect = new LandAspectFrogs();
 	
 	private Random random;
 	
@@ -69,22 +70,22 @@ public class LandAspectRegistry
 	 * Adds a new Land aspect to the table of random aspects to generate.
 	 * @param newAspect
 	 */
-	public static void registerLandAspect(TerrainAspect newAspect)
+	public static void registerLandAspect(TerrainLandAspect newAspect)
 	{
 		landAspects.add(newAspect);
 		landNames.put(newAspect.getPrimaryName(),newAspect);
 		for(ILandAspect variant : newAspect.getVariations())
-			landNames.put(variant.getPrimaryName(), (TerrainAspect) variant);
+			landNames.put(variant.getPrimaryName(), (TerrainLandAspect) variant);
 	}
 	
-	public static void registerLandAspect(TitleAspect newAspect, EnumAspect titleAspect)
+	public static void registerLandAspect(TitleLandAspect newAspect, EnumAspect titleAspect)
 	{
 		if(!titleAspects.containsKey(titleAspect))
-			titleAspects.put(titleAspect, new ArrayList<TitleAspect>());
+			titleAspects.put(titleAspect, new ArrayList<TitleLandAspect>());
 		titleAspects.get(titleAspect).add(newAspect);
 		landNames2.put(newAspect.getPrimaryName(), newAspect);
 		for(ILandAspect variant : newAspect.getVariations())
-			landNames2.put(variant.getPrimaryName(), (TitleAspect) variant);
+			landNames2.put(variant.getPrimaryName(), (TitleLandAspect) variant);
 	}
 	
 	/**
@@ -92,10 +93,10 @@ public class LandAspectRegistry
 	 * @param playerTitle
 	 * @return
 	 */
-	public TerrainAspect getLandAspect(TitleAspect aspect2, List<TerrainAspect> usedAspects)
+	public TerrainLandAspect getTerrainAspect(TitleLandAspect aspect2, List<TerrainLandAspect> usedAspects)
 	{
-		ArrayList<TerrainAspect> availableAspects = new ArrayList<TerrainAspect>();
-		for(TerrainAspect aspect : landAspects)
+		ArrayList<TerrainLandAspect> availableAspects = new ArrayList<TerrainLandAspect>();
+		for(TerrainLandAspect aspect : landAspects)
 			if(aspect2.isAspectCompatible(aspect))
 				availableAspects.add(aspect);
 		
@@ -105,13 +106,26 @@ public class LandAspectRegistry
 		return selectRandomAspect(availableAspects, usedAspects);
 	}
 	
-	public TitleAspect getTitleAspect(EnumAspect titleAspect, List<TitleAspect> usedAspects)
+	public TitleLandAspect getTitleAspect(TerrainLandAspect aspectTerrain, EnumAspect titleAspect, List<TitleLandAspect> usedAspects)
 	{
-		ArrayList<TitleAspect> aspectList = titleAspects.get(titleAspect);
+		ArrayList<TitleLandAspect> aspectList = titleAspects.get(titleAspect);
+		ArrayList<TitleLandAspect> availableAspects = new ArrayList<TitleLandAspect>();
 		if(aspectList == null || aspectList.isEmpty())
 			return nullAspect;
 		
-		return selectRandomAspect(aspectList, usedAspects);
+		if(aspectTerrain == null)
+			availableAspects.addAll(aspectList);
+		else for(TitleLandAspect aspect : aspectList)
+			if(aspect.isAspectCompatible(aspectTerrain))
+				availableAspects.add(aspect);
+		
+		if(availableAspects.isEmpty())
+		{
+			Debug.printf("Failed to find a title land aspect compatible with \"%s\". Forced to use a poorly compatible land aspect instead.");
+			availableAspects.addAll(aspectList);
+		}
+		
+		return selectRandomAspect(availableAspects, usedAspects);
 	}
 	
 	private <A extends ILandAspect> A selectRandomAspect(List<A> aspectList, List<A> usedAspects)
@@ -182,7 +196,7 @@ public class LandAspectRegistry
 	/**
 	 * Converts aspect data to NBT tags for saving/loading.
 	 */
-	public static NBTTagCompound toNBT(TerrainAspect aspect1, TitleAspect aspect2) {
+	public static NBTTagCompound toNBT(TerrainLandAspect aspect1, TitleLandAspect aspect2) {
 		NBTTagCompound tag = new NBTTagCompound();
 		tag.setString("aspect1",aspect1.getPrimaryName());
 		tag.setString("aspect2",aspect2.getPrimaryName());
@@ -192,17 +206,22 @@ public class LandAspectRegistry
 	/**
 	 * Gets a land aspect from it's primary name. Used in loading from NBT.
 	 */
-	public static TerrainAspect fromName(String name) {
-		return (TerrainAspect)landNames.get(name);
+	public static TerrainLandAspect fromNameTerrain(String name) {
+		return (TerrainLandAspect)landNames.get(name);
 		
 	}
 	
 	/**
 	 * Gets a land aspect from it's primary name. Used in loading from NBT.
 	 */
-	public static TitleAspect fromName2(String name)
+	public static TitleLandAspect fromNameTitle(String name)
 	{
 		return landNames2.get(name);
+	}
+	
+	public static boolean containsTitleLandAspect(EnumAspect titleAspect, TitleLandAspect landAspect)
+	{
+		return titleAspects.get(titleAspect).contains(landAspect);
 	}
 	
 	/**
@@ -261,15 +280,18 @@ public class LandAspectRegistry
 	
 	public static class AspectCombination
 	{
-		public AspectCombination(TerrainAspect terrainAspect, TitleAspect titleAspect)
+		public AspectCombination(TerrainLandAspect terrainAspect, TitleLandAspect titleAspect)
 		{
 			if(terrainAspect == null || titleAspect == null)
 				throw new IllegalArgumentException("Parameters may not be null");
 			this.aspectTerrain = terrainAspect;
 			this.aspectTitle = titleAspect;
 		}
-		public TerrainAspect aspectTerrain;
-		public TitleAspect aspectTitle;
+		public TerrainLandAspect aspectTerrain;
+		/**
+		 * Not to be confused with EnumAspect.
+		 */
+		public TitleLandAspect aspectTitle;
 	}
 	
 }

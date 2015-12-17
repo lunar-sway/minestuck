@@ -17,13 +17,13 @@ import net.minecraftforge.common.ChestGenHooks;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import com.mraof.minestuck.world.lands.terrain.TerrainAspect;
+import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 
-public class LandAspectMonsters extends TitleAspect
+public class LandAspectMonsters extends TitleLandAspect
 {
 	
 	private final String name;
-	private final List<TitleAspect> variations;
+	private final List<TitleLandAspect> variations;
 	private final List<SpawnListEntry> monsterList;
 	
 	public LandAspectMonsters()
@@ -33,7 +33,7 @@ public class LandAspectMonsters extends TitleAspect
 	
 	public LandAspectMonsters(String name)
 	{
-		this.variations = new ArrayList<TitleAspect>();
+		this.variations = new ArrayList<TitleLandAspect>();
 		this.name = name;
 		this.monsterList = new ArrayList<SpawnListEntry>();
 		if(this.name.equals("Monsters"))
@@ -84,21 +84,21 @@ public class LandAspectMonsters extends TitleAspect
 	}
 	
 	@Override
-	public boolean isAspectCompatible(TerrainAspect aspect)
+	public boolean isAspectCompatible(TerrainLandAspect aspect)
 	{
 		return aspect.getDayCycleMode() != 1;
 	}
 	
 	@Override
-	public List<TitleAspect> getVariations()
+	public List<TitleLandAspect> getVariations()
 	{
 		return variations;
 	}
 	
 	@Override
-	public TitleAspect getPrimaryVariant()
+	public TitleLandAspect getPrimaryVariant()
 	{
-		return LandAspectRegistry.fromName2("Monsters");
+		return LandAspectRegistry.fromNameTitle("Monsters");
 	}
 	
 }

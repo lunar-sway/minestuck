@@ -18,7 +18,7 @@ import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceMushroomGenerator;
 
-public class LandAspectShade extends TerrainAspect 
+public class LandAspectShade extends TerrainLandAspect 
 {
 	
 	static Vec3 skyColor = new Vec3(0.16D, 0.38D, 0.54D);

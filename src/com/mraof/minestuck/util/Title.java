@@ -29,4 +29,14 @@ public class Title {
 		return heroClass.toString() + " of " + heroAspect.toString();
 	}
 	
+	@Override
+	public boolean equals(Object obj)	//TODO override title.hashCode() too.
+	{
+		if(obj instanceof Title)
+		{
+			Title title = (Title) obj;
+			return title.heroClass.equals(this.heroClass) && title.heroAspect.equals(this.heroAspect);
+		}
+		return false;
+	}
 }

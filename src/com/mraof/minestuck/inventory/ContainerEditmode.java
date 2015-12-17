@@ -12,7 +12,7 @@ import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
-import com.mraof.minestuck.network.skaianet.SessionHandler;
+import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 
@@ -105,7 +105,7 @@ public class ContainerEditmode extends Container
 		
 		ArrayList<ItemStack> deployItems = DeployList.getItemList();
 		Iterator<ItemStack> iter = deployItems.iterator();
-		int playerTier = SessionHandler.availableTier(c.getClientName());
+		int playerTier = SburbHandler.availableTier(c.getClientName());
 		while(iter.hasNext())
 		{
 			ItemStack stack = iter.next();
@@ -116,7 +116,7 @@ public class ContainerEditmode extends Container
 			else if(stack.getItem().equals(MinestuckItems.captchaCard))
 				if(c.enteredGame())
 					iter.remove();
-				else stack.getTagCompound().setInteger("contentMeta", SessionHandler.getEntryItem(c.getClientName()));
+				else stack.getTagCompound().setInteger("contentMeta", SburbHandler.getEntryItem(c.getClientName()));
 			else if(stack.getItem().equals(Item.getItemFromBlock(MinestuckBlocks.blockMachine)) && stack.getMetadata() == 0)
 			{
 				NBTTagCompound nbt = new NBTTagCompound();

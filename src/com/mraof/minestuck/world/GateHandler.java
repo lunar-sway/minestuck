@@ -7,7 +7,7 @@ import java.util.Random;
 import com.google.common.collect.Lists;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
-import com.mraof.minestuck.network.skaianet.SessionHandler;
+import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Location;
@@ -62,7 +62,7 @@ public class GateHandler
 			
 		} else if(gateId == 2)
 		{
-			SburbConnection landConnection = SessionHandler.getConnectionForDimension(dim);
+			SburbConnection landConnection = SburbHandler.getConnectionForDimension(dim);
 			if(landConnection != null)
 			{
 				SburbConnection clientConnection = SkaianetHandler.getMainConnection(landConnection.getClientName(), false);
@@ -96,7 +96,7 @@ public class GateHandler
 			} else Debug.printf("Unexpected error: Can't find connection for dimension %d!", dim);
 		} else if(gateId == -1)
 		{
-			SburbConnection landConnection = SessionHandler.getConnectionForDimension(dim);
+			SburbConnection landConnection = SburbHandler.getConnectionForDimension(dim);
 			if(landConnection != null)
 			{
 				SburbConnection serverConnection = SkaianetHandler.getMainConnection(landConnection.getServerName(), true);
