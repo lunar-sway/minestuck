@@ -111,6 +111,7 @@ public class MinestuckPlayerData {
 		public Modus modus;
 		public boolean givenModus;
 		public int color = -1;
+		public Echeladder echeladder = new Echeladder();
 		
 		private void readFromNBT(NBTTagCompound nbt)
 		{
@@ -127,6 +128,8 @@ public class MinestuckPlayerData {
 			else givenModus = nbt.getBoolean("givenModus");
 			if(nbt.hasKey("color"))
 				this.color = nbt.getInteger("color");
+			
+			echeladder.loadEcheladder(nbt);
 		}
 		
 		private NBTTagCompound writeToNBT()
@@ -149,6 +152,8 @@ public class MinestuckPlayerData {
 				nbt.setTag("modus", CaptchaDeckHandler.writeToNBT(modus));
 			else nbt.setBoolean("givenModus", givenModus);
 			nbt.setInteger("color", this.color);
+			
+			echeladder.saveEcheladder(nbt);
 			return nbt;
 		}
 		
