@@ -1,6 +1,10 @@
 package com.mraof.minestuck.util;
 
+import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
 
 public class Echeladder
 {
@@ -10,6 +14,7 @@ public class Echeladder
 	
 	private static final int[] UNDERLING_BONUSES = new int[] {10, 200, 400, 1200};	//Bonuses for first time killing an underling
 	
+	private String name;
 	private int rug;
 	private int progress;
 	
@@ -26,17 +31,19 @@ public class Echeladder
 		if(rug >= RUG_COUNT || xp < max/50)
 			return;
 		
-		if(progress + xp >= max)
+		while(progress + xp >= max)
 		{
 			rug++;
 			xp -= (max - progress);
 			progress = 0;
-			
-			if(xp >= getRugProgressReq()/50)
-				progress = xp;
-		} else progress += xp;
+			max = getRugProgressReq();
+		}
+		if(xp >= max/50)
+			progress += xp;
 		
-		//Notify player
+		EntityPlayer player = MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(UsernameHandler.decode(name));
+		if(player != null)
+			MinestuckPlayerTracker.updateEcheladder(player);
 	}
 	
 	public void checkBonus(byte type)
@@ -77,5 +84,7 @@ public class Echeladder
 		byte[] bonuses = nbt.getByteArray("rugBonuses");
 		for(int i = 0; i < underlingBonuses.length && i < bonuses.length; i++)
 			underlingBonuses[i] = bonuses[i] != 0;
+		
+		name = nbt.getString("username");
 	}
 }

@@ -24,6 +24,8 @@ public class MinestuckPlayerData {
 	static GristSet targetGrist;
 	@SideOnly(Side.CLIENT)
 	public static Title title;
+	@SideOnly(Side.CLIENT)
+	public static int rug;
 	
 	
 	public static void onPacketRecived(GristCachePacket packet) {

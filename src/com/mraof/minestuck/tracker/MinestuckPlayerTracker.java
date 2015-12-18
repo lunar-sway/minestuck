@@ -27,6 +27,7 @@ import com.mraof.minestuck.network.PlayerDataPacket;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.MinestuckPlayerData;
@@ -82,6 +83,7 @@ public class MinestuckPlayerTracker {
 		
 		updateGristCache(UsernameHandler.encode(player.getCommandSenderName()));
 		updateTitle(player);
+		updateEcheladder(player);
 		
 		if(firstTime)
 			MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.COLOR), player);
@@ -165,7 +167,7 @@ public class MinestuckPlayerTracker {
 		}
 	}
 	
-	public void updateTitle(EntityPlayer player)
+	public static void updateTitle(EntityPlayer player)
 	{
 		String username = UsernameHandler.encode(player.getCommandSenderName());
 		Title newTitle = MinestuckPlayerData.getTitle(username);
@@ -174,6 +176,14 @@ public class MinestuckPlayerTracker {
 		MinestuckPacket packet = MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.TITLE, newTitle.getHeroClass(), newTitle.getHeroAspect());
 		MinestuckChannelHandler.sendToPlayer(packet, player);
 	}
+	
+	public static void updateEcheladder(EntityPlayer player)
+	{
+		Echeladder echeladder = MinestuckPlayerData.getData(player).echeladder;
+		MinestuckPacket packet = MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.ECHELADDER, echeladder.getRug(), echeladder.getProgress());
+		MinestuckChannelHandler.sendToPlayer(packet, player);
+	}
+	
 	public static void updateLands(EntityPlayer player)
 	{
 		MinestuckPacket packet = MinestuckPacket.makePacket(Type.LANDREGISTER);

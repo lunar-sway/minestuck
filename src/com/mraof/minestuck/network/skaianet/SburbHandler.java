@@ -133,7 +133,7 @@ public class SburbHandler
 		}
 		
 		MinestuckPlayerData.setTitle(player, title);
-		MinestuckPlayerTracker.instance.updateTitle(MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(UsernameHandler.decode(player)));
+		MinestuckPlayerTracker.updateTitle(MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(UsernameHandler.decode(player)));
 	}
 	
 	//Decided to skip completing this because I couldn't figure out the algorithms,
