@@ -31,15 +31,20 @@ public class Echeladder
 		if(rug >= RUG_COUNT || xp < max/50)
 			return;
 		
-		while(progress + xp >= max)
+		increasment:
 		{
-			rug++;
-			xp -= (max - progress);
-			progress = 0;
-			max = getRugProgressReq();
+			while(progress + xp >= max)
+			{
+				rug++;
+				xp -= (max - progress);
+				progress = 0;
+				max = getRugProgressReq();
+				if(rug >= RUG_COUNT)
+					break increasment;
+			}
+			if(xp >= max/50)
+				progress += xp;
 		}
-		if(xp >= max/50)
-			progress += xp;
 		
 		EntityPlayer player = MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(UsernameHandler.decode(name));
 		if(player != null)
