@@ -25,7 +25,7 @@ public class MinestuckPlayerData {
 	@SideOnly(Side.CLIENT)
 	public static Title title;
 	@SideOnly(Side.CLIENT)
-	public static int rug;
+	public static int rung;
 	
 	
 	public static void onPacketRecived(GristCachePacket packet) {
@@ -99,6 +99,7 @@ public class MinestuckPlayerData {
 		{
 			PlayerData data = new PlayerData();
 			data.player = player;
+			data.echeladder = new Echeladder(player);
 			dataMap.put(player, data);
 		}
 		return dataMap.get(player);
@@ -113,7 +114,7 @@ public class MinestuckPlayerData {
 		public Modus modus;
 		public boolean givenModus;
 		public int color = -1;
-		public Echeladder echeladder = new Echeladder();
+		public Echeladder echeladder;
 		
 		private void readFromNBT(NBTTagCompound nbt)
 		{
@@ -131,6 +132,7 @@ public class MinestuckPlayerData {
 			if(nbt.hasKey("color"))
 				this.color = nbt.getInteger("color");
 			
+			echeladder = new Echeladder(player);
 			echeladder.loadEcheladder(nbt);
 		}
 		

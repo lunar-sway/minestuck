@@ -84,12 +84,12 @@ public class PlayerDataPacket extends MinestuckPacket
 			MinestuckPlayerData.title = new Title(EnumClass.getClassFromInt(i1), EnumAspect.getAspectFromInt(i2));
 		} else if(type == ECHELADDER)
 		{
-			int prev = MinestuckPlayerData.rug;
-			MinestuckPlayerData.rug = i1;
+			int prev = MinestuckPlayerData.rung;
+			MinestuckPlayerData.rung = i1;
 			//MinestuckPlayerData.progress = f;
 			if(prev != -1)
 				for(prev++; prev <= i1; prev++)
-					player.addChatMessage(new ChatComponentText("You reached rug "+(prev + 1)+'!'));
+					player.addChatMessage(new ChatComponentText("You reached rung "+(prev + 1)+'!'));
 		}
 	}
 	

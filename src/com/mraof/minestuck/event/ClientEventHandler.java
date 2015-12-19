@@ -31,7 +31,7 @@ public class ClientEventHandler
 		ContainerEditmode.clientScroll = 0;
 		CaptchaDeckHandler.clientSideModus = null;
 		MinestuckPlayerData.title = null;
-		MinestuckPlayerData.rug = -1;
+		MinestuckPlayerData.rung = -1;
 		ColorCollector.playerColor = -1;
 		ColorCollector.displaySelectionGui = false;
 		GuiDataChecker.activeComponent = null;

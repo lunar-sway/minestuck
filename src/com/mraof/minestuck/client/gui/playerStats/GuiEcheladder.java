@@ -18,7 +18,7 @@ public class GuiEcheladder extends GuiPlayerStats
 	
 	private static final ResourceLocation guiEcheladder = new ResourceLocation("minestuck", "textures/gui/echeladder.png");
 	
-	private static final int MAX_SCROLL = Echeladder.RUG_COUNT*14 - 154;
+	private static final int MAX_SCROLL = Echeladder.RUNG_COUNT*14 - 154;
 	private static final int[] backgrounds = new int[] {};
 	private static final int[] textColors = new int[] {};
 	
@@ -68,18 +68,18 @@ public class GuiEcheladder extends GuiPlayerStats
 		for(int i = 0; i < rows; i++)
 		{
 			int y = yOffset + 177 + index - i*14;
-			int rug = scrollIndex/14 + i;
-			if(rug > Echeladder.RUG_COUNT)
+			int rung = scrollIndex/14 + i;
+			if(rung > Echeladder.RUNG_COUNT)
 				break;
 			
 			int textColor = 0xFFFFFF;
-			if(rug <= MinestuckPlayerData.rug)
+			if(rung <= MinestuckPlayerData.rung)
 			{
-				textColor = textColors.length > rug ? textColors[rug] : rand.nextInt(0xFFFFFF);
-				drawRect(xOffset + 90, y, xOffset + 236, y + 12, backgrounds.length > rug ? backgrounds[rug] : (textColor^0xFFFFFFFF));
+				textColor = textColors.length > rung ? textColors[rung] : rand.nextInt(0xFFFFFF);
+				drawRect(xOffset + 90, y, xOffset + 236, y + 12, backgrounds.length > rung ? backgrounds[rung] : (textColor^0xFFFFFFFF));
 			} else rand.nextInt(0xFFFFFF);
 			
-			String s = StatCollector.canTranslate("echeladder.rug"+rug) ? StatCollector.translateToLocal("echeladder.rug"+rug) : "Rug "+(rug+1);
+			String s = StatCollector.canTranslate("echeladder.rung"+rung) ? StatCollector.translateToLocal("echeladder.rung"+rung) : "Rung "+(rung+1);
 			mc.fontRendererObj.drawString(s, xOffset+ladderXOffset - mc.fontRendererObj.getStringWidth(s) / 2, y + 2, textColor);
 		}
 		GlStateManager.color(1,1,1);

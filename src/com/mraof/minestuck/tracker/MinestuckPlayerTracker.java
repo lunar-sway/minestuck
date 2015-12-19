@@ -65,6 +65,8 @@ public class MinestuckPlayerTracker {
 			firstTime = true;
 		}
 		
+		MinestuckPlayerData.getData(encUsername).echeladder.updateEcheladderBonuses(player);
+		
 		if(CaptchaDeckHandler.getModus(player) == null && MinestuckConfig.defaultModusTypes.length > 0 && !MinestuckPlayerData.getData(player).givenModus)
 		{
 			int index = player.worldObj.rand.nextInt(MinestuckConfig.defaultModusTypes.length);
@@ -180,7 +182,7 @@ public class MinestuckPlayerTracker {
 	public static void updateEcheladder(EntityPlayer player)
 	{
 		Echeladder echeladder = MinestuckPlayerData.getData(player).echeladder;
-		MinestuckPacket packet = MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.ECHELADDER, echeladder.getRug(), echeladder.getProgress());
+		MinestuckPacket packet = MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.ECHELADDER, echeladder.getRung(), echeladder.getProgress());
 		MinestuckChannelHandler.sendToPlayer(packet, player);
 	}
 	
