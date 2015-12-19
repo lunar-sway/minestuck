@@ -25,25 +25,25 @@ public class Echeladder
 		return (int) (Math.pow(1.4, rug)*5);
 	}
 	
-	public void increaseXP(int xp)
+	public void increaseEXP(int exp)
 	{
 		int max = getRugProgressReq();
-		if(rug >= RUG_COUNT || xp < max/50)
+		if(rug >= RUG_COUNT || exp < max/50)
 			return;
 		
 		increasment:
 		{
-			while(progress + xp >= max)
+			while(progress + exp >= max)
 			{
 				rug++;
-				xp -= (max - progress);
+				exp -= (max - progress);
 				progress = 0;
 				max = getRugProgressReq();
 				if(rug >= RUG_COUNT)
 					break increasment;
 			}
-			if(xp >= max/50)
-				progress += xp;
+			if(exp >= max/50)
+				progress += exp;
 		}
 		
 		EntityPlayer player = MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(UsernameHandler.decode(name));
@@ -56,7 +56,7 @@ public class Echeladder
 		if(type >= UNDERLING_BONUS_OFFSET && type < UNDERLING_BONUS_OFFSET + underlingBonuses.length && !underlingBonuses[type])
 		{
 			underlingBonuses[type] = true;
-			increaseXP(UNDERLING_BONUSES[type]);
+			increaseEXP(UNDERLING_BONUSES[type]);
 		}
 	}
 	

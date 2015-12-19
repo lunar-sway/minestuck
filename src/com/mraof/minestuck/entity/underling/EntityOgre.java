@@ -10,9 +10,11 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
+import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
+import com.mraof.minestuck.util.MinestuckPlayerData;
 
 //Makes non-stop ogre puns
 public class EntityOgre extends EntityUnderling 
@@ -69,6 +71,9 @@ public class EntityOgre extends EntityUnderling
 		if(this.dead && entity != null && entity instanceof EntityPlayerMP)
 		{
 			((EntityPlayerMP) entity).triggerAchievement(MinestuckAchievementHandler.killOgre);
+			Echeladder ladder = MinestuckPlayerData.getData((EntityPlayerMP) entity).echeladder;
+			ladder.increaseEXP(100);
+			ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 1));
 		}
 	}
 	

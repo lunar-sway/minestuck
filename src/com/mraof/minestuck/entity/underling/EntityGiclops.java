@@ -15,9 +15,11 @@ import net.minecraftforge.common.ForgeHooks;
 
 import com.mraof.minestuck.entity.IEntityMultiPart;
 import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
+import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
+import com.mraof.minestuck.util.MinestuckPlayerData;
 
 public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 {
@@ -165,6 +167,9 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 		if(this.dead && entity != null && entity instanceof EntityPlayerMP)
 		{
 			((EntityPlayerMP) entity).triggerAchievement(MinestuckAchievementHandler.killGiclops);
+			Echeladder ladder = MinestuckPlayerData.getData((EntityPlayerMP) entity).echeladder;
+			ladder.increaseEXP(1000);
+			ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 3));
 		}
 	}
 	

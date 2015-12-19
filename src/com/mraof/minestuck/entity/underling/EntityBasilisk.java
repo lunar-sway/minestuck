@@ -3,6 +3,7 @@ package com.mraof.minestuck.entity.underling;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.DifficultyInstance;
@@ -10,8 +11,10 @@ import net.minecraft.world.World;
 
 import com.mraof.minestuck.entity.IEntityMultiPart;
 import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
+import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristSet;
+import com.mraof.minestuck.util.MinestuckPlayerData;
 
 public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart 
 {
@@ -125,6 +128,19 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	public void onPartDeath(Entity entityPart, int id) 
 	{
 
+	}
+	
+	@Override
+	public void onDeath(DamageSource cause)
+	{
+		super.onDeath(cause);
+		Entity entity = cause.getEntity();
+		if(this.dead && entity != null && entity instanceof EntityPlayerMP)
+		{
+			Echeladder ladder = MinestuckPlayerData.getData((EntityPlayerMP) entity).echeladder;
+			ladder.increaseEXP(400);
+			ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 2));
+		}
 	}
 	
 	@Override

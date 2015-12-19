@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBuf;
 import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.fml.relauncher.Side;
 
 import com.mraof.minestuck.util.ColorCollector;
@@ -83,8 +84,12 @@ public class PlayerDataPacket extends MinestuckPacket
 			MinestuckPlayerData.title = new Title(EnumClass.getClassFromInt(i1), EnumAspect.getAspectFromInt(i2));
 		} else if(type == ECHELADDER)
 		{
+			int prev = MinestuckPlayerData.rug;
 			MinestuckPlayerData.rug = i1;
 			//MinestuckPlayerData.progress = f;
+			if(prev != -1)
+				for(prev++; prev <= i1; prev++)
+					player.addChatMessage(new ChatComponentText("You reached rug "+(prev + 1)+'!'));
 		}
 	}
 	
