@@ -30,6 +30,7 @@ public class MinestuckConfigPacket extends MinestuckPacket
 	boolean cardRecipe;
 	boolean disableGristWidget;
 	boolean dataChecker;
+	boolean preEntryEcheladder;
 	boolean[] deployValues;
 	
 	String lanHost;
@@ -57,6 +58,7 @@ public class MinestuckConfigPacket extends MinestuckPacket
 			data.writeBoolean(MinestuckConfig.disableGristWidget);
 			data.writeByte(MinestuckConfig.treeModusSetting);
 			data.writeBoolean((Boolean) dat[1]);
+			data.writeBoolean(MinestuckConfig.preEntryRungLimit <= 0);
 		}
 		
 		return this;
@@ -87,6 +89,7 @@ public class MinestuckConfigPacket extends MinestuckPacket
 			disableGristWidget = data.readBoolean();
 			treeModusSetting = data.readByte();
 			dataChecker = data.readBoolean();
+			preEntryEcheladder = data.readBoolean();
 		}
 		
 		return this;
@@ -114,6 +117,7 @@ public class MinestuckConfigPacket extends MinestuckPacket
 			MinestuckConfig.clientDisableGristWidget = disableGristWidget;
 			MinestuckConfig.clientTreeAutobalance = treeModusSetting;
 			MinestuckConfig.dataCheckerAccess = dataChecker;
+			MinestuckConfig.preEntryEcheladder = preEntryEcheladder;
 		}
 	}
 

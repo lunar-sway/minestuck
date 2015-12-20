@@ -6,6 +6,7 @@ import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.fml.relauncher.Side;
 
 import com.mraof.minestuck.util.ColorCollector;
@@ -89,7 +90,10 @@ public class PlayerDataPacket extends MinestuckPacket
 			//MinestuckPlayerData.progress = f;
 			if(prev != -1)
 				for(prev++; prev <= i1; prev++)
-					player.addChatMessage(new ChatComponentText("You reached rung "+(prev + 1)+'!'));
+				{
+					String s = StatCollector.canTranslate("echeladder.rung"+prev) ? StatCollector.translateToLocal("echeladder.rung"+prev) : String.valueOf(prev+1);
+					player.addChatMessage(new ChatComponentText("You reached rung "+s+'!'));
+				}
 		}
 	}
 	

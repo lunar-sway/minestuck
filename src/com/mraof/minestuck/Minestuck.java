@@ -169,12 +169,13 @@ public class Minestuck
 		MinecraftForge.EVENT_BUS.register(ServerEditHandler.instance);
 		MinecraftForge.EVENT_BUS.register(MinestuckAchievementHandler.instance);
 		MinecraftForge.EVENT_BUS.register(MinestuckPlayerTracker.instance);
+		MinecraftForge.EVENT_BUS.register(ServerEventHandler.instance);
 		
 		FMLCommonHandler.instance().bus().register(MinestuckPlayerTracker.instance);
 		FMLCommonHandler.instance().bus().register(ServerEditHandler.instance);
 		FMLCommonHandler.instance().bus().register(MinestuckChannelHandler.instance);
 		FMLCommonHandler.instance().bus().register(new ConnectionListener());
-		FMLCommonHandler.instance().bus().register(new ServerEventHandler());
+		FMLCommonHandler.instance().bus().register(ServerEventHandler.instance);
 		
 		if(event.getSide().isClient())
 		{

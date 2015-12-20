@@ -19,8 +19,8 @@ public class GuiEcheladder extends GuiPlayerStats
 	private static final ResourceLocation guiEcheladder = new ResourceLocation("minestuck", "textures/gui/echeladder.png");
 	
 	private static final int MAX_SCROLL = Echeladder.RUNG_COUNT*14 - 154;
-	private static final int[] backgrounds = new int[] {};
-	private static final int[] textColors = new int[] {};
+	private static final int[] backgrounds = new int[] {0xFF4FD400, 0xFFFDFF2B, 0xFFFF2B8F, 0xFF24D9D7, 0xFFA120AC, 0xFFFFAE00, 0xFFA8FFA8, 0xFF345AFF, 0xFFDFBB6C, 0xFFB1FFFF, 0xFFF12B26, 0xFFD885D9, 0xFFE4FF00, 0xFF3DFF17};
+	private static final int[] textColors = new int[] {0xFDFF2B, 0xFF942B, 0x000000, 0x008EA0, 0x8AFF33, 0xF80000, 0xFFB8AF, 0x00FFF0, 0xFF0000, 0x595959, 0xFFFFFF, 0x6C00FF, 0x6D9A00, 0x00970B};
 	
 	private static final int ladderXOffset = 163, ladderYOffset = 25;
 	private static final int rows = 12;

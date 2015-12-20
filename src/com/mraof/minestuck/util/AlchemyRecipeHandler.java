@@ -659,6 +659,7 @@ public class AlchemyRecipeHandler
 		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Items.iron_sword, 1, 0), 1, 1, 2));
 		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Items.ender_pearl, 1, 0), 1, 2, 1));
 		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Items.arrow, 1, 0), 2, 10, 6));
+		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Items.bread, 1, 0), 1, 4, 8));
 		
 		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(blockStorage, 1, 1), 1, 1, 3));
 		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(clawHammer, 1, 0), 1, 1, 5));
@@ -669,7 +670,6 @@ public class AlchemyRecipeHandler
 		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(transportalizer, 1, 0), 1, 1, 2));
 		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(rawCruxite, 1, 0), 1, 5, 5));
 		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(homesSmellYaLater, 1, 0), 1, 1, 2));
-		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(pogoHammer, 1, 0), 1, 1, 2));
 		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(spearCane, 1, 0), 1, 1, 2));
 	}
 	

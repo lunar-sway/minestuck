@@ -20,6 +20,7 @@ import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.inventory.ContainerHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 
 public class MinestuckConfig
@@ -48,6 +49,8 @@ public class MinestuckConfig
 	public static boolean dataCheckerAccess;
 	@SideOnly(Side.CLIENT)
 	public static boolean alchemyIcons;
+	@SideOnly(Side.CLIENT)
+	public static boolean preEntryEcheladder;
 	
 	public static boolean hardMode = false;
 	public static boolean generateCruxiteOre;
@@ -78,6 +81,7 @@ public class MinestuckConfig
 	 * (Will try to put a better explanation somewhere else later)
 	 */
 	public static int escapeFailureMode;
+	public static int preEntryRungLimit;
 	public static byte treeModusSetting;
 	/**
 	 * An option related to dropping the sylladex on death
@@ -150,6 +154,8 @@ public class MinestuckConfig
 		adaptEntryBlockHeight = config.get("General", "adaptEntryBlockHeight", true, "Adapt the transferred height to make the top non-air block to be placed at y:128. Makes entry take longer.").setLanguageKey("minestuck.config.adaptEntryBlockHeight").getBoolean();
 		allowSecondaryConnections = config.get("General", "secondaryConnections", true, "Set this to true to allow so-called 'secondary connections' to be created.").setLanguageKey("minestuck.config.secondaryConnections").getBoolean();	//Server lists need to be updated if this gets changeable in-game
 		disableGristWidget = config.get("General", "disableGristWidget", false).setLanguageKey("minestuck.config.disableGristWidget").setRequiresWorldRestart(true).getBoolean();
+		preEntryRungLimit = config.get("General", "preEntryRungLimit", 4, "The highest rung you can get before entering medium. Note that the first rung is indexed as 0, the second as 1 and so on.", 0, Echeladder.RUNG_COUNT - 1).setLanguageKey("minestuck.config.preEntryRungLimit").setRequiresWorldRestart(true).getInt();
+		
 		setting = config.get("General", "dataCheckerPermission", "opsAndGamemode", "Determines who's allowed to access the data checker. \"none\": No one is allowed. \"ops\": only those with a command permission of level 2 or more may access the data ckecker. (for single player, that would be if cheats are turned on) \"gamemode\": Only players with the creative or spectator gamemode may view the data checker. \"opsAndGamemode\": Combination of \"ops\" and \"gamemode\". \"anyone\": No access restrictions are used.",
 				new String[] {"none", "ops", "gamemode", "opsAndGamemode", "anyone"}).setLanguageKey("minestuck.config.dataCheckerPermission").getString();
 		if(setting.equals("none")) dataCheckerPermission = 0;

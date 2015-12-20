@@ -2,6 +2,9 @@ package com.mraof.minestuck.util;
 
 import java.util.UUID;
 
+import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.network.skaianet.SburbConnection;
+import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -39,23 +42,27 @@ public class Echeladder
 	
 	public void increaseEXP(int exp)
 	{
-		int max = getRungProgressReq();
-		if(rung >= RUNG_COUNT || exp < max/50)
+		SburbConnection c = SkaianetHandler.getMainConnection(name, true);
+		int topRung = c != null && c.enteredGame() ? RUNG_COUNT : MinestuckConfig.preEntryRungLimit;
+		int expReq = getRungProgressReq();
+		if(rung >= topRung || exp < expReq/50)
 			return;
 		
 		int prevRung = rung;
 		increasment:
 		{
-			while(progress + exp >= max)
+			while(progress + exp >= expReq)
 			{
 				rung++;
-				exp -= (max - progress);
+				exp -= (expReq - progress);
 				progress = 0;
-				max = getRungProgressReq();
-				if(rung >= RUNG_COUNT)
+				expReq = getRungProgressReq();
+				if(rung >= topRung)
 					break increasment;
+				if(rung > prevRung + 1)
+					exp = (int) (exp/1.5);
 			}
-			if(exp >= max/50)
+			if(exp >= expReq/50)
 				progress += exp;
 		}
 		
