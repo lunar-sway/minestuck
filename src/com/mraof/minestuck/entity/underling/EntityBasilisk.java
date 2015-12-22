@@ -1,12 +1,8 @@
 package com.mraof.minestuck.entity.underling;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.entity.IEntityMultiPart;
@@ -14,6 +10,7 @@ import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
 import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristSet;
+import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 
 public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart 
@@ -32,7 +29,7 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	@Override
 	public GristSet getGristSpoils() 
 	{
-		return GristHelper.getRandomDrop(type, 4);
+		return GristHelper.getRandomDrop(type, 4.5);
 	}
 
 	@Override
@@ -44,16 +41,11 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 		this.tasks.removeTask(this.entityAIAttackOnCollideWithRate);
 		this.tasks.addTask(4, entityAIAttackOnCollideWithRate);
 	}
-	@Override
-	public boolean attackEntityAsMob(Entity par1Entity) 
-	{
-		return par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this), (this.type.getPower() + 1) * 2);
-	}
 	
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return type != null ? 12 * type.getPower() + 50 : 0;
+		return type != null ? 15 * type.getPower() + 65 : 1;
 	}
 
 	@Override
@@ -66,6 +58,19 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	protected float getKnockbackResistance()
 	{
 		return 0.6F;
+	}
+	
+	@Override
+	protected double getAttackDamage()
+	{
+		return this.type.getPower()*2 + 4;
+	}
+	
+	@Override
+	protected void applyGristType(GristType type, boolean fullHeal)
+	{
+		super.applyGristType(type, fullHeal);
+		this.experienceValue = (int) (6 * type.getPower() + 4);
 	}
 	
 	@Override
@@ -142,27 +147,4 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 			ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 2));
 		}
 	}
-	
-	@Override
-	public void readFromNBT(NBTTagCompound tagCompund)
-	{
-		super.readFromNBT(tagCompund);
-		this.experienceValue = (int) (6 * type.getPower() + 4);
-	}
-	
-	@Override
-	public void readSpawnData(ByteBuf additionalData)
-	{
-		super.readSpawnData(additionalData);
-		this.experienceValue = (int) (6 * type.getPower() + 4);
-	}
-	
-	@Override
-	public IEntityLivingData onSpawnFirstTime(DifficultyInstance difficulty, IEntityLivingData livingData)
-	{
-		livingData = super.onSpawnFirstTime(difficulty, livingData);
-		this.experienceValue = (int) (6 * type.getPower() + 4);
-		return livingData;
-	}
-	
 }

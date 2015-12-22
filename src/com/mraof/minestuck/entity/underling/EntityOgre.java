@@ -1,18 +1,15 @@
 package com.mraof.minestuck.entity.underling;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
 import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristSet;
+import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 
@@ -30,13 +27,9 @@ public class EntityOgre extends EntityUnderling
 	@Override
 	public GristSet getGristSpoils()
 	{
-		return GristHelper.getRandomDrop(type,3);
+		return GristHelper.getRandomDrop(type, 3);
 	}
-	@Override
-	public boolean attackEntityAsMob(Entity par1Entity) 
-	{
-		return par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this), (this.type.getPower()) * 1.5F + 3);
-	}
+	
 	@Override
 	protected void setCombatTask() 
 	{
@@ -54,13 +47,26 @@ public class EntityOgre extends EntityUnderling
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return type != null ? 9 * type.getPower() + 28 : 0;
+		return type != null ? 10.5F * type.getPower() + 29 : 1;
 	}
 	
 	@Override
 	protected float getKnockbackResistance()
 	{
 		return 0.4F;
+	}
+	
+	@Override
+	protected double getAttackDamage()
+	{
+		return this.type.getPower() * 1.5 + 4;
+	}
+	
+	@Override
+	protected void applyGristType(GristType type, boolean fullHeal)
+	{
+		super.applyGristType(type, fullHeal);
+		this.experienceValue = (int) (5 * type.getPower() + 4);
 	}
 	
 	@Override
@@ -72,30 +78,8 @@ public class EntityOgre extends EntityUnderling
 		{
 			((EntityPlayerMP) entity).triggerAchievement(MinestuckAchievementHandler.killOgre);
 			Echeladder ladder = MinestuckPlayerData.getData((EntityPlayerMP) entity).echeladder;
-			ladder.increaseEXP(100);
+			ladder.increaseEXP(150);
 			ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 1));
 		}
-	}
-	
-	@Override
-	public void readFromNBT(NBTTagCompound tagCompund)
-	{
-		super.readFromNBT(tagCompund);
-		this.experienceValue = (int) (5 * type.getPower() + 4);
-	}
-	
-	@Override
-	public void readSpawnData(ByteBuf additionalData)
-	{
-		super.readSpawnData(additionalData);
-		this.experienceValue = (int) (5 * type.getPower() + 4);
-	}
-	
-	@Override
-	public IEntityLivingData onSpawnFirstTime(DifficultyInstance difficulty, IEntityLivingData livingData)
-	{
-		livingData = super.onSpawnFirstTime(difficulty, livingData);
-		this.experienceValue = (int) (5 * type.getPower() + 4);
-		return livingData;
 	}
 }

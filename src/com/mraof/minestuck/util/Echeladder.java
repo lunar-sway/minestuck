@@ -22,7 +22,7 @@ public class Echeladder
 	
 	private static final UUID echeladderHealthBoostModifierUUID = UUID.fromString("5b49a45b-ff22-4720-8f10-dfd745c3abb8");
 	private static final UUID echeladderDamageBoostModifierUUID = UUID.fromString("a74176fd-bf4e-4153-bb68-197dbe4109b2");
-	private static final int[] UNDERLING_BONUSES = new int[] {10, 120, 450, 1200};	//Bonuses for first time killing an underling
+	private static final int[] UNDERLING_BONUSES = new int[] {10, 120, 450, 2500};	//Bonuses for first time killing an underling
 	
 	private String name;
 	private int rung;

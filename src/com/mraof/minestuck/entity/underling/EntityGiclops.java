@@ -1,15 +1,11 @@
 package com.mraof.minestuck.entity.underling;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
@@ -18,6 +14,7 @@ import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
 import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristSet;
+import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 
@@ -40,7 +37,7 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 	@Override
 	public GristSet getGristSpoils()
 	{
-		return GristHelper.getRandomDrop(type, 6);
+		return GristHelper.getRandomDrop(type, 7);
 	}
 
 	@Override
@@ -63,6 +60,19 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 	protected float getKnockbackResistance()
 	{
 		return 0.9F;
+	}
+	
+	@Override
+	protected double getAttackDamage()
+	{
+		return this.type.getPower() * 2.5 + 4.5;
+	}
+	
+	@Override
+	protected void applyGristType(GristType type, boolean fullHeal)
+	{
+		super.applyGristType(type, fullHeal);
+		this.experienceValue = (int) (7 * type.getPower() + 5);
 	}
 	
 	@Override
@@ -92,52 +102,54 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
         this.isAirBorne = true;
         ForgeHooks.onLivingJump(this);
 	}
-	@Override
-	public boolean attackEntityAsMob(Entity par1Entity) 
-	{
-		return par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this), this.type.getPower() * 2.2F + 4.5F);
-	}
+	
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return type != null ? 19 * (type.getPower() + 1) + 48 : 0;
+		return type != null ? 21*type.getPower() + 108 : 1;
 	}
+	
 	@Override
 	public void onEntityUpdate() 
 	{
 		super.onEntityUpdate();
 		this.updatePartPositions();
 	}
-
+	
 	@Override
 	public void setPositionAndRotation(double par1, double par3, double par5, float par7, float par8) 
 	{
 		super.setPositionAndRotation(par1, par3, par5, par7, par8);
 		this.updatePartPositions();
 	}
+	
 	@Override
 	public Entity[] getParts() 
 	{
 		return new Entity[] {topPart};
 	}
+	
 	@Override
 	public World getWorld() 
 	{
 		return this.worldObj;
 	}
+	
 	@Override
 	protected void collideWithEntity(Entity par1Entity) 
 	{
 		if(par1Entity != topPart)
 			super.collideWithEntity(par1Entity);
 	}
+	
 	@Override
 	public boolean attackEntityFromPart(Entity entityPart, DamageSource source, float damage) 
 	{
 		return this.attackEntityFrom(source, damage);
 	}
+	
 	@Override
-	public void updatePartPositions() 
+	public void updatePartPositions()
 	{
 		float f1 = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw);
 		double topPartPosX = (this.posX + -Math.sin(f1 / 180.0 * Math.PI) * 2);
@@ -168,31 +180,9 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 		{
 			((EntityPlayerMP) entity).triggerAchievement(MinestuckAchievementHandler.killGiclops);
 			Echeladder ladder = MinestuckPlayerData.getData((EntityPlayerMP) entity).echeladder;
-			ladder.increaseEXP(1000);
+			ladder.increaseEXP(2200);
 			ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 3));
 		}
-	}
-	
-	@Override
-	public void readFromNBT(NBTTagCompound tagCompund)
-	{
-		super.readFromNBT(tagCompund);
-		this.experienceValue = (int) (7 * type.getPower() + 5);
-	}
-	
-	@Override
-	public void readSpawnData(ByteBuf additionalData)
-	{
-		super.readSpawnData(additionalData);
-		this.experienceValue = (int) (7 * type.getPower() + 5);
-	}
-	
-	@Override
-	public IEntityLivingData onSpawnFirstTime(DifficultyInstance difficulty, IEntityLivingData livingData)
-	{
-		livingData = super.onSpawnFirstTime(difficulty, livingData);
-		this.experienceValue = (int) (7 * type.getPower() + 5);
-		return livingData;
 	}
 	
 }

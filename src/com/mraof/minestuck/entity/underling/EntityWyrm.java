@@ -89,4 +89,10 @@ public class EntityWyrm extends EntityUnderling implements IEntityMultiPart
 	{
 		return 0;
 	}
+	
+	@Override
+	protected double getAttackDamage()
+	{
+		return 0;
+	}
 }
