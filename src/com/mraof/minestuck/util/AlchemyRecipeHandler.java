@@ -522,7 +522,7 @@ public class AlchemyRecipeHandler
 		
 		//add grist conversions
 		GristRegistry.addGristConversion(new ItemStack(coloredDirt, 1), false, new GristSet(new GristType[] {GristType. Build}, new int[] {1}));
-		GristRegistry.addGristConversion(new ItemStack(blockMachine,1,4), true, new GristSet(new GristType[] {GristType. Build,GristType.Garnet,GristType.Ruby}, new int[] {150, 25, 10}));
+		GristRegistry.addGristConversion(new ItemStack(blockMachine,1,4), true, new GristSet(new GristType[] {GristType. Build,GristType.Garnet,GristType.Ruby}, new int[] {550, 55, 34}));
 		GristRegistry.addGristConversion(new ItemStack(blockStorage, 1, 1), true, new GristSet(new GristType[] {GristType. Build}, new int[] {2}));
 		GristRegistry.addGristConversion(new ItemStack(woodenSpoon), false, new GristSet(GristType.Build, 3));
 		GristRegistry.addGristConversion(new ItemStack(silverSpoon), false, new GristSet(new GristType[] {GristType.Build, GristType.Mercury}, new int[] {6, 4}));
@@ -531,24 +531,24 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(cruxiteApple, 1), false, new GristSet());
 		
 		GristRegistry.addGristConversion(new ItemStack(clawHammer), false, new GristSet(GristType.Build, 5));
-		GristRegistry.addGristConversion(new ItemStack(sledgeHammer), false, new GristSet(new GristType[] {GristType.Build, GristType.Shale}, new int[] {8, 3}));
-		GristRegistry.addGristConversion(new ItemStack(blacksmithHammer), false, new GristSet(new GristType[] {GristType.Build, GristType.Sulfur, GristType.Caulk}, new int[] {18, 8, 3}));
-		GristRegistry.addGristConversion(new ItemStack(pogoHammer), false, new GristSet(new GristType[] {GristType.Build, GristType.Shale}, new int[] {20, 12}));
-		GristRegistry.addGristConversion(new ItemStack(telescopicSassacrusher), false, new GristSet(new GristType[] {GristType.Shale, GristType.Tar, GristType.Mercury}, new int[] {20, 8, 13}));
-		GristRegistry.addGristConversion(new ItemStack(fearNoAnvil), false, new GristSet(new GristType[] {GristType.Build, GristType.Garnet, GristType.Diamond, GristType.Gold, GristType.Quartz}, new int[] {120, 55, 20, 20, 1}));
+		GristRegistry.addGristConversion(new ItemStack(sledgeHammer), false, new GristSet(new GristType[] {GristType.Build, GristType.Shale}, new int[] {10, 4}));
+		GristRegistry.addGristConversion(new ItemStack(blacksmithHammer), false, new GristSet(new GristType[] {GristType.Build, GristType.Sulfur, GristType.Caulk}, new int[] {18, 9, 5}));
+		GristRegistry.addGristConversion(new ItemStack(pogoHammer), false, new GristSet(new GristType[] {GristType.Build, GristType.Shale}, new int[] {20, 16}));
+		GristRegistry.addGristConversion(new ItemStack(telescopicSassacrusher), false, new GristSet(new GristType[] {GristType.Shale, GristType.Tar, GristType.Mercury}, new int[] {45, 20, 33}));
+		GristRegistry.addGristConversion(new ItemStack(fearNoAnvil), false, new GristSet(new GristType[] {GristType.Build, GristType.Garnet, GristType.Diamond, GristType.Gold, GristType.Quartz}, new int[] {1200, 150, 45, 45, 1}));
 		
-		GristRegistry.addGristConversion(new ItemStack(ninjaSword), false, new GristSet(new GristType[] {GristType.Build, GristType.Quartz, GristType.Rust}, new int[] {20, 8, 6}));
-		GristRegistry.addGristConversion(new ItemStack(regisword), false, new GristSet(new GristType[] {GristType.Build, GristType.Tar,GristType.Gold}, new int[] {64, 24, 10}));
-		GristRegistry.addGristConversion(new ItemStack(katana), false, new GristSet(new GristType[] {GristType.Build, GristType.Diamond, GristType.Quartz, GristType.Ruby}, new int[] {110, 24, 35, 18}));
+		GristRegistry.addGristConversion(new ItemStack(ninjaSword), false, new GristSet(new GristType[] {GristType.Build, GristType.Quartz, GristType.Rust}, new int[] {20, 10, 6}));
+		GristRegistry.addGristConversion(new ItemStack(regisword), false, new GristSet(new GristType[] {GristType.Build, GristType.Tar,GristType.Gold}, new int[] {250, 34, 25}));
+		GristRegistry.addGristConversion(new ItemStack(katana), false, new GristSet(new GristType[] {GristType.Build, GristType.Diamond, GristType.Quartz, GristType.Ruby}, new int[] {1100, 63, 95, 54}));
 		
-		GristRegistry.addGristConversion(new ItemStack(regiSickle), false, new GristSet(new GristType[] {GristType.Build, GristType.Tar,GristType.Gold}, new int[] {60, 20, 8}));
+		GristRegistry.addGristConversion(new ItemStack(regiSickle), false, new GristSet(new GristType[] {GristType.Build, GristType.Tar,GristType.Gold}, new int[] {200, 30, 22}));
 		GristRegistry.addGristConversion(new ItemStack(sickle), false, new GristSet(new GristType[] {GristType.Build}, new int[] {5}));
-		GristRegistry.addGristConversion(new ItemStack(homesSmellYaLater), false, new GristSet(new GristType[] {GristType.Build, GristType.Amber, GristType.Amethyst}, new int[] {20, 8, 4}));
-		GristRegistry.addGristConversion(new ItemStack(spearCane), false, new GristSet(new GristType[] {GristType.Build, GristType.Mercury, GristType.Quartz}, new int[] {20, 8, 6}));
-		GristRegistry.addGristConversion(new ItemStack(transportalizer), false, new GristSet(new GristType[] {GristType.Build, GristType.Garnet, GristType.Rust, GristType.Uranium}, new int[] {110, 25, 25, 12}));
-		GristRegistry.addGristConversion(new ItemStack(modusCard, 1, 2), true, new GristSet(GristType.Build, 90));
+		GristRegistry.addGristConversion(new ItemStack(homesSmellYaLater), false, new GristSet(new GristType[] {GristType.Build, GristType.Amber, GristType.Amethyst}, new int[] {22, 8, 6}));
+		GristRegistry.addGristConversion(new ItemStack(spearCane), false, new GristSet(new GristType[] {GristType.Build, GristType.Mercury, GristType.Quartz}, new int[] {21, 8, 7}));
+		GristRegistry.addGristConversion(new ItemStack(transportalizer), false, new GristSet(new GristType[] {GristType.Build, GristType.Garnet, GristType.Rust, GristType.Uranium}, new int[] {300, 25, 35, 20}));
+		GristRegistry.addGristConversion(new ItemStack(modusCard, 1, 2), true, new GristSet(GristType.Build, 140));
 		GristRegistry.addGristConversion(new ItemStack(goldSeeds), new GristSet(GristType.Gold, 3));
-		GristRegistry.addGristConversion(new ItemStack(modusCard, 1, 3), true, new GristSet(GristType.Build, 200));
+		GristRegistry.addGristConversion(new ItemStack(modusCard, 1, 3), true, new GristSet(GristType.Build, 400));
 		GristRegistry.addGristConversion(new ItemStack(metalBoat, 1, 0), true, new GristSet(GristType.Rust, 30));
 		GristRegistry.addGristConversion(new ItemStack(metalBoat, 1, 1), true, new GristSet(GristType.Gold, 30));
 		GristRegistry.addGristConversion(new ItemStack(layeredSand), new GristSet(GristType.Build, 1));
@@ -557,17 +557,17 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(minestuckBucket, 1, 2), true, new GristSet(new GristType[] {GristType.Rust, GristType.Amethyst, GristType.Chalk}, new int[] {27, 8, 8}));
 		GristRegistry.addGristConversion(new ItemStack(obsidianBucket), new GristSet(new GristType[] {GristType.Rust, GristType.Cobalt, GristType.Tar, GristType.Build}, new int[] {27, 8, 16, 4}));
 		GristRegistry.addGristConversion(new ItemStack(glowingMushroom), new GristSet(new GristType[] {GristType.Build, GristType.Shale, GristType.Mercury}, new int[] {5, 3, 2}));
-		GristRegistry.addGristConversion(new ItemStack(emeraldSword), false, new GristSet(new GristType[] {GristType.Build, GristType.Diamond, GristType.Ruby}, new int[] {120, 41, 36}));
-		GristRegistry.addGristConversion(new ItemStack(emeraldAxe), false, new GristSet(new GristType[] {GristType.Build, GristType.Diamond, GristType.Ruby}, new int[] {100, 38, 34}));
-		GristRegistry.addGristConversion(new ItemStack(emeraldPickaxe), false, new GristSet(new GristType[] {GristType.Build, GristType.Diamond, GristType.Ruby}, new int[] {130, 43, 40}));
-		GristRegistry.addGristConversion(new ItemStack(emeraldShovel), false, new GristSet(new GristType[] {GristType.Build, GristType.Diamond, GristType.Ruby}, new int[] {100, 35, 34}));
-		GristRegistry.addGristConversion(new ItemStack(emeraldHoe), false, new GristSet(new GristType[] {GristType.Build, GristType.Diamond, GristType.Ruby}, new int[] {80, 32, 28}));
-		GristRegistry.addGristConversion(new ItemStack(prismarineHelmet), new GristSet(new GristType[] {GristType.Build, GristType.Cobalt, GristType.Marble}, new int[] {50, 25, 10}));
-		GristRegistry.addGristConversion(new ItemStack(prismarineChestplate), new GristSet(new GristType[] {GristType.Build, GristType.Cobalt, GristType.Marble}, new int[] {80, 40, 16}));
-		GristRegistry.addGristConversion(new ItemStack(prismarineLeggings), new GristSet(new GristType[] {GristType.Build, GristType.Cobalt, GristType.Marble}, new int[] {70, 35, 14}));
-		GristRegistry.addGristConversion(new ItemStack(prismarineBoots), new GristSet(new GristType[] {GristType.Build, GristType.Cobalt, GristType.Marble}, new int[] {40, 20, 8}));
+		GristRegistry.addGristConversion(new ItemStack(emeraldSword), false, new GristSet(new GristType[] {GristType.Build, GristType.Diamond, GristType.Ruby}, new int[] {1200, 61, 46}));
+		GristRegistry.addGristConversion(new ItemStack(emeraldAxe), false, new GristSet(new GristType[] {GristType.Build, GristType.Diamond, GristType.Ruby}, new int[] {1000, 58, 44}));
+		GristRegistry.addGristConversion(new ItemStack(emeraldPickaxe), false, new GristSet(new GristType[] {GristType.Build, GristType.Diamond, GristType.Ruby}, new int[] {1300, 53, 50}));
+		GristRegistry.addGristConversion(new ItemStack(emeraldShovel), false, new GristSet(new GristType[] {GristType.Build, GristType.Diamond, GristType.Ruby}, new int[] {1000, 55, 44}));
+		GristRegistry.addGristConversion(new ItemStack(emeraldHoe), false, new GristSet(new GristType[] {GristType.Build, GristType.Diamond, GristType.Ruby}, new int[] {800, 52, 38}));
+		GristRegistry.addGristConversion(new ItemStack(prismarineHelmet), new GristSet(new GristType[] {GristType.Build, GristType.Cobalt, GristType.Marble}, new int[] {75, 30, 15}));
+		GristRegistry.addGristConversion(new ItemStack(prismarineChestplate), new GristSet(new GristType[] {GristType.Build, GristType.Cobalt, GristType.Marble}, new int[] {120, 48, 24}));
+		GristRegistry.addGristConversion(new ItemStack(prismarineLeggings), new GristSet(new GristType[] {GristType.Build, GristType.Cobalt, GristType.Marble}, new int[] {105, 42, 21}));
+		GristRegistry.addGristConversion(new ItemStack(prismarineBoots), new GristSet(new GristType[] {GristType.Build, GristType.Cobalt, GristType.Marble}, new int[] {60, 24, 12}));
 		
-		GristRegistry.addGristConversion(new ItemStack(skaiaFork), new GristSet(new GristType[] {GristType.Build, GristType.Quartz, GristType.Gold, GristType.Amethyst}, new int[]{90,30,11,15}));
+		GristRegistry.addGristConversion(new ItemStack(skaiaFork), new GristSet(new GristType[] {GristType.Build, GristType.Quartz, GristType.Gold, GristType.Amethyst}, new int[]{900, 75, 38, 53}));
 		GristRegistry.addGristConversion(new ItemStack(spork), new GristSet(new GristType[]{GristType.Build}, new int[]{13}));
 		GristRegistry.addGristConversion(new ItemStack(candy, 1, 0), new GristSet(new GristType[] {GristType.Chalk, GristType.Sulfur, GristType.Iodine}, new int[] {1, 1, 1}));
 		for(int i = 0; i < 21; i++)

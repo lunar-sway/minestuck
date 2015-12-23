@@ -50,7 +50,6 @@ public class ServerEventHandler
 	@SubscribeEvent(priority=EventPriority.LOWEST, receiveCanceled=false)
 	public void onEntityDeath(LivingDeathEvent event)
 	{
-		Debug.print("Has entity death event");
 		if(event.entity instanceof IMob && event.source.getEntity() instanceof EntityPlayerMP)
 		{
 			EntityPlayerMP player = (EntityPlayerMP) event.source.getEntity();

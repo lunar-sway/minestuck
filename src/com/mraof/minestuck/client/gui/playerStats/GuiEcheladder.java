@@ -75,7 +75,9 @@ public class GuiEcheladder extends GuiPlayerStats
 			int textColor = 0xFFFFFF;
 			if(rung <= MinestuckPlayerData.rung)
 			{
-				textColor = textColors.length > rung ? textColors[rung] : rand.nextInt(0xFFFFFF);
+				textColor = rand.nextInt(0xFFFFFF);
+				if(textColors.length > rung)
+					textColor = textColors[rung];
 				drawRect(xOffset + 90, y, xOffset + 236, y + 12, backgrounds.length > rung ? backgrounds[rung] : (textColor^0xFFFFFFFF));
 			} else rand.nextInt(0xFFFFFF);
 			
