@@ -143,7 +143,7 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 		if(this.dead && entity != null && entity instanceof EntityPlayerMP)
 		{
 			Echeladder ladder = MinestuckPlayerData.getData((EntityPlayerMP) entity).echeladder;
-			ladder.increaseEXP(400);
+			ladder.increaseEXP((int) (100*type.getPower() + 160));
 			ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 2));
 		}
 	}

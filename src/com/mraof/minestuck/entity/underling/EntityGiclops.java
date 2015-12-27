@@ -180,7 +180,7 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 		{
 			((EntityPlayerMP) entity).triggerAchievement(MinestuckAchievementHandler.killGiclops);
 			Echeladder ladder = MinestuckPlayerData.getData((EntityPlayerMP) entity).echeladder;
-			ladder.increaseEXP(2200);
+			ladder.increaseEXP((int) (500*type.getPower() + 1000));
 			ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 3));
 		}
 	}

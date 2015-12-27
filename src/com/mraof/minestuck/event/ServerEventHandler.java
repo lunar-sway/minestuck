@@ -2,7 +2,6 @@ package com.mraof.minestuck.event;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 
 import net.minecraft.entity.monster.EntityBlaze;
