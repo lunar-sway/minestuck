@@ -14,7 +14,7 @@ public enum GristType {
 	Garnet("Garnet",0.3F),
 	Gold("Gold",0.2F), 
 	Iodine("Iodine",0.5F), 
-	Marble("Marble",0.5F), 
+	Marble("Marble",0.4F), 
 	Mercury("Mercury",0.4F), 
 	Quartz("Quartz",0.4F), 
 	Ruby("Ruby",0.3F), 

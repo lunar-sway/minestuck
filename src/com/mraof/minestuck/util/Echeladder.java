@@ -19,16 +19,19 @@ public class Echeladder
 	
 	public static final int RUNG_COUNT = 50;
 	public static final byte UNDERLING_BONUS_OFFSET = 0;
+	public static final byte ALCHEMY_BONUS_OFFSET = 15;
 	
 	private static final UUID echeladderHealthBoostModifierUUID = UUID.fromString("5b49a45b-ff22-4720-8f10-dfd745c3abb8");
 	private static final UUID echeladderDamageBoostModifierUUID = UUID.fromString("a74176fd-bf4e-4153-bb68-197dbe4109b2");
 	private static final int[] UNDERLING_BONUSES = new int[] {10, 120, 450, 2500};	//Bonuses for first time killing an underling
+	private static final int[] ALCHEMY_BONUSES = new int[] {15, 200, 1700};
 	
 	private String name;
 	private int rung;
 	private int progress;
 	
 	private boolean[] underlingBonuses = new boolean[UNDERLING_BONUSES.length];
+	private boolean[] alchemyBonuses = new boolean[ALCHEMY_BONUSES.length];
 	
 	public Echeladder(String name)
 	{
@@ -77,10 +80,14 @@ public class Echeladder
 	
 	public void checkBonus(byte type)
 	{
-		if(type >= UNDERLING_BONUS_OFFSET && type < UNDERLING_BONUS_OFFSET + underlingBonuses.length && !underlingBonuses[type])
+		if(type >= UNDERLING_BONUS_OFFSET && type < UNDERLING_BONUS_OFFSET + underlingBonuses.length && !underlingBonuses[type - UNDERLING_BONUS_OFFSET])
 		{
-			underlingBonuses[type] = true;
-			increaseEXP(UNDERLING_BONUSES[type]);
+			underlingBonuses[type - UNDERLING_BONUS_OFFSET] = true;
+			increaseEXP(UNDERLING_BONUSES[type - UNDERLING_BONUS_OFFSET]);
+		} else if(type >= ALCHEMY_BONUS_OFFSET && type < ALCHEMY_BONUS_OFFSET + alchemyBonuses.length && !alchemyBonuses[type - ALCHEMY_BONUS_OFFSET])
+		{
+			alchemyBonuses[type - ALCHEMY_BONUS_OFFSET] = true;
+			increaseEXP(ALCHEMY_BONUSES[type - ALCHEMY_BONUS_OFFSET]);
 		}
 	}
 	
@@ -116,9 +123,11 @@ public class Echeladder
 		nbt.setInteger("rung", rung);
 		nbt.setInteger("rungProgress", progress);
 		
-		byte[] bonuses = new byte[underlingBonuses.length];	//Booleans would be stored as bytes anyways
+		byte[] bonuses = new byte[ALCHEMY_BONUS_OFFSET + alchemyBonuses.length];	//Booleans would be stored as bytes anyways
 		for(int i = 0; i < underlingBonuses.length; i++)
-			bonuses[i] = (byte) (underlingBonuses[i] ? 1 : 0);
+			bonuses[i + UNDERLING_BONUS_OFFSET] = (byte) (underlingBonuses[i] ? 1 : 0);
+		for(int i = 0; i < alchemyBonuses.length; i++)
+			bonuses[i + ALCHEMY_BONUS_OFFSET] = (byte) (alchemyBonuses[i] ? 1 : 0);
 		nbt.setByteArray("rungBonuses", bonuses);
 	}
 	
@@ -128,7 +137,9 @@ public class Echeladder
 		progress = nbt.getInteger("rungProgress");
 		
 		byte[] bonuses = nbt.getByteArray("rungBonuses");
-		for(int i = 0; i < underlingBonuses.length && i < bonuses.length; i++)
-			underlingBonuses[i] = bonuses[i] != 0;
+		for(int i = 0; i < underlingBonuses.length && i + UNDERLING_BONUS_OFFSET < bonuses.length; i++)
+			underlingBonuses[i] = bonuses[i + UNDERLING_BONUS_OFFSET] != 0;
+		for(int i = 0; i < alchemyBonuses.length && i + ALCHEMY_BONUS_OFFSET < bonuses.length; i++)
+			alchemyBonuses[i] = bonuses[i + ALCHEMY_BONUS_OFFSET] != 0;
 	}
 }
