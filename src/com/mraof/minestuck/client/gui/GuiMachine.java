@@ -214,9 +214,8 @@ public void initGui()
 		super.mouseClicked(par1,par2,par3);
 		if (par3 == 1)
 		{
-			if (goButton.mousePressed(this.mc, par1, par2))
+			if (goButton != null && goButton.mousePressed(this.mc, par1, par2))
 			{
-				
 				goButton.playPressSound(this.mc.getSoundHandler());
 				this.actionPerformed(goButton);
 			}
