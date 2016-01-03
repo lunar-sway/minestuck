@@ -28,6 +28,8 @@ commands.grist.get=%s has:%s
 commands.grist.invalidSyntax=Invalid grist name: %s
 commands.grist.addSuccess=Successfully increased grist value for "%s"
 commands.grist.setSuccess=Successfully changed grist value for "%s"
+commands.gristSend.usage=/gristSend <player> <gristtype value ...>
+commands.gristSend.success=Successfully gave grist to %s: %s
 commands.invalidSubCommand=Invalid Command: "%s"
 commands.sburbSession.usage=/sburbSession <session name> <add|name|title|landTerrain|landTitle> [values ...]
 commands.sburbSession.addSuccess=Successfully added/removed %d/%d players.
@@ -41,6 +43,8 @@ commands.sburbSession.landTitleSuccess=Successfully predefined %s's title land a
 commands.tpz.usage=/tpz [player] <transportalizer code>
 commands.tpz.notFound=Couldn't find transportalizer with ID "%s"
 commands.tpz.success=Successfully teleported %s to transprtalizer "%s"
+commands.playerOnly=This command is only useable by players.
+commands.playerOnly.redidectGrist=This command is only useable by players. Try /grist instead.
 
 computer.buttonClear=Clear message
 computer.buttonClose=Disconnect

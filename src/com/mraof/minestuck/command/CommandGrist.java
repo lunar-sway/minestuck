@@ -87,7 +87,7 @@ public class CommandGrist extends CommandBase
 		} else throw new WrongUsageException("commands.invalidSubCommand", command);
 	}
 
-	public GristAmount[] parseGrist(String[] args, int startOffset) throws CommandException
+	public static GristAmount[] parseGrist(String[] args, int startOffset) throws CommandException
 	{
 		GristAmount[] grist = new GristAmount[(args.length - startOffset)/2];
 		for(int i = startOffset; i < args.length - 1; i += 2)

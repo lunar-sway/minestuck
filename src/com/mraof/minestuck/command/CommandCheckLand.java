@@ -38,14 +38,14 @@ public class CommandCheckLand extends CommandBase
 	@Override
 	public String getCommandUsage(ICommandSender sender)
 	{
-		return "commands.checkLand.usage";
+		return (sender instanceof EntityPlayerMP) ? "commands.checkLand.usage" : "commands.playerOnly";
 	}
 	
 	@Override
 	public void processCommand(ICommandSender sender, String[] args) throws CommandException
 	{
 		if(!(sender instanceof EntityPlayerMP))
-			throw new PlayerNotFoundException("This command is only useable by players.");
+			throw new PlayerNotFoundException("commands.playerOnly");
 		EntityPlayerMP player = (EntityPlayerMP) sender;
 		
 		if(MinestuckDimensionHandler.isLandDimension(player.dimension))

@@ -30,6 +30,7 @@ import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.client.util.MinestuckModelManager;
 import com.mraof.minestuck.command.CommandCheckLand;
+import com.mraof.minestuck.command.CommandGristSend;
 import com.mraof.minestuck.command.CommandSburbSession;
 import com.mraof.minestuck.command.CommandGrist;
 import com.mraof.minestuck.command.CommandTransportalizer;
@@ -244,6 +245,7 @@ public class Minestuck
 		
 		event.registerServerCommand(new CommandCheckLand());
 		event.registerServerCommand(new CommandGrist());
+		event.registerServerCommand(new CommandGristSend());
 		event.registerServerCommand(new CommandTransportalizer());
 		event.registerServerCommand(new CommandSburbSession());
 		

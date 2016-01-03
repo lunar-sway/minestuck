@@ -31,6 +31,12 @@ public class CommandSburbSession extends CommandBase	//TODO properly localize al
 	}
 	
 	@Override
+	public int getRequiredPermissionLevel()
+	{
+		return 2;
+	}
+	
+	@Override
 	public void processCommand(ICommandSender sender, String[] args) throws CommandException
 	{
 		if(args.length < 2 || args.length < 3 && args[1].equalsIgnoreCase("add")
