@@ -1,17 +1,14 @@
 package com.mraof.minestuck.entity.underling;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.entity.IEntityMultiPart;
 import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristSet;
+import com.mraof.minestuck.util.GristType;
 
 public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart 
 {
@@ -41,11 +38,6 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 		this.tasks.removeTask(this.entityAIAttackOnCollideWithRate);
 		this.tasks.addTask(4, entityAIAttackOnCollideWithRate);
 	}
-	@Override
-	public boolean attackEntityAsMob(Entity par1Entity) 
-	{
-		return par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this), (this.type.getPower() + 1) * 2);
-	}
 	
 	@Override
 	protected float getMaximumHealth() 
@@ -63,6 +55,19 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	protected float getKnockbackResistance()
 	{
 		return 0.6F;
+	}
+	
+	@Override
+	protected double getAttackDamage()
+	{
+		return (this.type.getPower() + 1) * 2;
+	}
+	
+	@Override
+	protected void applyGristType(GristType type, boolean fullHeal)
+	{
+		super.applyGristType(type, fullHeal);
+		this.experienceValue = (int) (6 * type.getPower() + 4);
 	}
 	
 	@Override
@@ -125,28 +130,6 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	public void onPartDeath(Entity entityPart, int id) 
 	{
 
-	}
-	
-	@Override
-	public void readFromNBT(NBTTagCompound tagCompund)
-	{
-		super.readFromNBT(tagCompund);
-		this.experienceValue = (int) (6 * type.getPower() + 4);
-	}
-	
-	@Override
-	public void readSpawnData(ByteBuf additionalData)
-	{
-		super.readSpawnData(additionalData);
-		this.experienceValue = (int) (6 * type.getPower() + 4);
-	}
-	
-	@Override
-	public IEntityLivingData onSpawnFirstTime(DifficultyInstance difficulty, IEntityLivingData livingData)
-	{
-		livingData = super.onSpawnFirstTime(difficulty, livingData);
-		this.experienceValue = (int) (6 * type.getPower() + 4);
-		return livingData;
 	}
 	
 }

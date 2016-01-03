@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -18,6 +19,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.DifficultyInstance;
@@ -76,8 +78,19 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	protected void applyEntityAttributes()
 	{
 		super.applyEntityAttributes();
+		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.attackDamage);
+		
 		this.getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue((double)(this.getKnockbackResistance()));
 		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(this.getWanderSpeed());
+	}
+	
+	protected void applyGristType(GristType type, boolean fullHeal)
+	{
+		this.type = type;
+		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(this.getMaximumHealth());
+		this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(this.getAttackDamage());
+		if(fullHeal)
+			this.setHealth(this.getMaxHealth());
 	}
 	
 	//used when getting how much grist should be dropped on death
@@ -91,10 +104,15 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	
 	protected abstract double getWanderSpeed();
 	
-	protected boolean useAltName()
+	protected abstract double getAttackDamage();
+	
+	@Override
+	public boolean attackEntityAsMob(Entity entityIn)
 	{
-		return false;
-	};
+		boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue());
+		return flag;
+	}
+	
 	@Override
 	protected void onDeathUpdate() 
 	{
@@ -168,16 +186,17 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	@Override
 	public void readEntityFromNBT(NBTTagCompound tagCompound) 
 	{
+		if(tagCompound.hasKey("Type", 8))
+			applyGristType(GristType.getTypeFromString(tagCompound.getString("Type")), false);
+		else applyGristType(SburbHandler.getUnderlingType(this), false);
 		super.readEntityFromNBT(tagCompound);
-		this.type = GristType.getTypeFromString(tagCompound.getString("Type"));
-		if(tagCompound.hasKey("areaToGuard"))
+		
+		if(tagCompound.hasKey("homePos", 10))
 		{
-			NBTTagCompound nbt = new NBTTagCompound();
+			NBTTagCompound nbt = tagCompound.getCompoundTag("homePos");
 			BlockPos pos = new BlockPos(nbt.getInteger("homeX"), nbt.getInteger("homeY"), nbt.getInteger("homeZ"));
 			setHomePosAndDistance(pos, nbt.getInteger("maxHomeDistance"));
 		}
-		
-		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)(this.getMaximumHealth()));
 	}
 	
 	@Override
@@ -195,7 +214,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	@Override
 	public void readSpawnData(ByteBuf additionalData)
 	{
-		this.type = GristType.values()[additionalData.readInt()];
+		applyGristType(GristType.values()[additionalData.readInt()], false);
 		this.textureResource = new ResourceLocation("minestuck", this.getTexture());
 	}
 	
@@ -205,16 +224,13 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 		
 		if(!(livingData instanceof UnderlingData))
 		{
-			this.type = SburbHandler.getUnderlingType(this);
+			applyGristType(SburbHandler.getUnderlingType(this), true);
 			livingData = new UnderlingData(this.type);
 		}
 		else
 		{
-			this.type = ((UnderlingData)livingData).type;
+			applyGristType(((UnderlingData)livingData).type, true);
 		}
-		
-		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)(this.getMaximumHealth()));
-		setHealth(this.getMaximumHealth());
 		
 		return super.onSpawnFirstTime(difficulty, livingData);
 	}

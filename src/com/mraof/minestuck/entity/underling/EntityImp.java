@@ -1,16 +1,11 @@
 package com.mraof.minestuck.entity.underling;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristSet;
+import com.mraof.minestuck.util.GristType;
 
 public class EntityImp extends EntityUnderling
 {
@@ -27,13 +22,7 @@ public class EntityImp extends EntityUnderling
 	{
 		return GristHelper.getRandomDrop(type,1);
 	}
-
-	@Override
-	public boolean attackEntityAsMob(Entity par1Entity) 
-	{
-		boolean flag = par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this), (int) Math.ceil((double)(this.type.getPower() + 1) / 2));
-		return flag;
-	}
+	
 	@Override
 	protected void setCombatTask() 
 	{
@@ -60,24 +49,16 @@ public class EntityImp extends EntityUnderling
 	}
 	
 	@Override
-	public void readFromNBT(NBTTagCompound tagCompund)
+	protected double getAttackDamage()
 	{
-		super.readFromNBT(tagCompund);
-		this.experienceValue = (int) (3 * type.getPower() + 1);
+		return Math.ceil((double)(this.type.getPower() + 1) / 2);
 	}
 	
 	@Override
-	public void readSpawnData(ByteBuf additionalData)
+	protected void applyGristType(GristType type, boolean fullHeal)
 	{
-		super.readSpawnData(additionalData);
+		super.applyGristType(type, fullHeal);
 		this.experienceValue = (int) (3 * type.getPower() + 1);
 	}
 	
-	@Override
-	public IEntityLivingData onSpawnFirstTime(DifficultyInstance difficulty, IEntityLivingData livingData)
-	{
-		livingData = super.onSpawnFirstTime(difficulty, livingData);
-		this.experienceValue = (int) (3 * type.getPower() + 1);
-		return livingData;
-	}
 }

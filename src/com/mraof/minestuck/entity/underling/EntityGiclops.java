@@ -1,15 +1,11 @@
 package com.mraof.minestuck.entity.underling;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
@@ -17,6 +13,7 @@ import com.mraof.minestuck.entity.IEntityMultiPart;
 import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristSet;
+import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 
 public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
@@ -64,6 +61,19 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 	}
 	
 	@Override
+	protected double getAttackDamage()
+	{
+		return this.type.getPower() * 2.2F + 4.5F;
+	}
+	
+	@Override
+	protected void applyGristType(GristType type, boolean fullHeal)
+	{
+		super.applyGristType(type, fullHeal);
+		this.experienceValue = (int) (7 * type.getPower() + 5);
+	}
+	
+	@Override
 	protected void applyEntityAttributes()
 	{
 		super.applyEntityAttributes();
@@ -90,11 +100,7 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
         this.isAirBorne = true;
         ForgeHooks.onLivingJump(this);
 	}
-	@Override
-	public boolean attackEntityAsMob(Entity par1Entity) 
-	{
-		return par1Entity.attackEntityFrom(DamageSource.causeMobDamage(this), this.type.getPower() * 2.2F + 4.5F);
-	}
+	
 	@Override
 	protected float getMaximumHealth() 
 	{
@@ -167,27 +173,4 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 			((EntityPlayerMP) entity).triggerAchievement(MinestuckAchievementHandler.killGiclops);
 		}
 	}
-	
-	@Override
-	public void readFromNBT(NBTTagCompound tagCompund)
-	{
-		super.readFromNBT(tagCompund);
-		this.experienceValue = (int) (7 * type.getPower() + 5);
-	}
-	
-	@Override
-	public void readSpawnData(ByteBuf additionalData)
-	{
-		super.readSpawnData(additionalData);
-		this.experienceValue = (int) (7 * type.getPower() + 5);
-	}
-	
-	@Override
-	public IEntityLivingData onSpawnFirstTime(DifficultyInstance difficulty, IEntityLivingData livingData)
-	{
-		livingData = super.onSpawnFirstTime(difficulty, livingData);
-		this.experienceValue = (int) (7 * type.getPower() + 5);
-		return livingData;
-	}
-	
 }
