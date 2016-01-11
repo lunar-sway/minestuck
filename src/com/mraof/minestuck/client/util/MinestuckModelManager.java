@@ -184,9 +184,9 @@ public class MinestuckModelManager
 		for(BlockMachine.MachineType type : BlockMachine.MachineType.values())
 			ModelBakery.addVariantName(Item.getItemFromBlock(blockMachine), "minestuck:machine_"+type.getName());
 		
-		ModelLoader.setCustomStateMapper(blockOil, (new StateMap.Builder()).addPropertiesToIgnore(BlockFluidBase.LEVEL).build());
-		ModelLoader.setCustomStateMapper(blockBlood, (new StateMap.Builder()).addPropertiesToIgnore(BlockFluidBase.LEVEL).build());
-		ModelLoader.setCustomStateMapper(blockBrainJuice, (new StateMap.Builder()).addPropertiesToIgnore(BlockFluidBase.LEVEL).build());
+		ModelLoader.setCustomStateMapper(blockOil, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
+		ModelLoader.setCustomStateMapper(blockBlood, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
+		ModelLoader.setCustomStateMapper(blockBrainJuice, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
 		ModelLoader.setCustomStateMapper(returnNode, new IStateMapper()
 		{
 			@Override

@@ -39,7 +39,7 @@ public class ContainerCaptchaDeck extends Container
 	@Override
 	public void onContainerClosed(EntityPlayer player)
 	{
-		ItemStack stack = this.inventory.getStackInSlotOnClosing(0);
+		ItemStack stack = this.inventory.removeStackFromSlot(0);
 		if(stack != null)
 			player.dropPlayerItemWithRandomChoice(stack, false);
 	}

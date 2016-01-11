@@ -375,7 +375,7 @@ public class SburbHandler
 	
 	public static boolean canSelectColor(EntityPlayerMP player)
 	{
-		String name = UsernameHandler.encode(player.getCommandSenderName());
+		String name = UsernameHandler.encode(player.getName());
 		for(SburbConnection c : SkaianetHandler.connections)
 			if(c.getClientName().equals(name))
 				return false;

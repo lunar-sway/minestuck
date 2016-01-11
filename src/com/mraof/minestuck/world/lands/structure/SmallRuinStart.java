@@ -238,7 +238,7 @@ public class SmallRuinStart extends StructureStart
 				{
 					EntityOgre ogre = new EntityOgre(world);
 					ogre.setPositionAndRotation(xPos + 0.5, maxY, zPos + 0.5, rand.nextFloat()*360F, 0);
-					ogre.onSpawnFirstTime(null, null);
+					ogre.onInitialSpawn(null, null);
 					ogre.setHomePosAndDistance(new BlockPos(minX + 8, this.boundingBox.minY, minZ + 8), 10);
 					world.spawnEntityInWorld(ogre);
 					return;

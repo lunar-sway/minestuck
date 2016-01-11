@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -66,10 +67,10 @@ public class KindAbstratusType
 	}
 	
 	private static class ItemIdType extends ItemType {
-		final String itemId;
+		final ResourceLocation itemId;
 		
 		ItemIdType(Item item) {
-			itemId = (String) Item.itemRegistry.getNameForObject(item);
+			itemId = Item.itemRegistry.getNameForObject(item);
 		}
 		
 		boolean partOf(ItemStack item) {

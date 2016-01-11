@@ -2,6 +2,7 @@ package com.mraof.minestuck.world.lands.decorator;
 
 import java.util.Random;
 
+import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
@@ -16,7 +17,7 @@ public class BasicTreeDecorator extends TreeDecoratorBase
 	{
 		this.treeTypes = new WorldGenTrees[trees.length];
 		for(int i = 0; i < trees.length; i++)
-			treeTypes[i] = new WorldGenTrees(false, 5, trees[i], trees[i], false);
+			treeTypes[i] = new WorldGenTrees(false);
 	}
 	
 	public BasicTreeDecorator(int treeType)

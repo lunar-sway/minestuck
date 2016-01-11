@@ -204,8 +204,8 @@ public class MinestuckConfig
 			if((dataCheckerPermission & 2) != 0)
 			{
 				GameType gameType = player.theItemInWorldManager.getGameType();
-				if(ServerEditHandler.getData(player.getCommandSenderName()) != null)
-					gameType = ServerEditHandler.getData(player.getCommandSenderName()).getDecoy().gameType;
+				if(ServerEditHandler.getData(player.getName()) != null)
+					gameType = ServerEditHandler.getData(player.getName()).getDecoy().gameType;
 				if(!gameType.isSurvivalOrAdventure())
 					return true;
 			}

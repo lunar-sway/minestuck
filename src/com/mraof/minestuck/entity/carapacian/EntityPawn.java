@@ -56,9 +56,9 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 	}
 	
 	@Override
-	public IEntityLivingData onSpawnFirstTime(DifficultyInstance difficulty, IEntityLivingData entityLivingData)	//was called "onSpawnWithEgg"
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData entityLivingData)	//was called "onSpawnWithEgg"
 	{
-		entityLivingData = super.onSpawnFirstTime(difficulty, entityLivingData);
+		entityLivingData = super.onInitialSpawn(difficulty, entityLivingData);
 		this.addRandomDrop();
 		
 		if(this.pawnType == 1)

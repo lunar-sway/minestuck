@@ -42,7 +42,7 @@ public class SburbConnectClosedPacket extends MinestuckPacket {
 	@Override
 	public void execute(EntityPlayer player)
 	{
-		if((!MinestuckConfig.privateComputers || UsernameHandler.encode(player.getCommandSenderName()).equals(this.player)) && ServerEditHandler.getData(((EntityPlayer)player).getCommandSenderName()) == null)
+		if((!MinestuckConfig.privateComputers || UsernameHandler.encode(player.getName()).equals(this.player)) && ServerEditHandler.getData(((EntityPlayer)player).getName()) == null)
 			SkaianetHandler.closeConnection(this.player,this.otherPlayer, isClient);
 	}
 

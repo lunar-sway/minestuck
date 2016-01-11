@@ -46,20 +46,20 @@ public class MinestuckPlayerTracker {
 	public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) 
 	{
 		EntityPlayer player = event.player;
-		Debug.print(player.getCommandSenderName()+" joined the game. Sending packets.");
+		Debug.print(player.getName()+" joined the game. Sending packets.");
 		MinecraftServer server = MinecraftServer.getServer();
 		if(!server.isDedicatedServer() && UsernameHandler.host == null)
-			UsernameHandler.host = event.player.getCommandSenderName();
-		String encUsername = UsernameHandler.encode(player.getCommandSenderName());
+			UsernameHandler.host = event.player.getName();
+		String encUsername = UsernameHandler.encode(player.getName());
 		
 		sendConfigPacket((EntityPlayerMP) player, true);
 		sendConfigPacket((EntityPlayerMP) player, false);
 		
-		SkaianetHandler.playerConnected(player.getCommandSenderName());
+		SkaianetHandler.playerConnected(player.getName());
 		boolean firstTime = false;
 		if(MinestuckPlayerData.getGristSet(encUsername) == null)
 		{
-			Debug.printf("Grist set is null for player %s. Handling it as first time in this world.", player.getCommandSenderName());
+			Debug.printf("Grist set is null for player %s. Handling it as first time in this world.", player.getName());
 			MinestuckPlayerData.setGrist(encUsername, new GristSet(GristType.Build, 20));
 			firstTime = true;
 		}
@@ -80,7 +80,7 @@ public class MinestuckPlayerTracker {
 			MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.CAPTCHA, CaptchaDeckPacket.DATA, CaptchaDeckHandler.writeToNBT(modus)), player);
 		}
 		
-		updateGristCache(UsernameHandler.encode(player.getCommandSenderName()));
+		updateGristCache(UsernameHandler.encode(player.getName()));
 		updateTitle(player);
 		
 		if(firstTime)
@@ -102,7 +102,7 @@ public class MinestuckPlayerTracker {
 		Modus modus = CaptchaDeckHandler.getModus(event.player);
 		if(modus != null)
 			modus.player = null;
-		dataCheckerPermission.remove(event.player.getCommandSenderName());
+		dataCheckerPermission.remove(event.player.getName());
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
@@ -132,7 +132,7 @@ public class MinestuckPlayerTracker {
 	private static boolean shouldUpdateConfigurations(EntityPlayerMP player)
 	{
 		boolean permission = MinestuckConfig.getDataCheckerPermissionFor(player);
-		if(permission != dataCheckerPermission.contains(player.getCommandSenderName()))
+		if(permission != dataCheckerPermission.contains(player.getName()))
 			return true;
 		
 		return false;
@@ -167,7 +167,7 @@ public class MinestuckPlayerTracker {
 	
 	public void updateTitle(EntityPlayer player)
 	{
-		String username = UsernameHandler.encode(player.getCommandSenderName());
+		String username = UsernameHandler.encode(player.getName());
 		Title newTitle = MinestuckPlayerData.getTitle(username);
 		if(newTitle == null)
 			return;
@@ -177,7 +177,7 @@ public class MinestuckPlayerTracker {
 	public static void updateLands(EntityPlayer player)
 	{
 		MinestuckPacket packet = MinestuckPacket.makePacket(Type.LANDREGISTER);
-		Debug.printf("Sending land packets to %s.", player == null ? "all players" : player.getCommandSenderName());
+		Debug.printf("Sending land packets to %s.", player == null ? "all players" : player.getName());
 		if(player == null)
 			MinestuckChannelHandler.sendToAllPlayers(packet);
 		else
@@ -198,8 +198,8 @@ public class MinestuckPlayerTracker {
 			boolean permission = MinestuckConfig.getDataCheckerPermissionFor(player);
 			packet = MinestuckPacket.makePacket(Type.CONFIG, false, permission);
 			if(permission)
-				dataCheckerPermission.add(player.getCommandSenderName());
-			else dataCheckerPermission.remove(player.getCommandSenderName());
+				dataCheckerPermission.add(player.getName());
+			else dataCheckerPermission.remove(player.getName());
 		}
 		MinestuckChannelHandler.sendToPlayer(packet, player);
 	}

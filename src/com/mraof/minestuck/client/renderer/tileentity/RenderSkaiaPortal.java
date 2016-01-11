@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
@@ -68,10 +69,10 @@ public class RenderSkaiaPortal extends TileEntitySpecialRenderer
 			GlStateManager.texGen(GlStateManager.TexGen.T, GL11.GL_OBJECT_LINEAR);
 			GlStateManager.texGen(GlStateManager.TexGen.R, GL11.GL_OBJECT_LINEAR);
 			GlStateManager.texGen(GlStateManager.TexGen.Q, GL11.GL_EYE_LINEAR);
-			GlStateManager.func_179105_a(GlStateManager.TexGen.S, GL11.GL_OBJECT_PLANE, this.func_76907_a(1.0F, 0.0F, 0.0F, 0.0F));	//GL11.glTexGen
-			GlStateManager.func_179105_a(GlStateManager.TexGen.T, GL11.GL_OBJECT_PLANE, this.func_76907_a(0.0F, 0.0F, 1.0F, 0.0F));
-			GlStateManager.func_179105_a(GlStateManager.TexGen.R, GL11.GL_OBJECT_PLANE, this.func_76907_a(0.0F, 0.0F, 0.0F, 1.0F));
-			GlStateManager.func_179105_a(GlStateManager.TexGen.Q, GL11.GL_EYE_PLANE, this.func_76907_a(0.0F, 1.0F, 0.0F, 0.0F));
+			GlStateManager.texGen(GlStateManager.TexGen.S, GL11.GL_OBJECT_PLANE, this.func_76907_a(1.0F, 0.0F, 0.0F, 0.0F));	//GL11.glTexGen
+			GlStateManager.texGen(GlStateManager.TexGen.T, GL11.GL_OBJECT_PLANE, this.func_76907_a(0.0F, 0.0F, 1.0F, 0.0F));
+			GlStateManager.texGen(GlStateManager.TexGen.R, GL11.GL_OBJECT_PLANE, this.func_76907_a(0.0F, 0.0F, 0.0F, 1.0F));
+			GlStateManager.texGen(GlStateManager.TexGen.Q, GL11.GL_EYE_PLANE, this.func_76907_a(0.0F, 1.0F, 0.0F, 0.0F));
 			GlStateManager.enableTexGenCoord(GlStateManager.TexGen.S);
 			GlStateManager.enableTexGenCoord(GlStateManager.TexGen.T);
 			GlStateManager.enableTexGenCoord(GlStateManager.TexGen.R);
@@ -89,7 +90,7 @@ public class RenderSkaiaPortal extends TileEntitySpecialRenderer
 			var19 = var18 + (float) ActiveRenderInfo.getPosition().xCoord;
 			GlStateManager.translate(((float) ActiveRenderInfo.getPosition().xCoord) * var15 / var19, ((float) ActiveRenderInfo.getPosition().zCoord) * var15 / var19, -var10);
 			WorldRenderer var24 = Tessellator.getInstance().getWorldRenderer();
-            var24.startDrawingQuads();
+            var24.begin(7, DefaultVertexFormats.POSITION);
 			var21 = var12.nextFloat() * 0.5F + 0.1F;
             float var22 = var12.nextFloat() * 0.5F + 0.4F;
             float var23 = var12.nextFloat() * 0.5F + 0.5F;
@@ -101,11 +102,11 @@ public class RenderSkaiaPortal extends TileEntitySpecialRenderer
 				var21 = 1.0F;
             }
 
-			var24.setColorRGBA_F(var21 * var17, var22 * var17, var23 * var17, 1.0F);
-            var24.addVertex(par2, par4 + var13, par6);
-            var24.addVertex(par2, par4 + var13, par6 + 1.0D);
-            var24.addVertex(par2 + 1.0D, par4 + var13, par6 + 1.0D);
-            var24.addVertex(par2 + 1.0D, par4 + var13, par6);
+			var24.color(var21 * var17, var22 * var17, var23 * var17, 1.0F);
+            var24.pos(par2, par4 + var13, par6);
+            var24.pos(par2, par4 + var13, par6 + 1.0D);
+            var24.pos(par2 + 1.0D, par4 + var13, par6 + 1.0D);
+            var24.pos(par2 + 1.0D, par4 + var13, par6);
 			Tessellator.getInstance().draw();
 			GlStateManager.popMatrix();
 			GlStateManager.matrixMode(GL11.GL_MODELVIEW);

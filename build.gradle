@@ -11,40 +11,40 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
     }
 }
 
 repositories {
-    maven {
+    /*maven {
         name = "chickenbones"
         url = "http://chickenbones.net/maven/"
-    }
+    }*/
 }
 
-apply plugin: 'forge'
+apply plugin: 'net.minecraftforge.gradle.forge'
 
 version = System.getenv()['BUILD_NUMBER']
 group= "com.mraof.minestuck"
 archivesBaseName = "Minestuck"
 
 minecraft {
-    version = "1.8-11.14.3.1499"
+    version = "1.8.9-11.15.0.1693"
     runDir = "eclipse"
 
-    mappings = "snapshot_20150301"
+    mappings = "stable_20"
 
     replaceIn "com/mraof/minestuck/Minestuck.java"
     replace "@VERSION@", project.version
 }
 
 dependencies {
-    // http://files.minecraftforge.net/CodeChickenLib/
+    /*// http://files.minecraftforge.net/CodeChickenLib/
     compile "codechicken:CodeChickenLib:1.8-1.1.2.133:universal"
     
     // http://chickenbones.net/maven
     compile "codechicken:CodeChickenCore:1.8-1.0.5.34:universal"
-    compile "codechicken:NotEnoughItems:1.8-1.0.5.82:universal"
+    compile "codechicken:NotEnoughItems:1.8-1.0.5.82:universal"*/
 }
 
 sourceSets {

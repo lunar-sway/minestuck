@@ -6,15 +6,18 @@ import java.util.Arrays;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
@@ -94,20 +97,12 @@ public class GuiGristSelector extends GuiScreen
 	{
 		this.mc.getTextureManager().bindTexture(new ResourceLocation("minestuck",location));
 
-		float scale = (float) 1/16;
-
 		int iconX = 16;
 		int iconY = 16;
 		int iconU = 0;
 		int iconV = 0;
 
-		WorldRenderer render = Tessellator.getInstance().getWorldRenderer();
-		render.startDrawingQuads();
-		render.addVertexWithUV((double)(x + 0), (double)(y +  iconY), (double)this.zLevel, (double)((float)(iconU + 0) * scale), (double)((float)(iconV +  iconY) * scale));
-		render.addVertexWithUV((double)(x + iconX), (double)(y +  iconY), (double)this.zLevel, (double)((float)(iconU + iconX) * scale), (double)((float)(iconV +  iconY) * scale));
-		render.addVertexWithUV((double)(x + iconX), (double)(y + 0), (double)this.zLevel, (double)((float)(iconU + iconX) * scale), (double)((float)(iconV + 0) * scale));
-		render.addVertexWithUV((double)(x + 0), (double)(y + 0), (double)this.zLevel, (double)((float)(iconU + 0) * scale), (double)((float)(iconV + 0) * scale));
-		Tessellator.getInstance().draw();
+		Gui.drawModalRectWithCustomSizedTexture(x, y, iconU, iconV, iconX, iconY, iconX, iconY);
 	}
 	
 	@Override

@@ -53,7 +53,7 @@ public class CommandGrist extends CommandBase
 		} else
 		{
 			EntityPlayerMP player = this.getCommandSenderAsPlayer(sender);
-			name = UsernameHandler.encode(player.getCommandSenderName());
+			name = UsernameHandler.encode(player.getName());
 		}
 		
 		if((args.length - offset) % 2  != 0)

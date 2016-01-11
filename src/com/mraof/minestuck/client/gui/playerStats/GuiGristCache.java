@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.io.IOException;
 import java.util.Arrays;
 
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
@@ -11,9 +12,9 @@ import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fml.common.Loader;
-import codechicken.lib.gui.GuiDraw;
+/*import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.NEIClientConfig;
-import codechicken.nei.recipe.GuiCraftingRecipe;
+import codechicken.nei.recipe.GuiCraftingRecipe;*/
 
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.editmode.ClientEditHandler;
@@ -99,27 +100,20 @@ public class GuiGristCache extends GuiPlayerStats
 	{
 		this.mc.getTextureManager().bindTexture(new ResourceLocation("minestuck",location));
 
-		float scale = (float) 1/16;
-
 		int iconX = 16;
 		int iconY = 16;
 		int iconU = 0;
 		int iconV = 0;
 
-		WorldRenderer render = Tessellator.getInstance().getWorldRenderer();
-		render.startDrawingQuads();
-		render.addVertexWithUV((double)(x + 0), (double)(y +  iconY), (double)this.zLevel, (double)((float)(iconU + 0) * scale), (double)((float)(iconV +  iconY) * scale));
-		render.addVertexWithUV((double)(x + iconX), (double)(y +  iconY), (double)this.zLevel, (double)((float)(iconU + iconX) * scale), (double)((float)(iconV +  iconY) * scale));
-		render.addVertexWithUV((double)(x + iconX), (double)(y + 0), (double)this.zLevel, (double)((float)(iconU + iconX) * scale), (double)((float)(iconV + 0) * scale));
-		render.addVertexWithUV((double)(x + 0), (double)(y + 0), (double)this.zLevel, (double)((float)(iconU + 0) * scale), (double)((float)(iconV + 0) * scale));
-		Tessellator.getInstance().draw();
+		
+		Gui.drawModalRectWithCustomSizedTexture(x, y, iconU, iconV, iconX, iconY, iconX, iconY);
 	}
 	
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) throws IOException
 	{
 		super.keyTyped(typedChar, keyCode);
-		if(Loader.isModLoaded("NotEnoughItems") && keyCode == NEIClientConfig.getKeyBinding("gui.usage"))
+		/*if(Loader.isModLoaded("NotEnoughItems") && keyCode == NEIClientConfig.getKeyBinding("gui.usage"))
 		{
 			Point mousePos = GuiDraw.getMousePosition();
 			for(int gristId = 0; gristId < GristType.allGrists; gristId++)
@@ -135,7 +129,7 @@ public class GuiGristCache extends GuiPlayerStats
 					return;
 				}
 			}
-		}
+		}*/
 	}
 	
 }

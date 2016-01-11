@@ -12,7 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.server.gui.IUpdatePlayerListBox;
+import net.minecraft.util.ITickable;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IChatComponent;
@@ -34,7 +34,7 @@ import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.UsernameHandler;
 
-public class TileEntityMachine extends TileEntity implements IInventory, IUpdatePlayerListBox
+public class TileEntityMachine extends TileEntity implements IInventory, ITickable
 {
 
     public ItemStack[] inv;
@@ -101,7 +101,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int slot) {
+    public ItemStack removeStackFromSlot(int slot) {
             ItemStack stack = getStackInSlot(slot);
             if (stack != null) {
                     setInventorySlotContents(slot, null);
@@ -388,8 +388,8 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 				for(int i = 0; i < cost.gristTypes.length; i++)
 					cost.gristTypes[i] = (int) Math.ceil(cost.gristTypes[i]*multiplier);
 			}
-			GristHelper.decrease(UsernameHandler.encode(owner.getCommandSenderName()), cost);
-			MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(owner.getCommandSenderName()));
+			GristHelper.decrease(UsernameHandler.encode(owner.getName()), cost);
+			MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(owner.getName()));
 			break;
 		case (4):
 			if(!worldObj.isRemote) 
@@ -446,7 +446,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 	}
 
 	@Override
-	public String getCommandSenderName()
+	public String getName()
 	{
 		return "tile.blockMachine."+ItemMachine.subNames[getMachineType()]+".name";
 	}
@@ -460,7 +460,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 	@Override
 	public IChatComponent getDisplayName()
 	{
-		return new ChatComponentTranslation(getCommandSenderName());
+		return new ChatComponentTranslation(getName());
 	}
 
 	@Override

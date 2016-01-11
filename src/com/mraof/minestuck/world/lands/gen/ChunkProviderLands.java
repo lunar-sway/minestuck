@@ -174,7 +174,7 @@ public class ChunkProviderLands implements IChunkProvider
 		for(int i = 0; i < chunkBiomes.length; i++)
 			chunkBiomes[i] = (byte) biomes[i].biomeID;
 		
-		structureHandler.func_175792_a(this, landWorld, chunkX, chunkZ, primer);
+		structureHandler.generate(this, landWorld, chunkX, chunkZ, primer);
 		return chunk;
 	}
 	
@@ -204,7 +204,7 @@ public class ChunkProviderLands implements IChunkProvider
 		
 		this.random.setSeed(getSeedFor(chunkX, chunkZ));
 		
-		this.generatingStructure = structureHandler.func_175794_a(landWorld, random, new ChunkCoordIntPair(chunkX, chunkZ));
+		this.generatingStructure = structureHandler.generateStructure(landWorld, random, new ChunkCoordIntPair(chunkX, chunkZ));
 		
 		ichunkprovider.populate(ichunkprovider, chunkX, chunkZ);
 		BlockPos pos = null;
