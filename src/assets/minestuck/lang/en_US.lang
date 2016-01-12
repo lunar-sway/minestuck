@@ -79,7 +79,7 @@ echeladder.rung7=Imp Crusher
 echeladder.rung8=Slime Enthusiast
 echeladder.rung9=Burly Pocketeer
 echeladder.rung10=Block Smasher
-
+echeladder.rung11=Gadabout Explorer
 echeladder.rung12=Village Protector
 echeladder.rung13=Golem Gallant
 echeladder.rung14=Rail Fanatic
@@ -88,9 +88,15 @@ echeladder.rung16=Who Needs A Map?
 echeladder.rung17=Inventory Tycoon
 echeladder.rung18=Diamond Smuggler
 echeladder.rung19=Cuboid Captain
+echeladder.rung20=Circuit Crafter
+echeladder.rung21=Alchemy Brewer
+echeladder.rung22=Keeper Of Consorts
+echeladder.rung23=Conglomerate Caliphate
+echeladder.rung24=Overworld Overlord
 
-echeladder.rung22=Conglomerate Caliphate
-echeladder.rung23=Overworld Overlord
+echeladder.rung34=Underworld Overlord
+
+echeladder.rung44=Otherworld Overlord
 
 entity.minestuck.dersiteBishop.name=Dersite Bishop
 entity.minestuck.dersitePawn.name=Dersite Pawn
