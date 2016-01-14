@@ -15,12 +15,12 @@ buildscript {
     }
 }
 
-repositories {
-    /*maven {
+/*repositories {
+    maven {
         name = "chickenbones"
         url = "http://chickenbones.net/maven/"
-    }*/
-}
+    }
+}*/
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 
@@ -33,12 +33,24 @@ minecraft {
     runDir = "eclipse"
 
     mappings = "stable_20"
+	
+	useDepAts = true
 
     replaceIn "com/mraof/minestuck/Minestuck.java"
     replace "@VERSION@", project.version
 }
 
+repositories{
+	maven{
+		url "http://dvs1.progwml6.com/files/maven"
+	}
+}
+dependencies{
+	deobfCompile "mezz.jei:jei_1.8.9:2.14.0.67"
+}
+
 dependencies {
+	deobfCompile "mezz.jei:jei_1.8.9:2.16.0.74"
     /*// http://files.minecraftforge.net/CodeChickenLib/
     compile "codechicken:CodeChickenLib:1.8-1.1.2.133:universal"
     
