@@ -30,9 +30,9 @@ public class EntityUnderlingPart extends EntityLiving implements IEntityAddition
 	}
 	
 	@Override
-	public String getCommandSenderName()
+	public String getName()
 	{
-		return ((Entity) baseEntity).getCommandSenderName();
+		return ((Entity) baseEntity).getName();
 	}
 	
 	/**

@@ -1,5 +1,5 @@
 package com.mraof.minestuck.nei;
-
+/*
 import static codechicken.lib.gui.GuiDraw.changeTexture;
 
 import java.awt.Point;
@@ -335,3 +335,4 @@ public class AlchemiterHandler extends TemplateRecipeHandler
 	}
 
 }
+*/

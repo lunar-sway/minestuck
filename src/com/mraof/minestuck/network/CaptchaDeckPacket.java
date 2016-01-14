@@ -114,7 +114,7 @@ public class CaptchaDeckPacket extends MinestuckPacket
 	{
 		if(player != null && player.worldObj != null && !player.worldObj.isRemote)
 		{
-			if(ServerEditHandler.getData(player.getCommandSenderName()) != null)
+			if(ServerEditHandler.getData(player.getName()) != null)
 				return;
 			
 			if(this.type == MODUS && player.openContainer instanceof ContainerCaptchaDeck)

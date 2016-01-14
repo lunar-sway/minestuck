@@ -6,11 +6,11 @@ import java.util.ArrayList;
 
 import org.lwjgl.input.Mouse;
 
-import codechicken.lib.gui.GuiDraw;
+/*import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.NEIClientConfig;
 import codechicken.nei.NEIClientUtils;
 import codechicken.nei.recipe.GuiCraftingRecipe;
-import codechicken.nei.recipe.GuiUsageRecipe;
+import codechicken.nei.recipe.GuiUsageRecipe;*/
 
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
@@ -221,7 +221,7 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 	protected void keyTyped(char typedChar, int keyCode) throws IOException
 	{
 		super.keyTyped(typedChar, keyCode);
-		if(Loader.isModLoaded("NotEnoughItems"))
+		/*if(Loader.isModLoaded("NotEnoughItems"))
 		{
 			boolean usage = keyCode == NEIClientConfig.getKeyBinding("gui.usage") || (keyCode == NEIClientConfig.getKeyBinding("gui.recipe") && NEIClientUtils.shiftKey());
 			boolean recipe = keyCode == NEIClientConfig.getKeyBinding("gui.recipe");
@@ -248,7 +248,7 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 						}
 				}
 			}
-		}
+		}*/
 	}
 	
 	@Override

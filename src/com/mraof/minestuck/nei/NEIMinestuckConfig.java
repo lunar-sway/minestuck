@@ -1,5 +1,5 @@
 package com.mraof.minestuck.nei;
-
+/*
 import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
 
@@ -24,3 +24,4 @@ public class NEIMinestuckConfig implements IConfigureNEI {
 	}
 
 }
+*/

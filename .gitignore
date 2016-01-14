@@ -8,3 +8,5 @@
 *~
 /gradle
 *.bat
+*.launch
+gradlew

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -254,15 +255,7 @@ public void initGui()
 	 */
 	public void drawCustomBox(int par1, int par2, int par3, int par4, int par5, int par6, int width, int height)
 	{
-		float f = 1/(float)width;
-		float f1 = 1/(float)height;
-		WorldRenderer render = Tessellator.getInstance().getWorldRenderer();
-		render.startDrawingQuads();
-		render.addVertexWithUV((double)(par1 + 0), (double)(par2 + par6), (double)this.zLevel, (double)((float)(par3 + 0) * f), (double)((float)(par4 + par6) * f1));
-		render.addVertexWithUV((double)(par1 + par5), (double)(par2 + par6), (double)this.zLevel, (double)((float)(par3 + par5) * f), (double)((float)(par4 + par6) * f1));
-		render.addVertexWithUV((double)(par1 + par5), (double)(par2 + 0), (double)this.zLevel, (double)((float)(par3 + par5) * f), (double)((float)(par4 + 0) * f1));
-		render.addVertexWithUV((double)(par1 + 0), (double)(par2 + 0), (double)this.zLevel, (double)((float)(par3 + 0) * f), (double)((float)(par4 + 0) * f1));
-		Tessellator.getInstance().draw();
+		Gui.drawModalRectWithCustomSizedTexture(par1, par2, par3, par4, par5, par6, width, height);
 	}
 
 	/**

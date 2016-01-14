@@ -26,7 +26,7 @@ public class RabbitSpawner implements ILandDecorator
 				
 				EntityRabbit entity = new EntityRabbit(world);
 				entity.setPosition(x + 0.5, pos.getY(), z + 0.5);
-				entity.onSpawnFirstTime(null, null);
+				entity.onInitialSpawn(null, null);
 				world.spawnEntityInWorld(entity);
 			}
 		return null;

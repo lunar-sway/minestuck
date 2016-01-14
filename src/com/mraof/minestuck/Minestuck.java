@@ -23,7 +23,10 @@ import net.minecraftforge.fml.common.event.FMLServerStoppedEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import codechicken.nei.NEIModContainer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+//import codechicken.nei.NEIModContainer;
+import mezz.jei.JustEnoughItems;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.ClientProxy;
@@ -42,7 +45,7 @@ import com.mraof.minestuck.event.MinestuckFluidHandler;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.nei.NEIMinestuckConfig;
+//import com.mraof.minestuck.nei.NEIMinestuckConfig;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
@@ -54,6 +57,7 @@ import com.mraof.minestuck.tracker.ConnectionListener;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.ComputerProgram;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.KindAbstratusList;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.SburbClient;
@@ -216,7 +220,12 @@ public class Minestuck
 
 		//register NEI stuff
 		if (Loader.isModLoaded("NotEnoughItems")) {
-			NEIModContainer.plugins.add(new NEIMinestuckConfig());
+			//NEIModContainer.plugins.add(new NEIMinestuckConfig());
+		}
+		//register JEI stuff
+		
+		if (Loader.isModLoaded("JEI") && event.getSide().isClient()) {
+			Debug.print("uhhh jei is loaded I guess and should just magically work without reference?");
 		}
 	}
 

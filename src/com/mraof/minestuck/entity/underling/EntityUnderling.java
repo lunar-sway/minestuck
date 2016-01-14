@@ -132,7 +132,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	}
 	
 	@Override
-	public String getCommandSenderName() 
+	public String getName() 
 	{
 		if(type != null)
 			return StatCollector.translateToLocalFormatted("entity.minestuck." + underlingName + ".type", type.getDisplayName());
@@ -219,7 +219,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	}
 	
 	@Override
-	public IEntityLivingData onSpawnFirstTime(DifficultyInstance difficulty, IEntityLivingData livingData)
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingData)
 	{
 		
 		if(!(livingData instanceof UnderlingData))
@@ -232,7 +232,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 			applyGristType(((UnderlingData)livingData).type, true);
 		}
 		
-		return super.onSpawnFirstTime(difficulty, livingData);
+		return super.onInitialSpawn(difficulty, livingData);
 	}
 	
 	@Override

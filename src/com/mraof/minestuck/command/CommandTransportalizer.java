@@ -86,6 +86,6 @@ public class CommandTransportalizer extends CommandBase
 		else
 			TileEntityTransportalizer.teleportTo(player, location);
 		
-		notifyOperators(sender, this, "commands.tpz.success", player.getCommandSenderName(), code);
+		notifyOperators(sender, this, "commands.tpz.success", player.getName(), code);
 	}
 }

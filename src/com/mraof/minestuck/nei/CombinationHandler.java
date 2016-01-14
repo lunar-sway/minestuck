@@ -1,5 +1,5 @@
 package com.mraof.minestuck.nei;
-
+/*
 import static codechicken.lib.gui.GuiDraw.changeTexture;
 
 import java.awt.Rectangle;
@@ -208,3 +208,4 @@ public class CombinationHandler extends TemplateRecipeHandler
 	}
 
 }
+*/

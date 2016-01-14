@@ -17,8 +17,8 @@ public class ComponentCastleLibraryPiece extends ComponentCastleRoomPiece
 	public boolean addComponentParts(World world, Random random,StructureBoundingBox structureboundingbox) 
 	{
 		super.addComponentParts(world, random, structureboundingbox);
-		this.func_175804_a(world, structureboundingbox, 1, 1, 1, 1, 3, 6, Blocks.bookshelf.getDefaultState(), Blocks.air.getDefaultState(), false);	//fillWithBlocks
-		this.func_175804_a(world, structureboundingbox, 6, 1, 1, 6, 3, 6, Blocks.bookshelf.getDefaultState(), Blocks.air.getDefaultState(), false);
+		this.fillWithBlocks(world, structureboundingbox, 1, 1, 1, 1, 3, 6, Blocks.bookshelf.getDefaultState(), Blocks.air.getDefaultState(), false);	//fillWithBlocks
+		this.fillWithBlocks(world, structureboundingbox, 6, 1, 1, 6, 3, 6, Blocks.bookshelf.getDefaultState(), Blocks.air.getDefaultState(), false);
 		return true;
 	}
 

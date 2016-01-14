@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
@@ -36,21 +37,23 @@ public class RenderGrist extends Render {
         int j = grist.getBrightnessForRender(f1);
         int k = j % 65536;
         int l = j / 65536;
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)k / 1.0F, (float)l / 1.0F);
+        //OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)k / 1.0F, (float)l / 1.0F);
+        GlStateManager.disableLighting();
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
 		GlStateManager.rotate(-this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
 		float f11 = grist.getSizeByValue();
 		GlStateManager.scale(f11, f11, f11);
-		render.startDrawingQuads();
-		render.setNormal(0.0F, 1.0F, 0.0F);
-		render.addVertexWithUV((double)(0.0F - f7), (double)(0.0F - f8), 0.0D, (double)f2, (double)f5);
-		render.addVertexWithUV((double)(f6 - f7), (double)(0.0F - f8), 0.0D, (double)f3, (double)f5);
-		render.addVertexWithUV((double)(f6 - f7), (double)(1.0F - f8), 0.0D, (double)f3, (double)f4);
-		render.addVertexWithUV((double)(0.0F - f7), (double)(1.0F - f8), 0.0D, (double)f2, (double)f4);
+		render.begin(7, DefaultVertexFormats.POSITION_TEX);
+		//render.normal(0.0F, 1.0F, 0.0F);
+		render.pos((double)(0.0F - f7), (double)(0.0F - f8), 0.0D).tex((double)f2, (double)f5).endVertex();
+		render.pos((double)(f6 - f7), (double)(0.0F - f8), 0.0D).tex((double)f3, (double)f5).endVertex();
+		render.pos((double)(f6 - f7), (double)(1.0F - f8), 0.0D).tex((double)f3, (double)f4).endVertex();
+		render.pos((double)(0.0F - f7), (double)(1.0F - f8), 0.0D).tex((double)f2, (double)f4).endVertex();
 		Tessellator.getInstance().draw();
 		GlStateManager.disableBlend();
 		GlStateManager.disableRescaleNormal();
+		GlStateManager.enableLighting();
 		GlStateManager.popMatrix();
 		
 	}
