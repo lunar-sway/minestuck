@@ -17,6 +17,7 @@ import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceMushroomGenerator;
+import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 
 public class LandAspectShade extends TerrainLandAspect 
 {
@@ -78,6 +79,11 @@ public class LandAspectShade extends TerrainLandAspect
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
 		list.add(new SurfaceMushroomGenerator());
+		
+		list.add(new UndergroundDecoratorVein(Blocks.gravel.getDefaultState(), 8, 33, 256));
+		list.add(new UndergroundDecoratorVein(Blocks.iron_ore.getDefaultState(), 24, 9, 64));
+		list.add(new UndergroundDecoratorVein(Blocks.lapis_ore.getDefaultState(), 6, 7, 35));
+		
 		return list;
 	}
 

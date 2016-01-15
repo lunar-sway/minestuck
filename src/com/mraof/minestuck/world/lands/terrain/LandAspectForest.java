@@ -16,6 +16,7 @@ import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.TallGrassDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.BasicTreeDecorator;
+import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 
 public class LandAspectForest extends TerrainLandAspect
 {
@@ -91,6 +92,11 @@ public class LandAspectForest extends TerrainLandAspect
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
 		list.add(new BasicTreeDecorator());
 		list.add(new TallGrassDecorator(0.5F));
+		
+		list.add(new UndergroundDecoratorVein(Blocks.dirt.getDefaultState(), 3, 33, 64));	//Have 64 be the highest value because stone is used as a building material for structures right now
+		list.add(new UndergroundDecoratorVein(Blocks.gravel.getDefaultState(), 2, 28, 64));
+		list.add(new UndergroundDecoratorVein(Blocks.coal_ore.getDefaultState(), 13, 17, 64));
+		list.add(new UndergroundDecoratorVein(Blocks.emerald_ore.getDefaultState(), 8, 3, 32));
 		return list;
 	}
 	

@@ -40,11 +40,4 @@ public class BasicTreeDecorator extends TreeDecoratorBase
 	{
 		return this.treeTypes[rand.nextInt(treeTypes.length)];
 	}
-	
-	@Override
-	public float getPriority()
-	{
-		return 0.6F;
-	}
-	
 }

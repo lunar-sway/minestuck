@@ -195,7 +195,7 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(Blocks.sponge, 1, 1), new GristSet(new GristType[] {GristType.Amber, GristType.Sulfur, GristType.Cobalt}, new int[] {20, 30, 10}));
 		
 		//Ores
-		GristRegistry.addGristConversion(new ItemStack(Blocks.coal_ore), false, new GristSet(new GristType[] {GristType.Build, GristType.Tar}, new int[] {4, 8}));
+		GristRegistry.addGristConversion("oreCoal", new GristSet(new GristType[] {GristType.Build, GristType.Tar}, new int[] {4, 8}));
 		GristRegistry.addGristConversion(new ItemStack(Items.coal, 1, 0), true, new GristSet(new GristType[] {GristType.Tar}, new int[] {8}));
 		GristRegistry.addGristConversion(new ItemStack(Items.coal, 1, 1), true, new GristSet(new GristType[] {GristType.Tar, GristType.Amber}, new int[] {6, 2}));
 		GristRegistry.addGristConversion("oreIron", new GristSet(new GristType[] {GristType.Build, GristType.Rust}, new int[] {4, 9}));
@@ -519,6 +519,23 @@ public class AlchemyRecipeHandler
 		GameRegistry.addRecipe(new Recipes.EmptyCardRecipe(3, 1, new ItemStack[]{cruxBl.copy(), card.copy(), crux.copy()}, new ItemStack(modusCard, 1, 0)));
 		GameRegistry.addRecipe(new Recipes.EmptyCardRecipe(3, 1, new ItemStack[]{crux.copy(), card.copy(), cruxBl.copy()}, new ItemStack(modusCard, 1, 1)));
 		GameRegistry.addSmelting(goldSeeds, new ItemStack(Items.gold_nugget), 0.1F);
+		GameRegistry.addSmelting(ironOreSandstone, new ItemStack(Items.iron_ingot), 0.7F);
+		GameRegistry.addSmelting(ironOreSandstoneRed, new ItemStack(Items.iron_ingot), 0.7F);
+		GameRegistry.addSmelting(goldOreSandstone, new ItemStack(Items.gold_ingot), 1.0F);
+		GameRegistry.addSmelting(goldOreSandstoneRed, new ItemStack(Items.gold_ingot), 1.0F);
+		
+		//Register ore dictionary entries
+		OreDictionary.registerOre("oreCoal", coalOreNetherrack);
+		OreDictionary.registerOre("oreIron", ironOreSandstone);
+		OreDictionary.registerOre("oreIron", ironOreSandstoneRed);
+		OreDictionary.registerOre("oreGold", goldOreSandstone);
+		OreDictionary.registerOre("oreGold", goldOreSandstoneRed);
+		
+		coalOreNetherrack.setHarvestLevel("pickaxe", Blocks.coal_ore.getHarvestLevel(Blocks.coal_ore.getDefaultState()));
+		ironOreSandstone.setHarvestLevel("pickaxe", Blocks.iron_ore.getHarvestLevel(Blocks.iron_ore.getDefaultState()));
+		ironOreSandstoneRed.setHarvestLevel("pickaxe", Blocks.iron_ore.getHarvestLevel(Blocks.iron_ore.getDefaultState()));
+		goldOreSandstone.setHarvestLevel("pickaxe", Blocks.gold_ore.getHarvestLevel(Blocks.gold_ore.getDefaultState()));
+		goldOreSandstoneRed.setHarvestLevel("pickaxe", Blocks.gold_ore.getHarvestLevel(Blocks.gold_ore.getDefaultState()));
 		
 		//add grist conversions
 		GristRegistry.addGristConversion(new ItemStack(coloredDirt, 1), false, new GristSet(new GristType[] {GristType. Build}, new int[] {1}));
@@ -616,6 +633,11 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Items.water_bucket), new ItemStack(Items.lava_bucket), MODE_OR, new ItemStack(obsidianBucket));	//water_bucket && lava bucket could make a bucket with liquid obsidian? (from a mod that adds liquid obsidian)
 		CombinationRegistry.addCombination(new ItemStack(Items.bucket), new ItemStack(Blocks.obsidian), MODE_AND, new ItemStack(obsidianBucket));	//bucket || obsidian could make a bucket made out of obsidian
 		CombinationRegistry.addCombination(new ItemStack(Blocks.brown_mushroom), new ItemStack(Items.glowstone_dust), MODE_OR, new ItemStack(glowingMushroom));
+		CombinationRegistry.addCombination(new ItemStack(Items.coal), new ItemStack(Blocks.netherrack), MODE_AND, new ItemStack(coalOreNetherrack));
+		CombinationRegistry.addCombination(new ItemStack(Items.iron_ingot), new ItemStack(Blocks.sandstone), MODE_AND, new ItemStack(ironOreSandstone));
+		CombinationRegistry.addCombination(new ItemStack(Items.iron_ingot), new ItemStack(Blocks.red_sandstone), MODE_AND, new ItemStack(ironOreSandstoneRed));
+		CombinationRegistry.addCombination(new ItemStack(Items.gold_ingot), new ItemStack(Blocks.sandstone), MODE_AND, new ItemStack(goldOreSandstone));
+		CombinationRegistry.addCombination(new ItemStack(Items.gold_ingot), new ItemStack(Blocks.red_sandstone), MODE_AND, new ItemStack(goldOreSandstoneRed));
 		
 		CombinationRegistry.addCombination(new ItemStack(Items.diamond_sword), new ItemStack(Items.emerald), MODE_OR, false, false, new ItemStack(emeraldSword));
 		CombinationRegistry.addCombination(new ItemStack(Items.diamond_axe), new ItemStack(Items.emerald), MODE_OR, false, false, new ItemStack(emeraldAxe));

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.BlockSilverfish;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -77,16 +78,18 @@ public class LandAspectRock extends TerrainLandAspect
 	@Override
 	public List<ILandDecorator> getDecorators()
 	{
-		List<ILandDecorator> decorators = new ArrayList<ILandDecorator>();
-		decorators.add(new UndergroundDecoratorVein(Blocks.coal_ore.getDefaultState(), 35, 8, 70));
-		decorators.add(new UndergroundDecoratorVein(Blocks.iron_ore.getDefaultState(), 24, 6, 64));
-		decorators.add(new UndergroundDecoratorVein(Blocks.gold_ore.getDefaultState(), 18, 5, 30));
-		decorators.add(new UndergroundDecoratorVein(Blocks.redstone_ore.getDefaultState(), 13, 4, 40));
-		decorators.add(new UndergroundDecoratorVein(Blocks.lapis_ore.getDefaultState(), 10, 5, 35));
-		decorators.add(new UndergroundDecoratorVein(Blocks.diamond_ore.getDefaultState(), 9, 4, 25));
+		List<ILandDecorator> list = new ArrayList<ILandDecorator>();
+		list.add(new UndergroundDecoratorVein(Blocks.coal_ore.getDefaultState(), 20, 17, 128));
+		list.add(new UndergroundDecoratorVein(Blocks.iron_ore.getDefaultState(), 20, 9, 64));
+		list.add(new UndergroundDecoratorVein(Blocks.redstone_ore.getDefaultState(), 10, 8, 32));
+		list.add(new UndergroundDecoratorVein(Blocks.lapis_ore.getDefaultState(), 4, 7, 24));
+		list.add(new UndergroundDecoratorVein(Blocks.gold_ore.getDefaultState(), 4, 9, 32));
+		list.add(new UndergroundDecoratorVein(Blocks.diamond_ore.getDefaultState(), 2, 6, 24));
+		list.add(new UndergroundDecoratorVein(Blocks.gravel.getDefaultState(), 10, 33, 256));
+		list.add(new UndergroundDecoratorVein(Blocks.monster_egg.getDefaultState().withProperty(BlockSilverfish.VARIANT, BlockSilverfish.EnumType.STONE), 7, 9, 64));
 		
-		decorators.add(new BlockBlobDecorator(Blocks.cobblestone.getDefaultState(), 0));
-		return decorators;
+		list.add(new BlockBlobDecorator(Blocks.cobblestone.getDefaultState(), 0));
+		return list;
 	}
 	
 	@Override

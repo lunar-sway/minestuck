@@ -83,7 +83,12 @@ public class LandAspectFrost extends TerrainLandAspect
 		list.add(new SurfaceDecoratorVein(Blocks.dirt.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.COARSE_DIRT), 10, 32));
 		list.add(new SurfaceDecoratorVein(Blocks.ice.getDefaultState(), 5, 8));
 		list.add(new SurfaceDecoratorVein(Blocks.snow.getDefaultState(), 10, 16));
-		list.add(new UndergroundDecoratorVein(Blocks.packed_ice.getDefaultState(), 20, 8, 128));
+		
+		list.add(new UndergroundDecoratorVein(Blocks.packed_ice.getDefaultState(), 2, 8, 64));
+		list.add(new UndergroundDecoratorVein(Blocks.snow.getDefaultState(), 3, 16, 64));
+		list.add(new UndergroundDecoratorVein(Blocks.dirt.getDefaultState(), 3, 28, 64));
+		list.add(new UndergroundDecoratorVein(Blocks.coal_ore.getDefaultState(), 13, 17, 64));
+		list.add(new UndergroundDecoratorVein(Blocks.diamond_ore.getDefaultState(), 3, 6, 24));
 		return list;
 	}
 	

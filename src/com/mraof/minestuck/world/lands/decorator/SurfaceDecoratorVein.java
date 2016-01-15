@@ -16,12 +16,19 @@ public class SurfaceDecoratorVein implements ILandDecorator
 	public int amount;
 	public IBlockState block;
 	public int size;
+	public float priority;
 	
-	public SurfaceDecoratorVein(IBlockState block,int amount,int size) 
+	public SurfaceDecoratorVein(IBlockState block, int amount, int size)
+	{
+		this(block, amount, size, 0.3F);
+	}
+	
+	public SurfaceDecoratorVein(IBlockState block, int amount, int size, float priority)
 	{
 		this.amount = amount;
 		this.block = block;
 		this.size = size;
+		this.priority = priority;
 	}
 	
 	@Override
@@ -43,7 +50,7 @@ public class SurfaceDecoratorVein implements ILandDecorator
 	@Override
 	public float getPriority()
 	{
-		return 0.2F;
+		return priority;
 	}
 	
 }
