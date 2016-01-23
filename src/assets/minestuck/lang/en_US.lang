@@ -360,6 +360,8 @@ minestuck.config.alchemyIcons=Alchemy Grist Icons
 minestuck.config.alchemyIcons.tooltip=Replaces grist names in the alchemiter/grist widget with icons, and makes the entries adapt to each others length.
 minestuck.config.dataCheckerPermission=Data Checker Permission
 minestuck.config.dataCheckerPermission.tooltip=Determines who's allowed to access the data checker. "No One": No one is allowed. "Only Operators": only those with a command permission of level 2 or more may access the data ckecker. (for single player, that would be if cheats are turned on) "Only Creative And Spectator": Only players with the creative or spectator gamemode may view the data checker. "Operators, Creative and Spectator": Only non-op survival/adventure players are prevented from using the data checker. "Anyone": No access restrictions are used.
+minestuck.config.vanillaOreDrop=Vanilla Ore Drop
+minestuck.config.vanillaOreDrop.tooltip=If this is true, the custom vanilla ores added by this mod will drop the standard vanilla ores when mined, instead of the custom type.
 
 message.selectDefaultColor=Default color selected. You can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!
 message.selectColor=If you want to change the color, you can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!

@@ -84,7 +84,7 @@ public class LandAspectFrost extends TerrainLandAspect
 		list.add(new SurfaceDecoratorVein(Blocks.ice.getDefaultState(), 5, 8));
 		list.add(new SurfaceDecoratorVein(Blocks.snow.getDefaultState(), 10, 16));
 		
-		list.add(new UndergroundDecoratorVein(Blocks.packed_ice.getDefaultState(), 2, 8, 64));
+		list.add(new UndergroundDecoratorVein(Blocks.packed_ice.getDefaultState(), 2, 8, 64));	//Have 64 be the highest value because stone is used as a building material for structures right now
 		list.add(new UndergroundDecoratorVein(Blocks.snow.getDefaultState(), 3, 16, 64));
 		list.add(new UndergroundDecoratorVein(Blocks.dirt.getDefaultState(), 3, 28, 64));
 		list.add(new UndergroundDecoratorVein(Blocks.coal_ore.getDefaultState(), 13, 17, 64));

@@ -3,13 +3,16 @@ package com.mraof.minestuck.block;
 import java.util.Random;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
@@ -46,8 +49,8 @@ public class BlockVanillaOre extends Block
 		switch(oreType)
 		{
 		case COAL: return Items.coal;
-		case IRON: return Item.getItemFromBlock(this);
-		case GOLD: return Item.getItemFromBlock(this);
+		case IRON: return Item.getItemFromBlock(MinestuckConfig.vanillaOreDrop ? Blocks.iron_ore : this);
+		case GOLD: return Item.getItemFromBlock(MinestuckConfig.vanillaOreDrop ? Blocks.gold_ore : this);
 		case LAPIS: return Items.dye;
 		case DIAMOND: return Items.diamond;
 		case EMERALD: return Items.emerald;
@@ -113,4 +116,23 @@ public class BlockVanillaOre extends Block
 	{
 		return oreType == OreType.LAPIS ? EnumDyeColor.BLUE.getDyeDamage() : 0;
 	}
+	
+	@Override
+	protected ItemStack createStackedBlock(IBlockState state)
+	{
+		if(!MinestuckConfig.vanillaOreDrop)
+			return super.createStackedBlock(state);
+		else switch(oreType)
+		{
+		case COAL: return new ItemStack(Blocks.coal_ore);
+		case IRON: return new ItemStack(Blocks.iron_ore);
+		case GOLD: return new ItemStack(Blocks.gold_ore);
+		case LAPIS: return new ItemStack(Blocks.lapis_ore);
+		case DIAMOND: return new ItemStack(Blocks.diamond_ore);
+		case EMERALD: return new ItemStack(Blocks.emerald_ore);
+		case QUARTZ: return new ItemStack(Blocks.quartz_ore);
+		default: return new ItemStack(this);
+		}
+	}
+	
 }

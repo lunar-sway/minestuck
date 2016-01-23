@@ -430,7 +430,8 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination("stickWood", Blocks.iron_bars, WILDCARD_VALUE, MODE_AND, new ItemStack(Blocks.rail));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.cobblestone_wall), new ItemStack(Blocks.mossy_cobblestone), MODE_OR, new ItemStack(Blocks.cobblestone_wall, 1, 1));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.dispenser), new ItemStack(Blocks.hopper), MODE_AND, new ItemStack(Blocks.dropper));
-		CombinationRegistry.addCombination(new ItemStack(Blocks.torch), new ItemStack(Items.redstone), MODE_OR, new ItemStack(Blocks.redstone_torch));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.torch), new ItemStack(Items.redstone), MODE_AND, new ItemStack(Blocks.redstone_torch));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.torch), new ItemStack(Items.redstone), MODE_OR, new ItemStack(Items.glowstone_dust));
 		CombinationRegistry.addCombination(new ItemStack(Items.minecart), new ItemStack(Blocks.chest), MODE_AND, new ItemStack(Items.chest_minecart));
 		CombinationRegistry.addCombination(new ItemStack(Items.minecart), new ItemStack(Blocks.furnace), MODE_AND, new ItemStack(Items.furnace_minecart));
 		CombinationRegistry.addCombination(new ItemStack(Items.minecart), new ItemStack(Blocks.tnt), MODE_AND, new ItemStack(Items.tnt_minecart));
