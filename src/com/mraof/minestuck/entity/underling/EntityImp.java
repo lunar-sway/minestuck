@@ -25,7 +25,7 @@ public class EntityImp extends EntityUnderling
 	@Override
 	public GristSet getGristSpoils()
 	{
-		return GristHelper.getRandomDrop(type, 0.75);
+		return GristHelper.getRandomDrop(type, 1);
 	}
 	
 	@Override
@@ -44,7 +44,7 @@ public class EntityImp extends EntityUnderling
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return type != null ? 5*type.getPower() + 5 : 1;
+		return type != null ? 6*type.getPower() + 8 : 1;
 	}
 	
 	@Override
@@ -56,7 +56,7 @@ public class EntityImp extends EntityUnderling
 	@Override
 	protected double getAttackDamage()
 	{
-		return Math.ceil((this.type.getPower() + 1) / 1.5);
+		return Math.ceil(this.type.getPower() + 1);
 	}
 	
 	@Override

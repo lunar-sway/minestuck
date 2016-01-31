@@ -40,7 +40,7 @@ public class Echeladder
 	
 	private int getRungProgressReq()
 	{
-		return (int) (Math.pow(1.3, rung)*6);
+		return (int) (Math.pow(1.4, rung)*8);
 	}
 	
 	public void increaseEXP(int exp)
@@ -101,13 +101,23 @@ public class Echeladder
 		return ((float) progress)/getRungProgressReq();
 	}
 	
+	public float getUnderlingDamageModifier()
+	{
+		return 1 + rung*0.1F;
+	}
+	
+	public float getUnderlingProtectionModifier()
+	{
+		return 1/(rung*0.05F + 1);
+	}
+	
 	public void updateEcheladderBonuses(EntityPlayer player)
 	{
 		int healthBonus = (int) (40*(rung/(float) Echeladder.RUNG_COUNT));	//At max rung, the player will have three rows of hearts
 		float damageBonus = rung*0.1F;
 		
 		Debug.printf("Health bonus for rung %d: %d", rung + 1, healthBonus);
-		updateAttribute(player.getEntityAttribute(SharedMonsterAttributes.maxHealth), new AttributeModifier(echeladderHealthBoostModifierUUID, "Echeladder Health Boost", healthBonus, 0));
+		updateAttribute(player.getEntityAttribute(SharedMonsterAttributes.maxHealth), new AttributeModifier(echeladderHealthBoostModifierUUID, "Echeladder Health Boost", healthBonus, 0).setSaved(false));
 		updateAttribute(player.getEntityAttribute(SharedMonsterAttributes.attackDamage), new AttributeModifier(echeladderDamageBoostModifierUUID, "Echeladder Damage Boost", damageBonus, 2).setSaved(false));
 	}
 	

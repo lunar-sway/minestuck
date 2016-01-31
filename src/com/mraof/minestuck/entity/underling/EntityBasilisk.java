@@ -29,7 +29,7 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	@Override
 	public GristSet getGristSpoils() 
 	{
-		return GristHelper.getRandomDrop(type, 4.5);
+		return GristHelper.getRandomDrop(type, 5);
 	}
 
 	@Override
@@ -45,13 +45,13 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return type != null ? 15 * type.getPower() + 65 : 1;
+		return type != null ? 18 * type.getPower() + 70 : 1;
 	}
 
 	@Override
 	protected double getWanderSpeed()
 	{
-		return 0.7;
+		return 0.75;
 	}
 	
 	@Override
@@ -63,7 +63,7 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	@Override
 	protected double getAttackDamage()
 	{
-		return this.type.getPower()*2 + 4;
+		return this.type.getPower()*2.7 + 6;
 	}
 	
 	@Override

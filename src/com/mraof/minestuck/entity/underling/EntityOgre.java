@@ -27,7 +27,7 @@ public class EntityOgre extends EntityUnderling
 	@Override
 	public GristSet getGristSpoils()
 	{
-		return GristHelper.getRandomDrop(type, 3);
+		return GristHelper.getRandomDrop(type, 4);
 	}
 	
 	@Override
@@ -42,12 +42,12 @@ public class EntityOgre extends EntityUnderling
 	@Override
 	protected double getWanderSpeed() 
 	{
-		return 0.6;
+		return 0.65;
 	}
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return type != null ? 10.5F * type.getPower() + 29 : 1;
+		return type != null ? 12F * type.getPower() + 40 : 1;
 	}
 	
 	@Override
@@ -59,7 +59,7 @@ public class EntityOgre extends EntityUnderling
 	@Override
 	protected double getAttackDamage()
 	{
-		return this.type.getPower() * 1.5 + 4;
+		return this.type.getPower() * 2.1 + 6;
 	}
 	
 	@Override

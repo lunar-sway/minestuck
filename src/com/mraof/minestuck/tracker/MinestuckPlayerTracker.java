@@ -131,6 +131,12 @@ public class MinestuckPlayerTracker {
 		}
 	}
 	
+	@SubscribeEvent
+	public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) 
+	{
+		MinestuckPlayerData.getData(event.player).echeladder.updateEcheladderBonuses(event.player);
+	}
+	
 	public static Set<String> dataCheckerPermission = new HashSet<String>();
 	
 	private static boolean shouldUpdateConfigurations(EntityPlayerMP player)
