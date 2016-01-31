@@ -20,6 +20,7 @@ import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.BlockBlobDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
+import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 import com.mraof.minestuck.world.lands.decorator.WorldGenDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.gen.DefaultTerrainGen;
@@ -126,6 +127,10 @@ public class LandAspectSandstone extends TerrainLandAspect
 		list.add(new SurfaceDecoratorVein(sand, 10, 32));
 		list.add(new BlockBlobDecorator(sandstone, 0));
 		list.add(new WorldGenDecorator(new WorldGenDeadBush(), 15, 0.4F));	//Will be especially uncommon because it only spawns on sand
+		
+		list.add(new UndergroundDecoratorVein(upperBlock, 8, 28, 256));
+		list.add(new UndergroundDecoratorVein(Blocks.iron_ore.getDefaultState(), 24, 9, 64));
+		list.add(new UndergroundDecoratorVein(Blocks.redstone_ore.getDefaultState(), 12, 8, 32));
 		return list;
 	}
 	

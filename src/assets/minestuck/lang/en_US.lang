@@ -28,6 +28,8 @@ commands.grist.get=%s has:%s
 commands.grist.invalidSyntax=Invalid grist name: %s
 commands.grist.addSuccess=Successfully increased grist value for "%s"
 commands.grist.setSuccess=Successfully changed grist value for "%s"
+commands.gristSend.usage=/gristSend <player> <gristtype value ...>
+commands.gristSend.success=Successfully gave grist to %s: %s
 commands.invalidSubCommand=Invalid Command: "%s"
 commands.sburbSession.usage=/sburbSession <session name> <add|name|title|landTerrain|landTitle> [values ...]
 commands.sburbSession.addSuccess=Successfully added/removed %d/%d players.
@@ -41,6 +43,8 @@ commands.sburbSession.landTitleSuccess=Successfully predefined %s's title land a
 commands.tpz.usage=/tpz [player] <transportalizer code>
 commands.tpz.notFound=Couldn't find transportalizer with ID "%s"
 commands.tpz.success=Successfully teleported %s to transprtalizer "%s"
+commands.playerOnly=This command is only useable by players.
+commands.playerOnly.redidectGrist=This command is only useable by players. Try /grist instead.
 
 computer.buttonClear=Clear message
 computer.buttonClose=Disconnect
@@ -387,6 +391,8 @@ minestuck.config.alchemyIcons=Alchemy Grist Icons
 minestuck.config.alchemyIcons.tooltip=Replaces grist names in the alchemiter/grist widget with icons, and makes the entries adapt to each others length.
 minestuck.config.dataCheckerPermission=Data Checker Permission
 minestuck.config.dataCheckerPermission.tooltip=Determines who's allowed to access the data checker. "No One": No one is allowed. "Only Operators": only those with a command permission of level 2 or more may access the data ckecker. (for single player, that would be if cheats are turned on) "Only Creative And Spectator": Only players with the creative or spectator gamemode may view the data checker. "Operators, Creative and Spectator": Only non-op survival/adventure players are prevented from using the data checker. "Anyone": No access restrictions are used.
+minestuck.config.vanillaOreDrop=Vanilla Ore Drop
+minestuck.config.vanillaOreDrop.tooltip=If this is true, the custom vanilla ores added by this mod will drop the standard vanilla ores when mined, instead of the custom type.
 minestuck.config.preEntryRungLimit=Pre-entry Rung Limit
 minestuck.config.preEntryRungLimit.tooltip=The highest rung you can get before entering medium. Note that the first rung is indexed as 0, the second as 1 and so on.
 

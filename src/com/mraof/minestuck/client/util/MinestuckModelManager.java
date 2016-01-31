@@ -133,6 +133,11 @@ public class MinestuckModelManager
 		register(oreCruxite, 2, "cruxite_cobblestone");
 		register(oreCruxite, 3, "cruxite_sandstone");
 		register(oreCruxite, 4, "cruxite_sandstone_red");
+		register(coalOreNetherrack);
+		register(ironOreSandstone);
+		register(ironOreSandstoneRed);
+		register(goldOreSandstone);
+		register(goldOreSandstoneRed);
 		for(BlockColoredDirt.BlockType type : BlockColoredDirt.BlockType.values())
 			register(coloredDirt, type.ordinal(), "colored_dirt_"+type.name);
 		for(BlockStorage.BlockType type : BlockStorage.BlockType.values())

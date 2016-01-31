@@ -150,7 +150,7 @@ public class GristSet {
 			{
 				if(!first)
 					build.append(',');
-				build.append(GristType.values()[i].name()+"="+gristTypes[i]+",");
+				build.append(GristType.values()[i].name()+"="+gristTypes[i]);
 				first = false;
 			}
 		

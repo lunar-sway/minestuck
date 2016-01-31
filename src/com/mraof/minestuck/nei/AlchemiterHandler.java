@@ -4,12 +4,8 @@ import static codechicken.lib.gui.GuiDraw.changeTexture;
 
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -25,11 +21,11 @@ import codechicken.nei.recipe.TemplateRecipeHandler;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.GristType;
-import com.mraof.minestuck.util.Pair;
 
 public class AlchemiterHandler extends TemplateRecipeHandler
 {
@@ -143,16 +139,82 @@ public class AlchemiterHandler extends TemplateRecipeHandler
 			Point offset = gui.getRecipePosition(recipe);
 			Point mouse = GuiDraw.getMousePosition();
 			int posX = (int) mouse.x - offset.x - (gui.width - 176)/2, posY = mouse.y - offset.y - (gui.height - 166)/2;
-			if(MinestuckConfig.alchemyIcons && posX >= 4 && posY >= 34 && posX < 162 && posY < 58)
+			if(posX >= 4 && posY >= 34 && posX < 162 && posY < 58)
 			{
-				for(Pair<Rectangle, String> pair : tooltips)
-				{
-					if(pair.object1.contains(posX, posY))
+				ItemStack result = arecipes.get(recipe).getResult().item;
+				GristSet set = GristRegistry.getGristConversion(result);
+				GristSet playerGrist = MinestuckPlayerData.getClientGrist();
+				
+				if(set != null && !set.isEmpty())
+					if(!MinestuckConfig.alchemyIcons)
 					{
-						currenttip.add(pair.object2);
-						break;
+						int place = 0;
+						for(GristAmount entry : set.getArray())
+						{
+							int row = place % 3;
+							int col = place / 3;
+							
+							if(posY >= 34 + 8*row && posY < 42 + 8*row)
+							{
+								int need = entry.getAmount();
+								String needStr = GuiHandler.addSuffix(need);
+								
+								if(!needStr.equals(String.valueOf(need)) && posX >= 4 + 79*col && posX < 4 + 79*col + GuiDraw.getStringWidth(needStr))
+								{
+									currenttip.add(String.valueOf(need));
+									break;
+								}
+								
+								int width = GuiDraw.getStringWidth(needStr + " " + entry.getType().getDisplayName() + " (");
+								int have = playerGrist.getGrist(entry.getType());
+								String haveStr = GuiHandler.addSuffix(have);
+								
+								if(!haveStr.equals(String.valueOf(have)) && posX >= 4 + 79*col + width && posX < 4 + 79*col + width + GuiDraw.getStringWidth(haveStr))
+								{
+									currenttip.add(String.valueOf(have));
+									break;
+								}
+							}
+							
+							place++;
+						}
+					} else
+					{
+						int index = 0;
+						for(GristAmount entry : set.getArray())
+						{
+							GristType type = entry.getType();
+							int need = entry.getAmount();
+							int have = playerGrist.getGrist(type);
+							int row = index/158;
+							
+							String needStr = GuiHandler.addSuffix(need), haveStr = GuiHandler.addSuffix(have);
+							int needStrWidth = GuiDraw.getStringWidth(needStr);
+							int haveStrWidth = GuiDraw.getStringWidth('('+haveStr+')');
+							
+							if(index + needStrWidth + 10 + haveStrWidth > (row + 1)*158)
+							{
+								row++;
+								index = row*158;
+							}
+							
+							if(posY >= 34 + 8*row && posY < 42 + 8*row)
+							{
+								if(!needStr.equals(String.valueOf(need)) && posX >= 4 + index%158 && posX < 4 + index%158 + needStrWidth)
+									currenttip.add(String.valueOf(need));
+								else if(posX >= needStrWidth + 5 + index%158 && posX < needStrWidth + 13 + index%158)
+									currenttip.add(type.getDisplayName());
+								else if(!haveStr.equals(String.valueOf(have)) && posX >= needStrWidth + 14 + index%158 + GuiDraw.getStringWidth("(") && posX < needStrWidth + 14 + index%158 + GuiDraw.getStringWidth("("+haveStr))
+									currenttip.add(String.valueOf(have));
+								
+								if(!currenttip.isEmpty())
+									break;
+							}
+							
+							index += needStrWidth + 10 + haveStrWidth;
+							index = Math.min(index + 6, (row + 1)*158);
+						}
 					}
-				}
 			}
 		}
 		
@@ -168,22 +230,19 @@ public class AlchemiterHandler extends TemplateRecipeHandler
 		}
 		GristSet playerGrist = MinestuckPlayerData.getClientGrist();
 		
-		Hashtable<Integer, Integer> reqs = cost.getHashtable();
-		if (reqs.size() == 0)
+		if (cost.isEmpty())
 		{
 			GuiDraw.drawString(StatCollector.translateToLocal("gui.free"), 4,34, 65280);
 			return;
 		}
-		Iterator<Entry<Integer, Integer>> it = reqs.entrySet().iterator();
-		tooltips.clear();
+		
 		if(!MinestuckConfig.alchemyIcons)
 		{
 			int place = 0;
-			while (it.hasNext())
+			for(GristAmount entry : cost.getArray())
 			{
-				Map.Entry<Integer, Integer> pairs = it.next();
-				GristType type = GristType.values()[pairs.getKey()];
-				int need = pairs.getValue();
+				GristType type = entry.getType();
+				int need = entry.getAmount();
 				int have = playerGrist.getGrist(type);
 				
 				int row = place % 3;
@@ -194,31 +253,20 @@ public class AlchemiterHandler extends TemplateRecipeHandler
 				String needStr = GuiHandler.addSuffix(need), haveStr = GuiHandler.addSuffix(have);
 				GuiDraw.drawString(needStr + " " + type.getDisplayName() + " (" + haveStr + ")", 4 + 79*col, 34 + 8*row, color);
 				
-				if(!needStr.equals(String.valueOf(need)))
-					tooltips.add(new Pair<Rectangle, String>(new Rectangle(4 + 79*col, 34 + 8*row, GuiDraw.getStringWidth(needStr), 8), String.valueOf(need)));
-				else if(!haveStr.equals(String.valueOf(have)))
-				{
-					int width = GuiDraw.getStringWidth(needStr + " " + type.getDisplayName() + " (");
-					tooltips.add(new Pair<Rectangle, String>(new Rectangle(4 + 79*col + width, 34 + 8*row, GuiDraw.getStringWidth(haveStr), 8), String.valueOf(need)));
-				}
-				
 				place++;
 			}
 		} else
 		{
 			int index = 0;
-			while(it.hasNext())
+			for(GristAmount entry : cost.getArray())
 			{
-				Map.Entry<Integer, Integer> pairs = it.next();
-				GristType type = GristType.values()[pairs.getKey()];
-				int need = pairs.getValue();
+				GristType type = entry.getType();
+				int need = entry.getAmount();
 				int have = playerGrist.getGrist(type);
 				int row = index/158;
 				int color = need <= have ? 0x00FF00 : 0xFF0000;
 				
 				String needStr = GuiHandler.addSuffix(need), haveStr = GuiHandler.addSuffix(have);
-				boolean prefixHave = !haveStr.equals(String.valueOf(have));
-				int haveStrWidth = GuiDraw.getStringWidth(haveStr);
 				haveStr = '('+haveStr+')';
 				int needStrWidth = GuiDraw.getStringWidth(needStr);
 				
@@ -235,20 +283,11 @@ public class AlchemiterHandler extends TemplateRecipeHandler
 				changeTexture("minestuck:textures/grist/" + type.getName()+ ".png");
 				drawTexturedModalRect(needStrWidth + 5 + index%158, 34 + 8*row, 0, 0, 8, 8, 8, 8);
 				
-				tooltips.add(new Pair<Rectangle, String>(new Rectangle(needStrWidth + 5 + index%158, 34 + 8*row, 8, 8), type.getDisplayName()));
-				if(!needStr.equals(String.valueOf(need)))
-					tooltips.add(new Pair<Rectangle, String>(new Rectangle(4 + index%158, 34 + 8*row, needStrWidth, 8), String.valueOf(need)));
-				if(prefixHave)
-					tooltips.add(new Pair<Rectangle, String>(new Rectangle(needStrWidth + 14 + index%158 + GuiDraw.getStringWidth("("), 34 + 8*row, haveStrWidth, 8), String.valueOf(have)));
-				
 				index += needStrWidth + 10 + GuiDraw.getStringWidth(haveStr);
 				index = Math.min(index + 6, (row + 1)*158);
 			}
 		}
 	}
-	
-	//Is it better to recreate the grist entry layout and get the tooltip in handleTooltip, or to store it when creating the layout for rendering, as demonstrated here?
-	private List<Pair<Rectangle, String>> tooltips = new ArrayList<Pair<Rectangle, String>>();
 	
 	public void drawTexturedModalRect(int par1, int par2, int par3, int par4, int par5, int par6,int w, int h) {
 			float f = (float)1/w;

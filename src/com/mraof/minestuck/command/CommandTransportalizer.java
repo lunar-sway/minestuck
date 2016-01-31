@@ -79,6 +79,8 @@ public class CommandTransportalizer extends CommandBase
 		if(block0.getBlock().getMaterial().blocksMovement() || block1.getBlock().getMaterial().blocksMovement())
 			throw new CommandException("message.transportalizer.destinationBlocked");
 		
+		player.timeUntilPortal = 60;
+		
 		if(location.dim != player.dimension)
 			Teleport.teleportEntity(player, location.dim, (TileEntityTransportalizer) te, false);
 		else

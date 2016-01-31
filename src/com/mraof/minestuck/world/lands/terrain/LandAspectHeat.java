@@ -3,11 +3,13 @@ package com.mraof.minestuck.world.lands.terrain;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.FireFieldDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
+import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -76,6 +78,10 @@ public class LandAspectHeat extends TerrainLandAspect
 		list.add(new FireFieldDecorator());
 		list.add(new SurfaceDecoratorVein(Blocks.soul_sand.getDefaultState(), 10, 32));
 		list.add(new SurfaceDecoratorVein(Blocks.glowstone.getDefaultState(), 5, 8));
+		
+		list.add(new UndergroundDecoratorVein(Blocks.gravel.getDefaultState(), 8, 33, 256));
+		list.add(new UndergroundDecoratorVein(MinestuckBlocks.coalOreNetherrack.getDefaultState(), 26, 17, 128));
+		list.add(new UndergroundDecoratorVein(Blocks.quartz_ore.getDefaultState(), 13, 14, 64));
 		return list;
 	}
 	

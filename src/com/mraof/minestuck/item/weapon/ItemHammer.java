@@ -121,4 +121,10 @@ public class ItemHammer extends ItemWeapon
 		return 0.7;
 	}
 	
+	@Override
+	public boolean canHarvestBlock(Block blockIn)
+	{
+		return blockIn.getMaterial() == Material.rock || blockIn.getMaterial() == Material.anvil || blockIn.getMaterial() == Material.iron;
+	}
+	
 }

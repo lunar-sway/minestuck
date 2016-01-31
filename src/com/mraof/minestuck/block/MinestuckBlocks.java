@@ -33,6 +33,12 @@ public class MinestuckBlocks
 	public static Block gate;
 	public static BlockGlowingMushroom glowingMushroom;
 	
+	public static Block coalOreNetherrack;
+	public static Block ironOreSandstone;
+	public static Block ironOreSandstoneRed;
+	public static Block goldOreSandstone;
+	public static Block goldOreSandstoneRed;
+	
 	public static Block blockOil;
 	public static Block blockBlood;
 	public static Block blockBrainJuice;
@@ -47,7 +53,14 @@ public class MinestuckBlocks
 		//blocks
 		chessTile = GameRegistry.registerBlock(new BlockChessTile(), ItemChessTile.class, "chess_tile");
 		skaiaPortal = GameRegistry.registerBlock(new BlockSkaiaPortal(Material.portal), "skaia_portal");
+		
 		oreCruxite = (OreCruxite) GameRegistry.registerBlock(new OreCruxite(), ItemOreCruxite.class, "ore_cruxite");
+		coalOreNetherrack = GameRegistry.registerBlock(new BlockVanillaOre(BlockVanillaOre.OreType.COAL).setUnlocalizedName("oreCoal"), "coal_ore_netherrack");
+		ironOreSandstone = GameRegistry.registerBlock(new BlockVanillaOre(BlockVanillaOre.OreType.IRON).setUnlocalizedName("oreIron"), "iron_ore_sandstone");
+		ironOreSandstoneRed = GameRegistry.registerBlock(new BlockVanillaOre(BlockVanillaOre.OreType.IRON).setUnlocalizedName("oreIron"), "iron_ore_sandstone_red");
+		goldOreSandstone = GameRegistry.registerBlock(new BlockVanillaOre(BlockVanillaOre.OreType.GOLD).setUnlocalizedName("oreGold"), "gold_ore_sandstone");
+		goldOreSandstoneRed = GameRegistry.registerBlock(new BlockVanillaOre(BlockVanillaOre.OreType.GOLD).setUnlocalizedName("oreGold"), "gold_ore_sandstone_red");
+		
 		layeredSand = GameRegistry.registerBlock(new BlockLayered(Blocks.sand), ItemBlockLayered.class, "layered_sand").setUnlocalizedName("layeredSand");
 		coloredDirt = (BlockColoredDirt) GameRegistry.registerBlock(new BlockColoredDirt(), ItemColoredDirt.class, "colored_dirt").setUnlocalizedName("coloredDirt").setHardness(0.5F);
 		blockStorage = GameRegistry.registerBlock(new BlockStorage(),ItemStorageBlock.class,"storage_block");
@@ -74,5 +87,4 @@ public class MinestuckBlocks
 		fluidBlood.setUnlocalizedName(blockBlood.getUnlocalizedName());
 		fluidBrainJuice.setUnlocalizedName(blockBrainJuice.getUnlocalizedName());
 	}
-	
 }

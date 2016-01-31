@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
+import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 import com.mraof.minestuck.world.lands.decorator.WorldGenDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.gen.LandTerrainGenBase;
@@ -122,6 +124,10 @@ public class LandAspectSand extends TerrainLandAspect
 			list.add(new SurfaceDecoratorVein(Blocks.sand.getDefaultState(), 10, 32));
 		list.add(new WorldGenDecorator(new WorldGenCactus(), 15, 0.4F));
 		list.add(new WorldGenDecorator(new WorldGenDeadBush(), 10, 0.4F));
+		
+		list.add(new UndergroundDecoratorVein(upperBlock, 8, 28, 256));
+		list.add(new UndergroundDecoratorVein((name.equals("SandRed")?MinestuckBlocks.ironOreSandstoneRed:MinestuckBlocks.ironOreSandstone).getDefaultState(), 24, 9, 64));
+		list.add(new UndergroundDecoratorVein((name.equals("SandRed")?MinestuckBlocks.goldOreSandstoneRed:MinestuckBlocks.goldOreSandstone).getDefaultState(), 6, 9, 32));
 		
 		return list;
 	}

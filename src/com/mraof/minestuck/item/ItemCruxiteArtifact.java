@@ -86,31 +86,6 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 				for(int chunkZ = ((z - artifactRange) >> 4) - 1; chunkZ <= ((z + artifactRange) >> 4) + 2; chunkZ++)	//from the overworld.
 					worldserver1.theChunkProviderServer.loadChunk(chunkX, chunkZ);
 			
-			Debug.print("Teleporting entities...");
-			List<?> list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().expand((double)artifactRange, artifactRange, (double)artifactRange));
-			Iterator<?> iterator = list.iterator();
-			
-			entity.setPositionAndUpdate(entity.posX, entity.posY + yDiff, entity.posZ);
-			while (iterator.hasNext())
-			{
-				Entity e = (Entity)iterator.next();
-				if(MinestuckConfig.entryCrater || e instanceof EntityPlayer || e instanceof EntityItem)
-				{
-					e.setPosition(e.posX, e.posY + yDiff, e.posZ);
-					Teleport.teleportEntity(e, worldserver1.provider.getDimensionId(), null, false);
-				}
-				else	//Copy instead of teleport
-				{
-					Entity newEntity = EntityList.createEntityByName(EntityList.getEntityString(entity), worldserver1);
-					if (newEntity != null)
-					{
-						newEntity.copyDataFromOld(entity);
-						newEntity.dimension = worldserver1.provider.getDimensionId();
-						newEntity.setPosition(newEntity.posX, newEntity.posY + yDiff, newEntity.posZ);
-						worldserver1.spawnEntityInWorld(newEntity);
-					}
-				}
-			}
 			Debug.print("Placing blocks...");
 			int nextZWidth = 0;
 			for(int blockX = x - artifactRange; blockX <= x + artifactRange; blockX++)
@@ -159,6 +134,32 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 				}
 			}
 			
+			Debug.print("Teleporting entities...");
+			List<?> list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().expand((double)artifactRange, artifactRange, (double)artifactRange));
+			Iterator<?> iterator = list.iterator();
+			
+			entity.setPositionAndUpdate(entity.posX, entity.posY + yDiff, entity.posZ);
+			while (iterator.hasNext())
+			{
+				Entity e = (Entity)iterator.next();
+				if(MinestuckConfig.entryCrater || e instanceof EntityPlayer || e instanceof EntityItem)
+				{
+					e.setPosition(e.posX, e.posY + yDiff, e.posZ);
+					Teleport.teleportEntity(e, worldserver1.provider.getDimensionId(), null, false);
+				}
+				else	//Copy instead of teleport
+				{
+					Entity newEntity = EntityList.createEntityByName(EntityList.getEntityString(entity), worldserver1);
+					if (newEntity != null)
+					{
+						newEntity.copyDataFromOld(entity);
+						newEntity.dimension = worldserver1.provider.getDimensionId();
+						newEntity.setPosition(newEntity.posX, newEntity.posY + yDiff, newEntity.posZ);
+						worldserver1.spawnEntityInWorld(newEntity);
+					}
+				}
+			}
+			
 			Debug.print("Removing old blocks...");
 			for(int blockX = x - artifactRange; blockX <= x + artifactRange; blockX++)
 			{
@@ -185,7 +186,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 			}
 			SkaianetHandler.clearMovingList();
 			
-			Debug.print("Making sure that old entities are removed...");
+			Debug.print("Removing entities created from removing blocks...");	//Normally only items in containers
 			list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().expand((double)artifactRange, artifactRange, (double)artifactRange));
 			iterator = list.iterator();
 			while (iterator.hasNext())

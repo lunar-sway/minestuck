@@ -78,5 +78,4 @@ public class EntityImp extends EntityUnderling
 			ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET));
 		}
 	}
-	
 }

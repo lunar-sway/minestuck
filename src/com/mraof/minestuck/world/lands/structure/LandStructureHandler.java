@@ -45,8 +45,8 @@ public class LandStructureHandler extends MapGenStructure
 	
 	private static final int MAX_STRUCTURE_DISTANCE = 15;
 	private static final int MIN_STRUCTURE_DISTANCE = 4;
-	private static final int MAX_NODE_DISTANCE = 5;
-	private static final int MIN_NODE_DISTANCE = 2;
+	private static final int MAX_NODE_DISTANCE = 9;
+	private static final int MIN_NODE_DISTANCE = 4;
 	
 	@Override
 	protected boolean canSpawnStructureAtCoords(int chunkX, int chunkZ)	//This works very much like the scattered features in the overworld

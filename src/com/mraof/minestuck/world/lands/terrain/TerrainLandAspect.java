@@ -59,9 +59,9 @@ public abstract class TerrainLandAspect implements ILandAspect<TerrainLandAspect
 		{
 			return getOceanBlock();
 		}
-		
-		public abstract List<ILandDecorator> getDecorators();
-		
+	
+	public abstract List<ILandDecorator> getDecorators();	//TODO Add a Random as parameter
+	
 		/**
 		 *  Returns a integer representing how they land's day cycle will proceed.
 		 *  

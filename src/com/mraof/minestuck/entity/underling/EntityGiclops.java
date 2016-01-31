@@ -184,5 +184,4 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 			ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 3));
 		}
 	}
-	
 }
