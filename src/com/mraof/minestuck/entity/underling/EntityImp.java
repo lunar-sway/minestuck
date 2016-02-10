@@ -71,11 +71,14 @@ public class EntityImp extends EntityUnderling
 	{
 		super.onDeath(cause);
 		Entity entity = cause.getEntity();
-		if(this.dead && entity != null && entity instanceof EntityPlayerMP)
+		if(this.dead && !this.worldObj.isRemote)
 		{
-			Echeladder ladder = MinestuckPlayerData.getData((EntityPlayerMP) entity).echeladder;
-			ladder.increaseEXP((int) (2 + 3*type.getPower()));
-			ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET));
+			computePlayerProgress((int) (2 + 3*type.getPower()));
+			if(entity != null && entity instanceof EntityPlayerMP)
+			{
+				Echeladder ladder = MinestuckPlayerData.getData((EntityPlayerMP) entity).echeladder;
+				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET));
+			}
 		}
 	}
 }

@@ -176,12 +176,15 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 	{
 		super.onDeath(cause);
 		Entity entity = cause.getEntity();
-		if(this.dead && entity != null && entity instanceof EntityPlayerMP)
+		if(this.dead && !this.worldObj.isRemote)
 		{
-			((EntityPlayerMP) entity).triggerAchievement(MinestuckAchievementHandler.killGiclops);
-			Echeladder ladder = MinestuckPlayerData.getData((EntityPlayerMP) entity).echeladder;
-			ladder.increaseEXP((int) (500*type.getPower() + 1000));
-			ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 3));
+			computePlayerProgress((int) (500*type.getPower() + 1000));
+			if(entity != null && entity instanceof EntityPlayerMP)
+			{
+				((EntityPlayerMP) entity).triggerAchievement(MinestuckAchievementHandler.killGiclops);
+				Echeladder ladder = MinestuckPlayerData.getData((EntityPlayerMP) entity).echeladder;
+				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 3));
+			}
 		}
 	}
 }

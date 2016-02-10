@@ -4,6 +4,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.underling.EntityUnderling;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 
 import net.minecraft.entity.monster.EntityBlaze;
@@ -61,12 +62,12 @@ public class ServerEventHandler
 			else if(event.entity instanceof EntityCreeper || event.entity instanceof EntitySpider || event.entity instanceof EntitySilverfish)
 				exp = 5;
 			else if(event.entity instanceof EntityEnderman || event.entity instanceof EntityBlaze || event.entity instanceof EntityWitch || event.entity instanceof EntityGuardian)
-				exp = 10;
+				exp = 12;
 			else if(event.entity instanceof EntitySlime)
 				exp = ((EntitySlime) event.entity).getSlimeSize() - 1;
 			
 			if(exp > 0)
-				MinestuckPlayerData.getData(player).echeladder.increaseEXP(exp);
+				Echeladder.increaseProgress(player, exp);
 		}
 	}
 	

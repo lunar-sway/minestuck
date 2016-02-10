@@ -4,7 +4,9 @@ import io.netty.buffer.ByteBuf;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.entity.Entity;
@@ -17,6 +19,7 @@ import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
@@ -33,6 +36,7 @@ import com.mraof.minestuck.entity.ai.EntityAIHurtByTargetAllied;
 import com.mraof.minestuck.entity.ai.EntityAINearestAttackableTargetWithHeight;
 import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
+import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
@@ -48,6 +52,11 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	protected GristType type;
 	//Name of underling, used in getting the texture and actually naming it
 	public String underlingName;
+	
+	private static final float maxSharedProgress = 2;	//The multiplier for the maximum amount progress that can be gathered from each enemy with the group fight bonus
+	
+	protected Map<EntityPlayerMP, Double> damageMap = new HashMap<EntityPlayerMP, Double>();	//Map that stores how much damage each player did to this to this underling. Null is used for environmental or other non-player damage
+	
 	//random used in randomly choosing a type of creature
 	protected static Random randStatic = new Random();
 	
@@ -238,6 +247,65 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	protected boolean canDespawn()
 	{
 		return !this.hasHome();
+	}
+	
+	@Override
+	protected void damageEntity(DamageSource damageSrc, float damageAmount)
+	{
+		if (!this.isEntityInvulnerable(damageSrc))
+		{
+			damageAmount = net.minecraftforge.common.ForgeHooks.onLivingHurt(this, damageSrc, damageAmount);
+			if (damageAmount <= 0) return;
+			damageAmount = this.applyArmorCalculations(damageSrc, damageAmount);
+			damageAmount = this.applyPotionDamageCalculations(damageSrc, damageAmount);
+			float f1 = damageAmount;
+			damageAmount = Math.max(damageAmount - this.getAbsorptionAmount(), 0.0F);
+			this.setAbsorptionAmount(this.getAbsorptionAmount() - (f1 - damageAmount));
+			
+			EntityPlayerMP player = null;
+			if(damageSrc.getEntity() instanceof EntityPlayerMP)
+				player = (EntityPlayerMP) damageSrc.getEntity();
+			if(damageMap.containsKey(player))
+					damageMap.put(player, damageMap.get(player) + f1);
+			else damageMap.put(player, (double) f1);
+			
+			if (damageAmount != 0.0F)
+			{
+				float f2 = this.getHealth();
+				this.setHealth(f2 - damageAmount);
+				this.getCombatTracker().func_94547_a(damageSrc, f2, damageAmount);
+				this.setAbsorptionAmount(this.getAbsorptionAmount() - damageAmount);
+			}
+		}
+	}
+	
+	protected void computePlayerProgress(int progress)
+	{
+		double totalDamage = 0;
+		for(Double i : damageMap.values())
+			totalDamage += i;
+		if(totalDamage < this.getMaxHealth())
+			totalDamage = this.getMaxHealth();
+		
+		int maxProgress = (int) (progress*maxSharedProgress);
+		damageMap.remove(null);
+		EntityPlayerMP[] playerList = damageMap.keySet().toArray(new EntityPlayerMP[damageMap.size()]);
+		double[] modifiers = new double[playerList.length];
+		double totalModifier = 0;
+		
+		for(int i = 0; i < playerList.length; i++)
+		{
+			double f = damageMap.get(playerList[i])/totalDamage;
+			modifiers[i] = 2*f - f*f;
+			totalModifier += modifiers[i];
+		}
+		
+		if(totalModifier > maxSharedProgress)
+			for(int i = 0; i < playerList.length; i++)
+				Echeladder.increaseProgress(playerList[i], (int) (maxProgress*modifiers[i]/totalModifier));
+		else
+			for(int i = 0; i < playerList.length; i++)
+				Echeladder.increaseProgress(playerList[i], (int) (progress*modifiers[i]));
 	}
 	
 	protected class UnderlingData implements IEntityLivingData

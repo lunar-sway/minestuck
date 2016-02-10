@@ -11,6 +11,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 
@@ -20,11 +21,17 @@ public class Echeladder
 	public static final int RUNG_COUNT = 50;
 	public static final byte UNDERLING_BONUS_OFFSET = 0;
 	public static final byte ALCHEMY_BONUS_OFFSET = 15;
+	public static final double MIN_PROGRESS_MODIFIER = 1/100D;
 	
 	private static final UUID echeladderHealthBoostModifierUUID = UUID.fromString("5b49a45b-ff22-4720-8f10-dfd745c3abb8");
 	private static final UUID echeladderDamageBoostModifierUUID = UUID.fromString("a74176fd-bf4e-4153-bb68-197dbe4109b2");
 	private static final int[] UNDERLING_BONUSES = new int[] {10, 120, 450, 2500};	//Bonuses for first time killing an underling
-	private static final int[] ALCHEMY_BONUSES = new int[] {15, 200, 1700};
+	private static final int[] ALCHEMY_BONUSES = new int[] {30, 400, 3000};
+	
+	public static void increaseProgress(EntityPlayerMP player, int progress)
+	{
+		MinestuckPlayerData.getData(player).echeladder.increaseProgress(progress);
+	}
 	
 	private String name;
 	private int rung;
@@ -43,15 +50,17 @@ public class Echeladder
 		return (int) (Math.pow(1.4, rung)*8);
 	}
 	
-	public void increaseEXP(int exp)
+	public void increaseProgress(int exp)
 	{
 		SburbConnection c = SkaianetHandler.getMainConnection(name, true);
 		int topRung = c != null && c.enteredGame() ? RUNG_COUNT : MinestuckConfig.preEntryRungLimit;
 		int expReq = getRungProgressReq();
-		if(rung >= topRung || exp < expReq/50)
-			return;
+		if(rung >= topRung || exp < expReq*MIN_PROGRESS_MODIFIER){Debug.print("Skipped progress: "+exp);
+			return;}
 		
 		int prevRung = rung;
+		int prevExp = exp;
+		
 		increasment:
 		{
 			while(progress + exp >= expReq)
@@ -68,6 +77,7 @@ public class Echeladder
 			if(exp >= expReq/50)
 				progress += exp;
 		}
+		Debug.print("Gained progress: "+prevExp+", rung increased by " +(rung - prevRung));
 		
 		EntityPlayer player = MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(UsernameHandler.decode(name));
 		if(player != null)
@@ -83,11 +93,11 @@ public class Echeladder
 		if(type >= UNDERLING_BONUS_OFFSET && type < UNDERLING_BONUS_OFFSET + underlingBonuses.length && !underlingBonuses[type - UNDERLING_BONUS_OFFSET])
 		{
 			underlingBonuses[type - UNDERLING_BONUS_OFFSET] = true;
-			increaseEXP(UNDERLING_BONUSES[type - UNDERLING_BONUS_OFFSET]);
+			increaseProgress(UNDERLING_BONUSES[type - UNDERLING_BONUS_OFFSET]);
 		} else if(type >= ALCHEMY_BONUS_OFFSET && type < ALCHEMY_BONUS_OFFSET + alchemyBonuses.length && !alchemyBonuses[type - ALCHEMY_BONUS_OFFSET])
 		{
 			alchemyBonuses[type - ALCHEMY_BONUS_OFFSET] = true;
-			increaseEXP(ALCHEMY_BONUSES[type - ALCHEMY_BONUS_OFFSET]);
+			increaseProgress(ALCHEMY_BONUSES[type - ALCHEMY_BONUS_OFFSET]);
 		}
 	}
 	
@@ -103,7 +113,7 @@ public class Echeladder
 	
 	public float getUnderlingDamageModifier()
 	{
-		return 1 + rung*0.1F;
+		return 1 + rung*0.05F;
 	}
 	
 	public float getUnderlingProtectionModifier()
