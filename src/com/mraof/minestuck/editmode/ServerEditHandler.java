@@ -341,7 +341,7 @@ public class ServerEditHandler
 		}
 	}
 	
-	@SubscribeEvent(priority=EventPriority.LOWEST)
+	@SubscribeEvent(priority=EventPriority.LOW)
 	public void onBlockPlaced(BlockEvent.PlaceEvent event)
 	{
 		if(getData(event.player.getCommandSenderName()) != null)
@@ -365,6 +365,7 @@ public class ServerEditHandler
 					SkaianetHandler.giveItems(c.getClientName());
 				if(!cost.isEmpty())
 					GristHelper.decrease(c.getClientName(), cost);
+				event.player.inventory.mainInventory[event.player.inventory.currentItem] = null;
 			} else
 			{
 				GristHelper.decrease(data.connection.getClientName(), GristRegistry.getGristConversion(stack));
