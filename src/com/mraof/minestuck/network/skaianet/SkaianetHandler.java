@@ -627,9 +627,12 @@ public class SkaianetHandler {
 				c.server = dataNew;
 		}
 		
-		resumingClients.replace(dataOld.owner, dataOld, dataNew);
-		resumingServers.replace(dataOld.owner, dataOld, dataNew);
-		serversOpen.replace(dataOld.owner, dataOld, dataNew);
+		if(resumingClients.containsKey(dataOld.owner) && resumingClients.get(dataOld.owner).equals(dataOld))
+			resumingClients.put(dataOld.owner, dataNew);	//Used to be map.replace until someone had a NoSuchMethodError
+		if(resumingServers.containsKey(dataOld.owner) && resumingServers.get(dataOld.owner).equals(dataOld))
+			resumingServers.put(dataOld.owner, dataNew);
+		if(serversOpen.containsKey(dataOld.owner) && serversOpen.get(dataOld.owner).equals(dataOld))
+			serversOpen.put(dataOld.owner, dataNew);
 		
 		movingComputers.add(dataNew);
 	}
