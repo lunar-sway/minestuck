@@ -39,14 +39,14 @@ public class GuiEcheladder extends GuiPlayerStats
 	public void drawScreen(int xcor, int ycor, float par3)
 	{
 		boolean mouseButtonDown = Mouse.isButtonDown(0);
-		if(!wasClicking && mouseButtonDown && xcor >= xOffset + 80 && xcor < xOffset + 87 && ycor >= yOffset + 42 && ycor < yOffset + 186)
+		if(!wasClicking && mouseButtonDown && xcor >= xOffset + 80 && xcor < xOffset + 87 && ycor >= yOffset + 42 && ycor < yOffset + 185)
 			isScrolling = true;
 		else if(!mouseButtonDown)
 			isScrolling = false;
 		
 		if(isScrolling)
 		{
-			scrollIndex = (int) (MAX_SCROLL*(ycor - yOffset - 179)/-131F);
+			scrollIndex = (int) (MAX_SCROLL*(ycor - yOffset - 179)/-130F);
 			scrollIndex = MathHelper.clamp_int(scrollIndex, 0, MAX_SCROLL);
 		}
 		wasClicking = mouseButtonDown;
@@ -91,7 +91,7 @@ public class GuiEcheladder extends GuiPlayerStats
 		
 		this.drawTexturedModalRect(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 
-		this.drawTexturedModalRect(xOffset + 80, yOffset + 42 + (int) (131*(1 - scrollIndex/(float) MAX_SCROLL)), 0, 226, 7, 13);
+		this.drawTexturedModalRect(xOffset + 80, yOffset + 42 + (int) (130*(1 - scrollIndex/(float) MAX_SCROLL)), 0, 226, 7, 13);
 		
 		drawActiveTabAndOther(xcor, ycor);
 		
@@ -110,5 +110,16 @@ public class GuiEcheladder extends GuiPlayerStats
 			else scrollIndex -= 14;
 			scrollIndex = MathHelper.clamp_int(scrollIndex, 0, MAX_SCROLL);
 		}
+	}
+	
+	@Override
+	protected void mouseClicked(int xcor, int ycor, int mouseButton) throws IOException
+	{
+		super.mouseClicked(xcor, ycor, mouseButton);
+		if(mouseButton == 0&& xcor >= xOffset + 80 && xcor < xOffset + 87)
+			if(ycor >= yOffset + 35 && ycor < yOffset + 42)
+				scrollIndex = MathHelper.clamp_int(scrollIndex + 14, 0, MAX_SCROLL);
+			else if(ycor >= yOffset + 185 && ycor < yOffset + 192)
+				scrollIndex = MathHelper.clamp_int(scrollIndex - 14, 0, MAX_SCROLL);
 	}
 }
