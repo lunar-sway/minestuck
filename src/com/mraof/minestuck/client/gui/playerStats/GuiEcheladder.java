@@ -80,6 +80,14 @@ public class GuiEcheladder extends GuiPlayerStats
 				if(textColors.length > rung)
 					textColor = textColors[rung];
 				drawRect(xOffset + 90, y, xOffset + 236, y + 12, backgrounds.length > rung ? backgrounds[rung] : (textColor^0xFFFFFFFF));
+			} else if(rung == MinestuckPlayerData.rung + 1)
+			{
+				int bg = rand.nextInt(0xFFFFFF)^0xFFFFFFFF;
+				if(backgrounds.length > rung)
+					bg = backgrounds[rung];
+				else if(textColors.length > rung)
+					bg = textColors[rung]^0xFFFFFFFF;
+				drawRect(xOffset + 90, y + 10, xOffset + 90 + (int)(146*MinestuckPlayerData.rungProgress), y + 12, bg);
 			} else rand.nextInt(0xFFFFFF);
 			
 			String s = StatCollector.canTranslate("echeladder.rung"+rung) ? StatCollector.translateToLocal("echeladder.rung"+rung) : "Rung "+(rung+1);

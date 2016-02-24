@@ -26,7 +26,8 @@ public class MinestuckPlayerData {
 	public static Title title;
 	@SideOnly(Side.CLIENT)
 	public static int rung;
-	
+	@SideOnly(Side.CLIENT)
+	public static float rungProgress;
 	
 	public static void onPacketRecived(GristCachePacket packet) {
 		if(packet.targetGrist)

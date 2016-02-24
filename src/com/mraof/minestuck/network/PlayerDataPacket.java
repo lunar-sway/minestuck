@@ -87,7 +87,7 @@ public class PlayerDataPacket extends MinestuckPacket
 		{
 			int prev = MinestuckPlayerData.rung;
 			MinestuckPlayerData.rung = i1;
-			//MinestuckPlayerData.progress = f;
+			MinestuckPlayerData.rungProgress = f;
 			if(prev != -1)
 				for(prev++; prev <= i1; prev++)
 				{
