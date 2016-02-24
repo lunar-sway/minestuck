@@ -188,7 +188,7 @@ public class MinestuckPlayerTracker {
 	public static void updateEcheladder(EntityPlayer player)
 	{
 		Echeladder echeladder = MinestuckPlayerData.getData(player).echeladder;
-		MinestuckPacket packet = MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.ECHELADDER, echeladder.getRung(), echeladder.getProgress());
+		MinestuckPacket packet = MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.ECHELADDER, echeladder.getRung(), MinestuckConfig.echeladderProgress ? echeladder.getProgress() : 0F);
 		MinestuckChannelHandler.sendToPlayer(packet, player);
 	}
 	

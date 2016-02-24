@@ -68,6 +68,7 @@ public class MinestuckConfig
 	public static boolean allowSecondaryConnections;	//TODO make open server not an option after having a main connection (for when this is set to false)
 	public static boolean disableGristWidget;
 	public static boolean vanillaOreDrop;
+	public static boolean echeladderProgress;
 	public static int artifactRange;
 	public static int overworldEditRange;
 	public static int landEditRange;
@@ -157,6 +158,7 @@ public class MinestuckConfig
 		disableGristWidget = config.get("General", "disableGristWidget", false).setLanguageKey("minestuck.config.disableGristWidget").setRequiresWorldRestart(true).getBoolean();
 		vanillaOreDrop = config.get("General", "vanillaOreDrop", false, "If this is true, the custom vanilla ores will drop the standard vanilla ores when mined, instead of the custom type.").setLanguageKey("minestuck.config.vanillaOreDrop").getBoolean();
 		preEntryRungLimit = config.get("General", "preEntryRungLimit", 6, "The highest rung you can get before entering medium. Note that the first rung is indexed as 0, the second as 1 and so on.", 0, Echeladder.RUNG_COUNT - 1).setLanguageKey("minestuck.config.preEntryRungLimit").setRequiresWorldRestart(true).getInt();
+		echeladderProgress = config.get("General", "echeladderProgress", false, "If this is true, players will be able to see their progress towards the next rung. This is server side and will only be active in multiplayer if the server/Lan host has it activated.").setLanguageKey("minestuck.config.echeladderProgress").getBoolean();
 		
 		setting = config.get("General", "dataCheckerPermission", "opsAndGamemode", "Determines who's allowed to access the data checker. \"none\": No one is allowed. \"ops\": only those with a command permission of level 2 or more may access the data ckecker. (for single player, that would be if cheats are turned on) \"gamemode\": Only players with the creative or spectator gamemode may view the data checker. \"opsAndGamemode\": Combination of \"ops\" and \"gamemode\". \"anyone\": No access restrictions are used.",
 				new String[] {"none", "ops", "gamemode", "opsAndGamemode", "anyone"}).setLanguageKey("minestuck.config.dataCheckerPermission").getString();
