@@ -17,6 +17,7 @@ public class GuiEcheladder extends GuiPlayerStats
 {
 	
 	private static final ResourceLocation guiEcheladder = new ResourceLocation("minestuck", "textures/gui/echeladder.png");
+	private static final ResourceLocation potionIcons = new ResourceLocation("textures/gui/container/inventory.png");
 	
 	private static final int MAX_SCROLL = Echeladder.RUNG_COUNT*14 - 154;
 														//0			1			2			3			4			5			6			7			8			9			10			11			12			13			14			15			16			17			18			19
@@ -31,8 +32,8 @@ public class GuiEcheladder extends GuiPlayerStats
 	public GuiEcheladder()
 	{
 		super();
-		guiWidth = 256;
-		guiHeight = 212;
+		guiWidth = 250;
+		guiHeight = 197;
 	}
 	
 	@Override
@@ -61,7 +62,7 @@ public class GuiEcheladder extends GuiPlayerStats
 		this.mc.getTextureManager().bindTexture(guiEcheladder);
 		int index = scrollIndex % 14;
 		for(int i = 0; i < rows; i++)
-			drawTexturedModalRect(xOffset + 90, yOffset + 175 + index - i*14, 0, 212, 146, 14);
+			drawTexturedModalRect(xOffset + 90, yOffset + 175 + index - i*14, 7, 242, 146, 14);
 		
 		Random rand = new Random(452619373);
 		for(int i = 0; i < scrollIndex/14; i++)
@@ -96,10 +97,32 @@ public class GuiEcheladder extends GuiPlayerStats
 		GlStateManager.color(1,1,1);
 		
 		this.mc.getTextureManager().bindTexture(guiEcheladder);
-		
 		this.drawTexturedModalRect(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 
-		this.drawTexturedModalRect(xOffset + 80, yOffset + 42 + (int) (130*(1 - scrollIndex/(float) MAX_SCROLL)), 0, 226, 7, 13);
+		this.drawTexturedModalRect(xOffset + 80, yOffset + 42 + (int) (130*(1 - scrollIndex/(float) MAX_SCROLL)), 0, 243, 7, 13);
+		
+		boolean gristLimit = true;
+		this.mc.getTextureManager().bindTexture(potionIcons);
+		this.drawTexturedModalRect(xOffset + 5, yOffset + 30, 72, 198, 18, 18);
+		this.drawTexturedModalRect(xOffset + 5, yOffset + 84, 126, 198, 18, 18);
+		this.mc.getTextureManager().bindTexture(icons);
+		this.drawTexturedModalRect(xOffset + 6, yOffset + 139, 48, 64, 16, 16);
+		this.drawTexturedModalRect(xOffset + 5, yOffset + 7, 238, 16, 18, 18);
+		
+		String msg = StatCollector.translateToLocal("gui.echeladder.name");
+		mc.fontRendererObj.drawString(msg, xOffset + 168 - mc.fontRendererObj.getStringWidth(msg)/2, yOffset + 12, 0x404040);
+		
+		mc.fontRendererObj.drawString(StatCollector.translateToLocal("gui.echeladder.attack.name"), xOffset + 24, yOffset + 30, 0x404040);
+		mc.fontRendererObj.drawString("100%", xOffset + 26, yOffset + 39, 0x0094FF);
+		
+		mc.fontRendererObj.drawString(StatCollector.translateToLocal("gui.echeladder.health.name"), xOffset + 24, yOffset + 84, 0x404040);
+		mc.fontRendererObj.drawString("10", xOffset + 26, yOffset + 93, 0x0094FF);
+		
+		mc.fontRendererObj.drawString("=", xOffset + 25, yOffset + 12, 0x404040);
+		mc.fontRendererObj.drawString("875", xOffset + 27 + mc.fontRendererObj.getCharWidth('='), yOffset + 12, 0x0094FF);
+		
+		mc.fontRendererObj.drawString(StatCollector.translateToLocal("gui.echeladder.cache.name"), xOffset + 24, yOffset + 138, 0x404040);
+		mc.fontRendererObj.drawString("Unlimited", xOffset + 26, yOffset + 147, 0x0094FF);
 		
 		drawActiveTabAndOther(xcor, ycor);
 		
