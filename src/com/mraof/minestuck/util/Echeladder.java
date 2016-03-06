@@ -123,8 +123,8 @@ public class Echeladder
 	
 	public void updateEcheladderBonuses(EntityPlayer player)
 	{
-		int healthBonus = (int) (40*(rung/(float) Echeladder.RUNG_COUNT));	//At max rung, the player will have three rows of hearts
-		float damageBonus = rung*0.05F;
+		int healthBonus = healthBoost(rung);
+		float damageBonus = attackBonus(rung);
 		
 		Debug.printf("Health bonus for rung %d: %d", rung + 1, healthBonus);
 		updateAttribute(player.getEntityAttribute(SharedMonsterAttributes.maxHealth), new AttributeModifier(echeladderHealthBoostModifierUUID, "Echeladder Health Boost", healthBonus, 0).setSaved(false));
@@ -161,5 +161,15 @@ public class Echeladder
 			underlingBonuses[i] = bonuses[i + UNDERLING_BONUS_OFFSET] != 0;
 		for(int i = 0; i < alchemyBonuses.length && i + ALCHEMY_BONUS_OFFSET < bonuses.length; i++)
 			alchemyBonuses[i] = bonuses[i + ALCHEMY_BONUS_OFFSET] != 0;
+	}
+	
+	public static float attackBonus(int rung)
+	{
+		return rung*0.05F;
+	}
+	
+	public static int healthBoost(int rung)
+	{
+		return (int) (40*(rung/(float) Echeladder.RUNG_COUNT));	//At max rung, the player will have three rows of hearts
 	}
 }

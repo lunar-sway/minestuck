@@ -5,6 +5,7 @@ import java.util.Random;
 
 import org.lwjgl.input.Mouse;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 
@@ -112,11 +113,13 @@ public class GuiEcheladder extends GuiPlayerStats
 		String msg = StatCollector.translateToLocal("gui.echeladder.name");
 		mc.fontRendererObj.drawString(msg, xOffset + 168 - mc.fontRendererObj.getStringWidth(msg)/2, yOffset + 12, 0x404040);
 		
+		int attack = (int) (100*(1 + Echeladder.attackBonus(MinestuckPlayerData.rung)));
 		mc.fontRendererObj.drawString(StatCollector.translateToLocal("gui.echeladder.attack.name"), xOffset + 24, yOffset + 30, 0x404040);
-		mc.fontRendererObj.drawString("100%", xOffset + 26, yOffset + 39, 0x0094FF);
+		mc.fontRendererObj.drawString(attack+"%", xOffset + 26, yOffset + 39, 0x0094FF);
 		
+		double health = 10 + Echeladder.healthBoost(MinestuckPlayerData.rung)/2.0;
 		mc.fontRendererObj.drawString(StatCollector.translateToLocal("gui.echeladder.health.name"), xOffset + 24, yOffset + 84, 0x404040);
-		mc.fontRendererObj.drawString("10", xOffset + 26, yOffset + 93, 0x0094FF);
+		mc.fontRendererObj.drawString(String.valueOf(health), xOffset + 26, yOffset + 93, 0x0094FF);
 		
 		mc.fontRendererObj.drawString("=", xOffset + 25, yOffset + 12, 0x404040);
 		mc.fontRendererObj.drawString("875", xOffset + 27 + mc.fontRendererObj.getCharWidth('='), yOffset + 12, 0x0094FF);
