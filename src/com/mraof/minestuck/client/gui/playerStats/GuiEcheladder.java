@@ -1,6 +1,7 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Random;
 
 import org.lwjgl.input.Mouse;
@@ -34,6 +35,13 @@ public class GuiEcheladder extends GuiPlayerStats
 		super();
 		guiWidth = 250;
 		guiHeight = 197;
+	}
+	
+	@Override
+	public void initGui()
+	{
+		super.initGui();
+		scrollIndex = MathHelper.clamp_int((MinestuckPlayerData.rung - 8)*14, 0, MAX_SCROLL);
 	}
 	
 	@Override
@@ -128,6 +136,10 @@ public class GuiEcheladder extends GuiPlayerStats
 		
 		drawActiveTabAndOther(xcor, ycor);
 		
+		if(ycor >= yOffset + 39 && ycor < yOffset + 39 + mc.fontRendererObj.FONT_HEIGHT && xcor >= xOffset + 26 && xcor < xOffset + 26 + mc.fontRendererObj.getStringWidth(attack+"%"))
+			drawHoveringText(Arrays.asList(StatCollector.translateToLocalFormatted("gui.echeladder.damageUnderling"), (int) (attack*Echeladder.getUnderlingDamageModifier(MinestuckPlayerData.rung)) + "%"), xcor, ycor);
+		if(ycor >= yOffset + 93 && ycor < yOffset + 93 + mc.fontRendererObj.FONT_HEIGHT && xcor >= xOffset + 26 && xcor < xOffset + 26 + mc.fontRendererObj.getStringWidth(String.valueOf(health)))
+			drawHoveringText(Arrays.asList(StatCollector.translateToLocalFormatted("gui.echeladder.protectionUnderling"), String.format("%.1f", 100*Echeladder.getUnderlingProtectionModifier(MinestuckPlayerData.rung))+"%"), xcor, ycor);
 	}
 	
 	@Override

@@ -71,6 +71,7 @@ public class Echeladder
 			while(progress + exp >= expReq)
 			{
 				rung++;
+				MinestuckPlayerData.getData(name).boondollars += BOONDOLLARS[Math.min(rung, BOONDOLLARS.length - 1)];
 				exp -= (expReq - progress);
 				progress = 0;
 				expReq = getRungProgressReq();
@@ -78,7 +79,6 @@ public class Echeladder
 					break increasment;
 				if(rung > prevRung + 1)
 					exp = (int) (exp/1.5);
-				MinestuckPlayerData.boondollars += BOONDOLLARS[Math.max(rung, BOONDOLLARS.length)];
 			}
 			if(exp >= expReq/50)
 				progress += exp;
@@ -122,12 +122,12 @@ public class Echeladder
 	
 	public float getUnderlingDamageModifier()
 	{
-		return 1 + rung*0.1F;
+		return getUnderlingDamageModifier(rung);
 	}
 	
 	public float getUnderlingProtectionModifier()
 	{
-		return 1/(rung*0.05F + 1);
+		return getUnderlingProtectionModifier(rung);
 	}
 	
 	public void updateEcheladderBonuses(EntityPlayer player)
@@ -180,5 +180,15 @@ public class Echeladder
 	public static int healthBoost(int rung)
 	{
 		return (int) (40*(rung/(float) Echeladder.RUNG_COUNT));	//At max rung, the player will have three rows of hearts
+	}
+	
+	public static float getUnderlingDamageModifier(int rung)
+	{
+		return 1 + rung*0.08F;
+	}
+	
+	public static float getUnderlingProtectionModifier(int rung)
+	{
+		return 1/(rung*0.05F + 1);
 	}
 }
