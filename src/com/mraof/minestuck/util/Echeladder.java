@@ -3,6 +3,10 @@ package com.mraof.minestuck.util;
 import java.util.UUID;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckPacket;
+import com.mraof.minestuck.network.PlayerDataPacket;
+import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
@@ -27,6 +31,7 @@ public class Echeladder
 	private static final UUID echeladderDamageBoostModifierUUID = UUID.fromString("a74176fd-bf4e-4153-bb68-197dbe4109b2");
 	private static final int[] UNDERLING_BONUSES = new int[] {10, 120, 450, 2500};	//Bonuses for first time killing an underling
 	private static final int[] ALCHEMY_BONUSES = new int[] {30, 400, 3000};
+	private static final int[] BOONDOLLARS = new int[] {50, 75, 105, 140, 170, 200, 250, 320, 425, 575, 790, 1140, 1630, 2230, 2980, 3850, 4800, 6000, 7500, 9500, 11900, 15200, 19300, 24400};
 	
 	public static void increaseProgress(EntityPlayerMP player, int progress)
 	{
@@ -73,6 +78,7 @@ public class Echeladder
 					break increasment;
 				if(rung > prevRung + 1)
 					exp = (int) (exp/1.5);
+				MinestuckPlayerData.boondollars += BOONDOLLARS[Math.max(rung, BOONDOLLARS.length)];
 			}
 			if(exp >= expReq/50)
 				progress += exp;
@@ -84,7 +90,10 @@ public class Echeladder
 		{
 			MinestuckPlayerTracker.updateEcheladder(player);
 			if(rung != prevRung)
+			{
 				updateEcheladderBonuses(player);
+				MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.BOONDOLLAR, MinestuckPlayerData.getData(name).boondollars), player);
+			}
 		}
 	}
 	

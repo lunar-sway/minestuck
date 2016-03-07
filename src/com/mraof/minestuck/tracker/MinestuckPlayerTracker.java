@@ -86,6 +86,7 @@ public class MinestuckPlayerTracker {
 		updateGristCache(UsernameHandler.encode(player.getCommandSenderName()));
 		updateTitle(player);
 		updateEcheladder(player);
+		MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.BOONDOLLAR, MinestuckPlayerData.getData(encUsername).boondollars), player);
 		
 		if(firstTime)
 			MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.COLOR), player);

@@ -17,7 +17,7 @@ import com.mraof.minestuck.util.Title;
 
 public class PlayerDataPacket extends MinestuckPacket 
 {
-	public static final byte COLOR = 0, TITLE = 1, ECHELADDER = 2;
+	public static final byte COLOR = 0, TITLE = 1, ECHELADDER = 2, BOONDOLLAR = 3;
 	
 	public int type;
 	public int i1;
@@ -41,6 +41,9 @@ public class PlayerDataPacket extends MinestuckPacket
 		{
 			data.writeInt((Integer) dat[1]);
 			data.writeFloat((Float) dat[2]);
+		} else if(type == BOONDOLLAR)
+		{
+			data.writeInt((Integer) dat[1]);
 		}
 		
 		return this;
@@ -64,6 +67,9 @@ public class PlayerDataPacket extends MinestuckPacket
 		{
 			i1 = data.readInt();
 			f = data.readFloat();
+		} else if(type == BOONDOLLAR)
+		{
+			i1 = data.readInt();
 		}
 		
 		return this;
@@ -94,6 +100,9 @@ public class PlayerDataPacket extends MinestuckPacket
 					String s = StatCollector.canTranslate("echeladder.rung"+prev) ? StatCollector.translateToLocal("echeladder.rung"+prev) : String.valueOf(prev+1);
 					player.addChatMessage(new ChatComponentText("You reached rung "+s+'!'));
 				}
+		} else if(type == BOONDOLLAR)
+		{
+			MinestuckPlayerData.boondollars = i1;
 		}
 	}
 	

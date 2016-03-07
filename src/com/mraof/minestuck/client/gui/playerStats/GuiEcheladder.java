@@ -5,7 +5,6 @@ import java.util.Random;
 
 import org.lwjgl.input.Mouse;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 
@@ -122,7 +121,7 @@ public class GuiEcheladder extends GuiPlayerStats
 		mc.fontRendererObj.drawString(String.valueOf(health), xOffset + 26, yOffset + 93, 0x0094FF);
 		
 		mc.fontRendererObj.drawString("=", xOffset + 25, yOffset + 12, 0x404040);
-		mc.fontRendererObj.drawString("875", xOffset + 27 + mc.fontRendererObj.getCharWidth('='), yOffset + 12, 0x0094FF);
+		mc.fontRendererObj.drawString(String.valueOf(MinestuckPlayerData.boondollars), xOffset + 27 + mc.fontRendererObj.getCharWidth('='), yOffset + 12, 0x0094FF);
 		
 		mc.fontRendererObj.drawString(StatCollector.translateToLocal("gui.echeladder.cache.name"), xOffset + 24, yOffset + 138, 0x404040);
 		mc.fontRendererObj.drawString("Unlimited", xOffset + 26, yOffset + 147, 0x0094FF);
