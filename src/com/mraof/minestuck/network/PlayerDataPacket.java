@@ -9,6 +9,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fml.relauncher.Side;
 
+import com.mraof.minestuck.client.gui.playerStats.GuiEcheladder;
 import com.mraof.minestuck.util.ColorCollector;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.EnumClass;
@@ -100,6 +101,8 @@ public class PlayerDataPacket extends MinestuckPacket
 					String s = StatCollector.canTranslate("echeladder.rung"+prev) ? StatCollector.translateToLocal("echeladder.rung"+prev) : String.valueOf(prev+1);
 					player.addChatMessage(new ChatComponentText("You reached rung "+s+'!'));
 				}
+			if(GuiEcheladder.lastRung == -1)
+				GuiEcheladder.lastRung = i1;
 		} else if(type == BOONDOLLAR)
 		{
 			MinestuckPlayerData.boondollars = i1;

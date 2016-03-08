@@ -78,14 +78,14 @@ public class ServerEventHandler
 			if(event.entityLiving instanceof EntityUnderling && event.source.getEntity() instanceof EntityPlayerMP)
 			{	//Increase damage to underling
 				EntityPlayerMP player = (EntityPlayerMP) event.source.getEntity();
-				float modifier = MinestuckPlayerData.getData(player).echeladder.getUnderlingDamageModifier();
+				double modifier = MinestuckPlayerData.getData(player).echeladder.getUnderlingDamageModifier();
 				event.ammount *= modifier;
 				Debug.print("Damage increased to "+100*modifier+'%');
 				
 			} else if(event.entityLiving instanceof EntityPlayerMP && event.source.getEntity() instanceof EntityUnderling)
 			{	//Decrease damamge to player
 				EntityPlayerMP player = (EntityPlayerMP) event.entityLiving;
-				float modifier = MinestuckPlayerData.getData(player).echeladder.getUnderlingProtectionModifier();
+				double modifier = MinestuckPlayerData.getData(player).echeladder.getUnderlingProtectionModifier();
 				event.ammount *= modifier;
 				Debug.print("Damage decreased to "+100*modifier+'%');
 			}

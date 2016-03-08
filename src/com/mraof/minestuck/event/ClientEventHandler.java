@@ -10,6 +10,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.GuiColorSelector;
 import com.mraof.minestuck.client.gui.playerStats.GuiDataChecker;
+import com.mraof.minestuck.client.gui.playerStats.GuiEcheladder;
 import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
 import com.mraof.minestuck.inventory.ContainerEditmode;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
@@ -35,6 +36,7 @@ public class ClientEventHandler
 		ColorCollector.playerColor = -1;
 		ColorCollector.displaySelectionGui = false;
 		GuiDataChecker.activeComponent = null;
+		GuiEcheladder.lastRung = -1;
 	}
 	
 	@SubscribeEvent

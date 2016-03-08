@@ -28,6 +28,8 @@ public class GuiEcheladder extends GuiPlayerStats
 	private static final int ladderXOffset = 163, ladderYOffset = 25;
 	private static final int rows = 12;
 	private int scrollIndex;
+	public static int lastRung = -1;
+	private int fromRung;
 	private boolean wasClicking, isScrolling;
 	
 	public GuiEcheladder()
@@ -42,6 +44,8 @@ public class GuiEcheladder extends GuiPlayerStats
 	{
 		super.initGui();
 		scrollIndex = MathHelper.clamp_int((MinestuckPlayerData.rung - 8)*14, 0, MAX_SCROLL);
+		fromRung = Math.max(lastRung, MinestuckPlayerData.rung - 4);
+		lastRung = MinestuckPlayerData.rung;
 	}
 	
 	@Override
@@ -68,16 +72,16 @@ public class GuiEcheladder extends GuiPlayerStats
 		drawTabs();
 		
 		this.mc.getTextureManager().bindTexture(guiEcheladder);
-		int index = scrollIndex % 14;
+		int scroll = scrollIndex % 14;
 		for(int i = 0; i < rows; i++)
-			drawTexturedModalRect(xOffset + 90, yOffset + 175 + index - i*14, 7, 242, 146, 14);
+			drawTexturedModalRect(xOffset + 90, yOffset + 175 + scroll - i*14, 7, 242, 146, 14);
 		
 		Random rand = new Random(452619373);
 		for(int i = 0; i < scrollIndex/14; i++)
 			rand.nextInt(0xFFFFFF);
 		for(int i = 0; i < rows; i++)
 		{
-			int y = yOffset + 177 + index - i*14;
+			int y = yOffset + 177 + scroll - i*14;
 			int rung = scrollIndex/14 + i;
 			if(rung > Echeladder.RUNG_COUNT)
 				break;
@@ -120,7 +124,7 @@ public class GuiEcheladder extends GuiPlayerStats
 		String msg = StatCollector.translateToLocal("gui.echeladder.name");
 		mc.fontRendererObj.drawString(msg, xOffset + 168 - mc.fontRendererObj.getStringWidth(msg)/2, yOffset + 12, 0x404040);
 		
-		int attack = (int) (100*(1 + Echeladder.attackBonus(MinestuckPlayerData.rung)));
+		int attack = (int) Math.round(100*Echeladder.attackBonus(MinestuckPlayerData.rung));
 		mc.fontRendererObj.drawString(StatCollector.translateToLocal("gui.echeladder.attack.name"), xOffset + 24, yOffset + 30, 0x404040);
 		mc.fontRendererObj.drawString(attack+"%", xOffset + 26, yOffset + 39, 0x0094FF);
 		
@@ -134,11 +138,55 @@ public class GuiEcheladder extends GuiPlayerStats
 		mc.fontRendererObj.drawString(StatCollector.translateToLocal("gui.echeladder.cache.name"), xOffset + 24, yOffset + 138, 0x404040);
 		mc.fontRendererObj.drawString("Unlimited", xOffset + 26, yOffset + 147, 0x0094FF);
 		
+		fromRung = Math.max(fromRung, MinestuckPlayerData.rung - 4);
+		
+		String tooltip = null;
+		if(fromRung < MinestuckPlayerData.rung)
+		{
+			rand =  new Random(452619373);
+			for(int i = 0; i <= fromRung; i++)
+				rand.nextInt(0xFFFFFF);
+			for(int rung = fromRung + 1; rung <= MinestuckPlayerData.rung; rung++)
+			{
+				int index = rung - 1 - fromRung;
+				int textColor = rand.nextInt(0xFFFFFF);
+				if(textColors.length > rung)
+					textColor = textColors[rung];
+				int bg = backgrounds.length > rung ? backgrounds[rung] : (textColor^0xFFFFFFFF);
+				
+				String str = "+"+(Math.round(100*Echeladder.attackBonus(rung)) - Math.round(100*Echeladder.attackBonus(rung - 1)))+"%!";
+				drawRect(xOffset + 5 + 32*(index%2), yOffset + 50 + 15*(index/2), xOffset + 35 + 32*(index%2), yOffset + 62 + 15*(index/2), bg);
+				int strX = xOffset + 20 + 32*(index%2) - mc.fontRendererObj.getStringWidth(str)/2, strY = yOffset + 52 + 15*(index/2);
+				mc.fontRendererObj.drawString(str, strX, strY, textColor);
+				if(ycor >= strY && ycor < strY + mc.fontRendererObj.FONT_HEIGHT && xcor >= strX && xcor < strX + mc.fontRendererObj.getStringWidth(str))
+				{
+					int diff = (int) Math.round(100*Echeladder.attackBonus(rung)*Echeladder.getUnderlingDamageModifier(rung));
+					diff -= Math.round(100*Echeladder.attackBonus(rung - 1)*Echeladder.getUnderlingDamageModifier(rung - 1));
+					tooltip = StatCollector.translateToLocalFormatted("gui.echeladder.damageUnderling.increase", diff);
+				}
+				
+				double d = (Echeladder.healthBoost(rung) - Echeladder.healthBoost(rung - 1))/2D;
+				str = "+"+(d == 0 ? d : d+"!");
+				drawRect(xOffset + 5 + 32*(index%2), yOffset + 104 + 15*(index/2), xOffset + 35 + 32*(index%2), yOffset + 116 + 15*(index/2), bg);
+				strX = xOffset + 20 + 32*(index%2) - mc.fontRendererObj.getStringWidth(str)/2;
+				strY = yOffset + 106 + 15*(index/2);
+				mc.fontRendererObj.drawString(str, strX, strY, textColor);
+				if(ycor >= strY && ycor < strY + mc.fontRendererObj.FONT_HEIGHT && xcor >= strX && xcor < strX + mc.fontRendererObj.getStringWidth(str))
+				{
+					int diff = (int) Math.round(1000*Echeladder.getUnderlingProtectionModifier(rung - 1));
+					diff -= Math.round(1000*Echeladder.getUnderlingProtectionModifier(rung));
+					tooltip = StatCollector.translateToLocalFormatted("gui.echeladder.protectionUnderling.increase", diff/10D);
+				}
+			}
+		}
+		
 		drawActiveTabAndOther(xcor, ycor);
 		
-		if(ycor >= yOffset + 39 && ycor < yOffset + 39 + mc.fontRendererObj.FONT_HEIGHT && xcor >= xOffset + 26 && xcor < xOffset + 26 + mc.fontRendererObj.getStringWidth(attack+"%"))
-			drawHoveringText(Arrays.asList(StatCollector.translateToLocalFormatted("gui.echeladder.damageUnderling"), (int) (attack*Echeladder.getUnderlingDamageModifier(MinestuckPlayerData.rung)) + "%"), xcor, ycor);
-		if(ycor >= yOffset + 93 && ycor < yOffset + 93 + mc.fontRendererObj.FONT_HEIGHT && xcor >= xOffset + 26 && xcor < xOffset + 26 + mc.fontRendererObj.getStringWidth(String.valueOf(health)))
+		if(tooltip != null)
+			drawHoveringText(Arrays.asList(tooltip), xcor, ycor);
+		else if(ycor >= yOffset + 39 && ycor < yOffset + 39 + mc.fontRendererObj.FONT_HEIGHT && xcor >= xOffset + 26 && xcor < xOffset + 26 + mc.fontRendererObj.getStringWidth(attack+"%"))
+			drawHoveringText(Arrays.asList(StatCollector.translateToLocalFormatted("gui.echeladder.damageUnderling"), Math.round(attack*Echeladder.getUnderlingDamageModifier(MinestuckPlayerData.rung)) + "%"), xcor, ycor);
+		else if(ycor >= yOffset + 93 && ycor < yOffset + 93 + mc.fontRendererObj.FONT_HEIGHT && xcor >= xOffset + 26 && xcor < xOffset + 26 + mc.fontRendererObj.getStringWidth(String.valueOf(health)))
 			drawHoveringText(Arrays.asList(StatCollector.translateToLocalFormatted("gui.echeladder.protectionUnderling"), String.format("%.1f", 100*Echeladder.getUnderlingProtectionModifier(MinestuckPlayerData.rung))+"%"), xcor, ycor);
 	}
 	
