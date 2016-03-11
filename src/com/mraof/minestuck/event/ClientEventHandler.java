@@ -37,6 +37,7 @@ public class ClientEventHandler
 		ColorCollector.displaySelectionGui = false;
 		GuiDataChecker.activeComponent = null;
 		GuiEcheladder.lastRung = -1;
+		GuiEcheladder.animatedRung = 0;
 	}
 	
 	@SubscribeEvent

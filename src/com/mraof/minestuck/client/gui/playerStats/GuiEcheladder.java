@@ -14,6 +14,9 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
+/**
+ * @author Kirderf1
+ */
 public class GuiEcheladder extends GuiPlayerStats
 {
 	
@@ -27,16 +30,23 @@ public class GuiEcheladder extends GuiPlayerStats
 	
 	private static final int ladderXOffset = 163, ladderYOffset = 25;
 	private static final int rows = 12;
+	
+	private static final int timeBeforeAnimation = 10, timeBeforeNext = 16, timeForRung = 4, timeForShowOnly = 65;
+	
 	private int scrollIndex;
-	public static int lastRung = -1;
-	private int fromRung;
 	private boolean wasClicking, isScrolling;
+	
+	public static int lastRung = -1;	//The current rung last time the gui was opened. Used to determine which rung to display increments from next time the gui is opened
+	public static int animatedRung;	//The rung animated to or the latest to be animated
+	private int fromRung;	//First rung to display increments from; (actually the one right before that one)
+	private int animationCycle;	//Ticks left on the animation cycle
+	private int animatedRungs;	//The amount of rungs to animate
 	
 	public GuiEcheladder()
 	{
 		super();
 		guiWidth = 250;
-		guiHeight = 197;
+		guiHeight = 202;
 	}
 	
 	@Override
@@ -44,25 +54,48 @@ public class GuiEcheladder extends GuiPlayerStats
 	{
 		super.initGui();
 		scrollIndex = MathHelper.clamp_int((MinestuckPlayerData.rung - 8)*14, 0, MAX_SCROLL);
-		fromRung = Math.max(lastRung, MinestuckPlayerData.rung - 4);
+		animatedRung = Math.max(animatedRung, lastRung);	//If you gain a rung while the gui is open, the animated rung might get higher than the lastRung. Otherwise they're always the same value.
+		fromRung = lastRung;
 		lastRung = MinestuckPlayerData.rung;
 	}
 	
 	@Override
 	public void drawScreen(int xcor, int ycor, float par3)
 	{
-		boolean mouseButtonDown = Mouse.isButtonDown(0);
-		if(!wasClicking && mouseButtonDown && xcor >= xOffset + 80 && xcor < xOffset + 87 && ycor >= yOffset + 42 && ycor < yOffset + 185)
-			isScrolling = true;
-		else if(!mouseButtonDown)
-			isScrolling = false;
+		updateScrollAndAnimation(xcor, ycor);
 		
-		if(isScrolling)
+		int currentRung;
+		boolean showLastRung = true;
+		if(animationCycle == 0)
 		{
-			scrollIndex = (int) (MAX_SCROLL*(ycor - yOffset - 179)/-130F);
-			scrollIndex = MathHelper.clamp_int(scrollIndex, 0, MAX_SCROLL);
+			currentRung = animatedRung;
+			if(animatedRung < MinestuckPlayerData.rung)
+			{
+				animatedRungs = MinestuckPlayerData.rung - animatedRung;
+				animationCycle = timeBeforeAnimation + getTicksForRungAnimation(animatedRungs);
+				animatedRung = MinestuckPlayerData.rung;
+			}
+		} else
+		{
+			int rungTicks = getTicksForRungAnimation(animatedRungs);
+			if(animationCycle - rungTicks >= 0)	//Awaiting animation start
+				currentRung = animatedRung - animatedRungs;
+			else
+			{
+				if(animatedRungs < 5)	//The animation type where the rungs flicker in
+				{
+					int rung = (animationCycle + timeBeforeNext)/(timeForRung + timeBeforeNext);
+					currentRung = animatedRung - rung;
+					if((animationCycle + timeBeforeNext)%(timeForRung + timeBeforeNext) >= timeBeforeNext)
+						showLastRung = (animationCycle + timeBeforeNext)%(timeForRung + timeBeforeNext) - timeBeforeNext >= timeForRung/2;
+				} else	//The animation type where the animation just goes through all rungs
+				{
+					currentRung = animatedRung;
+					int rung = animationCycle*animatedRungs/timeForShowOnly + 1;
+					currentRung = animatedRung - rung;
+				}
+			}
 		}
-		wasClicking = mouseButtonDown;
 		
 		super.drawScreen(xcor, ycor, par3);
 		this.drawDefaultBackground();
@@ -87,13 +120,13 @@ public class GuiEcheladder extends GuiPlayerStats
 				break;
 			
 			int textColor = 0xFFFFFF;
-			if(rung <= MinestuckPlayerData.rung)
+			if(rung <= currentRung - (showLastRung ? 0 : 1))
 			{
 				textColor = rand.nextInt(0xFFFFFF);
 				if(textColors.length > rung)
 					textColor = textColors[rung];
 				drawRect(xOffset + 90, y, xOffset + 236, y + 12, backgrounds.length > rung ? backgrounds[rung] : (textColor^0xFFFFFFFF));
-			} else if(rung == MinestuckPlayerData.rung + 1)
+			} else if(rung == currentRung + 1 && animationCycle == 0)
 			{
 				int bg = rand.nextInt(0xFFFFFF)^0xFFFFFFFF;
 				if(backgrounds.length > rung)
@@ -124,31 +157,30 @@ public class GuiEcheladder extends GuiPlayerStats
 		String msg = StatCollector.translateToLocal("gui.echeladder.name");
 		mc.fontRendererObj.drawString(msg, xOffset + 168 - mc.fontRendererObj.getStringWidth(msg)/2, yOffset + 12, 0x404040);
 		
-		int attack = (int) Math.round(100*Echeladder.attackBonus(MinestuckPlayerData.rung));
+		int attack = (int) Math.round(100*Echeladder.attackBonus(currentRung));
 		mc.fontRendererObj.drawString(StatCollector.translateToLocal("gui.echeladder.attack.name"), xOffset + 24, yOffset + 30, 0x404040);
 		mc.fontRendererObj.drawString(attack+"%", xOffset + 26, yOffset + 39, 0x0094FF);
 		
-		double health = 10 + Echeladder.healthBoost(MinestuckPlayerData.rung)/2.0;
+		double health = 10 + Echeladder.healthBoost(currentRung)/2.0;
 		mc.fontRendererObj.drawString(StatCollector.translateToLocal("gui.echeladder.health.name"), xOffset + 24, yOffset + 84, 0x404040);
 		mc.fontRendererObj.drawString(String.valueOf(health), xOffset + 26, yOffset + 93, 0x0094FF);
 		
-		mc.fontRendererObj.drawString("=", xOffset + 25, yOffset + 12, 0x404040);
+		mc.fontRendererObj.drawString("=", xOffset + 25, yOffset + 12, 0x404040);	//Should this be black, or the same blue as the numbers?
 		mc.fontRendererObj.drawString(String.valueOf(MinestuckPlayerData.boondollars), xOffset + 27 + mc.fontRendererObj.getCharWidth('='), yOffset + 12, 0x0094FF);
 		
 		mc.fontRendererObj.drawString(StatCollector.translateToLocal("gui.echeladder.cache.name"), xOffset + 24, yOffset + 138, 0x404040);
 		mc.fontRendererObj.drawString("Unlimited", xOffset + 26, yOffset + 147, 0x0094FF);
 		
-		fromRung = Math.max(fromRung, MinestuckPlayerData.rung - 4);
-		
 		String tooltip = null;
-		if(fromRung < MinestuckPlayerData.rung)
+		if(fromRung < currentRung)
 		{
 			rand =  new Random(452619373);
-			for(int i = 0; i <= fromRung; i++)
+			int rung;
+			for(rung = 0; rung <= Math.max(fromRung, currentRung - 4); rung++)
 				rand.nextInt(0xFFFFFF);
-			for(int rung = fromRung + 1; rung <= MinestuckPlayerData.rung; rung++)
+			for(; rung <= currentRung; rung++)
 			{
-				int index = rung - 1 - fromRung;
+				int index = rung - 1 - Math.max(fromRung, currentRung - 4);
 				int textColor = rand.nextInt(0xFFFFFF);
 				if(textColors.length > rung)
 					textColor = textColors[rung];
@@ -185,9 +217,44 @@ public class GuiEcheladder extends GuiPlayerStats
 		if(tooltip != null)
 			drawHoveringText(Arrays.asList(tooltip), xcor, ycor);
 		else if(ycor >= yOffset + 39 && ycor < yOffset + 39 + mc.fontRendererObj.FONT_HEIGHT && xcor >= xOffset + 26 && xcor < xOffset + 26 + mc.fontRendererObj.getStringWidth(attack+"%"))
-			drawHoveringText(Arrays.asList(StatCollector.translateToLocalFormatted("gui.echeladder.damageUnderling"), Math.round(attack*Echeladder.getUnderlingDamageModifier(MinestuckPlayerData.rung)) + "%"), xcor, ycor);
+			drawHoveringText(Arrays.asList(StatCollector.translateToLocalFormatted("gui.echeladder.damageUnderling"), Math.round(attack*Echeladder.getUnderlingDamageModifier(currentRung)) + "%"), xcor, ycor);
 		else if(ycor >= yOffset + 93 && ycor < yOffset + 93 + mc.fontRendererObj.FONT_HEIGHT && xcor >= xOffset + 26 && xcor < xOffset + 26 + mc.fontRendererObj.getStringWidth(String.valueOf(health)))
-			drawHoveringText(Arrays.asList(StatCollector.translateToLocalFormatted("gui.echeladder.protectionUnderling"), String.format("%.1f", 100*Echeladder.getUnderlingProtectionModifier(MinestuckPlayerData.rung))+"%"), xcor, ycor);
+			drawHoveringText(Arrays.asList(StatCollector.translateToLocalFormatted("gui.echeladder.protectionUnderling"), String.format("%.1f", 100*Echeladder.getUnderlingProtectionModifier(currentRung))+"%"), xcor, ycor);
+	}
+	
+	private void updateScrollAndAnimation(int xcor, int ycor)
+	{
+		boolean mouseButtonDown = Mouse.isButtonDown(0);
+		if(!wasClicking && mouseButtonDown && xcor >= xOffset + 80 && xcor < xOffset + 87 && ycor >= yOffset + 42 && ycor < yOffset + 185)
+			isScrolling = true;
+		else if(!mouseButtonDown)
+			isScrolling = false;
+		
+		if(isScrolling)
+		{
+			scrollIndex = (int) (MAX_SCROLL*(ycor - yOffset - 179)/-130F);
+			scrollIndex = MathHelper.clamp_int(scrollIndex, 0, MAX_SCROLL);
+		}
+		wasClicking = mouseButtonDown;
+		
+		if(animationCycle > 0)
+			animationCycle--;
+	}
+	
+	private int getTicksForRungAnimation(int rungs)
+	{
+		if(rungs < 5)
+			return timeForRung + (rungs - 1)*(timeForRung + timeBeforeNext);
+		else return timeForShowOnly;
+	}
+	
+	@Override
+	protected void keyTyped(char typedChar, int keyCode) throws IOException
+	{
+		super.keyTyped(typedChar, keyCode);
+		
+		if(keyCode == 28 || keyCode == 156)
+			animationCycle = 0;
 	}
 	
 	@Override
