@@ -3,7 +3,6 @@ package com.mraof.minestuck.event;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.underling.EntityUnderling;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 
@@ -80,14 +79,12 @@ public class ServerEventHandler
 				EntityPlayerMP player = (EntityPlayerMP) event.source.getEntity();
 				double modifier = MinestuckPlayerData.getData(player).echeladder.getUnderlingDamageModifier();
 				event.ammount *= modifier;
-				Debug.print("Damage increased to "+100*modifier+'%');
 				
 			} else if(event.entityLiving instanceof EntityPlayerMP && event.source.getEntity() instanceof EntityUnderling)
 			{	//Decrease damamge to player
 				EntityPlayerMP player = (EntityPlayerMP) event.entityLiving;
 				double modifier = MinestuckPlayerData.getData(player).echeladder.getUnderlingProtectionModifier();
 				event.ammount *= modifier;
-				Debug.print("Damage decreased to "+100*modifier+'%');
 			}
 	}
 }

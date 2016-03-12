@@ -58,10 +58,10 @@ public class Echeladder
 	public void increaseProgress(int exp)
 	{
 		SburbConnection c = SkaianetHandler.getMainConnection(name, true);
-		int topRung = c != null && c.enteredGame() ? RUNG_COUNT : MinestuckConfig.preEntryRungLimit;
+		int topRung = c != null && c.enteredGame() ? RUNG_COUNT - 1 : MinestuckConfig.preEntryRungLimit;
 		int expReq = getRungProgressReq();
-		if(rung >= topRung || exp < expReq*MIN_PROGRESS_MODIFIER){Debug.print("Skipped progress: "+exp);
-			return;}
+		if(rung >= topRung || exp < expReq*MIN_PROGRESS_MODIFIER)
+			return;
 		
 		int prevRung = rung;
 		int prevExp = exp;
@@ -83,7 +83,6 @@ public class Echeladder
 			if(exp >= expReq/50)
 				progress += exp;
 		}
-		Debug.print("Gained progress: "+prevExp+", rung increased by " +(rung - prevRung));
 		
 		EntityPlayer player = MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(UsernameHandler.decode(name));
 		if(player != null)
@@ -135,7 +134,6 @@ public class Echeladder
 		int healthBonus = healthBoost(rung);
 		double damageBonus = attackBonus(rung);
 		
-		Debug.printf("Health bonus for rung %d: %d", rung + 1, healthBonus);
 		updateAttribute(player.getEntityAttribute(SharedMonsterAttributes.maxHealth), new AttributeModifier(echeladderHealthBoostModifierUUID, "Echeladder Health Boost", healthBonus, 0).setSaved(false));
 		updateAttribute(player.getEntityAttribute(SharedMonsterAttributes.attackDamage), new AttributeModifier(echeladderDamageBoostModifierUUID, "Echeladder Damage Boost", damageBonus, 1).setSaved(false));
 	}
@@ -179,16 +177,16 @@ public class Echeladder
 	
 	public static int healthBoost(int rung)
 	{
-		return (int) (40*(rung/(float) Echeladder.RUNG_COUNT));	//At max rung, the player will have three rows of hearts
+		return (int) (40*(rung/(float) (Echeladder.RUNG_COUNT - 1)));	//At max rung, the player will have three rows of hearts
 	}
 	
 	public static double getUnderlingDamageModifier(int rung)
 	{
-		return 1 + rung*0.06D;
+		return 1 + rung*0.05D;
 	}
 	
 	public static double getUnderlingProtectionModifier(int rung)
 	{
-		return 1/(rung*0.05D + 1);
+		return 1/(rung*0.06D + 1);
 	}
 }
