@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.lwjgl.input.Mouse;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 
@@ -238,7 +239,9 @@ public class GuiEcheladder extends GuiPlayerStats
 		wasClicking = mouseButtonDown;
 		
 		if(animationCycle > 0)
-			animationCycle--;
+			if(MinestuckConfig.echeladderAnimation)
+				animationCycle--;
+			else animationCycle = 0;
 	}
 	
 	private int getTicksForRungAnimation(int rungs)
