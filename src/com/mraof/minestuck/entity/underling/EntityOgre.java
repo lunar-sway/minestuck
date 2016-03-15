@@ -47,7 +47,7 @@ public class EntityOgre extends EntityUnderling
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return type != null ? 12F * type.getPower() + 40 : 1;
+		return type != null ? 13F * type.getPower() + 44 : 1;
 	}
 	
 	@Override

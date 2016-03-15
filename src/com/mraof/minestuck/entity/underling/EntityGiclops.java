@@ -37,7 +37,7 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 	@Override
 	public GristSet getGristSpoils()
 	{
-		return GristHelper.getRandomDrop(type, 8);
+		return GristHelper.getRandomDrop(type, 10);
 	}
 
 	@Override
@@ -106,7 +106,7 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return type != null ? 45*type.getPower() + 200 : 1;
+		return type != null ? 46*type.getPower() + 210 : 1;
 	}
 	
 	@Override

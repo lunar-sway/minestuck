@@ -44,7 +44,7 @@ public class EntityImp extends EntityUnderling
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return type != null ? 6*type.getPower() + 8 : 1;
+		return type != null ? 7*type.getPower() + 8 : 1;
 	}
 	
 	@Override
