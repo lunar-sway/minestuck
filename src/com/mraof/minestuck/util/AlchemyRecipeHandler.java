@@ -84,11 +84,14 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(Blocks.snow), false, new GristSet(new GristType[] {GristType.Cobalt, GristType.Build}, new int[] {5, 3}));
 		GristRegistry.addGristConversion(new ItemStack(Blocks.snow_layer), false, new GristSet(new GristType[] {GristType.Cobalt}, new int[] {2}));
 		GristRegistry.addGristConversion(new ItemStack(Blocks.soul_sand), false, new GristSet(new GristType[] {GristType.Tar, GristType.Caulk, GristType.Build}, new int[] {5, 3, 2}));
-		GristRegistry.addGristConversion(new ItemStack(Blocks.sponge, 1, 0), false, new GristSet(new GristType[] {GristType.Amber, GristType.Sulfur}, new int[] {20, 30}));
+		GristRegistry.addGristConversion(new ItemStack(Blocks.sponge, 1, 0), new GristSet(new GristType[] {GristType.Amber, GristType.Sulfur}, new int[] {20, 30}));
+		GristRegistry.addGristConversion(new ItemStack(Blocks.sponge, 1, 1), new GristSet(new GristType[] {GristType.Amber, GristType.Sulfur, GristType.Cobalt}, new int[] {20, 30, 10}));
 		GristRegistry.addGristConversion(new ItemStack(Blocks.stained_hardened_clay), false, new GristSet(new GristType[] {GristType.Shale, GristType.Marble}, new int[] {12, 4}));
 		GristRegistry.addGristConversion(new ItemStack(Blocks.stone), false, new GristSet(new GristType[] {GristType.Build}, new int[] {2}));
 		GristRegistry.addGristConversion(new ItemStack(Blocks.stone_slab, 1, 5), true, new GristSet(new GristType[] {GristType.Build}, new int[] {1}));
 		GristRegistry.addGristConversion(new ItemStack(Blocks.stonebrick, 1, 2), true, new GristSet(new GristType[] {GristType.Build}, new int[] {2}));
+		GristRegistry.addGristConversion(new ItemStack(Blocks.stone_brick_stairs), new GristSet(new GristType[] {GristType.Build}, new int[] {3}));
+		GristRegistry.addGristConversion(new ItemStack(Blocks.sandstone_stairs), new GristSet(new GristType[] {GristType.Build}, new int[] {6}));
 		GristRegistry.addGristConversion(new ItemStack(Blocks.web), false, new GristSet(new GristType[] {GristType.Chalk}, new int[] {18}));
 		GristRegistry.addGristConversion(new ItemStack(Blocks.wool, 1, 0), true, new GristSet(new GristType[] {GristType.Chalk}, new int[] {6}));
 		GristRegistry.addGristConversion(new ItemStack(Blocks.wool, 1, 1), true, new GristSet(new GristType[] {GristType.Chalk, GristType.Garnet, GristType.Amber}, new int[] {6, 1, 1}));
@@ -189,7 +192,6 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(Items.prismarine_crystals), new GristSet(new GristType[] {GristType.Cobalt, GristType.Diamond, GristType.Amethyst}, new int[] {5, 2, 4}));
 		GristRegistry.addGristConversion(new ItemStack(Items.prismarine_shard), new GristSet(new GristType[] {GristType.Build, GristType.Cobalt}, new int[] {3, 3}));
 		GristRegistry.addGristConversion(new ItemStack(Items.rabbit_hide), new GristSet(new GristType[] {GristType.Iodine, GristType.Chalk}, new int[] {1, 1}));
-		GristRegistry.addGristConversion(new ItemStack(Blocks.sponge, 1, 1), new GristSet(new GristType[] {GristType.Amber, GristType.Sulfur, GristType.Cobalt}, new int[] {20, 30, 10}));
 		
 		//Ores
 		GristRegistry.addGristConversion("oreCoal", new GristSet(new GristType[] {GristType.Build, GristType.Tar}, new int[] {4, 8}));
@@ -483,9 +485,10 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Items.book), new ItemStack(Items.experience_bottle), MODE_AND, new ItemStack(Blocks.enchanting_table));
 		CombinationRegistry.addCombination("treeLeaves", new ItemStack(Items.water_bucket), true, MODE_OR, new ItemStack(Blocks.waterlily));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.crafting_table), new ItemStack(Blocks.iron_block), MODE_OR, new ItemStack(Blocks.anvil));
-		CombinationRegistry.addCombination(new ItemStack(Items.wooden_sword), new ItemStack(Items.arrow), MODE_OR, new ItemStack(Items.bow));
+		CombinationRegistry.addCombination(new ItemStack(Items.wooden_sword), new ItemStack(Items.arrow), false, true, MODE_OR, new ItemStack(Items.bow));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.red_flower), new ItemStack(Items.brick), false, true, MODE_AND, new ItemStack(Items.flower_pot));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.yellow_flower), new ItemStack(Items.brick), false, true, MODE_AND, new ItemStack(Items.flower_pot));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.cobblestone), new ItemStack(Items.lava_bucket), MODE_AND, new ItemStack(Blocks.netherrack));
 		
 	}
 	
@@ -589,6 +592,7 @@ public class AlchemyRecipeHandler
 			GristRegistry.addGristConversion(new ItemStack(candy, 1, i+1), new GristSet(GristType.values()[i], 3));
 		
 		//add Designix combinations
+		CombinationRegistry.addCombination(new ItemStack(Items.stone_sword), new ItemStack(Items.rotten_flesh), MODE_AND, false, true, new ItemStack(ninjaSword));
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_sword), new ItemStack(Items.rotten_flesh), MODE_AND, false, true, new ItemStack(ninjaSword));
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_sword), new ItemStack(component, 1, 2), MODE_AND, false, true, new ItemStack(regisword));
 		CombinationRegistry.addCombination(new ItemStack(ninjaSword), new ItemStack(component, 1, 2), MODE_AND, false, true, new ItemStack(regisword));
@@ -598,12 +602,14 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(sickle), new ItemStack(component, 1, 2), MODE_AND, false, true, new ItemStack(regiSickle));
 		
 		CombinationRegistry.addCombination(new ItemStack(clawHammer), new ItemStack(Blocks.brick_block), MODE_AND, false, false, new ItemStack(sledgeHammer));
+		CombinationRegistry.addCombination(new ItemStack(clawHammer), new ItemStack(Blocks.cobblestone), MODE_AND, false, false, new ItemStack(sledgeHammer));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.anvil), new ItemStack(sledgeHammer), MODE_AND, false, false, new ItemStack(blacksmithHammer));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.iron_block), new ItemStack(sledgeHammer), MODE_AND, false, false, new ItemStack(blacksmithHammer));
 		CombinationRegistry.addCombination(new ItemStack(Items.slime_ball), new ItemStack(sledgeHammer), MODE_AND, false, false, new ItemStack(pogoHammer));
 		CombinationRegistry.addCombination(new ItemStack(blacksmithHammer), new ItemStack(Items.clock), MODE_OR, false, false, new ItemStack(fearNoAnvil));
 		CombinationRegistry.addCombination(new ItemStack(sledgeHammer), new ItemStack(Items.book), MODE_AND, false, false, new ItemStack(telescopicSassacrusher));
 		
+		CombinationRegistry.addCombination(new ItemStack(cane), new ItemStack(Items.stone_sword), MODE_OR, false, false, new ItemStack(spearCane));
 		CombinationRegistry.addCombination(new ItemStack(cane), new ItemStack(Items.iron_sword), MODE_OR, false, false, new ItemStack(spearCane));
 		CombinationRegistry.addCombination(new ItemStack(cane), new ItemStack(ninjaSword), MODE_OR, false, false, new ItemStack(spearCane));
 		
@@ -668,7 +674,7 @@ public class AlchemyRecipeHandler
 			ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CORRIDOR).addItem(new WeightedRandomChestContent(captchaCard, 0, 1, 4, 10));
 		}
 		
-		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Items.experience_bottle, 1, 0), 1, 2, 3));
+		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Items.experience_bottle, 1, 0), 1, 2, 1));
 		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Items.iron_ingot, 1, 0), 1, 5, 9));
 		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Items.bow, 1, 0), 1, 1, 5));
 		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Items.redstone, 1, 0), 1, 6, 7));
@@ -678,6 +684,7 @@ public class AlchemyRecipeHandler
 		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Items.saddle, 1, 0), 1, 1, 3));
 		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Items.iron_sword, 1, 0), 1, 1, 2));
 		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Items.ender_pearl, 1, 0), 1, 2, 1));
+		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Items.rotten_flesh, 1, 0), 1, 3, 4));
 		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Items.arrow, 1, 0), 2, 10, 6));
 		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(Items.bread, 1, 0), 1, 4, 8));
 		
@@ -688,7 +695,7 @@ public class AlchemyRecipeHandler
 		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(sledgeHammer, 1, 0), 1, 1, 4));
 		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(woodenSpoon, 1, 0), 1, 1, 5));
 		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(transportalizer, 1, 0), 1, 1, 2));
-		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(rawCruxite, 1, 0), 1, 5, 5));
+		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(rawCruxite, 1, 0), 1, 5, 7));
 		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(homesSmellYaLater, 1, 0), 1, 1, 2));
 		basicMediumChest.add(new WeightedRandomChestContent(new ItemStack(spearCane, 1, 0), 1, 1, 2));
 	}

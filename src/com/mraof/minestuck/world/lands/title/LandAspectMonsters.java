@@ -72,6 +72,7 @@ public class LandAspectMonsters extends TitleLandAspect
 		if(chunkProvider.decorators != null)
 		{
 			ChestGenHooks chestGen = chunkProvider.lootMap.get(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST);
+			chestGen.removeItem(new ItemStack(Items.rotten_flesh, 1, 0));
 			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Items.rotten_flesh, 1, 0), 2, 8, 6));
 			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Items.bone, 1, 0), 1, 4, 5));
 			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Items.gunpowder, 1, 0), 2, 8, 4));

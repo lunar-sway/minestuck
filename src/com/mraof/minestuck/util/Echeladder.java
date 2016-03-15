@@ -53,7 +53,7 @@ public class Echeladder
 	
 	private int getRungProgressReq()
 	{
-		return (int) (Math.pow(1.4, rung)*8);
+		return (int) (Math.pow(1.4, rung)*9);
 	}
 	
 	public void increaseProgress(int exp)
@@ -135,7 +135,7 @@ public class Echeladder
 		int healthBonus = healthBoost(rung);
 		double damageBonus = attackBonus(rung);
 		
-		updateAttribute(player.getEntityAttribute(SharedMonsterAttributes.maxHealth), new AttributeModifier(echeladderHealthBoostModifierUUID, "Echeladder Health Boost", healthBonus, 0).setSaved(false));
+		updateAttribute(player.getEntityAttribute(SharedMonsterAttributes.maxHealth), new AttributeModifier(echeladderHealthBoostModifierUUID, "Echeladder Health Boost", healthBonus, 0));	//If this isn't saved, your health goes to 10 hearts (if it was higher before) when loading the save file.
 		updateAttribute(player.getEntityAttribute(SharedMonsterAttributes.attackDamage), new AttributeModifier(echeladderDamageBoostModifierUUID, "Echeladder Damage Boost", damageBonus, 1).setSaved(false));
 	}
 	
@@ -183,7 +183,7 @@ public class Echeladder
 	
 	public static double getUnderlingDamageModifier(int rung)
 	{
-		return 1 + rung*0.05D;
+		return 1 + rung*0.04D;
 	}
 	
 	public static double getUnderlingProtectionModifier(int rung)
