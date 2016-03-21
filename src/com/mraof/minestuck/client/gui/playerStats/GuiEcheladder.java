@@ -151,7 +151,7 @@ public class GuiEcheladder extends GuiPlayerStats
 		this.mc.getTextureManager().bindTexture(potionIcons);
 		this.drawTexturedModalRect(xOffset + 5, yOffset + 30, 72, 198, 18, 18);
 		this.drawTexturedModalRect(xOffset + 5, yOffset + 84, 126, 198, 18, 18);
-		this.mc.getTextureManager().bindTexture(icons);
+		this.mc.getTextureManager().bindTexture(GuiPlayerStats.icons);
 		this.drawTexturedModalRect(xOffset + 6, yOffset + 139, 48, 64, 16, 16);
 		this.drawTexturedModalRect(xOffset + 5, yOffset + 7, 238, 16, 18, 18);
 		

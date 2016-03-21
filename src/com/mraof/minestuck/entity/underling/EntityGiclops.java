@@ -176,7 +176,7 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 	{
 		super.onDeath(cause);
 		Entity entity = cause.getEntity();
-		if(this.dead && !this.worldObj.isRemote)
+		if(this.dead && !this.worldObj.isRemote && type != null)
 		{
 			computePlayerProgress((int) (500*type.getPower() + 1000));
 			if(entity != null && entity instanceof EntityPlayerMP)

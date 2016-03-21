@@ -47,7 +47,7 @@ public class EntityOgre extends EntityUnderling
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return type != null ? 13F * type.getPower() + 44 : 1;
+		return type != null ? 13F * type.getPower() + 50 : 1;
 	}
 	
 	@Override
@@ -74,7 +74,7 @@ public class EntityOgre extends EntityUnderling
 	{
 		super.onDeath(cause);
 		Entity entity = cause.getEntity();
-		if(this.dead && !this.worldObj.isRemote)
+		if(this.dead && !this.worldObj.isRemote && type != null)
 		{
 			computePlayerProgress((int) (40*type.getPower() + 50));
 			if(entity != null && entity instanceof EntityPlayerMP)
