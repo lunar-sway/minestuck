@@ -1,14 +1,17 @@
 package com.mraof.minestuck.entity.underling;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.entity.IEntityMultiPart;
 import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
+import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
+import com.mraof.minestuck.util.MinestuckPlayerData;
 
 public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart 
 {
@@ -26,7 +29,7 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	@Override
 	public GristSet getGristSpoils() 
 	{
-		return GristHelper.getRandomDrop(type, 4);
+		return GristHelper.getRandomDrop(type, 6);
 	}
 
 	@Override
@@ -42,13 +45,13 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return type != null ? 12 * type.getPower() + 50 : 0;
+		return type != null ? 20 * type.getPower() + 85 : 1;
 	}
 
 	@Override
 	protected double getWanderSpeed()
 	{
-		return 0.7;
+		return 0.75;
 	}
 	
 	@Override
@@ -60,7 +63,7 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	@Override
 	protected double getAttackDamage()
 	{
-		return (this.type.getPower() + 1) * 2;
+		return this.type.getPower()*2.7 + 6;
 	}
 	
 	@Override
@@ -132,4 +135,19 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 
 	}
 	
+	@Override
+	public void onDeath(DamageSource cause)
+	{
+		super.onDeath(cause);
+		Entity entity = cause.getEntity();
+		if(this.dead && !this.worldObj.isRemote && type != null)
+		{
+			computePlayerProgress((int) (100*type.getPower() + 160));
+			if(entity != null && entity instanceof EntityPlayerMP)
+			{
+				Echeladder ladder = MinestuckPlayerData.getData((EntityPlayerMP) entity).echeladder;
+				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 2));
+			}
+		}
+	}
 }

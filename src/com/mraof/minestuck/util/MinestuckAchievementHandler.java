@@ -12,6 +12,7 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.item.ItemCruxiteArtifact;
 import com.mraof.minestuck.item.MinestuckItems;
 
 public class MinestuckAchievementHandler {
@@ -64,12 +65,34 @@ public class MinestuckAchievementHandler {
 	
 	public static void onAlchemizedItem(ItemStack stack, EntityPlayer player)
 	{
-		if(!stack.getItem().equals(MinestuckItems.cruxiteApple))
+		if(!(stack.getItem() instanceof ItemCruxiteArtifact))
+		{
 			player.triggerAchievement(alchemy);
+			Echeladder e = MinestuckPlayerData.getData(player).echeladder;
+			e.checkBonus(Echeladder.ALCHEMY_BONUS_OFFSET);
+		}
 		if(stack.getItem().equals(MinestuckItems.clawHammer))
 			player.triggerAchievement(getHammer);
 		if(stack.getItem().equals(MinestuckItems.katana))
 			player.triggerAchievement(broBlade);
+		GristSet set = GristRegistry.getGristConversion(stack);
+		if(set != null) //The only time the grist set should be null here is if it was a captchalouge card that was alchemized
+		{
+			double value = 0;
+			for(GristType type : GristType.values())
+			{
+				int v = set.getGrist(type);
+				float f = type == GristType.Build || type == GristType.Artifact ? 0.5F : type == GristType.Zillium ? 20 : type.getPower();
+				if(v > 0)
+					value += f*v/2;
+			}
+			
+			Echeladder e = MinestuckPlayerData.getData(player).echeladder;
+			if(value >= 50)
+				e.checkBonus((byte) (Echeladder.ALCHEMY_BONUS_OFFSET + 1));
+			if(value >= 500)
+				e.checkBonus((byte) (Echeladder.ALCHEMY_BONUS_OFFSET + 2));
+		}
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)

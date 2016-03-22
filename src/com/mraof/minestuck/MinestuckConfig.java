@@ -20,6 +20,7 @@ import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.inventory.ContainerHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 
 public class MinestuckConfig
@@ -48,6 +49,10 @@ public class MinestuckConfig
 	public static boolean dataCheckerAccess;
 	@SideOnly(Side.CLIENT)
 	public static boolean alchemyIcons;
+	@SideOnly(Side.CLIENT)
+	public static boolean preEntryEcheladder;
+	@SideOnly(Side.CLIENT)
+	public static boolean echeladderAnimation;
 	
 	public static boolean hardMode = false;
 	public static boolean generateCruxiteOre;
@@ -65,6 +70,7 @@ public class MinestuckConfig
 	public static boolean allowSecondaryConnections;	//TODO make open server not an option after having a main connection (for when this is set to false)
 	public static boolean disableGristWidget;
 	public static boolean vanillaOreDrop;
+	public static boolean echeladderProgress;
 	public static int artifactRange;
 	public static int overworldEditRange;
 	public static int landEditRange;
@@ -79,6 +85,7 @@ public class MinestuckConfig
 	 * (Will try to put a better explanation somewhere else later)
 	 */
 	public static int escapeFailureMode;
+	public static int preEntryRungLimit;
 	public static byte treeModusSetting;
 	/**
 	 * An option related to dropping the sylladex on death
@@ -152,6 +159,9 @@ public class MinestuckConfig
 		allowSecondaryConnections = config.get("General", "secondaryConnections", true, "Set this to true to allow so-called 'secondary connections' to be created.").setLanguageKey("minestuck.config.secondaryConnections").getBoolean();	//Server lists need to be updated if this gets changeable in-game
 		disableGristWidget = config.get("General", "disableGristWidget", false).setLanguageKey("minestuck.config.disableGristWidget").setRequiresWorldRestart(true).getBoolean();
 		vanillaOreDrop = config.get("General", "vanillaOreDrop", false, "If this is true, the custom vanilla ores will drop the standard vanilla ores when mined, instead of the custom type.").setLanguageKey("minestuck.config.vanillaOreDrop").getBoolean();
+		preEntryRungLimit = config.get("General", "preEntryRungLimit", 6, "The highest rung you can get before entering medium. Note that the first rung is indexed as 0, the second as 1 and so on.", 0, Echeladder.RUNG_COUNT - 1).setLanguageKey("minestuck.config.preEntryRungLimit").setRequiresWorldRestart(true).getInt();
+		echeladderProgress = config.get("General", "echeladderProgress", false, "If this is true, players will be able to see their progress towards the next rung. This is server side and will only be active in multiplayer if the server/Lan host has it activated.").setLanguageKey("minestuck.config.echeladderProgress").getBoolean();
+		
 		setting = config.get("General", "dataCheckerPermission", "opsAndGamemode", "Determines who's allowed to access the data checker. \"none\": No one is allowed. \"ops\": only those with a command permission of level 2 or more may access the data ckecker. (for single player, that would be if cheats are turned on) \"gamemode\": Only players with the creative or spectator gamemode may view the data checker. \"opsAndGamemode\": Combination of \"ops\" and \"gamemode\". \"anyone\": No access restrictions are used.",
 				new String[] {"none", "ops", "gamemode", "opsAndGamemode", "anyone"}).setLanguageKey("minestuck.config.dataCheckerPermission").getString();
 		if(setting.equals("none")) dataCheckerPermission = 0;
@@ -172,6 +182,7 @@ public class MinestuckConfig
 			//cardResolution = config.getInt("General", "cardResolution", 1, 0, 5, "The resolution of the item inside of a card. The width/height is computed by '8*2^x', where 'x' is this config value.");
 			loginColorSelector = config.get("General", "loginColorSelector", true, "Determines if the color selector should be displayed when entering a save file for the first time.").setLanguageKey("minestuck.config.loginColorSelector").getBoolean();
 			alchemyIcons = config.get("General", "alchemyIcons", true, "Set this to true to replace grist names in alchemiter/grist widget with the grist icon.").setLanguageKey("minestuck.config.alchemyIcons").getBoolean();
+			echeladderAnimation = config.get("General", "echeladderAnimation", true, "If this is turned off, the echeladder animation will end immediately.").setLanguageKey("minestuck.config.echeladderAnimation").getBoolean();
 		}
 	}
 	

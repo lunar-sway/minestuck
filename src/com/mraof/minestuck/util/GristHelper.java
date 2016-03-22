@@ -19,30 +19,40 @@ public class GristHelper {
 		secondaryGristMap = new HashMap<GristType, ArrayList<GristType>>();
 		for(GristType type : GristType.values())
 			secondaryGristMap.put(type, new ArrayList<GristType>());
-		secondaryGristMap.get(GristType.Amber).add(GristType.Iodine);
 		secondaryGristMap.get(GristType.Amber).add(GristType.Rust);
 		secondaryGristMap.get(GristType.Amber).add(GristType.Sulfur);
 		secondaryGristMap.get(GristType.Amethyst).add(GristType.Quartz);
-		secondaryGristMap.get(GristType.Caulk).add(GristType.Chalk);
+		secondaryGristMap.get(GristType.Amethyst).add(GristType.Garnet);
 		secondaryGristMap.get(GristType.Caulk).add(GristType.Iodine);
-		secondaryGristMap.get(GristType.Caulk).add(GristType.Tar);
-		secondaryGristMap.get(GristType.Chalk).add(GristType.Quartz);
-		secondaryGristMap.get(GristType.Cobalt).add(GristType.Iodine);
-		secondaryGristMap.get(GristType.Cobalt).add(GristType.Rust);
-		secondaryGristMap.get(GristType.Cobalt).add(GristType.Sulfur);
-		secondaryGristMap.get(GristType.Garnet).add(GristType.Rust);
-		secondaryGristMap.get(GristType.Iodine).add(GristType.Tar);
-		secondaryGristMap.get(GristType.Marble).add(GristType.Rust);
-		secondaryGristMap.get(GristType.Marble).add(GristType.Chalk);
-		secondaryGristMap.get(GristType.Mercury).add(GristType.Sulfur);
-		secondaryGristMap.get(GristType.Quartz).add(GristType.Amethyst);
-		secondaryGristMap.get(GristType.Quartz).add(GristType.Shale);
-		secondaryGristMap.get(GristType.Shale).add(GristType.Quartz);
+		secondaryGristMap.get(GristType.Caulk).add(GristType.Chalk);
+		secondaryGristMap.get(GristType.Chalk).add(GristType.Shale);
+		secondaryGristMap.get(GristType.Chalk).add(GristType.Marble);
+		secondaryGristMap.get(GristType.Cobalt).add(GristType.Ruby);
+		secondaryGristMap.get(GristType.Cobalt).add(GristType.Amethyst);
+		secondaryGristMap.get(GristType.Garnet).add(GristType.Ruby);
+		secondaryGristMap.get(GristType.Garnet).add(GristType.Gold);
+		secondaryGristMap.get(GristType.Iodine).add(GristType.Amber);
+		secondaryGristMap.get(GristType.Iodine).add(GristType.Chalk);
+		secondaryGristMap.get(GristType.Marble).add(GristType.Caulk);
+		secondaryGristMap.get(GristType.Marble).add(GristType.Amethyst);
+		secondaryGristMap.get(GristType.Mercury).add(GristType.Cobalt);
+		secondaryGristMap.get(GristType.Mercury).add(GristType.Rust);
+		secondaryGristMap.get(GristType.Quartz).add(GristType.Marble);
+		secondaryGristMap.get(GristType.Quartz).add(GristType.Uranium);
+		secondaryGristMap.get(GristType.Ruby).add(GristType.Quartz);
+		secondaryGristMap.get(GristType.Ruby).add(GristType.Diamond);
+		secondaryGristMap.get(GristType.Rust).add(GristType.Shale);
+		secondaryGristMap.get(GristType.Rust).add(GristType.Garnet);
+		secondaryGristMap.get(GristType.Shale).add(GristType.Mercury);
 		secondaryGristMap.get(GristType.Shale).add(GristType.Tar);
-		secondaryGristMap.get(GristType.Sulfur).add(GristType.Gold);
-		secondaryGristMap.get(GristType.Sulfur).add(GristType.Rust);
-		secondaryGristMap.get(GristType.Tar).add(GristType.Mercury);
-		secondaryGristMap.get(GristType.Tar).add(GristType.Shale);
+		secondaryGristMap.get(GristType.Sulfur).add(GristType.Iodine);
+		secondaryGristMap.get(GristType.Sulfur).add(GristType.Tar);
+		secondaryGristMap.get(GristType.Tar).add(GristType.Amber);
+		secondaryGristMap.get(GristType.Tar).add(GristType.Cobalt);
+		
+		secondaryGristMap.get(GristType.Uranium).add(GristType.Diamond);
+		secondaryGristMap.get(GristType.Diamond).add(GristType.Gold);
+		secondaryGristMap.get(GristType.Gold).add(GristType.Uranium);
 	}
 
 	

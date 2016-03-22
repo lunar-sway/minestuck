@@ -5,8 +5,11 @@ import io.netty.buffer.ByteBuf;
 import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.fml.relauncher.Side;
 
+import com.mraof.minestuck.client.gui.playerStats.GuiEcheladder;
 import com.mraof.minestuck.util.ColorCollector;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.EnumClass;
@@ -15,12 +18,12 @@ import com.mraof.minestuck.util.Title;
 
 public class PlayerDataPacket extends MinestuckPacket 
 {
-	public static final byte COLOR = 0;
-	public static final byte TITLE = 1;
+	public static final byte COLOR = 0, TITLE = 1, ECHELADDER = 2, BOONDOLLAR = 3;
 	
 	public int type;
 	public int i1;
 	public int i2;
+	public float f;
 	
 	@Override
 	public MinestuckPacket generatePacket(Object... dat) 
@@ -31,11 +34,17 @@ public class PlayerDataPacket extends MinestuckPacket
 		{
 			if(dat.length > 1)
 				data.writeInt((Integer) dat[1]);
-		}
-		else if(type == TITLE)
+		} else if(type == TITLE)
 		{
 			data.writeInt(EnumClass.getIntFromClass((EnumClass) dat[1]));
 			data.writeInt(EnumAspect.getIntFromAspect((EnumAspect) dat[2]));
+		} else if(type == ECHELADDER)
+		{
+			data.writeInt((Integer) dat[1]);
+			data.writeFloat((Float) dat[2]);
+		} else if(type == BOONDOLLAR)
+		{
+			data.writeInt((Integer) dat[1]);
 		}
 		
 		return this;
@@ -55,10 +64,18 @@ public class PlayerDataPacket extends MinestuckPacket
 		{
 			i1 = data.readInt();
 			i2 = data.readInt();
+		} else if(type == ECHELADDER)
+		{
+			i1 = data.readInt();
+			f = data.readFloat();
+		} else if(type == BOONDOLLAR)
+		{
+			i1 = data.readInt();
 		}
+		
 		return this;
 	}
-
+	
 	@Override
 	public void execute(EntityPlayer player)
 	{
@@ -70,16 +87,31 @@ public class PlayerDataPacket extends MinestuckPacket
 				ColorCollector.displaySelectionGui = true;
 			}
 			else ColorCollector.playerColor = i1;
-		}
-		else if(type == TITLE)
+		} else if(type == TITLE)
 		{
 			MinestuckPlayerData.title = new Title(EnumClass.getClassFromInt(i1), EnumAspect.getAspectFromInt(i2));
+		} else if(type == ECHELADDER)
+		{
+			int prev = MinestuckPlayerData.rung;
+			MinestuckPlayerData.rung = i1;
+			MinestuckPlayerData.rungProgress = f;
+			if(prev != -1)
+				for(prev++; prev <= i1; prev++)
+				{
+					String s = StatCollector.canTranslate("echeladder.rung"+prev) ? StatCollector.translateToLocal("echeladder.rung"+prev) : String.valueOf(prev+1);
+					player.addChatMessage(new ChatComponentText("You reached rung "+s+'!'));
+				}
+			if(GuiEcheladder.lastRung == -1)
+				GuiEcheladder.lastRung = i1;
+		} else if(type == BOONDOLLAR)
+		{
+			MinestuckPlayerData.boondollars = i1;
 		}
 	}
-
+	
 	@Override
-	public EnumSet<Side> getSenderSide() {
+	public EnumSet<Side> getSenderSide()
+	{
 		return EnumSet.of(Side.SERVER);
 	}
-	
 }

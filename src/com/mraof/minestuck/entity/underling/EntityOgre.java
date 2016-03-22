@@ -6,10 +6,12 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
+import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
+import com.mraof.minestuck.util.MinestuckPlayerData;
 
 //Makes non-stop ogre puns
 public class EntityOgre extends EntityUnderling 
@@ -25,7 +27,7 @@ public class EntityOgre extends EntityUnderling
 	@Override
 	public GristSet getGristSpoils()
 	{
-		return GristHelper.getRandomDrop(type,3);
+		return GristHelper.getRandomDrop(type, 4);
 	}
 	
 	@Override
@@ -40,12 +42,12 @@ public class EntityOgre extends EntityUnderling
 	@Override
 	protected double getWanderSpeed() 
 	{
-		return 0.6;
+		return 0.65;
 	}
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return type != null ? 9 * type.getPower() + 28 : 0;
+		return type != null ? 13F * type.getPower() + 50 : 1;
 	}
 	
 	@Override
@@ -57,7 +59,7 @@ public class EntityOgre extends EntityUnderling
 	@Override
 	protected double getAttackDamage()
 	{
-		return (this.type.getPower()) * 1.5F + 3;
+		return this.type.getPower() * 2.1 + 6;
 	}
 	
 	@Override
@@ -72,9 +74,15 @@ public class EntityOgre extends EntityUnderling
 	{
 		super.onDeath(cause);
 		Entity entity = cause.getEntity();
-		if(this.dead && entity != null && entity instanceof EntityPlayerMP)
+		if(this.dead && !this.worldObj.isRemote && type != null)
 		{
-			((EntityPlayerMP) entity).triggerAchievement(MinestuckAchievementHandler.killOgre);
+			computePlayerProgress((int) (40*type.getPower() + 50));
+			if(entity != null && entity instanceof EntityPlayerMP)
+			{
+				((EntityPlayerMP) entity).triggerAchievement(MinestuckAchievementHandler.killOgre);
+				Echeladder ladder = MinestuckPlayerData.getData((EntityPlayerMP) entity).echeladder;
+				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 1));
+			}
 		}
 	}
 }

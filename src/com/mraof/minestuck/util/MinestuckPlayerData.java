@@ -24,7 +24,12 @@ public class MinestuckPlayerData {
 	static GristSet targetGrist;
 	@SideOnly(Side.CLIENT)
 	public static Title title;
-	
+	@SideOnly(Side.CLIENT)
+	public static int rung;
+	@SideOnly(Side.CLIENT)
+	public static float rungProgress;
+	@SideOnly(Side.CLIENT)
+	public static int boondollars;
 	
 	public static void onPacketRecived(GristCachePacket packet) {
 		if(packet.targetGrist)
@@ -97,6 +102,7 @@ public class MinestuckPlayerData {
 		{
 			PlayerData data = new PlayerData();
 			data.player = player;
+			data.echeladder = new Echeladder(player);
 			dataMap.put(player, data);
 		}
 		return dataMap.get(player);
@@ -111,6 +117,8 @@ public class MinestuckPlayerData {
 		public Modus modus;
 		public boolean givenModus;
 		public int color = -1;
+		public int boondollars;
+		public Echeladder echeladder;
 		
 		private void readFromNBT(NBTTagCompound nbt)
 		{
@@ -127,6 +135,10 @@ public class MinestuckPlayerData {
 			else givenModus = nbt.getBoolean("givenModus");
 			if(nbt.hasKey("color"))
 				this.color = nbt.getInteger("color");
+			boondollars = nbt.getInteger("boondollars");
+			
+			echeladder = new Echeladder(player);
+			echeladder.loadEcheladder(nbt);
 		}
 		
 		private NBTTagCompound writeToNBT()
@@ -149,6 +161,9 @@ public class MinestuckPlayerData {
 				nbt.setTag("modus", CaptchaDeckHandler.writeToNBT(modus));
 			else nbt.setBoolean("givenModus", givenModus);
 			nbt.setInteger("color", this.color);
+			nbt.setInteger("boondollars", boondollars);
+			
+			echeladder.saveEcheladder(nbt);
 			return nbt;
 		}
 		

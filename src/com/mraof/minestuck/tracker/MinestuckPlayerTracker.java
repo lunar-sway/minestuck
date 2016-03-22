@@ -27,6 +27,7 @@ import com.mraof.minestuck.network.PlayerDataPacket;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.MinestuckPlayerData;
@@ -64,6 +65,8 @@ public class MinestuckPlayerTracker {
 			firstTime = true;
 		}
 		
+		MinestuckPlayerData.getData(encUsername).echeladder.updateEcheladderBonuses(player);
+		
 		if(CaptchaDeckHandler.getModus(player) == null && MinestuckConfig.defaultModusTypes.length > 0 && !MinestuckPlayerData.getData(player).givenModus)
 		{
 			int index = player.worldObj.rand.nextInt(MinestuckConfig.defaultModusTypes.length);
@@ -82,6 +85,8 @@ public class MinestuckPlayerTracker {
 		
 		updateGristCache(UsernameHandler.encode(player.getCommandSenderName()));
 		updateTitle(player);
+		updateEcheladder(player);
+		MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.BOONDOLLAR, MinestuckPlayerData.getData(encUsername).boondollars), player);
 		
 		if(firstTime)
 			MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.COLOR), player);
@@ -127,6 +132,12 @@ public class MinestuckPlayerTracker {
 		}
 	}
 	
+	@SubscribeEvent
+	public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) 
+	{
+		MinestuckPlayerData.getData(event.player).echeladder.updateEcheladderBonuses(event.player);
+	}
+	
 	public static Set<String> dataCheckerPermission = new HashSet<String>();
 	
 	private static boolean shouldUpdateConfigurations(EntityPlayerMP player)
@@ -165,7 +176,7 @@ public class MinestuckPlayerTracker {
 		}
 	}
 	
-	public void updateTitle(EntityPlayer player)
+	public static void updateTitle(EntityPlayer player)
 	{
 		String username = UsernameHandler.encode(player.getCommandSenderName());
 		Title newTitle = MinestuckPlayerData.getTitle(username);
@@ -174,6 +185,14 @@ public class MinestuckPlayerTracker {
 		MinestuckPacket packet = MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.TITLE, newTitle.getHeroClass(), newTitle.getHeroAspect());
 		MinestuckChannelHandler.sendToPlayer(packet, player);
 	}
+	
+	public static void updateEcheladder(EntityPlayer player)
+	{
+		Echeladder echeladder = MinestuckPlayerData.getData(player).echeladder;
+		MinestuckPacket packet = MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.ECHELADDER, echeladder.getRung(), MinestuckConfig.echeladderProgress ? echeladder.getProgress() : 0F);
+		MinestuckChannelHandler.sendToPlayer(packet, player);
+	}
+	
 	public static void updateLands(EntityPlayer player)
 	{
 		MinestuckPacket packet = MinestuckPacket.makePacket(Type.LANDREGISTER);

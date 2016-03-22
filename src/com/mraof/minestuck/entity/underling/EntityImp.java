@@ -1,11 +1,16 @@
 package com.mraof.minestuck.entity.underling;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
+import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
+import com.mraof.minestuck.util.MinestuckPlayerData;
 
 public class EntityImp extends EntityUnderling
 {
@@ -20,7 +25,7 @@ public class EntityImp extends EntityUnderling
 	@Override
 	public GristSet getGristSpoils()
 	{
-		return GristHelper.getRandomDrop(type,1);
+		return GristHelper.getRandomDrop(type, 1);
 	}
 	
 	@Override
@@ -39,7 +44,7 @@ public class EntityImp extends EntityUnderling
 	@Override
 	protected float getMaximumHealth() 
 	{
-		return type != null ? 4 * (type.getPower() + 1) + 2 : 0;
+		return type != null ? 8*type.getPower() + 6 : 1;
 	}
 	
 	@Override
@@ -51,7 +56,7 @@ public class EntityImp extends EntityUnderling
 	@Override
 	protected double getAttackDamage()
 	{
-		return Math.ceil((double)(this.type.getPower() + 1) / 2);
+		return Math.ceil(this.type.getPower() + 1);
 	}
 	
 	@Override
@@ -61,4 +66,19 @@ public class EntityImp extends EntityUnderling
 		this.experienceValue = (int) (3 * type.getPower() + 1);
 	}
 	
+	@Override
+	public void onDeath(DamageSource cause)
+	{
+		super.onDeath(cause);
+		Entity entity = cause.getEntity();
+		if(this.dead && !this.worldObj.isRemote && type != null)
+		{
+			computePlayerProgress((int) (2 + 3*type.getPower()));
+			if(entity != null && entity instanceof EntityPlayerMP)
+			{
+				Echeladder ladder = MinestuckPlayerData.getData((EntityPlayerMP) entity).echeladder;
+				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET));
+			}
+		}
+	}
 }
