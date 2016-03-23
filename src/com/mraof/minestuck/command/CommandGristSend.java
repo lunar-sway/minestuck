@@ -3,10 +3,14 @@ package com.mraof.minestuck.command;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mraof.minestuck.network.skaianet.SburbConnection;
+import com.mraof.minestuck.network.skaianet.SessionHandler;
+import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.MinestuckPlayerData;
+import com.mraof.minestuck.util.UsernameHandler;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -56,6 +60,9 @@ public class CommandGristSend extends CommandBase
 		EntityPlayerMP receivingPlayer = MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(receiver);
 		if(receivingPlayer != null)
 		{
+			if(!isPermittedFor(player, receivingPlayer))
+				throw new CommandException("commands.gristSend.notPermitted", receivingPlayer.getCommandSenderName());
+			
 			GristSet set = new GristSet();
 			GristAmount[] parsedAmounts = CommandGrist.parseGrist(args, 1);
 			for(GristAmount amount : parsedAmounts)
@@ -85,6 +92,16 @@ public class CommandGristSend extends CommandBase
 			notifyOperators(sender, this, "commands.gristSend.success", receiver, costStr.toString());
 			
 		} else throw new PlayerNotFoundException("Couldn't find player \"%s\".", receiver);
+	}
+	
+	private static boolean isPermittedFor(EntityPlayerMP player, EntityPlayerMP player2)
+	{
+		String name1 = UsernameHandler.encode(player.getCommandSenderName()), name2 = UsernameHandler.encode(player2.getCommandSenderName());
+		SburbConnection c1 = SkaianetHandler.getMainConnection(name1, true);
+		SburbConnection c2 = SkaianetHandler.getMainConnection(name2, true);
+		if(c1 == null || c2 == null || !c1.enteredGame() || !c2.enteredGame())
+			return false;
+		else return SessionHandler.getPlayerSession(name1) == SessionHandler.getPlayerSession(name2);
 	}
 	
 	@Override

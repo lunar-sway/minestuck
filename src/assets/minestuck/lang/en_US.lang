@@ -30,6 +30,7 @@ commands.grist.addSuccess=Successfully increased grist value for "%s"
 commands.grist.setSuccess=Successfully changed grist value for "%s"
 commands.gristSend.usage=/gristSend <player> <gristtype value ...>
 commands.gristSend.success=Successfully gave grist to %s: %s
+commands.gristSend.notPermitted=You are not permitted to send grist to %s.
 commands.invalidSubCommand=Invalid Command: "%s"
 commands.sburbSession.usage=/sburbSession <session name> <add|name|title|landTerrain|landTitle> [values ...]
 commands.sburbSession.addSuccess=Successfully added/removed %d/%d players.

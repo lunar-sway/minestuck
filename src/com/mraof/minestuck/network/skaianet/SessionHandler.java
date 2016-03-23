@@ -140,7 +140,7 @@ public class SessionHandler {
 	 * @param player A string of the player's username.
 	 * @return A session that contains at least one connection, that the player is a part of.
 	 */
-	static Session getPlayerSession(String player)
+	public static Session getPlayerSession(String player)
 	{
 		for(Session s : sessions)
 			if(s.containsPlayer(player))
