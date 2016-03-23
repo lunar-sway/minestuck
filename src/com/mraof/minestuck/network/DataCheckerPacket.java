@@ -86,7 +86,7 @@ public class DataCheckerPacket extends MinestuckPacket
 		} else if(player instanceof EntityPlayerMP && MinestuckConfig.getDataCheckerPermissionFor((EntityPlayerMP) player))
 		{
 			NBTTagCompound data = SessionHandler.createDataTag();
-			MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.DATA_CHECKER, index, data), player);
+			MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.DATA_CHECKER, packetIndex, data), player);
 		}
 	}
 	
