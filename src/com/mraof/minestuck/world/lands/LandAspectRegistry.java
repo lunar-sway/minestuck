@@ -264,9 +264,6 @@ public class LandAspectRegistry
 		
 		MinestuckPlayerTracker.updateLands();
 		
-		if(!player.getEntityData().hasKey(EntityPlayer.PERSISTED_NBT_TAG))
-			player.getEntityData().setTag(EntityPlayer.PERSISTED_NBT_TAG, new NBTTagCompound());
-		player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("LandId", newLandId);
 		return newLandId;
 	}
 	

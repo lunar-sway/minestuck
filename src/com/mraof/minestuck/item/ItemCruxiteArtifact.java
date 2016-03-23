@@ -25,6 +25,7 @@ import static com.mraof.minestuck.MinestuckConfig.artifactRange;
 
 import com.mraof.minestuck.block.BlockGate;
 import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.tileentity.TileEntityGate;
@@ -34,6 +35,7 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.ITeleporter;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.Teleport;
+import com.mraof.minestuck.util.UsernameHandler;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
@@ -53,12 +55,14 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 	{
 		if(!world.isRemote && player.worldObj.provider.getDimensionId() != -1)
 		{
-			int destinationId = player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("LandId");
+			SburbConnection c = SkaianetHandler.getMainConnection(UsernameHandler.encode(player.getCommandSenderName()), true);
 			
-			if(!MinestuckDimensionHandler.isLandDimension(destinationId))
-				destinationId = LandAspectRegistry.createLand(player);
+			int destinationId;
+			if(c != null && c.enteredGame())
+				destinationId = c.getClientDimension();
+			else destinationId = LandAspectRegistry.createLand(player);
 			
-			if(player.worldObj.provider.getDimensionId() != destinationId)
+			if(c == null || !c.enteredGame() || !MinestuckDimensionHandler.isLandDimension(player.worldObj.provider.getDimensionId()))
 			{
 				player.triggerAchievement(MinestuckAchievementHandler.enterMedium);
 				Teleport.teleportEntity(player, destinationId, this, false);
@@ -69,7 +73,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 	
 	public void makeDestination(Entity entity, WorldServer worldserver0, WorldServer worldserver1)
 	{
-		if(entity instanceof EntityPlayerMP && entity.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("LandId") == worldserver1.provider.getDimensionId())
+		if(entity instanceof EntityPlayerMP)
 		{
 			int x = (int) entity.posX;
 			if(entity.posX < 0) x--;
