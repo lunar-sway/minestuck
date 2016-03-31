@@ -1,10 +1,15 @@
 package com.mraof.minestuck.event;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.underling.EntityUnderling;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.MinestuckPlayerData;
+import com.mraof.minestuck.util.PostEntryTask;
 
 import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.EntityCreeper;
@@ -31,6 +36,8 @@ public class ServerEventHandler
 	
 	public static long lastDay;
 	
+	public static List<PostEntryTask> tickTasks = new ArrayList<PostEntryTask>();
+	
 	@SubscribeEvent
 	public void onWorldTick(TickEvent.WorldTickEvent event)
 	{
@@ -46,6 +53,11 @@ public class ServerEventHandler
 					SkaianetHandler.resetGivenItems();
 				}
 			}
+			
+			Iterator<PostEntryTask> iter = tickTasks.iterator();
+			while(iter.hasNext())
+				if(iter.next().onTick())
+					iter.remove();
 		}
 	}
 	

@@ -178,19 +178,19 @@ public class ChunkProviderLands implements IChunkProvider
 		return chunk;
 	}
 	
-	private List<ChunkCoordIntPair> coords = new ArrayList<ChunkCoordIntPair>();
+	//private List<ChunkCoordIntPair> coords = new ArrayList<ChunkCoordIntPair>();
 	
 	@Override
 	public void populate(IChunkProvider ichunkprovider, int chunkX, int chunkZ) 
 	{
 		ChunkCoordIntPair coord = new ChunkCoordIntPair(chunkX, chunkZ);
 		
-		if(coords.contains(coord))
+		/*if(coords.contains(coord))
 		{
 			Debug.print("Re-populating chunk! This is likely caused by poorly-coded structures/decorators. Coords: "+coord+", stacktrace:");
 			Thread.dumpStack();
 		}
-		else coords.add(coord);
+		else coords.add(coord);*/
 		
 		BlockPos gatePos = GateHandler.getGatePos(-1, landWorld.provider.getDimensionId());
 		

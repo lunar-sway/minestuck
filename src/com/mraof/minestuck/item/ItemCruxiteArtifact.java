@@ -17,6 +17,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
@@ -25,6 +27,7 @@ import static com.mraof.minestuck.MinestuckConfig.artifactRange;
 
 import com.mraof.minestuck.block.BlockGate;
 import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
@@ -34,6 +37,7 @@ import com.mraof.minestuck.util.ColorCollector;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.ITeleporter;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
+import com.mraof.minestuck.util.PostEntryTask;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.util.UsernameHandler;
 import com.mraof.minestuck.world.GateHandler;
@@ -91,6 +95,8 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 					worldserver1.theChunkProviderServer.loadChunk(chunkX, chunkZ);
 			
 			Debug.print("Placing blocks...");
+			long time = System.currentTimeMillis();
+			int bl = 0;
 			int nextZWidth = 0;
 			for(int blockX = x - artifactRange; blockX <= x + artifactRange; blockX++)
 			{
@@ -98,25 +104,21 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 				nextZWidth = (int) Math.sqrt(artifactRange * artifactRange - (blockX - x + 1) * (blockX - x + 1));
 				for(int blockZ = z - zWidth; blockZ <= z + zWidth; blockZ++)
 				{
+					Chunk chunk = worldserver1.getChunkFromChunkCoords(blockX >> 4, blockZ >> 4);
+					Chunk chunk2 = worldserver0.getChunkFromChunkCoords(blockX >> 4, blockZ >> 4);
 					int height = (int) Math.sqrt(artifactRange * artifactRange - (((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2));
-					int heightX = (int) Math.sqrt(artifactRange * artifactRange - (((blockX - x + 1) * (blockX - x + 1) + (blockZ - z) * (blockZ - z)) / 2));
-					int heightZ = (int) Math.sqrt(artifactRange * artifactRange - (((blockX - x) * (blockX - x) + (blockZ - z + 1) * (blockZ - z + 1)) / 2));
-					int blockY;
-					for(blockY = Math.max(0, y - height); blockY <= Math.min(topY, y + height); blockY++)
+					for(int blockY = Math.max(0, y - height); blockY <= Math.min(topY, y + height); blockY++)
 					{
 						BlockPos pos = new BlockPos(blockX, blockY, blockZ);
 						BlockPos pos1 = pos.up(yDiff);
 						IBlockState block = worldserver0.getBlockState(pos);
 						TileEntity te = worldserver0.getTileEntity(pos);
-						if(block.getBlock() != Blocks.air && !block.getBlock().isBlockNormalCube()) //Place temp blocks to avoid things like torches breaking because of missing solid block
-						{
-							if(blockZ >= z - nextZWidth && blockX < x + artifactRange && blockZ <= z + nextZWidth && blockY >= y - heightX && blockY <= y + heightX)
-								worldserver1.setBlockState(pos1.east(), Blocks.stone.getDefaultState(), 0);
-							if(blockZ < z + zWidth && blockY >= y - heightZ && blockY <= y + heightZ)
-								worldserver1.setBlockState(pos1.south(), Blocks.stone.getDefaultState(), 0);
-						}
+						long t = System.currentTimeMillis();
 						if(block.getBlock() != Blocks.bedrock)
-							worldserver1.setBlockState(pos1, block, 0);
+						{
+							copyBlockDirect(chunk, chunk2, blockX & 15, blockY + yDiff, blockY, blockZ & 15);
+						}
+						bl += System.currentTimeMillis() - t;
 						if((te) != null)
 						{
 							TileEntity te1 = null;
@@ -131,12 +133,15 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 							worldserver1.setTileEntity(pos1, te1);
 							if(te instanceof TileEntityComputer)
 								SkaianetHandler.movingComputer((TileEntityComputer) te, (TileEntityComputer) te1);
-						};
+						}
 					}
-					for(blockY += yDiff; blockY < 256; blockY++)
+					for(int blockY = Math.min(topY, y + height) + yDiff; blockY < 256; blockY++)
 						worldserver1.setBlockState(new BlockPos(blockX, blockY, blockZ), Blocks.air.getDefaultState(), 0);
 				}
 			}
+			
+			int total = (int) (System.currentTimeMillis() - time);
+			Debug.printf("Total: %d, block: %d", total, bl);
 			
 			Debug.print("Teleporting entities...");
 			List<?> list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().expand((double)artifactRange, artifactRange, (double)artifactRange));
@@ -209,11 +214,32 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 			placeGate(1, new BlockPos(x, GateHandler.gateHeight1, z), worldserver1);
 			placeGate(2, new BlockPos(x, GateHandler.gateHeight2, z), worldserver1);
 			
+			ServerEventHandler.tickTasks.add(new PostEntryTask(worldserver1.provider.getDimensionId(), x, y + yDiff, z, artifactRange, (byte) 0));
+			
 			Debug.print("Entry finished");
 		}
 	}
 	
-	private int getTopHeight(WorldServer world, int x, int y, int z)
+	private static void copyBlockDirect(Chunk c, Chunk c2, int x, int y, int y2, int z)
+	{
+		int j = y & 15, j2 = y2 & 15;
+		ExtendedBlockStorage blockStorage = getBlockStorage(c, y >> 4);
+		ExtendedBlockStorage blockStorage2 = getBlockStorage(c2, y2 >> 4);
+		
+		blockStorage.set(x, j, z, blockStorage2.get(x, j2, z));
+		blockStorage.getBlocklightArray().set(x, j, z, blockStorage2.getBlocklightArray().get(x, j2, z));
+		blockStorage.getSkylightArray().set(x, j, z, blockStorage2.getSkylightArray().get(x, j2, z));
+	}
+	
+	private static ExtendedBlockStorage getBlockStorage(Chunk c, int y)
+	{
+		ExtendedBlockStorage blockStorage = c.getBlockStorageArray()[y];
+		if(blockStorage == null)
+			blockStorage = c.getBlockStorageArray()[y] = new ExtendedBlockStorage(y << 4, !c.getWorld().provider.getHasNoSky());
+		return blockStorage;
+	}
+	
+	private static int getTopHeight(WorldServer world, int x, int y, int z)
 	{
 		Debug.print("Getting maxY..");
 		int maxY = y;
