@@ -21,6 +21,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.common.DimensionManager;
 
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.util.UsernameHandler;
@@ -83,10 +84,13 @@ public class SessionHandler {
 	 * Used in the conversion of a non-global session world
 	 * to a global session world.
 	 */
-	static void mergeAll() {
+	static void mergeAll()
+	{
 		if(!canMergeAll() || sessions.size() == 0)
 		{
 			singleSession = sessions.size() == 0;
+			if(!singleSession)
+				Debug.print("Not allowed to merge all sessions together! Global session temporarily disabled for this time.");
 			return;
 		}
 		
@@ -95,6 +99,7 @@ public class SessionHandler {
 		{
 			Session s = sessions.remove(i);
 			session.connections.addAll(s.connections);
+			session.predefinedPlayers.putAll(s.predefinedPlayers);	//Used only when merging the global session
 			if(s.skaiaId != 0) session.skaiaId = s.skaiaId;
 			if(s.prospitId != 0) session.prospitId = s.prospitId;
 			if(s.derseId != 0) session.derseId = s.derseId;
@@ -113,8 +118,11 @@ public class SessionHandler {
 	 */
 	static boolean canMergeAll()
 	{
+		if(sessions.size() == 1 && (!sessions.get(0).isCustom() || sessions.get(0).name.equals(GLOBAL_SESSION_NAME)))
+				return true;
+		
 		int players = 0;
-		boolean skaiaUsed = false, prospitUsed = false, derseUsed = false, customSession = false;
+		boolean skaiaUsed = false, prospitUsed = false, derseUsed = false;
 		for(Session s : sessions)
 		{
 			if(s.skaiaId != 0)
@@ -126,7 +134,7 @@ public class SessionHandler {
 			if(s.derseId != 0)
 				if(derseUsed) return false;
 				else derseUsed = true;
-			if(s.isCustom())
+			if(s.isCustom() || s.locked)
 				return false;
 			players += s.getPlayerList().size();
 		}
@@ -338,7 +346,11 @@ public class SessionHandler {
 		{
 			if(finish && playerNames.length == 0)
 				throw new CommandException("Couldn't find session with that name. Aborting the finalizing process.", sessionName);
-			sender.addChatMessage(new ChatComponentText("Couldn't find session with that name, creating a new session..."));
+			if(singleSession)
+				throw new CommandException("Not allowed to create new sessions when global session is active. Use \"%s\" as session name for global session access.", GLOBAL_SESSION_NAME);
+			
+			if(sender.sendCommandFeedback())
+				sender.addChatMessage(new ChatComponentText("Couldn't find session with that name, creating a new session..."));
 			session = new Session();
 			session.name = sessionName;
 			sessions.add(session);
@@ -346,7 +358,7 @@ public class SessionHandler {
 		}
 		
 		if(session.locked)
-			throw new CommandException("That session should already be fully predefined.");
+			throw new CommandException("That session may no longer be modified.");
 		
 		int handled = 0;
 		boolean skipFinishing = false;
@@ -357,13 +369,15 @@ public class SessionHandler {
 				playerName = playerName.substring(1);
 				if(!session.containsPlayer(playerName))
 				{
-					sender.addChatMessage(new ChatComponentText("Failed to remove player \""+playerName+"\": Player isn't in session.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+					if(sender.sendCommandFeedback())
+						sender.addChatMessage(new ChatComponentText("Failed to remove player \""+playerName+"\": Player isn't in session.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
 					continue;
 				}
 				
 				if(session.predefinedPlayers.remove(playerName) == null)
 				{
-					sender.addChatMessage(new ChatComponentText("Failed to remove player \""+playerName+"\": Player isn't registered with the session.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+					if(sender.sendCommandFeedback())
+						sender.addChatMessage(new ChatComponentText("Failed to remove player \""+playerName+"\": Player isn't registered with the session.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
 					continue;
 				}
 				
@@ -375,7 +389,8 @@ public class SessionHandler {
 					session = sessionsByName.get(sessionName);
 					if(session.containsPlayer(playerName))
 					{
-						sender.addChatMessage(new ChatComponentText("Removed player \""+playerName+"\", but they are still part of a connection in the session and will therefore be part of the session unless the connection is discarded.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.YELLOW)));
+						if(sender.sendCommandFeedback())
+							sender.addChatMessage(new ChatComponentText("Removed player \""+playerName+"\", but they are still part of a connection in the session and will therefore be part of the session unless the connection is discarded.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.YELLOW)));
 						skipFinishing = true;
 						continue;
 					}
@@ -384,7 +399,8 @@ public class SessionHandler {
 			{
 				if(session.predefinedPlayers.containsKey(playerName))
 				{
-					sender.addChatMessage(new ChatComponentText("Failed to add player \""+playerName+"\": Player is already registered with session.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+					if(sender.sendCommandFeedback())
+						sender.addChatMessage(new ChatComponentText("Failed to add player \""+playerName+"\": Player is already registered with session.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
 					continue;
 				}
 				
@@ -394,12 +410,14 @@ public class SessionHandler {
 				{
 					if(merge(session, playerSession, null) != null)
 					{
-						sender.addChatMessage(new ChatComponentText("Failed to add player \""+playerName+"\": Can't merge with the session that the player is already in.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+						if(sender.sendCommandFeedback())
+							sender.addChatMessage(new ChatComponentText("Failed to add player \""+playerName+"\": Can't merge with the session that the player is already in.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
 						continue;
 					}
 				} else if(MinestuckConfig.forceMaxSize && session.getPlayerList().size() + 1 > maxSize)
 				{
-					sender.addChatMessage(new ChatComponentText("Failed to add player \""+playerName+"\": The session can't accept more players with the current configurations.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+					if(sender.sendCommandFeedback())
+						sender.addChatMessage(new ChatComponentText("Failed to add player \""+playerName+"\": The session can't accept more players with the current configurations.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
 					continue;
 				}
 				
@@ -422,6 +440,8 @@ public class SessionHandler {
 	public static void sessionName(ICommandSender sender, ICommand command, String player, String sessionName) throws CommandException
 	{
 		Session playerSession = getPlayerSession(player), session = sessionsByName.get(sessionName);
+		if(singleSession)
+			throw new CommandException("Not allowed to change session name when global session is active. Use \"%s\" as session name for global session access.", GLOBAL_SESSION_NAME);
 		if(playerSession == null)
 			throw new CommandException("Couldn't find session for player \"%s\"", player);
 		if(session != null)
