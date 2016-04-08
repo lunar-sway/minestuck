@@ -12,6 +12,7 @@ import net.minecraft.world.storage.ISaveHandler;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.MinestuckPlayerData;
@@ -33,6 +34,7 @@ public class MinestuckSaveHandler
 		{
 			NBTTagCompound nbt = new NBTTagCompound();
 			
+			ServerEditHandler.saveData(nbt);	//Keep this before skaianet
 			MinestuckDimensionHandler.saveData(nbt);
 			TileEntityTransportalizer.saveTransportalizers(nbt);
 			SkaianetHandler.saveData(nbt);
@@ -74,6 +76,7 @@ public class MinestuckSaveHandler
 			}
 			if(nbt != null)
 			{
+				ServerEditHandler.loadData(nbt);
 				MinestuckDimensionHandler.loadData(nbt);
 				SkaianetHandler.loadData(nbt.getCompoundTag("skaianet"));
 				MinestuckPlayerData.readFromNBT(nbt);

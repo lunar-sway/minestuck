@@ -87,6 +87,7 @@ public class MinestuckPlayerTracker {
 		updateTitle(player);
 		updateEcheladder(player);
 		MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.BOONDOLLAR, MinestuckPlayerData.getData(encUsername).boondollars), player);
+		ServerEditHandler.onPlayerLoggedIn((EntityPlayerMP) player);
 		
 		if(firstTime)
 			MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.COLOR), player);

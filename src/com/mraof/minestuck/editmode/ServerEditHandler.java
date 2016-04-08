@@ -2,7 +2,9 @@ package com.mraof.minestuck.editmode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
@@ -29,6 +31,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.WorldSettings;
 import net.minecraft.world.WorldSettings.GameType;
 import net.minecraftforge.event.CommandEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
@@ -570,4 +573,81 @@ public class ServerEditHandler
 		}
 	}
 	
+	private static List<NBTTagCompound> recoverData = new ArrayList<NBTTagCompound>();
+	
+	public static void saveData(NBTTagCompound nbt)
+	{
+		NBTTagList nbtList = new NBTTagList();
+		for(NBTTagCompound recoverEntry : recoverData)
+			nbtList.appendTag(recoverEntry);
+		
+		for(EditData data : list)
+		{
+			NBTTagCompound nbtTag = new NBTTagCompound();
+			UUID id = data.player.getGameProfile().getId();
+			nbtTag.setLong("UUID1", id.getLeastSignificantBits());
+			nbtTag.setLong("UUID2", id.getMostSignificantBits());
+			
+			nbtTag.setInteger("dim", data.decoy.dimension);
+			nbtTag.setDouble("x", data.decoy.posX);
+			nbtTag.setDouble("y", data.decoy.posY);
+			nbtTag.setDouble("z", data.decoy.posZ);
+			nbtTag.setFloat("rotYaw", data.decoy.rotationYaw);
+			nbtTag.setFloat("rotPitch", data.decoy.rotationPitch);
+			
+			nbtTag.setInteger("gamemode", data.decoy.gameType.getID());
+			nbtTag.setTag("capabilities", data.decoy.capabilities);
+			nbtTag.setFloat("health", data.decoy.getHealth());
+			NBTTagCompound foodNBT = new NBTTagCompound();
+			data.decoy.foodStats.writeNBT(foodNBT);
+			nbtTag.setTag("food", foodNBT);
+			nbtTag.setTag("inv", data.decoy.inventory.writeToNBT(new NBTTagList()));
+			
+			data.connection.inventory = data.player.inventory.writeToNBT(new NBTTagList());
+			
+			nbtList.appendTag(nbtTag);
+		}
+		
+		nbt.setTag("editmodeRecover", nbtList);
+	}
+	
+	public static void loadData(NBTTagCompound nbt)
+	{
+		recoverData.clear();
+		if(nbt != null && nbt.hasKey("editmodeRecover", 9))
+		{
+			NBTTagList nbtList = nbt.getTagList("editmodeRecover", 10);
+			for(int i = 0; i < nbtList.tagCount(); i++)
+				recoverData.add(nbtList.getCompoundTagAt(i));
+		}
+	}
+	
+	public static void onPlayerLoggedIn(EntityPlayerMP player)
+	{
+		UUID id = player.getGameProfile().getId();
+		Iterator<NBTTagCompound> iter = recoverData.iterator();
+		while(iter.hasNext())
+		{
+			NBTTagCompound nbt = iter.next();
+			if(id.getLeastSignificantBits() == nbt.getLong("UUID1") && id.getMostSignificantBits() == nbt.getLong("UUID2"))
+			{	//Recover player
+				if(player.dimension != nbt.getInteger("dim"))
+					Teleport.teleportEntity(player, nbt.getInteger("dim"), null, false);
+				
+				player.playerNetServerHandler.setPlayerLocation(nbt.getDouble("x"), nbt.getDouble("y"), nbt.getDouble("z"), nbt.getFloat("rotYaw"), nbt.getFloat("rotPitch"));
+				player.setGameType(WorldSettings.GameType.getByID(nbt.getInteger("gamemode")));
+				player.capabilities.readCapabilitiesFromNBT(nbt.getCompoundTag("capabilities"));
+				player.sendPlayerAbilities();
+				player.fallDistance = 0;
+				
+				player.setHealth(nbt.getFloat("health"));
+				player.getFoodStats().readNBT(nbt.getCompoundTag("food"));
+				player.inventory.readFromNBT(nbt.getTagList("inv", 10));
+				
+				iter.remove();
+				
+				return;
+			}
+		}
+	}
 }
