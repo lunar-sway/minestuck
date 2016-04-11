@@ -13,6 +13,8 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3i;
@@ -25,7 +27,9 @@ import com.mraof.minestuck.entity.underling.EntityGiclops;
 import com.mraof.minestuck.entity.underling.EntityImp;
 import com.mraof.minestuck.entity.underling.EntityOgre;
 import com.mraof.minestuck.entity.underling.EntityUnderling;
+import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.EnumClass;
 import com.mraof.minestuck.util.GristHelper;
@@ -60,6 +64,7 @@ public class SburbHandler
 		if(title == null)
 		{
 			Random rand = new Random(Minestuck.worldSeed^player.hashCode());
+			rand.nextInt();	//Avoid using same data as the artifact generation
 			
 			ArrayList<Title> usedTitles = new ArrayList<Title>();
 			Set<String> playersEntered = new HashSet<String>();	//Used to avoid duplicates from both connections and predefined data
@@ -213,10 +218,21 @@ public class SburbHandler
 	 * @param player The username of the player, encoded.
 	 * @return Damage value for the entry item
 	 */
-	public static int getEntryItem(String player)
+	public static ItemStack getEntryItem(String player)
 	{
+		SburbConnection c = SkaianetHandler.getClientConnection(player); 
 		int colorIndex = MinestuckPlayerData.getData(player).color;
-		return colorIndex + 1;
+		Item artifact;
+		if(c == null)
+			artifact = MinestuckItems.cruxiteApple;
+		
+		else switch(c.artifactType)
+		{
+		case 1: artifact = MinestuckItems.cruxitePotion; break;
+		default: artifact = MinestuckItems.cruxiteApple;
+		}
+		
+		return new ItemStack(artifact, 1, colorIndex + 1);
 	}
 	
 	public static int getColorForDimension(int dim)
@@ -257,7 +273,7 @@ public class SburbHandler
 	
 	private static void genLandAspects(SburbConnection connection)
 	{
-		LandAspectRegistry aspectGen = new LandAspectRegistry(Minestuck.worldSeed/connection.clientHomeLand);
+		LandAspectRegistry aspectGen = new LandAspectRegistry((Minestuck.worldSeed^connection.clientHomeLand)^(connection.clientHomeLand << 8));
 		Session session = SessionHandler.getPlayerSession(connection.getClientName());
 		Title title = MinestuckPlayerData.getTitle(connection.getClientName());
 		TitleLandAspect titleAspect = null;
@@ -381,5 +397,11 @@ public class SburbHandler
 				return false;
 		return true;
 	}
-	
+
+	static void onConnectionCreated(SburbConnection c)
+	{
+		Random rand = new Random(Minestuck.worldSeed^c.getClientName().hashCode());
+		c.artifactType = rand.nextInt(2);
+		Debug.print("Randomized type to be: "+c.artifactType);
+	}
 }

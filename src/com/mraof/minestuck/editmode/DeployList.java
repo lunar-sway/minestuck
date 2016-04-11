@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.item.ItemCruxiteArtifact;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.GristSet;
@@ -85,8 +86,9 @@ public class DeployList
 		else
 		{
 			stack.getTagCompound().removeTag("display");
-			if(stack.getItem().equals(MinestuckItems.captchaCard))
-				stack.getTagCompound().setInteger("contentMeta", 0);
+			if(stack.getItem().equals(MinestuckItems.captchaCard) && AlchemyRecipeHandler.getDecodedItem(stack) != null
+					&& AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact)
+				stack = AlchemyRecipeHandler.createCard(new ItemStack(MinestuckItems.cruxiteApple), true);
 			if(stack.getItem().equals(Item.getItemFromBlock(MinestuckBlocks.blockMachine)))
 				stack.getTagCompound().removeTag("BlockEntityTag");
 		}

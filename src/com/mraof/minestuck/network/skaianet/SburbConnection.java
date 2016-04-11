@@ -27,6 +27,7 @@ public class SburbConnection {
 	boolean enteredGame;
 	boolean canSplit;
 	int clientHomeLand;
+	int artifactType;
 	/**
 	 * If the client will have frog breeding as quest, the array will be extended and the new positions will hold the gear.
 	 */
@@ -112,6 +113,7 @@ public class SburbConnection {
 			nbt.setString("client", getClientName());
 			nbt.setString("server", getServerName());
 		}
+		nbt.setInteger("artifact", artifactType);
 		return nbt;
 	}
 	
@@ -152,6 +154,7 @@ public class SburbConnection {
 			clientName = nbt.getString("client");
 			serverName = nbt.getString("server");
 		}
+		artifactType = nbt.getInteger("artifact");
 		
 		return this;
 	}

@@ -105,6 +105,7 @@ public class MinestuckModelManager
 		modelRegistry.register(cruxiteDowel, new CruxiteDowelDefinition());
 		modelRegistry.register(captchaCard, new CaptchaCardDefinition());
 		modelRegistry.register(cruxiteApple, new ColoredItemDefinition("minestuck:cruxite_apple"));
+		modelRegistry.register(cruxitePotion, new ColoredItemDefinition("minestuck:cruxite_potion"));
 		register(disk, 0, "disk_client");
 		register(disk, 1, "disk_server");
 		register(component, 0, "spoon_wood");
@@ -159,6 +160,7 @@ public class MinestuckModelManager
 		ModelBakery.addVariantName(crockerSpork, "minestuck:crocker_fork", "minestuck:crocker_spoon");
 		ModelBakery.addVariantName(cruxiteDowel, "minestuck:dowel_uncarved", "minestuck:dowel_carved", "minestuck:dowel_uncarved_blank", "minestuck:dowel_carved_blank");
 		ModelBakery.addVariantName(cruxiteApple, "minestuck:cruxite_apple", "minestuck:cruxite_apple_blank");
+		ModelBakery.addVariantName(cruxitePotion, "minestuck:cruxite_potion", "minestuck:cruxite_potion_blank");
 		ModelBakery.addVariantName(disk, "minestuck:disk_client", "minestuck:disk_server");
 		ModelBakery.addVariantName(component, "minestuck:spoon_wood", "minestuck:spoon_silver", "minestuck:chessboard");
 		ModelBakery.addVariantName(minestuckBucket, "minestuck:bucket_blood", "minestuck:bucket_oil", "minestuck:bucket_brain_juice");

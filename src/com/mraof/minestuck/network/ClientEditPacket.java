@@ -18,7 +18,6 @@ import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.UsernameHandler;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.editmode.ServerEditHandler;
-import com.mraof.minestuck.item.MinestuckItems;
 
 public class ClientEditPacket extends MinestuckPacket {
 	
@@ -60,12 +59,12 @@ public class ClientEditPacket extends MinestuckPacket {
 			SburbConnection c = SkaianetHandler.getClientConnection(target);
 			if(c == null || !c.getServerName().equals(username) || !(c.isMain() || SkaianetHandler.giveItems(target)))
 				return;
-			for(int i = 0; i < c.givenItems().length; i++)
+			for(int i = 0; i < 5; i++)
 				if(i == 4)
 				{
 					if(c.enteredGame())
 						continue;
-					ItemStack card = AlchemyRecipeHandler.createCard(new ItemStack(MinestuckItems.cruxiteApple, 1, SburbHandler.getEntryItem(c.getClientName())), true);
+					ItemStack card = AlchemyRecipeHandler.createCard(SburbHandler.getEntryItem(c.getClientName()), true);
 					if(!playerMP.inventory.hasItemStack(card))
 						c.givenItems()[i] = playerMP.inventory.addItemStackToInventory(card) || c.givenItems()[i];
 				} else {

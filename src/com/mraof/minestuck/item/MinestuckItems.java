@@ -74,6 +74,7 @@ public class MinestuckItems
 	public static Item cruxiteDowel;
 	public static Item captchaCard;
 	public static Item cruxiteApple;
+	public static Item cruxitePotion;
 	public static Item disk;
 	public static Item component;
 	public static ItemModus modusCard;
@@ -158,6 +159,7 @@ public class MinestuckItems
 				cruxiteDowel = new ItemDowel();
 				captchaCard = new ItemCaptchaCard();
 				cruxiteApple = new ItemCruxiteApple();
+				cruxitePotion = new ItemCruxitePotion();
 				disk = new ItemDisk();
 				component = new ItemComponent();
 				minestuckBucket = new ItemMinestuckBucket();
@@ -226,6 +228,7 @@ public class MinestuckItems
 				GameRegistry.registerItem(cruxiteDowel, "cruxite_dowel");
 				GameRegistry.registerItem(captchaCard, "captcha_card");
 				GameRegistry.registerItem(cruxiteApple, "cruxite_artifact");	//TODO change to "cruxite_apple" when there's no risk of messing with existing save files
+				GameRegistry.registerItem(cruxitePotion, "cruxite_potion");
 				GameRegistry.registerItem(disk, "computer_disk");
 				GameRegistry.registerItem(component, "component");
 				GameRegistry.registerItem(minestuckBucket, "minestuck_bucket");

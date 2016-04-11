@@ -1,5 +1,7 @@
 package com.mraof.minestuck.util;
 
+import net.minecraft.entity.player.EntityPlayer;
+
 /**
  * Used to encode/decode player usernames, to handle uses with LAN.
  * @author kirderf1
@@ -26,6 +28,11 @@ public class UsernameHandler {
 		if(username.equals(".client"))
 			return host==null?"SP Character":host;
 		else return username;
+	}
+	
+	public static String encode(EntityPlayer player)
+	{
+		return encode(player.getCommandSenderName());
 	}
 	
 }

@@ -5,7 +5,7 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class ItemCruxiteApple extends ItemCruxiteArtifact
+public class ItemCruxitePotion extends ItemCruxiteArtifact
 {
 	
 	@Override
@@ -17,14 +17,13 @@ public class ItemCruxiteApple extends ItemCruxiteArtifact
 	@Override
 	public EnumAction getItemUseAction(ItemStack stack)
 	{
-		return EnumAction.EAT;
+		return EnumAction.DRINK;
 	}
 	
 	@Override
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityPlayer playerIn)
 	{
 		stack.stackSize--;
-		worldIn.playSoundAtEntity(playerIn, "random.burp", 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
 		onArtifactActivated(worldIn, playerIn);
 		
 		return stack;
@@ -40,7 +39,7 @@ public class ItemCruxiteApple extends ItemCruxiteArtifact
 	@Override
 	public int getColorFromItemStack(ItemStack stack, int renderPass)
 	{
-		if(renderPass == 1)
+		if(renderPass == 0)
 		{
 			int color = super.getColorFromItemStack(stack, renderPass);
 			int i0 = ((color & 255) + 255)/2;
@@ -49,6 +48,8 @@ public class ItemCruxiteApple extends ItemCruxiteArtifact
 			color = i0 | (i1 << 8) | (i2 << 16);
 			return color;
 		}
+		else if(renderPass == 2)
+			return 0xFFFFFF;
 		else return super.getColorFromItemStack(stack, renderPass);
 	}
 }

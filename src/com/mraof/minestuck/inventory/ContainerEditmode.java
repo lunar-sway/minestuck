@@ -7,6 +7,7 @@ import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.item.ItemCruxiteArtifact;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
@@ -14,7 +15,9 @@ import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.MinestuckPlayerData;
+import com.mraof.minestuck.util.UsernameHandler;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -113,10 +116,10 @@ public class ContainerEditmode extends Container
 				iter.remove();
 			else if(DeployList.getSecondaryCost(stack) == null && c.givenItems()[DeployList.getOrdinal(stack)])
 				iter.remove();
-			else if(stack.getItem().equals(MinestuckItems.captchaCard))
+			else if(stack.getItem().equals(MinestuckItems.captchaCard) && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact)
 				if(c.enteredGame())
 					iter.remove();
-				else stack.getTagCompound().setInteger("contentMeta", SburbHandler.getEntryItem(c.getClientName()));
+				else stack.setTagCompound(AlchemyRecipeHandler.createCard(SburbHandler.getEntryItem(UsernameHandler.encode(player)), true).getTagCompound());
 			else if(stack.getItem().equals(Item.getItemFromBlock(MinestuckBlocks.blockMachine)) && stack.getMetadata() == 0)
 			{
 				NBTTagCompound nbt = new NBTTagCompound();

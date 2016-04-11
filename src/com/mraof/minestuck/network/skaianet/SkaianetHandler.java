@@ -262,6 +262,7 @@ public class SkaianetHandler {
 				map.put(c.server.owner, c.server);
 				return;
 			}
+			SburbHandler.onConnectionCreated(c);
 		}
 		SburbConnection conn;
 		if(newConnection && (conn = getMainConnection(c.getClientName(), true)) != null)	//Copy client associated variables
@@ -277,6 +278,7 @@ public class SkaianetHandler {
 			c.centerX = conn.centerX;
 			c.centerZ = conn.centerZ;
 			c.clientHomeLand = conn.clientHomeLand;
+			c.artifactType = conn.artifactType;
 			if(c.inventory != null)
 				c.inventory = (NBTTagList) conn.inventory.copy();
 		}
