@@ -1,5 +1,9 @@
 package com.mraof.minestuck.entity.consort;
 
+import net.minecraft.entity.ai.EntityAILookIdle;
+import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
@@ -13,10 +17,11 @@ public abstract class EntityConsort extends EntityMinestuck
 	public EntityConsort(World world) 
 	{
 		super(world);
-//		moveSpeed = 2.5F;
-		
-        setSize(0.6F, 1.5F);
-        this.experienceValue = 1;
+		setSize(0.6F, 1.5F);
+		this.experienceValue = 1;
+		this.tasks.addTask(5, new EntityAIWander(this, 0.6F));
+		this.tasks.addTask(6, new EntityAILookIdle(this));
+		this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 	}
 
 	@Override
