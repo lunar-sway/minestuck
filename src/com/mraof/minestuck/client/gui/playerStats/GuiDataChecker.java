@@ -452,7 +452,7 @@ public class GuiDataChecker extends GuiScreen
 				if(connectionTag.hasKey("aspectTerrain"))
 					list.add(new TextField("Terrain aspect: %s", connectionTag.getString("aspectTerrain")));
 			}
-			list.add(new GristCacheButton(client));
+			list.add(new GristCacheButton(connectionTag.getString("clientId")));
 		}
 		@Override
 		public IDataComponent getParentComponent()
@@ -503,7 +503,7 @@ public class GuiDataChecker extends GuiScreen
 		@Override
 		public IDataComponent onButtonPressed()
 		{
-			GuiChat chat = new GuiChat("/grist "+name+" get");
+			GuiChat chat = new GuiChat("/grist @"+name+" get");
 			Minecraft.getMinecraft().displayGuiScreen(chat);
 			return null;
 		}

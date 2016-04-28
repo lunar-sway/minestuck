@@ -19,24 +19,30 @@ import com.mraof.minestuck.util.UsernameHandler;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 
-public class ClientEditPacket extends MinestuckPacket {
+public class ClientEditPacket extends MinestuckPacket
+{
 	
-	String username;
-	String target;
+	int username = -1;
+	int target;
 	
 	@Override
-	public MinestuckPacket generatePacket(Object... dat) {
+	public MinestuckPacket generatePacket(Object... dat)
+	{
 		if(dat.length > 0)
-			writeString(data, dat[0].toString() + "\n" + dat[1].toString());
+		{
+			data.writeInt((Integer) dat[0]);
+			data.writeInt((Integer) dat[1]);
+		}
 		return this;
 	}
 
 	@Override
-	public MinestuckPacket consumePacket(ByteBuf data) {
+	public MinestuckPacket consumePacket(ByteBuf data)
+	{
 		if(data.readableBytes() == 0)
 			return this;
-		username = readLine(data);
-		target = readLine(data);
+		username = data.readInt();
+		target = data.readInt();
 		return this;
 	}
 
@@ -45,29 +51,30 @@ public class ClientEditPacket extends MinestuckPacket {
 	{
 		if(!MinestuckConfig.giveItems)
 		{
-			if(username == null)
+			if(username == -1)
 				ServerEditHandler.onPlayerExit(player);
-			if(!MinestuckConfig.privateComputers || UsernameHandler.encode(player.getCommandSenderName()).equals(this.username))
-				ServerEditHandler.newServerEditor((EntityPlayerMP) player, username, target);
+			if(!MinestuckConfig.privateComputers || UsernameHandler.encode(player).getId() == this.username)
+				ServerEditHandler.newServerEditor((EntityPlayerMP) player, UsernameHandler.getById(username), UsernameHandler.getById(target));
 			return;
 		}
 		
-		EntityPlayerMP playerMP = MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(UsernameHandler.decode(target));
+		EntityPlayerMP playerMP = UsernameHandler.getById(target).getPlayer();
 		
-		if(playerMP != null && (!MinestuckConfig.privateComputers || player.getCommandSenderName().equals(UsernameHandler.decode(username))))
+		if(playerMP != null && (!MinestuckConfig.privateComputers || UsernameHandler.getById(username).appliesTo(player)))
 		{
-			SburbConnection c = SkaianetHandler.getClientConnection(target);
-			if(c == null || !c.getServerName().equals(username) || !(c.isMain() || SkaianetHandler.giveItems(target)))
+			SburbConnection c = SkaianetHandler.getClientConnection(UsernameHandler.getById(target));
+			if(c == null || c.getServerIdentifier().getId() != username || !(c.isMain() || SkaianetHandler.giveItems(UsernameHandler.getById(target))))
 				return;
 			for(int i = 0; i < 5; i++)
 				if(i == 4)
 				{
 					if(c.enteredGame())
 						continue;
-					ItemStack card = AlchemyRecipeHandler.createCard(SburbHandler.getEntryItem(c.getClientName()), true);
+					ItemStack card = AlchemyRecipeHandler.createCard(SburbHandler.getEntryItem(c.getClientIdentifier()), true);
 					if(!playerMP.inventory.hasItemStack(card))
 						c.givenItems()[i] = playerMP.inventory.addItemStackToInventory(card) || c.givenItems()[i];
-				} else {
+				} else
+				{
 					ItemStack machine = new ItemStack(MinestuckBlocks.blockMachine, 1, i);
 					if(i == 1 && !c.enteredGame())
 						continue;
@@ -79,7 +86,8 @@ public class ClientEditPacket extends MinestuckPacket {
 	}
 
 	@Override
-	public EnumSet<Side> getSenderSide() {
+	public EnumSet<Side> getSenderSide()
+	{
 		return EnumSet.of(Side.CLIENT);
 	}
 

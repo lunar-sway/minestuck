@@ -8,28 +8,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommand;
-import net.minecraft.command.ICommandSender;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.common.DimensionManager;
 
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.Title;
-import com.mraof.minestuck.util.UsernameHandler;
+import com.mraof.minestuck.util.UsernameHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
-import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 import com.mraof.minestuck.MinestuckConfig;
 
 /**
@@ -148,7 +139,7 @@ public class SessionHandler {
 	 * @param player A string of the player's username.
 	 * @return A session that contains at least one connection, that the player is a part of.
 	 */
-	public static Session getPlayerSession(String player)
+	public static Session getPlayerSession(PlayerIdentifier player)
 	{
 		for(Session s : sessions)
 			if(s.containsPlayer(player))
@@ -238,7 +229,7 @@ public class SessionHandler {
 				Iterator<SburbConnection> iter = session.connections.iterator();
 				while(iter.hasNext()){
 					SburbConnection c = iter.next();
-					if(s.containsPlayer(c.getClientName()) || s.containsPlayer(c.getServerName()) || first && !c.canSplit){
+					if(s.containsPlayer(c.getClientIdentifier()) || s.containsPlayer(c.getServerIdentifier()) || first && !c.canSplit){
 						found = true;
 						iter.remove();
 						s.connections.add(c);
@@ -258,7 +249,8 @@ public class SessionHandler {
 	 * @return True if client connection is not null and client and server session is the same or 
 	 * client connection is null and server connection is null.
 	 */
-	static boolean canConnect(String client, String server) {
+	static boolean canConnect(PlayerIdentifier client, PlayerIdentifier server)
+	{
 		Session sClient = getPlayerSession(client), sServer = getPlayerSession(server);
 		SburbConnection cClient = SkaianetHandler.getMainConnection(client, true);
 		SburbConnection cServer = SkaianetHandler.getMainConnection(server, false);
@@ -269,21 +261,25 @@ public class SessionHandler {
 	/**
 	 * @return Null if successful or an unlocalized error message describing reason.
 	 */
-	static String onConnectionCreated(SburbConnection connection) {
-		if(!canConnect(connection.getClientName(), connection.getServerName()))
+	static String onConnectionCreated(SburbConnection connection)
+	{
+		if(!canConnect(connection.getClientIdentifier(), connection.getServerIdentifier()))
 			return "computer.messageConnectFailed";
-		if(singleSession) {
+		if(singleSession)
+		{
 			if(sessions.size() == 0)
 				return "computer.messageConnectFailed";
-			int i = (sessions.get(0).containsPlayer(connection.getClientName())?0:1)+(sessions.get(0).containsPlayer(connection.getServerName())?0:1);
+			int i = (sessions.get(0).containsPlayer(connection.getClientIdentifier())?0:1)+(sessions.get(0).containsPlayer(connection.getServerIdentifier())?0:1);
 			if(MinestuckConfig.forceMaxSize && sessions.get(0).getPlayerList().size()+i > maxSize)
 				return "computer.singleSessionFull";
-			else {
+			else
+			{
 				sessions.get(0).connections.add(connection);
 				return null;
 			}
-		} else {
-			Session sClient = getPlayerSession(connection.getClientName()), sServer = getPlayerSession(connection.getServerName());
+		} else
+		{
+			Session sClient = getPlayerSession(connection.getClientIdentifier()), sServer = getPlayerSession(connection.getServerIdentifier());
 			if(sClient == null && sServer == null)
 			{
 				Session s = new Session();
@@ -309,8 +305,9 @@ public class SessionHandler {
 	 * @param normal If the connection was closed by normal means.
 	 * (includes everything but getting crushed by a meteor and other reasons for removal of a main connection)
 	 */
-	static void onConnectionClosed(SburbConnection connection, boolean normal) {
-		Session s = getPlayerSession(connection.getClientName());
+	static void onConnectionClosed(SburbConnection connection, boolean normal)
+	{
+		Session s = getPlayerSession(connection.getClientIdentifier());
 		
 		if(!connection.isMain)
 		{
@@ -321,16 +318,17 @@ public class SessionHandler {
 				else split(s);
 		} else if(!normal) {
 			s.connections.remove(connection);
-			if(!SkaianetHandler.getAssociatedPartner(connection.getClientName(), false).isEmpty() && !connection.getServerName().equals(".null")) {
-				SburbConnection c = SkaianetHandler.getMainConnection(connection.getClientName(), false);
+			if(SkaianetHandler.getAssociatedPartner(connection.getClientIdentifier(), false) != null && !connection.getServerIdentifier().equals(new PlayerIdentifier(".null")))
+			{
+				SburbConnection c = SkaianetHandler.getMainConnection(connection.getClientIdentifier(), false);
 				if(c.isActive)
-					SkaianetHandler.closeConnection(c.getClientName(), c.getServerName(), true);
+					SkaianetHandler.closeConnection(c.getClientIdentifier(), c.getServerIdentifier(), true);
 				switch(MinestuckConfig.escapeFailureMode) {
 				case 0:
-					c.serverName = connection.getServerName();
+					c.serverIdentifier = connection.getServerIdentifier();
 					break;
 				case 1:
-					c.serverName = ".null";
+					c.serverIdentifier = new PlayerIdentifier(".null");
 					break;
 				}
 			}
@@ -339,212 +337,16 @@ public class SessionHandler {
 		}
 	}
 	
-	public static void managePredefinedSession(ICommandSender sender, ICommand command, String sessionName, String[] playerNames, boolean finish) throws CommandException
+	static List<Object> getServerList(PlayerIdentifier client)
 	{
-		Session session = sessionsByName.get(sessionName);
-		if(session == null)
+		ArrayList<Object> list = new ArrayList<Object>();
+		for(PlayerIdentifier server : SkaianetHandler.serversOpen.keySet())
 		{
-			if(finish && playerNames.length == 0)
-				throw new CommandException("Couldn't find session with that name. Aborting the finalizing process.", sessionName);
-			if(singleSession)
-				throw new CommandException("Not allowed to create new sessions when global session is active. Use \"%s\" as session name for global session access.", GLOBAL_SESSION_NAME);
-			
-			if(sender.sendCommandFeedback())
-				sender.addChatMessage(new ChatComponentText("Couldn't find session with that name, creating a new session..."));
-			session = new Session();
-			session.name = sessionName;
-			sessions.add(session);
-			sessionsByName.put(session.name, session);
-		}
-		
-		if(session.locked)
-			throw new CommandException("That session may no longer be modified.");
-		
-		int handled = 0;
-		boolean skipFinishing = false;
-		for(String playerName : playerNames)
-		{
-			if(playerName.startsWith("!"))
-			{
-				playerName = playerName.substring(1);
-				if(!session.containsPlayer(playerName))
-				{
-					if(sender.sendCommandFeedback())
-						sender.addChatMessage(new ChatComponentText("Failed to remove player \""+playerName+"\": Player isn't in session.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
-					continue;
-				}
-				
-				if(session.predefinedPlayers.remove(playerName) == null)
-				{
-					if(sender.sendCommandFeedback())
-						sender.addChatMessage(new ChatComponentText("Failed to remove player \""+playerName+"\": Player isn't registered with the session.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
-					continue;
-				}
-				
-				handled++;
-				
-				if(session.containsPlayer(playerName))
-				{
-					split(session);
-					session = sessionsByName.get(sessionName);
-					if(session.containsPlayer(playerName))
-					{
-						if(sender.sendCommandFeedback())
-							sender.addChatMessage(new ChatComponentText("Removed player \""+playerName+"\", but they are still part of a connection in the session and will therefore be part of the session unless the connection is discarded.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.YELLOW)));
-						skipFinishing = true;
-						continue;
-					}
-				}
-			} else
-			{
-				if(session.predefinedPlayers.containsKey(playerName))
-				{
-					if(sender.sendCommandFeedback())
-						sender.addChatMessage(new ChatComponentText("Failed to add player \""+playerName+"\": Player is already registered with session.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
-					continue;
-				}
-				
-				Session playerSession = getPlayerSession(playerName);
-				
-				if(playerSession != null)
-				{
-					if(merge(session, playerSession, null) != null)
-					{
-						if(sender.sendCommandFeedback())
-							sender.addChatMessage(new ChatComponentText("Failed to add player \""+playerName+"\": Can't merge with the session that the player is already in.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
-						continue;
-					}
-				} else if(MinestuckConfig.forceMaxSize && session.getPlayerList().size() + 1 > maxSize)
-				{
-					if(sender.sendCommandFeedback())
-						sender.addChatMessage(new ChatComponentText("Failed to add player \""+playerName+"\": The session can't accept more players with the current configurations.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
-					continue;
-				}
-				
-				session.predefinedPlayers.put(playerName, new PredefineData());
-				handled++;
-			}
-		}
-		
-		if(playerNames.length > 0)
-			CommandBase.notifyOperators(sender, command, "commands.sburbSession.addSuccess", handled, playerNames.length);
-		
-		/*if(finish)
-			if(!skipFinishing && handled == playerNames.length)
-			{
-				SburbHandler.finishSession(sender, command, session);
-				
-			} else throw new CommandException("Skipping to finalize the session due to one or more issues while adding players.");*/
-	}
-	
-	public static void sessionName(ICommandSender sender, ICommand command, String player, String sessionName) throws CommandException
-	{
-		Session playerSession = getPlayerSession(player), session = sessionsByName.get(sessionName);
-		if(singleSession)
-			throw new CommandException("Not allowed to change session name when global session is active. Use \"%s\" as session name for global session access.", GLOBAL_SESSION_NAME);
-		if(playerSession == null)
-			throw new CommandException("Couldn't find session for player \"%s\"", player);
-		if(session != null)
-			throw new CommandException("That session name is already taken.");
-		
-		if(playerSession.name != null)
-			sessionsByName.remove(playerSession.name);
-		String prevName = playerSession.name;
-		playerSession.name = sessionName;
-		sessionsByName.put(playerSession.name, playerSession);
-		
-		if(prevName != null)
-			CommandBase.notifyOperators(sender, command, "commands.sburbSession.rename", prevName, sessionName, UsernameHandler.decode(player));
-		else CommandBase.notifyOperators(sender, command, "commands.sburbSession.name", sessionName, UsernameHandler.decode(player));
-	}
-	
-	public static void predefineTitle(ICommandSender sender, ICommand command, String player, String sessionName, Title title) throws CommandException
-	{
-		predefineCheck(sender, player, sessionName);
-		
-		Title playerTitle = MinestuckPlayerData.getTitle(player);
-		if(playerTitle != null)
-			throw new CommandException("You can't change your title after having entered the medium.");
-		
-		Session session = sessionsByName.get(sessionName);
-		for(SburbConnection c : session.connections)
-			if(c.isMain && c.enteredGame && title.equals(MinestuckPlayerData.getTitle(c.getClientName())))
-				throw new CommandException("This title is already used by %s.", c.getClientName());
-		for(Map.Entry<String, PredefineData> entry : session.predefinedPlayers.entrySet())
-			if(entry.getValue().title != null && title.equals(entry.getValue().title))
-				throw new CommandException("This title is already assigned to %s.", entry.getKey());
-		
-		PredefineData data = session.predefinedPlayers.get(player);
-		data.title = title;
-		CommandBase.notifyOperators(sender, command, "commands.sburbSession.titleSuccess", player, title.getTitleName());
-	}
-	
-	public static void predefineTerrainLandAspect(ICommandSender sender, ICommand command, String player, String sessionName, TerrainLandAspect aspect) throws CommandException
-	{
-		predefineCheck(sender, player, sessionName);
-		
-		Session session = sessionsByName.get(sessionName);
-		SburbConnection clientConnection = SkaianetHandler.getClientConnection(player);
-		PredefineData data = session.predefinedPlayers.get(player);
-		
-		if(clientConnection != null && clientConnection.enteredGame())
-			throw new CommandException("You can't change your land aspects after having entered the medium.");
-		if(data.landTitle == null)
-			throw new CommandException("You should define the other land aspect before this one.");
-		if(!data.landTitle.isAspectCompatible(aspect))
-			throw new CommandException("That terrain land aspect isn't compatible with the other land aspect.");
-		
-		data.landTerrain = aspect;
-		CommandBase.notifyOperators(sender, command, "commands.sburbSession.landTerrainSuccess", player, aspect.getPrimaryName());
-	}
-	
-	public static void predefineTitleLandAspect(ICommandSender sender, ICommand command, String player, String sessionName, TitleLandAspect aspect) throws CommandException
-	{
-		predefineCheck(sender, player, sessionName);
-		
-		Session session = sessionsByName.get(sessionName);
-		SburbConnection clientConnection = SkaianetHandler.getClientConnection(player);
-		PredefineData data = session.predefinedPlayers.get(player);
-		
-		if(clientConnection != null && clientConnection.enteredGame())
-			throw new CommandException("You can't change your land aspects after having entered the medium.");
-		if(sender.sendCommandFeedback())
-			if(data.title == null)
-				sender.addChatMessage(new ChatComponentText("Beware that the title generated might not be suited for this land aspect.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.YELLOW)));
-			else if(!LandAspectRegistry.containsTitleLandAspect(data.title.getHeroAspect(), aspect))
-				sender.addChatMessage(new ChatComponentText("Beware that the title predefined isn't suited for this land aspect.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.YELLOW)));
-		
-		if(data.landTerrain != null && !aspect.isAspectCompatible(data.landTerrain))
-		{
-			data.landTerrain = null;
-			if(sender.sendCommandFeedback())
-				sender.addChatMessage(new ChatComponentText("The terrain aspect previously chosen isn't compatible with this land aspect, and has therefore been removed.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.YELLOW)));
-		}
-		
-		data.landTitle = aspect;
-		CommandBase.notifyOperators(sender, command, "commands.sburbSession.landTitleSuccess", player, aspect.getPrimaryName());
-	}
-	
-	private static void predefineCheck(ICommandSender sender, String player, String sessionName) throws CommandException
-	{
-		Session session = sessionsByName.get(sessionName), playerSession = getPlayerSession(player);
-		if(session == null)
-			throw new CommandException("Couldn't find session with the name %s", sessionName);
-		if(playerSession != null && session != playerSession)
-			throw new CommandException("The player is already in another session!");
-		if(playerSession == null || !session.predefinedPlayers.containsKey(player))
-		{
-			if(sender.sendCommandFeedback())
-				sender.addChatMessage(new ChatComponentText("Couldn't find session for player or player isn't registered with this session yet. Adding player to session "+sessionName));
-			session.predefinedPlayers.put(player, new PredefineData());
-		}
-	}
-	
-	static List<String> getServerList(String client) {
-		ArrayList<String> list = new ArrayList<String>();
-		for(String server : SkaianetHandler.serversOpen.keySet()) {
 			if(canConnect(client, server))
-				list.add(server);
+			{
+				list.add(server.getId());
+				list.add(server.getUsername());
+			}
 		}
 		return list;
 	}
@@ -562,14 +364,15 @@ public class SessionHandler {
 		{
 			Session session = sessions.get(i);
 			NBTTagList connectionList = new NBTTagList();
-			Set<String> playerSet = new HashSet<String>();
+			Set<PlayerIdentifier> playerSet = new HashSet<PlayerIdentifier>();
 			for(SburbConnection c :session.connections)
 			{
 				if(c.isMain)
-					playerSet.add(c.getClientName());
+					playerSet.add(c.getClientIdentifier());
 				NBTTagCompound connectionTag = new NBTTagCompound();
-				connectionTag.setString("client", c.getClientName());
-				connectionTag.setString("server", c.getServerName());
+				connectionTag.setString("client", c.getClientIdentifier().getUsername());
+				connectionTag.setString("clientId", c.getClientIdentifier().getString());
+				connectionTag.setString("server", c.getServerIdentifier().getUsername());
 				connectionTag.setBoolean("isMain", c.isMain);
 				connectionTag.setBoolean("isActive", c.isActive);
 				if(c.isMain)
@@ -592,12 +395,12 @@ public class SessionHandler {
 								connectionTag.setString("aspect2", aspects.aspectTerrain.getNames()[landChunkGen.nameIndex1]);
 							}
 						}
-						Title title = MinestuckPlayerData.getTitle(c.getClientName());
+						Title title = MinestuckPlayerData.getTitle(c.getClientIdentifier());
 						connectionTag.setByte("class", (byte) title.getHeroClass().ordinal());
 						connectionTag.setByte("aspect", (byte) title.getHeroAspect().ordinal());
-					} else if(session.predefinedPlayers.containsKey(c.getClientName()))
+					} else if(session.predefinedPlayers.containsKey(c.getClientIdentifier()))
 					{
-						PredefineData data = session.predefinedPlayers.get(c.getClientName());
+						PredefineData data = session.predefinedPlayers.get(c.getClientIdentifier());
 						
 						if(data.title != null)
 						{
@@ -614,14 +417,15 @@ public class SessionHandler {
 				connectionList.appendTag(connectionTag);
 			}
 			
-			for(Map.Entry<String, PredefineData> entry : session.predefinedPlayers.entrySet())
+			for(Map.Entry<PlayerIdentifier, PredefineData> entry : session.predefinedPlayers.entrySet())
 			{
 				if(playerSet.contains(entry.getKey()))
 					continue;
 				
 				NBTTagCompound connectionTag = new NBTTagCompound();
 				
-				connectionTag.setString("client", entry.getKey());
+				connectionTag.setString("client", entry.getKey().getUsername());
+				connectionTag.setString("clientId", entry.getKey().getString());
 				connectionTag.setBoolean("isMain", true);
 				connectionTag.setBoolean("isActive", false);
 				connectionTag.setInteger("clientDim", 0);

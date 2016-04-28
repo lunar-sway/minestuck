@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Random;
 
+import com.mraof.minestuck.util.UsernameHandler.PlayerIdentifier;
+
 import net.minecraft.item.ItemStack;
 
 public class GristHelper {
@@ -97,14 +99,16 @@ public class GristHelper {
 	 * A shortened statement to obtain a certain grist count.
 	 * Uses the encoded version of the username!
 	 */
-	public static int getGrist(String player, GristType type) {
+	public static int getGrist(PlayerIdentifier player, GristType type)
+	{
 		return MinestuckPlayerData.getGristSet(player).getGrist(type);
 	}
 	
 	/**
 	 * Uses the encoded version of the username!
 	 */
-	public static boolean canAfford(String player, ItemStack stack, boolean clientSide) {
+	public static boolean canAfford(PlayerIdentifier player, ItemStack stack, boolean clientSide)
+	{
 		return canAfford(clientSide ? MinestuckPlayerData.getClientGrist() : MinestuckPlayerData.getGristSet(player), GristRegistry.getGristConversion(stack));
 	}
 	
@@ -130,7 +134,8 @@ public class GristHelper {
 	/**
 	 * Uses the encoded version of the username!
 	 */
-	public static void decrease(String player, GristSet set) {
+	public static void decrease(PlayerIdentifier player, GristSet set)
+	{
 		Hashtable<Integer, Integer> reqs = set.getHashtable();
 		if (reqs != null) {
 			Iterator<Entry<Integer, Integer>> it = reqs.entrySet().iterator();
@@ -141,7 +146,8 @@ public class GristHelper {
 		}
 	}
 	
-	public static void setGrist(String player, GristType type, int i) {
+	public static void setGrist(PlayerIdentifier player, GristType type, int i)
+	{
 		MinestuckPlayerData.getGristSet(player).setGrist(type, i);
 	}
 	
@@ -160,13 +166,16 @@ public class GristHelper {
 		return i;
 	}
 	
-	public static void increase(String username, GristSet set) {
+	public static void increase(PlayerIdentifier player, GristSet set)
+	{
 		Hashtable<Integer, Integer> reqs = set.getHashtable();
-		if (reqs != null) {
+		if (reqs != null)
+		{
 			Iterator<Entry<Integer, Integer>> it = reqs.entrySet().iterator();
-			while (it.hasNext()) {
+			while (it.hasNext())
+			{
 				Entry<Integer, Integer> pairs = it.next();
-				setGrist(username, GristType.values()[(Integer) pairs.getKey()], getGrist(username, GristType.values()[(Integer)pairs.getKey()]) + (Integer)pairs.getValue());
+				setGrist(player, GristType.values()[(Integer) pairs.getKey()], getGrist(player, GristType.values()[(Integer)pairs.getKey()]) + (Integer)pairs.getValue());
 			}
 		}
 	}

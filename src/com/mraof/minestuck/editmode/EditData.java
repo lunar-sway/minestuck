@@ -4,6 +4,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 
 import com.mraof.minestuck.entity.EntityDecoy;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
+import com.mraof.minestuck.util.UsernameHandler.PlayerIdentifier;
 
 /**
  * Data structure used by the server sided EditHandler
@@ -23,9 +24,9 @@ public class EditData {
 	
 	EntityPlayerMP player;
 	
-	public String getTarget()
+	public PlayerIdentifier getTarget()
 	{
-		return connection.getClientName();
+		return connection.getClientIdentifier();
 	}
 
 	public EntityPlayerMP getEditor()

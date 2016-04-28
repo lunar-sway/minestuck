@@ -11,6 +11,7 @@ import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.UsernameHandler;
+import com.mraof.minestuck.util.UsernameHandler.PlayerIdentifier;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -96,7 +97,7 @@ public class CommandGristSend extends CommandBase
 	
 	private static boolean isPermittedFor(EntityPlayerMP player, EntityPlayerMP player2)
 	{
-		String name1 = UsernameHandler.encode(player.getCommandSenderName()), name2 = UsernameHandler.encode(player2.getCommandSenderName());
+		PlayerIdentifier name1 = UsernameHandler.encode(player), name2 = UsernameHandler.encode(player2);
 		SburbConnection c1 = SkaianetHandler.getMainConnection(name1, true);
 		SburbConnection c2 = SkaianetHandler.getMainConnection(name2, true);
 		if(c1 == null || c2 == null || !c1.enteredGame() || !c2.enteredGame())

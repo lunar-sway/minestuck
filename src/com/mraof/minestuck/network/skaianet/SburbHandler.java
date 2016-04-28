@@ -9,25 +9,30 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatStyle;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.underling.EntityBasilisk;
 import com.mraof.minestuck.entity.underling.EntityGiclops;
 import com.mraof.minestuck.entity.underling.EntityImp;
 import com.mraof.minestuck.entity.underling.EntityOgre;
 import com.mraof.minestuck.entity.underling.EntityUnderling;
 import com.mraof.minestuck.item.MinestuckItems;
+import static com.mraof.minestuck.network.skaianet.SessionHandler.*;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.EnumAspect;
@@ -37,6 +42,7 @@ import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.util.UsernameHandler;
+import com.mraof.minestuck.util.UsernameHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.LandAspectRegistry.AspectCombination;
@@ -51,9 +57,9 @@ import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 public class SburbHandler
 {
 	
-	static void generateTitle(String player)
+	static void generateTitle(PlayerIdentifier player)
 	{
-		Session session = SessionHandler.getPlayerSession(player);
+		Session session = getPlayerSession(player);
 		Title title = null;
 		if(session.predefinedPlayers.containsKey(player))
 		{
@@ -67,16 +73,16 @@ public class SburbHandler
 			rand.nextInt();	//Avoid using same data as the artifact generation
 			
 			ArrayList<Title> usedTitles = new ArrayList<Title>();
-			Set<String> playersEntered = new HashSet<String>();	//Used to avoid duplicates from both connections and predefined data
+			Set<PlayerIdentifier> playersEntered = new HashSet<PlayerIdentifier>();	//Used to avoid duplicates from both connections and predefined data
 			playersEntered.add(player);
 			for(SburbConnection c : session.connections)
-				if(!c.getClientName().equals(player) && c.enteredGame)
+				if(!c.getClientIdentifier().equals(player) && c.enteredGame)
 				{
-					usedTitles.add(MinestuckPlayerData.getTitle(c.getClientName()));
-					playersEntered.add(c.getClientName());
+					usedTitles.add(MinestuckPlayerData.getTitle(c.getClientIdentifier()));
+					playersEntered.add(c.getClientIdentifier());
 				}
 			
-			for(Map.Entry<String, PredefineData> entry : session.predefinedPlayers.entrySet())
+			for(Map.Entry<PlayerIdentifier, PredefineData> entry : session.predefinedPlayers.entrySet())
 				if(!playersEntered.contains(entry.getKey()) && entry.getValue().title != null)
 					usedTitles.add(entry.getValue().title);
 			
@@ -138,7 +144,236 @@ public class SburbHandler
 		}
 		
 		MinestuckPlayerData.setTitle(player, title);
-		MinestuckPlayerTracker.updateTitle(MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(UsernameHandler.decode(player)));
+		MinestuckPlayerTracker.updateTitle(player.getPlayer());
+	}
+	
+	public static void managePredefinedSession(ICommandSender sender, ICommand command, String sessionName, String[] playerNames, boolean finish) throws CommandException
+	{
+		Session session = sessionsByName.get(sessionName);
+		if(session == null)
+		{
+			if(finish && playerNames.length == 0)
+				throw new CommandException("Couldn't find session with that name. Aborting the finalizing process.", sessionName);
+			if(singleSession)
+				throw new CommandException("Not allowed to create new sessions when global session is active. Use \"%s\" as session name for global session access.", GLOBAL_SESSION_NAME);
+			
+			if(sender.sendCommandFeedback())
+				sender.addChatMessage(new ChatComponentText("Couldn't find session with that name, creating a new session..."));
+			session = new Session();
+			session.name = sessionName;
+			sessions.add(session);
+			sessionsByName.put(session.name, session);
+		}
+		
+		if(session.locked)
+			throw new CommandException("That session may no longer be modified.");
+		
+		int handled = 0;
+		boolean skipFinishing = false;
+		for(String playerName : playerNames)
+		{
+			if(playerName.startsWith("!"))
+			{
+				playerName = playerName.substring(1);
+				
+				PlayerIdentifier identifier;
+				try
+				{
+					identifier = UsernameHandler.getForCommand(sender, playerName);
+				} catch(CommandException c)
+				{
+					if(sender.sendCommandFeedback())
+						sender.addChatMessage(new ChatComponentText(String.format(c.getMessage(), c.getErrorObjects())));
+					continue;
+				}
+				
+				if(!session.containsPlayer(identifier))
+				{
+					if(sender.sendCommandFeedback())
+						sender.addChatMessage(new ChatComponentText("Failed to remove player \""+playerName+"\": Player isn't in session.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+					continue;
+				}
+				
+				if(session.predefinedPlayers.remove(identifier) == null)
+				{
+					if(sender.sendCommandFeedback())
+						sender.addChatMessage(new ChatComponentText("Failed to remove player \""+playerName+"\": Player isn't registered with the session.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+					continue;
+				}
+				
+				handled++;
+				
+				if(session.containsPlayer(identifier))
+				{
+					split(session);
+					session = sessionsByName.get(sessionName);
+					if(session.containsPlayer(identifier))
+					{
+						if(sender.sendCommandFeedback())
+							sender.addChatMessage(new ChatComponentText("Removed player \""+playerName+"\", but they are still part of a connection in the session and will therefore be part of the session unless the connection is discarded.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.YELLOW)));
+						skipFinishing = true;
+						continue;
+					}
+				}
+			} else
+			{
+				PlayerIdentifier identifier;
+				try
+				{
+					identifier = UsernameHandler.getForCommand(sender, playerName);
+				} catch(CommandException c)
+				{
+					if(sender.sendCommandFeedback())
+						sender.addChatMessage(new ChatComponentText(String.format(c.getMessage(), c.getErrorObjects())));
+					continue;
+				}
+				
+				if(session.predefinedPlayers.containsKey(identifier))
+				{
+					if(sender.sendCommandFeedback())
+						sender.addChatMessage(new ChatComponentText("Failed to add player \""+playerName+"\": Player is already registered with session.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+					continue;
+				}
+				
+				Session playerSession = getPlayerSession(identifier);
+				
+				if(playerSession != null)
+				{
+					if(merge(session, playerSession, null) != null)
+					{
+						if(sender.sendCommandFeedback())
+							sender.addChatMessage(new ChatComponentText("Failed to add player \""+playerName+"\": Can't merge with the session that the player is already in.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+						continue;
+					}
+				} else if(MinestuckConfig.forceMaxSize && session.getPlayerList().size() + 1 > maxSize)
+				{
+					if(sender.sendCommandFeedback())
+						sender.addChatMessage(new ChatComponentText("Failed to add player \""+playerName+"\": The session can't accept more players with the current configurations.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+					continue;
+				}
+				
+				session.predefinedPlayers.put(identifier, new PredefineData());
+				handled++;
+			}
+		}
+		
+		if(playerNames.length > 0)
+			CommandBase.notifyOperators(sender, command, "commands.sburbSession.addSuccess", handled, playerNames.length);
+		
+		/*if(finish)
+			if(!skipFinishing && handled == playerNames.length)
+			{
+				SburbHandler.finishSession(sender, command, session);
+				
+			} else throw new CommandException("Skipping to finalize the session due to one or more issues while adding players.");*/
+	}
+	
+	public static void sessionName(ICommandSender sender, ICommand command, String playerName, String sessionName) throws CommandException
+	{
+		PlayerIdentifier identifier = UsernameHandler.getForCommand(sender, playerName);
+		
+		Session playerSession = getPlayerSession(identifier), session = sessionsByName.get(sessionName);
+		if(singleSession)
+			throw new CommandException("Not allowed to change session name when global session is active. Use \"%s\" as session name for global session access.", GLOBAL_SESSION_NAME);
+		if(playerSession == null)
+			throw new CommandException("Couldn't find session for player \"%s\"", playerName);
+		if(session != null)
+			throw new CommandException("That session name is already taken.");
+		
+		if(playerSession.name != null)
+			sessionsByName.remove(playerSession.name);
+		String prevName = playerSession.name;
+		playerSession.name = sessionName;
+		sessionsByName.put(playerSession.name, playerSession);
+		
+		if(prevName != null)
+			CommandBase.notifyOperators(sender, command, "commands.sburbSession.rename", prevName, sessionName, playerName);
+		else CommandBase.notifyOperators(sender, command, "commands.sburbSession.name", sessionName, playerName);
+	}
+	
+	public static void predefineTitle(ICommandSender sender, ICommand command, String playerName, String sessionName, Title title) throws CommandException
+	{
+		PlayerIdentifier identifier = predefineCheck(sender, playerName, sessionName);
+		
+		Title playerTitle = MinestuckPlayerData.getTitle(identifier);
+		if(playerTitle != null)
+			throw new CommandException("You can't change your title after having entered the medium.");
+		
+		Session session = sessionsByName.get(sessionName);
+		for(SburbConnection c : session.connections)
+			if(c.isMain && c.enteredGame && title.equals(MinestuckPlayerData.getTitle(c.getClientIdentifier())))
+				throw new CommandException("This title is already used by %s.", c.getClientIdentifier().getUsername());
+		for(Map.Entry<PlayerIdentifier, PredefineData> entry : session.predefinedPlayers.entrySet())
+			if(entry.getValue().title != null && title.equals(entry.getValue().title))
+				throw new CommandException("This title is already assigned to %s.", entry.getKey().getUsername());
+		
+		PredefineData data = session.predefinedPlayers.get(identifier);
+		data.title = title;
+		CommandBase.notifyOperators(sender, command, "commands.sburbSession.titleSuccess", playerName, title.getTitleName());
+	}
+	
+	public static void predefineTerrainLandAspect(ICommandSender sender, ICommand command, String playerName, String sessionName, TerrainLandAspect aspect) throws CommandException
+	{
+		PlayerIdentifier identifier = predefineCheck(sender, playerName, sessionName);
+		
+		Session session = sessionsByName.get(sessionName);
+		SburbConnection clientConnection = SkaianetHandler.getClientConnection(identifier);
+		PredefineData data = session.predefinedPlayers.get(identifier);
+		
+		if(clientConnection != null && clientConnection.enteredGame())
+			throw new CommandException("You can't change your land aspects after having entered the medium.");
+		if(data.landTitle == null)
+			throw new CommandException("You should define the other land aspect before this one.");
+		if(!data.landTitle.isAspectCompatible(aspect))
+			throw new CommandException("That terrain land aspect isn't compatible with the other land aspect.");
+		
+		data.landTerrain = aspect;
+		CommandBase.notifyOperators(sender, command, "commands.sburbSession.landTerrainSuccess", playerName, aspect.getPrimaryName());
+	}
+	
+	public static void predefineTitleLandAspect(ICommandSender sender, ICommand command, String playerName, String sessionName, TitleLandAspect aspect) throws CommandException
+	{
+		PlayerIdentifier identifier = predefineCheck(sender, playerName, sessionName);
+		
+		Session session = sessionsByName.get(sessionName);
+		SburbConnection clientConnection = SkaianetHandler.getClientConnection(identifier);
+		PredefineData data = session.predefinedPlayers.get(identifier);
+		
+		if(clientConnection != null && clientConnection.enteredGame())
+			throw new CommandException("You can't change your land aspects after having entered the medium.");
+		if(sender.sendCommandFeedback())
+			if(data.title == null)
+				sender.addChatMessage(new ChatComponentText("Beware that the title generated might not be suited for this land aspect.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.YELLOW)));
+			else if(!LandAspectRegistry.containsTitleLandAspect(data.title.getHeroAspect(), aspect))
+				sender.addChatMessage(new ChatComponentText("Beware that the title predefined isn't suited for this land aspect.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.YELLOW)));
+		
+		if(data.landTerrain != null && !aspect.isAspectCompatible(data.landTerrain))
+		{
+			data.landTerrain = null;
+			if(sender.sendCommandFeedback())
+				sender.addChatMessage(new ChatComponentText("The terrain aspect previously chosen isn't compatible with this land aspect, and has therefore been removed.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.YELLOW)));
+		}
+		
+		data.landTitle = aspect;
+		CommandBase.notifyOperators(sender, command, "commands.sburbSession.landTitleSuccess", playerName, aspect.getPrimaryName());
+	}
+	
+	private static PlayerIdentifier predefineCheck(ICommandSender sender, String playerName, String sessionName) throws CommandException
+	{
+		PlayerIdentifier identifier = UsernameHandler.getForCommand(sender, playerName);
+		
+		Session session = sessionsByName.get(sessionName), playerSession = getPlayerSession(identifier);
+		if(session == null)
+			throw new CommandException("Couldn't find session with the name %s", sessionName);
+		if(playerSession != null && session != playerSession)
+			throw new CommandException("The player is already in another session!");
+		if(playerSession == null || !session.predefinedPlayers.containsKey(identifier))
+		{
+			if(sender.sendCommandFeedback())
+				sender.addChatMessage(new ChatComponentText("Couldn't find session for player or player isn't registered with this session yet. Adding player to session "+sessionName));
+			session.predefinedPlayers.put(identifier, new PredefineData());
+		}
+		return identifier;
 	}
 	
 	//Decided to skip completing this because I couldn't figure out the algorithms,
@@ -147,12 +382,12 @@ public class SburbHandler
 	static void finishSession(ICommandSender sender, ICommand command, Session session) throws CommandException
 	{
 		Random rand = new Random();	//What seed?
-		Set<String> unregisteredPlayers = session.getPlayerList();
+		Set<PlayerIdentifier> unregisteredPlayers = session.getPlayerList();
 		unregisteredPlayers.removeAll(session.predefinedPlayers.keySet());
 		if(!unregisteredPlayers.isEmpty())
 		{
 			StringBuilder str = new StringBuilder();
-			Iterator<String> iter = unregisteredPlayers.iterator();
+			Iterator<PlayerIdentifier> iter = unregisteredPlayers.iterator();
 			str.append(iter.next());
 			while(iter.hasNext())
 			{
@@ -165,8 +400,8 @@ public class SburbHandler
 		for(SburbConnection c : session.connections)	//Add data to predefined registry
 			if(c.isMain && c.enteredGame)
 			{
-				PredefineData data = session.predefinedPlayers.get(c.getClientName());
-				Title title = MinestuckPlayerData.getTitle(c.getClientName());
+				PredefineData data = session.predefinedPlayers.get(c.getClientIdentifier());
+				Title title = MinestuckPlayerData.getTitle(c.getClientIdentifier());
 				AspectCombination landAspects = MinestuckDimensionHandler.getAspects(c.getClientDimension());
 				data.title = title;
 				data.landTitle = landAspects.aspectTitle;
@@ -218,7 +453,7 @@ public class SburbHandler
 	 * @param player The username of the player, encoded.
 	 * @return Damage value for the entry item
 	 */
-	public static ItemStack getEntryItem(String player)
+	public static ItemStack getEntryItem(PlayerIdentifier player)
 	{
 		SburbConnection c = SkaianetHandler.getClientConnection(player); 
 		int colorIndex = MinestuckPlayerData.getData(player).color;
@@ -238,7 +473,7 @@ public class SburbHandler
 	public static int getColorForDimension(int dim)
 	{
 		SburbConnection c = getConnectionForDimension(dim);
-		return c == null ? -1 : MinestuckPlayerData.getData(c.getClientName()).color;
+		return c == null ? -1 : MinestuckPlayerData.getData(c.getClientIdentifier()).color;
 	}
 	
 	public static SburbConnection getConnectionForDimension(int dim)
@@ -253,9 +488,9 @@ public class SburbHandler
 	 * 
 	 * @param client The username of the player, encoded.
 	 */
-	public static int availableTier(String client)
+	public static int availableTier(PlayerIdentifier client)
 	{
-		Session s = SessionHandler.getPlayerSession(client);
+		Session s = getPlayerSession(client);
 		if(s == null) {
 			return -1;
 		}
@@ -274,14 +509,14 @@ public class SburbHandler
 	private static void genLandAspects(SburbConnection connection)
 	{
 		LandAspectRegistry aspectGen = new LandAspectRegistry((Minestuck.worldSeed^connection.clientHomeLand)^(connection.clientHomeLand << 8));
-		Session session = SessionHandler.getPlayerSession(connection.getClientName());
-		Title title = MinestuckPlayerData.getTitle(connection.getClientName());
+		Session session = getPlayerSession(connection.getClientIdentifier());
+		Title title = MinestuckPlayerData.getTitle(connection.getClientIdentifier());
 		TitleLandAspect titleAspect = null;
 		TerrainLandAspect terrainAspect = null;
 		
-		if(session.predefinedPlayers.containsKey(connection.getClientName()))
+		if(session.predefinedPlayers.containsKey(connection.getClientIdentifier()))
 		{
-			PredefineData data = session.predefinedPlayers.get(connection.getClientName());
+			PredefineData data = session.predefinedPlayers.get(connection.getClientIdentifier());
 			if(data.landTitle != null)
 				titleAspect = data.landTitle;
 			if(data.landTerrain != null)
@@ -381,9 +616,10 @@ public class SburbHandler
 		
 	}
 	
-	static void onGameEntered(SburbConnection connection) {
-		generateTitle(connection.getClientName());
-		SessionHandler.getPlayerSession(connection.getClientName()).checkIfCompleted();
+	static void onGameEntered(SburbConnection connection)
+	{
+		generateTitle(connection.getClientIdentifier());
+		getPlayerSession(connection.getClientIdentifier()).checkIfCompleted();
 		genLandAspects(connection);
 		
 		
@@ -391,16 +627,16 @@ public class SburbHandler
 	
 	public static boolean canSelectColor(EntityPlayerMP player)
 	{
-		String name = UsernameHandler.encode(player.getCommandSenderName());
+		PlayerIdentifier identifier = UsernameHandler.encode(player);
 		for(SburbConnection c : SkaianetHandler.connections)
-			if(c.getClientName().equals(name))
+			if(c.getClientIdentifier().equals(identifier))
 				return false;
 		return true;
 	}
 
 	static void onConnectionCreated(SburbConnection c)
 	{
-		Random rand = new Random(Minestuck.worldSeed^c.getClientName().hashCode());
+		Random rand = new Random(Minestuck.worldSeed^c.getClientIdentifier().hashCode());
 		c.artifactType = rand.nextInt(2);
 		Debug.print("Randomized type to be: "+c.artifactType);
 	}

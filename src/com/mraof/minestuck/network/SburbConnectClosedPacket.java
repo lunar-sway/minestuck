@@ -12,43 +12,45 @@ import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.UsernameHandler;
 
-public class SburbConnectClosedPacket extends MinestuckPacket {
+public class SburbConnectClosedPacket extends MinestuckPacket
+{
 	
-	public String player;
-	public String otherPlayer;
+	public int player;
+	public int otherPlayer;
 	public boolean isClient;
 	
 	@Override
-	public MinestuckPacket generatePacket(Object... dat) {
-		writeString(data,dat[0].toString());
-		data.writeChar('\n');
-		writeString(data,dat[1].toString());
-		data.writeChar('\n');
+	public MinestuckPacket generatePacket(Object... dat)
+	{
+		data.writeInt((Integer) dat[0]);
+		data.writeInt((Integer) dat[1]);
 		data.writeBoolean((Boolean)dat[2]);
 		
 		return this;
 	}
-
+	
 	@Override
-	public MinestuckPacket consumePacket(ByteBuf data) {
-
-		player = readLine(data);
-		otherPlayer = readLine(data);
+	public MinestuckPacket consumePacket(ByteBuf data)
+	{
+		
+		player = data.readInt();
+		otherPlayer = data.readInt();
 		isClient = data.readBoolean();
 		
 		return this;
 	}
-
+	
 	@Override
 	public void execute(EntityPlayer player)
 	{
-		if((!MinestuckConfig.privateComputers || UsernameHandler.encode(player.getCommandSenderName()).equals(this.player)) && ServerEditHandler.getData(((EntityPlayer)player).getCommandSenderName()) == null)
-			SkaianetHandler.closeConnection(this.player,this.otherPlayer, isClient);
+		if((!MinestuckConfig.privateComputers || UsernameHandler.encode(player).getId() == this.player) && ServerEditHandler.getData(player) == null)
+			SkaianetHandler.closeConnection(UsernameHandler.getById(this.player), otherPlayer != -1 ? UsernameHandler.getById(this.otherPlayer) : null, isClient);
 	}
-
+	
 	@Override
-	public EnumSet<Side> getSenderSide() {
+	public EnumSet<Side> getSenderSide()
+	{
 		return EnumSet.of(Side.CLIENT);
 	}
-
+	
 }

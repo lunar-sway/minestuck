@@ -217,7 +217,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	 */
 	public void onCollideWithPlayer(EntityPlayer par1EntityPlayer)
 	{
-		if(this.worldObj.isRemote?ClientEditHandler.isActive():ServerEditHandler.getData(par1EntityPlayer.getCommandSenderName()) != null)
+		if(this.worldObj.isRemote?ClientEditHandler.isActive():ServerEditHandler.getData(par1EntityPlayer) != null)
 			return;
 		
 		if (!this.worldObj.isRemote)
@@ -232,8 +232,8 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	}
 	public void addGrist(EntityPlayer entityPlayer)
 	{
-		GristHelper.increase(UsernameHandler.encode(entityPlayer.getCommandSenderName()), new GristSet(GristType.getTypeFromString(gristType), gristValue));
-		MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(entityPlayer.getCommandSenderName()));
+		GristHelper.increase(UsernameHandler.encode(entityPlayer), new GristSet(GristType.getTypeFromString(gristType), gristValue));
+		MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(entityPlayer));
 	}
 
 	public boolean canAttackWithItem()

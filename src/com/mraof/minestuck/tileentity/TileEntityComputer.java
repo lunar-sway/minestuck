@@ -18,7 +18,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mraof.minestuck.block.BlockComputerOn;
 import com.mraof.minestuck.client.gui.GuiComputer;
+import com.mraof.minestuck.network.skaianet.ComputerData;
+import com.mraof.minestuck.network.skaianet.SburbConnection;
+import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.ComputerProgram;
+import com.mraof.minestuck.util.UsernameHandler;
+import com.mraof.minestuck.util.UsernameHandler.PlayerIdentifier;
 
 public class TileEntityComputer extends TileEntity
 {
@@ -28,7 +33,9 @@ public class TileEntityComputer extends TileEntity
 	 */
 	public Hashtable<Integer, Boolean> installedPrograms = new Hashtable<Integer, Boolean>();
 	public GuiComputer gui;
-	public String owner = "";
+	public PlayerIdentifier owner;
+	@SideOnly(Side.CLIENT)
+	public int ownerId;
 	public Hashtable<Integer, String> latestmessage = new Hashtable<Integer, String>();
 	public NBTTagCompound programData = new NBTTagCompound();
 	public int programSelected = -1;
@@ -67,11 +74,13 @@ public class TileEntityComputer extends TileEntity
 			nbt.setBoolean("isOpen", par1NBTTagCompound.getBoolean("serverOpen"));
 			programData.setTag("program_1", nbt);
 		}
-		this.owner = par1NBTTagCompound.getString("owner");
+		if(par1NBTTagCompound.hasKey("ownerId"))
+			ownerId = par1NBTTagCompound.getInteger("ownerId");
+		else this.owner = UsernameHandler.load(par1NBTTagCompound, "owner");
 		if(gui != null)
 			gui.updateGui();
 	}
-
+	
 	@Override
 	public void writeToNBT(NBTTagCompound par1NBTTagCompound) 
 	{
@@ -90,11 +99,8 @@ public class TileEntityComputer extends TileEntity
 			par1NBTTagCompound.setString("text" + e.getKey(), e.getValue());
 		par1NBTTagCompound.setTag("programs",programs);
 		par1NBTTagCompound.setTag("programData", (NBTTagCompound) programData.copy());
-		if (!this.owner.isEmpty()) 
-		{
-			par1NBTTagCompound.setString("owner",this.owner);
-		}
-
+		if (owner != null) 
+			owner.saveToNBT(par1NBTTagCompound, "owner");
 	}
 
 	@Override
@@ -102,13 +108,22 @@ public class TileEntityComputer extends TileEntity
 	{
 		NBTTagCompound tagCompound = new NBTTagCompound();
 		this.writeToNBT(tagCompound);
+		tagCompound.removeTag("owner");
+		tagCompound.removeTag("ownerMost");
+		tagCompound.removeTag("ownerLeast");
+		tagCompound.setInteger("ownerId", owner.getId());
+		if(hasProgram(1))
+		{
+			SburbConnection c = SkaianetHandler.getServerConnection(ComputerData.createData(this));
+			if(c != null)
+				tagCompound.getCompoundTag("programData").getCompoundTag("program_1").setInteger("connectedClient", c.getClientIdentifier().getId());
+		}
 		return new S35PacketUpdateTileEntity(this.pos, 2, tagCompound);
 	}
 
 	@Override
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) 
 	{
-		//Debug.print("Data packet gotten "+net.getClass());
 		this.readFromNBT(pkt.getNbtCompound());
 	}
 
@@ -136,7 +151,8 @@ public class TileEntityComputer extends TileEntity
 				ComputerProgram.getProgram(entry.getKey()).onClosed(this);
 	}
 
-	public void connected(String player, boolean isClient){
+	public void connected(PlayerIdentifier player, boolean isClient)
+	{
 		if(isClient)
 		{
 			getData(0).setBoolean("isResuming", false);
@@ -145,7 +161,6 @@ public class TileEntityComputer extends TileEntity
 		else
 		{
 			this.getData(1).setBoolean("isOpen", false);
-			this.getData(1).setString("connectedClient", player);
 		}
 	}
 	

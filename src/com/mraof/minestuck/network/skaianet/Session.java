@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.mraof.minestuck.util.UsernameHandler;
+import com.mraof.minestuck.util.UsernameHandler.PlayerIdentifier;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
@@ -15,9 +18,10 @@ import net.minecraft.nbt.NBTTagList;
  * SessionHandler is the new class for session interface.
  * @author kirderf1
  */
-public class Session {
+public class Session
+{
 	
-	Map<String, PredefineData> predefinedPlayers;
+	Map<PlayerIdentifier, PredefineData> predefinedPlayers;
 	List<SburbConnection> connections;
 	String name;
 	
@@ -35,21 +39,26 @@ public class Session {
 	/**
 	 * Checks if the variable completed should be true or false.
 	 */
-	void checkIfCompleted(){
-		if(connections.isEmpty() || SessionHandler.singleSession){
+	void checkIfCompleted()
+	{
+		if(connections.isEmpty() || SessionHandler.singleSession)
+		{
 			completed = false;
 			return;
 		}
-		String start = connections.get(0).getClientName();
-		String current = start;
+		PlayerIdentifier start = connections.get(0).getClientIdentifier();
+		PlayerIdentifier current = start;
 		main: while(true){
-			for(SburbConnection c : connections) {
-				if(!c.enteredGame) {
+			for(SburbConnection c : connections)
+			{
+				if(!c.enteredGame)
+				{
 					completed = false;
 					return;
 				}
-				if(c.getServerName().equals(current)) {
-					current = c.getClientName();
+				if(c.getServerIdentifier().equals(current))
+				{
+					current = c.getClientIdentifier();
 					if(start.equals(current)) {
 						completed = true;
 						return;
@@ -61,9 +70,10 @@ public class Session {
 		}
 	}
 	
-	Session(){
+	Session()
+	{
 		connections = new ArrayList<SburbConnection>();
-		predefinedPlayers = new HashMap<String, PredefineData>();
+		predefinedPlayers = new HashMap<PlayerIdentifier, PredefineData>();
 	}
 	
 	/**
@@ -71,12 +81,12 @@ public class Session {
 	 * @param player The username of the player.
 	 * @return If the player was found.
 	 */
-	boolean containsPlayer(String player)
+	boolean containsPlayer(PlayerIdentifier player)
 	{
 		if(predefinedPlayers.containsKey(player))
 			return true;
 		for(SburbConnection c : connections)
-			if(c.getClientName().equals(player) || c.getServerName().equals(player))
+			if(c.getClientIdentifier().equals(player) || c.getClientIdentifier().equals(player))
 				return true;
 		return false;
 	}
@@ -85,14 +95,14 @@ public class Session {
 	 * Creates a list with all players in the session.
 	 * @return Returns a list with the players usernames.
 	 */
-	Set<String> getPlayerList()
+	Set<PlayerIdentifier> getPlayerList()
 	{
-		Set<String> list = new HashSet<String>();
+		Set<PlayerIdentifier> list = new HashSet<PlayerIdentifier>();
 		for(SburbConnection c : this.connections)
 		{
-			list.add(c.getClientName());
-			if(!c.getServerName().equals(".null"))
-				list.add(c.getServerName());
+			list.add(c.getClientIdentifier());
+			if(!c.getServerIdentifier().equals(".null"))
+				list.add(c.getServerIdentifier());
 		}
 		list.addAll(predefinedPlayers.keySet());
 		return list;
@@ -113,10 +123,10 @@ public class Session {
 		for(SburbConnection c : connections)
 			list.appendTag(c.write());
 		nbt.setTag("connections", list);
-		NBTTagCompound predefineTag = new NBTTagCompound();
-		for(Map.Entry<String, PredefineData> entry : predefinedPlayers.entrySet())
-			predefineTag.setTag(entry.getKey(), entry.getValue().write());
-		nbt.setTag("predefinedPlayers", predefineTag);
+		NBTTagList predefineList = new NBTTagList();
+		for(Map.Entry<PlayerIdentifier, PredefineData> entry : predefinedPlayers.entrySet())
+			predefineList.appendTag(entry.getKey().saveToNBT(entry.getValue().write(), "player"));
+		nbt.setTag("predefinedPlayers", predefineList);
 		nbt.setBoolean("locked", locked);
 		nbt.setInteger("skaiaId", skaiaId);
 		nbt.setInteger("derseId", derseId);
@@ -134,12 +144,30 @@ public class Session {
 		if(nbt.hasKey("name", 8))
 			name = nbt.getString("name");
 		else name = null;
+		
 		NBTTagList list = nbt.getTagList("connections", 10);
 		for(int i = 0; i < list.tagCount(); i++)
 			connections.add(new SburbConnection().read(list.getCompoundTagAt(i)));
-		NBTTagCompound predefineTag = nbt.getCompoundTag("predefinedPlayers");
-		for(String player : (Set<String>) predefineTag.getKeySet())
-			predefinedPlayers.put(player, new PredefineData().read(predefineTag.getCompoundTag(player)));
+		
+		if(nbt.hasKey("predefinedPlayers", 9))	//If it is a tag list
+		{
+			list = nbt.getTagList("predefinedPlayers", 10);
+			for(int i = 0; i < list.tagCount(); i++)
+			{
+				NBTTagCompound compound = list.getCompoundTagAt(i);
+				predefinedPlayers.put(UsernameHandler.load(nbt, "player"), new PredefineData().read(compound));
+			}
+		} else
+		{	//Support for saves from older minestuck versions
+			NBTTagCompound predefineTag = nbt.getCompoundTag("predefinedPlayers");
+			for(String player : (Set<String>) predefineTag.getKeySet())
+			{
+				NBTTagCompound compound = new NBTTagCompound();
+				compound.setString("player", player);
+				predefinedPlayers.put(UsernameHandler.load(compound, "player"), new PredefineData().read(predefineTag.getCompoundTag(player)));
+			}
+		}
+		
 		SkaianetHandler.connections.addAll(this.connections);
 		locked = nbt.getBoolean("locked");
 		
@@ -149,7 +177,7 @@ public class Session {
 	
 	SburbConnection getConnection(String client, String server){
 		for(SburbConnection c : connections)
-			if(c.getClientName().equals(client) && c.getServerName().equals(server))
+			if(c.getClientIdentifier().equals(client) && c.getServerIdentifier().equals(server))
 				return c;
 		return null;
 	}

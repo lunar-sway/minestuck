@@ -14,6 +14,7 @@ import com.mraof.minestuck.client.gui.playerStats.GuiEcheladder;
 import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
 import com.mraof.minestuck.inventory.ContainerEditmode;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
+import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.util.ColorCollector;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 
@@ -38,6 +39,7 @@ public class ClientEventHandler
 		GuiDataChecker.activeComponent = null;
 		GuiEcheladder.lastRung = -1;
 		GuiEcheladder.animatedRung = 0;
+		SkaiaClient.clear();
 	}
 	
 	@SubscribeEvent

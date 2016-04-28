@@ -59,7 +59,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 	{
 		if(!world.isRemote && player.worldObj.provider.getDimensionId() != -1)
 		{
-			SburbConnection c = SkaianetHandler.getMainConnection(UsernameHandler.encode(player.getCommandSenderName()), true);
+			SburbConnection c = SkaianetHandler.getMainConnection(UsernameHandler.encode(player), true);
 			
 			int destinationId;
 			if(c != null && c.enteredGame())

@@ -388,8 +388,8 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 				for(int i = 0; i < cost.gristTypes.length; i++)
 					cost.gristTypes[i] = (int) Math.ceil(cost.gristTypes[i]*multiplier);
 			}
-			GristHelper.decrease(UsernameHandler.encode(owner.getCommandSenderName()), cost);
-			MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(owner.getCommandSenderName()));
+			GristHelper.decrease(UsernameHandler.encode(owner), cost);
+			MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(owner));
 			break;
 		case (4):
 			if(!worldObj.isRemote) 

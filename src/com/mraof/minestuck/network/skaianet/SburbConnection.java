@@ -4,24 +4,40 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.network.MinestuckPacket;
+import com.mraof.minestuck.util.UsernameHandler;
+import com.mraof.minestuck.util.UsernameHandler.PlayerIdentifier;
 
 public class SburbConnection {
 	
 	ComputerData client;
 	/**
-	 * Name for the client player. Beware that this might be an empty string if connection.client isn't null
+	 * Identifier for the client player. Beware that this might be null if connection.client isn't null
 	 * It is recommended to use connection.getClientName() instead if possible
 	 */
-	String clientName = "";
+	PlayerIdentifier clientIdentifier;
 	ComputerData server;
 	/**
-	 * Name for the server player. Beware that this might be an empty string if connection.server isn't null
+	 * Identifier for the server player. Beware that this might be null if connection.server isn't null
 	 * It is recommended to use connection.getServerName() instead if possible
 	 */
-	String serverName = "";
+	PlayerIdentifier serverIdentifier;
+	
+	/**
+	 * Display name used by computer guis
+	 */
+	@SideOnly(Side.CLIENT)
+	String clientName, serverName;
+	/**
+	 * Id for identifying players clientside
+	 */
+	@SideOnly(Side.CLIENT)
+	int clientId, serverId;
+	
 	boolean isActive;
 	boolean isMain;
 	boolean enteredGame;
@@ -47,15 +63,18 @@ public class SburbConnection {
 		this.isActive = true;
 	}
 	
-	public String getClientName(){
-		if(clientName.isEmpty())
+	public PlayerIdentifier getClientIdentifier()
+	{
+		if(clientIdentifier == null)
 			return client.owner;
-		else return clientName;
+		else return clientIdentifier;
 	}
-	public String getServerName(){
-		if(serverName.isEmpty())
+	
+	public PlayerIdentifier getServerIdentifier()
+	{
+		if(serverIdentifier == null)
 			return server.owner;
-		else return serverName;
+		else return serverIdentifier;
 	}
 	
 	public ComputerData getClientData() {return client;}
@@ -64,6 +83,14 @@ public class SburbConnection {
 	public boolean isMain(){return isMain;}
 	public int getClientDimension() {return clientHomeLand;}
 	public boolean[] givenItems(){return givenItemList;}
+	@SideOnly(Side.CLIENT)
+	public String getClientDisplayName() {return clientName;}
+	@SideOnly(Side.CLIENT)
+	public String getServerDisplayName() {return serverName;}
+	@SideOnly(Side.CLIENT)
+	public int getClientId() {return clientId;}
+	@SideOnly(Side.CLIENT)
+	public int getServerId() {return serverId;}
 	
 	public void writeBytes(ByteBuf data)
 	{
@@ -72,8 +99,10 @@ public class SburbConnection {
 			data.writeBoolean(isActive);
 			data.writeBoolean(enteredGame);
 		}
-		MinestuckPacket.writeString(data, getClientName()+"\n");
-		MinestuckPacket.writeString(data, getServerName()+"\n");
+		data.writeInt(getClientIdentifier().getId());
+		MinestuckPacket.writeString(data, getClientIdentifier().getUsername()+"\n");
+		data.writeInt(getServerIdentifier().getId());
+		MinestuckPacket.writeString(data, getServerIdentifier().getUsername()+"\n");
 	}
 
 	NBTTagCompound write()
@@ -110,8 +139,8 @@ public class SburbConnection {
 		}
 		else
 		{
-			nbt.setString("client", getClientName());
-			nbt.setString("server", getServerName());
+			getClientIdentifier().saveToNBT(nbt, "client");
+			getServerIdentifier().saveToNBT(nbt, "server");
 		}
 		nbt.setInteger("artifact", artifactType);
 		return nbt;
@@ -151,8 +180,8 @@ public class SburbConnection {
 		}
 		else
 		{
-			clientName = nbt.getString("client");
-			serverName = nbt.getString("server");
+			clientIdentifier = UsernameHandler.load(nbt, "client");
+			serverIdentifier = UsernameHandler.load(nbt, "server");
 		}
 		artifactType = nbt.getInteger("artifact");
 		

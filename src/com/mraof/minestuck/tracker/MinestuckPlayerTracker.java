@@ -35,6 +35,7 @@ import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.util.UpdateChecker;
 import com.mraof.minestuck.util.UsernameHandler;
+import com.mraof.minestuck.util.UsernameHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
@@ -51,21 +52,23 @@ public class MinestuckPlayerTracker {
 		MinecraftServer server = MinecraftServer.getServer();
 		if(!server.isDedicatedServer() && UsernameHandler.host == null)
 			UsernameHandler.host = event.player.getCommandSenderName();
-		String encUsername = UsernameHandler.encode(player.getCommandSenderName());
+		
+		UsernameHandler.playerLoggedIn(player);
+		PlayerIdentifier identifier = UsernameHandler.encode(player);
 		
 		sendConfigPacket((EntityPlayerMP) player, true);
 		sendConfigPacket((EntityPlayerMP) player, false);
 		
-		SkaianetHandler.playerConnected(player.getCommandSenderName());
+		SkaianetHandler.playerConnected(player);
 		boolean firstTime = false;
-		if(MinestuckPlayerData.getGristSet(encUsername) == null)
+		if(MinestuckPlayerData.getGristSet(identifier) == null)
 		{
 			Debug.printf("Grist set is null for player %s. Handling it as first time in this world.", player.getCommandSenderName());
-			MinestuckPlayerData.setGrist(encUsername, new GristSet(GristType.Build, 20));
+			MinestuckPlayerData.setGrist(identifier, new GristSet(GristType.Build, 20));
 			firstTime = true;
 		}
 		
-		MinestuckPlayerData.getData(encUsername).echeladder.updateEcheladderBonuses(player);
+		MinestuckPlayerData.getData(identifier).echeladder.updateEcheladderBonuses(player);
 		
 		if(CaptchaDeckHandler.getModus(player) == null && MinestuckConfig.defaultModusTypes.length > 0 && !MinestuckPlayerData.getData(player).givenModus)
 		{
@@ -83,10 +86,10 @@ public class MinestuckPlayerTracker {
 			MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.CAPTCHA, CaptchaDeckPacket.DATA, CaptchaDeckHandler.writeToNBT(modus)), player);
 		}
 		
-		updateGristCache(UsernameHandler.encode(player.getCommandSenderName()));
+		updateGristCache(identifier);
 		updateTitle(player);
 		updateEcheladder(player);
-		MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.BOONDOLLAR, MinestuckPlayerData.getData(encUsername).boondollars), player);
+		MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.BOONDOLLAR, MinestuckPlayerData.getData(identifier).boondollars), player);
 		ServerEditHandler.onPlayerLoggedIn((EntityPlayerMP) player);
 		
 		if(firstTime)
@@ -153,15 +156,15 @@ public class MinestuckPlayerTracker {
 	/**
 	 * Uses an "encoded" username as parameter.
 	 */
-	public static void updateGristCache(String player) {
-
+	public static void updateGristCache(PlayerIdentifier player)
+	{
 		int[] gristValues = new int[GristType.allGrists];
 		for(int typeInt = 0; typeInt < gristValues.length; typeInt++)
-			gristValues[typeInt] = GristHelper.getGrist(player,GristType.values()[typeInt]);
+			gristValues[typeInt] = GristHelper.getGrist(player, GristType.values()[typeInt]);
 
 		//The player
 		if(!player.equals(".client") || UsernameHandler.host != null) {
-			EntityPlayerMP playerMP = MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(UsernameHandler.decode(player));
+			EntityPlayerMP playerMP = player.getPlayer();
 			if(playerMP != null) {
 				MinestuckPacket packet = MinestuckPacket.makePacket(Type.GRISTCACHE, gristValues, false);
 				MinestuckChannelHandler.sendToPlayer(packet, playerMP);
@@ -179,8 +182,8 @@ public class MinestuckPlayerTracker {
 	
 	public static void updateTitle(EntityPlayer player)
 	{
-		String username = UsernameHandler.encode(player.getCommandSenderName());
-		Title newTitle = MinestuckPlayerData.getTitle(username);
+		PlayerIdentifier identifier = UsernameHandler.encode(player);
+		Title newTitle = MinestuckPlayerData.getTitle(identifier);
 		if(newTitle == null)
 			return;
 		MinestuckPacket packet = MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.TITLE, newTitle.getHeroClass(), newTitle.getHeroAspect());

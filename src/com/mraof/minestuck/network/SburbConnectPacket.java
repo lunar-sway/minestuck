@@ -17,43 +17,44 @@ public class SburbConnectPacket extends MinestuckPacket
 {
 	
 	ComputerData player;
-	String otherPlayer;
+	int otherPlayer;
 	boolean isClient;
 	
 	@Override
 	public MinestuckPacket generatePacket(Object... dat) 
 	{
 		ComputerData compData = (ComputerData)dat[0];
-		writeString(data,compData.getOwner()+'\n');
+		data.writeInt(compData.getOwnerId());
 		data.writeInt(compData.getX());
 		data.writeInt(compData.getY());
 		data.writeInt(compData.getZ());
 		data.writeInt(compData.getDimension());
-		writeString(data,dat[1].toString()+'\n');
+		data.writeInt((Integer)dat[1]);
 		data.writeBoolean((Boolean)dat[2]);
 		
 		return this;
 	}
-
+	
 	@Override
 	public MinestuckPacket consumePacket(ByteBuf data) 
 	{
-		player = new ComputerData(readLine(data), data.readInt(), data.readInt(), data.readInt(), data.readInt());
-		otherPlayer = readLine(data);
+		player = new ComputerData(UsernameHandler.getById(data.readInt()), data.readInt(), data.readInt(), data.readInt(), data.readInt());
+		otherPlayer = data.readInt();
 		isClient = data.readBoolean();
 		
 		return this;
 	}
-
+	
 	@Override
-	public void execute(EntityPlayer player) {
-		if((!MinestuckConfig.privateComputers || UsernameHandler.encode(player.getCommandSenderName()).equals(this.player.getOwner())) && ServerEditHandler.getData(((EntityPlayer)player).getCommandSenderName()) == null)
-			SkaianetHandler.requestConnection(this.player, otherPlayer, isClient);
+	public void execute(EntityPlayer player)
+	{
+		if((!MinestuckConfig.privateComputers || UsernameHandler.encode(player).getId() == this.player.getOwnerId()) && ServerEditHandler.getData(player) == null)
+			SkaianetHandler.requestConnection(this.player, otherPlayer != -1 ? UsernameHandler.getById(otherPlayer) : null, isClient);
 	}
-
+	
 	@Override
-	public EnumSet<Side> getSenderSide() {
+	public EnumSet<Side> getSenderSide()
+	{
 		return EnumSet.of(Side.CLIENT);
 	}
-
 }

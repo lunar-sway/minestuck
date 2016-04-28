@@ -12,7 +12,6 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.inventory.ContainerHandler;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.UsernameHandler;
 
 public class MinestuckConfigPacket extends MinestuckPacket
 {
@@ -33,8 +32,6 @@ public class MinestuckConfigPacket extends MinestuckPacket
 	boolean preEntryEcheladder;
 	boolean[] deployValues;
 	
-	String lanHost;
-	
 	@Override
 	public MinestuckPacket generatePacket(Object... dat)
 	{
@@ -50,8 +47,6 @@ public class MinestuckConfigPacket extends MinestuckPacket
 			
 			for(int i = 0; i < MinestuckConfig.deployConfigurations.length; i++)
 				data.writeBoolean(MinestuckConfig.deployConfigurations[i]);
-			if(UsernameHandler.host != null)
-				writeString(data,UsernameHandler.host);
 		} else
 		{
 			data.writeInt(MinestuckConfig.cardCost);
@@ -80,9 +75,6 @@ public class MinestuckConfigPacket extends MinestuckPacket
 			deployValues = new boolean[MinestuckConfig.deployConfigurations.length];
 			for(int i = 0; i < deployValues.length; i++)
 				deployValues[i] = data.readBoolean();
-			lanHost = readLine(data);
-			if(lanHost.isEmpty())
-				lanHost = null;
 		} else
 		{
 			cardCost = data.readInt();
@@ -107,7 +99,6 @@ public class MinestuckConfigPacket extends MinestuckPacket
 			
 			if(!Minestuck.isServerRunning)
 			{
-				UsernameHandler.host = lanHost;
 				DeployList.applyConfigValues(deployValues);
 				AlchemyRecipeHandler.addOrRemoveRecipes(cardRecipe);
 			}

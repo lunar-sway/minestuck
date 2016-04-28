@@ -102,13 +102,13 @@ public class ContainerEditmode extends Container
 	private void updateInventory()
 	{
 		ArrayList<ItemStack> itemList = new ArrayList<ItemStack>();
-		SburbConnection c = SkaianetHandler.getClientConnection(ServerEditHandler.getData(player.getCommandSenderName()).getTarget());
+		SburbConnection c = SkaianetHandler.getClientConnection(ServerEditHandler.getData(player).getTarget());
 		ArrayList<ItemStack> tools = new ArrayList<ItemStack>();
 		//Fill list with tool items when implemented
 		
 		ArrayList<ItemStack> deployItems = DeployList.getItemList();
 		Iterator<ItemStack> iter = deployItems.iterator();
-		int playerTier = SburbHandler.availableTier(c.getClientName());
+		int playerTier = SburbHandler.availableTier(c.getClientIdentifier());
 		while(iter.hasNext())
 		{
 			ItemStack stack = iter.next();
@@ -124,7 +124,7 @@ public class ContainerEditmode extends Container
 			{
 				NBTTagCompound nbt = new NBTTagCompound();
 				nbt.setTag("BlockEntityTag", new NBTTagCompound());
-				nbt.getCompoundTag("BlockEntityTag").setInteger("color", MinestuckPlayerData.getData(c.getClientName()).color);
+				nbt.getCompoundTag("BlockEntityTag").setInteger("color", MinestuckPlayerData.getData(c.getClientIdentifier()).color);
 				stack.setTagCompound(nbt);
 			}
 		}

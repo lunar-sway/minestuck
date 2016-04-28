@@ -7,6 +7,7 @@ import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.UsernameHandler;
+import com.mraof.minestuck.util.UsernameHandler.PlayerIdentifier;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -43,44 +44,43 @@ public class CommandGrist extends CommandBase
 			throw new WrongUsageException(this.getCommandUsage(sender));
 		
 		String command = args[0];
-		String name;
+		PlayerIdentifier identifier;
 		int offset = 1;
 		if(!(command.equalsIgnoreCase("set") || command.equalsIgnoreCase("add") || command.equalsIgnoreCase("get")))
 		{
 			command = args[1];
-			name = args[0];
+			identifier = UsernameHandler.getForCommand(sender, args[0]);
 			offset = 2;
 		} else
 		{
 			EntityPlayerMP player = this.getCommandSenderAsPlayer(sender);
-			name = UsernameHandler.encode(player.getCommandSenderName());
+			identifier = UsernameHandler.encode(player);
 		}
 		
 		if((args.length - offset) % 2  != 0)
 			throw new WrongUsageException(this.getCommandUsage(sender));
 		
-		String displayName = name.equals(".client") ? "Client Player" : name;
+		String displayName = identifier.getUsername();
 		
 		if(command.equalsIgnoreCase("set"))
 		{
 			GristAmount[] grist = parseGrist(args, offset);	//Using a GristAmount array instead of a GristSet gives support for setting grist to 0
 			for(GristAmount amount : grist)
-				GristHelper.setGrist(name, amount.getType(), amount.getAmount());
-			MinestuckPlayerTracker.updateGristCache(name);
-			notifyOperators(sender, this, "commands.grist.setSuccess", name);
+				GristHelper.setGrist(identifier, amount.getType(), amount.getAmount());
+			MinestuckPlayerTracker.updateGristCache(identifier);
+			notifyOperators(sender, this, "commands.grist.setSuccess", displayName);
 		}
 		else if(command.equalsIgnoreCase("add"))
 		{
 			GristSet grist = new GristSet(parseGrist(args, offset));
-			GristHelper.increase(name, grist);
-			MinestuckPlayerTracker.updateGristCache(name);
-			notifyOperators(sender, this, "commands.grist.addSuccess", name);
+			GristHelper.increase(identifier, grist);
+			MinestuckPlayerTracker.updateGristCache(identifier);
+			notifyOperators(sender, this, "commands.grist.addSuccess", displayName);
 		}
 		else if(command.equalsIgnoreCase("get"))
 		{
 			StringBuilder grist = new StringBuilder();
-			System.out.println(MinestuckPlayerData.getGristSet(name));
-			for(GristAmount amount : MinestuckPlayerData.getGristSet(name).getArray())
+			for(GristAmount amount : MinestuckPlayerData.getGristSet(identifier).getArray())
 				grist.append("\n" + amount.getAmount() + " " + amount.getType().getDisplayName());	//TODO properly translate display name for client side
 			
 			sender.addChatMessage(new ChatComponentTranslation("commands.grist.get", displayName, grist.toString()));

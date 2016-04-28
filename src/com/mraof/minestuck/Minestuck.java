@@ -58,6 +58,7 @@ import com.mraof.minestuck.util.KindAbstratusList;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.SburbClient;
 import com.mraof.minestuck.util.SburbServer;
+import com.mraof.minestuck.util.UsernameHandler;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.WorldProviderSkaia;
@@ -236,6 +237,7 @@ public class Minestuck
 		MinestuckDimensionHandler.unregisterDimensions();
 		isServerRunning = !isClientRunning;
 		MinestuckPlayerTracker.dataCheckerPermission.clear();
+		UsernameHandler.clear();
 	}
 	
 	@EventHandler

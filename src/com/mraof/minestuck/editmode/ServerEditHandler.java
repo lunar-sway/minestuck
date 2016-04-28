@@ -65,6 +65,7 @@ import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.Teleport;
+import com.mraof.minestuck.util.UsernameHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 
 /**
@@ -84,10 +85,10 @@ public class ServerEditHandler
 	 * Called both when any player logged out and when a player pressed the exit button.
 	 * @param player
 	 */
-	public static void onPlayerExit(EntityPlayer player) {
-		if(!player.worldObj.isRemote) {
-			reset(null, 0, getData(player.getCommandSenderName()));
-		}
+	public static void onPlayerExit(EntityPlayer player)
+	{
+		if(!player.worldObj.isRemote)
+			reset(null, 0, getData(player));
 	}
 	
 	public static void onDisconnect(SburbConnection c) {
@@ -100,7 +101,7 @@ public class ServerEditHandler
 	 * @param damageSource If the process was cancelled by the decoy taking damage, this parameter will be the damage source. Else null.
 	 * @param damage If the damageSource isn't null, this is the damage taken, else this parameter is ignored.
 	 * @param decoy The decoy entity used.
-	 * @param player The player.
+	 * @param playerId The player.
 	 */
 	public static void reset(DamageSource damageSource, float damage, EditData data) {
 		if(data == null) {
@@ -139,11 +140,13 @@ public class ServerEditHandler
 			player.attackEntityFrom(damageSource, damage);
 	}
 	
-	public static void newServerEditor(EntityPlayerMP player, String computerOwner, String computerTarget) {
+	public static void newServerEditor(EntityPlayerMP player, PlayerIdentifier computerOwner, PlayerIdentifier computerTarget)
+	{
 		if(player.isRiding())
 			return;	//Don't want to bother making the decoy able to ride anything right now.
 		SburbConnection c = SkaianetHandler.getClientConnection(computerTarget);
-		if(c != null && c.getServerName().equals(computerOwner) && getData(c) == null && getData(player.getCommandSenderName()) == null) {
+		if(c != null && c.getServerIdentifier().equals(computerOwner) && getData(c) == null && getData(player) == null)
+		{
 			Debug.print("Activating edit mode on player \""+player.getCommandSenderName()+"\", target player: \""+computerTarget+"\".");
 			EntityDecoy decoy = new EntityDecoy((WorldServer) player.worldObj, player);
 			EditData data = new EditData(decoy, player, c);
@@ -161,7 +164,7 @@ public class ServerEditHandler
 			list.add(data);
 			MinestuckPacket packet = MinestuckPacket.makePacket(Type.SERVER_EDIT, computerTarget, c.centerX, c.centerZ, c.givenItems());
 			MinestuckChannelHandler.sendToPlayer(packet, player);
-			MinestuckPlayerTracker.updateGristCache(c.getClientName());
+			MinestuckPlayerTracker.updateGristCache(c.getClientIdentifier());
 		}
 	}
 	
@@ -196,18 +199,19 @@ public class ServerEditHandler
 		return true;
 	}
 	
-	public static EditData getData(String editor)
+	public static EditData getData(EntityPlayer editor)
 	{
 		for(EditData data : list)
-			if(data.player.getCommandSenderName().equals(editor))
+			if(data.player == editor)
 				return data;
 		return null;
 	}
 	
-	public static EditData getData(SburbConnection c) {
-		for(EditData data : list) {
-			if(data.connection.getClientName().equals(c.getClientName()) && data.connection.getServerName().equals(c.getServerName()))
-				return data;}
+	public static EditData getData(SburbConnection c)
+	{
+		for(EditData data : list)
+			if(data.connection.getClientIdentifier().equals(c.getClientIdentifier()) && data.connection.getServerIdentifier().equals(c.getServerIdentifier()))
+				return data;
 		return null;
 	}
 	
@@ -224,7 +228,7 @@ public class ServerEditHandler
 			return;
 		EntityPlayerMP player = (EntityPlayerMP)event.player;
 		
-		EditData data = getData(player.getCommandSenderName());
+		EditData data = getData(player);
 		if(data == null)
 			return;
 		
@@ -232,7 +236,7 @@ public class ServerEditHandler
 		SburbConnection c = data.connection;
 		int range = MinestuckDimensionHandler.isLandDimension(player.dimension) ? MinestuckConfig.landEditRange : MinestuckConfig.overworldEditRange;
 		
-		updateInventory(player, c.givenItems(), c.enteredGame(), c.getClientName());
+		updateInventory(player, c.givenItems(), c.enteredGame(), c.getClientIdentifier());
 		updatePosition(player, range, c.centerX, c.centerZ);
 	}
 	
@@ -240,21 +244,21 @@ public class ServerEditHandler
 	public void onTossEvent(ItemTossEvent event)
 	{
 		InventoryPlayer inventory = event.player.inventory;
-		if(!event.entity.worldObj.isRemote && getData(event.player.getCommandSenderName()) != null)
+		if(!event.entity.worldObj.isRemote && getData(event.player) != null)
 		{
-			EditData data = getData(event.player.getCommandSenderName());
+			EditData data = getData(event.player);
 			ItemStack stack = event.entityItem.getEntityItem();
 			if(DeployList.containsItemStack(stack) && !isBlockItem(stack.getItem()))
 			{
 				GristSet cost = data.connection.givenItems()[DeployList.getOrdinal(stack)]
 						?DeployList.getSecondaryCost(stack):DeployList.getPrimaryCost(stack);
-				if(GristHelper.canAfford(MinestuckPlayerData.getGristSet(data.connection.getClientName()), cost))
+				if(GristHelper.canAfford(MinestuckPlayerData.getGristSet(data.connection.getClientIdentifier()), cost))
 				{
-					GristHelper.decrease(data.connection.getClientName(), cost);
-					MinestuckPlayerTracker.updateGristCache(data.connection.getClientName());
+					GristHelper.decrease(data.connection.getClientIdentifier(), cost);
+					MinestuckPlayerTracker.updateGristCache(data.connection.getClientIdentifier());
 					data.connection.givenItems()[DeployList.getOrdinal(stack)] = true;
 					if(!data.connection.isMain())
-						SkaianetHandler.giveItems(data.connection.getClientName());
+						SkaianetHandler.giveItems(data.connection.getClientIdentifier());
 				}
 				else event.setCanceled(true);
 			}
@@ -275,7 +279,7 @@ public class ServerEditHandler
 	@SubscribeEvent
 	public void onItemPickupEvent(EntityItemPickupEvent event)
 	{
-		if(!event.entity.worldObj.isRemote && getData(event.entityPlayer.getCommandSenderName()) != null)
+		if(!event.entity.worldObj.isRemote && getData(event.entityPlayer) != null)
 			event.setCanceled(true);
 	}
 	
@@ -286,9 +290,9 @@ public class ServerEditHandler
 	public void onItemUseControl(PlayerInteractEvent event)
 	{
 		
-		if(!event.world.isRemote && getData(event.entityPlayer.getCommandSenderName()) != null)
+		if(!event.world.isRemote && getData(event.entityPlayer) != null)
 		{
-			EditData data = getData(event.entityPlayer.getCommandSenderName());
+			EditData data = getData(event.entityPlayer);
 			if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK)
 			{
 				Block block = event.world.getBlockState(event.pos).getBlock();
@@ -308,12 +312,12 @@ public class ServerEditHandler
 				{
 					GristSet cost = data.connection.givenItems()[DeployList.getOrdinal(stack)]
 							? DeployList.getSecondaryCost(stack) : DeployList.getPrimaryCost(stack);
-					if(!GristHelper.canAfford(MinestuckPlayerData.getGristSet(data.connection.getClientName()), cost))
+					if(!GristHelper.canAfford(MinestuckPlayerData.getGristSet(data.connection.getClientIdentifier()), cost))
 					{
 						event.setCanceled(true);
 					}
 				}
-				else if(!isBlockItem(stack.getItem()) || !GristHelper.canAfford(data.connection.getClientName(), stack, false))
+				else if(!isBlockItem(stack.getItem()) || !GristHelper.canAfford(data.connection.getClientIdentifier(), stack, false))
 				{
 					event.setCanceled(true);
 				}
@@ -324,7 +328,7 @@ public class ServerEditHandler
 			{
 				Block block = event.world.getBlockState(event.pos).getBlock();
 				if(block.getBlockHardness(event.world, event.pos) < 0 || block.getMaterial() == Material.portal
-						|| GristHelper.getGrist(data.connection.getClientName(), GristType.Build) <= 0)
+						|| GristHelper.getGrist(data.connection.getClientIdentifier(), GristType.Build) <= 0)
 					event.setCanceled(true);
 			}
 			else if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR)
@@ -335,21 +339,21 @@ public class ServerEditHandler
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public void onBlockBreak(PlayerInteractEvent event)
 	{
-		if(!event.entity.worldObj.isRemote && getData(event.entityPlayer.getCommandSenderName()) != null
+		if(!event.entity.worldObj.isRemote && getData(event.entityPlayer) != null
 				&& event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK)
 		{
-			EditData data = getData(event.entityPlayer.getCommandSenderName());
-			GristHelper.decrease(data.connection.getClientName(), new GristSet(GristType.Build,1));
-			MinestuckPlayerTracker.updateGristCache(data.connection.getClientName());
+			EditData data = getData(event.entityPlayer);
+			GristHelper.decrease(data.connection.getClientIdentifier(), new GristSet(GristType.Build,1));
+			MinestuckPlayerTracker.updateGristCache(data.connection.getClientIdentifier());
 		}
 	}
 	
 	@SubscribeEvent(priority=EventPriority.LOW)
 	public void onBlockPlaced(BlockEvent.PlaceEvent event)
 	{
-		if(getData(event.player.getCommandSenderName()) != null)
+		if(getData(event.player) != null)
 		{
-			EditData data = getData(event.player.getCommandSenderName());
+			EditData data = getData(event.player);
 			if(event.isCanceled())	//If the event was cancelled server side and not client side, notify the client.
 			{
 				MinestuckPacket packet = MinestuckPacket.makePacket(Type.SERVER_EDIT, data.connection.givenItems());
@@ -365,21 +369,22 @@ public class ServerEditHandler
 						? DeployList.getSecondaryCost(stack) : DeployList.getPrimaryCost(stack);
 				c.givenItems()[DeployList.getOrdinal(stack)] = true;
 				if(!c.isMain())
-					SkaianetHandler.giveItems(c.getClientName());
+					SkaianetHandler.giveItems(c.getClientIdentifier());
 				if(!cost.isEmpty())
-					GristHelper.decrease(c.getClientName(), cost);
+					GristHelper.decrease(c.getClientIdentifier(), cost);
 				event.player.inventory.mainInventory[event.player.inventory.currentItem] = null;
 			} else
 			{
-				GristHelper.decrease(data.connection.getClientName(), GristRegistry.getGristConversion(stack));
-				MinestuckPlayerTracker.updateGristCache(data.connection.getClientName());
+				GristHelper.decrease(data.connection.getClientIdentifier(), GristRegistry.getGristConversion(stack));
+				MinestuckPlayerTracker.updateGristCache(data.connection.getClientIdentifier());
 			}
 		}
 	}
 	
 	@SubscribeEvent(priority=EventPriority.NORMAL)
-	public void onAttackEvent(AttackEntityEvent event) {
-		if(!event.entity.worldObj.isRemote && getData(event.entityPlayer.getCommandSenderName()) != null)
+	public void onAttackEvent(AttackEntityEvent event)
+	{
+		if(!event.entity.worldObj.isRemote && getData(event.entityPlayer) != null)
 			event.setCanceled(true);
 	}
 	
@@ -421,7 +426,7 @@ public class ServerEditHandler
 		}
 	}
 	
-	public static void updateInventory(EntityPlayerMP player, boolean[] givenItems, boolean enteredGame, String client)
+	public static void updateInventory(EntityPlayerMP player, boolean[] givenItems, boolean enteredGame, PlayerIdentifier client)
 	{
 		boolean inventoryChanged = false;
 		for(int i = 0; i < player.inventory.mainInventory.length; i++)
@@ -529,9 +534,9 @@ public class ServerEditHandler
 					}
 					
 					for(EntityPlayer player : targets)
-						if(getData(player.getCommandSenderName()) != null)
+						if(getData(player) != null)
 						{
-							reset(null, 0, getData(player.getCommandSenderName()));
+							reset(null, 0, getData(player));
 						}
 					return;
 				}
@@ -539,8 +544,8 @@ public class ServerEditHandler
 					target = event.parameters.length >= 2 ? CommandBase.getPlayer(event.sender, event.parameters[1]) : CommandBase.getCommandSenderAsPlayer(event.sender);
 				else target = CommandBase.getPlayer(event.sender, event.parameters[0]);
 				
-				if(target != null && getData(target.getCommandSenderName()) != null)
-					reset(null, 0, getData(target.getCommandSenderName()));
+				if(target != null && getData(target) != null)
+					reset(null, 0, getData(target));
 			}
 		}
 		catch(CommandException e)

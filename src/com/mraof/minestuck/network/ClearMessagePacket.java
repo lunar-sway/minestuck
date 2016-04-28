@@ -43,9 +43,10 @@ public class ClearMessagePacket extends MinestuckPacket {
 	}
 
 	@Override
-	public MinestuckPacket consumePacket(ByteBuf data) {
+	public MinestuckPacket consumePacket(ByteBuf data)
+	{
 		
-		computer = new ComputerData("",data.readInt(),data.readInt(),data.readInt(),data.readInt());
+		computer = new ComputerData(null,data.readInt(),data.readInt(),data.readInt(),data.readInt());
 		program = data.readInt();
 		
 		return this;

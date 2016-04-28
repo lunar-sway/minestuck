@@ -8,11 +8,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.management.ServerConfigurationManager;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
@@ -30,6 +30,7 @@ import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.UsernameHandler;
+import com.mraof.minestuck.util.UsernameHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 
 /**
@@ -39,48 +40,50 @@ import com.mraof.minestuck.world.MinestuckDimensionHandler;
  */
 public class SkaianetHandler {
 	
-	static Map<String, ComputerData> serversOpen = new TreeMap<String, ComputerData>();
-	static Map<String, ComputerData> resumingClients = new HashMap<String, ComputerData>();
-	static Map<String, ComputerData> resumingServers = new HashMap<String, ComputerData>();
+	static Map<PlayerIdentifier, ComputerData> serversOpen = new TreeMap<PlayerIdentifier, ComputerData>();
+	static Map<PlayerIdentifier, ComputerData> resumingClients = new HashMap<PlayerIdentifier, ComputerData>();
+	static Map<PlayerIdentifier, ComputerData> resumingServers = new HashMap<PlayerIdentifier, ComputerData>();
 	static List<SburbConnection> connections = new ArrayList<SburbConnection>();
-	static Map<String, String[]> infoToSend = new HashMap<String, String[]>();	//Key: player, value: data to send to player
+	static Map<PlayerIdentifier, PlayerIdentifier[]> infoToSend = new HashMap<PlayerIdentifier, PlayerIdentifier[]>();	//Key: player, value: data to send to player
 	static List<ComputerData> movingComputers = new ArrayList<ComputerData>();
 	
-	public static SburbConnection getClientConnection(String client){
+	public static SburbConnection getClientConnection(PlayerIdentifier client)
+	{
 		for(SburbConnection c : connections)
 			if(c.isActive && c.client.owner.equals(client))
 				return c;
 		return null;
 	}
 	
-	public static String getAssociatedPartner(String player, boolean isClient){
-		for(SburbConnection c : connections)
-			if(c.isMain)
-				if(isClient && c.getClientName().equals(player) && !c.getServerName().equals(".null"))
-					return c.getServerName();
-				else if(!isClient && c.getServerName().equals(player))
-				return c.getClientName();
-		return "";
-	}
-	
-	public static SburbConnection getMainConnection(String player, boolean isClient)
+	public static PlayerIdentifier getAssociatedPartner(PlayerIdentifier player, boolean isClient)
 	{
 		for(SburbConnection c : connections)
 			if(c.isMain)
-				if(isClient ? (c.getClientName().equals(player))
-						: c.getServerName().equals(player))
+				if(isClient && c.getClientIdentifier().equals(player) && !c.getServerIdentifier().equals(".null"))
+					return c.getServerIdentifier();
+				else if(!isClient && c.getServerIdentifier().equals(player))
+				return c.getClientIdentifier();
+		return null;
+	}
+	
+	public static SburbConnection getMainConnection(PlayerIdentifier player, boolean isClient)
+	{
+		for(SburbConnection c : connections)
+			if(c.isMain)
+				if(isClient ? (c.getClientIdentifier().equals(player))
+						: c.getServerIdentifier().equals(player))
 					return c;
 		return null;
 	}
 	
-	public static boolean giveItems(String player){
+	public static boolean giveItems(PlayerIdentifier player){
 		SburbConnection c = getClientConnection(player);
-		if(c != null && !c.isMain && getAssociatedPartner(c.getClientName(), true).isEmpty()
-				&& getAssociatedPartner(c.getServerName(), false).isEmpty()) {
+		if(c != null && !c.isMain && getAssociatedPartner(c.getClientIdentifier(), true) == null
+				&& getAssociatedPartner(c.getServerIdentifier(), false) == null) {
 			c.isMain = true;
 			SburbHandler.onFirstItemGiven(c);
-			updatePlayer(c.getClientName());
-			updatePlayer(c.getServerName());
+			updatePlayer(c.getClientIdentifier());
+			updatePlayer(c.getServerIdentifier());
 			return true;
 		}
 		return false;
@@ -90,50 +93,60 @@ public class SkaianetHandler {
 	 * Note that this is when a player logs in to the server.
 	 * @param player
 	 */
-	public static void playerConnected(String player){
-		//Debug.print("[SKAIANET] Player connected:"+player);
-		String[] s = new String[5];
-		s[0] = UsernameHandler.encode(player);
-		infoToSend.put(player, s);
-		updatePlayer(player);
+	public static void playerConnected(EntityPlayer player)
+	{
+		PlayerIdentifier identifier = UsernameHandler.encode(player);
+		PlayerIdentifier[] s = new PlayerIdentifier[5];
+		s[0] = identifier;
+		infoToSend.put(identifier, s);
+		updatePlayer(identifier);
 	}
 	
-	public static void requestConnection(ComputerData player, String otherPlayer, boolean isClient){
+	public static void requestConnection(ComputerData player, PlayerIdentifier otherPlayer, boolean isClient)
+	{
 		if(player.dimension == -1)
 			return;
 		TileEntityComputer te = getComputer(player);
 		if(te == null)
 			return;
-		if(!isClient){	//Is server
+		if(!isClient)	//Is server
+		{
 			if(serversOpen.containsKey(player.owner) || resumingServers.containsKey(player.owner))
 				return;
-			if(otherPlayer.isEmpty()){	//Wants to open
+			if(otherPlayer == null)	//Wants to open
+			{
 				if(resumingClients.containsKey(getAssociatedPartner(player.owner, false)))
 					connectTo(player, false, getAssociatedPartner(player.owner, false), resumingClients);
-				else{
+				else
+				{
 					te.getData(1).setBoolean("isOpen", true);
 					serversOpen.put(player.owner, player);
 				}
 			}
-			else if(!otherPlayer.isEmpty() && getAssociatedPartner(player.owner, false).equals(otherPlayer)){	//Wants to resume
+			else if(otherPlayer != null && getAssociatedPartner(player.owner, false).equals(otherPlayer))	//Wants to resume
+			{
 				if(resumingClients.containsKey(otherPlayer))	//The client is already waiting
 					connectTo(player, false, otherPlayer, resumingClients);
-				else {	//Client is not currently trying to resume
+				else	//Client is not currently trying to resume
+				{
 					te.getData(1).setBoolean("isOpen", true);
 					resumingServers.put(player.owner, player);
 				}
 			}
 			else return;
-		} else {	//Is client
+		} else	//Is client
+		{
 			if(getClientConnection(player.owner) != null || resumingClients.containsKey(player.owner))
 				return;
-			String p = getAssociatedPartner(player.owner, true);
-			if(!p.isEmpty() && (otherPlayer.isEmpty() || p.equals(otherPlayer))){	//If trying to connect to the associated partner
-				if(resumingServers.containsKey(p)){	//If server is "resuming".
+			PlayerIdentifier p = getAssociatedPartner(player.owner, true);
+			if(p != null && (otherPlayer == null || p.equals(otherPlayer)))	//If trying to connect to the associated partner
+			{
+				if(resumingServers.containsKey(p))	//If server is "resuming".
 					connectTo(player, true, p, resumingServers);
-				} else if(serversOpen.containsKey(p))	//If server is normally open.
+				else if(serversOpen.containsKey(p))	//If server is normally open.
 					connectTo(player, true, p, serversOpen);
-				else {	//If server isn't open
+				else	//If server isn't open
+				{
 					te.getData(0).setBoolean("isResuming", true);
 					resumingClients.put(player.owner, player);
 				}
@@ -145,8 +158,10 @@ public class SkaianetHandler {
 		updateAll();
 	}
 	
-	public static void closeConnection(String player, String otherPlayer, boolean isClient){
-		if(otherPlayer.isEmpty()){
+	public static void closeConnection(PlayerIdentifier player, PlayerIdentifier otherPlayer, boolean isClient)
+	{
+		if(otherPlayer == null)
+		{
 			if(isClient)
 			{
 				if(movingComputers.contains(resumingClients.get(player)))
@@ -223,7 +238,8 @@ public class SkaianetHandler {
 		updateAll();
 	}
 	
-	private static void connectTo(ComputerData player, boolean isClient, String otherPlayer, Map<String,ComputerData> map) {
+	private static void connectTo(ComputerData player, boolean isClient, PlayerIdentifier otherPlayer, Map<PlayerIdentifier, ComputerData> map)
+	{
 		TileEntityComputer c1 = getComputer(player), c2 = getComputer(map.get(otherPlayer));
 		if(c2 == null){
 			map.remove(otherPlayer);	//Invalid, should not be in the list
@@ -265,9 +281,9 @@ public class SkaianetHandler {
 			SburbHandler.onConnectionCreated(c);
 		}
 		SburbConnection conn;
-		if(newConnection && (conn = getMainConnection(c.getClientName(), true)) != null)	//Copy client associated variables
+		if(newConnection && (conn = getMainConnection(c.getClientIdentifier(), true)) != null)	//Copy client associated variables
 		{
-			if(conn.getServerName().equals(".null"))
+			if(conn.getServerIdentifier().equals(new PlayerIdentifier(".null")))
 			{
 				c.isMain = true;
 				connections.remove(conn);
@@ -288,11 +304,13 @@ public class SkaianetHandler {
 			c2.getWorld().markBlockForUpdate(c2.getPos());
 	}
 	
-	public static void requestInfo(String p0, String p1){
+	public static void requestInfo(PlayerIdentifier p0, PlayerIdentifier p1)
+	{
 		checkData();
-		String[] s = infoToSend.get(p0);
-		EntityPlayerMP player = MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(p0);
-		if(s == null || player == null){
+		PlayerIdentifier[] s = infoToSend.get(p0);
+		EntityPlayerMP player = p0.getPlayer();
+		if(s == null || player == null)
+		{
 			Debug.print("[SKAIANET] Player \"" + p0 + "\" sent a request without being online!");
 			return;
 		}
@@ -311,8 +329,9 @@ public class SkaianetHandler {
 				return;
 			}
 		}
-		if(i == s.length){	//If the array is full, increase size with 5.
-			String[] newS = new String[s.length+5];
+		if(i == s.length)	//If the array is full, increase size with 5.
+		{
+			PlayerIdentifier[] newS = new PlayerIdentifier[s.length+5];
 			System.arraycopy(s, 0, newS, 0, s.length);
 			s = newS;
 			infoToSend.put(p0, s);
@@ -323,7 +342,8 @@ public class SkaianetHandler {
 		updatePlayer(p0);
 	}
 	
-	public static void saveData(NBTTagCompound data) {
+	public static void saveData(NBTTagCompound data)
+	{
 		checkData();
 		
 		NBTTagCompound nbt = new NBTTagCompound();
@@ -336,8 +356,9 @@ public class SkaianetHandler {
 		
 		String[] s = {"serversOpen","resumingClients","resumingServers"};
 		@SuppressWarnings("unchecked")
-		Map<String, ComputerData>[] maps = new Map[]{serversOpen, resumingClients, resumingServers};
-		for(int i = 0; i < 3; i++) {
+		Map<PlayerIdentifier, ComputerData>[] maps = new Map[]{serversOpen, resumingClients, resumingServers};
+		for(int i = 0; i < 3; i++)
+		{
 			list = new NBTTagList();
 			for(ComputerData c:maps[i].values())
 				list.appendTag(c.write());
@@ -370,19 +391,18 @@ public class SkaianetHandler {
 			}
 			
 			String[] s = {"serversOpen","resumingClients","resumingServers"};
-			List<Map<String, ComputerData>> maps = new ArrayList<Map<String, ComputerData>>();
-			maps.add(serversOpen);
-			maps.add(resumingClients);
-			maps.add(resumingServers);
-			for(int e = 0; e < 3; e++) {
+			Map<PlayerIdentifier, ComputerData>[] maps = new Map[] {serversOpen, resumingClients, resumingServers};
+			for(int e = 0; e < 3; e++)
+			{
 				list = nbt.getTagList(s[e], 10);
 				if(list == null)
 					continue;
-				for(int i = 0; i < list.tagCount(); i++){
+				for(int i = 0; i < list.tagCount(); i++)
+				{
 					NBTTagCompound cmp = list.getCompoundTagAt(i);
 					ComputerData c = new ComputerData();
 					c.read(cmp);
-					maps.get(e).put(c.owner, c);
+					maps[e].put(c.owner, c);
 				}
 			}
 		}
@@ -390,53 +410,58 @@ public class SkaianetHandler {
 		SessionHandler.serverStarted();
 	}
 	
-	static void updateAll(){
+	static void updateAll()
+	{
 		checkData();
-		for(String s : infoToSend.keySet())
-			updatePlayer(s);
+		for(PlayerIdentifier i : infoToSend.keySet())
+			updatePlayer(i);
 	}
 	
-	static void updatePlayer(String player){
-		String[] str = infoToSend.get(player);
-		EntityPlayerMP playerMP = MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(player);
-		if(str == null || playerMP == null)//If the player disconnected
+	static void updatePlayer(PlayerIdentifier player)
+	{
+		PlayerIdentifier[] iden = infoToSend.get(player);
+		EntityPlayerMP playerMP = player.getPlayer();
+		if(iden == null || playerMP == null)//If the player disconnected
 			return;
-		String playerEnc = UsernameHandler.encode(player);
 		for(SburbConnection c : connections)
-			if(c.isActive && (c.getClientName().equals(playerEnc) || c.getServerName().equals(playerEnc))) {
+			if(c.isActive && (c.getClientIdentifier().equals(player) || c.getServerIdentifier().equals(player)))
+			{
 				playerMP.triggerAchievement(MinestuckAchievementHandler.setupConnection);
 				break;
 			}
-		for(String s : str)
-			if(s != null) {
-				MinestuckPacket packet = MinestuckPacket.makePacket(Type.SBURB_INFO, generateClientInfo(s));
+		for(PlayerIdentifier i : iden)
+			if(i != null)
+			{
+				MinestuckPacket packet = MinestuckPacket.makePacket(Type.SBURB_INFO, generateClientInfo(i));
 				MinestuckChannelHandler.sendToPlayer(packet, playerMP);
 			}
 	}
 	
-	static Object[] generateClientInfo(String player){
+	static Object[] generateClientInfo(PlayerIdentifier player)
+	{
 		List<Object> list = new ArrayList<Object>();
-		list.add(player);
+		list.add(player.getId());
 		
 		list.add(resumingClients.containsKey(player));
-		list.add(resumingServers.containsKey(player));
+		list.add(resumingServers.containsKey(player) || serversOpen.containsKey(player));
 		
-		List<String> playerList = SessionHandler.getServerList(player);
-		list.add(playerList.size());
+		List<Object> playerList = SessionHandler.getServerList(player);
+		list.add(playerList.size()/2);
 		list.addAll(playerList);
 		
 		for(SburbConnection c : connections)
-			if(c.getClientName().equals(player) && !c.getServerName().equals(".null") || c.getServerName().equals(player))
+			if(c.getClientIdentifier().equals(player) && !c.getServerIdentifier().equals(".null") || c.getServerIdentifier().equals(player))
 				list.add(c);
 		
 		return list.toArray();
 	}
 	
-	static void checkData() {
-		ServerConfigurationManager scm = MinecraftServer.getServer().getConfigurationManager();
-		Iterator<String> iter0 = infoToSend.keySet().iterator();
+	static void checkData()
+	{
+		Iterator<PlayerIdentifier> iter0 = infoToSend.keySet().iterator();
 		while(iter0.hasNext())
-			if(scm.getPlayerByUsername(iter0.next()) == null){
+			if(iter0.next().getPlayer() == null)
+			{
 				//Debug.print("[SKAIANET] Player disconnected, removing data.");
 				iter0.remove();
 			}
@@ -448,9 +473,10 @@ public class SkaianetHandler {
 			while(i.hasNext()) {
 				ComputerData data = i.next();
 				if(getComputer(data) == null || data.dimension == -1 || !getComputer(data).owner.equals(data.owner)
-						|| !(resumingClients.containsValue(data)?getComputer(data).getData(0).getBoolean("isResuming")
-								:getComputer(data).getData(1).getBoolean("isOpen"))) {
-					//Debug.print("[SKAIANET] Invalid computer in waiting list!");
+						|| !(i == iter1[1] && getComputer(data).getData(0).getBoolean("isResuming")
+								|| i != iter1[1] && getComputer(data).getData(1).getBoolean("isOpen")))
+				{
+					Debug.print("[SKAIANET] Invalid computer in waiting list!");
 					i.remove();
 				}
 			}
@@ -459,17 +485,18 @@ public class SkaianetHandler {
 		while(iter2.hasNext())
 		{
 			SburbConnection c = iter2.next();
-			if(c.getClientName().isEmpty() || c.getServerName().isEmpty())
+			if(c.getClientIdentifier() == null || c.getServerIdentifier() == null)
 			{
-				Debug.print("Found a broken connection with the client \""+c.getClientName()+"\" and server \""+c.getServerName()+". If this message continues to show up, something isn't working as it should.");
+				Debug.print("Found a broken connection with the client \""+c.getClientIdentifier()+"\" and server \""+c.getServerIdentifier()+". If this message continues to show up, something isn't working as it should.");
 				iter2.remove();
 				continue;
 			}
 			if(c.isActive)
 			{
 				TileEntityComputer cc = getComputer(c.client), sc = getComputer(c.server);
-				if(cc == null || sc == null || c.client.dimension == -1 || c.server.dimension == -1 || !cc.owner.equals(c.getClientName())
-						|| !sc.owner.equals(c.getServerName()) || !cc.getData(0).getBoolean("connectedToServer") || !sc.getData(1).getString("connectedClient").equals(c.getClientName())){
+				if(cc == null || sc == null || c.client.dimension == -1 || c.server.dimension == -1 || !cc.owner.equals(c.getClientIdentifier())
+						|| !sc.owner.equals(c.getServerIdentifier()) || !cc.getData(0).getBoolean("connectedToServer") /*|| !UsernameHandler.load(sc.getData(1), "connectedClient").equals(c.getClientIdentifier())*/)
+				{
 					//Debug.print("[SKAIANET] Invalid computer in connection.");
 					if(!c.isMain)
 						iter2.remove();
@@ -477,17 +504,20 @@ public class SkaianetHandler {
 					SessionHandler.onConnectionClosed(c, true);
 					ServerEditHandler.onDisconnect(c);
 					
-					if(cc != null){
+					if(cc != null)
+					{
 						cc.getData(0).setBoolean("connectedToServer", false);
 						cc.latestmessage.put(0, "computer.messageClosed");
 						cc.getWorld().markBlockForUpdate(cc.getPos());
-					} else if(sc != null){
-						sc.getData(1).setString("connectedClient", "");
+					} else if(sc != null)
+					{
+						//sc.getData(1).setString("connectedClient", "");
 						sc.latestmessage.put(1, "computer.messageClosed");
 						sc.getWorld().markBlockForUpdate(sc.getPos());
 					}
 				}
-				if(cc != null && c.enteredGame && c.inventory == null && c.centerX == 0 && c.centerZ == 0) {	//If the center location isn't defined
+				if(cc != null && c.enteredGame && c.inventory == null && c.centerX == 0 && c.centerZ == 0)	//If the center location isn't defined
+				{
 					c.centerX = cc.getPos().getX();
 					c.centerZ = cc.getPos().getZ();
 					c.inventory = new NBTTagList();
@@ -497,7 +527,7 @@ public class SkaianetHandler {
 			}
 			if(c.enteredGame && !MinestuckDimensionHandler.isLandDimension(c.clientHomeLand))
 			{
-				EntityPlayerMP player = MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(UsernameHandler.decode(c.getClientName()));
+				EntityPlayerMP player = c.getClientIdentifier().getPlayer();
 				if(player != null)
 				{
 					c.clientHomeLand = player.dimension;
@@ -505,7 +535,8 @@ public class SkaianetHandler {
 					{
 						iter2.remove();
 						SessionHandler.onConnectionClosed(c, false);
-						if(c.isActive) {
+						if(c.isActive)
+						{
 							TileEntityComputer cc = getComputer(c.client), sc = getComputer(c.server);
 							cc.getData(0).setBoolean("connectedToServer", false);
 							cc.latestmessage.put(0, "computer.messageClosed");
@@ -521,17 +552,17 @@ public class SkaianetHandler {
 		
 		if(MinestuckConfig.privateComputers)
 		{
-			for(Entry<String,String[]> entry : infoToSend.entrySet())
+			for(Entry<PlayerIdentifier,PlayerIdentifier[]> entry : infoToSend.entrySet())
 				for(int i = 0; i < entry.getValue().length; i++)
-					if(entry.getValue()[i] != null && !entry.getValue()[i].equals(UsernameHandler.encode(entry.getKey())))
+					if(entry.getValue()[i] != null && !entry.getValue()[i].equals(entry.getKey()))
 						entry.getValue()[i] = null;
 		}
 	}
 	
-	public static SburbConnection getConnection(String client, String server)
+	public static SburbConnection getConnection(PlayerIdentifier client, PlayerIdentifier server)
 	{
 		for(SburbConnection c : connections)
-			if(c.getClientName().equals(client) && c.getServerName().equals(server))
+			if(c.getClientIdentifier().equals(client) && c.getServerIdentifier().equals(server))
 				return c;
 		return null;
 	}
@@ -556,9 +587,17 @@ public class SkaianetHandler {
 		else return (TileEntityComputer)te;
 	}
 	
+	public static SburbConnection getServerConnection(ComputerData data)
+	{
+		for(SburbConnection c : connections)
+			if(c.isActive && c.server.equals(data))
+				return c;
+		return null;
+	}
+	
 	public static int enterMedium(EntityPlayerMP player, int dimensionId)
 	{
-		String username = UsernameHandler.encode(player.getCommandSenderName());
+		PlayerIdentifier username = UsernameHandler.encode(player);
 		SburbConnection c = getMainConnection(username, true);
 		if(c == null)
 		{
@@ -569,8 +608,8 @@ public class SkaianetHandler {
 				c = new SburbConnection();
 				c.isActive = false;
 				c.isMain = true;
-				c.clientName = username;
-				c.serverName = username;
+				c.clientIdentifier = username;
+				c.serverIdentifier = username;
 				if(SessionHandler.onConnectionCreated(c) == null)
 				{
 					SburbHandler.onFirstItemGiven(c);

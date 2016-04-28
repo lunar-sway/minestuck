@@ -14,7 +14,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.GuiComputer;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
@@ -22,18 +21,27 @@ import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.SkaianetInfoPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
-import com.mraof.minestuck.util.UsernameHandler;
 
 @SideOnly(Side.CLIENT)
 public class SkaiaClient
 {
 	
 	//Variables
-	static Map<String,List<String>> openServers = new HashMap<String, List<String>>();
+	static Map<Integer, Map<Integer, String>> openServers = new HashMap<Integer, Map<Integer, String>>();
 	static List<SburbConnection> connections = new ArrayList<SburbConnection>();
-	static Map<String, Boolean> resumingServer = new HashMap<String, Boolean>();
-	static Map<String, Boolean> resumingClient = new HashMap<String, Boolean>();
+	static Map<Integer, Boolean> serverWaiting = new HashMap<Integer, Boolean>();
+	static Map<Integer, Boolean> resumingClient = new HashMap<Integer, Boolean>();
 	static TileEntityComputer te = null;
+	public static int playerId;	//The id that this player is expected to have.
+	
+	public static void clear()
+	{
+		openServers.clear();
+		connections.clear();
+		serverWaiting.clear();
+		resumingClient.clear();
+		playerId = -1;
+	}
 	
 	/**
 	 * Called by a computer on interact. If it doesn't have the sufficient information,
@@ -41,81 +49,82 @@ public class SkaiaClient
 	 * @param computer The computer. Will save this variable for later if it sends a request.
 	 * @return If it currently has the necessary information.
 	 */
-	public static boolean requestData(TileEntityComputer computer){
-		boolean b = openServers.get(computer.owner) != null;
-		if(!b) {
-			MinestuckPacket packet = MinestuckPacket.makePacket(Type.SBURB_INFO, computer.owner);
+	public static boolean requestData(TileEntityComputer computer)
+	{
+		boolean b = openServers.get(computer.ownerId) != null;
+		if(!b)
+		{
+			MinestuckPacket packet = MinestuckPacket.makePacket(Type.SBURB_INFO, computer.ownerId);
 			MinestuckChannelHandler.sendToServer(packet);
 			te = computer;
 		}
 		return b;
 	}
 	
-	//Getters used by the gui
-	public static String getAssociatedPartner(String player, boolean isClient){
+	//Getters used by the computer
+	public static int getAssociatedPartner(int playerId, boolean isClient)
+	{
 		for(SburbConnection c : connections)
 			if(c.isMain)
-				if(isClient && c.getClientName().equals(player))
-					return c.getServerName();
-				else if(!isClient && c.getServerName().equals(player))
-				return c.getClientName();
-		return "";
+				if(isClient && c.clientId == playerId)
+					return c.serverId;
+				else if(!isClient && c.serverId == playerId)
+					return c.clientId;
+		return -1;
 	}
 	
-	public static List<String> getAvailableServers(String player){
-		return openServers.get(player);
+	public static Map<Integer, String> getAvailableServers(Integer playerId)
+	{
+		return openServers.get(playerId);
 	}
 	
-	public static boolean enteredMedium(String player){
+	public static boolean enteredMedium(int player)
+	{
 		for(SburbConnection c : connections)
-			if(c.isMain && c.getClientName().equals(player))
+			if(c.isMain && c.clientId == player)
 				return c.enteredGame;
 		return false;
 	}
 	
-	public static boolean isResuming(String player, boolean isClient){
-		if(isClient){
-			return resumingClient.get(player);
-		}
-		else {
-			return resumingServer.get(player);
-		}
-	}
-	
-	public static boolean isActive(String player, boolean isClient){
-		if(isClient)
-			return getClientConnection(player) != null || resumingClient.get(player);
-		else return openServers.get(player).contains(player) || resumingServer.get(player);
-	}
-	
-	public static boolean canSelect(String player)
+	public static boolean isActive(int playerId, boolean isClient)
 	{
-		if(!player.equals(UsernameHandler.encode(ClientProxy.getClientPlayer().getCommandSenderName())))
+		if(isClient)
+			return getClientConnection(playerId) != null || resumingClient.get(playerId);
+		else return serverWaiting.get(playerId);
+	}
+	
+	/**
+	 * If the color selection gui may be opened.
+	 */
+	public static boolean canSelect(int playerId)
+	{
+		if(playerId != SkaiaClient.playerId)
 			return false;
 		for(SburbConnection c : connections)
-			if(player.equals(c.getClientName()))
+			if(playerId == c.clientId)
 				return false;
 		return true;
 	}
 	
 	//Methods called from the actionPerformed method in the gui.
 	
-	public static SburbConnection getClientConnection(String client){
+	public static SburbConnection getClientConnection(int client)
+	{
 		for(SburbConnection c : connections)
-			if(c.isActive && c.getClientName().equals(client))
+			if(c.isActive && c.clientId == client)
 				return c;
 		return null;
 	}
 	
-	public static void sendConnectRequest(TileEntityComputer te, String otherPlayer, boolean isClient){	//Used for both connect, open server and resume
-//		Debug.print("Sending connect packet to server");
+	public static void sendConnectRequest(TileEntityComputer te, int otherPlayer, boolean isClient)	//Used for both connect, open server and resume
+	{
 		MinestuckPacket packet = MinestuckPacket.makePacket(Type.SBURB_CONNECT, ComputerData.createData(te), otherPlayer, isClient);
 		MinestuckChannelHandler.sendToServer(packet);
 	}
 	
-	public static void sendCloseRequest(TileEntityComputer te, String otherPlayer, boolean isClient){
-//		Debug.print("Sending close packet to server");
-		MinestuckPacket packet = MinestuckPacket.makePacket(Type.SBURB_CLOSE, te.owner, otherPlayer, isClient);
+	public static void sendCloseRequest(TileEntityComputer te, int otherPlayer, boolean isClient)
+	{
+		MinestuckPacket packet = MinestuckPacket.makePacket(Type.SBURB_CLOSE, te.ownerId, otherPlayer, isClient);
 		MinestuckChannelHandler.sendToServer(packet);
 	}
 	
@@ -130,23 +139,28 @@ public class SkaiaClient
 			c.isActive = data.readBoolean();
 			c.enteredGame = data.readBoolean();
 		}
+		c.clientId = data.readInt();
 		c.clientName = MinestuckPacket.readLine(data);
+		c.serverId = data.readInt();
 		c.serverName = MinestuckPacket.readLine(data);
 		
 		return c;
 	}
 	
-	public static void consumePacket(SkaianetInfoPacket data){
+	public static void consumePacket(SkaianetInfoPacket data)
+	{
+		if(playerId == -1)
+			playerId = data.playerId;	//The first info packet is expected to be regarding the receiving player.
+		openServers.put(data.playerId, data.openServers);
 		
-		openServers.put(data.player, data.openServers);
-		
-		resumingClient.put(data.player, data.isClientResuming);
-		resumingServer.put(data.player, data.isServerResuming);
+		resumingClient.put(data.playerId, data.isClientResuming);
+		serverWaiting.put(data.playerId, data.isServerResuming);
 		
 		Iterator<SburbConnection> i = connections.iterator();
-		while(i.hasNext()){
+		while(i.hasNext())
+		{
 			SburbConnection c = i.next();
-			if(c.clientName.equals(data.player) || c.serverName.equals(data.player))
+			if(c.clientId == data.playerId || c.serverId == data.playerId)
 				i.remove();
 		}
 		connections.addAll(data.connections);
@@ -154,11 +168,11 @@ public class SkaiaClient
 		GuiScreen gui = Minecraft.getMinecraft().currentScreen;
 		if(gui != null && gui instanceof GuiComputer)
 			((GuiComputer)gui).updateGui();
-		else if(te != null && te.owner.equals(data.player)){
+		else if(te != null && te.ownerId == data.playerId)
+		{
 			if(!Minecraft.getMinecraft().thePlayer.isSneaking())
 				Minecraft.getMinecraft().thePlayer.openGui(Minestuck.instance, GuiHandler.GuiId.COMPUTER.ordinal(), te.getWorld(), te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
 			te = null;
 		}
 	}
-	
 }

@@ -10,6 +10,7 @@ import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+import com.mraof.minestuck.util.UsernameHandler.PlayerIdentifier;
 
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -17,7 +18,6 @@ import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
 
 public class Echeladder
 {
@@ -27,7 +27,7 @@ public class Echeladder
 	public static final byte ALCHEMY_BONUS_OFFSET = 15;
 	public static final double MIN_PROGRESS_MODIFIER = 1/100D;
 	
-	private static final UUID echeladderHealthBoostModifierUUID = UUID.fromString("5b49a45b-ff22-4720-8f10-dfd745c3abb8");
+	private static final UUID echeladderHealthBoostModifierUUID = UUID.fromString("5b49a45b-ff22-4720-8f10-dfd745c3abb8");	//TODO Might be so that only one is needed, as we only add one modifier for each attribute.
 	private static final UUID echeladderDamageBoostModifierUUID = UUID.fromString("a74176fd-bf4e-4153-bb68-197dbe4109b2");
 	private static final int[] UNDERLING_BONUSES = new int[] {10, 120, 450, 2500};	//Bonuses for first time killing an underling
 	private static final int[] ALCHEMY_BONUSES = new int[] {30, 400, 3000};
@@ -39,16 +39,16 @@ public class Echeladder
 		MinestuckPlayerData.getData(player).echeladder.increaseProgress(progress);
 	}
 	
-	private String name;
+	private PlayerIdentifier identifier;
 	private int rung;
 	private int progress;
 	
 	private boolean[] underlingBonuses = new boolean[UNDERLING_BONUSES.length];
 	private boolean[] alchemyBonuses = new boolean[ALCHEMY_BONUSES.length];
 	
-	public Echeladder(String name)
+	public Echeladder(PlayerIdentifier identifier)
 	{
-		this.name = name;
+		this.identifier = identifier;
 	}
 	
 	private int getRungProgressReq()
@@ -58,7 +58,7 @@ public class Echeladder
 	
 	public void increaseProgress(int exp)
 	{
-		SburbConnection c = SkaianetHandler.getMainConnection(name, true);
+		SburbConnection c = SkaianetHandler.getMainConnection(identifier, true);
 		int topRung = c != null && c.enteredGame() ? RUNG_COUNT - 1 : MinestuckConfig.preEntryRungLimit;
 		int expReq = getRungProgressReq();
 		if(rung >= topRung || exp < expReq*MIN_PROGRESS_MODIFIER)
@@ -72,7 +72,7 @@ public class Echeladder
 			while(progress + exp >= expReq)
 			{
 				rung++;
-				MinestuckPlayerData.getData(name).boondollars += BOONDOLLARS[Math.min(rung, BOONDOLLARS.length - 1)];
+				MinestuckPlayerData.getData(identifier).boondollars += BOONDOLLARS[Math.min(rung, BOONDOLLARS.length - 1)];
 				exp -= (expReq - progress);
 				progress = 0;
 				expReq = getRungProgressReq();
@@ -85,14 +85,14 @@ public class Echeladder
 				progress += exp;
 		}
 		
-		EntityPlayer player = MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(UsernameHandler.decode(name));
+		EntityPlayer player = identifier.getPlayer();
 		if(player != null)
 		{
 			MinestuckPlayerTracker.updateEcheladder(player);
 			if(rung != prevRung)
 			{
 				updateEcheladderBonuses(player);
-				MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.BOONDOLLAR, MinestuckPlayerData.getData(name).boondollars), player);
+				MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.BOONDOLLAR, MinestuckPlayerData.getData(identifier).boondollars), player);
 			}
 		}
 	}

@@ -99,7 +99,7 @@ public class BlockComputerOff extends Block
 			world.setBlockState(pos, MinestuckBlocks.blockComputerOn.getDefaultState().withProperty(DIRECTION, side), 2);
 			
 			TileEntityComputer te = (TileEntityComputer) world.getTileEntity(pos);
-			te.owner = UsernameHandler.encode(player.getCommandSenderName());
+			te.owner = UsernameHandler.encode(player);
 			MinestuckBlocks.blockComputerOn.onBlockActivated(world, pos, world.getBlockState(pos), player, side, hitX, hitY, hitZ);
 		}
 		

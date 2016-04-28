@@ -1,6 +1,5 @@
 package com.mraof.minestuck.world;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3;
@@ -103,7 +102,7 @@ public class WorldProviderLands extends WorldProvider
 	@Override
 	public int getRespawnDimension(EntityPlayerMP player)	//actually only called when the provider says that you can't respawn in that dimension, which also causes beds to explode
 	{
-		SburbConnection c = SkaianetHandler.getMainConnection(UsernameHandler.encode(player.getCommandSenderName()), true);
+		SburbConnection c = SkaianetHandler.getMainConnection(UsernameHandler.encode(player), true);
 		return c == null || !c.enteredGame() ? this.dimensionId : c.getClientDimension();
 	}
 	
