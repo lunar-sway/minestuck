@@ -39,6 +39,8 @@ public class MinestuckBlocks
 	public static Block goldOreSandstone;
 	public static Block goldOreSandstoneRed;
 	
+	public static Block primedTnt;
+	
 	public static Block blockOil;
 	public static Block blockBlood;
 	public static Block blockBrainJuice;
@@ -72,6 +74,7 @@ public class MinestuckBlocks
 		returnNode = GameRegistry.registerBlock(new BlockReturnNode(), null, "return_node");
 		gate = GameRegistry.registerBlock(new BlockGate(), null, "gate");
 		glowingMushroom = (BlockGlowingMushroom) GameRegistry.registerBlock(new BlockGlowingMushroom(), "glowing_mushroom");
+		primedTnt = GameRegistry.registerBlock(new BlockPrimedTNT(), "primed_tnt");
 		//fluids
 		fluidOil = new Fluid("Oil", new ResourceLocation("minestuck", "blocks/OilStill"), new ResourceLocation("minestuck", "blocks/OilFlowing"));
 		FluidRegistry.registerFluid(fluidOil);

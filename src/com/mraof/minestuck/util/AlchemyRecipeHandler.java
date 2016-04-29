@@ -493,6 +493,8 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Blocks.cobblestone), new ItemStack(Items.lava_bucket), MODE_AND, new ItemStack(Blocks.netherrack));
 		CombinationRegistry.addCombination(new ItemStack(Items.emerald), new ItemStack(Items.coal), MODE_AND, new ItemStack(Items.diamond));
 		CombinationRegistry.addCombination(new ItemStack(Items.emerald), new ItemStack(Items.dye, 1, EnumDyeColor.BLUE.getDyeDamage()), MODE_AND, new ItemStack(Items.diamond));
+		CombinationRegistry.addCombination(new ItemStack(Items.potionitem, 1, 0), new ItemStack(Items.enchanted_book), MODE_OR, true, false, new ItemStack(Items.experience_bottle));
+		CombinationRegistry.addCombination(new ItemStack(Items.glass_bottle), new ItemStack(Items.enchanted_book), MODE_OR, true, false, new ItemStack(Items.experience_bottle));
 	}
 	
 	public static void registerMinestuckRecipes() {
@@ -594,6 +596,7 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(candy, 1, 0), new GristSet(new GristType[] {GristType.Chalk, GristType.Sulfur, GristType.Iodine}, new int[] {1, 1, 1}));
 		for(int i = 0; i < 21; i++)
 			GristRegistry.addGristConversion(new ItemStack(candy, 1, i+1), new GristSet(GristType.values()[i], 3));
+		GristRegistry.addGristConversion(primedTnt, new GristSet(new GristType[] {GristType.Build, GristType.Chalk, GristType.Sulfur}, new int[] {8, 10, 14}));
 		
 		//add Designix combinations
 		CombinationRegistry.addCombination(new ItemStack(Items.stone_sword), new ItemStack(Items.rotten_flesh), MODE_AND, false, true, new ItemStack(ninjaSword));
@@ -668,7 +671,8 @@ public class AlchemyRecipeHandler
 		
 		CombinationRegistry.addCombination(new ItemStack(fork), new ItemStack(component, 1, 2), MODE_AND, false, true, new ItemStack(skaiaFork));
 		CombinationRegistry.addCombination(new ItemStack(fork),new ItemStack(woodenSpoon),MODE_OR, false, false, new ItemStack(spork));
-		
+		CombinationRegistry.addCombination(new ItemStack(Blocks.tnt), new ItemStack(Blocks.stone_button), MODE_OR, new ItemStack(primedTnt));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.tnt), new ItemStack(Blocks.wooden_button), MODE_OR, new ItemStack(primedTnt));
 		
 		//Register chest loot
 		if(MinestuckConfig.cardLoot)

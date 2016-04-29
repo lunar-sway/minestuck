@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockTNT;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.ItemModelMesher;
@@ -147,6 +148,7 @@ public class MinestuckModelManager
 		for(BlockMachine.MachineType type : BlockMachine.MachineType.values())
 			register(blockMachine, type.ordinal(), "machine_"+type.getName());
 		register(glowingMushroom);
+		register(primedTnt);
 		
 	}
 	
@@ -194,6 +196,7 @@ public class MinestuckModelManager
 		ModelLoader.setCustomStateMapper(blockOil, (new StateMap.Builder()).addPropertiesToIgnore(BlockFluidBase.LEVEL).build());
 		ModelLoader.setCustomStateMapper(blockBlood, (new StateMap.Builder()).addPropertiesToIgnore(BlockFluidBase.LEVEL).build());
 		ModelLoader.setCustomStateMapper(blockBrainJuice, (new StateMap.Builder()).addPropertiesToIgnore(BlockFluidBase.LEVEL).build());
+		ModelLoader.setCustomStateMapper(primedTnt, (new StateMap.Builder()).addPropertiesToIgnore(BlockTNT.EXPLODE).build());
 		ModelLoader.setCustomStateMapper(returnNode, new IStateMapper()
 		{
 			@Override
