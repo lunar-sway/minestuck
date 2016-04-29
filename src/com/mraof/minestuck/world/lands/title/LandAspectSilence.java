@@ -63,7 +63,7 @@ public class LandAspectSilence extends TitleLandAspect
 		@Override
 		public boolean canPlace(BlockPos pos, World world)
 		{
-			return !world.getBlockState(pos).getBlock().getMaterial().isLiquid();
+			return !world.getBlockState(pos.down()).getBlock().getMaterial().isLiquid();
 		}
 	}
 }
