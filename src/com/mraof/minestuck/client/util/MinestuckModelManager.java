@@ -149,6 +149,8 @@ public class MinestuckModelManager
 			register(blockMachine, type.ordinal(), "machine_"+type.getName());
 		register(glowingMushroom);
 		register(primedTnt);
+		register(unstableTnt);
+		register(instantTnt);
 		
 	}
 	
@@ -197,6 +199,8 @@ public class MinestuckModelManager
 		ModelLoader.setCustomStateMapper(blockBlood, (new StateMap.Builder()).addPropertiesToIgnore(BlockFluidBase.LEVEL).build());
 		ModelLoader.setCustomStateMapper(blockBrainJuice, (new StateMap.Builder()).addPropertiesToIgnore(BlockFluidBase.LEVEL).build());
 		ModelLoader.setCustomStateMapper(primedTnt, (new StateMap.Builder()).addPropertiesToIgnore(BlockTNT.EXPLODE).build());
+		ModelLoader.setCustomStateMapper(unstableTnt, (new StateMap.Builder()).addPropertiesToIgnore(BlockTNT.EXPLODE).build());
+		ModelLoader.setCustomStateMapper(instantTnt, (new StateMap.Builder()).addPropertiesToIgnore(BlockTNT.EXPLODE).build());
 		ModelLoader.setCustomStateMapper(returnNode, new IStateMapper()
 		{
 			@Override

@@ -597,6 +597,8 @@ public class AlchemyRecipeHandler
 		for(int i = 0; i < 21; i++)
 			GristRegistry.addGristConversion(new ItemStack(candy, 1, i+1), new GristSet(GristType.values()[i], 3));
 		GristRegistry.addGristConversion(primedTnt, new GristSet(new GristType[] {GristType.Build, GristType.Chalk, GristType.Sulfur}, new int[] {8, 10, 14}));
+		GristRegistry.addGristConversion(unstableTnt, new GristSet(new GristType[] {GristType.Build, GristType.Chalk, GristType.Sulfur}, new int[] {5, 11, 15}));
+		GristRegistry.addGristConversion(instantTnt, new GristSet(new GristType[] {GristType.Build, GristType.Chalk, GristType.Sulfur}, new int[] {6, 11, 17}));
 		
 		//add Designix combinations
 		CombinationRegistry.addCombination(new ItemStack(Items.stone_sword), new ItemStack(Items.rotten_flesh), MODE_AND, false, true, new ItemStack(ninjaSword));
@@ -673,6 +675,9 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(fork),new ItemStack(woodenSpoon),MODE_OR, false, false, new ItemStack(spork));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.tnt), new ItemStack(Blocks.stone_button), MODE_OR, new ItemStack(primedTnt));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.tnt), new ItemStack(Blocks.wooden_button), MODE_OR, new ItemStack(primedTnt));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.tnt), new ItemStack(Blocks.redstone_torch), MODE_OR, new ItemStack(unstableTnt));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.tnt), new ItemStack(Items.potionitem, 1, 8236), MODE_OR, true, true, new ItemStack(instantTnt));	//Instant damage potions
+		CombinationRegistry.addCombination(new ItemStack(Blocks.tnt), new ItemStack(Items.potionitem, 1, 8268), MODE_OR, true, true, new ItemStack(instantTnt));
 		
 		//Register chest loot
 		if(MinestuckConfig.cardLoot)
