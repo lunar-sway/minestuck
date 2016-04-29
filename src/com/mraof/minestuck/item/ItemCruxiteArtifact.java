@@ -114,7 +114,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 						IBlockState block = worldserver0.getBlockState(pos);
 						TileEntity te = worldserver0.getTileEntity(pos);
 						long t = System.currentTimeMillis();
-						if(block.getBlock() != Blocks.bedrock)
+						if(block.getBlock() != Blocks.bedrock && block.getBlock() != Blocks.portal)
 						{
 							copyBlockDirect(chunk, chunk2, blockX & 15, blockY + yDiff, blockY, blockZ & 15);
 						}
