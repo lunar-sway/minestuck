@@ -90,6 +90,7 @@ public class ComputerData
 	public int getY(){return y;}
 	public int getZ() {return z;}
 	public int getDimension() {return dimension;}
+	public PlayerIdentifier getOwner() {return owner;}
 	@SideOnly(Side.CLIENT) public int getOwnerId() {return ownerId;}
 	
 	@Override
