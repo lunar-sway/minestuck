@@ -231,17 +231,22 @@ public class EntityDecoy extends EntityLiving {
 	}
 	
 	@Override
-	public ItemStack getEquipmentInSlot(int i) {
+	public ItemStack getEquipmentInSlot(int i)
+	{
 		if(i == 0)
 			return inventory.mainInventory[inventory.currentItem];
-		else return inventory.armorInventory[i-1];
+		else if(i > 0 && i <= inventory.armorInventory.length)
+			return inventory.armorInventory[i-1];
+		else return null;
 	}
 
 	@Override
-	public void setCurrentItemOrArmor(int i, ItemStack itemstack) {
+	public void setCurrentItemOrArmor(int i, ItemStack itemstack)
+	{
 		if(i == 0)
 			inventory.mainInventory[inventory.currentItem] = itemstack;
-		else inventory.armorInventory[i-1] = itemstack;
+		else if(i > 0 && i <= inventory.armorInventory.length)
+			inventory.armorInventory[i-1] = itemstack;
 	}
 	
 	@Override
