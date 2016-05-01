@@ -61,13 +61,13 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 		{
 			SburbConnection c = SkaianetHandler.getMainConnection(UsernameHandler.encode(player), true);
 			
-			int destinationId;
-			if(c != null && c.enteredGame())
-				destinationId = c.getClientDimension();
-			else destinationId = LandAspectRegistry.createLand(player);
-			
 			if(c == null || !c.enteredGame() || !MinestuckDimensionHandler.isLandDimension(player.worldObj.provider.getDimensionId()))
 			{
+				int destinationId;
+				if(c != null && c.enteredGame())
+					destinationId = c.getClientDimension();
+				else destinationId = LandAspectRegistry.createLand(player);
+				
 				player.triggerAchievement(MinestuckAchievementHandler.enterMedium);
 				Teleport.teleportEntity(player, destinationId, this, false);
 				MinestuckPlayerTracker.sendLandEntryMessage(player);

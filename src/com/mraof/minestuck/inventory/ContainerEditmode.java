@@ -17,7 +17,6 @@ import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.MinestuckPlayerData;
-import com.mraof.minestuck.util.UsernameHandler;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -119,7 +118,7 @@ public class ContainerEditmode extends Container
 			else if(stack.getItem().equals(MinestuckItems.captchaCard) && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact)
 				if(c.enteredGame())
 					iter.remove();
-				else stack.setTagCompound(AlchemyRecipeHandler.createCard(SburbHandler.getEntryItem(UsernameHandler.encode(player)), true).getTagCompound());
+				else stack.setTagCompound(AlchemyRecipeHandler.createCard(SburbHandler.getEntryItem(c.getClientIdentifier()), true).getTagCompound());
 			else if(stack.getItem().equals(Item.getItemFromBlock(MinestuckBlocks.blockMachine)) && stack.getMetadata() == 0)
 			{
 				NBTTagCompound nbt = new NBTTagCompound();
