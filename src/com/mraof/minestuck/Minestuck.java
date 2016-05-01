@@ -150,6 +150,7 @@ public class Minestuck
 		
 		BiomeGenMinestuck.mediumNormal = new BiomeGenMinestuck(biomeIdStart, true).setBiomeName("The Medium");
 		BiomeGenMinestuck.mediumOcean = new BiomeGenMinestuck(biomeIdStart+1, true).setBiomeName("The Medium (Ocean)");
+		BiomeGenMinestuck.mediumRough = new BiomeGenMinestuck(biomeIdStart+2, true).setBiomeName("The Medium (Rough)");
 		
 		//register ore generation
 		OreHandler oreHandler = new OreHandler();

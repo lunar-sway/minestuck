@@ -23,15 +23,15 @@ public class GenLayerLands extends GenLayer
 	}
 	
 	@Override
-	public int[] getInts(int areaX, int areaZ, int areaWidth, int areaHeight)
+	public int[] getInts(int areaX, int areaY, int areaWidth, int areaHeight)
 	{
 		int[] biomeGen = IntCache.getIntCache(areaWidth * areaHeight);
 		
 		for(int x = 0; x < areaWidth; x++)
-			for(int z = 0; z < areaHeight; z++)
+			for(int y = 0; y < areaHeight; y++)
 			{
-				initChunkSeed(areaX + x, areaZ + z);
-				biomeGen[x + z*areaWidth] = BiomeGenMinestuck.mediumNormal.biomeID + (nextInt(Integer.MAX_VALUE) >= oceanChance ? 0 : 1);
+				initChunkSeed(areaX + x, areaY + y);
+				biomeGen[x + y*areaWidth] = BiomeGenMinestuck.mediumNormal.biomeID + (nextInt(Integer.MAX_VALUE) >= oceanChance ? 0 : 1);
 			}
 		return biomeGen;
 	}
@@ -40,6 +40,7 @@ public class GenLayerLands extends GenLayer
 	{
 		GenLayer layerLands = new GenLayerLands(413L);
 		GenLayer layer = new GenLayerZoom(1000L, layerLands);
+		layer = new GenLayerLandRough(414L, layerLands);
 		layer = new GenLayerZoom(1001L, layer);
 		layer = new GenLayerZoom(1002L, layer);
 		layer = new GenLayerZoom(1003L, layer);

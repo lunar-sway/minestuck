@@ -2,7 +2,6 @@ package com.mraof.minestuck.world.lands.gen;
 
 import java.util.Random;
 
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.biome.BiomeGenMinestuck;
 import com.mraof.minestuck.world.gen.NoiseGeneratorTriangle;
 
@@ -13,8 +12,8 @@ import net.minecraft.world.gen.NoiseGeneratorOctaves;
 public class DefaultTerrainGen extends LandTerrainGenBase
 {
 	
-	public float normalHeight = 0.4F, oceanHeight = -0.2F;
-	public float normalVariation = 0.6F, oceanVariation = 0.2F;
+	public float normalHeight    = 0.4F, oceanHeight    = -0.2F, roughHeight = 0.5F;
+	public float normalVariation = 0.6F, oceanVariation =  0.2F, roughtVariation = 0.8F;
 	
 	protected NoiseGeneratorOctaves noiseGens[] = new NoiseGeneratorOctaves[2];
 	protected NoiseGeneratorTriangle noiseGeneratorTriangle;
