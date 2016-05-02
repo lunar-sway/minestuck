@@ -442,8 +442,9 @@ public class GuiDataChecker extends GuiScreen
 					list.add(new LocalizedTextField("land.message.format", new LocalizedObject("land."+connectionTag.getString("aspect1")), new LocalizedObject("land."+connectionTag.getString("aspect2"))));
 				if(connectionTag.hasKey("class"))
 				{
-					String titleClass = "title."+EnumClass.values()[connectionTag.getByte("class")].toString();
-					String titleAspect = "title."+EnumAspect.values()[connectionTag.getByte("aspect")].toString();
+					byte cl = connectionTag.getByte("class"), as = connectionTag.getByte("aspect");
+					String titleClass = cl == -1 ? "Unknown" : "title."+EnumClass.values()[cl].toString();
+					String titleAspect = as == -1 ? "Unknown" : "title."+EnumAspect.values()[as].toString();
 					list.add(new LocalizedTextField("title.format", new LocalizedObject(titleClass), new LocalizedObject(titleAspect)));
 				}
 				

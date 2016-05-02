@@ -396,8 +396,8 @@ public class SessionHandler {
 							}
 						}
 						Title title = MinestuckPlayerData.getTitle(c.getClientIdentifier());
-						connectionTag.setByte("class", (byte) title.getHeroClass().ordinal());
-						connectionTag.setByte("aspect", (byte) title.getHeroAspect().ordinal());
+						connectionTag.setByte("class", title == null ? -1 : (byte) title.getHeroClass().ordinal());
+						connectionTag.setByte("aspect", title == null ? -1 : (byte) title.getHeroAspect().ordinal());
 					} else if(session.predefinedPlayers.containsKey(c.getClientIdentifier()))
 					{
 						PredefineData data = session.predefinedPlayers.get(c.getClientIdentifier());
