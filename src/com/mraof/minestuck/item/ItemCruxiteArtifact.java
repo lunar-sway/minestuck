@@ -15,6 +15,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatStyle;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
@@ -57,21 +60,29 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 	
 	protected void onArtifactActivated(World world, EntityPlayer player)
 	{
-		if(!world.isRemote && player.worldObj.provider.getDimensionId() != -1)
+		try
 		{
-			SburbConnection c = SkaianetHandler.getMainConnection(UsernameHandler.encode(player), true);
-			
-			if(c == null || !c.enteredGame() || !MinestuckDimensionHandler.isLandDimension(player.worldObj.provider.getDimensionId()))
+			if(!world.isRemote && player.worldObj.provider.getDimensionId() != -1)
 			{
-				int destinationId;
-				if(c != null && c.enteredGame())
-					destinationId = c.getClientDimension();
-				else destinationId = LandAspectRegistry.createLand(player);
+				SburbConnection c = SkaianetHandler.getMainConnection(UsernameHandler.encode(player), true);
 				
-				player.triggerAchievement(MinestuckAchievementHandler.enterMedium);
-				Teleport.teleportEntity(player, destinationId, this, false);
-				MinestuckPlayerTracker.sendLandEntryMessage(player);
+				if(c == null || !c.enteredGame() || !MinestuckDimensionHandler.isLandDimension(player.worldObj.provider.getDimensionId()))
+				{
+					int destinationId;
+					if(c != null && c.enteredGame())
+						destinationId = c.getClientDimension();
+					else destinationId = LandAspectRegistry.createLand(player);
+					
+					player.triggerAchievement(MinestuckAchievementHandler.enterMedium);
+					Teleport.teleportEntity(player, destinationId, this, false);
+					MinestuckPlayerTracker.sendLandEntryMessage(player);
+				}
 			}
+		} catch(Exception e)
+		{
+			Debug.printf("Exception when %s tried to enter their land:", player.getCommandSenderName());
+			e.printStackTrace();
+			player.addChatMessage(new ChatComponentText("[Minestuck] Something went wrong during entry. "+ (Minestuck.isServerRunning?"Check the console for the error message.":"Notify the server owner about this.")).setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
 		}
 	}
 	
