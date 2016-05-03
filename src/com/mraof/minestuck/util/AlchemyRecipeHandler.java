@@ -749,8 +749,7 @@ public class AlchemyRecipeHandler
 		}
 		catch(Exception e) 
 		{
-			e.printStackTrace();
-			Debug.print("Exception while getting things for mod \"IronChest\".");
+			Debug.logger.warn("Exception while getting things for mod \"IronChest\".", e);
 		}
 		
 		
@@ -856,7 +855,7 @@ public class AlchemyRecipeHandler
 		recipeList = new HashMap<List<Object>, Object>();
 		int invalid = 0;
 		
-		Debug.print("Looking for dynamic grist conversions...");
+		Debug.debug("Looking for dynamic grist conversions...");
 		for (Object recipe : CraftingManager.getInstance().getRecipeList())
 		{
 			try
@@ -884,30 +883,31 @@ public class AlchemyRecipeHandler
 			}
 			catch (NullPointerException e)
 			{
-				Debug.printf("a null pointer exception was thrown for %s", recipe);
+				Debug.warnf("a null pointer exception was thrown for %s", recipe);
 			}
 		}
-		Debug.print("Found "+recipeList.size()+" valid recipes, and "+invalid+" unknown ones.");
+		Debug.info("Found "+recipeList.size()+" valid recipes, and "+invalid+" unknown ones.");
 		
-		Debug.print("Calculating grist conversion...");
+		Debug.debug("Calculating grist conversion...");
 		Iterator<Entry<List<Object>, Object>> it = recipeList.entrySet().iterator();
-        while (it.hasNext()) {
-        	Map.Entry<List<Object>, Object> pairs = it.next();
-        	//Debug.print("Getting recipe with key"+pairs.getKey()+" and value "+pairs.getValue());
+		while (it.hasNext())
+		{
+			Map.Entry<List<Object>, Object> pairs = it.next();
+			//Debug.print("Getting recipe with key"+pairs.getKey()+" and value "+pairs.getValue());
 			lookedOver = new HashMap<List<Object>, Boolean>();
 			try
 			{
 				getRecipe(pairs.getValue());
 			} catch(Exception e)
 			{
-				Debug.printf("Failed to look over recipe \"%s\" for \"%s\":%d. Cause:", pairs.getValue(), pairs.getKey().get(0), pairs.getKey().get(1));
+				Debug.warnf("Failed to look over recipe \"%s\" for \"%s\":%d. Cause:", pairs.getValue(), pairs.getKey().get(0), pairs.getKey().get(1));
 				e.printStackTrace();
 			}
-        }
+		}
 		
 		registerRecipes(new Minegicka3Support(), "minegicka3", true);
 		
-		Debug.print("Done. Added "+returned+" grist conversions.");
+		Debug.info("Added "+returned+" grist conversions.");
 	}
 	
 	private static boolean getRecipe(Object recipe) {
@@ -1110,8 +1110,7 @@ public class AlchemyRecipeHandler
 		}
 		catch(Exception e)
 		{
-			Debug.print("Exception while creating"+(dynamic?" dynamic":"")+" recipes for mod \""+modname+"\":");
-			e.printStackTrace();
+			Debug.logger.error("Exception while creating"+(dynamic?" dynamic":"")+" recipes for mod \""+modname+"\":", e);
 		}
 	}
 	

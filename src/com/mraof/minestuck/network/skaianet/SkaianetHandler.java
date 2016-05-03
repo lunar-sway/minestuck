@@ -195,7 +195,7 @@ public class SkaianetHandler {
 					te.latestmessage.put(1, "computer.messageResumeStop");
 					te.getWorld().markBlockForUpdate(te.getPos());
 				}
-			} else Debug.print("[SKAIANET] Got disconnect request but server is not open! "+player);
+			} else Debug.warn("[SKAIANET] Got disconnect request but server is not open! "+player);
 		} else {
 			SburbConnection c = isClient?getConnection(player, otherPlayer):getConnection(otherPlayer, player);
 			if(c != null)
@@ -267,10 +267,12 @@ public class SkaianetHandler {
 			c.server = player;
 			c.isActive = true;
 		}
-		if(newConnection){
+		if(newConnection)
+		{
 			String s = SessionHandler.onConnectionCreated(c);
-			if(s != null) {
-				Debug.print("SessionHandler denied, reason:"+s);
+			if(s != null)
+			{
+				Debug.warnf("SessionHandler denied connection between %s and %s, reason: %s", c.getClientIdentifier().getUsername(), c.getServerIdentifier().getUsername(), s);
 				connections.remove(c);
 				TileEntityComputer cte = getComputer(c.client);
 				if(cte != null)
@@ -304,14 +306,14 @@ public class SkaianetHandler {
 			c2.getWorld().markBlockForUpdate(c2.getPos());
 	}
 	
-	public static void requestInfo(PlayerIdentifier p0, PlayerIdentifier p1)
+	public static void requestInfo(EntityPlayer player, PlayerIdentifier p1)
 	{
 		checkData();
+		PlayerIdentifier p0 = UsernameHandler.encode(player);
 		PlayerIdentifier[] s = infoToSend.get(p0);
-		EntityPlayerMP player = p0.getPlayer();
-		if(s == null || player == null)
+		if(s == null)
 		{
-			Debug.print("[SKAIANET] Player \"" + p0 + "\" sent a request without being online!");
+			Debug.error("[SKAIANET] Something went wrong with player \"" + player.getCommandSenderName() + "\"'s skaianet data!");
 			return;
 		}
 		if(MinestuckConfig.privateComputers && !p0.equals(p1) && MinecraftServer.getServer().getConfigurationManager().getOppedPlayers().getEntry(player.getGameProfile()) == null)
@@ -324,7 +326,7 @@ public class SkaianetHandler {
 			if(s[i] == null)
 				break;
 			if(s[i].equals(p1)){
-				Debug.print("[Skaianet] Player already got the requested data.");
+				Debug.warnf("[Skaianet] Player %s already got the requested data.", player.getCommandSenderName());
 				updatePlayer(p0);	//Update anyway, to fix whatever went wrong
 				return;
 			}
@@ -385,7 +387,7 @@ public class SkaianetHandler {
 				if(session.isCustom())
 				{
 					if(SessionHandler.sessionsByName.containsKey(session.name))
-						Debug.printf("A session with a duplicate name has been loaded! (Session '%s') Either a bug or someone messing with the data file.", session.name);
+						Debug.warnf("A session with a duplicate name has been loaded! (Session '%s') Either a bug or someone messing with the data file.", session.name);
 					SessionHandler.sessionsByName.put(session.name, session);
 				}
 			}
@@ -476,7 +478,7 @@ public class SkaianetHandler {
 						|| !(i == iter1[1] && getComputer(data).getData(0).getBoolean("isResuming")
 								|| i != iter1[1] && getComputer(data).getData(1).getBoolean("isOpen")))
 				{
-					Debug.print("[SKAIANET] Invalid computer in waiting list!");
+					Debug.warn("[SKAIANET] Invalid computer in waiting list!");
 					i.remove();
 				}
 			}
@@ -487,7 +489,7 @@ public class SkaianetHandler {
 			SburbConnection c = iter2.next();
 			if(c.getClientIdentifier() == null || c.getServerIdentifier() == null)
 			{
-				Debug.print("Found a broken connection with the client \""+c.getClientIdentifier()+"\" and server \""+c.getServerIdentifier()+". If this message continues to show up, something isn't working as it should.");
+				Debug.warn("Found a broken connection with the client \""+c.getClientIdentifier()+"\" and server \""+c.getServerIdentifier()+". If this message continues to show up, something isn't working as it should.");
 				iter2.remove();
 				continue;
 			}
@@ -604,7 +606,7 @@ public class SkaianetHandler {
 			c = getClientConnection(username);
 			if(c == null)
 			{
-				Debug.print("Player entered without connection. Creating connection with self... "+dimensionId);
+				Debug.infof("Player %s entered without connection. Creating connection with self... ", player.getCommandSenderName());
 				c = new SburbConnection();
 				c.isActive = false;
 				c.isMain = true;

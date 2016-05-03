@@ -19,7 +19,7 @@ public class GenLayerLands extends GenLayer
 	public void setOceanChance(float oceanChance)
 	{
 		this.oceanChance = (int) (Integer.MAX_VALUE*oceanChance);
-		Debug.printf("Ocean chance: %f. Computed to %d out of %d.", oceanChance, this.oceanChance, Integer.MAX_VALUE);
+		Debug.debugf("Ocean chance: %f. Computed to %d out of %d.", oceanChance, this.oceanChance, Integer.MAX_VALUE);
 	}
 	
 	@Override

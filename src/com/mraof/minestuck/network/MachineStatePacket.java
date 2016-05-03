@@ -5,7 +5,6 @@ import io.netty.buffer.ByteBuf;
 import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.relauncher.Side;
 
 import com.mraof.minestuck.inventory.ContainerMachine;
@@ -39,10 +38,14 @@ public class MachineStatePacket extends MinestuckPacket {
 	@Override
 	public void execute(EntityPlayer player)
 	{
-		TileEntityMachine te = ((ContainerMachine) ((EntityPlayerMP)player).openContainer).tileEntity;
+		if(!(player.openContainer instanceof ContainerMachine))
+			return;
 		
-		if (te == null) {
-			Debug.print("Invalid TE!");
+		TileEntityMachine te = ((ContainerMachine) player.openContainer).tileEntity;
+		
+		if (te == null)
+		{
+			Debug.warnf("Invalid TE in container for player %s!", player.getCommandSenderName());
 		}
 		else
 		{

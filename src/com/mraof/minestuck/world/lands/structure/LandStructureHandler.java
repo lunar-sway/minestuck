@@ -129,7 +129,7 @@ public class LandStructureHandler extends MapGenStructure
 			}
 			catch(Exception e)
 			{
-				Debug.print("Failed to create structure for "+structureStart.getName());
+				Debug.error("Failed to create structure for "+structureStart.getName());
 				throw new IllegalStateException(e);	//The best exception I can think about right now.
 			}
 		}
@@ -181,7 +181,7 @@ public class LandStructureHandler extends MapGenStructure
 			else
 			{
 				nodePos = decoratorPos;
-				Debug.print("Spawning special node at: "+nodePos);
+				Debug.debug("Spawning special node at: "+nodePos);
 				}
 			
 			for(int i = 0; i < 4; i++)

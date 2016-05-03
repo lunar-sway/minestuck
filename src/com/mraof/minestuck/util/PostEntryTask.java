@@ -53,7 +53,7 @@ public class PostEntryTask
 		
 		if(world == null)
 		{
-			Debug.printf("Couldn't find world for dimension %d when performing post entry preparations! Cancelling task.", dimension);
+			Debug.errorf("Couldn't find world for dimension %d when performing post entry preparations! Cancelling task.", dimension);
 			return true;
 		}
 		
@@ -86,11 +86,11 @@ public class PostEntryTask
 				}
 			}
 			
-			Debug.printf("Completed entry block updates for dimension %d.", dimension);
+			Debug.infof("Completed entry block updates for dimension %d.", dimension);
 			return true;
 		}
 		
-		Debug.printf("Updated %d blocks this tick.", index - preIndex);
+		Debug.debugf("Updated %d blocks this tick.", index - preIndex);
 		return false;
 	}
 	

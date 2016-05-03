@@ -638,6 +638,6 @@ public class SburbHandler
 	{
 		Random rand = new Random(Minestuck.worldSeed^c.getClientIdentifier().hashCode());
 		c.artifactType = rand.nextInt(2);
-		Debug.print("Randomized type to be: "+c.artifactType);
+		Debug.infof("Randomized artifact type to be: %d for player %s.", c.artifactType, c.getClientIdentifier().getUsername());
 	}
 }

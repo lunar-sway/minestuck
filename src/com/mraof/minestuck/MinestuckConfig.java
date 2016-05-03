@@ -111,7 +111,7 @@ public class MinestuckConfig
 		MinestuckAchievementHandler.idOffset = config.get("IDs", "statsIdStart", 413).setRequiresMcRestart(true).setLanguageKey("minestuck.config.statsIdStart").getInt();
 		config.getCategory("IDs").setLanguageKey("minestuck.config.IDs");
 		
-		Debug.isDebugMode = config.get("General", "Print Debug Messages", true, "Whenether the game should print debug messages or not.").setShowInGui(false).getBoolean();
+		//Debug.isDebugMode = config.get("General", "Print Debug Messages", true, "Whenether the game should print debug messages or not.").setShowInGui(false).getBoolean();
 		
 		cardLoot = config.get("General", "cardLoot", false, "Set this to true to make captcha cards appear in dungeon and stronghold chests.").setLanguageKey("minestuck.config.cardLoot").setRequiresMcRestart(true).getBoolean();
 		

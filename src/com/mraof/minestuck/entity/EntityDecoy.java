@@ -117,7 +117,7 @@ public class EntityDecoy extends EntityLiving {
 		}
 		catch(NoSuchMethodError e)
 		{
-			Debug.print("Custom constructor detected for FoodStats. Trying with player as parameter...");
+			Debug.info("Custom constructor detected for FoodStats. Trying with player as parameter...");
 			try
 			{
 				foodStats = FoodStats.class.getConstructor(EntityPlayer.class).newInstance(player);

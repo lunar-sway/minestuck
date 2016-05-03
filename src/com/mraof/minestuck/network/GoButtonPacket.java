@@ -5,7 +5,6 @@ import io.netty.buffer.ByteBuf;
 import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.relauncher.Side;
 
 import com.mraof.minestuck.inventory.ContainerMachine;
@@ -41,12 +40,14 @@ public class GoButtonPacket extends MinestuckPacket
 	{
 		if(!(player.openContainer instanceof ContainerMachine))
 			return;
-		TileEntityMachine te = ((ContainerMachine) ((EntityPlayerMP)player).openContainer).tileEntity;
+		TileEntityMachine te = ((ContainerMachine) player.openContainer).tileEntity;
 		
-		if (te == null) {
-			Debug.print("Invalid TE!");
-		} else {
-			Debug.print("Button pressed. Alchemiter going!");
+		if (te == null)
+		{
+			Debug.warnf("Invalid TE in container for player %s!", player.getCommandSenderName());
+		} else
+		{
+			Debug.debug("Button pressed. Alchemiter going!");
 			te.ready = newMode;
 			te.overrideStop = overrideStop;
 		}

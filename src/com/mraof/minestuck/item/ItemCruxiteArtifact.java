@@ -80,8 +80,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 			}
 		} catch(Exception e)
 		{
-			Debug.printf("Exception when %s tried to enter their land:", player.getCommandSenderName());
-			e.printStackTrace();
+			Debug.logger.error("Exception when "+player.getCommandSenderName()+" tried to enter their land.", e);
 			player.addChatMessage(new ChatComponentText("[Minestuck] Something went wrong during entry. "+ (Minestuck.isServerRunning?"Check the console for the error message.":"Notify the server owner about this.")).setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
 		}
 	}
@@ -90,6 +89,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 	{
 		if(entity instanceof EntityPlayerMP)
 		{
+			Debug.infof("Starting entry for player %s", entity.getCommandSenderName());
 			int x = (int) entity.posX;
 			if(entity.posX < 0) x--;
 			int y = (int) entity.posY;
@@ -100,12 +100,12 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 			int yDiff = 128 - topY;
 			MinestuckDimensionHandler.setSpawn(worldserver1.provider.getDimensionId(), new BlockPos(x, y + yDiff, z));	//Set again, but with a more precise now that the y-coordinate is properly decided.
 			
-			Debug.print("Loading spawn chunks...");
+			Debug.debug("Loading spawn chunks...");
 			for(int chunkX = ((x - artifactRange) >> 4) - 1; chunkX <= ((x + artifactRange) >> 4) + 2; chunkX++)	//Prevent anything to generate on the piece that we move
 				for(int chunkZ = ((z - artifactRange) >> 4) - 1; chunkZ <= ((z + artifactRange) >> 4) + 2; chunkZ++)	//from the overworld.
 					worldserver1.theChunkProviderServer.loadChunk(chunkX, chunkZ);
 			
-			Debug.print("Placing blocks...");
+			Debug.debug("Placing blocks...");
 			long time = System.currentTimeMillis();
 			int bl = 0;
 			int nextZWidth = 0;
@@ -152,9 +152,9 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 			}
 			
 			int total = (int) (System.currentTimeMillis() - time);
-			Debug.printf("Total: %d, block: %d", total, bl);
+			Debug.debugf("Total: %d, block: %d", total, bl);
 			
-			Debug.print("Teleporting entities...");
+			Debug.debug("Teleporting entities...");
 			List<?> list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().expand((double)artifactRange, artifactRange, (double)artifactRange));
 			Iterator<?> iterator = list.iterator();
 			
@@ -180,7 +180,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 				}
 			}
 			
-			Debug.print("Removing old blocks...");
+			Debug.debug("Removing old blocks...");
 			for(int blockX = x - artifactRange; blockX <= x + artifactRange; blockX++)
 			{
 				int zWidth = (int) Math.sqrt(artifactRange * artifactRange - (blockX - x) * (blockX - x));
@@ -206,7 +206,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 			}
 			SkaianetHandler.clearMovingList();
 			
-			Debug.print("Removing entities created from removing blocks...");	//Normally only items in containers
+			Debug.debug("Removing entities created from removing blocks...");	//Normally only items in containers
 			list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().expand((double)artifactRange, artifactRange, (double)artifactRange));
 			iterator = list.iterator();
 			while (iterator.hasNext())
@@ -219,7 +219,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 						e.setDead();
 				}
 			
-			Debug.print("Placing gates...");
+			Debug.debug("Placing gates...");
 			
 			GateHandler.findGatePlacement(worldserver1);
 			placeGate(1, new BlockPos(x, GateHandler.gateHeight1, z), worldserver1);
@@ -227,7 +227,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 			
 			ServerEventHandler.tickTasks.add(new PostEntryTask(worldserver1.provider.getDimensionId(), x, y + yDiff, z, artifactRange, (byte) 0));
 			
-			Debug.print("Entry finished");
+			Debug.info("Entry finished");
 		}
 	}
 	
@@ -252,7 +252,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 	
 	private static int getTopHeight(WorldServer world, int x, int y, int z)
 	{
-		Debug.print("Getting maxY..");
+		Debug.debug("Getting maxY..");
 		int maxY = y;
 		for(int blockX = x - artifactRange; blockX <= x + artifactRange; blockX++)
 		{
@@ -269,7 +269,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 			}
 		}
 		
-		Debug.print("maxY: "+ maxY);
+		Debug.debug("maxY: "+ maxY);
 		return maxY;
 	}
 	

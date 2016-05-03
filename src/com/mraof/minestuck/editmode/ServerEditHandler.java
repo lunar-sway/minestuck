@@ -147,7 +147,7 @@ public class ServerEditHandler
 		SburbConnection c = SkaianetHandler.getClientConnection(computerTarget);
 		if(c != null && c.getServerIdentifier().equals(computerOwner) && getData(c) == null && getData(player) == null)
 		{
-			Debug.print("Activating edit mode on player \""+player.getCommandSenderName()+"\", target player: \""+computerTarget+"\".");
+			Debug.info("Activating edit mode on player \""+player.getCommandSenderName()+"\", target player: \""+computerTarget+"\".");
 			EntityDecoy decoy = new EntityDecoy((WorldServer) player.worldObj, player);
 			EditData data = new EditData(decoy, player, c);
 			if(!c.enteredGame()) {
@@ -498,7 +498,6 @@ public class ServerEditHandler
 			{
 				String c = event.command.getCommandName();
 				EntityPlayer target;
-				Debug.print(c);
 				if(c.equals("kill") || (c.equals("clear") || c.equals("spawnpoint")) && event.parameters.length == 0
 						|| c.equals("tp") && event.parameters.length != 2 && event.parameters.length != 4
 						|| c.equals("setworldspawn") && (event.parameters.length == 0 || event.parameters.length == 3))

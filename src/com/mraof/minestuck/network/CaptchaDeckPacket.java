@@ -139,7 +139,7 @@ public class CaptchaDeckPacket extends MinestuckPacket
 				CaptchaDeckHandler.clientSideModus = CaptchaDeckHandler.readFromNBT(nbt, true);
 				if(CaptchaDeckHandler.clientSideModus != null)
 					CaptchaDeckHandler.clientSideModus.getGuiHandler().updateContent();
-				else Debug.print("Lost modus");
+				else Debug.debug("Lost modus");
 //				}
 			}
 		}

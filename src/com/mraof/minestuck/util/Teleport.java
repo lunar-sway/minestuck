@@ -19,7 +19,7 @@ public class Teleport	//TODO Add method that takes a Location as parameter that 
 	{
 		if(entity instanceof EntityPlayerMP)
 		{
-			Debug.print("Teleporting player to dimension "+destinationDimension);
+			Debug.debug("Teleporting player to dimension "+destinationDimension);
 			EntityPlayerMP player = (EntityPlayerMP) entity;
 			int j = player.dimension;
 			WorldServer worldserver = player.mcServer.worldServerForDimension(player.dimension);

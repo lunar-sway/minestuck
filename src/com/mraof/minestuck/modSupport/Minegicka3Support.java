@@ -38,7 +38,7 @@ public class Minegicka3Support extends ModSupport
 	
 	public void registerDynamicRecipes() throws Exception
 	{
-		Debug.print("Adding minegicka 3 recipes...");
+		Debug.debug("Adding minegicka 3 recipes...");
 		Map<Integer, Object> recipes = ((Map<Integer, Object>) (Class.forName("com.williameze.minegicka3.mechanics.ClickCraft").getField("recipes").get(null)));
 		
 		recipes: for(Entry<Integer, Object> entry : (Set<Entry<Integer, Object>>) recipes.entrySet())

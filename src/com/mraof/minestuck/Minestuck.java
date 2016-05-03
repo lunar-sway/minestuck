@@ -54,6 +54,7 @@ import com.mraof.minestuck.tracker.ConnectionListener;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.ComputerProgram;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.KindAbstratusList;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.SburbClient;
@@ -106,6 +107,8 @@ public class Minestuck
 	public void preInit(FMLPreInitializationEvent event) 
 	{
 		isClientRunning = event.getSide().isClient();
+		
+		Debug.logger = event.getModLog();
 		
 		MinestuckConfig.loadConfigFile(event.getSuggestedConfigurationFile(), event.getSide());
 		

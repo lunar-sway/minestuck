@@ -81,7 +81,7 @@ public class SessionHandler {
 		{
 			singleSession = sessions.size() == 0;
 			if(!singleSession)
-				Debug.print("Not allowed to merge all sessions together! Global session temporarily disabled for this time.");
+				Debug.warn("Not allowed to merge all sessions together! Global session temporarily disabled for this time.");
 			return;
 		}
 		

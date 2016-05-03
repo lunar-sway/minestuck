@@ -121,7 +121,7 @@ public class LandAspectRegistry
 		
 		if(availableAspects.isEmpty())
 		{
-			Debug.printf("Failed to find a title land aspect compatible with \"%s\". Forced to use a poorly compatible land aspect instead.");
+			Debug.debugf("Failed to find a title land aspect compatible with \"%s\". Forced to use a poorly compatible land aspect instead.");
 			availableAspects.addAll(aspectList);
 		}
 		

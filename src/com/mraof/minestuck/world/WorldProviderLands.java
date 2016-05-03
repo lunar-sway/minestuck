@@ -74,7 +74,7 @@ public class WorldProviderLands extends WorldProvider
 			return spawn;
 		else
 		{
-			Debug.printf("Couldn't get special spawnpoint for dimension %d. This should not happen.", this.getDimensionId());
+			Debug.errorf("Couldn't get special spawnpoint for dimension %d. This should not happen.", this.getDimensionId());
 			return super.getSpawnPoint();
 		}
 	}
@@ -183,7 +183,7 @@ public class WorldProviderLands extends WorldProvider
 		}
 		else
 		{
-			Debug.print("Getting superclass fog color");
+			Debug.debug("Getting superclass fog color");
 			return super.getFogColor(par1, par2);
 		}
 	}

@@ -69,7 +69,7 @@ public class CommandTransportalizer extends CommandBase
 		TileEntity te = world.getTileEntity(location.pos);
 		if(te == null || !(te instanceof TileEntityTransportalizer))
 		{
-			Debug.print("Invalid transportalizer in map: " + code + " at " + location);
+			Debug.warn("Invalid transportalizer in map: " + code + " at " + location);
 			TileEntityTransportalizer.transportalizers.remove(code);
 			throw new CommandException("commands.tpz.notFound", code);
 		}

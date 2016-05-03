@@ -48,7 +48,7 @@ public class MinestuckPlayerTracker {
 	public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) 
 	{
 		EntityPlayer player = event.player;
-		Debug.print(player.getCommandSenderName()+" joined the game. Sending packets.");
+		Debug.debug(player.getCommandSenderName()+" joined the game. Sending packets.");
 		MinecraftServer server = MinecraftServer.getServer();
 		if(!server.isDedicatedServer() && UsernameHandler.host == null)
 			UsernameHandler.host = event.player.getCommandSenderName();
@@ -63,7 +63,7 @@ public class MinestuckPlayerTracker {
 		boolean firstTime = false;
 		if(MinestuckPlayerData.getGristSet(identifier) == null)
 		{
-			Debug.printf("Grist set is null for player %s. Handling it as first time in this world.", player.getCommandSenderName());
+			Debug.debugf("Grist set is null for player %s. Handling it as first time in this world.", player.getCommandSenderName());
 			MinestuckPlayerData.setGrist(identifier, new GristSet(GristType.Build, 20));
 			firstTime = true;
 		}
@@ -200,7 +200,7 @@ public class MinestuckPlayerTracker {
 	public static void updateLands(EntityPlayer player)
 	{
 		MinestuckPacket packet = MinestuckPacket.makePacket(Type.LANDREGISTER);
-		Debug.printf("Sending land packets to %s.", player == null ? "all players" : player.getCommandSenderName());
+		Debug.debugf("Sending land packets to %s.", player == null ? "all players" : player.getCommandSenderName());
 		if(player == null)
 			MinestuckChannelHandler.sendToAllPlayers(packet);
 		else

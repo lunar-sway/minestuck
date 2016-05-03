@@ -80,7 +80,7 @@ public class SkaianetInfoPacket extends MinestuckPacket
 	{
 		if(FMLCommonHandler.instance().getEffectiveSide().isClient())
 			SkaiaClient.consumePacket(this);
-		else SkaianetHandler.requestInfo(UsernameHandler.encode(player), UsernameHandler.getById(this.playerId));
+		else SkaianetHandler.requestInfo(player, UsernameHandler.getById(this.playerId));
 	}
 
 	@Override

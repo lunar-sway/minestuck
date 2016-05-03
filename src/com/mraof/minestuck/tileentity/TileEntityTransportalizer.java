@@ -97,7 +97,7 @@ public class TileEntityTransportalizer extends TileEntity implements ITeleporter
 			TileEntityTransportalizer destTransportalizer = (TileEntityTransportalizer) world.getTileEntity(location.pos);
 			if(destTransportalizer == null)
 			{
-				Debug.print("Invalid transportalizer in map: " + this.destId + " at " + location);
+				Debug.warn("Invalid transportalizer in map: " + this.destId + " at " + location);
 				transportalizers.remove(this.destId);
 				this.destId = "";
 				return;
