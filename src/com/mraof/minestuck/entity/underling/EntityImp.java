@@ -60,6 +60,12 @@ public class EntityImp extends EntityUnderling
 	}
 	
 	@Override
+	protected int getVitalityGel()
+	{
+		return 2;
+	}
+	
+	@Override
 	protected void applyGristType(GristType type, boolean fullHeal)
 	{
 		super.applyGristType(type, fullHeal);

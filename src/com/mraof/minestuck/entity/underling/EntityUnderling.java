@@ -35,6 +35,7 @@ import com.mraof.minestuck.entity.EntityMinestuck;
 import com.mraof.minestuck.entity.ai.EntityAIHurtByTargetAllied;
 import com.mraof.minestuck.entity.ai.EntityAINearestAttackableTargetWithHeight;
 import com.mraof.minestuck.entity.item.EntityGrist;
+import com.mraof.minestuck.entity.item.EntityVitalityGel;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.GristAmount;
@@ -115,6 +116,8 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	
 	protected abstract double getAttackDamage();
 	
+	protected abstract int getVitalityGel();
+	
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn)
 	{
@@ -128,8 +131,10 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 		super.onDeathUpdate();
 		if(this.deathTime == 20 && !this.worldObj.isRemote)
 		{
-			for(Object gristType : this.getGristSpoils().getArray())
-				this.worldObj.spawnEntityInWorld(new EntityGrist(worldObj, this.posX + this.rand.nextDouble() * this.width - this.width / 2, this.posY, this.posZ + this.rand.nextDouble() * this.width - this.width / 2, (GristAmount) gristType));
+			for(GristAmount gristType : this.getGristSpoils().getArray())
+				this.worldObj.spawnEntityInWorld(new EntityGrist(worldObj, this.posX + this.rand.nextDouble() * this.width - this.width / 2, this.posY, this.posZ + this.rand.nextDouble() * this.width - this.width / 2, gristType));
+			if(this.rand.nextInt(4) == 0)
+				this.worldObj.spawnEntityInWorld(new EntityVitalityGel(worldObj, this.posX + this.rand.nextDouble() * this.width - this.width / 2, this.posY, this.posZ + this.rand.nextDouble() * this.width - this.width / 2, this.getVitalityGel()));
 		}
 	}
 	@Override

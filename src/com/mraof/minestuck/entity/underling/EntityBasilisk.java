@@ -67,6 +67,12 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	}
 	
 	@Override
+	protected int getVitalityGel()
+	{
+		return 5;
+	}
+	
+	@Override
 	protected void applyGristType(GristType type, boolean fullHeal)
 	{
 		super.applyGristType(type, fullHeal);

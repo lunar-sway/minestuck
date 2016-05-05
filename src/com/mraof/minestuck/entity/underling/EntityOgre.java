@@ -63,6 +63,12 @@ public class EntityOgre extends EntityUnderling
 	}
 	
 	@Override
+	protected int getVitalityGel()
+	{
+		return 4;
+	}
+	
+	@Override
 	protected void applyGristType(GristType type, boolean fullHeal)
 	{
 		super.applyGristType(type, fullHeal);

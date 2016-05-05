@@ -15,6 +15,7 @@ import com.mraof.minestuck.entity.consort.EntityNakagator;
 import com.mraof.minestuck.entity.consort.EntitySalamander;
 import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.entity.item.EntityMetalBoat;
+import com.mraof.minestuck.entity.item.EntityVitalityGel;
 import com.mraof.minestuck.entity.underling.EntityBasilisk;
 import com.mraof.minestuck.entity.underling.EntityGiclops;
 import com.mraof.minestuck.entity.underling.EntityImp;
@@ -45,6 +46,7 @@ public final class MinestuckEntities
 		registerEntity(EntityDecoy.class, "playerDecoy");
 		registerEntity(EntityMetalBoat.class, "metalBoat");
 		registerEntity(EntityGrist.class, "grist", 512, 1, true);
+		registerEntity(EntityVitalityGel.class, "vitalityGel", 512, 1, true);
 	}
 
 	//registers entity with forge and minecraft, and increases currentEntityIdOffset by one in order to prevent id collision

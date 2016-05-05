@@ -69,6 +69,12 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 	}
 	
 	@Override
+	protected int getVitalityGel()
+	{
+		return 6;
+	}
+	
+	@Override
 	protected void applyGristType(GristType type, boolean fullHeal)
 	{
 		super.applyGristType(type, fullHeal);
