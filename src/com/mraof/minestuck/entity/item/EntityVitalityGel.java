@@ -22,6 +22,7 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 
 	public int age = 0;
 	private int healAmount;
+	private int health = 5;
 	
 	private EntityPlayer closestPlayer;
 
@@ -53,6 +54,25 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 	protected boolean canTriggerWalking()
 	{
 		return false;
+	}
+	
+	public boolean attackEntityFrom(DamageSource source, float amount)
+	{
+		if (this.isEntityInvulnerable(source))
+		{
+			return false;
+		} else
+		{
+			this.setBeenAttacked();
+			this.health = (int)((float)this.health - amount);
+			
+			if (this.health <= 0)
+			{
+				this.setDead();
+			}
+			
+			return false;
+		}
 	}
 	
 	protected void entityInit() {}
@@ -166,12 +186,14 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 	
 	public void writeEntityToNBT(NBTTagCompound nbt)
 	{
+		nbt.setShort("health", (short)((byte)this.health));
 		nbt.setShort("age", (short)this.age);
 		nbt.setShort("amount", (short)this.healAmount);
 	}
 	
 	public void readEntityFromNBT(NBTTagCompound nbt)
 	{
+		this.health = nbt.getShort("health") & 255;
 		this.age = nbt.getShort("age");
 		this.healAmount = nbt.getShort("amount");
 	}

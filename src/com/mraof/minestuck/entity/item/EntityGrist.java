@@ -68,7 +68,26 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	}
 
 	protected void entityInit() {}
-
+	
+	public boolean attackEntityFrom(DamageSource source, float amount)
+	{
+		if (this.isEntityInvulnerable(source))
+		{
+			return false;
+		} else
+		{
+			this.setBeenAttacked();
+			this.gristHealth = (int)((float)this.gristHealth - amount);
+			
+			if (this.gristHealth <= 0)
+			{
+				this.setDead();
+			}
+			
+			return false;
+		}
+	}
+	
 	@SideOnly(Side.CLIENT)
 	public int getBrightnessForRender(float par1)
 	{
@@ -171,17 +190,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	{
 		return this.worldObj.handleMaterialAcceleration(this.getEntityBoundingBox(), Material.water, this);
 	}
-
-	/**
-	 * Will deal the specified amount of damage to the entity if the entity isn't immune to fire damage. Args:
-	 * amountDamage
-	 */
-	protected void dealFireDamage(int par1)
-	{
-		//		this.attackEntityFrom(DamageSource.inFire, par1);
-		//Nope
-	}
-
+	
 	/**
 	 * Called when the entity is attacked.
 	 */
