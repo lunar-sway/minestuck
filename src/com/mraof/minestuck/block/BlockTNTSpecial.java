@@ -13,12 +13,12 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
-public class BlockSpecialTNT extends BlockTNT
+public class BlockTNTSpecial extends BlockTNT
 {
 	
 	final boolean primed, unstable, instant;
 	
-	public BlockSpecialTNT(boolean primed, boolean unstable, boolean instant)
+	public BlockTNTSpecial(boolean primed, boolean unstable, boolean instant)
 	{
 		super();
 		setCreativeTab(Minestuck.tabMinestuck);

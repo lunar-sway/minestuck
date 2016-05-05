@@ -1,0 +1,6 @@
+{
+    "parent": "minestuck:block/button_special_inventory",
+    "textures": {
+        "texture": "minestuck:blocks/ButtonExplosiveWood"
+    }
+}

@@ -42,6 +42,8 @@ public class MinestuckBlocks
 	public static Block primedTnt;
 	public static Block unstableTnt;
 	public static Block instantTnt;
+	public static Block woodenExplosiveButton;
+	public static Block stoneExplosiveButton;
 	
 	public static Block blockOil;
 	public static Block blockBlood;
@@ -76,9 +78,11 @@ public class MinestuckBlocks
 		returnNode = GameRegistry.registerBlock(new BlockReturnNode(), null, "return_node");
 		gate = GameRegistry.registerBlock(new BlockGate(), null, "gate");
 		glowingMushroom = (BlockGlowingMushroom) GameRegistry.registerBlock(new BlockGlowingMushroom(), "glowing_mushroom");
-		primedTnt = GameRegistry.registerBlock(new BlockSpecialTNT(true, false, false), "primed_tnt").setUnlocalizedName("primedTnt");
-		unstableTnt = GameRegistry.registerBlock(new BlockSpecialTNT(false, true, false), "unstable_tnt").setUnlocalizedName("unstableTnt");
-		instantTnt = GameRegistry.registerBlock(new BlockSpecialTNT(false, false, true), "instant_tnt").setUnlocalizedName("instantTnt");
+		primedTnt = GameRegistry.registerBlock(new BlockTNTSpecial(true, false, false), "primed_tnt").setUnlocalizedName("primedTnt");
+		unstableTnt = GameRegistry.registerBlock(new BlockTNTSpecial(false, true, false), "unstable_tnt").setUnlocalizedName("unstableTnt");
+		instantTnt = GameRegistry.registerBlock(new BlockTNTSpecial(false, false, true), "instant_tnt").setUnlocalizedName("instantTnt");
+		woodenExplosiveButton = GameRegistry.registerBlock(new BlockButtonSpecial(true, true), "wooden_button_explosive").setUnlocalizedName("buttonTnt");
+		stoneExplosiveButton = GameRegistry.registerBlock(new BlockButtonSpecial(false, true), "stone_button_explosive").setUnlocalizedName("buttonTnt");
 		//fluids
 		fluidOil = new Fluid("Oil", new ResourceLocation("minestuck", "blocks/OilStill"), new ResourceLocation("minestuck", "blocks/OilFlowing"));
 		FluidRegistry.registerFluid(fluidOil);

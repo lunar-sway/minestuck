@@ -599,6 +599,8 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(primedTnt, new GristSet(new GristType[] {GristType.Build, GristType.Chalk, GristType.Sulfur}, new int[] {8, 10, 14}));
 		GristRegistry.addGristConversion(unstableTnt, new GristSet(new GristType[] {GristType.Build, GristType.Chalk, GristType.Sulfur}, new int[] {5, 11, 15}));
 		GristRegistry.addGristConversion(instantTnt, new GristSet(new GristType[] {GristType.Build, GristType.Chalk, GristType.Sulfur}, new int[] {6, 11, 17}));
+		GristRegistry.addGristConversion(stoneExplosiveButton, new GristSet(new GristType[] {GristType.Build, GristType.Chalk, GristType.Sulfur}, new int[] {7, 5, 8}));
+		GristRegistry.addGristConversion(woodenExplosiveButton, new GristSet(new GristType[] {GristType.Build, GristType.Chalk, GristType.Sulfur}, new int[] {7, 5, 8}));
 		
 		//add Designix combinations
 		CombinationRegistry.addCombination(new ItemStack(Items.stone_sword), new ItemStack(Items.rotten_flesh), MODE_AND, false, true, new ItemStack(ninjaSword));
@@ -678,6 +680,10 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Blocks.tnt), new ItemStack(Blocks.redstone_torch), MODE_OR, new ItemStack(unstableTnt));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.tnt), new ItemStack(Items.potionitem, 1, 8236), MODE_OR, true, true, new ItemStack(instantTnt));	//Instant damage potions
 		CombinationRegistry.addCombination(new ItemStack(Blocks.tnt), new ItemStack(Items.potionitem, 1, 8268), MODE_OR, true, true, new ItemStack(instantTnt));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.tnt), new ItemStack(Blocks.stone_button), MODE_AND, new ItemStack(stoneExplosiveButton));
+		CombinationRegistry.addCombination(new ItemStack(instantTnt), new ItemStack(Blocks.stone_button), MODE_AND, new ItemStack(stoneExplosiveButton));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.tnt), new ItemStack(Blocks.wooden_button), MODE_AND, new ItemStack(woodenExplosiveButton));
+		CombinationRegistry.addCombination(new ItemStack(instantTnt), new ItemStack(Blocks.wooden_button), MODE_AND, new ItemStack(woodenExplosiveButton));
 		
 		//Register chest loot
 		if(MinestuckConfig.cardLoot)

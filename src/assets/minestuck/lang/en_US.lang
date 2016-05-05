@@ -486,6 +486,7 @@ tile.glowingMushroom.name=Glowing Mushroom
 tile.primedTnt.name=Primed TNT
 tile.unstableTnt.name=Unstable TNT
 tile.instantTnt.name=Instant TNT
+tile.buttonTnt.name=TNT Button
 
 title.format=%1$s of %2$s
 title.Bard=Bard

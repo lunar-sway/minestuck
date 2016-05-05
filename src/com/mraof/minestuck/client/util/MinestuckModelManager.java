@@ -151,6 +151,8 @@ public class MinestuckModelManager
 		register(primedTnt);
 		register(unstableTnt);
 		register(instantTnt);
+		register(woodenExplosiveButton);
+		register(stoneExplosiveButton);
 		
 	}
 	

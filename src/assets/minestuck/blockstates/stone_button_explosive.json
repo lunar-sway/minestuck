@@ -1,0 +1,16 @@
+{
+    "variants": {
+        "facing=up,powered=false":    { "model": "minestuck:stone_button_explosive", "x": 270 },
+        "facing=down,powered=false":  { "model": "minestuck:stone_button_explosive", "x": 90 },
+        "facing=east,powered=false":  { "model": "minestuck:stone_button_explosive", "y": 90 },
+        "facing=west,powered=false":  { "model": "minestuck:stone_button_explosive", "y": 270 },
+        "facing=south,powered=false": { "model": "minestuck:stone_button_explosive", "y": 180 },
+        "facing=north,powered=false": { "model": "minestuck:stone_button_explosive" },
+        "facing=up,powered=true":     { "model": "minestuck:stone_button_explosive_pressed", "x": 270 },
+        "facing=down,powered=true":   { "model": "minestuck:stone_button_explosive_pressed", "x": 90 },
+        "facing=east,powered=true":   { "model": "minestuck:stone_button_explosive_pressed", "y": 90 },
+        "facing=west,powered=true":   { "model": "minestuck:stone_button_explosive_pressed", "y": 270 },
+        "facing=south,powered=true":  { "model": "minestuck:stone_button_explosive_pressed", "y": 180 },
+        "facing=north,powered=true":  { "model": "minestuck:stone_button_explosive_pressed" }
+    }
+}
