@@ -41,7 +41,7 @@ public class BlockButtonSpecial extends BlockButton
 		if(explosive && b && !b1)
 		{
 			worldIn.setBlockToAir(pos);
-			worldIn.createExplosion((Entity)null, (double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, 2.0F, true);
+			worldIn.createExplosion((Entity)null, (double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, 1.5F, true);
 		}
 	}
 	
