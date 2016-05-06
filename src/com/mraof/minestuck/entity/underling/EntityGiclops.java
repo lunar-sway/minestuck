@@ -71,7 +71,7 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 	@Override
 	protected int getVitalityGel()
 	{
-		return 6;
+		return rand.nextInt(4) + 5;
 	}
 	
 	@Override

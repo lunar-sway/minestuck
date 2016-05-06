@@ -69,7 +69,7 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	@Override
 	protected int getVitalityGel()
 	{
-		return 5;
+		return rand.nextInt(3) + 4;
 	}
 	
 	@Override

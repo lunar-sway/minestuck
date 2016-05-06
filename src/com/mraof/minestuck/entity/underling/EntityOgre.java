@@ -65,7 +65,7 @@ public class EntityOgre extends EntityUnderling
 	@Override
 	protected int getVitalityGel()
 	{
-		return 4;
+		return rand.nextInt(3) + 3;
 	}
 	
 	@Override

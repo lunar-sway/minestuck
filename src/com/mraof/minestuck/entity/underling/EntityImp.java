@@ -62,7 +62,7 @@ public class EntityImp extends EntityUnderling
 	@Override
 	protected int getVitalityGel()
 	{
-		return 2;
+		return rand.nextInt(3)+1;
 	}
 	
 	@Override
