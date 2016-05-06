@@ -427,7 +427,7 @@ minestuck.config.preEntryRungLimit.tooltip=The highest rung you can get before e
 minestuck.config.echeladderProgress=Show Echeladder Progress
 minestuck.config.echeladderProgress.tooltip=If this is true, players will be able to see their progress towards the next rung. This is server side and will only be active in multiplayer if the server/Lan host has it activated.
 minestuck.config.echeladderAnimation=Echeladder Animation
-minestuck.config.echeladderAnimation.tooltip=If the "rung gained" amination in the echeladder should be showed.
+minestuck.config.echeladderAnimation.tooltip=Allows basic control of the "rung gained" amination in the echeladder.
 minestuck.config.uuidIdentification=UUID Identification
 minestuck.config.uuidIdentification.tooltip=If this is set to true, minestuck will use uuids to refer to players in the saved data. On false it will instead use the old method based on usernames.
 
@@ -448,6 +448,10 @@ ops=Only Operators
 gamemode=Only Creative And Spectator
 opsAndGamemode=Operators, Creative and Spectator
 anyone=Anyone
+slow=Slow
+normal=Normal
+fast=Fast
+nothing=Nothing
 
 strife.sword.name=Bladekind
 strife.bow.name=Bowkind

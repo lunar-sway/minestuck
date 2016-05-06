@@ -8,7 +8,6 @@ import net.minecraft.server.management.UserListOpsEntry;
 import net.minecraft.world.WorldSettings.GameType;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -38,6 +37,8 @@ public class MinestuckConfig
 	@SideOnly(Side.CLIENT)
 	public static byte clientTreeAutobalance;
 	@SideOnly(Side.CLIENT)
+	public static byte echeladderAnimation;
+	@SideOnly(Side.CLIENT)
 	public static boolean clientGiveItems;
 	@SideOnly(Side.CLIENT)
 	public static boolean clientDisableGristWidget;
@@ -51,8 +52,6 @@ public class MinestuckConfig
 	public static boolean alchemyIcons;
 	@SideOnly(Side.CLIENT)
 	public static boolean preEntryEcheladder;
-	@SideOnly(Side.CLIENT)
-	public static boolean echeladderAnimation;
 	
 	public static boolean hardMode = false;
 	public static boolean generateCruxiteOre;
@@ -169,8 +168,8 @@ public class MinestuckConfig
 		if(setting.equals("none")) dataCheckerPermission = 0;
 		else if(setting.equals("ops")) dataCheckerPermission = 1;
 		else if(setting.equals("gamemode")) dataCheckerPermission = 2;
-		else if(setting.equals("opsAndGamemode")) dataCheckerPermission = 3;
-		else dataCheckerPermission = 4;
+		else if(setting.equals("anyone")) dataCheckerPermission = 4;
+		else dataCheckerPermission = 3;
 		
 		if(gameSide.isClient())	//Client sided config values
 		{
@@ -179,12 +178,16 @@ public class MinestuckConfig
 			if(specialCardRenderer && !GLContext.getCapabilities().GL_EXT_framebuffer_object)
 			{
 				specialCardRenderer = false;
-				FMLLog.warning("[Minestuck] The FBO extension is not available and is required for the advanced rendering of captchalouge cards.");
+				Debug.warn("The FBO extension is not available and is required for the advanced rendering of captchalouge cards.");
 			}
 			//cardResolution = config.getInt("General", "cardResolution", 1, 0, 5, "The resolution of the item inside of a card. The width/height is computed by '8*2^x', where 'x' is this config value.");
 			loginColorSelector = config.get("General", "loginColorSelector", true, "Determines if the color selector should be displayed when entering a save file for the first time.").setLanguageKey("minestuck.config.loginColorSelector").getBoolean();
 			alchemyIcons = config.get("General", "alchemyIcons", true, "Set this to true to replace grist names in alchemiter/grist widget with the grist icon.").setLanguageKey("minestuck.config.alchemyIcons").getBoolean();
-			echeladderAnimation = config.get("General", "echeladderAnimation", true, "If this is turned off, the echeladder animation will end immediately.").setLanguageKey("minestuck.config.echeladderAnimation").getBoolean();
+			setting = config.get("General", "echeladderAnimationNew", "normal", "Allows control of standard speed for the echeladder rung \"animation\", or if it should have one in the first place.", new String[] {"nothing", "slow", "normal", "fast"}).setLanguageKey("minestuck.config.echeladderAnimation").getString();
+			if(setting.equals("none")) echeladderAnimation = 0;
+			else if(setting.equals("slow")) echeladderAnimation = 1;
+			else if(setting.equals("fast")) echeladderAnimation = 4;
+			else echeladderAnimation = 2;
 		}
 	}
 	

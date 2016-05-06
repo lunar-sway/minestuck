@@ -73,12 +73,12 @@ public class GuiEcheladder extends GuiPlayerStats
 			if(animatedRung < MinestuckPlayerData.rung)
 			{
 				animatedRungs = MinestuckPlayerData.rung - animatedRung;
-				animationCycle = timeBeforeAnimation + getTicksForRungAnimation(animatedRungs);
+				animationCycle = timeBeforeAnimation + getTicksForRungAnimation(animatedRungs)*MinestuckConfig.echeladderAnimation;
 				animatedRung = MinestuckPlayerData.rung;
 			}
 		} else
 		{
-			int rungTicks = getTicksForRungAnimation(animatedRungs);
+			int rungTicks = getTicksForRungAnimation(animatedRungs)*MinestuckConfig.echeladderAnimation;
 			if(animationCycle - rungTicks >= 0)	//Awaiting animation start
 				currentRung = animatedRung - animatedRungs;
 			else
@@ -239,7 +239,7 @@ public class GuiEcheladder extends GuiPlayerStats
 		wasClicking = mouseButtonDown;
 		
 		if(animationCycle > 0)
-			if(MinestuckConfig.echeladderAnimation)
+			if(MinestuckConfig.echeladderAnimation != 0)
 				animationCycle--;
 			else animationCycle = 0;
 	}
