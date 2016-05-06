@@ -151,7 +151,7 @@ public class LandAspectRegistry
 			return getRandomVariant(list.get(random.nextInt(list.size())));
 		
 		double randCap = 0;
-		for(int i = 0; 0 < useCount.length; i++)
+		for(int i = 0; i < useCount.length; i++)
 			randCap += 1D/useCount[i];
 		
 		double rand = random.nextDouble()*randCap;
