@@ -5,11 +5,11 @@ Minestuck is a mod for Minecraft that adds game elements from the webcomic Homes
 
 We hope to implement:
 * Places like Skaia, Prospit and Derse
-* Echeladders
+* Title powers
 * Sprites and Prototyping
 * Consort villages and Consort interaction
-* Gates (WIP)
-* Tons of Homestuck themed items (WIP)
+* More stuff in land
+* Tons of Homestuck themed items
 
 Useful Links
 ============
