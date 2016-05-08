@@ -3,6 +3,8 @@ Minestuck
 
 Minestuck is a mod for Minecraft that adds game elements from the webcomic Homestuck into Minecraft.
 
+As of right now, it's strongly recommended to have read at least the first four acts of Homestuck, and preferably also the fifth act before delving into this mod.
+
 We hope to implement:
 * Places like Skaia, Prospit and Derse
 * Title powers
