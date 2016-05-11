@@ -234,19 +234,16 @@ public class EntityDecoy extends EntityLiving {
 	public ItemStack getEquipmentInSlot(int i)
 	{
 		if(i == 0)
-			return inventory.mainInventory[inventory.currentItem];
-		else if(i > 0 && i <= inventory.armorInventory.length)
-			return inventory.armorInventory[i-1];
-		else return null;
+			return inventory.getCurrentItem();
+		else  return inventory.armorItemInSlot(i-1);
 	}
 
 	@Override
 	public void setCurrentItemOrArmor(int i, ItemStack itemstack)
 	{
 		if(i == 0)
-			inventory.mainInventory[inventory.currentItem] = itemstack;
-		else if(i > 0 && i <= inventory.armorInventory.length)
-			inventory.armorInventory[i-1] = itemstack;
+			inventory.setInventorySlotContents(inventory.currentItem, itemstack);
+		else inventory.armorInventory[i-1] = itemstack;	//Couldn't find a good method to replace this
 	}
 	
 	@Override
