@@ -24,15 +24,17 @@ public class CaptchaDeckHandler
 	
 	public static enum ModusType
 	{
-		STACK(StackModus.class),
-		QUEUE(QueueModus.class),
-		QUEUE_STACK(QueuestackModus.class),
-		TREE(TreeModus.class);
+		STACK(StackModus.class, 0),
+		QUEUE(QueueModus.class, 1),
+		QUEUE_STACK(QueuestackModus.class, 2),
+		TREE(TreeModus.class, 3);
 		
 		private final Class<? extends Modus> c;
-		ModusType(Class<? extends Modus> c)
+		public final int metadata;
+		ModusType(Class<? extends Modus> c, int metadata)
 		{
 			this.c = c;
+			this.metadata = metadata;
 		}
 		
 		public Modus createInstance()
@@ -51,6 +53,14 @@ public class CaptchaDeckHandler
 		{
 			for(ModusType type : values())
 				if(type.c == modus.getClass())
+					return type;
+			return null;
+		}
+		
+		public static ModusType getType(int metadata)
+		{
+			for(ModusType type : values())
+				if(type.metadata == metadata)
 					return type;
 			return null;
 		}
@@ -97,11 +107,11 @@ public class CaptchaDeckHandler
 		ItemStack item = container.inventory.getStackInSlot(0);
 		Modus modus = getModus(player);
 		
-		if(item.getItem().equals(MinestuckItems.modusCard) && ModusType.values().length > item.getItemDamage())
+		if(item.getItem().equals(MinestuckItems.modusCard) && ModusType.getType(item.getItemDamage()) != null)
 		{
 			if(modus == null)
 			{
-				modus = ModusType.values()[item.getItemDamage()].createInstance();
+				modus = ModusType.getType(item.getItemDamage()).createInstance();
 				modus.player = player;
 				modus.initModus(null, MinestuckConfig.initialModusSize);
 				setModus(player, modus);
@@ -111,9 +121,9 @@ public class CaptchaDeckHandler
 			{
 				Modus oldModus = modus;
 				ModusType oldType = ModusType.getType(oldModus);
-				if(oldType.ordinal() == item.getItemDamage())
+				if(oldType.metadata == item.getItemDamage())
 					return;
-				modus = ModusType.values()[item.getItemDamage()].createInstance();
+				modus = ModusType.getType(item.getItemDamage()).createInstance();
 				modus.player = player;
 				if(modus.canSwitchFrom(oldType))
 					modus.initModus(oldModus.getItems(), oldModus.getSize());
@@ -252,8 +262,9 @@ public class CaptchaDeckHandler
 		
 		ItemStack[] stacks = modus.getItems();
 		int size = modus.getSize();
+		int cardsToKeep = MinestuckConfig.sylladexDropMode == 2 ? 0 : MinestuckConfig.initialModusSize;
 		
-		if(!MinestuckConfig.dropItemsInCards)
+		if(!MinestuckConfig.dropItemsInCards || MinestuckConfig.sylladexDropMode == 0)
 		{
 			for(ItemStack stack : stacks)
 				if(stack != null)
@@ -261,19 +272,20 @@ public class CaptchaDeckHandler
 		} else
 			for(ItemStack stack : stacks)
 				if(stack != null)
-				{
-					ItemStack card = AlchemyRecipeHandler.createCard(stack, false);
-					player.dropItem(card, true, false);
-					size--;
-				}
+					if(size > cardsToKeep)
+					{
+						ItemStack card = AlchemyRecipeHandler.createCard(stack, false);
+						player.dropItem(card, true, false);
+						size--;
+					} else player.dropItem(stack, true, false);
 		
 		if(MinestuckConfig.sylladexDropMode >= 1)
-			for(; size > 0; size = Math.max(size - 16, 0))
-				player.dropItem(new ItemStack(MinestuckItems.captchaCard, Math.min(16, size)), true, false);
+			for(; size > cardsToKeep; size = Math.max(size - 16, cardsToKeep))
+				player.dropItem(new ItemStack(MinestuckItems.captchaCard, Math.min(16, size - cardsToKeep)), true, false);
 		
 		if(MinestuckConfig.sylladexDropMode == 2)
 		{
-			player.dropItem(new ItemStack(MinestuckItems.modusCard, 1, ModusType.getType(modus).ordinal()), true, false);
+			player.dropItem(new ItemStack(MinestuckItems.modusCard, 1, ModusType.getType(modus).metadata), true, false);
 			setModus(player, null);
 		} else modus.initModus(null, size);
 		
@@ -285,7 +297,7 @@ public class CaptchaDeckHandler
 	{
 		if(modus == null)
 			return null;
-		int index = ModusType.getType(modus).ordinal();
+		int index = ModusType.getType(modus).metadata;
 		NBTTagCompound nbt = modus.writeToNBT(new NBTTagCompound());
 		nbt.setInteger("type", index);
 		return nbt;
@@ -296,11 +308,11 @@ public class CaptchaDeckHandler
 		if(nbt == null)
 			return null;
 		Modus modus;
-		if(clientSide && clientSideModus != null && nbt.getInteger("type") == ModusType.getType(clientSideModus).ordinal())
+		if(clientSide && clientSideModus != null && nbt.getInteger("type") == ModusType.getType(clientSideModus).metadata)
 			modus = clientSideModus;
 		else
 		{
-			modus = ModusType.values()[nbt.getInteger("type")].createInstance();
+			modus = ModusType.getType(nbt.getInteger("type")).createInstance();
 			if(clientSide)
 				modus.player = ClientProxy.getClientPlayer();
 		}

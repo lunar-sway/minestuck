@@ -73,7 +73,7 @@ public class MinestuckPlayerTracker {
 		if(CaptchaDeckHandler.getModus(player) == null && MinestuckConfig.defaultModusTypes.length > 0 && !MinestuckPlayerData.getData(player).givenModus)
 		{
 			int index = player.worldObj.rand.nextInt(MinestuckConfig.defaultModusTypes.length);
-			Modus modus = CaptchaDeckHandler.ModusType.values()[MinestuckConfig.defaultModusTypes[index]].createInstance();
+			Modus modus = CaptchaDeckHandler.ModusType.getType(MinestuckConfig.defaultModusTypes[index]).createInstance();
 			modus.player = player;
 			modus.initModus(null, MinestuckConfig.initialModusSize);
 			CaptchaDeckHandler.setModus(player, modus);

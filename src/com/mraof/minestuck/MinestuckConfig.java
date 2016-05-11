@@ -17,7 +17,6 @@ import org.lwjgl.opengl.GLContext;
 
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.inventory.ContainerHandler;
-import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
@@ -125,13 +124,13 @@ public class MinestuckConfig
 		
 		initialModusSize = config.get("Modus", "initialModusSize", 5).setMinValue(0).setLanguageKey("minestuck.config.initialModusSize").getInt();
 		defaultModusTypes = config.get("Modus", "defaultModusType", new int[] {0, 1},
-				"An array with the possible modus types to be assigned. (0: Stack, 1: Queue, 2: QueueStack, 3: Tree)", 0, CaptchaDeckHandler.ModusType.values().length - 1).setLanguageKey("minestuck.config.defaultModusType").getIntList();
+				"An array with the possible modus types to be assigned. (0: Stack, 1: Queue, 2: QueueStack, 3: Tree)", 0, 3).setLanguageKey("minestuck.config.defaultModusType").getIntList();
 		modusMaxSize = config.get("Modus", "modusMaxSize", 0, "The max size on a modus. Ignored if the value is 0.").setMinValue(0).setLanguageKey("minestuck.config.modusMaxSize").getInt();
 		if(initialModusSize > modusMaxSize && modusMaxSize > 0)
 			initialModusSize = modusMaxSize;
 		String setting = config.get("Modus", "forceAutobalance", "both", "This determines if auto-balance should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.", new String[] {"both", "off", "on"}).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.forceAutobalance").getString();
 		treeModusSetting = (byte) (setting.equals("both") ? 0 : setting.equals("on") ? 1 : 2);
-		setting = config.get("Modus", "itemDropMode", "items", "Determines which items from the modus are dropped on death. \"items\": Only the items are dropped. \"cardsAndItems\": Both items and cards are dropped. \"all\": Everything is dropped, even the modus.", new String[] {"items", "cardsAndItems", "all"}).setLanguageKey("minestuck.config.itemDropMode").getString();
+		setting = config.get("Modus", "itemDropMode", "cardsAndItems", "Determines which items from the modus that are dropped on death. \"items\": Only the items are dropped. \"cardsAndItems\": Both items and cards are dropped. (So that you have at most initialModusSize amount of cards) \"all\": Everything is dropped, even the modus.", new String[] {"items", "cardsAndItems", "all"}).setLanguageKey("minestuck.config.itemDropMode").getString();
 		if(setting.equals("items"))
 			sylladexDropMode = 0;
 		if(setting.equals("cardsAndItems"))
