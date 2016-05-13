@@ -104,9 +104,9 @@ public class MinestuckPlayerTracker {
 			player.addChatMessage(new ChatComponentText("New version of Minestuck: " + UpdateChecker.latestVersion + "\nChanges: " + UpdateChecker.updateChanges));
 	}
 	
-	@SubscribeEvent
-	public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
-		
+	@SubscribeEvent(priority = EventPriority.HIGH)	//Editmode players need to be reset before nei handles the event
+	public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event)
+	{
 		ServerEditHandler.onPlayerExit(event.player);
 		Modus modus = CaptchaDeckHandler.getModus(event.player);
 		if(modus != null)

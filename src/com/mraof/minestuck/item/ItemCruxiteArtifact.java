@@ -30,6 +30,7 @@ import static com.mraof.minestuck.MinestuckConfig.artifactRange;
 
 import com.mraof.minestuck.block.BlockGate;
 import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
@@ -168,8 +169,13 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 				Entity e = (Entity)iterator.next();
 				if(MinestuckConfig.entryCrater || e instanceof EntityPlayer || e instanceof EntityItem)
 				{
-					e.setPosition(e.posX, e.posY + yDiff, e.posZ);
-					Teleport.teleportEntity(e, worldserver1.provider.getDimensionId(), null, false);
+					if(e instanceof EntityPlayer && ServerEditHandler.getData((EntityPlayer) e) != null)
+						ServerEditHandler.reset(ServerEditHandler.getData((EntityPlayer) e));
+					else
+					{
+						e.setPosition(e.posX, e.posY + yDiff, e.posZ);
+						Teleport.teleportEntity(e, worldserver1.provider.getDimensionId(), null, false);
+					}
 				}
 				else	//Copy instead of teleport
 				{

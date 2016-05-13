@@ -377,6 +377,7 @@ public class SkaianetHandler {
 		resumingServers.clear();
 		SessionHandler.sessions.clear();
 		SessionHandler.sessionsByName.clear();
+		SburbHandler.titleSelectionMap.clear();
 		if(nbt != null)
 		{
 			NBTTagList list = nbt.getTagList("sessions", 10);

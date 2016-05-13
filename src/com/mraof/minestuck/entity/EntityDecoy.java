@@ -197,7 +197,7 @@ public class EntityDecoy extends EntityLiving {
 		{
 			foodStats.onUpdate(player);
 			if(this.locationChanged())
-				ServerEditHandler.reset(null, 0, ServerEditHandler.getData(this));
+				ServerEditHandler.reset(ServerEditHandler.getData(this));
 		}
 	}
 	

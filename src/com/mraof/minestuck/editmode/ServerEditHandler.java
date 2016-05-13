@@ -88,12 +88,18 @@ public class ServerEditHandler
 	public static void onPlayerExit(EntityPlayer player)
 	{
 		if(!player.worldObj.isRemote)
-			reset(null, 0, getData(player));
+			reset(getData(player));
 	}
 	
-	public static void onDisconnect(SburbConnection c) {
-		reset(null, 0, getData(c));
+	public static void onDisconnect(SburbConnection c)
+	{
+		reset(getData(c));
 		c.useCoordinates = false;
+	}
+	
+	public static void reset(EditData data)
+	{
+		reset(null, 0, data);
 	}
 	
 	/**
@@ -103,10 +109,11 @@ public class ServerEditHandler
 	 * @param decoy The decoy entity used.
 	 * @param playerId The player.
 	 */
-	public static void reset(DamageSource damageSource, float damage, EditData data) {
-		if(data == null) {
+	public static void reset(DamageSource damageSource, float damage, EditData data)
+	{
+		if(data == null)
 			return;
-		}
+		
 		EntityPlayerMP player = data.player;
 		player.closeScreen();
 		EntityDecoy decoy = data.decoy;
@@ -484,7 +491,7 @@ public class ServerEditHandler
 	public static void onServerStopping()
 	{	
 		for(EditData data : new ArrayList<EditData>(list))
-			reset(null, 0, data);
+			reset(data);
 	}
 	
 	@SubscribeEvent(priority=EventPriority.LOWEST, receiveCanceled=false)
@@ -505,7 +512,7 @@ public class ServerEditHandler
 				else if(c.equals("defaultgamemode") && MinecraftServer.getServer().getForceGamemode())
 				{
 					for(EditData data : (EditData[]) list.toArray())
-						reset(null, 0, data);
+						reset(data);
 					return;
 				}
 				else if(c.equals("spreadplayers"))
@@ -535,7 +542,7 @@ public class ServerEditHandler
 					for(EntityPlayer player : targets)
 						if(getData(player) != null)
 						{
-							reset(null, 0, getData(player));
+							reset(getData(player));
 						}
 					return;
 				}
@@ -544,7 +551,7 @@ public class ServerEditHandler
 				else target = CommandBase.getPlayer(event.sender, event.parameters[0]);
 				
 				if(target != null && getData(target) != null)
-					reset(null, 0, getData(target));
+					reset(getData(target));
 			}
 		}
 		catch(CommandException e)
