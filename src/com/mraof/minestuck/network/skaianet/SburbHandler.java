@@ -2,6 +2,7 @@ package com.mraof.minestuck.network.skaianet;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -13,6 +14,7 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -20,6 +22,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.Vec3;
 import net.minecraft.util.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
@@ -32,7 +35,12 @@ import com.mraof.minestuck.entity.underling.EntityImp;
 import com.mraof.minestuck.entity.underling.EntityOgre;
 import com.mraof.minestuck.entity.underling.EntityUnderling;
 import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckPacket;
+import com.mraof.minestuck.network.PlayerDataPacket;
+
 import static com.mraof.minestuck.network.skaianet.SessionHandler.*;
+
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.EnumAspect;
@@ -56,10 +64,29 @@ import com.mraof.minestuck.world.lands.title.TitleLandAspect;
  */
 public class SburbHandler
 {
+	static Map<EntityPlayer, Vec3> titleSelectionMap = new HashMap<EntityPlayer, Vec3>();
 	
 	static void generateTitle(PlayerIdentifier player)
 	{
+		if(MinestuckPlayerData.getTitle(player) != null)
+			if(MinestuckConfig.playerSelectedTitle)
+				return;	//Should be generated using the title-selection gui
+			else
+			{
+				Debug.warnf("Trying to generate a title for %s when a title is already assigned!", player.getUsername());
+				return;
+			}
+		
 		Session session = getPlayerSession(player);
+		if(session == null)
+			if(MinestuckConfig.playerSelectedTitle)
+				session = new Session();
+			else
+			{
+				Debug.logger.warn(String.format("Trying to generate a title for %s before creating a session!", player.getUsername()), new Throwable().fillInStackTrace());
+				return;
+			}
+		
 		Title title = null;
 		if(session.predefinedPlayers.containsKey(player))
 		{
@@ -639,5 +666,67 @@ public class SburbHandler
 		Random rand = new Random(Minestuck.worldSeed^c.getClientIdentifier().hashCode());
 		c.artifactType = rand.nextInt(2);
 		Debug.infof("Randomized artifact type to be: %d for player %s.", c.artifactType, c.getClientIdentifier().getUsername());
+	}
+	
+	public static boolean shouldEnterNow(EntityPlayer player)
+	{
+		if(!MinestuckConfig.playerSelectedTitle)
+			return true;
+		
+		PlayerIdentifier identifier = UsernameHandler.encode(player);
+		Session s = getPlayerSession(identifier);
+		
+		if(s != null && s.predefinedPlayers.containsKey(identifier) && s.predefinedPlayers.get(identifier).title != null
+				|| MinestuckPlayerData.getTitle(identifier) != null)
+			return true;
+		
+		titleSelectionMap.put(player, new Vec3(player.posX, player.posY, player.posZ));
+		MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(MinestuckPacket.Type.PLAYER_DATA, PlayerDataPacket.TITLE_SELECT), player);
+		return false;
+	}
+	
+	public static void stopEntry(EntityPlayer player)
+	{
+		titleSelectionMap.remove(player);
+	}
+	
+	public static void titleSelected(EntityPlayer player, Title title)
+	{
+		if(MinestuckConfig.playerSelectedTitle && titleSelectionMap.containsKey(player))
+		{
+			PlayerIdentifier identifier = UsernameHandler.encode(player);
+			Session s = getPlayerSession(identifier);
+			if(s == null)
+				if(singleSession)
+					s = sessions.get(0);
+				else s = new Session();
+			
+			if(title == null)
+				generateTitle(identifier);
+			else
+			{
+				for(SburbConnection c : s.connections)
+					if(c.enteredGame() && title.equals(MinestuckPlayerData.getTitle(c.getClientIdentifier())))
+					{	//Title is already used
+						MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(MinestuckPacket.Type.PLAYER_DATA, PlayerDataPacket.TITLE_SELECT, title.getHeroClass(), title.getHeroAspect()), player);
+						return;
+					}
+				for(PredefineData data : s.predefinedPlayers.values())
+					if(title.equals(data.title))
+					{
+						MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(MinestuckPacket.Type.PLAYER_DATA, PlayerDataPacket.TITLE_SELECT, title.getHeroClass(), title.getHeroAspect()), player);
+						return;
+					}
+				
+				MinestuckPlayerData.setTitle(identifier, title);
+				MinestuckPlayerTracker.updateTitle(player);
+			}
+			
+			Vec3 pos = titleSelectionMap.remove(player);
+			
+			player.setPosition(pos.xCoord, pos.yCoord, pos.zCoord);
+			MinestuckItems.cruxiteApple.onArtifactActivated(player.worldObj, player);
+			
+		} else Debug.warnf("%s tried to select a title without entering.", player.getCommandSenderName());
 	}
 }

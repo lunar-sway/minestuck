@@ -32,6 +32,7 @@ import com.mraof.minestuck.block.BlockGate;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
+import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.tileentity.TileEntityGate;
@@ -58,12 +59,15 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 		setHasSubtypes(true);
 	}
 	
-	protected void onArtifactActivated(World world, EntityPlayer player)
+	public void onArtifactActivated(World world, EntityPlayer player)
 	{
 		try
 		{
 			if(!world.isRemote && player.worldObj.provider.getDimensionId() != -1)
 			{
+				if(!SburbHandler.shouldEnterNow(player))
+					return;
+				
 				SburbConnection c = SkaianetHandler.getMainConnection(UsernameHandler.encode(player), true);
 				
 				if(c == null || !c.enteredGame() || !MinestuckDimensionHandler.isLandDimension(player.worldObj.provider.getDimensionId()))

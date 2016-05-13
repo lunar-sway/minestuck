@@ -73,7 +73,7 @@ public class MinestuckItems
 	public static Item rawCruxite;
 	public static Item cruxiteDowel;
 	public static Item captchaCard;
-	public static Item cruxiteApple;
+	public static ItemCruxiteArtifact cruxiteApple;
 	public static Item cruxitePotion;
 	public static Item disk;
 	public static Item component;

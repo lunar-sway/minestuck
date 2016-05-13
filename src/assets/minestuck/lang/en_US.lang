@@ -201,6 +201,8 @@ gui.emptySylladex2=This will empty your sylladex.
 gui.emptySylladexButton=Empty Sylladex
 gui.autobalance.on=Auto-balance Active
 gui.autobalance.off=Auto-balance Inactive
+gui.selectTitle=Choose Your Title
+gui.selectTitle.used=%s is already used
 
 item.clawHammer.name=Claw Hammer
 item.sledgeHammer.name=Sledgehammer
@@ -430,6 +432,8 @@ minestuck.config.echeladderAnimation=Echeladder Animation
 minestuck.config.echeladderAnimation.tooltip=Allows basic control of the "rung gained" amination in the echeladder.
 minestuck.config.uuidIdentification=UUID Identification
 minestuck.config.uuidIdentification.tooltip=If this is set to true, minestuck will use uuids to refer to players in the saved data. On false it will instead use the old method based on usernames.
+minestuck.config.playerSelectedTitle=Player-selected Title
+minestuck.config.playerSelectedTitle.tooltip=Enable this to let players select their own title. They will however not be able to select the Lord or Muse as class.
 
 message.selectDefaultColor=Default color selected. You can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!
 message.selectColor=If you want to change the color, you can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!
