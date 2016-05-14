@@ -46,6 +46,8 @@ commands.tpz.notFound=Couldn't find transportalizer with ID "%s"
 commands.tpz.success=Successfully teleported %s to transprtalizer "%s"
 commands.playerOnly=This command is only useable by players.
 commands.playerOnly.redidectGrist=This command is only useable by players. Try /grist instead.
+commands.sburbServer.usage=/sburbServer <client player> <server player>
+commands.sburbServer.success=Successfully set %s's server player as %s.
 
 computer.buttonClear=Clear message
 computer.buttonClose=Disconnect

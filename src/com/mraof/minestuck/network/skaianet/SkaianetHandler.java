@@ -59,7 +59,7 @@ public class SkaianetHandler {
 	{
 		for(SburbConnection c : connections)
 			if(c.isMain)
-				if(isClient && c.getClientIdentifier().equals(player) && !c.getServerIdentifier().equals(".null"))
+				if(isClient && c.getClientIdentifier().equals(player) && !c.getServerIdentifier().equals(UsernameHandler.nullIdentifier))
 					return c.getServerIdentifier();
 				else if(!isClient && c.getServerIdentifier().equals(player))
 				return c.getClientIdentifier();
@@ -285,20 +285,24 @@ public class SkaianetHandler {
 		SburbConnection conn;
 		if(newConnection && (conn = getMainConnection(c.getClientIdentifier(), true)) != null)	//Copy client associated variables
 		{
-			if(conn.getServerIdentifier().equals(new PlayerIdentifier(".null")))
+			if(conn.getServerIdentifier().equals(UsernameHandler.nullIdentifier) && getMainConnection(c.getServerIdentifier(), false) == null)
 			{
-				c.isMain = true;
-				connections.remove(conn);
-				SessionHandler.onConnectionClosed(conn, false);
+				connections.remove(c);
+				conn.client = c.client;
+				conn.server = c.server;
+				c = conn;
 			}
-			c.enteredGame = conn.enteredGame;
-			c.canSplit = conn.canSplit;
-			c.centerX = conn.centerX;
-			c.centerZ = conn.centerZ;
-			c.clientHomeLand = conn.clientHomeLand;
-			c.artifactType = conn.artifactType;
-			if(c.inventory != null)
-				c.inventory = (NBTTagList) conn.inventory.copy();
+			else
+			{
+				c.enteredGame = conn.enteredGame;
+				c.canSplit = conn.canSplit;
+				c.centerX = conn.centerX;
+				c.centerZ = conn.centerZ;
+				c.clientHomeLand = conn.clientHomeLand;
+				c.artifactType = conn.artifactType;
+				if(c.inventory != null)
+					c.inventory = (NBTTagList) conn.inventory.copy();
+			}
 		}
 		c1.connected(otherPlayer, isClient);
 		c2.connected(player.owner, !isClient);
@@ -453,7 +457,7 @@ public class SkaianetHandler {
 		list.addAll(playerList);
 		
 		for(SburbConnection c : connections)
-			if(c.getClientIdentifier().equals(player) && !c.getServerIdentifier().equals(".null") || c.getServerIdentifier().equals(player))
+			if(c.getClientIdentifier().equals(player) && !c.getServerIdentifier().equals(UsernameHandler.nullIdentifier) || c.getServerIdentifier().equals(player))
 				list.add(c);
 		
 		return list.toArray();

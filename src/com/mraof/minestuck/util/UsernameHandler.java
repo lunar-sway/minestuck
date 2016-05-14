@@ -29,6 +29,7 @@ import net.minecraftforge.common.UsernameCache;
 public class UsernameHandler {
 	
 	public static String host;	//This basically stores server.getServerOwner(), but for all players to access
+	public static final PlayerIdentifier nullIdentifier = new PlayerIdentifier(".null");
 	
 	private static List<PlayerIdentifier> identifierList = new ArrayList<PlayerIdentifier>();
 	private static List<PlayerIdentifier> identifiersToChange = new ArrayList<PlayerIdentifier>();
@@ -73,6 +74,9 @@ public class UsernameHandler {
 	public static PlayerIdentifier load(NBTBase nbt, String key)
 	{
 		PlayerIdentifier identifier = new PlayerIdentifier(nbt, key);
+		if(".null".equals(identifier.username))
+			return nullIdentifier;
+		
 		List<PlayerIdentifier> list = MinestuckConfig.useUUID == identifier.useUUID ? identifierList : identifiersToChange;
 		
 		for(PlayerIdentifier id : list)
@@ -168,7 +172,7 @@ public class UsernameHandler {
 			useUUID = true;
 		}
 		
-		public PlayerIdentifier(String name)
+		private PlayerIdentifier(String name)
 		{
 			username = name;
 			useUUID = false;

@@ -378,7 +378,6 @@ public class GuiDataChecker extends GuiScreen
 				playerSet.add(connection.server);
 			}
 			
-			playerSet.remove(".null");
 			playerSet.remove("");
 			players = playerSet.size();
 		}
@@ -428,7 +427,7 @@ public class GuiDataChecker extends GuiScreen
 			if(isMain)
 				landDim = connectionTag.getInteger("clientDim");
 			
-			list.add(new TextField("Client Player: '%s'", client));
+			list.add(new TextField("Client Player: %s", client));
 			if(!server.isEmpty())
 				list.add(new TextField("Server Player: %s", server));
 			list.add(new TextField("Is Active: %b", connectionTag.getBoolean("isActive")));

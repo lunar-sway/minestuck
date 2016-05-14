@@ -17,6 +17,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mraof.minestuck.block.BlockComputerOn;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.gui.GuiComputer;
 import com.mraof.minestuck.network.skaianet.ComputerData;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
@@ -132,7 +133,7 @@ public class TileEntityComputer extends TileEntity
 		if(id == -1)
 		{
 			IBlockState state = worldObj.getBlockState(pos);
-			return (Boolean) state.getValue(BlockComputerOn.BSOD);
+			return state.getBlock() == MinestuckBlocks.blockMachine ? (Boolean) state.getValue(BlockComputerOn.BSOD) : false;
 		}
 		return installedPrograms.get(id) == null ? false:installedPrograms.get(id);
 	}

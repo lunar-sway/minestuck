@@ -8,15 +8,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommand;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatStyle;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.common.DimensionManager;
 
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.Title;
+import com.mraof.minestuck.util.UsernameHandler;
 import com.mraof.minestuck.util.UsernameHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
@@ -318,7 +326,7 @@ public class SessionHandler {
 				else split(s);
 		} else if(!normal) {
 			s.connections.remove(connection);
-			if(SkaianetHandler.getAssociatedPartner(connection.getClientIdentifier(), false) != null && !connection.getServerIdentifier().equals(new PlayerIdentifier(".null")))
+			if(SkaianetHandler.getAssociatedPartner(connection.getClientIdentifier(), false) != null)
 			{
 				SburbConnection c = SkaianetHandler.getMainConnection(connection.getClientIdentifier(), false);
 				if(c.isActive)
@@ -328,7 +336,7 @@ public class SessionHandler {
 					c.serverIdentifier = connection.getServerIdentifier();
 					break;
 				case 1:
-					c.serverIdentifier = new PlayerIdentifier(".null");
+					c.serverIdentifier = UsernameHandler.nullIdentifier;
 					break;
 				}
 			}
@@ -349,6 +357,97 @@ public class SessionHandler {
 			}
 		}
 		return list;
+	}
+	
+	public static void connectByCommand(ICommandSender sender, ICommand command, PlayerIdentifier client, PlayerIdentifier server) throws CommandException
+	{
+		Session sc = getPlayerSession(client), ss = getPlayerSession(server);
+		
+		if(singleSession)
+		{
+			int i = (sc == null ? 1:0) + (ss == null ? 1 : 0); 
+			sc = ss = sessions.get(0);
+			if(MinestuckConfig.forceMaxSize && sc.getPlayerList().size() + i > maxSize)
+				throw new CommandException("computer.singleSessionFull");
+		}
+		else
+		{
+			if(sc == null && ss == null)
+			{
+				if(sender.sendCommandFeedback())
+					sender.addChatMessage(new ChatComponentText("Neither player is part of a session. Creating new session..."));
+				sc = ss = new Session();
+				sessions.add(sc);
+			} else if(sc == null)
+			{
+				if(ss.locked)
+					throw new CommandException("The server session is locked, and can no longer be modified!");
+				if(MinestuckConfig.forceMaxSize && ss.getPlayerList().size() + 1 > maxSize)
+					throw new CommandException("computer.serverSessionFull");
+				sc = ss;
+			} else if(ss == null)
+			{
+				if(sc.locked)
+					throw new CommandException("The client session is locked, and can no longer be modified!");
+				if(MinestuckConfig.forceMaxSize && sc.getPlayerList().size() + 1 > maxSize)
+					throw new CommandException("computer.clientSessionFull");
+				ss = sc;
+			}
+		}
+		
+		SburbConnection cc = SkaianetHandler.getMainConnection(client, true), cs = SkaianetHandler.getMainConnection(server, false);
+		
+		if(cc != null && cc == cs)
+			throw new CommandException("Those players are already connected!");
+		
+		if(sc != ss)
+		{
+			String merge = merge(sc, ss, null);
+			if(merge != null)
+				throw new CommandException(merge);
+		}
+		
+		if(cs != null)
+		{
+			if(cs.isActive)
+				SkaianetHandler.closeConnection(server, cs.getClientIdentifier(), false);
+			cs.serverIdentifier = UsernameHandler.nullIdentifier;
+			if(sender.sendCommandFeedback())
+				sender.addChatMessage(new ChatComponentText(server.getUsername()+"'s old client player "+cs.getClientIdentifier().getUsername()+" is now without a server player.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.YELLOW)));
+		}
+		
+		if(cc != null && cc.isActive)
+			SkaianetHandler.closeConnection(client, cc.getServerIdentifier(), true);
+		
+		SburbConnection connection = SkaianetHandler.getConnection(client, server);
+		if(cc == null)
+		{
+			if(connection != null)
+				cc = connection;
+			else
+			{
+				cc = new SburbConnection();
+				SkaianetHandler.connections.add(cc);
+				cc.clientIdentifier = client;
+				cc.serverIdentifier = server;
+				sc.connections.add(cc);
+				SburbHandler.onConnectionCreated(cc);
+			}
+			cc.isMain = true;
+		} else
+		{
+			if(connection != null && connection.isActive)
+			{
+				SkaianetHandler.connections.remove(connection);
+				sc.connections.remove(connection);
+				cc.client = connection.client;
+				cc.server = connection.server;
+			} else cc.serverIdentifier = server;
+		}
+		
+		SkaianetHandler.updateAll();
+		
+		CommandBase.notifyOperators(sender, command, "commands.sburbServer.success", client.getUsername(), server.getUsername());
 	}
 	
 	/**
@@ -372,7 +471,8 @@ public class SessionHandler {
 				NBTTagCompound connectionTag = new NBTTagCompound();
 				connectionTag.setString("client", c.getClientIdentifier().getUsername());
 				connectionTag.setString("clientId", c.getClientIdentifier().getString());
-				connectionTag.setString("server", c.getServerIdentifier().getUsername());
+				if(!c.getServerIdentifier().equals(UsernameHandler.nullIdentifier))
+					connectionTag.setString("server", c.getServerIdentifier().getUsername());
 				connectionTag.setBoolean("isMain", c.isMain);
 				connectionTag.setBoolean("isActive", c.isActive);
 				if(c.isMain)
