@@ -86,7 +86,7 @@ public class Session
 		if(predefinedPlayers.containsKey(player))
 			return true;
 		for(SburbConnection c : connections)
-			if(c.getClientIdentifier().equals(player) || c.getClientIdentifier().equals(player))
+			if(c.getClientIdentifier().equals(player) || c.getServerIdentifier().equals(player))
 				return true;
 		return false;
 	}

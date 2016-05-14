@@ -262,8 +262,17 @@ public class SessionHandler {
 		Session sClient = getPlayerSession(client), sServer = getPlayerSession(server);
 		SburbConnection cClient = SkaianetHandler.getMainConnection(client, true);
 		SburbConnection cServer = SkaianetHandler.getMainConnection(server, false);
-		return cClient != null && sClient == sServer && (MinestuckConfig.allowSecondaryConnections || cClient == cServer)
-				|| cClient == null && cServer == null && !(sClient != null && sClient.locked) && !(sServer != null && sServer.locked);
+		boolean serverActive = cServer != null;
+		if(!serverActive && sServer != null)
+			for(SburbConnection c : sServer.connections)
+				if(c.getServerIdentifier().equals(server))
+				{
+					serverActive = true;
+					break;
+				}
+		
+		return cClient != null && sClient == sServer && (MinestuckConfig.allowSecondaryConnections || cClient == cServer)	//Reconnect within session
+				|| cClient == null && !serverActive && !(sClient != null && sClient.locked) && !(sServer != null && sServer.locked);	//Connect with a new player and potentially create a main connection
 	}
 	
 	/**
@@ -442,6 +451,7 @@ public class SessionHandler {
 				sc.connections.remove(connection);
 				cc.client = connection.client;
 				cc.server = connection.server;
+				cc.serverIdentifier = server;
 			} else cc.serverIdentifier = server;
 		}
 		
