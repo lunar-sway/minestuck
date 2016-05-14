@@ -249,17 +249,19 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	{
 		return false;
 	}
+	
 	public String getType() 
 	{
 		return gristType;
 	}
+	
 	public static int typeInt(String type)
 	{
-
-				return GristType.getTypeFromString(type).ordinal();
+		GristType grist = GristType.getTypeFromString(type);
+		return grist == null ? -1 : grist.ordinal();
 	
 	}
-
+	
 	public float getSizeByValue() 
 	{
 		return (float) (Math.pow(gristValue, .25) / 3.0F);
