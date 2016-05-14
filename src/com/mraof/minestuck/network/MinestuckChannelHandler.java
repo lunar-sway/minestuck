@@ -21,6 +21,7 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.util.Debug;
 
 public class MinestuckChannelHandler extends FMLIndexedMessageToMessageCodec<MinestuckPacket> 
 {
@@ -40,11 +41,13 @@ public class MinestuckChannelHandler extends FMLIndexedMessageToMessageCodec<Min
 	public void encodeInto(ChannelHandlerContext ctx, MinestuckPacket msg, ByteBuf target) throws Exception 
 	{
 		target.writeBytes(msg.data);
+		Debug.debug("Sending packet "+msg.toString()+" with size "+msg.data.writerIndex());
 	}
 
 	@Override
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf source, MinestuckPacket msg) 
 	{
+		Debug.debug("Received packet "+msg.toString()+" with size "+source.readableBytes());
 		msg.consumePacket(source);
 	}
 	

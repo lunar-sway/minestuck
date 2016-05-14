@@ -81,7 +81,7 @@ public class LandAspectHeat extends TerrainLandAspect
 		
 		list.add(new UndergroundDecoratorVein(Blocks.gravel.getDefaultState(), 8, 33, 256));
 		list.add(new UndergroundDecoratorVein(MinestuckBlocks.coalOreNetherrack.getDefaultState(), 26, 17, 128));
-		list.add(new UndergroundDecoratorVein(Blocks.quartz_ore.getDefaultState(), 13, 14, 64));
+		list.add(new UndergroundDecoratorVein(Blocks.quartz_ore.getDefaultState(), 13, 8, 64));
 		return list;
 	}
 	
