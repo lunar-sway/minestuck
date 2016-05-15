@@ -16,7 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemModus extends Item
 {
 	
-	public String[] modusNames = {"stack", "queue", "queuestack", "tree", "hashmap"};
+	public String[] modusNames = {"stack", "queue", "queuestack", "tree", "hashmap", "set"};
 	
 	public ItemModus()
 	{
@@ -39,6 +39,7 @@ public class ItemModus extends Item
 	{
 		for(int i = 0; i < 4; i++)
 			itemList.add(new ItemStack(this, 1, i));
+		itemList.add(new ItemStack(this, 1, 5));	//Skip hashmap until it's implemented
 	}
 	
 }

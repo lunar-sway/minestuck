@@ -12,7 +12,6 @@ import com.mraof.minestuck.util.AlchemyRecipeHandler;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -58,7 +57,7 @@ public class StackModus extends Modus
 			if(nbt.hasKey("item"+i))
 				list.add(ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("item"+i)));
 			else break;
-		if(FMLCommonHandler.instance().getEffectiveSide().isClient())
+		if(side.isClient())
 		{
 			items = new ItemStack[size];
 			changed = true;
@@ -102,7 +101,7 @@ public class StackModus extends Modus
 	@Override
 	public ItemStack[] getItems()
 	{
-		if(FMLCommonHandler.instance().getEffectiveSide().isServer())	//Used only when replacing the modus
+		if(side.isServer())	//Used only when replacing the modus
 		{
 			ItemStack[] items = new ItemStack[size];
 			fillList(items);

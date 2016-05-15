@@ -14,6 +14,7 @@ public abstract class Modus
 {
 	
 	public EntityPlayer player;
+	public Side side;
 	
 	/**
 	 * This is called when the modus is created without calling readFromNBT(nbt).
@@ -48,7 +49,7 @@ public abstract class Modus
 		ModusType type = ModusType.getType(this);
 		if(type == null)
 			return "";
-		else return new ItemStack(MinestuckItems.modusCard, 1, type.ordinal()).getDisplayName();
+		else return new ItemStack(MinestuckItems.modusCard, 1, type.metadata).getDisplayName();
 	}
 	
 }

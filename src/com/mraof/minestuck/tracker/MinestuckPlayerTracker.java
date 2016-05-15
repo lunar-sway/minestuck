@@ -14,6 +14,7 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.editmode.ServerEditHandler;
@@ -73,7 +74,7 @@ public class MinestuckPlayerTracker {
 		if(CaptchaDeckHandler.getModus(player) == null && MinestuckConfig.defaultModusTypes.length > 0 && !MinestuckPlayerData.getData(player).givenModus)
 		{
 			int index = player.worldObj.rand.nextInt(MinestuckConfig.defaultModusTypes.length);
-			Modus modus = CaptchaDeckHandler.ModusType.getType(MinestuckConfig.defaultModusTypes[index]).createInstance();
+			Modus modus = CaptchaDeckHandler.ModusType.getType(MinestuckConfig.defaultModusTypes[index]).createInstance(Side.SERVER);
 			modus.player = player;
 			modus.initModus(null, MinestuckConfig.initialModusSize);
 			CaptchaDeckHandler.setModus(player, modus);

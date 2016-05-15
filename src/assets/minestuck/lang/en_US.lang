@@ -258,6 +258,7 @@ item.modusCard.queue.name=Queue Modus
 item.modusCard.queuestack.name=Queue-Stack Modus
 item.modusCard.tree.name=Tree Modus
 item.modusCard.hashmap.name=Hashmap Modus
+item.modusCard.set.name=Set Modus
 item.metalBoat.iron.name=Iron Boat
 item.metalBoat.gold.name=Golden Boat
 item.bucketObsidian.name=Obsidian Bucket

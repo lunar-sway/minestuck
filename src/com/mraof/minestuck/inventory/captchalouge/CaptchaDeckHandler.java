@@ -27,7 +27,8 @@ public class CaptchaDeckHandler
 		STACK(StackModus.class, 0),
 		QUEUE(QueueModus.class, 1),
 		QUEUE_STACK(QueuestackModus.class, 2),
-		TREE(TreeModus.class, 3);
+		TREE(TreeModus.class, 3),
+		SET(SetModus.class, 5);
 		
 		private final Class<? extends Modus> c;
 		public final int metadata;
@@ -37,11 +38,13 @@ public class CaptchaDeckHandler
 			this.metadata = metadata;
 		}
 		
-		public Modus createInstance()
+		public Modus createInstance(Side side)
 		{
 			try
 			{
-				return c.newInstance();
+				Modus modus = c.newInstance();
+				modus.side = side;
+				return modus;
 			} catch (Exception e)
 			{
 				e.printStackTrace();
@@ -111,7 +114,7 @@ public class CaptchaDeckHandler
 		{
 			if(modus == null)
 			{
-				modus = ModusType.getType(item.getItemDamage()).createInstance();
+				modus = ModusType.getType(item.getItemDamage()).createInstance(Side.SERVER);
 				modus.player = player;
 				modus.initModus(null, MinestuckConfig.initialModusSize);
 				setModus(player, modus);
@@ -123,7 +126,7 @@ public class CaptchaDeckHandler
 				ModusType oldType = ModusType.getType(oldModus);
 				if(oldType.metadata == item.getItemDamage())
 					return;
-				modus = ModusType.getType(item.getItemDamage()).createInstance();
+				modus = ModusType.getType(item.getItemDamage()).createInstance(Side.SERVER);
 				modus.player = player;
 				if(modus.canSwitchFrom(oldType))
 					modus.initModus(oldModus.getItems(), oldModus.getSize());
@@ -312,7 +315,7 @@ public class CaptchaDeckHandler
 			modus = clientSideModus;
 		else
 		{
-			modus = ModusType.getType(nbt.getInteger("type")).createInstance();
+			modus = ModusType.getType(nbt.getInteger("type")).createInstance(clientSide ? Side.CLIENT : Side.SERVER);
 			if(clientSide)
 				modus.player = ClientProxy.getClientPlayer();
 		}

@@ -19,6 +19,7 @@ import net.minecraft.network.play.client.C0DPacketCloseWindow;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class GuiCaptchaDeck extends GuiPlayerStatsContainer implements GuiYesNoCallback
 {
@@ -81,7 +82,7 @@ public class GuiCaptchaDeck extends GuiPlayerStatsContainer implements GuiYesNoC
 			ItemStack stack = container.inventory.getStackInSlot(0);
 			if(stack.getItem() instanceof ItemModus)
 			{
-				Modus newModus = CaptchaDeckHandler.ModusType.getType(stack.getItemDamage()).createInstance();
+				Modus newModus = CaptchaDeckHandler.ModusType.getType(stack.getItemDamage()).createInstance(Side.CLIENT);
 				if(CaptchaDeckHandler.clientSideModus != null && !newModus.canSwitchFrom(CaptchaDeckHandler.ModusType.getType(CaptchaDeckHandler.clientSideModus)))
 				{
 					mc.currentScreen = new GuiYesNo(this, StatCollector.translateToLocal("gui.emptySylladex1"), StatCollector.translateToLocal("gui.emptySylladex2"), 0)
