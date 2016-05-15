@@ -1,6 +1,11 @@
 {
     "variants": {
-        "blocktype=blue": { "model": "minestuck:colored_dirt_blue" },
+        "blocktype=blue": [
+            { "model": "minestuck:colored_dirt_blue" },
+            { "model": "minestuck:colored_dirt_blue", "y": 90 },
+            { "model": "minestuck:colored_dirt_blue", "y": 180 },
+            { "model": "minestuck:colored_dirt_blue", "y": 270 }
+        ],
         "blocktype=thought": { "model": "minestuck:colored_dirt_thought" }
     }
 }
