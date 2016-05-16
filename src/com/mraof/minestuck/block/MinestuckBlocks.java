@@ -32,6 +32,7 @@ public class MinestuckBlocks
 	public static Block returnNode;
 	public static Block gate;
 	public static BlockGlowingMushroom glowingMushroom;
+	public static Block glowingLog;
 	
 	public static Block coalOreNetherrack;
 	public static Block ironOreSandstone;
@@ -78,6 +79,8 @@ public class MinestuckBlocks
 		returnNode = GameRegistry.registerBlock(new BlockReturnNode(), null, "return_node");
 		gate = GameRegistry.registerBlock(new BlockGate(), null, "gate");
 		glowingMushroom = (BlockGlowingMushroom) GameRegistry.registerBlock(new BlockGlowingMushroom(), "glowing_mushroom");
+		glowingLog = GameRegistry.registerBlock(new BlockGlowingLog(), "glowing_log");
+		
 		primedTnt = GameRegistry.registerBlock(new BlockTNTSpecial(true, false, false), "primed_tnt").setUnlocalizedName("primedTnt");
 		unstableTnt = GameRegistry.registerBlock(new BlockTNTSpecial(false, true, false), "unstable_tnt").setUnlocalizedName("unstableTnt");
 		instantTnt = GameRegistry.registerBlock(new BlockTNTSpecial(false, false, true), "instant_tnt").setUnlocalizedName("instantTnt");

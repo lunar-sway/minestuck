@@ -148,6 +148,8 @@ public class MinestuckModelManager
 		for(BlockMachine.MachineType type : BlockMachine.MachineType.values())
 			register(blockMachine, type.ordinal(), "machine_"+type.getName());
 		register(glowingMushroom);
+		register(glowingLog);
+		
 		register(primedTnt);
 		register(unstableTnt);
 		register(instantTnt);
