@@ -2,6 +2,6 @@
     "parent": "block/cube_column",
     "textures": {
         "end": "minestuck:blocks/log_glowing_top",
-        "side": "minestuck:blocks/log_Glowing"
+        "side": "minestuck:blocks/log_glowing"
     }
 }
