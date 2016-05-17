@@ -250,8 +250,12 @@ public class LandAspectRegistry
 				return player.dimension;
 			}
 		}
+		
 		int id = SkaianetHandler.enterMedium((EntityPlayerMP)player, newLandId);
-		if(id != newLandId)	//Player already got a land, but the tag was somehow lost?
+		if(id == -1)
+			return -1;	//Something happened at skaianet preventing you from entering
+		
+		if(id != newLandId)
 			newLandId = id;
 		else
 		{

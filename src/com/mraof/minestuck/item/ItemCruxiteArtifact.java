@@ -78,6 +78,12 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 						destinationId = c.getClientDimension();
 					else destinationId = LandAspectRegistry.createLand(player);
 					
+					if(destinationId == -1)	//Something bad happened further down and the problem should be written in the server console
+					{
+						player.addChatComponentMessage(new ChatComponentText("Something went wrong during entry. More details in the server console."));
+						return;
+					}
+					
 					player.triggerAchievement(MinestuckAchievementHandler.enterMedium);
 					Teleport.teleportEntity(player, destinationId, this, false);
 					MinestuckPlayerTracker.sendLandEntryMessage(player);

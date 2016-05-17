@@ -59,15 +59,17 @@ public class SkaianetHandler {
 	{
 		for(SburbConnection c : connections)
 			if(c.isMain)
-				if(isClient && c.getClientIdentifier().equals(player) && !c.getServerIdentifier().equals(UsernameHandler.nullIdentifier))
-					return c.getServerIdentifier();
+				if(isClient && c.getClientIdentifier().equals(player))
+					return c.getServerIdentifier().equals(UsernameHandler.nullIdentifier) ? null : c.getServerIdentifier();
 				else if(!isClient && c.getServerIdentifier().equals(player))
-				return c.getClientIdentifier();
+					return c.getClientIdentifier();
 		return null;
 	}
 	
 	public static SburbConnection getMainConnection(PlayerIdentifier player, boolean isClient)
 	{
+		if(player.equals(UsernameHandler.nullIdentifier))
+			return null;
 		for(SburbConnection c : connections)
 			if(c.isMain)
 				if(isClient ? (c.getClientIdentifier().equals(player))
@@ -614,26 +616,37 @@ public class SkaianetHandler {
 			c = getClientConnection(username);
 			if(c == null)
 			{
-				Debug.infof("Player %s entered without connection. Creating connection with self... ", player.getCommandSenderName());
+				Debug.infof("Player %s entered without connection. Creating connection... ", player.getCommandSenderName());
 				c = new SburbConnection();
 				c.isActive = false;
 				c.isMain = true;
 				c.clientIdentifier = username;
-				c.serverIdentifier = username;
-				if(SessionHandler.onConnectionCreated(c) == null)
+				c.serverIdentifier = UsernameHandler.nullIdentifier;
+				String s = SessionHandler.onConnectionCreated(c);
+				if(s == null)
 				{
 					SburbHandler.onFirstItemGiven(c);
 					connections.add(c);
 				}
 				else if(SessionHandler.singleSession)
 				{
+					Debug.warnf("Failed to create connection: %s. Trying again with global session disabled for this world...", s);
 					SessionHandler.singleSession = false;
 					SessionHandler.split();
-					if(SessionHandler.onConnectionCreated(c) == null)
+					s = SessionHandler.onConnectionCreated(c);
+					if(s == null)
 					{
 						SburbHandler.onFirstItemGiven(c);
 						connections.add(c);
+					} else
+					{
+						Debug.errorf("Couldn't create a connection for %s: %s. Stopping entry.", player.getCommandSenderName(), s);
+						return -1;
 					}
+				} else
+				{
+					Debug.errorf("Couldn't create a connection for %s: %s. Stopping entry.", player.getCommandSenderName(), s);
+					return -1;
 				}
 			}
 			else giveItems(username);

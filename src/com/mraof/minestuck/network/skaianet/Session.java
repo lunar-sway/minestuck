@@ -83,6 +83,8 @@ public class Session
 	 */
 	boolean containsPlayer(PlayerIdentifier player)
 	{
+		if(player.equals(UsernameHandler.nullIdentifier))
+			return false;
 		if(predefinedPlayers.containsKey(player))
 			return true;
 		for(SburbConnection c : connections)

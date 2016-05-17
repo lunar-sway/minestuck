@@ -285,8 +285,15 @@ public class SessionHandler {
 		if(singleSession)
 		{
 			if(sessions.size() == 0)
-				return "computer.messageConnectFailed";
-			int i = (sessions.get(0).containsPlayer(connection.getClientIdentifier())?0:1)+(sessions.get(0).containsPlayer(connection.getServerIdentifier())?0:1);
+			{
+				Debug.error("No session in list when global session should be turned on?");
+				Session session = new Session();
+				session.name = GLOBAL_SESSION_NAME;
+				sessions.add(session);
+				sessionsByName.put(session.name, session);
+			}
+			
+			int i = (sessions.get(0).containsPlayer(connection.getClientIdentifier())?0:1)+(connection.getServerIdentifier().equals(UsernameHandler.nullIdentifier) || sessions.get(0).containsPlayer(connection.getServerIdentifier())?0:1);
 			if(MinestuckConfig.forceMaxSize && sessions.get(0).getPlayerList().size()+i > maxSize)
 				return "computer.singleSessionFull";
 			else
@@ -303,13 +310,16 @@ public class SessionHandler {
 				sessions.add(s);
 				s.connections.add(connection);
 				return null;
-			} else if(sClient == null || sServer == null) {
-				if((sClient == null?sServer:sClient).locked || MinestuckConfig.forceMaxSize && (sClient == null?sServer:sClient).getPlayerList().size()+1 > maxSize)
+			} else if(sClient == null || sServer == null)
+			{
+				if((sClient == null?sServer:sClient).locked || MinestuckConfig.forceMaxSize && !connection.getServerIdentifier().equals(UsernameHandler.nullIdentifier) && (sClient == null?sServer:sClient).getPlayerList().size()+1 > maxSize)
 					return "computer."+(sClient == null?"server":"client")+"SessionFull";
 				(sClient == null?sServer:sClient).connections.add(connection);
 				return null;
-			} else {
-				if(sClient == sServer) {
+			} else
+			{
+				if(sClient == sServer)
+				{
 					sClient.connections.add(connection);
 					return null;
 				}
