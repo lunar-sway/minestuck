@@ -139,7 +139,7 @@ public class CaptchaDeckHandler
 				}
 				
 				setModus(player, modus);
-				item.setItemDamage(oldType.ordinal());
+				item.setItemDamage(oldType.metadata);
 			}
 			
 		}
