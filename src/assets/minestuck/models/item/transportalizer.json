@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "minestuck:items/Transportalizer"
+        "layer0": "minestuck:items/transportalizer"
     },
     "display": {
         "thirdperson": {

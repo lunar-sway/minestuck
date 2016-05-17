@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "minestuck:items/ScarletRibbitar"
+        "layer0": "minestuck:items/scarlet_ribbitar"
     },
     "display": {
         "thirdperson": {

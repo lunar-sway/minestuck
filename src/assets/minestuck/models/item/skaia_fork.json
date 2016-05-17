@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "minestuck:items/SkaianFork"
+        "layer0": "minestuck:items/skaian_fork"
     },
     "display": {
         "thirdperson": {

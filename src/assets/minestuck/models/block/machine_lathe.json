@@ -1,6 +1,6 @@
 {
     "textures": {
-        "particle": "minestuck:items/TotemLathe",
+        "particle": "minestuck:items/totem_lathe",
         "front": "minestuck:blocks/TotemLatheFront",
         "back": "minestuck:blocks/TotemLatheBack",
         "other": "minestuck:blocks/TotemLatheMisc"

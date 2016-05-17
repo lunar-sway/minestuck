@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "minestuck:items/Katana"
+        "layer0": "minestuck:items/katana"
     },
     "display": {
         "thirdperson": {

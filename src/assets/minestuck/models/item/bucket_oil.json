@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "minestuck:items/BucketOil"
+        "layer0": "minestuck:items/bucket_oil"
     },
     "display": {
         "thirdperson": {

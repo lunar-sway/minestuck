@@ -1,9 +1,9 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "minestuck:items/CruxitePotionBlank0",
-        "layer1": "minestuck:items/CruxitePotionBlank1",
-        "layer2": "minestuck:items/CruxitePotionBlank2"
+        "layer0": "minestuck:items/cruxite_potion_blank_0",
+        "layer1": "minestuck:items/cruxite_potion_blank_1",
+        "layer2": "minestuck:items/cruxite_potion_blank_2"
     },
     "display": {
         "thirdperson": {

@@ -1,6 +1,6 @@
 {
     "textures": {
-        "particle": "minestuck:items/GristWidget",
+        "particle": "minestuck:items/grist_widget",
         "texture1": "minestuck:blocks/GristWidget1",
         "texture2": "minestuck:blocks/GristWidget2"
     },

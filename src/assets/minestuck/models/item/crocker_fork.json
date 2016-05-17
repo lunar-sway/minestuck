@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "minestuck:items/CrockerFork"
+        "layer0": "minestuck:items/crocker_fork"
     },
     "display": {
         "thirdperson": {

@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "minestuck:items/PunchDesignix"
+        "layer0": "minestuck:items/punch_designix"
     },
     "display": {
         "thirdperson": {

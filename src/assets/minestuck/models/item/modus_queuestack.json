@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "minestuck:items/QueuestackModus"
+        "layer0": "minestuck:items/modus_queuestack"
     },
     "display": {
         "thirdperson": {

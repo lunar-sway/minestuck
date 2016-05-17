@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "minestuck:items/CruxiteApple"
+        "layer0": "minestuck:items/cruxite_apple"
     },
     "display": {
         "thirdperson": {

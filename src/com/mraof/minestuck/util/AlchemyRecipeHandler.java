@@ -572,6 +572,7 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(transportalizer), false, new GristSet(new GristType[] {GristType.Build, GristType.Amethyst, GristType.Rust, GristType.Uranium}, new int[] {350, 27, 36, 18}));
 		GristRegistry.addGristConversion(new ItemStack(modusCard, 1, 2), true, new GristSet(GristType.Build, 140));
 		GristRegistry.addGristConversion(new ItemStack(modusCard, 1, 3), true, new GristSet(new GristType[] {GristType.Build, GristType.Amber}, new int[] {400, 35}));
+		GristRegistry.addGristConversion(new ItemStack(modusCard, 1, 5), true, new GristSet(new GristType[] {GristType.Build, GristType.Mercury}, new int[] {350, 29}));
 		GristRegistry.addGristConversion(new ItemStack(metalBoat, 1, 0), true, new GristSet(GristType.Rust, 30));
 		GristRegistry.addGristConversion(new ItemStack(metalBoat, 1, 1), true, new GristSet(GristType.Gold, 30));
 		GristRegistry.addGristConversion(new ItemStack(layeredSand), new GristSet(GristType.Build, 1));
@@ -580,6 +581,7 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(minestuckBucket, 1, 2), true, new GristSet(new GristType[] {GristType.Rust, GristType.Amethyst, GristType.Chalk}, new int[] {27, 8, 8}));
 		GristRegistry.addGristConversion(new ItemStack(obsidianBucket), new GristSet(new GristType[] {GristType.Rust, GristType.Cobalt, GristType.Tar, GristType.Build}, new int[] {27, 8, 16, 4}));
 		GristRegistry.addGristConversion(new ItemStack(glowingMushroom), new GristSet(new GristType[] {GristType.Build, GristType.Shale, GristType.Mercury}, new int[] {5, 3, 2}));
+		GristRegistry.addGristConversion(new ItemStack(glowingLog), new GristSet(new GristType[] {GristType.Build, GristType.Amber, GristType.Mercury}, new int[] {8, 4, 4}));
 		GristRegistry.addGristConversion(new ItemStack(goldSeeds), new GristSet(GristType.Gold, 3));
 		GristRegistry.addGristConversion(new ItemStack(emeraldSword), false, new GristSet(new GristType[] {GristType.Quartz, GristType.Diamond, GristType.Ruby}, new int[] {44, 76, 72}));
 		GristRegistry.addGristConversion(new ItemStack(emeraldAxe), false, new GristSet(new GristType[] {GristType.Amber, GristType.Diamond, GristType.Ruby}, new int[] {40, 73, 70}));
@@ -634,6 +636,7 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination("stickWood", modusCard, OreDictionary.WILDCARD_VALUE, MODE_OR, new ItemStack(modusCard, 1, 3));
 		CombinationRegistry.addCombination("treeSapling", modusCard, OreDictionary.WILDCARD_VALUE, MODE_OR, new ItemStack(modusCard, 1, 3));
 		CombinationRegistry.addCombination("treeLeaves", modusCard, OreDictionary.WILDCARD_VALUE, MODE_OR, new ItemStack(modusCard, 1, 3));	//Not planks and logs though. Too little branch-related.
+		CombinationRegistry.addCombination(new ItemStack(modusCard), new ItemStack(Items.item_frame), MODE_AND, new ItemStack(modusCard, 1, 5));
 		
 		CombinationRegistry.addCombination(new ItemStack(Items.wheat_seeds), new ItemStack(Items.gold_nugget), MODE_AND, new ItemStack(goldSeeds));
 		CombinationRegistry.addCombination(new ItemStack(Items.wheat_seeds), new ItemStack(Items.gold_ingot), MODE_AND, new ItemStack(goldSeeds));
@@ -648,6 +651,9 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Items.water_bucket), new ItemStack(Items.lava_bucket), MODE_OR, new ItemStack(obsidianBucket));	//water_bucket && lava bucket could make a bucket with liquid obsidian? (from a mod that adds liquid obsidian)
 		CombinationRegistry.addCombination(new ItemStack(Items.bucket), new ItemStack(Blocks.obsidian), MODE_AND, new ItemStack(obsidianBucket));	//bucket || obsidian could make a bucket made out of obsidian
 		CombinationRegistry.addCombination(new ItemStack(Blocks.brown_mushroom), new ItemStack(Items.glowstone_dust), MODE_OR, new ItemStack(glowingMushroom));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.log), new ItemStack(glowingMushroom), MODE_OR, false, true, new ItemStack(glowingLog));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.log2), new ItemStack(glowingMushroom), MODE_OR, false, true, new ItemStack(glowingLog));
+		
 		CombinationRegistry.addCombination(new ItemStack(Items.coal), new ItemStack(Blocks.netherrack), MODE_AND, new ItemStack(coalOreNetherrack));
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_ingot), new ItemStack(Blocks.sandstone), MODE_AND, new ItemStack(ironOreSandstone));
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_ingot), new ItemStack(Blocks.red_sandstone), MODE_AND, new ItemStack(ironOreSandstoneRed));

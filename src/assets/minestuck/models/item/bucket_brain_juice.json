@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "minestuck:items/BucketBrainJuice"
+        "layer0": "minestuck:items/bucket_brain_juice"
     },
     "display": {
         "thirdperson": {

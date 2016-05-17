@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "minestuck:items/Spork"
+        "layer0": "minestuck:items/spork"
     },
     "display": {
         "thirdperson": {

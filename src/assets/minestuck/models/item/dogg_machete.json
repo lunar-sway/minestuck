@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "minestuck:items/SnoopDoggMachete"
+        "layer0": "minestuck:items/snoop_dogg_machete"
     },
     "display": {
         "thirdperson": {

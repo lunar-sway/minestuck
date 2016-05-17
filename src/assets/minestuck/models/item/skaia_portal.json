@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "minestuck:items/SkaiaPortal"
+        "layer0": "minestuck:items/skaia_portal"
     },
     "display": {
         "thirdperson": {

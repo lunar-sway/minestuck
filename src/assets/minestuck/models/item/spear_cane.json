@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "minestuck:items/SpearCane"
+        "layer0": "minestuck:items/spear_cane"
     },
     "display": {
         "thirdperson": {

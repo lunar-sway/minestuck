@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "minestuck:items/CompoWoodenSpoon"
+        "layer0": "minestuck:items/spoon_wood"
     },
     "display": {
         "thirdperson": {

@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "minestuck:items/PickaxeEmerald"
+        "layer0": "minestuck:items/pickaxe_emerald"
     },
     "display": {
         "thirdperson": {

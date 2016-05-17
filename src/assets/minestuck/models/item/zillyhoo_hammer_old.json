@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "minestuck:items/ZillyhooHammer"
+        "layer0": "minestuck:items/zillyhoo_hammer"
     },
     "display": {
         "thirdperson": {

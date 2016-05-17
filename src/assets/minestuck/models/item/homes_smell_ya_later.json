@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "minestuck:items/HomesSmellYaLater"
+        "layer0": "minestuck:items/homes_smell_ya_later"
     },
     "display": {
         "thirdperson": {
