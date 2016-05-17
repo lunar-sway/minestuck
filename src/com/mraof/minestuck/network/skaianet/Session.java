@@ -155,7 +155,7 @@ public class Session
 			for(int i = 0; i < list.tagCount(); i++)
 			{
 				NBTTagCompound compound = list.getCompoundTagAt(i);
-				predefinedPlayers.put(UsernameHandler.load(nbt, "player"), new PredefineData().read(compound));
+				predefinedPlayers.put(UsernameHandler.load(compound, "player"), new PredefineData().read(compound));
 			}
 		} else
 		{	//Support for saves from older minestuck versions
