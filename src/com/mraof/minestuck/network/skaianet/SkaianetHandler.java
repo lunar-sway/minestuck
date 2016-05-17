@@ -507,8 +507,8 @@ public class SkaianetHandler {
 			if(c.isActive)
 			{
 				TileEntityComputer cc = getComputer(c.client), sc = getComputer(c.server);
-				if(cc == null || sc == null || c.client.dimension == -1 || c.server.dimension == -1 || !cc.owner.equals(c.getClientIdentifier())
-						|| !sc.owner.equals(c.getServerIdentifier()) || !cc.getData(0).getBoolean("connectedToServer"))
+				if(cc == null || sc == null || c.client.dimension == -1 || c.server.dimension == -1 || !c.getClientIdentifier().equals(cc.owner)
+						|| !c.getServerIdentifier().equals(sc.owner) || !cc.getData(0).getBoolean("connectedToServer"))
 				{
 					Debug.warnf("[SKAIANET] Invalid computer in connection between %s and %s.", c.getClientIdentifier(), c.getServerIdentifier());
 					if(!c.isMain)
