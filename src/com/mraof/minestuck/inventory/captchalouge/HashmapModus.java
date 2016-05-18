@@ -5,6 +5,7 @@ import java.util.Iterator;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -13,19 +14,23 @@ import com.mraof.minestuck.client.gui.captchalouge.HashmapGuiHandler;
 import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler.ModusType;
 import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.network.CaptchaDeckPacket;
+import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 
 public class HashmapModus extends Modus
 {
 	
 	protected ArrayList<ItemStack> list;
+	public boolean ejectByChat = true;
 	
 	@SideOnly(Side.CLIENT)
 	protected boolean changed;
 	@SideOnly(Side.CLIENT)
 	protected ItemStack[] items;
 	@SideOnly(Side.CLIENT)
-	protected SylladexGuiHandler gui;	
+	protected SylladexGuiHandler gui;
 	
 	@Override
 	public void initModus(ItemStack[] prev, int size)
@@ -50,6 +55,7 @@ public class HashmapModus extends Modus
 	public void readFromNBT(NBTTagCompound nbt)
 	{
 		int size = nbt.getInteger("size");
+		ejectByChat = nbt.getBoolean("ejectByChat");
 		list = new ArrayList<ItemStack>();
 		
 		for(int i = 0; i < size; i++)
@@ -67,6 +73,7 @@ public class HashmapModus extends Modus
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
 	{
 		nbt.setInteger("size", list.size());
+		nbt.setBoolean("ejectByChat", ejectByChat);
 		Iterator<ItemStack> iter = list.iterator();
 		for(int i = 0; i < list.size(); i++)
 		{
@@ -91,7 +98,15 @@ public class HashmapModus extends Modus
 			list.add(null);
 		
 		if(list.get(index) != null)
-			CaptchaDeckHandler.launchItem(player, list.get(index));
+		{
+			ItemStack otherItem = list.get(index);
+			if(otherItem.getItem() == item.getItem() && otherItem.getItemDamage() == item.getItemDamage() && ItemStack.areItemStackTagsEqual(otherItem, item)
+					&& otherItem.stackSize + item.stackSize <= otherItem.getMaxStackSize())
+			{
+				otherItem.stackSize += item.stackSize;
+				return true;
+			} else CaptchaDeckHandler.launchItem(player, list.get(index));
+		}
 		
 		list.set(index, item);
 		
@@ -183,11 +198,77 @@ public class HashmapModus extends Modus
 	}
 	
 	@Override
+	public void setValue(byte type, int value)
+	{
+		ejectByChat = value > 0;
+	}
+	
+	@Override
 	public SylladexGuiHandler getGuiHandler()
 	{
 		if(gui == null)
 			gui = new HashmapGuiHandler(this);
 		return gui;
+	}
+	
+	public void onChatMessage(String str)
+	{
+		if(!ejectByChat && MinestuckConfig.hashmapChatModusSetting != 1 || MinestuckConfig.hashmapChatModusSetting == 2)
+			return;
+		
+		boolean isPrevLetter = false;
+		String number = "";
+		for(int i = 0; i < str.length(); i++)
+		{
+			char c = str.charAt(i);
+			if(Character.isLetter(c))
+				isPrevLetter = true;
+			else if(Character.isDigit(c) || (number.isEmpty() && c == '-'))
+			{
+				if(!isPrevLetter)
+					number = number + c;
+				continue;
+			} else
+			{
+				isPrevLetter = false;
+				
+				if(!number.isEmpty())
+					handleNumber(number);
+			}
+			
+			number = "";
+		}
+		
+		if(!number.isEmpty())
+			handleNumber(number);
+		
+		MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, CaptchaDeckHandler.writeToNBT(this));
+		MinestuckChannelHandler.sendToPlayer(packet, player);
+		
+	}
+	
+	private void handleNumber(String str)
+	{
+		int i;
+		
+		try
+		{
+			i = Integer.parseInt(str);
+		} catch(NumberFormatException e) {return;}
+		
+		int index = i % getSize();
+		if(index < 0)
+			index += getSize();
+		
+		ItemStack stack = getItem(index, false);
+		if(stack == null)
+			return;
+		
+		if(player.inventory.getCurrentItem() == null)
+			player.inventory.setInventorySlotContents(player.inventory.currentItem, stack);
+		else CaptchaDeckHandler.launchAnyItem(player, stack);
+		
+		this.player.addChatMessage(new ChatComponentTranslation("[HASHMAP] %s %% %s = %s -> %s", i, getSize(), index, stack.getChatComponent()));
 	}
 	
 }

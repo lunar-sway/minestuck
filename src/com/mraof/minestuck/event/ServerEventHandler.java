@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.underling.EntityUnderling;
+import com.mraof.minestuck.inventory.captchalouge.HashmapModus;
+import com.mraof.minestuck.inventory.captchalouge.Modus;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Echeladder;
@@ -24,6 +26,7 @@ import net.minecraft.entity.monster.EntityWitch;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -109,5 +112,13 @@ public class ServerEventHandler
 	{
 		if(!event.player.worldObj.isRemote)
 			SburbHandler.stopEntry(event.player);
+	}
+	
+	@SubscribeEvent(priority=EventPriority.LOW, receiveCanceled=false)
+	public void onServerChat(ServerChatEvent event)
+	{
+		Modus modus = MinestuckPlayerData.getData(event.player).modus;
+		if(modus instanceof HashmapModus)
+			((HashmapModus) modus).onChatMessage(event.message);
 	}
 }

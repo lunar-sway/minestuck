@@ -23,6 +23,7 @@ public class MinestuckConfigPacket extends MinestuckPacket
 	int cardCost;
 	int windowIdStart;
 	byte treeModusSetting;
+	byte hashmapModusSetting;
 	
 	boolean giveItems;
 	boolean easyDesignix;
@@ -52,6 +53,7 @@ public class MinestuckConfigPacket extends MinestuckPacket
 			data.writeInt(MinestuckConfig.cardCost);
 			data.writeBoolean(MinestuckConfig.disableGristWidget);
 			data.writeByte(MinestuckConfig.treeModusSetting);
+			data.writeByte(MinestuckConfig.hashmapChatModusSetting);
 			data.writeBoolean((Boolean) dat[1]);
 			data.writeBoolean(MinestuckConfig.preEntryRungLimit <= 0);
 		}
@@ -80,6 +82,7 @@ public class MinestuckConfigPacket extends MinestuckPacket
 			cardCost = data.readInt();
 			disableGristWidget = data.readBoolean();
 			treeModusSetting = data.readByte();
+			hashmapModusSetting = data.readByte();
 			dataChecker = data.readBoolean();
 			preEntryEcheladder = data.readBoolean();
 		}
@@ -107,6 +110,7 @@ public class MinestuckConfigPacket extends MinestuckPacket
 			MinestuckConfig.clientCardCost = cardCost;
 			MinestuckConfig.clientDisableGristWidget = disableGristWidget;
 			MinestuckConfig.clientTreeAutobalance = treeModusSetting;
+			MinestuckConfig.clientHashmapChat = hashmapModusSetting;
 			MinestuckConfig.dataCheckerAccess = dataChecker;
 			MinestuckConfig.preEntryEcheladder = preEntryEcheladder;
 		}

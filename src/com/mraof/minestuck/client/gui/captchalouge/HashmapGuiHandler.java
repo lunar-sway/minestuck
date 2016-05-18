@@ -1,8 +1,13 @@
 package com.mraof.minestuck.client.gui.captchalouge;
 
-import net.minecraft.item.ItemStack;
+import java.io.IOException;
 
-import com.mraof.minestuck.inventory.captchalouge.Modus;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
+
+import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.inventory.captchalouge.HashmapModus;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
@@ -11,13 +16,33 @@ import com.mraof.minestuck.network.MinestuckPacket.Type;
 public class HashmapGuiHandler extends SylladexGuiHandler
 {
 	
-	private Modus modus;
+	private HashmapModus modus;
+	protected GuiButton guiButton;
 	
-	public HashmapGuiHandler(Modus modus)
+	public HashmapGuiHandler(HashmapModus modus)
 	{
 		super();
 		this.modus = modus;
 		this.textureIndex = 4;
+	}
+	
+	@Override
+	public void initGui()
+	{
+		super.initGui();
+		guiButton = new GuiButton(0, (width - GUI_WIDTH)/2 + 15, (height - GUI_HEIGHT)/2 + 175, 120, 20, "");
+		buttonList.add(guiButton);
+	}
+	
+	@Override
+	public void drawScreen(int xcor, int ycor, float f)
+	{
+		guiButton.xPosition = (width - GUI_WIDTH)/2 + 15;
+		guiButton.yPosition = (height - GUI_HEIGHT)/2 + 175;
+		boolean active = MinestuckConfig.clientHashmapChat == 0 ? modus.ejectByChat : MinestuckConfig.clientHashmapChat == 1;
+		guiButton.displayString = StatCollector.translateToLocal(active ? "gui.ejectByChat.on" : "gui.ejectByChat.off");
+		guiButton.enabled = MinestuckConfig.clientHashmapChat == 0;
+		super.drawScreen(xcor, ycor, f);
 	}
 	
 	@Override
@@ -76,4 +101,14 @@ public class HashmapGuiHandler extends SylladexGuiHandler
 		}
 	}
 	
+	@Override
+	protected void actionPerformed(GuiButton button) throws IOException
+	{
+		super.actionPerformed(button);
+		if(button == this.guiButton && MinestuckConfig.clientHashmapChat == 0)
+		{
+			modus.ejectByChat = !modus.ejectByChat;
+			MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.VALUE, (byte) 0, modus.ejectByChat ? 1 : 0)); 
+		}
+	}
 }

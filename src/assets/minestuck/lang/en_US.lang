@@ -203,6 +203,8 @@ gui.emptySylladex2=This will empty your sylladex.
 gui.emptySylladexButton=Empty Sylladex
 gui.autobalance.on=Auto-balance Active
 gui.autobalance.off=Auto-balance Inactive
+gui.ejectByChat.on=Quick Eject Active
+gui.ejectByChat.off=Quick Eject Inactive
 gui.selectTitle=Choose Your Title
 gui.selectTitle.used=%s is already used
 
@@ -377,6 +379,8 @@ minestuck.config.modusMaxSize=Modus Max Size
 minestuck.config.modusMaxSize.tooltip=The highest number of cards a modus can have. If the value is 0, a maximum size will be ignored.
 minestuck.config.forceAutobalance=Force Auto-balance
 minestuck.config.forceAutobalance.tooltip=Determines if and how the auto-balance option (for the tree modus) should be forced. 'Both': Both options are available. 'On': Forced at on. 'Off': Forced at off.
+minestuck.config.forceEjectByChat=Force Hashmap Eject-by-chat
+minestuck.config.forceEjectByChat.tooltip=Determines if and how the eject-by-chat option (for the hashmap modus) should be forced. 'Both': Both options are available. 'On': Forced at on. 'Off': Forced at off.
 minestuck.config.itemDropMode=Item Drop Mode
 minestuck.config.itemDropMode.tooltip="Items": Only the captchalouged items will be dropped. "Cards And Items": Cards will also be dropped, but you will always keep up to the initial modus size of cards. "All": All items in the sylladex will be dropped. Even the modus and the rest of the cards.
 minestuck.config.dropItemsInCards=Drop Items In Cards
