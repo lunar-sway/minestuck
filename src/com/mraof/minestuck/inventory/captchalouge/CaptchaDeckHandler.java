@@ -28,6 +28,7 @@ public class CaptchaDeckHandler
 		QUEUE(QueueModus.class, 1),
 		QUEUE_STACK(QueuestackModus.class, 2),
 		TREE(TreeModus.class, 3),
+		HASHMAP(HashmapModus.class, 4),
 		SET(SetModus.class, 5);
 		
 		private final Class<? extends Modus> c;

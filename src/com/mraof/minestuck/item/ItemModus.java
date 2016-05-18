@@ -37,9 +37,8 @@ public class ItemModus extends Item
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item item, CreativeTabs tab, List itemList)
 	{
-		for(int i = 0; i < 4; i++)
+		for(int i = 0; i < 6; i++)
 			itemList.add(new ItemStack(this, 1, i));
-		itemList.add(new ItemStack(this, 1, 5));	//Skip hashmap until it's implemented
 	}
 	
 }
