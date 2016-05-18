@@ -118,7 +118,7 @@ public class AlchemiterHandler extends TemplateRecipeHandler
 		drawProgressBar(49, 12, 0, 0, 71, 10, 50, 0);
 		
 		//render carved dowel
-		changeTexture("minestuck:textures/items/CruxiteCarved.png");
+		changeTexture("minestuck:textures/items/cruxite_carved.png");
 		drawTexturedModalRect(22, 9, 0, 0, 16, 16,16,16);
 		
 		//Render grist requirements
