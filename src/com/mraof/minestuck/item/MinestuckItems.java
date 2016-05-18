@@ -41,6 +41,7 @@ public class MinestuckItems
 	public static Item scarletZillyhoo;
 	//blades
 	public static Item sord;
+	public static Item cactusCutlass;
 	public static Item ninjaSword;
 	public static Item katana;
 	public static Item caledscratch;
@@ -111,6 +112,7 @@ public class MinestuckItems
 				scarletZillyhoo = new ItemHammer(EnumHammerType.SCARLET);
 				//blades
 				sord = new ItemBlade(EnumBladeType.SORD);
+				cactusCutlass = new ItemBlade(EnumBladeType.CACTUS);
 				ninjaSword = new ItemBlade(EnumBladeType.NINJA);
 				katana = new ItemBlade(EnumBladeType.KATANA);
 				caledscratch = new ItemBlade(EnumBladeType.CALEDSCRATCH);
@@ -184,6 +186,7 @@ public class MinestuckItems
 				GameRegistry.registerItem(scarletZillyhoo, "scarlet_zillyhoo");
 				
 				GameRegistry.registerItem(sord, "sord");
+				GameRegistry.registerItem(cactusCutlass, "cactaceae_cutlass");
 				GameRegistry.registerItem(ninjaSword, "ninja_sword");
 				GameRegistry.registerItem(katana, "katana");
 				GameRegistry.registerItem(caledscratch, "caledscratch");

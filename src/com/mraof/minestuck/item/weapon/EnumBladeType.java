@@ -4,6 +4,7 @@ public enum EnumBladeType
 {
 
 	SORD(59, 3, 5, "sord"),
+	CACTUS(104, 5, 10, "cactaceaeCutlass"),
 	NINJA(250, 6, 15, "ninjaSword"),
 	KATANA(2200, 8, 20, "katana"),
 	CALEDSCRATCH(1561, 7, 30, "caledscratch"),
