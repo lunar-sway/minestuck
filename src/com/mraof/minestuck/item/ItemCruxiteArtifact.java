@@ -37,6 +37,7 @@ import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.tileentity.TileEntityGate;
+import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.ColorCollector;
 import com.mraof.minestuck.util.Debug;
@@ -107,6 +108,8 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 			int z = (int) entity.posZ;
 			if(entity.posZ < 0) z--;
 			
+			boolean creative = ((EntityPlayerMP) entity).theItemInWorldManager.isCreative();
+			
 			int topY = MinestuckConfig.adaptEntryBlockHeight ? getTopHeight(worldserver0, x, y, z) : y + artifactRange;
 			int yDiff = 128 - topY;
 			MinestuckDimensionHandler.setSpawn(worldserver1.provider.getDimensionId(), new BlockPos(x, y + yDiff, z));	//Set again, but with a more precise now that the y-coordinate is properly decided.
@@ -173,7 +176,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 			while (iterator.hasNext())
 			{
 				Entity e = (Entity)iterator.next();
-				if(MinestuckConfig.entryCrater || e instanceof EntityPlayer || e instanceof EntityItem)
+				if(MinestuckConfig.entryCrater || e instanceof EntityPlayer || !creative && e instanceof EntityItem)
 				{
 					if(e instanceof EntityPlayer && ServerEditHandler.getData((EntityPlayer) e) != null)
 						ServerEditHandler.reset(ServerEditHandler.getData((EntityPlayer) e));
@@ -215,25 +218,36 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 							if(worldserver0.getBlockState(pos).getBlock() != Blocks.bedrock)
 								worldserver0.setBlockState(pos, Blocks.air.getDefaultState(), 2);
 						} else
-							if(worldserver0.getTileEntity(pos) != null)
-								worldserver0.setBlockState(pos, Blocks.air.getDefaultState(), 2);
+						{
+							TileEntity tileEntity = worldserver0.getTileEntity(pos);
+							if(tileEntity != null)
+								if(!creative)
+									worldserver0.setBlockState(pos, Blocks.air.getDefaultState(), 2);
+								else if(tileEntity instanceof TileEntityComputer)	//Avoid duplicating computer data when a computer is kept in the overworld
+									((TileEntityComputer) worldserver0.getTileEntity(pos)).programData = new NBTTagCompound();
+								else if(tileEntity instanceof TileEntityTransportalizer)
+									worldserver0.removeTileEntity(pos);
+						}
 					}
 				}
 			}
 			SkaianetHandler.clearMovingList();
 			
-			Debug.debug("Removing entities created from removing blocks...");	//Normally only items in containers
-			list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().expand((double)artifactRange, artifactRange, (double)artifactRange));
-			iterator = list.iterator();
-			while (iterator.hasNext())
-				if(MinestuckConfig.entryCrater)
-					((Entity)iterator.next()).setDead();
-				else
-				{
-					Entity e = (Entity) iterator.next();
-					if(e instanceof EntityItem)
-						e.setDead();
-				}
+			if(!(creative && MinestuckConfig.entryCrater))
+			{
+				Debug.debug("Removing entities created from removing blocks...");	//Normally only items in containers
+				list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().expand((double)artifactRange, artifactRange, (double)artifactRange));
+				iterator = list.iterator();
+				while (iterator.hasNext())
+					if(MinestuckConfig.entryCrater)
+						((Entity)iterator.next()).setDead();
+					else
+					{
+						Entity e = (Entity) iterator.next();
+						if(e instanceof EntityItem)
+							e.setDead();
+					}
+			}
 			
 			Debug.debug("Placing gates...");
 			
