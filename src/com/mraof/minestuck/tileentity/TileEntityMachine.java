@@ -257,7 +257,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 				{
 					ItemStack input = inv[1] != null ? inv[1] : inv[2];
 					return (inv[0] == null || inv[0].stackSize < inv[0].getMaxStackSize() && (AlchemyRecipeHandler.getDecodedItem(inv[0]).isItemEqual(AlchemyRecipeHandler.getDecodedItem(input))
-							|| !(inv[2].hasTagCompound() && inv[2].getTagCompound().getBoolean("punched")) && !(inv[0].hasTagCompound() && inv[0].getTagCompound().hasKey("contentID"))));
+							|| !(input.hasTagCompound() && input.getTagCompound().getBoolean("punched")) && !(inv[0].hasTagCompound() && inv[0].getTagCompound().hasKey("contentID"))));
 				}
 			}
 			else return false;
