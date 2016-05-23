@@ -85,12 +85,6 @@ public class Minestuck
 	 */
 	public static volatile boolean isServerRunning;
 	
-	public static int skaiaProviderTypeId;
-	public static int skaiaDimensionId;
-	public static int landProviderTypeId;
-	public static int landDimensionIdStart;
-	public static int biomeIdStart;
-	
 	// The instance of your mod that Forge uses.
 	@Instance("Minestuck")
 	public static Minestuck instance;
@@ -147,13 +141,8 @@ public class Minestuck
 		GameRegistry.registerTileEntity(TileEntityComputer.class, "minestuck.computerSburb");
 		GameRegistry.registerTileEntity(TileEntityTransportalizer.class, "minestuck.transportalizer");
 		GameRegistry.registerTileEntity(TileEntityGate.class, "minestuck.gate");
-		//register world generators
-		DimensionManager.registerProviderType(skaiaProviderTypeId, WorldProviderSkaia.class, false);
-		DimensionManager.registerDimension(skaiaDimensionId, skaiaProviderTypeId);
-		DimensionManager.registerProviderType(landProviderTypeId, WorldProviderLands.class, MinestuckConfig.keepDimensionsLoaded);
 		
-		BiomeGenMinestuck.mediumNormal = new BiomeGenMinestuck(biomeIdStart, true).setBiomeName("The Medium");
-		BiomeGenMinestuck.mediumOcean = new BiomeGenMinestuck(biomeIdStart+1, true).setBiomeName("The Medium (Ocean)");
+		MinestuckDimensionHandler.register();
 		
 		//register ore generation
 		OreHandler oreHandler = new OreHandler();

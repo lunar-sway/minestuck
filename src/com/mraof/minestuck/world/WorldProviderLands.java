@@ -188,12 +188,6 @@ public class WorldProviderLands extends WorldProvider
 		}
 	}
 	
-	@Override
-	public String getInternalNameSuffix()
-	{
-		return "_minestuck";
-	}
-	
 	public World getWorld()
 	{
 		return worldObj;

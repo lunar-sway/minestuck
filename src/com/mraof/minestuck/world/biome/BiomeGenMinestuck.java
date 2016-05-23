@@ -6,9 +6,9 @@ public class BiomeGenMinestuck extends BiomeGenBase
 {
 	
 	public static BiomeGenBase mediumOcean, mediumNormal;
-	public BiomeGenMinestuck(int id, boolean register)
+	public BiomeGenMinestuck(BiomeProperties properties)
 	{
-		super(id, register);
+		super(properties);
 	}
 	
 }

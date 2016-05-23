@@ -12,6 +12,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.server.FMLServerHandler;
 
 import org.lwjgl.opengl.GLContext;
 
@@ -20,6 +21,7 @@ import com.mraof.minestuck.inventory.ContainerHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
+import com.mraof.minestuck.world.MinestuckDimensionHandler;
 
 public class MinestuckConfig
 {
@@ -105,11 +107,11 @@ public class MinestuckConfig
 		config = new Configuration(file, true);
 		config.load();
 		
-		Minestuck.skaiaProviderTypeId = config.get("IDs", "skaiaProviderTypeId", 2).setRequiresMcRestart(true).setLanguageKey("minestuck.config.skaiaProviderTypeId").getInt();
-		Minestuck.skaiaDimensionId = config.get("IDs", "skaiaDimensionId", 2).setRequiresMcRestart(true).setLanguageKey("minestuck.config.skaiaDimensionId").getInt();
-		Minestuck.landProviderTypeId = config.get("IDs", "landProviderTypeId", 3).setRequiresMcRestart(true).setLanguageKey("minestuck.config.landProviderTypeId").getInt();
-		Minestuck.landDimensionIdStart = config.get("IDs", "landDimensionIdStart", 3).setRequiresMcRestart(true).setLanguageKey("minestuck.config.landDimensionIdStart").getInt();
-		Minestuck.biomeIdStart = config.get("IDs", "biomeIdStart", 50).setRequiresMcRestart(true).setMinValue(40).setMaxValue(120).setLanguageKey("minestuck.config.biomeIdStart").getInt();
+		MinestuckDimensionHandler.skaiaProviderTypeId = config.get("IDs", "skaiaProviderTypeId", 2).setRequiresMcRestart(true).setLanguageKey("minestuck.config.skaiaProviderTypeId").getInt();
+		MinestuckDimensionHandler.skaiaDimensionId = config.get("IDs", "skaiaDimensionId", 2).setRequiresMcRestart(true).setLanguageKey("minestuck.config.skaiaDimensionId").getInt();
+		MinestuckDimensionHandler.landProviderTypeId = config.get("IDs", "landProviderTypeId", 3).setRequiresMcRestart(true).setLanguageKey("minestuck.config.landProviderTypeId").getInt();
+		MinestuckDimensionHandler.landDimensionIdStart = config.get("IDs", "landDimensionIdStart", 3).setRequiresMcRestart(true).setLanguageKey("minestuck.config.landDimensionIdStart").getInt();
+		MinestuckDimensionHandler.biomeIdStart = config.get("IDs", "biomeIdStart", 50).setRequiresMcRestart(true).setMinValue(40).setMaxValue(120).setLanguageKey("minestuck.config.biomeIdStart").getInt();
 		MinestuckAchievementHandler.idOffset = config.get("IDs", "statsIdStart", 413).setRequiresMcRestart(true).setLanguageKey("minestuck.config.statsIdStart").getInt();
 		config.getCategory("IDs").setLanguageKey("minestuck.config.IDs");
 		
@@ -201,9 +203,9 @@ public class MinestuckConfig
 	@SubscribeEvent
 	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
 	{
-		if(event.modID.equals(Minestuck.class.getAnnotation(Mod.class).modid()))
+		if(event.getModID().equals(Minestuck.class.getAnnotation(Mod.class).modid()))
 		{
-			if(!event.isWorldRunning && !event.requiresMcRestart)
+			if(!event.isWorldRunning() && !event.isRequiresMcRestart())
 				loadBasicConfigOptions();	//Haven't put up a method for changing config options while the world is running
 			
 			config.save();
@@ -217,17 +219,17 @@ public class MinestuckConfig
 		{
 			if((dataCheckerPermission & 1) != 0)
 			{
-				MinecraftServer server = MinecraftServer.getServer();
-				if (server.getConfigurationManager().canSendCommands(player.getGameProfile()))
+				MinecraftServer server = player.getServer();
+				if (server.getPlayerList().canSendCommands(player.getGameProfile()))
 				{
-					UserListOpsEntry userlistopsentry = (UserListOpsEntry)server.getConfigurationManager().getOppedPlayers().getEntry(player.getGameProfile());
+					UserListOpsEntry userlistopsentry = (UserListOpsEntry)server.getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
 					if((userlistopsentry != null ? userlistopsentry.getPermissionLevel() : server.getOpPermissionLevel()) >= 2)
 						return true;
 				}
 			}
 			if((dataCheckerPermission & 2) != 0)
 			{
-				GameType gameType = player.theItemInWorldManager.getGameType();
+				GameType gameType = player.interactionManager.getGameType();
 				if(ServerEditHandler.getData(player) != null)
 					gameType = ServerEditHandler.getData(player).getDecoy().gameType;
 				if(!gameType.isSurvivalOrAdventure())
