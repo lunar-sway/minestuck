@@ -204,6 +204,7 @@ public class HashmapModus extends Modus
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public SylladexGuiHandler getGuiHandler()
 	{
 		if(gui == null)

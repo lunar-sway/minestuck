@@ -607,7 +607,7 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(woodenExplosiveButton, new GristSet(new GristType[] {GristType.Build, GristType.Chalk, GristType.Sulfur}, new int[] {7, 5, 8}));
 		
 		//add Designix combinations
-		CombinationRegistry.addCombination(new ItemStack(Items.wooden_sword), new ItemStack(Blocks.cactus), false, true, MODE_AND, new ItemStack(cactusCutlass));
+		CombinationRegistry.addCombination(new ItemStack(Items.wooden_sword), new ItemStack(Blocks.cactus), MODE_AND, false, true, new ItemStack(cactusCutlass));
 		CombinationRegistry.addCombination(new ItemStack(Items.stone_sword), new ItemStack(Items.rotten_flesh), MODE_AND, false, true, new ItemStack(ninjaSword));
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_sword), new ItemStack(Items.rotten_flesh), MODE_AND, false, true, new ItemStack(ninjaSword));
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_sword), new ItemStack(component, 1, 2), MODE_AND, false, true, new ItemStack(regisword));
