@@ -4,9 +4,9 @@ import com.mraof.minestuck.Minestuck;
 
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 public class BlockGlowingLog extends BlockLog
@@ -22,7 +22,7 @@ public class BlockGlowingLog extends BlockLog
 	}
 	
 	@Override
-	public boolean canSustainLeaves(IBlockAccess world, BlockPos pos)
+	public boolean canSustainLeaves(IBlockState state, IBlockAccess world, BlockPos pos)
 	{
 		return false;
 	}
@@ -45,9 +45,9 @@ public class BlockGlowingLog extends BlockLog
 	}
 	
 	@Override
-	protected BlockState createBlockState()
+	protected BlockStateContainer createBlockState()
 	{
-		return new BlockState(this, new IProperty[] {LOG_AXIS});
+		return new BlockStateContainer(this, new IProperty[] {LOG_AXIS});
 	}
 	
 }

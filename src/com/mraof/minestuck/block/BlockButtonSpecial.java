@@ -6,25 +6,30 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.Debug;
 
 import net.minecraft.block.BlockButton;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class BlockButtonSpecial extends BlockButton
 {
 	
-	public final boolean explosive;
+	public final boolean explosive, wooden;
 	
 	public BlockButtonSpecial(boolean wooden, boolean explosive)
 	{
 		super(wooden);
 		this.explosive = explosive;
+		this.wooden = wooden;
 		setCreativeTab(Minestuck.tabMinestuck);
 		setHardness(0.5F);
 		if(wooden)
-			setStepSound(soundTypeWood);
-		else setStepSound(soundTypePiston);
+			setStepSound(SoundType.WOOD);
+		else setStepSound(SoundType.STONE);
 	}
 	
 	@Override
@@ -45,4 +50,19 @@ public class BlockButtonSpecial extends BlockButton
 		}
 	}
 	
+	@Override
+	protected void func_185615_a(EntityPlayer p_185615_1_, World player, BlockPos pos)
+	{
+		if(wooden)
+			player.playSound(p_185615_1_, pos, SoundEvents.block_wood_button_click_on, SoundCategory.BLOCKS, 0.3F, 0.6F);
+		else player.playSound(p_185615_1_, pos, SoundEvents.block_stone_button_click_on, SoundCategory.BLOCKS, 0.3F, 0.6F);
+	}
+	
+	@Override
+	protected void func_185617_b(World worldIn, BlockPos pos)
+	{
+		if(wooden)
+			worldIn.playSound((EntityPlayer)null, pos, SoundEvents.block_wood_button_click_off, SoundCategory.BLOCKS, 0.3F, 0.5F);
+		else worldIn.playSound((EntityPlayer)null, pos, SoundEvents.block_stone_button_click_off, SoundCategory.BLOCKS, 0.3F, 0.5F);
+	}
 }

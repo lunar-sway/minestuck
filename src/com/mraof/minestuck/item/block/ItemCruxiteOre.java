@@ -1,14 +1,14 @@
 package com.mraof.minestuck.item.block;
 
-import com.mraof.minestuck.block.OreCruxite;
+import com.mraof.minestuck.block.BlockCruxiteOre;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 
-public class ItemOreCruxite extends ItemBlock
+public class ItemCruxiteOre extends ItemBlock
 {
 	
-	public ItemOreCruxite(Block block)
+	public ItemCruxiteOre(Block block)
 	{
 		super(block);
 		setHasSubtypes(true);
@@ -17,7 +17,7 @@ public class ItemOreCruxite extends ItemBlock
 	@Override
 	public int getMetadata(int damage)
 	{
-		return damage % OreCruxite.BLOCK_TYPE.getAllowedValues().size();
+		return damage % BlockCruxiteOre.BLOCK_TYPE.getAllowedValues().size();
 	}
 	
 }

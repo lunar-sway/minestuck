@@ -4,7 +4,7 @@ import com.mraof.minestuck.item.block.ItemBlockLayered;
 import com.mraof.minestuck.item.block.ItemChessTile;
 import com.mraof.minestuck.item.block.ItemColoredDirt;
 import com.mraof.minestuck.item.block.ItemMachine;
-import com.mraof.minestuck.item.block.ItemOreCruxite;
+import com.mraof.minestuck.item.block.ItemCruxiteOre;
 import com.mraof.minestuck.item.block.ItemStorageBlock;
 
 import net.minecraft.block.Block;
@@ -22,7 +22,7 @@ public class MinestuckBlocks
 	public static Block chessTile;
 	public static BlockColoredDirt coloredDirt;
 	public static Block skaiaPortal;
-	public static OreCruxite oreCruxite;
+	public static Block oreCruxite;
 	public static Block blockStorage;
 	public static Block blockMachine;
 	public static Block blockComputerOn;
@@ -58,34 +58,35 @@ public class MinestuckBlocks
 	public static void registerBlocks()
 	{
 		//blocks
-		chessTile = GameRegistry.registerBlock(new BlockChessTile(), ItemChessTile.class, "chess_tile");
-		skaiaPortal = GameRegistry.registerBlock(new BlockSkaiaPortal(Material.portal), "skaia_portal");
+		chessTile = GameRegistry.register(new BlockChessTile().setRegistryName("chess_tile"));
+		skaiaPortal = GameRegistry.register(new BlockSkaiaPortal(Material.portal).setRegistryName("skaia_portal"));
 		
-		oreCruxite = (OreCruxite) GameRegistry.registerBlock(new OreCruxite(), ItemOreCruxite.class, "ore_cruxite");
-		coalOreNetherrack = GameRegistry.registerBlock(new BlockVanillaOre(BlockVanillaOre.OreType.COAL).setUnlocalizedName("oreCoal"), "coal_ore_netherrack");
-		ironOreSandstone = GameRegistry.registerBlock(new BlockVanillaOre(BlockVanillaOre.OreType.IRON).setUnlocalizedName("oreIron"), "iron_ore_sandstone");
-		ironOreSandstoneRed = GameRegistry.registerBlock(new BlockVanillaOre(BlockVanillaOre.OreType.IRON).setUnlocalizedName("oreIron"), "iron_ore_sandstone_red");
-		goldOreSandstone = GameRegistry.registerBlock(new BlockVanillaOre(BlockVanillaOre.OreType.GOLD).setUnlocalizedName("oreGold"), "gold_ore_sandstone");
-		goldOreSandstoneRed = GameRegistry.registerBlock(new BlockVanillaOre(BlockVanillaOre.OreType.GOLD).setUnlocalizedName("oreGold"), "gold_ore_sandstone_red");
+		oreCruxite = GameRegistry.register(new BlockCruxiteOre().setRegistryName("ore_cruxite"));
+		coalOreNetherrack = GameRegistry.register(new BlockVanillaOre(BlockVanillaOre.OreType.COAL).setRegistryName("coal_ore_netherrack")).setUnlocalizedName("oreCoal");
+		ironOreSandstone = GameRegistry.register(new BlockVanillaOre(BlockVanillaOre.OreType.IRON).setRegistryName("iron_ore_sandstone")).setUnlocalizedName("oreIron");
+		ironOreSandstoneRed = GameRegistry.register(new BlockVanillaOre(BlockVanillaOre.OreType.IRON).setRegistryName("iron_ore_sandstone_red")).setUnlocalizedName("oreIron");
+		goldOreSandstone = GameRegistry.register(new BlockVanillaOre(BlockVanillaOre.OreType.GOLD).setRegistryName("gold_ore_sandstone")).setUnlocalizedName("oreGold");
+		goldOreSandstoneRed = GameRegistry.register(new BlockVanillaOre(BlockVanillaOre.OreType.GOLD).setRegistryName("gold_ore_sandstone_red")).setUnlocalizedName("oreGold");
 		
-		layeredSand = GameRegistry.registerBlock(new BlockLayered(Blocks.sand), ItemBlockLayered.class, "layered_sand").setUnlocalizedName("layeredSand");
-		coloredDirt = (BlockColoredDirt) GameRegistry.registerBlock(new BlockColoredDirt(), ItemColoredDirt.class, "colored_dirt").setUnlocalizedName("coloredDirt").setHardness(0.5F);
-		blockStorage = GameRegistry.registerBlock(new BlockStorage(),ItemStorageBlock.class,"storage_block");
-		blockMachine = GameRegistry.registerBlock(new BlockMachine(), ItemMachine.class,"machine_block");
-		blockComputerOff = GameRegistry.registerBlock(new BlockComputerOff(),"computer_standard");
-		blockComputerOn = GameRegistry.registerBlock(new BlockComputerOn(), null, "computer_standard_on");
-		transportalizer = GameRegistry.registerBlock(new BlockTransportalizer(), "transportalizer");
-		blockGoldSeeds = (BlockGoldSeeds) GameRegistry.registerBlock(new BlockGoldSeeds(), null, "gold_seeds");
-		returnNode = GameRegistry.registerBlock(new BlockReturnNode(), null, "return_node");
-		gate = GameRegistry.registerBlock(new BlockGate(), null, "gate");
-		glowingMushroom = (BlockGlowingMushroom) GameRegistry.registerBlock(new BlockGlowingMushroom(), "glowing_mushroom");
-		glowingLog = GameRegistry.registerBlock(new BlockGlowingLog(), "glowing_log");
+		blockStorage = GameRegistry.register(new BlockStorage().setRegistryName("storage_block"));
+		blockMachine = GameRegistry.register(new BlockMachine().setRegistryName("machine_block"));
+		blockComputerOff = GameRegistry.register(new BlockComputerOff().setRegistryName("computer_standard"));
+		blockComputerOn = GameRegistry.register(new BlockComputerOn().setRegistryName("computer_standard_on"));
+		transportalizer = GameRegistry.register(new BlockTransportalizer().setRegistryName("transportalizer"));
+		blockGoldSeeds = (BlockGoldSeeds) GameRegistry.register(new BlockGoldSeeds().setRegistryName("gold_seeds"));
+		returnNode = GameRegistry.register(new BlockReturnNode().setRegistryName("return_node"));
+		gate = GameRegistry.register(new BlockGate().setRegistryName("gate"));
 		
-		primedTnt = GameRegistry.registerBlock(new BlockTNTSpecial(true, false, false), "primed_tnt").setUnlocalizedName("primedTnt");
-		unstableTnt = GameRegistry.registerBlock(new BlockTNTSpecial(false, true, false), "unstable_tnt").setUnlocalizedName("unstableTnt");
-		instantTnt = GameRegistry.registerBlock(new BlockTNTSpecial(false, false, true), "instant_tnt").setUnlocalizedName("instantTnt");
-		woodenExplosiveButton = GameRegistry.registerBlock(new BlockButtonSpecial(true, true), "wooden_button_explosive").setUnlocalizedName("buttonTnt");
-		stoneExplosiveButton = GameRegistry.registerBlock(new BlockButtonSpecial(false, true), "stone_button_explosive").setUnlocalizedName("buttonTnt");
+		layeredSand = GameRegistry.register(new BlockLayered(Blocks.sand.getDefaultState()).setRegistryName("layered_sand")).setUnlocalizedName("layeredSand");
+		coloredDirt = (BlockColoredDirt) GameRegistry.register(new BlockColoredDirt().setRegistryName("colored_dirt")).setUnlocalizedName("coloredDirt").setHardness(0.5F);
+		glowingMushroom = (BlockGlowingMushroom) GameRegistry.register(new BlockGlowingMushroom().setRegistryName("glowing_mushroom"));
+		glowingLog = GameRegistry.register(new BlockGlowingLog().setRegistryName("glowing_log"));
+		
+		primedTnt = GameRegistry.register(new BlockTNTSpecial(true, false, false).setRegistryName("primed_tnt")).setUnlocalizedName("primedTnt");
+		unstableTnt = GameRegistry.register(new BlockTNTSpecial(false, true, false).setRegistryName("unstable_tnt")).setUnlocalizedName("unstableTnt");
+		instantTnt = GameRegistry.register(new BlockTNTSpecial(false, false, true).setRegistryName("instant_tnt")).setUnlocalizedName("instantTnt");
+		woodenExplosiveButton = GameRegistry.register(new BlockButtonSpecial(true, true).setRegistryName("wooden_button_explosive")).setUnlocalizedName("buttonTnt");
+		stoneExplosiveButton = GameRegistry.register(new BlockButtonSpecial(false, true).setRegistryName("stone_button_explosive")).setUnlocalizedName("buttonTnt");
 		//fluids
 		fluidOil = new Fluid("Oil", new ResourceLocation("minestuck", "blocks/OilStill"), new ResourceLocation("minestuck", "blocks/OilFlowing"));
 		FluidRegistry.registerFluid(fluidOil);
@@ -93,9 +94,9 @@ public class MinestuckBlocks
 		FluidRegistry.registerFluid(fluidBlood);
 		fluidBrainJuice = new Fluid("BrainJuice", new ResourceLocation("minestuck", "blocks/BrainJuiceStill"), new ResourceLocation("minestuck", "blocks/BrainJuiceFlowing"));
 		FluidRegistry.registerFluid(fluidBrainJuice);
-		blockOil = GameRegistry.registerBlock(new BlockFluid(fluidOil, Material.water).setUnlocalizedName("oil"), null, "block_oil");
-		blockBlood = GameRegistry.registerBlock(new BlockFluid(fluidBlood, Material.water).setUnlocalizedName("blood"), null, "block_blood");
-		blockBrainJuice = GameRegistry.registerBlock(new BlockFluid(fluidBrainJuice, Material.water).setUnlocalizedName("brainJuice"), null, "block_brain_juice");
+		blockOil = GameRegistry.register(new BlockFluid(fluidOil, Material.water).setRegistryName("block_oil")).setUnlocalizedName("oil");
+		blockBlood = GameRegistry.register(new BlockFluid(fluidBlood, Material.water).setRegistryName("block_blood")).setUnlocalizedName("blood");
+		blockBrainJuice = GameRegistry.register(new BlockFluid(fluidBrainJuice, Material.water).setRegistryName("block_brain_juice")).setUnlocalizedName("brainJuice");
 		
 		fluidOil.setUnlocalizedName(blockOil.getUnlocalizedName());
 		fluidBlood.setUnlocalizedName(blockBlood.getUnlocalizedName());

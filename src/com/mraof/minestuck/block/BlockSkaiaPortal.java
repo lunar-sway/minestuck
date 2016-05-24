@@ -7,11 +7,15 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -20,49 +24,48 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.tileentity.TileEntitySkaiaPortal;
 import com.mraof.minestuck.util.Location;
+import com.mraof.minestuck.world.MinestuckDimensionHandler;
 
 public class BlockSkaiaPortal extends BlockContainer
 {
-	int destinationDimension;
+	
+	protected static final AxisAlignedBB SKAIA_PORTAL_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1/16D, 1.0D);
+	
 	public BlockSkaiaPortal(Material material) 
 	{
 		super(material);
 		
 		setUnlocalizedName("skaiaPortal");
 		this.setCreativeTab(Minestuck.tabMinestuck);
-		destinationDimension = Minestuck.skaiaDimensionId;
 	}
 	
 	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess access, BlockPos pos)
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
 	{
-		float var5 = 0.0625F;
-		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, var5, 1.0F);
+		return SKAIA_PORTAL_AABB;
 	}
 	
 	@Override
 	public void onEntityCollidedWithBlock(World world, BlockPos pos, Entity entity)
 	{
-		if (entity.ridingEntity == null && entity.riddenByEntity == null && !world.isRemote && entity.timeUntilPortal == 0)
+		if (entity.getRidingEntity() == null && entity.getPassengers().isEmpty() && !world.isRemote && entity.timeUntilPortal == 0)
 		{
 			TileEntitySkaiaPortal portal = (TileEntitySkaiaPortal) world.getTileEntity(pos);
 				portal.teleportEntity(entity);
 		}
 	}
 	
-	@SideOnly(Side.CLIENT)
-	/**
-	 * Returns true if the given side of this block type should be rendered, if the adjacent block is at the given
-	 * coordinates.  Args: blockAccess, x, y, z, side
-	 */
+	
 	@Override
-	public boolean shouldSideBeRendered(IBlockAccess worldIn, BlockPos pos, EnumFacing side)
+	@SideOnly(Side.CLIENT)
+	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
 	{
-		return side.getAxis().isHorizontal() ? false : super.shouldSideBeRendered(worldIn, pos, side);
+		return side.getAxis().isHorizontal() ? false : super.shouldSideBeRendered(blockState, blockAccess, pos, side);
 	}
 	
 	@Override
-	public boolean isOpaqueCube() {
+	public boolean isOpaqueCube(IBlockState state)
+	{
 		return false;
 	}
 	
@@ -71,7 +74,7 @@ public class BlockSkaiaPortal extends BlockContainer
 	{
 		TileEntitySkaiaPortal tileEntity = (TileEntitySkaiaPortal) this.createNewTileEntity(world);
 		tileEntity.destination = new Location();
-		tileEntity.destination.dim = this.destinationDimension;
+		tileEntity.destination.dim = MinestuckDimensionHandler.skaiaDimensionId == world.provider.getDimension() ? 0 : MinestuckDimensionHandler.skaiaDimensionId;
 		return tileEntity;
 	}
 	
@@ -81,14 +84,15 @@ public class BlockSkaiaPortal extends BlockContainer
 	}
 	
 	@Override
-	public boolean isFullCube()
+	public boolean isFullCube(IBlockState state)
 	{
 		return false;
 	}
 	
 	@Override
-	public void addCollisionBoxesToList(World worldIn, BlockPos pos, IBlockState state, AxisAlignedBB mask, @SuppressWarnings("rawtypes") List list, Entity collidingEntity)
-	{}
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB p_185477_4_, List<AxisAlignedBB> p_185477_5_, Entity p_185477_6_)
+	{
+	}
 	
 	/**
 	 * Returns the quantity of items to drop on block destruction.
@@ -99,39 +103,17 @@ public class BlockSkaiaPortal extends BlockContainer
 		return 0;
 	}
 	
-	/**
-	 * The type of render function that is called for this block
-	 */
+	
 	@Override
-	public int getRenderType()
+	public EnumBlockRenderType getRenderType(IBlockState state)
 	{
-		return -1;
+		return EnumBlockRenderType.INVISIBLE;
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
-	/**
-	 * only called by clickMiddleMouseButton , and passed to inventory.setCurrentItem (along with isCreative)
-	 */
-	public Item getItem(World worldIn, BlockPos pos)
+	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player)
 	{
 		return null;
-	}
-	
-	/**
-	 * Called whenever the block is added into the world. Args: world, x, y, z
-	 */
-	//this keeps portals that lead to the same world from existing
-	@Override
-	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state)
-	{
-		if (worldIn.provider.getDimensionId() == destinationDimension)
-			{
-				if(this.destinationDimension != 0)
-					this.destinationDimension = 0;
-				else
-					this.destinationDimension = Minestuck.skaiaDimensionId;
-			}
 	}
 	
 //	/**

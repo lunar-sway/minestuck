@@ -5,11 +5,14 @@ import java.util.Random;
 import com.mraof.minestuck.Minestuck;
 
 import net.minecraft.block.BlockTNT;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockPos;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
@@ -23,7 +26,7 @@ public class BlockTNTSpecial extends BlockTNT
 		super();
 		setCreativeTab(Minestuck.tabMinestuck);
 		setHardness(0.0F);
-		setStepSound(soundTypeGrass);
+		setStepSound(SoundType.PLANT);
 		this.primed = primed;
 		this.unstable = unstable;
 		this.instant = instant;
@@ -50,9 +53,9 @@ public class BlockTNTSpecial extends BlockTNT
 			{
 				EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(worldIn, (double)((float)pos.getX() + 0.5F), (double)((float)pos.getY() + 0.5F), (double)((float)pos.getZ() + 0.5F), igniter);
 				if(instant)
-					entitytntprimed.fuse = 0;
+					entitytntprimed.setFuse(0);
 				worldIn.spawnEntityInWorld(entitytntprimed);
-				worldIn.playSoundAtEntity(entitytntprimed, "game.tnt.primed", 1.0F, 1.0F);
+				worldIn.playSound((EntityPlayer)null, entitytntprimed.posX, entitytntprimed.posY, entitytntprimed.posZ, SoundEvents.entity_tnt_primed, SoundCategory.BLOCKS, 1.0F, 1.0F);
 			}
 		}
 	}
@@ -63,9 +66,9 @@ public class BlockTNTSpecial extends BlockTNT
 		if (!worldIn.isRemote)
 		{
 			EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(worldIn, (double)((float)pos.getX() + 0.5F), (double)((float)pos.getY() + 0.5F), (double)((float)pos.getZ() + 0.5F), explosionIn.getExplosivePlacedBy());
-			entitytntprimed.fuse = worldIn.rand.nextInt(entitytntprimed.fuse / 4) + entitytntprimed.fuse / 8;
+			entitytntprimed.setFuse(worldIn.rand.nextInt(entitytntprimed.getFuse() / 4) + entitytntprimed.getFuse() / 8);
 			if(instant)
-				entitytntprimed.fuse /= 2;
+				entitytntprimed.setFuse(entitytntprimed.getFuse() / 2);
 			worldIn.spawnEntityInWorld(entitytntprimed);
 		}
 	}

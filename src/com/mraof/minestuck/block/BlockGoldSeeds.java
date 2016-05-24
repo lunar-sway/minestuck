@@ -1,17 +1,24 @@
 package com.mraof.minestuck.block;
 
+import java.util.List;
 import java.util.Random;
 
 import com.mraof.minestuck.item.MinestuckItems;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumWorldBlockLayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -19,13 +26,20 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockGoldSeeds extends Block
 {
 	
+	protected static AxisAlignedBB SEEDS_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.25D, 1.0D);
+	
 	public BlockGoldSeeds()
 	{
 		super(Material.plants);
-		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.25F, 1F);
-		setStepSound(soundTypeMetal);
+		setStepSound(SoundType.METAL);
 		setHardness(0.1F);
 		setUnlocalizedName("goldSeeds");
+	}
+	
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+	{
+		return SEEDS_AABB;
 	}
 	
 	@Override
@@ -35,9 +49,8 @@ public class BlockGoldSeeds extends Block
 	}
 	
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state)
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB boundingBox, List<AxisAlignedBB> list, Entity entity)
 	{
-		return null;
 	}
 	
 	public boolean isOpaqueCube()
@@ -51,9 +64,9 @@ public class BlockGoldSeeds extends Block
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public EnumWorldBlockLayer getBlockLayer()
+	public BlockRenderLayer getBlockLayer()
 	{
-		return EnumWorldBlockLayer.CUTOUT;
+		return BlockRenderLayer.CUTOUT;
 	}
 	
 	@Override
@@ -66,11 +79,10 @@ public class BlockGoldSeeds extends Block
 		}
 	}
 	
-	@SideOnly(Side.CLIENT)
 	@Override
-	public Item getItem(World worldIn, BlockPos pos)
+	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player)
 	{
-		return MinestuckItems.goldSeeds;
+		return new ItemStack(MinestuckItems.goldSeeds);
 	}
 	
 }

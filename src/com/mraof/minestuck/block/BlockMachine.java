@@ -7,7 +7,7 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -18,11 +18,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -32,8 +34,15 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 
-public class BlockMachine extends BlockContainer {
-
+public class BlockMachine extends BlockContainer
+{
+	protected static final AxisAlignedBB CRUXTRUDER_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 15/16D, 1.0D);
+	protected static final AxisAlignedBB[] PUNCH_DESIGNIX_AABB = {new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 5/8D), new AxisAlignedBB(3/8D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 3/8D, 1.0D, 1.0D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 5/8D, 1.0D, 1.0D)};
+	protected static final AxisAlignedBB[] TOTEM_LATHE_AABB = {new AxisAlignedBB(0.0D, 0.0D, 5/16D, 1.0D, 1.0D, 11/16D), new AxisAlignedBB(5/16D, 0.0D, 0.0D, 11/16D, 1.0D, 1.0D)};
+	protected static final AxisAlignedBB ALCHMITER_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1/2D, 1.0D);
+	protected static final AxisAlignedBB[] ALCHEMITER_POLE_AABB = {new AxisAlignedBB(0.0D, 2/16D, 0.0D, 4.5/16D, 1.0D, 1/8D), new AxisAlignedBB(7/8D, 2/16D, 0.0D, 1.0D, 1.0D, 4.5/16D), new AxisAlignedBB(11.5/16D, 2/16D, 7/8D, 1.0D, 1.0D, 1.0D), new AxisAlignedBB(0.0D, 2/16D, 11.5/16D, 1/8D, 1.0D, 1.0D)};
+	protected static final AxisAlignedBB[] GRIST_WIDGET_AABB = {new AxisAlignedBB(0.0D, 0.0D, 1/4D, 1.0D, 1/4D, 3/4D), new AxisAlignedBB(1/4D, 0.0D, 0.0D, 3/4D, 1/4D, 1.0D)};
+	
 	public static final String[] iconNames = {"Cruxtruder","PunchDesignix","TotemLathe","Alchemiter","GristWidget"}; //PhernaliaFrame
 	
 	public static enum MachineType implements IStringSerializable
@@ -66,9 +75,9 @@ public class BlockMachine extends BlockContainer {
 	}
 	
 	@Override
-	protected BlockState createBlockState()
+	protected BlockStateContainer createBlockState()
 	{
-		return new BlockState(this, MACHINE_TYPE, DIRECTION);
+		return new BlockStateContainer(this, MACHINE_TYPE, DIRECTION);
 	}
 	
 	@Override
@@ -110,25 +119,25 @@ public class BlockMachine extends BlockContainer {
 	}
 	
 	@Override
-	public boolean isFullCube()
+	public boolean isFullCube(IBlockState state)
 	{
 		return false;
 	}
 	
 	@Override
-	public int getRenderType()
+	public EnumBlockRenderType getRenderType(IBlockState state)
 	{
-		return 3;
+		return EnumBlockRenderType.MODEL;
 	}
-
+	
 	@Override
-	public boolean isOpaqueCube()
+	public boolean isOpaqueCube(IBlockState state)
 	{
 		return false;
 	}
 	
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ)
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
 		TileEntityMachine tileEntity = (TileEntityMachine) worldIn.getTileEntity(pos);
 		if (tileEntity != null && !worldIn.isRemote)
@@ -155,12 +164,11 @@ public class BlockMachine extends BlockContainer {
 	}
 	
 	@Override
-	public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest)
+	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest)
 	{
 		TileEntityMachine te = (TileEntityMachine) world.getTileEntity(pos);
-		IBlockState state = world.getBlockState(pos);
 		
-		boolean b = super.removedByPlayer(world, pos, player, willHarvest);
+		boolean b = super.removedByPlayer(state, world, pos, player, willHarvest);
 		
 		if(!world.isRemote && willHarvest && te != null)
 		{
@@ -191,71 +199,32 @@ public class BlockMachine extends BlockContainer {
 	}
 	
 	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess worldIn, BlockPos pos)
-	{
-		AxisAlignedBB bb = getBoundingBox(getActualState(worldIn.getBlockState(pos), worldIn, pos));
-		setBlockBounds((float) bb.minX, (float) bb.minY, (float) bb.minZ, (float) bb.maxX, (float) bb.maxY, (float) bb.maxZ);
-	}
-	
-	@Override
-	public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state)
-	{
-		return getBoundingBox(getActualState(state, worldIn, pos)).offset(pos.getX(), pos.getY(), pos.getZ());
-	}
-	
-	@Override
-	public void addCollisionBoxesToList(World worldIn, BlockPos pos, IBlockState state, AxisAlignedBB mask, List list, Entity collidingEntity)
-	{
-		super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity);
-		if(state.getValue(MACHINE_TYPE).equals(MachineType.ALCHEMITER))
-		{
-			AxisAlignedBB bb = new AxisAlignedBB(0, 2/16D, 0, 4.5/16D, 1, 1/8D);
-			bb = rotate(bb, (EnumFacing) getActualState(state, worldIn, pos).getValue(DIRECTION)).offset(pos.getX(), pos.getY(), pos.getZ());
-			if(mask.intersectsWith(bb))
-				list.add(bb);
-		}
-	}
-	
-	public AxisAlignedBB getBoundingBox(IBlockState state)
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
 	{
 		EnumFacing rotation = (EnumFacing) state.getValue(DIRECTION);
 		MachineType type = (MachineType) state.getValue(MACHINE_TYPE);
-		AxisAlignedBB bb = null;
+		
 		switch(type)
 		{
-		case ALCHEMITER:
-			bb = new AxisAlignedBB(0, 0, 0, 1, 1/2D, 1);
-			break;
-		case CRUXTRUDER:
-			bb = new AxisAlignedBB(0, 0, 0, 1, 15/16D, 1);
-			break;
-		case GRIST_WIDGET:
-			bb = new AxisAlignedBB(0, 0, 1/4D, 1, 1/4D, 3/4D);
-			break;
-		case PUNCH_DESIGNIX:
-			bb = new AxisAlignedBB(0, 0, 0, 1, 1, 5/8D);
-			break;
-		case TOTEM_LATHE:
-			bb = new AxisAlignedBB(0, 0, 5/16D, 1, 1, 11/16D);
-			break;
+		case CRUXTRUDER: return CRUXTRUDER_AABB;
+		case PUNCH_DESIGNIX: return PUNCH_DESIGNIX_AABB[rotation.getHorizontalIndex()];
+		case TOTEM_LATHE: return TOTEM_LATHE_AABB[rotation.getHorizontalIndex()%2];
+		case ALCHEMITER: return ALCHMITER_AABB;
+		case GRIST_WIDGET: return GRIST_WIDGET_AABB[rotation.getHorizontalIndex()%2];
+		default: return super.getBoundingBox(state, source, pos);
 		}
-		return rotate(bb, rotation);
 	}
 	
-	public static AxisAlignedBB rotate(AxisAlignedBB bb, EnumFacing facing)
+	@Override
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB boundingBox, List<AxisAlignedBB> list, Entity entity)
 	{
-		switch(facing)
+		super.addCollisionBoxToList(state, worldIn, pos, boundingBox, list, entity);
+		if(state.getValue(MACHINE_TYPE).equals(MachineType.ALCHEMITER))
 		{
-		case SOUTH:
-			return bb;
-		case EAST:
-			return new AxisAlignedBB(bb.minZ, bb.minY, 1-bb.maxX, bb.maxZ, bb.maxY, 1-bb.minX);
-		case NORTH:
-			return new AxisAlignedBB(1-bb.maxX, bb.minY, 1-bb.maxZ, 1-bb.minX, bb.maxY, 1-bb.minZ);
-		case WEST:
-			return new AxisAlignedBB(1-bb.maxZ, bb.minY, bb.minX, 1-bb.minZ, bb.maxY, bb.maxX);
-		default:
-			return null;
+			EnumFacing roation = (EnumFacing) getActualState(state, worldIn, pos).getValue(DIRECTION);
+			AxisAlignedBB bb = ALCHEMITER_POLE_AABB[roation.getHorizontalIndex()].offset(pos);
+			if(boundingBox.intersectsWith(bb))
+				list.add(bb);
 		}
 	}
 	

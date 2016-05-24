@@ -3,19 +3,20 @@ package com.mraof.minestuck.block;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving.SpawnPlacementType;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fml.relauncher.Side;
@@ -50,14 +51,14 @@ public class BlockColoredDirt extends Block
 	{
 		super(Material.ground);
 		this.setCreativeTab(Minestuck.tabMinestuck);
-		setStepSound(Block.soundTypeGravel);
+		setStepSound(SoundType.GROUND);
 		setDefaultState(getBlockState().getBaseState().withProperty(BLOCK_TYPE, BlockType.BLUE));
 	}
 	
 	@Override
-	protected BlockState createBlockState()
+	protected BlockStateContainer createBlockState()
 	{
-		return new BlockState(this, BLOCK_TYPE);
+		return new BlockStateContainer(this, BLOCK_TYPE);
 	}
 	
 	@Override
@@ -87,8 +88,9 @@ public class BlockColoredDirt extends Block
 			subItems.add(new ItemStack(this, 1, i));
 	}
 	
+	
 	@Override
-	public boolean canCreatureSpawn(IBlockAccess world, BlockPos pos, SpawnPlacementType type)
+	public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, SpawnPlacementType type)
 	{
 		return true;
 	}
@@ -105,9 +107,9 @@ public class BlockColoredDirt extends Block
 	}
 	
 	@Override
-	public boolean canSustainPlant(IBlockAccess world, BlockPos pos, EnumFacing direction, IPlantable plantable)
+	public boolean canSustainPlant(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing direction, IPlantable plantable)
 	{
-		return plantable == Blocks.sapling || super.canSustainPlant(world, pos, direction, plantable);
+		return plantable == Blocks.sapling || super.canSustainPlant(state, world, pos, direction, plantable);
 	}
 	
 }

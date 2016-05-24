@@ -3,14 +3,15 @@ package com.mraof.minestuck.block;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.Minestuck;
@@ -34,9 +35,9 @@ public class BlockComputerOff extends Block
 	}
 	
 	@Override
-	protected BlockState createBlockState()
+	protected BlockStateContainer createBlockState()
 	{
-		return new BlockState(this, DIRECTION);
+		return new BlockStateContainer(this, DIRECTION);
 	}
 	
 	@Override
@@ -55,10 +56,10 @@ public class BlockComputerOff extends Block
 	{
 		if (!world.isRemote)
 		{
-			Block block = world.getBlockState(new BlockPos(x, y, z - 1)).getBlock();
-			Block block1 = world.getBlockState(new BlockPos(x, y, z + 1)).getBlock();
-			Block block2 = world.getBlockState(new BlockPos(x - 1, y, z)).getBlock();
-			Block block3 = world.getBlockState(new BlockPos(x + 1, y, z)).getBlock();
+			IBlockState block = world.getBlockState(new BlockPos(x, y, z - 1));
+			IBlockState block1 = world.getBlockState(new BlockPos(x, y, z + 1));
+			IBlockState block2 = world.getBlockState(new BlockPos(x - 1, y, z));
+			IBlockState block3 = world.getBlockState(new BlockPos(x + 1, y, z));
 			byte b0 = 0;
 
 			if (block.isFullBlock() && !block1.isFullBlock())
@@ -87,11 +88,10 @@ public class BlockComputerOff extends Block
 			world.setBlockState(new BlockPos(x, y, z), world.getBlockState(new BlockPos(x, y, z)).withProperty(DIRECTION, EnumFacing.values()[b0]), 2);
 		}
 	}
-	
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ)
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
-		if(player.isSneaking() || !state.getValue(DIRECTION).equals(side) || player.getHeldItem() != null && ComputerProgram.getProgramID(player.getHeldItem()) == -2)
+		if(player.isSneaking() || !state.getValue(DIRECTION).equals(side) || heldItem != null && ComputerProgram.getProgramID(heldItem) == -2)
 			return false;
 		
 		if(!world.isRemote)
@@ -100,7 +100,7 @@ public class BlockComputerOff extends Block
 			
 			TileEntityComputer te = (TileEntityComputer) world.getTileEntity(pos);
 			te.owner = UsernameHandler.encode(player);
-			MinestuckBlocks.blockComputerOn.onBlockActivated(world, pos, world.getBlockState(pos), player, side, hitX, hitY, hitZ);
+			MinestuckBlocks.blockComputerOn.onBlockActivated(world, pos, world.getBlockState(pos), player, hand, heldItem, side, hitX, hitY, hitZ);
 		}
 		
 		return true;

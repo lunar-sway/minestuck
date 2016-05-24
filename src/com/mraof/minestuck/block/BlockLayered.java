@@ -1,14 +1,16 @@
 package com.mraof.minestuck.block;
 
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -18,24 +20,24 @@ import com.mraof.minestuck.Minestuck;
 
 public class BlockLayered extends Block
 {
-	public Block fullBlock;
+	protected static final AxisAlignedBB[] LAYERED_AABB = {new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1/8D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 2/8D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 3/8D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 4/8D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 5/8D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 6/8D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 7/8D, 1.0D)};
+	
+	public IBlockState fullBlock;
 	public static final PropertyInteger SIZE = PropertyInteger.create("size", 1, 7);
 	
-	public BlockLayered(Block iconBlock)
+	public BlockLayered(IBlockState iconBlock)
 	{
 		super(iconBlock.getMaterial());
 		
-		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.125F, 1.0F);
 		this.setCreativeTab(Minestuck.tabMinestuck);
-		this.setBlockBoundsForDepth(0);
 		this.fullBlock = iconBlock;
-		stepSound = fullBlock.stepSound;
+		stepSound = fullBlock.getBlock().getStepSound();
 	}
 	
 	@Override
-	protected BlockState createBlockState()
+	protected BlockStateContainer createBlockState()
 	{
-		return new BlockState(this, SIZE);
+		return new BlockStateContainer(this, SIZE);
 	}
 	
 	@Override
@@ -50,56 +52,26 @@ public class BlockLayered extends Block
 		return getDefaultState().withProperty(SIZE, meta + 1);
 	}
 	
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+	{
+		int size = (Integer) state.getValue(SIZE);
+		
+		return LAYERED_AABB[size - 1];
+	}
 	
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state)
-	{
-		int l = (((Integer) state.getValue(SIZE)) & 7);
-		float f = 0.125F;
-		return new AxisAlignedBB(pos.getX() + minX, pos.getY() + minY, pos.getZ() + minZ, pos.getX() + maxX, pos.getY() + l*f, pos.getZ() + maxZ);
-	}
-
-	/**
-	 * Is this block (a) opaque and (b) a full 1m cube?  This determines whether or not to render the shared face of two
-	 * adjacent blocks and also whether the player can attach torches, redstone wire, etc to this block.
-	 */
-	@Override
-	public boolean isOpaqueCube()
+	public boolean isOpaqueCube(IBlockState state)
 	{
 		return false;
 	}
 	
 	@Override
-	public boolean isFullCube()
+	public boolean isFullCube(IBlockState state)
 	{
 		return false;
 	}
-
-	/**
-	 * Sets the block's bounds for rendering it as an item
-	 */
-	@Override
-	public void setBlockBoundsForItemRender()
-	{
-		this.setBlockBoundsForDepth(1);
-	}
 	
-	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess access, BlockPos pos)
-	{
-		this.setBlockBoundsForDepth((Integer) access.getBlockState(pos).getValue(SIZE));
-	}
-
-	/**
-	 * calls setBlockBounds based on the depth of the snow. Int is any values 0x0-0x7, usually this blocks metadata.
-	 */
-	protected void setBlockBoundsForDepth(int metadata)
-	{
-		int depth = metadata & 7;
-		float yBound = 2 * depth / 16.0F;
-		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, yBound, 1.0F);
-	}
-
 	/**
 	 * Checks to see if its valid to put this block at the specified coordinates. Args: world, pos
 	 */
@@ -107,22 +79,18 @@ public class BlockLayered extends Block
 	public boolean canPlaceBlockAt(World world, BlockPos pos)
 	{
 		IBlockState underneathBlock = world.getBlockState(pos.down());
-		if (underneathBlock.getBlock().isAir(world, pos.down()))
+		if (underneathBlock.getBlock().isAir(underneathBlock, world, pos.down()))
 			return false;
-		if (underneathBlock.getBlock().isLeaves(world, pos.add(0, -1, 0)) && underneathBlock.getBlock().isOpaqueCube())
+		if (underneathBlock.getBlock().isLeaves(underneathBlock, world, pos.add(0, -1, 0)) && underneathBlock.isOpaqueCube())
 			return false;
-		return underneathBlock.getBlock().getMaterial().blocksMovement();
+		return underneathBlock.getBlock().getMaterial(underneathBlock).blocksMovement();
 	}
-
+	
 	@Override
 	@SideOnly(Side.CLIENT)
-	/**
-	 * Returns true if the given side of this block type should be rendered, if the adjacent block is at the given
-	 * coordinates.  Args: blockAccess, pos, side
-	 */
-	public boolean shouldSideBeRendered(IBlockAccess worldIn, BlockPos pos, EnumFacing side)
+	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
 	{
-		return side == EnumFacing.UP ? true : super.shouldSideBeRendered(worldIn, pos, side);
+		return side == EnumFacing.UP ? true : super.shouldSideBeRendered(blockState, blockAccess, pos, side);
 	}
 	
 	@Override
@@ -131,16 +99,8 @@ public class BlockLayered extends Block
 		return ((Integer) state.getValue(SIZE)) & 7;
 	}
 	
-	/**
-	 * Determines if a new block can be replace the space occupied by this one,
-	 * Used in the player's placement code to make the block act like water, and lava.
-	 *
-	 * @param world The current world
-	 * @param pos Position
-	 * @return True if the block is replaceable by another block
-	 */
 	@Override
-	public boolean isReplaceable(World worldIn, BlockPos pos)
+	public boolean isReplaceable(IBlockAccess worldIn, BlockPos pos)
 	{
 		int meta = (Integer) worldIn.getBlockState(pos).getValue(SIZE);
 		return (meta > 7 ? false : blockMaterial.isReplaceable());
@@ -148,7 +108,7 @@ public class BlockLayered extends Block
 
 	public boolean changeHeight(World world, BlockPos pos, int metadata)
 	{
-		IBlockState block = (metadata <= 7 ? getDefaultState().withProperty(SIZE, metadata) : this.fullBlock.getDefaultState());
+		IBlockState block = (metadata <= 7 ? getDefaultState().withProperty(SIZE, metadata) : this.fullBlock);
 		return  world.setBlockState(pos, block, 3);
 	}
 

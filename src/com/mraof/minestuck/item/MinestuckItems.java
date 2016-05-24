@@ -1,8 +1,10 @@
 package com.mraof.minestuck.item;
 
+import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
@@ -11,7 +13,15 @@ import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.MinestuckBlocks;
+
+import static com.mraof.minestuck.block.MinestuckBlocks.*;
+
+import com.mraof.minestuck.item.block.ItemBlockLayered;
+import com.mraof.minestuck.item.block.ItemChessTile;
+import com.mraof.minestuck.item.block.ItemColoredDirt;
+import com.mraof.minestuck.item.block.ItemMachine;
+import com.mraof.minestuck.item.block.ItemCruxiteOre;
+import com.mraof.minestuck.item.block.ItemStorageBlock;
 import com.mraof.minestuck.item.weapon.EnumBladeType;
 import com.mraof.minestuck.item.weapon.EnumCaneType;
 import com.mraof.minestuck.item.weapon.EnumClubType;
@@ -99,7 +109,6 @@ public class MinestuckItems
 	
 	public static void registerItems()
 	{
-		//items
 				//hammers
 				clawHammer = new ItemHammer(EnumHammerType.CLAW);
 				sledgeHammer = new ItemHammer(EnumHammerType.SLEDGE);
@@ -171,9 +180,9 @@ public class MinestuckItems
 				metalBoat = new ItemMetalBoat();
 				candy = new ItemMinestuckCandy();
 				
-				minestuckBucket.addBlock(MinestuckBlocks.blockOil);
-				minestuckBucket.addBlock(MinestuckBlocks.blockBlood);
-				minestuckBucket.addBlock(MinestuckBlocks.blockBrainJuice);
+				minestuckBucket.addBlock(blockOil);
+				minestuckBucket.addBlock(blockBlood);
+				minestuckBucket.addBlock(blockBrainJuice);
 				
 				GameRegistry.registerItem(clawHammer, "claw_hammer");
 				GameRegistry.registerItem(sledgeHammer, "sledge_hammer");
@@ -240,5 +249,36 @@ public class MinestuckItems
 				GameRegistry.registerItem(goldSeeds, "gold_seeds");
 				GameRegistry.registerItem(metalBoat, "metal_boat");
 				GameRegistry.registerItem(candy, "candy");
+				
+		registerItemBlock(new ItemChessTile(chessTile));
+		registerItemBlock(new ItemBlock(skaiaPortal));
+		
+		registerItemBlock(new ItemCruxiteOre(oreCruxite));
+		registerItemBlock(new ItemBlock(coalOreNetherrack));
+		registerItemBlock(new ItemBlock(ironOreSandstone));
+		registerItemBlock(new ItemBlock(ironOreSandstoneRed));
+		registerItemBlock(new ItemBlock(goldOreSandstone));
+		registerItemBlock(new ItemBlock(goldOreSandstoneRed));
+		
+		registerItemBlock(new ItemStorageBlock(blockStorage));
+		registerItemBlock(new ItemMachine(blockMachine));
+		registerItemBlock(new ItemBlock(blockComputerOff));
+		registerItemBlock(new ItemBlock(transportalizer));
+		
+		registerItemBlock(new ItemBlockLayered(layeredSand));
+		registerItemBlock(new ItemColoredDirt(coloredDirt));
+		registerItemBlock(new ItemBlock(glowingMushroom));
+		registerItemBlock(new ItemBlock(glowingLog));
+		
+		registerItemBlock(new ItemBlock(primedTnt));
+		registerItemBlock(new ItemBlock(unstableTnt));
+		registerItemBlock(new ItemBlock(instantTnt));
+		registerItemBlock(new ItemBlock(woodenExplosiveButton));
+		registerItemBlock(new ItemBlock(stoneExplosiveButton));
+	}
+	
+	private static void registerItemBlock(ItemBlock item)
+	{
+		GameRegistry.register(item.setRegistryName(item.block.getRegistryName()));	//Is this enough?
 	}
 }
