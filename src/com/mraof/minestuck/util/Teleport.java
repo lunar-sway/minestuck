@@ -5,8 +5,9 @@ import java.util.Iterator;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.play.server.S07PacketRespawn;
-import net.minecraft.network.play.server.S1DPacketEntityEffect;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.play.server.SPacketEntityEffect;
+import net.minecraft.network.play.server.SPacketRespawn;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldProvider;
@@ -25,34 +26,34 @@ public class Teleport	//TODO Add method that takes a Location as parameter that 
 			WorldServer worldserver = player.mcServer.worldServerForDimension(player.dimension);
 			player.dimension = destinationDimension;
 			WorldServer worldserver1 = player.mcServer.worldServerForDimension(player.dimension);
-			S07PacketRespawn respawnPacket = new S07PacketRespawn(player.dimension, player.worldObj.getDifficulty(), worldserver1.getWorldInfo().getTerrainType(), player.theItemInWorldManager.getGameType());
+			SPacketRespawn respawnPacket = new SPacketRespawn(player.dimension, player.worldObj.getDifficulty(), worldserver1.getWorldInfo().getTerrainType(), player.interactionManager.getGameType());
 			player.playerNetServerHandler.sendPacket(respawnPacket);			
 
 			worldserver.removePlayerEntityDangerously(player);
 			player.isDead = false;
 			transferEntityToWorld(player, j, worldserver, worldserver1, teleporter, movementFactor);
 			WorldServer worldserver2 = player.getServerForPlayer();
-			worldserver.getPlayerManager().removePlayer(player);
-			worldserver2.getPlayerManager().addPlayer(player);
-			worldserver2.theChunkProviderServer.loadChunk((int)player.posX >> 4, (int)player.posZ >> 4);
+			worldserver.getPlayerChunkManager().removePlayer(player);
+			worldserver2.getPlayerChunkManager().addPlayer(player);
+			worldserver2.getChunkProvider().loadChunk((int)player.posX >> 4, (int)player.posZ >> 4);
 			
 			player.playerNetServerHandler.setPlayerLocation(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
-			player.theItemInWorldManager.setWorld(worldserver1);
-			player.mcServer.getConfigurationManager().updateTimeAndWeatherForPlayer(player, worldserver1);
-			player.mcServer.getConfigurationManager().syncPlayerInventory(player);
+			player.interactionManager.setWorld(worldserver1);
+			player.mcServer.getPlayerList().updateTimeAndWeatherForPlayer(player, worldserver1);
+			player.mcServer.getPlayerList().syncPlayerInventory(player);
 			Iterator<?> iterator = player.getActivePotionEffects().iterator();
 
 			while (iterator.hasNext())
 			{
 				PotionEffect potioneffect = (PotionEffect)iterator.next();
-				player.playerNetServerHandler.sendPacket(new S1DPacketEntityEffect(player.getEntityId(), potioneffect));
+				player.playerNetServerHandler.sendPacket(new SPacketEntityEffect(player.getEntityId(), potioneffect));
 			}
 			
 			FMLCommonHandler.instance().firePlayerChangedDimensionEvent(player, j, destinationDimension);
 		}
 		else if (!entity.worldObj.isRemote && !entity.isDead)
 		{
-			MinecraftServer minecraftserver = MinecraftServer.getServer();
+			MinecraftServer minecraftserver = entity.getServer();
 			int j = entity.dimension;
 			WorldServer worldserver = minecraftserver.worldServerForDimension(j);
 			WorldServer worldserver1 = minecraftserver.worldServerForDimension(destinationDimension);
@@ -61,10 +62,15 @@ public class Teleport	//TODO Add method that takes a Location as parameter that 
 			entity.isDead = false;
 			transferEntityToWorld(entity, j, worldserver, worldserver1, teleporter, movementFactor);
 			Entity newEntity = EntityList.createEntityByName(EntityList.getEntityString(entity), worldserver1);
-
+			
 			if (newEntity != null)
 			{
-				newEntity.copyDataFromOld(entity);
+				//newEntity.copyDataFromOld(entity);
+				NBTTagCompound nbttagcompound = new NBTTagCompound();
+				entity.writeToNBT(nbttagcompound);
+				nbttagcompound.removeTag("Dimension");
+				newEntity.readFromNBT(nbttagcompound);
+				newEntity.timeUntilPortal = entity.timeUntilPortal;
 				worldserver1.spawnEntityInWorld(newEntity);
 			}
 			entity.isDead = true;
@@ -80,7 +86,7 @@ public class Teleport	//TODO Add method that takes a Location as parameter that 
 		double moveFactor = movementFactor ? pOld.getMovementFactor() / pNew.getMovementFactor() : 1;
 		double d0 = entity.posX * moveFactor;
 		double d1 = entity.posZ * moveFactor;
-
+		
 		if (entity.isEntityAlive())
 		{
 			worldserver1.spawnEntityInWorld(entity);
@@ -89,8 +95,7 @@ public class Teleport	//TODO Add method that takes a Location as parameter that 
 			if(teleporter != null)
 				teleporter.makeDestination(entity, worldserver, worldserver1);
 		}
-
-
+		
 		entity.setWorld(worldserver1);
 	}
 }

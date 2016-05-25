@@ -81,7 +81,7 @@ public class ClientEditPacket extends MinestuckPacket
 					if(!playerMP.inventory.hasItemStack(machine))
 						c.givenItems()[i] = playerMP.inventory.addItemStackToInventory(machine) || c.givenItems()[i];
 				}
-			MinecraftServer.getServer().getConfigurationManager().syncPlayerInventory(playerMP);
+			player.getServer().getPlayerList().syncPlayerInventory(playerMP);
 		}
 	}
 

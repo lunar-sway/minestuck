@@ -15,10 +15,10 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraftforge.common.DimensionManager;
 
 import com.mraof.minestuck.util.Debug;
@@ -394,7 +394,7 @@ public class SessionHandler {
 			if(sc == null && ss == null)
 			{
 				if(sender.sendCommandFeedback())
-					sender.addChatMessage(new ChatComponentText("Neither player is part of a session. Creating new session..."));
+					sender.addChatMessage(new TextComponentString("Neither player is part of a session. Creating new session..."));
 				sc = ss = new Session();
 				sessions.add(sc);
 			} else if(sc == null)
@@ -432,7 +432,7 @@ public class SessionHandler {
 				SkaianetHandler.closeConnection(server, cs.getClientIdentifier(), false);
 			cs.serverIdentifier = UsernameHandler.nullIdentifier;
 			if(sender.sendCommandFeedback())
-				sender.addChatMessage(new ChatComponentText(server.getUsername()+"'s old client player "+cs.getClientIdentifier().getUsername()+" is now without a server player.").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.YELLOW)));
+				sender.addChatMessage(new TextComponentString(server.getUsername()+"'s old client player "+cs.getClientIdentifier().getUsername()+" is now without a server player.").setChatStyle(new Style().setColor(TextFormatting.YELLOW)));
 		}
 		
 		if(cc != null && cc.isActive)
@@ -473,7 +473,7 @@ public class SessionHandler {
 	/**
 	 * Creates data to be used for the data checker
 	 */
-	public static NBTTagCompound createDataTag()
+	public static NBTTagCompound createDataTag(MinecraftServer server)
 	{
 		NBTTagCompound nbt = new NBTTagCompound();
 		NBTTagList sessionList = new NBTTagList();
@@ -501,7 +501,7 @@ public class SessionHandler {
 					if(c.enteredGame && DimensionManager.isDimensionRegistered(c.clientHomeLand))
 					{
 						LandAspectRegistry.AspectCombination aspects = MinestuckDimensionHandler.getAspects(c.clientHomeLand);
-						IChunkProvider chunkGen = MinecraftServer.getServer().worldServerForDimension(c.clientHomeLand).provider.createChunkGenerator();
+						IChunkGenerator chunkGen = server.worldServerForDimension(c.clientHomeLand).provider.createChunkGenerator();
 						if(chunkGen instanceof ChunkProviderLands)
 						{
 							ChunkProviderLands landChunkGen = (ChunkProviderLands) chunkGen;

@@ -3,8 +3,9 @@ package com.mraof.minestuck.util;
 import static com.mraof.minestuck.MinestuckConfig.artifactRange;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.fml.server.FMLServerHandler;
 
 public class PostEntryTask
 {
@@ -47,9 +48,9 @@ public class PostEntryTask
 		return nbt;
 	}
 	
-	public boolean onTick()
+	public boolean onTick(MinecraftServer server)
 	{
-		WorldServer world = MinecraftServer.getServer().worldServerForDimension(dimension);
+		WorldServer world = server.worldServerForDimension(dimension);
 		
 		if(world == null)
 		{

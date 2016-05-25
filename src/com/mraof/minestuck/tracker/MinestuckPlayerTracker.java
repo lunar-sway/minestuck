@@ -51,7 +51,7 @@ public class MinestuckPlayerTracker {
 	{
 		EntityPlayer player = event.player;
 		Debug.debug(player.getName()+" joined the game. Sending packets.");
-		MinecraftServer server = FMLServerHandler.instance().getServer();
+		MinecraftServer server = player.getServer();
 		if(!server.isDedicatedServer() && UsernameHandler.host == null)
 			UsernameHandler.host = event.player.getName();
 		

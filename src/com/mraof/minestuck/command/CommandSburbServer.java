@@ -37,8 +37,8 @@ public class CommandSburbServer extends CommandBase
 		if(args.length != 2)
 			throw new WrongUsageException("commands.sburbServer.usage");
 		
-		PlayerIdentifier client = UsernameHandler.getForCommand(sender, args[0]);
-		PlayerIdentifier server = UsernameHandler.getForCommand(sender, args[1]);
+		PlayerIdentifier client = UsernameHandler.getForCommand(mcServer, sender, args[0]);
+		PlayerIdentifier server = UsernameHandler.getForCommand(mcServer, sender, args[1]);
 		
 		SessionHandler.connectByCommand(sender, this, client, server);
 	}

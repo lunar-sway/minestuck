@@ -3,7 +3,7 @@ package com.mraof.minestuck.util;
 import java.util.EnumSet;
 import java.util.Random;
 
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 
 /**
  * An aspect version of <code>EnumClass</code> that works pretty much the same way as the <code>EnumClass</code> exept
@@ -59,7 +59,7 @@ public enum EnumAspect {
 	
 	public String getDisplayName()
 	{
-		return StatCollector.translateToLocal("title."+this.toString());
+		return I18n.translateToLocal("title."+this.toString());
 	}
 	
 }

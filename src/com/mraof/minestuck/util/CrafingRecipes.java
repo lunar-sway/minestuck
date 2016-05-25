@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.world.World;
 
-public class Recipes
+public class CrafingRecipes
 {
 	
 	public static class NonMirroredRecipe extends ShapedRecipes

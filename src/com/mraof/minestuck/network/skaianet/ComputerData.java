@@ -23,8 +23,8 @@ public class ComputerData
 	public static ComputerData createData(TileEntityComputer te)
 	{
 		if(!te.getWorld().isRemote)
-			return new ComputerData(te.owner, te.getPos().getX(), te.getPos().getY(), te.getPos().getZ(), te.getWorld().provider.getDimensionId());
-		else return new ComputerData(te.ownerId, te.getPos().getX(), te.getPos().getY(), te.getPos().getZ(), te.getWorld().provider.getDimensionId());
+			return new ComputerData(te.owner, te.getPos().getX(), te.getPos().getY(), te.getPos().getZ(), te.getWorld().provider.getDimension());
+		else return new ComputerData(te.ownerId, te.getPos().getX(), te.getPos().getY(), te.getPos().getZ(), te.getWorld().provider.getDimension());
 	}
 	
 	public ComputerData(int ownerId, int x, int y, int z, int dimension)

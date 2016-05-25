@@ -61,7 +61,7 @@ public class ServerEventHandler
 			
 			Iterator<PostEntryTask> iter = tickTasks.iterator();
 			while(iter.hasNext())
-				if(iter.next().onTick())
+				if(iter.next().onTick(event.world.getMinecraftServer()))
 					iter.remove();
 		}
 	}

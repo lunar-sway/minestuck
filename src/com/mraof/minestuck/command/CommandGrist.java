@@ -50,7 +50,7 @@ public class CommandGrist extends CommandBase
 		if(!(command.equalsIgnoreCase("set") || command.equalsIgnoreCase("add") || command.equalsIgnoreCase("get")))
 		{
 			command = args[1];
-			identifier = UsernameHandler.getForCommand(sender, args[0]);
+			identifier = UsernameHandler.getForCommand(server, sender, args[0]);
 			offset = 2;
 		} else
 		{

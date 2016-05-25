@@ -5,8 +5,8 @@ import io.netty.buffer.ByteBuf;
 import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -115,8 +115,8 @@ public class PlayerDataPacket extends MinestuckPacket
 			if(prev != -1)
 				for(prev++; prev <= i1; prev++)
 				{
-					String s = StatCollector.canTranslate("echeladder.rung"+prev) ? StatCollector.translateToLocal("echeladder.rung"+prev) : String.valueOf(prev+1);
-					player.addChatMessage(new ChatComponentText("You reached rung "+s+'!'));
+					String s = I18n.canTranslate("echeladder.rung"+prev) ? I18n.translateToLocal("echeladder.rung"+prev) : String.valueOf(prev+1);
+					player.addChatMessage(new TextComponentString("You reached rung "+s+'!'));
 				}
 			if(GuiEcheladder.lastRung == -1)
 				GuiEcheladder.lastRung = i1;

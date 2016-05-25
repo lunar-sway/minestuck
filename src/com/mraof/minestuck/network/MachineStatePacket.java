@@ -45,7 +45,7 @@ public class MachineStatePacket extends MinestuckPacket {
 		
 		if (te == null)
 		{
-			Debug.warnf("Invalid TE in container for player %s!", player.getCommandSenderName());
+			Debug.warnf("Invalid TE in container for player %s!", player.getName());
 		}
 		else
 		{

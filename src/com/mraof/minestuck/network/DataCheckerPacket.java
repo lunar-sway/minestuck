@@ -85,7 +85,7 @@ public class DataCheckerPacket extends MinestuckPacket
 				GuiDataChecker.activeComponent = new GuiDataChecker.MainComponent(nbtData);
 		} else if(player instanceof EntityPlayerMP && MinestuckConfig.getDataCheckerPermissionFor((EntityPlayerMP) player))
 		{
-			NBTTagCompound data = SessionHandler.createDataTag();
+			NBTTagCompound data = SessionHandler.createDataTag(player.getServer());
 			MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.DATA_CHECKER, packetIndex, data), player);
 		}
 	}

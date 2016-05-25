@@ -50,12 +50,12 @@ public class CommandSburbSession extends CommandBase	//TODO properly localize al
 		if(command.equalsIgnoreCase("name"))
 		{
 			String playerName = args.length < 2 ? getCommandSenderAsPlayer(sender).getName() : args[2];
-			SburbHandler.sessionName(sender, this, playerName, sessionName);
+			SburbHandler.sessionName(server, sender, this, playerName, sessionName);
 			
 		} else if(command.equalsIgnoreCase("add")/* || command.equalsIgnoreCase("finish")*/)
 		{
 			String[] params = Arrays.copyOfRange(args, 2, args.length);
-			SburbHandler.managePredefinedSession(sender, this, sessionName, params, false);//command.equalsIgnoreCase("finish"));
+			SburbHandler.managePredefinedSession(server, sender, this, sessionName, params, false);//command.equalsIgnoreCase("finish"));
 		} else if(command.equalsIgnoreCase("title"))
 		{
 			String playerName = args[2];
@@ -101,7 +101,7 @@ public class CommandSburbSession extends CommandBase	//TODO properly localize al
 				throw new WrongUsageException("commands.sburbSession.notAspect", aspectStr);
 			}
 			
-			SburbHandler.predefineTitle(sender, this, playerName, sessionName, new Title(titleClass, titleAspect));
+			SburbHandler.predefineTitle(server, sender, this, playerName, sessionName, new Title(titleClass, titleAspect));
 			
 		} else if(command.equalsIgnoreCase("landTerrain"))
 		{
@@ -111,7 +111,7 @@ public class CommandSburbSession extends CommandBase	//TODO properly localize al
 			if(landAspect == null)
 				throw new CommandException("Can't find terrain land aspect by the name %s", args[3]);
 			
-			SburbHandler.predefineTerrainLandAspect(sender, this, playerName, sessionName, landAspect);
+			SburbHandler.predefineTerrainLandAspect(server, sender, this, playerName, sessionName, landAspect);
 			
 		} else if(command.equalsIgnoreCase("landTitle"))
 		{
@@ -121,7 +121,7 @@ public class CommandSburbSession extends CommandBase	//TODO properly localize al
 			if(landAspect == null)
 				throw new CommandException("Can't find title land aspect by the name %s", args[3]);
 			
-			SburbHandler.predefineTitleLandAspect(sender, this, playerName, sessionName, landAspect);
+			SburbHandler.predefineTitleLandAspect(server, sender, this, playerName, sessionName, landAspect);
 			
 		} else throw new WrongUsageException(this.getCommandUsage(sender));
 	}

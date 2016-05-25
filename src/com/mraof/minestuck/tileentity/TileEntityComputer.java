@@ -171,4 +171,10 @@ public class TileEntityComputer extends TileEntity
 		return oldState.getBlock() != newState.getBlock();
 	}
 	
+	public void markBlockForUpdate()
+	{
+		IBlockState state = worldObj.getBlockState(pos);
+		this.worldObj.notifyBlockUpdate(pos, state, state, 3);
+	}
+	
 }

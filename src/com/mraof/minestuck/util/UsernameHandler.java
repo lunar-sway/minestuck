@@ -18,8 +18,9 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.management.ServerConfigurationManager;
+import net.minecraft.server.management.PlayerList;
 import net.minecraftforge.common.UsernameCache;
+import net.minecraftforge.fml.server.FMLServerHandler;
 
 /**
  * Used to encode/decode player usernames, to handle uses with LAN.
@@ -64,7 +65,7 @@ public class UsernameHandler {
 		PlayerIdentifier identifier;
 		if(MinestuckConfig.useUUID)
 			identifier = new PlayerIdentifier(player.getGameProfile().getId());
-		else identifier = new PlayerIdentifier(usernameEncode(player.getCommandSenderName()));
+		else identifier = new PlayerIdentifier(usernameEncode(player.getName()));
 		identifier.id = nextIdentifierId;
 		nextIdentifierId++;
 		identifierList.add(identifier);
@@ -106,7 +107,7 @@ public class UsernameHandler {
 				identifier.useUUID = MinestuckConfig.useUUID;
 				if(identifier.useUUID)
 					identifier.uuid = player.getGameProfile().getId();
-				else identifier.username = usernameEncode(player.getCommandSenderName());
+				else identifier.username = usernameEncode(player.getName());
 				
 				identifierList.add(identifier);
 				iter.remove();
@@ -125,7 +126,7 @@ public class UsernameHandler {
 		return null;
 	}
 	
-	public static PlayerIdentifier getForCommand(ICommandSender sender, String playerName) throws CommandException
+	public static PlayerIdentifier getForCommand(MinecraftServer server, ICommandSender sender, String playerName) throws CommandException
 	{
 		if(playerName.startsWith("@"))	//Refer directly to an identifier
 		{
@@ -141,7 +142,7 @@ public class UsernameHandler {
 			throw new CommandException("Failed to find an identifier that fits \"%s\". The player has to be online at least once to have an identifier.", playerName);
 		} else	//Refer to an online player
 		{
-			EntityPlayer player = CommandBase.getPlayer(sender, playerName);
+			EntityPlayer player = CommandBase.getPlayer(server, sender, playerName);
 			if(player == null)
 				throw new CommandException("Couldn't find player \""+playerName+"\". Player must be online when referred directly.");
 			
@@ -234,7 +235,7 @@ public class UsernameHandler {
 		{
 			if(this.useUUID)
 				return player.getGameProfile().getId().equals(uuid);
-			else return usernameEncode(player.getCommandSenderName()).equals(username);
+			else return usernameEncode(player.getName()).equals(username);
 		}
 		
 		@Override
@@ -260,10 +261,10 @@ public class UsernameHandler {
 		
 		public EntityPlayerMP getPlayer()
 		{
-			ServerConfigurationManager manager = MinecraftServer.getServer().getConfigurationManager();
+			PlayerList list = FMLServerHandler.instance().getServer().getPlayerList();
 			if(this.useUUID)
-				return manager.getPlayerByUUID(uuid);
-			else return manager.getPlayerByUsername(usernameDecode(username));
+				return list.getPlayerByUUID(uuid);
+			else return list.getPlayerByUsername(usernameDecode(username));
 		}
 		
 		/**

@@ -4,7 +4,8 @@ import java.util.ArrayList;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -31,7 +32,7 @@ public class KindAbstratusType
 	
 	@SideOnly(Side.CLIENT)
 	public String getDisplayName() {
-		return StatCollector.translateToLocal("strife."+unlocalizedName+".name");
+		return I18n.translateToLocal("strife."+unlocalizedName+".name");
 	}
 	
 	public String getUnlocalizedName() {
@@ -65,17 +66,19 @@ public class KindAbstratusType
 		
 	}
 	
-	private static class ItemIdType extends ItemType {
-		final String itemId;
+	private static class ItemIdType extends ItemType
+	{
+		final ResourceLocation itemId;
 		
-		ItemIdType(Item item) {
-			itemId = (String) Item.itemRegistry.getNameForObject(item);
+		ItemIdType(Item item)
+		{
+			itemId = Item.itemRegistry.getNameForObject(item);
 		}
 		
-		boolean partOf(ItemStack item) {
-			return this.itemId == Item.itemRegistry.getNameForObject(item.getItem());
+		boolean partOf(ItemStack item)
+		{
+			return this.itemId.equals(Item.itemRegistry.getNameForObject(item.getItem()));
 		}
-		
 	}
 	
 }

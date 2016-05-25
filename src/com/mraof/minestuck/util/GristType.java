@@ -1,6 +1,6 @@
 package com.mraof.minestuck.util;
 
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 
 public enum GristType {
 	Amber("Amber",0.5F), 
@@ -35,8 +35,9 @@ public enum GristType {
 		this.rarity = rarity;
 	}
 	
-	public String getDisplayName() {
-		return StatCollector.translateToLocal("grist."+name);
+	public String getDisplayName()
+	{
+		return I18n.translateToLocal("grist."+name);
 	}
 	
 	/**

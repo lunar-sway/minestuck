@@ -1,6 +1,6 @@
 package com.mraof.minestuck.util;
 
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 
 public class Title {
 	
@@ -21,7 +21,7 @@ public class Title {
 	}
 	
 	public String getTitleName() {
-		return StatCollector.translateToLocalFormatted("title.format", heroClass.getDisplayName(), heroAspect.getDisplayName());
+		return I18n.translateToLocalFormatted("title.format", heroClass.getDisplayName(), heroAspect.getDisplayName());
 	}
 	
 	@Override
