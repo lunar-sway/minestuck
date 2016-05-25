@@ -44,7 +44,7 @@ dependencies {
     // http://chickenbones.net/maven
     compile "codechicken:CodeChickenLib:1.9-2.0.1.29:universal"
     compile "codechicken:CodeChickenCore:1.9-2.0.1.59:universal"
-    compile "codechicken:NotEnoughItems:1.8-1.0.5.82:universal"
+    //compile "codechicken:NotEnoughItems:1.8-1.0.5.82:universal"
 }
 
 sourceSets {
