@@ -41,7 +41,7 @@ public class ItemCruxitePotion extends ItemCruxiteArtifact
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
 	}
 	
-	@Override
+	/*@Override
 	public int getColorFromItemStack(ItemStack stack, int renderPass)
 	{
 		if(renderPass == 0)
@@ -56,5 +56,5 @@ public class ItemCruxitePotion extends ItemCruxiteArtifact
 		else if(renderPass == 2)
 			return 0xFFFFFF;
 		else return super.getColorFromItemStack(stack, renderPass);
-	}
+	}*/
 }

@@ -7,9 +7,10 @@ import java.util.Arrays;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.common.Loader;
 import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.NEIClientConfig;
@@ -51,7 +52,7 @@ public class GuiGristCache extends GuiPlayerStats
 		
 		String cacheMessage;
 		if(ClientEditHandler.isActive() || MinestuckPlayerData.title == null)
-			cacheMessage = StatCollector.translateToLocal("gui.gristCache.name");
+			cacheMessage = I18n.translateToLocal("gui.gristCache.name");
 		else cacheMessage = MinestuckPlayerData.title.getTitleName();
 		mc.fontRendererObj.drawString(cacheMessage, (this.width / 2) - mc.fontRendererObj.getStringWidth(cacheMessage) / 2, yOffset + 12, 0x404040);
 		
@@ -90,7 +91,7 @@ public class GuiGristCache extends GuiPlayerStats
 		
 		if (tooltip != -1)
 			if(tooltip % 2 == 0)
-				drawHoveringText(Arrays.asList(StatCollector.translateToLocalFormatted("grist.format", GristType.values()[tooltip/2].getDisplayName())),
+				drawHoveringText(Arrays.asList(I18n.translateToLocalFormatted("grist.format", GristType.values()[tooltip/2].getDisplayName())),
 						xcor, ycor, fontRendererObj);
 			else drawHoveringText(Arrays.asList(String.valueOf(clientGrist.getGrist(GristType.values()[tooltip/2]))), xcor, ycor, fontRendererObj);
 	}
@@ -98,20 +99,20 @@ public class GuiGristCache extends GuiPlayerStats
 	private void drawIcon(int x,int y,String location) 
 	{
 		this.mc.getTextureManager().bindTexture(new ResourceLocation("minestuck",location));
-
+		
 		float scale = (float) 1/16;
-
+		
 		int iconX = 16;
 		int iconY = 16;
 		int iconU = 0;
 		int iconV = 0;
-
-		WorldRenderer render = Tessellator.getInstance().getWorldRenderer();
-		render.startDrawingQuads();
-		render.addVertexWithUV((double)(x + 0), (double)(y +  iconY), (double)this.zLevel, (double)((float)(iconU + 0) * scale), (double)((float)(iconV +  iconY) * scale));
-		render.addVertexWithUV((double)(x + iconX), (double)(y +  iconY), (double)this.zLevel, (double)((float)(iconU + iconX) * scale), (double)((float)(iconV +  iconY) * scale));
-		render.addVertexWithUV((double)(x + iconX), (double)(y + 0), (double)this.zLevel, (double)((float)(iconU + iconX) * scale), (double)((float)(iconV + 0) * scale));
-		render.addVertexWithUV((double)(x + 0), (double)(y + 0), (double)this.zLevel, (double)((float)(iconU + 0) * scale), (double)((float)(iconV + 0) * scale));
+		
+		VertexBuffer render = Tessellator.getInstance().getBuffer();
+		render.begin(7, DefaultVertexFormats.POSITION_TEX);
+		render.pos(x, y + iconY, 0D).tex((iconU)*scale, (iconV + iconY)*scale).endVertex();
+		render.pos(x + iconX, y + iconY, 0D).tex((iconU + iconX)*scale, (iconV + iconY)*scale).endVertex();
+		render.pos(x + iconX, y, 0D).tex((iconU + iconX)*scale, (iconV)*scale).endVertex();
+		render.pos(x, y, 0D).tex((iconU)*scale, (iconV)*scale).endVertex();
 		Tessellator.getInstance().draw();
 	}
 	

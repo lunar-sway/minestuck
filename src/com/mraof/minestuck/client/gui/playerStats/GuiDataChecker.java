@@ -21,9 +21,9 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 public class GuiDataChecker extends GuiScreen
@@ -298,7 +298,7 @@ public class GuiDataChecker extends GuiScreen
 		@Override
 		public String getName()
 		{
-			return StatCollector.translateToLocalFormatted(message, params);
+			return I18n.translateToLocalFormatted(message, params);
 		}
 	}
 	

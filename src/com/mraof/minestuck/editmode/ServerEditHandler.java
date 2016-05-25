@@ -11,25 +11,26 @@ import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
-import net.minecraft.command.PlayerSelector;
+import net.minecraft.command.EntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemBlockSpecial;
 import net.minecraft.item.ItemDoor;
-import net.minecraft.item.ItemReed;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.WorldSettings.GameType;
@@ -44,6 +45,7 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
+import net.minecraftforge.fml.server.FMLServerHandler;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MinestuckBlocks;
@@ -154,7 +156,7 @@ public class ServerEditHandler
 		SburbConnection c = SkaianetHandler.getClientConnection(computerTarget);
 		if(c != null && c.getServerIdentifier().equals(computerOwner) && getData(c) == null && getData(player) == null)
 		{
-			Debug.info("Activating edit mode on player \""+player.getCommandSenderName()+"\", target player: \""+computerTarget+"\".");
+			Debug.info("Activating edit mode on player \""+player.getName()+"\", target player: \""+computerTarget+"\".");
 			EntityDecoy decoy = new EntityDecoy((WorldServer) player.worldObj, player);
 			EditData data = new EditData(decoy, player, c);
 			if(!c.enteredGame()) {
@@ -162,7 +164,7 @@ public class ServerEditHandler
 				c.centerZ = c.getClientData().getZ();
 			}
 			if(!setPlayerStats(player, c)) {
-				player.addChatMessage(new ChatComponentText(EnumChatFormatting.RED+"Failed to activate edit mode."));
+				player.addChatMessage(new TextComponentString(TextFormatting.RED+"Failed to activate edit mode."));
 				return;
 			}
 			if(c.inventory != null)
@@ -180,10 +182,10 @@ public class ServerEditHandler
 		//double playerOffset = player.posX - player.boundingBox.maxX; //unused
 		
 		double posX, posY = 0, posZ;
-		WorldServer world = MinecraftServer.getServer().worldServerForDimension(c.enteredGame()?c.getClientDimension():c.getClientData().getDimension());
+		WorldServer world = player.getServer().worldServerForDimension(c.enteredGame()?c.getClientDimension():c.getClientData().getDimension());
 		
-		if(world.provider.getDimensionId() != player.worldObj.provider.getDimensionId())
-			Teleport.teleportEntity(player, world.provider.getDimensionId(), null, false);
+		if(world.provider.getDimension() != player.worldObj.provider.getDimension())
+			Teleport.teleportEntity(player, world.provider.getDimension(), null, false);
 		
 		if(c.useCoordinates) {
 			posX = c.posX;
@@ -250,11 +252,11 @@ public class ServerEditHandler
 	@SubscribeEvent
 	public void onTossEvent(ItemTossEvent event)
 	{
-		InventoryPlayer inventory = event.player.inventory;
-		if(!event.entity.worldObj.isRemote && getData(event.player) != null)
+		InventoryPlayer inventory = event.getPlayer().inventory;
+		if(!event.getEntity().worldObj.isRemote && getData(event.getPlayer()) != null)
 		{
-			EditData data = getData(event.player);
-			ItemStack stack = event.entityItem.getEntityItem();
+			EditData data = getData(event.getPlayer());
+			ItemStack stack = event.getEntityItem().getEntityItem();
 			if(DeployList.containsItemStack(stack) && !isBlockItem(stack.getItem()))
 			{
 				GristSet cost = data.connection.givenItems()[DeployList.getOrdinal(stack)]
@@ -275,7 +277,7 @@ public class ServerEditHandler
 			}
 			if(event.isCanceled())
 			{
-				event.entityItem.setDead();
+				event.getEntityItem().setDead();
 				if(inventory.getItemStack() != null)
 					inventory.setItemStack(null);
 				else inventory.setInventorySlotContents(inventory.currentItem, null);
@@ -286,70 +288,75 @@ public class ServerEditHandler
 	@SubscribeEvent
 	public void onItemPickupEvent(EntityItemPickupEvent event)
 	{
-		if(!event.entity.worldObj.isRemote && getData(event.entityPlayer) != null)
+		if(!event.getEntity().worldObj.isRemote && getData(event.getEntityPlayer()) != null)
 			event.setCanceled(true);
 	}
 	
-	/**
-	 * Checks if the event should be canceled.
-	 */
 	@SubscribeEvent(priority=EventPriority.NORMAL)
-	public void onItemUseControl(PlayerInteractEvent event)
+	public void onRightClickBlockControl(PlayerInteractEvent.RightClickBlock event)
 	{
-		
-		if(!event.world.isRemote && getData(event.entityPlayer) != null)
+		if(!event.getWorld().isRemote && getData(event.getEntityPlayer()) != null)
 		{
-			EditData data = getData(event.entityPlayer);
-			if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK)
+			EditData data = getData(event.getEntityPlayer());
+			Block block = event.getWorld().getBlockState(event.getPos()).getBlock();
+			ItemStack stack = event.getEntityPlayer().getHeldItemMainhand();
+			event.setUseBlock(stack == null && (block instanceof BlockDoor || block instanceof BlockTrapDoor || block instanceof BlockFenceGate) ? Result.ALLOW : Result.DENY);
+			if(event.getUseBlock() == Result.ALLOW)
+				return;
+			if(stack == null || !isBlockItem(stack.getItem()))
 			{
-				Block block = event.world.getBlockState(event.pos).getBlock();
-				ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
-				event.useBlock = stack == null && (block instanceof BlockDoor || block instanceof BlockTrapDoor || block instanceof BlockFenceGate) ? Result.ALLOW : Result.DENY;
-				if(event.useBlock == Result.ALLOW)
-					return;
-				if(stack == null || !isBlockItem(stack.getItem()))
-				{
-					event.setCanceled(true);
-					return;
-				}
-				
-				cleanStackNBT(stack);
-				
-				if(DeployList.containsItemStack(stack))
-				{
-					GristSet cost = data.connection.givenItems()[DeployList.getOrdinal(stack)]
-							? DeployList.getSecondaryCost(stack) : DeployList.getPrimaryCost(stack);
-					if(!GristHelper.canAfford(MinestuckPlayerData.getGristSet(data.connection.getClientIdentifier()), cost))
-					{
-						event.setCanceled(true);
-					}
-				}
-				else if(!isBlockItem(stack.getItem()) || !GristHelper.canAfford(data.connection.getClientIdentifier(), stack, false))
-				{
-					event.setCanceled(true);
-				}
-				if(event.useItem == Result.DEFAULT)
-					event.useItem = Result.ALLOW;
+				event.setCanceled(true);
+				return;
 			}
-			else if(event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK)
+			
+			cleanStackNBT(stack);
+			
+			if(DeployList.containsItemStack(stack))
 			{
-				Block block = event.world.getBlockState(event.pos).getBlock();
-				if(block.getBlockHardness(event.world, event.pos) < 0 || block.getMaterial() == Material.portal
-						|| GristHelper.getGrist(data.connection.getClientIdentifier(), GristType.Build) <= 0)
+				GristSet cost = data.connection.givenItems()[DeployList.getOrdinal(stack)]
+						? DeployList.getSecondaryCost(stack) : DeployList.getPrimaryCost(stack);
+				if(!GristHelper.canAfford(MinestuckPlayerData.getGristSet(data.connection.getClientIdentifier()), cost))
+				{
 					event.setCanceled(true);
+				}
 			}
-			else if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR)
+			else if(!isBlockItem(stack.getItem()) || !GristHelper.canAfford(data.connection.getClientIdentifier(), stack, false))
+			{
+				event.setCanceled(true);
+			}
+			if(event.getUseItem() == Result.DEFAULT)
+				event.setUseItem(Result.ALLOW);
+		}
+	}
+	
+	@SubscribeEvent(priority=EventPriority.NORMAL)
+	public void onLeftClickBlockControl(PlayerInteractEvent.LeftClickBlock event)
+	{
+		if(!event.getWorld().isRemote && getData(event.getEntityPlayer()) != null)
+		{
+			EditData data = getData(event.getEntityPlayer());
+			IBlockState block = event.getWorld().getBlockState(event.getPos());
+			if(block.getBlockHardness(event.getWorld(), event.getPos()) < 0 || block.getMaterial() == Material.portal
+					|| GristHelper.getGrist(data.connection.getClientIdentifier(), GristType.Build) <= 0)
 				event.setCanceled(true);
 		}
 	}
 	
-	@SubscribeEvent(priority=EventPriority.LOWEST)
-	public void onBlockBreak(PlayerInteractEvent event)
+	@SubscribeEvent(priority=EventPriority.NORMAL)
+	public void onItemUseControl(PlayerInteractEvent.RightClickItem event)
 	{
-		if(!event.entity.worldObj.isRemote && getData(event.entityPlayer) != null
-				&& event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK)
+		if(!event.getWorld().isRemote && getData(event.getEntityPlayer()) != null)
 		{
-			EditData data = getData(event.entityPlayer);
+			event.setCanceled(true);
+		}
+	}
+	
+	@SubscribeEvent(priority=EventPriority.LOWEST)
+	public void onBlockBreak(PlayerInteractEvent.LeftClickBlock event)
+	{
+		if(!event.getEntity().worldObj.isRemote && getData(event.getEntityPlayer()) != null)
+		{
+			EditData data = getData(event.getEntityPlayer());
 			GristHelper.decrease(data.connection.getClientIdentifier(), new GristSet(GristType.Build,1));
 			MinestuckPlayerTracker.updateGristCache(data.connection.getClientIdentifier());
 		}
@@ -358,17 +365,17 @@ public class ServerEditHandler
 	@SubscribeEvent(priority=EventPriority.LOW)
 	public void onBlockPlaced(BlockEvent.PlaceEvent event)
 	{
-		if(getData(event.player) != null)
+		if(getData(event.getPlayer()) != null)
 		{
-			EditData data = getData(event.player);
+			EditData data = getData(event.getPlayer());
 			if(event.isCanceled())	//If the event was cancelled server side and not client side, notify the client.
 			{
 				MinestuckPacket packet = MinestuckPacket.makePacket(Type.SERVER_EDIT, data.connection.givenItems());
-				MinestuckChannelHandler.sendToPlayer(packet, event.player);
+				MinestuckChannelHandler.sendToPlayer(packet, event.getPlayer());
 				return;
 			}
 			
-			ItemStack stack = event.itemInHand;
+			ItemStack stack = event.getItemInHand();
 			if(DeployList.containsItemStack(stack))
 			{
 				SburbConnection c = data.connection;
@@ -379,7 +386,7 @@ public class ServerEditHandler
 					SkaianetHandler.giveItems(c.getClientIdentifier());
 				if(!cost.isEmpty())
 					GristHelper.decrease(c.getClientIdentifier(), cost);
-				event.player.inventory.mainInventory[event.player.inventory.currentItem] = null;
+				event.getPlayer().inventory.mainInventory[event.getPlayer().inventory.currentItem] = null;
 			} else
 			{
 				GristHelper.decrease(data.connection.getClientIdentifier(), GristRegistry.getGristConversion(stack));
@@ -391,7 +398,7 @@ public class ServerEditHandler
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public void onAttackEvent(AttackEntityEvent event)
 	{
-		if(!event.entity.worldObj.isRemote && getData(event.entityPlayer) != null)
+		if(!event.getEntity().worldObj.isRemote && getData(event.getEntityPlayer()) != null)
 			event.setCanceled(true);
 	}
 	
@@ -485,7 +492,7 @@ public class ServerEditHandler
 		}
 		
 		if(inventoryChanged)
-			MinecraftServer.getServer().getConfigurationManager().syncPlayerInventory(player);
+			player.getServer().getPlayerList().syncPlayerInventory(player);
 	}
 	
 	public static void onServerStopping()
@@ -501,15 +508,16 @@ public class ServerEditHandler
 			return;
 		try
 		{
-			if(commands.contains(event.command.getCommandName()))
+			MinecraftServer server = FMLServerHandler.instance().getServer();
+			if(commands.contains(event.getCommand().getCommandName()))
 			{
-				String c = event.command.getCommandName();
+				String c = event.getCommand().getCommandName();
 				EntityPlayer target;
-				if(c.equals("kill") || (c.equals("clear") || c.equals("spawnpoint")) && event.parameters.length == 0
-						|| c.equals("tp") && event.parameters.length != 2 && event.parameters.length != 4
-						|| c.equals("setworldspawn") && (event.parameters.length == 0 || event.parameters.length == 3))
-					target = CommandBase.getCommandSenderAsPlayer(event.sender);
-				else if(c.equals("defaultgamemode") && MinecraftServer.getServer().getForceGamemode())
+				if(c.equals("kill") || (c.equals("clear") || c.equals("spawnpoint")) && event.getParameters().length == 0
+						|| c.equals("tp") && event.getParameters().length != 2 && event.getParameters().length != 4
+						|| c.equals("setworldspawn") && (event.getParameters().length == 0 || event.getParameters().length == 3))
+					target = CommandBase.getCommandSenderAsPlayer(event.getSender());
+				else if(c.equals("defaultgamemode") && server.getForceGamemode())
 				{
 					for(EditData data : (EditData[]) list.toArray())
 						reset(data);
@@ -518,12 +526,12 @@ public class ServerEditHandler
 				else if(c.equals("spreadplayers"))
 				{
 					ArrayList<EntityPlayer> targets = new ArrayList<EntityPlayer>();
-					for(int i = 5; i < event.parameters.length; i++)
+					for(int i = 5; i < event.getParameters().length; i++)
 					{
-						String s = event.parameters[i];
-						if(PlayerSelector.hasArguments(s))
+						String s = event.getParameters()[i];
+						if(EntitySelector.hasArguments(s))
 						{
-							Entity[] list = (Entity[]) PlayerSelector.matchEntities(event.sender, s, Entity.class).toArray();
+							Entity[] list = (Entity[]) EntitySelector.matchEntities(event.getSender(), s, Entity.class).toArray();
 							if(list.length == 0)
 								return;
 							for(Entity e : list)
@@ -532,7 +540,7 @@ public class ServerEditHandler
 						}
 						else
 						{
-							EntityPlayer player = MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(s);
+							EntityPlayer player = server.getPlayerList().getPlayerByUsername(s);
 							if(player == null)
 								return;
 							targets.add(player);
@@ -547,8 +555,8 @@ public class ServerEditHandler
 					return;
 				}
 				else if(c.equals("gamemode") || c.equals("xp"))
-					target = event.parameters.length >= 2 ? CommandBase.getPlayer(event.sender, event.parameters[1]) : CommandBase.getCommandSenderAsPlayer(event.sender);
-				else target = CommandBase.getPlayer(event.sender, event.parameters[0]);
+					target = event.getParameters().length >= 2 ? CommandBase.getPlayer(server, event.getSender(), event.getParameters()[1]) : CommandBase.getCommandSenderAsPlayer(event.getSender());
+				else target = CommandBase.getPlayer(server, event.getSender(), event.getParameters()[0]);
 				
 				if(target != null && getData(target) != null)
 					reset(getData(target));
@@ -560,7 +568,7 @@ public class ServerEditHandler
 	
 	public static boolean isBlockItem(Item item)
 	{
-		return item instanceof ItemBlock || item instanceof ItemDoor || item instanceof ItemReed;
+		return item instanceof ItemBlock || item instanceof ItemDoor || item instanceof ItemBlockSpecial;
 	}
 	
 	public static void cleanStackNBT(ItemStack stack)

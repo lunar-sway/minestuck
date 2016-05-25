@@ -49,7 +49,7 @@ public class MinestuckKeyHandler
 		}
 		else if(captchaKey.isPressed())
 		{
-			if(Minecraft.getMinecraft().currentScreen == null && Minecraft.getMinecraft().thePlayer.getHeldItem() != null)
+			if(Minecraft.getMinecraft().currentScreen == null && Minecraft.getMinecraft().thePlayer.getHeldItemMainhand() != null)
 				MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.CAPTCHALOUGE));
 		}
 		

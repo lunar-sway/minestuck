@@ -26,11 +26,11 @@ import net.minecraft.client.gui.GuiYesNoCallback;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -77,7 +77,7 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 	@Override
 	public void initGui()
 	{
-		emptySylladex = new GuiButton(0, (width - GUI_WIDTH)/2 + 140, (height - GUI_HEIGHT)/2 + 175, 100, 20, StatCollector.translateToLocal("gui.emptySylladexButton"));
+		emptySylladex = new GuiButton(0, (width - GUI_WIDTH)/2 + 140, (height - GUI_HEIGHT)/2 + 175, 100, 20, I18n.translateToLocal("gui.emptySylladexButton"));
 		buttonList.add(emptySylladex);
 	}
 	
@@ -165,7 +165,7 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 		mc.getTextureManager().bindTexture(sylladexFrame);
 		drawTexturedModalRect(xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
-		mc.fontRendererObj.drawString(StatCollector.translateToLocal("gui.sylladex"), xOffset + 15, yOffset + 5, 0x404040);
+		mc.fontRendererObj.drawString(I18n.translateToLocal("gui.sylladex"), xOffset + 15, yOffset + 5, 0x404040);
 		
 		String str = CaptchaDeckHandler.clientSideModus.getName();
 		mc.fontRendererObj.drawString(str, xOffset + GUI_WIDTH - mc.fontRendererObj.getStringWidth(str) - 16, yOffset + 5, 0x404040);
@@ -212,7 +212,7 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 	{
 		if(button == emptySylladex)
 		{
-			mc.currentScreen = new GuiYesNo(this, StatCollector.translateToLocal("gui.emptySylladex1"), StatCollector.translateToLocal("gui.emptySylladex2"), 0);
+			mc.currentScreen = new GuiYesNo(this, I18n.translateToLocal("gui.emptySylladex1"), I18n.translateToLocal("gui.emptySylladex2"), 0);
 			mc.currentScreen.setWorldAndResolution(mc, width, height);
 		}
 	}

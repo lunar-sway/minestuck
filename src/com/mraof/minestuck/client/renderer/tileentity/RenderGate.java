@@ -5,11 +5,12 @@ import com.mraof.minestuck.util.ColorCollector;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 
 public class RenderGate extends TileEntitySpecialRenderer
 {
@@ -48,7 +49,7 @@ public class RenderGate extends TileEntitySpecialRenderer
 	
 	public void renderGateAt(TileEntityGate tileEntity, double posX, double posY, double posZ, float f, int p_180535_9_)
 	{
-		WorldRenderer renderer = Tessellator.getInstance().getWorldRenderer();
+		VertexBuffer buffer = Tessellator.getInstance().getBuffer();
 		float tick = tileEntity.getWorld().getTotalWorldTime() + f;
 		GlStateManager.translate(posX + 0.5, posY, posZ + 0.5);
 		
@@ -56,18 +57,18 @@ public class RenderGate extends TileEntitySpecialRenderer
 		GlStateManager.rotate(tick, 0, 1, 0);
 		double y = 0.5;
 		this.bindTexture(nodeInner);
-		renderer.startDrawingQuads();
-		renderer.addVertexWithUV(-1.5, y, -1.5, 0, 0);
-		renderer.addVertexWithUV(-1.5, y, 1.5, 0, 1);
-		renderer.addVertexWithUV(1.5, y, 1.5, 1, 1);
-		renderer.addVertexWithUV(1.5, y, -1.5, 1, 0);
+		buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
+		buffer.pos(-1.5, y, -1.5).tex(0, 0).endVertex();
+		buffer.pos(-1.5, y, 1.5).tex(0, 1).endVertex();
+		buffer.pos(1.5, y, 1.5).tex(1, 1).endVertex();
+		buffer.pos(1.5, y, -1.5).tex(1, 0).endVertex();
 		Tessellator.getInstance().draw();
 		GlStateManager.popMatrix();
 	}
 	
 	public void renderReturnNodeAt(TileEntityGate tileEntity, double posX, double posY, double posZ, float f, int p_180535_9_)
 	{
-		WorldRenderer renderer = Tessellator.getInstance().getWorldRenderer();
+		VertexBuffer buffer = Tessellator.getInstance().getBuffer();
 		float tick = tileEntity.getWorld().getTotalWorldTime() + f;
 		GlStateManager.translate(posX, posY, posZ);
 		
@@ -75,11 +76,11 @@ public class RenderGate extends TileEntitySpecialRenderer
 		GlStateManager.rotate(tick, 0, 1, 0);
 		double y = 0.5;
 		this.bindTexture(nodeInner);
-		renderer.startDrawingQuads();
-		renderer.addVertexWithUV(-1, y, -1, 0, 0);
-		renderer.addVertexWithUV(-1, y, 1, 0, 1);
-		renderer.addVertexWithUV(1, y, 1, 1, 1);
-		renderer.addVertexWithUV(1, y, -1, 1, 0);
+		buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
+		buffer.pos(-1, y, -1).tex(0, 0).endVertex();
+		buffer.pos(-1, y, 1).tex(0, 1).endVertex();
+		buffer.pos(1, y, 1).tex(1, 1).endVertex();
+		buffer.pos(1, y, -1).tex(1, 0).endVertex();
 		Tessellator.getInstance().draw();
 		GlStateManager.popMatrix();
 		
@@ -87,11 +88,11 @@ public class RenderGate extends TileEntitySpecialRenderer
 		GlStateManager.rotate(-tick/1.5F, 0, 1, 0);
 		y = 0.5 + MathHelper.sin(tick/50)*0.1;
 		this.bindTexture(nodeOuter);
-		renderer.startDrawingQuads();
-		renderer.addVertexWithUV(-1, y, -1, 0, 0);
-		renderer.addVertexWithUV(-1, y, 1, 0, 1);
-		renderer.addVertexWithUV(1, y, 1, 1, 1);
-		renderer.addVertexWithUV(1, y, -1, 1, 0);
+		buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
+		buffer.pos(-1, y, -1).tex(0, 0).endVertex();
+		buffer.pos(-1, y, 1).tex(0, 1).endVertex();
+		buffer.pos(1, y, 1).tex(1, 1).endVertex();
+		buffer.pos(1, y, -1).tex(1, 0).endVertex();
 		Tessellator.getInstance().draw();
 		GlStateManager.popMatrix();
 	}

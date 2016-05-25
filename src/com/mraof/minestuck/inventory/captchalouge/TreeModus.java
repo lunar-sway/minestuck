@@ -137,7 +137,7 @@ public class TreeModus extends Modus
 		}
 		
 		if(id == 0 && node.getSize() >= 16)
-			player.triggerAchievement(MinestuckAchievementHandler.treeModus);
+			player.addStat(MinestuckAchievementHandler.treeModus);
 		
 		
 		ArrayList<ItemStack> list = node.removeItems(id);

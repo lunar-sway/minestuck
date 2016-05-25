@@ -13,11 +13,13 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 import org.lwjgl.input.Keyboard;
@@ -110,9 +112,9 @@ public class GuiMachine extends GuiContainer {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
 	{
-		fontRendererObj.drawString(StatCollector.translateToLocal("gui."+guis[metadata]+".name"), 8, 6, 4210752);
+		fontRendererObj.drawString(I18n.translateToLocal("gui."+guis[metadata]+".name"), 8, 6, 4210752);
 		//draws "Inventory" or your regional equivalent
-		fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
+		fontRendererObj.drawString(I18n.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
 		if ((metadata == 3 || metadata == 4) && te.inv[1] != null) 
 		{
 			//Render grist requirements
@@ -194,7 +196,7 @@ public void initGui()
 				
 				te.ready = true;
 				te.overrideStop = false;
-				goButton.displayString = StatCollector.translateToLocal(te.overrideStop ? "gui.buttonStop" : "gui.buttonGo");
+				goButton.displayString = I18n.translateToLocal(te.overrideStop ? "gui.buttonStop" : "gui.buttonGo");
 			}
 			else if (Mouse.getEventButton() == 1 && te.getMachineType() > 2)
 			{
@@ -203,7 +205,7 @@ public void initGui()
 				MinestuckChannelHandler.sendToServer(packet);
 				
 				te.overrideStop = !te.overrideStop;
-				goButton.displayString = StatCollector.translateToLocal(te.overrideStop ? "gui.buttonStop" : "gui.buttonGo");
+				goButton.displayString = I18n.translateToLocal(te.overrideStop ? "gui.buttonStop" : "gui.buttonGo");
 			}
 		}
 	}
@@ -236,7 +238,7 @@ public void initGui()
 		
 		if(keyCode == 28)
 		{
-			this.mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
+			this.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.ui_button_click, 1.0F));
 			
 			boolean mode = te.getMachineType() > 2 && (Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54));
 			MinestuckPacket packet = MinestuckPacket.makePacket(Type.GOBUTTON,true, mode && !te.overrideStop);
@@ -245,7 +247,7 @@ public void initGui()
 			if(!mode)
 				te.ready = true;
 			te.overrideStop = mode && !te.overrideStop;
-			goButton.displayString = StatCollector.translateToLocal(te.overrideStop ? "gui.buttonStop" : "gui.buttonGo");
+			goButton.displayString = I18n.translateToLocal(te.overrideStop ? "gui.buttonStop" : "gui.buttonGo");
 		}
 	}
 	
@@ -256,15 +258,15 @@ public void initGui()
 	{
 		float f = 1/(float)width;
 		float f1 = 1/(float)height;
-		WorldRenderer render = Tessellator.getInstance().getWorldRenderer();
-		render.startDrawingQuads();
-		render.addVertexWithUV((double)(par1 + 0), (double)(par2 + par6), (double)this.zLevel, (double)((float)(par3 + 0) * f), (double)((float)(par4 + par6) * f1));
-		render.addVertexWithUV((double)(par1 + par5), (double)(par2 + par6), (double)this.zLevel, (double)((float)(par3 + par5) * f), (double)((float)(par4 + par6) * f1));
-		render.addVertexWithUV((double)(par1 + par5), (double)(par2 + 0), (double)this.zLevel, (double)((float)(par3 + par5) * f), (double)((float)(par4 + 0) * f1));
-		render.addVertexWithUV((double)(par1 + 0), (double)(par2 + 0), (double)this.zLevel, (double)((float)(par3 + 0) * f), (double)((float)(par4 + 0) * f1));
+		VertexBuffer render = Tessellator.getInstance().getBuffer();
+		render.begin(7, DefaultVertexFormats.POSITION_TEX);
+		render.pos(par1, par2 + par6, 0D).tex((par3)*f, (par4 + par6)*f1).endVertex();
+		render.pos(par1 + par5, par2 + par6, this.zLevel).tex((par3 + par5)*f, (par4 + par6)*f1).endVertex();
+		render.pos(par1 + par5, par2, this.zLevel).tex((par3 + par5)*f, (par4)*f1).endVertex();
+		render.pos(par1, par2, this.zLevel).tex((par3)*f, (par4)*f1).endVertex();
 		Tessellator.getInstance().draw();
 	}
-
+	
 	/**
 	 * Returns a number to be used in calculation of progress bar length.
 	 * 
@@ -282,7 +284,7 @@ public void initGui()
 	{
 		if (cost == null)
 		{
-			fontRendererObj.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 9,45, 16711680);
+			fontRendererObj.drawString(I18n.translateToLocal("gui.notAlchemizable"), 9,45, 16711680);
 			return;
 		}
 		GristSet playerGrist = MinestuckPlayerData.getClientGrist();
@@ -290,7 +292,7 @@ public void initGui()
 		Hashtable<Integer, Integer> reqs = cost.getHashtable();
 		if (reqs.size() == 0)
 		{
-			fontRendererObj.drawString(StatCollector.translateToLocal("gui.free"), 9,45, 65280);
+			fontRendererObj.drawString(I18n.translateToLocal("gui.free"), 9,45, 65280);
 			return;
 		}
 		List<String> tooltip= null;
