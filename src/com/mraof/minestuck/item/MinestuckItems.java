@@ -58,6 +58,7 @@ public class MinestuckItems
 	public static Item ninjaSword;
 	public static Item katana;
 	public static Item caledscratch;
+	public static Item caledfwlch;
 	public static Item royalDeringer;
 	public static Item regisword;
 	public static Item scarletRibbitar;
@@ -128,6 +129,7 @@ public class MinestuckItems
 				ninjaSword = new ItemBlade(EnumBladeType.NINJA);
 				katana = new ItemBlade(EnumBladeType.KATANA);
 				caledscratch = new ItemBlade(EnumBladeType.CALEDSCRATCH);
+				caledfwlch = new ItemBlade(EnumBladeType.CALEDFWLCH);
 				royalDeringer = new ItemBlade(EnumBladeType.DERINGER);
 				regisword = new ItemBlade(EnumBladeType.REGISWORD);
 				scarletRibbitar = new ItemBlade(EnumBladeType.SCARLET);
@@ -202,6 +204,7 @@ public class MinestuckItems
 				GameRegistry.registerItem(ninjaSword, "ninja_sword");
 				GameRegistry.registerItem(katana, "katana");
 				GameRegistry.registerItem(caledscratch, "caledscratch");
+				GameRegistry.registerItem(caledfwlch, "caledfwlch");
 				GameRegistry.registerItem(royalDeringer, "royal_deringer");
 				GameRegistry.registerItem(regisword, "regisword");
 				GameRegistry.registerItem(scarletRibbitar, "scarlet_ribbitar");
