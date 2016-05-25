@@ -89,7 +89,8 @@ public class BlockComputerOn extends Block implements ITileEntityProvider
 				world.setBlockState(pos, state.withProperty(BSOD, true), 2);
 			}
 			else tileEntity.installedPrograms.put(id, true);
-			world.notifyBlockUpdate(pos, state, state, 0);
+			tileEntity.markDirty();
+			world.notifyBlockUpdate(pos, state, state, 3);
 			return true;
 		}
 

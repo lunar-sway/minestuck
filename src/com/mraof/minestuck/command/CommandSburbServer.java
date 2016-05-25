@@ -8,6 +8,7 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
+import net.minecraft.server.MinecraftServer;
 
 public class CommandSburbServer extends CommandBase
 {
@@ -31,7 +32,7 @@ public class CommandSburbServer extends CommandBase
 	}
 	
 	@Override
-	public void processCommand(ICommandSender sender, String[] args) throws CommandException
+	public void execute(MinecraftServer mcServer, ICommandSender sender, String[] args) throws CommandException
 	{
 		if(args.length != 2)
 			throw new WrongUsageException("commands.sburbServer.usage");

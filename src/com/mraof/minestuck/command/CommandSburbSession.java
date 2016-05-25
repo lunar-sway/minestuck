@@ -14,6 +14,7 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
+import net.minecraft.server.MinecraftServer;
 
 public class CommandSburbSession extends CommandBase	//TODO properly localize all messages related to this command
 {
@@ -37,7 +38,7 @@ public class CommandSburbSession extends CommandBase	//TODO properly localize al
 	}
 	
 	@Override
-	public void processCommand(ICommandSender sender, String[] args) throws CommandException
+	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException
 	{
 		if(args.length < 2 || args.length < 3 && args[1].equalsIgnoreCase("add")
 				|| args.length != 4 && (args[1].equalsIgnoreCase("landTerrain") || args[1].equalsIgnoreCase("landTitle"))
@@ -48,7 +49,7 @@ public class CommandSburbSession extends CommandBase	//TODO properly localize al
 		
 		if(command.equalsIgnoreCase("name"))
 		{
-			String playerName = args.length < 2 ? getCommandSenderAsPlayer(sender).getCommandSenderName() : args[2];
+			String playerName = args.length < 2 ? getCommandSenderAsPlayer(sender).getName() : args[2];
 			SburbHandler.sessionName(sender, this, playerName, sessionName);
 			
 		} else if(command.equalsIgnoreCase("add")/* || command.equalsIgnoreCase("finish")*/)

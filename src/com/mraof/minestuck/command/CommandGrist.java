@@ -15,7 +15,8 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.command.SyntaxErrorException;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.TextComponentTranslation;
 
 public class CommandGrist extends CommandBase
 {
@@ -38,7 +39,7 @@ public class CommandGrist extends CommandBase
 	}
 	
 	@Override
-	public void processCommand(ICommandSender sender, String[] args) throws CommandException
+	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException
 	{
 		if(args.length < 1 || (!args[0].equalsIgnoreCase("get") && args.length < 2))
 			throw new WrongUsageException(this.getCommandUsage(sender));
@@ -83,7 +84,7 @@ public class CommandGrist extends CommandBase
 			for(GristAmount amount : MinestuckPlayerData.getGristSet(identifier).getArray())
 				grist.append("\n" + amount.getAmount() + " " + amount.getType().getDisplayName());	//TODO properly translate display name for client side
 			
-			sender.addChatMessage(new ChatComponentTranslation("commands.grist.get", displayName, grist.toString()));
+			sender.addChatMessage(new TextComponentTranslation("commands.grist.get", displayName, grist.toString()));
 		} else throw new WrongUsageException("commands.invalidSubCommand", command);
 	}
 

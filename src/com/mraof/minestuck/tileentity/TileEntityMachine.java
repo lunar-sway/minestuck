@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -11,11 +12,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.server.gui.IUpdatePlayerListBox;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MinestuckBlocks;
@@ -34,7 +35,7 @@ import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.UsernameHandler;
 
-public class TileEntityMachine extends TileEntity implements IInventory, IUpdatePlayerListBox
+public class TileEntityMachine extends TileEntity implements IInventory, ITickable
 {
 
     public ItemStack[] inv;
@@ -99,21 +100,22 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
             }
             return stack;
     }
-
-    @Override
-    public ItemStack getStackInSlotOnClosing(int slot) {
-            ItemStack stack = getStackInSlot(slot);
-            if (stack != null) {
-                    setInventorySlotContents(slot, null);
-            }
-            return stack;
-    }
-    
-    @Override
-    public int getInventoryStackLimit() {
-            return 64;
-    }
-
+	
+	@Override
+	public ItemStack removeStackFromSlot(int index)
+	{
+		ItemStack stack = getStackInSlot(index);
+		if (stack != null)
+			setInventorySlotContents(index, null);
+		return stack;
+	}
+	
+	@Override
+	public int getInventoryStackLimit()
+	{
+		return 64;
+	}
+	
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player)
 	{
@@ -169,10 +171,10 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
     {
     	NBTTagCompound tagCompound = new NBTTagCompound();
     	this.writeToNBT(tagCompound);
-    	return new S35PacketUpdateTileEntity(this.pos, 2, tagCompound);
+    	return new SPacketUpdateTileEntity(this.pos, 2, tagCompound);
     }
     @Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) 
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) 
     {
     	this.readFromNBT(pkt.getNbtCompound());
     }
@@ -181,10 +183,11 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 		return true;
 	}
 	
+	
 	@Override
 	public void update()
 	{
-		
+		IBlockState state = worldObj.getBlockState(pos);
 		if(worldObj.getBlockState(pos).getBlock() != MinestuckBlocks.blockMachine || worldObj.isRemote)	//Processing is easier done on the server side only
 			return;
 		
@@ -194,7 +197,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 			this.progress = 0;
 			this.ready = overrideStop;
 			if(!b)
-				worldObj.markBlockForUpdate(pos);
+				worldObj.notifyBlockUpdate(pos, state, state, 3);
 			return;
 		}
 		
@@ -205,7 +208,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 			this.progress = 0;
 			this.ready = overrideStop;
 			processContents();
-			worldObj.markBlockForUpdate(pos);
+			worldObj.notifyBlockUpdate(pos, state, state, 3);
 		}
 	}
 	
@@ -446,7 +449,7 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 	}
 
 	@Override
-	public String getCommandSenderName()
+	public String getName()
 	{
 		return "tile.blockMachine."+ItemMachine.subNames[getMachineType()]+".name";
 	}
@@ -458,9 +461,9 @@ public class TileEntityMachine extends TileEntity implements IInventory, IUpdate
 	}
 
 	@Override
-	public IChatComponent getDisplayName()
+	public ITextComponent getDisplayName()
 	{
-		return new ChatComponentTranslation(getCommandSenderName());
+		return new TextComponentTranslation(getName());
 	}
 
 	@Override

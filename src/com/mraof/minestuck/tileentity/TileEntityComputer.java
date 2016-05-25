@@ -9,9 +9,9 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -119,11 +119,11 @@ public class TileEntityComputer extends TileEntity
 			if(c != null)
 				tagCompound.getCompoundTag("programData").getCompoundTag("program_1").setInteger("connectedClient", c.getClientIdentifier().getId());
 		}
-		return new S35PacketUpdateTileEntity(this.pos, 2, tagCompound);
+		return new SPacketUpdateTileEntity(this.pos, 2, tagCompound);
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) 
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) 
 	{
 		this.readFromNBT(pkt.getNbtCompound());
 	}

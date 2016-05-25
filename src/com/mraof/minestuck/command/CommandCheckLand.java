@@ -12,8 +12,9 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 
 public class CommandCheckLand extends CommandBase
 {
@@ -42,7 +43,7 @@ public class CommandCheckLand extends CommandBase
 	}
 	
 	@Override
-	public void processCommand(ICommandSender sender, String[] args) throws CommandException
+	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException
 	{
 		if(!(sender instanceof EntityPlayerMP))
 			throw new PlayerNotFoundException("commands.playerOnly");
@@ -52,17 +53,17 @@ public class CommandCheckLand extends CommandBase
 		{
 			LandAspectRegistry.AspectCombination aspects = MinestuckDimensionHandler.getAspects(player.dimension);
 			ChunkProviderLands chunkProvider = (ChunkProviderLands) player.worldObj.provider.createChunkGenerator();
-			IChatComponent aspect1 = new ChatComponentTranslation("land."+aspects.aspectTerrain.getNames()[chunkProvider.nameIndex1]);
-			IChatComponent aspect2 = new ChatComponentTranslation("land."+aspects.aspectTitle.getNames()[chunkProvider.nameIndex2]);
-			IChatComponent toSend;
+			ITextComponent aspect1 = new TextComponentTranslation("land."+aspects.aspectTerrain.getNames()[chunkProvider.nameIndex1]);
+			ITextComponent aspect2 = new TextComponentTranslation("land."+aspects.aspectTitle.getNames()[chunkProvider.nameIndex2]);
+			ITextComponent toSend;
 			if(chunkProvider.nameOrder)
-				toSend = new ChatComponentTranslation("land.message.check", aspect1, aspect2);
-			else toSend = new ChatComponentTranslation("land.message.check", aspect2, aspect1);
+				toSend = new TextComponentTranslation("land.message.check", aspect1, aspect2);
+			else toSend = new TextComponentTranslation("land.message.check", aspect2, aspect1);
 			player.addChatMessage(toSend);
 		}
 		else
 		{
-			player.addChatMessage(new ChatComponentTranslation("land.message.checkFail"));
+			player.addChatMessage(new TextComponentTranslation("land.message.checkFail"));
 		}
 	}
 	
@@ -73,7 +74,7 @@ public class CommandCheckLand extends CommandBase
 	}
 	
 	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender sender)
+	public boolean checkPermission(MinecraftServer server, ICommandSender sender)
 	{
 		return true;
 	}

@@ -48,7 +48,7 @@ public class CommandGristSend extends CommandBase
 	}
 	
 	@Override
-	public void processCommand(ICommandSender sender, String[] args) throws CommandException
+	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException
 	{
 		if(!(sender instanceof EntityPlayerMP))
 			throw new PlayerNotFoundException("commands.playerOnly.redirectGrist");
@@ -58,11 +58,11 @@ public class CommandGristSend extends CommandBase
 			throw new WrongUsageException(this.getCommandUsage(sender));
 		
 		String receiver = args[0];
-		EntityPlayerMP receivingPlayer = MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(receiver);
+		EntityPlayerMP receivingPlayer = server.getPlayerList().getPlayerByUsername(receiver);
 		if(receivingPlayer != null)
 		{
 			if(!isPermittedFor(player, receivingPlayer))
-				throw new CommandException("commands.gristSend.notPermitted", receivingPlayer.getCommandSenderName());
+				throw new CommandException("commands.gristSend.notPermitted", receivingPlayer.getName());
 			
 			GristSet set = new GristSet();
 			GristAmount[] parsedAmounts = CommandGrist.parseGrist(args, 1);
@@ -112,7 +112,7 @@ public class CommandGristSend extends CommandBase
 	}
 	
 	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender sender)
+	public boolean checkPermission(MinecraftServer server, ICommandSender sender)
 	{
 		return true;
 	}

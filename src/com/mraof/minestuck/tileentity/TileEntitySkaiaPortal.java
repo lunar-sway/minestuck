@@ -4,7 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 
 import com.mraof.minestuck.block.BlockChessTile;
@@ -48,7 +48,7 @@ public class TileEntitySkaiaPortal extends TileEntity implements ITeleporter
 	public void teleportEntity(Entity entity)
 	{
 		entity.timeUntilPortal = entity.getPortalCooldown();
-		if(destination.dim != this.worldObj.provider.getDimensionId())
+		if(destination.dim != this.worldObj.provider.getDimension())
 			Teleport.teleportEntity(entity, this.destination.dim, this, false);
 		if(entity instanceof EntityPlayerMP)
 			((EntityPlayerMP)entity).playerNetServerHandler.setPlayerLocation(destination.pos.getX(), destination.pos.getY(), destination.pos.getZ(), entity.rotationYaw, entity.rotationPitch);
