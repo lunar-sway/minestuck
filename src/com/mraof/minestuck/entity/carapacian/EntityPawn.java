@@ -9,14 +9,18 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIArrowAttack;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
+import net.minecraft.entity.ai.EntityAIAttackMelee;
+import net.minecraft.entity.ai.EntityAIAttackRanged;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.entity.projectile.EntityTippedArrow;
+import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
@@ -25,8 +29,8 @@ import com.mraof.minestuck.item.MinestuckItems;
 public abstract class EntityPawn extends EntityCarapacian implements IRangedAttackMob, IMob
 {
 	private static Random randStatic = new Random();
-	private EntityAIArrowAttack entityAIArrowAttack = new EntityAIArrowAttack(this, 0.25F, 20, 10.0F);
-	private EntityAIAttackOnCollide entityAIAttackOnCollide = new EntityAIAttackOnCollide(this, .4F, false);
+	private EntityAIAttackRanged entityAIArrowAttack = new EntityAIAttackRanged(this, 0.25F, 20, 10.0F);
+	private EntityAIAttackMelee entityAIAttackOnCollide = new EntityAIAttackMelee(this, .4F, false);
 	private int pawnType;
 	protected float moveSpeed = 0.3F;
 
@@ -56,10 +60,10 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 	}
 	
 	@Override
-	public IEntityLivingData onSpawnFirstTime(DifficultyInstance difficulty, IEntityLivingData entityLivingData)	//was called "onSpawnWithEgg"
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData entityLivingData)	//was called "onSpawnWithEgg"
 	{
-		entityLivingData = super.onSpawnFirstTime(difficulty, entityLivingData);
-		this.addRandomDrop();
+		entityLivingData = super.onInitialSpawn(difficulty, entityLivingData);
+		setEquipmentBasedOnDifficulty(difficulty);
 		
 		if(this.pawnType == 1)
 		{
@@ -67,34 +71,39 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 		}
 		else
 			this.tasks.addTask(4, this.entityAIAttackOnCollide);
-		this.setCurrentItemOrArmor(0, new ItemStack(this.pawnType == 1 ? Items.bow : rand.nextDouble() < .2 ? MinestuckItems.regisword : rand.nextDouble() < .02 ? MinestuckItems.sord : Items.stone_sword));
+		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(this.pawnType == 1 ? Items.bow : rand.nextDouble() < .2 ? MinestuckItems.regisword : rand.nextDouble() < .02 ? MinestuckItems.sord : Items.stone_sword));
 		this.setEnchantmentBasedOnDifficulty(difficulty);	//was called "enchantEquipment"
 		return entityLivingData;
 	}
 
 	@Override
-	public void attackEntityWithRangedAttack(EntityLivingBase entityLiving, float f1) 
+	public void attackEntityWithRangedAttack(EntityLivingBase target, float f1) 
 	{
-		EntityArrow arrow = new EntityArrow(this.worldObj, this, entityLiving, 1.6F, 12.0F);
-		int power = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, this.getHeldItem());
-		int punch = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, this.getHeldItem());
+		EntityArrow arrow = new EntityTippedArrow(this.worldObj, this);
+        double d0 = target.posX - this.posX;
+        double d1 = target.getEntityBoundingBox().minY + (double)(target.height / 3.0F) - arrow.posY;
+        double d2 = target.posZ - this.posZ;
+        double d3 = (double)MathHelper.sqrt_double(d0 * d0 + d2 * d2);
+        arrow.setThrowableHeading(d0, d1 + d3 * 0.2D, d2, 1.6F, 12.0F);
+		int power = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.power, this);
+		int punch = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.punch, this);
 
-		if (power > 0)
+		if(power > 0)
 		{
 			arrow.setDamage(arrow.getDamage() + (double)power * 0.5D + 0.5D);
 		}
 
-		if (punch > 0)
+		if(punch > 0)
 		{
 			arrow.setKnockbackStrength(punch);
 		}
 
-		if (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, this.getHeldItem()) > 0)
+		if(EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.flame, this) > 0)
 		{
 			arrow.setFire(100);
 		}
-
-		this.playSound("random.bow", 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+		
+		playSound(SoundEvents.entity_skeleton_shoot, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
 		//		EntityPawn pawn = this.getClass() == EntityWhitePawn.class ? new EntityWhitePawn(this.worldObj, 0) : new EntityBlackPawn(this.worldObj, 0);
 		//		pawn.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
 		//		pawn.initCreature();
@@ -108,14 +117,14 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 	 */
 	public float getAttackStrength(Entity par1Entity)
 	{
-		ItemStack weapon = this.getHeldItem();
+		ItemStack weapon = this.getHeldItemMainhand();
 		float damage = 2;
 
 		if (weapon != null)
 			damage += 
-				(float)this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue();
+				(float)this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
 		
-		damage += EnchantmentHelper.func_152377_a(this.getHeldItem(), ((EntityLivingBase) par1Entity).getCreatureAttribute());
+		damage += EnchantmentHelper.getModifierForCreature(this.getHeldItemMainhand(), ((EntityLivingBase) par1Entity).getCreatureAttribute());
 		
 		return damage;
 	}
@@ -154,12 +163,12 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 	{
 		if(this.entityAIArrowAttack == null || this.entityAIAttackOnCollide == null)
 		{
-			entityAIArrowAttack = new EntityAIArrowAttack(this, 0.25F, 20, 10.0F);
-			entityAIAttackOnCollide = new EntityAIAttackOnCollide(this, .4F, false);
+			entityAIArrowAttack = new EntityAIAttackRanged(this, 0.25F, 20, 10.0F);
+			entityAIAttackOnCollide = new EntityAIAttackMelee(this, .4F, false);
 		}
 		this.tasks.removeTask(this.entityAIArrowAttack);
 		this.tasks.removeTask(this.entityAIAttackOnCollide);
-		ItemStack weapon = this.getHeldItem();
+		ItemStack weapon = this.getHeldItemMainhand();
 
 		if (weapon != null && weapon.getItem() == Items.bow)
 		{
@@ -168,13 +177,13 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 		else
 			this.tasks.addTask(4, this.entityAIAttackOnCollide);
 	}
-
+	
 	@Override
-	public void setCurrentItemOrArmor(int slot, ItemStack par2ItemStack)
+	public void setItemStackToSlot(EntityEquipmentSlot slotIn, ItemStack stack)
 	{
-		super.setCurrentItemOrArmor(slot, par2ItemStack);
+		super.setItemStackToSlot(slotIn, stack);
 
-		if (!this.worldObj.isRemote && slot == 0)
+		if (!this.worldObj.isRemote && slotIn == EntityEquipmentSlot.MAINHAND)
 		{
 			this.setCombatTask();
 		}
@@ -184,7 +193,7 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 	protected void applyEntityAttributes()
 	{
 		super.applyEntityAttributes();
-		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.attackDamage);
+		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 	}
 	
 }

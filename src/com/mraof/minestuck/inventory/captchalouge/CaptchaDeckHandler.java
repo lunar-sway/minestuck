@@ -16,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -175,7 +176,7 @@ public class CaptchaDeckHandler
 	
 	public static void captchalougeItem(EntityPlayerMP player)
 	{
-		ItemStack item = player.getCurrentEquippedItem();
+		ItemStack item = player.getHeldItemMainhand();
 		Modus modus = getModus(player);
 		if(modus != null && item != null)
 		{
@@ -195,18 +196,18 @@ public class CaptchaDeckHandler
 				if(!card2)
 					launchAnyItem(player, new ItemStack(MinestuckItems.captchaCard, 1));
 				
-				item = player.getCurrentEquippedItem();
+				item = player.getHeldItemMainhand();
 				if(card1 && item.stackSize > 1)
 					item.stackSize--;
-				else player.setCurrentItemOrArmor(0, null);
+				else player.setHeldItem(EnumHand.MAIN_HAND, null);
 				
 			}
 			else if(card1 && card2)
 			{
 				launchAnyItem(player, item);
-				item = player.getCurrentEquippedItem();
+				item = player.getHeldItemMainhand();
 				if(item.stackSize == 1)
-					player.setCurrentItemOrArmor(0, null);
+					player.setHeldItem(EnumHand.MAIN_HAND, null);
 				else item.stackSize--;
 			}
 			MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, writeToNBT(modus));
@@ -223,14 +224,14 @@ public class CaptchaDeckHandler
 		ItemStack stack = modus.getItem(index, asCard);
 		if(stack != null)
 		{
-			ItemStack otherStack = player.getCurrentEquippedItem();
+			ItemStack otherStack = player.getHeldItemMainhand();
 			if(otherStack == null)
-				player.setCurrentItemOrArmor(0, stack);
+				player.setHeldItem(EnumHand.MAIN_HAND, null);
 			else if(stack.getItem() == otherStack.getItem() && stack.getItemDamage() == otherStack.getItemDamage()
 					&& ItemStack.areItemStackTagsEqual(stack, otherStack) && stack.stackSize + otherStack.stackSize <= stack.getMaxStackSize())
 			{
 				stack.stackSize += otherStack.stackSize;
-				player.setCurrentItemOrArmor(0, stack);
+				player.setHeldItem(EnumHand.MAIN_HAND, null);
 			}
 			else
 			{

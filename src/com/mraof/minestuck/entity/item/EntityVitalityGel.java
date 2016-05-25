@@ -4,10 +4,11 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
@@ -107,12 +108,12 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 		this.prevPosZ = this.posZ;
 		this.motionY -= 0.03D;
 		
-		if (this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ))).getBlock().getMaterial() == Material.lava)
+		if (this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ))).getMaterial() == Material.lava)
 		{
 			this.motionY = 0.2D;
 			this.motionX = (double)((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F);
 			this.motionZ = (double)((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F);
-			this.playSound("random.fizz", 0.4F, 2.0F + this.rand.nextFloat() * 0.4F);
+			this.playSound(SoundEvents.entity_generic_burn, 0.4F, 2.0F + this.rand.nextFloat() * 0.4F);
 		}
 		
 		double d0 = this.getSizeByValue() * 2.0D;
@@ -208,7 +209,7 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 		
 		if (!this.worldObj.isRemote)
 		{
-			this.playSound("random.pop", 0.1F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F));
+			this.playSound(SoundEvents.entity_item_pickup, 0.1F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F));
 			player.heal(healAmount);
 			this.setDead();
 		}

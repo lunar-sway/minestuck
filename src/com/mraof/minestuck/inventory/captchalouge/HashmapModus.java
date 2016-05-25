@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -269,7 +269,7 @@ public class HashmapModus extends Modus
 			player.inventory.setInventorySlotContents(player.inventory.currentItem, stack);
 		else CaptchaDeckHandler.launchAnyItem(player, stack);
 		
-		this.player.addChatMessage(new ChatComponentTranslation("[HASHMAP] %s %% %s = %s -> %s", i, getSize(), index, stack.getChatComponent()));
+		this.player.addChatMessage(new TextComponentTranslation("[HASHMAP] %s %% %s = %s -> %s", i, getSize(), index, stack.getChatComponent()));
 	}
 	
 }

@@ -21,10 +21,10 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
@@ -88,17 +88,17 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	protected void applyEntityAttributes()
 	{
 		super.applyEntityAttributes();
-		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.attackDamage);
+		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 		
-		this.getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue((double)(this.getKnockbackResistance()));
-		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(this.getWanderSpeed());
+		this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue((double)(this.getKnockbackResistance()));
+		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(this.getWanderSpeed());
 	}
 	
 	protected void applyGristType(GristType type, boolean fullHeal)
 	{
 		this.type = type;
-		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(this.getMaximumHealth());
-		this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(this.getAttackDamage());
+		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.getMaximumHealth());
+		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(this.getAttackDamage());
 		if(fullHeal)
 			this.setHealth(this.getMaxHealth());
 	}
@@ -121,7 +121,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn)
 	{
-		boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue());
+		boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
 		return flag;
 	}
 	
@@ -146,11 +146,11 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	}
 	
 	@Override
-	public String getCommandSenderName() 
+	public String getName() 
 	{
 		if(type != null)
-			return StatCollector.translateToLocalFormatted("entity.minestuck." + underlingName + ".type", type.getDisplayName());
-		else return StatCollector.translateToFallback("entity.minestuck." + underlingName + ".name");
+			return I18n.translateToLocalFormatted("entity.minestuck." + underlingName + ".type", type.getDisplayName());
+		else return I18n.translateToFallback("entity.minestuck." + underlingName + ".name");
 	}
 	
 	@Override
@@ -233,7 +233,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	}
 	
 	@Override
-	public IEntityLivingData onSpawnFirstTime(DifficultyInstance difficulty, IEntityLivingData livingData)
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingData)
 	{
 		
 		if(!(livingData instanceof UnderlingData))
@@ -245,7 +245,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 			applyGristType(((UnderlingData)livingData).type, true);
 		}
 		
-		return super.onSpawnFirstTime(difficulty, livingData);
+		return super.onInitialSpawn(difficulty, livingData);
 	}
 	
 	@Override
@@ -278,7 +278,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 			{
 				float f2 = this.getHealth();
 				this.setHealth(f2 - damageAmount);
-				this.getCombatTracker().func_94547_a(damageSrc, f2, damageAmount);
+				this.getCombatTracker().trackDamage(damageSrc, f2, damageAmount);
 				this.setAbsorptionAmount(this.getAbsorptionAmount() - damageAmount);
 			}
 		}

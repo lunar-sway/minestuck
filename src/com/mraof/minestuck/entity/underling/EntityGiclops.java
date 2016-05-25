@@ -3,9 +3,10 @@ package com.mraof.minestuck.entity.underling;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.MobEffects;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
@@ -85,28 +86,29 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 	protected void applyEntityAttributes()
 	{
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(32.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32.0D);
 		
 	}
 	
 	@Override
-	protected void jump() {
-		this.motionY = 0.41999998688697815D;
-
-        if (this.isPotionActive(Potion.jump))
-        {
-            this.motionY += (double)((float)(this.getActivePotionEffect(Potion.jump).getAmplifier() + 1) * 0.1F);
-        }
-
-        if (this.isSprinting())
-        {
-            float f = this.rotationYaw * 0.017453292F;
-            this.motionX -= (double)(MathHelper.sin(f) * 0.2F);
-            this.motionZ += (double)(MathHelper.cos(f) * 0.2F);
-        }
-
-        this.isAirBorne = true;
-        ForgeHooks.onLivingJump(this);
+	protected void jump()
+	{
+		this.motionY = 0.42D;
+		
+		if (this.isPotionActive(MobEffects.jump))
+		{
+			this.motionY += (double)((float)(this.getActivePotionEffect(MobEffects.jump).getAmplifier() + 1) * 0.1F);
+		}
+		
+		if (this.isSprinting())
+		{
+			float f = this.rotationYaw * 0.017453292F;
+			this.motionX -= (double)(MathHelper.sin(f) * 0.2F);
+			this.motionZ += (double)(MathHelper.cos(f) * 0.2F);
+		}
+		
+		this.isAirBorne = true;
+		ForgeHooks.onLivingJump(this);
 	}
 	
 	@Override
@@ -187,7 +189,7 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 			computePlayerProgress((int) (500*type.getPower() + 1000));
 			if(entity != null && entity instanceof EntityPlayerMP)
 			{
-				((EntityPlayerMP) entity).triggerAchievement(MinestuckAchievementHandler.killGiclops);
+				((EntityPlayerMP) entity).addStat(MinestuckAchievementHandler.killGiclops);
 				Echeladder ladder = MinestuckPlayerData.getData((EntityPlayerMP) entity).echeladder;
 				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 3));
 			}

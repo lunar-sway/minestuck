@@ -18,7 +18,7 @@ public abstract class EntityMinestuck extends EntityCreature
 	protected void applyEntityAttributes()
 	{
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)(this.getMaximumHealth()));
+		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue((double)(this.getMaximumHealth()));
 	}
 	
 	protected abstract float getMaximumHealth();

@@ -4,9 +4,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.pathfinding.PathEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public class EntityAIAttackOnCollideWithRate extends EntityAIBase
@@ -118,9 +120,9 @@ public class EntityAIAttackOnCollideWithRate extends EntityAIBase
 			{
 				this.attackTick = this.attackRate;
 
-				if (this.attacker.getHeldItem() != null)
+				if (this.attacker.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND) != null)
 				{
-					this.attacker.swingItem();
+					this.attacker.swingArm(EnumHand.MAIN_HAND);
 				}
 
 				this.attacker.attackEntityAsMob(this.entityTarget);
