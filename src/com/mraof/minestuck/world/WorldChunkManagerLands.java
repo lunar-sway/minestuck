@@ -6,22 +6,22 @@ import com.mraof.minestuck.world.biome.GenLayerLands;
 
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
-import net.minecraft.world.biome.WorldChunkManager;
+import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.gen.layer.GenLayer;
 
-public class WorldChunkManagerLands extends WorldChunkManager
+public class WorldChunkManagerLands extends BiomeProvider
 {
 	private float rainfall;
 	private GenLayerLands layerLands;
 	
 	public WorldChunkManagerLands(World world, float rainfall, float oceanChance)
 	{
-		super(world);
+		super(world.getWorldInfo());
 		this.rainfall = rainfall;
 		layerLands.setOceanChance(oceanChance);
 	}
 	
-	@Override
+	/*@Override
 	public float[] getRainfall(float[] listToReuse, int x, int z, int width, int length)
 	{
 		if (listToReuse == null || listToReuse.length < width * length)
@@ -31,7 +31,7 @@ public class WorldChunkManagerLands extends WorldChunkManager
 		
 		Arrays.fill(listToReuse, 0, width * length, this.rainfall);
 		return listToReuse;
-	}
+	}*/
 	
 	@Override
 	public GenLayer[] getModdedBiomeGenerators(WorldType worldType, long seed, GenLayer[] original)

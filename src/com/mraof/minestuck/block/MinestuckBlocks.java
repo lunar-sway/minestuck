@@ -22,7 +22,7 @@ public class MinestuckBlocks
 	public static Block chessTile;
 	public static BlockColoredDirt coloredDirt;
 	public static Block skaiaPortal;
-	public static Block oreCruxite;
+	public static BlockCruxiteOre oreCruxite;
 	public static Block blockStorage;
 	public static Block blockMachine;
 	public static Block blockComputerOn;
@@ -61,7 +61,7 @@ public class MinestuckBlocks
 		chessTile = GameRegistry.register(new BlockChessTile().setRegistryName("chess_tile"));
 		skaiaPortal = GameRegistry.register(new BlockSkaiaPortal(Material.portal).setRegistryName("skaia_portal"));
 		
-		oreCruxite = GameRegistry.register(new BlockCruxiteOre().setRegistryName("ore_cruxite"));
+		oreCruxite = (BlockCruxiteOre) GameRegistry.register(new BlockCruxiteOre().setRegistryName("ore_cruxite"));
 		coalOreNetherrack = GameRegistry.register(new BlockVanillaOre(BlockVanillaOre.OreType.COAL).setRegistryName("coal_ore_netherrack")).setUnlocalizedName("oreCoal");
 		ironOreSandstone = GameRegistry.register(new BlockVanillaOre(BlockVanillaOre.OreType.IRON).setRegistryName("iron_ore_sandstone")).setUnlocalizedName("oreIron");
 		ironOreSandstoneRed = GameRegistry.register(new BlockVanillaOre(BlockVanillaOre.OreType.IRON).setRegistryName("iron_ore_sandstone_red")).setUnlocalizedName("oreIron");

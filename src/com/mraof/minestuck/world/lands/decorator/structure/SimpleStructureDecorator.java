@@ -6,7 +6,7 @@ import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public abstract class SimpleStructureDecorator implements ILandDecorator

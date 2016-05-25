@@ -15,17 +15,17 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Vec3;
 import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.util.math.Vec3d;
 
 public class LandAspectHeat extends TerrainLandAspect 
 {
 	IBlockState[] structureBlocks = {Blocks.nether_brick.getDefaultState(), Blocks.obsidian.getDefaultState()};
-	static Vec3 skyColor = new Vec3(0.4D, 0.0D, 0.0D);
+	static Vec3d skyColor = new Vec3d(0.4D, 0.0D, 0.0D);
 	
 	public LandAspectHeat()
 	{
-		List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
+		/*List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
 		list.add(new WeightedRandomChestContent(new ItemStack(Items.blaze_powder, 1, 0), 2, 8, 6));
 		list.add(new WeightedRandomChestContent(new ItemStack(Items.blaze_rod, 1, 0), 1, 3, 4));
 		list.add(new WeightedRandomChestContent(new ItemStack(Items.magma_cream, 1, 0), 1, 3, 3));
@@ -35,7 +35,7 @@ public class LandAspectHeat extends TerrainLandAspect
 		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.netherrack, 1, 0), 4, 15, 5));
 		list.add(new WeightedRandomChestContent(new ItemStack(MinestuckItems.blacksmithHammer), 1, 1, 2));
 		
-		lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);
+		lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);*/
 	}
 	
 	@Override
@@ -92,7 +92,7 @@ public class LandAspectHeat extends TerrainLandAspect
 	}
 
 	@Override
-	public Vec3 getFogColor() 
+	public Vec3d getFogColor() 
 	{
 		return skyColor;
 	}

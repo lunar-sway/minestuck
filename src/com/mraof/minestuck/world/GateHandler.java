@@ -18,8 +18,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
@@ -82,10 +82,10 @@ public class GateHandler
 					
 					if(gatePos.getY() == -1)
 					{
-						world.theChunkProviderServer.loadChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() - 8 >> 4);
-						world.theChunkProviderServer.loadChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() - 8 >> 4);
-						world.theChunkProviderServer.loadChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() + 8 >> 4);
-						world.theChunkProviderServer.loadChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() + 8 >> 4);
+						world.getChunkProvider().loadChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() - 8 >> 4);
+						world.getChunkProvider().loadChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() - 8 >> 4);
+						world.getChunkProvider().loadChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() + 8 >> 4);
+						world.getChunkProvider().loadChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() + 8 >> 4);
 						gatePos = getGatePos(-1, clientDim);
 						if(gatePos.getY() == -1) {Debug.errorf("Unexpected error: Gate didn't generate after loading chunks! Dim: %d, pos: %s", clientDim, gatePos); return;}
 					}
@@ -106,7 +106,7 @@ public class GateHandler
 					int serverDim = serverConnection.getClientDimension();
 					location = new Location(getGatePos(2, serverDim), serverDim);
 					
-				} else Debug.debugf("Player %s tried to teleport through gate before their server player entered the game.", player.getCommandSenderName());
+				} else Debug.debugf("Player %s tried to teleport through gate before their server player entered the game.", player.getName());
 				
 			} else Debug.errorf("Unexpected error: Can't find connection for dimension %d!", dim);
 		} else Debug.errorf("Unexpected error: Gate id %d is out of bounds!", gateId);
@@ -122,7 +122,7 @@ public class GateHandler
 				if(block.getBlock() != MinestuckBlocks.gate)
 				{
 					Debug.debugf("Can't find destination gate at %s. Probably destroyed.", location);
-					player.addChatMessage(new ChatComponentTranslation("message.gateDestroyed"));
+					player.addChatMessage(new TextComponentTranslation("message.gateDestroyed"));
 					return;
 				}
 			}
@@ -136,11 +136,11 @@ public class GateHandler
 	
 	public static void findGatePlacement(World world)
 	{
-		int dim = world.provider.getDimensionId();
+		int dim = world.provider.getDimension();
 		if(MinestuckDimensionHandler.isLandDimension(dim) && !gateData.containsKey(dim))
 		{
 			BlockPos spawn = MinestuckDimensionHandler.getSpawn(dim);
-			Random rand = world.setRandomSeed(0, 0, 43839551^world.provider.getDimensionId());
+			Random rand = world.setRandomSeed(0, 0, 43839551^world.provider.getDimension());
 			
 			BlockPos gatePos = null;
 			int tries = 0;
@@ -154,7 +154,7 @@ public class GateHandler
 				
 				BlockPos pos = new BlockPos(spawn.getX() + x, -1, spawn.getZ() + z);
 				
-				if(!world.getChunkProvider().chunkExists(pos.getX() >> 4, pos.getZ() >> 4) && world.provider.getWorldChunkManager().areBiomesViable(pos.getX(), pos.getZ(), Math.max(20, 50 - tries), Lists.newArrayList(BiomeGenMinestuck.mediumNormal)))
+				if(/*!world.getChunkProvider().chunkExists(pos.getX() >> 4, pos.getZ() >> 4) &&*/ world.provider.getBiomeProvider().areBiomesViable(pos.getX(), pos.getZ(), Math.max(20, 50 - tries), Lists.newArrayList(BiomeGenMinestuck.mediumNormal)))
 					gatePos = pos;
 				
 				tries++;

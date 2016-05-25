@@ -8,8 +8,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Vec3;
 import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.util.math.Vec3d;
 
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
@@ -23,7 +23,7 @@ public class LandAspectForest extends TerrainLandAspect
 	
 	public LandAspectForest()
 	{
-		List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
+		/*List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
 		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sapling, 1, 0), 1, 3, 5));
 		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sapling, 1, 1), 1, 3, 4));
 		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sapling, 1, 2), 1, 2, 3));
@@ -45,7 +45,7 @@ public class LandAspectForest extends TerrainLandAspect
 		list.add(new WeightedRandomChestContent(new ItemStack(Items.iron_axe, 1, 0), 1, 1, 3));
 		list.add(new WeightedRandomChestContent(new ItemStack(Items.diamond_axe, 1, 0), 1, 1, 1));
 		
-		this.lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);
+		this.lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);*/
 	}
 	
 	@Override
@@ -107,9 +107,9 @@ public class LandAspectForest extends TerrainLandAspect
 	}
 	
 	@Override
-	public Vec3 getFogColor()
+	public Vec3d getFogColor()
 	{
-		return new Vec3(0.0D, 1.0D, 0.6D);
+		return new Vec3d(0.0D, 1.0D, 0.6D);
 	}
 	
 	@Override

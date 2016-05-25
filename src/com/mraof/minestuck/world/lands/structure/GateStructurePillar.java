@@ -4,7 +4,7 @@ import java.util.Random;
 
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class GateStructurePillar implements IGateStructure
@@ -13,7 +13,7 @@ public class GateStructurePillar implements IGateStructure
 	@Override
 	public BlockPos generateGateStructure(World world, BlockPos pos, ChunkProviderLands provider)
 	{
-		Random rand = world.setRandomSeed(pos.getX(), pos.getZ(), 1849234152^world.provider.getDimensionId());
+		Random rand = world.setRandomSeed(pos.getX(), pos.getZ(), 1849234152^world.provider.getDimension());
 		pos = world.getTopSolidOrLiquidBlock(pos);
 		pos = pos.up(20);
 		BlockPos gatePos = pos.up(4);

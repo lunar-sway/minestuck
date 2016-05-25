@@ -5,9 +5,9 @@ import java.util.Random;
 import net.minecraft.block.BlockPumpkin;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.world.lands.decorator.SingleBlockDecorator;
@@ -34,7 +34,7 @@ public class LandAspectSilence extends TitleLandAspect
 	{
 		chunkProvider.dayCycle = 2;
 		
-		chunkProvider.mergeFogColor(new Vec3(0, 0, 0.1), 0.5F);
+		chunkProvider.mergeFogColor(new Vec3d(0, 0, 0.1), 0.5F);
 		
 		if(chunkProvider.decorators != null)
 		{
@@ -63,7 +63,7 @@ public class LandAspectSilence extends TitleLandAspect
 		@Override
 		public boolean canPlace(BlockPos pos, World world)
 		{
-			return !world.getBlockState(pos.down()).getBlock().getMaterial().isLiquid();
+			return !world.getBlockState(pos.down()).getMaterial().isLiquid();
 		}
 	}
 }

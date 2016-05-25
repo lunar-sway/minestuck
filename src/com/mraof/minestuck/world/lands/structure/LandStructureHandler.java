@@ -11,7 +11,8 @@ import com.mraof.minestuck.world.biome.BiomeGenMinestuck;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 import net.minecraft.block.Block;
-import net.minecraft.util.BlockPos;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.MapGenStructure;
@@ -61,7 +62,7 @@ public class LandStructureHandler extends MapGenStructure
 		
 		x /= this.MAX_STRUCTURE_DISTANCE;
 		z /= this.MAX_STRUCTURE_DISTANCE;
-		Random random = this.worldObj.setRandomSeed(x, z, 59273643^worldObj.provider.getDimensionId());
+		Random random = this.worldObj.setRandomSeed(x, z, 59273643^worldObj.provider.getDimension());
 		x *= this.MAX_STRUCTURE_DISTANCE;
 		z *= this.MAX_STRUCTURE_DISTANCE;
 		x += random.nextInt(this.MAX_STRUCTURE_DISTANCE - this.MIN_STRUCTURE_DISTANCE);
@@ -92,7 +93,7 @@ public class LandStructureHandler extends MapGenStructure
 		
 		x /= this.MAX_STRUCTURE_DISTANCE;
 		z /= this.MAX_STRUCTURE_DISTANCE;
-		Random rand = worldObj.setRandomSeed(x , z, 34527185^worldObj.provider.getDimensionId());
+		Random rand = worldObj.setRandomSeed(x , z, 34527185^worldObj.provider.getDimension());
 		
 		if(totalRarity == 0)
 			for(StructureEntry entry : structures)
@@ -147,7 +148,7 @@ public class LandStructureHandler extends MapGenStructure
 		
 		x /= this.MAX_NODE_DISTANCE;
 		z /= this.MAX_NODE_DISTANCE;
-		Random random = world.setRandomSeed(x, z, 32698602^world.provider.getDimensionId());
+		Random random = world.setRandomSeed(x, z, 32698602^world.provider.getDimension());
 		x *= this.MAX_NODE_DISTANCE;
 		z *= this.MAX_NODE_DISTANCE;
 		x += random.nextInt(this.MAX_NODE_DISTANCE - this.MIN_NODE_DISTANCE);
@@ -164,7 +165,7 @@ public class LandStructureHandler extends MapGenStructure
 				for(int i = 0; i < 4; i++)
 				{
 					BlockPos pos = world.getTopSolidOrLiquidBlock(new BlockPos(xPos + (i % 2), 0, zPos + i/2));
-					Block block = world.getBlockState(pos).getBlock();
+					IBlockState block = world.getBlockState(pos);
 					if(block.getMaterial().isLiquid() || world.getBiomeGenForCoordsBody(pos) == BiomeGenMinestuck.mediumOcean)
 						return;
 					if(pos.getY() > maxY)
@@ -173,7 +174,7 @@ public class LandStructureHandler extends MapGenStructure
 				for(int i = 0; i < 4; i++)
 				{
 					BlockPos pos = new BlockPos(xPos + (i % 2), maxY, zPos + i/2);
-					if(world.getBlockState(pos).getBlock().isLeaves(world, pos))
+					if(world.getBlockState(pos).getBlock().isLeaves(world.getBlockState(pos), world, pos))
 						return;
 				}
 				nodePos = new BlockPos(xPos, maxY, zPos);

@@ -23,8 +23,8 @@ import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Vec3;
 import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.gen.feature.WorldGenCactus;
 import net.minecraft.world.gen.feature.WorldGenDeadBush;
 
@@ -33,7 +33,7 @@ public class LandAspectSand extends TerrainLandAspect
 	private final IBlockState upperBlock;
 	private final IBlockState groundBlock;
 	private final IBlockState[] structureBlocks;
-	private final Vec3 skyColor;
+	private final Vec3d skyColor;
 	private final String name;
 	private final List<TerrainLandAspect> variations;
 	
@@ -49,39 +49,39 @@ public class LandAspectSand extends TerrainLandAspect
 		
 		if(name.equals("Sand"))
 		{
-			skyColor = new Vec3(0.99D, 0.8D, 0.05D);
+			skyColor = new Vec3d(0.99D, 0.8D, 0.05D);
 			
 			upperBlock = Blocks.sand.getDefaultState();
 			groundBlock = Blocks.sandstone.getDefaultState();
 			structureBlocks = new IBlockState[] {Blocks.sandstone.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.SMOOTH), Blocks.stonebrick.getDefaultState()};
 			
-			List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
+			/*List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
 			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sand, 1, 0), 4, 15, 6));
 			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sand, 1, 1), 2, 7, 3));
 			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sandstone, 1, 0), 2, 7, 5));
 			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sandstone, 1, 2), 2, 7, 3));
 			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_sandstone, 1, 0), 1, 3, 2));
 			
-			this.lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);
+			this.lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);*/
 			
 			variations.add(this);
 			variations.add(new LandAspectSand("SandRed"));
 		} else
 		{
-			skyColor = new Vec3(0.99D, 0.6D, 0.05D);
+			skyColor = new Vec3d(0.99D, 0.6D, 0.05D);
 			
 			upperBlock = Blocks.sand.getDefaultState().withProperty(BlockSand.VARIANT, BlockSand.EnumType.RED_SAND);
 			groundBlock = Blocks.red_sandstone.getDefaultState();
 			structureBlocks = new IBlockState[] {Blocks.red_sandstone.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.SMOOTH), Blocks.stonebrick.getDefaultState()};
 			
-			List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
+			/*List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
 			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sand, 1, 1), 4, 15, 6));
 			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sand, 1, 0), 2, 7, 3));
 			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_sandstone, 1, 0), 2, 7, 5));
 			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_sandstone, 1, 2), 2, 7, 3));
 			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sandstone, 1, 0), 1, 3, 2));
 			
-			this.lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);
+			this.lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);*/
 		}
 		
 	}
@@ -163,7 +163,7 @@ public class LandAspectSand extends TerrainLandAspect
 	}
 	
 	@Override
-	public Vec3 getFogColor() 
+	public Vec3d getFogColor() 
 	{
 		return skyColor;
 	}

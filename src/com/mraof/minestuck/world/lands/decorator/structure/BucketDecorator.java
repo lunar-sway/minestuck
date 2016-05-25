@@ -8,7 +8,7 @@ import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 
@@ -26,7 +26,7 @@ public class BucketDecorator extends SimpleStructureDecorator
 			xCoord = (chunkX << 4) + random.nextInt(16) + 8;
 			zCoord = (chunkZ << 4) + random.nextInt(16) + 8;
 			yCoord = world.getPrecipitationHeight(new BlockPos(xCoord, 0, zCoord)).getY();
-			if(world.getBlockState(new BlockPos(xCoord, yCoord -1, zCoord)).getBlock().getMaterial().isLiquid())
+			if(world.getBlockState(new BlockPos(xCoord, yCoord -1, zCoord)).getMaterial().isLiquid())
 				return null;
 			yCoord -= random.nextInt(3);
 			boolean variant = random.nextDouble() < 0.4;

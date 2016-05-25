@@ -6,8 +6,8 @@ import net.minecraft.block.BlockTorch;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 
@@ -28,7 +28,7 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 				return null;
 			
 			IBlockState ground = world.getBlockState(new BlockPos(xCoord, yCoord - 1, zCoord));
-			if((ground.getBlock().getMaterial().isLiquid() || ground.getBlock().getMaterial() == Material.ice) && random.nextFloat() < 0.6)	//Make it uncommon, but not impossible for it to be placed in the sea.
+			if((ground.getMaterial().isLiquid() || ground.getMaterial() == Material.ice) && random.nextFloat() < 0.6)	//Make it uncommon, but not impossible for it to be placed in the sea.
 				return null;
 			if(provider.isBBInSpawn(new StructureBoundingBox(xCoord - 4, zCoord - 4, xCoord + 4, zCoord + 4)))
 					return null;
@@ -52,7 +52,7 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 					{
 						world.setBlockState(pos, (Math.abs(x) == 3 || Math.abs(z) == 3) ? wall : floor, 2);
 						pos = pos.down();
-					} while(!world.getBlockState(pos).getBlock().getMaterial().isSolid());
+					} while(!world.getBlockState(pos).getMaterial().isSolid());
 				}
 			
 			
@@ -71,10 +71,10 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 			for(EnumFacing facing : EnumFacing.HORIZONTALS)
 			{
 				BlockPos pos = new BlockPos(xCoord, yCoord + 1, zCoord).offset(facing, 4);
-				if(world.getBlockState(pos).getBlock().getMaterial().isSolid())
+				if(world.getBlockState(pos).getMaterial().isSolid())
 				{
 					this.placeBlock(world, wall, 3*facing.getFrontOffsetX(), 1, 3*facing.getFrontOffsetZ());
-					if(world.getBlockState(pos.up()).getBlock().getMaterial().isSolid())
+					if(world.getBlockState(pos.up()).getMaterial().isSolid())
 					{
 						this.placeBlocks(world, wall, 3*facing.getFrontOffsetX(), 2, 3*facing.getFrontOffsetZ(), 3*facing.getFrontOffsetX(), height, 3*facing.getFrontOffsetZ());
 						continue;
@@ -83,7 +83,7 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 				{
 					this.placeBlock(world, Blocks.air.getDefaultState(), 3*facing.getFrontOffsetX(), 1, 3*facing.getFrontOffsetZ());
 					
-					if(!world.getBlockState(pos.down(2)).getBlock().getMaterial().isSolid())
+					if(!world.getBlockState(pos.down(2)).getMaterial().isSolid())
 					{
 						this.placeBlocks(world, floor, Math.min(3*facing.getFrontOffsetX(), 4*facing.getFrontOffsetX()), 0, Math.min(3*facing.getFrontOffsetZ(), 4*facing.getFrontOffsetZ()),
 								Math.max(3*facing.getFrontOffsetX(), 4*facing.getFrontOffsetX()), 0, Math.max(3*facing.getFrontOffsetZ(), 4*facing.getFrontOffsetZ()));

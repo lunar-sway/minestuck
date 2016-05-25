@@ -3,9 +3,8 @@ package com.mraof.minestuck.world.lands.title;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Vec3;
 import net.minecraft.util.WeightedRandomChestContent;
-import net.minecraftforge.common.ChestGenHooks;
+import net.minecraft.util.math.Vec3d;
 
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
@@ -33,13 +32,13 @@ public class LandAspectLight extends TitleLandAspect
 		
 		if(chunkProvider.decorators != null)
 		{
-			ChestGenHooks chestGen = chunkProvider.lootMap.get(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST);
+			/*ChestGenHooks chestGen = chunkProvider.lootMap.get(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST);
 			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Blocks.glowstone, 1, 0), 1, 4, 2));
 			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Items.glowstone_dust, 1, 0), 2, 5, 3));
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Blocks.torch, 1, 0), 2, 10, 5));
+			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Blocks.torch, 1, 0), 2, 10, 5));*/
 		}
 		
-		chunkProvider.mergeFogColor(new Vec3(1, 1, 0.8), 0.5F);
+		chunkProvider.mergeFogColor(new Vec3d(1, 1, 0.8), 0.5F);
 	}
 	
 	@Override

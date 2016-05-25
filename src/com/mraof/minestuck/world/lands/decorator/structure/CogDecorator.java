@@ -3,7 +3,7 @@ package com.mraof.minestuck.world.lands.decorator.structure;
 import java.util.Random;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 
@@ -23,7 +23,7 @@ public class CogDecorator extends SimpleStructureDecorator
 			xCoord = ((chunkX << 4) | random.nextInt(16)) + 8;
 			zCoord = ((chunkZ << 4) | random.nextInt(16)) + 8;
 			yCoord = world.getPrecipitationHeight(new BlockPos(xCoord, 0, zCoord)).getY() - blocksDown;
-			if(world.getBlockState(new BlockPos(xCoord, yCoord - 1, zCoord)).getBlock().getMaterial().isLiquid())
+			if(world.getBlockState(new BlockPos(xCoord, yCoord - 1, zCoord)).getMaterial().isLiquid())
 				return null;
 			IBlockState[] materials = provider.aspect1.getStructureBlocks();
 			IBlockState block = materials[random.nextInt(materials.length)];

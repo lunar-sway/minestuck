@@ -18,8 +18,8 @@ import com.mraof.minestuck.world.lands.structure.LandStructureHandler;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.Vec3;
 import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.util.math.Vec3d;
 
 public abstract class TerrainLandAspect implements ILandAspect<TerrainLandAspect>
 {
@@ -62,16 +62,16 @@ public abstract class TerrainLandAspect implements ILandAspect<TerrainLandAspect
 	
 	public abstract List<ILandDecorator> getDecorators();	//TODO Add a Random as parameter
 	
-		/**
-		 *  Returns a integer representing how they land's day cycle will proceed.
-		 *  
-		 *  0 = Normal day cycle;
-		 *  1 = Always day;
-		 *  2 = Always night.
-		 */
-		public abstract int getDayCycleMode();
-
-		public abstract Vec3 getFogColor();
+	/**
+	 *  Returns a integer representing how they land's day cycle will proceed.
+	 *  
+	 *  0 = Normal day cycle;
+	 *  1 = Always day;
+	 *  2 = Always night.
+	 */
+	public abstract int getDayCycleMode();
+	
+	public abstract Vec3d getFogColor();
 	
 	public IBlockState[] getStructureBlocks()
 	{

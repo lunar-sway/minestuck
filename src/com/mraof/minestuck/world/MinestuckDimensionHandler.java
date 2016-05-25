@@ -15,8 +15,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
+import net.minecraft.world.biome.BiomeGenBase.BiomeProperties;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class MinestuckDimensionHandler
 {
@@ -41,8 +43,8 @@ public class MinestuckDimensionHandler
 		
 		DimensionManager.registerDimension(skaiaDimensionId, skaiaDimensionType);
 		
-		BiomeGenMinestuck.mediumNormal = new BiomeGenMinestuck(biomeIdStart, true).setBiomeName("The Medium");
-		BiomeGenMinestuck.mediumOcean = new BiomeGenMinestuck(biomeIdStart+1, true).setBiomeName("The Medium (Ocean)");
+		BiomeGenMinestuck.mediumNormal = GameRegistry.register(new BiomeGenMinestuck(new BiomeProperties("The Medium")).setRegistryName("medium"));
+		BiomeGenMinestuck.mediumOcean = GameRegistry.register(new BiomeGenMinestuck(new BiomeProperties("The Medium (Ocean)").setBaseBiome("medium")).setRegistryName("medium_ocean"));
 	}
 	
 	public static void unregisterDimensions()
