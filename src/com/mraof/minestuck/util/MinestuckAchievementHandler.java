@@ -67,14 +67,14 @@ public class MinestuckAchievementHandler {
 	{
 		if(!(stack.getItem() instanceof ItemCruxiteArtifact))
 		{
-			player.triggerAchievement(alchemy);
+			player.addStat(alchemy);
 			Echeladder e = MinestuckPlayerData.getData(player).echeladder;
 			e.checkBonus(Echeladder.ALCHEMY_BONUS_OFFSET);
 		}
 		if(stack.getItem().equals(MinestuckItems.clawHammer))
-			player.triggerAchievement(getHammer);
+			player.addStat(getHammer);
 		if(stack.getItem().equals(MinestuckItems.katana))
-			player.triggerAchievement(broBlade);
+			player.addStat(broBlade);
 		GristSet set = GristRegistry.getGristConversion(stack);
 		if(set != null) //The only time the grist set should be null here is if it was a captchalouge card that was alchemized
 		{
@@ -98,9 +98,9 @@ public class MinestuckAchievementHandler {
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public void onItemPickupEvent(EntityItemPickupEvent event)
 	{
-		Item item = event.item.getEntityItem().getItem();
+		Item item = event.getItem().getEntityItem().getItem();
 		if(item.equals(MinestuckItems.rawCruxite))
-			event.entityPlayer.triggerAchievement(mineCruxite);
+			event.getEntityPlayer().addStat(mineCruxite);
 	}
 	
 }

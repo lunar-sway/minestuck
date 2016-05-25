@@ -8,8 +8,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class ItemGoldSeeds extends ItemSeeds
@@ -34,12 +36,12 @@ public class ItemGoldSeeds extends ItemSeeds
 	}
 	
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ)
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
-		boolean b = super.onItemUse(stack, playerIn, worldIn, pos, side, hitX, hitY, hitZ);
-		if(b)
-			playerIn.triggerAchievement(MinestuckAchievementHandler.goldSeeds);
-		return b;
+		EnumActionResult result = super.onItemUse(stack, playerIn, worldIn, pos, hand, facing, hitX, hitY, hitZ);
+		if(result == EnumActionResult.SUCCESS)
+			playerIn.addStat(MinestuckAchievementHandler.goldSeeds);
+		return result;
 	}
 	
 }

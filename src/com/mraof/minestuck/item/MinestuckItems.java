@@ -2,6 +2,8 @@ package com.mraof.minestuck.item;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemBlock;
@@ -9,6 +11,7 @@ import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -159,12 +162,12 @@ public class MinestuckItems
 				emeraldShovel = new ItemSpade(toolEmerald).setUnlocalizedName("shovelEmerald").setCreativeTab(Minestuck.tabMinestuck);
 				emeraldHoe = new ItemHoe(toolEmerald).setUnlocalizedName("hoeEmerald").setCreativeTab(Minestuck.tabMinestuck);
 				//armor
-				armorPrismarine = EnumHelper.addArmorMaterial("PRISMARINE", "minestuck:prismarine", 20, new int[]{3, 7, 6, 2}, 15);
+				armorPrismarine = EnumHelper.addArmorMaterial("PRISMARINE", "minestuck:prismarine", 20, new int[]{3, 7, 6, 2}, 15, SoundEvents.item_armor_equip_diamond);
 				armorPrismarine.customCraftingMaterial = Items.prismarine_shard;
-				prismarineHelmet = new ItemArmor(armorPrismarine, 0, 0).setUnlocalizedName("helmetPrismarine").setCreativeTab(Minestuck.tabMinestuck);
-				prismarineChestplate = new ItemArmor(armorPrismarine, 0, 1).setUnlocalizedName("chestplatePrismarine").setCreativeTab(Minestuck.tabMinestuck);
-				prismarineLeggings = new ItemArmor(armorPrismarine, 0, 2).setUnlocalizedName("leggingsPrismarine").setCreativeTab(Minestuck.tabMinestuck);
-				prismarineBoots = new ItemArmor(armorPrismarine, 0, 3).setUnlocalizedName("bootsPrismarine").setCreativeTab(Minestuck.tabMinestuck);
+				prismarineHelmet = new ItemArmor(armorPrismarine, 0, EntityEquipmentSlot.HEAD).setUnlocalizedName("helmetPrismarine").setCreativeTab(Minestuck.tabMinestuck);
+				prismarineChestplate = new ItemArmor(armorPrismarine, 0, EntityEquipmentSlot.CHEST).setUnlocalizedName("chestplatePrismarine").setCreativeTab(Minestuck.tabMinestuck);
+				prismarineLeggings = new ItemArmor(armorPrismarine, 0, EntityEquipmentSlot.LEGS).setUnlocalizedName("leggingsPrismarine").setCreativeTab(Minestuck.tabMinestuck);
+				prismarineBoots = new ItemArmor(armorPrismarine, 0, EntityEquipmentSlot.FEET).setUnlocalizedName("bootsPrismarine").setCreativeTab(Minestuck.tabMinestuck);
 				//misc
 				rawCruxite = new ItemCruxiteRaw();
 				cruxiteDowel = new ItemDowel();
@@ -179,12 +182,12 @@ public class MinestuckItems
 				goldSeeds = new ItemGoldSeeds();
 				metalBoat = new ItemMetalBoat();
 				candy = new ItemMinestuckCandy();
-				
-				minestuckBucket.addBlock(blockOil);
-				minestuckBucket.addBlock(blockBlood);
-				minestuckBucket.addBlock(blockBrainJuice);
-				
-				GameRegistry.registerItem(clawHammer, "claw_hammer");
+		
+		minestuckBucket.addBlock(blockOil.getDefaultState());
+		minestuckBucket.addBlock(blockBlood.getDefaultState());
+		minestuckBucket.addBlock(blockBrainJuice.getDefaultState());
+		
+				GameRegistry.registerItem(clawHammer, "claw_hammer");	//TODO stop using deprecated
 				GameRegistry.registerItem(sledgeHammer, "sledge_hammer");
 				GameRegistry.registerItem(blacksmithHammer, "blacksmith_hammer");
 				GameRegistry.registerItem(pogoHammer, "pogo_hammer");

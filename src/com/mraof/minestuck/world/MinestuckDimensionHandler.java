@@ -13,7 +13,7 @@ import com.mraof.minestuck.world.lands.LandAspectRegistry;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.FMLLog;
@@ -97,7 +97,7 @@ public class MinestuckDimensionHandler
 				
 				lands.put(dim, aspects);
 				spawnpoints.put(dim, spawn);
-				DimensionManager.registerDimension(dim, Minestuck.landProviderTypeId);
+				DimensionManager.registerDimension(dim, landDimensionType);
 			}
 		}
 		GateHandler.loadData(list);
@@ -110,7 +110,7 @@ public class MinestuckDimensionHandler
 		if(!lands.containsKey(dimensionId) && !DimensionManager.isDimensionRegistered(dimensionId))
 		{
 			lands.put(dimensionId, landAspects);
-			DimensionManager.registerDimension(dimensionId, Minestuck.landProviderTypeId);
+			DimensionManager.registerDimension(dimensionId, landDimensionType);
 		}
 		else FMLLog.warning("[Minestuck] Did not register land dimension with id %d.", dimensionId);
 	}
@@ -150,7 +150,7 @@ public class MinestuckDimensionHandler
 		for(int dim : lands.keySet())
 		{
 			if(!DimensionManager.isDimensionRegistered(dim))
-				DimensionManager.registerDimension(dim, Minestuck.landProviderTypeId);
+				DimensionManager.registerDimension(dim, landDimensionType);
 		}
 	}
 	

@@ -2,14 +2,18 @@ package com.mraof.minestuck.item.weapon;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -38,13 +42,13 @@ public class ItemHammer extends ItemWeapon
 	public void onCreated(ItemStack stack, World world, EntityPlayer player)
 	{
 		if(this.hammerType.equals(EnumHammerType.CLAW))
-			player.triggerAchievement(MinestuckAchievementHandler.getHammer);
+			player.addStat(MinestuckAchievementHandler.getHammer);
 	}
 	
 	@Override
-	public float getStrVsBlock(ItemStack itemStack, Block block)
+	public float getStrVsBlock(ItemStack stack, IBlockState state)
 	{
-		return block != null && (block.getMaterial() == Material.iron || block.getMaterial() == Material.anvil || block.getMaterial() == Material.rock) ? this.efficiencyOnProperMaterial : super.getStrVsBlock(itemStack, block);
+		return state != null && (state.getMaterial() == Material.iron || state.getMaterial() == Material.anvil || state.getMaterial() == Material.rock) ? this.efficiencyOnProperMaterial : super.getStrVsBlock(stack, state);
 	}
 
 	@Override
@@ -74,15 +78,15 @@ public class ItemHammer extends ItemWeapon
 		else if (hammerType.equals(EnumHammerType.POPAMATIC) )
 			target.attackEntityFrom(DamageSource.magic , (float) (player.worldObj.rand.nextInt(6)+1) * (player.worldObj.rand.nextInt(6)+1) );
 		else if (hammerType.equals(EnumHammerType.FEARNOANVIL) && player.worldObj.rand.nextGaussian() > 0.9)	//Just a suggestion, keep it if you like it.
-			target.addPotionEffect(new PotionEffect(2,100,3));	//Would prefer it being triggered by a critical hit instead, if it can.
+			target.addPotionEffect(new PotionEffect(Potion.getPotionById(2),100,3));	//Would prefer it being triggered by a critical hit instead, if it can.
 		return true;
 	}
 	
 	@Override
-	public boolean onBlockDestroyed(ItemStack stack, World worldIn, Block blockIn, BlockPos pos, EntityLivingBase playerIn)
+	public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState blockIn, BlockPos pos, EntityLivingBase entityLiving)
 	{
 		if ((double)blockIn.getBlockHardness(worldIn, pos) != 0.0D)
-			stack.damageItem(2, playerIn);
+			stack.damageItem(2, entityLiving);
 		
 		return true;
 	}
@@ -100,19 +104,19 @@ public class ItemHammer extends ItemWeapon
 	}
 	
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ)
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
-		if(worldIn.getBlockState(new BlockPos(pos)).getBlock() != Blocks.air)
+		if(worldIn.getBlockState(pos).getBlock() != Blocks.air)
 		{
 			if (hammerType.equals(EnumHammerType.POGO))
 			{
 				playerIn.motionY = Math.max(playerIn.motionY, Math.min(getPogoMotion(stack)*2, Math.abs(playerIn.motionY) + getPogoMotion(stack)));
 				playerIn.fallDistance = 0;
 				stack.damageItem(1, playerIn);
-				return true;
+				return EnumActionResult.SUCCESS;
 			} 
 		}
-		return false;
+		return EnumActionResult.PASS;
 	}
 	
 	protected double getPogoMotion(ItemStack stack)
@@ -122,9 +126,9 @@ public class ItemHammer extends ItemWeapon
 	}
 	
 	@Override
-	public boolean canHarvestBlock(Block blockIn)
+	public boolean canHarvestBlock(IBlockState state, ItemStack stack)
 	{
-		return blockIn.getMaterial() == Material.rock || blockIn.getMaterial() == Material.anvil || blockIn.getMaterial() == Material.iron;
+		return state.getMaterial() == Material.rock || state.getMaterial() == Material.anvil || state.getMaterial() == Material.iron;
 	}
 	
 }

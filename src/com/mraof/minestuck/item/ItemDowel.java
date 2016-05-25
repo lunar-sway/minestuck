@@ -9,7 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
@@ -43,16 +43,16 @@ public class ItemDowel extends Item
 			}
 			else
 			{
-				par3List.add("("+StatCollector.translateToLocal("item.captchaCard.invalid")+")");
+				par3List.add("("+I18n.translateToLocal("item.captchaCard.invalid")+")");
 			}
 		}
 	}
 	
-	@Override
+	/*@Override
 	public int getColorFromItemStack(ItemStack stack, int renderPass)
 	{
 		if(stack.getMetadata() == 0)
 			return -1;
 		else return ColorCollector.getColor(stack.getMetadata() - 1);
-	}
+	}*/
 }

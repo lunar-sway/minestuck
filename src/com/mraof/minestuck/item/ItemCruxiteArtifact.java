@@ -14,10 +14,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
@@ -65,14 +65,14 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 	{
 		try
 		{
-			if(!world.isRemote && player.worldObj.provider.getDimensionId() != -1)
+			if(!world.isRemote && player.worldObj.provider.getDimension() != -1)
 			{
 				if(!SburbHandler.shouldEnterNow(player))
 					return;
 				
 				SburbConnection c = SkaianetHandler.getMainConnection(UsernameHandler.encode(player), true);
 				
-				if(c == null || !c.enteredGame() || !MinestuckDimensionHandler.isLandDimension(player.worldObj.provider.getDimensionId()))
+				if(c == null || !c.enteredGame() || !MinestuckDimensionHandler.isLandDimension(player.worldObj.provider.getDimension()))
 				{
 					int destinationId;
 					if(c != null && c.enteredGame())
@@ -81,19 +81,19 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 					
 					if(destinationId == -1)	//Something bad happened further down and the problem should be written in the server console
 					{
-						player.addChatComponentMessage(new ChatComponentText("Something went wrong during entry. More details in the server console."));
+						player.addChatComponentMessage(new TextComponentString("Something went wrong during entry. More details in the server console."));
 						return;
 					}
 					
-					player.triggerAchievement(MinestuckAchievementHandler.enterMedium);
+					player.addStat(MinestuckAchievementHandler.enterMedium);
 					Teleport.teleportEntity(player, destinationId, this, false);
 					MinestuckPlayerTracker.sendLandEntryMessage(player);
 				}
 			}
 		} catch(Exception e)
 		{
-			Debug.logger.error("Exception when "+player.getCommandSenderName()+" tried to enter their land.", e);
-			player.addChatMessage(new ChatComponentText("[Minestuck] Something went wrong during entry. "+ (Minestuck.isServerRunning?"Check the console for the error message.":"Notify the server owner about this.")).setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+			Debug.logger.error("Exception when "+player.getName()+" tried to enter their land.", e);
+			player.addChatMessage(new TextComponentString("[Minestuck] Something went wrong during entry. "+ (Minestuck.isServerRunning?"Check the console for the error message.":"Notify the server owner about this.")).setChatStyle(new Style().setColor(TextFormatting.RED)));
 		}
 	}
 	
@@ -101,23 +101,23 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 	{
 		if(entity instanceof EntityPlayerMP)
 		{
-			Debug.infof("Starting entry for player %s", entity.getCommandSenderName());
+			Debug.infof("Starting entry for player %s", entity.getName());
 			int x = (int) entity.posX;
 			if(entity.posX < 0) x--;
 			int y = (int) entity.posY;
 			int z = (int) entity.posZ;
 			if(entity.posZ < 0) z--;
 			
-			boolean creative = ((EntityPlayerMP) entity).theItemInWorldManager.isCreative();
+			boolean creative = ((EntityPlayerMP) entity).interactionManager.isCreative();
 			
 			int topY = MinestuckConfig.adaptEntryBlockHeight ? getTopHeight(worldserver0, x, y, z) : y + artifactRange;
 			int yDiff = 128 - topY;
-			MinestuckDimensionHandler.setSpawn(worldserver1.provider.getDimensionId(), new BlockPos(x, y + yDiff, z));	//Set again, but with a more precise now that the y-coordinate is properly decided.
+			MinestuckDimensionHandler.setSpawn(worldserver1.provider.getDimension(), new BlockPos(x, y + yDiff, z));	//Set again, but with a more precise now that the y-coordinate is properly decided.
 			
 			Debug.debug("Loading spawn chunks...");
 			for(int chunkX = ((x - artifactRange) >> 4) - 1; chunkX <= ((x + artifactRange) >> 4) + 2; chunkX++)	//Prevent anything to generate on the piece that we move
 				for(int chunkZ = ((z - artifactRange) >> 4) - 1; chunkZ <= ((z + artifactRange) >> 4) + 2; chunkZ++)	//from the overworld.
-					worldserver1.theChunkProviderServer.loadChunk(chunkX, chunkZ);
+					worldserver1.getChunkProvider().loadChunk(chunkX, chunkZ);
 			
 			Debug.debug("Placing blocks...");
 			long time = System.currentTimeMillis();
@@ -183,7 +183,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 					else
 					{
 						e.setPosition(e.posX, e.posY + yDiff, e.posZ);
-						Teleport.teleportEntity(e, worldserver1.provider.getDimensionId(), null, false);
+						Teleport.teleportEntity(e, worldserver1.provider.getDimension(), null, false);
 					}
 				}
 				else	//Copy instead of teleport
@@ -191,8 +191,11 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 					Entity newEntity = EntityList.createEntityByName(EntityList.getEntityString(entity), worldserver1);
 					if (newEntity != null)
 					{
-						newEntity.copyDataFromOld(entity);
-						newEntity.dimension = worldserver1.provider.getDimensionId();
+						NBTTagCompound nbttagcompound = new NBTTagCompound();
+						entity.writeToNBT(nbttagcompound);
+						nbttagcompound.removeTag("Dimension");
+						newEntity.readFromNBT(nbttagcompound);
+						newEntity.dimension = worldserver1.provider.getDimension();
 						newEntity.setPosition(newEntity.posX, newEntity.posY + yDiff, newEntity.posZ);
 						worldserver1.spawnEntityInWorld(newEntity);
 					}
@@ -255,7 +258,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 			placeGate(1, new BlockPos(x, GateHandler.gateHeight1, z), worldserver1);
 			placeGate(2, new BlockPos(x, GateHandler.gateHeight2, z), worldserver1);
 			
-			ServerEventHandler.tickTasks.add(new PostEntryTask(worldserver1.provider.getDimensionId(), x, y + yDiff, z, artifactRange, (byte) 0));
+			ServerEventHandler.tickTasks.add(new PostEntryTask(worldserver1.provider.getDimension(), x, y + yDiff, z, artifactRange, (byte) 0));
 			
 			Debug.info("Entry finished");
 		}
@@ -315,11 +318,11 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 			else world.setBlockState(pos.add((i % 3) - 1, 0, i/3 - 1), MinestuckBlocks.gate.getDefaultState(), 0);
 	}
 	
-	@Override
+	/*@Override
 	public int getColorFromItemStack(ItemStack stack, int renderPass)
 	{
 		if(stack.getMetadata() == 0)
 			return -1;
 		else return ColorCollector.getColor(stack.getMetadata() - 1);
-	}
+	}*/
 }
