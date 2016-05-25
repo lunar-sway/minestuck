@@ -59,6 +59,7 @@ public class MinestuckModelManager
 		register(katana);
 		register(caledscratch);
 		register(caledfwlch);
+		register(zillywairCutlass);
 		register(royalDeringer);
 		register(regisword);
 		register(scarletRibbitar);
