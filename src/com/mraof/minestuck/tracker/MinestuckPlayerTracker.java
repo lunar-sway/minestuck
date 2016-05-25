@@ -6,15 +6,16 @@ import java.util.Set;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.server.FMLServerHandler;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.editmode.ServerEditHandler;
@@ -49,10 +50,10 @@ public class MinestuckPlayerTracker {
 	public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) 
 	{
 		EntityPlayer player = event.player;
-		Debug.debug(player.getCommandSenderName()+" joined the game. Sending packets.");
-		MinecraftServer server = MinecraftServer.getServer();
+		Debug.debug(player.getName()+" joined the game. Sending packets.");
+		MinecraftServer server = FMLServerHandler.instance().getServer();
 		if(!server.isDedicatedServer() && UsernameHandler.host == null)
-			UsernameHandler.host = event.player.getCommandSenderName();
+			UsernameHandler.host = event.player.getName();
 		
 		UsernameHandler.playerLoggedIn(player);
 		PlayerIdentifier identifier = UsernameHandler.encode(player);
@@ -64,7 +65,7 @@ public class MinestuckPlayerTracker {
 		boolean firstTime = false;
 		if(MinestuckPlayerData.getGristSet(identifier) == null)
 		{
-			Debug.debugf("Grist set is null for player %s. Handling it as first time in this world.", player.getCommandSenderName());
+			Debug.debugf("Grist set is null for player %s. Handling it as first time in this world.", player.getName());
 			MinestuckPlayerData.setGrist(identifier, new GristSet(GristType.Build, 20));
 			firstTime = true;
 		}
@@ -102,7 +103,7 @@ public class MinestuckPlayerTracker {
 		}
 		
 		if(UpdateChecker.outOfDate)
-			player.addChatMessage(new ChatComponentText("New version of Minestuck: " + UpdateChecker.latestVersion + "\nChanges: " + UpdateChecker.updateChanges));
+			player.addChatMessage(new TextComponentString("New version of Minestuck: " + UpdateChecker.latestVersion + "\nChanges: " + UpdateChecker.updateChanges));
 	}
 	
 	@SubscribeEvent(priority = EventPriority.HIGH)	//Editmode players need to be reset before nei handles the event
@@ -112,15 +113,15 @@ public class MinestuckPlayerTracker {
 		Modus modus = CaptchaDeckHandler.getModus(event.player);
 		if(modus != null)
 			modus.player = null;
-		dataCheckerPermission.remove(event.player.getCommandSenderName());
+		dataCheckerPermission.remove(event.player.getName());
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public void onPlayerDrops(PlayerDropsEvent event)
 	{
-		if(!event.entityPlayer.worldObj.isRemote)
+		if(!event.getEntityPlayer().worldObj.isRemote)
 		{
-			CaptchaDeckHandler.dropSylladex(event.entityPlayer);
+			CaptchaDeckHandler.dropSylladex(event.getEntityPlayer());
 			
 		}
 		
@@ -148,7 +149,7 @@ public class MinestuckPlayerTracker {
 	private static boolean shouldUpdateConfigurations(EntityPlayerMP player)
 	{
 		boolean permission = MinestuckConfig.getDataCheckerPermissionFor(player);
-		if(permission != dataCheckerPermission.contains(player.getCommandSenderName()))
+		if(permission != dataCheckerPermission.contains(player.getName()))
 			return true;
 		
 		return false;
@@ -201,7 +202,7 @@ public class MinestuckPlayerTracker {
 	public static void updateLands(EntityPlayer player)
 	{
 		MinestuckPacket packet = MinestuckPacket.makePacket(Type.LANDREGISTER);
-		Debug.debugf("Sending land packets to %s.", player == null ? "all players" : player.getCommandSenderName());
+		Debug.debugf("Sending land packets to %s.", player == null ? "all players" : player.getName());
 		if(player == null)
 			MinestuckChannelHandler.sendToAllPlayers(packet);
 		else
@@ -222,8 +223,8 @@ public class MinestuckPlayerTracker {
 			boolean permission = MinestuckConfig.getDataCheckerPermissionFor(player);
 			packet = MinestuckPacket.makePacket(Type.CONFIG, false, permission);
 			if(permission)
-				dataCheckerPermission.add(player.getCommandSenderName());
-			else dataCheckerPermission.remove(player.getCommandSenderName());
+				dataCheckerPermission.add(player.getName());
+			else dataCheckerPermission.remove(player.getName());
 		}
 		MinestuckChannelHandler.sendToPlayer(packet, player);
 	}
@@ -234,12 +235,12 @@ public class MinestuckPlayerTracker {
 		{
 			LandAspectRegistry.AspectCombination aspects = MinestuckDimensionHandler.getAspects(player.dimension);
 			ChunkProviderLands chunkProvider = (ChunkProviderLands) player.worldObj.provider.createChunkGenerator();
-			IChatComponent aspect1 = new ChatComponentTranslation("land."+aspects.aspectTerrain.getNames()[chunkProvider.nameIndex1]);
-			IChatComponent aspect2 = new ChatComponentTranslation("land."+aspects.aspectTitle.getNames()[chunkProvider.nameIndex2]);
-			IChatComponent toSend;
+			ITextComponent aspect1 = new TextComponentTranslation("land."+aspects.aspectTerrain.getNames()[chunkProvider.nameIndex1]);
+			ITextComponent aspect2 = new TextComponentTranslation("land."+aspects.aspectTitle.getNames()[chunkProvider.nameIndex2]);
+			ITextComponent toSend;
 			if(chunkProvider.nameOrder)
-				toSend = new ChatComponentTranslation("land.message.entry", aspect1, aspect2);
-			else toSend = new ChatComponentTranslation("land.message.entry", aspect2, aspect1);
+				toSend = new TextComponentTranslation("land.message.entry", aspect1, aspect2);
+			else toSend = new TextComponentTranslation("land.message.entry", aspect2, aspect1);
 			player.addChatComponentMessage(toSend);
 		}
 	}

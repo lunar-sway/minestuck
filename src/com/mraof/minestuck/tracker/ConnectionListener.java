@@ -22,7 +22,7 @@ public class ConnectionListener
 		MinestuckPacket packet = MinestuckPacket.makePacket(Type.LANDREGISTER);
 		
 		MinestuckChannelHandler.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.DISPATCHER);
-		MinestuckChannelHandler.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(event.manager.channel().attr(NetworkDispatcher.FML_DISPATCHER).get());
+		MinestuckChannelHandler.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(event.getManager().channel().attr(NetworkDispatcher.FML_DISPATCHER).get());
 		MinestuckChannelHandler.channels.get(Side.SERVER).writeOutbound(packet);
 	}
 	

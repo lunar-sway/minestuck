@@ -49,7 +49,7 @@ public class ServerEventHandler
 		if(event.phase == TickEvent.Phase.END)
 		{
 			
-			if(!MinestuckConfig.hardMode && event.world.provider.getDimensionId() == 0)
+			if(!MinestuckConfig.hardMode && event.world.provider.getDimension() == 0)
 			{
 				long time = event.world.getWorldTime() / 24000L;
 				if(time != lastDay)
@@ -69,41 +69,41 @@ public class ServerEventHandler
 	@SubscribeEvent(priority=EventPriority.LOWEST, receiveCanceled=false)
 	public void onEntityDeath(LivingDeathEvent event)
 	{
-		if(event.entity instanceof IMob && event.source.getEntity() instanceof EntityPlayerMP)
+		if(event.getEntity() instanceof IMob && event.getSource().getEntity() instanceof EntityPlayerMP)
 		{
-			EntityPlayerMP player = (EntityPlayerMP) event.source.getEntity();
+			EntityPlayerMP player = (EntityPlayerMP) event.getSource().getEntity();
 			int exp = 0;
-			if(event.entity instanceof EntityZombie || event.entity instanceof EntitySkeleton)
+			if(event.getEntity() instanceof EntityZombie || event.getEntity() instanceof EntitySkeleton)
 				exp = 6;
-			else if(event.entity instanceof EntityCreeper || event.entity instanceof EntitySpider || event.entity instanceof EntitySilverfish)
+			else if(event.getEntity() instanceof EntityCreeper || event.getEntity() instanceof EntitySpider || event.getEntity() instanceof EntitySilverfish)
 				exp = 5;
-			else if(event.entity instanceof EntityEnderman || event.entity instanceof EntityBlaze || event.entity instanceof EntityWitch || event.entity instanceof EntityGuardian)
+			else if(event.getEntity() instanceof EntityEnderman || event.getEntity() instanceof EntityBlaze || event.getEntity() instanceof EntityWitch || event.getEntity() instanceof EntityGuardian)
 				exp = 12;
-			else if(event.entity instanceof EntitySlime)
-				exp = ((EntitySlime) event.entity).getSlimeSize() - 1;
+			else if(event.getEntity() instanceof EntitySlime)
+				exp = ((EntitySlime) event.getEntity()).getSlimeSize() - 1;
 			
 			if(exp > 0)
 				Echeladder.increaseProgress(player, exp);
 		}
-		if(event.entity instanceof EntityPlayerMP)
-			SburbHandler.stopEntry((EntityPlayerMP) event.entity);
+		if(event.getEntity() instanceof EntityPlayerMP)
+			SburbHandler.stopEntry((EntityPlayerMP) event.getEntity());
 	}
 	
 	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=false)
 	public void onEntityAttack(LivingHurtEvent event)
 	{
-		if(event.source.getEntity() != null)
-			if(event.entityLiving instanceof EntityUnderling && event.source.getEntity() instanceof EntityPlayerMP)
+		if(event.getSource().getEntity() != null)
+			if(event.getEntityLiving() instanceof EntityUnderling && event.getSource().getEntity() instanceof EntityPlayerMP)
 			{	//Increase damage to underling
-				EntityPlayerMP player = (EntityPlayerMP) event.source.getEntity();
+				EntityPlayerMP player = (EntityPlayerMP) event.getSource().getEntity();
 				double modifier = MinestuckPlayerData.getData(player).echeladder.getUnderlingDamageModifier();
-				event.ammount *= modifier;
+				event.setAmount((float) (event.getAmount() * modifier));
 				
-			} else if(event.entityLiving instanceof EntityPlayerMP && event.source.getEntity() instanceof EntityUnderling)
+			} else if(event.getEntityLiving() instanceof EntityPlayerMP && event.getSource().getEntity() instanceof EntityUnderling)
 			{	//Decrease damamge to player
-				EntityPlayerMP player = (EntityPlayerMP) event.entityLiving;
+				EntityPlayerMP player = (EntityPlayerMP) event.getEntityLiving();
 				double modifier = MinestuckPlayerData.getData(player).echeladder.getUnderlingProtectionModifier();
-				event.ammount *= modifier;
+				event.setAmount((float) (event.getAmount() * modifier));
 			}
 	}
 	
@@ -117,8 +117,8 @@ public class ServerEventHandler
 	@SubscribeEvent(priority=EventPriority.LOW, receiveCanceled=false)
 	public void onServerChat(ServerChatEvent event)
 	{
-		Modus modus = MinestuckPlayerData.getData(event.player).modus;
+		Modus modus = MinestuckPlayerData.getData(event.getPlayer()).modus;
 		if(modus instanceof HashmapModus)
-			((HashmapModus) modus).onChatMessage(event.message);
+			((HashmapModus) modus).onChatMessage(event.getMessage());
 	}
 }
