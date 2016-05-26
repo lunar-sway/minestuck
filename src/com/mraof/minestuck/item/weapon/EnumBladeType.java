@@ -7,10 +7,13 @@ public enum EnumBladeType
 	CACTUS(104, 5, 10, "cactaceaeCutlass"),
 	NINJA(250, 6, 15, "ninjaSword"),
 	KATANA(2200, 8, 20, "katana"),
+	FIREPOKER(250, 7, 15, "firePoker"),
+	HOTHANDLE(350, 6, 15, "hotHandle"),
 	CALEDSCRATCH(1561, 7, 30, "caledscratch"),
 	CALEDFWLCH(1025, 7, 30, "caledfwlch"),
 	REGISWORD(812, 7, 10, "regisword"),
 	DERINGER(1561, 8, 30, "royalDeringer"),
+	ZILLYWAIR(2500, 9, 30, "zillywairCutlass"),
 	SCARLET(2000, 9, 30, "scarletRibbitar"),
 	DOGG(1000, 6, 30, "doggMachete");
 	
