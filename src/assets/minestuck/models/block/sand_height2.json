@@ -1,4 +1,4 @@
-{
+{	"parent": "block/thin_block",
     "textures": {
         "particle": "blocks/sand",
         "texture": "blocks/sand"
