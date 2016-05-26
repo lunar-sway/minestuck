@@ -226,12 +226,12 @@ public class CaptchaDeckHandler
 		{
 			ItemStack otherStack = player.getHeldItemMainhand();
 			if(otherStack == null)
-				player.setHeldItem(EnumHand.MAIN_HAND, null);
+				player.setHeldItem(EnumHand.MAIN_HAND, stack);
 			else if(stack.getItem() == otherStack.getItem() && stack.getItemDamage() == otherStack.getItemDamage()
 					&& ItemStack.areItemStackTagsEqual(stack, otherStack) && stack.stackSize + otherStack.stackSize <= stack.getMaxStackSize())
 			{
 				stack.stackSize += otherStack.stackSize;
-				player.setHeldItem(EnumHand.MAIN_HAND, null);
+				player.setHeldItem(EnumHand.MAIN_HAND, stack);
 			}
 			else
 			{
@@ -243,8 +243,8 @@ public class CaptchaDeckHandler
 							&& ItemStack.areItemStackTagsEqual(stack, otherStack) && stack.stackSize + otherStack.stackSize <= stack.getMaxStackSize())
 						stack.stackSize += otherStack.stackSize;
 					else if(otherStack != null) continue;
+					else player.inventory.mainInventory[i] = stack;
 					
-					player.inventory.mainInventory[i] = stack;
 					placed = true;
 					player.inventory.markDirty();
 					player.inventoryContainer.detectAndSendChanges();
