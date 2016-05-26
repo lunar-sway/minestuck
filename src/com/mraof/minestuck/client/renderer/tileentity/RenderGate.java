@@ -57,7 +57,7 @@ public class RenderGate extends TileEntitySpecialRenderer
 		GlStateManager.rotate(tick, 0, 1, 0);
 		double y = 0.5;
 		this.bindTexture(nodeInner);
-		buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
+		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
 		buffer.pos(-1.5, y, -1.5).tex(0, 0).endVertex();
 		buffer.pos(-1.5, y, 1.5).tex(0, 1).endVertex();
 		buffer.pos(1.5, y, 1.5).tex(1, 1).endVertex();
@@ -76,7 +76,7 @@ public class RenderGate extends TileEntitySpecialRenderer
 		GlStateManager.rotate(tick, 0, 1, 0);
 		double y = 0.5;
 		this.bindTexture(nodeInner);
-		buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
+		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
 		buffer.pos(-1, y, -1).tex(0, 0).endVertex();
 		buffer.pos(-1, y, 1).tex(0, 1).endVertex();
 		buffer.pos(1, y, 1).tex(1, 1).endVertex();
@@ -88,7 +88,7 @@ public class RenderGate extends TileEntitySpecialRenderer
 		GlStateManager.rotate(-tick/1.5F, 0, 1, 0);
 		y = 0.5 + MathHelper.sin(tick/50)*0.1;
 		this.bindTexture(nodeOuter);
-		buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
+		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
 		buffer.pos(-1, y, -1).tex(0, 0).endVertex();
 		buffer.pos(-1, y, 1).tex(0, 1).endVertex();
 		buffer.pos(1, y, 1).tex(1, 1).endVertex();
