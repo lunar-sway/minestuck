@@ -90,7 +90,7 @@ public class RenderSkaiaPortal extends TileEntitySpecialRenderer
 			var19 = var18 + (float) ActiveRenderInfo.getPosition().xCoord;
 			GlStateManager.translate(((float) ActiveRenderInfo.getPosition().xCoord) * var15 / var19, ((float) ActiveRenderInfo.getPosition().zCoord) * var15 / var19, -var10);
 			VertexBuffer var24 = Tessellator.getInstance().getBuffer();
-			var24.begin(7, DefaultVertexFormats.POSITION_COLOR);
+			var24.begin(7, DefaultVertexFormats.POSITION_TEX);
 			var21 = var12.nextFloat() * 0.5F + 0.1F;
             float var22 = var12.nextFloat() * 0.5F + 0.4F;
             float var23 = var12.nextFloat() * 0.5F + 0.5F;
@@ -102,11 +102,11 @@ public class RenderSkaiaPortal extends TileEntitySpecialRenderer
 				var21 = 1.0F;
             }
 			
-			var24.color(var21 * var17, var22 * var17, var23 * var17, 1.0F);
-			var24.pos(par2, par4 + var13, par6).endVertex();
-			var24.pos(par2, par4 + var13, par6 + 1.0D).endVertex();
-			var24.pos(par2 + 1.0D, par4 + var13, par6 + 1.0D).endVertex();
-			var24.pos(par2 + 1.0D, par4 + var13, par6).endVertex();
+			GlStateManager.color(var21 * var17, var22 * var17, var23 * var17, 1.0F);
+			var24.pos(par2, par4 + var13, par6).tex(0, 0).endVertex();
+			var24.pos(par2, par4 + var13, par6 + 1.0D).tex(0, 1).endVertex();
+			var24.pos(par2 + 1.0D, par4 + var13, par6 + 1.0D).tex(1, 1).endVertex();
+			var24.pos(par2 + 1.0D, par4 + var13, par6).tex(1, 0).endVertex();
 			Tessellator.getInstance().draw();
 			GlStateManager.popMatrix();
 			GlStateManager.matrixMode(GL11.GL_MODELVIEW);
