@@ -16,7 +16,6 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.Container;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
 
 public abstract class GuiPlayerStatsContainer extends GuiContainer

@@ -20,7 +20,7 @@ import net.minecraft.nbt.NBTTagString;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerList;
 import net.minecraftforge.common.UsernameCache;
-import net.minecraftforge.fml.server.FMLServerHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 /**
  * Used to encode/decode player usernames, to handle uses with LAN.
@@ -261,7 +261,9 @@ public class UsernameHandler {
 		
 		public EntityPlayerMP getPlayer()
 		{
-			PlayerList list = FMLServerHandler.instance().getServer().getPlayerList();
+			PlayerList list = FMLCommonHandler.instance().getMinecraftServerInstance() == null ? null : FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList();
+			if(list == null)
+				return null;
 			if(this.useUUID)
 				return list.getPlayerByUUID(uuid);
 			else return list.getPlayerByUsername(usernameDecode(username));

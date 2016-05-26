@@ -1,9 +1,9 @@
 {
     "variants": {
-        "blocktype=0": { "model": "minestuck:cruxite_stone" },
-        "blocktype=1": { "model": "minestuck:cruxite_netherrack" },
-        "blocktype=2": { "model": "minestuck:cruxite_cobblestone" },
-        "blocktype=3": { "model": "minestuck:cruxite_sandstone" },
-        "blocktype=4": { "model": "minestuck:cruxite_sandstone_red" }
+        "block_type=0": { "model": "minestuck:cruxite_stone" },
+        "block_type=1": { "model": "minestuck:cruxite_netherrack" },
+        "block_type=2": { "model": "minestuck:cruxite_cobblestone" },
+        "block_type=3": { "model": "minestuck:cruxite_sandstone" },
+        "block_type=4": { "model": "minestuck:cruxite_sandstone_red" }
     }
 }

@@ -24,7 +24,7 @@ public class BlockGate extends Block implements ITileEntityProvider
 {
 	
 	protected static final AxisAlignedBB GATE_AABB = new AxisAlignedBB(0.0D, 0.45D, 0.0D, 1.0D, 0.55D, 1.0D);
-	public static PropertyBool isMainComponent = PropertyBool.create("mainComponent");
+	public static PropertyBool isMainComponent = PropertyBool.create("main_component");
 	
 	public BlockGate()
 	{

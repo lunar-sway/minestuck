@@ -125,7 +125,7 @@ public class ChunkProviderLands implements IChunkGenerator
 			sortDecorators();
 			
 			List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>(AlchemyRecipeHandler.basicMediumChest);
-			aspect1.modifyChestContent(list, AlchemyRecipeHandler.BASIC_MEDIUM_CHEST);
+			//aspect1.modifyChestContent(list, AlchemyRecipeHandler.BASIC_MEDIUM_CHEST);
 			//lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, new ChestGenHooks(null, list, 0, 0));	//Item count is handled separately by the structure
 		}
 	}

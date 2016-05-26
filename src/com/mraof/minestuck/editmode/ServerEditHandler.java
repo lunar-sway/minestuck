@@ -40,12 +40,12 @@ import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
-import net.minecraftforge.fml.server.FMLServerHandler;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MinestuckBlocks;
@@ -508,7 +508,7 @@ public class ServerEditHandler
 			return;
 		try
 		{
-			MinecraftServer server = FMLServerHandler.instance().getServer();
+			MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 			if(commands.contains(event.getCommand().getCommandName()))
 			{
 				String c = event.getCommand().getCommandName();

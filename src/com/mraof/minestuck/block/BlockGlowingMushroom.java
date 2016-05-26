@@ -4,7 +4,6 @@ import java.util.Random;
 
 import com.mraof.minestuck.Minestuck;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;

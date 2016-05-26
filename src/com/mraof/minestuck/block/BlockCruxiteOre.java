@@ -21,7 +21,7 @@ import com.mraof.minestuck.item.MinestuckItems;
 
 public class BlockCruxiteOre extends Block 
 {
-	public static final PropertyInteger BLOCK_TYPE = PropertyInteger.create("blockType", 0, 4);
+	public static final PropertyInteger BLOCK_TYPE = PropertyInteger.create("block_type", 0, 4);
 	
 	private Random rand = new Random();
 	public BlockCruxiteOre()

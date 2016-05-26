@@ -45,7 +45,7 @@ public class BlockColoredDirt extends Block
 		
 	}
 	
-	public static final PropertyEnum BLOCK_TYPE = PropertyEnum.create("blockType", BlockType.class);
+	public static final PropertyEnum BLOCK_TYPE = PropertyEnum.create("block_type", BlockType.class);
 	
 	public BlockColoredDirt()
 	{

@@ -12,7 +12,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.Style;
@@ -20,7 +19,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.server.FMLServerHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.editmode.ServerEditHandler;
@@ -591,7 +590,7 @@ public class SkaianetHandler {
 	{
 		if(data == null)
 			return null;
-		World world = FMLServerHandler.instance().getServer().worldServerForDimension(data.dimension);
+		World world = FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(data.dimension);
 		if(world == null)
 			return null;
 		TileEntity te = world.getTileEntity(new BlockPos(data.x, data.y, data.z));

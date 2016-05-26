@@ -1,12 +1,5 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.item.block.ItemBlockLayered;
-import com.mraof.minestuck.item.block.ItemChessTile;
-import com.mraof.minestuck.item.block.ItemColoredDirt;
-import com.mraof.minestuck.item.block.ItemMachine;
-import com.mraof.minestuck.item.block.ItemCruxiteOre;
-import com.mraof.minestuck.item.block.ItemStorageBlock;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;

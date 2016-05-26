@@ -39,7 +39,7 @@ public class MinestuckDimensionHandler
 	{
 		//register world generators
 		landDimensionType = DimensionType.register("The Medium", "_medium", landProviderTypeId, WorldProviderLands.class, MinestuckConfig.keepDimensionsLoaded);
-		landDimensionType = DimensionType.register("Skaia", "_skaia", skaiaProviderTypeId, WorldProviderSkaia.class, false);
+		skaiaDimensionType = DimensionType.register("Skaia", "_skaia", skaiaProviderTypeId, WorldProviderSkaia.class, false);
 		
 		DimensionManager.registerDimension(skaiaDimensionId, skaiaDimensionType);
 		

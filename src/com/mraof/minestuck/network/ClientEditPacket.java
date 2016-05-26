@@ -7,7 +7,6 @@ import java.util.EnumSet;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.relauncher.Side;
 
 import com.mraof.minestuck.MinestuckConfig;
