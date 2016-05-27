@@ -65,6 +65,10 @@ public class ItemBlade extends ItemSword	//To allow enchantments such as sharpne
 			attacker.worldObj.spawnEntityInWorld(sord);
 			itemStack.stackSize--;
 		}
+		else if(bladeType.equals(EnumBladeType.FIREPOKER))
+			target.setFire(30);
+		else if(bladeType.equals(EnumBladeType.HOTHANDLE))
+			target.setFire(10);
 		
 		return true;
 	}

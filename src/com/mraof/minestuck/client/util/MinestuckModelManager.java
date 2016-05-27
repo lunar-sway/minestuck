@@ -57,9 +57,12 @@ public class MinestuckModelManager
 		register(cactusCutlass);
 		register(ninjaSword, 0, "katana");
 		register(katana);
+		register(firePoker);
+		register(hotHandle);
 		register(caledscratch);
 		register(caledfwlch);
 		register(royalDeringer);
+		register(zillywairCutlass);
 		register(regisword);
 		register(scarletRibbitar);
 		register(doggMachete);

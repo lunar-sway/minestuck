@@ -55,9 +55,12 @@ public class MinestuckItems
 	public static Item cactusCutlass;
 	public static Item ninjaSword;
 	public static Item katana;
+	public static Item firePoker;
+	public static Item hotHandle;
 	public static Item caledscratch;
 	public static Item caledfwlch;
 	public static Item royalDeringer;
+	public static Item zillywairCutlass;
 	public static Item regisword;
 	public static Item scarletRibbitar;
 	public static Item doggMachete;
@@ -126,9 +129,12 @@ public class MinestuckItems
 		cactusCutlass = GameRegistry.register(new ItemBlade(EnumBladeType.CACTUS).setRegistryName("cactaceae_cutlass"));
 		ninjaSword = GameRegistry.register(new ItemBlade(EnumBladeType.NINJA).setRegistryName("ninja_sword"));
 		katana = GameRegistry.register(new ItemBlade(EnumBladeType.KATANA).setRegistryName("katana"));
+		firePoker = GameRegistry.register(new ItemBlade(EnumBladeType.FIREPOKER).setRegistryName("fire_poker"));
+		hotHandle = GameRegistry.register(new ItemBlade(EnumBladeType.HOTHANDLE).setRegistryName("too_hot_to_handle"));
 		caledscratch = GameRegistry.register(new ItemBlade(EnumBladeType.CALEDSCRATCH).setRegistryName("caledscratch"));
 		caledfwlch = GameRegistry.register(new ItemBlade(EnumBladeType.CALEDFWLCH).setRegistryName("caledfwlch"));
 		royalDeringer = GameRegistry.register(new ItemBlade(EnumBladeType.DERINGER).setRegistryName("royal_deringer"));
+		zillywairCutlass = GameRegistry.register(new ItemBlade(EnumBladeType.ZILLYWAIR).setRegistryName("cutlass_of_zillywair"));
 		regisword = GameRegistry.register(new ItemBlade(EnumBladeType.REGISWORD).setRegistryName("regisword"));
 		scarletRibbitar = GameRegistry.register(new ItemBlade(EnumBladeType.SCARLET).setRegistryName("scarlet_ribbitar"));
 		doggMachete = GameRegistry.register(new ItemBlade(EnumBladeType.DOGG).setRegistryName("dogg_machete"));

@@ -562,6 +562,8 @@ public class AlchemyRecipeHandler
 		
 		GristRegistry.addGristConversion(new ItemStack(cactusCutlass), false, new GristSet(new GristType[] {GristType.Amber, GristType.Marble}, new int[] {7, 2}));
 		GristRegistry.addGristConversion(new ItemStack(ninjaSword), false, new GristSet(new GristType[] {GristType.Chalk, GristType.Quartz, GristType.Rust}, new int[] {12, 10, 6}));
+		GristRegistry.addGristConversion(new ItemStack(firePoker), false, new GristSet(new GristType[] {GristType.Amber, GristType.Ruby, GristType.Garnet, GristType.Gold}, new int[] {15, 10, 6, 1}));
+		GristRegistry.addGristConversion(new ItemStack(hotHandle), false, new GristSet(new GristType[] {GristType.Amber, GristType.Ruby, GristType.Garnet}, new int[] {10, 15, 10}));
 		GristRegistry.addGristConversion(new ItemStack(regisword), false, new GristSet(new GristType[] {GristType.Amethyst, GristType.Tar,GristType.Gold}, new int[] {27, 62, 38}));
 		GristRegistry.addGristConversion(new ItemStack(katana), false, new GristSet(new GristType[] {GristType.Build, GristType.Uranium, GristType.Quartz, GristType.Ruby}, new int[] {1100, 63, 115, 54}));
 		
@@ -609,6 +611,8 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Items.wooden_sword), new ItemStack(Blocks.cactus), MODE_AND, false, true, new ItemStack(cactusCutlass));
 		CombinationRegistry.addCombination(new ItemStack(Items.stone_sword), new ItemStack(Items.rotten_flesh), MODE_AND, false, true, new ItemStack(ninjaSword));
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_sword), new ItemStack(Items.rotten_flesh), MODE_AND, false, true, new ItemStack(ninjaSword));
+		CombinationRegistry.addCombination(new ItemStack(Items.iron_sword), new ItemStack(Items.blaze_rod), MODE_AND, false, true, new ItemStack(firePoker));
+		CombinationRegistry.addCombination(new ItemStack(Items.iron_sword), new ItemStack(Items.blaze_rod), MODE_OR, false, true, new ItemStack(hotHandle));
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_sword), new ItemStack(component, 1, 2), MODE_AND, false, true, new ItemStack(regisword));
 		CombinationRegistry.addCombination(new ItemStack(ninjaSword), new ItemStack(component, 1, 2), MODE_AND, false, true, new ItemStack(regisword));
 		CombinationRegistry.addCombination(new ItemStack(ninjaSword), new ItemStack(Blocks.obsidian), MODE_AND, new ItemStack(katana));
