@@ -13,7 +13,6 @@ import net.minecraft.util.text.translation.I18n;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.ColorCollector;
 
 public class ItemDowel extends Item
 {
@@ -48,11 +47,4 @@ public class ItemDowel extends Item
 		}
 	}
 	
-	/*@Override
-	public int getColorFromItemStack(ItemStack stack, int renderPass)
-	{
-		if(stack.getMetadata() == 0)
-			return -1;
-		else return ColorCollector.getColor(stack.getMetadata() - 1);
-	}*/
 }

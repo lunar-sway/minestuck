@@ -187,7 +187,7 @@ public class MinestuckItems
 		prismarineLeggings = GameRegistry.register(new ItemArmor(armorPrismarine, 0, EntityEquipmentSlot.LEGS).setRegistryName("prismarine_leggings")).setUnlocalizedName("leggingsPrismarine").setCreativeTab(Minestuck.tabMinestuck);
 		prismarineBoots = GameRegistry.register(new ItemArmor(armorPrismarine, 0, EntityEquipmentSlot.FEET).setRegistryName("prismarine_boots")).setUnlocalizedName("bootsPrismarine").setCreativeTab(Minestuck.tabMinestuck);
 		//misc
-		rawCruxite = GameRegistry.register(new ItemCruxiteRaw().setRegistryName("cruxite_raw"));
+		rawCruxite = GameRegistry.register(new Item().setRegistryName("cruxite_raw")).setUnlocalizedName("rawCruxite").setCreativeTab(Minestuck.tabMinestuck);
 		cruxiteDowel = GameRegistry.register(new ItemDowel().setRegistryName("cruxite_dowel"));
 		captchaCard = GameRegistry.register(new ItemCaptchaCard().setRegistryName("captcha_card"));
 		cruxiteApple = (ItemCruxiteArtifact) GameRegistry.register(new ItemCruxiteApple().setRegistryName("cruxite_apple"));
