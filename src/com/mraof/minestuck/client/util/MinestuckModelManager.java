@@ -67,6 +67,11 @@ public class MinestuckModelManager
 		register(scarletRibbitar);
 		register(doggMachete);
 		
+		register(blacksmithBane);
+		register(scraxe);
+		register(rubyCroak);
+		register(hephaestusLumber);
+		
 		register(dice);
 		register(fluoriteOctet);
 		
