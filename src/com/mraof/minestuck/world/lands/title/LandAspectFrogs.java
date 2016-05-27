@@ -8,7 +8,7 @@ public class LandAspectFrogs extends TitleLandAspect
 	@Override
 	public String getPrimaryName()
 	{
-		return "Frogs";
+		return "frogs";
 	}
 	
 	@Override

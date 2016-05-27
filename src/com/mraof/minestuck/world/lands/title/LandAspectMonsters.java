@@ -7,13 +7,9 @@ import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntitySpider;
 import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
 
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
@@ -27,7 +23,7 @@ public class LandAspectMonsters extends TitleLandAspect
 	
 	public LandAspectMonsters()
 	{
-		this("Monsters");
+		this("monsters");
 	}
 	
 	public LandAspectMonsters(String name)
@@ -35,15 +31,15 @@ public class LandAspectMonsters extends TitleLandAspect
 		this.variations = new ArrayList<TitleLandAspect>();
 		this.name = name;
 		this.monsterList = new ArrayList<SpawnListEntry>();
-		if(this.name.equals("Monsters"))
+		if(this.name.equals("monsters"))
 		{
 			monsterList.add(new SpawnListEntry(EntityCreeper.class, 1, 1, 1));
 			monsterList.add(new SpawnListEntry(EntitySpider.class, 1, 1, 2));
 			monsterList.add(new SpawnListEntry(EntityZombie.class, 1, 1, 2));
 			variations.add(this);
-			variations.add(new LandAspectMonsters("MonstersDead"));
+			variations.add(new LandAspectMonsters("monsters_dead"));
 		}
-		else if(this.name.equals("MonstersDead"))
+		else if(this.name.equals("monsters_dead"))
 		{
 			monsterList.add(new SpawnListEntry(EntityZombie.class, 2, 1, 3));
 			monsterList.add(new SpawnListEntry(EntitySkeleton.class, 1, 1, 2));
@@ -98,7 +94,7 @@ public class LandAspectMonsters extends TitleLandAspect
 	@Override
 	public TitleLandAspect getPrimaryVariant()
 	{
-		return LandAspectRegistry.fromNameTitle("Monsters");
+		return LandAspectRegistry.fromNameTitle("monsters");
 	}
 	
 }

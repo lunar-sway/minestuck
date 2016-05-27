@@ -10,12 +10,9 @@ import net.minecraft.block.BlockSandStone;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.gen.feature.WorldGenDeadBush;
 
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.BlockBlobDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
@@ -37,14 +34,14 @@ public class LandAspectSandstone extends TerrainLandAspect
 	
 	public LandAspectSandstone()
 	{
-		this("Sandstone");
+		this("sandstone");
 	}
 	
 	public LandAspectSandstone(String name)
 	{
 		variations = new ArrayList<TerrainLandAspect>();
 		this.name = name;
-		if(name.equals("Sandstone"))
+		if(name.equals("sandstone"))
 		{
 			upperBlock = Blocks.sandstone.getDefaultState();
 			structureBlocks = new IBlockState[] {Blocks.sandstone.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.SMOOTH), Blocks.stonebrick.getDefaultState()};
@@ -60,7 +57,7 @@ public class LandAspectSandstone extends TerrainLandAspect
 			lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);*/
 			
 			variations.add(this);
-			variations.add(new LandAspectSandstone("SandstoneRed"));
+			variations.add(new LandAspectSandstone("sandstone_red"));
 		}
 		else
 		{
@@ -119,7 +116,7 @@ public class LandAspectSandstone extends TerrainLandAspect
 		List<ILandDecorator> list = new ArrayList<ILandDecorator>();
 		IBlockState sand = Blocks.sand.getDefaultState();
 		IBlockState sandstone = Blocks.sandstone.getDefaultState();
-		if(name.equals("SandstoneRed"))
+		if(name.equals("sandstone_red"))
 		{
 			sand = sand.withProperty(BlockSand.VARIANT, BlockSand.EnumType.RED_SAND);
 			sandstone = Blocks.red_sandstone.getDefaultState();
@@ -167,7 +164,7 @@ public class LandAspectSandstone extends TerrainLandAspect
 	@Override
 	public TerrainLandAspect getPrimaryVariant()
 	{
-		return LandAspectRegistry.fromNameTerrain("Sandstone");
+		return LandAspectRegistry.fromNameTerrain("sandstone");
 	}
 	
 	@Override

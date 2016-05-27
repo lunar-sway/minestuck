@@ -1,0 +1,36 @@
+{
+    "pools": [
+        {
+            "rolls": 1,
+            "conditions": [
+                {
+                    "condition": "minestuck:land_aspect",
+                    "land_aspect": "light"
+                }
+            ],
+            "entries": [
+                {
+                    "type": "item",
+                    "name": "minecraft:golden_apple",
+                    "weight": 1
+                }
+            ]
+        },
+        {
+            "rolls": 1,
+            "conditions": [
+                {
+                    "condition": "minestuck:land_aspect",
+                    "land_aspect": "wind"
+                }
+            ],
+            "entries": [
+                {
+                    "type": "item",
+                    "name": "minestuck:pogo_hammer",
+                    "weight": 1
+                }
+            ]
+        }
+    ]
+}

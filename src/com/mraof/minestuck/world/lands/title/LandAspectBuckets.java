@@ -1,11 +1,5 @@
 package com.mraof.minestuck.world.lands.title;
 
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.WeightedRandomChestContent;
-
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.structure.BucketDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
@@ -15,7 +9,7 @@ public class LandAspectBuckets extends TitleLandAspect	//Yes, buckets
 	@Override
 	public String getPrimaryName()
 	{
-		return "Buckets";
+		return "buckets";
 	}
 
 	@Override

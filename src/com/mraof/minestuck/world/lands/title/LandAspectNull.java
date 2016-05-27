@@ -8,7 +8,7 @@ public class LandAspectNull extends TitleLandAspect
 	@Override
 	public String getPrimaryName()
 	{
-		return "Null";
+		return "null";
 	}
 
 	@Override

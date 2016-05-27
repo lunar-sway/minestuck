@@ -1,12 +1,7 @@
 package com.mraof.minestuck.world.lands.title;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.util.math.Vec3d;
 
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 
@@ -16,7 +11,7 @@ public class LandAspectLight extends TitleLandAspect
 	@Override
 	public String getPrimaryName()
 	{
-		return "Light";
+		return "light";
 	}
 	
 	@Override

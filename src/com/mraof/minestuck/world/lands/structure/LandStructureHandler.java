@@ -10,7 +10,6 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.biome.BiomeGenMinestuck;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ChunkCoordIntPair;

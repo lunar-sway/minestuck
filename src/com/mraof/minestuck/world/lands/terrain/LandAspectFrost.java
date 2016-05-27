@@ -3,22 +3,16 @@ package com.mraof.minestuck.world.lands.terrain;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.IceDecorator;
 import com.mraof.minestuck.world.lands.decorator.LayeredBlockDecorator;
-import com.mraof.minestuck.world.lands.decorator.SpruceTreeDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 
 import net.minecraft.block.BlockDirt;
-import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.util.math.Vec3d;
 
 public class LandAspectFrost extends TerrainLandAspect 
@@ -64,7 +58,7 @@ public class LandAspectFrost extends TerrainLandAspect
 	@Override
 	public String getPrimaryName() 
 	{
-		return "Frost";
+		return "frost";
 	}
 
 	@Override

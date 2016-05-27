@@ -20,7 +20,7 @@ public class LandAspectSilence extends TitleLandAspect
 	@Override
 	public String getPrimaryName()
 	{
-		return "Silence";
+		return "silence";
 	}
 	
 	@Override

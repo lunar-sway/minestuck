@@ -8,12 +8,8 @@ import net.minecraft.block.BlockSilverfish;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.util.math.Vec3d;
 
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.BlockBlobDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
@@ -66,7 +62,7 @@ public class LandAspectRock extends TerrainLandAspect
 	@Override
 	public String getPrimaryName()
 	{
-		return "Rock";
+		return "rock";
 	}
 	
 	@Override

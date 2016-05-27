@@ -1,10 +1,5 @@
 package com.mraof.minestuck.world.lands.title;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.WeightedRandomChestContent;
-
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.structure.BasicTowerDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
@@ -14,7 +9,7 @@ public class LandAspectTowers extends TitleLandAspect
 	@Override
 	public String getPrimaryName()
 	{
-		return "Towers";
+		return "towers";
 	}
 	
 	@Override

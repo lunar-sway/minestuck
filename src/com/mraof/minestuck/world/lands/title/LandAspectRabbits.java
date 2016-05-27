@@ -1,11 +1,7 @@
 package com.mraof.minestuck.world.lands.title;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.WeightedRandomChestContent;
 
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.RabbitSpawner;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
@@ -16,7 +12,7 @@ public class LandAspectRabbits extends TitleLandAspect
 	@Override
 	public String getPrimaryName()
 	{
-		return "Rabbits";
+		return "rabbits";
 	}
 	
 	@Override

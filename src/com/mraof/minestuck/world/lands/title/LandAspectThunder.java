@@ -11,7 +11,7 @@ public class LandAspectThunder extends TitleLandAspect
 	@Override
 	public String getPrimaryName()
 	{
-		return "Thunder";
+		return "thunder";
 	}
 	
 	@Override

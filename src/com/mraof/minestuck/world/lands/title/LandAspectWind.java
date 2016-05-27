@@ -1,11 +1,7 @@
 package com.mraof.minestuck.world.lands.title;
 
-import static com.mraof.minestuck.item.MinestuckItems.pogoHammer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.util.math.Vec3d;
 
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.RockDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.gen.DefaultTerrainGen;
@@ -16,7 +12,7 @@ public class LandAspectWind extends TitleLandAspect
 	@Override
 	public String getPrimaryName()
 	{
-		return "Wind";
+		return "wind";
 	}
 	
 	@Override

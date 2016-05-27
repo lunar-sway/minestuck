@@ -5,14 +5,9 @@ import java.util.Random;
 import net.minecraft.block.BlockCake;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.SingleBlockDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
@@ -22,7 +17,7 @@ public class LandAspectCake extends TitleLandAspect
 	@Override
 	public String getPrimaryName()
 	{
-		return "Cake";
+		return "cake";
 	}
 	
 	@Override

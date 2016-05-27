@@ -25,19 +25,20 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.world.storage.loot.conditions.LootConditionManager;
 import net.minecraftforge.oredict.OreDictionary;
 import static net.minecraftforge.oredict.OreDictionary.WILDCARD_VALUE;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
-import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.modSupport.ExtraUtilitiesSupport;
 import com.mraof.minestuck.modSupport.Minegicka3Support;
 import com.mraof.minestuck.modSupport.ModSupport;
 import com.mraof.minestuck.modSupport.NeverSayNetherSupport;
 import com.mraof.minestuck.modSupport.TinkersConstructSupport;
 import com.mraof.minestuck.modSupport.minetweaker.Minetweaker3Support;
+import com.mraof.minestuck.world.storage.loot.conditions.LandAspectLootCondition;
 
 import static com.mraof.minestuck.block.MinestuckBlocks.*;
 import static com.mraof.minestuck.item.MinestuckItems.*;
@@ -46,7 +47,7 @@ import static com.mraof.minestuck.util.CombinationRegistry.MODE_OR;
 
 public class AlchemyRecipeHandler
 {
-	public static final String BASIC_MEDIUM_CHEST = "minestuck:basicMediumChest";	//Internal key for basic medium loot.
+	public static final ResourceLocation BASIC_MEDIUM_CHEST = new ResourceLocation("minestuck", "chests/medium_basic");	//Internal key for basic medium loot.
 	public static final List<WeightedRandomChestContent> basicMediumChest = new ArrayList<WeightedRandomChestContent>();
 	
 	private static HashMap<List<Object>, Object> recipeList;
@@ -699,6 +700,7 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(instantTnt), new ItemStack(Blocks.wooden_button), MODE_AND, new ItemStack(woodenExplosiveButton));
 		
 		//Register chest loot
+		LootConditionManager.registerCondition(new LandAspectLootCondition.Serializer());
 		/*if(MinestuckConfig.cardLoot)
 		{
 			ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(new WeightedRandomChestContent(captchaCard, 0, 1, 3, 10));

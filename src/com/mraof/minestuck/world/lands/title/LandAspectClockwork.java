@@ -1,11 +1,7 @@
 package com.mraof.minestuck.world.lands.title;
 
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.util.math.Vec3d;
 
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.structure.CogDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
@@ -15,7 +11,7 @@ public class LandAspectClockwork extends TitleLandAspect
 	@Override
 	public String getPrimaryName()
 	{
-		return "Clockwork";
+		return "clockwork";
 	}
 	
 	@Override

@@ -3,13 +3,17 @@ package com.mraof.minestuck.world.lands.structure;
 import java.util.Random;
 
 import com.mraof.minestuck.entity.underling.EntityOgre;
+import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
+import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -109,9 +113,17 @@ public class SmallRuinStart extends StructureStart
 			
 			this.fillWithAir(worldIn, boundingBox, 1, 1, 0, 5, 3, 7);
 			this.fillWithAir(worldIn, boundingBox, 2, 1, 8, 4, 3, 8);
-			/*this.generateChestContents(worldIn, boundingBox, rand, 3, 1, 6, provider.lootMap.get(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST).getItems(rand), rand.nextInt(3) + 5);
-			if(boundingBox.isVecInside(new BlockPos(this.getXWithOffset(3, 6), this.getYWithOffset(1), this.getZWithOffset(3, 6))))
-				this.setBlockState(worldIn, this.getBlockStateFromPos(worldIn, 3, 1, 6, boundingBox).withProperty(BlockChest.FACING, this.func_186165_e().getOpposite()), 3, 1, 6, boundingBox);*/
+			BlockPos chestPos = new BlockPos(this.getXWithOffset(3, 6), this.getYWithOffset(1), this.getZWithOffset(3, 6));
+			if(boundingBox.isVecInside(chestPos))
+			{
+				worldIn.setBlockState(chestPos, Blocks.chest.getDefaultState().withProperty(BlockChest.FACING, this.func_186165_e().getOpposite()));
+				TileEntity tileentity1 = worldIn.getTileEntity(chestPos);
+				
+				if (tileentity1 instanceof TileEntityChest)
+				{
+					((TileEntityChest)tileentity1).setLoot(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, rand.nextLong());
+				}
+			}
 			
 			EnumFacing torchFacing = this.func_186165_e() == EnumFacing.EAST || this.func_186165_e() == EnumFacing.NORTH ? this.func_186165_e().rotateY() : this.func_186165_e().rotateYCCW();
 			if(torches[0])

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.FireFieldDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
@@ -13,9 +11,6 @@ import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.util.math.Vec3d;
 
 public class LandAspectHeat extends TerrainLandAspect 
@@ -62,8 +57,9 @@ public class LandAspectHeat extends TerrainLandAspect
 	}
 
 	@Override
-	public String getPrimaryName() {
-		return "Heat";
+	public String getPrimaryName()
+	{
+		return "heat";
 	}
 
 	@Override
