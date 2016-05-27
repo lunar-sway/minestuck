@@ -2,7 +2,9 @@ package com.mraof.minestuck.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -46,8 +48,10 @@ import com.mraof.minestuck.entity.underling.EntityImp;
 import com.mraof.minestuck.entity.underling.EntityOgre;
 import com.mraof.minestuck.entity.underling.EntityUnderlingPart;
 import com.mraof.minestuck.event.ClientEventHandler;
+import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tileentity.TileEntityGate;
 import com.mraof.minestuck.tileentity.TileEntitySkaiaPortal;
+import com.mraof.minestuck.util.ColorCollector;
 
 public class ClientProxy extends CommonProxy
 {
@@ -55,6 +59,12 @@ public class ClientProxy extends CommonProxy
 	public static EntityPlayer getClientPlayer()	//Note: can't get the client player directly from FMLClientHandler either, as the server side will still crash because of the return type
 	{
 		return FMLClientHandler.instance().getClientPlayerEntity();
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public static void registerPreInitRenderers() 
+	{
+		
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -79,6 +89,26 @@ public class ClientProxy extends CommonProxy
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySkaiaPortal.class, new RenderSkaiaPortal());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGate.class, new RenderGate());
 //		MinecraftForgeClient.registerItemRenderer(Minestuck.captchaCard, new RenderCard());
+		mc.getItemColors().registerItemColorHandler(new IItemColor()
+		{
+			@Override
+			public int getColorFromItemstack(ItemStack stack, int tintIndex)
+			{
+				if(tintIndex == 0 || tintIndex == 1)
+				{
+					int color = stack.getMetadata() == 0 ? -1 : ColorCollector.getColor(stack.getMetadata() - 1);
+					if(tintIndex == 1)
+					{
+						int i0 = ((color & 255) + 255)/2;
+						int i1 = (((color >> 8) & 255) + 255)/2;
+						int i2 = (((color >> 16) & 255) + 255)/2;
+						color = i0 | (i1 << 8) | (i2 << 16);
+					}
+					return color;
+				}
+				else return -1;
+			}
+		}, MinestuckItems.cruxiteDowel, MinestuckItems.cruxiteApple, MinestuckItems.cruxitePotion);
 	}
 	
 	@SideOnly(Side.CLIENT)
