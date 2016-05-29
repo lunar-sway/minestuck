@@ -23,6 +23,7 @@ import com.mraof.minestuck.item.block.ItemColoredDirt;
 import com.mraof.minestuck.item.block.ItemMachine;
 import com.mraof.minestuck.item.block.ItemCruxiteOre;
 import com.mraof.minestuck.item.block.ItemStorageBlock;
+import com.mraof.minestuck.item.weapon.EnumBattleaxeType;
 import com.mraof.minestuck.item.weapon.EnumBladeType;
 import com.mraof.minestuck.item.weapon.EnumCaneType;
 import com.mraof.minestuck.item.weapon.EnumClubType;
@@ -30,6 +31,7 @@ import com.mraof.minestuck.item.weapon.EnumDiceType;
 import com.mraof.minestuck.item.weapon.EnumHammerType;
 import com.mraof.minestuck.item.weapon.EnumSickleType;
 import com.mraof.minestuck.item.weapon.EnumSporkType;
+import com.mraof.minestuck.item.weapon.ItemBattleaxe;
 import com.mraof.minestuck.item.weapon.ItemBlade;
 import com.mraof.minestuck.item.weapon.ItemCane;
 import com.mraof.minestuck.item.weapon.ItemClub;
@@ -64,6 +66,11 @@ public class MinestuckItems
 	public static Item regisword;
 	public static Item scarletRibbitar;
 	public static Item doggMachete;
+	//axes
+	public static Item blacksmithBane;
+	public static Item scraxe;
+	public static Item rubyCroak;
+	public static Item hephaestusLumber;
 	//Dice
 	public static Item dice;
 	public static Item fluoriteOctet;
@@ -138,6 +145,11 @@ public class MinestuckItems
 		regisword = GameRegistry.register(new ItemBlade(EnumBladeType.REGISWORD).setRegistryName("regisword"));
 		scarletRibbitar = GameRegistry.register(new ItemBlade(EnumBladeType.SCARLET).setRegistryName("scarlet_ribbitar"));
 		doggMachete = GameRegistry.register(new ItemBlade(EnumBladeType.DOGG).setRegistryName("dogg_machete"));
+		//axes
+		blacksmithBane = GameRegistry.register(new ItemBattleaxe(EnumBattleaxeType.BANE).setRegistryName("blacksmiths_bane"));
+		scraxe = GameRegistry.register(new ItemBattleaxe(EnumBattleaxeType.SCRAXE).setRegistryName("scraxe"));
+		rubyCroak = GameRegistry.register(new ItemBattleaxe(EnumBattleaxeType.CROAK).setRegistryName("ruby_croak"));
+		hephaestusLumber = GameRegistry.register(new ItemBattleaxe(EnumBattleaxeType.HEPH).setRegistryName("hephaestus_lumberjack"));
 		//Dice
 		dice = GameRegistry.register(new ItemDice(EnumDiceType.DICE).setRegistryName("dice"));
 		fluoriteOctet = GameRegistry.register(new ItemDice(EnumDiceType.FLUORITE_OCTET).setRegistryName("fluorite_octet"));
