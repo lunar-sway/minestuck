@@ -42,7 +42,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	{
 		super(world);
 		this.gristValue = gristData.getAmount();
-		this.setSize(this.getSizeByValue(), 0.5F);
+		this.setSize(this.getSizeByValue(), this.getSizeByValue());
 //		this.yOffset = this.height / 2.0F;
 		this.setPosition(x, y, z);
 		this.rotationYaw = (float)(Math.random() * 360.0D);
