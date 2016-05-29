@@ -107,7 +107,7 @@ public class CommandSburbSession extends CommandBase	//TODO properly localize al
 		{
 			String playerName = args[2];
 			
-			TerrainLandAspect landAspect = LandAspectRegistry.fromNameTerrain(args[3]);
+			TerrainLandAspect landAspect = LandAspectRegistry.fromNameTerrain(args[3].toLowerCase());
 			if(landAspect == null)
 				throw new CommandException("Can't find terrain land aspect by the name %s", args[3]);
 			
@@ -117,7 +117,7 @@ public class CommandSburbSession extends CommandBase	//TODO properly localize al
 		{
 			String playerName = args[2];
 			
-			TitleLandAspect landAspect = LandAspectRegistry.fromNameTitle(args[3]);
+			TitleLandAspect landAspect = LandAspectRegistry.fromNameTitle(args[3].toLowerCase());
 			if(landAspect == null)
 				throw new CommandException("Can't find title land aspect by the name %s", args[3]);
 			
