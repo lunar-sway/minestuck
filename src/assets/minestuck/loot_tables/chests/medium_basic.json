@@ -2,34 +2,93 @@
     "pools": [
         {
             "rolls": 1,
-            "conditions": [
-                {
-                    "condition": "minestuck:land_aspect",
-                    "land_aspect": "light"
-                }
-            ],
             "entries": [
                 {
-                    "type": "item",
-                    "name": "minecraft:golden_apple",
-                    "weight": 1
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/general"
                 }
             ]
         },
         {
-            "rolls": 1,
-            "conditions": [
-                {
-                    "condition": "minestuck:land_aspect",
-                    "land_aspect": "wind"
-                }
-            ],
+            "rolls": {
+                "min": 1,
+                "max": 3
+            },
             "entries": [
                 {
-                    "type": "item",
-                    "name": "minestuck:pogo_hammer",
-                    "weight": 1
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "forest"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/forest"
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "frost"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/frost"
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "heat"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/heat"
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "rock"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/rock"
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "sand"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/sand"
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "sandstone"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/sandstone"
+                },
+                {
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "shade"
+                        }
+                    ],
+                    "type": "loot_table",
+                    "name": "minestuck:chests/medium_basic/shade"
                 }
+                
+                
+                
+                
             ]
         }
     ]
