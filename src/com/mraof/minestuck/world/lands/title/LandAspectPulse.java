@@ -32,11 +32,6 @@ public class LandAspectPulse extends TitleLandAspect
 			chunkProvider.oceanBlock = MinestuckBlocks.blockBlood.getDefaultState();
 			chunkProvider.riverBlock = MinestuckBlocks.blockBlood.getDefaultState();
 			
-			/*ChestGenHooks chestGen = chunkProvider.lootMap.get(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST);
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(MinestuckItems.minestuckBucket, 1, 1), 1, 1, 3));
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Items.repeater, 1, 0), 1, 1, 1));
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Items.beef, 1, 0), 1, 3, 4));
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Items.mutton, 1, 0), 1, 3, 4));*/
 		}
 		
 		chunkProvider.mergeFogColor(new Vec3d(0.8, 0, 0), 0.8F);

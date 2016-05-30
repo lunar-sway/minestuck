@@ -29,9 +29,7 @@ public class LandAspectThought extends TitleLandAspect
 		
 		if(chunkProvider.decorators != null)
 		{
-			/*ChestGenHooks chestGen = chunkProvider.lootMap.get(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST);
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(MinestuckItems.minestuckBucket, 1, 2), 1, 1, 3));
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(MinestuckBlocks.coloredDirt, 1, 1), 4, 15, 4));*/
+			
 		}
 		chunkProvider.riverBlock = MinestuckBlocks.blockBrainJuice.getDefaultState();
 		chunkProvider.oceanBlock = MinestuckBlocks.blockBrainJuice.getDefaultState();

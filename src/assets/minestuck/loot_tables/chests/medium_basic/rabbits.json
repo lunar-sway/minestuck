@@ -5,60 +5,39 @@
             "entries": [
                 {
                     "type": "item",
-                    "name": "minecraft:red_mushroom",
+                    "name": "minecraft:rabbit",
                     "weight": 10,
-                    "quality": 0,
-                    "functions": [
-                        {
-                            "function": "set_count",
-                            "count": {
-                                "min": 1,
-                                "max": 4
-                            }
-                        }
-                    ]
-                },
-                {
-                    "type": "item",
-                    "name": "minecraft:brown_mushroom",
-                    "weight": 10,
-                    "quality": 0,
-                    "functions": [
-                        {
-                            "function": "set_count",
-                            "count": {
-                                "min": 1,
-                                "max": 4
-                            }
-                        }
-                    ]
-                },
-                {
-                    "type": "item",
-                    "name": "minecraft:mushroom_stew",
-                    "weight": 5,
-                    "quality": 1
-                },
-                {
-                    "type": "item",
-                    "name": "minestuck:colored_dirt",
-                    "weight": 15,
-                    "quality": -2,
-                    "functions": [
-                        {
-                            "function": "set_count",
-                            "count": {
-                                "min": 2,
-                                "max": 16
-                            }
-                        }
-                    ]
-                },
-                {
-                    "type": "item",
-                    "name": "minestuck:glowing_log",
-                    "weight": 6,
                     "quality": -1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 2
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:cooked_rabbit",
+                    "weight": 7,
+                    "quality": 0,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 2
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:rabbit_hide",
+                    "weight": 8,
+                    "quality": 0,
                     "functions": [
                         {
                             "function": "set_count",
@@ -71,29 +50,20 @@
                 },
                 {
                     "type": "item",
-                    "name": "minestuck:glowing_mushroom",
+                    "name": "minecraft:rabbit_foot",
+                    "weight": 2,
+                    "quality": 1
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:rabbit_stew",
+                    "weight": 4,
+                    "quality": 1
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:carrot",
                     "weight": 12,
-                    "quality": -2,
-                    "functions": [
-                        {
-                            "function": "set_count",
-                            "count": {
-                                "min": 1,
-                                "max": 5
-                            }
-                        }
-                    ]
-                },
-                {
-                    "type": "item",
-                    "name": "minestuck:minestuck_bucket",
-                    "weight": 5,
-                    "quality": 0
-                },
-                {
-                    "type": "item",
-                    "name": "minecraft:torch",
-                    "weight": 8,
                     "quality": 0,
                     "functions": [
                         {

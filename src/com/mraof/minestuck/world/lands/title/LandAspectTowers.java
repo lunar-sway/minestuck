@@ -25,8 +25,6 @@ public class LandAspectTowers extends TitleLandAspect
 		{
 			chunkProvider.decorators.add(new BasicTowerDecorator());
 			chunkProvider.sortDecorators();
-			/*ChestGenHooks chestGen = chunkProvider.lootMap.get(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST);
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Blocks.ladder), 3, 16, 3));*/
 		}
 	}
 	

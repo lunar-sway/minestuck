@@ -29,13 +29,6 @@ public class LandAspectRabbits extends TitleLandAspect
 			chunkProvider.decorators.add(new RabbitSpawner());
 			chunkProvider.sortDecorators();
 			
-			/*ChestGenHooks chestGen = chunkProvider.lootMap.get(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST);
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Items.rabbit, 1, 0), 2, 8, 6));
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Items.cooked_rabbit, 1, 0), 1, 5, 5));
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Items.rabbit_hide, 1, 0), 2, 7, 4));
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Items.rabbit_foot, 1, 0), 1, 2, 2));
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Items.rabbit_stew, 1, 0), 1, 1, 2));
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Items.carrot, 1, 0), 1, 3, 4));*/
 		}
 	}
 	

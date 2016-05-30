@@ -32,8 +32,6 @@ public class LandAspectWind extends TitleLandAspect
 			if(chunkProvider.terrainGenerator instanceof DefaultTerrainGen)
 				((DefaultTerrainGen) chunkProvider.terrainGenerator).normalVariation *= 0.6F;
 			
-			/*ChestGenHooks chestGen = chunkProvider.lootMap.get(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST);
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(pogoHammer, 1, 0), 1, 1, 2));*/
 		}
 		
 		chunkProvider.mergeFogColor(new Vec3d(0.1, 0.2, 0.8), 0.3F);
