@@ -146,7 +146,7 @@ public class MinestuckItems
 		scarletRibbitar = GameRegistry.register(new ItemBlade(EnumBladeType.SCARLET).setRegistryName("scarlet_ribbitar"));
 		doggMachete = GameRegistry.register(new ItemBlade(EnumBladeType.DOGG).setRegistryName("dogg_machete"));
 		//axes
-		blacksmithBane = GameRegistry.register(new ItemBattleaxe(EnumBattleaxeType.BANE).setRegistryName("blacksmiths_bane"));
+		blacksmithBane = GameRegistry.register(new ItemBattleaxe(EnumBattleaxeType.BANE).setRegistryName("blacksmith_bane"));
 		scraxe = GameRegistry.register(new ItemBattleaxe(EnumBattleaxeType.SCRAXE).setRegistryName("scraxe"));
 		rubyCroak = GameRegistry.register(new ItemBattleaxe(EnumBattleaxeType.CROAK).setRegistryName("ruby_croak"));
 		hephaestusLumber = GameRegistry.register(new ItemBattleaxe(EnumBattleaxeType.HEPH).setRegistryName("hephaestus_lumberjack"));
@@ -157,7 +157,7 @@ public class MinestuckItems
 		//sickles
 		sickle = GameRegistry.register(new ItemSickle(EnumSickleType.SICKLE).setRegistryName("sickle"));
 		homesSmellYaLater = GameRegistry.register(new ItemSickle(EnumSickleType.HOMES).setRegistryName("homes_smell_ya_later"));
-		regiSickle = GameRegistry.register(new ItemSickle(EnumSickleType.REGISICKLE).setRegistryName("regi_sickle"));
+		regiSickle = GameRegistry.register(new ItemSickle(EnumSickleType.REGISICKLE).setRegistryName("regisickle"));
 		clawSickle = GameRegistry.register(new ItemSickle(EnumSickleType.CLAW).setRegistryName("claw_sickle"));
 		//clubs
 		deuceClub = GameRegistry.register(new ItemClub(EnumClubType.DEUCE).setRegistryName("deuce_club"));
@@ -166,8 +166,8 @@ public class MinestuckItems
 		spearCane = GameRegistry.register(new ItemCane(EnumCaneType.SPEAR).setRegistryName("spear_cane"));
 		dragonCane = GameRegistry.register(new ItemCane(EnumCaneType.DRAGON).setRegistryName("dragon_cane"));
 		//Spoons/forks
-		woodenSpoon = GameRegistry.register(new ItemSpork(EnumSporkType.SPOON_WOOD).setRegistryName("spoon_wood"));
-		silverSpoon = GameRegistry.register(new ItemSpork(EnumSporkType.SPOON_SILVER).setRegistryName("spoon_silver"));
+		woodenSpoon = GameRegistry.register(new ItemSpork(EnumSporkType.SPOON_WOOD).setRegistryName("wooden_spoon"));
+		silverSpoon = GameRegistry.register(new ItemSpork(EnumSporkType.SPOON_SILVER).setRegistryName("silver_spoon"));
 		crockerSpork = (ItemSpork) GameRegistry.register(new ItemSpork(EnumSporkType.CROCKER).setRegistryName("crocker_spork"));
 		skaiaFork = GameRegistry.register(new ItemSpork(EnumSporkType.SKAIA).setRegistryName("skaia_fork"));
 		fork = GameRegistry.register(new ItemSpork(EnumSporkType.FORK).setRegistryName("fork"));
@@ -187,7 +187,7 @@ public class MinestuckItems
 		prismarineLeggings = GameRegistry.register(new ItemArmor(armorPrismarine, 0, EntityEquipmentSlot.LEGS).setRegistryName("prismarine_leggings")).setUnlocalizedName("leggingsPrismarine").setCreativeTab(Minestuck.tabMinestuck);
 		prismarineBoots = GameRegistry.register(new ItemArmor(armorPrismarine, 0, EntityEquipmentSlot.FEET).setRegistryName("prismarine_boots")).setUnlocalizedName("bootsPrismarine").setCreativeTab(Minestuck.tabMinestuck);
 		//misc
-		rawCruxite = GameRegistry.register(new Item().setRegistryName("cruxite_raw")).setUnlocalizedName("rawCruxite").setCreativeTab(Minestuck.tabMinestuck);
+		rawCruxite = GameRegistry.register(new Item().setRegistryName("raw_cruxite")).setUnlocalizedName("rawCruxite").setCreativeTab(Minestuck.tabMinestuck);
 		cruxiteDowel = GameRegistry.register(new ItemDowel().setRegistryName("cruxite_dowel"));
 		captchaCard = GameRegistry.register(new ItemCaptchaCard().setRegistryName("captcha_card"));
 		cruxiteApple = (ItemCruxiteArtifact) GameRegistry.register(new ItemCruxiteApple().setRegistryName("cruxite_apple"));

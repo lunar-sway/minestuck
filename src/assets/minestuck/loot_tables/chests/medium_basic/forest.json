@@ -1,13 +1,178 @@
 {
     "pools": [
         {
-            "rolls": {
-                "min": 1,
-                "max": 3
-            },
+            "rolls": 1,
             "entries": [
                 {
-                    
+                    "type": "item",
+                    "name": "minecraft:sapling",
+                    "weight": 15,
+                    "quality": -1,
+                    "functions": [
+                        {
+                            "function": "set_data",
+                            "data": {
+                                "min": 0,
+                                "max": 5
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:log",
+                    "weight": 20,
+                    "quality": -1,
+                    "functions": [
+                        {
+                            "function": "set_data",
+                            "data": {
+                                "min": 0,
+                                "max": 3
+                            }
+                        },
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:log2",
+                    "weight": 5,
+                    "quality": -1,
+                    "functions": [
+                        {
+                            "function": "set_data",
+                            "data": {
+                                "min": 0,
+                                "max": 1
+                            }
+                        },
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:plank",
+                    "weight": 10,
+                    "quality": -2,
+                    "functions": [
+                        {
+                            "function": "set_data",
+                            "data": {
+                                "min": 0,
+                                "max": 5
+                            }
+                        },
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 5
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:leaves",
+                    "weight": 10,
+                    "quality": -2
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 2,
+                                "max": 15
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:cane",
+                    "weight": 10,
+                    "quality": -1,
+                    "functions": [
+                        {
+                            "function": "set_damage",
+                            "damage": {
+                                "min": 0.75,
+                                "max": 1
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:deuce_club",
+                    "weight": 10,
+                    "quality": -1,
+                    "functions": [
+                        {
+                            "function": "set_damage",
+                            "damage": {
+                                "min": 0.75,
+                                "max": 1
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:stone_axe",
+                    "weight": 10,
+                    "quality": 0,
+                    "functions": [
+                        {
+                            "function": "set_damage",
+                            "damage": {
+                                "min": 0.75,
+                                "max": 1
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:iron_axe",
+                    "weight": 5,
+                    "quality": 1,
+                    "functions": [
+                        {
+                            "function": "set_damage",
+                            "damage": {
+                                "min": 0.75,
+                                "max": 1
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:diamond_axe",
+                    "weight": 1,
+                    "quality": 2,
+                    "functions": [
+                        {
+                            "function": "set_damage",
+                            "damage": {
+                                "min": 0.75,
+                                "max": 1
+                            }
+                        }
+                    ]
                 }
             ]
         }

@@ -47,15 +47,6 @@ public class LandAspectSandstone extends TerrainLandAspect
 			structureBlocks = new IBlockState[] {Blocks.sandstone.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.SMOOTH), Blocks.stonebrick.getDefaultState()};
 			skyColor = new Vec3d(0.9D, 0.7D, 0.05D);
 			
-			/*List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sandstone, 1, 0), 4, 15, 6));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sandstone, 1, 2), 2, 7, 4));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sandstone, 1, 1), 1, 4, 3));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_sandstone, 1, 0), 2, 6, 3));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sand, 1, 0), 2, 7, 4));
-			
-			lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);*/
-			
 			variations.add(this);
 			variations.add(new LandAspectSandstone("sandstone_red"));
 		}
@@ -65,14 +56,6 @@ public class LandAspectSandstone extends TerrainLandAspect
 			structureBlocks = new IBlockState[] {Blocks.red_sandstone.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.SMOOTH), Blocks.stonebrick.getDefaultState()};
 			skyColor = new Vec3d(0.9D, 0.5D, 0.05D);
 			
-			/*List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_sandstone, 1, 0), 4, 15, 6));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_sandstone, 1, 2), 2, 7, 4));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_sandstone, 1, 1), 1, 4, 3));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sandstone, 1, 0), 2, 6, 3));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sand, 1, 1), 2, 7, 4));
-			
-			lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);*/
 		}
 	}
 	

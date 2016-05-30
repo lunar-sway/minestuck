@@ -18,21 +18,6 @@ public class LandAspectHeat extends TerrainLandAspect
 	IBlockState[] structureBlocks = {Blocks.nether_brick.getDefaultState(), Blocks.obsidian.getDefaultState()};
 	static Vec3d skyColor = new Vec3d(0.4D, 0.0D, 0.0D);
 	
-	public LandAspectHeat()
-	{
-		/*List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
-		list.add(new WeightedRandomChestContent(new ItemStack(Items.blaze_powder, 1, 0), 2, 8, 6));
-		list.add(new WeightedRandomChestContent(new ItemStack(Items.blaze_rod, 1, 0), 1, 3, 4));
-		list.add(new WeightedRandomChestContent(new ItemStack(Items.magma_cream, 1, 0), 1, 3, 3));
-		list.add(new WeightedRandomChestContent(new ItemStack(Items.brick, 1, 0), 1, 2, 2));
-		list.add(new WeightedRandomChestContent(new ItemStack(Items.flint_and_steel, 1, 0), 1, 1, 4));
-		list.add(new WeightedRandomChestContent(new ItemStack(Items.lava_bucket, 1, 0), 1, 1, 3));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.netherrack, 1, 0), 4, 15, 5));
-		list.add(new WeightedRandomChestContent(new ItemStack(MinestuckItems.blacksmithHammer), 1, 1, 2));
-		
-		lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);*/
-	}
-	
 	@Override
 	public IBlockState getUpperBlock() 
 	{

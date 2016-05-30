@@ -20,17 +20,6 @@ public class LandAspectFrost extends TerrainLandAspect
 	IBlockState[] structureBlocks = {Blocks.stone.getDefaultState(), Blocks.stonebrick.getDefaultState()};
 	static Vec3d skyColor = new Vec3d(0.45D, 0.5D, 0.98D);
 	
-	public LandAspectFrost()
-	{
-		/*List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
-		list.add(new WeightedRandomChestContent(new ItemStack(Items.snowball, 1, 0), 2, 8, 8));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.snow, 1, 0), 1, 4, 5));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.snow_layer, 1, 0), 2, 5, 4));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sapling, 1, BlockPlanks.EnumType.SPRUCE.getMetadata()), 1, 4, 3));
-		
-		lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);*/
-	}
-	
 	@Override
 	public IBlockState getSurfaceBlock() 
 	{

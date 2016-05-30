@@ -342,7 +342,7 @@
                 },
                 {
                     "type": "item",
-                    "name": "minestuck:block_storage",
+                    "name": "minestuck:storage_block",
                     "weight": 10,
                     "quality": -1,
                     "functions": [
@@ -365,7 +365,7 @@
                     "quality": 1,
                     "functions": [
                         {
-                            "function": "minecraft:set_count",
+                            "function": "set_count",
                             "count": {
                                 "min": 1,
                                 "max": 5
