@@ -125,7 +125,7 @@ public class SmallRuinStart extends StructureStart
 				}
 			}
 			
-			EnumFacing torchFacing = this.func_186165_e() == EnumFacing.EAST || this.func_186165_e() == EnumFacing.NORTH ? this.func_186165_e().rotateY() : this.func_186165_e().rotateYCCW();
+			EnumFacing torchFacing = this.func_186165_e() == EnumFacing.WEST || this.func_186165_e() == EnumFacing.NORTH ? this.func_186165_e().rotateY() : this.func_186165_e().rotateYCCW();
 			if(torches[0])
 				this.setBlockState(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, torchFacing), 1, 2, 3, boundingBox);
 			if(torches[1])

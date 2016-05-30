@@ -5,7 +5,6 @@ import java.util.List;
 import com.mraof.minestuck.tileentity.TileEntityGate;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
@@ -20,7 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockGate extends Block implements ITileEntityProvider
+public class BlockGate extends Block
 {
 	
 	protected static final AxisAlignedBB GATE_AABB = new AxisAlignedBB(0.0D, 0.45D, 0.0D, 1.0D, 0.55D, 1.0D);
@@ -88,7 +87,7 @@ public class BlockGate extends Block implements ITileEntityProvider
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta)
+	public TileEntity createTileEntity(World worldIn, IBlockState state)
 	{
 		return new TileEntityGate();
 	}

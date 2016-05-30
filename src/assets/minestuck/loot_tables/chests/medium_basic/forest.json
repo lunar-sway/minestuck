@@ -13,7 +13,7 @@
                             "function": "set_data",
                             "data": {
                                 "min": 0,
-                                "max": 5
+                                "max": 2
                             }
                         }
                     ]
@@ -35,7 +35,7 @@
                             "function": "set_count",
                             "count": {
                                 "min": 1,
-                                "max": 4
+                                "max": 3
                             }
                         }
                     ]
@@ -43,7 +43,7 @@
                 {
                     "type": "item",
                     "name": "minecraft:log2",
-                    "weight": 5,
+                    "weight": 3,
                     "quality": -1,
                     "functions": [
                         {
@@ -57,14 +57,14 @@
                             "function": "set_count",
                             "count": {
                                 "min": 1,
-                                "max": 3
+                                "max": 2
                             }
                         }
                     ]
                 },
                 {
                     "type": "item",
-                    "name": "minecraft:plank",
+                    "name": "minecraft:planks",
                     "weight": 10,
                     "quality": -2,
                     "functions": [
@@ -72,7 +72,7 @@
                             "function": "set_data",
                             "data": {
                                 "min": 0,
-                                "max": 5
+                                "max": 2
                             }
                         },
                         {
@@ -88,7 +88,7 @@
                     "type": "item",
                     "name": "minecraft:leaves",
                     "weight": 10,
-                    "quality": -2
+                    "quality": -2,
                     "functions": [
                         {
                             "function": "set_count",

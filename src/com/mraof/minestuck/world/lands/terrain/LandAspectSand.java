@@ -103,7 +103,7 @@ public class LandAspectSand extends TerrainLandAspect
 		if(name.equals("sand_red"))
 			list.add(new SurfaceDecoratorVein(Blocks.sand.getDefaultState(), 10, 32));
 		list.add(new WorldGenDecorator(new WorldGenCactus(), 15, 0.4F));
-		list.add(new WorldGenDecorator(new WorldGenDeadBush(), 10, 0.4F));
+		list.add(new WorldGenDecorator(new WorldGenDeadBush(), 1, 0.4F));
 		
 		list.add(new UndergroundDecoratorVein(upperBlock, 8, 28, 256));
 		list.add(new UndergroundDecoratorVein((name.equals("sand_red")?MinestuckBlocks.ironOreSandstoneRed:MinestuckBlocks.ironOreSandstone).getDefaultState(), 24, 9, 64));

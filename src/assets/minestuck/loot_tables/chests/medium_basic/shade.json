@@ -104,6 +104,21 @@
                     "name": "minestuck:minestuck_bucket",
                     "weight": 5,
                     "quality": 0
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:torch",
+                    "weight": 8,
+                    "quality": 0,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 5
+                            }
+                        }
+                    ]
                 }
             ]
         }
