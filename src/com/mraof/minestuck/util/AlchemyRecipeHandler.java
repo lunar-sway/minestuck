@@ -510,8 +510,8 @@ public class AlchemyRecipeHandler
 		cardRecipeAdded = true;
 		GameRegistry.addRecipe(new ItemStack(clawHammer),new Object[]{ " XX","XY "," Y ",'X',new ItemStack(Items.iron_ingot),'Y',new ItemStack(Items.stick)});
 		GameRegistry.addRecipe(new ItemStack(woodenSpoon),new Object[]{ " X "," Y "," Y ",'X',new ItemStack(Items.bowl),'Y',new ItemStack(Items.stick)});
-		GameRegistry.addRecipe(new ItemStack(component,1,0),new Object[]{ "XYX","YXY","XYX",'X',new ItemStack(Blocks.stained_hardened_clay,1,0),'Y',new ItemStack(Blocks.stained_hardened_clay,1,15)});
-		GameRegistry.addRecipe(new ItemStack(component,1,0),new Object[]{ "XYX","YXY","XYX",'Y',new ItemStack(Blocks.stained_hardened_clay,1,0),'X',new ItemStack(Blocks.stained_hardened_clay,1,15)});
+		GameRegistry.addRecipe(new ItemStack(chessboard),new Object[]{ "XYX","YXY","XYX",'X',new ItemStack(Blocks.stained_hardened_clay,1,0),'Y',new ItemStack(Blocks.stained_hardened_clay,1,15)});
+		GameRegistry.addRecipe(new ItemStack(chessboard),new Object[]{ "XYX","YXY","XYX",'Y',new ItemStack(Blocks.stained_hardened_clay,1,0),'X',new ItemStack(Blocks.stained_hardened_clay,1,15)});
 		GameRegistry.addRecipe(new ItemStack(disk, 1, 0),new Object[]{ "X X"," Y ","X X",'X',new ItemStack(rawCruxite, 1),'Y',new ItemStack(Items.iron_ingot,1)});
 		GameRegistry.addRecipe(new ItemStack(disk, 1, 1),new Object[]{ " X ","XYX"," X ",'X',new ItemStack(rawCruxite, 1),'Y',new ItemStack(Items.iron_ingot,1)});
 		GameRegistry.addShapelessRecipe(new ItemStack(rawCruxite, 9),new  ItemStack(blockStorage,1,0));
@@ -548,7 +548,7 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(blockStorage, 1, 1), true, new GristSet(new GristType[] {GristType. Build}, new int[] {2}));
 		GristRegistry.addGristConversion(new ItemStack(woodenSpoon), false, new GristSet(GristType.Build, 3));
 		GristRegistry.addGristConversion(new ItemStack(silverSpoon), false, new GristSet(new GristType[] {GristType.Build, GristType.Mercury}, new int[] {6, 4}));
-		GristRegistry.addGristConversion(new ItemStack(component,1, 0), true, new GristSet(new GristType[] {GristType.Shale, GristType.Marble}, new int[] {25, 25}));
+		GristRegistry.addGristConversion(new ItemStack(chessboard), true, new GristSet(new GristType[] {GristType.Shale, GristType.Marble}, new int[] {25, 25}));
 		GristRegistry.addGristConversion(new ItemStack(crockerSpork), false, new GristSet(new GristType[] {GristType.Build, GristType.Iodine,GristType.Chalk,GristType.Ruby}, new int[] {90, 34, 34, 6}));
 		GristRegistry.addGristConversion(new ItemStack(cruxiteApple, 1), false, new GristSet());
 		GristRegistry.addGristConversion(new ItemStack(cruxitePotion, 1), false, new GristSet());
@@ -618,8 +618,8 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_sword), new ItemStack(Items.rotten_flesh), MODE_AND, false, true, new ItemStack(ninjaSword));
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_sword), new ItemStack(Items.blaze_rod), MODE_AND, false, true, new ItemStack(firePoker));
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_sword), new ItemStack(Items.blaze_rod), MODE_OR, false, true, new ItemStack(hotHandle));
-		CombinationRegistry.addCombination(new ItemStack(Items.iron_sword), new ItemStack(component, 1, 0), MODE_AND, false, true, new ItemStack(regisword));
-		CombinationRegistry.addCombination(new ItemStack(ninjaSword), new ItemStack(component, 1, 0), MODE_AND, false, true, new ItemStack(regisword));
+		CombinationRegistry.addCombination(new ItemStack(Items.iron_sword), new ItemStack(chessboard), MODE_AND, false, true, new ItemStack(regisword));
+		CombinationRegistry.addCombination(new ItemStack(ninjaSword), new ItemStack(chessboard), MODE_AND, false, true, new ItemStack(regisword));
 		CombinationRegistry.addCombination(new ItemStack(ninjaSword), new ItemStack(Blocks.obsidian), MODE_AND, new ItemStack(katana));
 		
 		CombinationRegistry.addCombination(new ItemStack(Items.wooden_axe), new ItemStack(Blocks.anvil), MODE_AND, false, true, new ItemStack(blacksmithBane));
@@ -628,7 +628,7 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Items.golden_axe), new ItemStack(Items.lava_bucket), MODE_AND, false, true, new ItemStack(hephaestusLumber));
 		
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_hoe), new ItemStack(Items.wheat), MODE_AND, false, true, new ItemStack(sickle));
-		CombinationRegistry.addCombination(new ItemStack(sickle), new ItemStack(component, 1, 0), MODE_AND, false, true, new ItemStack(regiSickle));
+		CombinationRegistry.addCombination(new ItemStack(sickle), new ItemStack(chessboard), MODE_AND, false, true, new ItemStack(regiSickle));
 		
 		CombinationRegistry.addCombination(new ItemStack(clawHammer), new ItemStack(Blocks.brick_block), MODE_AND, false, false, new ItemStack(sledgeHammer));
 		CombinationRegistry.addCombination(new ItemStack(clawHammer), new ItemStack(Blocks.cobblestone), MODE_AND, false, false, new ItemStack(sledgeHammer));
@@ -696,7 +696,7 @@ public class AlchemyRecipeHandler
 				CombinationRegistry.addCombination(new ItemStack(metalBoots[i]), prismarine, MODE_OR, false, false, new ItemStack(prismarineBoots));
 			}
 		
-		CombinationRegistry.addCombination(new ItemStack(fork), new ItemStack(component, 1, 0), MODE_AND, false, true, new ItemStack(skaiaFork));
+		CombinationRegistry.addCombination(new ItemStack(fork), new ItemStack(chessboard), MODE_AND, false, true, new ItemStack(skaiaFork));
 		CombinationRegistry.addCombination(new ItemStack(fork), new ItemStack(woodenSpoon), MODE_OR, false, false, new ItemStack(spork));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.tnt), new ItemStack(Blocks.stone_button), MODE_OR, new ItemStack(primedTnt));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.tnt), new ItemStack(Blocks.wooden_button), MODE_OR, new ItemStack(primedTnt));

@@ -7,21 +7,21 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemHoe;
+import net.minecraft.item.ItemMultiTexture;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
+import com.google.common.base.Function;
 import com.mraof.minestuck.Minestuck;
 
 import static com.mraof.minestuck.block.MinestuckBlocks.*;
 
+import com.mraof.minestuck.block.BlockColoredDirt;
 import com.mraof.minestuck.item.block.ItemBlockLayered;
-import com.mraof.minestuck.item.block.ItemChessTile;
-import com.mraof.minestuck.item.block.ItemColoredDirt;
 import com.mraof.minestuck.item.block.ItemMachine;
-import com.mraof.minestuck.item.block.ItemCruxiteOre;
 import com.mraof.minestuck.item.block.ItemStorageBlock;
 import com.mraof.minestuck.item.weapon.EnumBattleaxeType;
 import com.mraof.minestuck.item.weapon.EnumBladeType;
@@ -99,7 +99,7 @@ public class MinestuckItems
 	public static ItemCruxiteArtifact cruxiteApple;
 	public static Item cruxitePotion;
 	public static Item disk;
-	public static Item component;
+	public static Item chessboard;
 	public static ItemModus modusCard;
 	public static ItemMinestuckBucket minestuckBucket;
 	public static ItemGoldSeeds goldSeeds;	//This item is pretty much only a joke
@@ -193,7 +193,7 @@ public class MinestuckItems
 		cruxiteApple = (ItemCruxiteArtifact) GameRegistry.register(new ItemCruxiteApple().setRegistryName("cruxite_apple"));
 		cruxitePotion = GameRegistry.register(new ItemCruxitePotion().setRegistryName("cruxite_potion"));
 		disk = GameRegistry.register(new ItemDisk().setRegistryName("computer_disk"));
-		component = GameRegistry.register(new ItemComponent().setRegistryName("component"));
+		chessboard = GameRegistry.register(new Item().setRegistryName("chessboard")).setUnlocalizedName("chessboard").setMaxStackSize(1).setCreativeTab(Minestuck.tabMinestuck);
 		minestuckBucket = (ItemMinestuckBucket) GameRegistry.register(new ItemMinestuckBucket().setRegistryName("minestuck_bucket"));
 		obsidianBucket = GameRegistry.register(new ItemObsidianBucket().setRegistryName("bucket_obsidian"));
 		modusCard = (ItemModus) GameRegistry.register(new ItemModus().setRegistryName("modus_card"));
@@ -205,10 +205,17 @@ public class MinestuckItems
 		minestuckBucket.addBlock(blockBlood.getDefaultState());
 		minestuckBucket.addBlock(blockBrainJuice.getDefaultState());
 		
-		registerItemBlock(new ItemChessTile(chessTile));
+		registerItemBlock(new ItemMultiTexture(chessTile, chessTile, new String[] {"black", "white", "darkgrey", "lightgrey"}));
 		registerItemBlock(new ItemBlock(skaiaPortal));
 		
-		registerItemBlock(new ItemCruxiteOre(oreCruxite));
+		registerItemBlock(new ItemMultiTexture(oreCruxite, oreCruxite, new String[0])
+		{
+			@Override
+			public String getUnlocalizedName(ItemStack stack)
+			{
+				return theBlock.getUnlocalizedName();
+			}
+		});
 		registerItemBlock(new ItemBlock(coalOreNetherrack));
 		registerItemBlock(new ItemBlock(ironOreSandstone));
 		registerItemBlock(new ItemBlock(ironOreSandstoneRed));
@@ -221,7 +228,14 @@ public class MinestuckItems
 		registerItemBlock(new ItemBlock(transportalizer));
 		
 		registerItemBlock(new ItemBlockLayered(layeredSand));
-		registerItemBlock(new ItemColoredDirt(coloredDirt));
+		registerItemBlock(new ItemMultiTexture(coloredDirt, coloredDirt, new Function<ItemStack, String>()
+				{
+					@Override
+					public String apply(ItemStack input)
+					{
+						return BlockColoredDirt.BlockType.values()[input.getItemDamage()].name;
+					}
+				}));
 		registerItemBlock(new ItemBlock(glowingMushroom));
 		registerItemBlock(new ItemBlock(glowingLog));
 		
@@ -232,8 +246,8 @@ public class MinestuckItems
 		registerItemBlock(new ItemBlock(stoneExplosiveButton));
 	}
 	
-	private static void registerItemBlock(ItemBlock item)
+	private static Item registerItemBlock(ItemBlock item)
 	{
-		GameRegistry.register(item.setRegistryName(item.block.getRegistryName()));	//Is this enough?
+		return GameRegistry.register(item.setRegistryName(item.block.getRegistryName()));	//Is this enough?
 	}
 }
