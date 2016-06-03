@@ -20,8 +20,9 @@ import com.mraof.minestuck.Minestuck;
 import static com.mraof.minestuck.block.MinestuckBlocks.*;
 
 import com.mraof.minestuck.block.BlockColoredDirt;
+import com.mraof.minestuck.block.BlockCrockerMachine;
 import com.mraof.minestuck.item.block.ItemBlockLayered;
-import com.mraof.minestuck.item.block.ItemMachine;
+import com.mraof.minestuck.item.block.ItemSburbMachine;
 import com.mraof.minestuck.item.block.ItemStorageBlock;
 import com.mraof.minestuck.item.weapon.EnumBattleaxeType;
 import com.mraof.minestuck.item.weapon.EnumBladeType;
@@ -223,7 +224,15 @@ public class MinestuckItems
 		registerItemBlock(new ItemBlock(goldOreSandstoneRed));
 		
 		registerItemBlock(new ItemStorageBlock(blockStorage));
-		registerItemBlock(new ItemMachine(blockMachine));
+		registerItemBlock(new ItemSburbMachine(sburbMachine));
+		registerItemBlock(new ItemMultiTexture(crockerMachine, crockerMachine, new Function<ItemStack, String>()
+				{
+					@Override
+					public String apply(ItemStack input)
+					{
+						return BlockCrockerMachine.MachineType.values()[input.getItemDamage()].getUnlocalizedName();
+					}
+				}));
 		registerItemBlock(new ItemBlock(blockComputerOff));
 		registerItemBlock(new ItemBlock(transportalizer));
 		

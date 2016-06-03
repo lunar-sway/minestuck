@@ -21,7 +21,7 @@ import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
-import com.mraof.minestuck.util.UsernameHandler;
+import com.mraof.minestuck.util.IdentifierHandler;
 
 public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 {
@@ -242,8 +242,8 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	}
 	public void addGrist(EntityPlayer entityPlayer)
 	{
-		GristHelper.increase(UsernameHandler.encode(entityPlayer), new GristSet(GristType.getTypeFromString(gristType), gristValue));
-		MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(entityPlayer));
+		GristHelper.increase(IdentifierHandler.encode(entityPlayer), new GristSet(GristType.getTypeFromString(gristType), gristValue));
+		MinestuckPlayerTracker.updateGristCache(IdentifierHandler.encode(entityPlayer));
 	}
 
 	public boolean canAttackWithItem()

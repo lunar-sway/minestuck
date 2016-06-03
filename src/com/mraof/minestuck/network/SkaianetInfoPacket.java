@@ -13,7 +13,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.UsernameHandler;
+import com.mraof.minestuck.util.IdentifierHandler;
 
 public class SkaianetInfoPacket extends MinestuckPacket
 {
@@ -80,7 +80,7 @@ public class SkaianetInfoPacket extends MinestuckPacket
 	{
 		if(FMLCommonHandler.instance().getEffectiveSide().isClient())
 			SkaiaClient.consumePacket(this);
-		else SkaianetHandler.requestInfo(player, UsernameHandler.getById(this.playerId));
+		else SkaianetHandler.requestInfo(player, IdentifierHandler.getById(this.playerId));
 	}
 
 	@Override

@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.mraof.minestuck.util.UsernameHandler;
-import com.mraof.minestuck.util.UsernameHandler.PlayerIdentifier;
+import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -83,7 +83,7 @@ public class Session
 	 */
 	boolean containsPlayer(PlayerIdentifier player)
 	{
-		if(player.equals(UsernameHandler.nullIdentifier))
+		if(player.equals(IdentifierHandler.nullIdentifier))
 			return false;
 		if(predefinedPlayers.containsKey(player))
 			return true;
@@ -157,7 +157,7 @@ public class Session
 			for(int i = 0; i < list.tagCount(); i++)
 			{
 				NBTTagCompound compound = list.getCompoundTagAt(i);
-				predefinedPlayers.put(UsernameHandler.load(compound, "player"), new PredefineData().read(compound));
+				predefinedPlayers.put(IdentifierHandler.load(compound, "player"), new PredefineData().read(compound));
 			}
 		} else
 		{	//Support for saves from older minestuck versions
@@ -166,7 +166,7 @@ public class Session
 			{
 				NBTTagCompound compound = new NBTTagCompound();
 				compound.setString("player", player);
-				predefinedPlayers.put(UsernameHandler.load(compound, "player"), new PredefineData().read(predefineTag.getCompoundTag(player)));
+				predefinedPlayers.put(IdentifierHandler.load(compound, "player"), new PredefineData().read(predefineTag.getCompoundTag(player)));
 			}
 		}
 		

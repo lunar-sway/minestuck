@@ -24,8 +24,8 @@ import net.minecraftforge.common.DimensionManager;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.Title;
-import com.mraof.minestuck.util.UsernameHandler;
-import com.mraof.minestuck.util.UsernameHandler.PlayerIdentifier;
+import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
@@ -293,7 +293,7 @@ public class SessionHandler {
 				sessionsByName.put(session.name, session);
 			}
 			
-			int i = (sessions.get(0).containsPlayer(connection.getClientIdentifier())?0:1)+(connection.getServerIdentifier().equals(UsernameHandler.nullIdentifier) || sessions.get(0).containsPlayer(connection.getServerIdentifier())?0:1);
+			int i = (sessions.get(0).containsPlayer(connection.getClientIdentifier())?0:1)+(connection.getServerIdentifier().equals(IdentifierHandler.nullIdentifier) || sessions.get(0).containsPlayer(connection.getServerIdentifier())?0:1);
 			if(MinestuckConfig.forceMaxSize && sessions.get(0).getPlayerList().size()+i > maxSize)
 				return "computer.singleSessionFull";
 			else
@@ -312,7 +312,7 @@ public class SessionHandler {
 				return null;
 			} else if(sClient == null || sServer == null)
 			{
-				if((sClient == null?sServer:sClient).locked || MinestuckConfig.forceMaxSize && !connection.getServerIdentifier().equals(UsernameHandler.nullIdentifier) && (sClient == null?sServer:sClient).getPlayerList().size()+1 > maxSize)
+				if((sClient == null?sServer:sClient).locked || MinestuckConfig.forceMaxSize && !connection.getServerIdentifier().equals(IdentifierHandler.nullIdentifier) && (sClient == null?sServer:sClient).getPlayerList().size()+1 > maxSize)
 					return "computer."+(sClient == null?"server":"client")+"SessionFull";
 				(sClient == null?sServer:sClient).connections.add(connection);
 				return null;
@@ -355,7 +355,7 @@ public class SessionHandler {
 					c.serverIdentifier = connection.getServerIdentifier();
 					break;
 				case 1:
-					c.serverIdentifier = UsernameHandler.nullIdentifier;
+					c.serverIdentifier = IdentifierHandler.nullIdentifier;
 					break;
 				}
 			}
@@ -430,7 +430,7 @@ public class SessionHandler {
 		{
 			if(cs.isActive)
 				SkaianetHandler.closeConnection(server, cs.getClientIdentifier(), false);
-			cs.serverIdentifier = UsernameHandler.nullIdentifier;
+			cs.serverIdentifier = IdentifierHandler.nullIdentifier;
 			if(sender.sendCommandFeedback())
 				sender.addChatMessage(new TextComponentString(server.getUsername()+"'s old client player "+cs.getClientIdentifier().getUsername()+" is now without a server player.").setChatStyle(new Style().setColor(TextFormatting.YELLOW)));
 		}
@@ -491,7 +491,7 @@ public class SessionHandler {
 				NBTTagCompound connectionTag = new NBTTagCompound();
 				connectionTag.setString("client", c.getClientIdentifier().getUsername());
 				connectionTag.setString("clientId", c.getClientIdentifier().getString());
-				if(!c.getServerIdentifier().equals(UsernameHandler.nullIdentifier))
+				if(!c.getServerIdentifier().equals(IdentifierHandler.nullIdentifier))
 					connectionTag.setString("server", c.getServerIdentifier().getUsername());
 				connectionTag.setBoolean("isMain", c.isMain);
 				connectionTag.setBoolean("isActive", c.isActive);

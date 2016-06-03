@@ -7,8 +7,8 @@ import java.util.EnumSet;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 
-import com.mraof.minestuck.inventory.ContainerMachine;
-import com.mraof.minestuck.tileentity.TileEntityMachine;
+import com.mraof.minestuck.inventory.ContainerSburbMachine;
+import com.mraof.minestuck.tileentity.TileEntitySburbMachine;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristType;
 
@@ -38,10 +38,10 @@ public class MachineStatePacket extends MinestuckPacket {
 	@Override
 	public void execute(EntityPlayer player)
 	{
-		if(!(player.openContainer instanceof ContainerMachine))
+		if(!(player.openContainer instanceof ContainerSburbMachine))
 			return;
 		
-		TileEntityMachine te = ((ContainerMachine) player.openContainer).tileEntity;
+		TileEntitySburbMachine te = ((ContainerSburbMachine) player.openContainer).tileEntity;
 		
 		if (te == null)
 		{

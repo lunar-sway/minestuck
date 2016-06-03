@@ -1,6 +1,5 @@
 package com.mraof.minestuck.util;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -24,7 +23,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.storage.loot.conditions.LootConditionManager;
 import net.minecraftforge.oredict.OreDictionary;
 import static net.minecraftforge.oredict.OreDictionary.WILDCARD_VALUE;
@@ -48,7 +46,6 @@ import static com.mraof.minestuck.util.CombinationRegistry.MODE_OR;
 public class AlchemyRecipeHandler
 {
 	public static final ResourceLocation BASIC_MEDIUM_CHEST = new ResourceLocation("minestuck", "chests/medium_basic");
-	public static final List<WeightedRandomChestContent> basicMediumChest = new ArrayList<WeightedRandomChestContent>();
 	
 	private static HashMap<List<Object>, Object> recipeList;
 	private static HashMap<List<Object>, Boolean> lookedOver;
@@ -543,9 +540,9 @@ public class AlchemyRecipeHandler
 		goldOreSandstoneRed.setHarvestLevel("pickaxe", Blocks.gold_ore.getHarvestLevel(Blocks.gold_ore.getDefaultState()));
 		
 		//add grist conversions
-		GristRegistry.addGristConversion(new ItemStack(coloredDirt, 1), false, new GristSet(new GristType[] {GristType. Build}, new int[] {1}));
-		GristRegistry.addGristConversion(new ItemStack(blockMachine,1,4), true, new GristSet(new GristType[] {GristType. Build,GristType.Garnet,GristType.Ruby}, new int[] {550, 55, 34}));
-		GristRegistry.addGristConversion(new ItemStack(blockStorage, 1, 1), true, new GristSet(new GristType[] {GristType. Build}, new int[] {2}));
+		GristRegistry.addGristConversion(new ItemStack(coloredDirt, 1), false, new GristSet(new GristType[] {GristType.Build}, new int[] {1}));
+		GristRegistry.addGristConversion(new ItemStack(crockerMachine, 1, 0), true, new GristSet(new GristType[] {GristType.Build, GristType.Garnet, GristType.Ruby}, new int[] {550, 55, 34}));
+		GristRegistry.addGristConversion(new ItemStack(blockStorage, 1, 1), true, new GristSet(new GristType[] {GristType.Build}, new int[] {2}));
 		GristRegistry.addGristConversion(new ItemStack(woodenSpoon), false, new GristSet(GristType.Build, 3));
 		GristRegistry.addGristConversion(new ItemStack(silverSpoon), false, new GristSet(new GristType[] {GristType.Build, GristType.Mercury}, new int[] {6, 4}));
 		GristRegistry.addGristConversion(new ItemStack(chessboard), true, new GristSet(new GristType[] {GristType.Shale, GristType.Marble}, new int[] {25, 25}));
@@ -645,7 +642,7 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(woodenSpoon), new ItemStack(Items.iron_ingot), MODE_AND, false, false, new ItemStack(silverSpoon));
 		CombinationRegistry.addCombination(new ItemStack(silverSpoon), new ItemStack(Items.cake), MODE_AND, false, false, new ItemStack(crockerSpork));
 		
-		CombinationRegistry.addCombination(new ItemStack(crockerSpork), new ItemStack(captchaCard), MODE_OR, false, true, new ItemStack(blockMachine, 1, 4));
+		CombinationRegistry.addCombination(new ItemStack(crockerSpork), new ItemStack(captchaCard), MODE_OR, false, true, new ItemStack(crockerMachine, 1, 0));
 		CombinationRegistry.addCombination(new ItemStack(Items.ender_pearl), new ItemStack(Blocks.iron_block), MODE_AND, false, false, new ItemStack(transportalizer));
 		
 		CombinationRegistry.addCombination(new ItemStack(modusCard, 1, 0), new ItemStack(modusCard, 1, 1), MODE_AND, true, true, new ItemStack(modusCard, 1, 2));
@@ -815,13 +812,13 @@ public class AlchemyRecipeHandler
 		
 		if (card == null) {return null;}
 		
-		if (!(card.getItem().equals(captchaCard) && card.hasTagCompound() && card.getTagCompound().hasKey("contentID")))
+		if (card.getItem().equals(captchaCard) && card.hasTagCompound() && card.getTagCompound().hasKey("contentID"))
 		{
-			return card.copy();
+			return getDecodedItem(card);
 		}
 		else
 		{
-			return getDecodedItem(card);
+			return card.copy();
 		}
 	}
 	

@@ -41,7 +41,7 @@ import com.mraof.minestuck.util.ITeleporter;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.PostEntryTask;
 import com.mraof.minestuck.util.Teleport;
-import com.mraof.minestuck.util.UsernameHandler;
+import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
@@ -66,7 +66,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 				if(!SburbHandler.shouldEnterNow(player))
 					return;
 				
-				SburbConnection c = SkaianetHandler.getMainConnection(UsernameHandler.encode(player), true);
+				SburbConnection c = SkaianetHandler.getMainConnection(IdentifierHandler.encode(player), true);
 				
 				if(c == null || !c.enteredGame() || !MinestuckDimensionHandler.isLandDimension(player.worldObj.provider.getDimension()))
 				{

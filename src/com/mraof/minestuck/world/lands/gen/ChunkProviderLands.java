@@ -9,7 +9,6 @@ import java.util.Random;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.ChunkCoordIntPair;
@@ -29,7 +28,6 @@ import com.mraof.minestuck.entity.consort.EntityIguana;
 import com.mraof.minestuck.entity.consort.EntityNakagator;
 import com.mraof.minestuck.entity.consort.EntitySalamander;
 import com.mraof.minestuck.tileentity.TileEntityGate;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
@@ -56,7 +54,6 @@ public class ChunkProviderLands implements IChunkGenerator
 	public int nameIndex1, nameIndex2;
 	public boolean nameOrder;
 
-	//public final Map<String, ChestGenHooks> lootMap = new HashMap<String, ChestGenHooks>();
 	public IBlockState surfaceBlock;
 	public IBlockState upperBlock;
 	public IBlockState groundBlock;
@@ -118,10 +115,6 @@ public class ChunkProviderLands implements IChunkGenerator
 			this.decorators = new ArrayList<ILandDecorator>();
 			this.decorators.addAll(aspect1.getDecorators());
 			sortDecorators();
-			
-			List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>(AlchemyRecipeHandler.basicMediumChest);
-			//aspect1.modifyChestContent(list, AlchemyRecipeHandler.BASIC_MEDIUM_CHEST);
-			//lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, new ChestGenHooks(null, list, 0, 0));	//Item count is handled separately by the structure
 		}
 	}
 	

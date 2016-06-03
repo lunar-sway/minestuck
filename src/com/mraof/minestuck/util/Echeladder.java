@@ -10,7 +10,7 @@ import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
-import com.mraof.minestuck.util.UsernameHandler.PlayerIdentifier;
+import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;

@@ -6,8 +6,8 @@ import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.MinestuckPlayerData;
-import com.mraof.minestuck.util.UsernameHandler;
-import com.mraof.minestuck.util.UsernameHandler.PlayerIdentifier;
+import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -50,12 +50,12 @@ public class CommandGrist extends CommandBase
 		if(!(command.equalsIgnoreCase("set") || command.equalsIgnoreCase("add") || command.equalsIgnoreCase("get")))
 		{
 			command = args[1];
-			identifier = UsernameHandler.getForCommand(server, sender, args[0]);
+			identifier = IdentifierHandler.getForCommand(server, sender, args[0]);
 			offset = 2;
 		} else
 		{
 			EntityPlayerMP player = this.getCommandSenderAsPlayer(sender);
-			identifier = UsernameHandler.encode(player);
+			identifier = IdentifierHandler.encode(player);
 		}
 		
 		if((args.length - offset) % 2  != 0)

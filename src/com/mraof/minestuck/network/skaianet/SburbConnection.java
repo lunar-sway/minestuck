@@ -9,8 +9,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.util.UsernameHandler;
-import com.mraof.minestuck.util.UsernameHandler.PlayerIdentifier;
+import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 
 public class SburbConnection {
 	
@@ -180,8 +180,8 @@ public class SburbConnection {
 		}
 		else
 		{
-			clientIdentifier = UsernameHandler.load(nbt, "client");
-			serverIdentifier = UsernameHandler.load(nbt, "server");
+			clientIdentifier = IdentifierHandler.load(nbt, "client");
+			serverIdentifier = IdentifierHandler.load(nbt, "server");
 		}
 		artifactType = nbt.getInteger("artifact");
 		

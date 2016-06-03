@@ -15,10 +15,6 @@
         "facing=south,machine_type=punch_designix": { "model": "minestuck:machine_designix" },
         "facing=west,machine_type=punch_designix":  { "model": "minestuck:machine_designix", "y": 90 },
         "facing=north,machine_type=punch_designix": { "model": "minestuck:machine_designix", "y": 180 },
-        "facing=east,machine_type=punch_designix":  { "model": "minestuck:machine_designix", "y": 270 },
-        "facing=south,machine_type=grist_widget":   { "model": "minestuck:machine_grist_widget" },
-        "facing=west,machine_type=grist_widget":    { "model": "minestuck:machine_grist_widget", "y": 90 },
-        "facing=north,machine_type=grist_widget":   { "model": "minestuck:machine_grist_widget", "y": 180 },
-        "facing=east,machine_type=grist_widget":    { "model": "minestuck:machine_grist_widget", "y": 270 }
+        "facing=east,machine_type=punch_designix":  { "model": "minestuck:machine_designix", "y": 270 }
     }
 }

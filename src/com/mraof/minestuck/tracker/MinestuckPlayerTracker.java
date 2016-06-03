@@ -36,8 +36,8 @@ import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.util.UpdateChecker;
-import com.mraof.minestuck.util.UsernameHandler;
-import com.mraof.minestuck.util.UsernameHandler.PlayerIdentifier;
+import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
@@ -52,11 +52,11 @@ public class MinestuckPlayerTracker {
 		EntityPlayer player = event.player;
 		Debug.debug(player.getName()+" joined the game. Sending packets.");
 		MinecraftServer server = player.getServer();
-		if(!server.isDedicatedServer() && UsernameHandler.host == null)
-			UsernameHandler.host = event.player.getName();
+		if(!server.isDedicatedServer() && IdentifierHandler.host == null)
+			IdentifierHandler.host = event.player.getName();
 		
-		UsernameHandler.playerLoggedIn(player);
-		PlayerIdentifier identifier = UsernameHandler.encode(player);
+		IdentifierHandler.playerLoggedIn(player);
+		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		
 		sendConfigPacket((EntityPlayerMP) player, true);
 		sendConfigPacket((EntityPlayerMP) player, false);
@@ -165,7 +165,7 @@ public class MinestuckPlayerTracker {
 			gristValues[typeInt] = GristHelper.getGrist(player, GristType.values()[typeInt]);
 
 		//The player
-		if(!player.equals(".client") || UsernameHandler.host != null) {
+		if(!player.equals(".client") || IdentifierHandler.host != null) {
 			EntityPlayerMP playerMP = player.getPlayer();
 			if(playerMP != null) {
 				MinestuckPacket packet = MinestuckPacket.makePacket(Type.GRISTCACHE, gristValues, false);
@@ -184,7 +184,7 @@ public class MinestuckPlayerTracker {
 	
 	public static void updateTitle(EntityPlayer player)
 	{
-		PlayerIdentifier identifier = UsernameHandler.encode(player);
+		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		Title newTitle = MinestuckPlayerData.getTitle(identifier);
 		if(newTitle == null)
 			return;

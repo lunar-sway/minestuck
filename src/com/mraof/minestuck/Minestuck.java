@@ -46,8 +46,9 @@ import com.mraof.minestuck.nei.NEIMinestuckConfig;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.tileentity.TileEntityCrockerMachine;
 import com.mraof.minestuck.tileentity.TileEntityGate;
-import com.mraof.minestuck.tileentity.TileEntityMachine;
+import com.mraof.minestuck.tileentity.TileEntitySburbMachine;
 import com.mraof.minestuck.tileentity.TileEntitySkaiaPortal;
 import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 import com.mraof.minestuck.tracker.ConnectionListener;
@@ -59,7 +60,7 @@ import com.mraof.minestuck.util.KindAbstratusList;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.SburbClient;
 import com.mraof.minestuck.util.SburbServer;
-import com.mraof.minestuck.util.UsernameHandler;
+import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.gen.OreHandler;
 import com.mraof.minestuck.world.gen.structure.StructureCastlePieces;
@@ -132,11 +133,12 @@ public class Minestuck
 	{
 		MinestuckEntities.registerEntities();
 		//register Tile Entities
-		GameRegistry.registerTileEntity(TileEntitySkaiaPortal.class, "minstuck.gatePortal");
-		GameRegistry.registerTileEntity(TileEntityMachine.class, "minestuck.containerMachine");
-		GameRegistry.registerTileEntity(TileEntityComputer.class, "minestuck.computerSburb");
-		GameRegistry.registerTileEntity(TileEntityTransportalizer.class, "minestuck.transportalizer");
-		GameRegistry.registerTileEntity(TileEntityGate.class, "minestuck.gate");
+		GameRegistry.registerTileEntity(TileEntitySkaiaPortal.class, "Minstuck.GatePortal");
+		GameRegistry.registerTileEntity(TileEntitySburbMachine.class, "Minestuck.SburbMachine");
+		GameRegistry.registerTileEntity(TileEntityCrockerMachine.class, "Minestuck.CrockerMachine");
+		GameRegistry.registerTileEntity(TileEntityComputer.class, "Minestuck.ComputerSburb");
+		GameRegistry.registerTileEntity(TileEntityTransportalizer.class, "Minestuck.Transportalizer");
+		GameRegistry.registerTileEntity(TileEntityGate.class, "Minestuck.Gate");
 		
 		MinestuckDimensionHandler.register();
 		
@@ -226,7 +228,7 @@ public class Minestuck
 		MinestuckDimensionHandler.unregisterDimensions();
 		isServerRunning = !isClientRunning;
 		MinestuckPlayerTracker.dataCheckerPermission.clear();
-		UsernameHandler.clear();
+		IdentifierHandler.clear();
 	}
 	
 	@EventHandler

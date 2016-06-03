@@ -26,11 +26,11 @@ public class DeployList
 	
 	public static void registerItems()
 	{
-		registerItem(new ItemStack(MinestuckBlocks.blockMachine,1,0), new GristSet(), new GristSet(GristType.Build, 100), 0);
-		registerItem(new ItemStack(MinestuckBlocks.blockMachine,1,2), new GristSet(), new GristSet(GristType.Build, 100), 0);
+		registerItem(new ItemStack(MinestuckBlocks.sburbMachine,1,0), new GristSet(), new GristSet(GristType.Build, 100), 0);
+		registerItem(new ItemStack(MinestuckBlocks.sburbMachine,1,2), new GristSet(), new GristSet(GristType.Build, 100), 0);
 		registerItem(AlchemyRecipeHandler.createCard(new ItemStack(MinestuckItems.cruxiteApple), true), new GristSet(), null, 0);
-		registerItem(new ItemStack(MinestuckBlocks.blockMachine,1,3), new GristSet(), new GristSet(GristType.Build, 100), 0);
-		registerItem(new ItemStack(MinestuckBlocks.blockMachine,1,1), new GristSet(GristType.Shale, 4), 0);
+		registerItem(new ItemStack(MinestuckBlocks.sburbMachine,1,3), new GristSet(), new GristSet(GristType.Build, 100), 0);
+		registerItem(new ItemStack(MinestuckBlocks.sburbMachine,1,1), new GristSet(GristType.Shale, 4), 0);
 	}
 	
 	public static void registerItem(ItemStack stack)
@@ -89,8 +89,8 @@ public class DeployList
 			if(stack.getItem().equals(MinestuckItems.captchaCard) && AlchemyRecipeHandler.getDecodedItem(stack) != null
 					&& AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact)
 				stack = AlchemyRecipeHandler.createCard(new ItemStack(MinestuckItems.cruxiteApple), true);
-			if(stack.getItem().equals(Item.getItemFromBlock(MinestuckBlocks.blockMachine)))
-				stack.getTagCompound().removeTag("BlockEntityTag");
+			if(stack.getItem().equals(Item.getItemFromBlock(MinestuckBlocks.sburbMachine)))
+				stack.getTagCompound().removeTag("color");
 		}
 		return stack;
 	}

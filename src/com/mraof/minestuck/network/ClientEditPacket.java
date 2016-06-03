@@ -14,7 +14,7 @@ import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.UsernameHandler;
+import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 
@@ -52,17 +52,17 @@ public class ClientEditPacket extends MinestuckPacket
 		{
 			if(username == -1)
 				ServerEditHandler.onPlayerExit(player);
-			if(!MinestuckConfig.privateComputers || UsernameHandler.encode(player).getId() == this.username)
-				ServerEditHandler.newServerEditor((EntityPlayerMP) player, UsernameHandler.getById(username), UsernameHandler.getById(target));
+			if(!MinestuckConfig.privateComputers || IdentifierHandler.encode(player).getId() == this.username)
+				ServerEditHandler.newServerEditor((EntityPlayerMP) player, IdentifierHandler.getById(username), IdentifierHandler.getById(target));
 			return;
 		}
 		
-		EntityPlayerMP playerMP = UsernameHandler.getById(target).getPlayer();
+		EntityPlayerMP playerMP = IdentifierHandler.getById(target).getPlayer();
 		
-		if(playerMP != null && (!MinestuckConfig.privateComputers || UsernameHandler.getById(username).appliesTo(player)))
+		if(playerMP != null && (!MinestuckConfig.privateComputers || IdentifierHandler.getById(username).appliesTo(player)))
 		{
-			SburbConnection c = SkaianetHandler.getClientConnection(UsernameHandler.getById(target));
-			if(c == null || c.getServerIdentifier().getId() != username || !(c.isMain() || SkaianetHandler.giveItems(UsernameHandler.getById(target))))
+			SburbConnection c = SkaianetHandler.getClientConnection(IdentifierHandler.getById(target));
+			if(c == null || c.getServerIdentifier().getId() != username || !(c.isMain() || SkaianetHandler.giveItems(IdentifierHandler.getById(target))))
 				return;
 			for(int i = 0; i < 5; i++)
 				if(i == 4)
@@ -74,7 +74,7 @@ public class ClientEditPacket extends MinestuckPacket
 						c.givenItems()[i] = playerMP.inventory.addItemStackToInventory(card) || c.givenItems()[i];
 				} else
 				{
-					ItemStack machine = new ItemStack(MinestuckBlocks.blockMachine, 1, i);
+					ItemStack machine = new ItemStack(MinestuckBlocks.sburbMachine, 1, i);
 					if(i == 1 && !c.enteredGame())
 						continue;
 					if(!playerMP.inventory.hasItemStack(machine))

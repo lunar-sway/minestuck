@@ -23,7 +23,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.BlockChessTile;
-import com.mraof.minestuck.block.BlockMachine;
+import com.mraof.minestuck.block.BlockCrockerMachine;
+import com.mraof.minestuck.block.BlockSburbMachine;
 import com.mraof.minestuck.block.BlockStorage;
 import com.mraof.minestuck.block.BlockColoredDirt;
 import com.mraof.minestuck.item.ItemMinestuckCandy;
@@ -153,8 +154,10 @@ public class MinestuckModelManager
 		for(BlockStorage.BlockType type : BlockStorage.BlockType.values())
 			register(blockStorage, type.ordinal(), "storage_block_"+type.name);
 		register(layeredSand);
-		for(BlockMachine.MachineType type : BlockMachine.MachineType.values())
-			register(blockMachine, type.ordinal(), "machine_"+type.getName());
+		for(BlockSburbMachine.MachineType type : BlockSburbMachine.MachineType.values())
+			register(sburbMachine, type.ordinal(), "machine_"+type.getName());
+		for(BlockCrockerMachine.MachineType type : BlockCrockerMachine.MachineType.values())
+			register(crockerMachine, type.ordinal(), "machine_"+type.getName());
 		register(glowingMushroom);
 		register(glowingLog);
 		
@@ -203,8 +206,10 @@ public class MinestuckModelManager
 			ModelBakery.registerItemVariants(Item.getItemFromBlock(coloredDirt), new ResourceLocation("minestuck:colored_dirt_"+type.name));
 		for(BlockStorage.BlockType type : BlockStorage.BlockType.values())
 			ModelBakery.registerItemVariants(Item.getItemFromBlock(blockStorage), new ResourceLocation("minestuck:storage_block_"+type.name));
-		for(BlockMachine.MachineType type : BlockMachine.MachineType.values())
-			ModelBakery.registerItemVariants(Item.getItemFromBlock(blockMachine), new ResourceLocation("minestuck:machine_"+type.getName()));
+		for(BlockSburbMachine.MachineType type : BlockSburbMachine.MachineType.values())
+			ModelBakery.registerItemVariants(Item.getItemFromBlock(sburbMachine), new ResourceLocation("minestuck:machine_"+type.getName()));
+		for(BlockCrockerMachine.MachineType type : BlockCrockerMachine.MachineType.values())
+			ModelBakery.registerItemVariants(Item.getItemFromBlock(crockerMachine), new ResourceLocation("minestuck:machine_"+type.getName()));
 		
 		ModelLoader.setCustomStateMapper(blockOil, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
 		ModelLoader.setCustomStateMapper(blockBlood, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());

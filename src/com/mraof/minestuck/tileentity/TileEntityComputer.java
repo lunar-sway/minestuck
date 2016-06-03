@@ -23,8 +23,8 @@ import com.mraof.minestuck.network.skaianet.ComputerData;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.ComputerProgram;
-import com.mraof.minestuck.util.UsernameHandler;
-import com.mraof.minestuck.util.UsernameHandler.PlayerIdentifier;
+import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 
 public class TileEntityComputer extends TileEntity
 {
@@ -77,7 +77,7 @@ public class TileEntityComputer extends TileEntity
 		}
 		if(par1NBTTagCompound.hasKey("ownerId"))
 			ownerId = par1NBTTagCompound.getInteger("ownerId");
-		else this.owner = UsernameHandler.load(par1NBTTagCompound, "owner");
+		else this.owner = IdentifierHandler.load(par1NBTTagCompound, "owner");
 		if(gui != null)
 			gui.updateGui();
 	}
@@ -133,7 +133,7 @@ public class TileEntityComputer extends TileEntity
 		if(id == -1)
 		{
 			IBlockState state = worldObj.getBlockState(pos);
-			return state.getBlock() == MinestuckBlocks.blockMachine ? (Boolean) state.getValue(BlockComputerOn.BSOD) : false;
+			return state.getBlock() == MinestuckBlocks.blockComputerOn ? (Boolean) state.getValue(BlockComputerOn.BSOD) : false;
 		}
 		return installedPrograms.get(id) == null ? false:installedPrograms.get(id);
 	}

@@ -13,7 +13,7 @@ import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalouge.Modus;
 import com.mraof.minestuck.network.GristCachePacket;
-import com.mraof.minestuck.util.UsernameHandler.PlayerIdentifier;
+import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 
 public class MinestuckPlayerData {
 	
@@ -94,7 +94,7 @@ public class MinestuckPlayerData {
 	
 	public static PlayerData getData(EntityPlayer player)
 	{
-		return getData(UsernameHandler.encode(player));
+		return getData(IdentifierHandler.encode(player));
 	}
 	
 	public static PlayerData getData(PlayerIdentifier player)
@@ -124,8 +124,8 @@ public class MinestuckPlayerData {
 		private void readFromNBT(NBTTagCompound nbt)
 		{
 			if(nbt.hasKey("username"))
-				this.player = UsernameHandler.load(nbt, "username");	//For compability with saves from older minestuck versions
-			else this.player = UsernameHandler.load(nbt, "player");
+				this.player = IdentifierHandler.load(nbt, "username");	//For compability with saves from older minestuck versions
+			else this.player = IdentifierHandler.load(nbt, "player");
 			if(nbt.hasKey("grist"))
 				this.gristCache = new GristSet(GristType.values(), nbt.getIntArray("grist"));
 			if(nbt.hasKey("titleClass"))
@@ -176,7 +176,7 @@ public class MinestuckPlayerData {
 	{
 		if(player.worldObj.isRemote)
 			return getClientGrist();
-		else return getGristSet(UsernameHandler.encode(player));
+		else return getGristSet(IdentifierHandler.encode(player));
 	}
 	
 }

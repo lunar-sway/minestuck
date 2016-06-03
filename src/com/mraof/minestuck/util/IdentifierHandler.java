@@ -27,7 +27,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
  * This file is to now only be used serverside.
  * @author kirderf1
  */
-public class UsernameHandler {
+public class IdentifierHandler {
 	
 	public static String host;	//This basically stores server.getServerOwner(), but for all players to access
 	public static final PlayerIdentifier nullIdentifier = new PlayerIdentifier(".null");

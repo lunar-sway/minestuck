@@ -3,6 +3,7 @@ package com.mraof.minestuck.client.gui;
 import java.io.IOException;
 import java.util.Arrays;
 
+import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
@@ -29,9 +30,9 @@ public class GuiGristSelector extends GuiScreen
 	private static final int gristCountX = 44, gristCountY = 36;
 	private static final int guiWidth = 226, guiHeight = 190;
 	
-	private GuiMachine otherGui;
+	private GuiSburbMachine otherGui;
 	
-	protected GuiGristSelector(GuiMachine guiMachine)
+	protected GuiGristSelector(GuiSburbMachine guiMachine)
 	{
 		this.otherGui = guiMachine;
 	}
@@ -68,7 +69,7 @@ public class GuiGristSelector extends GuiScreen
 			int column = (int) (gristId % 7);
 			int gristXOffset = xOffset + (gristDisplayXOffset * row - row);
 			int gristYOffset = yOffset + (gristDisplayYOffset * column - column);
-			String amount = GuiHandler.addSuffix(clientGrist.getGrist(GristType.values()[gristId]));
+			String amount = GuiUtil.addSuffix(clientGrist.getGrist(GristType.values()[gristId]));
 
 			if(this.isPointInRegion(gristXOffset + gristIconX, gristYOffset + gristIconY, 16, 16, xcor, ycor))
 			{

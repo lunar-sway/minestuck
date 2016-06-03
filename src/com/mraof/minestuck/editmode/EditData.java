@@ -4,7 +4,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 
 import com.mraof.minestuck.entity.EntityDecoy;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
-import com.mraof.minestuck.util.UsernameHandler.PlayerIdentifier;
+import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 
 /**
  * Data structure used by the server sided EditHandler

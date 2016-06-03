@@ -16,7 +16,7 @@ import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.NEIClientConfig;
 import codechicken.nei.recipe.GuiCraftingRecipe;
 
-import com.mraof.minestuck.client.gui.GuiHandler;
+import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
@@ -73,7 +73,7 @@ public class GuiGristCache extends GuiPlayerStats
 			int column = (int) (gristId % 7);
 			int gristXOffset = xOffset + (gristDisplayXOffset * row - row);
 			int gristYOffset = yOffset + (gristDisplayYOffset * column - column);
-			String amount = GuiHandler.addSuffix(clientGrist.getGrist(GristType.values()[gristId]));
+			String amount = GuiUtil.addSuffix(clientGrist.getGrist(GristType.values()[gristId]));
 
 			if(this.isPointInRegion(gristXOffset + gristIconX, gristYOffset + gristIconY, 16, 16, xcor, ycor))
 			{

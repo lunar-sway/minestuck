@@ -11,7 +11,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.skaianet.ComputerData;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.UsernameHandler;
+import com.mraof.minestuck.util.IdentifierHandler;
 
 public class SburbConnectPacket extends MinestuckPacket
 {
@@ -38,7 +38,7 @@ public class SburbConnectPacket extends MinestuckPacket
 	@Override
 	public MinestuckPacket consumePacket(ByteBuf data) 
 	{
-		player = new ComputerData(UsernameHandler.getById(data.readInt()), data.readInt(), data.readInt(), data.readInt(), data.readInt());
+		player = new ComputerData(IdentifierHandler.getById(data.readInt()), data.readInt(), data.readInt(), data.readInt(), data.readInt());
 		otherPlayer = data.readInt();
 		isClient = data.readBoolean();
 		
@@ -48,8 +48,8 @@ public class SburbConnectPacket extends MinestuckPacket
 	@Override
 	public void execute(EntityPlayer player)
 	{
-		if((!MinestuckConfig.privateComputers || UsernameHandler.encode(player) == this.player.getOwner()) && ServerEditHandler.getData(player) == null)
-			SkaianetHandler.requestConnection(this.player, otherPlayer != -1 ? UsernameHandler.getById(otherPlayer) : null, isClient);
+		if((!MinestuckConfig.privateComputers || IdentifierHandler.encode(player) == this.player.getOwner()) && ServerEditHandler.getData(player) == null)
+			SkaianetHandler.requestConnection(this.player, otherPlayer != -1 ? IdentifierHandler.getById(otherPlayer) : null, isClient);
 	}
 	
 	@Override

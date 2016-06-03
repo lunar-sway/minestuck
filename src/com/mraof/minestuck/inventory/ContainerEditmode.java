@@ -119,11 +119,10 @@ public class ContainerEditmode extends Container
 				if(c.enteredGame())
 					iter.remove();
 				else stack.setTagCompound(AlchemyRecipeHandler.createCard(SburbHandler.getEntryItem(c.getClientIdentifier()), true).getTagCompound());
-			else if(stack.getItem().equals(Item.getItemFromBlock(MinestuckBlocks.blockMachine)) && stack.getMetadata() == 0)
+			else if(stack.getItem().equals(Item.getItemFromBlock(MinestuckBlocks.sburbMachine)) && stack.getMetadata() == 0)
 			{
 				NBTTagCompound nbt = new NBTTagCompound();
-				nbt.setTag("BlockEntityTag", new NBTTagCompound());
-				nbt.getCompoundTag("BlockEntityTag").setInteger("color", MinestuckPlayerData.getData(c.getClientIdentifier()).color);
+				nbt.setInteger("color", MinestuckPlayerData.getData(c.getClientIdentifier()).color);
 				stack.setTagCompound(nbt);
 			}
 		}

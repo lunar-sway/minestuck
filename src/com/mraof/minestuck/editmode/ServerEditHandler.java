@@ -67,7 +67,7 @@ import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.Teleport;
-import com.mraof.minestuck.util.UsernameHandler.PlayerIdentifier;
+import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 
 /**
@@ -576,14 +576,7 @@ public class ServerEditHandler
 		NBTTagCompound nbt = stack.getTagCompound();
 		if(nbt != null)
 		{
-			if(nbt.hasKey("BlockEntityTag"))
-				if(stack.getItem().equals(Item.getItemFromBlock(MinestuckBlocks.blockMachine)) && stack.getMetadata() == 0)
-				{
-					for(Object key : nbt.getCompoundTag("BlockEntityTag").getKeySet())
-						if(!key.equals("color"))
-							nbt.getCompoundTag("BlockEntityTag").removeTag((String) key);
-				} else nbt.removeTag("BlockEntityTag");
-			
+			nbt.removeTag("BlockEntityTag");
 			nbt.removeTag("ench");
 			nbt.removeTag("display");
 			

@@ -1,8 +1,8 @@
 package com.mraof.minestuck.command;
 
 import com.mraof.minestuck.network.skaianet.SessionHandler;
-import com.mraof.minestuck.util.UsernameHandler;
-import com.mraof.minestuck.util.UsernameHandler.PlayerIdentifier;
+import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -37,8 +37,8 @@ public class CommandSburbServer extends CommandBase
 		if(args.length != 2)
 			throw new WrongUsageException("commands.sburbServer.usage");
 		
-		PlayerIdentifier client = UsernameHandler.getForCommand(mcServer, sender, args[0]);
-		PlayerIdentifier server = UsernameHandler.getForCommand(mcServer, sender, args[1]);
+		PlayerIdentifier client = IdentifierHandler.getForCommand(mcServer, sender, args[0]);
+		PlayerIdentifier server = IdentifierHandler.getForCommand(mcServer, sender, args[1]);
 		
 		SessionHandler.connectByCommand(sender, this, client, server);
 	}

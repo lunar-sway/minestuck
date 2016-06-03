@@ -17,7 +17,8 @@ public class MinestuckBlocks
 	public static Block skaiaPortal;
 	public static BlockCruxiteOre oreCruxite;
 	public static Block blockStorage;
-	public static Block blockMachine;
+	public static Block sburbMachine;
+	public static Block crockerMachine;
 	public static Block blockComputerOn;
 	public static Block blockComputerOff;
 	public static Block transportalizer;
@@ -62,7 +63,8 @@ public class MinestuckBlocks
 		goldOreSandstoneRed = GameRegistry.register(new BlockVanillaOre(BlockVanillaOre.OreType.GOLD).setRegistryName("gold_ore_sandstone_red")).setUnlocalizedName("oreGold");
 		
 		blockStorage = GameRegistry.register(new BlockStorage().setRegistryName("storage_block"));
-		blockMachine = GameRegistry.register(new BlockMachine().setRegistryName("machine_block"));
+		sburbMachine = GameRegistry.register(new BlockSburbMachine().setRegistryName("sburb_machine"));
+		crockerMachine = GameRegistry.register(new BlockCrockerMachine().setRegistryName("crocker_machine"));
 		blockComputerOff = GameRegistry.register(new BlockComputerOff().setRegistryName("computer_standard"));
 		blockComputerOn = GameRegistry.register(new BlockComputerOn().setRegistryName("computer_standard_on"));
 		transportalizer = GameRegistry.register(new BlockTransportalizer().setRegistryName("transportalizer"));

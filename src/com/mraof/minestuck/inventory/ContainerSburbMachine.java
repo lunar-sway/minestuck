@@ -7,10 +7,13 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
+import com.mraof.minestuck.block.BlockSburbMachine.MachineType;
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.tileentity.TileEntityMachine;
+import com.mraof.minestuck.tileentity.TileEntitySburbMachine;
+import com.mraof.minestuck.util.IdentifierHandler;
 
-public class ContainerMachine extends Container {
+public class ContainerSburbMachine extends Container
+{
 	
 	private static final int cruxtruderInputX = 79;
 	private static final int cruxtruderInputY = 57;
@@ -38,93 +41,82 @@ public class ContainerMachine extends Container {
 	private static final int alchemiterOutputX = 135;
 	private static final int alchemiterOutputY = 20;
 	
-	public TileEntityMachine tileEntity;
-	private int metadata;
+	public TileEntitySburbMachine tileEntity;
+	private MachineType type;
 	private boolean operator = true;
 	private int progress;
 	
-	public ContainerMachine(InventoryPlayer inventoryPlayer, TileEntityMachine te)
+	public ContainerSburbMachine(InventoryPlayer inventoryPlayer, TileEntitySburbMachine te)
 	{
 		tileEntity = te;
-		metadata = te.getMachineType();
-		te.owner = inventoryPlayer.player;
+		type = te.getMachineType();
+		te.owner = IdentifierHandler.encode(inventoryPlayer.player);
 		
-		//the Slot constructor takes the IInventory and the slot number in that it binds to
-		//and the x-y coordinates it resides on-screen
-		switch (metadata) {
-		case (0):
-			addSlotToContainer(new SlotInput(tileEntity, 1, cruxtruderInputX, cruxtruderInputY, MinestuckItems.rawCruxite));
-			addSlotToContainer(new SlotOutput(tileEntity, 0, cruxtruderOutputX, cruxtruderOutputY));
+		switch (type)
+		{
+		case CRUXTRUDER:
+			addSlotToContainer(new SlotInput(tileEntity, 0, cruxtruderInputX, cruxtruderInputY, MinestuckItems.rawCruxite));
+			addSlotToContainer(new SlotOutput(tileEntity, 1, cruxtruderOutputX, cruxtruderOutputY));
 			break;
-		case (1):
-			addSlotToContainer(new Slot(tileEntity, 1, designixInputX, designixInputY));
-			addSlotToContainer(new SlotInput(tileEntity, 2, designixCardsX, designixCardsY, MinestuckItems.captchaCard));
-			addSlotToContainer(new SlotOutput(tileEntity, 0, designixOutputX, designixOutputY));
+		case PUNCH_DESIGNIX:
+			addSlotToContainer(new Slot(tileEntity, 0, designixInputX, designixInputY));
+			addSlotToContainer(new SlotInput(tileEntity, 1, designixCardsX, designixCardsY, MinestuckItems.captchaCard));
+			addSlotToContainer(new SlotOutput(tileEntity, 2, designixOutputX, designixOutputY));
 			break;
-		case (2):
-			addSlotToContainer(new SlotInput(tileEntity, 1, latheCard1X, latheCard1Y, MinestuckItems.captchaCard));
-			addSlotToContainer(new SlotInput(tileEntity, 2, latheCard2X, latheCard2Y, MinestuckItems.captchaCard));
-			addSlotToContainer(new SlotInput(tileEntity, 3, latheDowelX, latheDowelY, MinestuckItems.cruxiteDowel));
-			addSlotToContainer(new SlotOutput(tileEntity, 0, latheOutputX, latheOutputY));
+		case TOTEM_LATHE:
+			addSlotToContainer(new SlotInput(tileEntity, 0, latheCard1X, latheCard1Y, MinestuckItems.captchaCard));
+			addSlotToContainer(new SlotInput(tileEntity, 1, latheCard2X, latheCard2Y, MinestuckItems.captchaCard));
+			addSlotToContainer(new SlotInput(tileEntity, 2, latheDowelX, latheDowelY, MinestuckItems.cruxiteDowel));
+			addSlotToContainer(new SlotOutput(tileEntity, 3, latheOutputX, latheOutputY));
 			break;
-		case (3):
-			addSlotToContainer(new SlotInput(tileEntity, 1, alchemiterInputX, alchemiterInputY, MinestuckItems.cruxiteDowel));
-			addSlotToContainer(new SlotOutput(tileEntity, 0, alchemiterOutputX, alchemiterOutputY));
-			break;
-		case (4):
-			addSlotToContainer(new SlotInput(tileEntity, 1, alchemiterInputX, alchemiterInputY, MinestuckItems.captchaCard)
-			{
-				@Override
-				public boolean isItemValid(ItemStack stack)
-				{
-					return super.isItemValid(stack) && (stack.hasTagCompound() && stack.getTagCompound().hasKey("contentID") && !stack.getTagCompound().getBoolean("punched"));
-				}
-			});
+		case ALCHEMITER:
+			addSlotToContainer(new SlotInput(tileEntity, 0, alchemiterInputX, alchemiterInputY, MinestuckItems.cruxiteDowel));
+			addSlotToContainer(new SlotOutput(tileEntity, 1, alchemiterOutputX, alchemiterOutputY));
 			break;
 		}
 		
 		bindPlayerInventory(inventoryPlayer);
 	}
 	@Override
-	public boolean canInteractWith(EntityPlayer player) {
+	public boolean canInteractWith(EntityPlayer player)
+	{
 		return tileEntity.isUseableByPlayer(player);
 	}
-
-
-	protected void bindPlayerInventory(InventoryPlayer inventoryPlayer) {
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 9; j++) {
+	
+	protected void bindPlayerInventory(InventoryPlayer inventoryPlayer)
+	{
+		for (int i = 0; i < 3; i++)
+			for (int j = 0; j < 9; j++)
 				addSlotToContainer(new Slot(inventoryPlayer, j + i * 9 + 9,
 						8 + j * 18, 84 + i * 18));
-			}
-		}
-
-		for (int i = 0; i < 9; i++) {
+		
+		for (int i = 0; i < 9; i++)
 			addSlotToContainer(new Slot(inventoryPlayer, i, 8 + i * 18, 142));
-		}
 	}
 
 	@Override
-	public ItemStack transferStackInSlot(EntityPlayer player, int slotNumber) {
+	public ItemStack transferStackInSlot(EntityPlayer player, int slotNumber)
+	{
 		ItemStack itemstack = null;
 		Slot slot = (Slot)this.inventorySlots.get(slotNumber);
 		int allSlots = this.inventorySlots.size();
-		//int invSlots = tileEntity.getSizeInventory();
-
+		
 		if (slot != null && slot.getHasStack())
 		{
 			ItemStack itemstackOrig = slot.getStack();
 			itemstack = itemstackOrig.copy();
 			boolean result = false;
 			
-			//Debug.print("Shifing slot "+slotNumber);
 			
-			switch (metadata) {
-			case (0):
-				if (slotNumber <= 1) {
+			switch (type)
+			{
+			case CRUXTRUDER:
+				if (slotNumber <= 1)
+				{
 					//if it's a machine slot
 					result = mergeItemStack(itemstackOrig,2,allSlots,false);
-				} else if (slotNumber > 1) {
+				} else if (slotNumber > 1)
+				{
 					//if it's an inventory slot with valid contents
 					//Debug.print("item ID of " + itemstackOrig.itemID + ". Expected " + Minestuck.rawCruxite.itemID);
 					if (itemstackOrig.getItem() == MinestuckItems.rawCruxite)
@@ -134,7 +126,7 @@ public class ContainerMachine extends Container {
 					}
 				}
 				break;
-			case (1):
+			case PUNCH_DESIGNIX:
 				if (slotNumber <= 2)
 				{
 					//if it's a machine slot
@@ -149,7 +141,7 @@ public class ContainerMachine extends Container {
 					else result = mergeItemStack(itemstackOrig,0,1,false);
 				}
 				break;
-			case (2):
+			case TOTEM_LATHE:
 				if (slotNumber <= 3)
 				{
 					//if it's a machine slot
@@ -164,41 +156,26 @@ public class ContainerMachine extends Container {
 						result = mergeItemStack(itemstackOrig,2,3,false);
 				}
 				break;
-			case (3):
-			   	if (slotNumber <= 1) {
+			case ALCHEMITER:
+				if (slotNumber <= 1)
+				{
 					//if it's a machine slot
 					result = mergeItemStack(itemstackOrig,2,allSlots,false);
-				} else if (slotNumber > 1) {
+				} else if (slotNumber > 1)
+				{
 					//if it's an inventory slot with valid contents
 					if (itemstackOrig.getItem() == MinestuckItems.cruxiteDowel)
 						result = mergeItemStack(itemstackOrig,0,1,false);
 				}
 				break;
-			case (4):
-				if (slotNumber <= 0) {
-					//if it's a machine slot
-					result = mergeItemStack(itemstackOrig,2,allSlots,false);
-				}
-				else if (slotNumber > 0 && getSlot(0).isItemValid(itemstackOrig))
-				{
-					//if it's an inventory slot with valid contents
-					result = mergeItemStack(itemstackOrig, 0, 1, false);
-				}
-				break;
 			}
 			
-			if (!result) {
+			if (!result)
 				return null;
-			}
 			
 			if (itemstackOrig.stackSize == 0)
-			{
 				slot.putStack((ItemStack)null);
-			}
-			else
-			{
-				slot.onSlotChanged();
-			}
+			else slot.onSlotChanged();
 		}
 		
 		return itemstack;
@@ -221,4 +198,3 @@ public class ContainerMachine extends Container {
 		}
 	}
 }
-

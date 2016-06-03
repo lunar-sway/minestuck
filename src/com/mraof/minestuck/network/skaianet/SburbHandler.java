@@ -50,8 +50,8 @@ import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.Title;
-import com.mraof.minestuck.util.UsernameHandler;
-import com.mraof.minestuck.util.UsernameHandler.PlayerIdentifier;
+import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.LandAspectRegistry.AspectCombination;
@@ -207,7 +207,7 @@ public class SburbHandler
 				PlayerIdentifier identifier;
 				try
 				{
-					identifier = UsernameHandler.getForCommand(server, sender, playerName);
+					identifier = IdentifierHandler.getForCommand(server, sender, playerName);
 				} catch(CommandException c)
 				{
 					if(sender.sendCommandFeedback())
@@ -248,7 +248,7 @@ public class SburbHandler
 				PlayerIdentifier identifier;
 				try
 				{
-					identifier = UsernameHandler.getForCommand(server, sender, playerName);
+					identifier = IdentifierHandler.getForCommand(server, sender, playerName);
 				} catch(CommandException c)
 				{
 					if(sender.sendCommandFeedback())
@@ -298,7 +298,7 @@ public class SburbHandler
 	
 	public static void sessionName(MinecraftServer server, ICommandSender sender, ICommand command, String playerName, String sessionName) throws CommandException
 	{
-		PlayerIdentifier identifier = UsernameHandler.getForCommand(server, sender, playerName);
+		PlayerIdentifier identifier = IdentifierHandler.getForCommand(server, sender, playerName);
 		
 		Session playerSession = getPlayerSession(identifier), session = sessionsByName.get(sessionName);
 		if(singleSession)
@@ -388,7 +388,7 @@ public class SburbHandler
 	
 	private static PlayerIdentifier predefineCheck(MinecraftServer server, ICommandSender sender, String playerName, String sessionName) throws CommandException
 	{
-		PlayerIdentifier identifier = UsernameHandler.getForCommand(server, sender, playerName);
+		PlayerIdentifier identifier = IdentifierHandler.getForCommand(server, sender, playerName);
 		
 		Session session = sessionsByName.get(sessionName), playerSession = getPlayerSession(identifier);
 		if(session == null)
@@ -655,7 +655,7 @@ public class SburbHandler
 	
 	public static boolean canSelectColor(EntityPlayerMP player)
 	{
-		PlayerIdentifier identifier = UsernameHandler.encode(player);
+		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		for(SburbConnection c : SkaianetHandler.connections)
 			if(c.getClientIdentifier().equals(identifier))
 				return false;
@@ -674,7 +674,7 @@ public class SburbHandler
 		if(!MinestuckConfig.playerSelectedTitle)
 			return true;
 		
-		PlayerIdentifier identifier = UsernameHandler.encode(player);
+		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		Session s = getPlayerSession(identifier);
 		
 		if(s != null && s.predefinedPlayers.containsKey(identifier) && s.predefinedPlayers.get(identifier).title != null
@@ -695,7 +695,7 @@ public class SburbHandler
 	{
 		if(MinestuckConfig.playerSelectedTitle && titleSelectionMap.containsKey(player))
 		{
-			PlayerIdentifier identifier = UsernameHandler.encode(player);
+			PlayerIdentifier identifier = IdentifierHandler.encode(player);
 			Session s = getPlayerSession(identifier);
 			if(s == null)
 				if(singleSession)

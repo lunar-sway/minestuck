@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.ComputerProgram;
-import com.mraof.minestuck.util.UsernameHandler;
+import com.mraof.minestuck.util.IdentifierHandler;
 
 public class BlockComputerOff extends Block
 {
@@ -99,7 +99,7 @@ public class BlockComputerOff extends Block
 			world.setBlockState(pos, MinestuckBlocks.blockComputerOn.getDefaultState().withProperty(DIRECTION, side), 2);
 			
 			TileEntityComputer te = (TileEntityComputer) world.getTileEntity(pos);
-			te.owner = UsernameHandler.encode(player);
+			te.owner = IdentifierHandler.encode(player);
 			MinestuckBlocks.blockComputerOn.onBlockActivated(world, pos, world.getBlockState(pos), player, hand, heldItem, side, hitX, hitY, hitZ);
 		}
 		

@@ -29,8 +29,8 @@ import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
-import com.mraof.minestuck.util.UsernameHandler;
-import com.mraof.minestuck.util.UsernameHandler.PlayerIdentifier;
+import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 
 /**
@@ -60,7 +60,7 @@ public class SkaianetHandler {
 		for(SburbConnection c : connections)
 			if(c.isMain)
 				if(isClient && c.getClientIdentifier().equals(player))
-					return c.getServerIdentifier().equals(UsernameHandler.nullIdentifier) ? null : c.getServerIdentifier();
+					return c.getServerIdentifier().equals(IdentifierHandler.nullIdentifier) ? null : c.getServerIdentifier();
 				else if(!isClient && c.getServerIdentifier().equals(player))
 					return c.getClientIdentifier();
 		return null;
@@ -68,7 +68,7 @@ public class SkaianetHandler {
 	
 	public static SburbConnection getMainConnection(PlayerIdentifier player, boolean isClient)
 	{
-		if(player.equals(UsernameHandler.nullIdentifier))
+		if(player.equals(IdentifierHandler.nullIdentifier))
 			return null;
 		for(SburbConnection c : connections)
 			if(c.isMain)
@@ -97,7 +97,7 @@ public class SkaianetHandler {
 	 */
 	public static void playerConnected(EntityPlayer player)
 	{
-		PlayerIdentifier identifier = UsernameHandler.encode(player);
+		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		PlayerIdentifier[] s = new PlayerIdentifier[5];
 		s[0] = identifier;
 		infoToSend.put(identifier, s);
@@ -272,7 +272,7 @@ public class SkaianetHandler {
 		if(newConnection)
 		{
 			SburbConnection conn = getMainConnection(c.getClientIdentifier(), true);
-			if(conn != null && conn.getServerIdentifier().equals(UsernameHandler.nullIdentifier) && getMainConnection(c.getServerIdentifier(), false) == null)
+			if(conn != null && conn.getServerIdentifier().equals(IdentifierHandler.nullIdentifier) && getMainConnection(c.getServerIdentifier(), false) == null)
 			{
 				connections.remove(c);
 				conn.client = c.client;
@@ -319,7 +319,7 @@ public class SkaianetHandler {
 	public static void requestInfo(EntityPlayer player, PlayerIdentifier p1)
 	{
 		checkData();
-		PlayerIdentifier p0 = UsernameHandler.encode(player);
+		PlayerIdentifier p0 = IdentifierHandler.encode(player);
 		PlayerIdentifier[] s = infoToSend.get(p0);
 		if(s == null)
 		{
@@ -463,7 +463,7 @@ public class SkaianetHandler {
 		list.addAll(playerList);
 		
 		for(SburbConnection c : connections)
-			if(c.getClientIdentifier().equals(player) && !c.getServerIdentifier().equals(UsernameHandler.nullIdentifier) || c.getServerIdentifier().equals(player))
+			if(c.getClientIdentifier().equals(player) && !c.getServerIdentifier().equals(IdentifierHandler.nullIdentifier) || c.getServerIdentifier().equals(player))
 				list.add(c);
 		
 		return list.toArray();
@@ -609,7 +609,7 @@ public class SkaianetHandler {
 	
 	public static int enterMedium(EntityPlayerMP player, int dimensionId)
 	{
-		PlayerIdentifier username = UsernameHandler.encode(player);
+		PlayerIdentifier username = IdentifierHandler.encode(player);
 		SburbConnection c = getMainConnection(username, true);
 		if(c == null)
 		{
@@ -621,7 +621,7 @@ public class SkaianetHandler {
 				c.isActive = false;
 				c.isMain = true;
 				c.clientIdentifier = username;
-				c.serverIdentifier = UsernameHandler.nullIdentifier;
+				c.serverIdentifier = IdentifierHandler.nullIdentifier;
 				String s = SessionHandler.onConnectionCreated(c);
 				if(s == null)
 				{
