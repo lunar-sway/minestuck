@@ -620,7 +620,7 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(ninjaSword), new ItemStack(Blocks.obsidian), MODE_AND, new ItemStack(katana));
 		
 		CombinationRegistry.addCombination(new ItemStack(Items.wooden_axe), new ItemStack(Blocks.anvil), MODE_AND, false, true, new ItemStack(blacksmithBane));
-		//scraxe recipe here
+		CombinationRegistry.addCombination("record", Items.iron_axe, OreDictionary.WILDCARD_VALUE, MODE_AND, new ItemStack(scraxe));
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_axe), new ItemStack(Blocks.redstone_block), MODE_AND, false, true, new ItemStack(rubyCroak));
 		CombinationRegistry.addCombination(new ItemStack(Items.golden_axe), new ItemStack(Items.lava_bucket), MODE_AND, false, true, new ItemStack(hephaestusLumber));
 		
