@@ -52,15 +52,6 @@ public class LandAspectSand extends TerrainLandAspect
 			groundBlock = Blocks.sandstone.getDefaultState();
 			structureBlocks = new IBlockState[] {Blocks.sandstone.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.SMOOTH), Blocks.stonebrick.getDefaultState()};
 			
-			/*List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sand, 1, 0), 4, 15, 6));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sand, 1, 1), 2, 7, 3));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sandstone, 1, 0), 2, 7, 5));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sandstone, 1, 2), 2, 7, 3));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_sandstone, 1, 0), 1, 3, 2));
-			
-			this.lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);*/
-			
 			variations.add(this);
 			variations.add(new LandAspectSand("sand_red"));
 		} else
@@ -71,14 +62,6 @@ public class LandAspectSand extends TerrainLandAspect
 			groundBlock = Blocks.red_sandstone.getDefaultState();
 			structureBlocks = new IBlockState[] {Blocks.red_sandstone.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.SMOOTH), Blocks.stonebrick.getDefaultState()};
 			
-			/*List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sand, 1, 1), 4, 15, 6));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sand, 1, 0), 2, 7, 3));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_sandstone, 1, 0), 2, 7, 5));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_sandstone, 1, 2), 2, 7, 3));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sandstone, 1, 0), 1, 3, 2));
-			
-			this.lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);*/
 		}
 		
 	}
@@ -120,7 +103,7 @@ public class LandAspectSand extends TerrainLandAspect
 		if(name.equals("sand_red"))
 			list.add(new SurfaceDecoratorVein(Blocks.sand.getDefaultState(), 10, 32));
 		list.add(new WorldGenDecorator(new WorldGenCactus(), 15, 0.4F));
-		list.add(new WorldGenDecorator(new WorldGenDeadBush(), 10, 0.4F));
+		list.add(new WorldGenDecorator(new WorldGenDeadBush(), 1, 0.4F));
 		
 		list.add(new UndergroundDecoratorVein(upperBlock, 8, 28, 256));
 		list.add(new UndergroundDecoratorVein((name.equals("sand_red")?MinestuckBlocks.ironOreSandstoneRed:MinestuckBlocks.ironOreSandstone).getDefaultState(), 24, 9, 64));

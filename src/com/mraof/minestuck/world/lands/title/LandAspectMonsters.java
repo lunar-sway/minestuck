@@ -66,14 +66,7 @@ public class LandAspectMonsters extends TitleLandAspect
 		
 		if(chunkProvider.decorators != null)
 		{
-			/*ChestGenHooks chestGen = chunkProvider.lootMap.get(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST);
-			chestGen.removeItem(new ItemStack(Items.rotten_flesh, 1, 0));
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Items.rotten_flesh, 1, 0), 2, 8, 6));
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Items.bone, 1, 0), 1, 4, 5));
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Items.gunpowder, 1, 0), 2, 8, 4));
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Items.string, 1, 0), 2, 8, 4));
-			chestGen.removeItem(new ItemStack(Items.ender_pearl, 1, 0));	//Re-add ender pearl with a slightly higher priority and amount
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Items.ender_pearl, 1, 0), 1, 4, 2));*/
+			
 		}
 		
 		chunkProvider.mergeFogColor(new Vec3d(0.1, 0, 0), 0.5F);

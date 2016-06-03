@@ -1,12 +1,9 @@
 package com.mraof.minestuck.world.lands.terrain;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.ILandAspect;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
@@ -18,13 +15,10 @@ import com.mraof.minestuck.world.lands.structure.LandStructureHandler;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.util.math.Vec3d;
 
 public abstract class TerrainLandAspect implements ILandAspect<TerrainLandAspect>
 {
-	
-	public final Map<String, List<WeightedRandomChestContent>> lootMap = new HashMap<String, List<WeightedRandomChestContent>>();
 	
 		/**
 		 * Returns the blocks that can possibly be use in the land's underground blocks.
@@ -129,13 +123,6 @@ public abstract class TerrainLandAspect implements ILandAspect<TerrainLandAspect
 	
 	public void modifyStructureList(List<LandStructureHandler.StructureEntry> list)
 	{}
-	
-	public void modifyChestContent(List<WeightedRandomChestContent> content, String lootType)
-	{
-		if(lootMap.containsKey(lootType))
-			content.addAll(lootMap.get(lootType));
-		else content.addAll(lootMap.get(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST)); //Default value
-	}
 	
 	@Override
 	public IGateStructure getGateStructure()

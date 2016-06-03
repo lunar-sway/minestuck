@@ -16,33 +16,6 @@ import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 public class LandAspectForest extends TerrainLandAspect
 {
 	
-	public LandAspectForest()
-	{
-		/*List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sapling, 1, 0), 1, 3, 5));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sapling, 1, 1), 1, 3, 4));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sapling, 1, 2), 1, 2, 3));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sapling, 1, 3), 1, 2, 2));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sapling, 1, 4), 1, 2, 3));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sapling, 1, 5), 1, 3, 4));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.planks, 1, 0), 2, 10, 5));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.planks, 1, 1), 2, 7, 2));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.planks, 1, 5), 2, 7, 2));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.log, 1, 0), 2, 5, 5));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.log, 1, 1), 2, 5, 4));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.log, 1, 2), 2, 5, 2));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.log2, 1, 0), 2, 5, 2));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.log2, 1, 1), 2, 5, 4));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.leaves, 1, 0), 1, 4, 2));
-		list.add(new WeightedRandomChestContent(new ItemStack(MinestuckItems.deuceClub, 1, 0), 1, 1, 6));
-		list.add(new WeightedRandomChestContent(new ItemStack(MinestuckItems.cane, 1, 0), 1, 1, 6));
-		list.add(new WeightedRandomChestContent(new ItemStack(Items.stone_axe, 1, 0), 1, 1, 5));
-		list.add(new WeightedRandomChestContent(new ItemStack(Items.iron_axe, 1, 0), 1, 1, 3));
-		list.add(new WeightedRandomChestContent(new ItemStack(Items.diamond_axe, 1, 0), 1, 1, 1));
-		
-		this.lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);*/
-	}
-	
 	@Override
 	public IBlockState getSurfaceBlock()
 	{

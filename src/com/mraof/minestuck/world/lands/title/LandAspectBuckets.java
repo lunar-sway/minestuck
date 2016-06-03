@@ -26,14 +26,6 @@ public class LandAspectBuckets extends TitleLandAspect	//Yes, buckets
 			chunkProvider.decorators.add(new BucketDecorator());
 			chunkProvider.sortDecorators();
 			
-			/*ChestGenHooks chestGen = chunkProvider.lootMap.get(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST);
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(MinestuckItems.minestuckBucket, 1, 0), 1, 1, 3));
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(MinestuckItems.minestuckBucket, 1, 1), 1, 1, 3));
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(MinestuckItems.minestuckBucket, 1, 2), 1, 1, 3));
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Items.lava_bucket, 1, 0), 1, 1, 3));
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Items.water_bucket, 1, 0), 1, 1, 4));
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Items.bucket, 1, 0), 1, 4, 5));
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Items.milk_bucket, 1, 0), 1, 1, 3));*/
 		}
 	}
 }

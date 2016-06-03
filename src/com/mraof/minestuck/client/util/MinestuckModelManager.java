@@ -119,9 +119,7 @@ public class MinestuckModelManager
 		modelRegistry.register(cruxitePotion, new ColoredItemDefinition("minestuck:cruxite_potion"));
 		register(disk, 0, "disk_client");
 		register(disk, 1, "disk_server");
-		register(component, 0, "spoon_wood");
-		register(component, 1, "spoon_silver");
-		register(component, 2, "chessboard");
+		register(chessboard);
 		register(minestuckBucket, 0, "bucket_oil");
 		register(minestuckBucket, 1, "bucket_blood");
 		register(minestuckBucket, 2, "bucket_brain_juice");
@@ -180,7 +178,6 @@ public class MinestuckModelManager
 		ModelBakery.registerItemVariants(cruxiteApple, new ResourceLocation("minestuck:cruxite_apple"), new ResourceLocation("minestuck:cruxite_apple_blank"));
 		ModelBakery.registerItemVariants(cruxitePotion, new ResourceLocation("minestuck:cruxite_potion"), new ResourceLocation("minestuck:cruxite_potion_blank"));
 		ModelBakery.registerItemVariants(disk, new ResourceLocation("minestuck:disk_client"), new ResourceLocation("minestuck:disk_server"));
-		ModelBakery.registerItemVariants(component, new ResourceLocation("minestuck:spoon_wood"), new ResourceLocation("minestuck:spoon_silver"), new ResourceLocation("minestuck:chessboard"));
 		ModelBakery.registerItemVariants(minestuckBucket, new ResourceLocation("minestuck:bucket_blood"), new ResourceLocation("minestuck:bucket_oil"), new ResourceLocation("minestuck:bucket_brain_juice"));
 		ModelBakery.registerItemVariants(captchaCard, new ResourceLocation("minestuck:card_empty"), new ResourceLocation("minestuck:card_full"), new ResourceLocation("minestuck:card_punched"));
 		ModelBakery.registerItemVariants(ninjaSword, new ResourceLocation("minestuck:katana"));	//To prevent the game to try to load "minestuck:ninja_sword"
