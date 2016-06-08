@@ -25,7 +25,6 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.BlockChessTile;
 import com.mraof.minestuck.block.BlockCrockerMachine;
 import com.mraof.minestuck.block.BlockSburbMachine;
-import com.mraof.minestuck.block.BlockStorage;
 import com.mraof.minestuck.block.BlockColoredDirt;
 import com.mraof.minestuck.item.ItemMinestuckCandy;
 
@@ -144,6 +143,8 @@ public class MinestuckModelManager
 		register(oreCruxite, 2, "cruxite_cobblestone");
 		register(oreCruxite, 3, "cruxite_sandstone");
 		register(oreCruxite, 4, "cruxite_sandstone_red");
+		register(cruxiteBlock);
+		register(genericObject);
 		register(coalOreNetherrack);
 		register(ironOreSandstone);
 		register(ironOreSandstoneRed);
@@ -151,8 +152,6 @@ public class MinestuckModelManager
 		register(goldOreSandstoneRed);
 		for(BlockColoredDirt.BlockType type : BlockColoredDirt.BlockType.values())
 			register(coloredDirt, type.ordinal(), "colored_dirt_"+type.name);
-		for(BlockStorage.BlockType type : BlockStorage.BlockType.values())
-			register(blockStorage, type.ordinal(), "storage_block_"+type.name);
 		register(layeredSand);
 		for(BlockSburbMachine.MachineType type : BlockSburbMachine.MachineType.values())
 			register(sburbMachine, type.ordinal(), "machine_"+type.getName());
@@ -204,8 +203,6 @@ public class MinestuckModelManager
 		ModelBakery.registerItemVariants(Item.getItemFromBlock(oreCruxite), new ResourceLocation("minestuck:cruxite_stone"), new ResourceLocation("minestuck:cruxite_netherrack"), new ResourceLocation("minestuck:cruxite_cobblestone"), new ResourceLocation("minestuck:cruxite_sandstone"), new ResourceLocation("minestuck:cruxite_sandstone_red"));
 		for(BlockColoredDirt.BlockType type : BlockColoredDirt.BlockType.values())
 			ModelBakery.registerItemVariants(Item.getItemFromBlock(coloredDirt), new ResourceLocation("minestuck:colored_dirt_"+type.name));
-		for(BlockStorage.BlockType type : BlockStorage.BlockType.values())
-			ModelBakery.registerItemVariants(Item.getItemFromBlock(blockStorage), new ResourceLocation("minestuck:storage_block_"+type.name));
 		for(BlockSburbMachine.MachineType type : BlockSburbMachine.MachineType.values())
 			ModelBakery.registerItemVariants(Item.getItemFromBlock(sburbMachine), new ResourceLocation("minestuck:machine_"+type.getName()));
 		for(BlockCrockerMachine.MachineType type : BlockCrockerMachine.MachineType.values())
@@ -299,8 +296,7 @@ public class MinestuckModelManager
 			String str;
 			if(nbt != null && nbt.hasKey("contentID"))
 			{
-				if(nbt.getBoolean("punched") && !(Item.itemRegistry.getObject(new ResourceLocation(nbt.getString("contentID"))) == Item.getItemFromBlock(blockStorage)
-						&& nbt.getInteger("contentMeta") == 1))
+				if(nbt.getBoolean("punched") && !(Item.itemRegistry.getObject(new ResourceLocation(nbt.getString("contentID"))) == Item.getItemFromBlock(genericObject)))
 					str = "card_punched";
 				else str = "card_full";
 			}

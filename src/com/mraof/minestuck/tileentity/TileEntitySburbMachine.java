@@ -150,7 +150,7 @@ public class TileEntitySburbMachine extends TileEntityMachine
 				ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(this.inv[0]);
 				if (newItem == null)
 					if(!inv[0].hasTagCompound() || !inv[0].getTagCompound().hasKey("contentID"))
-						newItem = new ItemStack(MinestuckBlocks.blockStorage, 1, 1);
+						newItem = new ItemStack(MinestuckBlocks.genericObject);
 					else return false;
 				if (inv[1] != null && (inv[1].getItem() != newItem.getItem() || inv[1].getItemDamage() != newItem.getItemDamage() || inv[1].getMaxStackSize() <= inv[1].stackSize))
 				{return false;}
@@ -225,17 +225,17 @@ public class TileEntitySburbMachine extends TileEntityMachine
 			ItemStack output;
 			if(inv[0] != null && inv[1] != null)
 				if(!inv[0].hasTagCompound() || !inv[0].getTagCompound().getBoolean("punched") || !inv[1].hasTagCompound() || !inv[1].getTagCompound().getBoolean("punched"))
-					output = new ItemStack(MinestuckBlocks.blockStorage, 1, 1);
+					output = new ItemStack(MinestuckBlocks.genericObject);
 				else output = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(inv[0]), AlchemyRecipeHandler.getDecodedItem(inv[1]), CombinationRegistry.MODE_AND);
 			else
 			{
 				ItemStack input = inv[0] != null ? inv[0] : inv[1];
 				if(!input.hasTagCompound() || !input.getTagCompound().getBoolean("punched"))
-					output = new ItemStack(MinestuckBlocks.blockStorage, 1, 1);
+					output = new ItemStack(MinestuckBlocks.genericObject);
 				else output = AlchemyRecipeHandler.getDecodedItem(input);
 			}
 			
-			ItemStack outputDowel = (output.getItem().equals(Item.getItemFromBlock(MinestuckBlocks.blockStorage)) && output.getItemDamage() == 1)
+			ItemStack outputDowel = output.getItem().equals(Item.getItemFromBlock(MinestuckBlocks.genericObject))
 					? new ItemStack(MinestuckItems.cruxiteDowel) : AlchemyRecipeHandler.createEncodedItem(output, false);
 			outputDowel.setItemDamage(inv[2].getItemDamage());
 			
@@ -246,7 +246,7 @@ public class TileEntitySburbMachine extends TileEntityMachine
 			ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(this.inv[0]);
 			
 			if(newItem == null)
-				newItem = new ItemStack(MinestuckBlocks.blockStorage, 1, 1);
+				newItem = new ItemStack(MinestuckBlocks.genericObject);
 			
 			if (inv[1] == null)
 			{

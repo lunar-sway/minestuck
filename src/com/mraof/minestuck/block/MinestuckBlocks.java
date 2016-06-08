@@ -1,6 +1,10 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.Minestuck;
+
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
@@ -16,7 +20,8 @@ public class MinestuckBlocks
 	public static BlockColoredDirt coloredDirt;
 	public static Block skaiaPortal;
 	public static BlockCruxiteOre oreCruxite;
-	public static Block blockStorage;
+	public static Block cruxiteBlock;
+	public static Block genericObject;
 	public static Block sburbMachine;
 	public static Block crockerMachine;
 	public static Block blockComputerOn;
@@ -62,7 +67,8 @@ public class MinestuckBlocks
 		goldOreSandstone = GameRegistry.register(new BlockVanillaOre(BlockVanillaOre.OreType.GOLD).setRegistryName("gold_ore_sandstone")).setUnlocalizedName("oreGold");
 		goldOreSandstoneRed = GameRegistry.register(new BlockVanillaOre(BlockVanillaOre.OreType.GOLD).setRegistryName("gold_ore_sandstone_red")).setUnlocalizedName("oreGold");
 		
-		blockStorage = GameRegistry.register(new BlockStorage().setRegistryName("storage_block"));
+		cruxiteBlock = GameRegistry.register(new Block(Material.rock, MapColor.lightBlueColor).setRegistryName("cruxite_block")).setUnlocalizedName("cruxiteBlock").setHardness(3.0F).setCreativeTab(Minestuck.tabMinestuck);
+		genericObject = GameRegistry.register(new BlockSound(Material.gourd, MapColor.limeColor, SoundType.WOOD).setRegistryName("generic_object")).setUnlocalizedName("genericObject").setHardness(1.0F).setCreativeTab(Minestuck.tabMinestuck);
 		sburbMachine = GameRegistry.register(new BlockSburbMachine().setRegistryName("sburb_machine"));
 		crockerMachine = GameRegistry.register(new BlockCrockerMachine().setRegistryName("crocker_machine"));
 		blockComputerOff = GameRegistry.register(new BlockComputerOff().setRegistryName("computer_standard"));
@@ -92,6 +98,8 @@ public class MinestuckBlocks
 		blockOil = GameRegistry.register(new BlockFluid(fluidOil, Material.water).setRegistryName("block_oil")).setUnlocalizedName("oil");
 		blockBlood = GameRegistry.register(new BlockFluid(fluidBlood, Material.water).setRegistryName("block_blood")).setUnlocalizedName("blood");
 		blockBrainJuice = GameRegistry.register(new BlockFluid(fluidBrainJuice, Material.water).setRegistryName("block_brain_juice")).setUnlocalizedName("brainJuice");
+		
+		cruxiteBlock.setHarvestLevel("pickaxe", 0);
 		
 		fluidOil.setUnlocalizedName(blockOil.getUnlocalizedName());
 		fluidBlood.setUnlocalizedName(blockBlood.getUnlocalizedName());

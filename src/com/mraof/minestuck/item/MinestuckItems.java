@@ -23,7 +23,6 @@ import com.mraof.minestuck.block.BlockColoredDirt;
 import com.mraof.minestuck.block.BlockCrockerMachine;
 import com.mraof.minestuck.item.block.ItemBlockLayered;
 import com.mraof.minestuck.item.block.ItemSburbMachine;
-import com.mraof.minestuck.item.block.ItemStorageBlock;
 import com.mraof.minestuck.item.weapon.EnumBattleaxeType;
 import com.mraof.minestuck.item.weapon.EnumBladeType;
 import com.mraof.minestuck.item.weapon.EnumCaneType;
@@ -223,7 +222,8 @@ public class MinestuckItems
 		registerItemBlock(new ItemBlock(goldOreSandstone));
 		registerItemBlock(new ItemBlock(goldOreSandstoneRed));
 		
-		registerItemBlock(new ItemStorageBlock(blockStorage));
+		registerItemBlock(new ItemBlock(cruxiteBlock));
+		registerItemBlock(new ItemBlock(genericObject));
 		registerItemBlock(new ItemSburbMachine(sburbMachine));
 		registerItemBlock(new ItemMultiTexture(crockerMachine, crockerMachine, new Function<ItemStack, String>()
 				{

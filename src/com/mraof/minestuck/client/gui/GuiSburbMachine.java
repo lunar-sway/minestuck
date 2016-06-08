@@ -108,7 +108,7 @@ public class GuiSburbMachine extends GuiContainer
 			//Render grist requirements
 			ItemStack stack = AlchemyRecipeHandler.getDecodedItem(te.getStackInSlot(0));
 			if(type == MachineType.ALCHEMITER && !(te.getStackInSlot(0).hasTagCompound() && te.getStackInSlot(0).getTagCompound().hasKey("contentID")))
-				stack = new ItemStack(MinestuckBlocks.blockStorage, 1, 1);
+				stack = new ItemStack(MinestuckBlocks.genericObject);
 			
 			GristSet set = GristRegistry.getGristConversion(stack);
 			boolean useSelectedType = stack == null ? false : stack.getItem() == MinestuckItems.captchaCard;
