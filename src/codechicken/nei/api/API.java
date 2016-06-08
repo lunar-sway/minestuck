@@ -2,7 +2,6 @@ package codechicken.nei.api;
 
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
-import com.mraof.minestuck.nei.AlchemiterHandler;
 import com.mraof.minestuck.nei.CombinationHandler;
 
 public class API {

@@ -1,6 +1,5 @@
 package com.mraof.minestuck.item.weapon;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;

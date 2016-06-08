@@ -1,7 +1,5 @@
 package com.mraof.minestuck.world;
 
-import java.util.Arrays;
-
 import com.mraof.minestuck.world.biome.GenLayerLands;
 
 import net.minecraft.world.World;

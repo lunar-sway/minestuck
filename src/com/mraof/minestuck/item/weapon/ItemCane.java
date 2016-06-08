@@ -1,6 +1,5 @@
 package com.mraof.minestuck.item.weapon;
 
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
 import net.minecraft.entity.EntityLivingBase;

@@ -3,10 +3,8 @@ package com.mraof.minestuck.world;
 import net.minecraft.init.Biomes;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
-import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.BiomeProviderSingle;
 import net.minecraft.world.chunk.IChunkGenerator;
-import net.minecraft.world.chunk.IChunkProvider;
 
 import com.mraof.minestuck.world.gen.ChunkProviderSkaia;
 

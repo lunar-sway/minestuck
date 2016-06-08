@@ -12,12 +12,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.WorldServer;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.ITeleporter;
 import com.mraof.minestuck.util.Location;

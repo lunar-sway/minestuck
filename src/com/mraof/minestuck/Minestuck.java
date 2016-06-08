@@ -12,7 +12,6 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -85,12 +84,7 @@ public class Minestuck
 	// The instance of your mod that Forge uses.
 	@Instance("Minestuck")
 	public static Minestuck instance;
-
-	// Says where the client and server 'proxy' code is loaded.
-	@SidedProxy(clientSide="com.mraof.minestuck.client.ClientProxy", serverSide="com.mraof.minestuck.CommonProxy")
-
-	//The proxy to be used by client and server
-	public static CommonProxy proxy;
+	
 	public static CreativeTabs tabMinestuck;
 
 	public static long worldSeed = 0;	//TODO proper usage of seed when generating titles, land aspects, and land dimension data

@@ -1,7 +1,6 @@
 package com.mraof.minestuck.world.lands.gen;
 
 import net.minecraft.init.Blocks;
-import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 public abstract class LandTerrainGenBase implements ILandTerrainGen
