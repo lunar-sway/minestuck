@@ -34,6 +34,7 @@ import com.mraof.minestuck.command.CommandGristSend;
 import com.mraof.minestuck.command.CommandSburbServer;
 import com.mraof.minestuck.command.CommandSburbSession;
 import com.mraof.minestuck.command.CommandGrist;
+import com.mraof.minestuck.command.CommandSetRung;
 import com.mraof.minestuck.command.CommandTransportalizer;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.editmode.DeployList;
@@ -256,6 +257,7 @@ public class Minestuck
 		event.registerServerCommand(new CommandTransportalizer());
 		event.registerServerCommand(new CommandSburbSession());
 		event.registerServerCommand(new CommandSburbServer());
+		event.registerServerCommand(new CommandSetRung());
 		
 		worldSeed = event.getServer().worldServers[0].getSeed();
 		ServerEventHandler.lastDay = event.getServer().worldServers[0].getWorldTime() / 24000L;

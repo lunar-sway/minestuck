@@ -18,6 +18,7 @@ import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MathHelper;
 
 public class Echeladder
 {
@@ -88,7 +89,7 @@ public class Echeladder
 		EntityPlayer player = identifier.getPlayer();
 		if(player != null)
 		{
-			MinestuckPlayerTracker.updateEcheladder(player);
+			MinestuckPlayerTracker.updateEcheladder(player, false);
 			if(rung != prevRung)
 			{
 				updateEcheladderBonuses(player);
@@ -190,4 +191,20 @@ public class Echeladder
 	{
 		return 1/(rung*0.06D + 1);
 	}
+	
+	public void setByCommand(int rung, double progress)
+	{
+		this.rung = MathHelper.clamp_int(rung, 0, RUNG_COUNT - 1);	//Can never be too careful
+		if(rung != RUNG_COUNT - 1)
+		{
+			this.progress = (int) (getRungProgressReq()*progress);
+			if(this.progress >= getRungProgressReq())
+				this.progress--;
+		} else this.progress = 0;
+		
+		EntityPlayer player = identifier.getPlayer();
+		if(player != null)
+			MinestuckPlayerTracker.updateEcheladder(player, true);
+	}
+	
 }
