@@ -7,6 +7,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -78,20 +81,25 @@ public class ItemSpork extends ItemWeapon
 		return true;
 	}
 	
+	@Override
 	public int getMaxItemUseDuration(ItemStack itemStack)
 	{
 		return 72000;
 	}
 	
-	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) 
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand)
 	{
-		if(!world.isRemote)
-			if (sporkType.equals(EnumSporkType.CROCKER) && player.isSneaking())
-			{
-				checkTagCompound(stack);
-				stack.getTagCompound().setBoolean("isSpoon", !stack.getTagCompound().getBoolean("isSpoon"));
+		if (sporkType.equals(EnumSporkType.CROCKER) && player.isSneaking())
+		{
+				if(!world.isRemote)
+				{
+					checkTagCompound(stack);
+					stack.getTagCompound().setBoolean("isSpoon", !stack.getTagCompound().getBoolean("isSpoon"));
+				}
+				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 			}
-		return stack;
+		return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
 	}
 	
 	public void checkTagCompound(ItemStack stack)
