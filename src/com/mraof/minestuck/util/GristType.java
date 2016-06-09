@@ -3,27 +3,27 @@ package com.mraof.minestuck.util;
 import net.minecraft.util.text.translation.I18n;
 
 public enum GristType {
-	Amber("Amber",0.5F), 
-	Amethyst("Amethyst",0.3F), 
-	Artifact("Artifact",0.1F),
-	Build("Build",0.0F),
-	Caulk("Caulk",0.5F),
-	Chalk("Chalk",0.5F),
-	Cobalt("Cobalt",0.4F),
-	Diamond("Diamond",0.2F),
-	Garnet("Garnet",0.3F),
-	Gold("Gold",0.2F), 
-	Iodine("Iodine",0.5F), 
-	Marble("Marble",0.4F), 
-	Mercury("Mercury",0.4F), 
-	Quartz("Quartz",0.4F), 
-	Ruby("Ruby",0.3F), 
-	Rust("Rust",0.3F), 
-	Shale("Shale",0.5F), 
-	Sulfur("Sulfur",0.4F), 
-	Tar("Tar",0.5F), 
-	Uranium("Uranium",0.2F), 
-	Zillium("Zillium",0.0F);
+	Amber("amber",0.5F), 
+	Amethyst("amethyst",0.3F), 
+	Artifact("artifact",0.1F),
+	Build("build",0.0F),
+	Caulk("caulk",0.5F),
+	Chalk("chalk",0.5F),
+	Cobalt("cobalt",0.4F),
+	Diamond("diamond",0.2F),
+	Garnet("garnet",0.3F),
+	Gold("gold",0.2F), 
+	Iodine("iodine",0.5F), 
+	Marble("marble",0.4F), 
+	Mercury("mercury",0.4F), 
+	Quartz("quartz",0.4F), 
+	Ruby("ruby",0.3F), 
+	Rust("rust",0.3F), 
+	Shale("shale",0.5F), 
+	Sulfur("sulfur",0.4F), 
+	Tar("tar",0.5F), 
+	Uranium("uranium",0.2F), 
+	Zillium("zillium",0.0F);
 	
 	final String name;
 	final float rarity;

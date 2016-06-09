@@ -93,10 +93,17 @@ public class CommandGrist extends CommandBase
 		GristAmount[] grist = new GristAmount[(args.length - startOffset)/2];
 		for(int i = startOffset; i < args.length - 1; i += 2)
 		{
-			GristType type = GristType.getTypeFromString(args[i].substring(0,1).toUpperCase() + args[i].substring(1).toLowerCase());
+			GristType type = GristType.getTypeFromString(args[i].toLowerCase());
+			int numIndex = 1;
 			if(type == null)
-				throw new SyntaxErrorException("commands.grist.invalidSyntax", args[i]);
-			grist[(i - startOffset)/2] = new GristAmount(type, parseInt(args[i + 1]));
+			{	//Support both orders
+				type = GristType.getTypeFromString(args[i + 1].toLowerCase());
+				numIndex = 0;
+				
+				if(type == null)
+					throw new SyntaxErrorException("commands.grist.invalidSyntax", args[i]);
+			}
+			grist[(i - startOffset)/2] = new GristAmount(type, parseInt(args[i + numIndex]));
 		}
 		
 		return grist;

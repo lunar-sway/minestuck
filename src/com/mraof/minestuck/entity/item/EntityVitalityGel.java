@@ -22,7 +22,7 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 	public int cycle;
 
 	public int age = 0;
-	private int healAmount;
+	private int healAmount = 1;
 	private int health = 5;
 	
 	private EntityPlayer closestPlayer;
@@ -196,7 +196,8 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 	{
 		this.health = nbt.getShort("health") & 255;
 		this.age = nbt.getShort("age");
-		this.healAmount = nbt.getShort("amount");
+		if(nbt.hasKey("amount", 99))
+			this.healAmount = nbt.getShort("amount");
 	}
 
 	/**
