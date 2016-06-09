@@ -8,6 +8,7 @@ import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -95,9 +96,9 @@ public class MinestuckBlocks
 		FluidRegistry.registerFluid(fluidBlood);
 		fluidBrainJuice = new Fluid("BrainJuice", new ResourceLocation("minestuck", "blocks/BrainJuiceStill"), new ResourceLocation("minestuck", "blocks/BrainJuiceFlowing"));
 		FluidRegistry.registerFluid(fluidBrainJuice);
-		blockOil = GameRegistry.register(new BlockFluid(fluidOil, Material.water).setRegistryName("block_oil")).setUnlocalizedName("oil");
-		blockBlood = GameRegistry.register(new BlockFluid(fluidBlood, Material.water).setRegistryName("block_blood")).setUnlocalizedName("blood");
-		blockBrainJuice = GameRegistry.register(new BlockFluid(fluidBrainJuice, Material.water).setRegistryName("block_brain_juice")).setUnlocalizedName("brainJuice");
+		blockOil = GameRegistry.register(new BlockFluidClassic(fluidOil, Material.water).setRegistryName("block_oil")).setUnlocalizedName("oil");
+		blockBlood = GameRegistry.register(new BlockFluidClassic(fluidBlood, Material.water).setRegistryName("block_blood")).setUnlocalizedName("blood");
+		blockBrainJuice = GameRegistry.register(new BlockFluidClassic(fluidBrainJuice, Material.water).setRegistryName("block_brain_juice")).setUnlocalizedName("brainJuice");
 		
 		cruxiteBlock.setHarvestLevel("pickaxe", 0);
 		
