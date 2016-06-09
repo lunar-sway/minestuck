@@ -31,6 +31,7 @@ public class MinestuckConfigPacket extends MinestuckPacket
 	boolean disableGristWidget;
 	boolean dataChecker;
 	boolean preEntryEcheladder;
+	boolean hardMode;
 	boolean[] deployValues;
 	
 	@Override
@@ -45,6 +46,7 @@ public class MinestuckConfigPacket extends MinestuckPacket
 			data.writeInt(ContainerHandler.windowIdStart);
 			data.writeBoolean(MinestuckConfig.giveItems);
 			data.writeBoolean(MinestuckConfig.cardRecipe);
+			data.writeBoolean(MinestuckConfig.hardMode);
 			
 			for(int i = 0; i < MinestuckConfig.deployConfigurations.length; i++)
 				data.writeBoolean(MinestuckConfig.deployConfigurations[i]);
@@ -73,6 +75,7 @@ public class MinestuckConfigPacket extends MinestuckPacket
 			windowIdStart = data.readInt();
 			giveItems = data.readBoolean();
 			cardRecipe = data.readBoolean();
+			hardMode = data.readBoolean();
 			
 			deployValues = new boolean[MinestuckConfig.deployConfigurations.length];
 			for(int i = 0; i < deployValues.length; i++)
@@ -99,6 +102,7 @@ public class MinestuckConfigPacket extends MinestuckPacket
 			MinestuckConfig.clientLandEditRange = landEditRange;
 			MinestuckConfig.clientGiveItems = giveItems;
 			ContainerHandler.clientWindowIdStart = windowIdStart;
+			MinestuckConfig.clientHardMode = hardMode;
 			
 			if(!Minestuck.isServerRunning)
 			{

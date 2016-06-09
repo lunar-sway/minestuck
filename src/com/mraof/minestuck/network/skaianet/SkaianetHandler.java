@@ -672,6 +672,7 @@ public class SkaianetHandler {
 		{
 			for(int i = 0; i < c.givenItemList.length; i++)
 				c.givenItemList[i] = false;
+			c.unregisteredItems = new NBTTagList();
 			if(ServerEditHandler.getData(c) != null)
 			{
 				MinestuckPacket packet = MinestuckPacket.makePacket(Type.SERVER_EDIT, c.givenItemList);

@@ -45,6 +45,8 @@ public class MinestuckConfig
 	@SideOnly(Side.CLIENT)
 	public static boolean clientDisableGristWidget;
 	@SideOnly(Side.CLIENT)
+	public static boolean clientHardMode;
+	@SideOnly(Side.CLIENT)
 	public static boolean oldItemModels;
 	@SideOnly(Side.CLIENT)
 	public static boolean loginColorSelector;
@@ -169,6 +171,8 @@ public class MinestuckConfig
 		echeladderProgress = config.get("General", "echeladderProgress", false, "If this is true, players will be able to see their progress towards the next rung. This is server side and will only be active in multiplayer if the server/Lan host has it activated.").setLanguageKey("minestuck.config.echeladderProgress").getBoolean();
 		useUUID = config.get("General", "uuidIdentification", true, "If this is set to true, minestuck will use uuids to refer to players in the saved data. On false it will instead use the old method based on usernames.").setLanguageKey("minestuck.config.uuidIdentification").setRequiresWorldRestart(true).getBoolean();
 		playerSelectedTitle = config.get("General", "playerSelectedTitle", false, "Enable this to let players select their own title. They will however not be able to select the Lord or Muse as class.").setLanguageKey("minestuck.config.playerSelectedTitle").getBoolean();
+		if(config.hasKey("General", "hardMode"))
+			hardMode = config.get("General", "hardMode", false).getBoolean();	//Not fully fleshed out yet
 		
 		setting = config.get("General", "dataCheckerPermission", "opsAndGamemode", "Determines who's allowed to access the data checker. \"none\": No one is allowed. \"ops\": only those with a command permission of level 2 or more may access the data ckecker. (for single player, that would be if cheats are turned on) \"gamemode\": Only players with the creative or spectator gamemode may view the data checker. \"opsAndGamemode\": Combination of \"ops\" and \"gamemode\". \"anyone\": No access restrictions are used.",
 				new String[] {"none", "ops", "gamemode", "opsAndGamemode", "anyone"}).setLanguageKey("minestuck.config.dataCheckerPermission").getString();
