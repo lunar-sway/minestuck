@@ -68,7 +68,7 @@ import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.structure.LandStructureHandler;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
-@Mod(modid = "Minestuck", name = "Minestuck", version = "@VERSION@", guiFactory = "com.mraof.minestuck.client.gui.MinestuckGuiFactory", acceptedMinecraftVersions = "[1.9]")
+@Mod(modid = "minestuck", name = "Minestuck", version = "@VERSION@", guiFactory = "com.mraof.minestuck.client.gui.MinestuckGuiFactory", acceptedMinecraftVersions = "[1.9]")
 public class Minestuck
 {
 	
@@ -82,7 +82,7 @@ public class Minestuck
 	public static volatile boolean isServerRunning;
 	
 	// The instance of your mod that Forge uses.
-	@Instance("Minestuck")
+	@Instance("minestuck")
 	public static Minestuck instance;
 	
 	public static CreativeTabs tabMinestuck;

@@ -31,8 +31,8 @@ public class LandStructureHandler extends MapGenStructure
 	public static void registerStructures()
 	{
 		genericStructures.add(new StructureEntry(SmallRuinStart.class, 1));
-		MapGenStructureIO.registerStructure(SmallRuinStart.class, "minestuckSmallRuin");
-		MapGenStructureIO.registerStructureComponent(SmallRuinStart.SmallRuin.class, "minestuckSmallRuinCompo");
+		MapGenStructureIO.registerStructure(SmallRuinStart.class, "MinestuckSmallRuin");
+		MapGenStructureIO.registerStructureComponent(SmallRuinStart.SmallRuin.class, "MinestuckSmallRuinCompo");
 	}
 	
 	public LandStructureHandler(ChunkProviderLands chunkProvider)

@@ -7,7 +7,7 @@
         "updateUrl": "http://ci.mraof.com/job/Minestuck/", 
         "credits": "Coded by Mraof, Kirderf1, Iconmaster and others, graphics by many others; see forum page for full credits.", 
         "version": "${version}", 
-        "modid": "Minestuck", 
+        "modid": "minestuck", 
         "authors": [
             "Mraof", 
             "Iconmaster",

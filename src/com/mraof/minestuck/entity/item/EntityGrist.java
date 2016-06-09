@@ -31,8 +31,8 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 
 	private int gristHealth = 5;
 	//Type of grist
-	private String gristType;
-	private int gristValue;
+	private GristType gristType = GristType.Build;
+	private int gristValue = 1;
 
 	private EntityPlayer closestPlayer;
 
@@ -51,7 +51,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		this.motionZ = (double)((float)(world.rand.nextGaussian() * 0.20000000298023224D - 0.10000000149011612D));
 		this.isImmuneToFire = true;
 
-		this.gristType = gristData.getType().getName();
+		this.gristType = gristData.getType();
 	}
 
 	public EntityGrist(World par1World)
@@ -208,7 +208,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		par1NBTTagCompound.setShort("Health", (short)((byte)this.gristHealth));
 		par1NBTTagCompound.setShort("Age", (short)this.gristAge);
 		par1NBTTagCompound.setShort("Value", (short)this.gristValue);
-		par1NBTTagCompound.setString("Type", this.gristType);
+		par1NBTTagCompound.setString("Type", this.gristType.getName());
 	}
 
 	/**
@@ -218,8 +218,10 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	{
 		this.gristHealth = par1NBTTagCompound.getShort("Health") & 255;
 		this.gristAge = par1NBTTagCompound.getShort("Age");
-		this.gristValue = par1NBTTagCompound.getShort("Value");
-		this.gristType = par1NBTTagCompound.getString("Type");
+		if(par1NBTTagCompound.hasKey("Value", 99))
+			this.gristValue = par1NBTTagCompound.getShort("Value");
+		if(par1NBTTagCompound.hasKey("Type", 8))
+			this.gristType = GristType.getTypeFromString(par1NBTTagCompound.getString("Type"));
 	}
 
 	/**
@@ -242,7 +244,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	}
 	public void addGrist(EntityPlayer entityPlayer)
 	{
-		GristHelper.increase(IdentifierHandler.encode(entityPlayer), new GristSet(GristType.getTypeFromString(gristType), gristValue));
+		GristHelper.increase(IdentifierHandler.encode(entityPlayer), new GristSet(gristType, gristValue));
 		MinestuckPlayerTracker.updateGristCache(IdentifierHandler.encode(entityPlayer));
 	}
 
@@ -251,15 +253,14 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		return false;
 	}
 	
-	public String getType() 
+	public GristType getType() 
 	{
 		return gristType;
 	}
 	
-	public static int typeInt(String type)
+	public static int typeInt(GristType type)
 	{
-		GristType grist = GristType.getTypeFromString(type);
-		return grist == null ? -1 : grist.ordinal();
+		return type == null ? -1 : type.ordinal();
 	
 	}
 	
@@ -288,7 +289,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 			this.setDead();
 			return;
 		}
-		this.gristType = GristType.values()[typeOffset].getName();
+		this.gristType = GristType.values()[typeOffset];
 		this.gristValue = data.readInt();
 		this.setSize(this.getSizeByValue(), 0.5F);
 //		this.yOffset = this.height / 2.0F;

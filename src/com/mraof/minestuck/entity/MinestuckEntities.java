@@ -37,16 +37,16 @@ public final class MinestuckEntities
 		registerEntity(EntityBasilisk.class, "Basilisk");
 		registerEntity(EntityGiclops.class, "Giclops");
 		registerEntity(EntityWyrm.class, "Wyrm");
-		registerEntity(EntityBlackPawn.class, "dersitePawn");
-		registerEntity(EntityWhitePawn.class, "prospitianPawn");
-		registerEntity(EntityBlackBishop.class, "dersiteBishop");
-		registerEntity(EntityWhiteBishop.class, "prospitianBishop");
-		registerEntity(EntityBlackRook.class, "dersiteRook");
-		registerEntity(EntityWhiteRook.class, "prospitianRook");
-		registerEntity(EntityDecoy.class, "playerDecoy");
-		registerEntity(EntityMetalBoat.class, "metalBoat");
-		registerEntity(EntityGrist.class, "grist", 512, 1, true);
-		registerEntity(EntityVitalityGel.class, "vitalityGel", 512, 1, true);
+		registerEntity(EntityBlackPawn.class, "DersitePawn");
+		registerEntity(EntityWhitePawn.class, "ProspitianPawn");
+		registerEntity(EntityBlackBishop.class, "DersiteBishop");
+		registerEntity(EntityWhiteBishop.class, "ProspitianBishop");
+		registerEntity(EntityBlackRook.class, "DersiteRook");
+		registerEntity(EntityWhiteRook.class, "ProspitianRook");
+		registerEntity(EntityDecoy.class, "PlayerDecoy");
+		registerEntity(EntityMetalBoat.class, "MetalBoat");
+		registerEntity(EntityGrist.class, "Grist", 512, 1, true);
+		registerEntity(EntityVitalityGel.class, "VitalityGel", 512, 1, true);
 	}
 
 	//registers entity with forge and minecraft, and increases currentEntityIdOffset by one in order to prevent id collision
