@@ -58,6 +58,7 @@ public class MinestuckModelManager
 		register(ninjaSword, 0, "katana");
 		register(katana);
 		register(caledscratch);
+		register(caledfwlch);
 		register(royalDeringer);
 		register(regisword);
 		register(scarletRibbitar);
