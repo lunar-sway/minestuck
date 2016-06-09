@@ -70,6 +70,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 				
 				if(c == null || !c.enteredGame() || !MinestuckDimensionHandler.isLandDimension(player.worldObj.provider.getDimension()))
 				{
+					
 					int destinationId;
 					if(c != null && c.enteredGame())
 						destinationId = c.getClientDimension();
@@ -118,11 +119,9 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 			Debug.debug("Placing blocks...");
 			long time = System.currentTimeMillis();
 			int bl = 0;
-			int nextZWidth = 0;
 			for(int blockX = x - artifactRange; blockX <= x + artifactRange; blockX++)
 			{
-				int zWidth = nextZWidth;
-				nextZWidth = (int) Math.sqrt(artifactRange * artifactRange - (blockX - x + 1) * (blockX - x + 1));
+				int zWidth = (int) Math.sqrt(artifactRange * artifactRange - (blockX - x) * (blockX - x));
 				for(int blockZ = z - zWidth; blockZ <= z + zWidth; blockZ++)
 				{
 					Chunk chunk = worldserver1.getChunkFromChunkCoords(blockX >> 4, blockZ >> 4);
@@ -258,6 +257,24 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 			
 			Debug.info("Entry finished");
 		}
+	}
+	
+	private static boolean canModifyEntryBlocks(World world, EntityPlayer player)
+	{
+		int x = (int) player.posX;
+		if(player.posX < 0) x--;
+		int y = (int) player.posY;
+		int z = (int) player.posZ;
+		if(player.posZ < 0) z--;
+		for(int blockX = x - artifactRange; blockX <= x + artifactRange; blockX++)
+		{
+			int zWidth = (int) Math.sqrt(artifactRange * artifactRange - (blockX - x) * (blockX - x));
+			for(int blockZ = z - zWidth; blockZ <= z + zWidth; blockZ++)
+				if(world.isBlockModifiable(player, new BlockPos(blockX, y, blockZ)))
+					return false;
+		}
+		
+		return true;
 	}
 	
 	private static void copyBlockDirect(Chunk c, Chunk c2, int x, int y, int y2, int z)
