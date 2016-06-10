@@ -193,6 +193,7 @@ public class MinestuckItems
 				GameRegistry.registerItem(katana, "katana");
 				GameRegistry.registerItem(caledscratch, "caledscratch");
 				GameRegistry.registerItem(caledfwlch, "caledfwlch");
+				GameRegistry.registerItem(zillywairCutlass, "cutlass_of_zillywair");
 				GameRegistry.registerItem(royalDeringer, "royal_deringer");
 				GameRegistry.registerItem(regisword, "regisword");
 				GameRegistry.registerItem(scarletRibbitar, "scarlet_ribbitar");

@@ -9,6 +9,7 @@ public enum EnumBladeType
 	KATANA(2200, 8, 20, "katana"),
 	CALEDSCRATCH(1561, 7, 30, "caledscratch"),
 	CALEDFWLCH(1025, 7, 30, "caledfwlch"),
+	ZILLYWAIR(3000, 9, 30, "zillywairCutlass"),
 	REGISWORD(812, 7, 10, "regisword"),
 	DERINGER(1561, 8, 30, "royalDeringer"),
 	SCARLET(2000, 9, 30, "scarletRibbitar"),
