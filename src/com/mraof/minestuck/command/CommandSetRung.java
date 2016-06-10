@@ -1,14 +1,15 @@
 package com.mraof.minestuck.command;
 
 import com.mraof.minestuck.util.Echeladder;
+import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.util.MinestuckPlayerData;
-import com.mraof.minestuck.util.UsernameHandler;
-import com.mraof.minestuck.util.UsernameHandler.PlayerIdentifier;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
+import net.minecraft.server.MinecraftServer;
 
 public class CommandSetRung extends CommandBase
 {
@@ -26,12 +27,12 @@ public class CommandSetRung extends CommandBase
 	}
 	
 	@Override
-	public void processCommand(ICommandSender sender, String[] args) throws CommandException
+	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException
 	{
 		if(args.length < 2)
 			throw new WrongUsageException(this.getCommandUsage(sender));
 		
-		PlayerIdentifier target = UsernameHandler.getForCommand(sender, args[0]);
+		PlayerIdentifier target = IdentifierHandler.getForCommand(server, sender, args[0]);
 		
 		int rung = parseInt(args[1], 0, Echeladder.RUNG_COUNT - 1);
 		double progress = 0;
