@@ -27,6 +27,7 @@ public class PlayerDataPacket extends MinestuckPacket
 	public int i1;
 	public int i2;
 	public float f;
+	public boolean b;
 	
 	@Override
 	public MinestuckPacket generatePacket(Object... dat) 
@@ -45,6 +46,7 @@ public class PlayerDataPacket extends MinestuckPacket
 		{
 			data.writeInt((Integer) dat[1]);
 			data.writeFloat((Float) dat[2]);
+			data.writeBoolean((Boolean) dat[3]);
 		} else if(type == BOONDOLLAR)
 		{
 			data.writeInt((Integer) dat[1]);
@@ -78,6 +80,7 @@ public class PlayerDataPacket extends MinestuckPacket
 		{
 			i1 = data.readInt();
 			f = data.readFloat();
+			b = data.readBoolean();
 		} else if(type == BOONDOLLAR)
 		{
 			i1 = data.readInt();
@@ -112,14 +115,13 @@ public class PlayerDataPacket extends MinestuckPacket
 			int prev = MinestuckPlayerData.rung;
 			MinestuckPlayerData.rung = i1;
 			MinestuckPlayerData.rungProgress = f;
-			if(prev != -1)
+			if(!b)
 				for(prev++; prev <= i1; prev++)
 				{
 					String s = I18n.canTranslate("echeladder.rung"+prev) ? I18n.translateToLocal("echeladder.rung"+prev) : String.valueOf(prev+1);
 					player.addChatMessage(new TextComponentString("You reached rung "+s+'!'));
 				}
-			if(GuiEcheladder.lastRung == -1)
-				GuiEcheladder.lastRung = i1;
+			else GuiEcheladder.animatedRung = GuiEcheladder.lastRung = i1;
 		} else if(type == BOONDOLLAR)
 		{
 			MinestuckPlayerData.boondollars = i1;

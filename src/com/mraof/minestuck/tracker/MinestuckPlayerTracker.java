@@ -89,7 +89,7 @@ public class MinestuckPlayerTracker {
 		
 		updateGristCache(identifier);
 		updateTitle(player);
-		updateEcheladder(player);
+		updateEcheladder(player, true);
 		MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.BOONDOLLAR, MinestuckPlayerData.getData(identifier).boondollars), player);
 		ServerEditHandler.onPlayerLoggedIn((EntityPlayerMP) player);
 		
@@ -191,10 +191,10 @@ public class MinestuckPlayerTracker {
 		MinestuckChannelHandler.sendToPlayer(packet, player);
 	}
 	
-	public static void updateEcheladder(EntityPlayer player)
+	public static void updateEcheladder(EntityPlayer player, boolean jump)
 	{
 		Echeladder echeladder = MinestuckPlayerData.getData(player).echeladder;
-		MinestuckPacket packet = MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.ECHELADDER, echeladder.getRung(), MinestuckConfig.echeladderProgress ? echeladder.getProgress() : 0F);
+		MinestuckPacket packet = MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.ECHELADDER, echeladder.getRung(), MinestuckConfig.echeladderProgress ? echeladder.getProgress() : 0F, jump);
 		MinestuckChannelHandler.sendToPlayer(packet, player);
 	}
 	
