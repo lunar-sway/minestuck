@@ -118,7 +118,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 			Debug.debug("Loading spawn chunks...");
 			for(int chunkX = ((x - artifactRange) >> 4) - 1; chunkX <= ((x + artifactRange) >> 4) + 2; chunkX++)	//Prevent anything to generate on the piece that we move
 				for(int chunkZ = ((z - artifactRange) >> 4) - 1; chunkZ <= ((z + artifactRange) >> 4) + 2; chunkZ++)	//from the overworld.
-					worldserver1.getChunkProvider().loadChunk(chunkX, chunkZ);
+					worldserver1.getChunkProvider().provideChunk(chunkX, chunkZ);
 			
 			Debug.debug("Placing blocks...");
 			long time = System.currentTimeMillis();
