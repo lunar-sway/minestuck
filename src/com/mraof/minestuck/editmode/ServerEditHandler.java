@@ -35,6 +35,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.WorldSettings.GameType;
 import net.minecraftforge.event.CommandEvent;
+import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
@@ -572,6 +573,15 @@ public class ServerEditHandler
 		}
 		catch(CommandException e)
 		{}
+	}
+	
+	@SubscribeEvent
+	public void onEntityTeleport(EntityTravelToDimensionEvent event)
+	{
+		if(event.getEntity() instanceof EntityPlayerMP && getData((EntityPlayerMP) event.getEntity()) != null)
+		{
+			event.setCanceled(true);
+		}
 	}
 	
 	public static boolean isBlockItem(Item item)
