@@ -1,7 +1,6 @@
 package com.mraof.minestuck.tileentity;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -36,6 +35,7 @@ public class TileEntitySkaiaPortal extends TileEntity implements ITeleporter
 			destination.pos = this.pos;
 		}
 	}
+	
 	@Override
 	public void writeToNBT(NBTTagCompound par1nbtTagCompound) 
 	{
@@ -45,16 +45,18 @@ public class TileEntitySkaiaPortal extends TileEntity implements ITeleporter
 		par1nbtTagCompound.setInteger("DestinationY", destination.pos.getY());
 		par1nbtTagCompound.setInteger("DestinationZ", destination.pos.getZ());
 	}
+	
 	public void teleportEntity(Entity entity)
 	{
-		entity.timeUntilPortal = entity.getPortalCooldown();
 		if(destination.dim != this.worldObj.provider.getDimension())
-			Teleport.teleportEntity(entity, this.destination.dim, this, false);
-		if(entity instanceof EntityPlayerMP)
-			((EntityPlayerMP)entity).playerNetServerHandler.setPlayerLocation(destination.pos.getX(), destination.pos.getY(), destination.pos.getZ(), entity.rotationYaw, entity.rotationPitch);
-		else
-			entity.setPosition(destination.pos.getX(), destination.pos.getY(), destination.pos.getZ());
+		{
+			if(!Teleport.teleportEntity(entity, this.destination.dim, this, destination.pos))
+				return;
+		}
+		entity.timeUntilPortal = entity.getPortalCooldown();
 	}
+	
+	@Override
 	public void makeDestination(Entity entity, WorldServer worldserver, WorldServer worldserver1)
 	{
 		double x = entity.posX;

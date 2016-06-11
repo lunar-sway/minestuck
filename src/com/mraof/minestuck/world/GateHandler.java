@@ -127,10 +127,10 @@ public class GateHandler
 				}
 			}
 			
-			player.timeUntilPortal = 60;
 			if(location.dim != dim)
-				Teleport.teleportEntity(player, location.dim, null, false);
-			player.playerNetServerHandler.setPlayerLocation(location.pos.getX() + 0.5, location.pos.getY(), location.pos.getZ() + 0.5, player.rotationYaw, player.rotationPitch);
+				Teleport.teleportEntity(player, location.dim, null, location.pos.getX() + 0.5, location.pos.getY(), location.pos.getZ() + 0.5);
+			else player.playerNetServerHandler.setPlayerLocation(location.pos.getX() + 0.5, location.pos.getY(), location.pos.getZ() + 0.5, player.rotationYaw, player.rotationPitch);
+			player.timeUntilPortal = 60;
 		}
 	}
 	

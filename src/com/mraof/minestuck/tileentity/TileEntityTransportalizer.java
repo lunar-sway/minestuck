@@ -17,11 +17,10 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.WorldServer;
 
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.ITeleporter;
 import com.mraof.minestuck.util.Location;
 import com.mraof.minestuck.util.Teleport;
 
-public class TileEntityTransportalizer extends TileEntity implements ITeleporter
+public class TileEntityTransportalizer extends TileEntity
 {
 	public static HashMap<String, Location> transportalizers = new HashMap<String, Location>();
 	private static Random rand = new Random();
@@ -72,7 +71,7 @@ public class TileEntityTransportalizer extends TileEntity implements ITeleporter
 		transportalizers.put(key, location);
 	}
 	
-	public static void teleportTo(Entity entity, Location location)
+	public static boolean teleportTo(Entity entity, Location location)
 	{
 		double x = location.pos.getX() + 0.5;
 		double y = location.pos.getY() + 0.6;
@@ -85,6 +84,7 @@ public class TileEntityTransportalizer extends TileEntity implements ITeleporter
 		{
 			entity.setPosition(x, y, z);
 		}
+		return true;
 	}
 
 	public void teleport(Entity entity)
@@ -101,21 +101,22 @@ public class TileEntityTransportalizer extends TileEntity implements ITeleporter
 				this.destId = "";
 				return;
 			}
-			entity.timeUntilPortal = 60;
 			
 			IBlockState block0 = world.getBlockState(location.pos.up());
 			IBlockState block1 = world.getBlockState(location.pos.up(2));
 			if(block0.getMaterial().blocksMovement() || block1.getMaterial().blocksMovement())
 			{
+				entity.timeUntilPortal = 60;
 				if(entity instanceof EntityPlayerMP)
 					((EntityPlayerMP) entity).addChatMessage(new TextComponentTranslation("message.transportalizer.destinationBlocked"));
 				return;
 			}
 			
 			if(location.dim != entity.dimension)
-				Teleport.teleportEntity(entity, location.dim, destTransportalizer, false);
+				Teleport.teleportEntity(entity, location.dim, null, destTransportalizer.pos.getX() + 0.5, destTransportalizer.pos.getY() + 0.6, destTransportalizer.pos.getZ() + 0.5);
 			else
 				teleportTo(entity, transportalizers.get(this.destId));
+			entity.timeUntilPortal = 60;
 		}
 	}
 
@@ -194,13 +195,5 @@ public class TileEntityTransportalizer extends TileEntity implements ITeleporter
 	{
 		this.readFromNBT(pkt.getNbtCompound());
 	}
-
-	@Override
-	public void makeDestination(Entity entity, WorldServer worldserver, WorldServer worldserver1) 
-	{
-		entity.setLocationAndAngles(this.pos.getX() + 0.5, this.pos.getY() + 0.6, this.pos.getZ() + 0.5, entity.rotationYaw, entity.rotationPitch);
-		entity.timeUntilPortal = 100;
-	}
 	
 }
-

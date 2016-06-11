@@ -82,9 +82,12 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 						return;
 					}
 					
-					player.addStat(MinestuckAchievementHandler.enterMedium);
-					Teleport.teleportEntity(player, destinationId, this, false);
-					MinestuckPlayerTracker.sendLandEntryMessage(player);
+					if(!Teleport.teleportEntity(player, destinationId, this))
+					{
+						Debug.warn("Was not able to teleport player "+player.getName()+" into the medium! Likely caused by mod collision.");
+						player.addChatComponentMessage(new TextComponentString("Was not able to teleport you into the medium! Likely caused by mod collision."));
+					}
+					else MinestuckPlayerTracker.sendLandEntryMessage(player);
 				}
 			}
 		} catch(Exception e)
@@ -98,6 +101,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 	{
 		if(entity instanceof EntityPlayerMP)
 		{
+			((EntityPlayerMP) entity).addStat(MinestuckAchievementHandler.enterMedium);
 			Debug.infof("Starting entry for player %s", entity.getName());
 			int x = (int) entity.posX;
 			if(entity.posX < 0) x--;
@@ -177,8 +181,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 						ServerEditHandler.reset(ServerEditHandler.getData((EntityPlayer) e));
 					else
 					{
-						e.setPosition(e.posX, e.posY + yDiff, e.posZ);
-						Teleport.teleportEntity(e, worldserver1.provider.getDimension(), null, false);
+						Teleport.teleportEntity(e, worldserver1.provider.getDimension(), null, e.posX, e.posY + yDiff, e.posZ);
 					}
 				}
 				else	//Copy instead of teleport

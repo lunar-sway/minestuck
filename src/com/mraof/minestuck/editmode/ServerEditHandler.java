@@ -115,11 +115,17 @@ public class ServerEditHandler
 		if(data == null)
 			return;
 		
+		list.remove(data);
+		
 		EntityPlayerMP player = data.player;
 		player.closeScreen();
 		EntityDecoy decoy = data.decoy;
 		if(player.dimension != decoy.dimension)
-			Teleport.teleportEntity(player, decoy.dimension, null, false);
+			if(!Teleport.teleportEntity(player, decoy.dimension, null))
+			{
+				list.add(data);
+				throw new IllegalStateException("Was not able to reset editmode player for "+player.getName()+"! Likely caused by mod collision.");
+			}
 		
 		data.connection.useCoordinates = true;
 		data.connection.posX = player.posX;
@@ -139,7 +145,6 @@ public class ServerEditHandler
 		player.inventory.copyInventory(decoy.inventory);
 		
 		decoy.markedForDespawn = true;
-		list.remove(data);
 		
 		MinestuckPacket packet = MinestuckPacket.makePacket(Type.SERVER_EDIT);
 		MinestuckChannelHandler.sendToPlayer(packet, player);
@@ -158,11 +163,13 @@ public class ServerEditHandler
 			Debug.info("Activating edit mode on player \""+player.getName()+"\", target player: \""+computerTarget+"\".");
 			EntityDecoy decoy = new EntityDecoy((WorldServer) player.worldObj, player);
 			EditData data = new EditData(decoy, player, c);
-			if(!c.enteredGame()) {
+			if(!c.enteredGame())
+			{
 				c.centerX = c.getClientData().getX();
 				c.centerZ = c.getClientData().getZ();
 			}
-			if(!setPlayerStats(player, c)) {
+			if(!setPlayerStats(player, c))
+			{
 				player.addChatMessage(new TextComponentString(TextFormatting.RED+"Failed to activate edit mode."));
 				return;
 			}
@@ -176,25 +183,27 @@ public class ServerEditHandler
 		}
 	}
 	
-	static boolean setPlayerStats(EntityPlayerMP player, SburbConnection c) {
-		
-		//double playerOffset = player.posX - player.boundingBox.maxX; //unused
+	static boolean setPlayerStats(EntityPlayerMP player, SburbConnection c)
+	{
 		
 		double posX, posY = 0, posZ;
 		WorldServer world = player.getServer().worldServerForDimension(c.enteredGame()?c.getClientDimension():c.getClientData().getDimension());
 		
 		if(world.provider.getDimension() != player.worldObj.provider.getDimension())
-			Teleport.teleportEntity(player, world.provider.getDimension(), null, false);
+			if(!Teleport.teleportEntity(player, world.provider.getDimension(), null))
+				return false;
 		
-		if(c.useCoordinates) {
+		if(c.useCoordinates)
+		{
 			posX = c.posX;
 			posZ = c.posZ;
 			posY = world.getTopSolidOrLiquidBlock(new BlockPos(posX, 0, posZ)).getY();
-		} else {
-				posX = c.centerX + 0.5;
-				posY = world.getTopSolidOrLiquidBlock(new BlockPos(c.centerX, 0, c.centerZ)).getY();
-				posZ = c.centerZ + 0.5;
-			}
+		} else
+		{
+			posX = c.centerX + 0.5;
+			posY = world.getTopSolidOrLiquidBlock(new BlockPos(c.centerX, 0, c.centerZ)).getY();
+			posZ = c.centerZ + 0.5;
+		}
 		
 		player.closeScreen();
 		player.inventory.clear();
@@ -643,7 +652,8 @@ public class ServerEditHandler
 			if(id.getLeastSignificantBits() == nbt.getLong("UUID1") && id.getMostSignificantBits() == nbt.getLong("UUID2"))
 			{	//Recover player
 				if(player.dimension != nbt.getInteger("dim"))
-					Teleport.teleportEntity(player, nbt.getInteger("dim"), null, false);
+					if(!Teleport.teleportEntity(player, nbt.getInteger("dim"), null))
+						throw new IllegalStateException("Was not able to restore editmode player for "+player.getName()+"! Likely caused by mod collision.");
 				
 				player.playerNetServerHandler.setPlayerLocation(nbt.getDouble("x"), nbt.getDouble("y"), nbt.getDouble("z"), nbt.getFloat("rotYaw"), nbt.getFloat("rotPitch"));
 				player.setGameType(WorldSettings.GameType.getByID(nbt.getInteger("gamemode")));
