@@ -50,6 +50,7 @@ public class MinestuckItems
 	public static Item regisword;
 	public static Item scarletRibbitar;
 	public static Item doggMachete;
+	public static Item zillywairCutlass;
 	//Dice
 	public static Item dice;
 	public static Item fluoriteOctet;
