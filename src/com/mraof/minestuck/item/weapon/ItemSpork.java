@@ -1,10 +1,7 @@
 package com.mraof.minestuck.item.weapon;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
@@ -14,14 +11,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import com.mraof.minestuck.Minestuck;
 
 //I called it a spork because it includes both
 public class ItemSpork extends ItemWeapon 
 {
-	private int weaponDamage;
 	private final EnumSporkType sporkType;
 	
 	/**
@@ -39,20 +33,23 @@ public class ItemSpork extends ItemWeapon
 		this.setCreativeTab(Minestuck.tabMinestuck);
 		this.setUnlocalizedName(sporkType.getUnlocalizedName());
 		this.weaponDamage = sporkType.getDamageVsEntity();
+		this.weaponSpeed = sporkType.getAttackSpeed();
 	}
 	
 	@Override
-	public int getAttackDamage() 
+	public double getAttackDamage(ItemStack stack)
 	{
-		return weaponDamage;
+		if(this.sporkType == EnumSporkType.CROCKER && !isSpoon(stack))
+			return 6.0D;
+		return super.getAttackDamage(stack);
 	}
 	
-	public int getAttackDamage(ItemStack stack)
+	@Override
+	protected double getAttackSpeed(ItemStack stack)
 	{
-		int damage = weaponDamage;
-		if(this.sporkType == EnumSporkType.CROCKER && isSpoon(stack))
-			damage -= 2;
-		return damage;
+		if(this.sporkType == EnumSporkType.CROCKER && !isSpoon(stack))
+			return EnumSporkType.FORK_ATTACK_SPEED;
+		return super.getAttackSpeed(stack);
 	}
 	
 	@Override
@@ -117,15 +114,4 @@ public class ItemSpork extends ItemWeapon
 		else return "item."+(isSpoon(stack)?"crockerSpoon":"crockerFork");
 	}
 	
-    @Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack)
-    {
-        Multimap multimap = HashMultimap.create();
-        if(slot == EntityEquipmentSlot.MAINHAND)
-        {
-        multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", (double)this.weaponDamage, 0));
-        multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -2.4000000953674316D, 0));
-        }
-        return multimap;
-    }
 }

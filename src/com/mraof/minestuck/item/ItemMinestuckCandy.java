@@ -42,7 +42,8 @@ public class ItemMinestuckCandy extends ItemFood
 			GristType type = GristType.values()[i];
 			if(type == GristType.Build) saturationModifiers[i + 1] = 0.0F;	//Perhaps change to 0.1 or 0.05
 			else saturationModifiers[i + 1] = 0.6F - type.getRarity();
-			unlocalizedNames[i + 1] = "item.candy"+type.getName();
+			String name = type.getName();
+			unlocalizedNames[i + 1] = "item.candy"+(name.substring(0, 1).toUpperCase() + name.substring(1));
 		}
 	}
 	

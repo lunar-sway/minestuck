@@ -20,7 +20,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemDice extends ItemSword	//To allow enchantments such as sharpness
 {
-	private int weaponDamage;
+	private double weaponDamage;
+	private double weaponSpeed;
 	private final EnumDiceType diceType;
 	
 	public ItemDice(EnumDiceType DiceType)
@@ -32,12 +33,13 @@ public class ItemDice extends ItemSword	//To allow enchantments such as sharpnes
 		this.setMaxDamage(DiceType.getMaxUses());
 		this.setUnlocalizedName(DiceType.getName());
 		this.weaponDamage = DiceType.getDamageVsEntity();
+		this.weaponSpeed = DiceType.getAttackSpeed();
 	}
 	
 	@Override
 	public float getDamageVsEntity()
 	{
-		int damage=diceType.getDamageVsEntity();
+		double damage=diceType.getDamageVsEntity();
 		damage+=(Math.ceil( Math.random()*diceType.getProbibility())-(diceType.getProbibility()/2));
 		//System.out.println("damage");
 		return 0;
@@ -91,16 +93,16 @@ public class ItemDice extends ItemSword	//To allow enchantments such as sharpnes
 		return true;
 	}
 	
-    @Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack)
-    {
-        Multimap multimap = HashMultimap.create();
-        if(slot == EntityEquipmentSlot.MAINHAND)
-        {
-        multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", (double)this.weaponDamage, 0));
-        multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -2.4000000953674316D, 0));
-        }
-        return multimap;
-    }
+	@Override
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack)
+	{
+		Multimap multimap = HashMultimap.create();
+		if(slot == EntityEquipmentSlot.MAINHAND)
+		{
+			multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", (double)this.weaponDamage, 0));
+			multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", this.weaponSpeed, 0));
+		}
+		return multimap;
+	}
 	
 }

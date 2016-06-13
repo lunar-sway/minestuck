@@ -12,7 +12,7 @@ import com.mraof.minestuck.Minestuck;
 
 public abstract class ItemWeapon extends Item
 {
-	protected int weaponDamage;
+	protected double weaponDamage, weaponSpeed;
 	
 	public ItemWeapon() 
 	{
@@ -20,18 +20,26 @@ public abstract class ItemWeapon extends Item
 		this.setCreativeTab(Minestuck.tabMinestuck);
 	}
 	
-	protected abstract int getAttackDamage();
+	protected double getAttackDamage(ItemStack stack)
+	{
+		return weaponDamage;
+	}
 	
-    @Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack)
-    {
-        Multimap multimap = HashMultimap.create();
-        if(slot == EntityEquipmentSlot.MAINHAND)
-        {
-        multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", (double)this.weaponDamage, 0));
-        multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -2.4000000953674316D, 0));
-        }
-        return multimap;
-    }
+	protected double getAttackSpeed(ItemStack stack)
+	{
+		return weaponSpeed;
+	}
+	
+	@Override
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack)
+	{
+		Multimap multimap = HashMultimap.create();
+		if(slot == EntityEquipmentSlot.MAINHAND)
+		{
+			multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", getAttackDamage(stack), 0));
+			multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", getAttackSpeed(stack), 0));
+		}
+		return multimap;
+	}
 	
 }

@@ -3,11 +3,8 @@ package com.mraof.minestuck.item.weapon;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -20,13 +17,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 
 public class ItemHammer extends ItemWeapon
 {	
-	private int weaponDamage;
 	private final EnumHammerType hammerType;
 	public float efficiencyOnProperMaterial;
 	
@@ -40,6 +34,7 @@ public class ItemHammer extends ItemWeapon
 		this.efficiencyOnProperMaterial = hammerType.getEfficiencyOnProperMaterial();
 		this.setUnlocalizedName(hammerType.getName());
 		this.weaponDamage = hammerType.getDamageVsEntity();
+		this.weaponSpeed = hammerType.getAttackSpeed();
 	}
 	
 	@Override
@@ -54,19 +49,13 @@ public class ItemHammer extends ItemWeapon
 	{
 		return state != null && (state.getMaterial() == Material.iron || state.getMaterial() == Material.anvil || state.getMaterial() == Material.rock) ? this.efficiencyOnProperMaterial : super.getStrVsBlock(stack, state);
 	}
-
-	@Override
-	public int getAttackDamage()
-	{
-		return this.weaponDamage;
-	}
-
+	
 	@Override
 	public int getItemEnchantability()
 	{
 		return this.hammerType.getEnchantability();
 	}
-
+	
 	@Override
 	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase player)
 	{
@@ -134,17 +123,5 @@ public class ItemHammer extends ItemWeapon
 	{
 		return state.getMaterial() == Material.rock || state.getMaterial() == Material.anvil || state.getMaterial() == Material.iron;
 	}
-	
-    @Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack)
-    {
-        Multimap multimap = HashMultimap.create();
-        if(slot == EntityEquipmentSlot.MAINHAND)
-        {
-        multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", (double)this.weaponDamage, 0));
-        multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -2.4000000953674316D, 0));
-        }
-        return multimap;
-    }
 	
 }
