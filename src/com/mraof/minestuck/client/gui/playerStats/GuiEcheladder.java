@@ -85,14 +85,14 @@ public class GuiEcheladder extends GuiPlayerStats
 			{
 				if(animatedRungs < 5)	//The animation type where the rungs flicker in
 				{
-					int rung = (animationCycle + timeBeforeNext)/(timeForRung + timeBeforeNext);
+					int rung = (animationCycle/MinestuckConfig.echeladderAnimation + timeBeforeNext)/(timeForRung + timeBeforeNext);
 					currentRung = animatedRung - rung;
-					if((animationCycle + timeBeforeNext)%(timeForRung + timeBeforeNext) >= timeBeforeNext)
-						showLastRung = (animationCycle + timeBeforeNext)%(timeForRung + timeBeforeNext) - timeBeforeNext >= timeForRung/2;
+					if((animationCycle/MinestuckConfig.echeladderAnimation + timeBeforeNext)%(timeForRung + timeBeforeNext) >= timeBeforeNext)
+						showLastRung = (animationCycle/MinestuckConfig.echeladderAnimation + timeBeforeNext)%(timeForRung + timeBeforeNext) - timeBeforeNext >= timeForRung/2;
 				} else	//The animation type where the animation just goes through all rungs
 				{
 					currentRung = animatedRung;
-					int rung = animationCycle*animatedRungs/timeForShowOnly + 1;
+					int rung = animationCycle*animatedRungs/(timeForShowOnly*MinestuckConfig.echeladderAnimation) + 1;
 					currentRung = animatedRung - rung;
 				}
 			}

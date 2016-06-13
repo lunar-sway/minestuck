@@ -192,9 +192,9 @@ public class MinestuckConfig
 			loginColorSelector = config.get("General", "loginColorSelector", true, "Determines if the color selector should be displayed when entering a save file for the first time.").setLanguageKey("minestuck.config.loginColorSelector").getBoolean();
 			alchemyIcons = config.get("General", "alchemyIcons", true, "Set this to true to replace grist names in alchemiter/grist widget with the grist icon.").setLanguageKey("minestuck.config.alchemyIcons").getBoolean();
 			setting = config.get("General", "echeladderAnimationNew", "normal", "Allows control of standard speed for the echeladder rung \"animation\", or if it should have one in the first place.", new String[] {"nothing", "slow", "normal", "fast"}).setLanguageKey("minestuck.config.echeladderAnimation").getString();
-			if(setting.equals("none")) echeladderAnimation = 0;
-			else if(setting.equals("slow")) echeladderAnimation = 1;
-			else if(setting.equals("fast")) echeladderAnimation = 4;
+			if(setting.equals("nothing")) echeladderAnimation = 0;
+			else if(setting.equals("slow")) echeladderAnimation = 4;
+			else if(setting.equals("fast")) echeladderAnimation = 1;
 			else echeladderAnimation = 2;
 		}
 	}
