@@ -55,8 +55,8 @@ public class MinestuckItems
 	//blades
 	public static Item sord;
 	public static Item cactusCutlass;
-	public static Item ninjaSword;
 	public static Item katana;
+	public static Item unbreakableKatana;	//Not actually unbreakable
 	public static Item firePoker;
 	public static Item hotHandle;
 	public static Item caledscratch;
@@ -134,8 +134,8 @@ public class MinestuckItems
 		//blades
 		sord = GameRegistry.register(new ItemBlade(EnumBladeType.SORD).setRegistryName("sord"));
 		cactusCutlass = GameRegistry.register(new ItemBlade(EnumBladeType.CACTUS).setRegistryName("cactaceae_cutlass"));
-		ninjaSword = GameRegistry.register(new ItemBlade(EnumBladeType.NINJA).setRegistryName("ninja_sword"));
-		katana = GameRegistry.register(new ItemBlade(EnumBladeType.KATANA).setRegistryName("katana"));
+		katana = GameRegistry.register(new ItemBlade(EnumBladeType.NINJA).setRegistryName("katana"));
+		unbreakableKatana = GameRegistry.register(new ItemBlade(EnumBladeType.KATANA).setRegistryName("unbreakable_katana"));
 		firePoker = GameRegistry.register(new ItemBlade(EnumBladeType.FIREPOKER).setRegistryName("fire_poker"));
 		hotHandle = GameRegistry.register(new ItemBlade(EnumBladeType.HOTHANDLE).setRegistryName("too_hot_to_handle"));
 		caledscratch = GameRegistry.register(new ItemBlade(EnumBladeType.CALEDSCRATCH).setRegistryName("caledscratch"));

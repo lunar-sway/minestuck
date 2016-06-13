@@ -57,7 +57,7 @@ public class MinestuckAchievementHandler {
 		achievementPage.getAchievements().add(killOgre);
 		killGiclops = (Achievement) new Achievement("achievement.killGiclops", "killGiclops", -1, 3, MinestuckItems.royalDeringer, killOgre).registerStat();
 		achievementPage.getAchievements().add(killGiclops);
-		broBlade = (Achievement) new Achievement("achievement.broBlade", "broBlade", 5, -2, MinestuckItems.katana, alchemy).registerStat();
+		broBlade = (Achievement) new Achievement("achievement.broBlade", "broBlade", 5, -2, MinestuckItems.unbreakableKatana, alchemy).registerStat();
 		achievementPage.getAchievements().add(broBlade);
 		returnNode = (Achievement) new Achievement("achievement.returnNode", "returnNode", 4, 2, Items.bed, enterMedium).registerStat();
 		achievementPage.getAchievements().add(returnNode);
@@ -73,7 +73,7 @@ public class MinestuckAchievementHandler {
 		}
 		if(stack.getItem().equals(MinestuckItems.clawHammer))
 			player.addStat(getHammer);
-		if(stack.getItem().equals(MinestuckItems.katana))
+		if(stack.getItem().equals(MinestuckItems.unbreakableKatana))
 			player.addStat(broBlade);
 		GristSet set = GristRegistry.getGristConversion(stack);
 		if(set != null) //The only time the grist set should be null here is if it was a captchalouge card that was alchemized
