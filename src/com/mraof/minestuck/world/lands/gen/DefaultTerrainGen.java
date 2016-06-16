@@ -12,8 +12,8 @@ import net.minecraft.world.gen.NoiseGeneratorOctaves;
 public class DefaultTerrainGen extends LandTerrainGenBase
 {
 	
-	public float normalHeight    = 0.4F, oceanHeight    = -0.2F, roughHeight = 0.5F;
-	public float normalVariation = 0.6F, oceanVariation =  0.2F, roughtVariation = 0.8F;
+	public float normalHeight    = 0.3F, oceanHeight    = -0.2F, roughHeight = 0.5F;
+	public float normalVariation = 0.5F, oceanVariation =  0.2F, roughtVariation = 0.8F;
 	
 	protected NoiseGeneratorOctaves noiseGens[] = new NoiseGeneratorOctaves[2];
 	protected NoiseGeneratorTriangle noiseGeneratorTriangle;
@@ -139,6 +139,8 @@ public class DefaultTerrainGen extends LandTerrainGenBase
 	{
 		if(biome == BiomeGenMinestuck.mediumOcean)
 			return this.oceanHeight;
+		else if(biome == BiomeGenMinestuck.mediumRough)
+			return this.roughHeight;
 		else return this.normalHeight;
 	}
 	
@@ -146,6 +148,8 @@ public class DefaultTerrainGen extends LandTerrainGenBase
 	{
 		if(biome == BiomeGenMinestuck.mediumOcean)
 			return this.oceanVariation;
+		else if(biome == BiomeGenMinestuck.mediumRough)
+			return this.roughtVariation;
 		else return this.normalVariation;
 	}
 	
