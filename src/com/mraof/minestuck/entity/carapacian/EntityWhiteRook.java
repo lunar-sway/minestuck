@@ -12,7 +12,7 @@ public class EntityWhiteRook extends EntityRook
 	@Override
 	public String getTexture() 
 	{
-		return "textures/mobs/ProspitianRook.png";
+		return "textures/mobs/prospitian_rook.png";
 	}
 
 	@Override
