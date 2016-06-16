@@ -10,6 +10,7 @@ import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemSword;
 
+import com.mraof.minestuck.item.weapon.ItemBattleaxe;
 import com.mraof.minestuck.item.weapon.ItemBlade;
 import com.mraof.minestuck.item.weapon.ItemCane;
 import com.mraof.minestuck.item.weapon.ItemClub;
@@ -21,14 +22,15 @@ public class KindAbstratusList {
 	
 	static ArrayList<KindAbstratusType> typeList;
 	
-	public static void registerTypes() {
+	public static void registerTypes()
+	{
 		if(typeList != null)
 			return;
 		typeList = new ArrayList<KindAbstratusType>();
 		typeList.add(new KindAbstratusType("sword").addItemClass(ItemSword.class).addItemClass(ItemBlade.class));
 		typeList.add(new KindAbstratusType("bow").addItemClass(ItemBow.class));
 		typeList.add(new KindAbstratusType("pickaxe").addItemClass(ItemPickaxe.class));
-		typeList.add(new KindAbstratusType("axe").addItemClass(ItemAxe.class));
+		typeList.add(new KindAbstratusType("axe").addItemClass(ItemAxe.class).addItemClass(ItemBattleaxe.class));
 		typeList.add(new KindAbstratusType("hoe").addItemClass(ItemHoe.class));
 		typeList.add(new KindAbstratusType("shovel").addItemClass(ItemSpade.class));
 		typeList.add(new KindAbstratusType("hammer").addItemClass(ItemHammer.class));

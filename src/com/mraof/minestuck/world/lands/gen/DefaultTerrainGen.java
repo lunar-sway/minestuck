@@ -5,7 +5,7 @@ import java.util.Random;
 import com.mraof.minestuck.world.biome.BiomeGenMinestuck;
 import com.mraof.minestuck.world.gen.NoiseGeneratorTriangle;
 
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 
@@ -107,7 +107,7 @@ public class DefaultTerrainGen extends LandTerrainGenBase
 	
 	protected void generateBiomeData(int chunkX, int chunkZ)
 	{
-		biomesForGeneration = provider.landWorld.getWorldChunkManager().getBiomesForGeneration(this.biomesForGeneration, chunkX*4 - 2, chunkZ*4 - 2, 9, 9);
+		biomesForGeneration = provider.landWorld.getBiomeProvider().getBiomesForGeneration(this.biomesForGeneration, chunkX*4 - 2, chunkZ*4 - 2, 9, 9);
 		
 		for(int x0 = 0; x0 < 5; x0++)
 			for(int z0 = 0; z0 < 5; z0++)

@@ -10,8 +10,8 @@ import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.MinestuckPlayerData;
-import com.mraof.minestuck.util.UsernameHandler;
-import com.mraof.minestuck.util.UsernameHandler.PlayerIdentifier;
+import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -48,7 +48,7 @@ public class CommandGristSend extends CommandBase
 	}
 	
 	@Override
-	public void processCommand(ICommandSender sender, String[] args) throws CommandException
+	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException
 	{
 		if(!(sender instanceof EntityPlayerMP))
 			throw new PlayerNotFoundException("commands.playerOnly.redirectGrist");
@@ -58,11 +58,11 @@ public class CommandGristSend extends CommandBase
 			throw new WrongUsageException(this.getCommandUsage(sender));
 		
 		String receiver = args[0];
-		EntityPlayerMP receivingPlayer = MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(receiver);
+		EntityPlayerMP receivingPlayer = server.getPlayerList().getPlayerByUsername(receiver);
 		if(receivingPlayer != null)
 		{
 			if(!isPermittedFor(player, receivingPlayer))
-				throw new CommandException("commands.gristSend.notPermitted", receivingPlayer.getCommandSenderName());
+				throw new CommandException("commands.gristSend.notPermitted", receivingPlayer.getName());
 			
 			GristSet set = new GristSet();
 			GristAmount[] parsedAmounts = CommandGrist.parseGrist(args, 1);
@@ -97,7 +97,7 @@ public class CommandGristSend extends CommandBase
 	
 	private static boolean isPermittedFor(EntityPlayerMP player, EntityPlayerMP player2)
 	{
-		PlayerIdentifier name1 = UsernameHandler.encode(player), name2 = UsernameHandler.encode(player2);
+		PlayerIdentifier name1 = IdentifierHandler.encode(player), name2 = IdentifierHandler.encode(player2);
 		SburbConnection c1 = SkaianetHandler.getMainConnection(name1, true);
 		SburbConnection c2 = SkaianetHandler.getMainConnection(name2, true);
 		if(c1 == null || c2 == null || !c1.enteredGame() || !c2.enteredGame())
@@ -112,7 +112,7 @@ public class CommandGristSend extends CommandBase
 	}
 	
 	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender sender)
+	public boolean checkPermission(MinecraftServer server, ICommandSender sender)
 	{
 		return true;
 	}

@@ -63,6 +63,12 @@ public class EntityOgre extends EntityUnderling
 	}
 	
 	@Override
+	protected int getVitalityGel()
+	{
+		return rand.nextInt(3) + 3;
+	}
+	
+	@Override
 	protected void applyGristType(GristType type, boolean fullHeal)
 	{
 		super.applyGristType(type, fullHeal);
@@ -79,7 +85,7 @@ public class EntityOgre extends EntityUnderling
 			computePlayerProgress((int) (40*type.getPower() + 50));
 			if(entity != null && entity instanceof EntityPlayerMP)
 			{
-				((EntityPlayerMP) entity).triggerAchievement(MinestuckAchievementHandler.killOgre);
+				((EntityPlayerMP) entity).addStat(MinestuckAchievementHandler.killOgre);
 				Echeladder ladder = MinestuckPlayerData.getData((EntityPlayerMP) entity).echeladder;
 				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 1));
 			}

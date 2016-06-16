@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.biome;
 
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.IntCache;
 
@@ -23,11 +24,12 @@ public class GenLayerLandRough extends GenLayer
 		for(int i = 0; i < biomeGen.length; i++)
 		{
 			initChunkSeed(areaX + i%areaWidth, areaY + i/areaWidth);
-			if(biomeGen[i] == BiomeGenMinestuck.mediumNormal.biomeID && nextInt(10) == 0)
-				biomeGen[i] = BiomeGenMinestuck.mediumRough.biomeID;
+			if(biomeGen[i] == BiomeGenBase.getIdForBiome(BiomeGenMinestuck.mediumNormal) && nextInt(10) == 0)
+				biomeGen[i] = BiomeGenBase.getIdForBiome(BiomeGenMinestuck.mediumRough);
 		}*/
 		
 		//No generation by ocean
+		int oceanId = BiomeGenBase.getIdForBiome(BiomeGenMinestuck.mediumOcean);
 		int width = areaWidth + 2, height = areaHeight + 2, x = areaX - 1, y = areaY - 1;
 		
 		int[] parentGen = parent.getInts(x, y, width, height);
@@ -37,10 +39,10 @@ public class GenLayerLandRough extends GenLayer
 			{
 				initChunkSeed(x + xCor, y + yCor);
 				int i = xCor + yCor*width;
-				if(parentGen[i] == BiomeGenMinestuck.mediumNormal.biomeID && nextInt(5) == 0
-						&& parentGen[i + 1] != BiomeGenMinestuck.mediumOcean.biomeID && parentGen[i - 1] != BiomeGenMinestuck.mediumOcean.biomeID
-						&& parentGen[i + width] != BiomeGenMinestuck.mediumOcean.biomeID && parentGen[i - width] != BiomeGenMinestuck.mediumOcean.biomeID)
-					parentGen[i] = BiomeGenMinestuck.mediumRough.biomeID;
+				if(parentGen[i] == BiomeGenBase.getIdForBiome(BiomeGenMinestuck.mediumNormal) && nextInt(5) == 0
+						&& parentGen[i + 1] != oceanId && parentGen[i - 1] != oceanId
+						&& parentGen[i + width] != oceanId && parentGen[i - width] != oceanId)
+					parentGen[i] = BiomeGenBase.getIdForBiome(BiomeGenMinestuck.mediumRough);
 			}
 		
 		int[] biomeGen = IntCache.getIntCache(areaWidth * areaHeight);

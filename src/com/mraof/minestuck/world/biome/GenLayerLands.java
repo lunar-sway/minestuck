@@ -2,6 +2,7 @@ package com.mraof.minestuck.world.biome;
 
 import com.mraof.minestuck.util.Debug;
 
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.GenLayerVoronoiZoom;
 import net.minecraft.world.gen.layer.GenLayerZoom;
@@ -19,7 +20,7 @@ public class GenLayerLands extends GenLayer
 	public void setOceanChance(float oceanChance)
 	{
 		this.oceanChance = (int) (Integer.MAX_VALUE*oceanChance);
-		Debug.printf("Ocean chance: %f. Computed to %d out of %d.", oceanChance, this.oceanChance, Integer.MAX_VALUE);
+		Debug.debugf("Ocean chance: %f. Computed to %d out of %d.", oceanChance, this.oceanChance, Integer.MAX_VALUE);
 	}
 	
 	@Override
@@ -31,7 +32,7 @@ public class GenLayerLands extends GenLayer
 			for(int y = 0; y < areaHeight; y++)
 			{
 				initChunkSeed(areaX + x, areaY + y);
-				biomeGen[x + y*areaWidth] = BiomeGenMinestuck.mediumNormal.biomeID + (nextInt(Integer.MAX_VALUE) >= oceanChance ? 0 : 1);
+				biomeGen[x + y*areaWidth] = BiomeGenBase.getIdForBiome(BiomeGenMinestuck.mediumNormal) + (nextInt(Integer.MAX_VALUE) >= oceanChance ? 0 : 1);
 			}
 		return biomeGen;
 	}

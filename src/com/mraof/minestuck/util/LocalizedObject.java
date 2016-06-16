@@ -1,6 +1,6 @@
 package com.mraof.minestuck.util;
 
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 
 public class LocalizedObject
 {
@@ -14,6 +14,6 @@ public class LocalizedObject
 	@Override
 	public String toString()
 	{
-		return StatCollector.translateToLocalFormatted(message, params);
+		return I18n.translateToLocalFormatted(message, params);
 	}
 }

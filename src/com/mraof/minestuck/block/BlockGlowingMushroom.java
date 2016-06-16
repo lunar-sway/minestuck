@@ -4,11 +4,11 @@ import java.util.Random;
 
 import com.mraof.minestuck.Minestuck;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class BlockGlowingMushroom extends BlockBush
@@ -19,14 +19,13 @@ public class BlockGlowingMushroom extends BlockBush
 		setCreativeTab(Minestuck.tabMinestuck);
 		setUnlocalizedName("glowingMushroom");
 		setLightLevel(0.75F);
-		setStepSound(soundTypeGrass);
+		setStepSound(SoundType.PLANT);
 	}
 	
-	
 	@Override
-	protected boolean canPlaceBlockOn(Block ground)
+	protected boolean func_185514_i(IBlockState state)
 	{
-		return ground.isFullBlock();
+		return state.isFullBlock();
 	}
 	
 	@Override

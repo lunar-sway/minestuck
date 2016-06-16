@@ -6,13 +6,8 @@ import java.util.List;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Vec3;
-import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.util.math.Vec3d;
 
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.TallGrassDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.BasicTreeDecorator;
@@ -20,33 +15,6 @@ import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 
 public class LandAspectForest extends TerrainLandAspect
 {
-	
-	public LandAspectForest()
-	{
-		List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sapling, 1, 0), 1, 3, 5));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sapling, 1, 1), 1, 3, 4));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sapling, 1, 2), 1, 2, 3));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sapling, 1, 3), 1, 2, 2));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sapling, 1, 4), 1, 2, 3));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sapling, 1, 5), 1, 3, 4));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.planks, 1, 0), 2, 10, 5));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.planks, 1, 1), 2, 7, 2));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.planks, 1, 5), 2, 7, 2));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.log, 1, 0), 2, 5, 5));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.log, 1, 1), 2, 5, 4));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.log, 1, 2), 2, 5, 2));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.log2, 1, 0), 2, 5, 2));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.log2, 1, 1), 2, 5, 4));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.leaves, 1, 0), 1, 4, 2));
-		list.add(new WeightedRandomChestContent(new ItemStack(MinestuckItems.deuceClub, 1, 0), 1, 1, 6));
-		list.add(new WeightedRandomChestContent(new ItemStack(MinestuckItems.cane, 1, 0), 1, 1, 6));
-		list.add(new WeightedRandomChestContent(new ItemStack(Items.stone_axe, 1, 0), 1, 1, 5));
-		list.add(new WeightedRandomChestContent(new ItemStack(Items.iron_axe, 1, 0), 1, 1, 3));
-		list.add(new WeightedRandomChestContent(new ItemStack(Items.diamond_axe, 1, 0), 1, 1, 1));
-		
-		this.lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);
-	}
 	
 	@Override
 	public IBlockState getSurfaceBlock()
@@ -77,7 +45,7 @@ public class LandAspectForest extends TerrainLandAspect
 	@Override
 	public String getPrimaryName()
 	{
-		return "Forest";
+		return "forest";
 	}
 	
 	@Override
@@ -107,9 +75,9 @@ public class LandAspectForest extends TerrainLandAspect
 	}
 	
 	@Override
-	public Vec3 getFogColor()
+	public Vec3d getFogColor()
 	{
-		return new Vec3(0.0D, 1.0D, 0.6D);
+		return new Vec3d(0.0D, 1.0D, 0.6D);
 	}
 	
 	@Override

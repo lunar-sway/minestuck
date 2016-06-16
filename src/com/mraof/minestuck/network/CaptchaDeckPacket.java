@@ -14,6 +14,7 @@ import com.mraof.minestuck.util.Debug;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
@@ -119,7 +120,7 @@ public class CaptchaDeckPacket extends MinestuckPacket
 			
 			if(this.type == MODUS && player.openContainer instanceof ContainerCaptchaDeck)
 				CaptchaDeckHandler.useItem((EntityPlayerMP) player);
-			else if(this.type == CAPTCHALOUGE && player.getCurrentEquippedItem() != null)
+			else if(this.type == CAPTCHALOUGE && player.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND) != null)
 				CaptchaDeckHandler.captchalougeItem((EntityPlayerMP) player);
 			else if(this.type == GET)
 				CaptchaDeckHandler.getItem((EntityPlayerMP) player, itemIndex, getCard);
@@ -139,7 +140,7 @@ public class CaptchaDeckPacket extends MinestuckPacket
 				CaptchaDeckHandler.clientSideModus = CaptchaDeckHandler.readFromNBT(nbt, true);
 				if(CaptchaDeckHandler.clientSideModus != null)
 					CaptchaDeckHandler.clientSideModus.getGuiHandler().updateContent();
-				else Debug.print("Lost modus");
+				else Debug.debug("Lost modus");
 //				}
 			}
 		}

@@ -7,14 +7,9 @@ import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntitySpider;
 import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Vec3;
-import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
-import net.minecraftforge.common.ChestGenHooks;
 
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
@@ -28,7 +23,7 @@ public class LandAspectMonsters extends TitleLandAspect
 	
 	public LandAspectMonsters()
 	{
-		this("Monsters");
+		this("monsters");
 	}
 	
 	public LandAspectMonsters(String name)
@@ -36,15 +31,15 @@ public class LandAspectMonsters extends TitleLandAspect
 		this.variations = new ArrayList<TitleLandAspect>();
 		this.name = name;
 		this.monsterList = new ArrayList<SpawnListEntry>();
-		if(this.name.equals("Monsters"))
+		if(this.name.equals("monsters"))
 		{
 			monsterList.add(new SpawnListEntry(EntityCreeper.class, 1, 1, 1));
 			monsterList.add(new SpawnListEntry(EntitySpider.class, 1, 1, 2));
 			monsterList.add(new SpawnListEntry(EntityZombie.class, 1, 1, 2));
 			variations.add(this);
-			variations.add(new LandAspectMonsters("MonstersDead"));
+			variations.add(new LandAspectMonsters("monsters_dead"));
 		}
-		else if(this.name.equals("MonstersDead"))
+		else if(this.name.equals("monsters_dead"))
 		{
 			monsterList.add(new SpawnListEntry(EntityZombie.class, 2, 1, 3));
 			monsterList.add(new SpawnListEntry(EntitySkeleton.class, 1, 1, 2));
@@ -71,17 +66,10 @@ public class LandAspectMonsters extends TitleLandAspect
 		
 		if(chunkProvider.decorators != null)
 		{
-			ChestGenHooks chestGen = chunkProvider.lootMap.get(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST);
-			chestGen.removeItem(new ItemStack(Items.rotten_flesh, 1, 0));
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Items.rotten_flesh, 1, 0), 2, 8, 6));
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Items.bone, 1, 0), 1, 4, 5));
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Items.gunpowder, 1, 0), 2, 8, 4));
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Items.string, 1, 0), 2, 8, 4));
-			chestGen.removeItem(new ItemStack(Items.ender_pearl, 1, 0));	//Re-add ender pearl with a slightly higher priority and amount
-			chestGen.addItem(new WeightedRandomChestContent(new ItemStack(Items.ender_pearl, 1, 0), 1, 4, 2));
+			
 		}
 		
-		chunkProvider.mergeFogColor(new Vec3(0.1, 0, 0), 0.5F);
+		chunkProvider.mergeFogColor(new Vec3d(0.1, 0, 0), 0.5F);
 	}
 	
 	@Override
@@ -99,7 +87,7 @@ public class LandAspectMonsters extends TitleLandAspect
 	@Override
 	public TitleLandAspect getPrimaryVariant()
 	{
-		return LandAspectRegistry.fromNameTitle("Monsters");
+		return LandAspectRegistry.fromNameTitle("monsters");
 	}
 	
 }

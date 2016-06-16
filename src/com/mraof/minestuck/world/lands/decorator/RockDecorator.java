@@ -7,7 +7,7 @@ import java.util.Queue;
 import java.util.Random;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.util.CoordPair;
@@ -26,7 +26,7 @@ public class RockDecorator implements ILandDecorator
 			BlockPos pos = world.getTopSolidOrLiquidBlock(new BlockPos(x, 0, z));
 			int height = random.nextInt(7) + 10;
 			
-			if(world.getBlockState(pos.up(height*2/3)).getBlock().getMaterial().isLiquid())	//At least 1/3rd of the height should be above the liquid surface
+			if(world.getBlockState(pos.up(height*2/3)).getMaterial().isLiquid())	//At least 1/3rd of the height should be above the liquid surface
 				return null;
 			float plateauSize = 0.2F + random.nextFloat()*(height/25F);
 			

@@ -9,21 +9,22 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mraof.minestuck.block.BlockComputerOn;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.gui.GuiComputer;
 import com.mraof.minestuck.network.skaianet.ComputerData;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.ComputerProgram;
-import com.mraof.minestuck.util.UsernameHandler;
-import com.mraof.minestuck.util.UsernameHandler.PlayerIdentifier;
+import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 
 public class TileEntityComputer extends TileEntity
 {
@@ -76,7 +77,7 @@ public class TileEntityComputer extends TileEntity
 		}
 		if(par1NBTTagCompound.hasKey("ownerId"))
 			ownerId = par1NBTTagCompound.getInteger("ownerId");
-		else this.owner = UsernameHandler.load(par1NBTTagCompound, "owner");
+		else this.owner = IdentifierHandler.load(par1NBTTagCompound, "owner");
 		if(gui != null)
 			gui.updateGui();
 	}
@@ -118,11 +119,11 @@ public class TileEntityComputer extends TileEntity
 			if(c != null)
 				tagCompound.getCompoundTag("programData").getCompoundTag("program_1").setInteger("connectedClient", c.getClientIdentifier().getId());
 		}
-		return new S35PacketUpdateTileEntity(this.pos, 2, tagCompound);
+		return new SPacketUpdateTileEntity(this.pos, 2, tagCompound);
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) 
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) 
 	{
 		this.readFromNBT(pkt.getNbtCompound());
 	}
@@ -132,7 +133,7 @@ public class TileEntityComputer extends TileEntity
 		if(id == -1)
 		{
 			IBlockState state = worldObj.getBlockState(pos);
-			return (Boolean) state.getValue(BlockComputerOn.BSOD);
+			return state.getBlock() == MinestuckBlocks.blockComputerOn ? (Boolean) state.getValue(BlockComputerOn.BSOD) : false;
 		}
 		return installedPrograms.get(id) == null ? false:installedPrograms.get(id);
 	}
@@ -168,6 +169,12 @@ public class TileEntityComputer extends TileEntity
 	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState)
 	{
 		return oldState.getBlock() != newState.getBlock();
+	}
+	
+	public void markBlockForUpdate()
+	{
+		IBlockState state = worldObj.getBlockState(pos);
+		this.worldObj.notifyBlockUpdate(pos, state, state, 3);
 	}
 	
 }

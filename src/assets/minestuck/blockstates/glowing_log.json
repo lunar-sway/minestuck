@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "axis=y":  { "model": "minestuck:glowing_log" },
+        "axis=z":   { "model": "minestuck:glowing_log_side" },
+        "axis=x":   { "model": "minestuck:glowing_log_side", "y": 90 },
+        "axis=none": { "model": "minestuck:glowing_log_bark" }
+    }
+}

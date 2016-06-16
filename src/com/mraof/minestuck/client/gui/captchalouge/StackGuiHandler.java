@@ -7,11 +7,11 @@ import com.mraof.minestuck.inventory.captchalouge.Modus;
 public class StackGuiHandler extends SylladexGuiHandler
 {
 	
-	
 	private Modus modus;
 	
 	public StackGuiHandler(Modus modus)
 	{
+		super();
 		this.modus = modus;
 		this.textureIndex = 0;
 	}

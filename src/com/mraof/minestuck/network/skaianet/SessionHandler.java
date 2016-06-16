@@ -8,16 +8,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommand;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraftforge.common.DimensionManager;
 
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.Title;
-import com.mraof.minestuck.util.UsernameHandler.PlayerIdentifier;
+import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
@@ -81,7 +89,7 @@ public class SessionHandler {
 		{
 			singleSession = sessions.size() == 0;
 			if(!singleSession)
-				Debug.print("Not allowed to merge all sessions together! Global session temporarily disabled for this time.");
+				Debug.warn("Not allowed to merge all sessions together! Global session temporarily disabled for this time.");
 			return;
 		}
 		
@@ -254,8 +262,17 @@ public class SessionHandler {
 		Session sClient = getPlayerSession(client), sServer = getPlayerSession(server);
 		SburbConnection cClient = SkaianetHandler.getMainConnection(client, true);
 		SburbConnection cServer = SkaianetHandler.getMainConnection(server, false);
-		return cClient != null && sClient == sServer && (MinestuckConfig.allowSecondaryConnections || cClient == cServer)
-				|| cClient == null && cServer == null && !(sClient != null && sClient.locked) && !(sServer != null && sServer.locked);
+		boolean serverActive = cServer != null;
+		if(!serverActive && sServer != null)
+			for(SburbConnection c : sServer.connections)
+				if(c.getServerIdentifier().equals(server))
+				{
+					serverActive = true;
+					break;
+				}
+		
+		return cClient != null && sClient == sServer && (MinestuckConfig.allowSecondaryConnections || cClient == cServer)	//Reconnect within session
+				|| cClient == null && !serverActive && !(sClient != null && sClient.locked) && !(sServer != null && sServer.locked);	//Connect with a new player and potentially create a main connection
 	}
 	
 	/**
@@ -268,8 +285,15 @@ public class SessionHandler {
 		if(singleSession)
 		{
 			if(sessions.size() == 0)
-				return "computer.messageConnectFailed";
-			int i = (sessions.get(0).containsPlayer(connection.getClientIdentifier())?0:1)+(sessions.get(0).containsPlayer(connection.getServerIdentifier())?0:1);
+			{
+				Debug.error("No session in list when global session should be turned on?");
+				Session session = new Session();
+				session.name = GLOBAL_SESSION_NAME;
+				sessions.add(session);
+				sessionsByName.put(session.name, session);
+			}
+			
+			int i = (sessions.get(0).containsPlayer(connection.getClientIdentifier())?0:1)+(connection.getServerIdentifier().equals(IdentifierHandler.nullIdentifier) || sessions.get(0).containsPlayer(connection.getServerIdentifier())?0:1);
 			if(MinestuckConfig.forceMaxSize && sessions.get(0).getPlayerList().size()+i > maxSize)
 				return "computer.singleSessionFull";
 			else
@@ -286,13 +310,16 @@ public class SessionHandler {
 				sessions.add(s);
 				s.connections.add(connection);
 				return null;
-			} else if(sClient == null || sServer == null) {
-				if((sClient == null?sServer:sClient).locked || MinestuckConfig.forceMaxSize && (sClient == null?sServer:sClient).getPlayerList().size()+1 > maxSize)
+			} else if(sClient == null || sServer == null)
+			{
+				if((sClient == null?sServer:sClient).locked || MinestuckConfig.forceMaxSize && !connection.getServerIdentifier().equals(IdentifierHandler.nullIdentifier) && (sClient == null?sServer:sClient).getPlayerList().size()+1 > maxSize)
 					return "computer."+(sClient == null?"server":"client")+"SessionFull";
 				(sClient == null?sServer:sClient).connections.add(connection);
 				return null;
-			} else {
-				if(sClient == sServer) {
+			} else
+			{
+				if(sClient == sServer)
+				{
 					sClient.connections.add(connection);
 					return null;
 				}
@@ -318,7 +345,7 @@ public class SessionHandler {
 				else split(s);
 		} else if(!normal) {
 			s.connections.remove(connection);
-			if(SkaianetHandler.getAssociatedPartner(connection.getClientIdentifier(), false) != null && !connection.getServerIdentifier().equals(new PlayerIdentifier(".null")))
+			if(SkaianetHandler.getAssociatedPartner(connection.getClientIdentifier(), false) != null)
 			{
 				SburbConnection c = SkaianetHandler.getMainConnection(connection.getClientIdentifier(), false);
 				if(c.isActive)
@@ -328,7 +355,7 @@ public class SessionHandler {
 					c.serverIdentifier = connection.getServerIdentifier();
 					break;
 				case 1:
-					c.serverIdentifier = new PlayerIdentifier(".null");
+					c.serverIdentifier = IdentifierHandler.nullIdentifier;
 					break;
 				}
 			}
@@ -351,10 +378,102 @@ public class SessionHandler {
 		return list;
 	}
 	
+	public static void connectByCommand(ICommandSender sender, ICommand command, PlayerIdentifier client, PlayerIdentifier server) throws CommandException
+	{
+		Session sc = getPlayerSession(client), ss = getPlayerSession(server);
+		
+		if(singleSession)
+		{
+			int i = (sc == null ? 1:0) + (ss == null ? 1 : 0); 
+			sc = ss = sessions.get(0);
+			if(MinestuckConfig.forceMaxSize && sc.getPlayerList().size() + i > maxSize)
+				throw new CommandException("computer.singleSessionFull");
+		}
+		else
+		{
+			if(sc == null && ss == null)
+			{
+				if(sender.sendCommandFeedback())
+					sender.addChatMessage(new TextComponentString("Neither player is part of a session. Creating new session..."));
+				sc = ss = new Session();
+				sessions.add(sc);
+			} else if(sc == null)
+			{
+				if(ss.locked)
+					throw new CommandException("The server session is locked, and can no longer be modified!");
+				if(MinestuckConfig.forceMaxSize && ss.getPlayerList().size() + 1 > maxSize)
+					throw new CommandException("computer.serverSessionFull");
+				sc = ss;
+			} else if(ss == null)
+			{
+				if(sc.locked)
+					throw new CommandException("The client session is locked, and can no longer be modified!");
+				if(MinestuckConfig.forceMaxSize && sc.getPlayerList().size() + 1 > maxSize)
+					throw new CommandException("computer.clientSessionFull");
+				ss = sc;
+			}
+		}
+		
+		SburbConnection cc = SkaianetHandler.getMainConnection(client, true), cs = SkaianetHandler.getMainConnection(server, false);
+		
+		if(cc != null && cc == cs)
+			throw new CommandException("Those players are already connected!");
+		
+		if(sc != ss)
+		{
+			String merge = merge(sc, ss, null);
+			if(merge != null)
+				throw new CommandException(merge);
+		}
+		
+		if(cs != null)
+		{
+			if(cs.isActive)
+				SkaianetHandler.closeConnection(server, cs.getClientIdentifier(), false);
+			cs.serverIdentifier = IdentifierHandler.nullIdentifier;
+			if(sender.sendCommandFeedback())
+				sender.addChatMessage(new TextComponentString(server.getUsername()+"'s old client player "+cs.getClientIdentifier().getUsername()+" is now without a server player.").setChatStyle(new Style().setColor(TextFormatting.YELLOW)));
+		}
+		
+		if(cc != null && cc.isActive)
+			SkaianetHandler.closeConnection(client, cc.getServerIdentifier(), true);
+		
+		SburbConnection connection = SkaianetHandler.getConnection(client, server);
+		if(cc == null)
+		{
+			if(connection != null)
+				cc = connection;
+			else
+			{
+				cc = new SburbConnection();
+				SkaianetHandler.connections.add(cc);
+				cc.clientIdentifier = client;
+				cc.serverIdentifier = server;
+				sc.connections.add(cc);
+				SburbHandler.onConnectionCreated(cc);
+			}
+			cc.isMain = true;
+		} else
+		{
+			if(connection != null && connection.isActive)
+			{
+				SkaianetHandler.connections.remove(connection);
+				sc.connections.remove(connection);
+				cc.client = connection.client;
+				cc.server = connection.server;
+				cc.serverIdentifier = server;
+			} else cc.serverIdentifier = server;
+		}
+		
+		SkaianetHandler.updateAll();
+		
+		CommandBase.notifyOperators(sender, command, "commands.sburbServer.success", client.getUsername(), server.getUsername());
+	}
+	
 	/**
 	 * Creates data to be used for the data checker
 	 */
-	public static NBTTagCompound createDataTag()
+	public static NBTTagCompound createDataTag(MinecraftServer server)
 	{
 		NBTTagCompound nbt = new NBTTagCompound();
 		NBTTagList sessionList = new NBTTagList();
@@ -372,7 +491,8 @@ public class SessionHandler {
 				NBTTagCompound connectionTag = new NBTTagCompound();
 				connectionTag.setString("client", c.getClientIdentifier().getUsername());
 				connectionTag.setString("clientId", c.getClientIdentifier().getString());
-				connectionTag.setString("server", c.getServerIdentifier().getUsername());
+				if(!c.getServerIdentifier().equals(IdentifierHandler.nullIdentifier))
+					connectionTag.setString("server", c.getServerIdentifier().getUsername());
 				connectionTag.setBoolean("isMain", c.isMain);
 				connectionTag.setBoolean("isActive", c.isActive);
 				if(c.isMain)
@@ -381,7 +501,7 @@ public class SessionHandler {
 					if(c.enteredGame && DimensionManager.isDimensionRegistered(c.clientHomeLand))
 					{
 						LandAspectRegistry.AspectCombination aspects = MinestuckDimensionHandler.getAspects(c.clientHomeLand);
-						IChunkProvider chunkGen = MinecraftServer.getServer().worldServerForDimension(c.clientHomeLand).provider.createChunkGenerator();
+						IChunkGenerator chunkGen = server.worldServerForDimension(c.clientHomeLand).provider.createChunkGenerator();
 						if(chunkGen instanceof ChunkProviderLands)
 						{
 							ChunkProviderLands landChunkGen = (ChunkProviderLands) chunkGen;
@@ -396,8 +516,8 @@ public class SessionHandler {
 							}
 						}
 						Title title = MinestuckPlayerData.getTitle(c.getClientIdentifier());
-						connectionTag.setByte("class", (byte) title.getHeroClass().ordinal());
-						connectionTag.setByte("aspect", (byte) title.getHeroAspect().ordinal());
+						connectionTag.setByte("class", title == null ? -1 : (byte) title.getHeroClass().ordinal());
+						connectionTag.setByte("aspect", title == null ? -1 : (byte) title.getHeroAspect().ordinal());
 					} else if(session.predefinedPlayers.containsKey(c.getClientIdentifier()))
 					{
 						PredefineData data = session.predefinedPlayers.get(c.getClientIdentifier());

@@ -1,25 +1,32 @@
 package com.mraof.minestuck.world;
 
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldSettings.GameType;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.chunk.IChunkGenerator;
 
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.UsernameHandler;
+import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
-public class WorldProviderLands extends WorldProvider 
+public class WorldProviderLands extends WorldProvider
 {
 	private ChunkProviderLands provider;
 	public LandAspectRegistry.AspectCombination landAspects;
+	
+	@Override
+	public DimensionType getDimensionType()
+	{
+		return MinestuckDimensionHandler.landDimensionType;
+	}
 	
 	@Override
 	public float calculateCelestialAngle(long par1, float par3)
@@ -43,20 +50,20 @@ public class WorldProviderLands extends WorldProvider
 			return this.calculateCelestialAngle(par1,par3);
 		}
 	}
-
-	public IChunkProvider createChunkGenerator()
+	
+	@Override
+	public IChunkGenerator createChunkGenerator()
 	{
 		if (provider == null)
 		{
-			landAspects = MinestuckDimensionHandler.getAspects(dimensionId);
+			landAspects = MinestuckDimensionHandler.getAspects(getDimension());
 			
 			provider = landAspects.aspectTitle.createChunkProvider(this);
 			
 		}
 		return provider;
 	}
-
-	@Override
+	
 	public String getDimensionName()
 	{
 		if (provider == null || provider.aspect1 == null || provider.aspect2 == null) {
@@ -69,12 +76,12 @@ public class WorldProviderLands extends WorldProvider
 	@Override
 	public BlockPos getSpawnPoint() 
 	{
-		BlockPos spawn = MinestuckDimensionHandler.getSpawn(getDimensionId());
+		BlockPos spawn = MinestuckDimensionHandler.getSpawn(getDimension());
 		if(spawn != null)
 			return spawn;
 		else
 		{
-			Debug.printf("Couldn't get special spawnpoint for dimension %d. This should not happen.", this.getDimensionId());
+			Debug.errorf("Couldn't get special spawnpoint for dimension %d. This should not happen.", this.getDimension());
 			return super.getSpawnPoint();
 		}
 	}
@@ -102,8 +109,8 @@ public class WorldProviderLands extends WorldProvider
 	@Override
 	public int getRespawnDimension(EntityPlayerMP player)	//actually only called when the provider says that you can't respawn in that dimension, which also causes beds to explode
 	{
-		SburbConnection c = SkaianetHandler.getMainConnection(UsernameHandler.encode(player), true);
-		return c == null || !c.enteredGame() ? this.dimensionId : c.getClientDimension();
+		SburbConnection c = SkaianetHandler.getMainConnection(IdentifierHandler.encode(player), true);
+		return c == null || !c.enteredGame() ? getDimension() : c.getClientDimension();
 	}
 	
 	@Override
@@ -175,7 +182,7 @@ public class WorldProviderLands extends WorldProvider
 	}
 	
 	@Override
-	public Vec3 getFogColor(float par1, float par2)
+	public Vec3d getFogColor(float par1, float par2)
 	{
 		if(provider != null)
 		{
@@ -183,15 +190,9 @@ public class WorldProviderLands extends WorldProvider
 		}
 		else
 		{
-			Debug.print("Getting superclass fog color");
+			Debug.debug("Getting superclass fog color");
 			return super.getFogColor(par1, par2);
 		}
-	}
-	
-	@Override
-	public String getInternalNameSuffix()
-	{
-		return "_minestuck";
 	}
 	
 	public World getWorld()

@@ -3,7 +3,8 @@ package com.mraof.minestuck.world.lands.decorator;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.util.BlockPos;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.block.BlockLayered;
@@ -53,7 +54,7 @@ public class LayeredBlockDecorator implements ILandDecorator
 			for(int z = 0; z < 32; z++)
 			{
 				BlockPos pos = world.getTopSolidOrLiquidBlock(new BlockPos(x + (chunkX << 4), 0, z + (chunkZ << 4)));
-				if(world.getBlockState(pos).getBlock().isAir(world, pos) && block.canPlaceBlockAt(world, pos))
+				if(world.getBlockState(pos).getBlock().isAir(world.getBlockState(pos), world, pos) && block.canPlaceBlockAt(world, pos))
 					setBlock(world, pos, 1);
 			}
 		return null;
@@ -80,8 +81,8 @@ public class LayeredBlockDecorator implements ILandDecorator
 		
 		if(height == 8)
 		{
-			Block fullBlock = ((BlockLayered) block).fullBlock;
-			world.setBlockState(pos, fullBlock.getDefaultState(), 2);
+			IBlockState fullBlock = ((BlockLayered) block).fullBlock;
+			world.setBlockState(pos, fullBlock, 2);
 		}
 		else
 		{

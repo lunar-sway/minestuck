@@ -1,6 +1,7 @@
 package com.mraof.minestuck.entity;
 
 import java.lang.reflect.Constructor;
+import java.util.Arrays;
 import java.util.Set;
 
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -9,8 +10,12 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
 import net.minecraft.util.ResourceLocation;
@@ -25,7 +30,9 @@ import com.mraof.minestuck.util.Debug;
 
 public class EntityDecoy extends EntityLiving {
 	
-	final static int DATAWATCHER_ID_START = 22;
+	private static final DataParameter<String> USERNAME = EntityDataManager.createKey(EntityDecoy.class, DataSerializers.STRING);
+	private static final DataParameter<Float> ROTATION_YAW_HEAD = EntityDataManager.createKey(EntityDecoy.class, DataSerializers.FLOAT);
+	private static final DataParameter<Boolean> FLYING = EntityDataManager.createKey(EntityDecoy.class, DataSerializers.BOOLEAN);
 	
 	public boolean isFlying;
 	public GameType gameType;
@@ -73,19 +80,19 @@ public class EntityDecoy extends EntityLiving {
 		this.rotationYaw = player.rotationYaw;
 		this.rotationYawHead = player.rotationYawHead;
 		this.renderYawOffset = player.renderYawOffset;
-		this.gameType = player.theItemInWorldManager.getGameType();
+		this.gameType = player.interactionManager.getGameType();
 		initInventory(player);
 		this.setHealth(player.getHealth());
-		username = player.getCommandSenderName();
+		username = player.getName();
 		isFlying = player.capabilities.isFlying;
 		player.capabilities.writeCapabilitiesToNBT(this.capabilities);
 		NBTTagCompound nbt = new NBTTagCompound();
 		player.getFoodStats().writeNBT(nbt);
 		initFoodStats();
 		foodStats.readNBT(nbt);	//Exact copy of food stack
-		dataWatcher.updateObject(DATAWATCHER_ID_START, username);
-		dataWatcher.updateObject(DATAWATCHER_ID_START+1, this.rotationYawHead);	//Due to rotationYawHead didn't update correctly
-		dataWatcher.updateObject(DATAWATCHER_ID_START+2, (byte) (isFlying?1:0));
+		dataWatcher.set(USERNAME, username);
+		dataWatcher.set(ROTATION_YAW_HEAD, this.rotationYawHead);	//Due to rotationYawHead didn't update correctly
+		dataWatcher.set(FLYING, isFlying);
 	}
 	
 	private void initInventory(EntityPlayerMP player)
@@ -117,7 +124,7 @@ public class EntityDecoy extends EntityLiving {
 		}
 		catch(NoSuchMethodError e)
 		{
-			Debug.print("Custom constructor detected for FoodStats. Trying with player as parameter...");
+			Debug.info("Custom constructor detected for FoodStats. Trying with player as parameter...");
 			try
 			{
 				foodStats = FoodStats.class.getConstructor(EntityPlayer.class).newInstance(player);
@@ -134,11 +141,12 @@ public class EntityDecoy extends EntityLiving {
 	}
 	
 	@Override
-	protected void entityInit() {
+	protected void entityInit()
+	{
 		super.entityInit();
-		this.dataWatcher.addObject(DATAWATCHER_ID_START, "");
-		this.dataWatcher.addObject(DATAWATCHER_ID_START+1, 0F);
-		dataWatcher.addObject(DATAWATCHER_ID_START+2, (byte)0);
+		this.dataWatcher.register(USERNAME, "");
+		this.dataWatcher.register(ROTATION_YAW_HEAD, 0F);
+		dataWatcher.register(FLYING, false);
 	}
 	
 	protected void setupCustomSkin() {
@@ -176,13 +184,13 @@ public class EntityDecoy extends EntityLiving {
 		}
 		super.onUpdate();
 		if(worldObj.isRemote && !init ){
-			username = this.dataWatcher.getWatchableObjectString(DATAWATCHER_ID_START);
-			this.rotationYawHead = this.dataWatcher.getWatchableObjectFloat(DATAWATCHER_ID_START+1);
+			username = this.dataWatcher.get(USERNAME);
+			this.rotationYawHead = this.dataWatcher.get(ROTATION_YAW_HEAD);
 			prevRotationYawHead = rotationYawHead;
 			this.rotationYaw = rotationYawHead;	//I don't know how much of this that is necessary
 			prevRotationYaw = rotationYaw;
 			renderYawOffset = rotationYaw;
-			isFlying = dataWatcher.getWatchableObjectByte(DATAWATCHER_ID_START+2) != 0;
+			isFlying = dataWatcher.get(FLYING);
 			setupCustomSkin();
 			init = true;
 		}
@@ -197,7 +205,7 @@ public class EntityDecoy extends EntityLiving {
 		{
 			foodStats.onUpdate(player);
 			if(this.locationChanged())
-				ServerEditHandler.reset(null, 0, ServerEditHandler.getData(this));
+				ServerEditHandler.reset(ServerEditHandler.getData(this));
 		}
 	}
 	
@@ -220,33 +228,29 @@ public class EntityDecoy extends EntityLiving {
 	}
 	
 	@Override
-	public String getCommandSenderName() 
+	public String getName() 
 	{
 		return username != null ? username : "DECOY";
 	}
 	
 	@Override
-	public ItemStack getHeldItem() {
-		return getEquipmentInSlot(0);
+	public ItemStack getItemStackFromSlot(EntityEquipmentSlot slotIn)
+	{
+		if(slotIn == EntityEquipmentSlot.MAINHAND)
+			return inventory.getCurrentItem();
+		else if(slotIn == EntityEquipmentSlot.OFFHAND)
+			return inventory.offHandInventory[0];
+		else return inventory.armorItemInSlot(slotIn.getIndex());
 	}
 	
 	@Override
-	public ItemStack getEquipmentInSlot(int i)
+	public void setItemStackToSlot(EntityEquipmentSlot slotIn, ItemStack stack)
 	{
-		if(i == 0)
-			return inventory.mainInventory[inventory.currentItem];
-		else if(i > 0 && i <= inventory.armorInventory.length)
-			return inventory.armorInventory[i-1];
-		else return null;
-	}
-
-	@Override
-	public void setCurrentItemOrArmor(int i, ItemStack itemstack)
-	{
-		if(i == 0)
-			inventory.mainInventory[inventory.currentItem] = itemstack;
-		else if(i > 0 && i <= inventory.armorInventory.length)
-			inventory.armorInventory[i-1] = itemstack;
+		if(slotIn == EntityEquipmentSlot.MAINHAND)
+			inventory.setInventorySlotContents(inventory.currentItem, stack);
+		else if(slotIn == EntityEquipmentSlot.OFFHAND)
+			inventory.offHandInventory[0] = stack;
+		else inventory.armorInventory[slotIn.getIndex()] = stack;	//Couldn't find a good method to replace this
 	}
 	
 	@Override
@@ -257,9 +261,9 @@ public class EntityDecoy extends EntityLiving {
 	}
 	
 	@Override
-	public ItemStack[] getInventory()
+	public Iterable<ItemStack> getArmorInventoryList()
 	{
-		return inventory.armorInventory;
+		return Arrays.asList(inventory.armorInventory);
 	}
 	
 	@Override

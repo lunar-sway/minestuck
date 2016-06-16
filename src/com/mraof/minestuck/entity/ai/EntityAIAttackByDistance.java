@@ -4,7 +4,9 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.util.MathHelper;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.MathHelper;
 
 public class EntityAIAttackByDistance extends EntityAIBase
 {
@@ -168,9 +170,9 @@ public class EntityAIAttackByDistance extends EntityAIBase
 				{
 					this.rangedAttackTime = 20;
 	
-					if (this.attacker.getHeldItem() != null)
+					if (this.attacker.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND) != null)
 					{
-						this.attacker.swingItem();
+						this.attacker.swingArm(EnumHand.MAIN_HAND);
 					}
 	
 					this.attacker.attackEntityAsMob(this.attackTarget);

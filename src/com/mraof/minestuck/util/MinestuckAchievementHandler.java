@@ -47,7 +47,7 @@ public class MinestuckAchievementHandler {
 		achievementPage.getAchievements().add(setupConnection);
 		enterMedium = (Achievement) (new Achievement("achievement.enterMedium", "enterMedium", 2, 1, MinestuckItems.cruxiteApple, setupConnection)).registerStat();
 		achievementPage.getAchievements().add(enterMedium);
-		alchemy = (Achievement) (new Achievement("achievement.alchemy", "alchemy", 4, 0, new ItemStack(MinestuckBlocks.blockMachine, 1, 3), enterMedium)).registerStat();
+		alchemy = (Achievement) (new Achievement("achievement.alchemy", "alchemy", 4, 0, new ItemStack(MinestuckBlocks.sburbMachine, 1, 3), enterMedium)).registerStat();
 		achievementPage.getAchievements().add(alchemy);
 		goldSeeds = (Achievement) new Achievement("achievement.goldSeeds", "goldSeeds", -2, -2, MinestuckItems.goldSeeds, AchievementList.buildHoe).registerStat();
 		achievementPage.getAchievements().add(goldSeeds);
@@ -57,7 +57,7 @@ public class MinestuckAchievementHandler {
 		achievementPage.getAchievements().add(killOgre);
 		killGiclops = (Achievement) new Achievement("achievement.killGiclops", "killGiclops", -1, 3, MinestuckItems.royalDeringer, killOgre).registerStat();
 		achievementPage.getAchievements().add(killGiclops);
-		broBlade = (Achievement) new Achievement("achievement.broBlade", "broBlade", 5, -2, MinestuckItems.katana, alchemy).registerStat();
+		broBlade = (Achievement) new Achievement("achievement.broBlade", "broBlade", 5, -2, MinestuckItems.unbreakableKatana, alchemy).registerStat();
 		achievementPage.getAchievements().add(broBlade);
 		returnNode = (Achievement) new Achievement("achievement.returnNode", "returnNode", 4, 2, Items.bed, enterMedium).registerStat();
 		achievementPage.getAchievements().add(returnNode);
@@ -67,14 +67,14 @@ public class MinestuckAchievementHandler {
 	{
 		if(!(stack.getItem() instanceof ItemCruxiteArtifact))
 		{
-			player.triggerAchievement(alchemy);
+			player.addStat(alchemy);
 			Echeladder e = MinestuckPlayerData.getData(player).echeladder;
 			e.checkBonus(Echeladder.ALCHEMY_BONUS_OFFSET);
 		}
 		if(stack.getItem().equals(MinestuckItems.clawHammer))
-			player.triggerAchievement(getHammer);
-		if(stack.getItem().equals(MinestuckItems.katana))
-			player.triggerAchievement(broBlade);
+			player.addStat(getHammer);
+		if(stack.getItem().equals(MinestuckItems.unbreakableKatana))
+			player.addStat(broBlade);
 		GristSet set = GristRegistry.getGristConversion(stack);
 		if(set != null) //The only time the grist set should be null here is if it was a captchalouge card that was alchemized
 		{
@@ -98,9 +98,9 @@ public class MinestuckAchievementHandler {
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public void onItemPickupEvent(EntityItemPickupEvent event)
 	{
-		Item item = event.item.getEntityItem().getItem();
+		Item item = event.getItem().getEntityItem().getItem();
 		if(item.equals(MinestuckItems.rawCruxite))
-			event.entityPlayer.triggerAchievement(mineCruxite);
+			event.getEntityPlayer().addStat(mineCruxite);
 	}
 	
 }

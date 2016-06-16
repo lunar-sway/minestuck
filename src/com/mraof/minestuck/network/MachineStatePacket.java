@@ -5,11 +5,10 @@ import io.netty.buffer.ByteBuf;
 import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.relauncher.Side;
 
-import com.mraof.minestuck.inventory.ContainerMachine;
-import com.mraof.minestuck.tileentity.TileEntityMachine;
+import com.mraof.minestuck.inventory.ContainerSburbMachine;
+import com.mraof.minestuck.tileentity.TileEntitySburbMachine;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristType;
 
@@ -39,10 +38,14 @@ public class MachineStatePacket extends MinestuckPacket {
 	@Override
 	public void execute(EntityPlayer player)
 	{
-		TileEntityMachine te = ((ContainerMachine) ((EntityPlayerMP)player).openContainer).tileEntity;
+		if(!(player.openContainer instanceof ContainerSburbMachine))
+			return;
 		
-		if (te == null) {
-			Debug.print("Invalid TE!");
+		TileEntitySburbMachine te = ((ContainerSburbMachine) player.openContainer).tileEntity;
+		
+		if (te == null)
+		{
+			Debug.warnf("Invalid TE in container for player %s!", player.getName());
 		}
 		else
 		{

@@ -6,15 +6,10 @@ import java.util.List;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Vec3;
-import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.util.math.Vec3d;
 
 import com.mraof.minestuck.block.BlockColoredDirt;
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceMushroomGenerator;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
@@ -22,11 +17,11 @@ import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 public class LandAspectShade extends TerrainLandAspect 
 {
 	
-	static Vec3 skyColor = new Vec3(0.16D, 0.38D, 0.54D);
+	static Vec3d skyColor = new Vec3d(0.16D, 0.38D, 0.54D);
 	
 	public LandAspectShade()
 	{
-		List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
+		/*List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
 		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_mushroom, 1, 0), 1, 7, 6));
 		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_mushroom, 1, 0), 1, 4, 3));
 		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.brown_mushroom, 1, 0), 1, 4, 3));
@@ -34,7 +29,7 @@ public class LandAspectShade extends TerrainLandAspect
 		list.add(new WeightedRandomChestContent(new ItemStack(Items.mushroom_stew, 1, 0), 1, 1, 4));
 		list.add(new WeightedRandomChestContent(new ItemStack(MinestuckItems.minestuckBucket, 1, 0), 1, 1, 2));
 		
-		lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);
+		lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);*/
 	}
 	
 	@Override
@@ -66,7 +61,7 @@ public class LandAspectShade extends TerrainLandAspect
 	@Override
 	public String getPrimaryName()
 	{
-		return "Shade";
+		return "shade";
 	}
 
 	@Override
@@ -93,7 +88,7 @@ public class LandAspectShade extends TerrainLandAspect
 	}
 
 	@Override
-	public Vec3 getFogColor() 
+	public Vec3d getFogColor() 
 	{
 		return skyColor;
 	}

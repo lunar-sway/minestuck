@@ -3,24 +3,37 @@ package com.mraof.minestuck.item.weapon;
 public enum EnumBladeType 
 {
 
-	SORD(59, 3, 5, "sord"),
-	NINJA(250, 6, 15, "ninjaSword"),
-	KATANA(2200, 8, 20, "katana"),
-	CALEDSCRATCH(1561, 7, 30, "caledscratch"),
-	REGISWORD(812, 7, 10, "regisword"),
-	DERINGER(1561, 8, 30, "royalDeringer"),
-	SCARLET(2000, 9, 30, "scarletRibbitar"),
-	DOGG(1000, 6, 30, "doggMachete");
+	SORD(59, 2, 5, "sord"),
+	CACTUS(104, 4, 10, "cactaceaeCutlass"),
+	NINJA(250, 5, 15, "ninjaSword"),
+	KATANA(2200, 7, 20, "katana"),
+	FIREPOKER(250, 6, 15, "firePoker"),
+	HOTHANDLE(350, 5, 15, "hotHandle"),
+	CALEDSCRATCH(1561, 6, 30, "caledscratch"),
+	CALEDFWLCH(1025, 6, 30, "caledfwlch"),
+	REGISWORD(812, 6, 10, "regisword"),
+	DERINGER(1561, 7, 30, "royalDeringer"),
+	ZILLYWAIR(2500, 8, 30, "zillywairCutlass"),
+	SCARLET(2000, 7, 30, "scarletRibbitar"),
+	DOGG(1000, 5, 30, "doggMachete");
 	
+	private static final double DEFAULT_ATTACK_SPEED = -2.4D;
 	private final int maxUses;
-	private final int damageVsEntity;
+	private final double damageVsEntity;
+	private final double attackSpeed;
 	private final int enchantability;
 	private final String name;
 	
-	private EnumBladeType(int maxUses, int damageVsEntity, int enchantability, String name) 
+	private EnumBladeType(int maxUses, double damageVsEntity, int enchantability, String name)
+	{
+		this(maxUses, damageVsEntity, DEFAULT_ATTACK_SPEED, enchantability, name);
+	}
+	
+	private EnumBladeType(int maxUses, double damageVsEntity, double attackSpeed, int enchantability, String name)
 	{
 		this.maxUses = maxUses;
 		this.damageVsEntity = damageVsEntity;
+		this.attackSpeed = attackSpeed;
 		this.enchantability = enchantability;
 		this.name = name;
 	}
@@ -30,9 +43,14 @@ public enum EnumBladeType
 		return maxUses;
 	}
 	
-	public int getDamageVsEntity()
+	public double getDamageVsEntity()
 	{
 		return damageVsEntity;
+	}
+	
+	public double getAttackSpeed()
+	{
+		return attackSpeed;
 	}
 	
 	public int getEnchantability()

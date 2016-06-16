@@ -3,27 +3,23 @@ package com.mraof.minestuck.world.lands.gen;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.IProgressUpdate;
-import net.minecraft.util.Vec3;
-import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.BiomeGenBase.BiomeProperties;
 import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
-import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
-import net.minecraftforge.common.ChestGenHooks;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.BlockGate;
@@ -32,8 +28,6 @@ import com.mraof.minestuck.entity.consort.EntityIguana;
 import com.mraof.minestuck.entity.consort.EntityNakagator;
 import com.mraof.minestuck.entity.consort.EntitySalamander;
 import com.mraof.minestuck.tileentity.TileEntityGate;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
@@ -46,13 +40,13 @@ import com.mraof.minestuck.world.lands.structure.LandStructureHandler;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 
-public class ChunkProviderLands implements IChunkProvider 
+public class ChunkProviderLands implements IChunkGenerator
 {
 	List<SpawnListEntry> consortList;
 	public List<SpawnListEntry> monsterList;
 	World landWorld;
 	Random random;
-	Vec3 skyColor;
+	Vec3d skyColor;
 	long seed;
 	public TerrainLandAspect aspect1;
 	public TitleLandAspect aspect2;
@@ -60,7 +54,6 @@ public class ChunkProviderLands implements IChunkProvider
 	public int nameIndex1, nameIndex2;
 	public boolean nameOrder;
 
-	public final Map<String, ChestGenHooks> lootMap = new HashMap<String, ChestGenHooks>();
 	public IBlockState surfaceBlock;
 	public IBlockState upperBlock;
 	public IBlockState groundBlock;
@@ -103,7 +96,7 @@ public class ChunkProviderLands implements IChunkProvider
 		
 		if(!clientSide)
 		{
-			seed = worldObj.getSeed()*worldObj.provider.getDimensionId();
+			seed = worldObj.getSeed()*worldObj.provider.getDimension();
 			helper = new LandAspectRegistry(seed);
 			
 			Random rand = new Random(seed);
@@ -122,18 +115,15 @@ public class ChunkProviderLands implements IChunkProvider
 			this.decorators = new ArrayList<ILandDecorator>();
 			this.decorators.addAll(aspect1.getDecorators());
 			sortDecorators();
-			
-			List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>(AlchemyRecipeHandler.basicMediumChest);
-			aspect1.modifyChestContent(list, AlchemyRecipeHandler.BASIC_MEDIUM_CHEST);
-			lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, new ChestGenHooks(null, list, 0, 0));	//Item count is handled separately by the structure
 		}
 	}
 	
 	public void createBiomeGen()
 	{
-		biomeGenLands = new BiomeGenMinestuck(BiomeGenMinestuck.mediumNormal.biomeID, false).setTemperatureRainfall(temperature, rainfall).setBiomeName(this.landWorld.provider.getDimensionName());
+		BiomeProperties properties = new BiomeProperties(((WorldProviderLands)this.landWorld.provider).getDimensionName()).setTemperature(temperature).setRainfall(rainfall).setBaseBiome("medium");
 		if(temperature <= 0.1)
-			biomeGenLands.setEnableSnow();
+			properties.setSnowEnabled();
+		biomeGenLands = new BiomeGenMinestuck(properties);
 	}
 	
 	public void sortDecorators()	//Called after an aspect have added elements to the decorators list.
@@ -146,20 +136,14 @@ public class ChunkProviderLands implements IChunkProvider
 			}});
 	}
 	
-	public void mergeFogColor(Vec3 fogColor, float strength)
+	public void mergeFogColor(Vec3d fogColor, float strength)
 	{
 		double d1 = (this.skyColor.xCoord + fogColor.xCoord*strength)/(1 + strength);
 		double d2 = (this.skyColor.yCoord + fogColor.yCoord*strength)/(1 + strength);
 		double d3 = (this.skyColor.zCoord + fogColor.zCoord*strength)/(1 + strength);
-		this.skyColor = new Vec3(d1, d2, d3);
+		this.skyColor = new Vec3d(d1, d2, d3);
 	}
 	
-	@Override
-	public boolean chunkExists(int i, int j) 
-	{
-		return true;
-	}
-
 	@Override
 	public Chunk provideChunk(int chunkX, int chunkZ) 
 	{
@@ -168,20 +152,20 @@ public class ChunkProviderLands implements IChunkProvider
 		Chunk chunk = new Chunk(this.landWorld, primer, chunkX, chunkZ);
 		chunk.generateSkylightMap();
 		
-		BiomeGenBase[] biomes = landWorld.getWorldChunkManager().loadBlockGeneratorData(null, chunkX * 16, chunkZ * 16, 16, 16);
+		BiomeGenBase[] biomes = landWorld.getBiomeProvider().loadBlockGeneratorData(null, chunkX * 16, chunkZ * 16, 16, 16);
 		
 		byte[] chunkBiomes = chunk.getBiomeArray();
 		for(int i = 0; i < chunkBiomes.length; i++)
-			chunkBiomes[i] = (byte) biomes[i].biomeID;
+			chunkBiomes[i] = (byte) BiomeGenBase.getIdForBiome(biomes[i]);
 		
-		structureHandler.func_175792_a(this, landWorld, chunkX, chunkZ, primer);
+		structureHandler.generate(landWorld, chunkX, chunkZ, primer);
 		return chunk;
 	}
 	
 	//private List<ChunkCoordIntPair> coords = new ArrayList<ChunkCoordIntPair>();
 	
 	@Override
-	public void populate(IChunkProvider ichunkprovider, int chunkX, int chunkZ) 
+	public void populate(int chunkX, int chunkZ) 
 	{
 		ChunkCoordIntPair coord = new ChunkCoordIntPair(chunkX, chunkZ);
 		
@@ -192,7 +176,7 @@ public class ChunkProviderLands implements IChunkProvider
 		}
 		else coords.add(coord);*/
 		
-		BlockPos gatePos = GateHandler.getGatePos(-1, landWorld.provider.getDimensionId());
+		BlockPos gatePos = GateHandler.getGatePos(-1, landWorld.provider.getDimension());
 		
 		boolean generatingGate = false;
 		if(gatePos != null)
@@ -204,9 +188,8 @@ public class ChunkProviderLands implements IChunkProvider
 		
 		this.random.setSeed(getSeedFor(chunkX, chunkZ));
 		
-		this.generatingStructure = structureHandler.func_175794_a(landWorld, random, new ChunkCoordIntPair(chunkX, chunkZ));
+		this.generatingStructure = structureHandler.generateStructure(landWorld, random, new ChunkCoordIntPair(chunkX, chunkZ));
 		
-		ichunkprovider.populate(ichunkprovider, chunkX, chunkZ);
 		BlockPos pos = null;
 		for (Object decorator : decorators)
 		{
@@ -232,7 +215,7 @@ public class ChunkProviderLands implements IChunkProvider
 			
 			gatePos = structure.generateGateStructure(landWorld, gatePos, this);
 			
-			GateHandler.setDefiniteGatePos(-1, landWorld.provider.getDimensionId(), gatePos);
+			GateHandler.setDefiniteGatePos(-1, landWorld.provider.getDimension(), gatePos);
 			for(int x = -1; x <= 1; x++)
 				for(int z = -1; z <= 1; z++)
 				{
@@ -248,6 +231,12 @@ public class ChunkProviderLands implements IChunkProvider
 		this.generatingStructure = false;
 	}
 	
+	@Override
+	public boolean generateStructures(Chunk chunkIn, int x, int z)
+	{
+		return false;
+	}
+	
 	public long getSeedFor(int chunkX, int chunkZ)
 	{
 		random.setSeed(seed);
@@ -256,51 +245,9 @@ public class ChunkProviderLands implements IChunkProvider
 		return ((long)chunkX * i1 + (long)chunkZ * j1) ^ seed;
 	}
 	
-	@Override
-	public boolean saveChunks(boolean flag, IProgressUpdate iprogressupdate) {
-		return true;
-	}
-
-	@Override
-	public boolean unloadQueuedChunks() {
-		return false;
-	}
-
-	@Override
-	public boolean canSave() {
-		return true;
-	}
-
-	@Override
-	public String makeString() {
-		return "LandRandomLevelSource";
-	}
-	
-	@Override
-	public int getLoadedChunkCount() {
-		return 0;
-	}
-	
-	@Override
-	public void saveExtraData() {
-	}
-	
-	public Vec3 getFogColor()
+	public Vec3d getFogColor()
 	{
 		return this.skyColor;
-	}
-	
-	@Override
-	public Chunk provideChunk(BlockPos pos)
-	{
-		return provideChunk(pos.getX() >> 4, pos.getZ() >> 4);
-	}
-
-	@Override
-	public boolean func_177460_a(IChunkProvider p_177460_1_, Chunk p_177460_2_,
-			int p_177460_3_, int p_177460_4_) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 	
 	@Override

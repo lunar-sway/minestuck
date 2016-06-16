@@ -4,10 +4,11 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
@@ -20,7 +21,7 @@ import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
-import com.mraof.minestuck.util.UsernameHandler;
+import com.mraof.minestuck.util.IdentifierHandler;
 
 public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 {
@@ -30,8 +31,8 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 
 	private int gristHealth = 5;
 	//Type of grist
-	private String gristType;
-	private int gristValue;
+	private GristType gristType = GristType.Build;
+	private int gristValue = 1;
 
 	private EntityPlayer closestPlayer;
 
@@ -41,7 +42,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	{
 		super(world);
 		this.gristValue = gristData.getAmount();
-		this.setSize(this.getSizeByValue(), 0.5F);
+		this.setSize(this.getSizeByValue(), this.getSizeByValue());
 //		this.yOffset = this.height / 2.0F;
 		this.setPosition(x, y, z);
 		this.rotationYaw = (float)(Math.random() * 360.0D);
@@ -50,7 +51,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		this.motionZ = (double)((float)(world.rand.nextGaussian() * 0.20000000298023224D - 0.10000000149011612D));
 		this.isImmuneToFire = true;
 
-		this.gristType = gristData.getType().getName();
+		this.gristType = gristData.getType();
 	}
 
 	public EntityGrist(World par1World)
@@ -68,7 +69,26 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	}
 
 	protected void entityInit() {}
-
+	
+	public boolean attackEntityFrom(DamageSource source, float amount)
+	{
+		if (this.isEntityInvulnerable(source))
+		{
+			return false;
+		} else
+		{
+			this.setBeenAttacked();
+			this.gristHealth = (int)((float)this.gristHealth - amount);
+			
+			if (this.gristHealth <= 0)
+			{
+				this.setDead();
+			}
+			
+			return false;
+		}
+	}
+	
 	@SideOnly(Side.CLIENT)
 	public int getBrightnessForRender(float par1)
 	{
@@ -97,14 +117,14 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
-		this.motionY -= 0.029999999329447746D;
+		this.motionY -= 0.03D;
 
-		if (this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ))).getBlock().getMaterial() == Material.lava)
+		if (this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ))).getMaterial() == Material.lava)
 		{
-			this.motionY = 0.20000000298023224D;
+			this.motionY = 0.2D;
 			this.motionX = (double)((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F);
 			this.motionZ = (double)((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F);
-			this.playSound("random.fizz", 0.4F, 2.0F + this.rand.nextFloat() * 0.4F);
+			this.playSound(SoundEvents.entity_generic_burn, 0.4F, 2.0F + this.rand.nextFloat() * 0.4F);
 		}
 
 		//this.setPosition(this.posX, (this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxY) / 2.0D, this.posZ);
@@ -171,17 +191,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	{
 		return this.worldObj.handleMaterialAcceleration(this.getEntityBoundingBox(), Material.water, this);
 	}
-
-	/**
-	 * Will deal the specified amount of damage to the entity if the entity isn't immune to fire damage. Args:
-	 * amountDamage
-	 */
-	protected void dealFireDamage(int par1)
-	{
-		//		this.attackEntityFrom(DamageSource.inFire, par1);
-		//Nope
-	}
-
+	
 	/**
 	 * Called when the entity is attacked.
 	 */
@@ -198,7 +208,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		par1NBTTagCompound.setShort("Health", (short)((byte)this.gristHealth));
 		par1NBTTagCompound.setShort("Age", (short)this.gristAge);
 		par1NBTTagCompound.setShort("Value", (short)this.gristValue);
-		par1NBTTagCompound.setString("Type", this.gristType);
+		par1NBTTagCompound.setString("Type", this.gristType.getName());
 	}
 
 	/**
@@ -208,8 +218,10 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	{
 		this.gristHealth = par1NBTTagCompound.getShort("Health") & 255;
 		this.gristAge = par1NBTTagCompound.getShort("Age");
-		this.gristValue = par1NBTTagCompound.getShort("Value");
-		this.gristType = par1NBTTagCompound.getString("Type");
+		if(par1NBTTagCompound.hasKey("Value", 99))
+			this.gristValue = par1NBTTagCompound.getShort("Value");
+		if(par1NBTTagCompound.hasKey("Type", 8))
+			this.gristType = GristType.getTypeFromString(par1NBTTagCompound.getString("Type"));
 	}
 
 	/**
@@ -222,7 +234,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		
 		if (!this.worldObj.isRemote)
 		{
-			this.playSound("random.pop", 0.1F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F));
+			this.playSound(SoundEvents.entity_item_pickup, 0.1F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F));
 			par1EntityPlayer.onItemPickup(this, 1);
 			this.addGrist(par1EntityPlayer);
 			this.setDead();
@@ -232,25 +244,26 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	}
 	public void addGrist(EntityPlayer entityPlayer)
 	{
-		GristHelper.increase(UsernameHandler.encode(entityPlayer), new GristSet(GristType.getTypeFromString(gristType), gristValue));
-		MinestuckPlayerTracker.updateGristCache(UsernameHandler.encode(entityPlayer));
+		GristHelper.increase(IdentifierHandler.encode(entityPlayer), new GristSet(gristType, gristValue));
+		MinestuckPlayerTracker.updateGristCache(IdentifierHandler.encode(entityPlayer));
 	}
 
 	public boolean canAttackWithItem()
 	{
 		return false;
 	}
-	public String getType() 
+	
+	public GristType getType() 
 	{
 		return gristType;
 	}
-	public static int typeInt(String type)
+	
+	public static int typeInt(GristType type)
 	{
-
-				return GristType.getTypeFromString(type).ordinal();
+		return type == null ? -1 : type.ordinal();
 	
 	}
-
+	
 	public float getSizeByValue() 
 	{
 		return (float) (Math.pow(gristValue, .25) / 3.0F);
@@ -276,7 +289,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 			this.setDead();
 			return;
 		}
-		this.gristType = GristType.values()[typeOffset].getName();
+		this.gristType = GristType.values()[typeOffset];
 		this.gristValue = data.readInt();
 		this.setSize(this.getSizeByValue(), 0.5F);
 //		this.yOffset = this.height / 2.0F;

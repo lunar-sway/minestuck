@@ -11,12 +11,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.Minestuck;
@@ -31,8 +33,8 @@ public abstract class ItemCustomBoat extends Item
 		BlockDispenser.dispenseBehaviorRegistry.putObject(this, new BehaivorDispenseCustomBoat());
 	}
 	
-	//This method is copied straight from the normal boat item.
-	public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn)
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, net.minecraft.util.EnumHand hand)
 	{
 		float f = 1.0F;
 		float f1 = playerIn.prevRotationPitch + (playerIn.rotationPitch - playerIn.prevRotationPitch) * f;
@@ -40,7 +42,7 @@ public abstract class ItemCustomBoat extends Item
 		double d0 = playerIn.prevPosX + (playerIn.posX - playerIn.prevPosX) * (double)f;
 		double d1 = playerIn.prevPosY + (playerIn.posY - playerIn.prevPosY) * (double)f + (double)playerIn.getEyeHeight();
 		double d2 = playerIn.prevPosZ + (playerIn.posZ - playerIn.prevPosZ) * (double)f;
-		Vec3 vec3 = new Vec3(d0, d1, d2);
+		Vec3d vec3 = new Vec3d(d0, d1, d2);
 		float f3 = MathHelper.cos(-f2 * 0.017453292F - (float)Math.PI);
 		float f4 = MathHelper.sin(-f2 * 0.017453292F - (float)Math.PI);
 		float f5 = -MathHelper.cos(-f1 * 0.017453292F);
@@ -48,16 +50,16 @@ public abstract class ItemCustomBoat extends Item
 		float f7 = f4 * f5;
 		float f8 = f3 * f5;
 		double d3 = 5.0D;
-		Vec3 vec31 = vec3.addVector((double)f7 * d3, (double)f6 * d3, (double)f8 * d3);
-		MovingObjectPosition movingobjectposition = worldIn.rayTraceBlocks(vec3, vec31, true);
+		Vec3d vec31 = vec3.addVector((double)f7 * d3, (double)f6 * d3, (double)f8 * d3);
+		RayTraceResult rayTrace = worldIn.rayTraceBlocks(vec3, vec31, true);
 		
-		if (movingobjectposition == null)
+		if (rayTrace == null)
 		{
-			return itemStackIn;
+			return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
 		}
 		else
 		{
-			Vec3 vec32 = playerIn.getLook(f);
+			Vec3d vec32 = playerIn.getLook(f);
 			boolean flag = false;
 			float f9 = 1.0F;
 			List list = worldIn.getEntitiesWithinAABBExcludingEntity(playerIn, playerIn.getEntityBoundingBox().addCoord(vec32.xCoord * d3, vec32.yCoord * d3, vec32.zCoord * d3).expand((double)f9, (double)f9, (double)f9));
@@ -80,13 +82,13 @@ public abstract class ItemCustomBoat extends Item
 			
 			if (flag)
 			{
-				return itemStackIn;
+				return new ActionResult(EnumActionResult.PASS, itemStackIn);
 			}
 			else
 			{
-				if (movingobjectposition.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK)
+				if (rayTrace.typeOfHit == RayTraceResult.Type.BLOCK)
 				{
-					BlockPos blockpos = movingobjectposition.getBlockPos();
+					BlockPos blockpos = rayTrace.getBlockPos();
 					
 					if (worldIn.getBlockState(blockpos).getBlock() == Blocks.snow_layer)
 					{
@@ -96,9 +98,9 @@ public abstract class ItemCustomBoat extends Item
 					Entity entityboat = createBoat(itemStackIn, worldIn, (double)((float)blockpos.getX() + 0.5F), (double)((float)blockpos.getY() + 1.0F), (double)((float)blockpos.getZ() + 0.5F));
 					entityboat.rotationYaw = (float)(((MathHelper.floor_double((double)(playerIn.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3) - 1) * 90);
 					
-					if (!worldIn.getCollidingBoundingBoxes(entityboat, entityboat.getEntityBoundingBox().expand(-0.1D, -0.1D, -0.1D)).isEmpty())
+					if (!worldIn.getCubes(entityboat, entityboat.getEntityBoundingBox().expandXyz(-0.1D)).isEmpty())
 					{
-						return itemStackIn;
+						return new ActionResult(EnumActionResult.FAIL, itemStackIn);
 					}
 					
 					if (!worldIn.isRemote)
@@ -110,9 +112,10 @@ public abstract class ItemCustomBoat extends Item
 					{
 						--itemStackIn.stackSize;
 					}
+					return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);
 				}
 				
-				return itemStackIn;
+				return new ActionResult(EnumActionResult.PASS, itemStackIn);
 			}
 		}
 	}
@@ -129,7 +132,7 @@ public abstract class ItemCustomBoat extends Item
 			double d1 = source.getY() + (double)((float)enumfacing.getFrontOffsetY() * 1.125F);
 			double d2 = source.getZ() + (double)((float)enumfacing.getFrontOffsetZ() * 1.125F);
 			BlockPos blockpos = source.getBlockPos().offset(enumfacing);
-			Material material = world.getBlockState(blockpos).getBlock().getMaterial();
+			Material material = world.getBlockState(blockpos).getMaterial();
 			double d3;
 			
 			if (Material.water.equals(material))
@@ -138,7 +141,7 @@ public abstract class ItemCustomBoat extends Item
 			}
 			else
 			{
-				if (!Material.air.equals(material) || !Material.water.equals(world.getBlockState(blockpos.down()).getBlock().getMaterial()))
+				if (!Material.air.equals(material) || !Material.water.equals(world.getBlockState(blockpos.down()).getMaterial()))
 				{
 					return this.dispense(source, stack);
 				}

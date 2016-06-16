@@ -16,7 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemModus extends Item
 {
 	
-	public String[] modusNames = {"stack", "queue", "queuestack", "tree", "hashmap"};
+	public String[] modusNames = {"stack", "queue", "queuestack", "tree", "hashmap", "set"};
 	
 	public ItemModus()
 	{
@@ -37,7 +37,7 @@ public class ItemModus extends Item
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item item, CreativeTabs tab, List itemList)
 	{
-		for(int i = 0; i < 4; i++)
+		for(int i = 0; i < 6; i++)
 			itemList.add(new ItemStack(this, 1, i));
 	}
 	

@@ -10,12 +10,9 @@ import net.minecraft.block.BlockSandStone;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Vec3;
-import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.gen.feature.WorldGenDeadBush;
 
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.BlockBlobDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
@@ -31,51 +28,34 @@ public class LandAspectSandstone extends TerrainLandAspect
 	
 	private final IBlockState upperBlock;
 	private final IBlockState[] structureBlocks;
-	private final Vec3 skyColor;
+	private final Vec3d skyColor;
 	private final String name;
 	private final List<TerrainLandAspect> variations;
 	
 	public LandAspectSandstone()
 	{
-		this("Sandstone");
+		this("sandstone");
 	}
 	
 	public LandAspectSandstone(String name)
 	{
 		variations = new ArrayList<TerrainLandAspect>();
 		this.name = name;
-		if(name.equals("Sandstone"))
+		if(name.equals("sandstone"))
 		{
 			upperBlock = Blocks.sandstone.getDefaultState();
 			structureBlocks = new IBlockState[] {Blocks.sandstone.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.SMOOTH), Blocks.stonebrick.getDefaultState()};
-			skyColor = new Vec3(0.9D, 0.7D, 0.05D);
-			
-			List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sandstone, 1, 0), 4, 15, 6));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sandstone, 1, 2), 2, 7, 4));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sandstone, 1, 1), 1, 4, 3));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_sandstone, 1, 0), 2, 6, 3));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sand, 1, 0), 2, 7, 4));
-			
-			lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);
+			skyColor = new Vec3d(0.9D, 0.7D, 0.05D);
 			
 			variations.add(this);
-			variations.add(new LandAspectSandstone("SandstoneRed"));
+			variations.add(new LandAspectSandstone("sandstone_red"));
 		}
 		else
 		{
 			upperBlock = Blocks.red_sandstone.getDefaultState();
 			structureBlocks = new IBlockState[] {Blocks.red_sandstone.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.SMOOTH), Blocks.stonebrick.getDefaultState()};
-			skyColor = new Vec3(0.9D, 0.5D, 0.05D);
+			skyColor = new Vec3d(0.9D, 0.5D, 0.05D);
 			
-			List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_sandstone, 1, 0), 4, 15, 6));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_sandstone, 1, 2), 2, 7, 4));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_sandstone, 1, 1), 1, 4, 3));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sandstone, 1, 0), 2, 6, 3));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sand, 1, 1), 2, 7, 4));
-			
-			lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);
 		}
 	}
 	
@@ -119,7 +99,7 @@ public class LandAspectSandstone extends TerrainLandAspect
 		List<ILandDecorator> list = new ArrayList<ILandDecorator>();
 		IBlockState sand = Blocks.sand.getDefaultState();
 		IBlockState sandstone = Blocks.sandstone.getDefaultState();
-		if(name.equals("SandstoneRed"))
+		if(name.equals("sandstone_red"))
 		{
 			sand = sand.withProperty(BlockSand.VARIANT, BlockSand.EnumType.RED_SAND);
 			sandstone = Blocks.red_sandstone.getDefaultState();
@@ -159,7 +139,7 @@ public class LandAspectSandstone extends TerrainLandAspect
 	}
 	
 	@Override
-	public Vec3 getFogColor()
+	public Vec3d getFogColor()
 	{
 		return skyColor;
 	}
@@ -167,7 +147,7 @@ public class LandAspectSandstone extends TerrainLandAspect
 	@Override
 	public TerrainLandAspect getPrimaryVariant()
 	{
-		return LandAspectRegistry.fromNameTerrain("Sandstone");
+		return LandAspectRegistry.fromNameTerrain("sandstone");
 	}
 	
 	@Override

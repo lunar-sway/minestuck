@@ -2,10 +2,15 @@ package com.mraof.minestuck.item;
 
 import net.minecraft.item.ItemAxe;
 
-public class ItemMinestuckAxe extends ItemAxe	//Only to be able to access the protected constructor
+public class ItemMinestuckAxe extends ItemAxe
 {
-	public ItemMinestuckAxe(ToolMaterial material)
+	public ItemMinestuckAxe(ToolMaterial material, float damage, float speed)
 	{
-		super(material);
+		super(ToolMaterial.IRON);
+		this.toolMaterial = material;
+		this.damageVsEntity = damage;
+		this.attackSpeed = speed;
+		this.setMaxDamage(material.getMaxUses());
+		this.efficiencyOnProperMaterial = material.getEfficiencyOnProperMaterial();
 	}
 }

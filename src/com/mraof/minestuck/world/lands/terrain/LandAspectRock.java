@@ -8,12 +8,8 @@ import net.minecraft.block.BlockSilverfish;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Vec3;
-import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.util.math.Vec3d;
 
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.BlockBlobDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
@@ -25,25 +21,6 @@ public class LandAspectRock extends TerrainLandAspect
 {
 	
 	private IBlockState[] structureBlocks = {Blocks.cobblestone.getDefaultState(), Blocks.stonebrick.getDefaultState()};
-	
-	public LandAspectRock()
-	{
-		List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.stone, 1, 0), 2, 8, 5));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.cobblestone, 1, 0), 4, 15, 7));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.gravel, 1, 0), 2, 6, 5));
-		list.add(new WeightedRandomChestContent(new ItemStack(Items.brick, 1, 0), 2, 6, 4));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.brick_block, 1, 0), 1, 3, 3));
-		list.add(new WeightedRandomChestContent(new ItemStack(Items.stone_pickaxe, 1, 0), 1, 1, 7));
-		list.add(new WeightedRandomChestContent(new ItemStack(Items.iron_pickaxe, 1, 0), 1, 1, 4));
-		list.add(new WeightedRandomChestContent(new ItemStack(Items.diamond_pickaxe, 1, 0), 1, 1, 1));
-		list.add(new WeightedRandomChestContent(new ItemStack(Items.iron_boots, 1, 0), 1, 1, 2));
-		list.add(new WeightedRandomChestContent(new ItemStack(Items.iron_leggings, 1, 0), 1, 1, 2));
-		list.add(new WeightedRandomChestContent(new ItemStack(Items.iron_chestplate, 1, 0), 1, 1, 2));
-		list.add(new WeightedRandomChestContent(new ItemStack(Items.iron_helmet, 1, 0), 1, 1, 2));
-		
-		lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);
-	}
 	
 	@Override
 	public IBlockState getSurfaceBlock()
@@ -66,7 +43,7 @@ public class LandAspectRock extends TerrainLandAspect
 	@Override
 	public String getPrimaryName()
 	{
-		return "Rock";
+		return "rock";
 	}
 	
 	@Override
@@ -117,9 +94,9 @@ public class LandAspectRock extends TerrainLandAspect
 	}
 	
 	@Override
-	public Vec3 getFogColor()
+	public Vec3d getFogColor()
 	{
-		return new Vec3(0.5, 0.5, 0.55);
+		return new Vec3d(0.5, 0.5, 0.55);
 	}
 	
 	@Override

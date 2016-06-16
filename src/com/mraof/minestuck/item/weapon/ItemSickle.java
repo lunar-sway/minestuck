@@ -9,7 +9,6 @@ import com.mraof.minestuck.Minestuck;
 
 public class ItemSickle extends ItemWeapon
 {
-	private int weaponDamage;
 	private final EnumSickleType sickleType;
 	
 	public ItemSickle(EnumSickleType sickleType)
@@ -37,15 +36,10 @@ public class ItemSickle extends ItemWeapon
 			break;
 		}
 		this.weaponDamage = sickleType.getDamageVsEntity();
-	}
-    
-    @Override
-	public int getAttackDamage() 
-    {
-		return weaponDamage;
+		this.weaponSpeed = sickleType.getAttackSpeed();
 	}
 	
-    @Override
+	@Override
 	public int getItemEnchantability()
 	{
 		return this.sickleType.getEnchantability();

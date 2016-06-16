@@ -3,7 +3,7 @@ package com.mraof.minestuck.util;
 import java.util.EnumSet;
 import java.util.Random;
 
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 
 /**
  * This class represents the 14 classes that exists in sburb,
@@ -72,7 +72,7 @@ public enum EnumClass {
 	}
 	
 	public String getDisplayName() {
-		return StatCollector.translateToLocal("title."+this.toString());
+		return I18n.translateToLocal("title."+this.toString());
 	}
 	
 }

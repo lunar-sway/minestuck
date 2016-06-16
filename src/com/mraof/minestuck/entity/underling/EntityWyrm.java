@@ -95,4 +95,10 @@ public class EntityWyrm extends EntityUnderling implements IEntityMultiPart
 	{
 		return 0;
 	}
+	
+	@Override
+	protected int getVitalityGel()
+	{
+		return 0;
+	}
 }

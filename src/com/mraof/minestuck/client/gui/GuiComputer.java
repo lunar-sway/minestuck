@@ -10,7 +10,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -108,7 +108,7 @@ public class GuiComputer extends GuiScreen
 		
 		if(te.program != null) {
 			te.program.onUpdateGui(this, buttonList);
-			programButton.displayString = StatCollector.translateToLocal(te.program.getName());
+			programButton.displayString = I18n.translateToLocal(te.program.getName());
 		}
 		
 	}

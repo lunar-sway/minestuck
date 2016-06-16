@@ -23,6 +23,7 @@ public class MinestuckConfigPacket extends MinestuckPacket
 	int cardCost;
 	int windowIdStart;
 	byte treeModusSetting;
+	byte hashmapModusSetting;
 	
 	boolean giveItems;
 	boolean easyDesignix;
@@ -30,6 +31,7 @@ public class MinestuckConfigPacket extends MinestuckPacket
 	boolean disableGristWidget;
 	boolean dataChecker;
 	boolean preEntryEcheladder;
+	boolean hardMode;
 	boolean[] deployValues;
 	
 	@Override
@@ -44,6 +46,7 @@ public class MinestuckConfigPacket extends MinestuckPacket
 			data.writeInt(ContainerHandler.windowIdStart);
 			data.writeBoolean(MinestuckConfig.giveItems);
 			data.writeBoolean(MinestuckConfig.cardRecipe);
+			data.writeBoolean(MinestuckConfig.hardMode);
 			
 			for(int i = 0; i < MinestuckConfig.deployConfigurations.length; i++)
 				data.writeBoolean(MinestuckConfig.deployConfigurations[i]);
@@ -52,6 +55,7 @@ public class MinestuckConfigPacket extends MinestuckPacket
 			data.writeInt(MinestuckConfig.cardCost);
 			data.writeBoolean(MinestuckConfig.disableGristWidget);
 			data.writeByte(MinestuckConfig.treeModusSetting);
+			data.writeByte(MinestuckConfig.hashmapChatModusSetting);
 			data.writeBoolean((Boolean) dat[1]);
 			data.writeBoolean(MinestuckConfig.preEntryRungLimit <= 0);
 		}
@@ -71,6 +75,7 @@ public class MinestuckConfigPacket extends MinestuckPacket
 			windowIdStart = data.readInt();
 			giveItems = data.readBoolean();
 			cardRecipe = data.readBoolean();
+			hardMode = data.readBoolean();
 			
 			deployValues = new boolean[MinestuckConfig.deployConfigurations.length];
 			for(int i = 0; i < deployValues.length; i++)
@@ -80,6 +85,7 @@ public class MinestuckConfigPacket extends MinestuckPacket
 			cardCost = data.readInt();
 			disableGristWidget = data.readBoolean();
 			treeModusSetting = data.readByte();
+			hashmapModusSetting = data.readByte();
 			dataChecker = data.readBoolean();
 			preEntryEcheladder = data.readBoolean();
 		}
@@ -96,6 +102,7 @@ public class MinestuckConfigPacket extends MinestuckPacket
 			MinestuckConfig.clientLandEditRange = landEditRange;
 			MinestuckConfig.clientGiveItems = giveItems;
 			ContainerHandler.clientWindowIdStart = windowIdStart;
+			MinestuckConfig.clientHardMode = hardMode;
 			
 			if(!Minestuck.isServerRunning)
 			{
@@ -107,6 +114,7 @@ public class MinestuckConfigPacket extends MinestuckPacket
 			MinestuckConfig.clientCardCost = cardCost;
 			MinestuckConfig.clientDisableGristWidget = disableGristWidget;
 			MinestuckConfig.clientTreeAutobalance = treeModusSetting;
+			MinestuckConfig.clientHashmapChat = hashmapModusSetting;
 			MinestuckConfig.dataCheckerAccess = dataChecker;
 			MinestuckConfig.preEntryEcheladder = preEntryEcheladder;
 		}

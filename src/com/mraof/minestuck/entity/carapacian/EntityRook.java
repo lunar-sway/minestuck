@@ -1,14 +1,14 @@
 package com.mraof.minestuck.entity.carapacian;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
+import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 public abstract class EntityRook extends EntityCarapacian implements IMob
 {
-	private EntityAIAttackOnCollide entityAIAttackOnCollide = new EntityAIAttackOnCollide(this, .5F, false);
+	private EntityAIAttackMelee entityAIAttackOnCollide = new EntityAIAttackMelee(this, .5F, false);
 
 	public EntityRook(World world)
 	{
@@ -55,7 +55,7 @@ public abstract class EntityRook extends EntityCarapacian implements IMob
 	public void setCombatTask()
 	{
 		if(this.entityAIAttackOnCollide == null)
-			entityAIAttackOnCollide = new EntityAIAttackOnCollide(this, .4F, false);
+			entityAIAttackOnCollide = new EntityAIAttackMelee(this, .4F, false);
 		this.tasks.removeTask(this.entityAIAttackOnCollide);
 		this.tasks.addTask(4, this.entityAIAttackOnCollide);
 	}

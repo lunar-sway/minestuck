@@ -1,17 +1,29 @@
 package com.mraof.minestuck.item;
 
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemHoe;
+import net.minecraft.item.ItemMultiTexture;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
+import com.google.common.base.Function;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.MinestuckBlocks;
+
+import static com.mraof.minestuck.block.MinestuckBlocks.*;
+
+import com.mraof.minestuck.block.BlockColoredDirt;
+import com.mraof.minestuck.block.BlockCrockerMachine;
+import com.mraof.minestuck.item.block.ItemBlockLayered;
+import com.mraof.minestuck.item.block.ItemSburbMachine;
+import com.mraof.minestuck.item.weapon.EnumBattleaxeType;
 import com.mraof.minestuck.item.weapon.EnumBladeType;
 import com.mraof.minestuck.item.weapon.EnumCaneType;
 import com.mraof.minestuck.item.weapon.EnumClubType;
@@ -19,6 +31,7 @@ import com.mraof.minestuck.item.weapon.EnumDiceType;
 import com.mraof.minestuck.item.weapon.EnumHammerType;
 import com.mraof.minestuck.item.weapon.EnumSickleType;
 import com.mraof.minestuck.item.weapon.EnumSporkType;
+import com.mraof.minestuck.item.weapon.ItemBattleaxe;
 import com.mraof.minestuck.item.weapon.ItemBlade;
 import com.mraof.minestuck.item.weapon.ItemCane;
 import com.mraof.minestuck.item.weapon.ItemClub;
@@ -41,13 +54,23 @@ public class MinestuckItems
 	public static Item scarletZillyhoo;
 	//blades
 	public static Item sord;
-	public static Item ninjaSword;
+	public static Item cactusCutlass;
 	public static Item katana;
+	public static Item unbreakableKatana;	//Not actually unbreakable
+	public static Item firePoker;
+	public static Item hotHandle;
 	public static Item caledscratch;
+	public static Item caledfwlch;
 	public static Item royalDeringer;
+	public static Item zillywairCutlass;
 	public static Item regisword;
 	public static Item scarletRibbitar;
 	public static Item doggMachete;
+	//axes
+	public static Item blacksmithBane;
+	public static Item scraxe;
+	public static Item rubyCroak;
+	public static Item hephaestusLumber;
 	//Dice
 	public static Item dice;
 	public static Item fluoriteOctet;
@@ -73,10 +96,10 @@ public class MinestuckItems
 	public static Item rawCruxite;
 	public static Item cruxiteDowel;
 	public static Item captchaCard;
-	public static Item cruxiteApple;
+	public static ItemCruxiteArtifact cruxiteApple;
 	public static Item cruxitePotion;
 	public static Item disk;
-	public static Item component;
+	public static Item chessboard;
 	public static ItemModus modusCard;
 	public static ItemMinestuckBucket minestuckBucket;
 	public static ItemGoldSeeds goldSeeds;	//This item is pretty much only a joke
@@ -98,144 +121,142 @@ public class MinestuckItems
 	
 	public static void registerItems()
 	{
-		//items
-				//hammers
-				clawHammer = new ItemHammer(EnumHammerType.CLAW);
-				sledgeHammer = new ItemHammer(EnumHammerType.SLEDGE);
-				blacksmithHammer = new ItemHammer(EnumHammerType.BLACKSMITH);
-				pogoHammer = new ItemHammer(EnumHammerType.POGO);
-				telescopicSassacrusher = new ItemHammer(EnumHammerType.TELESCOPIC);
-				fearNoAnvil = new ItemHammer(EnumHammerType.FEARNOANVIL);
-				zillyhooHammer = new ItemHammer(EnumHammerType.ZILLYHOO);
-				popamaticVrillyhoo = new ItemHammer(EnumHammerType.POPAMATIC);
-				scarletZillyhoo = new ItemHammer(EnumHammerType.SCARLET);
-				//blades
-				sord = new ItemBlade(EnumBladeType.SORD);
-				ninjaSword = new ItemBlade(EnumBladeType.NINJA);
-				katana = new ItemBlade(EnumBladeType.KATANA);
-				caledscratch = new ItemBlade(EnumBladeType.CALEDSCRATCH);
-				royalDeringer = new ItemBlade(EnumBladeType.DERINGER);
-				regisword = new ItemBlade(EnumBladeType.REGISWORD);
-				scarletRibbitar = new ItemBlade(EnumBladeType.SCARLET);
-				doggMachete = new ItemBlade(EnumBladeType.DOGG);
-				//Dice
-				dice = new ItemDice(EnumDiceType.DICE);
-				fluoriteOctet = new ItemDice(EnumDiceType.FLUORITE_OCTET);
-				
-				//sickles
-				sickle = new ItemSickle(EnumSickleType.SICKLE);
-				homesSmellYaLater = new ItemSickle(EnumSickleType.HOMES);
-				regiSickle = new ItemSickle(EnumSickleType.REGISICKLE);
-				clawSickle = new ItemSickle(EnumSickleType.CLAW);
-				//clubs
-				deuceClub = new ItemClub(EnumClubType.DEUCE);
-				//canes
-				cane = new ItemCane(EnumCaneType.CANE);
-				spearCane = new ItemCane(EnumCaneType.SPEAR);
-				dragonCane = new ItemCane(EnumCaneType.DRAGON);
-				//Spoons/forks
-				woodenSpoon = new ItemSpork(EnumSporkType.SPOON_WOOD);
-				silverSpoon = new ItemSpork(EnumSporkType.SPOON_SILVER);
-				crockerSpork = new ItemSpork(EnumSporkType.CROCKER);
-				skaiaFork = new ItemSpork(EnumSporkType.SKAIA);
-				fork = new ItemSpork(EnumSporkType.FORK);
-				spork = new ItemSpork(EnumSporkType.SPORK);
-				
-				toolEmerald = EnumHelper.addToolMaterial("EMERALD", 3, 1220, 12.0F, 4.0F, 12).setRepairItem(new ItemStack(Items.emerald));
-				emeraldSword = new ItemSword(toolEmerald).setUnlocalizedName("swordEmerald").setCreativeTab(Minestuck.tabMinestuck);
-				emeraldAxe = new ItemMinestuckAxe(toolEmerald).setUnlocalizedName("hatchetEmerald").setCreativeTab(Minestuck.tabMinestuck);
-				emeraldPickaxe = new ItemMinestuckPickaxe(toolEmerald).setUnlocalizedName("pickaxeEmerald").setCreativeTab(Minestuck.tabMinestuck);
-				emeraldShovel = new ItemSpade(toolEmerald).setUnlocalizedName("shovelEmerald").setCreativeTab(Minestuck.tabMinestuck);
-				emeraldHoe = new ItemHoe(toolEmerald).setUnlocalizedName("hoeEmerald").setCreativeTab(Minestuck.tabMinestuck);
-				//armor
-				armorPrismarine = EnumHelper.addArmorMaterial("PRISMARINE", "minestuck:prismarine", 20, new int[]{3, 7, 6, 2}, 15);
-				armorPrismarine.customCraftingMaterial = Items.prismarine_shard;
-				prismarineHelmet = new ItemArmor(armorPrismarine, 0, 0).setUnlocalizedName("helmetPrismarine").setCreativeTab(Minestuck.tabMinestuck);
-				prismarineChestplate = new ItemArmor(armorPrismarine, 0, 1).setUnlocalizedName("chestplatePrismarine").setCreativeTab(Minestuck.tabMinestuck);
-				prismarineLeggings = new ItemArmor(armorPrismarine, 0, 2).setUnlocalizedName("leggingsPrismarine").setCreativeTab(Minestuck.tabMinestuck);
-				prismarineBoots = new ItemArmor(armorPrismarine, 0, 3).setUnlocalizedName("bootsPrismarine").setCreativeTab(Minestuck.tabMinestuck);
-				//misc
-				rawCruxite = new ItemCruxiteRaw();
-				cruxiteDowel = new ItemDowel();
-				captchaCard = new ItemCaptchaCard();
-				cruxiteApple = new ItemCruxiteApple();
-				cruxitePotion = new ItemCruxitePotion();
-				disk = new ItemDisk();
-				component = new ItemComponent();
-				minestuckBucket = new ItemMinestuckBucket();
-				obsidianBucket = new ItemObsidianBucket();
-				modusCard = new ItemModus();
-				goldSeeds = new ItemGoldSeeds();
-				metalBoat = new ItemMetalBoat();
-				candy = new ItemMinestuckCandy();
-				
-				minestuckBucket.addBlock(MinestuckBlocks.blockOil);
-				minestuckBucket.addBlock(MinestuckBlocks.blockBlood);
-				minestuckBucket.addBlock(MinestuckBlocks.blockBrainJuice);
-				
-				GameRegistry.registerItem(clawHammer, "claw_hammer");
-				GameRegistry.registerItem(sledgeHammer, "sledge_hammer");
-				GameRegistry.registerItem(blacksmithHammer, "blacksmith_hammer");
-				GameRegistry.registerItem(pogoHammer, "pogo_hammer");
-				GameRegistry.registerItem(telescopicSassacrusher, "telescopic_sassacrusher");
-				GameRegistry.registerItem(fearNoAnvil, "fear_no_anvil");
-				GameRegistry.registerItem(zillyhooHammer, "zillyhoo_hammer");
-				GameRegistry.registerItem(popamaticVrillyhoo, "popamatic_vrillyhoo");
-				GameRegistry.registerItem(scarletZillyhoo, "scarlet_zillyhoo");
-				
-				GameRegistry.registerItem(sord, "sord");
-				GameRegistry.registerItem(ninjaSword, "ninja_sword");
-				GameRegistry.registerItem(katana, "katana");
-				GameRegistry.registerItem(caledscratch, "caledscratch");
-				GameRegistry.registerItem(royalDeringer, "royal_deringer");
-				GameRegistry.registerItem(regisword, "regisword");
-				GameRegistry.registerItem(scarletRibbitar, "scarlet_ribbitar");
-				GameRegistry.registerItem(doggMachete, "dogg_machete");
-				
-				GameRegistry.registerItem(dice,"dice");
-				GameRegistry.registerItem(fluoriteOctet, "fluorite_octet");
-				
-				GameRegistry.registerItem(sickle, "sickle");
-				GameRegistry.registerItem(homesSmellYaLater, "homes_smell_ya_later");
-				GameRegistry.registerItem(regiSickle, "regi_sickle");
-				GameRegistry.registerItem(clawSickle, "claw_sickle");
-				
-				GameRegistry.registerItem(deuceClub, "deuce_club");
-				
-				GameRegistry.registerItem(cane, "cane");
-				GameRegistry.registerItem(spearCane, "spear_cane");
-				GameRegistry.registerItem(dragonCane, "dragon_cane");
-				
-				GameRegistry.registerItem(woodenSpoon, "spoon_wood");
-				GameRegistry.registerItem(silverSpoon, "spoon_silver");
-				GameRegistry.registerItem(crockerSpork, "crocker_spork");
-				GameRegistry.registerItem(skaiaFork, "skaia_fork");
-				GameRegistry.registerItem(fork, "fork");
-				GameRegistry.registerItem(spork,"spork");
-				
-				GameRegistry.registerItem(emeraldSword, "emerald_sword");
-				GameRegistry.registerItem(emeraldAxe, "emerald_axe");
-				GameRegistry.registerItem(emeraldPickaxe, "emerald_pickaxe");
-				GameRegistry.registerItem(emeraldShovel, "emerald_shovel");
-				GameRegistry.registerItem(emeraldHoe, "emerald_hoe");
-				
-				GameRegistry.registerItem(prismarineHelmet, "prismarine_helmet");
-				GameRegistry.registerItem(prismarineChestplate, "prismarine_chestplate");
-				GameRegistry.registerItem(prismarineLeggings, "prismarine_leggings");
-				GameRegistry.registerItem(prismarineBoots, "prismarine_boots");
-				
-				GameRegistry.registerItem(rawCruxite, "cruxite_raw");
-				GameRegistry.registerItem(cruxiteDowel, "cruxite_dowel");
-				GameRegistry.registerItem(captchaCard, "captcha_card");
-				GameRegistry.registerItem(cruxiteApple, "cruxite_artifact");	//TODO change to "cruxite_apple" when there's no risk of messing with existing save files
-				GameRegistry.registerItem(cruxitePotion, "cruxite_potion");
-				GameRegistry.registerItem(disk, "computer_disk");
-				GameRegistry.registerItem(component, "component");
-				GameRegistry.registerItem(minestuckBucket, "minestuck_bucket");
-				GameRegistry.registerItem(obsidianBucket, "bucket_obsidian");
-				GameRegistry.registerItem(modusCard, "modus_card");
-				GameRegistry.registerItem(goldSeeds, "gold_seeds");
-				GameRegistry.registerItem(metalBoat, "metal_boat");
-				GameRegistry.registerItem(candy, "candy");
+		//hammers
+		clawHammer = GameRegistry.register(new ItemHammer(EnumHammerType.CLAW).setRegistryName("claw_hammer"));
+		sledgeHammer = GameRegistry.register(new ItemHammer(EnumHammerType.SLEDGE).setRegistryName("sledge_hammer"));
+		blacksmithHammer = GameRegistry.register(new ItemHammer(EnumHammerType.BLACKSMITH).setRegistryName("blacksmith_hammer"));
+		pogoHammer = GameRegistry.register(new ItemHammer(EnumHammerType.POGO).setRegistryName("pogo_hammer"));
+		telescopicSassacrusher = GameRegistry.register(new ItemHammer(EnumHammerType.TELESCOPIC).setRegistryName("telescopic_sassacrusher"));
+		fearNoAnvil = GameRegistry.register(new ItemHammer(EnumHammerType.FEARNOANVIL).setRegistryName("fear_no_anvil"));
+		zillyhooHammer = GameRegistry.register(new ItemHammer(EnumHammerType.ZILLYHOO).setRegistryName("zillyhoo_hammer"));
+		popamaticVrillyhoo = GameRegistry.register(new ItemHammer(EnumHammerType.POPAMATIC).setRegistryName("popamatic_vrillyhoo"));
+		scarletZillyhoo = GameRegistry.register(new ItemHammer(EnumHammerType.SCARLET).setRegistryName("scarlet_zillyhoo"));
+		//blades
+		sord = GameRegistry.register(new ItemBlade(EnumBladeType.SORD).setRegistryName("sord"));
+		cactusCutlass = GameRegistry.register(new ItemBlade(EnumBladeType.CACTUS).setRegistryName("cactaceae_cutlass"));
+		katana = GameRegistry.register(new ItemBlade(EnumBladeType.NINJA).setRegistryName("katana"));
+		unbreakableKatana = GameRegistry.register(new ItemBlade(EnumBladeType.KATANA).setRegistryName("unbreakable_katana"));
+		firePoker = GameRegistry.register(new ItemBlade(EnumBladeType.FIREPOKER).setRegistryName("fire_poker"));
+		hotHandle = GameRegistry.register(new ItemBlade(EnumBladeType.HOTHANDLE).setRegistryName("too_hot_to_handle"));
+		caledscratch = GameRegistry.register(new ItemBlade(EnumBladeType.CALEDSCRATCH).setRegistryName("caledscratch"));
+		caledfwlch = GameRegistry.register(new ItemBlade(EnumBladeType.CALEDFWLCH).setRegistryName("caledfwlch"));
+		royalDeringer = GameRegistry.register(new ItemBlade(EnumBladeType.DERINGER).setRegistryName("royal_deringer"));
+		zillywairCutlass = GameRegistry.register(new ItemBlade(EnumBladeType.ZILLYWAIR).setRegistryName("cutlass_of_zillywair"));
+		regisword = GameRegistry.register(new ItemBlade(EnumBladeType.REGISWORD).setRegistryName("regisword"));
+		scarletRibbitar = GameRegistry.register(new ItemBlade(EnumBladeType.SCARLET).setRegistryName("scarlet_ribbitar"));
+		doggMachete = GameRegistry.register(new ItemBlade(EnumBladeType.DOGG).setRegistryName("dogg_machete"));
+		//axes
+		blacksmithBane = GameRegistry.register(new ItemBattleaxe(EnumBattleaxeType.BANE).setRegistryName("blacksmith_bane"));
+		scraxe = GameRegistry.register(new ItemBattleaxe(EnumBattleaxeType.SCRAXE).setRegistryName("scraxe"));
+		rubyCroak = GameRegistry.register(new ItemBattleaxe(EnumBattleaxeType.CROAK).setRegistryName("ruby_croak"));
+		hephaestusLumber = GameRegistry.register(new ItemBattleaxe(EnumBattleaxeType.HEPH).setRegistryName("hephaestus_lumberjack"));
+		//Dice
+		dice = GameRegistry.register(new ItemDice(EnumDiceType.DICE).setRegistryName("dice"));
+		fluoriteOctet = GameRegistry.register(new ItemDice(EnumDiceType.FLUORITE_OCTET).setRegistryName("fluorite_octet"));
+		
+		//sickles
+		sickle = GameRegistry.register(new ItemSickle(EnumSickleType.SICKLE).setRegistryName("sickle"));
+		homesSmellYaLater = GameRegistry.register(new ItemSickle(EnumSickleType.HOMES).setRegistryName("homes_smell_ya_later"));
+		regiSickle = GameRegistry.register(new ItemSickle(EnumSickleType.REGISICKLE).setRegistryName("regisickle"));
+		clawSickle = GameRegistry.register(new ItemSickle(EnumSickleType.CLAW).setRegistryName("claw_sickle"));
+		//clubs
+		deuceClub = GameRegistry.register(new ItemClub(EnumClubType.DEUCE).setRegistryName("deuce_club"));
+		//canes
+		cane = GameRegistry.register(new ItemCane(EnumCaneType.CANE).setRegistryName("cane"));
+		spearCane = GameRegistry.register(new ItemCane(EnumCaneType.SPEAR).setRegistryName("spear_cane"));
+		dragonCane = GameRegistry.register(new ItemCane(EnumCaneType.DRAGON).setRegistryName("dragon_cane"));
+		//Spoons/forks
+		woodenSpoon = GameRegistry.register(new ItemSpork(EnumSporkType.SPOON_WOOD).setRegistryName("wooden_spoon"));
+		silverSpoon = GameRegistry.register(new ItemSpork(EnumSporkType.SPOON_SILVER).setRegistryName("silver_spoon"));
+		crockerSpork = (ItemSpork) GameRegistry.register(new ItemSpork(EnumSporkType.CROCKER).setRegistryName("crocker_spork"));
+		skaiaFork = GameRegistry.register(new ItemSpork(EnumSporkType.SKAIA).setRegistryName("skaia_fork"));
+		fork = GameRegistry.register(new ItemSpork(EnumSporkType.FORK).setRegistryName("fork"));
+		spork = GameRegistry.register(new ItemSpork(EnumSporkType.SPORK).setRegistryName("spork"));
+		
+		toolEmerald = EnumHelper.addToolMaterial("EMERALD", 3, 1220, 12.0F, 4.0F, 12).setRepairItem(new ItemStack(Items.emerald));
+		emeraldSword = GameRegistry.register(new ItemSword(toolEmerald).setRegistryName("emerald_sword")).setUnlocalizedName("swordEmerald").setCreativeTab(Minestuck.tabMinestuck);
+		emeraldAxe = GameRegistry.register(new ItemMinestuckAxe(toolEmerald, 9.0F, -3.0F).setRegistryName("emerald_axe")).setUnlocalizedName("hatchetEmerald").setCreativeTab(Minestuck.tabMinestuck);
+		emeraldPickaxe = GameRegistry.register(new ItemMinestuckPickaxe(toolEmerald).setRegistryName("emerald_pickaxe")).setUnlocalizedName("pickaxeEmerald").setCreativeTab(Minestuck.tabMinestuck);
+		emeraldShovel = GameRegistry.register(new ItemSpade(toolEmerald).setRegistryName("emerald_shovel")).setUnlocalizedName("shovelEmerald").setCreativeTab(Minestuck.tabMinestuck);
+		emeraldHoe = GameRegistry.register(new ItemHoe(toolEmerald).setRegistryName("emerald_hoe")).setUnlocalizedName("hoeEmerald").setCreativeTab(Minestuck.tabMinestuck);
+		//armor
+		armorPrismarine = EnumHelper.addArmorMaterial("PRISMARINE", "minestuck:prismarine", 20, new int[]{3, 7, 6, 2}, 15, SoundEvents.item_armor_equip_diamond);
+		armorPrismarine.customCraftingMaterial = Items.prismarine_shard;
+		prismarineHelmet = GameRegistry.register(new ItemArmor(armorPrismarine, 0, EntityEquipmentSlot.HEAD).setRegistryName("prismarine_helmet")).setUnlocalizedName("helmetPrismarine").setCreativeTab(Minestuck.tabMinestuck);
+		prismarineChestplate = GameRegistry.register(new ItemArmor(armorPrismarine, 0, EntityEquipmentSlot.CHEST).setRegistryName("prismarine_chestplate")).setUnlocalizedName("chestplatePrismarine").setCreativeTab(Minestuck.tabMinestuck);
+		prismarineLeggings = GameRegistry.register(new ItemArmor(armorPrismarine, 0, EntityEquipmentSlot.LEGS).setRegistryName("prismarine_leggings")).setUnlocalizedName("leggingsPrismarine").setCreativeTab(Minestuck.tabMinestuck);
+		prismarineBoots = GameRegistry.register(new ItemArmor(armorPrismarine, 0, EntityEquipmentSlot.FEET).setRegistryName("prismarine_boots")).setUnlocalizedName("bootsPrismarine").setCreativeTab(Minestuck.tabMinestuck);
+		//misc
+		rawCruxite = GameRegistry.register(new Item().setRegistryName("raw_cruxite")).setUnlocalizedName("rawCruxite").setCreativeTab(Minestuck.tabMinestuck);
+		cruxiteDowel = GameRegistry.register(new ItemDowel().setRegistryName("cruxite_dowel"));
+		captchaCard = GameRegistry.register(new ItemCaptchaCard().setRegistryName("captcha_card"));
+		cruxiteApple = (ItemCruxiteArtifact) GameRegistry.register(new ItemCruxiteApple().setRegistryName("cruxite_apple"));
+		cruxitePotion = GameRegistry.register(new ItemCruxitePotion().setRegistryName("cruxite_potion"));
+		disk = GameRegistry.register(new ItemDisk().setRegistryName("computer_disk"));
+		chessboard = GameRegistry.register(new Item().setRegistryName("chessboard")).setUnlocalizedName("chessboard").setMaxStackSize(1).setCreativeTab(Minestuck.tabMinestuck);
+		minestuckBucket = (ItemMinestuckBucket) GameRegistry.register(new ItemMinestuckBucket().setRegistryName("minestuck_bucket"));
+		obsidianBucket = GameRegistry.register(new ItemObsidianBucket().setRegistryName("bucket_obsidian"));
+		modusCard = (ItemModus) GameRegistry.register(new ItemModus().setRegistryName("modus_card"));
+		goldSeeds = (ItemGoldSeeds) GameRegistry.register(new ItemGoldSeeds().setRegistryName("gold_seeds"));
+		metalBoat = (ItemMetalBoat) GameRegistry.register(new ItemMetalBoat().setRegistryName("metal_boat"));
+		candy = GameRegistry.register(new ItemMinestuckCandy().setRegistryName("candy"));
+		
+		minestuckBucket.addBlock(blockOil.getDefaultState());
+		minestuckBucket.addBlock(blockBlood.getDefaultState());
+		minestuckBucket.addBlock(blockBrainJuice.getDefaultState());
+		
+		registerItemBlock(new ItemMultiTexture(chessTile, chessTile, new String[] {"black", "white", "darkgrey", "lightgrey"}));
+		registerItemBlock(new ItemBlock(skaiaPortal));
+		
+		registerItemBlock(new ItemMultiTexture(oreCruxite, oreCruxite, new String[0])
+		{
+			@Override
+			public String getUnlocalizedName(ItemStack stack)
+			{
+				return theBlock.getUnlocalizedName();
+			}
+		});
+		registerItemBlock(new ItemBlock(coalOreNetherrack));
+		registerItemBlock(new ItemBlock(ironOreSandstone));
+		registerItemBlock(new ItemBlock(ironOreSandstoneRed));
+		registerItemBlock(new ItemBlock(goldOreSandstone));
+		registerItemBlock(new ItemBlock(goldOreSandstoneRed));
+		
+		registerItemBlock(new ItemBlock(cruxiteBlock));
+		registerItemBlock(new ItemBlock(genericObject));
+		registerItemBlock(new ItemSburbMachine(sburbMachine));
+		registerItemBlock(new ItemMultiTexture(crockerMachine, crockerMachine, new Function<ItemStack, String>()
+				{
+					@Override
+					public String apply(ItemStack input)
+					{
+						return BlockCrockerMachine.MachineType.values()[input.getItemDamage()].getUnlocalizedName();
+					}
+				}));
+		registerItemBlock(new ItemBlock(blockComputerOff));
+		registerItemBlock(new ItemBlock(transportalizer));
+		
+		registerItemBlock(new ItemBlockLayered(layeredSand));
+		registerItemBlock(new ItemMultiTexture(coloredDirt, coloredDirt, new Function<ItemStack, String>()
+				{
+					@Override
+					public String apply(ItemStack input)
+					{
+						return BlockColoredDirt.BlockType.values()[input.getItemDamage()].name;
+					}
+				}));
+		registerItemBlock(new ItemBlock(glowingMushroom));
+		registerItemBlock(new ItemBlock(glowingLog));
+		
+		registerItemBlock(new ItemBlock(primedTnt));
+		registerItemBlock(new ItemBlock(unstableTnt));
+		registerItemBlock(new ItemBlock(instantTnt));
+		registerItemBlock(new ItemBlock(woodenExplosiveButton));
+		registerItemBlock(new ItemBlock(stoneExplosiveButton));
+	}
+	
+	private static Item registerItemBlock(ItemBlock item)
+	{
+		return GameRegistry.register(item.setRegistryName(item.block.getRegistryName()));	//Is this enough?
 	}
 }

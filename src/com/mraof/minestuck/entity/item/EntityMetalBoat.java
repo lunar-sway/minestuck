@@ -12,9 +12,9 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
@@ -105,7 +105,7 @@ public class EntityMetalBoat extends EntityBoat implements IEntityAdditionalSpaw
 				this.fallDistance = 0.0F;
 			}
 		}
-		else if (this.worldObj.getBlockState((new BlockPos(this)).down()).getBlock().getMaterial() != Material.water && par1 < 0.0D)
+		else if (this.worldObj.getBlockState((new BlockPos(this)).down()).getMaterial() != Material.water && par1 < 0.0D)
 		{
 			this.fallDistance = (float)((double)this.fallDistance - par1);
 		}
@@ -117,7 +117,7 @@ public class EntityMetalBoat extends EntityBoat implements IEntityAdditionalSpaw
 			return false;
 		else if (!this.worldObj.isRemote && !this.isDead)
 		{
-			if (this.riddenByEntity != null && this.riddenByEntity == source.getEntity() && source instanceof EntityDamageSourceIndirect)
+			if (this.getPassengers().contains(source.getEntity()) && source instanceof EntityDamageSourceIndirect)
 				return false;
 			else
 			{
@@ -129,8 +129,7 @@ public class EntityMetalBoat extends EntityBoat implements IEntityAdditionalSpaw
 				
 				if (flag || this.getDamageTaken() > 40.0F)
 				{
-					if (this.riddenByEntity != null)
-						this.riddenByEntity.mountEntity(this);
+					this.removePassengers();
 					
 					if (!flag)
 						this.entityDropItem(new ItemStack(MinestuckItems.metalBoat, 1, this.type), 0.0F);

@@ -10,7 +10,7 @@ import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
-import com.mraof.minestuck.util.UsernameHandler.PlayerIdentifier;
+import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -18,6 +18,7 @@ import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.MathHelper;
 
 public class Echeladder
 {
@@ -88,7 +89,7 @@ public class Echeladder
 		EntityPlayer player = identifier.getPlayer();
 		if(player != null)
 		{
-			MinestuckPlayerTracker.updateEcheladder(player);
+			MinestuckPlayerTracker.updateEcheladder(player, false);
 			if(rung != prevRung)
 			{
 				updateEcheladderBonuses(player);
@@ -135,13 +136,13 @@ public class Echeladder
 		int healthBonus = healthBoost(rung);
 		double damageBonus = attackBonus(rung);
 		
-		updateAttribute(player.getEntityAttribute(SharedMonsterAttributes.maxHealth), new AttributeModifier(echeladderHealthBoostModifierUUID, "Echeladder Health Boost", healthBonus, 0));	//If this isn't saved, your health goes to 10 hearts (if it was higher before) when loading the save file.
-		updateAttribute(player.getEntityAttribute(SharedMonsterAttributes.attackDamage), new AttributeModifier(echeladderDamageBoostModifierUUID, "Echeladder Damage Boost", damageBonus, 1).setSaved(false));
+		updateAttribute(player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH), new AttributeModifier(echeladderHealthBoostModifierUUID, "Echeladder Health Boost", healthBonus, 0));	//If this isn't saved, your health goes to 10 hearts (if it was higher before) when loading the save file.
+		updateAttribute(player.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE), new AttributeModifier(echeladderDamageBoostModifierUUID, "Echeladder Damage Boost", damageBonus, 1).setSaved(false));
 	}
 	
 	public void updateAttribute(IAttributeInstance attribute, AttributeModifier modifier)
 	{
-		if(attribute.func_180374_a(modifier))
+		if(attribute.hasModifier(modifier))
 			attribute.removeModifier(attribute.getModifier(modifier.getID()));
 		attribute.applyModifier(modifier);
 	}
@@ -190,4 +191,20 @@ public class Echeladder
 	{
 		return 1/(rung*0.06D + 1);
 	}
+	
+	public void setByCommand(int rung, double progress)
+	{
+		this.rung = MathHelper.clamp_int(rung, 0, RUNG_COUNT - 1);	//Can never be too careful
+		if(rung != RUNG_COUNT - 1)
+		{
+			this.progress = (int) (getRungProgressReq()*progress);
+			if(this.progress >= getRungProgressReq())
+				this.progress--;
+		} else this.progress = 0;
+		
+		EntityPlayer player = identifier.getPlayer();
+		if(player != null)
+			MinestuckPlayerTracker.updateEcheladder(player, true);
+	}
+	
 }

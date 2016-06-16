@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 
 import com.mraof.minestuck.client.gui.GuiComputer;
 import com.mraof.minestuck.network.ClearMessagePacket;
@@ -134,7 +134,7 @@ public abstract class ButtonListProgram extends ComputerProgram {
 		if(te.latestmessage.get(te.programSelected) == null || te.latestmessage.get(te.programSelected).isEmpty())
 			mc.fontRendererObj.drawString(message, (gui.width - GuiComputer.xSize) / 2 + 15, (gui.height - GuiComputer.ySize) / 2 + 45, 4210752);
 		else 
-			mc.fontRendererObj.drawString(StatCollector.translateToLocal(te.latestmessage.get(te.programSelected)), (gui.width - GuiComputer.xSize) / 2  + 15, (gui.height - GuiComputer.ySize) / 2 + 45, 4210752);
+			mc.fontRendererObj.drawString(I18n.translateToLocal(te.latestmessage.get(te.programSelected)), (gui.width - GuiComputer.xSize) / 2  + 15, (gui.height - GuiComputer.ySize) / 2 + 45, 4210752);
 	}
 	
 	/**
@@ -151,7 +151,7 @@ public abstract class ButtonListProgram extends ComputerProgram {
 		}
 		
 		public String translate() {
-			return StatCollector.translateToLocalFormatted(string, formatData);
+			return I18n.translateToLocalFormatted(string, formatData);
 		}
 		
 	}

@@ -10,7 +10,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.UsernameHandler;
+import com.mraof.minestuck.util.IdentifierHandler;
 
 public class SburbConnectClosedPacket extends MinestuckPacket
 {
@@ -43,8 +43,8 @@ public class SburbConnectClosedPacket extends MinestuckPacket
 	@Override
 	public void execute(EntityPlayer player)
 	{
-		if((!MinestuckConfig.privateComputers || UsernameHandler.encode(player).getId() == this.player) && ServerEditHandler.getData(player) == null)
-			SkaianetHandler.closeConnection(UsernameHandler.getById(this.player), otherPlayer != -1 ? UsernameHandler.getById(this.otherPlayer) : null, isClient);
+		if((!MinestuckConfig.privateComputers || IdentifierHandler.encode(player).getId() == this.player) && ServerEditHandler.getData(player) == null)
+			SkaianetHandler.closeConnection(IdentifierHandler.getById(this.player), otherPlayer != -1 ? IdentifierHandler.getById(this.otherPlayer) : null, isClient);
 	}
 	
 	@Override

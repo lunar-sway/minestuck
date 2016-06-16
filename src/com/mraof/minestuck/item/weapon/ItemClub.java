@@ -23,12 +23,7 @@ public class ItemClub extends ItemWeapon
 		this.setMaxDamage(clubType.getMaxUses());
 		this.setUnlocalizedName(clubType.getName());
 		this.weaponDamage = clubType.getDamageVsEntity();
-	}
-	
-	@Override
-	public int getAttackDamage() 
-	{
-		return weaponDamage;
+		this.weaponSpeed = clubType.getAttackSpeed();
 	}
 	
 	@Override

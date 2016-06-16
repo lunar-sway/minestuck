@@ -2,7 +2,9 @@ package com.mraof.minestuck.item.weapon;
 
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -10,7 +12,7 @@ import com.mraof.minestuck.Minestuck;
 
 public abstract class ItemWeapon extends Item
 {
-	protected int weaponDamage;
+	protected double weaponDamage, weaponSpeed;
 	
 	public ItemWeapon() 
 	{
@@ -18,14 +20,25 @@ public abstract class ItemWeapon extends Item
 		this.setCreativeTab(Minestuck.tabMinestuck);
 	}
 	
-	protected abstract int getAttackDamage();
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	protected double getAttackDamage(ItemStack stack)
+	{
+		return weaponDamage;
+	}
+	
+	protected double getAttackSpeed(ItemStack stack)
+	{
+		return weaponSpeed;
+	}
+	
 	@Override
-	public Multimap getItemAttributeModifiers()
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack)
 	{
 		Multimap multimap = HashMultimap.create();
-		multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(this.itemModifierUUID, "Tool Modifier", (double)this.getAttackDamage(), 0));
+		if(slot == EntityEquipmentSlot.MAINHAND)
+		{
+			multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", getAttackDamage(stack), 0));
+			multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", getAttackSpeed(stack), 0));
+		}
 		return multimap;
 	}
 	

@@ -108,9 +108,9 @@ public class CombinationRegistry {
 		}
 		
 		if(item == null)
-			if(input1.getItem().equals(MinestuckBlocks.blockStorage) && input1.getItemDamage() == 1)
+			if(input1.getItem().equals(MinestuckBlocks.genericObject))
 				return mode?input1:input2;
-			else if(input2.getItem().equals(MinestuckBlocks.blockStorage) && input2.getItemDamage() == 1)
+			else if(input2.getItem().equals(MinestuckBlocks.genericObject))
 				return mode?input2:input1;
 		return item;
 	}

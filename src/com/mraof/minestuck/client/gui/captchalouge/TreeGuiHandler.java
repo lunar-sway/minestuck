@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.gui.captchalouge;
 import java.io.IOException;
 
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.inventory.captchalouge.TreeModus;
@@ -41,7 +41,7 @@ public class TreeGuiHandler extends SylladexGuiHandler
 		guiButton.xPosition = (width - GUI_WIDTH)/2 + 15;
 		guiButton.yPosition = (height - GUI_HEIGHT)/2 + 175;
 		boolean autobalance = MinestuckConfig.clientTreeAutobalance == 0 ? modus.autobalance : MinestuckConfig.clientTreeAutobalance == 1;
-		guiButton.displayString = StatCollector.translateToLocal(autobalance ? "gui.autobalance.on" : "gui.autobalance.off");
+		guiButton.displayString = I18n.translateToLocal(autobalance ? "gui.autobalance.on" : "gui.autobalance.off");
 		guiButton.enabled = MinestuckConfig.clientTreeAutobalance == 0;
 		super.drawScreen(xcor, ycor, f);
 	}

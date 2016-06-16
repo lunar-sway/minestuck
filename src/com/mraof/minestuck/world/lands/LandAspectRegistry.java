@@ -8,11 +8,10 @@ import java.util.Random;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.FMLLog;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
@@ -121,7 +120,7 @@ public class LandAspectRegistry
 		
 		if(availableAspects.isEmpty())
 		{
-			Debug.printf("Failed to find a title land aspect compatible with \"%s\". Forced to use a poorly compatible land aspect instead.");
+			Debug.debugf("Failed to find a title land aspect compatible with \"%s\". Forced to use a poorly compatible land aspect instead.");
 			availableAspects.addAll(aspectList);
 		}
 		
@@ -151,7 +150,7 @@ public class LandAspectRegistry
 			return getRandomVariant(list.get(random.nextInt(list.size())));
 		
 		double randCap = 0;
-		for(int i = 0; 0 < useCount.length; i++)
+		for(int i = 0; i < useCount.length; i++)
 			randCap += 1D/useCount[i];
 		
 		double rand = random.nextDouble()*randCap;
@@ -232,7 +231,7 @@ public class LandAspectRegistry
 	public static int createLand(EntityPlayer player)
 	{
 		
-		int newLandId = Minestuck.landDimensionIdStart;
+		int newLandId = MinestuckDimensionHandler.landDimensionIdStart;
 		
 		while (true)
 		{
@@ -250,8 +249,12 @@ public class LandAspectRegistry
 				return player.dimension;
 			}
 		}
+		
 		int id = SkaianetHandler.enterMedium((EntityPlayerMP)player, newLandId);
-		if(id != newLandId)	//Player already got a land, but the tag was somehow lost?
+		if(id == -1)
+			return -1;	//Something happened at skaianet preventing you from entering
+		
+		if(id != newLandId)
 			newLandId = id;
 		else
 		{

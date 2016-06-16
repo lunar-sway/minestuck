@@ -3,7 +3,7 @@ package com.mraof.minestuck.world.lands.decorator;
 import java.util.Random;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 
@@ -37,7 +37,7 @@ public class UndergroundDecoratorVein implements ILandDecorator
 			int posX = chunkX * 16 + random.nextInt(16);
 			int posY = minY + random.nextInt(diffBtwnMinMaxY);
 			int posZ = chunkZ * 16 + random.nextInt(16);
-			(new WorldGenMinable(block, size/2 + random.nextInt(size*2), new OreHandler.BlockStatePredicate(provider.groundBlock))).generate(world, random, new BlockPos(posX, posY, posZ));
+			(new WorldGenMinable(block, size, new OreHandler.BlockStatePredicate(provider.groundBlock))).generate(world, random, new BlockPos(posX, posY, posZ));
 		}
 		return null;
 	}

@@ -12,8 +12,10 @@ import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
@@ -32,7 +34,7 @@ public class SmallRuinStart extends StructureStart
 		components.add(new SmallRuin(provider, chunkX, chunkZ, rand));
 		updateBoundingBox();
 		
-		BlockPos pos = GateHandler.getGatePos(-1, world.provider.getDimensionId());
+		BlockPos pos = GateHandler.getGatePos(-1, world.provider.getDimension());
 		if(pos != null && this.getBoundingBox().intersectsWith(pos.getX() - 16, pos.getZ() - 16, pos.getX() + 16, pos.getZ() + 16))
 			components.clear();
 	}
@@ -51,9 +53,9 @@ public class SmallRuinStart extends StructureStart
 		{
 			int x = chunkX*16 + rand.nextInt(16);
 			int z = chunkZ*16 + rand.nextInt(16);
-			this.coordBaseMode = EnumFacing.Plane.HORIZONTAL.random(rand);
-			int xWidth = coordBaseMode.getAxis().equals(EnumFacing.Axis.X) ? 10 : 7;
-			int zWidth = coordBaseMode.getAxis().equals(EnumFacing.Axis.Z) ? 10 : 7;
+			func_186164_a(EnumFacing.Plane.HORIZONTAL.random(rand));
+			int xWidth = func_186165_e().getAxis().equals(EnumFacing.Axis.X) ? 10 : 7;
+			int zWidth = func_186165_e().getAxis().equals(EnumFacing.Axis.Z) ? 10 : 7;
 			this.boundingBox = new StructureBoundingBox(x, 64, z, x + xWidth - 1, 67, z + zWidth - 1);
 			
 			IBlockState[] structureBlocks = provider.aspect1.getStructureBlocks();
@@ -111,11 +113,19 @@ public class SmallRuinStart extends StructureStart
 			
 			this.fillWithAir(worldIn, boundingBox, 1, 1, 0, 5, 3, 7);
 			this.fillWithAir(worldIn, boundingBox, 2, 1, 8, 4, 3, 8);
-			this.generateChestContents(worldIn, boundingBox, rand, 3, 1, 6, provider.lootMap.get(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST).getItems(rand), rand.nextInt(3) + 5);
-			if(boundingBox.isVecInside(new BlockPos(this.getXWithOffset(3, 6), this.getYWithOffset(1), this.getZWithOffset(3, 6))))
-				this.setBlockState(worldIn, this.getBlockStateFromPos(worldIn, 3, 1, 6, boundingBox).withProperty(BlockChest.FACING, this.coordBaseMode.getOpposite()), 3, 1, 6, boundingBox);
+			BlockPos chestPos = new BlockPos(this.getXWithOffset(3, 6), this.getYWithOffset(1), this.getZWithOffset(3, 6));
+			if(boundingBox.isVecInside(chestPos))
+			{
+				worldIn.setBlockState(chestPos, Blocks.chest.getDefaultState().withProperty(BlockChest.FACING, this.func_186165_e().getOpposite()));
+				TileEntity tileentity1 = worldIn.getTileEntity(chestPos);
+				
+				if (tileentity1 instanceof TileEntityChest)
+				{
+					((TileEntityChest)tileentity1).setLoot(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, rand.nextLong());
+				}
+			}
 			
-			EnumFacing torchFacing = this.coordBaseMode == EnumFacing.EAST || this.coordBaseMode == EnumFacing.NORTH ? this.coordBaseMode.rotateY() : this.coordBaseMode.rotateYCCW();
+			EnumFacing torchFacing = this.func_186165_e() == EnumFacing.WEST || this.func_186165_e() == EnumFacing.NORTH ? this.func_186165_e().rotateY() : this.func_186165_e().rotateYCCW();
 			if(torches[0])
 				this.setBlockState(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, torchFacing), 1, 2, 3, boundingBox);
 			if(torches[1])
@@ -192,7 +202,7 @@ public class SmallRuinStart extends StructureStart
 			int y = 0;
 			
 			float f = (3 - z)*0.25F;
-			if(this.getBlockStateFromPos(world, x, y, z, boundingBox).getBlock().getMaterial().isSolid())	//getBlockStateFromPos: get block state
+			if(this.getBlockStateFromPos(world, x, y, z, boundingBox).getMaterial().isSolid())	//getBlockStateFromPos: get block state
 				f -= 0.25F;
 			boolean b = true;
 			do
@@ -208,7 +218,7 @@ public class SmallRuinStart extends StructureStart
 				}
 				
 				y--;
-			} while(this.boundingBox.minY + y >= 0 && !this.getBlockStateFromPos(world, x, y, z, boundingBox).getBlock().getMaterial().isSolid());
+			} while(this.boundingBox.minY + y >= 0 && !this.getBlockStateFromPos(world, x, y, z, boundingBox).getMaterial().isSolid());
 			
 			return b;
 		}
@@ -238,7 +248,7 @@ public class SmallRuinStart extends StructureStart
 				{
 					EntityOgre ogre = new EntityOgre(world);
 					ogre.setPositionAndRotation(xPos + 0.5, maxY, zPos + 0.5, rand.nextFloat()*360F, 0);
-					ogre.onSpawnFirstTime(null, null);
+					ogre.onInitialSpawn(null, null);
 					ogre.setHomePosAndDistance(new BlockPos(minX + 8, this.boundingBox.minY, minZ + 8), 10);
 					world.spawnEntityInWorld(ogre);
 					return;

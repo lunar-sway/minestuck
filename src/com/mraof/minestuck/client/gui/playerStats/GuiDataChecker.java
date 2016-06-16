@@ -21,9 +21,9 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 public class GuiDataChecker extends GuiScreen
@@ -298,7 +298,7 @@ public class GuiDataChecker extends GuiScreen
 		@Override
 		public String getName()
 		{
-			return StatCollector.translateToLocalFormatted(message, params);
+			return I18n.translateToLocalFormatted(message, params);
 		}
 	}
 	
@@ -378,7 +378,6 @@ public class GuiDataChecker extends GuiScreen
 				playerSet.add(connection.server);
 			}
 			
-			playerSet.remove(".null");
 			playerSet.remove("");
 			players = playerSet.size();
 		}
@@ -428,7 +427,7 @@ public class GuiDataChecker extends GuiScreen
 			if(isMain)
 				landDim = connectionTag.getInteger("clientDim");
 			
-			list.add(new TextField("Client Player: '%s'", client));
+			list.add(new TextField("Client Player: %s", client));
 			if(!server.isEmpty())
 				list.add(new TextField("Server Player: %s", server));
 			list.add(new TextField("Is Active: %b", connectionTag.getBoolean("isActive")));
@@ -442,8 +441,9 @@ public class GuiDataChecker extends GuiScreen
 					list.add(new LocalizedTextField("land.message.format", new LocalizedObject("land."+connectionTag.getString("aspect1")), new LocalizedObject("land."+connectionTag.getString("aspect2"))));
 				if(connectionTag.hasKey("class"))
 				{
-					String titleClass = "title."+EnumClass.values()[connectionTag.getByte("class")].toString();
-					String titleAspect = "title."+EnumAspect.values()[connectionTag.getByte("aspect")].toString();
+					byte cl = connectionTag.getByte("class"), as = connectionTag.getByte("aspect");
+					String titleClass = cl == -1 ? "Unknown" : "title."+EnumClass.values()[cl].toString();
+					String titleAspect = as == -1 ? "Unknown" : "title."+EnumAspect.values()[as].toString();
 					list.add(new LocalizedTextField("title.format", new LocalizedObject(titleClass), new LocalizedObject(titleAspect)));
 				}
 				

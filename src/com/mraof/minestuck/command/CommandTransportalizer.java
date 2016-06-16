@@ -39,7 +39,7 @@ public class CommandTransportalizer extends CommandBase
 	}
 	
 	@Override
-	public void processCommand(ICommandSender sender, String[] args) throws CommandException
+	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException
 	{
 		if(args.length < 1 || args.length > 2)
 			throw new WrongUsageException(this.getCommandUsage(sender));
@@ -53,7 +53,7 @@ public class CommandTransportalizer extends CommandBase
 		} else
 		{
 			code = args[1];
-			player = getPlayer(sender, args[0]);
+			player = getPlayer(server, sender, args[0]);
 		}
 		code = code.toUpperCase();
 		
@@ -64,28 +64,30 @@ public class CommandTransportalizer extends CommandBase
 		if(location == null || !DimensionManager.isDimensionRegistered(location.dim))
 			throw new CommandException("commands.tpz.notFound", code);
 		
-		WorldServer world = MinecraftServer.getServer().worldServerForDimension(location.dim);
+		WorldServer world = server.worldServerForDimension(location.dim);
 		
 		TileEntity te = world.getTileEntity(location.pos);
 		if(te == null || !(te instanceof TileEntityTransportalizer))
 		{
-			Debug.print("Invalid transportalizer in map: " + code + " at " + location);
+			Debug.warn("Invalid transportalizer in map: " + code + " at " + location);
 			TileEntityTransportalizer.transportalizers.remove(code);
 			throw new CommandException("commands.tpz.notFound", code);
 		}
 		
 		IBlockState block0 = world.getBlockState(location.pos.up());
 		IBlockState block1 = world.getBlockState(location.pos.up(2));
-		if(block0.getBlock().getMaterial().blocksMovement() || block1.getBlock().getMaterial().blocksMovement())
+		if(block0.getMaterial().blocksMovement() || block1.getMaterial().blocksMovement())
 			throw new CommandException("message.transportalizer.destinationBlocked");
 		
-		player.timeUntilPortal = 60;
+		boolean success = location.dim != player.dimension ? Teleport.teleportEntity(player, location.dim, null, te.getPos().getX() + 0.5, te.getPos().getY() + 0.6, te.getPos().getZ() + 0.5)
+				: TileEntityTransportalizer.teleportTo(player, location);
 		
-		if(location.dim != player.dimension)
-			Teleport.teleportEntity(player, location.dim, (TileEntityTransportalizer) te, false);
-		else
-			TileEntityTransportalizer.teleportTo(player, location);
-		
-		notifyOperators(sender, this, "commands.tpz.success", player.getCommandSenderName(), code);
+		if(success)
+		{
+			player.timeUntilPortal = 60;
+			
+			notifyOperators(sender, this, "commands.tpz.success", player.getName(), code);
+		} else if(sender.sendCommandFeedback())
+			throw new CommandException("commands.tpz.failed");
 	}
 }

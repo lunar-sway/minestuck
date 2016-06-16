@@ -8,13 +8,15 @@ import com.mraof.minestuck.MinestuckConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -81,9 +83,8 @@ public class BlockVanillaOre extends Block
 	}
 	
 	@Override
-	public int getExpDrop(IBlockAccess world, BlockPos pos, int fortune)
+	public int getExpDrop(IBlockState state, IBlockAccess world, BlockPos pos, int fortune)
 	{
-		IBlockState state = world.getBlockState(pos);
 		Random rand = world instanceof World ? ((World)world).rand : new Random();
 		if(oreType != OreType.IRON && oreType != OreType.GOLD)
 		{
@@ -106,9 +107,9 @@ public class BlockVanillaOre extends Block
 	}
 	
 	@Override
-	public int getDamageValue(World worldIn, BlockPos pos)
+	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player)
 	{
-		return 0;
+		return new ItemStack(this);
 	}
 	
 	@Override

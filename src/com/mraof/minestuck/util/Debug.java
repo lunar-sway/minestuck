@@ -1,27 +1,51 @@
 package com.mraof.minestuck.util;
 
-public class Debug {
+import org.apache.logging.log4j.Logger;
 
-	public static boolean isDebugMode;
+public class Debug
+{
+	
+	//public static boolean isDebugMode;
+	public static Logger logger;
 
-	public static void print(Object text) {
-		if (isDebugMode) {
-			System.out.println("[MINESTUCK] "+text);
-		}
-	}
-	public static void printf(String text, Object... args)
+	public static void error(Object text)
 	{
-		if (isDebugMode) 
-		{
-			System.out.printf("[MINESTUCK] " + text + "\n", args);
-		}
+		logger.error(text);
 	}
-	//Don't use this unless you want to crash the game
-	@SuppressWarnings("null")
-	public static void crash()
+	
+	public static void errorf(String text, Object... args)
 	{
-		Object nullObj = null;
-		nullObj.toString();
+		logger.info(String.format(text, args));
 	}
-
+	
+	public static void warn(Object text)
+	{
+		logger.warn(text);
+	}
+	
+	public static void warnf(String text, Object... args)
+	{
+		logger.warn(String.format(text, args));
+	}
+	
+	public static void info(Object text)
+	{
+		logger.info(text);
+	}
+	
+	public static void infof(String text, Object... args)
+	{
+		logger.info(String.format(text, args));
+	}
+	
+	public static void debug(Object text)
+	{
+		logger.debug(text);
+	}
+	
+	public static void debugf(String text, Object... args)
+	{
+		logger.debug(String.format(text, args));
+	}
+	
 }

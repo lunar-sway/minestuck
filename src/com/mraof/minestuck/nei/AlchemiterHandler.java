@@ -7,24 +7,19 @@ import java.awt.Rectangle;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
 import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.guihook.GuiContainerManager;
 import codechicken.nei.recipe.GuiRecipe;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.client.gui.GuiHandler;
+import com.mraof.minestuck.client.util.GuiUtil;
+import com.mraof.minestuck.client.util.GuiUtil.GristboardMode;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.GristType;
 
 public class AlchemiterHandler extends TemplateRecipeHandler
@@ -52,16 +47,17 @@ public class AlchemiterHandler extends TemplateRecipeHandler
 			return result;
 		}
 		
-		
 	}
 
 	@Override
-	public String getRecipeName() {
+	public String getRecipeName()
+	{
 		return "Alchemiter";
 	}
 
 	@Override
-	public String getGuiTexture() {
+	public String getGuiTexture()
+	{
 		return "minestuck:textures/gui/alchemiter.png";
 	}
 	
@@ -118,14 +114,14 @@ public class AlchemiterHandler extends TemplateRecipeHandler
 		drawProgressBar(49, 12, 0, 0, 71, 10, 50, 0);
 		
 		//render carved dowel
-		changeTexture("minestuck:textures/items/CruxiteCarved.png");
-		drawTexturedModalRect(22, 9, 0, 0, 16, 16,16,16);
+		changeTexture("minestuck:textures/items/cruxite_carved.png");
+		Gui.drawModalRectWithCustomSizedTexture(22, 9, 0, 0, 16, 16,16,16);
 		
 		//Render grist requirements
 		ItemStack result = arecipes.get(recipe).getResult().item;
 		GristSet set = GristRegistry.getGristConversion(result);
 		
-		drawGristBoard(set);
+		GuiUtil.drawGristBoard(set, GristboardMode.ALCHEMITER, 4, 34, GuiDraw.fontRenderer);
 		
 	}
 	
@@ -143,162 +139,17 @@ public class AlchemiterHandler extends TemplateRecipeHandler
 			{
 				ItemStack result = arecipes.get(recipe).getResult().item;
 				GristSet set = GristRegistry.getGristConversion(result);
-				GristSet playerGrist = MinestuckPlayerData.getClientGrist();
 				
 				if(set != null && !set.isEmpty())
-					if(!MinestuckConfig.alchemyIcons)
-					{
-						int place = 0;
-						for(GristAmount entry : set.getArray())
-						{
-							int row = place % 3;
-							int col = place / 3;
-							
-							if(posY >= 34 + 8*row && posY < 42 + 8*row)
-							{
-								int need = entry.getAmount();
-								String needStr = GuiHandler.addSuffix(need);
-								
-								if(!needStr.equals(String.valueOf(need)) && posX >= 4 + 79*col && posX < 4 + 79*col + GuiDraw.getStringWidth(needStr))
-								{
-									currenttip.add(String.valueOf(need));
-									break;
-								}
-								
-								int width = GuiDraw.getStringWidth(needStr + " " + entry.getType().getDisplayName() + " (");
-								int have = playerGrist.getGrist(entry.getType());
-								String haveStr = GuiHandler.addSuffix(have);
-								
-								if(!haveStr.equals(String.valueOf(have)) && posX >= 4 + 79*col + width && posX < 4 + 79*col + width + GuiDraw.getStringWidth(haveStr))
-								{
-									currenttip.add(String.valueOf(have));
-									break;
-								}
-							}
-							
-							place++;
-						}
-					} else
-					{
-						int index = 0;
-						for(GristAmount entry : set.getArray())
-						{
-							GristType type = entry.getType();
-							int need = entry.getAmount();
-							int have = playerGrist.getGrist(type);
-							int row = index/158;
-							
-							String needStr = GuiHandler.addSuffix(need), haveStr = GuiHandler.addSuffix(have);
-							int needStrWidth = GuiDraw.getStringWidth(needStr);
-							int haveStrWidth = GuiDraw.getStringWidth('('+haveStr+')');
-							
-							if(index + needStrWidth + 10 + haveStrWidth > (row + 1)*158)
-							{
-								row++;
-								index = row*158;
-							}
-							
-							if(posY >= 34 + 8*row && posY < 42 + 8*row)
-							{
-								if(!needStr.equals(String.valueOf(need)) && posX >= 4 + index%158 && posX < 4 + index%158 + needStrWidth)
-									currenttip.add(String.valueOf(need));
-								else if(posX >= needStrWidth + 5 + index%158 && posX < needStrWidth + 13 + index%158)
-									currenttip.add(type.getDisplayName());
-								else if(!haveStr.equals(String.valueOf(have)) && posX >= needStrWidth + 14 + index%158 + GuiDraw.getStringWidth("(") && posX < needStrWidth + 14 + index%158 + GuiDraw.getStringWidth("("+haveStr))
-									currenttip.add(String.valueOf(have));
-								
-								if(!currenttip.isEmpty())
-									break;
-							}
-							
-							index += needStrWidth + 10 + haveStrWidth;
-							index = Math.min(index + 6, (row + 1)*158);
-						}
-					}
+				{
+					List<String> tooltip = GuiUtil.getGristboardTooltip(set, posX, posY, 4, 34, GuiDraw.fontRenderer);
+					if(tooltip != null)
+						currenttip.addAll(tooltip);
+				}
 			}
 		}
 		
 		return currenttip;
-	}
-	
-	private void drawGristBoard(GristSet cost)
-	{
-		if (cost == null)
-		{
-			GuiDraw.drawString(StatCollector.translateToLocal("gui.notAlchemizable"), 4,34, 16711680);
-			return;
-		}
-		GristSet playerGrist = MinestuckPlayerData.getClientGrist();
-		
-		if (cost.isEmpty())
-		{
-			GuiDraw.drawString(StatCollector.translateToLocal("gui.free"), 4,34, 65280);
-			return;
-		}
-		
-		if(!MinestuckConfig.alchemyIcons)
-		{
-			int place = 0;
-			for(GristAmount entry : cost.getArray())
-			{
-				GristType type = entry.getType();
-				int need = entry.getAmount();
-				int have = playerGrist.getGrist(type);
-				
-				int row = place % 3;
-				int col = place / 3;
-				
-				int color = need <= have ? 0x00FF00 : 0xFF0000; //Green if we have enough grist, red if not
-				
-				String needStr = GuiHandler.addSuffix(need), haveStr = GuiHandler.addSuffix(have);
-				GuiDraw.drawString(needStr + " " + type.getDisplayName() + " (" + haveStr + ")", 4 + 79*col, 34 + 8*row, color);
-				
-				place++;
-			}
-		} else
-		{
-			int index = 0;
-			for(GristAmount entry : cost.getArray())
-			{
-				GristType type = entry.getType();
-				int need = entry.getAmount();
-				int have = playerGrist.getGrist(type);
-				int row = index/158;
-				int color = need <= have ? 0x00FF00 : 0xFF0000;
-				
-				String needStr = GuiHandler.addSuffix(need), haveStr = GuiHandler.addSuffix(have);
-				haveStr = '('+haveStr+')';
-				int needStrWidth = GuiDraw.getStringWidth(needStr);
-				
-				if(index + needStrWidth + 10 + GuiDraw.getStringWidth(haveStr) > (row + 1)*158)
-				{
-					row++;
-					index = row*158;
-				}
-				
-				GuiDraw.drawString(needStr, 4 + index%158, 34 + 8*row, color);
-				GuiDraw.drawString(haveStr, needStrWidth + 14 + index%158, 34 + (8 * (row)), color);
-				
-				GlStateManager.color(1, 1, 1);
-				changeTexture("minestuck:textures/grist/" + type.getName()+ ".png");
-				drawTexturedModalRect(needStrWidth + 5 + index%158, 34 + 8*row, 0, 0, 8, 8, 8, 8);
-				
-				index += needStrWidth + 10 + GuiDraw.getStringWidth(haveStr);
-				index = Math.min(index + 6, (row + 1)*158);
-			}
-		}
-	}
-	
-	public void drawTexturedModalRect(int par1, int par2, int par3, int par4, int par5, int par6,int w, int h) {
-			float f = (float)1/w;
-			float f1 = (float)1/h;
-			WorldRenderer render = Tessellator.getInstance().getWorldRenderer();
-			render.startDrawingQuads();
-			render.addVertexWithUV((double)(par1 + 0), (double)(par2 + par6), 0.0F, (double)((float)(par3 + 0) * f), (double)((float)(par4 + par6) * f1));
-			render.addVertexWithUV((double)(par1 + par5), (double)(par2 + par6), 0.0F, (double)((float)(par3 + par5) * f), (double)((float)(par4 + par6) * f1));
-			render.addVertexWithUV((double)(par1 + par5), (double)(par2 + 0), 0.0F, (double)((float)(par3 + par5) * f), (double)((float)(par4 + 0) * f1));
-			render.addVertexWithUV((double)(par1 + 0), (double)(par2 + 0), 0.0F, (double)((float)(par3 + 0) * f), (double)((float)(par4 + 0) * f1));
-			Tessellator.getInstance().draw();
 	}
 	
 	@Override
@@ -314,16 +165,16 @@ public class AlchemiterHandler extends TemplateRecipeHandler
 		switch(direction)
 		{
 			case 0://right
-				this.drawTexturedModalRect(x, y, tx, ty, var, h,w,h);
+				Gui.drawModalRectWithCustomSizedTexture(x, y, tx, ty, var, h,w,h);
 			break;
 			case 1://down
-				this.drawTexturedModalRect(x, y, tx, ty, w, var,w,h);
+				Gui.drawModalRectWithCustomSizedTexture(x, y, tx, ty, w, var,w,h);
 			break;
 			case 2://left
-				this.drawTexturedModalRect(x+w-var, y, tx+w-var, ty, var, h,w,h);
+				Gui.drawModalRectWithCustomSizedTexture(x+w-var, y, tx+w-var, ty, var, h,w,h);
 			break;
 			case 3://up
-				this.drawTexturedModalRect(x, y+h-var, tx, ty+h-var, w, var,w,h);
+				Gui.drawModalRectWithCustomSizedTexture(x, y+h-var, tx, ty+h-var, w, var,w,h);
 			break;		
 		}
 	}

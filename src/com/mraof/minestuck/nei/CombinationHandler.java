@@ -7,8 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -161,19 +160,6 @@ public class CombinationHandler extends TemplateRecipeHandler
 		GuiDraw.drawString(crecipe.mode ? "&&" : "||", 22,18, 0x8B8B8B);
 	}
 	
-	
-	public void drawTexturedModalRect(int par1, int par2, int par3, int par4, int par5, int par6,int w, int h) {
-			float f = (float)1/w;
-			float f1 = (float)1/h;
-			WorldRenderer render = Tessellator.getInstance().getWorldRenderer();
-			render.startDrawingQuads();
-			render.addVertexWithUV((double)(par1 + 0), (double)(par2 + par6), 0.0F, (double)((float)(par3 + 0) * f), (double)((float)(par4 + par6) * f1));
-			render.addVertexWithUV((double)(par1 + par5), (double)(par2 + par6), 0.0F, (double)((float)(par3 + par5) * f), (double)((float)(par4 + par6) * f1));
-			render.addVertexWithUV((double)(par1 + par5), (double)(par2 + 0), 0.0F, (double)((float)(par3 + par5) * f), (double)((float)(par4 + 0) * f1));
-			render.addVertexWithUV((double)(par1 + 0), (double)(par2 + 0), 0.0F, (double)((float)(par3 + 0) * f), (double)((float)(par4 + 0) * f1));
-			Tessellator.getInstance().draw();
-	}
-	
 	@Override
 	public void drawProgressBar(int x, int y, int tx, int ty, int w, int h, float completion, int direction)
 	{
@@ -187,16 +173,16 @@ public class CombinationHandler extends TemplateRecipeHandler
 		switch(direction)
 		{
 			case 0://right
-				this.drawTexturedModalRect(x, y, tx, ty, var, h,w,h);
+				Gui.drawModalRectWithCustomSizedTexture(x, y, tx, ty, var, h,w,h);
 			break;
 			case 1://down
-				this.drawTexturedModalRect(x, y, tx, ty, w, var,w,h);
+				Gui.drawModalRectWithCustomSizedTexture(x, y, tx, ty, w, var,w,h);
 			break;
 			case 2://left
-				this.drawTexturedModalRect(x+w-var, y, tx+w-var, ty, var, h,w,h);
+				Gui.drawModalRectWithCustomSizedTexture(x+w-var, y, tx+w-var, ty, var, h,w,h);
 			break;
 			case 3://up
-				this.drawTexturedModalRect(x, y+h-var, tx, ty+h-var, w, var,w,h);
+				Gui.drawModalRectWithCustomSizedTexture(x, y+h-var, tx, ty+h-var, w, var,w,h);
 			break;		
 		}
 	}

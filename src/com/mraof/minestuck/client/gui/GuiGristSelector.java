@@ -3,6 +3,7 @@ package com.mraof.minestuck.client.gui;
 import java.io.IOException;
 import java.util.Arrays;
 
+import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
@@ -14,9 +15,10 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 
 public class GuiGristSelector extends GuiScreen
 {
@@ -28,9 +30,9 @@ public class GuiGristSelector extends GuiScreen
 	private static final int gristCountX = 44, gristCountY = 36;
 	private static final int guiWidth = 226, guiHeight = 190;
 	
-	private GuiMachine otherGui;
+	private GuiSburbMachine otherGui;
 	
-	protected GuiGristSelector(GuiMachine guiMachine)
+	protected GuiGristSelector(GuiSburbMachine guiMachine)
 	{
 		this.otherGui = guiMachine;
 	}
@@ -49,7 +51,7 @@ public class GuiGristSelector extends GuiScreen
 		this.mc.getTextureManager().bindTexture(guiGristcache);
 		this.drawTexturedModalRect(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
-		String cacheMessage = StatCollector.translateToLocal("gui.selectGrist");
+		String cacheMessage = I18n.translateToLocal("gui.selectGrist");
 		mc.fontRendererObj.drawString(cacheMessage, (this.width / 2) - mc.fontRendererObj.getStringWidth(cacheMessage) / 2, yOffset + 12, 0x404040);
 		
 		GlStateManager.color(1,1,1);
@@ -67,7 +69,7 @@ public class GuiGristSelector extends GuiScreen
 			int column = (int) (gristId % 7);
 			int gristXOffset = xOffset + (gristDisplayXOffset * row - row);
 			int gristYOffset = yOffset + (gristDisplayYOffset * column - column);
-			String amount = GuiHandler.addSuffix(clientGrist.getGrist(GristType.values()[gristId]));
+			String amount = GuiUtil.addSuffix(clientGrist.getGrist(GristType.values()[gristId]));
 
 			if(this.isPointInRegion(gristXOffset + gristIconX, gristYOffset + gristIconY, 16, 16, xcor, ycor))
 			{
@@ -85,7 +87,7 @@ public class GuiGristSelector extends GuiScreen
 		
 		if (tooltip != -1)
 			if(tooltip % 2 == 0)
-				drawHoveringText(Arrays.asList(StatCollector.translateToLocalFormatted("grist.format", GristType.values()[tooltip/2].getDisplayName())),
+				drawHoveringText(Arrays.asList(I18n.translateToLocalFormatted("grist.format", GristType.values()[tooltip/2].getDisplayName())),
 						xcor, ycor, fontRendererObj);
 			else drawHoveringText(Arrays.asList(String.valueOf(clientGrist.getGrist(GristType.values()[tooltip/2]))), xcor, ycor, fontRendererObj);
 	}
@@ -93,20 +95,20 @@ public class GuiGristSelector extends GuiScreen
 	private void drawIcon(int x,int y,String location) 
 	{
 		this.mc.getTextureManager().bindTexture(new ResourceLocation("minestuck",location));
-
+		
 		float scale = (float) 1/16;
-
+		
 		int iconX = 16;
 		int iconY = 16;
 		int iconU = 0;
 		int iconV = 0;
-
-		WorldRenderer render = Tessellator.getInstance().getWorldRenderer();
-		render.startDrawingQuads();
-		render.addVertexWithUV((double)(x + 0), (double)(y +  iconY), (double)this.zLevel, (double)((float)(iconU + 0) * scale), (double)((float)(iconV +  iconY) * scale));
-		render.addVertexWithUV((double)(x + iconX), (double)(y +  iconY), (double)this.zLevel, (double)((float)(iconU + iconX) * scale), (double)((float)(iconV +  iconY) * scale));
-		render.addVertexWithUV((double)(x + iconX), (double)(y + 0), (double)this.zLevel, (double)((float)(iconU + iconX) * scale), (double)((float)(iconV + 0) * scale));
-		render.addVertexWithUV((double)(x + 0), (double)(y + 0), (double)this.zLevel, (double)((float)(iconU + 0) * scale), (double)((float)(iconV + 0) * scale));
+		
+		VertexBuffer render = Tessellator.getInstance().getBuffer();
+		render.begin(7, DefaultVertexFormats.POSITION_TEX);
+		render.pos(x, y + iconY, 0D).tex((iconU)*scale, (iconV + iconY)*scale).endVertex();
+		render.pos(x + iconX, y + iconY, 0D).tex((iconU + iconX)*scale, (iconV + iconY)*scale).endVertex();
+		render.pos(x + iconX, y, 0D).tex((iconU + iconX)*scale, (iconV)*scale).endVertex();
+		render.pos(x, y, 0D).tex((iconU)*scale, (iconV)*scale).endVertex();
 		Tessellator.getInstance().draw();
 	}
 	

@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBuf;
 import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 
 import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
@@ -40,7 +40,7 @@ public class TransportalizerPacket extends MinestuckPacket
 		//data.getBytes(0, destBytes, 0, 4);
 		for(int i = 0; i < 4; i++)
 			destBytes[i] = data.readByte();
-		Debug.printf("%d, %d, %d, %d", destBytes[0], destBytes[1], destBytes[2], destBytes[3]);
+		Debug.debugf("%d, %d, %d, %d", destBytes[0], destBytes[1], destBytes[2], destBytes[3]);
 		destId = new String(destBytes);
 		return this;
 	}

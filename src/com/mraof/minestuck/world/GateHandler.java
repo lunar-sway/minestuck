@@ -18,8 +18,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
@@ -58,7 +58,7 @@ public class GateHandler
 						location = new Location(player.worldObj.getTopSolidOrLiquidBlock(placement), dim);
 					
 				} while(location == null);	//TODO replace with a more friendly version without a chance of freezing the game
-			else Debug.printf("Unexpected error: Couldn't find position for land gate for dimension %d.", dim);
+			else Debug.errorf("Unexpected error: Couldn't find position for land gate for dimension %d.", dim);
 			
 		} else if(gateId == 2)
 		{
@@ -77,23 +77,23 @@ public class GateHandler
 					{
 						findGatePlacement(world);
 						gatePos = getGatePos(-1, clientDim);
-						if(gatePos == null) {Debug.printf("Unexpected error: Can't initiaize land gate placement for dimension %d!", clientDim); return;}
+						if(gatePos == null) {Debug.errorf("Unexpected error: Can't initiaize land gate placement for dimension %d!", clientDim); return;}
 					}
 					
 					if(gatePos.getY() == -1)
 					{
-						world.theChunkProviderServer.loadChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() - 8 >> 4);
-						world.theChunkProviderServer.loadChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() - 8 >> 4);
-						world.theChunkProviderServer.loadChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() + 8 >> 4);
-						world.theChunkProviderServer.loadChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() + 8 >> 4);
+						world.getChunkProvider().loadChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() - 8 >> 4);
+						world.getChunkProvider().loadChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() - 8 >> 4);
+						world.getChunkProvider().loadChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() + 8 >> 4);
+						world.getChunkProvider().loadChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() + 8 >> 4);
 						gatePos = getGatePos(-1, clientDim);
-						if(gatePos.getY() == -1) {Debug.printf("Unexpected error: Gate didn't generate after loading chunks! Dim: %d, pos: %s", clientDim, gatePos); return;}
+						if(gatePos.getY() == -1) {Debug.errorf("Unexpected error: Gate didn't generate after loading chunks! Dim: %d, pos: %s", clientDim, gatePos); return;}
 					}
 					
 					location = new Location(gatePos, clientDim);
 				}
 				
-			} else Debug.printf("Unexpected error: Can't find connection for dimension %d!", dim);
+			} else Debug.errorf("Unexpected error: Can't find connection for dimension %d!", dim);
 		} else if(gateId == -1)
 		{
 			SburbConnection landConnection = SburbHandler.getConnectionForDimension(dim);
@@ -106,10 +106,10 @@ public class GateHandler
 					int serverDim = serverConnection.getClientDimension();
 					location = new Location(getGatePos(2, serverDim), serverDim);
 					
-				} else Debug.printf("Player %s tried to teleport through gate before their server player entered the game.", player.getCommandSenderName());
+				} else Debug.debugf("Player %s tried to teleport through gate before their server player entered the game.", player.getName());
 				
-			} else Debug.printf("Unexpected error: Can't find connection for dimension %d!", dim);
-		} else Debug.printf("Unexpected error: Gate id %d is out of bounds!", gateId);
+			} else Debug.errorf("Unexpected error: Can't find connection for dimension %d!", dim);
+		} else Debug.errorf("Unexpected error: Gate id %d is out of bounds!", gateId);
 		
 		if(location != null)
 		{
@@ -121,26 +121,26 @@ public class GateHandler
 				
 				if(block.getBlock() != MinestuckBlocks.gate)
 				{
-					Debug.print("Can't find destination gate. Probably destroyed.");
-					player.addChatMessage(new ChatComponentTranslation("message.gateDestroyed"));
+					Debug.debugf("Can't find destination gate at %s. Probably destroyed.", location);
+					player.addChatMessage(new TextComponentTranslation("message.gateDestroyed"));
 					return;
 				}
 			}
 			
-			player.timeUntilPortal = 60;
 			if(location.dim != dim)
-				Teleport.teleportEntity(player, location.dim, null, false);
-			player.playerNetServerHandler.setPlayerLocation(location.pos.getX() + 0.5, location.pos.getY(), location.pos.getZ() + 0.5, player.rotationYaw, player.rotationPitch);
+				Teleport.teleportEntity(player, location.dim, null, location.pos.getX() + 0.5, location.pos.getY(), location.pos.getZ() + 0.5);
+			else player.playerNetServerHandler.setPlayerLocation(location.pos.getX() + 0.5, location.pos.getY(), location.pos.getZ() + 0.5, player.rotationYaw, player.rotationPitch);
+			player.timeUntilPortal = 60;
 		}
 	}
 	
 	public static void findGatePlacement(World world)
 	{
-		int dim = world.provider.getDimensionId();
+		int dim = world.provider.getDimension();
 		if(MinestuckDimensionHandler.isLandDimension(dim) && !gateData.containsKey(dim))
 		{
 			BlockPos spawn = MinestuckDimensionHandler.getSpawn(dim);
-			Random rand = world.setRandomSeed(0, 0, 43839551^world.provider.getDimensionId());
+			Random rand = world.setRandomSeed(0, 0, 43839551^world.provider.getDimension());
 			
 			BlockPos gatePos = null;
 			int tries = 0;
@@ -154,13 +154,13 @@ public class GateHandler
 				
 				BlockPos pos = new BlockPos(spawn.getX() + x, -1, spawn.getZ() + z);
 				
-				if(!world.getChunkProvider().chunkExists(pos.getX() >> 4, pos.getZ() >> 4) && world.provider.getWorldChunkManager().areBiomesViable(pos.getX(), pos.getZ(), Math.max(20, 50 - tries), Lists.newArrayList(BiomeGenMinestuck.mediumNormal)))
+				if(/*!world.getChunkProvider().chunkExists(pos.getX() >> 4, pos.getZ() >> 4) &&*/ world.provider.getBiomeProvider().areBiomesViable(pos.getX(), pos.getZ(), Math.max(20, 50 - tries), Lists.newArrayList(BiomeGenMinestuck.mediumNormal)))
 					gatePos = pos;
 				
 				tries++;
 			} while(gatePos == null);	//TODO replace with a more friendly version without a chance of freezing the game
 			
-			Debug.printf("Land gate will generate at %d %d.", gatePos.getX(), gatePos.getZ());
+			Debug.infof("Land gate will generate at %d %d in dimension %d.", gatePos.getX(), gatePos.getZ(), dim);
 			gateData.put(dim, gatePos);
 		}
 	}
@@ -198,13 +198,13 @@ public class GateHandler
 			BlockPos oldPos = gateData.get(dim);
 			if(oldPos.getY() != -1)
 			{
-				Debug.print("Trying to set position for a gate that should already be generated!");
+				Debug.error("Trying to set position for a gate that should already be generated!");
 				return;
 			}
 			
 			gateData.put(dim, newPos);
 		}
-		else Debug.print("Trying to set position for a gate that should already be generated/doesn't exist!");
+		else Debug.error("Trying to set position for a gate that should already be generated/doesn't exist!");
 	}
 	
 	static void saveData(NBTTagList nbtList)

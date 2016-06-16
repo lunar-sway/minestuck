@@ -3,7 +3,7 @@ package com.mraof.minestuck.util;
 import static com.mraof.minestuck.MinestuckConfig.artifactRange;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 
 public class PostEntryTask
@@ -47,13 +47,13 @@ public class PostEntryTask
 		return nbt;
 	}
 	
-	public boolean onTick()
+	public boolean onTick(MinecraftServer server)
 	{
-		WorldServer world = MinecraftServer.getServer().worldServerForDimension(dimension);
+		WorldServer world = server.worldServerForDimension(dimension);
 		
 		if(world == null)
 		{
-			Debug.printf("Couldn't find world for dimension %d when performing post entry preparations! Cancelling task.", dimension);
+			Debug.errorf("Couldn't find world for dimension %d when performing post entry preparations! Cancelling task.", dimension);
 			return true;
 		}
 		
@@ -86,11 +86,11 @@ public class PostEntryTask
 				}
 			}
 			
-			Debug.printf("Completed entry block updates for dimension %d.", dimension);
+			Debug.infof("Completed entry block updates for dimension %d.", dimension);
 			return true;
 		}
 		
-		Debug.printf("Updated %d blocks this tick.", index - preIndex);
+		Debug.debugf("Updated %d blocks this tick.", index - preIndex);
 		return false;
 	}
 	

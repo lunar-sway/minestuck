@@ -9,8 +9,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mraof.minestuck.tileentity.TileEntityComputer;
-import com.mraof.minestuck.util.UsernameHandler;
-import com.mraof.minestuck.util.UsernameHandler.PlayerIdentifier;
+import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 
 public class ComputerData
 {
@@ -23,8 +23,8 @@ public class ComputerData
 	public static ComputerData createData(TileEntityComputer te)
 	{
 		if(!te.getWorld().isRemote)
-			return new ComputerData(te.owner, te.getPos().getX(), te.getPos().getY(), te.getPos().getZ(), te.getWorld().provider.getDimensionId());
-		else return new ComputerData(te.ownerId, te.getPos().getX(), te.getPos().getY(), te.getPos().getZ(), te.getWorld().provider.getDimensionId());
+			return new ComputerData(te.owner, te.getPos().getX(), te.getPos().getY(), te.getPos().getZ(), te.getWorld().provider.getDimension());
+		else return new ComputerData(te.ownerId, te.getPos().getX(), te.getPos().getY(), te.getPos().getZ(), te.getWorld().provider.getDimension());
 	}
 	
 	public ComputerData(int ownerId, int x, int y, int z, int dimension)
@@ -68,7 +68,7 @@ public class ComputerData
 	}
 	
 	ComputerData read(NBTTagCompound nbt){
-		owner = UsernameHandler.load(nbt, "name");
+		owner = IdentifierHandler.load(nbt, "name");
 		x = nbt.getInteger("x");
 		y = nbt.getInteger("y");
 		z = nbt.getInteger("z");

@@ -1,23 +1,21 @@
 package com.mraof.minestuck.item.weapon;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import com.mraof.minestuck.Minestuck;
 
 //I called it a spork because it includes both
 public class ItemSpork extends ItemWeapon 
 {
-	private int weaponDamage;
 	private final EnumSporkType sporkType;
 	
 	/**
@@ -35,20 +33,23 @@ public class ItemSpork extends ItemWeapon
 		this.setCreativeTab(Minestuck.tabMinestuck);
 		this.setUnlocalizedName(sporkType.getUnlocalizedName());
 		this.weaponDamage = sporkType.getDamageVsEntity();
+		this.weaponSpeed = sporkType.getAttackSpeed();
 	}
 	
 	@Override
-	public int getAttackDamage() 
+	public double getAttackDamage(ItemStack stack)
 	{
-		return weaponDamage;
+		if(this.sporkType == EnumSporkType.CROCKER && !isSpoon(stack))
+			return 6.0D;
+		return super.getAttackDamage(stack);
 	}
 	
-	public int getAttackDamage(ItemStack stack)
+	@Override
+	protected double getAttackSpeed(ItemStack stack)
 	{
-		int damage = weaponDamage;
-		if(this.sporkType == EnumSporkType.CROCKER && isSpoon(stack))
-			damage -= 2;
-		return damage;
+		if(this.sporkType == EnumSporkType.CROCKER && !isSpoon(stack))
+			return EnumSporkType.FORK_ATTACK_SPEED;
+		return super.getAttackSpeed(stack);
 	}
 	
 	@Override
@@ -77,20 +78,25 @@ public class ItemSpork extends ItemWeapon
 		return true;
 	}
 	
+	@Override
 	public int getMaxItemUseDuration(ItemStack itemStack)
 	{
 		return 72000;
 	}
 	
-	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) 
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand)
 	{
-		if(!world.isRemote)
-			if (sporkType.equals(EnumSporkType.CROCKER) && player.isSneaking())
-			{
-				checkTagCompound(stack);
-				stack.getTagCompound().setBoolean("isSpoon", !stack.getTagCompound().getBoolean("isSpoon"));
+		if (sporkType.equals(EnumSporkType.CROCKER) && player.isSneaking())
+		{
+				if(!world.isRemote)
+				{
+					checkTagCompound(stack);
+					stack.getTagCompound().setBoolean("isSpoon", !stack.getTagCompound().getBoolean("isSpoon"));
+				}
+				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 			}
-		return stack;
+		return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
 	}
 	
 	public void checkTagCompound(ItemStack stack)
@@ -106,14 +112,6 @@ public class ItemSpork extends ItemWeapon
 		if(this.sporkType != EnumSporkType.CROCKER)
 			return getUnlocalizedName();
 		else return "item."+(isSpoon(stack)?"crockerSpoon":"crockerFork");
-	}
-	
-	@Override
-	public Multimap getAttributeModifiers(ItemStack stack)
-	{
-		Multimap multimap = HashMultimap.create();
-		multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(this.itemModifierUUID, "Tool Modifier", (double)this.getAttackDamage(stack), 0));
-		return multimap;
 	}
 	
 }

@@ -61,7 +61,7 @@ public class ClearMessagePacket extends MinestuckPacket {
 		if(te != null)
 		{
 			te.latestmessage.put(program, "");
-			te.getWorld().markBlockForUpdate(te.getPos());
+			te.markBlockForUpdate();
 		}
 	}
 	

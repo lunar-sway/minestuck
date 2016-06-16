@@ -8,22 +8,22 @@ import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.InventoryEffectRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -98,7 +98,7 @@ public class ClientEditHandler {
 		
 		GristSet have = MinestuckPlayerData.getClientGrist();
 		
-		addToolTip(event.itemStack, event.toolTip, have, givenItems);
+		addToolTip(event.getItemStack(), event.getToolTip(), have, givenItems);
 		
 	}
 	
@@ -115,18 +115,18 @@ public class ClientEditHandler {
 		
 		if(cost == null)
 		{
-			toolTip.add(EnumChatFormatting.RED + StatCollector.translateToLocal("gui.notAvailable"));
+			toolTip.add(TextFormatting.RED + I18n.translateToLocal("gui.notAvailable"));
 			return;
 		}
 		
 		for(Entry<Integer, Integer> entry : cost.getHashtable().entrySet())
 		{
 			GristType grist = GristType.values()[entry.getKey()];
-			String s = "" + (entry.getValue() <= have.getGrist(grist) ? EnumChatFormatting.GREEN : EnumChatFormatting.RED);
+			String s = "" + (entry.getValue() <= have.getGrist(grist) ? TextFormatting.GREEN : TextFormatting.RED);
 			toolTip.add(s + entry.getValue() + " " + grist.getDisplayName() + " (" + have.getGrist(grist) + ")");
 		}
 		if(cost.isEmpty())
-			toolTip.add(EnumChatFormatting.GREEN + StatCollector.translateToLocal("gui.free"));
+			toolTip.add(TextFormatting.GREEN + I18n.translateToLocal("gui.free"));
 	}
 	
 	@SubscribeEvent
@@ -144,10 +144,10 @@ public class ClientEditHandler {
 	@SubscribeEvent
 	public void onTossEvent(ItemTossEvent event)
 	{
-		if(event.entity.worldObj.isRemote && event.player == ClientProxy.getClientPlayer() && isActive())
+		if(event.getEntity().worldObj.isRemote && event.getPlayer() == ClientProxy.getClientPlayer() && isActive())
 		{
-			InventoryPlayer inventory = event.player.inventory;
-			ItemStack stack = event.entityItem.getEntityItem();
+			InventoryPlayer inventory = event.getPlayer().inventory;
+			ItemStack stack = event.getEntityItem().getEntityItem();
 			int ordinal = DeployList.getOrdinal(stack);
 			if(ordinal >= 0)
 			{
@@ -162,73 +162,85 @@ public class ClientEditHandler {
 				if(inventory.getItemStack() != null)
 					inventory.setItemStack(null);
 				else inventory.setInventorySlotContents(inventory.currentItem, null);
-				event.entityItem.setDead();
+				event.getEntityItem().setDead();
 			}
 		}
 	}
 	
 	@SubscribeEvent
 	public void onItemPickupEvent(EntityItemPickupEvent event) {
-		if(event.entity.worldObj.isRemote && isActive() && event.entityPlayer.equals(Minecraft.getMinecraft().thePlayer))
+		if(event.getEntity().worldObj.isRemote && isActive() && event.getEntityPlayer().equals(Minecraft.getMinecraft().thePlayer))
 			event.setCanceled(true);
 	}
 	
 	@SubscribeEvent(priority=EventPriority.NORMAL)
-	public void onInteractEvent(PlayerInteractEvent event)
+	public void onRightClickEvent(PlayerInteractEvent.RightClickBlock event)
 	{
-		
-		if(event.world.isRemote && event.entityPlayer == ClientProxy.getClientPlayer() && isActive())
+		if(event.getWorld().isRemote && event.getEntityPlayer() == ClientProxy.getClientPlayer() && isActive())
 		{
-			if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK)
+			Block block = event.getWorld().getBlockState(event.getPos()).getBlock();
+			ItemStack stack = event.getEntityPlayer().getHeldItemMainhand();
+			event.setUseBlock(stack == null && (block instanceof BlockDoor || block instanceof BlockTrapDoor || block instanceof BlockFenceGate) ? Result.ALLOW : Result.DENY);
+			if(event.getUseBlock() == Result.ALLOW)
+				return;
+			if(stack == null || !ServerEditHandler.isBlockItem(stack.getItem()))
 			{
-				Block block = event.world.getBlockState(event.pos).getBlock();
-				ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
-				event.useBlock = stack == null && (block instanceof BlockDoor || block instanceof BlockTrapDoor || block instanceof BlockFenceGate) ? Result.ALLOW : Result.DENY;
-				if(event.useBlock == Result.ALLOW)
-					return;
-				if(stack == null || !ServerEditHandler.isBlockItem(stack.getItem()))
+				event.setCanceled(true);
+				return;
+			}
+			
+			GristSet cost;
+			if(DeployList.containsItemStack(stack))
+				if(givenItems[DeployList.getOrdinal(stack)])
+					cost = DeployList.getSecondaryCost(stack);
+				else cost = DeployList.getPrimaryCost(stack);
+			else cost = GristRegistry.getGristConversion(stack);
+			if(!GristHelper.canAfford(MinestuckPlayerData.getClientGrist(), cost)) {
+				StringBuilder str = new StringBuilder();
+				if(cost != null)
 				{
-					event.setCanceled(true);
-					return;
-				}
-				
-				GristSet cost;
-				if(DeployList.containsItemStack(stack))
-					if(givenItems[DeployList.getOrdinal(stack)])
-						cost = DeployList.getSecondaryCost(stack);
-					else cost = DeployList.getPrimaryCost(stack);
-				else cost = GristRegistry.getGristConversion(stack);
-				if(!GristHelper.canAfford(MinestuckPlayerData.getClientGrist(), cost)) {
-					StringBuilder str = new StringBuilder();
-					if(cost != null)
+					for(GristAmount grist : cost.getArray())
 					{
-						for(GristAmount grist : cost.getArray())
-						{
-							if(cost.getArray().indexOf(grist) != 0)
-								str.append(", ");
-							str.append(grist.getAmount()+" "+grist.getType().getDisplayName());
-						}
-						event.entityPlayer.addChatMessage(new ChatComponentTranslation("grist.missing",str.toString()));
+						if(cost.getArray().indexOf(grist) != 0)
+							str.append(", ");
+						str.append(grist.getAmount()+" "+grist.getType().getDisplayName());
 					}
-					event.setCanceled(true);
+					event.getEntityPlayer().addChatMessage(new TextComponentTranslation("grist.missing",str.toString()));
 				}
-				if(event.useItem == Result.DEFAULT)
-					event.useItem = Result.ALLOW;
-			} else if(event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) {
-				Block block = event.world.getBlockState(event.pos).getBlock();
-				if(block.getBlockHardness(event.world, event.pos) < 0 || block.getMaterial() == Material.portal
-						|| MinestuckPlayerData.getClientGrist().getGrist(GristType.Build) <= 0)
-					event.setCanceled(true);
-			} else if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR)
+				event.setCanceled(true);
+			}
+			if(event.getUseItem() == Result.DEFAULT)
+				event.setUseItem(Result.ALLOW);
+		}
+	}
+	
+	@SubscribeEvent(priority=EventPriority.NORMAL)
+	public void onLeftClickEvent(PlayerInteractEvent.LeftClickBlock event)
+	{
+		if(event.getWorld().isRemote && event.getEntityPlayer() == ClientProxy.getClientPlayer() && isActive())
+		{
+			IBlockState block = event.getWorld().getBlockState(event.getPos());
+			if(block.getBlockHardness(event.getWorld(), event.getPos()) < 0 || block.getMaterial() == Material.portal
+					|| MinestuckPlayerData.getClientGrist().getGrist(GristType.Build) <= 0)
 				event.setCanceled(true);
 		}
 	}
 	
+	@SubscribeEvent(priority=EventPriority.NORMAL)
+	public void onRightClickAir(PlayerInteractEvent.RightClickItem event)
+	{
+		if(event.getWorld().isRemote && event.getEntityPlayer() == ClientProxy.getClientPlayer() && isActive())
+		{
+			event.setCanceled(true);
+		}
+	}
+	
 	@SubscribeEvent(priority=EventPriority.LOWEST,receiveCanceled=false)
-	public void onBlockPlaced(PlayerInteractEvent event) {
-		if(event.world.isRemote && isActive() && event.entityPlayer.equals(Minecraft.getMinecraft().thePlayer)
-				&& event.action == Action.RIGHT_CLICK_BLOCK && event.useItem == Result.ALLOW) {
-			ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
+	public void onBlockPlaced(PlayerInteractEvent.RightClickBlock event)
+	{
+		if(event.getWorld().isRemote && isActive() && event.getEntityPlayer().equals(Minecraft.getMinecraft().thePlayer)
+				&& event.getUseItem() == Result.ALLOW) {
+			ItemStack stack = event.getEntityPlayer().getHeldItemMainhand();
 			if(DeployList.containsItemStack(stack))
 				givenItems[DeployList.getOrdinal(stack)] = true;
 		}
@@ -237,20 +249,21 @@ public class ClientEditHandler {
 	@SubscribeEvent
 	public void onAttackEvent(AttackEntityEvent event)
 	{
-		if(event.entity.worldObj.isRemote && event.entityPlayer == ClientProxy.getClientPlayer() && isActive())
+		if(event.getEntity().worldObj.isRemote && event.getEntityPlayer() == ClientProxy.getClientPlayer() && isActive())
 			event.setCanceled(true);
 	}
 	
 	@SubscribeEvent
-	public void onWorldUnload(WorldEvent.Unload event) {
-		if(event.world.isRemote)
+	public void onWorldUnload(WorldEvent.Unload event)
+	{
+		if(event.getWorld().isRemote)
 			activated = false;
 	}
 	
 	@SubscribeEvent(priority=EventPriority.HIGH)
 	public void onGuiOpened(GuiOpenEvent event)
 	{
-		if(isActive() && event.gui instanceof InventoryEffectRenderer)
+		if(isActive() && event.getGui() instanceof InventoryEffectRenderer)
 		{
 				event.setCanceled(true);
 				GuiPlayerStats.editmodeTab = GuiPlayerStats.EditmodeGuiType.DEPLOY_LIST;

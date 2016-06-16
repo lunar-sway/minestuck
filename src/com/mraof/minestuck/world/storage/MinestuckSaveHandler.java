@@ -26,10 +26,10 @@ public class MinestuckSaveHandler
 	@SubscribeEvent
 	public void onWorldSave(WorldEvent.Save event)
 	{
-		if(event.world.provider.getDimensionId() != 0)	//Only save one time each world-save instead of one per dimension each world-save.
+		if(event.getWorld().provider.getDimension() != 0)	//Only save one time each world-save instead of one per dimension each world-save.
 			return;
 
-		File dataFile = event.world.getSaveHandler().getMapFileFromName("MinestuckData");
+		File dataFile = event.getWorld().getSaveHandler().getMapFileFromName("MinestuckData");
 		if (dataFile != null)
 		{
 			NBTTagCompound nbt = new NBTTagCompound();
@@ -59,9 +59,9 @@ public class MinestuckSaveHandler
 	@SubscribeEvent
 	public void onWorldLoad(WorldEvent.Load event)
 	{
-		if(event.world.provider.getDimensionId() != 0 || event.world.isRemote)
+		if(event.getWorld().provider.getDimension() != 0 || event.getWorld().isRemote)
 			return;
-		ISaveHandler saveHandler = event.world.getSaveHandler();
+		ISaveHandler saveHandler = event.getWorld().getSaveHandler();
 		File dataFile = saveHandler.getMapFileFromName("MinestuckData");
 		if(dataFile != null && dataFile.exists())
 		{

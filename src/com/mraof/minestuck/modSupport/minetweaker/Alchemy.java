@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.oredict.OreDictionary;
 
 import com.mraof.minestuck.util.GristRegistry;
@@ -127,7 +127,7 @@ public class Alchemy
 			if(items.get(0) instanceof String)
 				return items.get(0).toString();
 			else if(items.get(1).equals(OreDictionary.WILDCARD_VALUE))
-				return StatCollector.translateToLocal(((Item) items.get(0)).getUnlocalizedName());
+				return I18n.translateToLocal(((Item) items.get(0)).getUnlocalizedName());
 			ItemStack stack = new ItemStack((Item) items.get(0), 1, (Integer) items.get(1));
 			return stack.getDisplayName();
 		}

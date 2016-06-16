@@ -2,7 +2,7 @@ package com.mraof.minestuck.world.lands.decorator;
 
 import java.util.Random;
 
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.block.MinestuckBlocks;

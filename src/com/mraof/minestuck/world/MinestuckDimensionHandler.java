@@ -6,20 +6,47 @@ import java.util.Map;
 import java.util.Set;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.LandRegisterPacket;
+import com.mraof.minestuck.world.biome.BiomeGenMinestuck;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.DimensionType;
+import net.minecraft.world.biome.BiomeGenBase.BiomeProperties;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class MinestuckDimensionHandler
 {
 	
+	public static int skaiaProviderTypeId;
+	public static int skaiaDimensionId;
+	public static int landProviderTypeId;
+	public static int landDimensionIdStart;
+	public static int biomeIdStart;
+	
 	private static Hashtable<Integer, LandAspectRegistry.AspectCombination> lands = new Hashtable<Integer, LandAspectRegistry.AspectCombination>();
 	private static Hashtable<Integer, BlockPos> spawnpoints = new Hashtable<Integer, BlockPos>();
+	
+	public static DimensionType landDimensionType;
+	public static DimensionType skaiaDimensionType;
+	
+	public static void register()
+	{
+		//register world generators
+		landDimensionType = DimensionType.register("The Medium", "_medium", landProviderTypeId, WorldProviderLands.class, MinestuckConfig.keepDimensionsLoaded);
+		skaiaDimensionType = DimensionType.register("Skaia", "_skaia", skaiaProviderTypeId, WorldProviderSkaia.class, false);
+		
+		DimensionManager.registerDimension(skaiaDimensionId, skaiaDimensionType);
+		
+		BiomeGenMinestuck.mediumNormal = GameRegistry.register(new BiomeGenMinestuck(new BiomeProperties("The Medium")).setRegistryName("medium"));
+		BiomeGenMinestuck.mediumOcean = GameRegistry.register(new BiomeGenMinestuck(new BiomeProperties("The Medium (Ocean)").setBaseBiome("medium")).setRegistryName("medium_ocean"));
+		BiomeGenMinestuck.mediumRough = GameRegistry.register(new BiomeGenMinestuck(new BiomeProperties("The Medium (Rough)").setBaseBiome("medium")).setRegistryName("medium_rough"));
+	}
 	
 	public static void unregisterDimensions()
 	{
@@ -73,7 +100,7 @@ public class MinestuckDimensionHandler
 				
 				lands.put(dim, aspects);
 				spawnpoints.put(dim, spawn);
-				DimensionManager.registerDimension(dim, Minestuck.landProviderTypeId);
+				DimensionManager.registerDimension(dim, landDimensionType);
 			}
 		}
 		GateHandler.loadData(list);
@@ -86,7 +113,7 @@ public class MinestuckDimensionHandler
 		if(!lands.containsKey(dimensionId) && !DimensionManager.isDimensionRegistered(dimensionId))
 		{
 			lands.put(dimensionId, landAspects);
-			DimensionManager.registerDimension(dimensionId, Minestuck.landProviderTypeId);
+			DimensionManager.registerDimension(dimensionId, landDimensionType);
 		}
 		else FMLLog.warning("[Minestuck] Did not register land dimension with id %d.", dimensionId);
 	}
@@ -126,7 +153,7 @@ public class MinestuckDimensionHandler
 		for(int dim : lands.keySet())
 		{
 			if(!DimensionManager.isDimensionRegistered(dim))
-				DimensionManager.registerDimension(dim, Minestuck.landProviderTypeId);
+				DimensionManager.registerDimension(dim, landDimensionType);
 		}
 	}
 	

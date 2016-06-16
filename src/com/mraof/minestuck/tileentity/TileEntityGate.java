@@ -10,10 +10,10 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -37,10 +37,10 @@ public class TileEntityGate extends TileEntity
 			player.motionY = 0;
 			player.motionZ = 0;
 			player.fallDistance = 0;
-			player.triggerAchievement(MinestuckAchievementHandler.returnNode);
+			player.addStat(MinestuckAchievementHandler.returnNode);
 		} else
 		{
-			GateHandler.teleport(gateCount, worldObj.provider.getDimensionId(), player);
+			GateHandler.teleport(gateCount, worldObj.provider.getDimension(), player);
 		}
 	}
 	
@@ -70,12 +70,12 @@ public class TileEntityGate extends TileEntity
 	public Packet getDescriptionPacket()
 	{
 		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setInteger("color", SburbHandler.getColorForDimension(this.worldObj.provider.getDimensionId()));
-		return new S35PacketUpdateTileEntity(this.pos, 0, nbt);
+		nbt.setInteger("color", SburbHandler.getColorForDimension(this.worldObj.provider.getDimension()));
+		return new SPacketUpdateTileEntity(this.pos, 0, nbt);
 	}
 	
 	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt)
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
 	{
 		this.colorIndex = pkt.getNbtCompound().getInteger("color");
 	}

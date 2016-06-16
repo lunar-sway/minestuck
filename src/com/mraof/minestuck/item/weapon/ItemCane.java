@@ -7,7 +7,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemCane extends ItemWeapon
 {
-	private int weaponDamage;
 	private final EnumCaneType caneType;
 	
 	public ItemCane(EnumCaneType caneType) 
@@ -17,12 +16,7 @@ public class ItemCane extends ItemWeapon
 		this.setMaxDamage(caneType.getMaxUses());
 		this.setUnlocalizedName(caneType.getName());
 		this.weaponDamage = caneType.getDamageVsEntity();
-	}
-	
-	@Override
-	public int getAttackDamage() 
-	{
-		return weaponDamage;
+		this.weaponSpeed = caneType.getAttackSpeed();
 	}
 	
 	@Override
@@ -44,4 +38,5 @@ public class ItemCane extends ItemWeapon
 	{
 		return true;
 	}
+	
 }

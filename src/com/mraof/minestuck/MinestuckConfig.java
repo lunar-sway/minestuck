@@ -8,7 +8,6 @@ import net.minecraft.server.management.UserListOpsEntry;
 import net.minecraft.world.WorldSettings.GameType;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -18,10 +17,10 @@ import org.lwjgl.opengl.GLContext;
 
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.inventory.ContainerHandler;
-import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
+import com.mraof.minestuck.world.MinestuckDimensionHandler;
 
 public class MinestuckConfig
 {
@@ -38,9 +37,15 @@ public class MinestuckConfig
 	@SideOnly(Side.CLIENT)
 	public static byte clientTreeAutobalance;
 	@SideOnly(Side.CLIENT)
+	public static byte clientHashmapChat;
+	@SideOnly(Side.CLIENT)
+	public static byte echeladderAnimation;
+	@SideOnly(Side.CLIENT)
 	public static boolean clientGiveItems;
 	@SideOnly(Side.CLIENT)
 	public static boolean clientDisableGristWidget;
+	@SideOnly(Side.CLIENT)
+	public static boolean clientHardMode;
 	@SideOnly(Side.CLIENT)
 	public static boolean oldItemModels;
 	@SideOnly(Side.CLIENT)
@@ -51,8 +56,6 @@ public class MinestuckConfig
 	public static boolean alchemyIcons;
 	@SideOnly(Side.CLIENT)
 	public static boolean preEntryEcheladder;
-	@SideOnly(Side.CLIENT)
-	public static boolean echeladderAnimation;
 	
 	public static boolean hardMode = false;
 	public static boolean generateCruxiteOre;
@@ -62,7 +65,6 @@ public class MinestuckConfig
 	public static boolean giveItems;
 	public static boolean specialCardRenderer;
 	public static boolean cardRecipe;
-	public static boolean cardLoot;
 	public static boolean dropItemsInCards;
 	public static boolean entryCrater;
 	public static boolean keepDimensionsLoaded;
@@ -72,6 +74,7 @@ public class MinestuckConfig
 	public static boolean vanillaOreDrop;
 	public static boolean echeladderProgress;
 	public static boolean useUUID;
+	public static boolean playerSelectedTitle;
 	public static int artifactRange;
 	public static int overworldEditRange;
 	public static int landEditRange;
@@ -88,6 +91,7 @@ public class MinestuckConfig
 	public static int escapeFailureMode;
 	public static int preEntryRungLimit;
 	public static byte treeModusSetting;
+	public static byte hashmapChatModusSetting;
 	/**
 	 * An option related to dropping the sylladex on death
 	 * If 0: only captchalouged items are dropped. If 1: Both captchalouged items and cards are dropped. If 2: All items, including the actual modus.
@@ -103,17 +107,15 @@ public class MinestuckConfig
 		config = new Configuration(file, true);
 		config.load();
 		
-		Minestuck.skaiaProviderTypeId = config.get("IDs", "skaiaProviderTypeId", 2).setRequiresMcRestart(true).setLanguageKey("minestuck.config.skaiaProviderTypeId").getInt();
-		Minestuck.skaiaDimensionId = config.get("IDs", "skaiaDimensionId", 2).setRequiresMcRestart(true).setLanguageKey("minestuck.config.skaiaDimensionId").getInt();
-		Minestuck.landProviderTypeId = config.get("IDs", "landProviderTypeId", 3).setRequiresMcRestart(true).setLanguageKey("minestuck.config.landProviderTypeId").getInt();
-		Minestuck.landDimensionIdStart = config.get("IDs", "landDimensionIdStart", 3).setRequiresMcRestart(true).setLanguageKey("minestuck.config.landDimensionIdStart").getInt();
-		Minestuck.biomeIdStart = config.get("IDs", "biomeIdStart", 50).setRequiresMcRestart(true).setMinValue(40).setMaxValue(120).setLanguageKey("minestuck.config.biomeIdStart").getInt();
+		MinestuckDimensionHandler.skaiaProviderTypeId = config.get("IDs", "skaiaProviderTypeId", 2).setRequiresMcRestart(true).setLanguageKey("minestuck.config.skaiaProviderTypeId").getInt();
+		MinestuckDimensionHandler.skaiaDimensionId = config.get("IDs", "skaiaDimensionId", 2).setRequiresMcRestart(true).setLanguageKey("minestuck.config.skaiaDimensionId").getInt();
+		MinestuckDimensionHandler.landProviderTypeId = config.get("IDs", "landProviderTypeId", 3).setRequiresMcRestart(true).setLanguageKey("minestuck.config.landProviderTypeId").getInt();
+		MinestuckDimensionHandler.landDimensionIdStart = config.get("IDs", "landDimensionIdStart", 3).setRequiresMcRestart(true).setLanguageKey("minestuck.config.landDimensionIdStart").getInt();
+		MinestuckDimensionHandler.biomeIdStart = config.get("IDs", "biomeIdStart", 50).setRequiresMcRestart(true).setMinValue(40).setMaxValue(120).setLanguageKey("minestuck.config.biomeIdStart").getInt();
 		MinestuckAchievementHandler.idOffset = config.get("IDs", "statsIdStart", 413).setRequiresMcRestart(true).setLanguageKey("minestuck.config.statsIdStart").getInt();
 		config.getCategory("IDs").setLanguageKey("minestuck.config.IDs");
 		
-		Debug.isDebugMode = config.get("General", "Print Debug Messages", true, "Whenether the game should print debug messages or not.").setShowInGui(false).getBoolean();
-		
-		cardLoot = config.get("General", "cardLoot", false, "Set this to true to make captcha cards appear in dungeon and stronghold chests.").setLanguageKey("minestuck.config.cardLoot").setRequiresMcRestart(true).getBoolean();
+		//Debug.isDebugMode = config.get("General", "Print Debug Messages", true, "Whenether the game should print debug messages or not.").setShowInGui(false).getBoolean();
 		
 		loadBasicConfigOptions();
 		
@@ -126,13 +128,15 @@ public class MinestuckConfig
 		
 		initialModusSize = config.get("Modus", "initialModusSize", 5).setMinValue(0).setLanguageKey("minestuck.config.initialModusSize").getInt();
 		defaultModusTypes = config.get("Modus", "defaultModusType", new int[] {0, 1},
-				"An array with the possible modus types to be assigned. (0: Stack, 1: Queue, 2: QueueStack, 3: Tree)", 0, CaptchaDeckHandler.ModusType.values().length - 1).setLanguageKey("minestuck.config.defaultModusType").getIntList();
+				"An array with the possible modus types to be assigned. (0: Stack, 1: Queue, 2: QueueStack, 3: Tree)", 0, 3).setLanguageKey("minestuck.config.defaultModusType").getIntList();
 		modusMaxSize = config.get("Modus", "modusMaxSize", 0, "The max size on a modus. Ignored if the value is 0.").setMinValue(0).setLanguageKey("minestuck.config.modusMaxSize").getInt();
 		if(initialModusSize > modusMaxSize && modusMaxSize > 0)
 			initialModusSize = modusMaxSize;
 		String setting = config.get("Modus", "forceAutobalance", "both", "This determines if auto-balance should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.", new String[] {"both", "off", "on"}).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.forceAutobalance").getString();
 		treeModusSetting = (byte) (setting.equals("both") ? 0 : setting.equals("on") ? 1 : 2);
-		setting = config.get("Modus", "itemDropMode", "items", "Determines which items from the modus are dropped on death. \"items\": Only the items are dropped. \"cardsAndItems\": Both items and cards are dropped. \"all\": Everything is dropped, even the modus.", new String[] {"items", "cardsAndItems", "all"}).setLanguageKey("minestuck.config.itemDropMode").getString();
+		setting = config.get("Modus", "forceEjectByChat", "on", "This determines if hashmap chat ejection should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.", new String[] {"both", "off", "on"}).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.forceEjectByChat").getString();
+		hashmapChatModusSetting = (byte) (setting.equals("both") ? 0 : setting.equals("on") ? 1 : 2);
+		setting = config.get("Modus", "itemDropMode", "cardsAndItems", "Determines which items from the modus that are dropped on death. \"items\": Only the items are dropped. \"cardsAndItems\": Both items and cards are dropped. (So that you have at most initialModusSize amount of cards) \"all\": Everything is dropped, even the modus.", new String[] {"items", "cardsAndItems", "all"}).setLanguageKey("minestuck.config.itemDropMode").getString();
 		if(setting.equals("items"))
 			sylladexDropMode = 0;
 		if(setting.equals("cardsAndItems"))
@@ -163,14 +167,17 @@ public class MinestuckConfig
 		preEntryRungLimit = config.get("General", "preEntryRungLimit", 6, "The highest rung you can get before entering medium. Note that the first rung is indexed as 0, the second as 1 and so on.", 0, Echeladder.RUNG_COUNT - 1).setLanguageKey("minestuck.config.preEntryRungLimit").setRequiresWorldRestart(true).getInt();
 		echeladderProgress = config.get("General", "echeladderProgress", false, "If this is true, players will be able to see their progress towards the next rung. This is server side and will only be active in multiplayer if the server/Lan host has it activated.").setLanguageKey("minestuck.config.echeladderProgress").getBoolean();
 		useUUID = config.get("General", "uuidIdentification", true, "If this is set to true, minestuck will use uuids to refer to players in the saved data. On false it will instead use the old method based on usernames.").setLanguageKey("minestuck.config.uuidIdentification").setRequiresWorldRestart(true).getBoolean();
+		playerSelectedTitle = config.get("General", "playerSelectedTitle", false, "Enable this to let players select their own title. They will however not be able to select the Lord or Muse as class.").setLanguageKey("minestuck.config.playerSelectedTitle").getBoolean();
+		if(config.hasKey("General", "hardMode"))
+			hardMode = config.get("General", "hardMode", false).getBoolean();	//Not fully fleshed out yet
 		
 		setting = config.get("General", "dataCheckerPermission", "opsAndGamemode", "Determines who's allowed to access the data checker. \"none\": No one is allowed. \"ops\": only those with a command permission of level 2 or more may access the data ckecker. (for single player, that would be if cheats are turned on) \"gamemode\": Only players with the creative or spectator gamemode may view the data checker. \"opsAndGamemode\": Combination of \"ops\" and \"gamemode\". \"anyone\": No access restrictions are used.",
 				new String[] {"none", "ops", "gamemode", "opsAndGamemode", "anyone"}).setLanguageKey("minestuck.config.dataCheckerPermission").getString();
 		if(setting.equals("none")) dataCheckerPermission = 0;
 		else if(setting.equals("ops")) dataCheckerPermission = 1;
 		else if(setting.equals("gamemode")) dataCheckerPermission = 2;
-		else if(setting.equals("opsAndGamemode")) dataCheckerPermission = 3;
-		else dataCheckerPermission = 4;
+		else if(setting.equals("anyone")) dataCheckerPermission = 4;
+		else dataCheckerPermission = 3;
 		
 		if(gameSide.isClient())	//Client sided config values
 		{
@@ -179,12 +186,16 @@ public class MinestuckConfig
 			if(specialCardRenderer && !GLContext.getCapabilities().GL_EXT_framebuffer_object)
 			{
 				specialCardRenderer = false;
-				FMLLog.warning("[Minestuck] The FBO extension is not available and is required for the advanced rendering of captchalouge cards.");
+				Debug.warn("The FBO extension is not available and is required for the advanced rendering of captchalouge cards.");
 			}
 			//cardResolution = config.getInt("General", "cardResolution", 1, 0, 5, "The resolution of the item inside of a card. The width/height is computed by '8*2^x', where 'x' is this config value.");
 			loginColorSelector = config.get("General", "loginColorSelector", true, "Determines if the color selector should be displayed when entering a save file for the first time.").setLanguageKey("minestuck.config.loginColorSelector").getBoolean();
 			alchemyIcons = config.get("General", "alchemyIcons", true, "Set this to true to replace grist names in alchemiter/grist widget with the grist icon.").setLanguageKey("minestuck.config.alchemyIcons").getBoolean();
-			echeladderAnimation = config.get("General", "echeladderAnimation", true, "If this is turned off, the echeladder animation will end immediately.").setLanguageKey("minestuck.config.echeladderAnimation").getBoolean();
+			setting = config.get("General", "echeladderAnimationNew", "normal", "Allows control of standard speed for the echeladder rung \"animation\", or if it should have one in the first place.", new String[] {"nothing", "slow", "normal", "fast"}).setLanguageKey("minestuck.config.echeladderAnimation").getString();
+			if(setting.equals("nothing")) echeladderAnimation = 0;
+			else if(setting.equals("slow")) echeladderAnimation = 4;
+			else if(setting.equals("fast")) echeladderAnimation = 1;
+			else echeladderAnimation = 2;
 		}
 	}
 	
@@ -192,9 +203,9 @@ public class MinestuckConfig
 	@SubscribeEvent
 	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
 	{
-		if(event.modID.equals(Minestuck.class.getAnnotation(Mod.class).modid()))
+		if(event.getModID().equals(Minestuck.class.getAnnotation(Mod.class).modid()))
 		{
-			if(!event.isWorldRunning && !event.requiresMcRestart)
+			if(!event.isWorldRunning() && !event.isRequiresMcRestart())
 				loadBasicConfigOptions();	//Haven't put up a method for changing config options while the world is running
 			
 			config.save();
@@ -208,17 +219,17 @@ public class MinestuckConfig
 		{
 			if((dataCheckerPermission & 1) != 0)
 			{
-				MinecraftServer server = MinecraftServer.getServer();
-				if (server.getConfigurationManager().canSendCommands(player.getGameProfile()))
+				MinecraftServer server = player.getServer();
+				if (server.getPlayerList().canSendCommands(player.getGameProfile()))
 				{
-					UserListOpsEntry userlistopsentry = (UserListOpsEntry)server.getConfigurationManager().getOppedPlayers().getEntry(player.getGameProfile());
+					UserListOpsEntry userlistopsentry = (UserListOpsEntry)server.getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
 					if((userlistopsentry != null ? userlistopsentry.getPermissionLevel() : server.getOpPermissionLevel()) >= 2)
 						return true;
 				}
 			}
 			if((dataCheckerPermission & 2) != 0)
 			{
-				GameType gameType = player.theItemInWorldManager.getGameType();
+				GameType gameType = player.interactionManager.getGameType();
 				if(ServerEditHandler.getData(player) != null)
 					gameType = ServerEditHandler.getData(player).getDecoy().gameType;
 				if(!gameType.isSurvivalOrAdventure())

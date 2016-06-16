@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Random;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
@@ -22,9 +21,7 @@ import net.minecraft.block.BlockSandStone;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Vec3;
-import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.gen.feature.WorldGenCactus;
 import net.minecraft.world.gen.feature.WorldGenDeadBush;
 
@@ -33,13 +30,13 @@ public class LandAspectSand extends TerrainLandAspect
 	private final IBlockState upperBlock;
 	private final IBlockState groundBlock;
 	private final IBlockState[] structureBlocks;
-	private final Vec3 skyColor;
+	private final Vec3d skyColor;
 	private final String name;
 	private final List<TerrainLandAspect> variations;
 	
 	public LandAspectSand()
 	{
-		this("Sand");
+		this("sand");
 	}
 	
 	public LandAspectSand(String variation)
@@ -47,41 +44,24 @@ public class LandAspectSand extends TerrainLandAspect
 		variations = new ArrayList<TerrainLandAspect>();
 		name = variation;
 		
-		if(name.equals("Sand"))
+		if(name.equals("sand"))
 		{
-			skyColor = new Vec3(0.99D, 0.8D, 0.05D);
+			skyColor = new Vec3d(0.99D, 0.8D, 0.05D);
 			
 			upperBlock = Blocks.sand.getDefaultState();
 			groundBlock = Blocks.sandstone.getDefaultState();
 			structureBlocks = new IBlockState[] {Blocks.sandstone.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.SMOOTH), Blocks.stonebrick.getDefaultState()};
 			
-			List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sand, 1, 0), 4, 15, 6));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sand, 1, 1), 2, 7, 3));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sandstone, 1, 0), 2, 7, 5));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sandstone, 1, 2), 2, 7, 3));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_sandstone, 1, 0), 1, 3, 2));
-			
-			this.lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);
-			
 			variations.add(this);
-			variations.add(new LandAspectSand("SandRed"));
+			variations.add(new LandAspectSand("sand_red"));
 		} else
 		{
-			skyColor = new Vec3(0.99D, 0.6D, 0.05D);
+			skyColor = new Vec3d(0.99D, 0.6D, 0.05D);
 			
 			upperBlock = Blocks.sand.getDefaultState().withProperty(BlockSand.VARIANT, BlockSand.EnumType.RED_SAND);
 			groundBlock = Blocks.red_sandstone.getDefaultState();
 			structureBlocks = new IBlockState[] {Blocks.red_sandstone.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.SMOOTH), Blocks.stonebrick.getDefaultState()};
 			
-			List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sand, 1, 1), 4, 15, 6));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sand, 1, 0), 2, 7, 3));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_sandstone, 1, 0), 2, 7, 5));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.red_sandstone, 1, 2), 2, 7, 3));
-			list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sandstone, 1, 0), 1, 3, 2));
-			
-			this.lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);
 		}
 		
 	}
@@ -120,14 +100,14 @@ public class LandAspectSand extends TerrainLandAspect
 	public List<ILandDecorator> getDecorators()
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
-		if(name.equals("SandRed"))
+		if(name.equals("sand_red"))
 			list.add(new SurfaceDecoratorVein(Blocks.sand.getDefaultState(), 10, 32));
 		list.add(new WorldGenDecorator(new WorldGenCactus(), 15, 0.4F));
-		list.add(new WorldGenDecorator(new WorldGenDeadBush(), 10, 0.4F));
+		list.add(new WorldGenDecorator(new WorldGenDeadBush(), 1, 0.4F));
 		
 		list.add(new UndergroundDecoratorVein(upperBlock, 8, 28, 256));
-		list.add(new UndergroundDecoratorVein((name.equals("SandRed")?MinestuckBlocks.ironOreSandstoneRed:MinestuckBlocks.ironOreSandstone).getDefaultState(), 24, 9, 64));
-		list.add(new UndergroundDecoratorVein((name.equals("SandRed")?MinestuckBlocks.goldOreSandstoneRed:MinestuckBlocks.goldOreSandstone).getDefaultState(), 6, 9, 32));
+		list.add(new UndergroundDecoratorVein((name.equals("sand_red")?MinestuckBlocks.ironOreSandstoneRed:MinestuckBlocks.ironOreSandstone).getDefaultState(), 24, 9, 64));
+		list.add(new UndergroundDecoratorVein((name.equals("sand_red")?MinestuckBlocks.goldOreSandstoneRed:MinestuckBlocks.goldOreSandstone).getDefaultState(), 6, 9, 32));
 		
 		return list;
 	}
@@ -163,7 +143,7 @@ public class LandAspectSand extends TerrainLandAspect
 	}
 	
 	@Override
-	public Vec3 getFogColor() 
+	public Vec3d getFogColor() 
 	{
 		return skyColor;
 	}
@@ -177,7 +157,7 @@ public class LandAspectSand extends TerrainLandAspect
 	@Override
 	public TerrainLandAspect getPrimaryVariant()
 	{
-		return LandAspectRegistry.fromNameTerrain("Sand");
+		return LandAspectRegistry.fromNameTerrain("sand");
 	}
 	
 	@Override

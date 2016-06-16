@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.FireFieldDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
@@ -13,30 +11,12 @@ import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Vec3;
-import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.util.math.Vec3d;
 
 public class LandAspectHeat extends TerrainLandAspect 
 {
 	IBlockState[] structureBlocks = {Blocks.nether_brick.getDefaultState(), Blocks.obsidian.getDefaultState()};
-	static Vec3 skyColor = new Vec3(0.4D, 0.0D, 0.0D);
-	
-	public LandAspectHeat()
-	{
-		List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
-		list.add(new WeightedRandomChestContent(new ItemStack(Items.blaze_powder, 1, 0), 2, 8, 6));
-		list.add(new WeightedRandomChestContent(new ItemStack(Items.blaze_rod, 1, 0), 1, 3, 4));
-		list.add(new WeightedRandomChestContent(new ItemStack(Items.magma_cream, 1, 0), 1, 3, 3));
-		list.add(new WeightedRandomChestContent(new ItemStack(Items.brick, 1, 0), 1, 2, 2));
-		list.add(new WeightedRandomChestContent(new ItemStack(Items.flint_and_steel, 1, 0), 1, 1, 4));
-		list.add(new WeightedRandomChestContent(new ItemStack(Items.lava_bucket, 1, 0), 1, 1, 3));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.netherrack, 1, 0), 4, 15, 5));
-		list.add(new WeightedRandomChestContent(new ItemStack(MinestuckItems.blacksmithHammer), 1, 1, 2));
-		
-		lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);
-	}
+	static Vec3d skyColor = new Vec3d(0.4D, 0.0D, 0.0D);
 	
 	@Override
 	public IBlockState getUpperBlock() 
@@ -62,8 +42,9 @@ public class LandAspectHeat extends TerrainLandAspect
 	}
 
 	@Override
-	public String getPrimaryName() {
-		return "Heat";
+	public String getPrimaryName()
+	{
+		return "heat";
 	}
 
 	@Override
@@ -81,7 +62,7 @@ public class LandAspectHeat extends TerrainLandAspect
 		
 		list.add(new UndergroundDecoratorVein(Blocks.gravel.getDefaultState(), 8, 33, 256));
 		list.add(new UndergroundDecoratorVein(MinestuckBlocks.coalOreNetherrack.getDefaultState(), 26, 17, 128));
-		list.add(new UndergroundDecoratorVein(Blocks.quartz_ore.getDefaultState(), 13, 14, 64));
+		list.add(new UndergroundDecoratorVein(Blocks.quartz_ore.getDefaultState(), 13, 8, 64));
 		return list;
 	}
 	
@@ -92,7 +73,7 @@ public class LandAspectHeat extends TerrainLandAspect
 	}
 
 	@Override
-	public Vec3 getFogColor() 
+	public Vec3d getFogColor() 
 	{
 		return skyColor;
 	}

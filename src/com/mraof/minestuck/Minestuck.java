@@ -6,14 +6,12 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -31,8 +29,10 @@ import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.client.util.MinestuckModelManager;
 import com.mraof.minestuck.command.CommandCheckLand;
 import com.mraof.minestuck.command.CommandGristSend;
+import com.mraof.minestuck.command.CommandSburbServer;
 import com.mraof.minestuck.command.CommandSburbSession;
 import com.mraof.minestuck.command.CommandGrist;
+import com.mraof.minestuck.command.CommandSetRung;
 import com.mraof.minestuck.command.CommandTransportalizer;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.editmode.DeployList;
@@ -46,23 +46,22 @@ import com.mraof.minestuck.nei.NEIMinestuckConfig;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.tileentity.TileEntityCrockerMachine;
 import com.mraof.minestuck.tileentity.TileEntityGate;
-import com.mraof.minestuck.tileentity.TileEntityMachine;
+import com.mraof.minestuck.tileentity.TileEntitySburbMachine;
 import com.mraof.minestuck.tileentity.TileEntitySkaiaPortal;
 import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 import com.mraof.minestuck.tracker.ConnectionListener;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.ComputerProgram;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.KindAbstratusList;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.SburbClient;
 import com.mraof.minestuck.util.SburbServer;
-import com.mraof.minestuck.util.UsernameHandler;
+import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
-import com.mraof.minestuck.world.WorldProviderLands;
-import com.mraof.minestuck.world.WorldProviderSkaia;
-import com.mraof.minestuck.world.biome.BiomeGenMinestuck;
 import com.mraof.minestuck.world.gen.OreHandler;
 import com.mraof.minestuck.world.gen.structure.StructureCastlePieces;
 import com.mraof.minestuck.world.gen.structure.StructureCastleStart;
@@ -70,7 +69,7 @@ import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.structure.LandStructureHandler;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
-@Mod(modid = "Minestuck", name = "Minestuck", version = "@VERSION@", guiFactory = "com.mraof.minestuck.client.gui.MinestuckGuiFactory")
+@Mod(modid = "minestuck", name = "Minestuck", version = "@VERSION@", guiFactory = "com.mraof.minestuck.client.gui.MinestuckGuiFactory", acceptedMinecraftVersions = "[1.9]")
 public class Minestuck
 {
 	
@@ -83,21 +82,10 @@ public class Minestuck
 	 */
 	public static volatile boolean isServerRunning;
 	
-	public static int skaiaProviderTypeId;
-	public static int skaiaDimensionId;
-	public static int landProviderTypeId;
-	public static int landDimensionIdStart;
-	public static int biomeIdStart;
-	
 	// The instance of your mod that Forge uses.
-	@Instance("Minestuck")
+	@Instance("minestuck")
 	public static Minestuck instance;
-
-	// Says where the client and server 'proxy' code is loaded.
-	@SidedProxy(clientSide="com.mraof.minestuck.client.ClientProxy", serverSide="com.mraof.minestuck.CommonProxy")
-
-	//The proxy to be used by client and server
-	public static CommonProxy proxy;
+	
 	public static CreativeTabs tabMinestuck;
 
 	public static long worldSeed = 0;	//TODO proper usage of seed when generating titles, land aspects, and land dimension data
@@ -106,6 +94,8 @@ public class Minestuck
 	public void preInit(FMLPreInitializationEvent event) 
 	{
 		isClientRunning = event.getSide().isClient();
+		
+		Debug.logger = event.getModLog();
 		
 		MinestuckConfig.loadConfigFile(event.getSuggestedConfigurationFile(), event.getSide());
 		
@@ -138,19 +128,14 @@ public class Minestuck
 	{
 		MinestuckEntities.registerEntities();
 		//register Tile Entities
-		GameRegistry.registerTileEntity(TileEntitySkaiaPortal.class, "minstuck.gatePortal");
-		GameRegistry.registerTileEntity(TileEntityMachine.class, "minestuck.containerMachine");
-		GameRegistry.registerTileEntity(TileEntityComputer.class, "minestuck.computerSburb");
-		GameRegistry.registerTileEntity(TileEntityTransportalizer.class, "minestuck.transportalizer");
-		GameRegistry.registerTileEntity(TileEntityGate.class, "minestuck.gate");
-		//register world generators
-		DimensionManager.registerProviderType(skaiaProviderTypeId, WorldProviderSkaia.class, false);
-		DimensionManager.registerDimension(skaiaDimensionId, skaiaProviderTypeId);
-		DimensionManager.registerProviderType(landProviderTypeId, WorldProviderLands.class, MinestuckConfig.keepDimensionsLoaded);
+		GameRegistry.registerTileEntity(TileEntitySkaiaPortal.class, "Minstuck.GatePortal");
+		GameRegistry.registerTileEntity(TileEntitySburbMachine.class, "Minestuck.SburbMachine");
+		GameRegistry.registerTileEntity(TileEntityCrockerMachine.class, "Minestuck.CrockerMachine");
+		GameRegistry.registerTileEntity(TileEntityComputer.class, "Minestuck.ComputerSburb");
+		GameRegistry.registerTileEntity(TileEntityTransportalizer.class, "Minestuck.Transportalizer");
+		GameRegistry.registerTileEntity(TileEntityGate.class, "Minestuck.Gate");
 		
-		BiomeGenMinestuck.mediumNormal = new BiomeGenMinestuck(biomeIdStart, true).setBiomeName("The Medium");
-		BiomeGenMinestuck.mediumOcean = new BiomeGenMinestuck(biomeIdStart+1, true).setBiomeName("The Medium (Ocean)");
-		BiomeGenMinestuck.mediumRough = new BiomeGenMinestuck(biomeIdStart+2, true).setBiomeName("The Medium (Rough)");
+		MinestuckDimensionHandler.register();
 		
 		//register ore generation
 		OreHandler oreHandler = new OreHandler();
@@ -238,7 +223,7 @@ public class Minestuck
 		MinestuckDimensionHandler.unregisterDimensions();
 		isServerRunning = !isClientRunning;
 		MinestuckPlayerTracker.dataCheckerPermission.clear();
-		UsernameHandler.clear();
+		IdentifierHandler.clear();
 	}
 	
 	@EventHandler
@@ -252,6 +237,8 @@ public class Minestuck
 		event.registerServerCommand(new CommandGristSend());
 		event.registerServerCommand(new CommandTransportalizer());
 		event.registerServerCommand(new CommandSburbSession());
+		event.registerServerCommand(new CommandSburbServer());
+		event.registerServerCommand(new CommandSetRung());
 		
 		worldSeed = event.getServer().worldServers[0].getSeed();
 		ServerEventHandler.lastDay = event.getServer().worldServers[0].getWorldTime() / 24000L;

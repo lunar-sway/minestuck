@@ -1,25 +1,29 @@
 package com.mraof.minestuck.block;
 
+import java.util.List;
+
 import com.mraof.minestuck.tileentity.TileEntityGate;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockGate extends Block implements ITileEntityProvider
+public class BlockGate extends Block
 {
 	
-	public static PropertyBool isMainComponent = PropertyBool.create("mainComponent");
+	protected static final AxisAlignedBB GATE_AABB = new AxisAlignedBB(0.0D, 0.45D, 0.0D, 1.0D, 0.55D, 1.0D);
+	public static PropertyBool isMainComponent = PropertyBool.create("main_component");
 	
 	public BlockGate()
 	{
@@ -27,7 +31,12 @@ public class BlockGate extends Block implements ITileEntityProvider
 		setDefaultState(getDefaultState().withProperty(isMainComponent, false));
 		setLightLevel(0.75F);
 		setHardness(10.0F);
-		this.setBlockBounds(0F, 0.45F, 0F, 1F, 0.55F, 1F);
+	}
+	
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+	{
+		return GATE_AABB;
 	}
 	
 	@Override
@@ -37,33 +46,32 @@ public class BlockGate extends Block implements ITileEntityProvider
 	}
 	
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state)
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB boundingBox, List<AxisAlignedBB> list, Entity entity)
 	{
-		return null;
 	}
 	
 	@Override
-	public int getRenderType()
+	public EnumBlockRenderType getRenderType(IBlockState state)
 	{
-		return -1;
+		return EnumBlockRenderType.INVISIBLE;
 	}
 	
 	@Override
-	public boolean isOpaqueCube()
+	public boolean isOpaqueCube(IBlockState state)
 	{
 		return false;
 	}
 	
 	@Override
-	public boolean isFullCube()
+	public boolean isFullCube(IBlockState state)
 	{
 		return false;
 	}
 	
 	@Override
-	protected BlockState createBlockState()
+	protected BlockStateContainer createBlockState()
 	{
-		return new BlockState(this, isMainComponent);
+		return new BlockStateContainer(this, isMainComponent);
 	}
 	
 	@Override
@@ -79,7 +87,7 @@ public class BlockGate extends Block implements ITileEntityProvider
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta)
+	public TileEntity createTileEntity(World worldIn, IBlockState state)
 	{
 		return new TileEntityGate();
 	}
@@ -93,7 +101,7 @@ public class BlockGate extends Block implements ITileEntityProvider
 	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn)
 	{
-		if(entityIn instanceof EntityPlayerMP && entityIn.ridingEntity == null && entityIn.riddenByEntity == null && entityIn.timeUntilPortal == 0)
+		if(entityIn instanceof EntityPlayerMP && entityIn.getRidingEntity() == null && entityIn.getPassengers().isEmpty() && entityIn.timeUntilPortal == 0)
 		{
 			BlockPos mainPos = pos;
 			if(!(Boolean) state.getValue(isMainComponent))
@@ -184,11 +192,4 @@ public class BlockGate extends Block implements ITileEntityProvider
 			else removePortal(mainPos, worldIn);
 		}
 	}
-	
-	@Override
-	public int getLightValue()
-	{
-		return super.getLightValue();
-	}
-	
 }

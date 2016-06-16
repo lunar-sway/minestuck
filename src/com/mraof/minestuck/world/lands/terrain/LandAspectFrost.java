@@ -3,39 +3,22 @@ package com.mraof.minestuck.world.lands.terrain;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.IceDecorator;
 import com.mraof.minestuck.world.lands.decorator.LayeredBlockDecorator;
-import com.mraof.minestuck.world.lands.decorator.SpruceTreeDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 
 import net.minecraft.block.BlockDirt;
-import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Vec3;
-import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.util.math.Vec3d;
 
 public class LandAspectFrost extends TerrainLandAspect 
 {
 	IBlockState[] structureBlocks = {Blocks.stone.getDefaultState(), Blocks.stonebrick.getDefaultState()};
-	static Vec3 skyColor = new Vec3(0.45D, 0.5D, 0.98D);
-	
-	public LandAspectFrost()
-	{
-		List<WeightedRandomChestContent> list = new ArrayList<WeightedRandomChestContent>();
-		list.add(new WeightedRandomChestContent(new ItemStack(Items.snowball, 1, 0), 2, 8, 8));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.snow, 1, 0), 1, 4, 5));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.snow_layer, 1, 0), 2, 5, 4));
-		list.add(new WeightedRandomChestContent(new ItemStack(Blocks.sapling, 1, BlockPlanks.EnumType.SPRUCE.getMetadata()), 1, 4, 3));
-		
-		lootMap.put(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, list);
-	}
+	static Vec3d skyColor = new Vec3d(0.45D, 0.5D, 0.98D);
 	
 	@Override
 	public IBlockState getSurfaceBlock() 
@@ -64,7 +47,7 @@ public class LandAspectFrost extends TerrainLandAspect
 	@Override
 	public String getPrimaryName() 
 	{
-		return "Frost";
+		return "frost";
 	}
 
 	@Override
@@ -98,7 +81,7 @@ public class LandAspectFrost extends TerrainLandAspect
 	}
 
 	@Override
-	public Vec3 getFogColor() 
+	public Vec3d getFogColor() 
 	{
 		return skyColor;
 	}

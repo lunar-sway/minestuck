@@ -22,14 +22,14 @@ public class ConnectionListener
 		MinestuckPacket packet = MinestuckPacket.makePacket(Type.LANDREGISTER);
 		
 		MinestuckChannelHandler.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.DISPATCHER);
-		MinestuckChannelHandler.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(event.manager.channel().attr(NetworkDispatcher.FML_DISPATCHER).get());
+		MinestuckChannelHandler.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(event.getManager().channel().attr(NetworkDispatcher.FML_DISPATCHER).get());
 		MinestuckChannelHandler.channels.get(Side.SERVER).writeOutbound(packet);
 	}
 	
 	@SubscribeEvent
 	public void onClientConnectionClosed(FMLNetworkEvent.ClientDisconnectionFromServerEvent event)
 	{
-		Debug.print("Disconnecting from server. Unregistering land dimensions...");
+		Debug.debug("Disconnecting from server. Unregistering land dimensions...");
 		if(!Minestuck.isServerRunning)
 			MinestuckDimensionHandler.unregisterDimensions();
 	}

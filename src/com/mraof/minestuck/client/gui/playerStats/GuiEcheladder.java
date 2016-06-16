@@ -11,9 +11,9 @@ import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.translation.I18n;
 
 /**
  * @author Kirderf1
@@ -73,26 +73,26 @@ public class GuiEcheladder extends GuiPlayerStats
 			if(animatedRung < MinestuckPlayerData.rung)
 			{
 				animatedRungs = MinestuckPlayerData.rung - animatedRung;
-				animationCycle = timeBeforeAnimation + getTicksForRungAnimation(animatedRungs);
+				animationCycle = timeBeforeAnimation + getTicksForRungAnimation(animatedRungs)*MinestuckConfig.echeladderAnimation;
 				animatedRung = MinestuckPlayerData.rung;
 			}
 		} else
 		{
-			int rungTicks = getTicksForRungAnimation(animatedRungs);
+			int rungTicks = getTicksForRungAnimation(animatedRungs)*MinestuckConfig.echeladderAnimation;
 			if(animationCycle - rungTicks >= 0)	//Awaiting animation start
 				currentRung = animatedRung - animatedRungs;
 			else
 			{
 				if(animatedRungs < 5)	//The animation type where the rungs flicker in
 				{
-					int rung = (animationCycle + timeBeforeNext)/(timeForRung + timeBeforeNext);
+					int rung = (animationCycle/MinestuckConfig.echeladderAnimation + timeBeforeNext)/(timeForRung + timeBeforeNext);
 					currentRung = animatedRung - rung;
-					if((animationCycle + timeBeforeNext)%(timeForRung + timeBeforeNext) >= timeBeforeNext)
-						showLastRung = (animationCycle + timeBeforeNext)%(timeForRung + timeBeforeNext) - timeBeforeNext >= timeForRung/2;
+					if((animationCycle/MinestuckConfig.echeladderAnimation + timeBeforeNext)%(timeForRung + timeBeforeNext) >= timeBeforeNext)
+						showLastRung = (animationCycle/MinestuckConfig.echeladderAnimation + timeBeforeNext)%(timeForRung + timeBeforeNext) - timeBeforeNext >= timeForRung/2;
 				} else	//The animation type where the animation just goes through all rungs
 				{
 					currentRung = animatedRung;
-					int rung = animationCycle*animatedRungs/timeForShowOnly + 1;
+					int rung = animationCycle*animatedRungs/(timeForShowOnly*MinestuckConfig.echeladderAnimation) + 1;
 					currentRung = animatedRung - rung;
 				}
 			}
@@ -137,7 +137,7 @@ public class GuiEcheladder extends GuiPlayerStats
 				drawRect(xOffset + 90, y + 10, xOffset + 90 + (int)(146*MinestuckPlayerData.rungProgress), y + 12, bg);
 			} else rand.nextInt(0xFFFFFF);
 			
-			String s = StatCollector.canTranslate("echeladder.rung"+rung) ? StatCollector.translateToLocal("echeladder.rung"+rung) : "Rung "+(rung+1);
+			String s = I18n.canTranslate("echeladder.rung"+rung) ? I18n.translateToLocal("echeladder.rung"+rung) : "Rung "+(rung+1);
 			mc.fontRendererObj.drawString(s, xOffset+ladderXOffset - mc.fontRendererObj.getStringWidth(s) / 2, y + 2, textColor);
 		}
 		GlStateManager.color(1,1,1);
@@ -155,21 +155,21 @@ public class GuiEcheladder extends GuiPlayerStats
 		this.drawTexturedModalRect(xOffset + 6, yOffset + 139, 48, 64, 16, 16);
 		this.drawTexturedModalRect(xOffset + 5, yOffset + 7, 238, 16, 18, 18);
 		
-		String msg = StatCollector.translateToLocal("gui.echeladder.name");
+		String msg = I18n.translateToLocal("gui.echeladder.name");
 		mc.fontRendererObj.drawString(msg, xOffset + 168 - mc.fontRendererObj.getStringWidth(msg)/2, yOffset + 12, 0x404040);
 		
 		int attack = (int) Math.round(100*Echeladder.attackBonus(currentRung));
-		mc.fontRendererObj.drawString(StatCollector.translateToLocal("gui.echeladder.attack.name"), xOffset + 24, yOffset + 30, 0x404040);
+		mc.fontRendererObj.drawString(I18n.translateToLocal("gui.echeladder.attack.name"), xOffset + 24, yOffset + 30, 0x404040);
 		mc.fontRendererObj.drawString(attack+"%", xOffset + 26, yOffset + 39, 0x0094FF);
 		
 		double health = 10 + Echeladder.healthBoost(currentRung)/2.0;
-		mc.fontRendererObj.drawString(StatCollector.translateToLocal("gui.echeladder.health.name"), xOffset + 24, yOffset + 84, 0x404040);
+		mc.fontRendererObj.drawString(I18n.translateToLocal("gui.echeladder.health.name"), xOffset + 24, yOffset + 84, 0x404040);
 		mc.fontRendererObj.drawString(String.valueOf(health), xOffset + 26, yOffset + 93, 0x0094FF);
 		
 		mc.fontRendererObj.drawString("=", xOffset + 25, yOffset + 12, 0x404040);	//Should this be black, or the same blue as the numbers?
 		mc.fontRendererObj.drawString(String.valueOf(MinestuckPlayerData.boondollars), xOffset + 27 + mc.fontRendererObj.getCharWidth('='), yOffset + 12, 0x0094FF);
 		
-		mc.fontRendererObj.drawString(StatCollector.translateToLocal("gui.echeladder.cache.name"), xOffset + 24, yOffset + 138, 0x404040);
+		mc.fontRendererObj.drawString(I18n.translateToLocal("gui.echeladder.cache.name"), xOffset + 24, yOffset + 138, 0x404040);
 		mc.fontRendererObj.drawString("Unlimited", xOffset + 26, yOffset + 147, 0x0094FF);
 		
 		String tooltip = null;
@@ -195,7 +195,7 @@ public class GuiEcheladder extends GuiPlayerStats
 				{
 					int diff = (int) Math.round(100*Echeladder.attackBonus(rung)*Echeladder.getUnderlingDamageModifier(rung));
 					diff -= Math.round(100*Echeladder.attackBonus(rung - 1)*Echeladder.getUnderlingDamageModifier(rung - 1));
-					tooltip = StatCollector.translateToLocalFormatted("gui.echeladder.damageUnderling.increase", diff);
+					tooltip = I18n.translateToLocalFormatted("gui.echeladder.damageUnderling.increase", diff);
 				}
 				
 				double d = (Echeladder.healthBoost(rung) - Echeladder.healthBoost(rung - 1))/2D;
@@ -208,7 +208,7 @@ public class GuiEcheladder extends GuiPlayerStats
 				{
 					int diff = (int) Math.round(1000*Echeladder.getUnderlingProtectionModifier(rung - 1));
 					diff -= Math.round(1000*Echeladder.getUnderlingProtectionModifier(rung));
-					tooltip = StatCollector.translateToLocalFormatted("gui.echeladder.protectionUnderling.increase", diff/10D);
+					tooltip = I18n.translateToLocalFormatted("gui.echeladder.protectionUnderling.increase", diff/10D);
 				}
 			}
 		}
@@ -218,9 +218,9 @@ public class GuiEcheladder extends GuiPlayerStats
 		if(tooltip != null)
 			drawHoveringText(Arrays.asList(tooltip), xcor, ycor);
 		else if(ycor >= yOffset + 39 && ycor < yOffset + 39 + mc.fontRendererObj.FONT_HEIGHT && xcor >= xOffset + 26 && xcor < xOffset + 26 + mc.fontRendererObj.getStringWidth(attack+"%"))
-			drawHoveringText(Arrays.asList(StatCollector.translateToLocalFormatted("gui.echeladder.damageUnderling"), Math.round(attack*Echeladder.getUnderlingDamageModifier(currentRung)) + "%"), xcor, ycor);
+			drawHoveringText(Arrays.asList(I18n.translateToLocalFormatted("gui.echeladder.damageUnderling"), Math.round(attack*Echeladder.getUnderlingDamageModifier(currentRung)) + "%"), xcor, ycor);
 		else if(ycor >= yOffset + 93 && ycor < yOffset + 93 + mc.fontRendererObj.FONT_HEIGHT && xcor >= xOffset + 26 && xcor < xOffset + 26 + mc.fontRendererObj.getStringWidth(String.valueOf(health)))
-			drawHoveringText(Arrays.asList(StatCollector.translateToLocalFormatted("gui.echeladder.protectionUnderling"), String.format("%.1f", 100*Echeladder.getUnderlingProtectionModifier(currentRung))+"%"), xcor, ycor);
+			drawHoveringText(Arrays.asList(I18n.translateToLocalFormatted("gui.echeladder.protectionUnderling"), String.format("%.1f", 100*Echeladder.getUnderlingProtectionModifier(currentRung))+"%"), xcor, ycor);
 	}
 	
 	private void updateScrollAndAnimation(int xcor, int ycor)
@@ -239,7 +239,7 @@ public class GuiEcheladder extends GuiPlayerStats
 		wasClicking = mouseButtonDown;
 		
 		if(animationCycle > 0)
-			if(MinestuckConfig.echeladderAnimation)
+			if(MinestuckConfig.echeladderAnimation != 0)
 				animationCycle--;
 			else animationCycle = 0;
 	}
