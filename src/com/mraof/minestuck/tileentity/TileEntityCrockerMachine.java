@@ -66,7 +66,7 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 		case GRIST_WIDGET:
 			if(!worldObj.isRemote) 
 			{
-				ItemStack item = AlchemyRecipeHandler.getDecodedItem(inv[1]);
+				ItemStack item = AlchemyRecipeHandler.getDecodedItem(inv[0]);
 				GristSet gristSet = GristRegistry.getGristConversion(item);
 				if(item.stackSize != 1)
 					gristSet.scaleGrist(item.stackSize);

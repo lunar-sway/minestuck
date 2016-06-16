@@ -135,7 +135,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		if(worldObj.isRemote)	//Processing is easier done on the server side only
 			return;
 		
-		if (!contentsValid() || (!ready && !isAutomatic()))
+		if ((!ready && !isAutomatic()) || !contentsValid())
 		{
 			boolean b = progress == 0;
 			this.progress = 0;
