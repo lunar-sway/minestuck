@@ -101,7 +101,7 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 				}
 				
 			}
-			this.decrStackSize(1, 1);
+			this.decrStackSize(0, 1);
 			break;
 		}
 	}
