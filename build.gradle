@@ -26,7 +26,7 @@ repositories {
 //apply plugin: 'forge'
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = System.getenv()['BUILD_NUMBER']
+version = "1.0." + System.getenv()['BUILD_NUMBER']
 group= "com.mraof.minestuck"
 archivesBaseName = "Minestuck"
 
