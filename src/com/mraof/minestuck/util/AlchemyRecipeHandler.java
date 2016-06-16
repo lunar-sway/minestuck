@@ -504,6 +504,7 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Items.glass_bottle), new ItemStack(Items.enchanted_book), MODE_OR, true, false, new ItemStack(Items.experience_bottle));
 		CombinationRegistry.addCombination(new ItemStack(Items.quartz), new ItemStack(Items.water_bucket), MODE_OR, new ItemStack(Items.prismarine_crystals));
 		CombinationRegistry.addCombination(new ItemStack(Items.quartz), new ItemStack(Items.water_bucket), MODE_AND, new ItemStack(Items.prismarine_shard));
+		CombinationRegistry.addCombination(new ItemStack(Items.feather), new ItemStack(Items.ender_pearl), MODE_AND, new ItemStack(Items.elytra));
 	}
 	
 	public static void registerMinestuckRecipes() {
