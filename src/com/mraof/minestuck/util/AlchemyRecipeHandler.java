@@ -565,6 +565,8 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(ninjaSword), false, new GristSet(new GristType[] {GristType.Chalk, GristType.Quartz, GristType.Rust}, new int[] {12, 10, 6}));
 		GristRegistry.addGristConversion(new ItemStack(regisword), false, new GristSet(new GristType[] {GristType.Amethyst, GristType.Tar,GristType.Gold}, new int[] {27, 62, 38}));
 		GristRegistry.addGristConversion(new ItemStack(katana), false, new GristSet(new GristType[] {GristType.Build, GristType.Uranium, GristType.Quartz, GristType.Ruby}, new int[] {1100, 63, 115, 54}));
+		GristRegistry.addGristConversion(new ItemStack(caledscratch), false, new GristSet(new GristType[] {GristType.Build, GristType.Diamond, GristType.Quartz, GristType.Ruby}, new int[] {2000, 100, 300, 100}));
+		GristRegistry.addGristConversion(new ItemStack(sord), false, new GristSet(new GristType[] {GristType.Artifact}, new int[] {-100}));
 		
 		GristRegistry.addGristConversion(new ItemStack(regiSickle), false, new GristSet(new GristType[] {GristType.Amethyst, GristType.Tar,GristType.Gold}, new int[] {25, 57, 33}));
 		GristRegistry.addGristConversion(new ItemStack(sickle), false, new GristSet(new GristType[] {GristType.Build}, new int[] {5}));
@@ -613,6 +615,8 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_sword), new ItemStack(component, 1, 2), MODE_AND, false, true, new ItemStack(regisword));
 		CombinationRegistry.addCombination(new ItemStack(ninjaSword), new ItemStack(component, 1, 2), MODE_AND, false, true, new ItemStack(regisword));
 		CombinationRegistry.addCombination(new ItemStack(ninjaSword), new ItemStack(Blocks.obsidian), MODE_AND, new ItemStack(katana));
+		CombinationRegistry.addCombination(new ItemStack(katana), new ItemStack(Items.clock), MODE_AND, new ItemStack(caledscratch));
+		CombinationRegistry.addCombination(new ItemStack(Items.wooden_sword), new ItemStack(Items.dye, 1, EnumDyeColor.BLACK.getDyeDamage()), MODE_OR, new ItemStack(sord));
 		
 		CombinationRegistry.addCombination(new ItemStack(Items.iron_hoe), new ItemStack(Items.wheat), MODE_AND, false, true, new ItemStack(sickle));
 		CombinationRegistry.addCombination(new ItemStack(sickle), new ItemStack(component, 1, 2), MODE_AND, false, true, new ItemStack(regiSickle));
