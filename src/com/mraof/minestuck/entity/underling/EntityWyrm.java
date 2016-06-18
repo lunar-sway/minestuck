@@ -19,7 +19,7 @@ public class EntityWyrm extends EntityUnderling implements IEntityMultiPart
 	public ArrayList<Integer> partIds = new ArrayList<Integer>();
 	public EntityWyrm(World world)
 	{
-		super(world, "Wyrm");
+		super(world, "wyrm");
 	}
 
 	@Override
