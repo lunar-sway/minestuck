@@ -86,7 +86,7 @@ public class CommandTransportalizer extends CommandBase
 		{
 			player.timeUntilPortal = 60;
 			
-			notifyOperators(sender, this, "commands.tpz.success", player.getName(), code);
+			notifyCommandListener(sender, this, "commands.tpz.success", player.getName(), code);
 		} else if(sender.sendCommandFeedback())
 			throw new CommandException("commands.tpz.failed");
 	}

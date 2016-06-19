@@ -17,19 +17,19 @@ import net.minecraft.util.math.Vec3d;
 
 public class LandAspectFrost extends TerrainLandAspect 
 {
-	IBlockState[] structureBlocks = {Blocks.stone.getDefaultState(), Blocks.stonebrick.getDefaultState()};
+	IBlockState[] structureBlocks = {Blocks.STONE.getDefaultState(), Blocks.STONEBRICK.getDefaultState()};
 	static Vec3d skyColor = new Vec3d(0.45D, 0.5D, 0.98D);
 	
 	@Override
 	public IBlockState getSurfaceBlock() 
 	{
-		return Blocks.grass.getDefaultState();
+		return Blocks.GRASS.getDefaultState();
 	}
 
 	@Override
 	public IBlockState getUpperBlock() 
 	{
-		return Blocks.dirt.getDefaultState();
+		return Blocks.DIRT.getDefaultState();
 	}
 	
 	@Override
@@ -41,7 +41,7 @@ public class LandAspectFrost extends TerrainLandAspect
 	@Override
 	public IBlockState getRiverBlock() 
 	{
-		return Blocks.ice.getDefaultState();
+		return Blocks.ICE.getDefaultState();
 	}
 
 	@Override
@@ -60,18 +60,18 @@ public class LandAspectFrost extends TerrainLandAspect
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
 		list.add(new IceDecorator());
-		list.add(new LayeredBlockDecorator(Blocks.snow_layer, true));
+		list.add(new LayeredBlockDecorator(Blocks.SNOW_LAYER, true));
 //		list.add(new SpruceTreeDecorator());
 		
-		list.add(new SurfaceDecoratorVein(Blocks.dirt.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.COARSE_DIRT), 10, 32));
-		list.add(new SurfaceDecoratorVein(Blocks.ice.getDefaultState(), 5, 8));
-		list.add(new SurfaceDecoratorVein(Blocks.snow.getDefaultState(), 10, 16));
+		list.add(new SurfaceDecoratorVein(Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.COARSE_DIRT), 10, 32));
+		list.add(new SurfaceDecoratorVein(Blocks.ICE.getDefaultState(), 5, 8));
+		list.add(new SurfaceDecoratorVein(Blocks.SNOW.getDefaultState(), 10, 16));
 		
-		list.add(new UndergroundDecoratorVein(Blocks.packed_ice.getDefaultState(), 2, 8, 64));	//Have 64 be the highest value because stone is used as a building material for structures right now
-		list.add(new UndergroundDecoratorVein(Blocks.snow.getDefaultState(), 3, 16, 64));
-		list.add(new UndergroundDecoratorVein(Blocks.dirt.getDefaultState(), 3, 28, 64));
-		list.add(new UndergroundDecoratorVein(Blocks.coal_ore.getDefaultState(), 13, 17, 64));
-		list.add(new UndergroundDecoratorVein(Blocks.diamond_ore.getDefaultState(), 3, 6, 24));
+		list.add(new UndergroundDecoratorVein(Blocks.PACKED_ICE.getDefaultState(), 2, 8, 64));	//Have 64 be the highest value because stone is used as a building material for structures right now
+		list.add(new UndergroundDecoratorVein(Blocks.SNOW.getDefaultState(), 3, 16, 64));
+		list.add(new UndergroundDecoratorVein(Blocks.DIRT.getDefaultState(), 3, 28, 64));
+		list.add(new UndergroundDecoratorVein(Blocks.COAL_ORE.getDefaultState(), 13, 17, 64));
+		list.add(new UndergroundDecoratorVein(Blocks.DIAMOND_ORE.getDefaultState(), 3, 6, 24));
 		return list;
 	}
 	
@@ -107,8 +107,8 @@ public class LandAspectFrost extends TerrainLandAspect
 	@Override
 	public IBlockState getDecorativeBlockFor(IBlockState state)
 	{
-		if(state.getBlock() == Blocks.stonebrick)
-			return Blocks.stonebrick.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED);
+		if(state.getBlock() == Blocks.STONEBRICK)
+			return Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED);
 		return state;
 	}
 	

@@ -11,8 +11,8 @@ import com.mraof.minestuck.util.Title;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 public class GuiTitleSelector extends GuiScreen
@@ -64,10 +64,10 @@ public class GuiTitleSelector extends GuiScreen
 		this.mc.getTextureManager().bindTexture(guiBackground);
 		this.drawTexturedModalRect(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
-		String message = previous == null ? I18n.translateToLocal("gui.selectTitle") : I18n.translateToLocalFormatted("gui.selectTitle.used", previous.getTitleName());
+		String message = previous == null ? I18n.format("gui.selectTitle") : I18n.format("gui.selectTitle.used", previous.getTitleName());
 		mc.fontRendererObj.drawString(message, (this.width / 2) - mc.fontRendererObj.getStringWidth(message) / 2, yOffset + 12, 0x404040);
 		
-		message = I18n.translateToLocalFormatted("title.format", "", "");
+		message = I18n.format("title.format", "", "");
 		mc.fontRendererObj.drawString(message, (this.width / 2) - mc.fontRendererObj.getStringWidth(message) / 2, yOffset + 56 - mc.fontRendererObj.FONT_HEIGHT/2, 0x404040);
 		
 		super.drawScreen(mouseX, mouseY, partialTicks);

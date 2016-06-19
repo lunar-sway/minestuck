@@ -40,7 +40,7 @@ public class LandAspectPulse extends TitleLandAspect
 	@Override
 	public boolean isAspectCompatible(TerrainLandAspect aspect)
 	{
-		return aspect.getOceanBlock().getMaterial() != Material.lava;	//Lava is likely a too important part of the terrain aspect to be replaced
+		return aspect.getOceanBlock().getMaterial() != Material.LAVA;	//Lava is likely a too important part of the terrain aspect to be replaced
 	}
 	
 }

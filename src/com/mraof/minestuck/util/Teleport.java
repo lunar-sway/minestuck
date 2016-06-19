@@ -45,9 +45,9 @@ public class Teleport
 			player.dimension = destinationDimension;
 			
 			SPacketRespawn respawnPacket = new SPacketRespawn(player.dimension, player.worldObj.getDifficulty(), worldDest.getWorldInfo().getTerrainType(), player.interactionManager.getGameType());
-			player.playerNetServerHandler.sendPacket(respawnPacket);
+			player.connection.sendPacket(respawnPacket);
 			playerList.updatePermissionLevel(player);
-			worldFrom.removePlayerEntityDangerously(player);
+			worldFrom.removeEntityDangerously(player);
 			player.isDead = false;
 			
 			player.setPosition(x, y, z);
@@ -59,9 +59,9 @@ public class Teleport
 			
 			playerList.preparePlayer(player, worldFrom);
 			
-			player.playerNetServerHandler.setPlayerLocation(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
+			player.connection.setPlayerLocation(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
 			player.interactionManager.setWorld(worldDest);
-			player.playerNetServerHandler.sendPacket(new SPacketPlayerAbilities(player.capabilities));
+			player.connection.sendPacket(new SPacketPlayerAbilities(player.capabilities));
 			
 			mcServer.getPlayerList().updateTimeAndWeatherForPlayer(player, worldDest);
 			mcServer.getPlayerList().syncPlayerInventory(player);
@@ -70,7 +70,7 @@ public class Teleport
 			while (iterator.hasNext())
 			{
 				PotionEffect potioneffect = (PotionEffect)iterator.next();
-				player.playerNetServerHandler.sendPacket(new SPacketEntityEffect(player.getEntityId(), potioneffect));
+				player.connection.sendPacket(new SPacketEntityEffect(player.getEntityId(), potioneffect));
 			}
 			
 			FMLCommonHandler.instance().firePlayerChangedDimensionEvent(player, prevDimension, destinationDimension);

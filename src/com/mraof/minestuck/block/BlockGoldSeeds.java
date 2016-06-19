@@ -30,8 +30,8 @@ public class BlockGoldSeeds extends Block
 	
 	public BlockGoldSeeds()
 	{
-		super(Material.plants);
-		setStepSound(SoundType.METAL);
+		super(Material.PLANTS);
+		setSoundType(SoundType.METAL);
 		setHardness(0.1F);
 		setUnlocalizedName("goldSeeds");
 	}
@@ -70,12 +70,12 @@ public class BlockGoldSeeds extends Block
 	}
 	
 	@Override
-	public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock)
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn)
 	{
-		if(worldIn.getBlockState(pos.down()).getBlock() != Blocks.farmland)
+		if(worldIn.getBlockState(pos.down()).getBlock() != Blocks.FARMLAND)
 		{
 			this.dropBlockAsItem(worldIn, pos, state, 0);
-			worldIn.setBlockState(pos, Blocks.air.getDefaultState(), 3);
+			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 		}
 	}
 	

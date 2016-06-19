@@ -45,7 +45,7 @@ public class BlockSkaiaPortal extends BlockContainer
 	}
 	
 	@Override
-	public void onEntityCollidedWithBlock(World world, BlockPos pos, Entity entity)
+	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity)
 	{
 		if (entity.getRidingEntity() == null && entity.getPassengers().isEmpty() && !world.isRemote && entity.timeUntilPortal == 0)
 		{

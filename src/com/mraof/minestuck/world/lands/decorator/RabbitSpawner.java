@@ -21,7 +21,7 @@ public class RabbitSpawner implements ILandDecorator
 				int x = random.nextInt(16) + (chunkX << 4) + 8;
 				int z = random.nextInt(16) + (chunkZ << 4) + 8;
 				BlockPos pos = world.getTopSolidOrLiquidBlock(new BlockPos(x, 0, z));
-				if(world.getBlockState(pos).getMaterial().isLiquid() || provider.isPositionInSpawn(x, z) || world.getBiomeGenForCoordsBody(pos) == BiomeGenMinestuck.mediumOcean)
+				if(world.getBlockState(pos).getMaterial().isLiquid() || provider.isPositionInSpawn(x, z) || world.getBiomeForCoordsBody(pos) == BiomeGenMinestuck.mediumOcean)
 					continue;
 				
 				EntityRabbit entity = new EntityRabbit(world);

@@ -24,17 +24,19 @@ public class WorldProviderSkaia extends WorldProvider
 		return true;
 	}
 	
-	public void registerWorldChunkManager()
+	@Override
+	protected void createBiomeProvider()
 	{
-		super.registerWorldChunkManager();
-		this.worldChunkMgr = new BiomeProviderSingle(Biomes.plains);
+		this.biomeProvider = new BiomeProviderSingle(Biomes.PLAINS);
 	}
 	
+	@Override
 	public float calculateCelestialAngle(long par1, float par3)
 	{
 		return 12000.0F;
 	}
-	
+
+	@Override
 	public boolean isSurfaceWorld()
 	{
 		return false;

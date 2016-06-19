@@ -9,8 +9,8 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -75,7 +75,6 @@ public class GuiComputer extends GuiScreen
 		return false;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public void initGui() {
 		super.initGui();
@@ -96,8 +95,8 @@ public class GuiComputer extends GuiScreen
 		updateGui();
 	}
 	
-	@SuppressWarnings("unchecked")
-	public void updateGui() {
+	public void updateGui()
+	{
 		
 		programButton.enabled = te.installedPrograms.size() > 1;
 		
@@ -108,13 +107,13 @@ public class GuiComputer extends GuiScreen
 		
 		if(te.program != null) {
 			te.program.onUpdateGui(this, buttonList);
-			programButton.displayString = I18n.translateToLocal(te.program.getName());
+			programButton.displayString = I18n.format(te.program.getName());
 		}
 		
 	}
 	
-	@SuppressWarnings("unchecked")
-	protected void actionPerformed(GuiButton guibutton) {
+	protected void actionPerformed(GuiButton guibutton)
+	{
 		if(te.hasProgram(-1))
 			return;
 		

@@ -94,9 +94,9 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 	{
 		this.motionY = 0.42D;
 		
-		if (this.isPotionActive(MobEffects.jump))
+		if (this.isPotionActive(MobEffects.JUMP_BOOST))
 		{
-			this.motionY += (double)((float)(this.getActivePotionEffect(MobEffects.jump).getAmplifier() + 1) * 0.1F);
+			this.motionY += (double)((float)(this.getActivePotionEffect(MobEffects.JUMP_BOOST).getAmplifier() + 1) * 0.1F);
 		}
 		
 		if (this.isSprinting())

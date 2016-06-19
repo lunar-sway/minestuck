@@ -25,7 +25,7 @@ public class BlockTransportalizer extends BlockContainer
 	
 	public BlockTransportalizer()
 	{
-		super(Material.iron);
+		super(Material.IRON);
 		this.setCreativeTab(Minestuck.tabMinestuck);
 		this.setUnlocalizedName("transportalizer");
 		this.setHardness(3.0F);
@@ -46,7 +46,7 @@ public class BlockTransportalizer extends BlockContainer
 	}
 	
 	@Override
-	public void onEntityCollidedWithBlock(World world, BlockPos pos, Entity entity)
+	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity)
 	{
 		if (!world.isRemote && entity.getRidingEntity() == null && entity.getPassengers().isEmpty() && !world.isRemote && entity.timeUntilPortal == 0)
 		{

@@ -29,7 +29,7 @@ public class BlockBlobDecorator implements ILandDecorator	//A version of WorldGe
 		{
 			BlockPos pos = world.getHeight(new BlockPos((chunkX << 4) + 8 + random.nextInt(16), 0, (chunkZ << 4) + 8 + random.nextInt(16)));
 			
-			if(world.getBiomeGenForCoordsBody(pos) == BiomeGenMinestuck.mediumOcean)
+			if(world.getBiomeForCoordsBody(pos) == BiomeGenMinestuck.mediumOcean)
 				continue;
 			
 			for (int i1 = 0; i1 < 3; ++i1)

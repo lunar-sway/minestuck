@@ -49,9 +49,9 @@ public class BlockColoredDirt extends Block
 	
 	public BlockColoredDirt()
 	{
-		super(Material.ground);
+		super(Material.GROUND);
 		this.setCreativeTab(Minestuck.tabMinestuck);
-		setStepSound(SoundType.GROUND);
+		setSoundType(SoundType.GROUND);
 		setDefaultState(getBlockState().getBaseState().withProperty(BLOCK_TYPE, BlockType.BLUE));
 	}
 	
@@ -80,9 +80,8 @@ public class BlockColoredDirt extends Block
 	}
 	
 	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item item, CreativeTabs tab, List subItems) 
+	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> subItems) 
 	{
 		for(int i = 0; i < BlockType.values().length; i++)
 			subItems.add(new ItemStack(this, 1, i));
@@ -100,8 +99,8 @@ public class BlockColoredDirt extends Block
 	{
 		switch((BlockType) state.getValue(BLOCK_TYPE))
 		{
-		case BLUE: return MapColor.blueColor;
-		case THOUGHT: return MapColor.limeColor;
+		case BLUE: return MapColor.BLUE;
+		case THOUGHT: return MapColor.LIME;
 		default: return super.getMapColor(state);
 		}
 	}
@@ -109,7 +108,7 @@ public class BlockColoredDirt extends Block
 	@Override
 	public boolean canSustainPlant(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing direction, IPlantable plantable)
 	{
-		return plantable == Blocks.sapling || super.canSustainPlant(state, world, pos, direction, plantable);
+		return plantable == Blocks.SAPLING || super.canSustainPlant(state, world, pos, direction, plantable);
 	}
 	
 }

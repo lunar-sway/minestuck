@@ -30,9 +30,9 @@ public class Minegicka3Support extends ModSupport
 		
 		GristRegistry.addGristConversion(new ItemStack(thingy), false, new GristSet(new GristType[]{GristType.Rust, GristType.Gold}, new int[]{16, 16}));
 		
-		CombinationRegistry.addCombination(new ItemStack(thingy), new ItemStack(Items.stick), CombinationRegistry.MODE_AND, new ItemStack(stick));
-		CombinationRegistry.addCombination(new ItemStack(thingy2), new ItemStack(Items.stick), CombinationRegistry.MODE_AND, new ItemStack(stick2));
-		CombinationRegistry.addCombination(new ItemStack(thingy3), new ItemStack(Items.stick), CombinationRegistry.MODE_AND, new ItemStack(stick3));
+		CombinationRegistry.addCombination(new ItemStack(thingy), new ItemStack(Items.STICK), CombinationRegistry.MODE_AND, new ItemStack(stick));
+		CombinationRegistry.addCombination(new ItemStack(thingy2), new ItemStack(Items.STICK), CombinationRegistry.MODE_AND, new ItemStack(stick2));
+		CombinationRegistry.addCombination(new ItemStack(thingy3), new ItemStack(Items.STICK), CombinationRegistry.MODE_AND, new ItemStack(stick3));
 		
 	}
 	

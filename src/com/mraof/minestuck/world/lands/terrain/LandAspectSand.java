@@ -48,9 +48,9 @@ public class LandAspectSand extends TerrainLandAspect
 		{
 			skyColor = new Vec3d(0.99D, 0.8D, 0.05D);
 			
-			upperBlock = Blocks.sand.getDefaultState();
-			groundBlock = Blocks.sandstone.getDefaultState();
-			structureBlocks = new IBlockState[] {Blocks.sandstone.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.SMOOTH), Blocks.stonebrick.getDefaultState()};
+			upperBlock = Blocks.SAND.getDefaultState();
+			groundBlock = Blocks.SANDSTONE.getDefaultState();
+			structureBlocks = new IBlockState[] {Blocks.SANDSTONE.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.SMOOTH), Blocks.STONEBRICK.getDefaultState()};
 			
 			variations.add(this);
 			variations.add(new LandAspectSand("sand_red"));
@@ -58,9 +58,9 @@ public class LandAspectSand extends TerrainLandAspect
 		{
 			skyColor = new Vec3d(0.99D, 0.6D, 0.05D);
 			
-			upperBlock = Blocks.sand.getDefaultState().withProperty(BlockSand.VARIANT, BlockSand.EnumType.RED_SAND);
-			groundBlock = Blocks.red_sandstone.getDefaultState();
-			structureBlocks = new IBlockState[] {Blocks.red_sandstone.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.SMOOTH), Blocks.stonebrick.getDefaultState()};
+			upperBlock = Blocks.SAND.getDefaultState().withProperty(BlockSand.VARIANT, BlockSand.EnumType.RED_SAND);
+			groundBlock = Blocks.RED_SANDSTONE.getDefaultState();
+			structureBlocks = new IBlockState[] {Blocks.RED_SANDSTONE.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.SMOOTH), Blocks.STONEBRICK.getDefaultState()};
 			
 		}
 		
@@ -101,7 +101,7 @@ public class LandAspectSand extends TerrainLandAspect
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
 		if(name.equals("sand_red"))
-			list.add(new SurfaceDecoratorVein(Blocks.sand.getDefaultState(), 10, 32));
+			list.add(new SurfaceDecoratorVein(Blocks.SAND.getDefaultState(), 10, 32));
 		list.add(new WorldGenDecorator(new WorldGenCactus(), 15, 0.4F));
 		list.add(new WorldGenDecorator(new WorldGenDeadBush(), 1, 0.4F));
 		
@@ -163,11 +163,11 @@ public class LandAspectSand extends TerrainLandAspect
 	@Override
 	public IBlockState getDecorativeBlockFor(IBlockState state)
 	{
-		if(state.getBlock() == Blocks.stonebrick)
-			return Blocks.stonebrick.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED);
-		else if(state.getBlock() == Blocks.sandstone)
-			return Blocks.sandstone.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.CHISELED);
-		else return Blocks.red_sandstone.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.CHISELED);
+		if(state.getBlock() == Blocks.STONEBRICK)
+			return Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED);
+		else if(state.getBlock() == Blocks.SANDSTONE)
+			return Blocks.SANDSTONE.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.CHISELED);
+		else return Blocks.RED_SANDSTONE.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.CHISELED);
 	}
 	
 	@Override

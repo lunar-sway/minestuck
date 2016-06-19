@@ -45,7 +45,7 @@ public class ItemBlockLayered extends ItemBlock
 				
 				if (/*depth <= 6 && */worldIn.checkNoEntityCollision(this.block.getBoundingBox(state, worldIn, pos)) && ((BlockLayered)this.block).changeHeight(worldIn, pos, metadata + 1)) //changes full BlockLayered into full block
 				{
-					worldIn.playSound(null, (double)pos.getX() + 0.5, (double)pos.getY() + 0.5, (double)pos.getZ() + 0.5, this.block.getStepSound().getPlaceSound(), SoundCategory.BLOCKS, (this.block.getStepSound().getVolume() + 1.0F) / 2.0F, this.block.getStepSound().getPitch() * 0.8F);
+					worldIn.playSound(null, (double)pos.getX() + 0.5, (double)pos.getY() + 0.5, (double)pos.getZ() + 0.5, this.block.getSoundType().getPlaceSound(), SoundCategory.BLOCKS, (this.block.getSoundType().getVolume() + 1.0F) / 2.0F, this.block.getSoundType().getPitch() * 0.8F);
 					--stack.stackSize;
 					return EnumActionResult.SUCCESS;
 				}

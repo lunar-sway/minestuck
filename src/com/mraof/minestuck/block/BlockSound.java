@@ -14,13 +14,13 @@ public class BlockSound extends Block
 	public BlockSound(Material material, MapColor mapColor, SoundType sound)
 	{
 		super(material, mapColor);
-		setStepSound(sound);
+		setSoundType(sound);
 	}
 	
 	public BlockSound(Material material, SoundType sound)
 	{
 		super(material);
-		setStepSound(sound);
+		setSoundType(sound);
 	}
 	
 }

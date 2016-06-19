@@ -8,8 +8,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
 import codechicken.lib.gui.GuiDraw;
 
 import com.mraof.minestuck.MinestuckConfig;
@@ -34,13 +34,13 @@ public class GuiUtil
 	{
 		if (grist == null)
 		{
-			fontRenderer.drawString(I18n.translateToLocal("gui.notAlchemizable"), 9, 45, 16711680);
+			fontRenderer.drawString(I18n.format("gui.notAlchemizable"), 9, 45, 16711680);
 			return;
 		}
 		
 		if (grist.isEmpty())
 		{
-			fontRenderer.drawString(I18n.translateToLocal("gui.free"), 9, 45, 65280);
+			fontRenderer.drawString(I18n.format("gui.free"), 9, 45, 65280);
 			return;
 		}
 		

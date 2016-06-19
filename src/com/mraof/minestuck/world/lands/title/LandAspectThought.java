@@ -40,7 +40,7 @@ public class LandAspectThought extends TitleLandAspect
 	@Override
 	public boolean isAspectCompatible(TerrainLandAspect aspect)
 	{
-		return aspect.getOceanBlock().getMaterial() != Material.lava;
+		return aspect.getOceanBlock().getMaterial() != Material.LAVA;
 	}
 	
 }

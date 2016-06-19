@@ -35,7 +35,7 @@ public class LandAspectRabbits extends TitleLandAspect
 	@Override
 	public boolean isAspectCompatible(TerrainLandAspect aspect)
 	{
-		return !aspect.getOceanBlock().getMaterial().equals(Material.lava);
+		return !aspect.getOceanBlock().getMaterial().equals(Material.LAVA);
 	}
 	
 }

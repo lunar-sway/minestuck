@@ -3,7 +3,7 @@ package com.mraof.minestuck.inventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
@@ -184,8 +184,8 @@ public class ContainerSburbMachine extends Container
 	public void detectAndSendChanges()
 	{
 		if(this.progress != tileEntity.progress && tileEntity.progress != 0)
-			for(ICrafting crafter : (Iterable<ICrafting>) crafters)
-				crafter.sendProgressBarUpdate(this, 0, tileEntity.progress);	//The server should update and send the progress bar to the client because client and server ticks aren't synchronized
+			for(IContainerListener listener : listeners)
+				listener.sendProgressBarUpdate(this, 0, tileEntity.progress);	//The server should update and send the progress bar to the client because client and server ticks aren't synchronized
 		this.progress = tileEntity.progress;
 	}
 	@Override

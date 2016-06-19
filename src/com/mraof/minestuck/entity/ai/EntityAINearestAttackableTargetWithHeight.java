@@ -51,7 +51,6 @@ public class EntityAINearestAttackableTargetWithHeight extends EntityAITarget
 	/**
 	 * Returns whether the EntityAIBase should begin execution.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public boolean shouldExecute()
 	{
 		if (this.targetChance > 0 && this.taskOwner.getRNG().nextInt(this.targetChance) != 0)
@@ -72,13 +71,13 @@ public class EntityAINearestAttackableTargetWithHeight extends EntityAITarget
 			}
 			else
 			{
-				List list = this.taskOwner.worldObj.getEntitiesWithinAABB(this.targetClass, this.taskOwner.getEntityBoundingBox().expand((double)this.targetDistance, this.targetHeightDistance, (double)this.targetDistance), targetPredicate);
+				List<Entity> list = this.taskOwner.worldObj.getEntitiesWithinAABB(this.targetClass, this.taskOwner.getEntityBoundingBox().expand((double)this.targetDistance, this.targetHeightDistance, (double)this.targetDistance), targetPredicate);
 				Collections.sort(list, this.theNearestAttackableTargetWithHeightSorter);
-				Iterator iterator = list.iterator();
+				Iterator<Entity> iterator = list.iterator();
 				
 				while (iterator.hasNext())
 				{
-					Entity entity = (Entity)iterator.next();
+					Entity entity = iterator.next();
 					EntityLivingBase entityliving = (EntityLivingBase)entity;
 
 					if (this.isSuitableTarget(entityliving, false))

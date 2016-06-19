@@ -119,12 +119,12 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		this.prevPosZ = this.posZ;
 		this.motionY -= 0.03D;
 
-		if (this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ))).getMaterial() == Material.lava)
+		if (this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ))).getMaterial() == Material.LAVA)
 		{
 			this.motionY = 0.2D;
 			this.motionX = (double)((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F);
 			this.motionZ = (double)((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F);
-			this.playSound(SoundEvents.entity_generic_burn, 0.4F, 2.0F + this.rand.nextFloat() * 0.4F);
+			this.playSound(SoundEvents.ENTITY_GENERIC_BURN, 0.4F, 2.0F + this.rand.nextFloat() * 0.4F);
 		}
 
 		//this.setPosition(this.posX, (this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxY) / 2.0D, this.posZ);
@@ -189,7 +189,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public boolean handleWaterMovement()
 	{
-		return this.worldObj.handleMaterialAcceleration(this.getEntityBoundingBox(), Material.water, this);
+		return this.worldObj.handleMaterialAcceleration(this.getEntityBoundingBox(), Material.WATER, this);
 	}
 	
 	/**
@@ -234,7 +234,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		
 		if (!this.worldObj.isRemote)
 		{
-			this.playSound(SoundEvents.entity_item_pickup, 0.1F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F));
+			this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.1F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F));
 			par1EntityPlayer.onItemPickup(this, 1);
 			this.addGrist(par1EntityPlayer);
 			this.setDead();

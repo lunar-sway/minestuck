@@ -5,7 +5,7 @@ import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.pathfinding.PathEntity;
+import net.minecraft.pathfinding.Path;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -25,7 +25,7 @@ public class EntityAIAttackOnCollideWithRate extends EntityAIBase
 	boolean willSearch;
 
 	/** The PathEntity of our entity. */
-	PathEntity entityPathEntity;
+	Path entityPath;
 	Class<? extends Entity> classTarget;
 	private int movementTime;
 	private int attackRate;
@@ -66,8 +66,8 @@ public class EntityAIAttackOnCollideWithRate extends EntityAIBase
 		else
 		{
 			this.entityTarget = entityliving;
-			this.entityPathEntity = this.attacker.getNavigator().getPathToEntityLiving(this.entityTarget);
-			return this.entityPathEntity != null;
+			this.entityPath = this.attacker.getNavigator().getPathToEntityLiving(this.entityTarget);
+			return this.entityPath != null;
 		}
 	}
 
@@ -85,7 +85,7 @@ public class EntityAIAttackOnCollideWithRate extends EntityAIBase
 	 */
 	public void startExecuting()
 	{
-		this.attacker.getNavigator().setPath(this.entityPathEntity, this.movementSpeed);
+		this.attacker.getNavigator().setPath(this.entityPath, this.movementSpeed);
 		this.movementTime = 0;
 	}
 

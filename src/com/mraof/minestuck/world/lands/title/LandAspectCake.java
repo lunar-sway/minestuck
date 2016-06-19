@@ -44,7 +44,7 @@ public class LandAspectCake extends TitleLandAspect
 		public IBlockState pickBlock(Random random)
 		{
 			int bites = Math.max(0, (int) (random.nextDouble()*10) - 6);
-			return Blocks.cake.getDefaultState().withProperty(BlockCake.BITES, bites);
+			return Blocks.CAKE.getDefaultState().withProperty(BlockCake.BITES, bites);
 		}
 		@Override
 		public int getBlocksForChunk(int chunkX, int chunkZ, Random random)
@@ -62,7 +62,7 @@ public class LandAspectCake extends TitleLandAspect
 		@Override
 		public boolean canPlace(BlockPos pos, World world)
 		{
-			return Blocks.cake.canPlaceBlockAt(world, pos) && !world.getBlockState(pos).getMaterial().isLiquid() && world.getBlockState(pos).getBlock().isReplaceable(world, pos);
+			return Blocks.CAKE.canPlaceBlockAt(world, pos) && !world.getBlockState(pos).getMaterial().isLiquid() && world.getBlockState(pos).getBlock().isReplaceable(world, pos);
 		}
 	}
 }

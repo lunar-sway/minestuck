@@ -134,7 +134,7 @@ public class ServerEditHandler
 		
 		player.setGameType(decoy.gameType);
 		
-		player.playerNetServerHandler.setPlayerLocation(decoy.posX, decoy.posY, decoy.posZ, decoy.rotationYaw, decoy.rotationPitch);
+		player.connection.setPlayerLocation(decoy.posX, decoy.posY, decoy.posZ, decoy.rotationYaw, decoy.rotationPitch);
 		player.capabilities.readCapabilitiesFromNBT(decoy.capabilities);
 		player.sendPlayerAbilities();
 		player.fallDistance = 0;
@@ -345,7 +345,7 @@ public class ServerEditHandler
 		{
 			EditData data = getData(event.getEntityPlayer());
 			IBlockState block = event.getWorld().getBlockState(event.getPos());
-			if(block.getBlockHardness(event.getWorld(), event.getPos()) < 0 || block.getMaterial() == Material.portal
+			if(block.getBlockHardness(event.getWorld(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
 					|| GristHelper.getGrist(data.connection.getClientIdentifier(), GristType.Build) <= 0)
 				event.setCanceled(true);
 		}
@@ -665,7 +665,7 @@ public class ServerEditHandler
 					if(!Teleport.teleportEntity(player, nbt.getInteger("dim"), null))
 						throw new IllegalStateException("Was not able to restore editmode player for "+player.getName()+"! Likely caused by mod collision.");
 				
-				player.playerNetServerHandler.setPlayerLocation(nbt.getDouble("x"), nbt.getDouble("y"), nbt.getDouble("z"), nbt.getFloat("rotYaw"), nbt.getFloat("rotPitch"));
+				player.connection.setPlayerLocation(nbt.getDouble("x"), nbt.getDouble("y"), nbt.getDouble("z"), nbt.getFloat("rotYaw"), nbt.getFloat("rotPitch"));
 				player.setGameType(WorldSettings.GameType.getByID(nbt.getInteger("gamemode")));
 				player.capabilities.readCapabilitiesFromNBT(nbt.getCompoundTag("capabilities"));
 				player.sendPlayerAbilities();

@@ -20,18 +20,18 @@ import com.mraof.minestuck.world.lands.gen.ILandTerrainGen;
 public class LandAspectRock extends TerrainLandAspect
 {
 	
-	private IBlockState[] structureBlocks = {Blocks.cobblestone.getDefaultState(), Blocks.stonebrick.getDefaultState()};
+	private IBlockState[] structureBlocks = {Blocks.COBBLESTONE.getDefaultState(), Blocks.STONEBRICK.getDefaultState()};
 	
 	@Override
 	public IBlockState getSurfaceBlock()
 	{
-		return Blocks.gravel.getDefaultState();
+		return Blocks.GRAVEL.getDefaultState();
 	}
 	
 	@Override
 	public IBlockState getUpperBlock()
 	{
-		return Blocks.cobblestone.getDefaultState();
+		return Blocks.COBBLESTONE.getDefaultState();
 	}
 	
 	@Override
@@ -56,16 +56,16 @@ public class LandAspectRock extends TerrainLandAspect
 	public List<ILandDecorator> getDecorators()
 	{
 		List<ILandDecorator> list = new ArrayList<ILandDecorator>();
-		list.add(new UndergroundDecoratorVein(Blocks.coal_ore.getDefaultState(), 20, 17, 128));
-		list.add(new UndergroundDecoratorVein(Blocks.iron_ore.getDefaultState(), 20, 9, 64));
-		list.add(new UndergroundDecoratorVein(Blocks.redstone_ore.getDefaultState(), 10, 8, 32));
-		list.add(new UndergroundDecoratorVein(Blocks.lapis_ore.getDefaultState(), 4, 7, 24));
-		list.add(new UndergroundDecoratorVein(Blocks.gold_ore.getDefaultState(), 4, 9, 32));
-		list.add(new UndergroundDecoratorVein(Blocks.diamond_ore.getDefaultState(), 2, 6, 24));
-		list.add(new UndergroundDecoratorVein(Blocks.gravel.getDefaultState(), 10, 33, 256));
-		list.add(new UndergroundDecoratorVein(Blocks.monster_egg.getDefaultState().withProperty(BlockSilverfish.VARIANT, BlockSilverfish.EnumType.STONE), 7, 9, 64));
+		list.add(new UndergroundDecoratorVein(Blocks.COAL_ORE.getDefaultState(), 20, 17, 128));
+		list.add(new UndergroundDecoratorVein(Blocks.IRON_ORE.getDefaultState(), 20, 9, 64));
+		list.add(new UndergroundDecoratorVein(Blocks.REDSTONE_ORE.getDefaultState(), 10, 8, 32));
+		list.add(new UndergroundDecoratorVein(Blocks.LAPIS_ORE.getDefaultState(), 4, 7, 24));
+		list.add(new UndergroundDecoratorVein(Blocks.GOLD_ORE.getDefaultState(), 4, 9, 32));
+		list.add(new UndergroundDecoratorVein(Blocks.DIAMOND_ORE.getDefaultState(), 2, 6, 24));
+		list.add(new UndergroundDecoratorVein(Blocks.GRAVEL.getDefaultState(), 10, 33, 256));
+		list.add(new UndergroundDecoratorVein(Blocks.MONSTER_EGG.getDefaultState().withProperty(BlockSilverfish.VARIANT, BlockSilverfish.EnumType.STONE), 7, 9, 64));
 		
-		list.add(new BlockBlobDecorator(Blocks.cobblestone.getDefaultState(), 0));
+		list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 0));
 		return list;
 	}
 	
@@ -102,8 +102,8 @@ public class LandAspectRock extends TerrainLandAspect
 	@Override
 	public IBlockState getDecorativeBlockFor(IBlockState state)
 	{
-		if(state.getBlock() == Blocks.stonebrick)
-			return Blocks.stonebrick.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED);
+		if(state.getBlock() == Blocks.STONEBRICK)
+			return Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED);
 		return state;
 	}
 	

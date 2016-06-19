@@ -10,11 +10,11 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 import org.lwjgl.input.Keyboard;
@@ -100,9 +100,9 @@ public class GuiSburbMachine extends GuiContainer
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
 	{
-		fontRendererObj.drawString(I18n.translateToLocal("gui."+guis[type.ordinal()]+".name"), 8, 6, 4210752);
+		fontRendererObj.drawString(I18n.format("gui."+guis[type.ordinal()]+".name"), 8, 6, 4210752);
 		//draws "Inventory" or your regional equivalent
-		fontRendererObj.drawString(I18n.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
+		fontRendererObj.drawString(I18n.format("container.inventory"), 8, ySize - 96 + 2, 4210752);
 		if (type == MachineType.ALCHEMITER && te.getStackInSlot(0) != null) 
 		{
 			//Render grist requirements
@@ -177,7 +177,7 @@ public class GuiSburbMachine extends GuiContainer
 				
 				te.ready = true;
 				te.overrideStop = false;
-				goButton.displayString = I18n.translateToLocal(te.overrideStop ? "gui.buttonStop" : "gui.buttonGo");
+				goButton.displayString = I18n.format(te.overrideStop ? "gui.buttonStop" : "gui.buttonGo");
 			}
 			else if (Mouse.getEventButton() == 1 && te.allowOverrideStop())
 			{
@@ -186,7 +186,7 @@ public class GuiSburbMachine extends GuiContainer
 				MinestuckChannelHandler.sendToServer(packet);
 				
 				te.overrideStop = !te.overrideStop;
-				goButton.displayString = I18n.translateToLocal(te.overrideStop ? "gui.buttonStop" : "gui.buttonGo");
+				goButton.displayString = I18n.format(te.overrideStop ? "gui.buttonStop" : "gui.buttonGo");
 			}
 		}
 	}
@@ -219,7 +219,7 @@ public class GuiSburbMachine extends GuiContainer
 		
 		if(keyCode == 28)
 		{
-			this.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.ui_button_click, 1.0F));
+			this.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			
 			boolean mode = te.allowOverrideStop() && (Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54));
 			MinestuckPacket packet = MinestuckPacket.makePacket(Type.GOBUTTON,true, mode && !te.overrideStop);
@@ -228,7 +228,7 @@ public class GuiSburbMachine extends GuiContainer
 			if(!mode)
 				te.ready = true;
 			te.overrideStop = mode && !te.overrideStop;
-			goButton.displayString = I18n.translateToLocal(te.overrideStop ? "gui.buttonStop" : "gui.buttonGo");
+			goButton.displayString = I18n.format(te.overrideStop ? "gui.buttonStop" : "gui.buttonGo");
 		}
 	}
 	

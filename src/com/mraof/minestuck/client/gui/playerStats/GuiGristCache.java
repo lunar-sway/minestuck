@@ -9,8 +9,8 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.common.Loader;
 import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.NEIClientConfig;
@@ -52,7 +52,7 @@ public class GuiGristCache extends GuiPlayerStats
 		
 		String cacheMessage;
 		if(ClientEditHandler.isActive() || MinestuckPlayerData.title == null)
-			cacheMessage = I18n.translateToLocal("gui.gristCache.name");
+			cacheMessage = I18n.format("gui.gristCache.name");
 		else cacheMessage = MinestuckPlayerData.title.getTitleName();
 		mc.fontRendererObj.drawString(cacheMessage, (this.width / 2) - mc.fontRendererObj.getStringWidth(cacheMessage) / 2, yOffset + 12, 0x404040);
 		
@@ -91,7 +91,7 @@ public class GuiGristCache extends GuiPlayerStats
 		
 		if (tooltip != -1)
 			if(tooltip % 2 == 0)
-				drawHoveringText(Arrays.asList(I18n.translateToLocalFormatted("grist.format", GristType.values()[tooltip/2].getDisplayName())),
+				drawHoveringText(Arrays.asList(I18n.format("grist.format", GristType.values()[tooltip/2].getDisplayName())),
 						xcor, ycor, fontRendererObj);
 			else drawHoveringText(Arrays.asList(String.valueOf(clientGrist.getGrist(GristType.values()[tooltip/2]))), xcor, ycor, fontRendererObj);
 	}

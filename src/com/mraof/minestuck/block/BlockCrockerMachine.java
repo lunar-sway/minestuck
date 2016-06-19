@@ -62,7 +62,7 @@ public class BlockCrockerMachine extends BlockContainer
 	
 	protected BlockCrockerMachine()
 	{
-		super(Material.rock);
+		super(Material.ROCK);
 		
 		setUnlocalizedName("crockerMachine");
 		setHardness(3.0F);

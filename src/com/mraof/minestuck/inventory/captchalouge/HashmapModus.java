@@ -269,7 +269,7 @@ public class HashmapModus extends Modus
 			player.inventory.setInventorySlotContents(player.inventory.currentItem, stack);
 		else CaptchaDeckHandler.launchAnyItem(player, stack);
 		
-		this.player.addChatMessage(new TextComponentTranslation("[HASHMAP] %s %% %s = %s -> %s", i, getSize(), index, stack.getChatComponent()));
+		this.player.addChatMessage(new TextComponentTranslation("[HASHMAP] %s %% %s = %s -> %s", i, getSize(), index, stack.getTextComponent()));
 	}
 	
 }

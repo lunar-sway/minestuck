@@ -42,7 +42,7 @@ public class CommandSetRung extends CommandBase
 		Echeladder echeladder = MinestuckPlayerData.getData(target).echeladder;
 		echeladder.setByCommand(rung, progress);
 		
-		notifyOperators(sender, this, "commands.setRung.success", target.getUsername(), rung, progress*100);
+		notifyCommandListener(sender, this, "commands.setRung.success", target.getUsername(), rung, progress*100);
 	}
 	
 	@Override

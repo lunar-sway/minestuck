@@ -90,7 +90,7 @@ public class CommandGristSend extends CommandBase
 				}
 			}
 			
-			notifyOperators(sender, this, "commands.gristSend.success", receiver, costStr.toString());
+			notifyCommandListener(sender, this, "commands.gristSend.success", receiver, costStr.toString());
 			
 		} else throw new PlayerNotFoundException("Couldn't find player \"%s\".", receiver);
 	}

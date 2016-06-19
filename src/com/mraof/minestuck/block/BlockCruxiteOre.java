@@ -26,13 +26,13 @@ public class BlockCruxiteOre extends Block
 	private Random rand = new Random();
 	public BlockCruxiteOre()
 	{
-		super(Material.rock);
+		super(Material.ROCK);
 		
 		this.setUnlocalizedName("oreCruxite");
 		setHardness(3.0F);
 		setResistance(5.0F);	//Values normally used by ores
 		setHarvestLevel("pickaxe", 0);
-		setDefaultState(getBlockState(Blocks.stone.getDefaultState()));
+		setDefaultState(getBlockState(Blocks.STONE.getDefaultState()));
 		this.setCreativeTab(Minestuck.tabMinestuck);
 	}
 	
@@ -93,15 +93,15 @@ public class BlockCruxiteOre extends Block
 	public IBlockState getBlockState(IBlockState ground)
 	{
 		int meta = 0;
-		if(ground.getBlock() == Blocks.stone)
+		if(ground.getBlock() == Blocks.STONE)
 			meta = 0;
-		else if(ground.getBlock() == Blocks.netherrack)
+		else if(ground.getBlock() == Blocks.NETHERRACK)
 			meta = 1;
-		else if(ground.getBlock() == Blocks.cobblestone)
+		else if(ground.getBlock() == Blocks.COBBLESTONE)
 			meta = 2;
-		else if(ground.getBlock() == Blocks.sandstone)
+		else if(ground.getBlock() == Blocks.SANDSTONE)
 			meta = 3;
-		else if(ground.getBlock() == Blocks.red_sandstone)
+		else if(ground.getBlock() == Blocks.RED_SANDSTONE)
 			meta = 4;
 		
 		return getBlockState().getBaseState().withProperty(BLOCK_TYPE, meta);

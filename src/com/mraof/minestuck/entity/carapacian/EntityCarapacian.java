@@ -104,12 +104,10 @@ public abstract class EntityCarapacian extends EntityMinestuck
 			this.addEnemy(par1EntityLivingBase.getClass());
 		}
 	}
-
-	@SuppressWarnings("rawtypes")
+	
 	@Override
 	public boolean canAttackClass(Class par1Class)
 	{
-
 		return !this.allyClasses.contains(par1Class);
 	}
 	

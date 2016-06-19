@@ -174,22 +174,24 @@ public class TileEntityTransportalizer extends TileEntity
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound tagCompound)
+	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound)
 	{
 		super.writeToNBT(tagCompound);
 		
 		tagCompound.setString("idString", id);
 		tagCompound.setString("destId", destId);
+		
+		return tagCompound;
 	}
-
+	
 	@Override
-	public Packet getDescriptionPacket() 
+	public SPacketUpdateTileEntity getUpdatePacket()
 	{
 		NBTTagCompound tagCompound = new NBTTagCompound();
 		this.writeToNBT(tagCompound);
 		return new SPacketUpdateTileEntity(this.pos, 2, tagCompound);
 	}
-
+	
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) 
 	{

@@ -73,7 +73,7 @@ public class BlockSburbMachine extends BlockContainer
 	
 	public BlockSburbMachine()
 	{
-		super(Material.rock);
+		super(Material.ROCK);
 		
 		setUnlocalizedName("sburbMachine");
 		setHardness(3.0F);
@@ -107,7 +107,6 @@ public class BlockSburbMachine extends BlockContainer
 		return new ArrayList<ItemStack>();
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> subItems) 

@@ -36,7 +36,6 @@ public class GuiTransportalizer extends GuiScreen
 		this.te = te;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void initGui()
 	{

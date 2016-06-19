@@ -72,7 +72,7 @@ public class EntityMetalBoat extends EntityBoat implements IEntityAdditionalSpaw
 		
 		capturedDrops.clear();
 		
-		if(!this.worldObj.isAABBInMaterial(this.getEntityBoundingBox(), Material.water))
+		if(!this.worldObj.isAABBInMaterial(this.getEntityBoundingBox(), Material.WATER))
 			return;
 		
 		this.motionY = motion;
@@ -105,7 +105,7 @@ public class EntityMetalBoat extends EntityBoat implements IEntityAdditionalSpaw
 				this.fallDistance = 0.0F;
 			}
 		}
-		else if (this.worldObj.getBlockState((new BlockPos(this)).down()).getMaterial() != Material.water && par1 < 0.0D)
+		else if (this.worldObj.getBlockState((new BlockPos(this)).down()).getMaterial() != Material.WATER && par1 < 0.0D)
 		{
 			this.fallDistance = (float)((double)this.fallDistance - par1);
 		}
@@ -146,9 +146,9 @@ public class EntityMetalBoat extends EntityBoat implements IEntityAdditionalSpaw
 	private Item getTypeItem()
 	{
 		if(this.type == 0)
-			return Items.iron_ingot;
+			return Items.IRON_INGOT;
 		else if(this.type == 1)
-			return Items.gold_ingot;
+			return Items.GOLD_INGOT;
 		return null;
 	}
 	

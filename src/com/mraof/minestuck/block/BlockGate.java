@@ -9,7 +9,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.particle.EffectRenderer;
+import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
@@ -27,7 +27,7 @@ public class BlockGate extends Block
 	
 	public BlockGate()
 	{
-		super(Material.portal);
+		super(Material.PORTAL);
 		setDefaultState(getDefaultState().withProperty(isMainComponent, false));
 		setLightLevel(0.75F);
 		setHardness(10.0F);
@@ -40,7 +40,7 @@ public class BlockGate extends Block
 	}
 	
 	@Override
-	public boolean addDestroyEffects(World world, BlockPos pos, EffectRenderer effectRenderer)
+	public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager)
 	{
 		return true;
 	}
@@ -179,7 +179,7 @@ public class BlockGate extends Block
 	}
 	
 	@Override
-	public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock)
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn)
 	{
 		if(!this.isValid(pos, worldIn, state))
 		{

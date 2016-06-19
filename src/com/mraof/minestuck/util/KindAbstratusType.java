@@ -72,12 +72,12 @@ public class KindAbstratusType
 		
 		ItemIdType(Item item)
 		{
-			itemId = Item.itemRegistry.getNameForObject(item);
+			itemId = Item.REGISTRY.getNameForObject(item);
 		}
 		
 		boolean partOf(ItemStack item)
 		{
-			return this.itemId.equals(Item.itemRegistry.getNameForObject(item.getItem()));
+			return this.itemId.equals(Item.REGISTRY.getNameForObject(item.getItem()));
 		}
 	}
 	

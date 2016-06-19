@@ -26,7 +26,7 @@ public class BlockComputerOff extends Block
 	
 	public BlockComputerOff()
 	{
-		super(Material.rock);
+		super(Material.ROCK);
 		setUnlocalizedName("sburbComputer");
 		setHardness(4.0F);
 		setHarvestLevel("pickaxe", 0);

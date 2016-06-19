@@ -23,7 +23,7 @@ public abstract class TreeDecoratorBase implements ILandDecorator
 			
 			WorldGenAbstractTree gen = getTreeToGenerate(world, pos, random);
 			if (gen.generate(world, random, pos))
-				gen.func_180711_a(world, random, pos);
+				gen.generateSaplings(world, random, pos);
 		}
 		
 		return null;

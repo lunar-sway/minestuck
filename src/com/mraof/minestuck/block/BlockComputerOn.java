@@ -37,7 +37,7 @@ public class BlockComputerOn extends Block implements ITileEntityProvider
 	
 	public BlockComputerOn()
 	{
-		super(Material.rock);
+		super(Material.ROCK);
 		
 		setDefaultState(getDefaultState().withProperty(BSOD, false));
 		setUnlocalizedName("sburbComputer");

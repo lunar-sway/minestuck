@@ -18,7 +18,7 @@ public class MinestuckFluidHandler
 	public void onBucketFill(FillBucketEvent event)
 	{
 		
-		if(event.getEmptyBucket() == null || event.getEmptyBucket().getItem() != Items.bucket || event.getFilledBucket() != null || event.getTarget() == null || event.getResult() == Result.DENY)
+		if(event.getEmptyBucket() == null || event.getEmptyBucket().getItem() != Items.BUCKET || event.getFilledBucket() != null || event.getTarget() == null || event.getResult() == Result.DENY)
 			return;
 		
 		ItemStack result = fillCustomBucket(event.getWorld(), event.getTarget());

@@ -10,8 +10,9 @@ import java.util.Random;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
+import net.minecraft.world.biome.Biome.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.chunk.IChunkGenerator;
@@ -108,7 +109,7 @@ public class ChunkProviderSkaia implements IChunkGenerator
 				}
 		//y * 256, z * 16, x
 		Chunk chunk = new Chunk(this.skaiaWorld, primer, chunkX, chunkZ);
-//		this.castleGenerator.func_175792_a(this, skaiaWorld, chunkX, chunkZ, primer);
+//		this.castleGenerator.generate(skaiaWorld, chunkX, chunkZ, primer);
 		chunk.generateSkylightMap();
 		return chunk;
 	}
@@ -116,7 +117,7 @@ public class ChunkProviderSkaia implements IChunkGenerator
 	@Override
 	public void populate(int var2, int var3) 
 	{
-//		this.castleGenerator.func_175794_a(skaiaWorld, random, new ChunkCoordIntPair(var2, var3));	//was called "generateStructuresInChunk"
+//		this.castleGenerator.generateStructure(skaiaWorld, random, new ChunkPos(var2, var3));	//was called "generateStructuresInChunk"
 	}
 	
 	@Override

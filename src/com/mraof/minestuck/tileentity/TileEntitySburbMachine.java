@@ -68,7 +68,7 @@ public class TileEntitySburbMachine extends TileEntityMachine
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound tagCompound)
+	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound)
 	{
 		super.writeToNBT(tagCompound);
 		
@@ -80,6 +80,7 @@ public class TileEntitySburbMachine extends TileEntityMachine
 		
 		if(getMachineType() == MachineType.ALCHEMITER && owner != null)
 			owner.saveToNBT(tagCompound, "owner");
+		return tagCompound;
 	}
 	
 	@Override

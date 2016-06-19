@@ -97,7 +97,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound tagCompound)
+	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound)
 	{
 		super.writeToNBT(tagCompound);
 		
@@ -112,10 +112,11 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 				stack.writeToNBT(tag);
 			tagCompound.setTag("slot"+i, tag);
 		}
+		return tagCompound;
 	}
 	
 	@Override
-	public Packet getDescriptionPacket() 
+	public SPacketUpdateTileEntity getUpdatePacket()
 	{
 		NBTTagCompound tagCompound = new NBTTagCompound();
 		this.writeToNBT(tagCompound);

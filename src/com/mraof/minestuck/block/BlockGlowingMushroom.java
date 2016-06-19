@@ -19,11 +19,11 @@ public class BlockGlowingMushroom extends BlockBush
 		setCreativeTab(Minestuck.tabMinestuck);
 		setUnlocalizedName("glowingMushroom");
 		setLightLevel(0.75F);
-		setStepSound(SoundType.PLANT);
+		setSoundType(SoundType.PLANT);
 	}
 	
 	@Override
-	protected boolean func_185514_i(IBlockState state)
+	protected boolean canSustainBush(IBlockState state)
 	{
 		return state.isFullBlock();
 	}
@@ -66,7 +66,7 @@ public class BlockGlowingMushroom extends BlockBush
 	@Override
 	public MapColor getMapColor(IBlockState state)
 	{
-		return MapColor.diamondColor;
+		return MapColor.DIAMOND;
 	}
 	
 }

@@ -38,7 +38,7 @@ public class BlockVanillaOre extends Block
 	
 	public BlockVanillaOre(OreType type)	//For vanilla ores with a different background texture
 	{
-		super(Material.rock);
+		super(Material.ROCK);
 		oreType = type;
 		setHardness(3.0F);
 		setResistance(5.0F);	//Values normally used by ores
@@ -50,13 +50,13 @@ public class BlockVanillaOre extends Block
 	{
 		switch(oreType)
 		{
-		case COAL: return Items.coal;
-		case IRON: return Item.getItemFromBlock(MinestuckConfig.vanillaOreDrop ? Blocks.iron_ore : this);
-		case GOLD: return Item.getItemFromBlock(MinestuckConfig.vanillaOreDrop ? Blocks.gold_ore : this);
-		case LAPIS: return Items.dye;
-		case DIAMOND: return Items.diamond;
-		case EMERALD: return Items.emerald;
-		case QUARTZ: return Items.quartz;
+		case COAL: return Items.COAL;
+		case IRON: return Item.getItemFromBlock(MinestuckConfig.vanillaOreDrop ? Blocks.IRON_ORE : this);
+		case GOLD: return Item.getItemFromBlock(MinestuckConfig.vanillaOreDrop ? Blocks.GOLD_ORE : this);
+		case LAPIS: return Items.DYE;
+		case DIAMOND: return Items.DIAMOND;
+		case EMERALD: return Items.EMERALD;
+		case QUARTZ: return Items.QUARTZ;
 		default: return Item.getItemFromBlock(this);
 		}
 	}
@@ -125,13 +125,13 @@ public class BlockVanillaOre extends Block
 			return super.createStackedBlock(state);
 		else switch(oreType)
 		{
-		case COAL: return new ItemStack(Blocks.coal_ore);
-		case IRON: return new ItemStack(Blocks.iron_ore);
-		case GOLD: return new ItemStack(Blocks.gold_ore);
-		case LAPIS: return new ItemStack(Blocks.lapis_ore);
-		case DIAMOND: return new ItemStack(Blocks.diamond_ore);
-		case EMERALD: return new ItemStack(Blocks.emerald_ore);
-		case QUARTZ: return new ItemStack(Blocks.quartz_ore);
+		case COAL: return new ItemStack(Blocks.COAL_ORE);
+		case IRON: return new ItemStack(Blocks.IRON_ORE);
+		case GOLD: return new ItemStack(Blocks.GOLD_ORE);
+		case LAPIS: return new ItemStack(Blocks.LAPIS_ORE);
+		case DIAMOND: return new ItemStack(Blocks.DIAMOND_ORE);
+		case EMERALD: return new ItemStack(Blocks.EMERALD_ORE);
+		case QUARTZ: return new ItemStack(Blocks.QUARTZ_ORE);
 		default: return new ItemStack(this);
 		}
 	}

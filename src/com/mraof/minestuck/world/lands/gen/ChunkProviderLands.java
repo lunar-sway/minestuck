@@ -10,12 +10,12 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.biome.BiomeGenBase.BiomeProperties;
-import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biome.BiomeProperties;
+import net.minecraft.world.biome.Biome.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.chunk.IChunkGenerator;
@@ -66,7 +66,7 @@ public class ChunkProviderLands implements IChunkGenerator
 	public int weatherType;	//-1:No weather &1: Force rain &2: If thunder &4: Force thunder
 	public float rainfall, temperature;
 	public float oceanChance;
-	protected BiomeGenBase biomeGenLands;
+	protected Biome biomeLands;
 	
 	public boolean generatingStructure;
 
@@ -123,7 +123,7 @@ public class ChunkProviderLands implements IChunkGenerator
 		BiomeProperties properties = new BiomeProperties(((WorldProviderLands)this.landWorld.provider).getDimensionName()).setTemperature(temperature).setRainfall(rainfall).setBaseBiome("medium");
 		if(temperature <= 0.1)
 			properties.setSnowEnabled();
-		biomeGenLands = new BiomeGenMinestuck(properties);
+		biomeLands = new BiomeGenMinestuck(properties);
 	}
 	
 	public void sortDecorators()	//Called after an aspect have added elements to the decorators list.
@@ -152,29 +152,21 @@ public class ChunkProviderLands implements IChunkGenerator
 		Chunk chunk = new Chunk(this.landWorld, primer, chunkX, chunkZ);
 		chunk.generateSkylightMap();
 		
-		BiomeGenBase[] biomes = landWorld.getBiomeProvider().loadBlockGeneratorData(null, chunkX * 16, chunkZ * 16, 16, 16);
+		Biome[] biomes = landWorld.getBiomeProvider().loadBlockGeneratorData(null, chunkX * 16, chunkZ * 16, 16, 16);
 		
 		byte[] chunkBiomes = chunk.getBiomeArray();
 		for(int i = 0; i < chunkBiomes.length; i++)
-			chunkBiomes[i] = (byte) BiomeGenBase.getIdForBiome(biomes[i]);
+			chunkBiomes[i] = (byte) Biome.getIdForBiome(biomes[i]);
 		
 		structureHandler.generate(landWorld, chunkX, chunkZ, primer);
 		return chunk;
 	}
 	
-	//private List<ChunkCoordIntPair> coords = new ArrayList<ChunkCoordIntPair>();
 	
 	@Override
 	public void populate(int chunkX, int chunkZ) 
 	{
-		ChunkCoordIntPair coord = new ChunkCoordIntPair(chunkX, chunkZ);
-		
-		/*if(coords.contains(coord))
-		{
-			Debug.print("Re-populating chunk! This is likely caused by poorly-coded structures/decorators. Coords: "+coord+", stacktrace:");
-			Thread.dumpStack();
-		}
-		else coords.add(coord);*/
+		ChunkPos coord = new ChunkPos(chunkX, chunkZ);
 		
 		BlockPos gatePos = GateHandler.getGatePos(-1, landWorld.provider.getDimension());
 		
@@ -188,7 +180,7 @@ public class ChunkProviderLands implements IChunkGenerator
 		
 		this.random.setSeed(getSeedFor(chunkX, chunkZ));
 		
-		this.generatingStructure = structureHandler.generateStructure(landWorld, random, new ChunkCoordIntPair(chunkX, chunkZ));
+		this.generatingStructure = structureHandler.generateStructure(landWorld, random, new ChunkPos(chunkX, chunkZ));
 		
 		BlockPos pos = null;
 		for (Object decorator : decorators)
@@ -199,7 +191,7 @@ public class ChunkProviderLands implements IChunkGenerator
 		}
 		
 		if(!generatingGate)
-			structureHandler.placeReturnNodes(landWorld, random, new ChunkCoordIntPair(chunkX, chunkZ), pos);
+			structureHandler.placeReturnNodes(landWorld, random, new ChunkPos(chunkX, chunkZ), pos);
 		else if(gatePos.getX() >= (chunkX << 4) + 8 && gatePos.getX() < (chunkX << 4) + 24 && gatePos.getZ() >= (chunkZ << 4) + 8 && gatePos.getZ() < (chunkZ << 4) + 24)
 		{
 			IGateStructure gate1 = aspect1.getGateStructure();
@@ -309,9 +301,9 @@ public class ChunkProviderLands implements IChunkGenerator
 		return false;
 	}
 	
-	public BiomeGenBase getBiomeGen()
+	public Biome getBiomeGen()
 	{
-		return biomeGenLands;
+		return biomeLands;
 	}
 	
 }

@@ -15,12 +15,12 @@ public class SpruceTreeDecorator extends TreeDecoratorBase	//TODO: F1X TH1S
 	protected WorldGenTaiga1 tree1 = new WorldGenTaiga1()
 	{
 		@Override
-		protected boolean canGrowInto(Block block) {return super.canGrowInto(block) || block == Blocks.snow_layer;}
+		protected boolean canGrowInto(Block block) {return super.canGrowInto(block) || block == Blocks.SNOW_LAYER;}
 	};
 	protected WorldGenTaiga2 tree2 = new WorldGenTaiga2(false)
 	{
 		@Override
-		protected boolean canGrowInto(Block block) {return super.canGrowInto(block) || block == Blocks.snow_layer;}
+		protected boolean canGrowInto(Block block) {return super.canGrowInto(block) || block == Blocks.SNOW_LAYER;}
 	};
 	
 	@Override

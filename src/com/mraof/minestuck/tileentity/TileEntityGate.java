@@ -59,15 +59,16 @@ public class TileEntityGate extends TileEntity
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound compound)
+	public NBTTagCompound writeToNBT(NBTTagCompound compound)
 	{
 		super.writeToNBT(compound);
 		if(this.gateCount != 0)
 			compound.setInteger("gateCount", gateCount);
+		return compound;
 	}
 	
 	@Override
-	public Packet getDescriptionPacket()
+	public SPacketUpdateTileEntity getUpdatePacket()
 	{
 		NBTTagCompound nbt = new NBTTagCompound();
 		nbt.setInteger("color", SburbHandler.getColorForDimension(this.worldObj.provider.getDimension()));

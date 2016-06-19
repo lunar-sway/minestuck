@@ -37,13 +37,14 @@ public class TileEntitySkaiaPortal extends TileEntity implements ITeleporter
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound par1nbtTagCompound) 
+	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) 
 	{
-		super.writeToNBT(par1nbtTagCompound);
-		par1nbtTagCompound.setInteger("Destination", this.destination.dim);
-		par1nbtTagCompound.setInteger("DestinationX", destination.pos.getX());
-		par1nbtTagCompound.setInteger("DestinationY", destination.pos.getY());
-		par1nbtTagCompound.setInteger("DestinationZ", destination.pos.getZ());
+		super.writeToNBT(tagCompound);
+		tagCompound.setInteger("Destination", this.destination.dim);
+		tagCompound.setInteger("DestinationX", destination.pos.getX());
+		tagCompound.setInteger("DestinationY", destination.pos.getY());
+		tagCompound.setInteger("DestinationZ", destination.pos.getZ());
+		return tagCompound;
 	}
 	
 	public void teleportEntity(Entity entity)

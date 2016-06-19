@@ -83,9 +83,9 @@ public class TileEntityComputer extends TileEntity
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound par1NBTTagCompound) 
+	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) 
 	{
-		super.writeToNBT(par1NBTTagCompound);
+		super.writeToNBT(tagCompound);
 		NBTTagCompound programs = new NBTTagCompound();
 		Iterator<Entry<Integer, Boolean>> it = this.installedPrograms.entrySet().iterator();
 		//int place = 0;
@@ -97,15 +97,16 @@ public class TileEntityComputer extends TileEntity
 			//place++;
 		}
 		for(Entry<Integer, String> e : latestmessage.entrySet())
-			par1NBTTagCompound.setString("text" + e.getKey(), e.getValue());
-		par1NBTTagCompound.setTag("programs",programs);
-		par1NBTTagCompound.setTag("programData", (NBTTagCompound) programData.copy());
+			tagCompound.setString("text" + e.getKey(), e.getValue());
+		tagCompound.setTag("programs",programs);
+		tagCompound.setTag("programData", (NBTTagCompound) programData.copy());
 		if (owner != null) 
-			owner.saveToNBT(par1NBTTagCompound, "owner");
+			owner.saveToNBT(tagCompound, "owner");
+		return tagCompound;
 	}
-
+	
 	@Override
-	public Packet getDescriptionPacket() 
+	public SPacketUpdateTileEntity getUpdatePacket()
 	{
 		NBTTagCompound tagCompound = new NBTTagCompound();
 		this.writeToNBT(tagCompound);
@@ -121,7 +122,7 @@ public class TileEntityComputer extends TileEntity
 		}
 		return new SPacketUpdateTileEntity(this.pos, 2, tagCompound);
 	}
-
+	
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) 
 	{

@@ -220,7 +220,7 @@ public class ClientEditHandler {
 		if(event.getWorld().isRemote && event.getEntityPlayer() == ClientProxy.getClientPlayer() && isActive())
 		{
 			IBlockState block = event.getWorld().getBlockState(event.getPos());
-			if(block.getBlockHardness(event.getWorld(), event.getPos()) < 0 || block.getMaterial() == Material.portal
+			if(block.getBlockHardness(event.getWorld(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
 					|| MinestuckPlayerData.getClientGrist().getGrist(GristType.Build) <= 0)
 				event.setCanceled(true);
 		}

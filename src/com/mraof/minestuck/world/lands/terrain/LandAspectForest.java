@@ -19,26 +19,26 @@ public class LandAspectForest extends TerrainLandAspect
 	@Override
 	public IBlockState getSurfaceBlock()
 	{
-		return Blocks.grass.getDefaultState();
+		return Blocks.GRASS.getDefaultState();
 	}
 	
 	@Override
 	public IBlockState getUpperBlock()
 	{
-		return Blocks.dirt.getDefaultState();
+		return Blocks.DIRT.getDefaultState();
 	}
 	
 	@Override
 	public IBlockState[] getStructureBlocks()
 	{
-		return new IBlockState[] {Blocks.stone.getDefaultState(), Blocks.stonebrick.getDefaultState()};
+		return new IBlockState[] {Blocks.STONE.getDefaultState(), Blocks.STONEBRICK.getDefaultState()};
 	}
 	
 	@Override
 	public IBlockState getDecorativeBlockFor(IBlockState state)
 	{
-		if(state.getBlock() == Blocks.stonebrick)
-			return Blocks.stonebrick.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED);
+		if(state.getBlock() == Blocks.STONEBRICK)
+			return Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED);
 		else return state;
 	}
 	
@@ -61,10 +61,10 @@ public class LandAspectForest extends TerrainLandAspect
 		list.add(new BasicTreeDecorator());
 		list.add(new TallGrassDecorator(0.5F));
 		
-		list.add(new UndergroundDecoratorVein(Blocks.dirt.getDefaultState(), 3, 33, 64));	//Have 64 be the highest value because stone is used as a building material for structures right now
-		list.add(new UndergroundDecoratorVein(Blocks.gravel.getDefaultState(), 2, 28, 64));
-		list.add(new UndergroundDecoratorVein(Blocks.coal_ore.getDefaultState(), 13, 17, 64));
-		list.add(new UndergroundDecoratorVein(Blocks.emerald_ore.getDefaultState(), 8, 3, 32));
+		list.add(new UndergroundDecoratorVein(Blocks.DIRT.getDefaultState(), 3, 33, 64));	//Have 64 be the highest value because stone is used as a building material for structures right now
+		list.add(new UndergroundDecoratorVein(Blocks.GRAVEL.getDefaultState(), 2, 28, 64));
+		list.add(new UndergroundDecoratorVein(Blocks.COAL_ORE.getDefaultState(), 13, 17, 64));
+		list.add(new UndergroundDecoratorVein(Blocks.EMERALD_ORE.getDefaultState(), 8, 3, 32));
 		return list;
 	}
 	

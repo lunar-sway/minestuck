@@ -47,7 +47,7 @@ public class ItemHammer extends ItemWeapon
 	@Override
 	public float getStrVsBlock(ItemStack stack, IBlockState state)
 	{
-		return state != null && (state.getMaterial() == Material.iron || state.getMaterial() == Material.anvil || state.getMaterial() == Material.rock) ? this.efficiencyOnProperMaterial : super.getStrVsBlock(stack, state);
+		return state != null && (state.getMaterial() == Material.IRON || state.getMaterial() == Material.ANVIL || state.getMaterial() == Material.ROCK) ? this.efficiencyOnProperMaterial : super.getStrVsBlock(stack, state);
 	}
 	
 	@Override
@@ -99,7 +99,7 @@ public class ItemHammer extends ItemWeapon
 	@Override
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
-		if(worldIn.getBlockState(pos).getBlock() != Blocks.air)
+		if(worldIn.getBlockState(pos).getBlock() != Blocks.AIR)
 		{
 			if (hammerType.equals(EnumHammerType.POGO))
 			{
@@ -121,7 +121,7 @@ public class ItemHammer extends ItemWeapon
 	@Override
 	public boolean canHarvestBlock(IBlockState state, ItemStack stack)
 	{
-		return state.getMaterial() == Material.rock || state.getMaterial() == Material.anvil || state.getMaterial() == Material.iron;
+		return state.getMaterial() == Material.ROCK || state.getMaterial() == Material.ANVIL || state.getMaterial() == Material.IRON;
 	}
 	
 }
