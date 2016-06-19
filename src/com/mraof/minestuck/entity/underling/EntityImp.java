@@ -18,7 +18,7 @@ public class EntityImp extends EntityUnderling
 
 	public EntityImp(World world) 
 	{
-		super(world, "Imp");
+		super(world, "imp");
 		setSize(0.5F, 1.0F);
 	}
 	
