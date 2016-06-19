@@ -125,7 +125,7 @@ public class SmallRuinStart extends StructureStart
 				}
 			}
 			
-			EnumFacing torchFacing = this.getCoordBaseMode() == EnumFacing.WEST || this.getCoordBaseMode() == EnumFacing.NORTH ? this.getCoordBaseMode().rotateY() : this.getCoordBaseMode().rotateYCCW();
+			EnumFacing torchFacing = this.getCoordBaseMode() == EnumFacing.WEST || this.getCoordBaseMode() == EnumFacing.NORTH ? this.getCoordBaseMode().rotateY() : this.getCoordBaseMode().rotateYCCW();	//TODO Blocks now somewhat rotated in setBlockState. Recheck this facing
 			if(torches[0])
 				this.setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, torchFacing), 1, 2, 3, boundingBox);
 			if(torches[1])

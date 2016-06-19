@@ -1,6 +1,7 @@
 {
     "pools": [
         {
+            "name": "general",
             "rolls": 1,
             "entries": [
                 {
@@ -10,6 +11,7 @@
             ]
         },
         {
+            "name": "aspectbased",
             "rolls": {
                 "min": 2,
                 "max": 3

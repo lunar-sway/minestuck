@@ -74,7 +74,7 @@ public class Minestuck
 {
 	
 	/**
-	 * True only if the minecraft application is client-sided
+	 * True only if the minecraft application is client-sided 
 	 */
 	public static boolean isClientRunning;
 	/**

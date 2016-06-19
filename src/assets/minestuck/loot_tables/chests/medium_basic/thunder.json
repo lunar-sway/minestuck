@@ -1,6 +1,7 @@
 {
     "pools": [
         {
+            "name": "main",
             "rolls": 0,
             "entries": [
                 
