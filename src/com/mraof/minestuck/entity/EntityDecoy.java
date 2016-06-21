@@ -240,7 +240,7 @@ public class EntityDecoy extends EntityLiving {
 			return inventory.getCurrentItem();
 		else if(slotIn == EntityEquipmentSlot.OFFHAND)
 			return inventory.offHandInventory[0];
-		else return inventory.armorItemInSlot(slotIn.getIndex());
+		else return inventory.armorInventory[slotIn.getIndex()];
 	}
 	
 	@Override

@@ -10,8 +10,8 @@ import net.minecraft.util.ResourceLocation;
 public class RenderMetalBoat extends RenderBoat
 {
 	
-	private static final ResourceLocation ironVariant = new ResourceLocation("minestuck", "textures/entity/IronBoat.png");
-	private static final ResourceLocation goldVariant = new ResourceLocation("minestuck", "textures/entity/GoldBoat.png");
+	private static final ResourceLocation ironVariant = new ResourceLocation("minestuck", "textures/entity/iron_boat.png");
+	private static final ResourceLocation goldVariant = new ResourceLocation("minestuck", "textures/entity/gold_boat.png");
 	
 	public RenderMetalBoat(RenderManager manager)
 	{

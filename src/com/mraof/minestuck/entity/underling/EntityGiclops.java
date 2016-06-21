@@ -26,7 +26,7 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 
 	public EntityGiclops(World world)
 	{
-		super(world, "Giclops");
+		super(world, "giclops");
 
 		setSize(8.0F, 12.0F);
 		this.stepHeight = 2;
