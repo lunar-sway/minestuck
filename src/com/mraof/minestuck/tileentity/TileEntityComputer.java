@@ -106,7 +106,7 @@ public class TileEntityComputer extends TileEntity
 	}
 	
 	@Override
-	public SPacketUpdateTileEntity getUpdatePacket()
+	public NBTTagCompound getUpdateTag()
 	{
 		NBTTagCompound tagCompound = new NBTTagCompound();
 		this.writeToNBT(tagCompound);
@@ -120,7 +120,13 @@ public class TileEntityComputer extends TileEntity
 			if(c != null)
 				tagCompound.getCompoundTag("programData").getCompoundTag("program_1").setInteger("connectedClient", c.getClientIdentifier().getId());
 		}
-		return new SPacketUpdateTileEntity(this.pos, 2, tagCompound);
+		return tagCompound;
+	}
+	
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket()
+	{
+		return new SPacketUpdateTileEntity(this.pos, 2, getUpdateTag());
 	}
 	
 	@Override

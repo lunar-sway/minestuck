@@ -68,6 +68,14 @@ public class TileEntityGate extends TileEntity
 	}
 	
 	@Override
+	public NBTTagCompound getUpdateTag()
+	{
+		NBTTagCompound nbt = super.getUpdateTag();
+		nbt.setInteger("color", SburbHandler.getColorForDimension(this.worldObj.provider.getDimension()));
+		return nbt;
+	}
+	
+	@Override
 	public SPacketUpdateTileEntity getUpdatePacket()
 	{
 		NBTTagCompound nbt = new NBTTagCompound();
@@ -76,9 +84,15 @@ public class TileEntityGate extends TileEntity
 	}
 	
 	@Override
+	public void handleUpdateTag(NBTTagCompound tag)
+	{
+		this.colorIndex = tag.getInteger("color");
+	}
+	
+	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
 	{
-		this.colorIndex = pkt.getNbtCompound().getInteger("color");
+		handleUpdateTag(pkt.getNbtCompound());
 	}
 	
 	public boolean isGate()

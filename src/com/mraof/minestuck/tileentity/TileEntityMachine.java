@@ -116,17 +116,29 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	}
 	
 	@Override
+	public NBTTagCompound getUpdateTag()
+	{
+		return this.writeToNBT(new NBTTagCompound());
+	}
+	
+	@Override
 	public SPacketUpdateTileEntity getUpdatePacket()
 	{
-		NBTTagCompound tagCompound = new NBTTagCompound();
-		this.writeToNBT(tagCompound);
+		NBTTagCompound tagCompound = this.getUpdateTag();
 		return new SPacketUpdateTileEntity(this.pos, 2, tagCompound);
+	}
+	
+	@Override
+	public void handleUpdateTag(NBTTagCompound tag)
+	{
+		this.readFromNBT(tag);
+		
 	}
 	
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) 
 	{
-		this.readFromNBT(pkt.getNbtCompound());
+		this.handleUpdateTag(pkt.getNbtCompound());
 	}
 	
 	@Override

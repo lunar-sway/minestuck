@@ -86,7 +86,7 @@ public class TileEntityTransportalizer extends TileEntity
 		}
 		return true;
 	}
-
+	
 	public void teleport(Entity entity)
 	{
 		Location location = transportalizers.get(this.destId);
@@ -119,7 +119,7 @@ public class TileEntityTransportalizer extends TileEntity
 			entity.timeUntilPortal = 60;
 		}
 	}
-
+	
 	public static void saveTransportalizers(NBTTagCompound tagCompound)
 	{
 		NBTTagCompound transportalizerTagCompound = new NBTTagCompound();
@@ -137,7 +137,7 @@ public class TileEntityTransportalizer extends TileEntity
 		}
 		tagCompound.setTag("transportalizers", transportalizerTagCompound);
 	}
-
+	
 	public static void loadTransportalizers(NBTTagCompound tagCompound)
 	{
 		for(Object id : tagCompound.getKeySet())
@@ -146,7 +146,7 @@ public class TileEntityTransportalizer extends TileEntity
 			put((String)id, new Location(locationTag.getInteger("x"), locationTag.getInteger("y"), locationTag.getInteger("z"), locationTag.getInteger("dim")));
 		}
 	}
-
+	
 	public String getId()
 	{
 		return id;
@@ -185,11 +185,15 @@ public class TileEntityTransportalizer extends TileEntity
 	}
 	
 	@Override
+	public NBTTagCompound getUpdateTag()
+	{
+		return this.writeToNBT(new NBTTagCompound());
+	}
+	
+	@Override
 	public SPacketUpdateTileEntity getUpdatePacket()
 	{
-		NBTTagCompound tagCompound = new NBTTagCompound();
-		this.writeToNBT(tagCompound);
-		return new SPacketUpdateTileEntity(this.pos, 2, tagCompound);
+		return new SPacketUpdateTileEntity(this.pos, 2, this.writeToNBT(new NBTTagCompound()));
 	}
 	
 	@Override
