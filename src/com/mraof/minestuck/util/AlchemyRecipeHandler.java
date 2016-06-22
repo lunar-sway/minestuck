@@ -231,10 +231,10 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(Blocks.RED_FLOWER, 1, 6), true, new GristSet(new GristType[] {GristType.Amethyst, GristType.Chalk, GristType.Iodine}, new int[] {2, 2, 1}));
 		GristRegistry.addGristConversion(new ItemStack(Blocks.RED_FLOWER, 1, 7), true, new GristSet(new GristType[] {GristType.Garnet, GristType.Iodine}, new int[] {4, 1}));
 		GristRegistry.addGristConversion(new ItemStack(Blocks.RED_FLOWER, 1, 8), true, new GristSet(new GristType[] {GristType.Tar, GristType.Chalk, GristType.Iodine}, new int[] {1, 3, 1}));
-		GristRegistry.addGristConversion(new ItemStack(Blocks.BROWN_MUSHROOM), false, new GristSet(new GristType[] {GristType.Iodine}, new int[] {3}));
-		GristRegistry.addGristConversion(new ItemStack(Blocks.RED_MUSHROOM), false, new GristSet(new GristType[] {GristType.Ruby}, new int[] {3}));
+		GristRegistry.addGristConversion(new ItemStack(Blocks.BROWN_MUSHROOM), false, new GristSet(new GristType[] {GristType.Iodine}, new int[] {5}));
+		GristRegistry.addGristConversion(new ItemStack(Blocks.RED_MUSHROOM), false, new GristSet(new GristType[] {GristType.Iodine, GristType.Ruby}, new int[] {3, 2}));
 		GristRegistry.addGristConversion(new ItemStack(Blocks.CACTUS), false, new GristSet(new GristType[] {GristType.Amber, GristType.Iodine}, new int[] {4, 1}));
-		GristRegistry.addGristConversion(new ItemStack(Blocks.TALLGRASS), false, new GristSet(new GristType[] {GristType.Amber}, new int[] {1}));
+		GristRegistry.addGristConversion(new ItemStack(Blocks.TALLGRASS), false, new GristSet(new GristType[] {GristType.Build}, new int[] {1}));
 		GristRegistry.addGristConversion(new ItemStack(Blocks.VINE), false, new GristSet(new GristType[] {GristType.Build, GristType.Amber}, new int[] {8, 1}));
 		GristRegistry.addGristConversion(new ItemStack(Blocks.WATERLILY), false, new GristSet(new GristType[] {GristType.Amber, GristType.Iodine}, new int[] {4, 1}));
 		GristRegistry.addGristConversion(new ItemStack(Blocks.DOUBLE_PLANT, 1, 0), true, new GristSet(new GristType[] {GristType.Amber, GristType.Iodine}, new int[] {7, 2}));
