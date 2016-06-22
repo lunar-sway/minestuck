@@ -129,26 +129,26 @@ echeladder.rung47=Forge Fidaddler
 echeladder.rung48=Installed Initiate
 echeladder.rung49=Master Of Mods
 
-entity.minestuck.dersiteBishop.name=Dersite Bishop
-entity.minestuck.dersitePawn.name=Dersite Pawn
-entity.minestuck.dersiteRook.name=Dersite Rook
-entity.minestuck.prospitianBishop.name=Prospitan Bishop
-entity.minestuck.prospitianPawn.name=Prospitian Pawn
-entity.minestuck.prospitianRook.name=Prospitian Rook
+entity.minestuck.DersiteBishop.name=Dersite Bishop
+entity.minestuck.DersitePawn.name=Dersite Pawn
+entity.minestuck.DersiteRook.name=Dersite Rook
+entity.minestuck.ProspitianBishop.name=Prospitan Bishop
+entity.minestuck.ProspitianPawn.name=Prospitian Pawn
+entity.minestuck.ProspitianRook.name=Prospitian Rook
 
 entity.minestuck.Salamander.name=Salamander
 entity.minestuck.Nakagator.name=Nakagator
 entity.minestuck.Iguana.name=Iguana
 entity.minestuck.Turtle.name=Turtle
 
-entity.minestuck.Imp.name=Imp
-entity.minestuck.Imp.type=%s Imp
-entity.minestuck.Ogre.name=Ogre
-entity.minestuck.Ogre.type=%s Ogre
-entity.minestuck.Giclops.name=Giclops
-entity.minestuck.Giclops.type=%s Giclops
-entity.minestuck.Basilisk.name=Basilisk
-entity.minestuck.Basilisk.type=%s Basilisk
+entity.minestuck.imp.name=Imp
+entity.minestuck.imp.type=%s Imp
+entity.minestuck.ogre.name=Ogre
+entity.minestuck.ogre.type=%s Ogre
+entity.minestuck.giclops.name=Giclops
+entity.minestuck.giclops.type=%s Giclops
+entity.minestuck.basilisk.name=Basilisk
+entity.minestuck.basilisk.type=%s Basilisk
 
 grist.format=%s Grist
 grist.amber=Amber

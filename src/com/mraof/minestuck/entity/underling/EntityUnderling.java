@@ -202,7 +202,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	{
 		if(tagCompound.hasKey("Type", 8))
 			applyGristType(GristType.getTypeFromString(tagCompound.getString("Type")), false);
-		else applyGristType(SburbHandler.getUnderlingType(this), false);
+		else applyGristType(SburbHandler.getUnderlingType(this), true);
 		super.readEntityFromNBT(tagCompound);
 		
 		if(tagCompound.hasKey("homePos", 10))
@@ -238,7 +238,8 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 		
 		if(!(livingData instanceof UnderlingData))
 		{
-			applyGristType(SburbHandler.getUnderlingType(this), true);
+			if(this.type == null)
+				applyGristType(SburbHandler.getUnderlingType(this), true);
 			livingData = new UnderlingData(this.type);
 		} else
 		{
