@@ -108,8 +108,6 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 
 	protected abstract void setCombatTask();
 	
-	protected abstract float getMaximumHealth();
-	
 	protected abstract float getKnockbackResistance();
 	
 	protected abstract double getWanderSpeed();
@@ -185,7 +183,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	public void writeEntityToNBT(NBTTagCompound tagCompound) 
 	{
 		super.writeEntityToNBT(tagCompound);
-		tagCompound.setString("Type", this.type.getName());
+		tagCompound.setString("type", this.type.getName());
 		if(hasHome())
 		{
 			NBTTagCompound nbt = new NBTTagCompound();
@@ -200,7 +198,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	@Override
 	public void readEntityFromNBT(NBTTagCompound tagCompound) 
 	{
-		if(tagCompound.hasKey("Type", 8))
+		if(tagCompound.hasKey("type", 8))
 			applyGristType(GristType.getTypeFromString(tagCompound.getString("Type")), false);
 		else applyGristType(SburbHandler.getUnderlingType(this), true);
 		super.readEntityFromNBT(tagCompound);
