@@ -3,6 +3,7 @@ package com.mraof.minestuck.item.weapon;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -62,7 +63,8 @@ public class ItemHammer extends ItemWeapon
 		itemStack.damageItem(1, player);
 		if(hammerType.equals(EnumHammerType.POGO))
 		{
-			target.motionY = Math.max(target.motionY, Math.min(getPogoMotion(itemStack)*2, Math.abs(player.motionY) + target.motionY + getPogoMotion(itemStack)));
+			double knockbackModifier = 1D - target.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getAttributeValue();
+			target.motionY = Math.max(target.motionY, knockbackModifier*Math.min(getPogoMotion(itemStack)*2, Math.abs(player.motionY) + target.motionY + getPogoMotion(itemStack)));
 			player.motionY = 0;
 			player.fallDistance = 0;
 		}
