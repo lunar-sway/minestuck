@@ -18,6 +18,7 @@ import com.mraof.minestuck.util.GristType;
 public class Minegicka3Support extends ModSupport
 {
 	
+	@Override
 	public void registerRecipes() throws Exception
 	{
 		Item thingy = ((Item) (Class.forName("com.williameze.minegicka3.ModBase").getField("thingy").get(null)));
@@ -36,6 +37,7 @@ public class Minegicka3Support extends ModSupport
 		
 	}
 	
+	@Override
 	public void registerDynamicRecipes() throws Exception
 	{
 		Debug.debug("Adding minegicka 3 recipes...");

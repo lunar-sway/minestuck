@@ -112,6 +112,7 @@ public class GuiComputer extends GuiScreen
 		
 	}
 	
+	@Override
 	protected void actionPerformed(GuiButton guibutton)
 	{
 		if(te.hasProgram(-1))

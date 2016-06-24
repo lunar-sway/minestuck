@@ -56,11 +56,14 @@ public class KindAbstratusType
 		
 		final Class<? extends Item> itemClass;
 		
-		ItemClassType(Class<? extends Item> itemClass) {
+		ItemClassType(Class<? extends Item> itemClass)
+		{
 			this.itemClass = itemClass;
 		}
 		
-		boolean partOf(ItemStack item) {
+		@Override
+		boolean partOf(ItemStack item)
+		{
 			return this.itemClass.isInstance(item.getItem().getClass());
 		}
 		
@@ -75,6 +78,7 @@ public class KindAbstratusType
 			itemId = Item.REGISTRY.getNameForObject(item);
 		}
 		
+		@Override
 		boolean partOf(ItemStack item)
 		{
 			return this.itemId.equals(Item.REGISTRY.getNameForObject(item.getItem()));

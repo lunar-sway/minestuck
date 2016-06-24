@@ -47,16 +47,18 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 	{
 		super(par1World);
 	}
-
+	
 	/**
 	 * returns if this entity triggers Block.onEntityWalking on the blocks they walk on. used for spiders and wolves to
 	 * prevent them from trampling crops
 	 */
+	@Override
 	protected boolean canTriggerWalking()
 	{
 		return false;
 	}
 	
+	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount)
 	{
 		if (this.isEntityInvulnerable(source))
@@ -76,9 +78,11 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 		}
 	}
 	
+	@Override
 	protected void entityInit() {}
 	
 	@SideOnly(Side.CLIENT)
+	@Override
 	public int getBrightnessForRender(float par1)
 	{
 		float f1 = 0.5F;
@@ -99,6 +103,7 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 	/**
 	 * Called to update the entity's position/logic.
 	 */
+	@Override
 	public void onUpdate()
 	{
 		super.onUpdate();
@@ -180,11 +185,7 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 		return this.worldObj.handleMaterialAcceleration(this.getEntityBoundingBox(), Material.WATER, this);
 	}
 	
-	public boolean attackEntityFrom(DamageSource source, int par2)
-	{
-		return false;
-	}
-	
+	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt)
 	{
 		nbt.setShort("health", (short)((byte)this.health));
@@ -192,6 +193,7 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 		nbt.setShort("amount", (short)this.healAmount);
 	}
 	
+	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt)
 	{
 		this.health = nbt.getShort("health") & 255;
@@ -203,6 +205,7 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 	/**
 	 * Called by a player entity when they collide with an entity
 	 */
+	@Override
 	public void onCollideWithPlayer(EntityPlayer player)
 	{
 		if(this.worldObj.isRemote?ClientEditHandler.isActive():ServerEditHandler.getData(player) != null)
@@ -218,7 +221,8 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 			this.setDead();
 	}
 	
-	public boolean canAttackWithItem()
+	@Override
+	public boolean canBeAttackedWithItem()
 	{
 		return false;
 	}

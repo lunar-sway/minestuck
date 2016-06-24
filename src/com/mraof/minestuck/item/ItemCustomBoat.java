@@ -124,6 +124,7 @@ public abstract class ItemCustomBoat extends Item
 	
 	protected class BehaivorDispenseCustomBoat extends BehaviorDefaultDispenseItem
 	{
+		@Override
 		public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
 		{
 			EnumFacing enumfacing = BlockDispenser.getFacing(source.getBlockMetadata());
@@ -154,6 +155,7 @@ public abstract class ItemCustomBoat extends Item
 			stack.splitStack(1);
 			return stack;
 		}
+		@Override
 		protected void playDispenseSound(IBlockSource source)
 		{
 			source.getWorld().playEvent(1000, source.getBlockPos(), 0);

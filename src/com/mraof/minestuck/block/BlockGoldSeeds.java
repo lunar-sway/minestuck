@@ -64,6 +64,7 @@ public class BlockGoldSeeds extends Block
 	}
 	
 	@SideOnly(Side.CLIENT)
+	@Override
 	public BlockRenderLayer getBlockLayer()
 	{
 		return BlockRenderLayer.CUTOUT;

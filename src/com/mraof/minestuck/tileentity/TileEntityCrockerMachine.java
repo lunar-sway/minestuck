@@ -47,6 +47,7 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 		return true;
 	}
 	
+	@Override
 	public boolean contentsValid()
 	{
 		switch (getMachineType())
@@ -59,6 +60,7 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 		return false;
 	}
 	
+	@Override
 	public void processContents()
 	{
 		switch (getMachineType())

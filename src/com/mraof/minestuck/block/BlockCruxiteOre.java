@@ -53,12 +53,14 @@ public class BlockCruxiteOre extends Block
 	{
 		return MinestuckItems.rawCruxite;
 	}
-
+	
+	@Override
 	public int quantityDropped(Random random)
 	{
 		return 2 + random.nextInt(4);
 	}
-
+	
+	@Override
 	public int quantityDroppedWithBonus(int par1, Random par2Random)
 	{
 		if (par1 > 0)

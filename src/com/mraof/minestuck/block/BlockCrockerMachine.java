@@ -51,6 +51,7 @@ public class BlockCrockerMachine extends BlockContainer
 			return unlocalizedName;
 		}
 		
+		@Override
 		public String getName()
 		{
 			return name().toLowerCase();

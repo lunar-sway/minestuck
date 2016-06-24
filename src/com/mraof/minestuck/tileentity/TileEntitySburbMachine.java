@@ -96,6 +96,7 @@ public class TileEntitySburbMachine extends TileEntityMachine
 		return true;
 	}
 	
+	@Override
 	public boolean contentsValid()
 	{
 		switch (getMachineType())

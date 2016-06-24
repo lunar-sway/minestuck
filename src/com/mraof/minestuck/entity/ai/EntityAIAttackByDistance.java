@@ -65,6 +65,7 @@ public class EntityAIAttackByDistance extends EntityAIBase
 	/**
 	 * Returns whether the EntityAIBase should begin execution.
 	 */
+	@Override
 	public boolean shouldExecute()
 	{
 		EntityLivingBase entityliving = this.entityHost.getAttackTarget();
@@ -86,6 +87,7 @@ public class EntityAIAttackByDistance extends EntityAIBase
 	/**
 	 * Returns whether an in-progress EntityAIBase should continue executing
 	 */
+	@Override
 	public boolean continueExecuting()
 	{
 		return this.shouldExecute() || !this.entityHost.getNavigator().noPath();
@@ -94,6 +96,7 @@ public class EntityAIAttackByDistance extends EntityAIBase
 	/**
 	 * Resets the task
 	 */
+	@Override
 	public void resetTask()
 	{
 		this.attackTarget = null;
@@ -104,6 +107,7 @@ public class EntityAIAttackByDistance extends EntityAIBase
 	/**
 	 * Updates the task
 	 */
+	@Override
 	public void updateTask()
 	{
 		double d0 = this.entityHost.getDistanceSq(this.attackTarget.posX, this.attackTarget.getEntityBoundingBox().minY, this.attackTarget.posZ);

@@ -51,6 +51,7 @@ public class EntityAIAttackOnCollideWithRate extends EntityAIBase
 	/**
 	 * Returns whether the EntityAIBase should begin execution.
 	 */
+	@Override
 	public boolean shouldExecute()
 	{
 		EntityLivingBase entityliving = this.attacker.getAttackTarget();
@@ -74,6 +75,7 @@ public class EntityAIAttackOnCollideWithRate extends EntityAIBase
 	/**
 	 * Returns whether an in-progress EntityAIBase should continue executing
 	 */
+	@Override
 	public boolean continueExecuting()
 	{
 		EntityLivingBase entityliving = this.attacker.getAttackTarget();
@@ -83,6 +85,7 @@ public class EntityAIAttackOnCollideWithRate extends EntityAIBase
 	/**
 	 * Execute a one shot task or start executing a continuous task
 	 */
+	@Override
 	public void startExecuting()
 	{
 		this.attacker.getNavigator().setPath(this.entityPath, this.movementSpeed);
@@ -92,6 +95,7 @@ public class EntityAIAttackOnCollideWithRate extends EntityAIBase
 	/**
 	 * Resets the task
 	 */
+	@Override
 	public void resetTask()
 	{
 		this.entityTarget = null;
@@ -101,6 +105,7 @@ public class EntityAIAttackOnCollideWithRate extends EntityAIBase
 	/**
 	 * Updates the task
 	 */
+	@Override
 	public void updateTask()
 	{
 		this.attacker.getLookHelper().setLookPositionWithEntity(this.entityTarget, 30.0F, 30.0F);

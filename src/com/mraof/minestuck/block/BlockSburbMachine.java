@@ -62,6 +62,7 @@ public class BlockSburbMachine extends BlockContainer
 			return unlocalizedName;
 		}
 		
+		@Override
 		public String getName()
 		{
 			return name().toLowerCase();

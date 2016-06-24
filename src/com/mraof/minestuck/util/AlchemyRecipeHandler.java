@@ -510,8 +510,8 @@ public class AlchemyRecipeHandler
 	public static void registerMinestuckRecipes() {
 		
 		//set up vanilla recipes
-		RecipeSorter.register("minestuck:notmirrored", CrafingRecipes.NonMirroredRecipe.class, RecipeSorter.Category.SHAPED, "before:minecraft:shaped");
-		RecipeSorter.register("minestuck:emptycard", CrafingRecipes.EmptyCardRecipe.class, RecipeSorter.Category.SHAPED, "before:minecraft:shaped");
+		RecipeSorter.register("minestuck:notmirrored", CraftingRecipes.NonMirroredRecipe.class, RecipeSorter.Category.SHAPED, "before:minecraft:shaped");
+		RecipeSorter.register("minestuck:emptycard", CraftingRecipes.EmptyCardRecipe.class, RecipeSorter.Category.SHAPED, "before:minecraft:shaped");
 		
 		GameRegistry.addRecipe(new ItemStack(blockComputerOff,1,0),new Object[]{ "XXX","XYX","XXX",'Y',new ItemStack(cruxiteBlock),'X',new ItemStack(Items.IRON_INGOT,1)});
 		GameRegistry.addRecipe(new ItemStack(cruxiteBlock),new Object[]{ "XXX","XXX","XXX",'X',new ItemStack(rawCruxite, 1)});
@@ -533,8 +533,8 @@ public class AlchemyRecipeHandler
 		ItemStack crux = new ItemStack(rawCruxite);
 		ItemStack cruxBl = new ItemStack(cruxiteBlock);
 		ItemStack card = new ItemStack(captchaCard);
-		GameRegistry.addRecipe(new CrafingRecipes.EmptyCardRecipe(3, 1, new ItemStack[]{cruxBl.copy(), card.copy(), crux.copy()}, new ItemStack(modusCard, 1, 0)));
-		GameRegistry.addRecipe(new CrafingRecipes.EmptyCardRecipe(3, 1, new ItemStack[]{crux.copy(), card.copy(), cruxBl.copy()}, new ItemStack(modusCard, 1, 1)));
+		GameRegistry.addRecipe(new CraftingRecipes.EmptyCardRecipe(3, 1, new ItemStack[]{cruxBl.copy(), card.copy(), crux.copy()}, new ItemStack(modusCard, 1, 0)));
+		GameRegistry.addRecipe(new CraftingRecipes.EmptyCardRecipe(3, 1, new ItemStack[]{crux.copy(), card.copy(), cruxBl.copy()}, new ItemStack(modusCard, 1, 1)));
 		GameRegistry.addSmelting(goldSeeds, new ItemStack(Items.GOLD_NUGGET), 0.1F);
 		GameRegistry.addSmelting(ironOreSandstone, new ItemStack(Items.IRON_INGOT), 0.7F);
 		GameRegistry.addSmelting(ironOreSandstoneRed, new ItemStack(Items.IRON_INGOT), 0.7F);

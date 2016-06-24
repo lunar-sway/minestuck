@@ -48,8 +48,9 @@ public class ComponentCastleStartPiece extends ComponentCastlePiece
 		this.getNextComponentNormal(this, components, random, 0, -8, 0, true);
 		
 	}
-    public boolean addComponentParts(World world, Random random, StructureBoundingBox structureBoundingBox)
-    {
+	@Override
+	public boolean addComponentParts(World world, Random random, StructureBoundingBox structureBoundingBox)
+	{
 		IBlockState chessTile = getChessBlockState(this.isBlack ? 0 : 1);
 		IBlockState chessTile1 = getChessBlockState(this.isBlack ? 2 : 3);
 //    	Debug.print("addComponentParts in ComponentCastleStartPiece running");

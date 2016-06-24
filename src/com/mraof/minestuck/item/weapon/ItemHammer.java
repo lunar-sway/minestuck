@@ -91,11 +91,6 @@ public class ItemHammer extends ItemWeapon
 		return true;
 	}
 	
-	public int getMaxItemUseDuration(ItemStack itemStack)
-	{
-		return Integer.MAX_VALUE;
-	}
-	
 	@Override
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{

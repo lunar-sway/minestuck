@@ -51,6 +51,8 @@ public class ModelBasilisk extends ModelBase
 		tail2.addBox(-3, 0, -2, 4, 4, 20);
 		tail2.setRotationPoint(0F, -15 + offsetY, 54F);
 	}
+	
+	@Override
 	public void render(Entity entity, float par2, float par3, float par4, float par5, float par6, float par7)
 	{
 		this.setRotationAngles(par2, par3, par4, par5, par6, par7, entity);
@@ -64,6 +66,7 @@ public class ModelBasilisk extends ModelBase
 		this.tail1.render(par7);
 		this.tail2.render(par7);
 	}
+	
 	@Override
 	public void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6, Entity par7Entity)
 	{

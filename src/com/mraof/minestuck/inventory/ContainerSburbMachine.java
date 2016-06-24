@@ -181,6 +181,7 @@ public class ContainerSburbMachine extends Container
 		return itemstack;
 	}
 	
+	@Override
 	public void detectAndSendChanges()
 	{
 		if(this.progress != tileEntity.progress && tileEntity.progress != 0)

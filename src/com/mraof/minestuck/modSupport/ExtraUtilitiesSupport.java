@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 public class ExtraUtilitiesSupport extends ModSupport
 {
 	
+	@Override
 	public void registerRecipes() throws Exception
 	{
 		if(Class.forName("com.rwtema.extrautils.ExtraUtils").getField("bedrockiumEnabled").getBoolean(null))

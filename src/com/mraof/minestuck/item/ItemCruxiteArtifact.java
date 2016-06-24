@@ -21,8 +21,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
-
 import static com.mraof.minestuck.MinestuckConfig.artifactRange;
+
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.BlockGate;
@@ -97,6 +97,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 		}
 	}
 	
+	@Override
 	public void makeDestination(Entity entity, WorldServer worldserver0, WorldServer worldserver1)
 	{
 		if(entity instanceof EntityPlayerMP)

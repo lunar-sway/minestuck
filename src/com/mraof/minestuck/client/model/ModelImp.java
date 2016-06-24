@@ -56,29 +56,31 @@ public class ModelImp extends ModelBase
 		Legright.mirror = true;
 		setRotation(Legright, 0F, 0F, 0F);
 	}
-
-	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
+	
+	@Override
+	public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale)
 	{
-		setRotationAngles(f, f1, f2, f3, f4, f5);
-		Head.render(f5);
-		Body.render(f5);
-		Armright.render(f5);
-		Armleft.render(f5);
-		Legleft.render(f5);
-		Legright.render(f5);
+		setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
+		Head.render(scale);
+		Body.render(scale);
+		Armright.render(scale);
+		Armleft.render(scale);
+		Legleft.render(scale);
+		Legright.render(scale);
 	}
-
+	
 	private void setRotation(ModelRenderer model, float x, float y, float z)
 	{
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
 	}
-
-	public void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6)
+	
+	@Override
+	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn)
 	{
-		this.Legleft.rotateAngleX = MathHelper.cos(par1 * 0.6662F) * 1.4F * par2;
-		this.Legright.rotateAngleX = MathHelper.cos(par1 * 0.6662F + (float)Math.PI) * 1.4F * par2;
+		this.Legleft.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+		this.Legright.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
 	}
 
 }

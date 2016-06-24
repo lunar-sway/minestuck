@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.world.World;
 
-public class CrafingRecipes
+public class CraftingRecipes
 {
 	
 	public static class NonMirroredRecipe extends ShapedRecipes
@@ -18,6 +18,7 @@ public class CrafingRecipes
 			super(width, height, input, result);
 		}
 		
+		@Override
 		public boolean matches(InventoryCrafting inv, World world)
 		{
 			for (int i = 0; i <= 3 - this.recipeWidth; ++i)
