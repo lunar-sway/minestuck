@@ -61,7 +61,7 @@ public class ItemHammer extends ItemWeapon
 	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase player)
 	{
 		itemStack.damageItem(1, player);
-		if(hammerType.equals(EnumHammerType.POGO))
+		if(hammerType.equals(EnumHammerType.POGO) && player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder() && !player.isInWater() && !player.isRiding())
 		{
 			double knockbackModifier = 1D - target.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getAttributeValue();
 			target.motionY = Math.max(target.motionY, knockbackModifier*Math.min(getPogoMotion(itemStack)*2, Math.abs(player.motionY) + target.motionY + getPogoMotion(itemStack)));
@@ -71,8 +71,8 @@ public class ItemHammer extends ItemWeapon
 		else if(hammerType.equals(EnumHammerType.SCARLET))
 			target.setFire(50);
 		else if (hammerType.equals(EnumHammerType.POPAMATIC) )
-			target.attackEntityFrom(DamageSource.magic , (float) (player.worldObj.rand.nextInt(6)+1) * (player.worldObj.rand.nextInt(6)+1) );
-		else if (hammerType.equals(EnumHammerType.FEARNOANVIL) && player.worldObj.rand.nextGaussian() > 0.9)	//Just a suggestion, keep it if you like it.
+			target.attackEntityFrom(DamageSource.magic , (float) (player.getRNG().nextInt(6)+1) * (player.getRNG().nextInt(6)+1) );
+		else if (hammerType.equals(EnumHammerType.FEARNOANVIL) && player.getRNG().nextGaussian() > 0.9)	//Just a suggestion, keep it if you like it.
 			target.addPotionEffect(new PotionEffect(Potion.getPotionById(2),100,3));	//Would prefer it being triggered by a critical hit instead, if it can.
 		return true;
 	}
