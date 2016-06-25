@@ -125,15 +125,14 @@ public class SmallRuinStart extends StructureStart
 				}
 			}
 			
-			EnumFacing torchFacing = this.getCoordBaseMode() == EnumFacing.WEST || this.getCoordBaseMode() == EnumFacing.NORTH ? this.getCoordBaseMode().rotateY() : this.getCoordBaseMode().rotateYCCW();	//TODO Blocks now somewhat rotated in setBlockState. Recheck this facing
 			if(torches[0])
-				this.setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, torchFacing), 1, 2, 3, boundingBox);
+				this.setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.EAST), 1, 2, 3, boundingBox);
 			if(torches[1])
-				this.setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, torchFacing.getOpposite()), 5, 2, 3, boundingBox);
+				this.setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.WEST), 5, 2, 3, boundingBox);
 			if(torches[2])
-				this.setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, torchFacing), 1, 2, 6, boundingBox);
+				this.setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.EAST), 1, 2, 6, boundingBox);
 			if(torches[3])
-				this.setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, torchFacing.getOpposite()), 5, 2, 6, boundingBox);
+				this.setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.WEST), 5, 2, 6, boundingBox);
 			
 			if(boundingBox.intersectsWith(this.boundingBox.minX, this.boundingBox.minZ, this.boundingBox.minX, this.boundingBox.minZ))
 				placeUnderling(this.boundingBox.minX - 6, this.boundingBox.minZ - 6, worldIn, rand);
