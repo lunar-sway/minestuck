@@ -199,7 +199,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	public void readEntityFromNBT(NBTTagCompound tagCompound) 
 	{
 		if(tagCompound.hasKey("type", 8))
-			applyGristType(GristType.getTypeFromString(tagCompound.getString("Type")), false);
+			applyGristType(GristType.getTypeFromString(tagCompound.getString("type")), false);
 		else applyGristType(SburbHandler.getUnderlingType(this), true);
 		super.readEntityFromNBT(tagCompound);
 		
