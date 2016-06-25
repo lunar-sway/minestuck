@@ -457,6 +457,7 @@ message.selectColor=If you want to change the color, you can bring up the color 
 message.privateComputerMessage=You are not allowed to access other players computers.
 message.transportalizer.destinationBlocked=The destination seems to be blocked.
 message.gateDestroyed=The destination gate seems to have been destroyed.
+message.gateMissingLand=The land this gate leads to does not yet exist!
 
 both=Both
 off=Off

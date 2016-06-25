@@ -105,7 +105,7 @@ public class TileEntityTransportalizer extends TileEntity
 			IBlockState block1 = world.getBlockState(location.pos.up(2));
 			if(block0.getMaterial().blocksMovement() || block1.getMaterial().blocksMovement())
 			{
-				entity.timeUntilPortal = 60;
+				entity.timeUntilPortal = entity.getPortalCooldown();
 				if(entity instanceof EntityPlayerMP)
 					((EntityPlayerMP) entity).addChatMessage(new TextComponentTranslation("message.transportalizer.destinationBlocked"));
 				return;
@@ -115,7 +115,7 @@ public class TileEntityTransportalizer extends TileEntity
 				Teleport.teleportEntity(entity, location.dim, null, destTransportalizer.pos.getX() + 0.5, destTransportalizer.pos.getY() + 0.6, destTransportalizer.pos.getZ() + 0.5);
 			else
 				teleportTo(entity, transportalizers.get(this.destId));
-			entity.timeUntilPortal = 60;
+			entity.timeUntilPortal = entity.getPortalCooldown();
 		}
 	}
 	

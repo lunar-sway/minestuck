@@ -101,8 +101,14 @@ public class BlockGate extends Block
 	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn)
 	{
-		if(entityIn instanceof EntityPlayerMP && entityIn.getRidingEntity() == null && entityIn.getPassengers().isEmpty() && entityIn.timeUntilPortal == 0)
+		if(entityIn instanceof EntityPlayerMP && entityIn.getRidingEntity() == null && entityIn.getPassengers().isEmpty())
 		{
+			if(entityIn.timeUntilPortal != 0)
+			{
+				entityIn.timeUntilPortal = entityIn.getPortalCooldown();
+				return;
+			}
+			
 			BlockPos mainPos = pos;
 			if(!(Boolean) state.getValue(isMainComponent))
 				if(this != MinestuckBlocks.gate)

@@ -34,7 +34,7 @@ public class GateHandler
 	public static void teleport(int gateId, int dim, EntityPlayerMP player)
 	{
 		Location location = null;
-		player.timeUntilPortal = 10;	//Basically to avoid message spam when something goes wrong
+		player.timeUntilPortal = player.getPortalCooldown();	//Basically to avoid message spam when something goes wrong
 		
 		if(gateId == 1)
 		{
@@ -54,7 +54,7 @@ public class GateHandler
 					
 					BlockPos placement = pos.add(x, 0, z);
 					
-					if(player.worldObj.getBiomeForCoordsBody(placement) != BiomeGenMinestuck.mediumOcean)
+					if(player.worldObj.getBiomeForCoordsBody(placement) == BiomeGenMinestuck.mediumNormal)
 						location = new Location(player.worldObj.getTopSolidOrLiquidBlock(placement), dim);
 					
 				} while(location == null);	//TODO replace with a more friendly version without a chance of freezing the game
@@ -82,17 +82,17 @@ public class GateHandler
 					
 					if(gatePos.getY() == -1)
 					{
-						world.getChunkProvider().loadChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() - 8 >> 4);
-						world.getChunkProvider().loadChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() - 8 >> 4);
-						world.getChunkProvider().loadChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() + 8 >> 4);
-						world.getChunkProvider().loadChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() + 8 >> 4);
+						world.getChunkProvider().provideChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() - 8 >> 4);
+						world.getChunkProvider().provideChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() - 8 >> 4);
+						world.getChunkProvider().provideChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() + 8 >> 4);
+						world.getChunkProvider().provideChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() + 8 >> 4);
 						gatePos = getGatePos(-1, clientDim);
 						if(gatePos.getY() == -1) {Debug.errorf("Unexpected error: Gate didn't generate after loading chunks! Dim: %d, pos: %s", clientDim, gatePos); return;}
 					}
 					
 					location = new Location(gatePos, clientDim);
 				}
-				
+				else player.addChatMessage(new TextComponentTranslation("message.gateMissingLand"));
 			} else Debug.errorf("Unexpected error: Can't find connection for dimension %d!", dim);
 		} else if(gateId == -1)
 		{
@@ -106,7 +106,7 @@ public class GateHandler
 					int serverDim = serverConnection.getClientDimension();
 					location = new Location(getGatePos(2, serverDim), serverDim);
 					
-				} else Debug.debugf("Player %s tried to teleport through gate before their server player entered the game.", player.getName());
+				} else player.addChatMessage(new TextComponentTranslation("message.gateMissingLand"));
 				
 			} else Debug.errorf("Unexpected error: Can't find connection for dimension %d!", dim);
 		} else Debug.errorf("Unexpected error: Gate id %d is out of bounds!", gateId);
@@ -130,7 +130,6 @@ public class GateHandler
 			if(location.dim != dim)
 				Teleport.teleportEntity(player, location.dim, null, location.pos.getX() + 0.5, location.pos.getY(), location.pos.getZ() + 0.5);
 			else player.connection.setPlayerLocation(location.pos.getX() + 0.5, location.pos.getY(), location.pos.getZ() + 0.5, player.rotationYaw, player.rotationPitch);
-			player.timeUntilPortal = 60;
 		}
 	}
 	

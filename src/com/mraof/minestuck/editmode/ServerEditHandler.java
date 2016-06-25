@@ -250,7 +250,6 @@ public class ServerEditHandler
 		if(data == null)
 			return;
 		
-		player.timeUntilPortal = 60;
 		SburbConnection c = data.connection;
 		int range = MinestuckDimensionHandler.isLandDimension(player.dimension) ? MinestuckConfig.landEditRange : MinestuckConfig.overworldEditRange;
 		
