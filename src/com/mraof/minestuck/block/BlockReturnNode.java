@@ -9,7 +9,7 @@ public class BlockReturnNode extends BlockGate
 	
 	public BlockReturnNode()
 	{
-		setHardness(5.0F);
+		blockResistance = 25.0F;
 	}
 	
 	@Override

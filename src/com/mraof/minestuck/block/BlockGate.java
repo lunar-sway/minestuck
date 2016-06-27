@@ -30,7 +30,8 @@ public class BlockGate extends Block
 		super(Material.PORTAL);
 		setDefaultState(getDefaultState().withProperty(isMainComponent, false));
 		setLightLevel(0.75F);
-		setHardness(10.0F);
+		setBlockUnbreakable();
+		blockResistance = 75.0F;
 	}
 	
 	@Override
