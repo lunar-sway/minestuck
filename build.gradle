@@ -31,7 +31,7 @@ group= "com.mraof.minestuck"
 archivesBaseName = "Minestuck"
 
 minecraft {
-    version = "1.9.4-12.17.0.1965"
+    version = "1.9.4-12.17.0.1976"
     runDir = "run"
 
     mappings = "snapshot_20160518"
