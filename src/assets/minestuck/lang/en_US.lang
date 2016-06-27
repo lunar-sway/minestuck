@@ -451,13 +451,14 @@ minestuck.config.uuidIdentification=UUID Identification
 minestuck.config.uuidIdentification.tooltip=If this is set to true, minestuck will use uuids to refer to players in the saved data. On false it will instead use the old method based on usernames.
 minestuck.config.playerSelectedTitle=Player-selected Title
 minestuck.config.playerSelectedTitle.tooltip=Enable this to let players select their own title. They will however not be able to select the Lord or Muse as class.
-
+minestuck.config.canBreakGates=Can Break Gates
+minestuck.config.canBreakGates.tooltip=Lets gates be destroyed by explosions. Turning this off will make gates use the same explosion resistance as bedrock.
 message.selectDefaultColor=Default color selected. You can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!
 message.selectColor=If you want to change the color, you can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!
 message.privateComputerMessage=You are not allowed to access other players computers.
 message.transportalizer.destinationBlocked=The destination seems to be blocked.
 message.gateDestroyed=The destination gate seems to have been destroyed.
-message.gateMissingLand=The land this gate leads to does not yet exist!
+message.gateMissingLand=The land this gate leads to does not exist yet!
 
 both=Both
 off=Off

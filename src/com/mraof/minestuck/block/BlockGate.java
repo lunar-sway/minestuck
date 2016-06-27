@@ -2,6 +2,7 @@ package com.mraof.minestuck.block;
 
 import java.util.List;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.tileentity.TileEntityGate;
 
 import net.minecraft.block.Block;
@@ -16,6 +17,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -31,7 +33,7 @@ public class BlockGate extends Block
 		setDefaultState(getDefaultState().withProperty(isMainComponent, false));
 		setLightLevel(0.75F);
 		setBlockUnbreakable();
-		blockResistance = 75.0F;
+		setResistance(25.0F);
 	}
 	
 	@Override
@@ -198,5 +200,13 @@ public class BlockGate extends Block
 				worldIn.setBlockToAir(pos);
 			else removePortal(mainPos, worldIn);
 		}
+	}
+	
+	@Override
+	public float getExplosionResistance(World world, BlockPos pos, Entity exploder, Explosion explosion)
+	{
+		if(this instanceof BlockReturnNode || MinestuckConfig.canBreakGates)
+			return super.getExplosionResistance(world, pos, exploder, explosion);
+		else return 3600000.0F;
 	}
 }
