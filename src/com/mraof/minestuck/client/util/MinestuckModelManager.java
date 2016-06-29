@@ -77,6 +77,7 @@ public class MinestuckModelManager
 		
 		register(sickle);
 		register(homesSmellYaLater);
+		register(fudgeSickle);
 		register(regiSickle);
 		register(clawSickle);
 		

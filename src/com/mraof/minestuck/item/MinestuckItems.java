@@ -77,6 +77,7 @@ public class MinestuckItems
 	//sickles
 	public static Item sickle;
 	public static Item homesSmellYaLater;
+	public static Item fudgeSickle;
 	public static Item regiSickle;
 	public static Item clawSickle;
 	//clubs
@@ -157,6 +158,7 @@ public class MinestuckItems
 		//sickles
 		sickle = GameRegistry.register(new ItemSickle(EnumSickleType.SICKLE).setRegistryName("sickle"));
 		homesSmellYaLater = GameRegistry.register(new ItemSickle(EnumSickleType.HOMES).setRegistryName("homes_smell_ya_later"));
+		fudgeSickle = GameRegistry.register(new ItemSickle(EnumSickleType.FUDGE).setRegistryName("fudgesickle"));
 		regiSickle = GameRegistry.register(new ItemSickle(EnumSickleType.REGISICKLE).setRegistryName("regisickle"));
 		clawSickle = GameRegistry.register(new ItemSickle(EnumSickleType.CLAW).setRegistryName("claw_sickle"));
 		//clubs
