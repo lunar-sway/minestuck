@@ -55,7 +55,7 @@ public class RenderVitalityGel extends Render
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) 
 	{
-		return new ResourceLocation("minestuck", "textures/entity/vitalityGel.png");
+		return new ResourceLocation("minestuck", "textures/entity/vitality_gel.png");
 	}
 
 }

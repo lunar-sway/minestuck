@@ -56,13 +56,13 @@ public class ModelBishop extends ModelBase
 		rightLeg.addBox(-4F, 0F, -5F, 6, 15, 8);
 		rightLeg.setRotationPoint(10F, 55F + offsetY, 0F);
 		rightLeg.mirror = true;
-
-
 	}
+	
+	@Override
 	public void render(Entity entity, float par2, float par3, float par4, float par5, float par6, float par7)
 	{
 		this.setRotationAngles(par2, par3, par4, par5, par6, par7, entity);
-
+		
 		this.body.render(par7);
 		this.rightArm.render(par7);
 		this.leftArm.render(par7);
@@ -71,6 +71,7 @@ public class ModelBishop extends ModelBase
 		this.head.render(par7);
 		this.hatKnob.render(par7);
 	}
+	
 	/**
 	 * Sets the model's various rotation angles. For bipeds, par1 and par2 are used for animating the movement of arms
 	 * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how

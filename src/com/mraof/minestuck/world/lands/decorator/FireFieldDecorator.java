@@ -28,9 +28,9 @@ public class FireFieldDecorator implements ILandDecorator
 				IBlockState block = world.getBlockState(pos1);
 				if(block != provider.groundBlock && (block == provider.surfaceBlock || block == provider.upperBlock))
 				{
-					world.setBlockState(pos1, Blocks.netherrack.getDefaultState(), 2);
+					world.setBlockState(pos1, Blocks.NETHERRACK.getDefaultState(), 2);
 					if(world.isAirBlock(pos1.up()) && random.nextFloat() < fireChance)
-						world.setBlockState(pos1.up(), Blocks.fire.getDefaultState(), 2);
+						world.setBlockState(pos1.up(), Blocks.FIRE.getDefaultState(), 2);
 				}
 			}
 		}

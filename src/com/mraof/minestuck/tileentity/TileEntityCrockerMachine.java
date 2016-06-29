@@ -47,6 +47,7 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 		return true;
 	}
 	
+	@Override
 	public boolean contentsValid()
 	{
 		switch (getMachineType())
@@ -59,6 +60,7 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 		return false;
 	}
 	
+	@Override
 	public void processContents()
 	{
 		switch (getMachineType())
@@ -66,7 +68,7 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 		case GRIST_WIDGET:
 			if(!worldObj.isRemote) 
 			{
-				ItemStack item = AlchemyRecipeHandler.getDecodedItem(inv[1]);
+				ItemStack item = AlchemyRecipeHandler.getDecodedItem(inv[0]);
 				GristSet gristSet = GristRegistry.getGristConversion(item);
 				if(item.stackSize != 1)
 					gristSet.scaleGrist(item.stackSize);
@@ -101,7 +103,7 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 				}
 				
 			}
-			this.decrStackSize(1, 1);
+			this.decrStackSize(0, 1);
 			break;
 		}
 	}

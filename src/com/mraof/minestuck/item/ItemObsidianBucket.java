@@ -27,12 +27,12 @@ public class ItemObsidianBucket extends Item
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
 	{
-		worldIn.playSound(null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.entity_item_pickup, SoundCategory.PLAYERS, 0.2F, ((worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-		if(!playerIn.inventory.addItemStackToInventory(new ItemStack(Blocks.obsidian, 1)))
+		worldIn.playSound(null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+		if(!playerIn.inventory.addItemStackToInventory(new ItemStack(Blocks.OBSIDIAN, 1)))
 			if(!worldIn.isRemote)
-				playerIn.dropItem(Item.getItemFromBlock(Blocks.obsidian), 1);
+				playerIn.dropItem(Item.getItemFromBlock(Blocks.OBSIDIAN), 1);
 		
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, new ItemStack(Items.bucket, 1));
+		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, new ItemStack(Items.BUCKET, 1));
 	}
 	
 }

@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 public class NeverSayNetherSupport extends ModSupport
 {
 	
+	@Override
 	public void registerRecipes() throws Exception
 	{
 		Item dust = ((Item) (Class.forName("com.debbie.nsn.items.ModItems").getField("daedalean_dustItem").get(null)));

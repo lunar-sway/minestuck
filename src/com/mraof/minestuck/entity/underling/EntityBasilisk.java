@@ -20,7 +20,7 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	
 	public EntityBasilisk(World world) 
 	{
-		super(world, "Basilisk");
+		super(world, "basilisk");
 		this.setSize(3F, 2F);
 		tail = new EntityUnderlingPart(this, 0, 3F, 2F);
 		world.spawnEntityInWorld(tail);

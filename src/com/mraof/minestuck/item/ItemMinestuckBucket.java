@@ -33,7 +33,7 @@ public class ItemMinestuckBucket extends ItemBucket	//Unsure if anything more sh
 	
 	public ItemMinestuckBucket() 
 	{
-		super(Blocks.air);
+		super(Blocks.AIR);
 		setUnlocalizedName("minestuckBucket");
 		setCreativeTab(Minestuck.tabMinestuck);
 	}
@@ -41,7 +41,7 @@ public class ItemMinestuckBucket extends ItemBucket	//Unsure if anything more sh
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand)
 	{
-		RayTraceResult raytraceresult = this.getMovingObjectPositionFromPlayer(world, player, false);
+		RayTraceResult raytraceresult = this.rayTrace(world, player, false);
 		
 		ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onBucketUse(player, world, itemStack, raytraceresult);
 		if (ret != null) return ret;
@@ -73,8 +73,8 @@ public class ItemMinestuckBucket extends ItemBucket	//Unsure if anything more sh
 				}
 				else if (this.tryPlaceContainedLiquid(player, world, blockpos1, fillFluids.get(itemStack.getItemDamage())))
 				{
-					player.addStat(StatList.func_188057_b(this));
-					return new ActionResult(EnumActionResult.SUCCESS, !player.capabilities.isCreativeMode ? new ItemStack(Items.bucket) : itemStack);
+					player.addStat(StatList.getObjectUseStats(this));
+					return new ActionResult(EnumActionResult.SUCCESS, !player.capabilities.isCreativeMode ? new ItemStack(Items.BUCKET) : itemStack);
 				}
 				else
 				{
@@ -103,7 +103,7 @@ public class ItemMinestuckBucket extends ItemBucket	//Unsure if anything more sh
 				world.destroyBlock(pos, true);
 			}
 
-			world.playSound(player, pos, SoundEvents.item_bucket_empty, SoundCategory.BLOCKS, 1.0F, 1.0F);
+			world.playSound(player, pos, SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
 			world.setBlockState(pos, block, 3);
 			
 			return true;

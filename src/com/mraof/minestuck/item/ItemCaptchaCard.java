@@ -43,7 +43,7 @@ public class ItemCaptchaCard extends Item
 			NBTTagString contentID = (NBTTagString)nbttagcompound.getTag("contentID");
 			NBTTagInt contentMeta = (NBTTagInt)nbttagcompound.getTag("contentMeta");
 			
-			if (contentID != null && contentMeta != null && Item.itemRegistry.containsKey(new ResourceLocation(contentID.getString())))
+			if (contentID != null && contentMeta != null && Item.REGISTRY.containsKey(new ResourceLocation(contentID.getString())))
 			{
 				String stackSize = nbttagcompound.getBoolean("punched") ? "" : nbttagcompound.getInteger("contentSize") + "x";
 				par3List.add("(" + stackSize + (AlchemyRecipeHandler.getDecodedItem(par1ItemStack)).getDisplayName() + ")");

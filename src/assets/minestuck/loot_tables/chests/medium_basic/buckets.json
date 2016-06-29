@@ -1,6 +1,7 @@
 {
     "pools": [
         {
+            "name": "main",
             "rolls": 1,
             "entries": [
                 {
@@ -28,12 +29,14 @@
                     "quality": 0
                 },
                 {
+                    "entryName": "oil_bucket",
                     "type": "item",
                     "name": "minestuck:minestuck_bucket",
                     "weight": 5,
                     "quality": 0
                 },
                 {
+                    "entryName": "blood_bucket",
                     "type": "item",
                     "name": "minestuck:minestuck_bucket",
                     "weight": 5,
@@ -46,6 +49,7 @@
                     ]
                 },
                 {
+                    "entryName": "brain_juice_bucket",
                     "type": "item",
                     "name": "minestuck:minestuck_bucket",
                     "weight": 5,

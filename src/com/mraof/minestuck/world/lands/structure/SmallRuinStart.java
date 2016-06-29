@@ -53,9 +53,9 @@ public class SmallRuinStart extends StructureStart
 		{
 			int x = chunkX*16 + rand.nextInt(16);
 			int z = chunkZ*16 + rand.nextInt(16);
-			func_186164_a(EnumFacing.Plane.HORIZONTAL.random(rand));
-			int xWidth = func_186165_e().getAxis().equals(EnumFacing.Axis.X) ? 10 : 7;
-			int zWidth = func_186165_e().getAxis().equals(EnumFacing.Axis.Z) ? 10 : 7;
+			setCoordBaseMode(EnumFacing.Plane.HORIZONTAL.random(rand));
+			int xWidth = getCoordBaseMode().getAxis().equals(EnumFacing.Axis.X) ? 10 : 7;
+			int zWidth = getCoordBaseMode().getAxis().equals(EnumFacing.Axis.Z) ? 10 : 7;
 			this.boundingBox = new StructureBoundingBox(x, 64, z, x + xWidth - 1, 67, z + zWidth - 1);
 			
 			IBlockState[] structureBlocks = provider.aspect1.getStructureBlocks();
@@ -116,24 +116,23 @@ public class SmallRuinStart extends StructureStart
 			BlockPos chestPos = new BlockPos(this.getXWithOffset(3, 6), this.getYWithOffset(1), this.getZWithOffset(3, 6));
 			if(boundingBox.isVecInside(chestPos))
 			{
-				worldIn.setBlockState(chestPos, Blocks.chest.getDefaultState().withProperty(BlockChest.FACING, this.func_186165_e().getOpposite()));
+				worldIn.setBlockState(chestPos, Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, this.getCoordBaseMode().getOpposite()));
 				TileEntity tileentity1 = worldIn.getTileEntity(chestPos);
 				
 				if (tileentity1 instanceof TileEntityChest)
 				{
-					((TileEntityChest)tileentity1).setLoot(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, rand.nextLong());
+					((TileEntityChest)tileentity1).setLootTable(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, rand.nextLong());
 				}
 			}
 			
-			EnumFacing torchFacing = this.func_186165_e() == EnumFacing.WEST || this.func_186165_e() == EnumFacing.NORTH ? this.func_186165_e().rotateY() : this.func_186165_e().rotateYCCW();
 			if(torches[0])
-				this.setBlockState(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, torchFacing), 1, 2, 3, boundingBox);
+				this.setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.EAST), 1, 2, 3, boundingBox);
 			if(torches[1])
-				this.setBlockState(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, torchFacing.getOpposite()), 5, 2, 3, boundingBox);
+				this.setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.WEST), 5, 2, 3, boundingBox);
 			if(torches[2])
-				this.setBlockState(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, torchFacing), 1, 2, 6, boundingBox);
+				this.setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.EAST), 1, 2, 6, boundingBox);
 			if(torches[3])
-				this.setBlockState(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, torchFacing.getOpposite()), 5, 2, 6, boundingBox);
+				this.setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.WEST), 5, 2, 6, boundingBox);
 			
 			if(boundingBox.intersectsWith(this.boundingBox.minX, this.boundingBox.minZ, this.boundingBox.minX, this.boundingBox.minZ))
 				placeUnderling(this.boundingBox.minX - 6, this.boundingBox.minZ - 6, worldIn, rand);
@@ -169,7 +168,7 @@ public class SmallRuinStart extends StructureStart
 						maxY = y;*/
 					height += y;
 					i++;
-					if(!worldIn.getBlockState(new BlockPos(x, y, z)).getBlock().equals(Blocks.ice))
+					if(!worldIn.getBlockState(new BlockPos(x, y, z)).getBlock().equals(Blocks.ICE))
 						onLand = true;	//used to prevent the structure from spawning in an ice-covered sea without any land nearby
 				}
 				

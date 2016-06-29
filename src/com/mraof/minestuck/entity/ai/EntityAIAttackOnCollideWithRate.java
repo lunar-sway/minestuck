@@ -5,7 +5,7 @@ import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.pathfinding.PathEntity;
+import net.minecraft.pathfinding.Path;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -25,7 +25,7 @@ public class EntityAIAttackOnCollideWithRate extends EntityAIBase
 	boolean willSearch;
 
 	/** The PathEntity of our entity. */
-	PathEntity entityPathEntity;
+	Path entityPath;
 	Class<? extends Entity> classTarget;
 	private int movementTime;
 	private int attackRate;
@@ -51,6 +51,7 @@ public class EntityAIAttackOnCollideWithRate extends EntityAIBase
 	/**
 	 * Returns whether the EntityAIBase should begin execution.
 	 */
+	@Override
 	public boolean shouldExecute()
 	{
 		EntityLivingBase entityliving = this.attacker.getAttackTarget();
@@ -66,14 +67,15 @@ public class EntityAIAttackOnCollideWithRate extends EntityAIBase
 		else
 		{
 			this.entityTarget = entityliving;
-			this.entityPathEntity = this.attacker.getNavigator().getPathToEntityLiving(this.entityTarget);
-			return this.entityPathEntity != null;
+			this.entityPath = this.attacker.getNavigator().getPathToEntityLiving(this.entityTarget);
+			return this.entityPath != null;
 		}
 	}
 
 	/**
 	 * Returns whether an in-progress EntityAIBase should continue executing
 	 */
+	@Override
 	public boolean continueExecuting()
 	{
 		EntityLivingBase entityliving = this.attacker.getAttackTarget();
@@ -83,15 +85,17 @@ public class EntityAIAttackOnCollideWithRate extends EntityAIBase
 	/**
 	 * Execute a one shot task or start executing a continuous task
 	 */
+	@Override
 	public void startExecuting()
 	{
-		this.attacker.getNavigator().setPath(this.entityPathEntity, this.movementSpeed);
+		this.attacker.getNavigator().setPath(this.entityPath, this.movementSpeed);
 		this.movementTime = 0;
 	}
 
 	/**
 	 * Resets the task
 	 */
+	@Override
 	public void resetTask()
 	{
 		this.entityTarget = null;
@@ -101,6 +105,7 @@ public class EntityAIAttackOnCollideWithRate extends EntityAIBase
 	/**
 	 * Updates the task
 	 */
+	@Override
 	public void updateTask()
 	{
 		this.attacker.getLookHelper().setLookPositionWithEntity(this.entityTarget, 30.0F, 30.0F);

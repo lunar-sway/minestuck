@@ -21,8 +21,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
-
 import static com.mraof.minestuck.MinestuckConfig.artifactRange;
+
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.BlockGate;
@@ -93,10 +93,11 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 		} catch(Exception e)
 		{
 			Debug.logger.error("Exception when "+player.getName()+" tried to enter their land.", e);
-			player.addChatMessage(new TextComponentString("[Minestuck] Something went wrong during entry. "+ (Minestuck.isServerRunning?"Check the console for the error message.":"Notify the server owner about this.")).setChatStyle(new Style().setColor(TextFormatting.RED)));
+			player.addChatMessage(new TextComponentString("[Minestuck] Something went wrong during entry. "+ (Minestuck.isServerRunning?"Check the console for the error message.":"Notify the server owner about this.")).setStyle(new Style().setColor(TextFormatting.RED)));
 		}
 	}
 	
+	@Override
 	public void makeDestination(Entity entity, WorldServer worldserver0, WorldServer worldserver1)
 	{
 		if(entity instanceof EntityPlayerMP)
@@ -138,7 +139,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 						IBlockState block = worldserver0.getBlockState(pos);
 						TileEntity te = worldserver0.getTileEntity(pos);
 						long t = System.currentTimeMillis();
-						if(block.getBlock() != Blocks.bedrock && block.getBlock() != Blocks.portal)
+						if(block.getBlock() != Blocks.BEDROCK && block.getBlock() != Blocks.PORTAL)
 						{
 							copyBlockDirect(chunk, chunk2, blockX & 15, blockY + yDiff, blockY, blockZ & 15);
 						}
@@ -160,7 +161,7 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 						}
 					}
 					for(int blockY = Math.min(topY, y + height) + yDiff; blockY < 256; blockY++)
-						worldserver1.setBlockState(new BlockPos(blockX, blockY, blockZ), Blocks.air.getDefaultState(), 0);
+						worldserver1.setBlockState(new BlockPos(blockX, blockY, blockZ), Blocks.AIR.getDefaultState(), 0);
 				}
 			}
 			
@@ -216,14 +217,14 @@ public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
 						BlockPos pos = new BlockPos(blockX, blockY, blockZ);
 						if(MinestuckConfig.entryCrater)
 						{
-							if(worldserver0.getBlockState(pos).getBlock() != Blocks.bedrock)
-								worldserver0.setBlockState(pos, Blocks.air.getDefaultState(), 2);
+							if(worldserver0.getBlockState(pos).getBlock() != Blocks.BEDROCK)
+								worldserver0.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
 						} else
 						{
 							TileEntity tileEntity = worldserver0.getTileEntity(pos);
 							if(tileEntity != null)
 								if(!creative)
-									worldserver0.setBlockState(pos, Blocks.air.getDefaultState(), 2);
+									worldserver0.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
 								else if(tileEntity instanceof TileEntityComputer)	//Avoid duplicating computer data when a computer is kept in the overworld
 									((TileEntityComputer) worldserver0.getTileEntity(pos)).programData = new NBTTagCompound();
 								else if(tileEntity instanceof TileEntityTransportalizer)

@@ -7,6 +7,7 @@ import java.util.EnumSet;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 
+import com.mraof.minestuck.inventory.ContainerCrockerMachine;
 import com.mraof.minestuck.inventory.ContainerSburbMachine;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.util.Debug;
@@ -38,9 +39,12 @@ public class GoButtonPacket extends MinestuckPacket
 	@Override
 	public void execute(EntityPlayer player)
 	{
-		if(!(player.openContainer instanceof ContainerSburbMachine))
-			return;
-		TileEntityMachine te = ((ContainerSburbMachine) player.openContainer).tileEntity;
+		TileEntityMachine te;
+		if(player.openContainer instanceof ContainerSburbMachine)
+				te = ((ContainerSburbMachine) player.openContainer).tileEntity;
+		else if(player.openContainer instanceof ContainerCrockerMachine)
+			te = ((ContainerCrockerMachine) player.openContainer).tileEntity;
+		else return;
 		
 		if (te == null)
 		{

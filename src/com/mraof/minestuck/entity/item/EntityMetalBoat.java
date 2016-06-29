@@ -4,8 +4,8 @@ import io.netty.buffer.ByteBuf;
 
 import com.mraof.minestuck.item.MinestuckItems;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -72,7 +72,7 @@ public class EntityMetalBoat extends EntityBoat implements IEntityAdditionalSpaw
 		
 		capturedDrops.clear();
 		
-		if(!this.worldObj.isAABBInMaterial(this.getEntityBoundingBox(), Material.water))
+		if(!this.worldObj.isAABBInMaterial(this.getEntityBoundingBox(), Material.WATER))
 			return;
 		
 		this.motionY = motion;
@@ -86,9 +86,10 @@ public class EntityMetalBoat extends EntityBoat implements IEntityAdditionalSpaw
 		
 	}
 	
-	protected void updateFallState(double par1, boolean par2, Block par3, BlockPos par4)
+	@Override
+	protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos)
 	{
-		if (par2)
+		if (onGroundIn)
 		{
 			float fall = type == 0 ? 5.0F : 3.0F;
 			if (this.fallDistance > fall)
@@ -105,12 +106,13 @@ public class EntityMetalBoat extends EntityBoat implements IEntityAdditionalSpaw
 				this.fallDistance = 0.0F;
 			}
 		}
-		else if (this.worldObj.getBlockState((new BlockPos(this)).down()).getMaterial() != Material.water && par1 < 0.0D)
+		else if (this.worldObj.getBlockState((new BlockPos(this)).down()).getMaterial() != Material.WATER && y < 0.0D)
 		{
-			this.fallDistance = (float)((double)this.fallDistance - par1);
+			this.fallDistance = (float)((double)this.fallDistance - y);
 		}
 	}
 	
+	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount)
 	{
 		if (this.isEntityInvulnerable(source))
@@ -146,9 +148,9 @@ public class EntityMetalBoat extends EntityBoat implements IEntityAdditionalSpaw
 	private Item getTypeItem()
 	{
 		if(this.type == 0)
-			return Items.iron_ingot;
+			return Items.IRON_INGOT;
 		else if(this.type == 1)
-			return Items.gold_ingot;
+			return Items.GOLD_INGOT;
 		return null;
 	}
 	
@@ -164,14 +166,12 @@ public class EntityMetalBoat extends EntityBoat implements IEntityAdditionalSpaw
 		this.type = tagCompund.getByte("boatType");
 	}
 	
-
 	@Override
 	public void writeSpawnData(ByteBuf buffer)
 	{
 		buffer.writeByte(type);
 	}
 	
-
 	@Override
 	public void readSpawnData(ByteBuf additionalData)
 	{

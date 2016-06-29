@@ -432,7 +432,7 @@ public class SessionHandler {
 				SkaianetHandler.closeConnection(server, cs.getClientIdentifier(), false);
 			cs.serverIdentifier = IdentifierHandler.nullIdentifier;
 			if(sender.sendCommandFeedback())
-				sender.addChatMessage(new TextComponentString(server.getUsername()+"'s old client player "+cs.getClientIdentifier().getUsername()+" is now without a server player.").setChatStyle(new Style().setColor(TextFormatting.YELLOW)));
+				sender.addChatMessage(new TextComponentString(server.getUsername()+"'s old client player "+cs.getClientIdentifier().getUsername()+" is now without a server player.").setStyle(new Style().setColor(TextFormatting.YELLOW)));
 		}
 		
 		if(cc != null && cc.isActive)
@@ -467,7 +467,7 @@ public class SessionHandler {
 		
 		SkaianetHandler.updateAll();
 		
-		CommandBase.notifyOperators(sender, command, "commands.sburbServer.success", client.getUsername(), server.getUsername());
+		CommandBase.notifyCommandListener(sender, command, "commands.sburbServer.success", client.getUsername(), server.getUsername());
 	}
 	
 	/**

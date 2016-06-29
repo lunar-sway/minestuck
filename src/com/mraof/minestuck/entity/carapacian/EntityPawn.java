@@ -70,7 +70,7 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 		}
 		else
 			this.tasks.addTask(4, this.entityAIAttackOnCollide);
-		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(this.pawnType == 1 ? Items.bow : rand.nextDouble() < .2 ? MinestuckItems.regisword : rand.nextDouble() < .02 ? MinestuckItems.sord : Items.stone_sword));
+		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(this.pawnType == 1 ? Items.BOW : rand.nextDouble() < .2 ? MinestuckItems.regisword : rand.nextDouble() < .02 ? MinestuckItems.sord : Items.STONE_SWORD));
 		this.setEnchantmentBasedOnDifficulty(difficulty);	//was called "enchantEquipment"
 		return entityLivingData;
 	}
@@ -79,13 +79,13 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 	public void attackEntityWithRangedAttack(EntityLivingBase target, float f1) 
 	{
 		EntityArrow arrow = new EntityTippedArrow(this.worldObj, this);
-        double d0 = target.posX - this.posX;
-        double d1 = target.getEntityBoundingBox().minY + (double)(target.height / 3.0F) - arrow.posY;
-        double d2 = target.posZ - this.posZ;
-        double d3 = (double)MathHelper.sqrt_double(d0 * d0 + d2 * d2);
-        arrow.setThrowableHeading(d0, d1 + d3 * 0.2D, d2, 1.6F, 12.0F);
-		int power = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.power, this);
-		int punch = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.punch, this);
+		double d0 = target.posX - this.posX;
+		double d1 = target.getEntityBoundingBox().minY + (double)(target.height / 3.0F) - arrow.posY;
+		double d2 = target.posZ - this.posZ;
+		double d3 = (double)MathHelper.sqrt_double(d0 * d0 + d2 * d2);
+		arrow.setThrowableHeading(d0, d1 + d3 * 0.2D, d2, 1.6F, 12.0F);
+		int power = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.POWER, this);
+		int punch = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.PUNCH, this);
 
 		if(power > 0)
 		{
@@ -97,12 +97,12 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 			arrow.setKnockbackStrength(punch);
 		}
 
-		if(EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.flame, this) > 0)
+		if(EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.FLAME, this) > 0)
 		{
 			arrow.setFire(100);
 		}
 		
-		playSound(SoundEvents.entity_skeleton_shoot, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+		playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
 		//		EntityPawn pawn = this.getClass() == EntityWhitePawn.class ? new EntityWhitePawn(this.worldObj, 0) : new EntityBlackPawn(this.worldObj, 0);
 		//		pawn.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
 		//		pawn.initCreature();
@@ -169,7 +169,7 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 		this.tasks.removeTask(this.entityAIAttackOnCollide);
 		ItemStack weapon = this.getHeldItemMainhand();
 
-		if (weapon != null && weapon.getItem() == Items.bow)
+		if (weapon != null && weapon.getItem() == Items.BOW)
 		{
 			this.tasks.addTask(4, this.entityAIArrowAttack);
 		}

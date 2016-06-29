@@ -27,7 +27,7 @@ public class BasicTreeDecorator extends TreeDecoratorBase
 	
 	public BasicTreeDecorator()
 	{
-		this(Blocks.log.getDefaultState(), Blocks.leaves.getDefaultState());
+		this(Blocks.LOG.getDefaultState(), Blocks.LEAVES.getDefaultState());
 	}
 	
 	@Override

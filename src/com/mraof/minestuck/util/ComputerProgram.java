@@ -52,7 +52,7 @@ public abstract class ComputerProgram {	//This is an unnecessary abstract way of
 		if(item == null)
 			return -2;
 		item = item.copy();
-		if(item.getItem().equals(Items.record_11))
+		if(item.getItem().equals(Items.RECORD_11))
 			return -1;
 		item.stackSize = 1;
 		for(int id : disks.keySet())
@@ -63,7 +63,7 @@ public abstract class ComputerProgram {	//This is an unnecessary abstract way of
 	
 	public static ItemStack getItem(int id) {
 		if(id == -1)
-			return new ItemStack(Items.record_11);
+			return new ItemStack(Items.RECORD_11);
 		return disks.get(id).copy();
 	}
 	

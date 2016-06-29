@@ -6,7 +6,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
@@ -97,7 +96,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound tagCompound)
+	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound)
 	{
 		super.writeToNBT(tagCompound);
 		
@@ -112,20 +111,33 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 				stack.writeToNBT(tag);
 			tagCompound.setTag("slot"+i, tag);
 		}
+		return tagCompound;
 	}
 	
 	@Override
-	public Packet getDescriptionPacket() 
+	public NBTTagCompound getUpdateTag()
 	{
-		NBTTagCompound tagCompound = new NBTTagCompound();
-		this.writeToNBT(tagCompound);
+		return this.writeToNBT(new NBTTagCompound());
+	}
+	
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket()
+	{
+		NBTTagCompound tagCompound = this.getUpdateTag();
 		return new SPacketUpdateTileEntity(this.pos, 2, tagCompound);
+	}
+	
+	@Override
+	public void handleUpdateTag(NBTTagCompound tag)
+	{
+		this.readFromNBT(tag);
+		
 	}
 	
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) 
 	{
-		this.readFromNBT(pkt.getNbtCompound());
+		this.handleUpdateTag(pkt.getNbtCompound());
 	}
 	
 	@Override
@@ -135,7 +147,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		if(worldObj.isRemote)	//Processing is easier done on the server side only
 			return;
 		
-		if (!contentsValid() || (!ready && !isAutomatic()))
+		if ((!ready && !isAutomatic()) || !contentsValid())
 		{
 			boolean b = progress == 0;
 			this.progress = 0;

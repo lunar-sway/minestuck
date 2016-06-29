@@ -15,30 +15,30 @@ import net.minecraft.util.math.Vec3d;
 
 public class LandAspectHeat extends TerrainLandAspect 
 {
-	IBlockState[] structureBlocks = {Blocks.nether_brick.getDefaultState(), Blocks.obsidian.getDefaultState()};
+	IBlockState[] structureBlocks = {Blocks.NETHER_BRICK.getDefaultState(), Blocks.OBSIDIAN.getDefaultState()};
 	static Vec3d skyColor = new Vec3d(0.4D, 0.0D, 0.0D);
 	
 	@Override
 	public IBlockState getUpperBlock() 
 	{
-		return Blocks.cobblestone.getDefaultState();
+		return Blocks.COBBLESTONE.getDefaultState();
 	}
 	
 	@Override
 	public IBlockState getGroundBlock()
 	{
-		return Blocks.netherrack.getDefaultState();
+		return Blocks.NETHERRACK.getDefaultState();
 	}
 	
 	@Override
 	public IBlockState getOceanBlock()
 	{
-		return Blocks.lava.getDefaultState();
+		return Blocks.LAVA.getDefaultState();
 	}
 	@Override
 	public IBlockState getRiverBlock()
 	{
-		return Blocks.flowing_lava.getDefaultState();
+		return Blocks.FLOWING_LAVA.getDefaultState();
 	}
 
 	@Override
@@ -57,12 +57,12 @@ public class LandAspectHeat extends TerrainLandAspect
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
 		list.add(new FireFieldDecorator());
-		list.add(new SurfaceDecoratorVein(Blocks.soul_sand.getDefaultState(), 10, 32));
-		list.add(new SurfaceDecoratorVein(Blocks.glowstone.getDefaultState(), 5, 8));
+		list.add(new SurfaceDecoratorVein(Blocks.SOUL_SAND.getDefaultState(), 10, 32));
+		list.add(new SurfaceDecoratorVein(Blocks.GLOWSTONE.getDefaultState(), 5, 8));
 		
-		list.add(new UndergroundDecoratorVein(Blocks.gravel.getDefaultState(), 8, 33, 256));
+		list.add(new UndergroundDecoratorVein(Blocks.GRAVEL.getDefaultState(), 8, 33, 256));
 		list.add(new UndergroundDecoratorVein(MinestuckBlocks.coalOreNetherrack.getDefaultState(), 26, 17, 128));
-		list.add(new UndergroundDecoratorVein(Blocks.quartz_ore.getDefaultState(), 13, 8, 64));
+		list.add(new UndergroundDecoratorVein(Blocks.QUARTZ_ORE.getDefaultState(), 13, 8, 64));
 		return list;
 	}
 	

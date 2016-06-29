@@ -7,12 +7,12 @@ import java.util.Random;
 import com.mraof.minestuck.block.BlockGate;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.biome.BiomeGenMinestuck;
+import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
@@ -135,7 +135,7 @@ public class LandStructureHandler extends MapGenStructure
 		}
 	}
 	
-	public void placeReturnNodes(World world, Random rand, ChunkCoordIntPair coords, BlockPos decoratorPos)
+	public void placeReturnNodes(World world, Random rand, ChunkPos coords, BlockPos decoratorPos)
 	{
 		int x = coords.chunkXPos;
 		int z = coords.chunkZPos;
@@ -165,7 +165,7 @@ public class LandStructureHandler extends MapGenStructure
 				{
 					BlockPos pos = world.getTopSolidOrLiquidBlock(new BlockPos(xPos + (i % 2), 0, zPos + i/2));
 					IBlockState block = world.getBlockState(pos);
-					if(block.getMaterial().isLiquid() || world.getBiomeGenForCoordsBody(pos) == BiomeGenMinestuck.mediumOcean)
+					if(block.getMaterial().isLiquid() || world.getBiomeForCoordsBody(pos) == BiomeMinestuck.mediumOcean)
 						return;
 					if(pos.getY() > maxY)
 						maxY = pos.getY();

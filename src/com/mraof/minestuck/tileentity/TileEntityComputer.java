@@ -8,7 +8,6 @@ import java.util.Map.Entry;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -83,9 +82,9 @@ public class TileEntityComputer extends TileEntity
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound par1NBTTagCompound) 
+	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) 
 	{
-		super.writeToNBT(par1NBTTagCompound);
+		super.writeToNBT(tagCompound);
 		NBTTagCompound programs = new NBTTagCompound();
 		Iterator<Entry<Integer, Boolean>> it = this.installedPrograms.entrySet().iterator();
 		//int place = 0;
@@ -97,15 +96,16 @@ public class TileEntityComputer extends TileEntity
 			//place++;
 		}
 		for(Entry<Integer, String> e : latestmessage.entrySet())
-			par1NBTTagCompound.setString("text" + e.getKey(), e.getValue());
-		par1NBTTagCompound.setTag("programs",programs);
-		par1NBTTagCompound.setTag("programData", (NBTTagCompound) programData.copy());
+			tagCompound.setString("text" + e.getKey(), e.getValue());
+		tagCompound.setTag("programs",programs);
+		tagCompound.setTag("programData", (NBTTagCompound) programData.copy());
 		if (owner != null) 
-			owner.saveToNBT(par1NBTTagCompound, "owner");
+			owner.saveToNBT(tagCompound, "owner");
+		return tagCompound;
 	}
-
+	
 	@Override
-	public Packet getDescriptionPacket() 
+	public NBTTagCompound getUpdateTag()
 	{
 		NBTTagCompound tagCompound = new NBTTagCompound();
 		this.writeToNBT(tagCompound);
@@ -119,9 +119,15 @@ public class TileEntityComputer extends TileEntity
 			if(c != null)
 				tagCompound.getCompoundTag("programData").getCompoundTag("program_1").setInteger("connectedClient", c.getClientIdentifier().getId());
 		}
-		return new SPacketUpdateTileEntity(this.pos, 2, tagCompound);
+		return tagCompound;
 	}
-
+	
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket()
+	{
+		return new SPacketUpdateTileEntity(this.pos, 2, getUpdateTag());
+	}
+	
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) 
 	{

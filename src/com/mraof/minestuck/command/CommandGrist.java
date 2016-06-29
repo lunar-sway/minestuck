@@ -69,14 +69,14 @@ public class CommandGrist extends CommandBase
 			for(GristAmount amount : grist)
 				GristHelper.setGrist(identifier, amount.getType(), amount.getAmount());
 			MinestuckPlayerTracker.updateGristCache(identifier);
-			notifyOperators(sender, this, "commands.grist.setSuccess", displayName);
+			notifyCommandListener(sender, this, "commands.grist.setSuccess", displayName);
 		}
 		else if(command.equalsIgnoreCase("add"))
 		{
 			GristSet grist = new GristSet(parseGrist(args, offset));
 			GristHelper.increase(identifier, grist);
 			MinestuckPlayerTracker.updateGristCache(identifier);
-			notifyOperators(sender, this, "commands.grist.addSuccess", displayName);
+			notifyCommandListener(sender, this, "commands.grist.addSuccess", displayName);
 		}
 		else if(command.equalsIgnoreCase("get"))
 		{

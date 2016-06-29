@@ -25,9 +25,8 @@ public class ItemDowel extends Item
 		this.setHasSubtypes(true);
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
+	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4)
 	{
 		if (par1ItemStack.hasTagCompound())
 		{
@@ -35,7 +34,7 @@ public class ItemDowel extends Item
 			NBTTagString contentID = (NBTTagString)nbttagcompound.getTag("contentID");
 			NBTTagInt contentMeta = (NBTTagInt)nbttagcompound.getTag("contentMeta");
 			
-			if (contentID != null && contentMeta != null && Item.itemRegistry.containsKey(new ResourceLocation(contentID.getString())))
+			if (contentID != null && contentMeta != null && Item.REGISTRY.containsKey(new ResourceLocation(contentID.getString())))
 			{
 				par3List.add("(" + (AlchemyRecipeHandler.getDecodedItem(par1ItemStack)).getDisplayName() + ")");
 				return;

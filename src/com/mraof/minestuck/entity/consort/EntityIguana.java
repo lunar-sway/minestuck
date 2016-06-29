@@ -11,7 +11,7 @@ public class EntityIguana extends EntityConsort {
 	@Override
 	public String getTexture() 
 	{
-		return "textures/mobs/Iguana.png";
+		return "textures/mobs/iguana.png";
 	}
 
 }

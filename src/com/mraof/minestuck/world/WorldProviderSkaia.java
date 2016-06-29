@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world;
 
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Biomes;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
@@ -23,17 +24,19 @@ public class WorldProviderSkaia extends WorldProvider
 		return true;
 	}
 	
-	public void registerWorldChunkManager()
+	@Override
+	protected void createBiomeProvider()
 	{
-		super.registerWorldChunkManager();
-		this.worldChunkMgr = new BiomeProviderSingle(Biomes.plains);
+		this.biomeProvider = new BiomeProviderSingle(Biomes.PLAINS);
 	}
 	
+	@Override
 	public float calculateCelestialAngle(long par1, float par3)
 	{
 		return 12000.0F;
 	}
-	
+
+	@Override
 	public boolean isSurfaceWorld()
 	{
 		return false;
@@ -45,4 +48,13 @@ public class WorldProviderSkaia extends WorldProvider
 		return MinestuckDimensionHandler.skaiaDimensionType;
 	}
 	
+	@Override
+	public void onPlayerAdded(EntityPlayerMP player)
+	{
+		int centerX = ((int)player.posX) >> 4;
+		int centerZ = ((int)player.posZ) >> 4;
+		for(int x = centerX - 1; x <= centerX + 1; x++)
+			for(int z = centerZ - 1; z <= centerZ + 1; z++)
+				this.worldObj.getChunkProvider().provideChunk(x, z);
+	}
 }

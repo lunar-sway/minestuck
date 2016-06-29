@@ -26,7 +26,7 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
+import net.minecraft.world.biome.Biome.SpawnListEntry;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
@@ -218,14 +218,14 @@ public class SburbHandler
 				if(!session.containsPlayer(identifier))
 				{
 					if(sender.sendCommandFeedback())
-						sender.addChatMessage(new TextComponentString("Failed to remove player \""+playerName+"\": Player isn't in session.").setChatStyle(new Style().setColor(TextFormatting.RED)));
+						sender.addChatMessage(new TextComponentString("Failed to remove player \""+playerName+"\": Player isn't in session.").setStyle(new Style().setColor(TextFormatting.RED)));
 					continue;
 				}
 				
 				if(session.predefinedPlayers.remove(identifier) == null)
 				{
 					if(sender.sendCommandFeedback())
-						sender.addChatMessage(new TextComponentString("Failed to remove player \""+playerName+"\": Player isn't registered with the session.").setChatStyle(new Style().setColor(TextFormatting.RED)));
+						sender.addChatMessage(new TextComponentString("Failed to remove player \""+playerName+"\": Player isn't registered with the session.").setStyle(new Style().setColor(TextFormatting.RED)));
 					continue;
 				}
 				
@@ -238,7 +238,7 @@ public class SburbHandler
 					if(session.containsPlayer(identifier))
 					{
 						if(sender.sendCommandFeedback())
-							sender.addChatMessage(new TextComponentString("Removed player \""+playerName+"\", but they are still part of a connection in the session and will therefore be part of the session unless the connection is discarded.").setChatStyle(new Style().setColor(TextFormatting.YELLOW)));
+							sender.addChatMessage(new TextComponentString("Removed player \""+playerName+"\", but they are still part of a connection in the session and will therefore be part of the session unless the connection is discarded.").setStyle(new Style().setColor(TextFormatting.YELLOW)));
 						skipFinishing = true;
 						continue;
 					}
@@ -259,7 +259,7 @@ public class SburbHandler
 				if(session.predefinedPlayers.containsKey(identifier))
 				{
 					if(sender.sendCommandFeedback())
-						sender.addChatMessage(new TextComponentString("Failed to add player \""+playerName+"\": Player is already registered with session.").setChatStyle(new Style().setColor(TextFormatting.RED)));
+						sender.addChatMessage(new TextComponentString("Failed to add player \""+playerName+"\": Player is already registered with session.").setStyle(new Style().setColor(TextFormatting.RED)));
 					continue;
 				}
 				
@@ -270,13 +270,13 @@ public class SburbHandler
 					if(merge(session, playerSession, null) != null)
 					{
 						if(sender.sendCommandFeedback())
-							sender.addChatMessage(new TextComponentString("Failed to add player \""+playerName+"\": Can't merge with the session that the player is already in.").setChatStyle(new Style().setColor(TextFormatting.RED)));
+							sender.addChatMessage(new TextComponentString("Failed to add player \""+playerName+"\": Can't merge with the session that the player is already in.").setStyle(new Style().setColor(TextFormatting.RED)));
 						continue;
 					}
 				} else if(MinestuckConfig.forceMaxSize && session.getPlayerList().size() + 1 > maxSize)
 				{
 					if(sender.sendCommandFeedback())
-						sender.addChatMessage(new TextComponentString("Failed to add player \""+playerName+"\": The session can't accept more players with the current configurations.").setChatStyle(new Style().setColor(TextFormatting.RED)));
+						sender.addChatMessage(new TextComponentString("Failed to add player \""+playerName+"\": The session can't accept more players with the current configurations.").setStyle(new Style().setColor(TextFormatting.RED)));
 					continue;
 				}
 				
@@ -286,7 +286,7 @@ public class SburbHandler
 		}
 		
 		if(playerNames.length > 0)
-			CommandBase.notifyOperators(sender, command, "commands.sburbSession.addSuccess", handled, playerNames.length);
+			CommandBase.notifyCommandListener(sender, command, "commands.sburbSession.addSuccess", handled, playerNames.length);
 		
 		/*if(finish)
 			if(!skipFinishing && handled == playerNames.length)
@@ -315,8 +315,8 @@ public class SburbHandler
 		sessionsByName.put(playerSession.name, playerSession);
 		
 		if(prevName != null)
-			CommandBase.notifyOperators(sender, command, "commands.sburbSession.rename", prevName, sessionName, playerName);
-		else CommandBase.notifyOperators(sender, command, "commands.sburbSession.name", sessionName, playerName);
+			CommandBase.notifyCommandListener(sender, command, "commands.sburbSession.rename", prevName, sessionName, playerName);
+		else CommandBase.notifyCommandListener(sender, command, "commands.sburbSession.name", sessionName, playerName);
 	}
 	
 	public static void predefineTitle(MinecraftServer server, ICommandSender sender, ICommand command, String playerName, String sessionName, Title title) throws CommandException
@@ -337,7 +337,7 @@ public class SburbHandler
 		
 		PredefineData data = session.predefinedPlayers.get(identifier);
 		data.title = title;
-		CommandBase.notifyOperators(sender, command, "commands.sburbSession.titleSuccess", playerName, title.getTitleName());
+		CommandBase.notifyCommandListener(sender, command, "commands.sburbSession.titleSuccess", playerName, title.getTitleName());
 	}
 	
 	public static void predefineTerrainLandAspect(MinecraftServer server, ICommandSender sender, ICommand command, String playerName, String sessionName, TerrainLandAspect aspect) throws CommandException
@@ -356,7 +356,7 @@ public class SburbHandler
 			throw new CommandException("That terrain land aspect isn't compatible with the other land aspect.");
 		
 		data.landTerrain = aspect;
-		CommandBase.notifyOperators(sender, command, "commands.sburbSession.landTerrainSuccess", playerName, aspect.getPrimaryName());
+		CommandBase.notifyCommandListener(sender, command, "commands.sburbSession.landTerrainSuccess", playerName, aspect.getPrimaryName());
 	}
 	
 	public static void predefineTitleLandAspect(MinecraftServer server, ICommandSender sender, ICommand command, String playerName, String sessionName, TitleLandAspect aspect) throws CommandException
@@ -371,19 +371,19 @@ public class SburbHandler
 			throw new CommandException("You can't change your land aspects after having entered the medium.");
 		if(sender.sendCommandFeedback())
 			if(data.title == null)
-				sender.addChatMessage(new TextComponentString("Beware that the title generated might not be suited for this land aspect.").setChatStyle(new Style().setColor(TextFormatting.YELLOW)));
+				sender.addChatMessage(new TextComponentString("Beware that the title generated might not be suited for this land aspect.").setStyle(new Style().setColor(TextFormatting.YELLOW)));
 			else if(!LandAspectRegistry.containsTitleLandAspect(data.title.getHeroAspect(), aspect))
-				sender.addChatMessage(new TextComponentString("Beware that the title predefined isn't suited for this land aspect.").setChatStyle(new Style().setColor(TextFormatting.YELLOW)));
+				sender.addChatMessage(new TextComponentString("Beware that the title predefined isn't suited for this land aspect.").setStyle(new Style().setColor(TextFormatting.YELLOW)));
 		
 		if(data.landTerrain != null && !aspect.isAspectCompatible(data.landTerrain))
 		{
 			data.landTerrain = null;
 			if(sender.sendCommandFeedback())
-				sender.addChatMessage(new TextComponentString("The terrain aspect previously chosen isn't compatible with this land aspect, and has therefore been removed.").setChatStyle(new Style().setColor(TextFormatting.YELLOW)));
+				sender.addChatMessage(new TextComponentString("The terrain aspect previously chosen isn't compatible with this land aspect, and has therefore been removed.").setStyle(new Style().setColor(TextFormatting.YELLOW)));
 		}
 		
 		data.landTitle = aspect;
-		CommandBase.notifyOperators(sender, command, "commands.sburbSession.landTitleSuccess", playerName, aspect.getPrimaryName());
+		CommandBase.notifyCommandListener(sender, command, "commands.sburbSession.landTitleSuccess", playerName, aspect.getPrimaryName());
 	}
 	
 	private static PlayerIdentifier predefineCheck(MinecraftServer server, ICommandSender sender, String playerName, String sessionName) throws CommandException

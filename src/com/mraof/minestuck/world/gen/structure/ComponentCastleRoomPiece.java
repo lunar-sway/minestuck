@@ -82,8 +82,8 @@ public class ComponentCastleRoomPiece extends ComponentCastlePiece
 		}
 		this.fillWithAlternatingBlocks(world, structureboundingbox, 0, 0, 0, 7 ,0, 7, chessTile,  chessTile1, false);
 		this.fillWithAlternatingBlocks(world, structureboundingbox, 0, 7, 0, 7 ,7, 7, chessTile,  chessTile1, false);
-		this.fillWithBlocks(world, structureboundingbox, 0, 1, 0, 7, 6, 7, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
-		this.setBlockState(world, Blocks.torch.getDefaultState(), 3, 1, 3, structureboundingbox);	//placeBlockAtCurrentPosition
+		this.fillWithBlocks(world, structureboundingbox, 0, 1, 0, 7, 6, 7, Blocks.AIR.getDefaultState(), Blocks.AIR.getDefaultState(), false);
+		this.setBlockState(world, Blocks.TORCH.getDefaultState(), 3, 1, 3, structureboundingbox);	//placeBlockAtCurrentPosition
 		return true;
 	}
 	@Override

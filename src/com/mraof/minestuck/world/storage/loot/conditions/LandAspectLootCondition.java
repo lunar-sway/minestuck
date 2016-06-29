@@ -1,6 +1,5 @@
 package com.mraof.minestuck.world.storage.loot.conditions;
 
-import java.lang.reflect.Field;
 import java.util.Random;
 
 import com.google.gson.JsonArray;
@@ -38,18 +37,7 @@ public class LandAspectLootCondition implements LootCondition
 	@Override
 	public boolean testCondition(Random rand, LootContext context)
 	{
-		WorldServer world = null;
-		try	//TODO Wait for forge to add a proper getter
-		{
-			Field[] fields = context.getClass().getDeclaredFields();
-			for(Field field : fields)
-				if(field.getType().equals(WorldServer.class))
-				{
-					field.setAccessible(true);
-					world = (WorldServer) field.get(context);
-				}
-		} catch(Exception e)
-		{}
+		WorldServer world = context.getWorld();
 		
 		if(world != null && MinestuckDimensionHandler.isLandDimension(world.provider.getDimension()))
 		{

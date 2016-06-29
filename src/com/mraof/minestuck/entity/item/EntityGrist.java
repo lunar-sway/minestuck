@@ -63,13 +63,16 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	 * returns if this entity triggers Block.onEntityWalking on the blocks they walk on. used for spiders and wolves to
 	 * prevent them from trampling crops
 	 */
+	@Override
 	protected boolean canTriggerWalking()
 	{
 		return false;
 	}
-
+	
+	@Override
 	protected void entityInit() {}
 	
+	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount)
 	{
 		if (this.isEntityInvulnerable(source))
@@ -90,6 +93,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@SideOnly(Side.CLIENT)
+	@Override
 	public int getBrightnessForRender(float par1)
 	{
 		float f1 = 0.5F;
@@ -110,6 +114,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	/**
 	 * Called to update the entity's position/logic.
 	 */
+	@Override
 	public void onUpdate()
 	{
 		super.onUpdate();
@@ -119,12 +124,12 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		this.prevPosZ = this.posZ;
 		this.motionY -= 0.03D;
 
-		if (this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ))).getMaterial() == Material.lava)
+		if (this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ))).getMaterial() == Material.LAVA)
 		{
 			this.motionY = 0.2D;
 			this.motionX = (double)((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F);
 			this.motionZ = (double)((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F);
-			this.playSound(SoundEvents.entity_generic_burn, 0.4F, 2.0F + this.rand.nextFloat() * 0.4F);
+			this.playSound(SoundEvents.ENTITY_GENERIC_BURN, 0.4F, 2.0F + this.rand.nextFloat() * 0.4F);
 		}
 
 		//this.setPosition(this.posX, (this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxY) / 2.0D, this.posZ);
@@ -189,20 +194,10 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public boolean handleWaterMovement()
 	{
-		return this.worldObj.handleMaterialAcceleration(this.getEntityBoundingBox(), Material.water, this);
+		return this.worldObj.handleMaterialAcceleration(this.getEntityBoundingBox(), Material.WATER, this);
 	}
 	
-	/**
-	 * Called when the entity is attacked.
-	 */
-	public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
-	{
-		return false;
-	}
-
-	/**
-	 * (abstract) Protected helper method to write subclass entity data to NBT.
-	 */
+	@Override
 	public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound)
 	{
 		par1NBTTagCompound.setShort("Health", (short)((byte)this.gristHealth));
@@ -210,10 +205,8 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		par1NBTTagCompound.setShort("Value", (short)this.gristValue);
 		par1NBTTagCompound.setString("Type", this.gristType.getName());
 	}
-
-	/**
-	 * (abstract) Protected helper method to read subclass entity data from NBT.
-	 */
+	
+	@Override
 	public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound)
 	{
 		this.gristHealth = par1NBTTagCompound.getShort("Health") & 255;
@@ -223,10 +216,11 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		if(par1NBTTagCompound.hasKey("Type", 8))
 			this.gristType = GristType.getTypeFromString(par1NBTTagCompound.getString("Type"));
 	}
-
+	
 	/**
 	 * Called by a player entity when they collide with an entity
 	 */
+	@Override
 	public void onCollideWithPlayer(EntityPlayer par1EntityPlayer)
 	{
 		if(this.worldObj.isRemote?ClientEditHandler.isActive():ServerEditHandler.getData(par1EntityPlayer) != null)
@@ -234,7 +228,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		
 		if (!this.worldObj.isRemote)
 		{
-			this.playSound(SoundEvents.entity_item_pickup, 0.1F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F));
+			this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.1F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F));
 			par1EntityPlayer.onItemPickup(this, 1);
 			this.addGrist(par1EntityPlayer);
 			this.setDead();
@@ -242,13 +236,15 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		else  
 			this.setDead();
 	}
+	
 	public void addGrist(EntityPlayer entityPlayer)
 	{
 		GristHelper.increase(IdentifierHandler.encode(entityPlayer), new GristSet(gristType, gristValue));
 		MinestuckPlayerTracker.updateGristCache(IdentifierHandler.encode(entityPlayer));
 	}
-
-	public boolean canAttackWithItem()
+	
+	@Override
+	public boolean canBeAttackedWithItem()
 	{
 		return false;
 	}
@@ -268,7 +264,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	{
 		return (float) (Math.pow(gristValue, .25) / 3.0F);
 	}
-
+	
 	@Override
 	public void writeSpawnData(ByteBuf data) 
 	{

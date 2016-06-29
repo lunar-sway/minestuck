@@ -90,9 +90,9 @@ public class EntityDecoy extends EntityLiving {
 		player.getFoodStats().writeNBT(nbt);
 		initFoodStats();
 		foodStats.readNBT(nbt);	//Exact copy of food stack
-		dataWatcher.set(USERNAME, username);
-		dataWatcher.set(ROTATION_YAW_HEAD, this.rotationYawHead);	//Due to rotationYawHead didn't update correctly
-		dataWatcher.set(FLYING, isFlying);
+		dataManager.set(USERNAME, username);
+		dataManager.set(ROTATION_YAW_HEAD, this.rotationYawHead);	//Due to rotationYawHead didn't update correctly
+		dataManager.set(FLYING, isFlying);
 	}
 	
 	private void initInventory(EntityPlayerMP player)
@@ -144,9 +144,9 @@ public class EntityDecoy extends EntityLiving {
 	protected void entityInit()
 	{
 		super.entityInit();
-		this.dataWatcher.register(USERNAME, "");
-		this.dataWatcher.register(ROTATION_YAW_HEAD, 0F);
-		dataWatcher.register(FLYING, false);
+		dataManager.register(USERNAME, "");
+		dataManager.register(ROTATION_YAW_HEAD, 0F);
+		dataManager.register(FLYING, false);
 	}
 	
 	protected void setupCustomSkin() {
@@ -184,13 +184,13 @@ public class EntityDecoy extends EntityLiving {
 		}
 		super.onUpdate();
 		if(worldObj.isRemote && !init ){
-			username = this.dataWatcher.get(USERNAME);
-			this.rotationYawHead = this.dataWatcher.get(ROTATION_YAW_HEAD);
+			username = dataManager.get(USERNAME);
+			this.rotationYawHead = dataManager.get(ROTATION_YAW_HEAD);
 			prevRotationYawHead = rotationYawHead;
 			this.rotationYaw = rotationYawHead;	//I don't know how much of this that is necessary
 			prevRotationYaw = rotationYaw;
 			renderYawOffset = rotationYaw;
-			isFlying = dataWatcher.get(FLYING);
+			isFlying = dataManager.get(FLYING);
 			setupCustomSkin();
 			init = true;
 		}
@@ -240,7 +240,7 @@ public class EntityDecoy extends EntityLiving {
 			return inventory.getCurrentItem();
 		else if(slotIn == EntityEquipmentSlot.OFFHAND)
 			return inventory.offHandInventory[0];
-		else return inventory.armorItemInSlot(slotIn.getIndex());
+		else return inventory.armorInventory[slotIn.getIndex()];
 	}
 	
 	@Override

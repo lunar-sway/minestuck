@@ -15,7 +15,7 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
 public class BucketDecorator extends SimpleStructureDecorator
 {
 	
-	private Block[] liquidBlocks = {Blocks.air, Blocks.water, Blocks.lava, MinestuckBlocks.blockBlood, MinestuckBlocks.blockOil, MinestuckBlocks.blockBrainJuice};
+	private Block[] liquidBlocks = {Blocks.AIR, Blocks.WATER, Blocks.LAVA, MinestuckBlocks.blockBlood, MinestuckBlocks.blockOil, MinestuckBlocks.blockBrainJuice};
 	
 	@Override
 	public BlockPos generateStructure(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
@@ -30,7 +30,7 @@ public class BucketDecorator extends SimpleStructureDecorator
 				return null;
 			yCoord -= random.nextInt(3);
 			boolean variant = random.nextDouble() < 0.4;
-			IBlockState block = random.nextDouble() < 0.3 ? Blocks.iron_block.getDefaultState() /*<- Should this continue to be a thing?*/ : Blocks.quartz_block.getDefaultState();
+			IBlockState block = random.nextDouble() < 0.3 ? Blocks.IRON_BLOCK.getDefaultState() /*<- Should this continue to be a thing?*/ : Blocks.QUARTZ_BLOCK.getDefaultState();
 			IBlockState liquid;
 			if(random.nextBoolean())
 				liquid = liquidBlocks[random.nextInt(liquidBlocks.length)].getDefaultState();

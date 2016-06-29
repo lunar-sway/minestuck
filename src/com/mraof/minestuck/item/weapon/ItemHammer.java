@@ -3,6 +3,7 @@ package com.mraof.minestuck.item.weapon;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -47,7 +48,7 @@ public class ItemHammer extends ItemWeapon
 	@Override
 	public float getStrVsBlock(ItemStack stack, IBlockState state)
 	{
-		return state != null && (state.getMaterial() == Material.iron || state.getMaterial() == Material.anvil || state.getMaterial() == Material.rock) ? this.efficiencyOnProperMaterial : super.getStrVsBlock(stack, state);
+		return state != null && (state.getMaterial() == Material.IRON || state.getMaterial() == Material.ANVIL || state.getMaterial() == Material.ROCK) ? this.efficiencyOnProperMaterial : super.getStrVsBlock(stack, state);
 	}
 	
 	@Override
@@ -60,17 +61,18 @@ public class ItemHammer extends ItemWeapon
 	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase player)
 	{
 		itemStack.damageItem(1, player);
-		if(hammerType.equals(EnumHammerType.POGO))
+		if(hammerType.equals(EnumHammerType.POGO) && player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder() && !player.isInWater() && !player.isRiding())
 		{
-			target.motionY = Math.max(target.motionY, Math.min(getPogoMotion(itemStack)*2, Math.abs(player.motionY) + target.motionY + getPogoMotion(itemStack)));
+			double knockbackModifier = 1D - target.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getAttributeValue();
+			target.motionY = Math.max(target.motionY, knockbackModifier*Math.min(getPogoMotion(itemStack)*2, Math.abs(player.motionY) + target.motionY + getPogoMotion(itemStack)));
 			player.motionY = 0;
 			player.fallDistance = 0;
 		}
 		else if(hammerType.equals(EnumHammerType.SCARLET))
 			target.setFire(50);
 		else if (hammerType.equals(EnumHammerType.POPAMATIC) )
-			target.attackEntityFrom(DamageSource.magic , (float) (player.worldObj.rand.nextInt(6)+1) * (player.worldObj.rand.nextInt(6)+1) );
-		else if (hammerType.equals(EnumHammerType.FEARNOANVIL) && player.worldObj.rand.nextGaussian() > 0.9)	//Just a suggestion, keep it if you like it.
+			target.attackEntityFrom(DamageSource.magic , (float) (player.getRNG().nextInt(6)+1) * (player.getRNG().nextInt(6)+1) );
+		else if (hammerType.equals(EnumHammerType.FEARNOANVIL) && player.getRNG().nextGaussian() > 0.9)	//Just a suggestion, keep it if you like it.
 			target.addPotionEffect(new PotionEffect(Potion.getPotionById(2),100,3));	//Would prefer it being triggered by a critical hit instead, if it can.
 		return true;
 	}
@@ -91,15 +93,10 @@ public class ItemHammer extends ItemWeapon
 		return true;
 	}
 	
-	public int getMaxItemUseDuration(ItemStack itemStack)
-	{
-		return Integer.MAX_VALUE;
-	}
-	
 	@Override
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
-		if(worldIn.getBlockState(pos).getBlock() != Blocks.air)
+		if(worldIn.getBlockState(pos).getBlock() != Blocks.AIR)
 		{
 			if (hammerType.equals(EnumHammerType.POGO))
 			{
@@ -121,7 +118,7 @@ public class ItemHammer extends ItemWeapon
 	@Override
 	public boolean canHarvestBlock(IBlockState state, ItemStack stack)
 	{
-		return state.getMaterial() == Material.rock || state.getMaterial() == Material.anvil || state.getMaterial() == Material.iron;
+		return state.getMaterial() == Material.ROCK || state.getMaterial() == Material.ANVIL || state.getMaterial() == Material.IRON;
 	}
 	
 }

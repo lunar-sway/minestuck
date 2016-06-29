@@ -9,7 +9,6 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -32,7 +31,7 @@ public class TileEntityGate extends TileEntity
 		{
 			BlockPos pos = world.provider.getRandomizedSpawnPoint();
 			player.setPositionAndUpdate(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-			player.timeUntilPortal = 60;
+			player.timeUntilPortal = player.getPortalCooldown();
 			player.motionX = 0;
 			player.motionY = 0;
 			player.motionZ = 0;
@@ -59,15 +58,24 @@ public class TileEntityGate extends TileEntity
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound compound)
+	public NBTTagCompound writeToNBT(NBTTagCompound compound)
 	{
 		super.writeToNBT(compound);
 		if(this.gateCount != 0)
 			compound.setInteger("gateCount", gateCount);
+		return compound;
 	}
 	
 	@Override
-	public Packet getDescriptionPacket()
+	public NBTTagCompound getUpdateTag()
+	{
+		NBTTagCompound nbt = super.getUpdateTag();
+		nbt.setInteger("color", SburbHandler.getColorForDimension(this.worldObj.provider.getDimension()));
+		return nbt;
+	}
+	
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket()
 	{
 		NBTTagCompound nbt = new NBTTagCompound();
 		nbt.setInteger("color", SburbHandler.getColorForDimension(this.worldObj.provider.getDimension()));
@@ -75,9 +83,15 @@ public class TileEntityGate extends TileEntity
 	}
 	
 	@Override
+	public void handleUpdateTag(NBTTagCompound tag)
+	{
+		this.colorIndex = tag.getInteger("color");
+	}
+	
+	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
 	{
-		this.colorIndex = pkt.getNbtCompound().getInteger("color");
+		handleUpdateTag(pkt.getNbtCompound());
 	}
 	
 	public boolean isGate()

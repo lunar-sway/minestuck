@@ -28,7 +28,7 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 				return null;
 			
 			IBlockState ground = world.getBlockState(new BlockPos(xCoord, yCoord - 1, zCoord));
-			if((ground.getMaterial().isLiquid() || ground.getMaterial() == Material.ice) && random.nextFloat() < 0.6)	//Make it uncommon, but not impossible for it to be placed in the sea.
+			if((ground.getMaterial().isLiquid() || ground.getMaterial() == Material.ICE) && random.nextFloat() < 0.6)	//Make it uncommon, but not impossible for it to be placed in the sea.
 				return null;
 			if(provider.isBBInSpawn(new StructureBoundingBox(xCoord - 4, zCoord - 4, xCoord + 4, zCoord + 4)))
 					return null;
@@ -81,7 +81,7 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 					}
 				} else
 				{
-					this.placeBlock(world, Blocks.air.getDefaultState(), 3*facing.getFrontOffsetX(), 1, 3*facing.getFrontOffsetZ());
+					this.placeBlock(world, Blocks.AIR.getDefaultState(), 3*facing.getFrontOffsetX(), 1, 3*facing.getFrontOffsetZ());
 					
 					if(!world.getBlockState(pos.down(2)).getMaterial().isSolid())
 					{
@@ -103,7 +103,7 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 					}
 				}
 				
-				this.placeBlocks(world, Blocks.air.getDefaultState(), 3*facing.getFrontOffsetX(), 2, 3*facing.getFrontOffsetZ(), 3*facing.getFrontOffsetX(), 3, 3*facing.getFrontOffsetZ());
+				this.placeBlocks(world, Blocks.AIR.getDefaultState(), 3*facing.getFrontOffsetX(), 2, 3*facing.getFrontOffsetZ(), 3*facing.getFrontOffsetX(), 3, 3*facing.getFrontOffsetZ());
 				this.placeBlock(world, provider.aspect1.getDecorativeBlockFor(wall), 3*facing.getFrontOffsetX(), 4, 3*facing.getFrontOffsetZ());
 				this.placeBlocks(world, wall, 3*facing.getFrontOffsetX(), 5, 3*facing.getFrontOffsetZ(), 3*facing.getFrontOffsetX(), height, 3*facing.getFrontOffsetZ());
 			}
@@ -118,10 +118,10 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 			this.placeBlock(world, floor, -2, height + 1, 2);
 			if(torches)
 			{
-				this.placeBlock(world, Blocks.torch.getDefaultState(), -2, height + 2, -2);
-				this.placeBlock(world, Blocks.torch.getDefaultState(), 2, height + 2, -2);
-				this.placeBlock(world, Blocks.torch.getDefaultState(), 2, height + 2, 2);
-				this.placeBlock(world, Blocks.torch.getDefaultState(), -2, height + 2, 2);
+				this.placeBlock(world, Blocks.TORCH.getDefaultState(), -2, height + 2, -2);
+				this.placeBlock(world, Blocks.TORCH.getDefaultState(), 2, height + 2, -2);
+				this.placeBlock(world, Blocks.TORCH.getDefaultState(), 2, height + 2, 2);
+				this.placeBlock(world, Blocks.TORCH.getDefaultState(), -2, height + 2, 2);
 			}
 			
 			
@@ -150,8 +150,8 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 			this.placeBlocks(world, wall, 2, height + 1, 3, 2, height + 2, 3);
 			
 			
-			this.placeBlocks(world, Blocks.air.getDefaultState(), -2, 1, -2, 2, height, 2);
-			this.placeBlocks(world, Blocks.air.getDefaultState(), -1, height + 1, -1, 1, height + 1, 1);
+			this.placeBlocks(world, Blocks.AIR.getDefaultState(), -2, 1, -2, 2, height, 2);
+			this.placeBlocks(world, Blocks.AIR.getDefaultState(), -1, height + 1, -1, 1, height + 1, 1);
 			this.placeBlock(world, floor, 0, height + 1, 0);
 			
 			rotation = random.nextBoolean();
@@ -170,10 +170,10 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 			{
 				for(int y = 5; y < height; y += 5)
 				{
-					this.placeBlock(world, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.EAST), -2, y, 0);
-					this.placeBlock(world, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.WEST), 2, y, 0);
-					this.placeBlock(world, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.SOUTH), 0, y, -2);
-					this.placeBlock(world, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.NORTH), 0, y, 2);
+					this.placeBlock(world, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.EAST), -2, y, 0);
+					this.placeBlock(world, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.WEST), 2, y, 0);
+					this.placeBlock(world, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.SOUTH), 0, y, -2);
+					this.placeBlock(world, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.NORTH), 0, y, 2);
 				}
 			}
 			

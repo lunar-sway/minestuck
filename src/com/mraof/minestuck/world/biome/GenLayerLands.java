@@ -2,7 +2,7 @@ package com.mraof.minestuck.world.biome;
 
 import com.mraof.minestuck.util.Debug;
 
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.GenLayerVoronoiZoom;
 import net.minecraft.world.gen.layer.GenLayerZoom;
@@ -32,7 +32,7 @@ public class GenLayerLands extends GenLayer
 			for(int y = 0; y < areaHeight; y++)
 			{
 				initChunkSeed(areaX + x, areaY + y);
-				biomeGen[x + y*areaWidth] = BiomeGenBase.getIdForBiome(BiomeGenMinestuck.mediumNormal) + (nextInt(Integer.MAX_VALUE) >= oceanChance ? 0 : 1);
+				biomeGen[x + y*areaWidth] = Biome.getIdForBiome(BiomeMinestuck.mediumNormal) + (nextInt(Integer.MAX_VALUE) >= oceanChance ? 0 : 1);
 			}
 		return biomeGen;
 	}

@@ -29,7 +29,7 @@ public class BlockLayered extends Block
 		
 		this.setCreativeTab(Minestuck.tabMinestuck);
 		this.fullBlock = iconBlock;
-		stepSound = fullBlock.getBlock().getStepSound();
+		setSoundType(fullBlock.getBlock().getSoundType());
 	}
 	
 	@Override

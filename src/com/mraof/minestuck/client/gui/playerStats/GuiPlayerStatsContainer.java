@@ -14,9 +14,9 @@ import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.Container;
-import net.minecraft.util.text.translation.I18n;
 
 public abstract class GuiPlayerStatsContainer extends GuiContainer
 {
@@ -104,7 +104,7 @@ public abstract class GuiPlayerStatsContainer extends GuiContainer
 					break;
 				else if(xcor < xOffset + i*(tabWidth + 2) + tabWidth
 						&& (!mode || !NormalGuiType.values()[i].reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || mc.playerController.isInCreativeMode()))
-					drawHoveringText(Arrays.asList(I18n.translateToLocal(mode? NormalGuiType.values()[i].name:EditmodeGuiType.values()[i].name)),
+					drawHoveringText(Arrays.asList(I18n.format(mode? NormalGuiType.values()[i].name:EditmodeGuiType.values()[i].name)),
 							xcor - guiLeft, ycor - guiTop, fontRendererObj);
 		GlStateManager.enableDepth();
 		GlStateManager.disableLighting();
@@ -122,7 +122,7 @@ public abstract class GuiPlayerStatsContainer extends GuiContainer
 				{
 					if(mode && NormalGuiType.values()[i].reqMedium() && !SkaiaClient.enteredMedium(SkaiaClient.playerId) && mc.playerController.isNotCreative())
 						return;
-					mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.ui_button_click, 1.0F));
+					mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 					if(i != (mode? normalTab:editmodeTab).ordinal())
 					{
 						if(mode)

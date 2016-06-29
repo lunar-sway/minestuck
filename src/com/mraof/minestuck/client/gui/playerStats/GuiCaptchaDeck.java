@@ -14,10 +14,10 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiYesNo;
 import net.minecraft.client.gui.GuiYesNoCallback;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CPacketCloseWindow;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -41,8 +41,8 @@ public class GuiCaptchaDeck extends GuiPlayerStatsContainer implements GuiYesNoC
 	public void initGui()
 	{
 		super.initGui();
-		modusButton = new GuiButtonExt(1, xOffset + 102, yOffset + 31, 50, 18, I18n.translateToLocal("gui.useItem"));
-		sylladexMap = new GuiButtonExt(1, xOffset + 6, yOffset + 31, 60, 18, I18n.translateToLocal("gui.sylladex"));
+		modusButton = new GuiButtonExt(1, xOffset + 102, yOffset + 31, 50, 18, I18n.format("gui.useItem"));
+		sylladexMap = new GuiButtonExt(1, xOffset + 6, yOffset + 31, 60, 18, I18n.format("gui.sylladex"));
 		buttonList.add(modusButton);
 		buttonList.add(sylladexMap);
 		sylladexMap.enabled = CaptchaDeckHandler.clientSideModus != null;
@@ -69,7 +69,7 @@ public class GuiCaptchaDeck extends GuiPlayerStatsContainer implements GuiYesNoC
 	{
 		drawTabTooltip(xcor, ycor);
 		
-		String message = I18n.translateToLocal("gui.captchaDeck.name");
+		String message = I18n.format("gui.captchaDeck.name");
 		mc.fontRendererObj.drawString(message, (this.width / 2) - mc.fontRendererObj.getStringWidth(message) / 2 - guiLeft, yOffset + 12 - guiTop, 0x404040);
 		
 	}
@@ -85,7 +85,7 @@ public class GuiCaptchaDeck extends GuiPlayerStatsContainer implements GuiYesNoC
 				Modus newModus = CaptchaDeckHandler.ModusType.getType(stack.getItemDamage()).createInstance(Side.CLIENT);
 				if(CaptchaDeckHandler.clientSideModus != null && !newModus.canSwitchFrom(CaptchaDeckHandler.ModusType.getType(CaptchaDeckHandler.clientSideModus)))
 				{
-					mc.currentScreen = new GuiYesNo(this, I18n.translateToLocal("gui.emptySylladex1"), I18n.translateToLocal("gui.emptySylladex2"), 0)
+					mc.currentScreen = new GuiYesNo(this, I18n.format("gui.emptySylladex1"), I18n.format("gui.emptySylladex2"), 0)
 					{
 						@Override
 						public void onGuiClosed()
@@ -102,7 +102,7 @@ public class GuiCaptchaDeck extends GuiPlayerStatsContainer implements GuiYesNoC
 		}
 		else if(button == this.sylladexMap && CaptchaDeckHandler.clientSideModus != null)
 		{
-			mc.thePlayer.sendQueue.addToSendQueue(new CPacketCloseWindow(mc.thePlayer.openContainer.windowId));
+			mc.thePlayer.connection.sendPacket(new CPacketCloseWindow(mc.thePlayer.openContainer.windowId));
 			mc.thePlayer.inventory.setItemStack((ItemStack)null);
 			mc.displayGuiScreen(CaptchaDeckHandler.clientSideModus.getGuiHandler());
 			mc.thePlayer.openContainer = mc.thePlayer.inventoryContainer;

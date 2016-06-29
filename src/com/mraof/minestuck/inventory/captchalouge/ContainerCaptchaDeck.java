@@ -41,7 +41,7 @@ public class ContainerCaptchaDeck extends Container
 	{
 		ItemStack stack = this.inventory.removeStackFromSlot(0);
 		if(stack != null)
-			player.dropPlayerItemWithRandomChoice(stack, false);
+			player.dropItem(stack, false);
 	}
 	
 	@Override

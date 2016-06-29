@@ -277,7 +277,7 @@ public class TreeModus extends Modus
 		
 		private String itemToString()
 		{
-			ResourceLocation name = (ResourceLocation) Item.itemRegistry.getNameForObject(stack.getItem());
+			ResourceLocation name = (ResourceLocation) Item.REGISTRY.getNameForObject(stack.getItem());
 			return name.getResourcePath()+":"+name.getResourceDomain();	//Don't want the items to be sorted mod-wise.
 		}
 		

@@ -7,7 +7,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import com.mraof.minestuck.world.biome.BiomeGenMinestuck;
+import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 public class BlockBlobDecorator implements ILandDecorator	//A version of WorldGenBlockBlob slightly adapted to this usage area
@@ -29,7 +29,7 @@ public class BlockBlobDecorator implements ILandDecorator	//A version of WorldGe
 		{
 			BlockPos pos = world.getHeight(new BlockPos((chunkX << 4) + 8 + random.nextInt(16), 0, (chunkZ << 4) + 8 + random.nextInt(16)));
 			
-			if(world.getBiomeGenForCoordsBody(pos) == BiomeGenMinestuck.mediumOcean)
+			if(world.getBiomeForCoordsBody(pos) == BiomeMinestuck.mediumOcean)
 				continue;
 			
 			for (int i1 = 0; i1 < 3; ++i1)

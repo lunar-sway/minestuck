@@ -10,7 +10,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -86,7 +85,7 @@ public class TileEntityTransportalizer extends TileEntity
 		}
 		return true;
 	}
-
+	
 	public void teleport(Entity entity)
 	{
 		Location location = transportalizers.get(this.destId);
@@ -106,7 +105,7 @@ public class TileEntityTransportalizer extends TileEntity
 			IBlockState block1 = world.getBlockState(location.pos.up(2));
 			if(block0.getMaterial().blocksMovement() || block1.getMaterial().blocksMovement())
 			{
-				entity.timeUntilPortal = 60;
+				entity.timeUntilPortal = entity.getPortalCooldown();
 				if(entity instanceof EntityPlayerMP)
 					((EntityPlayerMP) entity).addChatMessage(new TextComponentTranslation("message.transportalizer.destinationBlocked"));
 				return;
@@ -116,10 +115,10 @@ public class TileEntityTransportalizer extends TileEntity
 				Teleport.teleportEntity(entity, location.dim, null, destTransportalizer.pos.getX() + 0.5, destTransportalizer.pos.getY() + 0.6, destTransportalizer.pos.getZ() + 0.5);
 			else
 				teleportTo(entity, transportalizers.get(this.destId));
-			entity.timeUntilPortal = 60;
+			entity.timeUntilPortal = entity.getPortalCooldown();
 		}
 	}
-
+	
 	public static void saveTransportalizers(NBTTagCompound tagCompound)
 	{
 		NBTTagCompound transportalizerTagCompound = new NBTTagCompound();
@@ -137,7 +136,7 @@ public class TileEntityTransportalizer extends TileEntity
 		}
 		tagCompound.setTag("transportalizers", transportalizerTagCompound);
 	}
-
+	
 	public static void loadTransportalizers(NBTTagCompound tagCompound)
 	{
 		for(Object id : tagCompound.getKeySet())
@@ -146,7 +145,7 @@ public class TileEntityTransportalizer extends TileEntity
 			put((String)id, new Location(locationTag.getInteger("x"), locationTag.getInteger("y"), locationTag.getInteger("z"), locationTag.getInteger("dim")));
 		}
 	}
-
+	
 	public String getId()
 	{
 		return id;
@@ -174,22 +173,28 @@ public class TileEntityTransportalizer extends TileEntity
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound tagCompound)
+	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound)
 	{
 		super.writeToNBT(tagCompound);
 		
 		tagCompound.setString("idString", id);
 		tagCompound.setString("destId", destId);
+		
+		return tagCompound;
 	}
-
+	
 	@Override
-	public Packet getDescriptionPacket() 
+	public NBTTagCompound getUpdateTag()
 	{
-		NBTTagCompound tagCompound = new NBTTagCompound();
-		this.writeToNBT(tagCompound);
-		return new SPacketUpdateTileEntity(this.pos, 2, tagCompound);
+		return this.writeToNBT(new NBTTagCompound());
 	}
-
+	
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket()
+	{
+		return new SPacketUpdateTileEntity(this.pos, 2, this.writeToNBT(new NBTTagCompound()));
+	}
+	
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) 
 	{

@@ -7,7 +7,7 @@ import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldSettings.GameType;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.IChunkGenerator;
 
 import com.mraof.minestuck.network.skaianet.SburbConnection;
@@ -142,15 +142,14 @@ public class WorldProviderLands extends WorldProvider
 	{
 		return true;
 	}
-
+	
 	@Override
-	public void registerWorldChunkManager()
+	protected void createBiomeProvider()
 	{
-		super.registerWorldChunkManager();
 		isHellWorld = false;
 		if(provider == null)
 			createChunkGenerator();
-		this.worldChunkMgr = new WorldChunkManagerLands(worldObj, provider.rainfall, provider.oceanChance);
+		this.biomeProvider = new WorldChunkManagerLands(worldObj, provider.rainfall, provider.oceanChance);
 		this.hasNoSky = false;
 	}
 	
@@ -201,9 +200,18 @@ public class WorldProviderLands extends WorldProvider
 	}
 	
 	@Override
-	public BiomeGenBase getBiomeGenForCoords(BlockPos pos)
+	public Biome getBiomeForCoords(BlockPos pos)
 	{
 		return provider.getBiomeGen();
 	}
 	
+	@Override
+	public void onPlayerAdded(EntityPlayerMP player)
+	{
+		int centerX = ((int)player.posX) >> 4;
+		int centerZ = ((int)player.posZ) >> 4;
+		for(int x = centerX - 1; x <= centerX + 1; x++)
+			for(int z = centerZ - 1; z <= centerZ + 1; z++)
+				this.worldObj.getChunkProvider().provideChunk(x, z);
+	}
 }

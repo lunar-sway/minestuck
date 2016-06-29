@@ -21,7 +21,7 @@ public class IceDecorator implements ILandDecorator
 				BlockPos pos = world.getPrecipitationHeight(new BlockPos(x, 0, z)).down();
 				Block block1 = world.getBlockState(pos).getBlock();
 				if(world.canBlockFreezeWater(pos))
-					world.setBlockState(pos, Blocks.ice.getDefaultState(), 2);
+					world.setBlockState(pos, Blocks.ICE.getDefaultState(), 2);
 			}
 		return null;
 	}

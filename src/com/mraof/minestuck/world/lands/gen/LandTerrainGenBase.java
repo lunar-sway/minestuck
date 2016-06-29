@@ -14,6 +14,7 @@ public abstract class LandTerrainGenBase implements ILandTerrainGen
 		this.provider = chunkProvider;
 	}
 	
+	@Override
 	public ChunkPrimer createChunk(int chunkX, int chunkZ)
 	{
 		ChunkPrimer primer = new ChunkPrimer();
@@ -24,7 +25,7 @@ public abstract class LandTerrainGenBase implements ILandTerrainGen
 		for(int x = 0; x < 16; x++)
 			for(int z = 0; z < 16; z++)
 			{
-				primer.setBlockState(x, 0, z, Blocks.bedrock.getDefaultState());
+				primer.setBlockState(x, 0, z, Blocks.BEDROCK.getDefaultState());
 				int riverHeight = Math.max(0, topRiverBlock[x << 4 | z] - Math.max(0, seaHeight - topBlock[x << 4 | z]));
 				int y;
 				int yMax = topBlock[x << 4 | z] - 3 - riverHeight;

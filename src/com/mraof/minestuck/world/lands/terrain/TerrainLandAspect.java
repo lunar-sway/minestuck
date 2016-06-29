@@ -37,7 +37,7 @@ public abstract class TerrainLandAspect implements ILandAspect<TerrainLandAspect
 		
 		public IBlockState getGroundBlock()
 		{
-			return Blocks.stone.getDefaultState();
+			return Blocks.STONE.getDefaultState();
 		}
 		
 		/**
@@ -46,7 +46,7 @@ public abstract class TerrainLandAspect implements ILandAspect<TerrainLandAspect
 		 */
 		public IBlockState getOceanBlock()
 		{
-			return Blocks.water.getDefaultState();
+			return Blocks.WATER.getDefaultState();
 		}
 		
 		public IBlockState getRiverBlock()

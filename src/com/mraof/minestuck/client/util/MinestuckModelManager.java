@@ -233,7 +233,7 @@ public class MinestuckModelManager
 	private static void register(Item item)
 	{
 		ItemModelMesher modelRegistry = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
-		modelRegistry.register(item, 0, new ModelResourceLocation((ResourceLocation) Item.itemRegistry.getNameForObject(item), "inventory"));
+		modelRegistry.register(item, 0, new ModelResourceLocation((ResourceLocation) Item.REGISTRY.getNameForObject(item), "inventory"));
 	}
 	
 	private static void register(Item item, int meta, String modelResource)
@@ -296,7 +296,7 @@ public class MinestuckModelManager
 			String str;
 			if(nbt != null && nbt.hasKey("contentID"))
 			{
-				if(nbt.getBoolean("punched") && !(Item.itemRegistry.getObject(new ResourceLocation(nbt.getString("contentID"))) == Item.getItemFromBlock(genericObject)))
+				if(nbt.getBoolean("punched") && !(Item.REGISTRY.getObject(new ResourceLocation(nbt.getString("contentID"))) == Item.getItemFromBlock(genericObject)))
 					str = "card_punched";
 				else str = "card_full";
 			}

@@ -44,7 +44,7 @@ public class BlockChessTile extends Block
 	
 	public BlockChessTile()
 	{
-		super(Material.ground);
+		super(Material.GROUND);
 		setHardness(0.5F);
 		
 		setUnlocalizedName("chessTile");
@@ -77,9 +77,8 @@ public class BlockChessTile extends Block
 	}
 	
 	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item item, CreativeTabs tab, List subItems) 
+	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> subItems) 
 	{
 		for(int i = 0; i < BlockType.values().length; i++)
 			subItems.add(new ItemStack(this, 1, i));
@@ -96,10 +95,10 @@ public class BlockChessTile extends Block
 	{
 		switch((BlockType) state.getValue(BLOCK_TYPE))
 		{
-		case WHITE: return MapColor.snowColor;
-		case LIGHT_GREY: return MapColor.silverColor;
-		case DARK_GREY: return MapColor.grayColor;
-		case BLACK: return MapColor.blackColor;
+		case WHITE: return MapColor.SNOW;
+		case LIGHT_GREY: return MapColor.SILVER;
+		case DARK_GREY: return MapColor.GRAY;
+		case BLACK: return MapColor.BLACK;
 		default: return super.getMapColor(state);
 		}
 	}

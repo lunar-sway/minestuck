@@ -50,13 +50,13 @@ public class TallGrassDecorator implements ILandDecorator
 					{
 						BlockDoublePlant.EnumPlantType type = random.nextFloat() < fernChance ? BlockDoublePlant.EnumPlantType.FERN : BlockDoublePlant.EnumPlantType.GRASS;
 						
-						if(Blocks.double_plant.canPlaceBlockAt(world, grassPos))
-							Blocks.double_plant.placeAt(world, grassPos, type, 2);
+						if(Blocks.DOUBLE_PLANT.canPlaceBlockAt(world, grassPos))
+							Blocks.DOUBLE_PLANT.placeAt(world, grassPos, type, 2);
 					} else
 					{
-						IBlockState state = Blocks.tallgrass.getDefaultState().withProperty(BlockTallGrass.TYPE, random.nextFloat() < fernChance ? BlockTallGrass.EnumType.FERN : BlockTallGrass.EnumType.GRASS);
+						IBlockState state = Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, random.nextFloat() < fernChance ? BlockTallGrass.EnumType.FERN : BlockTallGrass.EnumType.GRASS);
 						
-						if(Blocks.tallgrass.canBlockStay(world, grassPos, state))
+						if(Blocks.TALLGRASS.canBlockStay(world, grassPos, state))
 							world.setBlockState(grassPos, state, 2);
 					}
 				}

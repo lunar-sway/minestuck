@@ -2,11 +2,11 @@ package com.mraof.minestuck.world.lands.gen;
 
 import java.util.Random;
 
-import com.mraof.minestuck.world.biome.BiomeGenMinestuck;
+import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.gen.NoiseGeneratorTriangle;
 
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 
 public class DefaultTerrainGen extends LandTerrainGenBase
@@ -21,7 +21,7 @@ public class DefaultTerrainGen extends LandTerrainGenBase
 	protected double[] heightMap;
 	protected double[] riverHeightMap;
 	protected double[] biomeHeightMap, biomeVariationMap;
-	protected BiomeGenBase[] biomesForGeneration;
+	protected Biome[] biomesForGeneration;
 	public static float[] parabolicField;
 	
 	{
@@ -119,7 +119,7 @@ public class DefaultTerrainGen extends LandTerrainGenBase
 				for(int x1 = 0; x1 < 5; x1++)
 					for(int z1 = 0; z1 < 5; z1++)
 					{
-						BiomeGenBase biome = biomesForGeneration[(z0 + z1)*9 + x0 + x1];
+						Biome biome = biomesForGeneration[(z0 + z1)*9 + x0 + x1];
 						float multiplier = parabolicField[x1*5 + z1];
 						float biomeHeight1 = getBiomeHeight(biome);
 						if(biomeHeight1 > biomeHeight)
@@ -135,20 +135,20 @@ public class DefaultTerrainGen extends LandTerrainGenBase
 		
 	}
 	
-	protected float getBiomeHeight(BiomeGenBase biome)
+	protected float getBiomeHeight(Biome biome)
 	{
-		if(biome == BiomeGenMinestuck.mediumOcean)
+		if(biome == BiomeMinestuck.mediumOcean)
 			return this.oceanHeight;
-		else if(biome == BiomeGenMinestuck.mediumRough)
+		else if(biome == BiomeMinestuck.mediumRough)
 			return this.roughHeight;
 		else return this.normalHeight;
 	}
 	
-	protected float getBiomeVariation(BiomeGenBase biome)
+	protected float getBiomeVariation(Biome biome)
 	{
-		if(biome == BiomeGenMinestuck.mediumOcean)
+		if(biome == BiomeMinestuck.mediumOcean)
 			return this.oceanVariation;
-		else if(biome == BiomeGenMinestuck.mediumRough)
+		else if(biome == BiomeMinestuck.mediumRough)
 			return this.roughtVariation;
 		else return this.normalVariation;
 	}

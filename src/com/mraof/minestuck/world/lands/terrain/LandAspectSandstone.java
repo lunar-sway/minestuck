@@ -43,8 +43,8 @@ public class LandAspectSandstone extends TerrainLandAspect
 		this.name = name;
 		if(name.equals("sandstone"))
 		{
-			upperBlock = Blocks.sandstone.getDefaultState();
-			structureBlocks = new IBlockState[] {Blocks.sandstone.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.SMOOTH), Blocks.stonebrick.getDefaultState()};
+			upperBlock = Blocks.SANDSTONE.getDefaultState();
+			structureBlocks = new IBlockState[] {Blocks.SANDSTONE.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.SMOOTH), Blocks.STONEBRICK.getDefaultState()};
 			skyColor = new Vec3d(0.9D, 0.7D, 0.05D);
 			
 			variations.add(this);
@@ -52,8 +52,8 @@ public class LandAspectSandstone extends TerrainLandAspect
 		}
 		else
 		{
-			upperBlock = Blocks.red_sandstone.getDefaultState();
-			structureBlocks = new IBlockState[] {Blocks.red_sandstone.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.SMOOTH), Blocks.stonebrick.getDefaultState()};
+			upperBlock = Blocks.RED_SANDSTONE.getDefaultState();
+			structureBlocks = new IBlockState[] {Blocks.RED_SANDSTONE.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.SMOOTH), Blocks.STONEBRICK.getDefaultState()};
 			skyColor = new Vec3d(0.9D, 0.5D, 0.05D);
 			
 		}
@@ -86,31 +86,31 @@ public class LandAspectSandstone extends TerrainLandAspect
 	@Override
 	public IBlockState getDecorativeBlockFor(IBlockState state)
 	{
-		if(state.getBlock() == Blocks.stonebrick)
-			return Blocks.stonebrick.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED);
-		else if(state.getBlock() == Blocks.sandstone)
-			return Blocks.sandstone.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.CHISELED);
-		else return Blocks.red_sandstone.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.CHISELED);
+		if(state.getBlock() == Blocks.STONEBRICK)
+			return Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED);
+		else if(state.getBlock() == Blocks.SANDSTONE)
+			return Blocks.SANDSTONE.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.CHISELED);
+		else return Blocks.RED_SANDSTONE.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.CHISELED);
 	}
 	
 	@Override
 	public List<ILandDecorator> getDecorators()
 	{
 		List<ILandDecorator> list = new ArrayList<ILandDecorator>();
-		IBlockState sand = Blocks.sand.getDefaultState();
-		IBlockState sandstone = Blocks.sandstone.getDefaultState();
+		IBlockState sand = Blocks.SAND.getDefaultState();
+		IBlockState sandstone = Blocks.SANDSTONE.getDefaultState();
 		if(name.equals("sandstone_red"))
 		{
 			sand = sand.withProperty(BlockSand.VARIANT, BlockSand.EnumType.RED_SAND);
-			sandstone = Blocks.red_sandstone.getDefaultState();
+			sandstone = Blocks.RED_SANDSTONE.getDefaultState();
 		}
 		list.add(new SurfaceDecoratorVein(sand, 10, 32));
 		list.add(new BlockBlobDecorator(sandstone, 0));
 		list.add(new WorldGenDecorator(new WorldGenDeadBush(), 15, 0.4F));	//Will be especially uncommon because it only spawns on sand
 		
 		list.add(new UndergroundDecoratorVein(upperBlock, 8, 28, 256));
-		list.add(new UndergroundDecoratorVein(Blocks.iron_ore.getDefaultState(), 24, 9, 64));
-		list.add(new UndergroundDecoratorVein(Blocks.redstone_ore.getDefaultState(), 12, 8, 32));
+		list.add(new UndergroundDecoratorVein(Blocks.IRON_ORE.getDefaultState(), 24, 9, 64));
+		list.add(new UndergroundDecoratorVein(Blocks.REDSTONE_ORE.getDefaultState(), 12, 8, 32));
 		return list;
 	}
 	

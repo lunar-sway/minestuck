@@ -39,9 +39,9 @@ public class MinestuckAchievementHandler {
 	{
 		achievementPage = new AchievementPage("Minestuck");
 		AchievementPage.registerAchievementPage(achievementPage);
-		getHammer = (Achievement) (new Achievement("achievement.getHammer", "getHammer", 0, -2, MinestuckItems.clawHammer, AchievementList.buildWorkBench)).registerStat();
+		getHammer = (Achievement) (new Achievement("achievement.getHammer", "getHammer", 0, -2, MinestuckItems.clawHammer, AchievementList.BUILD_WORK_BENCH)).registerStat();
 		achievementPage.getAchievements().add(getHammer);
-		mineCruxite = (Achievement) (new Achievement("achievement.mineCruxite", "mineCruxite", -2, 1, MinestuckItems.rawCruxite, AchievementList.buildPickaxe)).registerStat();
+		mineCruxite = (Achievement) (new Achievement("achievement.mineCruxite", "mineCruxite", -2, 1, MinestuckItems.rawCruxite, AchievementList.BUILD_PICKAXE)).registerStat();
 		achievementPage.getAchievements().add(mineCruxite);
 		setupConnection = (Achievement) (new Achievement("achievement.setupConnection", "setupConnection", 0, 0, MinestuckItems.disk, mineCruxite)).registerStat();
 		achievementPage.getAchievements().add(setupConnection);
@@ -49,7 +49,7 @@ public class MinestuckAchievementHandler {
 		achievementPage.getAchievements().add(enterMedium);
 		alchemy = (Achievement) (new Achievement("achievement.alchemy", "alchemy", 4, 0, new ItemStack(MinestuckBlocks.sburbMachine, 1, 3), enterMedium)).registerStat();
 		achievementPage.getAchievements().add(alchemy);
-		goldSeeds = (Achievement) new Achievement("achievement.goldSeeds", "goldSeeds", -2, -2, MinestuckItems.goldSeeds, AchievementList.buildHoe).registerStat();
+		goldSeeds = (Achievement) new Achievement("achievement.goldSeeds", "goldSeeds", -2, -2, MinestuckItems.goldSeeds, AchievementList.BUILD_HOE).registerStat();
 		achievementPage.getAchievements().add(goldSeeds);
 		treeModus = (Achievement) new Achievement("achievement.treeModus", "treeModus", 2, -2, new ItemStack(MinestuckItems.modusCard, 1, 3), (Achievement)null).registerStat();
 		achievementPage.getAchievements().add(treeModus);
@@ -59,7 +59,7 @@ public class MinestuckAchievementHandler {
 		achievementPage.getAchievements().add(killGiclops);
 		broBlade = (Achievement) new Achievement("achievement.broBlade", "broBlade", 5, -2, MinestuckItems.unbreakableKatana, alchemy).registerStat();
 		achievementPage.getAchievements().add(broBlade);
-		returnNode = (Achievement) new Achievement("achievement.returnNode", "returnNode", 4, 2, Items.bed, enterMedium).registerStat();
+		returnNode = (Achievement) new Achievement("achievement.returnNode", "returnNode", 4, 2, Items.BED, enterMedium).registerStat();
 		achievementPage.getAchievements().add(returnNode);
 	}
 	

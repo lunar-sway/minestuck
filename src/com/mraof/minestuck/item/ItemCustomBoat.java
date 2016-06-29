@@ -30,7 +30,7 @@ public abstract class ItemCustomBoat extends Item
 	{
 		this.maxStackSize = 1;
 		setCreativeTab(Minestuck.tabMinestuck);
-		BlockDispenser.dispenseBehaviorRegistry.putObject(this, new BehaivorDispenseCustomBoat());
+		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, new BehaivorDispenseCustomBoat());
 	}
 	
 	@Override
@@ -90,7 +90,7 @@ public abstract class ItemCustomBoat extends Item
 				{
 					BlockPos blockpos = rayTrace.getBlockPos();
 					
-					if (worldIn.getBlockState(blockpos).getBlock() == Blocks.snow_layer)
+					if (worldIn.getBlockState(blockpos).getBlock() == Blocks.SNOW_LAYER)
 					{
 						blockpos = blockpos.down();
 					}
@@ -98,7 +98,7 @@ public abstract class ItemCustomBoat extends Item
 					Entity entityboat = createBoat(itemStackIn, worldIn, (double)((float)blockpos.getX() + 0.5F), (double)((float)blockpos.getY() + 1.0F), (double)((float)blockpos.getZ() + 0.5F));
 					entityboat.rotationYaw = (float)(((MathHelper.floor_double((double)(playerIn.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3) - 1) * 90);
 					
-					if (!worldIn.getCubes(entityboat, entityboat.getEntityBoundingBox().expandXyz(-0.1D)).isEmpty())
+					if (!worldIn.getCollisionBoxes(entityboat, entityboat.getEntityBoundingBox().expandXyz(-0.1D)).isEmpty())
 					{
 						return new ActionResult(EnumActionResult.FAIL, itemStackIn);
 					}
@@ -124,6 +124,7 @@ public abstract class ItemCustomBoat extends Item
 	
 	protected class BehaivorDispenseCustomBoat extends BehaviorDefaultDispenseItem
 	{
+		@Override
 		public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
 		{
 			EnumFacing enumfacing = BlockDispenser.getFacing(source.getBlockMetadata());
@@ -135,13 +136,13 @@ public abstract class ItemCustomBoat extends Item
 			Material material = world.getBlockState(blockpos).getMaterial();
 			double d3;
 			
-			if (Material.water.equals(material))
+			if (Material.WATER.equals(material))
 			{
 				d3 = 1.0D;
 			}
 			else
 			{
-				if (!Material.air.equals(material) || !Material.water.equals(world.getBlockState(blockpos.down()).getMaterial()))
+				if (!Material.AIR.equals(material) || !Material.WATER.equals(world.getBlockState(blockpos.down()).getMaterial()))
 				{
 					return this.dispense(source, stack);
 				}
@@ -154,9 +155,10 @@ public abstract class ItemCustomBoat extends Item
 			stack.splitStack(1);
 			return stack;
 		}
+		@Override
 		protected void playDispenseSound(IBlockSource source)
 		{
-			source.getWorld().playAuxSFX(1000, source.getBlockPos(), 0);
+			source.getWorld().playEvent(1000, source.getBlockPos(), 0);
 		}
 	}
 }

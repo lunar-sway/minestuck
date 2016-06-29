@@ -65,12 +65,14 @@ public class ModelSalamander extends ModelBase
 		hood = new ModelRenderer(this, 32, 0);
 		hood.addBox(-4F, -9F, -4F, 8, 5, 8);
 		hood.setRotationPoint(0F, 16F, 0F);
-
+		
 	}
+	
+	@Override
 	public void render(Entity entity, float par2, float par3, float par4, float par5, float par6, float par7)
 	{
 		this.setRotationAngles(par2, par3, par4, par5, par6, par7, entity);
-
+		
 		if (this.isChild)
 		{
 			float var8 = 2.0F;

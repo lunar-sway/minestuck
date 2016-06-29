@@ -10,11 +10,11 @@ import com.mraof.minestuck.util.ColorCollector;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.translation.I18n;
 
 public class GuiColorSelector extends GuiScreen
 {
@@ -50,7 +50,7 @@ public class GuiColorSelector extends GuiScreen
 		this.mc.getTextureManager().bindTexture(guiBackground);
 		this.drawTexturedModalRect(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
-		String cacheMessage = I18n.translateToLocal("gui.selectColor");
+		String cacheMessage = I18n.format("gui.selectColor");
 		mc.fontRendererObj.drawString(cacheMessage, (this.width / 2) - mc.fontRendererObj.getStringWidth(cacheMessage) / 2, yOffset + 12, 0x404040);
 		
 		for(int i = 0; i < 4; i++)

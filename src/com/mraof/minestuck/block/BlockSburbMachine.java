@@ -25,6 +25,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -62,6 +63,7 @@ public class BlockSburbMachine extends BlockContainer
 			return unlocalizedName;
 		}
 		
+		@Override
 		public String getName()
 		{
 			return name().toLowerCase();
@@ -73,7 +75,7 @@ public class BlockSburbMachine extends BlockContainer
 	
 	public BlockSburbMachine()
 	{
-		super(Material.rock);
+		super(Material.ROCK);
 		
 		setUnlocalizedName("sburbMachine");
 		setHardness(3.0F);
@@ -107,7 +109,6 @@ public class BlockSburbMachine extends BlockContainer
 		return new ArrayList<ItemStack>();
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> subItems) 
@@ -219,6 +220,12 @@ public class BlockSburbMachine extends BlockContainer
 			if(boundingBox.intersectsWith(bb))
 				list.add(bb);
 		}
+	}
+	
+	@Override
+	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player)
+	{
+		return new ItemStack(Item.getItemFromBlock(this), 1, state.getValue(MACHINE_TYPE).ordinal());
 	}
 	
 }

@@ -1,5 +1,6 @@
 package com.mraof.minestuck.util;
 
+import java.lang.reflect.Field;
 import java.util.Iterator;
 
 import net.minecraft.entity.Entity;
@@ -15,6 +16,7 @@ import net.minecraft.server.management.PlayerList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class Teleport
@@ -42,12 +44,19 @@ public class Teleport
 		{
 			PlayerList playerList = mcServer.getPlayerList();
 			EntityPlayerMP player = (EntityPlayerMP) entity;
+			try
+			{
+				setPortalInvincibilityWithReflection(player);
+			} catch(Exception e)
+			{
+				Debug.warn("Failed to set portal invincibility through reflection. Portal problems might occur. Problem: "+e.getMessage());
+			}
 			player.dimension = destinationDimension;
 			
 			SPacketRespawn respawnPacket = new SPacketRespawn(player.dimension, player.worldObj.getDifficulty(), worldDest.getWorldInfo().getTerrainType(), player.interactionManager.getGameType());
-			player.playerNetServerHandler.sendPacket(respawnPacket);
+			player.connection.sendPacket(respawnPacket);
 			playerList.updatePermissionLevel(player);
-			worldFrom.removePlayerEntityDangerously(player);
+			worldFrom.removeEntityDangerously(player);
 			player.isDead = false;
 			
 			player.setPosition(x, y, z);
@@ -59,9 +68,9 @@ public class Teleport
 			
 			playerList.preparePlayer(player, worldFrom);
 			
-			player.playerNetServerHandler.setPlayerLocation(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
+			player.connection.setPlayerLocation(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
 			player.interactionManager.setWorld(worldDest);
-			player.playerNetServerHandler.sendPacket(new SPacketPlayerAbilities(player.capabilities));
+			player.connection.sendPacket(new SPacketPlayerAbilities(player.capabilities));
 			
 			mcServer.getPlayerList().updateTimeAndWeatherForPlayer(player, worldDest);
 			mcServer.getPlayerList().syncPlayerInventory(player);
@@ -70,7 +79,7 @@ public class Teleport
 			while (iterator.hasNext())
 			{
 				PotionEffect potioneffect = (PotionEffect)iterator.next();
-				player.playerNetServerHandler.sendPacket(new SPacketEntityEffect(player.getEntityId(), potioneffect));
+				player.connection.sendPacket(new SPacketEntityEffect(player.getEntityId(), potioneffect));
 			}
 			
 			FMLCommonHandler.instance().firePlayerChangedDimensionEvent(player, prevDimension, destinationDimension);
@@ -112,5 +121,60 @@ public class Teleport
 			return true;
 		}
 		return false;
+	}
+	
+	private static Field portalInvincibilityField = null;
+	
+	private static void setPortalInvincibilityWithReflection(EntityPlayerMP player) throws Exception
+	{
+		if(portalInvincibilityField == null)
+		fieldSearch: {
+			FakePlayer fake = new FakePlayer(player.getServerWorld(), player.getGameProfile());
+			try
+			{	//For dev environments with patch similar to 
+				if(checkFieldForBoolean(EntityPlayerMP.class.getDeclaredField("invulnerableDimensionChange"), fake))
+				{
+					portalInvincibilityField = EntityPlayerMP.class.getDeclaredField("invulnerableDimensionChange");
+					break fieldSearch;
+				}
+			} catch(NoSuchFieldException e) {}
+			
+			try
+			{	//For obfuscated code
+				if(checkFieldForBoolean(EntityPlayerMP.class.getDeclaredField("field_184851_cj"), fake))
+				{
+					portalInvincibilityField = EntityPlayerMP.class.getDeclaredField("field_184851_cj");
+					break fieldSearch;
+				}
+			} catch(NoSuchFieldException e) {}
+			
+			Debug.warn("Couldn't find portal invincibility field by the normal names. Searching all fields based on type...");
+			
+			for(Field field : EntityPlayerMP.class.getDeclaredFields())	//There should only be one boolean field which is by default false
+				if(checkFieldForBoolean(field, fake))
+				{
+					if(portalInvincibilityField != null)
+					{
+						portalInvincibilityField = null;
+						throw new NoSuchFieldException("Found more than one field. Can't determine which one that is the portal cooldown.");
+					}
+					portalInvincibilityField = field;
+				}
+			
+			if(portalInvincibilityField == null)
+				throw new NoSuchFieldException("Couldn't find any fields that fits the portal cooldown field");
+			else Debug.warn("Found possible field: "+ portalInvincibilityField.getName());
+		}
+		portalInvincibilityField.setAccessible(true);
+		portalInvincibilityField.setBoolean(player, true);
+		portalInvincibilityField.setAccessible(false);
+	}
+	
+	private static boolean checkFieldForBoolean(Field field, FakePlayer player) throws Exception
+	{
+		field.setAccessible(true);
+		boolean b = field.getType().equals(boolean.class) && !field.getBoolean(player);	//Field is false by default
+		field.setAccessible(false);
+		return b;
 	}
 }

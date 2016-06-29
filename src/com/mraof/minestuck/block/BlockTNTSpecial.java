@@ -26,7 +26,7 @@ public class BlockTNTSpecial extends BlockTNT
 		super();
 		setCreativeTab(Minestuck.tabMinestuck);
 		setHardness(0.0F);
-		setStepSound(SoundType.PLANT);
+		setSoundType(SoundType.PLANT);
 		this.primed = primed;
 		this.unstable = unstable;
 		this.instant = instant;
@@ -55,7 +55,7 @@ public class BlockTNTSpecial extends BlockTNT
 				if(instant)
 					entitytntprimed.setFuse(0);
 				worldIn.spawnEntityInWorld(entitytntprimed);
-				worldIn.playSound((EntityPlayer)null, entitytntprimed.posX, entitytntprimed.posY, entitytntprimed.posZ, SoundEvents.entity_tnt_primed, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				worldIn.playSound((EntityPlayer)null, entitytntprimed.posX, entitytntprimed.posY, entitytntprimed.posZ, SoundEvents.ENTITY_TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
 			}
 		}
 	}

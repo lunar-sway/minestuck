@@ -18,6 +18,7 @@ import com.mraof.minestuck.util.GristType;
 public class Minegicka3Support extends ModSupport
 {
 	
+	@Override
 	public void registerRecipes() throws Exception
 	{
 		Item thingy = ((Item) (Class.forName("com.williameze.minegicka3.ModBase").getField("thingy").get(null)));
@@ -30,12 +31,13 @@ public class Minegicka3Support extends ModSupport
 		
 		GristRegistry.addGristConversion(new ItemStack(thingy), false, new GristSet(new GristType[]{GristType.Rust, GristType.Gold}, new int[]{16, 16}));
 		
-		CombinationRegistry.addCombination(new ItemStack(thingy), new ItemStack(Items.stick), CombinationRegistry.MODE_AND, new ItemStack(stick));
-		CombinationRegistry.addCombination(new ItemStack(thingy2), new ItemStack(Items.stick), CombinationRegistry.MODE_AND, new ItemStack(stick2));
-		CombinationRegistry.addCombination(new ItemStack(thingy3), new ItemStack(Items.stick), CombinationRegistry.MODE_AND, new ItemStack(stick3));
+		CombinationRegistry.addCombination(new ItemStack(thingy), new ItemStack(Items.STICK), CombinationRegistry.MODE_AND, new ItemStack(stick));
+		CombinationRegistry.addCombination(new ItemStack(thingy2), new ItemStack(Items.STICK), CombinationRegistry.MODE_AND, new ItemStack(stick2));
+		CombinationRegistry.addCombination(new ItemStack(thingy3), new ItemStack(Items.STICK), CombinationRegistry.MODE_AND, new ItemStack(stick3));
 		
 	}
 	
+	@Override
 	public void registerDynamicRecipes() throws Exception
 	{
 		Debug.debug("Adding minegicka 3 recipes...");

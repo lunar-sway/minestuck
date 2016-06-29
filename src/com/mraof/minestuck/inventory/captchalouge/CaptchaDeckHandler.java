@@ -227,11 +227,10 @@ public class CaptchaDeckHandler
 			ItemStack otherStack = player.getHeldItemMainhand();
 			if(otherStack == null)
 				player.setHeldItem(EnumHand.MAIN_HAND, stack);
-			else if(stack.getItem() == otherStack.getItem() && stack.getItemDamage() == otherStack.getItemDamage()
-					&& ItemStack.areItemStackTagsEqual(stack, otherStack) && stack.stackSize + otherStack.stackSize <= stack.getMaxStackSize())
+			else if(canMergeItemStacks(stack, otherStack))
 			{
-				stack.stackSize += otherStack.stackSize;
-				player.setHeldItem(EnumHand.MAIN_HAND, stack);
+				otherStack.stackSize += stack.stackSize;
+				stack.stackSize = 0;
 			}
 			else
 			{
@@ -239,12 +238,13 @@ public class CaptchaDeckHandler
 				for(int i = 0; i < player.inventory.mainInventory.length; i++)
 				{
 					otherStack = player.inventory.mainInventory[i];
-					if(otherStack != null && stack.getItem() == otherStack.getItem() && stack.getItemDamage() == otherStack.getItemDamage()
-							&& ItemStack.areItemStackTagsEqual(stack, otherStack) && stack.stackSize + otherStack.stackSize <= stack.getMaxStackSize())
-						stack.stackSize += otherStack.stackSize;
-					else if(otherStack != null) continue;
-					else player.inventory.mainInventory[i] = stack;
+					if(otherStack == null)
+						player.inventory.mainInventory[i] = stack.copy();
+					else if(canMergeItemStacks(stack, otherStack))
+						otherStack.stackSize += stack.stackSize;
+					else continue;
 					
+					stack.stackSize = 0;
 					placed = true;
 					player.inventory.markDirty();
 					player.inventoryContainer.detectAndSendChanges();
@@ -337,5 +337,9 @@ public class CaptchaDeckHandler
 			MinestuckPlayerData.getData(player).givenModus = true;
 	}
 	
-	
+	private static boolean canMergeItemStacks(ItemStack stack1, ItemStack stack2)
+	{
+		return stack1.getItem() == stack2.getItem() && (!stack1.getHasSubtypes() || stack1.getMetadata() == stack2.getMetadata()) && ItemStack.areItemStackTagsEqual(stack1, stack2)
+				&& stack1.isStackable() && stack1.stackSize + stack2.stackSize < stack1.getMaxStackSize();
+	}
 }

@@ -18,11 +18,11 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CPacketCloseWindow;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
 
 public abstract class GuiPlayerStats extends GuiScreen
 {
@@ -216,7 +216,7 @@ public abstract class GuiPlayerStats extends GuiScreen
 					break;
 				else if(xcor < xOffset + i*(tabWidth + 2) + tabWidth
 						&& (!mode || !NormalGuiType.values()[i].reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || mc.playerController.isInCreativeMode()))
-					drawHoveringText(Arrays.asList(I18n.translateToLocal(mode? NormalGuiType.values()[i].name:EditmodeGuiType.values()[i].name)),
+					drawHoveringText(Arrays.asList(I18n.format(mode? NormalGuiType.values()[i].name:EditmodeGuiType.values()[i].name)),
 							xcor, ycor, fontRendererObj);
 	}
 	
@@ -232,7 +232,7 @@ public abstract class GuiPlayerStats extends GuiScreen
 				{
 					if(mode && NormalGuiType.values()[i].reqMedium() && !SkaiaClient.enteredMedium(SkaiaClient.playerId) && mc.playerController.isNotCreative())
 						return;
-					mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.ui_button_click, 1.0F));
+					mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 					if(i != (mode? normalTab:editmodeTab).ordinal())
 					{
 						if(mode)
@@ -255,7 +255,7 @@ public abstract class GuiPlayerStats extends GuiScreen
 		{
 			if(mc.currentScreen != null && mc.currentScreen instanceof GuiContainer)
 			{
-				mc.thePlayer.sendQueue.addToSendQueue(new CPacketCloseWindow(mc.thePlayer.openContainer.windowId));
+				mc.thePlayer.connection.sendPacket(new CPacketCloseWindow(mc.thePlayer.openContainer.windowId));
 				mc.thePlayer.inventory.setItemStack((ItemStack)null);
 			}
 			if(ClientEditHandler.isActive() ? editmodeTab.isContainer : normalTab.isContainer)

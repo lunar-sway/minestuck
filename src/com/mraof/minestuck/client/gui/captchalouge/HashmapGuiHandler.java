@@ -3,8 +3,8 @@ package com.mraof.minestuck.client.gui.captchalouge;
 import java.io.IOException;
 
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.translation.I18n;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.inventory.captchalouge.HashmapModus;
@@ -40,7 +40,7 @@ public class HashmapGuiHandler extends SylladexGuiHandler
 		guiButton.xPosition = (width - GUI_WIDTH)/2 + 15;
 		guiButton.yPosition = (height - GUI_HEIGHT)/2 + 175;
 		boolean active = MinestuckConfig.clientHashmapChat == 0 ? modus.ejectByChat : MinestuckConfig.clientHashmapChat == 1;
-		guiButton.displayString = I18n.translateToLocal(active ? "gui.ejectByChat.on" : "gui.ejectByChat.off");
+		guiButton.displayString = I18n.format(active ? "gui.ejectByChat.on" : "gui.ejectByChat.off");
 		guiButton.enabled = MinestuckConfig.clientHashmapChat == 0;
 		super.drawScreen(xcor, ycor, f);
 	}

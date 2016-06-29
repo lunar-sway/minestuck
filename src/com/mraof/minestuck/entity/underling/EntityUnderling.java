@@ -108,8 +108,6 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 
 	protected abstract void setCombatTask();
 	
-	protected abstract float getMaximumHealth();
-	
 	protected abstract float getKnockbackResistance();
 	
 	protected abstract double getWanderSpeed();
@@ -141,8 +139,8 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	public String getTexture() 
 	{
 		if(type == null)
-			return "textures/mobs/" + GristType.Shale.getName() + underlingName + ".png";
-		return "textures/mobs/" + type.getName() + underlingName + ".png";
+			return "textures/mobs/" + GristType.Shale.getName() + '_' + underlingName + ".png";
+		return "textures/mobs/" + type.getName() + '_' + underlingName + ".png";
 	}
 	
 	@Override
@@ -185,7 +183,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	public void writeEntityToNBT(NBTTagCompound tagCompound) 
 	{
 		super.writeEntityToNBT(tagCompound);
-		tagCompound.setString("Type", this.type.getName());
+		tagCompound.setString("type", this.type.getName());
 		if(hasHome())
 		{
 			NBTTagCompound nbt = new NBTTagCompound();
@@ -200,9 +198,9 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	@Override
 	public void readEntityFromNBT(NBTTagCompound tagCompound) 
 	{
-		if(tagCompound.hasKey("Type", 8))
-			applyGristType(GristType.getTypeFromString(tagCompound.getString("Type")), false);
-		else applyGristType(SburbHandler.getUnderlingType(this), false);
+		if(tagCompound.hasKey("type", 8))
+			applyGristType(GristType.getTypeFromString(tagCompound.getString("type")), false);
+		else applyGristType(SburbHandler.getUnderlingType(this), true);
 		super.readEntityFromNBT(tagCompound);
 		
 		if(tagCompound.hasKey("homePos", 10))
@@ -238,7 +236,8 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 		
 		if(!(livingData instanceof UnderlingData))
 		{
-			applyGristType(SburbHandler.getUnderlingType(this), true);
+			if(this.type == null)
+				applyGristType(SburbHandler.getUnderlingType(this), true);
 			livingData = new UnderlingData(this.type);
 		} else
 		{

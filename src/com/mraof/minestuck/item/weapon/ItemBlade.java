@@ -54,7 +54,7 @@ public class ItemBlade extends ItemSword	//To allow enchantments such as sharpne
 	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase attacker)
 	{
 		itemStack.damageItem(1, attacker);
-		if (bladeType.equals(EnumBladeType.SORD) && Math.random() < .25)
+		if (bladeType.equals(EnumBladeType.SORD) && attacker.getRNG().nextFloat() < .25)
 		{
 			EntityItem sord = new EntityItem(attacker.worldObj, attacker.posX, attacker.posY, attacker.posZ, itemStack.copy());
 			sord.getEntityItem().stackSize = 1;

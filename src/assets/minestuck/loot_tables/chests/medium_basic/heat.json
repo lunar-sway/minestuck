@@ -1,6 +1,7 @@
 {
     "pools": [
         {
+            "name": "main",
             "rolls": 1,
             "entries": [
                 {
@@ -74,21 +75,6 @@
                             "count": {
                                 "min": 1,
                                 "max": 8
-                            }
-                        }
-                    ]
-                },
-                {
-                    "type": "item",
-                    "name": "minecraft:magma_cream",
-                    "weight": 5,
-                    "quality": 0,
-                    "functions": [
-                        {
-                            "function": "set_count",
-                            "count": {
-                                "min": 1,
-                                "max": 2
                             }
                         }
                     ]

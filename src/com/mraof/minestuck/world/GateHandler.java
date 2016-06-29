@@ -12,7 +12,7 @@ import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Location;
 import com.mraof.minestuck.util.Teleport;
-import com.mraof.minestuck.world.biome.BiomeGenMinestuck;
+import com.mraof.minestuck.world.biome.BiomeMinestuck;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -34,7 +34,7 @@ public class GateHandler
 	public static void teleport(int gateId, int dim, EntityPlayerMP player)
 	{
 		Location location = null;
-		player.timeUntilPortal = 10;	//Basically to avoid message spam when something goes wrong
+		player.timeUntilPortal = player.getPortalCooldown();	//Basically to avoid message spam when something goes wrong
 		
 		if(gateId == 1)
 		{
@@ -54,7 +54,7 @@ public class GateHandler
 					
 					BlockPos placement = pos.add(x, 0, z);
 					
-					if(player.worldObj.getBiomeGenForCoordsBody(placement) != BiomeGenMinestuck.mediumOcean)
+					if(player.worldObj.getBiomeForCoordsBody(placement) == BiomeMinestuck.mediumNormal)
 						location = new Location(player.worldObj.getTopSolidOrLiquidBlock(placement), dim);
 					
 				} while(location == null);	//TODO replace with a more friendly version without a chance of freezing the game
@@ -82,17 +82,17 @@ public class GateHandler
 					
 					if(gatePos.getY() == -1)
 					{
-						world.getChunkProvider().loadChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() - 8 >> 4);
-						world.getChunkProvider().loadChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() - 8 >> 4);
-						world.getChunkProvider().loadChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() + 8 >> 4);
-						world.getChunkProvider().loadChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() + 8 >> 4);
+						world.getChunkProvider().provideChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() - 8 >> 4);
+						world.getChunkProvider().provideChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() - 8 >> 4);
+						world.getChunkProvider().provideChunk(gatePos.getX() - 8 >> 4, gatePos.getZ() + 8 >> 4);
+						world.getChunkProvider().provideChunk(gatePos.getX() + 8 >> 4, gatePos.getZ() + 8 >> 4);
 						gatePos = getGatePos(-1, clientDim);
 						if(gatePos.getY() == -1) {Debug.errorf("Unexpected error: Gate didn't generate after loading chunks! Dim: %d, pos: %s", clientDim, gatePos); return;}
 					}
 					
 					location = new Location(gatePos, clientDim);
 				}
-				
+				else player.addChatMessage(new TextComponentTranslation("message.gateMissingLand"));
 			} else Debug.errorf("Unexpected error: Can't find connection for dimension %d!", dim);
 		} else if(gateId == -1)
 		{
@@ -106,7 +106,7 @@ public class GateHandler
 					int serverDim = serverConnection.getClientDimension();
 					location = new Location(getGatePos(2, serverDim), serverDim);
 					
-				} else Debug.debugf("Player %s tried to teleport through gate before their server player entered the game.", player.getName());
+				} else player.addChatMessage(new TextComponentTranslation("message.gateMissingLand"));
 				
 			} else Debug.errorf("Unexpected error: Can't find connection for dimension %d!", dim);
 		} else Debug.errorf("Unexpected error: Gate id %d is out of bounds!", gateId);
@@ -129,8 +129,7 @@ public class GateHandler
 			
 			if(location.dim != dim)
 				Teleport.teleportEntity(player, location.dim, null, location.pos.getX() + 0.5, location.pos.getY(), location.pos.getZ() + 0.5);
-			else player.playerNetServerHandler.setPlayerLocation(location.pos.getX() + 0.5, location.pos.getY(), location.pos.getZ() + 0.5, player.rotationYaw, player.rotationPitch);
-			player.timeUntilPortal = 60;
+			else player.connection.setPlayerLocation(location.pos.getX() + 0.5, location.pos.getY(), location.pos.getZ() + 0.5, player.rotationYaw, player.rotationPitch);
 		}
 	}
 	
@@ -154,7 +153,7 @@ public class GateHandler
 				
 				BlockPos pos = new BlockPos(spawn.getX() + x, -1, spawn.getZ() + z);
 				
-				if(/*!world.getChunkProvider().chunkExists(pos.getX() >> 4, pos.getZ() >> 4) &&*/ world.provider.getBiomeProvider().areBiomesViable(pos.getX(), pos.getZ(), Math.max(20, 50 - tries), Lists.newArrayList(BiomeGenMinestuck.mediumNormal)))
+				if(/*!world.getChunkProvider().chunkExists(pos.getX() >> 4, pos.getZ() >> 4) &&*/ world.provider.getBiomeProvider().areBiomesViable(pos.getX(), pos.getZ(), Math.max(20, 50 - tries), Lists.newArrayList(BiomeMinestuck.mediumNormal)))
 					gatePos = pos;
 				
 				tries++;

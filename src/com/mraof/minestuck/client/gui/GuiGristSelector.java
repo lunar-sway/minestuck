@@ -17,8 +17,8 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
 
 public class GuiGristSelector extends GuiScreen
 {
@@ -51,7 +51,7 @@ public class GuiGristSelector extends GuiScreen
 		this.mc.getTextureManager().bindTexture(guiGristcache);
 		this.drawTexturedModalRect(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
-		String cacheMessage = I18n.translateToLocal("gui.selectGrist");
+		String cacheMessage = I18n.format("gui.selectGrist");
 		mc.fontRendererObj.drawString(cacheMessage, (this.width / 2) - mc.fontRendererObj.getStringWidth(cacheMessage) / 2, yOffset + 12, 0x404040);
 		
 		GlStateManager.color(1,1,1);
@@ -87,7 +87,7 @@ public class GuiGristSelector extends GuiScreen
 		
 		if (tooltip != -1)
 			if(tooltip % 2 == 0)
-				drawHoveringText(Arrays.asList(I18n.translateToLocalFormatted("grist.format", GristType.values()[tooltip/2].getDisplayName())),
+				drawHoveringText(Arrays.asList(I18n.format("grist.format", GristType.values()[tooltip/2].getDisplayName())),
 						xcor, ycor, fontRendererObj);
 			else drawHoveringText(Arrays.asList(String.valueOf(clientGrist.getGrist(GristType.values()[tooltip/2]))), xcor, ycor, fontRendererObj);
 	}

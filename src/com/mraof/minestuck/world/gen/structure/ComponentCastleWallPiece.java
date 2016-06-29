@@ -105,7 +105,8 @@ public class ComponentCastleWallPiece extends ComponentCastlePiece
 		StructureBoundingBox structureboundingbox = new StructureBoundingBox(x + 0, y + 0, z + 0, x + 8 + 0, 0 + 8 + 0, z + 8 + 0);
 		return new ComponentCastleWallPiece(par6, startPiece, structureboundingbox, par5, cornerPiece);
 	}
-
+	
+	@Override
 	public boolean addComponentParts(World par1World, Random par2Random, StructureBoundingBox structureBoundingBox)
 	{
 		IBlockState chessTile = getChessBlockState(startPiece.isBlack ? 0 : 1);
