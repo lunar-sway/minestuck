@@ -70,22 +70,6 @@ public class TileEntityTransportalizer extends TileEntity
 		transportalizers.put(key, location);
 	}
 	
-	public static boolean teleportTo(Entity entity, Location location)
-	{
-		double x = location.pos.getX() + 0.5;
-		double y = location.pos.getY() + 0.6;
-		double z = location.pos.getZ() + 0.5;
-		if(entity instanceof EntityPlayerMP)
-		{
-			((EntityPlayerMP) entity).setPositionAndUpdate(x, y, z);
-		}
-		else
-		{
-			entity.setPosition(x, y, z);
-		}
-		return true;
-	}
-	
 	public void teleport(Entity entity)
 	{
 		Location location = transportalizers.get(this.destId);
@@ -111,10 +95,7 @@ public class TileEntityTransportalizer extends TileEntity
 				return;
 			}
 			
-			if(location.dim != entity.dimension)
-				Teleport.teleportEntity(entity, location.dim, null, destTransportalizer.pos.getX() + 0.5, destTransportalizer.pos.getY() + 0.6, destTransportalizer.pos.getZ() + 0.5);
-			else
-				teleportTo(entity, transportalizers.get(this.destId));
+			Teleport.teleportEntity(entity, location.dim, null, destTransportalizer.pos.getX() + 0.5, destTransportalizer.pos.getY() + 0.6, destTransportalizer.pos.getZ() + 0.5);
 			entity.timeUntilPortal = entity.getPortalCooldown();
 		}
 	}

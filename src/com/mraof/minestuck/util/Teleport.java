@@ -23,7 +23,7 @@ public class Teleport
 {
 	public static boolean teleportEntity(Entity entity, int destinationDimension, ITeleporter teleporter, BlockPos dest)
 	{
-		return teleportEntity(entity, destinationDimension, teleporter, dest.getX(), dest.getY(), dest.getZ());
+		return teleportEntity(entity, destinationDimension, teleporter, dest.getX() + 0.5, dest.getY(), dest.getZ() + 0.5);
 	}
 	
 	public static boolean teleportEntity(Entity entity, int destinationDimension, ITeleporter teleporter)
@@ -33,8 +33,14 @@ public class Teleport
 	
 	public static boolean teleportEntity(Entity entity, int destinationDimension, ITeleporter teleporter, double x, double y, double z)
 	{
+		if(destinationDimension == entity.dimension)
+			return localTeleport(entity, teleporter, x, y, z);
+		
+		if(entity.worldObj.isRemote)
+			throw new IllegalArgumentException("Shouldn't do teleporting with a clientside entity.");
 		if(!ForgeHooks.onTravelToDimension(entity, destinationDimension))
 			return false;
+		
 		MinecraftServer mcServer = entity.getServer();
 		int prevDimension = entity.dimension;
 		WorldServer worldFrom = mcServer.worldServerForDimension(prevDimension);
@@ -72,8 +78,8 @@ public class Teleport
 			player.interactionManager.setWorld(worldDest);
 			player.connection.sendPacket(new SPacketPlayerAbilities(player.capabilities));
 			
-			mcServer.getPlayerList().updateTimeAndWeatherForPlayer(player, worldDest);
-			mcServer.getPlayerList().syncPlayerInventory(player);
+			playerList.updateTimeAndWeatherForPlayer(player, worldDest);
+			playerList.syncPlayerInventory(player);
 			Iterator<?> iterator = player.getActivePotionEffects().iterator();
 			
 			while (iterator.hasNext())
@@ -86,7 +92,7 @@ public class Teleport
 			
 			return true;
 		}
-		else if (!entity.worldObj.isRemote && !entity.isDead)
+		else if (!entity.isDead)
 		{
 			Entity newEntity = EntityList.createEntityByName(EntityList.getEntityString(entity), worldDest);
 			if(newEntity == null)
@@ -120,6 +126,54 @@ public class Teleport
 			
 			return true;
 		}
+		return false;
+	}
+	
+	public static boolean localTeleport(Entity entity, ITeleporter teleporter, double x, double y, double z)
+	{
+		if(entity.worldObj.isRemote)
+			throw new IllegalArgumentException("Shouldn't do teleporting with a clientside entity.");
+		if(!ForgeHooks.onTravelToDimension(entity, entity.dimension))
+			return false;
+		
+		if(entity instanceof EntityPlayerMP)
+		{
+			WorldServer world = (WorldServer) entity.worldObj;
+			PlayerList playerList = entity.getServer().getPlayerList();
+			EntityPlayerMP player = (EntityPlayerMP) entity;
+			try
+			{
+				setPortalInvincibilityWithReflection(player);
+			} catch(Exception e)
+			{
+				Debug.warn("Failed to set portal invincibility through reflection. Portal problems might occur. Problem: "+e.getMessage());
+			}
+			
+//			SPacketRespawn respawnPacket = new SPacketRespawn(player.dimension, world.getDifficulty(), world.getWorldInfo().getTerrainType(), player.interactionManager.getGameType());
+//			player.connection.sendPacket(respawnPacket);
+//			playerList.updatePermissionLevel(player);
+			
+			player.setPosition(x, y, z);
+			if(teleporter != null)
+				teleporter.makeDestination(player, world, world);
+//			world.updateEntityWithOptionalForce(entity, false);
+			
+//			playerList.preparePlayer(player, world);
+			
+			player.connection.setPlayerLocation(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
+			player.connection.sendPacket(new SPacketPlayerAbilities(player.capabilities));
+			
+			
+			return true;
+		} else if(!entity.isDead)
+		{
+			entity.setPosition(x, y, z);
+			if(teleporter != null)
+				teleporter.makeDestination(entity, (WorldServer) entity.worldObj, (WorldServer) entity.worldObj);
+			
+			return true;
+		}
+		
 		return false;
 	}
 	
@@ -177,4 +231,10 @@ public class Teleport
 		field.setAccessible(false);
 		return b;
 	}
+	
+	public static interface ITeleporter
+	{
+		void makeDestination(Entity entity, WorldServer worldserver, WorldServer worldserver1);
+	}
+	
 }

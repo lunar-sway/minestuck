@@ -8,11 +8,10 @@ import net.minecraft.world.WorldServer;
 
 import com.mraof.minestuck.block.BlockChessTile;
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.util.ITeleporter;
 import com.mraof.minestuck.util.Location;
 import com.mraof.minestuck.util.Teleport;
 
-public class TileEntitySkaiaPortal extends TileEntity implements ITeleporter
+public class TileEntitySkaiaPortal extends TileEntity implements Teleport.ITeleporter
 {
 	public Location destination;
 	
