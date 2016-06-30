@@ -52,6 +52,7 @@ public class MinestuckModelManager
 		register(fearNoAnvil);
 		register(popamaticVrillyhoo);
 		register(scarletZillyhoo);
+		register(mwrthwl);
 		
 		register(sord);
 		register(cactusCutlass);
@@ -82,6 +83,7 @@ public class MinestuckModelManager
 		register(clawSickle);
 		
 		register(deuceClub);
+		register(nightClub);
 		
 		register(cane);
 		register(spearCane);

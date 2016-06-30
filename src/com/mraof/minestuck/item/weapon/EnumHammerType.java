@@ -9,6 +9,7 @@ public enum EnumHammerType
 	TELESCOPIC(2, 1024, 5.0F, 9.0D, -2.9D, 15, "telescopicSassacrusher"),
 	FEARNOANVIL(3, 2048, 7.0F, 10.0D, 12, "fearNoAnvil"),
 	SCARLET(3, 2000, 4.0F, 11.0D, 16, "scarletZillyhoo"),
+	MWRTHWL(3, 2000, 4.0F, 10.5D, 16, "mwrthwl"),
 	ZILLYHOO(4, 3000, 15.0F, 11.0D, 30, "zillyhooHammer"),
 	POPAMATIC(4, 3000, 15.0F, 0.0D, 30, "popamaticVrillyhoo");
 	
