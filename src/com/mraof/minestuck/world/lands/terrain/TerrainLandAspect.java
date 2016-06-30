@@ -89,7 +89,12 @@ public abstract class TerrainLandAspect implements ILandAspect<TerrainLandAspect
 	
 	public float getOceanChance()
 	{
-		return 1/2F;
+		return 1/3F;
+	}
+	
+	public float getRoughChance()
+	{
+		return 1/5F;//getOceanChance()/2 + 1/5F; For if generation by ocean
 	}
 	
 	@Override

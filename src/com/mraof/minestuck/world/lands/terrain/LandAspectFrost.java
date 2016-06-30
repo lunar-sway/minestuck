@@ -101,7 +101,7 @@ public class LandAspectFrost extends TerrainLandAspect
 	@Override
 	public float getOceanChance()
 	{
-		return 1/3F;
+		return 1/4F;
 	}
 	
 	@Override

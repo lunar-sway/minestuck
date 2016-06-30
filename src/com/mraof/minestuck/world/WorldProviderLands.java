@@ -149,7 +149,7 @@ public class WorldProviderLands extends WorldProvider
 		isHellWorld = false;
 		if(provider == null)
 			createChunkGenerator();
-		this.biomeProvider = new WorldChunkManagerLands(worldObj, provider.rainfall, provider.oceanChance);
+		this.biomeProvider = new WorldChunkManagerLands(worldObj, provider.rainfall, provider.oceanChance, provider.roughChance);
 		this.hasNoSky = false;
 	}
 	

@@ -135,7 +135,7 @@ public class LandAspectSandstone extends TerrainLandAspect
 	@Override
 	public float getOceanChance()
 	{
-		return 0.1F;
+		return 1/10F;
 	}
 	
 	@Override
@@ -160,7 +160,7 @@ public class LandAspectSandstone extends TerrainLandAspect
 	public ILandTerrainGen createTerrainGenerator(ChunkProviderLands chunkProvider, Random rand)
 	{
 		DefaultTerrainGen terrainGen = new DefaultTerrainGen(chunkProvider, rand);
-		terrainGen.normalVariation = 0.7F;
+		terrainGen.normalVariation = 0.6F;
 		terrainGen.oceanVariation = 0.3F;
 		return terrainGen;
 	}

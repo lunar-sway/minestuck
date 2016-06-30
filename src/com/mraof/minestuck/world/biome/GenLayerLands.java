@@ -1,7 +1,5 @@
 package com.mraof.minestuck.world.biome;
 
-import com.mraof.minestuck.util.Debug;
-
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.GenLayerVoronoiZoom;
@@ -11,16 +9,17 @@ import net.minecraft.world.gen.layer.IntCache;
 public class GenLayerLands extends GenLayer
 {
 	private int oceanChance;
+	private GenLayerLandRough roughGen;
 	
 	public GenLayerLands(long seed)
 	{
 		super(seed);
 	}
 	
-	public void setOceanChance(float oceanChance)
+	public void setChance(float oceanChance, float roughChance)
 	{
 		this.oceanChance = (int) (Integer.MAX_VALUE*oceanChance);
-		Debug.debugf("Ocean chance: %f. Computed to %d out of %d.", oceanChance, this.oceanChance, Integer.MAX_VALUE);
+		roughGen.setRoughChance(roughChance);
 	}
 	
 	@Override
@@ -32,16 +31,16 @@ public class GenLayerLands extends GenLayer
 			for(int y = 0; y < areaHeight; y++)
 			{
 				initChunkSeed(areaX + x, areaY + y);
-				biomeGen[x + y*areaWidth] = Biome.getIdForBiome(BiomeMinestuck.mediumNormal) + (nextInt(Integer.MAX_VALUE) >= oceanChance ? 0 : 1);
+				biomeGen[x + y*areaWidth] = Biome.getIdForBiome((nextInt(Integer.MAX_VALUE) >= oceanChance ? BiomeMinestuck.mediumNormal : BiomeMinestuck.mediumOcean));
 			}
 		return biomeGen;
 	}
 	
 	public static GenLayer[] generateBiomeGenLayers(long seed)
 	{
-		GenLayer layerLands = new GenLayerLands(413L);
+		GenLayerLands layerLands = new GenLayerLands(413L);
 		GenLayer layer = new GenLayerZoom(1000L, layerLands);
-		layer = new GenLayerLandRough(414L, layerLands);
+		layer = layerLands.roughGen = new GenLayerLandRough(414L, layerLands);
 		layer = new GenLayerZoom(1001L, layer);
 		layer = new GenLayerZoom(1002L, layer);
 		layer = new GenLayerZoom(1003L, layer);

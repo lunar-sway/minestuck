@@ -12,7 +12,7 @@ import net.minecraft.world.gen.NoiseGeneratorOctaves;
 public class DefaultTerrainGen extends LandTerrainGenBase
 {
 	
-	public float normalHeight    = 0.3F, oceanHeight    = -0.2F, roughHeight = 0.5F;
+	public float normalHeight    = 0.3F, oceanHeight    = -0.2F, roughHeight     = 0.4F;
 	public float normalVariation = 0.5F, oceanVariation =  0.2F, roughtVariation = 0.8F;
 	
 	protected NoiseGeneratorOctaves noiseGens[] = new NoiseGeneratorOctaves[2];

@@ -90,7 +90,7 @@ public class LandAspectRock extends TerrainLandAspect
 	@Override
 	public float getOceanChance()
 	{
-		return 1/3F;
+		return 1/4F;
 	}
 	
 	@Override
@@ -111,8 +111,9 @@ public class LandAspectRock extends TerrainLandAspect
 	public ILandTerrainGen createTerrainGenerator(ChunkProviderLands chunkProvider, Random rand)
 	{
 		DefaultTerrainGen terrainGen = new DefaultTerrainGen(chunkProvider, rand);
-		terrainGen.normalVariation = 0.8F;
-		terrainGen.oceanVariation = 0.5F;
+		terrainGen.normalVariation = 0.6F;
+		terrainGen.roughtVariation = 0.9F;
+		terrainGen.oceanVariation = 0.4F;
 		return terrainGen;
 	}
 	

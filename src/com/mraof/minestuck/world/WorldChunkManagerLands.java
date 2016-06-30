@@ -12,11 +12,11 @@ public class WorldChunkManagerLands extends BiomeProvider
 	private float rainfall;
 	private GenLayerLands layerLands;
 	
-	public WorldChunkManagerLands(World world, float rainfall, float oceanChance)
+	public WorldChunkManagerLands(World world, float rainfall, float oceanChance, float roughChance)
 	{
 		super(world.getWorldInfo());
 		this.rainfall = rainfall;
-		layerLands.setOceanChance(oceanChance);
+		layerLands.setChance(oceanChance, roughChance);
 	}
 	
 	/*@Override

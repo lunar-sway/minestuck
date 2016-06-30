@@ -30,8 +30,12 @@ public class LandAspectWind extends TitleLandAspect
 		{
 			chunkProvider.decorators.add(new RockDecorator());
 			if(chunkProvider.terrainGenerator instanceof DefaultTerrainGen)
-				((DefaultTerrainGen) chunkProvider.terrainGenerator).normalVariation *= 0.6F;
-			
+			{
+				DefaultTerrainGen terrainGen = (DefaultTerrainGen) chunkProvider.terrainGenerator;
+				terrainGen.normalVariation *= 0.6F;
+				terrainGen.roughtVariation *= 0.6F;
+				terrainGen.roughHeight = (terrainGen.roughHeight + terrainGen.normalHeight)/2;
+			}
 		}
 		
 		chunkProvider.mergeFogColor(new Vec3d(0.1, 0.2, 0.8), 0.3F);

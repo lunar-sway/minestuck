@@ -66,6 +66,7 @@ public class ChunkProviderLands implements IChunkGenerator
 	public int weatherType;	//-1:No weather &1: Force rain &2: If thunder &4: Force thunder
 	public float rainfall, temperature;
 	public float oceanChance;
+	public float roughChance;
 	protected Biome biomeLands;
 	
 	public boolean generatingStructure;
@@ -93,6 +94,7 @@ public class ChunkProviderLands implements IChunkGenerator
 		this.rainfall = aspect1.getRainfall();
 		this.temperature = aspect1.getTemperature();
 		this.oceanChance = aspect1.getOceanChance();
+		this.roughChance = aspect1.getRoughChance();
 		
 		if(!clientSide)
 		{
