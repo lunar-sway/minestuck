@@ -52,6 +52,7 @@ public class MinestuckItems
 	public static Item zillyhooHammer;
 	public static Item popamaticVrillyhoo;
 	public static Item scarletZillyhoo;
+	public static Item mwrthwl;
 	//blades
 	public static Item sord;
 	public static Item cactusCutlass;
@@ -77,10 +78,12 @@ public class MinestuckItems
 	//sickles
 	public static Item sickle;
 	public static Item homesSmellYaLater;
+	public static Item fudgeSickle;
 	public static Item regiSickle;
 	public static Item clawSickle;
 	//clubs
 	public static Item deuceClub;
+	public static Item nightClub;
 	//canes
 	public static Item cane;
 	public static Item spearCane;
@@ -131,6 +134,7 @@ public class MinestuckItems
 		zillyhooHammer = GameRegistry.register(new ItemHammer(EnumHammerType.ZILLYHOO).setRegistryName("zillyhoo_hammer"));
 		popamaticVrillyhoo = GameRegistry.register(new ItemHammer(EnumHammerType.POPAMATIC).setRegistryName("popamatic_vrillyhoo"));
 		scarletZillyhoo = GameRegistry.register(new ItemHammer(EnumHammerType.SCARLET).setRegistryName("scarlet_zillyhoo"));
+		mwrthwl = GameRegistry.register(new ItemHammer(EnumHammerType.MWRTHWL).setRegistryName("mwrthwl"));
 		//blades
 		sord = GameRegistry.register(new ItemBlade(EnumBladeType.SORD).setRegistryName("sord"));
 		cactusCutlass = GameRegistry.register(new ItemBlade(EnumBladeType.CACTUS).setRegistryName("cactaceae_cutlass"));
@@ -157,10 +161,12 @@ public class MinestuckItems
 		//sickles
 		sickle = GameRegistry.register(new ItemSickle(EnumSickleType.SICKLE).setRegistryName("sickle"));
 		homesSmellYaLater = GameRegistry.register(new ItemSickle(EnumSickleType.HOMES).setRegistryName("homes_smell_ya_later"));
+		fudgeSickle = GameRegistry.register(new ItemSickle(EnumSickleType.FUDGE).setRegistryName("fudgesickle"));
 		regiSickle = GameRegistry.register(new ItemSickle(EnumSickleType.REGISICKLE).setRegistryName("regisickle"));
 		clawSickle = GameRegistry.register(new ItemSickle(EnumSickleType.CLAW).setRegistryName("claw_sickle"));
 		//clubs
 		deuceClub = GameRegistry.register(new ItemClub(EnumClubType.DEUCE).setRegistryName("deuce_club"));
+		nightClub = GameRegistry.register(new ItemClub(EnumClubType.NIGHT).setRegistryName("nightclub"));
 		//canes
 		cane = GameRegistry.register(new ItemCane(EnumCaneType.CANE).setRegistryName("cane"));
 		spearCane = GameRegistry.register(new ItemCane(EnumCaneType.SPEAR).setRegistryName("spear_cane"));
