@@ -7,8 +7,23 @@
                 {
                     "type": "item",
                     "name": "minecraft:pumpkin",
-                    "weight": 1,
+                    "weight": 5,
                     "quality": 0
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:nightclub",
+                    "weight": 1,
+                    "quality": 1,
+                    "functions": [
+                        {
+                            "function": "set_damage",
+                            "damage": {
+                                "min": 0.75,
+                                "max": 1
+                            }
+                        }
+                    ]
                 }
             ]
         }

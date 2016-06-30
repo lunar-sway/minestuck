@@ -589,7 +589,7 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(regiSickle), false, new GristSet(new GristType[] {GristType.Amethyst, GristType.Tar, GristType.Gold}, new int[] {25, 57, 33}));
 		GristRegistry.addGristConversion(new ItemStack(sickle), false, new GristSet(new GristType[] {GristType.Build}, new int[] {8}));
 		GristRegistry.addGristConversion(new ItemStack(homesSmellYaLater), false, new GristSet(new GristType[] {GristType.Build, GristType.Amber, GristType.Amethyst}, new int[] {34, 19, 10}));
-		GristRegistry.addGristConversion(new ItemStack(fudgeSickle), false, new GristSet(new GristType[] {GristType.Iodine, GristType.Amber, GristType.Chalk}, new int[] {35, 23, 19}));
+		GristRegistry.addGristConversion(new ItemStack(fudgeSickle), false, new GristSet(new GristType[] {GristType.Iodine, GristType.Amber, GristType.Chalk}, new int[] {23, 15, 12}));
 		
 		GristRegistry.addGristConversion(new ItemStack(nightClub), false, new GristSet(new GristType[] {GristType.Tar, GristType.Shale, GristType.Cobalt}, new int[] {28, 19, 6}));
 		
