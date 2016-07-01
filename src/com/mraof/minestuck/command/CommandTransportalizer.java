@@ -79,8 +79,7 @@ public class CommandTransportalizer extends CommandBase
 		if(block0.getMaterial().blocksMovement() || block1.getMaterial().blocksMovement())
 			throw new CommandException("message.transportalizer.destinationBlocked");
 		
-		boolean success = location.dim != player.dimension ? Teleport.teleportEntity(player, location.dim, null, te.getPos().getX() + 0.5, te.getPos().getY() + 0.6, te.getPos().getZ() + 0.5)
-				: TileEntityTransportalizer.teleportTo(player, location);
+		boolean success = Teleport.teleportEntity(player, location.dim, null, te.getPos().getX() + 0.5, te.getPos().getY() + 0.6, te.getPos().getZ() + 0.5);
 		
 		if(success)
 		{

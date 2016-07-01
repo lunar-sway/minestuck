@@ -204,7 +204,10 @@ public class Echeladder
 		
 		EntityPlayer player = identifier.getPlayer();
 		if(player != null)
+		{
 			MinestuckPlayerTracker.updateEcheladder(player, true);
+			updateEcheladderBonuses(player);
+		}
 	}
 	
 }
