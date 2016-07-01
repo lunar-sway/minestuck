@@ -235,7 +235,7 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(Blocks.RED_MUSHROOM), false, new GristSet(new GristType[] {GristType.Iodine, GristType.Ruby}, new int[] {3, 2}));
 		GristRegistry.addGristConversion(new ItemStack(Blocks.CACTUS), false, new GristSet(new GristType[] {GristType.Amber, GristType.Iodine}, new int[] {4, 1}));
 		GristRegistry.addGristConversion(new ItemStack(Blocks.TALLGRASS), false, new GristSet(new GristType[] {GristType.Build}, new int[] {1}));
-		GristRegistry.addGristConversion(new ItemStack(Blocks.VINE), false, new GristSet(new GristType[] {GristType.Build, GristType.Amber}, new int[] {8, 1}));
+		GristRegistry.addGristConversion(new ItemStack(Blocks.VINE), false, new GristSet(new GristType[] {GristType.Build, GristType.Amber}, new int[] {2, 1}));
 		GristRegistry.addGristConversion(new ItemStack(Blocks.WATERLILY), false, new GristSet(new GristType[] {GristType.Amber, GristType.Iodine}, new int[] {4, 1}));
 		GristRegistry.addGristConversion(new ItemStack(Blocks.DOUBLE_PLANT, 1, 0), true, new GristSet(new GristType[] {GristType.Amber, GristType.Iodine}, new int[] {7, 2}));
 		GristRegistry.addGristConversion(new ItemStack(Blocks.DOUBLE_PLANT, 1, 1), true, new GristSet(new GristType[] {GristType.Amethyst, GristType.Garnet, GristType.Iodine}, new int[] {2, 5, 2}));
