@@ -253,6 +253,8 @@ public class ServerEditHandler
 		
 		updateInventory(player, c.givenItems(), c.enteredGame(), c.getClientIdentifier());
 		updatePosition(player, range, c.centerX, c.centerZ);
+		
+		player.timeUntilPortal = player.getPortalCooldown();
 	}
 	
 	@SubscribeEvent

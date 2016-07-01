@@ -110,8 +110,9 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public void playerChangedDimension(PlayerChangedDimensionEvent event)
 	{
-		if(!event.player.worldObj.isRemote)
-			SburbHandler.stopEntry(event.player);
+		SburbHandler.stopEntry(event.player);
+		
+		MinestuckPlayerData.getData(event.player).echeladder.resendAttributes(event.player);
 	}
 	
 	@SubscribeEvent(priority=EventPriority.LOW, receiveCanceled=false)

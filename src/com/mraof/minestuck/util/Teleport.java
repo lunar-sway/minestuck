@@ -161,7 +161,7 @@ public class Teleport
 //			playerList.preparePlayer(player, world);
 			
 			player.connection.setPlayerLocation(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
-			player.connection.sendPacket(new SPacketPlayerAbilities(player.capabilities));
+//			player.connection.sendPacket(new SPacketPlayerAbilities(player.capabilities));
 			
 			
 			return true;
