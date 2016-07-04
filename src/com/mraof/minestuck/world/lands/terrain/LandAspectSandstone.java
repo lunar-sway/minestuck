@@ -13,6 +13,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.gen.feature.WorldGenDeadBush;
 
+import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.BlockBlobDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
@@ -105,8 +106,9 @@ public class LandAspectSandstone extends TerrainLandAspect
 			sandstone = Blocks.RED_SANDSTONE.getDefaultState();
 		}
 		list.add(new SurfaceDecoratorVein(sand, 10, 32));
-		list.add(new BlockBlobDecorator(sandstone, 0));
-		list.add(new WorldGenDecorator(new WorldGenDeadBush(), 15, 0.4F));	//Will be especially uncommon because it only spawns on sand
+		list.add(new BlockBlobDecorator(sandstone, 0, 3, BiomeMinestuck.mediumNormal));
+		list.add(new BlockBlobDecorator(sandstone, 0, 5, BiomeMinestuck.mediumRough));
+		list.add(new WorldGenDecorator(new WorldGenDeadBush(), 15, 0.4F));
 		
 		list.add(new UndergroundDecoratorVein(upperBlock, 8, 28, 256));
 		list.add(new UndergroundDecoratorVein(Blocks.IRON_ORE.getDefaultState(), 24, 9, 64));

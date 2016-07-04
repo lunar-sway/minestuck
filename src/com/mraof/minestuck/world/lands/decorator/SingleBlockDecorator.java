@@ -8,22 +8,17 @@ import net.minecraft.world.World;
 
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
-public abstract class SingleBlockDecorator implements ILandDecorator
+public abstract class SingleBlockDecorator extends BiomeSpecificDecorator
 {
 	
+	
 	@Override
-	public BlockPos generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
+	public BlockPos generate(World world, Random random, BlockPos pos, ChunkProviderLands provider)
 	{
-		int blocks = getBlocksForChunk(chunkX, chunkZ, random);
-		for(int i = 0; i < blocks; i++)
-		{
-			int x = random.nextInt(16) + (chunkX << 4) + 8;
-			int z = random.nextInt(16) + (chunkZ << 4) + 8;
-			BlockPos pos = world.getHeight(new BlockPos(x, 0, z));
-			
-			if(canPlace(pos, world))
-				world.setBlockState(pos, pickBlock(random), 2);
-		}
+		pos = world.getHeight(pos);
+		
+		if(canPlace(pos, world))
+			world.setBlockState(pos, pickBlock(random), 2);
 		
 		return null;
 	}
@@ -35,8 +30,6 @@ public abstract class SingleBlockDecorator implements ILandDecorator
 	}
 	
 	public abstract IBlockState pickBlock(Random random);
-	
-	public abstract int getBlocksForChunk(int chunkX, int chunkZ, Random random);
 	
 	public abstract boolean canPlace(BlockPos pos, World world);
 }

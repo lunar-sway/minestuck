@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.lands.terrain;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.IceDecorator;
 import com.mraof.minestuck.world.lands.decorator.LayeredBlockDecorator;
@@ -63,9 +64,10 @@ public class LandAspectFrost extends TerrainLandAspect
 		list.add(new LayeredBlockDecorator(Blocks.SNOW_LAYER, true));
 //		list.add(new SpruceTreeDecorator());
 		
-		list.add(new SurfaceDecoratorVein(Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.COARSE_DIRT), 10, 32));
-		list.add(new SurfaceDecoratorVein(Blocks.ICE.getDefaultState(), 5, 8));
-		list.add(new SurfaceDecoratorVein(Blocks.SNOW.getDefaultState(), 10, 16));
+		list.add(new SurfaceDecoratorVein(Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.COARSE_DIRT), 10, 32, BiomeMinestuck.mediumRough, BiomeMinestuck.mediumOcean));
+		list.add(new SurfaceDecoratorVein(Blocks.ICE.getDefaultState(), 5, 8, BiomeMinestuck.mediumRough));
+		list.add(new SurfaceDecoratorVein(Blocks.SNOW.getDefaultState(), 8, 16, BiomeMinestuck.mediumRough));
+		list.add(new SurfaceDecoratorVein(Blocks.SNOW.getDefaultState(), 15, 16, BiomeMinestuck.mediumNormal));
 		
 		list.add(new UndergroundDecoratorVein(Blocks.PACKED_ICE.getDefaultState(), 2, 8, 64));	//Have 64 be the highest value because stone is used as a building material for structures right now
 		list.add(new UndergroundDecoratorVein(Blocks.SNOW.getDefaultState(), 3, 16, 64));

@@ -8,6 +8,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.Vec3d;
 
+import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.decorator.TallGrassDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.BasicTreeDecorator;
@@ -58,8 +59,8 @@ public class LandAspectForest extends TerrainLandAspect
 	public List<ILandDecorator> getDecorators()
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
-		list.add(new BasicTreeDecorator());
-		list.add(new TallGrassDecorator(0.5F));
+		list.add(new BasicTreeDecorator(BiomeMinestuck.mediumNormal, BiomeMinestuck.mediumRough));
+		list.add(new TallGrassDecorator(0.3F, BiomeMinestuck.mediumNormal, BiomeMinestuck.mediumRough));
 		
 		list.add(new UndergroundDecoratorVein(Blocks.DIRT.getDefaultState(), 3, 33, 64));	//Have 64 be the highest value because stone is used as a building material for structures right now
 		list.add(new UndergroundDecoratorVein(Blocks.GRAVEL.getDefaultState(), 2, 28, 64));

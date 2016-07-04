@@ -47,7 +47,7 @@ public class LandAspectCake extends TitleLandAspect
 			return Blocks.CAKE.getDefaultState().withProperty(BlockCake.BITES, bites);
 		}
 		@Override
-		public int getBlocksForChunk(int chunkX, int chunkZ, Random random)
+		public int getCount(Random random)
 		{
 			if(random.nextDouble() < 0.2)
 			{

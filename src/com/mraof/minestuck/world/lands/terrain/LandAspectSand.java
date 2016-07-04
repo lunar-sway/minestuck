@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
@@ -102,8 +103,9 @@ public class LandAspectSand extends TerrainLandAspect
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
 		if(name.equals("sand_red"))
 			list.add(new SurfaceDecoratorVein(Blocks.SAND.getDefaultState(), 10, 32));
-		list.add(new WorldGenDecorator(new WorldGenCactus(), 15, 0.4F));
-		list.add(new WorldGenDecorator(new WorldGenDeadBush(), 1, 0.4F));
+		list.add(new WorldGenDecorator(new WorldGenCactus(), 15, 0.4F, BiomeMinestuck.mediumNormal));
+		list.add(new WorldGenDecorator(new WorldGenCactus(), 5, 0.4F, BiomeMinestuck.mediumRough));
+		list.add(new WorldGenDecorator(new WorldGenDeadBush(), 1, 0.4F, BiomeMinestuck.mediumNormal, BiomeMinestuck.mediumRough));
 		
 		list.add(new UndergroundDecoratorVein(upperBlock, 8, 28, 256));
 		list.add(new UndergroundDecoratorVein((name.equals("sand_red")?MinestuckBlocks.ironOreSandstoneRed:MinestuckBlocks.ironOreSandstone).getDefaultState(), 24, 9, 64));

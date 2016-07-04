@@ -4,32 +4,30 @@ import java.util.Random;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
-public abstract class TreeDecoratorBase implements ILandDecorator
+public abstract class TreeDecoratorBase extends BiomeSpecificDecorator
 {
 	
-	@Override
-	public BlockPos generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
+	public TreeDecoratorBase(Biome... biomes)
 	{
-		int treeCount = getTreesPerChunk(random);
-		for (int i = 0; i < treeCount; i++)
-		{
-			int x = random.nextInt(16) + 8;
-			int z = random.nextInt(16) + 8;
-			BlockPos pos = world.getHeight(new BlockPos((chunkX << 4) + x, 0, (chunkZ << 4) + z));
-			
-			WorldGenAbstractTree gen = getTreeToGenerate(world, pos, random);
-			if (gen.generate(world, random, pos))
-				gen.generateSaplings(world, random, pos);
-		}
+		super(biomes);
+	}
+	
+	@Override
+	public BlockPos generate(World world, Random random, BlockPos pos, ChunkProviderLands provider)
+	{
+		pos = world.getHeight(pos);
+		
+		WorldGenAbstractTree gen = getTreeToGenerate(world, pos, random);
+		if (gen.generate(world, random, pos))
+			gen.generateSaplings(world, random, pos);
 		
 		return null;
 	}
-	
-	protected abstract int getTreesPerChunk(Random rand);
 	
 	protected abstract WorldGenAbstractTree getTreeToGenerate(World world, BlockPos pos, Random rand);
 	

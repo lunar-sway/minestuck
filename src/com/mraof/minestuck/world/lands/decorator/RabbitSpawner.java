@@ -5,31 +5,42 @@ import java.util.Random;
 import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 
-import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
-public class RabbitSpawner implements ILandDecorator
+public class RabbitSpawner extends BiomeSpecificDecorator
 {
 	
-	@Override
-	public BlockPos generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
+	public RabbitSpawner(Biome... biomes)
 	{
+		super(biomes);
+	}
+	
+	@Override
+	public BlockPos generate(World world, Random random, BlockPos pos, ChunkProviderLands provider)
+	{
+		pos = world.getTopSolidOrLiquidBlock(pos);
+		
+		if(!world.getBlockState(pos).getMaterial().isLiquid() && !provider.isPositionInSpawn(pos.getX(), pos.getZ()))
+		{
+			EntityRabbit entity = new EntityRabbit(world);
+			entity.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+			entity.onInitialSpawn(null, null);
+			world.spawnEntityInWorld(entity);
+		}
+		
+		return null;
+	}
+	
+	@Override
+	public int getCount(Random random)
+	{
+		int count = 0;
 		for(int i = 0; i < 8; i++)
 			if(random.nextDouble() < 0.2)
-			{
-				int x = random.nextInt(16) + (chunkX << 4) + 8;
-				int z = random.nextInt(16) + (chunkZ << 4) + 8;
-				BlockPos pos = world.getTopSolidOrLiquidBlock(new BlockPos(x, 0, z));
-				if(world.getBlockState(pos).getMaterial().isLiquid() || provider.isPositionInSpawn(x, z) || world.getBiomeForCoordsBody(pos) == BiomeMinestuck.mediumOcean)
-					continue;
-				
-				EntityRabbit entity = new EntityRabbit(world);
-				entity.setPosition(x + 0.5, pos.getY(), z + 0.5);
-				entity.onInitialSpawn(null, null);
-				world.spawnEntityInWorld(entity);
-			}
-		return null;
+				count++;
+		return count;
 	}
 	
 	@Override

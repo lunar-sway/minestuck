@@ -13,38 +13,38 @@ import net.minecraft.world.World;
 import com.mraof.minestuck.util.CoordPair;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
-public class RockDecorator implements ILandDecorator
+public class RockDecorator extends BiomeSpecificDecorator
 {
 	
 	@Override
-	public BlockPos generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
+	public int getCount(Random random)
 	{
-		if(random.nextFloat() < 0.02)
+		return random.nextFloat() < 0.02 ? 1 : 0;
+	}
+	
+	@Override
+	public BlockPos generate(World world, Random random, BlockPos pos, ChunkProviderLands provider)
+	{
+		pos = world.getTopSolidOrLiquidBlock(pos);
+		int height = random.nextInt(7) + 10;
+		
+		if(world.getBlockState(pos.up(height*2/3)).getMaterial().isLiquid())	//At least 1/3rd of the height should be above the liquid surface
+			return null;
+		float plateauSize = 0.2F + random.nextFloat()*(height/25F);
+		
+		BlockPos nodePos = generateRock(pos.up(height), height, plateauSize, world, random, provider);
+		
+/*		float rockRarity = plateauSize + height/15F + random.nextFloat()*0.5F - 0.5F;
+		
+		if(rockRarity > 1F)
 		{
-			int x = (chunkX << 4) + 8 + random.nextInt(16);
-			int z = (chunkZ << 4) + 8 + random.nextInt(16);
-			BlockPos pos = world.getTopSolidOrLiquidBlock(new BlockPos(x, 0, z));
-			int height = random.nextInt(7) + 10;
-			
-			if(world.getBlockState(pos.up(height*2/3)).getMaterial().isLiquid())	//At least 1/3rd of the height should be above the liquid surface
-				return null;
-			float plateauSize = 0.2F + random.nextFloat()*(height/25F);
-			
-			BlockPos nodePos = generateRock(pos.up(height), height, plateauSize, world, random, provider);
-			
-/*			float rockRarity = plateauSize + height/15F + random.nextFloat()*0.5F - 0.5F;
-			
-			if(rockRarity > 1F)
-			{
-				generateSubRock(pos, height, plateauSize, world, random, provider);
-				rockRarity -= 1F;
-			}
-			if(random.nextFloat() < rockRarity)
-				generateSubRock(pos, height, plateauSize, world, random, provider);*/
-			
-			return nodePos;
+			generateSubRock(pos, height, plateauSize, world, random, provider);
+			rockRarity -= 1F;
 		}
-		return null;
+		if(random.nextFloat() < rockRarity)
+			generateSubRock(pos, height, plateauSize, world, random, provider);*/
+		
+		return nodePos;
 	}
 	
 	private void generateSubRock(BlockPos pos, int heightOld, float plateauOld, World world, Random rand, ChunkProviderLands provider)

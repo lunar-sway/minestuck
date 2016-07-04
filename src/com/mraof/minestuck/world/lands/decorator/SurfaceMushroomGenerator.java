@@ -4,19 +4,27 @@ import java.util.Random;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
-public class SurfaceMushroomGenerator implements ILandDecorator
+public class SurfaceMushroomGenerator extends BiomeSpecificDecorator
 {
+	private int tries;
+	private int count;
+	
+	public SurfaceMushroomGenerator(int tries, int count, Biome... biomes)
+	{
+		super(biomes);
+		this.tries = tries;
+		this.count = count;
+	}
 	
 	@Override
-	public BlockPos generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
+	public BlockPos generate(World world, Random random, BlockPos pos, ChunkProviderLands provider)
 	{
-		BlockPos pos = world.getTopSolidOrLiquidBlock(new BlockPos((chunkX << 4) + 8 + random.nextInt(16), 0, (chunkZ << 4) + 8 +random.nextInt(16)));
-		for (int i = 0; i < 64; ++i)
+		for (int i = 0; i < tries; ++i)
 		{
 			BlockPos pos1 = pos.add(random.nextInt(8) - random.nextInt(8), random.nextInt(4) - random.nextInt(4), random.nextInt(8) - random.nextInt(8));
 			if (world.isAirBlock(pos1) && MinestuckBlocks.glowingMushroom.canSpread(world, pos1, MinestuckBlocks.glowingMushroom.getDefaultState()))
@@ -24,6 +32,12 @@ public class SurfaceMushroomGenerator implements ILandDecorator
 		}
 		
 		return null;
+	}
+	
+	@Override
+	public int getCount(Random random)
+	{
+		return count;
 	}
 	
 	@Override

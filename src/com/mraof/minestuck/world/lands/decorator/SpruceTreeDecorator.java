@@ -24,9 +24,9 @@ public class SpruceTreeDecorator extends TreeDecoratorBase	//TODO: F1X TH1S
 	};
 	
 	@Override
-	protected int getTreesPerChunk(Random rand)
+	public int getCount(Random random)
 	{
-		return Math.max(0, rand.nextInt(10) - 7);
+		return Math.max(0, random.nextInt(10) - 7);
 	}
 
 	@Override

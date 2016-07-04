@@ -1,3 +1,4 @@
+
 package com.mraof.minestuck.world.lands.decorator;
 
 import java.util.Random;
@@ -5,12 +6,13 @@ import java.util.Random;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 
 import com.mraof.minestuck.world.gen.OreHandler;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
-public class SurfaceDecoratorVein implements ILandDecorator
+public class SurfaceDecoratorVein extends BiomeSpecificDecorator
 {
 	
 	public int amount;
@@ -18,13 +20,14 @@ public class SurfaceDecoratorVein implements ILandDecorator
 	public int size;
 	public float priority;
 	
-	public SurfaceDecoratorVein(IBlockState block, int amount, int size)
+	public SurfaceDecoratorVein(IBlockState block, int amount, int size, Biome... biomes)
 	{
-		this(block, amount, size, 0.3F);
+		this(block, amount, size, 0.3F, biomes);
 	}
 	
-	public SurfaceDecoratorVein(IBlockState block, int amount, int size, float priority)
+	public SurfaceDecoratorVein(IBlockState block, int amount, int size, float priority, Biome... biomes)
 	{
+		super(biomes);
 		this.amount = amount;
 		this.block = block;
 		this.size = size;
@@ -32,19 +35,16 @@ public class SurfaceDecoratorVein implements ILandDecorator
 	}
 	
 	@Override
-	public BlockPos generate(World world, Random random, int chunkX, int chunkZ, ChunkProviderLands provider)
+	public BlockPos generate(World world, Random random, BlockPos pos, ChunkProviderLands provider)
 	{
-		int minY = 0;
-		int maxY = 255;
-		int diffBtwnMinMaxY = maxY - minY;
-		for(int x = 0; x < amount; x++)
-		{
-			int posX = chunkX * 16 + random.nextInt(16);
-			int posY = minY + random.nextInt(diffBtwnMinMaxY);
-			int posZ = chunkZ * 16 + random.nextInt(16);
-			(new WorldGenMinable(block, size, new OreHandler.BlockStatePredicate(provider.surfaceBlock, provider.upperBlock))).generate(world, random, new BlockPos(posX, posY, posZ));
-		}
+		(new WorldGenMinable(block, size, new OreHandler.BlockStatePredicate(provider.surfaceBlock, provider.upperBlock))).generate(world, random, pos.add(-8, 0, -8));
 		return null;
+	}
+	
+	@Override
+	public int getCount(Random random)
+	{
+		return amount;
 	}
 	
 	@Override

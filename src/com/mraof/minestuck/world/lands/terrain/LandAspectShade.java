@@ -10,6 +10,7 @@ import net.minecraft.util.math.Vec3d;
 
 import com.mraof.minestuck.block.BlockColoredDirt;
 import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceMushroomGenerator;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
@@ -64,7 +65,8 @@ public class LandAspectShade extends TerrainLandAspect
 	public List<ILandDecorator> getDecorators()
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
-		list.add(new SurfaceMushroomGenerator());
+		list.add(new SurfaceMushroomGenerator(10, 64, BiomeMinestuck.mediumNormal));
+		list.add(new SurfaceMushroomGenerator(5, 32, BiomeMinestuck.mediumRough));
 		
 		list.add(new UndergroundDecoratorVein(Blocks.GRAVEL.getDefaultState(), 8, 33, 256));
 		list.add(new UndergroundDecoratorVein(Blocks.IRON_ORE.getDefaultState(), 24, 9, 64));

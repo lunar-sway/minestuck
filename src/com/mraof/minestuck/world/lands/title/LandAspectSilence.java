@@ -56,7 +56,7 @@ public class LandAspectSilence extends TitleLandAspect
 			return Blocks.PUMPKIN.getDefaultState().withProperty(BlockPumpkin.FACING, EnumFacing.Plane.HORIZONTAL.random(random));
 		}
 		@Override
-		public int getBlocksForChunk(int chunkX, int chunkZ, Random random)
+		public int getCount(Random random)
 		{
 			return random.nextFloat() < 0.01 ? 1 : 0;
 		}

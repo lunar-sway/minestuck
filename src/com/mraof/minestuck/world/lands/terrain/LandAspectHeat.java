@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.decorator.FireFieldDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
@@ -56,9 +57,11 @@ public class LandAspectHeat extends TerrainLandAspect
 	public List<ILandDecorator> getDecorators()
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
-		list.add(new FireFieldDecorator());
-		list.add(new SurfaceDecoratorVein(Blocks.SOUL_SAND.getDefaultState(), 10, 32));
-		list.add(new SurfaceDecoratorVein(Blocks.GLOWSTONE.getDefaultState(), 5, 8));
+		list.add(new FireFieldDecorator(7, BiomeMinestuck.mediumNormal));
+		list.add(new FireFieldDecorator(10, BiomeMinestuck.mediumRough));
+		list.add(new SurfaceDecoratorVein(Blocks.SOUL_SAND.getDefaultState(), 15, 32, BiomeMinestuck.mediumRough));
+		list.add(new SurfaceDecoratorVein(Blocks.SOUL_SAND.getDefaultState(), 8, 32, BiomeMinestuck.mediumNormal));
+		list.add(new SurfaceDecoratorVein(Blocks.GLOWSTONE.getDefaultState(), 5, 8, BiomeMinestuck.mediumNormal));
 		
 		list.add(new UndergroundDecoratorVein(Blocks.GRAVEL.getDefaultState(), 8, 33, 256));
 		list.add(new UndergroundDecoratorVein(MinestuckBlocks.coalOreNetherrack.getDefaultState(), 26, 17, 128));
@@ -71,7 +74,7 @@ public class LandAspectHeat extends TerrainLandAspect
 	{
 		return 0;
 	}
-
+	
 	@Override
 	public Vec3d getFogColor() 
 	{

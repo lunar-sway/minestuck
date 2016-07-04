@@ -10,6 +10,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.Vec3d;
 
+import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.decorator.BlockBlobDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
@@ -65,7 +66,8 @@ public class LandAspectRock extends TerrainLandAspect
 		list.add(new UndergroundDecoratorVein(Blocks.GRAVEL.getDefaultState(), 10, 33, 256));
 		list.add(new UndergroundDecoratorVein(Blocks.MONSTER_EGG.getDefaultState().withProperty(BlockSilverfish.VARIANT, BlockSilverfish.EnumType.STONE), 7, 9, 64));
 		
-		list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 0));
+		list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 0, 3, BiomeMinestuck.mediumNormal));
+		list.add(new BlockBlobDecorator(Blocks.COBBLESTONE.getDefaultState(), 1, 4, BiomeMinestuck.mediumRough));
 		return list;
 	}
 	
