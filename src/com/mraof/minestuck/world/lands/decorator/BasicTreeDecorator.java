@@ -13,29 +13,31 @@ import net.minecraft.world.gen.feature.WorldGenTrees;
 public class BasicTreeDecorator extends TreeDecoratorBase
 {
 	WorldGenTrees[] treeTypes;
+	protected int treeCount;
 	
-	public BasicTreeDecorator(IBlockState[] trees, IBlockState[] leaves, Biome... biomes)
+	public BasicTreeDecorator(IBlockState[] trees, IBlockState[] leaves, int treeCount, Biome... biomes)
 	{
 		super(biomes);
+		this.treeCount = treeCount;
 		this.treeTypes = new WorldGenTrees[trees.length];
 		for(int i = 0; i < trees.length; i++)
 			treeTypes[i] = new WorldGenTrees(false, 5, trees[i], leaves[i], false);
 	}
 	
-	public BasicTreeDecorator(IBlockState treeType, IBlockState leafType, Biome... biomes)
+	public BasicTreeDecorator(IBlockState treeType, IBlockState leafType, int treeCount, Biome... biomes)
 	{
-		this(new IBlockState[] {treeType}, new IBlockState[] {leafType}, biomes);
+		this(new IBlockState[] {treeType}, new IBlockState[] {leafType}, treeCount, biomes);
 	}
 	
-	public BasicTreeDecorator(Biome... biomes)
+	public BasicTreeDecorator(int treeCount, Biome... biomes)
 	{
-		this(Blocks.LOG.getDefaultState(), Blocks.LEAVES.getDefaultState(), biomes);
+		this(Blocks.LOG.getDefaultState(), Blocks.LEAVES.getDefaultState(), treeCount, biomes);
 	}
 	
 	@Override
 	public int getCount(Random random)
 	{
-		return random.nextInt(5) + 5;
+		return random.nextInt(treeCount) + treeCount;
 	}
 	
 	@Override

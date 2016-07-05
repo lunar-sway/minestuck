@@ -59,8 +59,10 @@ public class LandAspectForest extends TerrainLandAspect
 	public List<ILandDecorator> getDecorators()
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
-		list.add(new BasicTreeDecorator(BiomeMinestuck.mediumNormal, BiomeMinestuck.mediumRough));
-		list.add(new TallGrassDecorator(0.3F, BiomeMinestuck.mediumNormal, BiomeMinestuck.mediumRough));
+		list.add(new BasicTreeDecorator(5, BiomeMinestuck.mediumNormal));
+		list.add(new BasicTreeDecorator(8, BiomeMinestuck.mediumRough));
+		list.add(new TallGrassDecorator(0.3F, BiomeMinestuck.mediumNormal));
+		list.add(new TallGrassDecorator(0.5F, 0.2F, BiomeMinestuck.mediumRough));
 		
 		list.add(new UndergroundDecoratorVein(Blocks.DIRT.getDefaultState(), 3, 33, 64));	//Have 64 be the highest value because stone is used as a building material for structures right now
 		list.add(new UndergroundDecoratorVein(Blocks.GRAVEL.getDefaultState(), 2, 28, 64));

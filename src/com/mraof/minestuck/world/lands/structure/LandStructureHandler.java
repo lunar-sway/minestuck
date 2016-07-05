@@ -14,6 +14,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
@@ -68,7 +69,11 @@ public class LandStructureHandler extends MapGenStructure
 		z += random.nextInt(this.MAX_STRUCTURE_DISTANCE - this.MIN_STRUCTURE_DISTANCE);
 		
 		if (chunkX == x && chunkZ == z)
-			return !chunkProvider.isBBInSpawn(new StructureBoundingBox(chunkX*16 - 16, chunkZ*16 - 16, chunkX*16 + 32, chunkZ*16 + 32));	//This chunk and the chunks around it.
+		{
+			Biome biome = this.worldObj.getBiomeProvider().getBiomeGenerator(new BlockPos(new BlockPos(chunkX*16 + 8, 0, chunkZ*16 + 8)));
+			return !chunkProvider.isBBInSpawn(new StructureBoundingBox(chunkX*16 - 16, chunkZ*16 - 16, chunkX*16 + 32, chunkZ*16 + 32))	//This chunk and the chunks around it.
+					&& biome == BiomeMinestuck.mediumNormal;
+		}
 		
 		return false;
 	}
