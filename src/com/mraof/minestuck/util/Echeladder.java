@@ -1,5 +1,6 @@
 package com.mraof.minestuck.util;
 
+import java.util.Set;
 import java.util.UUID;
 
 import com.mraof.minestuck.MinestuckConfig;
@@ -13,6 +14,7 @@ import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeMap;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
@@ -145,6 +147,13 @@ public class Echeladder
 		if(attribute.hasModifier(modifier))
 			attribute.removeModifier(attribute.getModifier(modifier.getID()));
 		attribute.applyModifier(modifier);
+	}
+	
+	public void resendAttributes(EntityPlayer player)
+	{
+		Set<IAttributeInstance> attributesToSend = ((AttributeMap) player.getAttributeMap()).getAttributeInstanceSet();
+		
+		attributesToSend.add(player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH));
 	}
 	
 	protected void saveEcheladder(NBTTagCompound nbt)
