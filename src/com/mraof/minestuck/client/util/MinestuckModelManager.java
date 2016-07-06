@@ -84,6 +84,9 @@ public class MinestuckModelManager
 		
 		register(deuceClub);
 		register(nightClub);
+		register(pogoClub);
+		register(metalBat);
+		register(spikedClub);
 		
 		register(cane);
 		register(spearCane);
