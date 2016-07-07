@@ -3,6 +3,7 @@ package com.mraof.minestuck.tileentity;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
+import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.GateHandler;
 
 import net.minecraft.block.Block;
@@ -30,7 +31,7 @@ public class TileEntityGate extends TileEntity
 		if(block == MinestuckBlocks.returnNode)
 		{
 			BlockPos pos = world.provider.getRandomizedSpawnPoint();
-			player.setPositionAndUpdate(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+			Teleport.localTeleport(player, null, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 			player.timeUntilPortal = player.getPortalCooldown();
 			player.motionX = 0;
 			player.motionY = 0;
