@@ -245,6 +245,9 @@ item.regiSickle.name=Regisickle
 item.clawSickle.name=Clawsickle
 item.deuceClub.name=Deuce Club
 item.nightClub.name=Nightclub
+item.pogoClub.name=Pogo Club
+item.metalBat.name=Metal Bat
+item.spikedClub.name=Spiked Club
 item.cane.name=Cane
 item.spearCane.name=Spear Cane
 item.dragonCane.name=Dragon Cane
@@ -310,6 +313,9 @@ item.candySulfur.name=Sulfur Candy Apple
 item.candyTar.name=Tar Black Licorice
 item.candyUranium.name=Uranium Gummy Bear
 item.candyZillium.name=Zillium Skittles
+item.threshDvd.name=Thresh Prince DVD
+item.crewPoster.name=Midnight Crew Poster
+item.sbahjPoster.name=Sweet Bro and Hella Jeff Poster
 
 itemGroup.tabMinestuck=Minestuck
 

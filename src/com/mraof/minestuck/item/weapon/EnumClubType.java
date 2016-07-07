@@ -3,7 +3,10 @@ package com.mraof.minestuck.item.weapon;
 public enum EnumClubType 
 {
 	DEUCE(1024, 2.5D, 15, "deuceClub"),
-	NIGHT(600, 4.0D, 20, "nightClub");
+	NIGHT(600, 4.0D, 20, "nightClub"),
+	POGO(600, 3.5D, 15, "pogoClub"),
+	BAT(750, 5.0D, 5, "metalBat"),
+	SPIKED(500, 5.5D, 5, "spikedClub");
 	
 	private static final double DEFAULT_ATTACK_SPEED = -2.2D;
 	private final int maxUses;
