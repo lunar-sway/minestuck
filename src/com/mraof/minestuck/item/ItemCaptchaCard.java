@@ -20,42 +20,48 @@ public class ItemCaptchaCard extends Item
 	
 	public ItemCaptchaCard()
 	{
-		this.maxStackSize = 16;
 		this.setCreativeTab(Minestuck.tabMinestuck);
 		this.setHasSubtypes(true);
 		this.setUnlocalizedName("captchaCard");
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, List itemList) {
+	public int getItemStackLimit(ItemStack stack)
+	{
+		if(stack.hasTagCompound())
+			return 16;
+		else return 64;
+	}
+	
+	@Override
+	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> itemList)
+	{
 		itemList.add(new ItemStack(this));
 		itemList.add(AlchemyRecipeHandler.createCard(new ItemStack(MinestuckItems.cruxiteApple), true));
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
-	public void addInformation(ItemStack par1ItemStack,
-			EntityPlayer par2EntityPlayer,
-			@SuppressWarnings("rawtypes") List par3List, boolean par4) {
-		if (par1ItemStack.hasTagCompound()) {
-			NBTTagCompound nbttagcompound = par1ItemStack.getTagCompound();
+	public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced)
+	{
+		if(stack.hasTagCompound())
+		{
+			NBTTagCompound nbttagcompound = stack.getTagCompound();
 			NBTTagString contentID = (NBTTagString)nbttagcompound.getTag("contentID");
 			NBTTagInt contentMeta = (NBTTagInt)nbttagcompound.getTag("contentMeta");
 			
 			if (contentID != null && contentMeta != null && Item.REGISTRY.containsKey(new ResourceLocation(contentID.getString())))
 			{
 				String stackSize = nbttagcompound.getBoolean("punched") ? "" : nbttagcompound.getInteger("contentSize") + "x";
-				par3List.add("(" + stackSize + (AlchemyRecipeHandler.getDecodedItem(par1ItemStack)).getDisplayName() + ")");
+				tooltip.add("(" + stackSize + (AlchemyRecipeHandler.getDecodedItem(stack)).getDisplayName() + ")");
 				if(nbttagcompound.getBoolean("punched"))
-					par3List.add("("+I18n.translateToLocal("item.captchaCard.punched")+")");
+					tooltip.add("("+I18n.translateToLocal("item.captchaCard.punched")+")");
 				return;
 			}
 			else {
-				par3List.add("("+I18n.translateToLocal("item.captchaCard.invalid")+")");
+				tooltip.add("("+I18n.translateToLocal("item.captchaCard.invalid")+")");
 			}
 		} else {
-			par3List.add("("+I18n.translateToLocal("item.captchaCard.empty")+")");
+			tooltip.add("("+I18n.translateToLocal("item.captchaCard.empty")+")");
 		}
 		
 	}

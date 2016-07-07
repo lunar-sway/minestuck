@@ -19,29 +19,36 @@ public class ItemDowel extends Item
 	
 	public ItemDowel()
 	{
-		this.maxStackSize = 16;
 		this.setCreativeTab(Minestuck.tabMinestuck);
 		this.setUnlocalizedName("dowelCruxite");
 		this.setHasSubtypes(true);
 	}
 	
 	@Override
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4)
+	public int getItemStackLimit(ItemStack stack)
 	{
-		if (par1ItemStack.hasTagCompound())
+		if(stack.hasTagCompound())
+			return 16;
+		else return 64;
+	}
+	
+	@Override
+	public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced)
+	{
+		if (stack.hasTagCompound())
 		{
-			NBTTagCompound nbttagcompound = par1ItemStack.getTagCompound();
+			NBTTagCompound nbttagcompound = stack.getTagCompound();
 			NBTTagString contentID = (NBTTagString)nbttagcompound.getTag("contentID");
 			NBTTagInt contentMeta = (NBTTagInt)nbttagcompound.getTag("contentMeta");
 			
 			if (contentID != null && contentMeta != null && Item.REGISTRY.containsKey(new ResourceLocation(contentID.getString())))
 			{
-				par3List.add("(" + (AlchemyRecipeHandler.getDecodedItem(par1ItemStack)).getDisplayName() + ")");
+				tooltip.add("(" + (AlchemyRecipeHandler.getDecodedItem(stack)).getDisplayName() + ")");
 				return;
 			}
 			else
 			{
-				par3List.add("("+I18n.translateToLocal("item.captchaCard.invalid")+")");
+				tooltip.add("("+I18n.translateToLocal("item.captchaCard.invalid")+")");
 			}
 		}
 	}
