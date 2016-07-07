@@ -20,7 +20,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mraof.minestuck.Minestuck;
 
-public class BlockChessTile extends Block 
+public class BlockChessTile extends Block
 {
 	public static enum BlockType implements IStringSerializable
 	{
@@ -28,7 +28,7 @@ public class BlockChessTile extends Block
 		WHITE("white"),
 		DARK_GREY("dark_grey"),
 		LIGHT_GREY("light_grey");
-		public final String name; 
+		public final String name;
 		BlockType(String resource)
 		{
 			this.name = resource;

@@ -52,6 +52,7 @@ public class MinestuckItems
 	public static Item zillyhooHammer;
 	public static Item popamaticVrillyhoo;
 	public static Item scarletZillyhoo;
+	public static Item mwrthwl;
 	//blades
 	public static Item sord;
 	public static Item cactusCutlass;
@@ -77,10 +78,15 @@ public class MinestuckItems
 	//sickles
 	public static Item sickle;
 	public static Item homesSmellYaLater;
+	public static Item fudgeSickle;
 	public static Item regiSickle;
 	public static Item clawSickle;
 	//clubs
 	public static Item deuceClub;
+	public static Item nightClub;
+	public static Item pogoClub;
+	public static Item metalBat;
+	public static Item spikedClub;
 	//canes
 	public static Item cane;
 	public static Item spearCane;
@@ -115,6 +121,9 @@ public class MinestuckItems
 	public static Item prismarineLeggings;
 	public static Item prismarineBoots;
 	public static Item candy;
+	public static Item threshDvd;
+	public static Item crewPoster;
+	public static Item sbahjPoster;
 	
 	public static Item.ToolMaterial toolEmerald;
 	public static ItemArmor.ArmorMaterial armorPrismarine;
@@ -131,6 +140,8 @@ public class MinestuckItems
 		zillyhooHammer = GameRegistry.register(new ItemHammer(EnumHammerType.ZILLYHOO).setRegistryName("zillyhoo_hammer"));
 		popamaticVrillyhoo = GameRegistry.register(new ItemHammer(EnumHammerType.POPAMATIC).setRegistryName("popamatic_vrillyhoo"));
 		scarletZillyhoo = GameRegistry.register(new ItemHammer(EnumHammerType.SCARLET).setRegistryName("scarlet_zillyhoo"));
+		mwrthwl = GameRegistry.register(new ItemHammer(EnumHammerType.MWRTHWL).setRegistryName("mwrthwl"));
+		
 		//blades
 		sord = GameRegistry.register(new ItemBlade(EnumBladeType.SORD).setRegistryName("sord"));
 		cactusCutlass = GameRegistry.register(new ItemBlade(EnumBladeType.CACTUS).setRegistryName("cactaceae_cutlass"));
@@ -145,11 +156,13 @@ public class MinestuckItems
 		regisword = GameRegistry.register(new ItemBlade(EnumBladeType.REGISWORD).setRegistryName("regisword"));
 		scarletRibbitar = GameRegistry.register(new ItemBlade(EnumBladeType.SCARLET).setRegistryName("scarlet_ribbitar"));
 		doggMachete = GameRegistry.register(new ItemBlade(EnumBladeType.DOGG).setRegistryName("dogg_machete"));
+		
 		//axes
 		blacksmithBane = GameRegistry.register(new ItemBattleaxe(EnumBattleaxeType.BANE).setRegistryName("blacksmith_bane"));
 		scraxe = GameRegistry.register(new ItemBattleaxe(EnumBattleaxeType.SCRAXE).setRegistryName("scraxe"));
 		rubyCroak = GameRegistry.register(new ItemBattleaxe(EnumBattleaxeType.CROAK).setRegistryName("ruby_croak"));
 		hephaestusLumber = GameRegistry.register(new ItemBattleaxe(EnumBattleaxeType.HEPH).setRegistryName("hephaestus_lumberjack"));
+		
 		//Dice
 		dice = GameRegistry.register(new ItemDice(EnumDiceType.DICE).setRegistryName("dice"));
 		fluoriteOctet = GameRegistry.register(new ItemDice(EnumDiceType.FLUORITE_OCTET).setRegistryName("fluorite_octet"));
@@ -157,14 +170,22 @@ public class MinestuckItems
 		//sickles
 		sickle = GameRegistry.register(new ItemSickle(EnumSickleType.SICKLE).setRegistryName("sickle"));
 		homesSmellYaLater = GameRegistry.register(new ItemSickle(EnumSickleType.HOMES).setRegistryName("homes_smell_ya_later"));
+		fudgeSickle = GameRegistry.register(new ItemSickle(EnumSickleType.FUDGE).setRegistryName("fudgesickle"));
 		regiSickle = GameRegistry.register(new ItemSickle(EnumSickleType.REGISICKLE).setRegistryName("regisickle"));
 		clawSickle = GameRegistry.register(new ItemSickle(EnumSickleType.CLAW).setRegistryName("claw_sickle"));
+		
 		//clubs
 		deuceClub = GameRegistry.register(new ItemClub(EnumClubType.DEUCE).setRegistryName("deuce_club"));
+		nightClub = GameRegistry.register(new ItemClub(EnumClubType.NIGHT).setRegistryName("nightclub"));
+		pogoClub = GameRegistry.register(new ItemClub(EnumClubType.POGO).setRegistryName("pogo_club"));
+		metalBat = GameRegistry.register(new ItemClub(EnumClubType.BAT).setRegistryName("metal_bat"));
+		spikedClub = GameRegistry.register(new ItemClub(EnumClubType.SPIKED).setRegistryName("spiked_club"));
+		
 		//canes
 		cane = GameRegistry.register(new ItemCane(EnumCaneType.CANE).setRegistryName("cane"));
 		spearCane = GameRegistry.register(new ItemCane(EnumCaneType.SPEAR).setRegistryName("spear_cane"));
 		dragonCane = GameRegistry.register(new ItemCane(EnumCaneType.DRAGON).setRegistryName("dragon_cane"));
+		
 		//Spoons/forks
 		woodenSpoon = GameRegistry.register(new ItemSpork(EnumSporkType.SPOON_WOOD).setRegistryName("wooden_spoon"));
 		silverSpoon = GameRegistry.register(new ItemSpork(EnumSporkType.SPOON_SILVER).setRegistryName("silver_spoon"));
@@ -179,6 +200,7 @@ public class MinestuckItems
 		emeraldPickaxe = GameRegistry.register(new ItemMinestuckPickaxe(toolEmerald).setRegistryName("emerald_pickaxe")).setUnlocalizedName("pickaxeEmerald").setCreativeTab(Minestuck.tabMinestuck);
 		emeraldShovel = GameRegistry.register(new ItemSpade(toolEmerald).setRegistryName("emerald_shovel")).setUnlocalizedName("shovelEmerald").setCreativeTab(Minestuck.tabMinestuck);
 		emeraldHoe = GameRegistry.register(new ItemHoe(toolEmerald).setRegistryName("emerald_hoe")).setUnlocalizedName("hoeEmerald").setCreativeTab(Minestuck.tabMinestuck);
+		
 		//armor
 		armorPrismarine = EnumHelper.addArmorMaterial("PRISMARINE", "minestuck:prismarine", 20, new int[]{3, 7, 6, 2}, 15, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0F);
 		armorPrismarine.customCraftingMaterial = Items.PRISMARINE_SHARD;
@@ -186,6 +208,7 @@ public class MinestuckItems
 		prismarineChestplate = GameRegistry.register(new ItemArmor(armorPrismarine, 0, EntityEquipmentSlot.CHEST).setRegistryName("prismarine_chestplate")).setUnlocalizedName("chestplatePrismarine").setCreativeTab(Minestuck.tabMinestuck);
 		prismarineLeggings = GameRegistry.register(new ItemArmor(armorPrismarine, 0, EntityEquipmentSlot.LEGS).setRegistryName("prismarine_leggings")).setUnlocalizedName("leggingsPrismarine").setCreativeTab(Minestuck.tabMinestuck);
 		prismarineBoots = GameRegistry.register(new ItemArmor(armorPrismarine, 0, EntityEquipmentSlot.FEET).setRegistryName("prismarine_boots")).setUnlocalizedName("bootsPrismarine").setCreativeTab(Minestuck.tabMinestuck);
+		
 		//misc
 		rawCruxite = GameRegistry.register(new Item().setRegistryName("raw_cruxite")).setUnlocalizedName("rawCruxite").setCreativeTab(Minestuck.tabMinestuck);
 		cruxiteDowel = GameRegistry.register(new ItemDowel().setRegistryName("cruxite_dowel"));
@@ -200,6 +223,9 @@ public class MinestuckItems
 		goldSeeds = (ItemGoldSeeds) GameRegistry.register(new ItemGoldSeeds().setRegistryName("gold_seeds"));
 		metalBoat = (ItemMetalBoat) GameRegistry.register(new ItemMetalBoat().setRegistryName("metal_boat"));
 		candy = GameRegistry.register(new ItemMinestuckCandy().setRegistryName("candy"));
+		threshDvd = GameRegistry.register(new Item().setRegistryName("thresh_dvd")).setUnlocalizedName("threshDvd").setMaxStackSize(1).setCreativeTab(Minestuck.tabMinestuck);
+		crewPoster = GameRegistry.register(new Item().setRegistryName("crew_poster")).setUnlocalizedName("crewPoster").setMaxStackSize(1).setCreativeTab(Minestuck.tabMinestuck);
+		sbahjPoster = GameRegistry.register(new Item().setRegistryName("sbahj_poster")).setUnlocalizedName("sbahjPoster").setMaxStackSize(1).setCreativeTab(Minestuck.tabMinestuck);
 		
 		minestuckBucket.addBlock(blockOil.getDefaultState());
 		minestuckBucket.addBlock(blockBlood.getDefaultState());

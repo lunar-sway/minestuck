@@ -190,10 +190,6 @@ public class ServerEditHandler
 		double posX, posY = 0, posZ;
 		WorldServer world = player.getServer().worldServerForDimension(c.enteredGame()?c.getClientDimension():c.getClientData().getDimension());
 		
-		if(world.provider.getDimension() != player.worldObj.provider.getDimension())
-			if(!Teleport.teleportEntity(player, world.provider.getDimension(), null))
-				return false;
-		
 		if(c.useCoordinates)
 		{
 			posX = c.posX;
@@ -206,13 +202,15 @@ public class ServerEditHandler
 			posZ = c.centerZ + 0.5;
 		}
 		
+		if(world.provider.getDimension() != player.worldObj.provider.getDimension())
+			if(!Teleport.teleportEntity(player, world.provider.getDimension(), null, posX, posY, posZ))
+				return false;
+		
 		player.closeScreen();
 		player.inventory.clear();
 		
 		player.setGameType(GameType.CREATIVE);
 		player.sendPlayerAbilities();
-		
-		player.setPositionAndUpdate(posX, posY, posZ);
 		
 		return true;
 	}
@@ -255,6 +253,8 @@ public class ServerEditHandler
 		
 		updateInventory(player, c.givenItems(), c.enteredGame(), c.getClientIdentifier());
 		updatePosition(player, range, c.centerX, c.centerZ);
+		
+		player.timeUntilPortal = player.getPortalCooldown();
 	}
 	
 	@SubscribeEvent

@@ -52,6 +52,7 @@ public class MinestuckModelManager
 		register(fearNoAnvil);
 		register(popamaticVrillyhoo);
 		register(scarletZillyhoo);
+		register(mwrthwl);
 		
 		register(sord);
 		register(cactusCutlass);
@@ -77,10 +78,15 @@ public class MinestuckModelManager
 		
 		register(sickle);
 		register(homesSmellYaLater);
+		register(fudgeSickle);
 		register(regiSickle);
 		register(clawSickle);
 		
 		register(deuceClub);
+		register(nightClub);
+		register(pogoClub);
+		register(metalBat);
+		register(spikedClub);
 		
 		register(cane);
 		register(spearCane);
@@ -131,6 +137,9 @@ public class MinestuckModelManager
 		register(obsidianBucket);
 		for(int i = 0; i < ItemMinestuckCandy.modelNames.length; i++)
 			register(candy, i, ItemMinestuckCandy.modelNames[i]);
+		register(threshDvd);
+		register(crewPoster);
+		register(sbahjPoster);
 		
 		//Blocks
 		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())

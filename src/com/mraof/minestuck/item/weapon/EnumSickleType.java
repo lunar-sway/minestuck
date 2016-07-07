@@ -4,6 +4,7 @@ public enum EnumSickleType
 {
 	SICKLE(220, 4.0D, 8, "sickle"),
 	HOMES(400, 5.5D, 10, "homesSmellYaLater"),
+	FUDGE(450, 5.5D, 10, "fudgeSickle"),
 	REGISICKLE(812, 6.0D, 5, "regiSickle"),
 	CLAW(2048, 7.0D, 15, "clawSickle");
 	

@@ -37,7 +37,6 @@ import com.mraof.minestuck.tileentity.TileEntityGate;
 import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.ITeleporter;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.PostEntryTask;
 import com.mraof.minestuck.util.Teleport;
@@ -46,7 +45,7 @@ import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 
-public abstract class ItemCruxiteArtifact extends Item implements ITeleporter
+public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITeleporter
 {
 	
 	public ItemCruxiteArtifact() 

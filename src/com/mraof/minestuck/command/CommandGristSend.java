@@ -6,6 +6,7 @@ import java.util.List;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
@@ -90,6 +91,15 @@ public class CommandGristSend extends CommandBase
 				}
 			}
 			
+			PlayerIdentifier senderIdentifier;
+			PlayerIdentifier receiverIdentifier;
+			
+			senderIdentifier = IdentifierHandler.encode(player);
+			receiverIdentifier = IdentifierHandler.encode(receivingPlayer);
+			
+			MinestuckPlayerTracker.updateGristCache(senderIdentifier);
+			MinestuckPlayerTracker.updateGristCache(receiverIdentifier);
+
 			notifyCommandListener(sender, this, "commands.gristSend.success", receiver, costStr.toString());
 			
 		} else throw new PlayerNotFoundException("Couldn't find player \"%s\".", receiver);

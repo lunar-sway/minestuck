@@ -162,19 +162,19 @@ public class MinestuckPlayerTracker {
 		int[] gristValues = new int[GristType.allGrists];
 		for(int typeInt = 0; typeInt < gristValues.length; typeInt++)
 			gristValues[typeInt] = GristHelper.getGrist(player, GristType.values()[typeInt]);
-
+		
 		//The player
-		if(!player.equals(".client") || IdentifierHandler.host != null) {
-			EntityPlayerMP playerMP = player.getPlayer();
-			if(playerMP != null) {
-				MinestuckPacket packet = MinestuckPacket.makePacket(Type.GRISTCACHE, gristValues, false);
-				MinestuckChannelHandler.sendToPlayer(packet, playerMP);
-			}
+		EntityPlayerMP playerMP = player.getPlayer();
+		if(playerMP != null)
+		{
+			MinestuckPacket packet = MinestuckPacket.makePacket(Type.GRISTCACHE, gristValues, false);
+			MinestuckChannelHandler.sendToPlayer(packet, playerMP);
 		}
-
+		
 		//The editing player, if there is any.
 		SburbConnection c = SkaianetHandler.getClientConnection(player);
-		if(c != null && ServerEditHandler.getData(c) != null) {
+		if(c != null && ServerEditHandler.getData(c) != null)
+		{
 			EntityPlayerMP editor = ServerEditHandler.getData(c).getEditor();
 			MinestuckPacket packet = MinestuckPacket.makePacket(Type.GRISTCACHE, gristValues, true);
 			MinestuckChannelHandler.sendToPlayer(packet, editor);
