@@ -2,6 +2,7 @@ package com.mraof.minestuck.world.lands.title;
 
 import net.minecraft.block.material.Material;
 
+import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.decorator.RabbitSpawner;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
@@ -30,7 +31,8 @@ public class LandAspectRabbits extends TitleLandAspect
 	@Override
 	protected void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
-		chunkProvider.decorators.add(new RabbitSpawner());
+		chunkProvider.decorators.add(new RabbitSpawner(6, BiomeMinestuck.mediumNormal));
+		chunkProvider.decorators.add(new RabbitSpawner(3, BiomeMinestuck.mediumRough));
 		chunkProvider.sortDecorators();
 	}
 	

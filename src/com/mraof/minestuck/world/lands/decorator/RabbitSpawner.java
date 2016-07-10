@@ -11,10 +11,12 @@ import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 public class RabbitSpawner extends BiomeSpecificDecorator
 {
+	int attempts;
 	
-	public RabbitSpawner(Biome... biomes)
+	public RabbitSpawner(int attempts, Biome... biomes)
 	{
 		super(biomes);
+		this.attempts = attempts;
 	}
 	
 	@Override
@@ -37,7 +39,7 @@ public class RabbitSpawner extends BiomeSpecificDecorator
 	public int getCount(Random random)
 	{
 		int count = 0;
-		for(int i = 0; i < 8; i++)
+		for(int i = 0; i < attempts; i++)
 			if(random.nextDouble() < 0.2)
 				count++;
 		return count;
