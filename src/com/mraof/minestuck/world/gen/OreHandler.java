@@ -35,7 +35,7 @@ public class OreHandler implements IWorldGenerator
 		int diffBtwnMinMaxY = maxY - minY;
 		IBlockState groundType = Blocks.STONE.getDefaultState();
 		if(world.provider instanceof WorldProviderLands)
-			groundType = ((ChunkProviderLands) world.provider.createChunkGenerator()).groundBlock;
+			groundType = ((ChunkProviderLands) world.provider.createChunkGenerator()).getGroundBlock();
 		if(block.getBlock() == MinestuckBlocks.oreCruxite)
 			block = MinestuckBlocks.oreCruxite.getBlockState(groundType);
 		for(int x = 0; x < chancesToSpawn; x++)

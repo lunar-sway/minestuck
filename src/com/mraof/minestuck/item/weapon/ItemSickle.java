@@ -20,21 +20,7 @@ public class ItemSickle extends ItemWeapon
 		this.setMaxDamage(sickleType.getMaxUses());
 		this.setCreativeTab(Minestuck.tabMinestuck);
 		this.setUnlocalizedName(sickleType.getName());
-		switch(sickleType)
-		{
-		case SICKLE:
-			this.setUnlocalizedName("sickle");
-			break;
-		case HOMES:
-			this.setUnlocalizedName("homesSmellYaLater");
-			break;
-		case REGISICKLE:
-			this.setUnlocalizedName("regiSickle");
-			break;
-		case CLAW:
-			this.setUnlocalizedName("clawSickle");
-			break;
-		}
+		
 		this.weaponDamage = sickleType.getDamageVsEntity();
 		this.weaponSpeed = sickleType.getAttackSpeed();
 	}

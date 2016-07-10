@@ -13,6 +13,8 @@ public abstract class TitleLandAspect implements ILandAspect<TitleLandAspect>
 {
 	
 	protected abstract void prepareChunkProvider(ChunkProviderLands chunkProvider);
+
+	protected abstract void prepareChunkProviderServer(ChunkProviderLands chunkProvider);
 	
 	public boolean isAspectCompatible(TerrainLandAspect aspect)
 	{
@@ -23,6 +25,8 @@ public abstract class TitleLandAspect implements ILandAspect<TitleLandAspect>
 	{
 		ChunkProviderLands chunkProvider = new ChunkProviderLands(land.getWorld(), land, land.getWorld().isRemote);
 		prepareChunkProvider(chunkProvider);
+		if(!land.getWorld().isRemote)
+			prepareChunkProviderServer(chunkProvider);
 		chunkProvider.createBiomeGen();
 		return chunkProvider;
 	}

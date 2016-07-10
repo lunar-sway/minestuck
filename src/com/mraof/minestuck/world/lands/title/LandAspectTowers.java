@@ -21,11 +21,13 @@ public class LandAspectTowers extends TitleLandAspect
 	@Override
 	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
-		if(chunkProvider.decorators != null)
-		{
-			chunkProvider.decorators.add(new BasicTowerDecorator());
+	}
+	
+	@Override
+	protected void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
+	{
+		chunkProvider.decorators.add(new BasicTowerDecorator());
 			chunkProvider.sortDecorators();
-		}
 	}
 	
 }

@@ -25,10 +25,15 @@ public class LandAspectThunder extends TitleLandAspect
 	{
 		chunkProvider.weatherType = 4;
 		chunkProvider.rainfall += 0.1F;
-		chunkProvider.oceanChance = Math.min(Math.max(0.5F, chunkProvider.oceanChance), chunkProvider.oceanChance*1.2F);
 		
 		chunkProvider.mergeFogColor(new Vec3d(0.1, 0.1, 0.2), 0.5F);
 		
+	}
+	
+	@Override
+	protected void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
+	{
+		chunkProvider.oceanChance = Math.min(Math.max(0.5F, chunkProvider.oceanChance), chunkProvider.oceanChance*1.2F);
 	}
 	
 	@Override

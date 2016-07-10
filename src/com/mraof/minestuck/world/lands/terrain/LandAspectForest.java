@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.BlockStoneBrick;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.Vec3d;
 
@@ -13,34 +12,19 @@ import com.mraof.minestuck.world.lands.decorator.TallGrassDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.BasicTreeDecorator;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
+import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
 public class LandAspectForest extends TerrainLandAspect
 {
 	
 	@Override
-	public IBlockState getSurfaceBlock()
+	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		return Blocks.GRASS.getDefaultState();
-	}
-	
-	@Override
-	public IBlockState getUpperBlock()
-	{
-		return Blocks.DIRT.getDefaultState();
-	}
-	
-	@Override
-	public IBlockState[] getStructureBlocks()
-	{
-		return new IBlockState[] {Blocks.STONE.getDefaultState(), Blocks.STONEBRICK.getDefaultState()};
-	}
-	
-	@Override
-	public IBlockState getDecorativeBlockFor(IBlockState state)
-	{
-		if(state.getBlock() == Blocks.STONEBRICK)
-			return Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED);
-		else return state;
+		registry.setBlockState("surface", Blocks.GRASS.getDefaultState());
+		registry.setBlockState("upper", Blocks.DIRT.getDefaultState());
+		registry.setBlockState("structure_primary", Blocks.STONEBRICK.getDefaultState());
+		registry.setBlockState("structure_primary_decorative", Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED));
+		registry.setBlockState("structure_secondary", Blocks.STONE.getDefaultState());
 	}
 	
 	@Override

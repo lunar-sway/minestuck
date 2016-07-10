@@ -9,39 +9,25 @@ import com.mraof.minestuck.world.lands.decorator.FireFieldDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
+import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.Vec3d;
 
 public class LandAspectHeat extends TerrainLandAspect 
 {
-	IBlockState[] structureBlocks = {Blocks.NETHER_BRICK.getDefaultState(), Blocks.OBSIDIAN.getDefaultState()};
 	static Vec3d skyColor = new Vec3d(0.4D, 0.0D, 0.0D);
 	
 	@Override
-	public IBlockState getUpperBlock() 
+	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		return Blocks.COBBLESTONE.getDefaultState();
+		registry.setBlockState("upper", Blocks.COBBLESTONE.getDefaultState());
+		registry.setBlockState("ground", Blocks.NETHERRACK.getDefaultState());
+		registry.setBlockState("ocean", Blocks.LAVA.getDefaultState());
+		registry.setBlockState("structure_primary", Blocks.NETHER_BRICK.getDefaultState());
+		registry.setBlockState("structure_secondary", Blocks.OBSIDIAN.getDefaultState());
 	}
 	
-	@Override
-	public IBlockState getGroundBlock()
-	{
-		return Blocks.NETHERRACK.getDefaultState();
-	}
-	
-	@Override
-	public IBlockState getOceanBlock()
-	{
-		return Blocks.LAVA.getDefaultState();
-	}
-	@Override
-	public IBlockState getRiverBlock()
-	{
-		return Blocks.FLOWING_LAVA.getDefaultState();
-	}
-
 	@Override
 	public String getPrimaryName()
 	{
@@ -79,12 +65,6 @@ public class LandAspectHeat extends TerrainLandAspect
 	public Vec3d getFogColor() 
 	{
 		return skyColor;
-	}
-	
-	@Override
-	public IBlockState[] getStructureBlocks()
-	{
-		return structureBlocks;
 	}
 	
 	@Override

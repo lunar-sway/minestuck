@@ -25,11 +25,13 @@ public class FireFieldDecorator extends BiomeSpecificDecorator
 	@Override
 	public BlockPos generate(World world, Random random, BlockPos pos, ChunkProviderLands provider)
 	{
+		IBlockState surface = provider.getSurfaceBlock();
+		IBlockState upper = provider.getUpperBlock();
 		for(int i2 = 0; i2 < blocks; i2++)
 		{
 			BlockPos pos1 = pos.add(random.nextInt(8) - random.nextInt(8), random.nextInt(4) - random.nextInt(4), random.nextInt(8) - random.nextInt(8));
 			IBlockState block = world.getBlockState(pos1);
-			if(block != provider.groundBlock && (block == provider.surfaceBlock || block == provider.upperBlock))
+			if(block == surface || block == upper)
 			{
 				world.setBlockState(pos1, Blocks.NETHERRACK.getDefaultState(), 2);
 				if(world.isAirBlock(pos1.up()) && random.nextFloat() < fireChance)

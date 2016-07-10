@@ -43,7 +43,6 @@ public class SmallRuinStart extends StructureStart
 	{
 		
 		protected boolean[] torches = new boolean[4];
-		protected int floorIndex, wallIndex;
 		protected boolean definedHeight  = false;
 		
 		public SmallRuin()
@@ -57,12 +56,6 @@ public class SmallRuinStart extends StructureStart
 			int xWidth = getCoordBaseMode().getAxis().equals(EnumFacing.Axis.X) ? 10 : 7;
 			int zWidth = getCoordBaseMode().getAxis().equals(EnumFacing.Axis.Z) ? 10 : 7;
 			this.boundingBox = new StructureBoundingBox(x, 64, z, x + xWidth - 1, 67, z + zWidth - 1);
-			
-			IBlockState[] structureBlocks = provider.aspect1.getStructureBlocks();
-			floorIndex = rand.nextInt(structureBlocks.length);
-			wallIndex = rand.nextInt(Math.max(1, structureBlocks.length - 1));
-			if(wallIndex >= floorIndex && structureBlocks.length > 1)
-				wallIndex++;
 			
 			float torchChance = provider.dayCycle == 0 ? 0.4F : provider.dayCycle == 1 ? 0F : 0.9F;
 			
@@ -80,10 +73,9 @@ public class SmallRuinStart extends StructureStart
 				return false;
 			
 			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
-			IBlockState[] structureBlocks = provider.aspect1.getStructureBlocks();
-			floorIndex = Math.min(floorIndex, structureBlocks.length - 1);
-			wallIndex = Math.min(wallIndex, structureBlocks.length - 1);	//In case the structure blocks have decreased during an update
-			IBlockState floorBlock = structureBlocks[floorIndex], wallBlock = structureBlocks[wallIndex];
+			IBlockState wallBlock = provider.blockRegistry.getBlockState("structure_primary");
+			IBlockState wallDecor = provider.blockRegistry.getBlockState("structure_primary_decorative");
+			IBlockState floorBlock = provider.blockRegistry.getBlockState("structure_secondary");
 			
 			for(int z = 0; z < 8; z++)
 				for(int x = 0; x < 7; x++)
@@ -102,7 +94,7 @@ public class SmallRuinStart extends StructureStart
 					buildFloorTile(wallBlock, x, 8, worldIn, rand, boundingBox);
 					buildWall(wallBlock, x, 8, worldIn, rand, boundingBox, 0);
 					if(this.getBlockStateFromPos(worldIn, x, 2, 8, boundingBox) == wallBlock)
-						this.setBlockState(worldIn, provider.aspect1.getDecorativeBlockFor(wallBlock), x, 2, 8, boundingBox);
+						this.setBlockState(worldIn, wallDecor, x, 2, 8, boundingBox);
 				} else buildFloorTile(floorBlock, x, 8, worldIn, rand, boundingBox);
 			
 			for(int x = 2; x < 5; x++)
@@ -260,8 +252,6 @@ public class SmallRuinStart extends StructureStart
 		@Override
 		protected void writeStructureToNBT(NBTTagCompound nbt)
 		{
-			nbt.setInteger("wallIndex", wallIndex);
-			nbt.setInteger("floorIndex", floorIndex);
 			nbt.setBoolean("definedHeight", definedHeight);
 			for(int i = 0; i < 4; i++)
 				nbt.setBoolean("torch"+i, torches[i]);
@@ -270,8 +260,6 @@ public class SmallRuinStart extends StructureStart
 		@Override
 		protected void readStructureFromNBT(NBTTagCompound nbt)
 		{
-			wallIndex = nbt.getInteger("wallIndex");
-			floorIndex = nbt.getInteger("floorIndex");
 			definedHeight = nbt.getBoolean("definedHeight");
 			for(int i = 0; i < 4; i++)
 				torches[i] = nbt.getBoolean("torch"+i);

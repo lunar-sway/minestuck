@@ -34,12 +34,11 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 		int height = random.nextInt(7) + 12;
 		if(height + yCoord + 3 >= 256)
 			return null;
-		IBlockState[] structureBlocks = provider.aspect1.getStructureBlocks();
-		int index1 = random.nextInt(structureBlocks.length);
-		int index2 = random.nextInt(Math.max(1, structureBlocks.length - 1));
-		if(structureBlocks.length > 1 && index2 >= index1)
-			index2++;
-		IBlockState floor = structureBlocks[index1], wall = structureBlocks[index2];
+		
+		IBlockState wall = provider.blockRegistry.getBlockState("structure_primary");
+		IBlockState wallDec = provider.blockRegistry.getBlockState("structure_primary_decorated");
+		IBlockState floor = provider.blockRegistry.getBlockState("structure_secondary");
+		
 		boolean torches = random.nextFloat() < (provider.dayCycle == 0 ? 0.4F : provider.dayCycle == 1 ? 0F : 0.9F);
 		
 		for(int x = -3; x < 4; x++)
@@ -102,7 +101,7 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 			}
 			
 			this.placeBlocks(world, Blocks.AIR.getDefaultState(), 3*facing.getFrontOffsetX(), 2, 3*facing.getFrontOffsetZ(), 3*facing.getFrontOffsetX(), 3, 3*facing.getFrontOffsetZ());
-			this.placeBlock(world, provider.aspect1.getDecorativeBlockFor(wall), 3*facing.getFrontOffsetX(), 4, 3*facing.getFrontOffsetZ());
+			this.placeBlock(world, wallDec, 3*facing.getFrontOffsetX(), 4, 3*facing.getFrontOffsetZ());
 			this.placeBlocks(world, wall, 3*facing.getFrontOffsetX(), 5, 3*facing.getFrontOffsetZ(), 3*facing.getFrontOffsetX(), height, 3*facing.getFrontOffsetZ());
 		}
 		

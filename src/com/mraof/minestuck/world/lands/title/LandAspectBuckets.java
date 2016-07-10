@@ -22,11 +22,12 @@ public class LandAspectBuckets extends TitleLandAspect	//Yes, buckets
 	@Override
 	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
-		if(chunkProvider.decorators != null)
-		{
-			chunkProvider.decorators.add(new BucketDecorator(BiomeMinestuck.mediumNormal, BiomeMinestuck.mediumRough));
-			chunkProvider.sortDecorators();
-			
-		}
+	}
+	
+	@Override
+	protected void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
+	{
+		chunkProvider.decorators.add(new BucketDecorator(BiomeMinestuck.mediumNormal, BiomeMinestuck.mediumRough));
+		chunkProvider.sortDecorators();
 	}
 }

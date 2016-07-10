@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -13,6 +14,7 @@ public class GateStructurePillar implements IGateStructure
 	@Override
 	public BlockPos generateGateStructure(World world, BlockPos pos, ChunkProviderLands provider)
 	{
+		IBlockState ground = provider.getGroundBlock();
 		Random rand = world.setRandomSeed(pos.getX(), pos.getZ(), 1849234152^world.provider.getDimension());
 		pos = world.getTopSolidOrLiquidBlock(pos);
 		pos = pos.up(20);
@@ -20,23 +22,23 @@ public class GateStructurePillar implements IGateStructure
 		
 		do
 		{
-			world.setBlockState(pos, provider.groundBlock);
-			world.setBlockState(pos.north(), provider.groundBlock);
-			world.setBlockState(pos.east(), provider.groundBlock);
-			world.setBlockState(pos.south(), provider.groundBlock);
-			world.setBlockState(pos.west(), provider.groundBlock);
+			world.setBlockState(pos, ground);
+			world.setBlockState(pos.north(), ground);
+			world.setBlockState(pos.east(), ground);
+			world.setBlockState(pos.south(), ground);
+			world.setBlockState(pos.west(), ground);
 			
 			if(rand.nextBoolean())
-				world.setBlockState(pos.add(-1, 0, -1), provider.groundBlock);
+				world.setBlockState(pos.add(-1, 0, -1), ground);
 			if(rand.nextBoolean())
-				world.setBlockState(pos.add(-1, 0, 1), provider.groundBlock);
+				world.setBlockState(pos.add(-1, 0, 1), ground);
 			if(rand.nextBoolean())
-				world.setBlockState(pos.add(1, 0, 1), provider.groundBlock);
+				world.setBlockState(pos.add(1, 0, 1), ground);
 			if(rand.nextBoolean())
-				world.setBlockState(pos.add(1, 0, -1), provider.groundBlock);
+				world.setBlockState(pos.add(1, 0, -1), ground);
 			
 			pos = pos.down();
-		} while(pos.getY() > 0 && !world.getBlockState(pos).equals(provider.groundBlock));
+		} while(pos.getY() > 0 && !world.getBlockState(pos).equals(ground));
 		
 		return gatePos;
 	}

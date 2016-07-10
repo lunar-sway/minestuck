@@ -29,13 +29,13 @@ public class LandAspectCake extends TitleLandAspect
 	@Override
 	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
-		if(chunkProvider.decorators != null)
-		{
-			chunkProvider.decorators.add(new CakeDecorator());
-			chunkProvider.sortDecorators();
-			
-		}
-		
+	}
+	
+	@Override
+	protected void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
+	{
+		chunkProvider.decorators.add(new CakeDecorator());
+		chunkProvider.sortDecorators();
 	}
 	
 	private static class CakeDecorator extends SingleBlockDecorator

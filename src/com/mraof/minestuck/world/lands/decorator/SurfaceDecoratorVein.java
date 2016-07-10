@@ -37,7 +37,7 @@ public class SurfaceDecoratorVein extends BiomeSpecificDecorator
 	@Override
 	public BlockPos generate(World world, Random random, BlockPos pos, ChunkProviderLands provider)
 	{
-		(new WorldGenMinable(block, size, new OreHandler.BlockStatePredicate(provider.surfaceBlock, provider.upperBlock))).generate(world, random, pos.add(-8, 0, -8));
+		(new WorldGenMinable(block, size, new OreHandler.BlockStatePredicate(provider.getSurfaceBlock(), provider.getUpperBlock()))).generate(world, random, pos.add(-8, 0, -8));
 		return null;
 	}
 	

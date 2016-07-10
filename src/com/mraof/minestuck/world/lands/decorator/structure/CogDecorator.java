@@ -24,8 +24,7 @@ public class CogDecorator extends SimpleStructureDecorator
 		yCoord = world.getPrecipitationHeight(pos).getY() - blocksDown;
 		if(world.getBlockState(new BlockPos(xCoord, yCoord - 1, zCoord)).getMaterial().isLiquid())
 			return null;
-		IBlockState[] materials = provider.aspect1.getStructureBlocks();
-		IBlockState block = materials[random.nextInt(materials.length)];
+		IBlockState block = provider.blockRegistry.getBlockState(random.nextBoolean() ? "structure_primary" : "structure_secondary");
 		
 		StructureBoundingBox boundingBox;
 		if(!big)
@@ -49,8 +48,7 @@ public class CogDecorator extends SimpleStructureDecorator
 		}
 		else
 		{
-			IBlockState block2 = block;
-			block2 = materials[random.nextInt(materials.length)];
+			IBlockState block2 = provider.blockRegistry.getBlockState(random.nextBoolean() ? "structure_primary" : "structure_secondary");
 			
 			placeBlocks(world, block, -3, 0, 0, -2, 0, 1);
 			placeBlocks(world, block, -3, 1, 0, -3, 1, 1);

@@ -25,12 +25,13 @@ public class LandAspectLight extends TitleLandAspect
 	{
 		chunkProvider.dayCycle = 1;
 		
-		if(chunkProvider.decorators != null)
-		{
-			
-		}
-		
 		chunkProvider.mergeFogColor(new Vec3d(1, 1, 0.8), 0.5F);
+	}
+	
+	@Override
+	protected void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
+	{
+		
 	}
 	
 	@Override

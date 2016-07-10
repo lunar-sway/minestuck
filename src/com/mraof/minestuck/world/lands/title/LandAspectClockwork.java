@@ -23,14 +23,14 @@ public class LandAspectClockwork extends TitleLandAspect
 	@Override
 	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
-		if(chunkProvider.decorators != null)
-		{
-			chunkProvider.decorators.add(new CogDecorator());
-			chunkProvider.sortDecorators();
-			
-		}
-		
 		chunkProvider.mergeFogColor(new Vec3d(0.5, 0.5, 0.5), 0.5F);
+	}
+	
+	@Override
+	protected void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
+	{
+		chunkProvider.decorators.add(new CogDecorator());
+		chunkProvider.sortDecorators();
 	}
 	
 }

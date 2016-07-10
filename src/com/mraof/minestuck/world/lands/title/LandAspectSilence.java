@@ -36,10 +36,12 @@ public class LandAspectSilence extends TitleLandAspect
 		
 		chunkProvider.mergeFogColor(new Vec3d(0, 0, 0.1), 0.5F);
 		
-		if(chunkProvider.decorators != null)
-		{
-			chunkProvider.decorators.add(new PumpkinDecorator());
-		}
+	}
+	
+	@Override
+	protected void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
+	{
+		chunkProvider.decorators.add(new PumpkinDecorator());
 	}
 	
 	@Override

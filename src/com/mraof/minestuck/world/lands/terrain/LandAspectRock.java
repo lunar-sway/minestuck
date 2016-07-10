@@ -6,7 +6,6 @@ import java.util.Random;
 
 import net.minecraft.block.BlockSilverfish;
 import net.minecraft.block.BlockStoneBrick;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.Vec3d;
 
@@ -17,28 +16,19 @@ import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.gen.DefaultTerrainGen;
 import com.mraof.minestuck.world.lands.gen.ILandTerrainGen;
+import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
 public class LandAspectRock extends TerrainLandAspect
 {
 	
-	private IBlockState[] structureBlocks = {Blocks.COBBLESTONE.getDefaultState(), Blocks.STONEBRICK.getDefaultState()};
-	
 	@Override
-	public IBlockState getSurfaceBlock()
+	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		return Blocks.GRAVEL.getDefaultState();
-	}
-	
-	@Override
-	public IBlockState getUpperBlock()
-	{
-		return Blocks.COBBLESTONE.getDefaultState();
-	}
-	
-	@Override
-	public IBlockState[] getStructureBlocks()
-	{
-		return structureBlocks;
+		registry.setBlockState("surface", Blocks.GRAVEL.getDefaultState());
+		registry.setBlockState("upper", Blocks.COBBLESTONE.getDefaultState());
+		registry.setBlockState("structure_primary", Blocks.STONEBRICK.getDefaultState());
+		registry.setBlockState("structure_primary_decorative", Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED));
+		registry.setBlockState("structure_secondary", Blocks.COBBLESTONE.getDefaultState());
 	}
 	
 	@Override
@@ -99,14 +89,6 @@ public class LandAspectRock extends TerrainLandAspect
 	public Vec3d getFogColor()
 	{
 		return new Vec3d(0.5, 0.5, 0.55);
-	}
-	
-	@Override
-	public IBlockState getDecorativeBlockFor(IBlockState state)
-	{
-		if(state.getBlock() == Blocks.STONEBRICK)
-			return Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED);
-		return state;
 	}
 	
 	@Override

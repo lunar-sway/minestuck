@@ -37,7 +37,7 @@ public class UndergroundDecoratorVein implements ILandDecorator
 			int posX = chunkX * 16 + random.nextInt(16);
 			int posY = minY + random.nextInt(diffBtwnMinMaxY);
 			int posZ = chunkZ * 16 + random.nextInt(16);
-			(new WorldGenMinable(block, size, new OreHandler.BlockStatePredicate(provider.groundBlock))).generate(world, random, new BlockPos(posX, posY, posZ));
+			(new WorldGenMinable(block, size, new OreHandler.BlockStatePredicate(provider.getGroundBlock()))).generate(world, random, new BlockPos(posX, posY, posZ));
 		}
 		return null;
 	}

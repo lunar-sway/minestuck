@@ -64,12 +64,13 @@ public class LandAspectMonsters extends TitleLandAspect
 		chunkProvider.dayCycle = 2;
 		chunkProvider.monsterList.addAll(this.monsterList);
 		
-		if(chunkProvider.decorators != null)
-		{
-			
-		}
-		
 		chunkProvider.mergeFogColor(new Vec3d(0.1, 0, 0), 0.5F);
+	}
+	
+	@Override
+	protected void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
+	{
+		
 	}
 	
 	@Override

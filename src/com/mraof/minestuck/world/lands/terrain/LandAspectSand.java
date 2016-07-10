@@ -15,12 +15,12 @@ import com.mraof.minestuck.world.lands.decorator.WorldGenDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.gen.LandTerrainGenBase;
 import com.mraof.minestuck.world.lands.gen.RiverFreeTerrainGen;
+import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
 import net.minecraft.block.BlockRedSandstone;
 import net.minecraft.block.BlockSand;
 import net.minecraft.block.BlockSandStone;
 import net.minecraft.block.BlockStoneBrick;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.gen.feature.WorldGenCactus;
@@ -28,67 +28,58 @@ import net.minecraft.world.gen.feature.WorldGenDeadBush;
 
 public class LandAspectSand extends TerrainLandAspect
 {
-	private final IBlockState upperBlock;
-	private final IBlockState groundBlock;
-	private final IBlockState[] structureBlocks;
 	private final Vec3d skyColor;
-	private final String name;
+	private final Variant type;
 	private final List<TerrainLandAspect> variations;
 	
 	public LandAspectSand()
 	{
-		this("sand");
+		this(Variant.SAND);
 	}
 	
-	public LandAspectSand(String variation)
+	public LandAspectSand(Variant variation)
 	{
 		variations = new ArrayList<TerrainLandAspect>();
-		name = variation;
+		type = variation;
 		
-		if(name.equals("sand"))
+		if(type == Variant.SAND)
 		{
 			skyColor = new Vec3d(0.99D, 0.8D, 0.05D);
 			
-			upperBlock = Blocks.SAND.getDefaultState();
-			groundBlock = Blocks.SANDSTONE.getDefaultState();
-			structureBlocks = new IBlockState[] {Blocks.SANDSTONE.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.SMOOTH), Blocks.STONEBRICK.getDefaultState()};
-			
 			variations.add(this);
-			variations.add(new LandAspectSand("sand_red"));
+			variations.add(new LandAspectSand(Variant.SAND_RED));
 		} else
 		{
 			skyColor = new Vec3d(0.99D, 0.6D, 0.05D);
-			
-			upperBlock = Blocks.SAND.getDefaultState().withProperty(BlockSand.VARIANT, BlockSand.EnumType.RED_SAND);
-			groundBlock = Blocks.RED_SANDSTONE.getDefaultState();
-			structureBlocks = new IBlockState[] {Blocks.RED_SANDSTONE.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.SMOOTH), Blocks.STONEBRICK.getDefaultState()};
-			
 		}
 		
 	}
 	
 	@Override
-	public IBlockState getUpperBlock()
+	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		return upperBlock;
-	}
-	
-	@Override
-	public IBlockState getGroundBlock()
-	{
-		return groundBlock;
-	}
-	
-	@Override
-	public IBlockState getRiverBlock()
-	{
-		return upperBlock;
+		if(type == Variant.SAND)
+		{
+			registry.setBlockState("upper", Blocks.SAND.getDefaultState());
+			registry.setBlockState("ground", Blocks.SANDSTONE.getDefaultState());
+			registry.setBlockState("structure_primary", Blocks.SANDSTONE.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.SMOOTH));
+			registry.setBlockState("structure_primary_decorative", Blocks.SANDSTONE.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.CHISELED));
+		} else
+		{
+			registry.setBlockState("upper", Blocks.SAND.getDefaultState().withProperty(BlockSand.VARIANT, BlockSand.EnumType.RED_SAND));
+			registry.setBlockState("ground", Blocks.RED_SANDSTONE.getDefaultState());
+			registry.setBlockState("structure_primary", Blocks.RED_SANDSTONE.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.SMOOTH));
+			registry.setBlockState("structure_primary_decorative", Blocks.RED_SANDSTONE.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.CHISELED));
+		}
+		registry.setBlockState("structure_secondary", Blocks.STONEBRICK.getDefaultState());
+		registry.setBlockState("structure_secondary_decorative", Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED));
+		registry.setBlockState("river", registry.getBlockState("upper"));
 	}
 	
 	@Override
 	public String getPrimaryName()
 	{
-		return name;
+		return type.getName();
 	}
 
 	@Override
@@ -101,15 +92,15 @@ public class LandAspectSand extends TerrainLandAspect
 	public List<ILandDecorator> getDecorators()
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
-		if(name.equals("sand_red"))
+		if(type == Variant.SAND_RED)
 			list.add(new SurfaceDecoratorVein(Blocks.SAND.getDefaultState(), 10, 32));
 		list.add(new WorldGenDecorator(new WorldGenCactus(), 15, 0.4F, BiomeMinestuck.mediumNormal));
 		list.add(new WorldGenDecorator(new WorldGenCactus(), 5, 0.4F, BiomeMinestuck.mediumRough));
 		list.add(new WorldGenDecorator(new WorldGenDeadBush(), 1, 0.4F, BiomeMinestuck.mediumNormal, BiomeMinestuck.mediumRough));
 		
-		list.add(new UndergroundDecoratorVein(upperBlock, 8, 28, 256));
-		list.add(new UndergroundDecoratorVein((name.equals("sand_red")?MinestuckBlocks.ironOreSandstoneRed:MinestuckBlocks.ironOreSandstone).getDefaultState(), 24, 9, 64));
-		list.add(new UndergroundDecoratorVein((name.equals("sand_red")?MinestuckBlocks.goldOreSandstoneRed:MinestuckBlocks.goldOreSandstone).getDefaultState(), 6, 9, 32));
+		list.add(new UndergroundDecoratorVein(Blocks.SAND.getDefaultState().withProperty(BlockSand.VARIANT, type == Variant.SAND_RED?BlockSand.EnumType.RED_SAND:BlockSand.EnumType.SAND), 8, 28, 256));
+		list.add(new UndergroundDecoratorVein((type == Variant.SAND_RED?MinestuckBlocks.ironOreSandstoneRed:MinestuckBlocks.ironOreSandstone).getDefaultState(), 24, 9, 64));
+		list.add(new UndergroundDecoratorVein((type == Variant.SAND_RED?MinestuckBlocks.goldOreSandstoneRed:MinestuckBlocks.goldOreSandstone).getDefaultState(), 6, 9, 32));
 		
 		return list;
 	}
@@ -139,12 +130,6 @@ public class LandAspectSand extends TerrainLandAspect
 	}
 	
 	@Override
-	public IBlockState[] getStructureBlocks()
-	{
-		return structureBlocks;
-	}
-	
-	@Override
 	public Vec3d getFogColor() 
 	{
 		return skyColor;
@@ -163,19 +148,18 @@ public class LandAspectSand extends TerrainLandAspect
 	}
 	
 	@Override
-	public IBlockState getDecorativeBlockFor(IBlockState state)
-	{
-		if(state.getBlock() == Blocks.STONEBRICK)
-			return Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED);
-		else if(state.getBlock() == Blocks.SANDSTONE)
-			return Blocks.SANDSTONE.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.CHISELED);
-		else return Blocks.RED_SANDSTONE.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.CHISELED);
-	}
-	
-	@Override
 	public LandTerrainGenBase createTerrainGenerator(ChunkProviderLands chunkProvider, Random rand)
 	{
 		return new RiverFreeTerrainGen(chunkProvider, rand);
 	}
 	
+	public static enum Variant
+	{
+		SAND,
+		SAND_RED;
+		public String getName()
+		{
+			return this.toString().toLowerCase();
+		}
+	}
 }

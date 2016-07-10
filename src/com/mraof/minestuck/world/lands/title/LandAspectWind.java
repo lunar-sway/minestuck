@@ -26,19 +26,20 @@ public class LandAspectWind extends TitleLandAspect
 	{
 		if(chunkProvider.weatherType == -1)
 			chunkProvider.weatherType = 0;
-		if(chunkProvider.decorators != null)
-		{
-			chunkProvider.decorators.add(new RockDecorator());
-			if(chunkProvider.terrainGenerator instanceof DefaultTerrainGen)
-			{
-				DefaultTerrainGen terrainGen = (DefaultTerrainGen) chunkProvider.terrainGenerator;
-				terrainGen.normalVariation *= 0.6F;
-				terrainGen.roughtVariation *= 0.6F;
-				terrainGen.roughHeight = (terrainGen.roughHeight + terrainGen.normalHeight)/2;
-			}
-		}
 		
 		chunkProvider.mergeFogColor(new Vec3d(0.1, 0.2, 0.8), 0.3F);
 	}
 	
+	@Override
+	protected void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
+	{
+		chunkProvider.decorators.add(new RockDecorator());
+		if(chunkProvider.terrainGenerator instanceof DefaultTerrainGen)
+		{
+			DefaultTerrainGen terrainGen = (DefaultTerrainGen) chunkProvider.terrainGenerator;
+			terrainGen.normalVariation *= 0.6F;
+			terrainGen.roughtVariation *= 0.6F;
+			terrainGen.roughHeight = (terrainGen.roughHeight + terrainGen.normalHeight)/2;
+		}
+	}
 }

@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.lands.gen;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.chunk.ChunkPrimer;
 
@@ -17,6 +18,12 @@ public abstract class LandTerrainGenBase implements ILandTerrainGen
 	@Override
 	public ChunkPrimer createChunk(int chunkX, int chunkZ)
 	{
+		IBlockState ground = provider.getGroundBlock();
+		IBlockState upper = provider.getUpperBlock();
+		IBlockState surface = provider.getSurfaceBlock();
+		IBlockState river = provider.blockRegistry.getBlockState("river");
+		IBlockState ocean = provider.blockRegistry.getBlockState("ocean");
+		
 		ChunkPrimer primer = new ChunkPrimer();
 		
 		int[] topBlock = getHeightMap(chunkX, chunkZ);	//original code
@@ -31,52 +38,24 @@ public abstract class LandTerrainGenBase implements ILandTerrainGen
 				int yMax = topBlock[x << 4 | z] - 3 - riverHeight;
 				for(y = 1; y < yMax; y++)
 				{
-					primer.setBlockState(x, y, z, provider.groundBlock);
+					primer.setBlockState(x, y, z, ground);
 				}
 				
 				int upperBlockHeight = (riverHeight > 0 || yMax + 3 >= seaHeight) ? 2 : 3;
 				for(; y < yMax + upperBlockHeight; y++)
-					primer.setBlockState(x, y, z, provider.upperBlock);
+					primer.setBlockState(x, y, z, upper);
 				
 				if(y >= seaHeight && riverHeight == 0)
-					primer.setBlockState(x, y, z, provider.surfaceBlock);
+					primer.setBlockState(x, y, z, surface);
 				else
 				{
 					for(int i = y + riverHeight; y < i; y++)
-						primer.setBlockState(x, y, z, provider.riverBlock);
+						primer.setBlockState(x, y, z, river);
 					
 					for(; y <= seaHeight; y++)
-						primer.setBlockState(x, y, z, provider.oceanBlock);
+						primer.setBlockState(x, y, z, ocean);
 				}
 			}
-		
-		/*int[] topBlockOrig = getHeightMap(chunkX, chunkZ, false);	Learning what different noise input does
-		int[] topBlockTest = getHeightMap(chunkX, chunkZ, true);
-		
-		for(int x = 0; x < 16; x++)
-			for(int z = 0; z < 16; z++)
-			{
-				int heightOrig = topBlockOrig[x << 4 | z];
-				int heightTest = topBlockTest[x << 4 | z];
-				int y;
-				for(y = 0; y < Math.min(heightOrig, heightTest); y++)
-					primer.setBlockState(x, y, z, Blocks.stone.getDefaultState());
-				for(; y < heightOrig; y++)
-					primer.setBlockState(x, y, z, Blocks.dirt.getDefaultState());
-				for(; y < heightTest; y++)
-					primer.setBlockState(x, y, z, Blocks.gravel.getDefaultState());
-			}*/
-		
-		/*for(int x = 0; x < 16; x++)	Biome test
-			for(int z = 0; z < 16; z++)
-			{
-				primer.setBlockState(x, 0, z, Blocks.bedrock.getDefaultState());
-				BiomeGenBase biome = biomesForGeneration[x/4 + z - (z%4)];
-				for(int y = 1; y < 70; y++)
-					primer.setBlockState(x, y, z, provider.groundBlock);
-				if(biome == BiomeGenMinestuck.mediumNormal)
-					primer.setBlockState(x, 70, z, provider.upperBlock);
-			}*/
 		
 		return primer;
 	}

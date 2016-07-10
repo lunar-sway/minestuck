@@ -38,9 +38,7 @@ public class BucketDecorator extends SimpleStructureDecorator
 		IBlockState liquid;
 		if(random.nextBoolean())
 			liquid = liquidBlocks[random.nextInt(liquidBlocks.length)].getDefaultState();
-		else if(random.nextBoolean())
-			liquid = provider.oceanBlock;
-		else liquid = provider.riverBlock;
+		else liquid = provider.blockRegistry.getBlockState(random.nextBoolean() ? "ocean" : "river");
 		
 		StructureBoundingBox boundingBox;
 		if(variant)

@@ -60,7 +60,7 @@ public class RockDecorator extends BiomeSpecificDecorator
 	private BlockPos generateRock(BlockPos rockPos, int height, float plateauSize, World world, Random random, ChunkProviderLands provider)
 	{
 		float xSlope = random.nextFloat(), zSlope = random.nextFloat();
-		IBlockState block = provider.groundBlock;
+		IBlockState block = provider.getGroundBlock();
 		
 		Map<CoordPair, Integer> heightMap = new HashMap<CoordPair, Integer>();
 		Queue<BlockPos> toProcess = new LinkedList<BlockPos>();

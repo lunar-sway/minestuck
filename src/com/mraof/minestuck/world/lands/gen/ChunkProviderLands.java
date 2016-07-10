@@ -37,6 +37,7 @@ import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.structure.DefaultGatePlacement;
 import com.mraof.minestuck.world.lands.structure.IGateStructure;
 import com.mraof.minestuck.world.lands.structure.LandStructureHandler;
+import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 
@@ -53,12 +54,8 @@ public class ChunkProviderLands implements IChunkGenerator
 	public LandAspectRegistry helper;
 	public int nameIndex1, nameIndex2;
 	public boolean nameOrder;
-
-	public IBlockState surfaceBlock;
-	public IBlockState upperBlock;
-	public IBlockState groundBlock;
-	public IBlockState oceanBlock;
-	public IBlockState riverBlock;
+	
+	public final StructureBlockRegistry blockRegistry;
 	public List<ILandDecorator> decorators;
 	public ILandTerrainGen terrainGenerator;
 	public LandStructureHandler structureHandler;
@@ -93,8 +90,6 @@ public class ChunkProviderLands implements IChunkGenerator
 		this.weatherType = aspect1.getWeatherType();
 		this.rainfall = aspect1.getRainfall();
 		this.temperature = aspect1.getTemperature();
-		this.oceanChance = aspect1.getOceanChance();
-		this.roughChance = aspect1.getRoughChance();
 		
 		if(!clientSide)
 		{
@@ -106,18 +101,18 @@ public class ChunkProviderLands implements IChunkGenerator
 			nameIndex2 = rand.nextInt(aspect2.getNames().length);
 			nameOrder = rand.nextBoolean();
 			
+			this.oceanChance = aspect1.getOceanChance();
+			this.roughChance = aspect1.getRoughChance();
+			
 			this.random = new Random(seed);
+			blockRegistry = new StructureBlockRegistry();
 			this.terrainGenerator = aspect1.createTerrainGenerator(this, random);
 			this.structureHandler = new LandStructureHandler(this);
-			this.surfaceBlock = aspect1.getSurfaceBlock();
-			this.upperBlock = aspect1.getUpperBlock();
-			this.groundBlock = aspect1.getGroundBlock();
-			this.oceanBlock = aspect1.getOceanBlock();
-			this.riverBlock = aspect1.getRiverBlock();
+			aspect1.registerBlocks(blockRegistry);
 			this.decorators = new ArrayList<ILandDecorator>();
 			this.decorators.addAll(aspect1.getDecorators());
 			sortDecorators();
-		}
+		} else blockRegistry = null;
 	}
 	
 	public void createBiomeGen()
@@ -306,6 +301,21 @@ public class ChunkProviderLands implements IChunkGenerator
 	public Biome getBiomeGen()
 	{
 		return biomeLands;
+	}
+	
+	public IBlockState getGroundBlock()
+	{
+		return blockRegistry.getBlockState("ground");
+	}
+	
+	public IBlockState getUpperBlock()
+	{
+		return blockRegistry.getBlockState("upper");
+	}
+	
+	public IBlockState getSurfaceBlock()
+	{
+		return blockRegistry.getBlockState("surface");
 	}
 	
 }

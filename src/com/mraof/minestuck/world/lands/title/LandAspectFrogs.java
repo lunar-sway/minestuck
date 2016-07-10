@@ -23,4 +23,9 @@ public class LandAspectFrogs extends TitleLandAspect
 		
 	}
 	
+	@Override
+	protected void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
+	{
+		
+	}
 }

@@ -9,48 +9,34 @@ import com.mraof.minestuck.world.lands.decorator.IceDecorator;
 import com.mraof.minestuck.world.lands.decorator.LayeredBlockDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
+import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
 import net.minecraft.block.BlockDirt;
 import net.minecraft.block.BlockStoneBrick;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.Vec3d;
 
 public class LandAspectFrost extends TerrainLandAspect 
 {
-	IBlockState[] structureBlocks = {Blocks.STONE.getDefaultState(), Blocks.STONEBRICK.getDefaultState()};
 	static Vec3d skyColor = new Vec3d(0.45D, 0.5D, 0.98D);
 	
 	@Override
-	public IBlockState getSurfaceBlock() 
+	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		return Blocks.GRASS.getDefaultState();
-	}
-
-	@Override
-	public IBlockState getUpperBlock() 
-	{
-		return Blocks.DIRT.getDefaultState();
-	}
-	
-	@Override
-	public IBlockState[] getStructureBlocks()
-	{
-		return structureBlocks;
+		registry.setBlockState("surface", Blocks.GRASS.getDefaultState());
+		registry.setBlockState("upper", Blocks.DIRT.getDefaultState());
+		registry.setBlockState("structure_primary", Blocks.STONEBRICK.getDefaultState());
+		registry.setBlockState("structure_primary_decorative", Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED));
+		registry.setBlockState("structure_secondary", Blocks.STONE.getDefaultState());
+		registry.setBlockState("river", Blocks.ICE.getDefaultState());
 	}
 	
-	@Override
-	public IBlockState getRiverBlock() 
-	{
-		return Blocks.ICE.getDefaultState();
-	}
-
 	@Override
 	public String getPrimaryName() 
 	{
 		return "frost";
 	}
-
+	
 	@Override
 	public String[] getNames() {
 		return new String[] {"frost", "ice", "snow"};
@@ -104,14 +90,6 @@ public class LandAspectFrost extends TerrainLandAspect
 	public float getOceanChance()
 	{
 		return 1/4F;
-	}
-	
-	@Override
-	public IBlockState getDecorativeBlockFor(IBlockState state)
-	{
-		if(state.getBlock() == Blocks.STONEBRICK)
-			return Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED);
-		return state;
 	}
 	
 }
