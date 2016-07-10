@@ -17,29 +17,29 @@ import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 public class LandAspectMonsters extends TitleLandAspect
 {
 	
-	private final String name;
+	private final Variant type;
 	private final List<TitleLandAspect> variations;
 	private final List<SpawnListEntry> monsterList;
 	
 	public LandAspectMonsters()
 	{
-		this("monsters");
+		this(Variant.MONSTERS);
 	}
 	
-	public LandAspectMonsters(String name)
+	public LandAspectMonsters(Variant type)
 	{
 		this.variations = new ArrayList<TitleLandAspect>();
-		this.name = name;
+		this.type = type;
 		this.monsterList = new ArrayList<SpawnListEntry>();
-		if(this.name.equals("monsters"))
+		if(this.type == Variant.MONSTERS)
 		{
 			monsterList.add(new SpawnListEntry(EntityCreeper.class, 1, 1, 1));
 			monsterList.add(new SpawnListEntry(EntitySpider.class, 1, 1, 2));
 			monsterList.add(new SpawnListEntry(EntityZombie.class, 1, 1, 2));
 			variations.add(this);
-			variations.add(new LandAspectMonsters("monsters_dead"));
+			variations.add(new LandAspectMonsters(Variant.MONSTERS_DEAD));
 		}
-		else if(this.name.equals("monsters_dead"))
+		else if(this.type == Variant.MONSTERS_DEAD)
 		{
 			monsterList.add(new SpawnListEntry(EntityZombie.class, 2, 1, 3));
 			monsterList.add(new SpawnListEntry(EntitySkeleton.class, 1, 1, 2));
@@ -49,7 +49,7 @@ public class LandAspectMonsters extends TitleLandAspect
 	@Override
 	public String getPrimaryName()
 	{
-		return name;
+		return type.getName();
 	}
 	
 	@Override
@@ -91,4 +91,13 @@ public class LandAspectMonsters extends TitleLandAspect
 		return LandAspectRegistry.fromNameTitle("monsters");
 	}
 	
+	public static enum Variant
+	{
+		MONSTERS,
+		MONSTERS_DEAD;
+		public String getName()
+		{
+			return this.toString().toLowerCase();
+		}
+	}
 }
