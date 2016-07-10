@@ -34,7 +34,7 @@ public class BucketDecorator extends SimpleStructureDecorator
 			return null;
 		yCoord -= random.nextInt(3);
 		boolean variant = random.nextDouble() < 0.4;
-		IBlockState block = random.nextDouble() < 0.3 ? Blocks.IRON_BLOCK.getDefaultState() /*<- Should this continue to be a thing?*/ : Blocks.QUARTZ_BLOCK.getDefaultState();
+		IBlockState block = provider.blockRegistry.getBlockState(random.nextDouble() < 0.3 ? "bucket2" : "bucket1");
 		IBlockState liquid;
 		if(random.nextBoolean())
 			liquid = liquidBlocks[random.nextInt(liquidBlocks.length)].getDefaultState();

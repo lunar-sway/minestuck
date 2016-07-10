@@ -45,6 +45,8 @@ public class StructureBlockRegistry
 		registerBlock("structure_primary_decorative", "structure_primary");
 		registerBlock("structure_secondary", "structure_primary");
 		registerBlock("structure_secondary_decorative", "structure_secondary");
+		registerBlock("bucket1", Blocks.QUARTZ_BLOCK.getDefaultState());
+		registerBlock("bucket2", Blocks.IRON_BLOCK.getDefaultState());
 	}
 	
 	private static class BlockEntry
