@@ -1,8 +1,11 @@
 package com.mraof.minestuck.world.lands.structure;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import com.mraof.minestuck.block.BlockGate;
 import com.mraof.minestuck.block.MinestuckBlocks;
@@ -31,7 +34,7 @@ public class LandStructureHandler extends MapGenStructure
 	
 	public static void registerStructures()
 	{
-		genericStructures.add(new StructureEntry(SmallRuinStart.class, 1));
+		genericStructures.add(new StructureEntry(SmallRuinStart.class, 1, BiomeMinestuck.mediumNormal));
 		MapGenStructureIO.registerStructure(SmallRuinStart.class, "MinestuckSmallRuin");
 		MapGenStructureIO.registerStructureComponent(SmallRuinStart.SmallRuin.class, "MinestuckSmallRuinCompo");
 	}
@@ -70,9 +73,12 @@ public class LandStructureHandler extends MapGenStructure
 		
 		if (chunkX == x && chunkZ == z)
 		{
+			Random entryRand = worldObj.setRandomSeed(chunkX , chunkZ, 34527185^worldObj.provider.getDimension());
 			Biome biome = this.worldObj.getBiomeProvider().getBiomeGenerator(new BlockPos(new BlockPos(chunkX*16 + 8, 0, chunkZ*16 + 8)));
+			StructureEntry entry = getRandomEntry(entryRand);
+			
 			return !chunkProvider.isBBInSpawn(new StructureBoundingBox(chunkX*16 - 16, chunkZ*16 - 16, chunkX*16 + 32, chunkZ*16 + 32))	//This chunk and the chunks around it.
-					&& biome == BiomeMinestuck.mediumNormal;
+					&& (entry.biomes.isEmpty() || entry.biomes.contains(biome));
 		}
 		
 		return false;
@@ -87,18 +93,13 @@ public class LandStructureHandler extends MapGenStructure
 	@Override
 	protected StructureStart getStructureStart(int chunkX, int chunkZ)
 	{
-		int x = chunkX;
-		int z = chunkZ;
+		Random rand = worldObj.setRandomSeed(chunkX , chunkZ, 34527185^worldObj.provider.getDimension());
 		
-		if (x < 0)
-			x -= this.MAX_STRUCTURE_DISTANCE - 1;
-		if (z < 0)
-			z -= this.MAX_STRUCTURE_DISTANCE - 1;
-		
-		x /= this.MAX_STRUCTURE_DISTANCE;
-		z /= this.MAX_STRUCTURE_DISTANCE;
-		Random rand = worldObj.setRandomSeed(x , z, 34527185^worldObj.provider.getDimension());
-		
+		return getRandomEntry(rand).createInstance(chunkProvider, worldObj, rand, chunkX, chunkZ);
+	}
+	
+	private StructureEntry getRandomEntry(Random random)
+	{
 		if(totalRarity == 0)
 			for(StructureEntry entry : structures)
 				totalRarity += entry.rarity;
@@ -108,7 +109,7 @@ public class LandStructureHandler extends MapGenStructure
 		for(StructureEntry entry : structures)
 		{
 			if(index < entry.rarity)
-				return entry.createInstance(chunkProvider, worldObj, rand, chunkX, chunkZ);
+				return entry;
 			index -= entry.rarity;
 		}
 		
@@ -119,11 +120,13 @@ public class LandStructureHandler extends MapGenStructure
 	{
 		public final Class<? extends StructureStart> structureStart;
 		public final float rarity;
+		public final Set<Biome> biomes;
 		
-		public StructureEntry(Class<? extends StructureStart> structure, int rarity)
+		public StructureEntry(Class<? extends StructureStart> structure, int rarity, Biome... biomes)
 		{
 			this.structureStart = structure;
 			this.rarity = rarity;
+			this.biomes = new HashSet<Biome>(Arrays.asList(biomes));
 		}
 		
 		private StructureStart createInstance(ChunkProviderLands chunkProvider, World world, Random rand, int chunkX, int chunkZ)
