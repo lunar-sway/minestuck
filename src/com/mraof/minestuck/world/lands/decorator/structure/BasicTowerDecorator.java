@@ -36,7 +36,7 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 			return null;
 		
 		IBlockState wall = provider.blockRegistry.getBlockState("structure_primary");
-		IBlockState wallDec = provider.blockRegistry.getBlockState("structure_primary_decorated");
+		IBlockState wallDec = provider.blockRegistry.getBlockState("structure_primary_decorative");
 		IBlockState floor = provider.blockRegistry.getBlockState("structure_secondary");
 		
 		boolean torches = random.nextFloat() < (provider.dayCycle == 0 ? 0.4F : provider.dayCycle == 1 ? 0F : 0.9F);

@@ -193,14 +193,14 @@ public class SmallRuinStart extends StructureStart
 			int y = 0;
 			
 			float f = (3 - z)*0.25F;
-			if(this.getBlockStateFromPos(world, x, y, z, boundingBox).getMaterial().isSolid())	//getBlockStateFromPos: get block state
+			if(this.getBlockStateFromPos(world, x, y, z, boundingBox).getMaterial().isSolid())
 				f -= 0.25F;
 			boolean b = true;
 			do
 			{
 				if(rand.nextFloat() >= f)
 				{
-					this.setBlockState(world, block, x, y, z, boundingBox);	//setBlockState: place block
+					this.setBlockState(world, block, x, y, z, boundingBox);
 					f = 0F;
 				} else
 				{

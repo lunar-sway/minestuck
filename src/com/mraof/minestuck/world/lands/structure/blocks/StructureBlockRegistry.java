@@ -43,8 +43,10 @@ public class StructureBlockRegistry
 		registerBlock("river", "ocean");
 		registerBlock("structure_primary", "ground");
 		registerBlock("structure_primary_decorative", "structure_primary");
+		registerBlock("structure_primary_stairs", "structure_primary");
 		registerBlock("structure_secondary", "structure_primary");
 		registerBlock("structure_secondary_decorative", "structure_secondary");
+		registerBlock("structure_secondary_stairs", "structure_secondary");
 		registerBlock("bucket1", Blocks.QUARTZ_BLOCK.getDefaultState());
 		registerBlock("bucket2", Blocks.IRON_BLOCK.getDefaultState());
 	}
