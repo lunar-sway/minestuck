@@ -90,7 +90,7 @@ public class LandStructureHandler extends MapGenStructure
 	@Override
 	public String getStructureName()
 	{
-		return "Basic Land Feature";
+		return "LandFeature";
 	}
 	
 	@Override
