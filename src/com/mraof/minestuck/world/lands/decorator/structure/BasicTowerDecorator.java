@@ -48,7 +48,7 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 				do
 				{
 					world.setBlockState(floorPos, (Math.abs(x) == 3 || Math.abs(z) == 3) ? wall : floor, 2);
-					floorPos = pos.down();
+					floorPos = floorPos.down();
 				} while(!world.getBlockState(floorPos).getMaterial().isSolid());
 			}
 		
