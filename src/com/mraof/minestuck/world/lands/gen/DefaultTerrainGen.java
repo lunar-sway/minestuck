@@ -68,7 +68,7 @@ public class DefaultTerrainGen extends LandTerrainGenBase
 					double biomeHeight = height0;
 					double biomeHeightDiff = (height1 - height0)*f1;
 					double biomeVariation = variation0;
-					double biomeVariationDiff = (variation1 - variation0);
+					double biomeVariationDiff = (variation1 - variation0)*f1;
 					for(int z1 = 0; z1 < 4; z1++)
 					{
 						double height = heightMap[(x0*4 + x1)*16 + z0*4 + z1]/40D;
