@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
+import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -126,7 +127,8 @@ public class ImpDungeonStart extends StructureStart
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, -3, 4, 4, -3, 5, wallBlock, wallBlock, false);
 			setBlockState(worldIn, wallBlock, 4, -4, 5, structureBoundingBoxIn);
 			
-			
+			setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.EAST), 2, -3, 8, structureBoundingBoxIn);
+			setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.WEST), 3, -3, 8, structureBoundingBoxIn);
 			
 			return true;
 		}
