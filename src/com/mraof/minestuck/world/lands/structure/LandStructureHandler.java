@@ -14,6 +14,7 @@ import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -28,7 +29,7 @@ public class LandStructureHandler extends MapGenStructure
 	
 	public final static List<StructureEntry> genericStructures = new ArrayList<StructureEntry>();
 	public final List<StructureEntry> structures = new ArrayList<StructureEntry>();
-	private float totalRarity;
+	private int totalWeight;
 	
 	private final ChunkProviderLands chunkProvider;
 	
@@ -103,32 +104,21 @@ public class LandStructureHandler extends MapGenStructure
 	
 	private StructureEntry getRandomEntry(Random random)
 	{
-		if(totalRarity == 0)
-			for(StructureEntry entry : structures)
-				totalRarity += entry.rarity;
+		if(totalWeight == 0)
+			totalWeight = WeightedRandom.getTotalWeight(structures);
 		
-		float index = rand.nextFloat()*totalRarity;
-		
-		for(StructureEntry entry : structures)
-		{
-			if(index < entry.rarity)
-				return entry;
-			index -= entry.rarity;
-		}
-		
-		throw new IllegalStateException("Index out of bounds! Total rarity '"+totalRarity+"' must be incorrectly calculated.");
+		return WeightedRandom.getRandomItem(rand, structures, totalWeight);
 	}
 	
-	public static class StructureEntry
+	public static class StructureEntry extends WeightedRandom.Item
 	{
 		public final Class<? extends StructureStart> structureStart;
-		public final float rarity;
 		public final Set<Biome> biomes;
 		
-		public StructureEntry(Class<? extends StructureStart> structure, int rarity, Biome... biomes)
+		public StructureEntry(Class<? extends StructureStart> structure, int weight, Biome... biomes)
 		{
+			super(weight);
 			this.structureStart = structure;
-			this.rarity = rarity;
 			this.biomes = new HashSet<Biome>(Arrays.asList(biomes));
 		}
 		
