@@ -81,8 +81,8 @@ public class ImpDungeonStart extends StructureStart
 			
 			for(int z = 0; z < 5; z++)
 			{
-				buildFloorTile(floorBlock, 0, z, worldIn, randomIn, structureBoundingBoxIn);
-				buildFloorTile(floorBlock, 5, z, worldIn, randomIn, structureBoundingBoxIn);
+				buildFloorTile(wallBlock, 0, z, worldIn, randomIn, structureBoundingBoxIn);
+				buildFloorTile(wallBlock, 5, z, worldIn, randomIn, structureBoundingBoxIn);
 				buildWall(wallBlock, 0, z, worldIn, randomIn, structureBoundingBoxIn, 0);
 				buildWall(wallBlock, 5, z, worldIn, randomIn, structureBoundingBoxIn, 0);
 			}
@@ -96,26 +96,26 @@ public class ImpDungeonStart extends StructureStart
 			
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 1, 1, 0, 4, floorBlock, floorBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 1, 4, 0, 4, floorBlock, floorBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 5, 4, 0, 5, floorBlock, floorBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 5, 4, 0, 5, wallBlock, wallBlock, false);
 			fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 0, 4, 4, 4);
 			
 			fillWithAir(worldIn, structureBoundingBoxIn, 2, 0, 2, 3, 0, 4);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 1, 3, 0, 1, floorStairs, floorStairs, false);
 			fillWithAir(worldIn, structureBoundingBoxIn, 2, -1, 3, 3, -1, 5);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, -1, 2, 3, -1, 2, floorStairs, floorStairs, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, -1, 6, 4, -1, 6, floorBlock, floorBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, -1, 6, 4, -1, 6, wallBlock, wallBlock, false);
 			fillWithAir(worldIn, structureBoundingBoxIn, 2, -2, 4, 3, -2, 6);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, -2, 3, 3, -2, 3, floorStairs, floorStairs, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, -2, 7, 4, -2, 10, floorBlock, floorBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, -2, 7, 4, -2, 10, wallBlock, wallBlock, false);
 			fillWithAir(worldIn, structureBoundingBoxIn, 2, -3, 5, 3, -3, 9);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, -3, 4, 3, -3, 4, floorStairs, floorStairs, false);
 			fillWithAir(worldIn, structureBoundingBoxIn, 2, -4, 6, 3, -4, 9);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, -4, 5, 3, -4, 5, floorStairs, floorStairs, false);
 			fillWithAir(worldIn, structureBoundingBoxIn, 2, -5, 7, 3, -5, 9);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, -5, 6, 3, -5, 6, floorStairs, floorStairs, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, -6, 6, 4, -6, 10, floorBlock, floorBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, -6, 6, 4, -6, 8, floorBlock, floorBlock, false);
 			
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, -5, 10, 4, -3, 10, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, -6, 10, 4, -3, 10, wallBlock, wallBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, -5, 6, 1, -3, 9, wallBlock, wallBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, -1, 2, 1, -1, 5, wallBlock, wallBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, -2, 3, 1, -2, 6, wallBlock, wallBlock, false);
@@ -126,6 +126,9 @@ public class ImpDungeonStart extends StructureStart
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, -2, 3, 4, -2, 6, wallBlock, wallBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, -3, 4, 4, -3, 5, wallBlock, wallBlock, false);
 			setBlockState(worldIn, wallBlock, 4, -4, 5, structureBoundingBoxIn);
+			fillWithAir(worldIn, structureBoundingBoxIn, 2, -6, 9, 3, -6, 9);
+			setBlockState(worldIn, wallBlock, 1, -6, 9, structureBoundingBoxIn);
+			setBlockState(worldIn, wallBlock, 4, -6, 9, structureBoundingBoxIn);
 			
 			setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.EAST), 2, -3, 8, structureBoundingBoxIn);
 			setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.WEST), 3, -3, 8, structureBoundingBoxIn);
