@@ -47,6 +47,7 @@ public class StructureBlockRegistry
 		registerBlock("structure_secondary", "structure_primary");
 		registerBlock("structure_secondary_decorative", "structure_secondary");
 		registerBlock("structure_secondary_stairs", "structure_secondary");
+		registerBlock("fall_fluid", "ocean");
 		registerBlock("bucket1", Blocks.QUARTZ_BLOCK.getDefaultState());
 		registerBlock("bucket2", Blocks.IRON_BLOCK.getDefaultState());
 	}

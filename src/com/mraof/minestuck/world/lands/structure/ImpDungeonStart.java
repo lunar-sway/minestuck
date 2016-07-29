@@ -1,7 +1,9 @@
 package com.mraof.minestuck.world.lands.structure;
 
+import java.util.List;
 import java.util.Random;
 
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 import net.minecraft.block.BlockTorch;
@@ -26,7 +28,7 @@ public class ImpDungeonStart extends StructureStart
 	{
 		super(chunkX, chunkZ);
 		
-		components.add(new EntryComponent(provider, chunkX, chunkZ, rand));
+		components.add(new EntryComponent(provider, chunkX, chunkZ, rand, components));
 		updateBoundingBox();
 		
 		//TODO add an appropriate gate check
@@ -34,12 +36,13 @@ public class ImpDungeonStart extends StructureStart
 	
 	public static class EntryComponent extends StructureComponent
 	{
-		protected boolean definedHeight  = false;
+		protected boolean definedHeight = false;
+		protected int compoHeight;
 		
 		public EntryComponent()
 		{}
 		
-		public EntryComponent(ChunkProviderLands provider, int chunkX, int chunkZ, Random rand)
+		public EntryComponent(ChunkProviderLands provider, int chunkX, int chunkZ, Random rand, List<StructureComponent> componentList)
 		{
 			int x = chunkX*16 + rand.nextInt(16);
 			int z = chunkZ*16 + rand.nextInt(16);
@@ -48,26 +51,28 @@ public class ImpDungeonStart extends StructureStart
 			int zWidth = getCoordBaseMode().getAxis().equals(EnumFacing.Axis.Z) ? 11 : 6;
 			this.boundingBox = new StructureBoundingBox(x, 64, z, x + xWidth - 1, 67, z + zWidth - 1);
 			
-			//Add other components
+			ImpDungeonComponents.EntryCorridor corridor = new ImpDungeonComponents.EntryCorridor(this.getCoordBaseMode(), x, z, rand, componentList);
+			compoHeight = corridor.getBoundingBox().maxY;
+			componentList.add(corridor);
 		}
 		
 		@Override
 		protected void writeStructureToNBT(NBTTagCompound tagCompound)
 		{
 			tagCompound.setBoolean("definedHeight", definedHeight);
+			tagCompound.setInteger("compoHeight", compoHeight);
 		}
 		
 		@Override
 		protected void readStructureFromNBT(NBTTagCompound tagCompound)
 		{
 			definedHeight = tagCompound.getBoolean("definedHeight");
+			compoHeight = tagCompound.getInteger("compoHeight");
 		}
 		
 		@Override
 		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
 		{
-			if(!checkHeight(worldIn, boundingBox) || this.isLiquidInStructureBoundingBox(worldIn, boundingBox))
-				return false;
 			
 			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
 			
@@ -115,7 +120,7 @@ public class ImpDungeonStart extends StructureStart
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, -5, 6, 3, -5, 6, floorStairs, floorStairs, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, -6, 6, 4, -6, 8, floorBlock, floorBlock, false);
 			
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, -6, 10, 4, -3, 10, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, compoHeight - boundingBox.minY, 10, 4, -3, 10, wallBlock, wallBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, -5, 6, 1, -3, 9, wallBlock, wallBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, -1, 2, 1, -1, 5, wallBlock, wallBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, -2, 3, 1, -2, 6, wallBlock, wallBlock, false);
@@ -126,9 +131,10 @@ public class ImpDungeonStart extends StructureStart
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, -2, 3, 4, -2, 6, wallBlock, wallBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, -3, 4, 4, -3, 5, wallBlock, wallBlock, false);
 			setBlockState(worldIn, wallBlock, 4, -4, 5, structureBoundingBoxIn);
-			fillWithAir(worldIn, structureBoundingBoxIn, 2, -6, 9, 3, -6, 9);
-			setBlockState(worldIn, wallBlock, 1, -6, 9, structureBoundingBoxIn);
-			setBlockState(worldIn, wallBlock, 4, -6, 9, structureBoundingBoxIn);
+			fillWithAir(worldIn, structureBoundingBoxIn, 2, compoHeight - boundingBox.minY, 9, 3, -6, 9);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, compoHeight - boundingBox.minY, 9, 1, -6, 9, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, compoHeight - boundingBox.minY, 9, 4, -6, 9, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, compoHeight - boundingBox.minY, 8, 4, -7, 8, wallBlock, wallBlock, false);
 			
 			setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.EAST), 2, -3, 8, structureBoundingBoxIn);
 			setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.WEST), 3, -3, 8, structureBoundingBoxIn);
@@ -136,13 +142,12 @@ public class ImpDungeonStart extends StructureStart
 			return true;
 		}
 		
-		protected boolean checkHeight(World worldIn, StructureBoundingBox bb)
+		protected void checkHeight(World worldIn, StructureBoundingBox bb)
 		{
+			Debug.info(definedHeight);
 			if(definedHeight)
-				return true;
-//			int minY = 256, maxY = 0;
+				return;
 			int height = 0;
-			boolean onLand = false;
 			int i = 0;
 			
 			for(int x = boundingBox.minX; x <= boundingBox.maxX; x++)
@@ -152,23 +157,14 @@ public class ImpDungeonStart extends StructureStart
 						continue;
 					
 					int y = worldIn.getTopSolidOrLiquidBlock(new BlockPos(x, 0, z)).getY();
-					/*if(y < minY)
-						minY = y;
-					if(y > maxY)
-						maxY = y;*/
 					height += y;
 					i++;
-					if(!worldIn.getBlockState(new BlockPos(x, y, z)).getBlock().equals(Blocks.ICE))
-						onLand = true;	//used to prevent the structure from spawning in an ice-covered sea without any land nearby
 				}
-				
-			if(!onLand || i == 0/* || maxY - minY > 5*/)
-				return false;
 			
 			height /= i;
+			Debug.info(height+","+i+","+boundingBox.minY);
 			boundingBox.offset(0, height - boundingBox.minY, 0);
 			definedHeight = true;
-			return true;
 		}
 		
 		protected void buildWall(IBlockState block, int x, int z, World world, Random rand, StructureBoundingBox boundingBox, int minY)

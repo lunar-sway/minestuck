@@ -26,6 +26,7 @@ public class LandAspectHeat extends TerrainLandAspect
 		registry.setBlockState("ocean", Blocks.LAVA.getDefaultState());
 		registry.setBlockState("structure_primary", Blocks.NETHER_BRICK.getDefaultState());
 		registry.setBlockState("structure_secondary", Blocks.OBSIDIAN.getDefaultState());
+		registry.setBlockState("fall_fluid", Blocks.WATER.getDefaultState());
 	}
 	
 	@Override
