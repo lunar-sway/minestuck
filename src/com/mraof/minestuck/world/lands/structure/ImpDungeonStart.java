@@ -52,7 +52,7 @@ public class ImpDungeonStart extends StructureStart
 			this.boundingBox = new StructureBoundingBox(x, 64, z, x + xWidth - 1, 67, z + zWidth - 1);
 			
 			ImpDungeonComponents.EntryCorridor corridor = new ImpDungeonComponents.EntryCorridor(this.getCoordBaseMode(), x, z, rand, componentList);
-			compoHeight = corridor.getBoundingBox().maxY;
+			compoHeight = corridor.getBoundingBox().maxY - 1;
 			componentList.add(corridor);
 		}
 		
@@ -73,6 +73,7 @@ public class ImpDungeonStart extends StructureStart
 		@Override
 		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
 		{
+			checkHeight(worldIn, structureBoundingBoxIn);
 			
 			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
 			
