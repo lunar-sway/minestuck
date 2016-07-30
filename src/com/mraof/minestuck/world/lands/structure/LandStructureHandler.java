@@ -44,6 +44,7 @@ public class LandStructureHandler extends MapGenStructure
 		MapGenStructureIO.registerStructureComponent(ImpDungeonComponents.EntryCorridor.class, "MinestuckIDEntryCorridor");
 		MapGenStructureIO.registerStructureComponent(ImpDungeonComponents.StraightCorridor.class, "MinestuckIDCorridor");
 		MapGenStructureIO.registerStructureComponent(ImpDungeonComponents.CrossCorridor.class, "MinestuckIDCross");
+		MapGenStructureIO.registerStructureComponent(ImpDungeonComponents.TurnCorridor.class, "MinestuckIDTurn");
 	}
 	
 	public LandStructureHandler(ChunkProviderLands chunkProvider)

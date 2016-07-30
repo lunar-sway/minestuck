@@ -115,16 +115,20 @@ public class ImpDungeonComponents
 				|| xIndex < 0 || zIndex < 0 || compoGen[xIndex][zIndex])
 			return false;
 		
-		if(rand.nextGaussian() >= (1 - index*0.2))
+		if(rand.nextGaussian() >= (1.4 - index*0.2))
 			return false;
 		
 		compoGen[xIndex][zIndex] = true;
 		
 		StructureComponent component;
 		
-		if(rand.nextGaussian() < 0.7)
+		double i = rand.nextGaussian();
+		if(i < 0.4)
 		{
 			component = new StraightCorridor(facing, pos, rand, compoGen, xIndex, zIndex, index, compoList);
+		} else if(i < 0.7)
+		{
+			component = new TurnCorridor(facing, pos, rand, compoGen, xIndex, zIndex, index, compoList);
 		} else
 		{
 			component = new CrossCorridor(facing, pos, rand, compoGen, xIndex, zIndex, index, compoList);
@@ -284,4 +288,78 @@ public class ImpDungeonComponents
 			return true;
 		}
 	}
+	
+	public static class TurnCorridor extends StructureComponent
+	{
+		boolean[] corridors = new boolean[2];
+		
+		public TurnCorridor()
+		{}
+		
+		public TurnCorridor(EnumFacing coordBaseMode, BlockPos pos, Random rand, boolean[][] compoGen, int xIndex, int zIndex, int index, List<StructureComponent> componentList)
+		{
+			boolean direction = rand.nextBoolean();
+			if(direction)
+				setCoordBaseMode(coordBaseMode.rotateY());
+			else setCoordBaseMode(coordBaseMode);
+			
+			int xWidth = 6;
+			int zWidth = 6;
+			
+			int i = coordBaseMode.getAxisDirection().getOffset() + 1;
+			int j = direction^(coordBaseMode.getAxis() == EnumFacing.Axis.Z)^(coordBaseMode.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE)?2:0;
+			int x = pos.getX() - 3 + (getCoordBaseMode() == EnumFacing.NORTH || getCoordBaseMode() == EnumFacing.WEST ? 2 : 0);
+			int z = pos.getZ() - 3 + (getCoordBaseMode() == EnumFacing.NORTH || getCoordBaseMode() == EnumFacing.EAST ? 2 : 0);
+			
+			this.boundingBox = new StructureBoundingBox(x, pos.getY(), z, x + xWidth - 1, pos.getY() + 4, z + zWidth - 1);
+			
+			EnumFacing newFacing = direction ? coordBaseMode.rotateYCCW() : coordBaseMode.rotateY();
+			int xOffset = newFacing.getFrontOffsetX();
+			int zOffset = newFacing.getFrontOffsetZ();
+			corridors[direction ? 0 : 1] = !generatePart(compoGen, xIndex + xOffset, zIndex + zOffset, pos.add(xOffset*8, 0, zOffset*8), newFacing, rand, componentList, index + 1);
+		}
+		
+		@Override
+		protected void writeStructureToNBT(NBTTagCompound tagCompound)
+		{
+			for(int i = 0; i < corridors.length; i++)
+				tagCompound.setBoolean("blocked"+i, corridors[i]);
+		}
+		
+		@Override
+		protected void readStructureFromNBT(NBTTagCompound tagCompound)
+		{
+			for(int i = 0; i < corridors.length; i++)
+				corridors[i] = tagCompound.getBoolean("blocked"+i);
+		}
+		
+		@Override
+		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
+		{
+			
+			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
+			
+			IBlockState wallBlock = provider.blockRegistry.getBlockState("structure_primary");
+			IBlockState floorBlock = provider.blockRegistry.getBlockState("structure_secondary");
+			
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 0, 0, 4, 0, 4, floorBlock, floorBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 3, 2, 0, 4, floorBlock, floorBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 0, 0, 5, 4, 5, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 0, 2, 4, 2, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 2, 1, 4, 2, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 5, 4, 4, 5, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 4, 0, 4, 4, 4, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 4, 3, 2, 4, 4, wallBlock, wallBlock, false);
+			fillWithAir(worldIn, structureBoundingBoxIn, 3, 1, 0, 4, 3, 4);
+			fillWithAir(worldIn, structureBoundingBoxIn, 0, 1, 3, 2, 3, 4);
+			
+			if(corridors[0])
+				fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 1, 0, 4, 3, 0, wallBlock, wallBlock, false);
+			if(corridors[1])
+				fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 1, 3, 0, 3, 4, wallBlock, wallBlock, false);
+			
+			return true;
+		}
+	}
+	
 }
