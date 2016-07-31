@@ -16,7 +16,7 @@ import net.minecraft.world.gen.structure.StructureComponent;
 public class ImpDungeonComponents
 {
 	
-	public static class EntryCorridor extends StructureComponent
+	public static class EntryCorridor extends ImpDungeonComponent
 	{
 		
 		boolean[] corridors = new boolean[2];
@@ -40,13 +40,20 @@ public class ImpDungeonComponents
 			
 			BlockPos compoPos = new BlockPos(x + (xWidth/2 - 1), height, z + (zWidth/2 - 1));
 			
-			boolean[][] compoGen = new boolean[13][13];
-			compoGen[6][6] = true;
+			ImpDungeonComponent[][] compoGen = new ImpDungeonComponent[13][13];
+			compoGen[6][6] = this;
 			
 			int xOffset = coordBaseMode.getFrontOffsetX();
 			int zOffset = coordBaseMode.getFrontOffsetZ();
-			corridors[0] = !generatePart(compoGen, 6 + xOffset, 6 + zOffset, compoPos.add(xOffset*8, 0, zOffset*8), coordBaseMode, rand, componentList, 0);
-			corridors[1] = !generatePart(compoGen, 6 - xOffset, 6 - zOffset, compoPos.add(-xOffset*8, 0, -zOffset*8), coordBaseMode.getOpposite(), rand, componentList, 0);
+			if(rand.nextBoolean())
+			{
+				corridors[0] = !generatePart(compoGen, 6 + xOffset, 6 + zOffset, compoPos.add(xOffset*8, 0, zOffset*8), coordBaseMode, rand, componentList, 0);
+				corridors[1] = !generatePart(compoGen, 6 - xOffset, 6 - zOffset, compoPos.add(-xOffset*8, 0, -zOffset*8), coordBaseMode.getOpposite(), rand, componentList, 0);
+			} else
+			{
+				corridors[1] = !generatePart(compoGen, 6 - xOffset, 6 - zOffset, compoPos.add(-xOffset*8, 0, -zOffset*8), coordBaseMode.getOpposite(), rand, componentList, 0);
+				corridors[0] = !generatePart(compoGen, 6 + xOffset, 6 + zOffset, compoPos.add(xOffset*8, 0, zOffset*8), coordBaseMode, rand, componentList, 0);
+			}
 		}
 		
 		@Override
@@ -61,6 +68,13 @@ public class ImpDungeonComponents
 		{
 			for(int i = 0; i < corridors.length; i++)
 				corridors[i] = tagCompound.getBoolean("blocked"+i);
+		}
+		
+		@Override
+		protected boolean connectFrom(EnumFacing facing)
+		{
+			
+			return false;
 		}
 		
 		@Override
@@ -109,18 +123,19 @@ public class ImpDungeonComponents
 		}
 	}
 	
-	public static boolean generatePart(boolean[][] compoGen, int xIndex, int zIndex, BlockPos pos, EnumFacing facing, Random rand, List<StructureComponent> compoList, int index)
+	public static boolean generatePart(ImpDungeonComponent[][] compoGen, int xIndex, int zIndex, BlockPos pos, EnumFacing facing, Random rand, List<StructureComponent> compoList, int index)
 	{
 		if(xIndex >= compoGen.length || zIndex >= compoGen[0].length
-				|| xIndex < 0 || zIndex < 0 || compoGen[xIndex][zIndex])
+				|| xIndex < 0 || zIndex < 0)
 			return false;
+		
+		if(compoGen[xIndex][zIndex] != null)
+			return compoGen[xIndex][zIndex].connectFrom(facing.getOpposite());
 		
 		if(rand.nextGaussian() >= (1.4 - index*0.2))
 			return false;
 		
-		compoGen[xIndex][zIndex] = true;
-		
-		StructureComponent component;
+		ImpDungeonComponent component;
 		
 		double i = rand.nextGaussian();
 		if(i < 0.4)
@@ -139,14 +154,63 @@ public class ImpDungeonComponents
 		return true;
 	}
 	
-	public static class StraightCorridor extends StructureComponent
+	public static abstract class ImpDungeonComponent extends StructureComponent
+	{
+		protected abstract boolean connectFrom(EnumFacing facing);
+		
+		@Override
+		protected int getXWithOffset(int x, int z)
+		{
+			EnumFacing enumfacing = this.getCoordBaseMode();
+			
+			if (enumfacing == null)
+				return x;
+			else switch (enumfacing)
+			{
+			case NORTH:
+				return this.boundingBox.maxX - x;
+			case SOUTH:
+				return this.boundingBox.minX + x;
+			case WEST:
+				return this.boundingBox.maxX - z;
+			case EAST:
+				return this.boundingBox.minX + z;
+			default:
+				return x;
+			}
+		}
+		
+		@Override
+		protected int getZWithOffset(int x, int z)
+		{
+			EnumFacing enumfacing = this.getCoordBaseMode();
+			
+			if (enumfacing == null)
+				return z;
+			else switch (enumfacing)
+			{
+			case NORTH:
+				return this.boundingBox.maxZ - z;
+			case SOUTH:
+				return this.boundingBox.minZ + z;
+			case WEST:
+				return this.boundingBox.minZ + x;
+			case EAST:
+				return this.boundingBox.maxZ - x;
+			default:
+				return z;
+			}
+		}
+	}
+	
+	public static class StraightCorridor extends ImpDungeonComponent
 	{
 		boolean[] corridors = new boolean[1];
 		
 		public StraightCorridor()
 		{}
 		
-		public StraightCorridor(EnumFacing coordBaseMode, BlockPos pos, Random rand, boolean[][] compoGen, int xIndex, int zIndex, int index, List<StructureComponent> componentList)
+		public StraightCorridor(EnumFacing coordBaseMode, BlockPos pos, Random rand, ImpDungeonComponent[][] compoGen, int xIndex, int zIndex, int index, List<StructureComponent> componentList)
 		{
 			setCoordBaseMode(coordBaseMode);
 			
@@ -158,6 +222,7 @@ public class ImpDungeonComponents
 			
 			this.boundingBox = new StructureBoundingBox(x, pos.getY(), z, x + xWidth - 1, pos.getY() + 4, z + zWidth - 1);
 			
+			compoGen[xIndex][zIndex] = this;
 			int xOffset = coordBaseMode.getFrontOffsetX();
 			int zOffset = coordBaseMode.getFrontOffsetZ();
 			corridors[0] = !generatePart(compoGen, xIndex + xOffset, zIndex + zOffset, pos.add(xOffset*8, 0, zOffset*8), coordBaseMode, rand, componentList, index + 1);
@@ -175,6 +240,14 @@ public class ImpDungeonComponents
 		{
 			for(int i = 0; i < corridors.length; i++)
 				corridors[i] = tagCompound.getBoolean("blocked"+i);
+		}
+		
+		@Override
+		protected boolean connectFrom(EnumFacing facing)
+		{
+			if(facing.equals(getCoordBaseMode()))
+				corridors[0] = false;
+			return facing.getAxis().equals(getCoordBaseMode().getAxis());
 		}
 		
 		@Override
@@ -199,14 +272,14 @@ public class ImpDungeonComponents
 		}
 	}
 	
-	public static class CrossCorridor extends StructureComponent
+	public static class CrossCorridor extends ImpDungeonComponent
 	{
 		boolean[] corridors = new boolean[3];
 		
 		public CrossCorridor()
 		{}
 		
-		public CrossCorridor(EnumFacing coordBaseMode, BlockPos pos, Random rand, boolean[][] compoGen, int xIndex, int zIndex, int index, List<StructureComponent> componentList)
+		public CrossCorridor(EnumFacing coordBaseMode, BlockPos pos, Random rand, ImpDungeonComponent[][] compoGen, int xIndex, int zIndex, int index, List<StructureComponent> componentList)
 		{
 			setCoordBaseMode(coordBaseMode);
 			
@@ -218,11 +291,19 @@ public class ImpDungeonComponents
 			
 			this.boundingBox = new StructureBoundingBox(x, pos.getY(), z, x + xWidth - 1, pos.getY() + 5, z + zWidth - 1);
 			
+			compoGen[xIndex][zIndex] = this;
 			int xOffset = coordBaseMode.getFrontOffsetX();
 			int zOffset = coordBaseMode.getFrontOffsetZ();
-			corridors[0] = !generatePart(compoGen, xIndex - zOffset, zIndex + xOffset, pos.add(-zOffset*8, 0, xOffset*8), coordBaseMode.rotateY(), rand, componentList, index + 1);
+			if(rand.nextBoolean())
+			{
+				corridors[0] = !generatePart(compoGen, xIndex - zOffset, zIndex + xOffset, pos.add(-zOffset*8, 0, xOffset*8), coordBaseMode.rotateY(), rand, componentList, index + 1);
+				corridors[2] = !generatePart(compoGen, xIndex + zOffset, zIndex - xOffset, pos.add(zOffset*8, 0, -xOffset*8), coordBaseMode.rotateYCCW(), rand, componentList, index + 1);
+			} else
+			{
+				corridors[2] = !generatePart(compoGen, xIndex + zOffset, zIndex - xOffset, pos.add(zOffset*8, 0, -xOffset*8), coordBaseMode.rotateYCCW(), rand, componentList, index + 1);
+				corridors[0] = !generatePart(compoGen, xIndex - zOffset, zIndex + xOffset, pos.add(-zOffset*8, 0, xOffset*8), coordBaseMode.rotateY(), rand, componentList, index + 1);
+			}
 			corridors[1] = !generatePart(compoGen, xIndex + xOffset, zIndex + zOffset, pos.add(xOffset*8, 0, zOffset*8), coordBaseMode, rand, componentList, index + 2);
-			corridors[2] = !generatePart(compoGen, xIndex + zOffset, zIndex - xOffset, pos.add(zOffset*8, 0, -xOffset*8), coordBaseMode.rotateYCCW(), rand, componentList, index + 1);
 		}
 		
 		@Override
@@ -237,6 +318,18 @@ public class ImpDungeonComponents
 		{
 			for(int i = 0; i < corridors.length; i++)
 				corridors[i] = tagCompound.getBoolean("blocked"+i);
+		}
+		
+		@Override
+		protected boolean connectFrom(EnumFacing facing)
+		{
+			if(facing.rotateY().equals(getCoordBaseMode()))
+				corridors[0] = false;
+			else if(facing.equals(getCoordBaseMode()))
+				corridors[1] = false;
+			else if(facing.rotateYCCW().equals(getCoordBaseMode()))
+				corridors[2] = false;
+			return true;
 		}
 		
 		@Override
@@ -289,14 +382,14 @@ public class ImpDungeonComponents
 		}
 	}
 	
-	public static class TurnCorridor extends StructureComponent
+	public static class TurnCorridor extends ImpDungeonComponent
 	{
 		boolean[] corridors = new boolean[2];
 		
 		public TurnCorridor()
 		{}
 		
-		public TurnCorridor(EnumFacing coordBaseMode, BlockPos pos, Random rand, boolean[][] compoGen, int xIndex, int zIndex, int index, List<StructureComponent> componentList)
+		public TurnCorridor(EnumFacing coordBaseMode, BlockPos pos, Random rand, ImpDungeonComponent[][] compoGen, int xIndex, int zIndex, int index, List<StructureComponent> componentList)
 		{
 			boolean direction = rand.nextBoolean();
 			if(direction)
@@ -313,6 +406,7 @@ public class ImpDungeonComponents
 			
 			this.boundingBox = new StructureBoundingBox(x, pos.getY(), z, x + xWidth - 1, pos.getY() + 4, z + zWidth - 1);
 			
+			compoGen[xIndex][zIndex] = this;
 			EnumFacing newFacing = direction ? coordBaseMode.rotateYCCW() : coordBaseMode.rotateY();
 			int xOffset = newFacing.getFrontOffsetX();
 			int zOffset = newFacing.getFrontOffsetZ();
@@ -331,6 +425,17 @@ public class ImpDungeonComponents
 		{
 			for(int i = 0; i < corridors.length; i++)
 				corridors[i] = tagCompound.getBoolean("blocked"+i);
+		}
+		
+		@Override
+		protected boolean connectFrom(EnumFacing facing)
+		{
+			if(facing.rotateY().equals(getCoordBaseMode()))
+				corridors[1] = false;
+			else if(facing.getOpposite().equals(getCoordBaseMode()))
+				corridors[0] = false;
+			else return false;
+			return true;
 		}
 		
 		@Override

@@ -3,7 +3,6 @@ package com.mraof.minestuck.world.lands.structure;
 import java.util.List;
 import java.util.Random;
 
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 import net.minecraft.block.BlockTorch;
@@ -145,7 +144,6 @@ public class ImpDungeonStart extends StructureStart
 		
 		protected void checkHeight(World worldIn, StructureBoundingBox bb)
 		{
-			Debug.info(definedHeight);
 			if(definedHeight)
 				return;
 			int height = 0;
@@ -157,13 +155,12 @@ public class ImpDungeonStart extends StructureStart
 					if(!bb.isVecInside(new BlockPos(x, 64, z)))
 						continue;
 					
-					int y = worldIn.getTopSolidOrLiquidBlock(new BlockPos(x, 0, z)).getY();
+					int y = Math.max(62, worldIn.getTopSolidOrLiquidBlock(new BlockPos(x, 0, z)).getY());
 					height += y;
 					i++;
 				}
 			
 			height /= i;
-			Debug.info(height+","+i+","+boundingBox.minY);
 			boundingBox.offset(0, height - boundingBox.minY, 0);
 			definedHeight = true;
 		}
