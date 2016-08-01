@@ -3,6 +3,8 @@ package com.mraof.minestuck.world.lands.structure;
 import java.util.List;
 import java.util.Random;
 
+import com.mraof.minestuck.block.BlockGate;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 import net.minecraft.block.state.IBlockState;
@@ -19,13 +21,14 @@ public class ImpDungeonComponents
 	public static class EntryCorridor extends ImpDungeonComponent
 	{
 		
-		boolean[] corridors = new boolean[2];
-		
 		public EntryCorridor()
-		{}
+		{
+			corridors = new boolean[2];
+		}
 		
 		public EntryCorridor(EnumFacing coordBaseMode, int posX, int posZ, Random rand, List<StructureComponent> componentList)
 		{
+			this();
 			setCoordBaseMode(coordBaseMode);
 			
 			int xWidth = getCoordBaseMode().getAxis().equals(EnumFacing.Axis.X) ? 8 : 6;
@@ -40,34 +43,20 @@ public class ImpDungeonComponents
 			
 			BlockPos compoPos = new BlockPos(x + (xWidth/2 - 1), height, z + (zWidth/2 - 1));
 			
-			ImpDungeonComponent[][] compoGen = new ImpDungeonComponent[13][13];
-			compoGen[6][6] = this;
+			StructureContext ctxt = new StructureContext(componentList, rand);
+			ctxt.compoGen[6][6] = this;
 			
 			int xOffset = coordBaseMode.getFrontOffsetX();
 			int zOffset = coordBaseMode.getFrontOffsetZ();
 			if(rand.nextBoolean())
 			{
-				corridors[0] = !generatePart(compoGen, 6 + xOffset, 6 + zOffset, compoPos.add(xOffset*8, 0, zOffset*8), coordBaseMode, rand, componentList, 0);
-				corridors[1] = !generatePart(compoGen, 6 - xOffset, 6 - zOffset, compoPos.add(-xOffset*8, 0, -zOffset*8), coordBaseMode.getOpposite(), rand, componentList, 0);
+				corridors[0] = !generatePart(ctxt, 6 + xOffset, 6 + zOffset, compoPos.add(xOffset*8, 0, zOffset*8), coordBaseMode, 0);
+				corridors[1] = !generatePart(ctxt, 6 - xOffset, 6 - zOffset, compoPos.add(-xOffset*8, 0, -zOffset*8), coordBaseMode.getOpposite(), 0);
 			} else
 			{
-				corridors[1] = !generatePart(compoGen, 6 - xOffset, 6 - zOffset, compoPos.add(-xOffset*8, 0, -zOffset*8), coordBaseMode.getOpposite(), rand, componentList, 0);
-				corridors[0] = !generatePart(compoGen, 6 + xOffset, 6 + zOffset, compoPos.add(xOffset*8, 0, zOffset*8), coordBaseMode, rand, componentList, 0);
+				corridors[1] = !generatePart(ctxt, 6 - xOffset, 6 - zOffset, compoPos.add(-xOffset*8, 0, -zOffset*8), coordBaseMode.getOpposite(), 0);
+				corridors[0] = !generatePart(ctxt, 6 + xOffset, 6 + zOffset, compoPos.add(xOffset*8, 0, zOffset*8), coordBaseMode, 0);
 			}
-		}
-		
-		@Override
-		protected void writeStructureToNBT(NBTTagCompound tagCompound)
-		{
-			for(int i = 0; i < corridors.length; i++)
-				tagCompound.setBoolean("blocked"+i, corridors[i]);
-		}
-		
-		@Override
-		protected void readStructureFromNBT(NBTTagCompound tagCompound)
-		{
-			for(int i = 0; i < corridors.length; i++)
-				corridors[i] = tagCompound.getBoolean("blocked"+i);
 		}
 		
 		@Override
@@ -123,40 +112,72 @@ public class ImpDungeonComponents
 		}
 	}
 	
-	public static boolean generatePart(ImpDungeonComponent[][] compoGen, int xIndex, int zIndex, BlockPos pos, EnumFacing facing, Random rand, List<StructureComponent> compoList, int index)
+	public static boolean generatePart(StructureContext ctxt, int xIndex, int zIndex, BlockPos pos, EnumFacing facing, int index)
 	{
-		if(xIndex >= compoGen.length || zIndex >= compoGen[0].length
+		if(xIndex >= ctxt.compoGen.length || zIndex >= ctxt.compoGen[0].length
 				|| xIndex < 0 || zIndex < 0)
 			return false;
 		
-		if(compoGen[xIndex][zIndex] != null)
-			return compoGen[xIndex][zIndex].connectFrom(facing.getOpposite());
+		if(ctxt.compoGen[xIndex][zIndex] != null)
+			return ctxt.compoGen[xIndex][zIndex].connectFrom(facing.getOpposite());
 		
-		if(rand.nextGaussian() >= (1.4 - index*0.2))
+		if(ctxt.rand.nextGaussian() >= (1.4 - index*0.1))
 			return false;
 		
 		ImpDungeonComponent component;
 		
-		double i = rand.nextGaussian();
-		if(i < 0.4)
+		double i = ctxt.rand.nextGaussian();
+		if(i < 0.3)
 		{
-			component = new StraightCorridor(facing, pos, rand, compoGen, xIndex, zIndex, index, compoList);
-		} else if(i < 0.7)
+			component = new StraightCorridor(facing, pos, xIndex, zIndex, index, ctxt);
+		} else if(i < 0.6)
 		{
-			component = new TurnCorridor(facing, pos, rand, compoGen, xIndex, zIndex, index, compoList);
+			component = new TurnCorridor(facing, pos, xIndex, zIndex, index, ctxt);
+		} else if(i < 0.9)
+		{
+			component = new CrossCorridor(facing, pos, xIndex, zIndex, index, ctxt);
 		} else
 		{
-			component = new CrossCorridor(facing, pos, rand, compoGen, xIndex, zIndex, index, compoList);
+			component = new ReturnRoom(facing, pos, xIndex, zIndex, index, ctxt);
 		}
 		
-		compoList.add(component);
+		ctxt.compoList.add(component);
 		
 		return true;
 	}
 	
+	protected static class StructureContext
+	{
+		ImpDungeonComponent[][] compoGen = new ImpDungeonComponent[13][13];
+		List<StructureComponent> compoList;
+		Random rand;
+		
+		public StructureContext(List<StructureComponent> compoList, Random rand)
+		{
+			this.compoList = compoList;
+			this.rand = rand;
+		}
+	}
+	
 	public static abstract class ImpDungeonComponent extends StructureComponent
 	{
+		protected boolean[] corridors = new boolean[0];
+		
 		protected abstract boolean connectFrom(EnumFacing facing);
+		
+		@Override
+		protected void writeStructureToNBT(NBTTagCompound tagCompound)
+		{
+			for(int i = 0; i < corridors.length; i++)
+				tagCompound.setBoolean("blocked"+i, corridors[i]);
+		}
+		
+		@Override
+		protected void readStructureFromNBT(NBTTagCompound tagCompound)
+		{
+			for(int i = 0; i < corridors.length; i++)
+				corridors[i] = tagCompound.getBoolean("blocked"+i);
+		}
 		
 		@Override
 		protected int getXWithOffset(int x, int z)
@@ -205,13 +226,14 @@ public class ImpDungeonComponents
 	
 	public static class StraightCorridor extends ImpDungeonComponent
 	{
-		boolean[] corridors = new boolean[1];
-		
 		public StraightCorridor()
-		{}
-		
-		public StraightCorridor(EnumFacing coordBaseMode, BlockPos pos, Random rand, ImpDungeonComponent[][] compoGen, int xIndex, int zIndex, int index, List<StructureComponent> componentList)
 		{
+			corridors = new boolean[1];
+		}
+		
+		public StraightCorridor(EnumFacing coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		{
+			this();
 			setCoordBaseMode(coordBaseMode);
 			
 			int xWidth = getCoordBaseMode().getAxis().equals(EnumFacing.Axis.X) ? 8 : 4;
@@ -222,24 +244,10 @@ public class ImpDungeonComponents
 			
 			this.boundingBox = new StructureBoundingBox(x, pos.getY(), z, x + xWidth - 1, pos.getY() + 4, z + zWidth - 1);
 			
-			compoGen[xIndex][zIndex] = this;
+			ctxt.compoGen[xIndex][zIndex] = this;
 			int xOffset = coordBaseMode.getFrontOffsetX();
 			int zOffset = coordBaseMode.getFrontOffsetZ();
-			corridors[0] = !generatePart(compoGen, xIndex + xOffset, zIndex + zOffset, pos.add(xOffset*8, 0, zOffset*8), coordBaseMode, rand, componentList, index + 1);
-		}
-		
-		@Override
-		protected void writeStructureToNBT(NBTTagCompound tagCompound)
-		{
-			for(int i = 0; i < corridors.length; i++)
-				tagCompound.setBoolean("blocked"+i, corridors[i]);
-		}
-		
-		@Override
-		protected void readStructureFromNBT(NBTTagCompound tagCompound)
-		{
-			for(int i = 0; i < corridors.length; i++)
-				corridors[i] = tagCompound.getBoolean("blocked"+i);
+			corridors[0] = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.add(xOffset*8, 0, zOffset*8), coordBaseMode, index + 1);
 		}
 		
 		@Override
@@ -274,13 +282,14 @@ public class ImpDungeonComponents
 	
 	public static class CrossCorridor extends ImpDungeonComponent
 	{
-		boolean[] corridors = new boolean[3];
-		
 		public CrossCorridor()
-		{}
-		
-		public CrossCorridor(EnumFacing coordBaseMode, BlockPos pos, Random rand, ImpDungeonComponent[][] compoGen, int xIndex, int zIndex, int index, List<StructureComponent> componentList)
 		{
+			corridors = new boolean[3];
+		}
+		
+		public CrossCorridor(EnumFacing coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		{
+			this();
 			setCoordBaseMode(coordBaseMode);
 			
 			int xWidth = 8;
@@ -291,33 +300,19 @@ public class ImpDungeonComponents
 			
 			this.boundingBox = new StructureBoundingBox(x, pos.getY(), z, x + xWidth - 1, pos.getY() + 5, z + zWidth - 1);
 			
-			compoGen[xIndex][zIndex] = this;
+			ctxt.compoGen[xIndex][zIndex] = this;
 			int xOffset = coordBaseMode.getFrontOffsetX();
 			int zOffset = coordBaseMode.getFrontOffsetZ();
-			if(rand.nextBoolean())
+			if(ctxt.rand.nextBoolean())
 			{
-				corridors[0] = !generatePart(compoGen, xIndex - zOffset, zIndex + xOffset, pos.add(-zOffset*8, 0, xOffset*8), coordBaseMode.rotateY(), rand, componentList, index + 1);
-				corridors[2] = !generatePart(compoGen, xIndex + zOffset, zIndex - xOffset, pos.add(zOffset*8, 0, -xOffset*8), coordBaseMode.rotateYCCW(), rand, componentList, index + 1);
+				corridors[0] = !generatePart(ctxt, xIndex - zOffset, zIndex + xOffset, pos.add(-zOffset*8, 0, xOffset*8), coordBaseMode.rotateY(), index + 1);
+				corridors[2] = !generatePart(ctxt, xIndex + zOffset, zIndex - xOffset, pos.add(zOffset*8, 0, -xOffset*8), coordBaseMode.rotateYCCW(), index + 1);
 			} else
 			{
-				corridors[2] = !generatePart(compoGen, xIndex + zOffset, zIndex - xOffset, pos.add(zOffset*8, 0, -xOffset*8), coordBaseMode.rotateYCCW(), rand, componentList, index + 1);
-				corridors[0] = !generatePart(compoGen, xIndex - zOffset, zIndex + xOffset, pos.add(-zOffset*8, 0, xOffset*8), coordBaseMode.rotateY(), rand, componentList, index + 1);
+				corridors[2] = !generatePart(ctxt, xIndex + zOffset, zIndex - xOffset, pos.add(zOffset*8, 0, -xOffset*8), coordBaseMode.rotateYCCW(), index + 1);
+				corridors[0] = !generatePart(ctxt, xIndex - zOffset, zIndex + xOffset, pos.add(-zOffset*8, 0, xOffset*8), coordBaseMode.rotateY(), index + 1);
 			}
-			corridors[1] = !generatePart(compoGen, xIndex + xOffset, zIndex + zOffset, pos.add(xOffset*8, 0, zOffset*8), coordBaseMode, rand, componentList, index + 2);
-		}
-		
-		@Override
-		protected void writeStructureToNBT(NBTTagCompound tagCompound)
-		{
-			for(int i = 0; i < corridors.length; i++)
-				tagCompound.setBoolean("blocked"+i, corridors[i]);
-		}
-		
-		@Override
-		protected void readStructureFromNBT(NBTTagCompound tagCompound)
-		{
-			for(int i = 0; i < corridors.length; i++)
-				corridors[i] = tagCompound.getBoolean("blocked"+i);
+			corridors[1] = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.add(xOffset*8, 0, zOffset*8), coordBaseMode, index + 2);
 		}
 		
 		@Override
@@ -384,14 +379,15 @@ public class ImpDungeonComponents
 	
 	public static class TurnCorridor extends ImpDungeonComponent
 	{
-		boolean[] corridors = new boolean[2];
-		
 		public TurnCorridor()
-		{}
-		
-		public TurnCorridor(EnumFacing coordBaseMode, BlockPos pos, Random rand, ImpDungeonComponent[][] compoGen, int xIndex, int zIndex, int index, List<StructureComponent> componentList)
 		{
-			boolean direction = rand.nextBoolean();
+			corridors = new boolean[2];
+		}
+		
+		public TurnCorridor(EnumFacing coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		{
+			this();
+			boolean direction = ctxt.rand.nextBoolean();
 			if(direction)
 				setCoordBaseMode(coordBaseMode.rotateY());
 			else setCoordBaseMode(coordBaseMode);
@@ -406,25 +402,11 @@ public class ImpDungeonComponents
 			
 			this.boundingBox = new StructureBoundingBox(x, pos.getY(), z, x + xWidth - 1, pos.getY() + 4, z + zWidth - 1);
 			
-			compoGen[xIndex][zIndex] = this;
+			ctxt.compoGen[xIndex][zIndex] = this;
 			EnumFacing newFacing = direction ? coordBaseMode.rotateYCCW() : coordBaseMode.rotateY();
 			int xOffset = newFacing.getFrontOffsetX();
 			int zOffset = newFacing.getFrontOffsetZ();
-			corridors[direction ? 0 : 1] = !generatePart(compoGen, xIndex + xOffset, zIndex + zOffset, pos.add(xOffset*8, 0, zOffset*8), newFacing, rand, componentList, index + 1);
-		}
-		
-		@Override
-		protected void writeStructureToNBT(NBTTagCompound tagCompound)
-		{
-			for(int i = 0; i < corridors.length; i++)
-				tagCompound.setBoolean("blocked"+i, corridors[i]);
-		}
-		
-		@Override
-		protected void readStructureFromNBT(NBTTagCompound tagCompound)
-		{
-			for(int i = 0; i < corridors.length; i++)
-				corridors[i] = tagCompound.getBoolean("blocked"+i);
+			corridors[direction ? 0 : 1] = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.add(xOffset*8, 0, zOffset*8), newFacing, index + 1);
 		}
 		
 		@Override
@@ -464,6 +446,96 @@ public class ImpDungeonComponents
 				fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 1, 3, 0, 3, 4, wallBlock, wallBlock, false);
 			
 			return true;
+		}
+	}
+	
+	public static class ReturnRoom extends ImpDungeonComponent
+	{
+		public ReturnRoom()
+		{}
+		
+		public ReturnRoom(EnumFacing coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		{
+			setCoordBaseMode(coordBaseMode);
+			
+			int xWidth = getCoordBaseMode().getAxis().equals(EnumFacing.Axis.X) ? 8 : 6;
+			int zWidth = getCoordBaseMode().getAxis().equals(EnumFacing.Axis.Z) ? 8 : 6;
+			
+			int x = pos.getX() - (xWidth/2 - 1);
+			int z = pos.getZ() - (zWidth/2 - 1);
+			
+			this.boundingBox = new StructureBoundingBox(x, pos.getY(), z, x + xWidth - 1, pos.getY() + 10, z + zWidth - 1);
+			
+			ctxt.compoGen[xIndex][zIndex] = this;
+		}
+		
+		@Override
+		protected boolean connectFrom(EnumFacing facing)
+		{
+			return facing.getOpposite().equals(getCoordBaseMode());
+		}
+		
+		@Override
+		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
+		{
+			
+			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
+			
+			IBlockState wallBlock = provider.blockRegistry.getBlockState("structure_primary");
+			IBlockState wallDecor = provider.blockRegistry.getBlockState("structure_primary_decorative");
+			IBlockState floorBlock = provider.blockRegistry.getBlockState("structure_secondary");
+			IBlockState floorDecor = provider.blockRegistry.getBlockState("structure_secondary_decorative");
+			IBlockState light = provider.blockRegistry.getBlockState("light_block");
+			
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 0, 3, 0, 2, floorBlock, floorBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 3, 4, 0, 6, floorBlock, floorBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 4, 3, 0, 5, floorDecor, floorDecor, false);
+			fillWithAir(worldIn, structureBoundingBoxIn, 2, 1, 0, 3, 3, 2);
+			fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 3, 4, 4, 6);
+			fillWithAir(worldIn, structureBoundingBoxIn, 2, 5, 4, 3, 9, 5);
+			
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 0, 1, 4, 2, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 0, 4, 4, 2, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 2, 0, 5, 7, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 0, 2, 5, 5, 7, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 7, 4, 5, 7, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 4, 0, 3, 4, 2, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 5, 2, 4, 5, 2, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 3, 4, 0, 3, 5, wallDecor, wallDecor, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 3, 4, 5, 3, 5, wallDecor, wallDecor, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 3, 7, 3, 3, 7, wallDecor, wallDecor, false);
+			
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 5, 3, 4, 10, 3, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 5, 6, 4, 10, 6, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 5, 4, 1, 10, 5, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 5, 4, 4, 10, 5, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 10, 4, 3, 10, 5, light, light, false);
+			
+			placeReturnNode(worldIn, structureBoundingBoxIn);
+			
+			return true;
+		}
+		
+		private void placeReturnNode(World world, StructureBoundingBox boundingBox)
+		{
+			int x = getXWithOffset(2, 4), y = getYWithOffset(1), z = getZWithOffset(2, 4);
+			
+			if(getCoordBaseMode() == EnumFacing.NORTH || getCoordBaseMode() == EnumFacing.WEST)
+				x--;
+			if(getCoordBaseMode() == EnumFacing.NORTH || getCoordBaseMode() == EnumFacing.EAST)
+				z--;
+			BlockPos nodePos = new BlockPos(x, y, z);
+			
+			for(int i = 0; i < 4; i++)
+			{
+				BlockPos pos = nodePos.add(i % 2, 0, i/2);
+				if(boundingBox.isVecInside(pos))
+				{
+					if(i == 3)
+						world.setBlockState(pos, MinestuckBlocks.returnNode.getDefaultState().cycleProperty(BlockGate.isMainComponent), 2);
+					else world.setBlockState(pos, MinestuckBlocks.returnNode.getDefaultState(), 2);
+				}
+			}
 		}
 	}
 	

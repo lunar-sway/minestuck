@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.lands.terrain;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.BlockLog;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.Vec3d;
@@ -29,6 +30,7 @@ public class LandAspectShade extends TerrainLandAspect
 		registry.setBlockState("structure_primary_decorative", Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED));
 		registry.setBlockState("structure_primary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
 		registry.setBlockState("structure_secondary", Blocks.STONE.getDefaultState());
+		registry.setBlockState("light_block", MinestuckBlocks.glowingLog.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE));
 	}
 	
 	@Override
@@ -36,7 +38,7 @@ public class LandAspectShade extends TerrainLandAspect
 	{
 		return "shade";
 	}
-
+	
 	@Override
 	public String[] getNames() {
 		return new String[] {"shade"};
