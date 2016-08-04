@@ -12,7 +12,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import codechicken.lib.gui.GuiDraw;
-import codechicken.nei.PositionedStack;
+import codechicken.nei.api.stack.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
 import com.mraof.minestuck.item.MinestuckItems;

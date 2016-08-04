@@ -8,9 +8,9 @@ import org.lwjgl.input.Mouse;
 
 import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.NEIClientConfig;
-import codechicken.nei.NEIClientUtils;
 import codechicken.nei.recipe.GuiCraftingRecipe;
 import codechicken.nei.recipe.GuiUsageRecipe;
+import codechicken.nei.util.NEIClientUtils;
 
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
