@@ -86,13 +86,13 @@ public class GuiUtil
 					row++;
 					index = row*GRIST_BOARD_WIDTH;
 				}
-				fontRenderer.drawString(needStr, 9 + index%GRIST_BOARD_WIDTH, boardY + 8*row, color);
-				fontRenderer.drawString(haveStr, needStrWidth + boardX + 10 + index%GRIST_BOARD_WIDTH, boardY + 8*row, color);
+				fontRenderer.drawString(needStr, boardX + 1 + index%GRIST_BOARD_WIDTH, boardY + 8*row, color);
+				fontRenderer.drawString(haveStr, boardX + needStrWidth + 10 + index%GRIST_BOARD_WIDTH, boardY + 8*row, color);
 				
 				GlStateManager.color(1, 1, 1);
 				GlStateManager.disableLighting();
 				Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("minestuck", "textures/grist/" + type.getName()+ ".png"));
-				Gui.drawModalRectWithCustomSizedTexture(needStrWidth + boardX + 1 + index%GRIST_BOARD_WIDTH, boardY + 8*row, 0, 0, 8, 8, 8, 8);
+				Gui.drawModalRectWithCustomSizedTexture(boardX + needStrWidth + 1 + index%GRIST_BOARD_WIDTH, boardY + 8*row, 0, 0, 8, 8, 8, 8);
 				
 				index += needStrWidth + 10 + fontRenderer.getStringWidth(haveStr);
 				index = Math.min(index + 6, (row + 1)*158);

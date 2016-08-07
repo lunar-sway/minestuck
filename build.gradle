@@ -21,6 +21,9 @@ repositories {
         name = "chickenbones"
         url = "http://chickenbones.net/maven/"
     }
+    maven {
+        url "http://dvs1.progwml6.com/files/maven" //jei which is now a dependency to nei?
+    }
 }
 
 //apply plugin: 'forge'
@@ -42,9 +45,11 @@ minecraft {
 
 dependencies {
     // http://chickenbones.net/maven
-    compile "codechicken:CodeChickenLib:1.9.4-2.0.2.39:universal"
-    compile "codechicken:CodeChickenCore:1.9.4-2.0.3.65:universal"
-    //compile "codechicken:NotEnoughItems:1.8-1.0.5.82:universal"
+    compile "codechicken:CodeChickenLib:1.9.4-2.1.2.42:universal"
+    compile "codechicken:CodeChickenCore:1.9.4-2.0.4.71:universal"
+    compile "codechicken:NotEnoughItems:1.9.4-2.0.1.133:universal"
+	// http://dvs1.progwml6.com/files/maven
+    //compile "mezz.jei:jei_1.9.4:3.6.8.225"
 }
 
 sourceSets {

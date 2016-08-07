@@ -10,7 +10,7 @@ import java.util.Map;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.item.ItemStack;
 import codechicken.lib.gui.GuiDraw;
-import codechicken.nei.PositionedStack;
+import codechicken.nei.api.stack.PositionedStack;
 import codechicken.nei.guihook.GuiContainerManager;
 import codechicken.nei.recipe.GuiRecipe;
 import codechicken.nei.recipe.TemplateRecipeHandler;
