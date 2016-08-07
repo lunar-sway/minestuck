@@ -34,7 +34,7 @@ public class ImpDungeonComponents
 			int xWidth = getCoordBaseMode().getAxis().equals(EnumFacing.Axis.X) ? 8 : 6;
 			int zWidth = getCoordBaseMode().getAxis().equals(EnumFacing.Axis.Z) ? 8 : 6;
 			
-			int height = 50 - rand.nextInt(8);
+			int height = 45 - rand.nextInt(8);
 			int offset = getCoordBaseMode().getAxisDirection().equals(EnumFacing.AxisDirection.POSITIVE) ? 5 : -2;
 			int x = posX + (getCoordBaseMode().getAxis().equals(EnumFacing.Axis.Z) ? 0 : offset);
 			int z = posZ + (getCoordBaseMode().getAxis().equals(EnumFacing.Axis.X) ? 0 : offset);
@@ -62,8 +62,11 @@ public class ImpDungeonComponents
 		@Override
 		protected boolean connectFrom(EnumFacing facing)
 		{
-			
-			return false;
+			if(getCoordBaseMode().equals(facing))
+				corridors[0] = false;
+			else if(getCoordBaseMode().getOpposite().equals(facing))
+				corridors[1] = false;
+			return getCoordBaseMode().getAxis().equals(facing.getAxis());
 		}
 		
 		@Override
@@ -126,21 +129,24 @@ public class ImpDungeonComponents
 		
 		ImpDungeonComponent component;
 		
+		int corridors = ctxt.corridors;
 		double i = ctxt.rand.nextGaussian();
-		if(i < 0.3)
+		if(i < 1.2 - corridors*0.12)	//Cross corridor
 		{
-			component = new StraightCorridor(facing, pos, xIndex, zIndex, index, ctxt);
-		} else if(i < 0.6)
-		{
-			component = new TurnCorridor(facing, pos, xIndex, zIndex, index, ctxt);
-		} else if(i < 0.9)
-		{
+			ctxt.corridors += 3;
 			component = new CrossCorridor(facing, pos, xIndex, zIndex, index, ctxt);
-		} else
+		} else if(i < 0.96 - corridors*0.06)	//Any room
 		{
 			component = new ReturnRoom(facing, pos, xIndex, zIndex, index, ctxt);
+		} else	//Straight or corner corridor
+		{
+			ctxt.corridors -= 1;
+			if(ctxt.rand.nextBoolean())
+				component = new TurnCorridor(facing, pos, xIndex, zIndex, index, ctxt);
+			else component = new StraightCorridor(facing, pos, xIndex, zIndex, index, ctxt);
 		}
 		
+		ctxt.corridors = corridors;
 		ctxt.compoList.add(component);
 		
 		return true;
@@ -151,6 +157,7 @@ public class ImpDungeonComponents
 		ImpDungeonComponent[][] compoGen = new ImpDungeonComponent[13][13];
 		List<StructureComponent> compoList;
 		Random rand;
+		int corridors = 3;
 		
 		public StructureContext(List<StructureComponent> compoList, Random rand)
 		{
@@ -253,9 +260,9 @@ public class ImpDungeonComponents
 		@Override
 		protected boolean connectFrom(EnumFacing facing)
 		{
-			if(facing.equals(getCoordBaseMode()))
+			if(getCoordBaseMode().equals(facing))
 				corridors[0] = false;
-			return facing.getAxis().equals(getCoordBaseMode().getAxis());
+			return getCoordBaseMode().getAxis().equals(facing.getAxis());
 		}
 		
 		@Override
@@ -318,11 +325,11 @@ public class ImpDungeonComponents
 		@Override
 		protected boolean connectFrom(EnumFacing facing)
 		{
-			if(facing.rotateY().equals(getCoordBaseMode()))
+			if(getCoordBaseMode().rotateY().equals(facing))
 				corridors[0] = false;
-			else if(facing.equals(getCoordBaseMode()))
+			else if(getCoordBaseMode().equals(facing))
 				corridors[1] = false;
-			else if(facing.rotateYCCW().equals(getCoordBaseMode()))
+			else if(getCoordBaseMode().rotateYCCW().equals(facing))
 				corridors[2] = false;
 			return true;
 		}
@@ -412,9 +419,9 @@ public class ImpDungeonComponents
 		@Override
 		protected boolean connectFrom(EnumFacing facing)
 		{
-			if(facing.rotateY().equals(getCoordBaseMode()))
+			if(getCoordBaseMode().rotateY().equals(facing))
 				corridors[1] = false;
-			else if(facing.getOpposite().equals(getCoordBaseMode()))
+			else if(getCoordBaseMode().getOpposite().equals(facing))
 				corridors[0] = false;
 			else return false;
 			return true;
@@ -472,7 +479,7 @@ public class ImpDungeonComponents
 		@Override
 		protected boolean connectFrom(EnumFacing facing)
 		{
-			return facing.getOpposite().equals(getCoordBaseMode());
+			return getCoordBaseMode().getOpposite().equals(facing);
 		}
 		
 		@Override

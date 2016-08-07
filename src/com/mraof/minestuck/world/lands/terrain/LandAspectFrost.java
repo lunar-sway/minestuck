@@ -12,7 +12,7 @@ import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
 import net.minecraft.block.BlockDirt;
-import net.minecraft.block.BlockStoneBrick;
+import net.minecraft.block.BlockPrismarine;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.Vec3d;
 
@@ -25,10 +25,9 @@ public class LandAspectFrost extends TerrainLandAspect
 	{
 		registry.setBlockState("surface", Blocks.GRASS.getDefaultState());
 		registry.setBlockState("upper", Blocks.DIRT.getDefaultState());
-		registry.setBlockState("structure_primary", Blocks.STONEBRICK.getDefaultState());
-		registry.setBlockState("structure_primary_decorative", Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED));
-		registry.setBlockState("structure_primary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
-		registry.setBlockState("structure_secondary", Blocks.STONE.getDefaultState());
+		registry.setBlockState("structure_primary", Blocks.PRISMARINE.getDefaultState());
+		registry.setBlockState("structure_primary_decorative", Blocks.PRISMARINE.getDefaultState().withProperty(BlockPrismarine.VARIANT, BlockPrismarine.EnumType.BRICKS));
+		registry.setBlockState("structure_secondary", Blocks.PRISMARINE.getDefaultState().withProperty(BlockPrismarine.VARIANT, BlockPrismarine.EnumType.DARK));
 		registry.setBlockState("river", Blocks.ICE.getDefaultState());
 	}
 	
@@ -56,7 +55,7 @@ public class LandAspectFrost extends TerrainLandAspect
 		list.add(new SurfaceDecoratorVein(Blocks.SNOW.getDefaultState(), 8, 16, BiomeMinestuck.mediumRough));
 		list.add(new SurfaceDecoratorVein(Blocks.SNOW.getDefaultState(), 15, 16, BiomeMinestuck.mediumNormal));
 		
-		list.add(new UndergroundDecoratorVein(Blocks.PACKED_ICE.getDefaultState(), 2, 8, 64));	//Have 64 be the highest value because stone is used as a building material for structures right now
+		list.add(new UndergroundDecoratorVein(Blocks.PACKED_ICE.getDefaultState(), 2, 8, 64));
 		list.add(new UndergroundDecoratorVein(Blocks.SNOW.getDefaultState(), 3, 16, 64));
 		list.add(new UndergroundDecoratorVein(Blocks.DIRT.getDefaultState(), 3, 28, 64));
 		list.add(new UndergroundDecoratorVein(Blocks.COAL_ORE.getDefaultState(), 13, 17, 64));
