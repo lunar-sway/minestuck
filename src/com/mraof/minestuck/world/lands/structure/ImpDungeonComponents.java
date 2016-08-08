@@ -125,7 +125,11 @@ public class ImpDungeonComponents
 			return ctxt.compoGen[xIndex][zIndex].connectFrom(facing.getOpposite());
 		
 		if(ctxt.rand.nextGaussian() >= (1.4 - index*0.1))
-			return false;
+			if(ctxt.rand.nextGaussian() < 1/3D)
+			{
+				ctxt.compoList.add(genRoom(facing, pos, xIndex, zIndex, index, ctxt));
+				return true;
+			} else return false;
 		
 		ImpDungeonComponent component;
 		
@@ -137,7 +141,7 @@ public class ImpDungeonComponents
 			component = new CrossCorridor(facing, pos, xIndex, zIndex, index, ctxt);
 		} else if(i < 0.96 - corridors*0.06)	//Any room
 		{
-			component = new ReturnRoom(facing, pos, xIndex, zIndex, index, ctxt);
+			component = genRoom(facing, pos, xIndex, zIndex, index, ctxt);
 		} else	//Straight or corner corridor
 		{
 			ctxt.corridors -= 1;
@@ -150,6 +154,11 @@ public class ImpDungeonComponents
 		ctxt.compoList.add(component);
 		
 		return true;
+	}
+	
+	protected static ImpDungeonComponent genRoom(EnumFacing facing, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+	{
+		return new ReturnRoom(facing, pos, xIndex, zIndex, index, ctxt);
 	}
 	
 	protected static class StructureContext
