@@ -30,6 +30,7 @@ public class LandAspectFrost extends TerrainLandAspect
 		registry.setBlockState("structure_secondary", Blocks.PRISMARINE.getDefaultState().withProperty(BlockPrismarine.VARIANT, BlockPrismarine.EnumType.DARK));
 		registry.setBlockState("river", Blocks.ICE.getDefaultState());
 		registry.setBlockState("light_block", Blocks.SEA_LANTERN.getDefaultState());
+		registry.setBlockState("bucket1", Blocks.SNOW.getDefaultState());
 	}
 	
 	@Override

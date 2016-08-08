@@ -294,5 +294,11 @@ public class IdentifierHandler {
 			return getUsername();
 		}
 		
+		@Override
+		public int hashCode()
+		{
+			return useUUID ? uuid.hashCode() : username.hashCode();
+		}
+		
 	}
 }
