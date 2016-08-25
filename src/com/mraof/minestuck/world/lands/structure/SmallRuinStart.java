@@ -4,16 +4,14 @@ import java.util.Random;
 
 import com.mraof.minestuck.entity.underling.EntityOgre;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.util.StructureUtil;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
-import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -106,16 +104,7 @@ public class SmallRuinStart extends StructureStart
 			this.fillWithAir(worldIn, boundingBox, 1, 1, 0, 5, 3, 7);
 			this.fillWithAir(worldIn, boundingBox, 2, 1, 8, 4, 3, 8);
 			BlockPos chestPos = new BlockPos(this.getXWithOffset(3, 6), this.getYWithOffset(1), this.getZWithOffset(3, 6));
-			if(boundingBox.isVecInside(chestPos))
-			{
-				worldIn.setBlockState(chestPos, Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, this.getCoordBaseMode().getOpposite()));
-				TileEntity tileentity1 = worldIn.getTileEntity(chestPos);
-				
-				if (tileentity1 instanceof TileEntityChest)
-				{
-					((TileEntityChest)tileentity1).setLootTable(AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, rand.nextLong());
-				}
-			}
+			StructureUtil.placeLootChest(chestPos, worldIn, boundingBox, this.getCoordBaseMode().getOpposite(), AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, rand);
 			
 			if(torches[0])
 				this.setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.EAST), 1, 2, 3, boundingBox);

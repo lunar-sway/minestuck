@@ -72,7 +72,7 @@ public class ItemHammer extends ItemWeapon
 			target.setFire(50);
 		else if (hammerType.equals(EnumHammerType.POPAMATIC) )
 			target.attackEntityFrom(DamageSource.magic , (float) (player.getRNG().nextInt(6)+1) * (player.getRNG().nextInt(6)+1) );
-		else if (hammerType.equals(EnumHammerType.FEARNOANVIL) && player.getRNG().nextGaussian() > 0.9)	//Just a suggestion, keep it if you like it.
+		else if (hammerType.equals(EnumHammerType.FEARNOANVIL) && player.getRNG().nextDouble() > 0.9)	//Just a suggestion, keep it if you like it.
 			target.addPotionEffect(new PotionEffect(Potion.getPotionById(2),100,3));	//Would prefer it being triggered by a critical hit instead, if it can.
 		return true;
 	}
