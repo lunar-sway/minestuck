@@ -14,11 +14,23 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 
 public class ImpDungeonComponents
 {
+	
+	public static void registerComponents()
+	{
+		MapGenStructureIO.registerStructureComponent(ImpDungeonComponents.EntryCorridor.class, "MinestuckIDEntryCorridor");
+		MapGenStructureIO.registerStructureComponent(ImpDungeonComponents.StraightCorridor.class, "MinestuckIDCorridor");
+		MapGenStructureIO.registerStructureComponent(ImpDungeonComponents.CrossCorridor.class, "MinestuckIDCross");
+		MapGenStructureIO.registerStructureComponent(ImpDungeonComponents.TurnCorridor.class, "MinestuckIDTurn");
+		MapGenStructureIO.registerStructureComponent(ImpDungeonComponents.ReturnRoom.class, "MinestuckIDReturn");
+		MapGenStructureIO.registerStructureComponent(ImpDungeonComponents.SpawnerRoom.class, "MinestuckIDMonstSpawn");
+		MapGenStructureIO.registerStructureComponent(ImpDungeonComponents.EmptyRoom.class, "MinestuckIDRoom");
+	}
 	
 	public static class EntryCorridor extends ImpDungeonComponent
 	{
@@ -162,6 +174,8 @@ public class ImpDungeonComponents
 	{
 		if(ctxt.rand.nextFloat() < 0.2 || !ctxt.generatedReturn)
 			return new ReturnRoom(facing, pos, xIndex, zIndex, index, ctxt);
+		else if(ctxt.rand.nextFloat() < 0.5)
+			return new EmptyRoom(facing, pos, xIndex, zIndex, index, ctxt);
 		else return new SpawnerRoom(facing, pos, xIndex, zIndex, index, ctxt);
 	}
 	
@@ -630,8 +644,9 @@ public class ImpDungeonComponents
 			
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 0, 0, 4, 0, 2, floorBlock, floorBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 3, 6, 0, 5, floorBlock, floorBlock, false);
-			setBlockState(worldIn, floorBlock, 1, 0, 2, structureBoundingBoxIn);
-			setBlockState(worldIn, floorBlock, 6, 0, 2, structureBoundingBoxIn);
+			setBlockState(worldIn, floorDecor, 1, 0, 2, structureBoundingBoxIn);
+			setBlockState(worldIn, floorDecor, 6, 0, 2, structureBoundingBoxIn);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 0, 5, 4, 0, 5, floorDecor, floorDecor, false);
 			fillWithAir(worldIn, structureBoundingBoxIn, 3, 1, 0, 4, 3, 2);
 			fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 3, 6, 3, 5);
 			fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 2, 1, 3, 2);
@@ -667,4 +682,69 @@ public class ImpDungeonComponents
 		}
 	}
 	
+	public static class EmptyRoom extends ImpDungeonComponent
+	{
+		public EmptyRoom()
+		{}
+		
+		public EmptyRoom(EnumFacing coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		{
+			setCoordBaseMode(coordBaseMode);
+			
+			int xWidth = 8;
+			int zWidth = 8;
+			
+			int x = pos.getX() - (xWidth/2 - 1);
+			int z = pos.getZ() - (zWidth/2 - 1);
+			
+			this.boundingBox = new StructureBoundingBox(x, pos.getY(), z, x + xWidth - 1, pos.getY() + 4, z + zWidth - 1);
+			
+			ctxt.compoGen[xIndex][zIndex] = this;
+		}
+		
+		@Override
+		protected boolean connectFrom(EnumFacing facing)
+		{
+			return getCoordBaseMode().getOpposite().equals(facing);
+		}
+		
+		@Override
+		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
+		{
+			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
+			
+			IBlockState wallBlock = provider.blockRegistry.getBlockState("structure_primary");
+			IBlockState wallDecor = provider.blockRegistry.getBlockState("structure_primary_decorative");
+			IBlockState floorBlock = provider.blockRegistry.getBlockState("structure_secondary");
+			IBlockState floorDecor = provider.blockRegistry.getBlockState("structure_secondary_decorative");
+			
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 0, 0, 4, 0, 0, floorBlock, floorBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 1, 6, 0, 1, floorBlock, floorBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 6, 6, 0, 6, floorBlock, floorBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 2, 1, 0, 5, floorBlock, floorBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 0, 2, 6, 0, 5, floorBlock, floorBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 0, 3, 4, 0, 4, floorBlock, floorBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 2, 5, 0, 2, floorDecor, floorDecor, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 5, 5, 0, 5, floorDecor, floorDecor, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 3, 2, 0, 4, floorDecor, floorDecor, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 0, 3, 5, 0, 4, floorDecor, floorDecor, false);
+			fillWithAir(worldIn, structureBoundingBoxIn, 3, 1, 0, 4, 3, 0);
+			fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 1, 6, 4, 6);
+			fillWithAir(worldIn, structureBoundingBoxIn, 2, 5, 2, 5, 5, 5);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 0, 2, 5, 0, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 0, 0, 7, 5, 0, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 1, 0, 5, 7, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 7, 0, 1, 7, 5, 7, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 7, 6, 5, 7, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 4, 0, 4, 5, 0, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 5, 1, 1, 5, 6, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 5, 1, 6, 5, 6, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 5, 1, 5, 5, 1, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 5, 6, 5, 5, 6, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 6, 1, 6, 6, 6, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 6, 3, 4, 6, 4, wallDecor, wallDecor, false);
+			
+			return true;
+		}
+	}
 }
