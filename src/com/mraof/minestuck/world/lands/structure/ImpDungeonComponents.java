@@ -10,6 +10,7 @@ import com.mraof.minestuck.util.StructureUtil;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -29,7 +30,7 @@ public class ImpDungeonComponents
 		MapGenStructureIO.registerStructureComponent(ImpDungeonComponents.TurnCorridor.class, "MinestuckIDTurn");
 		MapGenStructureIO.registerStructureComponent(ImpDungeonComponents.ReturnRoom.class, "MinestuckIDReturn");
 		MapGenStructureIO.registerStructureComponent(ImpDungeonComponents.SpawnerRoom.class, "MinestuckIDMonstSpawn");
-		MapGenStructureIO.registerStructureComponent(ImpDungeonComponents.EmptyRoom.class, "MinestuckIDRoom");
+		MapGenStructureIO.registerStructureComponent(ImpDungeonComponents.BookcaseRoom.class, "MinestuckIDRoom");
 	}
 	
 	public static class EntryCorridor extends ImpDungeonComponent
@@ -175,7 +176,7 @@ public class ImpDungeonComponents
 		if(ctxt.rand.nextFloat() < 0.2 || !ctxt.generatedReturn)
 			return new ReturnRoom(facing, pos, xIndex, zIndex, index, ctxt);
 		else if(ctxt.rand.nextFloat() < 0.5)
-			return new EmptyRoom(facing, pos, xIndex, zIndex, index, ctxt);
+			return new BookcaseRoom(facing, pos, xIndex, zIndex, index, ctxt);
 		else return new SpawnerRoom(facing, pos, xIndex, zIndex, index, ctxt);
 	}
 	
@@ -644,15 +645,17 @@ public class ImpDungeonComponents
 			
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 0, 0, 4, 0, 2, floorBlock, floorBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 3, 6, 0, 5, floorBlock, floorBlock, false);
-			setBlockState(worldIn, floorDecor, 1, 0, 2, structureBoundingBoxIn);
-			setBlockState(worldIn, floorDecor, 6, 0, 2, structureBoundingBoxIn);
+			setBlockState(worldIn, floorBlock, 1, 0, 2, structureBoundingBoxIn);
+			setBlockState(worldIn, floorBlock, 6, 0, 2, structureBoundingBoxIn);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 0, 5, 4, 0, 5, floorDecor, floorDecor, false);
 			fillWithAir(worldIn, structureBoundingBoxIn, 3, 1, 0, 4, 3, 2);
 			fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 3, 6, 3, 5);
 			fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 2, 1, 3, 2);
 			fillWithAir(worldIn, structureBoundingBoxIn, 6, 1, 2, 6, 3, 2);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 0, 2, 4, 2, wallBlock, wallBlock, false);
-			fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 0, 0, 5, 4, 2, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 0, 2, 4, 1, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 0, 0, 5, 4, 1, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 2, 2, 4, 2, wallDecor, wallDecor, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 0, 2, 5, 4, 2, wallDecor, wallDecor, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 1, 1, 4, 1, wallBlock, wallBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 0, 1, 6, 4, 1, wallBlock, wallBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 1, 0, 4, 5, wallBlock, wallBlock, false);
@@ -682,12 +685,14 @@ public class ImpDungeonComponents
 		}
 	}
 	
-	public static class EmptyRoom extends ImpDungeonComponent
+	public static class BookcaseRoom extends ImpDungeonComponent
 	{
-		public EmptyRoom()
+		float bookChance;
+		
+		public BookcaseRoom()
 		{}
 		
-		public EmptyRoom(EnumFacing coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		public BookcaseRoom(EnumFacing coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
 			setCoordBaseMode(coordBaseMode);
 			
@@ -700,6 +705,22 @@ public class ImpDungeonComponents
 			this.boundingBox = new StructureBoundingBox(x, pos.getY(), z, x + xWidth - 1, pos.getY() + 4, z + zWidth - 1);
 			
 			ctxt.compoGen[xIndex][zIndex] = this;
+			
+			bookChance = ctxt.rand.nextFloat() - 0.5F;
+		}
+		
+		@Override
+		protected void writeStructureToNBT(NBTTagCompound tagCompound)
+		{
+			super.writeStructureToNBT(tagCompound);
+			tagCompound.setFloat("book", bookChance);
+		}
+		
+		@Override
+		protected void readStructureFromNBT(NBTTagCompound tagCompound)
+		{
+			super.readStructureFromNBT(tagCompound);
+			bookChance = tagCompound.getFloat("book");
 		}
 		
 		@Override
@@ -743,6 +764,13 @@ public class ImpDungeonComponents
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 5, 6, 5, 5, 6, wallBlock, wallBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 6, 1, 6, 6, 6, wallBlock, wallBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 6, 3, 4, 6, 4, wallDecor, wallDecor, false);
+			
+			IBlockState bookshelf = Blocks.BOOKSHELF.getDefaultState();
+			fillWithBlocksRandomly(worldIn, structureBoundingBoxIn, randomIn, bookChance, 1, 1, 1, 1, 4, 2, bookshelf, bookshelf, false);
+			fillWithBlocksRandomly(worldIn, structureBoundingBoxIn, randomIn, bookChance, 1, 1, 5, 1, 4, 6, bookshelf, bookshelf, false);
+			fillWithBlocksRandomly(worldIn, structureBoundingBoxIn, randomIn, bookChance, 6, 1, 1, 6, 4, 2, bookshelf, bookshelf, false);
+			fillWithBlocksRandomly(worldIn, structureBoundingBoxIn, randomIn, bookChance, 6, 1, 5, 6, 4, 6, bookshelf, bookshelf, false);
+			fillWithBlocksRandomly(worldIn, structureBoundingBoxIn, randomIn, bookChance, 3, 1, 6, 4, 4, 6, bookshelf, bookshelf, false);
 			
 			return true;
 		}
