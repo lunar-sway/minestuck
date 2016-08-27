@@ -74,6 +74,7 @@ public class SmallRuinStart extends StructureStart
 			IBlockState wallBlock = provider.blockRegistry.getBlockState("structure_primary");
 			IBlockState wallDecor = provider.blockRegistry.getBlockState("structure_primary_decorative");
 			IBlockState floorBlock = provider.blockRegistry.getBlockState("structure_secondary");
+			IBlockState torchBlock = provider.blockRegistry.getBlockState("torch");
 			
 			for(int z = 0; z < 8; z++)
 				for(int x = 0; x < 7; x++)
@@ -107,13 +108,13 @@ public class SmallRuinStart extends StructureStart
 			StructureUtil.placeLootChest(chestPos, worldIn, boundingBox, this.getCoordBaseMode().getOpposite(), AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, rand);
 			
 			if(torches[0])
-				this.setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.EAST), 1, 2, 3, boundingBox);
+				this.setBlockState(worldIn, torchBlock.withProperty(BlockTorch.FACING, EnumFacing.EAST), 1, 2, 3, boundingBox);
 			if(torches[1])
-				this.setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.WEST), 5, 2, 3, boundingBox);
+				this.setBlockState(worldIn, torchBlock.withProperty(BlockTorch.FACING, EnumFacing.WEST), 5, 2, 3, boundingBox);
 			if(torches[2])
-				this.setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.EAST), 1, 2, 6, boundingBox);
+				this.setBlockState(worldIn, torchBlock.withProperty(BlockTorch.FACING, EnumFacing.EAST), 1, 2, 6, boundingBox);
 			if(torches[3])
-				this.setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.WEST), 5, 2, 6, boundingBox);
+				this.setBlockState(worldIn, torchBlock.withProperty(BlockTorch.FACING, EnumFacing.WEST), 5, 2, 6, boundingBox);
 			
 			if(boundingBox.intersectsWith(this.boundingBox.minX, this.boundingBox.minZ, this.boundingBox.minX, this.boundingBox.minZ))
 				placeUnderling(this.boundingBox.minX - 6, this.boundingBox.minZ - 6, worldIn, rand);

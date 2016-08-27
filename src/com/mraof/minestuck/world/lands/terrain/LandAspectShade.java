@@ -26,11 +26,11 @@ public class LandAspectShade extends TerrainLandAspect
 	{
 		registry.setBlockState("upper", MinestuckBlocks.coloredDirt.getDefaultState().withProperty(BlockColoredDirt.BLOCK_TYPE, BlockColoredDirt.BlockType.BLUE));
 		registry.setBlockState("ocean", MinestuckBlocks.blockOil.getDefaultState());
-		registry.setBlockState("structure_primary", Blocks.STONEBRICK.getDefaultState());
 		registry.setBlockState("structure_primary_decorative", Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED));
 		registry.setBlockState("structure_primary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
 		registry.setBlockState("structure_secondary", Blocks.STONE.getDefaultState());
 		registry.setBlockState("light_block", MinestuckBlocks.glowingLog.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE));
+		registry.setBlockState("torch", Blocks.REDSTONE_TORCH.getDefaultState());
 	}
 	
 	@Override

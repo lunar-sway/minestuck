@@ -38,6 +38,7 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 		IBlockState wall = provider.blockRegistry.getBlockState("structure_primary");
 		IBlockState wallDec = provider.blockRegistry.getBlockState("structure_primary_decorative");
 		IBlockState floor = provider.blockRegistry.getBlockState("structure_secondary");
+		IBlockState torch = provider.blockRegistry.getBlockState("torch");
 		
 		boolean torches = random.nextFloat() < (provider.dayCycle == 0 ? 0.4F : provider.dayCycle == 1 ? 0F : 0.9F);
 		
@@ -115,10 +116,10 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 		this.placeBlock(world, floor, -2, height + 1, 2);
 		if(torches)
 		{
-			this.placeBlock(world, Blocks.TORCH.getDefaultState(), -2, height + 2, -2);
-			this.placeBlock(world, Blocks.TORCH.getDefaultState(), 2, height + 2, -2);
-			this.placeBlock(world, Blocks.TORCH.getDefaultState(), 2, height + 2, 2);
-			this.placeBlock(world, Blocks.TORCH.getDefaultState(), -2, height + 2, 2);
+			this.placeBlock(world, torch, -2, height + 2, -2);
+			this.placeBlock(world, torch, 2, height + 2, -2);
+			this.placeBlock(world, torch, 2, height + 2, 2);
+			this.placeBlock(world, torch, -2, height + 2, 2);
 		}
 		
 		
@@ -167,10 +168,10 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 		{
 			for(int y = 5; y < height; y += 5)
 			{
-				this.placeBlock(world, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.EAST), -2, y, 0);
-				this.placeBlock(world, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.WEST), 2, y, 0);
-				this.placeBlock(world, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.SOUTH), 0, y, -2);
-				this.placeBlock(world, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.NORTH), 0, y, 2);
+				this.placeBlock(world, torch.withProperty(BlockTorch.FACING, EnumFacing.EAST), -2, y, 0);
+				this.placeBlock(world, torch.withProperty(BlockTorch.FACING, EnumFacing.WEST), 2, y, 0);
+				this.placeBlock(world, torch.withProperty(BlockTorch.FACING, EnumFacing.SOUTH), 0, y, -2);
+				this.placeBlock(world, torch.withProperty(BlockTorch.FACING, EnumFacing.NORTH), 0, y, 2);
 			}
 		}
 		

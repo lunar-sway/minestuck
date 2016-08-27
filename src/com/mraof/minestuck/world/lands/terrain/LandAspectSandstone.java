@@ -76,6 +76,7 @@ public class LandAspectSandstone extends TerrainLandAspect
 		registry.setBlockState("structure_secondary", Blocks.STONEBRICK.getDefaultState());
 		registry.setBlockState("structure_secondary_decorative", Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED));
 		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
+		registry.setBlockState("torch", Blocks.REDSTONE_TORCH.getDefaultState());
 	}
 	
 	@Override

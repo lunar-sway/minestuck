@@ -6,7 +6,7 @@ import java.util.List;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntitySpider;
-import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.monster.EntityZombie;import net.minecraft.init.Blocks;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
 
@@ -70,7 +70,8 @@ public class LandAspectMonsters extends TitleLandAspect
 	@Override
 	protected void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
-		
+		if(chunkProvider.blockRegistry.getCustomBlock("torch") == null)
+			chunkProvider.blockRegistry.setBlockState("torch", Blocks.REDSTONE_TORCH.getDefaultState());
 	}
 	
 	@Override

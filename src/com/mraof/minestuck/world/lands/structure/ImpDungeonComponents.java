@@ -367,9 +367,12 @@ public class ImpDungeonComponents
 				fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 1, 7, 2, 3, 7, wallBlock, wallBlock, false);
 			
 			if(light)
+			{
+				IBlockState torch = provider.blockRegistry.getBlockState("torch");
 				if(lightPos/2 == 0)
-					setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.WEST), 2, 2, 3 + lightPos%2, structureBoundingBoxIn);
-				else setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.EAST), 1, 2, 3 + lightPos%2, structureBoundingBoxIn);
+					setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.WEST), 2, 2, 3 + lightPos%2, structureBoundingBoxIn);
+				else setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.EAST), 1, 2, 3 + lightPos%2, structureBoundingBoxIn);
+			}
 			
 			return true;
 		}
@@ -585,8 +588,9 @@ public class ImpDungeonComponents
 			
 			if(light)
 			{
-				setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.WEST), 4, 2, 2, structureBoundingBoxIn);
-				setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.NORTH), 2, 2, 4, structureBoundingBoxIn);
+				IBlockState torch = provider.blockRegistry.getBlockState("torch");
+				setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.WEST), 4, 2, 2, structureBoundingBoxIn);
+				setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.NORTH), 2, 2, 4, structureBoundingBoxIn);
 			}
 			
 			return true;
@@ -886,7 +890,7 @@ public class ImpDungeonComponents
 			
 			if(light)
 			{
-				IBlockState torch = Blocks.TORCH.getDefaultState();
+				IBlockState torch = provider.blockRegistry.getBlockState("torch");
 				if(randomIn.nextBoolean())
 					setBlockState(worldIn, torch, 2, 1, 2, structureBoundingBoxIn);
 				if(randomIn.nextBoolean())

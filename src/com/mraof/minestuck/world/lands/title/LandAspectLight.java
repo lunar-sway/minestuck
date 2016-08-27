@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.lands.title;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.Vec3d;
 
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
@@ -31,7 +32,7 @@ public class LandAspectLight extends TitleLandAspect
 	@Override
 	protected void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
-		
+		chunkProvider.blockRegistry.setBlockState("torch", Blocks.TORCH.getDefaultState());
 	}
 	
 	@Override

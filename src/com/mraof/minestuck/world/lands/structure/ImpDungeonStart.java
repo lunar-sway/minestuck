@@ -7,7 +7,6 @@ import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Rotation;
@@ -80,6 +79,7 @@ public class ImpDungeonStart extends StructureStart
 			IBlockState wallDecor = provider.blockRegistry.getBlockState("structure_primary_decorative");
 			IBlockState floorBlock = provider.blockRegistry.getBlockState("structure_secondary");
 			IBlockState floorStairs = provider.blockRegistry.getBlockState("structure_secondary_stairs").withRotation(Rotation.CLOCKWISE_180);
+			IBlockState torch = provider.blockRegistry.getBlockState("torch");
 			
 			for(int x = 1; x < 5; x++)
 				buildFloorTile(floorBlock, x, 0, worldIn, randomIn, structureBoundingBoxIn);
@@ -136,8 +136,8 @@ public class ImpDungeonStart extends StructureStart
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, compoHeight - boundingBox.minY, 9, 4, -6, 9, wallBlock, wallBlock, false);
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, compoHeight - boundingBox.minY, 8, 4, -7, 8, wallBlock, wallBlock, false);
 			
-			setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.EAST), 2, -3, 8, structureBoundingBoxIn);
-			setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.WEST), 3, -3, 8, structureBoundingBoxIn);
+			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.EAST), 2, -3, 8, structureBoundingBoxIn);
+			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.WEST), 3, -3, 8, structureBoundingBoxIn);
 			
 			return true;
 		}

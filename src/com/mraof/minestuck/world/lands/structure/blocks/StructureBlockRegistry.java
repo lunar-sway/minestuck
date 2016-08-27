@@ -3,6 +3,8 @@ package com.mraof.minestuck.world.lands.structure.blocks;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 
@@ -13,15 +15,27 @@ public class StructureBlockRegistry
 	
 	public static void registerBlock(String name, IBlockState defaultBlock)
 	{
+		registerBlock(name, defaultBlock, Block.class);
+	}
+	
+	public static void registerBlock(String name, IBlockState defaultBlock, Class<? extends Block> extention)
+	{
 		if(defaultBlock == null || name == null)
 			throw new IllegalArgumentException("Null parameters not allowed.");
 		if(staticRegistry.containsKey(name))
 			throw new IllegalStateException("\""+name+"\" has already been registered!");
+		if(!extention.isInstance(defaultBlock.getBlock()))
+			throw new IllegalArgumentException("The default block \""+defaultBlock.getBlock()+"\" has to extend the minimum class \""+extention+"\"!");
 		
-		staticRegistry.put(name, new BlockEntry(defaultBlock));
+		staticRegistry.put(name, new BlockEntry(defaultBlock, extention));
 	}
 	
 	public static void registerBlock(String name, String parent)
+	{
+		registerBlock(name, parent, Block.class);
+	}
+	
+	public static void registerBlock(String name, String parent, Class<? extends Block> extention)
 	{
 		if(parent == null || name == null)
 			throw new IllegalArgumentException("Null parameters not allowed.");
@@ -31,7 +45,10 @@ public class StructureBlockRegistry
 		if(!staticRegistry.containsKey(parent))
 			throw new IllegalStateException("The parent entry \""+parent+"\" isn't registered! Make sure to register the parent first.");
 		
-		staticRegistry.put(name, new BlockEntry(parent));
+		if(!extention.isAssignableFrom(staticRegistry.get(parent).extention))
+			throw new IllegalArgumentException("The class specified must be the same or a superclass to the class used by the parent \""+parent+"\".");
+		
+		staticRegistry.put(name, new BlockEntry(parent, extention));
 	}
 	
 	static
@@ -41,7 +58,7 @@ public class StructureBlockRegistry
 		registerBlock("surface", "upper");
 		registerBlock("ocean", Blocks.WATER.getDefaultState());
 		registerBlock("river", "ocean");
-		registerBlock("structure_primary", "ground");
+		registerBlock("structure_primary", Blocks.STONEBRICK.getDefaultState());
 		registerBlock("structure_primary_decorative", "structure_primary");
 		registerBlock("structure_primary_stairs", "structure_primary");
 		registerBlock("structure_secondary", "structure_primary");
@@ -49,21 +66,25 @@ public class StructureBlockRegistry
 		registerBlock("structure_secondary_stairs", "structure_secondary");
 		registerBlock("fall_fluid", "ocean");
 		registerBlock("light_block", Blocks.GLOWSTONE.getDefaultState());
+		registerBlock("torch", Blocks.TORCH.getDefaultState(), BlockTorch.class);	//Class restriction needed because of the facing property
 		registerBlock("bucket1", Blocks.QUARTZ_BLOCK.getDefaultState());
 		registerBlock("bucket2", Blocks.IRON_BLOCK.getDefaultState());
 	}
 	
 	private static class BlockEntry
 	{
+		Class<? extends Block> extention;
 		IBlockState defaultBlock;
 		String parentEntry;
-		BlockEntry(IBlockState state)
+		BlockEntry(IBlockState state, Class<? extends Block> clazz)
 		{
 			defaultBlock = state;
+			extention = clazz;
 		}
-		BlockEntry(String str)
+		BlockEntry(String str, Class<? extends Block> clazz)
 		{
 			parentEntry = str;
+			extention = clazz;
 		}
 		
 		IBlockState getBlockState(StructureBlockRegistry registry)
@@ -83,6 +104,8 @@ public class StructureBlockRegistry
 			throw new IllegalArgumentException("Null parameters not allowed.");
 		if(!staticRegistry.containsKey(name))
 			throw new IllegalStateException("Structure block \""+name+"\" isn't registered, and can therefore not be set.");
+		if(!staticRegistry.get(name).extention.isInstance(state.getBlock()))
+			throw new IllegalArgumentException("The provided block must extend \""+staticRegistry.get(name).extention+"\".");
 		
 		blockRegistry.put(name, state);
 	}
