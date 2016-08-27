@@ -9,10 +9,12 @@ import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.StructureUtil;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
+import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
@@ -258,10 +260,40 @@ public class ImpDungeonComponents
 				return z;
 			}
 		}
+		
+		@Override
+		protected void setBlockState(World worldIn, IBlockState blockstateIn, int x, int y, int z, StructureBoundingBox boundingboxIn)
+		{
+			BlockPos blockpos = new BlockPos(this.getXWithOffset(x, z), this.getYWithOffset(y), this.getZWithOffset(x, z));
+			
+			if (boundingboxIn.isVecInside(blockpos))
+			{
+				EnumFacing facing = this.getCoordBaseMode();
+				switch(facing)
+				{
+				case NORTH:
+					blockstateIn = blockstateIn.withRotation(Rotation.CLOCKWISE_180);
+					break;
+				case WEST:
+					blockstateIn = blockstateIn.withRotation(Rotation.CLOCKWISE_90);
+					break;
+				case EAST:
+					blockstateIn = blockstateIn.withRotation(Rotation.COUNTERCLOCKWISE_90);
+					break;
+				default:
+				}
+				
+				worldIn.setBlockState(blockpos, blockstateIn, 2);
+			}
+		}
 	}
 	
 	public static class StraightCorridor extends ImpDungeonComponent
 	{
+		
+		boolean light;
+		byte lightPos;
+		
 		public StraightCorridor()
 		{
 			corridors = new boolean[1];
@@ -280,10 +312,32 @@ public class ImpDungeonComponents
 			
 			this.boundingBox = new StructureBoundingBox(x, pos.getY(), z, x + xWidth - 1, pos.getY() + 4, z + zWidth - 1);
 			
+			light = true;//ctxt.rand.nextFloat() < 0.1F;
+			if(light)
+				lightPos = (byte) ctxt.rand.nextInt(4);
+			
 			ctxt.compoGen[xIndex][zIndex] = this;
 			int xOffset = coordBaseMode.getFrontOffsetX();
 			int zOffset = coordBaseMode.getFrontOffsetZ();
 			corridors[0] = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.add(xOffset*8, 0, zOffset*8), coordBaseMode, index + 1);
+		}
+		
+		@Override
+		protected void writeStructureToNBT(NBTTagCompound tagCompound)
+		{
+			super.writeStructureToNBT(tagCompound);
+			tagCompound.setBoolean("light", light);
+			if(light)
+				tagCompound.setByte("lpos", lightPos);
+		}
+		
+		@Override
+		protected void readStructureFromNBT(NBTTagCompound tagCompound)
+		{
+			super.readStructureFromNBT(tagCompound);
+			light = tagCompound.getBoolean("light");
+			if(light)
+				lightPos = tagCompound.getByte("lpos");
 		}
 		
 		@Override
@@ -312,12 +366,19 @@ public class ImpDungeonComponents
 			if(corridors[0])
 				fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 1, 7, 2, 3, 7, wallBlock, wallBlock, false);
 			
+			if(light)
+				if(lightPos/2 == 0)
+					setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.WEST), 2, 2, 3 + lightPos%2, structureBoundingBoxIn);
+				else setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.EAST), 1, 2, 3 + lightPos%2, structureBoundingBoxIn);
+			
 			return true;
 		}
 	}
 	
 	public static class CrossCorridor extends ImpDungeonComponent
 	{
+		boolean light;
+		
 		public CrossCorridor()
 		{
 			corridors = new boolean[3];
@@ -336,9 +397,12 @@ public class ImpDungeonComponents
 			
 			this.boundingBox = new StructureBoundingBox(x, pos.getY(), z, x + xWidth - 1, pos.getY() + 5, z + zWidth - 1);
 			
+			light = ctxt.rand.nextFloat() < 0.3F;
+			
 			ctxt.compoGen[xIndex][zIndex] = this;
 			int xOffset = coordBaseMode.getFrontOffsetX();
 			int zOffset = coordBaseMode.getFrontOffsetZ();
+			
 			if(ctxt.rand.nextBoolean())
 			{
 				corridors[0] = !generatePart(ctxt, xIndex - zOffset, zIndex + xOffset, pos.add(-zOffset*8, 0, xOffset*8), coordBaseMode.rotateY(), index + 1);
@@ -349,6 +413,20 @@ public class ImpDungeonComponents
 				corridors[0] = !generatePart(ctxt, xIndex - zOffset, zIndex + xOffset, pos.add(-zOffset*8, 0, xOffset*8), coordBaseMode.rotateY(), index + 1);
 			}
 			corridors[1] = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.add(xOffset*8, 0, zOffset*8), coordBaseMode, index + 2);
+		}
+		
+		@Override
+		protected void writeStructureToNBT(NBTTagCompound tagCompound)
+		{
+			super.writeStructureToNBT(tagCompound);
+			tagCompound.setBoolean("light", light);
+		}
+		
+		@Override
+		protected void readStructureFromNBT(NBTTagCompound tagCompound)
+		{
+			super.readStructureFromNBT(tagCompound);
+			light = tagCompound.getBoolean("light");
 		}
 		
 		@Override
@@ -409,12 +487,20 @@ public class ImpDungeonComponents
 			if(corridors[2])
 				fillWithBlocks(worldIn, structureBoundingBoxIn, 7, 1, 3, 7, 3, 4, wallBlock, wallBlock, false);
 			
+			if(light)
+			{
+				IBlockState lightBlock = provider.blockRegistry.getBlockState("light_block");
+				fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 5, 3, 4, 5, 4, lightBlock, lightBlock, false);
+			}
+			
 			return true;
 		}
 	}
 	
 	public static class TurnCorridor extends ImpDungeonComponent
 	{
+		boolean light;
+		
 		public TurnCorridor()
 		{
 			corridors = new boolean[2];
@@ -438,11 +524,27 @@ public class ImpDungeonComponents
 			
 			this.boundingBox = new StructureBoundingBox(x, pos.getY(), z, x + xWidth - 1, pos.getY() + 4, z + zWidth - 1);
 			
+			light = ctxt.rand.nextFloat() < 0.2F;
+			
 			ctxt.compoGen[xIndex][zIndex] = this;
 			EnumFacing newFacing = direction ? coordBaseMode.rotateYCCW() : coordBaseMode.rotateY();
 			int xOffset = newFacing.getFrontOffsetX();
 			int zOffset = newFacing.getFrontOffsetZ();
 			corridors[direction ? 0 : 1] = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.add(xOffset*8, 0, zOffset*8), newFacing, index + 1);
+		}
+		
+		@Override
+		protected void writeStructureToNBT(NBTTagCompound tagCompound)
+		{
+			super.writeStructureToNBT(tagCompound);
+			tagCompound.setBoolean("light", light);
+		}
+		
+		@Override
+		protected void readStructureFromNBT(NBTTagCompound tagCompound)
+		{
+			super.readStructureFromNBT(tagCompound);
+			light = tagCompound.getBoolean("light");
 		}
 		
 		@Override
@@ -480,6 +582,12 @@ public class ImpDungeonComponents
 				fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 1, 0, 4, 3, 0, wallBlock, wallBlock, false);
 			if(corridors[1])
 				fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 1, 3, 0, 3, 4, wallBlock, wallBlock, false);
+			
+			if(light)
+			{
+				setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.WEST), 4, 2, 2, structureBoundingBoxIn);
+				setBlockState(worldIn, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.NORTH), 2, 2, 4, structureBoundingBoxIn);
+			}
 			
 			return true;
 		}
@@ -688,6 +796,7 @@ public class ImpDungeonComponents
 	public static class BookcaseRoom extends ImpDungeonComponent
 	{
 		float bookChance;
+		boolean light;
 		
 		public BookcaseRoom()
 		{}
@@ -706,6 +815,7 @@ public class ImpDungeonComponents
 			
 			ctxt.compoGen[xIndex][zIndex] = this;
 			
+			light = ctxt.rand.nextFloat() < 0.4F;
 			bookChance = ctxt.rand.nextFloat() - 0.5F;
 		}
 		
@@ -714,6 +824,7 @@ public class ImpDungeonComponents
 		{
 			super.writeStructureToNBT(tagCompound);
 			tagCompound.setFloat("book", bookChance);
+			tagCompound.setBoolean("light", light);
 		}
 		
 		@Override
@@ -721,6 +832,7 @@ public class ImpDungeonComponents
 		{
 			super.readStructureFromNBT(tagCompound);
 			bookChance = tagCompound.getFloat("book");
+			light = tagCompound.getBoolean("light");
 		}
 		
 		@Override
@@ -771,6 +883,19 @@ public class ImpDungeonComponents
 			fillWithBlocksRandomly(worldIn, structureBoundingBoxIn, randomIn, bookChance, 6, 1, 1, 6, 4, 2, bookshelf, bookshelf, false);
 			fillWithBlocksRandomly(worldIn, structureBoundingBoxIn, randomIn, bookChance, 6, 1, 5, 6, 4, 6, bookshelf, bookshelf, false);
 			fillWithBlocksRandomly(worldIn, structureBoundingBoxIn, randomIn, bookChance, 3, 1, 6, 4, 4, 6, bookshelf, bookshelf, false);
+			
+			if(light)
+			{
+				IBlockState torch = Blocks.TORCH.getDefaultState();
+				if(randomIn.nextBoolean())
+					setBlockState(worldIn, torch, 2, 1, 2, structureBoundingBoxIn);
+				if(randomIn.nextBoolean())
+					setBlockState(worldIn, torch, 5, 1, 2, structureBoundingBoxIn);
+				if(randomIn.nextBoolean())
+					setBlockState(worldIn, torch, 2, 1, 5, structureBoundingBoxIn);
+				if(randomIn.nextBoolean())
+					setBlockState(worldIn, torch, 5, 1, 5, structureBoundingBoxIn);
+			}
 			
 			return true;
 		}
