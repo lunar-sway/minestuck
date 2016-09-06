@@ -26,13 +26,14 @@ public class ImpDungeonComponents
 	
 	public static void registerComponents()
 	{
-		MapGenStructureIO.registerStructureComponent(ImpDungeonComponents.EntryCorridor.class, "MinestuckIDEntryCorridor");
-		MapGenStructureIO.registerStructureComponent(ImpDungeonComponents.StraightCorridor.class, "MinestuckIDCorridor");
-		MapGenStructureIO.registerStructureComponent(ImpDungeonComponents.CrossCorridor.class, "MinestuckIDCross");
-		MapGenStructureIO.registerStructureComponent(ImpDungeonComponents.TurnCorridor.class, "MinestuckIDTurn");
-		MapGenStructureIO.registerStructureComponent(ImpDungeonComponents.ReturnRoom.class, "MinestuckIDReturn");
-		MapGenStructureIO.registerStructureComponent(ImpDungeonComponents.SpawnerRoom.class, "MinestuckIDMonstSpawn");
-		MapGenStructureIO.registerStructureComponent(ImpDungeonComponents.BookcaseRoom.class, "MinestuckIDRoom");
+		MapGenStructureIO.registerStructureComponent(ImpDungeonComponents.EntryCorridor.class, "MinestuckIDEC");
+		MapGenStructureIO.registerStructureComponent(ImpDungeonComponents.StraightCorridor.class, "MinestuckIDC");
+		MapGenStructureIO.registerStructureComponent(ImpDungeonComponents.CrossCorridor.class, "MinestuckIDCC");
+		MapGenStructureIO.registerStructureComponent(ImpDungeonComponents.TurnCorridor.class, "MinestuckIDCT");
+		MapGenStructureIO.registerStructureComponent(ImpDungeonComponents.ReturnRoom.class, "MinestuckIDRR");
+		MapGenStructureIO.registerStructureComponent(ImpDungeonComponents.SpawnerRoom.class, "MinestuckIDSpR");
+		MapGenStructureIO.registerStructureComponent(ImpDungeonComponents.BookcaseRoom.class, "MinestuckIDR");
+		MapGenStructureIO.registerStructureComponent(ImpDungeonComponents.SpawnerCorridor.class, "MinestuckIDSpC");
 	}
 	
 	public static class EntryCorridor extends ImpDungeonComponent
@@ -164,7 +165,12 @@ public class ImpDungeonComponents
 			ctxt.corridors -= 1;
 			if(ctxt.rand.nextBoolean())
 				component = new TurnCorridor(facing, pos, xIndex, zIndex, index, ctxt);
-			else component = new StraightCorridor(facing, pos, xIndex, zIndex, index, ctxt);
+			else
+			{	//Corridor
+				if(ctxt.rand.nextFloat() < 0.2)
+					component = new SpawnerCorridor(facing, pos, xIndex, zIndex, index, ctxt);
+				else component = new StraightCorridor(facing, pos, xIndex, zIndex, index, ctxt);
+			}
 		}
 		
 		ctxt.corridors = corridors;
@@ -207,14 +213,14 @@ public class ImpDungeonComponents
 		protected void writeStructureToNBT(NBTTagCompound tagCompound)
 		{
 			for(int i = 0; i < corridors.length; i++)
-				tagCompound.setBoolean("blocked"+i, corridors[i]);
+				tagCompound.setBoolean("bl"+i, corridors[i]);
 		}
 		
 		@Override
 		protected void readStructureFromNBT(NBTTagCompound tagCompound)
 		{
 			for(int i = 0; i < corridors.length; i++)
-				corridors[i] = tagCompound.getBoolean("blocked"+i);
+				corridors[i] = tagCompound.getBoolean("bl"+i);
 		}
 		
 		@Override
@@ -326,7 +332,7 @@ public class ImpDungeonComponents
 		protected void writeStructureToNBT(NBTTagCompound tagCompound)
 		{
 			super.writeStructureToNBT(tagCompound);
-			tagCompound.setBoolean("light", light);
+			tagCompound.setBoolean("l", light);
 			if(light)
 				tagCompound.setByte("lpos", lightPos);
 		}
@@ -335,7 +341,7 @@ public class ImpDungeonComponents
 		protected void readStructureFromNBT(NBTTagCompound tagCompound)
 		{
 			super.readStructureFromNBT(tagCompound);
-			light = tagCompound.getBoolean("light");
+			light = tagCompound.getBoolean("l");
 			if(light)
 				lightPos = tagCompound.getByte("lpos");
 		}
@@ -422,14 +428,14 @@ public class ImpDungeonComponents
 		protected void writeStructureToNBT(NBTTagCompound tagCompound)
 		{
 			super.writeStructureToNBT(tagCompound);
-			tagCompound.setBoolean("light", light);
+			tagCompound.setBoolean("l", light);
 		}
 		
 		@Override
 		protected void readStructureFromNBT(NBTTagCompound tagCompound)
 		{
 			super.readStructureFromNBT(tagCompound);
-			light = tagCompound.getBoolean("light");
+			light = tagCompound.getBoolean("l");
 		}
 		
 		@Override
@@ -540,14 +546,14 @@ public class ImpDungeonComponents
 		protected void writeStructureToNBT(NBTTagCompound tagCompound)
 		{
 			super.writeStructureToNBT(tagCompound);
-			tagCompound.setBoolean("light", light);
+			tagCompound.setBoolean("l", light);
 		}
 		
 		@Override
 		protected void readStructureFromNBT(NBTTagCompound tagCompound)
 		{
 			super.readStructureFromNBT(tagCompound);
-			light = tagCompound.getBoolean("light");
+			light = tagCompound.getBoolean("l");
 		}
 		
 		@Override
@@ -690,7 +696,7 @@ public class ImpDungeonComponents
 	
 	public static class SpawnerRoom extends ImpDungeonComponent
 	{
-		private boolean spawner1, spawner2, chestPos;
+		private boolean spawner1, spawner2;
 		
 		public SpawnerRoom()
 		{}
@@ -718,7 +724,6 @@ public class ImpDungeonComponents
 				spawner1 = ctxt.rand.nextBoolean();
 				spawner2 = !spawner1;
 			}
-			chestPos = ctxt.rand.nextBoolean();
 		}
 		
 		@Override
@@ -727,7 +732,6 @@ public class ImpDungeonComponents
 			super.writeStructureToNBT(tagCompound);
 			tagCompound.setBoolean("sp1", spawner1);
 			tagCompound.setBoolean("sp2", spawner2);
-			tagCompound.setBoolean("ch", chestPos);
 		}
 		
 		@Override
@@ -736,7 +740,6 @@ public class ImpDungeonComponents
 			super.readStructureFromNBT(tagCompound);
 			spawner1 = tagCompound.getBoolean("sp1");
 			spawner2 = tagCompound.getBoolean("sp2");
-			chestPos = tagCompound.getBoolean("ch");
 		}
 		
 		@Override
@@ -789,8 +792,9 @@ public class ImpDungeonComponents
 				spawner2 = !StructureUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, "minestuck.Imp");
 			}
 			
-			int x = chestPos ? 3 : 4;
-			BlockPos chestPos = new BlockPos(this.getXWithOffset(x, 5), this.getYWithOffset(1), this.getZWithOffset(x, 5));
+			BlockPos chestPos = new BlockPos(this.getXWithOffset(3, 5), this.getYWithOffset(1), this.getZWithOffset(3, 5));
+			StructureUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().getOpposite(), AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, randomIn);
+			chestPos = new BlockPos(this.getXWithOffset(4, 5), this.getYWithOffset(1), this.getZWithOffset(3, 5));
 			StructureUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().getOpposite(), AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, randomIn);
 			
 			return true;
@@ -827,16 +831,16 @@ public class ImpDungeonComponents
 		protected void writeStructureToNBT(NBTTagCompound tagCompound)
 		{
 			super.writeStructureToNBT(tagCompound);
-			tagCompound.setFloat("book", bookChance);
-			tagCompound.setBoolean("light", light);
+			tagCompound.setFloat("b", bookChance);
+			tagCompound.setBoolean("l", light);
 		}
 		
 		@Override
 		protected void readStructureFromNBT(NBTTagCompound tagCompound)
 		{
 			super.readStructureFromNBT(tagCompound);
-			bookChance = tagCompound.getFloat("book");
-			light = tagCompound.getBoolean("light");
+			bookChance = tagCompound.getFloat("b");
+			light = tagCompound.getBoolean("l");
 		}
 		
 		@Override
@@ -904,4 +908,129 @@ public class ImpDungeonComponents
 			return true;
 		}
 	}
+	
+	public static class SpawnerCorridor extends ImpDungeonComponent
+	{
+		private boolean spawner1, spawner2, chestPos;
+		
+		public SpawnerCorridor()
+		{
+			corridors = new boolean[2];
+		}
+		
+		public SpawnerCorridor(EnumFacing coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		{
+			this();
+			boolean mirror = ctxt.rand.nextBoolean();
+			if(mirror)
+				setCoordBaseMode(coordBaseMode.getOpposite());
+			else setCoordBaseMode(coordBaseMode);
+			
+			int xWidth = getCoordBaseMode().getAxis().equals(EnumFacing.Axis.X) ? 8 : 6;
+			int zWidth = getCoordBaseMode().getAxis().equals(EnumFacing.Axis.Z) ? 8 : 6;
+			
+			int x = pos.getX() - (xWidth/2 - 1);
+			int z = pos.getZ() - (zWidth/2 - 1);
+			
+			this.boundingBox = new StructureBoundingBox(x, pos.getY(), z, x + xWidth - 1, pos.getY() + 4, z + zWidth - 1);
+			
+			ctxt.compoGen[xIndex][zIndex] = this;
+			
+			if(ctxt.rand.nextBoolean())
+			{
+				spawner1 = true;
+				spawner2 = true;
+			} else
+			{
+				spawner1 = ctxt.rand.nextBoolean();
+				spawner2 = !spawner1;
+			}
+			chestPos = ctxt.rand.nextBoolean();
+			
+			int xOffset = coordBaseMode.getFrontOffsetX();
+			int zOffset = coordBaseMode.getFrontOffsetZ();
+			corridors[mirror ? 0 : 1] = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.add(xOffset*8, 0, zOffset*8), coordBaseMode, index + 1);
+			
+		}
+		
+		@Override
+		protected void writeStructureToNBT(NBTTagCompound tagCompound)
+		{
+			super.writeStructureToNBT(tagCompound);
+			tagCompound.setBoolean("sp1", spawner1);
+			tagCompound.setBoolean("sp2", spawner2);
+			tagCompound.setBoolean("ch", chestPos);
+		}
+		
+		@Override
+		protected void readStructureFromNBT(NBTTagCompound tagCompound)
+		{
+			super.readStructureFromNBT(tagCompound);
+			spawner1 = tagCompound.getBoolean("sp1");
+			spawner2 = tagCompound.getBoolean("sp2");
+			chestPos = tagCompound.getBoolean("ch");
+		}
+		
+		@Override
+		protected boolean connectFrom(EnumFacing facing)
+		{
+			if(getCoordBaseMode().getAxis().equals(facing.getAxis()))
+			{
+				corridors[getCoordBaseMode().equals(facing)?1:0] = false;
+				return true;
+			}
+			return false;
+		}
+		
+		@Override
+		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
+		{
+			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
+			
+			IBlockState wallBlock = provider.blockRegistry.getBlockState("structure_primary");
+			IBlockState wallDecor = provider.blockRegistry.getBlockState("structure_primary_decorative");
+			IBlockState floorBlock = provider.blockRegistry.getBlockState("structure_secondary");
+			
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 0, 3, 0, 7, floorBlock, floorBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 2, 1, 0, 5, floorBlock, floorBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 2, 4, 0, 5, floorBlock, floorBlock, false);
+			fillWithAir(worldIn, structureBoundingBoxIn, 2, 1, 0, 3, 3, 7);
+			fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 2, 1, 3, 5);
+			fillWithAir(worldIn, structureBoundingBoxIn, 4, 1, 2, 4, 3, 5);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 0, 1, 4, 1, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 0, 4, 4, 1, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 1, 0, 4, 6, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 0, 1, 5, 4, 6, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 6, 1, 4, 7, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 6, 4, 4, 7, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 4, 0, 3, 4, 7, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 4, 2, 1, 4, 5, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 4, 2, 4, 4, 5, wallBlock, wallBlock, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 2, 3, 0, 2, 4, wallDecor, wallDecor, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 2, 3, 5, 2, 4, wallDecor, wallDecor, false);
+			
+			if(spawner1)
+			{
+				BlockPos spawnerPos = new BlockPos(this.getXWithOffset(1, 3), this.getYWithOffset(1), this.getZWithOffset(1, 3));
+				spawner1 = !StructureUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, "minestuck.Imp");
+			}
+			if(spawner2)
+			{
+				BlockPos spawnerPos = new BlockPos(this.getXWithOffset(1, 4), this.getYWithOffset(1), this.getZWithOffset(1, 4));
+				spawner2 = !StructureUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, "minestuck.Imp");
+			}
+			
+			int z = chestPos ? 3 : 4;
+			BlockPos chestPos = new BlockPos(this.getXWithOffset(4, z), this.getYWithOffset(1), this.getZWithOffset(4, z));
+			StructureUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().rotateY(), AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, randomIn);
+			
+			if(corridors[0])
+				fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 0, 3, 3, 0, wallBlock, wallBlock, false);
+			if(corridors[1])
+				fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 7, 3, 3, 7, wallBlock, wallBlock, false);
+			
+			return true;
+		}
+	}
+	
 }
