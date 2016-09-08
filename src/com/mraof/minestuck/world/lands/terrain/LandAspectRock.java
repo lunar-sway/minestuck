@@ -30,7 +30,7 @@ public class LandAspectRock extends TerrainLandAspect
 		registry.setBlockState("structure_primary_decorative", Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED));
 		registry.setBlockState("structure_primary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
 		registry.setBlockState("structure_secondary", MinestuckBlocks.stone.getDefaultState());
-//		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_STAIRS.getDefaultState());
+		registry.setBlockState("structure_secondary_stairs", MinestuckBlocks.coarseStoneStairs.getDefaultState());
 	}
 	
 	@Override
