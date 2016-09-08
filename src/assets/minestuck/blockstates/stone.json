@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "variant=coarse": { "model": "minestuck:stone_coarse" }
+    }
+}

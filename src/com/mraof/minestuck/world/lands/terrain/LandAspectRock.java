@@ -9,6 +9,7 @@ import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.Vec3d;
 
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.decorator.BlockBlobDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
@@ -28,8 +29,8 @@ public class LandAspectRock extends TerrainLandAspect
 		registry.setBlockState("upper", Blocks.COBBLESTONE.getDefaultState());
 		registry.setBlockState("structure_primary_decorative", Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED));
 		registry.setBlockState("structure_primary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
-		registry.setBlockState("structure_secondary", Blocks.COBBLESTONE.getDefaultState());
-		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_STAIRS.getDefaultState());
+		registry.setBlockState("structure_secondary", MinestuckBlocks.stone.getDefaultState());
+//		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_STAIRS.getDefaultState());
 	}
 	
 	@Override

@@ -21,6 +21,7 @@ import static com.mraof.minestuck.block.MinestuckBlocks.*;
 
 import com.mraof.minestuck.block.BlockColoredDirt;
 import com.mraof.minestuck.block.BlockCrockerMachine;
+import com.mraof.minestuck.block.BlockStoneMinstuck;
 import com.mraof.minestuck.item.block.ItemBlockLayered;
 import com.mraof.minestuck.item.block.ItemSburbMachine;
 import com.mraof.minestuck.item.weapon.EnumBattleaxeType;
@@ -268,11 +269,19 @@ public class MinestuckItems
 					@Override
 					public String apply(ItemStack input)
 					{
-						return BlockColoredDirt.BlockType.values()[input.getItemDamage()].name;
+						return BlockColoredDirt.BlockType.values()[input.getItemDamage()].getName();
 					}
 				}));
 		registerItemBlock(new ItemBlock(glowingMushroom));
 		registerItemBlock(new ItemBlock(glowingLog));
+		registerItemBlock(new ItemMultiTexture(stone, stone, new Function<ItemStack, String>()
+		{
+			@Override
+			public String apply(ItemStack input)
+			{
+				return BlockStoneMinstuck.BlockType.values()[input.getItemDamage()].getName();
+			}
+		}));
 		
 		registerItemBlock(new ItemBlock(primedTnt));
 		registerItemBlock(new ItemBlock(unstableTnt));

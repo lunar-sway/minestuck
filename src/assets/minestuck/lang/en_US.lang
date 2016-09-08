@@ -520,6 +520,7 @@ tile.coloredDirt.thought.name=Thought Dirt
 tile.goldSeeds.name=Golden seeds
 tile.glowingMushroom.name=Glowing Mushroom
 tile.glowingLog.name=Glowing Log
+tile.stoneMinestuck.coarse.name=Coarse Stone
 tile.primedTnt.name=Primed TNT
 tile.unstableTnt.name=Unstable TNT
 tile.instantTnt.name=Instant TNT

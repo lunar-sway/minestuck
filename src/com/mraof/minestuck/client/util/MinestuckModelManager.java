@@ -25,6 +25,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.BlockChessTile;
 import com.mraof.minestuck.block.BlockCrockerMachine;
 import com.mraof.minestuck.block.BlockSburbMachine;
+import com.mraof.minestuck.block.BlockStoneMinstuck;
 import com.mraof.minestuck.block.BlockColoredDirt;
 import com.mraof.minestuck.item.ItemMinestuckCandy;
 
@@ -168,6 +169,8 @@ public class MinestuckModelManager
 			register(crockerMachine, type.ordinal(), "machine_"+type.getName());
 		register(glowingMushroom);
 		register(glowingLog);
+		for(BlockStoneMinstuck.BlockType type : BlockStoneMinstuck.BlockType.values())
+			register(stone, type.ordinal(), "stone_"+type.getName());
 		
 		register(primedTnt);
 		register(unstableTnt);
@@ -216,6 +219,8 @@ public class MinestuckModelManager
 			ModelBakery.registerItemVariants(Item.getItemFromBlock(sburbMachine), new ResourceLocation("minestuck:machine_"+type.getName()));
 		for(BlockCrockerMachine.MachineType type : BlockCrockerMachine.MachineType.values())
 			ModelBakery.registerItemVariants(Item.getItemFromBlock(crockerMachine), new ResourceLocation("minestuck:machine_"+type.getName()));
+		for(BlockStoneMinstuck.BlockType type : BlockStoneMinstuck.BlockType.values())
+			ModelBakery.registerItemVariants(Item.getItemFromBlock(stone), new ResourceLocation("minestuck:stone_"+type.getName()));
 		
 		ModelLoader.setCustomStateMapper(blockOil, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
 		ModelLoader.setCustomStateMapper(blockBlood, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
