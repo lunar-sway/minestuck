@@ -21,7 +21,7 @@ import static com.mraof.minestuck.block.MinestuckBlocks.*;
 
 import com.mraof.minestuck.block.BlockColoredDirt;
 import com.mraof.minestuck.block.BlockCrockerMachine;
-import com.mraof.minestuck.block.BlockStoneMinstuck;
+import com.mraof.minestuck.block.BlockMinestuckStone;
 import com.mraof.minestuck.item.block.ItemBlockLayered;
 import com.mraof.minestuck.item.block.ItemSburbMachine;
 import com.mraof.minestuck.item.weapon.EnumBattleaxeType;
@@ -279,9 +279,10 @@ public class MinestuckItems
 			@Override
 			public String apply(ItemStack input)
 			{
-				return BlockStoneMinstuck.BlockType.values()[input.getItemDamage()].getName();
+				return BlockMinestuckStone.BlockType.values()[input.getItemDamage()].getName();
 			}
 		}));
+		registerItemBlock(new ItemBlock(coarseStoneStairs));
 		
 		registerItemBlock(new ItemBlock(primedTnt));
 		registerItemBlock(new ItemBlock(unstableTnt));

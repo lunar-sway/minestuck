@@ -34,6 +34,7 @@ public class MinestuckBlocks
 	public static BlockGlowingMushroom glowingMushroom;
 	public static Block glowingLog;
 	public static Block stone;
+	public static Block coarseStoneStairs;
 	
 	public static Block coalOreNetherrack;
 	public static Block ironOreSandstone;
@@ -84,7 +85,8 @@ public class MinestuckBlocks
 		coloredDirt = (BlockColoredDirt) GameRegistry.register(new BlockColoredDirt().setRegistryName("colored_dirt")).setUnlocalizedName("coloredDirt").setHardness(0.5F);
 		glowingMushroom = (BlockGlowingMushroom) GameRegistry.register(new BlockGlowingMushroom().setRegistryName("glowing_mushroom"));
 		glowingLog = GameRegistry.register(new BlockGlowingLog().setRegistryName("glowing_log"));
-		stone = GameRegistry.register(new BlockStoneMinstuck().setRegistryName("stone"));	//Full name will be minestuck:stone and because of that not produce any collisions
+		stone = GameRegistry.register(new BlockMinestuckStone().setRegistryName("stone"));	//Full name will be minestuck:stone and because of that not produce any collisions
+		coarseStoneStairs = GameRegistry.register(new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.COARSE)).setRegistryName("coarse_stone_stairs")).setUnlocalizedName("stairsMinestuck.coarse");
 		
 		primedTnt = GameRegistry.register(new BlockTNTSpecial(true, false, false).setRegistryName("primed_tnt")).setUnlocalizedName("primedTnt");
 		unstableTnt = GameRegistry.register(new BlockTNTSpecial(false, true, false).setRegistryName("unstable_tnt")).setUnlocalizedName("unstableTnt");

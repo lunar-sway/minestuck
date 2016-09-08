@@ -521,6 +521,7 @@ tile.goldSeeds.name=Golden seeds
 tile.glowingMushroom.name=Glowing Mushroom
 tile.glowingLog.name=Glowing Log
 tile.stoneMinestuck.coarse.name=Coarse Stone
+tile.stairsMinestuck.coarse.name=Coarse Stone Stairs
 tile.primedTnt.name=Primed TNT
 tile.unstableTnt.name=Unstable TNT
 tile.instantTnt.name=Instant TNT
