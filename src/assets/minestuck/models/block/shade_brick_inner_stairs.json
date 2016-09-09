@@ -1,0 +1,8 @@
+{
+    "parent": "block/inner_stairs",
+    "textures": {
+        "bottom": "minestuck:blocks/shade_brick",
+        "top": "minestuck:blocks/shade_brick",
+        "side": "minestuck:blocks/shade_brick"
+    }
+}

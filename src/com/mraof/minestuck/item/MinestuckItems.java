@@ -279,10 +279,11 @@ public class MinestuckItems
 			@Override
 			public String apply(ItemStack input)
 			{
-				return BlockMinestuckStone.BlockType.values()[input.getItemDamage()].getName();
+				return BlockMinestuckStone.BlockType.values()[input.getItemDamage()].getUnlocalizedName();
 			}
 		}));
 		registerItemBlock(new ItemBlock(coarseStoneStairs));
+		registerItemBlock(new ItemBlock(shadeBrickStairs));
 		
 		registerItemBlock(new ItemBlock(primedTnt));
 		registerItemBlock(new ItemBlock(unstableTnt));
@@ -293,6 +294,6 @@ public class MinestuckItems
 	
 	private static Item registerItemBlock(ItemBlock item)
 	{
-		return GameRegistry.register(item.setRegistryName(item.block.getRegistryName()));	//Is this enough?
+		return GameRegistry.register(item.setRegistryName(item.block.getRegistryName()));
 	}
 }

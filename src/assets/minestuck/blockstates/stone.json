@@ -1,5 +1,6 @@
 {
     "variants": {
-        "variant=coarse": { "model": "minestuck:coarse_stone" }
+        "variant=coarse_stone": { "model": "minestuck:coarse_stone" },
+        "variant=shade_brick": { "model": "minestuck:shade_brick" }
     }
 }

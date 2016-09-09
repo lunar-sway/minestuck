@@ -170,8 +170,9 @@ public class MinestuckModelManager
 		register(glowingMushroom);
 		register(glowingLog);
 		for(BlockMinestuckStone.BlockType type : BlockMinestuckStone.BlockType.values())
-			register(stone, type.ordinal(), type.getName()+"_stone");
+			register(stone, type.ordinal(), type.getName());
 		register(coarseStoneStairs);
+		register(shadeBrickStairs);
 		
 		register(primedTnt);
 		register(unstableTnt);
@@ -221,7 +222,7 @@ public class MinestuckModelManager
 		for(BlockCrockerMachine.MachineType type : BlockCrockerMachine.MachineType.values())
 			ModelBakery.registerItemVariants(Item.getItemFromBlock(crockerMachine), new ResourceLocation("minestuck:machine_"+type.getName()));
 		for(BlockMinestuckStone.BlockType type : BlockMinestuckStone.BlockType.values())
-			ModelBakery.registerItemVariants(Item.getItemFromBlock(stone), new ResourceLocation("minestuck:"+type.getName()+"_stone"));
+			ModelBakery.registerItemVariants(Item.getItemFromBlock(stone), new ResourceLocation("minestuck:"+type.getName()));
 		
 		ModelLoader.setCustomStateMapper(blockOil, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
 		ModelLoader.setCustomStateMapper(blockBlood, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
