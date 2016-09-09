@@ -636,7 +636,8 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(stoneExplosiveButton, new GristSet(new GristType[] {GristType.Build, GristType.Chalk, GristType.Sulfur}, new int[] {7, 5, 8}));
 		GristRegistry.addGristConversion(woodenExplosiveButton, new GristSet(new GristType[] {GristType.Build, GristType.Chalk, GristType.Sulfur}, new int[] {7, 5, 8}));
 		GristRegistry.addGristConversion(new ItemStack(stone, 1, 0), new GristSet(GristType.Build, 4));
-		GristRegistry.addGristConversion(new ItemStack(stone, 1, 1), new GristSet(new GristType[] {GristType.Build, GristType.Shale}, new int[] {3, 1}));
+		GristRegistry.addGristConversion(new ItemStack(stone, 1, 1), new GristSet(new GristType[] {GristType.Build, GristType.Shale}, new int[] {2, 1}));
+		GristRegistry.addGristConversion(new ItemStack(stone, 1, 2), new GristSet(new GristType[] {GristType.Build, GristType.Shale}, new int[] {4, 1}));
 		
 		//add Designix combinations
 		
@@ -761,6 +762,8 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Blocks.STONE_BRICK_STAIRS), new ItemStack(coloredDirt, 1, 0), MODE_OR, new ItemStack(shadeBrickStairs));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.STONEBRICK), new ItemStack(Items.DYE, 1, EnumDyeColor.BLUE.getDyeDamage()), MODE_OR, new ItemStack(stone, 1, 1));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.STONE_BRICK_STAIRS), new ItemStack(Items.DYE, 1, EnumDyeColor.BLUE.getDyeDamage()), MODE_OR, new ItemStack(shadeBrickStairs));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.STONE, 1, 0), new ItemStack(coloredDirt, 1, 0), MODE_OR, new ItemStack(stone, 1, 2));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.STONE, 1, 0), new ItemStack(Items.DYE, 1, EnumDyeColor.BLUE.getDyeDamage()), MODE_OR, new ItemStack(stone, 1, 2));
 		
 		//Register chest loot
 		LootConditionManager.registerCondition(new LandAspectLootCondition.Serializer());

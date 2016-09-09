@@ -522,6 +522,7 @@ tile.glowingMushroom.name=Glowing Mushroom
 tile.glowingLog.name=Glowing Log
 tile.stoneMinestuck.coarse.name=Coarse Stone
 tile.stoneMinestuck.shadeBrick.name=Shade Bricks
+tile.stoneMinestuck.shadeSmooth.name=Smooth Shade Stone
 tile.stairsMinestuck.coarse.name=Coarse Stone Stairs
 tile.stairsMinestuck.shadeBrick.name=Shade Brick Stairs
 tile.primedTnt.name=Primed TNT

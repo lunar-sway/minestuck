@@ -51,6 +51,12 @@ public class BlockMinestuckStone extends Block
 	}
 	
 	@Override
+	public int damageDropped(IBlockState state)
+	{
+		return getMetaFromState(state);
+	}
+	
+	@Override
 	public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos)
 	{
 		return blockState.getValue(VARIANT).hardness;
@@ -66,16 +72,17 @@ public class BlockMinestuckStone extends Block
 	public static enum BlockType implements IStringSerializable
 	{
 		COARSE("coarse_stone", "coarse", 2.0F),
-		SHADE("shade_brick", "shadeBrick", 1.5F);
+		SHADE_BRICK("shade_brick", "shadeBrick", 1.5F),
+		SHADE_SMOOTH("shade_smooth", "shadeSmooth", 2.0F);
 		
 		private final String name;
 		private final String unlocalizedName;
 		private final float hardness;
+		
 		private BlockType(String name, float hardness)
 		{
 			this(name, name, hardness);
 		}
-		
 		private BlockType(String name, String unlocalizedName, float hardness)
 		{
 			this.name = name;
