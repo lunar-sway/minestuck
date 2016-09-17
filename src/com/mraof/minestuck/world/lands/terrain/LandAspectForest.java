@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.BlockStoneBrick;
+import net.minecraft.block.BlockLog.EnumAxis;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.Vec3d;
 
+import com.mraof.minestuck.block.BlockMinestuckLog;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.decorator.TallGrassDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
@@ -22,9 +25,11 @@ public class LandAspectForest extends TerrainLandAspect
 	{
 		registry.setBlockState("surface", Blocks.GRASS.getDefaultState());
 		registry.setBlockState("upper", Blocks.DIRT.getDefaultState());
-		registry.setBlockState("structure_primary_decorative", Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED));
-		registry.setBlockState("structure_primary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
-		registry.setBlockState("structure_secondary", Blocks.STONE.getDefaultState());
+		registry.setBlockState("structure_primary", MinestuckBlocks.log.getDefaultState().withProperty(BlockMinestuckLog.VARIANT, BlockMinestuckLog.BlockType.VINE_OAK).withProperty(BlockMinestuckLog.LOG_AXIS, EnumAxis.NONE));
+		registry.setBlockState("structure_primary_decorative", MinestuckBlocks.log.getDefaultState().withProperty(BlockMinestuckLog.VARIANT, BlockMinestuckLog.BlockType.FLOWERY_VINE_OAK).withProperty(BlockMinestuckLog.LOG_AXIS, EnumAxis.NONE));
+		registry.setBlockState("structure_secondary", Blocks.STONEBRICK.getDefaultState());
+		registry.setBlockState("structure_secondary_decorative", Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED));
+		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
 	}
 	
 	@Override

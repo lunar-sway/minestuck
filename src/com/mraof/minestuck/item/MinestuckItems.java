@@ -21,6 +21,7 @@ import static com.mraof.minestuck.block.MinestuckBlocks.*;
 
 import com.mraof.minestuck.block.BlockColoredDirt;
 import com.mraof.minestuck.block.BlockCrockerMachine;
+import com.mraof.minestuck.block.BlockMinestuckLog;
 import com.mraof.minestuck.block.BlockMinestuckStone;
 import com.mraof.minestuck.item.block.ItemBlockLayered;
 import com.mraof.minestuck.item.block.ItemSburbMachine;
@@ -285,6 +286,14 @@ public class MinestuckItems
 		registerItemBlock(new ItemBlock(coarseStoneStairs));
 		registerItemBlock(new ItemBlock(shadeBrickStairs));
 		registerItemBlock(new ItemBlock(frostBrickStairs));
+		registerItemBlock(new ItemMultiTexture(log, log, new Function<ItemStack, String>()
+		{
+			@Override
+			public String apply(ItemStack input)
+			{
+				return BlockMinestuckLog.BlockType.values()[input.getItemDamage()].getUnlocalizedName();
+			}
+		}));
 		
 		registerItemBlock(new ItemBlock(primedTnt));
 		registerItemBlock(new ItemBlock(unstableTnt));

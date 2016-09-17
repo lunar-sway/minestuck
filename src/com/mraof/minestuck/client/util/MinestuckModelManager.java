@@ -24,6 +24,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.BlockChessTile;
 import com.mraof.minestuck.block.BlockCrockerMachine;
+import com.mraof.minestuck.block.BlockMinestuckLog;
 import com.mraof.minestuck.block.BlockSburbMachine;
 import com.mraof.minestuck.block.BlockMinestuckStone;
 import com.mraof.minestuck.block.BlockColoredDirt;
@@ -174,6 +175,8 @@ public class MinestuckModelManager
 		register(coarseStoneStairs);
 		register(shadeBrickStairs);
 		register(frostBrickStairs);
+		for(BlockMinestuckLog.BlockType type : BlockMinestuckLog.BlockType.values())
+			register(log, type.ordinal(), type.getName()+"_log");
 		
 		register(primedTnt);
 		register(unstableTnt);
@@ -224,6 +227,8 @@ public class MinestuckModelManager
 			ModelBakery.registerItemVariants(Item.getItemFromBlock(crockerMachine), new ResourceLocation("minestuck:machine_"+type.getName()));
 		for(BlockMinestuckStone.BlockType type : BlockMinestuckStone.BlockType.values())
 			ModelBakery.registerItemVariants(Item.getItemFromBlock(stone), new ResourceLocation("minestuck:"+type.getName()));
+		for(BlockMinestuckLog.BlockType type : BlockMinestuckLog.BlockType.values())
+			ModelBakery.registerItemVariants(Item.getItemFromBlock(log), new ResourceLocation("minestuck:"+type.getName()+"_log"));
 		
 		ModelLoader.setCustomStateMapper(blockOil, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
 		ModelLoader.setCustomStateMapper(blockBlood, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
@@ -231,6 +236,7 @@ public class MinestuckModelManager
 		ModelLoader.setCustomStateMapper(primedTnt, (new StateMap.Builder()).ignore(BlockTNT.EXPLODE).build());
 		ModelLoader.setCustomStateMapper(unstableTnt, (new StateMap.Builder()).ignore(BlockTNT.EXPLODE).build());
 		ModelLoader.setCustomStateMapper(instantTnt, (new StateMap.Builder()).ignore(BlockTNT.EXPLODE).build());
+		ModelLoader.setCustomStateMapper(log, (new StateMap.Builder()).withName(BlockMinestuckLog.VARIANT).withSuffix("_log").build());
 		ModelLoader.setCustomStateMapper(returnNode, new IStateMapper()
 		{
 			@Override
