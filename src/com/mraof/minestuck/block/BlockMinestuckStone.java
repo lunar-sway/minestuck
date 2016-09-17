@@ -6,6 +6,7 @@ import com.mraof.minestuck.Minestuck;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -71,24 +72,22 @@ public class BlockMinestuckStone extends Block
 	
 	public static enum BlockType implements IStringSerializable
 	{
-		COARSE("coarse_stone", "coarse", 2.0F),
-		SHADE_BRICK("shade_brick", "shadeBrick", 1.5F),
-		SHADE_SMOOTH("shade_smooth", "shadeSmooth", 2.0F),
-		FROST_BRICK("frost_brick", "frostBrick", 1.5F);
+		COARSE("coarse_stone", "coarse", 2.0F, MapColor.STONE),
+		SHADE_BRICK("shade_brick", "shadeBrick", 1.5F, MapColor.BLUE),
+		SHADE_SMOOTH("shade_smooth", "shadeSmooth", 2.0F, MapColor.BLUE),
+		FROST_BRICK("frost_brick", "frostBrick", 1.5F, MapColor.ICE);
 		
 		private final String name;
 		private final String unlocalizedName;
 		private final float hardness;
+		private final MapColor color;
 		
-		private BlockType(String name, float hardness)
-		{
-			this(name, name, hardness);
-		}
-		private BlockType(String name, String unlocalizedName, float hardness)
+		private BlockType(String name, String unlocalizedName, float hardness, MapColor color)
 		{
 			this.name = name;
 			this.unlocalizedName = unlocalizedName;
 			this.hardness = hardness;
+			this.color = color;
 		}
 		
 		@Override

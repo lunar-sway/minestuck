@@ -37,7 +37,7 @@ public class LandAspectFrost extends TerrainLandAspect
 	}
 	
 	@Override
-	public String getPrimaryName() 
+	public String getPrimaryName()
 	{
 		return "frost";
 	}
