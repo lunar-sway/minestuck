@@ -284,6 +284,7 @@ public class MinestuckItems
 		}));
 		registerItemBlock(new ItemBlock(coarseStoneStairs));
 		registerItemBlock(new ItemBlock(shadeBrickStairs));
+		registerItemBlock(new ItemBlock(frostBrickStairs));
 		
 		registerItemBlock(new ItemBlock(primedTnt));
 		registerItemBlock(new ItemBlock(unstableTnt));

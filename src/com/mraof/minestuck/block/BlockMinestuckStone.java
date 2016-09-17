@@ -73,7 +73,8 @@ public class BlockMinestuckStone extends Block
 	{
 		COARSE("coarse_stone", "coarse", 2.0F),
 		SHADE_BRICK("shade_brick", "shadeBrick", 1.5F),
-		SHADE_SMOOTH("shade_smooth", "shadeSmooth", 2.0F);
+		SHADE_SMOOTH("shade_smooth", "shadeSmooth", 2.0F),
+		FROST_BRICK("frost_brick", "frostBrick", 1.5F);
 		
 		private final String name;
 		private final String unlocalizedName;

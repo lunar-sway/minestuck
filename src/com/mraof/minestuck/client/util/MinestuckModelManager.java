@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.util;
 
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
 
 import net.minecraft.block.Block;
@@ -173,6 +173,7 @@ public class MinestuckModelManager
 			register(stone, type.ordinal(), type.getName());
 		register(coarseStoneStairs);
 		register(shadeBrickStairs);
+		register(frostBrickStairs);
 		
 		register(primedTnt);
 		register(unstableTnt);
@@ -235,14 +236,14 @@ public class MinestuckModelManager
 			@Override
 			public Map putStateModelLocations(Block block)
 			{
-				return new HashMap();	//We're not using any models for rendering the return node
+				return Collections.emptyMap();	//We're not using any models for rendering the return node
 			}});
 		ModelLoader.setCustomStateMapper(gate, new IStateMapper()
 		{
 			@Override
 			public Map putStateModelLocations(Block block)
 			{
-				return new HashMap();
+				return Collections.emptyMap();
 			}});
 	}
 	

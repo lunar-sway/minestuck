@@ -36,6 +36,7 @@ public class MinestuckBlocks
 	public static Block stone;
 	public static Block coarseStoneStairs;
 	public static Block shadeBrickStairs;
+	public static Block frostBrickStairs;
 	
 	public static Block coalOreNetherrack;
 	public static Block ironOreSandstone;
@@ -89,6 +90,7 @@ public class MinestuckBlocks
 		stone = GameRegistry.register(new BlockMinestuckStone().setRegistryName("stone"));	//Full name will be minestuck:stone and because of that not produce any collisions
 		coarseStoneStairs = GameRegistry.register(new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.COARSE)).setRegistryName("coarse_stone_stairs")).setUnlocalizedName("stairsMinestuck.coarse");
 		shadeBrickStairs = GameRegistry.register(new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.SHADE_BRICK)).setRegistryName("shade_brick_stairs")).setUnlocalizedName("stairsMinestuck.shadeBrick");
+		frostBrickStairs = GameRegistry.register(new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.FROST_BRICK)).setRegistryName("frost_brick_stairs")).setUnlocalizedName("stairsMinestuck.frostBrick");
 		
 		primedTnt = GameRegistry.register(new BlockTNTSpecial(true, false, false).setRegistryName("primed_tnt")).setUnlocalizedName("primedTnt");
 		unstableTnt = GameRegistry.register(new BlockTNTSpecial(false, true, false).setRegistryName("unstable_tnt")).setUnlocalizedName("unstableTnt");
