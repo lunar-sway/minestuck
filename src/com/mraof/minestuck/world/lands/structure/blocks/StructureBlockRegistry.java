@@ -4,9 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockStairs;
 import net.minecraft.block.BlockTorch;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Rotation;
 
 public class StructureBlockRegistry
 {
@@ -125,5 +129,36 @@ public class StructureBlockRegistry
 	public IBlockState getCustomBlock(String name)
 	{
 		return blockRegistry.get(name);
+	}
+	
+	public IBlockState getStairs(String name, EnumFacing facing, boolean upsideDown)
+	{
+		Rotation rotation;
+		switch(facing)
+		{
+		case EAST:
+			rotation = Rotation.CLOCKWISE_90;
+			break;
+		case SOUTH:
+			rotation = Rotation.CLOCKWISE_180;
+			break;
+		case WEST:
+			rotation = Rotation.COUNTERCLOCKWISE_90;
+			break;
+		default: rotation = Rotation.NONE;
+		}
+		
+		IBlockState state = getBlockState(name);
+		state = state.withRotation(rotation);
+		
+		if(upsideDown)
+			for(IProperty<?> property : state.getPropertyNames())
+				if(property.getValueClass().equals(BlockStairs.EnumHalf.class))
+				{
+					state = state.withProperty((IProperty<BlockStairs.EnumHalf>)property, BlockStairs.EnumHalf.TOP);
+					break;
+				}
+		
+		return state;
 	}
 }

@@ -158,8 +158,16 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 		for(int y = 0; y <= height + 3; y++)
 		{
 			offset = getStairOffset(y + stairOffset);
-			this.placeBlock(world, floor, offset.getX(), Math.min(height, y) + 1, offset.getZ());
+			EnumFacing facing = getStairFacing(y + stairOffset);
+			IBlockState rotatedStairs = provider.blockRegistry.getStairs("structure_secondary_stairs", facing, false);
+			this.placeBlock(world, (y < height + 1)?rotatedStairs:floor, offset.getX(), Math.min(height, y) + 1, offset.getZ());
+			if(y != 0 && y < height + 1)
+			{
+				rotatedStairs = provider.blockRegistry.getStairs("structure_secondary_stairs", facing.getOpposite(), true);
+				this.placeBlock(world, rotatedStairs, offset.getX(), Math.min(height, y), offset.getZ());
+			}
 		}
+		
 		if(rotation)
 			offset = new BlockPos(offset.getZ(), 0, offset.getX());
 		
@@ -238,6 +246,23 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 			z = -1;
 		
 		return new BlockPos(x, 0, z);
+	}
+	
+	protected EnumFacing getStairFacing(int offset)
+	{
+		offset /= 2;
+		if(rotation)
+			offset = 3 - offset;
+		offset &= 3;	//0 - 1 -> 0 -> W
+						//0 - 1 -> 3 -> N
+		
+		switch(offset)
+		{
+		case 0: return EnumFacing.EAST;
+		case 1: return EnumFacing.NORTH;
+		case 2: return EnumFacing.WEST;
+		default: return EnumFacing.SOUTH;
+		}
 	}
 	
 }
