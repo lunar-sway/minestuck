@@ -16,7 +16,8 @@ We hope to implement:
 Useful Links
 ============
 
-* Omegaupdate Thread: http://omegaupdate.freeforums.net/thread/412/minestuck-minecraft-adding-homestuck-stuff
+* Omegaupdate Thread: http://omegaupdate.freeforums.net/thread/412/
+* Minecraft Forums Thread: http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/wip-mods/2742212
 * Download Link for 1.7.10 and earlier: http://ci.mraof.com/job/Minestuck-1.7.10/
 * Download Link for 1.8+: http://ci.mraof.com/job/Minestuck/
 * Wikia: http://minestuck.wikia.com/wiki/Minestuck_Wiki
