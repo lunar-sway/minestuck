@@ -45,7 +45,7 @@ public class ChunkProviderLands implements IChunkGenerator
 {
 	List<SpawnListEntry> consortList;
 	public List<SpawnListEntry> monsterList;
-	World landWorld;
+	public World landWorld;
 	Random random;
 	Vec3d skyColor;
 	long seed;

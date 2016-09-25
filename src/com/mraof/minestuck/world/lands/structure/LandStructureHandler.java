@@ -44,8 +44,17 @@ public class LandStructureHandler extends MapGenStructure
 		ImpDungeonComponents.registerComponents();
 	}
 	
+	public boolean isInsideDungeon(BlockPos pos)
+	{
+		this.initializeStructureData(this.worldObj);
+		StructureStart structure = this.getStructureAt(pos);
+		return structure != null && (structure instanceof ImpDungeonStart);
+	}
+	
 	public LandStructureHandler(ChunkProviderLands chunkProvider)
 	{
+		this.worldObj = chunkProvider.landWorld;
+		
 		structures.addAll(genericStructures);
 		this.chunkProvider = chunkProvider;
 		

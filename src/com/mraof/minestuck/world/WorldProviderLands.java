@@ -19,7 +19,7 @@ import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 public class WorldProviderLands extends WorldProvider
 {
-	private ChunkProviderLands provider;
+	public ChunkProviderLands chunkProvider;
 	public LandAspectRegistry.AspectCombination landAspects;
 	
 	@Override
@@ -31,9 +31,9 @@ public class WorldProviderLands extends WorldProvider
 	@Override
 	public float calculateCelestialAngle(long par1, float par3)
 	{
-		if (provider != null) 
+		if (chunkProvider != null) 
 		{
-			switch(provider.dayCycle) 
+			switch(chunkProvider.dayCycle) 
 			{
 			case (0):
 				return super.calculateCelestialAngle(par1,par3);
@@ -54,22 +54,22 @@ public class WorldProviderLands extends WorldProvider
 	@Override
 	public IChunkGenerator createChunkGenerator()
 	{
-		if (provider == null)
+		if (chunkProvider == null)
 		{
 			landAspects = MinestuckDimensionHandler.getAspects(getDimension());
 			
-			provider = landAspects.aspectTitle.createChunkProvider(this);
+			chunkProvider = landAspects.aspectTitle.createChunkProvider(this);
 			
 		}
-		return provider;
+		return chunkProvider;
 	}
 	
 	public String getDimensionName()
 	{
-		if (provider == null || provider.aspect1 == null || provider.aspect2 == null) {
+		if (chunkProvider == null || chunkProvider.aspect1 == null || chunkProvider.aspect2 == null) {
 			return "Land";
 		} else {
-			return "Land of " + provider.aspect1.getPrimaryName() + " and " + provider.aspect2.getPrimaryName();
+			return "Land of " + chunkProvider.aspect1.getPrimaryName() + " and " + chunkProvider.aspect2.getPrimaryName();
 		}
 	}
 	
@@ -121,8 +121,8 @@ public class WorldProviderLands extends WorldProvider
 	
 	@Override
 	public boolean isDaytime() {
-		if (provider != null) {
-			switch (provider.dayCycle) {
+		if (chunkProvider != null) {
+			switch (chunkProvider.dayCycle) {
 			case (0):
 				return super.isDaytime();
 			case (1):
@@ -147,9 +147,9 @@ public class WorldProviderLands extends WorldProvider
 	protected void createBiomeProvider()
 	{
 		isHellWorld = false;
-		if(provider == null)
+		if(chunkProvider == null)
 			createChunkGenerator();
-		this.biomeProvider = new WorldChunkManagerLands(worldObj, provider.rainfall, provider.oceanChance, provider.roughChance);
+		this.biomeProvider = new WorldChunkManagerLands(worldObj, chunkProvider.rainfall, chunkProvider.oceanChance, chunkProvider.roughChance);
 		this.hasNoSky = false;
 	}
 	
@@ -169,23 +169,23 @@ public class WorldProviderLands extends WorldProvider
 	
 	private void forceWeatherCheck()
 	{
-		if(provider.weatherType == -1)
+		if(chunkProvider.weatherType == -1)
 			worldObj.rainingStrength = 0.0F;
-		else if((provider.weatherType & 5) != 0)
+		else if((chunkProvider.weatherType & 5) != 0)
 			worldObj.rainingStrength = 1.0F;
 		
-		if(provider.weatherType == -1 || (provider.weatherType & 6) == 0)
+		if(chunkProvider.weatherType == -1 || (chunkProvider.weatherType & 6) == 0)
 			worldObj.thunderingStrength = 0.0F;
-		else if((provider.weatherType & 4) != 0)
+		else if((chunkProvider.weatherType & 4) != 0)
 			worldObj.thunderingStrength = 1.0F;
 	}
 	
 	@Override
 	public Vec3d getFogColor(float par1, float par2)
 	{
-		if(provider != null)
+		if(chunkProvider != null)
 		{
-			return provider.getFogColor();
+			return chunkProvider.getFogColor();
 		}
 		else
 		{
@@ -202,7 +202,7 @@ public class WorldProviderLands extends WorldProvider
 	@Override
 	public Biome getBiomeForCoords(BlockPos pos)
 	{
-		return provider.getBiomeGen();
+		return chunkProvider.getBiomeGen();
 	}
 	
 	@Override

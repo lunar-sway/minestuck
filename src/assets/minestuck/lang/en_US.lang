@@ -21,6 +21,8 @@ achievement.broBlade=The Blade of a Bro
 achievement.broBlade.desc=Alchemize a really sturdy Katana.
 achievement.returnNode=There's no place like home
 achievement.returnNode.desc=Find a Return Node and jump in to return home.
+achievement.findDungeon=Dungeon Explorer
+achievement.findDungeon.desc=Find a Dungeon to explore!
 
 commands.checkLand.usage=/checkLand
 commands.grist.usage=/grist [player] <add|set> <gristtype value ...> OR /grist [player] get
