@@ -280,7 +280,7 @@ public class MinestuckItems
 			@Override
 			public String apply(ItemStack input)
 			{
-				return BlockMinestuckStone.BlockType.values()[input.getItemDamage()].getUnlocalizedName();
+				return BlockMinestuckStone.BlockType.getFromMeta(input.getMetadata()).getUnlocalizedName();
 			}
 		}));
 		registerItemBlock(new ItemBlock(coarseStoneStairs));

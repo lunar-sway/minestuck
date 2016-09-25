@@ -171,7 +171,7 @@ public class MinestuckModelManager
 		register(glowingMushroom);
 		register(glowingLog);
 		for(BlockMinestuckStone.BlockType type : BlockMinestuckStone.BlockType.values())
-			register(stone, type.ordinal(), type.getName());
+			register(stone, type.getMetadata(), type.getName());
 		register(coarseStoneStairs);
 		register(shadeBrickStairs);
 		register(frostBrickStairs);
