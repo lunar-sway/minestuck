@@ -112,7 +112,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 			boolean creative = ((EntityPlayerMP) entity).interactionManager.isCreative();
 			
 			int topY = MinestuckConfig.adaptEntryBlockHeight ? getTopHeight(worldserver0, x, y, z) : y + artifactRange;
-			int yDiff = 128 - topY;
+			int yDiff = 127 - topY;
 			MinestuckDimensionHandler.setSpawn(worldserver1.provider.getDimension(), new BlockPos(x, y + yDiff, z));	//Set again, but with a more precise now that the y-coordinate is properly decided.
 			
 			Debug.debug("Loading spawn chunks...");
@@ -159,7 +159,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 								SkaianetHandler.movingComputer((TileEntityComputer) te, (TileEntityComputer) te1);
 						}
 					}
-					for(int blockY = Math.min(topY, y + height) + yDiff; blockY < 256; blockY++)
+					for(int blockY = Math.min(topY, y + height) + yDiff + 1; blockY < 256; blockY++)
 						worldserver1.setBlockState(new BlockPos(blockX, blockY, blockZ), Blocks.AIR.getDefaultState(), 0);
 				}
 			}
