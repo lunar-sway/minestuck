@@ -20,6 +20,16 @@ import net.minecraft.world.World;
 
 public class BlockMinestuckStone extends Block
 {
+	public static final int COARSE_META = BlockType.COARSE.getMetadata();
+	public static final int COARSE_CHISELED_META = BlockType.COARSE_CHISELED.getMetadata();
+	public static final int SHADE_META = BlockType.SHADE_BRICK.getMetadata();
+	public static final int SHADE_SMOOTH_META = BlockType.SHADE_SMOOTH.getMetadata();
+	public static final int FROST_META = BlockType.FROST_BRICK.getMetadata();
+	public static final int FROST_TILE_META = BlockType.FROST_TILE.getMetadata();
+	public static final int FROST_CHISELED_META = BlockType.FROST_CHISELED.getMetadata();
+	public static final int CAST_META = BlockType.CAST_IRON.getMetadata();
+	public static final int CAST_CHISELED_META = BlockType.CAST_IRON_CHISELED.getMetadata();
+	
 	public static final PropertyEnum<BlockType> VARIANT = PropertyEnum.create("variant", BlockType.class);
 	
 	public BlockMinestuckStone()
@@ -73,12 +83,14 @@ public class BlockMinestuckStone extends Block
 	public static enum BlockType implements IStringSerializable
 	{
 		COARSE(0, "coarse_stone", "coarse", 2.0F, MapColor.STONE),
-		//Space for decorative coarse stone
+		COARSE_CHISELED(1, "coarse_chiseled", "coarseChiseled", 2.0F, MapColor.STONE),
 		SHADE_BRICK(2, "shade_brick", "shadeBrick", 1.5F, MapColor.BLUE),
 		SHADE_SMOOTH(3, "shade_smooth", "shadeSmooth", 1.5F, MapColor.BLUE),
 		FROST_BRICK(4, "frost_brick", "frostBrick", 1.5F, MapColor.ICE),
 		FROST_TILE(5, "frost_tile", "frostTile", 1.5F, MapColor.ICE),
-		FROST_CHISELED(6, "frost_chiseled", "frostChiseled", 1.5F, MapColor.ICE);
+		FROST_CHISELED(6, "frost_chiseled", "frostChiseled", 1.5F, MapColor.ICE),
+		CAST_IRON(7, "cast_iron", "castIron", 3.0F, MapColor.IRON),
+		CAST_IRON_CHISELED(8, "cast_iron_chiseled", "castIronChiseled", 3.0F, MapColor.IRON);
 		
 		private final int metadata;
 		private final String name;

@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.lands.terrain;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mraof.minestuck.block.BlockMinestuckStone;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.decorator.FireFieldDecorator;
@@ -25,7 +26,8 @@ public class LandAspectHeat extends TerrainLandAspect
 		registry.setBlockState("ground", Blocks.NETHERRACK.getDefaultState());
 		registry.setBlockState("ocean", Blocks.LAVA.getDefaultState());
 		registry.setBlockState("structure_primary", Blocks.NETHER_BRICK.getDefaultState());
-		registry.setBlockState("structure_secondary", Blocks.OBSIDIAN.getDefaultState());
+		registry.setBlockState("structure_secondary", MinestuckBlocks.stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.CAST_IRON));
+		registry.setBlockState("structure_secondary_decorative", MinestuckBlocks.stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.CAST_IRON_CHISELED));
 		registry.setBlockState("fall_fluid", Blocks.WATER.getDefaultState());
 	}
 	
