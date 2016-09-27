@@ -28,6 +28,7 @@ public class LandAspectHeat extends TerrainLandAspect
 		registry.setBlockState("structure_primary", Blocks.NETHER_BRICK.getDefaultState());
 		registry.setBlockState("structure_secondary", MinestuckBlocks.stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.CAST_IRON));
 		registry.setBlockState("structure_secondary_decorative", MinestuckBlocks.stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.CAST_IRON_CHISELED));
+		registry.setBlockState("structure_secondary_stairs", MinestuckBlocks.castIronStairs.getDefaultState());
 		registry.setBlockState("fall_fluid", Blocks.WATER.getDefaultState());
 	}
 	

@@ -286,6 +286,7 @@ public class MinestuckItems
 		registerItemBlock(new ItemBlock(coarseStoneStairs));
 		registerItemBlock(new ItemBlock(shadeBrickStairs));
 		registerItemBlock(new ItemBlock(frostBrickStairs));
+		registerItemBlock(new ItemBlock(castIronStairs));
 		registerItemBlock(new ItemMultiTexture(log, log, new Function<ItemStack, String>()
 		{
 			@Override
