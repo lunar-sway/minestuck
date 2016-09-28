@@ -53,6 +53,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	protected GristType type;
 	//Name of underling, used in getting the texture and actually naming it
 	public String underlingName;
+	public boolean fromSpawner;
 	
 	private static final float maxSharedProgress = 2;	//The multiplier for the maximum amount progress that can be gathered from each enemy with the group fight bonus
 	
@@ -129,7 +130,10 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 		super.onDeathUpdate();
 		if(this.deathTime == 20 && !this.worldObj.isRemote)
 		{
-			for(GristAmount gristType : this.getGristSpoils().getArray())
+			GristSet grist = this.getGristSpoils();
+			if(fromSpawner)
+				grist.scaleGrist(0.5F);
+			for(GristAmount gristType : grist.getArray())
 				this.worldObj.spawnEntityInWorld(new EntityGrist(worldObj, this.posX + this.rand.nextDouble() * this.width - this.width / 2, this.posY, this.posZ + this.rand.nextDouble() * this.width - this.width / 2, gristType));
 			if(this.rand.nextInt(4) == 0)
 				this.worldObj.spawnEntityInWorld(new EntityVitalityGel(worldObj, this.posX + this.rand.nextDouble() * this.width - this.width / 2, this.posY, this.posZ + this.rand.nextDouble() * this.width - this.width / 2, this.getVitalityGel()));
@@ -184,6 +188,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	{
 		super.writeEntityToNBT(tagCompound);
 		tagCompound.setString("type", this.type.getName());
+		tagCompound.setBoolean("spawned", fromSpawner);
 		if(hasHome())
 		{
 			NBTTagCompound nbt = new NBTTagCompound();
@@ -202,6 +207,8 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 			applyGristType(GristType.getTypeFromString(tagCompound.getString("type")), false);
 		else applyGristType(SburbHandler.getUnderlingType(this), true);
 		super.readEntityFromNBT(tagCompound);
+		
+		fromSpawner = tagCompound.getBoolean("spawned");
 		
 		if(tagCompound.hasKey("homePos", 10))
 		{

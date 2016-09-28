@@ -21,6 +21,7 @@ public class StructureUtil
 	{
 		WeightedSpawnerEntity entity = new WeightedSpawnerEntity();
 		entity.getNbt().setString("id", entityName);
+		entity.getNbt().setBoolean("spawned", true);
 		return placeSpawner(pos, world, bb, entity);
 	}
 	
