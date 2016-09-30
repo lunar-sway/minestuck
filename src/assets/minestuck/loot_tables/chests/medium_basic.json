@@ -12,10 +12,7 @@
         },
         {
             "name": "aspectbased",
-            "rolls": {
-                "min": 2,
-                "max": 3
-            },
+            "rolls": 2,
             "entries": [
                 {
                     "conditions": [

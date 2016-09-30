@@ -66,6 +66,21 @@
                     "name": "minestuck:candy",
                     "weight": 3,
                     "quality": 0
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:fudgesickle",
+                    "weight": 2,
+                    "quality": 1,
+                    "functions": [
+                        {
+                            "function": "set_damage",
+                            "damage": {
+                                "min": 0.75,
+                                "max": 1
+                            }
+                        }
+                    ]
                 }
             ]
         }
