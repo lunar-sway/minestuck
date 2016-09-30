@@ -146,6 +146,7 @@
                     ]
                 },
                 {
+                    "entryName": "cast_iron",
                     "type": "item",
                     "name": "minestuck:stone",
                     "weight": 5,
@@ -165,6 +166,7 @@
                     ]
                 },
                 {
+                    "entryName": "cast_iron_chiseled",
                     "type": "item",
                     "name": "minestuck:stone",
                     "weight": 3,
