@@ -3,6 +3,8 @@ package com.mraof.minestuck.world.lands.title;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.Vec3d;
 
+import com.mraof.minestuck.world.biome.BiomeMinestuck;
+import com.mraof.minestuck.world.lands.decorator.PillarDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 
@@ -33,6 +35,10 @@ public class LandAspectLight extends TitleLandAspect
 	protected void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.blockRegistry.setBlockState("torch", Blocks.TORCH.getDefaultState());
+		
+		chunkProvider.decorators.add(new PillarDecorator("light_block", 0.5F, false, BiomeMinestuck.mediumNormal, BiomeMinestuck.mediumOcean));
+		chunkProvider.decorators.add(new PillarDecorator("light_block", 3, true, BiomeMinestuck.mediumRough));
+		
 	}
 	
 	@Override
