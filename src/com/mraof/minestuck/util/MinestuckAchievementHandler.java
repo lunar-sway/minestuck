@@ -17,6 +17,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.ItemCruxiteArtifact;
 import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.world.WorldProviderLands;
 
 public class MinestuckAchievementHandler {
@@ -117,7 +118,6 @@ public class MinestuckAchievementHandler {
 		{
 			if(event.player.worldObj.provider instanceof WorldProviderLands)
 			{
-				event.player.addStat(enterMedium);
 				WorldProviderLands provider = (WorldProviderLands) event.player.worldObj.provider;
 				if(provider.chunkProvider.structureHandler.isInsideDungeon(new BlockPos(event.player)))
 					event.player.addStat(dungeon);
