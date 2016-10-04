@@ -17,9 +17,11 @@ import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -36,6 +38,7 @@ import com.mraof.minestuck.entity.ai.EntityAIHurtByTargetAllied;
 import com.mraof.minestuck.entity.ai.EntityAINearestAttackableTargetWithHeight;
 import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.entity.item.EntityVitalityGel;
+import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.GristAmount;
@@ -54,6 +57,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	//Name of underling, used in getting the texture and actually naming it
 	public String underlingName;
 	public boolean fromSpawner;
+	public boolean dropCandy;
 	
 	private static final float maxSharedProgress = 2;	//The multiplier for the maximum amount progress that can be gathered from each enemy with the group fight bonus
 	
@@ -125,7 +129,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	}
 	
 	@Override
-	protected void onDeathUpdate() 
+	protected void onDeathUpdate()
 	{
 		super.onDeathUpdate();
 		if(this.deathTime == 20 && !this.worldObj.isRemote)
@@ -133,12 +137,39 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 			GristSet grist = this.getGristSpoils();
 			if(fromSpawner)
 				grist.scaleGrist(0.5F);
-			for(GristAmount gristType : grist.getArray())
-				this.worldObj.spawnEntityInWorld(new EntityGrist(worldObj, this.posX + this.rand.nextDouble() * this.width - this.width / 2, this.posY, this.posZ + this.rand.nextDouble() * this.width - this.width / 2, gristType));
+			
+			if(!dropCandy)
+			{
+				for(GristAmount gristType : grist.getArray())
+					this.worldObj.spawnEntityInWorld(new EntityGrist(worldObj, randX(), this.posY, randZ(), gristType));
+			} else
+			{
+				for(GristAmount gristType : grist.getArray())
+				{
+					int candy = (gristType.getAmount() + 2)/4;
+					int gristAmount = gristType.getAmount() - candy*2;
+					if(candy > 0)
+						this.worldObj.spawnEntityInWorld(new EntityItem(worldObj, randX(), this.posY, randZ(), new ItemStack(MinestuckItems.candy, candy, gristType.getType().ordinal() + 1)));
+					if(gristAmount > 0)
+						this.worldObj.spawnEntityInWorld(new EntityGrist(worldObj, randX(), this.posY, randZ(),new GristAmount(gristType.getType(), gristAmount)));
+				}
+			}
+			
 			if(this.rand.nextInt(4) == 0)
-				this.worldObj.spawnEntityInWorld(new EntityVitalityGel(worldObj, this.posX + this.rand.nextDouble() * this.width - this.width / 2, this.posY, this.posZ + this.rand.nextDouble() * this.width - this.width / 2, this.getVitalityGel()));
+				this.worldObj.spawnEntityInWorld(new EntityVitalityGel(worldObj, randX(), this.posY, randZ(), this.getVitalityGel()));
 		}
 	}
+	
+	private double randX()
+	{
+		return this.posX + this.rand.nextDouble() * this.width - this.width / 2;
+	}
+	
+	private double randZ()
+	{
+		return this.posZ + this.rand.nextDouble() * this.width - this.width / 2;
+	}
+	
 	@Override
 	public String getTexture() 
 	{
@@ -288,6 +319,14 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 				this.setAbsorptionAmount(this.getAbsorptionAmount() - damageAmount);
 			}
 		}
+	}
+	
+	@Override
+	public void onEntityUpdate()
+	{
+		super.onEntityUpdate();
+		if(this.getHealth() > 0.0F)
+			dropCandy = false;
 	}
 	
 	protected void computePlayerProgress(int progress)

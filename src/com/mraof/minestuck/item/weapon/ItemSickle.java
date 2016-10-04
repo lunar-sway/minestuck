@@ -6,6 +6,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.entity.underling.EntityUnderling;
 
 public class ItemSickle extends ItemWeapon
 {
@@ -35,6 +36,12 @@ public class ItemSickle extends ItemWeapon
 	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase attacker)
 	{
 		itemStack.damageItem(1, attacker);
+		
+		if(sickleType.equals(EnumSickleType.CANDY) && target instanceof EntityUnderling)
+		{
+			((EntityUnderling) target).dropCandy = true;
+		}
+		
 		return true;
 	}
 	

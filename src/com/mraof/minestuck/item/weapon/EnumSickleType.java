@@ -6,7 +6,8 @@ public enum EnumSickleType
 	HOMES(400, 5.5D, 10, "homesSmellYaLater"),
 	FUDGE(450, 5.5D, 10, "fudgeSickle"),
 	REGISICKLE(812, 6.0D, 5, "regiSickle"),
-	CLAW(2048, 7.0D, 15, "clawSickle");
+	CLAW(2048, 7.0D, 15, "clawSickle"),
+	CANDY(96, 6.0D, 15, "candySickle");
 	
 	private static final double DEFAULT_ATTACK_SPEED = -2.4D;
 	private final int maxUses;

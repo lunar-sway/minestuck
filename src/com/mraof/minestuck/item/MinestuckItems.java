@@ -83,6 +83,7 @@ public class MinestuckItems
 	public static Item fudgeSickle;
 	public static Item regiSickle;
 	public static Item clawSickle;
+	public static Item candySickle;
 	//clubs
 	public static Item deuceClub;
 	public static Item nightClub;
@@ -175,6 +176,7 @@ public class MinestuckItems
 		fudgeSickle = GameRegistry.register(new ItemSickle(EnumSickleType.FUDGE).setRegistryName("fudgesickle"));
 		regiSickle = GameRegistry.register(new ItemSickle(EnumSickleType.REGISICKLE).setRegistryName("regisickle"));
 		clawSickle = GameRegistry.register(new ItemSickle(EnumSickleType.CLAW).setRegistryName("claw_sickle"));
+		candySickle = GameRegistry.register(new ItemSickle(EnumSickleType.CANDY).setRegistryName("candy_sickle"));
 		
 		//clubs
 		deuceClub = GameRegistry.register(new ItemClub(EnumClubType.DEUCE).setRegistryName("deuce_club"));

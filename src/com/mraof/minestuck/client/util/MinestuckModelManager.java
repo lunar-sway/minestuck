@@ -83,6 +83,7 @@ public class MinestuckModelManager
 		register(fudgeSickle);
 		register(regiSickle);
 		register(clawSickle);
+		register(candySickle);
 		
 		register(deuceClub);
 		register(nightClub);
