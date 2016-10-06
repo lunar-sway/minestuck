@@ -4,9 +4,9 @@ import java.util.Random;
 
 import com.mraof.minestuck.entity.underling.EntityOgre;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.StructureUtil;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockUtil;
 
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
@@ -105,7 +105,7 @@ public class SmallRuinStart extends StructureStart
 			this.fillWithAir(worldIn, boundingBox, 1, 1, 0, 5, 3, 7);
 			this.fillWithAir(worldIn, boundingBox, 2, 1, 8, 4, 3, 8);
 			BlockPos chestPos = new BlockPos(this.getXWithOffset(3, 6), this.getYWithOffset(1), this.getZWithOffset(3, 6));
-			StructureUtil.placeLootChest(chestPos, worldIn, boundingBox, this.getCoordBaseMode().getOpposite(), AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, rand);
+			StructureBlockUtil.placeLootChest(chestPos, worldIn, boundingBox, this.getCoordBaseMode().getOpposite(), AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, rand);
 			
 			if(torches[0])
 				this.setBlockState(worldIn, torchBlock.withProperty(BlockTorch.FACING, EnumFacing.EAST), 1, 2, 3, boundingBox);

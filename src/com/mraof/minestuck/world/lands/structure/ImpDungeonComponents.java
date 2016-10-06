@@ -6,8 +6,8 @@ import java.util.Random;
 import com.mraof.minestuck.block.BlockGate;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.StructureUtil;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockUtil;
 
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
@@ -784,18 +784,18 @@ public class ImpDungeonComponents
 			if(spawner1)
 			{
 				BlockPos spawnerPos = new BlockPos(this.getXWithOffset(1, 2), this.getYWithOffset(1), this.getZWithOffset(1, 2));
-				spawner1 = !StructureUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, "minestuck.Imp");
+				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, "minestuck.Imp");
 			}
 			if(spawner2)
 			{
 				BlockPos spawnerPos = new BlockPos(this.getXWithOffset(6, 2), this.getYWithOffset(1), this.getZWithOffset(6, 2));
-				spawner2 = !StructureUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, "minestuck.Imp");
+				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, "minestuck.Imp");
 			}
 			
 			BlockPos chestPos = new BlockPos(this.getXWithOffset(3, 5), this.getYWithOffset(1), this.getZWithOffset(3, 5));
-			StructureUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().getOpposite(), AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, randomIn);
-			chestPos = new BlockPos(this.getXWithOffset(4, 5), this.getYWithOffset(1), this.getZWithOffset(3, 5));
-			StructureUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().getOpposite(), AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, randomIn);
+			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().getOpposite(), AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, randomIn);
+			chestPos = new BlockPos(this.getXWithOffset(4, 5), this.getYWithOffset(1), this.getZWithOffset(4, 5));
+			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().getOpposite(), AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, randomIn);
 			
 			return true;
 		}
@@ -1012,17 +1012,17 @@ public class ImpDungeonComponents
 			if(spawner1)
 			{
 				BlockPos spawnerPos = new BlockPos(this.getXWithOffset(1, 3), this.getYWithOffset(1), this.getZWithOffset(1, 3));
-				spawner1 = !StructureUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, "minestuck.Imp");
+				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, "minestuck.Imp");
 			}
 			if(spawner2)
 			{
 				BlockPos spawnerPos = new BlockPos(this.getXWithOffset(1, 4), this.getYWithOffset(1), this.getZWithOffset(1, 4));
-				spawner2 = !StructureUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, "minestuck.Imp");
+				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, worldIn, structureBoundingBoxIn, "minestuck.Imp");
 			}
 			
 			int z = chestPos ? 3 : 4;
 			BlockPos chestPos = new BlockPos(this.getXWithOffset(4, z), this.getYWithOffset(1), this.getZWithOffset(4, z));
-			StructureUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().rotateY(), AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, randomIn);
+			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().rotateY(), AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, randomIn);
 			
 			if(corridors[0])
 				fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 0, 3, 3, 0, wallBlock, wallBlock, false);

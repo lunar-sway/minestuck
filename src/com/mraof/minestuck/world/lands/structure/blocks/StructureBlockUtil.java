@@ -1,4 +1,4 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.world.lands.structure.blocks;
 
 import java.util.Random;
 
@@ -14,7 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 
-public class StructureUtil
+public class StructureBlockUtil
 {
 	
 	public static boolean placeSpawner(BlockPos pos, World world, StructureBoundingBox bb, String entityName)
