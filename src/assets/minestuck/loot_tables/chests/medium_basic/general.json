@@ -357,6 +357,48 @@
                             }
                         }
                     ]
+                },
+                {
+                    "type": "item",
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": [
+                                "buckets", "towers", "cake", "pulse"
+                            ]
+                        }
+                    ],
+                    "name": "minestuck:thresh_dvd",
+                    "weight": 4,
+                    "quality": 2
+                },
+                {
+                    "type": "item",
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": [
+                                "wind", "silence", "thunder", "monsters"
+                            ]
+                        }
+                    ],
+                    "name": "minestuck:crew_poster",
+                    "weight": 4,
+                    "quality": 2
+                },
+                {
+                    "type": "item",
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": [
+                                "clockwork", "light", "rabbits", "thought"
+                            ]
+                        }
+                    ],
+                    "name": "minestuck:sbahj_poster",
+                    "weight": 4,
+                    "quality": 2
                 }
             ]
         }
