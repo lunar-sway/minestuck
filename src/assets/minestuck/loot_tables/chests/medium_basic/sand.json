@@ -268,7 +268,7 @@
                 {
                     "type": "item",
                     "name": "minecraft:gold_ingot",
-                    "weight": 5,
+                    "weight": 6,
                     "quality": 1,
                     "functions": [
                         {
@@ -283,7 +283,82 @@
                 {
                     "type": "item",
                     "name": "minestuck:cactaceae_cutlass",
-                    "weight": 3,
+                    "weight": 4,
+                    "quality": 2,
+                    "functions": [
+                        {
+                            "function": "set_damage",
+                            "damage": {
+                                "min": 0.75,
+                                "max": 1
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:golden_sword",
+                    "weight": 1,
+                    "quality": 2,
+                    "functions": [
+                        {
+                            "function": "set_damage",
+                            "damage": {
+                                "min": 0.75,
+                                "max": 1
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:golden_axe",
+                    "weight": 1,
+                    "quality": 2,
+                    "functions": [
+                        {
+                            "function": "set_damage",
+                            "damage": {
+                                "min": 0.75,
+                                "max": 1
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:golden_pickaxe",
+                    "weight": 1,
+                    "quality": 2,
+                    "functions": [
+                        {
+                            "function": "set_damage",
+                            "damage": {
+                                "min": 0.75,
+                                "max": 1
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:golden_shovel",
+                    "weight": 1,
+                    "quality": 2,
+                    "functions": [
+                        {
+                            "function": "set_damage",
+                            "damage": {
+                                "min": 0.75,
+                                "max": 1
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:golden_hoe",
+                    "weight": 2,
                     "quality": 2,
                     "functions": [
                         {
