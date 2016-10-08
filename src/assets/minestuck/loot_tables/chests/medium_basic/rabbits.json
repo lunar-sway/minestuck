@@ -75,6 +75,21 @@
                             }
                         }
                     ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:gold_seeds",
+                    "weight": 3,
+                    "quality": 0,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        }
+                    ]
                 }
             ]
         }
