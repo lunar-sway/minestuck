@@ -49,4 +49,21 @@ public abstract class SimpleStructureDecorator extends BiomeSpecificDecorator
 		world.setBlockState(new BlockPos(xPos, yPos, zPos), block, 2);
 	}
 	
+	protected void placeFloor(World world, IBlockState floor, int xOffset, int yOffset, int zOffset)
+	{
+		do
+		{
+			placeBlock(world, floor, xOffset, yOffset, zOffset);
+			yOffset--;
+		} while(yCoord + yOffset >= 0 && !getBlockState(world, xOffset, yOffset, zOffset).getMaterial().isSolid());
+	}
+	
+	protected IBlockState getBlockState(World world, int xOffset, int yOffset, int zOffset)
+	{
+		int xPos = xCoord + (rotation ? zOffset : xOffset);
+		int yPos = yCoord + yOffset;
+		int zPos = zCoord + (rotation ? xOffset : zOffset);
+		
+		return world.getBlockState(new BlockPos(xPos, yPos, zPos));
+	}
 }

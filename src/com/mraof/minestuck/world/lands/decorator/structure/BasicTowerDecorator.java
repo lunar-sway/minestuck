@@ -44,15 +44,7 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 		
 		for(int x = -3; x < 4; x++)
 			for(int z = Math.abs(x) == 3 ? -2 : -3; z < (Math.abs(x) == 3 ? 3 : 4); z++)
-			{
-				BlockPos floorPos = new BlockPos(xCoord + x, yCoord, zCoord + z);
-				do
-				{
-					world.setBlockState(floorPos, (Math.abs(x) == 3 || Math.abs(z) == 3) ? wall : floor, 2);
-					floorPos = floorPos.down();
-				} while(!world.getBlockState(floorPos).getMaterial().isSolid());
-			}
-		
+				placeFloor(world, (Math.abs(x) == 3 || Math.abs(z) == 3) ? wall : floor, x, 0, z);
 		
 		this.placeBlocks(world, wall, -2, 1, -3, -1, height, -3);
 		this.placeBlocks(world, wall, 1, 1, -3, 2, height, -3);
@@ -253,8 +245,7 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 		offset /= 2;
 		if(rotation)
 			offset = 3 - offset;
-		offset &= 3;	//0 - 1 -> 0 -> W
-						//0 - 1 -> 3 -> N
+		offset &= 3;
 		
 		switch(offset)
 		{
