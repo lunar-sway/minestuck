@@ -202,9 +202,8 @@ public class ServerEditHandler
 			posZ = c.centerZ + 0.5;
 		}
 		
-		if(world.provider.getDimension() != player.worldObj.provider.getDimension())
-			if(!Teleport.teleportEntity(player, world.provider.getDimension(), null, posX, posY, posZ))
-				return false;
+		if(!Teleport.teleportEntity(player, world.provider.getDimension(), null, posX, posY, posZ))
+			return false;
 		
 		player.closeScreen();
 		player.inventory.clear();
