@@ -632,7 +632,7 @@ public class SburbHandler
 			list.add(new SpawnListEntry(EntityOgre.class, ogreWeight, ogreWeight >= 5 ? 2 : 1, Math.max(1, ogreWeight/2)));
 		if(basiliskWeight > 0)
 			list.add(new SpawnListEntry(EntityBasilisk.class, basiliskWeight, 1, Math.max(1, basiliskWeight/2)));
-		if(giclopsWeight > 0)
+		if(giclopsWeight > 0 && !MinestuckConfig.disableGiclops)
 			list.add(new SpawnListEntry(EntityGiclops.class, giclopsWeight, 1, Math.max(1, giclopsWeight/2)));
 		
 		difficultyList[difficulty] = list;

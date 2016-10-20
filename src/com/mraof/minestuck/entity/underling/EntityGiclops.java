@@ -9,6 +9,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.IEntityMultiPart;
 import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
 import com.mraof.minestuck.util.Echeladder;
@@ -27,7 +28,7 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 	public EntityGiclops(World world)
 	{
 		super(world, "giclops");
-
+		
 		setSize(8.0F, 12.0F);
 		this.stepHeight = 2;
 		topPart = new EntityUnderlingPart(this, 0, 6.0F, 7.0F);
@@ -121,6 +122,8 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 	{
 		super.onEntityUpdate();
 		this.updatePartPositions();
+		if(!worldObj.isRemote && MinestuckConfig.disableGiclops)
+			this.setDead();
 	}
 	
 	@Override
