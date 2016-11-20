@@ -19,9 +19,9 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.GameType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraft.world.WorldSettings.GameType;
 import net.minecraftforge.common.util.FakePlayer;
 
 import com.mojang.authlib.GameProfile;

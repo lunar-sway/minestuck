@@ -886,11 +886,11 @@ public class ImpDungeonComponents
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 6, 3, 4, 6, 4, wallDecor, wallDecor, false);
 			
 			IBlockState bookshelf = Blocks.BOOKSHELF.getDefaultState();
-			fillWithBlocksRandomly(worldIn, structureBoundingBoxIn, randomIn, bookChance, 1, 1, 1, 1, 4, 2, bookshelf, bookshelf, false);
-			fillWithBlocksRandomly(worldIn, structureBoundingBoxIn, randomIn, bookChance, 1, 1, 5, 1, 4, 6, bookshelf, bookshelf, false);
-			fillWithBlocksRandomly(worldIn, structureBoundingBoxIn, randomIn, bookChance, 6, 1, 1, 6, 4, 2, bookshelf, bookshelf, false);
-			fillWithBlocksRandomly(worldIn, structureBoundingBoxIn, randomIn, bookChance, 6, 1, 5, 6, 4, 6, bookshelf, bookshelf, false);
-			fillWithBlocksRandomly(worldIn, structureBoundingBoxIn, randomIn, bookChance, 3, 1, 6, 4, 4, 6, bookshelf, bookshelf, false);
+			func_189914_a(worldIn, structureBoundingBoxIn, randomIn, bookChance, 1, 1, 1, 1, 4, 2, bookshelf, bookshelf, false, 0);
+			func_189914_a(worldIn, structureBoundingBoxIn, randomIn, bookChance, 1, 1, 5, 1, 4, 6, bookshelf, bookshelf, false, 0);	//fillWithBlocksRandomly
+			func_189914_a(worldIn, structureBoundingBoxIn, randomIn, bookChance, 6, 1, 1, 6, 4, 2, bookshelf, bookshelf, false, 0);
+			func_189914_a(worldIn, structureBoundingBoxIn, randomIn, bookChance, 6, 1, 5, 6, 4, 6, bookshelf, bookshelf, false, 0);
+			func_189914_a(worldIn, structureBoundingBoxIn, randomIn, bookChance, 3, 1, 6, 4, 4, 6, bookshelf, bookshelf, false, 0);
 			
 			if(light)
 			{

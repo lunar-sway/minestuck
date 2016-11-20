@@ -5,7 +5,7 @@ import java.io.File;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.UserListOpsEntry;
-import net.minecraft.world.WorldSettings.GameType;
+import net.minecraft.world.GameType;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;

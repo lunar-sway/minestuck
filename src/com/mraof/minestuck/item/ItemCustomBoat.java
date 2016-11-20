@@ -127,7 +127,7 @@ public abstract class ItemCustomBoat extends Item
 		@Override
 		public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
 		{
-			EnumFacing enumfacing = BlockDispenser.getFacing(source.getBlockMetadata());
+			EnumFacing enumfacing = (EnumFacing)source.func_189992_e().getValue(BlockDispenser.FACING);
 			World world = source.getWorld();
 			double d0 = source.getX() + (double)((float)enumfacing.getFrontOffsetX() * 1.125F);
 			double d1 = source.getY() + (double)((float)enumfacing.getFrontOffsetY() * 1.125F);

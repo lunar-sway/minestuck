@@ -4,9 +4,9 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
+import net.minecraft.world.GameType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
-import net.minecraft.world.WorldSettings.GameType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.IChunkGenerator;
 

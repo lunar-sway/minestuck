@@ -31,9 +31,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.GameType;
 import net.minecraft.world.WorldServer;
-import net.minecraft.world.WorldSettings;
-import net.minecraft.world.WorldSettings.GameType;
 import net.minecraftforge.event.CommandEvent;
 import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
@@ -664,7 +663,7 @@ public class ServerEditHandler
 						throw new IllegalStateException("Was not able to restore editmode player for "+player.getName()+"! Likely caused by mod collision.");
 				
 				player.connection.setPlayerLocation(nbt.getDouble("x"), nbt.getDouble("y"), nbt.getDouble("z"), nbt.getFloat("rotYaw"), nbt.getFloat("rotPitch"));
-				player.setGameType(WorldSettings.GameType.getByID(nbt.getInteger("gamemode")));
+				player.setGameType(GameType.getByID(nbt.getInteger("gamemode")));
 				player.capabilities.readCapabilitiesFromNBT(nbt.getCompoundTag("capabilities"));
 				player.sendPlayerAbilities();
 				player.fallDistance = 0;
