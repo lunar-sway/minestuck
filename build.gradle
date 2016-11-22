@@ -42,7 +42,7 @@ minecraft {
     version = "1.10.2-12.18.2.2099"
     runDir = "run"
 
-    mappings = "snapshot_20160518"
+    mappings = "stable_29"
 
     replaceIn "com/mraof/minestuck/Minestuck.java"
     replace "@VERSION@", project.version
@@ -50,9 +50,9 @@ minecraft {
 
 dependencies {
     // http://chickenbones.net/maven
-    compile "codechicken:CodeChickenLib:1.10.2-2.4.3.124:universal"
-    compile "codechicken:CodeChickenCore:1.10.2-2.3.5.91:universal"
-    compile "codechicken:NotEnoughItems:1.10.2-2.1.2.163:universal"
+    //compile "codechicken:CodeChickenLib:1.10.2-2.4.3.124:universal"
+    //compile "codechicken:CodeChickenCore:1.10.2-2.3.5.91:universal"
+    //compile "codechicken:NotEnoughItems:1.10.2-2.1.2.163:universal"
 	// http://dvs1.progwml6.com/files/maven
     //compile "mezz.jei:jei_1.9.4:3.6.8.225"
 }

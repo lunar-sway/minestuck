@@ -54,7 +54,7 @@ public class BlockTNTSpecial extends BlockTNT
 				EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(worldIn, (double)((float)pos.getX() + 0.5F), (double)((float)pos.getY() + 0.5F), (double)((float)pos.getZ() + 0.5F), igniter);
 				if(instant)
 					entitytntprimed.setFuse(0);
-				worldIn.spawnEntityInWorld(entitytntprimed);
+				worldIn.spawnEntity(entitytntprimed);
 				worldIn.playSound((EntityPlayer)null, entitytntprimed.posX, entitytntprimed.posY, entitytntprimed.posZ, SoundEvents.ENTITY_TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
 			}
 		}
@@ -69,7 +69,7 @@ public class BlockTNTSpecial extends BlockTNT
 			entitytntprimed.setFuse(worldIn.rand.nextInt(entitytntprimed.getFuse() / 4) + entitytntprimed.getFuse() / 8);
 			if(instant)
 				entitytntprimed.setFuse(entitytntprimed.getFuse() / 2);
-			worldIn.spawnEntityInWorld(entitytntprimed);
+			worldIn.spawnEntity(entitytntprimed);
 		}
 	}
 	

@@ -113,7 +113,7 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 		this.prevPosZ = this.posZ;
 		this.motionY -= 0.03D;
 		
-		if (this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ))).getMaterial() == Material.LAVA)
+		if (this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.posY), MathHelper.floor(this.posZ))).getMaterial() == Material.LAVA)
 		{
 			this.motionY = 0.2D;
 			this.motionX = (double)((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F);
@@ -127,7 +127,7 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 		{
 			if (this.closestPlayer == null || this.closestPlayer.getDistanceSqToEntity(this) > d0 * d0)
 			{
-				this.closestPlayer = this.worldObj.getClosestPlayerToEntity(this, d0);
+				this.closestPlayer = this.world.getClosestPlayerToEntity(this, d0);
 			}
 			
 			this.targetCycle = this.cycle;
@@ -149,12 +149,12 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 			}
 		}
 
-		this.moveEntity(this.motionX, this.motionY, this.motionZ);
+		this.move(this.motionX, this.motionY, this.motionZ);
 		float f = 0.98F;
 		
 		if(this.onGround)
 		{
-			f = this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.getEntityBoundingBox().minY) - 1, MathHelper.floor_double(this.posZ))).getBlock().slipperiness * 0.98F;
+			f = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.98F;
 		}
 		
 		this.motionX *= (double)f;
@@ -182,7 +182,7 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 	@Override
 	public boolean handleWaterMovement()
 	{
-		return this.worldObj.handleMaterialAcceleration(this.getEntityBoundingBox(), Material.WATER, this);
+		return this.world.handleMaterialAcceleration(this.getEntityBoundingBox(), Material.WATER, this);
 	}
 	
 	@Override
@@ -208,10 +208,10 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 	@Override
 	public void onCollideWithPlayer(EntityPlayer player)
 	{
-		if(this.worldObj.isRemote?ClientEditHandler.isActive():ServerEditHandler.getData(player) != null)
+		if(this.world.isRemote?ClientEditHandler.isActive():ServerEditHandler.getData(player) != null)
 			return;
 		
-		if (!this.worldObj.isRemote)
+		if (!this.world.isRemote)
 		{
 			this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.1F, 0.5F * ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.8F));
 			player.heal(healAmount);

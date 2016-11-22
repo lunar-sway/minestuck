@@ -23,7 +23,7 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 		super(world, "basilisk");
 		this.setSize(3F, 2F);
 		tail = new EntityUnderlingPart(this, 0, 3F, 2F);
-		world.spawnEntityInWorld(tail);
+		world.spawnEntity(tail);
 	}
 
 	@Override
@@ -82,7 +82,7 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	@Override
 	public World getWorld() 
 	{
-		return this.worldObj;
+		return this.world;
 	}
 	
 	@Override
@@ -146,7 +146,7 @@ public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart
 	{
 		super.onDeath(cause);
 		Entity entity = cause.getEntity();
-		if(this.dead && !this.worldObj.isRemote && type != null)
+		if(this.dead && !this.world.isRemote && type != null)
 		{
 			computePlayerProgress((int) (100*type.getPower() + 160));
 			if(entity != null && entity instanceof EntityPlayerMP)

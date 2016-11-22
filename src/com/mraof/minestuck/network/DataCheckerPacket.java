@@ -79,7 +79,7 @@ public class DataCheckerPacket extends MinestuckPacket
 	@Override
 	public void execute(EntityPlayer player)
 	{
-		if(player.worldObj.isRemote)
+		if(player.world.isRemote)
 		{
 			if(packetIndex == index)
 				GuiDataChecker.activeComponent = new GuiDataChecker.MainComponent(nbtData);

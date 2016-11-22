@@ -31,7 +31,7 @@ public class GuiCaptchaDeck extends GuiPlayerStatsContainer implements GuiYesNoC
 	
 	public GuiCaptchaDeck()
 	{
-		super(new ContainerCaptchaDeck(Minecraft.getMinecraft().thePlayer));
+		super(new ContainerCaptchaDeck(Minecraft.getMinecraft().player));
 		container = (ContainerCaptchaDeck) inventorySlots;
 		guiWidth = 178;
 		guiHeight= 145;
@@ -91,7 +91,7 @@ public class GuiCaptchaDeck extends GuiPlayerStatsContainer implements GuiYesNoC
 						public void onGuiClosed()
 						{
 							mc.currentScreen = (GuiScreen) parentScreen;
-							mc.thePlayer.closeScreen();
+							mc.player.closeScreen();
 						}
 					};
 					mc.currentScreen.setWorldAndResolution(mc, width, height);
@@ -102,10 +102,10 @@ public class GuiCaptchaDeck extends GuiPlayerStatsContainer implements GuiYesNoC
 		}
 		else if(button == this.sylladexMap && CaptchaDeckHandler.clientSideModus != null)
 		{
-			mc.thePlayer.connection.sendPacket(new CPacketCloseWindow(mc.thePlayer.openContainer.windowId));
-			mc.thePlayer.inventory.setItemStack((ItemStack)null);
+			mc.player.connection.sendPacket(new CPacketCloseWindow(mc.player.openContainer.windowId));
+			mc.player.inventory.setItemStack((ItemStack)null);
 			mc.displayGuiScreen(CaptchaDeckHandler.clientSideModus.getGuiHandler());
-			mc.thePlayer.openContainer = mc.thePlayer.inventoryContainer;
+			mc.player.openContainer = mc.player.inventoryContainer;
 		}
 	}
 	

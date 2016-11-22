@@ -83,7 +83,7 @@ public class BlockCruxiteOre extends Block
 	@Override
 	public int getExpDrop(IBlockState state, IBlockAccess world, BlockPos pos, int fortune)
 	{
-		return MathHelper.getRandomIntegerInRange(rand, 2, 5);
+		return MathHelper.getInt(rand, 2, 5);
 	}
 	
 	@Override

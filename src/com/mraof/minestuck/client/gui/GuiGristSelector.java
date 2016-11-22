@@ -144,7 +144,7 @@ public class GuiGristSelector extends GuiScreen
 	public void onGuiClosed()
 	{
 		mc.currentScreen = otherGui;
-		mc.thePlayer.closeScreen();
+		mc.player.closeScreen();
 	}
 	
 	protected boolean isPointInRegion(int regionX, int regionY, int regionWidth, int regionHeight, int pointX, int pointY)

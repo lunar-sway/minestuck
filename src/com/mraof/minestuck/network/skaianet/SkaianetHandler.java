@@ -328,7 +328,7 @@ public class SkaianetHandler {
 		}
 		if(MinestuckConfig.privateComputers && !p0.equals(p1) && player.getServer().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile()) == null)
 		{
-			player.addChatComponentMessage(new TextComponentString("[Minestuck] ").setStyle(new Style().setColor(TextFormatting.RED)).appendSibling(new TextComponentTranslation("message.privateComputerMessage")));
+			player.sendStatusMessage(new TextComponentString("[Minestuck] ").setStyle(new Style().setColor(TextFormatting.RED)).appendSibling(new TextComponentTranslation("message.privateComputerMessage")));
 			return;
 		}
 		int i = 0;

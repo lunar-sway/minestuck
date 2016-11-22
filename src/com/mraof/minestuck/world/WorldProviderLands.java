@@ -92,15 +92,15 @@ public class WorldProviderLands extends WorldProvider
 		createChunkGenerator();
 		BlockPos coordinates = getSpawnPoint();
 		
-		boolean isAdventure = worldObj.getWorldInfo().getGameType() == GameType.ADVENTURE;
+		boolean isAdventure = world.getWorldInfo().getGameType() == GameType.ADVENTURE;
 		int spawnFuzz = 12;	//TODO respect changed value of MinestuckConfig.artifactRange
 		int spawnFuzzHalf = spawnFuzz / 2;
 		
 		if (!isAdventure)
 		{
-			coordinates = coordinates.add(this.worldObj.rand.nextInt(spawnFuzz) - spawnFuzzHalf,
-					0, this.worldObj.rand.nextInt(spawnFuzz) - spawnFuzzHalf);
-			coordinates = this.worldObj.getTopSolidOrLiquidBlock(coordinates);
+			coordinates = coordinates.add(this.world.rand.nextInt(spawnFuzz) - spawnFuzzHalf,
+					0, this.world.rand.nextInt(spawnFuzz) - spawnFuzzHalf);
+			coordinates = this.world.getTopSolidOrLiquidBlock(coordinates);
 		}
 		
 		return coordinates;
@@ -146,10 +146,10 @@ public class WorldProviderLands extends WorldProvider
 	@Override
 	protected void createBiomeProvider()
 	{
-		isHellWorld = false;
+		doesWaterVaporize = false;
 		if(chunkProvider == null)
 			createChunkGenerator();
-		this.biomeProvider = new WorldChunkManagerLands(worldObj, chunkProvider.rainfall, chunkProvider.oceanChance, chunkProvider.roughChance);
+		this.biomeProvider = new WorldChunkManagerLands(world, chunkProvider.rainfall, chunkProvider.oceanChance, chunkProvider.roughChance);
 		this.hasNoSky = false;
 	}
 	
@@ -170,14 +170,14 @@ public class WorldProviderLands extends WorldProvider
 	private void forceWeatherCheck()
 	{
 		if(chunkProvider.weatherType == -1)
-			worldObj.rainingStrength = 0.0F;
+			world.rainingStrength = 0.0F;
 		else if((chunkProvider.weatherType & 5) != 0)
-			worldObj.rainingStrength = 1.0F;
+			world.rainingStrength = 1.0F;
 		
 		if(chunkProvider.weatherType == -1 || (chunkProvider.weatherType & 6) == 0)
-			worldObj.thunderingStrength = 0.0F;
+			world.thunderingStrength = 0.0F;
 		else if((chunkProvider.weatherType & 4) != 0)
-			worldObj.thunderingStrength = 1.0F;
+			world.thunderingStrength = 1.0F;
 	}
 	
 	@Override
@@ -196,7 +196,7 @@ public class WorldProviderLands extends WorldProvider
 	
 	public World getWorld()
 	{
-		return worldObj;
+		return world;
 	}
 	
 	@Override
@@ -212,6 +212,6 @@ public class WorldProviderLands extends WorldProvider
 		int centerZ = ((int)player.posZ) >> 4;
 		for(int x = centerX - 1; x <= centerX + 1; x++)
 			for(int z = centerZ - 1; z <= centerZ + 1; z++)
-				this.worldObj.getChunkProvider().provideChunk(x, z);
+				this.world.getChunkProvider().provideChunk(x, z);
 	}
 }

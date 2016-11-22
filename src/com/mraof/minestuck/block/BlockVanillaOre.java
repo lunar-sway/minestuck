@@ -91,15 +91,15 @@ public class BlockVanillaOre extends Block
 			int j = 0;
 			
 			if(oreType == OreType.COAL)
-				j = MathHelper.getRandomIntegerInRange(rand, 0, 2);
+				j = MathHelper.getInt(rand, 0, 2);
 			else if(oreType == OreType.DIAMOND)
-				j = MathHelper.getRandomIntegerInRange(rand, 3, 7);
+				j = MathHelper.getInt(rand, 3, 7);
 			else if(oreType == OreType.EMERALD)
-				j = MathHelper.getRandomIntegerInRange(rand, 3, 7);
+				j = MathHelper.getInt(rand, 3, 7);
 			else if(oreType == OreType.LAPIS)
-				j = MathHelper.getRandomIntegerInRange(rand, 2, 5);
+				j = MathHelper.getInt(rand, 2, 5);
 			else if(oreType == OreType.QUARTZ)
-				j = MathHelper.getRandomIntegerInRange(rand, 2, 5);
+				j = MathHelper.getInt(rand, 2, 5);
 			
 			return j;
 		}
@@ -119,10 +119,10 @@ public class BlockVanillaOre extends Block
 	}
 	
 	@Override
-	protected ItemStack createStackedBlock(IBlockState state)
+	protected ItemStack getSilkTouchDrop(IBlockState state)
 	{
 		if(!MinestuckConfig.vanillaOreDrop)
-			return super.createStackedBlock(state);
+			return super.getSilkTouchDrop(state);
 		else switch(oreType)
 		{
 		case COAL: return new ItemStack(Blocks.COAL_ORE);

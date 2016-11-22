@@ -170,8 +170,8 @@ public class SkaiaClient
 			((GuiComputer)gui).updateGui();
 		else if(te != null && te.ownerId == data.playerId)
 		{
-			if(!Minecraft.getMinecraft().thePlayer.isSneaking())
-				Minecraft.getMinecraft().thePlayer.openGui(Minestuck.instance, GuiHandler.GuiId.COMPUTER.ordinal(), te.getWorld(), te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
+			if(!Minecraft.getMinecraft().player.isSneaking())
+				Minecraft.getMinecraft().player.openGui(Minestuck.instance, GuiHandler.GuiId.COMPUTER.ordinal(), te.getWorld(), te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
 			te = null;
 		}
 	}

@@ -77,7 +77,7 @@ public class EntityImp extends EntityUnderling
 	{
 		super.onDeath(cause);
 		Entity entity = cause.getEntity();
-		if(this.dead && !this.worldObj.isRemote && type != null)
+		if(this.dead && !this.world.isRemote && type != null)
 		{
 			computePlayerProgress((int) (2 + 3*type.getPower()));
 			if(entity != null && entity instanceof EntityPlayerMP)

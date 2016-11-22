@@ -41,7 +41,7 @@ public class EntityAIAttackOnCollideWithRate extends EntityAIBase
 	{
 		this.attackTick = 0;
 		this.attacker = par1EntityLiving;
-		this.worldObj = par1EntityLiving.worldObj;
+		this.worldObj = par1EntityLiving.world;
 		this.movementSpeed = par2;
 		this.attackRate = attackRate;
 		this.willSearch = par3;
@@ -79,7 +79,7 @@ public class EntityAIAttackOnCollideWithRate extends EntityAIBase
 	public boolean continueExecuting()
 	{
 		EntityLivingBase entityliving = this.attacker.getAttackTarget();
-		return entityliving == null ? false : (!this.entityTarget.isEntityAlive() ? false : (!this.willSearch ? !this.attacker.getNavigator().noPath() : this.attacker.isWithinHomeDistanceFromPosition(new BlockPos(MathHelper.floor_double(this.entityTarget.posX), MathHelper.floor_double(this.entityTarget.posY), MathHelper.floor_double(this.entityTarget.posZ)))));
+		return entityliving == null ? false : (!this.entityTarget.isEntityAlive() ? false : (!this.willSearch ? !this.attacker.getNavigator().noPath() : this.attacker.isWithinHomeDistanceFromPosition(new BlockPos(MathHelper.floor(this.entityTarget.posX), MathHelper.floor(this.entityTarget.posY), MathHelper.floor(this.entityTarget.posZ)))));
 	}
 
 	/**

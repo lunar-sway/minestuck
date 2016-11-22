@@ -20,13 +20,13 @@ public class CommandCheckLand extends CommandBase
 {
 	
 	@Override
-	public String getCommandName()
+	public String getName()
 	{
 		return "checkLand";
 	}
 	
 	@Override
-	public List getCommandAliases()
+	public List getAliases()
 	{
 		ArrayList<String> list = new ArrayList<String>();
 		list.add("land");
@@ -37,7 +37,7 @@ public class CommandCheckLand extends CommandBase
 	}
 	
 	@Override
-	public String getCommandUsage(ICommandSender sender)
+	public String getUsage(ICommandSender sender)
 	{
 		return (sender instanceof EntityPlayerMP) ? "commands.checkLand.usage" : "commands.playerOnly";
 	}
@@ -52,18 +52,18 @@ public class CommandCheckLand extends CommandBase
 		if(MinestuckDimensionHandler.isLandDimension(player.dimension))
 		{
 			LandAspectRegistry.AspectCombination aspects = MinestuckDimensionHandler.getAspects(player.dimension);
-			ChunkProviderLands chunkProvider = (ChunkProviderLands) player.worldObj.provider.createChunkGenerator();
+			ChunkProviderLands chunkProvider = (ChunkProviderLands) player.world.provider.createChunkGenerator();
 			ITextComponent aspect1 = new TextComponentTranslation("land."+aspects.aspectTerrain.getNames()[chunkProvider.nameIndex1]);
 			ITextComponent aspect2 = new TextComponentTranslation("land."+aspects.aspectTitle.getNames()[chunkProvider.nameIndex2]);
 			ITextComponent toSend;
 			if(chunkProvider.nameOrder)
 				toSend = new TextComponentTranslation("land.message.check", aspect1, aspect2);
 			else toSend = new TextComponentTranslation("land.message.check", aspect2, aspect1);
-			player.addChatMessage(toSend);
+			player.sendMessage(toSend);
 		}
 		else
 		{
-			player.addChatMessage(new TextComponentTranslation("land.message.checkFail"));
+			player.sendMessage(new TextComponentTranslation("land.message.checkFail"));
 		}
 	}
 	

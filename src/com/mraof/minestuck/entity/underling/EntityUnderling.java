@@ -132,7 +132,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	protected void onDeathUpdate()
 	{
 		super.onDeathUpdate();
-		if(this.deathTime == 20 && !this.worldObj.isRemote)
+		if(this.deathTime == 20 && !this.world.isRemote)
 		{
 			GristSet grist = this.getGristSpoils();
 			if(fromSpawner)
@@ -141,7 +141,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 			if(!dropCandy)
 			{
 				for(GristAmount gristType : grist.getArray())
-					this.worldObj.spawnEntityInWorld(new EntityGrist(worldObj, randX(), this.posY, randZ(), gristType));
+					this.world.spawnEntity(new EntityGrist(world, randX(), this.posY, randZ(), gristType));
 			} else
 			{
 				for(GristAmount gristType : grist.getArray())
@@ -149,14 +149,14 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 					int candy = (gristType.getAmount() + 2)/4;
 					int gristAmount = gristType.getAmount() - candy*2;
 					if(candy > 0)
-						this.worldObj.spawnEntityInWorld(new EntityItem(worldObj, randX(), this.posY, randZ(), new ItemStack(MinestuckItems.candy, candy, gristType.getType().ordinal() + 1)));
+						this.world.spawnEntity(new EntityItem(world, randX(), this.posY, randZ(), new ItemStack(MinestuckItems.candy, candy, gristType.getType().ordinal() + 1)));
 					if(gristAmount > 0)
-						this.worldObj.spawnEntityInWorld(new EntityGrist(worldObj, randX(), this.posY, randZ(),new GristAmount(gristType.getType(), gristAmount)));
+						this.world.spawnEntity(new EntityGrist(world, randX(), this.posY, randZ(),new GristAmount(gristType.getType(), gristAmount)));
 				}
 			}
 			
 			if(this.rand.nextInt(4) == 0)
-				this.worldObj.spawnEntityInWorld(new EntityVitalityGel(worldObj, randX(), this.posY, randZ(), this.getVitalityGel()));
+				this.world.spawnEntity(new EntityVitalityGel(world, randX(), this.posY, randZ(), this.getVitalityGel()));
 		}
 	}
 	
@@ -252,7 +252,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	@Override
 	public boolean getCanSpawnHere()
 	{
-		return this.worldObj.getDifficulty() != EnumDifficulty.PEACEFUL && super.getCanSpawnHere();
+		return this.world.getDifficulty() != EnumDifficulty.PEACEFUL && super.getCanSpawnHere();
 	}
 	
 	@Override

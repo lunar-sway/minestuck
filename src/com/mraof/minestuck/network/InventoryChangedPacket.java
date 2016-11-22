@@ -63,7 +63,7 @@ public class InventoryChangedPacket extends MinestuckPacket
 		switch(type)
 		{
 		case 0:
-			if(player.worldObj.isRemote && this.inventory != null && player.openContainer instanceof ContainerEditmode)
+			if(player.world.isRemote && this.inventory != null && player.openContainer instanceof ContainerEditmode)
 			{
 				for(int i = 0; i < inventory.size(); i++)
 				{
@@ -76,7 +76,7 @@ public class InventoryChangedPacket extends MinestuckPacket
 					((GuiInventoryEditmode)FMLClientHandler.instance().getClient().currentScreen).more = b2;
 				}
 			}
-			else if(!player.worldObj.isRemote && player.openContainer instanceof ContainerEditmode)
+			else if(!player.world.isRemote && player.openContainer instanceof ContainerEditmode)
 				((ContainerEditmode)player.openContainer).scroll += b1 ? 1 : -1;
 			break;
 		}

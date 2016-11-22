@@ -186,7 +186,7 @@ public class SburbHandler
 				throw new CommandException("Not allowed to create new sessions when global session is active. Use \"%s\" as session name for global session access.", GLOBAL_SESSION_NAME);
 			
 			if(sender.sendCommandFeedback())
-				sender.addChatMessage(new TextComponentString("Couldn't find session with that name, creating a new session..."));
+				sender.sendMessage(new TextComponentString("Couldn't find session with that name, creating a new session..."));
 			session = new Session();
 			session.name = sessionName;
 			sessions.add(session);
@@ -211,21 +211,21 @@ public class SburbHandler
 				} catch(CommandException c)
 				{
 					if(sender.sendCommandFeedback())
-						sender.addChatMessage(new TextComponentString(String.format(c.getMessage(), c.getErrorObjects())));
+						sender.sendMessage(new TextComponentString(String.format(c.getMessage(), c.getErrorObjects())));
 					continue;
 				}
 				
 				if(!session.containsPlayer(identifier))
 				{
 					if(sender.sendCommandFeedback())
-						sender.addChatMessage(new TextComponentString("Failed to remove player \""+playerName+"\": Player isn't in session.").setStyle(new Style().setColor(TextFormatting.RED)));
+						sender.sendMessage(new TextComponentString("Failed to remove player \""+playerName+"\": Player isn't in session.").setStyle(new Style().setColor(TextFormatting.RED)));
 					continue;
 				}
 				
 				if(session.predefinedPlayers.remove(identifier) == null)
 				{
 					if(sender.sendCommandFeedback())
-						sender.addChatMessage(new TextComponentString("Failed to remove player \""+playerName+"\": Player isn't registered with the session.").setStyle(new Style().setColor(TextFormatting.RED)));
+						sender.sendMessage(new TextComponentString("Failed to remove player \""+playerName+"\": Player isn't registered with the session.").setStyle(new Style().setColor(TextFormatting.RED)));
 					continue;
 				}
 				
@@ -238,7 +238,7 @@ public class SburbHandler
 					if(session.containsPlayer(identifier))
 					{
 						if(sender.sendCommandFeedback())
-							sender.addChatMessage(new TextComponentString("Removed player \""+playerName+"\", but they are still part of a connection in the session and will therefore be part of the session unless the connection is discarded.").setStyle(new Style().setColor(TextFormatting.YELLOW)));
+							sender.sendMessage(new TextComponentString("Removed player \""+playerName+"\", but they are still part of a connection in the session and will therefore be part of the session unless the connection is discarded.").setStyle(new Style().setColor(TextFormatting.YELLOW)));
 						skipFinishing = true;
 						continue;
 					}
@@ -252,14 +252,14 @@ public class SburbHandler
 				} catch(CommandException c)
 				{
 					if(sender.sendCommandFeedback())
-						sender.addChatMessage(new TextComponentString(String.format(c.getMessage(), c.getErrorObjects())));
+						sender.sendMessage(new TextComponentString(String.format(c.getMessage(), c.getErrorObjects())));
 					continue;
 				}
 				
 				if(session.predefinedPlayers.containsKey(identifier))
 				{
 					if(sender.sendCommandFeedback())
-						sender.addChatMessage(new TextComponentString("Failed to add player \""+playerName+"\": Player is already registered with session.").setStyle(new Style().setColor(TextFormatting.RED)));
+						sender.sendMessage(new TextComponentString("Failed to add player \""+playerName+"\": Player is already registered with session.").setStyle(new Style().setColor(TextFormatting.RED)));
 					continue;
 				}
 				
@@ -270,13 +270,13 @@ public class SburbHandler
 					if(merge(session, playerSession, null) != null)
 					{
 						if(sender.sendCommandFeedback())
-							sender.addChatMessage(new TextComponentString("Failed to add player \""+playerName+"\": Can't merge with the session that the player is already in.").setStyle(new Style().setColor(TextFormatting.RED)));
+							sender.sendMessage(new TextComponentString("Failed to add player \""+playerName+"\": Can't merge with the session that the player is already in.").setStyle(new Style().setColor(TextFormatting.RED)));
 						continue;
 					}
 				} else if(MinestuckConfig.forceMaxSize && session.getPlayerList().size() + 1 > maxSize)
 				{
 					if(sender.sendCommandFeedback())
-						sender.addChatMessage(new TextComponentString("Failed to add player \""+playerName+"\": The session can't accept more players with the current configurations.").setStyle(new Style().setColor(TextFormatting.RED)));
+						sender.sendMessage(new TextComponentString("Failed to add player \""+playerName+"\": The session can't accept more players with the current configurations.").setStyle(new Style().setColor(TextFormatting.RED)));
 					continue;
 				}
 				
@@ -371,15 +371,15 @@ public class SburbHandler
 			throw new CommandException("You can't change your land aspects after having entered the medium.");
 		if(sender.sendCommandFeedback())
 			if(data.title == null)
-				sender.addChatMessage(new TextComponentString("Beware that the title generated might not be suited for this land aspect.").setStyle(new Style().setColor(TextFormatting.YELLOW)));
+				sender.sendMessage(new TextComponentString("Beware that the title generated might not be suited for this land aspect.").setStyle(new Style().setColor(TextFormatting.YELLOW)));
 			else if(!LandAspectRegistry.containsTitleLandAspect(data.title.getHeroAspect(), aspect))
-				sender.addChatMessage(new TextComponentString("Beware that the title predefined isn't suited for this land aspect.").setStyle(new Style().setColor(TextFormatting.YELLOW)));
+				sender.sendMessage(new TextComponentString("Beware that the title predefined isn't suited for this land aspect.").setStyle(new Style().setColor(TextFormatting.YELLOW)));
 		
 		if(data.landTerrain != null && !aspect.isAspectCompatible(data.landTerrain))
 		{
 			data.landTerrain = null;
 			if(sender.sendCommandFeedback())
-				sender.addChatMessage(new TextComponentString("The terrain aspect previously chosen isn't compatible with this land aspect, and has therefore been removed.").setStyle(new Style().setColor(TextFormatting.YELLOW)));
+				sender.sendMessage(new TextComponentString("The terrain aspect previously chosen isn't compatible with this land aspect, and has therefore been removed.").setStyle(new Style().setColor(TextFormatting.YELLOW)));
 		}
 		
 		data.landTitle = aspect;
@@ -398,7 +398,7 @@ public class SburbHandler
 		if(playerSession == null || !session.predefinedPlayers.containsKey(identifier))
 		{
 			if(sender.sendCommandFeedback())
-				sender.addChatMessage(new TextComponentString("Couldn't find session for player or player isn't registered with this session yet. Adding player to session "+sessionName));
+				sender.sendMessage(new TextComponentString("Couldn't find session for player or player isn't registered with this session yet. Adding player to session "+sessionName));
 			session.predefinedPlayers.put(identifier, new PredefineData());
 		}
 		return identifier;
@@ -726,7 +726,7 @@ public class SburbHandler
 			Vec3d pos = titleSelectionMap.remove(player);
 			
 			player.setPosition(pos.xCoord, pos.yCoord, pos.zCoord);
-			MinestuckItems.cruxiteApple.onArtifactActivated(player.worldObj, player);
+			MinestuckItems.cruxiteApple.onArtifactActivated(player.world, player);
 			
 		} else Debug.warnf("%s tried to select a title without entering.", player.getName());
 	}

@@ -36,7 +36,7 @@ public class Teleport
 		if(destinationDimension == entity.dimension)
 			return localTeleport(entity, teleporter, x, y, z);
 		
-		if(entity.worldObj.isRemote)
+		if(entity.world.isRemote)
 			throw new IllegalArgumentException("Shouldn't do teleporting with a clientside entity.");
 		if(!ForgeHooks.onTravelToDimension(entity, destinationDimension))
 			return false;
@@ -59,7 +59,7 @@ public class Teleport
 			}
 			player.dimension = destinationDimension;
 			
-			SPacketRespawn respawnPacket = new SPacketRespawn(player.dimension, player.worldObj.getDifficulty(), worldDest.getWorldInfo().getTerrainType(), player.interactionManager.getGameType());
+			SPacketRespawn respawnPacket = new SPacketRespawn(player.dimension, player.world.getDifficulty(), worldDest.getWorldInfo().getTerrainType(), player.interactionManager.getGameType());
 			player.connection.sendPacket(respawnPacket);
 			playerList.updatePermissionLevel(player);
 			worldFrom.removeEntityDangerously(player);
@@ -68,7 +68,7 @@ public class Teleport
 			player.setPosition(x, y, z);
 			if(teleporter != null)
 				teleporter.makeDestination(player, worldFrom, worldDest);
-			worldDest.spawnEntityInWorld(player);
+			worldDest.spawnEntity(player);
 			worldDest.updateEntityWithOptionalForce(entity, false);
 			player.setWorld(worldDest);
 			
@@ -100,7 +100,7 @@ public class Teleport
 			
 			entity.dimension = destinationDimension;
 			
-			entity.worldObj.removeEntity(entity);
+			entity.world.removeEntity(entity);
 			entity.isDead = false;
 			
 			entity.setPosition(x, y, z);
@@ -116,7 +116,7 @@ public class Teleport
 			
 			boolean flag = newEntity.forceSpawn;
 			newEntity.forceSpawn = true;
-			worldDest.spawnEntityInWorld(newEntity);
+			worldDest.spawnEntity(newEntity);
 			newEntity.forceSpawn = flag;
 			worldDest.updateEntityWithOptionalForce(newEntity, false);
 			
@@ -131,14 +131,14 @@ public class Teleport
 	
 	public static boolean localTeleport(Entity entity, ITeleporter teleporter, double x, double y, double z)
 	{
-		if(entity.worldObj.isRemote)
+		if(entity.world.isRemote)
 			throw new IllegalArgumentException("Shouldn't do teleporting with a clientside entity.");
 		if(!ForgeHooks.onTravelToDimension(entity, entity.dimension))
 			return false;
 		
 		if(entity instanceof EntityPlayerMP)
 		{
-			WorldServer world = (WorldServer) entity.worldObj;
+			WorldServer world = (WorldServer) entity.world;
 			PlayerList playerList = entity.getServer().getPlayerList();
 			EntityPlayerMP player = (EntityPlayerMP) entity;
 			try
@@ -169,7 +169,7 @@ public class Teleport
 		{
 			entity.setPosition(x, y, z);
 			if(teleporter != null)
-				teleporter.makeDestination(entity, (WorldServer) entity.worldObj, (WorldServer) entity.worldObj);
+				teleporter.makeDestination(entity, (WorldServer) entity.world, (WorldServer) entity.world);
 			
 			return true;
 		}

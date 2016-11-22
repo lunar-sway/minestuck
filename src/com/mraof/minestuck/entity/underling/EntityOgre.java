@@ -80,7 +80,7 @@ public class EntityOgre extends EntityUnderling
 	{
 		super.onDeath(cause);
 		Entity entity = cause.getEntity();
-		if(this.dead && !this.worldObj.isRemote && type != null)
+		if(this.dead && !this.world.isRemote && type != null)
 		{
 			computePlayerProgress((int) (40*type.getPower() + 50));
 			if(entity != null && entity instanceof EntityPlayerMP)

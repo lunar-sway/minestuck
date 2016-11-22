@@ -152,7 +152,7 @@ public class StructureBlockRegistry
 		state = state.withRotation(rotation);
 		
 		if(upsideDown)
-			for(IProperty<?> property : state.getPropertyNames())
+			for(IProperty<?> property : state.getPropertyKeys())
 				if(property.getValueClass().equals(BlockStairs.EnumHalf.class))
 				{
 					state = state.withProperty((IProperty<BlockStairs.EnumHalf>)property, BlockStairs.EnumHalf.TOP);

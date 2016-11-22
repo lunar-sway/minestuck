@@ -72,7 +72,7 @@ public class EntityMetalBoat extends EntityBoat implements IEntityAdditionalSpaw
 		
 		capturedDrops.clear();
 		
-		if(!this.worldObj.isAABBInMaterial(this.getEntityBoundingBox(), Material.WATER))
+		if(!this.world.isAABBInMaterial(this.getEntityBoundingBox(), Material.WATER))
 			return;
 		
 		this.motionY = motion;
@@ -82,7 +82,7 @@ public class EntityMetalBoat extends EntityBoat implements IEntityAdditionalSpaw
 		motionY /= 1.5;
 		motionZ /= 1.5;
 		
-		moveEntity(0, motionY, 0);
+		move(0, motionY, 0);
 		
 	}
 	
@@ -96,7 +96,7 @@ public class EntityMetalBoat extends EntityBoat implements IEntityAdditionalSpaw
 			{
 				this.fall(this.fallDistance, 1.0F);
 				
-				if (!this.worldObj.isRemote && !this.isDead)
+				if (!this.world.isRemote && !this.isDead)
 				{
 					this.setDead();
 					
@@ -106,7 +106,7 @@ public class EntityMetalBoat extends EntityBoat implements IEntityAdditionalSpaw
 				this.fallDistance = 0.0F;
 			}
 		}
-		else if (this.worldObj.getBlockState((new BlockPos(this)).down()).getMaterial() != Material.WATER && y < 0.0D)
+		else if (this.world.getBlockState((new BlockPos(this)).down()).getMaterial() != Material.WATER && y < 0.0D)
 		{
 			this.fallDistance = (float)((double)this.fallDistance - y);
 		}
@@ -117,7 +117,7 @@ public class EntityMetalBoat extends EntityBoat implements IEntityAdditionalSpaw
 	{
 		if (this.isEntityInvulnerable(source))
 			return false;
-		else if (!this.worldObj.isRemote && !this.isDead)
+		else if (!this.world.isRemote && !this.isDead)
 		{
 			if (this.getPassengers().contains(source.getEntity()) && source instanceof EntityDamageSourceIndirect)
 				return false;

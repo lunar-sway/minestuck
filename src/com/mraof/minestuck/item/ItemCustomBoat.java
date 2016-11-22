@@ -96,7 +96,7 @@ public abstract class ItemCustomBoat extends Item
 					}
 					
 					Entity entityboat = createBoat(itemStackIn, worldIn, (double)((float)blockpos.getX() + 0.5F), (double)((float)blockpos.getY() + 1.0F), (double)((float)blockpos.getZ() + 0.5F));
-					entityboat.rotationYaw = (float)(((MathHelper.floor_double((double)(playerIn.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3) - 1) * 90);
+					entityboat.rotationYaw = (float)(((MathHelper.floor((double)(playerIn.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3) - 1) * 90);
 					
 					if (!worldIn.getCollisionBoxes(entityboat, entityboat.getEntityBoundingBox().expandXyz(-0.1D)).isEmpty())
 					{
@@ -105,7 +105,7 @@ public abstract class ItemCustomBoat extends Item
 					
 					if (!worldIn.isRemote)
 					{
-						worldIn.spawnEntityInWorld(entityboat);
+						worldIn.spawnEntity(entityboat);
 					}
 					
 					if (!playerIn.capabilities.isCreativeMode)
@@ -127,7 +127,7 @@ public abstract class ItemCustomBoat extends Item
 		@Override
 		public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
 		{
-			EnumFacing enumfacing = (EnumFacing)source.func_189992_e().getValue(BlockDispenser.FACING);
+			EnumFacing enumfacing = (EnumFacing)source.getBlockState().getValue(BlockDispenser.FACING);
 			World world = source.getWorld();
 			double d0 = source.getX() + (double)((float)enumfacing.getFrontOffsetX() * 1.125F);
 			double d1 = source.getY() + (double)((float)enumfacing.getFrontOffsetY() * 1.125F);
@@ -151,7 +151,7 @@ public abstract class ItemCustomBoat extends Item
 			}
 			
 			Entity entityboat = createBoat(stack, world, d0, d1 + d3, d2);
-			world.spawnEntityInWorld(entityboat);
+			world.spawnEntity(entityboat);
 			stack.splitStack(1);
 			return stack;
 		}

@@ -68,8 +68,10 @@ public class BlockMinestuckLog extends BlockLog
 			list.add(new ItemStack(itemIn, 1, type.ordinal()));
 	}
 	
+	
+	
 	@Override
-	protected ItemStack createStackedBlock(IBlockState state)
+	protected ItemStack getSilkTouchDrop(IBlockState state)
 	{
 		return new ItemStack(Item.getItemFromBlock(this), 1, state.getValue(VARIANT).ordinal());
 	}

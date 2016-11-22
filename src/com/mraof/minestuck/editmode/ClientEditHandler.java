@@ -73,7 +73,7 @@ public class ClientEditHandler {
 	
 	public static void onClientPackage(String target, int posX, int posZ, boolean[] items) {
 		Minecraft mc = Minecraft.getMinecraft();
-		EntityPlayerSP player = mc.thePlayer;
+		EntityPlayerSP player = mc.player;
 		if(target != null) {	//Enable edit mode
 			activated = true;
 			givenItems = items;
@@ -131,7 +131,7 @@ public class ClientEditHandler {
 	
 	@SubscribeEvent
 	public void tickEnd(PlayerTickEvent event) {
-		if(event.phase != TickEvent.Phase.END || event.player != Minecraft.getMinecraft().thePlayer || !isActive())
+		if(event.phase != TickEvent.Phase.END || event.player != Minecraft.getMinecraft().player || !isActive())
 			return;
 		EntityPlayer player = event.player;
 		
@@ -144,7 +144,7 @@ public class ClientEditHandler {
 	@SubscribeEvent
 	public void onTossEvent(ItemTossEvent event)
 	{
-		if(event.getEntity().worldObj.isRemote && event.getPlayer() == ClientProxy.getClientPlayer() && isActive())
+		if(event.getEntity().world.isRemote && event.getPlayer() == ClientProxy.getClientPlayer() && isActive())
 		{
 			InventoryPlayer inventory = event.getPlayer().inventory;
 			ItemStack stack = event.getEntityItem().getEntityItem();
@@ -169,7 +169,7 @@ public class ClientEditHandler {
 	
 	@SubscribeEvent
 	public void onItemPickupEvent(EntityItemPickupEvent event) {
-		if(event.getEntity().worldObj.isRemote && isActive() && event.getEntityPlayer().equals(Minecraft.getMinecraft().thePlayer))
+		if(event.getEntity().world.isRemote && isActive() && event.getEntityPlayer().equals(Minecraft.getMinecraft().player))
 			event.setCanceled(true);
 	}
 	
@@ -205,7 +205,7 @@ public class ClientEditHandler {
 							str.append(", ");
 						str.append(grist.getAmount()+" "+grist.getType().getDisplayName());
 					}
-					event.getEntityPlayer().addChatMessage(new TextComponentTranslation("grist.missing",str.toString()));
+					event.getEntityPlayer().sendStatusMessage(new TextComponentTranslation("grist.missing",str.toString()));
 				}
 				event.setCanceled(true);
 			}
@@ -238,7 +238,7 @@ public class ClientEditHandler {
 	@SubscribeEvent(priority=EventPriority.LOWEST,receiveCanceled=false)
 	public void onBlockPlaced(PlayerInteractEvent.RightClickBlock event)
 	{
-		if(event.getWorld().isRemote && isActive() && event.getEntityPlayer().equals(Minecraft.getMinecraft().thePlayer)
+		if(event.getWorld().isRemote && isActive() && event.getEntityPlayer().equals(Minecraft.getMinecraft().player)
 				&& event.getUseItem() == Result.ALLOW) {
 			ItemStack stack = event.getEntityPlayer().getHeldItemMainhand();
 			if(DeployList.containsItemStack(stack))
@@ -249,7 +249,7 @@ public class ClientEditHandler {
 	@SubscribeEvent
 	public void onAttackEvent(AttackEntityEvent event)
 	{
-		if(event.getEntity().worldObj.isRemote && event.getEntityPlayer() == ClientProxy.getClientPlayer() && isActive())
+		if(event.getEntity().world.isRemote && event.getEntityPlayer() == ClientProxy.getClientPlayer() && isActive())
 			event.setCanceled(true);
 	}
 	

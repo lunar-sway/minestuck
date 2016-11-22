@@ -20,13 +20,13 @@ public class CommandSburbSession extends CommandBase	//TODO properly localize al
 {
 	
 	@Override
-	public String getCommandName()
+	public String getName()
 	{
 		return "sburbSession";
 	}
 	
 	@Override
-	public String getCommandUsage(ICommandSender sender)
+	public String getUsage(ICommandSender sender)
 	{
 		return "commands.sburbSession.usage";
 	}
@@ -43,7 +43,7 @@ public class CommandSburbSession extends CommandBase	//TODO properly localize al
 		if(args.length < 2 || args.length < 3 && args[1].equalsIgnoreCase("add")
 				|| args.length != 4 && (args[1].equalsIgnoreCase("landTerrain") || args[1].equalsIgnoreCase("landTitle"))
 				|| args.length != 5 && args[1].equalsIgnoreCase("title"))
-			throw new WrongUsageException(this.getCommandUsage(sender));
+			throw new WrongUsageException(this.getUsage(sender));
 		String sessionName = args[0];
 		String command = args[1];
 		
@@ -123,6 +123,6 @@ public class CommandSburbSession extends CommandBase	//TODO properly localize al
 			
 			SburbHandler.predefineTitleLandAspect(server, sender, this, playerName, sessionName, landAspect);
 			
-		} else throw new WrongUsageException(this.getCommandUsage(sender));
+		} else throw new WrongUsageException(this.getUsage(sender));
 	}
 }

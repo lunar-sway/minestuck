@@ -255,8 +255,8 @@ public abstract class GuiPlayerStats extends GuiScreen
 		{
 			if(mc.currentScreen != null && mc.currentScreen instanceof GuiContainer)
 			{
-				mc.thePlayer.connection.sendPacket(new CPacketCloseWindow(mc.thePlayer.openContainer.windowId));
-				mc.thePlayer.inventory.setItemStack((ItemStack)null);
+				mc.player.connection.sendPacket(new CPacketCloseWindow(mc.player.openContainer.windowId));
+				mc.player.inventory.setItemStack((ItemStack)null);
 			}
 			if(ClientEditHandler.isActive() ? editmodeTab.isContainer : normalTab.isContainer)
 			{

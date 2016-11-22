@@ -36,7 +36,7 @@ public class GuiInventoryEditmode extends GuiPlayerStatsContainer
 		mc.getTextureManager().bindTexture(guiBackground);
 		this.drawTexturedModalRect(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
-		Calendar calendar = mc.theWorld.getCurrentDate();
+		Calendar calendar = mc.world.getCurrentDate();
 		boolean b1 = MinestuckConfig.clientHardMode;
 		boolean b2 = !b1 && (calendar.get(2) + 1 == 4 && calendar.get(5) == 13 || calendar.get(2) + 1 == 6 && calendar.get(5) == 12
 				|| calendar.get(2) + 1 == 10 && calendar.get(5) == 25 || calendar.get(2) + 1 == 11 && calendar.get(5) == 11

@@ -12,9 +12,9 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
-import codechicken.lib.gui.GuiDraw;
-import codechicken.nei.NEIClientConfig;
-import codechicken.nei.recipe.GuiCraftingRecipe;
+//import codechicken.lib.gui.GuiDraw;
+//import codechicken.nei.NEIClientConfig;
+//import codechicken.nei.recipe.GuiCraftingRecipe;
 
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.editmode.ClientEditHandler;
@@ -120,7 +120,7 @@ public class GuiGristCache extends GuiPlayerStats
 	protected void keyTyped(char typedChar, int keyCode) throws IOException
 	{
 		super.keyTyped(typedChar, keyCode);
-		if(Loader.isModLoaded("NotEnoughItems") && keyCode == NEIClientConfig.getKeyBinding("gui.usage"))
+		/*if(Loader.isModLoaded("NotEnoughItems") && keyCode == NEIClientConfig.getKeyBinding("gui.usage"))
 		{
 			Point mousePos = GuiDraw.getMousePosition();
 			for(int gristId = 0; gristId < GristType.allGrists; gristId++)
@@ -136,7 +136,7 @@ public class GuiGristCache extends GuiPlayerStats
 					return;
 				}
 			}
-		}
+		}*/
 	}
 	
 }

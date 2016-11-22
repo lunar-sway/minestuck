@@ -48,7 +48,7 @@ public class TileEntitySkaiaPortal extends TileEntity implements Teleport.ITelep
 	
 	public void teleportEntity(Entity entity)
 	{
-		if(destination.dim != this.worldObj.provider.getDimension())
+		if(destination.dim != this.world.provider.getDimension())
 		{
 			if(!Teleport.teleportEntity(entity, this.destination.dim, this, destination.pos))
 				return;

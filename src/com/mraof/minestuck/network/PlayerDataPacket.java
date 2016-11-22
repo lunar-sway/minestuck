@@ -119,7 +119,7 @@ public class PlayerDataPacket extends MinestuckPacket
 				for(prev++; prev <= i1; prev++)
 				{
 					String s = I18n.canTranslate("echeladder.rung"+prev) ? I18n.translateToLocal("echeladder.rung"+prev) : String.valueOf(prev+1);
-					player.addChatMessage(new TextComponentString("You reached rung "+s+'!'));
+					player.sendStatusMessage(new TextComponentString("You reached rung "+s+'!'));
 				}
 			else GuiEcheladder.animatedRung = GuiEcheladder.lastRung = i1;
 		} else if(type == BOONDOLLAR)
@@ -131,7 +131,7 @@ public class PlayerDataPacket extends MinestuckPacket
 			if(i1 >= 0 && i1 < 12 && i2 >= 0 && i2 < 12)
 				title = new Title(EnumClass.getClassFromInt(i1), EnumAspect.getAspectFromInt(i2));
 			else title = null;
-			if(player.worldObj.isRemote)
+			if(player.world.isRemote)
 			{
 				FMLClientHandler.instance().showGuiScreen(new GuiTitleSelector(title));
 			} else

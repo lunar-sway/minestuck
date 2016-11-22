@@ -203,7 +203,7 @@ public class Echeladder
 	
 	public void setByCommand(int rung, double progress)
 	{
-		this.rung = MathHelper.clamp_int(rung, 0, RUNG_COUNT - 1);	//Can never be too careful
+		this.rung = MathHelper.clamp(rung, 0, RUNG_COUNT - 1);	//Can never be too careful
 		if(rung != RUNG_COUNT - 1)
 		{
 			this.progress = (int) (getRungProgressReq()*progress);

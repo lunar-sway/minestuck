@@ -48,7 +48,7 @@ public class TransportalizerPacket extends MinestuckPacket
 	@Override
 	public void execute(EntityPlayer player)
 	{
-		TileEntityTransportalizer te = (TileEntityTransportalizer) player.worldObj.getTileEntity(new BlockPos(x, y, z));
+		TileEntityTransportalizer te = (TileEntityTransportalizer) player.world.getTileEntity(new BlockPos(x, y, z));
 		if(te != null)
 		{
 			te.setDestId(destId);

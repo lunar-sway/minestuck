@@ -60,14 +60,14 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 	{
 		try
 		{
-			if(!world.isRemote && player.worldObj.provider.getDimension() != -1)
+			if(!world.isRemote && player.world.provider.getDimension() != -1)
 			{
 				if(!SburbHandler.shouldEnterNow(player))
 					return;
 				
 				SburbConnection c = SkaianetHandler.getMainConnection(IdentifierHandler.encode(player), true);
 				
-				if(c == null || !c.enteredGame() || !MinestuckDimensionHandler.isLandDimension(player.worldObj.provider.getDimension()))
+				if(c == null || !c.enteredGame() || !MinestuckDimensionHandler.isLandDimension(player.world.provider.getDimension()))
 				{
 					
 					int destinationId;
@@ -77,14 +77,14 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 					
 					if(destinationId == -1)	//Something bad happened further down and the problem should be written in the server console
 					{
-						player.addChatComponentMessage(new TextComponentString("Something went wrong during entry. More details in the server console."));
+						player.sendStatusMessage(new TextComponentString("Something went wrong during entry. More details in the server console."));
 						return;
 					}
 					
 					if(!Teleport.teleportEntity(player, destinationId, this))
 					{
 						Debug.warn("Was not able to teleport player "+player.getName()+" into the medium! Likely caused by mod collision.");
-						player.addChatComponentMessage(new TextComponentString("Was not able to teleport you into the medium! Likely caused by mod collision."));
+						player.sendStatusMessage(new TextComponentString("Was not able to teleport you into the medium! Likely caused by mod collision."));
 					}
 					else MinestuckPlayerTracker.sendLandEntryMessage(player);
 				}
@@ -92,7 +92,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 		} catch(Exception e)
 		{
 			Debug.logger.error("Exception when "+player.getName()+" tried to enter their land.", e);
-			player.addChatMessage(new TextComponentString("[Minestuck] Something went wrong during entry. "+ (Minestuck.isServerRunning?"Check the console for the error message.":"Notify the server owner about this.")).setStyle(new Style().setColor(TextFormatting.RED)));
+			player.sendStatusMessage(new TextComponentString("[Minestuck] Something went wrong during entry. "+ (Minestuck.isServerRunning?"Check the console for the error message.":"Notify the server owner about this.")).setStyle(new Style().setColor(TextFormatting.RED)));
 		}
 	}
 	
@@ -168,7 +168,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 			Debug.debugf("Total: %d, block: %d", total, bl);
 			
 			Debug.debug("Teleporting entities...");
-			List<?> list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().expand((double)artifactRange, artifactRange, (double)artifactRange));
+			List<?> list = entity.world.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().expand((double)artifactRange, artifactRange, (double)artifactRange));
 			Iterator<?> iterator = list.iterator();
 			
 			entity.setPositionAndUpdate(entity.posX, entity.posY + yDiff, entity.posZ);
@@ -195,7 +195,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 						newEntity.readFromNBT(nbttagcompound);
 						newEntity.dimension = worldserver1.provider.getDimension();
 						newEntity.setPosition(newEntity.posX, newEntity.posY + yDiff, newEntity.posZ);
-						worldserver1.spawnEntityInWorld(newEntity);
+						worldserver1.spawnEntity(newEntity);
 					}
 				}
 			}
@@ -237,7 +237,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 			if(!(creative && MinestuckConfig.entryCrater))
 			{
 				Debug.debug("Removing entities created from removing blocks...");	//Normally only items in containers
-				list = entity.worldObj.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().expand((double)artifactRange, artifactRange, (double)artifactRange));
+				list = entity.world.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().expand((double)artifactRange, artifactRange, (double)artifactRange));
 				iterator = list.iterator();
 				while (iterator.hasNext())
 					if(MinestuckConfig.entryCrater)
@@ -295,7 +295,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 	{
 		ExtendedBlockStorage blockStorage = c.getBlockStorageArray()[y];
 		if(blockStorage == null)
-			blockStorage = c.getBlockStorageArray()[y] = new ExtendedBlockStorage(y << 4, !c.getWorld().provider.getHasNoSky());
+			blockStorage = c.getBlockStorageArray()[y] = new ExtendedBlockStorage(y << 4, !c.getWorld().provider.hasNoSky());
 		return blockStorage;
 	}
 	

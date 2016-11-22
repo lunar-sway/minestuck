@@ -43,7 +43,7 @@ public class TreeModus extends Modus
 		size = nbt.getInteger("size");
 		autobalance = nbt.getBoolean("autobalance");
 		node = readNode(nbt, 0, 0);
-		if(player == null || !player.worldObj.isRemote)
+		if(player == null || !player.world.isRemote)
 			autobalance();
 	}
 	

@@ -66,7 +66,7 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 		switch (getMachineType())
 		{
 		case GRIST_WIDGET:
-			if(!worldObj.isRemote) 
+			if(!world.isRemote) 
 			{
 				ItemStack item = AlchemyRecipeHandler.getDecodedItem(inv[0]);
 				GristSet gristSet = GristRegistry.getGristConversion(item);
@@ -91,12 +91,12 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 					{
 						if(grist == 0)
 							break;
-						GristAmount gristAmount = new GristAmount(GristType.values()[entry.getKey()],grist<=3?grist:(worldObj.rand.nextInt(grist)+1));
-						EntityGrist entity = new EntityGrist(worldObj, this.pos.getX() + 0.5 /* this.width - this.width / 2*/, this.pos.getY() + 1, this.pos.getZ() + 0.5 /* this.width - this.width / 2*/, gristAmount);
+						GristAmount gristAmount = new GristAmount(GristType.values()[entry.getKey()],grist<=3?grist:(world.rand.nextInt(grist)+1));
+						EntityGrist entity = new EntityGrist(world, this.pos.getX() + 0.5 /* this.width - this.width / 2*/, this.pos.getY() + 1, this.pos.getZ() + 0.5 /* this.width - this.width / 2*/, gristAmount);
 						entity.motionX /= 2;
 						entity.motionY /= 2;
 						entity.motionZ /= 2;
-						worldObj.spawnEntityInWorld(entity);
+						world.spawnEntity(entity);
 						//Create grist entity of gristAmount
 						grist -= gristAmount.getAmount();
 					}

@@ -29,7 +29,7 @@ public class RabbitSpawner extends BiomeSpecificDecorator
 			EntityRabbit entity = new EntityRabbit(world);
 			entity.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 			entity.onInitialSpawn(null, null);
-			world.spawnEntityInWorld(entity);
+			world.spawnEntity(entity);
 		}
 		
 		return null;

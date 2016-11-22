@@ -73,7 +73,7 @@ public class MinestuckPlayerTracker {
 		
 		if(CaptchaDeckHandler.getModus(player) == null && MinestuckConfig.defaultModusTypes.length > 0 && !MinestuckPlayerData.getData(player).givenModus)
 		{
-			int index = player.worldObj.rand.nextInt(MinestuckConfig.defaultModusTypes.length);
+			int index = player.world.rand.nextInt(MinestuckConfig.defaultModusTypes.length);
 			Modus modus = CaptchaDeckHandler.ModusType.getType(MinestuckConfig.defaultModusTypes[index]).createInstance(Side.SERVER);
 			modus.player = player;
 			modus.initModus(null, MinestuckConfig.initialModusSize);
@@ -102,7 +102,7 @@ public class MinestuckPlayerTracker {
 		}
 		
 		if(UpdateChecker.outOfDate)
-			player.addChatMessage(new TextComponentString("New version of Minestuck: " + UpdateChecker.latestVersion + "\nChanges: " + UpdateChecker.updateChanges));
+			player.sendStatusMessage(new TextComponentString("New version of Minestuck: " + UpdateChecker.latestVersion + "\nChanges: " + UpdateChecker.updateChanges));
 	}
 	
 	@SubscribeEvent(priority = EventPriority.HIGH)	//Editmode players need to be reset before nei handles the event
@@ -118,7 +118,7 @@ public class MinestuckPlayerTracker {
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public void onPlayerDrops(PlayerDropsEvent event)
 	{
-		if(!event.getEntityPlayer().worldObj.isRemote)
+		if(!event.getEntityPlayer().world.isRemote)
 		{
 			CaptchaDeckHandler.dropSylladex(event.getEntityPlayer());
 			
@@ -233,14 +233,14 @@ public class MinestuckPlayerTracker {
 		if(MinestuckDimensionHandler.isLandDimension(player.dimension))
 		{
 			LandAspectRegistry.AspectCombination aspects = MinestuckDimensionHandler.getAspects(player.dimension);
-			ChunkProviderLands chunkProvider = (ChunkProviderLands) player.worldObj.provider.createChunkGenerator();
+			ChunkProviderLands chunkProvider = (ChunkProviderLands) player.world.provider.createChunkGenerator();
 			ITextComponent aspect1 = new TextComponentTranslation("land."+aspects.aspectTerrain.getNames()[chunkProvider.nameIndex1]);
 			ITextComponent aspect2 = new TextComponentTranslation("land."+aspects.aspectTitle.getNames()[chunkProvider.nameIndex2]);
 			ITextComponent toSend;
 			if(chunkProvider.nameOrder)
 				toSend = new TextComponentTranslation("land.message.entry", aspect1, aspect2);
 			else toSend = new TextComponentTranslation("land.message.entry", aspect2, aspect1);
-			player.addChatComponentMessage(toSend);
+			player.sendStatusMessage(toSend);
 		}
 	}
 	

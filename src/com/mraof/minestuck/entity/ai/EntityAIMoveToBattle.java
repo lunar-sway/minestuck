@@ -33,7 +33,7 @@ public class EntityAIMoveToBattle extends EntityAIBase
 		if(type == EnumEntityKingdom.DERSITE && target.posX >= 0 || type == EnumEntityKingdom.PROSPITIAN && target.posX <= 0)
 			return false;
 		
-		BlockPos pos = target.worldObj.getHeight(new BlockPos(type == EnumEntityKingdom.DERSITE ? 5 : -5, 0, target.posY));
+		BlockPos pos = target.world.getHeight(new BlockPos(type == EnumEntityKingdom.DERSITE ? 5 : -5, 0, target.posY));
 		destination = RandomPositionGenerator.findRandomTargetBlockTowards(target, 10, 7, new Vec3d(pos.getX(), pos.getY(), pos.getZ()));
 		
 		return destination != null;

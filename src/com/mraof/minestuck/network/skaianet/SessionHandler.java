@@ -394,7 +394,7 @@ public class SessionHandler {
 			if(sc == null && ss == null)
 			{
 				if(sender.sendCommandFeedback())
-					sender.addChatMessage(new TextComponentString("Neither player is part of a session. Creating new session..."));
+					sender.sendMessage(new TextComponentString("Neither player is part of a session. Creating new session..."));
 				sc = ss = new Session();
 				sessions.add(sc);
 			} else if(sc == null)
@@ -432,7 +432,7 @@ public class SessionHandler {
 				SkaianetHandler.closeConnection(server, cs.getClientIdentifier(), false);
 			cs.serverIdentifier = IdentifierHandler.nullIdentifier;
 			if(sender.sendCommandFeedback())
-				sender.addChatMessage(new TextComponentString(server.getUsername()+"'s old client player "+cs.getClientIdentifier().getUsername()+" is now without a server player.").setStyle(new Style().setColor(TextFormatting.YELLOW)));
+				sender.sendMessage(new TextComponentString(server.getUsername()+"'s old client player "+cs.getClientIdentifier().getUsername()+" is now without a server player.").setStyle(new Style().setColor(TextFormatting.YELLOW)));
 		}
 		
 		if(cc != null && cc.isActive)

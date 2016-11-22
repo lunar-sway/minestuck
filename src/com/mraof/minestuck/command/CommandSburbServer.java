@@ -14,13 +14,13 @@ public class CommandSburbServer extends CommandBase
 {
 	
 	@Override
-	public String getCommandName()
+	public String getName()
 	{
 		return "sburbServer";
 	}
 	
 	@Override
-	public String getCommandUsage(ICommandSender sender)
+	public String getUsage(ICommandSender sender)
 	{
 		return "commands.sburbServer.usage";
 	}

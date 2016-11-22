@@ -74,9 +74,9 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	}
 	
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player)
+	public boolean isUsableByPlayer(EntityPlayer player)
 	{
-		return this.worldObj.getTileEntity(pos) == this &&
+		return this.world.getTileEntity(pos) == this &&
 				player.getDistanceSq(this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5) < 64;
 	}
 	
@@ -143,8 +143,8 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	@Override
 	public void update()
 	{
-		IBlockState state = worldObj.getBlockState(pos);
-		if(worldObj.isRemote)	//Processing is easier done on the server side only
+		IBlockState state = world.getBlockState(pos);
+		if(world.isRemote)	//Processing is easier done on the server side only
 			return;
 		
 		if ((!ready && !isAutomatic()) || !contentsValid())
@@ -153,7 +153,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 			this.progress = 0;
 			this.ready = overrideStop;
 			if(!b)
-				worldObj.notifyBlockUpdate(pos, state, state, 3);
+				world.notifyBlockUpdate(pos, state, state, 3);
 			return;
 		}
 		
@@ -164,7 +164,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 			this.progress = 0;
 			this.ready = overrideStop;
 			processContents();
-			worldObj.notifyBlockUpdate(pos, state, state, 3);
+			world.notifyBlockUpdate(pos, state, state, 3);
 		}
 	}
 	

@@ -44,7 +44,7 @@ public class HashmapModus extends Modus
 		for(int i = list.size(); i < size; i++)
 			list.add(null);
 		
-		if(player.worldObj.isRemote)
+		if(player.world.isRemote)
 		{
 			items = new ItemStack[size];
 			changed = prev != null;
@@ -269,7 +269,7 @@ public class HashmapModus extends Modus
 			player.inventory.setInventorySlotContents(player.inventory.currentItem, stack);
 		else CaptchaDeckHandler.launchAnyItem(player, stack);
 		
-		this.player.addChatMessage(new TextComponentTranslation("[HASHMAP] %s %% %s = %s -> %s", i, getSize(), index, stack.getTextComponent()));
+		this.player.sendStatusMessage(new TextComponentTranslation("[HASHMAP] %s %% %s = %s -> %s", i, getSize(), index, stack.getTextComponent()));
 	}
 	
 }

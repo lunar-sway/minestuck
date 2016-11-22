@@ -204,7 +204,7 @@ public class GuiSburbMachine extends GuiContainer
 				this.actionPerformed(goButton);
 			}
 		}
-		else if(te.getMachineType() == MachineType.ALCHEMITER && par3 == 0 && mc.thePlayer.inventory.getItemStack() == null
+		else if(te.getMachineType() == MachineType.ALCHEMITER && par3 == 0 && mc.player.inventory.getItemStack() == null
 				&& te.getStackInSlot(0) != null && AlchemyRecipeHandler.getDecodedItem(te.getStackInSlot(0)) != null && AlchemyRecipeHandler.getDecodedItem(te.getStackInSlot(0)).getItem() == MinestuckItems.captchaCard
 				&& par1 >= guiLeft + 9 && par1 < guiLeft + 167 && par2 >= guiTop + 45 && par2 < guiTop + 70)
 		{

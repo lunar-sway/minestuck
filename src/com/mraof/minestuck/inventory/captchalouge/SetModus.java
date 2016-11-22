@@ -40,7 +40,7 @@ public class SetModus extends Modus
 					list.add(stack);
 		}*/
 		
-		if(player.worldObj.isRemote)
+		if(player.world.isRemote)
 		{
 			items = new ItemStack[size];
 			changed = prev != null;

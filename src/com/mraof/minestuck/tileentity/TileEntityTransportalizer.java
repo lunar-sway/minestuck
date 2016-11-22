@@ -30,11 +30,11 @@ public class TileEntityTransportalizer extends TileEntity
 	public void validate()
 	{
 		super.validate();
-		if(!worldObj.isRemote)
+		if(!world.isRemote)
 		{
 			if(id.isEmpty())
 				id = getUnusedId();
-			put(id, new Location(this.pos, worldObj.provider.getDimension()));
+			put(id, new Location(this.pos, world.provider.getDimension()));
 		}
 	}
 	
@@ -42,10 +42,10 @@ public class TileEntityTransportalizer extends TileEntity
 	public void invalidate()
 	{
 		super.invalidate();
-		if(!worldObj.isRemote)
+		if(!world.isRemote)
 		{
 			Location location = transportalizers.get(id);
-			if(location.equals(new Location(this.pos, this.worldObj.provider.getDimension())))
+			if(location.equals(new Location(this.pos, this.world.provider.getDimension())))
 				transportalizers.remove(id);
 		}
 	}
@@ -91,7 +91,7 @@ public class TileEntityTransportalizer extends TileEntity
 			{
 				entity.timeUntilPortal = entity.getPortalCooldown();
 				if(entity instanceof EntityPlayerMP)
-					((EntityPlayerMP) entity).addChatMessage(new TextComponentTranslation("message.transportalizer.destinationBlocked"));
+					((EntityPlayerMP) entity).sendStatusMessage(new TextComponentTranslation("message.transportalizer.destinationBlocked"));
 				return;
 			}
 			
@@ -140,9 +140,9 @@ public class TileEntityTransportalizer extends TileEntity
 	public void setDestId(String destId)
 	{
 		this.destId = destId;
-		IBlockState state = worldObj.getBlockState(pos);
+		IBlockState state = world.getBlockState(pos);
 		this.markDirty();
-		worldObj.notifyBlockUpdate(pos, state, state, 0);
+		world.notifyBlockUpdate(pos, state, state, 0);
 	}
 
 	@Override

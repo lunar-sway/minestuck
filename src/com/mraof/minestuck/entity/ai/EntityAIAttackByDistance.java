@@ -143,7 +143,7 @@ public class EntityAIAttackByDistance extends EntityAIBase
 					return;
 				}
 	
-				f = MathHelper.sqrt_double(d0) / this.field_96562_i;
+				f = MathHelper.sqrt(d0) / this.field_96562_i;
 				float f1 = f;
 	
 				if (f < 0.1F)
@@ -157,12 +157,12 @@ public class EntityAIAttackByDistance extends EntityAIBase
 				}
 	
 				((IRangedAttackMob) this.attacker).attackEntityWithRangedAttack(this.attackTarget, f1);
-				this.rangedAttackTime = MathHelper.floor_float(f * (float)(this.maxRangedAttackTime - this.field_96561_g) + (float)this.field_96561_g);
+				this.rangedAttackTime = MathHelper.floor(f * (float)(this.maxRangedAttackTime - this.field_96561_g) + (float)this.field_96561_g);
 			}
 			else if (this.rangedAttackTime < 0)
 			{
-				f = MathHelper.sqrt_double(d0) / this.field_96562_i;
-				this.rangedAttackTime = MathHelper.floor_float(f * (float)(this.maxRangedAttackTime - this.field_96561_g) + (float)this.field_96561_g);
+				f = MathHelper.sqrt(d0) / this.field_96562_i;
+				this.rangedAttackTime = MathHelper.floor(f * (float)(this.maxRangedAttackTime - this.field_96561_g) + (float)this.field_96561_g);
 			}
 		}
 		else

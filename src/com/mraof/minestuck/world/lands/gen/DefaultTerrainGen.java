@@ -28,7 +28,7 @@ public class DefaultTerrainGen extends LandTerrainGenBase
 		parabolicField = new float[25];
 		for(int x = -2; x <= 2; x++)
 			for(int z = -2; z <= 2; z++)
-				parabolicField[(x + 2)*5 + z + 2] = 10.0F / MathHelper.sqrt_float((float)(x * x + z * z) + 0.2F);
+				parabolicField[(x + 2)*5 + z + 2] = 10.0F / MathHelper.sqrt((float)(x * x + z * z) + 0.2F);
 	}
 	
 	public DefaultTerrainGen(ChunkProviderLands chunkProvider, Random rand)

@@ -113,7 +113,7 @@ public class CaptchaDeckPacket extends MinestuckPacket
 	@Override
 	public void execute(EntityPlayer player)
 	{
-		if(player != null && player.worldObj != null && !player.worldObj.isRemote)
+		if(player != null && player.world != null && !player.world.isRemote)
 		{
 			if(ServerEditHandler.getData(player) != null)
 				return;

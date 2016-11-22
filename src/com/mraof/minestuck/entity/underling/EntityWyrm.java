@@ -37,7 +37,7 @@ public class EntityWyrm extends EntityUnderling implements IEntityMultiPart
 	@Override
 	public World getWorld()
 	{
-		return this.worldObj;
+		return this.world;
 	}
 
 	@Override

@@ -39,25 +39,25 @@ public abstract class EntityConsort extends EntityMinestuck
 	
 	protected boolean isValidLightLevel()
 	{
-		int i = MathHelper.floor_double(this.posX);
-		int j = MathHelper.floor_double(this.getEntityBoundingBox().minY);
-		int k = MathHelper.floor_double(this.posZ);
+		int i = MathHelper.floor(this.posX);
+		int j = MathHelper.floor(this.getEntityBoundingBox().minY);
+		int k = MathHelper.floor(this.posZ);
 		BlockPos pos = new BlockPos(i, j, k);
 		
-		if (this.worldObj.getLightFor(EnumSkyBlock.SKY, pos) < this.rand.nextInt(8))
+		if (this.world.getLightFor(EnumSkyBlock.SKY, pos) < this.rand.nextInt(8))
 		{
 			return false;
 		}
 		else
 		{
-			int l = this.worldObj.getLightFromNeighbors(pos);
+			int l = this.world.getLightFromNeighbors(pos);
 			
-			if (this.worldObj.isThundering())
+			if (this.world.isThundering())
 			{
-				int i1 = this.worldObj.getSkylightSubtracted();
-				this.worldObj.setSkylightSubtracted(10);
-				l = this.worldObj.getLightFromNeighbors(pos);
-				this.worldObj.setSkylightSubtracted(i1);
+				int i1 = this.world.getSkylightSubtracted();
+				this.world.setSkylightSubtracted(10);
+				l = this.world.getLightFromNeighbors(pos);
+				this.world.setSkylightSubtracted(i1);
 			}
 			
 			return l >= this.rand.nextInt(8);

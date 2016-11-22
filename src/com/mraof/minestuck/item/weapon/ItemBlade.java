@@ -56,10 +56,10 @@ public class ItemBlade extends ItemSword	//To allow enchantments such as sharpne
 		itemStack.damageItem(1, attacker);
 		if (bladeType.equals(EnumBladeType.SORD) && attacker.getRNG().nextFloat() < .25)
 		{
-			EntityItem sord = new EntityItem(attacker.worldObj, attacker.posX, attacker.posY, attacker.posZ, itemStack.copy());
+			EntityItem sord = new EntityItem(attacker.world, attacker.posX, attacker.posY, attacker.posZ, itemStack.copy());
 			sord.getEntityItem().stackSize = 1;
 			sord.setPickupDelay(40);
-			attacker.worldObj.spawnEntityInWorld(sord);
+			attacker.world.spawnEntity(sord);
 			itemStack.stackSize--;
 		}
 		else if(bladeType.equals(EnumBladeType.FIREPOKER))
@@ -94,8 +94,8 @@ public class ItemBlade extends ItemSword	//To allow enchantments such as sharpne
 		Multimap multimap = HashMultimap.create();
 		if(slot == EntityEquipmentSlot.MAINHAND)
 		{
-			multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", bladeType.getDamageVsEntity(), 0));
-			multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", bladeType.getAttackSpeed(), 0));
+			multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", bladeType.getDamageVsEntity(), 0));
+			multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", bladeType.getAttackSpeed(), 0));
 		}
 		return multimap;
 	}

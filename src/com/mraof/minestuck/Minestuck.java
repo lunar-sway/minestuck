@@ -21,7 +21,7 @@ import net.minecraftforge.fml.common.event.FMLServerStoppedEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import codechicken.nei.NEIModContainer;
+//import codechicken.nei.NEIModContainer;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.ClientProxy;
@@ -42,7 +42,7 @@ import com.mraof.minestuck.event.MinestuckFluidHandler;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.nei.NEIMinestuckConfig;
+//import com.mraof.minestuck.nei.NEIMinestuckConfig;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
@@ -204,7 +204,7 @@ public class Minestuck
 
 		//register NEI stuff
 		if (Loader.isModLoaded("NotEnoughItems")) {
-			NEIModContainer.plugins.add(new NEIMinestuckConfig());
+//			NEIModContainer.plugins.add(new NEIMinestuckConfig());
 		}
 	}
 
@@ -240,8 +240,8 @@ public class Minestuck
 		event.registerServerCommand(new CommandSburbServer());
 		event.registerServerCommand(new CommandSetRung());
 		
-		worldSeed = event.getServer().worldServers[0].getSeed();
-		ServerEventHandler.lastDay = event.getServer().worldServers[0].getWorldTime() / 24000L;
+		worldSeed = event.getServer().worlds[0].getSeed();
+		ServerEventHandler.lastDay = event.getServer().worlds[0].getWorldTime() / 24000L;
 		CaptchaDeckHandler.rand = new Random();
 	}
 	

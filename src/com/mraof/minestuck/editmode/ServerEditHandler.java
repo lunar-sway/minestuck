@@ -88,7 +88,7 @@ public class ServerEditHandler
 	 */
 	public static void onPlayerExit(EntityPlayer player)
 	{
-		if(!player.worldObj.isRemote)
+		if(!player.world.isRemote)
 			reset(getData(player));
 	}
 	
@@ -161,7 +161,7 @@ public class ServerEditHandler
 		if(c != null && c.getServerIdentifier().equals(computerOwner) && getData(c) == null && getData(player) == null)
 		{
 			Debug.info("Activating edit mode on player \""+player.getName()+"\", target player: \""+computerTarget+"\".");
-			EntityDecoy decoy = new EntityDecoy((WorldServer) player.worldObj, player);
+			EntityDecoy decoy = new EntityDecoy((WorldServer) player.world, player);
 			EditData data = new EditData(decoy, player, c);
 			if(!c.enteredGame())
 			{
@@ -170,12 +170,12 @@ public class ServerEditHandler
 			}
 			if(!setPlayerStats(player, c))
 			{
-				player.addChatMessage(new TextComponentString(TextFormatting.RED+"Failed to activate edit mode."));
+				player.sendStatusMessage(new TextComponentString(TextFormatting.RED+"Failed to activate edit mode."));
 				return;
 			}
 			if(c.inventory != null)
 				player.inventory.readFromNBT(c.inventory);
-			decoy.worldObj.spawnEntityInWorld(decoy);
+			decoy.world.spawnEntity(decoy);
 			list.add(data);
 			MinestuckPacket packet = MinestuckPacket.makePacket(Type.SERVER_EDIT, computerTarget, c.centerX, c.centerZ, c.givenItems());
 			MinestuckChannelHandler.sendToPlayer(packet, player);
@@ -259,7 +259,7 @@ public class ServerEditHandler
 	public void onTossEvent(ItemTossEvent event)
 	{
 		InventoryPlayer inventory = event.getPlayer().inventory;
-		if(!event.getEntity().worldObj.isRemote && getData(event.getPlayer()) != null)
+		if(!event.getEntity().world.isRemote && getData(event.getPlayer()) != null)
 		{
 			EditData data = getData(event.getPlayer());
 			ItemStack stack = event.getEntityItem().getEntityItem();
@@ -294,7 +294,7 @@ public class ServerEditHandler
 	@SubscribeEvent
 	public void onItemPickupEvent(EntityItemPickupEvent event)
 	{
-		if(!event.getEntity().worldObj.isRemote && getData(event.getEntityPlayer()) != null)
+		if(!event.getEntity().world.isRemote && getData(event.getEntityPlayer()) != null)
 			event.setCanceled(true);
 	}
 	
@@ -360,7 +360,7 @@ public class ServerEditHandler
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public void onBlockBreak(PlayerInteractEvent.LeftClickBlock event)
 	{
-		if(!event.getEntity().worldObj.isRemote && getData(event.getEntityPlayer()) != null)
+		if(!event.getEntity().world.isRemote && getData(event.getEntityPlayer()) != null)
 		{
 			EditData data = getData(event.getEntityPlayer());
 			GristHelper.decrease(data.connection.getClientIdentifier(), new GristSet(GristType.Build,1));
@@ -404,7 +404,7 @@ public class ServerEditHandler
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public void onAttackEvent(AttackEntityEvent event)
 	{
-		if(!event.getEntity().worldObj.isRemote && getData(event.getEntityPlayer()) != null)
+		if(!event.getEntity().world.isRemote && getData(event.getEntityPlayer()) != null)
 			event.setCanceled(true);
 	}
 	
@@ -515,9 +515,9 @@ public class ServerEditHandler
 		try
 		{
 			MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-			if(commands.contains(event.getCommand().getCommandName()))
+			if(commands.contains(event.getCommand().getName()))
 			{
-				String c = event.getCommand().getCommandName();
+				String c = event.getCommand().getName();
 				EntityPlayer target;
 				if(c.equals("kill") || (c.equals("clear") || c.equals("spawnpoint")) && event.getParameters().length == 0
 						|| c.equals("tp") && event.getParameters().length != 2 && event.getParameters().length != 4

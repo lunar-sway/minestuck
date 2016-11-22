@@ -10,7 +10,6 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
-import codechicken.lib.gui.GuiDraw;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.util.GristAmount;
@@ -124,7 +123,7 @@ public class GuiUtil
 					if(!needStr.equals(String.valueOf(need)) && mouseX >= GRIST_BOARD_WIDTH/2*col && mouseX < GRIST_BOARD_WIDTH/2*col + fontRenderer.getStringWidth(needStr))
 						return Arrays.asList(String.valueOf(need));
 					
-					int width = GuiDraw.getStringWidth(needStr + " " + entry.getType().getDisplayName() + " (");
+					int width = fontRenderer.getStringWidth(needStr + " " + entry.getType().getDisplayName() + " (");
 					int have = playerGrist.getGrist(entry.getType());
 					String haveStr = addSuffix(have);
 					

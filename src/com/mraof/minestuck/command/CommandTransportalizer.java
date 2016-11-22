@@ -21,13 +21,13 @@ public class CommandTransportalizer extends CommandBase
 {
 	
 	@Override
-	public String getCommandName()
+	public String getName()
 	{
 		return "tpz";
 	}
 	
 	@Override
-	public String getCommandUsage(ICommandSender sender)
+	public String getUsage(ICommandSender sender)
 	{
 		return "commands.tpz.usage";
 	}
@@ -42,7 +42,7 @@ public class CommandTransportalizer extends CommandBase
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException
 	{
 		if(args.length < 1 || args.length > 2)
-			throw new WrongUsageException(this.getCommandUsage(sender));
+			throw new WrongUsageException(this.getUsage(sender));
 		
 		String code;
 		EntityPlayerMP player;	//TODO make it possible to apply this command to more than just players

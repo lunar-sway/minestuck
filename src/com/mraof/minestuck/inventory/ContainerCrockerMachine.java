@@ -48,7 +48,7 @@ public class ContainerCrockerMachine extends Container
 	@Override
 	public boolean canInteractWith(EntityPlayer player)
 	{
-		return tileEntity.isUseableByPlayer(player);
+		return tileEntity.isUsableByPlayer(player);
 	}
 	
 	protected void bindPlayerInventory(InventoryPlayer inventoryPlayer)

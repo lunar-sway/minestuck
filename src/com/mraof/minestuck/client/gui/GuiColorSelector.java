@@ -135,7 +135,7 @@ public class GuiColorSelector extends GuiScreen
 			if(ColorCollector.playerColor == -1)
 				message = new TextComponentTranslation("message.selectDefaultColor");
 			else message = new TextComponentTranslation("message.selectColor");
-			this.mc.thePlayer.addChatMessage(new TextComponentString("[Minestuck] ").appendSibling(message));
+			this.mc.player.sendStatusMessage(new TextComponentString("[Minestuck] ").appendSibling(message));
 		}
 	}
 	

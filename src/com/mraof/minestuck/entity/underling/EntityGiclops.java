@@ -32,7 +32,7 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 		setSize(8.0F, 12.0F);
 		this.stepHeight = 2;
 		topPart = new EntityUnderlingPart(this, 0, 6.0F, 7.0F);
-		world.spawnEntityInWorld(topPart);
+		world.spawnEntity(topPart);
 	}
 
 	@Override
@@ -122,7 +122,7 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 	{
 		super.onEntityUpdate();
 		this.updatePartPositions();
-		if(!worldObj.isRemote && MinestuckConfig.disableGiclops)
+		if(!world.isRemote && MinestuckConfig.disableGiclops)
 			this.setDead();
 	}
 	
@@ -142,7 +142,7 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 	@Override
 	public World getWorld() 
 	{
-		return this.worldObj;
+		return this.world;
 	}
 	
 	@Override
@@ -186,7 +186,7 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 	{
 		super.onDeath(cause);
 		Entity entity = cause.getEntity();
-		if(this.dead && !this.worldObj.isRemote && type != null)
+		if(this.dead && !this.world.isRemote && type != null)
 		{
 			computePlayerProgress((int) (500*type.getPower() + 1000));
 			if(entity != null && entity instanceof EntityPlayerMP)

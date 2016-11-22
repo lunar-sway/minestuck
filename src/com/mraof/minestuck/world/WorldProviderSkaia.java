@@ -15,7 +15,7 @@ public class WorldProviderSkaia extends WorldProvider
 	@Override
 	public IChunkGenerator createChunkGenerator()
 	{
-		return new ChunkProviderSkaia(this.worldObj, this.worldObj.getSeed(), true);
+		return new ChunkProviderSkaia(this.world, this.world.getSeed(), true);
 	}
 	
 	@Override
@@ -55,6 +55,6 @@ public class WorldProviderSkaia extends WorldProvider
 		int centerZ = ((int)player.posZ) >> 4;
 		for(int x = centerX - 1; x <= centerX + 1; x++)
 			for(int z = centerZ - 1; z <= centerZ + 1; z++)
-				this.worldObj.getChunkProvider().provideChunk(x, z);
+				this.world.getChunkProvider().provideChunk(x, z);
 	}
 }

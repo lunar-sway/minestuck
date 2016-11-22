@@ -39,8 +39,8 @@ public class GateHandler
 		if(gateId == 1)
 		{
 			BlockPos pos = getGatePos(-1, dim);
-			Random rand = player.worldObj.rand;
-			BlockPos spawn = player.worldObj.provider.getSpawnPoint();
+			Random rand = player.world.rand;
+			BlockPos spawn = player.world.provider.getSpawnPoint();
 			if(pos != null)
 				do
 				{
@@ -54,8 +54,8 @@ public class GateHandler
 					
 					BlockPos placement = pos.add(x, 0, z);
 					
-					if(player.worldObj.getBiomeForCoordsBody(placement) == BiomeMinestuck.mediumNormal)
-						location = new Location(player.worldObj.getTopSolidOrLiquidBlock(placement), dim);
+					if(player.world.getBiomeForCoordsBody(placement) == BiomeMinestuck.mediumNormal)
+						location = new Location(player.world.getTopSolidOrLiquidBlock(placement), dim);
 					
 				} while(location == null);	//TODO replace with a more friendly version without a chance of freezing the game
 			else Debug.errorf("Unexpected error: Couldn't find position for land gate for dimension %d.", dim);
@@ -92,7 +92,7 @@ public class GateHandler
 					
 					location = new Location(gatePos, clientDim);
 				}
-				else player.addChatMessage(new TextComponentTranslation("message.gateMissingLand"));
+				else player.sendStatusMessage(new TextComponentTranslation("message.gateMissingLand"));
 			} else Debug.errorf("Unexpected error: Can't find connection for dimension %d!", dim);
 		} else if(gateId == -1)
 		{
@@ -106,7 +106,7 @@ public class GateHandler
 					int serverDim = serverConnection.getClientDimension();
 					location = new Location(getGatePos(2, serverDim), serverDim);
 					
-				} else player.addChatMessage(new TextComponentTranslation("message.gateMissingLand"));
+				} else player.sendStatusMessage(new TextComponentTranslation("message.gateMissingLand"));
 				
 			} else Debug.errorf("Unexpected error: Can't find connection for dimension %d!", dim);
 		} else Debug.errorf("Unexpected error: Gate id %d is out of bounds!", gateId);
@@ -122,7 +122,7 @@ public class GateHandler
 				if(block.getBlock() != MinestuckBlocks.gate)
 				{
 					Debug.debugf("Can't find destination gate at %s. Probably destroyed.", location);
-					player.addChatMessage(new TextComponentTranslation("message.gateDestroyed"));
+					player.sendStatusMessage(new TextComponentTranslation("message.gateDestroyed"));
 					return;
 				}
 			}

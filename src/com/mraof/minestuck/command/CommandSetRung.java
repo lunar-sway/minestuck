@@ -15,13 +15,13 @@ public class CommandSetRung extends CommandBase
 {
 	
 	@Override
-	public String getCommandName()
+	public String getName()
 	{
 		return "setRung";
 	}
 	
 	@Override
-	public String getCommandUsage(ICommandSender sender)
+	public String getUsage(ICommandSender sender)
 	{
 		return "commands.setRung.usage";
 	}
@@ -30,7 +30,7 @@ public class CommandSetRung extends CommandBase
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException
 	{
 		if(args.length < 2)
-			throw new WrongUsageException(this.getCommandUsage(sender));
+			throw new WrongUsageException(this.getUsage(sender));
 		
 		PlayerIdentifier target = IdentifierHandler.getForCommand(server, sender, args[0]);
 		

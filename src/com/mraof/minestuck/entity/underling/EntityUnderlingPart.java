@@ -123,7 +123,7 @@ public class EntityUnderlingPart extends EntityLiving implements IEntityAddition
 	
 	public void setBaseById(int baseId)
 	{
-		Entity base = this.worldObj.getEntityByID(baseId);
+		Entity base = this.world.getEntityByID(baseId);
 		if(base != null)
 		{
 			this.baseEntity = (IEntityMultiPart) base;

@@ -47,14 +47,14 @@ public abstract class EntityBishop extends EntityCarapacian implements IRangedAt
 		double distanceY = entityliving.getEntityBoundingBox().minY + (double)(entityliving.height / 2.0F) - (this.posY + (double)(this.height / 2.0F));
 		double distanceZ = entityliving.posZ - this.posZ;
 		
-		EntityLargeFireball entitylargefireball = new EntityLargeFireball(this.worldObj, this, distanceX, distanceY, distanceZ);
+		EntityLargeFireball entitylargefireball = new EntityLargeFireball(this.world, this, distanceX, distanceY, distanceZ);
 		entitylargefireball.explosionPower = 1;
 		double d8 = (double)this.width;
 		Vec3d vec3 = this.getLook(1.0F);
 		entitylargefireball.posX = (this.getEntityBoundingBox().minX + this.getEntityBoundingBox().maxX) / 2.0F  + vec3.xCoord * d8;
 		entitylargefireball.posY = this.posY + (double)(this.height / 2.0F);
 		entitylargefireball.posZ = (this.getEntityBoundingBox().minZ + this.getEntityBoundingBox().maxZ) / 2.0F + vec3.zCoord * d8;
-		this.worldObj.spawnEntityInWorld(entitylargefireball);
+		this.world.spawnEntity(entitylargefireball);
 	}
 	public int getAttackStrength(Entity par1Entity)
 	{
@@ -103,7 +103,7 @@ public abstract class EntityBishop extends EntityCarapacian implements IRangedAt
 	{
 		super.setItemStackToSlot(slotIn, stack);
 		
-		if (!this.worldObj.isRemote && slotIn == EntityEquipmentSlot.MAINHAND)
+		if (!this.world.isRemote && slotIn == EntityEquipmentSlot.MAINHAND)
 		{
 			this.setCombatTask();
 		}

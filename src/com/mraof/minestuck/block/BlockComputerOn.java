@@ -145,7 +145,7 @@ public class BlockComputerOn extends Block implements ITileEntityProvider
 			entityItem.motionX = rand.nextGaussian() * factor;
 			entityItem.motionY = rand.nextGaussian() * factor + 0.2F;
 			entityItem.motionZ = rand.nextGaussian() * factor;
-			world.spawnEntityInWorld(entityItem);
+			world.spawnEntity(entityItem);
 		}
 		if((Boolean) state.getValue(BSOD))
 		{
@@ -156,7 +156,7 @@ public class BlockComputerOn extends Block implements ITileEntityProvider
 			entityItem.motionX = rand.nextGaussian() * factor;
 			entityItem.motionY = rand.nextGaussian() * factor + 0.2F;
 			entityItem.motionZ = rand.nextGaussian() * factor;
-			world.spawnEntityInWorld(entityItem);
+			world.spawnEntity(entityItem);
 		}
 	}
 	@Override

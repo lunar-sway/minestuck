@@ -95,11 +95,11 @@ public class CaptchaDeckHandler
 	
 	public static void launchAnyItem(EntityPlayer player, ItemStack item)
 	{
-		EntityItem entity = new EntityItem(player.worldObj, player.posX, player.posY+1, player.posZ, item);
+		EntityItem entity = new EntityItem(player.world, player.posX, player.posY+1, player.posZ, item);
 		entity.motionX = rand.nextDouble() - 0.5;
 		entity.motionZ = rand.nextDouble() - 0.5;
 		entity.setDefaultPickupDelay();
-		player.worldObj.spawnEntityInWorld(entity);
+		player.world.spawnEntity(entity);
 	}
 	
 	public static void useItem(EntityPlayerMP player)

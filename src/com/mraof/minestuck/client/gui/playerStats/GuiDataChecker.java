@@ -87,7 +87,7 @@ public class GuiDataChecker extends GuiScreen
 			if(isScrolling)
 			{
 				displayIndex = (mouseY -  yOffset - 28.5F)/91;
-				displayIndex = MathHelper.clamp_float(displayIndex, 0.0F, 1.0F);
+				displayIndex = MathHelper.clamp(displayIndex, 0.0F, 1.0F);
 				int newIndex = (int) ((guiComponent.getComponentList().size() - 5)*displayIndex + 0.5);
 				if(newIndex != index)
 				{
@@ -165,7 +165,7 @@ public class GuiDataChecker extends GuiScreen
 			if(i > 0)
 				index -= 1;
 			else index += 1;
-			index = MathHelper.clamp_int(index, 0, size - 5);
+			index = MathHelper.clamp(index, 0, size - 5);
 			
 			if(index != prevIndex)
 			{

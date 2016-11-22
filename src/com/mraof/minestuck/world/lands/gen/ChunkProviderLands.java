@@ -149,7 +149,7 @@ public class ChunkProviderLands implements IChunkGenerator
 		Chunk chunk = new Chunk(this.landWorld, primer, chunkX, chunkZ);
 		chunk.generateSkylightMap();
 		
-		Biome[] biomes = landWorld.getBiomeProvider().loadBlockGeneratorData(null, chunkX * 16, chunkZ * 16, 16, 16);
+		Biome[] biomes = landWorld.getBiomeProvider().getBiomes(null, chunkX * 16, chunkZ * 16, 16, 16);
 		
 		byte[] chunkBiomes = chunk.getBiomeArray();
 		for(int i = 0; i < chunkBiomes.length; i++)

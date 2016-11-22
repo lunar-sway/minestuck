@@ -46,14 +46,14 @@ public class LandStructureHandler extends MapGenStructure
 	
 	public boolean isInsideDungeon(BlockPos pos)
 	{
-		this.initializeStructureData(this.worldObj);
+		this.initializeStructureData(this.world);
 		StructureStart structure = this.getStructureAt(pos);
 		return structure != null && (structure instanceof ImpDungeonStart);
 	}
 	
 	public LandStructureHandler(ChunkProviderLands chunkProvider)
 	{
-		this.worldObj = chunkProvider.landWorld;
+		this.world = chunkProvider.landWorld;
 		
 		structures.addAll(genericStructures);
 		this.chunkProvider = chunkProvider;
@@ -79,7 +79,7 @@ public class LandStructureHandler extends MapGenStructure
 		
 		x /= this.MAX_STRUCTURE_DISTANCE;
 		z /= this.MAX_STRUCTURE_DISTANCE;
-		Random random = this.worldObj.setRandomSeed(x, z, 59273643^worldObj.provider.getDimension());
+		Random random = this.world.setRandomSeed(x, z, 59273643^world.provider.getDimension());
 		x *= this.MAX_STRUCTURE_DISTANCE;
 		z *= this.MAX_STRUCTURE_DISTANCE;
 		x += random.nextInt(this.MAX_STRUCTURE_DISTANCE - this.MIN_STRUCTURE_DISTANCE);
@@ -87,8 +87,8 @@ public class LandStructureHandler extends MapGenStructure
 		
 		if (chunkX == x && chunkZ == z)
 		{
-			Random entryRand = worldObj.setRandomSeed(chunkX , chunkZ, 34527185^worldObj.provider.getDimension());
-			Biome biome = this.worldObj.getBiomeProvider().getBiomeGenerator(new BlockPos(new BlockPos(chunkX*16 + 8, 0, chunkZ*16 + 8)));
+			Random entryRand = world.setRandomSeed(chunkX , chunkZ, 34527185^world.provider.getDimension());
+			Biome biome = this.world.getBiomeProvider().getBiome(new BlockPos(new BlockPos(chunkX*16 + 8, 0, chunkZ*16 + 8)));
 			StructureEntry entry = getRandomEntry(entryRand);
 			
 			return !chunkProvider.isBBInSpawn(new StructureBoundingBox(chunkX*16 - 16, chunkZ*16 - 16, chunkX*16 + 32, chunkZ*16 + 32))	//This chunk and the chunks around it.
@@ -107,9 +107,9 @@ public class LandStructureHandler extends MapGenStructure
 	@Override
 	protected StructureStart getStructureStart(int chunkX, int chunkZ)
 	{
-		Random rand = worldObj.setRandomSeed(chunkX , chunkZ, 34527185^worldObj.provider.getDimension());
+		Random rand = world.setRandomSeed(chunkX , chunkZ, 34527185^world.provider.getDimension());
 		
-		return getRandomEntry(rand).createInstance(chunkProvider, worldObj, rand, chunkX, chunkZ);
+		return getRandomEntry(rand).createInstance(chunkProvider, world, rand, chunkX, chunkZ);
 	}
 	
 	private StructureEntry getRandomEntry(Random random)

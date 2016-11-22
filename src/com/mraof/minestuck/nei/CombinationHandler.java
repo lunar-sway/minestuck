@@ -1,4 +1,4 @@
-package com.mraof.minestuck.nei;
+/*package com.mraof.minestuck.nei;
 
 import static codechicken.lib.gui.GuiDraw.changeTexture;
 
@@ -194,3 +194,4 @@ public class CombinationHandler extends TemplateRecipeHandler
 	}
 
 }
+*/

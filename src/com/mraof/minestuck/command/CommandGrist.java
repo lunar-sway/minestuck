@@ -21,13 +21,13 @@ import net.minecraft.util.text.TextComponentTranslation;
 public class CommandGrist extends CommandBase
 {
 	@Override
-	public String getCommandName()
+	public String getName()
 	{
 		return "grist";
 	}
 	
 	@Override
-	public String getCommandUsage(ICommandSender sender)
+	public String getUsage(ICommandSender sender)
 	{
 		return "commands.grist.usage";
 	}
@@ -42,7 +42,7 @@ public class CommandGrist extends CommandBase
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException
 	{
 		if(args.length < 1 || (!args[0].equalsIgnoreCase("get") && args.length < 2))
-			throw new WrongUsageException(this.getCommandUsage(sender));
+			throw new WrongUsageException(this.getUsage(sender));
 		
 		String command = args[0];
 		PlayerIdentifier identifier;
@@ -59,7 +59,7 @@ public class CommandGrist extends CommandBase
 		}
 		
 		if((args.length - offset) % 2  != 0)
-			throw new WrongUsageException(this.getCommandUsage(sender));
+			throw new WrongUsageException(this.getUsage(sender));
 		
 		String displayName = identifier.getUsername();
 		
@@ -84,7 +84,7 @@ public class CommandGrist extends CommandBase
 			for(GristAmount amount : MinestuckPlayerData.getGristSet(identifier).getArray())
 				grist.append("\n" + amount.getAmount() + " " + amount.getType().getDisplayName());	//TODO properly translate display name for client side
 			
-			sender.addChatMessage(new TextComponentTranslation("commands.grist.get", displayName, grist.toString()));
+			sender.sendMessage(new TextComponentTranslation("commands.grist.get", displayName, grist.toString()));
 		} else throw new WrongUsageException("commands.invalidSubCommand", command);
 	}
 

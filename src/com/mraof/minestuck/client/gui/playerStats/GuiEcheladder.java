@@ -54,7 +54,7 @@ public class GuiEcheladder extends GuiPlayerStats
 	public void initGui()
 	{
 		super.initGui();
-		scrollIndex = MathHelper.clamp_int((MinestuckPlayerData.rung - 8)*14, 0, MAX_SCROLL);
+		scrollIndex = MathHelper.clamp((MinestuckPlayerData.rung - 8)*14, 0, MAX_SCROLL);
 		animatedRung = Math.max(animatedRung, lastRung);	//If you gain a rung while the gui is open, the animated rung might get higher than the lastRung. Otherwise they're always the same value.
 		fromRung = lastRung;
 		lastRung = MinestuckPlayerData.rung;
@@ -234,7 +234,7 @@ public class GuiEcheladder extends GuiPlayerStats
 		if(isScrolling)
 		{
 			scrollIndex = (int) (MAX_SCROLL*(ycor - yOffset - 179)/-130F);
-			scrollIndex = MathHelper.clamp_int(scrollIndex, 0, MAX_SCROLL);
+			scrollIndex = MathHelper.clamp(scrollIndex, 0, MAX_SCROLL);
 		}
 		wasClicking = mouseButtonDown;
 		
@@ -271,7 +271,7 @@ public class GuiEcheladder extends GuiPlayerStats
 			if(i > 0)
 				scrollIndex += 14;
 			else scrollIndex -= 14;
-			scrollIndex = MathHelper.clamp_int(scrollIndex, 0, MAX_SCROLL);
+			scrollIndex = MathHelper.clamp(scrollIndex, 0, MAX_SCROLL);
 		}
 	}
 	
@@ -281,8 +281,8 @@ public class GuiEcheladder extends GuiPlayerStats
 		super.mouseClicked(xcor, ycor, mouseButton);
 		if(mouseButton == 0&& xcor >= xOffset + 80 && xcor < xOffset + 87)
 			if(ycor >= yOffset + 35 && ycor < yOffset + 42)
-				scrollIndex = MathHelper.clamp_int(scrollIndex + 14, 0, MAX_SCROLL);
+				scrollIndex = MathHelper.clamp(scrollIndex + 14, 0, MAX_SCROLL);
 			else if(ycor >= yOffset + 185 && ycor < yOffset + 192)
-				scrollIndex = MathHelper.clamp_int(scrollIndex - 14, 0, MAX_SCROLL);
+				scrollIndex = MathHelper.clamp(scrollIndex - 14, 0, MAX_SCROLL);
 	}
 }

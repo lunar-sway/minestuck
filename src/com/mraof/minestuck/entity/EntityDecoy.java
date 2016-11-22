@@ -150,7 +150,7 @@ public class EntityDecoy extends EntityLiving {
 	}
 	
 	protected void setupCustomSkin() {
-		if (this.worldObj.isRemote && username != null && !username.isEmpty()){
+		if (this.world.isRemote && username != null && !username.isEmpty()){
 			locationSkin = AbstractClientPlayer.getLocationSkin(username);
 			//locationCape = AbstractClientPlayer.getLocationCape(username);
 			downloadImageSkin = AbstractClientPlayer.getDownloadImageSkin(locationSkin, username);
@@ -183,7 +183,7 @@ public class EntityDecoy extends EntityLiving {
 			return;
 		}
 		super.onUpdate();
-		if(worldObj.isRemote && !init ){
+		if(world.isRemote && !init ){
 			username = dataManager.get(USERNAME);
 			this.rotationYawHead = dataManager.get(ROTATION_YAW_HEAD);
 			prevRotationYawHead = rotationYawHead;
@@ -201,7 +201,7 @@ public class EntityDecoy extends EntityLiving {
 		if(isFlying)
 			posY = prevPosY;
 		
-		if(!worldObj.isRemote)
+		if(!world.isRemote)
 		{
 			foodStats.onUpdate(player);
 			if(this.locationChanged())
@@ -217,7 +217,7 @@ public class EntityDecoy extends EntityLiving {
 	
 	@Override
 	public boolean attackEntityFrom(DamageSource damageSource, float par2) {
-		if (!worldObj.isRemote && (!gameType.equals(GameType.CREATIVE) || damageSource.canHarmInCreative()))
+		if (!world.isRemote && (!gameType.equals(GameType.CREATIVE) || damageSource.canHarmInCreative()))
 			ServerEditHandler.reset(damageSource, par2, ServerEditHandler.getData(this));
 		return true;
 	}

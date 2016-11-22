@@ -174,7 +174,7 @@ public class MinestuckPlayerData {
 	
 	public static GristSet getGristSet(EntityPlayer player)
 	{
-		if(player.worldObj.isRemote)
+		if(player.world.isRemote)
 			return getClientGrist();
 		else return getGristSet(IdentifierHandler.encode(player));
 	}

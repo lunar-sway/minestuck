@@ -78,11 +78,11 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 	@Override
 	public void attackEntityWithRangedAttack(EntityLivingBase target, float f1) 
 	{
-		EntityArrow arrow = new EntityTippedArrow(this.worldObj, this);
+		EntityArrow arrow = new EntityTippedArrow(this.world, this);
 		double d0 = target.posX - this.posX;
 		double d1 = target.getEntityBoundingBox().minY + (double)(target.height / 3.0F) - arrow.posY;
 		double d2 = target.posZ - this.posZ;
-		double d3 = (double)MathHelper.sqrt_double(d0 * d0 + d2 * d2);
+		double d3 = (double)MathHelper.sqrt(d0 * d0 + d2 * d2);
 		arrow.setThrowableHeading(d0, d1 + d3 * 0.2D, d2, 1.6F, 12.0F);
 		int power = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.POWER, this);
 		int punch = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.PUNCH, this);
@@ -108,7 +108,7 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 		//		pawn.initCreature();
 		//		this.worldObj.spawnEntityInWorld(pawn);	
 		//I was just messing around to see if I could make an EntityLiving spawn more EntityLiving, it can
-		this.worldObj.spawnEntityInWorld(arrow);
+		this.world.spawnEntity(arrow);
 	}
 
 	/**
@@ -182,7 +182,7 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 	{
 		super.setItemStackToSlot(slotIn, stack);
 
-		if (!this.worldObj.isRemote && slotIn == EntityEquipmentSlot.MAINHAND)
+		if (!this.world.isRemote && slotIn == EntityEquipmentSlot.MAINHAND)
 		{
 			this.setCombatTask();
 		}

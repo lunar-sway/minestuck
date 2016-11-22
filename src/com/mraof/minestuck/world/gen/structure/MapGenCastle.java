@@ -18,7 +18,7 @@ public class MapGenCastle extends MapGenStructure
     {
         int var3 = chunkX >> 4;
         int var4 = chunkY >> 4;
-        this.rand.setSeed((long)(var3 ^ var4 << 4) ^ this.worldObj.getSeed());
+        this.rand.setSeed((long)(var3 ^ var4 << 4) ^ this.world.getSeed());
         this.rand.nextInt();
         return chunkX == 1 && chunkY == 0;//this.rand.nextInt(3) != 0 ? false : (par1 != (var3 << 4) + 4 + this.rand.nextInt(8) ? false : par2 == (var4 << 4) + 4 + this.rand.nextInt(8));
     }
@@ -26,7 +26,7 @@ public class MapGenCastle extends MapGenStructure
 	@Override
     protected StructureStart getStructureStart(int par1, int par2)
     {
-        return new StructureCastleStart(this.worldObj, this.rand, par1, par2, rand.nextBoolean());
+        return new StructureCastleStart(this.world, this.rand, par1, par2, rand.nextBoolean());
     }
     
 	@Override

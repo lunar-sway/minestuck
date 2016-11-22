@@ -40,7 +40,7 @@ public class TileEntityGate extends TileEntity
 			player.addStat(MinestuckAchievementHandler.returnNode);
 		} else
 		{
-			GateHandler.teleport(gateCount, worldObj.provider.getDimension(), player);
+			GateHandler.teleport(gateCount, world.provider.getDimension(), player);
 		}
 	}
 	
@@ -71,7 +71,7 @@ public class TileEntityGate extends TileEntity
 	public NBTTagCompound getUpdateTag()
 	{
 		NBTTagCompound nbt = super.getUpdateTag();
-		nbt.setInteger("color", SburbHandler.getColorForDimension(this.worldObj.provider.getDimension()));
+		nbt.setInteger("color", SburbHandler.getColorForDimension(this.world.provider.getDimension()));
 		return nbt;
 	}
 	
@@ -79,7 +79,7 @@ public class TileEntityGate extends TileEntity
 	public SPacketUpdateTileEntity getUpdatePacket()
 	{
 		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setInteger("color", SburbHandler.getColorForDimension(this.worldObj.provider.getDimension()));
+		nbt.setInteger("color", SburbHandler.getColorForDimension(this.world.provider.getDimension()));
 		return new SPacketUpdateTileEntity(this.pos, 0, nbt);
 	}
 	
@@ -97,7 +97,7 @@ public class TileEntityGate extends TileEntity
 	
 	public boolean isGate()
 	{
-		return this.worldObj != null ? this.worldObj.getBlockState(this.getPos()).getBlock() != MinestuckBlocks.returnNode : this.gateCount != 0;
+		return this.world != null ? this.world.getBlockState(this.getPos()).getBlock() != MinestuckBlocks.returnNode : this.gateCount != 0;
 	}
 	
 	@SideOnly(Side.CLIENT)

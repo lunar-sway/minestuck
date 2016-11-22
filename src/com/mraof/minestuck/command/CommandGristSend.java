@@ -26,13 +26,13 @@ public class CommandGristSend extends CommandBase
 {
 	
 	@Override
-	public String getCommandName()
+	public String getName()
 	{
 		return "gristSend";
 	}
 	
 	@Override
-	public List getCommandAliases()
+	public List getAliases()
 	{
 		ArrayList<String> list = new ArrayList<String>();
 		list.add("gristSend");
@@ -43,7 +43,7 @@ public class CommandGristSend extends CommandBase
 	}
 	
 	@Override
-	public String getCommandUsage(ICommandSender sender)
+	public String getUsage(ICommandSender sender)
 	{
 		return (sender instanceof EntityPlayerMP) ? "commands.gristSend.usage" : "commands.playerOnly.redirectGrist";
 	}
@@ -56,7 +56,7 @@ public class CommandGristSend extends CommandBase
 		EntityPlayerMP player = (EntityPlayerMP) sender;
 		
 		if(args.length < 3 || args.length % 2 == 0)
-			throw new WrongUsageException(this.getCommandUsage(sender));
+			throw new WrongUsageException(this.getUsage(sender));
 		
 		String receiver = args[0];
 		EntityPlayerMP receivingPlayer = server.getPlayerList().getPlayerByUsername(receiver);
