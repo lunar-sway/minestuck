@@ -13,7 +13,7 @@ import com.mraof.minestuck.entity.EntityMinestuck;
 
 public abstract class EntityConsort extends EntityMinestuck
 {
-
+	
 	public EntityConsort(World world) 
 	{
 		super(world);
@@ -23,14 +23,13 @@ public abstract class EntityConsort extends EntityMinestuck
 		this.tasks.addTask(6, new EntityAILookIdle(this));
 		this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 	}
-
+	
 	@Override
-	protected float getMaximumHealth() 
+	protected float getMaximumHealth()
 	{
 		return 10;
 	}
 	
-
 	@Override
 	public boolean getCanSpawnHere()
 	{

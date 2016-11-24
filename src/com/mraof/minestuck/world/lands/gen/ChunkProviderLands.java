@@ -27,6 +27,7 @@ import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.consort.EntityIguana;
 import com.mraof.minestuck.entity.consort.EntityNakagator;
 import com.mraof.minestuck.entity.consort.EntitySalamander;
+import com.mraof.minestuck.entity.consort.EntityTurtle;
 import com.mraof.minestuck.tileentity.TileEntityGate;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.WorldProviderLands;
@@ -84,6 +85,7 @@ public class ChunkProviderLands implements IChunkGenerator
 		this.consortList.add(new SpawnListEntry(EntityNakagator.class, 2, 1, 10));
 		this.consortList.add(new SpawnListEntry(EntitySalamander.class, 2, 1, 10));
 		this.consortList.add(new SpawnListEntry(EntityIguana.class, 2, 1, 10));
+		this.consortList.add(new SpawnListEntry(EntityTurtle.class, 2, 1, 10));
 		
 		this.dayCycle = aspect1.getDayCycleMode();
 		this.skyColor = aspect1.getFogColor();

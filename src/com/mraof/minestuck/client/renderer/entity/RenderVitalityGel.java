@@ -7,12 +7,11 @@ import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
 import com.mraof.minestuck.entity.item.EntityVitalityGel;
 
-public class RenderVitalityGel extends Render
+public class RenderVitalityGel extends Render<EntityVitalityGel>
 {
 	
 	public RenderVitalityGel(RenderManager manager)
@@ -22,7 +21,8 @@ public class RenderVitalityGel extends Render
 		this.shadowOpaque = .75F;
 	}
 	
-	public void renderGel(EntityVitalityGel entity, double d0, double d1, double d2, float f, float f1)
+	@Override
+	public void doRender(EntityVitalityGel entity, double d0, double d1, double d2, float f, float f1)
 	{
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float)d0, (float)d1 + entity.getSizeByValue()/2, (float)d2);
@@ -47,13 +47,9 @@ public class RenderVitalityGel extends Render
 		GlStateManager.disableRescaleNormal();
 		GlStateManager.popMatrix();
 	}
+	
 	@Override
-	public void doRender(Entity entity, double d0, double d1, double d2, float f, float f1) 
-	{
-		renderGel((EntityVitalityGel) entity, d0, d1, d2, f, f1);
-	}
-	@Override
-	protected ResourceLocation getEntityTexture(Entity entity) 
+	protected ResourceLocation getEntityTexture(EntityVitalityGel entity) 
 	{
 		return new ResourceLocation("minestuck", "textures/entity/vitality_gel.png");
 	}

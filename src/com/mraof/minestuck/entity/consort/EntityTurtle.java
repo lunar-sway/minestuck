@@ -2,10 +2,9 @@ package com.mraof.minestuck.entity.consort;
 
 import net.minecraft.world.World;
 
-public class EntityIguana extends EntityConsort
+public class EntityTurtle extends EntityConsort
 {
-	
-	public EntityIguana(World world)
+	public EntityTurtle(World world)
 	{
 		super(world);
 	}
@@ -13,6 +12,6 @@ public class EntityIguana extends EntityConsort
 	@Override
 	public String getTexture()
 	{
-		return "textures/mobs/iguana.png";
+		return "textures/mobs/turtle.png";
 	}
 }
