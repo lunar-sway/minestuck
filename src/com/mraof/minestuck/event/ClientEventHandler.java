@@ -1,6 +1,10 @@
 package com.mraof.minestuck.event;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.translation.I18n;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
@@ -54,6 +58,21 @@ public class ClientEventHandler
 					Minecraft.getMinecraft().displayGuiScreen(new GuiColorSelector(true));
 			}
 			
+		}
+	}
+	
+	@SubscribeEvent(priority=EventPriority.HIGHEST)
+	public void addCustomTooltip(ItemTooltipEvent event)
+	{
+		//Add config check
+		{
+			ItemStack stack = event.getItemStack();
+			if(stack.getItem().getRegistryName().getResourceDomain().equals("minestuck"))
+			{
+				String name = stack.getUnlocalizedName() + ".tooltip";
+				if(I18n.canTranslate(name))
+					event.getToolTip().add(1, I18n.translateToLocal(name));
+			}
 		}
 	}
 	
