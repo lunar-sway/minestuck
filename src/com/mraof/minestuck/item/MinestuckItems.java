@@ -127,6 +127,8 @@ public class MinestuckItems
 	public static Item threshDvd;
 	public static Item crewPoster;
 	public static Item sbahjPoster;
+	public static Item recordEmissaryOfDance;
+	public static Item recordDanceStab;
 	
 	public static Item.ToolMaterial toolEmerald;
 	public static ItemArmor.ArmorMaterial armorPrismarine;
@@ -230,6 +232,8 @@ public class MinestuckItems
 		threshDvd = GameRegistry.register(new Item().setRegistryName("thresh_dvd")).setUnlocalizedName("threshDvd").setMaxStackSize(1).setCreativeTab(Minestuck.tabMinestuck);
 		crewPoster = GameRegistry.register(new Item().setRegistryName("crew_poster")).setUnlocalizedName("crewPoster").setMaxStackSize(1).setCreativeTab(Minestuck.tabMinestuck);
 		sbahjPoster = GameRegistry.register(new Item().setRegistryName("sbahj_poster")).setUnlocalizedName("sbahjPoster").setMaxStackSize(1).setCreativeTab(Minestuck.tabMinestuck);
+		recordEmissaryOfDance = GameRegistry.register(new ItemMinestuckRecord("emissary", Minestuck.soundEmissaryOfDance).setRegistryName("record_emissary").setUnlocalizedName("record"));
+		recordDanceStab = GameRegistry.register(new ItemMinestuckRecord("danceStab", Minestuck.soundDanceStabDance).setRegistryName("record_dance_stab").setUnlocalizedName("record"));
 		
 		minestuckBucket.addBlock(blockOil.getDefaultState());
 		minestuckBucket.addBlock(blockBlood.getDefaultState());

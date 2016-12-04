@@ -5,6 +5,8 @@ import java.util.Random;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -89,7 +91,10 @@ public class Minestuck
 	public static CreativeTabs tabMinestuck;
 
 	public static long worldSeed = 0;	//TODO proper usage of seed when generating titles, land aspects, and land dimension data
-
+	
+	public static SoundEvent soundEmissaryOfDance;
+	public static SoundEvent soundDanceStabDance;
+	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) 
 	{
@@ -109,6 +114,11 @@ public class Minestuck
 				return MinestuckItems.zillyhooHammer;
 			}
 		};
+		
+		ResourceLocation soundLocation = new ResourceLocation("minestuck", "record.emissary");
+		soundEmissaryOfDance = GameRegistry.register(new SoundEvent(soundLocation), soundLocation);
+		soundLocation = new ResourceLocation("minestuck", "record.danceStab");
+		soundDanceStabDance = GameRegistry.register(new SoundEvent(soundLocation), soundLocation);
 		
 		MinestuckBlocks.registerBlocks();
 		MinestuckItems.registerItems();

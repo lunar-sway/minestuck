@@ -143,6 +143,8 @@ public class MinestuckModelManager
 		register(threshDvd);
 		register(crewPoster);
 		register(sbahjPoster);
+		register(recordEmissaryOfDance);
+		register(recordDanceStab);
 		
 		//Blocks
 		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())
