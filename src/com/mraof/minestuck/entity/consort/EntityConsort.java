@@ -4,6 +4,8 @@ import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
@@ -13,6 +15,8 @@ import com.mraof.minestuck.entity.EntityMinestuck;
 
 public abstract class EntityConsort extends EntityMinestuck
 {
+	
+	ConsortDialogue.Message message;
 	
 	public EntityConsort(World world) 
 	{
@@ -28,6 +32,23 @@ public abstract class EntityConsort extends EntityMinestuck
 	protected float getMaximumHealth()
 	{
 		return 10;
+	}
+	
+	@Override
+	protected boolean processInteract(EntityPlayer player, EnumHand hand, ItemStack stack)
+	{
+		if(this.isEntityAlive() && !player.isSneaking())
+		{
+			if(!player.world.isRemote)
+			{
+				if(message == null)
+					message = ConsortDialogue.getRandomMessage(this, player);
+				player.sendMessage(message.getMessage(this));
+			}
+			
+			return true;
+		}
+		else return super.processInteract(player, hand, stack);
 	}
 	
 	@Override

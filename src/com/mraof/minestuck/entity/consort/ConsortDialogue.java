@@ -8,7 +8,10 @@ import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.ILandAspect;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 
 public class ConsortDialogue
 {
@@ -52,7 +55,7 @@ public class ConsortDialogue
 		addMessage("ringFishing");
 		addMessage("frogWalk");
 		addMessage("deliciousHair");
-		addMessage("village");
+//		addMessage("village"); Did not work as intended
 		addMessage("lazyKing");
 		addMessage("musicInvention");
 		addMessage("rapBattle");
@@ -112,5 +115,23 @@ public class ConsortDialogue
 		ILandAspect aspectRequirement;
 		Class<EntityConsort> consortRequirement;
 		//More conditions
+		
+		public ITextComponent getMessage(EntityConsort consort)
+		{
+			Object[] args = new Object[this.args.length];
+			for(int i = 0; i < this.args.length; i++)
+			{
+				//Assign parameters
+			}
+			TextComponentTranslation message = new TextComponentTranslation("consort."+unlocalizedMessage, args);
+			String s = EntityList.getEntityString(consort);
+			if (s == null)
+			{
+				s = "generic";
+			}
+			TextComponentTranslation entity = new TextComponentTranslation("entity." + s + ".name");
+			
+			return new TextComponentTranslation("%s: %s", entity, message);
+		}
 	}
 }
