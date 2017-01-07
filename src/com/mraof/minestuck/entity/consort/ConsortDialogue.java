@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.ILandAspect;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
@@ -27,8 +28,8 @@ public class ConsortDialogue
 		addMessage(LandAspectRegistry.fromNameTitle("wind"), "dadWind");
 		addMessage(LandAspectRegistry.fromNameTitle("pulse"), "koolaid");
 		addMessage(LandAspectRegistry.fromNameTitle("pulse"), "murderRain");
-		addMessage(LandAspectRegistry.fromNameTitle("storm"), "skeletonHorse");
-		addMessage(LandAspectRegistry.fromNameTitle("storm"), "blueMoon");
+		addMessage(LandAspectRegistry.fromNameTitle("thunder"), "skeletonHorse");
+		addMessage(LandAspectRegistry.fromNameTitle("thunder"), "blueMoon");
 		addMessage(LandAspectRegistry.fromNameTitle("rabbits"), "bunnyBirthday");
 		addMessage(LandAspectRegistry.fromNameTitle("rabbits"), "rabbitEating");
 		addMessage(LandAspectRegistry.fromNameTitle("monsters"), "petZombie");
@@ -73,6 +74,8 @@ public class ConsortDialogue
 	
 	public static void addMessage(ILandAspect aspect, String message, String... args)
 	{
+		if(aspect == null)
+			Debug.warn("Land aspect is null for consort message "+message+", this is probably not intended");
 		addMessage(aspect, null, message, args);
 	}
 	
@@ -113,7 +116,7 @@ public class ConsortDialogue
 		String[] args;
 		
 		ILandAspect aspectRequirement;
-		Class<EntityConsort> consortRequirement;
+		Class<? extends EntityConsort> consortRequirement;
 		//More conditions
 		
 		public ITextComponent getMessage(EntityConsort consort)

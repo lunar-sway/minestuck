@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.mraof.minestuck.entity.consort.EntityConsort;
 import com.mraof.minestuck.world.lands.ILandAspect;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
@@ -87,4 +88,5 @@ public abstract class TerrainLandAspect implements ILandAspect<TerrainLandAspect
 		return new GateStructurePillar();
 	}
 	
+	public abstract Class<? extends EntityConsort> getConsortType();
 }

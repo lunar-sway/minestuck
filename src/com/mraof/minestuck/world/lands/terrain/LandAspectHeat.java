@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.mraof.minestuck.block.BlockMinestuckStone;
 import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.entity.consort.EntityConsort;
+import com.mraof.minestuck.entity.consort.EntityNakagator;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.decorator.FireFieldDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
@@ -83,4 +85,9 @@ public class LandAspectHeat extends TerrainLandAspect
 		return 0.0F;
 	}
 	
+	@Override
+	public Class<? extends EntityConsort> getConsortType()
+	{
+		return EntityNakagator.class;
+	}
 }
