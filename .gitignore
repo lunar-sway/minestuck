@@ -10,3 +10,4 @@
 *.bat
 *.launch
 /run
+/out

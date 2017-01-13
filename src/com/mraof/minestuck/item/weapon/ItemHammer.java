@@ -6,6 +6,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -100,7 +101,23 @@ public class ItemHammer extends ItemWeapon
 		{
 			if (hammerType.equals(EnumHammerType.POGO))
 			{
-				playerIn.motionY = Math.max(playerIn.motionY, Math.min(getPogoMotion(stack)*2, Math.abs(playerIn.motionY) + getPogoMotion(stack)));
+				double velocity = Math.max(playerIn.motionY, Math.min(getPogoMotion(stack) * 2, Math.abs(playerIn.motionY) + getPogoMotion(stack)));
+				final float HORIZONTAL_Y = 6f;
+				switch (facing.getAxis()) {
+					case X:
+					    velocity += Math.abs(playerIn.motionX) / 2;
+						playerIn.motionX = velocity * facing.getDirectionVec().getX();
+						playerIn.motionY = velocity / HORIZONTAL_Y;
+						break;
+					case Y:
+						playerIn.motionY = velocity * facing.getDirectionVec().getY();
+						break;
+					case Z:
+						velocity += Math.abs(playerIn.motionZ) / 2;
+						playerIn.motionZ = velocity * facing.getDirectionVec().getZ();
+						playerIn.motionY = velocity / HORIZONTAL_Y;
+						break;
+				}
 				playerIn.fallDistance = 0;
 				stack.damageItem(1, playerIn);
 				return EnumActionResult.SUCCESS;
