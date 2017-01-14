@@ -14,4 +14,10 @@ public class EntitySalamander extends EntityConsort
 	{
 		return "textures/mobs/salamander.png";
 	}
+	
+	@Override
+	public EnumConsort getConsortType()
+	{
+		return EnumConsort.SALAMANDER;
+	}
 }

@@ -43,7 +43,7 @@ public abstract class EntityConsort extends EntityMinestuck
 			{
 				if(message == null)
 					message = ConsortDialogue.getRandomMessage(this, player);
-				player.sendMessage(message.getMessage(this));
+				player.sendMessage(message.getMessage(this, player));
 			}
 			
 			return true;
@@ -83,4 +83,6 @@ public abstract class EntityConsort extends EntityMinestuck
 			return l >= this.rand.nextInt(8);
 		}
 	}
+	
+	public abstract EnumConsort getConsortType();
 }

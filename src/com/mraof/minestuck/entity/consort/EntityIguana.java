@@ -15,4 +15,10 @@ public class EntityIguana extends EntityConsort
 	{
 		return "textures/mobs/iguana.png";
 	}
+	
+	@Override
+	public EnumConsort getConsortType()
+	{
+		return EnumConsort.IGUANA;
+	}
 }

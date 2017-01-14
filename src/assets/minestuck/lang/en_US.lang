@@ -115,6 +115,8 @@ consort.lazyKing=I feel like our king just sits around doing nothing but eating 
 consort.musicInvention=I invented music, y'kno! My favorite song goes like ba ba dum, dum ba dum.
 consort.rapBattle=I challenge you to a rap battle! Accept challenge? Y/N
 
+consort.awaitHero=Here, in the %s. we %s worship the %s. We wait and hope for the day that they awaken.
+
 echeladder.rung0=Greentike
 echeladder.rung1=Sir Dies-a-lot
 echeladder.rung2=Soil Architect
@@ -177,6 +179,10 @@ entity.minestuck.Salamander.name=Salamander
 entity.minestuck.Nakagator.name=Nakagator
 entity.minestuck.Iguana.name=Iguana
 entity.minestuck.Turtle.name=Turtle
+entity.minestuck.Salamander.plural.name=Salamanders
+entity.minestuck.Nakagator.plural.name=Nakagators
+entity.minestuck.Iguana.plural.name=Iguanas
+entity.minestuck.Turtle.plural.name=Turtles
 
 entity.minestuck.imp.name=Imp
 entity.minestuck.imp.type=%s Imp
