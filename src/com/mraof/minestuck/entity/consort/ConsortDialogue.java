@@ -14,6 +14,7 @@ import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
+import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 
@@ -195,8 +196,18 @@ public class ConsortDialogue
 				} else if(this.args[i].equals("landName"))
 				{
 					if(consort.world.provider instanceof WorldProviderLands) //TODO make land name translate on the client side
-						args[i] = ((WorldProviderLands) consort.world.provider).getDimensionName();
-					else
+					{
+						ChunkProviderLands chunkProvider = (ChunkProviderLands) player.world.provider
+								.createChunkGenerator();
+						ITextComponent aspect1 = new TextComponentTranslation(
+								"land." + chunkProvider.aspect1.getNames()[chunkProvider.nameIndex1]);
+						ITextComponent aspect2 = new TextComponentTranslation(
+								"land." + chunkProvider.aspect2.getNames()[chunkProvider.nameIndex2]);
+						if(chunkProvider.nameOrder)
+							args[i] = new TextComponentTranslation("land.message.check", aspect1, aspect2);
+						else
+							args[i] = new TextComponentTranslation("land.message.check", aspect2, aspect1);
+					} else
 						args[i] = "Land name";
 				} else if(this.args[i].equals("playerTitleLand"))
 				{
