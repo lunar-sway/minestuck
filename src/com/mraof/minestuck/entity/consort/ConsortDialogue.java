@@ -40,7 +40,8 @@ public class ConsortDialogue
 		addMessage(LandAspectRegistry.fromNameTitle("thunder"), "blueMoon");
 		addMessage(LandAspectRegistry.fromNameTitle("rabbits"), "bunnyBirthday");
 		addMessage(LandAspectRegistry.fromNameTitle("rabbits"), "rabbitEating");
-		addMessage(null, Sets.newHashSet(LandAspectRegistry.fromNameTitle("monsters").getVariations()), null, "petZombie");
+		addMessage(null, Sets.newHashSet(LandAspectRegistry.fromNameTitle("monsters").getVariations()), null,
+				"petZombie");
 		addMessage(LandAspectRegistry.fromNameTitle("monsters"), "spiderRaid");
 		addMessage(LandAspectRegistry.fromNameTitle("towers"), "bugTreasure");
 		addMessage(LandAspectRegistry.fromNameTitle("towers"), "towerGone");
@@ -63,12 +64,13 @@ public class ConsortDialogue
 		addMessage("ringFishing");
 		addMessage("frogWalk");
 		addMessage("deliciousHair");
-//		addMessage("village"); Did not work as intended
+		//		addMessage("village"); Did not work as intended
 		addMessage("lazyKing");
 		addMessage("musicInvention");
 		addMessage("rapBattle");
 		
 		addMessage(true, "awaitHero", "landName", "consortTypes", "playerTitleLand");
+		addMessage(true, "watchSkaia");
 	}
 	
 	public static void addMessage(String message, String... args)
@@ -99,18 +101,19 @@ public class ConsortDialogue
 	public static void addMessage(TerrainLandAspect aspect, String message, String... args)
 	{
 		if(aspect == null)
-			Debug.warn("Land aspect is null for consort message "+message+", this is probably not intended");
+			Debug.warn("Land aspect is null for consort message " + message + ", this is probably not intended");
 		addMessage(aspect == null ? null : Sets.newHashSet(aspect), null, null, message, args);
 	}
 	
 	public static void addMessage(TitleLandAspect aspect, String message, String... args)
 	{
 		if(aspect == null)
-			Debug.warn("Land aspect is null for consort message "+message+", this is probably not intended");
+			Debug.warn("Land aspect is null for consort message " + message + ", this is probably not intended");
 		addMessage(null, aspect == null ? null : Sets.newHashSet(aspect), null, message, args);
 	}
 	
-	public static void addMessage(Set<TerrainLandAspect> aspects1, Set<TitleLandAspect> aspects2, EnumSet<EnumConsort> consort, String message, String... args)
+	public static void addMessage(Set<TerrainLandAspect> aspects1, Set<TitleLandAspect> aspects2,
+			EnumSet<EnumConsort> consort, String message, String... args)
 	{
 		Message msg = new Message();
 		msg.unlocalizedMessage = message;
@@ -124,7 +127,7 @@ public class ConsortDialogue
 	
 	public static Message getRandomMessage(EntityConsort consort, EntityPlayer player)
 	{
-		LandAspectRegistry.AspectCombination aspects = MinestuckDimensionHandler.getAspects(consort.dimension);	//Change to a consort home dimension variable, as the current won't work as intended when the consort is moved from one dimension to another
+		LandAspectRegistry.AspectCombination aspects = MinestuckDimensionHandler.getAspects(consort.dimension); //Change to a consort home dimension variable, as the current won't work as intended when the consort is moved from one dimension to another
 		
 		List<Message> list = new ArrayList<Message>();
 		
@@ -144,25 +147,34 @@ public class ConsortDialogue
 		return list.get(consort.world.rand.nextInt(list.size()));
 	}
 	
+	public static Message getMessageFromString(String name)
+	{
+		for(Message message : messages)
+			if(message.unlocalizedMessage.equals(name))
+				return message;
+		return null;
+	}
+	
 	public static class Message
 	{
 		private Message()
-		{}
+		{
+		}
 		
-		boolean reqLand;
+		private boolean reqLand;
 		
-		String unlocalizedMessage;
+		private String unlocalizedMessage;
 		String[] args;
 		
-		Set<TerrainLandAspect> aspect1Requirement;
-		Set<TitleLandAspect> aspect2Requirement;
-		EnumSet<EnumConsort> consortRequirement;
+		private Set<TerrainLandAspect> aspect1Requirement;
+		private Set<TitleLandAspect> aspect2Requirement;
+		private EnumSet<EnumConsort> consortRequirement;
 		//More conditions
 		
 		public ITextComponent getMessage(EntityConsort consort, EntityPlayer player)
 		{
 			String s = EntityList.getEntityString(consort);
-			if (s == null)
+			if(s == null)
 			{
 				s = "generic";
 			}
@@ -175,53 +187,56 @@ public class ConsortDialogue
 					SburbConnection c = SburbHandler.getConnectionForDimension(consort.dimension);
 					if(c != null)
 						args[i] = c.getClientIdentifier().getUsername();
-					else args[i] = "Player name";
-				}
-				else if(this.args[i].equals("playerName"))
+					else
+						args[i] = "Player name";
+				} else if(this.args[i].equals("playerName"))
 				{
 					args[i] = player.getName();
-				}
-				else if(this.args[i].equals("landName"))
+				} else if(this.args[i].equals("landName"))
 				{
-					if(consort.world.provider instanceof WorldProviderLands)	//TODO make land name translate on the client side
+					if(consort.world.provider instanceof WorldProviderLands) //TODO make land name translate on the client side
 						args[i] = ((WorldProviderLands) consort.world.provider).getDimensionName();
-					else args[i] = "Land name";
-				}
-				else if(this.args[i].equals("playerTitleLand"))
+					else
+						args[i] = "Land name";
+				} else if(this.args[i].equals("playerTitleLand"))
 				{
 					SburbConnection c = SburbHandler.getConnectionForDimension(consort.dimension);
 					if(c != null)
 						args[i] = MinestuckPlayerData.getData(c.getClientIdentifier()).title.toString();
-					else args[i] = "Player title";
-				}
-				else if(this.args[i].equals("playerClassLand"))
+					else
+						args[i] = "Player title";
+				} else if(this.args[i].equals("playerClassLand"))
 				{
 					SburbConnection c = SburbHandler.getConnectionForDimension(consort.dimension);
 					if(c != null)
 						args[i] = MinestuckPlayerData.getData(c.getClientIdentifier()).title.getHeroClass().toString();
-					else args[i] = "Player class";
-				}
-				else if(this.args[i].equals("playerAspectLand"))
+					else
+						args[i] = "Player class";
+				} else if(this.args[i].equals("playerAspectLand"))
 				{
 					SburbConnection c = SburbHandler.getConnectionForDimension(consort.dimension);
 					if(c != null)
 						args[i] = MinestuckPlayerData.getData(c.getClientIdentifier()).title.getHeroAspect().toString();
-					else args[i] = "Player aspect";
-				}
-				else if(this.args[i].equals("consortType"))
+					else
+						args[i] = "Player aspect";
+				} else if(this.args[i].equals("consortType"))
 				{
 					args[i] = new TextComponentTranslation("entity." + s + ".name");
-				}
-				else if(this.args[i].equals("consortTypes"))
+				} else if(this.args[i].equals("consortTypes"))
 				{
 					args[i] = new TextComponentTranslation("entity." + s + ".plural.name");
 				}
 			}
 			
-			TextComponentTranslation message = new TextComponentTranslation("consort."+unlocalizedMessage, args);
+			TextComponentTranslation message = new TextComponentTranslation("consort." + unlocalizedMessage, args);
 			TextComponentTranslation entity = new TextComponentTranslation("entity." + s + ".name");
 			
 			return new TextComponentTranslation("%s: %s", entity, message);
+		}
+		
+		public String getString()
+		{
+			return unlocalizedMessage;
 		}
 	}
 }

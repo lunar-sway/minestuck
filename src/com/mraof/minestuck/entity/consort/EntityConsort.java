@@ -5,6 +5,7 @@ import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -17,8 +18,9 @@ public abstract class EntityConsort extends EntityMinestuck
 {
 	
 	ConsortDialogue.Message message;
+	int messageTicksLeft;
 	
-	public EntityConsort(World world) 
+	public EntityConsort(World world)
 	{
 		super(world);
 		setSize(0.6F, 1.5F);
@@ -39,16 +41,29 @@ public abstract class EntityConsort extends EntityMinestuck
 	{
 		if(this.isEntityAlive() && !player.isSneaking())
 		{
-			if(!player.world.isRemote)
+			if(!world.isRemote)
 			{
 				if(message == null)
+				{
 					message = ConsortDialogue.getRandomMessage(this, player);
+					messageTicksLeft = 24000 + world.rand.nextInt(24000);
+				}
 				player.sendMessage(message.getMessage(this, player));
 			}
 			
 			return true;
-		}
-		else return super.processInteract(player, hand, stack);
+		} else
+			return super.processInteract(player, hand, stack);
+	}
+	
+	@Override
+	public void onLivingUpdate()
+	{
+		super.onLivingUpdate();
+		if(messageTicksLeft > 0)
+			messageTicksLeft--;
+		else
+			message = null;
 	}
 	
 	@Override
@@ -64,15 +79,14 @@ public abstract class EntityConsort extends EntityMinestuck
 		int k = MathHelper.floor(this.posZ);
 		BlockPos pos = new BlockPos(i, j, k);
 		
-		if (this.world.getLightFor(EnumSkyBlock.SKY, pos) < this.rand.nextInt(8))
+		if(this.world.getLightFor(EnumSkyBlock.SKY, pos) < this.rand.nextInt(8))
 		{
 			return false;
-		}
-		else
+		} else
 		{
 			int l = this.world.getLightFromNeighbors(pos);
 			
-			if (this.world.isThundering())
+			if(this.world.isThundering())
 			{
 				int i1 = this.world.getSkylightSubtracted();
 				this.world.setSkylightSubtracted(10);
@@ -81,6 +95,30 @@ public abstract class EntityConsort extends EntityMinestuck
 			}
 			
 			return l >= this.rand.nextInt(8);
+		}
+	}
+	
+	@Override
+	public void writeEntityToNBT(NBTTagCompound compound)
+	{
+		super.writeEntityToNBT(compound);
+		
+		if(message != null)
+		{
+			compound.setString("dialogue", message.getString());
+			compound.setInteger("messageTicks", messageTicksLeft);
+		}
+	}
+	
+	@Override
+	public void readEntityFromNBT(NBTTagCompound compound)
+	{
+		super.readEntityFromNBT(compound);
+		
+		if(compound.hasKey("dialogue", 8))
+		{
+			message = ConsortDialogue.getMessageFromString(compound.getString("dialogue"));
+			messageTicksLeft = compound.getInteger("messageTicks");
 		}
 	}
 	
