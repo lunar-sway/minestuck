@@ -1,46 +1,25 @@
 package com.mraof.minestuck.item;
 
-import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemHoe;
-import net.minecraft.item.ItemMultiTexture;
-import net.minecraft.item.ItemSpade;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
-import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-
 import com.google.common.base.Function;
 import com.mraof.minestuck.Minestuck;
-
-import static com.mraof.minestuck.block.MinestuckBlocks.*;
-
 import com.mraof.minestuck.block.BlockColoredDirt;
 import com.mraof.minestuck.block.BlockCrockerMachine;
 import com.mraof.minestuck.block.BlockMinestuckLog;
 import com.mraof.minestuck.block.BlockMinestuckStone;
 import com.mraof.minestuck.item.block.ItemBlockLayered;
 import com.mraof.minestuck.item.block.ItemSburbMachine;
-import com.mraof.minestuck.item.weapon.EnumBattleaxeType;
-import com.mraof.minestuck.item.weapon.EnumBladeType;
-import com.mraof.minestuck.item.weapon.EnumCaneType;
-import com.mraof.minestuck.item.weapon.EnumClubType;
-import com.mraof.minestuck.item.weapon.EnumDiceType;
-import com.mraof.minestuck.item.weapon.EnumHammerType;
-import com.mraof.minestuck.item.weapon.EnumSickleType;
-import com.mraof.minestuck.item.weapon.EnumSporkType;
-import com.mraof.minestuck.item.weapon.ItemBattleaxe;
-import com.mraof.minestuck.item.weapon.ItemBlade;
-import com.mraof.minestuck.item.weapon.ItemCane;
-import com.mraof.minestuck.item.weapon.ItemClub;
-import com.mraof.minestuck.item.weapon.ItemDice;
-import com.mraof.minestuck.item.weapon.ItemHammer;
-import com.mraof.minestuck.item.weapon.ItemSickle;
-import com.mraof.minestuck.item.weapon.ItemSpork;
+import com.mraof.minestuck.item.weapon.*;
+import net.minecraft.block.Block;
+import net.minecraft.init.Items;
+import net.minecraft.init.MobEffects;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.*;
+import net.minecraft.potion.PotionEffect;
+import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+
+import static com.mraof.minestuck.block.MinestuckBlocks.*;
 
 public class MinestuckItems
 {
@@ -134,69 +113,84 @@ public class MinestuckItems
 	public static void registerItems()
 	{
 		//hammers
-		clawHammer = GameRegistry.register(new ItemHammer(EnumHammerType.CLAW).setRegistryName("claw_hammer"));
-		sledgeHammer = GameRegistry.register(new ItemHammer(EnumHammerType.SLEDGE).setRegistryName("sledge_hammer"));
-		blacksmithHammer = GameRegistry.register(new ItemHammer(EnumHammerType.BLACKSMITH).setRegistryName("blacksmith_hammer"));
-		pogoHammer = GameRegistry.register(new ItemHammer(EnumHammerType.POGO).setRegistryName("pogo_hammer"));
-		telescopicSassacrusher = GameRegistry.register(new ItemHammer(EnumHammerType.TELESCOPIC).setRegistryName("telescopic_sassacrusher"));
-		fearNoAnvil = GameRegistry.register(new ItemHammer(EnumHammerType.FEARNOANVIL).setRegistryName("fear_no_anvil"));
-		zillyhooHammer = GameRegistry.register(new ItemHammer(EnumHammerType.ZILLYHOO).setRegistryName("zillyhoo_hammer"));
-		popamaticVrillyhoo = GameRegistry.register(new ItemHammer(EnumHammerType.POPAMATIC).setRegistryName("popamatic_vrillyhoo"));
-		scarletZillyhoo = GameRegistry.register(new ItemHammer(EnumHammerType.SCARLET).setRegistryName("scarlet_zillyhoo"));
-		mwrthwl = GameRegistry.register(new ItemHammer(EnumHammerType.MWRTHWL).setRegistryName("mwrthwl"));
+		clawHammer = GameRegistry.register(new ItemWeapon(131, 4.0D, -2.4D, 10, "clawHammer").setTool("pickaxe", 0, 1.0F).setRegistryName("claw_hammer"));
+		sledgeHammer = GameRegistry.register(new ItemWeapon(250, 6.0D, -2.8D, 8, "sledgeHammer").setTool("pickaxe", 2, 4.0F).setRegistryName("sledge_hammer"));
+		blacksmithHammer = GameRegistry.register(new ItemWeapon(450, 7.0D, -2.8D, 10, "blacksmithHammer").setTool("pickaxe", 2, 3.5F).setRegistryName("blacksmith_hammer"));
+		pogoHammer = GameRegistry.register(new ItemPogoWeapon(400, 7.0D, -2.8D, 8, "pogoHammer", 0.7).setTool("pickaxe", 1, 2.0F).setRegistryName("pogo_hammer"));
+		telescopicSassacrusher = GameRegistry.register(new ItemWeapon(1024, 9.0D, -2.9D, 15, "telescopicSassacrusher").setTool("pickaxe", 2, 5.0F).setRegistryName("telescopic_sassacrusher"));
+		fearNoAnvil = GameRegistry.register(new ItemPotionWeapon(2048, 10.0D, -2.8D, 12, "fearNoAnvil", new PotionEffect(MobEffects.SLOWNESS,100,3)).setTool("pickaxe", 3, 7.0F).setRegistryName("fear_no_anvil"));
+		zillyhooHammer = GameRegistry.register(new ItemWeapon(3000, 11.0D, -2.8D, 30, "zillyhooHammer").setTool("pickaxe", 4, 15.0F).setRegistryName("zillyhoo_hammer"));
+		popamaticVrillyhoo = GameRegistry.register(new ItemWeapon(3000, 0.0D, -2.8D, 30, "popamaticVrillyhoo").setTool("pickaxe", 4, 15.0F).setRegistryName("popamatic_vrillyhoo"));
+		scarletZillyhoo = GameRegistry.register(new ItemFireWeapon(2000, 11.0D, -2.8D, 16, "scarletZillyhoo", 50).setTool("pickaxe", 3, 4.0F).setRegistryName("scarlet_zillyhoo"));
+		mwrthwl = GameRegistry.register(new ItemWeapon(2000, 10.5D, -2.8D, 16, "mwrthwl").setTool("pickaxe", 3, 4.0F).setRegistryName("mwrthwl"));
+
 		
 		//blades
-		sord = GameRegistry.register(new ItemBlade(EnumBladeType.SORD).setRegistryName("sord"));
-		cactusCutlass = GameRegistry.register(new ItemBlade(EnumBladeType.CACTUS).setRegistryName("cactaceae_cutlass"));
-		katana = GameRegistry.register(new ItemBlade(EnumBladeType.NINJA).setRegistryName("katana"));
-		unbreakableKatana = GameRegistry.register(new ItemBlade(EnumBladeType.KATANA).setRegistryName("unbreakable_katana"));
-		firePoker = GameRegistry.register(new ItemBlade(EnumBladeType.FIREPOKER).setRegistryName("fire_poker"));
-		hotHandle = GameRegistry.register(new ItemBlade(EnumBladeType.HOTHANDLE).setRegistryName("too_hot_to_handle"));
-		caledscratch = GameRegistry.register(new ItemBlade(EnumBladeType.CALEDSCRATCH).setRegistryName("caledscratch"));
-		caledfwlch = GameRegistry.register(new ItemBlade(EnumBladeType.CALEDFWLCH).setRegistryName("caledfwlch"));
-		royalDeringer = GameRegistry.register(new ItemBlade(EnumBladeType.DERINGER).setRegistryName("royal_deringer"));
-		zillywairCutlass = GameRegistry.register(new ItemBlade(EnumBladeType.ZILLYWAIR).setRegistryName("cutlass_of_zillywair"));
-		regisword = GameRegistry.register(new ItemBlade(EnumBladeType.REGISWORD).setRegistryName("regisword"));
-		scarletRibbitar = GameRegistry.register(new ItemBlade(EnumBladeType.SCARLET).setRegistryName("scarlet_ribbitar"));
-		doggMachete = GameRegistry.register(new ItemBlade(EnumBladeType.DOGG).setRegistryName("dogg_machete"));
-		
+		sord = GameRegistry.register(new ItemSord(59, 2, -2.4D, 5, "sord").setRegistryName("sord"));
+		cactusCutlass = GameRegistry.register(new ItemWeapon(104, 4, -2.4D, 10, "cactaceaeCutlass").setRegistryName("cactaceae_cutlass"));
+		katana = GameRegistry.register(new ItemWeapon(250, 5, -2.4D, 15, "ninjaSword").setRegistryName("katana"));
+		unbreakableKatana = GameRegistry.register(new ItemWeapon(2200, 7, -2.4D, 20, "katana").setRegistryName("unbreakable_katana"));
+		firePoker = GameRegistry.register(new ItemFireWeapon(250, 6, -2.4D, 15, "firePoker", 30).setRegistryName("fire_poker"));
+		hotHandle = GameRegistry.register(new ItemFireWeapon(350, 5, -2.4D, 15, "hotHandle", 10).setRegistryName("too_hot_to_handle"));
+		caledscratch = GameRegistry.register(new ItemWeapon(1561, 6, -2.4D, 30, "caledscratch").setRegistryName("caledscratch"));
+		caledfwlch = GameRegistry.register(new ItemWeapon(1025, 6, -2.4D, 30, "caledfwlch").setRegistryName("caledfwlch"));
+		royalDeringer = GameRegistry.register(new ItemWeapon(1561, 7, -2.4D, 30, "royalDeringer").setRegistryName("royal_deringer"));
+		zillywairCutlass = GameRegistry.register(new ItemWeapon(2500, 8, -2.4D, 30, "zillywairCutlass").setRegistryName("cutlass_of_zillywair"));
+		regisword = GameRegistry.register(new ItemWeapon(812, 6, -2.4D, 10, "regisword").setRegistryName("regisword"));
+		scarletRibbitar = GameRegistry.register(new ItemWeapon(2000, 7, -2.4D, 30, "scarletRibbitar").setRegistryName("scarlet_ribbitar"));
+		doggMachete = GameRegistry.register(new ItemWeapon(1000, 5, -2.4D, 30, "doggMachete").setRegistryName("dogg_machete"));
+
 		//axes
-		blacksmithBane = GameRegistry.register(new ItemBattleaxe(EnumBattleaxeType.BANE).setRegistryName("blacksmith_bane"));
-		scraxe = GameRegistry.register(new ItemBattleaxe(EnumBattleaxeType.SCRAXE).setRegistryName("scraxe"));
-		rubyCroak = GameRegistry.register(new ItemBattleaxe(EnumBattleaxeType.CROAK).setRegistryName("ruby_croak"));
-		hephaestusLumber = GameRegistry.register(new ItemBattleaxe(EnumBattleaxeType.HEPH).setRegistryName("hephaestus_lumberjack"));
+		blacksmithBane = GameRegistry.register(new ItemWeapon(413, 9.0D, -3.0D, 15, "blacksmithBane").setTool("axe", 2, 6.0F).setRegistryName("blacksmith_bane"));
+		scraxe = GameRegistry.register(new ItemWeapon(500, 10.0D, -3.0D, 20, "scraxe").setTool("axe", 2, 7.0F).setRegistryName("scraxe"));
+		rubyCroak = GameRegistry.register(new ItemWeapon(2000, 11.0D, -2.9D, 30, "rubyCroak").setTool("axe", 3, 8.0F).setRegistryName("ruby_croak"));
+		hephaestusLumber = GameRegistry.register(new ItemFireWeapon(3000, 11.0D, -3.0D, 30, "hephaestusLumber", 30).setTool("axe", 3, 9.0F).setRegistryName("hephaestus_lumberjack"));
 		
 		//Dice
-		dice = GameRegistry.register(new ItemDice(EnumDiceType.DICE).setRegistryName("dice"));
-		fluoriteOctet = GameRegistry.register(new ItemDice(EnumDiceType.FLUORITE_OCTET).setRegistryName("fluorite_octet"));
+		dice = GameRegistry.register(new ItemWeapon(51, 6, 3, 6, "dice").setRegistryName("dice"));
+		fluoriteOctet = GameRegistry.register(new ItemWeapon(67, 15, 6, 8, "fluoriteOctet").setRegistryName("fluorite_octet"));
 		
 		//sickles
-		sickle = GameRegistry.register(new ItemSickle(EnumSickleType.SICKLE).setRegistryName("sickle"));
-		homesSmellYaLater = GameRegistry.register(new ItemSickle(EnumSickleType.HOMES).setRegistryName("homes_smell_ya_later"));
-		fudgeSickle = GameRegistry.register(new ItemSickle(EnumSickleType.FUDGE).setRegistryName("fudgesickle"));
-		regiSickle = GameRegistry.register(new ItemSickle(EnumSickleType.REGISICKLE).setRegistryName("regisickle"));
-		clawSickle = GameRegistry.register(new ItemSickle(EnumSickleType.CLAW).setRegistryName("claw_sickle"));
-		candySickle = GameRegistry.register(new ItemSickle(EnumSickleType.CANDY).setRegistryName("candy_sickle"));
-		
+		sickle = GameRegistry.register(new ItemWeapon(220, 4.0D, -2.4D, 8, "sickle").setRegistryName("sickle"));
+		homesSmellYaLater = GameRegistry.register(new ItemWeapon(400, 5.5D, -2.4D, 10, "homesSmellYaLater").setRegistryName("homes_smell_ya_later"));
+		fudgeSickle = GameRegistry.register(new ItemWeapon(450, 5.5D, -2.4D, 10, "fudgeSickle").setRegistryName("fudgesickle"));
+		regiSickle = GameRegistry.register(new ItemWeapon(812, 6.0D, -2.4D, 5, "regiSickle").setRegistryName("regisickle"));
+		clawSickle = GameRegistry.register(new ItemWeapon(2048, 7.0D, -2.4D, 15, "clawSickle").setRegistryName("claw_sickle"));
+		candySickle = GameRegistry.register(new ItemCandyWeapon(96, 6.0D, -2.4D, 15, "candySickle").setRegistryName("candy_sickle"));
+/*
+		DEUCE(),
+				NIGHT(),
+				POGO(),
+				BAT(),
+				SPIKED();
+		*/
 		//clubs
-		deuceClub = GameRegistry.register(new ItemClub(EnumClubType.DEUCE).setRegistryName("deuce_club"));
-		nightClub = GameRegistry.register(new ItemClub(EnumClubType.NIGHT).setRegistryName("nightclub"));
-		pogoClub = GameRegistry.register(new ItemClub(EnumClubType.POGO).setRegistryName("pogo_club"));
-		metalBat = GameRegistry.register(new ItemClub(EnumClubType.BAT).setRegistryName("metal_bat"));
-		spikedClub = GameRegistry.register(new ItemClub(EnumClubType.SPIKED).setRegistryName("spiked_club"));
-		
+		deuceClub = GameRegistry.register(new ItemWeapon(1024, 2.5D, -2.2D, 15, "deuceClub").setRegistryName("deuce_club"));
+		nightClub = GameRegistry.register(new ItemWeapon(600, 4.0D, -2.2D, 20, "nightClub").setRegistryName("nightclub"));
+		pogoClub = GameRegistry.register(new ItemPogoWeapon(600, 3.5D, -2.2D, 15, "pogoClub", 0.5).setRegistryName("pogo_club"));
+		metalBat = GameRegistry.register(new ItemWeapon(750, 5.0D, -2.2D, 5, "metalBat").setRegistryName("metal_bat"));
+		spikedClub = GameRegistry.register(new ItemWeapon(500, 5.5D, -2.2D, 5, "spikedClub").setRegistryName("spiked_club"));
+
 		//canes
-		cane = GameRegistry.register(new ItemCane(EnumCaneType.CANE).setRegistryName("cane"));
-		spearCane = GameRegistry.register(new ItemCane(EnumCaneType.SPEAR).setRegistryName("spear_cane"));
-		dragonCane = GameRegistry.register(new ItemCane(EnumCaneType.DRAGON).setRegistryName("dragon_cane"));
+		cane = GameRegistry.register(new ItemWeapon(100, 2.0D, -2.0D, 15, "cane").setRegistryName("cane"));
+		spearCane = GameRegistry.register(new ItemWeapon(300, 4.0D, -2.0D, 13, "spearCane").setRegistryName("spear_cane"));
+		dragonCane = GameRegistry.register(new ItemWeapon(300, 6.5D, -2.0D, 20, "dragonCane").setRegistryName("dragon_cane"));
 		
 		//Spoons/forks
-		woodenSpoon = GameRegistry.register(new ItemSpork(EnumSporkType.SPOON_WOOD).setRegistryName("wooden_spoon"));
-		silverSpoon = GameRegistry.register(new ItemSpork(EnumSporkType.SPOON_SILVER).setRegistryName("silver_spoon"));
-		crockerSpork = (ItemSpork) GameRegistry.register(new ItemSpork(EnumSporkType.CROCKER).setRegistryName("crocker_spork"));
-		skaiaFork = GameRegistry.register(new ItemSpork(EnumSporkType.SKAIA).setRegistryName("skaia_fork"));
-		fork = GameRegistry.register(new ItemSpork(EnumSporkType.FORK).setRegistryName("fork"));
-		spork = GameRegistry.register(new ItemSpork(EnumSporkType.SPORK).setRegistryName("spork"));
+/*
+		SPOON_WOOD(),
+		SPOON_SILVER(),
+		CROCKER(),
+		SKAIA(),
+		FORK(),
+		SPORK();
+		*/
+		woodenSpoon = GameRegistry.register(new ItemWeapon(59, 2.0D, -2.2D, 5, "woodenSpoon").setRegistryName("wooden_spoon"));
+		silverSpoon = GameRegistry.register(new ItemWeapon(250, 2.5D, -2.2D, 12, "silverSpoon").setRegistryName("silver_spoon"));
+		crockerSpork = (ItemSpork) GameRegistry.register(new ItemSpork(512, 4.0D, -2.2D, 15, "crockerSpork").setRegistryName("crocker_spork"));
+		skaiaFork = GameRegistry.register(new ItemWeapon(2048, 8.5D, -2.2D, 10, "skaiaFork").setRegistryName("skaia_fork"));
+		fork = GameRegistry.register(new ItemWeapon(100, 4.0D, -2.2D, 3, "fork").setRegistryName("fork"));
+		spork = GameRegistry.register(new ItemWeapon(120, 4.5D, -2.3D, 5, "spork").setRegistryName("spork"));
 		
 		toolEmerald = EnumHelper.addToolMaterial("EMERALD", 3, 1220, 12.0F, 4.0F, 12).setRepairItem(new ItemStack(Items.EMERALD));
 		emeraldSword = GameRegistry.register(new ItemSword(toolEmerald).setRegistryName("emerald_sword")).setUnlocalizedName("swordEmerald").setCreativeTab(Minestuck.tabMinestuck);
@@ -234,6 +228,10 @@ public class MinestuckItems
 		minestuckBucket.addBlock(blockOil.getDefaultState());
 		minestuckBucket.addBlock(blockBlood.getDefaultState());
 		minestuckBucket.addBlock(blockBrainJuice.getDefaultState());
+		for(Block block : liquidGrists)
+		{
+		    minestuckBucket.addBlock(block.getDefaultState());
+		}
 		
 		registerItemBlock(new ItemMultiTexture(chessTile, chessTile, new String[] {"black", "white", "darkgrey", "lightgrey"}));
 		registerItemBlock(new ItemBlock(skaiaPortal));

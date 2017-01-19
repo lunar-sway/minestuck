@@ -49,7 +49,7 @@ public class CommandSburbSession extends CommandBase	//TODO properly localize al
 		
 		if(command.equalsIgnoreCase("name"))
 		{
-			String playerName = args.length < 2 ? getCommandSenderAsPlayer(sender).getName() : args[2];
+			String playerName = args.length < 3 ? getCommandSenderAsPlayer(sender).getName() : args[2];
 			SburbHandler.sessionName(server, sender, this, playerName, sessionName);
 			
 		} else if(command.equalsIgnoreCase("add")/* || command.equalsIgnoreCase("finish")*/)
