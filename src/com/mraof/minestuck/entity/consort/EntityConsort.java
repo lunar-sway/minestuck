@@ -17,8 +17,9 @@ import com.mraof.minestuck.entity.EntityMinestuck;
 public abstract class EntityConsort extends EntityMinestuck
 {
 	
-	ConsortDialogue.Message message;
+	ConsortDialogue.ConditionedMessage message;
 	int messageTicksLeft;
+	NBTTagCompound messageData;
 	
 	public EntityConsort(World world)
 	{
@@ -47,6 +48,7 @@ public abstract class EntityConsort extends EntityMinestuck
 				{
 					message = ConsortDialogue.getRandomMessage(this, player);
 					messageTicksLeft = 24000 + world.rand.nextInt(24000);
+					messageData = new NBTTagCompound();
 				}
 				player.sendMessage(message.getMessage(this, player));
 			}
@@ -63,7 +65,10 @@ public abstract class EntityConsort extends EntityMinestuck
 		if(messageTicksLeft > 0)
 			messageTicksLeft--;
 		else
+		{
 			message = null;
+			messageData = null;
+		}
 	}
 	
 	@Override
@@ -107,6 +112,7 @@ public abstract class EntityConsort extends EntityMinestuck
 		{
 			compound.setString("dialogue", message.getString());
 			compound.setInteger("messageTicks", messageTicksLeft);
+			compound.setTag("messageData", messageData);
 		}
 	}
 	
@@ -119,8 +125,21 @@ public abstract class EntityConsort extends EntityMinestuck
 		{
 			message = ConsortDialogue.getMessageFromString(compound.getString("dialogue"));
 			messageTicksLeft = compound.getInteger("messageTicks");
+			messageData = compound.getCompoundTag("messageData");
 		}
 	}
 	
 	public abstract EnumConsort getConsortType();
+	
+	public NBTTagCompound getMessageTag()
+	{
+		return messageData;
+	}
+	
+	public NBTTagCompound getMessageTagForPlayer(EntityPlayer player)
+	{
+		if(!messageData.hasKey(player.getCachedUniqueIdString(), 10))
+			messageData.setTag(player.getCachedUniqueIdString(), new NBTTagCompound());
+		return messageData.getCompoundTag(player.getCachedUniqueIdString());
+	}
 }

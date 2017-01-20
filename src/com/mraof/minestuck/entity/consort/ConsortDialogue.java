@@ -7,26 +7,26 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-import com.mraof.minestuck.network.skaianet.SburbConnection;
-import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
-import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
+import static com.mraof.minestuck.entity.consort.MessageType.*;
 
-import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
 
+/**
+ * Handles message registry, message selection and contains the main message
+ * class, which combines conditioning and a MessageType
+ * 
+ * @author Kirderf1
+ */
 public class ConsortDialogue
 {
 	
-	private static final List<Message> messages = new LinkedList<Message>();
+	private static final List<ConditionedMessage> messages = new LinkedList<ConditionedMessage>();
 	
 	/**
 	 * Make sure to call after land registry
@@ -42,7 +42,7 @@ public class ConsortDialogue
 		addMessage(LandAspectRegistry.fromNameTitle("rabbits"), "bunnyBirthday");
 		addMessage(LandAspectRegistry.fromNameTitle("rabbits"), "rabbitEating");
 		addMessage(null, Sets.newHashSet(LandAspectRegistry.fromNameTitle("monsters").getVariations()), null,
-				"petZombie");
+				new SingleMessage("petZombie"));
 		addMessage(LandAspectRegistry.fromNameTitle("monsters"), "spiderRaid");
 		addMessage(LandAspectRegistry.fromNameTitle("towers"), "bugTreasure");
 		addMessage(LandAspectRegistry.fromNameTitle("towers"), "towerGone");
@@ -66,34 +66,37 @@ public class ConsortDialogue
 		addMessage("frogWalk");
 		addMessage("deliciousHair");
 		//		addMessage("village"); Did not work as intended
-		addMessage("lazyKing");
+		addMessage(LandAspectRegistry.fromNameTerrain("shade"), "lazyKing");
 		addMessage("musicInvention");
 		addMessage("rapBattle");
 		
 		addMessage(true, "awaitHero", "landName", "consortTypes", "playerTitleLand");
 		addMessage(true, "watchSkaia");
+		addMessage(LandAspectRegistry.fromNameTerrain("shade"),
+				new ChainMessage(2, new SingleMessage("mushFarm1"), new SingleMessage("mushFarm2"),
+						new SingleMessage("mushFarm3"), new SingleMessage("mushFarm4"), new SingleMessage("mushFarm5"),
+						new SingleMessage("mushFarm6"), new SingleMessage("mushFarm7")));
 	}
 	
 	public static void addMessage(String message, String... args)
 	{
-		addMessage(false, null, message, args);
+		addMessage(false, null, new SingleMessage(message, args));
 	}
 	
 	public static void addMessage(boolean reqLand, String message, String... args)
 	{
-		addMessage(reqLand, null, message, args);
+		addMessage(reqLand, null, new SingleMessage(message, args));
 	}
 	
-	public static void addMessage(EnumSet<EnumConsort> consort, String message, String... args)
+	public static void addMessage(EnumSet<EnumConsort> consort, MessageType message)
 	{
-		addMessage(false, consort, message, args);
+		addMessage(false, consort, message);
 	}
 	
-	public static void addMessage(boolean reqLand, EnumSet<EnumConsort> consort, String message, String... args)
+	public static void addMessage(boolean reqLand, EnumSet<EnumConsort> consort, MessageType message)
 	{
-		Message msg = new Message();
-		msg.unlocalizedMessage = message;
-		msg.args = args;
+		ConditionedMessage msg = new ConditionedMessage();
+		msg.messageType = message;
 		msg.reqLand = reqLand;
 		msg.consortRequirement = consort;
 		messages.add(msg);
@@ -103,22 +106,33 @@ public class ConsortDialogue
 	{
 		if(aspect == null)
 			Debug.warn("Land aspect is null for consort message " + message + ", this is probably not intended");
-		addMessage(aspect == null ? null : Sets.newHashSet(aspect), null, null, message, args);
+		addMessage(aspect == null ? null : Sets.newHashSet(aspect), null, null, new SingleMessage(message, args));
 	}
 	
 	public static void addMessage(TitleLandAspect aspect, String message, String... args)
 	{
+		addMessage(null, aspect == null ? null : Sets.newHashSet(aspect), null, new SingleMessage(message, args));
+	}
+	
+	public static void addMessage(TerrainLandAspect aspect, MessageType message)
+	{
 		if(aspect == null)
 			Debug.warn("Land aspect is null for consort message " + message + ", this is probably not intended");
-		addMessage(null, aspect == null ? null : Sets.newHashSet(aspect), null, message, args);
+		addMessage(aspect == null ? null : Sets.newHashSet(aspect), null, null, message);
+	}
+	
+	public static void addMessage(TitleLandAspect aspect, MessageType message)
+	{
+		if(aspect == null)
+			Debug.warn("Land aspect is null for consort message " + message + ", this is probably not intended");
+		addMessage(null, aspect == null ? null : Sets.newHashSet(aspect), null, message);
 	}
 	
 	public static void addMessage(Set<TerrainLandAspect> aspects1, Set<TitleLandAspect> aspects2,
-			EnumSet<EnumConsort> consort, String message, String... args)
+			EnumSet<EnumConsort> consort, MessageType message)
 	{
-		Message msg = new Message();
-		msg.unlocalizedMessage = message;
-		msg.args = args;
+		ConditionedMessage msg = new ConditionedMessage();
+		msg.messageType = message;
 		msg.reqLand = true;
 		msg.aspect1Requirement = aspects1;
 		msg.aspect2Requirement = aspects2;
@@ -126,13 +140,13 @@ public class ConsortDialogue
 		messages.add(msg);
 	}
 	
-	public static Message getRandomMessage(EntityConsort consort, EntityPlayer player)
+	public static ConditionedMessage getRandomMessage(EntityConsort consort, EntityPlayer player)
 	{
 		LandAspectRegistry.AspectCombination aspects = MinestuckDimensionHandler.getAspects(consort.dimension); //Change to a consort home dimension variable, as the current won't work as intended when the consort is moved from one dimension to another
 		
-		List<Message> list = new ArrayList<Message>();
+		List<ConditionedMessage> list = new ArrayList<ConditionedMessage>();
 		
-		for(Message message : messages)
+		for(ConditionedMessage message : messages)
 		{
 			if(message.reqLand && aspects == null)
 				continue;
@@ -148,24 +162,23 @@ public class ConsortDialogue
 		return list.get(consort.world.rand.nextInt(list.size()));
 	}
 	
-	public static Message getMessageFromString(String name)
+	public static ConditionedMessage getMessageFromString(String name)
 	{
-		for(Message message : messages)
-			if(message.unlocalizedMessage.equals(name))
+		for(ConditionedMessage message : messages)
+			if(message.getString().equals(name))
 				return message;
 		return null;
 	}
 	
-	public static class Message
+	public static class ConditionedMessage
 	{
-		private Message()
+		private ConditionedMessage()
 		{
 		}
 		
 		private boolean reqLand;
 		
-		private String unlocalizedMessage;
-		String[] args;
+		private MessageType messageType;
 		
 		private Set<TerrainLandAspect> aspect1Requirement;
 		private Set<TitleLandAspect> aspect2Requirement;
@@ -174,80 +187,12 @@ public class ConsortDialogue
 		
 		public ITextComponent getMessage(EntityConsort consort, EntityPlayer player)
 		{
-			String s = EntityList.getEntityString(consort);
-			if(s == null)
-			{
-				s = "generic";
-			}
-			
-			Object[] args = new Object[this.args.length];
-			for(int i = 0; i < this.args.length; i++)
-			{
-				if(this.args[i].equals("playerNameLand"))
-				{
-					SburbConnection c = SburbHandler.getConnectionForDimension(consort.dimension);
-					if(c != null)
-						args[i] = c.getClientIdentifier().getUsername();
-					else
-						args[i] = "Player name";
-				} else if(this.args[i].equals("playerName"))
-				{
-					args[i] = player.getName();
-				} else if(this.args[i].equals("landName"))
-				{
-					if(consort.world.provider instanceof WorldProviderLands) //TODO make land name translate on the client side
-					{
-						ChunkProviderLands chunkProvider = (ChunkProviderLands) player.world.provider
-								.createChunkGenerator();
-						ITextComponent aspect1 = new TextComponentTranslation(
-								"land." + chunkProvider.aspect1.getNames()[chunkProvider.nameIndex1]);
-						ITextComponent aspect2 = new TextComponentTranslation(
-								"land." + chunkProvider.aspect2.getNames()[chunkProvider.nameIndex2]);
-						if(chunkProvider.nameOrder)
-							args[i] = new TextComponentTranslation("land.message.check", aspect1, aspect2);
-						else
-							args[i] = new TextComponentTranslation("land.message.check", aspect2, aspect1);
-					} else
-						args[i] = "Land name";
-				} else if(this.args[i].equals("playerTitleLand"))
-				{
-					SburbConnection c = SburbHandler.getConnectionForDimension(consort.dimension);
-					if(c != null)
-						args[i] = MinestuckPlayerData.getData(c.getClientIdentifier()).title.toString();
-					else
-						args[i] = "Player title";
-				} else if(this.args[i].equals("playerClassLand"))
-				{
-					SburbConnection c = SburbHandler.getConnectionForDimension(consort.dimension);
-					if(c != null)
-						args[i] = MinestuckPlayerData.getData(c.getClientIdentifier()).title.getHeroClass().toString();
-					else
-						args[i] = "Player class";
-				} else if(this.args[i].equals("playerAspectLand"))
-				{
-					SburbConnection c = SburbHandler.getConnectionForDimension(consort.dimension);
-					if(c != null)
-						args[i] = MinestuckPlayerData.getData(c.getClientIdentifier()).title.getHeroAspect().toString();
-					else
-						args[i] = "Player aspect";
-				} else if(this.args[i].equals("consortType"))
-				{
-					args[i] = new TextComponentTranslation("entity." + s + ".name");
-				} else if(this.args[i].equals("consortTypes"))
-				{
-					args[i] = new TextComponentTranslation("entity." + s + ".plural.name");
-				}
-			}
-			
-			TextComponentTranslation message = new TextComponentTranslation("consort." + unlocalizedMessage, args);
-			TextComponentTranslation entity = new TextComponentTranslation("entity." + s + ".name");
-			
-			return new TextComponentTranslation("%s: %s", entity, message);
+			return messageType.getMessage(consort, player);
 		}
 		
 		public String getString()
 		{
-			return unlocalizedMessage;
+			return messageType.getString();
 		}
 	}
 }
