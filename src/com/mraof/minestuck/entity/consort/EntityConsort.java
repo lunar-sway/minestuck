@@ -9,6 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 
@@ -130,6 +131,16 @@ public abstract class EntityConsort extends EntityMinestuck
 	}
 	
 	public abstract EnumConsort getConsortType();
+	
+	public void commandReply(EntityPlayer player, String chain)
+	{
+		if(this.isEntityAlive() && !world.isRemote && message != null)
+		{
+			ITextComponent text = message.getFromChain(this, player, chain);
+			if(text != null)
+				player.sendMessage(text);
+		}
+	}
 	
 	public NBTTagCompound getMessageTag()
 	{

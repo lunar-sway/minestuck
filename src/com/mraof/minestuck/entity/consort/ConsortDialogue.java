@@ -76,6 +76,11 @@ public class ConsortDialogue
 				new ChainMessage(2, new SingleMessage("mushFarm1"), new SingleMessage("mushFarm2"),
 						new SingleMessage("mushFarm3"), new SingleMessage("mushFarm4"), new SingleMessage("mushFarm5"),
 						new SingleMessage("mushFarm6"), new SingleMessage("mushFarm7")));
+		addMessage(true, null, new ChoiseMessage(true, new SingleMessage("titlePresence", "playerTitle"),
+				new SingleMessage[] { new SingleMessage("titlePresence.iam", "playerTitle"),
+						new SingleMessage("titlePresence.agree") },
+				new MessageType[] { new SingleMessage("titlePresence.iamAnswer"), new SingleMessage("thanks") }));
+		
 	}
 	
 	public static void addMessage(String message, String... args)
@@ -187,7 +192,12 @@ public class ConsortDialogue
 		
 		public ITextComponent getMessage(EntityConsort consort, EntityPlayer player)
 		{
-			return messageType.getMessage(consort, player);
+			return messageType.getMessage(consort, player, "");
+		}
+		
+		public ITextComponent getFromChain(EntityConsort consort, EntityPlayer player, String fromChain)
+		{
+			return messageType.getFromChain(consort, player, "", fromChain);
 		}
 		
 		public String getString()

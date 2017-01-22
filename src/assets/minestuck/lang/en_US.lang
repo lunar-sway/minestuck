@@ -80,6 +80,8 @@ computer.selectColor=Select a Color
 computer.serverSessionFull=Server player's session is full
 computer.clientSessionFull=Client player's session is full
 
+consort.thanks=Thanks!
+
 consort.dadWind=My dad was blown away in one of the recent wind storms.
 consort.koolaid=Some people say the oceans of blood are actually kool-aid. I'm too scared to taste it for myself.
 consort.murderRain=You don't want to know what it's like to be outside when it rains. You can't tell who's a murderer or who forgot an umbrella!
@@ -115,9 +117,8 @@ consort.lazyKing=I feel like our king just sits around doing nothing but eating 
 consort.musicInvention=I invented music, y'kno! My favorite song goes like ba ba dum, dum ba dum.
 consort.rapBattle=I challenge you to a rap battle! Accept challenge? Y/N
 
-consort.awaitHero=Here, in the %s. we %s worship the %s. We wait and hope for the day that they awaken.
+consort.awaitHero=Here, in the %s, we %s worship the %s. We wait and hope for the day that they awaken.
 consort.watchSkaia=Sometimes, I look up in the sky to see Skaia and wish I could visit there some day...
-
 consort.mushFarm1=Someone's gotta be farmin' all these goddamn fuckin' mushrooms, pain in the ass through truly it be.
 consort.mushFarm2=So that's what I'm doing.
 consort.mushFarm3=Standing around here.
@@ -125,6 +126,10 @@ consort.mushFarm4=farmin' all these
 consort.mushFarm5=goddamn
 consort.mushFarm6=fuckin
 consort.mushFarm7=mushrooms
+consort.titlePresence=I sense the presence of the %s. Tell me if you see them, ok?
+consort.titlePresence.iam=>I am the %s.
+consort.titlePresence.iamAnswer=OH MY GLUB
+consort.titlePresence.agree=>Hehe, ok I will.
 
 echeladder.rung0=Greentike
 echeladder.rung1=Sir Dies-a-lot
