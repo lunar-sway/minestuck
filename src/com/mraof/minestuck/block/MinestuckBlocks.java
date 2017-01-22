@@ -2,6 +2,7 @@ package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.Minestuck;
 
+import com.mraof.minestuck.util.GristType;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -9,6 +10,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.BlockFluidClassic;
+import net.minecraftforge.fluids.BlockFluidFinite;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -56,11 +58,15 @@ public class MinestuckBlocks
 	public static Block blockBlood;
 	public static Block blockBrainJuice;
 	public static Block layeredSand;
+
+	public static Block[] liquidGrists;
 	
 	public static Fluid fluidOil;
 	public static Fluid fluidBlood;
 	public static Fluid fluidBrainJuice;
-	
+
+	public static Fluid[] gristFluids;
+
 	public static void registerBlocks()
 	{
 		//blocks
@@ -111,7 +117,16 @@ public class MinestuckBlocks
 		blockOil = GameRegistry.register(new BlockFluidClassic(fluidOil, Material.WATER).setRegistryName("block_oil")).setUnlocalizedName("oil");
 		blockBlood = GameRegistry.register(new BlockFluidClassic(fluidBlood, Material.WATER).setRegistryName("block_blood")).setUnlocalizedName("blood");
 		blockBrainJuice = GameRegistry.register(new BlockFluidClassic(fluidBrainJuice, Material.WATER).setRegistryName("block_brain_juice")).setUnlocalizedName("brainJuice");
-		
+
+		liquidGrists = new Block[GristType.allGrists];
+		gristFluids = new Fluid[GristType.allGrists];
+		for(GristType grist : GristType.values()) {
+			gristFluids[grist.ordinal()] = new Fluid(grist.getName(), new ResourceLocation("minestuck", "blocks/Liquid" + grist.getName() + "Still"), new ResourceLocation("minestuck", "blocks/Liquid" + grist.getName() + "Flowing"));
+			FluidRegistry.registerFluid(gristFluids[grist.ordinal()]);
+			liquidGrists[grist.ordinal()] = GameRegistry.register(new BlockFluidGrist(gristFluids[grist.ordinal()], Material.WATER).setRegistryName("liquid_" + grist.getName())).setUnlocalizedName("liquid_" + grist.getName());
+		}
+
+
 		cruxiteBlock.setHarvestLevel("pickaxe", 0);
 		
 		fluidOil.setUnlocalizedName(blockOil.getUnlocalizedName());

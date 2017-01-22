@@ -1,22 +1,9 @@
 package com.mraof.minestuck.util;
 
+import net.minecraft.item.*;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.item.ItemAxe;
-import net.minecraft.item.ItemBow;
-import net.minecraft.item.ItemHoe;
-import net.minecraft.item.ItemPickaxe;
-import net.minecraft.item.ItemSpade;
-import net.minecraft.item.ItemSword;
-
-import com.mraof.minestuck.item.weapon.ItemBattleaxe;
-import com.mraof.minestuck.item.weapon.ItemBlade;
-import com.mraof.minestuck.item.weapon.ItemCane;
-import com.mraof.minestuck.item.weapon.ItemClub;
-import com.mraof.minestuck.item.weapon.ItemHammer;
-import com.mraof.minestuck.item.weapon.ItemSickle;
-import com.mraof.minestuck.item.weapon.ItemSpork;
 
 public class KindAbstratusList {
 	
@@ -27,17 +14,17 @@ public class KindAbstratusList {
 		if(typeList != null)
 			return;
 		typeList = new ArrayList<KindAbstratusType>();
-		typeList.add(new KindAbstratusType("sword").addItemClass(ItemSword.class).addItemClass(ItemBlade.class));
+		typeList.add(new KindAbstratusType("sword").addItemClass(ItemSword.class));
 		typeList.add(new KindAbstratusType("bow").addItemClass(ItemBow.class));
 		typeList.add(new KindAbstratusType("pickaxe").addItemClass(ItemPickaxe.class));
-		typeList.add(new KindAbstratusType("axe").addItemClass(ItemAxe.class).addItemClass(ItemBattleaxe.class));
+		typeList.add(new KindAbstratusType("axe").addItemClass(ItemAxe.class));
 		typeList.add(new KindAbstratusType("hoe").addItemClass(ItemHoe.class));
 		typeList.add(new KindAbstratusType("shovel").addItemClass(ItemSpade.class));
-		typeList.add(new KindAbstratusType("hammer").addItemClass(ItemHammer.class));
-		typeList.add(new KindAbstratusType("cane").addItemClass(ItemCane.class));
-		typeList.add(new KindAbstratusType("club").addItemClass(ItemClub.class));
-		typeList.add(new KindAbstratusType("sickle").addItemClass(ItemSickle.class));
-		typeList.add(new KindAbstratusType("spork").addItemClass(ItemSpork.class));
+		typeList.add(new KindAbstratusType("hammer"));
+		typeList.add(new KindAbstratusType("cane"));
+		typeList.add(new KindAbstratusType("club"));
+		typeList.add(new KindAbstratusType("sickle"));
+		typeList.add(new KindAbstratusType("spork"));
 	}
 	
 	public static void registerType(KindAbstratusType type) {
@@ -53,7 +40,7 @@ public class KindAbstratusList {
 	}
 	
 	public static List<KindAbstratusType> getTypeList() {
-		return (List) typeList.clone();
+		return new ArrayList<KindAbstratusType>(typeList);
 	}
 	
 }
