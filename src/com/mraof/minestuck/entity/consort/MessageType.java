@@ -2,7 +2,6 @@ package com.mraof.minestuck.entity.consort;
 
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.util.MinestuckPlayerData;
@@ -13,6 +12,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.event.ClickEvent;
 
@@ -293,8 +293,9 @@ public abstract class MessageType
 				for(int i = 0; i < options.length; i++)
 				{
 					question.appendText("\n");
-					ITextComponent option = getMessage(consort, player, options[i].unlocalizedMessage, options[i].args,
-							false);
+					ITextComponent option = new TextComponentString(">");
+					option.appendSibling(
+							getMessage(consort, player, options[i].unlocalizedMessage, options[i].args, false));
 					option.getStyle().setClickEvent(
 							new ClickEvent(ClickEvent.Action.RUN_COMMAND, commandStart + options[i].getString()));
 					question.appendSibling(option);
@@ -310,7 +311,6 @@ public abstract class MessageType
 		public ITextComponent getFromChain(EntityConsort consort, EntityPlayer player, String chainIdentifier,
 				String fromChain)
 		{
-			Debug.info(fromChain);
 			if(fromChain.isEmpty())
 				return null;
 			
@@ -336,6 +336,10 @@ public abstract class MessageType
 						if(!chainIdentifier.isEmpty())
 							chainIdentifier += ':';
 						chainIdentifier += message.getString();
+						
+						player.sendMessage(new TextComponentTranslation("chat.type.text", player.getDisplayName(),
+								getMessage(consort, player, options[index].unlocalizedMessage, options[index].args,
+										false)));
 						
 						return message.getMessage(consort, player, chainIdentifier);
 					}

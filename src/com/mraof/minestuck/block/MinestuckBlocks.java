@@ -121,9 +121,9 @@ public class MinestuckBlocks
 		liquidGrists = new Block[GristType.allGrists];
 		gristFluids = new Fluid[GristType.allGrists];
 		for(GristType grist : GristType.values()) {
-			gristFluids[grist.ordinal()] = new Fluid(grist.getName(), new ResourceLocation("minestuck", "blocks/Liquid" + grist.getName() + "Still"), new ResourceLocation("minestuck", "blocks/Liquid" + grist.getName() + "Flowing"));
-			FluidRegistry.registerFluid(gristFluids[grist.ordinal()]);
-			liquidGrists[grist.ordinal()] = GameRegistry.register(new BlockFluidGrist(gristFluids[grist.ordinal()], Material.WATER).setRegistryName("liquid_" + grist.getName())).setUnlocalizedName("liquid_" + grist.getName());
+//			gristFluids[grist.ordinal()] = new Fluid(grist.getName(), new ResourceLocation("minestuck", "blocks/Liquid" + grist.getName() + "Still"), new ResourceLocation("minestuck", "blocks/Liquid" + grist.getName() + "Flowing"));
+//			FluidRegistry.registerFluid(gristFluids[grist.ordinal()]);
+//			liquidGrists[grist.ordinal()] = GameRegistry.register(new BlockFluidGrist(gristFluids[grist.ordinal()], Material.WATER).setRegistryName("liquid_" + grist.getName())).setUnlocalizedName("liquid_" + grist.getName());
 		}
 
 

@@ -127,9 +127,9 @@ consort.mushFarm5=goddamn
 consort.mushFarm6=fuckin
 consort.mushFarm7=mushrooms
 consort.titlePresence=I sense the presence of the %s. Tell me if you see them, ok?
-consort.titlePresence.iam=>I am the %s.
+consort.titlePresence.iam=I am the %s.
 consort.titlePresence.iamAnswer=OH MY GLUB
-consort.titlePresence.agree=>Hehe, ok I will.
+consort.titlePresence.agree=Hehe, ok I will.
 
 echeladder.rung0=Greentike
 echeladder.rung1=Sir Dies-a-lot
