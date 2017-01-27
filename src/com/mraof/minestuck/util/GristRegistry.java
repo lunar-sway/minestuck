@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -15,12 +17,13 @@ public class GristRegistry {
 	/**
 	 * Creates a item-grist conversion ratio for an ItemStack. Used in the Alchemiter and GristWidget.
 	 */
-	public static void addGristConversion(ItemStack item, GristSet grist) {
+	public static void addGristConversion(@Nonnull ItemStack item, GristSet grist)
+	{
 		addGristConversion(item, true, grist);
 	}
 
-	public static void addGristConversion(ItemStack item,boolean useDamage,GristSet grist) {
-		//System.out.printf("adding grist conversion for id %d and metadata %d, %susing metadata\n", item.itemID, item.getItemDamage(), useDamage ? "" : "not ");
+	public static void addGristConversion(@Nonnull ItemStack item, boolean useDamage, GristSet grist)
+	{
 		gristRecipes.put(Arrays.asList(item.getItem(), useDamage ? item.getItemDamage() : OreDictionary.WILDCARD_VALUE), grist);
 	}
 	public static void addGristConversion(Block block, GristSet grist)
@@ -40,10 +43,10 @@ public class GristRegistry {
 	/**
 	 * Returns a item-grist conversion ratio, given an ItemStack. Used in the Alchemiter and GristWidget.
 	 */
-	public static GristSet getGristConversion(ItemStack item)
+	public static GristSet getGristConversion(@Nonnull ItemStack item)
 	{
 		GristSet grist;
-		if(item == null || item.getItem() == null)
+		if(item.isEmpty())
 		{return null;}
 		
 		if((grist = gristRecipes.get(Arrays.asList(item.getItem(),item.getItemDamage()))) != null);

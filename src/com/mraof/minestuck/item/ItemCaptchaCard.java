@@ -9,8 +9,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagString;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
@@ -34,10 +37,11 @@ public class ItemCaptchaCard extends Item
 	}
 	
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> itemList)
+	@SideOnly(Side.CLIENT)
+	public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems)
 	{
-		itemList.add(new ItemStack(this));
-		itemList.add(AlchemyRecipeHandler.createCard(new ItemStack(MinestuckItems.cruxiteApple), true));
+		subItems.add(new ItemStack(this));
+		subItems.add(AlchemyRecipeHandler.createCard(new ItemStack(MinestuckItems.cruxiteApple), true));
 	}
 	
 	@Override

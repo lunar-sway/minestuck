@@ -102,7 +102,7 @@ public class MinestuckPlayerTracker {
 		}
 		
 		if(UpdateChecker.outOfDate)
-			player.sendStatusMessage(new TextComponentString("New version of Minestuck: " + UpdateChecker.latestVersion + "\nChanges: " + UpdateChecker.updateChanges));
+			player.sendMessage(new TextComponentString("New version of Minestuck: " + UpdateChecker.latestVersion + "\nChanges: " + UpdateChecker.updateChanges));
 	}
 	
 	@SubscribeEvent(priority = EventPriority.HIGH)	//Editmode players need to be reset before nei handles the event
@@ -240,7 +240,7 @@ public class MinestuckPlayerTracker {
 			if(chunkProvider.nameOrder)
 				toSend = new TextComponentTranslation("land.message.entry", aspect1, aspect2);
 			else toSend = new TextComponentTranslation("land.message.entry", aspect2, aspect1);
-			player.sendStatusMessage(toSend);
+			player.sendMessage(toSend);
 		}
 	}
 	

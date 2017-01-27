@@ -21,8 +21,8 @@ import com.mraof.minestuck.util.ComputerProgram;
 public class GuiComputer extends GuiScreen
 {
 
-	public static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/Sburb.png");
-	public static final ResourceLocation guiBsod = new ResourceLocation("minestuck", "textures/gui/BsodMessage.png");
+	public static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/sburb.png");
+	public static final ResourceLocation guiBsod = new ResourceLocation("minestuck", "textures/gui/bsod_message.png");
 	
 	public static final int xSize = 176;
 	public static final int ySize = 166;

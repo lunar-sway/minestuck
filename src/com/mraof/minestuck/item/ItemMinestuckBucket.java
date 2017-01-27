@@ -18,6 +18,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -39,46 +40,47 @@ public class ItemMinestuckBucket extends ItemBucket	//Unsure if anything more sh
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand)
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
 	{
-		RayTraceResult raytraceresult = this.rayTrace(world, player, false);
+		ItemStack stack = playerIn.getHeldItem(handIn);
+		RayTraceResult raytraceresult = this.rayTrace(worldIn, playerIn, false);
 		
-		ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onBucketUse(player, world, itemStack, raytraceresult);
+		ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onBucketUse(playerIn, worldIn, stack, raytraceresult);
 		if (ret != null) return ret;
 		
 		if (raytraceresult == null)
 		{
-			return new ActionResult(EnumActionResult.PASS, itemStack);
+			return new ActionResult(EnumActionResult.PASS, stack);
 		}
 		else if (raytraceresult.typeOfHit != RayTraceResult.Type.BLOCK)
 		{
-			return new ActionResult(EnumActionResult.PASS, itemStack);
+			return new ActionResult(EnumActionResult.PASS, stack);
 		}
 		else
 		{
 			BlockPos blockpos = raytraceresult.getBlockPos();
 			
-			if (!world.isBlockModifiable(player, blockpos))
+			if (!worldIn.isBlockModifiable(playerIn, blockpos))
 			{
-				return new ActionResult(EnumActionResult.FAIL, itemStack);
+				return new ActionResult(EnumActionResult.FAIL, stack);
 			}
 			else
 			{
-				boolean flag1 = world.getBlockState(blockpos).getBlock().isReplaceable(world, blockpos);
+				boolean flag1 = worldIn.getBlockState(blockpos).getBlock().isReplaceable(worldIn, blockpos);
 				BlockPos blockpos1 = flag1 && raytraceresult.sideHit == EnumFacing.UP ? blockpos : blockpos.offset(raytraceresult.sideHit);
 				
-				if (!player.canPlayerEdit(blockpos1, raytraceresult.sideHit, itemStack))
+				if (!playerIn.canPlayerEdit(blockpos1, raytraceresult.sideHit, stack))
 				{
-					return new ActionResult(EnumActionResult.FAIL, itemStack);
+					return new ActionResult(EnumActionResult.FAIL, stack);
 				}
-				else if (this.tryPlaceContainedLiquid(player, world, blockpos1, fillFluids.get(itemStack.getItemDamage())))
+				else if (this.tryPlaceContainedLiquid(playerIn, worldIn, blockpos1, fillFluids.get(stack.getItemDamage())))
 				{
-					player.addStat(StatList.getObjectUseStats(this));
-					return new ActionResult(EnumActionResult.SUCCESS, !player.capabilities.isCreativeMode ? new ItemStack(Items.BUCKET) : itemStack);
+					playerIn.addStat(StatList.getObjectUseStats(this));
+					return new ActionResult(EnumActionResult.SUCCESS, !playerIn.capabilities.isCreativeMode ? new ItemStack(Items.BUCKET) : stack);
 				}
 				else
 				{
-					return new ActionResult(EnumActionResult.FAIL, itemStack);
+					return new ActionResult(EnumActionResult.FAIL, stack);
 				}
 			}
 		}
@@ -110,14 +112,14 @@ public class ItemMinestuckBucket extends ItemBucket	//Unsure if anything more sh
 		}
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, List subItems)
+	@SideOnly(Side.CLIENT)
+	public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems)
 	{
 		for(int id = 0; id < fillFluids.size(); id++)
 			subItems.add(new ItemStack(this, 1, id));
 	}
+	
 	@Override
 	public String getUnlocalizedName(ItemStack par1ItemStack) 
 	{

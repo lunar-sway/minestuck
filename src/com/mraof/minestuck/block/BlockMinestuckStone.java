@@ -1,7 +1,5 @@
 package com.mraof.minestuck.block;
 
-import java.util.List;
-
 import com.mraof.minestuck.Minestuck;
 
 import net.minecraft.block.Block;
@@ -15,8 +13,11 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockMinestuckStone extends Block
 {
@@ -74,7 +75,8 @@ public class BlockMinestuckStone extends Block
 	}
 	
 	@Override
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list)
+	@SideOnly(Side.CLIENT)
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list)
 	{
 		for(BlockType type : BlockType.values())
 			list.add(new ItemStack(itemIn, 1, type.getMetadata()));

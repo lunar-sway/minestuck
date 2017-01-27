@@ -19,7 +19,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 public class GuiColorSelector extends GuiScreen
 {
 	
-	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/ColorSelector.png");
+	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/color_selector.png");
 	private static final int guiWidth = 176, guiHeight = 157;
 	private int selectedColor;
 	private boolean firstTime;
@@ -135,7 +135,7 @@ public class GuiColorSelector extends GuiScreen
 			if(ColorCollector.playerColor == -1)
 				message = new TextComponentTranslation("message.selectDefaultColor");
 			else message = new TextComponentTranslation("message.selectColor");
-			this.mc.player.sendStatusMessage(new TextComponentString("[Minestuck] ").appendSibling(message));
+			this.mc.player.sendMessage(new TextComponentString("[Minestuck] ").appendSibling(message));
 		}
 	}
 	

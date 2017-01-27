@@ -23,6 +23,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -111,10 +112,10 @@ public class BlockSburbMachine extends BlockContainer
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> subItems) 
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list)
 	{
 		for(int i = 0; i < 4; i++)
-			subItems.add(new ItemStack(this, 1, i));
+			list.add(new ItemStack(this, 1, i));
 	}
 	
 	@Override
@@ -136,7 +137,8 @@ public class BlockSburbMachine extends BlockContainer
 	}
 	
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
+			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
 		TileEntity tileEntity = worldIn.getTileEntity(pos);
 		if (!(tileEntity instanceof TileEntitySburbMachine) || playerIn.isSneaking())

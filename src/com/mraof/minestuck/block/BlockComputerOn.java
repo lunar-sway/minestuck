@@ -65,34 +65,35 @@ public class BlockComputerOn extends Block implements ITileEntityProvider
 	}
 	
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
+			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
-		TileEntityComputer tileEntity = (TileEntityComputer) world.getTileEntity(pos);
+		TileEntityComputer tileEntity = (TileEntityComputer) worldIn.getTileEntity(pos);
 
-		if (tileEntity == null || player.isSneaking())
+		if (tileEntity == null || playerIn.isSneaking())
 		{
 			return false;
 		}
 
-		int id = ComputerProgram.getProgramID(heldItem);
+		int id = ComputerProgram.getProgramID(playerIn.getHeldItem(hand));
 		if(id != -2 && !tileEntity.hasProgram(id) && tileEntity.installedPrograms.size() < 2 && !tileEntity.hasProgram(-1)) 
 		{
-			if(world.isRemote)
+			if(worldIn.isRemote)
 				return true;
-			player.setHeldItem(hand, null);
+			playerIn.setHeldItem(hand, ItemStack.EMPTY);
 			if(id == -1) 
 			{
 				tileEntity.closeAll();
-				world.setBlockState(pos, state.withProperty(BSOD, true), 2);
+				worldIn.setBlockState(pos, state.withProperty(BSOD, true), 2);
 			}
 			else tileEntity.installedPrograms.put(id, true);
 			tileEntity.markDirty();
-			world.notifyBlockUpdate(pos, state, state, 3);
+			worldIn.notifyBlockUpdate(pos, state, state, 3);
 			return true;
 		}
 
-		if(world.isRemote && SkaiaClient.requestData(tileEntity))
-			player.openGui(Minestuck.instance, GuiHandler.GuiId.COMPUTER.ordinal(), world, pos.getX(), pos.getY(), pos.getZ());
+		if(worldIn.isRemote && SkaiaClient.requestData(tileEntity))
+			playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.COMPUTER.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
 
 		return true;
 	}

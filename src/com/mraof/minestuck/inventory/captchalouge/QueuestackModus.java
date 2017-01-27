@@ -21,18 +21,18 @@ public class QueuestackModus extends StackModus {
 			{
 				size--;
 				return new ItemStack(MinestuckItems.captchaCard);
-			} else return null;
+			} else return ItemStack.EMPTY;
 		}
 		
 		if(list.isEmpty())
-			return null;
+			return ItemStack.EMPTY;
 		
 		if(id == CaptchaDeckHandler.EMPTY_SYLLADEX)
 		{
 			for(ItemStack item : list)
 				CaptchaDeckHandler.launchAnyItem(player, item);
 			list.clear();
-			return null;
+			return ItemStack.EMPTY;
 		}
 		
 		if(asCard)

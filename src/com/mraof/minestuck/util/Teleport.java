@@ -94,7 +94,7 @@ public class Teleport
 		}
 		else if (!entity.isDead)
 		{
-			Entity newEntity = EntityList.createEntityByName(EntityList.getEntityString(entity), worldDest);
+			Entity newEntity = EntityList.newEntity(entity.getClass(), worldDest);
 			if(newEntity == null)
 				return false;
 			

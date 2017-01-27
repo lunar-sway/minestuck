@@ -59,12 +59,6 @@ public class AlchemiterRecipeCategory extends BlankRecipeCategory<AlchemiterReci
     }
 
     @Override
-    public String getRecipeCategoryUid()
-    {
-        return "alchemiter";
-    }
-
-    @Override
     public String getRecipeCategoryUid(AlchemiterRecipeWrapper recipe)
     {
         return "alchemiter";

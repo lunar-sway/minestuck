@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -34,8 +35,9 @@ public abstract class ItemCustomBoat extends Item
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, net.minecraft.util.EnumHand hand)
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
 	{
+		ItemStack itemstack = playerIn.getHeldItem(handIn);
 		float f = 1.0F;
 		float f1 = playerIn.prevRotationPitch + (playerIn.rotationPitch - playerIn.prevRotationPitch) * f;
 		float f2 = playerIn.prevRotationYaw + (playerIn.rotationYaw - playerIn.prevRotationYaw) * f;
@@ -55,7 +57,7 @@ public abstract class ItemCustomBoat extends Item
 		
 		if (rayTrace == null)
 		{
-			return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
+			return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
 		}
 		else
 		{
@@ -82,7 +84,7 @@ public abstract class ItemCustomBoat extends Item
 			
 			if (flag)
 			{
-				return new ActionResult(EnumActionResult.PASS, itemStackIn);
+				return new ActionResult(EnumActionResult.PASS, itemstack);
 			}
 			else
 			{
@@ -95,12 +97,12 @@ public abstract class ItemCustomBoat extends Item
 						blockpos = blockpos.down();
 					}
 					
-					Entity entityboat = createBoat(itemStackIn, worldIn, (double)((float)blockpos.getX() + 0.5F), (double)((float)blockpos.getY() + 1.0F), (double)((float)blockpos.getZ() + 0.5F));
+					Entity entityboat = createBoat(itemstack, worldIn, (double)((float)blockpos.getX() + 0.5F), (double)((float)blockpos.getY() + 1.0F), (double)((float)blockpos.getZ() + 0.5F));
 					entityboat.rotationYaw = (float)(((MathHelper.floor((double)(playerIn.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3) - 1) * 90);
 					
 					if (!worldIn.getCollisionBoxes(entityboat, entityboat.getEntityBoundingBox().expandXyz(-0.1D)).isEmpty())
 					{
-						return new ActionResult(EnumActionResult.FAIL, itemStackIn);
+						return new ActionResult(EnumActionResult.FAIL, itemstack);
 					}
 					
 					if (!worldIn.isRemote)
@@ -110,12 +112,12 @@ public abstract class ItemCustomBoat extends Item
 					
 					if (!playerIn.capabilities.isCreativeMode)
 					{
-						--itemStackIn.stackSize;
+						itemstack.shrink(1);
 					}
-					return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);
+					return new ActionResult(EnumActionResult.SUCCESS, itemstack);
 				}
 				
-				return new ActionResult(EnumActionResult.PASS, itemStackIn);
+				return new ActionResult(EnumActionResult.PASS, itemstack);
 			}
 		}
 	}

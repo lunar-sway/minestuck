@@ -3,6 +3,8 @@
  */
 package com.mraof.minestuck.world.gen.structure;
 
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.StructureStart;
 
@@ -34,5 +36,9 @@ public class MapGenCastle extends MapGenStructure
 	{
 		return "SkaiaCastle";
 	}
-	
+	@Override
+	public BlockPos getClosestStrongholdPos(World worldIn, BlockPos pos, boolean p_180706_3_)
+	{
+		return null;
+	}
 }

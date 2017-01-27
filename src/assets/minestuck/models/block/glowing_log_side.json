@@ -1,7 +1,0 @@
-{
-    "parent": "block/column_side",
-    "textures": {
-        "end": "minestuck:blocks/log_glowing_top",
-        "side": "minestuck:blocks/log_glowing"
-    }
-}

@@ -9,6 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
+import net.minecraft.world.gen.structure.template.TemplateManager;
 
 public class ComponentCastleStartPiece extends ComponentCastlePiece 
 {
@@ -87,9 +88,9 @@ public class ComponentCastleStartPiece extends ComponentCastlePiece
 		
 	}
 	@Override
-	protected void readStructureFromNBT(NBTTagCompound p_143011_1_) {
+	protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_)
+	{
 		// TODO Auto-generated method stub
 		
 	}
-
 }

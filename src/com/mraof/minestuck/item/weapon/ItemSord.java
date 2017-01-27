@@ -20,10 +20,10 @@ public class ItemSord extends ItemWeapon
         if (attacker.getRNG().nextFloat() < .25)
         {
             EntityItem sord = new EntityItem(attacker.world, attacker.posX, attacker.posY, attacker.posZ, itemStack.copy());
-            sord.getEntityItem().stackSize = 1;
+            sord.getEntityItem().setCount(1);
             sord.setPickupDelay(40);
             attacker.world.spawnEntity(sord);
-            itemStack.stackSize--;
+            itemStack.shrink(1);
         }
         return super.hitEntity(itemStack, target, attacker);
     }

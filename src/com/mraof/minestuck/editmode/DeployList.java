@@ -3,6 +3,8 @@ package com.mraof.minestuck.editmode;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -75,12 +77,13 @@ public class DeployList
 		return itemList;
 	}
 	
+	@Nonnull
 	private static ItemStack cleanStack(ItemStack stack)
 	{
-		if(stack == null)
-			return null;
+		if(stack.isEmpty())
+			return ItemStack.EMPTY;
 		stack = stack.copy();
-		stack.stackSize = 1;
+		stack.setCount(1);
 		if(!stack.hasTagCompound())
 			stack.setTagCompound(new NBTTagCompound());
 		else

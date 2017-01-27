@@ -91,7 +91,7 @@ public class TileEntityTransportalizer extends TileEntity
 			{
 				entity.timeUntilPortal = entity.getPortalCooldown();
 				if(entity instanceof EntityPlayerMP)
-					((EntityPlayerMP) entity).sendStatusMessage(new TextComponentTranslation("message.transportalizer.destinationBlocked"));
+					((EntityPlayerMP) entity).sendMessage(new TextComponentTranslation("message.transportalizer.destinationBlocked"));
 				return;
 			}
 			

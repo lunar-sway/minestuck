@@ -34,10 +34,11 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 	@Override
 	public int getSizeInventory()
 	{
-		switch(getMachineType())
-		{
-		case GRIST_WIDGET: return 1;
-		default: return 0;
+		switch (getMachineType()) {
+		case GRIST_WIDGET:
+			return 1;
+		default:
+			return 0;
 		}
 	}
 	
@@ -50,12 +51,15 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 	@Override
 	public boolean contentsValid()
 	{
-		switch (getMachineType())
-		{
+		switch (getMachineType()) {
 		case GRIST_WIDGET:
-			if(MinestuckConfig.disableGristWidget) return false;
-			return (this.inv[0] != null && inv[0].getItem() == MinestuckItems.captchaCard && GristRegistry.getGristConversion(AlchemyRecipeHandler.getDecodedItem(inv[0])) != null
-			&& !inv[0].getTagCompound().getBoolean("punched") && AlchemyRecipeHandler.getDecodedItem(inv[0]).getItem() != MinestuckItems.captchaCard);
+			if(MinestuckConfig.disableGristWidget)
+				return false;
+			ItemStack input = this.inv.get(0);
+			return (input.getItem() == MinestuckItems.captchaCard
+					&& GristRegistry.getGristConversion(AlchemyRecipeHandler.getDecodedItem(input)) != null
+					&& !input.getTagCompound().getBoolean("punched")
+					&& AlchemyRecipeHandler.getDecodedItem(input).getItem() != MinestuckItems.captchaCard);
 		}
 		return false;
 	}
@@ -63,36 +67,41 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 	@Override
 	public void processContents()
 	{
-		switch (getMachineType())
-		{
+		switch (getMachineType()) {
 		case GRIST_WIDGET:
-			if(!world.isRemote) 
+			if(!world.isRemote)
 			{
-				ItemStack item = AlchemyRecipeHandler.getDecodedItem(inv[0]);
+				ItemStack item = AlchemyRecipeHandler.getDecodedItem(inv.get(0));
 				GristSet gristSet = GristRegistry.getGristConversion(item);
-				if(item.stackSize != 1)
-					gristSet.scaleGrist(item.stackSize);
+				if(item.getCount() != 1)
+					gristSet.scaleGrist(item.getCount());
 				
 				gristSet.scaleGrist(0.9F);
 				
 				if(item.isItemDamaged())
 				{
-					float multiplier = 1 - item.getItem().getDamage(item)/((float) item.getMaxDamage());
+					float multiplier = 1 - item.getItem().getDamage(item) / ((float) item.getMaxDamage());
 					for(int i = 0; i < gristSet.gristTypes.length; i++)
-						gristSet.gristTypes[i] = (int) (gristSet.gristTypes[i]*multiplier);
+						gristSet.gristTypes[i] = (int) (gristSet.gristTypes[i] * multiplier);
 				}
 				
 				Iterator<Entry<Integer, Integer>> iter = gristSet.getHashtable().entrySet().iterator();
-				while(iter.hasNext()) 
+				while (iter.hasNext())
 				{
 					Map.Entry<Integer, Integer> entry = (Entry<Integer, Integer>) iter.next();
 					int grist = entry.getValue();
-					while(true) 
+					while (true)
 					{
 						if(grist == 0)
 							break;
-						GristAmount gristAmount = new GristAmount(GristType.values()[entry.getKey()],grist<=3?grist:(world.rand.nextInt(grist)+1));
-						EntityGrist entity = new EntityGrist(world, this.pos.getX() + 0.5 /* this.width - this.width / 2*/, this.pos.getY() + 1, this.pos.getZ() + 0.5 /* this.width - this.width / 2*/, gristAmount);
+						GristAmount gristAmount = new GristAmount(GristType.values()[entry.getKey()],
+								grist <= 3 ? grist : (world.rand.nextInt(grist) + 1));
+						EntityGrist entity = new EntityGrist(world,
+								this.pos.getX()
+										+ 0.5 /* this.width - this.width / 2 */,
+								this.pos.getY() + 1, this.pos.getZ()
+										+ 0.5 /* this.width - this.width / 2 */,
+								gristAmount);
 						entity.motionX /= 2;
 						entity.motionY /= 2;
 						entity.motionZ /= 2;
@@ -111,11 +120,11 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 	@Override
 	public String getName()
 	{
-		return "tile.crockerMachine."+getMachineType().getUnlocalizedName()+".name";
+		return "tile.crockerMachine." + getMachineType().getUnlocalizedName() + ".name";
 	}
 	
 	public MachineType getMachineType()
 	{
-		return MachineType.values()[getBlockMetadata()%4];
+		return MachineType.values()[getBlockMetadata() % 4];
 	}
 }

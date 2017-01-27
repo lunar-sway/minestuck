@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map.Entry;
+
+import javax.annotation.Nonnull;
+
 import java.util.Random;
 
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
@@ -104,10 +107,7 @@ public class GristHelper {
 		return MinestuckPlayerData.getGristSet(player).getGrist(type);
 	}
 	
-	/**
-	 * Uses the encoded version of the username!
-	 */
-	public static boolean canAfford(PlayerIdentifier player, ItemStack stack, boolean clientSide)
+	public static boolean canAfford(PlayerIdentifier player, @Nonnull ItemStack stack, boolean clientSide)
 	{
 		return canAfford(clientSide ? MinestuckPlayerData.getClientGrist() : MinestuckPlayerData.getGristSet(player), GristRegistry.getGristConversion(stack));
 	}

@@ -71,7 +71,7 @@ public class BlockGoldSeeds extends Block
 	}
 	
 	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn)
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
 	{
 		if(worldIn.getBlockState(pos.down()).getBlock() != Blocks.FARMLAND)
 		{

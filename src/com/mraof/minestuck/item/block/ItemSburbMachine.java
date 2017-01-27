@@ -1,6 +1,5 @@
 package com.mraof.minestuck.item.block;
 
-import com.google.common.base.Function;
 import com.mraof.minestuck.block.BlockSburbMachine;
 import com.mraof.minestuck.tileentity.TileEntitySburbMachine;
 
@@ -18,7 +17,7 @@ public class ItemSburbMachine extends ItemMultiTexture
 {
 	public ItemSburbMachine(Block block) 
 	{
-		super(block, block, new Function<ItemStack, String>()
+		super(block, block, new ItemMultiTexture.Mapper()
 		{
 			@Override
 			public String apply(ItemStack input)

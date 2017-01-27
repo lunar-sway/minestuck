@@ -17,6 +17,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -83,13 +84,13 @@ public class CaptchaDeckHandler
 	public static void launchItem(EntityPlayer player, ItemStack item)
 	{
 		if(item.getItem().equals(MinestuckItems.captchaCard) && (!item.hasTagCompound() || !item.getTagCompound().hasKey("contentID")))
-			while(item.stackSize > 0)
+			while(item.getCount() > 0)
 			{
 				if(getModus(player).increaseSize())
-					item.stackSize--;
+					item.shrink(1);
 				else break;
 			}
-		if(item.stackSize > 0)
+		if(item.getCount() > 0)
 			launchAnyItem(player, item);
 	}
 	
@@ -107,7 +108,7 @@ public class CaptchaDeckHandler
 		if(!(player.openContainer instanceof ContainerCaptchaDeck))
 			return;
 		ContainerCaptchaDeck container = (ContainerCaptchaDeck) player.openContainer;
-		if(container.inventory.getStackInSlot(0) == null)
+		if(container.inventory.getStackInSlot(0).isEmpty())
 			return;
 		ItemStack item = container.inventory.getStackInSlot(0);
 		Modus modus = getModus(player);
@@ -120,7 +121,7 @@ public class CaptchaDeckHandler
 				modus.player = player;
 				modus.initModus(null, MinestuckConfig.initialModusSize);
 				setModus(player, modus);
-				container.inventory.setInventorySlotContents(0, null);
+				container.inventory.setInventorySlotContents(0, ItemStack.EMPTY);
 			}
 			else
 			{
@@ -135,7 +136,7 @@ public class CaptchaDeckHandler
 				else
 				{
 					for(ItemStack content : oldModus.getItems())
-						if(content != null)
+						if(!content.isEmpty())
 							launchAnyItem(player, content);
 					modus.initModus(null, oldModus.getSize());
 				}
@@ -150,12 +151,12 @@ public class CaptchaDeckHandler
 		{
 			ItemStack content = AlchemyRecipeHandler.getDecodedItem(item);
 			int failed = 0;
-			for(int i = 0; i < item.stackSize; i++)
+			for(int i = 0; i < item.getCount(); i++)
 				if(!modus.increaseSize())
 					failed++;
 			
 			if(content != null)
-				for(int i = 0; i < item.stackSize - failed; i++)
+				for(int i = 0; i < item.getCount() - failed; i++)
 				{
 					ItemStack toPut = content.copy();
 					if(!modus.putItemStack(toPut))
@@ -163,8 +164,8 @@ public class CaptchaDeckHandler
 				}
 			
 			if(failed == 0)
-				container.inventory.setInventorySlotContents(0, null);
-			else item.stackSize = failed;
+				container.inventory.setInventorySlotContents(0, ItemStack.EMPTY);
+			else item.setCount(failed);
 		}
 		
 		if(modus != null)
@@ -176,39 +177,38 @@ public class CaptchaDeckHandler
 	
 	public static void captchalougeItem(EntityPlayerMP player)
 	{
-		ItemStack item = player.getHeldItemMainhand();
+		ItemStack stack = player.getHeldItemMainhand();
 		Modus modus = getModus(player);
-		if(modus != null && item != null)
+		if(modus != null && !stack.isEmpty())
 		{
 			boolean card1 = false, card2 = true;
-			if(item.getItem() == MinestuckItems.captchaCard && item.hasTagCompound() && !item.getTagCompound().getBoolean("punched"))
+			if(stack.getItem() == MinestuckItems.captchaCard && stack.hasTagCompound() && !stack.getTagCompound().getBoolean("punched"))
 			{
-				ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(item);
-				if(newItem != null)
+				ItemStack newStack = AlchemyRecipeHandler.getDecodedItem(stack);
+				if(!newStack.isEmpty())
 				{
 					card1 = true;
-					item = newItem;
+					stack = newStack;
 					card2 = modus.increaseSize();
 				}
 			}
-			if(modus.putItemStack(item))
+			if(modus.putItemStack(stack))
 			{
 				if(!card2)
 					launchAnyItem(player, new ItemStack(MinestuckItems.captchaCard, 1));
 				
-				item = player.getHeldItemMainhand();
-				if(card1 && item.stackSize > 1)
-					item.stackSize--;
-				else player.setHeldItem(EnumHand.MAIN_HAND, null);
-				
+				stack = player.getHeldItemMainhand();
+				if(card1 && stack.getCount() > 1)
+					stack.shrink(1);
+				else player.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
 			}
 			else if(card1 && card2)
 			{
-				launchAnyItem(player, item);
-				item = player.getHeldItemMainhand();
-				if(item.stackSize == 1)
-					player.setHeldItem(EnumHand.MAIN_HAND, null);
-				else item.stackSize--;
+				launchAnyItem(player, stack);
+				stack = player.getHeldItemMainhand();
+				if(stack.getCount() == 1)
+					player.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
+				else stack.shrink(1);
 			}
 			MinestuckPacket packet = MinestuckPacket.makePacket(MinestuckPacket.Type.CAPTCHA, CaptchaDeckPacket.DATA, writeToNBT(modus));
 			MinestuckChannelHandler.sendToPlayer(packet, player);
@@ -222,29 +222,29 @@ public class CaptchaDeckHandler
 		if(modus == null)
 			return;
 		ItemStack stack = modus.getItem(index, asCard);
-		if(stack != null)
+		if(!stack.isEmpty())
 		{
 			ItemStack otherStack = player.getHeldItemMainhand();
-			if(otherStack == null)
+			if(otherStack.isEmpty())
 				player.setHeldItem(EnumHand.MAIN_HAND, stack);
 			else if(canMergeItemStacks(stack, otherStack))
 			{
-				otherStack.stackSize += stack.stackSize;
-				stack.stackSize = 0;
+				otherStack.grow(stack.getCount());
+				stack.setCount(0);
 			}
 			else
 			{
 				boolean placed = false;
-				for(int i = 0; i < player.inventory.mainInventory.length; i++)
+				for(int i = 0; i < player.inventory.mainInventory.size(); i++)
 				{
-					otherStack = player.inventory.mainInventory[i];
+					otherStack = player.inventory.mainInventory.get(i);
 					if(otherStack == null)
-						player.inventory.mainInventory[i] = stack.copy();
+						player.inventory.mainInventory.set(i, stack.copy());
 					else if(canMergeItemStacks(stack, otherStack))
-						otherStack.stackSize += stack.stackSize;
+						otherStack.grow(stack.getCount());
 					else continue;
 					
-					stack.stackSize = 0;
+					stack.setCount(0);
 					placed = true;
 					player.inventory.markDirty();
 					player.inventoryContainer.detectAndSendChanges();
@@ -265,18 +265,18 @@ public class CaptchaDeckHandler
 		if(modus == null)
 			return;
 		
-		ItemStack[] stacks = modus.getItems();
+		NonNullList<ItemStack> stacks = modus.getItems();
 		int size = modus.getSize();
 		int cardsToKeep = MinestuckConfig.sylladexDropMode == 2 ? 0 : MinestuckConfig.initialModusSize;
 		
 		if(!MinestuckConfig.dropItemsInCards || MinestuckConfig.sylladexDropMode == 0)
 		{
 			for(ItemStack stack : stacks)
-				if(stack != null)
+				if(!stack.isEmpty())
 					player.dropItem(stack, true, false);
 		} else
 			for(ItemStack stack : stacks)
-				if(stack != null)
+				if(!stack.isEmpty())
 					if(size > cardsToKeep)
 					{
 						ItemStack card = AlchemyRecipeHandler.createCard(stack, false);
@@ -340,6 +340,6 @@ public class CaptchaDeckHandler
 	private static boolean canMergeItemStacks(ItemStack stack1, ItemStack stack2)
 	{
 		return stack1.getItem() == stack2.getItem() && (!stack1.getHasSubtypes() || stack1.getMetadata() == stack2.getMetadata()) && ItemStack.areItemStackTagsEqual(stack1, stack2)
-				&& stack1.isStackable() && stack1.stackSize + stack2.stackSize < stack1.getMaxStackSize();
+				&& stack1.isStackable() && stack1.getCount() + stack2.getCount() < stack1.getMaxStackSize();
 	}
 }

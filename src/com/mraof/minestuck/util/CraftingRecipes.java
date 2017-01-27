@@ -37,7 +37,7 @@ public class CraftingRecipes
 				{
 					int posX = invX - x;
 					int posY = invY - y;
-					ItemStack itemstack = null;
+					ItemStack itemstack = ItemStack.EMPTY;
 					
 					if (posX >= 0 && posY >= 0 && posX < this.recipeWidth && posY < this.recipeHeight)
 					{
@@ -46,9 +46,9 @@ public class CraftingRecipes
 					
 					ItemStack itemstack1 = inv.getStackInRowAndColumn(invX, invY);
 					
-					if (itemstack1 != null || itemstack != null)
+					if (!itemstack1.isEmpty() || !itemstack.isEmpty())
 					{
-						if (itemstack1 == null && itemstack != null || itemstack1 != null && itemstack == null)
+						if (itemstack1.isEmpty() && !itemstack.isEmpty() || !itemstack1.isEmpty() && itemstack.isEmpty())
 						{
 							return false;
 						}
@@ -84,7 +84,7 @@ public class CraftingRecipes
 			for(int i = 0; i < crafting.getSizeInventory(); i++)
 			{
 				ItemStack stack = crafting.getStackInSlot(i);
-				if(stack != null && stack.getItem() == MinestuckItems.captchaCard && stack.hasTagCompound() && stack.getTagCompound().hasKey("contentID"))
+				if(stack.getItem() == MinestuckItems.captchaCard && stack.hasTagCompound() && stack.getTagCompound().hasKey("contentID"))
 					return false;
 			}
 			return super.matches(crafting, world);

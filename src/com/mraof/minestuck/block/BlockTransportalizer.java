@@ -5,7 +5,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -69,17 +68,18 @@ public class BlockTransportalizer extends BlockContainer
 	}
 	
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
+			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
-		TileEntityTransportalizer tileEntity = (TileEntityTransportalizer) world.getTileEntity(pos);
+		TileEntityTransportalizer tileEntity = (TileEntityTransportalizer) worldIn.getTileEntity(pos);
 
-		if (tileEntity == null || player.isSneaking())
+		if (tileEntity == null || playerIn.isSneaking())
 		{
 			return false;
 		}
 
-		if(world.isRemote)
-			player.openGui(Minestuck.instance, GuiHandler.GuiId.TRANSPORTALIZER.ordinal(), world, pos.getX(), pos.getY(), pos.getZ());
+		if(worldIn.isRemote)
+			playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.TRANSPORTALIZER.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
 
 		return true;
 	}

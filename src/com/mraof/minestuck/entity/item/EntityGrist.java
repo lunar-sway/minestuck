@@ -3,6 +3,7 @@ package com.mraof.minestuck.entity.item;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
@@ -160,8 +161,8 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 				this.motionZ += d3 / d4 * d5 * 0.1D;
 			}
 		}
-
-		this.move(this.motionX, this.motionY, this.motionZ);
+		
+		this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 		float f = 0.98F;
 		
 		if(this.onGround)

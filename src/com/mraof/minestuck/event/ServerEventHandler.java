@@ -15,7 +15,6 @@ import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.PostEntryTask;
 
-import minetweaker.api.event.PlayerAttackEntityEvent;
 import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityEnderman;
@@ -27,7 +26,6 @@ import net.minecraft.entity.monster.EntitySpider;
 import net.minecraft.entity.monster.EntityWitch;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraftforge.event.ServerChatEvent;
@@ -38,8 +36,6 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-
-import static sun.audio.AudioPlayer.player;
 
 public class ServerEventHandler
 {
@@ -119,7 +115,7 @@ public class ServerEventHandler
 					event.setAmount((float) (event.getAmount() * modifier));
 				}
 				boolean critical = cachedCooledAttackStrength > 0.9 && player.fallDistance > 0.0F && !player.onGround && !player.isOnLadder() && !player.isInWater() && !player.isPotionActive(MobEffects.BLINDNESS) && !player.isRiding();
-				if(critical && player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() instanceof ItemPotionWeapon)
+				if(critical && !player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof ItemPotionWeapon)
 				{
 					event.getEntityLiving().addPotionEffect(((ItemPotionWeapon) player.getHeldItemMainhand().getItem()).getEffect());
 				}

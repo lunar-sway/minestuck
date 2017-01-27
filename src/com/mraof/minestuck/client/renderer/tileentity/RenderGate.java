@@ -15,8 +15,8 @@ import net.minecraft.util.math.MathHelper;
 public class RenderGate extends TileEntitySpecialRenderer
 {
 	
-	private static final ResourceLocation nodeInner = new ResourceLocation("minestuck","textures/blocks/NodeSpiroInner.png");
-	private static final ResourceLocation nodeOuter = new ResourceLocation("minestuck","textures/blocks/NodeSpiroOuter.png");
+	private static final ResourceLocation nodeInner = new ResourceLocation("minestuck","textures/blocks/node_spiro_inner.png");
+	private static final ResourceLocation nodeOuter = new ResourceLocation("minestuck","textures/blocks/node_spiro_outer.png");
 	
 	@Override
 	public void renderTileEntityAt(TileEntity tileEntity, double posX, double posY, double posZ, float f, int p_180535_9_)

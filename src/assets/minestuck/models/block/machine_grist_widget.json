@@ -1,8 +1,8 @@
 {
     "textures": {
         "particle": "minestuck:items/grist_widget",
-        "texture1": "minestuck:blocks/GristWidget1",
-        "texture2": "minestuck:blocks/GristWidget2"
+        "texture1": "minestuck:blocks/grist_widget_1",
+        "texture2": "minestuck:blocks/grist_widget_2"
     },
     "elements": [
         {

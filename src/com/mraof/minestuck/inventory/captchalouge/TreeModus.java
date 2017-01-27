@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -32,7 +33,7 @@ public class TreeModus extends Modus
 	protected TreeGuiHandler guiHandler;
 	
 	@Override
-	public void initModus(ItemStack[] prev, int size)
+	public void initModus(NonNullList<ItemStack> prev, int size)
 	{
 		this.size = size;
 	}
@@ -51,8 +52,8 @@ public class TreeModus extends Modus
 	{
 		if(nbt.hasKey("node"+currentIndex))
 		{
-			ItemStack stack = ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("node"+currentIndex));
-			if(stack == null) return null;	//Should not happen
+			ItemStack stack = new ItemStack(nbt.getCompoundTag("node"+currentIndex));
+			if(stack.isEmpty()) return null;	//Should not happen
 			TreeNode node = new TreeNode(stack);
 			node.node1 = readNode(nbt, currentIndex + (int) Math.pow(2, level), level + 1);
 			node.node2 = readNode(nbt, currentIndex + (int) Math.pow(2, level + 1), level + 1);
@@ -85,7 +86,7 @@ public class TreeModus extends Modus
 	public boolean putItemStack(ItemStack item)
 	{
 		int currentSize = node == null ? 0 : node.getSize();
-		if(item == null || currentSize >= size)
+		if(item.isEmpty() || currentSize >= size)
 			return false;
 		if(node == null)
 			node = new TreeNode(item);
@@ -95,14 +96,14 @@ public class TreeModus extends Modus
 	}
 	
 	@Override
-	public ItemStack[] getItems()
+	public NonNullList<ItemStack> getItems()
 	{
 		if(node == null)
-			return new ItemStack[size];
-		ArrayList<ItemStack> list = node.getItems();
+			return NonNullList.<ItemStack>withSize(size, ItemStack.EMPTY);
+		NonNullList<ItemStack> list = node.getItems();
 		while(list.size() < size)
-			list.add(null);
-		return list.toArray(new ItemStack[list.size()]);
+			list.add(ItemStack.EMPTY);
+		return list;
 	}
 	
 	@Override
@@ -120,20 +121,20 @@ public class TreeModus extends Modus
 	{
 		if(id == CaptchaDeckHandler.EMPTY_CARD)
 		{
-			if(size <= 0)
-				return null;
+			if(size <= 0 && (node == null || size > node.getSize()))
+				return ItemStack.EMPTY;
 			size--;
 			return new ItemStack(MinestuckItems.captchaCard);
 		}
 		if(node == null)
-			return null;
+			return ItemStack.EMPTY;
 		if(id == CaptchaDeckHandler.EMPTY_SYLLADEX)
 		{
 			ArrayList<ItemStack> list = node.removeItems(0);
 			node = null;
 			for(ItemStack stack : list)
 				CaptchaDeckHandler.launchAnyItem(player, stack);
-			return null;
+			return ItemStack.EMPTY;
 		}
 		
 		if(id == 0 && node.getSize() >= 16)
@@ -142,7 +143,7 @@ public class TreeModus extends Modus
 		
 		ArrayList<ItemStack> list = node.removeItems(id);
 		if(list.isEmpty())
-			return null;
+			return ItemStack.EMPTY;
 		ItemStack stack = list.get(0);
 		for(int i = 1; i < list.size(); i++)
 			CaptchaDeckHandler.launchAnyItem(player, list.get(i));
@@ -251,9 +252,9 @@ public class TreeModus extends Modus
 		public void addNode(TreeNode node)
 		{
 			if(this.stack.getItem() == node.stack.getItem() && this.stack.getItemDamage() == node.stack.getItemDamage() && ItemStack.areItemStackTagsEqual(this.stack, node.stack)
-				&& this.stack.stackSize + node.stack.stackSize <= this.stack.getMaxStackSize())
+				&& this.stack.getCount() + node.stack.getCount() <= this.stack.getMaxStackSize())
 			{
-				this.stack.stackSize += node.stack.stackSize;
+				this.stack.grow(node.stack.getCount());
 			}
 			else
 			{
@@ -316,9 +317,9 @@ public class TreeModus extends Modus
 			}
 		}
 		
-		public ArrayList<ItemStack> getItems()
-		{
-			ArrayList<ItemStack> list = new ArrayList<ItemStack>();
+		public NonNullList<ItemStack> getItems()
+		{	//TODO Maybe something more efficient that repeatedly creating and discarding lists?
+			NonNullList<ItemStack> list = NonNullList.<ItemStack>create();
 			if(node1 != null)
 				list.addAll(node1.getItems());
 			list.add(stack);
@@ -328,5 +329,4 @@ public class TreeModus extends Modus
 		}
 		
 	}
-	
 }

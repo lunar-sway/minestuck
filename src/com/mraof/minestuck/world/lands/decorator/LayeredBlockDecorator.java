@@ -50,10 +50,10 @@ public class LayeredBlockDecorator implements ILandDecorator
 //		for(int x = 0; x < 16; x++)
 //			for(int z = 0; z < 16; z++)
 //				setBlock(world, world.getTopSolidOrLiquidBlock(new BlockPos(x + (chunkX << 4) + 8, 0, z + (chunkZ << 4) + 8)), heightMap[(x << 4) | z]);
-		for(int x = 0; x < 32; x++)
-			for(int z = 0; z < 32; z++)
+		for(int x = 0; x < 24; x++)
+			for(int z = 0; z < 24; z++)
 			{
-				BlockPos pos = world.getTopSolidOrLiquidBlock(new BlockPos(x + (chunkX << 4), 0, z + (chunkZ << 4)));
+				BlockPos pos = world.getTopSolidOrLiquidBlock(new BlockPos(x + 4 + (chunkX << 4), 0, z + 4 + (chunkZ << 4)));
 				if(world.getBlockState(pos).getBlock().isAir(world.getBlockState(pos), world, pos) && block.canPlaceBlockAt(world, pos))
 					setBlock(world, pos, 1);
 			}

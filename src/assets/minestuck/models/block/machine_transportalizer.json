@@ -1,7 +1,7 @@
 {
     "textures": {
         "particle": "minestuck:items/transportalizer",
-        "texture": "minestuck:blocks/Transportalizer"
+        "texture": "minestuck:blocks/transportalizer"
     },
     "elements": [
         {

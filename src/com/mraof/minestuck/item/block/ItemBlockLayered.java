@@ -25,13 +25,15 @@ public class ItemBlockLayered extends ItemBlock
 	}
 	
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand,
+			EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
-		if (stack.stackSize == 0)
+		ItemStack stack = player.getHeldItem(hand);
+		if (stack.isEmpty())
 		{
 			return EnumActionResult.PASS;
 		}
-		else if (!playerIn.canPlayerEdit(pos, facing, stack))
+		else if (!player.canPlayerEdit(pos, facing, stack))
 		{
 			return EnumActionResult.FAIL;
 		}
@@ -43,15 +45,15 @@ public class ItemBlockLayered extends ItemBlock
 			{
 				int metadata = (Integer) state.getValue(BlockLayered.SIZE);
 				
-				if (/*depth <= 6 && */worldIn.checkNoEntityCollision(this.block.getBoundingBox(state, worldIn, pos)) && ((BlockLayered)this.block).changeHeight(worldIn, pos, metadata + 1)) //changes full BlockLayered into full block
+				if (/*depth <= 6 && */worldIn.checkNoEntityCollision(state.getBoundingBox(worldIn, pos)) && ((BlockLayered)this.block).changeHeight(worldIn, pos, metadata + 1)) //changes full BlockLayered into full block
 				{
-					worldIn.playSound(null, (double)pos.getX() + 0.5, (double)pos.getY() + 0.5, (double)pos.getZ() + 0.5, this.block.getSoundType().getPlaceSound(), SoundCategory.BLOCKS, (this.block.getSoundType().getVolume() + 1.0F) / 2.0F, this.block.getSoundType().getPitch() * 0.8F);
-					--stack.stackSize;
+					worldIn.playSound(null, (double)pos.getX() + 0.5, (double)pos.getY() + 0.5, (double)pos.getZ() + 0.5, this.block.getSoundType(state, worldIn, pos, player).getPlaceSound(), SoundCategory.BLOCKS, (this.block.getSoundType().getVolume() + 1.0F) / 2.0F, this.block.getSoundType().getPitch() * 0.8F);
+					stack.shrink(1);
 					return EnumActionResult.SUCCESS;
 				}
 			}
 			
-			return super.onItemUse(stack, playerIn, worldIn, pos, hand, facing, hitX, hitY, hitZ);
+			return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
 		}
 	}
 	

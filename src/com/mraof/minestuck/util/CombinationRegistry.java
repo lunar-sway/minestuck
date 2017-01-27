@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import com.mraof.minestuck.block.MinestuckBlocks;
 
 import net.minecraft.block.Block;
@@ -20,42 +22,43 @@ public class CombinationRegistry {
 	/**
 	 * Creates an entry for a result of combining the cards of two items. Used in the Punch Designix.
 	 */
-	public static void addCombination(ItemStack input1, ItemStack input2, boolean mode, ItemStack output) {
+	public static void addCombination(@Nonnull ItemStack input1, @Nonnull ItemStack input2, boolean mode, @Nonnull ItemStack output) {
 		addCombination(input1, input2, mode, true, true, output);
 	}
 	
 	
-	public static void addCombination(ItemStack input1, ItemStack input2, boolean mode, boolean useDamage1, boolean useDamage2, ItemStack output) {
+	public static void addCombination(@Nonnull ItemStack input1, @Nonnull ItemStack input2, boolean mode, boolean useDamage1, boolean useDamage2, @Nonnull ItemStack output)
+	{
 		addCombination(input1.getItem(), useDamage1 ? input1.getItemDamage() : OreDictionary.WILDCARD_VALUE, input2.getItem(), useDamage2 ? input2.getItemDamage() : OreDictionary.WILDCARD_VALUE, mode, output);
 	}
 	
-	public static void addCombination(String oreDictInput, ItemStack itemInput, boolean useDamage, boolean mode, ItemStack output)
+	public static void addCombination(String oreDictInput, @Nonnull ItemStack itemInput, boolean useDamage, boolean mode, @Nonnull ItemStack output)
 	{
 		addCombination(oreDictInput, itemInput.getItem(), useDamage ? itemInput.getItemDamage() : OreDictionary.WILDCARD_VALUE, mode, output);
 	}
 	
-	public static void addCombination(String oreDictInput, Item item, int damage, boolean mode, ItemStack output)
+	public static void addCombination(String oreDictInput, Item item, int damage, boolean mode, @Nonnull ItemStack output)
 	{
 		addCombination(oreDictInput, OreDictionary.WILDCARD_VALUE, item, damage, mode, output);
 	}
 	
-	public static void addCombination(String oreDictInput, Block block, int damage, boolean mode, ItemStack output)
+	public static void addCombination(String oreDictInput, Block block, int damage, boolean mode, @Nonnull ItemStack output)
 	{
 		addCombination(oreDictInput, OreDictionary.WILDCARD_VALUE, Item.getItemFromBlock(block), damage, mode, output);
 	}
 	
-	public static void addCombination(String input1, String input2, boolean mode, ItemStack output)
+	public static void addCombination(String input1, String input2, boolean mode, @Nonnull ItemStack output)
 	{
 		addCombination(input1, OreDictionary.WILDCARD_VALUE, input2, OreDictionary.WILDCARD_VALUE, mode, output);
 	}
 	
-	private static void addCombination(Object input1, int damage1, Object input2, int damage2, boolean mode, ItemStack output)
+	private static void addCombination(Object input1, int damage1, Object input2, int damage2, boolean mode, @Nonnull ItemStack output)
 	{
 		try
 		{
 			checkIsValid(input1);
 			checkIsValid(input2);
-			if(output == null || output.getItem() == null)
+			if(output.isEmpty())
 				throw new IllegalArgumentException("Output is not defined.");
 		} catch(IllegalArgumentException e)
 		{
@@ -84,30 +87,32 @@ public class CombinationRegistry {
 	/**
 	 * Returns an entry for a result of combining the cards of two items. Used in the Punch Designix.
 	 */
-	public static ItemStack getCombination(ItemStack input1, ItemStack input2, boolean mode) {
+	@Nonnull
+	public static ItemStack getCombination(@Nonnull ItemStack input1, @Nonnull ItemStack input2, boolean mode)
+	{
 		ItemStack item;
-		if (input1 == null || input2 == null) {return null;}
+		if (input1.isEmpty() || input2.isEmpty()) {return ItemStack.EMPTY;}
 		
-		if((item = getCombination(input1.getItem(), input1.getItemDamage(), input2.getItem(), input2.getItemDamage(), mode)) == null)
+		if((item = getCombination(input1.getItem(), input1.getItemDamage(), input2.getItem(), input2.getItemDamage(), mode)).isEmpty())
 		{
 			String[] itemNames2 = getDictionaryNames(input2);
 			
 			for(String str2 : itemNames2)
-				if((item = getCombination(input1.getItem(), input1.getItemDamage(), str2, OreDictionary.WILDCARD_VALUE, mode)) != null)
+				if(!(item = getCombination(input1.getItem(), input1.getItemDamage(), str2, OreDictionary.WILDCARD_VALUE, mode)).isEmpty())
 					return item;
 			
 			String[] itemNames1 = getDictionaryNames(input1);
 			for(String str1 : itemNames1)
-				if((item = getCombination(str1, OreDictionary.WILDCARD_VALUE, input2.getItem(), input2.getItemDamage(), mode)) != null)
+				if(!(item = getCombination(str1, OreDictionary.WILDCARD_VALUE, input2.getItem(), input2.getItemDamage(), mode)).isEmpty())
 					return item;
 			
 			for(String str1 : itemNames1)
 				for(String str2 : itemNames2)
-					if((item = getCombination(str1, OreDictionary.WILDCARD_VALUE, str2, OreDictionary.WILDCARD_VALUE, mode)) != null)
+					if(!(item = getCombination(str1, OreDictionary.WILDCARD_VALUE, str2, OreDictionary.WILDCARD_VALUE, mode)).isEmpty())
 						return item;
 		}
 		
-		if(item == null)
+		if(item.isEmpty())
 			if(input1.getItem().equals(MinestuckBlocks.genericObject))
 				return mode?input1:input2;
 			else if(input2.getItem().equals(MinestuckBlocks.genericObject))
@@ -115,6 +120,7 @@ public class CombinationRegistry {
 		return item;
 	}
 	
+	@Nonnull
 	private static ItemStack getCombination(Object input1, int damage1, Object input2, int damage2, boolean mode)
 	{
 		ItemStack item;
@@ -138,10 +144,13 @@ public class CombinationRegistry {
 			else if(b1 && b2) item = combRecipes.get(Arrays.asList(input2, OreDictionary.WILDCARD_VALUE, input1, OreDictionary.WILDCARD_VALUE, mode));
 		}
 		
+		if(item == null || item.isEmpty())
+			return ItemStack.EMPTY;
+		
 		return item;
 	}
 	
-	protected static String[] getDictionaryNames(ItemStack stack)
+	protected static String[] getDictionaryNames(@Nonnull ItemStack stack)
 	{
 		int[] itemIDs = OreDictionary.getOreIDs(stack);
 		String[] itemNames = new String[itemIDs.length];

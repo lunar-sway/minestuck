@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureStart;
+import net.minecraft.world.gen.structure.template.TemplateManager;
 
 public class ImpDungeonStart extends StructureStart
 {
@@ -62,7 +63,7 @@ public class ImpDungeonStart extends StructureStart
 		}
 		
 		@Override
-		protected void readStructureFromNBT(NBTTagCompound tagCompound)
+		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager templates)
 		{
 			definedHeight = tagCompound.getBoolean("definedHeight");
 			compoHeight = tagCompound.getInteger("compoHeight");

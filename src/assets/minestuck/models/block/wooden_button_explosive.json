@@ -1,6 +1,6 @@
 {
     "parent": "minestuck:block/button_special",
     "textures": {
-        "texture": "minestuck:blocks/ButtonExplosiveWood"
+        "texture": "minestuck:blocks/button_explosive_wood"
     }
 }

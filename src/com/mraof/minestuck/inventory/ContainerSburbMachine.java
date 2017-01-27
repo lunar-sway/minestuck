@@ -7,6 +7,8 @@ import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nonnull;
+
 import com.mraof.minestuck.block.BlockSburbMachine.MachineType;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tileentity.TileEntitySburbMachine;
@@ -93,11 +95,12 @@ public class ContainerSburbMachine extends Container
 		for (int i = 0; i < 9; i++)
 			addSlotToContainer(new Slot(inventoryPlayer, i, 8 + i * 18, 142));
 	}
-
+	
+	@Nonnull
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotNumber)
 	{
-		ItemStack itemstack = null;
+		ItemStack itemstack = ItemStack.EMPTY;
 		Slot slot = (Slot)this.inventorySlots.get(slotNumber);
 		int allSlots = this.inventorySlots.size();
 		
@@ -171,11 +174,10 @@ public class ContainerSburbMachine extends Container
 			}
 			
 			if (!result)
-				return null;
+				return ItemStack.EMPTY;
 			
-			if (itemstackOrig.stackSize == 0)
-				slot.putStack((ItemStack)null);
-			else slot.onSlotChanged();
+			if(!itemstackOrig.isEmpty())
+				slot.onSlotChanged();
 		}
 		
 		return itemstack;

@@ -119,7 +119,7 @@ public class PlayerDataPacket extends MinestuckPacket
 				for(prev++; prev <= i1; prev++)
 				{
 					String s = I18n.canTranslate("echeladder.rung"+prev) ? I18n.translateToLocal("echeladder.rung"+prev) : String.valueOf(prev+1);
-					player.sendStatusMessage(new TextComponentString("You reached rung "+s+'!'));
+					player.sendMessage(new TextComponentString("You reached rung "+s+'!'));
 				}
 			else GuiEcheladder.animatedRung = GuiEcheladder.lastRung = i1;
 		} else if(type == BOONDOLLAR)

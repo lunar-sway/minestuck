@@ -1,9 +1,9 @@
 {
     "textures": {
         "particle": "minestuck:items/cruxtruder",
-        "up": "minestuck:blocks/CruxtruderTop",
-        "down": "minestuck:blocks/CruxtruderBottom",
-        "other": "minestuck:blocks/CruxtruderMisc"
+        "up": "minestuck:blocks/cruxtruder_top",
+        "down": "minestuck:blocks/cruxtruder_bottom",
+        "other": "minestuck:blocks/cruxtruder_misc"
     },
     "elements": [
         {

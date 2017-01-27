@@ -36,12 +36,12 @@ public class ItemGoldSeeds extends ItemSeeds
 	}
 	
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand,
+			EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
-		EnumActionResult result = super.onItemUse(stack, playerIn, worldIn, pos, hand, facing, hitX, hitY, hitZ);
+		EnumActionResult result = super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
 		if(result == EnumActionResult.SUCCESS)
-			playerIn.addStat(MinestuckAchievementHandler.goldSeeds);
+			player.addStat(MinestuckAchievementHandler.goldSeeds);
 		return result;
 	}
-	
 }

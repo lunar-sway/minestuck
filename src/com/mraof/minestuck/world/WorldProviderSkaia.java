@@ -25,7 +25,7 @@ public class WorldProviderSkaia extends WorldProvider
 	}
 	
 	@Override
-	protected void createBiomeProvider()
+	protected void init()
 	{
 		this.biomeProvider = new BiomeProviderSingle(Biomes.PLAINS);
 	}

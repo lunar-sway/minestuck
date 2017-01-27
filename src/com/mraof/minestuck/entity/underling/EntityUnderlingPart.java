@@ -62,7 +62,7 @@ public class EntityUnderlingPart extends EntityLiving implements IEntityAddition
 	@Override
 	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
 	{
-		if(this.baseEntity == null || par1DamageSource == DamageSource.inWall || par1DamageSource == DamageSource.drown || par1DamageSource == DamageSource.fall)
+		if(this.baseEntity == null || par1DamageSource == DamageSource.IN_WALL || par1DamageSource == DamageSource.DROWN || par1DamageSource == DamageSource.FALL)
 			return false;
 		return ((IEntityMultiPart) this.baseEntity).attackEntityFromPart(this, par1DamageSource, par2);
 	}

@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
+import net.minecraft.world.gen.structure.template.TemplateManager;
 
 public class ImpDungeonComponents
 {
@@ -217,7 +218,7 @@ public class ImpDungeonComponents
 		}
 		
 		@Override
-		protected void readStructureFromNBT(NBTTagCompound tagCompound)
+		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager templates)
 		{
 			for(int i = 0; i < corridors.length; i++)
 				corridors[i] = tagCompound.getBoolean("bl"+i);
@@ -338,9 +339,9 @@ public class ImpDungeonComponents
 		}
 		
 		@Override
-		protected void readStructureFromNBT(NBTTagCompound tagCompound)
+		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager templates)
 		{
-			super.readStructureFromNBT(tagCompound);
+			super.readStructureFromNBT(tagCompound, templates);
 			light = tagCompound.getBoolean("l");
 			if(light)
 				lightPos = tagCompound.getByte("lpos");
@@ -432,9 +433,9 @@ public class ImpDungeonComponents
 		}
 		
 		@Override
-		protected void readStructureFromNBT(NBTTagCompound tagCompound)
+		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager templates)
 		{
-			super.readStructureFromNBT(tagCompound);
+			super.readStructureFromNBT(tagCompound, templates);
 			light = tagCompound.getBoolean("l");
 		}
 		
@@ -550,9 +551,9 @@ public class ImpDungeonComponents
 		}
 		
 		@Override
-		protected void readStructureFromNBT(NBTTagCompound tagCompound)
+		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager templates)
 		{
-			super.readStructureFromNBT(tagCompound);
+			super.readStructureFromNBT(tagCompound, templates);
 			light = tagCompound.getBoolean("l");
 		}
 		
@@ -735,9 +736,9 @@ public class ImpDungeonComponents
 		}
 		
 		@Override
-		protected void readStructureFromNBT(NBTTagCompound tagCompound)
+		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager templates)
 		{
-			super.readStructureFromNBT(tagCompound);
+			super.readStructureFromNBT(tagCompound, templates);
 			spawner1 = tagCompound.getBoolean("sp1");
 			spawner2 = tagCompound.getBoolean("sp2");
 		}
@@ -836,9 +837,9 @@ public class ImpDungeonComponents
 		}
 		
 		@Override
-		protected void readStructureFromNBT(NBTTagCompound tagCompound)
+		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager templates)
 		{
-			super.readStructureFromNBT(tagCompound);
+			super.readStructureFromNBT(tagCompound, templates);
 			bookChance = tagCompound.getFloat("b");
 			light = tagCompound.getBoolean("l");
 		}
@@ -886,11 +887,12 @@ public class ImpDungeonComponents
 			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 6, 3, 4, 6, 4, wallDecor, wallDecor, false);
 			
 			IBlockState bookshelf = Blocks.BOOKSHELF.getDefaultState();
-			func_189914_a(worldIn, structureBoundingBoxIn, randomIn, bookChance, 1, 1, 1, 1, 4, 2, bookshelf, bookshelf, false, 0);
-			func_189914_a(worldIn, structureBoundingBoxIn, randomIn, bookChance, 1, 1, 5, 1, 4, 6, bookshelf, bookshelf, false, 0);	//fillWithBlocksRandomly
-			func_189914_a(worldIn, structureBoundingBoxIn, randomIn, bookChance, 6, 1, 1, 6, 4, 2, bookshelf, bookshelf, false, 0);
-			func_189914_a(worldIn, structureBoundingBoxIn, randomIn, bookChance, 6, 1, 5, 6, 4, 6, bookshelf, bookshelf, false, 0);
-			func_189914_a(worldIn, structureBoundingBoxIn, randomIn, bookChance, 3, 1, 6, 4, 4, 6, bookshelf, bookshelf, false, 0);
+			
+			generateMaybeBox(worldIn, structureBoundingBoxIn, randomIn, bookChance, 1, 1, 1, 1, 4, 2, bookshelf, bookshelf, false, 0);
+			generateMaybeBox(worldIn, structureBoundingBoxIn, randomIn, bookChance, 1, 1, 5, 1, 4, 6, bookshelf, bookshelf, false, 0);
+			generateMaybeBox(worldIn, structureBoundingBoxIn, randomIn, bookChance, 6, 1, 1, 6, 4, 2, bookshelf, bookshelf, false, 0);
+			generateMaybeBox(worldIn, structureBoundingBoxIn, randomIn, bookChance, 6, 1, 5, 6, 4, 6, bookshelf, bookshelf, false, 0);
+			generateMaybeBox(worldIn, structureBoundingBoxIn, randomIn, bookChance, 3, 1, 6, 4, 4, 6, bookshelf, bookshelf, false, 0);
 			
 			if(light)
 			{
@@ -963,9 +965,9 @@ public class ImpDungeonComponents
 		}
 		
 		@Override
-		protected void readStructureFromNBT(NBTTagCompound tagCompound)
+		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager templates)
 		{
-			super.readStructureFromNBT(tagCompound);
+			super.readStructureFromNBT(tagCompound, templates);
 			spawner1 = tagCompound.getBoolean("sp1");
 			spawner2 = tagCompound.getBoolean("sp2");
 			chestPos = tagCompound.getBoolean("ch");

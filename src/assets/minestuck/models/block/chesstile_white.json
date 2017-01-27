@@ -1,6 +1,6 @@
 {
     "parent": "block/cube_all",
     "textures": {
-        "all": "minestuck:blocks/WhiteChessTile"
+        "all": "minestuck:blocks/white_chess_tile"
     }
 }

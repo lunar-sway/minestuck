@@ -1,9 +1,9 @@
 {
     "textures": {
         "particle": "minestuck:items/punch_designix",
-        "front": "minestuck:blocks/PunchDesignixFront",
-        "back": "minestuck:blocks/PunchDesignixBack",
-        "other": "minestuck:blocks/PunchDesignixMisc"
+        "front": "minestuck:blocks/punch_designix_front",
+        "back": "minestuck:blocks/punch_designix_back",
+        "other": "minestuck:blocks/punch_designix_misc"
     },
     "elements": [
         {

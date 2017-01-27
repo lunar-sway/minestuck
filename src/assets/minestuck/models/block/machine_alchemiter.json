@@ -1,8 +1,8 @@
 {
     "textures": {
         "particle": "minestuck:items/alchemiter",
-        "base": "minestuck:blocks/AlchemiterBase",
-        "other": "minestuck:blocks/AlchemiterMisc"
+        "base": "minestuck:blocks/alchemiter_base",
+        "other": "minestuck:blocks/alchemiter_misc"
     },
     "elements": [
         {

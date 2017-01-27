@@ -103,7 +103,7 @@ public class GuiSburbMachine extends GuiContainer
 		fontRendererObj.drawString(I18n.format("gui."+guis[type.ordinal()]+".name"), 8, 6, 4210752);
 		//draws "Inventory" or your regional equivalent
 		fontRendererObj.drawString(I18n.format("container.inventory"), 8, ySize - 96 + 2, 4210752);
-		if (type == MachineType.ALCHEMITER && te.getStackInSlot(0) != null) 
+		if (type == MachineType.ALCHEMITER && !te.getStackInSlot(0).isEmpty()) 
 		{
 			//Render grist requirements
 			ItemStack stack = AlchemyRecipeHandler.getDecodedItem(te.getStackInSlot(0));
@@ -111,7 +111,7 @@ public class GuiSburbMachine extends GuiContainer
 				stack = new ItemStack(MinestuckBlocks.genericObject);
 			
 			GristSet set = GristRegistry.getGristConversion(stack);
-			boolean useSelectedType = stack == null ? false : stack.getItem() == MinestuckItems.captchaCard;
+			boolean useSelectedType = stack.getItem() == MinestuckItems.captchaCard;
 			if(useSelectedType)
 				set = new GristSet(te.selectedGrist, MinestuckConfig.clientCardCost);
 			if(set != null && stack.isItemDamaged())

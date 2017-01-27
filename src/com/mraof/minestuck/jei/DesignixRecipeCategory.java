@@ -63,7 +63,7 @@ public class DesignixRecipeCategory extends BlankRecipeCategory<DesignixRecipeWr
             second.add(AlchemyRecipeHandler.createCard(stack, true));
         }
         stackGroup.set(1, second);
-        List<ItemStack> outputs = new ArrayList<ItemStack>(ingredients.getOutputs(ItemStack.class));
+        List<ItemStack> outputs = new ArrayList<ItemStack>(ingredients.getOutputs(ItemStack.class).get(0));
         outputs.add(AlchemyRecipeHandler.createCard(outputs.get(0), true));
         stackGroup.set(2, outputs);
     }
@@ -75,12 +75,6 @@ public class DesignixRecipeCategory extends BlankRecipeCategory<DesignixRecipeWr
     public Class<DesignixRecipeWrapper> getRecipeClass()
     {
         return DesignixRecipeWrapper.class;
-    }
-
-    @Override
-    public String getRecipeCategoryUid()
-    {
-        return "punchDesignix";
     }
 
     @Override

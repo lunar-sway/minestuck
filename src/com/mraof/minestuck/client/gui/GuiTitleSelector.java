@@ -17,7 +17,7 @@ import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 public class GuiTitleSelector extends GuiScreen
 {
-	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/TitleSelector.png");
+	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/title_selector.png");
 	private static final int guiWidth = 186, guiHeight = 157;
 	private EnumClass currentClass;
 	private EnumAspect currentAspect;

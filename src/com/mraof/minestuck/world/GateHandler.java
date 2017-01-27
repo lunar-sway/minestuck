@@ -92,7 +92,7 @@ public class GateHandler
 					
 					location = new Location(gatePos, clientDim);
 				}
-				else player.sendStatusMessage(new TextComponentTranslation("message.gateMissingLand"));
+				else player.sendMessage(new TextComponentTranslation("message.gateMissingLand"));
 			} else Debug.errorf("Unexpected error: Can't find connection for dimension %d!", dim);
 		} else if(gateId == -1)
 		{
@@ -106,7 +106,7 @@ public class GateHandler
 					int serverDim = serverConnection.getClientDimension();
 					location = new Location(getGatePos(2, serverDim), serverDim);
 					
-				} else player.sendStatusMessage(new TextComponentTranslation("message.gateMissingLand"));
+				} else player.sendMessage(new TextComponentTranslation("message.gateMissingLand"));
 				
 			} else Debug.errorf("Unexpected error: Can't find connection for dimension %d!", dim);
 		} else Debug.errorf("Unexpected error: Gate id %d is out of bounds!", gateId);
@@ -122,7 +122,7 @@ public class GateHandler
 				if(block.getBlock() != MinestuckBlocks.gate)
 				{
 					Debug.debugf("Can't find destination gate at %s. Probably destroyed.", location);
-					player.sendStatusMessage(new TextComponentTranslation("message.gateDestroyed"));
+					player.sendMessage(new TextComponentTranslation("message.gateDestroyed"));
 					return;
 				}
 			}

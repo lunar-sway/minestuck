@@ -14,7 +14,7 @@ import net.minecraft.util.ResourceLocation;
 public class GuiInventoryEditmode extends GuiPlayerStatsContainer
 {
 
-	private ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/guiInvEditmode.png");
+	private ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/gui_inv_editmode.png");
 	private ResourceLocation icons = new ResourceLocation("minestuck", "textures/gui/icons.png");
 	
 	private static final int leftArrowX = 7, rightArrowX = 151, arrowY = 23;

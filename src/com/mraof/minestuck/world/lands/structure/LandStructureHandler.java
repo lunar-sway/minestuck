@@ -207,4 +207,10 @@ public class LandStructureHandler extends MapGenStructure
 		}
 	}
 	
+	@Override
+	public BlockPos getClosestStrongholdPos(World worldIn, BlockPos pos, boolean p_180706_3_)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

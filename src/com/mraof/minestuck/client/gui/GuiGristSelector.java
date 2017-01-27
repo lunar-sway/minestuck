@@ -23,7 +23,7 @@ import net.minecraft.util.ResourceLocation;
 public class GuiGristSelector extends GuiScreen
 {
 	
-	private static final ResourceLocation guiGristcache = new ResourceLocation("minestuck", "textures/gui/GristCache.png");
+	private static final ResourceLocation guiGristcache = new ResourceLocation("minestuck", "textures/gui/grist_cache.png");
 	
 	private static final int gristIconX = 21, gristIconY = 32;
 	private static final int gristDisplayXOffset = 66, gristDisplayYOffset = 21;

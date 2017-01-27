@@ -5,6 +5,7 @@ import java.io.IOException;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.inventory.captchalouge.HashmapModus;
@@ -48,15 +49,15 @@ public class HashmapGuiHandler extends SylladexGuiHandler
 	@Override
 	public void updateContent()
 	{
-		ItemStack[] stacks = modus.getItems();
+		NonNullList<ItemStack> stacks = modus.getItems();
 		this.cards.clear();
-		this.maxWidth = Math.max(mapWidth, 10 + (stacks.length*CARD_WIDTH + (stacks.length - 1)*5));
+		this.maxWidth = Math.max(mapWidth, 10 + (stacks.size()*CARD_WIDTH + (stacks.size() - 1)*5));
 		this.maxHeight = mapHeight;
 		super.updateContent();
-		int start = Math.max(5, (mapWidth - (stacks.length*CARD_WIDTH + (stacks.length - 1)*5))/2);
+		int start = Math.max(5, (mapWidth - (stacks.size()*CARD_WIDTH + (stacks.size() - 1)*5))/2);
 		
-		for(int i = 0; i < stacks.length; i++)
-			this.cards.add(new GuiCard(stacks[i], this, i, start + i*(CARD_WIDTH + 5), (mapHeight - CARD_HEIGHT)/2)
+		for(int i = 0; i < stacks.size(); i++)
+			this.cards.add(new GuiCard(stacks.get(i), this, i, start + i*(CARD_WIDTH + 5), (mapHeight - CARD_HEIGHT)/2)
 			{
 				@Override
 				public void onClick(int mouseButton)

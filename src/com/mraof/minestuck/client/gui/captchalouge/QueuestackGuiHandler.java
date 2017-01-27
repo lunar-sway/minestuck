@@ -16,7 +16,7 @@ public class QueuestackGuiHandler extends StackGuiHandler
 	{
 		super.updateContent();
 		for(int i = cards.size() - 1; i > 0; i--)
-			if(cards.get(i).item != null)
+			if(!cards.get(i).item.isEmpty())
 			{
 				cards.get(i).index = 1;
 				break;

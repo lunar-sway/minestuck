@@ -75,7 +75,7 @@ public class GuiCrockerMachine extends GuiContainer
 		fontRendererObj.drawString(I18n.format("gui."+guis[type.ordinal()]+".name"), 8, 6, 4210752);
 		//draws "Inventory" or your regional equivalent
 		fontRendererObj.drawString(I18n.format("container.inventory"), 8, ySize - 96 + 2, 4210752);
-		if (type == MachineType.GRIST_WIDGET && te.getStackInSlot(0) != null) 
+		if (type == MachineType.GRIST_WIDGET && !te.getStackInSlot(0).isEmpty()) 
 		{
 			//Render grist requirements
 			ItemStack stack = AlchemyRecipeHandler.getDecodedItem(te.getStackInSlot(0));
@@ -83,7 +83,7 @@ public class GuiCrockerMachine extends GuiContainer
 			GristSet set = GristRegistry.getGristConversion(stack);
 			if(set != null)
 			{
-				float multiplier = stack.stackSize;
+				float multiplier = stack.getCount();
 				if(multiplier != 1)
 					set = set.scaleGrist(multiplier);
 				set.scaleGrist(0.9F);

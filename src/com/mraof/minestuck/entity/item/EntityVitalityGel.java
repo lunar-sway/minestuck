@@ -3,6 +3,7 @@ package com.mraof.minestuck.entity.item;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
@@ -149,7 +150,7 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 			}
 		}
 
-		this.move(this.motionX, this.motionY, this.motionZ);
+		this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 		float f = 0.98F;
 		
 		if(this.onGround)

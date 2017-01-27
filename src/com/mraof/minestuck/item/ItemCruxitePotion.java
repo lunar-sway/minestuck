@@ -27,7 +27,7 @@ public class ItemCruxitePotion extends ItemCruxiteArtifact
 	@Override
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving)
 	{
-		stack.stackSize--;
+		stack.shrink(1);
 		if(entityLiving instanceof EntityPlayer)
 			onArtifactActivated(worldIn, (EntityPlayer) entityLiving);
 		
@@ -35,10 +35,10 @@ public class ItemCruxitePotion extends ItemCruxiteArtifact
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
 	{
-		playerIn.setActiveHand(hand);
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
+		playerIn.setActiveHand(handIn);
+		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 	}
 	
 }

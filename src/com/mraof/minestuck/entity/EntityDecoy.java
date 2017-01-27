@@ -1,7 +1,6 @@
 package com.mraof.minestuck.entity;
 
 import java.lang.reflect.Constructor;
-import java.util.Arrays;
 import java.util.Set;
 
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -239,8 +238,8 @@ public class EntityDecoy extends EntityLiving {
 		if(slotIn == EntityEquipmentSlot.MAINHAND)
 			return inventory.getCurrentItem();
 		else if(slotIn == EntityEquipmentSlot.OFFHAND)
-			return inventory.offHandInventory[0];
-		else return inventory.armorInventory[slotIn.getIndex()];
+			return inventory.offHandInventory.get(0);
+		else return inventory.armorInventory.get(slotIn.getIndex());
 	}
 	
 	@Override
@@ -249,8 +248,8 @@ public class EntityDecoy extends EntityLiving {
 		if(slotIn == EntityEquipmentSlot.MAINHAND)
 			inventory.setInventorySlotContents(inventory.currentItem, stack);
 		else if(slotIn == EntityEquipmentSlot.OFFHAND)
-			inventory.offHandInventory[0] = stack;
-		else inventory.armorInventory[slotIn.getIndex()] = stack;	//Couldn't find a good method to replace this
+			inventory.offHandInventory.set(0, stack);
+		else inventory.armorInventory.set(slotIn.getIndex(), stack);
 	}
 	
 	@Override
@@ -263,7 +262,7 @@ public class EntityDecoy extends EntityLiving {
 	@Override
 	public Iterable<ItemStack> getArmorInventoryList()
 	{
-		return Arrays.asList(inventory.armorInventory);
+		return inventory.armorInventory;
 	}
 	
 	@Override

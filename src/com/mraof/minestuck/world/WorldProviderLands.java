@@ -144,8 +144,9 @@ public class WorldProviderLands extends WorldProvider
 	}
 	
 	@Override
-	protected void createBiomeProvider()
+	protected void init()
 	{
+		hasSkyLight = true;
 		doesWaterVaporize = false;
 		if(chunkProvider == null)
 			createChunkGenerator();

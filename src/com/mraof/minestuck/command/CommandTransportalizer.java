@@ -58,7 +58,7 @@ public class CommandTransportalizer extends CommandBase
 		code = code.toUpperCase();
 		
 		if(player == null)
-			throw new PlayerNotFoundException();
+			throw new PlayerNotFoundException("commands.generic.player.unspecified");
 		
 		Location location = TileEntityTransportalizer.transportalizers.get(code);
 		if(location == null || !DimensionManager.isDimensionRegistered(location.dim))

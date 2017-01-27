@@ -66,14 +66,14 @@ public class ContainerEditmode extends Container
 		{
 			Slot slot = (Slot) this.inventorySlots.get(slotIndex);
 			ItemStack stack = slot.getStack();
-			slot.putStack(null);
+			slot.putStack(ItemStack.EMPTY);
 			return stack;
 		}
 		if(slotIndex >= 0 && slotIndex < 14)
 		{
 			Slot slot = (Slot) this.inventorySlots.get(slotIndex);
 			ItemStack stack = slot.getStack();
-			if(stack != null)
+			if(!stack.isEmpty())
 				for(int i = 14; i < inventorySlots.size(); i++)
 					if(!getSlot(i).getHasStack())
 					{
@@ -81,7 +81,7 @@ public class ContainerEditmode extends Container
 						return stack;
 					}
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 	
 	@Override
@@ -129,8 +129,8 @@ public class ContainerEditmode extends Container
 		
 		for(int i = 0; i < Math.max(tools.size(), deployItems.size()); i++)
 		{
-			itemList.add(i >= tools.size()? null:tools.get(i));
-			itemList.add(i >= deployItems.size()? null:deployItems.get(i));
+			itemList.add(i >= tools.size()? ItemStack.EMPTY:tools.get(i));
+			itemList.add(i >= deployItems.size()? ItemStack.EMPTY:deployItems.get(i));
 		}
 		
 		boolean changed = false;
@@ -155,7 +155,7 @@ public class ContainerEditmode extends Container
 		ArrayList<ItemStack> itemList = new ArrayList<ItemStack>();
 		for(int i = 0; i < 14; i++)
 		{
-			itemList.add(this.items.size() <= i + scroll*2? null:this.items.get(i + scroll*2));
+			itemList.add(this.items.size() <= i + scroll*2? ItemStack.EMPTY:this.items.get(i + scroll*2));
 			this.inventory.setInventorySlotContents(i, itemList.get(i));
 			this.inventoryItemStacks.set(i, itemList.get(i));
 		}
@@ -196,7 +196,7 @@ public class ContainerEditmode extends Container
 		@Override
 		public ItemStack getStack()
 		{
-			return this.inventory.getStackInSlot(this.slotNumber) ==  null?null:this.inventory.getStackInSlot(this.slotNumber).copy();
+			return this.inventory.getStackInSlot(this.slotNumber).copy();
 		}
 		
 		@Override
@@ -204,5 +204,4 @@ public class ContainerEditmode extends Container
 		{}
 		
 	}
-	
 }

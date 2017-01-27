@@ -167,7 +167,7 @@ public class SburbConnection {
 			for(int i = 0; i < list.tagCount(); i++)
 			{
 				NBTTagCompound itemTag = list.getCompoundTagAt(i);
-				int ordinal = DeployList.getOrdinal(ItemStack.loadItemStackFromNBT(itemTag));
+				int ordinal = DeployList.getOrdinal(new ItemStack(itemTag));
 				if(ordinal == -1)
 					unregisteredItems.appendTag(itemTag);
 				else givenItemList[ordinal] = itemTag.getBoolean("given");

@@ -18,6 +18,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureStart;
+import net.minecraft.world.gen.structure.template.TemplateManager;
 
 public class SmallRuinStart extends StructureStart
 {
@@ -248,7 +249,7 @@ public class SmallRuinStart extends StructureStart
 		}
 		
 		@Override
-		protected void readStructureFromNBT(NBTTagCompound nbt)
+		protected void readStructureFromNBT(NBTTagCompound nbt, TemplateManager templates)
 		{
 			definedHeight = nbt.getBoolean("definedHeight");
 			for(int i = 0; i < 4; i++)

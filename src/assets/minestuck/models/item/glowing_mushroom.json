@@ -1,7 +1,7 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "minestuck:blocks/GlowingMushroom1"
+        "layer0": "minestuck:blocks/glowing_mushroom_1"
     }
 }
 

@@ -77,14 +77,14 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 					
 					if(destinationId == -1)	//Something bad happened further down and the problem should be written in the server console
 					{
-						player.sendStatusMessage(new TextComponentString("Something went wrong during entry. More details in the server console."));
+						player.sendMessage(new TextComponentString("Something went wrong during entry. More details in the server console."));
 						return;
 					}
 					
 					if(!Teleport.teleportEntity(player, destinationId, this))
 					{
 						Debug.warn("Was not able to teleport player "+player.getName()+" into the medium! Likely caused by mod collision.");
-						player.sendStatusMessage(new TextComponentString("Was not able to teleport you into the medium! Likely caused by mod collision."));
+						player.sendMessage(new TextComponentString("Was not able to teleport you into the medium! Likely caused by mod collision."));
 					}
 					else MinestuckPlayerTracker.sendLandEntryMessage(player);
 				}
@@ -92,7 +92,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 		} catch(Exception e)
 		{
 			Debug.logger.error("Exception when "+player.getName()+" tried to enter their land.", e);
-			player.sendStatusMessage(new TextComponentString("[Minestuck] Something went wrong during entry. "+ (Minestuck.isServerRunning?"Check the console for the error message.":"Notify the server owner about this.")).setStyle(new Style().setColor(TextFormatting.RED)));
+			player.sendMessage(new TextComponentString("[Minestuck] Something went wrong during entry. "+ (Minestuck.isServerRunning?"Check the console for the error message.":"Notify the server owner about this.")).setStyle(new Style().setColor(TextFormatting.RED)));
 		}
 	}
 	
@@ -186,7 +186,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 				}
 				else	//Copy instead of teleport
 				{
-					Entity newEntity = EntityList.createEntityByName(EntityList.getEntityString(entity), worldserver1);
+					Entity newEntity = EntityList.newEntity(entity.getClass(), worldserver1);
 					if (newEntity != null)
 					{
 						NBTTagCompound nbttagcompound = new NBTTagCompound();

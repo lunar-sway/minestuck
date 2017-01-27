@@ -1,6 +1,7 @@
 package com.mraof.minestuck.entity;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 import com.mraof.minestuck.Minestuck;
@@ -29,35 +30,35 @@ public final class MinestuckEntities
 	public static void registerEntities()
 	{
 		//register entities
-		registerEntity(EntitySalamander.class, "Salamander");
-		registerEntity(EntityNakagator.class, "Nakagator");
-		registerEntity(EntityIguana.class, "Iguana");
-		registerEntity(EntityImp.class, "Imp");
-		registerEntity(EntityOgre.class, "Ogre");
-		registerEntity(EntityBasilisk.class, "Basilisk");
-		registerEntity(EntityGiclops.class, "Giclops");
-		registerEntity(EntityWyrm.class, "Wyrm");
-		registerEntity(EntityBlackPawn.class, "DersitePawn");
-		registerEntity(EntityWhitePawn.class, "ProspitianPawn");
-		registerEntity(EntityBlackBishop.class, "DersiteBishop");
-		registerEntity(EntityWhiteBishop.class, "ProspitianBishop");
-		registerEntity(EntityBlackRook.class, "DersiteRook");
-		registerEntity(EntityWhiteRook.class, "ProspitianRook");
-		registerEntity(EntityDecoy.class, "PlayerDecoy");
-		registerEntity(EntityMetalBoat.class, "MetalBoat");
-		registerEntity(EntityGrist.class, "Grist", 512, 1, true);
-		registerEntity(EntityVitalityGel.class, "VitalityGel", 512, 1, true);
+		registerEntity(EntitySalamander.class, "Salamander", "salamander");
+		registerEntity(EntityNakagator.class, "Nakagator", "nakagator");
+		registerEntity(EntityIguana.class, "Iguana", "iguana");
+		registerEntity(EntityImp.class, "Imp", "imp");
+		registerEntity(EntityOgre.class, "Ogre", "ogre");
+		registerEntity(EntityBasilisk.class, "Basilisk", "basilisk");
+		registerEntity(EntityGiclops.class, "Giclops", "giclops");
+		registerEntity(EntityWyrm.class, "Wyrm", "wyrm");
+		registerEntity(EntityBlackPawn.class, "DersitePawn", "dersite_pawn");
+		registerEntity(EntityWhitePawn.class, "ProspitianPawn", "prospitian_pawn");
+		registerEntity(EntityBlackBishop.class, "DersiteBishop", "dersite_bishop");
+		registerEntity(EntityWhiteBishop.class, "ProspitianBishop", "prospitian_bishop");
+		registerEntity(EntityBlackRook.class, "DersiteRook", "dersite_rook");
+		registerEntity(EntityWhiteRook.class, "ProspitianRook", "prospitian_rook");
+		registerEntity(EntityDecoy.class, "PlayerDecoy", "player_decoy");
+		registerEntity(EntityMetalBoat.class, "MetalBoat", "metal_boat");
+		registerEntity(EntityGrist.class, "Grist", "grist", 512, 1, true);
+		registerEntity(EntityVitalityGel.class, "VitalityGel", "vitality_gel", 512, 1, true);
 	}
 
 	//registers entity with forge and minecraft, and increases currentEntityIdOffset by one in order to prevent id collision
-	public static void registerEntity(Class<? extends Entity> entityClass, String name)
+	public static void registerEntity(Class<? extends Entity> entityClass, String name, String registryName)
 	{
-		registerEntity(entityClass, name, 80, 3, true);
+		registerEntity(entityClass, name, registryName, 80, 3, true);
 	}
 
-	public static void registerEntity(Class<? extends Entity> entityClass, String name, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates)
+	public static void registerEntity(Class<? extends Entity> entityClass, String name, String registryName, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates)
 	{
-		EntityRegistry.registerModEntity(entityClass, name, currentEntityIdOffset, Minestuck.instance, trackingRange, updateFrequency, sendsVelocityUpdates);
+		EntityRegistry.registerModEntity(new ResourceLocation("minestuck", registryName), entityClass, name, currentEntityIdOffset, Minestuck.instance, trackingRange, updateFrequency, sendsVelocityUpdates);
 		currentEntityIdOffset++;
 	}
 

@@ -159,9 +159,9 @@ public class ClientEditHandler {
 			}
 			if(event.isCanceled())
 			{
-				if(inventory.getItemStack() != null)
-					inventory.setItemStack(null);
-				else inventory.setInventorySlotContents(inventory.currentItem, null);
+				if(!inventory.getItemStack().isEmpty())
+					inventory.setItemStack(ItemStack.EMPTY);
+				else inventory.setInventorySlotContents(inventory.currentItem, ItemStack.EMPTY);
 				event.getEntityItem().setDead();
 			}
 		}
@@ -180,10 +180,10 @@ public class ClientEditHandler {
 		{
 			Block block = event.getWorld().getBlockState(event.getPos()).getBlock();
 			ItemStack stack = event.getEntityPlayer().getHeldItemMainhand();
-			event.setUseBlock(stack == null && (block instanceof BlockDoor || block instanceof BlockTrapDoor || block instanceof BlockFenceGate) ? Result.ALLOW : Result.DENY);
+			event.setUseBlock((block instanceof BlockDoor || block instanceof BlockTrapDoor || block instanceof BlockFenceGate) ? Result.ALLOW : Result.DENY);
 			if(event.getUseBlock() == Result.ALLOW)
 				return;
-			if(stack == null || !ServerEditHandler.isBlockItem(stack.getItem()))
+			if(!ServerEditHandler.isBlockItem(stack.getItem()))
 			{
 				event.setCanceled(true);
 				return;
@@ -205,7 +205,7 @@ public class ClientEditHandler {
 							str.append(", ");
 						str.append(grist.getAmount()+" "+grist.getType().getDisplayName());
 					}
-					event.getEntityPlayer().sendStatusMessage(new TextComponentTranslation("grist.missing",str.toString()));
+					event.getEntityPlayer().sendMessage(new TextComponentTranslation("grist.missing",str.toString()));
 				}
 				event.setCanceled(true);
 			}

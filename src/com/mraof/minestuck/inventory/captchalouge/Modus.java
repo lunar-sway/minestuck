@@ -7,6 +7,7 @@ import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -20,7 +21,7 @@ public abstract class Modus
 	 * This is called when the modus is created without calling readFromNBT(nbt).
 	 * Note that this method is used to clear the inventory/size after dropping stuff on death without creating a new instance.
 	 */
-	public abstract void initModus(ItemStack[] prev, int size);
+	public abstract void initModus(NonNullList<ItemStack> prev, int size);
 	
 	public abstract void readFromNBT(NBTTagCompound nbt);
 	
@@ -28,7 +29,7 @@ public abstract class Modus
 	
 	public abstract boolean putItemStack(ItemStack item);
 	
-	public abstract ItemStack[] getItems();
+	public abstract NonNullList<ItemStack> getItems();
 	
 	public abstract boolean increaseSize();
 	

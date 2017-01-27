@@ -156,6 +156,7 @@ public class ChunkProviderLands implements IChunkGenerator
 			chunkBiomes[i] = (byte) Biome.getIdForBiome(biomes[i]);
 		
 		structureHandler.generate(landWorld, chunkX, chunkZ, primer);
+		
 		return chunk;
 	}
 	
@@ -259,11 +260,11 @@ public class ChunkProviderLands implements IChunkGenerator
 	 * var3: The locators position;
 	 */
 	@Override
-	public BlockPos getStrongholdGen(World worldIn, String structureName, BlockPos pos)
+	public BlockPos getStrongholdGen(World worldIn, String structureName, BlockPos position, boolean p_180513_4_)
 	{
 		return null;
 	}
-
+	
 	@Override
 	public void recreateStructures(Chunk chunk, int p_180514_2_, int p_180514_3_) {}
 	

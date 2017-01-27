@@ -6,6 +6,7 @@ import com.mraof.minestuck.item.MinestuckItems;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -72,7 +73,7 @@ public class EntityMetalBoat extends EntityBoat implements IEntityAdditionalSpaw
 		
 		capturedDrops.clear();
 		
-		if(!this.world.isAABBInMaterial(this.getEntityBoundingBox(), Material.WATER))
+		if(!this.world.isMaterialInBB(this.getEntityBoundingBox(), Material.WATER))
 			return;
 		
 		this.motionY = motion;
@@ -82,7 +83,7 @@ public class EntityMetalBoat extends EntityBoat implements IEntityAdditionalSpaw
 		motionY /= 1.5;
 		motionZ /= 1.5;
 		
-		move(0, motionY, 0);
+		move(MoverType.SELF, 0, motionY, 0);
 		
 	}
 	

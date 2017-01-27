@@ -43,31 +43,33 @@ public class ItemPogoWeapon extends ItemWeapon
 //		return 0.5 + EnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency.effectId, stack)*0.1;
         return pogoMotion;
     }
-
+    
     @Override
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand,
+    		EnumFacing facing, float hitX, float hitY, float hitZ)
     {
+    	ItemStack stack = player.getHeldItem(hand);
         if(worldIn.getBlockState(pos).getBlock() != Blocks.AIR)
         {
-            double velocity = Math.max(playerIn.motionY, Math.min(getPogoMotion(stack) * 2, Math.abs(playerIn.motionY) + getPogoMotion(stack)));
+            double velocity = Math.max(player.motionY, Math.min(getPogoMotion(stack) * 2, Math.abs(player.motionY) + getPogoMotion(stack)));
             final float HORIZONTAL_Y = 6f;
             switch (facing.getAxis()) {
                 case X:
-                    velocity += Math.abs(playerIn.motionX) / 2;
-                    playerIn.motionX = velocity * facing.getDirectionVec().getX();
-                    playerIn.motionY = velocity / HORIZONTAL_Y;
+                    velocity += Math.abs(player.motionX) / 2;
+                    player.motionX = velocity * facing.getDirectionVec().getX();
+                    player.motionY = velocity / HORIZONTAL_Y;
                     break;
                 case Y:
-                    playerIn.motionY = velocity * facing.getDirectionVec().getY();
+                    player.motionY = velocity * facing.getDirectionVec().getY();
                     break;
                 case Z:
-                    velocity += Math.abs(playerIn.motionZ) / 2;
-                    playerIn.motionZ = velocity * facing.getDirectionVec().getZ();
-                    playerIn.motionY = velocity / HORIZONTAL_Y;
+                    velocity += Math.abs(player.motionZ) / 2;
+                    player.motionZ = velocity * facing.getDirectionVec().getZ();
+                    player.motionY = velocity / HORIZONTAL_Y;
                     break;
             }
-            playerIn.fallDistance = 0;
-            stack.damageItem(1, playerIn);
+            player.fallDistance = 0;
+            stack.damageItem(1, player);
             return EnumActionResult.SUCCESS;
         }
         return EnumActionResult.PASS;

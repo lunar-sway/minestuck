@@ -1,8 +1,6 @@
 package com.mraof.minestuck.jei;
 
 import com.mraof.minestuck.item.MinestuckItems;
-import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.BlankRecipeWrapper;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;

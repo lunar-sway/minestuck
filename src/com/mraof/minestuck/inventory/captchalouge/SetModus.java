@@ -1,10 +1,10 @@
 package com.mraof.minestuck.inventory.captchalouge;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -19,20 +19,20 @@ public class SetModus extends Modus
 {
 	
 	protected int size;
-	protected ArrayList<ItemStack> list;
+	protected NonNullList<ItemStack> list;
 	
 	@SideOnly(Side.CLIENT)
 	protected boolean changed;
 	@SideOnly(Side.CLIENT)
-	protected ItemStack[] items;
+	protected NonNullList<ItemStack> items;
 	@SideOnly(Side.CLIENT)
 	protected SylladexGuiHandler gui;
 	
 	@Override
-	public void initModus(ItemStack[] prev, int size)
+	public void initModus(NonNullList<ItemStack> prev, int size)
 	{
 		this.size = size;
-		list = new ArrayList<ItemStack>();
+		list = NonNullList.<ItemStack>create();
 		/*if(prev != null)
 		{
 			for(ItemStack stack : prev)
@@ -42,8 +42,8 @@ public class SetModus extends Modus
 		
 		if(player.world.isRemote)
 		{
-			items = new ItemStack[size];
-			changed = prev != null;
+			items = NonNullList.<ItemStack>create();
+			changed = true;
 		}
 	}
 	
@@ -51,15 +51,16 @@ public class SetModus extends Modus
 	public void readFromNBT(NBTTagCompound nbt)
 	{
 		size = nbt.getInteger("size");
-		list = new ArrayList<ItemStack>();
+		list = NonNullList.<ItemStack>create();
 		
 		for(int i = 0; i < size; i++)
 			if(nbt.hasKey("item"+i))
-				list.add(ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("item"+i)));
+				list.add(new ItemStack(nbt.getCompoundTag("item"+i)));
 			else break;
 		if(side.isClient())
 		{
-			items = new ItemStack[size];
+			if(items == null)
+				items = NonNullList.create();
 			changed = true;
 		}
 	}
@@ -80,7 +81,7 @@ public class SetModus extends Modus
 	@Override
 	public boolean putItemStack(ItemStack item)
 	{
-		if(size <= list.size() || item == null)
+		if(size <= list.size() || item.isEmpty())
 			return false;
 		
 		for(ItemStack stack : list)
@@ -91,11 +92,11 @@ public class SetModus extends Modus
 				
 			}
 		
-		if(item.stackSize > 1)
+		if(item.getCount() > 1)
 		{
 			ItemStack stack = item.copy();
-			stack.stackSize--;
-			item.stackSize = 1;
+			stack.shrink(1);
+			item.setCount(1);
 			CaptchaDeckHandler.launchItem(player, stack);
 		}
 		list.add(item);
@@ -104,11 +105,11 @@ public class SetModus extends Modus
 	}
 	
 	@Override
-	public ItemStack[] getItems()
+	public NonNullList<ItemStack> getItems()
 	{
 		if(side.isServer())	//Used only when replacing the modus
 		{
-			ItemStack[] items = new ItemStack[size];
+			NonNullList<ItemStack> items = NonNullList.<ItemStack>create();
 			fillList(items);
 			return items;
 		}
@@ -120,13 +121,13 @@ public class SetModus extends Modus
 		return items;
 	}
 	
-	protected void fillList(ItemStack[] items)
+	protected void fillList(NonNullList<ItemStack> items)
 	{
 		Iterator<ItemStack> iter = list.iterator();
 		for(int i = 0; i < size; i++)
 			if(iter.hasNext())
-				items[i] = iter.next();
-			else items[i] = null;
+				items.add(iter.next());
+			else items.add(ItemStack.EMPTY);
 	}
 	
 	@Override
@@ -149,22 +150,22 @@ public class SetModus extends Modus
 			{
 				size--;
 				return new ItemStack(MinestuckItems.captchaCard);
-			} else return null;
+			} else return ItemStack.EMPTY;
 		}
 		
 		if(list.isEmpty())
-			return null;
+			return ItemStack.EMPTY;
 		
 		if(id == CaptchaDeckHandler.EMPTY_SYLLADEX)
 		{
 			for(ItemStack item : list)
 				CaptchaDeckHandler.launchAnyItem(player, item);
 			list.clear();
-			return null;
+			return ItemStack.EMPTY;
 		}
 		
 		if(id < 0 || id >= list.size())
-			return null;
+			return ItemStack.EMPTY;
 		
 		ItemStack item = list.remove(id);
 		

@@ -1,8 +1,8 @@
 {
     "parent": "block/orientable",
     "textures": {
-        "top": "minestuck:blocks/PhernaliaFrame",
-        "front": "minestuck:blocks/BsodFront",
-        "side": "minestuck:blocks/PhernaliaFrame"
+        "top": "minestuck:blocks/phernalia_frame",
+        "front": "minestuck:blocks/bsod_front",
+        "side": "minestuck:blocks/phernalia_frame"
     }
 }

@@ -24,7 +24,7 @@ import net.minecraftforge.fml.relauncher.Side;
 public class GuiCaptchaDeck extends GuiPlayerStatsContainer implements GuiYesNoCallback
 {
 	
-	private static final ResourceLocation guiCaptchaDeck = new ResourceLocation("minestuck", "textures/gui/CaptchaDeck.png");
+	private static final ResourceLocation guiCaptchaDeck = new ResourceLocation("minestuck", "textures/gui/captcha_deck.png");
 	
 	private GuiButton modusButton, sylladexMap;
 	private ContainerCaptchaDeck container;
@@ -46,14 +46,14 @@ public class GuiCaptchaDeck extends GuiPlayerStatsContainer implements GuiYesNoC
 		buttonList.add(modusButton);
 		buttonList.add(sylladexMap);
 		sylladexMap.enabled = CaptchaDeckHandler.clientSideModus != null;
-		modusButton.enabled = container.inventory.getStackInSlot(0) != null;
+		modusButton.enabled = !container.inventory.getStackInSlot(0).isEmpty();
 	}
 	
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int xcor, int ycor)
 	{
 		sylladexMap.enabled = CaptchaDeckHandler.clientSideModus != null;
-		modusButton.enabled = container.inventory.getStackInSlot(0) != null;
+		modusButton.enabled = !container.inventory.getStackInSlot(0).isEmpty();
 		
 		drawTabs();
 		
@@ -77,7 +77,7 @@ public class GuiCaptchaDeck extends GuiPlayerStatsContainer implements GuiYesNoC
 	@Override
 	protected void actionPerformed(GuiButton button)
 	{
-		if(button == this.modusButton && container.inventory.getStackInSlot(0) != null)
+		if(button == this.modusButton && !container.inventory.getStackInSlot(0).isEmpty())
 		{
 			ItemStack stack = container.inventory.getStackInSlot(0);
 			if(stack.getItem() instanceof ItemModus)
@@ -103,7 +103,7 @@ public class GuiCaptchaDeck extends GuiPlayerStatsContainer implements GuiYesNoC
 		else if(button == this.sylladexMap && CaptchaDeckHandler.clientSideModus != null)
 		{
 			mc.player.connection.sendPacket(new CPacketCloseWindow(mc.player.openContainer.windowId));
-			mc.player.inventory.setItemStack((ItemStack)null);
+			mc.player.inventory.setItemStack(ItemStack.EMPTY);
 			mc.displayGuiScreen(CaptchaDeckHandler.clientSideModus.getGuiHandler());
 			mc.player.openContainer = mc.player.inventoryContainer;
 		}
@@ -112,7 +112,7 @@ public class GuiCaptchaDeck extends GuiPlayerStatsContainer implements GuiYesNoC
 	@Override
 	public void confirmClicked(boolean result, int id)
 	{
-		if(result && container.inventory.getStackInSlot(0) != null)
+		if(result && !container.inventory.getStackInSlot(0).isEmpty())
 			MinestuckChannelHandler.sendToServer(MinestuckPacket.makePacket(Type.CAPTCHA, CaptchaDeckPacket.MODUS));
 		mc.currentScreen = this;
 	}

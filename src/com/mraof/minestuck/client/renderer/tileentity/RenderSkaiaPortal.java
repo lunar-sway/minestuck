@@ -13,8 +13,11 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.projectile.EntityTippedArrow;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec3d;
 
 import com.mraof.minestuck.tileentity.TileEntitySkaiaPortal;
 
@@ -27,6 +30,9 @@ public class RenderSkaiaPortal extends TileEntitySpecialRenderer
 
 	public void renderGatePortalTileEntity(TileEntitySkaiaPortal par1TileEntityGatePortal, double par2, double par4, double par6, float par8)
     {
+		Entity temp = new EntityTippedArrow(par1TileEntityGatePortal.getWorld());
+		Vec3d position = ActiveRenderInfo.projectViewFromEntity(temp, 0);	//TODO temp solution for removed getter
+		
 		float var9 = (float)this.rendererDispatcher.entityX;
 		float var10 = (float)this.rendererDispatcher.entityY;
 		float var11 = (float)this.rendererDispatcher.entityZ;
@@ -60,8 +66,8 @@ public class RenderSkaiaPortal extends TileEntitySpecialRenderer
             }
 
             float var18 = (float) (-(par4 + var13));
-			float var19 = var18 + (float) ActiveRenderInfo.getPosition().yCoord;
-			float var20 = var18 + var15 + (float) ActiveRenderInfo.getPosition().yCoord;
+			float var19 = var18 + (float) position.yCoord;
+			float var20 = var18 + var15 + (float) position.yCoord;
 			float var21 = var19 / var20;
 			var21 += (float) (par4 + var13);
 			GlStateManager.translate(var9, var21, var11);
@@ -87,8 +93,8 @@ public class RenderSkaiaPortal extends TileEntitySpecialRenderer
 			GlStateManager.rotate((var14 * var14 * 4321 + var14 * 9) * 2.0F, 0.0F, 0.0F, 1.0F);
 			GlStateManager.translate(-0.5F, -0.5F, 0.0F);
 			GlStateManager.translate(-var9, -var11, -var10);
-			var19 = var18 + (float) ActiveRenderInfo.getPosition().xCoord;
-			GlStateManager.translate(((float) ActiveRenderInfo.getPosition().xCoord) * var15 / var19, ((float) ActiveRenderInfo.getPosition().zCoord) * var15 / var19, -var10);
+			var19 = var18 + (float) position.xCoord;
+			GlStateManager.translate(((float) position.xCoord) * var15 / var19, ((float) position.zCoord) * var15 / var19, -var10);
 			VertexBuffer var24 = Tessellator.getInstance().getBuffer();
 			var24.begin(7, DefaultVertexFormats.POSITION_TEX);
 			var21 = var12.nextFloat() * 0.5F + 0.1F;

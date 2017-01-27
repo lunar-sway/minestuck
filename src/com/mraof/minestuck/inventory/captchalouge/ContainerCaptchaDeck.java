@@ -40,7 +40,7 @@ public class ContainerCaptchaDeck extends Container
 	public void onContainerClosed(EntityPlayer player)
 	{
 		ItemStack stack = this.inventory.removeStackFromSlot(0);
-		if(stack != null)
+		if(!stack.isEmpty())
 			player.dropItem(stack, false);
 	}
 	
@@ -62,19 +62,19 @@ public class ContainerCaptchaDeck extends Container
 			if(slotNumber == slotCount - 1)
 			{
 				if(!mergeItemStack(stack1, 0, slotCount - 1, false))
-					return null;
+					return ItemStack.EMPTY;
 			} else
 			{
 				if(!getSlot(slotCount - 1).isItemValid(stack1) || !mergeItemStack(stack1, slotCount - 1, slotCount, false))
-					return null;
+					return ItemStack.EMPTY;
 			}
 			
-			if (stack1.stackSize == 0)
-				slot.putStack(null);
+			if (stack1.isEmpty())
+				slot.putStack(ItemStack.EMPTY);
 			else slot.onSlotChanged();
 			return stack2;
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 	
 }

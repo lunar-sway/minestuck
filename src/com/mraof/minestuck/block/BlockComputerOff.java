@@ -88,19 +88,22 @@ public class BlockComputerOff extends Block
 			world.setBlockState(new BlockPos(x, y, z), world.getBlockState(new BlockPos(x, y, z)).withProperty(DIRECTION, EnumFacing.values()[b0]), 2);
 		}
 	}
+	
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
+			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
-		if(player.isSneaking() || !state.getValue(DIRECTION).equals(side) || heldItem != null && ComputerProgram.getProgramID(heldItem) == -2)
+		ItemStack heldItem = playerIn.getHeldItem(hand);
+		if(playerIn.isSneaking() || !state.getValue(DIRECTION).equals(facing) || !heldItem.isEmpty() && ComputerProgram.getProgramID(heldItem) == -2)
 			return false;
 		
-		if(!world.isRemote)
+		if(!worldIn.isRemote)
 		{
-			world.setBlockState(pos, MinestuckBlocks.blockComputerOn.getDefaultState().withProperty(DIRECTION, side), 2);
+			worldIn.setBlockState(pos, MinestuckBlocks.blockComputerOn.getDefaultState().withProperty(DIRECTION, facing), 2);
 			
-			TileEntityComputer te = (TileEntityComputer) world.getTileEntity(pos);
-			te.owner = IdentifierHandler.encode(player);
-			MinestuckBlocks.blockComputerOn.onBlockActivated(world, pos, world.getBlockState(pos), player, hand, heldItem, side, hitX, hitY, hitZ);
+			TileEntityComputer te = (TileEntityComputer) worldIn.getTileEntity(pos);
+			te.owner = IdentifierHandler.encode(playerIn);
+			MinestuckBlocks.blockComputerOn.onBlockActivated(worldIn, pos, worldIn.getBlockState(pos), playerIn, hand, facing, hitX, hitY, hitZ);
 		}
 		
 		return true;

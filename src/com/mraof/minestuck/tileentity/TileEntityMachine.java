@@ -3,19 +3,21 @@ package com.mraof.minestuck.tileentity;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 
 public abstract class TileEntityMachine extends TileEntity implements IInventory, ITickable
 {
 	
-	protected ItemStack[] inv = new ItemStack[4];
+	protected NonNullList<ItemStack> inv = NonNullList.<ItemStack>withSize(4, ItemStack.EMPTY);
 	public int progress = 0;
 	public int maxProgress = 100;
 	public boolean ready = false;
@@ -25,46 +27,40 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	protected abstract boolean allowOverrideStop();
 	
 	@Override
-	public ItemStack getStackInSlot(int slot)
+	public ItemStack getStackInSlot(int index)
 	{
-		return this.inv[slot];
+		return index >= this.getSizeInventory() ? ItemStack.EMPTY : this.inv.get(index);
 	}
 	
 	@Override
-	public void setInventorySlotContents(int slot, ItemStack stack)
+	public void setInventorySlotContents(int index, ItemStack stack)
 	{
-		this.inv[slot] = stack;
-		if (stack != null && stack.stackSize > getInventoryStackLimit())
+		this.inv.set(index, stack);
+		if (stack.getCount() > this.getInventoryStackLimit())
 		{
-			stack.stackSize = getInventoryStackLimit();
+			stack.setCount(this.getInventoryStackLimit());
 		}
 	}
 	
 	@Override
-	public ItemStack decrStackSize(int slot, int amt)
+	public ItemStack decrStackSize(int index, int count)
 	{
-		ItemStack stack = getStackInSlot(slot);
-		if (stack != null)
-		{
-			if (stack.stackSize <= amt)
-				setInventorySlotContents(slot, null);
-			else
-			{
-				stack = stack.splitStack(amt);
-				if (stack.stackSize == 0)
-					setInventorySlotContents(slot, null);
-			}
-		}
-		return stack;
+		return ItemStackHelper.getAndSplit(this.inv, index, count);
 	}
 	
 	@Override
 	public ItemStack removeStackFromSlot(int index)
 	{
-		ItemStack stack = getStackInSlot(index);
-		if (stack != null)
-			setInventorySlotContents(index, null);
-		return stack;
+		return ItemStackHelper.getAndRemove(this.inv, index);
+	}
+	
+	@Override
+	public boolean isEmpty()
+	{
+		for(ItemStack stack : inv)
+			if(!stack.isEmpty())
+				return false;
+		return true;
 	}
 	
 	@Override
@@ -87,12 +83,8 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		
 		this.progress = tagCompound.getInteger("progress");
 		this.overrideStop = tagCompound.getBoolean("overrideStop");
-		
-		for (int i = 0; i < inv.length; i++)
-		{
-			NBTTagCompound tag = tagCompound.getCompoundTag("slot"+i);
-			this.inv[i] = ItemStack.loadItemStackFromNBT(tag);
-		}
+		inv = NonNullList.<ItemStack>withSize(4, ItemStack.EMPTY);
+		ItemStackHelper.loadAllItems(tagCompound, inv);
 	}
 	
 	@Override
@@ -102,15 +94,8 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		
 		tagCompound.setInteger("progress", this.progress);
 		tagCompound.setBoolean("overrideStop", this.overrideStop);
+		ItemStackHelper.saveAllItems(tagCompound, inv);
 		
-		for (int i = 0; i < this.inv.length; i++)
-		{
-			ItemStack stack = this.inv[i];
-			NBTTagCompound tag = new NBTTagCompound();
-			if (stack != null)
-				stack.writeToNBT(tag);
-			tagCompound.setTag("slot"+i, tag);
-		}
 		return tagCompound;
 	}
 	
@@ -211,7 +196,6 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	@Override
 	public void clear()
 	{
-		inv = new ItemStack[4];
+		inv.clear();
 	}
-	
 }

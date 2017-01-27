@@ -3,7 +3,6 @@ package com.mraof.minestuck;
 import java.util.Random;
 
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.MinecraftForge;
@@ -69,7 +68,7 @@ import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.structure.LandStructureHandler;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 
-@Mod(modid = "minestuck", name = "Minestuck", version = "@VERSION@", guiFactory = "com.mraof.minestuck.client.gui.MinestuckGuiFactory", acceptedMinecraftVersions = "[1.10.2]")
+@Mod(modid = "minestuck", name = "Minestuck", version = "@VERSION@", guiFactory = "com.mraof.minestuck.client.gui.MinestuckGuiFactory", acceptedMinecraftVersions = "[1.11]")
 public class Minestuck
 {
 	
@@ -105,8 +104,9 @@ public class Minestuck
 		tabMinestuck = new CreativeTabs("tabMinestuck")
 		{
 			@Override
-			public Item getTabIconItem() {
-				return MinestuckItems.zillyhooHammer;
+			public ItemStack getTabIconItem()
+			{
+				return new ItemStack(MinestuckItems.zillyhooHammer);
 			}
 		};
 		

@@ -1,6 +1,8 @@
 package com.mraof.minestuck.jei;
 
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.util.Debug;
+
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IGuiItemStackGroup;
@@ -70,7 +72,8 @@ public class TotemLatheRecipeCategory extends BlankRecipeCategory<TotemLatheReci
         }
         stackGroup.set(1, second);
         stackGroup.set(2, inputs.get(2));
-        List<ItemStack> outputs = new ArrayList<ItemStack>(ingredients.getOutputs(ItemStack.class));
+        Debug.info(ingredients.getOutputs(ItemStack.class).size());
+        List<ItemStack> outputs = new ArrayList<ItemStack>(ingredients.getOutputs(ItemStack.class).get(0));
         outputs.add(AlchemyRecipeHandler.createEncodedItem(outputs.get(0), false));
         stackGroup.set(3, outputs);
     }
@@ -82,12 +85,6 @@ public class TotemLatheRecipeCategory extends BlankRecipeCategory<TotemLatheReci
     public Class<TotemLatheRecipeWrapper> getRecipeClass()
     {
         return TotemLatheRecipeWrapper.class;
-    }
-
-    @Override
-    public String getRecipeCategoryUid()
-    {
-        return "totemLathe";
     }
 
     @Override

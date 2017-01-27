@@ -1,6 +1,6 @@
 {
     "parent": "block/cross",
     "textures": {
-        "cross": "minestuck:blocks/GlowingMushroom0"
+        "cross": "minestuck:blocks/glowing_mushroom_0"
     }
 }

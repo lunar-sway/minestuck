@@ -99,7 +99,7 @@ public class PostEntryTask
 		if(i >= index)
 		{
 			if(blockUpdate)
-				world.notifyNeighborsOfStateChange(pos, world.getBlockState(pos).getBlock());
+				world.notifyNeighborsOfStateChange(pos, world.getBlockState(pos).getBlock(), true);
 			world.checkLight(pos);
 			index++;
 		}

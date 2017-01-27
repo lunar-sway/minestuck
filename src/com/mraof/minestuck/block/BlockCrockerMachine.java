@@ -1,7 +1,5 @@
 package com.mraof.minestuck.block;
 
-import java.util.List;
-
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.tileentity.TileEntityCrockerMachine;
@@ -25,6 +23,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -93,10 +92,10 @@ public class BlockCrockerMachine extends BlockContainer
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> subItems) 
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list)
 	{
 		for(int i = 0; i < MachineType.values().length; i++)
-			subItems.add(new ItemStack(this, 1, i));
+			list.add(new ItemStack(this, 1, i));
 	}
 	
 	@Override
@@ -118,7 +117,8 @@ public class BlockCrockerMachine extends BlockContainer
 	}
 	
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
+			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
 		TileEntity tileEntity = worldIn.getTileEntity(pos);
 		

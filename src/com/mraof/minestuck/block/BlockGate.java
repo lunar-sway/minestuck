@@ -188,7 +188,7 @@ public class BlockGate extends Block
 	}
 	
 	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn)
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
 	{
 		if(!this.isValid(pos, worldIn, state))
 		{

@@ -1,6 +1,5 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
-import java.awt.Point;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -11,10 +10,6 @@ import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.Loader;
-//import codechicken.lib.gui.GuiDraw;
-//import codechicken.nei.NEIClientConfig;
-//import codechicken.nei.recipe.GuiCraftingRecipe;
 
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.editmode.ClientEditHandler;
@@ -25,7 +20,7 @@ import com.mraof.minestuck.util.MinestuckPlayerData;
 public class GuiGristCache extends GuiPlayerStats
 {
 	
-	private static final ResourceLocation guiGristcache = new ResourceLocation("minestuck", "textures/gui/GristCache.png");
+	private static final ResourceLocation guiGristcache = new ResourceLocation("minestuck", "textures/gui/grist_cache.png");
 	
 	private static final int gristIconX = 21, gristIconY = 32;
 	private static final int gristDisplayXOffset = 66, gristDisplayYOffset = 21;

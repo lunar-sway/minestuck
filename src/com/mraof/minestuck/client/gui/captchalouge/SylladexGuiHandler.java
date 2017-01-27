@@ -1,16 +1,9 @@
 package com.mraof.minestuck.client.gui.captchalouge;
 
-import java.awt.Point;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import org.lwjgl.input.Mouse;
-
-//import codechicken.lib.gui.GuiDraw;
-//import codechicken.nei.NEIClientConfig;
-//import codechicken.nei.recipe.GuiCraftingRecipe;
-//import codechicken.nei.recipe.GuiUsageRecipe;
-//import codechicken.nei.util.NEIClientUtils;
 
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
@@ -31,7 +24,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -40,7 +32,7 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 {
 	
 	
-	protected static final ResourceLocation sylladexFrame = new ResourceLocation("minestuck", "textures/gui/SylladexFrame.png");
+	protected static final ResourceLocation sylladexFrame = new ResourceLocation("minestuck", "textures/gui/sylladex_frame.png");
 	protected static final ResourceLocation cardTexture = new ResourceLocation("minestuck", "textures/gui/icons.png");
 	protected static final int GUI_WIDTH = 256, GUI_HEIGHT= 202;
 	protected static final int MAP_WIDTH = 224, MAP_HEIGHT = 153;
@@ -310,7 +302,9 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 		protected int xPos, yPos;
 		
 		protected GuiCard()
-		{}
+		{
+			item = ItemStack.EMPTY;
+		}
 		
 		public GuiCard(ItemStack item, SylladexGuiHandler gui, int index, int xPos, int yPos)
 		{
@@ -324,7 +318,7 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 		public void onClick(int mouseButton)
 		{
 			int toSend = -1;
-			if(this.item == null && mouseButton == 1)
+			if(this.item.isEmpty() && mouseButton == 1)
 				toSend = CaptchaDeckHandler.EMPTY_CARD;
 			else if(this.index != -1 && (mouseButton == 0 || mouseButton == 1))
 				toSend = this.index;
@@ -356,16 +350,16 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 		protected void drawItem()
 		{
 			GlStateManager.color(1F, 1F, 1F, 1F);
-			if(this.item != null)
+			if(!this.item.isEmpty())
 			{
 				int x = this.xPos +2 - gui.mapX;
 				int y = this.yPos +7 - gui.mapY;
 				if(x >= gui.mapWidth || y >= gui.mapHeight || x + 16 < 0 || y + 16 < 0)
 					return;
 				gui.itemRender.renderItemAndEffectIntoGUI(item, x, y);
-				if(item.stackSize > 1)
+				if(item.getCount() > 1)
 				{
-					String stackSize = String.valueOf(item.stackSize);
+					String stackSize = String.valueOf(item.getCount());
 					GlStateManager.disableLighting();
 					GlStateManager.disableDepth();
 					GlStateManager.disableBlend();
@@ -380,7 +374,7 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 		
 		protected void drawTooltip(int mouseX, int mouseY)
 		{
-			if(item != null)
+			if(!item.isEmpty())
 				gui.renderToolTip(item, mouseX, mouseY);
 		}
 		

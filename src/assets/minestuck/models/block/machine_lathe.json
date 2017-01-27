@@ -1,9 +1,9 @@
 {
     "textures": {
         "particle": "minestuck:items/totem_lathe",
-        "front": "minestuck:blocks/TotemLatheFront",
-        "back": "minestuck:blocks/TotemLatheBack",
-        "other": "minestuck:blocks/TotemLatheMisc"
+        "front": "minestuck:blocks/totem_lathe_front",
+        "back": "minestuck:blocks/totem_lathe_back",
+        "other": "minestuck:blocks/totem_lathe_misc"
     },
     "elements": [
         {

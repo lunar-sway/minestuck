@@ -170,7 +170,7 @@ public class ServerEditHandler
 			}
 			if(!setPlayerStats(player, c))
 			{
-				player.sendStatusMessage(new TextComponentString(TextFormatting.RED+"Failed to activate edit mode."));
+				player.sendMessage(new TextComponentString(TextFormatting.RED+"Failed to activate edit mode."));
 				return;
 			}
 			if(c.inventory != null)
@@ -284,9 +284,9 @@ public class ServerEditHandler
 			if(event.isCanceled())
 			{
 				event.getEntityItem().setDead();
-				if(inventory.getItemStack() != null)
-					inventory.setItemStack(null);
-				else inventory.setInventorySlotContents(inventory.currentItem, null);
+				if(!inventory.getItemStack().isEmpty())
+					inventory.setItemStack(ItemStack.EMPTY);
+				else inventory.setInventorySlotContents(inventory.currentItem, ItemStack.EMPTY);
 			}
 		}
 	}
@@ -306,10 +306,10 @@ public class ServerEditHandler
 			EditData data = getData(event.getEntityPlayer());
 			Block block = event.getWorld().getBlockState(event.getPos()).getBlock();
 			ItemStack stack = event.getEntityPlayer().getHeldItemMainhand();
-			event.setUseBlock(stack == null && (block instanceof BlockDoor || block instanceof BlockTrapDoor || block instanceof BlockFenceGate) ? Result.ALLOW : Result.DENY);
+			event.setUseBlock(stack.isEmpty() && (block instanceof BlockDoor || block instanceof BlockTrapDoor || block instanceof BlockFenceGate) ? Result.ALLOW : Result.DENY);
 			if(event.getUseBlock() == Result.ALLOW)
 				return;
-			if(stack == null || !isBlockItem(stack.getItem()))
+			if(stack.isEmpty() || !isBlockItem(stack.getItem()))
 			{
 				event.setCanceled(true);
 				return;
@@ -392,7 +392,7 @@ public class ServerEditHandler
 					SkaianetHandler.giveItems(c.getClientIdentifier());
 				if(!cost.isEmpty())
 					GristHelper.decrease(c.getClientIdentifier(), cost);
-				event.getPlayer().inventory.mainInventory[event.getPlayer().inventory.currentItem] = null;
+				event.getPlayer().inventory.mainInventory.set(event.getPlayer().inventory.currentItem, ItemStack.EMPTY);
 			} else
 			{
 				GristHelper.decrease(data.connection.getClientIdentifier(), GristRegistry.getGristConversion(stack));
@@ -449,19 +449,19 @@ public class ServerEditHandler
 	public static void updateInventory(EntityPlayerMP player, boolean[] givenItems, boolean enteredGame, PlayerIdentifier client)
 	{
 		boolean inventoryChanged = false;
-		for(int i = 0; i < player.inventory.mainInventory.length; i++)
+		for(int i = 0; i < player.inventory.mainInventory.size(); i++)
 		{
-			ItemStack stack = player.inventory.mainInventory[i];
-			if(stack != null &&
+			ItemStack stack = player.inventory.mainInventory.get(i);
+			if(!stack.isEmpty() &&
 					(stack.getItem() == MinestuckItems.captchaCard && AlchemyRecipeHandler.getDecodedItem(stack).getItem() instanceof ItemCruxiteArtifact && enteredGame
 					|| !DeployList.containsItemStack(stack) && (GristRegistry.getGristConversion(stack) == null || !isBlockItem(stack.getItem()))))
 			{
-				player.inventory.mainInventory[i] = null;
+				player.inventory.mainInventory.set(i, ItemStack.EMPTY);
 				inventoryChanged = true;
 			}
-			if(stack != null && stack.stackSize > 1)
+			if(stack.getCount() > 1)
 			{
-				stack.stackSize = 1;
+				stack.setCount(1);
 				inventoryChanged = true;
 			}
 		}
@@ -473,25 +473,25 @@ public class ServerEditHandler
 					|| DeployList.getTier(stack) > availableTier)
 				itemsToRemove.add(stack);
 		
-		if(player.inventory.getItemStack() != null)
+		if(!player.inventory.getItemStack().isEmpty())
 			for(ItemStack stack : itemsToRemove)
 				if(player.inventory.getItemStack().equals(stack))
 				{
-					player.inventory.setItemStack(null);
+					player.inventory.setItemStack(ItemStack.EMPTY);
 					inventoryChanged = true;
 					break;
 				}
 		
-		for(int i = 0; i < player.inventory.mainInventory.length; i++)
+		for(int i = 0; i < player.inventory.mainInventory.size(); i++)
 		{
-			ItemStack stack = player.inventory.mainInventory[i];
-			if(stack == null)
+			ItemStack stack = player.inventory.mainInventory.get(i);
+			if(stack.isEmpty())
 				continue;
 			cleanStackNBT(stack);
 			for(ItemStack stack1 : itemsToRemove)
 				if(stack.isItemEqual(stack1))
 				{
-					player.inventory.mainInventory[i] = null;
+					player.inventory.mainInventory.set(i, ItemStack.EMPTY);
 					inventoryChanged = true;
 					break;
 				}
@@ -535,7 +535,7 @@ public class ServerEditHandler
 					for(int i = 5; i < event.getParameters().length; i++)
 					{
 						String s = event.getParameters()[i];
-						if(EntitySelector.hasArguments(s))
+						if(EntitySelector.isSelector(s))
 						{
 							Entity[] list = (Entity[]) EntitySelector.matchEntities(event.getSender(), s, Entity.class).toArray();
 							if(list.length == 0)

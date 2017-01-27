@@ -10,7 +10,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.BlockFluidClassic;
-import net.minecraftforge.fluids.BlockFluidFinite;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -108,25 +107,24 @@ public class MinestuckBlocks
 		woodenExplosiveButton = GameRegistry.register(new BlockButtonSpecial(true, true).setRegistryName("wooden_button_explosive")).setUnlocalizedName("buttonTnt");
 		stoneExplosiveButton = GameRegistry.register(new BlockButtonSpecial(false, true).setRegistryName("stone_button_explosive")).setUnlocalizedName("buttonTnt");
 		//fluids
-		fluidOil = new Fluid("Oil", new ResourceLocation("minestuck", "blocks/OilStill"), new ResourceLocation("minestuck", "blocks/OilFlowing"));
+		fluidOil = new Fluid("Oil", new ResourceLocation("minestuck", "blocks/oil_still"), new ResourceLocation("minestuck", "blocks/oil_flowing"));
 		FluidRegistry.registerFluid(fluidOil);
-		fluidBlood = new Fluid("Blood", new ResourceLocation("minestuck", "blocks/BloodStill"), new ResourceLocation("minestuck", "blocks/BloodFlowing"));
+		fluidBlood = new Fluid("Blood", new ResourceLocation("minestuck", "blocks/blood_still"), new ResourceLocation("minestuck", "blocks/blood_flowing"));
 		FluidRegistry.registerFluid(fluidBlood);
-		fluidBrainJuice = new Fluid("BrainJuice", new ResourceLocation("minestuck", "blocks/BrainJuiceStill"), new ResourceLocation("minestuck", "blocks/BrainJuiceFlowing"));
+		fluidBrainJuice = new Fluid("BrainJuice", new ResourceLocation("minestuck", "blocks/brain_juice_still"), new ResourceLocation("minestuck", "blocks/brain_juice_flowing"));
 		FluidRegistry.registerFluid(fluidBrainJuice);
 		blockOil = GameRegistry.register(new BlockFluidClassic(fluidOil, Material.WATER).setRegistryName("block_oil")).setUnlocalizedName("oil");
 		blockBlood = GameRegistry.register(new BlockFluidClassic(fluidBlood, Material.WATER).setRegistryName("block_blood")).setUnlocalizedName("blood");
 		blockBrainJuice = GameRegistry.register(new BlockFluidClassic(fluidBrainJuice, Material.WATER).setRegistryName("block_brain_juice")).setUnlocalizedName("brainJuice");
-
-		liquidGrists = new Block[GristType.allGrists];
+		
+		/*liquidGrists = new Block[GristType.allGrists];
 		gristFluids = new Fluid[GristType.allGrists];
 		for(GristType grist : GristType.values()) {
 			gristFluids[grist.ordinal()] = new Fluid(grist.getName(), new ResourceLocation("minestuck", "blocks/Liquid" + grist.getName() + "Still"), new ResourceLocation("minestuck", "blocks/Liquid" + grist.getName() + "Flowing"));
 			FluidRegistry.registerFluid(gristFluids[grist.ordinal()]);
 			liquidGrists[grist.ordinal()] = GameRegistry.register(new BlockFluidGrist(gristFluids[grist.ordinal()], Material.WATER).setRegistryName("liquid_" + grist.getName())).setUnlocalizedName("liquid_" + grist.getName());
-		}
-
-
+		}*/
+		
 		cruxiteBlock.setHarvestLevel("pickaxe", 0);
 		
 		fluidOil.setUnlocalizedName(blockOil.getUnlocalizedName());

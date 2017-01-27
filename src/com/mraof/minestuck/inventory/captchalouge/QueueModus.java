@@ -9,6 +9,7 @@ import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -24,18 +25,18 @@ public class QueueModus extends StackModus
 			{
 				size--;
 				return new ItemStack(MinestuckItems.captchaCard);
-			} else return null;
+			} else return ItemStack.EMPTY;
 		}
 		
 		if(list.isEmpty())
-			return null;
+			return ItemStack.EMPTY;
 		
 		if(id == CaptchaDeckHandler.EMPTY_SYLLADEX)
 		{
 			for(ItemStack item : list)
 				CaptchaDeckHandler.launchAnyItem(player, item);
 			list.clear();
-			return null;
+			return ItemStack.EMPTY;
 		}
 		
 		ItemStack item = list.removeLast();
@@ -48,13 +49,14 @@ public class QueueModus extends StackModus
 	}
 	
 	@Override
-	protected void fillList(ItemStack[] items)
+	protected void fillList(NonNullList<ItemStack> items)
 	{
+		items.clear();
 		Iterator<ItemStack> iter = list.iterator();
 		for(int i = 0; i < size; i++)
 			if(i < size - list.size())
-				items[i] = null;
-			else items[i] = iter.next();
+				items.add(ItemStack.EMPTY);
+			else items.add(iter.next());
 	}
 	
 	@Override

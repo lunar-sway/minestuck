@@ -52,11 +52,12 @@ public class ItemSpork extends ItemWeapon
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand)
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
 	{
-		if (player.isSneaking())
+		ItemStack stack = playerIn.getHeldItem(handIn);
+		if (playerIn.isSneaking())
 		{
-				if(!world.isRemote)
+				if(!worldIn.isRemote)
 				{
 					NBTTagCompound tagCompound = checkTagCompound(stack);
 					tagCompound.setBoolean("isSpoon", !tagCompound.getBoolean("isSpoon"));
