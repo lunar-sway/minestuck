@@ -7,6 +7,7 @@ import com.mraof.minestuck.entity.PartGroup;
 import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
 import com.mraof.minestuck.util.*;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
@@ -182,9 +183,9 @@ public class EntityGiclops extends EntityUnderling implements IBigEntity
 		this.setEntityBoundingBox(realBox);
 		return result;
 	}
-
+	
 	@Override
-	public void move(double x, double y, double z)
+	public void move(MoverType type, double x, double y, double z)
 	{
 		AxisAlignedBB realBox = this.getEntityBoundingBox();
 		Vec3d min = new Vec3d(
@@ -199,7 +200,7 @@ public class EntityGiclops extends EntityUnderling implements IBigEntity
 				z < 0 ? realBox.minZ - z : realBox.maxZ
 		);
 		this.setEntityBoundingBox(new AxisAlignedBB(min, max));
-		super.move(x, y, z);
+		super.move(type, x, y, z);
 		AxisAlignedBB changedBox = this.getEntityBoundingBox();
 		this.setEntityBoundingBox(realBox.offset(changedBox.minX - min.xCoord, changedBox.minY - min.yCoord, changedBox.minZ - min.zCoord));
 		this.resetPositionToBB();
