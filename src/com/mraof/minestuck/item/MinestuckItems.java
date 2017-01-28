@@ -211,10 +211,10 @@ public class MinestuckItems
 		crewPoster = GameRegistry.register(new Item().setRegistryName("crew_poster")).setUnlocalizedName("crewPoster").setMaxStackSize(1).setCreativeTab(Minestuck.tabMinestuck);
 		sbahjPoster = GameRegistry.register(new Item().setRegistryName("sbahj_poster")).setUnlocalizedName("sbahjPoster").setMaxStackSize(1).setCreativeTab(Minestuck.tabMinestuck);
 		
-		/*minestuckBucket.addBlock(blockOil.getDefaultState());
+		minestuckBucket.addBlock(blockOil.getDefaultState());
 		minestuckBucket.addBlock(blockBlood.getDefaultState());
 		minestuckBucket.addBlock(blockBrainJuice.getDefaultState());
-		for(Block block : liquidGrists)
+		/*for(Block block : liquidGrists)
 		{
 		    minestuckBucket.addBlock(block.getDefaultState());
 		}*/
@@ -281,6 +281,7 @@ public class MinestuckItems
 				return BlockMinestuckLog.BlockType.values()[input.getItemDamage()].getUnlocalizedName();
 			}
 		}));
+		registerItemBlock(new ItemBlock(woodenCactus));
 		
 		registerItemBlock(new ItemBlock(primedTnt));
 		registerItemBlock(new ItemBlock(unstableTnt));

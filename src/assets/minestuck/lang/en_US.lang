@@ -540,6 +540,7 @@ tile.stairsMinestuck.frostBrick.name=Frostbrick Stairs
 tile.stairsMinestuck.castIron.name=Cast-Iron Stairs
 tile.logMinestuck.vineOak.name=Vine Oak
 tile.logMinestuck.floweryVineOak.name=Flowery Vine Oak
+tile.woodenCactus.name=Wooden Cactus
 tile.primedTnt.name=Primed TNT
 tile.unstableTnt.name=Unstable TNT
 tile.instantTnt.name=Instant TNT

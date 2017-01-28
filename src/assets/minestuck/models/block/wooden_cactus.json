@@ -1,0 +1,9 @@
+{
+    "parent": "block/cactus",
+    "textures": {
+        "particle": "minestuck:blocks/wooden_cactus_side",
+        "bottom": "minestuck:blocks/wooden_cactus_bottom",
+        "top": "minestuck:blocks/wooden_cactus_top",
+        "side": "minestuck:blocks/wooden_cactus_side"
+    }
+}
