@@ -211,13 +211,13 @@ public class MinestuckItems
 		crewPoster = GameRegistry.register(new Item().setRegistryName("crew_poster")).setUnlocalizedName("crewPoster").setMaxStackSize(1).setCreativeTab(Minestuck.tabMinestuck);
 		sbahjPoster = GameRegistry.register(new Item().setRegistryName("sbahj_poster")).setUnlocalizedName("sbahjPoster").setMaxStackSize(1).setCreativeTab(Minestuck.tabMinestuck);
 		
-		minestuckBucket.addBlock(blockOil.getDefaultState());
+		/*minestuckBucket.addBlock(blockOil.getDefaultState());
 		minestuckBucket.addBlock(blockBlood.getDefaultState());
 		minestuckBucket.addBlock(blockBrainJuice.getDefaultState());
 		for(Block block : liquidGrists)
 		{
 		    minestuckBucket.addBlock(block.getDefaultState());
-		}
+		}*/
 		
 		registerItemBlock(new ItemMultiTexture(chessTile, chessTile, new String[] {"black", "white", "darkgrey", "lightgrey"}));
 		registerItemBlock(new ItemBlock(skaiaPortal));
