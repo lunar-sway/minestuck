@@ -3,6 +3,8 @@ package com.mraof.minestuck.entity.underling;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.boss.EntityDragonPart;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
@@ -17,6 +19,7 @@ public class EntityUnderlingPart extends EntityLiving implements IEntityAddition
 	public int id = -1;
 	private int headId = -1;
 
+	@SuppressWarnings("unused") //Minecraft creates entities with reflection
 	public EntityUnderlingPart(World world)
 	{
 		super(world);
@@ -64,7 +67,7 @@ public class EntityUnderlingPart extends EntityLiving implements IEntityAddition
 	{
 		if(this.baseEntity == null || par1DamageSource == DamageSource.IN_WALL || par1DamageSource == DamageSource.DROWN || par1DamageSource == DamageSource.FALL)
 			return false;
-		return ((IEntityMultiPart) this.baseEntity).attackEntityFromPart(this, par1DamageSource, par2);
+		return this.baseEntity.attackEntityFromPart(this, par1DamageSource, par2);
 	}
 	@Override
 	public void onUpdate() 
