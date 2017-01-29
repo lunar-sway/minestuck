@@ -2,7 +2,6 @@ package com.mraof.minestuck.entity;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -14,7 +13,7 @@ import java.util.ArrayList;
 public class PartGroup
 {
     private ArrayList<Vec3d> positions = new ArrayList<Vec3d>();
-    private ArrayList<Vec2f> sizes = new ArrayList<Vec2f>();
+    private ArrayList<Vec3d> sizes = new ArrayList<Vec3d>();
     public ArrayList<EntityBigPart> parts = new ArrayList<EntityBigPart>();
     EntityLivingBase parent;
 
@@ -31,17 +30,17 @@ public class PartGroup
         for(int x = 0; x < xSize; x++)
         {
             positions.add(offset.addVector(x + 0.5, 0, 0.5));
-            sizes.add(new Vec2f(1, (float) ySize));
+            sizes.add(new Vec3d(1, ySize, 1));
             positions.add(offset.addVector(x + 0.5, 0, zSize - 0.5));
-            sizes.add(new Vec2f(1, (float) ySize));
+            sizes.add(new Vec3d(1, ySize, 1));
         }
 
         for(int z = 1; z < zSize - 1; z++)
         {
             positions.add(offset.addVector(0.5, 0, z + 0.5));
-            sizes.add(new Vec2f(1, (float) ySize + 10));
+            sizes.add(new Vec3d(1, ySize + 10, 1));
             positions.add(offset.addVector(xSize - 0.5, 0, z + 0.5));
-            sizes.add(new Vec2f(1, (float) ySize + 10));
+            sizes.add(new Vec3d(1, ySize + 10, 1));
         }
     }
 

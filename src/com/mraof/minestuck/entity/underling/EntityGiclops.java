@@ -14,7 +14,6 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
@@ -187,21 +186,17 @@ public class EntityGiclops extends EntityUnderling implements IBigEntity
 	public void move(double x, double y, double z)
 	{
 		AxisAlignedBB realBox = this.getEntityBoundingBox();
-		Vec3d min = new Vec3d(
-				x > 0 ? realBox.maxX - x : realBox.minX,
+		double minX = x > 0 ? realBox.maxX - x : realBox.minX;
 /*				y > 0 ? realBox.maxY - y : realBox.minY,*/
-				realBox.minY,
-				z > 0 ? realBox.maxZ - z : realBox.minZ
-		);
-		Vec3d max = new Vec3d(
-				x < 0 ? realBox.minX - x : realBox.maxX,
-				y < 0 ? realBox.minY - y : realBox.maxY,
-				z < 0 ? realBox.minZ - z : realBox.maxZ
-		);
-		this.setEntityBoundingBox(new AxisAlignedBB(min, max));
+		double minY = realBox.minY;
+		double minZ = z > 0 ? realBox.maxZ - z : realBox.minZ;
+		double maxX = x < 0 ? realBox.minX - x : realBox.maxX;
+		double maxY = y < 0 ? realBox.minY - y : realBox.maxY;
+		double maxZ = z < 0 ? realBox.minZ - z : realBox.maxZ;
+		this.setEntityBoundingBox(new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ));
 		super.move(x, y, z);
 		AxisAlignedBB changedBox = this.getEntityBoundingBox();
-		this.setEntityBoundingBox(realBox.offset(changedBox.minX - min.xCoord, changedBox.minY - min.yCoord, changedBox.minZ - min.zCoord));
+		this.setEntityBoundingBox(realBox.offset(changedBox.minX - minX, changedBox.minY - minY, changedBox.minZ - minZ));
 		this.resetPositionToBB();
 	}
 
