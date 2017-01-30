@@ -148,6 +148,15 @@ public class EntityGiclops extends EntityUnderling implements IBigEntity
 	}
 
 	@Override
+	public void applyEntityCollision(Entity entityIn)
+	{
+	    if(!entityIn.noClip)
+		{
+			partGroup.applyCollision(entityIn);
+		}
+	}
+
+	@Override
 	public void onDeath(DamageSource cause)
 	{
 		super.onDeath(cause);
@@ -219,6 +228,6 @@ public class EntityGiclops extends EntityUnderling implements IBigEntity
 	@Override
 	public boolean canBeCollidedWith()
 	{
-		return false;
+		return true;
 	}
 }

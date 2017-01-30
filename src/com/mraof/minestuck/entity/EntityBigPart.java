@@ -8,7 +8,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHandSide;
-import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
@@ -21,13 +20,12 @@ import java.util.ArrayList;
  */
 public class EntityBigPart extends EntityLivingBase implements IEntityAdditionalSpawnData
 {
-    private PartGroup group;
+    PartGroup group;
     private int partId;
 
     public EntityBigPart(World world)
     {
         super(world);
-        this.noClip = true;
     }
 
     EntityBigPart(World worldIn, PartGroup group, Vec3d size)
@@ -129,5 +127,23 @@ public class EntityBigPart extends EntityLivingBase implements IEntityAdditional
     public boolean canBeCollidedWith()
     {
         return true;
+    }
+
+    @Override
+    public boolean isEntityInsideOpaqueBlock()
+    {
+        return false;
+    }
+
+    @Override
+    protected void collideWithEntity(Entity entityIn)
+    {
+    }
+
+    @Override
+    public void move(double x, double y, double z)
+    {
+        this.setEntityBoundingBox(this.getEntityBoundingBox().offset(x, y, z));
+        this.resetPositionToBB();
     }
 }
