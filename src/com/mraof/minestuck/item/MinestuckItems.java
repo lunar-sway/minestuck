@@ -8,7 +8,6 @@ import com.mraof.minestuck.block.BlockMinestuckStone;
 import com.mraof.minestuck.item.block.ItemBlockLayered;
 import com.mraof.minestuck.item.block.ItemSburbMachine;
 import com.mraof.minestuck.item.weapon.*;
-import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
@@ -174,6 +173,7 @@ public class MinestuckItems
 				return BlockMinestuckLog.BlockType.values()[input.getItemDamage()].getUnlocalizedName();
 			}
 		}));
+		registerItemBlock(new ItemBlock(woodenCactus));
 		
 		registerItemBlock(new ItemBlock(primedTnt));
 		registerItemBlock(new ItemBlock(unstableTnt));

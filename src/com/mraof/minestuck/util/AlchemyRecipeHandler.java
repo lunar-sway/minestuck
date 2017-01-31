@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import javax.annotation.Nonnull;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockPrismarine;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.init.Blocks;
@@ -543,12 +544,14 @@ public class AlchemyRecipeHandler
 		GameRegistry.addRecipe(new ItemStack(frostBrickStairs, 4), new Object[] {"X  ", "XX ", "XXX", 'X', new ItemStack(stone, 1, BlockMinestuckStone.FROST_META)});
 		GameRegistry.addRecipe(new ItemStack(castIronStairs, 4), new Object[] {"X  ", "XX ", "XXX", 'X', new ItemStack(stone, 1, BlockMinestuckStone.CAST_META)});
 		GameRegistry.addRecipe(new ItemStack(stone, 4, BlockMinestuckStone.SHADE_META), new Object[] {"XX", "XX", 'X', new ItemStack(stone, 1, BlockMinestuckStone.SHADE_SMOOTH_META)});
+		GameRegistry.addRecipe(new ItemStack(Blocks.PLANKS, 3, BlockPlanks.EnumType.SPRUCE.getMetadata()), new Object[] {"X", 'X', new ItemStack(woodenCactus)});
 		
 		GameRegistry.addSmelting(goldSeeds, new ItemStack(Items.GOLD_NUGGET), 0.1F);
 		GameRegistry.addSmelting(ironOreSandstone, new ItemStack(Items.IRON_INGOT), 0.7F);
 		GameRegistry.addSmelting(ironOreSandstoneRed, new ItemStack(Items.IRON_INGOT), 0.7F);
 		GameRegistry.addSmelting(goldOreSandstone, new ItemStack(Items.GOLD_INGOT), 1.0F);
 		GameRegistry.addSmelting(goldOreSandstoneRed, new ItemStack(Items.GOLD_INGOT), 1.0F);
+		GameRegistry.addSmelting(woodenCactus, new ItemStack(Items.COAL, 1, 1), 0.15F);
 		
 		//Register ore dictionary entries
 		OreDictionary.registerOre("oreCoal", coalOreNetherrack);
@@ -658,6 +661,7 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(sbahjPoster), new GristSet(new GristType[] {GristType.Build}, new int[] {4}));
 		GristRegistry.addGristConversion(new ItemStack(crewPoster), new GristSet(new GristType[] {GristType.Tar, GristType.Rust}, new int[] {3, 2}));
 		GristRegistry.addGristConversion(new ItemStack(threshDvd), new GristSet(new GristType[] {GristType.Iodine, GristType.Amethyst}, new int[] {3, 2}));
+		GristRegistry.addGristConversion(woodenCactus, new GristSet(GristType.Build, 7));
 		
 		//add Designix combinations
 		
@@ -805,6 +809,10 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Blocks.LOG, 1, 0), new ItemStack(Blocks.VINE), MODE_AND, new ItemStack(log, 1, 0));
 		CombinationRegistry.addCombination(new ItemStack(log, 1, 0), new ItemStack(Blocks.YELLOW_FLOWER), MODE_OR, true, false, new ItemStack(log, 1, 1));
 		CombinationRegistry.addCombination(new ItemStack(log, 1, 0), new ItemStack(Blocks.RED_FLOWER), MODE_OR, true, false, new ItemStack(log, 1, 1));
+		CombinationRegistry.addCombination(new ItemStack(Items.WOODEN_SWORD), new ItemStack(Blocks.CACTUS), MODE_OR, false, true, new ItemStack(woodenCactus));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.PLANKS), new ItemStack(Blocks.CACTUS), MODE_OR, false, true, new ItemStack(woodenCactus));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.LOG), new ItemStack(Blocks.CACTUS), MODE_OR, false, true, new ItemStack(woodenCactus));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.LOG2), new ItemStack(Blocks.CACTUS), MODE_OR, false, true, new ItemStack(woodenCactus));
 		
 		//Register chest loot
 		LootConditionManager.registerCondition(new LandAspectLootCondition.Serializer());

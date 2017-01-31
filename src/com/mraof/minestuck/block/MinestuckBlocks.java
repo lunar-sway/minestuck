@@ -40,6 +40,7 @@ public class MinestuckBlocks
 	public static Block frostBrickStairs;
 	public static Block castIronStairs;
 	public static Block log;
+	public static Block woodenCactus;
 	
 	public static Block coalOreNetherrack;
 	public static Block ironOreSandstone;
@@ -100,6 +101,7 @@ public class MinestuckBlocks
 		frostBrickStairs = GameRegistry.register(new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.FROST_BRICK)).setRegistryName("frost_brick_stairs")).setUnlocalizedName("stairsMinestuck.frostBrick");
 		castIronStairs = GameRegistry.register(new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.CAST_IRON)).setRegistryName("cast_iron_stairs")).setUnlocalizedName("stairsMinestuck.castIron");
 		log = GameRegistry.register(new BlockMinestuckLog().setRegistryName("log"));
+		woodenCactus = GameRegistry.register(new BlockCactusSpecial(SoundType.WOOD, "axe").setRegistryName("wooden_cactus")).setHardness(1.0F).setResistance(2.5F).setUnlocalizedName("woodenCactus");
 		
 		primedTnt = GameRegistry.register(new BlockTNTSpecial(true, false, false).setRegistryName("primed_tnt")).setUnlocalizedName("primedTnt");
 		unstableTnt = GameRegistry.register(new BlockTNTSpecial(false, true, false).setRegistryName("unstable_tnt")).setUnlocalizedName("unstableTnt");
