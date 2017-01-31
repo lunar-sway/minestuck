@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHandSide;
-import net.minecraft.util.math.Vec2f;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
@@ -20,20 +20,19 @@ import java.util.ArrayList;
  */
 public class EntityBigPart extends EntityLivingBase implements IEntityAdditionalSpawnData
 {
-    private PartGroup group;
+    PartGroup group;
     private int partId;
 
     public EntityBigPart(World world)
     {
         super(world);
-        this.noClip = true;
     }
 
-    EntityBigPart(World worldIn, PartGroup group, Vec2f size)
+    EntityBigPart(World worldIn, PartGroup group, Vec3d size)
     {
         this(worldIn);
         this.group = group;
-        this.setSize(size.x, size.y);
+        this.setSize((float) size.xCoord, (float) size.yCoord);
     }
 
     void setPartId(int id)
@@ -65,9 +64,7 @@ public class EntityBigPart extends EntityLivingBase implements IEntityAdditional
     @Override
     public boolean attackEntityFrom(DamageSource damageSource, float amount)
     {
-        boolean result = this.group != null && this.group.attackFrom(damageSource, amount);
-        System.out.printf("%s %s %s %s%n", damageSource.getDamageType(), amount, this.group, result);
-        return result;
+        return this.group != null && this.group.attackFrom(damageSource, amount);
     }
 
     @Override
@@ -130,5 +127,23 @@ public class EntityBigPart extends EntityLivingBase implements IEntityAdditional
     public boolean canBeCollidedWith()
     {
         return true;
+    }
+
+    @Override
+    public boolean isEntityInsideOpaqueBlock()
+    {
+        return false;
+    }
+
+    @Override
+    protected void collideWithEntity(Entity entityIn)
+    {
+    }
+
+    @Override
+    public void move(double x, double y, double z)
+    {
+        this.setEntityBoundingBox(this.getEntityBoundingBox().offset(x, y, z));
+        this.resetPositionToBB();
     }
 }
