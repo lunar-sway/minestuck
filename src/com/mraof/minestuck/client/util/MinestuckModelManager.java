@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Map;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockCactus;
 import net.minecraft.block.BlockTNT;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemMeshDefinition;
@@ -181,6 +182,7 @@ public class MinestuckModelManager
 		register(castIronStairs);
 		for(BlockMinestuckLog.BlockType type : BlockMinestuckLog.BlockType.values())
 			register(log, type.ordinal(), type.getName()+"_log");
+		register(woodenCactus);
 		
 		register(primedTnt);
 		register(unstableTnt);
@@ -241,6 +243,7 @@ public class MinestuckModelManager
 		ModelLoader.setCustomStateMapper(unstableTnt, (new StateMap.Builder()).ignore(BlockTNT.EXPLODE).build());
 		ModelLoader.setCustomStateMapper(instantTnt, (new StateMap.Builder()).ignore(BlockTNT.EXPLODE).build());
 		ModelLoader.setCustomStateMapper(log, (new StateMap.Builder()).withName(BlockMinestuckLog.VARIANT).withSuffix("_log").build());
+		ModelLoader.setCustomStateMapper(woodenCactus, new StateMap.Builder().ignore(BlockCactus.AGE).build());
 		ModelLoader.setCustomStateMapper(returnNode, new IStateMapper()
 		{
 			@Override

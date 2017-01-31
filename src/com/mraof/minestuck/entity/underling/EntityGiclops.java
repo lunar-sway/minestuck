@@ -1,38 +1,38 @@
 package com.mraof.minestuck.entity.underling;
 
+import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.entity.EntityBigPart;
+import com.mraof.minestuck.entity.IBigEntity;
+import com.mraof.minestuck.entity.PartGroup;
+import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
+import com.mraof.minestuck.util.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.entity.IEntityMultiPart;
-import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
-import com.mraof.minestuck.util.Echeladder;
-import com.mraof.minestuck.util.GristHelper;
-import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.GristType;
-import com.mraof.minestuck.util.MinestuckAchievementHandler;
-import com.mraof.minestuck.util.MinestuckPlayerData;
-
-public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
+public class EntityGiclops extends EntityUnderling implements IBigEntity
 {
 	private EntityAIAttackOnCollideWithRate entityAIAttackOnCollideWithRate;
-	
-	EntityUnderlingPart topPart;
+	private PartGroup partGroup;
 
 	public EntityGiclops(World world)
 	{
 		super(world, "giclops");
-		
+
 		setSize(8.0F, 12.0F);
 		this.stepHeight = 2;
-		topPart = new EntityUnderlingPart(this, 0, 6.0F, 7.0F);
-		world.spawnEntity(topPart);
+		partGroup = new PartGroup(this);
+		partGroup.addBox(-4, 2, -1.5, 8, 8, 5);
+		partGroup.addBox(-5, 0, -0.5, 3, 2, 3);
+		partGroup.addBox(1, 0, -0.5, 3, 2, 3);
+		partGroup.createEntities(world);
 	}
 
 	@Override
@@ -87,19 +87,19 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 	{
 		super.applyEntityAttributes();
 		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32.0D);
-		
 	}
 	
 	@Override
 	protected void jump()
 	{
 		this.motionY = 0.42D;
-		
-		if (this.isPotionActive(MobEffects.JUMP_BOOST))
+
+		PotionEffect jumpBoost = this.getActivePotionEffect(MobEffects.JUMP_BOOST);
+		if (jumpBoost != null)
 		{
-			this.motionY += (double)((float)(this.getActivePotionEffect(MobEffects.JUMP_BOOST).getAmplifier() + 1) * 0.1F);
+			this.motionY += (double)((float)(jumpBoost.getAmplifier() + 1) * 0.1F);
 		}
-		
+
 		if (this.isSprinting())
 		{
 			float f = this.rotationYaw * 0.017453292F;
@@ -121,7 +121,7 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 	public void onEntityUpdate() 
 	{
 		super.onEntityUpdate();
-		this.updatePartPositions();
+		partGroup.updatePositions();
 		if(!world.isRemote && MinestuckConfig.disableGiclops)
 			this.setDead();
 	}
@@ -130,57 +130,32 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 	public void setPositionAndRotation(double par1, double par3, double par5, float par7, float par8) 
 	{
 		super.setPositionAndRotation(par1, par3, par5, par7, par8);
-		this.updatePartPositions();
+		partGroup.updatePositions();
 	}
 	
 	@Override
 	public Entity[] getParts() 
 	{
-		return new Entity[] {topPart};
+		Entity[] array = new Entity[partGroup.parts.size()];
+		return partGroup.parts.toArray(array);
 	}
-	
+
 	@Override
-	public World getWorld() 
+	protected void collideWithEntity(Entity par1Entity)
 	{
-		return this.world;
-	}
-	
-	@Override
-	protected void collideWithEntity(Entity par1Entity) 
-	{
-		if(par1Entity != topPart)
+		if(!(par1Entity instanceof EntityBigPart))
 			super.collideWithEntity(par1Entity);
 	}
-	
-	@Override
-	public boolean attackEntityFromPart(Entity entityPart, DamageSource source, float damage) 
-	{
-		return this.attackEntityFrom(source, damage);
-	}
-	
-	@Override
-	public void updatePartPositions()
-	{
-		float f1 = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw);
-		double topPartPosX = (this.posX + -Math.sin(f1 / 180.0 * Math.PI) * 2);
-		double topPartPosZ = (this.posZ + Math.cos(f1 / 180.0 * Math.PI) * 2);
-		
-		if(topPart != null)
-			topPart.setPositionAndRotation(topPartPosX, this.posY + 6, topPartPosZ, this.rotationYaw, this.rotationPitch);
-	}
 
 	@Override
-	public void addPart(Entity entityPart, int id) 
+	public void applyEntityCollision(Entity entityIn)
 	{
-		this.topPart = (EntityUnderlingPart) entityPart;
+	    if(!entityIn.noClip)
+		{
+			partGroup.applyCollision(entityIn);
+		}
 	}
 
-	@Override
-	public void onPartDeath(Entity entityPart, int id) 
-	{
-
-	}
-	
 	@Override
 	public void onDeath(DamageSource cause)
 	{
@@ -196,5 +171,63 @@ public class EntityGiclops extends EntityUnderling implements IEntityMultiPart
 				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 3));
 			}
 		}
+	}
+
+	//Reduced lag is worth not taking damage for being inside a wall
+	@Override
+	public boolean isEntityInsideOpaqueBlock()
+	{
+		return false;
+	}
+
+	//Only pay attention to the top for water
+	@Override
+	public boolean handleWaterMovement()
+	{
+		AxisAlignedBB realBox = this.getEntityBoundingBox();
+		this.setEntityBoundingBox(new AxisAlignedBB(realBox.minX, realBox.maxY - 1, realBox.minZ, realBox.maxX, realBox.maxY, realBox.maxZ));
+		boolean result = super.handleWaterMovement();
+		this.setEntityBoundingBox(realBox);
+		return result;
+	}
+
+	@Override
+	public void move(double x, double y, double z)
+	{
+		AxisAlignedBB realBox = this.getEntityBoundingBox();
+		double minX = x > 0 ? realBox.maxX - x : realBox.minX;
+/*				y > 0 ? realBox.maxY - y : realBox.minY,*/
+		double minY = realBox.minY;
+		double minZ = z > 0 ? realBox.maxZ - z : realBox.minZ;
+		double maxX = x < 0 ? realBox.minX - x : realBox.maxX;
+		double maxY = y < 0 ? realBox.minY - y : realBox.maxY;
+		double maxZ = z < 0 ? realBox.minZ - z : realBox.maxZ;
+		this.setEntityBoundingBox(new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ));
+		super.move(x, y, z);
+		AxisAlignedBB changedBox = this.getEntityBoundingBox();
+		this.setEntityBoundingBox(realBox.offset(changedBox.minX - minX, changedBox.minY - minY, changedBox.minZ - minZ));
+		this.resetPositionToBB();
+	}
+
+	@Override
+	public PartGroup getGroup()
+	{
+		return partGroup;
+	}
+
+	/**
+	 * Will get destroyed next tick.
+	 */
+	@Override
+	public void setDead()
+	{
+		super.setDead();
+		partGroup.updatePositions();
+	}
+
+	@Override
+	public boolean canBeCollidedWith()
+	{
+		return true;
 	}
 }

@@ -159,13 +159,7 @@ public class MinestuckItems
 		regiSickle = GameRegistry.register(new ItemWeapon(812, 6.0D, -2.4D, 5, "regiSickle").setRegistryName("regisickle"));
 		clawSickle = GameRegistry.register(new ItemWeapon(2048, 7.0D, -2.4D, 15, "clawSickle").setRegistryName("claw_sickle"));
 		candySickle = GameRegistry.register(new ItemCandyWeapon(96, 6.0D, -2.4D, 15, "candySickle").setRegistryName("candy_sickle"));
-/*
-		DEUCE(),
-				NIGHT(),
-				POGO(),
-				BAT(),
-				SPIKED();
-		*/
+
 		//clubs
 		deuceClub = GameRegistry.register(new ItemWeapon(1024, 2.5D, -2.2D, 15, "deuceClub").setRegistryName("deuce_club"));
 		nightClub = GameRegistry.register(new ItemWeapon(600, 4.0D, -2.2D, 20, "nightClub").setRegistryName("nightclub"));
@@ -179,14 +173,6 @@ public class MinestuckItems
 		dragonCane = GameRegistry.register(new ItemWeapon(300, 6.5D, -2.0D, 20, "dragonCane").setRegistryName("dragon_cane"));
 		
 		//Spoons/forks
-/*
-		SPOON_WOOD(),
-		SPOON_SILVER(),
-		CROCKER(),
-		SKAIA(),
-		FORK(),
-		SPORK();
-		*/
 		woodenSpoon = GameRegistry.register(new ItemWeapon(59, 2.0D, -2.2D, 5, "woodenSpoon").setRegistryName("wooden_spoon"));
 		silverSpoon = GameRegistry.register(new ItemWeapon(250, 2.5D, -2.2D, 12, "silverSpoon").setRegistryName("silver_spoon"));
 		crockerSpork = (ItemSpork) GameRegistry.register(new ItemSpork(512, 4.0D, -2.2D, 15, "crockerSpork").setRegistryName("crocker_spork"));
@@ -232,10 +218,10 @@ public class MinestuckItems
 		minestuckBucket.addBlock(blockOil.getDefaultState());
 		minestuckBucket.addBlock(blockBlood.getDefaultState());
 		minestuckBucket.addBlock(blockBrainJuice.getDefaultState());
-		for(Block block : liquidGrists)
+		/*for(Block block : liquidGrists)
 		{
 		    minestuckBucket.addBlock(block.getDefaultState());
-		}
+		}*/
 		
 		registerItemBlock(new ItemMultiTexture(chessTile, chessTile, new String[] {"black", "white", "darkgrey", "lightgrey"}));
 		registerItemBlock(new ItemBlock(skaiaPortal));
@@ -299,6 +285,7 @@ public class MinestuckItems
 				return BlockMinestuckLog.BlockType.values()[input.getItemDamage()].getUnlocalizedName();
 			}
 		}));
+		registerItemBlock(new ItemBlock(woodenCactus));
 		
 		registerItemBlock(new ItemBlock(primedTnt));
 		registerItemBlock(new ItemBlock(unstableTnt));

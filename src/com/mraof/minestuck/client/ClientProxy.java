@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client;
 
+import com.mraof.minestuck.entity.EntityBigPart;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.color.IItemColor;
@@ -114,6 +115,14 @@ public class ClientProxy
 			public Render<EntityUnderlingPart> createRenderFor(RenderManager manager)
 			{
 				return new RenderShadow(manager, 2.8F);
+			}
+		});
+		RenderingRegistry.registerEntityRenderingHandler(EntityBigPart.class, new IRenderFactory<EntityBigPart>()
+		{
+			@Override
+			public Render<EntityBigPart> createRenderFor(RenderManager manager)
+			{
+				return new RenderShadow(manager, 0F);
 			}
 		});
 		RenderingRegistry.registerEntityRenderingHandler(EntityPawn.class, new IRenderFactory<EntityPawn>()

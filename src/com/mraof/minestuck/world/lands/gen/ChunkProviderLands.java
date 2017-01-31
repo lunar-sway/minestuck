@@ -73,7 +73,7 @@ public class ChunkProviderLands implements IChunkGenerator
 		aspect2 = worldProvider.landAspects.aspectTitle;
 		
 		NBTTagCompound landDataTag = (NBTTagCompound) worldObj.getWorldInfo().getAdditionalProperty("LandData");
-		
+
 		this.landWorld = worldObj;
 		
 		this.consortList = new ArrayList<SpawnListEntry>();
