@@ -145,7 +145,7 @@ public class MinestuckModelManager
 		register(chocolateBeetle);
 		register(coneOfFlies);
 		register(grasshopper);
-		register(lidOfBugs);
+		register(jarOfBugs);
 		register(onion);
 		register(threshDvd);
 		register(crewPoster);

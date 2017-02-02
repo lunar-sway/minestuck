@@ -91,7 +91,7 @@ public class MinestuckItems
 	public static Item chocolateBeetle;
 	public static Item coneOfFlies;
 	public static Item grasshopper;
-	public static Item lidOfBugs;
+	public static Item jarOfBugs;
 	public static Item onion;
 	//Other
 	public static Item rawCruxite;
@@ -209,12 +209,12 @@ public class MinestuckItems
 		
 		//food
 		candy = GameRegistry.register(new ItemMinestuckCandy().setRegistryName("candy"));
-		bugOnAStick = GameRegistry.register(new ItemFood(0, 0F, false).setRegistryName("bug_on_stick")).setUnlocalizedName("bugOnAStick").setCreativeTab(Minestuck.tabMinestuck);
-		chocolateBeetle = GameRegistry.register(new ItemFood(0, 0F, false).setRegistryName("chocolate_beetle")).setUnlocalizedName("chocolateBeetle").setCreativeTab(Minestuck.tabMinestuck);
-		coneOfFlies = GameRegistry.register(new ItemFood(0, 0F, false).setRegistryName("cone_of_flies")).setUnlocalizedName("coneOfFlies").setCreativeTab(Minestuck.tabMinestuck);
-		grasshopper = GameRegistry.register(new ItemFood(0, 0F, false).setRegistryName("grasshopper")).setUnlocalizedName("grasshopper").setCreativeTab(Minestuck.tabMinestuck);
-		lidOfBugs = GameRegistry.register(new ItemFood(0, 0F, false).setRegistryName("lid_of_bugs")).setUnlocalizedName("lidsOfBugs").setCreativeTab(Minestuck.tabMinestuck);
-		onion = GameRegistry.register(new ItemFood(0, 0F, false).setRegistryName("onion")).setUnlocalizedName("onion").setCreativeTab(Minestuck.tabMinestuck);
+		bugOnAStick = GameRegistry.register(new ItemFood(1, 0.1F, false).setRegistryName("bug_on_stick")).setUnlocalizedName("bugOnAStick").setCreativeTab(Minestuck.tabMinestuck);
+		chocolateBeetle = GameRegistry.register(new ItemFood(3, 0.4F, false).setRegistryName("chocolate_beetle")).setUnlocalizedName("chocolateBeetle").setCreativeTab(Minestuck.tabMinestuck);
+		coneOfFlies = GameRegistry.register(new ItemFood(2, 0.1F, false).setRegistryName("cone_of_flies")).setUnlocalizedName("coneOfFlies").setCreativeTab(Minestuck.tabMinestuck);
+		grasshopper = GameRegistry.register(new ItemFood(4, 0.5F, false).setRegistryName("grasshopper")).setUnlocalizedName("grasshopper").setCreativeTab(Minestuck.tabMinestuck);
+		jarOfBugs = GameRegistry.register(new ItemFood(3, 0.2F, false).setRegistryName("jar_of_bugs")).setUnlocalizedName("jarOfBugs").setCreativeTab(Minestuck.tabMinestuck);
+		onion = GameRegistry.register(new ItemFood(2, 0.2F, false).setRegistryName("onion")).setUnlocalizedName("onion").setCreativeTab(Minestuck.tabMinestuck);
 		
 		//misc
 		rawCruxite = GameRegistry.register(new Item().setRegistryName("raw_cruxite")).setUnlocalizedName("rawCruxite").setCreativeTab(Minestuck.tabMinestuck);
