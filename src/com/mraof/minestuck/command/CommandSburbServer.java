@@ -1,6 +1,10 @@
 package com.mraof.minestuck.command;
 
+import java.util.Collections;
+import java.util.List;
+
 import com.mraof.minestuck.network.skaianet.SessionHandler;
+import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 
@@ -9,6 +13,7 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 
 public class CommandSburbServer extends CommandBase
 {
@@ -43,4 +48,10 @@ public class CommandSburbServer extends CommandBase
 		SessionHandler.connectByCommand(sender, this, client, server);
 	}
 	
+	@Override
+	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos)
+	{
+		return args.length == 1 || args.length == 2 ? IdentifierHandler.getCommandAutocomplete(server, args)
+				: Collections.<String>emptyList();
+	}
 }

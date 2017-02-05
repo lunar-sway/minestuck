@@ -1,7 +1,11 @@
 package com.mraof.minestuck.command;
 
+import java.util.Collections;
+import java.util.List;
+
 import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.Location;
 import com.mraof.minestuck.util.Teleport;
 
@@ -14,6 +18,7 @@ import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 
@@ -88,5 +93,11 @@ public class CommandTransportalizer extends CommandBase
 			notifyCommandListener(sender, this, "commands.tpz.success", player.getName(), code);
 		} else if(sender.sendCommandFeedback())
 			throw new CommandException("commands.tpz.failed");
+	}
+	
+	@Override
+	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos)
+	{
+		return args.length == 1 ? IdentifierHandler.getCommandAutocomplete(server, args) : Collections.<String>emptyList();
 	}
 }

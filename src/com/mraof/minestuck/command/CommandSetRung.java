@@ -1,6 +1,10 @@
 package com.mraof.minestuck.command;
 
+import java.util.Collections;
+import java.util.List;
+
 import com.mraof.minestuck.util.Echeladder;
+import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.util.MinestuckPlayerData;
@@ -10,6 +14,7 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 
 public class CommandSetRung extends CommandBase
 {
@@ -43,6 +48,12 @@ public class CommandSetRung extends CommandBase
 		echeladder.setByCommand(rung, progress);
 		
 		notifyCommandListener(sender, this, "commands.setRung.success", target.getUsername(), rung, progress*100);
+	}
+	
+	@Override
+	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos)
+	{
+		return args.length == 1 ? IdentifierHandler.getCommandAutocomplete(server, args) : Collections.<String>emptyList();
 	}
 	
 	@Override

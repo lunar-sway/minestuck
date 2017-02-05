@@ -1,5 +1,8 @@
 package com.mraof.minestuck.command;
 
+import java.util.Collections;
+import java.util.List;
+
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristHelper;
@@ -16,6 +19,7 @@ import net.minecraft.command.SyntaxErrorException;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 
 public class CommandGrist extends CommandBase
@@ -107,5 +111,14 @@ public class CommandGrist extends CommandBase
 		}
 		
 		return grist;
+	}
+	
+	@Override
+	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos)
+	{
+		return args.length == 1 ? IdentifierHandler.getCommandAutocomplete(server, args) :
+			(args.length == 2 ? getListOfStringsMatchingLastWord(args, "add", "set") :
+				(args.length > 2 && (args.length%2 == 0) ? getListOfStringsMatchingLastWord(args, GristType.getNames())
+						: Collections.<String>emptyList()));
 	}
 }
