@@ -51,10 +51,9 @@ public enum EnumAspect {
 	}
 	
 	@Override
-	public String toString() {
-		String s = this.name();
-		s = s.toLowerCase();
-		return s.replaceFirst(String.valueOf(s.charAt(0)), String.valueOf(Character.toUpperCase(s.charAt(0))));
+	public String toString()
+	{
+		return this.name().toLowerCase();
 	}
 	
 	public String getDisplayName()

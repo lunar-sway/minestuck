@@ -12,6 +12,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.server.management.UserListOpsEntry;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.Style;
@@ -326,7 +327,8 @@ public class SkaianetHandler {
 			Debug.error("[SKAIANET] Something went wrong with player \"" + player.getName() + "\"'s skaianet data!");
 			return;
 		}
-		if(MinestuckConfig.privateComputers && !p0.equals(p1) && player.getServer().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile()) == null)
+		UserListOpsEntry opsEntry = player.getServer().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
+		if(MinestuckConfig.privateComputers && !p0.equals(p1) && !(opsEntry != null && opsEntry.getPermissionLevel() >= 2))
 		{
 			player.sendStatusMessage(new TextComponentString("[Minestuck] ").setStyle(new Style().setColor(TextFormatting.RED)).appendSibling(new TextComponentTranslation("message.privateComputerMessage")));
 			return;
@@ -565,9 +567,16 @@ public class SkaianetHandler {
 		if(MinestuckConfig.privateComputers)
 		{
 			for(Entry<PlayerIdentifier,PlayerIdentifier[]> entry : infoToSend.entrySet())
+			{
+				EntityPlayerMP player = entry.getKey().getPlayer();
+				UserListOpsEntry opsEntry = player == null ? null : player.getServer().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
+				if(opsEntry != null && opsEntry.getPermissionLevel() >= 2)
+					continue;
+				
 				for(int i = 0; i < entry.getValue().length; i++)
 					if(entry.getValue()[i] != null && !entry.getValue()[i].equals(entry.getKey()))
 						entry.getValue()[i] = null;
+			}
 		}
 	}
 	

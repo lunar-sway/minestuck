@@ -70,4 +70,12 @@ public enum GristType {
 				return current;
 		return null;
 	}
+	
+	public static String[] getNames()
+	{
+		String[] list = new String[values().length];
+		for(int i = 0; i < list.length; i++)
+			list[i] = values()[i].name;
+		return list;
+	}
 }
