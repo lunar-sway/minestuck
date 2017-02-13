@@ -21,7 +21,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.LootContext;
 
@@ -55,7 +57,7 @@ public abstract class MessageType
 		{
 			if(args[i].equals("playerNameLand"))
 			{
-				SburbConnection c = SburbHandler.getConnectionForDimension(consort.dimension);
+				SburbConnection c = SburbHandler.getConnectionForDimension(consort.homeDimension);
 				if(c != null)
 					obj[i] = c.getClientIdentifier().getUsername();
 				else
@@ -65,9 +67,10 @@ public abstract class MessageType
 				obj[i] = player.getName();
 			} else if(args[i].equals("landName"))
 			{
-				if(consort.world.provider instanceof WorldProviderLands)
+				World world = consort.getServer().worldServerForDimension(consort.homeDimension);
+				if(world != null && consort.world.provider instanceof WorldProviderLands)
 				{
-					ChunkProviderLands chunkProvider = (ChunkProviderLands) player.world.provider
+					ChunkProviderLands chunkProvider = (ChunkProviderLands) world.provider
 							.createChunkGenerator();
 					ITextComponent aspect1 = new TextComponentTranslation(
 							"land." + chunkProvider.aspect1.getNames()[chunkProvider.nameIndex1]);
@@ -81,23 +84,23 @@ public abstract class MessageType
 					obj[i] = "Land name";
 			} else if(args[i].equals("playerTitleLand"))
 			{
-				SburbConnection c = SburbHandler.getConnectionForDimension(consort.dimension);
+				SburbConnection c = SburbHandler.getConnectionForDimension(consort.homeDimension);
 				if(c != null)
-					obj[i] = MinestuckPlayerData.getData(c.getClientIdentifier()).title.toString();
+					obj[i] = MinestuckPlayerData.getData(c.getClientIdentifier()).title.asTextComponent();
 				else
 					obj[i] = "Player title";
 			} else if(args[i].equals("playerClassLand"))
 			{
 				SburbConnection c = SburbHandler.getConnectionForDimension(consort.dimension);
 				if(c != null)
-					obj[i] = MinestuckPlayerData.getData(c.getClientIdentifier()).title.getHeroClass().toString();
+					obj[i] = MinestuckPlayerData.getData(c.getClientIdentifier()).title.getHeroClass().asTextComponent();
 				else
 					obj[i] = "Player class";
 			} else if(args[i].equals("playerAspectLand"))
 			{
 				SburbConnection c = SburbHandler.getConnectionForDimension(consort.dimension);
 				if(c != null)
-					obj[i] = MinestuckPlayerData.getData(c.getClientIdentifier()).title.getHeroAspect().toString();
+					obj[i] = MinestuckPlayerData.getData(c.getClientIdentifier()).title.getHeroAspect().asTextComponent();
 				else
 					obj[i] = "Player aspect";
 			} else if(args[i].equals("consortType"))
@@ -110,7 +113,7 @@ public abstract class MessageType
 			{
 				PlayerIdentifier identifier = IdentifierHandler.encode(player);
 				if(MinestuckPlayerData.getTitle(identifier) != null)
-					obj[i] = MinestuckPlayerData.getTitle(identifier).toString();
+					obj[i] = MinestuckPlayerData.getTitle(identifier).asTextComponent();
 				else
 					obj[i] = player.getName();
 			}
@@ -174,7 +177,7 @@ public abstract class MessageType
 			ITextComponent message = super.getMessage(consort, player, chainIdentifier);
 			message.appendText("\n");
 			ITextComponent desc = createMessage(consort, player, unlocalizedMessage + ".desc", args, false);
-			desc.getStyle().setItalic(true);
+			desc.getStyle().setItalic(true).setColor(TextFormatting.GRAY);
 			message.appendSibling(desc);
 			return message;
 		}

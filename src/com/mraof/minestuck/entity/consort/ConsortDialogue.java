@@ -169,7 +169,7 @@ public class ConsortDialogue
 	
 	public static ConditionedMessage getRandomMessage(EntityConsort consort, EntityPlayer player)
 	{
-		LandAspectRegistry.AspectCombination aspects = MinestuckDimensionHandler.getAspects(consort.dimension); //Change to a consort home dimension variable, as the current won't work as intended when the consort is moved from one dimension to another
+		LandAspectRegistry.AspectCombination aspects = MinestuckDimensionHandler.getAspects(consort.homeDimension);
 		
 		List<ConditionedMessage> list = new ArrayList<ConditionedMessage>();
 		

@@ -24,6 +24,7 @@ public abstract class EntityConsort extends EntityMinestuck
 	int messageTicksLeft;
 	NBTTagCompound messageData;
 	EnumConsort.MerchantType merchantType = EnumConsort.MerchantType.NONE;
+	int homeDimension;
 	
 	public EntityConsort(World world)
 	{
@@ -122,6 +123,7 @@ public abstract class EntityConsort extends EntityMinestuck
 		}
 		
 		compound.setInteger("merchant", merchantType.ordinal());
+		compound.setInteger("homeDim", homeDimension);
 	}
 	
 	@Override
@@ -137,6 +139,10 @@ public abstract class EntityConsort extends EntityMinestuck
 		}
 		
 		merchantType = EnumConsort.MerchantType.values()[MathHelper.clamp(compound.getInteger("merchant"), 0, EnumConsort.MerchantType.values().length - 1)];
+		
+		if(compound.hasKey("homeDim", 99))
+			homeDimension = compound.getInteger("homeDim");
+		else homeDimension = this.world.provider.getDimension();
 	}
 	
 	@Override
@@ -144,6 +150,8 @@ public abstract class EntityConsort extends EntityMinestuck
 	{
 		if(this.rand.nextInt(30) == 0)
 			merchantType = EnumConsort.MerchantType.SHADY;
+		
+		homeDimension = world.provider.getDimension();
 		
 		return super.onInitialSpawn(difficulty, livingdata);
 	}
