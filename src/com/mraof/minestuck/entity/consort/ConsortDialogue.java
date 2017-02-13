@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
+import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
@@ -41,7 +42,7 @@ public class ConsortDialogue
 		addMessage(LandAspectRegistry.fromNameTitle("thunder"), "blueMoon");
 		addMessage(LandAspectRegistry.fromNameTitle("rabbits"), "bunnyBirthday");
 		addMessage(LandAspectRegistry.fromNameTitle("rabbits"), "rabbitEating");
-		addMessage(null, Sets.newHashSet(LandAspectRegistry.fromNameTitle("monsters").getVariations()), null,
+		addMessage(null, Sets.newHashSet(LandAspectRegistry.fromNameTitle("monsters").getVariations()), null, null,
 				new SingleMessage("petZombie"));
 		addMessage(LandAspectRegistry.fromNameTitle("monsters"), "spiderRaid");
 		addMessage(LandAspectRegistry.fromNameTitle("towers"), "bugTreasure");
@@ -76,34 +77,54 @@ public class ConsortDialogue
 				new ChainMessage(2, new SingleMessage("mushFarm1"), new SingleMessage("mushFarm2"),
 						new SingleMessage("mushFarm3"), new SingleMessage("mushFarm4"), new SingleMessage("mushFarm5"),
 						new SingleMessage("mushFarm6"), new SingleMessage("mushFarm7")));
-		addMessage(true, null, new ChoiseMessage(true, new SingleMessage("titlePresence", "playerTitle"),
+		addMessage(true, null, null, new ChoiceMessage(true, new SingleMessage("titlePresence", "playerTitle"),
 				new SingleMessage[] { new SingleMessage("titlePresence.iam", "playerTitle"),
 						new SingleMessage("titlePresence.agree") },
 				new MessageType[] { new SingleMessage("titlePresence.iamAnswer"), new SingleMessage("thanks") }));
+		
+		addMessage(false, EnumConsort.MerchantType.SHADY, new ChoiceMessage(new DescriptionMessage("shadyOffer"),
+				new SingleMessage[] { new SingleMessage("shadyOffer.buy"), new SingleMessage("shadyOffer.deny") },
+				new MessageType[] {
+						new TradeMessage(false, AlchemyRecipeHandler.CONSORT_JUNK_REWARD, 1000, "purchase",
+								new ChainMessage(1, new SingleMessage("shadyOffer.item"),
+										new SingleMessage("shadyOffer.purchase"))),
+						new ChoiceMessage(new SingleMessage("shadyOffer.next"),
+								new SingleMessage[] { new SingleMessage("shadyOffer.denyAgain"),
+										new SingleMessage("shadyOffer.buy2") },
+								new MessageType[] { new SingleMessage("dots"),
+										new TradeMessage(false, AlchemyRecipeHandler.CONSORT_JUNK_REWARD, 500, "purchase",
+												new SingleMessage("shadyOffer.purchase")) }) }));
 		
 	}
 	
 	public static void addMessage(String message, String... args)
 	{
-		addMessage(false, null, new SingleMessage(message, args));
+		addMessage(false, null, null, new SingleMessage(message, args));
 	}
 	
 	public static void addMessage(boolean reqLand, String message, String... args)
 	{
-		addMessage(reqLand, null, new SingleMessage(message, args));
+		addMessage(reqLand, null, null, new SingleMessage(message, args));
+	}
+	
+	public static void addMessage(boolean reqLand, EnumConsort.MerchantType merchantType, MessageType message)
+	{
+		addMessage(reqLand, null, EnumSet.of(merchantType), message);
 	}
 	
 	public static void addMessage(EnumSet<EnumConsort> consort, MessageType message)
 	{
-		addMessage(false, consort, message);
+		addMessage(false, consort, null, message);
 	}
 	
-	public static void addMessage(boolean reqLand, EnumSet<EnumConsort> consort, MessageType message)
+	public static void addMessage(boolean reqLand, EnumSet<EnumConsort> consort,
+			EnumSet<EnumConsort.MerchantType> merchantTypes, MessageType message)
 	{
 		ConditionedMessage msg = new ConditionedMessage();
 		msg.messageType = message;
 		msg.reqLand = reqLand;
 		msg.consortRequirement = consort;
+		msg.merchantRequirement = merchantTypes;
 		messages.add(msg);
 	}
 	
@@ -111,30 +132,30 @@ public class ConsortDialogue
 	{
 		if(aspect == null)
 			Debug.warn("Land aspect is null for consort message " + message + ", this is probably not intended");
-		addMessage(aspect == null ? null : Sets.newHashSet(aspect), null, null, new SingleMessage(message, args));
+		addMessage(aspect == null ? null : Sets.newHashSet(aspect), null, null, null, new SingleMessage(message, args));
 	}
 	
 	public static void addMessage(TitleLandAspect aspect, String message, String... args)
 	{
-		addMessage(null, aspect == null ? null : Sets.newHashSet(aspect), null, new SingleMessage(message, args));
+		addMessage(null, aspect == null ? null : Sets.newHashSet(aspect), null, null, new SingleMessage(message, args));
 	}
 	
 	public static void addMessage(TerrainLandAspect aspect, MessageType message)
 	{
 		if(aspect == null)
 			Debug.warn("Land aspect is null for consort message " + message + ", this is probably not intended");
-		addMessage(aspect == null ? null : Sets.newHashSet(aspect), null, null, message);
+		addMessage(aspect == null ? null : Sets.newHashSet(aspect), null, null, null, message);
 	}
 	
 	public static void addMessage(TitleLandAspect aspect, MessageType message)
 	{
 		if(aspect == null)
 			Debug.warn("Land aspect is null for consort message " + message + ", this is probably not intended");
-		addMessage(null, aspect == null ? null : Sets.newHashSet(aspect), null, message);
+		addMessage(null, aspect == null ? null : Sets.newHashSet(aspect), null, null, message);
 	}
 	
 	public static void addMessage(Set<TerrainLandAspect> aspects1, Set<TitleLandAspect> aspects2,
-			EnumSet<EnumConsort> consort, MessageType message)
+			EnumSet<EnumConsort> consort, EnumSet<EnumConsort.MerchantType> merchantTypes, MessageType message)
 	{
 		ConditionedMessage msg = new ConditionedMessage();
 		msg.messageType = message;
@@ -142,6 +163,7 @@ public class ConsortDialogue
 		msg.aspect1Requirement = aspects1;
 		msg.aspect2Requirement = aspects2;
 		msg.consortRequirement = consort;
+		msg.merchantRequirement = merchantTypes;
 		messages.add(msg);
 	}
 	
@@ -160,6 +182,10 @@ public class ConsortDialogue
 			if(message.aspect1Requirement != null && !message.aspect1Requirement.contains(aspects.aspectTerrain))
 				continue;
 			if(message.aspect2Requirement != null && !message.aspect2Requirement.contains(aspects.aspectTitle))
+				continue;
+			if(message.merchantRequirement == null && consort.merchantType != EnumConsort.MerchantType.NONE
+					|| message.merchantRequirement != null
+							&& !message.merchantRequirement.contains(consort.merchantType))
 				continue;
 			list.add(message);
 		}
@@ -188,6 +214,7 @@ public class ConsortDialogue
 		private Set<TerrainLandAspect> aspect1Requirement;
 		private Set<TitleLandAspect> aspect2Requirement;
 		private EnumSet<EnumConsort> consortRequirement;
+		private EnumSet<EnumConsort.MerchantType> merchantRequirement;
 		//More conditions
 		
 		public ITextComponent getMessage(EntityConsort consort, EntityPlayer player)

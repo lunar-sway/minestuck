@@ -81,6 +81,8 @@ computer.serverSessionFull=Server player's session is full
 computer.clientSessionFull=Client player's session is full
 
 consort.thanks=Thanks!
+consort.cantAfford=You don't have enough boondollars for that!
+consort.dots=...
 
 consort.dadWind=My dad was blown away in one of the recent wind storms.
 consort.koolaid=Some people say the oceans of blood are actually kool-aid. I'm too scared to taste it for myself.
@@ -130,6 +132,19 @@ consort.titlePresence=I sense the presence of the %s. Tell me if you see them, o
 consort.titlePresence.iam=I am the %s.
 consort.titlePresence.iamAnswer=OH MY GLUB
 consort.titlePresence.agree=Hehe, ok I will.
+consort.shadyOffer=Hey kid... I'll give you something special for 1000 boondollars...
+consort.shadyOffer.desc=This consort seems pretty shady. You're not sure whether or not to trust them...
+consort.shadyOffer.buy=Buy "Something special" [Pay 1000 boondollars]
+consort.shadyOffer.buy.reply=Ok... Sure??
+consort.shadyOffer.item=Here, kid.
+consort.shadyOffer.deny=Do not buy from the shadowy dealer.
+consort.shadyOffer.deny.reply=Uh, no thanks...
+consort.shadyOffer.next=You're missin' out kiddo. Glub it. I'll sell you this thing for 500 boondollars.
+consort.shadyOffer.denyAgain=It may be a deception, do not buy the "thing"!
+consort.shadyOffer.denyAgain.reply=I said no already.
+consort.shadyOffer.buy2=buy it already! [Pay 500 boondollars]
+consort.shadyOffer.buy2.reply= Sure! Fine! Ok! Jeez...
+consort.shadyOffer.purchase=Thanks for your cash.
 
 echeladder.rung0=Greentike
 echeladder.rung1=Sir Dies-a-lot

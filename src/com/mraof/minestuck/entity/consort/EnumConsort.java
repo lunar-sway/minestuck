@@ -18,4 +18,17 @@ public enum EnumConsort
 	{
 		return consortClass.isInstance(consort);
 	}
+	
+	public static enum MerchantType
+	{
+		NONE(false),
+		SHADY(false);
+		
+		boolean tradingGui;
+		
+		private MerchantType(boolean tradingGui)
+		{
+			this.tradingGui = tradingGui;
+		}
+	}
 }

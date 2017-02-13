@@ -1,20 +1,29 @@
 package com.mraof.minestuck.entity.consort;
 
+import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckPacket;
+import com.mraof.minestuck.network.PlayerDataPacket;
+import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.util.MinestuckPlayerData;
+import com.mraof.minestuck.util.MinestuckPlayerData.PlayerData;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.event.ClickEvent;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.storage.loot.LootContext;
 
 /**
  * Class where message content is defined. Also things such as if it's a chain
@@ -32,7 +41,7 @@ public abstract class MessageType
 	public abstract ITextComponent getFromChain(EntityConsort consort, EntityPlayer player, String chainIdentifier,
 			String fromChain);
 	
-	private static ITextComponent getMessage(EntityConsort consort, EntityPlayer player, String unlocalizedMessage,
+	private static ITextComponent createMessage(EntityConsort consort, EntityPlayer player, String unlocalizedMessage,
 			String[] args, boolean consortPrefix)
 	{
 		String s = EntityList.getEntityString(consort);
@@ -121,8 +130,8 @@ public abstract class MessageType
 	
 	public static class SingleMessage extends MessageType
 	{
-		private String unlocalizedMessage;
-		private String[] args;
+		protected String unlocalizedMessage;
+		protected String[] args;
 		
 		public SingleMessage(String message, String... args)
 		{
@@ -140,7 +149,7 @@ public abstract class MessageType
 		public ITextComponent getMessage(EntityConsort consort, EntityPlayer player, String chainIdentifier)
 		{
 			consort.getMessageTagForPlayer(player).setString("currentMessage", this.getString());
-			return getMessage(consort, player, unlocalizedMessage, args, true);
+			return createMessage(consort, player, unlocalizedMessage, args, true);
 		}
 		
 		@Override
@@ -151,11 +160,31 @@ public abstract class MessageType
 		}
 	}
 	
+	public static class DescriptionMessage extends SingleMessage
+	{
+		
+		public DescriptionMessage(String message, String... args)
+		{
+			super(message, args);
+		}
+		
+		@Override
+		public ITextComponent getMessage(EntityConsort consort, EntityPlayer player, String chainIdentifier)
+		{
+			ITextComponent message = super.getMessage(consort, player, chainIdentifier);
+			message.appendText("\n");
+			ITextComponent desc = createMessage(consort, player, unlocalizedMessage + ".desc", args, false);
+			desc.getStyle().setItalic(true);
+			message.appendSibling(desc);
+			return message;
+		}
+	}
+	
 	public static class ChainMessage extends MessageType
 	{
-		private String name;
-		private MessageType[] messages;
-		private int repeatIndex;
+		protected String name;
+		protected MessageType[] messages;
+		protected int repeatIndex;
 		
 		public ChainMessage(MessageType... messages)
 		{
@@ -190,13 +219,16 @@ public abstract class MessageType
 			if(index >= messages.length)
 				index = repeatIndex;
 			
-			nbt.setInteger(this.getString(), index);
-			
 			if(!chainIdentifier.isEmpty())
 				chainIdentifier += ':';
 			chainIdentifier += message.getString();
 			
-			return message.getMessage(consort, player, chainIdentifier);
+			ITextComponent text = message.getMessage(consort, player, chainIdentifier);
+			
+			if(text != null)
+				nbt.setInteger(this.getString(), index);
+			
+			return text;
 		}
 		
 		@Override
@@ -208,7 +240,7 @@ public abstract class MessageType
 			int i = fromChain.indexOf(':');
 			if(i == -1)
 				i = fromChain.length();
-			String messageName = fromChain.substring(0, i);
+			String messageName = fromChain.substring(0, i + 1);
 			fromChain = i == fromChain.length() ? "" : fromChain.substring(i);
 			
 			int index = 0;
@@ -237,19 +269,19 @@ public abstract class MessageType
 		}
 	}
 	
-	public static class ChoiseMessage extends MessageType
+	public static class ChoiceMessage extends MessageType
 	{
-		private boolean repeat;
-		private SingleMessage message;
-		private SingleMessage[] options;
-		private MessageType[] results;
+		protected boolean repeat;
+		protected SingleMessage message;
+		protected SingleMessage[] options;
+		protected MessageType[] results;
 		
-		public ChoiseMessage(SingleMessage message, SingleMessage[] options, MessageType[] results)
+		public ChoiceMessage(SingleMessage message, SingleMessage[] options, MessageType[] results)
 		{
 			this(false, message, options, results);
 		}
 		
-		public ChoiseMessage(boolean repeat, SingleMessage message, SingleMessage[] options, MessageType[] results)
+		public ChoiceMessage(boolean repeat, SingleMessage message, SingleMessage[] options, MessageType[] results)
 		{
 			if(options.length != results.length)
 				throw new IllegalArgumentException("Option and result arrays must be of equal size!");
@@ -295,7 +327,7 @@ public abstract class MessageType
 					question.appendText("\n");
 					ITextComponent option = new TextComponentString(">");
 					option.appendSibling(
-							getMessage(consort, player, options[i].unlocalizedMessage, options[i].args, false));
+							createMessage(consort, player, options[i].unlocalizedMessage, options[i].args, false));
 					option.getStyle().setClickEvent(
 							new ClickEvent(ClickEvent.Action.RUN_COMMAND, commandStart + options[i].getString()));
 					question.appendSibling(option);
@@ -318,7 +350,7 @@ public abstract class MessageType
 			if(i == -1)
 				i = fromChain.length();
 			String messageName = fromChain.substring(0, i);
-			fromChain = i == fromChain.length() ? "" : fromChain.substring(i);
+			fromChain = i == fromChain.length() ? "" : fromChain.substring(i + 1);
 			
 			NBTTagCompound nbt = consort.getMessageTagForPlayer(player);
 			
@@ -330,18 +362,23 @@ public abstract class MessageType
 					{
 						message = results[index];
 						
-						if(!repeat)
-							nbt.setInteger(this.getString(), index);
-						
 						if(!chainIdentifier.isEmpty())
 							chainIdentifier += ':';
 						chainIdentifier += message.getString();
 						
-						player.sendMessage(new TextComponentTranslation("chat.type.text", player.getDisplayName(),
-								getMessage(consort, player, options[index].unlocalizedMessage, options[index].args,
-										false)));
+						ITextComponent text = message.getMessage(consort, player, chainIdentifier);
 						
-						return message.getMessage(consort, player, chainIdentifier);
+						if(text != null)
+						{
+							if(!repeat)
+								nbt.setInteger(this.getString(), index);
+							
+							player.sendMessage(new TextComponentTranslation("chat.type.text", player.getDisplayName(),
+									createMessage(consort, player, options[index].unlocalizedMessage + ".reply",
+											options[index].args, false)));
+						}
+						
+						return text;
 					}
 				
 			for(int index = 0; index < results.length; index++)
@@ -360,6 +397,82 @@ public abstract class MessageType
 				}
 			
 			return null;
+		}
+		
+	}
+	
+	public static class TradeMessage extends MessageType
+	{
+		protected String name;
+		protected boolean repeat;
+		protected ResourceLocation item;
+		protected int cost;
+		protected MessageType message;
+		
+		public TradeMessage(ResourceLocation item, int cost, MessageType message)
+		{
+			this(false, item, cost, message.getString(), message);
+		}
+		
+		/**
+		 * Make sure to use this constructor with a unique name, if the message is of a type that uses it's own stored data
+		 */
+		public TradeMessage(boolean repeat, ResourceLocation item, int cost, String name, MessageType message)
+		{
+			this.name = name;
+			this.repeat = repeat;
+			this.item = item;
+			this.cost = cost;
+			this.message = message;
+		}
+		
+		@Override
+		public ITextComponent getFromChain(EntityConsort consort, EntityPlayer player, String chainIdentifier,
+				String fromChain)
+		{
+			return message.getFromChain(consort, player, chainIdentifier, fromChain);
+		}
+		
+		@Override
+		public ITextComponent getMessage(EntityConsort consort, EntityPlayer player, String chainIdentifier)
+		{
+			NBTTagCompound nbt = consort.getMessageTagForPlayer(player);
+			
+			if(!repeat && nbt.getBoolean(name))
+				return message.getMessage(consort, player, chainIdentifier);
+			
+			PlayerData data = MinestuckPlayerData.getData(player);
+			if(data.boondollars < cost)
+			{
+				player.sendMessage(createMessage(consort, player, "cantAfford", new String[0], false));
+				
+				return null;
+			} else
+			{
+				data.boondollars -= cost;
+				if(!repeat)
+					nbt.setBoolean(name, true);
+				
+				LootContext.Builder contextBuilder = new LootContext.Builder((WorldServer) consort.world);
+				for(ItemStack itemstack : consort.world.getLootTableManager()
+						.getLootTableFromLocation(item)
+						.generateLootForPools(consort.world.rand, contextBuilder.build()))
+				{
+					player.entityDropItem(itemstack, 0.0F);
+				}
+				
+				MinestuckChannelHandler.sendToPlayer(
+						MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.BOONDOLLAR, data.boondollars),
+						player);
+				
+				return message.getMessage(consort, player, chainIdentifier);
+			}
+		}
+		
+		@Override
+		public String getString()
+		{
+			return name;
 		}
 	}
 }

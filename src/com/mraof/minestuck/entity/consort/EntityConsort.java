@@ -1,5 +1,6 @@
 package com.mraof.minestuck.entity.consort;
 
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
@@ -10,6 +11,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 
@@ -21,6 +23,7 @@ public abstract class EntityConsort extends EntityMinestuck
 	ConsortDialogue.ConditionedMessage message;
 	int messageTicksLeft;
 	NBTTagCompound messageData;
+	EnumConsort.MerchantType merchantType = EnumConsort.MerchantType.NONE;
 	
 	public EntityConsort(World world)
 	{
@@ -51,7 +54,9 @@ public abstract class EntityConsort extends EntityMinestuck
 					messageTicksLeft = 24000 + world.rand.nextInt(24000);
 					messageData = new NBTTagCompound();
 				}
-				player.sendMessage(message.getMessage(this, player));
+				ITextComponent text = message.getMessage(this, player);
+				if(text != null)
+					player.sendMessage(text);
 			}
 			
 			return true;
@@ -115,6 +120,8 @@ public abstract class EntityConsort extends EntityMinestuck
 			compound.setInteger("messageTicks", messageTicksLeft);
 			compound.setTag("messageData", messageData);
 		}
+		
+		compound.setInteger("merchant", merchantType.ordinal());
 	}
 	
 	@Override
@@ -128,6 +135,17 @@ public abstract class EntityConsort extends EntityMinestuck
 			messageTicksLeft = compound.getInteger("messageTicks");
 			messageData = compound.getCompoundTag("messageData");
 		}
+		
+		merchantType = EnumConsort.MerchantType.values()[MathHelper.clamp(compound.getInteger("merchant"), 0, EnumConsort.MerchantType.values().length - 1)];
+	}
+	
+	@Override
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata)
+	{
+		if(this.rand.nextInt(30) == 0)
+			merchantType = EnumConsort.MerchantType.SHADY;
+		
+		return super.onInitialSpawn(difficulty, livingdata);
 	}
 	
 	public abstract EnumConsort getConsortType();
