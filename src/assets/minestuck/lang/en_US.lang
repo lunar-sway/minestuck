@@ -147,6 +147,26 @@ consort.shadyOffer.denyAgain.reply=I said no already.
 consort.shadyOffer.buy2=buy it already! [Pay 500 boondollars]
 consort.shadyOffer.buy2.reply= Sure! Fine! Ok! Jeez...
 consort.shadyOffer.purchase=Thanks for your cash.
+consort.denizen=%s has been sleeping for a thousand years. I shudder at the thought of their return.
+consort.denizen.what=The... what?
+consort.denizen.what.reply=The... what?
+consort.denizen.explain=The Denizen is the One that Slumbers in our very soil. It is eternally waiting for the %s to awaken it. Then they will be given The Choice, and their victory will be determined by what they choose.
+consort.denizen.askAlignment=Were these 'denizens' bad?
+consort.denizen.askAlignment.reply=Were these 'denizens' bad?
+consort.denizen.alignment=How am I supposed to know if they were good or bad? There's more to a living being than just black and white!
+
+denizen.blood.name=Jormungandr
+denizen.breath.name=Typheus
+denizen.doom.name=Nemesis
+denizen.heart.name=Bastet
+denizen.hope.name=Abraxas
+denizen.life.name=Hemera
+denizen.light.name=Cetus
+denizen.mind.name=Sibyl
+denizen.rage.name=Tartarus
+denizen.space.name=Echidna
+denizen.time.name=Hephaestus
+denizen.void.name=Nyx
 
 echeladder.rung0=Greentike
 echeladder.rung1=Sir Dies-a-lot

@@ -95,6 +95,7 @@ public class ConsortDialogue
 										new TradeMessage(false, AlchemyRecipeHandler.CONSORT_JUNK_REWARD, 500, "purchase",
 												new SingleMessage("shadyOffer.purchase")) }) }));
 		
+		addMessage(true, null, null, new ChoiceMessage(true, new SingleMessage("denizen", "denizen"), new SingleMessage[] {new SingleMessage("denizen.what"), new SingleMessage("denizen.askAlignment")}, new MessageType[] {new SingleMessage("denizen.explain", "playerClassLand"), new SingleMessage("denizen.alignment")}));
 	}
 	
 	public static void addMessage(String message, String... args)

@@ -10,6 +10,7 @@ import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.MinestuckPlayerData.PlayerData;
+import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
@@ -53,11 +54,12 @@ public abstract class MessageType
 		}
 		
 		Object[] obj = new Object[args.length];
+		SburbConnection c = SburbHandler.getConnectionForDimension(consort.homeDimension);
+		Title title = c == null ? null : MinestuckPlayerData.getData(c.getClientIdentifier()).title;
 		for(int i = 0; i < args.length; i++)
 		{
 			if(args[i].equals("playerNameLand"))
 			{
-				SburbConnection c = SburbHandler.getConnectionForDimension(consort.homeDimension);
 				if(c != null)
 					obj[i] = c.getClientIdentifier().getUsername();
 				else
@@ -84,23 +86,20 @@ public abstract class MessageType
 					obj[i] = "Land name";
 			} else if(args[i].equals("playerTitleLand"))
 			{
-				SburbConnection c = SburbHandler.getConnectionForDimension(consort.homeDimension);
-				if(c != null)
-					obj[i] = MinestuckPlayerData.getData(c.getClientIdentifier()).title.asTextComponent();
+				if(title != null)
+					obj[i] = title.asTextComponent();
 				else
 					obj[i] = "Player title";
 			} else if(args[i].equals("playerClassLand"))
 			{
-				SburbConnection c = SburbHandler.getConnectionForDimension(consort.dimension);
-				if(c != null)
-					obj[i] = MinestuckPlayerData.getData(c.getClientIdentifier()).title.getHeroClass().asTextComponent();
+				if(title != null)
+					obj[i] = title.getHeroClass().asTextComponent();
 				else
 					obj[i] = "Player class";
 			} else if(args[i].equals("playerAspectLand"))
 			{
-				SburbConnection c = SburbHandler.getConnectionForDimension(consort.dimension);
-				if(c != null)
-					obj[i] = MinestuckPlayerData.getData(c.getClientIdentifier()).title.getHeroAspect().asTextComponent();
+				if(title != null)
+					obj[i] = title.getHeroAspect().asTextComponent();
 				else
 					obj[i] = "Player aspect";
 			} else if(args[i].equals("consortType"))
@@ -116,6 +115,11 @@ public abstract class MessageType
 					obj[i] = MinestuckPlayerData.getTitle(identifier).asTextComponent();
 				else
 					obj[i] = player.getName();
+			} else if(args[i].equals("denizen"))
+			{
+				if(title != null)
+					obj[i] = new TextComponentTranslation("denizen."+MinestuckPlayerData.getData(c.getClientIdentifier()).title.getHeroAspect().toString()+".name");
+				else obj[i] = "Denizen";
 			}
 		}
 		
