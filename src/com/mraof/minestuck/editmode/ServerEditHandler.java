@@ -391,7 +391,10 @@ public class ServerEditHandler
 				if(!c.isMain())
 					SkaianetHandler.giveItems(c.getClientIdentifier());
 				if(!cost.isEmpty())
+				{
 					GristHelper.decrease(c.getClientIdentifier(), cost);
+					MinestuckPlayerTracker.updateGristCache(data.connection.getClientIdentifier());
+				}
 				event.getPlayer().inventory.mainInventory[event.getPlayer().inventory.currentItem] = null;
 			} else
 			{
