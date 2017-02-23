@@ -13,6 +13,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
@@ -168,13 +169,14 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 			Debug.debugf("Total: %d, block: %d", total, bl);
 			
 			Debug.debug("Teleporting entities...");
-			List<?> list = entity.world.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().expand((double)artifactRange, artifactRange, (double)artifactRange));
-			Iterator<?> iterator = list.iterator();
+			AxisAlignedBB entityTeleportBB = entity.getEntityBoundingBox().expand((double)artifactRange, artifactRange, (double)artifactRange);
+			List<Entity> list = worldserver0.getEntitiesWithinAABBExcludingEntity(entity, entityTeleportBB);
+			Iterator<Entity> iterator = list.iterator();
 			
 			entity.setPositionAndUpdate(entity.posX, entity.posY + yDiff, entity.posZ);
 			while (iterator.hasNext())
 			{
-				Entity e = (Entity)iterator.next();
+				Entity e = iterator.next();
 				if(MinestuckConfig.entryCrater || e instanceof EntityPlayer || !creative && e instanceof EntityItem)
 				{
 					if(e instanceof EntityPlayer && ServerEditHandler.getData((EntityPlayer) e) != null)
@@ -225,7 +227,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 								if(!creative)
 									worldserver0.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
 								else if(tileEntity instanceof TileEntityComputer)	//Avoid duplicating computer data when a computer is kept in the overworld
-									((TileEntityComputer) worldserver0.getTileEntity(pos)).programData = new NBTTagCompound();
+									((TileEntityComputer) tileEntity).programData = new NBTTagCompound();
 								else if(tileEntity instanceof TileEntityTransportalizer)
 									worldserver0.removeTileEntity(pos);
 						}
@@ -234,17 +236,17 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 			}
 			SkaianetHandler.clearMovingList();
 			
-			if(!(creative && MinestuckConfig.entryCrater))
+			if(!creative || MinestuckConfig.entryCrater)
 			{
 				Debug.debug("Removing entities created from removing blocks...");	//Normally only items in containers
-				list = entity.world.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().expand((double)artifactRange, artifactRange, (double)artifactRange));
+				list = worldserver0.getEntitiesWithinAABBExcludingEntity(entity, entityTeleportBB);
 				iterator = list.iterator();
 				while (iterator.hasNext())
 					if(MinestuckConfig.entryCrater)
-						((Entity)iterator.next()).setDead();
+						iterator.next().setDead();
 					else
 					{
-						Entity e = (Entity) iterator.next();
+						Entity e = iterator.next();
 						if(e instanceof EntityItem)
 							e.setDead();
 					}
