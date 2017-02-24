@@ -30,6 +30,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.GameType;
 import net.minecraft.world.WorldServer;
@@ -60,6 +61,7 @@ import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristHelper;
 import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
@@ -323,6 +325,17 @@ public class ServerEditHandler
 						? DeployList.getSecondaryCost(stack) : DeployList.getPrimaryCost(stack);
 				if(!GristHelper.canAfford(MinestuckPlayerData.getGristSet(data.connection.getClientIdentifier()), cost))
 				{
+					StringBuilder str = new StringBuilder();
+					if(cost != null)
+					{
+						for(GristAmount grist : cost.getArray())
+						{
+							if(cost.getArray().indexOf(grist) != 0)
+								str.append(", ");
+							str.append(grist.getAmount()+" "+grist.getType().getDisplayName());
+						}
+						event.getEntityPlayer().sendMessage(new TextComponentTranslation("grist.missing",str.toString()));
+					}
 					event.setCanceled(true);
 				}
 			}
@@ -391,7 +404,10 @@ public class ServerEditHandler
 				if(!c.isMain())
 					SkaianetHandler.giveItems(c.getClientIdentifier());
 				if(!cost.isEmpty())
+				{
 					GristHelper.decrease(c.getClientIdentifier(), cost);
+					MinestuckPlayerTracker.updateGristCache(data.connection.getClientIdentifier());
+				}
 				event.getPlayer().inventory.mainInventory.set(event.getPlayer().inventory.currentItem, ItemStack.EMPTY);
 			} else
 			{

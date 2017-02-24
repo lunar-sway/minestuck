@@ -7,6 +7,7 @@ import java.util.EnumSet;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.management.UserListOpsEntry;
 import net.minecraftforge.fml.relauncher.Side;
 
 import com.mraof.minestuck.MinestuckConfig;
@@ -48,18 +49,19 @@ public class ClientEditPacket extends MinestuckPacket
 	@Override
 	public void execute(EntityPlayer player)
 	{
+		UserListOpsEntry opsEntry = player == null ? null : player.getServer().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
 		if(!MinestuckConfig.giveItems)
 		{
 			if(username == -1)
 				ServerEditHandler.onPlayerExit(player);
-			if(!MinestuckConfig.privateComputers || IdentifierHandler.encode(player).getId() == this.username)
+			else if(!MinestuckConfig.privateComputers || IdentifierHandler.encode(player).getId() == this.username || opsEntry != null && opsEntry.getPermissionLevel() >= 2)
 				ServerEditHandler.newServerEditor((EntityPlayerMP) player, IdentifierHandler.getById(username), IdentifierHandler.getById(target));
 			return;
 		}
 		
 		EntityPlayerMP playerMP = IdentifierHandler.getById(target).getPlayer();
 		
-		if(playerMP != null && (!MinestuckConfig.privateComputers || IdentifierHandler.getById(username).appliesTo(player)))
+		if(playerMP != null && (!MinestuckConfig.privateComputers || IdentifierHandler.getById(username).appliesTo(player)) || opsEntry != null && opsEntry.getPermissionLevel() >= 2)
 		{
 			SburbConnection c = SkaianetHandler.getClientConnection(IdentifierHandler.getById(target));
 			if(c == null || c.getServerIdentifier().getId() != username || !(c.isMain() || SkaianetHandler.giveItems(IdentifierHandler.getById(target))))

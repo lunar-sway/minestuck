@@ -1,10 +1,16 @@
 package com.mraof.minestuck.command;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
+import com.google.common.collect.Lists;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
+import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.EnumClass;
+import com.mraof.minestuck.util.GristType;
+import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
@@ -15,6 +21,7 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 
 public class CommandSburbSession extends CommandBase	//TODO properly localize all messages related to this command
 {
@@ -124,5 +131,57 @@ public class CommandSburbSession extends CommandBase	//TODO properly localize al
 			SburbHandler.predefineTitleLandAspect(server, sender, this, playerName, sessionName, landAspect);
 			
 		} else throw new WrongUsageException(this.getUsage(sender));
+	}
+	
+	@Override
+	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos)
+	{
+		if(args.length == 1) return getListOfStringsMatchingLastWord(args, SessionHandler.getSessionNames());
+		else if(args.length == 2) return getListOfStringsMatchingLastWord(args, "add", "name", "title", "landTerrain", "landTitle");
+		else if(args.length > 2)
+		{
+			String command = args[1];
+			if(command.equalsIgnoreCase("add"))
+			{
+				boolean remove = args[args.length - 1].startsWith("!");
+				if(remove)
+					args[args.length - 1] = args[args.length - 1].substring(1);
+				List<String> list = IdentifierHandler.getCommandAutocomplete(server, args);
+				if(remove && !list.isEmpty())
+				{
+					List<String> oldList = list;
+					list = Lists.<String>newArrayList();
+					for(String s : oldList)
+						list.add("!" + s);
+				}
+				return list;
+			} else if(command.equalsIgnoreCase("name"))
+			{
+				if(args.length == 3)
+					return IdentifierHandler.getCommandAutocomplete(server, args);
+			} else if(command.equalsIgnoreCase("title"))
+			{
+				if(args.length == 3)
+					return IdentifierHandler.getCommandAutocomplete(server, args);
+				if(args.length == 4)
+					return getListOfStringsMatchingLastWord(args, Arrays.asList(EnumClass.values()));
+				if(args.length == 5)
+					return getListOfStringsMatchingLastWord(args, Arrays.asList(EnumAspect.values()));
+			} else if(command.equalsIgnoreCase("landTerrain"))
+			{
+				if(args.length == 3)
+					return IdentifierHandler.getCommandAutocomplete(server, args);
+				if(args.length == 4)
+					return getListOfStringsMatchingLastWord(args, LandAspectRegistry.getNamesTerrain());
+			} else if(command.equalsIgnoreCase("landTitle"))
+			{
+				if(args.length == 3)
+					return IdentifierHandler.getCommandAutocomplete(server, args);
+				if(args.length == 4)
+					return getListOfStringsMatchingLastWord(args, LandAspectRegistry.getNamesTitle());
+			}
+		}
+		
+		return Collections.<String>emptyList();
 	}
 }

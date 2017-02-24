@@ -29,6 +29,7 @@ import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import com.google.common.collect.Lists;
 import com.mraof.minestuck.MinestuckConfig;
 
 /**
@@ -468,6 +469,15 @@ public class SessionHandler {
 		SkaianetHandler.updateAll();
 		
 		CommandBase.notifyCommandListener(sender, command, "commands.sburbServer.success", client.getUsername(), server.getUsername());
+	}
+	
+	public static List<String> getSessionNames()
+	{
+		List<String> list = Lists.<String>newArrayList();
+		for(Session session : sessions)
+			if(session.name != null)
+				list.add(session.name);
+		return list;
 	}
 	
 	/**
