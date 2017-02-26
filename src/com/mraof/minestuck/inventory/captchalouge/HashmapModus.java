@@ -130,6 +130,7 @@ public class HashmapModus extends Modus
 	
 	protected void fillList(NonNullList<ItemStack> items)
 	{
+		items.clear();
 		for(int i = 0; i < list.size(); i++)
 			items.add(list.get(i));
 	}
