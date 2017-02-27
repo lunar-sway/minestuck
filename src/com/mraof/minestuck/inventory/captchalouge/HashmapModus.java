@@ -94,9 +94,6 @@ public class HashmapModus extends Modus
 		if(index < 0)
 			index += list.size();
 		
-		while(list.size() < list.size())
-			list.add(null);
-		
 		if(list.get(index) != null)
 		{
 			ItemStack otherItem = list.get(index);
@@ -109,6 +106,9 @@ public class HashmapModus extends Modus
 		}
 		
 		list.set(index, item);
+		
+		if(ejectByChat && MinestuckConfig.hashmapChatModusSetting != 2 || MinestuckConfig.hashmapChatModusSetting == 1)
+			this.player.sendStatusMessage(new TextComponentTranslation("[HASHMAP] %s %% %s -> %s", item.getTextComponent(), getSize(), index));
 		
 		return true;
 	}
