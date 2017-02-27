@@ -242,7 +242,7 @@ public class MinestuckItems
 		//Spoons/forks
 		woodenSpoon = GameRegistry.register(new ItemWeapon(59, 2.0D, -2.2D, 5, "woodenSpoon").setRegistryName("wooden_spoon"));
 		silverSpoon = GameRegistry.register(new ItemWeapon(250, 2.5D, -2.2D, 12, "silverSpoon").setRegistryName("silver_spoon"));
-		crockerSpork = (ItemSpork) GameRegistry.register(new ItemSpork(512, 4.0D, -2.2D, 15, "crockerSpork").setRegistryName("crocker_spork"));
+		crockerSpork = (ItemSpork) GameRegistry.register(new ItemSpork(512, 4.0D, -2.2D, 15, "crocker").setRegistryName("crocker_spork"));
 		skaiaFork = GameRegistry.register(new ItemWeapon(2048, 8.5D, -2.2D, 10, "skaiaFork").setRegistryName("skaia_fork"));
 		fork = GameRegistry.register(new ItemWeapon(100, 4.0D, -2.2D, 3, "fork").setRegistryName("fork"));
 		spork = GameRegistry.register(new ItemWeapon(120, 4.5D, -2.3D, 5, "spork").setRegistryName("spork"));

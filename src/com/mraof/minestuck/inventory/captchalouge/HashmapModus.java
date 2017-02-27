@@ -108,6 +108,9 @@ public class HashmapModus extends Modus
 		
 		list.set(index, item);
 		
+		if(ejectByChat && MinestuckConfig.hashmapChatModusSetting != 2 || MinestuckConfig.hashmapChatModusSetting == 1)
+			this.player.sendMessage(new TextComponentTranslation("[HASHMAP] %s %% %s -> %s", item.getTextComponent(), getSize(), index));
+		
 		return true;
 	}
 	
