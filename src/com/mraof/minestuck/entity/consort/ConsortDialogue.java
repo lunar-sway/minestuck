@@ -6,7 +6,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
+import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
@@ -16,6 +18,8 @@ import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 import static com.mraof.minestuck.entity.consort.MessageType.*;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 
 /**
@@ -61,7 +65,6 @@ public class ConsortDialogue
 		addMessage(LandAspectRegistry.fromNameTitle("silence"), "silentUnderlings");
 		
 		addMessage(true, "denizenMention");
-		addMessage("hungry");
 		addMessage(true, "floatingIsland");
 		addMessage("ringFishing");
 		addMessage("frogWalk");
@@ -74,28 +77,51 @@ public class ConsortDialogue
 		addMessage(true, "awaitHero", "landName", "consortTypes", "playerTitleLand");
 		addMessage(true, "watchSkaia");
 		addMessage(LandAspectRegistry.fromNameTerrain("shade"),
-				new ChainMessage(2, new SingleMessage("mushFarm1"), new SingleMessage("mushFarm2"),
-						new SingleMessage("mushFarm3"), new SingleMessage("mushFarm4"), new SingleMessage("mushFarm5"),
-						new SingleMessage("mushFarm6"), new SingleMessage("mushFarm7")));
+				new ChainMessage(2, new SingleMessage("mushFarm1"), new SingleMessage("mushFarm2"), new SingleMessage("mushFarm3"),
+						new SingleMessage("mushFarm4"), new SingleMessage("mushFarm5"), new SingleMessage("mushFarm6"),
+						new SingleMessage("mushFarm7")));
 		addMessage(true, null, null, new ChoiceMessage(true, new SingleMessage("titlePresence", "playerTitle"),
-				new SingleMessage[] { new SingleMessage("titlePresence.iam", "playerTitle"),
-						new SingleMessage("titlePresence.agree") },
+				new SingleMessage[] { new SingleMessage("titlePresence.iam", "playerTitle"), new SingleMessage("titlePresence.agree") },
 				new MessageType[] { new SingleMessage("titlePresence.iamAnswer"), new SingleMessage("thanks") }));
 		
 		addMessage(false, EnumConsort.MerchantType.SHADY, new ChoiceMessage(new DescriptionMessage("shadyOffer"),
 				new SingleMessage[] { new SingleMessage("shadyOffer.buy"), new SingleMessage("shadyOffer.deny") },
 				new MessageType[] {
-						new TradeMessage(false, AlchemyRecipeHandler.CONSORT_JUNK_REWARD, 1000, "purchase",
-								new ChainMessage(1, new SingleMessage("shadyOffer.item"),
-										new SingleMessage("shadyOffer.purchase"))),
+						new PurchaseMessage(false, AlchemyRecipeHandler.CONSORT_JUNK_REWARD, 1000, "purchase",
+								new ChainMessage(1, new SingleMessage("shadyOffer.item"), new SingleMessage("shadyOffer.purchase"))),
 						new ChoiceMessage(new SingleMessage("shadyOffer.next"),
-								new SingleMessage[] { new SingleMessage("shadyOffer.denyAgain"),
-										new SingleMessage("shadyOffer.buy2") },
+								new SingleMessage[] { new SingleMessage("shadyOffer.denyAgain"), new SingleMessage("shadyOffer.buy2") },
 								new MessageType[] { new SingleMessage("dots"),
-										new TradeMessage(false, AlchemyRecipeHandler.CONSORT_JUNK_REWARD, 500, "purchase",
+										new PurchaseMessage(false, AlchemyRecipeHandler.CONSORT_JUNK_REWARD, 500, "purchase",
 												new SingleMessage("shadyOffer.purchase")) }) }));
 		
-		addMessage(true, null, null, new ChoiceMessage(true, new SingleMessage("denizen", "denizen"), new SingleMessage[] {new SingleMessage("denizen.what"), new SingleMessage("denizen.askAlignment")}, new MessageType[] {new SingleMessage("denizen.explain", "playerClassLand"), new SingleMessage("denizen.alignment")}));
+		addMessage(true, null, null, new ChoiceMessage(true, new SingleMessage("denizen", "denizen"),
+				new SingleMessage[] { new SingleMessage("denizen.what"), new SingleMessage("denizen.askAlignment") },
+				new MessageType[] { new SingleMessage("denizen.explain", "playerClassLand"), new SingleMessage("denizen.alignment") }));
+		
+		List<ItemStack> hungryList = ImmutableList.of(new ItemStack(Items.COOKIE), new ItemStack(MinestuckItems.bugOnAStick),
+				new ItemStack(MinestuckItems.grasshopper), new ItemStack(MinestuckItems.chocolateBeetle),
+				new ItemStack(MinestuckItems.coneOfFlies));
+		addMessage((EnumSet<EnumConsort>) null,
+				new ItemRequirement(hungryList, false, true, new SingleMessage("hungry"),
+						new ChoiceMessage(new SingleMessage("hungry.askFood", "nbtItem:hungry.item"),
+								new SingleMessage[] { new SingleMessage("hungry.accept"), new SingleMessage("hungry.deny") },
+								new MessageType[] { new GiveItemMessage("hungry.item", 0, new SingleMessage("hungry.thanks")),
+										new SingleMessage("sadface") })));
+		addMessage((EnumSet<EnumConsort>) null,
+				new ItemRequirement("hungry2", hungryList, false, true, false,
+						new SingleMessage(
+								"hungry"),
+						new ChoiceMessage(new SingleMessage("hungry.askFood", "nbtItem:hungry2.item"),
+								new SingleMessage[] { new SingleMessage("hungry.accept"),
+										new SingleMessage(
+												"hungry.deny") },
+								new MessageType[] { new GiveItemMessage("hungry2.item", 0, new SingleMessage("hungry.thanks")),
+										new ChoiceMessage(new SingleMessage("hungry.starving"),
+												new SingleMessage[] { new SingleMessage("hungry.agree"), new SingleMessage("hungry.tooCheap") },
+												new MessageType[] {
+														new GiveItemMessage("hungry2.item", 10, new DescriptionMessage("hungry.finally")),
+														new SingleMessage("hungry.end") }) })));
 	}
 	
 	public static void addMessage(String message, String... args)
@@ -118,8 +144,8 @@ public class ConsortDialogue
 		addMessage(false, consort, null, message);
 	}
 	
-	public static void addMessage(boolean reqLand, EnumSet<EnumConsort> consort,
-			EnumSet<EnumConsort.MerchantType> merchantTypes, MessageType message)
+	public static void addMessage(boolean reqLand, EnumSet<EnumConsort> consort, EnumSet<EnumConsort.MerchantType> merchantTypes,
+			MessageType message)
 	{
 		ConditionedMessage msg = new ConditionedMessage();
 		msg.messageType = message;
@@ -155,8 +181,8 @@ public class ConsortDialogue
 		addMessage(null, aspect == null ? null : Sets.newHashSet(aspect), null, null, message);
 	}
 	
-	public static void addMessage(Set<TerrainLandAspect> aspects1, Set<TitleLandAspect> aspects2,
-			EnumSet<EnumConsort> consort, EnumSet<EnumConsort.MerchantType> merchantTypes, MessageType message)
+	public static void addMessage(Set<TerrainLandAspect> aspects1, Set<TitleLandAspect> aspects2, EnumSet<EnumConsort> consort,
+			EnumSet<EnumConsort.MerchantType> merchantTypes, MessageType message)
 	{
 		ConditionedMessage msg = new ConditionedMessage();
 		msg.messageType = message;
@@ -185,8 +211,7 @@ public class ConsortDialogue
 			if(message.aspect2Requirement != null && !message.aspect2Requirement.contains(aspects.aspectTitle))
 				continue;
 			if(message.merchantRequirement == null && consort.merchantType != EnumConsort.MerchantType.NONE
-					|| message.merchantRequirement != null
-							&& !message.merchantRequirement.contains(consort.merchantType))
+					|| message.merchantRequirement != null && !message.merchantRequirement.contains(consort.merchantType))
 				continue;
 			list.add(message);
 		}

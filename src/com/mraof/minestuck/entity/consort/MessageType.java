@@ -1,5 +1,8 @@
 package com.mraof.minestuck.entity.consort;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.PlayerDataPacket;
@@ -18,8 +21,10 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
@@ -72,8 +77,7 @@ public abstract class MessageType
 				World world = consort.getServer().worldServerForDimension(consort.homeDimension);
 				if(world != null && consort.world.provider instanceof WorldProviderLands)
 				{
-					ChunkProviderLands chunkProvider = (ChunkProviderLands) world.provider
-							.createChunkGenerator();
+					ChunkProviderLands chunkProvider = (ChunkProviderLands) world.provider.createChunkGenerator();
 					ITextComponent aspect1 = new TextComponentTranslation(
 							"land." + chunkProvider.aspect1.getNames()[chunkProvider.nameIndex1]);
 					ITextComponent aspect2 = new TextComponentTranslation(
@@ -118,8 +122,18 @@ public abstract class MessageType
 			} else if(args[i].equals("denizen"))
 			{
 				if(title != null)
-					obj[i] = new TextComponentTranslation("denizen."+MinestuckPlayerData.getData(c.getClientIdentifier()).title.getHeroAspect().toString()+".name");
-				else obj[i] = "Denizen";
+					obj[i] = new TextComponentTranslation("denizen."
+							+ MinestuckPlayerData.getData(c.getClientIdentifier()).title.getHeroAspect().toString()
+							+ ".name");
+				else
+					obj[i] = "Denizen";
+			} else if(args[i].startsWith("nbtItem:"))
+			{
+				NBTTagCompound nbt = consort.getMessageTagForPlayer(player);
+				ItemStack stack = ItemStack.loadItemStackFromNBT(nbt.getCompoundTag(args[i].substring(8)));
+				if(stack != null)
+					obj[i] = new TextComponentTranslation(stack.getUnlocalizedName() + ".name");
+				else obj[i] = "Item";
 			}
 		}
 		
@@ -133,6 +147,13 @@ public abstract class MessageType
 			return entity;
 		} else
 			return message;
+	}
+	
+	private static String addTo(String chain, String name)
+	{
+		if(!chain.isEmpty())
+			chain += ':';
+		return chain + name;
 	}
 	
 	public static class SingleMessage extends MessageType
@@ -189,7 +210,7 @@ public abstract class MessageType
 	
 	public static class ChainMessage extends MessageType
 	{
-		protected String name;
+		protected String nbtName;
 		protected MessageType[] messages;
 		protected int repeatIndex;
 		
@@ -207,13 +228,13 @@ public abstract class MessageType
 		{
 			this.repeatIndex = repeatIndex;
 			this.messages = messages;
-			this.name = name;
+			this.nbtName = name;
 		}
 		
 		@Override
 		public String getString()
 		{
-			return name;
+			return nbtName;
 		}
 		
 		@Override
@@ -226,11 +247,7 @@ public abstract class MessageType
 			if(index >= messages.length)
 				index = repeatIndex;
 			
-			if(!chainIdentifier.isEmpty())
-				chainIdentifier += ':';
-			chainIdentifier += message.getString();
-			
-			ITextComponent text = message.getMessage(consort, player, chainIdentifier);
+			ITextComponent text = message.getMessage(consort, player, addTo(chainIdentifier, message.getString()));
 			
 			if(text != null)
 				nbt.setInteger(this.getString(), index);
@@ -247,8 +264,8 @@ public abstract class MessageType
 			int i = fromChain.indexOf(':');
 			if(i == -1)
 				i = fromChain.length();
-			String messageName = fromChain.substring(0, i + 1);
-			fromChain = i == fromChain.length() ? "" : fromChain.substring(i);
+			String messageName = fromChain.substring(0, i);
+			fromChain = i == fromChain.length() ? "" : fromChain.substring(i + 1);
 			
 			int index = 0;
 			MessageType message = null;
@@ -265,11 +282,7 @@ public abstract class MessageType
 			if(message == null && !(prevIndex + 1 == index || index == messages.length - 1 && prevIndex == repeatIndex))
 				return null;
 			
-			if(!chainIdentifier.isEmpty())
-				chainIdentifier += ':';
-			chainIdentifier += message.getString();
-			
-			ITextComponent text = message.getFromChain(consort, player, chainIdentifier, fromChain);
+			ITextComponent text = message.getFromChain(consort, player, addTo(chainIdentifier, message.getString()), fromChain);
 			if(text != null) //Only update if everything is correctly performed
 				nbt.setInteger(this.getString(), index);
 			return text;
@@ -313,11 +326,8 @@ public abstract class MessageType
 				int index = nbt.getInteger(this.getString());
 				if(index >= 0 && index < options.length)
 				{
-					if(!chainIdentifier.isEmpty())
-						chainIdentifier += ':';
-					chainIdentifier += results[index].getString();
-					
-					return results[index].getMessage(consort, player, chainIdentifier);
+					return results[index].getMessage(consort, player,
+							addTo(chainIdentifier, results[index].getString()));
 				} else
 				{
 					nbt.removeTag(this.getString());
@@ -369,11 +379,7 @@ public abstract class MessageType
 					{
 						message = results[index];
 						
-						if(!chainIdentifier.isEmpty())
-							chainIdentifier += ':';
-						chainIdentifier += message.getString();
-						
-						ITextComponent text = message.getMessage(consort, player, chainIdentifier);
+						ITextComponent text = message.getMessage(consort, player, addTo(chainIdentifier, message.getString()));
 						
 						if(text != null)
 						{
@@ -396,11 +402,7 @@ public abstract class MessageType
 					if(!repeat && (!nbt.hasKey(this.getString(), 99) || nbt.getInteger(this.getString()) != index))
 						return null;
 					
-					if(!chainIdentifier.isEmpty())
-						chainIdentifier += ':';
-					chainIdentifier += message.getString();
-					
-					return message.getFromChain(consort, player, chainIdentifier, fromChain);
+					return message.getFromChain(consort, player, addTo(chainIdentifier, message.getString()), fromChain);
 				}
 			
 			return null;
@@ -408,25 +410,26 @@ public abstract class MessageType
 		
 	}
 	
-	public static class TradeMessage extends MessageType
+	public static class PurchaseMessage extends MessageType
 	{
-		protected String name;
+		protected String nbtName;
 		protected boolean repeat;
 		protected ResourceLocation item;
 		protected int cost;
 		protected MessageType message;
 		
-		public TradeMessage(ResourceLocation item, int cost, MessageType message)
+		public PurchaseMessage(ResourceLocation item, int cost, MessageType message)
 		{
 			this(false, item, cost, message.getString(), message);
 		}
 		
 		/**
-		 * Make sure to use this constructor with a unique name, if the message is of a type that uses it's own stored data
+		 * Make sure to use this constructor with a unique name, if the message
+		 * is of a type that uses it's own stored data
 		 */
-		public TradeMessage(boolean repeat, ResourceLocation item, int cost, String name, MessageType message)
+		public PurchaseMessage(boolean repeat, ResourceLocation item, int cost, String name, MessageType message)
 		{
-			this.name = name;
+			this.nbtName = name;
 			this.repeat = repeat;
 			this.item = item;
 			this.cost = cost;
@@ -445,7 +448,7 @@ public abstract class MessageType
 		{
 			NBTTagCompound nbt = consort.getMessageTagForPlayer(player);
 			
-			if(!repeat && nbt.getBoolean(name))
+			if(!repeat && nbt.getBoolean(nbtName))
 				return message.getMessage(consort, player, chainIdentifier);
 			
 			PlayerData data = MinestuckPlayerData.getData(player);
@@ -458,11 +461,10 @@ public abstract class MessageType
 			{
 				data.boondollars -= cost;
 				if(!repeat)
-					nbt.setBoolean(name, true);
+					nbt.setBoolean(nbtName, true);
 				
 				LootContext.Builder contextBuilder = new LootContext.Builder((WorldServer) consort.world);
-				for(ItemStack itemstack : consort.world.getLootTableManager()
-						.getLootTableFromLocation(item)
+				for(ItemStack itemstack : consort.world.getLootTableManager().getLootTableFromLocation(item)
 						.generateLootForPools(consort.world.rand, contextBuilder.build()))
 				{
 					player.entityDropItem(itemstack, 0.0F);
@@ -479,7 +481,237 @@ public abstract class MessageType
 		@Override
 		public String getString()
 		{
-			return name;
+			return nbtName;
+		}
+	}
+	
+	public static class ItemRequirement extends MessageType
+	{
+		protected String nbtName;
+		protected boolean random, held, repeat;
+		protected MessageType defaultMessage;
+		protected MessageType conditionedMessage;
+		protected List<ItemStack> possibleItems;
+		
+		public ItemRequirement(List<ItemStack> list, MessageType defaultMessage, MessageType nextMessage)
+		{
+			this(defaultMessage.getString(), list, true, true, false, defaultMessage, nextMessage);
+		}
+		
+		public ItemRequirement(List<ItemStack> list, boolean random, boolean held, MessageType defaultMessage,
+				MessageType nextMessage)
+		{
+			this(defaultMessage.getString(), list, random, held, false, defaultMessage, nextMessage);
+		}
+		
+		/**
+		 * Used to require the player to possess a certain item to proceed.
+		 * 
+		 * @param name
+		 *            Name used used for nbt data
+		 * @param list
+		 *            List of potential item requirements
+		 * @param random
+		 *            If the item required should be picked at random or be
+		 *            based on what the player has
+		 * @param held
+		 *            If the item has to be held by the player to count
+		 * @param repeat
+		 *            If the requirement will be rechecked every time this
+		 *            message is reached
+		 * @param defaultMessage
+		 *            Message when requirement is not met
+		 * @param nextMessage
+		 *            Message when requirement is met
+		 */
+		public ItemRequirement(String name, List<ItemStack> list, boolean random, boolean held, boolean repeat,
+				MessageType defaultMessage, MessageType nextMessage)
+		{
+			this.nbtName = name;
+			this.possibleItems = list;
+			this.defaultMessage = defaultMessage;
+			this.conditionedMessage = nextMessage;
+			this.random = random;
+			this.held = held;
+			this.repeat = repeat;
+		}
+		
+		@Override
+		public String getString()
+		{
+			return nbtName;
+		}
+		
+		@Override
+		public ITextComponent getMessage(EntityConsort consort, EntityPlayer player, String chainIdentifier)
+		{
+			NBTTagCompound nbt = consort.getMessageTagForPlayer(player);
+			if(!repeat && nbt.hasKey(this.getString()))
+				return conditionedMessage.getMessage(consort, player,
+						addTo(chainIdentifier, conditionedMessage.getString()));
+			
+			boolean hasItem = false;
+			if(random || repeat && nbt.hasKey(this.getString()))
+			{
+				int index;
+				if(nbt.hasKey(this.getString()))
+					index = nbt.getInteger(this.getString());
+				else
+				{
+					index = consort.world.rand.nextInt(possibleItems.size());
+					nbt.setInteger(this.getString(), index);
+				}
+				
+				ItemStack stack = possibleItems.get(index);
+				nbt.setTag(this.getString() + ".item", stack.writeToNBT(new NBTTagCompound()));
+				
+				hasItem = lookFor(stack, player);
+			} else
+			{
+				List<ItemStack> list = new ArrayList<ItemStack>(possibleItems);
+				while (!list.isEmpty())
+				{
+					ItemStack stack = list.remove(consort.world.rand.nextInt(list.size()));
+					if(lookFor(stack, player))
+					{
+						nbt.setInteger(this.getString(), possibleItems.indexOf(stack));
+						nbt.setTag(this.getString() + ".item", stack.writeToNBT(new NBTTagCompound()));
+						hasItem = true;
+						break;
+					}
+				}
+			}
+			
+			if(hasItem)
+			{
+				return conditionedMessage.getMessage(consort, player, addTo(chainIdentifier, conditionedMessage.getString()));
+			}
+			
+			player.sendMessage(defaultMessage.getMessage(consort, player, addTo(chainIdentifier, defaultMessage.getString())));
+			return null;
+		}
+		
+		@Override
+		public ITextComponent getFromChain(EntityConsort consort, EntityPlayer player, String chainIdentifier,
+				String fromChain)
+		{
+			if(fromChain.isEmpty())
+				return null;
+			int i = fromChain.indexOf(':');
+			if(i == -1)
+				i = fromChain.length();
+			String messageName = fromChain.substring(0, i);
+			fromChain = i == fromChain.length() ? "" : fromChain.substring(i + 1);
+			
+			NBTTagCompound nbt = consort.getMessageTagForPlayer(player);
+			if(messageName.equals(conditionedMessage.getString()))
+				return conditionedMessage.getFromChain(consort, player, addTo(chainIdentifier, conditionedMessage.getString()), fromChain);
+			else if(messageName.equals(defaultMessage.getString()))
+				return !repeat && nbt.hasKey(this.getString()) ? null
+						: defaultMessage.getFromChain(consort, player, addTo(chainIdentifier, conditionedMessage.getString()), fromChain);
+			return null;
+		}
+		
+		private boolean lookFor(ItemStack stack, EntityPlayer player)
+		{
+			for(ItemStack held : player.getHeldEquipment())
+				if(ItemStack.areItemsEqual(held, stack))
+					return true;
+				
+			if(!held)
+				for(ItemStack held : player.inventory.mainInventory)
+					if(ItemStack.areItemsEqual(held, stack))
+						return true;
+					
+			return false;
+		}
+	}
+	
+	public static class GiveItemMessage extends MessageType
+	{
+		protected String nbtName;
+		protected MessageType next;
+		protected String itemData;
+		protected int boondollars;
+		
+		public GiveItemMessage(String itemData, int boondollars, MessageType next)
+		{
+			this(next.getString(), itemData, boondollars, next);
+		}
+		
+		public GiveItemMessage(String nbtName, String itemData, int boondollars, MessageType next)
+		{
+			this.nbtName = nbtName;
+			this.itemData = itemData;
+			this.boondollars = boondollars;
+			this.next = next;
+		}
+		
+		@Override
+		public String getString()
+		{
+			return nbtName;
+		}
+		
+		@Override
+		public ITextComponent getMessage(EntityConsort consort, EntityPlayer player, String chainIdentifier)
+		{
+			NBTTagCompound nbt = consort.getMessageTagForPlayer(player);
+			if(nbt.getBoolean(this.getString()))
+				return next.getMessage(consort, player, chainIdentifier);
+			
+			ItemStack stack = ItemStack.loadItemStackFromNBT(nbt.getCompoundTag(itemData));
+			
+			boolean foundItem = false;
+			for(EnumHand hand : EnumHand.values())
+			{
+				ItemStack heldItem = player.getHeldItem(hand);
+				if(ItemStack.areItemsEqual(heldItem, stack))
+				{
+					foundItem = true;
+					heldItem.stackSize--;
+					if(heldItem.stackSize <= 0)
+						player.setHeldItem(hand, null);
+					break;
+				}
+			}
+			
+			for(int i = 0; i < player.inventory.mainInventory.length; i++)
+			{
+				ItemStack invItem = player.inventory.mainInventory[i];
+				if(ItemStack.areItemsEqual(invItem, stack))
+				{
+					foundItem = true;
+					invItem.stackSize--;
+					if(invItem.stackSize <= 0)
+						player.inventory.mainInventory[i] = null;
+					break;
+				}
+			}
+			
+			if(foundItem)
+			{
+				if(boondollars != 0)
+				{
+					MinestuckPlayerData.getData(player).boondollars += boondollars;
+					MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.PLAYER_DATA,
+							PlayerDataPacket.BOONDOLLAR, MinestuckPlayerData.getData(player).boondollars), player);
+				}
+				nbt.setBoolean(this.getString(), true);
+				return next.getMessage(consort, player, chainIdentifier);
+			} else
+			{
+				player.sendMessage(
+						createMessage(consort, player, "missingItem", new String[] { "nbtItem:" + itemData }, false).setStyle(new Style().setColor(TextFormatting.RED)));
+				return null;
+			}
+		}
+		
+		@Override
+		public ITextComponent getFromChain(EntityConsort consort, EntityPlayer player, String chainIdentifier,
+				String fromChain)
+		{
+			return next.getFromChain(consort, player, chainIdentifier, fromChain);
 		}
 	}
 }

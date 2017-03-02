@@ -80,9 +80,11 @@ computer.selectColor=Select a Color
 computer.serverSessionFull=Server player's session is full
 computer.clientSessionFull=Client player's session is full
 
-consort.thanks=Thanks!
 consort.cantAfford=You don't have enough boondollars for that!
+consort.missingItem=You need a %s for that!
+consort.thanks=Thanks!
 consort.dots=...
+consort.sadface=:(
 
 consort.dadWind=My dad was blown away in one of the recent wind storms.
 consort.koolaid=Some people say the oceans of blood are actually kool-aid. I'm too scared to taste it for myself.
@@ -109,12 +111,10 @@ consort.murderSilence=This is a great place for murder. No one will hear you scr
 consort.silentUnderlings=This place is so quiet and peaceful. Too bad we can't hear underlings about to kill us.
 
 consort.denizenMention=It's a wonderful day. Hopefully some monster underneath the planet's surface doesn't eat us all!
-consort.hungry=I'm hungry. Have any bugs? Maybe a chocolate chip cookie? Mmm.
 consort.floatingIsland=I heard a floating island just appeared somewhere near here recently and falling chunks destroyed a village underneath it!
 consort.ringFishing=My brother found a magic ring while fishing recently!
 consort.frogWalk=Frog, it's such a wonderful day to just walk around a village.
 consort.deliciousHair=Holy leapin' god, you have such wonderful hair! Can I eat some?
-consort.village=Welcome to §k randnamehere §r village! Enjoy your stay!
 consort.lazyKing=I feel like our king just sits around doing nothing but eating weird glowing mushrooms! So lazy!
 consort.musicInvention=I invented music, y'kno! My favorite song goes like ba ba dum, dum ba dum.
 consort.rapBattle=I challenge you to a rap battle! Accept challenge? Y/N
@@ -154,6 +154,22 @@ consort.denizen.explain=The Denizen is the One that Slumbers in our very soil. I
 consort.denizen.askAlignment=Ask if the denizens are bad or not.
 consort.denizen.askAlignment.reply=Were these 'denizens' bad?
 consort.denizen.alignment=How am I supposed to know if they were good or bad? There's more to a living being than just black and white!
+
+consort.hungry=I'm hungry. Have any bugs? Maybe a chocolate chip cookie? Mmm.
+consort.hungry.askFood=A %s! Could I have some?
+consort.hungry.accept=Yes
+consort.hungry.accept.reply=Sure, here.
+consort.hungry.deny=No
+consort.hungry.deny.reply=I don't really want to give this away.
+consort.hungry.thanks=Thank you! I will remember your kindness for the rest of my short life.
+consort.hungry.starving=But I am starving here! What if I paid you 10 boondollars for it?
+consort.hungry.agree=Sure
+consort.hungry.agree.reply=Sure, I can agree to that.
+consort.hungry.tooCheap=Too Cheap
+consort.hungry.tooCheap.reply=I won't let it go that cheap.
+consort.hungry.finally=Finally!
+consort.hungry.finally.desc=You are given 10 boondollars for the %s.
+consort.hungry.end=Fine. I will just go and find a real food store.
 
 denizen.blood.name=Jormungandr
 denizen.breath.name=Typheus
