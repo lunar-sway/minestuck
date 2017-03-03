@@ -112,15 +112,20 @@ public class ConsortDialogue
 				new ItemRequirement("hungry2", hungryList, false, true, false,
 						new SingleMessage(
 								"hungry"),
-						new ChoiceMessage(new SingleMessage("hungry.askFood", "nbtItem:hungry2.item"),
-								new SingleMessage[] { new SingleMessage("hungry.accept"),
+						new ChoiceMessage(
+								new SingleMessage("hungry.askFood",
+										"nbtItem:hungry2.item"),
+								new SingleMessage[] {
 										new SingleMessage(
-												"hungry.deny") },
+												"hungry.accept"),
+										new SingleMessage("hungry.deny") },
 								new MessageType[] { new GiveItemMessage("hungry2.item", 0, new SingleMessage("hungry.thanks")),
 										new ChoiceMessage(new SingleMessage("hungry.starving"),
-												new SingleMessage[] { new SingleMessage("hungry.agree"), new SingleMessage("hungry.tooCheap") },
-												new MessageType[] {
-														new GiveItemMessage("hungry2.item", 10, new DescriptionMessage("hungry.finally")),
+												new SingleMessage[] { new SingleMessage("hungry.agree"),
+														new SingleMessage("hungry.tooCheap") },
+												new MessageType[] { new GiveItemMessage("hungry.sellItem", "hungry2.item", 10,
+														new ChainMessage(1, new DescriptionMessage("hungry.finally", "nbtItem:hungry2.item"),
+																new SingleMessage("hungry.finally"))),
 														new SingleMessage("hungry.end") }) })));
 	}
 	

@@ -140,11 +140,10 @@ public abstract class MessageType
 		TextComponentTranslation message = new TextComponentTranslation("consort." + unlocalizedMessage, obj);
 		if(consortPrefix)
 		{
+			message.getStyle().setColor(consort.getConsortType().getColor());
 			TextComponentTranslation entity = new TextComponentTranslation("entity." + s + ".name");
-			entity.appendText(": ");
-			entity.appendSibling(message);
 			
-			return entity;
+			return new TextComponentTranslation("chat.type.text", entity, message);
 		} else
 			return message;
 	}
