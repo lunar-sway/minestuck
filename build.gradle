@@ -22,14 +22,14 @@ repositories {
         url = "http://chickenbones.net/maven/"
     }
     maven {
-        url "http://dvs1.progwml6.com/files/maven" //jei which is now a dependency to nei?
+        url = "http://dvs1.progwml6.com/files/maven/" //jei which is now a dependency to nei?
     }
 }
 
 //apply plugin: 'forge'
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.10.2-1.1." + System.getenv()['BUILD_NUMBER']
+version = "1.10.2-1.2." + System.getenv()['BUILD_NUMBER']
 group= "com.mraof.minestuck"
 archivesBaseName = "Minestuck"
 
@@ -39,7 +39,7 @@ compileJava {
 }
 
 minecraft {
-    version = "1.10.2-12.18.2.2099"
+    version = "1.10.2-12.18.3.2185"
     runDir = "run"
 
     mappings = "stable_29"
@@ -49,12 +49,16 @@ minecraft {
 }
 
 dependencies {
+    def mc_version = "1.10.2"
+    def jei_version = "3.14.3.403"
     // http://chickenbones.net/maven
     //compile "codechicken:CodeChickenLib:1.10.2-2.4.3.124:universal"
     //compile "codechicken:CodeChickenCore:1.10.2-2.3.5.91:universal"
     //compile "codechicken:NotEnoughItems:1.10.2-2.1.2.163:universal"
 	// http://dvs1.progwml6.com/files/maven
     //compile "mezz.jei:jei_1.9.4:3.6.8.225"
+    deobfCompile "mezz.jei:jei_${mc_version}:${jei_version}:api"
+    runtime "mezz.jei:jei_${mc_version}:${jei_version}"
 }
 
 sourceSets {

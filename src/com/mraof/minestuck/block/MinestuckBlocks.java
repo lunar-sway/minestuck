@@ -2,6 +2,7 @@ package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.Minestuck;
 
+import com.mraof.minestuck.util.GristType;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -39,6 +40,7 @@ public class MinestuckBlocks
 	public static Block frostBrickStairs;
 	public static Block castIronStairs;
 	public static Block log;
+	public static Block woodenCactus;
 	
 	public static Block coalOreNetherrack;
 	public static Block ironOreSandstone;
@@ -56,11 +58,15 @@ public class MinestuckBlocks
 	public static Block blockBlood;
 	public static Block blockBrainJuice;
 	public static Block layeredSand;
+
+	public static Block[] liquidGrists;
 	
 	public static Fluid fluidOil;
 	public static Fluid fluidBlood;
 	public static Fluid fluidBrainJuice;
-	
+
+	public static Fluid[] gristFluids;
+
 	public static void registerBlocks()
 	{
 		//blocks
@@ -95,6 +101,7 @@ public class MinestuckBlocks
 		frostBrickStairs = GameRegistry.register(new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.FROST_BRICK)).setRegistryName("frost_brick_stairs")).setUnlocalizedName("stairsMinestuck.frostBrick");
 		castIronStairs = GameRegistry.register(new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.CAST_IRON)).setRegistryName("cast_iron_stairs")).setUnlocalizedName("stairsMinestuck.castIron");
 		log = GameRegistry.register(new BlockMinestuckLog().setRegistryName("log"));
+		woodenCactus = GameRegistry.register(new BlockCactusSpecial(SoundType.WOOD, "axe").setRegistryName("wooden_cactus")).setHardness(1.0F).setResistance(2.5F).setUnlocalizedName("woodenCactus");
 		
 		primedTnt = GameRegistry.register(new BlockTNTSpecial(true, false, false).setRegistryName("primed_tnt")).setUnlocalizedName("primedTnt");
 		unstableTnt = GameRegistry.register(new BlockTNTSpecial(false, true, false).setRegistryName("unstable_tnt")).setUnlocalizedName("unstableTnt");
@@ -111,6 +118,14 @@ public class MinestuckBlocks
 		blockOil = GameRegistry.register(new BlockFluidClassic(fluidOil, Material.WATER).setRegistryName("block_oil")).setUnlocalizedName("oil");
 		blockBlood = GameRegistry.register(new BlockFluidClassic(fluidBlood, Material.WATER).setRegistryName("block_blood")).setUnlocalizedName("blood");
 		blockBrainJuice = GameRegistry.register(new BlockFluidClassic(fluidBrainJuice, Material.WATER).setRegistryName("block_brain_juice")).setUnlocalizedName("brainJuice");
+		
+		/*liquidGrists = new Block[GristType.allGrists];
+		gristFluids = new Fluid[GristType.allGrists];
+		for(GristType grist : GristType.values()) {
+			gristFluids[grist.ordinal()] = new Fluid(grist.getName(), new ResourceLocation("minestuck", "blocks/Liquid" + grist.getName() + "Still"), new ResourceLocation("minestuck", "blocks/Liquid" + grist.getName() + "Flowing"));
+			FluidRegistry.registerFluid(gristFluids[grist.ordinal()]);
+			liquidGrists[grist.ordinal()] = GameRegistry.register(new BlockFluidGrist(gristFluids[grist.ordinal()], Material.WATER).setRegistryName("liquid_" + grist.getName())).setUnlocalizedName("liquid_" + grist.getName());
+		}*/
 		
 		cruxiteBlock.setHarvestLevel("pickaxe", 0);
 		

@@ -1,6 +1,7 @@
 package com.mraof.minestuck.world.lands;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Random;
@@ -216,6 +217,16 @@ public class LandAspectRegistry
 	public static TitleLandAspect fromNameTitle(String name)
 	{
 		return landNames2.get(name);
+	}
+	
+	public static Collection<String> getNamesTerrain()
+	{
+		return landNames.keySet();
+	}
+	
+	public static Collection<String> getNamesTitle()
+	{
+		return landNames2.keySet();
 	}
 	
 	public static boolean containsTitleLandAspect(EnumAspect titleAspect, TitleLandAspect landAspect)

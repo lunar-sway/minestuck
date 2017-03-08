@@ -5,9 +5,10 @@ import java.util.Random;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -28,6 +29,7 @@ import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.client.util.MinestuckModelManager;
 import com.mraof.minestuck.command.CommandCheckLand;
+import com.mraof.minestuck.command.CommandConsortReply;
 import com.mraof.minestuck.command.CommandGristSend;
 import com.mraof.minestuck.command.CommandSburbServer;
 import com.mraof.minestuck.command.CommandSburbSession;
@@ -38,6 +40,7 @@ import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.MinestuckEntities;
+import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.event.MinestuckFluidHandler;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
@@ -89,7 +92,10 @@ public class Minestuck
 	public static CreativeTabs tabMinestuck;
 
 	public static long worldSeed = 0;	//TODO proper usage of seed when generating titles, land aspects, and land dimension data
-
+	
+	public static SoundEvent soundEmissaryOfDance;
+	public static SoundEvent soundDanceStabDance;
+	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) 
 	{
@@ -109,6 +115,11 @@ public class Minestuck
 				return MinestuckItems.zillyhooHammer;
 			}
 		};
+		
+		ResourceLocation soundLocation = new ResourceLocation("minestuck", "record.emissary");
+		soundEmissaryOfDance = GameRegistry.register(new SoundEvent(soundLocation), soundLocation);
+		soundLocation = new ResourceLocation("minestuck", "record.danceStab");
+		soundDanceStabDance = GameRegistry.register(new SoundEvent(soundLocation), soundLocation);
 		
 		MinestuckBlocks.registerBlocks();
 		MinestuckItems.registerItems();
@@ -158,19 +169,13 @@ public class Minestuck
 		MinecraftForge.EVENT_BUS.register(MinestuckAchievementHandler.instance);
 		MinecraftForge.EVENT_BUS.register(MinestuckPlayerTracker.instance);
 		MinecraftForge.EVENT_BUS.register(ServerEventHandler.instance);
-		
-		FMLCommonHandler.instance().bus().register(MinestuckPlayerTracker.instance);
-		FMLCommonHandler.instance().bus().register(ServerEditHandler.instance);
-		FMLCommonHandler.instance().bus().register(MinestuckChannelHandler.instance);
-		FMLCommonHandler.instance().bus().register(new ConnectionListener());
-		FMLCommonHandler.instance().bus().register(ServerEventHandler.instance);
+		MinecraftForge.EVENT_BUS.register(MinestuckChannelHandler.instance);
+		MinecraftForge.EVENT_BUS.register(new ConnectionListener());
 		
 		if(event.getSide().isClient())
 		{
-		//register channel handler
 			MinecraftForge.EVENT_BUS.register(ClientEditHandler.instance);
-			FMLCommonHandler.instance().bus().register(ClientEditHandler.instance);
-			FMLCommonHandler.instance().bus().register(new MinestuckConfig());
+			MinecraftForge.EVENT_BUS.register(new MinestuckConfig());
 		}
 		
 		//register channel handler
@@ -187,6 +192,7 @@ public class Minestuck
 		AlchemyRecipeHandler.registerModRecipes();
 		
 		LandAspectRegistry.registerLandAspects();
+		ConsortDialogue.init();
 		
 		KindAbstratusList.registerTypes();
 		DeployList.registerItems();
@@ -239,6 +245,7 @@ public class Minestuck
 		event.registerServerCommand(new CommandSburbSession());
 		event.registerServerCommand(new CommandSburbServer());
 		event.registerServerCommand(new CommandSetRung());
+		event.registerServerCommand(new CommandConsortReply());
 		
 		worldSeed = event.getServer().worlds[0].getSeed();
 		ServerEventHandler.lastDay = event.getServer().worlds[0].getWorldTime() / 24000L;

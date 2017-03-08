@@ -14,4 +14,10 @@ public class EntityTurtle extends EntityConsort
 	{
 		return "textures/mobs/turtle.png";
 	}
+	
+	@Override
+	public EnumConsort getConsortType()
+	{
+		return EnumConsort.TURTLE;
+	}
 }

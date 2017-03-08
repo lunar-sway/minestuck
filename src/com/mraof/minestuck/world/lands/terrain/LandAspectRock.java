@@ -11,6 +11,8 @@ import net.minecraft.util.math.Vec3d;
 
 import com.mraof.minestuck.block.BlockMinestuckStone;
 import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.entity.consort.EntityConsort;
+import com.mraof.minestuck.entity.consort.EntityNakagator;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.decorator.BlockBlobDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
@@ -105,4 +107,9 @@ public class LandAspectRock extends TerrainLandAspect
 		return terrainGen;
 	}
 	
+	@Override
+	public Class<? extends EntityConsort> getConsortType()
+	{
+		return EntityNakagator.class;
+	}
 }

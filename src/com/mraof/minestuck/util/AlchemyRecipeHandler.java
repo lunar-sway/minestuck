@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockPrismarine;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.init.Blocks;
@@ -48,6 +49,7 @@ import static com.mraof.minestuck.util.CombinationRegistry.MODE_OR;
 public class AlchemyRecipeHandler
 {
 	public static final ResourceLocation BASIC_MEDIUM_CHEST = new ResourceLocation("minestuck", "chests/medium_basic");
+	public static final ResourceLocation CONSORT_JUNK_REWARD = new ResourceLocation("minestuck", "gameplay/consort_junk");
 	
 	private static HashMap<List<Object>, Object> recipeList;
 	private static HashMap<List<Object>, Boolean> lookedOver;
@@ -541,12 +543,15 @@ public class AlchemyRecipeHandler
 		GameRegistry.addRecipe(new ItemStack(frostBrickStairs, 4), new Object[] {"X  ", "XX ", "XXX", 'X', new ItemStack(stone, 1, BlockMinestuckStone.FROST_META)});
 		GameRegistry.addRecipe(new ItemStack(castIronStairs, 4), new Object[] {"X  ", "XX ", "XXX", 'X', new ItemStack(stone, 1, BlockMinestuckStone.CAST_META)});
 		GameRegistry.addRecipe(new ItemStack(stone, 4, BlockMinestuckStone.SHADE_META), new Object[] {"XX", "XX", 'X', new ItemStack(stone, 1, BlockMinestuckStone.SHADE_SMOOTH_META)});
+		GameRegistry.addRecipe(new ItemStack(Blocks.PLANKS, 3, BlockPlanks.EnumType.SPRUCE.getMetadata()), new Object[] {"X", 'X', new ItemStack(woodenCactus)});
+		GameRegistry.addShapelessRecipe(new ItemStack(bugOnAStick, 3), jarOfBugs, Items.STICK, Items.STICK, Items.STICK);
 		
 		GameRegistry.addSmelting(goldSeeds, new ItemStack(Items.GOLD_NUGGET), 0.1F);
 		GameRegistry.addSmelting(ironOreSandstone, new ItemStack(Items.IRON_INGOT), 0.7F);
 		GameRegistry.addSmelting(ironOreSandstoneRed, new ItemStack(Items.IRON_INGOT), 0.7F);
 		GameRegistry.addSmelting(goldOreSandstone, new ItemStack(Items.GOLD_INGOT), 1.0F);
 		GameRegistry.addSmelting(goldOreSandstoneRed, new ItemStack(Items.GOLD_INGOT), 1.0F);
+		GameRegistry.addSmelting(woodenCactus, new ItemStack(Items.COAL, 1, 1), 0.15F);
 		
 		//Register ore dictionary entries
 		OreDictionary.registerOre("oreCoal", coalOreNetherrack);
@@ -637,6 +642,12 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(candy, 1, 0), new GristSet(new GristType[] {GristType.Chalk, GristType.Sulfur, GristType.Iodine}, new int[] {1, 1, 1}));
 		for(int i = 0; i < 21; i++)
 			GristRegistry.addGristConversion(new ItemStack(candy, 1, i+1), new GristSet(GristType.values()[i], 3));
+		GristRegistry.addGristConversion(new ItemStack(bugOnAStick), new GristSet(new GristType[] {GristType.Build, GristType.Chalk}, new int[] {1, 1}));
+		GristRegistry.addGristConversion(new ItemStack(chocolateBeetle), new GristSet(new GristType[] {GristType.Chalk, GristType.Iodine}, new int[] {2, 4}));
+		GristRegistry.addGristConversion(new ItemStack(coneOfFlies), new GristSet(new GristType[] {GristType.Build, GristType.Amber}, new int[] {2, 2}));
+		GristRegistry.addGristConversion(new ItemStack(grasshopper), new GristSet(new GristType[] {GristType.Iodine, GristType.Amber}, new int[] {3, 7}));
+		GristRegistry.addGristConversion(new ItemStack(jarOfBugs), new GristSet(new GristType[] {GristType.Build, GristType.Chalk}, new int[] {5, 3}));
+		GristRegistry.addGristConversion(new ItemStack(onion), new GristSet(new GristType[] {GristType.Iodine}, new int[] {3}));
 		GristRegistry.addGristConversion(primedTnt, new GristSet(new GristType[] {GristType.Build, GristType.Chalk, GristType.Sulfur}, new int[] {8, 10, 14}));
 		GristRegistry.addGristConversion(unstableTnt, new GristSet(new GristType[] {GristType.Build, GristType.Chalk, GristType.Sulfur}, new int[] {5, 11, 15}));
 		GristRegistry.addGristConversion(instantTnt, new GristSet(new GristType[] {GristType.Build, GristType.Chalk, GristType.Sulfur}, new int[] {6, 11, 17}));
@@ -656,6 +667,11 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(sbahjPoster), new GristSet(new GristType[] {GristType.Build}, new int[] {4}));
 		GristRegistry.addGristConversion(new ItemStack(crewPoster), new GristSet(new GristType[] {GristType.Tar, GristType.Rust}, new int[] {3, 2}));
 		GristRegistry.addGristConversion(new ItemStack(threshDvd), new GristSet(new GristType[] {GristType.Iodine, GristType.Amethyst}, new int[] {3, 2}));
+		GristRegistry.addGristConversion(new ItemStack(carvingTool), new GristSet(new GristType[] {GristType.Build, GristType.Rust}, new int[] {10, 2}));
+		GristRegistry.addGristConversion(new ItemStack(crumplyHat), new GristSet(new GristType[] {GristType.Build}, new int[] {20}));
+		GristRegistry.addGristConversion(new ItemStack(frogStatueReplica), new GristSet(new GristType[] {GristType.Build}, new int[] {30}));
+		GristRegistry.addGristConversion(new ItemStack(stoneSlab), new GristSet(new GristType[] {GristType.Build}, new int[] {5}));
+		GristRegistry.addGristConversion(woodenCactus, new GristSet(GristType.Build, 7));
 		
 		//add Designix combinations
 		
@@ -803,6 +819,11 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Blocks.LOG, 1, 0), new ItemStack(Blocks.VINE), MODE_AND, new ItemStack(log, 1, 0));
 		CombinationRegistry.addCombination(new ItemStack(log, 1, 0), new ItemStack(Blocks.YELLOW_FLOWER), MODE_OR, true, false, new ItemStack(log, 1, 1));
 		CombinationRegistry.addCombination(new ItemStack(log, 1, 0), new ItemStack(Blocks.RED_FLOWER), MODE_OR, true, false, new ItemStack(log, 1, 1));
+		CombinationRegistry.addCombination(new ItemStack(Items.WOODEN_SWORD), new ItemStack(Blocks.CACTUS), MODE_OR, false, true, new ItemStack(woodenCactus));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.PLANKS), new ItemStack(Blocks.CACTUS), MODE_OR, false, true, new ItemStack(woodenCactus));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.LOG), new ItemStack(Blocks.CACTUS), MODE_OR, false, true, new ItemStack(woodenCactus));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.LOG2), new ItemStack(Blocks.CACTUS), MODE_OR, false, true, new ItemStack(woodenCactus));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.STONE), new ItemStack(carvingTool), MODE_AND, false, true, new ItemStack(stoneSlab));
 		
 		//Register chest loot
 		LootConditionManager.registerCondition(new LandAspectLootCondition.Serializer());

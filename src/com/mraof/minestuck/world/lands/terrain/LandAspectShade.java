@@ -11,6 +11,8 @@ import net.minecraft.util.math.Vec3d;
 import com.mraof.minestuck.block.BlockColoredDirt;
 import com.mraof.minestuck.block.BlockMinestuckStone;
 import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.entity.consort.EntityConsort;
+import com.mraof.minestuck.entity.consort.EntitySalamander;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.LeaflessTreeDecorator;
@@ -81,4 +83,9 @@ public class LandAspectShade extends TerrainLandAspect
 		return 0;
 	}
 	
+	@Override
+	public Class<? extends EntityConsort> getConsortType()
+	{
+		return EntitySalamander.class;
+	}
 }

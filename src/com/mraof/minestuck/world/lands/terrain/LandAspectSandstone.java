@@ -13,6 +13,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.gen.feature.WorldGenDeadBush;
 
+import com.mraof.minestuck.entity.consort.EntityConsort;
+import com.mraof.minestuck.entity.consort.EntityTurtle;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.BlockBlobDecorator;
@@ -162,6 +164,12 @@ public class LandAspectSandstone extends TerrainLandAspect
 		terrainGen.normalVariation = 0.6F;
 		terrainGen.oceanVariation = 0.3F;
 		return terrainGen;
+	}
+	
+	@Override
+	public Class<? extends EntityConsort> getConsortType()
+	{
+		return EntityTurtle.class;
 	}
 	
 	public static enum Variant

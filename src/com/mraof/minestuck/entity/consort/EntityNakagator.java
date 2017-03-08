@@ -14,4 +14,10 @@ public class EntityNakagator extends EntityConsort
 	{
 		return "textures/mobs/nakagator.png";
 	}
+	
+	@Override
+	public EnumConsort getConsortType()
+	{
+		return EnumConsort.NAKAGATOR;
+	}
 }

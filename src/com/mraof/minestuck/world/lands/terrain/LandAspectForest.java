@@ -10,6 +10,8 @@ import net.minecraft.util.math.Vec3d;
 
 import com.mraof.minestuck.block.BlockMinestuckLog;
 import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.entity.consort.EntityConsort;
+import com.mraof.minestuck.entity.consort.EntityIguana;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.decorator.TallGrassDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
@@ -78,4 +80,9 @@ public class LandAspectForest extends TerrainLandAspect
 		return 0.8F;
 	}
 	
+	@Override
+	public Class<? extends EntityConsort> getConsortType()
+	{
+		return EntityIguana.class;
+	}
 }

@@ -3,6 +3,8 @@ package com.mraof.minestuck.util;
 import java.util.EnumSet;
 import java.util.Random;
 
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.translation.I18n;
 
 /**
@@ -66,13 +68,15 @@ public enum EnumClass {
 	@Override
 	public String toString()
 	{
-		String s = this.name();
-		s = s.toLowerCase();
-		return s.replaceFirst(String.valueOf(s.charAt(0)), String.valueOf(Character.toUpperCase(s.charAt(0))));
+		return this.name().toLowerCase();
 	}
 	
 	public String getDisplayName() {
 		return I18n.translateToLocal("title."+this.toString());
 	}
 	
+	public ITextComponent asTextComponent()
+	{
+		return new TextComponentTranslation("title."+this.toString());
+	}
 }

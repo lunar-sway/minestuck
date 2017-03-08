@@ -1,11 +1,13 @@
 package com.mraof.minestuck.event;
 
+import com.mraof.minestuck.block.BlockFluidGrist;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -42,5 +44,14 @@ public class MinestuckFluidHandler
 		} else
 			return null;
 		
+	}
+
+	@SubscribeEvent
+	public void onCreateFluidSource(BlockEvent.CreateFluidSourceEvent event)
+	{
+		if(event.getState().getBlock() instanceof BlockFluidGrist)
+		{
+		    event.setResult(Result.DENY);
+		}
 	}
 }

@@ -1,6 +1,7 @@
 package com.mraof.minestuck.command;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.mraof.minestuck.network.skaianet.SburbConnection;
@@ -21,6 +22,7 @@ import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 
 public class CommandGristSend extends CommandBase
 {
@@ -125,5 +127,13 @@ public class CommandGristSend extends CommandBase
 	public boolean checkPermission(MinecraftServer server, ICommandSender sender)
 	{
 		return true;
+	}
+	
+	@Override
+	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos)
+	{
+		return args.length == 1 ? getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames()) :
+			(args.length > 1 && (args.length%2 == 1) ? getListOfStringsMatchingLastWord(args, GristType.getNames())
+					: Collections.<String>emptyList());
 	}
 }

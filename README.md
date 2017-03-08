@@ -18,8 +18,8 @@ Useful Links
 
 * Omegaupdate Thread: http://omegaupdate.freeforums.net/thread/412/
 * Minecraft Forums Thread: http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/wip-mods/2742212
-* Download Link for 1.7.10 and earlier: http://ci.mraof.com/job/Minestuck-1.7.10/
-* Download Link for 1.8+: http://ci.mraof.com/job/Minestuck/
+* Mods.io Page (for downloads): https://mods.io/mods/1050-minestuck
+* Build server: http://ci.mraof.com/job/Minestuck/
 * Wikia: http://minestuck.wikia.com/wiki/Minestuck_Wiki
 * Tumblr Development Blog: http://minestuckmod.tumblr.com/
 * Feature List: https://docs.google.com/document/d/1-6UuTk_Wbzcr6gT2eFBEIu-NEEcrChYJNpNlaITYmDs/edit?usp=sharing
@@ -28,4 +28,3 @@ Useful Links
 * Basically Outdated Alchemy Data Spreadsheets: https://docs.google.com/spreadsheet/ccc?key=0AtQP0yOa5DOrdGJTekhGTUJ2azhxMUxsWjBiand0UVE&usp=sharing , https://docs.google.com/spreadsheet/ccc?key=0AtQP0yOa5DOrdFFRMmx4M2Z1QUhKRVZJZTRTdEZOdUE&usp=sharing
 * Beginning Gameplay Guide: http://imgur.com/a/TkrEG
 * Installation Guide: http://imgur.com/a/8itRt
-* Mods.io Page: https://mods.io/mods/1050-minestuck

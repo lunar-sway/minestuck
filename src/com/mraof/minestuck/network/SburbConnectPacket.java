@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBuf;
 import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.management.UserListOpsEntry;
 import net.minecraftforge.fml.relauncher.Side;
 
 import com.mraof.minestuck.MinestuckConfig;
@@ -48,7 +49,8 @@ public class SburbConnectPacket extends MinestuckPacket
 	@Override
 	public void execute(EntityPlayer player)
 	{
-		if((!MinestuckConfig.privateComputers || IdentifierHandler.encode(player) == this.player.getOwner()) && ServerEditHandler.getData(player) == null)
+		UserListOpsEntry opsEntry = player.getServer().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
+		if((!MinestuckConfig.privateComputers || IdentifierHandler.encode(player) == this.player.getOwner() || opsEntry != null && opsEntry.getPermissionLevel() >= 2) && ServerEditHandler.getData(player) == null)
 			SkaianetHandler.requestConnection(this.player, otherPlayer != -1 ? IdentifierHandler.getById(otherPlayer) : null, isClient);
 	}
 	

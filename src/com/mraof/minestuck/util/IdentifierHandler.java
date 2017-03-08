@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
+import com.google.common.collect.Lists;
 import com.mraof.minestuck.MinestuckConfig;
 
 import net.minecraft.command.CommandBase;
@@ -149,6 +150,26 @@ public class IdentifierHandler {
 			return encode(player);
 		}
 		
+	}
+	
+	public static List<String> getCommandAutocomplete(MinecraftServer server, String[] args)
+	{
+		String arg = args[args.length - 1];
+		if(arg.startsWith("@"))
+		{
+			arg = arg.substring(1);
+			List<String> list = Lists.<String>newArrayList();
+			for(PlayerIdentifier identifier : identifierList)
+				if(identifier.getString().startsWith(arg))
+					list.add("@"+identifier.getString());
+			for(PlayerIdentifier identifier : identifiersToChange)
+				if(identifier.getString().startsWith(arg))
+					list.add("@"+identifier.getString());
+			return list;
+		} else
+		{
+			return CommandBase.getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames());
+		}
 	}
 	
 	public static void clear()
