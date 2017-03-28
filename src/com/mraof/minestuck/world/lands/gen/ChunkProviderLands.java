@@ -33,7 +33,7 @@ import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.structure.DefaultGatePlacement;
 import com.mraof.minestuck.world.lands.structure.IGateStructure;
-import com.mraof.minestuck.world.lands.structure.LandStructureHandler;
+import com.mraof.minestuck.world.lands.structure.MapGenLandStructure;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
@@ -55,7 +55,7 @@ public class ChunkProviderLands implements IChunkGenerator
 	public final StructureBlockRegistry blockRegistry;
 	public List<ILandDecorator> decorators;
 	public ILandTerrainGen terrainGenerator;
-	public LandStructureHandler structureHandler;
+	public MapGenLandStructure structureHandler;
 	public int dayCycle;
 	public int weatherType;	//-1:No weather &1: Force rain &2: If thunder &4: Force thunder
 	public float rainfall, temperature;
@@ -102,7 +102,7 @@ public class ChunkProviderLands implements IChunkGenerator
 			this.random = new Random(seed);
 			blockRegistry = new StructureBlockRegistry();
 			this.terrainGenerator = aspect1.createTerrainGenerator(this, random);
-			this.structureHandler = new LandStructureHandler(this);
+			this.structureHandler = new MapGenLandStructure(this);
 			aspect1.registerBlocks(blockRegistry);
 			this.decorators = new ArrayList<ILandDecorator>();
 			this.decorators.addAll(aspect1.getDecorators());

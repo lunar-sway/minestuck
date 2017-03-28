@@ -24,7 +24,7 @@ import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureStart;
 
-public class LandStructureHandler extends MapGenStructure
+public class MapGenLandStructure extends MapGenStructure
 {
 	
 	public final static List<StructureEntry> genericStructures = new ArrayList<StructureEntry>();
@@ -51,7 +51,7 @@ public class LandStructureHandler extends MapGenStructure
 		return structure != null && (structure instanceof ImpDungeonStart);
 	}
 	
-	public LandStructureHandler(ChunkProviderLands chunkProvider)
+	public MapGenLandStructure(ChunkProviderLands chunkProvider)
 	{
 		this.world = chunkProvider.landWorld;
 		
@@ -61,7 +61,7 @@ public class LandStructureHandler extends MapGenStructure
 		chunkProvider.aspect1.modifyStructureList(structures);
 	}
 	
-	private static final int MAX_STRUCTURE_DISTANCE = 15;
+	private static final int MAX_STRUCTURE_DISTANCE = 16;
 	private static final int MIN_STRUCTURE_DISTANCE = 4;
 	private static final int MAX_NODE_DISTANCE = 9;
 	private static final int MIN_NODE_DISTANCE = 4;
