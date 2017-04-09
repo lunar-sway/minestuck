@@ -19,10 +19,7 @@ import com.mraof.minestuck.world.lands.gen.LandTerrainGenBase;
 import com.mraof.minestuck.world.lands.gen.RiverFreeTerrainGen;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
-import net.minecraft.block.BlockRedSandstone;
-import net.minecraft.block.BlockSand;
-import net.minecraft.block.BlockSandStone;
-import net.minecraft.block.BlockStoneBrick;
+import net.minecraft.block.*;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.gen.feature.WorldGenCactus;
@@ -78,6 +75,8 @@ public class LandAspectSand extends TerrainLandAspect
 		registry.setBlockState("structure_secondary", Blocks.STONEBRICK.getDefaultState());
 		registry.setBlockState("structure_secondary_decorative", Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED));
 		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
+		registry.setBlockState("structure_planks", Blocks.PLANKS.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.ACACIA));
+		registry.setBlockState("structure_planks_slab", Blocks.WOODEN_SLAB.getDefaultState().withProperty(BlockWoodSlab.VARIANT, BlockPlanks.EnumType.ACACIA));
 		registry.setBlockState("river", registry.getBlockState("upper"));
 	}
 	

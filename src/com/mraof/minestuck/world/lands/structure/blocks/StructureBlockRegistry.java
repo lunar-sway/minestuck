@@ -3,9 +3,7 @@ package com.mraof.minestuck.world.lands.structure.blocks;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockStairs;
-import net.minecraft.block.BlockTorch;
+import net.minecraft.block.*;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -68,6 +66,10 @@ public class StructureBlockRegistry
 		registerBlock("structure_secondary", "structure_primary");
 		registerBlock("structure_secondary_decorative", "structure_secondary");
 		registerBlock("structure_secondary_stairs", "structure_secondary");
+		registerBlock("structure_planks", Blocks.PLANKS.getDefaultState());
+		registerBlock("structure_planks_slab", Blocks.WOODEN_SLAB.getDefaultState(), BlockSlab.class);
+		registerBlock("village_door", Blocks.OAK_DOOR.getDefaultState(), BlockDoor.class);
+		registerBlock("village_path", "ground");
 		registerBlock("fall_fluid", "ocean");
 		registerBlock("light_block", Blocks.GLOWSTONE.getDefaultState());
 		registerBlock("torch", Blocks.TORCH.getDefaultState(), BlockTorch.class);	//Class restriction needed because of the facing property

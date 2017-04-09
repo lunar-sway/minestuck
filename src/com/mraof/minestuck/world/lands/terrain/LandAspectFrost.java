@@ -16,7 +16,9 @@ import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
 import net.minecraft.block.BlockDirt;
+import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockPrismarine;
+import net.minecraft.block.BlockWoodSlab;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.Vec3d;
 
@@ -34,6 +36,8 @@ public class LandAspectFrost extends TerrainLandAspect
 		registry.setBlockState("structure_secondary", MinestuckBlocks.stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.FROST_BRICK));
 		registry.setBlockState("structure_secondary_stairs", MinestuckBlocks.frostBrickStairs.getDefaultState());
 		registry.setBlockState("structure_secondary_decorative", MinestuckBlocks.stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.FROST_CHISELED));
+		registry.setBlockState("structure_planks", Blocks.PLANKS.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.SPRUCE));
+		registry.setBlockState("structure_planks_slab", Blocks.WOODEN_SLAB.getDefaultState().withProperty(BlockWoodSlab.VARIANT, BlockPlanks.EnumType.SPRUCE));
 		registry.setBlockState("river", Blocks.ICE.getDefaultState());
 		registry.setBlockState("light_block", Blocks.SEA_LANTERN.getDefaultState());
 		registry.setBlockState("bucket1", Blocks.SNOW.getDefaultState());

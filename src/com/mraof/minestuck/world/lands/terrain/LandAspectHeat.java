@@ -14,6 +14,7 @@ import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
+import net.minecraft.block.BlockStoneSlab;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.Vec3d;
 
@@ -32,6 +33,8 @@ public class LandAspectHeat extends TerrainLandAspect
 		registry.setBlockState("structure_secondary_decorative", MinestuckBlocks.stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.CAST_IRON_CHISELED));
 		registry.setBlockState("structure_secondary_stairs", MinestuckBlocks.castIronStairs.getDefaultState());
 		registry.setBlockState("fall_fluid", Blocks.WATER.getDefaultState());
+		registry.setBlockState("structure_planks", Blocks.BRICK_BLOCK.getDefaultState());
+		registry.setBlockState("structure_planks_slab", Blocks.STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.BRICK));
 	}
 	
 	@Override

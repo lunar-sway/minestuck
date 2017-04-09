@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.lands.structure;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -7,6 +8,7 @@ import java.util.Random;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.structure.MapGenStructure;
@@ -77,15 +79,38 @@ public class MapGenConsortVillage extends MapGenStructure
 	
 	public static class Start extends StructureStart
 	{
+		public Start()
+		{
+		
+		}
+		
 		public Start(ChunkProviderLands provider, World world, Random rand, int chunkX, int chunkZ)
 		{
 			super(chunkX, chunkZ);
-			components.add(getVillageStart(provider));
+			ConsortVillageComponents.VillageCenter start = getVillageStart(provider, (chunkX << 4) + rand.nextInt(16), (chunkZ << 4) + rand.nextInt(16), rand);
+			components.add(start);
+			start.buildComponent(start, components, rand);
+			
+			while(!start.pendingHouses.isEmpty() || !start.pendingRoads.isEmpty())
+			{
+				if(!start.pendingRoads.isEmpty())
+				{
+					int index = rand.nextInt(start.pendingRoads.size());
+					StructureComponent component = start.pendingRoads.remove(index);
+					component.buildComponent(component, components, rand);
+				} else
+				{
+					int index = rand.nextInt(start.pendingHouses.size());
+					StructureComponent component = start.pendingHouses.remove(index);
+					component.buildComponent(component, components, rand);
+				}
+			}
+			updateBoundingBox();
 		}
 	}
 	
-	private static StructureComponent getVillageStart(ChunkProviderLands provider)
+	private static ConsortVillageComponents.VillageCenter getVillageStart(ChunkProviderLands provider, int x, int z, Random rand)
 	{
-		return null;
+		return new ConsortVillageComponents.VillageMarketCenter(x, z, rand);
 	}
 }

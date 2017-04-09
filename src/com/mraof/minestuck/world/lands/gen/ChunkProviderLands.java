@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
+import com.mraof.minestuck.world.lands.structure.MapGenConsortVillage;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.nbt.NBTTagCompound;
@@ -56,6 +57,7 @@ public class ChunkProviderLands implements IChunkGenerator
 	public List<ILandDecorator> decorators;
 	public ILandTerrainGen terrainGenerator;
 	public MapGenLandStructure structureHandler;
+	public MapGenConsortVillage villageHandler;
 	public int dayCycle;
 	public int weatherType;	//-1:No weather &1: Force rain &2: If thunder &4: Force thunder
 	public float rainfall, temperature;
@@ -71,8 +73,6 @@ public class ChunkProviderLands implements IChunkGenerator
 		
 		aspect1 = worldProvider.landAspects.aspectTerrain;
 		aspect2 = worldProvider.landAspects.aspectTitle;
-		
-		NBTTagCompound landDataTag = (NBTTagCompound) worldObj.getWorldInfo().getAdditionalProperty("LandData");
 
 		this.landWorld = worldObj;
 		
@@ -103,6 +103,7 @@ public class ChunkProviderLands implements IChunkGenerator
 			blockRegistry = new StructureBlockRegistry();
 			this.terrainGenerator = aspect1.createTerrainGenerator(this, random);
 			this.structureHandler = new MapGenLandStructure(this);
+			this.villageHandler = new MapGenConsortVillage(this);
 			aspect1.registerBlocks(blockRegistry);
 			this.decorators = new ArrayList<ILandDecorator>();
 			this.decorators.addAll(aspect1.getDecorators());
@@ -151,6 +152,7 @@ public class ChunkProviderLands implements IChunkGenerator
 			chunkBiomes[i] = (byte) Biome.getIdForBiome(biomes[i]);
 		
 		structureHandler.generate(landWorld, chunkX, chunkZ, primer);
+		villageHandler.generate(landWorld, chunkX, chunkZ, primer);
 		return chunk;
 	}
 	
@@ -173,6 +175,7 @@ public class ChunkProviderLands implements IChunkGenerator
 		this.random.setSeed(getSeedFor(chunkX, chunkZ));
 		
 		this.generatingStructure = structureHandler.generateStructure(landWorld, random, new ChunkPos(chunkX, chunkZ));
+		this.generatingStructure |= villageHandler.generateStructure(landWorld, random, new ChunkPos(chunkX, chunkZ));
 		
 		BlockPos pos = null;
 		for (Object decorator : decorators)

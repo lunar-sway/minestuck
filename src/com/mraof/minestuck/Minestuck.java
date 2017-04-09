@@ -2,6 +2,7 @@ package com.mraof.minestuck;
 
 import java.util.Random;
 
+import com.mraof.minestuck.world.lands.structure.ConsortVillageComponents;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -185,6 +186,7 @@ public class Minestuck
 		MapGenStructureIO.registerStructure(StructureCastleStart.class, "SkaiaCastle");
 		StructureCastlePieces.registerComponents();
 		MapGenLandStructure.registerStructures();
+		ConsortVillageComponents.registerComponents();
 		
 		//register recipes
 		AlchemyRecipeHandler.registerVanillaRecipes();
