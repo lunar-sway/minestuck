@@ -75,6 +75,9 @@ public class MinestuckModelManager
 		register(scraxe);
 		register(rubyCroak);
 		register(hephaestusLumber);
+		register(copseCrusher);
+		register(qPHammerAxe);
+		
 		
 		register(dice);
 		register(fluoriteOctet);

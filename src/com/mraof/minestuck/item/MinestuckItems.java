@@ -15,6 +15,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.*;
+import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -53,6 +54,8 @@ public class MinestuckItems
 	public static Item scraxe;
 	public static Item rubyCroak;
 	public static Item hephaestusLumber;
+	public static Item copseCrusher;
+	public static Item qPHammerAxe;
 	//Dice
 	public static Item dice;
 	public static Item fluoriteOctet;
@@ -123,8 +126,7 @@ public class MinestuckItems
 		popamaticVrillyhoo = GameRegistry.register(new ItemWeapon(3000, 0.0D, -2.8D, 30, "popamaticVrillyhoo").setTool("pickaxe", 4, 15.0F).setRegistryName("popamatic_vrillyhoo"));
 		scarletZillyhoo = GameRegistry.register(new ItemFireWeapon(2000, 11.0D, -2.8D, 16, "scarletZillyhoo", 50).setTool("pickaxe", 3, 4.0F).setRegistryName("scarlet_zillyhoo"));
 		mwrthwl = GameRegistry.register(new ItemWeapon(2000, 10.5D, -2.8D, 16, "mwrthwl").setTool("pickaxe", 3, 4.0F).setRegistryName("mwrthwl"));
-
-		
+				
 		//blades
 		sord = GameRegistry.register(new ItemSord(59, 2, -2.4D, 5, "sord").setRegistryName("sord"));
 		cactusCutlass = GameRegistry.register(new ItemWeapon(104, 4, -2.4D, 10, "cactaceaeCutlass").setRegistryName("cactaceae_cutlass"));
@@ -145,6 +147,8 @@ public class MinestuckItems
 		scraxe = GameRegistry.register(new ItemWeapon(500, 10.0D, -3.0D, 20, "scraxe").setTool("axe", 2, 7.0F).setRegistryName("scraxe"));
 		rubyCroak = GameRegistry.register(new ItemWeapon(2000, 11.0D, -2.9D, 30, "rubyCroak").setTool("axe", 3, 8.0F).setRegistryName("ruby_croak"));
 		hephaestusLumber = GameRegistry.register(new ItemFireWeapon(3000, 11.0D, -3.0D, 30, "hephaestusLumber", 30).setTool("axe", 3, 9.0F).setRegistryName("hephaestus_lumberjack"));
+		copseCrusher = GameRegistry.register(new ItemWeapon(500, 10.0D, -3.0D, 20, "copseCrusher", 5).setTool("axe", 2, 7.0F).setRegistryName("copse_crusher"));
+		qPHammerAxe = GameRegistry.register(new ItemPogoWeapon(1000, 10.0D, -2.5D, 30, "qPHammerAxe", 0.6).setTool("axe", 2, 7.0F).setTool("pickaxe", 1, 2.0F).setRadius(10).setRegistryName("piston_powered_pogo_axehammer"));
 		
 		//Dice
 		dice = GameRegistry.register(new ItemWeapon(51, 6, 3, 6, "dice").setRegistryName("dice"));
