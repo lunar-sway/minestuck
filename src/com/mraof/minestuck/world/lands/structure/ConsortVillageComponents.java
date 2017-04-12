@@ -28,8 +28,13 @@ public class ConsortVillageComponents
 	{
 		MapGenStructureIO.registerStructure(MapGenConsortVillage.Start.class, "MinestuckConsortVillage");
 		MapGenStructureIO.registerStructureComponent(ConsortVillageComponents.VillageMarketCenter.class, "MinestuckCVCM");
-		MapGenStructureIO.registerStructureComponent(ConsortVillageComponents.PipeHouse1.class, "MinestuckCVPH1");
-		MapGenStructureIO.registerStructureComponent(ConsortVillageComponents.HighPipeHouse1.class, "MinestuckCVHPH1");
+		
+		MapGenStructureIO.registerStructureComponent(ConsortVillageComponents.PipeHouse1.class, "MinestuckCVPiH1");
+		MapGenStructureIO.registerStructureComponent(ConsortVillageComponents.HighPipeHouse1.class, "MinestuckCVHPiH1");
+		
+		MapGenStructureIO.registerStructureComponent(ConsortVillageComponents.LoweredShellHouse1.class, "MinestuckCVLShH1");
+		MapGenStructureIO.registerStructureComponent(ConsortVillageComponents.TurtleMarketBuilding1.class, "MinestuckCVTuMB1");
+		
 		MapGenStructureIO.registerStructureComponent(ConsortVillageComponents.VillagePath.class, "MinestuckCVPth");
 	}
 	
@@ -40,10 +45,12 @@ public class ConsortVillageComponents
 		{
 			case SALAMANDER:
 			default:
-				list.add(new PieceWeight(PipeHouse1.class, 4, MathHelper.getInt(random, 4, 8)));
-				list.add(new PieceWeight(HighPipeHouse1.class, 4, MathHelper.getInt(random, 2, 4)));
+				list.add(new PieceWeight(PipeHouse1.class, 3, MathHelper.getInt(random, 5, 8)));
+				list.add(new PieceWeight(HighPipeHouse1.class, 6, MathHelper.getInt(random, 2, 4)));
 				break;
 			case TURTLE:
+				list.add(new PieceWeight(LoweredShellHouse1.class, 3, MathHelper.getInt(random, 5, 8)));
+				list.add(new PieceWeight(TurtleMarketBuilding1.class, 10, MathHelper.getInt(random, 0, 2)));
 				break;
 			case IGUANA:
 				break;
@@ -155,6 +162,14 @@ public class ConsortVillageComponents
 		{
 			villagePiece = HighPipeHouse1.createPiece(start, structureComponents, rand, structureMinX, structureMinY, structureMinZ, facing);
 		}
+		else if(pieceClass == LoweredShellHouse1.class)
+		{
+			villagePiece = LoweredShellHouse1.createPiece(start, structureComponents, rand, structureMinX, structureMinY, structureMinZ, facing);
+		}
+		else if(pieceClass == TurtleMarketBuilding1.class)
+		{
+			villagePiece = TurtleMarketBuilding1.createPiece(start, structureComponents, rand, structureMinX, structureMinY, structureMinZ, facing);
+		}
 		
 		return villagePiece;
 	}
@@ -235,13 +250,13 @@ public class ConsortVillageComponents
 				{
 					case NORTH:
 					default:
-						return ConsortVillageComponents.generateAndAddComponent(start, structureComponents, rand, this.boundingBox.minX - 1, this.boundingBox.minY + offsetY, this.boundingBox.minZ + offsetXZ, EnumFacing.WEST);
+						return ConsortVillageComponents.generateAndAddComponent(start, structureComponents, rand, this.boundingBox.minX - 2, this.boundingBox.minY + offsetY, this.boundingBox.minZ + offsetXZ, EnumFacing.WEST);
 					case SOUTH:
-						return ConsortVillageComponents.generateAndAddComponent(start, structureComponents, rand, this.boundingBox.minX - 1, this.boundingBox.minY + offsetY, this.boundingBox.minZ + offsetXZ, EnumFacing.WEST);
+						return ConsortVillageComponents.generateAndAddComponent(start, structureComponents, rand, this.boundingBox.minX - 2, this.boundingBox.minY + offsetY, this.boundingBox.minZ + offsetXZ, EnumFacing.WEST);
 					case WEST:
-						return ConsortVillageComponents.generateAndAddComponent(start, structureComponents, rand, this.boundingBox.minX + offsetXZ, this.boundingBox.minY + offsetY, this.boundingBox.minZ - 1, EnumFacing.NORTH);
+						return ConsortVillageComponents.generateAndAddComponent(start, structureComponents, rand, this.boundingBox.minX + offsetXZ, this.boundingBox.minY + offsetY, this.boundingBox.minZ - 2, EnumFacing.NORTH);
 					case EAST:
-						return ConsortVillageComponents.generateAndAddComponent(start, structureComponents, rand, this.boundingBox.minX + offsetXZ, this.boundingBox.minY + offsetY, this.boundingBox.minZ - 1, EnumFacing.NORTH);
+						return ConsortVillageComponents.generateAndAddComponent(start, structureComponents, rand, this.boundingBox.minX + offsetXZ, this.boundingBox.minY + offsetY, this.boundingBox.minZ - 2, EnumFacing.NORTH);
 				}
 			}
 			else
@@ -260,13 +275,13 @@ public class ConsortVillageComponents
 				{
 					case NORTH:
 					default:
-						return ConsortVillageComponents.generateAndAddComponent(start, structureComponents, rand, this.boundingBox.maxX + 1, this.boundingBox.minY + offsetY, this.boundingBox.minZ + offsetXZ, EnumFacing.EAST);
+						return ConsortVillageComponents.generateAndAddComponent(start, structureComponents, rand, this.boundingBox.maxX + 2, this.boundingBox.minY + offsetY, this.boundingBox.minZ + offsetXZ, EnumFacing.EAST);
 					case SOUTH:
-						return ConsortVillageComponents.generateAndAddComponent(start, structureComponents, rand, this.boundingBox.maxX + 1, this.boundingBox.minY + offsetY, this.boundingBox.minZ + offsetXZ, EnumFacing.EAST);
+						return ConsortVillageComponents.generateAndAddComponent(start, structureComponents, rand, this.boundingBox.maxX + 2, this.boundingBox.minY + offsetY, this.boundingBox.minZ + offsetXZ, EnumFacing.EAST);
 					case WEST:
-						return ConsortVillageComponents.generateAndAddComponent(start, structureComponents, rand, this.boundingBox.minX + offsetXZ, this.boundingBox.minY + offsetY, this.boundingBox.maxZ + 1, EnumFacing.SOUTH);
+						return ConsortVillageComponents.generateAndAddComponent(start, structureComponents, rand, this.boundingBox.minX + offsetXZ, this.boundingBox.minY + offsetY, this.boundingBox.maxZ + 2, EnumFacing.SOUTH);
 					case EAST:
-						return ConsortVillageComponents.generateAndAddComponent(start, structureComponents, rand, this.boundingBox.minX + offsetXZ, this.boundingBox.minY + offsetY, this.boundingBox.maxZ + 1, EnumFacing.SOUTH);
+						return ConsortVillageComponents.generateAndAddComponent(start, structureComponents, rand, this.boundingBox.minX + offsetXZ, this.boundingBox.minY + offsetY, this.boundingBox.maxZ + 2, EnumFacing.SOUTH);
 				}
 			}
 			else
@@ -324,7 +339,7 @@ public class ConsortVillageComponents
 					break;
 				case SOUTH:
 					ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.minX + 3, boundingBox.minY, boundingBox.minZ - 1, EnumFacing.NORTH);
-					ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.maxX, boundingBox.minY, boundingBox.maxZ + 1, EnumFacing.SOUTH);
+					ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.maxX - 1, boundingBox.minY, boundingBox.maxZ + 1, EnumFacing.SOUTH);
 					ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.maxX + 1, boundingBox.minY, boundingBox.maxZ - 1, EnumFacing.EAST);
 					break;
 				case WEST:
@@ -358,11 +373,12 @@ public class ConsortVillageComponents
 			IBlockState torch = provider.blockRegistry.getBlockState("torch");
 			
 			
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 0, 5, 0, 0, floorBlock, floorBlock, false);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 1, 6, 0, 1, floorBlock, floorBlock, false);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 2, 1, 0, 7, floorBlock, floorBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, -1, 0, 5, 0, 0, floorBlock, floorBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, -1, 1, 6, 0, 1, floorBlock, floorBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, -1, 2, 1, 0, 7, floorBlock, floorBlock, false);
 			this.setBlockState(worldIn, floorBlock, 1, 0, 8, structureBoundingBoxIn);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 2, 7, 0, 9, floorBlock, floorBlock, false);
+			this.setBlockState(worldIn, floorBlock, 1, -1, 8, structureBoundingBoxIn);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, -1, 2, 7, 0, 9, floorBlock, floorBlock, false);
 			
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, -1, -1, 5, -1, -1, floorBlock, floorBlock, false);
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 6, -1, 10, 7, -1, 10, floorBlock, floorBlock, false);
@@ -428,6 +444,8 @@ public class ConsortVillageComponents
 		}
 		
 	}
+	
+	/////////////////////////Salamander
 	
 	public static class PipeHouse1 extends ConsortVillagePiece
 	{
@@ -559,6 +577,7 @@ public class ConsortVillageComponents
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0,0,1,0,0, 5, wallBlock, wallBlock, false);
 			this.setBlockState(worldIn, wallBlock, 0, 1, 1, structureBoundingBoxIn);
 			this.setBlockState(worldIn, wallBlock, 0, 1, 5, structureBoundingBoxIn);
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 0, 1, 2, 0, 1, 4);
 			
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 6,2,1,6,12, 2, wallBlock, wallBlock, false);
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 6,2,4,6,12, 5, wallBlock, wallBlock, false);
@@ -570,6 +589,7 @@ public class ConsortVillageComponents
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 6,0,1,6,0, 5, wallBlock, wallBlock, false);
 			this.setBlockState(worldIn, wallBlock, 6, 1, 1, structureBoundingBoxIn);
 			this.setBlockState(worldIn, wallBlock, 6, 1, 5, structureBoundingBoxIn);
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 6, 1, 2, 6, 1, 4);
 			
 			
 			func_189915_a(worldIn, structureBoundingBoxIn, randomIn, 3, 0, 0, EnumFacing.NORTH, (BlockDoor) doorBlock.getBlock());
@@ -577,6 +597,182 @@ public class ConsortVillageComponents
 			return true;
 		}
 	}
+	
+	/////////////////////////Turtle
+	
+	public static class LoweredShellHouse1 extends ConsortVillagePiece
+	{
+		public LoweredShellHouse1()
+		{
+		
+		}
+		
+		public LoweredShellHouse1(VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
+		{
+			this.setCoordBaseMode(facing);
+			this.boundingBox = boundingBox;
+		}
+		
+		public static LoweredShellHouse1 createPiece(VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
+		{
+			StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, -2, 0, 8, 5, 8, facing);
+			return StructureComponent.findIntersecting(componentList, structureboundingbox) == null ? new LoweredShellHouse1(start, rand, structureboundingbox, facing) : null;
+		}
+		
+		@Override
+		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
+		{
+			if (this.averageGroundLvl < 0)
+			{
+				this.averageGroundLvl = this.getAverageGroundLevel(worldIn, structureBoundingBoxIn);
+				
+				if (this.averageGroundLvl < 0)
+				{
+					return true;
+				}
+				
+				this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.minY - 3, 0);
+			}
+			
+			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
+			IBlockState buildBlock = provider.blockRegistry.getBlockState("structure_primary");
+			IBlockState lightBlock = provider.blockRegistry.getBlockState("light_block");
+			
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 1, 6, 4, 6);
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 3, 3, 0, 4, 4, 0);
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 2, 5, 5, 2, 5, 5);
+			
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 2, 3, -1, 5, 5, -1);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 0, 7, 0, 7, buildBlock, buildBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 1, 7, 7, 4, 7, buildBlock, buildBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 1, 0, 0, 4, 6, buildBlock, buildBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 7, 1, 0, 7, 4, 6, buildBlock, buildBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 1, 0, 6, 2, 0, buildBlock, buildBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 3, 0, 2, 4, 0, buildBlock, buildBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 3, 0, 6, 4, 0, buildBlock, buildBlock, false);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 1, 1, 4, 1, 1, buildBlock, buildBlock, false);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 5, 0, 4, 5, 0, buildBlock, buildBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 5, 1, 6, 5, 1, buildBlock, buildBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 5, 2, 1, 5, 6, buildBlock, buildBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 5, 2, 6, 5, 6, buildBlock, buildBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 5, 6, 5, 5, 6, buildBlock, buildBlock, false);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 6, 2, 5, 6, 5, buildBlock, buildBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 6, 3, 4, 6, 4, lightBlock, lightBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 7, 3, 4, 7, 4, buildBlock, buildBlock, false);
+			
+			return true;
+		}
+	}
+	
+	public static class TurtleMarketBuilding1 extends ConsortVillagePiece
+	{
+		public TurtleMarketBuilding1()
+		{
+		
+		}
+		
+		public TurtleMarketBuilding1(VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
+		{
+			this.setCoordBaseMode(facing);
+			this.boundingBox = boundingBox;
+		}
+		
+		public static TurtleMarketBuilding1 createPiece(VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
+		{
+			StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 14, 6, 18, facing);
+			return StructureComponent.findIntersecting(componentList, structureboundingbox) == null ? new TurtleMarketBuilding1(start, rand, structureboundingbox, facing) : null;
+		}
+		
+		@Override
+		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
+		{
+			if (this.averageGroundLvl < 0)
+			{
+				this.averageGroundLvl = this.getAverageGroundLevel(worldIn, structureBoundingBoxIn);
+				
+				if (this.averageGroundLvl < 0)
+				{
+					return true;
+				}
+				
+				this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.minY - 3, 0);
+			}
+			
+			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
+			IBlockState primaryBlock = provider.blockRegistry.getBlockState("structure_primary");
+			IBlockState primaryDecorBlock = provider.blockRegistry.getBlockState("structure_primary_decorative");
+			IBlockState secondaryBlock = provider.blockRegistry.getBlockState("structure_secondary");
+			IBlockState lightBlock = provider.blockRegistry.getBlockState("light_block");
+			IBlockState glassBlock = provider.blockRegistry.getBlockState("glass");
+			
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 6, 0, 0, 7, 2, 2);
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 0, 3, 12, 3, 12);
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 13, 12, 3, 13);
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 0, 14, 12, 3, 16);
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 2, 4, 2, 11, 4, 15);
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 5, 1, -1, 8, 4, -1);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, -1, 3, 12, -1, 16, primaryBlock, primaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 5, -1, 0, 8, -1, 2, secondaryBlock, secondaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 0, 0, 5, 2, 2, secondaryBlock, secondaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 8, 0, 0, 8, 2, 2, secondaryBlock, secondaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 3, 0, 7, 3, 2, secondaryBlock, secondaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, -1, 2, 4, 0, 2, secondaryBlock, secondaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 9, -1, 2, 13, 0, 2, secondaryBlock, secondaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, -1, 3, 0, 0, 17, secondaryBlock, secondaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 13, -1, 3, 13, 0, 17, secondaryBlock, secondaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, -1, 17, 12, 0, 17, secondaryBlock, secondaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 1, 2, 4, 2, 2, primaryBlock, primaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 9, 1, 2, 13, 2, 2, primaryBlock, primaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 1, 3, 0, 2, 17, primaryBlock, primaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 13, 1, 3, 13, 2, 17, primaryBlock, primaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 1, 17, 12, 2, 17, primaryBlock, primaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 3, 2, 5, 3, 2, glassBlock, glassBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 8, 3, 2, 13, 3, 2, glassBlock, glassBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 3, 3, 0, 3, 17, glassBlock, glassBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 13, 3, 3, 13, 3, 17, glassBlock, glassBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 3, 17, 12, 3, 17, glassBlock, glassBlock, false);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 4, 3, 12, 4, 3, primaryBlock, primaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 4, 4, 1, 4, 16, primaryBlock, primaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 12, 4, 4, 12, 4, 16, primaryBlock, primaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 4, 16, 11, 4, 16, primaryBlock, primaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 5, 4, 11, 5, 15, primaryBlock, primaryBlock, false);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 13, 12, 0, 13, secondaryBlock, secondaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 6, -1, 3, 7, -1, 6, primaryDecorBlock, primaryDecorBlock, false);
+			this.setBlockState(worldIn, primaryDecorBlock, 5, -1, 7, structureBoundingBoxIn);
+			this.setBlockState(worldIn, primaryDecorBlock, 8, -1, 7, structureBoundingBoxIn);
+			this.setBlockState(worldIn, primaryDecorBlock, 4, -1, 8, structureBoundingBoxIn);
+			this.setBlockState(worldIn, primaryDecorBlock, 9, -1, 8, structureBoundingBoxIn);
+			this.setBlockState(worldIn, primaryDecorBlock, 3, -1, 9, structureBoundingBoxIn);
+			this.setBlockState(worldIn, primaryDecorBlock, 10, -1, 9, structureBoundingBoxIn);
+			this.setBlockState(worldIn, primaryDecorBlock, 4, -1, 10, structureBoundingBoxIn);
+			this.setBlockState(worldIn, primaryDecorBlock, 9, -1, 10, structureBoundingBoxIn);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 5, -1, 11, 8, -1, 11, primaryDecorBlock, primaryDecorBlock, false);
+			
+			this.setBlockState(worldIn, lightBlock, 5, 0, 0, structureBoundingBoxIn);
+			this.setBlockState(worldIn, lightBlock, 8, 0, 0, structureBoundingBoxIn);
+			this.setBlockState(worldIn, lightBlock, 1, -1, 3, structureBoundingBoxIn);
+			this.setBlockState(worldIn, lightBlock, 12, -1, 3, structureBoundingBoxIn);
+			this.setBlockState(worldIn, lightBlock, 1, -1, 12, structureBoundingBoxIn);
+			this.setBlockState(worldIn, lightBlock, 12, -1, 12, structureBoundingBoxIn);
+			this.setBlockState(worldIn, lightBlock, 1, -1, 16, structureBoundingBoxIn);
+			this.setBlockState(worldIn, lightBlock, 12, -1, 16, structureBoundingBoxIn);
+			this.setBlockState(worldIn, lightBlock, 2, 5, 4, structureBoundingBoxIn);
+			this.setBlockState(worldIn, lightBlock, 11, 5, 4, structureBoundingBoxIn);
+			this.setBlockState(worldIn, lightBlock, 12, 5, 15, structureBoundingBoxIn);
+			this.setBlockState(worldIn, lightBlock, 11, 5, 15, structureBoundingBoxIn);
+			
+			return true;
+		}
+	}
+	
+	/////////////////////////Utility
 	
 	public static class VillagePath extends ConsortVillagePiece
 	{

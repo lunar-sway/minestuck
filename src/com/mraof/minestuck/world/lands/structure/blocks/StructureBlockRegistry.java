@@ -75,6 +75,7 @@ public class StructureBlockRegistry
 		registerBlock("torch", Blocks.TORCH.getDefaultState(), BlockTorch.class);	//Class restriction needed because of the facing property
 		registerBlock("bucket1", Blocks.QUARTZ_BLOCK.getDefaultState());
 		registerBlock("bucket2", Blocks.IRON_BLOCK.getDefaultState());
+		registerBlock("glass", Blocks.GLASS.getDefaultState());
 	}
 	
 	private static class BlockEntry
