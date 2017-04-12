@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
 import net.minecraft.block.BlockSilverfish;
 import net.minecraft.block.BlockStoneBrick;
@@ -13,8 +14,6 @@ import net.minecraft.util.math.Vec3d;
 
 import com.mraof.minestuck.block.BlockMinestuckStone;
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.entity.consort.EntityConsort;
-import com.mraof.minestuck.entity.consort.EntityNakagator;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.decorator.BlockBlobDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
@@ -113,8 +112,8 @@ public class LandAspectRock extends TerrainLandAspect
 	}
 	
 	@Override
-	public Class<? extends EntityConsort> getConsortType()
+	public EnumConsort getConsortType()
 	{
-		return EntityNakagator.class;
+		return EnumConsort.NAKAGATOR;
 	}
 }

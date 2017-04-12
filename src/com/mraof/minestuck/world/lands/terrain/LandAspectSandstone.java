@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.mraof.minestuck.entity.consort.EnumConsort;
 import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.gen.feature.WorldGenDeadBush;
 
-import com.mraof.minestuck.entity.consort.EntityConsort;
-import com.mraof.minestuck.entity.consort.EntityTurtle;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.BlockBlobDecorator;
@@ -27,7 +26,6 @@ import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 public class LandAspectSandstone extends TerrainLandAspect
 {
 	
-	private final IBlockState[] structureBlocks;
 	private final Vec3d skyColor;
 	private final Variant type;
 	private final List<TerrainLandAspect> variations;
@@ -43,14 +41,12 @@ public class LandAspectSandstone extends TerrainLandAspect
 		this.type = type;
 		if(type == Variant.SANDSTONE)
 		{
-			structureBlocks = new IBlockState[] {Blocks.SANDSTONE.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.SMOOTH), Blocks.STONEBRICK.getDefaultState()};
 			skyColor = new Vec3d(0.9D, 0.7D, 0.05D);
 			
 			variations.add(this);
 			variations.add(new LandAspectSandstone(Variant.SANDSTONE_RED));
 		} else
 		{
-			structureBlocks = new IBlockState[] {Blocks.RED_SANDSTONE.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.SMOOTH), Blocks.STONEBRICK.getDefaultState()};
 			skyColor = new Vec3d(0.9D, 0.5D, 0.05D);
 			
 		}
@@ -166,9 +162,9 @@ public class LandAspectSandstone extends TerrainLandAspect
 	}
 	
 	@Override
-	public Class<? extends EntityConsort> getConsortType()
+	public EnumConsort getConsortType()
 	{
-		return EntityTurtle.class;
+		return EnumConsort.TURTLE;
 	}
 	
 	public static enum Variant

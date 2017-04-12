@@ -28,6 +28,11 @@ public enum EnumConsort
 		return color;
 	}
 	
+	public Class<? extends EntityConsort> getConsortClass()
+	{
+		return consortClass;
+	}
+	
 	public static enum MerchantType
 	{
 		NONE(false),

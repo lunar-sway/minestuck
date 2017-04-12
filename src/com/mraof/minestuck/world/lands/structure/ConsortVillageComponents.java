@@ -1,11 +1,13 @@
 package com.mraof.minestuck.world.lands.structure;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
 import com.google.common.collect.Lists;
 
-import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.entity.consort.EnumConsort;
+import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockSlab;
@@ -19,7 +21,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
-import net.minecraft.world.gen.structure.StructureVillagePieces;
 
 public class ConsortVillageComponents
 {
@@ -32,7 +33,153 @@ public class ConsortVillageComponents
 		MapGenStructureIO.registerStructureComponent(ConsortVillageComponents.VillagePath.class, "MinestuckCVPth");
 	}
 	
-	public static abstract class ConsortVillage extends StructureComponent
+	public static List<PieceWeight> getStructureVillageWeightedPieceList(Random random, EnumConsort consortType, LandAspectRegistry.AspectCombination landAspects)
+	{
+		List<PieceWeight> list = Lists.newArrayList();
+		switch (consortType)
+		{
+			case SALAMANDER:
+			default:
+				list.add(new PieceWeight(PipeHouse1.class, 4, MathHelper.getInt(random, 4, 8)));
+				list.add(new PieceWeight(HighPipeHouse1.class, 4, MathHelper.getInt(random, 2, 4)));
+				break;
+			case TURTLE:
+				break;
+			case IGUANA:
+				break;
+			case NAKAGATOR:
+				break;
+		}
+		Iterator<PieceWeight> iterator = list.iterator();
+		
+		while (iterator.hasNext())
+		{
+			if (iterator.next().villagePiecesLimit == 0)
+			{
+				iterator.remove();
+			}
+		}
+		
+		return list;
+	}
+	
+	private static StructureComponent generateAndAddComponent(VillageCenter start, List<StructureComponent> structureComponents, Random rand, int structureMinX, int structureMinY, int structureMinZ, EnumFacing facing)
+	{
+		if (Math.abs(structureMinX - start.getBoundingBox().minX) <= 112 && Math.abs(structureMinZ - start.getBoundingBox().minZ) <= 112)
+		{
+			StructureComponent villagePiece = generateComponent(start, structureComponents, rand, structureMinX, structureMinY, structureMinZ, facing);
+			
+			if (villagePiece != null)
+			{
+				structureComponents.add(villagePiece);
+				start.pendingHouses.add(villagePiece);
+				return villagePiece;
+			}
+			else return null;
+		}
+		else return null;
+	}
+	
+	private static ConsortVillagePiece generateComponent(VillageCenter start, List<StructureComponent> structureComponents, Random rand, int structureMinX, int structureMinY, int structureMinZ, EnumFacing facing)
+	{
+		int i = updatePieceWeight(start.pieceWeightList);
+		
+		if (i <= 0)
+		{
+			return null;
+		}
+		else
+		{
+			int j = 0;
+			
+			while (j < 5)
+			{
+				++j;
+				int k = rand.nextInt(i);
+				
+				for (PieceWeight pieceWeight : start.pieceWeightList)
+				{
+					k -= pieceWeight.villagePieceWeight;
+					
+					if (k < 0)
+					{
+						if (!pieceWeight.canSpawnMoreVillagePieces() || pieceWeight == start.lastPieceWeightUsed && start.pieceWeightList.size() > 1)
+							break;
+						
+						ConsortVillagePiece villagePiece = findAndCreateComponentFactory(start, pieceWeight, structureComponents, rand, structureMinX, structureMinY, structureMinZ, facing);
+						
+						if (villagePiece != null)
+						{
+							pieceWeight.villagePiecesSpawned++;
+							start.lastPieceWeightUsed = pieceWeight;
+							
+							if (!pieceWeight.canSpawnMoreVillagePieces())
+								start.pieceWeightList.remove(pieceWeight);
+							
+							return villagePiece;
+						}
+					}
+				}
+			}
+			
+			return null;
+		}
+	}
+	
+	private static int updatePieceWeight(List<PieceWeight> list)
+	{
+		boolean flag = false;
+		int totalWeight = 0;
+		
+		for (PieceWeight pieceWeight : list)
+		{
+			if (pieceWeight.villagePiecesLimit > 0 && pieceWeight.villagePiecesSpawned < pieceWeight.villagePiecesLimit)
+				flag = true;
+			
+			totalWeight += pieceWeight.villagePieceWeight;
+		}
+		
+		return flag ? totalWeight : -1;
+	}
+	
+	private static ConsortVillagePiece findAndCreateComponentFactory(VillageCenter start, PieceWeight weight, List<StructureComponent> structureComponents, Random rand, int structureMinX, int structureMinY, int structureMinZ, EnumFacing facing)
+	{
+		Class <? extends ConsortVillagePiece> pieceClass = weight.villagePieceClass;
+		ConsortVillagePiece villagePiece = null;
+		
+		if (pieceClass == PipeHouse1.class)
+		{
+			villagePiece = PipeHouse1.createPiece(start, structureComponents, rand, structureMinX, structureMinY, structureMinZ, facing);
+		}
+		else if (pieceClass == HighPipeHouse1.class)
+		{
+			villagePiece = HighPipeHouse1.createPiece(start, structureComponents, rand, structureMinX, structureMinY, structureMinZ, facing);
+		}
+		
+		return villagePiece;
+	}
+	
+	public static class PieceWeight
+	{
+		public Class <? extends ConsortVillagePiece> villagePieceClass;
+		public final int villagePieceWeight;
+		public int villagePiecesSpawned;
+		public int villagePiecesLimit;
+		
+		public PieceWeight(Class <? extends ConsortVillagePiece> pieceClass, int weight, int limit)
+		{
+			this.villagePieceClass = pieceClass;
+			this.villagePieceWeight = weight;
+			this.villagePiecesLimit = limit;
+		}
+		
+		public boolean canSpawnMoreVillagePieces()
+		{
+			return this.villagePiecesLimit == 0 || this.villagePiecesSpawned < this.villagePiecesLimit;
+		}
+	}
+	
+	public static abstract class ConsortVillagePiece extends StructureComponent
 	{
 		protected int averageGroundLvl = -1;
 		
@@ -77,20 +224,78 @@ public class ConsortVillageComponents
 				return i / j;
 			}
 		}
+		
+		protected StructureComponent getNextComponentNN(VillageCenter start, List<StructureComponent> structureComponents, Random rand, int offsetY, int offsetXZ)
+		{
+			EnumFacing enumfacing = this.getCoordBaseMode();
+			
+			if (enumfacing != null)
+			{
+				switch (enumfacing)
+				{
+					case NORTH:
+					default:
+						return ConsortVillageComponents.generateAndAddComponent(start, structureComponents, rand, this.boundingBox.minX - 1, this.boundingBox.minY + offsetY, this.boundingBox.minZ + offsetXZ, EnumFacing.WEST);
+					case SOUTH:
+						return ConsortVillageComponents.generateAndAddComponent(start, structureComponents, rand, this.boundingBox.minX - 1, this.boundingBox.minY + offsetY, this.boundingBox.minZ + offsetXZ, EnumFacing.WEST);
+					case WEST:
+						return ConsortVillageComponents.generateAndAddComponent(start, structureComponents, rand, this.boundingBox.minX + offsetXZ, this.boundingBox.minY + offsetY, this.boundingBox.minZ - 1, EnumFacing.NORTH);
+					case EAST:
+						return ConsortVillageComponents.generateAndAddComponent(start, structureComponents, rand, this.boundingBox.minX + offsetXZ, this.boundingBox.minY + offsetY, this.boundingBox.minZ - 1, EnumFacing.NORTH);
+				}
+			}
+			else
+			{
+				return null;
+			}
+		}
+		
+		protected StructureComponent getNextComponentPP(VillageCenter start, List<StructureComponent> structureComponents, Random rand, int offsetY, int offsetXZ)
+		{
+			EnumFacing enumfacing = this.getCoordBaseMode();
+			
+			if (enumfacing != null)
+			{
+				switch (enumfacing)
+				{
+					case NORTH:
+					default:
+						return ConsortVillageComponents.generateAndAddComponent(start, structureComponents, rand, this.boundingBox.maxX + 1, this.boundingBox.minY + offsetY, this.boundingBox.minZ + offsetXZ, EnumFacing.EAST);
+					case SOUTH:
+						return ConsortVillageComponents.generateAndAddComponent(start, structureComponents, rand, this.boundingBox.maxX + 1, this.boundingBox.minY + offsetY, this.boundingBox.minZ + offsetXZ, EnumFacing.EAST);
+					case WEST:
+						return ConsortVillageComponents.generateAndAddComponent(start, structureComponents, rand, this.boundingBox.minX + offsetXZ, this.boundingBox.minY + offsetY, this.boundingBox.maxZ + 1, EnumFacing.SOUTH);
+					case EAST:
+						return ConsortVillageComponents.generateAndAddComponent(start, structureComponents, rand, this.boundingBox.minX + offsetXZ, this.boundingBox.minY + offsetY, this.boundingBox.maxZ + 1, EnumFacing.SOUTH);
+				}
+			}
+			else
+			{
+				return null;
+			}
+		}
 	}
 	
-	public abstract static class VillageCenter extends ConsortVillage
+	public abstract static class VillageCenter extends ConsortVillagePiece
 	{
 		public List<StructureComponent> pendingHouses = Lists.<StructureComponent>newArrayList();
 		public List<StructureComponent> pendingRoads = Lists.<StructureComponent>newArrayList();
 		
+		public List<PieceWeight> pieceWeightList;
+		public PieceWeight lastPieceWeightUsed;
+		
+		protected VillageCenter(List<PieceWeight> pieceWeightList)
+		{
+			this.pieceWeightList = pieceWeightList;
+		}
 	}
 	
 	public static class VillageMarketCenter extends VillageCenter
 	{
 		
-		public VillageMarketCenter(int x, int z, Random rand)
+		public VillageMarketCenter(List<PieceWeight> pieceWeightList, int x, int z, Random rand)
 		{
+			super(pieceWeightList);
 			this.setCoordBaseMode(EnumFacing.Plane.HORIZONTAL.random(rand));
 			
 			if (this.getCoordBaseMode().getAxis() == EnumFacing.Axis.Z)
@@ -224,7 +429,7 @@ public class ConsortVillageComponents
 		
 	}
 	
-	public static class PipeHouse1 extends ConsortVillage
+	public static class PipeHouse1 extends ConsortVillagePiece
 	{
 		public PipeHouse1()
 		{
@@ -283,7 +488,7 @@ public class ConsortVillageComponents
 		}
 	}
 	
-	public static class HighPipeHouse1 extends ConsortVillage
+	public static class HighPipeHouse1 extends ConsortVillagePiece
 	{
 		public HighPipeHouse1()
 		{
@@ -338,7 +543,7 @@ public class ConsortVillageComponents
 			
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1,0,6,2,12, 6, wallBlock, wallBlock, false);
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 4,0,6,5,12, 6, wallBlock, wallBlock, false);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3,0,0,3,2, 6, wallBlock, wallBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3,0,6,3,2, 6, wallBlock, wallBlock, false);
 			this.setBlockState(worldIn, wallBlock, 3, 4, 6, structureBoundingBoxIn);
 			this.setBlockState(worldIn, wallBlock, 3, 6, 6, structureBoundingBoxIn);
 			this.setBlockState(worldIn, wallBlock, 3, 8, 6, structureBoundingBoxIn);
@@ -373,7 +578,7 @@ public class ConsortVillageComponents
 		}
 	}
 	
-	public static class VillagePath extends ConsortVillage
+	public static class VillagePath extends ConsortVillagePiece
 	{
 		private int length;
 		
@@ -409,24 +614,24 @@ public class ConsortVillageComponents
 			
 			for (int i = rand.nextInt(5); i < this.length - 8; i += 2 + rand.nextInt(5))
 			{
-				/*StructureComponent structurecomponent = this.getNextComponentNN((StructureVillagePieces.Start)componentIn, listIn, rand, 0, i);
+				StructureComponent newPiece = this.getNextComponentNN((VillageCenter)componentIn, listIn, rand, 0, i);
 				
-				if (structurecomponent != null)
+				if (newPiece != null)
 				{
-					i += Math.max(structurecomponent.boundingBox.getXSize(), structurecomponent.boundingBox.getZSize());
+					i += Math.max(newPiece.getBoundingBox().getXSize(), newPiece.getBoundingBox().getZSize());
 					flag = true;
-				}*/
+				}
 			}
 			
 			for (int j = rand.nextInt(5); j < this.length - 8; j += 2 + rand.nextInt(5))
 			{
-				/*StructureComponent structurecomponent1 = this.getNextComponentPP((StructureVillagePieces.Start)componentIn, listIn, rand, 0, j);
+				StructureComponent newPiece = this.getNextComponentPP((VillageCenter) componentIn, listIn, rand, 0, j);
 				
-				if (structurecomponent1 != null)
+				if (newPiece != null)
 				{
-					j += Math.max(structurecomponent1.boundingBox.getXSize(), structurecomponent1.boundingBox.getZSize());
+					j += Math.max(newPiece.getBoundingBox().getXSize(), newPiece.getBoundingBox().getZSize());
 					flag = true;
-				}*/
+				}
 			}
 			
 			EnumFacing enumfacing = this.getCoordBaseMode();

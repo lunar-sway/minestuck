@@ -78,7 +78,7 @@ public class ChunkProviderLands implements IChunkGenerator
 		
 		this.consortList = new ArrayList<SpawnListEntry>();
 		this.monsterList = new ArrayList<SpawnListEntry>();
-		this.consortList.add(new SpawnListEntry(aspect1.getConsortType(), 2, 1, 10));
+		this.consortList.add(new SpawnListEntry(aspect1.getConsortType().getConsortClass(), 2, 1, 10));
 		
 		this.dayCycle = aspect1.getDayCycleMode();
 		this.skyColor = aspect1.getFogColor();

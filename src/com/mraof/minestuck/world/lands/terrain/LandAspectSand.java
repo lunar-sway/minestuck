@@ -6,8 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.entity.consort.EntityConsort;
-import com.mraof.minestuck.entity.consort.EntityTurtle;
+import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
@@ -158,9 +157,9 @@ public class LandAspectSand extends TerrainLandAspect
 	}
 	
 	@Override
-	public Class<? extends EntityConsort> getConsortType()
+	public EnumConsort getConsortType()
 	{
-		return EntityTurtle.class;
+		return EnumConsort.TURTLE;
 	}
 	
 	public static enum Variant

@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.lands.terrain;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.lands.decorator.*;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.BlockLog.EnumAxis;
@@ -11,8 +12,6 @@ import net.minecraft.util.math.Vec3d;
 
 import com.mraof.minestuck.block.BlockMinestuckLog;
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.entity.consort.EntityConsort;
-import com.mraof.minestuck.entity.consort.EntityIguana;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
@@ -80,8 +79,8 @@ public class LandAspectForest extends TerrainLandAspect
 	}
 	
 	@Override
-	public Class<? extends EntityConsort> getConsortType()
+	public EnumConsort getConsortType()
 	{
-		return EntityIguana.class;
+		return EnumConsort.IGUANA;
 	}
 }

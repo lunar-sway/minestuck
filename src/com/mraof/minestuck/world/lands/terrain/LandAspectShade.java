@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.lands.terrain;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mraof.minestuck.entity.consort.EnumConsort;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.init.Blocks;
@@ -11,8 +12,6 @@ import net.minecraft.util.math.Vec3d;
 import com.mraof.minestuck.block.BlockColoredDirt;
 import com.mraof.minestuck.block.BlockMinestuckStone;
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.entity.consort.EntityConsort;
-import com.mraof.minestuck.entity.consort.EntitySalamander;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.LeaflessTreeDecorator;
@@ -35,6 +34,7 @@ public class LandAspectShade extends TerrainLandAspect
 		registry.setBlockState("structure_secondary", MinestuckBlocks.stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.SHADE_BRICK));
 		registry.setBlockState("structure_secondary_decorative", MinestuckBlocks.stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.SHADE_SMOOTH));
 		registry.setBlockState("structure_secondary_stairs", MinestuckBlocks.shadeBrickStairs.getDefaultState());
+		registry.setBlockState("village_path", Blocks.GRAVEL.getDefaultState());
 		registry.setBlockState("light_block", MinestuckBlocks.glowingLog.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE));
 		registry.setBlockState("torch", Blocks.REDSTONE_TORCH.getDefaultState());
 	}
@@ -84,8 +84,8 @@ public class LandAspectShade extends TerrainLandAspect
 	}
 	
 	@Override
-	public Class<? extends EntityConsort> getConsortType()
+	public EnumConsort getConsortType()
 	{
-		return EntitySalamander.class;
+		return EnumConsort.SALAMANDER;
 	}
 }
