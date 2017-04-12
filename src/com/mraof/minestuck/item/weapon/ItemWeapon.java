@@ -42,7 +42,7 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 
 	public ItemWeapon(int maxUses, double damageVsEntity, double weaponSpeed, int enchantability, String name)
 	{
-	    super(ToolMaterial.IRON);
+		super(ToolMaterial.IRON);
 		this.maxStackSize = 1;
 		this.setCreativeTab(Minestuck.tabMinestuck);
 		this.setMaxDamage(maxUses);
@@ -109,11 +109,11 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 	@Override
 	public float getStrVsBlock(ItemStack stack, IBlockState state)
 	{
-	    for(String tool : getToolClasses(stack))
-	    {
-	    	if(state.getBlock().isToolEffective(tool, state))
-	    	{
-	    	    return efficiency;
+		for(String tool : getToolClasses(stack))
+		{
+			if(state.getBlock().isToolEffective(tool, state))
+			{
+				return efficiency;
 			}
 		}
 		return super.getStrVsBlock(stack, state);
@@ -144,30 +144,30 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 		return this;
 	}
 	
-    //Thanks to Mraof for supplying the base for this method.
-    @Override
-    public boolean canHarvestBlock(IBlockState state, ItemStack stack)
-    {
-        String tool = state.getBlock().getHarvestTool(state);
-        if(getToolClasses(stack).contains(tool))
-        {
-            int blockHarvestLevel = state.getBlock().getHarvestLevel(state);
-            int toolHarvestLevel = getHarvestLevel(stack, tool, null, state);
-        	return toolHarvestLevel >= blockHarvestLevel;        	
-        } else
-        {
-        	return state.getMaterial().isToolNotRequired();
-        }
-    }
-    
-    //Because of the use of IBlockState to determine block equivalence,
-    //Blocks that would normally be considered equivalent but are trivially different
-    //Will still be considered different blocks. Examples include logs oriented in different directions
-    //Or torches mounted on different sides of blocks.
-    @Override
-    public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState blockState, BlockPos pos, EntityLivingBase playerIn)
-    {
-        Comparator<Pair> comparator = new pairedIntComparator();
+	//Thanks to Mraof for supplying the base for this method.
+	@Override
+	public boolean canHarvestBlock(IBlockState state, ItemStack stack)
+	{
+		String tool = state.getBlock().getHarvestTool(state);
+		if(getToolClasses(stack).contains(tool))
+		{
+			int blockHarvestLevel = state.getBlock().getHarvestLevel(state);
+			int toolHarvestLevel = getHarvestLevel(stack, tool, null, state);
+			return toolHarvestLevel >= blockHarvestLevel;        	
+		} else
+		{
+			return state.getMaterial().isToolNotRequired();
+		}
+	}
+
+	//Because of the use of IBlockState to determine block equivalence,
+	//Blocks that would normally be considered equivalent but are trivially different
+	//Will still be considered different blocks. Examples include logs oriented in different directions
+	//Or torches mounted on different sides of blocks.
+	@Override
+	public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState blockState, BlockPos pos, EntityLivingBase playerIn)
+	{
+		Comparator<Pair> comparator = new pairedIntComparator();
 		PriorityQueue<Pair> candidates = new PriorityQueue<Pair>(comparator);
 		
 		//If the tool can't harvest the block, or the player is sneaking, or the tool doesn't farmine, don't farmine.
@@ -204,26 +204,26 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 				if(rad>0)
 				{
 					//Iterates across all blocks in a 3x3 cube centered on this block.
-	    			for(int i=-1; i<2; i++)
-	    			{
-	    				for(int j=-1; j<2; j++)
-	    				{
-	    					for(int k=-1; k<2; k++)
-	    					{
-	    						BlockPos newBlock = new BlockPos(curr.getX()+i, curr.getY()+j, curr.getZ()+k);
-	    						if(worldIn.getBlockState(newBlock)==blockState)
-	    						{
-	    							candidates.add(new Pair(newBlock, rad-1));
-	    						}
-	    					}
-	    				}
-	    			}
+					for(int i=-1; i<2; i++)
+					{
+						for(int j=-1; j<2; j++)
+						{
+							for(int k=-1; k<2; k++)
+							{
+								BlockPos newBlock = new BlockPos(curr.getX()+i, curr.getY()+j, curr.getZ()+k);
+								if(worldIn.getBlockState(newBlock)==blockState)
+								{
+									candidates.add(new Pair(newBlock, rad-1));
+								}
+							}
+						}
+					}
 				}
 			}
 		}
 		stack.damageItem(damageCount, playerIn);
-    	return true;
-    }
+		return true;
+	}
 }
 
 class pairedIntComparator implements Comparator<Pair>
