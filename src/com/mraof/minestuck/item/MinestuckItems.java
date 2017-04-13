@@ -5,15 +5,20 @@ import com.mraof.minestuck.block.BlockColoredDirt;
 import com.mraof.minestuck.block.BlockCrockerMachine;
 import com.mraof.minestuck.block.BlockMinestuckLog;
 import com.mraof.minestuck.block.BlockMinestuckStone;
+import com.mraof.minestuck.entity.item.EntityCrewPoster;
 import com.mraof.minestuck.item.block.ItemBlockLayered;
 import com.mraof.minestuck.item.block.ItemSburbMachine;
 import com.mraof.minestuck.item.weapon.*;
+import net.minecraft.entity.EntityHanging;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.*;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -153,6 +158,7 @@ public class MinestuckItems
 				}));
 		registerItemBlock(new ItemBlock(glowingMushroom));
 		registerItemBlock(new ItemBlock(glowingLog));
+		registerItemBlock(new ItemBlock(glowingPlanks));
 		registerItemBlock(new ItemMultiTexture(stone, stone, new ItemMultiTexture.Mapper()
 		{
 			@Override
@@ -277,7 +283,13 @@ public class MinestuckItems
 		metalBoat = (ItemMetalBoat) GameRegistry.register(new ItemMetalBoat().setRegistryName("metal_boat"));
 		candy = GameRegistry.register(new ItemMinestuckCandy().setRegistryName("candy"));
 		threshDvd = GameRegistry.register(new Item().setRegistryName("thresh_dvd")).setUnlocalizedName("threshDvd").setMaxStackSize(1).setCreativeTab(Minestuck.tabMinestuck);
-		crewPoster = GameRegistry.register(new Item().setRegistryName("crew_poster")).setUnlocalizedName("crewPoster").setMaxStackSize(1).setCreativeTab(Minestuck.tabMinestuck);
+		crewPoster = GameRegistry.register(new ItemHanging(){
+			@Override
+			public EntityHanging createEntity(World worldIn, BlockPos pos, EnumFacing facing, ItemStack stack)
+			{
+				return new EntityCrewPoster(worldIn, pos, facing);
+			}
+		}.setRegistryName("crew_poster")).setUnlocalizedName("crewPoster").setMaxStackSize(1).setCreativeTab(Minestuck.tabMinestuck);
 		sbahjPoster = GameRegistry.register(new Item().setRegistryName("sbahj_poster")).setUnlocalizedName("sbahjPoster").setMaxStackSize(1).setCreativeTab(Minestuck.tabMinestuck);
 		
 		minestuckBucket.addBlock(blockOil.getDefaultState());

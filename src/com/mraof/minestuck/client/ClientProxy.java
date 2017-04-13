@@ -1,6 +1,8 @@
 package com.mraof.minestuck.client;
 
+import com.mraof.minestuck.client.renderer.entity.*;
 import com.mraof.minestuck.entity.EntityBigPart;
+import com.mraof.minestuck.entity.item.EntityCrewPoster;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.color.IItemColor;
@@ -22,13 +24,6 @@ import com.mraof.minestuck.client.model.ModelNakagator;
 import com.mraof.minestuck.client.model.ModelOgre;
 import com.mraof.minestuck.client.model.ModelRook;
 import com.mraof.minestuck.client.model.ModelSalamander;
-import com.mraof.minestuck.client.renderer.entity.RenderDecoy;
-import com.mraof.minestuck.client.renderer.entity.RenderEntityMinestuck;
-import com.mraof.minestuck.client.renderer.entity.RenderGrist;
-import com.mraof.minestuck.client.renderer.entity.RenderMetalBoat;
-import com.mraof.minestuck.client.renderer.entity.RenderPawn;
-import com.mraof.minestuck.client.renderer.entity.RenderShadow;
-import com.mraof.minestuck.client.renderer.entity.RenderVitalityGel;
 import com.mraof.minestuck.client.renderer.tileentity.RenderGate;
 import com.mraof.minestuck.client.renderer.tileentity.RenderSkaiaPortal;
 import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
@@ -81,6 +76,7 @@ public class ClientProxy
 		RenderingRegistry.registerEntityRenderingHandler(EntityVitalityGel.class, new RenderVitalityGel(mc.getRenderManager()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityDecoy.class, new RenderDecoy(mc.getRenderManager()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityMetalBoat.class, new RenderMetalBoat(mc.getRenderManager()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityCrewPoster.class, new RenderHangingArt<EntityCrewPoster>(mc.getRenderManager(), "midnight_poster"));
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySkaiaPortal.class, new RenderSkaiaPortal());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGate.class, new RenderGate());
 //		MinecraftForgeClient.registerItemRenderer(Minestuck.captchaCard, new RenderCard());
