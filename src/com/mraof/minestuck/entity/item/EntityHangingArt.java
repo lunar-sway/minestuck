@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.google.common.collect.Lists;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityHanging;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,10 +15,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class EntityHangingArt<T extends EntityHangingArt.IArt> extends EntityHanging
+public abstract class EntityHangingArt<T extends EntityHangingArt.IArt> extends EntityHanging implements IEntityAdditionalSpawnData
 {
 	public T art;
 	
@@ -140,6 +142,32 @@ public abstract class EntityHangingArt<T extends EntityHangingArt.IArt> extends 
 	{
 		BlockPos blockpos = this.hangingPosition.add(x - this.posX, y - this.posY, z - this.posZ);
 		this.setPosition((double) blockpos.getX(), (double) blockpos.getY(), (double) blockpos.getZ());
+	}
+	
+	@Override
+	public void writeSpawnData(ByteBuf data)
+	{
+		String name = art.getTitle();
+		data.writeInt(name.length());
+		for(char c : name.toCharArray())
+			data.writeChar(c);
+	}
+	
+	@Override
+	public void readSpawnData(ByteBuf data)
+	{
+		int length = data.readInt();
+		StringBuilder str = new StringBuilder();
+		for(int i = 0; i < length; i++)
+			str.append(data.readChar());
+		
+		String name = str.toString();
+		for(T art : this.getArtSet())
+			if(art.getTitle().equals(name))
+			{
+				this.art = art;
+				break;
+			}
 	}
 	
 	public abstract Set<T> getArtSet();

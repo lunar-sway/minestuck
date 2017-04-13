@@ -13,6 +13,11 @@ import net.minecraft.world.World;
 public class EntityCrewPoster extends EntityHangingArt<EntityCrewPoster.MidnightCrewArt>
 {
 	
+	public EntityCrewPoster(World worldIn)
+	{
+		super(worldIn);
+	}
+	
 	public EntityCrewPoster(World worldIn, BlockPos pos, EnumFacing facing)
 	{
 		super(worldIn, pos, facing);
