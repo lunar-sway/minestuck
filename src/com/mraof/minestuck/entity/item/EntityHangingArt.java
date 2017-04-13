@@ -147,6 +147,12 @@ public abstract class EntityHangingArt<T extends EntityHangingArt.IArt> extends 
 	@Override
 	public void writeSpawnData(ByteBuf data)
 	{
+		data.writeByte(this.facingDirection.ordinal());
+		
+		data.writeInt(this.hangingPosition.getX());
+		data.writeInt(this.hangingPosition.getY());
+		data.writeInt(this.hangingPosition.getZ());
+		
 		String name = art.getTitle();
 		data.writeInt(name.length());
 		for(char c : name.toCharArray())
@@ -156,6 +162,10 @@ public abstract class EntityHangingArt<T extends EntityHangingArt.IArt> extends 
 	@Override
 	public void readSpawnData(ByteBuf data)
 	{
+		EnumFacing facing = EnumFacing.values()[data.readByte()%EnumFacing.values().length];
+		
+		this.hangingPosition = new BlockPos(data.readInt(), data.readInt(), data.readInt());
+		
 		int length = data.readInt();
 		StringBuilder str = new StringBuilder();
 		for(int i = 0; i < length; i++)
@@ -168,6 +178,8 @@ public abstract class EntityHangingArt<T extends EntityHangingArt.IArt> extends 
 				this.art = art;
 				break;
 			}
+		
+		this.updateFacingWithBoundingBox(facing);
 	}
 	
 	public abstract Set<T> getArtSet();

@@ -172,6 +172,7 @@ public class MinestuckModelManager
 			register(crockerMachine, type.ordinal(), "machine_"+type.getName());
 		register(glowingMushroom);
 		register(glowingLog);
+		register(glowingPlanks);
 		for(BlockMinestuckStone.BlockType type : BlockMinestuckStone.BlockType.values())
 			register(stone, type.getMetadata(), type.getName());
 		register(coarseStoneStairs);

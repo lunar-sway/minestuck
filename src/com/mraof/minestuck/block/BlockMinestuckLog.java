@@ -13,7 +13,10 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 
 public class BlockMinestuckLog extends BlockLog
 {
@@ -80,6 +83,18 @@ public class BlockMinestuckLog extends BlockLog
 	public int damageDropped(IBlockState state)
 	{
 		return state.getValue(VARIANT).ordinal();
+	}
+	
+	@Override
+	public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face)
+	{
+		return 5;
+	}
+	
+	@Override
+	public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face)
+	{
+		return 5;
 	}
 	
 	public static enum BlockType implements IStringSerializable
