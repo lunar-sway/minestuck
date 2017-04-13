@@ -76,7 +76,7 @@ public class ClientProxy
 		RenderingRegistry.registerEntityRenderingHandler(EntityVitalityGel.class, new RenderVitalityGel(mc.getRenderManager()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityDecoy.class, new RenderDecoy(mc.getRenderManager()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityMetalBoat.class, new RenderMetalBoat(mc.getRenderManager()));
-		RenderingRegistry.registerEntityRenderingHandler(EntityCrewPoster.class, new RenderHangingArt(mc.getRenderManager(), "midnight_poster"));
+		RenderingRegistry.registerEntityRenderingHandler(EntityCrewPoster.class, new RenderHangingArt<EntityCrewPoster>(mc.getRenderManager(), "midnight_poster"));
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySkaiaPortal.class, new RenderSkaiaPortal());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGate.class, new RenderGate());
 //		MinecraftForgeClient.registerItemRenderer(Minestuck.captchaCard, new RenderCard());

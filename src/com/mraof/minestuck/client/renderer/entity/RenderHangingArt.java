@@ -16,22 +16,19 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class RenderHangingArt extends Render<EntityHangingArt>
+public class RenderHangingArt<T extends EntityHangingArt> extends Render<T>
 {
 	private final ResourceLocation ART_TEXTURE;
 	
 	public RenderHangingArt(RenderManager renderManagerIn, String artPath)
 	{
 		super(renderManagerIn);
-		ART_TEXTURE = new ResourceLocation("minestuck:textures/painting/" + artPath + ".png");
+		ART_TEXTURE = new ResourceLocation("minestuck:textures/paintings/" + artPath + ".png");
 	}
 	
 	@Override
-	public void doRender(EntityHangingArt entity, double x, double y, double z, float entityYaw, float partialTicks)
+	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks)
 	{
-		if(entity.art == null)
-			return;
-		
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y, z);
 		GlStateManager.rotate(180.0F - entityYaw, 0.0F, 1.0F, 0.0F);
@@ -66,7 +63,7 @@ public class RenderHangingArt extends Render<EntityHangingArt>
 		return ART_TEXTURE;
 	}
 	
-	private void renderPainting(EntityHangingArt painting, int width, int height, int textureU, int textureV)
+	private void renderPainting(T painting, int width, int height, int textureU, int textureV)
 	{
 		float renderOffsetU = (float)(-width) / 2.0F;
 		float renderOffsetV = (float)(-height) / 2.0F;
@@ -116,7 +113,7 @@ public class RenderHangingArt extends Render<EntityHangingArt>
 		}
 	}
 	
-	private void setLightmap(EntityHangingArt painting, float u, float v)
+	private void setLightmap(T painting, float u, float v)
 	{
 		int x = MathHelper.floor(painting.posX);
 		int y = MathHelper.floor(painting.posY + (double)(v / 16.0F));
