@@ -525,6 +525,7 @@ tile.coloredDirt.thought.name=Thought Dirt
 tile.goldSeeds.name=Golden seeds
 tile.glowingMushroom.name=Glowing Mushroom
 tile.glowingLog.name=Glowing Log
+tile.glowingPlanks.name=Glowing Planks
 tile.stoneMinestuck.coarse.name=Coarse Stone
 tile.stoneMinestuck.coarseChiseled.name=Chiseled Coarse Stone
 tile.stoneMinestuck.shadeBrick.name=Shade Bricks

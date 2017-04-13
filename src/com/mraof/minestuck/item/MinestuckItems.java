@@ -272,6 +272,7 @@ public class MinestuckItems
 				}));
 		registerItemBlock(new ItemBlock(glowingMushroom));
 		registerItemBlock(new ItemBlock(glowingLog));
+		registerItemBlock(new ItemBlock(glowingPlanks));
 		registerItemBlock(new ItemMultiTexture(stone, stone, new Function<ItemStack, String>()
 		{
 			@Override

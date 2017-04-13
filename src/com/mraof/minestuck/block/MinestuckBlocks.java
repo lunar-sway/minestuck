@@ -34,6 +34,7 @@ public class MinestuckBlocks
 	public static Block gate;
 	public static BlockGlowingMushroom glowingMushroom;
 	public static Block glowingLog;
+	public static Block glowingPlanks;
 	public static Block stone;
 	public static Block coarseStoneStairs;
 	public static Block shadeBrickStairs;
@@ -81,7 +82,7 @@ public class MinestuckBlocks
 		goldOreSandstoneRed = GameRegistry.register(new BlockVanillaOre(BlockVanillaOre.OreType.GOLD).setRegistryName("gold_ore_sandstone_red")).setUnlocalizedName("oreGold");
 		
 		cruxiteBlock = GameRegistry.register(new Block(Material.ROCK, MapColor.LIGHT_BLUE).setRegistryName("cruxite_block")).setUnlocalizedName("cruxiteBlock").setHardness(3.0F).setCreativeTab(Minestuck.tabMinestuck);
-		genericObject = GameRegistry.register(new BlockSound(Material.GOURD, MapColor.LIME, SoundType.WOOD).setRegistryName("generic_object")).setUnlocalizedName("genericObject").setHardness(1.0F).setCreativeTab(Minestuck.tabMinestuck);
+		genericObject = GameRegistry.register(new BlockCustom(Material.GOURD, MapColor.LIME, SoundType.WOOD).setRegistryName("generic_object")).setUnlocalizedName("genericObject").setHardness(1.0F).setCreativeTab(Minestuck.tabMinestuck);
 		sburbMachine = GameRegistry.register(new BlockSburbMachine().setRegistryName("sburb_machine"));
 		crockerMachine = GameRegistry.register(new BlockCrockerMachine().setRegistryName("crocker_machine"));
 		blockComputerOff = GameRegistry.register(new BlockComputerOff().setRegistryName("computer_standard"));
@@ -95,6 +96,7 @@ public class MinestuckBlocks
 		coloredDirt = (BlockColoredDirt) GameRegistry.register(new BlockColoredDirt().setRegistryName("colored_dirt")).setUnlocalizedName("coloredDirt").setHardness(0.5F);
 		glowingMushroom = (BlockGlowingMushroom) GameRegistry.register(new BlockGlowingMushroom().setRegistryName("glowing_mushroom"));
 		glowingLog = GameRegistry.register(new BlockGlowingLog().setRegistryName("glowing_log"));
+		glowingPlanks = GameRegistry.register(new BlockCustom(Material.WOOD, MapColor.LIGHT_BLUE, SoundType.WOOD).setFireInfo(5, 20).setRegistryName("glowing_planks")).setUnlocalizedName("glowingPlanks").setLightLevel(0.5F).setHardness(2.0F).setResistance(5.0F).setCreativeTab(Minestuck.tabMinestuck);
 		stone = GameRegistry.register(new BlockMinestuckStone().setRegistryName("stone"));	//Full name will be minestuck:stone and because of that not produce any collisions
 		coarseStoneStairs = GameRegistry.register(new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.COARSE)).setRegistryName("coarse_stone_stairs")).setUnlocalizedName("stairsMinestuck.coarse");
 		shadeBrickStairs = GameRegistry.register(new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.SHADE_BRICK)).setRegistryName("shade_brick_stairs")).setUnlocalizedName("stairsMinestuck.shadeBrick");

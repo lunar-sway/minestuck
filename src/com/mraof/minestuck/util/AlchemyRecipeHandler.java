@@ -525,7 +525,7 @@ public class AlchemyRecipeHandler
 		GameRegistry.addRecipe(new ItemStack(chessboard),new Object[]{ "XYX","YXY","XYX",'Y',new ItemStack(Blocks.STAINED_HARDENED_CLAY,1,0),'X',new ItemStack(Blocks.STAINED_HARDENED_CLAY,1,15)});
 		GameRegistry.addRecipe(new ItemStack(disk, 1, 0),new Object[]{ "X X"," Y ","X X",'X',new ItemStack(rawCruxite, 1),'Y',new ItemStack(Items.IRON_INGOT,1)});
 		GameRegistry.addRecipe(new ItemStack(disk, 1, 1),new Object[]{ " X ","XYX"," X ",'X',new ItemStack(rawCruxite, 1),'Y',new ItemStack(Items.IRON_INGOT,1)});
-		GameRegistry.addShapelessRecipe(new ItemStack(rawCruxite, 9),new  ItemStack(cruxiteBlock));
+		GameRegistry.addShapelessRecipe(new ItemStack(rawCruxite, 9), new ItemStack(cruxiteBlock));
 		GameRegistry.addRecipe(new ItemStack(cane, 1), new Object[] {"  X", " X ", "X  ", 'X', new ItemStack(Items.STICK, 1)});
 		GameRegistry.addRecipe(new ItemStack(deuceClub, 1), new Object[] {"  Y", " X ", "X  ", 'X', new ItemStack(Items.STICK, 1), 'Y', new ItemStack(Blocks.PLANKS, 1)});
 		GameRegistry.addRecipe(new ItemStack(fork, 1), new Object[] {"X X"," X "," X ", 'X', new ItemStack(Blocks.STONE,1)});
@@ -543,6 +543,7 @@ public class AlchemyRecipeHandler
 		GameRegistry.addRecipe(new ItemStack(castIronStairs, 4), new Object[] {"X  ", "XX ", "XXX", 'X', new ItemStack(stone, 1, BlockMinestuckStone.CAST_META)});
 		GameRegistry.addRecipe(new ItemStack(stone, 4, BlockMinestuckStone.SHADE_META), new Object[] {"XX", "XX", 'X', new ItemStack(stone, 1, BlockMinestuckStone.SHADE_SMOOTH_META)});
 		GameRegistry.addRecipe(new ItemStack(Blocks.PLANKS, 3, BlockPlanks.EnumType.SPRUCE.getMetadata()), new Object[] {"X", 'X', new ItemStack(woodenCactus)});
+		GameRegistry.addShapelessRecipe(new ItemStack(glowingPlanks, 4), new ItemStack(glowingLog));
 		
 		GameRegistry.addSmelting(goldSeeds, new ItemStack(Items.GOLD_NUGGET), 0.1F);
 		GameRegistry.addSmelting(ironOreSandstone, new ItemStack(Items.IRON_INGOT), 0.7F);
@@ -624,6 +625,7 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(obsidianBucket), new GristSet(new GristType[] {GristType.Rust, GristType.Cobalt, GristType.Tar, GristType.Build}, new int[] {27, 8, 16, 4}));
 		GristRegistry.addGristConversion(new ItemStack(glowingMushroom), new GristSet(new GristType[] {GristType.Build, GristType.Shale, GristType.Mercury}, new int[] {5, 3, 2}));
 		GristRegistry.addGristConversion(new ItemStack(glowingLog), new GristSet(new GristType[] {GristType.Build, GristType.Amber, GristType.Mercury}, new int[] {8, 4, 4}));
+		GristRegistry.addGristConversion(new ItemStack(glowingPlanks), new GristSet(new GristType[] {GristType.Build, GristType.Amber, GristType.Mercury}, new int[] {2, 1, 1}));
 		GristRegistry.addGristConversion(new ItemStack(goldSeeds), new GristSet(GristType.Gold, 3));
 		GristRegistry.addGristConversion(new ItemStack(emeraldSword), false, new GristSet(new GristType[] {GristType.Quartz, GristType.Diamond, GristType.Ruby}, new int[] {44, 76, 72}));
 		GristRegistry.addGristConversion(new ItemStack(emeraldAxe), false, new GristSet(new GristType[] {GristType.Amber, GristType.Diamond, GristType.Ruby}, new int[] {40, 73, 70}));
@@ -738,6 +740,7 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Blocks.BROWN_MUSHROOM), new ItemStack(Items.GLOWSTONE_DUST), MODE_OR, new ItemStack(glowingMushroom));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.LOG), new ItemStack(glowingMushroom), MODE_OR, false, true, new ItemStack(glowingLog));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.LOG2), new ItemStack(glowingMushroom), MODE_OR, false, true, new ItemStack(glowingLog));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.PLANKS), new ItemStack(glowingMushroom), MODE_OR, false, true, new ItemStack(glowingPlanks));
 		CombinationRegistry.addCombination(new ItemStack(Items.SUGAR), new ItemStack(Items.WHEAT_SEEDS), MODE_AND, new ItemStack(candy, 1, 0));
 		CombinationRegistry.addCombination(new ItemStack(Items.WOODEN_SHOVEL), new ItemStack(Items.BOWL), MODE_AND, new ItemStack(woodenSpoon));
 		CombinationRegistry.addCombination(new ItemStack(Items.WOODEN_SHOVEL), new ItemStack(Items.MUSHROOM_STEW), MODE_AND, new ItemStack(woodenSpoon));
