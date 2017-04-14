@@ -18,11 +18,11 @@ public abstract class ItemHanging extends Item
 	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
 		ItemStack stack = player.getHeldItem(hand);
-		BlockPos blockpos = pos.offset(facing);
+		BlockPos blockPos = pos.offset(facing);
 		
-		if (facing != EnumFacing.DOWN && facing != EnumFacing.UP && player.canPlayerEdit(pos, facing, stack))
+		if (facing != EnumFacing.DOWN && facing != EnumFacing.UP && player.canPlayerEdit(blockPos, facing, stack))
 		{
-			EntityHanging entityhanging = this.createEntity(worldIn, pos, facing, stack);
+			EntityHanging entityhanging = this.createEntity(worldIn, blockPos, facing, stack);
 			
 			if (entityhanging != null && entityhanging.onValidSurface())
 			{
