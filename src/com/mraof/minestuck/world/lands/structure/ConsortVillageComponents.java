@@ -15,6 +15,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -33,7 +34,8 @@ public class ConsortVillageComponents
 		MapGenStructureIO.registerStructureComponent(ConsortVillageComponents.HighPipeHouse1.class, "MinestuckCVHPiH1");
 		
 		MapGenStructureIO.registerStructureComponent(ConsortVillageComponents.LoweredShellHouse1.class, "MinestuckCVLShH1");
-		MapGenStructureIO.registerStructureComponent(ConsortVillageComponents.TurtleMarketBuilding1.class, "MinestuckCVTuMB1");
+		MapGenStructureIO.registerStructureComponent(TurtleMarketBuilding1.class, "MinestuckCVTuMB1");
+		MapGenStructureIO.registerStructureComponent(TurtleTemple1.class, "MinestuckCVTuTe1");
 		
 		MapGenStructureIO.registerStructureComponent(ConsortVillageComponents.VillagePath.class, "MinestuckCVPth");
 	}
@@ -51,6 +53,7 @@ public class ConsortVillageComponents
 			case TURTLE:
 				list.add(new PieceWeight(LoweredShellHouse1.class, 3, MathHelper.getInt(random, 5, 8)));
 				list.add(new PieceWeight(TurtleMarketBuilding1.class, 10, MathHelper.getInt(random, 0, 2)));
+				list.add(new PieceWeight(TurtleTemple1.class, 10, MathHelper.getInt(random, 1, 1)));
 				break;
 			case IGUANA:
 				break;
@@ -169,6 +172,10 @@ public class ConsortVillageComponents
 		else if(pieceClass == TurtleMarketBuilding1.class)
 		{
 			villagePiece = TurtleMarketBuilding1.createPiece(start, structureComponents, rand, structureMinX, structureMinY, structureMinZ, facing);
+		}
+		else if(pieceClass == TurtleTemple1.class)
+		{
+			villagePiece = TurtleTemple1.createPiece(start, structureComponents, rand, structureMinX, structureMinY, structureMinZ, facing);
 		}
 		
 		return villagePiece;
@@ -699,7 +706,7 @@ public class ConsortVillageComponents
 					return true;
 				}
 				
-				this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.minY - 3, 0);
+				this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.minY, 0);
 			}
 			
 			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
@@ -767,6 +774,118 @@ public class ConsortVillageComponents
 			this.setBlockState(worldIn, lightBlock, 11, 5, 4, structureBoundingBoxIn);
 			this.setBlockState(worldIn, lightBlock, 12, 5, 15, structureBoundingBoxIn);
 			this.setBlockState(worldIn, lightBlock, 11, 5, 15, structureBoundingBoxIn);
+			
+			return true;
+		}
+	}
+	
+	public static class TurtleTemple1 extends ConsortVillagePiece
+	{
+		public TurtleTemple1()
+		{
+		
+		}
+		
+		public TurtleTemple1(VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
+		{
+			this.setCoordBaseMode(facing);
+			this.boundingBox = boundingBox;
+		}
+		
+		public static TurtleTemple1 createPiece(VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
+		{
+			StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, -1, 0, 11, 6, 13, facing);
+			return StructureComponent.findIntersecting(componentList, structureboundingbox) == null ? new TurtleTemple1(start, rand, structureboundingbox, facing) : null;
+		}
+		
+		@Override
+		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
+		{
+			if (this.averageGroundLvl < 0)
+			{
+				this.averageGroundLvl = this.getAverageGroundLevel(worldIn, structureBoundingBoxIn);
+				
+				if (this.averageGroundLvl < 0)
+				{
+					return true;
+				}
+				
+				this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.minY - 1, 0);
+			}
+			
+			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
+			IBlockState primaryBlock = provider.blockRegistry.getBlockState("structure_primary");
+			IBlockState secondaryBlock = provider.blockRegistry.getBlockState("structure_secondary");
+			IBlockState lightBlock = provider.blockRegistry.getBlockState("light_block");
+			IBlockState glassBlock1 = provider.blockRegistry.getBlockState("stained_glass_1");
+			IBlockState glassBlock2 = provider.blockRegistry.getBlockState("stained_glass_2");
+			
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 1, 9, 5, 3);
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 4, 9, 4, 5);
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 0, 6, 9, 3, 11);
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 4, 1, -1, 6, 4, -1);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 1, 9, 0, 5, primaryBlock, primaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, -1, 5, 9, -1, 11, primaryBlock, primaryBlock, false);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 0, 10, 1, 0, secondaryBlock, secondaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 2, 0, 6, 3, 0, secondaryBlock, secondaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 1, 0, 1, 3, secondaryBlock, secondaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 10, 0, 1, 10, 1, 3, secondaryBlock, secondaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 4, 0, 1, 5, primaryBlock, primaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, -1, 6, 0, 3, 12, primaryBlock, primaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 10, 0, 4, 10, 1, 5, primaryBlock, primaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 10, -1, 6, 10, 3, 12, primaryBlock, primaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, -1, 12, 9, 3, 12, primaryBlock, primaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 4, 0, 9, 5, 0, primaryBlock, primaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 2, 0, 0, 5, 3, primaryBlock, primaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 4, 4, 0, 4, 5, primaryBlock, primaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 10, 2, 0, 10, 5, 3, primaryBlock, primaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 10, 4, 4, 10, 4, 5, primaryBlock, primaryBlock, false);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 4, 6, 9, 4, 11, primaryBlock, primaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 5, 4, 9, 5, 5, primaryBlock, primaryBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 6, 1, 9, 6, 3, primaryBlock, primaryBlock, false);
+			
+			this.setBlockState(worldIn, lightBlock, 1, 0, 1, structureBoundingBoxIn);
+			this.setBlockState(worldIn, lightBlock, 9, 0, 1, structureBoundingBoxIn);
+			this.setBlockState(worldIn, lightBlock, 1, -1, 11, structureBoundingBoxIn);
+			this.setBlockState(worldIn, lightBlock, 9, -1, 11, structureBoundingBoxIn);
+			
+			this.setBlockState(worldIn, glassBlock1, 1, 2, 0, structureBoundingBoxIn);
+			this.setBlockState(worldIn, glassBlock1, 1, 3, 0, structureBoundingBoxIn);
+			this.setBlockState(worldIn, glassBlock2, 2, 2, 0, structureBoundingBoxIn);
+			this.setBlockState(worldIn, glassBlock2, 2, 3, 0, structureBoundingBoxIn);
+			this.setBlockState(worldIn, glassBlock1, 2, 4, 0, structureBoundingBoxIn);
+			this.setBlockState(worldIn, glassBlock1, 3, 2, 0, structureBoundingBoxIn);
+			this.setBlockState(worldIn, glassBlock1, 3, 3, 0, structureBoundingBoxIn);
+			
+			this.setBlockState(worldIn, glassBlock1, 7, 2, 0, structureBoundingBoxIn);
+			this.setBlockState(worldIn, glassBlock1, 7, 3, 0, structureBoundingBoxIn);
+			this.setBlockState(worldIn, glassBlock2, 8, 2, 0, structureBoundingBoxIn);
+			this.setBlockState(worldIn, glassBlock2, 8, 3, 0, structureBoundingBoxIn);
+			this.setBlockState(worldIn, glassBlock1, 8, 4, 0, structureBoundingBoxIn);
+			this.setBlockState(worldIn, glassBlock1, 9, 2, 0, structureBoundingBoxIn);
+			this.setBlockState(worldIn, glassBlock1, 9, 3, 0, structureBoundingBoxIn);
+			
+			this.setBlockState(worldIn, glassBlock2, 0, 2, 3, structureBoundingBoxIn);
+			this.setBlockState(worldIn, glassBlock1, 0, 3, 3, structureBoundingBoxIn);
+			this.setBlockState(worldIn, glassBlock1, 0, 2, 4, structureBoundingBoxIn);
+			this.setBlockState(worldIn, glassBlock2, 0, 3, 4, structureBoundingBoxIn);
+			this.setBlockState(worldIn, glassBlock2, 0, 2, 5, structureBoundingBoxIn);
+			this.setBlockState(worldIn, glassBlock1, 0, 3, 5, structureBoundingBoxIn);
+			
+			this.setBlockState(worldIn, glassBlock2, 10, 2, 3, structureBoundingBoxIn);
+			this.setBlockState(worldIn, glassBlock1, 10, 3, 3, structureBoundingBoxIn);
+			this.setBlockState(worldIn, glassBlock1, 10, 2, 4, structureBoundingBoxIn);
+			this.setBlockState(worldIn, glassBlock2, 10, 3, 4, structureBoundingBoxIn);
+			this.setBlockState(worldIn, glassBlock2, 10, 2, 5, structureBoundingBoxIn);
+			this.setBlockState(worldIn, glassBlock1, 10, 3, 5, structureBoundingBoxIn);
+			
+			this.func_189915_a(worldIn, structureBoundingBoxIn, randomIn, 5, 1, 0, EnumFacing.NORTH, Blocks.IRON_DOOR);
+			
+			this.setBlockState(worldIn, Blocks.STONE_BUTTON.getDefaultState().withRotation(Rotation.CLOCKWISE_180), 6, 1, -1, structureBoundingBoxIn);
+			this.setBlockState(worldIn, Blocks.STONE_BUTTON.getDefaultState(), 4, 1, 1, structureBoundingBoxIn);
 			
 			return true;
 		}

@@ -7,6 +7,7 @@ import net.minecraft.block.*;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Rotation;
 
@@ -76,6 +77,8 @@ public class StructureBlockRegistry
 		registerBlock("bucket1", Blocks.QUARTZ_BLOCK.getDefaultState());
 		registerBlock("bucket2", Blocks.IRON_BLOCK.getDefaultState());
 		registerBlock("glass", Blocks.GLASS.getDefaultState());
+		registerBlock("stained_glass_1", Blocks.STAINED_GLASS.getDefaultState().withProperty(BlockStainedGlass.COLOR, EnumDyeColor.GRAY));
+		registerBlock("stained_glass_2", Blocks.STAINED_GLASS.getDefaultState().withProperty(BlockStainedGlass.COLOR, EnumDyeColor.SILVER));
 	}
 	
 	private static class BlockEntry
