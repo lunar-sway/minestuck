@@ -37,6 +37,8 @@ public class ConsortVillageComponents
 		MapGenStructureIO.registerStructureComponent(TurtleMarketBuilding1.class, "MinestuckCVTuMB1");
 		MapGenStructureIO.registerStructureComponent(TurtleTemple1.class, "MinestuckCVTuTe1");
 		
+		MapGenStructureIO.registerStructureComponent(HighNakHousing1.class, "MinestuckCVHNaH1");
+		
 		MapGenStructureIO.registerStructureComponent(ConsortVillageComponents.VillagePath.class, "MinestuckCVPth");
 	}
 	
@@ -58,6 +60,7 @@ public class ConsortVillageComponents
 			case IGUANA:
 				break;
 			case NAKAGATOR:
+				list.add(new PieceWeight(HighNakHousing1.class, 6, MathHelper.getInt(random, 3, 5)));
 				break;
 		}
 		Iterator<PieceWeight> iterator = list.iterator();
@@ -176,6 +179,10 @@ public class ConsortVillageComponents
 		else if(pieceClass == TurtleTemple1.class)
 		{
 			villagePiece = TurtleTemple1.createPiece(start, structureComponents, rand, structureMinX, structureMinY, structureMinZ, facing);
+		}
+		else if(pieceClass == HighNakHousing1.class)
+		{
+			villagePiece = HighNakHousing1.createPiece(start, structureComponents, rand, structureMinX, structureMinY, structureMinZ, facing);
 		}
 		
 		return villagePiece;
@@ -916,6 +923,118 @@ public class ConsortVillageComponents
 			return true;
 		}
 	}
+	
+	/////////////////////////Nakagators
+	
+	
+	public static class HighNakHousing1 extends ConsortVillagePiece
+	{
+		public HighNakHousing1()
+		{
+		
+		}
+		
+		public HighNakHousing1(VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
+		{
+			this.setCoordBaseMode(facing);
+			this.boundingBox = boundingBox;
+		}
+		
+		public static HighNakHousing1 createPiece(VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
+		{
+			StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 8, 13, 9, facing);
+			return StructureComponent.findIntersecting(componentList, structureboundingbox) == null ? new HighNakHousing1(start, rand, structureboundingbox, facing) : null;
+		}
+		
+		@Override
+		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
+		{
+			if (this.averageGroundLvl < 0)
+			{
+				this.averageGroundLvl = this.getAverageGroundLevel(worldIn, structureBoundingBoxIn);
+				
+				if (this.averageGroundLvl < 0)
+				{
+					return true;
+				}
+				
+				this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.minY - 1, 0);
+			}
+			
+			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
+			IBlockState buildBlock = provider.blockRegistry.getBlockState("structure_primary");
+			IBlockState stairs1 = provider.blockRegistry.getStairs("structure_primary_stairs", EnumFacing.NORTH, false);
+			IBlockState stairs2 = provider.blockRegistry.getStairs("structure_primary_stairs", EnumFacing.SOUTH, false);
+			IBlockState doorBlock = provider.blockRegistry.getBlockState("village_door");
+			IBlockState floorBlock = provider.blockRegistry.getBlockState("ground");
+			
+			//Floor
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, -1, 1, 7, 0, 8, floorBlock, floorBlock, false);
+			
+			//Base walls and second/third floors
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 1, 1, 7, 12, 1, buildBlock, buildBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 1, 8, 7, 12, 8, buildBlock, buildBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 1, 2, 0, 12, 7, buildBlock, buildBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 7, 1, 2, 7, 12, 7, buildBlock, buildBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 4, 2, 6, 4, 7, buildBlock, buildBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 8, 2, 6, 8, 7, buildBlock, buildBlock, false);
+			
+			//Remove blocks in front of the building
+			this.clearFront(worldIn, structureBoundingBoxIn, 2, 5, 1, 0);
+			
+			//First floor clear, doors, windows and furnishing
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 2, 6, 3, 7);
+			this.func_189915_a(worldIn, structureBoundingBoxIn, randomIn, 3, 1, 1, EnumFacing.NORTH, (BlockDoor) doorBlock.getBlock());
+			this.func_189915_a(worldIn, structureBoundingBoxIn, randomIn, 4, 1, 1, EnumFacing.NORTH, (BlockDoor) doorBlock.getBlock());
+			this.setBlockState(worldIn, Blocks.AIR.getDefaultState(), 0, 2, 3, structureBoundingBoxIn);
+			this.setBlockState(worldIn, Blocks.AIR.getDefaultState(), 0, 2, 5, structureBoundingBoxIn);
+			this.setBlockState(worldIn, Blocks.AIR.getDefaultState(), 3, 2, 8, structureBoundingBoxIn);
+			this.setBlockState(worldIn, Blocks.AIR.getDefaultState(), 5, 2, 8, structureBoundingBoxIn);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 1, 5, 2, 1, 5, buildBlock, buildBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 1, 6, 3, 1, 7, buildBlock, buildBlock, false);
+			
+			//First to second floor stairs
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 1, 4, 6, 1, 7, buildBlock, buildBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 2, 5, 6, 2, 7, buildBlock, buildBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 3, 6, 6, 3, 7, buildBlock, buildBlock, false);
+			this.setBlockState(worldIn, stairs1, 6, 1, 3, structureBoundingBoxIn);
+			this.setBlockState(worldIn, stairs1, 6, 2, 4, structureBoundingBoxIn);
+			this.setBlockState(worldIn, stairs1, 6, 3, 5, structureBoundingBoxIn);
+			this.setBlockState(worldIn, stairs1, 6, 4, 6, structureBoundingBoxIn);
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 6, 4, 2, 6, 4, 5);
+			
+			//Second floor windows
+			this.setBlockState(worldIn, Blocks.AIR.getDefaultState(), 2, 6, 1, structureBoundingBoxIn);
+			this.setBlockState(worldIn, Blocks.AIR.getDefaultState(), 5, 6, 1, structureBoundingBoxIn);
+			this.setBlockState(worldIn, Blocks.AIR.getDefaultState(), 0, 6, 3, structureBoundingBoxIn);
+			this.setBlockState(worldIn, Blocks.AIR.getDefaultState(), 0, 6, 5, structureBoundingBoxIn);
+			this.setBlockState(worldIn, Blocks.AIR.getDefaultState(), 2, 6, 8, structureBoundingBoxIn);
+			this.setBlockState(worldIn, Blocks.AIR.getDefaultState(), 5, 6, 8, structureBoundingBoxIn);
+			this.setBlockState(worldIn, Blocks.AIR.getDefaultState(), 7, 6, 3, structureBoundingBoxIn);
+			this.setBlockState(worldIn, Blocks.AIR.getDefaultState(), 7, 6, 6, structureBoundingBoxIn);
+			
+			//Second to third floor stairs
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 5, 2, 1, 5, 5, buildBlock, buildBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 6, 2, 1, 6, 4, buildBlock, buildBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 7, 2, 1, 7, 3, buildBlock, buildBlock, false);
+			this.setBlockState(worldIn, stairs2, 1, 5, 6, structureBoundingBoxIn);
+			this.setBlockState(worldIn, stairs2, 1, 6, 5, structureBoundingBoxIn);
+			this.setBlockState(worldIn, stairs2, 1, 7, 4, structureBoundingBoxIn);
+			this.setBlockState(worldIn, stairs2, 1, 8, 3, structureBoundingBoxIn);
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 8, 4, 1, 8, 7);
+			
+			//Third floor windows
+			this.setBlockState(worldIn, Blocks.AIR.getDefaultState(), 2, 10, 1, structureBoundingBoxIn);
+			this.setBlockState(worldIn, Blocks.AIR.getDefaultState(), 5, 10, 1, structureBoundingBoxIn);
+			this.setBlockState(worldIn, Blocks.AIR.getDefaultState(), 0, 10, 3, structureBoundingBoxIn);
+			this.setBlockState(worldIn, Blocks.AIR.getDefaultState(), 0, 10, 5, structureBoundingBoxIn);
+			this.setBlockState(worldIn, Blocks.AIR.getDefaultState(), 7, 10, 3, structureBoundingBoxIn);
+			this.setBlockState(worldIn, Blocks.AIR.getDefaultState(), 7, 10, 6, structureBoundingBoxIn);
+			
+			return true;
+		}
+	}
+	
 	
 	/////////////////////////Utility
 	
