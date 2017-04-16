@@ -1,8 +1,5 @@
 package com.mraof.minestuck.world.lands.structure.blocks;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import net.minecraft.block.*;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -10,6 +7,9 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Rotation;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class StructureBlockRegistry
 {
@@ -71,6 +71,7 @@ public class StructureBlockRegistry
 		registerBlock("structure_planks_slab", Blocks.WOODEN_SLAB.getDefaultState(), BlockSlab.class);
 		registerBlock("village_door", Blocks.OAK_DOOR.getDefaultState(), BlockDoor.class);
 		registerBlock("village_path", "ground");
+		registerBlock("village_fence", Blocks.OAK_FENCE.getDefaultState());
 		registerBlock("fall_fluid", "ocean");
 		registerBlock("light_block", Blocks.GLOWSTONE.getDefaultState());
 		registerBlock("torch", Blocks.TORCH.getDefaultState(), BlockTorch.class);	//Class restriction needed because of the facing property
