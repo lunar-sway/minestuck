@@ -110,6 +110,47 @@ consort.doctorsInside=Our best village doctors found that staying outside in the
 consort.murderSilence=This is a great place for murder. No one will hear you scream.
 consort.silentUnderlings=This place is so quiet and peaceful. Too bad we can't hear underlings about to kill us.
 
+consort.zazzerpan=Old wizard Zazzerpan would be turning in his grave if he saw the horrors that walk these lands. Those giclopses sure are terrifying!
+consort.texasHistory=The place was %s, the year, was 20XX.
+
+consort.cantSee=We spent a lot of time making this shop looks really nice, we may have overdone it though, I can barely see over this counter.
+consort.naked=Special offer on shell polish, dear custom- wait a minute, where's your shell? Are you naked?
+consort.vines=Please don't climb on the vines outside, I won't be able to reach you and it'll be really upsetting to watch me fruitlessly try.
+consort.skaiaRocket=My house may be kind of in the ground, but my dreams are taller than any Giclops! One day I'm gonna fly a rocket to Skaia and prove that we're not all so timid.
+consort.advertisement=Been to the shop? They've got the best %s in the area!
+
+consort.disks=I used to be an adventurer like you, then I never got the disks.
+consort.whoops=Beware the man who speaks in hands, wait...wrong game.
+consort.fourthWall=Maybe you should do something more productive than talking to NPCs.
+
+consort.hats=I like crumpled hats, they're comfy and easy to wear!
+consort.cult1=We would love to invite you, %s of %s, to our secret wizards cult.
+consort.cult2=Meet me by dawn with mercury, salt, and sulfur to begin the initiation.
+consort.wwizard=Secret wizards? Th-there are no secret wizards! Wh-what're you speaking of, o-outlandish traveller?
+consort.stockMarket=I bought a bunch of stocks on the market... Now I'm broke...
+
+consort.college1=Please, I need to pay for my children to attend college...
+consort.college2=Wow, you have so many boondollars! I'll never make that much in my short, amphibious lifetime.
+
+consort.unknown1=They are coming...
+consort.unknown2=Huh? 'Who the fuck is They'? What kind of question is that?! I don't know! Who the fuck are you?
+
+consort.identity=I heard that the true name of the %s is %s. Isn't that cool?
+
+consort.peppyOffer=Hey there! I've got a wonderful item here for just 1000 boondollars? How about it kid?
+cosnort.peppyOffer.desc=This consort is way too nice to ever scam you! Surely you can trust them?
+consort.peppyOffer.buy=Buy "Wonderful item" [Pay 1000 boondollars]
+consort.peppyOffer.buy.reply=Sure! Why not?
+consort.peppyOffer.item= Here you are!
+consort.peppyOffer.deny=Do not buy from cheery salesman.
+consort.peppyOffer.deny.reply=No thanks! I'm short on cash.
+consort.peppyOffer.next=Oh! No worries! How about I sell it to you for just 500 boondollars instead??
+consort.peppyOffer.denyAgain=Still do not buy from cheery salesman.
+consort.peppyOffer.denyAgain.reply=I'm sorry, I meant *really* short on cash...
+consort.peppyOffer.buy2=Buy that cheap item! [pay 500 boondollars]
+consort.peppyOffer.buy2.reply=Sure! I'd be glad to!
+consort.peppyOffer.purchase=Thank you for your money!
+
 consort.denizenMention=It's a wonderful day. Hopefully some monster underneath the planet's surface doesn't eat us all!
 consort.floatingIsland=I heard a floating island just appeared somewhere near here recently and falling chunks destroyed a village underneath it!
 consort.ringFishing=My brother found a magic ring while fishing recently!
@@ -417,6 +458,7 @@ item.disk.Server.name=SBURB Server Disk
 item.chessboard.name=Chessboard
 item.minestuckBucket.oil.name=Bucket of Oil
 item.minestuckBucket.blood.name=Bucket of Blood
+item.minestuckBucket.blood.tooltop=It looks like Kool-Aid... But you're too scared to try it yourself.
 item.minestuckBucket.brainJuice.name=Bucket of Brain Juice
 item.modusCard.stack.name=Stack Modus
 item.modusCard.queue.name=Queue Modus
