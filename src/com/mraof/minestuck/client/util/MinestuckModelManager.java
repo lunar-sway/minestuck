@@ -30,6 +30,7 @@ import com.mraof.minestuck.block.BlockSburbMachine;
 import com.mraof.minestuck.block.BlockMinestuckStone;
 import com.mraof.minestuck.block.BlockColoredDirt;
 import com.mraof.minestuck.item.ItemMinestuckCandy;
+import com.mraof.minestuck.item.weapon.ItemDualWeapon;
 
 import static com.mraof.minestuck.block.MinestuckBlocks.*;
 import static com.mraof.minestuck.item.MinestuckItems.*;
@@ -47,6 +48,9 @@ public class MinestuckModelManager
 		ItemModelMesher modelRegistry = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
 		
 		//Items
+		////////////////////////////////////////////////////////////////////////////////
+		modelRegistry.register(CatClaws, new DualWeaponDefinition(CatClaws));
+		////////////////////////////////////////////////////////////////////////////////
 		register(clawHammer);
 		register(sledgeHammer);
 		register(blacksmithHammer);
@@ -199,6 +203,7 @@ public class MinestuckModelManager
 	{
 		//Items
 		ModelBakery.registerItemVariants(crockerSpork, new ResourceLocation("minestuck:crocker_fork"), new ResourceLocation("minestuck:crocker_spoon"));
+		ModelBakery.registerItemVariants(CatClaws,new ResourceLocation("minestuck:catclaws_sheathed"), new ResourceLocation("minestuck:catclaws_drawn"));
 		ModelBakery.registerItemVariants(cruxiteDowel, new ResourceLocation("minestuck:dowel_uncarved"), new ResourceLocation("minestuck:dowel_carved"), new ResourceLocation("minestuck:dowel_uncarved_blank"), new ResourceLocation("minestuck:dowel_carved_blank"));
 		ModelBakery.registerItemVariants(cruxiteApple, new ResourceLocation("minestuck:cruxite_apple"), new ResourceLocation("minestuck:cruxite_apple_blank"));
 		ModelBakery.registerItemVariants(cruxitePotion, new ResourceLocation("minestuck:cruxite_potion"), new ResourceLocation("minestuck:cruxite_potion_blank"));
@@ -289,6 +294,28 @@ public class MinestuckModelManager
 			return new ModelResourceLocation("minestuck:" + (crockerSpork.isSpoon(stack) ? "crocker_spoon" : "crocker_fork"), "inventory");
 		}
 	}
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	private static class DualWeaponDefinition implements ItemMeshDefinition
+	{
+		private Item item;
+		public DualWeaponDefinition(Item item){
+			this.item=item;
+		}
+		@Override
+		public ModelResourceLocation getModelLocation(ItemStack stack)
+		{
+			if(((ItemDualWeapon)this.item).IsDrawn(stack)){
+				
+				return new ModelResourceLocation("minestuck:" + ((ItemDualWeapon)this.item).Prefex + "_drawn","inventory");
+			}else
+				return new ModelResourceLocation("minestuck:" + ((ItemDualWeapon)this.item).Prefex + "_sheathed","inventory");
+			
+		}
+	}
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 	
 	private static class CruxiteDowelDefinition implements ItemMeshDefinition
 	{
