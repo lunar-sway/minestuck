@@ -29,9 +29,6 @@ import static com.mraof.minestuck.block.MinestuckBlocks.*;
 public class MinestuckItems
 {
 	//hammers
-	//////////////////////////////////////////////////////////////////////////////////////////////////////
-	public static Item CatClaws;
-	//////////////////////////////////////////////////////////////////////////////////////////////////////
 	public static Item clawHammer;
 	public static Item sledgeHammer;
 	public static Item blacksmithHammer;
@@ -64,6 +61,8 @@ public class MinestuckItems
 	//Dice
 	public static Item dice;
 	public static Item fluoriteOctet;
+	//mic weapons
+	public static Item CatClaws;
 	//sickles
 	public static Item sickle;
 	public static Item homesSmellYaLater;
@@ -121,9 +120,6 @@ public class MinestuckItems
 	public static void registerItems()
 	{
 		//hammers
-		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		CatClaws = GameRegistry.register(new ItemDualWeapon(500, 5.0D, 1.0D, -1.0D,-1.5D, 6, "catclaws").setRegistryName("catclaws"));
-		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		clawHammer = GameRegistry.register(new ItemWeapon(131, 4.0D, -2.4D, 10, "clawHammer").setTool("pickaxe", 0, 1.0F).setRegistryName("claw_hammer"));
 		sledgeHammer = GameRegistry.register(new ItemWeapon(250, 6.0D, -2.8D, 8, "sledgeHammer").setTool("pickaxe", 2, 4.0F).setRegistryName("sledge_hammer"));
 		blacksmithHammer = GameRegistry.register(new ItemWeapon(450, 7.0D, -2.8D, 10, "blacksmithHammer").setTool("pickaxe", 2, 3.5F).setRegistryName("blacksmith_hammer"));
@@ -160,7 +156,8 @@ public class MinestuckItems
 		//Dice
 		dice = GameRegistry.register(new ItemWeapon(51, 6, 3, 6, "dice").setRegistryName("dice"));
 		fluoriteOctet = GameRegistry.register(new ItemWeapon(67, 15, 6, 8, "fluoriteOctet").setRegistryName("fluorite_octet"));
-		
+		//misc weapons
+		CatClaws = GameRegistry.register(new ItemDualWeapon(500, 5.0D, 1.0D, -1.5D,-1.0D, 6, "catclaws").setRegistryName("catclaws"));
 		//sickles
 		sickle = GameRegistry.register(new ItemWeapon(220, 4.0D, -2.4D, 8, "sickle").setRegistryName("sickle"));
 		homesSmellYaLater = GameRegistry.register(new ItemWeapon(400, 5.5D, -2.4D, 10, "homesSmellYaLater").setRegistryName("homes_smell_ya_later"));
