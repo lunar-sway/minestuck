@@ -67,10 +67,10 @@ public class ItemDualWeapon extends ItemWeapon{
 
         
         if (IsDrawn(stack)){
-        	return "item." + Prefex + "_drawn";
+        	return "item." + Prefex + "Drawn";
         }
         else{
-        	return "item." + Prefex +  "_sheathed";
+        	return "item." + Prefex +  "Sheathed";
         }
     }
 	@Override
