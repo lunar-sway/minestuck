@@ -48,9 +48,7 @@ public class MinestuckModelManager
 		ItemModelMesher modelRegistry = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
 		
 		//Items
-		////////////////////////////////////////////////////////////////////////////////
-		modelRegistry.register(CatClaws, new DualWeaponDefinition(CatClaws));
-		////////////////////////////////////////////////////////////////////////////////
+
 		register(clawHammer);
 		register(sledgeHammer);
 		register(blacksmithHammer);
@@ -82,6 +80,8 @@ public class MinestuckModelManager
 		
 		register(dice);
 		register(fluoriteOctet);
+		
+		modelRegistry.register(CatClaws, new DualWeaponDefinition(CatClaws));
 		
 		register(sickle);
 		register(homesSmellYaLater);
@@ -295,7 +295,7 @@ public class MinestuckModelManager
 		}
 	}
 	
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	private static class DualWeaponDefinition implements ItemMeshDefinition
 	{
 		private Item item;
@@ -313,7 +313,7 @@ public class MinestuckModelManager
 			
 		}
 	}
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 
 
 	
