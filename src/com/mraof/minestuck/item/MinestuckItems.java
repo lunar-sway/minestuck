@@ -10,6 +10,7 @@ import com.mraof.minestuck.entity.item.EntityCrewPoster;
 import com.mraof.minestuck.item.block.ItemBlockLayered;
 import com.mraof.minestuck.item.block.ItemSburbMachine;
 import com.mraof.minestuck.item.weapon.*;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityHanging;
 import net.minecraft.init.Items;
@@ -23,7 +24,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-
 import static com.mraof.minestuck.block.MinestuckBlocks.*;
 
 public class MinestuckItems
@@ -61,6 +61,8 @@ public class MinestuckItems
 	//Dice
 	public static Item dice;
 	public static Item fluoriteOctet;
+	//mic weapons
+	public static Item CatClaws;
 	//sickles
 	public static Item sickle;
 	public static Item homesSmellYaLater;
@@ -154,7 +156,8 @@ public class MinestuckItems
 		//Dice
 		dice = GameRegistry.register(new ItemWeapon(51, 6, 3, 6, "dice").setRegistryName("dice"));
 		fluoriteOctet = GameRegistry.register(new ItemWeapon(67, 15, 6, 8, "fluoriteOctet").setRegistryName("fluorite_octet"));
-		
+		//misc weapons
+		CatClaws = GameRegistry.register(new ItemDualWeapon(500, 5.0D, 1.0D, -1.5D,-1.0D, 6, "catclaws").setRegistryName("catclaws"));
 		//sickles
 		sickle = GameRegistry.register(new ItemWeapon(220, 4.0D, -2.4D, 8, "sickle").setRegistryName("sickle"));
 		homesSmellYaLater = GameRegistry.register(new ItemWeapon(400, 5.5D, -2.4D, 10, "homesSmellYaLater").setRegistryName("homes_smell_ya_later"));
