@@ -11,3 +11,4 @@
 *.launch
 /run
 /out
+!/.gitignore

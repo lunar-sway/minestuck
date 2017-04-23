@@ -2,6 +2,7 @@ package com.mraof.minestuck;
 
 import java.util.Random;
 
+import com.mraof.minestuck.command.*;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -27,13 +28,6 @@ import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.client.util.MinestuckModelManager;
-import com.mraof.minestuck.command.CommandCheckLand;
-import com.mraof.minestuck.command.CommandGristSend;
-import com.mraof.minestuck.command.CommandSburbServer;
-import com.mraof.minestuck.command.CommandSburbSession;
-import com.mraof.minestuck.command.CommandGrist;
-import com.mraof.minestuck.command.CommandSetRung;
-import com.mraof.minestuck.command.CommandTransportalizer;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
@@ -244,7 +238,7 @@ public class Minestuck
 		event.registerServerCommand(new CommandSburbSession());
 		event.registerServerCommand(new CommandSburbServer());
 		event.registerServerCommand(new CommandSetRung());
-		
+
 		worldSeed = event.getServer().worlds[0].getSeed();
 		ServerEventHandler.lastDay = event.getServer().worlds[0].getWorldTime() / 24000L;
 		CaptchaDeckHandler.rand = new Random();
