@@ -51,6 +51,7 @@ public class MinestuckItems
 	public static Item regisword;
 	public static Item scarletRibbitar;
 	public static Item doggMachete;
+	public static Item cobaltSabre;
 	//axes
 	public static Item blacksmithBane;
 	public static Item scraxe;
@@ -214,7 +215,8 @@ public class MinestuckItems
 		regisword = GameRegistry.register(new ItemWeapon(812, 6, -2.4D, 10, "regisword").setRegistryName("regisword"));
 		scarletRibbitar = GameRegistry.register(new ItemWeapon(2000, 7, -2.4D, 30, "scarletRibbitar").setRegistryName("scarlet_ribbitar"));
 		doggMachete = GameRegistry.register(new ItemWeapon(1000, 5, -2.4D, 30, "doggMachete").setRegistryName("dogg_machete"));
-
+		cobaltSabre = GameRegistry.register(new ItemFireWeapon(300, 7, -2.4D, 10, "cobaltSabre", 30).setRegistryName("cobalt_sabre"));
+		
 		//axes
 		blacksmithBane = GameRegistry.register(new ItemWeapon(413, 9.0D, -3.0D, 15, "blacksmithBane").setTool("axe", 2, 6.0F).setRegistryName("blacksmith_bane"));
 		scraxe = GameRegistry.register(new ItemWeapon(500, 10.0D, -3.0D, 20, "scraxe").setTool("axe", 2, 7.0F).setRegistryName("scraxe"));

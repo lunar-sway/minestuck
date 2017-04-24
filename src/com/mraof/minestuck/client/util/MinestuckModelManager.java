@@ -70,6 +70,7 @@ public class MinestuckModelManager
 		register(regisword);
 		register(scarletRibbitar);
 		register(doggMachete);
+		register(cobaltSabre);
 		
 		register(blacksmithBane);
 		register(scraxe);
