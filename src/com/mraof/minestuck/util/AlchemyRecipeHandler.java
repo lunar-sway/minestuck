@@ -590,6 +590,7 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(hotHandle), false, new GristSet(new GristType[] {GristType.Amber, GristType.Ruby, GristType.Sulfur}, new int[] {10, 15, 10}));
 		GristRegistry.addGristConversion(new ItemStack(regisword), false, new GristSet(new GristType[] {GristType.Amethyst, GristType.Tar,GristType.Gold}, new int[] {27, 62, 38}));
 		GristRegistry.addGristConversion(new ItemStack(unbreakableKatana), false, new GristSet(new GristType[] {GristType.Build, GristType.Uranium, GristType.Quartz, GristType.Ruby}, new int[] {1100, 63, 115, 54}));
+		GristRegistry.addGristConversion(new ItemStack(cobaltSabre), false, new GristSet(new GristType[] {GristType.Build, GristType.Uranium, GristType.Cobalt, GristType.Diamond}, new int[] {1300, 90, 175, 30}));
 		
 		GristRegistry.addGristConversion(new ItemStack(woodenSpoon), false, new GristSet(GristType.Build, 5));
 		GristRegistry.addGristConversion(new ItemStack(silverSpoon), false, new GristSet(new GristType[] {GristType.Build, GristType.Mercury}, new int[] {6, 4}));
@@ -678,6 +679,7 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Items.IRON_SWORD), new ItemStack(chessboard), MODE_AND, false, true, new ItemStack(regisword));
 		CombinationRegistry.addCombination(new ItemStack(katana), new ItemStack(chessboard), MODE_AND, false, true, new ItemStack(regisword));
 		CombinationRegistry.addCombination(new ItemStack(katana), new ItemStack(Blocks.OBSIDIAN), MODE_AND, new ItemStack(unbreakableKatana));
+		CombinationRegistry.addCombination(new ItemStack(hotHandle), new ItemStack(Blocks.LAPIS_BLOCK), MODE_OR, new ItemStack(cobaltSabre));
 		
 		//axes
 		CombinationRegistry.addCombination(new ItemStack(Items.WOODEN_AXE), new ItemStack(Blocks.ANVIL), MODE_AND, false, true, new ItemStack(blacksmithBane));
