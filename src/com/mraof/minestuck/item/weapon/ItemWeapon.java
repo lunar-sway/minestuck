@@ -7,6 +7,7 @@ import java.util.PriorityQueue;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.Pair;
@@ -17,6 +18,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
@@ -153,27 +155,28 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 	
 	private void reinitializeFarMineLists()
 	{
-		farMineForbiddenBlocks.add(Block.getBlockById(1));		//Stone
-		farMineForbiddenBlocks.add(Block.getBlockById(2));		//Grass
-		farMineForbiddenBlocks.add(Block.getBlockById(87));		//Netherrack
-		farMineForbiddenBlocks.add(Block.getBlockById(121));	//End Stone
-		farMineForbiddenBlocks.add(Block.getBlockFromName("minestuck:colored_dirt"));
+		farMineForbiddenBlocks.add(Blocks.STONE);		//Stone
+		farMineForbiddenBlocks.add(Blocks.GRASS);		//Grass
+		farMineForbiddenBlocks.add(Blocks.NETHERRACK);	//Netherrack
+		farMineForbiddenBlocks.add(Blocks.END_STONE);	//End Stone
+		farMineForbiddenBlocks.add(MinestuckBlocks.coloredDirt);
 
-		farMineBaseAcceptables.add(Block.getBlockById(14));		//Gold Ore
-		farMineBaseAcceptables.add(Block.getBlockById(15));		//Iron Ore
-		farMineBaseAcceptables.add(Block.getBlockById(16));		//Coal Ore
-		farMineBaseAcceptables.add(Block.getBlockById(21));		//Lapis Ore
-		farMineBaseAcceptables.add(Block.getBlockById(56));		//Diamond Ore
-		farMineBaseAcceptables.add(Block.getBlockById(73));		//Redstone Ore
-		farMineBaseAcceptables.add(Block.getBlockById(129));	//Emerald Ore
-		farMineBaseAcceptables.add(Block.getBlockById(153));	//Nether Quartz Ore
-		farMineBaseAcceptables.add(Block.getBlockById(24));		//Sandstone
-		farMineBaseAcceptables.add(Block.getBlockById(155));	//Quartz
-		farMineBaseAcceptables.add(Block.getBlockById(168));	//Prismarine
-		farMineBaseAcceptables.add(Block.getBlockById(179));	//Red Sandstone
-		farMineBaseAcceptables.add(Block.getBlockFromName("minestuck:ore_cruxite"));
+		farMineBaseAcceptables.add(Blocks.GOLD_ORE);		//Gold Ore
+		farMineBaseAcceptables.add(Blocks.IRON_ORE);		//Iron Ore
+		farMineBaseAcceptables.add(Blocks.COAL_ORE);		//Coal Ore
+		farMineBaseAcceptables.add(Blocks.LAPIS_ORE);		//Lapis Ore
+		farMineBaseAcceptables.add(Blocks.DIAMOND_ORE);		//Diamond Ore
+		farMineBaseAcceptables.add(Blocks.REDSTONE_ORE);	//Redstone Ore
+		farMineBaseAcceptables.add(Blocks.EMERALD_ORE);		//Emerald Ore
+		farMineBaseAcceptables.add(Blocks.QUARTZ_ORE);		//Nether Quartz Ore
+		farMineBaseAcceptables.add(Blocks.SANDSTONE);		//Sandstone
+		farMineBaseAcceptables.add(Blocks.QUARTZ_BLOCK);	//Quartz
+		farMineBaseAcceptables.add(Blocks.PRISMARINE);		//Prismarine
+		farMineBaseAcceptables.add(Blocks.RED_SANDSTONE);	//Red Sandstone
+		farMineBaseAcceptables.add(MinestuckBlocks.oreCruxite);
 
-		farMineForceAcceptable.add(Block.getBlockFromName("minecraft:log"));
+		farMineForceAcceptable.add(Blocks.LOG);
+		farMineForceAcceptable.add(Blocks.LOG2);
 	}
 
 	//Thanks to Mraof for supplying the base for this method.
