@@ -50,12 +50,12 @@ public class MinestuckItems
 	public static Item scarletRibbitar;
 	public static Item doggMachete;
 	//axes
+	public static Item copseCrusher;
 	public static Item blacksmithBane;
 	public static Item scraxe;
+	public static Item qPHammerAxe;
 	public static Item rubyCroak;
 	public static Item hephaestusLumber;
-	public static Item copseCrusher;
-	public static Item qPHammerAxe;
 	//Dice
 	public static Item dice;
 	public static Item fluoriteOctet;
@@ -143,12 +143,12 @@ public class MinestuckItems
 		doggMachete = GameRegistry.register(new ItemWeapon(1000, 5, -2.4D, 30, "doggMachete").setRegistryName("dogg_machete"));
 
 		//axes
+		copseCrusher = GameRegistry.register(new ItemWeapon(400, 6.0D, -3.0D, 20, "copseCrusher", 5).setTool("axe", 2, 7.0F).setRegistryName("copse_crusher"));
 		blacksmithBane = GameRegistry.register(new ItemWeapon(413, 9.0D, -3.0D, 15, "blacksmithBane").setTool("axe", 2, 6.0F).setRegistryName("blacksmith_bane"));
 		scraxe = GameRegistry.register(new ItemWeapon(500, 10.0D, -3.0D, 20, "scraxe").setTool("axe", 2, 7.0F).setRegistryName("scraxe"));
+		qPHammerAxe = GameRegistry.register(new ItemPogoWeapon(800, 10.0D, -3.0D, 30, "qPHammerAxe", 0.6).setTool("axe", 2, 7.0F).setTool("pickaxe", 1, 2.0F).setRadius(10).setRegistryName("piston_powered_pogo_axehammer"));
 		rubyCroak = GameRegistry.register(new ItemWeapon(2000, 11.0D, -2.9D, 30, "rubyCroak").setTool("axe", 3, 8.0F).setRegistryName("ruby_croak"));
 		hephaestusLumber = GameRegistry.register(new ItemFireWeapon(3000, 11.0D, -3.0D, 30, "hephaestusLumber", 30).setTool("axe", 3, 9.0F).setRegistryName("hephaestus_lumberjack"));
-		copseCrusher = GameRegistry.register(new ItemWeapon(500, 10.0D, -3.0D, 20, "copseCrusher", 5).setTool("axe", 2, 7.0F).setRegistryName("copse_crusher"));
-		qPHammerAxe = GameRegistry.register(new ItemPogoWeapon(1000, 10.0D, -2.5D, 30, "qPHammerAxe", 0.6).setTool("axe", 2, 7.0F).setTool("pickaxe", 1, 2.0F).setRadius(10).setRegistryName("piston_powered_pogo_axehammer"));
 		
 		//Dice
 		dice = GameRegistry.register(new ItemWeapon(51, 6, 3, 6, "dice").setRegistryName("dice"));

@@ -11,6 +11,7 @@ import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.Pair;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -32,7 +33,9 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 	private final int enchantability;
 	private float efficiency;
 	private int radius = 0;
-	HashSet<IBlockState> farMineForbiddenBlocks = new HashSet<IBlockState>();
+	HashSet<Block> farMineBaseAcceptables = new HashSet<Block>();
+	HashSet<Block> farMineForbiddenBlocks = new HashSet<Block>();
+	HashSet<Block> farMineForceAcceptable = new HashSet<Block>(); 
 
 	@Deprecated
 	private ItemWeapon()
@@ -42,7 +45,7 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 
 	public ItemWeapon(int maxUses, double damageVsEntity, double weaponSpeed, int enchantability, String name)
 	{
-	    super(ToolMaterial.IRON);
+		super(ToolMaterial.IRON);
 		this.maxStackSize = 1;
 		this.setCreativeTab(Minestuck.tabMinestuck);
 		this.setMaxDamage(maxUses);
@@ -56,6 +59,10 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 	{
 		this(maxUses, damageVsEntity, weaponSpeed, enchantability, name);
 		this.radius = radius;
+		if(radius != 0)
+		{
+			reinitializeFarMineLists();
+		}
 	}
 
 	protected double getAttackDamage(ItemStack stack)
@@ -109,11 +116,11 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 	@Override
 	public float getStrVsBlock(ItemStack stack, IBlockState state)
 	{
-	    for(String tool : getToolClasses(stack))
-	    {
-	    	if(state.getBlock().isToolEffective(tool, state))
-	    	{
-	    	    return efficiency;
+		for(String tool : getToolClasses(stack))
+		{
+			if(state.getBlock().isToolEffective(tool, state))
+			{
+				return efficiency;
 			}
 		}
 		return super.getStrVsBlock(stack, state);
@@ -129,10 +136,6 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 		}
 	}
 	
-	/**
-	 * "FarMining" code created by BenjaminK April 2017.
-	 */
-	
 	public int getRadius()
 	{
 		return radius;
@@ -141,55 +144,85 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 	public ItemWeapon setRadius(int r)
 	{
 		radius = r;
+		if(farMineForbiddenBlocks.isEmpty())
+		{
+			reinitializeFarMineLists();
+		}
 		return this;
 	}
 	
-    //Thanks to Mraof for supplying the base for this method.
-    @Override
-    public boolean canHarvestBlock(IBlockState state, ItemStack stack)
-    {
-        String tool = state.getBlock().getHarvestTool(state);
-        if(getToolClasses(stack).contains(tool))
-        {
-            int blockHarvestLevel = state.getBlock().getHarvestLevel(state);
-            int toolHarvestLevel = getHarvestLevel(stack, tool, null, state);
-        	return toolHarvestLevel >= blockHarvestLevel;        	
-        } else
-        {
-        	return state.getMaterial().isToolNotRequired();
-        }
-    }
-    
-    //Because of the use of IBlockState to determine block equivalence,
-    //Blocks that would normally be considered equivalent but are trivially different
-    //Will still be considered different blocks. Examples include logs oriented in different directions
-    //Or torches mounted on different sides of blocks.
-    @Override
-    public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState blockState, BlockPos pos, EntityLivingBase playerIn)
-    {
-        Comparator<Pair> comparator = new pairedIntComparator();
-		PriorityQueue<Pair> candidates = new PriorityQueue<Pair>(comparator);
-		
-		//If the tool can't harvest the block, or the player is sneaking, or the tool doesn't farmine, don't farmine.
-		if(!canHarvestBlock(blockState, stack) || playerIn.isSneaking() || radius == 0)
+	private void reinitializeFarMineLists()
+	{
+		farMineForbiddenBlocks.add(Block.getBlockById(1));		//Stone
+		farMineForbiddenBlocks.add(Block.getBlockById(2));		//Grass
+		farMineForbiddenBlocks.add(Block.getBlockById(87));		//Netherrack
+		farMineForbiddenBlocks.add(Block.getBlockById(121));	//End Stone
+		farMineForbiddenBlocks.add(Block.getBlockFromName("minestuck:colored_dirt"));
+
+		farMineBaseAcceptables.add(Block.getBlockById(14));		//Gold Ore
+		farMineBaseAcceptables.add(Block.getBlockById(15));		//Iron Ore
+		farMineBaseAcceptables.add(Block.getBlockById(16));		//Coal Ore
+		farMineBaseAcceptables.add(Block.getBlockById(21));		//Lapis Ore
+		farMineBaseAcceptables.add(Block.getBlockById(56));		//Diamond Ore
+		farMineBaseAcceptables.add(Block.getBlockById(73));		//Redstone Ore
+		farMineBaseAcceptables.add(Block.getBlockById(129));	//Emerald Ore
+		farMineBaseAcceptables.add(Block.getBlockById(153));	//Nether Quartz Ore
+		farMineBaseAcceptables.add(Block.getBlockById(24));		//Sandstone
+		farMineBaseAcceptables.add(Block.getBlockById(155));	//Quartz
+		farMineBaseAcceptables.add(Block.getBlockById(168));	//Prismarine
+		farMineBaseAcceptables.add(Block.getBlockById(179));	//Red Sandstone
+		farMineBaseAcceptables.add(Block.getBlockFromName("minestuck:ore_cruxite"));
+
+		farMineForceAcceptable.add(Block.getBlockFromName("minecraft:log"));
+	}
+
+	//Thanks to Mraof for supplying the base for this method.
+	@Override
+	public boolean canHarvestBlock(IBlockState state, ItemStack stack)
+	{
+		String tool = state.getBlock().getHarvestTool(state);
+		if(getToolClasses(stack).contains(tool))
 		{
-			return super.onBlockDestroyed(stack, worldIn, blockState, pos, playerIn);
-			//All this really does is deal 2 damage to the item. 
+			int blockHarvestLevel = state.getBlock().getHarvestLevel(state);
+			int toolHarvestLevel = getHarvestLevel(stack, tool, null, state);
+			return toolHarvestLevel >= blockHarvestLevel;
+		} else
+		{
+			return state.getMaterial().isToolNotRequired();
 		}
-		//If the block is farmine-forbidden or it uses a tool other than this one, only do a 3x3 area.
-		//Or, if the tool's radius is too low to allow that, whatever the tool's radius is.
-		//Though the only way that would trigger would be if the radius was negative.
-		//Don't know why someone would do that, but it's possible.
-		else if(farMineForbiddenBlocks.contains(blockState) ||
-				(blockState.getMaterial().isToolNotRequired() && !getToolClasses(stack).contains(blockState.getBlock().getHarvestTool(blockState))))
+	}
+
+	//Because of the use of IBlockState to determine block equivalence,
+	//Blocks that would normally be considered equivalent but are trivially different
+	//Will still be considered different blocks. Examples include logs oriented in different directions
+	//Or torches mounted on different sides of blocks.
+	@Override
+	public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState blockState, BlockPos pos, EntityLivingBase playerIn)
+	{
+		Comparator<Pair> comparator = new pairedIntComparator();
+		PriorityQueue<Pair> candidates = new PriorityQueue<Pair>(comparator);
+		Block block = blockState.getBlock();
+		
+		//If the tool can't harvest the block, or the player is sneaking,
+		//or the tool doesn't farmine, or it's one of those blocks that breaks instantly, don't farmine.
+		if(!canHarvestBlock(blockState, stack) || playerIn.isSneaking()
+				|| radius == 0 || Math.abs(blockState.getBlockHardness(worldIn, pos))<0.000000001)
+		{
+			//All this really does is deal 2 damage to the item.
+			//Unless the block's hardness is 0, in which case it doesn't.
+			return super.onBlockDestroyed(stack, worldIn, blockState, pos, playerIn);
+		}
+		//If the block is acceptable and there's no tool mismatch, farmine normally
+		else if(getToolClasses(stack).contains(blockState.getBlock().getHarvestTool(blockState))
+				&& (farMineForceAcceptable.contains(block) || (!farMineForbiddenBlocks.contains(block) && farMineBaseAcceptables.contains(block))))
+		{
+			candidates.add(new Pair(pos, radius));
+		}
+		//Otherwise, cap out at a basic 3x3 area.
+		else
 		{
 			candidates.add(new Pair(pos, Math.min(1, radius)));
 		}
-		//Otherwise, farmine the blocks normally.
-		else
-		{
-			candidates.add(new Pair(pos, radius));
-		}		
 		
 		int damageCount = 1;	//Ensures the weapon takes at least 2 points of damage.
 		//This is important because all weapons take 2 damage when they break one block.
@@ -197,33 +230,35 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 		{
 			BlockPos curr = (BlockPos)candidates.peek().object1;
 			int rad = (Integer)candidates.poll().object2;
-			if(worldIn.getBlockState(curr)==blockState)
+			if(worldIn.getBlockState(curr).getBlock()==block)
 			{
-				worldIn.destroyBlock(curr, canHarvestBlock(blockState, stack));
+				block.dropBlockAsItem(worldIn, pos, blockState, 0);
+				worldIn.setBlockToAir(curr);
+				//worldIn.destroyBlock(curr, true);
 				damageCount++;
 				if(rad>0)
 				{
 					//Iterates across all blocks in a 3x3 cube centered on this block.
-	    			for(int i=-1; i<2; i++)
-	    			{
-	    				for(int j=-1; j<2; j++)
-	    				{
-	    					for(int k=-1; k<2; k++)
-	    					{
-	    						BlockPos newBlock = new BlockPos(curr.getX()+i, curr.getY()+j, curr.getZ()+k);
-	    						if(worldIn.getBlockState(newBlock)==blockState)
-	    						{
-	    							candidates.add(new Pair(newBlock, rad-1));
-	    						}
-	    					}
-	    				}
-	    			}
+					for(int i=-1; i<2; i++)
+					{
+						for(int j=-1; j<2; j++)
+						{
+							for(int k=-1; k<2; k++)
+							{
+								BlockPos newBlock = new BlockPos(curr.getX()+i, curr.getY()+j, curr.getZ()+k);
+								if(worldIn.getBlockState(newBlock).getBlock()==block)
+								{
+									candidates.add(new Pair(newBlock, rad-1));
+								}
+							}
+						}
+					}
 				}
 			}
 		}
 		stack.damageItem(damageCount, playerIn);
-    	return true;
-    }
+		return true;
+	}
 }
 
 class pairedIntComparator implements Comparator<Pair>
