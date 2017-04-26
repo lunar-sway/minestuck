@@ -147,7 +147,7 @@ public class GristHelper {
 			while (it.hasNext()) {
 				Entry<Integer, Integer> pairs = it.next();
 				setGrist(player, GristType.values()[(Integer) pairs.getKey()], getGrist(player, GristType.values()[(Integer)pairs.getKey()]) - (Integer)pairs.getValue());
-				if(SHOULD_OUTPUT_GRIST_CHANGES)
+				if(SHOULD_OUTPUT_GRIST_CHANGES && gristOwner!=null)
 				{
 					gristOwner.sendMessage(new TextComponentTranslation("You lost " + pairs.getValue() + " " + GristType.values()[(Integer) pairs.getKey()].getName() + " grist."));
 				}
@@ -186,7 +186,7 @@ public class GristHelper {
 			{
 				Entry<Integer, Integer> pairs = it.next();
 				setGrist(player, GristType.values()[(Integer) pairs.getKey()], getGrist(player, GristType.values()[(Integer)pairs.getKey()]) + (Integer)pairs.getValue());
-				if(SHOULD_OUTPUT_GRIST_CHANGES)
+				if(SHOULD_OUTPUT_GRIST_CHANGES && gristOwner!=null)
 				{
 					gristOwner.sendMessage(new TextComponentTranslation("You gained " + pairs.getValue() + " " + GristType.values()[(Integer) pairs.getKey()].getName() + " grist."));
 				}
