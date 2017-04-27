@@ -35,6 +35,7 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 	private final int enchantability;
 	private float efficiency;
 	private int radius = 0;
+	private int terminus = 1;
 	HashSet<Block> farMineBaseAcceptables = new HashSet<Block>();
 	HashSet<Block> farMineForbiddenBlocks = new HashSet<Block>();
 	HashSet<Block> farMineForceAcceptable = new HashSet<Block>(); 
@@ -57,13 +58,17 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 		this.setUnlocalizedName(name);
 	}
 	
-	public ItemWeapon(int maxUses, double damageVsEntity, double weaponSpeed, int enchantability, String name, int radius)
+	public ItemWeapon(int maxUses, double damageVsEntity, double weaponSpeed, int enchantability, String name, int r, int t)
 	{
 		this(maxUses, damageVsEntity, weaponSpeed, enchantability, name);
-		this.radius = radius;
+		radius = r;
+		terminus = t;
 		if(radius != 0)
 		{
 			reinitializeFarMineLists();
+		} else
+		{
+			terminus = Math.max(terminus, 1);
 		}
 	}
 
@@ -143,10 +148,11 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 		return radius;
 	}
 	
-	public ItemWeapon setRadius(int r)
+	public ItemWeapon setTerminus(int r, int t)
 	{
 		radius = r;
-		if(farMineForbiddenBlocks.isEmpty())
+		terminus = t;
+		if(farMineBaseAcceptables.isEmpty())
 		{
 			reinitializeFarMineLists();
 		}
@@ -155,25 +161,27 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 	
 	private void reinitializeFarMineLists()
 	{
-		farMineForbiddenBlocks.add(Blocks.STONE);		//Stone
-		farMineForbiddenBlocks.add(Blocks.GRASS);		//Grass
-		farMineForbiddenBlocks.add(Blocks.NETHERRACK);	//Netherrack
-		farMineForbiddenBlocks.add(Blocks.END_STONE);	//End Stone
-		farMineForbiddenBlocks.add(MinestuckBlocks.coloredDirt);
+		//farMineForbiddenBlocks.add(Blocks.STONE);
+		//farMineForbiddenBlocks.add(Blocks.GRASS);
+		//farMineForbiddenBlocks.add(Blocks.NETHERRACK);
+		//farMineForbiddenBlocks.add(Blocks.END_STONE);
+		//farMineForbiddenBlocks.add(MinestuckBlocks.coloredDirt);
 
-		farMineBaseAcceptables.add(Blocks.GOLD_ORE);		//Gold Ore
-		farMineBaseAcceptables.add(Blocks.IRON_ORE);		//Iron Ore
-		farMineBaseAcceptables.add(Blocks.COAL_ORE);		//Coal Ore
-		farMineBaseAcceptables.add(Blocks.LAPIS_ORE);		//Lapis Ore
-		farMineBaseAcceptables.add(Blocks.DIAMOND_ORE);		//Diamond Ore
-		farMineBaseAcceptables.add(Blocks.REDSTONE_ORE);	//Redstone Ore
-		farMineBaseAcceptables.add(Blocks.EMERALD_ORE);		//Emerald Ore
-		farMineBaseAcceptables.add(Blocks.QUARTZ_ORE);		//Nether Quartz Ore
-		farMineBaseAcceptables.add(Blocks.SANDSTONE);		//Sandstone
-		farMineBaseAcceptables.add(Blocks.QUARTZ_BLOCK);	//Quartz
-		farMineBaseAcceptables.add(Blocks.PRISMARINE);		//Prismarine
-		farMineBaseAcceptables.add(Blocks.RED_SANDSTONE);	//Red Sandstone
-		farMineBaseAcceptables.add(MinestuckBlocks.oreCruxite);
+		//farMineBaseAcceptables.add(Blocks.STONE);
+		
+		//farMineBaseAcceptables.add(Blocks.GOLD_ORE);
+		//farMineBaseAcceptables.add(Blocks.IRON_ORE);
+		//farMineBaseAcceptables.add(Blocks.COAL_ORE);
+		//farMineBaseAcceptables.add(Blocks.LAPIS_ORE);
+		//farMineBaseAcceptables.add(Blocks.DIAMOND_ORE);
+		//farMineBaseAcceptables.add(Blocks.REDSTONE_ORE);
+		//farMineBaseAcceptables.add(Blocks.EMERALD_ORE);
+		//farMineBaseAcceptables.add(Blocks.QUARTZ_ORE);
+		//farMineBaseAcceptables.add(Blocks.SANDSTONE);
+		//farMineBaseAcceptables.add(Blocks.QUARTZ_BLOCK);
+		//farMineBaseAcceptables.add(Blocks.PRISMARINE);
+		//farMineBaseAcceptables.add(Blocks.RED_SANDSTONE);
+		//farMineBaseAcceptables.add(MinestuckBlocks.oreCruxite);
 
 		farMineForceAcceptable.add(Blocks.LOG);
 		farMineForceAcceptable.add(Blocks.LOG2);
@@ -195,10 +203,6 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 		}
 	}
 
-	//Because of the use of IBlockState to determine block equivalence,
-	//Blocks that would normally be considered equivalent but are trivially different
-	//Will still be considered different blocks. Examples include logs oriented in different directions
-	//Or torches mounted on different sides of blocks.
 	@Override
 	public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState blockState, BlockPos pos, EntityLivingBase playerIn)
 	{
@@ -209,16 +213,12 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 		//If the tool can't harvest the block, or the player is sneaking,
 		//or the tool doesn't farmine, or it's one of those blocks that breaks instantly, don't farmine.
 		if(!canHarvestBlock(blockState, stack) || playerIn.isSneaking()
-				|| radius == 0 || Math.abs(blockState.getBlockHardness(worldIn, pos))<0.000000001)
-		{
-			//All this really does is deal 2 damage to the item.
-			//Unless the block's hardness is 0, in which case it doesn't.
+				|| radius == 0 || Math.abs(blockState.getBlockHardness(worldIn, pos))<0.000000001) {
 			return super.onBlockDestroyed(stack, worldIn, blockState, pos, playerIn);
 		}
 		//If the block is acceptable and there's no tool mismatch, farmine normally
 		else if(getToolClasses(stack).contains(blockState.getBlock().getHarvestTool(blockState))
-				&& (farMineForceAcceptable.contains(block) || (!farMineForbiddenBlocks.contains(block) && farMineBaseAcceptables.contains(block))))
-		{
+				&& (farMineForceAcceptable.contains(block) || !farMineForbiddenBlocks.contains(block))) {
 			candidates.add(new Pair(pos, radius));
 		}
 		//Otherwise, cap out at a basic 3x3 area.
@@ -227,19 +227,21 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 			candidates.add(new Pair(pos, Math.min(1, radius)));
 		}
 		
-		int damageCount = 1;	//Ensures the weapon takes at least 2 points of damage.
-		//This is important because all weapons take 2 damage when they break one block.
-		while(!candidates.isEmpty())
+		//This set will contain all the blocks you'll want to break in the end.
+		//This is used to determine if the number of blocks broken is too high.
+		//If it is, it mines a 3x3 area instead.
+		HashSet<BlockPos> blocksToBreak = new HashSet<BlockPos>();
+		
+		boolean flag = false;
+		while(!candidates.isEmpty() && flag==false)
 		{
 			BlockPos curr = (BlockPos)candidates.peek().object1;
 			int rad = (Integer)candidates.poll().object2;
-			if(worldIn.getBlockState(curr).getBlock()==block)
+			if(worldIn.getBlockState(curr).getBlock()==block && !blocksToBreak.contains(curr))
 			{
-				block.dropBlockAsItem(worldIn, pos, blockState, 0);
-				worldIn.setBlockToAir(curr);
-				//worldIn.destroyBlock(curr, true);
-				damageCount++;
-				if(rad>0)
+				blocksToBreak.add(curr);
+				
+				if(rad!=0)
 				{
 					//Iterates across all blocks in a 3x3 cube centered on this block.
 					for(int i=-1; i<2; i++)
@@ -257,21 +259,65 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 						}
 					}
 				}
+				
+			}
+			
+			if(blocksToBreak.size()+1 > stack.getMaxDamage() - stack.getItemDamage()
+					|| blocksToBreak.size()+1>terminus) {
+				flag=true;
 			}
 		}
-		stack.damageItem(damageCount, playerIn);
+		
+		//If you passed the break limit, only harvest a 3x3 area.
+		if(flag)
+		{
+			int damage = 1;
+			for(int i=-1; i<2; i++)
+			{
+				for(int j=-1; j<2; j++)
+				{
+					for(int k=-1; k<2; k++)
+					{
+						BlockPos newBlock = new BlockPos(pos.getX()+i, pos.getY()+j, pos.getZ()+k);
+						if(worldIn.getBlockState(newBlock).getBlock()==block
+								&& damage < stack.getMaxDamage() - stack.getItemDamage())
+						{
+							block.dropBlockAsItem(worldIn, pos, blockState, 0);
+							worldIn.setBlockToAir(newBlock);
+							damage++;
+						}
+					}
+				}
+			}
+			stack.damageItem(damage, playerIn);
+			
+		} else	//Otherwise, break ALL the blocks!
+		{
+			for(BlockPos blockToBreak : blocksToBreak)
+			{
+				block.dropBlockAsItem(worldIn, pos, blockState, 0);
+				worldIn.setBlockToAir(blockToBreak);
+			}
+			
+			//We add 1 because that means the tool will always take at least 2 damage.
+			//This is important because all ItemWeapons take at least 2 damage whenever it breaks a block.
+			//This is because ItemWeapon extends ItemSword.
+			stack.damageItem(blocksToBreak.size()+1, playerIn);
+		}
+		
 		return true;
 	}
-}
-
-class pairedIntComparator implements Comparator<Pair>
-{
-	@Override
-	public int compare(Pair x, Pair y)
+	
+	//This returns a larger-to-smaller comparison of the paired objects, assuming they are integers.
+	private class pairedIntComparator implements Comparator<Pair>
 	{
-		if(x == null || y ==null || x.object2==null || y.object2==null)
-			return 0;
-		
-		return (Integer)y.object2-(Integer)x.object2;
+		@Override
+		public int compare(Pair x, Pair y)
+		{
+			if(x == null || y ==null || x.object2==null || y.object2==null)
+				return 0;
+			
+			return (Integer)y.object2-(Integer)x.object2;
+		}
 	}
 }
