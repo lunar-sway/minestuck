@@ -241,6 +241,8 @@ item.blacksmithBane.name=Blacksmith's Bane
 item.scraxe.name=Scraxe
 item.rubyCroak.name=Ruby Croak
 item.hephaestusLumber.name=Hephaestus' Lumberjack
+item.copseCrusher.name=Copse Crusher
+item.qPHammerAxe.name=Piston-Powered Pogo Pulverizer 
 item.sickle.name=Sickle
 item.homesSmellYaLater.name=Homes Smell Ya Later
 item.fudgeSickle.name=Fudgesickle
@@ -320,6 +322,8 @@ item.candyZillium.name=Zillium Skittles
 item.threshDvd.name=Thresh Prince DVD
 item.crewPoster.name=Midnight Crew Poster
 item.sbahjPoster.name=Sweet Bro and Hella Jeff Poster
+item.catclawsDrawn.name=Cat Claws
+item.catclawsSheathed.name=Cat Claws
 
 itemGroup.tabMinestuck=Minestuck
 
