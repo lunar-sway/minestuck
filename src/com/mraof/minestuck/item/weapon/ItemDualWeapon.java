@@ -26,29 +26,31 @@ public class ItemDualWeapon extends ItemWeapon{
 		this.ShiethedSpeed=weaponSpeedWhileShiethed;
 	}
 	
-		public boolean IsDrawn(ItemStack itemStack)
+	public boolean IsDrawn(ItemStack itemStack)
+	{
+		return checkTagCompound(itemStack).getBoolean("IsDrawn");
+	}
+	
+	private NBTTagCompound checkTagCompound(ItemStack stack)
+	{
+		NBTTagCompound tagCompound = stack.getTagCompound();
+		if(tagCompound == null)
 		{
-			return checkTagCompound(itemStack).getBoolean("IsDrawn");
+			tagCompound = new NBTTagCompound();
+			stack.setTagCompound(tagCompound);
 		}
-		
-
-		private NBTTagCompound checkTagCompound(ItemStack stack)
+		if(!tagCompound.hasKey("IsDrawn"))
 		{
-		    NBTTagCompound tagCompound = stack.getTagCompound();
-		    if(tagCompound == null)
-			{
-				tagCompound = new NBTTagCompound();
-				stack.setTagCompound(tagCompound);
-			}
-			if(!tagCompound.hasKey("IsDrawn"))
-			{
-				tagCompound.setBoolean("IsDrawn", true);
-			}
-		    return tagCompound;
+			tagCompound.setBoolean("IsDrawn", true);
 		}
+		return tagCompound;
+	}
+	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn,World worldIn,EntityPlayer playerIn,EnumHand hand){
-		if(playerIn.isSneaking() ){
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
+	{
+		ItemStack itemStackIn = playerIn.getHeldItem(handIn);
+			if(playerIn.isSneaking() ){
 			if (IsDrawn(itemStackIn)){
 				Sheath(itemStackIn);
 			}else{
@@ -58,8 +60,6 @@ public class ItemDualWeapon extends ItemWeapon{
 		}
 		return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
 	}
-	
-	
 	
 	@Override
     public String getUnlocalizedName(ItemStack stack)
