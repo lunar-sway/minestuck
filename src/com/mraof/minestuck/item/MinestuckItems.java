@@ -9,13 +9,11 @@ import com.mraof.minestuck.block.BlockMinestuckStone;
 import com.mraof.minestuck.item.block.ItemBlockLayered;
 import com.mraof.minestuck.item.block.ItemSburbMachine;
 import com.mraof.minestuck.item.weapon.*;
-import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.*;
-import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -146,7 +144,7 @@ public class MinestuckItems
 		copseCrusher = GameRegistry.register(new ItemWeapon(400, 6.0D, -3.0D, 20, "copseCrusher", -1, 20).setTool("axe", 2, 7.0F).setRegistryName("copse_crusher"));
 		blacksmithBane = GameRegistry.register(new ItemWeapon(413, 9.0D, -3.0D, 15, "blacksmithBane").setTool("axe", 2, 6.0F).setRegistryName("blacksmith_bane"));
 		scraxe = GameRegistry.register(new ItemWeapon(500, 10.0D, -3.0D, 20, "scraxe").setTool("axe", 2, 7.0F).setRegistryName("scraxe"));
-		qPHammerAxe = GameRegistry.register(new ItemPogoWeapon(800, 10.0D, -3.0D, 30, "qPHammerAxe", 0.6).setTool("axe", 2, 7.0F).setTool("pickaxe", 1, 2.0F).setTerminus(-1, 50).setRegistryName("piston_powered_pogo_axehammer"));
+		qPHammerAxe = GameRegistry.register(new ItemPogoWeapon(800, 8.0D, -3.0D, 30, "qPHammerAxe", 0.6).setTool("axe", 2, 7.0F).setTool("pickaxe", 1, 2.0F).setTerminus(-1, 50).setRegistryName("piston_powered_pogo_axehammer"));
 		rubyCroak = GameRegistry.register(new ItemWeapon(2000, 11.0D, -2.9D, 30, "rubyCroak").setTool("axe", 3, 8.0F).setRegistryName("ruby_croak"));
 		hephaestusLumber = GameRegistry.register(new ItemFireWeapon(3000, 11.0D, -3.0D, 30, "hephaestusLumber", 30).setTool("axe", 3, 9.0F).setRegistryName("hephaestus_lumberjack"));
 		
