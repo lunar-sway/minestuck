@@ -225,18 +225,7 @@ public class MinestuckItems
 		goldSeeds = (ItemGoldSeeds) GameRegistry.register(new ItemGoldSeeds().setRegistryName("gold_seeds"));
 		metalBoat = (ItemMetalBoat) GameRegistry.register(new ItemMetalBoat().setRegistryName("metal_boat"));
 		candy = GameRegistry.register(new ItemMinestuckCandy().setRegistryName("candy"));
-		salad = GameRegistry.register(new ItemFood(1,0.8f,false){
-			//we can put these in their own ItemSalad Class, but it seamed a bit superficial.
-			//adds a tool tip
-			@Override
-		    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced)
-		    {	tooltip.add("It's literally just salad, Gordon Ramsay would not approve");}
-			//gives back a bowl
-		    @Nullable
-		    public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving)
-		    {	super.onItemUseFinish(stack, worldIn, entityLiving);
-		        return new ItemStack(Items.BOWL);}
-		}.setRegistryName("salad").setUnlocalizedName("salad").setCreativeTab(Minestuck.tabMinestuck));
+		salad = GameRegistry.register(new ItemSoup(1).setRegistryName("salad").setUnlocalizedName("salad").setCreativeTab(Minestuck.tabMinestuck));
 		threshDvd = GameRegistry.register(new Item().setRegistryName("thresh_dvd")).setUnlocalizedName("threshDvd").setMaxStackSize(1).setCreativeTab(Minestuck.tabMinestuck);
 		crewPoster = GameRegistry.register(new ItemHanging(){
 			@Override

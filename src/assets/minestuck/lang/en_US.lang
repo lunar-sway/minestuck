@@ -324,6 +324,7 @@ item.sbahjPoster.name=Sweet Bro and Hella Jeff Poster
 item.catclawsDrawn.name=Cat Claws
 item.catclawsSheathed.name=Cat Claws
 item.salad.name=Bowl of Leaves
+item.salad.tooltip=It's literally just salad, Gordon Ramsay would not approve.
 
 itemGroup.tabMinestuck=Minestuck
 
