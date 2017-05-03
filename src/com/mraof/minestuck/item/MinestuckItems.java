@@ -1,6 +1,6 @@
 package com.mraof.minestuck.item;
 
-import javax.annotation.Nullable;
+
 
 import com.google.common.base.Function;
 import com.mraof.minestuck.Minestuck;
@@ -13,11 +13,8 @@ import com.mraof.minestuck.item.block.ItemBlockLayered;
 import com.mraof.minestuck.item.block.ItemSburbMachine;
 import com.mraof.minestuck.item.weapon.*;
 
-import java.util.List;
 
 import net.minecraft.entity.EntityHanging;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
