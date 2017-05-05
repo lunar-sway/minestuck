@@ -5,6 +5,7 @@ import java.util.Iterator;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.item.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketEntityEffect;
@@ -97,29 +98,27 @@ public class Teleport
 			Entity newEntity = EntityList.createEntityByName(EntityList.getEntityString(entity), worldDest);
 			if(newEntity == null)
 				return false;
-			
+
+			NBTTagCompound nbt = new NBTTagCompound();
 			entity.dimension = destinationDimension;
+			entity.writeToNBT(nbt);
 			
-			entity.world.removeEntity(entity);
-			entity.isDead = false;
-			
-			entity.setPosition(x, y, z);
 			if(teleporter != null)
 				teleporter.makeDestination(entity, worldFrom, worldDest);
 			worldDest.updateEntityWithOptionalForce(entity, false);
 			
-			NBTTagCompound nbt = new NBTTagCompound();
-			entity.writeToNBT(nbt);
 			nbt.removeTag("Dimension");
 			newEntity.readFromNBT(nbt);
 			newEntity.timeUntilPortal = entity.timeUntilPortal;
-			
+			newEntity.setPosition(x, y, z);
+						
 			boolean flag = newEntity.forceSpawn;
 			newEntity.forceSpawn = true;
 			worldDest.spawnEntity(newEntity);
 			newEntity.forceSpawn = flag;
 			worldDest.updateEntityWithOptionalForce(newEntity, false);
 			
+			entity.world.removeEntity(entity);
 			entity.isDead = true;
 			worldFrom.resetUpdateEntityTick();
 			worldDest.resetUpdateEntityTick();

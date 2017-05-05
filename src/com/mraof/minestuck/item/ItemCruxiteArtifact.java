@@ -143,6 +143,10 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 						{
 							copyBlockDirect(chunk, chunk2, blockX & 15, blockY + yDiff, blockY, blockZ & 15);
 						}
+						else
+						{
+							worldserver1.setBlockState(new BlockPos(blockX, blockY + yDiff, blockZ), Blocks.AIR.getDefaultState(), 3);
+						}
 						bl += System.currentTimeMillis() - t;
 						if((te) != null)
 						{
@@ -219,13 +223,13 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 						if(MinestuckConfig.entryCrater)
 						{
 							if(worldserver0.getBlockState(pos).getBlock() != Blocks.BEDROCK)
-								worldserver0.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
+								worldserver0.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 						} else
 						{
 							TileEntity tileEntity = worldserver0.getTileEntity(pos);
 							if(tileEntity != null)
 								if(!creative)
-									worldserver0.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
+									worldserver0.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 								else if(tileEntity instanceof TileEntityComputer)	//Avoid duplicating computer data when a computer is kept in the overworld
 									((TileEntityComputer) tileEntity).programData = new NBTTagCompound();
 								else if(tileEntity instanceof TileEntityTransportalizer)
