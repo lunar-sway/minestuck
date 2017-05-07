@@ -13,6 +13,9 @@ import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
 import net.minecraft.block.BlockLog;
+import net.minecraft.block.BlockNewLog;
+import net.minecraft.block.BlockOldLog;
+import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.init.Blocks;
@@ -30,11 +33,11 @@ public class LandAspectWood extends TerrainLandAspect
 		registry.setBlockState("surface", Blocks.PLANKS.getDefaultState());
 		registry.setBlockState("ocean", Blocks.WATER.getDefaultState());
 		registry.setBlockState("river", Blocks.WATER.getDefaultState());
-		registry.setBlockState("structure_primary", Blocks.LOG.getStateFromMeta(3));
-		registry.setBlockState("structure_primary_decorative", Blocks.LOG2.getStateFromMeta(1));
+		registry.setBlockState("structure_primary", Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.JUNGLE));
+		registry.setBlockState("structure_primary_decorative", Blocks.LOG2.getDefaultState().withProperty(BlockNewLog.VARIANT, BlockPlanks.EnumType.DARK_OAK));
 		registry.setBlockState("structure_primary_stairs", Blocks.DARK_OAK_STAIRS.getDefaultState());
-		registry.setBlockState("structure_secondary", Blocks.PLANKS.getStateFromMeta(3));
-		registry.setBlockState("structure_secondary_decorative", Blocks.PLANKS.getStateFromMeta(5));
+		registry.setBlockState("structure_secondary", Blocks.PLANKS.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.JUNGLE));
+		registry.setBlockState("structure_secondary_decorative", Blocks.PLANKS.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.DARK_OAK));
 		registry.setBlockState("structure_secondary_stairs", Blocks.JUNGLE_STAIRS.getDefaultState());
 		registry.setBlockState("fall_fluid", Blocks.WATER.getDefaultState());
 		registry.setBlockState("light_block", MinestuckBlocks.glowingLog.getDefaultState());
