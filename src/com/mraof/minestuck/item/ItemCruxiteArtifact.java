@@ -217,13 +217,27 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 					int minY =  y - height;
 					minY = minY < 0 ? 0 : minY;
 					int maxY = MinestuckConfig.entryCrater ? Math.min(topY, y + height) + 1 : 256;
+					
+					//Meant to indicate if this block is on the outer edge of the moved region.
+					//boolean isEdge = true;	//Slow, with block updates.
+					boolean isEdge = Math.abs(radius-artifactRange)<1.0;	//Attempt at balance.
+					//boolean isEdge = false;	//Fast, without block updates.
+					
 					for(int blockY = minY; blockY < maxY; blockY++)
 					{
 						BlockPos pos = new BlockPos(blockX, blockY, blockZ);
 						if(MinestuckConfig.entryCrater)
 						{
 							if(worldserver0.getBlockState(pos).getBlock() != Blocks.BEDROCK)
-								worldserver0.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
+							{
+								if(isEdge || blockY == minY || blockY == maxY - 1)
+								{
+									worldserver0.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
+								} else
+								{
+									worldserver0.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
+								}
+							}
 						} else
 						{
 							TileEntity tileEntity = worldserver0.getTileEntity(pos);
