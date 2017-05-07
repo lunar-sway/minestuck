@@ -14,6 +14,7 @@ import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.BlockStoneBrick;
+import net.minecraft.block.BlockTorch;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.Vec3d;
 
@@ -24,13 +25,19 @@ public class LandAspectWood extends TerrainLandAspect
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("surface", Blocks.PLANKS.getDefaultState());
+		registry.setBlockState("ground", Blocks.STONE.getDefaultState());
 		registry.setBlockState("upper", Blocks.LOG.getDefaultState());
+		registry.setBlockState("surface", Blocks.PLANKS.getDefaultState());
 		registry.setBlockState("ocean", Blocks.WATER.getDefaultState());
-		registry.setBlockState("structure_primary", Blocks.LOG.getDefaultState());
-		registry.setBlockState("structure_primary_decorative", MinestuckBlocks.glowingLog.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE));
-		registry.setBlockState("structure_primary_stairs", Blocks.OAK_STAIRS.getDefaultState());
+		registry.setBlockState("river", Blocks.WATER.getDefaultState());
+		registry.setBlockState("structure_primary", Blocks.LOG.getStateFromMeta(3));
+		registry.setBlockState("structure_primary_decorative", Blocks.LOG2.getStateFromMeta(1));
+		registry.setBlockState("structure_primary_stairs", Blocks.DARK_OAK_STAIRS.getDefaultState());
+		registry.setBlockState("structure_secondary", Blocks.PLANKS.getStateFromMeta(3));
+		registry.setBlockState("structure_secondary_decorative", Blocks.PLANKS.getStateFromMeta(5));
+		registry.setBlockState("structure_secondary_stairs", Blocks.JUNGLE_STAIRS.getDefaultState());
 		registry.setBlockState("fall_fluid", Blocks.WATER.getDefaultState());
+		registry.setBlockState("light_block", MinestuckBlocks.glowingLog.getDefaultState());
 	}
 	
 	@Override
@@ -49,7 +56,7 @@ public class LandAspectWood extends TerrainLandAspect
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
 		list.add(new SurfaceDecoratorVein(Blocks.LEAVES.getDefaultState(), 15, 32, BiomeMinestuck.mediumRough));
-		list.add(new SurfaceDecoratorVein(Blocks.OAK_FENCE.getDefaultState(), 8, 32, BiomeMinestuck.mediumNormal));
+		list.add(new SurfaceDecoratorVein(MinestuckBlocks.log.getDefaultState(), 8, 32, BiomeMinestuck.mediumNormal));
 		list.add(new SurfaceDecoratorVein(Blocks.NETHERRACK.getDefaultState(), 5, 8, BiomeMinestuck.mediumNormal));
 		
 		list.add(new UndergroundDecoratorVein(Blocks.GRAVEL.getDefaultState(), 8, 33, 256));
@@ -81,7 +88,7 @@ public class LandAspectWood extends TerrainLandAspect
 	@Override
 	public float getRainfall()
 	{
-		return 0.5F;
+		return 0.6F;
 	}
 	
 }
