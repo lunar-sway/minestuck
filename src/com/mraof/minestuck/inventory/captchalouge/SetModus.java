@@ -1,19 +1,18 @@
 package com.mraof.minestuck.inventory.captchalouge;
 
-import java.util.Iterator;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.NonNullList;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.captchalouge.SetGuiHandler;
 import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler.ModusType;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Iterator;
 
 public class SetModus extends Modus
 {
@@ -123,6 +122,7 @@ public class SetModus extends Modus
 	
 	protected void fillList(NonNullList<ItemStack> items)
 	{
+		items.clear();
 		Iterator<ItemStack> iter = list.iterator();
 		for(int i = 0; i < size; i++)
 			if(iter.hasNext())
