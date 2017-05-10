@@ -210,6 +210,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 			for(int blockX = x - artifactRange; blockX <= x + artifactRange; blockX++)
 			{
 				int zWidth = (int) Math.sqrt(artifactRange * artifactRange - (blockX - x) * (blockX - x));
+				boolean isEdgeX = Math.abs(blockX-x)==artifactRange;
 				for(int blockZ = z - zWidth; blockZ <= z + zWidth; blockZ++)
 				{
 					double radius = Math.sqrt(((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2);
@@ -217,12 +218,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 					int minY =  y - height;
 					minY = minY < 0 ? 0 : minY;
 					int maxY = MinestuckConfig.entryCrater ? Math.min(topY, y + height) + 1 : 256;
-					
-					//Meant to indicate if this block is on the outer edge of the moved region.
-					//boolean isEdge = true;	//Slow, with block updates.
-					boolean isEdge = Math.abs(radius-artifactRange)<1.0;	//Attempt at balance.
-					//boolean isEdge = false;	//Fast, without block updates.
-					
+					boolean isEdgeZ = Math.abs(blockZ-z)==zWidth;
 					for(int blockY = minY; blockY < maxY; blockY++)
 					{
 						BlockPos pos = new BlockPos(blockX, blockY, blockZ);
@@ -230,7 +226,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 						{
 							if(worldserver0.getBlockState(pos).getBlock() != Blocks.BEDROCK)
 							{
-								if(isEdge || blockY == minY || blockY == maxY - 1)
+								if(isEdgeX || isEdgeZ || blockY == minY || blockY == --maxY)
 								{
 									worldserver0.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 								} else

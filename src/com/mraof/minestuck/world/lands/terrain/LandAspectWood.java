@@ -33,14 +33,14 @@ public class LandAspectWood extends TerrainLandAspect
 		registry.setBlockState("surface", Blocks.PLANKS.getDefaultState());
 		registry.setBlockState("ocean", Blocks.WATER.getDefaultState());
 		registry.setBlockState("river", Blocks.WATER.getDefaultState());
-		registry.setBlockState("structure_primary", Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.JUNGLE));
+		registry.setBlockState("structure_primary", Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.JUNGLE).withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE));
 		registry.setBlockState("structure_primary_decorative", Blocks.LOG2.getDefaultState().withProperty(BlockNewLog.VARIANT, BlockPlanks.EnumType.DARK_OAK));
 		registry.setBlockState("structure_primary_stairs", Blocks.DARK_OAK_STAIRS.getDefaultState());
 		registry.setBlockState("structure_secondary", Blocks.PLANKS.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.JUNGLE));
 		registry.setBlockState("structure_secondary_decorative", Blocks.PLANKS.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.DARK_OAK));
 		registry.setBlockState("structure_secondary_stairs", Blocks.JUNGLE_STAIRS.getDefaultState());
 		registry.setBlockState("fall_fluid", Blocks.WATER.getDefaultState());
-		registry.setBlockState("light_block", MinestuckBlocks.glowingLog.getDefaultState());
+		registry.setBlockState("light_block", MinestuckBlocks.glowingLog.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE));
 	}
 	
 	@Override
@@ -59,13 +59,13 @@ public class LandAspectWood extends TerrainLandAspect
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
 		list.add(new SurfaceDecoratorVein(Blocks.LEAVES.getDefaultState(), 15, 32, BiomeMinestuck.mediumRough));
-		list.add(new SurfaceDecoratorVein(MinestuckBlocks.log.getDefaultState(), 8, 32, BiomeMinestuck.mediumNormal));
-		list.add(new SurfaceDecoratorVein(Blocks.NETHERRACK.getDefaultState(), 5, 8, BiomeMinestuck.mediumNormal));
+		list.add(new SurfaceDecoratorVein(MinestuckBlocks.log.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE), 8, 32, BiomeMinestuck.mediumNormal));
+		list.add(new SurfaceDecoratorVein(Blocks.NETHERRACK.getDefaultState(), 6, 8, BiomeMinestuck.mediumNormal));
 		
 		list.add(new UndergroundDecoratorVein(Blocks.GRAVEL.getDefaultState(), 8, 33, 256));
-		list.add(new UndergroundDecoratorVein(Blocks.DIRT.getDefaultState(), 26, 17, 128));
-		list.add(new UndergroundDecoratorVein(Blocks.REDSTONE_ORE.getDefaultState(), 4, 7, 32));
-		list.add(new UndergroundDecoratorVein(Blocks.IRON_ORE.getDefaultState(), 4, 9, 32));
+		list.add(new UndergroundDecoratorVein(Blocks.DIRT.getDefaultState(), 18, 17, 128));
+		list.add(new UndergroundDecoratorVein(Blocks.REDSTONE_ORE.getDefaultState(), 8, 7, 32));
+		list.add(new UndergroundDecoratorVein(Blocks.IRON_ORE.getDefaultState(), 12, 9, 32));
 		list.add(new UndergroundDecoratorVein(Blocks.EMERALD_ORE.getDefaultState(), 8, 3, 24));
 		return list;
 	}
