@@ -226,7 +226,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 						{
 							if(worldserver0.getBlockState(pos).getBlock() != Blocks.BEDROCK)
 							{
-								if(isEdgeX || isEdgeZ || blockY == minY || blockY == --maxY)
+								if(isEdgeX || isEdgeZ || blockY == minY || blockY == maxY-1)
 								{
 									worldserver0.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 								} else
