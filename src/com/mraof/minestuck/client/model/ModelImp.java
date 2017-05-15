@@ -5,6 +5,8 @@
 // - ZeuX
 package com.mraof.minestuck.client.model;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
@@ -60,6 +62,9 @@ public class ModelImp extends ModelBase
 	@Override
 	public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale)
 	{
+		scale*=1.5F;
+		GL11.glTranslatef(0F, -0.6F, 0F);
+		
 		setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
 		Head.render(scale);
 		Body.render(scale);

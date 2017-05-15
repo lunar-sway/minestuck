@@ -351,6 +351,9 @@ land.desert=Deserts
 land.sandstone=Sandstone
 land.desertStone=Stony Deserts
 land.shade=Shade
+land.wood=Wood
+land.oak=Oak
+land.lumber=Lumber
 
 land.bucket=Buckets
 land.cake=Cake

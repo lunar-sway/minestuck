@@ -1,0 +1,254 @@
+{
+    "pools": [
+        {
+            "name": "main",
+            "rolls": 1,
+            "entries": [
+                {
+                    "entryName": "darkoak_planks",
+                    "type": "item",
+                    "name": "minecraft:planks",
+                    "weight": 10,
+                    "quality": -2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 8
+                            }
+                        },
+                        {
+                            "function": "set_data",
+                            "data": 5
+                        }
+                    ]
+                },
+                {
+                    "entryName": "jungle_planks",
+                    "type": "item",
+                    "name": "minecraft:planks",
+                    "weight": 15,
+                    "quality": -2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 2,
+                                "max": 16
+                            }
+                        },
+                        {
+                            "function": "set_data",
+                            "data": 3
+                        }
+                    ]
+                },
+                {
+                    "entryName": "oak_planks",
+                    "type": "item",
+                    "name": "minecraft:planks",
+                    "weight": 15,
+                    "quality": -2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 2,
+                                "max": 16
+                            }
+                        }
+                    ]
+                },
+                {
+                    "entryName": "darkoak_logs",
+                    "type": "item",
+                    "name": "minecraft:log2",
+                    "weight": 4,
+                    "quality": -2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "entryName": "jungle_logs",
+                    "type": "item",
+                    "name": "minecraft:log",
+                    "weight": 10,
+                    "quality": -2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 8
+                            }
+                        },
+                        {
+                            "function": "set_data",
+                            "data": 3
+                        }
+                    ]
+                },
+                {
+                    "entryName": "oak_logs",
+                    "type": "item",
+                    "name": "minecraft:log",
+                    "weight": 8,
+                    "quality": -2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 5
+                            }
+                        }
+                    ]
+                },
+                {
+                    "entryName": "darkoak_saplings",
+                    "type": "item",
+                    "name": "minecraft:sapling",
+                    "weight": 4,
+                    "quality": -2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 2
+                            }
+                        },
+                        {
+                            "function": "set_data",
+                            "data": 5
+                        }
+                    ]
+                },
+                {
+                    "entryName": "jungle_saplings",
+                    "type": "item",
+                    "name": "minecraft:sapling",
+                    "weight": 4,
+                    "quality": -2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 2
+                            }
+                        },
+                        {
+                            "function": "set_data",
+                            "data": 3
+                        }
+                    ]
+                },
+                {
+                    "entryName": "oak_saplings",
+                    "type": "item",
+                    "name": "minecraft:sapling",
+                    "weight": 4,
+                    "quality": -2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                },
+                {
+                    "entryName": "glowing_logs",
+                    "type": "item",
+                    "name": "minestuck:glowing_log",
+                    "weight": 8,
+                    "quality": -2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 5
+                            }
+                        }
+                    ]
+                },
+                {
+                    "entryName": "iron_ingots",
+                    "type": "item",
+                    "name": "minecraft:iron_ingot",
+                    "weight": 2,
+                    "quality": 2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        }
+                    ]
+                },
+                {
+                    "entryName": "redstone",
+                    "type": "item",
+                    "name": "minecraft:redstone",
+                    "weight": 5,
+                    "quality": 0,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 7
+                            }
+                        }
+                    ]
+                },
+                {
+                    "entryName": "pogo_hammer",
+                    "type": "item",
+                    "name": "minestuck:pogo_hammer",
+                    "weight": 3,
+                    "quality": 0,
+                    "functions": [
+                        {
+                            "function": "set_damage",
+                            "damage": {
+                                "min": 0.75,
+                                "max": 1
+                            }
+                        }
+                    ]
+                },
+                {
+                    "entryName": "iron_axe",
+                    "type": "item",
+                    "name": "minecraft:iron_axe",
+                    "weight": 3,
+                    "quality": 1,
+                    "functions": [
+                        {
+                            "function": "set_damage",
+                            "damage": {
+                                "min": 0.75,
+                                "max": 1
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -143,6 +143,10 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 						{
 							copyBlockDirect(chunk, chunk2, blockX & 15, blockY + yDiff, blockY, blockZ & 15);
 						}
+						else
+						{
+							worldserver1.setBlockState(new BlockPos(blockX, blockY + yDiff, blockZ), Blocks.AIR.getDefaultState(), 3);
+						}
 						bl += System.currentTimeMillis() - t;
 						if((te) != null)
 						{
@@ -206,6 +210,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 			for(int blockX = x - artifactRange; blockX <= x + artifactRange; blockX++)
 			{
 				int zWidth = (int) Math.sqrt(artifactRange * artifactRange - (blockX - x) * (blockX - x));
+				boolean isEdgeX = Math.abs(blockX-x)==artifactRange;
 				for(int blockZ = z - zWidth; blockZ <= z + zWidth; blockZ++)
 				{
 					double radius = Math.sqrt(((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2);
@@ -213,19 +218,28 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 					int minY =  y - height;
 					minY = minY < 0 ? 0 : minY;
 					int maxY = MinestuckConfig.entryCrater ? Math.min(topY, y + height) + 1 : 256;
+					boolean isEdgeZ = Math.abs(blockZ-z)==zWidth;
 					for(int blockY = minY; blockY < maxY; blockY++)
 					{
 						BlockPos pos = new BlockPos(blockX, blockY, blockZ);
 						if(MinestuckConfig.entryCrater)
 						{
 							if(worldserver0.getBlockState(pos).getBlock() != Blocks.BEDROCK)
-								worldserver0.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
+							{
+								if(isEdgeX || isEdgeZ || blockY == minY || blockY == maxY-1)
+								{
+									worldserver0.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
+								} else
+								{
+									worldserver0.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
+								}
+							}
 						} else
 						{
 							TileEntity tileEntity = worldserver0.getTileEntity(pos);
 							if(tileEntity != null)
 								if(!creative)
-									worldserver0.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
+									worldserver0.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 								else if(tileEntity instanceof TileEntityComputer)	//Avoid duplicating computer data when a computer is kept in the overworld
 									((TileEntityComputer) tileEntity).programData = new NBTTagCompound();
 								else if(tileEntity instanceof TileEntityTransportalizer)
