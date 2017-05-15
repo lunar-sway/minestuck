@@ -1,5 +1,6 @@
 package com.mraof.minestuck.item;
 
+import com.google.common.base.Function;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.BlockColoredDirt;
 import com.mraof.minestuck.block.BlockCrockerMachine;
@@ -9,6 +10,7 @@ import com.mraof.minestuck.entity.item.EntityCrewPoster;
 import com.mraof.minestuck.item.block.ItemBlockLayered;
 import com.mraof.minestuck.item.block.ItemSburbMachine;
 import com.mraof.minestuck.item.weapon.*;
+
 import net.minecraft.entity.EntityHanging;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
@@ -111,6 +113,7 @@ public class MinestuckItems
 	public static Item prismarineLeggings;
 	public static Item prismarineBoots;
 	public static Item candy;
+	public static Item salad;
 	public static Item threshDvd;
 	public static Item crewPoster;
 	public static Item sbahjPoster;
@@ -290,6 +293,7 @@ public class MinestuckItems
 		goldSeeds = (ItemGoldSeeds) GameRegistry.register(new ItemGoldSeeds().setRegistryName("gold_seeds"));
 		metalBoat = (ItemMetalBoat) GameRegistry.register(new ItemMetalBoat().setRegistryName("metal_boat"));
 		candy = GameRegistry.register(new ItemMinestuckCandy().setRegistryName("candy"));
+		salad = GameRegistry.register(new ItemSoup(1).setRegistryName("salad").setUnlocalizedName("salad").setCreativeTab(Minestuck.tabMinestuck));
 		threshDvd = GameRegistry.register(new Item().setRegistryName("thresh_dvd")).setUnlocalizedName("threshDvd").setMaxStackSize(1).setCreativeTab(Minestuck.tabMinestuck);
 		crewPoster = GameRegistry.register(new ItemHanging(){
 			@Override

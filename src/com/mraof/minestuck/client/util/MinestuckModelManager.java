@@ -149,6 +149,7 @@ public class MinestuckModelManager
 		register(obsidianBucket);
 		for(int i = 0; i < ItemMinestuckCandy.modelNames.length; i++)
 			register(candy, i, ItemMinestuckCandy.modelNames[i]);
+		register(salad);
 		register(threshDvd);
 		register(crewPoster);
 		register(sbahjPoster);
