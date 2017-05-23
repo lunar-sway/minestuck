@@ -63,7 +63,7 @@ public class ModelImp extends ModelBase
 	public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale)
 	{
 		scale*=1.5F;
-		GL11.glTranslatef(0F, -0.6F, 0F);
+		GL11.glTranslatef(0F, -0.8F, 0F);
 		
 		setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
 		Head.render(scale);
