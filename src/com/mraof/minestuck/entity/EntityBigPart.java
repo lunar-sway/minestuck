@@ -73,12 +73,11 @@ public class EntityBigPart extends EntityLivingBase implements IEntityAdditional
     {
         return new ArrayList<ItemStack>();
     }
-
-    @Nullable
+    
     @Override
     public ItemStack getItemStackFromSlot(EntityEquipmentSlot slotIn)
     {
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override
