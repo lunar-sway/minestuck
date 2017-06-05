@@ -1,27 +1,26 @@
 package com.mraof.minestuck.world.lands.terrain;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
+import com.mraof.minestuck.block.BlockMinestuckStone;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.consort.EnumConsort;
+import com.mraof.minestuck.world.biome.BiomeMinestuck;
+import com.mraof.minestuck.world.lands.decorator.BlockBlobDecorator;
+import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
+import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
+import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.lands.gen.DefaultTerrainGen;
+import com.mraof.minestuck.world.lands.gen.ILandTerrainGen;
+import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.BlockSilverfish;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.BlockStoneSlab;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.Vec3d;
 
-import com.mraof.minestuck.block.BlockMinestuckStone;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.world.biome.BiomeMinestuck;
-import com.mraof.minestuck.world.lands.decorator.BlockBlobDecorator;
-import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
-import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import com.mraof.minestuck.world.lands.gen.DefaultTerrainGen;
-import com.mraof.minestuck.world.lands.gen.ILandTerrainGen;
-import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class LandAspectRock extends TerrainLandAspect
 {
@@ -36,8 +35,8 @@ public class LandAspectRock extends TerrainLandAspect
 		registry.setBlockState("structure_secondary", MinestuckBlocks.stone.getDefaultState());
 		registry.setBlockState("structure_secondary_decorative", MinestuckBlocks.stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.COARSE_CHISELED));
 		registry.setBlockState("structure_secondary_stairs", MinestuckBlocks.coarseStoneStairs.getDefaultState());
-		registry.setBlockState("structure_planks", Blocks.BRICK_BLOCK.getDefaultState());
-		registry.setBlockState("structure_planks_slab", Blocks.STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.BRICK));
+		registry.setBlockState("structure_planks_slab", Blocks.STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.BRICK));		registry.setBlockState("structure_planks_slab", Blocks.STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.BRICK));
+		registry.setBlockState("village_path", MinestuckBlocks.stone.getDefaultState());
 	}
 	
 	@Override

@@ -1,21 +1,17 @@
 package com.mraof.minestuck.world.lands.structure;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-
-import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureStart;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 public class MapGenConsortVillage extends MapGenStructure
 {
@@ -115,6 +111,9 @@ public class MapGenConsortVillage extends MapGenStructure
 	
 	private static ConsortVillageComponents.VillageCenter getVillageStart(ChunkProviderLands provider, int x, int z, Random rand, List<ConsortVillageComponents.PieceWeight> list, LandAspectRegistry.AspectCombination landAspects)
 	{
+		if(landAspects.aspectTerrain.getPrimaryVariant().getPrimaryName().equals("rock"))
+			return new ConsortVillageComponents.RockCenter(list, x, z, rand);
+		
 		return new ConsortVillageComponents.VillageMarketCenter(list, x, z, rand);
 	}
 }

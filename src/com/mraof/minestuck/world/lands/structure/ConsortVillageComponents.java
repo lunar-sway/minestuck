@@ -29,6 +29,7 @@ public class ConsortVillageComponents
 	{
 		MapGenStructureIO.registerStructure(MapGenConsortVillage.Start.class, "MinestuckConsortVillage");
 		MapGenStructureIO.registerStructureComponent(ConsortVillageComponents.VillageMarketCenter.class, "MinestuckCVCM");
+		MapGenStructureIO.registerStructureComponent(ConsortVillageComponents.RockCenter.class, "MinestuckCVCRo");
 		
 		MapGenStructureIO.registerStructureComponent(ConsortVillageComponents.PipeHouse1.class, "MinestuckCVPiH1");
 		MapGenStructureIO.registerStructureComponent(ConsortVillageComponents.HighPipeHouse1.class, "MinestuckCVHPiH1");
@@ -326,6 +327,52 @@ public class ConsortVillageComponents
 						this.fillWithBlocks(world, structureBB, x, y, z, x, y + i - 1, z, Blocks.LADDER.getDefaultState(), Blocks.LADDER.getDefaultState(), false);
 				}
 		}
+		
+		protected void placeRoadtile(int x, int z, StructureBoundingBox boundingBox, World worldIn, IBlockState pathBlock)
+		{
+			BlockPos blockpos = new BlockPos(x, 64, z);
+			
+			if (boundingBox.isVecInside(blockpos))
+			{
+				blockpos = worldIn.getTopSolidOrLiquidBlock(blockpos).down();
+				
+				if (blockpos.getY() < worldIn.getSeaLevel())
+				{
+					blockpos = new BlockPos(blockpos.getX(), worldIn.getSeaLevel() - 1, blockpos.getZ());
+				}
+				
+				while (blockpos.getY() >= worldIn.getSeaLevel() - 1)
+				{
+					IBlockState state = worldIn.getBlockState(blockpos);
+					
+					if (state.getMaterial().isLiquid() || state.isNormalCube())
+					{
+						worldIn.setBlockState(blockpos, pathBlock, 2);
+						break;
+					}
+					
+					blockpos = blockpos.down();
+				}
+			}
+		}
+		
+		protected void blockPillar(int x, int y, int z, StructureBoundingBox boundingBox, World world, IBlockState block)
+		{
+			BlockPos pos = new BlockPos(this.getXWithOffset(x, z), this.getYWithOffset(y), this.getZWithOffset(x, z));
+			
+			if(!boundingBox.isVecInside(pos))
+				return;
+			
+			while(pos.getY() >= world.getSeaLevel())
+			{
+				world.setBlockState(pos, block, 2);
+				
+				pos = pos.down();
+				
+				if(world.getBlockState(pos).isOpaqueCube())
+					break;
+			}
+		}
 	}
 	
 	public abstract static class VillageCenter extends ConsortVillagePiece
@@ -485,6 +532,84 @@ public class ConsortVillageComponents
 			
 			this.setBlockState(worldIn, torch, 1, 2, 4, structureBoundingBoxIn);
 			this.setBlockState(worldIn, torch, 6, 2, 4, structureBoundingBoxIn);
+			
+			return true;
+		}
+		
+	}
+	
+	public static class RockCenter extends VillageCenter
+	{
+		public RockCenter()
+		{
+			super();
+		}
+		
+		public RockCenter(List<PieceWeight> pieceWeightList, int x, int z, Random rand)
+		{
+			super(pieceWeightList);
+			this.setCoordBaseMode(EnumFacing.Plane.HORIZONTAL.random(rand));
+			
+			this.boundingBox = new StructureBoundingBox(x, 64, z, x + 7 - 1, 78, z + 7 - 1);
+		}
+		
+		@Override
+		public void buildComponent(StructureComponent componentIn, List<StructureComponent> listIn, Random rand)
+		{
+			ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.minX + 3, boundingBox.minY, boundingBox.maxZ + 1, EnumFacing.SOUTH);
+			ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.minX - 1, boundingBox.minY, boundingBox.minZ + 3, EnumFacing.WEST);
+			ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.minX + 3, boundingBox.minY, boundingBox.minZ - 1, EnumFacing.NORTH);
+			ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.maxX + 1, boundingBox.minY, boundingBox.minZ + 3, EnumFacing.EAST);
+		}
+		
+		@Override
+		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
+		{
+			if (this.averageGroundLvl < 0)
+			{
+				this.averageGroundLvl = this.getAverageGroundLevel(worldIn, structureBoundingBoxIn);
+				
+				if (this.averageGroundLvl < 0)
+				{
+					return true;
+				}
+				
+				this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.minY - 1, 0);
+			}
+			
+			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
+			IBlockState road = provider.blockRegistry.getBlockState("village_path");
+			IBlockState rock = provider.blockRegistry.getBlockState("ground");
+			
+			for(int x = 0; x < 7; x++)
+			{
+				for (int z = 0; z < 2; z++)
+					this.placeRoadtile(this.boundingBox.minX + x, this.boundingBox.minZ + z, structureBoundingBoxIn, worldIn, road);
+				
+				for (int z = 5; z < 7; z++)
+					this.placeRoadtile(this.boundingBox.minX + x, this.boundingBox.minZ + z, structureBoundingBoxIn, worldIn, road);
+			}
+			
+			for(int z = 2; z < 5; z++)
+			{
+				for (int x = 0; x < 2; x++)
+					this.placeRoadtile(this.boundingBox.minX + x, this.boundingBox.minZ + z, structureBoundingBoxIn, worldIn, road);
+				
+				for (int x = 5; x < 7; x++)
+					this.placeRoadtile(this.boundingBox.minX + x, this.boundingBox.minZ + z, structureBoundingBoxIn, worldIn, road);
+			}
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 2, 1, 2, 4, 4, 4);
+			
+			this.blockPillar(2, randomIn.nextInt(2) + randomIn.nextInt(2), 2, boundingBox, worldIn, rock);
+			this.blockPillar(4, randomIn.nextInt(2) + randomIn.nextInt(2), 2, boundingBox, worldIn, rock);
+			this.blockPillar(2, randomIn.nextInt(2) + randomIn.nextInt(2), 4, boundingBox, worldIn, rock);
+			this.blockPillar(4, randomIn.nextInt(2) + randomIn.nextInt(2), 4, boundingBox, worldIn, rock);
+			
+			this.blockPillar(3, 2 + (randomIn.nextInt(4) == 3 ? 1 : 0), 2, boundingBox, worldIn, rock);
+			this.blockPillar(3, 2 + (randomIn.nextInt(4) == 3 ? 1 : 0), 4, boundingBox, worldIn, rock);
+			this.blockPillar(2, 2 + (randomIn.nextInt(4) == 3 ? 1 : 0), 3, boundingBox, worldIn, rock);
+			this.blockPillar(4, 2 + (randomIn.nextInt(4) == 3 ? 1 : 0), 3, boundingBox, worldIn, rock);
+			this.blockPillar(3, 3, 3, boundingBox, worldIn, rock);
 			
 			return true;
 		}
@@ -1273,30 +1398,7 @@ public class ConsortVillageComponents
 			{
 				for (int j = this.boundingBox.minZ; j <= this.boundingBox.maxZ; ++j)
 				{
-					BlockPos blockpos = new BlockPos(i, 64, j);
-					
-					if (structureBoundingBoxIn.isVecInside(blockpos))
-					{
-						blockpos = worldIn.getTopSolidOrLiquidBlock(blockpos).down();
-						
-						if (blockpos.getY() < worldIn.getSeaLevel())
-						{
-							blockpos = new BlockPos(blockpos.getX(), worldIn.getSeaLevel() - 1, blockpos.getZ());
-						}
-						
-						while (blockpos.getY() >= worldIn.getSeaLevel() - 1)
-						{
-							IBlockState state = worldIn.getBlockState(blockpos);
-							
-							if (state.getMaterial().isLiquid() || state.isNormalCube())
-							{
-								worldIn.setBlockState(blockpos, pathBlock, 2);
-								break;
-							}
-							
-							blockpos = blockpos.down();
-						}
-					}
+					placeRoadtile(i, j, structureBoundingBoxIn, worldIn, pathBlock);
 				}
 			}
 			
