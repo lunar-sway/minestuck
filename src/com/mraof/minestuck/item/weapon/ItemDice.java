@@ -15,22 +15,18 @@ public class ItemDice extends ItemWeapon{
 	}
 	@Override
 	protected double getAttackDamage(ItemStack stack){
-		//done in a different method so that we change how multiple dice act in a different place than how a single dice acts..
-		double totaldamage=0;
-		int finaldamage;
-		for (int i=0;i<this.maxStackSize;i++){
-			totaldamage += getOneDieAttack();
+		if(this.maxStackSize==stack.stackSize){
+			//done in a different method so that we change how multiple dice act in a different place than how a single dice acts..
+			double totaldamage=0;
+			int finaldamage;
+			for (int i=0;i<this.maxStackSize;i++){
+				totaldamage += getOneDieAttack();
+			}
+			totaldamage=totaldamage/this.maxStackSize;
+			finaldamage=(int) Math.floor(totaldamage);
+			return finaldamage;
 		}
-		totaldamage=totaldamage/this.maxStackSize;
-		finaldamage=(int) Math.floor(totaldamage);
-		return finaldamage;
-	}
-	protected boolean canAtack(ItemStack stack){
-		if (stack.stackSize==this.maxStackSize){
-			return true;
-		}else{
-			return false;
-		}
+		else return(0);
 	}
 	protected double getOneDieAttack(){
 		double Damage;
