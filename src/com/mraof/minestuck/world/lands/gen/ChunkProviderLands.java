@@ -1,15 +1,24 @@
 package com.mraof.minestuck.world.lands.gen;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Random;
-
-import com.mraof.minestuck.world.lands.structure.MapGenConsortVillage;
+import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.block.BlockGate;
+import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.network.skaianet.SburbHandler;
+import com.mraof.minestuck.tileentity.TileEntityGate;
+import com.mraof.minestuck.world.GateHandler;
+import com.mraof.minestuck.world.WorldProviderLands;
+import com.mraof.minestuck.world.biome.BiomeMinestuck;
+import com.mraof.minestuck.world.lands.LandAspectRegistry;
+import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
+import com.mraof.minestuck.world.lands.structure.DefaultGatePlacement;
+import com.mraof.minestuck.world.lands.structure.IGateStructure;
+import com.mraof.minestuck.world.lands.structure.MapGenLandStructure;
+import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.lands.structure.village.MapGenConsortVillage;
+import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
+import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
@@ -22,22 +31,7 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.block.BlockGate;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.tileentity.TileEntityGate;
-import com.mraof.minestuck.world.GateHandler;
-import com.mraof.minestuck.world.WorldProviderLands;
-import com.mraof.minestuck.network.skaianet.SburbHandler;
-import com.mraof.minestuck.world.biome.BiomeMinestuck;
-import com.mraof.minestuck.world.lands.LandAspectRegistry;
-import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
-import com.mraof.minestuck.world.lands.structure.DefaultGatePlacement;
-import com.mraof.minestuck.world.lands.structure.IGateStructure;
-import com.mraof.minestuck.world.lands.structure.MapGenLandStructure;
-import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
-import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
-import com.mraof.minestuck.world.lands.title.TitleLandAspect;
+import java.util.*;
 
 public class ChunkProviderLands implements IChunkGenerator
 {

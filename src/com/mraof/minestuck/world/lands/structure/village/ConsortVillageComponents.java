@@ -1,11 +1,10 @@
-package com.mraof.minestuck.world.lands.structure;
+package com.mraof.minestuck.world.lands.structure.village;
 
 import com.google.common.collect.Lists;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import net.minecraft.block.BlockDoor;
-import net.minecraft.block.BlockSlab;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,8 +27,7 @@ public class ConsortVillageComponents
 	public static void registerComponents()
 	{
 		MapGenStructureIO.registerStructure(MapGenConsortVillage.Start.class, "MinestuckConsortVillage");
-		MapGenStructureIO.registerStructureComponent(ConsortVillageComponents.VillageMarketCenter.class, "MinestuckCVCM");
-		MapGenStructureIO.registerStructureComponent(ConsortVillageComponents.RockCenter.class, "MinestuckCVCRo");
+		ConsortVillageCenter.register();
 		
 		MapGenStructureIO.registerStructureComponent(ConsortVillageComponents.PipeHouse1.class, "MinestuckCVPiH1");
 		MapGenStructureIO.registerStructureComponent(ConsortVillageComponents.HighPipeHouse1.class, "MinestuckCVHPiH1");
@@ -79,7 +77,7 @@ public class ConsortVillageComponents
 		return list;
 	}
 	
-	private static StructureComponent generateAndAddComponent(VillageCenter start, List<StructureComponent> structureComponents, Random rand, int structureMinX, int structureMinY, int structureMinZ, EnumFacing facing)
+	private static StructureComponent generateAndAddComponent(ConsortVillageCenter.VillageCenter start, List<StructureComponent> structureComponents, Random rand, int structureMinX, int structureMinY, int structureMinZ, EnumFacing facing)
 	{
 		if (Math.abs(structureMinX - start.getBoundingBox().minX) <= 112 && Math.abs(structureMinZ - start.getBoundingBox().minZ) <= 112)
 		{
@@ -96,7 +94,7 @@ public class ConsortVillageComponents
 		else return null;
 	}
 	
-	private static ConsortVillagePiece generateComponent(VillageCenter start, List<StructureComponent> structureComponents, Random rand, int structureMinX, int structureMinY, int structureMinZ, EnumFacing facing)
+	private static ConsortVillagePiece generateComponent(ConsortVillageCenter.VillageCenter start, List<StructureComponent> structureComponents, Random rand, int structureMinX, int structureMinY, int structureMinZ, EnumFacing facing)
 	{
 		int i = updatePieceWeight(start.pieceWeightList);
 		
@@ -158,7 +156,7 @@ public class ConsortVillageComponents
 		return flag ? totalWeight : -1;
 	}
 	
-	private static ConsortVillagePiece findAndCreateComponentFactory(VillageCenter start, PieceWeight weight, List<StructureComponent> structureComponents, Random rand, int structureMinX, int structureMinY, int structureMinZ, EnumFacing facing)
+	private static ConsortVillagePiece findAndCreateComponentFactory(ConsortVillageCenter.VillageCenter start, PieceWeight weight, List<StructureComponent> structureComponents, Random rand, int structureMinX, int structureMinY, int structureMinZ, EnumFacing facing)
 	{
 		Class <? extends ConsortVillagePiece> pieceClass = weight.villagePieceClass;
 		ConsortVillagePiece villagePiece = null;
@@ -261,7 +259,7 @@ public class ConsortVillageComponents
 			}
 		}
 		
-		protected StructureComponent getNextComponentNN(VillageCenter start, List<StructureComponent> structureComponents, Random rand, int offsetY, int offsetXZ)
+		protected StructureComponent getNextComponentNN(ConsortVillageCenter.VillageCenter start, List<StructureComponent> structureComponents, Random rand, int offsetY, int offsetXZ)
 		{
 			EnumFacing enumfacing = this.getCoordBaseMode();
 			
@@ -286,7 +284,7 @@ public class ConsortVillageComponents
 			}
 		}
 		
-		protected StructureComponent getNextComponentPP(VillageCenter start, List<StructureComponent> structureComponents, Random rand, int offsetY, int offsetXZ)
+		protected StructureComponent getNextComponentPP(ConsortVillageCenter.VillageCenter start, List<StructureComponent> structureComponents, Random rand, int offsetY, int offsetXZ)
 		{
 			EnumFacing enumfacing = this.getCoordBaseMode();
 			
@@ -375,247 +373,6 @@ public class ConsortVillageComponents
 		}
 	}
 	
-	public abstract static class VillageCenter extends ConsortVillagePiece
-	{
-		public List<StructureComponent> pendingHouses = Lists.<StructureComponent>newArrayList();
-		public List<StructureComponent> pendingRoads = Lists.<StructureComponent>newArrayList();
-		
-		public List<PieceWeight> pieceWeightList;
-		public PieceWeight lastPieceWeightUsed;
-		
-		protected VillageCenter()
-		{
-		
-		}
-		
-		protected VillageCenter(List<PieceWeight> pieceWeightList)
-		{
-			this.pieceWeightList = pieceWeightList;
-		}
-	}
-	
-	public static class VillageMarketCenter extends VillageCenter
-	{
-		public VillageMarketCenter()
-		{
-			super();
-		}
-		
-		public VillageMarketCenter(List<PieceWeight> pieceWeightList, int x, int z, Random rand)
-		{
-			super(pieceWeightList);
-			this.setCoordBaseMode(EnumFacing.Plane.HORIZONTAL.random(rand));
-			
-			if (this.getCoordBaseMode().getAxis() == EnumFacing.Axis.Z)
-			{
-				this.boundingBox = new StructureBoundingBox(x, 64, z, x + 8 - 1, 78, z + 10 - 1);
-			} else
-			{
-				this.boundingBox = new StructureBoundingBox(x, 64, z, x + 10 - 1, 78, z + 8 - 1);
-			}
-		}
-		
-		@Override
-		public void buildComponent(StructureComponent componentIn, List<StructureComponent> listIn, Random rand)
-		{
-			switch(this.getCoordBaseMode())
-			{	//The vanilla code for "rotating coords based on facing" is messy
-				case NORTH:
-					ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.minX + 3, boundingBox.minY, boundingBox.maxZ + 1, EnumFacing.SOUTH);
-					ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.maxX - 1, boundingBox.minY, boundingBox.minZ - 1, EnumFacing.NORTH);
-					ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.maxX + 1, boundingBox.minY, boundingBox.minZ, EnumFacing.EAST);
-					break;
-				case EAST:
-					ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.minX - 1, boundingBox.minY, boundingBox.minZ + 3, EnumFacing.WEST);
-					ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.maxX + 1, boundingBox.minY, boundingBox.maxZ - 1, EnumFacing.EAST);
-					ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.maxX - 1, boundingBox.minY, boundingBox.maxZ + 1, EnumFacing.SOUTH);
-					break;
-				case SOUTH:
-					ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.minX + 3, boundingBox.minY, boundingBox.minZ - 1, EnumFacing.NORTH);
-					ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.maxX - 1, boundingBox.minY, boundingBox.maxZ + 1, EnumFacing.SOUTH);
-					ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.maxX + 1, boundingBox.minY, boundingBox.maxZ - 1, EnumFacing.EAST);
-					break;
-				case WEST:
-					ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.maxX + 1, boundingBox.minY, boundingBox.minZ + 3, EnumFacing.EAST);
-					ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.minX - 1, boundingBox.minY, boundingBox.maxZ - 1, EnumFacing.WEST);
-					ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.minX, boundingBox.minY, boundingBox.maxZ + 1, EnumFacing.SOUTH);
-					break;
-			}
-		}
-		
-		@Override
-		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
-		{
-			if (this.averageGroundLvl < 0)
-			{
-				this.averageGroundLvl = this.getAverageGroundLevel(worldIn, structureBoundingBoxIn);
-				
-				if (this.averageGroundLvl < 0)
-				{
-					return true;
-				}
-				
-				this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.minY, 0);
-			}
-			
-			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
-			IBlockState floorBlock = provider.blockRegistry.getBlockState("structure_secondary");
-			IBlockState plankBlock = provider.blockRegistry.getBlockState("structure_planks");
-			IBlockState plankSlab0 = provider.blockRegistry.getBlockState("structure_planks_slab");
-			IBlockState plankSlab1 = plankSlab0.withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.TOP);
-			IBlockState torch = provider.blockRegistry.getBlockState("torch");
-			
-			
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, -1, 0, 5, 0, 0, floorBlock, floorBlock, false);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, -1, 1, 6, 0, 1, floorBlock, floorBlock, false);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, -1, 2, 1, 0, 7, floorBlock, floorBlock, false);
-			this.setBlockState(worldIn, floorBlock, 1, 0, 8, structureBoundingBoxIn);
-			this.setBlockState(worldIn, floorBlock, 1, -1, 8, structureBoundingBoxIn);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, -1, 2, 7, 0, 9, floorBlock, floorBlock, false);
-			
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, -1, -1, 5, -1, -1, floorBlock, floorBlock, false);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 6, -1, 10, 7, -1, 10, floorBlock, floorBlock, false);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 8, -1, 8, 8, -1, 9, floorBlock, floorBlock, false);
-			
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 1, 2, 1, 1, 6, plankBlock, plankBlock, false);
-			this.setBlockState(worldIn, plankBlock, 0, 1, 2, structureBoundingBoxIn);
-			this.setBlockState(worldIn, plankSlab0, 0, 1, 3, structureBoundingBoxIn);
-			this.setBlockState(worldIn, plankBlock, 0, 1, 4, structureBoundingBoxIn);
-			this.setBlockState(worldIn, plankSlab0, 0, 1, 5, structureBoundingBoxIn);
-			this.setBlockState(worldIn, plankBlock, 0, 1, 6, structureBoundingBoxIn);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 2, 2, 1, 3, 2, plankBlock, plankBlock, false);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 2, 6, 1, 3, 6, plankBlock, plankBlock, false);
-			
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 1, 2, 6, 1, 6, plankBlock, plankBlock, false);
-			this.setBlockState(worldIn, plankBlock, 7, 1, 2, structureBoundingBoxIn);
-			this.setBlockState(worldIn, plankSlab0, 7, 1, 3, structureBoundingBoxIn);
-			this.setBlockState(worldIn, plankBlock, 7, 1, 4, structureBoundingBoxIn);
-			this.setBlockState(worldIn, plankSlab0, 7, 1, 5, structureBoundingBoxIn);
-			this.setBlockState(worldIn, plankBlock, 7, 1, 6, structureBoundingBoxIn);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 2, 2, 6, 3, 2, plankBlock, plankBlock, false);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 2, 6, 6, 3, 6, plankBlock, plankBlock, false);
-			
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 1, 8, 2, 3, 8, plankBlock, plankBlock, false);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 1, 8, 4, 3, 8, plankBlock, plankBlock, false);
-			this.setBlockState(worldIn, plankBlock, 3, 1, 8, structureBoundingBoxIn);
-			this.setBlockState(worldIn, plankBlock, 2, 1, 9, structureBoundingBoxIn);
-			this.setBlockState(worldIn, plankSlab0, 3, 1, 9, structureBoundingBoxIn);
-			this.setBlockState(worldIn, plankBlock, 4, 1, 9, structureBoundingBoxIn);
-			
-			
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 3, 1, 6, 3, 1, plankSlab1, plankSlab1, false);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 3, 2, 5, 3, 6, plankSlab1, plankSlab1, false);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 3, 2, 0, 3, 6, plankSlab1, plankSlab1, false);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 7, 3, 2, 7, 3, 6, plankSlab1, plankSlab1, false);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 3, 3, 1, 3, 5, plankSlab1, plankSlab1, false);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 3, 3, 6, 3, 5, plankSlab1, plankSlab1, false);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 3, 7, 6, 3, 7, plankSlab1, plankSlab1, false);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 3, 8, 6, 3, 8, plankSlab1, plankSlab1, false);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 3, 9, 4, 3, 9, plankSlab1, plankSlab1, false);
-			this.setBlockState(worldIn, plankSlab1, 3, 3, 8, structureBoundingBoxIn);
-			
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 4, 2, 5, 4,  2, plankSlab0, plankSlab0, false);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 4, 3, 6, 4,  5, plankSlab0, plankSlab0, false);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 4, 6, 5, 4,  6, plankSlab0, plankSlab0, false);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 4, 7, 4, 4,  7, plankSlab0, plankSlab0, false);
-			this.setBlockState(worldIn, plankSlab0, 3, 4, 8, structureBoundingBoxIn);
-			
-			this.fillWithAir(worldIn, structureBoundingBoxIn, 2, 1, 0, 5, 3, 0);
-			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 1, 6, 2, 1);
-			this.fillWithAir(worldIn, structureBoundingBoxIn, 2, 1, 2, 5, 2, 7);
-			this.fillWithAir(worldIn, structureBoundingBoxIn, 0, 2, 3, 1, 2, 5);
-			this.fillWithAir(worldIn, structureBoundingBoxIn, 6, 2, 3, 7, 2, 5);
-			this.fillWithAir(worldIn, structureBoundingBoxIn, 2, 2, 9, 4, 2, 9);
-			this.setBlockState(worldIn, Blocks.AIR.getDefaultState(), 3, 2, 8, structureBoundingBoxIn);
-			this.fillWithAir(worldIn, structureBoundingBoxIn, 0, 1, 7, 1, 2, 9);
-			this.fillWithAir(worldIn, structureBoundingBoxIn, 5, 1, 7, 7, 2, 9);
-			
-			this.setBlockState(worldIn, torch, 1, 2, 4, structureBoundingBoxIn);
-			this.setBlockState(worldIn, torch, 6, 2, 4, structureBoundingBoxIn);
-			
-			return true;
-		}
-		
-	}
-	
-	public static class RockCenter extends VillageCenter
-	{
-		public RockCenter()
-		{
-			super();
-		}
-		
-		public RockCenter(List<PieceWeight> pieceWeightList, int x, int z, Random rand)
-		{
-			super(pieceWeightList);
-			this.setCoordBaseMode(EnumFacing.Plane.HORIZONTAL.random(rand));
-			
-			this.boundingBox = new StructureBoundingBox(x, 64, z, x + 7 - 1, 78, z + 7 - 1);
-		}
-		
-		@Override
-		public void buildComponent(StructureComponent componentIn, List<StructureComponent> listIn, Random rand)
-		{
-			ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.minX + 3, boundingBox.minY, boundingBox.maxZ + 1, EnumFacing.SOUTH);
-			ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.minX - 1, boundingBox.minY, boundingBox.minZ + 3, EnumFacing.WEST);
-			ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.minX + 3, boundingBox.minY, boundingBox.minZ - 1, EnumFacing.NORTH);
-			ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.maxX + 1, boundingBox.minY, boundingBox.minZ + 3, EnumFacing.EAST);
-		}
-		
-		@Override
-		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
-		{
-			if (this.averageGroundLvl < 0)
-			{
-				this.averageGroundLvl = this.getAverageGroundLevel(worldIn, structureBoundingBoxIn);
-				
-				if (this.averageGroundLvl < 0)
-				{
-					return true;
-				}
-				
-				this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.minY - 1, 0);
-			}
-			
-			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
-			IBlockState road = provider.blockRegistry.getBlockState("village_path");
-			IBlockState rock = provider.blockRegistry.getBlockState("ground");
-			
-			for(int x = 0; x < 7; x++)
-			{
-				for (int z = 0; z < 2; z++)
-					this.placeRoadtile(this.boundingBox.minX + x, this.boundingBox.minZ + z, structureBoundingBoxIn, worldIn, road);
-				
-				for (int z = 5; z < 7; z++)
-					this.placeRoadtile(this.boundingBox.minX + x, this.boundingBox.minZ + z, structureBoundingBoxIn, worldIn, road);
-			}
-			
-			for(int z = 2; z < 5; z++)
-			{
-				for (int x = 0; x < 2; x++)
-					this.placeRoadtile(this.boundingBox.minX + x, this.boundingBox.minZ + z, structureBoundingBoxIn, worldIn, road);
-				
-				for (int x = 5; x < 7; x++)
-					this.placeRoadtile(this.boundingBox.minX + x, this.boundingBox.minZ + z, structureBoundingBoxIn, worldIn, road);
-			}
-			this.fillWithAir(worldIn, structureBoundingBoxIn, 2, 1, 2, 4, 4, 4);
-			
-			this.blockPillar(2, randomIn.nextInt(2) + randomIn.nextInt(2), 2, boundingBox, worldIn, rock);
-			this.blockPillar(4, randomIn.nextInt(2) + randomIn.nextInt(2), 2, boundingBox, worldIn, rock);
-			this.blockPillar(2, randomIn.nextInt(2) + randomIn.nextInt(2), 4, boundingBox, worldIn, rock);
-			this.blockPillar(4, randomIn.nextInt(2) + randomIn.nextInt(2), 4, boundingBox, worldIn, rock);
-			
-			this.blockPillar(3, 2 + (randomIn.nextInt(4) == 3 ? 1 : 0), 2, boundingBox, worldIn, rock);
-			this.blockPillar(3, 2 + (randomIn.nextInt(4) == 3 ? 1 : 0), 4, boundingBox, worldIn, rock);
-			this.blockPillar(2, 2 + (randomIn.nextInt(4) == 3 ? 1 : 0), 3, boundingBox, worldIn, rock);
-			this.blockPillar(4, 2 + (randomIn.nextInt(4) == 3 ? 1 : 0), 3, boundingBox, worldIn, rock);
-			this.blockPillar(3, 3, 3, boundingBox, worldIn, rock);
-			
-			return true;
-		}
-		
-	}
-	
 	/////////////////////////Salamander
 	
 	public static class PipeHouse1 extends ConsortVillagePiece
@@ -625,13 +382,13 @@ public class ConsortVillageComponents
 		
 		}
 		
-		public PipeHouse1(VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
+		public PipeHouse1(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
 		{
 			this.setCoordBaseMode(facing);
 			this.boundingBox = boundingBox;
 		}
 		
-		public static PipeHouse1 createPiece(VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
+		public static PipeHouse1 createPiece(ConsortVillageCenter.VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
 		{
 			StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 6, 5, 7, facing);
 			return StructureComponent.findIntersecting(componentList, structureboundingbox) == null ? new PipeHouse1(start, rand, structureboundingbox, facing) : null;
@@ -684,13 +441,13 @@ public class ConsortVillageComponents
 		
 		}
 		
-		public HighPipeHouse1(VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
+		public HighPipeHouse1(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
 		{
 			this.setCoordBaseMode(facing);
 			this.boundingBox = boundingBox;
 		}
 		
-		public static HighPipeHouse1 createPiece(VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
+		public static HighPipeHouse1 createPiece(ConsortVillageCenter.VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
 		{
 			StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 7, 13, 8, facing);
 			return StructureComponent.findIntersecting(componentList, structureboundingbox) == null ? new HighPipeHouse1(start, rand, structureboundingbox, facing) : null;
@@ -778,13 +535,13 @@ public class ConsortVillageComponents
 		
 		}
 		
-		public LoweredShellHouse1(VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
+		public LoweredShellHouse1(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
 		{
 			this.setCoordBaseMode(facing);
 			this.boundingBox = boundingBox;
 		}
 		
-		public static LoweredShellHouse1 createPiece(VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
+		public static LoweredShellHouse1 createPiece(ConsortVillageCenter.VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
 		{
 			StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, -2, 0, 8, 5, 9, facing);
 			return StructureComponent.findIntersecting(componentList, structureboundingbox) == null ? new LoweredShellHouse1(start, rand, structureboundingbox, facing) : null;
@@ -846,13 +603,13 @@ public class ConsortVillageComponents
 		
 		}
 		
-		public TurtleMarketBuilding1(VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
+		public TurtleMarketBuilding1(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
 		{
 			this.setCoordBaseMode(facing);
 			this.boundingBox = boundingBox;
 		}
 		
-		public static TurtleMarketBuilding1 createPiece(VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
+		public static TurtleMarketBuilding1 createPiece(ConsortVillageCenter.VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
 		{
 			StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 14, 7, 19, facing);
 			return StructureComponent.findIntersecting(componentList, structureboundingbox) == null ? new TurtleMarketBuilding1(start, rand, structureboundingbox, facing) : null;
@@ -950,13 +707,13 @@ public class ConsortVillageComponents
 		
 		}
 		
-		public TurtleTemple1(VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
+		public TurtleTemple1(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
 		{
 			this.setCoordBaseMode(facing);
 			this.boundingBox = boundingBox;
 		}
 		
-		public static TurtleTemple1 createPiece(VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
+		public static TurtleTemple1 createPiece(ConsortVillageCenter.VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
 		{
 			StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, -1, 0, 11, 6, 14, facing);
 			return StructureComponent.findIntersecting(componentList, structureboundingbox) == null ? new TurtleTemple1(start, rand, structureboundingbox, facing) : null;
@@ -1065,13 +822,13 @@ public class ConsortVillageComponents
 		
 		}
 		
-		public HighNakHousing1(VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
+		public HighNakHousing1(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
 		{
 			this.setCoordBaseMode(facing);
 			this.boundingBox = boundingBox;
 		}
 		
-		public static HighNakHousing1 createPiece(VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
+		public static HighNakHousing1 createPiece(ConsortVillageCenter.VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
 		{
 			StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 8, 13, 9, facing);
 			return StructureComponent.findIntersecting(componentList, structureboundingbox) == null ? new HighNakHousing1(start, rand, structureboundingbox, facing) : null;
@@ -1173,13 +930,13 @@ public class ConsortVillageComponents
 		
 		}
 		
-		public HighNakMarket1(VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
+		public HighNakMarket1(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
 		{
 			this.setCoordBaseMode(facing);
 			this.boundingBox = boundingBox;
 		}
 		
-		public static HighNakMarket1 createPiece(VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
+		public static HighNakMarket1 createPiece(ConsortVillageCenter.VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
 		{
 			StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 12, 14, 10, facing);
 			return StructureComponent.findIntersecting(componentList, structureboundingbox) == null ? new HighNakMarket1(start, rand, structureboundingbox, facing) : null;
@@ -1286,7 +1043,7 @@ public class ConsortVillageComponents
 		{
 		}
 		
-		public VillagePath(VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
+		public VillagePath(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
 		{
 			this.setCoordBaseMode(facing);
 			this.boundingBox = boundingBox;
@@ -1314,7 +1071,7 @@ public class ConsortVillageComponents
 			
 			for (int i = rand.nextInt(5); i < this.length - 8; i += 2 + rand.nextInt(5))
 			{
-				StructureComponent newPiece = this.getNextComponentNN((VillageCenter)componentIn, listIn, rand, 0, i);
+				StructureComponent newPiece = this.getNextComponentNN((ConsortVillageCenter.VillageCenter)componentIn, listIn, rand, 0, i);
 				
 				if (newPiece != null)
 				{
@@ -1325,7 +1082,7 @@ public class ConsortVillageComponents
 			
 			for (int j = rand.nextInt(5); j < this.length - 8; j += 2 + rand.nextInt(5))
 			{
-				StructureComponent newPiece = this.getNextComponentPP((VillageCenter) componentIn, listIn, rand, 0, j);
+				StructureComponent newPiece = this.getNextComponentPP((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, 0, j);
 				
 				if (newPiece != null)
 				{
@@ -1342,16 +1099,16 @@ public class ConsortVillageComponents
 				{
 					case NORTH:
 					default:
-						ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, this.boundingBox.minX - 1, this.boundingBox.minY, this.boundingBox.minZ, EnumFacing.WEST);
+						ConsortVillageComponents.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, this.boundingBox.minX - 1, this.boundingBox.minY, this.boundingBox.minZ, EnumFacing.WEST);
 						break;
 					case SOUTH:
-						ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, this.boundingBox.minX - 1, this.boundingBox.minY, this.boundingBox.maxZ - 2, EnumFacing.WEST);
+						ConsortVillageComponents.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, this.boundingBox.minX - 1, this.boundingBox.minY, this.boundingBox.maxZ - 2, EnumFacing.WEST);
 						break;
 					case WEST:
-						ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, this.boundingBox.minX, this.boundingBox.minY, this.boundingBox.minZ - 1, EnumFacing.NORTH);
+						ConsortVillageComponents.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, this.boundingBox.minX, this.boundingBox.minY, this.boundingBox.minZ - 1, EnumFacing.NORTH);
 						break;
 					case EAST:
-						ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, this.boundingBox.maxX - 2, this.boundingBox.minY, this.boundingBox.minZ - 1, EnumFacing.NORTH);
+						ConsortVillageComponents.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, this.boundingBox.maxX - 2, this.boundingBox.minY, this.boundingBox.minZ - 1, EnumFacing.NORTH);
 				}
 			}
 			
@@ -1361,21 +1118,21 @@ public class ConsortVillageComponents
 				{
 					case NORTH:
 					default:
-						ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, this.boundingBox.maxX + 1, this.boundingBox.minY, this.boundingBox.minZ, EnumFacing.EAST);
+						ConsortVillageComponents.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, this.boundingBox.maxX + 1, this.boundingBox.minY, this.boundingBox.minZ, EnumFacing.EAST);
 						break;
 					case SOUTH:
-						ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, this.boundingBox.maxX + 1, this.boundingBox.minY, this.boundingBox.maxZ - 2, EnumFacing.EAST);
+						ConsortVillageComponents.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, this.boundingBox.maxX + 1, this.boundingBox.minY, this.boundingBox.maxZ - 2, EnumFacing.EAST);
 						break;
 					case WEST:
-						ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, this.boundingBox.minX, this.boundingBox.minY, this.boundingBox.maxZ + 1, EnumFacing.SOUTH);
+						ConsortVillageComponents.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, this.boundingBox.minX, this.boundingBox.minY, this.boundingBox.maxZ + 1, EnumFacing.SOUTH);
 						break;
 					case EAST:
-						ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, this.boundingBox.maxX - 2, this.boundingBox.minY, this.boundingBox.maxZ + 1, EnumFacing.SOUTH);
+						ConsortVillageComponents.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, listIn, rand, this.boundingBox.maxX - 2, this.boundingBox.minY, this.boundingBox.maxZ + 1, EnumFacing.SOUTH);
 				}
 			}
 		}
 		
-		public static StructureBoundingBox findPieceBox(VillageCenter start, List<StructureComponent> components, Random rand, int x, int y, int z, EnumFacing facing)
+		public static StructureBoundingBox findPieceBox(ConsortVillageCenter.VillageCenter start, List<StructureComponent> components, Random rand, int x, int y, int z, EnumFacing facing)
 		{
 			for(int i = 7 * MathHelper.getInt(rand, 3, 5); i >= 7; i -= 7)
 			{
@@ -1407,7 +1164,7 @@ public class ConsortVillageComponents
 	}
 	
 	
-	private static StructureComponent generateAndAddRoadPiece(VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
+	protected static StructureComponent generateAndAddRoadPiece(ConsortVillageCenter.VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
 	{
 		if (Math.abs(x - start.getBoundingBox().minX) <= 112 && Math.abs(z - start.getBoundingBox().minZ) <= 112)
 		{

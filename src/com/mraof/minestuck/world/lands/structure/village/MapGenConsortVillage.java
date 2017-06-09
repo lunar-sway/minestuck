@@ -1,4 +1,4 @@
-package com.mraof.minestuck.world.lands.structure;
+package com.mraof.minestuck.world.lands.structure.village;
 
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
@@ -87,7 +87,7 @@ public class MapGenConsortVillage extends MapGenStructure
 			super(chunkX, chunkZ);
 			LandAspectRegistry.AspectCombination landAspects = new LandAspectRegistry.AspectCombination(provider.aspect1, provider.aspect2);
 			List<ConsortVillageComponents.PieceWeight> pieceWeightList = ConsortVillageComponents.getStructureVillageWeightedPieceList(rand, landAspects.aspectTerrain.getConsortType(), landAspects);
-			ConsortVillageComponents.VillageCenter start = getVillageStart(provider, (chunkX << 4) + rand.nextInt(16), (chunkZ << 4) + rand.nextInt(16), rand, pieceWeightList, landAspects);
+			ConsortVillageCenter.VillageCenter start = ConsortVillageCenter.getVillageStart(provider, (chunkX << 4) + rand.nextInt(16), (chunkZ << 4) + rand.nextInt(16), rand, pieceWeightList, landAspects);
 			components.add(start);
 			start.buildComponent(start, components, rand);
 			
@@ -107,13 +107,5 @@ public class MapGenConsortVillage extends MapGenStructure
 			}
 			updateBoundingBox();
 		}
-	}
-	
-	private static ConsortVillageComponents.VillageCenter getVillageStart(ChunkProviderLands provider, int x, int z, Random rand, List<ConsortVillageComponents.PieceWeight> list, LandAspectRegistry.AspectCombination landAspects)
-	{
-		if(landAspects.aspectTerrain.getPrimaryVariant().getPrimaryName().equals("rock"))
-			return new ConsortVillageComponents.RockCenter(list, x, z, rand);
-		
-		return new ConsortVillageComponents.VillageMarketCenter(list, x, z, rand);
 	}
 }
