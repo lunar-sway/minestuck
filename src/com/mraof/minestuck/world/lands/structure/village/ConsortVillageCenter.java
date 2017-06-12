@@ -8,6 +8,7 @@ import net.minecraft.block.BlockSlab;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.WeightedRandom;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
@@ -29,15 +30,40 @@ public class ConsortVillageCenter
 		
 	}
 	
+	private static class CenterEntry extends WeightedRandom.Item
+	{
+		private final Class<? extends VillageCenter> center;
+		private CenterEntry(Class<? extends VillageCenter> center, int weight)
+		{
+			super(weight);
+			this.center = center;
+		}
+	}
 	
 	public static ConsortVillageCenter.VillageCenter getVillageStart(ChunkProviderLands provider, int x, int z, Random rand, List<ConsortVillageComponents.PieceWeight> list, LandAspectRegistry.AspectCombination landAspects)
 	{
-		if(landAspects.aspectTerrain.getPrimaryVariant().getPrimaryName().equals("rock"))
-			return new ConsortVillageCenter.RockCenter(list, x, z, rand);
-		if(landAspects.aspectTerrain.getPrimaryVariant().getPrimaryName().equals("sand"))
-			return new CactusPyramidCenter(list, x, z, rand);
+		List<CenterEntry> weightList = Lists.newArrayList();
 		
-		return new ConsortVillageCenter.VillageMarketCenter(list, x, z, rand);
+		if(landAspects.aspectTerrain.getPrimaryVariant().getPrimaryName().equals("rock"))
+			weightList.add(new CenterEntry(RockCenter.class, 5));
+		if(landAspects.aspectTerrain.getPrimaryVariant().getPrimaryName().equals("sand"))
+			weightList.add(new CenterEntry(CactusPyramidCenter.class, 5));
+		
+		if(weightList.isEmpty())
+			return new ConsortVillageCenter.VillageMarketCenter(list, x, z, rand);
+		else
+		{
+			Class<? extends VillageCenter> c = WeightedRandom.getRandomItem(rand, weightList).center;
+			
+			try
+			{
+				return c.getConstructor(List.class, int.class, int.class, Random.class).newInstance(list, x, z, rand);
+			} catch(Exception e)
+			{
+				e.printStackTrace();
+				return new ConsortVillageCenter.VillageMarketCenter(list, x, z, rand);
+			}
+		}
 	}
 	
 	public abstract static class VillageCenter extends ConsortVillageComponents.ConsortVillagePiece
@@ -299,10 +325,10 @@ public class ConsortVillageCenter
 		@Override
 		public void buildComponent(StructureComponent componentIn, List<StructureComponent> listIn, Random rand)
 		{
-			ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.minX + 3, boundingBox.minY, boundingBox.maxZ + 1, EnumFacing.SOUTH);
-			ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.minX - 1, boundingBox.minY, boundingBox.minZ + 3, EnumFacing.WEST);
-			ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.minX + 3, boundingBox.minY, boundingBox.minZ - 1, EnumFacing.NORTH);
-			ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.maxX + 1, boundingBox.minY, boundingBox.minZ + 3, EnumFacing.EAST);
+			ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.minX + 7, boundingBox.minY, boundingBox.maxZ + 1, EnumFacing.SOUTH);
+			ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.minX - 1, boundingBox.minY, boundingBox.minZ + 7, EnumFacing.WEST);
+			ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.minX + 7, boundingBox.minY, boundingBox.minZ - 1, EnumFacing.NORTH);
+			ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.maxX + 1, boundingBox.minY, boundingBox.minZ + 7, EnumFacing.EAST);
 		}
 		
 		@Override

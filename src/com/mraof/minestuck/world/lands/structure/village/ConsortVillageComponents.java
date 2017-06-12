@@ -1,7 +1,10 @@
 package com.mraof.minestuck.world.lands.structure.village;
 
 import com.google.common.collect.Lists;
+import com.mraof.minestuck.entity.consort.EntityConsort;
 import com.mraof.minestuck.entity.consort.EnumConsort;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import net.minecraft.block.BlockDoor;
@@ -371,6 +374,34 @@ public class ConsortVillageComponents
 					break;
 			}
 		}
+		
+		protected void spawnConsort(int x, int y, int z, StructureBoundingBox boundingBox, World world)
+		{
+			BlockPos pos = new BlockPos(this.getXWithOffset(x, z), this.getYWithOffset(y), this.getZWithOffset(x, z));
+			
+			if(boundingBox.isVecInside(pos))
+			{
+				LandAspectRegistry.AspectCombination aspects = MinestuckDimensionHandler.getAspects(world.provider.getDimension());
+				if(aspects == null)
+				{
+					Debug.warn("Tried to spawn a consort in a building that is being generated outside of a land dimension.");
+					return;
+				}
+				
+				Class<? extends EntityConsort> c = aspects.aspectTerrain.getConsortType().getConsortClass();
+				
+				try
+				{
+					EntityConsort consort = c.getConstructor(World.class).newInstance(world);
+					consort.setPosition(x + 0.5, y, z + 0.5);
+					//TODO More preparations, such as home location or set merchant by parameter
+					world.spawnEntity(consort);
+				} catch(Exception e)
+				{
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 	
 	/////////////////////////Salamander
@@ -639,8 +670,8 @@ public class ConsortVillageComponents
 			
 			this.fillWithAir(worldIn, structureBoundingBoxIn, 6, 1, 1, 7, 3, 3);
 			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 4, 12, 4, 13);
-			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 3, 13, 12, 4, 14);
-			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 2, 14, 12, 4, 17);
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 2, 14, 12, 4, 14);
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 15, 12, 4, 17);
 			this.fillWithAir(worldIn, structureBoundingBoxIn, 2, 5, 3, 11, 5, 16);
 			this.clearFront(worldIn, structureBoundingBoxIn, 5, 8, 2, 0);
 			
