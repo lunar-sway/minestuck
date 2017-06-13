@@ -215,6 +215,11 @@ public class Minestuck
 		if(!event.getServer().isDedicatedServer() && Minestuck.class.getAnnotation(Mod.class).version().startsWith("@"))
 			event.getServer().setOnlineMode(false);	//Makes it possible to use LAN in a development environment
 		
+		if(!event.getServer().isServerInOnlineMode() && MinestuckConfig.useUUID)
+			Debug.warn("Because uuids might not be consistent in an offline environment, it is not recommended to use uuids for minestuck. You should disable uuidIdentification in the minestuck config.");
+		if(event.getServer().isServerInOnlineMode() && !MinestuckConfig.useUUID)
+			Debug.warn("Because users may change their usernames, it is normally recommended to use uuids for minestuck. You should enable uuidIdentification in the minestuck config.");
+		
 		event.registerServerCommand(new CommandCheckLand());
 		event.registerServerCommand(new CommandGrist());
 		event.registerServerCommand(new CommandGristSend());

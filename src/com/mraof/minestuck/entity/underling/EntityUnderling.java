@@ -102,6 +102,8 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	protected void applyGristType(GristType type, boolean fullHeal)
 	{
 		this.type = type;
+		if(this.type.getRarity() == 0)	//Utility grist type
+			this.type = SburbHandler.getUnderlingType(this);
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.getMaximumHealth());
 		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(this.getAttackDamage());
 		if(fullHeal)

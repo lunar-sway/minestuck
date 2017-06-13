@@ -1,6 +1,8 @@
 package com.mraof.minestuck.client;
 
+import com.mraof.minestuck.client.renderer.entity.*;
 import com.mraof.minestuck.entity.EntityBigPart;
+import com.mraof.minestuck.entity.item.EntityCrewPoster;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.color.IItemColor;
@@ -27,13 +29,6 @@ import com.mraof.minestuck.client.model.ModelOgre;
 import com.mraof.minestuck.client.model.ModelRook;
 import com.mraof.minestuck.client.model.ModelSalamander;
 import com.mraof.minestuck.client.model.ModelTurtle;
-import com.mraof.minestuck.client.renderer.entity.RenderDecoy;
-import com.mraof.minestuck.client.renderer.entity.RenderEntityMinestuck;
-import com.mraof.minestuck.client.renderer.entity.RenderGrist;
-import com.mraof.minestuck.client.renderer.entity.RenderMetalBoat;
-import com.mraof.minestuck.client.renderer.entity.RenderPawn;
-import com.mraof.minestuck.client.renderer.entity.RenderShadow;
-import com.mraof.minestuck.client.renderer.entity.RenderVitalityGel;
 import com.mraof.minestuck.client.renderer.tileentity.RenderGate;
 import com.mraof.minestuck.client.renderer.tileentity.RenderSkaiaPortal;
 import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
@@ -165,6 +160,15 @@ public class ClientProxy
 				return new RenderMetalBoat(manager);
 			}
 		});
+		RenderingRegistry.registerEntityRenderingHandler(EntityCrewPoster.class, new IRenderFactory<EntityCrewPoster>()
+		{
+			@Override
+			public Render<EntityCrewPoster> createRenderFor(RenderManager manager)
+			{
+				return new RenderHangingArt(manager, "midnight_poster");
+			}
+		});
+		
 		MinecraftForge.EVENT_BUS.register(new MinestuckKeyHandler());
 		MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
 	}

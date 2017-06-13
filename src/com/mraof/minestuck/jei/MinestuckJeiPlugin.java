@@ -87,10 +87,7 @@ public class MinestuckJeiPlugin implements IModPlugin
     private List<ItemStack> getItemStacks(Object item, int metadata)
     {
         ArrayList<ItemStack> stacks = new ArrayList<ItemStack>();
-        if(metadata == OreDictionary.WILDCARD_VALUE)
-        {
-            metadata = 0;
-        }
+        
         if(item instanceof Item)
         {
             stacks.add(new ItemStack((Item) item, 1, metadata));

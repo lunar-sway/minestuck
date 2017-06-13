@@ -1,5 +1,6 @@
 package com.mraof.minestuck.entity;
 
+import com.mraof.minestuck.entity.item.EntityCrewPoster;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 
@@ -35,6 +36,7 @@ public final class MinestuckEntities
 		registerEntity(EntityMetalBoat.class, "MetalBoat");
 		registerEntity(EntityGrist.class, "Grist", 512, 1, true);
 		registerEntity(EntityVitalityGel.class, "VitalityGel", 512, 1, true);
+		registerEntity(EntityCrewPoster.class, "MidnightCrewPoster");
 	}
 
 	//registers entity with forge and minecraft, and increases currentEntityIdOffset by one in order to prevent id collision

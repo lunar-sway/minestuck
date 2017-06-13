@@ -6,13 +6,17 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Random;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 
 public class GristHelper {
 	private static Random random = new Random();
+	private static final boolean SHOULD_OUTPUT_GRIST_CHANGES = false;
 	
 	public static HashMap<GristType, ArrayList<GristType>> secondaryGristMap;
 
@@ -139,9 +143,14 @@ public class GristHelper {
 		Hashtable<Integer, Integer> reqs = set.getHashtable();
 		if (reqs != null) {
 			Iterator<Entry<Integer, Integer>> it = reqs.entrySet().iterator();
+			EntityPlayerMP gristOwner = player.getPlayer();
 			while (it.hasNext()) {
 				Entry<Integer, Integer> pairs = it.next();
 				setGrist(player, GristType.values()[(Integer) pairs.getKey()], getGrist(player, GristType.values()[(Integer)pairs.getKey()]) - (Integer)pairs.getValue());
+				if(SHOULD_OUTPUT_GRIST_CHANGES && gristOwner!=null)
+				{
+					gristOwner.sendMessage(new TextComponentTranslation("You lost " + pairs.getValue() + " " + GristType.values()[(Integer) pairs.getKey()].getName() + " grist."));
+				}
 			}
 		}
 	}
@@ -172,10 +181,15 @@ public class GristHelper {
 		if (reqs != null)
 		{
 			Iterator<Entry<Integer, Integer>> it = reqs.entrySet().iterator();
+			EntityPlayerMP gristOwner = player.getPlayer();
 			while (it.hasNext())
 			{
 				Entry<Integer, Integer> pairs = it.next();
 				setGrist(player, GristType.values()[(Integer) pairs.getKey()], getGrist(player, GristType.values()[(Integer)pairs.getKey()]) + (Integer)pairs.getValue());
+				if(SHOULD_OUTPUT_GRIST_CHANGES && gristOwner!=null)
+				{
+					gristOwner.sendMessage(new TextComponentTranslation("You gained " + pairs.getValue() + " " + GristType.values()[(Integer) pairs.getKey()].getName() + " grist."));
+				}
 			}
 		}
 	}
