@@ -9,6 +9,9 @@ import java.util.Map.Entry;
 
 import javax.annotation.Nonnull;
 
+import com.mraof.minestuck.modSupport.*;
+import com.mraof.minestuck.modSupport.minetweaker.Minetweaker3Support;
+import com.mraof.minestuck.world.storage.loot.conditions.LandAspectLootCondition;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockPrismarine;
@@ -25,28 +28,19 @@ import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.storage.loot.conditions.LootConditionManager;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraft.world.storage.loot.conditions.LootConditionManager;
 import net.minecraftforge.oredict.OreDictionary;
-import static net.minecraftforge.oredict.OreDictionary.WILDCARD_VALUE;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-
-import com.mraof.minestuck.block.BlockMinestuckStone;
-import com.mraof.minestuck.modSupport.ExtraUtilitiesSupport;
-import com.mraof.minestuck.modSupport.Minegicka3Support;
-import com.mraof.minestuck.modSupport.ModSupport;
-import com.mraof.minestuck.modSupport.NeverSayNetherSupport;
-import com.mraof.minestuck.modSupport.TinkersConstructSupport;
-import com.mraof.minestuck.modSupport.minetweaker.Minetweaker3Support;
-import com.mraof.minestuck.world.storage.loot.conditions.LandAspectLootCondition;
 
 import static com.mraof.minestuck.block.MinestuckBlocks.*;
 import static com.mraof.minestuck.item.MinestuckItems.*;
 import static com.mraof.minestuck.util.CombinationRegistry.MODE_AND;
 import static com.mraof.minestuck.util.CombinationRegistry.MODE_OR;
+import static net.minecraftforge.oredict.OreDictionary.WILDCARD_VALUE;
 
 public class AlchemyRecipeHandler
 {
@@ -160,6 +154,7 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(Items.GUNPOWDER), false, new GristSet(new GristType[] {GristType.Sulfur, GristType.Chalk}, new int[] {3, 2}));
 		GristRegistry.addGristConversion(new ItemStack(Items.IRON_HORSE_ARMOR), false, new GristSet(new GristType[] {GristType.Rust}, new int[] {40}));
 		GristRegistry.addGristConversion(new ItemStack(Items.LAVA_BUCKET), false, new GristSet(new GristType[] {GristType.Rust, GristType.Tar}, new int[] {27, 16}));
+		GristRegistry.addGristConversion(new ItemStack(Items.LEATHER), false, new GristSet(new GristType[] {GristType.Iodine, GristType.Chalk}, new int[] {3, 3}));
 		GristRegistry.addGristConversion(new ItemStack(Items.MAP), false, new GristSet(new GristType[] {GristType.Rust, GristType.Chalk, GristType.Garnet}, new int[] {32, 10, 2}));
 		GristRegistry.addGristConversion(new ItemStack(Items.MILK_BUCKET), false, new GristSet(new GristType[] {GristType.Rust, GristType.Chalk}, new int[] {27, 8}));
 		GristRegistry.addGristConversion(new ItemStack(Items.NAME_TAG), false, new GristSet(new GristType[] {GristType.Build, GristType.Caulk, GristType.Amber, GristType.Chalk}, new int[] {4, 10, 12, 8}));
@@ -270,6 +265,7 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(Items.COOKED_FISH, 1, 0), true, new GristSet(new GristType[] {GristType.Caulk, GristType.Amber, GristType.Cobalt, GristType.Tar}, new int[] {4, 4, 2, 1}));
 		GristRegistry.addGristConversion(new ItemStack(Items.COOKED_MUTTON), new GristSet(new GristType[] {GristType.Iodine, GristType.Tar}, new int[] {10, 1}));
 		GristRegistry.addGristConversion(new ItemStack(Items.COOKED_RABBIT), new GristSet(new GristType[] {GristType.Iodine, GristType.Tar}, new int[] {8, 1}));
+		GristRegistry.addGristConversion(new ItemStack(Items.GOLDEN_APPLE, 1, 1), new GristSet(new GristType[] {GristType.Amber, GristType.Gold, GristType.Uranium}, new int[] {4, 150, 10}));
 		
 		//Potions
 		/*GristRegistry.addGristConversion(new ItemStack(Items.POTIONITEM, 1, 0), true, new GristSet(new GristType[] {GristType.Build, GristType.Cobalt}, new int[] {1, 4}));	//water
@@ -901,7 +897,6 @@ public class AlchemyRecipeHandler
 	 * Given a punched card or a carved dowel, returns a new item that represents the encoded data.
 	 * 
 	 * @param card - The dowel or card with encoded data
-	 * @param b - If it is used for a dowel in alchemy.
 	 * @return An item, or null if the data was invalid.
 	 */
 	@Nonnull
