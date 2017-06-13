@@ -7,6 +7,7 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import net.minecraft.block.BlockDirt;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -42,6 +43,8 @@ public class ConsortVillageComponents
 		MapGenStructureIO.registerStructureComponent(HighNakHousing1.class, "MinestuckCVHNaH1");
 		MapGenStructureIO.registerStructureComponent(HighNakMarket1.class, "MinestuckCVHNaM1");
 		
+		MapGenStructureIO.registerStructureComponent(SmallTent1.class, "MinestuckCVSmTe1");
+		
 		MapGenStructureIO.registerStructureComponent(ConsortVillageComponents.VillagePath.class, "MinestuckCVPth");
 	}
 	
@@ -61,6 +64,7 @@ public class ConsortVillageComponents
 				list.add(new PieceWeight(TurtleTemple1.class, 10, MathHelper.getInt(random, 1, 1)));
 				break;
 			case IGUANA:
+				list.add(new PieceWeight(SmallTent1.class, 3, MathHelper.getInt(random, 5, 8)));
 				break;
 			case NAKAGATOR:
 				list.add(new PieceWeight(HighNakHousing1.class, 6, MathHelper.getInt(random, 3, 5)));
@@ -191,6 +195,10 @@ public class ConsortVillageComponents
 		else if(pieceClass == HighNakMarket1.class)
 		{
 			villagePiece = HighNakMarket1.createPiece(start, structureComponents, rand, structureMinX, structureMinY, structureMinZ, facing);
+		}
+		else if(pieceClass == SmallTent1.class)
+		{
+			villagePiece = SmallTent1.createPiece(start, structureComponents, rand, structureMinX, structureMinY, structureMinZ, facing);
 		}
 		
 		return villagePiece;
@@ -845,7 +853,6 @@ public class ConsortVillageComponents
 	
 	/////////////////////////Nakagators
 	
-	
 	public static class HighNakHousing1 extends ConsortVillagePiece
 	{
 		public HighNakHousing1()
@@ -1064,6 +1071,91 @@ public class ConsortVillageComponents
 		}
 	}
 	
+	/////////////////////////Iguanas
+	
+	public static class SmallTent1 extends ConsortVillagePiece
+	{
+		private int woolType = 1;
+		
+		public SmallTent1()
+		{
+		
+		}
+		
+		public SmallTent1(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
+		{
+			this.setCoordBaseMode(facing);
+			this.boundingBox = boundingBox;
+			woolType = 1 + rand.nextInt(3);
+		}
+		
+		public static SmallTent1 createPiece(ConsortVillageCenter.VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
+		{
+			StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 9, 6, 6, facing);
+			return StructureComponent.findIntersecting(componentList, structureboundingbox) == null ? new SmallTent1(start, rand, structureboundingbox, facing) : null;
+		}
+		
+		@Override
+		protected void writeStructureToNBT(NBTTagCompound tagCompound)
+		{
+			super.writeStructureToNBT(tagCompound);
+			tagCompound.setInteger("Wool", this.woolType);
+		}
+		
+		@Override
+		protected void readStructureFromNBT(NBTTagCompound tagCompound)
+		{
+			super.readStructureFromNBT(tagCompound);
+			this.woolType = tagCompound.getInteger("Wool");
+		}
+		
+		@Override
+		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
+		{
+			if (this.averageGroundLvl < 0)
+			{
+				this.averageGroundLvl = this.getAverageGroundLevel(worldIn, structureBoundingBoxIn);
+				
+				if (this.averageGroundLvl < 0)
+				{
+					return true;
+				}
+				
+				this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.minY - 1, 0);
+			}
+			
+			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
+			IBlockState fence = provider.blockRegistry.getBlockState("village_fence");
+			IBlockState surface = provider.blockRegistry.getBlockState("surface");
+			IBlockState dirt = Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.COARSE_DIRT);
+			IBlockState wool = provider.blockRegistry.getBlockState("structure_wool_"+woolType);
+			
+			//Floor
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 1, 7, 6, 5);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 1, 7, 0, 5, surface, surface, false);
+			for(int x = 1; x < 8; x++)
+				for(int z = 1; z < 6; z++)
+					if(randomIn.nextFloat() < 0.15f)
+						this.setBlockState(worldIn, dirt, x, 0, z,  structureBoundingBoxIn);
+			
+			//Remove blocks in front of the building
+			this.clearFront(worldIn, structureBoundingBoxIn, 1, 7, 1, 0);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 1, 3, 4, 4, 3, fence, fence, false);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 1, 1, 0, 1, 5, wool, wool, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 8, 1, 1, 8, 1, 5, wool, wool, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 2, 1, 1, 2, 5, wool, wool, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 7, 2, 1, 7, 2, 5, wool, wool, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 3, 1, 2, 3, 5, wool, wool, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 3, 1, 6, 3, 5, wool, wool, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 4, 1, 3, 4, 5, wool, wool, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 4, 1, 5, 4, 5, wool, wool, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 5, 1, 4, 5, 5, wool, wool, false);
+			
+			return true;
+		}
+	}
 	/////////////////////////Utility
 	
 	public static class VillagePath extends ConsortVillagePiece

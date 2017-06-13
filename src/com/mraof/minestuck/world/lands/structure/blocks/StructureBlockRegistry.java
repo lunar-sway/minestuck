@@ -69,6 +69,9 @@ public class StructureBlockRegistry
 		registerBlock("structure_secondary_stairs", "structure_secondary");
 		registerBlock("structure_planks", Blocks.PLANKS.getDefaultState());
 		registerBlock("structure_planks_slab", Blocks.WOODEN_SLAB.getDefaultState(), BlockSlab.class);
+		registerBlock("structure_wool_1", Blocks.WOOL.getDefaultState());
+		registerBlock("structure_wool_2", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.SILVER));
+		registerBlock("structure_wool_3", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.GRAY));
 		registerBlock("village_door", Blocks.OAK_DOOR.getDefaultState(), BlockDoor.class);
 		registerBlock("village_path", "ground");
 		registerBlock("village_fence", Blocks.OAK_FENCE.getDefaultState());

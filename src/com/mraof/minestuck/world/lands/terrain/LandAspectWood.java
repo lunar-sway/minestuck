@@ -1,26 +1,22 @@
 package com.mraof.minestuck.world.lands.terrain;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.mraof.minestuck.block.BlockMinestuckStone;
 import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
-import com.mraof.minestuck.world.lands.decorator.FireFieldDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
 import com.mraof.minestuck.world.lands.decorator.SurfaceMushroomGenerator;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
-
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.BlockNewLog;
 import net.minecraft.block.BlockOldLog;
 import net.minecraft.block.BlockPlanks;
-import net.minecraft.block.BlockStoneBrick;
-import net.minecraft.block.BlockTorch;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.Vec3d;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class LandAspectWood extends TerrainLandAspect 
 {
@@ -100,4 +96,9 @@ public class LandAspectWood extends TerrainLandAspect
 		return 0.6F;
 	}
 	
+	@Override
+	public EnumConsort getConsortType()
+	{
+		return EnumConsort.SALAMANDER;
+	}
 }

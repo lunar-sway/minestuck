@@ -2,6 +2,7 @@ package com.mraof.minestuck.world.lands.structure.village;
 
 import com.google.common.collect.Lists;
 import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import net.minecraft.block.BlockSlab;
@@ -27,6 +28,7 @@ public class ConsortVillageCenter
 		MapGenStructureIO.registerStructureComponent(ConsortVillageCenter.VillageMarketCenter.class, "MinestuckCVCM");
 		MapGenStructureIO.registerStructureComponent(ConsortVillageCenter.RockCenter.class, "MinestuckCVCRo");
 		MapGenStructureIO.registerStructureComponent(ConsortVillageCenter.CactusPyramidCenter.class, "MinestuckCVCCaPy");
+		MapGenStructureIO.registerStructureComponent(ConsortVillageCenter.TurtleWellCenter.class, "MinestuckCVCTuWe");
 		
 	}
 	
@@ -48,6 +50,8 @@ public class ConsortVillageCenter
 			weightList.add(new CenterEntry(RockCenter.class, 5));
 		if(landAspects.aspectTerrain.getPrimaryVariant().getPrimaryName().equals("sand"))
 			weightList.add(new CenterEntry(CactusPyramidCenter.class, 5));
+		if(landAspects.aspectTerrain.getConsortType().equals(EnumConsort.TURTLE))
+			weightList.add(new CenterEntry(TurtleWellCenter.class, 5));
 		
 		if(weightList.isEmpty())
 			return new ConsortVillageCenter.VillageMarketCenter(list, x, z, rand);
@@ -192,7 +196,6 @@ public class ConsortVillageCenter
 			this.setBlockState(worldIn, plankBlock, 2, 1, 9, structureBoundingBoxIn);
 			this.setBlockState(worldIn, plankSlab0, 3, 1, 9, structureBoundingBoxIn);
 			this.setBlockState(worldIn, plankBlock, 4, 1, 9, structureBoundingBoxIn);
-			
 			
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 3, 1, 6, 3, 1, plankSlab1, plankSlab1, false);
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 3, 2, 5, 3, 6, plankSlab1, plankSlab1, false);
@@ -383,6 +386,114 @@ public class ConsortVillageCenter
 				for (int x = 14; x < 16; x++)
 					this.placeRoadtile(this.boundingBox.minX + x, this.boundingBox.minZ + z, structureBoundingBoxIn, worldIn, road);
 			}
+			
+			return true;
+		}
+		
+	}
+	
+	
+	public static class TurtleWellCenter extends VillageCenter
+	{
+		public TurtleWellCenter()
+		{
+			super();
+		}
+		
+		public TurtleWellCenter(List<ConsortVillageComponents.PieceWeight> pieceWeightList, int x, int z, Random rand)
+		{
+			super(pieceWeightList);
+			this.setCoordBaseMode(EnumFacing.Plane.HORIZONTAL.random(rand));
+			
+			this.boundingBox = new StructureBoundingBox(x, 60, z, x + 8 - 1, 70, z + 8 - 1);
+		}
+		
+		@Override
+		public void buildComponent(StructureComponent componentIn, List<StructureComponent> listIn, Random rand)
+		{
+			ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.minX + 3, boundingBox.minY, boundingBox.maxZ + 1, EnumFacing.SOUTH);
+			ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.minX - 1, boundingBox.minY, boundingBox.minZ + 3, EnumFacing.WEST);
+			ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.minX + 3, boundingBox.minY, boundingBox.minZ - 1, EnumFacing.NORTH);
+			ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.maxX + 1, boundingBox.minY, boundingBox.minZ + 3, EnumFacing.EAST);
+		}
+		
+		@Override
+		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
+		{
+			if (this.averageGroundLvl < 0)
+			{
+				this.averageGroundLvl = this.getAverageGroundLevel(worldIn, structureBoundingBoxIn);
+				
+				if (this.averageGroundLvl < 0)
+				{
+					return true;
+				}
+				
+				this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.minY - 5, 0);
+			}
+			
+			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
+			IBlockState primary = provider.blockRegistry.getBlockState("structure_primary");
+			IBlockState secondary = provider.blockRegistry.getBlockState("structure_secondary");
+			IBlockState fluid = provider.blockRegistry.getBlockState("ocean");
+			IBlockState stairsN = provider.blockRegistry.getStairs("structure_primary_stairs", EnumFacing.NORTH, false);
+			IBlockState stairsE = provider.blockRegistry.getStairs("structure_primary_stairs", EnumFacing.EAST, false);
+			IBlockState stairsS = provider.blockRegistry.getStairs("structure_primary_stairs", EnumFacing.SOUTH, false);
+			IBlockState stairsW = provider.blockRegistry.getStairs("structure_primary_stairs", EnumFacing.WEST, false);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 4, 0, 2, 4, 0, primary, primary, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 4, 1, 0, 4, 2, primary, primary, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 4, 0, 7, 4, 0, primary, primary, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 7, 4, 1, 7, 4, 2, primary, primary, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 4, 7, 2, 4, 7, primary, primary, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 4, 5, 0, 4, 6, primary, primary, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 4, 7, 7, 4, 7, primary, primary, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 7, 4, 5, 7, 4, 6, primary, primary, false);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 4, 0, 4, 4, 0, stairsS, stairsS, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 4, 7, 4, 4, 7, stairsN, stairsN, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 4, 3, 0, 4, 4, stairsW, stairsW, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 7, 4, 3, 7, 4, 4, stairsE, stairsE, false);
+			
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 5, 0, 6, 7, 0);
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 5, 7, 6, 7, 7);
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 0, 5, 1, 0, 7, 6);
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 7, 5, 1, 7, 7, 6);
+			
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 4, 1, 6, 8, 6);
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 2, 3, 2, 5, 3, 5);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 5, 0, 0, 7, 0, primary, primary, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 5, 7, 0, 7, 7, primary, primary, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 7, 5, 0, 7, 7, 0, primary, primary, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 7, 5, 7, 7, 7, 7, primary, primary, false);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 8, 0, 7, 8, 0, primary, primary, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 8, 7, 7, 8, 7, primary, primary, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 8, 1, 0, 8, 6, primary, primary, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 7, 8, 1, 7, 8, 6, primary, primary, false);
+			this.setBlockState(worldIn, primary, 1, 8, 1, structureBoundingBoxIn);
+			this.setBlockState(worldIn, primary, 1, 8, 6, structureBoundingBoxIn);
+			this.setBlockState(worldIn, primary, 6, 8, 1, structureBoundingBoxIn);
+			this.setBlockState(worldIn, primary, 6, 8, 6, structureBoundingBoxIn);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 9, 1, 6, 9, 6, primary, primary, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 10, 2, 5, 10, 5, primary, primary, false);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 1, 1, 6, 3, 1, secondary, secondary, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 1, 6, 6, 3, 6, secondary, secondary, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 1, 2, 1, 3, 5, secondary, secondary, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 1, 2, 6, 3, 5, secondary, secondary, false);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 3, 1, 4, 3, 1, stairsS, stairsS, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 3, 6, 4, 3, 6, stairsN, stairsN, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 3, 3, 1, 3, 4, stairsW, stairsW, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 3, 3, 6, 3, 4, stairsE, stairsE, false);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 2, 5, 1, 5, secondary, secondary, false);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 2, 2, 5, 2, 5, fluid, fluid, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 1, 3, 4, 1, 4, fluid, fluid, false);
 			
 			return true;
 		}
