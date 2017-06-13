@@ -1,14 +1,6 @@
 package com.mraof.minestuck.util;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import javax.annotation.Nonnull;
-
+import com.mraof.minestuck.block.BlockMinestuckStone;
 import com.mraof.minestuck.modSupport.*;
 import com.mraof.minestuck.modSupport.minetweaker.Minetweaker3Support;
 import com.mraof.minestuck.world.storage.loot.conditions.LandAspectLootCondition;
@@ -35,6 +27,10 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+
+import javax.annotation.Nonnull;
+import java.util.*;
+import java.util.Map.Entry;
 
 import static com.mraof.minestuck.block.MinestuckBlocks.*;
 import static com.mraof.minestuck.item.MinestuckItems.*;
