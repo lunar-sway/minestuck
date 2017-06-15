@@ -1,22 +1,20 @@
 package com.mraof.minestuck.modSupport.minetweaker;
 
-import java.util.Arrays;
-import java.util.List;
-
+import com.mraof.minestuck.util.GristRegistry;
+import com.mraof.minestuck.util.GristSet;
+import com.mraof.minestuck.util.GristType;
+import minetweaker.IUndoableAction;
+import minetweaker.MineTweakerAPI;
+import minetweaker.api.item.IItemStack;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.oredict.OreDictionary;
-
-import com.mraof.minestuck.util.GristRegistry;
-import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.GristType;
-
-import minetweaker.IUndoableAction;
-import minetweaker.MineTweakerAPI;
-import minetweaker.api.item.IItemStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
+
+import java.util.Arrays;
+import java.util.List;
 
 @ZenClass("minestuck.Alchemy")
 public class Alchemy
@@ -26,13 +24,19 @@ public class Alchemy
 	public static void setCost(IItemStack iStack, String cost)
 	{
 		ItemStack stack = (ItemStack) iStack.getInternal();
-		MineTweakerAPI.apply(new SetCost(stack.getItem(), stack.getItemDamage(), cost));
+		GristSet grist = getGrist(cost);
+		if(grist == null)
+			return;
+		MineTweakerAPI.apply(new SetCost(stack.getItem(), stack.getItemDamage(), grist));
 	}
 	
 	@ZenMethod
 	public static void setOreDictCost(String name, String cost)
 	{
-		MineTweakerAPI.apply(new SetCost(name, OreDictionary.WILDCARD_VALUE, cost));
+		GristSet grist = getGrist(cost);
+		if(grist == null)
+			return;
+		MineTweakerAPI.apply(new SetCost(name, OreDictionary.WILDCARD_VALUE, grist));
 	}
 	
 	@ZenMethod
@@ -55,10 +59,10 @@ public class Alchemy
 		private final GristSet cost;
 		private GristSet costOld;
 		
-		public SetCost(Object item, int metadata, String cost)
+		public SetCost(Object item, int metadata, GristSet cost)
 		{
 			items = Arrays.asList(item, metadata);
-			this.cost = getGrist(cost);
+			this.cost = cost;
 		}
 		
 		@Override
@@ -75,23 +79,6 @@ public class Alchemy
 			if(costOld == null)
 				GristRegistry.getAllConversions().remove(items);
 			else GristRegistry.getAllConversions().put(items, costOld);
-		}
-		
-		private static GristSet getGrist(String str)
-		{
-			if(str == null)
-				return null;
-			
-			GristSet grist = new GristSet();
-			String[] values = str.split(",");
-			for (String value : values) {
-				if (value.startsWith(" ")) value = value.replaceFirst(" ", "");
-				String[] gristAmount = value.split("\\s+");
-				if (gristAmount.length == 2)
-					grist.addGrist(GristType.getTypeFromString(gristAmount[0]), Integer.parseInt(gristAmount[1]));
-			}
-			
-			return grist;
 		}
 		
 		@Override
@@ -131,5 +118,35 @@ public class Alchemy
 			ItemStack stack = new ItemStack((Item) items.get(0), 1, (Integer) items.get(1));
 			return stack.getDisplayName();
 		}
+	}
+	
+	private static GristSet getGrist(String str)
+	{
+		if(str == null)
+			return null;
+		
+		GristSet grist = new GristSet();
+		String[] values = str.split(",");
+		for(String value : values)
+		{
+			value = value.trim();
+			String[] gristAmount = value.split("\\s+");
+			if(gristAmount.length == 2)
+			{
+				if(GristType.getTypeFromString(gristAmount[0].toLowerCase()) != null)
+					grist.addGrist(GristType.getTypeFromString(gristAmount[0].toLowerCase()), Integer.parseInt(gristAmount[1]));
+				else
+				{
+					MineTweakerAPI.logError("\""+gristAmount[0].toLowerCase()+"\" does not match any grist types. Look for typos and make sure the grist type is actually in the mod.");
+					return null;
+				}
+			} else
+			{
+				MineTweakerAPI.logError("\""+value + "\" is not an acceptable grist value. Separate grist-number pairings with commas.");
+				return null;
+			}
+		}
+		
+		return grist;
 	}
 }
