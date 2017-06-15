@@ -44,6 +44,7 @@ public class ConsortVillageComponents
 		MapGenStructureIO.registerStructureComponent(HighNakMarket1.class, "MinestuckCVHNaM1");
 		
 		MapGenStructureIO.registerStructureComponent(SmallTent1.class, "MinestuckCVSmTe1");
+		MapGenStructureIO.registerStructureComponent(LargeTent1.class, "MinestuckCVLaTe1");
 		
 		MapGenStructureIO.registerStructureComponent(ConsortVillageComponents.VillagePath.class, "MinestuckCVPth");
 	}
@@ -65,6 +66,7 @@ public class ConsortVillageComponents
 				break;
 			case IGUANA:
 				list.add(new PieceWeight(SmallTent1.class, 3, MathHelper.getInt(random, 5, 8)));
+				list.add(new PieceWeight(LargeTent1.class, 10, MathHelper.getInt(random, 1, 2)));
 				break;
 			case NAKAGATOR:
 				list.add(new PieceWeight(HighNakHousing1.class, 6, MathHelper.getInt(random, 3, 5)));
@@ -199,6 +201,10 @@ public class ConsortVillageComponents
 		else if(pieceClass == SmallTent1.class)
 		{
 			villagePiece = SmallTent1.createPiece(start, structureComponents, rand, structureMinX, structureMinY, structureMinZ, facing);
+		}
+		else if(pieceClass == LargeTent1.class)
+		{
+			villagePiece = LargeTent1.createPiece(start, structureComponents, rand, structureMinX, structureMinY, structureMinZ, facing);
 		}
 		
 		return villagePiece;
@@ -1156,6 +1162,120 @@ public class ConsortVillageComponents
 			return true;
 		}
 	}
+	
+	public static class LargeTent1 extends ConsortVillagePiece
+	{
+		private int woolType = 1;
+		
+		public LargeTent1()
+		{
+		
+		}
+		
+		public LargeTent1(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
+		{
+			this.setCoordBaseMode(facing);
+			this.boundingBox = boundingBox;
+			woolType = 1 + rand.nextInt(3);
+		}
+		
+		public static LargeTent1 createPiece(ConsortVillageCenter.VillageCenter start, List<StructureComponent> componentList, Random rand, int x, int y, int z, EnumFacing facing)
+		{
+			StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 12, 8, 16, facing);
+			return StructureComponent.findIntersecting(componentList, structureboundingbox) == null ? new LargeTent1(start, rand, structureboundingbox, facing) : null;
+		}
+		
+		@Override
+		protected void writeStructureToNBT(NBTTagCompound tagCompound)
+		{
+			super.writeStructureToNBT(tagCompound);
+			tagCompound.setInteger("Wool", this.woolType);
+		}
+		
+		@Override
+		protected void readStructureFromNBT(NBTTagCompound tagCompound)
+		{
+			super.readStructureFromNBT(tagCompound);
+			this.woolType = tagCompound.getInteger("Wool");
+		}
+		
+		@Override
+		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
+		{
+			if (this.averageGroundLvl < 0)
+			{
+				this.averageGroundLvl = this.getAverageGroundLevel(worldIn, structureBoundingBoxIn);
+				
+				if (this.averageGroundLvl < 0)
+				{
+					return true;
+				}
+				
+				this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.minY - 1, 0);
+			}
+			
+			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
+			IBlockState fence = provider.blockRegistry.getBlockState("village_fence");
+			IBlockState surface = provider.blockRegistry.getBlockState("surface");
+			IBlockState dirt = Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.COARSE_DIRT);
+			IBlockState wool = provider.blockRegistry.getBlockState("structure_wool_"+woolType);
+			
+			//Floor
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 1, 10, 6, 15);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 1, 10, 0, 15, surface, surface, false);
+			for(int x = 1; x < 11; x++)
+				for(int z = 1; z < 16; z++)
+					if(randomIn.nextFloat() < 0.15f)
+						this.setBlockState(worldIn, dirt, x, 0, z,  structureBoundingBoxIn);
+			
+			//Remove blocks in front of the building
+			this.clearFront(worldIn, structureBoundingBoxIn, 2, 9, 1, 0);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 1, 2, 1, 4, 2, fence, fence, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 10, 1, 2, 10, 4, 2, fence, fence, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 1, 14, 1, 4, 14, fence, fence, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 10, 1, 14, 10, 4, 14, fence, fence, false);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 5, 6, 9, 5, 6, fence, fence, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 6, 7, 8, 6, 7, fence, fence, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 6, 9, 8, 6, 9, fence, fence, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 5, 11, 9, 5, 11, fence, fence, false);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 1, 1, 1, 4, 1, wool, wool, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 2, 1, 2, 4, 1, wool, wool, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 3, 1, 3, 4, 1, wool, wool, false);
+			this.setBlockState(worldIn, wool, 4, 4, 1, structureBoundingBoxIn);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 10, 1, 1, 10, 4, 1, wool, wool, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 9, 2, 1, 9, 4, 1, wool, wool, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 8, 3, 1, 8, 4, 1, wool, wool, false);
+			this.setBlockState(worldIn, wool, 7, 4, 1, structureBoundingBoxIn);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 1, 15, 1, 4, 15, wool, wool, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 2, 15, 2, 4, 15, wool, wool, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 3, 15, 3, 4, 15, wool, wool, false);
+			this.setBlockState(worldIn, wool, 4, 4, 15, structureBoundingBoxIn);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 10, 1, 15, 10, 4, 15, wool, wool, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 9, 2, 15, 9, 4, 15, wool, wool, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 8, 3, 15, 8, 4, 15, wool, wool, false);
+			this.setBlockState(worldIn, wool, 7, 4, 15, structureBoundingBoxIn);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 1, 2, 0, 4, 14, wool, wool, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 11, 1, 2, 11, 4, 14, wool, wool, false);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 5, 2, 10, 5, 2, wool, wool, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 5, 14, 10, 5, 14, wool, wool, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 5, 3, 1, 5, 13, wool, wool, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 10, 5, 3, 10, 5, 13, wool, wool, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 6, 3, 9, 6, 3, wool, wool, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 6, 13, 9, 6, 13, wool, wool, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 6, 4, 2, 6, 12, wool, wool, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 9, 6, 4, 9, 6, 12, wool, wool, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 7, 4, 8, 7, 12, wool, wool, false);
+			
+			
+			return true;
+		}
+	}
+	
 	/////////////////////////Utility
 	
 	public static class VillagePath extends ConsortVillagePiece
