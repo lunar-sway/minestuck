@@ -2,7 +2,7 @@ package com.mraof.minestuck.modSupport.minetweaker;
 
 import minetweaker.MineTweakerAPI;
 
-public class Minetweaker3Support
+public class MinetweakerSupport
 {
 	
 	public static void registerClasses()

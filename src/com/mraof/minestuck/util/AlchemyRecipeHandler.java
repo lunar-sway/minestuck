@@ -2,7 +2,7 @@ package com.mraof.minestuck.util;
 
 import com.mraof.minestuck.block.BlockMinestuckStone;
 import com.mraof.minestuck.modSupport.*;
-import com.mraof.minestuck.modSupport.minetweaker.Minetweaker3Support;
+import com.mraof.minestuck.modSupport.minetweaker.MinetweakerSupport;
 import com.mraof.minestuck.world.storage.loot.conditions.LandAspectLootCondition;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPlanks;
@@ -878,8 +878,8 @@ public class AlchemyRecipeHandler
 		registerRecipes(new ExtraUtilitiesSupport(), "ExtraUtilities", false);
 		registerRecipes(new TinkersConstructSupport(), "TConstruct", false);
 		
-		if(Loader.isModLoaded("MineTweaker3"))
-			Minetweaker3Support.registerClasses();
+		if(Loader.isModLoaded("crafttweaker"))
+			MinetweakerSupport.registerClasses();
 		
 	}
 	
