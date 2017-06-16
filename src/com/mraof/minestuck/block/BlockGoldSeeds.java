@@ -1,10 +1,6 @@
 package com.mraof.minestuck.block;
 
-import java.util.List;
-import java.util.Random;
-
 import com.mraof.minestuck.item.MinestuckItems;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -22,6 +18,10 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Random;
 
 public class BlockGoldSeeds extends Block
 {
@@ -49,7 +49,7 @@ public class BlockGoldSeeds extends Block
 	}
 	
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB boundingBox, List<AxisAlignedBB> list, Entity entity)
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_)
 	{
 	}
 	

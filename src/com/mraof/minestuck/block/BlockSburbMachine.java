@@ -1,8 +1,10 @@
 package com.mraof.minestuck.block;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.client.gui.GuiHandler;
+import com.mraof.minestuck.tileentity.TileEntityMachine;
+import com.mraof.minestuck.tileentity.TileEntitySburbMachine;
+import com.mraof.minestuck.util.IdentifierHandler;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
@@ -19,11 +21,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.NonNullList;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -32,11 +30,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.client.gui.GuiHandler;
-import com.mraof.minestuck.tileentity.TileEntityMachine;
-import com.mraof.minestuck.tileentity.TileEntitySburbMachine;
-import com.mraof.minestuck.util.IdentifierHandler;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BlockSburbMachine extends BlockContainer
 {
@@ -212,15 +208,15 @@ public class BlockSburbMachine extends BlockContainer
 	}
 	
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB boundingBox, List<AxisAlignedBB> list, Entity entity)
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_)
 	{
-		super.addCollisionBoxToList(state, worldIn, pos, boundingBox, list, entity);
+		super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn, p_185477_7_);
 		if(state.getValue(MACHINE_TYPE).equals(MachineType.ALCHEMITER))
 		{
 			EnumFacing roation = (EnumFacing) getActualState(state, worldIn, pos).getValue(FACING);
 			AxisAlignedBB bb = ALCHEMITER_POLE_AABB[roation.getHorizontalIndex()].offset(pos);
-			if(boundingBox.intersectsWith(bb))
-				list.add(bb);
+			if(entityBox.intersectsWith(bb))
+				collidingBoxes.add(bb);
 		}
 	}
 	

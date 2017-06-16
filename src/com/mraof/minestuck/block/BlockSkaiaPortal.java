@@ -1,8 +1,9 @@
 package com.mraof.minestuck.block;
 
-import java.util.List;
-import java.util.Random;
-
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.tileentity.TileEntitySkaiaPortal;
+import com.mraof.minestuck.util.Location;
+import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -20,10 +21,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.tileentity.TileEntitySkaiaPortal;
-import com.mraof.minestuck.util.Location;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Random;
 
 public class BlockSkaiaPortal extends BlockContainer
 {
@@ -89,7 +89,7 @@ public class BlockSkaiaPortal extends BlockContainer
 	}
 	
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB p_185477_4_, List<AxisAlignedBB> p_185477_5_, Entity p_185477_6_)
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_)
 	{
 	}
 	
