@@ -50,7 +50,7 @@ public class CommandToStructure extends CommandBase
 		
 		if(playerMP.world.provider instanceof WorldProviderLands)
 		{
-			BlockPos location = ((WorldProviderLands) playerMP.world.provider).findAndMarkNextStructure(playerMP, args[0], playerMP.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getTagList("commandVisitedStructures", 10));
+			BlockPos location = ((WorldProviderLands) playerMP.world.provider).findAndMarkNextStructure(playerMP, args[0], playerMP.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getTagList("commandVisitedStructures", 4));
 			if(location != null)
 				playerMP.setPositionAndUpdate(location.getX(), location.getY(), location.getZ());
 			else throw new CommandException("A problem occured");
