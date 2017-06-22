@@ -1,28 +1,26 @@
 
 package com.mraof.minestuck.world.lands.terrain;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
-import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 import com.mraof.minestuck.world.lands.decorator.WorldGenDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.gen.LandTerrainGenBase;
 import com.mraof.minestuck.world.lands.gen.RiverFreeTerrainGen;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
-
 import net.minecraft.block.*;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.gen.feature.WorldGenCactus;
 import net.minecraft.world.gen.feature.WorldGenDeadBush;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class LandAspectSand extends TerrainLandAspect
 {
@@ -63,6 +61,7 @@ public class LandAspectSand extends TerrainLandAspect
 			registry.setBlockState("structure_primary", Blocks.SANDSTONE.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.SMOOTH));
 			registry.setBlockState("structure_primary_decorative", Blocks.SANDSTONE.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.CHISELED));
 			registry.setBlockState("structure_primary_stairs", Blocks.SANDSTONE_STAIRS.getDefaultState());
+			registry.setBlockState("village_path", Blocks.SAND.getDefaultState().withProperty(BlockSand.VARIANT, BlockSand.EnumType.RED_SAND));
 		} else
 		{
 			registry.setBlockState("upper", Blocks.SAND.getDefaultState().withProperty(BlockSand.VARIANT, BlockSand.EnumType.RED_SAND));
@@ -70,6 +69,7 @@ public class LandAspectSand extends TerrainLandAspect
 			registry.setBlockState("structure_primary", Blocks.RED_SANDSTONE.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.SMOOTH));
 			registry.setBlockState("structure_primary_decorative", Blocks.RED_SANDSTONE.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.CHISELED));
 			registry.setBlockState("structure_primary_stairs", Blocks.RED_SANDSTONE_STAIRS.getDefaultState());
+			registry.setBlockState("village_path", Blocks.SAND.getDefaultState());
 		}
 		registry.setBlockState("structure_secondary", Blocks.STONEBRICK.getDefaultState());
 		registry.setBlockState("structure_secondary_decorative", Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED));
@@ -95,8 +95,6 @@ public class LandAspectSand extends TerrainLandAspect
 	public List<ILandDecorator> getDecorators()
 	{
 		ArrayList<ILandDecorator> list = new ArrayList<ILandDecorator>();
-		if(type == Variant.SAND_RED)
-			list.add(new SurfaceDecoratorVein(Blocks.SAND.getDefaultState(), 10, 32));
 		list.add(new WorldGenDecorator(new WorldGenCactus(), 15, 0.4F, BiomeMinestuck.mediumNormal));
 		list.add(new WorldGenDecorator(new WorldGenCactus(), 5, 0.4F, BiomeMinestuck.mediumRough));
 		list.add(new WorldGenDecorator(new WorldGenDeadBush(), 1, 0.4F, BiomeMinestuck.mediumNormal, BiomeMinestuck.mediumRough));

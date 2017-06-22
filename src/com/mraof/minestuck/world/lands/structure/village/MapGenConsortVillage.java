@@ -1,8 +1,13 @@
 package com.mraof.minestuck.world.lands.structure.village;
 
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagLong;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.structure.MapGenStructure;
@@ -10,6 +15,7 @@ import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureStart;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -74,6 +80,25 @@ public class MapGenConsortVillage extends MapGenStructure
 		return new Start(chunkProvider, world, this.rand, chunkX, chunkZ);
 	}
 	
+	public BlockPos findAndMarkNextVillage(EntityPlayerMP player, String type, NBTTagList list)
+	{
+		HashSet<Long> set = new HashSet<Long>(list.tagCount());
+		for(int i = 0; i < list.tagCount(); i++)
+			set.add(((NBTTagLong) list.get(i)).getLong());
+		
+		for(long l : this.structureMap.keySet())
+		{
+			if(!set.contains(l))
+			{
+				StructureStart start = this.structureMap.get(l);
+				list.appendTag(new NBTTagLong(l));
+				return new BlockPos(start.getChunkPosX()*16 + 8, 90, start.getChunkPosZ()*16 + 8);
+			}
+		}
+		
+		Debug.warn("Couldn't find village");
+		return null;
+	}
 	
 	public static class Start extends StructureStart
 	{

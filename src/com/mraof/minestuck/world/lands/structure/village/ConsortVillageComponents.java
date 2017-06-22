@@ -407,7 +407,9 @@ public class ConsortVillageComponents
 				try
 				{
 					EntityConsort consort = c.getConstructor(World.class).newInstance(world);
-					consort.setPosition(x + 0.5, y, z + 0.5);
+					consort.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+					
+					consort.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(consort)), null);
 					//TODO More preparations, such as home location or set merchant by parameter
 					world.spawnEntity(consort);
 				} catch(Exception e)
@@ -637,6 +639,9 @@ public class ConsortVillageComponents
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 6, 4, 4, 6, 5, lightBlock, lightBlock, false);
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 7, 4, 4, 7, 5, buildBlock, buildBlock, false);
 			
+			this.spawnConsort(2, 1, 5, structureBoundingBoxIn, worldIn);
+			this.spawnConsort(5, 1, 5, structureBoundingBoxIn, worldIn);
+			
 			return true;
 		}
 	}
@@ -740,6 +745,9 @@ public class ConsortVillageComponents
 			this.setBlockState(worldIn, lightBlock, 11, 6, 5, structureBoundingBoxIn);
 			this.setBlockState(worldIn, lightBlock, 2, 6, 16, structureBoundingBoxIn);
 			this.setBlockState(worldIn, lightBlock, 11, 6, 16, structureBoundingBoxIn);
+			
+			this.spawnConsort(4, 1, 15, structureBoundingBoxIn, worldIn);
+			this.spawnConsort(9, 1, 15, structureBoundingBoxIn, worldIn);
 			
 			return true;
 		}
@@ -852,6 +860,8 @@ public class ConsortVillageComponents
 			
 			this.setBlockState(worldIn, Blocks.STONE_BUTTON.getDefaultState().withRotation(Rotation.CLOCKWISE_180), 6, 1, 0, structureBoundingBoxIn);
 			this.setBlockState(worldIn, Blocks.STONE_BUTTON.getDefaultState(), 4, 1, 2, structureBoundingBoxIn);
+			
+			this.spawnConsort(5, 0, 10, structureBoundingBoxIn, worldIn);
 			
 			return true;
 		}
@@ -1159,6 +1169,8 @@ public class ConsortVillageComponents
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 4, 1, 5, 4, 5, wool, wool, false);
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 5, 1, 4, 5, 5, wool, wool, false);
 			
+			this.spawnConsort(3, 1, 3, structureBoundingBoxIn, worldIn);
+			
 			return true;
 		}
 	}
@@ -1271,6 +1283,10 @@ public class ConsortVillageComponents
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 9, 6, 4, 9, 6, 12, wool, wool, false);
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 7, 4, 8, 7, 12, wool, wool, false);
 			
+			this.spawnConsort(2, 1, 5, structureBoundingBoxIn, worldIn);
+			this.spawnConsort(2, 1, 11, structureBoundingBoxIn, worldIn);
+			this.spawnConsort(9, 1, 5, structureBoundingBoxIn, worldIn);
+			this.spawnConsort(9, 1, 11, structureBoundingBoxIn, worldIn);
 			
 			return true;
 		}
