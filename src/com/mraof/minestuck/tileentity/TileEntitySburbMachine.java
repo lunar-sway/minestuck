@@ -26,6 +26,7 @@ public class TileEntitySburbMachine extends TileEntityMachine
 	public PlayerIdentifier owner;
 	public GristType selectedGrist = GristType.Build;
 	public int color = -1;
+	private int ticks_since_update = 0;
 	
 	@Override
 	public boolean isAutomatic()
@@ -103,7 +104,7 @@ public class TileEntitySburbMachine extends TileEntityMachine
 		{
 		case CRUXTRUDER:
 			ItemStack stack1 = this.inv.get(1);
-			return (!this.inv.get(0).isEmpty() && (stack1.isEmpty() || stack1.getCount() < stack1.getMaxStackSize() && stack1.getItemDamage() == this.color + 1));
+			return (!world.isBlockPowered(this.getPos()) && !this.inv.get(0).isEmpty() && (stack1.isEmpty() || stack1.getCount() < stack1.getMaxStackSize() && stack1.getItemDamage() == this.color + 1));
 		case PUNCH_DESIGNIX:
 		if(!this.inv.get(0).isEmpty() && !inv.get(1).isEmpty())
 		{
@@ -147,7 +148,7 @@ public class TileEntitySburbMachine extends TileEntityMachine
 			}
 			else return false;
 		case ALCHEMITER:
-			if (!this.inv.get(0).isEmpty() && this.owner != null)
+			if(!world.isBlockPowered(this.getPos()) && !this.inv.get(0).isEmpty() && this.owner != null)
 			{
 				//Check owner's cache: Do they have everything they need?
 				ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(this.inv.get(0));
@@ -176,6 +177,31 @@ public class TileEntitySburbMachine extends TileEntityMachine
 		return false;
 	}
 	
+	// We're going to want to trigger a block update every 20 ticks to have comparators pull data from the Alchemeter.
+	@Override
+	public void update()
+	{
+		if(world.isRemote)
+			return;
+		switch (getMachineType()) {
+			case CRUXTRUDER:
+				break;
+			case PUNCH_DESIGNIX:
+				break;
+			case TOTEM_LATHE:
+				break;
+			case ALCHEMITER:
+				if(this.ticks_since_update == 20)
+				{
+					world.updateComparatorOutputLevel(this.getPos(), this.blockType);
+					this.ticks_since_update = 0;
+				} else {
+					this.ticks_since_update++;
+				}
+		}
+		super.update();
+	}
+
 	@Override
 	public void processContents()
 	{

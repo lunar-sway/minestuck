@@ -1,9 +1,17 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.GuiHandler;
+import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.tileentity.TileEntitySburbMachine;
+import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.util.GristHelper;
+import com.mraof.minestuck.util.GristRegistry;
+import com.mraof.minestuck.util.GristSet;
+import com.mraof.minestuck.util.GristType;
+import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.IdentifierHandler;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
@@ -42,6 +50,8 @@ public class BlockSburbMachine extends BlockContainer
 	protected static final AxisAlignedBB ALCHMITER_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1/2D, 1.0D);
 	protected static final AxisAlignedBB[] ALCHEMITER_POLE_AABB = {new AxisAlignedBB(0.0D, 2/16D, 0.0D, 4.5/16D, 1.0D, 1/8D), new AxisAlignedBB(7/8D, 2/16D, 0.0D, 1.0D, 1.0D, 4.5/16D), new AxisAlignedBB(11.5/16D, 2/16D, 7/8D, 1.0D, 1.0D, 1.0D), new AxisAlignedBB(0.0D, 2/16D, 11.5/16D, 1/8D, 1.0D, 1.0D)};
 	
+	public GristType selectedGrist = GristType.Build;
+
 	public static enum MachineType implements IStringSerializable
 	{
 		CRUXTRUDER("cruxtruder"),
@@ -149,6 +159,60 @@ public class BlockSburbMachine extends BlockContainer
 		return true;
 	}
 	
+	// Inform the game that this object has a comparator value.
+	@Override
+	public boolean hasComparatorInputOverride(IBlockState state) { return true; }
+
+	// Will provide a redstone signal through a comparator with the output level corresponding to how many items can be alchemized with the player's current grist cache.
+	// If no item can be alchemized, it will provide no signal to the comparator.
+	@Override
+	public int getComparatorInputOverride(IBlockState state, World world, BlockPos pos)
+	{
+		// Pretty much copied from TileEntitySburbMachine.java with case-specific additions.
+		TileEntitySburbMachine te = (TileEntitySburbMachine) world.getTileEntity(pos);
+		if ((te != null) && state.getValue(MACHINE_TYPE) == MachineType.ALCHEMITER)
+		{
+			if (te.getStackInSlot(0) != null && te.owner != null)
+			{
+				ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(te.getStackInSlot(0));
+				if (newItem.isEmpty())
+					if(!te.getStackInSlot(0).hasTagCompound() || !te.getStackInSlot(0).getTagCompound().hasKey("contentID"))
+						newItem = new ItemStack(MinestuckBlocks.genericObject);
+					else return 0;
+				if (!te.getStackInSlot(1).isEmpty() && (te.getStackInSlot(1).getItem() != newItem.getItem() || te.getStackInSlot(1).getItemDamage() != newItem.getItemDamage() || te.getStackInSlot(1).getMaxStackSize() <= te.getStackInSlot(1).getCount()))
+				{return 0;}
+				GristSet cost = GristRegistry.getGristConversion(newItem);
+				if(newItem.getItem() == MinestuckItems.captchaCard)
+					cost = new GristSet(selectedGrist, MinestuckConfig.cardCost);
+				if(cost != null && newItem.isItemDamaged())
+				{
+					float multiplier = 1 - newItem.getItem().getDamage(newItem)/((float) newItem.getMaxDamage());
+					for(int i = 0; i < cost.gristTypes.length; i++)
+						cost.gristTypes[i] = (int) Math.ceil(cost.gristTypes[i]*multiplier);
+				}
+				// We need to run the check 16 times. Don't want to hammer the game with too many of these, so the comparators are only told to update every 20 ticks.
+				// Additionally, we need to check if the item in the slot is empty. Otherwise, it will attempt to check the cost for air, which cannot be alchemized anyway.
+				if(cost != null && !te.getStackInSlot(0).isEmpty())
+				{
+					GristSet scale_cost;
+					for(int lvl = 1; lvl <= 17; lvl++)
+					{
+						// We went through fifteen item cost checks and could still afford it. No sense in checking more than this.
+						if(lvl == 17) { return 15; }
+						// We need to make a copy to preserve the original grist amounts and avoid scaling values that have already been scaled. Keeps scaling linear as opposed to exponential.
+						scale_cost = cost.copy().scaleGrist(lvl);
+						if(!GristHelper.canAfford(MinestuckPlayerData.getGristSet(te.owner), scale_cost))
+						{
+							return lvl-1;
+						}
+					}
+					return 0;
+				}
+			}
+		}
+		return 0;
+	}
+
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
