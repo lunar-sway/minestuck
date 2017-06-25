@@ -49,8 +49,6 @@ public class BlockSburbMachine extends BlockContainer
 	protected static final AxisAlignedBB[] TOTEM_LATHE_AABB = {new AxisAlignedBB(0.0D, 0.0D, 5/16D, 1.0D, 1.0D, 11/16D), new AxisAlignedBB(5/16D, 0.0D, 0.0D, 11/16D, 1.0D, 1.0D)};
 	protected static final AxisAlignedBB ALCHMITER_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1/2D, 1.0D);
 	protected static final AxisAlignedBB[] ALCHEMITER_POLE_AABB = {new AxisAlignedBB(0.0D, 2/16D, 0.0D, 4.5/16D, 1.0D, 1/8D), new AxisAlignedBB(7/8D, 2/16D, 0.0D, 1.0D, 1.0D, 4.5/16D), new AxisAlignedBB(11.5/16D, 2/16D, 7/8D, 1.0D, 1.0D, 1.0D), new AxisAlignedBB(0.0D, 2/16D, 11.5/16D, 1/8D, 1.0D, 1.0D)};
-	
-	public GristType selectedGrist = GristType.Build;
 
 	public static enum MachineType implements IStringSerializable
 	{
@@ -183,7 +181,7 @@ public class BlockSburbMachine extends BlockContainer
 				{return 0;}
 				GristSet cost = GristRegistry.getGristConversion(newItem);
 				if(newItem.getItem() == MinestuckItems.captchaCard)
-					cost = new GristSet(selectedGrist, MinestuckConfig.cardCost);
+					cost = new GristSet(te.selectedGrist, MinestuckConfig.cardCost);
 				if(cost != null && newItem.isItemDamaged())
 				{
 					float multiplier = 1 - newItem.getItem().getDamage(newItem)/((float) newItem.getMaxDamage());
