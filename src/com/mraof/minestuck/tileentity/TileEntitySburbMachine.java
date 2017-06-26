@@ -177,6 +177,55 @@ public class TileEntitySburbMachine extends TileEntityMachine
 		return false;
 	}
 	
+	public int comparatorValue()
+	{
+		switch (getMachineType()) {
+			case CRUXTRUDER:
+				break;
+			case PUNCH_DESIGNIX:
+				break;
+			case TOTEM_LATHE:
+				break;
+			case ALCHEMITER:
+				if (getStackInSlot(0) != null && owner != null) {
+					ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(getStackInSlot(0));
+					if (newItem.isEmpty())
+						if (!getStackInSlot(0).hasTagCompound() || !getStackInSlot(0).getTagCompound().hasKey("contentID"))
+							newItem = new ItemStack(MinestuckBlocks.genericObject);
+						else return 0;
+					if (!getStackInSlot(1).isEmpty() && (getStackInSlot(1).getItem() != newItem.getItem() || getStackInSlot(1).getItemDamage() != newItem.getItemDamage() || getStackInSlot(1).getMaxStackSize() <= getStackInSlot(1).getCount())) {
+						return 0;
+					}
+					GristSet cost = GristRegistry.getGristConversion(newItem);
+					if (newItem.getItem() == MinestuckItems.captchaCard)
+						cost = new GristSet(selectedGrist, MinestuckConfig.cardCost);
+					if (cost != null && newItem.isItemDamaged()) {
+						float multiplier = 1 - newItem.getItem().getDamage(newItem) / ((float) newItem.getMaxDamage());
+						for (int i = 0; i < cost.gristTypes.length; i++)
+							cost.gristTypes[i] = (int) Math.ceil(cost.gristTypes[i] * multiplier);
+					}
+					// We need to run the check 16 times. Don't want to hammer the game with too many of these, so the comparators are only told to update every 20 ticks.
+					// Additionally, we need to check if the item in the slot is empty. Otherwise, it will attempt to check the cost for air, which cannot be alchemized anyway.
+					if (cost != null && !getStackInSlot(0).isEmpty()) {
+						GristSet scale_cost;
+						for (int lvl = 1; lvl <= 17; lvl++) {
+							// We went through fifteen item cost checks and could still afford it. No sense in checking more than this.
+							if (lvl == 17) {
+								return 15;
+							}
+							// We need to make a copy to preserve the original grist amounts and avoid scaling values that have already been scaled. Keeps scaling linear as opposed to exponential.
+							scale_cost = cost.copy().scaleGrist(lvl);
+							if (!GristHelper.canAfford(MinestuckPlayerData.getGristSet(owner), scale_cost)) {
+								return lvl - 1;
+							}
+						}
+						return 0;
+					}
+				}
+		}
+		return 0;
+	}
+	
 	// We're going to want to trigger a block update every 20 ticks to have comparators pull data from the Alchemeter.
 	@Override
 	public void update()
