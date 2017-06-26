@@ -480,6 +480,7 @@ minestuck.config.disableGiclops.tooltip=Right now, the giclops pathfinding is cu
 message.selectDefaultColor=Default color selected. You can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!
 message.selectColor=If you want to change the color, you can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!
 message.privateComputerMessage=You are not allowed to access other players computers.
+message.transportalizer.transportalizerDisabled=This transportalizer is currently disabled with a redstone signal.
 message.transportalizer.destinationBlocked=The destination seems to be blocked.
 message.gateDestroyed=The destination gate seems to have been destroyed.
 message.gateMissingLand=The land this gate leads to does not exist yet!

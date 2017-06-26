@@ -12,6 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.WorldServer;
 
@@ -19,10 +20,11 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Location;
 import com.mraof.minestuck.util.Teleport;
 
-public class TileEntityTransportalizer extends TileEntity
+public class TileEntityTransportalizer extends TileEntity implements ITickable
 {
 	public static HashMap<String, Location> transportalizers = new HashMap<String, Location>();
 	private static Random rand = new Random();
+	private boolean enabled = true;
 	String id = "";
 	private String destId = "";
 	
@@ -50,6 +52,23 @@ public class TileEntityTransportalizer extends TileEntity
 		}
 	}
 	
+	@Override
+	public void update()
+	{
+		if(world.isRemote)
+			return;
+		// Disable the transportalizer if it's being powered by a redstone signal.
+		// Disabling a transportalizer prevents it from receiving or sending.
+		// Recieving will fail silently. Sending will warn the player.
+		if(world.isBlockPowered(this.getPos()))
+		{
+			if(enabled) { setEnabled(false); }
+		}
+		else {
+			if(!enabled) { setEnabled(true); }
+		}
+	}
+
 	public String getUnusedId()
 	{
 		String unusedId = "";
@@ -73,6 +92,13 @@ public class TileEntityTransportalizer extends TileEntity
 	public void teleport(Entity entity)
 	{
 		Location location = transportalizers.get(this.destId);
+		if(!enabled)
+		{
+			entity.timeUntilPortal = entity.getPortalCooldown();
+			if(entity instanceof EntityPlayerMP)
+				((EntityPlayerMP) entity).sendMessage(new TextComponentTranslation("message.transportalizer.transportalizerDisabled"));
+			return;
+		}
 		if(location != null && location.pos.getY() != -1)
 		{
 			WorldServer world = entity.getServer().worldServerForDimension(location.dim);
@@ -85,6 +111,7 @@ public class TileEntityTransportalizer extends TileEntity
 				return;
 			}
 			
+			if(!destTransportalizer.getEnabled()) { return; } // Fail silently to make it look as though the player entered an ID that doesn't map to a transportalizer.
 			IBlockState block0 = world.getBlockState(location.pos.up());
 			IBlockState block1 = world.getBlockState(location.pos.up(2));
 			if(block0.getMaterial().blocksMovement() || block1.getMaterial().blocksMovement())
@@ -140,6 +167,16 @@ public class TileEntityTransportalizer extends TileEntity
 	public void setDestId(String destId)
 	{
 		this.destId = destId;
+		IBlockState state = world.getBlockState(pos);
+		this.markDirty();
+		world.notifyBlockUpdate(pos, state, state, 0);
+	}
+
+	public boolean getEnabled() { return enabled; }
+
+	public void setEnabled(boolean enabled)
+	{
+		this.enabled = enabled;
 		IBlockState state = world.getBlockState(pos);
 		this.markDirty();
 		world.notifyBlockUpdate(pos, state, state, 0);

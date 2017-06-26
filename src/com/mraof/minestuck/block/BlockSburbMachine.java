@@ -41,7 +41,7 @@ public class BlockSburbMachine extends BlockContainer
 	protected static final AxisAlignedBB[] TOTEM_LATHE_AABB = {new AxisAlignedBB(0.0D, 0.0D, 5/16D, 1.0D, 1.0D, 11/16D), new AxisAlignedBB(5/16D, 0.0D, 0.0D, 11/16D, 1.0D, 1.0D)};
 	protected static final AxisAlignedBB ALCHMITER_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1/2D, 1.0D);
 	protected static final AxisAlignedBB[] ALCHEMITER_POLE_AABB = {new AxisAlignedBB(0.0D, 2/16D, 0.0D, 4.5/16D, 1.0D, 1/8D), new AxisAlignedBB(7/8D, 2/16D, 0.0D, 1.0D, 1.0D, 4.5/16D), new AxisAlignedBB(11.5/16D, 2/16D, 7/8D, 1.0D, 1.0D, 1.0D), new AxisAlignedBB(0.0D, 2/16D, 11.5/16D, 1/8D, 1.0D, 1.0D)};
-	
+
 	public static enum MachineType implements IStringSerializable
 	{
 		CRUXTRUDER("cruxtruder"),
@@ -149,6 +149,21 @@ public class BlockSburbMachine extends BlockContainer
 		return true;
 	}
 	
+	// Inform the game that this object has a comparator value.
+	@Override
+	public boolean hasComparatorInputOverride(IBlockState state) { return true; }
+
+	// Will provide a redstone signal through a comparator with the output level corresponding to how many items can be alchemized with the player's current grist cache.
+	// If no item can be alchemized, it will provide no signal to the comparator.
+	@Override
+	public int getComparatorInputOverride(IBlockState state, World world, BlockPos pos)
+	{
+		TileEntitySburbMachine te = (TileEntitySburbMachine) world.getTileEntity(pos);
+		if(te != null)
+			return te.comparatorValue();
+		return 0;
+	}
+
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
