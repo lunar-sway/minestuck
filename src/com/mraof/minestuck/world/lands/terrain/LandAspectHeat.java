@@ -34,6 +34,8 @@ public class LandAspectHeat extends TerrainLandAspect
 		registry.setBlockState("fall_fluid", Blocks.WATER.getDefaultState());
 		registry.setBlockState("structure_planks", Blocks.BRICK_BLOCK.getDefaultState());
 		registry.setBlockState("structure_planks_slab", Blocks.STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.BRICK));
+		registry.setBlockState("village_path", Blocks.QUARTZ_BLOCK.getDefaultState());
+		registry.setBlockState("village_fence", Blocks.NETHER_BRICK_FENCE.getDefaultState());
 	}
 	
 	@Override

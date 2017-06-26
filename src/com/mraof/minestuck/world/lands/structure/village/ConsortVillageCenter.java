@@ -6,6 +6,7 @@ import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import net.minecraft.block.BlockSlab;
+import net.minecraft.block.BlockStoneSlab;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -29,6 +30,7 @@ public class ConsortVillageCenter
 		MapGenStructureIO.registerStructureComponent(ConsortVillageCenter.RockCenter.class, "MinestuckCVCRo");
 		MapGenStructureIO.registerStructureComponent(ConsortVillageCenter.CactusPyramidCenter.class, "MinestuckCVCCaPy");
 		MapGenStructureIO.registerStructureComponent(ConsortVillageCenter.TurtleWellCenter.class, "MinestuckCVCTuWe");
+		MapGenStructureIO.registerStructureComponent(ConsortVillageCenter.RadioTowerCenter.class, "MinestuckCVCRaTo");
 		
 	}
 	
@@ -52,6 +54,8 @@ public class ConsortVillageCenter
 			weightList.add(new CenterEntry(CactusPyramidCenter.class, 5));
 		if(landAspects.aspectTerrain.getConsortType().equals(EnumConsort.TURTLE))
 			weightList.add(new CenterEntry(TurtleWellCenter.class, 5));
+		if(landAspects.aspectTerrain.getConsortType().equals(EnumConsort.NAKAGATOR))
+			weightList.add(new CenterEntry(RadioTowerCenter.class, 5));
 		
 		if(weightList.isEmpty())
 			return new ConsortVillageCenter.VillageMarketCenter(list, x, z, rand);
@@ -392,7 +396,6 @@ public class ConsortVillageCenter
 		
 	}
 	
-	
 	public static class TurtleWellCenter extends VillageCenter
 	{
 		public TurtleWellCenter()
@@ -494,6 +497,164 @@ public class ConsortVillageCenter
 			
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 2, 2, 5, 2, 5, fluid, fluid, false);
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 1, 3, 4, 1, 4, fluid, fluid, false);
+			
+			return true;
+		}
+		
+	}
+	
+	public static class RadioTowerCenter extends VillageCenter
+	{
+		public RadioTowerCenter()
+		{
+			super();
+		}
+		
+		public RadioTowerCenter(List<ConsortVillageComponents.PieceWeight> pieceWeightList, int x, int z, Random rand)
+		{
+			super(pieceWeightList);
+			this.setCoordBaseMode(EnumFacing.Plane.HORIZONTAL.random(rand));
+			
+			this.boundingBox = new StructureBoundingBox(x, 64, z, x + 8 - 1, 90, z + 8 - 1);
+		}
+		
+		@Override
+		public void buildComponent(StructureComponent componentIn, List<StructureComponent> listIn, Random rand)
+		{
+			ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.minX + 3, boundingBox.minY, boundingBox.maxZ + 1, EnumFacing.SOUTH);
+			ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.minX - 1, boundingBox.minY, boundingBox.minZ + 3, EnumFacing.WEST);
+			ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.minX + 3, boundingBox.minY, boundingBox.minZ - 1, EnumFacing.NORTH);
+			ConsortVillageComponents.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.maxX + 1, boundingBox.minY, boundingBox.minZ + 3, EnumFacing.EAST);
+		}
+		
+		@Override
+		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
+		{
+			if (this.averageGroundLvl < 0)
+			{
+				this.averageGroundLvl = this.getAverageGroundLevel(worldIn, structureBoundingBoxIn);
+				
+				if (this.averageGroundLvl < 0)
+				{
+					return true;
+				}
+				
+				this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.minY - 1, 0);
+			}
+			
+			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
+			IBlockState secondary = provider.blockRegistry.getBlockState("structure_secondary");
+			IBlockState secondaryDecor = provider.blockRegistry.getBlockState("structure_secondary_decorative");
+			IBlockState fence = provider.blockRegistry.getBlockState("village_fence");
+			IBlockState topBlock = Blocks.QUARTZ_BLOCK.getDefaultState();
+			IBlockState topSlab0 = Blocks.STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.QUARTZ);
+			IBlockState topSlab1 = Blocks.STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.QUARTZ).withProperty(BlockStoneSlab.HALF, BlockStoneSlab.EnumBlockHalf.TOP);
+			
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 1, 6, 6, 6);
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 3, 1, 0, 4, 2, 0);
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 3, 1, 7, 4, 2, 7);
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 0, 1, 2, 0, 2, 5);
+			this.fillWithAir(worldIn, structureBoundingBoxIn, 7, 1, 2, 7, 2, 5);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 0, 7, 0, 7, secondary, secondary, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 0, 2, 5, 0, 5, secondaryDecor, secondaryDecor, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 0, 1, 4, 0, 1, secondaryDecor, secondaryDecor, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 0, 6, 4, 0, 6, secondaryDecor, secondaryDecor, false);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 1, 0, 2, 7, 0, secondary, secondary, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 3, 0, 4, 7, 0, secondary, secondary, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 1, 0, 7, 7, 0, secondary, secondary, false);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 1, 7, 2, 7, 7, secondary, secondary, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 3, 7, 4, 7, 7, secondary, secondary, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 1, 7, 7, 7, 7, secondary, secondary, false);
+			
+			this.setBlockState(worldIn, secondary, 0, 1, 1, structureBoundingBoxIn);
+			this.setBlockState(worldIn, secondary, 0, 1, 6, structureBoundingBoxIn);
+			this.setBlockState(worldIn, secondary, 0, 2, 1, structureBoundingBoxIn);
+			this.setBlockState(worldIn, secondary, 0, 2, 6, structureBoundingBoxIn);
+			this.setBlockState(worldIn, secondary, 0, 3, 2, structureBoundingBoxIn);
+			this.setBlockState(worldIn, secondary, 0, 3, 5, structureBoundingBoxIn);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 4, 3, 0, 5, 4, secondary, secondary, false);
+			this.setBlockState(worldIn, secondary, 0, 6, 2, structureBoundingBoxIn);
+			this.setBlockState(worldIn, secondary, 0, 6, 5, structureBoundingBoxIn);
+			this.setBlockState(worldIn, secondary, 0, 7, 1, structureBoundingBoxIn);
+			this.setBlockState(worldIn, secondary, 0, 7, 6, structureBoundingBoxIn);
+			
+			this.setBlockState(worldIn, secondary, 7, 1, 1, structureBoundingBoxIn);
+			this.setBlockState(worldIn, secondary, 7, 1, 6, structureBoundingBoxIn);
+			this.setBlockState(worldIn, secondary, 7, 2, 1, structureBoundingBoxIn);
+			this.setBlockState(worldIn, secondary, 7, 2, 6, structureBoundingBoxIn);
+			this.setBlockState(worldIn, secondary, 7, 3, 2, structureBoundingBoxIn);
+			this.setBlockState(worldIn, secondary, 7, 3, 5, structureBoundingBoxIn);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 7, 4, 3, 7, 5, 4, secondary, secondary, false);
+			this.setBlockState(worldIn, secondary, 7, 6, 2, structureBoundingBoxIn);
+			this.setBlockState(worldIn, secondary, 7, 6, 5, structureBoundingBoxIn);
+			this.setBlockState(worldIn, secondary, 7, 7, 1, structureBoundingBoxIn);
+			this.setBlockState(worldIn, secondary, 7, 7, 6, structureBoundingBoxIn);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 7, 1, 6, 7, 6, secondary, secondary, false);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 8, 1, 1, 13, 6, secondary, secondary, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 8, 1, 6, 13, 6, secondary, secondary, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 13, 2, 5, 13, 5, secondary, secondary, false);
+			
+			this.setBlockState(worldIn, secondary, 2, 9, 1, structureBoundingBoxIn);
+			this.setBlockState(worldIn, secondary, 5, 9, 1, structureBoundingBoxIn);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 10, 1, 4, 11, 1, secondary, secondary, false);
+			this.setBlockState(worldIn, secondary, 2, 12, 1, structureBoundingBoxIn);
+			this.setBlockState(worldIn, secondary, 5, 12, 1, structureBoundingBoxIn);
+			
+			this.setBlockState(worldIn, secondary, 2, 9, 6, structureBoundingBoxIn);
+			this.setBlockState(worldIn, secondary, 5, 9, 6, structureBoundingBoxIn);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 10, 6, 4, 11, 6, secondary, secondary, false);
+			this.setBlockState(worldIn, secondary, 2, 12, 6, structureBoundingBoxIn);
+			this.setBlockState(worldIn, secondary, 5, 12, 6, structureBoundingBoxIn);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 14, 1, 6, 19, 1, secondary, secondary, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 14, 6, 6, 19, 6, secondary, secondary, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 19, 2, 5, 20, 5, secondary, secondary, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 20, 1, 5, 20, 1, secondary, secondary, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 20, 6, 5, 20, 6, secondary, secondary, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 20, 2, 1, 20, 5, secondary, secondary, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 20, 2, 6, 20, 5, secondary, secondary, false);
+			
+			this.setBlockState(worldIn, secondary, 1, 15, 2, structureBoundingBoxIn);
+			this.setBlockState(worldIn, secondary, 1, 15, 5, structureBoundingBoxIn);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 16, 3, 1, 17, 4, secondary, secondary, false);
+			this.setBlockState(worldIn, secondary, 1, 18, 2, structureBoundingBoxIn);
+			this.setBlockState(worldIn, secondary, 1, 18, 5, structureBoundingBoxIn);
+			
+			this.setBlockState(worldIn, secondary, 6, 15, 2, structureBoundingBoxIn);
+			this.setBlockState(worldIn, secondary, 6, 15, 5, structureBoundingBoxIn);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 16, 3, 6, 17, 4, secondary, secondary, false);
+			this.setBlockState(worldIn, secondary, 6, 18, 2, structureBoundingBoxIn);
+			this.setBlockState(worldIn, secondary, 6, 18, 5, structureBoundingBoxIn);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 21, 3, 4, 22, 4, fence, fence, false);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 23, 3, 4, 23, 4, topBlock, topBlock, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 24, 2, 4, 24, 2, topSlab0, topSlab0, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 24, 5, 4, 24, 5, topSlab0, topSlab0, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 24, 3, 2, 24, 4, topSlab0, topSlab0, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 24, 3, 5, 24, 4, topSlab0, topSlab0, false);
+			
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 24, 1, 4, 24, 1, topSlab1, topSlab1, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 24, 6, 4, 24, 6, topSlab1, topSlab1, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 24, 3, 1, 24, 4, topSlab1, topSlab1, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 24, 3, 6, 24, 4, topSlab1, topSlab1, false);
+			this.setBlockState(worldIn, topSlab1, 2, 24, 2, structureBoundingBoxIn);
+			this.setBlockState(worldIn, topSlab1, 2, 24, 5, structureBoundingBoxIn);
+			this.setBlockState(worldIn, topSlab1, 5, 24, 2, structureBoundingBoxIn);
+			this.setBlockState(worldIn, topSlab1, 5, 24, 5, structureBoundingBoxIn);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 25, 1, 4, 25, 1, topSlab0, topSlab0, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 25, 6, 4, 25, 6, topSlab0, topSlab0, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 25, 3, 1, 25, 4, topSlab0, topSlab0, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 25, 3, 6, 25, 4, topSlab0, topSlab0, false);
+			this.setBlockState(worldIn, topSlab0, 2, 25, 2, structureBoundingBoxIn);
+			this.setBlockState(worldIn, topSlab0, 2, 25, 5, structureBoundingBoxIn);
+			this.setBlockState(worldIn, topSlab0, 5, 25, 2, structureBoundingBoxIn);
+			this.setBlockState(worldIn, topSlab0, 5, 25, 5, structureBoundingBoxIn);
 			
 			return true;
 		}

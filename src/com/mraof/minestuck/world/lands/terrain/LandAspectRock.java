@@ -37,6 +37,7 @@ public class LandAspectRock extends TerrainLandAspect
 		registry.setBlockState("structure_secondary_stairs", MinestuckBlocks.coarseStoneStairs.getDefaultState());
 		registry.setBlockState("structure_planks_slab", Blocks.STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.BRICK));		registry.setBlockState("structure_planks_slab", Blocks.STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.BRICK));
 		registry.setBlockState("village_path", Blocks.MOSSY_COBBLESTONE.getDefaultState());
+		registry.setBlockState("village_fence", Blocks.COBBLESTONE_WALL.getDefaultState());
 	}
 	
 	@Override
