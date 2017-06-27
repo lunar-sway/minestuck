@@ -54,6 +54,7 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 		{
 		case GRIST_WIDGET:
 			if(MinestuckConfig.disableGristWidget) return false;
+			if(world.isBlockPowered(this.getPos())) return false;
 			return (this.inv[0] != null && inv[0].getItem() == MinestuckItems.captchaCard && GristRegistry.getGristConversion(AlchemyRecipeHandler.getDecodedItem(inv[0])) != null
 			&& !inv[0].getTagCompound().getBoolean("punched") && AlchemyRecipeHandler.getDecodedItem(inv[0]).getItem() != MinestuckItems.captchaCard);
 		}

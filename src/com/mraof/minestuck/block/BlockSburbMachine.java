@@ -150,6 +150,20 @@ public class BlockSburbMachine extends BlockContainer
 		}
 		return true;
 	}
+
+	@Override
+	public boolean hasComparatorInputOverride(IBlockState state) { return true; }
+
+	// Will provide a redstone signal through a comparator with the output level corresponding to how many items can be alchemized with the player's current grist cache.
+ 	// If no item can be alchemized, it will provide no signal to the comparator.
+	@Override
+	public int getComparatorInputOverride(IBlockState state, World world, BlockPos pos)
+	{
+		TileEntitySburbMachine te = (TileEntitySburbMachine) world.getTileEntity(pos);
+		if(te != null)
+			return te.comparatorValue();
+		return 0;
+	}
 	
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)

@@ -26,6 +26,7 @@ public class TileEntitySburbMachine extends TileEntityMachine
 	public PlayerIdentifier owner;
 	public GristType selectedGrist = GristType.Build;
 	public int color = -1;
+	private int ticks_since_update = 0;
 	
 	@Override
 	public boolean isAutomatic()
@@ -102,7 +103,7 @@ public class TileEntitySburbMachine extends TileEntityMachine
 		switch (getMachineType())
 		{
 		case CRUXTRUDER:
-			return (this.inv[0] != null && (this.inv[1] == null || this.inv[1].stackSize < this.inv[1].getMaxStackSize() && inv[1].getItemDamage() == this.color + 1));
+			return (!world.isBlockPowered(this.getPos()) && this.inv[0] != null && (this.inv[1] == null || this.inv[1].stackSize < this.inv[1].getMaxStackSize() && inv[1].getItemDamage() == this.color + 1));
 		case PUNCH_DESIGNIX:
 		if (this.inv[0] != null && inv[1] != null)
 		{
@@ -146,7 +147,7 @@ public class TileEntitySburbMachine extends TileEntityMachine
 			}
 			else return false;
 		case ALCHEMITER:
-			if (this.inv[0] != null && this.owner != null)
+			if (!world.isBlockPowered(this.getPos()) && this.inv[0] != null && this.owner != null)
 			{
 				//Check owner's cache: Do they have everything they need?
 				ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(this.inv[0]);
@@ -173,6 +174,80 @@ public class TileEntitySburbMachine extends TileEntityMachine
 			}
 		}
 		return false;
+	}
+
+	public int comparatorValue()
+ 	{
+		switch (getMachineType()) {
+			case CRUXTRUDER:
+				break;
+			case PUNCH_DESIGNIX:
+				break;
+			case TOTEM_LATHE:
+				break;
+			case ALCHEMITER:
+				if (this.inv[0] != null && owner != null) {
+					ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(this.inv[0]);
+					if (newItem == null)
+						if (!this.inv[0].hasTagCompound() || !this.inv[0].getTagCompound().hasKey("contentID"))
+						newItem = new ItemStack(MinestuckBlocks.genericObject);
+					else return 0;
+					if (!(this.inv[1] == null) && (this.inv[1].getItem() != newItem.getItem() || this.inv[1].getItemDamage() != newItem.getItemDamage() || this.inv[1].getMaxStackSize() <= this.inv[1].stackSize)) {
+						return 0;
+					}
+					GristSet cost = GristRegistry.getGristConversion(newItem);
+					if (newItem.getItem() == MinestuckItems.captchaCard)
+						cost = new GristSet(selectedGrist, MinestuckConfig.cardCost);
+					if (cost != null && newItem.isItemDamaged()) {
+						float multiplier = 1 - newItem.getItem().getDamage(newItem) / ((float) newItem.getMaxDamage());
+						for (int i = 0; i < cost.gristTypes.length; i++)
+							cost.gristTypes[i] = (int) Math.ceil(cost.gristTypes[i] * multiplier);
+					}
+					// We need to run the check 16 times. Don't want to hammer the game with too many of these, so the comparators are only told to update every 20 ticks.
+					// Additionally, we need to check if the item in the slot is empty. Otherwise, it will attempt to check the cost for air, which cannot be alchemized anyway.
+					if (cost != null && !(this.inv[0] == null)) {
+						GristSet scale_cost;
+						for (int lvl = 1; lvl <= 17; lvl++) {
+							// We went through fifteen item cost checks and could still afford it. No sense in checking more than this.
+							if (lvl == 17) {
+								return 15;
+							}
+							// We need to make a copy to preserve the original grist amounts and avoid scaling values that have already been scaled. Keeps scaling linear as opposed to exponential.
+							scale_cost = cost.copy().scaleGrist(lvl);
+							if (!GristHelper.canAfford(MinestuckPlayerData.getGristSet(owner), scale_cost)) {
+								return lvl - 1;
+							}
+						}
+						return 0;
+					}
+				}
+		}
+		return 0;
+	}
+
+	// We're going to want to trigger a block update every 20 ticks to have comparators pull data from the Alchemeter.
+	@Override
+	public void update()
+ 	{
+		if(world.isRemote)
+			return;
+		switch (getMachineType()) {
+			case CRUXTRUDER:
+				break;
+			case PUNCH_DESIGNIX:
+				break;
+			case TOTEM_LATHE:
+				break;
+			case ALCHEMITER:
+				if(this.ticks_since_update == 20)
+				{
+					world.updateComparatorOutputLevel(this.getPos(), this.blockType);
+					this.ticks_since_update = 0;
+				} else {
+					this.ticks_since_update++;
+				}
+		}
+		super.update();
 	}
 	
 	@Override
