@@ -77,6 +77,8 @@ public class StructureBlockRegistry
 		registerBlock("village_fence", Blocks.OAK_FENCE.getDefaultState());
 		registerBlock("fall_fluid", "ocean");
 		registerBlock("light_block", Blocks.GLOWSTONE.getDefaultState());
+		registerBlock("mushroom_1", Blocks.RED_MUSHROOM.getDefaultState());
+		registerBlock("mushroom_2", Blocks.BROWN_MUSHROOM.getDefaultState());
 		registerBlock("torch", Blocks.TORCH.getDefaultState(), BlockTorch.class);	//Class restriction needed because of the facing property
 		registerBlock("bucket1", Blocks.QUARTZ_BLOCK.getDefaultState());
 		registerBlock("bucket2", Blocks.IRON_BLOCK.getDefaultState());
