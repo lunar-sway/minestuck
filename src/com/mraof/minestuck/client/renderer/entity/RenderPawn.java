@@ -3,22 +3,21 @@ package com.mraof.minestuck.client.renderer.entity;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ResourceLocation;
 
 import com.mraof.minestuck.entity.carapacian.EntityPawn;
 
-public class RenderPawn extends RenderBiped 
+public class RenderPawn extends RenderBiped<EntityPawn>
 {
-
-	public RenderPawn(RenderManager manager, ModelBiped par1ModelBiped, float par2) 
+	
+	public RenderPawn(RenderManager manager, ModelBiped modelBiped, float shadowSize)
 	{
-		super(manager, par1ModelBiped, par2);
+		super(manager, modelBiped, shadowSize);
 	}
+	
 	@Override
-	protected ResourceLocation getEntityTexture(EntityLiving par1EntityLiving) 
+	protected ResourceLocation getEntityTexture(EntityPawn pawn) 
 	{
-		return ((EntityPawn)par1EntityLiving).getTextureResource();
+		return pawn.getTextureResource();
 	}
-
 }

@@ -1,12 +1,18 @@
 package com.mraof.minestuck.event;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.translation.I18n;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.GuiColorSelector;
 import com.mraof.minestuck.client.gui.playerStats.GuiDataChecker;
@@ -54,6 +60,21 @@ public class ClientEventHandler
 					Minecraft.getMinecraft().displayGuiScreen(new GuiColorSelector(true));
 			}
 			
+		}
+	}
+	
+	@SubscribeEvent(priority=EventPriority.HIGHEST)
+	public void addCustomTooltip(ItemTooltipEvent event)
+	{
+		//Add config check
+		{
+			ItemStack stack = event.getItemStack();
+			if(stack.getItem().getRegistryName().getResourceDomain().equals(Minestuck.class.getAnnotation(Mod.class).modid()))
+			{
+				String name = stack.getUnlocalizedName() + ".tooltip";
+				if(I18n.canTranslate(name))
+					event.getToolTip().add(1, I18n.translateToLocal(name));
+			}
 		}
 	}
 	

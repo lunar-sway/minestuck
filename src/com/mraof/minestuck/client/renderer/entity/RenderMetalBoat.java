@@ -27,5 +27,4 @@ public class RenderMetalBoat extends RenderBoat
 			return goldVariant;
 		else return ironVariant;
 	}
-	
 }

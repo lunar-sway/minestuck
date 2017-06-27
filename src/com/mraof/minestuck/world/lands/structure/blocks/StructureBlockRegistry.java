@@ -1,16 +1,15 @@
 package com.mraof.minestuck.world.lands.structure.blocks;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockStairs;
-import net.minecraft.block.BlockTorch;
+import net.minecraft.block.*;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Rotation;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class StructureBlockRegistry
 {
@@ -68,11 +67,24 @@ public class StructureBlockRegistry
 		registerBlock("structure_secondary", "structure_primary");
 		registerBlock("structure_secondary_decorative", "structure_secondary");
 		registerBlock("structure_secondary_stairs", "structure_secondary");
+		registerBlock("structure_planks", Blocks.PLANKS.getDefaultState());
+		registerBlock("structure_planks_slab", Blocks.WOODEN_SLAB.getDefaultState(), BlockSlab.class);
+		registerBlock("structure_wool_1", Blocks.WOOL.getDefaultState());
+		registerBlock("structure_wool_2", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.SILVER));
+		registerBlock("structure_wool_3", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.GRAY));
+		registerBlock("village_door", Blocks.OAK_DOOR.getDefaultState(), BlockDoor.class);
+		registerBlock("village_path", "structure_secondary");
+		registerBlock("village_fence", Blocks.OAK_FENCE.getDefaultState());
 		registerBlock("fall_fluid", "ocean");
 		registerBlock("light_block", Blocks.GLOWSTONE.getDefaultState());
+		registerBlock("mushroom_1", Blocks.RED_MUSHROOM.getDefaultState());
+		registerBlock("mushroom_2", Blocks.BROWN_MUSHROOM.getDefaultState());
 		registerBlock("torch", Blocks.TORCH.getDefaultState(), BlockTorch.class);	//Class restriction needed because of the facing property
 		registerBlock("bucket1", Blocks.QUARTZ_BLOCK.getDefaultState());
 		registerBlock("bucket2", Blocks.IRON_BLOCK.getDefaultState());
+		registerBlock("glass", Blocks.GLASS.getDefaultState());
+		registerBlock("stained_glass_1", Blocks.STAINED_GLASS.getDefaultState().withProperty(BlockStainedGlass.COLOR, EnumDyeColor.GRAY));
+		registerBlock("stained_glass_2", Blocks.STAINED_GLASS.getDefaultState().withProperty(BlockStainedGlass.COLOR, EnumDyeColor.SILVER));
 	}
 	
 	private static class BlockEntry

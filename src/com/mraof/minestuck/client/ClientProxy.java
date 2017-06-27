@@ -6,11 +6,15 @@ import com.mraof.minestuck.entity.item.EntityCrewPoster;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -24,6 +28,7 @@ import com.mraof.minestuck.client.model.ModelNakagator;
 import com.mraof.minestuck.client.model.ModelOgre;
 import com.mraof.minestuck.client.model.ModelRook;
 import com.mraof.minestuck.client.model.ModelSalamander;
+import com.mraof.minestuck.client.model.ModelTurtle;
 import com.mraof.minestuck.client.renderer.tileentity.RenderGate;
 import com.mraof.minestuck.client.renderer.tileentity.RenderSkaiaPortal;
 import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
@@ -34,6 +39,7 @@ import com.mraof.minestuck.entity.carapacian.EntityRook;
 import com.mraof.minestuck.entity.consort.EntityIguana;
 import com.mraof.minestuck.entity.consort.EntityNakagator;
 import com.mraof.minestuck.entity.consort.EntitySalamander;
+import com.mraof.minestuck.entity.consort.EntityTurtle;
 import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.entity.item.EntityMetalBoat;
 import com.mraof.minestuck.entity.item.EntityVitalityGel;
@@ -60,23 +66,6 @@ public class ClientProxy
 	public static void registerRenderers() 
 	{
 		Minecraft mc = Minecraft.getMinecraft();
-		RenderingRegistry.registerEntityRenderingHandler(EntityNakagator.class, new RenderEntityMinestuck(mc.getRenderManager(), new ModelNakagator(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(EntitySalamander.class, new RenderEntityMinestuck(mc.getRenderManager(), new ModelSalamander(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityIguana.class, new RenderEntityMinestuck(mc.getRenderManager(), new ModelIguana(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityImp.class, new RenderEntityMinestuck(mc.getRenderManager(), new ModelImp(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityOgre.class, new RenderEntityMinestuck(mc.getRenderManager(), new ModelOgre(), 2.8F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityBasilisk.class, new RenderEntityMinestuck(mc.getRenderManager(), new ModelBasilisk(), 2.8F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityUnderlingPart.class, new RenderShadow(mc.getRenderManager(), 2.8F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityBigPart.class, new RenderShadow(mc.getRenderManager(), 0F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityGiclops.class, new RenderEntityMinestuck(mc.getRenderManager(), new ModelGiclops(), 7.6F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityPawn.class, new RenderPawn(mc.getRenderManager(), new ModelBiped(), 0.5F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityBishop.class, new RenderEntityMinestuck(mc.getRenderManager(), new ModelBishop(), 1.8F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityRook.class, new RenderEntityMinestuck(mc.getRenderManager(), new ModelRook(), 2.5F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityGrist.class, new RenderGrist(mc.getRenderManager()));
-		RenderingRegistry.registerEntityRenderingHandler(EntityVitalityGel.class, new RenderVitalityGel(mc.getRenderManager()));
-		RenderingRegistry.registerEntityRenderingHandler(EntityDecoy.class, new RenderDecoy(mc.getRenderManager()));
-		RenderingRegistry.registerEntityRenderingHandler(EntityMetalBoat.class, new RenderMetalBoat(mc.getRenderManager()));
-		RenderingRegistry.registerEntityRenderingHandler(EntityCrewPoster.class, new RenderHangingArt<EntityCrewPoster>(mc.getRenderManager(), "midnight_poster"));
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySkaiaPortal.class, new RenderSkaiaPortal());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGate.class, new RenderGate());
 //		MinecraftForgeClient.registerItemRenderer(Minestuck.captchaCard, new RenderCard());
@@ -105,9 +94,82 @@ public class ClientProxy
 	@SideOnly(Side.CLIENT)
 	public static void registerSided()
 	{
+		RenderingRegistry.registerEntityRenderingHandler(EntityNakagator.class, RenderEntityMinestuck.getFactory(new ModelNakagator(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(EntitySalamander.class, RenderEntityMinestuck.getFactory(new ModelSalamander(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityIguana.class, RenderEntityMinestuck.getFactory(new ModelIguana(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityTurtle.class, RenderEntityMinestuck.getFactory(new ModelTurtle(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityImp.class, RenderEntityMinestuck.getFactory(new ModelImp(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityOgre.class, RenderEntityMinestuck.getFactory(new ModelOgre(), 2.8F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityBasilisk.class, RenderEntityMinestuck.getFactory(new ModelBasilisk(), 2.8F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityGiclops.class, RenderEntityMinestuck.getFactory(new ModelGiclops(), 7.6F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityBishop.class, RenderEntityMinestuck.getFactory(new ModelBishop(), 1.8F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityRook.class, RenderEntityMinestuck.getFactory(new ModelRook(), 2.5F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityUnderlingPart.class, new IRenderFactory<EntityUnderlingPart>()
+		{
+			@Override
+			public Render<EntityUnderlingPart> createRenderFor(RenderManager manager)
+			{
+				return new RenderShadow(manager, 2.8F);
+			}
+		});
+		RenderingRegistry.registerEntityRenderingHandler(EntityBigPart.class, new IRenderFactory<EntityBigPart>()
+		{
+			@Override
+			public Render<EntityBigPart> createRenderFor(RenderManager manager)
+			{
+				return new RenderShadow(manager, 0F);
+			}
+		});
+		RenderingRegistry.registerEntityRenderingHandler(EntityPawn.class, new IRenderFactory<EntityPawn>()
+		{
+			@Override
+			public Render<EntityPawn> createRenderFor(RenderManager manager)
+			{
+				return new RenderPawn(manager, new ModelBiped(), 0.5F);
+			}
+		});
+		RenderingRegistry.registerEntityRenderingHandler(EntityGrist.class, new IRenderFactory<EntityGrist>()
+		{
+			@Override
+			public Render<EntityGrist> createRenderFor(RenderManager manager)
+			{
+				return new RenderGrist(manager);
+			}
+		});
+		RenderingRegistry.registerEntityRenderingHandler(EntityVitalityGel.class, new IRenderFactory<EntityVitalityGel>()
+		{
+			@Override
+			public Render<EntityVitalityGel> createRenderFor(RenderManager manager)
+			{
+				return new RenderVitalityGel(manager);
+			}
+		});
+		RenderingRegistry.registerEntityRenderingHandler(EntityDecoy.class, new IRenderFactory<EntityDecoy>()
+		{
+			@Override
+			public Render<EntityDecoy> createRenderFor(RenderManager manager)
+			{
+				return new RenderDecoy(manager);
+			}
+		});
+		RenderingRegistry.registerEntityRenderingHandler(EntityMetalBoat.class, new IRenderFactory<EntityBoat>()
+		{
+			@Override
+			public Render<EntityBoat> createRenderFor(RenderManager manager)
+			{
+				return new RenderMetalBoat(manager);
+			}
+		});
+		RenderingRegistry.registerEntityRenderingHandler(EntityCrewPoster.class, new IRenderFactory<EntityCrewPoster>()
+		{
+			@Override
+			public Render<EntityCrewPoster> createRenderFor(RenderManager manager)
+			{
+				return new RenderHangingArt(manager, "midnight_poster");
+			}
+		});
 		
 		MinecraftForge.EVENT_BUS.register(new MinestuckKeyHandler());
 		MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
 	}
-	
 }

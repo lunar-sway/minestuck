@@ -1,14 +1,24 @@
 package com.mraof.minestuck.world.lands.gen;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Random;
-
+import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.block.BlockGate;
+import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.network.skaianet.SburbHandler;
+import com.mraof.minestuck.tileentity.TileEntityGate;
+import com.mraof.minestuck.world.GateHandler;
+import com.mraof.minestuck.world.WorldProviderLands;
+import com.mraof.minestuck.world.biome.BiomeMinestuck;
+import com.mraof.minestuck.world.lands.LandAspectRegistry;
+import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
+import com.mraof.minestuck.world.lands.structure.DefaultGatePlacement;
+import com.mraof.minestuck.world.lands.structure.IGateStructure;
+import com.mraof.minestuck.world.lands.structure.MapGenLandStructure;
+import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.lands.structure.village.MapGenConsortVillage;
+import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
+import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
@@ -21,25 +31,7 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.block.BlockGate;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.entity.consort.EntityIguana;
-import com.mraof.minestuck.entity.consort.EntityNakagator;
-import com.mraof.minestuck.entity.consort.EntitySalamander;
-import com.mraof.minestuck.tileentity.TileEntityGate;
-import com.mraof.minestuck.world.GateHandler;
-import com.mraof.minestuck.world.WorldProviderLands;
-import com.mraof.minestuck.network.skaianet.SburbHandler;
-import com.mraof.minestuck.world.biome.BiomeMinestuck;
-import com.mraof.minestuck.world.lands.LandAspectRegistry;
-import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
-import com.mraof.minestuck.world.lands.structure.DefaultGatePlacement;
-import com.mraof.minestuck.world.lands.structure.IGateStructure;
-import com.mraof.minestuck.world.lands.structure.LandStructureHandler;
-import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
-import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
-import com.mraof.minestuck.world.lands.title.TitleLandAspect;
+import java.util.*;
 
 public class ChunkProviderLands implements IChunkGenerator
 {
@@ -58,7 +50,8 @@ public class ChunkProviderLands implements IChunkGenerator
 	public final StructureBlockRegistry blockRegistry;
 	public List<ILandDecorator> decorators;
 	public ILandTerrainGen terrainGenerator;
-	public LandStructureHandler structureHandler;
+	public MapGenLandStructure structureHandler;
+	public MapGenConsortVillage villageHandler;
 	public int dayCycle;
 	public int weatherType;	//-1:No weather &1: Force rain &2: If thunder &4: Force thunder
 	public float rainfall, temperature;
@@ -74,16 +67,12 @@ public class ChunkProviderLands implements IChunkGenerator
 		
 		aspect1 = worldProvider.landAspects.aspectTerrain;
 		aspect2 = worldProvider.landAspects.aspectTitle;
-		
-		NBTTagCompound landDataTag = (NBTTagCompound) worldObj.getWorldInfo().getAdditionalProperty("LandData");
 
 		this.landWorld = worldObj;
 		
 		this.consortList = new ArrayList<SpawnListEntry>();
 		this.monsterList = new ArrayList<SpawnListEntry>();
-		this.consortList.add(new SpawnListEntry(EntityNakagator.class, 2, 1, 10));
-		this.consortList.add(new SpawnListEntry(EntitySalamander.class, 2, 1, 10));
-		this.consortList.add(new SpawnListEntry(EntityIguana.class, 2, 1, 10));
+		this.consortList.add(new SpawnListEntry(aspect1.getConsortType().getConsortClass(), 2, 1, 10));
 		
 		this.dayCycle = aspect1.getDayCycleMode();
 		this.skyColor = aspect1.getFogColor();
@@ -107,7 +96,8 @@ public class ChunkProviderLands implements IChunkGenerator
 			this.random = new Random(seed);
 			blockRegistry = new StructureBlockRegistry();
 			this.terrainGenerator = aspect1.createTerrainGenerator(this, random);
-			this.structureHandler = new LandStructureHandler(this);
+			this.structureHandler = new MapGenLandStructure(this);
+			this.villageHandler = new MapGenConsortVillage(this);
 			aspect1.registerBlocks(blockRegistry);
 			this.decorators = new ArrayList<ILandDecorator>();
 			this.decorators.addAll(aspect1.getDecorators());
@@ -156,7 +146,7 @@ public class ChunkProviderLands implements IChunkGenerator
 			chunkBiomes[i] = (byte) Biome.getIdForBiome(biomes[i]);
 		
 		structureHandler.generate(landWorld, chunkX, chunkZ, primer);
-		
+		villageHandler.generate(landWorld, chunkX, chunkZ, primer);
 		return chunk;
 	}
 	
@@ -179,6 +169,7 @@ public class ChunkProviderLands implements IChunkGenerator
 		this.random.setSeed(getSeedFor(chunkX, chunkZ));
 		
 		this.generatingStructure = structureHandler.generateStructure(landWorld, random, new ChunkPos(chunkX, chunkZ));
+		this.generatingStructure |= villageHandler.generateStructure(landWorld, random, new ChunkPos(chunkX, chunkZ));
 		
 		BlockPos pos = null;
 		for (Object decorator : decorators)

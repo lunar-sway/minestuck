@@ -3,6 +3,8 @@ package com.mraof.minestuck.util;
 import java.util.EnumSet;
 import java.util.Random;
 
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.translation.I18n;
 
 /**
@@ -73,4 +75,8 @@ public enum EnumClass {
 		return I18n.translateToLocal("title."+this.toString());
 	}
 	
+	public ITextComponent asTextComponent()
+	{
+		return new TextComponentTranslation("title."+this.toString());
+	}
 }

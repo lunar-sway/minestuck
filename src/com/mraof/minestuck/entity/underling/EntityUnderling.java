@@ -176,8 +176,8 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	public String getTexture() 
 	{
 		if(type == null)
-			return "textures/mobs/" + GristType.Shale.getName() + '_' + underlingName + ".png";
-		return "textures/mobs/" + type.getName() + '_' + underlingName + ".png";
+			return "textures/mobs/underlings/" + GristType.Shale.getName() + '_' + underlingName + ".png";
+		return "textures/mobs/underlings/" + type.getName() + '_' + underlingName + ".png";
 	}
 	
 	@Override

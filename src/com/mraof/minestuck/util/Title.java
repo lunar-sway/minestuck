@@ -1,5 +1,7 @@
 package com.mraof.minestuck.util;
 
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.translation.I18n;
 
 public class Title {
@@ -27,6 +29,11 @@ public class Title {
 	@Override
 	public String toString() {
 		return heroClass.toString() + " of " + heroAspect.toString();
+	}
+	
+	public ITextComponent asTextComponent()
+	{
+		return new TextComponentTranslation("title.format", heroClass.asTextComponent(), heroAspect.asTextComponent());
 	}
 	
 	@Override

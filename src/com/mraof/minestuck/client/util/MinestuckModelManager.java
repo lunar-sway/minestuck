@@ -149,10 +149,22 @@ public class MinestuckModelManager
 		register(obsidianBucket);
 		for(int i = 0; i < ItemMinestuckCandy.modelNames.length; i++)
 			register(candy, i, ItemMinestuckCandy.modelNames[i]);
+		register(bugOnAStick);
+		register(chocolateBeetle);
+		register(coneOfFlies);
+		register(grasshopper);
+		register(jarOfBugs);
+		register(onion);
 		register(salad);
 		register(threshDvd);
 		register(crewPoster);
 		register(sbahjPoster);
+		register(carvingTool);
+		register(crumplyHat);
+		register(frogStatueReplica);
+		register(stoneSlab);
+		register(recordEmissaryOfDance);
+		register(recordDanceStab);
 		
 		//Blocks
 		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())

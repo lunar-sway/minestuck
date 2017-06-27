@@ -6,23 +6,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.entity.carapacian.EntityBlackBishop;
-import com.mraof.minestuck.entity.carapacian.EntityBlackPawn;
-import com.mraof.minestuck.entity.carapacian.EntityBlackRook;
-import com.mraof.minestuck.entity.carapacian.EntityWhiteBishop;
-import com.mraof.minestuck.entity.carapacian.EntityWhitePawn;
-import com.mraof.minestuck.entity.carapacian.EntityWhiteRook;
-import com.mraof.minestuck.entity.consort.EntityIguana;
-import com.mraof.minestuck.entity.consort.EntityNakagator;
-import com.mraof.minestuck.entity.consort.EntitySalamander;
-import com.mraof.minestuck.entity.item.EntityGrist;
-import com.mraof.minestuck.entity.item.EntityMetalBoat;
-import com.mraof.minestuck.entity.item.EntityVitalityGel;
-import com.mraof.minestuck.entity.underling.EntityBasilisk;
-import com.mraof.minestuck.entity.underling.EntityGiclops;
-import com.mraof.minestuck.entity.underling.EntityImp;
-import com.mraof.minestuck.entity.underling.EntityOgre;
-import com.mraof.minestuck.entity.underling.EntityWyrm;
+import com.mraof.minestuck.entity.carapacian.*;
+import com.mraof.minestuck.entity.consort.*;
+import com.mraof.minestuck.entity.item.*;
+import com.mraof.minestuck.entity.underling.*;
 
 public final class MinestuckEntities
 {
@@ -34,6 +21,7 @@ public final class MinestuckEntities
 		registerEntity(EntitySalamander.class, "Salamander", "salamander");
 		registerEntity(EntityNakagator.class, "Nakagator", "nakagator");
 		registerEntity(EntityIguana.class, "Iguana", "iguana");
+		registerEntity(EntityTurtle.class, "Turtle", "turtle");
 		registerEntity(EntityImp.class, "Imp", "imp");
 		registerEntity(EntityOgre.class, "Ogre", "ogre");
 		registerEntity(EntityBasilisk.class, "Basilisk", "basilisk");

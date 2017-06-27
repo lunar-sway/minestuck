@@ -1,34 +1,26 @@
 package com.mraof.minestuck.world.lands.terrain;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import net.minecraft.block.BlockRedSandstone;
-import net.minecraft.block.BlockSand;
-import net.minecraft.block.BlockSandStone;
-import net.minecraft.block.BlockStoneBrick;
+import com.mraof.minestuck.entity.consort.EnumConsort;
+import com.mraof.minestuck.world.biome.BiomeMinestuck;
+import com.mraof.minestuck.world.lands.LandAspectRegistry;
+import com.mraof.minestuck.world.lands.decorator.*;
+import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import com.mraof.minestuck.world.lands.gen.DefaultTerrainGen;
+import com.mraof.minestuck.world.lands.gen.ILandTerrainGen;
+import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
+import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.gen.feature.WorldGenDeadBush;
 
-import com.mraof.minestuck.world.biome.BiomeMinestuck;
-import com.mraof.minestuck.world.lands.LandAspectRegistry;
-import com.mraof.minestuck.world.lands.decorator.BlockBlobDecorator;
-import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
-import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
-import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
-import com.mraof.minestuck.world.lands.decorator.WorldGenDecorator;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import com.mraof.minestuck.world.lands.gen.DefaultTerrainGen;
-import com.mraof.minestuck.world.lands.gen.ILandTerrainGen;
-import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class LandAspectSandstone extends TerrainLandAspect
 {
 	
-	private final IBlockState[] structureBlocks;
 	private final Vec3d skyColor;
 	private final Variant type;
 	private final List<TerrainLandAspect> variations;
@@ -44,14 +36,12 @@ public class LandAspectSandstone extends TerrainLandAspect
 		this.type = type;
 		if(type == Variant.SANDSTONE)
 		{
-			structureBlocks = new IBlockState[] {Blocks.SANDSTONE.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.SMOOTH), Blocks.STONEBRICK.getDefaultState()};
 			skyColor = new Vec3d(0.9D, 0.7D, 0.05D);
 			
 			variations.add(this);
 			variations.add(new LandAspectSandstone(Variant.SANDSTONE_RED));
 		} else
 		{
-			structureBlocks = new IBlockState[] {Blocks.RED_SANDSTONE.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.SMOOTH), Blocks.STONEBRICK.getDefaultState()};
 			skyColor = new Vec3d(0.9D, 0.5D, 0.05D);
 			
 		}
@@ -66,16 +56,20 @@ public class LandAspectSandstone extends TerrainLandAspect
 			registry.setBlockState("structure_primary", Blocks.SANDSTONE.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.SMOOTH));
 			registry.setBlockState("structure_primary_decorative", Blocks.SANDSTONE.getDefaultState().withProperty(BlockSandStone.TYPE, BlockSandStone.EnumType.CHISELED));
 			registry.setBlockState("structure_primary_stairs", Blocks.SANDSTONE_STAIRS.getDefaultState());
+			registry.setBlockState("village_path", Blocks.SAND.getDefaultState().withProperty(BlockSand.VARIANT, BlockSand.EnumType.RED_SAND));
 		} else
 		{
 			registry.setBlockState("upper", Blocks.RED_SANDSTONE.getDefaultState());
 			registry.setBlockState("structure_primary", Blocks.RED_SANDSTONE.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.SMOOTH));
 			registry.setBlockState("structure_primary_decorative", Blocks.RED_SANDSTONE.getDefaultState().withProperty(BlockRedSandstone.TYPE, BlockRedSandstone.EnumType.CHISELED));
 			registry.setBlockState("structure_primary_stairs", Blocks.RED_SANDSTONE_STAIRS.getDefaultState());
+			registry.setBlockState("village_path", Blocks.SAND.getDefaultState());
 		}
 		registry.setBlockState("structure_secondary", Blocks.STONEBRICK.getDefaultState());
 		registry.setBlockState("structure_secondary_decorative", Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED));
 		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
+		registry.setBlockState("structure_planks", Blocks.PLANKS.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.ACACIA));
+		registry.setBlockState("structure_planks_slab", Blocks.WOODEN_SLAB.getDefaultState().withProperty(BlockWoodSlab.VARIANT, BlockPlanks.EnumType.ACACIA));
 		registry.setBlockState("torch", Blocks.REDSTONE_TORCH.getDefaultState());
 	}
 	
@@ -162,6 +156,12 @@ public class LandAspectSandstone extends TerrainLandAspect
 		terrainGen.normalVariation = 0.6F;
 		terrainGen.oceanVariation = 0.3F;
 		return terrainGen;
+	}
+	
+	@Override
+	public EnumConsort getConsortType()
+	{
+		return EnumConsort.TURTLE;
 	}
 	
 	public static enum Variant

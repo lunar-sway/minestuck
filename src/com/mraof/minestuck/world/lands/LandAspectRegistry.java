@@ -1,18 +1,5 @@
 package com.mraof.minestuck.world.lands;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Random;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.fml.common.FMLLog;
-
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
@@ -21,6 +8,14 @@ import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.terrain.*;
 import com.mraof.minestuck.world.lands.title.*;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.fml.common.FMLLog;
+
+import java.util.*;
 
 public class LandAspectRegistry
 {
@@ -233,6 +228,13 @@ public class LandAspectRegistry
 	public static boolean containsTitleLandAspect(EnumAspect titleAspect, TitleLandAspect landAspect)
 	{
 		return titleAspects.get(titleAspect).contains(landAspect);
+	}
+	
+	public static TitleLandAspect getSingleLandAspect(EnumAspect aspect)
+	{
+		if(titleAspects.get(aspect).size() == 1)
+			return titleAspects.get(aspect).get(0);
+		else return null;
 	}
 	
 	/**

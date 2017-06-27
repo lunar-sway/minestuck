@@ -1,0 +1,18 @@
+{
+    "record.emissary": {
+      "sounds": [
+        {
+            "name": "minestuck:records/emissary_of_dance",
+            "stream": true
+        }
+      ]
+    },
+    "record.danceStab": {
+      "sounds": [
+        {
+            "name": "minestuck:records/dance_stab_dance",
+            "stream": true
+        }
+      ]
+    }
+}

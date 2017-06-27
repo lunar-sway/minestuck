@@ -205,7 +205,7 @@ public class MinestuckConfig
 	
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
-	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
+	public void onConfigChanged(ConfigChangedEvent.PostConfigChangedEvent event)
 	{
 		if(event.getModID().equals(Minestuck.class.getAnnotation(Mod.class).modid()))
 		{

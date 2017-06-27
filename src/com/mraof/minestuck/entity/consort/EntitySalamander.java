@@ -4,14 +4,20 @@ import net.minecraft.world.World;
 
 public class EntitySalamander extends EntityConsort
 {
-	public EntitySalamander(World world) 
+	public EntitySalamander(World world)
 	{
 		super(world);
 	}
-
+	
 	@Override
-	public String getTexture() 
+	public String getTexture()
 	{
 		return "textures/mobs/salamander.png";
+	}
+	
+	@Override
+	public EnumConsort getConsortType()
+	{
+		return EnumConsort.SALAMANDER;
 	}
 }

@@ -1,15 +1,20 @@
 package com.mraof.minestuck.network.skaianet;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.entity.underling.*;
+import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckPacket;
+import com.mraof.minestuck.network.PlayerDataPacket;
+import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import com.mraof.minestuck.world.lands.LandAspectRegistry;
+import com.mraof.minestuck.world.lands.LandAspectRegistry.AspectCombination;
+import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
+import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -28,35 +33,9 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.entity.underling.EntityBasilisk;
-import com.mraof.minestuck.entity.underling.EntityGiclops;
-import com.mraof.minestuck.entity.underling.EntityImp;
-import com.mraof.minestuck.entity.underling.EntityOgre;
-import com.mraof.minestuck.entity.underling.EntityUnderling;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.network.MinestuckChannelHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.PlayerDataPacket;
+import java.util.*;
 
 import static com.mraof.minestuck.network.skaianet.SessionHandler.*;
-
-import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.EnumAspect;
-import com.mraof.minestuck.util.EnumClass;
-import com.mraof.minestuck.util.GristHelper;
-import com.mraof.minestuck.util.GristType;
-import com.mraof.minestuck.util.MinestuckPlayerData;
-import com.mraof.minestuck.util.Title;
-import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
-import com.mraof.minestuck.world.lands.LandAspectRegistry;
-import com.mraof.minestuck.world.lands.LandAspectRegistry.AspectCombination;
-import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
-import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 
 /**
  * A class for managing sbrub-related stuff from outside this package that is dependent on connections and sessions.
@@ -337,6 +316,9 @@ public class SburbHandler
 		
 		PredefineData data = session.predefinedPlayers.get(identifier);
 		data.title = title;
+		TitleLandAspect landAspect = LandAspectRegistry.getSingleLandAspect(title.getHeroAspect());
+		if(landAspect != null)
+			data.landTitle = landAspect;	//This part could be made more robust for when landTerrain is already defined
 		CommandBase.notifyCommandListener(sender, command, "commands.sburbSession.titleSuccess", playerName, title.getTitleName());
 	}
 	
@@ -392,7 +374,19 @@ public class SburbHandler
 		
 		Session session = sessionsByName.get(sessionName), playerSession = getPlayerSession(identifier);
 		if(session == null)
-			throw new CommandException("Couldn't find session with the name %s", sessionName);
+		{
+			if(singleSession)
+				throw new CommandException("Not allowed to create new sessions when global session is active. Use \"%s\" as session name for global session access.", GLOBAL_SESSION_NAME);
+			
+			if(sender.sendCommandFeedback())
+				sender.sendMessage(new TextComponentString("Couldn't find session with that name, creating a new session..."));
+			session = new Session();
+			session.name = sessionName;
+			sessions.add(session);
+			sessionsByName.put(session.name, session);
+		}
+		/*if(session == null)
+			throw new CommandException("Couldn't find session with the name %s", sessionName);*/
 		if(playerSession != null && session != playerSession)
 			throw new CommandException("The player is already in another session!");
 		if(playerSession == null || !session.predefinedPlayers.containsKey(identifier))

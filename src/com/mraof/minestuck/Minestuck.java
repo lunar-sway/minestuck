@@ -1,72 +1,52 @@
 package com.mraof.minestuck;
 
-import java.util.Random;
-
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.gen.structure.MapGenStructureIO;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.fml.common.event.FMLServerStoppedEvent;
-import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-//import codechicken.nei.NEIModContainer;
-
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.client.util.MinestuckModelManager;
-import com.mraof.minestuck.command.CommandCheckLand;
-import com.mraof.minestuck.command.CommandGristSend;
-import com.mraof.minestuck.command.CommandSburbServer;
-import com.mraof.minestuck.command.CommandSburbSession;
-import com.mraof.minestuck.command.CommandGrist;
-import com.mraof.minestuck.command.CommandSetRung;
-import com.mraof.minestuck.command.CommandTransportalizer;
+import com.mraof.minestuck.command.*;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.MinestuckEntities;
+import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.event.MinestuckFluidHandler;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.item.MinestuckItems;
-//import com.mraof.minestuck.nei.NEIMinestuckConfig;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
-import com.mraof.minestuck.tileentity.TileEntityComputer;
-import com.mraof.minestuck.tileentity.TileEntityCrockerMachine;
-import com.mraof.minestuck.tileentity.TileEntityGate;
-import com.mraof.minestuck.tileentity.TileEntitySburbMachine;
-import com.mraof.minestuck.tileentity.TileEntitySkaiaPortal;
-import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
+import com.mraof.minestuck.tileentity.*;
 import com.mraof.minestuck.tracker.ConnectionListener;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.ComputerProgram;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.KindAbstratusList;
-import com.mraof.minestuck.util.MinestuckAchievementHandler;
-import com.mraof.minestuck.util.SburbClient;
-import com.mraof.minestuck.util.SburbServer;
-import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.gen.OreHandler;
 import com.mraof.minestuck.world.gen.structure.StructureCastlePieces;
 import com.mraof.minestuck.world.gen.structure.StructureCastleStart;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
-import com.mraof.minestuck.world.lands.structure.LandStructureHandler;
+import com.mraof.minestuck.world.lands.structure.MapGenLandStructure;
+import com.mraof.minestuck.world.lands.structure.village.ConsortVillageComponents;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.world.gen.structure.MapGenStructureIO;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+
+import java.util.Random;
+
+//import codechicken.nei.NEIModContainer;
+//import com.mraof.minestuck.nei.NEIMinestuckConfig;
 
 @Mod(modid = "minestuck", name = "Minestuck", version = "@VERSION@", guiFactory = "com.mraof.minestuck.client.gui.MinestuckGuiFactory", acceptedMinecraftVersions = "[1.11]")
 public class Minestuck
@@ -88,7 +68,10 @@ public class Minestuck
 	public static CreativeTabs tabMinestuck;
 
 	public static long worldSeed = 0;	//TODO proper usage of seed when generating titles, land aspects, and land dimension data
-
+	
+	public static SoundEvent soundEmissaryOfDance;
+	public static SoundEvent soundDanceStabDance;
+	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) 
 	{
@@ -109,6 +92,11 @@ public class Minestuck
 				return new ItemStack(MinestuckItems.zillyhooHammer);
 			}
 		};
+		
+		ResourceLocation soundLocation = new ResourceLocation("minestuck", "record.emissary");
+		soundEmissaryOfDance = GameRegistry.register(new SoundEvent(soundLocation), soundLocation);
+		soundLocation = new ResourceLocation("minestuck", "record.danceStab");
+		soundDanceStabDance = GameRegistry.register(new SoundEvent(soundLocation), soundLocation);
 		
 		MinestuckBlocks.registerBlocks();
 		MinestuckItems.registerItems();
@@ -158,19 +146,13 @@ public class Minestuck
 		MinecraftForge.EVENT_BUS.register(MinestuckAchievementHandler.instance);
 		MinecraftForge.EVENT_BUS.register(MinestuckPlayerTracker.instance);
 		MinecraftForge.EVENT_BUS.register(ServerEventHandler.instance);
-		
-		FMLCommonHandler.instance().bus().register(MinestuckPlayerTracker.instance);
-		FMLCommonHandler.instance().bus().register(ServerEditHandler.instance);
-		FMLCommonHandler.instance().bus().register(MinestuckChannelHandler.instance);
-		FMLCommonHandler.instance().bus().register(new ConnectionListener());
-		FMLCommonHandler.instance().bus().register(ServerEventHandler.instance);
+		MinecraftForge.EVENT_BUS.register(MinestuckChannelHandler.instance);
+		MinecraftForge.EVENT_BUS.register(new ConnectionListener());
 		
 		if(event.getSide().isClient())
 		{
-		//register channel handler
 			MinecraftForge.EVENT_BUS.register(ClientEditHandler.instance);
-			FMLCommonHandler.instance().bus().register(ClientEditHandler.instance);
-			FMLCommonHandler.instance().bus().register(new MinestuckConfig());
+			MinecraftForge.EVENT_BUS.register(new MinestuckConfig());
 		}
 		
 		//register channel handler
@@ -179,7 +161,8 @@ public class Minestuck
 		//Register structures
 		MapGenStructureIO.registerStructure(StructureCastleStart.class, "SkaiaCastle");
 		StructureCastlePieces.registerComponents();
-		LandStructureHandler.registerStructures();
+		MapGenLandStructure.registerStructures();
+		ConsortVillageComponents.registerComponents();
 		
 		//register recipes
 		AlchemyRecipeHandler.registerVanillaRecipes();
@@ -187,6 +170,7 @@ public class Minestuck
 		AlchemyRecipeHandler.registerModRecipes();
 		
 		LandAspectRegistry.registerLandAspects();
+		ConsortDialogue.init();
 		
 		KindAbstratusList.registerTypes();
 		DeployList.registerItems();
@@ -244,6 +228,8 @@ public class Minestuck
 		event.registerServerCommand(new CommandSburbSession());
 		event.registerServerCommand(new CommandSburbServer());
 		event.registerServerCommand(new CommandSetRung());
+		event.registerServerCommand(new CommandConsortReply());
+		event.registerServerCommand(new CommandToStructure());
 		
 		worldSeed = event.getServer().worlds[0].getSeed();
 		ServerEventHandler.lastDay = event.getServer().worlds[0].getWorldTime() / 24000L;

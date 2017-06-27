@@ -90,6 +90,20 @@ public class MinestuckItems
 	public static Item skaiaFork;
 	public static Item fork;
 	public static Item spork;
+	//Armor
+	public static Item prismarineHelmet;
+	public static Item prismarineChestplate;
+	public static Item prismarineLeggings;
+	public static Item prismarineBoots;
+	//Food
+	public static Item candy;
+	public static Item bugOnAStick;
+	public static Item chocolateBeetle;
+	public static Item coneOfFlies;
+	public static Item grasshopper;
+	public static Item jarOfBugs;
+	public static Item onion;
+	public static Item salad;
 	//Other
 	public static Item rawCruxite;
 	public static Item cruxiteDowel;
@@ -108,15 +122,15 @@ public class MinestuckItems
 	public static Item emeraldPickaxe;
 	public static Item emeraldShovel;
 	public static Item emeraldHoe;
-	public static Item prismarineHelmet;
-	public static Item prismarineChestplate;
-	public static Item prismarineLeggings;
-	public static Item prismarineBoots;
-	public static Item candy;
-	public static Item salad;
 	public static Item threshDvd;
 	public static Item crewPoster;
 	public static Item sbahjPoster;
+	public static Item recordEmissaryOfDance;
+	public static Item recordDanceStab;
+	public static Item carvingTool;
+	public static Item crumplyHat;
+	public static Item frogStatueReplica;
+	public static Item stoneSlab;
 	
 	public static Item.ToolMaterial toolEmerald;
 	public static ItemArmor.ArmorMaterial armorPrismarine;
@@ -279,6 +293,16 @@ public class MinestuckItems
 		prismarineLeggings = GameRegistry.register(new ItemArmor(armorPrismarine, 0, EntityEquipmentSlot.LEGS).setRegistryName("prismarine_leggings")).setUnlocalizedName("leggingsPrismarine").setCreativeTab(Minestuck.tabMinestuck);
 		prismarineBoots = GameRegistry.register(new ItemArmor(armorPrismarine, 0, EntityEquipmentSlot.FEET).setRegistryName("prismarine_boots")).setUnlocalizedName("bootsPrismarine").setCreativeTab(Minestuck.tabMinestuck);
 		
+		//food
+		candy = GameRegistry.register(new ItemMinestuckCandy().setRegistryName("candy"));
+		bugOnAStick = GameRegistry.register(new ItemFood(1, 0.1F, false).setRegistryName("bug_on_stick")).setUnlocalizedName("bugOnAStick").setCreativeTab(Minestuck.tabMinestuck);
+		chocolateBeetle = GameRegistry.register(new ItemFood(3, 0.4F, false).setRegistryName("chocolate_beetle")).setUnlocalizedName("chocolateBeetle").setCreativeTab(Minestuck.tabMinestuck);
+		coneOfFlies = GameRegistry.register(new ItemFood(2, 0.1F, false).setRegistryName("cone_of_flies")).setUnlocalizedName("coneOfFlies").setCreativeTab(Minestuck.tabMinestuck);
+		grasshopper = GameRegistry.register(new ItemFood(4, 0.5F, false).setRegistryName("grasshopper")).setUnlocalizedName("grasshopper").setCreativeTab(Minestuck.tabMinestuck);
+		jarOfBugs = GameRegistry.register(new ItemFood(3, 0.2F, false).setRegistryName("jar_of_bugs")).setUnlocalizedName("jarOfBugs").setCreativeTab(Minestuck.tabMinestuck);
+		onion = GameRegistry.register(new ItemFood(2, 0.2F, false).setRegistryName("onion")).setUnlocalizedName("onion").setCreativeTab(Minestuck.tabMinestuck);
+		salad = GameRegistry.register(new ItemSoup(1).setRegistryName("salad").setUnlocalizedName("salad").setCreativeTab(Minestuck.tabMinestuck));
+		
 		//misc
 		rawCruxite = GameRegistry.register(new Item().setRegistryName("raw_cruxite")).setUnlocalizedName("rawCruxite").setCreativeTab(Minestuck.tabMinestuck);
 		cruxiteDowel = GameRegistry.register(new ItemDowel().setRegistryName("cruxite_dowel"));
@@ -292,8 +316,6 @@ public class MinestuckItems
 		modusCard = (ItemModus) GameRegistry.register(new ItemModus().setRegistryName("modus_card"));
 		goldSeeds = (ItemGoldSeeds) GameRegistry.register(new ItemGoldSeeds().setRegistryName("gold_seeds"));
 		metalBoat = (ItemMetalBoat) GameRegistry.register(new ItemMetalBoat().setRegistryName("metal_boat"));
-		candy = GameRegistry.register(new ItemMinestuckCandy().setRegistryName("candy"));
-		salad = GameRegistry.register(new ItemSoup(1).setRegistryName("salad").setUnlocalizedName("salad").setCreativeTab(Minestuck.tabMinestuck));
 		threshDvd = GameRegistry.register(new Item().setRegistryName("thresh_dvd")).setUnlocalizedName("threshDvd").setMaxStackSize(1).setCreativeTab(Minestuck.tabMinestuck);
 		crewPoster = GameRegistry.register(new ItemHanging(){
 			@Override
@@ -303,6 +325,14 @@ public class MinestuckItems
 			}
 		}.setRegistryName("crew_poster")).setUnlocalizedName("crewPoster").setMaxStackSize(1).setCreativeTab(Minestuck.tabMinestuck);
 		sbahjPoster = GameRegistry.register(new Item().setRegistryName("sbahj_poster")).setUnlocalizedName("sbahjPoster").setMaxStackSize(1).setCreativeTab(Minestuck.tabMinestuck);
+		carvingTool = GameRegistry.register(new Item().setRegistryName("carving_tool")).setUnlocalizedName("carvingTool").setMaxStackSize(1).setCreativeTab(Minestuck.tabMinestuck);
+		crumplyHat = GameRegistry.register(new Item().setRegistryName("crumply_hat")).setUnlocalizedName("crumplyHat").setMaxStackSize(1).setCreativeTab(Minestuck.tabMinestuck);
+		frogStatueReplica = GameRegistry.register(new Item().setRegistryName("frog_statue_replica")).setUnlocalizedName("frogStatueReplica").setCreativeTab(Minestuck.tabMinestuck);
+		stoneSlab = GameRegistry.register(new Item().setRegistryName("stone_slab")).setUnlocalizedName("stoneSlab").setCreativeTab(Minestuck.tabMinestuck);
+		
+		//Music disks
+		recordEmissaryOfDance = GameRegistry.register(new ItemMinestuckRecord("emissary", Minestuck.soundEmissaryOfDance).setRegistryName("record_emissary").setUnlocalizedName("record"));
+		recordDanceStab = GameRegistry.register(new ItemMinestuckRecord("danceStab", Minestuck.soundDanceStabDance).setRegistryName("record_dance_stab").setUnlocalizedName("record"));
 		
 		minestuckBucket.addBlock(blockOil.getDefaultState());
 		minestuckBucket.addBlock(blockBlood.getDefaultState());

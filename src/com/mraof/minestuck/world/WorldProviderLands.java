@@ -1,6 +1,13 @@
 package com.mraof.minestuck.world;
 
+import com.mraof.minestuck.network.skaianet.SburbConnection;
+import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.world.lands.LandAspectRegistry;
+import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
@@ -9,13 +16,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.IChunkGenerator;
-
-import com.mraof.minestuck.network.skaianet.SburbConnection;
-import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.world.lands.LandAspectRegistry;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 public class WorldProviderLands extends WorldProvider
 {
@@ -214,5 +214,13 @@ public class WorldProviderLands extends WorldProvider
 		for(int x = centerX - 1; x <= centerX + 1; x++)
 			for(int z = centerZ - 1; z <= centerZ + 1; z++)
 				this.world.getChunkProvider().provideChunk(x, z);
+	}
+	
+	public BlockPos findAndMarkNextStructure(EntityPlayerMP player, String type, NBTTagList tags)
+	{
+		if(type.equalsIgnoreCase("village"))
+			return chunkProvider.villageHandler.findAndMarkNextVillage(player, type, tags);
+		Debug.warnf("Couldn't identify %s", type);
+		return null;
 	}
 }

@@ -1,19 +1,20 @@
 package com.mraof.minestuck.world.lands.terrain;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.mraof.minestuck.block.BlockMinestuckStone;
 import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.decorator.FireFieldDecorator;
 import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
 import com.mraof.minestuck.world.lands.decorator.SurfaceDecoratorVein;
 import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
-
+import net.minecraft.block.BlockStoneSlab;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.Vec3d;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class LandAspectHeat extends TerrainLandAspect 
 {
@@ -26,10 +27,15 @@ public class LandAspectHeat extends TerrainLandAspect
 		registry.setBlockState("ground", Blocks.NETHERRACK.getDefaultState());
 		registry.setBlockState("ocean", Blocks.LAVA.getDefaultState());
 		registry.setBlockState("structure_primary", Blocks.NETHER_BRICK.getDefaultState());
+		registry.setBlockState("structure_primary_stairs", Blocks.NETHER_BRICK_STAIRS.getDefaultState());
 		registry.setBlockState("structure_secondary", MinestuckBlocks.stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.CAST_IRON));
 		registry.setBlockState("structure_secondary_decorative", MinestuckBlocks.stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.CAST_IRON_CHISELED));
 		registry.setBlockState("structure_secondary_stairs", MinestuckBlocks.castIronStairs.getDefaultState());
 		registry.setBlockState("fall_fluid", Blocks.WATER.getDefaultState());
+		registry.setBlockState("structure_planks", Blocks.BRICK_BLOCK.getDefaultState());
+		registry.setBlockState("structure_planks_slab", Blocks.STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.BRICK));
+		registry.setBlockState("village_path", Blocks.QUARTZ_BLOCK.getDefaultState());
+		registry.setBlockState("village_fence", Blocks.NETHER_BRICK_FENCE.getDefaultState());
 	}
 	
 	@Override
@@ -83,4 +89,9 @@ public class LandAspectHeat extends TerrainLandAspect
 		return 0.0F;
 	}
 	
+	@Override
+	public EnumConsort getConsortType()
+	{
+		return EnumConsort.NAKAGATOR;
+	}
 }

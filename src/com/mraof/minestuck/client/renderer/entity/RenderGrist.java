@@ -7,12 +7,12 @@ import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
 import com.mraof.minestuck.entity.item.EntityGrist;
 
-public class RenderGrist extends Render {
+public class RenderGrist extends Render<EntityGrist>
+{
 	
 	public RenderGrist(RenderManager manager)
 	{
@@ -21,7 +21,8 @@ public class RenderGrist extends Render {
 		this.shadowOpaque = .75F;
 	}
 	
-	public void renderGrist(EntityGrist grist, double d0, double d1, double d2, float f, float f1)
+	@Override
+	public void doRender(EntityGrist grist, double d0, double d1, double d2, float f, float f1)
 	{
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float)d0, (float)d1 + grist.getSizeByValue()/2, (float)d2);
@@ -47,13 +48,9 @@ public class RenderGrist extends Render {
 		GlStateManager.popMatrix();
 		
 	}
+	
 	@Override
-	public void doRender(Entity entity, double d0, double d1, double d2, float f, float f1) 
-	{
-		renderGrist((EntityGrist) entity, d0, d1, d2, f, f1);
-	}
-	@Override
-	protected ResourceLocation getEntityTexture(Entity entity) 
+	protected ResourceLocation getEntityTexture(EntityGrist entity) 
 	{
 		return new ResourceLocation("minestuck", "textures/grist/" + ((EntityGrist) entity).getType().getName() + ".png");
 	}

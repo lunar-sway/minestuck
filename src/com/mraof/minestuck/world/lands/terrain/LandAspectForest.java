@@ -3,6 +3,8 @@ package com.mraof.minestuck.world.lands.terrain;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mraof.minestuck.entity.consort.EnumConsort;
+import com.mraof.minestuck.world.lands.decorator.*;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.BlockLog.EnumAxis;
 import net.minecraft.init.Blocks;
@@ -11,10 +13,6 @@ import net.minecraft.util.math.Vec3d;
 import com.mraof.minestuck.block.BlockMinestuckLog;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
-import com.mraof.minestuck.world.lands.decorator.TallGrassDecorator;
-import com.mraof.minestuck.world.lands.decorator.ILandDecorator;
-import com.mraof.minestuck.world.lands.decorator.BasicTreeDecorator;
-import com.mraof.minestuck.world.lands.decorator.UndergroundDecoratorVein;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 
 public class LandAspectForest extends TerrainLandAspect
@@ -30,6 +28,7 @@ public class LandAspectForest extends TerrainLandAspect
 		registry.setBlockState("structure_secondary", Blocks.STONEBRICK.getDefaultState());
 		registry.setBlockState("structure_secondary_decorative", Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED));
 		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
+		registry.setBlockState("village_path", Blocks.GRASS_PATH.getDefaultState());
 	}
 	
 	@Override
@@ -57,6 +56,7 @@ public class LandAspectForest extends TerrainLandAspect
 		list.add(new UndergroundDecoratorVein(Blocks.GRAVEL.getDefaultState(), 2, 28, 64));
 		list.add(new UndergroundDecoratorVein(Blocks.COAL_ORE.getDefaultState(), 13, 17, 64));
 		list.add(new UndergroundDecoratorVein(Blocks.EMERALD_ORE.getDefaultState(), 8, 3, 32));
+		list.add(new SurfaceDecoratorVein(Blocks.CLAY.getDefaultState(), 15, 10, BiomeMinestuck.mediumOcean));
 		return list;
 	}
 	
@@ -78,4 +78,9 @@ public class LandAspectForest extends TerrainLandAspect
 		return 0.8F;
 	}
 	
+	@Override
+	public EnumConsort getConsortType()
+	{
+		return EnumConsort.IGUANA;
+	}
 }
