@@ -412,7 +412,7 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Items.ENDER_EYE),new ItemStack(Items.EGG),MODE_AND, new ItemStack(Blocks.DRAGON_EGG));
 		CombinationRegistry.addCombination(new ItemStack(Items.ENDER_PEARL),new ItemStack(Items.BLAZE_POWDER),MODE_AND, new ItemStack(Items.ENDER_EYE));
 		CombinationRegistry.addCombination(new ItemStack(Items.GOLD_INGOT),new ItemStack(Items.SADDLE),MODE_AND, new ItemStack(Items.GOLDEN_HORSE_ARMOR));
-		CombinationRegistry.addCombination(new ItemStack(Items.GUNPOWDER),new ItemStack(Blocks.SAND), true, false, MODE_AND, new ItemStack(Blocks.TNT));
+		CombinationRegistry.addCombination(new ItemStack(Items.GUNPOWDER),new ItemStack(Blocks.SAND), MODE_AND, true, false, new ItemStack(Blocks.TNT));
 		CombinationRegistry.addCombination(new ItemStack(Items.IRON_INGOT), new ItemStack(Blocks.TALLGRASS), MODE_AND, true, false, new ItemStack(Items.SHEARS));
 		CombinationRegistry.addCombination(new ItemStack(Items.IRON_INGOT),new ItemStack(Items.SADDLE),MODE_AND, new ItemStack(Items.IRON_HORSE_ARMOR));
 		CombinationRegistry.addCombination(new ItemStack(Items.POTATO),new ItemStack(Items.WHEAT_SEEDS),MODE_OR, new ItemStack(Items.CARROT));
