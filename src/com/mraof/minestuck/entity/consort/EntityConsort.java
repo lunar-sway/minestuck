@@ -1,11 +1,11 @@
 package com.mraof.minestuck.entity.consort;
 
+import com.mraof.minestuck.entity.EntityMinestuck;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -14,8 +14,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
-
-import com.mraof.minestuck.entity.EntityMinestuck;
 
 public abstract class EntityConsort extends EntityMinestuck
 {
@@ -43,7 +41,7 @@ public abstract class EntityConsort extends EntityMinestuck
 	}
 	
 	@Override
-	protected boolean processInteract(EntityPlayer player, EnumHand hand, ItemStack stack)
+	protected boolean processInteract(EntityPlayer player, EnumHand hand)
 	{
 		if(this.isEntityAlive() && !player.isSneaking())
 		{
@@ -62,7 +60,7 @@ public abstract class EntityConsort extends EntityMinestuck
 			
 			return true;
 		} else
-			return super.processInteract(player, hand, stack);
+			return super.processInteract(player, hand);
 	}
 	
 	@Override

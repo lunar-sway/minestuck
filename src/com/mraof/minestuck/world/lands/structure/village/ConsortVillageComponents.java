@@ -21,6 +21,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
+import net.minecraft.world.gen.structure.template.TemplateManager;
 
 import java.util.Iterator;
 import java.util.List;
@@ -241,7 +242,7 @@ public class ConsortVillageComponents
 		}
 		
 		@Override
-		protected void readStructureFromNBT(NBTTagCompound tagCompound)
+		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_)
 		{
 			this.averageGroundLvl = tagCompound.getInteger("HPos");
 		}
@@ -475,7 +476,7 @@ public class ConsortVillageComponents
 			this.setBlockState(worldIn, wallBlock, 5, 2, 2, structureBoundingBoxIn);
 			this.setBlockState(worldIn, wallBlock, 5, 2, 5, structureBoundingBoxIn);
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 5,3,2,5,5, 5, wallBlock, wallBlock, false);
-			func_189915_a(worldIn, structureBoundingBoxIn, randomIn, 3, 1, 1, EnumFacing.NORTH, (BlockDoor) doorBlock.getBlock());
+			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 3, 1, 1, EnumFacing.NORTH, (BlockDoor) doorBlock.getBlock());
 			
 			this.spawnConsort(2, 1, 3, structureBoundingBoxIn, worldIn);
 			this.spawnConsort(3, 1, 4,structureBoundingBoxIn, worldIn);
@@ -568,7 +569,7 @@ public class ConsortVillageComponents
 			this.setBlockState(worldIn, wallBlock, 6, 2, 6, structureBoundingBoxIn);
 			this.fillWithAir(worldIn, structureBoundingBoxIn, 6, 2, 3, 6, 2, 5);
 			
-			func_189915_a(worldIn, structureBoundingBoxIn, randomIn, 3, 1, 1, EnumFacing.NORTH, (BlockDoor) doorBlock.getBlock());
+			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 3, 1, 1, EnumFacing.NORTH, (BlockDoor) doorBlock.getBlock());
 			
 			this.spawnConsort(2, 1, 4,structureBoundingBoxIn, worldIn);
 			this.spawnConsort(3, 1, 5,structureBoundingBoxIn, worldIn);
@@ -861,7 +862,7 @@ public class ConsortVillageComponents
 			this.setBlockState(worldIn, glassBlock2, 10, 2, 6, structureBoundingBoxIn);
 			this.setBlockState(worldIn, glassBlock1, 10, 3, 6, structureBoundingBoxIn);
 			
-			this.func_189915_a(worldIn, structureBoundingBoxIn, randomIn, 5, 1, 1, EnumFacing.NORTH, Blocks.IRON_DOOR);
+			this.generateDoor(worldIn, structureBoundingBoxIn, randomIn, 5, 1, 1, EnumFacing.NORTH, Blocks.IRON_DOOR);
 			
 			this.setBlockState(worldIn, Blocks.STONE_BUTTON.getDefaultState().withRotation(Rotation.CLOCKWISE_180), 6, 1, 0, structureBoundingBoxIn);
 			this.setBlockState(worldIn, Blocks.STONE_BUTTON.getDefaultState(), 4, 1, 2, structureBoundingBoxIn);
@@ -933,8 +934,8 @@ public class ConsortVillageComponents
 			
 			//First floor clear, doors, windows and furnishing
 			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 2, 6, 3, 7);
-			this.func_189915_a(worldIn, structureBoundingBoxIn, randomIn, 3, 1, 1, EnumFacing.NORTH, (BlockDoor) doorBlock.getBlock());
-			this.func_189915_a(worldIn, structureBoundingBoxIn, randomIn, 4, 1, 1, EnumFacing.NORTH, (BlockDoor) doorBlock.getBlock());
+			this.generateDoor(worldIn, structureBoundingBoxIn, randomIn, 3, 1, 1, EnumFacing.NORTH, (BlockDoor) doorBlock.getBlock());
+			this.generateDoor(worldIn, structureBoundingBoxIn, randomIn, 4, 1, 1, EnumFacing.NORTH, (BlockDoor) doorBlock.getBlock());
 			this.setBlockState(worldIn, Blocks.AIR.getDefaultState(), 0, 2, 3, structureBoundingBoxIn);
 			this.setBlockState(worldIn, Blocks.AIR.getDefaultState(), 0, 2, 5, structureBoundingBoxIn);
 			this.setBlockState(worldIn, Blocks.AIR.getDefaultState(), 3, 2, 8, structureBoundingBoxIn);
@@ -1054,7 +1055,7 @@ public class ConsortVillageComponents
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 5, 1, 8, 5, 1, fence, fence, false);
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 9, 4, 8, 9, 4, buildBlock, buildBlock, false);
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 9, 1, 8, 9, 1, fence, fence, false);
-			this.func_189915_a(worldIn, structureBoundingBoxIn, randomIn, 9, 5, 2, EnumFacing.WEST, (BlockDoor) doorBlock.getBlock());
+			this.generateDoor(worldIn, structureBoundingBoxIn, randomIn, 9, 5, 2, EnumFacing.WEST, (BlockDoor) doorBlock.getBlock());
 			this.fillWithAir(worldIn, structureBoundingBoxIn, 2, 5, 2, 2, 6, 2);
 			this.fillWithAir(worldIn, structureBoundingBoxIn, 9, 9, 2, 9, 10, 2);
 			
@@ -1135,9 +1136,9 @@ public class ConsortVillageComponents
 		}
 		
 		@Override
-		protected void readStructureFromNBT(NBTTagCompound tagCompound)
+		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_)
 		{
-			super.readStructureFromNBT(tagCompound);
+			super.readStructureFromNBT(tagCompound, p_143011_2_);
 			this.woolType = tagCompound.getInteger("Wool");
 		}
 		
@@ -1221,9 +1222,9 @@ public class ConsortVillageComponents
 		}
 		
 		@Override
-		protected void readStructureFromNBT(NBTTagCompound tagCompound)
+		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_)
 		{
-			super.readStructureFromNBT(tagCompound);
+			super.readStructureFromNBT(tagCompound, p_143011_2_);
 			this.woolType = tagCompound.getInteger("Wool");
 		}
 		
@@ -1333,9 +1334,9 @@ public class ConsortVillageComponents
 		}
 		
 		@Override
-		protected void readStructureFromNBT(NBTTagCompound tagCompound)
+		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_)
 		{
-			super.readStructureFromNBT(tagCompound);
+			super.readStructureFromNBT(tagCompound, p_143011_2_);
 			this.length = tagCompound.getInteger("Length");
 		}
 		

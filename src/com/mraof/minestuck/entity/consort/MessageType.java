@@ -1,12 +1,9 @@
 package com.mraof.minestuck.entity.consort;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.PlayerDataPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.network.PlayerDataPacket;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.IdentifierHandler;
@@ -16,22 +13,20 @@ import com.mraof.minestuck.util.MinestuckPlayerData.PlayerData;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.*;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.LootContext;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class where message content is defined. Also things such as if it's a chain
@@ -130,7 +125,7 @@ public abstract class MessageType
 			} else if(args[i].startsWith("nbtItem:"))
 			{
 				NBTTagCompound nbt = consort.getMessageTagForPlayer(player);
-				ItemStack stack = ItemStack.loadItemStackFromNBT(nbt.getCompoundTag(args[i].substring(8)));
+				ItemStack stack = new ItemStack(nbt.getCompoundTag(args[i].substring(8)));
 				if(stack != null)
 					obj[i] = new TextComponentTranslation(stack.getUnlocalizedName() + ".name");
 				else obj[i] = "Item";
@@ -659,7 +654,7 @@ public abstract class MessageType
 			if(nbt.getBoolean(this.getString()))
 				return next.getMessage(consort, player, chainIdentifier);
 			
-			ItemStack stack = ItemStack.loadItemStackFromNBT(nbt.getCompoundTag(itemData));
+			ItemStack stack = new ItemStack(nbt.getCompoundTag(itemData));
 			
 			boolean foundItem = false;
 			for(EnumHand hand : EnumHand.values())
@@ -668,22 +663,17 @@ public abstract class MessageType
 				if(ItemStack.areItemsEqual(heldItem, stack))
 				{
 					foundItem = true;
-					heldItem.stackSize--;
-					if(heldItem.stackSize <= 0)
-						player.setHeldItem(hand, null);
+					heldItem.shrink(1);
 					break;
 				}
 			}
 			
-			for(int i = 0; i < player.inventory.mainInventory.length; i++)
+			for(ItemStack invItem : player.inventory.mainInventory)
 			{
-				ItemStack invItem = player.inventory.mainInventory[i];
 				if(ItemStack.areItemsEqual(invItem, stack))
 				{
 					foundItem = true;
-					invItem.stackSize--;
-					if(invItem.stackSize <= 0)
-						player.inventory.mainInventory[i] = null;
+					invItem.shrink(1);
 					break;
 				}
 			}

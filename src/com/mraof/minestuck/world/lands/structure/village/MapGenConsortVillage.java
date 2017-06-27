@@ -14,6 +14,7 @@ import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureStart;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -78,6 +79,13 @@ public class MapGenConsortVillage extends MapGenStructure
 	protected StructureStart getStructureStart(int chunkX, int chunkZ)
 	{
 		return new Start(chunkProvider, world, this.rand, chunkX, chunkZ);
+	}
+	
+	@Nullable
+	@Override
+	public BlockPos getClosestStrongholdPos(World worldIn, BlockPos pos, boolean p_180706_3_)
+	{
+		return null;
 	}
 	
 	public BlockPos findAndMarkNextVillage(EntityPlayerMP player, String type, NBTTagList list)
