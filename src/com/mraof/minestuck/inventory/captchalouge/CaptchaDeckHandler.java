@@ -1,7 +1,5 @@
 package com.mraof.minestuck.inventory.captchalouge;
 
-import java.util.Random;
-
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.item.MinestuckItems;
@@ -10,7 +8,6 @@ import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.MinestuckPlayerData;
-
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -20,6 +17,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Random;
 
 public class CaptchaDeckHandler
 {
@@ -238,7 +237,7 @@ public class CaptchaDeckHandler
 				for(int i = 0; i < player.inventory.mainInventory.size(); i++)
 				{
 					otherStack = player.inventory.mainInventory.get(i);
-					if(otherStack == null)
+					if(otherStack.isEmpty())
 						player.inventory.mainInventory.set(i, stack.copy());
 					else if(canMergeItemStacks(stack, otherStack))
 						otherStack.grow(stack.getCount());
