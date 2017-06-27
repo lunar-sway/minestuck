@@ -4,7 +4,6 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
-
 import org.lwjgl.opengl.GL11;
 
 public class ModelNakagator extends ModelBase 
@@ -28,33 +27,32 @@ public class ModelNakagator extends ModelBase
     {
     	textureWidth = 64;
         textureHeight = 32;
-        
-          body = new ModelRenderer(this, 16, 16);
-          body.addBox(-3F, 0F, -3F, 6, 9, 6);
-          body.setRotationPoint(0F, 10F, 0F);
-          body.setTextureSize(64, 32);
-          rightLeg = new ModelRenderer(this, 0, 16);
-          rightLeg.addBox(-2F, 0F, -2F, 2, 5, 3);
-          rightLeg.setRotationPoint(-1F, 19F, 0F);
-          leftLeg = new ModelRenderer(this, 0, 16);
-          leftLeg.addBox(-2F, 0F, -2F, 2, 5, 3);
-          leftLeg.setRotationPoint(3F, 19F, 0F);
-          head = new ModelRenderer(this, 0, 0);
-          head.addBox(-3F, -8F, -3F, 6, 3, 7);
-          head.setRotationPoint(0F, 15F, 0F);
-          upperTail = new ModelRenderer(this, 0, 16);
-          upperTail.addBox(-1F, 0F, -1F, 2, 4, 2);
-          upperTail.setRotationPoint(0F, 18F, 3F);
-          setRotation(upperTail, 0.2230717F, 0F, 0F);
-          lowerTail = new ModelRenderer(this, 0, 16);
-          lowerTail.addBox(-1F, 0F, -1F, 2, 2, 7);
-          lowerTail.setRotationPoint(0F, 22F, 4F);
-          upperJaw = new ModelRenderer(this, 22, 0);
-          upperJaw.addBox(-2F, 0F, -12F, 4, 1, 9);
-          upperJaw.setRotationPoint(0F, 8F, 0F);
-          lowerJaw = new ModelRenderer(this, 41, 23);
-          lowerJaw.addBox(-2F, 0F, -10F, 4, 1, 7);
-          lowerJaw.setRotationPoint(0F, 9F, -0F);
+	
+		this.body = new ModelRenderer(this, 16, 16);
+		this.body.setRotationPoint(0.0F, 10.0F, 0.0F);
+		this.body.addBox(-3.0F, 0.0F, -3.0F, 6, 9, 6, 0.0F);
+		this.upperJaw = new ModelRenderer(this, 22, 0);
+		this.upperJaw.setRotationPoint(0.0F, 8.1F, 0.0F);
+		this.upperJaw.addBox(-2.0F, 0.0F, -12.0F, 4, 1, 11, 0.0F);
+		this.upperTail = new ModelRenderer(this, 0, 16);
+		this.upperTail.setRotationPoint(0.0F, 18.0F, 3.0F);
+		this.upperTail.addBox(-1.0F, 0.0F, -1.0F, 2, 4, 2, 0.0F);
+		this.setRotation(upperTail, 0.22307169437408447F, 0.0F, 0.0F);
+		this.head = new ModelRenderer(this, 0, 0);
+		this.head.setRotationPoint(0.0F, 8.3F, 0.0F);
+		this.head.addBox(-3.0F, -1.3F, -3.0F, 6, 3, 7, 0.0F);
+		this.leftLeg = new ModelRenderer(this, 0, 16);
+		this.leftLeg.setRotationPoint(3.0F, 19.0F, 0.0F);
+		this.leftLeg.addBox(-2.0F, 0.0F, -2.0F, 2, 5, 3, 0.0F);
+		this.lowerJaw = new ModelRenderer(this, 37, 19);
+		this.lowerJaw.setRotationPoint(0.0F, 9.0F, -0.0F);
+		this.lowerJaw.addBox(-2.0F, 0.0F, -10.0F, 4, 1, 11, 0.0F);
+		this.lowerTail = new ModelRenderer(this, 0, 16);
+		this.lowerTail.setRotationPoint(0.0F, 22.0F, 4.0F);
+		this.lowerTail.addBox(-1.0F, 0.0F, -1.0F, 2, 2, 7, 0.0F);
+		this.rightLeg = new ModelRenderer(this, 0, 16);
+		this.rightLeg.setRotationPoint(-1.0F, 19.0F, 0.0F);
+		this.rightLeg.addBox(-2.0F, 0.0F, -2.0F, 2, 5, 3, 0.0F);
         
 	}
 	
