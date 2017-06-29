@@ -80,6 +80,33 @@ public class ConsortDialogue
 				new ChainMessage(2, new SingleMessage("mushFarm1"), new SingleMessage("mushFarm2"), new SingleMessage("mushFarm3"),
 						new SingleMessage("mushFarm4"), new SingleMessage("mushFarm5"), new SingleMessage("mushFarm6"),
 						new SingleMessage("mushFarm7")));
+
+		addMessage(EnumSet.of(EnumConsort.TURTLE), new SingleMessage("zazzerpan"));
+		addMessage(EnumSet.of(EnumConsort.SALAMANDER), new SingleMessage("texasHistory", "landName"));
+		addMessage(EnumSet.of(EnumConsort.IGUANA), new SingleMessage("disks"));
+		addMessage(EnumSet.of(EnumConsort.IGUANA), new SingleMessage("whoops"));
+		addMessage(EnumSet.of(EnumConsort.IGUANA), new SingleMessage("fourthWall"));
+		addMessage(EnumSet.of(EnumConsort.SALAMANDER), new SingleMessage("hats"));
+		addMessage(EnumSet.of(EnumConsort.TURTLE), new SingleMessage("wwizard"));
+		addMessage(EnumSet.of(EnumConsort.NAKAGATOR), new SingleMessage("stockMarket"));
+		addMessage(EnumSet.of(EnumConsort.SALAMANDER), new SingleMessage("identity", "playerTitleLand", "playerNameLand"));
+		addMessage(EnumSet.of(EnumConsort.TURTLE),
+				new ChainMessage(1, new SingleMessage("unknown1"), new SingleMessage("unknown2")));
+		addMessage(EnumSet.of(EnumConsort.TURTLE),
+				new ChainMessage(1, new SingleMessage("cult1", "playerTitle"), new SingleMessage("cult2")));
+
+		addMessage(false, EnumConsort.MerchantType.SHADY, new ChoiceMessage(new DescriptionMessage("peppyOffer"),
+				new SingleMessage[] { new SingleMessage("peppyOffer.buy"), new SingleMessage("peppyOffer.deny") },
+				new MessageType[] {
+						new PurchaseMessage(false, AlchemyRecipeHandler.CONSORT_JUNK_REWARD, 1000, "purchase",
+								new ChainMessage(1, new SingleMessage("peppyOffer.item"), new SingleMessage("peppyOffer.purchase"))),
+						new ChoiceMessage(new SingleMessage("peppyOffer.next"),
+								new SingleMessage[] { new SingleMessage("peppyOffer.denyAgain"), new SingleMessage("peppyOffer.buy2") },
+								new MessageType[] { new SingleMessage("dots"),
+										new PurchaseMessage(false, AlchemyRecipeHandler.CONSORT_JUNK_REWARD, 500, "purchase",
+												new SingleMessage("peppyOffer.purchase")) }) }));
+
+
 		addMessage(true, null, null, new ChoiceMessage(true, new SingleMessage("titlePresence", "playerTitle"),
 				new SingleMessage[] { new SingleMessage("titlePresence.iam", "playerTitle"), new SingleMessage("titlePresence.agree") },
 				new MessageType[] { new SingleMessage("titlePresence.iamAnswer"), new SingleMessage("thanks") }));
