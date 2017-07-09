@@ -154,6 +154,12 @@ public abstract class EntityConsort extends EntityMinestuck
 		return super.onInitialSpawn(difficulty, livingdata);
 	}
 	
+	@Override
+	protected boolean canDespawn()
+	{
+		return false;
+	}
+	
 	public abstract EnumConsort getConsortType();
 	
 	public void commandReply(EntityPlayer player, String chain)
