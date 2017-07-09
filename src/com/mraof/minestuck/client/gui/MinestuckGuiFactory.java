@@ -1,12 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -19,6 +14,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 @SideOnly(Side.CLIENT)
 public class MinestuckGuiFactory implements IModGuiFactory
 {
@@ -26,6 +25,18 @@ public class MinestuckGuiFactory implements IModGuiFactory
 	@Override
 	public void initialize(Minecraft minecraftInstance)
 	{}
+	
+	@Override
+	public boolean hasConfigGui()
+	{
+		return true;
+	}
+	
+	@Override
+	public GuiScreen createConfigGui(GuiScreen parentScreen)
+	{
+		return new MinestuckConfigGui(parentScreen);
+	}
 	
 	@Override
 	public Class<? extends GuiScreen> mainConfigGuiClass()
