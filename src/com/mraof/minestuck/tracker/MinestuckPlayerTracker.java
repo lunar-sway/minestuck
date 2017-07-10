@@ -1,8 +1,21 @@
 package com.mraof.minestuck.tracker;
 
-import java.util.HashSet;
-import java.util.Set;
-
+import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
+import com.mraof.minestuck.inventory.captchalouge.Modus;
+import com.mraof.minestuck.network.CaptchaDeckPacket;
+import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckPacket;
+import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.network.PlayerDataPacket;
+import com.mraof.minestuck.network.skaianet.SburbConnection;
+import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import com.mraof.minestuck.world.lands.LandAspectRegistry;
+import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
@@ -16,30 +29,8 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.editmode.ServerEditHandler;
-import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
-import com.mraof.minestuck.inventory.captchalouge.Modus;
-import com.mraof.minestuck.network.CaptchaDeckPacket;
-import com.mraof.minestuck.network.MinestuckChannelHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
-import com.mraof.minestuck.network.PlayerDataPacket;
-import com.mraof.minestuck.network.skaianet.SburbConnection;
-import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.Echeladder;
-import com.mraof.minestuck.util.GristHelper;
-import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.MinestuckPlayerData;
-import com.mraof.minestuck.util.GristType;
-import com.mraof.minestuck.util.Title;
-import com.mraof.minestuck.util.UpdateChecker;
-import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
-import com.mraof.minestuck.world.lands.LandAspectRegistry;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MinestuckPlayerTracker {
 	
@@ -147,6 +138,7 @@ public class MinestuckPlayerTracker {
 	
 	private static boolean shouldUpdateConfigurations(EntityPlayerMP player)
 	{
+		//TODO check for changed configs and change setRequiresWorldRestart status for those config options
 		boolean permission = MinestuckConfig.getDataCheckerPermissionFor(player);
 		if(permission != dataCheckerPermission.contains(player.getName()))
 			return true;

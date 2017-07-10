@@ -1,7 +1,11 @@
 package com.mraof.minestuck;
 
-import java.io.File;
-
+import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.inventory.ContainerHandler;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.Echeladder;
+import com.mraof.minestuck.util.MinestuckAchievementHandler;
+import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.UserListOpsEntry;
@@ -12,19 +16,12 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import org.lwjgl.opengl.GLContext;
 
-import com.mraof.minestuck.editmode.ServerEditHandler;
-import com.mraof.minestuck.inventory.ContainerHandler;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.Echeladder;
-import com.mraof.minestuck.util.MinestuckAchievementHandler;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import java.io.File;
 
 public class MinestuckConfig
 {
-	
 	public static Configuration config;
 	public static Side gameSide;
 	
@@ -115,18 +112,45 @@ public class MinestuckConfig
 		MinestuckDimensionHandler.landDimensionIdStart = config.get("IDs", "landDimensionIdStart", 3).setRequiresMcRestart(true).setLanguageKey("minestuck.config.landDimensionIdStart").getInt();
 		MinestuckDimensionHandler.biomeIdStart = config.get("IDs", "biomeIdStart", 50).setRequiresMcRestart(true).setMinValue(40).setMaxValue(120).setLanguageKey("minestuck.config.biomeIdStart").getInt();
 		MinestuckAchievementHandler.idOffset = config.get("IDs", "statsIdStart", 413).setRequiresMcRestart(true).setLanguageKey("minestuck.config.statsIdStart").getInt();
-		config.getCategory("IDs").setLanguageKey("minestuck.config.IDs");
+		
+		keepDimensionsLoaded = config.get("General", "keepDimensionsLoaded", true, "").setLanguageKey("minestuck.config.keepDimensionsLoaded").setRequiresMcRestart(true).getBoolean();
 		
 		//Debug.isDebugMode = config.get("General", "Print Debug Messages", true, "Whenether the game should print debug messages or not.").setShowInGui(false).getBoolean();
 		
-		loadBasicConfigOptions();
+		loadBasicConfigOptions(false);
 		
 		config.save();
 	}
 	
-	static void loadBasicConfigOptions()
+	static void loadBasicConfigOptions(boolean worldRunning)
 	{
-		ContainerHandler.windowIdStart = config.get("IDs", "specialWindowIdStart", -10).setLanguageKey("minestuck.config.windowIdStart").setRequiresWorldRestart(true).getInt();
+		config.getCategory("IDs").setLanguageKey("minestuck.config.IDs");
+		config.getCategory("Modus").setLanguageKey("minestuck.config.modus");
+		
+		if(!worldRunning)
+		{
+			ContainerHandler.windowIdStart = config.get("IDs", "specialWindowIdStart", -10).setLanguageKey("minestuck.config.windowIdStart").setRequiresWorldRestart(true).getInt();
+			
+			String setting = config.get("Modus", "forceAutobalance", "both", "This determines if auto-balance should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.", new String[] {"both", "off", "on"}).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.forceAutobalance").getString();
+			treeModusSetting = (byte) (setting.equals("both") ? 0 : setting.equals("on") ? 1 : 2);
+			setting = config.get("Modus", "forceEjectByChat", "on", "This determines if hashmap chat ejection should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.", new String[] {"both", "off", "on"}).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.forceEjectByChat").getString();
+			hashmapChatModusSetting = (byte) (setting.equals("both") ? 0 : setting.equals("on") ? 1 : 2);
+			
+			giveItems = config.get("General", "giveItems", false, "Setting this to true replaces editmode with the old Give Items button.").setLanguageKey("minestuck.config.giveItems").setRequiresWorldRestart(true).getBoolean();
+			
+			deployConfigurations = new boolean[1];
+			deployConfigurations[0] = config.get("General", "deployCard", false, "Determines if a card with a captcha card punched on it should be added to the deploy list or not.").setLanguageKey("minestuck.config.deployCard").setRequiresWorldRestart(true).getBoolean();
+			cardCost = config.get("General", "cardCost", 1, "An integer that determines how much a captchalouge card costs to alchemize").setMinValue(1).setLanguageKey("minestuck.config.cardCost").setRequiresWorldRestart(true).getInt();
+			cardRecipe = config.get("General", "cardRecipe", true, "Set this to false to remove the captcha card crafting recipe.").setLanguageKey("minestuck.config.cardRecipe").setRequiresWorldRestart(true).getBoolean();
+			
+			globalSession = config.get("General", "globalSession", false, "Whenether all connetions should be put into a single session or not.").setRequiresWorldRestart(true).setLanguageKey("minestuck.config.globalSession").getBoolean();
+			generateCruxiteOre = config.get("General", "generateCruxiteOre", true, "If cruxite ore should be generated in the overworld.").setRequiresWorldRestart(true).setLanguageKey("minestuck.config.generateCruxiteOre").getBoolean();
+			overworldEditRange = config.get("General", "overworldEditRange", 15, "A number that determines how far away from the computer an editmode player may be before entry.", 3, 50).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.overworldEditRange").getInt();
+			landEditRange = config.get("General", "landEditRange", 30, "A number that determines how far away from the center of the brought land that an editmode player may be after entry.", 3, 50).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.landEditRange").getInt();
+			disableGristWidget = config.get("General", "disableGristWidget", false).setLanguageKey("minestuck.config.disableGristWidget").setRequiresWorldRestart(true).getBoolean();
+			preEntryRungLimit = config.get("General", "preEntryRungLimit", 6, "The highest rung you can get before entering medium. Note that the first rung is indexed as 0, the second as 1 and so on.", 0, Echeladder.RUNG_COUNT - 1).setLanguageKey("minestuck.config.preEntryRungLimit").setRequiresWorldRestart(true).getInt();
+			useUUID = config.get("General", "uuidIdentification", true, "If this is set to true, minestuck will use uuids to refer to players in the saved data. On false it will instead use the old method based on usernames.").setLanguageKey("minestuck.config.uuidIdentification").setRequiresWorldRestart(true).getBoolean();
+		}
 		
 		initialModusSize = config.get("Modus", "initialModusSize", 5).setMinValue(0).setLanguageKey("minestuck.config.initialModusSize").getInt();
 		defaultModusTypes = config.get("Modus", "defaultModusType", new int[] {0, 1},
@@ -134,41 +158,22 @@ public class MinestuckConfig
 		modusMaxSize = config.get("Modus", "modusMaxSize", 0, "The max size on a modus. Ignored if the value is 0.").setMinValue(0).setLanguageKey("minestuck.config.modusMaxSize").getInt();
 		if(initialModusSize > modusMaxSize && modusMaxSize > 0)
 			initialModusSize = modusMaxSize;
-		String setting = config.get("Modus", "forceAutobalance", "both", "This determines if auto-balance should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.", new String[] {"both", "off", "on"}).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.forceAutobalance").getString();
-		treeModusSetting = (byte) (setting.equals("both") ? 0 : setting.equals("on") ? 1 : 2);
-		setting = config.get("Modus", "forceEjectByChat", "on", "This determines if hashmap chat ejection should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.", new String[] {"both", "off", "on"}).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.forceEjectByChat").getString();
-		hashmapChatModusSetting = (byte) (setting.equals("both") ? 0 : setting.equals("on") ? 1 : 2);
-		setting = config.get("Modus", "itemDropMode", "cardsAndItems", "Determines which items from the modus that are dropped on death. \"items\": Only the items are dropped. \"cardsAndItems\": Both items and cards are dropped. (So that you have at most initialModusSize amount of cards) \"all\": Everything is dropped, even the modus.", new String[] {"items", "cardsAndItems", "all"}).setLanguageKey("minestuck.config.itemDropMode").getString();
+		String setting = config.get("Modus", "itemDropMode", "cardsAndItems", "Determines which items from the modus that are dropped on death. \"items\": Only the items are dropped. \"cardsAndItems\": Both items and cards are dropped. (So that you have at most initialModusSize amount of cards) \"all\": Everything is dropped, even the modus.", new String[] {"items", "cardsAndItems", "all"}).setLanguageKey("minestuck.config.itemDropMode").getString();
 		if(setting.equals("items"))
 			sylladexDropMode = 0;
 		if(setting.equals("cardsAndItems"))
 			sylladexDropMode = 1;
 		else sylladexDropMode = 2;
 		dropItemsInCards = config.get("Modus", "dropItemsInCards", true, "When sylladexes are droppable, this option determines if items should be dropped inside of cards or items and cards as different stacks.").setLanguageKey("minestuck.config.dropItemsInCards").getBoolean();
-		config.getCategory("Modus").setLanguageKey("minestuck.config.modus");
 		
 		privateComputers = config.get("General", "privateComputers", true, "True if computers should only be able to be used by the owner.").setLanguageKey("minestuck.config.privateComputers").getBoolean();
-		giveItems = config.get("General", "giveItems", false, "Setting this to true replaces editmode with the old Give Items button.").setLanguageKey("minestuck.config.giveItems").setRequiresWorldRestart(true).getBoolean();
 		
-		deployConfigurations = new boolean[1];
-		deployConfigurations[0] = config.get("General", "deployCard", false, "Determines if a card with a captcha card punched on it should be added to the deploy list or not.").setLanguageKey("minestuck.config.deployCard").setRequiresWorldRestart(true).getBoolean();
-		cardCost = config.get("General", "cardCost", 1, "An integer that determines how much a captchalouge card costs to alchemize").setMinValue(1).setLanguageKey("minestuck.config.cardCost").setRequiresWorldRestart(true).getInt();
-		cardRecipe = config.get("General", "cardRecipe", true, "Set this to false to remove the captcha card crafting recipe.").setLanguageKey("minestuck.config.cardRecipe").setRequiresWorldRestart(true).getBoolean();
-		
-		generateCruxiteOre = config.get("General", "generateCruxiteOre", true, "If cruxite ore should be generated in the overworld.").setRequiresWorldRestart(true).setLanguageKey("minestuck.config.generateCruxiteOre").getBoolean();
-		globalSession = config.get("General", "globalSession", false, "Whenether all connetions should be put into a single session or not.").setLanguageKey("minestuck.config.globalSession").getBoolean();
-		overworldEditRange = config.get("General", "overworldEditRange", 15, "A number that determines how far away from the computer an editmode player may be before entry.", 3, 50).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.overworldEditRange").getInt();
-		landEditRange = config.get("General", "landEditRange", 30, "A number that determines how far away from the center of the brought land that an editmode player may be after entry.", 3, 50).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.landEditRange").getInt();
 		artifactRange = config.get("General", "artifactRange", 30, "Radius of the land brought into the medium.", 3, 50).setLanguageKey("minestuck.config.artifactRange").getInt();
 		entryCrater = config.get("General", "entryCrater", true, "Disable this to prevent craters from people entering the medium.").setLanguageKey("minestuck.config.entryCrater").getBoolean();
-		keepDimensionsLoaded = config.get("General", "keepDimensionsLoaded", true, "").setLanguageKey("minestuck.config.keepDimensionsLoaded").setRequiresMcRestart(true).getBoolean();
 		adaptEntryBlockHeight = config.get("General", "adaptEntryBlockHeight", true, "Adapt the transferred height to make the top non-air block to be placed at y:128. Makes entry take slightly longer.").setLanguageKey("minestuck.config.adaptEntryBlockHeight").getBoolean();
 		allowSecondaryConnections = config.get("General", "secondaryConnections", true, "Set this to true to allow so-called 'secondary connections' to be created.").setLanguageKey("minestuck.config.secondaryConnections").getBoolean();	//Server lists need to be updated if this gets changeable in-game
-		disableGristWidget = config.get("General", "disableGristWidget", false).setLanguageKey("minestuck.config.disableGristWidget").setRequiresWorldRestart(true).getBoolean();
 		vanillaOreDrop = config.get("General", "vanillaOreDrop", false, "If this is true, the custom vanilla ores will drop the standard vanilla ores when mined, instead of the custom type.").setLanguageKey("minestuck.config.vanillaOreDrop").getBoolean();
-		preEntryRungLimit = config.get("General", "preEntryRungLimit", 6, "The highest rung you can get before entering medium. Note that the first rung is indexed as 0, the second as 1 and so on.", 0, Echeladder.RUNG_COUNT - 1).setLanguageKey("minestuck.config.preEntryRungLimit").setRequiresWorldRestart(true).getInt();
 		echeladderProgress = config.get("General", "echeladderProgress", false, "If this is true, players will be able to see their progress towards the next rung. This is server side and will only be active in multiplayer if the server/Lan host has it activated.").setLanguageKey("minestuck.config.echeladderProgress").getBoolean();
-		useUUID = config.get("General", "uuidIdentification", true, "If this is set to true, minestuck will use uuids to refer to players in the saved data. On false it will instead use the old method based on usernames.").setLanguageKey("minestuck.config.uuidIdentification").setRequiresWorldRestart(true).getBoolean();
 		playerSelectedTitle = config.get("General", "playerSelectedTitle", false, "Enable this to let players select their own title. They will however not be able to select the Lord or Muse as class.").setLanguageKey("minestuck.config.playerSelectedTitle").getBoolean();
 		canBreakGates = config.get("General", "canBreakGates", true, "Lets gates be destroyed by explosions. Turning this off will make gates use the same explosion resistance as bedrock.").setLanguageKey("minestuck.config.canBreakGates").getBoolean();
 		disableGiclops = config.get("General", "disableGiclops", false, "Right now, the giclops pathfinding is currently causing huge amounts of lag due to their size. This option is a short-term solution that will disable giclops spawning and remove all existing giclopses.").setLanguageKey("minestuck.config.disableGiclops").getBoolean();
@@ -205,12 +210,11 @@ public class MinestuckConfig
 	
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
-	public void onConfigChanged(ConfigChangedEvent.PostConfigChangedEvent event)
+	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
 	{
 		if(event.getModID().equals(Minestuck.class.getAnnotation(Mod.class).modid()))
 		{
-			if(!event.isWorldRunning() && !event.isRequiresMcRestart())
-				loadBasicConfigOptions();	//Haven't put up a method for changing config options while the world is running
+			loadBasicConfigOptions(event.isWorldRunning());
 			
 			config.save();
 			
@@ -226,7 +230,7 @@ public class MinestuckConfig
 				MinecraftServer server = player.getServer();
 				if (server.getPlayerList().canSendCommands(player.getGameProfile()))
 				{
-					UserListOpsEntry userlistopsentry = (UserListOpsEntry)server.getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
+					UserListOpsEntry userlistopsentry = server.getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
 					if((userlistopsentry != null ? userlistopsentry.getPermissionLevel() : server.getOpPermissionLevel()) >= 2)
 						return true;
 				}
