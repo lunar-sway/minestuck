@@ -1,8 +1,9 @@
 package com.mraof.minestuck.client.util;
 
-import java.util.Collections;
-import java.util.Map;
-
+import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.block.*;
+import com.mraof.minestuck.item.ItemMinestuckCandy;
+import com.mraof.minestuck.item.weapon.ItemDualWeapon;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCactus;
 import net.minecraft.block.BlockTNT;
@@ -22,15 +23,8 @@ import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.block.BlockChessTile;
-import com.mraof.minestuck.block.BlockCrockerMachine;
-import com.mraof.minestuck.block.BlockMinestuckLog;
-import com.mraof.minestuck.block.BlockSburbMachine;
-import com.mraof.minestuck.block.BlockMinestuckStone;
-import com.mraof.minestuck.block.BlockColoredDirt;
-import com.mraof.minestuck.item.ItemMinestuckCandy;
-import com.mraof.minestuck.item.weapon.ItemDualWeapon;
+import java.util.Collections;
+import java.util.Map;
 
 import static com.mraof.minestuck.block.MinestuckBlocks.*;
 import static com.mraof.minestuck.item.MinestuckItems.*;
@@ -49,7 +43,6 @@ public class MinestuckModelManager
 		
 		//Items
 
-		register(clawHammer);
 		register(sledgeHammer);
 		register(blacksmithHammer);
 		register(pogoHammer);
@@ -113,9 +106,12 @@ public class MinestuckModelManager
 		
 		if(MinestuckConfig.oldItemModels)
 		{
+			register(clawHammer, 0, "claw_hammer_old");
 			register(zillyhooHammer, 0, "zillyhoo_hammer_old");
 		} else
 		{
+			//register(clawHammer);
+			register(clawHammer, 0, "claw_hammer_old");	//Until the issues with the model are fixed
 			register(zillyhooHammer);
 		}
 		
