@@ -228,6 +228,7 @@ public class MinestuckModelManager
 		{
 			ModelBakery.registerItemVariants(zillyhooHammer, new ResourceLocation("minestuck:zillyhoo_hammer_old"));
 		}
+		ModelBakery.registerItemVariants(clawHammer, new ResourceLocation("minestuck:claw_hammer_old"));
 		
 		ResourceLocation[] resLoc = new ResourceLocation[modusCard.modusNames.length];
 		for(int i = 0; i < resLoc.length; i++)
