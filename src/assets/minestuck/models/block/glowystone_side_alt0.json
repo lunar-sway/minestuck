@@ -1,0 +1,6 @@
+{
+    "parent": "minestuck:block/glowystone_side_alt",
+    "textures": {
+        "line": "minestuck:blocks/glowystone_line"
+    }
+}

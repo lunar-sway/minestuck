@@ -463,6 +463,7 @@ item.candySulfur.name=Sulfur Candy Apple
 item.candyTar.name=Tar Black Licorice
 item.candyUranium.name=Uranium Gummy Bear
 item.candyZillium.name=Zillium Skittles
+item.beverageTab.name=Tab
 item.bugOnAStick.name=Bug On a Stick
 item.chocolateBeetle.name=Chocolate Covered Beetle
 item.coneOfFlies.name=Cone Of Flies
@@ -481,6 +482,7 @@ item.carvingTool.name=Carving Tool
 item.crumplyHat.name=Crumply Hat
 item.frogStatueReplica.name=Frog Statue Replica
 item.stoneSlab.name=Stone Slab
+item.glowystoneDust.name=Glowystone Dust
 item.record.emissary.desc=Catboss - Emissary of Dance
 item.record.danceStab.desc=Catboss - Dance-Stab-Dance
 

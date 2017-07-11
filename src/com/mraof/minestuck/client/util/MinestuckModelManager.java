@@ -1,7 +1,148 @@
 package com.mraof.minestuck.client.util;
 
+import static com.mraof.minestuck.block.MinestuckBlocks.blockBlood;
+import static com.mraof.minestuck.block.MinestuckBlocks.blockBrainJuice;
+import static com.mraof.minestuck.block.MinestuckBlocks.blockComputerOff;
+import static com.mraof.minestuck.block.MinestuckBlocks.blockOil;
+import static com.mraof.minestuck.block.MinestuckBlocks.castIronStairs;
+import static com.mraof.minestuck.block.MinestuckBlocks.chessTile;
+import static com.mraof.minestuck.block.MinestuckBlocks.coalOreNetherrack;
+import static com.mraof.minestuck.block.MinestuckBlocks.coarseStoneStairs;
+import static com.mraof.minestuck.block.MinestuckBlocks.coloredDirt;
+import static com.mraof.minestuck.block.MinestuckBlocks.crockerMachine;
+import static com.mraof.minestuck.block.MinestuckBlocks.cruxiteBlock;
+import static com.mraof.minestuck.block.MinestuckBlocks.frostBrickStairs;
+import static com.mraof.minestuck.block.MinestuckBlocks.gate;
+import static com.mraof.minestuck.block.MinestuckBlocks.genericObject;
+import static com.mraof.minestuck.block.MinestuckBlocks.glowingLog;
+import static com.mraof.minestuck.block.MinestuckBlocks.glowingMushroom;
+import static com.mraof.minestuck.block.MinestuckBlocks.glowingPlanks;
+import static com.mraof.minestuck.block.MinestuckBlocks.goldOreSandstone;
+import static com.mraof.minestuck.block.MinestuckBlocks.goldOreSandstoneRed;
+import static com.mraof.minestuck.block.MinestuckBlocks.instantTnt;
+import static com.mraof.minestuck.block.MinestuckBlocks.ironOreSandstone;
+import static com.mraof.minestuck.block.MinestuckBlocks.ironOreSandstoneRed;
+import static com.mraof.minestuck.block.MinestuckBlocks.layeredSand;
+import static com.mraof.minestuck.block.MinestuckBlocks.log;
+import static com.mraof.minestuck.block.MinestuckBlocks.oreCruxite;
+import static com.mraof.minestuck.block.MinestuckBlocks.primedTnt;
+import static com.mraof.minestuck.block.MinestuckBlocks.returnNode;
+import static com.mraof.minestuck.block.MinestuckBlocks.sburbMachine;
+import static com.mraof.minestuck.block.MinestuckBlocks.shadeBrickStairs;
+import static com.mraof.minestuck.block.MinestuckBlocks.skaiaPortal;
+import static com.mraof.minestuck.block.MinestuckBlocks.stone;
+import static com.mraof.minestuck.block.MinestuckBlocks.stoneExplosiveButton;
+import static com.mraof.minestuck.block.MinestuckBlocks.transportalizer;
+import static com.mraof.minestuck.block.MinestuckBlocks.unstableTnt;
+import static com.mraof.minestuck.block.MinestuckBlocks.woodenCactus;
+import static com.mraof.minestuck.block.MinestuckBlocks.woodenExplosiveButton;
+import static com.mraof.minestuck.item.MinestuckItems.CatClaws;
+import static com.mraof.minestuck.item.MinestuckItems.beverage;
+import static com.mraof.minestuck.item.MinestuckItems.blacksmithBane;
+import static com.mraof.minestuck.item.MinestuckItems.blacksmithHammer;
+import static com.mraof.minestuck.item.MinestuckItems.bugOnAStick;
+import static com.mraof.minestuck.item.MinestuckItems.cactusCutlass;
+import static com.mraof.minestuck.item.MinestuckItems.caledfwlch;
+import static com.mraof.minestuck.item.MinestuckItems.caledscratch;
+import static com.mraof.minestuck.item.MinestuckItems.candy;
+import static com.mraof.minestuck.item.MinestuckItems.candySickle;
+import static com.mraof.minestuck.item.MinestuckItems.cane;
+import static com.mraof.minestuck.item.MinestuckItems.captchaCard;
+import static com.mraof.minestuck.item.MinestuckItems.carvingTool;
+import static com.mraof.minestuck.item.MinestuckItems.chessboard;
+import static com.mraof.minestuck.item.MinestuckItems.chocolateBeetle;
+import static com.mraof.minestuck.item.MinestuckItems.clawHammer;
+import static com.mraof.minestuck.item.MinestuckItems.clawSickle;
+import static com.mraof.minestuck.item.MinestuckItems.cobaltSabre;
+import static com.mraof.minestuck.item.MinestuckItems.coneOfFlies;
+import static com.mraof.minestuck.item.MinestuckItems.copseCrusher;
+import static com.mraof.minestuck.item.MinestuckItems.crewPoster;
+import static com.mraof.minestuck.item.MinestuckItems.crockerSpork;
+import static com.mraof.minestuck.item.MinestuckItems.crumplyHat;
+import static com.mraof.minestuck.item.MinestuckItems.cruxiteApple;
+import static com.mraof.minestuck.item.MinestuckItems.cruxiteDowel;
+import static com.mraof.minestuck.item.MinestuckItems.cruxitePotion;
+import static com.mraof.minestuck.item.MinestuckItems.deuceClub;
+import static com.mraof.minestuck.item.MinestuckItems.dice;
+import static com.mraof.minestuck.item.MinestuckItems.disk;
+import static com.mraof.minestuck.item.MinestuckItems.doggMachete;
+import static com.mraof.minestuck.item.MinestuckItems.dragonCane;
+import static com.mraof.minestuck.item.MinestuckItems.emeraldAxe;
+import static com.mraof.minestuck.item.MinestuckItems.emeraldHoe;
+import static com.mraof.minestuck.item.MinestuckItems.emeraldPickaxe;
+import static com.mraof.minestuck.item.MinestuckItems.emeraldShovel;
+import static com.mraof.minestuck.item.MinestuckItems.emeraldSword;
+import static com.mraof.minestuck.item.MinestuckItems.fearNoAnvil;
+import static com.mraof.minestuck.item.MinestuckItems.firePoker;
+import static com.mraof.minestuck.item.MinestuckItems.fluoriteOctet;
+import static com.mraof.minestuck.item.MinestuckItems.fork;
+import static com.mraof.minestuck.item.MinestuckItems.frogStatueReplica;
+import static com.mraof.minestuck.item.MinestuckItems.fudgeSickle;
+import static com.mraof.minestuck.item.MinestuckItems.glowystoneDust;
+import static com.mraof.minestuck.item.MinestuckItems.goldSeeds;
+import static com.mraof.minestuck.item.MinestuckItems.grasshopper;
+import static com.mraof.minestuck.item.MinestuckItems.hephaestusLumber;
+import static com.mraof.minestuck.item.MinestuckItems.homesSmellYaLater;
+import static com.mraof.minestuck.item.MinestuckItems.hotHandle;
+import static com.mraof.minestuck.item.MinestuckItems.jarOfBugs;
+import static com.mraof.minestuck.item.MinestuckItems.katana;
+import static com.mraof.minestuck.item.MinestuckItems.metalBat;
+import static com.mraof.minestuck.item.MinestuckItems.metalBoat;
+import static com.mraof.minestuck.item.MinestuckItems.minestuckBucket;
+import static com.mraof.minestuck.item.MinestuckItems.modusCard;
+import static com.mraof.minestuck.item.MinestuckItems.mwrthwl;
+import static com.mraof.minestuck.item.MinestuckItems.nightClub;
+import static com.mraof.minestuck.item.MinestuckItems.obsidianBucket;
+import static com.mraof.minestuck.item.MinestuckItems.onion;
+import static com.mraof.minestuck.item.MinestuckItems.pogoClub;
+import static com.mraof.minestuck.item.MinestuckItems.pogoHammer;
+import static com.mraof.minestuck.item.MinestuckItems.popamaticVrillyhoo;
+import static com.mraof.minestuck.item.MinestuckItems.prismarineBoots;
+import static com.mraof.minestuck.item.MinestuckItems.prismarineChestplate;
+import static com.mraof.minestuck.item.MinestuckItems.prismarineHelmet;
+import static com.mraof.minestuck.item.MinestuckItems.prismarineLeggings;
+import static com.mraof.minestuck.item.MinestuckItems.qPHammerAxe;
+import static com.mraof.minestuck.item.MinestuckItems.rawCruxite;
+import static com.mraof.minestuck.item.MinestuckItems.recordDanceStab;
+import static com.mraof.minestuck.item.MinestuckItems.recordEmissaryOfDance;
+import static com.mraof.minestuck.item.MinestuckItems.regiSickle;
+import static com.mraof.minestuck.item.MinestuckItems.regisword;
+import static com.mraof.minestuck.item.MinestuckItems.royalDeringer;
+import static com.mraof.minestuck.item.MinestuckItems.rubyCroak;
+import static com.mraof.minestuck.item.MinestuckItems.salad;
+import static com.mraof.minestuck.item.MinestuckItems.sbahjPoster;
+import static com.mraof.minestuck.item.MinestuckItems.scarletRibbitar;
+import static com.mraof.minestuck.item.MinestuckItems.scarletZillyhoo;
+import static com.mraof.minestuck.item.MinestuckItems.scraxe;
+import static com.mraof.minestuck.item.MinestuckItems.sickle;
+import static com.mraof.minestuck.item.MinestuckItems.silverSpoon;
+import static com.mraof.minestuck.item.MinestuckItems.skaiaFork;
+import static com.mraof.minestuck.item.MinestuckItems.sledgeHammer;
+import static com.mraof.minestuck.item.MinestuckItems.sord;
+import static com.mraof.minestuck.item.MinestuckItems.spearCane;
+import static com.mraof.minestuck.item.MinestuckItems.spikedClub;
+import static com.mraof.minestuck.item.MinestuckItems.spork;
+import static com.mraof.minestuck.item.MinestuckItems.stoneSlab;
+import static com.mraof.minestuck.item.MinestuckItems.telescopicSassacrusher;
+import static com.mraof.minestuck.item.MinestuckItems.threshDvd;
+import static com.mraof.minestuck.item.MinestuckItems.unbreakableKatana;
+import static com.mraof.minestuck.item.MinestuckItems.woodenSpoon;
+import static com.mraof.minestuck.item.MinestuckItems.zillyhooHammer;
+import static com.mraof.minestuck.item.MinestuckItems.zillywairCutlass;
+
 import java.util.Collections;
 import java.util.Map;
+
+import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.block.BlockChessTile;
+import com.mraof.minestuck.block.BlockColoredDirt;
+import com.mraof.minestuck.block.BlockCrockerMachine;
+import com.mraof.minestuck.block.BlockMinestuckLog;
+import com.mraof.minestuck.block.BlockMinestuckStone;
+import com.mraof.minestuck.block.BlockSburbMachine;
+import com.mraof.minestuck.item.ItemMinestuckBeverage;
+import com.mraof.minestuck.item.ItemMinestuckCandy;
+import com.mraof.minestuck.item.weapon.ItemDualWeapon;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCactus;
@@ -149,6 +290,8 @@ public class MinestuckModelManager
 		register(obsidianBucket);
 		for(int i = 0; i < ItemMinestuckCandy.modelNames.length; i++)
 			register(candy, i, ItemMinestuckCandy.modelNames[i]);
+		for(int i = 0; i < ItemMinestuckBeverage.modelNames.length; i++)
+			register(beverage, i, ItemMinestuckBeverage.modelNames[i]);
 		register(bugOnAStick);
 		register(chocolateBeetle);
 		register(coneOfFlies);
@@ -165,6 +308,7 @@ public class MinestuckModelManager
 		register(stoneSlab);
 		register(recordEmissaryOfDance);
 		register(recordDanceStab);
+		register(glowystoneDust);
 		
 		//Blocks
 		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())
@@ -241,6 +385,8 @@ public class MinestuckModelManager
 			ModelBakery.registerItemVariants(metalBoat, new ResourceLocation("minestuck:boat_" + s));
 		for(String s : ItemMinestuckCandy.modelNames)
 			ModelBakery.registerItemVariants(candy, new ResourceLocation("minestuck:"+s));
+		for(String s : ItemMinestuckBeverage.modelNames)
+			ModelBakery.registerItemVariants(beverage, new ResourceLocation("minestuck:"+s));
 		
 		//Blocks
 		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())
