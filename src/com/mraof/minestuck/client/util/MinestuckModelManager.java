@@ -1,11 +1,5 @@
 package com.mraof.minestuck.client.util;
 
-import static com.mraof.minestuck.block.MinestuckBlocks.*;
-import static com.mraof.minestuck.item.MinestuckItems.*;
-
-import java.util.Collections;
-import java.util.Map;
-
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.BlockChessTile;
 import com.mraof.minestuck.block.BlockColoredDirt;
@@ -35,6 +29,12 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Collections;
+import java.util.Map;
+
+import static com.mraof.minestuck.block.MinestuckBlocks.*;
+import static com.mraof.minestuck.item.MinestuckItems.*;
 
 @SideOnly(Side.CLIENT)
 public class MinestuckModelManager
