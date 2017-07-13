@@ -1,8 +1,26 @@
 package com.mraof.minestuck.client;
 
+import com.mraof.minestuck.client.model.*;
 import com.mraof.minestuck.client.renderer.entity.*;
+import com.mraof.minestuck.client.renderer.tileentity.RenderGate;
+import com.mraof.minestuck.client.renderer.tileentity.RenderSkaiaPortal;
+import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
 import com.mraof.minestuck.entity.EntityBigPart;
-import com.mraof.minestuck.entity.item.EntityCrewPoster;
+import com.mraof.minestuck.entity.EntityDecoy;
+import com.mraof.minestuck.entity.carapacian.EntityBishop;
+import com.mraof.minestuck.entity.carapacian.EntityPawn;
+import com.mraof.minestuck.entity.carapacian.EntityRook;
+import com.mraof.minestuck.entity.consort.EntityIguana;
+import com.mraof.minestuck.entity.consort.EntityNakagator;
+import com.mraof.minestuck.entity.consort.EntitySalamander;
+import com.mraof.minestuck.entity.consort.EntityTurtle;
+import com.mraof.minestuck.entity.item.*;
+import com.mraof.minestuck.entity.underling.*;
+import com.mraof.minestuck.event.ClientEventHandler;
+import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.tileentity.TileEntityGate;
+import com.mraof.minestuck.tileentity.TileEntitySkaiaPortal;
+import com.mraof.minestuck.util.ColorCollector;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.color.IItemColor;
@@ -18,41 +36,6 @@ import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.mraof.minestuck.client.model.ModelBasilisk;
-import com.mraof.minestuck.client.model.ModelBishop;
-import com.mraof.minestuck.client.model.ModelGiclops;
-import com.mraof.minestuck.client.model.ModelIguana;
-import com.mraof.minestuck.client.model.ModelImp;
-import com.mraof.minestuck.client.model.ModelNakagator;
-import com.mraof.minestuck.client.model.ModelOgre;
-import com.mraof.minestuck.client.model.ModelRook;
-import com.mraof.minestuck.client.model.ModelSalamander;
-import com.mraof.minestuck.client.model.ModelTurtle;
-import com.mraof.minestuck.client.renderer.tileentity.RenderGate;
-import com.mraof.minestuck.client.renderer.tileentity.RenderSkaiaPortal;
-import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
-import com.mraof.minestuck.entity.EntityDecoy;
-import com.mraof.minestuck.entity.carapacian.EntityBishop;
-import com.mraof.minestuck.entity.carapacian.EntityPawn;
-import com.mraof.minestuck.entity.carapacian.EntityRook;
-import com.mraof.minestuck.entity.consort.EntityIguana;
-import com.mraof.minestuck.entity.consort.EntityNakagator;
-import com.mraof.minestuck.entity.consort.EntitySalamander;
-import com.mraof.minestuck.entity.consort.EntityTurtle;
-import com.mraof.minestuck.entity.item.EntityGrist;
-import com.mraof.minestuck.entity.item.EntityMetalBoat;
-import com.mraof.minestuck.entity.item.EntityVitalityGel;
-import com.mraof.minestuck.entity.underling.EntityBasilisk;
-import com.mraof.minestuck.entity.underling.EntityGiclops;
-import com.mraof.minestuck.entity.underling.EntityImp;
-import com.mraof.minestuck.entity.underling.EntityOgre;
-import com.mraof.minestuck.entity.underling.EntityUnderlingPart;
-import com.mraof.minestuck.event.ClientEventHandler;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.tileentity.TileEntityGate;
-import com.mraof.minestuck.tileentity.TileEntitySkaiaPortal;
-import com.mraof.minestuck.util.ColorCollector;
 
 public class ClientProxy
 {
@@ -166,6 +149,14 @@ public class ClientProxy
 			public Render<EntityCrewPoster> createRenderFor(RenderManager manager)
 			{
 				return new RenderHangingArt(manager, "midnight_poster");
+			}
+		});
+		RenderingRegistry.registerEntityRenderingHandler(EntitySbahjPoster.class, new IRenderFactory<EntitySbahjPoster>()
+		{
+			@Override
+			public Render<EntitySbahjPoster> createRenderFor(RenderManager manager)
+			{
+				return new RenderHangingArt(manager, "sbahj_poster");
 			}
 		});
 		

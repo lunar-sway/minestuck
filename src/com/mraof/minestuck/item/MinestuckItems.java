@@ -1,16 +1,15 @@
 package com.mraof.minestuck.item;
 
-import com.google.common.base.Function;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.BlockColoredDirt;
 import com.mraof.minestuck.block.BlockCrockerMachine;
 import com.mraof.minestuck.block.BlockMinestuckLog;
 import com.mraof.minestuck.block.BlockMinestuckStone;
 import com.mraof.minestuck.entity.item.EntityCrewPoster;
+import com.mraof.minestuck.entity.item.EntitySbahjPoster;
 import com.mraof.minestuck.item.block.ItemBlockLayered;
 import com.mraof.minestuck.item.block.ItemSburbMachine;
 import com.mraof.minestuck.item.weapon.*;
-
 import net.minecraft.entity.EntityHanging;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
@@ -327,7 +326,13 @@ public class MinestuckItems
 				return new EntityCrewPoster(worldIn, pos, facing);
 			}
 		}.setRegistryName("crew_poster")).setUnlocalizedName("crewPoster").setMaxStackSize(1).setCreativeTab(Minestuck.tabMinestuck);
-		sbahjPoster = GameRegistry.register(new Item().setRegistryName("sbahj_poster")).setUnlocalizedName("sbahjPoster").setMaxStackSize(1).setCreativeTab(Minestuck.tabMinestuck);
+		sbahjPoster = GameRegistry.register(new ItemHanging(){
+			@Override
+			public EntityHanging createEntity(World worldIn, BlockPos pos, EnumFacing facing, ItemStack stack)
+			{
+				return new EntitySbahjPoster(worldIn, pos, facing);
+			}
+		}.setRegistryName("sbahj_poster")).setUnlocalizedName("sbahjPoster").setMaxStackSize(1).setCreativeTab(Minestuck.tabMinestuck);
 		carvingTool = GameRegistry.register(new Item().setRegistryName("carving_tool")).setUnlocalizedName("carvingTool").setMaxStackSize(1).setCreativeTab(Minestuck.tabMinestuck);
 		crumplyHat = GameRegistry.register(new Item().setRegistryName("crumply_hat")).setUnlocalizedName("crumplyHat").setMaxStackSize(1).setCreativeTab(Minestuck.tabMinestuck);
 		frogStatueReplica = GameRegistry.register(new Item().setRegistryName("frog_statue_replica")).setUnlocalizedName("frogStatueReplica").setCreativeTab(Minestuck.tabMinestuck);

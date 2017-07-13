@@ -6,10 +6,7 @@ import com.mraof.minestuck.entity.consort.EntityIguana;
 import com.mraof.minestuck.entity.consort.EntityNakagator;
 import com.mraof.minestuck.entity.consort.EntitySalamander;
 import com.mraof.minestuck.entity.consort.EntityTurtle;
-import com.mraof.minestuck.entity.item.EntityCrewPoster;
-import com.mraof.minestuck.entity.item.EntityGrist;
-import com.mraof.minestuck.entity.item.EntityMetalBoat;
-import com.mraof.minestuck.entity.item.EntityVitalityGel;
+import com.mraof.minestuck.entity.item.*;
 import com.mraof.minestuck.entity.underling.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -42,6 +39,7 @@ public final class MinestuckEntities
 		registerEntity(EntityGrist.class, "grist", "grist", 512, 1, true);
 		registerEntity(EntityVitalityGel.class, "vitalityGel", "vitality_gel", 512, 1, true);
 		registerEntity(EntityCrewPoster.class, "midnightCrewPoster", "midnight_crew_poster");
+		registerEntity(EntitySbahjPoster.class, "sbahjPoster", "sbahj_poster");
 	}
 	
 	public static void registerEntity(Class<? extends Entity> entityClass, String name)
