@@ -1,9 +1,16 @@
 package com.mraof.minestuck.client.util;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.block.*;
+import com.mraof.minestuck.block.BlockChessTile;
+import com.mraof.minestuck.block.BlockColoredDirt;
+import com.mraof.minestuck.block.BlockCrockerMachine;
+import com.mraof.minestuck.block.BlockMinestuckLog;
+import com.mraof.minestuck.block.BlockMinestuckStone;
+import com.mraof.minestuck.block.BlockSburbMachine;
+import com.mraof.minestuck.item.ItemMinestuckBeverage;
 import com.mraof.minestuck.item.ItemMinestuckCandy;
 import com.mraof.minestuck.item.weapon.ItemDualWeapon;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCactus;
 import net.minecraft.block.BlockTNT;
@@ -145,6 +152,8 @@ public class MinestuckModelManager
 		register(obsidianBucket);
 		for(int i = 0; i < ItemMinestuckCandy.modelNames.length; i++)
 			register(candy, i, ItemMinestuckCandy.modelNames[i]);
+		for(int i = 0; i < ItemMinestuckBeverage.modelNames.length; i++)
+			register(beverage, i, ItemMinestuckBeverage.modelNames[i]);
 		register(bugOnAStick);
 		register(chocolateBeetle);
 		register(coneOfFlies);
@@ -161,6 +170,7 @@ public class MinestuckModelManager
 		register(stoneSlab);
 		register(recordEmissaryOfDance);
 		register(recordDanceStab);
+		register(glowystoneDust);
 		
 		//Blocks
 		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())
@@ -238,6 +248,8 @@ public class MinestuckModelManager
 			ModelBakery.registerItemVariants(metalBoat, new ResourceLocation("minestuck:boat_" + s));
 		for(String s : ItemMinestuckCandy.modelNames)
 			ModelBakery.registerItemVariants(candy, new ResourceLocation("minestuck:"+s));
+		for(String s : ItemMinestuckBeverage.modelNames)
+			ModelBakery.registerItemVariants(beverage, new ResourceLocation("minestuck:"+s));
 		
 		//Blocks
 		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())

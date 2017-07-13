@@ -1,6 +1,7 @@
 package com.mraof.minestuck.util;
 
 import com.mraof.minestuck.block.BlockMinestuckStone;
+import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.modSupport.*;
 import com.mraof.minestuck.modSupport.minetweaker.MinetweakerSupport;
 import com.mraof.minestuck.world.storage.loot.conditions.LandAspectLootCondition;
@@ -503,6 +504,7 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Items.QUARTZ), new ItemStack(Items.WATER_BUCKET), MODE_OR, new ItemStack(Items.PRISMARINE_CRYSTALS));
 		CombinationRegistry.addCombination(new ItemStack(Items.QUARTZ), new ItemStack(Items.WATER_BUCKET), MODE_AND, new ItemStack(Items.PRISMARINE_SHARD));
 		CombinationRegistry.addCombination(new ItemStack(Items.FEATHER), new ItemStack(Items.ENDER_PEARL), MODE_OR, new ItemStack(Items.ELYTRA));
+		CombinationRegistry.addCombination(new ItemStack(Items.REDSTONE), new ItemStack(Items.GLOWSTONE_DUST), MODE_OR, new ItemStack(MinestuckItems.glowystoneDust));
 	}
 	
 	public static void registerMinestuckRecipes() {
@@ -549,6 +551,7 @@ public class AlchemyRecipeHandler
 		GameRegistry.addSmelting(goldOreSandstone, new ItemStack(Items.GOLD_INGOT), 1.0F);
 		GameRegistry.addSmelting(goldOreSandstoneRed, new ItemStack(Items.GOLD_INGOT), 1.0F);
 		GameRegistry.addSmelting(woodenCactus, new ItemStack(Items.COAL, 1, 1), 0.15F);
+		GameRegistry.addSmelting(cruxiteDowel, new ItemStack(MinestuckItems.rawCruxite), 0.1F);
 		
 		//Register ore dictionary entries
 		OreDictionary.registerOre("oreCoal", coalOreNetherrack);
@@ -641,6 +644,7 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(prismarineChestplate), new GristSet(new GristType[] {GristType.Build, GristType.Cobalt, GristType.Marble}, new int[] {120, 48, 24}));
 		GristRegistry.addGristConversion(new ItemStack(prismarineLeggings), new GristSet(new GristType[] {GristType.Build, GristType.Cobalt, GristType.Marble}, new int[] {105, 42, 21}));
 		GristRegistry.addGristConversion(new ItemStack(prismarineBoots), new GristSet(new GristType[] {GristType.Build, GristType.Cobalt, GristType.Marble}, new int[] {60, 24, 12}));
+		GristRegistry.addGristConversion(new ItemStack(glowystoneDust), new GristSet(new GristType[] {GristType.Build, GristType.Amber}, new int[] {1, 1}));
 		GristRegistry.addGristConversion(new ItemStack(rawCruxite), new GristSet(GristType.Build, 3));
 
 		GristRegistry.addGristConversion(new ItemStack(spork), new GristSet(new GristType[]{GristType.Build}, new int[]{13}));

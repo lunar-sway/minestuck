@@ -97,6 +97,7 @@ public class MinestuckItems
 	public static Item prismarineBoots;
 	//Food
 	public static Item candy;
+	public static Item beverage;
 	public static Item bugOnAStick;
 	public static Item chocolateBeetle;
 	public static Item coneOfFlies;
@@ -131,6 +132,7 @@ public class MinestuckItems
 	public static Item crumplyHat;
 	public static Item frogStatueReplica;
 	public static Item stoneSlab;
+	public static Item glowystoneDust;
 	
 	public static Item.ToolMaterial toolEmerald;
 	public static ItemArmor.ArmorMaterial armorPrismarine;
@@ -295,6 +297,7 @@ public class MinestuckItems
 		
 		//food
 		candy = GameRegistry.register(new ItemMinestuckCandy().setRegistryName("candy"));
+		beverage = GameRegistry.register(new ItemMinestuckBeverage().setRegistryName("beverage"));
 		bugOnAStick = GameRegistry.register(new ItemFood(1, 0.1F, false).setRegistryName("bug_on_stick")).setUnlocalizedName("bugOnAStick").setCreativeTab(Minestuck.tabMinestuck);
 		chocolateBeetle = GameRegistry.register(new ItemFood(3, 0.4F, false).setRegistryName("chocolate_beetle")).setUnlocalizedName("chocolateBeetle").setCreativeTab(Minestuck.tabMinestuck);
 		coneOfFlies = GameRegistry.register(new ItemFood(2, 0.1F, false).setRegistryName("cone_of_flies")).setUnlocalizedName("coneOfFlies").setCreativeTab(Minestuck.tabMinestuck);
@@ -329,6 +332,7 @@ public class MinestuckItems
 		crumplyHat = GameRegistry.register(new Item().setRegistryName("crumply_hat")).setUnlocalizedName("crumplyHat").setMaxStackSize(1).setCreativeTab(Minestuck.tabMinestuck);
 		frogStatueReplica = GameRegistry.register(new Item().setRegistryName("frog_statue_replica")).setUnlocalizedName("frogStatueReplica").setCreativeTab(Minestuck.tabMinestuck);
 		stoneSlab = GameRegistry.register(new Item().setRegistryName("stone_slab")).setUnlocalizedName("stoneSlab").setCreativeTab(Minestuck.tabMinestuck);
+		glowystoneDust = GameRegistry.register(new ItemGlowystoneDust().setRegistryName("glowystone_dust")).setUnlocalizedName("glowystoneDust").setCreativeTab(Minestuck.tabMinestuck);
 		
 		//Music disks
 		recordEmissaryOfDance = GameRegistry.register(new ItemMinestuckRecord("emissary", Minestuck.soundEmissaryOfDance).setRegistryName("record_emissary").setUnlocalizedName("record"));

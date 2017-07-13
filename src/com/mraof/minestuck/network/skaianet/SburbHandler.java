@@ -403,7 +403,7 @@ public class SburbHandler
 	//Continue if you think you can do it.
 	static void finishSession(ICommandSender sender, ICommand command, Session session) throws CommandException
 	{
-		Random rand = new Random();	//What seed?
+		Random rand = new Random();	//What seed?	//How about Minestuck.worldSeed?
 		Set<PlayerIdentifier> unregisteredPlayers = session.getPlayerList();
 		unregisteredPlayers.removeAll(session.predefinedPlayers.keySet());
 		if(!unregisteredPlayers.isEmpty())

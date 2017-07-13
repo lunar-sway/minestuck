@@ -5,21 +5,23 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map.Entry;
+import java.util.Random;
 
 import javax.annotation.Nonnull;
 
-import java.util.Random;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
-
+import com.mraof.minestuck.editmode.EditData;
+import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.network.skaianet.SburbConnection;
+import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextComponentTranslation;
 
 public class GristHelper {
 	private static Random random = new Random();
-	private static final boolean SHOULD_OUTPUT_GRIST_CHANGES = false;
+	private static final boolean SHOULD_OUTPUT_GRIST_CHANGES = true;
 	
 	public static HashMap<GristType, ArrayList<GristType>> secondaryGristMap;
 
@@ -143,14 +145,10 @@ public class GristHelper {
 		Hashtable<Integer, Integer> reqs = set.getHashtable();
 		if (reqs != null) {
 			Iterator<Entry<Integer, Integer>> it = reqs.entrySet().iterator();
-			EntityPlayerMP gristOwner = player.getPlayer();
 			while (it.hasNext()) {
 				Entry<Integer, Integer> pairs = it.next();
 				setGrist(player, GristType.values()[(Integer) pairs.getKey()], getGrist(player, GristType.values()[(Integer)pairs.getKey()]) - (Integer)pairs.getValue());
-				if(SHOULD_OUTPUT_GRIST_CHANGES && gristOwner!=null)
-				{
-					gristOwner.sendMessage(new TextComponentTranslation("You lost " + pairs.getValue() + " " + GristType.values()[(Integer) pairs.getKey()].getName() + " grist."));
-				}
+				notifyServer(player, GristType.values()[(Integer) pairs.getKey()].getName(), pairs.getValue(), "spent");
 			}
 		}
 	}
@@ -186,12 +184,35 @@ public class GristHelper {
 			{
 				Entry<Integer, Integer> pairs = it.next();
 				setGrist(player, GristType.values()[(Integer) pairs.getKey()], getGrist(player, GristType.values()[(Integer)pairs.getKey()]) + (Integer)pairs.getValue());
-				if(SHOULD_OUTPUT_GRIST_CHANGES && gristOwner!=null)
-				{
-					gristOwner.sendMessage(new TextComponentTranslation("You gained " + pairs.getValue() + " " + GristType.values()[(Integer) pairs.getKey()].getName() + " grist."));
-				}
+				notify(player, GristType.values()[(Integer) pairs.getKey()].getName(), pairs.getValue(), "gained");
 			}
 		}
+	}
+	
+	private static void notify(PlayerIdentifier player, String type, Integer difference, String action)
+	{
+		if(SHOULD_OUTPUT_GRIST_CHANGES)
+		{
+			if (player != null)
+			{
+				EntityPlayerMP client = player.getPlayer();
+				if(client != null)
+				{
+					//"true" sends the message to the action bar (like bed messages), while "false" sends it to the chat.
+					player.getPlayer().sendStatusMessage(new TextComponentTranslation("You " + action + " " + difference + " " + type + " grist."), true);
+				}
+				
+			}
+		}
+	}
+	
+	private static void notifyServer(PlayerIdentifier player, String type, Integer difference, String action)
+	{
+		SburbConnection sc = SkaianetHandler.getClientConnection(player);
+		if (sc==null) return;
+		EditData ed = ServerEditHandler.getData(sc);
+		if(ed==null) return;
+		notify(IdentifierHandler.encode(ed.getEditor()), type, difference, action);
 	}
 	
 }

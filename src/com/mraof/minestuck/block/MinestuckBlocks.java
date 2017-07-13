@@ -2,7 +2,6 @@ package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.Minestuck;
 
-import com.mraof.minestuck.util.GristType;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -59,6 +58,7 @@ public class MinestuckBlocks
 	public static Block blockBlood;
 	public static Block blockBrainJuice;
 	public static Block layeredSand;
+	public static Block glowystoneWire;
 
 	public static Block[] liquidGrists;
 	
@@ -93,6 +93,7 @@ public class MinestuckBlocks
 		gate = GameRegistry.register(new BlockGate().setRegistryName("gate"));
 		
 		layeredSand = GameRegistry.register(new BlockLayered(Blocks.SAND.getDefaultState()).setRegistryName("layered_sand")).setUnlocalizedName("layeredSand");
+		glowystoneWire = GameRegistry.register(new BlockGlowystoneWire().setRegistryName("glowystone_wire").setUnlocalizedName("glowystoneWire"));
 		coloredDirt = (BlockColoredDirt) GameRegistry.register(new BlockColoredDirt().setRegistryName("colored_dirt")).setUnlocalizedName("coloredDirt").setHardness(0.5F);
 		glowingMushroom = (BlockGlowingMushroom) GameRegistry.register(new BlockGlowingMushroom().setRegistryName("glowing_mushroom"));
 		glowingLog = GameRegistry.register(new BlockGlowingLog().setRegistryName("glowing_log"));
