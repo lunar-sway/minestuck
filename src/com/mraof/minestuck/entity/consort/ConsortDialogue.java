@@ -76,23 +76,6 @@ public class ConsortDialogue
 		
 		//addMessage("rapBattleC1");
 		
-		MessageType rapResults =
-			new ChoiceMessage(
-				true,
-				new DescriptiveMessage("rapBattle"),
-				new SingleMessage[]
-				{
-					new SingleMessage("rapBattleSchool"),
-					new SingleMessage("rapBattleConcede")
-				},
-				new MessageType[]
-				{
-					new DoubleMessage(new DescriptiveMessage("rapBattleSchool", "playerTitle", "landName"), new SingleMessage("rapBattleSchool.final", "consortSound")),
-					new SingleMessage("rapBattleConcede.final", "consortSound")
-				}
-			)
-		;
-		
 		MessageType rapBattle = 
 			new ChoiceMessage
 			(
@@ -144,14 +127,27 @@ public class ConsortDialogue
 								new DoubleMessage(new SingleMessage("rapBattle.F3"),new SingleMessage("rapBattle.F4"))
 							)
 						),
-						rapResults
+						new ChoiceMessage
+						(
+							true,
+							new DescriptiveMessage("rapBattle"),
+							new SingleMessage[]
+							{
+								new SingleMessage("rapBattleSchool"),
+								new SingleMessage("rapBattleConcede")
+							},
+							new MessageType[]
+							{
+								new DoubleMessage(new DescriptiveMessage("rapBattleSchool", "playerTitle", "landName"), new SingleMessage("rapBattleSchool.final", "consortSound")),
+								new SingleMessage("rapBattleConcede.final", "consortSound")
+							}
+						)
 					),
 					new SingleMessage("rapBattle.denyAnswer")
 				}
 			)
 		;
 		
-		addMessage(rapResults);
 		addMessage(rapBattle);
 		
 //		addMessage(new DoubleMessage(

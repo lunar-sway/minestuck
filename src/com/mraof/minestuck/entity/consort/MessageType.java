@@ -182,13 +182,14 @@ public abstract class MessageType
 		public ITextComponent getFromChain(EntityConsort consort, EntityPlayer player, String chainIdentifier,
 				String fromChain)
 		{
-			return getMessage(consort, player, chainIdentifier);
+			return null;
 		}
 	}
 	
 	//This class takes two separate messages and treats them as one.
 	//This allows several messages to group together and be sent to the chat simultaneously.
 	//Used in rap battles.
+	//Note that only the last option in a DoubleMessage can be a ChoiceMessage.
 	public static class DoubleMessage extends MessageType
 	{
 		protected MessageType messageOne;
@@ -219,23 +220,7 @@ public abstract class MessageType
 		public ITextComponent getFromChain(EntityConsort consort, EntityPlayer player,
 				String chainIdentifier, String fromChain)
 		{
-			ITextComponent message = null;
-			if(chainIdentifier.compareTo("")!=0)
-			{
-				message = messageOne.getFromChain(consort, player, chainIdentifier, fromChain);
-			} else
-			{
-				message = new TextComponentString("");
-			}
-			
-			if(message != null)
-			{
-				message.appendText("\n");
-				message.appendSibling(messageTwo.getFromChain(consort, player, chainIdentifier, fromChain));
-			} else
-			{
-				System.out.println(messageOne.getString());
-			}
+			ITextComponent message = messageTwo.getFromChain(consort, player, chainIdentifier, fromChain);
 			return message;
 		}
 	}
@@ -284,6 +269,13 @@ public abstract class MessageType
 		}
 	}
 	
+	/*
+	 * ChainMessage will take several messages and iterate through the list as it is accessed further.
+	 * repeatIndex is the index of the message to which the consort will loop back when it hits the end of the chain.
+	 * By making repeatIndex 0, the whole chain will be repeated. By making it messages.length-1, only the last line will be repeated.
+	 * Keep in mind that a ChainMessage will always begin with the first message in the chain,
+	 * And that the next message to be said is stored in the NBT of the consort itself.
+	 */
 	public static class ChainMessage extends MessageType
 	{
 		protected String nbtName;
@@ -365,7 +357,6 @@ public abstract class MessageType
 		}
 	}
 	
-	
 	//This class functions like a chain message, except that it will select a single entry randomly each time, instead of looping.
 	public static class RandomMessage extends ChainMessage
 	{
@@ -390,9 +381,6 @@ public abstract class MessageType
 		public ITextComponent getFromChain(EntityConsort consort, EntityPlayer player, String chainIdentifier,
 				String fromChain)
 		{
-			NBTTagCompound nbt = consort.getMessageTagForPlayer(player);
-			nbt.setInteger(this.getString(), random.nextInt(messages.length));
-			
 			ITextComponent out = super.getFromChain(consort, player, chainIdentifier, fromChain);
 			return out;
 		}
