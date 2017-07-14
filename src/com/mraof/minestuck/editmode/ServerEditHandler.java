@@ -1,11 +1,19 @@
 package com.mraof.minestuck.editmode;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
-
+import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.entity.EntityDecoy;
+import com.mraof.minestuck.item.ItemCruxiteArtifact;
+import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckPacket;
+import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.network.skaianet.SburbConnection;
+import com.mraof.minestuck.network.skaianet.SburbHandler;
+import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockFenceGate;
@@ -19,15 +27,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemBlockSpecial;
-import net.minecraft.item.ItemDoor;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -48,28 +53,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.entity.EntityDecoy;
-import com.mraof.minestuck.item.ItemCruxiteArtifact;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.network.MinestuckChannelHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
-import com.mraof.minestuck.network.skaianet.SburbConnection;
-import com.mraof.minestuck.network.skaianet.SburbHandler;
-import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.GristAmount;
-import com.mraof.minestuck.util.GristHelper;
-import com.mraof.minestuck.util.GristRegistry;
-import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.MinestuckPlayerData;
-import com.mraof.minestuck.util.GristType;
-import com.mraof.minestuck.util.Teleport;
-import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import java.util.*;
 
 /**
  * Main class to handle the server side of edit mode.
@@ -109,8 +93,7 @@ public class ServerEditHandler
 	 * Called when the server stops editing the clients house.
 	 * @param damageSource If the process was cancelled by the decoy taking damage, this parameter will be the damage source. Else null.
 	 * @param damage If the damageSource isn't null, this is the damage taken, else this parameter is ignored.
-	 * @param decoy The decoy entity used.
-	 * @param playerId The player.
+	 * @param data editdata to identify the editmode session
 	 */
 	public static void reset(DamageSource damageSource, float damage, EditData data)
 	{
@@ -311,7 +294,7 @@ public class ServerEditHandler
 			event.setUseBlock(stack.isEmpty() && (block instanceof BlockDoor || block instanceof BlockTrapDoor || block instanceof BlockFenceGate) ? Result.ALLOW : Result.DENY);
 			if(event.getUseBlock() == Result.ALLOW)
 				return;
-			if(stack.isEmpty() || !isBlockItem(stack.getItem()))
+			if(stack.isEmpty() || !isBlockItem(stack.getItem()) || event.getHand().equals(EnumHand.OFF_HAND))
 			{
 				event.setCanceled(true);
 				return;

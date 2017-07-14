@@ -1,8 +1,14 @@
 package com.mraof.minestuck.editmode;
 
-import java.util.List;
-import java.util.Map.Entry;
-
+import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.client.ClientProxy;
+import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
+import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckPacket;
+import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockFenceGate;
@@ -15,6 +21,7 @@ import net.minecraft.client.renderer.InventoryEffectRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
@@ -31,20 +38,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.client.ClientProxy;
-import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.network.MinestuckChannelHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
-import com.mraof.minestuck.util.GristAmount;
-import com.mraof.minestuck.util.GristHelper;
-import com.mraof.minestuck.util.GristRegistry;
-import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.MinestuckPlayerData;
-import com.mraof.minestuck.util.GristType;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import java.util.List;
+import java.util.Map.Entry;
 
 public class ClientEditHandler {
 	
@@ -183,7 +178,7 @@ public class ClientEditHandler {
 			event.setUseBlock((block instanceof BlockDoor || block instanceof BlockTrapDoor || block instanceof BlockFenceGate) ? Result.ALLOW : Result.DENY);
 			if(event.getUseBlock() == Result.ALLOW)
 				return;
-			if(!ServerEditHandler.isBlockItem(stack.getItem()))
+			if(event.getHand().equals(EnumHand.OFF_HAND) || !ServerEditHandler.isBlockItem(stack.getItem()))
 			{
 				event.setCanceled(true);
 				return;
