@@ -40,171 +40,78 @@ public class ConsortDialogue
 	public static void init()
 	{
 		
-		//addMessage(LandAspectRegistry.fromNameTitle("wind"), "dadWind");
-		//addMessage(LandAspectRegistry.fromNameTitle("pulse"), "koolaid");
-		//addMessage(LandAspectRegistry.fromNameTitle("pulse"), "murderRain");
-		//addMessage(LandAspectRegistry.fromNameTitle("thunder"), "skeletonHorse");
-		//addMessage(LandAspectRegistry.fromNameTitle("thunder"), "blueMoon");
-		//addMessage(LandAspectRegistry.fromNameTitle("rabbits"), "bunnyBirthday");
-		//addMessage(LandAspectRegistry.fromNameTitle("rabbits"), "rabbitEating");
-		//addMessage(null, Sets.newHashSet(LandAspectRegistry.fromNameTitle("monsters").getVariations()), null, null,
-		//		new SingleMessage("petZombie"));
-		//addMessage(LandAspectRegistry.fromNameTitle("monsters"), "spiderRaid");
-		//addMessage(LandAspectRegistry.fromNameTitle("towers"), "bugTreasure");
-		//addMessage(LandAspectRegistry.fromNameTitle("towers"), "towerGone");
-		//addMessage(LandAspectRegistry.fromNameTitle("thought"), "glassBooks");
-		//addMessage(LandAspectRegistry.fromNameTitle("thought"), "bookFood");
-		//addMessage(LandAspectRegistry.fromNameTitle("cake"), "cakeRecipe");
-		//addMessage(LandAspectRegistry.fromNameTitle("cake"), "cakeRegen");
-		//addMessage(LandAspectRegistry.fromNameTitle("clockwork"), "gearTechnology");
-		//addMessage(LandAspectRegistry.fromNameTitle("clockwork"), "evilGears");
-		//addMessage(LandAspectRegistry.frogAspect, "frogCreation");
-		//addMessage(LandAspectRegistry.frogAspect, "frogImitation");
-		//addMessage(LandAspectRegistry.fromNameTitle("light"), "blindness");
-		//addMessage(LandAspectRegistry.fromNameTitle("light"), "doctorsInside");
-		//addMessage(LandAspectRegistry.fromNameTitle("silence"), "murderSilence");
-		//addMessage(LandAspectRegistry.fromNameTitle("silence"), "silentUnderlings");
+		addMessage(LandAspectRegistry.fromNameTitle("wind"), "dadWind");
+		addMessage(LandAspectRegistry.fromNameTitle("pulse"), "koolaid");
+		addMessage(LandAspectRegistry.fromNameTitle("pulse"), "murderRain");
+		addMessage(LandAspectRegistry.fromNameTitle("thunder"), "skeletonHorse");
+		addMessage(LandAspectRegistry.fromNameTitle("thunder"), "blueMoon");
+		addMessage(LandAspectRegistry.fromNameTitle("rabbits"), "bunnyBirthday");
+		addMessage(LandAspectRegistry.fromNameTitle("rabbits"), "rabbitEating");
+		addMessage(null, Sets.newHashSet(LandAspectRegistry.fromNameTitle("monsters").getVariations()), null, null,
+				new SingleMessage("petZombie"));
+		addMessage(LandAspectRegistry.fromNameTitle("monsters"), "spiderRaid");
+		addMessage(LandAspectRegistry.fromNameTitle("towers"), "bugTreasure");
+		addMessage(LandAspectRegistry.fromNameTitle("towers"), "towerGone");
+		addMessage(LandAspectRegistry.fromNameTitle("thought"), "glassBooks");
+		addMessage(LandAspectRegistry.fromNameTitle("thought"), "bookFood");
+		addMessage(LandAspectRegistry.fromNameTitle("cake"), "cakeRecipe");
+		addMessage(LandAspectRegistry.fromNameTitle("cake"), "cakeRegen");
+		addMessage(LandAspectRegistry.fromNameTitle("clockwork"), "gearTechnology");
+		addMessage(LandAspectRegistry.fromNameTitle("clockwork"), "evilGears");
+		addMessage(LandAspectRegistry.frogAspect, "frogCreation");
+		addMessage(LandAspectRegistry.frogAspect, "frogImitation");
+		addMessage(LandAspectRegistry.fromNameTitle("light"), "blindness");
+		addMessage(LandAspectRegistry.fromNameTitle("light"), "doctorsInside");
+		addMessage(LandAspectRegistry.fromNameTitle("silence"), "murderSilence");
+		addMessage(LandAspectRegistry.fromNameTitle("silence"), "silentUnderlings");
 		
-		//addMessage(true, "denizenMention");
-		//addMessage(true, "floatingIsland");
-		//addMessage("ringFishing");
-		//addMessage("frogWalk");
-		//addMessage("deliciousHair");
+		addMessage(true, "denizenMention");
+		addMessage(true, "floatingIsland");
+		addMessage("ringFishing");
+		addMessage("frogWalk");
+		addMessage("deliciousHair");
 		//		addMessage("village"); Did not work as intended
-		//addMessage(LandAspectRegistry.fromNameTerrain("shade"), "lazyKing");
-		//addMessage("musicInvention");
+		addMessage(LandAspectRegistry.fromNameTerrain("shade"), "lazyKing");
+		addMessage("musicInvention");
 		
-		//addMessage("rapBattleC1");
-		
-		MessageType rapBattle = 
-			new ChoiceMessage
-			(
-				true,
-				new SingleMessage("rapBattle"),
-				new SingleMessage[]
-				{
-					new SingleMessage("rapBattle.accept"),
-					new SingleMessage("rapBattle.deny")
-				},
-				new MessageType[]
-				{
-					new DoubleMessage
-					(
-						new RandomMessage
-						(
-							new DoubleMessage
-							(
-								new DoubleMessage(new SingleMessage("rapBattle.A1"),new SingleMessage("rapBattle.A2")),
-								new DoubleMessage(new SingleMessage("rapBattle.A3"),new SingleMessage("rapBattle.A4"))
-							),
-							new DoubleMessage
-							(
-								new DoubleMessage(new SingleMessage("rapBattle.B1"),new SingleMessage("rapBattle.B2")),
-								new DoubleMessage(new SingleMessage("rapBattle.B3"),new SingleMessage("rapBattle.B4"))
-							),
-							new DoubleMessage
-							(
-								new DoubleMessage(new SingleMessage("rapBattle.C1"),new SingleMessage("rapBattle.C2")),
-								new DoubleMessage
-								(
-									new SingleMessage("rapBattle.C3", "consortSound", "consortSound", "consortSound", "consortSound"),
-									new SingleMessage("rapBattle.C4")
-								)
-							),
-							new DoubleMessage
-							(
-								new DoubleMessage(new SingleMessage("rapBattle.D1"),new SingleMessage("rapBattle.D2")),
-								new DoubleMessage(new SingleMessage("rapBattle.D3"),new SingleMessage("rapBattle.D4"))
-							),
-							new DoubleMessage
-							(
-								new DoubleMessage(new SingleMessage("rapBattle.E1"),new SingleMessage("rapBattle.E2")),
-								new DoubleMessage(new SingleMessage("rapBattle.E3"),new SingleMessage("rapBattle.E4"))
-							),
-							new DoubleMessage
-							(
-								new DoubleMessage(new SingleMessage("rapBattle.F1"),new SingleMessage("rapBattle.F2")),
-								new DoubleMessage(new SingleMessage("rapBattle.F3"),new SingleMessage("rapBattle.F4"))
-							)
-						),
-						new ChoiceMessage
-						(
-							true,
-							new DescriptiveMessage("rapBattle"),
-							new SingleMessage[]
-							{
-								new SingleMessage("rapBattleSchool"),
-								new SingleMessage("rapBattleConcede")
-							},
-							new MessageType[]
-							{
-								new DoubleMessage(new DescriptiveMessage("rapBattleSchool", "playerTitle", "landName"), new SingleMessage("rapBattleSchool.final", "consortSound")),
-								new SingleMessage("rapBattleConcede.final", "consortSound")
-							}
+		addMessage(new ChoiceMessage(true, new SingleMessage("rapBattle"), new SingleMessage[] { new SingleMessage("rapBattle.accept"), new SingleMessage("rapBattle.deny")},
+				new MessageType[] { new DoubleMessage( new RandomMessage(
+						new DoubleMessage(
+							new DoubleMessage(new SingleMessage("rapBattle.A1"),new SingleMessage("rapBattle.A2")),
+							new DoubleMessage(new SingleMessage("rapBattle.A3"),new SingleMessage("rapBattle.A4"))
+						), new DoubleMessage(
+							new DoubleMessage(new SingleMessage("rapBattle.B1"),new SingleMessage("rapBattle.B2")),
+							new DoubleMessage(new SingleMessage("rapBattle.B3"),new SingleMessage("rapBattle.B4"))
+						), new DoubleMessage(
+							new DoubleMessage(new SingleMessage("rapBattle.C1"),new SingleMessage("rapBattle.C2")),
+							new DoubleMessage(new SingleMessage("rapBattle.C3", "consortSound", "consortSound", "consortSound", "consortSound"), new SingleMessage("rapBattle.C4"))
+						), new DoubleMessage(
+							new DoubleMessage(new SingleMessage("rapBattle.D1"),new SingleMessage("rapBattle.D2")),
+							new DoubleMessage(new SingleMessage("rapBattle.D3"),new SingleMessage("rapBattle.D4"))
+						),new DoubleMessage(
+							new DoubleMessage(new SingleMessage("rapBattle.E1"),new SingleMessage("rapBattle.E2")),
+							new DoubleMessage(new SingleMessage("rapBattle.E3"),new SingleMessage("rapBattle.E4"))
+						),new DoubleMessage(
+							new DoubleMessage(new SingleMessage("rapBattle.F1"),new SingleMessage("rapBattle.F2")),
+							new DoubleMessage(new SingleMessage("rapBattle.F3"),new SingleMessage("rapBattle.F4"))
 						)
-					),
-					new SingleMessage("rapBattle.denyAnswer")
-				}
-			)
-		;
-		
-		addMessage(rapBattle);
-		
-//		addMessage(new DoubleMessage(
-//			new RandomMessage
-//			(
-//				new DoubleMessage(
-//						new DoubleMessage(new SingleMessage("rapBattle.A1"),new SingleMessage("rapBattle.A2")),
-//						new DoubleMessage(new SingleMessage("rapBattle.A3"),new SingleMessage("rapBattle.A4"))
-//				),
-//				new DoubleMessage(
-//						new DoubleMessage(new SingleMessage("rapBattle.B1"),new SingleMessage("rapBattle.B2")),
-//						new DoubleMessage(new SingleMessage("rapBattle.B3"),new SingleMessage("rapBattle.B4"))
-//				),
-//				new DoubleMessage(
-//						new DoubleMessage(new SingleMessage("rapBattle.C1"),new SingleMessage("rapBattle.C2")),
-//						new DoubleMessage(
-//								new SingleMessage("rapBattle.C3", "consortSound", "consortSound", "consortSound", "consortSound"),
-//								new SingleMessage("rapBattle.C4")
-//						)
-//				),
-//				new DoubleMessage(
-//						new DoubleMessage(new SingleMessage("rapBattle.D1"),new SingleMessage("rapBattle.D2")),
-//						new DoubleMessage(new SingleMessage("rapBattle.D3"),new SingleMessage("rapBattle.D4"))
-//				),
-//				new DoubleMessage(
-//						new DoubleMessage(new SingleMessage("rapBattle.E1"),new SingleMessage("rapBattle.E2")),
-//						new DoubleMessage(new SingleMessage("rapBattle.E3"),new SingleMessage("rapBattle.E4"))
-//				),
-//				new DoubleMessage(
-//						new DoubleMessage(new SingleMessage("rapBattle.F1"),new SingleMessage("rapBattle.F2")),
-//						new DoubleMessage(new SingleMessage("rapBattle.F3"),new SingleMessage("rapBattle.F4"))
-//				)
-//			),
+				), new DescriptiveMessage("rapBattle")), new SingleMessage("rapBattle.denyAnswer")}));
+
 //			new ChoiceMessage(true, new DescriptiveMessage("rapBattle"),
-//				new SingleMessage[]
-//				{
-//					new SingleMessage("rapBattleSchool"),
-//					new SingleMessage("rapBattleConcede")
-//				},
-//				new MessageType[]
-//				{
-//					new DoubleMessage(new DescriptiveMessage("rapBattleSchool", "playerTitle", "landName"), new SingleMessage("rapBattleSchool.final", "consortSound")),
-//					new SingleMessage("rapBattleConcede.final", "consortSound")
-//				}
-//			)
-//		));
+//				new SingleMessage[] {new SingleMessage("rapBattleSchool"), new SingleMessage("rapBattleConcede")},
+//				new MessageType[] {new DoubleMessage(new DescriptiveMessage("rapBattleSchool", "playerTitle", "landName"), new SingleMessage("rapBattleSchool.final", "consortSound")),
+//					new SingleMessage("rapBattleConcede.final", "consortSound")})));
 		
 		
-//		addMessage(true, "awaitHero", "landName", "consortTypes", "playerTitleLand");
-//		addMessage(true, "watchSkaia");
-//		addMessage(LandAspectRegistry.fromNameTerrain("shade"),
-//				new ChainMessage(2, new SingleMessage("mushFarm1"), new SingleMessage("mushFarm2"), new SingleMessage("mushFarm3"),
-//						new SingleMessage("mushFarm4"), new SingleMessage("mushFarm5"), new SingleMessage("mushFarm6"),
-//						new SingleMessage("mushFarm7")));
-//		addMessage(true, null, null, new ChoiceMessage(true, new SingleMessage("titlePresence", "playerTitle"),
-//				new SingleMessage[] { new SingleMessage("titlePresence.iam", "playerTitle"), new SingleMessage("titlePresence.agree") },
-//				new MessageType[] { new SingleMessage("titlePresence.iamAnswer"), new SingleMessage("thanks") }));
+		addMessage(true, "awaitHero", "landName", "consortTypes", "playerTitleLand");
+		addMessage(true, "watchSkaia");
+		addMessage(LandAspectRegistry.fromNameTerrain("shade"),
+				new ChainMessage(2, new SingleMessage("mushFarm1"), new SingleMessage("mushFarm2"), new SingleMessage("mushFarm3"),
+						new SingleMessage("mushFarm4"), new SingleMessage("mushFarm5"), new SingleMessage("mushFarm6"),
+						new SingleMessage("mushFarm7")));
+		addMessage(true, null, null, new ChoiceMessage(true, new SingleMessage("titlePresence", "playerTitle"),
+				new SingleMessage[] { new SingleMessage("titlePresence.iam", "playerTitle"), new SingleMessage("titlePresence.agree") },
+				new MessageType[] { new SingleMessage("titlePresence.iamAnswer"), new SingleMessage("thanks") }));
 		
 		addMessage(false, EnumConsort.MerchantType.SHADY, new ChoiceMessage(new DescriptionMessage("shadyOffer"),
 				new SingleMessage[]
@@ -236,38 +143,38 @@ public class ConsortDialogue
 				}
 		));
 		
-//		addMessage(true, null, null, new ChoiceMessage(true, new SingleMessage("denizen", "denizen"),
-//				new SingleMessage[] { new SingleMessage("denizen.what"), new SingleMessage("denizen.askAlignment") },
-//				new MessageType[] { new SingleMessage("denizen.explain", "playerClassLand"), new SingleMessage("denizen.alignment") }));
-//		
-//		List<ItemStack> hungryList = ImmutableList.of(new ItemStack(Items.COOKIE), new ItemStack(MinestuckItems.bugOnAStick),
-//				new ItemStack(MinestuckItems.grasshopper), new ItemStack(MinestuckItems.chocolateBeetle),
-//				new ItemStack(MinestuckItems.coneOfFlies));
-//		addMessage((EnumSet<EnumConsort>) null,
-//				new ItemRequirement(hungryList, false, true, new SingleMessage("hungry"),
-//						new ChoiceMessage(new SingleMessage("hungry.askFood", "nbtItem:hungry.item"),
-//								new SingleMessage[] { new SingleMessage("hungry.accept"), new SingleMessage("hungry.deny") },
-//								new MessageType[] { new GiveItemMessage("hungry.item", 0, new SingleMessage("hungry.thanks")),
-//										new SingleMessage("sadface") })));
-//		addMessage((EnumSet<EnumConsort>) null,
-//				new ItemRequirement("hungry2", hungryList, false, true, false,
-//						new SingleMessage(
-//								"hungry"),
-//						new ChoiceMessage(
-//								new SingleMessage("hungry.askFood",
-//										"nbtItem:hungry2.item"),
-//								new SingleMessage[] {
-//										new SingleMessage(
-//												"hungry.accept"),
-//										new SingleMessage("hungry.deny") },
-//								new MessageType[] { new GiveItemMessage("hungry2.item", 0, new SingleMessage("hungry.thanks")),
-//										new ChoiceMessage(new SingleMessage("hungry.starving"),
-//												new SingleMessage[] { new SingleMessage("hungry.agree"),
-//														new SingleMessage("hungry.tooCheap") },
-//												new MessageType[] { new GiveItemMessage("hungry.sellItem", "hungry2.item", 10,
-//														new ChainMessage(1, new DescriptionMessage("hungry.finally", "nbtItem:hungry2.item"),
-//																new SingleMessage("hungry.finally"))),
-//														new SingleMessage("hungry.end") }) })));
+		addMessage(true, null, null, new ChoiceMessage(true, new SingleMessage("denizen", "denizen"),
+				new SingleMessage[] { new SingleMessage("denizen.what"), new SingleMessage("denizen.askAlignment") },
+				new MessageType[] { new SingleMessage("denizen.explain", "playerClassLand"), new SingleMessage("denizen.alignment") }));
+		
+		List<ItemStack> hungryList = ImmutableList.of(new ItemStack(Items.COOKIE), new ItemStack(MinestuckItems.bugOnAStick),
+				new ItemStack(MinestuckItems.grasshopper), new ItemStack(MinestuckItems.chocolateBeetle),
+				new ItemStack(MinestuckItems.coneOfFlies));
+		addMessage((EnumSet<EnumConsort>) null,
+				new ItemRequirement(hungryList, false, true, new SingleMessage("hungry"),
+						new ChoiceMessage(new SingleMessage("hungry.askFood", "nbtItem:hungry.item"),
+								new SingleMessage[] { new SingleMessage("hungry.accept"), new SingleMessage("hungry.deny") },
+								new MessageType[] { new GiveItemMessage("hungry.item", 0, new SingleMessage("hungry.thanks")),
+										new SingleMessage("sadface") })));
+		addMessage((EnumSet<EnumConsort>) null,
+				new ItemRequirement("hungry2", hungryList, false, true, false,
+						new SingleMessage(
+								"hungry"),
+						new ChoiceMessage(
+								new SingleMessage("hungry.askFood",
+										"nbtItem:hungry2.item"),
+								new SingleMessage[] {
+										new SingleMessage(
+												"hungry.accept"),
+										new SingleMessage("hungry.deny") },
+								new MessageType[] { new GiveItemMessage("hungry2.item", 0, new SingleMessage("hungry.thanks")),
+										new ChoiceMessage(new SingleMessage("hungry.starving"),
+												new SingleMessage[] { new SingleMessage("hungry.agree"),
+														new SingleMessage("hungry.tooCheap") },
+												new MessageType[] { new GiveItemMessage("hungry.sellItem", "hungry2.item", 10,
+														new ChainMessage(1, new DescriptionMessage("hungry.finally", "nbtItem:hungry2.item"),
+																new SingleMessage("hungry.finally"))),
+														new SingleMessage("hungry.end") }) })));
 	}
 	
 	public static void addMessage(MessageType message, String... args)
