@@ -83,7 +83,7 @@ public class EntityLich extends EntityUnderling
 			if(entity != null && entity instanceof EntityPlayerMP)
 			{
 				Echeladder ladder = MinestuckPlayerData.getData((EntityPlayerMP) entity).echeladder;
-				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET));
+				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 3));
 			}
 		}
 	}

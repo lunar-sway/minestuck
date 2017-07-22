@@ -32,7 +32,7 @@ public class Echeladder
 	
 	private static final UUID echeladderHealthBoostModifierUUID = UUID.fromString("5b49a45b-ff22-4720-8f10-dfd745c3abb8");	//TODO Might be so that only one is needed, as we only add one modifier for each attribute.
 	private static final UUID echeladderDamageBoostModifierUUID = UUID.fromString("a74176fd-bf4e-4153-bb68-197dbe4109b2");
-	private static final int[] UNDERLING_BONUSES = new int[] {10, 120, 450, 2500};	//Bonuses for first time killing an underling
+	private static final int[] UNDERLING_BONUSES = new int[] {10, 120, 450, 1200, 2500};	//Bonuses for first time killing an underling
 	private static final int[] ALCHEMY_BONUSES = new int[] {30, 400, 3000};
 													//	0				4						9							14								19								24									29										34
 	private static final int[] BOONDOLLARS = new int[] {0, 50, 75, 105, 140, 170, 200, 250, 320, 425, 575, 790, 1140, 1630, 2230, 2980, 3850, 4800, 6000, 7500, 9500, 11900, 15200, 19300, 24400, 45000, 68000, 95500, 124000, 180000, 260000, 425000, 632000, 880000, 1000000};
