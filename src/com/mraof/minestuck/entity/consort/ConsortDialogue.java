@@ -1,11 +1,5 @@
 package com.mraof.minestuck.entity.consort;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 import com.mraof.minestuck.item.MinestuckItems;
@@ -15,12 +9,15 @@ import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
-import static com.mraof.minestuck.entity.consort.MessageType.*;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+
+import java.util.*;
+
+import static com.mraof.minestuck.entity.consort.MessageType.*;
 
 /**
  * Handles message registry, message selection and contains the main message
@@ -154,6 +151,8 @@ public class ConsortDialogue
 														new ChainMessage(1, new DescriptionMessage("hungry.finally", "nbtItem:hungry2.item"),
 																new SingleMessage("hungry.finally"))),
 														new SingleMessage("hungry.end") }) })));
+		
+		addMessage(true, EnumConsort.MerchantType.FOOD, new MerchantGuiMessage(new SingleMessage("buyFood"), new ResourceLocation("minestuck", "")));
 	}
 	
 	public static void addMessage(String message, String... args)

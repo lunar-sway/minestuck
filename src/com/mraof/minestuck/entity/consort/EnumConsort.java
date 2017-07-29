@@ -33,16 +33,10 @@ public enum EnumConsort
 		return consortClass;
 	}
 	
-	public static enum MerchantType
+	public enum MerchantType
 	{
-		NONE(false),
-		SHADY(false);
-		
-		boolean tradingGui;
-		
-		private MerchantType(boolean tradingGui)
-		{
-			this.tradingGui = tradingGui;
-		}
+		NONE,
+		SHADY,
+		FOOD,
 	}
 }

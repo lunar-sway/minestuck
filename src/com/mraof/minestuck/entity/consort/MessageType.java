@@ -1,5 +1,7 @@
 package com.mraof.minestuck.entity.consort;
 
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
@@ -701,6 +703,45 @@ public abstract class MessageType
 				String fromChain)
 		{
 			return next.getFromChain(consort, player, chainIdentifier, fromChain);
+		}
+	}
+	
+	public static class MerchantGuiMessage extends MessageType
+	{
+		protected String nbtName;
+		protected SingleMessage initMessage;
+		protected ResourceLocation lootTable;
+		
+		public MerchantGuiMessage(SingleMessage message, ResourceLocation location)
+		{
+			this(message.getString(), message, location);
+		}
+		
+		public MerchantGuiMessage(String name, SingleMessage message, ResourceLocation location)
+		{
+			nbtName = name;
+			initMessage = message;
+			lootTable = location;
+		}
+		
+		@Override
+		public String getString()
+		{
+			return nbtName;
+		}
+		
+		@Override
+		public ITextComponent getMessage(EntityConsort consort, EntityPlayer player, String chainIdentifier)
+		{
+			player.openGui(Minestuck.instance, GuiHandler.GuiId.MERCHANT.ordinal(), player.world, (int) consort.posX, (int) consort.posY, (int) consort.posZ);
+			
+			return initMessage.getMessage(consort, player, chainIdentifier);
+		}
+		
+		@Override
+		public ITextComponent getFromChain(EntityConsort consort, EntityPlayer player, String chainIdentifier, String fromChain)
+		{
+			return null;
 		}
 	}
 }
