@@ -1,6 +1,7 @@
 package com.mraof.minestuck.entity.consort;
 
 import com.mraof.minestuck.entity.EntityMinestuck;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIWander;
@@ -158,6 +159,14 @@ public abstract class EntityConsort extends EntityMinestuck
 	protected boolean canDespawn()
 	{
 		return false;
+	}
+	
+	@Override
+	public boolean isCreatureType(EnumCreatureType type, boolean forSpawnCount)
+	{
+		if(forSpawnCount && this.isNoDespawnRequired())
+			return false;
+		return type.equals(EnumCreatureType.CREATURE);
 	}
 	
 	public abstract EnumConsort getConsortType();
