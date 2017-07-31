@@ -1,19 +1,18 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Random;
-
-import org.lwjgl.input.Mouse;
-
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.MinestuckPlayerData;
-
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import org.lwjgl.input.Mouse;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Random;
 
 /**
  * @author Kirderf1
@@ -129,11 +128,11 @@ public class GuiEcheladder extends GuiPlayerStats
 				drawRect(xOffset + 90, y, xOffset + 236, y + 12, backgrounds.length > rung ? backgrounds[rung] : (textColor^0xFFFFFFFF));
 			} else if(rung == currentRung + 1 && animationCycle == 0)
 			{
-				int bg = rand.nextInt(0xFFFFFF)^0xFFFFFFFF;
+				int bg = ~rand.nextInt(0xFFFFFF);
 				if(backgrounds.length > rung)
 					bg = backgrounds[rung];
 				else if(textColors.length > rung)
-					bg = textColors[rung]^0xFFFFFFFF;
+					bg = ~textColors[rung];
 				drawRect(xOffset + 90, y + 10, xOffset + 90 + (int)(146*MinestuckPlayerData.rungProgress), y + 12, bg);
 			} else rand.nextInt(0xFFFFFF);
 			
@@ -162,7 +161,7 @@ public class GuiEcheladder extends GuiPlayerStats
 		mc.fontRendererObj.drawString(I18n.format("gui.echeladder.attack.name"), xOffset + 24, yOffset + 30, 0x404040);
 		mc.fontRendererObj.drawString(attack+"%", xOffset + 26, yOffset + 39, 0x0094FF);
 		
-		double health = 10 + Echeladder.healthBoost(currentRung)/2.0;
+		double health = ClientProxy.getClientPlayer().getMaxHealth();	//10 + Echeladder.healthBoost(currentRung)/2.0;
 		mc.fontRendererObj.drawString(I18n.format("gui.echeladder.health.name"), xOffset + 24, yOffset + 84, 0x404040);
 		mc.fontRendererObj.drawString(String.valueOf(health), xOffset + 26, yOffset + 93, 0x0094FF);
 		
