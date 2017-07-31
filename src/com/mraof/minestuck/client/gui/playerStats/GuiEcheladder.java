@@ -161,7 +161,7 @@ public class GuiEcheladder extends GuiPlayerStats
 		mc.fontRendererObj.drawString(I18n.format("gui.echeladder.attack.name"), xOffset + 24, yOffset + 30, 0x404040);
 		mc.fontRendererObj.drawString(attack+"%", xOffset + 26, yOffset + 39, 0x0094FF);
 		
-		double health = ClientProxy.getClientPlayer().getMaxHealth();	//10 + Echeladder.healthBoost(currentRung)/2.0;
+		double health = ClientProxy.getClientPlayer().getMaxHealth()/2;	//10 + Echeladder.healthBoost(currentRung)/2.0;
 		mc.fontRendererObj.drawString(I18n.format("gui.echeladder.health.name"), xOffset + 24, yOffset + 84, 0x404040);
 		mc.fontRendererObj.drawString(String.valueOf(health), xOffset + 26, yOffset + 93, 0x0094FF);
 		
