@@ -138,7 +138,7 @@ consort.unknown2=Huh? 'Who the fuck is They'? What kind of question is that?! I 
 consort.identity=I heard that the true name of the %s is %s. Isn't that cool?
 
 consort.peppyOffer=Hey there! I've got a wonderful item here for just 1000 boondollars? How about it kid?
-cosnort.peppyOffer.desc=This consort is way too nice to ever scam you! Surely you can trust them?
+consort.peppyOffer.desc=This consort is way too nice to ever scam you! Surely you can trust them?
 consort.peppyOffer.buy=Buy "Wonderful item" [Pay 1000 boondollars]
 consort.peppyOffer.buy.reply=Sure! Why not?
 consort.peppyOffer.item= Here you are!
