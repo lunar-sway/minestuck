@@ -300,6 +300,8 @@ entity.minestuck.giclops.name=Giclops
 entity.minestuck.giclops.type=%s Giclops
 entity.minestuck.basilisk.name=Basilisk
 entity.minestuck.basilisk.type=%s Basilisk
+entity.minestuck.lich.name=Lich
+entity.minestuck.lich.type=%s Lich
 
 grist.format=%s Grist
 grist.amber=Amber

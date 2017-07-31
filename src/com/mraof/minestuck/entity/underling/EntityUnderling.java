@@ -50,7 +50,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 
 	protected List<Class<? extends EntityLivingBase>> enemyClasses;
 	@SuppressWarnings("unchecked")
-	protected static EntityListFilter underlingSelector = new EntityListFilter(Arrays.<Class<? extends EntityLivingBase>>asList(EntityImp.class, EntityOgre.class, EntityBasilisk.class, EntityGiclops.class));
+	protected static EntityListFilter underlingSelector = new EntityListFilter(Arrays.<Class<? extends EntityLivingBase>>asList(EntityImp.class, EntityOgre.class, EntityBasilisk.class, EntityLich.class, EntityGiclops.class));
 	protected EntityListFilter attackEntitySelector;
 	//The type of the underling
 	protected GristType type;

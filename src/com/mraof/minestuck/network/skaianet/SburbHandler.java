@@ -597,7 +597,7 @@ public class SburbHandler
 		
 		ArrayList<SpawnListEntry> list = new ArrayList<SpawnListEntry>();
 		
-		int impWeight = 0, ogreWeight = 0, basiliskWeight = 0, giclopsWeight = 0;
+		int impWeight = 0, ogreWeight = 0, basiliskWeight = 0, lichWeight = 0, giclopsWeight = 0;
 		
 		if(difficulty < 8)
 			impWeight = difficulty + 1;
@@ -613,6 +613,9 @@ public class SburbHandler
 				if(difficulty < 26)
 					basiliskWeight = (difficulty - 14)/2;
 				else basiliskWeight = 6;
+				if(difficulty < 28)
+					lichWeight = (difficulty - 12)/3;
+				else lichWeight = 6;
 				if(difficulty >= 20)
 					if(difficulty < 30)
 						giclopsWeight = (difficulty - 17)/3;
@@ -626,6 +629,8 @@ public class SburbHandler
 			list.add(new SpawnListEntry(EntityOgre.class, ogreWeight, ogreWeight >= 5 ? 2 : 1, Math.max(1, ogreWeight/2)));
 		if(basiliskWeight > 0)
 			list.add(new SpawnListEntry(EntityBasilisk.class, basiliskWeight, 1, Math.max(1, basiliskWeight/2)));
+		if(lichWeight > 0)
+			list.add(new SpawnListEntry(EntityLich.class, lichWeight, 1, Math.max(1, lichWeight/2)));
 		if(giclopsWeight > 0 && !MinestuckConfig.disableGiclops)
 			list.add(new SpawnListEntry(EntityGiclops.class, giclopsWeight, 1, Math.max(1, giclopsWeight/2)));
 		
