@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableList;
@@ -72,7 +73,35 @@ public class ConsortDialogue
 		//		addMessage("village"); Did not work as intended
 		addMessage(LandAspectRegistry.fromNameTerrain("shade"), "lazyKing");
 		addMessage("musicInvention");
-		addMessage("rapBattle");
+		
+		addMessage(new ChoiceMessage(true, new SingleMessage("rapBattle"), new SingleMessage[] { new SingleMessage("rapBattle.accept"), new SingleMessage("rapBattle.deny")},
+				new MessageType[] { new DoubleMessage( new RandomMessage(
+						new DoubleMessage(
+							new DoubleMessage(new SingleMessage("rapBattle.A1"),new SingleMessage("rapBattle.A2")),
+							new DoubleMessage(new SingleMessage("rapBattle.A3"),new SingleMessage("rapBattle.A4"))
+						), new DoubleMessage(
+							new DoubleMessage(new SingleMessage("rapBattle.B1"),new SingleMessage("rapBattle.B2")),
+							new DoubleMessage(new SingleMessage("rapBattle.B3"),new SingleMessage("rapBattle.B4"))
+						), new DoubleMessage(
+							new DoubleMessage(new SingleMessage("rapBattle.C1"),new SingleMessage("rapBattle.C2")),
+							new DoubleMessage(new SingleMessage("rapBattle.C3", "consortSound", "consortSound", "consortSound", "consortSound"), new SingleMessage("rapBattle.C4"))
+						), new DoubleMessage(
+							new DoubleMessage(new SingleMessage("rapBattle.D1"),new SingleMessage("rapBattle.D2")),
+							new DoubleMessage(new SingleMessage("rapBattle.D3"),new SingleMessage("rapBattle.D4"))
+						),new DoubleMessage(
+							new DoubleMessage(new SingleMessage("rapBattle.E1"),new SingleMessage("rapBattle.E2")),
+							new DoubleMessage(new SingleMessage("rapBattle.E3"),new SingleMessage("rapBattle.E4"))
+						),new DoubleMessage(
+							new DoubleMessage(new SingleMessage("rapBattle.F1"),new SingleMessage("rapBattle.F2")),
+							new DoubleMessage(new SingleMessage("rapBattle.F3"),new SingleMessage("rapBattle.F4"))
+						)
+				), new DescriptiveMessage("rapBattle")), new SingleMessage("rapBattle.denyAnswer")}));
+
+//			new ChoiceMessage(true, new DescriptiveMessage("rapBattle"),
+//				new SingleMessage[] {new SingleMessage("rapBattleSchool"), new SingleMessage("rapBattleConcede")},
+//				new MessageType[] {new DoubleMessage(new DescriptiveMessage("rapBattleSchool", "playerTitle", "landName"), new SingleMessage("rapBattleSchool.final", "consortSound")),
+//					new SingleMessage("rapBattleConcede.final", "consortSound")})));
+		
 		
 		addMessage(true, "awaitHero", "landName", "consortTypes", "playerTitleLand");
 		addMessage(true, "watchSkaia");
@@ -112,15 +141,34 @@ public class ConsortDialogue
 				new MessageType[] { new SingleMessage("titlePresence.iamAnswer"), new SingleMessage("thanks") }));
 		
 		addMessage(false, EnumConsort.MerchantType.SHADY, new ChoiceMessage(new DescriptionMessage("shadyOffer"),
-				new SingleMessage[] { new SingleMessage("shadyOffer.buy"), new SingleMessage("shadyOffer.deny") },
+				new SingleMessage[]
+						{
+								new SingleMessage("shadyOffer.buy"),
+								new SingleMessage("shadyOffer.deny")
+						},
 				new MessageType[] {
 						new PurchaseMessage(false, AlchemyRecipeHandler.CONSORT_JUNK_REWARD, 1000, "purchase",
-								new ChainMessage(1, new SingleMessage("shadyOffer.item"), new SingleMessage("shadyOffer.purchase"))),
-						new ChoiceMessage(new SingleMessage("shadyOffer.next"),
-								new SingleMessage[] { new SingleMessage("shadyOffer.denyAgain"), new SingleMessage("shadyOffer.buy2") },
-								new MessageType[] { new SingleMessage("dots"),
+								new ChainMessage(1,
+										new SingleMessage("shadyOffer.item"),
+										new SingleMessage("shadyOffer.purchase")
+								)
+						),
+						new ChoiceMessage(new SingleMessage("shadyOffer.next", "consortSound"),
+								new SingleMessage[]
+								{
+										new SingleMessage("shadyOffer.denyAgain"),
+										new SingleMessage("shadyOffer.buy2")
+								},
+								new MessageType[]
+								{
+										new SingleMessage("dots"),
 										new PurchaseMessage(false, AlchemyRecipeHandler.CONSORT_JUNK_REWARD, 500, "purchase",
-												new SingleMessage("shadyOffer.purchase")) }) }));
+												new SingleMessage("shadyOffer.purchase")
+										)
+								}
+						)
+				}
+		));
 		
 		addMessage(true, null, null, new ChoiceMessage(true, new SingleMessage("denizen", "denizen"),
 				new SingleMessage[] { new SingleMessage("denizen.what"), new SingleMessage("denizen.askAlignment") },
@@ -154,6 +202,11 @@ public class ConsortDialogue
 														new ChainMessage(1, new DescriptionMessage("hungry.finally", "nbtItem:hungry2.item"),
 																new SingleMessage("hungry.finally"))),
 														new SingleMessage("hungry.end") }) })));
+	}
+	
+	public static void addMessage(MessageType message, String... args)
+	{
+		addMessage(false, null, null, message);
 	}
 	
 	public static void addMessage(String message, String... args)

@@ -27,6 +27,7 @@ import net.minecraft.world.storage.loot.LootContext;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Class where message content is defined. Also things such as if it's a chain
@@ -101,6 +102,9 @@ public abstract class MessageType
 					obj[i] = title.getHeroAspect().asTextComponent();
 				else
 					obj[i] = "Player aspect";
+			} else if(args[i].equals("consortSound"))
+			{
+				obj[i] = new TextComponentTranslation("consort.sound." + s);
 			} else if(args[i].equals("consortType"))
 			{
 				obj[i] = new TextComponentTranslation("entity." + s + ".name");
@@ -182,6 +186,45 @@ public abstract class MessageType
 		}
 	}
 	
+	//This class takes two separate messages and treats them as one.
+	//This allows several messages to group together and be sent to the chat simultaneously.
+	//Used in rap battles.
+	//Note that only the last option in a DoubleMessage can be a ChoiceMessage.
+	public static class DoubleMessage extends MessageType
+	{
+		protected MessageType messageOne;
+		protected MessageType messageTwo;
+		protected String[] args;
+		
+		public DoubleMessage(MessageType messageOne, MessageType messageTwo)
+		{
+			this.messageOne = messageOne;
+			this.messageTwo = messageTwo;
+		}
+
+		@Override
+		public String getString() {
+			return addTo(messageOne.getString(), messageTwo.getString());
+		}
+
+		@Override
+		public ITextComponent getMessage(EntityConsort consort, EntityPlayer player,
+				String chainIdentifier) {
+			ITextComponent message = messageOne.getMessage(consort, player, chainIdentifier);
+			message.appendText("\n");
+			message.appendSibling(messageTwo.getMessage(consort, player, chainIdentifier));
+			return message;
+		}
+
+		@Override
+		public ITextComponent getFromChain(EntityConsort consort, EntityPlayer player,
+				String chainIdentifier, String fromChain)
+		{
+			ITextComponent message = messageTwo.getFromChain(consort, player, chainIdentifier, fromChain);
+			return message;
+		}
+	}
+	
 	public static class DescriptionMessage extends SingleMessage
 	{
 		
@@ -201,7 +244,38 @@ public abstract class MessageType
 			return message;
 		}
 	}
+
+	/* Works like DescriptionMessage, except that it will NOT automatically include the prompt to a description.
+	 *  An example of when this would be used is when a Consort is introduced with narration rather than a quote, 
+	 *  like "This consort is silent and aloof. What do you do?"
+	 */
 	
+	public static class DescriptiveMessage extends SingleMessage
+	{
+		public DescriptiveMessage(String message, String... args)
+		{
+			super(message, args);
+		}
+		
+		@Override
+		public ITextComponent getMessage(EntityConsort consort, EntityPlayer player, String chainIdentifier)
+		{
+			ITextComponent desc = createMessage(consort, player, unlocalizedMessage + ".desc", args, false);
+			desc.getStyle().setItalic(true).setColor(TextFormatting.GRAY);
+			
+			ITextComponent message = new TextComponentString("");
+			message.appendSibling(desc);
+			return message;
+		}
+	}
+	
+	/*
+	 * ChainMessage will take several messages and iterate through the list as it is accessed further.
+	 * repeatIndex is the index of the message to which the consort will loop back when it hits the end of the chain.
+	 * By making repeatIndex 0, the whole chain will be repeated. By making it messages.length-1, only the last line will be repeated.
+	 * Keep in mind that a ChainMessage will always begin with the first message in the chain,
+	 * And that the next message to be said is stored in the NBT of the consort itself.
+	 */
 	public static class ChainMessage extends MessageType
 	{
 		protected String nbtName;
@@ -280,6 +354,35 @@ public abstract class MessageType
 			if(text != null) //Only update if everything is correctly performed
 				nbt.setInteger(this.getString(), index);
 			return text;
+		}
+	}
+	
+	//This class functions like a chain message, except that it will select a single entry randomly each time, instead of looping.
+	public static class RandomMessage extends ChainMessage
+	{
+		Random random = new Random();
+		
+		public RandomMessage(MessageType... messages)
+		{
+			super(messages);
+		}
+		
+		@Override
+		public ITextComponent getMessage(EntityConsort consort, EntityPlayer player, String chainIdentifier)
+		{
+			NBTTagCompound nbt = consort.getMessageTagForPlayer(player);
+			nbt.setInteger(this.getString(), random.nextInt(messages.length));
+			
+			ITextComponent out = super.getMessage(consort, player, chainIdentifier);
+			return out;
+		}
+
+		@Override
+		public ITextComponent getFromChain(EntityConsort consort, EntityPlayer player, String chainIdentifier,
+				String fromChain)
+		{
+			ITextComponent out = super.getFromChain(consort, player, chainIdentifier, fromChain);
+			return out;
 		}
 	}
 	
