@@ -195,16 +195,24 @@ public abstract class MessageType
 		protected MessageType messageOne;
 		protected MessageType messageTwo;
 		protected String[] args;
+		protected String nbtName;
 		
 		public DoubleMessage(MessageType messageOne, MessageType messageTwo)
 		{
 			this.messageOne = messageOne;
 			this.messageTwo = messageTwo;
+			nbtName = messageOne.getString();
+		}
+		
+		public DoubleMessage(MessageType messageOne, MessageType messageTwo, String s)
+		{
+			this(messageOne, messageTwo);
+			nbtName = s;
 		}
 
 		@Override
 		public String getString() {
-			return addTo(messageOne.getString(), messageTwo.getString());
+			return nbtName;
 		}
 
 		@Override
@@ -215,7 +223,7 @@ public abstract class MessageType
 			message.appendSibling(messageTwo.getMessage(consort, player, chainIdentifier));
 			return message;
 		}
-
+		
 		@Override
 		public ITextComponent getFromChain(EntityConsort consort, EntityPlayer player,
 				String chainIdentifier, String fromChain)

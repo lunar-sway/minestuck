@@ -118,7 +118,7 @@ consort.deliciousHair=Holy leapin' god, you have such wonderful hair! Can I eat 
 consort.lazyKing=I feel like our king just sits around doing nothing but eating weird glowing mushrooms! So lazy!
 consort.musicInvention=I invented music, y'kno! My favorite song goes like ba ba dum, dum ba dum.
 
-consort.rapBattle=I challenge you to a rap battle! Accept challenge? Y/N
+consort.rapBattle=I challenge you to a %s! Accept challenge? Y/N
 consort.rapBattle.accept=Accept this consort's challenge!
 consort.rapBattle.accept.reply=Y! I'll take you on! You can even go first.
 consort.rapBattle.deny=Don't bother with this guy.
@@ -148,7 +148,7 @@ consort.rapBattle.F1=Have a nice trip and I'll see you next fall!
 consort.rapBattle.F2=I hope you don't mind that my house isn't tall,
 consort.rapBattle.F3='Cuz them things is dang'rous and although no one cares,
 consort.rapBattle.F4=I'm tellin' ya, dawg, I WARNED YOU 'BOUT STAIRS!
-consort.rapBattle.desc=... that was really awful.
+consort.rapBattle.A4.desc=... that rap was really awful.
 consort.rapBattleSchool=Schoo' that foo'!
 consort.rapBattleSchool.reply=All right, now it's my turn.
 consort.rapBattleSchool.desc=The %s proceded to drop sick fire unlike any the %s had ever seen before.
