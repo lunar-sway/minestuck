@@ -2,8 +2,6 @@ package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.util.MinestuckAchievementHandler;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemSeeds;
@@ -40,8 +38,8 @@ public class ItemGoldSeeds extends ItemSeeds
 			EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
 		EnumActionResult result = super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
-		if(result == EnumActionResult.SUCCESS)
-			player.addStat(MinestuckAchievementHandler.goldSeeds);
+		/*if(result == EnumActionResult.SUCCESS)
+			player.addStat(MinestuckAchievementHandler.goldSeeds);*/
 		return result;
 	}
 }

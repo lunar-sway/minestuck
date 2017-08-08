@@ -1,14 +1,18 @@
 package com.mraof.minestuck.entity.underling;
 
+import com.mraof.minestuck.entity.EntityListFilter;
+import com.mraof.minestuck.entity.EntityMinestuck;
+import com.mraof.minestuck.entity.ai.EntityAIHurtByTargetAllied;
+import com.mraof.minestuck.entity.ai.EntityAINearestAttackableTargetWithHeight;
+import com.mraof.minestuck.entity.item.EntityGrist;
+import com.mraof.minestuck.entity.item.EntityVitalityGel;
+import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.network.skaianet.SburbHandler;
+import com.mraof.minestuck.util.Echeladder;
+import com.mraof.minestuck.util.GristAmount;
+import com.mraof.minestuck.util.GristSet;
+import com.mraof.minestuck.util.GristType;
 import io.netty.buffer.ByteBuf;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
@@ -32,18 +36,7 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
-import com.mraof.minestuck.entity.EntityListFilter;
-import com.mraof.minestuck.entity.EntityMinestuck;
-import com.mraof.minestuck.entity.ai.EntityAIHurtByTargetAllied;
-import com.mraof.minestuck.entity.ai.EntityAINearestAttackableTargetWithHeight;
-import com.mraof.minestuck.entity.item.EntityGrist;
-import com.mraof.minestuck.entity.item.EntityVitalityGel;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.network.skaianet.SburbHandler;
-import com.mraof.minestuck.util.Echeladder;
-import com.mraof.minestuck.util.GristAmount;
-import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.GristType;
+import java.util.*;
 
 public abstract class EntityUnderling extends EntityMinestuck implements IEntityAdditionalSpawnData, IMob
 {
@@ -307,8 +300,8 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 			this.setAbsorptionAmount(this.getAbsorptionAmount() - (f1 - damageAmount));
 			
 			EntityPlayerMP player = null;
-			if(damageSrc.getEntity() instanceof EntityPlayerMP)
-				player = (EntityPlayerMP) damageSrc.getEntity();
+			if(damageSrc.getTrueSource() instanceof EntityPlayerMP)
+				player = (EntityPlayerMP) damageSrc.getTrueSource();
 			if(damageMap.containsKey(player))
 					damageMap.put(player, damageMap.get(player) + f1);
 			else damageMap.put(player, (double) f1);

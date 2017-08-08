@@ -1,24 +1,20 @@
 package com.mraof.minestuck.world;
 
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.LandRegisterPacket;
-import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
-import net.minecraft.world.biome.Biome.BiomeProperties;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.FMLLog;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 public class MinestuckDimensionHandler
 {
@@ -42,10 +38,6 @@ public class MinestuckDimensionHandler
 		skaiaDimensionType = DimensionType.register("Skaia", "_skaia", skaiaProviderTypeId, WorldProviderSkaia.class, false);
 		
 		DimensionManager.registerDimension(skaiaDimensionId, skaiaDimensionType);
-		
-		BiomeMinestuck.mediumNormal = GameRegistry.register(new BiomeMinestuck(new BiomeProperties("The Medium")).setRegistryName("medium"));
-		BiomeMinestuck.mediumOcean = GameRegistry.register(new BiomeMinestuck(new BiomeProperties("The Medium (Ocean)").setBaseBiome("medium")).setRegistryName("medium_ocean"));
-		BiomeMinestuck.mediumRough = GameRegistry.register(new BiomeMinestuck(new BiomeProperties("The Medium (Rough)").setBaseBiome("medium")).setRegistryName("medium_rough"));
 	}
 	
 	public static void unregisterDimensions()

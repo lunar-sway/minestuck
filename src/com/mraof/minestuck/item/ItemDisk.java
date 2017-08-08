@@ -1,13 +1,10 @@
 package com.mraof.minestuck.item;
 
+import com.mraof.minestuck.Minestuck;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.mraof.minestuck.Minestuck;
 
 public class ItemDisk extends Item
 {
@@ -36,10 +33,9 @@ public class ItemDisk extends Item
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems)
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
 	{
 		for (int i = 0; i < subNames.length; i++)
-			subItems.add(new ItemStack(this, 1, i));
+			items.add(new ItemStack(this, 1, i));
 	}
 }

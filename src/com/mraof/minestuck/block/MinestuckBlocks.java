@@ -1,17 +1,18 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.Minestuck;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.registries.IForgeRegistry;
 
 public class MinestuckBlocks
 {
@@ -68,49 +69,51 @@ public class MinestuckBlocks
 
 	public static Fluid[] gristFluids;
 
-	public static void registerBlocks()
+	@SubscribeEvent
+	public static void registerBlocks(RegistryEvent.Register<Block> event)
 	{
+		IForgeRegistry<Block> registry = event.getRegistry();
 		//blocks
-		chessTile = GameRegistry.register(new BlockChessTile().setRegistryName("chess_tile"));
-		skaiaPortal = GameRegistry.register(new BlockSkaiaPortal(Material.PORTAL).setRegistryName("skaia_portal"));
+		chessTile = register(registry, new BlockChessTile().setRegistryName("chess_tile"));
+		skaiaPortal = register(registry, new BlockSkaiaPortal(Material.PORTAL).setRegistryName("skaia_portal"));
 		
-		oreCruxite = (BlockCruxiteOre) GameRegistry.register(new BlockCruxiteOre().setRegistryName("ore_cruxite"));
-		coalOreNetherrack = GameRegistry.register(new BlockVanillaOre(BlockVanillaOre.OreType.COAL).setRegistryName("coal_ore_netherrack")).setUnlocalizedName("oreCoal");
-		ironOreSandstone = GameRegistry.register(new BlockVanillaOre(BlockVanillaOre.OreType.IRON).setRegistryName("iron_ore_sandstone")).setUnlocalizedName("oreIron");
-		ironOreSandstoneRed = GameRegistry.register(new BlockVanillaOre(BlockVanillaOre.OreType.IRON).setRegistryName("iron_ore_sandstone_red")).setUnlocalizedName("oreIron");
-		goldOreSandstone = GameRegistry.register(new BlockVanillaOre(BlockVanillaOre.OreType.GOLD).setRegistryName("gold_ore_sandstone")).setUnlocalizedName("oreGold");
-		goldOreSandstoneRed = GameRegistry.register(new BlockVanillaOre(BlockVanillaOre.OreType.GOLD).setRegistryName("gold_ore_sandstone_red")).setUnlocalizedName("oreGold");
+		oreCruxite = (BlockCruxiteOre) register(registry, new BlockCruxiteOre().setRegistryName("ore_cruxite"));
+		coalOreNetherrack = register(registry, new BlockVanillaOre(BlockVanillaOre.OreType.COAL).setRegistryName("coal_ore_netherrack")).setUnlocalizedName("oreCoal");
+		ironOreSandstone = register(registry, new BlockVanillaOre(BlockVanillaOre.OreType.IRON).setRegistryName("iron_ore_sandstone")).setUnlocalizedName("oreIron");
+		ironOreSandstoneRed = register(registry, new BlockVanillaOre(BlockVanillaOre.OreType.IRON).setRegistryName("iron_ore_sandstone_red")).setUnlocalizedName("oreIron");
+		goldOreSandstone = register(registry, new BlockVanillaOre(BlockVanillaOre.OreType.GOLD).setRegistryName("gold_ore_sandstone")).setUnlocalizedName("oreGold");
+		goldOreSandstoneRed = register(registry, new BlockVanillaOre(BlockVanillaOre.OreType.GOLD).setRegistryName("gold_ore_sandstone_red")).setUnlocalizedName("oreGold");
 		
-		cruxiteBlock = GameRegistry.register(new Block(Material.ROCK, MapColor.LIGHT_BLUE).setRegistryName("cruxite_block")).setUnlocalizedName("cruxiteBlock").setHardness(3.0F).setCreativeTab(Minestuck.tabMinestuck);
-		genericObject = GameRegistry.register(new BlockCustom(Material.GOURD, MapColor.LIME, SoundType.WOOD).setRegistryName("generic_object")).setUnlocalizedName("genericObject").setHardness(1.0F).setCreativeTab(Minestuck.tabMinestuck);
-		sburbMachine = GameRegistry.register(new BlockSburbMachine().setRegistryName("sburb_machine"));
-		crockerMachine = GameRegistry.register(new BlockCrockerMachine().setRegistryName("crocker_machine"));
-		blockComputerOff = GameRegistry.register(new BlockComputerOff().setRegistryName("computer_standard"));
-		blockComputerOn = GameRegistry.register(new BlockComputerOn().setRegistryName("computer_standard_on"));
-		transportalizer = GameRegistry.register(new BlockTransportalizer().setRegistryName("transportalizer"));
-		blockGoldSeeds = (BlockGoldSeeds) GameRegistry.register(new BlockGoldSeeds().setRegistryName("gold_seeds"));
-		returnNode = GameRegistry.register(new BlockReturnNode().setRegistryName("return_node"));
-		gate = GameRegistry.register(new BlockGate().setRegistryName("gate"));
+		cruxiteBlock = register(registry, new Block(Material.ROCK, MapColor.LIGHT_BLUE).setRegistryName("cruxite_block")).setUnlocalizedName("cruxiteBlock").setHardness(3.0F).setCreativeTab(Minestuck.tabMinestuck);
+		genericObject = register(registry, new BlockCustom(Material.GOURD, MapColor.LIME, SoundType.WOOD).setRegistryName("generic_object")).setUnlocalizedName("genericObject").setHardness(1.0F).setCreativeTab(Minestuck.tabMinestuck);
+		sburbMachine = register(registry, new BlockSburbMachine().setRegistryName("sburb_machine"));
+		crockerMachine = register(registry, new BlockCrockerMachine().setRegistryName("crocker_machine"));
+		blockComputerOff = register(registry, new BlockComputerOff().setRegistryName("computer_standard"));
+		blockComputerOn = register(registry, new BlockComputerOn().setRegistryName("computer_standard_on"));
+		transportalizer = register(registry, new BlockTransportalizer().setRegistryName("transportalizer"));
+		blockGoldSeeds = (BlockGoldSeeds) register(registry, new BlockGoldSeeds().setRegistryName("gold_seeds"));
+		returnNode = register(registry, new BlockReturnNode().setRegistryName("return_node"));
+		gate = register(registry, new BlockGate().setRegistryName("gate"));
 		
-		layeredSand = GameRegistry.register(new BlockLayered(Blocks.SAND.getDefaultState()).setRegistryName("layered_sand")).setUnlocalizedName("layeredSand");
-		glowystoneWire = GameRegistry.register(new BlockGlowystoneWire().setRegistryName("glowystone_wire").setUnlocalizedName("glowystoneWire"));
-		coloredDirt = (BlockColoredDirt) GameRegistry.register(new BlockColoredDirt().setRegistryName("colored_dirt")).setUnlocalizedName("coloredDirt").setHardness(0.5F);
-		glowingMushroom = (BlockGlowingMushroom) GameRegistry.register(new BlockGlowingMushroom().setRegistryName("glowing_mushroom"));
-		glowingLog = GameRegistry.register(new BlockGlowingLog().setRegistryName("glowing_log"));
-		glowingPlanks = GameRegistry.register(new BlockCustom(Material.WOOD, MapColor.LIGHT_BLUE, SoundType.WOOD).setFireInfo(5, 20).setRegistryName("glowing_planks")).setUnlocalizedName("glowingPlanks").setLightLevel(0.5F).setHardness(2.0F).setResistance(5.0F).setCreativeTab(Minestuck.tabMinestuck);
-		stone = GameRegistry.register(new BlockMinestuckStone().setRegistryName("stone"));	//Full name will be minestuck:stone and because of that not produce any collisions
-		coarseStoneStairs = GameRegistry.register(new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.COARSE)).setRegistryName("coarse_stone_stairs")).setUnlocalizedName("stairsMinestuck.coarse");
-		shadeBrickStairs = GameRegistry.register(new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.SHADE_BRICK)).setRegistryName("shade_brick_stairs")).setUnlocalizedName("stairsMinestuck.shadeBrick");
-		frostBrickStairs = GameRegistry.register(new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.FROST_BRICK)).setRegistryName("frost_brick_stairs")).setUnlocalizedName("stairsMinestuck.frostBrick");
-		castIronStairs = GameRegistry.register(new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.CAST_IRON)).setRegistryName("cast_iron_stairs")).setUnlocalizedName("stairsMinestuck.castIron");
-		log = GameRegistry.register(new BlockMinestuckLog().setRegistryName("log"));
-		woodenCactus = GameRegistry.register(new BlockCactusSpecial(SoundType.WOOD, "axe").setRegistryName("wooden_cactus")).setHardness(1.0F).setResistance(2.5F).setUnlocalizedName("woodenCactus");
+		layeredSand = register(registry, new BlockLayered(Blocks.SAND.getDefaultState()).setRegistryName("layered_sand")).setUnlocalizedName("layeredSand");
+		glowystoneWire = register(registry, new BlockGlowystoneWire().setRegistryName("glowystone_wire").setUnlocalizedName("glowystoneWire"));
+		coloredDirt = (BlockColoredDirt) register(registry, new BlockColoredDirt().setRegistryName("colored_dirt")).setUnlocalizedName("coloredDirt").setHardness(0.5F);
+		glowingMushroom = (BlockGlowingMushroom) register(registry, new BlockGlowingMushroom().setRegistryName("glowing_mushroom"));
+		glowingLog = register(registry, new BlockGlowingLog().setRegistryName("glowing_log"));
+		glowingPlanks = register(registry, new BlockCustom(Material.WOOD, MapColor.LIGHT_BLUE, SoundType.WOOD).setFireInfo(5, 20).setRegistryName("glowing_planks")).setUnlocalizedName("glowingPlanks").setLightLevel(0.5F).setHardness(2.0F).setResistance(5.0F).setCreativeTab(Minestuck.tabMinestuck);
+		stone = register(registry, new BlockMinestuckStone().setRegistryName("stone"));	//Full name will be minestuck:stone and because of that not produce any collisions
+		coarseStoneStairs = register(registry, new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.COARSE)).setRegistryName("coarse_stone_stairs")).setUnlocalizedName("stairsMinestuck.coarse");
+		shadeBrickStairs = register(registry, new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.SHADE_BRICK)).setRegistryName("shade_brick_stairs")).setUnlocalizedName("stairsMinestuck.shadeBrick");
+		frostBrickStairs = register(registry, new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.FROST_BRICK)).setRegistryName("frost_brick_stairs")).setUnlocalizedName("stairsMinestuck.frostBrick");
+		castIronStairs = register(registry, new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.CAST_IRON)).setRegistryName("cast_iron_stairs")).setUnlocalizedName("stairsMinestuck.castIron");
+		log = register(registry, new BlockMinestuckLog().setRegistryName("log"));
+		woodenCactus = register(registry, new BlockCactusSpecial(SoundType.WOOD, "axe").setRegistryName("wooden_cactus")).setHardness(1.0F).setResistance(2.5F).setUnlocalizedName("woodenCactus");
 		
-		primedTnt = GameRegistry.register(new BlockTNTSpecial(true, false, false).setRegistryName("primed_tnt")).setUnlocalizedName("primedTnt");
-		unstableTnt = GameRegistry.register(new BlockTNTSpecial(false, true, false).setRegistryName("unstable_tnt")).setUnlocalizedName("unstableTnt");
-		instantTnt = GameRegistry.register(new BlockTNTSpecial(false, false, true).setRegistryName("instant_tnt")).setUnlocalizedName("instantTnt");
-		woodenExplosiveButton = GameRegistry.register(new BlockButtonSpecial(true, true).setRegistryName("wooden_button_explosive")).setUnlocalizedName("buttonTnt");
-		stoneExplosiveButton = GameRegistry.register(new BlockButtonSpecial(false, true).setRegistryName("stone_button_explosive")).setUnlocalizedName("buttonTnt");
+		primedTnt = register(registry, new BlockTNTSpecial(true, false, false).setRegistryName("primed_tnt")).setUnlocalizedName("primedTnt");
+		unstableTnt = register(registry, new BlockTNTSpecial(false, true, false).setRegistryName("unstable_tnt")).setUnlocalizedName("unstableTnt");
+		instantTnt = register(registry, new BlockTNTSpecial(false, false, true).setRegistryName("instant_tnt")).setUnlocalizedName("instantTnt");
+		woodenExplosiveButton = register(registry, new BlockButtonSpecial(true, true).setRegistryName("wooden_button_explosive")).setUnlocalizedName("buttonTnt");
+		stoneExplosiveButton = register(registry, new BlockButtonSpecial(false, true).setRegistryName("stone_button_explosive")).setUnlocalizedName("buttonTnt");
 		//fluids
 		fluidOil = new Fluid("Oil", new ResourceLocation("minestuck", "blocks/oil_still"), new ResourceLocation("minestuck", "blocks/oil_flowing"));
 		FluidRegistry.registerFluid(fluidOil);
@@ -118,9 +121,9 @@ public class MinestuckBlocks
 		FluidRegistry.registerFluid(fluidBlood);
 		fluidBrainJuice = new Fluid("BrainJuice", new ResourceLocation("minestuck", "blocks/brain_juice_still"), new ResourceLocation("minestuck", "blocks/brain_juice_flowing"));
 		FluidRegistry.registerFluid(fluidBrainJuice);
-		blockOil = GameRegistry.register(new BlockFluidClassic(fluidOil, Material.WATER).setRegistryName("block_oil")).setUnlocalizedName("oil");
-		blockBlood = GameRegistry.register(new BlockFluidClassic(fluidBlood, Material.WATER).setRegistryName("block_blood")).setUnlocalizedName("blood");
-		blockBrainJuice = GameRegistry.register(new BlockFluidClassic(fluidBrainJuice, Material.WATER).setRegistryName("block_brain_juice")).setUnlocalizedName("brainJuice");
+		blockOil = register(registry, new BlockFluidClassic(fluidOil, Material.WATER).setRegistryName("block_oil")).setUnlocalizedName("oil");
+		blockBlood = register(registry, new BlockFluidClassic(fluidBlood, Material.WATER).setRegistryName("block_blood")).setUnlocalizedName("blood");
+		blockBrainJuice = register(registry, new BlockFluidClassic(fluidBrainJuice, Material.WATER).setRegistryName("block_brain_juice")).setUnlocalizedName("brainJuice");
 		
 		/*liquidGrists = new Block[GristType.allGrists];
 		gristFluids = new Fluid[GristType.allGrists];
@@ -135,5 +138,11 @@ public class MinestuckBlocks
 		fluidOil.setUnlocalizedName(blockOil.getUnlocalizedName());
 		fluidBlood.setUnlocalizedName(blockBlood.getUnlocalizedName());
 		fluidBrainJuice.setUnlocalizedName(blockBrainJuice.getUnlocalizedName());
+	}
+	
+	private static Block register(IForgeRegistry<Block> registry, Block block) //Because the new registry method doesn't return the block
+	{
+		registry.register(block);
+		return block;
 	}
 }

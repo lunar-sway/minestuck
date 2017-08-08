@@ -1,5 +1,6 @@
 package com.mraof.minestuck.jei;
 
+import com.mraof.minestuck.Minestuck;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IRecipeLayout;
@@ -22,8 +23,14 @@ public class AlchemiterRecipeCategory extends BlankRecipeCategory<AlchemiterReci
         ResourceLocation alchemiterBackground = new ResourceLocation("minestuck:textures/gui/alchemiter.png");
         background = guiHelper.createDrawable(alchemiterBackground, 8, 15, 160, 56);
     }
-
-    @Override
+	
+	@Override
+	public String getModName()
+	{
+		return Minestuck.MOD_NAME;
+	}
+	
+	@Override
     public String getUid()
     {
         return "alchemiter";

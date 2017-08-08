@@ -1,8 +1,8 @@
 package com.mraof.minestuck.jei;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.Debug;
-
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IGuiItemStackGroup;
@@ -30,8 +30,14 @@ public class TotemLatheRecipeCategory extends BlankRecipeCategory<TotemLatheReci
         ResourceLocation totemLatheBackground = new ResourceLocation("minestuck:textures/gui/lathe.png");
         background = guiHelper.createDrawable(totemLatheBackground, 25, 24, 130, 36);
     }
-
-    @Override
+	
+	@Override
+	public String getModName()
+	{
+		return Minestuck.MOD_NAME;
+	}
+	
+	@Override
     public String getUid()
     {
         return "totemLathe";

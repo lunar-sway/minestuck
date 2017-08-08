@@ -1,9 +1,9 @@
 package com.mraof.minestuck.item;
 
-import java.util.List;
-
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,11 +12,10 @@ import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.world.World;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemCaptchaCard extends Item
 {
@@ -37,15 +36,14 @@ public class ItemCaptchaCard extends Item
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems)
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
 	{
-		subItems.add(new ItemStack(this));
-		subItems.add(AlchemyRecipeHandler.createCard(new ItemStack(MinestuckItems.cruxiteApple), true));
+		items.add(new ItemStack(this));
+		items.add(AlchemyRecipeHandler.createCard(new ItemStack(MinestuckItems.cruxiteApple), true));
 	}
 	
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced)
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
 	{
 		if(stack.hasTagCompound())
 		{

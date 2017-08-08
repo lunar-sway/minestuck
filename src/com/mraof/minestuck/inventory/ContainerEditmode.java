@@ -1,8 +1,5 @@
 package com.mraof.minestuck.inventory;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.editmode.DeployList;
@@ -17,7 +14,6 @@ import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.MinestuckPlayerData;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
@@ -27,6 +23,9 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class ContainerEditmode extends Container
 {
@@ -83,10 +82,6 @@ public class ContainerEditmode extends Container
 		}
 		return ItemStack.EMPTY;
 	}
-	
-	@Override
-	protected void retrySlotClick(int p_75133_1_, int p_75133_2_, boolean p_75133_3_, EntityPlayer player)
-	{}
 	
 	private void addSlots()
 	{

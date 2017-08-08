@@ -1,5 +1,9 @@
 package com.mraof.minestuck.inventory;
 
+import com.mraof.minestuck.block.BlockSburbMachine.MachineType;
+import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.tileentity.TileEntitySburbMachine;
+import com.mraof.minestuck.util.IdentifierHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -8,11 +12,6 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
-
-import com.mraof.minestuck.block.BlockSburbMachine.MachineType;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.tileentity.TileEntitySburbMachine;
-import com.mraof.minestuck.util.IdentifierHandler;
 
 public class ContainerSburbMachine extends Container
 {
@@ -188,7 +187,7 @@ public class ContainerSburbMachine extends Container
 	{
 		if(this.progress != tileEntity.progress && tileEntity.progress != 0)
 			for(IContainerListener listener : listeners)
-				listener.sendProgressBarUpdate(this, 0, tileEntity.progress);	//The server should update and send the progress bar to the client because client and server ticks aren't synchronized
+				listener.sendWindowProperty(this, 0, tileEntity.progress);	//The server should update and send the progress bar to the client because client and server ticks aren't synchronized
 		this.progress = tileEntity.progress;
 	}
 	@Override

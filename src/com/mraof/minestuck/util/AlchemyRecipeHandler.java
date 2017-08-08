@@ -6,7 +6,6 @@ import com.mraof.minestuck.modSupport.*;
 import com.mraof.minestuck.modSupport.minetweaker.MinetweakerSupport;
 import com.mraof.minestuck.world.storage.loot.conditions.LandAspectLootCondition;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockPrismarine;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.init.Blocks;
@@ -15,17 +14,13 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.ShapedRecipes;
-import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraft.item.crafting.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.conditions.LootConditionManager;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
@@ -509,8 +504,8 @@ public class AlchemyRecipeHandler
 	
 	public static void registerMinestuckRecipes() {
 		
-		//set up vanilla recipes
-		RecipeSorter.register("minestuck:notmirrored", CraftingRecipes.NonMirroredRecipe.class, RecipeSorter.Category.SHAPED, "before:minecraft:shaped");
+		//set up crafting recipes
+		/*RecipeSorter.register("minestuck:notmirrored", CraftingRecipes.NonMirroredRecipe.class, RecipeSorter.Category.SHAPED, "before:minecraft:shaped");
 		RecipeSorter.register("minestuck:emptycard", CraftingRecipes.EmptyCardRecipe.class, RecipeSorter.Category.SHAPED, "before:minecraft:shaped");
 		
 		GameRegistry.addRecipe(new ItemStack(blockComputerOff,1,0),new Object[]{ "XXX","XYX","XXX",'Y',new ItemStack(cruxiteBlock),'X',new ItemStack(Items.IRON_INGOT,1)});
@@ -544,7 +539,7 @@ public class AlchemyRecipeHandler
 		GameRegistry.addShapelessRecipe(new ItemStack(glowingPlanks, 4), new ItemStack(glowingLog));
 		GameRegistry.addShapelessRecipe(new ItemStack(salad,1),new Object[]{ new ItemStack(Blocks.LEAVES,1,WILDCARD_VALUE),new ItemStack(Items.BOWL)});
 		GameRegistry.addShapelessRecipe(new ItemStack(salad,1),new Object[]{ new ItemStack(Blocks.LEAVES2,1,WILDCARD_VALUE),new ItemStack(Items.BOWL)});
-		GameRegistry.addShapelessRecipe(new ItemStack(bugOnAStick, 3), jarOfBugs, Items.STICK, Items.STICK, Items.STICK);
+		GameRegistry.addShapelessRecipe(new ItemStack(bugOnAStick, 3), jarOfBugs, Items.STICK, Items.STICK, Items.STICK);*///TODO Figure out recipe names and groups
 		GameRegistry.addSmelting(goldSeeds, new ItemStack(Items.GOLD_NUGGET), 0.1F);
 		GameRegistry.addSmelting(ironOreSandstone, new ItemStack(Items.IRON_INGOT), 0.7F);
 		GameRegistry.addSmelting(ironOreSandstoneRed, new ItemStack(Items.IRON_INGOT), 0.7F);
@@ -999,7 +994,7 @@ public class AlchemyRecipeHandler
 		int invalid = 0;
 		
 		Debug.debug("Looking for dynamic grist conversions...");
-		for (Object recipe : CraftingManager.getInstance().getRecipeList())
+		for (IRecipe recipe : CraftingManager.REGISTRY)
 		{
 			try
 			{
@@ -1065,7 +1060,8 @@ public class AlchemyRecipeHandler
 			}
 			if (GristRegistry.getGristConversion(newRecipe.getRecipeOutput()) != null) {return false;};
 			GristSet set = new GristSet();
-			for (ItemStack item : newRecipe.recipeItems) {
+			for (Ingredient ingredient : newRecipe.recipeItems) {
+				ItemStack item = ingredient == Ingredient.EMPTY ? ItemStack.EMPTY : ingredient.getMatchingStacks()[0];
 				if (GristRegistry.getGristConversion(item) != null) {
 					//Debug.print("	Adding compo: "+item);
 					set.addGrist(GristRegistry.getGristConversion(item));
@@ -1105,8 +1101,9 @@ public class AlchemyRecipeHandler
 			}
 			if (GristRegistry.getGristConversion(newRecipe.getRecipeOutput()) != null) {return false;};
 			GristSet set = new GristSet();
-			for (ItemStack item : newRecipe.recipeItems)
+			for (Ingredient ingredient : newRecipe.recipeItems)
 			{
+				ItemStack item = ingredient == Ingredient.EMPTY ? ItemStack.EMPTY : ingredient.getMatchingStacks()[0];
 				if (GristRegistry.getGristConversion(item) != null)
 				{
 					set.addGrist(GristRegistry.getGristConversion(item));
@@ -1145,21 +1142,13 @@ public class AlchemyRecipeHandler
 				lookedOver.put(Arrays.asList(newRecipe.getRecipeOutput().getItem(),newRecipe.getRecipeOutput().getHasSubtypes() ? newRecipe.getRecipeOutput().getItemDamage() : 0),true);
 			}
 			GristSet set = new GristSet();
-			for (Object obj : newRecipe.getInput())
+			for (Ingredient ingredient : newRecipe.getIngredients())
 			{
 				ItemStack item = null;
-				if (obj == null)
+				if (ingredient == Ingredient.EMPTY)
 					continue;
-				if (obj instanceof List)
-				{
-					if (((List<?>) obj).size() == 0)
-					{
-						break;
-					}
-					item = (ItemStack) ((List<?>) obj).get(0);
-				} else {
-					item = (ItemStack) obj;
-				}
+				item = ingredient.getMatchingStacks()[0];
+				
 				if (GristRegistry.getGristConversion(item) != null) {
 					//Debug.print("	Adding compo: "+item);
 					set.addGrist(GristRegistry.getGristConversion(item));
@@ -1198,18 +1187,10 @@ public class AlchemyRecipeHandler
 			}
 			if (GristRegistry.getGristConversion(newRecipe.getRecipeOutput()) != null) {return false;};
 			GristSet set = new GristSet();
-			for (Object obj : newRecipe.getInput()) {
+			for (Ingredient ingredient : newRecipe.getIngredients()) {
 				ItemStack item = null;
-				if (obj == null) {break;}
-				if (obj instanceof List) {
-					if (((List<?>) obj).size() == 0) {
-						//Debug.print("	Input list was empty!");
-						break;
-					}
-					item = (ItemStack) ((List<?>) obj).get(0);
-				} else {
-					item = (ItemStack) obj;
-				}
+				if (ingredient == Ingredient.EMPTY) {break;}
+				item = ingredient.getMatchingStacks()[0];
 				if (GristRegistry.getGristConversion(item) != null)
 				{
 					set.addGrist(GristRegistry.getGristConversion(item));
@@ -1298,7 +1279,7 @@ public class AlchemyRecipeHandler
 	
 	public static void addOrRemoveRecipes(boolean addCardRecipe)
 	{
-		if(addCardRecipe && !cardRecipeAdded)
+		/*if(addCardRecipe && !cardRecipeAdded)
 		{
 			CraftingManager.getInstance().getRecipeList().add(cardRecipe);
 			cardRecipeAdded = true;
@@ -1307,7 +1288,7 @@ public class AlchemyRecipeHandler
 		{
 			CraftingManager.getInstance().getRecipeList().remove(cardRecipe);
 			cardRecipeAdded = false;
-		}
+		}*/
 	}
 	
 }

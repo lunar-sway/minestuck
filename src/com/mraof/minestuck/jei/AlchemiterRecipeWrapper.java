@@ -35,14 +35,14 @@ public class AlchemiterRecipeWrapper extends BlankRecipeWrapper
     @Override
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY)
     {
-        GuiUtil.drawGristBoard(grist, GuiUtil.GristboardMode.ALCHEMITER, 1, 30, minecraft.fontRendererObj);
+        GuiUtil.drawGristBoard(grist, GuiUtil.GristboardMode.ALCHEMITER, 1, 30, minecraft.fontRenderer);
     }
 
     @Nullable
     @Override
     public List<String> getTooltipStrings(int mouseX, int mouseY)
     {
-        return GuiUtil.getGristboardTooltip(grist, mouseX, mouseY, 1, 30, Minecraft.getMinecraft().fontRendererObj);
+        return GuiUtil.getGristboardTooltip(grist, mouseX, mouseY, 1, 30, Minecraft.getMinecraft().fontRenderer);
     }
 
     @Override

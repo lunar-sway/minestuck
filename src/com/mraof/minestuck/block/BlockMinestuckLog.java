@@ -1,7 +1,6 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.Minestuck;
-
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.IProperty;
@@ -16,8 +15,6 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockMinestuckLog extends BlockLog
 {
@@ -57,7 +54,7 @@ public class BlockMinestuckLog extends BlockLog
 	}
 	
 	@Override
-	public MapColor getMapColor(IBlockState state)
+	public MapColor getMapColor(IBlockState state, IBlockAccess worldIn, BlockPos pos)
 	{
 		BlockType type = state.getValue(VARIANT);
 		if(state.getValue(LOG_AXIS).equals(EnumAxis.Y))
@@ -66,11 +63,10 @@ public class BlockMinestuckLog extends BlockLog
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list)
+	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items)
 	{
 		for(BlockType type : BlockType.values())
-			list.add(new ItemStack(itemIn, 1, type.ordinal()));
+			items.add(new ItemStack(this, 1, type.ordinal()));
 	}
 	
 	@Override

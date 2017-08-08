@@ -1,15 +1,14 @@
 package com.mraof.minestuck.client.renderer.entity;
 
+import com.mraof.minestuck.entity.item.EntityVitalityGel;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
-
-import com.mraof.minestuck.entity.item.EntityVitalityGel;
 
 public class RenderVitalityGel extends Render<EntityVitalityGel>
 {
@@ -27,8 +26,8 @@ public class RenderVitalityGel extends Render<EntityVitalityGel>
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float)d0, (float)d1 + entity.getSizeByValue()/2, (float)d2);
 		this.bindEntityTexture(entity);
-		VertexBuffer vertexbuffer = Tessellator.getInstance().getBuffer();
-		int j = entity.getBrightnessForRender(f1);
+		BufferBuilder vertexbuffer = Tessellator.getInstance().getBuffer();
+		int j = entity.getBrightnessForRender();
 		int k = j % 65536;
 		int l = j / 65536;
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)k / 1.0F, (float)l / 1.0F);

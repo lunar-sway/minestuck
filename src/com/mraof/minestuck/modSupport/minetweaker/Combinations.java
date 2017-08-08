@@ -1,15 +1,14 @@
-package com.mraof.minestuck.modSupport.minetweaker;
+/*package com.mraof.minestuck.modSupport.minetweaker;
 
 import java.util.Arrays;
 import java.util.List;
 
 import com.mraof.minestuck.util.CombinationRegistry;
 
+import crafttweaker.CraftTweakerAPI;
+import crafttweaker.api.item.IItemStack;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
-import minetweaker.IUndoableAction;
-import minetweaker.MineTweakerAPI;
-import minetweaker.api.item.IItemStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
@@ -22,20 +21,20 @@ public class Combinations
 	{
 		ItemStack stack1 = (ItemStack) input1.getInternal();
 		ItemStack stack2 = (ItemStack) input2.getInternal();
-		MineTweakerAPI.apply(new SetRecipe(stack1.getItem(), stack1.getItemDamage(), stack2.getItem(), stack2.getItemDamage(), getMode(mode), (ItemStack) output.getInternal()));
+		CraftTweakerAPI.apply(new SetRecipe(stack1.getItem(), stack1.getItemDamage(), stack2.getItem(), stack2.getItemDamage(), getMode(mode), (ItemStack) output.getInternal()));
 	}
 	
 	@ZenMethod
 	public static void addOreDictRecipe(IItemStack input1, String input2, String mode, IItemStack output)
 	{
 		ItemStack stack = (ItemStack) input1.getInternal();
-		MineTweakerAPI.apply(new SetRecipe(stack.getItem(), stack.getItemDamage(), input2, OreDictionary.WILDCARD_VALUE, getMode(mode), (ItemStack) output.getInternal()));
+		CraftTweakerAPI.apply(new SetRecipe(stack.getItem(), stack.getItemDamage(), input2, OreDictionary.WILDCARD_VALUE, getMode(mode), (ItemStack) output.getInternal()));
 	}
 	
 	@ZenMethod
 	public static void addFullOreDictRecipe(String input1, String input2, String mode, IItemStack output)
 	{
-		MineTweakerAPI.apply(new SetRecipe(input1, OreDictionary.WILDCARD_VALUE, input2, OreDictionary.WILDCARD_VALUE, getMode(mode), (ItemStack) output.getInternal()));
+		CraftTweakerAPI.apply(new SetRecipe(input1, OreDictionary.WILDCARD_VALUE, input2, OreDictionary.WILDCARD_VALUE, getMode(mode), (ItemStack) output.getInternal()));
 	}
 	
 	@ZenMethod
@@ -43,20 +42,20 @@ public class Combinations
 	{
 		ItemStack stack1 = (ItemStack) input1.getInternal();
 		ItemStack stack2 = (ItemStack) input2.getInternal();
-		MineTweakerAPI.apply(new SetRecipe(stack1.getItem(), stack1.getItemDamage(), stack2.getItem(), stack2.getItemDamage(), getMode(mode), null));
+		CraftTweakerAPI.apply(new SetRecipe(stack1.getItem(), stack1.getItemDamage(), stack2.getItem(), stack2.getItemDamage(), getMode(mode), null));
 	}
 	
 	@ZenMethod
 	public static void removeOreDictRecipe(IItemStack input1, String input2, String mode)
 	{
 		ItemStack stack = (ItemStack) input1.getInternal();
-		MineTweakerAPI.apply(new SetRecipe(stack.getItem(), stack.getItemDamage(), input2, OreDictionary.WILDCARD_VALUE, getMode(mode), null));
+		CraftTweakerAPI.apply(new SetRecipe(stack.getItem(), stack.getItemDamage(), input2, OreDictionary.WILDCARD_VALUE, getMode(mode), null));
 	}
 	
 	@ZenMethod
 	public static void removeFullOreDictRecipe(String input1, String input2, String mode)
 	{
-		MineTweakerAPI.apply(new SetRecipe(input1, OreDictionary.WILDCARD_VALUE, input2, OreDictionary.WILDCARD_VALUE, getMode(mode), null));
+		CraftTweakerAPI.apply(new SetRecipe(input1, OreDictionary.WILDCARD_VALUE, input2, OreDictionary.WILDCARD_VALUE, getMode(mode), null));
 	}
 	
 	private static boolean getMode(String mode)
@@ -131,4 +130,4 @@ public class Combinations
 		}
 		
 	}
-}
+}*/

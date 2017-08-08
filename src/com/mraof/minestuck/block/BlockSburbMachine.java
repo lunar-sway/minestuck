@@ -27,8 +27,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -107,11 +105,10 @@ public class BlockSburbMachine extends BlockContainer
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list)
+	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items)
 	{
 		for(int i = 0; i < 4; i++)
-			list.add(new ItemStack(this, 1, i));
+			items.add(new ItemStack(this, 1, i));
 	}
 	
 	@Override
@@ -230,7 +227,7 @@ public class BlockSburbMachine extends BlockContainer
 		{
 			EnumFacing roation = (EnumFacing) getActualState(state, worldIn, pos).getValue(FACING);
 			AxisAlignedBB bb = ALCHEMITER_POLE_AABB[roation.getHorizontalIndex()].offset(pos);
-			if(entityBox.intersectsWith(bb))
+			if(entityBox.intersects(bb))
 				collidingBoxes.add(bb);
 		}
 	}

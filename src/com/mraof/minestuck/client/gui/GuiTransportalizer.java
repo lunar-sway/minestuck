@@ -1,7 +1,9 @@
 package com.mraof.minestuck.client.gui;
 
-import java.io.IOException;
-
+import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckPacket;
+import com.mraof.minestuck.network.TransportalizerPacket;
+import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -10,10 +12,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 
-import com.mraof.minestuck.network.MinestuckChannelHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.TransportalizerPacket;
-import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
+import java.io.IOException;
 
 public class GuiTransportalizer extends GuiScreen
 {
@@ -32,7 +31,7 @@ public class GuiTransportalizer extends GuiScreen
 		super();
 
 		this.mc = mc;
-		this.fontRendererObj = mc.fontRendererObj;
+		this.fontRenderer = mc.fontRenderer;
 		this.te = te;
 	}
 
@@ -40,7 +39,7 @@ public class GuiTransportalizer extends GuiScreen
 	public void initGui()
 	{
 		int yOffset = (this.height / 2) - (guiHeight / 2);
-		this.destinationTextField = new GuiTextField(0, this.fontRendererObj, this.width / 2 - 20, yOffset + 25, 40, 20);
+		this.destinationTextField = new GuiTextField(0, this.fontRenderer, this.width / 2 - 20, yOffset + 25, 40, 20);
 		this.destinationTextField.setMaxStringLength(4);
 		this.destinationTextField.setFocused(true);
 		this.destinationTextField.setText(this.te.getDestId());
@@ -56,7 +55,7 @@ public class GuiTransportalizer extends GuiScreen
 		this.mc.getTextureManager().bindTexture(guiBackground);
 		int yOffset = (this.height / 2) - (guiHeight / 2);
 		this.drawTexturedModalRect((this.width / 2) - (guiWidth / 2), yOffset, 0, 0, guiWidth, guiHeight);
-		fontRendererObj.drawString(te.getId(), (this.width / 2) - fontRendererObj.getStringWidth(te.getId()) / 2, yOffset + 10, 0x404040);
+		fontRenderer.drawString(te.getId(), (this.width / 2) - fontRenderer.getStringWidth(te.getId()) / 2, yOffset + 10, 0x404040);
 		this.destinationTextField.drawTextBox();
 		super.drawScreen(x, y, f1);
 	}

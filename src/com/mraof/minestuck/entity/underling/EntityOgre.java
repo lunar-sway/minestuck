@@ -1,17 +1,11 @@
 package com.mraof.minestuck.entity.underling;
 
+import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
+import com.mraof.minestuck.util.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-
-import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
-import com.mraof.minestuck.util.Echeladder;
-import com.mraof.minestuck.util.GristHelper;
-import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.GristType;
-import com.mraof.minestuck.util.MinestuckAchievementHandler;
-import com.mraof.minestuck.util.MinestuckPlayerData;
 
 //Makes non-stop ogre puns
 public class EntityOgre extends EntityUnderling 
@@ -79,13 +73,13 @@ public class EntityOgre extends EntityUnderling
 	public void onDeath(DamageSource cause)
 	{
 		super.onDeath(cause);
-		Entity entity = cause.getEntity();
+		Entity entity = cause.getTrueSource();
 		if(this.dead && !this.world.isRemote && type != null)
 		{
 			computePlayerProgress((int) (40*type.getPower() + 50));
 			if(entity != null && entity instanceof EntityPlayerMP)
 			{
-				((EntityPlayerMP) entity).addStat(MinestuckAchievementHandler.killOgre);
+				//((EntityPlayerMP) entity).addStat(MinestuckAchievementHandler.killOgre);
 				Echeladder ladder = MinestuckPlayerData.getData((EntityPlayerMP) entity).echeladder;
 				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 1));
 			}

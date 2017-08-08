@@ -1,16 +1,9 @@
 package com.mraof.minestuck.util;
 
-import com.mraof.minestuck.item.MinestuckItems;
-
-import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ShapedRecipes;
-import net.minecraft.world.World;
-
 public class CraftingRecipes
 {
 	
-	public static class NonMirroredRecipe extends ShapedRecipes
+	/*public static class NonMirroredRecipe extends ShapedRecipes
 	{
 		
 		public NonMirroredRecipe(int width, int height, ItemStack[] input, ItemStack result)
@@ -89,5 +82,5 @@ public class CraftingRecipes
 			}
 			return super.matches(crafting, world);
 		}
-	}
+	}*/
 }

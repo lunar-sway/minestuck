@@ -8,6 +8,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.StructureStart;
 
+import javax.annotation.Nullable;
+
 /**
  * @author mraof
  *
@@ -36,8 +38,10 @@ public class MapGenCastle extends MapGenStructure
 	{
 		return "SkaiaCastle";
 	}
+	
+	@Nullable
 	@Override
-	public BlockPos getClosestStrongholdPos(World worldIn, BlockPos pos, boolean p_180706_3_)
+	public BlockPos getNearestStructurePos(World worldIn, BlockPos pos, boolean findUnexplored)
 	{
 		return null;
 	}

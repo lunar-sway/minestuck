@@ -1,9 +1,5 @@
 package com.mraof.minestuck.event;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.underling.EntityUnderling;
 import com.mraof.minestuck.inventory.captchalouge.HashmapModus;
@@ -14,18 +10,7 @@ import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.PostEntryTask;
-
-import net.minecraft.entity.monster.EntityBlaze;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.monster.EntityGuardian;
-import net.minecraft.entity.monster.EntitySilverfish;
-import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.monster.EntitySlime;
-import net.minecraft.entity.monster.EntitySpider;
-import net.minecraft.entity.monster.EntityWitch;
-import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.monster.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraftforge.event.ServerChatEvent;
@@ -36,6 +21,10 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class ServerEventHandler
 {
@@ -72,9 +61,9 @@ public class ServerEventHandler
 	@SubscribeEvent(priority=EventPriority.LOWEST, receiveCanceled=false)
 	public void onEntityDeath(LivingDeathEvent event)
 	{
-		if(event.getEntity() instanceof IMob && event.getSource().getEntity() instanceof EntityPlayerMP)
+		if(event.getEntity() instanceof IMob && event.getSource().getTrueSource() instanceof EntityPlayerMP)
 		{
-			EntityPlayerMP player = (EntityPlayerMP) event.getSource().getEntity();
+			EntityPlayerMP player = (EntityPlayerMP) event.getSource().getTrueSource();
 			int exp = 0;
 			if(event.getEntity() instanceof EntityZombie || event.getEntity() instanceof EntitySkeleton)
 				exp = 6;
@@ -104,11 +93,11 @@ public class ServerEventHandler
 	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=false)
 	public void onEntityAttack(LivingHurtEvent event)
 	{
-		if(event.getSource().getEntity() != null)
+		if(event.getSource().getTrueSource() != null)
 		{
-			if (event.getSource().getEntity() instanceof EntityPlayerMP)
+			if (event.getSource().getTrueSource() instanceof EntityPlayerMP)
 			{
-				EntityPlayerMP player = (EntityPlayerMP) event.getSource().getEntity();
+				EntityPlayerMP player = (EntityPlayerMP) event.getSource().getTrueSource();
 				if (event.getEntityLiving() instanceof EntityUnderling)
 				{    //Increase damage to underling
 					double modifier = MinestuckPlayerData.getData(player).echeladder.getUnderlingDamageModifier();
@@ -120,7 +109,7 @@ public class ServerEventHandler
 					event.getEntityLiving().addPotionEffect(((ItemPotionWeapon) player.getHeldItemMainhand().getItem()).getEffect());
 				}
 			}
-			else if (event.getEntityLiving() instanceof EntityPlayerMP && event.getSource().getEntity() instanceof EntityUnderling)
+			else if (event.getEntityLiving() instanceof EntityPlayerMP && event.getSource().getTrueSource() instanceof EntityUnderling)
 			{    //Decrease damage to player
 					EntityPlayerMP player = (EntityPlayerMP) event.getEntityLiving();
 					double modifier = MinestuckPlayerData.getData(player).echeladder.getUnderlingProtectionModifier();

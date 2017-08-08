@@ -1,8 +1,8 @@
 package com.mraof.minestuck.item;
 
-import java.util.List;
-
-import net.minecraft.entity.player.EntityPlayer;
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -10,9 +10,10 @@ import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
+import net.minecraft.world.World;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemDowel extends Item
 {
@@ -33,7 +34,7 @@ public class ItemDowel extends Item
 	}
 	
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced)
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
 	{
 		if (stack.hasTagCompound())
 		{

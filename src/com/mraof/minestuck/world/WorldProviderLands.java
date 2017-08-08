@@ -15,7 +15,7 @@ import net.minecraft.world.GameType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.chunk.IChunkGenerator;
+import net.minecraft.world.gen.IChunkGenerator;
 
 public class WorldProviderLands extends WorldProvider
 {
@@ -151,7 +151,7 @@ public class WorldProviderLands extends WorldProvider
 		if(chunkProvider == null)
 			createChunkGenerator();
 		this.biomeProvider = new WorldChunkManagerLands(world, chunkProvider.rainfall, chunkProvider.oceanChance, chunkProvider.roughChance);
-		this.hasNoSky = false;
+		this.nether = false;
 	}
 	
 	@Override

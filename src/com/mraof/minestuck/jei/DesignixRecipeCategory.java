@@ -1,5 +1,6 @@
 package com.mraof.minestuck.jei;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
@@ -28,7 +29,13 @@ public class DesignixRecipeCategory extends BlankRecipeCategory<DesignixRecipeWr
         ResourceLocation punchDesignixBackground = new ResourceLocation("minestuck:textures/gui/designix.png");
         background = guiHelper.createDrawable(punchDesignixBackground, 43, 25, 94, 42);
     }
-
+    
+    @Override
+    public String getModName()
+    {
+        return Minestuck.MOD_NAME;
+    }
+    
     @Override
     public String getUid()
     {

@@ -1,16 +1,11 @@
 package com.mraof.minestuck.entity.underling;
 
+import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
+import com.mraof.minestuck.util.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-
-import com.mraof.minestuck.entity.ai.EntityAIAttackOnCollideWithRate;
-import com.mraof.minestuck.util.Echeladder;
-import com.mraof.minestuck.util.GristHelper;
-import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.GristType;
-import com.mraof.minestuck.util.MinestuckPlayerData;
 
 public class EntityLich extends EntityUnderling
 {
@@ -76,7 +71,7 @@ public class EntityLich extends EntityUnderling
 	public void onDeath(DamageSource cause)
 	{
 		super.onDeath(cause);
-		Entity entity = cause.getEntity();
+		Entity entity = cause.getTrueSource();
 		if(this.dead && !this.world.isRemote && type != null)
 		{
 			computePlayerProgress((int) (300*type.getPower() + 650));

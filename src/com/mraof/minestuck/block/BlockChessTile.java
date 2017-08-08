@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.Minestuck;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -8,16 +9,11 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving.SpawnPlacementType;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.mraof.minestuck.Minestuck;
 
 public class BlockChessTile extends Block
 {
@@ -76,11 +72,10 @@ public class BlockChessTile extends Block
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list)
+	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items)
 	{
 		for(int i = 0; i < BlockType.values().length; i++)
-			list.add(new ItemStack(this, 1, i));
+			items.add(new ItemStack(this, 1, i));
 	}
 	
 	@Override
@@ -90,7 +85,7 @@ public class BlockChessTile extends Block
 	}
 	
 	@Override
-	public MapColor getMapColor(IBlockState state)
+	public MapColor getMapColor(IBlockState state, IBlockAccess worldIn, BlockPos pos)
 	{
 		switch((BlockType) state.getValue(BLOCK_TYPE))
 		{
@@ -98,7 +93,7 @@ public class BlockChessTile extends Block
 		case LIGHT_GREY: return MapColor.SILVER;
 		case DARK_GREY: return MapColor.GRAY;
 		case BLACK: return MapColor.BLACK;
-		default: return super.getMapColor(state);
+		default: return super.getMapColor(state, worldIn, pos);
 		}
 	}
 }

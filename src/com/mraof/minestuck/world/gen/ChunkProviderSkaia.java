@@ -3,10 +3,10 @@
  */
 package com.mraof.minestuck.world.gen;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
+import com.mraof.minestuck.block.BlockChessTile;
+import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.entity.carapacian.*;
+import com.mraof.minestuck.world.gen.structure.MapGenCastle;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.math.BlockPos;
@@ -14,20 +14,15 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
-import net.minecraft.world.chunk.IChunkGenerator;
+import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraftforge.event.terraingen.InitNoiseGensEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
 
-import com.mraof.minestuck.block.BlockChessTile;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.entity.carapacian.EntityBlackBishop;
-import com.mraof.minestuck.entity.carapacian.EntityBlackPawn;
-import com.mraof.minestuck.entity.carapacian.EntityBlackRook;
-import com.mraof.minestuck.entity.carapacian.EntityWhiteBishop;
-import com.mraof.minestuck.entity.carapacian.EntityWhitePawn;
-import com.mraof.minestuck.entity.carapacian.EntityWhiteRook;
-import com.mraof.minestuck.world.gen.structure.MapGenCastle;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * @author Mraof
@@ -82,7 +77,7 @@ public class ChunkProviderSkaia implements IChunkGenerator
 	}
 	
 	@Override
-	public Chunk provideChunk(int chunkX, int chunkZ) 
+	public Chunk generateChunk(int x, int z)
 	{
 		ChunkPrimer primer = new ChunkPrimer();
 		double[] generated0 = new double[256];
@@ -90,25 +85,25 @@ public class ChunkProviderSkaia implements IChunkGenerator
 		double[] generated2 = new double[256];
 		int[] topBlock = new int[256];
 
-		generated0 = this.noiseGen1.generateNoiseOctaves(generated0, chunkX*16, 10, chunkZ*16, 16, 1, 16, .1, 0, .1);
-		generated1 = this.noiseGen5.generateNoiseOctaves(generated1, chunkX*16, 10, chunkZ*16, 16, 1, 16, .04, 0, .04);
-		generated2 = this.noiseGen2.generateNoiseOctaves(generated2, chunkX*16, 10, chunkZ*16, 16, 1, 16, .01, 0, .01);
+		generated0 = this.noiseGen1.generateNoiseOctaves(generated0, x*16, 10, z*16, 16, 1, 16, .1, 0, .1);
+		generated1 = this.noiseGen5.generateNoiseOctaves(generated1, x*16, 10, z*16, 16, 1, 16, .04, 0, .04);
+		generated2 = this.noiseGen2.generateNoiseOctaves(generated2, x*16, 10, z*16, 16, 1, 16, .01, 0, .01);
 		for(int i = 0; i < 256; i++)
 		{
 			int y = (int)(128 + generated0[i] + generated1[i] + generated2[i]);
 			topBlock[i] = (y&511)<=255  ? y&255 : 255 - y&255;
 		}
-		byte chessTileMetadata = (byte) ((Math.abs(chunkX) + Math.abs(chunkZ)) % 2);
+		byte chessTileMetadata = (byte) ((Math.abs(x) + Math.abs(z)) % 2);
 		IBlockState block = MinestuckBlocks.chessTile.getDefaultState().withProperty(BlockChessTile.BLOCK_TYPE, BlockChessTile.BlockType.values()[chessTileMetadata]);
-		for(int x = 0; x < 16; x++)
-			for(int z = 0; z < 16; z++)
-				for(int y = 0; y <= topBlock[x * 16 + z]; y++)
+		for(int posX = 0; posX < 16; posX++)
+			for(int posZ = 0; posZ < 16; posZ++)
+				for(int posY = 0; posY <= topBlock[posX * 16 + posZ]; posY++)
 				{
-					primer.setBlockState(x, y, z, block);
+					primer.setBlockState(posX, posY, posZ, block);
 				}
 		//y * 256, z * 16, x
-		Chunk chunk = new Chunk(this.skaiaWorld, primer, chunkX, chunkZ);
-//		this.castleGenerator.generate(skaiaWorld, chunkX, chunkZ, primer);
+		Chunk chunk = new Chunk(this.skaiaWorld, primer, x, z);
+//		this.castleGenerator.generate(skaiaWorld, x, z, primer);
 		chunk.generateSkylightMap();
 		return chunk;
 	}
@@ -132,10 +127,17 @@ public class ChunkProviderSkaia implements IChunkGenerator
 		return (creatureType == EnumCreatureType.MONSTER || creatureType == EnumCreatureType.CREATURE) ? (pos.getX() < 0 ? this.spawnableBlackList : this.spawnableWhiteList) : null;
 	}
 	
+	@Nullable
 	@Override
-	public BlockPos getStrongholdGen(World worldIn, String structureName, BlockPos position, boolean p_180513_4_)
+	public BlockPos getNearestStructurePos(World worldIn, String structureName, BlockPos position, boolean findUnexplored)
 	{
 		return null;
+	}
+	
+	@Override
+	public boolean isInsideStructure(World worldIn, String structureName, BlockPos pos)
+	{
+		return false;
 	}
 	
 	@Override

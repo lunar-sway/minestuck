@@ -33,7 +33,7 @@ public class EntityBigPart extends EntityLivingBase implements IEntityAdditional
     {
         this(worldIn);
         this.group = group;
-        this.setSize((float) size.xCoord, (float) size.yCoord);
+        this.setSize((float) size.x, (float) size.y);
     }
 
     void setPartId(int id)

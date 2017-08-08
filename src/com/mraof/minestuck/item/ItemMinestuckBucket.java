@@ -1,8 +1,6 @@
 package com.mraof.minestuck.item;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.mraof.minestuck.Minestuck;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -10,23 +8,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.mraof.minestuck.Minestuck;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemMinestuckBucket extends ItemBucket	//Unsure if anything more should update for 1.9
 {
@@ -113,11 +104,10 @@ public class ItemMinestuckBucket extends ItemBucket	//Unsure if anything more sh
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems)
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
 	{
 		for(int id = 0; id < fillFluids.size(); id++)
-			subItems.add(new ItemStack(this, 1, id));
+			items.add(new ItemStack(this, 1, id));
 	}
 	
 	@Override

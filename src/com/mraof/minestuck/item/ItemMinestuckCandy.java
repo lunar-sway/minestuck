@@ -2,14 +2,10 @@ package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.GristType;
-
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemMinestuckCandy extends ItemFood
 {
@@ -67,10 +63,9 @@ public class ItemMinestuckCandy extends ItemFood
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems)
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
 	{
 		for(int i = 0; i < 22; i++)
-			subItems.add(new ItemStack(itemIn, 1, i));
+			items.add(new ItemStack(this, 1, i));
 	}
 }

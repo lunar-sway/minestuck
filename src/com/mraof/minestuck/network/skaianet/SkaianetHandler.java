@@ -1,13 +1,15 @@
 package com.mraof.minestuck.network.skaianet;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.TreeMap;
-
+import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckPacket;
+import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,17 +24,8 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.editmode.ServerEditHandler;
-import com.mraof.minestuck.network.MinestuckChannelHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
-import com.mraof.minestuck.tileentity.TileEntityComputer;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.MinestuckAchievementHandler;
-import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * This class handles server sided stuff about the sburb connection network.
@@ -441,7 +434,7 @@ public class SkaianetHandler {
 		for(SburbConnection c : connections)
 			if(c.isActive && (c.getClientIdentifier().equals(player) || c.getServerIdentifier().equals(player)))
 			{
-				playerMP.addStat(MinestuckAchievementHandler.setupConnection);
+				//playerMP.addStat(MinestuckAchievementHandler.setupConnection);
 				break;
 			}
 		for(PlayerIdentifier i : iden)
@@ -599,7 +592,7 @@ public class SkaianetHandler {
 	{
 		if(data == null)
 			return null;
-		World world = FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(data.dimension);
+		World world = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(data.dimension);
 		if(world == null)
 			return null;
 		TileEntity te = world.getTileEntity(new BlockPos(data.x, data.y, data.z));

@@ -1,7 +1,7 @@
 package com.mraof.minestuck.block;
 
-import java.util.Random;
-
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
@@ -15,11 +15,8 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.item.MinestuckItems;
+import java.util.Random;
 
 public class BlockCruxiteOre extends Block 
 {
@@ -112,10 +109,9 @@ public class BlockCruxiteOre extends Block
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list)
+	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items)
 	{
 		for(int i = 0; i < 5; i++)
-			list.add(new ItemStack(itemIn, 1, i));
+			items.add(new ItemStack(this, 1, i));
 	}
 }

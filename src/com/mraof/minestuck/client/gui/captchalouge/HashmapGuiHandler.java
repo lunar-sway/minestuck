@@ -1,18 +1,17 @@
 package com.mraof.minestuck.client.gui.captchalouge;
 
-import java.io.IOException;
-
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.inventory.captchalouge.HashmapModus;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+
+import java.io.IOException;
 
 public class HashmapGuiHandler extends SylladexGuiHandler
 {
@@ -38,8 +37,8 @@ public class HashmapGuiHandler extends SylladexGuiHandler
 	@Override
 	public void drawScreen(int xcor, int ycor, float f)
 	{
-		guiButton.xPosition = (width - GUI_WIDTH)/2 + 15;
-		guiButton.yPosition = (height - GUI_HEIGHT)/2 + 175;
+		guiButton.x = (width - GUI_WIDTH)/2 + 15;
+		guiButton.y = (height - GUI_HEIGHT)/2 + 175;
 		boolean active = MinestuckConfig.clientHashmapChat == 0 ? modus.ejectByChat : MinestuckConfig.clientHashmapChat == 1;
 		guiButton.displayString = I18n.format(active ? "gui.ejectByChat.on" : "gui.ejectByChat.off");
 		guiButton.enabled = MinestuckConfig.clientHashmapChat == 0;
@@ -89,16 +88,16 @@ public class HashmapGuiHandler extends SylladexGuiHandler
 	public void drawGuiMap(int xcor, int ycor)
 	{
 		super.drawGuiMap(xcor, ycor);
-		int y = mapHeight/2 - CARD_HEIGHT/2 - 3 - mc.fontRendererObj.FONT_HEIGHT;
+		int y = mapHeight/2 - CARD_HEIGHT/2 - 3 - mc.fontRenderer.FONT_HEIGHT;
 		int start = Math.max(5, (mapWidth - (cards.size()*CARD_WIDTH + (cards.size() - 1)*5))/2);
 		
 		for(int i = 0; i < cards.size(); i++)
 		{
 			String s = String.valueOf(i);
-			int width = mc.fontRendererObj.getStringWidth(s);
+			int width = mc.fontRenderer.getStringWidth(s);
 			int x = start + i*(CARD_WIDTH + 5) + CARD_WIDTH/2 - mapX - width/2;
 			if(x + width > 0 && x < mapWidth)
-				mc.fontRendererObj.drawString(s, x, y, 0x000000);
+				mc.fontRenderer.drawString(s, x, y, 0x000000);
 		}
 	}
 	

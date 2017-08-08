@@ -1,23 +1,17 @@
 package com.mraof.minestuck.util;
 
+import com.mraof.minestuck.world.WorldProviderLands;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.stats.Achievement;
-import net.minecraft.stats.AchievementList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.item.ItemCruxiteArtifact;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.world.WorldProviderLands;
+//import net.minecraft.stats.Achievement;
+//import net.minecraft.stats.AchievementList;
+//import net.minecraftforge.common.AchievementPage;
 
 public class MinestuckAchievementHandler {
 	
@@ -25,7 +19,7 @@ public class MinestuckAchievementHandler {
 	
 	public static int idOffset;
 	
-	public static AchievementPage achievementPage;
+	/*public static AchievementPage achievementPage;
 	
 	public static Achievement getHammer;
 	public static Achievement mineCruxite;
@@ -38,11 +32,11 @@ public class MinestuckAchievementHandler {
 	public static Achievement killGiclops;
 	public static Achievement broBlade;
 	public static Achievement returnNode;
-	public static Achievement dungeon;
+	public static Achievement dungeon;*/
 	
 	public static void prepareAchievementPage()
 	{
-		achievementPage = new AchievementPage("Minestuck");
+		/*achievementPage = new AchievementPage("Minestuck");
 		AchievementPage.registerAchievementPage(achievementPage);
 		getHammer = (Achievement) (new Achievement("achievement.getHammer", "getHammer", 0, -2, MinestuckItems.clawHammer, AchievementList.BUILD_WORK_BENCH)).registerStat();
 		achievementPage.getAchievements().add(getHammer);
@@ -67,12 +61,12 @@ public class MinestuckAchievementHandler {
 		returnNode = (Achievement) new Achievement("achievement.returnNode", "returnNode", 4, 0, Items.BED, enterMedium).registerStat();
 		achievementPage.getAchievements().add(returnNode);
 		dungeon = (Achievement) new Achievement("achievement.findDungeon", "findDungeon", 4, 2, new ItemStack(MinestuckBlocks.stone, 1, 4), enterMedium).registerStat();
-		achievementPage.getAchievements().add(dungeon);
+		achievementPage.getAchievements().add(dungeon);*/
 	}
 	
 	public static void onAlchemizedItem(ItemStack stack, EntityPlayer player)
 	{
-		if(!(stack.getItem() instanceof ItemCruxiteArtifact))
+		/*if(!(stack.getItem() instanceof ItemCruxiteArtifact))
 		{
 			player.addStat(alchemy);
 			Echeladder e = MinestuckPlayerData.getData(player).echeladder;
@@ -81,7 +75,7 @@ public class MinestuckAchievementHandler {
 		if(stack.getItem().equals(MinestuckItems.clawHammer))
 			player.addStat(getHammer);
 		if(stack.getItem().equals(MinestuckItems.unbreakableKatana))
-			player.addStat(broBlade);
+			player.addStat(broBlade);*/
 		GristSet set = GristRegistry.getGristConversion(stack);
 		if(set != null) //The only time the grist set should be null here is if it was a captchalouge card that was alchemized
 		{
@@ -105,9 +99,9 @@ public class MinestuckAchievementHandler {
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public void onItemPickupEvent(EntityItemPickupEvent event)
 	{
-		Item item = event.getItem().getEntityItem().getItem();
+		/*Item item = event.getItem().getEntityItem().getItem();
 		if(item.equals(MinestuckItems.rawCruxite))
-			event.getEntityPlayer().addStat(mineCruxite);
+			event.getEntityPlayer().addStat(mineCruxite);*/
 	}
 	
 	@SubscribeEvent
@@ -118,8 +112,8 @@ public class MinestuckAchievementHandler {
 			if(event.player.world.provider instanceof WorldProviderLands)
 			{
 				WorldProviderLands provider = (WorldProviderLands) event.player.world.provider;
-				if(provider.chunkProvider.structureHandler.isInsideDungeon(new BlockPos(event.player)))
-					event.player.addStat(dungeon);
+				//if(provider.chunkProvider.structureHandler.isInsideDungeon(new BlockPos(event.player)))
+				//	event.player.addStat(dungeon);
 			}
 		}
 	}

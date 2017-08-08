@@ -33,7 +33,7 @@ public class PartGroup
         Vec3d offset = new Vec3d(xOffset, yOffset, zOffset);
         Vec3d max = offset.addVector(xSize, ySize, zSize);
         //I know AxisAlignedBB has a constructor for two Vec3d but that doesn't work on dedicated servers
-        boxes.add(new AxisAlignedBB(offset.xCoord, offset.yCoord, offset.zCoord, max.xCoord, max.yCoord, max.zCoord));
+        boxes.add(new AxisAlignedBB(offset.x, offset.y, offset.z, max.x, max.y, max.z));
         for(int x = 0; x < xSize; x++)
         {
             positions.add(offset.addVector(x + 0.5, 0, 0.5));
@@ -57,7 +57,7 @@ public class PartGroup
         {
             EntityBigPart part = new EntityBigPart(world, this, sizes.get(i));
             Vec3d position = positions.get(i);
-            part.setPosition(parent.posX + position.xCoord, parent.posY + position.yCoord, parent.posZ + position.zCoord);
+            part.setPosition(parent.posX + position.x, parent.posY + position.y, parent.posZ + position.z);
             part.setPartId(parts.size());
             parts.add(part);
             world.spawnEntity(part);
@@ -75,43 +75,43 @@ public class PartGroup
         {
             EntityBigPart part = parts.get(i);
             Vec3d position = positions.get(i).rotateYaw(yaw);
-            part.setPosition(parent.posX + position.xCoord, parent.posY + position.yCoord, parent.posZ + position.zCoord);
+            part.setPosition(parent.posX + position.x, parent.posY + position.y, parent.posZ + position.z);
             part.isDead = parent.isDead;
         }
     }
 
     public void applyCollision(Entity entity)
     {
-        parent.world.theProfiler.startSection("partGroupCollision");
+        parent.world.profiler.startSection("partGroupCollision");
         float yaw = -parent.renderYawOffset * 3.141592f / 180f;
         boolean positionChanged = false;
         Vec3d position = new Vec3d(entity.posX - parent.posX, entity.posY - parent.posY, entity.posZ - parent.posZ).rotateYaw(yaw);
         for (AxisAlignedBB box : boxes)
         {
-            AxisAlignedBB relativeBox = new AxisAlignedBB(position.xCoord, position.yCoord, position.zCoord, entity.width, entity.height, entity.width);
-            if(box.intersectsWith(relativeBox))
+            AxisAlignedBB relativeBox = new AxisAlignedBB(position.x, position.y, position.z, entity.width, entity.height, entity.width);
+            if(box.intersects(relativeBox))
             {
                 positionChanged = true;
                 double centerX = box.maxX / 2 + box.minX;
                 double centerZ = box.maxZ / 2 + box.minZ;
-                double differenceX = position.xCoord - centerX;
-                double differenceZ = position.zCoord - centerZ;
+                double differenceX = position.x - centerX;
+                double differenceZ = position.z - centerZ;
                 if(Math.abs(differenceX) > Math.abs(differenceZ))
                 {
-                    position = new Vec3d(position.xCoord, position.yCoord, differenceZ > 0 ? box.maxZ : box.minZ);
+                    position = new Vec3d(position.x, position.y, differenceZ > 0 ? box.maxZ : box.minZ);
                 }
                 else
                 {
-                    position = new Vec3d(differenceX > 0 ? box.maxX : box.minX, position.yCoord, position.zCoord);
+                    position = new Vec3d(differenceX > 0 ? box.maxX : box.minX, position.y, position.z);
                 }
             }
             if(positionChanged)
             {
                 position = position.rotateYaw(-yaw);
-                entity.move(MoverType.SELF, position.xCoord + parent.posX, position.yCoord + parent.posY, position.zCoord + parent.posZ);	//TODO change to velocity, or lookup MoverType?
+                entity.move(MoverType.SELF, position.x + parent.posX, position.y + parent.posY, position.z + parent.posZ);	//TODO change to velocity, or lookup MoverType?
             }
         }
-        parent.world.theProfiler.endSection();
+        parent.world.profiler.endSection();
     }
 
     boolean attackFrom(DamageSource damageSource, float amount)

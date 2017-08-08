@@ -1,9 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-
+import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.util.ComputerProgram;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -14,8 +12,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.mraof.minestuck.tileentity.TileEntityComputer;
-import com.mraof.minestuck.util.ComputerProgram;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 @SideOnly(Side.CLIENT)
 public class GuiComputer extends GuiScreen
@@ -38,7 +37,7 @@ public class GuiComputer extends GuiScreen
 		super();
 		
 		this.mc = mc;
-		this.fontRendererObj = mc.fontRendererObj;
+		this.fontRenderer = mc.fontRenderer;
 		this.te = te;
 		te.gui = this;
 	}
@@ -59,7 +58,7 @@ public class GuiComputer extends GuiScreen
 			this.mc.getTextureManager().bindTexture(guiBackground);
 			int yOffset = (this.height / 2) - (ySize / 2);
 			this.drawTexturedModalRect((this.width / 2) - (xSize / 2), yOffset, 0, 0, xSize, ySize);
-			fontRendererObj.drawString("Insert disk.", (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
+			fontRenderer.drawString("Insert disk.", (width - xSize) / 2 +15, (height - ySize) / 2 +45, 4210752);
 		}
 		GlStateManager.disableRescaleNormal();
 		RenderHelper.disableStandardItemLighting();
