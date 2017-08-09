@@ -40,45 +40,45 @@ public class ConsortDialogue
 	public static void init()
 	{
 		
-//		addMessage(LandAspectRegistry.fromNameTitle("wind"), "dadWind");
-//		addMessage(LandAspectRegistry.fromNameTitle("pulse"), "koolaid");
-//		addMessage(LandAspectRegistry.fromNameTitle("pulse"), "murderRain");
-//		addMessage(LandAspectRegistry.fromNameTitle("thunder"), "skeletonHorse");
-//		addMessage(LandAspectRegistry.fromNameTitle("thunder"), "blueMoon");
-//		addMessage(LandAspectRegistry.fromNameTitle("rabbits"), "bunnyBirthday");
-//		addMessage(LandAspectRegistry.fromNameTitle("rabbits"), "rabbitEating");
-//		addMessage(null, Sets.newHashSet(LandAspectRegistry.fromNameTitle("monsters").getVariations()), null, null,
-//				new SingleMessage("petZombie"));
-//		addMessage(LandAspectRegistry.fromNameTitle("monsters"), "spiderRaid");
-//		addMessage(LandAspectRegistry.fromNameTitle("towers"), "bugTreasure");
-//		addMessage(LandAspectRegistry.fromNameTitle("towers"), "towerGone");
-//		addMessage(LandAspectRegistry.fromNameTitle("thought"), "glassBooks");
-//		addMessage(LandAspectRegistry.fromNameTitle("thought"), "bookFood");
-//		addMessage(LandAspectRegistry.fromNameTitle("cake"), "cakeRecipe");
-//		addMessage(LandAspectRegistry.fromNameTitle("cake"), "cakeRegen");
-//		addMessage(LandAspectRegistry.fromNameTitle("clockwork"), "gearTechnology");
-//		addMessage(LandAspectRegistry.fromNameTitle("clockwork"), "evilGears");
-//		addMessage(LandAspectRegistry.frogAspect, "frogCreation");
-//		addMessage(LandAspectRegistry.frogAspect, "frogImitation");
-//		addMessage(LandAspectRegistry.fromNameTitle("light"), "blindness");
-//		addMessage(LandAspectRegistry.fromNameTitle("light"), "doctorsInside");
-//		addMessage(LandAspectRegistry.fromNameTitle("silence"), "murderSilence");
-//		addMessage(LandAspectRegistry.fromNameTitle("silence"), "silentUnderlings");
-//		
-//		addMessage(true, "denizenMention");
-//		addMessage(true, "floatingIsland");
-//		addMessage("ringFishing");
-//		addMessage("frogWalk");
-//		addMessage("deliciousHair");
-//		//		addMessage("village"); Did not work as intended
-//		addMessage(LandAspectRegistry.fromNameTerrain("shade"), "lazyKing");
-//		addMessage("musicInvention");
+		addMessage(LandAspectRegistry.fromNameTitle("wind"), "dadWind");
+		addMessage(LandAspectRegistry.fromNameTitle("pulse"), "koolaid");
+		addMessage(LandAspectRegistry.fromNameTitle("pulse"), "murderRain");
+		addMessage(LandAspectRegistry.fromNameTitle("thunder"), "skeletonHorse");
+		addMessage(LandAspectRegistry.fromNameTitle("thunder"), "blueMoon");
+		addMessage(LandAspectRegistry.fromNameTitle("rabbits"), "bunnyBirthday");
+		addMessage(LandAspectRegistry.fromNameTitle("rabbits"), "rabbitEating");
+		addMessage(null, Sets.newHashSet(LandAspectRegistry.fromNameTitle("monsters").getVariations()), null, null,
+				new SingleMessage("petZombie"));
+		addMessage(LandAspectRegistry.fromNameTitle("monsters"), "spiderRaid");
+		addMessage(LandAspectRegistry.fromNameTitle("towers"), "bugTreasure");
+		addMessage(LandAspectRegistry.fromNameTitle("towers"), "towerGone");
+		addMessage(LandAspectRegistry.fromNameTitle("thought"), "glassBooks");
+		addMessage(LandAspectRegistry.fromNameTitle("thought"), "bookFood");
+		addMessage(LandAspectRegistry.fromNameTitle("cake"), "cakeRecipe");
+		addMessage(LandAspectRegistry.fromNameTitle("cake"), "cakeRegen");
+		addMessage(LandAspectRegistry.fromNameTitle("clockwork"), "gearTechnology");
+		addMessage(LandAspectRegistry.fromNameTitle("clockwork"), "evilGears");
+		addMessage(LandAspectRegistry.frogAspect, "frogCreation");
+		addMessage(LandAspectRegistry.frogAspect, "frogImitation");
+		addMessage(LandAspectRegistry.fromNameTitle("light"), "blindness");
+		addMessage(LandAspectRegistry.fromNameTitle("light"), "doctorsInside");
+		addMessage(LandAspectRegistry.fromNameTitle("silence"), "murderSilence");
+		addMessage(LandAspectRegistry.fromNameTitle("silence"), "silentUnderlings");
+		
+		addMessage(true, "denizenMention");
+		addMessage(true, "floatingIsland");
+		addMessage("ringFishing");
+		addMessage("frogWalk");
+		addMessage("deliciousHair");
+		//		addMessage("village"); Did not work as intended
+		addMessage(LandAspectRegistry.fromNameTerrain("shade"), "lazyKing");
+		addMessage("musicInvention");
 		
 		addMessage(
 			new ChoiceMessage
 			(
 				false,
-				new SingleMessage("rapBattle", "rap battle"),
+				new SingleMessage("rapBattle"),
 				new SingleMessage[]
 				{
 					new SingleMessage("rapBattle.accept"),
@@ -115,14 +115,11 @@ public class ConsortDialogue
 							false,
 							new DescriptiveMessage("rapBattle.A4"),
 							new SingleMessage[] {
-									new SingleMessage("rapBattleSchool"),
+									new DescriptionMessage("rapBattleSchool", "playerTitle", "landName"),
 									new SingleMessage("rapBattleConcede")
 							},
 							new MessageType[] {
-								new DoubleMessage(
-									new DescriptiveMessage("rapBattleSchool", "playerTitle", "landName"),
-									new SingleMessage("rapBattleSchool.final", "consortSound")
-								),
+								new SingleMessage("rapBattleSchool.final", "consortSound"),
 								new SingleMessage("rapBattleConcede.final", "consortSound")
 							}
 						)
@@ -134,78 +131,78 @@ public class ConsortDialogue
 		);
 		
 		
-//		addMessage(true, "awaitHero", "landName", "consortTypes", "playerTitleLand");
-//		addMessage(true, "watchSkaia");
-//		addMessage(LandAspectRegistry.fromNameTerrain("shade"),
-//				new ChainMessage(2, new SingleMessage("mushFarm1"), new SingleMessage("mushFarm2"), new SingleMessage("mushFarm3"),
-//						new SingleMessage("mushFarm4"), new SingleMessage("mushFarm5"), new SingleMessage("mushFarm6"),
-//						new SingleMessage("mushFarm7")));
-//		addMessage(true, null, null, new ChoiceMessage(true, new SingleMessage("titlePresence", "playerTitle"),
-//				new SingleMessage[] { new SingleMessage("titlePresence.iam", "playerTitle"), new SingleMessage("titlePresence.agree") },
-//				new MessageType[] { new SingleMessage("titlePresence.iamAnswer"), new SingleMessage("thanks") }));
-//		
-//		addMessage(false, EnumConsort.MerchantType.SHADY, new ChoiceMessage(new DescriptionMessage("shadyOffer"),
-//				new SingleMessage[]
-//						{
-//								new SingleMessage("shadyOffer.buy"),
-//								new SingleMessage("shadyOffer.deny")
-//						},
-//				new MessageType[] {
-//						new PurchaseMessage(false, AlchemyRecipeHandler.CONSORT_JUNK_REWARD, 1000, "purchase",
-//								new ChainMessage(1,
-//										new SingleMessage("shadyOffer.item"),
-//										new SingleMessage("shadyOffer.purchase")
-//								)
-//						),
-//						new ChoiceMessage(new SingleMessage("shadyOffer.next", "consortSound"),
-//								new SingleMessage[]
-//								{
-//										new SingleMessage("shadyOffer.denyAgain"),
-//										new SingleMessage("shadyOffer.buy2")
-//								},
-//								new MessageType[]
-//								{
-//										new SingleMessage("dots"),
-//										new PurchaseMessage(false, AlchemyRecipeHandler.CONSORT_JUNK_REWARD, 500, "purchase",
-//												new SingleMessage("shadyOffer.purchase")
-//										)
-//								}
-//						)
-//				}
-//		));
-//		
-//		addMessage(true, null, null, new ChoiceMessage(true, new SingleMessage("denizen", "denizen"),
-//				new SingleMessage[] { new SingleMessage("denizen.what"), new SingleMessage("denizen.askAlignment") },
-//				new MessageType[] { new SingleMessage("denizen.explain", "playerClassLand"), new SingleMessage("denizen.alignment") }));
-//		
-//		List<ItemStack> hungryList = ImmutableList.of(new ItemStack(Items.COOKIE), new ItemStack(MinestuckItems.bugOnAStick),
-//				new ItemStack(MinestuckItems.grasshopper), new ItemStack(MinestuckItems.chocolateBeetle),
-//				new ItemStack(MinestuckItems.coneOfFlies));
-//		addMessage((EnumSet<EnumConsort>) null,
-//				new ItemRequirement(hungryList, false, true, new SingleMessage("hungry"),
-//						new ChoiceMessage(new SingleMessage("hungry.askFood", "nbtItem:hungry.item"),
-//								new SingleMessage[] { new SingleMessage("hungry.accept"), new SingleMessage("hungry.deny") },
-//								new MessageType[] { new GiveItemMessage("hungry.item", 0, new SingleMessage("hungry.thanks")),
-//										new SingleMessage("sadface") })));
-//		addMessage((EnumSet<EnumConsort>) null,
-//				new ItemRequirement("hungry2", hungryList, false, true, false,
-//						new SingleMessage(
-//								"hungry"),
-//						new ChoiceMessage(
-//								new SingleMessage("hungry.askFood",
-//										"nbtItem:hungry2.item"),
-//								new SingleMessage[] {
-//										new SingleMessage(
-//												"hungry.accept"),
-//										new SingleMessage("hungry.deny") },
-//								new MessageType[] { new GiveItemMessage("hungry2.item", 0, new SingleMessage("hungry.thanks")),
-//										new ChoiceMessage(new SingleMessage("hungry.starving"),
-//												new SingleMessage[] { new SingleMessage("hungry.agree"),
-//														new SingleMessage("hungry.tooCheap") },
-//												new MessageType[] { new GiveItemMessage("hungry.sellItem", "hungry2.item", 10,
-//														new ChainMessage(1, new DescriptionMessage("hungry.finally", "nbtItem:hungry2.item"),
-//																new SingleMessage("hungry.finally"))),
-//														new SingleMessage("hungry.end") }) })));
+		addMessage(true, "awaitHero", "landName", "consortTypes", "playerTitleLand");
+		addMessage(true, "watchSkaia");
+		addMessage(LandAspectRegistry.fromNameTerrain("shade"),
+				new ChainMessage(2, new SingleMessage("mushFarm1"), new SingleMessage("mushFarm2"), new SingleMessage("mushFarm3"),
+						new SingleMessage("mushFarm4"), new SingleMessage("mushFarm5"), new SingleMessage("mushFarm6"),
+						new SingleMessage("mushFarm7")));
+		addMessage(true, null, null, new ChoiceMessage(true, new SingleMessage("titlePresence", "playerTitle"),
+				new SingleMessage[] { new SingleMessage("titlePresence.iam", "playerTitle"), new SingleMessage("titlePresence.agree") },
+				new MessageType[] { new SingleMessage("titlePresence.iamAnswer"), new SingleMessage("thanks") }));
+		
+		addMessage(false, EnumConsort.MerchantType.SHADY, new ChoiceMessage(new DescriptionMessage("shadyOffer"),
+				new SingleMessage[]
+						{
+								new SingleMessage("shadyOffer.buy"),
+								new SingleMessage("shadyOffer.deny")
+						},
+				new MessageType[] {
+						new PurchaseMessage(false, AlchemyRecipeHandler.CONSORT_JUNK_REWARD, 1000, "purchase",
+								new ChainMessage(1,
+										new SingleMessage("shadyOffer.item"),
+										new SingleMessage("shadyOffer.purchase")
+								)
+						),
+						new ChoiceMessage(new SingleMessage("shadyOffer.next", "consortSound"),
+								new SingleMessage[]
+								{
+										new SingleMessage("shadyOffer.denyAgain"),
+										new SingleMessage("shadyOffer.buy2")
+								},
+								new MessageType[]
+								{
+										new SingleMessage("dots"),
+										new PurchaseMessage(false, AlchemyRecipeHandler.CONSORT_JUNK_REWARD, 500, "purchase",
+												new SingleMessage("shadyOffer.purchase")
+										)
+								}
+						)
+				}
+		));
+		
+		addMessage(true, null, null, new ChoiceMessage(true, new SingleMessage("denizen", "denizen"),
+				new SingleMessage[] { new SingleMessage("denizen.what"), new SingleMessage("denizen.askAlignment") },
+				new MessageType[] { new SingleMessage("denizen.explain", "playerClassLand"), new SingleMessage("denizen.alignment") }));
+		
+		List<ItemStack> hungryList = ImmutableList.of(new ItemStack(Items.COOKIE), new ItemStack(MinestuckItems.bugOnAStick),
+				new ItemStack(MinestuckItems.grasshopper), new ItemStack(MinestuckItems.chocolateBeetle),
+				new ItemStack(MinestuckItems.coneOfFlies));
+		addMessage((EnumSet<EnumConsort>) null,
+				new ItemRequirement(hungryList, false, true, new SingleMessage("hungry"),
+						new ChoiceMessage(new SingleMessage("hungry.askFood", "nbtItem:hungry.item"),
+								new SingleMessage[] { new SingleMessage("hungry.accept"), new SingleMessage("hungry.deny") },
+								new MessageType[] { new GiveItemMessage("hungry.item", 0, new SingleMessage("hungry.thanks")),
+										new SingleMessage("sadface") })));
+		addMessage((EnumSet<EnumConsort>) null,
+				new ItemRequirement("hungry2", hungryList, false, true, false,
+						new SingleMessage(
+								"hungry"),
+						new ChoiceMessage(
+								new SingleMessage("hungry.askFood",
+										"nbtItem:hungry2.item"),
+								new SingleMessage[] {
+										new SingleMessage(
+												"hungry.accept"),
+										new SingleMessage("hungry.deny") },
+								new MessageType[] { new GiveItemMessage("hungry2.item", 0, new SingleMessage("hungry.thanks")),
+										new ChoiceMessage(new SingleMessage("hungry.starving"),
+												new SingleMessage[] { new SingleMessage("hungry.agree"),
+														new SingleMessage("hungry.tooCheap") },
+												new MessageType[] { new GiveItemMessage("hungry.sellItem", "hungry2.item", 10,
+														new ChainMessage(1, new DescriptionMessage("hungry.finally", "nbtItem:hungry2.item"),
+																new SingleMessage("hungry.finally"))),
+														new SingleMessage("hungry.end") }) })));
 	}
 	
 	public static void addMessage(MessageType message, String... args)

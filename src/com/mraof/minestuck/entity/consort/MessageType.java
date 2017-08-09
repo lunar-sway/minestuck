@@ -37,7 +37,6 @@ import java.util.Random;
  */
 public abstract class MessageType
 {
-	
 	public abstract String getString();
 	
 	public abstract ITextComponent getMessage(EntityConsort consort, EntityPlayer player, String chainIdentifier);
@@ -235,7 +234,6 @@ public abstract class MessageType
 	
 	public static class DescriptionMessage extends SingleMessage
 	{
-		
 		public DescriptionMessage(String message, String... args)
 		{
 			super(message, args);
@@ -257,7 +255,6 @@ public abstract class MessageType
 	 *  An example of when this would be used is when a Consort is introduced with narration rather than a quote, 
 	 *  like "This consort is silent and aloof. What do you do?"
 	 */
-	
 	public static class DescriptiveMessage extends SingleMessage
 	{
 		public DescriptiveMessage(String message, String... args)
@@ -274,6 +271,12 @@ public abstract class MessageType
 			ITextComponent message = new TextComponentString("");
 			message.appendSibling(desc);
 			return message;
+		}
+		
+		@Override
+		public String getString()
+		{
+			return unlocalizedMessage + ".desc";
 		}
 	}
 	
@@ -491,9 +494,19 @@ public abstract class MessageType
 							if(!repeat)
 								nbt.setInteger(this.getString(), index);
 							
-							player.sendMessage(new TextComponentTranslation("chat.type.text", player.getDisplayName(),
-									createMessage(consort, player, options[index].unlocalizedMessage + ".reply",
-											options[index].args, false)));
+							ITextComponent innerMessage = createMessage(consort, player, options[index].unlocalizedMessage + ".reply", options[index].args, false);
+							
+							if(options[index] instanceof DescriptionMessage)
+							{
+								innerMessage.appendText("\n");
+								ITextComponent desc = createMessage(consort, player, options[index].unlocalizedMessage + ".reply.desc", options[index].args, false);
+								desc.getStyle().setItalic(true).setColor(TextFormatting.GRAY);
+								innerMessage.appendSibling(desc);
+							}
+							
+							ITextComponent out = new TextComponentTranslation("chat.type.text", player.getDisplayName(), innerMessage);
+							
+							player.sendMessage(out);
 						}
 						
 						return text;
@@ -512,7 +525,6 @@ public abstract class MessageType
 			
 			return null;
 		}
-		
 	}
 	
 	public static class PurchaseMessage extends MessageType
