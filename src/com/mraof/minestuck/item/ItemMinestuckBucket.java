@@ -1,6 +1,5 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.Minestuck;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -27,7 +26,7 @@ public class ItemMinestuckBucket extends ItemBucket	//Unsure if anything more sh
 	{
 		super(Blocks.AIR);
 		setUnlocalizedName("minestuckBucket");
-		setCreativeTab(Minestuck.tabMinestuck);
+		setCreativeTab(MinestuckItems.tabMinestuck);
 	}
 	
 	@Override

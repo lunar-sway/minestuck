@@ -1,9 +1,6 @@
 package com.mraof.minestuck.block;
 
-import java.util.Random;
-
-import com.mraof.minestuck.Minestuck;
-
+import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.block.BlockTNT;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -16,6 +13,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
+import java.util.Random;
+
 public class BlockTNTSpecial extends BlockTNT
 {
 	
@@ -24,7 +23,7 @@ public class BlockTNTSpecial extends BlockTNT
 	public BlockTNTSpecial(boolean primed, boolean unstable, boolean instant)
 	{
 		super();
-		setCreativeTab(Minestuck.tabMinestuck);
+		setCreativeTab(MinestuckItems.tabMinestuck);
 		setHardness(0.0F);
 		setSoundType(SoundType.PLANT);
 		this.primed = primed;

@@ -50,7 +50,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 	
 	public ItemCruxiteArtifact() 
 	{
-		this.setCreativeTab(Minestuck.tabMinestuck);
+		this.setCreativeTab(MinestuckItems.tabMinestuck);
 		setUnlocalizedName("cruxiteArtifact");
 		this.maxStackSize = 1;
 		setHasSubtypes(true);

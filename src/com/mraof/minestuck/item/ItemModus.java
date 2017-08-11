@@ -1,6 +1,5 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.Minestuck;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -9,20 +8,20 @@ import net.minecraft.util.NonNullList;
 public class ItemModus extends Item
 {
 	
-	public String[] modusNames = {"stack", "queue", "queuestack", "tree", "hashmap", "set"};
+	public static final String[] NAMES = {"stack", "queue", "queuestack", "tree", "hashmap", "set"};
 	
 	public ItemModus()
 	{
 		this.maxStackSize = 1;
 		this.setHasSubtypes(true);
-		this.setCreativeTab(Minestuck.tabMinestuck);
+		this.setCreativeTab(MinestuckItems.tabMinestuck);
 		this.setUnlocalizedName("modusCard");
 	}
 	
 	@Override
 	public String getUnlocalizedName(ItemStack stack)
 	{
-		return getUnlocalizedName()+"."+modusNames[stack.getItemDamage()];
+		return getUnlocalizedName()+"."+ NAMES[stack.getItemDamage()];
 	}
 	
 	@Override

@@ -1,6 +1,5 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.Minestuck;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -16,7 +15,7 @@ public class ItemDisk extends Item
 		super();
 		this.maxStackSize = 1;
 		this.setHasSubtypes(true);
-		this.setCreativeTab(Minestuck.tabMinestuck);
+		this.setCreativeTab(MinestuckItems.tabMinestuck);
 		this.setUnlocalizedName("disk");
 	}
 	

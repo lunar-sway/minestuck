@@ -2,7 +2,6 @@ package com.mraof.minestuck.item.weapon;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.Pair;
 import net.minecraft.block.Block;
@@ -47,7 +46,7 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 	{
 		super(ToolMaterial.IRON);
 		this.maxStackSize = 1;
-		this.setCreativeTab(Minestuck.tabMinestuck);
+		this.setCreativeTab(MinestuckItems.tabMinestuck);
 		this.setMaxDamage(maxUses);
 		this.weaponDamage = damageVsEntity;
 		this.enchantability = enchantability;

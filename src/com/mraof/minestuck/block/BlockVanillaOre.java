@@ -1,10 +1,7 @@
 package com.mraof.minestuck.block;
 
-import java.util.Random;
-
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-
+import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -19,6 +16,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import java.util.Random;
+
 
 public class BlockVanillaOre extends Block
 {
@@ -42,7 +42,7 @@ public class BlockVanillaOre extends Block
 		oreType = type;
 		setHardness(3.0F);
 		setResistance(5.0F);	//Values normally used by ores
-		this.setCreativeTab(Minestuck.tabMinestuck);
+		this.setCreativeTab(MinestuckItems.tabMinestuck);
 	}
 	
 	@Override

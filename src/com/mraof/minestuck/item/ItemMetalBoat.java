@@ -10,7 +10,7 @@ import net.minecraft.world.World;
 public class ItemMetalBoat extends ItemCustomBoat
 {
 	
-	public String[] names = {"iron", "gold"};
+	public static final String[] NAMES = {"iron", "gold"};
 	
 	public ItemMetalBoat()
 	{
@@ -28,13 +28,13 @@ public class ItemMetalBoat extends ItemCustomBoat
 	@Override
 	public String getUnlocalizedName(ItemStack stack)
 	{
-		return super.getUnlocalizedName(stack) + "." + names[stack.getItemDamage()];
+		return super.getUnlocalizedName(stack) + "." + NAMES[stack.getItemDamage()];
 	}
 	
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
 	{
-		for(int i = 0; i < names.length; i++)
+		for(int i = 0; i < NAMES.length; i++)
 			items.add(new ItemStack(this, 1, i));
 	}
 	

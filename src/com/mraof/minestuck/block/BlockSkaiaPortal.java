@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tileentity.TileEntitySkaiaPortal;
 import com.mraof.minestuck.util.Location;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
@@ -35,7 +35,7 @@ public class BlockSkaiaPortal extends BlockContainer
 		super(material);
 		
 		setUnlocalizedName("skaiaPortal");
-		this.setCreativeTab(Minestuck.tabMinestuck);
+		this.setCreativeTab(MinestuckItems.tabMinestuck);
 	}
 	
 	@Override

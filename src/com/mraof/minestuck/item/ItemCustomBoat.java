@@ -1,6 +1,5 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.Minestuck;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.material.Material;
 import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
@@ -25,7 +24,7 @@ public abstract class ItemCustomBoat extends Item
 	public ItemCustomBoat()
 	{
 		this.maxStackSize = 1;
-		setCreativeTab(Minestuck.tabMinestuck);
+		setCreativeTab(MinestuckItems.tabMinestuck);
 		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, new BehaivorDispenseCustomBoat());
 	}
 	

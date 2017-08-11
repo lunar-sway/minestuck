@@ -1,6 +1,5 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
@@ -20,7 +19,7 @@ public class ItemDowel extends Item
 	
 	public ItemDowel()
 	{
-		this.setCreativeTab(Minestuck.tabMinestuck);
+		this.setCreativeTab(MinestuckItems.tabMinestuck);
 		this.setUnlocalizedName("dowelCruxite");
 		this.setHasSubtypes(true);
 	}

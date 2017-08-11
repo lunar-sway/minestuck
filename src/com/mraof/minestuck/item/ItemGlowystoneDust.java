@@ -1,12 +1,8 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MinestuckBlocks;
-
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
@@ -19,7 +15,7 @@ public class ItemGlowystoneDust extends Item
 {
     public ItemGlowystoneDust()
     {
-        this.setCreativeTab(Minestuck.tabMinestuck);
+        this.setCreativeTab(MinestuckItems.tabMinestuck);
     }
 
     /**

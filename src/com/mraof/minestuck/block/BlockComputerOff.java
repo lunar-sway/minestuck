@@ -1,5 +1,9 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.util.ComputerProgram;
+import com.mraof.minestuck.util.IdentifierHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
@@ -14,11 +18,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.tileentity.TileEntityComputer;
-import com.mraof.minestuck.util.ComputerProgram;
-import com.mraof.minestuck.util.IdentifierHandler;
-
 public class BlockComputerOff extends Block
 {
 	
@@ -30,7 +29,7 @@ public class BlockComputerOff extends Block
 		setUnlocalizedName("sburbComputer");
 		setHardness(4.0F);
 		setHarvestLevel("pickaxe", 0);
-		this.setCreativeTab(Minestuck.tabMinestuck);
+		this.setCreativeTab(MinestuckItems.tabMinestuck);
 		
 	}
 	

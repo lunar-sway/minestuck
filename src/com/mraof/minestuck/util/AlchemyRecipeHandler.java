@@ -505,6 +505,7 @@ public class AlchemyRecipeHandler
 	public static void registerMinestuckRecipes() {
 		
 		//set up crafting recipes
+		
 		/*RecipeSorter.register("minestuck:notmirrored", CraftingRecipes.NonMirroredRecipe.class, RecipeSorter.Category.SHAPED, "before:minecraft:shaped");
 		RecipeSorter.register("minestuck:emptycard", CraftingRecipes.EmptyCardRecipe.class, RecipeSorter.Category.SHAPED, "before:minecraft:shaped");
 		
@@ -538,8 +539,7 @@ public class AlchemyRecipeHandler
 		GameRegistry.addRecipe(new ItemStack(Blocks.PLANKS, 3, BlockPlanks.EnumType.SPRUCE.getMetadata()), new Object[] {"X", 'X', new ItemStack(woodenCactus)});
 		GameRegistry.addShapelessRecipe(new ItemStack(glowingPlanks, 4), new ItemStack(glowingLog));
 		GameRegistry.addShapelessRecipe(new ItemStack(salad,1),new Object[]{ new ItemStack(Blocks.LEAVES,1,WILDCARD_VALUE),new ItemStack(Items.BOWL)});
-		GameRegistry.addShapelessRecipe(new ItemStack(salad,1),new Object[]{ new ItemStack(Blocks.LEAVES2,1,WILDCARD_VALUE),new ItemStack(Items.BOWL)});
-		GameRegistry.addShapelessRecipe(new ItemStack(bugOnAStick, 3), jarOfBugs, Items.STICK, Items.STICK, Items.STICK);*///TODO Figure out recipe names and groups
+		GameRegistry.addShapelessRecipe(new ItemStack(salad,1),new Object[]{ new ItemStack(Blocks.LEAVES2,1,WILDCARD_VALUE),new ItemStack(Items.BOWL)});*///TODO Figure out recipe names and groups
 		GameRegistry.addSmelting(goldSeeds, new ItemStack(Items.GOLD_NUGGET), 0.1F);
 		GameRegistry.addSmelting(ironOreSandstone, new ItemStack(Items.IRON_INGOT), 0.7F);
 		GameRegistry.addSmelting(ironOreSandstoneRed, new ItemStack(Items.IRON_INGOT), 0.7F);
@@ -571,7 +571,7 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(cruxitePotion, 1), false, new GristSet());
 		
 
-		GristRegistry.addGristConversion(new ItemStack(CatClaws),false,new GristSet(new GristType[] {GristType.Build,GristType.Rust},new int[] {15,5}));
+		GristRegistry.addGristConversion(new ItemStack(catClaws),false,new GristSet(new GristType[] {GristType.Build,GristType.Rust},new int[] {15,5}));
 
 		
 		GristRegistry.addGristConversion(new ItemStack(clawHammer), false, new GristSet(GristType.Build, 8));
@@ -742,7 +742,7 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination("treeLeaves", modusCard, OreDictionary.WILDCARD_VALUE, MODE_OR, new ItemStack(modusCard, 1, 3));	//Not planks and logs though. Too little branch-related.
 		CombinationRegistry.addCombination(new ItemStack(modusCard), new ItemStack(blockComputerOff), MODE_AND, false, true, new ItemStack(modusCard, 1, 4));
 		CombinationRegistry.addCombination(new ItemStack(modusCard), new ItemStack(Items.ITEM_FRAME), MODE_AND, false, true, new ItemStack(modusCard, 1, 5));
-		CombinationRegistry.addCombination(new ItemStack(Blocks.IRON_BARS),new ItemStack(Items.LEATHER), MODE_AND, false, true, new ItemStack(CatClaws));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.IRON_BARS),new ItemStack(Items.LEATHER), MODE_AND, false, true, new ItemStack(catClaws));
 		CombinationRegistry.addCombination(new ItemStack(Items.WHEAT_SEEDS), new ItemStack(Items.GOLD_NUGGET), MODE_AND, new ItemStack(goldSeeds));
 		CombinationRegistry.addCombination(new ItemStack(Items.WHEAT_SEEDS), new ItemStack(Items.GOLD_INGOT), MODE_AND, new ItemStack(goldSeeds));
 		CombinationRegistry.addCombination(new ItemStack(Items.BOAT), new ItemStack(Items.MINECART), MODE_OR, new ItemStack(metalBoat, 1, 0));
@@ -921,8 +921,9 @@ public class AlchemyRecipeHandler
 			return ItemStack.EMPTY;
 		}
 		
-		if (!Item.REGISTRY.containsKey(new ResourceLocation(tag.getString("contentID")))) {return ItemStack.EMPTY;}
-		ItemStack newItem = new ItemStack((Item)Item.REGISTRY.getObject(new ResourceLocation(tag.getString(("contentID")))), 1, tag.getInteger("contentMeta"));
+		Item item = Item.REGISTRY.getObject(new ResourceLocation(tag.getString(("contentID"))));
+		if (item == null) {return ItemStack.EMPTY;}
+		ItemStack newItem = new ItemStack(item, 1, tag.getInteger("contentMeta"));
 		
 		if(tag.hasKey("contentTags"))
 			newItem.setTagCompound(tag.getCompoundTag("contentTags"));

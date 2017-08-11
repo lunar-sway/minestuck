@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -44,7 +44,7 @@ public class BlockChessTile extends Block
 		
 		setUnlocalizedName("chessTile");
 		setDefaultState(getDefaultState().withProperty(BLOCK_TYPE, BlockType.BLACK));
-		this.setCreativeTab(Minestuck.tabMinestuck);
+		this.setCreativeTab(MinestuckItems.tabMinestuck);
 	}
 	
 	@Override

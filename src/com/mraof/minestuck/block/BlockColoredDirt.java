@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -45,7 +45,7 @@ public class BlockColoredDirt extends Block
 	public BlockColoredDirt()
 	{
 		super(Material.GROUND);
-		this.setCreativeTab(Minestuck.tabMinestuck);
+		this.setCreativeTab(MinestuckItems.tabMinestuck);
 		setSoundType(SoundType.GROUND);
 		setDefaultState(getBlockState().getBaseState().withProperty(BLOCK_TYPE, BlockType.BLUE));
 	}

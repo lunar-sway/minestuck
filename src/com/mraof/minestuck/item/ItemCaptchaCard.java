@@ -1,6 +1,5 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
@@ -22,7 +21,7 @@ public class ItemCaptchaCard extends Item
 	
 	public ItemCaptchaCard()
 	{
-		this.setCreativeTab(Minestuck.tabMinestuck);
+		this.setCreativeTab(MinestuckItems.tabMinestuck);
 		this.setHasSubtypes(true);
 		this.setUnlocalizedName("captchaCard");
 	}

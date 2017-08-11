@@ -1,6 +1,5 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.Minestuck;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemFood;
@@ -9,7 +8,7 @@ import net.minecraft.util.NonNullList;
 
 public class ItemMinestuckBeverage extends ItemFood
 {
-	public static String[] modelNames = new String[]{"tab"};
+	public static final String[] NAMES = new String[]{"tab"};
 	
 	private int[] healAmounts;
 	private float[] saturationModifiers;
@@ -19,11 +18,11 @@ public class ItemMinestuckBeverage extends ItemFood
 	{
 		super(0, 0, false);
 		this.setHasSubtypes(true);
-		this.setCreativeTab(Minestuck.tabMinestuck);
+		this.setCreativeTab(MinestuckItems.tabMinestuck);
 		this.setUnlocalizedName("beverage");
 		setMaxStackSize(16);
 		
-		int num_beverages = modelNames.length;
+		int num_beverages = NAMES.length;
 		healAmounts = new int[num_beverages];
 		saturationModifiers = new float[num_beverages];
 		unlocalizedNames = new String[num_beverages];
@@ -36,7 +35,7 @@ public class ItemMinestuckBeverage extends ItemFood
 		for(int i = 0; i < num_beverages; i++)
 		{
 			saturationModifiers[i] = 0.0F;
-			String name = modelNames[i].substring(0, 1).toUpperCase() + modelNames[i].substring(1);
+			String name = NAMES[i].substring(0, 1).toUpperCase() + NAMES[i].substring(1);
 			unlocalizedNames[i] = "item.beverage"+name;
 		}
 		
@@ -70,7 +69,7 @@ public class ItemMinestuckBeverage extends ItemFood
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
 	{
-		int num_beverages = modelNames.length;
+		int num_beverages = NAMES.length;
 		for(int i = 0; i < num_beverages; i++)
 			items.add(new ItemStack(this, 1, i));
 	}

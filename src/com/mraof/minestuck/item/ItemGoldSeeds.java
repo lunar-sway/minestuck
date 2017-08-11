@@ -1,6 +1,5 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -18,7 +17,7 @@ public class ItemGoldSeeds extends ItemSeeds
 	public ItemGoldSeeds()
 	{
 		super(MinestuckBlocks.blockGoldSeeds, Blocks.FARMLAND);
-		setCreativeTab(Minestuck.tabMinestuck);
+		setCreativeTab(MinestuckItems.tabMinestuck);
 	}
 	
 	@Override

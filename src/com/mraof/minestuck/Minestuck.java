@@ -5,7 +5,6 @@ import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.client.util.MinestuckModelManager;
 import com.mraof.minestuck.command.*;
-import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.MinestuckEntities;
@@ -29,7 +28,6 @@ import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.structure.MapGenLandStructure;
 import com.mraof.minestuck.world.lands.structure.village.ConsortVillageComponents;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.MinecraftForge;
@@ -37,6 +35,7 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -64,7 +63,8 @@ public class Minestuck
 	@Instance("minestuck")
 	public static Minestuck instance;
 	
-	public static CreativeTabs tabMinestuck;
+	@SidedProxy(clientSide = "com.mraof.minestuck.client.ClientProxy", serverSide = "com.mraof.minestuck.CommonProxy")
+	public static CommonProxy proxy;
 
 	public static long worldSeed = 0;	//TODO proper usage of seed when generating titles, land aspects, and land dimension data
 	
@@ -79,21 +79,7 @@ public class Minestuck
 		
 		//(new UpdateChecker()).start();
 		
-		//Register the Minestuck creative tab
-		tabMinestuck = new CreativeTabs("tabMinestuck")
-		{
-			@Override
-			public ItemStack getTabIconItem()
-			{
-				return new ItemStack(MinestuckItems.zillyhooHammer);
-			}
-		};
-		
-		if(isClientRunning)
-		{
-			ClientProxy.registerSided();
-			MinestuckModelManager.registerVariants();
-		}
+		proxy.preInit();
 		
 		MinecraftForge.EVENT_BUS.register(MinestuckSoundHandler.instance);
 		MinecraftForge.EVENT_BUS.register(MinestuckBlocks.class);
@@ -142,11 +128,7 @@ public class Minestuck
 		MinecraftForge.EVENT_BUS.register(MinestuckChannelHandler.instance);
 		MinecraftForge.EVENT_BUS.register(new ConnectionListener());
 		
-		if(event.getSide().isClient())
-		{
-			MinecraftForge.EVENT_BUS.register(ClientEditHandler.instance);
-			MinecraftForge.EVENT_BUS.register(new MinestuckConfig());
-		}
+		proxy.init();
 		
 		//register channel handler
 		MinestuckChannelHandler.setupChannel();

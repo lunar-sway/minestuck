@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -84,8 +84,8 @@ public class MinestuckBlocks
 		goldOreSandstone = register(registry, new BlockVanillaOre(BlockVanillaOre.OreType.GOLD).setRegistryName("gold_ore_sandstone")).setUnlocalizedName("oreGold");
 		goldOreSandstoneRed = register(registry, new BlockVanillaOre(BlockVanillaOre.OreType.GOLD).setRegistryName("gold_ore_sandstone_red")).setUnlocalizedName("oreGold");
 		
-		cruxiteBlock = register(registry, new Block(Material.ROCK, MapColor.LIGHT_BLUE).setRegistryName("cruxite_block")).setUnlocalizedName("cruxiteBlock").setHardness(3.0F).setCreativeTab(Minestuck.tabMinestuck);
-		genericObject = register(registry, new BlockCustom(Material.GOURD, MapColor.LIME, SoundType.WOOD).setRegistryName("generic_object")).setUnlocalizedName("genericObject").setHardness(1.0F).setCreativeTab(Minestuck.tabMinestuck);
+		cruxiteBlock = register(registry, new Block(Material.ROCK, MapColor.LIGHT_BLUE).setRegistryName("cruxite_block")).setUnlocalizedName("cruxiteBlock").setHardness(3.0F).setCreativeTab(MinestuckItems.tabMinestuck);
+		genericObject = register(registry, new BlockCustom(Material.GOURD, MapColor.LIME, SoundType.WOOD).setRegistryName("generic_object")).setUnlocalizedName("genericObject").setHardness(1.0F).setCreativeTab(MinestuckItems.tabMinestuck);
 		sburbMachine = register(registry, new BlockSburbMachine().setRegistryName("sburb_machine"));
 		crockerMachine = register(registry, new BlockCrockerMachine().setRegistryName("crocker_machine"));
 		blockComputerOff = register(registry, new BlockComputerOff().setRegistryName("computer_standard"));
@@ -100,7 +100,7 @@ public class MinestuckBlocks
 		coloredDirt = (BlockColoredDirt) register(registry, new BlockColoredDirt().setRegistryName("colored_dirt")).setUnlocalizedName("coloredDirt").setHardness(0.5F);
 		glowingMushroom = (BlockGlowingMushroom) register(registry, new BlockGlowingMushroom().setRegistryName("glowing_mushroom"));
 		glowingLog = register(registry, new BlockGlowingLog().setRegistryName("glowing_log"));
-		glowingPlanks = register(registry, new BlockCustom(Material.WOOD, MapColor.LIGHT_BLUE, SoundType.WOOD).setFireInfo(5, 20).setRegistryName("glowing_planks")).setUnlocalizedName("glowingPlanks").setLightLevel(0.5F).setHardness(2.0F).setResistance(5.0F).setCreativeTab(Minestuck.tabMinestuck);
+		glowingPlanks = register(registry, new BlockCustom(Material.WOOD, MapColor.LIGHT_BLUE, SoundType.WOOD).setFireInfo(5, 20).setRegistryName("glowing_planks")).setUnlocalizedName("glowingPlanks").setLightLevel(0.5F).setHardness(2.0F).setResistance(5.0F).setCreativeTab(MinestuckItems.tabMinestuck);
 		stone = register(registry, new BlockMinestuckStone().setRegistryName("stone"));	//Full name will be minestuck:stone and because of that not produce any collisions
 		coarseStoneStairs = register(registry, new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.COARSE)).setRegistryName("coarse_stone_stairs")).setUnlocalizedName("stairsMinestuck.coarse");
 		shadeBrickStairs = register(registry, new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.SHADE_BRICK)).setRegistryName("shade_brick_stairs")).setUnlocalizedName("stairsMinestuck.shadeBrick");
