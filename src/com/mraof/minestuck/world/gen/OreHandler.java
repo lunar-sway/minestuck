@@ -2,6 +2,7 @@ package com.mraof.minestuck.world.gen;
 
 import com.google.common.base.Predicate;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.block.BlockCruxiteOre;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
@@ -36,7 +37,7 @@ public class OreHandler implements IWorldGenerator
 		if(world.provider instanceof WorldProviderLands)
 			groundType = ((ChunkProviderLands) world.provider.createChunkGenerator()).getGroundBlock();
 		if(block.getBlock() == MinestuckBlocks.oreCruxite)
-			block = MinestuckBlocks.oreCruxite.getBlockState(groundType);
+			block = BlockCruxiteOre.getBlockState(groundType);
 		for(int x = 0; x < chancesToSpawn; x++)
 		{
 			int posX = blockXPos + random.nextInt(maxX);
