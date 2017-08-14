@@ -1,12 +1,5 @@
 package com.mraof.minestuck.entity.consort;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 import com.mraof.minestuck.item.MinestuckItems;
@@ -16,12 +9,14 @@ import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
-import static com.mraof.minestuck.entity.consort.MessageType.*;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
+
+import java.util.*;
+
+import static com.mraof.minestuck.entity.consort.MessageType.*;
 
 /**
  * Handles message registry, message selection and contains the main message
@@ -74,11 +69,26 @@ public class ConsortDialogue
 		addMessage(LandAspectRegistry.fromNameTerrain("shade"), "lazyKing");
 		addMessage("musicInvention");
 		
-		addMessage(
-			new ChoiceMessage
-			(
-				false,
-				new SingleMessage("rapBattle"),
+		MessageType raps = new RandomMessage("rapBattles", RandomKeepResult.KEEP_CONSORT,
+				new DelayMessage(new int[] {17, 17, 30},
+					new SingleMessage("rapBattle.A1"), new SingleMessage("rapBattle.A2"),
+					new SingleMessage("rapBattle.A3"), new SingleMessage("rapBattle.A4")
+				), new DelayMessage(new int[] {25},
+					new SingleMessage("rapBattle.B1"),new SingleMessage("rapBattle.B2"),
+					new SingleMessage("rapBattle.B3"),new SingleMessage("rapBattle.B4")
+				), new DelayMessage(new int[] {17},
+					new SingleMessage("rapBattle.C1"),new SingleMessage("rapBattle.C2"),
+					new SingleMessage("rapBattle.C3", "consortSound"), new SingleMessage("rapBattle.C4")
+				), new DelayMessage(new int[] {25, 20, 30},
+					new SingleMessage("rapBattle.D1"),new SingleMessage("rapBattle.D2"),
+					new SingleMessage("rapBattle.D3"),new SingleMessage("rapBattle.D4")
+				), new DelayMessage(new int[] {17, 20, 30},
+					new SingleMessage("rapBattle.E1"),new SingleMessage("rapBattle.E2"),
+					new SingleMessage("rapBattle.E3"),new SingleMessage("rapBattle.E4")
+				), new DelayMessage(new int[] {25},
+					new SingleMessage("rapBattle.F1"),new SingleMessage("rapBattle.F2"),
+					new SingleMessage("rapBattle.F3"),new SingleMessage("rapBattle.F4")));
+		addMessage(new ChoiceMessage(false, new SingleMessage("rapBattle"),
 				new SingleMessage[]
 				{
 					new SingleMessage("rapBattle.accept"),
@@ -86,50 +96,23 @@ public class ConsortDialogue
 				},
 				new MessageType[] {
 					//If you accepted the challenge
-					new ChainMessage(
-						1,
-						//The first time talking to the consort
-						new RandomMessage(
-							new DoubleMessage(
-								new DoubleMessage(new SingleMessage("rapBattle.A1"),new SingleMessage("rapBattle.A2")),
-								new DoubleMessage(new SingleMessage("rapBattle.A3"),new SingleMessage("rapBattle.A4"))
-							), new DoubleMessage(
-								new DoubleMessage(new SingleMessage("rapBattle.B1"),new SingleMessage("rapBattle.B2")),
-								new DoubleMessage(new SingleMessage("rapBattle.B3"),new SingleMessage("rapBattle.B4"))
-							), new DoubleMessage(
-								new DoubleMessage(new SingleMessage("rapBattle.C1"),new SingleMessage("rapBattle.C2")),
-								new DoubleMessage(new SingleMessage("rapBattle.C3", "consortSound", "consortSound", "consortSound", "consortSound"), new SingleMessage("rapBattle.C4"))
-							), new DoubleMessage(
-								new DoubleMessage(new SingleMessage("rapBattle.D1"),new SingleMessage("rapBattle.D2")),
-								new DoubleMessage(new SingleMessage("rapBattle.D3"),new SingleMessage("rapBattle.D4"))
-							), new DoubleMessage(
-								new DoubleMessage(new SingleMessage("rapBattle.E1"),new SingleMessage("rapBattle.E2")),
-								new DoubleMessage(new SingleMessage("rapBattle.E3"),new SingleMessage("rapBattle.E4"))
-							), new DoubleMessage(
-								new DoubleMessage(new SingleMessage("rapBattle.F1"),new SingleMessage("rapBattle.F2")),
-								new DoubleMessage(new SingleMessage("rapBattle.F3"),new SingleMessage("rapBattle.F4"))
-							)
-						),
-						//Every further time talking to the consort
-						new ChoiceMessage(
-							false,
-							new DescriptiveMessage("rapBattle.A4"),
+					new ChoiceMessage(false,
+							new DescriptionMessage(raps, "rapBattle.rapsDesc"),
 							new SingleMessage[] {
-									new DescriptionMessage("rapBattleSchool", "playerTitle", "landName"),
+									new SingleMessage("rapBattleSchool"),
 									new SingleMessage("rapBattleConcede")
 							},
 							new MessageType[] {
-								new SingleMessage("rapBattleSchool.final", "consortSound"),
-								new SingleMessage("rapBattleConcede.final", "consortSound")
+									new DoubleMessage(new DescriptiveMessage("rapBattleSchool.rap", "playerTitle", "landName"),
+											new SingleMessage("rapBattleSchool.final", "consortSound")).setSayFirstOnce(),
+									new SingleMessage("rapBattleConcede.final", "consortSound")
 							}
-						)
 					),
 					//If you didn't accept the challenge
 					new SingleMessage("rapBattle.denyAnswer")
 				}
-			)
+			).setAcceptNull()
 		);
-		
 		
 		addMessage(true, "awaitHero", "landName", "consortTypes", "playerTitleLand");
 		addMessage(true, "watchSkaia");
