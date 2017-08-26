@@ -59,9 +59,9 @@ public class MinestuckBlocks
 	public static Block layeredSand = new BlockLayered(Blocks.SAND.getDefaultState()).setRegistryName("layered_sand").setUnlocalizedName("layeredSand");
 	public static Block glowystoneWire = new BlockGlowystoneWire().setRegistryName("glowystone_wire").setUnlocalizedName("glowystoneWire");
 	
-	public static Fluid fluidOil = new Fluid("Oil", new ResourceLocation("minestuck", "blocks/oil_still"), new ResourceLocation("minestuck", "blocks/oil_flowing"));;
-	public static Fluid fluidBlood = new Fluid("Blood", new ResourceLocation("minestuck", "blocks/blood_still"), new ResourceLocation("minestuck", "blocks/blood_flowing"));;
-	public static Fluid fluidBrainJuice = new Fluid("BrainJuice", new ResourceLocation("minestuck", "blocks/brain_juice_still"), new ResourceLocation("minestuck", "blocks/brain_juice_flowing"));;
+	public static Fluid fluidOil = createFluid("oil", new ResourceLocation("minestuck", "blocks/oil_still"), new ResourceLocation("minestuck", "blocks/oil_flowing"), "tile.oil");
+	public static Fluid fluidBlood = createFluid("blood", new ResourceLocation("minestuck", "blocks/blood_still"), new ResourceLocation("minestuck", "blocks/blood_flowing"), "tile.blood");
+	public static Fluid fluidBrainJuice = createFluid("brain_juice", new ResourceLocation("minestuck", "blocks/brain_juice_still"), new ResourceLocation("minestuck", "blocks/brain_juice_flowing"), "tile.brainJuice");
 	
 	public static Block blockOil = new BlockFluidClassic(fluidOil, Material.WATER).setRegistryName("block_oil").setUnlocalizedName("oil");
 	public static Block blockBlood = new BlockFluidClassic(fluidBlood, Material.WATER).setRegistryName("block_blood").setUnlocalizedName("blood");
@@ -76,49 +76,21 @@ public class MinestuckBlocks
 	{
 		IForgeRegistry<Block> registry = event.getRegistry();
 		//blocks
-		registry.register(chessTile);
-		registry.register(skaiaPortal);
+		final Block[] blocks = {chessTile, coloredDirt, layeredSand,
+				oreCruxite, coalOreNetherrack, ironOreSandstone, ironOreSandstoneRed, goldOreSandstone, goldOreSandstoneRed,
+				skaiaPortal, returnNode, gate,
+				cruxiteBlock, genericObject,
+				sburbMachine, crockerMachine, transportalizer,
+				blockComputerOff, blockComputerOn,
+				blockGoldSeeds, glowystoneWire,
+				primedTnt, unstableTnt, instantTnt, woodenExplosiveButton, stoneExplosiveButton,
+				blockOil, blockBlood, blockBrainJuice};
 		
-		registry.register(coloredDirt);
-		registry.register(cruxiteBlock);
-		registry.register(genericObject);
-		registry.register(sburbMachine);
-		registry.register(crockerMachine);
-		registry.register(blockComputerOff);
-		registry.register(blockComputerOn);
-		registry.register(transportalizer);
-		registry.register(blockGoldSeeds);
-		registry.register(returnNode);
-		registry.register(gate);
-		
-		registry.register(oreCruxite);
-		registry.register(coalOreNetherrack);
-		registry.register(ironOreSandstone);
-		registry.register(ironOreSandstoneRed);
-		registry.register(goldOreSandstone);
-		registry.register(goldOreSandstoneRed);
-		
-		registry.register(primedTnt);
-		registry.register(unstableTnt);
-		registry.register(instantTnt);
-		registry.register(woodenExplosiveButton);
-		registry.register(stoneExplosiveButton);
-		
-		registry.register(layeredSand);
-		registry.register(glowystoneWire);
+		for(Block block : blocks)
+			registry.register(block);
 		
 		//fluids
-		FluidRegistry.registerFluid(fluidOil);
-		FluidRegistry.registerFluid(fluidBlood);
-		FluidRegistry.registerFluid(fluidBrainJuice);
 		
-		registry.register(blockOil);
-		registry.register(blockBlood);
-		registry.register(blockBrainJuice);
-		
-		fluidOil.setUnlocalizedName(blockOil.getUnlocalizedName());
-		fluidBlood.setUnlocalizedName(blockBlood.getUnlocalizedName());
-		fluidBrainJuice.setUnlocalizedName(blockBrainJuice.getUnlocalizedName());
 		
 		/*liquidGrists = new Block[GristType.allGrists];
 		gristFluids = new Fluid[GristType.allGrists];
@@ -129,5 +101,18 @@ public class MinestuckBlocks
 		}*/
 		
 		cruxiteBlock.setHarvestLevel("pickaxe", 0);
+	}
+	
+	private static Fluid createFluid(String name, ResourceLocation still, ResourceLocation flowing, String unlocalizedName)
+	{
+		Fluid fluid = new Fluid(name, still, flowing);
+		
+		boolean useFluid = FluidRegistry.registerFluid(fluid);
+		
+		if(useFluid)
+			fluid.setUnlocalizedName(unlocalizedName);
+		else fluid = FluidRegistry.getFluid(name);
+		
+		return fluid;
 	}
 }

@@ -30,7 +30,6 @@ public class BlockCruxiteOre extends Block
 		setHardness(3.0F);
 		setResistance(5.0F);	//Values normally used by ores
 		setHarvestLevel("pickaxe", 0);
-		setDefaultState(getBlockState(Blocks.STONE.getDefaultState()));
 		this.setCreativeTab(MinestuckItems.tabMinestuck);
 	}
 	
