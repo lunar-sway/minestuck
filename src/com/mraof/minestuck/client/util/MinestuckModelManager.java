@@ -167,9 +167,7 @@ public class MinestuckModelManager
 		//Blocks
 		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())
 			register(chessTile, type.ordinal(), "chesstile_"+type.name);
-		///////////////////
-		register(RabbitSpawner);
-		///////////////////
+		register(rabbitSpawner);
 		register(skaiaPortal);
 		register(transportalizer);
 		register(blockComputerOff);
@@ -244,7 +242,6 @@ public class MinestuckModelManager
 			ModelBakery.registerItemVariants(candy, new ResourceLocation("minestuck:"+s));
 		
 		//Blocks
-
 		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())
 			ModelBakery.registerItemVariants(Item.getItemFromBlock(chessTile), new ResourceLocation("minestuck:chesstile_"+type.name));
 		ModelBakery.registerItemVariants(Item.getItemFromBlock(oreCruxite), new ResourceLocation("minestuck:cruxite_stone"), new ResourceLocation("minestuck:cruxite_netherrack"), new ResourceLocation("minestuck:cruxite_cobblestone"), new ResourceLocation("minestuck:cruxite_sandstone"), new ResourceLocation("minestuck:cruxite_sandstone_red"));

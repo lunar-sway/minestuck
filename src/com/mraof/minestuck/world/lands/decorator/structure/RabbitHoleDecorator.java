@@ -12,79 +12,100 @@ import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
 
-public class RabbitHoleDecorator  extends SimpleStructureDecorator{
-	public RabbitHoleDecorator(Biome biome){
+public class RabbitHoleDecorator extends SimpleStructureDecorator
+{
+	public RabbitHoleDecorator(Biome biome)
+	{
 		super(biome);
 	}
 
 	@Override
-	public float getPriority() {
+	public float getPriority()
+	{
 		return 0.5f;
 	}
 
 	@Override
-	protected BlockPos generateStructure(World world, Random random, BlockPos pos, ChunkProviderLands provider) {
+	protected BlockPos generateStructure(World world, Random random, BlockPos pos, ChunkProviderLands provider)
+	{
 
-		IBlockState Ground=provider.getSurfaceBlock();
-		IBlockState Air=Blocks.AIR.getDefaultState();
+		IBlockState ground = provider.getSurfaceBlock();
+		IBlockState air = Blocks.AIR.getDefaultState();
 
 		BlockPos newpos = pos;
-		while((world.getBlockState(newpos)==Air)){
-				newpos=newpos.down();
+		while ((world.getBlockState(newpos) == air))
+		{
+			newpos = newpos.down();
 		}
-		while(world.getBlockState(newpos.up())!=Air){
-			newpos=newpos.up();
+		while (world.getBlockState(newpos.up()) != air)
+		{
+			newpos = newpos.up();
 		}
-		if(world.getBlockState(newpos)!=Ground){
-			if (world.getBlockState(newpos.down())==Ground){
-				newpos=newpos.down();
-			}else{
+		if (world.getBlockState(newpos) != ground)
+		{
+			if (world.getBlockState(newpos.down()) == ground)
+			{
+				newpos = newpos.down();
+			}
+			else
+			{
 				return null;
 			}
 		}
 
-			boolean mirror;
-			xCoord = newpos.getX();
-			zCoord = newpos.getZ();
-			yCoord = newpos.getY();
-			//check wich way it should be facing
-			if(world.getBlockState(new BlockPos(xCoord, yCoord -1, zCoord)).getMaterial().isLiquid())
-				return null;
-			if(world.getBlockState(newpos.north())==Air){
-				rotation=false;
-				mirror=false;
-			}else if(world.getBlockState(newpos.east())==Air){
-				rotation=true;
-				mirror=true;
-			}else if(world.getBlockState(newpos.south())==Air){
-				rotation=false;
-				mirror=true;
-			}else if(world.getBlockState(newpos.west())==Air){
-				rotation=true;
-				mirror=false;
-			}else return null;
-		
-		if(mirror){
-			placeBlock(world,Blocks.DEADBUSH.getDefaultState(),0,0,1);
-			placeBlock(world,Air,0,0,0);
-			placeBlock(world,Air,0,-1,0);
-			placeBlock(world,Air,0,-1,-1);
-			placeBlock(world,MinestuckBlocks.RabbitSpawner.getDefaultState(),0,-1,-2);
+		boolean mirror;
+		xCoord = newpos.getX();
+		zCoord = newpos.getZ();
+		yCoord = newpos.getY();
+		//check wich way it should be facing
+		if (world.getBlockState(new BlockPos(xCoord, yCoord - 1, zCoord)).getMaterial().isLiquid())
+			return null;
+		if (world.getBlockState(newpos.north()) == air)
+		{
+			rotation = false;
+			mirror = false;
 		}
-		else{
-			placeBlock(world,Blocks.DEADBUSH.getDefaultState(),0,0,-1);
-			placeBlock(world,Air,0,0,0);
-			placeBlock(world,Air,0,-1,0);
-			placeBlock(world,Air,0,-1,1);
-			placeBlock(world,MinestuckBlocks.RabbitSpawner.getDefaultState(),0,-1,2);
+		else if (world.getBlockState(newpos.east()) == air)
+		{
+			rotation = true;
+			mirror = true;
+		}
+		else if (world.getBlockState(newpos.south()) == air)
+		{
+			rotation = false;
+			mirror = true;
+		}
+		else if (world.getBlockState(newpos.west()) == air)
+		{
+			rotation = true;
+			mirror = false;
+		}
+		else return null;
+
+		if (mirror)
+		{
+			placeBlock(world, Blocks.DEADBUSH.getDefaultState(), 0, 0, 1);
+			placeBlock(world, air, 0, 0, 0);
+			placeBlock(world, air, 0, -1, 0);
+			placeBlock(world, air, 0, -1, -1);
+			placeBlock(world, MinestuckBlocks.rabbitSpawner.getDefaultState(), 0, -1, -2);
+		}
+		else
+		{
+			placeBlock(world, Blocks.DEADBUSH.getDefaultState(), 0, 0, -1);
+			placeBlock(world, air, 0, 0, 0);
+			placeBlock(world, air, 0, -1, 0);
+			placeBlock(world, air, 0, -1, 1);
+			placeBlock(world, MinestuckBlocks.rabbitSpawner.getDefaultState(), 0, -1, 2);
 		}
 
-		System.out.println(Ground);
+		System.out.println(ground);
 		return null;
 	}
-		
+
 	@Override
-	public int getCount(Random random) {
+	public int getCount(Random random)
+	{
 		return 5;
 	}
 }
