@@ -131,11 +131,15 @@ public class MinestuckItems
 	public static Item crumplyHat;
 	public static Item frogStatueReplica;
 	public static Item stoneSlab;
+<<<<<<< HEAD
 	public static Item glowystoneDust;
 	
+=======
+
+>>>>>>> refs/remotes/mraof/1.10.2
 	public static Item.ToolMaterial toolEmerald;
 	public static ItemArmor.ArmorMaterial armorPrismarine;
-	
+
 	public static void registerItems()
 	{
 		
@@ -221,7 +225,7 @@ public class MinestuckItems
 		popamaticVrillyhoo = GameRegistry.register(new ItemWeapon(3000, 0.0D, -2.8D, 30, "popamaticVrillyhoo").setTool("pickaxe", 4, 15.0F).setRegistryName("popamatic_vrillyhoo"));
 		scarletZillyhoo = GameRegistry.register(new ItemFireWeapon(2000, 11.0D, -2.8D, 16, "scarletZillyhoo", 50).setTool("pickaxe", 3, 4.0F).setRegistryName("scarlet_zillyhoo"));
 		mwrthwl = GameRegistry.register(new ItemWeapon(2000, 10.5D, -2.8D, 16, "mwrthwl").setTool("pickaxe", 3, 4.0F).setRegistryName("mwrthwl"));
-		
+
 		//blades
 		sord = GameRegistry.register(new ItemSord(59, 2, -2.4D, 5, "sord").setRegistryName("sord"));
 		cactusCutlass = GameRegistry.register(new ItemWeapon(104, 4, -2.4D, 10, "cactaceaeCutlass").setRegistryName("cactaceae_cutlass"));
@@ -245,7 +249,7 @@ public class MinestuckItems
 		qPHammerAxe = GameRegistry.register(new ItemPogoWeapon(800, 8.0D, -3.0D, 30, "qPHammerAxe", 0.6).setTool("axe", 2, 7.0F).setTool("pickaxe", 1, 2.0F).setTerminus(-1, 50).setRegistryName("piston_powered_pogo_axehammer"));
 		rubyCroak = GameRegistry.register(new ItemWeapon(2000, 11.0D, -2.9D, 30, "rubyCroak").setTool("axe", 3, 8.0F).setRegistryName("ruby_croak"));
 		hephaestusLumber = GameRegistry.register(new ItemFireWeapon(3000, 11.0D, -3.0D, 30, "hephaestusLumber", 30).setTool("axe", 3, 9.0F).setRegistryName("hephaestus_lumberjack"));
-		
+
 		//Dice
 		dice = GameRegistry.register(new ItemWeapon(51, 6, 3, 6, "dice").setRegistryName("dice"));
 		fluoriteOctet = GameRegistry.register(new ItemWeapon(67, 15, 6, 8, "fluoriteOctet").setRegistryName("fluorite_octet"));
@@ -270,7 +274,7 @@ public class MinestuckItems
 		cane = GameRegistry.register(new ItemWeapon(100, 2.0D, -2.0D, 15, "cane").setRegistryName("cane"));
 		spearCane = GameRegistry.register(new ItemWeapon(300, 4.0D, -2.0D, 13, "spearCane").setRegistryName("spear_cane"));
 		dragonCane = GameRegistry.register(new ItemWeapon(300, 6.5D, -2.0D, 20, "dragonCane").setRegistryName("dragon_cane"));
-		
+
 		//Spoons/forks
 		woodenSpoon = GameRegistry.register(new ItemWeapon(59, 2.0D, -2.2D, 5, "woodenSpoon").setRegistryName("wooden_spoon"));
 		silverSpoon = GameRegistry.register(new ItemWeapon(250, 2.5D, -2.2D, 12, "silverSpoon").setRegistryName("silver_spoon"));
@@ -278,14 +282,14 @@ public class MinestuckItems
 		skaiaFork = GameRegistry.register(new ItemWeapon(2048, 8.5D, -2.2D, 10, "skaiaFork").setRegistryName("skaia_fork"));
 		fork = GameRegistry.register(new ItemWeapon(100, 4.0D, -2.2D, 3, "fork").setRegistryName("fork"));
 		spork = GameRegistry.register(new ItemWeapon(120, 4.5D, -2.3D, 5, "spork").setRegistryName("spork"));
-		
+
 		toolEmerald = EnumHelper.addToolMaterial("EMERALD", 3, 1220, 12.0F, 4.0F, 12).setRepairItem(new ItemStack(Items.EMERALD));
 		emeraldSword = GameRegistry.register(new ItemSword(toolEmerald).setRegistryName("emerald_sword")).setUnlocalizedName("swordEmerald").setCreativeTab(Minestuck.tabMinestuck);
 		emeraldAxe = GameRegistry.register(new ItemMinestuckAxe(toolEmerald, 9.0F, -3.0F).setRegistryName("emerald_axe")).setUnlocalizedName("hatchetEmerald").setCreativeTab(Minestuck.tabMinestuck);
 		emeraldPickaxe = GameRegistry.register(new ItemMinestuckPickaxe(toolEmerald).setRegistryName("emerald_pickaxe")).setUnlocalizedName("pickaxeEmerald").setCreativeTab(Minestuck.tabMinestuck);
 		emeraldShovel = GameRegistry.register(new ItemSpade(toolEmerald).setRegistryName("emerald_shovel")).setUnlocalizedName("shovelEmerald").setCreativeTab(Minestuck.tabMinestuck);
 		emeraldHoe = GameRegistry.register(new ItemHoe(toolEmerald).setRegistryName("emerald_hoe")).setUnlocalizedName("hoeEmerald").setCreativeTab(Minestuck.tabMinestuck);
-		
+
 		//armor
 		armorPrismarine = EnumHelper.addArmorMaterial("PRISMARINE", "minestuck:prismarine", 20, new int[]{3, 7, 6, 2}, 15, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0F);
 		armorPrismarine.repairMaterial = new ItemStack(Items.PRISMARINE_SHARD);
@@ -293,7 +297,7 @@ public class MinestuckItems
 		prismarineChestplate = GameRegistry.register(new ItemArmor(armorPrismarine, 0, EntityEquipmentSlot.CHEST).setRegistryName("prismarine_chestplate")).setUnlocalizedName("chestplatePrismarine").setCreativeTab(Minestuck.tabMinestuck);
 		prismarineLeggings = GameRegistry.register(new ItemArmor(armorPrismarine, 0, EntityEquipmentSlot.LEGS).setRegistryName("prismarine_leggings")).setUnlocalizedName("leggingsPrismarine").setCreativeTab(Minestuck.tabMinestuck);
 		prismarineBoots = GameRegistry.register(new ItemArmor(armorPrismarine, 0, EntityEquipmentSlot.FEET).setRegistryName("prismarine_boots")).setUnlocalizedName("bootsPrismarine").setCreativeTab(Minestuck.tabMinestuck);
-		
+
 		//food
 		candy = GameRegistry.register(new ItemMinestuckCandy().setRegistryName("candy"));
 		beverage = GameRegistry.register(new ItemMinestuckBeverage().setRegistryName("beverage"));
@@ -304,7 +308,7 @@ public class MinestuckItems
 		jarOfBugs = GameRegistry.register(new ItemFood(3, 0.2F, false).setRegistryName("jar_of_bugs")).setUnlocalizedName("jarOfBugs").setCreativeTab(Minestuck.tabMinestuck);
 		onion = GameRegistry.register(new ItemFood(2, 0.2F, false).setRegistryName("onion")).setUnlocalizedName("onion").setCreativeTab(Minestuck.tabMinestuck);
 		salad = GameRegistry.register(new ItemSoup(1).setRegistryName("salad").setUnlocalizedName("salad").setCreativeTab(Minestuck.tabMinestuck));
-		
+
 		//misc
 		rawCruxite = GameRegistry.register(new Item().setRegistryName("raw_cruxite")).setUnlocalizedName("rawCruxite").setCreativeTab(Minestuck.tabMinestuck);
 		cruxiteDowel = GameRegistry.register(new ItemDowel().setRegistryName("cruxite_dowel"));
@@ -337,12 +341,16 @@ public class MinestuckItems
 		crumplyHat = GameRegistry.register(new Item().setRegistryName("crumply_hat")).setUnlocalizedName("crumplyHat").setMaxStackSize(1).setCreativeTab(Minestuck.tabMinestuck);
 		frogStatueReplica = GameRegistry.register(new Item().setRegistryName("frog_statue_replica")).setUnlocalizedName("frogStatueReplica").setCreativeTab(Minestuck.tabMinestuck);
 		stoneSlab = GameRegistry.register(new Item().setRegistryName("stone_slab")).setUnlocalizedName("stoneSlab").setCreativeTab(Minestuck.tabMinestuck);
+<<<<<<< HEAD
 		glowystoneDust = GameRegistry.register(new ItemGlowystoneDust().setRegistryName("glowystone_dust")).setUnlocalizedName("glowystoneDust").setCreativeTab(Minestuck.tabMinestuck);
 		
+=======
+
+>>>>>>> refs/remotes/mraof/1.10.2
 		//Music disks
 		recordEmissaryOfDance = GameRegistry.register(new ItemMinestuckRecord("emissary", Minestuck.soundEmissaryOfDance).setRegistryName("record_emissary").setUnlocalizedName("record"));
 		recordDanceStab = GameRegistry.register(new ItemMinestuckRecord("danceStab", Minestuck.soundDanceStabDance).setRegistryName("record_dance_stab").setUnlocalizedName("record"));
-		
+
 		minestuckBucket.addBlock(blockOil.getDefaultState());
 		minestuckBucket.addBlock(blockBlood.getDefaultState());
 		minestuckBucket.addBlock(blockBrainJuice.getDefaultState());
@@ -350,8 +358,83 @@ public class MinestuckItems
 		{
 			minestuckBucket.addBlock(block.getDefaultState());
 		}*/
+<<<<<<< HEAD
+=======
+
+		registerItemBlock(new ItemMultiTexture(chessTile, chessTile, new String[] {"black", "white", "darkgrey", "lightgrey"}));
+		registerItemBlock(new ItemBlock(skaiaPortal));
+
+		registerItemBlock(new ItemMultiTexture(oreCruxite, oreCruxite, new String[0])
+		{
+			@Override
+			public String getUnlocalizedName(ItemStack stack)
+			{
+				return theBlock.getUnlocalizedName();
+			}
+		});
+		registerItemBlock(new ItemBlock(rabbitSpawner));
+		registerItemBlock(new ItemBlock(coalOreNetherrack));
+		registerItemBlock(new ItemBlock(ironOreSandstone));
+		registerItemBlock(new ItemBlock(ironOreSandstoneRed));
+		registerItemBlock(new ItemBlock(goldOreSandstone));
+		registerItemBlock(new ItemBlock(goldOreSandstoneRed));
+
+		registerItemBlock(new ItemBlock(cruxiteBlock));
+		registerItemBlock(new ItemBlock(genericObject));
+		registerItemBlock(new ItemSburbMachine(sburbMachine));
+		registerItemBlock(new ItemMultiTexture(crockerMachine, crockerMachine, new Function<ItemStack, String>()
+		{
+			@Override
+			public String apply(ItemStack input)
+			{
+				return BlockCrockerMachine.MachineType.values()[input.getItemDamage()].getUnlocalizedName();
+			}
+		}));
+		registerItemBlock(new ItemBlock(blockComputerOff));
+		registerItemBlock(new ItemBlock(transportalizer));
+
+		registerItemBlock(new ItemBlockLayered(layeredSand));
+		registerItemBlock(new ItemMultiTexture(coloredDirt, coloredDirt, new Function<ItemStack, String>()
+		{
+			@Override
+			public String apply(ItemStack input)
+			{
+				return BlockColoredDirt.BlockType.values()[input.getItemDamage()].getName();
+			}
+		}));
+		registerItemBlock(new ItemBlock(glowingMushroom));
+		registerItemBlock(new ItemBlock(glowingLog));
+		registerItemBlock(new ItemBlock(glowingPlanks));
+		registerItemBlock(new ItemMultiTexture(stone, stone, new Function<ItemStack, String>()
+		{
+			@Override
+			public String apply(ItemStack input)
+			{
+				return BlockMinestuckStone.BlockType.getFromMeta(input.getMetadata()).getUnlocalizedName();
+			}
+		}));
+		registerItemBlock(new ItemBlock(coarseStoneStairs));
+		registerItemBlock(new ItemBlock(shadeBrickStairs));
+		registerItemBlock(new ItemBlock(frostBrickStairs));
+		registerItemBlock(new ItemBlock(castIronStairs));
+		registerItemBlock(new ItemMultiTexture(log, log, new Function<ItemStack, String>()
+		{
+			@Override
+			public String apply(ItemStack input)
+			{
+				return BlockMinestuckLog.BlockType.values()[input.getItemDamage()].getUnlocalizedName();
+			}
+		}));
+		registerItemBlock(new ItemBlock(woodenCactus));
+
+		registerItemBlock(new ItemBlock(primedTnt));
+		registerItemBlock(new ItemBlock(unstableTnt));
+		registerItemBlock(new ItemBlock(instantTnt));
+		registerItemBlock(new ItemBlock(woodenExplosiveButton));
+		registerItemBlock(new ItemBlock(stoneExplosiveButton));
+>>>>>>> refs/remotes/mraof/1.10.2
 	}
-	
+
 	private static Item registerItemBlock(ItemBlock item)
 	{
 		return GameRegistry.register(item.setRegistryName(item.block.getRegistryName()));
