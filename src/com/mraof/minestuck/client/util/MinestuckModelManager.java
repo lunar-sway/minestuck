@@ -49,7 +49,11 @@ public class MinestuckModelManager
 		ItemModelMesher modelRegistry = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
 		
 		//Items
+<<<<<<< HEAD
 
+=======
+		register(clawHammer);
+>>>>>>> refs/remotes/mraof/1.10.2
 		register(sledgeHammer);
 		register(blacksmithHammer);
 		register(pogoHammer);
@@ -175,6 +179,7 @@ public class MinestuckModelManager
 		//Blocks
 		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())
 			register(chessTile, type.ordinal(), "chesstile_"+type.name);
+		register(rabbitSpawner);
 		register(skaiaPortal);
 		register(transportalizer);
 		register(blockComputerOff);
