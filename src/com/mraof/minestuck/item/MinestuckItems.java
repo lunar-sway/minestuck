@@ -281,6 +281,9 @@ public class MinestuckItems
 				return theBlock.getUnlocalizedName();
 			}
 		});
+		///////////////////////
+		registerItemBlock(new ItemBlock(RabbitSpawner));
+		///////////////////////
 		registerItemBlock(new ItemBlock(coalOreNetherrack));
 		registerItemBlock(new ItemBlock(ironOreSandstone));
 		registerItemBlock(new ItemBlock(ironOreSandstoneRed));

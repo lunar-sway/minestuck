@@ -18,6 +18,10 @@ public class MinestuckBlocks
 {
 	
 	//Blocks
+	
+	///////////////////////////
+	public static Block RabbitSpawner;
+	//////////////////////
 	public static Block chessTile;
 	public static BlockColoredDirt coloredDirt;
 	public static Block skaiaPortal;
@@ -71,6 +75,9 @@ public class MinestuckBlocks
 	public static void registerBlocks()
 	{
 		//blocks
+		///////////////
+		RabbitSpawner = GameRegistry.register(new BlockMobSpawner().setRegistryName("rabbit_spawner").setUnlocalizedName("rabbitSpawner"));
+		////////////
 		chessTile = GameRegistry.register(new BlockChessTile().setRegistryName("chess_tile"));
 		skaiaPortal = GameRegistry.register(new BlockSkaiaPortal(Material.PORTAL).setRegistryName("skaia_portal"));
 		
