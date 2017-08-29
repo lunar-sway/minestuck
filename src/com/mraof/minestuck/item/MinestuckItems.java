@@ -13,7 +13,6 @@ import com.mraof.minestuck.item.block.ItemBlockLayered;
 import com.mraof.minestuck.item.block.ItemSburbMachine;
 import com.mraof.minestuck.item.weapon.*;
 
-
 import net.minecraft.entity.EntityHanging;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
@@ -174,8 +173,8 @@ public class MinestuckItems
 		hephaestusLumber = GameRegistry.register(new ItemFireWeapon(3000, 11.0D, -3.0D, 30, "hephaestusLumber", 30).setTool("axe", 3, 9.0F).setRegistryName("hephaestus_lumberjack"));
 
 		//Dice
-		dice = GameRegistry.register(new ItemWeapon(51, 6, 3, 6, "dice").setRegistryName("dice"));
-		fluoriteOctet = GameRegistry.register(new ItemWeapon(67, 15, 6, 8, "fluoriteOctet").setRegistryName("fluorite_octet"));
+		dice = GameRegistry.register(new ItemDice(51, 1.0D,6.0D, -3.0D,1, 1, "dice").setRegistryName("dice"));
+		fluoriteOctet = GameRegistry.register(new ItemDice(100, 8.0D, 16.0D, -3.0d, 3, 8, "flurite_octet").setRegistryName("fluorite_octet"));
 		//misc weapons
 		CatClaws = GameRegistry.register(new ItemDualWeapon(500, 4.0D, 1.0D, -1.5D,-1.0D, 6, "catclaws").setRegistryName("catclaws"));
 		//sickles
