@@ -76,10 +76,12 @@ public class MinestuckBlocks
 	{
 		IForgeRegistry<Block> registry = event.getRegistry();
 		//blocks
-		final Block[] blocks = {chessTile, coloredDirt, layeredSand,
+		final Block[] blocks = {chessTile, coloredDirt, layeredSand, stone,
+				log, glowingLog, glowingPlanks, glowingMushroom, woodenCactus,
 				oreCruxite, coalOreNetherrack, ironOreSandstone, ironOreSandstoneRed, goldOreSandstone, goldOreSandstoneRed,
-				skaiaPortal, returnNode, gate,
 				cruxiteBlock, genericObject,
+				coarseStoneStairs, shadeBrickStairs, frostBrickStairs, castIronStairs,
+				skaiaPortal, returnNode, gate,
 				sburbMachine, crockerMachine, transportalizer,
 				blockComputerOff, blockComputerOn,
 				blockGoldSeeds, glowystoneWire,
