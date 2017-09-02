@@ -496,6 +496,7 @@ item.dice.tooltip=Dungeons and Dragons anybody?
 item.fluoriteOctet.name=Fluorite Octet
 item.fluoriteOctet.tooltip=Magical Dice! Let 'em roll!
 item.rawCruxite.name=Raw Cruxite
+item.rawUranium.name=Uranium Lump
 item.dowelCruxite.name=Cruxite Dowel
 item.captchaCard.name=Captchalogue Card
 item.captchaCard.empty=empty
@@ -582,6 +583,8 @@ item.stoneSlab.name=Stone Slab
 item.glowystoneDust.name=Glowystone Dust
 item.record.emissary.desc=Catboss - Emissary of Dance
 item.record.danceStab.desc=Catboss - Dance-Stab-Dance
+item.fakeArms.name=Fake Arm
+item.fakeArms.desc=Fool your friends with this super-realistic fake arm!
 
 itemGroup.tabMinestuck=Minestuck
 
@@ -777,6 +780,7 @@ tile.cruxiteBlock.name=Cruxite Block
 tile.genericObject.name=Perfectly Generic Object
 tile.skaiaPortal.name=Skaia Portal
 tile.oreCruxite.name=Cruxite Ore
+tile.oreUranium.name=Uranium Ore
 tile.sburbMachine.cruxtruder.name=Cruxtruder
 tile.sburbMachine.punchDesignix.name=Punch Designix
 tile.sburbMachine.totemLathe.name=Totem Lathe
