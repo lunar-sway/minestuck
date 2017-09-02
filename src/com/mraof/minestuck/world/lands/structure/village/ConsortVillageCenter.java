@@ -363,7 +363,7 @@ public class ConsortVillageCenter
 			
 			for(int x = 1; x < 15; x++)
 				for(int z = 1; z < 15; z++)
-					this.blockPillar(x, 0, z, boundingBox, worldIn, surface);
+					this.blockPillar(x, 0, z, structureBoundingBoxIn, worldIn, surface);
 			
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 2, 2, 13, 2, 13, surface, surface, false);
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 3, 3, 12, 3, 12, surface, surface, false);
