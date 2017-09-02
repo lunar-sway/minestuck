@@ -49,11 +49,6 @@ public class MinestuckModelManager
 		ItemModelMesher modelRegistry = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
 		
 		//Items
-<<<<<<< HEAD
-
-=======
-		register(clawHammer);
->>>>>>> 1.10.2
 		register(sledgeHammer);
 		register(blacksmithHammer);
 		register(pogoHammer);
@@ -174,11 +169,8 @@ public class MinestuckModelManager
 		register(stoneSlab);
 		register(recordEmissaryOfDance);
 		register(recordDanceStab);
-<<<<<<< HEAD
 		register(glowystoneDust);
-=======
 		register(fakeArms);
->>>>>>> 1.10.2
 		
 		//Blocks
 		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())

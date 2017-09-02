@@ -18,7 +18,6 @@ public class MinestuckBlocks
 
 	//Blocks
 
-	public static Block rabbitSpawner;
 	public static Block chessTile;
 	public static BlockColoredDirt coloredDirt;
 	public static Block skaiaPortal;
@@ -44,12 +43,8 @@ public class MinestuckBlocks
 	public static Block castIronStairs;
 	public static Block log;
 	public static Block woodenCactus;
-<<<<<<< HEAD
 	public static Block rabbitSpawner;
 	
-=======
-
->>>>>>> 1.10.2
 	public static Block coalOreNetherrack;
 	public static Block ironOreSandstone;
 	public static Block ironOreSandstoneRed;
@@ -115,10 +110,6 @@ public class MinestuckBlocks
 		castIronStairs = GameRegistry.register(new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.CAST_IRON)).setRegistryName("cast_iron_stairs")).setUnlocalizedName("stairsMinestuck.castIron");
 		log = GameRegistry.register(new BlockMinestuckLog().setRegistryName("log"));
 		woodenCactus = GameRegistry.register(new BlockCactusSpecial(SoundType.WOOD, "axe").setRegistryName("wooden_cactus")).setHardness(1.0F).setResistance(2.5F).setUnlocalizedName("woodenCactus");
-<<<<<<< HEAD
-		rabbitSpawner = GameRegistry.register(new BlockMobSpawner().setRegistryName("rabbit_spawner").setUnlocalizedName("rabbitSpawner"));
-=======
->>>>>>> 1.10.2
 
 		primedTnt = GameRegistry.register(new BlockTNTSpecial(true, false, false).setRegistryName("primed_tnt")).setUnlocalizedName("primedTnt");
 		unstableTnt = GameRegistry.register(new BlockTNTSpecial(false, true, false).setRegistryName("unstable_tnt")).setUnlocalizedName("unstableTnt");

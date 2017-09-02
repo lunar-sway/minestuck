@@ -132,13 +132,9 @@ public class MinestuckItems
 	public static Item crumplyHat;
 	public static Item frogStatueReplica;
 	public static Item stoneSlab;
-<<<<<<< HEAD
 	public static Item glowystoneDust;
-	
-=======
 	public static Item fakeArms;
 
->>>>>>> 1.10.2
 	public static Item.ToolMaterial toolEmerald;
 	public static ItemArmor.ArmorMaterial armorPrismarine;
 
@@ -345,13 +341,9 @@ public class MinestuckItems
 		crumplyHat = GameRegistry.register(new Item().setRegistryName("crumply_hat")).setUnlocalizedName("crumplyHat").setMaxStackSize(1).setCreativeTab(Minestuck.tabMinestuck);
 		frogStatueReplica = GameRegistry.register(new Item().setRegistryName("frog_statue_replica")).setUnlocalizedName("frogStatueReplica").setCreativeTab(Minestuck.tabMinestuck);
 		stoneSlab = GameRegistry.register(new Item().setRegistryName("stone_slab")).setUnlocalizedName("stoneSlab").setCreativeTab(Minestuck.tabMinestuck);
-<<<<<<< HEAD
 		glowystoneDust = GameRegistry.register(new ItemGlowystoneDust().setRegistryName("glowystone_dust")).setUnlocalizedName("glowystoneDust").setCreativeTab(Minestuck.tabMinestuck);
-		
-=======
 		fakeArms = GameRegistry.register(new Item().setRegistryName("fake_arms")).setUnlocalizedName("fakeArms").setCreativeTab(Minestuck.tabMinestuck);
 
->>>>>>> 1.10.2
 		//Music disks
 		recordEmissaryOfDance = GameRegistry.register(new ItemMinestuckRecord("emissary", Minestuck.soundEmissaryOfDance).setRegistryName("record_emissary").setUnlocalizedName("record"));
 		recordDanceStab = GameRegistry.register(new ItemMinestuckRecord("danceStab", Minestuck.soundDanceStabDance).setRegistryName("record_dance_stab").setUnlocalizedName("record"));
@@ -363,89 +355,6 @@ public class MinestuckItems
 		{
 			minestuckBucket.addBlock(block.getDefaultState());
 		}*/
-<<<<<<< HEAD
-=======
-
-		registerItemBlock(new ItemMultiTexture(chessTile, chessTile, new String[] {"black", "white", "darkgrey", "lightgrey"}));
-		registerItemBlock(new ItemBlock(skaiaPortal));
-
-		registerItemBlock(new ItemMultiTexture(oreCruxite, oreCruxite, new String[0])
-		{
-			@Override
-			public String getUnlocalizedName(ItemStack stack)
-			{
-				return theBlock.getUnlocalizedName();
-			}
-		});
-		registerItemBlock(new ItemMultiTexture(oreUranium, oreUranium, new String[0])
-		{
-			@Override
-			public String getUnlocalizedName(ItemStack stack)
-			{
-				return theBlock.getUnlocalizedName();
-			}
-		});
-		registerItemBlock(new ItemBlock(rabbitSpawner));
-		registerItemBlock(new ItemBlock(coalOreNetherrack));
-		registerItemBlock(new ItemBlock(ironOreSandstone));
-		registerItemBlock(new ItemBlock(ironOreSandstoneRed));
-		registerItemBlock(new ItemBlock(goldOreSandstone));
-		registerItemBlock(new ItemBlock(goldOreSandstoneRed));
-
-		registerItemBlock(new ItemBlock(cruxiteBlock));
-		registerItemBlock(new ItemBlock(genericObject));
-		registerItemBlock(new ItemSburbMachine(sburbMachine));
-		registerItemBlock(new ItemMultiTexture(crockerMachine, crockerMachine, new Function<ItemStack, String>()
-		{
-			@Override
-			public String apply(ItemStack input)
-			{
-				return BlockCrockerMachine.MachineType.values()[input.getItemDamage()].getUnlocalizedName();
-			}
-		}));
-		registerItemBlock(new ItemBlock(blockComputerOff));
-		registerItemBlock(new ItemBlock(transportalizer));
-
-		registerItemBlock(new ItemBlockLayered(layeredSand));
-		registerItemBlock(new ItemMultiTexture(coloredDirt, coloredDirt, new Function<ItemStack, String>()
-		{
-			@Override
-			public String apply(ItemStack input)
-			{
-				return BlockColoredDirt.BlockType.values()[input.getItemDamage()].getName();
-			}
-		}));
-		registerItemBlock(new ItemBlock(glowingMushroom));
-		registerItemBlock(new ItemBlock(glowingLog));
-		registerItemBlock(new ItemBlock(glowingPlanks));
-		registerItemBlock(new ItemMultiTexture(stone, stone, new Function<ItemStack, String>()
-		{
-			@Override
-			public String apply(ItemStack input)
-			{
-				return BlockMinestuckStone.BlockType.getFromMeta(input.getMetadata()).getUnlocalizedName();
-			}
-		}));
-		registerItemBlock(new ItemBlock(coarseStoneStairs));
-		registerItemBlock(new ItemBlock(shadeBrickStairs));
-		registerItemBlock(new ItemBlock(frostBrickStairs));
-		registerItemBlock(new ItemBlock(castIronStairs));
-		registerItemBlock(new ItemMultiTexture(log, log, new Function<ItemStack, String>()
-		{
-			@Override
-			public String apply(ItemStack input)
-			{
-				return BlockMinestuckLog.BlockType.values()[input.getItemDamage()].getUnlocalizedName();
-			}
-		}));
-		registerItemBlock(new ItemBlock(woodenCactus));
-
-		registerItemBlock(new ItemBlock(primedTnt));
-		registerItemBlock(new ItemBlock(unstableTnt));
-		registerItemBlock(new ItemBlock(instantTnt));
-		registerItemBlock(new ItemBlock(woodenExplosiveButton));
-		registerItemBlock(new ItemBlock(stoneExplosiveButton));
->>>>>>> 1.10.2
 	}
 
 	private static Item registerItemBlock(ItemBlock item)

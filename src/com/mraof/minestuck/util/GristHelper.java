@@ -7,16 +7,13 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Random;
 
-<<<<<<< HEAD
 import javax.annotation.Nonnull;
 
 import com.mraof.minestuck.editmode.EditData;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-=======
 import com.mraof.minestuck.MinestuckConfig;
->>>>>>> 1.10.2
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -25,11 +22,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 
 public class GristHelper {
 	private static Random random = new Random();
-<<<<<<< HEAD
-	private static final boolean SHOULD_OUTPUT_GRIST_CHANGES = true;
-=======
 	private static final boolean SHOULD_OUTPUT_GRIST_CHANGES = MinestuckConfig.showGristChanges;
->>>>>>> 1.10.2
 	
 	public static HashMap<GristType, ArrayList<GristType>> secondaryGristMap;
 
