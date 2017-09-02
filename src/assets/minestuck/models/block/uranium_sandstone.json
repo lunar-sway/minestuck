@@ -1,0 +1,8 @@
+{
+    "parent": "block/cube_bottom_top",
+    "textures": {
+        "bottom": "minestuck:blocks/UraniumSandstoneBottom",
+        "top": "minestuck:blocks/UraniumSandstoneTop",
+        "side": "minestuck:blocks/UraniumSandstoneSide"
+    }
+}
