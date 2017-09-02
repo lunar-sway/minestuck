@@ -153,7 +153,7 @@ public class ClientProxy extends CommonProxy
 			@Override
 			public Render<EntityCrewPoster> createRenderFor(RenderManager manager)
 			{
-				return new RenderHangingArt(manager, "midnight_poster");
+				return new RenderHangingArt<>(manager, "midnight_poster");
 			}
 		});
 		RenderingRegistry.registerEntityRenderingHandler(EntitySbahjPoster.class, new IRenderFactory<EntitySbahjPoster>()
@@ -161,15 +161,13 @@ public class ClientProxy extends CommonProxy
 			@Override
 			public Render<EntitySbahjPoster> createRenderFor(RenderManager manager)
 			{
-				return new RenderHangingArt(manager, "sbahj_poster");
+				return new RenderHangingArt<>(manager, "sbahj_poster");
 			}
 		});
 		
 		MinecraftForge.EVENT_BUS.register(new MinestuckKeyHandler());
 		MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
-		
-		
-		MinestuckModelManager.registerVariants();
+		MinecraftForge.EVENT_BUS.register(MinestuckModelManager.class);
 	}
 	
 	@Override

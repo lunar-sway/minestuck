@@ -3,7 +3,6 @@ package com.mraof.minestuck;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.GuiHandler;
-import com.mraof.minestuck.client.util.MinestuckModelManager;
 import com.mraof.minestuck.command.*;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
@@ -114,7 +113,6 @@ public class Minestuck
 		//Register textures and renders
 		if(isClientRunning)
 		{
-			MinestuckModelManager.registerTextures();
 			ClientProxy.registerRenderers();
 		}
 		

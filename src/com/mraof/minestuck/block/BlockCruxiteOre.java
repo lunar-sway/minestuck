@@ -103,7 +103,7 @@ public class BlockCruxiteOre extends Block
 		else if(ground.getBlock() == Blocks.RED_SANDSTONE)
 			meta = 4;
 		
-		return MinestuckBlocks.cruxiteBlock.getBlockState().getBaseState().withProperty(BLOCK_TYPE, meta);
+		return MinestuckBlocks.oreCruxite.getBlockState().getBaseState().withProperty(BLOCK_TYPE, meta);
 	}
 	
 	@Override

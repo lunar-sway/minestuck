@@ -2,8 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "minestuck:salad",
-      "minestuck:salad2"
+      "minestuck:salad"
     ]
   },
   "criteria": {
