@@ -152,6 +152,14 @@ public class MinestuckItems
 				return theBlock.getUnlocalizedName();
 			}
 		});
+		registerItemBlock(new ItemMultiTexture(oreUranium, oreUranium, new String[0])
+		{
+			@Override
+			public String getUnlocalizedName(ItemStack stack)
+			{
+				return theBlock.getUnlocalizedName();
+			}
+		});
 		registerItemBlock(new ItemBlock(rabbitSpawner));
 		registerItemBlock(new ItemBlock(coalOreNetherrack));
 		registerItemBlock(new ItemBlock(ironOreSandstone));

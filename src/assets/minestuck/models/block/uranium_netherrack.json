@@ -1,6 +1,6 @@
 {
     "parent": "block/cube_all",
     "textures": {
-        "all": "minestuck:blocks/UraniumNetherrack"
+        "all": "minestuck:blocks/uranium_netherrack"
     }
 }

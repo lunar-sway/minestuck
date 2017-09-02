@@ -79,7 +79,7 @@ public class MinestuckBlocks
 		skaiaPortal = GameRegistry.register(new BlockSkaiaPortal(Material.PORTAL).setRegistryName("skaia_portal"));
 
 		oreCruxite = (BlockCruxiteOre) GameRegistry.register(new BlockCruxiteOre().setRegistryName("ore_cruxite"));
-		oreUranium = (BlockUraniumOre) GameRegistry.register(new BlockUraniumOre().setRegistryName("ore_uranium"));
+		oreUranium = (BlockUraniumOre) GameRegistry.register(new BlockUraniumOre().setRegistryName("ore_uranium").setUnlocalizedName("oreUranium"));
 		coalOreNetherrack = GameRegistry.register(new BlockVanillaOre(BlockVanillaOre.OreType.COAL).setRegistryName("coal_ore_netherrack")).setUnlocalizedName("oreCoal");
 		ironOreSandstone = GameRegistry.register(new BlockVanillaOre(BlockVanillaOre.OreType.IRON).setRegistryName("iron_ore_sandstone")).setUnlocalizedName("oreIron");
 		ironOreSandstoneRed = GameRegistry.register(new BlockVanillaOre(BlockVanillaOre.OreType.IRON).setRegistryName("iron_ore_sandstone_red")).setUnlocalizedName("oreIron");
