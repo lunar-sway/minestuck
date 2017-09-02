@@ -107,6 +107,7 @@ public class MinestuckItems
 	public static Item salad;
 	//Other
 	public static Item rawCruxite;
+	public static Item rawUranium;
 	public static Item cruxiteDowel;
 	public static Item captchaCard;
 	public static ItemCruxiteArtifact cruxiteApple;
@@ -132,6 +133,7 @@ public class MinestuckItems
 	public static Item crumplyHat;
 	public static Item frogStatueReplica;
 	public static Item stoneSlab;
+	public static Item fakeArms;
 
 	public static Item.ToolMaterial toolEmerald;
 	public static ItemArmor.ArmorMaterial armorPrismarine;
@@ -233,6 +235,7 @@ public class MinestuckItems
 
 		//misc
 		rawCruxite = GameRegistry.register(new Item().setRegistryName("raw_cruxite")).setUnlocalizedName("rawCruxite").setCreativeTab(Minestuck.tabMinestuck);
+		rawUranium = GameRegistry.register(new Item().setRegistryName("raw_uranium")).setUnlocalizedName("rawUranium").setCreativeTab(Minestuck.tabMinestuck);
 		cruxiteDowel = GameRegistry.register(new ItemDowel().setRegistryName("cruxite_dowel"));
 		captchaCard = GameRegistry.register(new ItemCaptchaCard().setRegistryName("captcha_card"));
 		cruxiteApple = (ItemCruxiteArtifact) GameRegistry.register(new ItemCruxiteApple().setRegistryName("cruxite_apple"));
@@ -257,6 +260,7 @@ public class MinestuckItems
 		crumplyHat = GameRegistry.register(new Item().setRegistryName("crumply_hat")).setUnlocalizedName("crumplyHat").setMaxStackSize(1).setCreativeTab(Minestuck.tabMinestuck);
 		frogStatueReplica = GameRegistry.register(new Item().setRegistryName("frog_statue_replica")).setUnlocalizedName("frogStatueReplica").setCreativeTab(Minestuck.tabMinestuck);
 		stoneSlab = GameRegistry.register(new Item().setRegistryName("stone_slab")).setUnlocalizedName("stoneSlab").setCreativeTab(Minestuck.tabMinestuck);
+		fakeArms = GameRegistry.register(new Item().setRegistryName("fake_arms")).setUnlocalizedName("fakeArms").setCreativeTab(Minestuck.tabMinestuck);
 
 		//Music disks
 		recordEmissaryOfDance = GameRegistry.register(new ItemMinestuckRecord("emissary", Minestuck.soundEmissaryOfDance).setRegistryName("record_emissary").setUnlocalizedName("record"));
@@ -274,6 +278,14 @@ public class MinestuckItems
 		registerItemBlock(new ItemBlock(skaiaPortal));
 
 		registerItemBlock(new ItemMultiTexture(oreCruxite, oreCruxite, new String[0])
+		{
+			@Override
+			public String getUnlocalizedName(ItemStack stack)
+			{
+				return theBlock.getUnlocalizedName();
+			}
+		});
+		registerItemBlock(new ItemMultiTexture(oreUranium, oreUranium, new String[0])
 		{
 			@Override
 			public String getUnlocalizedName(ItemStack stack)

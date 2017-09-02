@@ -1,0 +1,9 @@
+{
+    "variants": {
+        "block_type=0": { "model": "minestuck:uranium_stone" },
+        "block_type=1": { "model": "minestuck:uranium_netherrack" },
+        "block_type=2": { "model": "minestuck:uranium_cobblestone" },
+        "block_type=3": { "model": "minestuck:uranium_sandstone" },
+        "block_type=4": { "model": "minestuck:uranium_sandstone_red" }
+    }
+}

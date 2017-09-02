@@ -9,6 +9,7 @@ import java.util.Random;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -16,7 +17,7 @@ import net.minecraft.item.ItemStack;
 
 public class GristHelper {
 	private static Random random = new Random();
-	private static final boolean SHOULD_OUTPUT_GRIST_CHANGES = false;
+	private static final boolean SHOULD_OUTPUT_GRIST_CHANGES = MinestuckConfig.showGristChanges;
 	
 	public static HashMap<GristType, ArrayList<GristType>> secondaryGristMap;
 

@@ -56,9 +56,12 @@ public class MinestuckConfig
 	public static boolean alchemyIcons;
 	@SideOnly(Side.CLIENT)
 	public static boolean preEntryEcheladder;
+	@SideOnly(Side.CLIENT)
+	public static boolean showGristChanges;
 	
 	public static boolean hardMode = false;
 	public static boolean generateCruxiteOre;
+	public static boolean generateUraniumOre;
 	public static boolean privateComputers;
 	public static boolean globalSession;
 	public static boolean forceMaxSize = true;
@@ -156,6 +159,7 @@ public class MinestuckConfig
 		cardRecipe = config.get("General", "cardRecipe", true, "Set this to false to remove the captcha card crafting recipe.").setLanguageKey("minestuck.config.cardRecipe").setRequiresWorldRestart(true).getBoolean();
 		
 		generateCruxiteOre = config.get("General", "generateCruxiteOre", true, "If cruxite ore should be generated in the overworld.").setRequiresWorldRestart(true).setLanguageKey("minestuck.config.generateCruxiteOre").getBoolean();
+		generateUraniumOre = config.get("General", "generateUraniumOre", false, "If uranium ore should be generated in the overworld.").setRequiresWorldRestart(true).setLanguageKey("minestuck.config.generateUraniumOre").getBoolean();
 		globalSession = config.get("General", "globalSession", false, "Whenether all connetions should be put into a single session or not.").setLanguageKey("minestuck.config.globalSession").getBoolean();
 		overworldEditRange = config.get("General", "overworldEditRange", 15, "A number that determines how far away from the computer an editmode player may be before entry.", 3, 50).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.overworldEditRange").getInt();
 		landEditRange = config.get("General", "landEditRange", 30, "A number that determines how far away from the center of the brought land that an editmode player may be after entry.", 3, 50).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.landEditRange").getInt();
@@ -172,6 +176,7 @@ public class MinestuckConfig
 		playerSelectedTitle = config.get("General", "playerSelectedTitle", false, "Enable this to let players select their own title. They will however not be able to select the Lord or Muse as class.").setLanguageKey("minestuck.config.playerSelectedTitle").getBoolean();
 		canBreakGates = config.get("General", "canBreakGates", true, "Lets gates be destroyed by explosions. Turning this off will make gates use the same explosion resistance as bedrock.").setLanguageKey("minestuck.config.canBreakGates").getBoolean();
 		disableGiclops = config.get("General", "disableGiclops", false, "Right now, the giclops pathfinding is currently causing huge amounts of lag due to their size. This option is a short-term solution that will disable giclops spawning and remove all existing giclopses.").setLanguageKey("minestuck.config.disableGiclops").getBoolean();
+		showGristChanges = config.get("General", "showGristChanges", true, "If this is true, grist change messages will appear").setLanguageKey("minestuck.config.showGristChanges").getBoolean();
 		if(config.hasKey("General", "hardMode"))
 			hardMode = config.get("General", "hardMode", false).getBoolean();	//Not fully fleshed out yet
 		
