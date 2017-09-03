@@ -22,7 +22,7 @@ public class ItemCaptchaCard extends Item
 	public ItemCaptchaCard()
 	{
 		this.setCreativeTab(MinestuckItems.tabMinestuck);
-		this.setHasSubtypes(true);
+		//this.setHasSubtypes(true);
 		this.setUnlocalizedName("captchaCard");
 	}
 	

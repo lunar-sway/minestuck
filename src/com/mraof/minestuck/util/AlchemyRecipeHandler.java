@@ -506,37 +506,15 @@ public class AlchemyRecipeHandler
 		
 		//set up crafting recipes
 		
+		//CraftingHelper.register();
 		/*RecipeSorter.register("minestuck:notmirrored", CraftingRecipes.NonMirroredRecipe.class, RecipeSorter.Category.SHAPED, "before:minecraft:shaped");
 		RecipeSorter.register("minestuck:emptycard", CraftingRecipes.EmptyCardRecipe.class, RecipeSorter.Category.SHAPED, "before:minecraft:shaped");
 		
-		GameRegistry.addRecipe(new ItemStack(blockComputerOff,1,0),new Object[]{ "XXX","XYX","XXX",'Y',new ItemStack(cruxiteBlock),'X',new ItemStack(Items.IRON_INGOT,1)});
-		GameRegistry.addRecipe(new ItemStack(cruxiteBlock),new Object[]{ "XXX","XXX","XXX",'X',new ItemStack(rawCruxite, 1)});
-		cardRecipe = GameRegistry.addShapedRecipe(new ItemStack(captchaCard,8,0),new Object[]{ "XXX","XYX","XXX",'Y',new ItemStack(rawCruxite, 1),'X',new ItemStack(Items.PAPER,1)});
-		cardRecipeAdded = true;
-		GameRegistry.addRecipe(new ItemStack(clawHammer),new Object[]{ " XX","XY "," Y ",'X',new ItemStack(Items.IRON_INGOT),'Y',new ItemStack(Items.STICK)});
-		GameRegistry.addRecipe(new ItemStack(woodenSpoon),new Object[]{ " X "," Y "," Y ",'X',new ItemStack(Items.BOWL),'Y',new ItemStack(Items.STICK)});
-		GameRegistry.addRecipe(new ItemStack(chessboard),new Object[]{ "XYX","YXY","XYX",'X',new ItemStack(Blocks.STAINED_HARDENED_CLAY,1,0),'Y',new ItemStack(Blocks.STAINED_HARDENED_CLAY,1,15)});
-		GameRegistry.addRecipe(new ItemStack(chessboard),new Object[]{ "XYX","YXY","XYX",'Y',new ItemStack(Blocks.STAINED_HARDENED_CLAY,1,0),'X',new ItemStack(Blocks.STAINED_HARDENED_CLAY,1,15)});
-		GameRegistry.addRecipe(new ItemStack(disk, 1, 0),new Object[]{ "X X"," Y ","X X",'X',new ItemStack(rawCruxite, 1),'Y',new ItemStack(Items.IRON_INGOT,1)});
-		GameRegistry.addRecipe(new ItemStack(disk, 1, 1),new Object[]{ " X ","XYX"," X ",'X',new ItemStack(rawCruxite, 1),'Y',new ItemStack(Items.IRON_INGOT,1)});
-		GameRegistry.addShapelessRecipe(new ItemStack(rawCruxite, 9), new ItemStack(cruxiteBlock));
-		GameRegistry.addRecipe(new ItemStack(cane, 1), new Object[] {"  X", " X ", "X  ", 'X', new ItemStack(Items.STICK, 1)});
-		GameRegistry.addRecipe(new ItemStack(deuceClub, 1), new Object[] {"  Y", " X ", "X  ", 'X', new ItemStack(Items.STICK, 1), 'Y', new ItemStack(Blocks.PLANKS, 1)});
-		GameRegistry.addRecipe(new ItemStack(fork, 1), new Object[] {"X X"," X "," X ", 'X', new ItemStack(Blocks.STONE,1)});
-		GameRegistry.addRecipe(new ItemStack(sickle, 1), new Object[] {" XX","X  "," Y ", 'X', new ItemStack(Items.IRON_INGOT), 'Y', new ItemStack(Items.STICK)});
-		GameRegistry.addRecipe(new ItemStack(katana, 1), new Object[] {"  X"," X ","Y  ", 'X', new ItemStack(Items.IRON_INGOT), 'Y', new ItemStack(Items.STICK)});
-		GameRegistry.addRecipe(new ItemStack(sledgeHammer, 1), new Object[] {"XZX"," Y "," Y ", 'X', new ItemStack(Items.IRON_INGOT), 'Y', new ItemStack(Items.STICK), 'Z', new ItemStack(Blocks.STONE)});
 		ItemStack crux = new ItemStack(rawCruxite);
 		ItemStack cruxBl = new ItemStack(cruxiteBlock);
 		ItemStack card = new ItemStack(captchaCard);
 		GameRegistry.addRecipe(new CraftingRecipes.EmptyCardRecipe(3, 1, new ItemStack[]{cruxBl.copy(), card.copy(), crux.copy()}, new ItemStack(modusCard, 1, 0)));
-		GameRegistry.addRecipe(new CraftingRecipes.EmptyCardRecipe(3, 1, new ItemStack[]{crux.copy(), card.copy(), cruxBl.copy()}, new ItemStack(modusCard, 1, 1)));
-		GameRegistry.addRecipe(new ItemStack(coarseStoneStairs, 4), new Object[] {"X  ", "XX ", "XXX", 'X', new ItemStack(stone, 1, BlockMinestuckStone.COARSE_META)});
-		GameRegistry.addRecipe(new ItemStack(shadeBrickStairs, 4), new Object[] {"X  ", "XX ", "XXX", 'X', new ItemStack(stone, 1, BlockMinestuckStone.SHADE_META)});
-		GameRegistry.addRecipe(new ItemStack(frostBrickStairs, 4), new Object[] {"X  ", "XX ", "XXX", 'X', new ItemStack(stone, 1, BlockMinestuckStone.FROST_META)});
-		GameRegistry.addRecipe(new ItemStack(castIronStairs, 4), new Object[] {"X  ", "XX ", "XXX", 'X', new ItemStack(stone, 1, BlockMinestuckStone.CAST_META)});
-		GameRegistry.addRecipe(new ItemStack(stone, 4, BlockMinestuckStone.SHADE_META), new Object[] {"XX", "XX", 'X', new ItemStack(stone, 1, BlockMinestuckStone.SHADE_SMOOTH_META)});
-		GameRegistry.addRecipe(new ItemStack(Blocks.PLANKS, 3, BlockPlanks.EnumType.SPRUCE.getMetadata()), new Object[] {"X", 'X', new ItemStack(woodenCactus)});*///TODO Figure out recipe names and groups
+		GameRegistry.addRecipe(new CraftingRecipes.EmptyCardRecipe(3, 1, new ItemStack[]{crux.copy(), card.copy(), cruxBl.copy()}, new ItemStack(modusCard, 1, 1)));*///TODO Figure out recipe names and groups
 		GameRegistry.addSmelting(goldSeeds, new ItemStack(Items.GOLD_NUGGET), 0.1F);
 		GameRegistry.addSmelting(ironOreSandstone, new ItemStack(Items.IRON_INGOT), 0.7F);
 		GameRegistry.addSmelting(ironOreSandstoneRed, new ItemStack(Items.IRON_INGOT), 0.7F);

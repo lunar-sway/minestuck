@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shapeless",
-  "group": "minestuck:salad",
   "ingredients": [
     {
       "item": "minecraft:bowl",

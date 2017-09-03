@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XXX",
+    "XXX",
+    "XXX"
+  ],
+  "key": {
+    "X": {
+      "item": "minestuck:raw_cruxite"
+    }
+  },
+  "result": {
+    "item": "minestuck:cruxite_block",
+    "count": 1
+  }
+}

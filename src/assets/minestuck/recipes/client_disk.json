@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "X X",
+    " # ",
+    "X X"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:iron_ingot"
+    },
+    "X": {
+      "item": "minestuck:raw_cruxite"
+    }
+  },
+  "result": {
+    "item": "minestuck:computer_disk",
+    "data": 0,
+    "count": 1
+  }
+}

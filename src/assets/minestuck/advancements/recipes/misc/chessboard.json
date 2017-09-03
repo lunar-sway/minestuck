@@ -1,0 +1,53 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:chessboard1",
+      "minestuck:chessboard2"
+    ]
+  },
+  "criteria": {
+    "has_white_clay": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:stained_hardened_clay",
+            "data": 0
+          }
+        ]
+      }
+    },
+    "has_black_clay": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:stained_hardened_clay",
+            "data": 15
+          }
+        ]
+      }
+    },
+    "has_recipe_1": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:chessboard1"
+      }
+    },
+    "has_recipe_2": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:chessboard2"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_white_clay",
+      "has_black_clay",
+      "has_recipe_1",
+      "has_recipe_2"
+    ]
+  ]
+}
