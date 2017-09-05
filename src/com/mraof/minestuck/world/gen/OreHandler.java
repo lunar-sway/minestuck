@@ -27,6 +27,11 @@ public class OreHandler implements IWorldGenerator
 		{
 			this.addOreSpawn(MinestuckBlocks.oreCruxite.getDefaultState(), world, random, chunkX * 16, chunkZ * 16, 16, 16, 6 + random.nextInt(3), 10, 0, 60);
 		}
+		
+		if(world.provider.isSurfaceWorld() && (MinestuckConfig.generateUraniumOre || chunkGenerator instanceof ChunkProviderLands))
+		{
+			this.addOreSpawn(MinestuckBlocks.oreUranium.getDefaultState(), world, random, chunkX * 16, chunkZ * 16, 16, 16, 3 + random.nextInt(3), 10, 0, 30);
+		}
 	}
 	
 	public void addOreSpawn(IBlockState block, World world, Random random, int blockXPos, int blockZPos, int maxX, int maxZ, int maxVeinSize, int chancesToSpawn, int minY, int maxY)
@@ -38,6 +43,8 @@ public class OreHandler implements IWorldGenerator
 			groundType = ((ChunkProviderLands) world.provider.createChunkGenerator()).getGroundBlock();
 		if(block.getBlock() == MinestuckBlocks.oreCruxite)
 			block = MinestuckBlocks.oreCruxite.getBlockState(groundType);
+		if(block.getBlock() == MinestuckBlocks.oreUranium)
+			block = MinestuckBlocks.oreUranium.getBlockState(groundType);
 		for(int x = 0; x < chancesToSpawn; x++)
 		{
 			int posX = blockXPos + random.nextInt(maxX);

@@ -9,12 +9,14 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.init.Blocks;
+
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import java.util.Random;
 
 public class BlockMobSpawner extends Block
 {
@@ -22,10 +24,8 @@ public class BlockMobSpawner extends Block
     {
         super(Material.AIR);
         this.setTickRandomly(true);
-        
     }
-   
-    
+
     @Override
     public void randomTick(World worldIn, BlockPos pos, IBlockState state, Random random)
     {
@@ -48,23 +48,17 @@ public class BlockMobSpawner extends Block
         return EnumBlockRenderType.INVISIBLE;
     }
 
+
     @Override
     public boolean getTickRandomly()
     {
         return true;
-    }
-    //make it so you can pass through it
-    @Nullable
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos)
-    {
-        return NULL_AABB;
     }
 
     @Override
     public boolean canCollideCheck(IBlockState state, boolean hitIfLiquid)
     {
         return false;
-        
     }
 
     @Override
