@@ -72,6 +72,7 @@ public class MinestuckModelManager
 		register(scarletRibbitar);
 		register(doggMachete);
 		register(cobaltSabre);
+		register(quantumSabre);
 		
 		register(blacksmithBane);
 		register(scraxe);
@@ -101,6 +102,7 @@ public class MinestuckModelManager
 		register(cane);
 		register(spearCane);
 		register(dragonCane);
+		register(upStick);
 		
 		register(woodenSpoon);
 		register(silverSpoon);
@@ -160,6 +162,7 @@ public class MinestuckModelManager
 		register(jarOfBugs);
 		register(onion);
 		register(salad);
+		register(irradiatedSteak);
 		
 		register(threshDvd);
 		register(crewPoster);
