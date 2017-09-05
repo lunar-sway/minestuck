@@ -85,6 +85,7 @@ public class MinestuckConfig
 	public static int[] defaultModusTypes;
 	public static int modusMaxSize;
 	public static int cardCost;
+	public static int oreMultiplier;
 	/**
 	 * 0: Make the player's new server player his/her old server player's server player
 	 * 1: The player that lost his/her server player will have an idle main connection until someone without a client player connects to him/her.
@@ -144,10 +145,12 @@ public class MinestuckConfig
 			deployConfigurations = new boolean[1];
 			deployConfigurations[0] = config.get("General", "deployCard", false, "Determines if a card with a captcha card punched on it should be added to the deploy list or not.").setLanguageKey("minestuck.config.deployCard").setRequiresWorldRestart(true).getBoolean();
 			cardCost = config.get("General", "cardCost", 1, "An integer that determines how much a captchalouge card costs to alchemize").setMinValue(1).setLanguageKey("minestuck.config.cardCost").setRequiresWorldRestart(true).getInt();
+			oreMultiplier = config.get("General", "oreMultiplier", 1, "Multiplies the cost for the 'contents' of an ore. Set to 0 to disable alchemizing ores.").setMinValue(0).setLanguageKey("minestuck.config.oreMultiplier").setRequiresWorldRestart(true).getInt();
 			cardRecipe = config.get("General", "cardRecipe", true, "Set this to false to remove the captcha card crafting recipe.").setLanguageKey("minestuck.config.cardRecipe").setRequiresWorldRestart(true).getBoolean();
 			
 			globalSession = config.get("General", "globalSession", false, "Whenether all connetions should be put into a single session or not.").setRequiresWorldRestart(true).setLanguageKey("minestuck.config.globalSession").getBoolean();
 			generateCruxiteOre = config.get("General", "generateCruxiteOre", true, "If cruxite ore should be generated in the overworld.").setRequiresWorldRestart(true).setLanguageKey("minestuck.config.generateCruxiteOre").getBoolean();
+			generateUraniumOre = config.get("General", "generateUraniumOre", true, "If uranium ore should be generated in the overworld.").setRequiresWorldRestart(true).setLanguageKey("minestuck.config.generateUraniumOre").getBoolean();
 			overworldEditRange = config.get("General", "overworldEditRange", 15, "A number that determines how far away from the computer an editmode player may be before entry.", 3, 50).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.overworldEditRange").getInt();
 			landEditRange = config.get("General", "landEditRange", 30, "A number that determines how far away from the center of the brought land that an editmode player may be after entry.", 3, 50).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.landEditRange").getInt();
 			disableGristWidget = config.get("General", "disableGristWidget", false).setLanguageKey("minestuck.config.disableGristWidget").setRequiresWorldRestart(true).getBoolean();
@@ -174,6 +177,7 @@ public class MinestuckConfig
 		deployConfigurations = new boolean[1];
 		deployConfigurations[0] = config.get("General", "deployCard", false, "Determines if a card with a captcha card punched on it should be added to the deploy list or not.").setLanguageKey("minestuck.config.deployCard").setRequiresWorldRestart(true).getBoolean();
 		cardCost = config.get("General", "cardCost", 1, "An integer that determines how much a captchalouge card costs to alchemize").setMinValue(1).setLanguageKey("minestuck.config.cardCost").setRequiresWorldRestart(true).getInt();
+		oreMultiplier = config.get("General", "oreMultiplier", 1, "Multiplies the cost for the 'contents' of an ore. Set to 0 to disable alchemizing ores.").setMinValue(0).setLanguageKey("minestuck.config.oreMultiplier").setRequiresWorldRestart(true).getInt();
 		cardRecipe = config.get("General", "cardRecipe", true, "Set this to false to remove the captcha card crafting recipe.").setLanguageKey("minestuck.config.cardRecipe").setRequiresWorldRestart(true).getBoolean();
 		
 		generateCruxiteOre = config.get("General", "generateCruxiteOre", true, "If cruxite ore should be generated in the overworld.").setRequiresWorldRestart(true).setLanguageKey("minestuck.config.generateCruxiteOre").getBoolean();

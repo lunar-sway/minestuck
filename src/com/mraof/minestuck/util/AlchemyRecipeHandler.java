@@ -43,6 +43,7 @@ public class AlchemyRecipeHandler
 {
 	public static final ResourceLocation BASIC_MEDIUM_CHEST = new ResourceLocation("minestuck", "chests/medium_basic");
 	public static final ResourceLocation CONSORT_JUNK_REWARD = new ResourceLocation("minestuck", "gameplay/consort_junk");
+	public static final int ORE_COST_MULTIPLIER = 1;
 	
 	private static HashMap<List<Object>, Object> recipeList;
 	private static HashMap<List<Object>, Boolean> lookedOver;
@@ -201,22 +202,25 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(Items.DRAGON_BREATH), new GristSet(new GristType[] {GristType.Ruby, GristType.Sulfur}, new int[] {4, 13}));
 		
 		//Ores
-		GristRegistry.addGristConversion("oreCoal", new GristSet(new GristType[] {GristType.Build, GristType.Tar}, new int[] {4, 8}));
+		if(ORE_COST_MULTIPLIER != 0)
+		{
+			GristRegistry.addGristConversion("oreCoal", new GristSet(new GristType[] {GristType.Build, GristType.Tar}, new int[] {4, 8*ORE_COST_MULTIPLIER}));
+			GristRegistry.addGristConversion("oreIron", new GristSet(new GristType[] {GristType.Build, GristType.Rust}, new int[] {4, 9*ORE_COST_MULTIPLIER}));
+			GristRegistry.addGristConversion("oreGold", new GristSet(new GristType[] {GristType.Build, GristType.Gold}, new int[] {4, 9*ORE_COST_MULTIPLIER}));
+			GristRegistry.addGristConversion(new ItemStack(Blocks.REDSTONE_ORE), false, new GristSet(new GristType[] {GristType.Garnet, GristType.Build}, new int[] {16*ORE_COST_MULTIPLIER, 4}));
+			GristRegistry.addGristConversion(new ItemStack(Blocks.LAPIS_ORE), false, new GristSet(new GristType[] {GristType.Amethyst, GristType.Build}, new int[] {16*ORE_COST_MULTIPLIER, 4}));
+			GristRegistry.addGristConversion(new ItemStack(Blocks.DIAMOND_ORE), false, new GristSet(new GristType[] {GristType.Diamond, GristType.Build}, new int[] {18*ORE_COST_MULTIPLIER, 4}));
+			GristRegistry.addGristConversion(new ItemStack(Blocks.EMERALD_ORE), false, new GristSet(new GristType[] {GristType.Ruby, GristType.Diamond, GristType.Build}, new int[] {9*ORE_COST_MULTIPLIER, 9*ORE_COST_MULTIPLIER, 4}));
+			GristRegistry.addGristConversion(new ItemStack(Blocks.QUARTZ_ORE), false, new GristSet(new GristType[] {GristType.Quartz, GristType.Marble, GristType.Build}, new int[] {8*ORE_COST_MULTIPLIER, 2*ORE_COST_MULTIPLIER, 2}));
+		}
 		GristRegistry.addGristConversion(new ItemStack(Items.COAL, 1, 0), true, new GristSet(new GristType[] {GristType.Tar}, new int[] {8}));
 		GristRegistry.addGristConversion(new ItemStack(Items.COAL, 1, 1), true, new GristSet(new GristType[] {GristType.Tar, GristType.Amber}, new int[] {6, 2}));
-		GristRegistry.addGristConversion("oreIron", new GristSet(new GristType[] {GristType.Build, GristType.Rust}, new int[] {4, 9}));
-		GristRegistry.addGristConversion("ingotIron", new GristSet(new GristType[] {GristType.Rust}, new int[] {9}));
-		GristRegistry.addGristConversion("oreGold", new GristSet(new GristType[] {GristType.Build, GristType.Gold}, new int[] {4, 9}));
 		GristRegistry.addGristConversion("ingotGold", new GristSet(new GristType[] {GristType.Gold}, new int[] {9}));
-		GristRegistry.addGristConversion(new ItemStack(Blocks.REDSTONE_ORE), false, new GristSet(new GristType[] {GristType.Garnet, GristType.Build}, new int[] {16, 4}));
-		GristRegistry.addGristConversion(new ItemStack(Blocks.LAPIS_ORE), false, new GristSet(new GristType[] {GristType.Amethyst, GristType.Build}, new int[] {16, 4}));
-		GristRegistry.addGristConversion(new ItemStack(Blocks.DIAMOND_ORE), false, new GristSet(new GristType[] {GristType.Diamond, GristType.Build}, new int[] {18, 4}));
-		GristRegistry.addGristConversion(new ItemStack(Items.DIAMOND), false, new GristSet(new GristType[] {GristType.Diamond}, new int[] {18}));
-		GristRegistry.addGristConversion(new ItemStack(Blocks.EMERALD_ORE), false, new GristSet(new GristType[] {GristType.Ruby, GristType.Diamond, GristType.Build}, new int[] {9, 9, 4}));
-		GristRegistry.addGristConversion(new ItemStack(Items.EMERALD), false, new GristSet(new GristType[] {GristType.Ruby, GristType.Diamond}, new int[] {9, 9}));
-		GristRegistry.addGristConversion(new ItemStack(Blocks.QUARTZ_ORE), false, new GristSet(new GristType[] {GristType.Quartz, GristType.Marble, GristType.Build}, new int[] {8, 2, 2}));
+		GristRegistry.addGristConversion("ingotIron", new GristSet(new GristType[] {GristType.Rust}, new int[] {9}));
 		GristRegistry.addGristConversion(new ItemStack(Items.QUARTZ), false, new GristSet(new GristType[] {GristType.Quartz, GristType.Marble}, new int[] {4, 1}));
 		GristRegistry.addGristConversion(new ItemStack(Blocks.QUARTZ_BLOCK), false, new GristSet(new GristType[] {GristType.Quartz, GristType.Marble}, new int[] {16, 4}));
+		GristRegistry.addGristConversion(new ItemStack(Items.EMERALD), false, new GristSet(new GristType[] {GristType.Ruby, GristType.Diamond}, new int[] {9, 9}));
+		GristRegistry.addGristConversion(new ItemStack(Items.DIAMOND), false, new GristSet(new GristType[] {GristType.Diamond}, new int[] {18}));
 		
 		//Plants
 		GristRegistry.addGristConversion(new ItemStack(Blocks.LEAVES2), false, new GristSet(new GristType[] {GristType.Build}, new int[] {1}));
