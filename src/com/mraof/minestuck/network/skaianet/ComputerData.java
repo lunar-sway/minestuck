@@ -1,16 +1,11 @@
 package com.mraof.minestuck.network.skaianet;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ComputerData
 {
@@ -18,7 +13,7 @@ public class ComputerData
 	int dimension;
 	PlayerIdentifier owner;
 	@SideOnly(Side.CLIENT)
-	int ownerId;
+	private int ownerId;
 	
 	public static ComputerData createData(TileEntityComputer te)
 	{
@@ -27,7 +22,7 @@ public class ComputerData
 		else return new ComputerData(te.ownerId, te.getPos().getX(), te.getPos().getY(), te.getPos().getZ(), te.getWorld().provider.getDimension());
 	}
 	
-	public ComputerData(int ownerId, int x, int y, int z, int dimension)
+	private ComputerData(int ownerId, int x, int y, int z, int dimension)
 	{
 		this.ownerId = ownerId;
 		this.x = x;
@@ -45,29 +40,11 @@ public class ComputerData
 		this.dimension = dimension;
 	}
 	
-	ComputerData() {}
+	ComputerData()
+	{}
 	
-	void save(DataOutputStream stream) throws IOException
+	ComputerData read(NBTTagCompound nbt)
 	{
-		stream.writeInt(x);
-		stream.writeInt(y);
-		stream.writeInt(z);
-		stream.writeInt(dimension);
-		stream.writeInt(owner.getId());
-	}
-	
-	static ComputerData load(DataInputStream stream) throws IOException
-	{
-		ComputerData data = new ComputerData();
-		data.x = stream.readInt();
-		data.y = stream.readInt();
-		data.z = stream.readInt();
-		data.dimension = stream.readInt();
-		data.ownerId = stream.readInt();
-		return data;
-	}
-	
-	ComputerData read(NBTTagCompound nbt){
 		owner = IdentifierHandler.load(nbt, "name");
 		x = nbt.getInteger("x");
 		y = nbt.getInteger("y");
@@ -76,7 +53,8 @@ public class ComputerData
 		return this;
 	}
 	
-	NBTTagCompound write(){
+	NBTTagCompound write()
+	{
 		NBTTagCompound c = new NBTTagCompound();
 		owner.saveToNBT(c, "name");
 		c.setInteger("x", x);
