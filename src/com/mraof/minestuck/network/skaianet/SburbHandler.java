@@ -319,7 +319,7 @@ public class SburbHandler
 		TitleLandAspect landAspect = LandAspectRegistry.getSingleLandAspect(title.getHeroAspect());
 		if(landAspect != null)
 			data.landTitle = landAspect;	//This part could be made more robust for when landTerrain is already defined
-		CommandBase.notifyCommandListener(sender, command, "commands.sburbSession.titleSuccess", playerName, title.getTitleName());
+		CommandBase.notifyCommandListener(sender, command, "commands.sburbSession.titleSuccess", playerName, title.asTextComponent());
 	}
 	
 	public static void predefineTerrainLandAspect(MinecraftServer server, ICommandSender sender, ICommand command, String playerName, String sessionName, TerrainLandAspect aspect) throws CommandException

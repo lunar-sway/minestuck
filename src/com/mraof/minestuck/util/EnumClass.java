@@ -1,11 +1,13 @@
 package com.mraof.minestuck.util;
 
-import java.util.EnumSet;
-import java.util.Random;
-
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.EnumSet;
+import java.util.Random;
 
 /**
  * This class represents the 14 classes that exists in sburb,
@@ -14,7 +16,8 @@ import net.minecraft.util.text.translation.I18n;
  * The <code>toString()</code> method is overridden and returns a better cased version of the class name.
  * @author kirderf1
  */
-public enum EnumClass {
+public enum EnumClass
+{
 	BARD,HEIR,KNIGHT,MAGE,MAID,PAGE,PRINCE,ROGUE,SEER,SYLPH,THIEF,WITCH,
 	LORD,MUSE;	//Non-randomized classes
 	
@@ -36,20 +39,22 @@ public enum EnumClass {
 	{
 		if(unavailableClasses == null)
 			unavailableClasses = EnumSet.noneOf(EnumClass.class);
-		if(!includeSpecial){
+		if(!includeSpecial)
+		{
 			unavailableClasses.add(LORD);
 			unavailableClasses.add(MUSE);
 		}
-		if(!(unavailableClasses.size() < 12) || includeSpecial && !(unavailableClasses.size() < 14))
+		
+		if(unavailableClasses.size() == 14)
 			return null;	//No class available to generate
-		int classInt = rand.nextInt(12 - unavailableClasses.size());
+		int classInt = rand.nextInt(14 - unavailableClasses.size());
 		EnumClass[] list = values();
-		for(int i = 0; i < list.length; i++)
-			if(!unavailableClasses.contains(list[i]))
+		for(EnumClass c : list)
+			if(!unavailableClasses.contains(c))
 			{
+				if(classInt == 0)
+					return c;
 				classInt--;
-				if(classInt == -1)
-					return list[i];
 			}
 		
 		return null;
@@ -71,12 +76,14 @@ public enum EnumClass {
 		return this.name().toLowerCase();
 	}
 	
-	public String getDisplayName() {
-		return I18n.translateToLocal("title."+this.toString());
+	@SideOnly(Side.CLIENT)
+	public String getDisplayName()
+	{
+		return I18n.format("title." + this.toString());
 	}
 	
 	public ITextComponent asTextComponent()
 	{
-		return new TextComponentTranslation("title."+this.toString());
+		return new TextComponentTranslation("title." + this.toString());
 	}
 }
