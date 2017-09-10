@@ -62,6 +62,7 @@ public class MinestuckItems
 	public static Item qPHammerAxe;
 	public static Item rubyCroak;
 	public static Item hephaestusLumber;
+	public static Item qFHammerAxe;
 	//Dice
 	public static Item dice;
 	public static Item fluoriteOctet;
@@ -84,6 +85,7 @@ public class MinestuckItems
 	public static Item cane;
 	public static Item spearCane;
 	public static Item dragonCane;
+	public static Item pogoCane;
 	public static Item upStick;
 	//Spoons/forks
 	public static Item woodenSpoon;
@@ -261,6 +263,7 @@ public class MinestuckItems
 		qPHammerAxe = GameRegistry.register(new ItemPogoWeapon(800, 8.0D, -3.0D, 30, "qPHammerAxe", 0.6).setTool("axe", 2, 7.0F).setTool("pickaxe", 1, 2.0F).setTerminus(-1, 50).setRegistryName("piston_powered_pogo_axehammer"));
 		rubyCroak = GameRegistry.register(new ItemWeapon(2000, 11.0D, -3.0D, 30, "rubyCroak").setTool("axe", 3, 8.0F).setRegistryName("ruby_croak"));
 		hephaestusLumber = GameRegistry.register(new ItemFireWeapon(3000, 11.0D, -3.0D, 30, "hephaestusLumber", 30).setTool("axe", 3, 9.0F).setRegistryName("hephaestus_lumberjack"));
+		qFHammerAxe = GameRegistry.register(new ItemPogoWeapon(2048, 11.0D, -3.0D, 0, "qFHammerAxe", 0.7).setTool("axe", 3, 7.0F).setTool("pickaxe", 2, 3.0F).setTerminus(-1, 100).setRegistryName("fission_focused_fault_feller"));
 
 		//Dice
 		dice = GameRegistry.register(new ItemWeapon(51, 6, 3, 6, "dice").setRegistryName("dice"));
@@ -286,6 +289,7 @@ public class MinestuckItems
 		cane = GameRegistry.register(new ItemWeapon(100, 2.0D, -2.0D, 15, "cane").setRegistryName("cane"));
 		spearCane = GameRegistry.register(new ItemWeapon(300, 4.0D, -2.0D, 13, "spearCane").setRegistryName("spear_cane"));
 		dragonCane = GameRegistry.register(new ItemWeapon(300, 6.5D, -2.0D, 20, "dragonCane").setRegistryName("dragon_cane"));
+		pogoCane = GameRegistry.register(new ItemPogoWeapon(500, 3.0D, -2.0D, 15, "pogoCane", 0.6).setRegistryName("pogo_cane"));
 		upStick = GameRegistry.register(new ItemWeapon(ToolMaterial.WOOD, 1, 0.0D, 0.0D, 0, "upStick").setUnbreakable().setRegistryName("uranium_powered_stick"));
 
 		//Spoons/forks

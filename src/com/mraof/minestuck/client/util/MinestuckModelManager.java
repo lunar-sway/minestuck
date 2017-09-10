@@ -80,6 +80,8 @@ public class MinestuckModelManager
 		register(hephaestusLumber);
 		register(copseCrusher);
 		register(qPHammerAxe);
+		register(qFHammerAxe);
+		
 		
 		register(dice);
 		register(fluoriteOctet);
@@ -102,6 +104,7 @@ public class MinestuckModelManager
 		register(cane);
 		register(spearCane);
 		register(dragonCane);
+		register(pogoCane);
 		register(upStick);
 		
 		register(woodenSpoon);
