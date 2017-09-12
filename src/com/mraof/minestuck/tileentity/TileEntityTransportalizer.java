@@ -1,10 +1,8 @@
 package com.mraof.minestuck.tileentity;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Random;
-
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.Location;
+import com.mraof.minestuck.util.Teleport;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -16,9 +14,10 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.WorldServer;
 
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.Location;
-import com.mraof.minestuck.util.Teleport;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Random;
 
 public class TileEntityTransportalizer extends TileEntity implements ITickable
 {
@@ -112,13 +111,22 @@ public class TileEntityTransportalizer extends TileEntity implements ITickable
 			}
 			
 			if(!destTransportalizer.getEnabled()) { return; } // Fail silently to make it look as though the player entered an ID that doesn't map to a transportalizer.
-			IBlockState block0 = world.getBlockState(location.pos.up());
-			IBlockState block1 = world.getBlockState(location.pos.up(2));
+			IBlockState block0 = this.world.getBlockState(this.pos.up());
+			IBlockState block1 = this.world.getBlockState(this.pos.up(2));
 			if(block0.getMaterial().blocksMovement() || block1.getMaterial().blocksMovement())
 			{
 				entity.timeUntilPortal = entity.getPortalCooldown();
 				if(entity instanceof EntityPlayerMP)
-					((EntityPlayerMP) entity).sendMessage(new TextComponentTranslation("message.transportalizer.destinationBlocked"));
+					entity.sendMessage(new TextComponentTranslation("message.transportalizer.blocked"));
+				return;
+			}
+			block0 = world.getBlockState(location.pos.up());
+			block1 = world.getBlockState(location.pos.up(2));
+			if(block0.getMaterial().blocksMovement() || block1.getMaterial().blocksMovement())
+			{
+				entity.timeUntilPortal = entity.getPortalCooldown();
+				if(entity instanceof EntityPlayerMP)
+					entity.sendMessage(new TextComponentTranslation("message.transportalizer.destinationBlocked"));
 				return;
 			}
 			
