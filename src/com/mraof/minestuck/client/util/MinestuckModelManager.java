@@ -1,16 +1,10 @@
 package com.mraof.minestuck.client.util;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.block.BlockChessTile;
-import com.mraof.minestuck.block.BlockColoredDirt;
-import com.mraof.minestuck.block.BlockCrockerMachine;
-import com.mraof.minestuck.block.BlockMinestuckLog;
-import com.mraof.minestuck.block.BlockMinestuckStone;
-import com.mraof.minestuck.block.BlockSburbMachine;
+import com.mraof.minestuck.block.*;
 import com.mraof.minestuck.item.ItemMinestuckBeverage;
 import com.mraof.minestuck.item.ItemMinestuckCandy;
 import com.mraof.minestuck.item.weapon.ItemDualWeapon;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCactus;
 import net.minecraft.block.BlockTNT;
@@ -62,7 +56,7 @@ public class MinestuckModelManager
 		register(sord);
 		register(cactusCutlass);
 		register(katana);
-		register(unbreakableKatana, 0, "katana");
+		register(unbreakableKatana);
 		register(firePoker);
 		register(hotHandle);
 		register(caledscratch);
@@ -234,7 +228,6 @@ public class MinestuckModelManager
 		ModelBakery.registerItemVariants(disk, new ResourceLocation("minestuck:disk_client"), new ResourceLocation("minestuck:disk_server"));
 		ModelBakery.registerItemVariants(minestuckBucket, new ResourceLocation("minestuck:bucket_blood"), new ResourceLocation("minestuck:bucket_oil"), new ResourceLocation("minestuck:bucket_brain_juice"));
 		ModelBakery.registerItemVariants(captchaCard, new ResourceLocation("minestuck:card_empty"), new ResourceLocation("minestuck:card_full"), new ResourceLocation("minestuck:card_punched"));
-		ModelBakery.registerItemVariants(unbreakableKatana, new ResourceLocation("minestuck:katana"));
 		if(MinestuckConfig.oldItemModels)
 		{
 			ModelBakery.registerItemVariants(zillyhooHammer, new ResourceLocation("minestuck:zillyhoo_hammer_old"));
