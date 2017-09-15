@@ -54,17 +54,17 @@ public enum EnumClass
 			unavailableClasses.add(MUSE);
 		}
 		
-		if(unavailableClasses.size() == 14)
+		EnumSet<EnumClass> classes = EnumSet.complementOf(unavailableClasses);	//TODO Does it make more sense for the parameter to instead be a set of available classes?
+		if(classes.isEmpty())
 			return null;	//No class available to generate
-		int classInt = rand.nextInt(14 - unavailableClasses.size());	//TODO Change to a set with all available classes to avoid iterating through the enum values
-		EnumClass[] list = values();
-		for(EnumClass c : list)	//Go through each title-class until the index generated is reached
-			if(!unavailableClasses.contains(c))
-			{
-				if(classInt == 0)
-					return c;
-				classInt--;
-			}
+		
+		int classInt = rand.nextInt(classes.size());
+		for(EnumClass c : classes)	//Go through each available title-class until the index generated is reached
+		{
+			if(classInt == 0)
+				return c;
+			classInt--;
+		}
 		
 		return null;
 	}
