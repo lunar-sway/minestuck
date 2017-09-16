@@ -45,28 +45,57 @@ public enum EnumAspect
 		return null;
 	}
 	
+	/**
+	 * Used to get a title-aspect based on index. Used when reading a title-aspect from nbt.
+	 * The index value is matched with the return of <code>getIntFromAspect</code>
+	 * @param i The index number.
+	 * @return the title-aspect
+	 */
 	public static EnumAspect getAspectFromInt(int i)
 	{
 		return EnumAspect.values()[i];
 	}
 	
+	/**
+	 * Gives the index for the aspect. Used when writing a title-aspect to nbt.
+	 * When reading a title-aspect from nbt, <code>getAspectFromInt</code> should be used to return the index to a title-aspect.
+	 * @param e The title-aspect to convert.
+	 * @return an index number that matches this title-aspect
+	 */
 	public static int getIntFromAspect(EnumAspect e)
 	{
 		return e.ordinal();
 	}
 	
+	/**
+	 * Takes the enum name for this title-aspect and returns a lowercase version.
+	 * Aside from regular use of the method, it is useful for producing
+	 * the unlocalized name of the title-aspect using <code>"title." + titleAspect.toString()</code>
+	 * @return the name of this title-aspect
+	 */
 	@Override
 	public String toString()
 	{
 		return this.name().toLowerCase();
 	}
 	
+	/**
+	 * Translates and returns the proper name of this title-aspect. Should only be used client-side.
+	 * For usage in messages sent to a player from a server, use <code>asTextComponent()</code>.
+	 * For debugging purposes, use <code>toString()</code> instead.
+	 * @return a translated string of the name.
+	 */
 	@SideOnly(Side.CLIENT)
 	public String getDisplayName()
 	{
 		return I18n.format("title." + this.toString());
 	}
 	
+	/**
+	 * Creates a text component for this title-aspect that will be translated client-side.
+	 * Used for messages from the mod that for example will be sent trough chat.
+	 * @return a text component that will translate into the name of the title-aspect
+	 */
 	public ITextComponent asTextComponent()
 	{
 		return new TextComponentTranslation("title." + this.toString());
