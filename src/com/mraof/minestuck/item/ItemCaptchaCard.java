@@ -37,8 +37,11 @@ public class ItemCaptchaCard extends Item
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
 	{
-		items.add(new ItemStack(this));
-		items.add(AlchemyRecipeHandler.createCard(new ItemStack(MinestuckItems.cruxiteApple), true));
+		if(this.isInCreativeTab(tab))
+		{
+			items.add(new ItemStack(this));
+			items.add(AlchemyRecipeHandler.createCard(new ItemStack(MinestuckItems.cruxiteApple), true));
+		}
 	}
 	
 	@Override

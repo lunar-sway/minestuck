@@ -70,7 +70,8 @@ public class ItemMinestuckBeverage extends ItemFood
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
 	{
 		int num_beverages = NAMES.length;
-		for(int i = 0; i < num_beverages; i++)
-			items.add(new ItemStack(this, 1, i));
+		if(this.isInCreativeTab(tab))
+			for(int i = 0; i < num_beverages; i++)
+				items.add(new ItemStack(this, 1, i));
 	}
 }

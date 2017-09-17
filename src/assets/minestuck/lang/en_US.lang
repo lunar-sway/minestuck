@@ -24,6 +24,9 @@ achievement.returnNode.desc=Find a Return Node and jump in to return home.
 achievement.findDungeon=Dungeon Explorer
 achievement.findDungeon.desc=Find a Dungeon to explore!
 
+advancements.minestuck.root.title=Minestuck
+advancements.minestuck.root.description=The Beginning of Something Really Excellent
+
 commands.checkLand.usage=/checkLand
 commands.grist.usage=/grist [player] <add|set> <gristtype value ...> OR /grist [player] get
 commands.grist.get=%s has:%s

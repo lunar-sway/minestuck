@@ -105,8 +105,9 @@ public class ItemMinestuckBucket extends ItemBucket	//Unsure if anything more sh
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
 	{
-		for(int id = 0; id < fillFluids.size(); id++)
-			items.add(new ItemStack(this, 1, id));
+		if(this.isInCreativeTab(tab))
+			for(int id = 0; id < fillFluids.size(); id++)
+				items.add(new ItemStack(this, 1, id));
 	}
 	
 	@Override
