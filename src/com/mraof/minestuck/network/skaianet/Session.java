@@ -1,17 +1,11 @@
 package com.mraof.minestuck.network.skaianet;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+
+import java.util.*;
 
 /**
  * Was also an interface for the session system, but now just a data structure representing a session.
@@ -95,7 +89,7 @@ public class Session
 	
 	/**
 	 * Creates a list with all players in the session.
-	 * @return Returns a list with the players usernames.
+	 * @return Returns a list with the players identifiers.
 	 */
 	Set<PlayerIdentifier> getPlayerList()
 	{
@@ -103,7 +97,7 @@ public class Session
 		for(SburbConnection c : this.connections)
 		{
 			list.add(c.getClientIdentifier());
-			if(!c.getServerIdentifier().equals(".null"))
+			if(!c.getServerIdentifier().equals(IdentifierHandler.nullIdentifier))
 				list.add(c.getServerIdentifier());
 		}
 		list.addAll(predefinedPlayers.keySet());
@@ -162,7 +156,7 @@ public class Session
 		} else
 		{	//Support for saves from older minestuck versions
 			NBTTagCompound predefineTag = nbt.getCompoundTag("predefinedPlayers");
-			for(String player : (Set<String>) predefineTag.getKeySet())
+			for(String player : predefineTag.getKeySet())
 			{
 				NBTTagCompound compound = new NBTTagCompound();
 				compound.setString("player", player);
@@ -175,13 +169,6 @@ public class Session
 		
 		checkIfCompleted();
 		return this;
-	}
-	
-	SburbConnection getConnection(String client, String server){
-		for(SburbConnection c : connections)
-			if(c.getClientIdentifier().equals(client) && c.getServerIdentifier().equals(server))
-				return c;
-		return null;
 	}
 	
 	boolean isCustom()

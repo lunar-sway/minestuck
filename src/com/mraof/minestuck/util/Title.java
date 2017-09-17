@@ -1,33 +1,42 @@
 package com.mraof.minestuck.util;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class Title {
+public class Title
+{
 	
 	private EnumClass heroClass;
 	private EnumAspect heroAspect;
 
-	public Title(EnumClass heroClass, EnumAspect heroAspect) {
+	public Title(EnumClass heroClass, EnumAspect heroAspect)
+	{
 		this.heroClass = heroClass;
 		this.heroAspect = heroAspect;
 	}
 	
-	public EnumClass getHeroClass() {
+	public EnumClass getHeroClass()
+	{
 		return this.heroClass;
 	}
 	
-	public EnumAspect getHeroAspect() {
+	public EnumAspect getHeroAspect()
+	{
 		return this.heroAspect;
 	}
 	
-	public String getTitleName() {
-		return I18n.translateToLocalFormatted("title.format", heroClass.getDisplayName(), heroAspect.getDisplayName());
+	@SideOnly(Side.CLIENT)
+	public String getTitleName()
+	{
+		return I18n.format("title.format", heroClass.getDisplayName(), heroAspect.getDisplayName());
 	}
 	
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		return heroClass.toString() + " of " + heroAspect.toString();
 	}
 	

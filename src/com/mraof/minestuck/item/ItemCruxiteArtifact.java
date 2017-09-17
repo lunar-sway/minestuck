@@ -302,15 +302,16 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 		ExtendedBlockStorage blockStorage2 = getBlockStorage(c2, y2 >> 4);
 		
 		blockStorage.set(x, j, z, blockStorage2.get(x, j2, z));
-		blockStorage.getBlockLight().set(x, j, z, blockStorage2.getBlockLight().get(x, j2, z));
-		blockStorage.getSkyLight().set(x, j, z, blockStorage2.getSkyLight().get(x, j2, z));
+		blockStorage.setBlockLight(x, j, z, blockStorage2.getBlockLight(x, j2, z));
+		if(blockStorage2.getSkyLight() != null)
+			blockStorage.setSkyLight(x, j, z, blockStorage2.getSkyLight(x, j2, z));
 	}
 	
 	private static ExtendedBlockStorage getBlockStorage(Chunk c, int y)
 	{
 		ExtendedBlockStorage blockStorage = c.getBlockStorageArray()[y];
 		if(blockStorage == null)
-			blockStorage = c.getBlockStorageArray()[y] = new ExtendedBlockStorage(y << 4, !c.getWorld().provider.isNether());
+			blockStorage = c.getBlockStorageArray()[y] = new ExtendedBlockStorage(y << 4, c.getWorld().provider.hasSkyLight());
 		return blockStorage;
 	}
 	

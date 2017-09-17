@@ -180,6 +180,7 @@ public class MinestuckItems
 				return block.getUnlocalizedName();
 			}
 		});
+		registerItemBlock(registry, new ItemBlock(rabbitSpawner));
 		registerItemBlock(registry, new ItemBlock(coalOreNetherrack));
 		registerItemBlock(registry, new ItemBlock(ironOreSandstone));
 		registerItemBlock(registry, new ItemBlock(ironOreSandstoneRed));

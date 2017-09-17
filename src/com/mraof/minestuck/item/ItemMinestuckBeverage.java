@@ -8,7 +8,8 @@ import net.minecraft.util.NonNullList;
 
 public class ItemMinestuckBeverage extends ItemFood
 {
-	public static final String[] NAMES = new String[]{"tab"};
+	public static final String[] NAMES = new String[]{"tab", "faygo", "faygo_candyapple", "faygo_cola",
+			"faygo_cottoncandy", "faygo_creme", "faygo_grape", "faygo_moonmist", "faygo_peach", "faygo_redpop"};
 	
 	private int[] healAmounts;
 	private float[] saturationModifiers;

@@ -29,9 +29,10 @@ import java.util.*;
  * Handles session related stuff like title generation, consort choosing, and other session management stuff.
  * @author kirderf1
  */
-public class SessionHandler {
+public class SessionHandler
+{
 	
-	public static final String GLOBAL_SESSION_NAME = "global";
+	static final String GLOBAL_SESSION_NAME = "global";
 	
 	/**
 	 * The max numbers of players per session.
@@ -43,7 +44,7 @@ public class SessionHandler {
 	 * Will be for example false even if Minestuck.globalSession is true if it can't merge all
 	 * sessions into a single session.
 	 */
-	public static boolean singleSession;
+	static boolean singleSession;
 	
 	/**
 	 * An array list of the current worlds sessions.
@@ -55,7 +56,8 @@ public class SessionHandler {
 	 * Called when the server loads a new world, after
 	 * Minestuck has loaded the sessions from file.
 	 */
-	public static void serverStarted() {
+	static void serverStarted()
+	{
 		singleSession = MinestuckConfig.globalSession;
 		if(!MinestuckConfig.globalSession) {
 			split();
@@ -77,7 +79,7 @@ public class SessionHandler {
 	 * Used in the conversion of a non-global session world
 	 * to a global session world.
 	 */
-	static void mergeAll()
+	private static void mergeAll()
 	{
 		if(!canMergeAll() || sessions.size() == 0)
 		{
@@ -109,7 +111,7 @@ public class SessionHandler {
 	 * @return False if all registered players is more than maxSize, or if there exists more
 	 * than one skaia, prospit, or derse dimension.
 	 */
-	static boolean canMergeAll()
+	private static boolean canMergeAll()
 	{
 		if(sessions.size() == 1 && (!sessions.get(0).isCustom() || sessions.get(0).name.equals(GLOBAL_SESSION_NAME)))
 				return true;
@@ -131,9 +133,7 @@ public class SessionHandler {
 				return false;
 			players += s.getPlayerList().size();
 		}
-		if(players > maxSize)
-			return false;
-		else return true;
+		return players <= maxSize;
 	}
 	
 	/**
@@ -173,7 +173,7 @@ public class SessionHandler {
 		return s;
 	}
 	
-	static String canMerge(Session s0, Session s1)
+	private static String canMerge(Session s0, Session s1)
 	{
 		if(s0.isCustom() && s1.isCustom() || s0.locked || s1.locked)
 			return "computer.messageConnectFail";
@@ -251,7 +251,7 @@ public class SessionHandler {
 	 * @return True if client connection is not null and client and server session is the same or 
 	 * client connection is null and server connection is null.
 	 */
-	static boolean canConnect(PlayerIdentifier client, PlayerIdentifier server)
+	private static boolean canConnect(PlayerIdentifier client, PlayerIdentifier server)
 	{
 		Session sClient = getPlayerSession(client), sServer = getPlayerSession(server);
 		SburbConnection cClient = SkaianetHandler.getMainConnection(client, true);

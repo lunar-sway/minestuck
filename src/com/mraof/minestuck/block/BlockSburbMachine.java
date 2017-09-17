@@ -161,6 +161,12 @@ public class BlockSburbMachine extends BlockContainer
 			return te.comparatorValue();
 		return 0;
 	}
+	
+	@Override
+	public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side)
+	{
+		return side!=null;
+	}
 
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)

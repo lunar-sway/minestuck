@@ -27,16 +27,16 @@ import net.minecraft.world.storage.loot.LootContext;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Class where message content is defined. Also things such as if it's a chain
  * message or perhaps a message one could reply to
- * 
+ * There is plenty of room for improvement and to make things more robust
  * @author Kirderf1
  */
 public abstract class MessageType
 {
-	
 	public abstract String getString();
 	
 	public abstract ITextComponent getMessage(EntityConsort consort, EntityPlayer player, String chainIdentifier);
@@ -101,6 +101,9 @@ public abstract class MessageType
 					obj[i] = title.getHeroAspect().asTextComponent();
 				else
 					obj[i] = "Player aspect";
+			} else if(args[i].equals("consortSound"))
+			{
+				obj[i] = new TextComponentTranslation("consort.sound." + s);
 			} else if(args[i].equals("consortType"))
 			{
 				obj[i] = new TextComponentTranslation("entity." + s + ".name");
@@ -182,10 +185,126 @@ public abstract class MessageType
 		}
 	}
 	
-	public static class DescriptionMessage extends SingleMessage
+	//This class takes two separate messages and treats them as one.
+	//This allows several messages to group together and be sent to the chat simultaneously.
+	//Used in rap battles.
+	//Note that only the last option in a DoubleMessage can be a ChoiceMessage.
+	public static class DoubleMessage extends MessageType
 	{
+		protected MessageType messageOne;
+		protected MessageType messageTwo;
+		protected String[] args;
+		protected String nbtName;
+		protected boolean firstOnce;
+		
+		public DoubleMessage(MessageType messageOne, MessageType messageTwo)
+		{
+			this.messageOne = messageOne;
+			this.messageTwo = messageTwo;
+			nbtName = messageOne.getString();
+		}
+		
+		public DoubleMessage(MessageType messageOne, MessageType messageTwo, String s)
+		{
+			this(messageOne, messageTwo);
+			nbtName = s;
+		}
+		
+		/**
+		 * Will make the first of the two messages only appear the first time
+		 */
+		public DoubleMessage setSayFirstOnce()
+		{
+			firstOnce = true;
+			return this;
+		}
+		
+		@Override
+		public String getString() {
+			return nbtName;
+		}
+
+		@Override
+		public ITextComponent getMessage(EntityConsort consort, EntityPlayer player,
+				String chainIdentifier) {
+			if(firstOnce)
+			{
+				NBTTagCompound nbt = consort.getMessageTagForPlayer(player);
+				if(!nbt.hasKey(this.getString()) || !nbt.getBoolean(this.getString()))
+					nbt.setBoolean(this.getString(), true);
+				else return messageTwo.getMessage(consort, player, chainIdentifier);
+			}
+			
+			ITextComponent message = messageOne.getMessage(consort, player, chainIdentifier);
+			message.appendText("\n");
+			message.appendSibling(messageTwo.getMessage(consort, player, chainIdentifier));
+			return message;
+		}
+		
+		@Override
+		public ITextComponent getFromChain(EntityConsort consort, EntityPlayer player,
+				String chainIdentifier, String fromChain)
+		{
+			ITextComponent message = messageTwo.getFromChain(consort, player, chainIdentifier, fromChain);
+			return message;
+		}
+	}
+	
+	/**
+	 * Message wrapper that adds a description at the end of the message when the return isn't null
+	 */
+	public static class DescriptionMessage extends MessageType
+	{
+		protected MessageType message;
+		protected String unlocalizedMessage;
+		protected String[] args;
 		
 		public DescriptionMessage(String message, String... args)
+		{
+			this(new SingleMessage(message, args), message + ".desc", args);
+		}
+		
+		public DescriptionMessage(MessageType message, String desc, String... args)
+		{
+			this.message = message;
+			this.unlocalizedMessage = desc;
+			this.args = args;
+		}
+		
+		@Override
+		public String getString()
+		{
+			return unlocalizedMessage;
+		}
+		
+		@Override
+		public ITextComponent getMessage(EntityConsort consort, EntityPlayer player, String chainIdentifier)
+		{
+			ITextComponent message = this.message.getMessage(consort, player, chainIdentifier);
+			if(message == null)
+				return null;
+			
+			message.appendText("\n");
+			ITextComponent desc = createMessage(consort, player, unlocalizedMessage, args, false);
+			desc.getStyle().setItalic(true).setColor(TextFormatting.GRAY);
+			message.appendSibling(desc);
+			return message;
+		}
+		
+		@Override
+		public ITextComponent getFromChain(EntityConsort consort, EntityPlayer player, String chainIdentifier, String fromChain)
+		{
+			return message.getFromChain(consort, player, chainIdentifier, fromChain);
+		}
+	}
+
+	/* Works like DescriptionMessage, except that it will NOT automatically include the prompt to a description.
+	 *  An example of when this would be used is when a Consort is introduced with narration rather than a quote, 
+	 *  like "This consort is silent and aloof. What do you do?"
+	 */
+	public static class DescriptiveMessage extends SingleMessage
+	{
+		public DescriptiveMessage(String message, String... args)
 		{
 			super(message, args);
 		}
@@ -193,15 +312,28 @@ public abstract class MessageType
 		@Override
 		public ITextComponent getMessage(EntityConsort consort, EntityPlayer player, String chainIdentifier)
 		{
-			ITextComponent message = super.getMessage(consort, player, chainIdentifier);
-			message.appendText("\n");
-			ITextComponent desc = createMessage(consort, player, unlocalizedMessage + ".desc", args, false);
+			ITextComponent desc = createMessage(consort, player, unlocalizedMessage, args, false);
 			desc.getStyle().setItalic(true).setColor(TextFormatting.GRAY);
+			
+			ITextComponent message = new TextComponentString("");
 			message.appendSibling(desc);
 			return message;
 		}
+		
+		@Override
+		public String getString()
+		{
+			return unlocalizedMessage;
+		}
 	}
 	
+	/*
+	 * ChainMessage will take several messages and iterate through the list as it is accessed further.
+	 * repeatIndex is the index of the message to which the consort will loop back when it hits the end of the chain.
+	 * By making repeatIndex 0, the whole chain will be repeated. By making it messages.length-1, only the last line will be repeated.
+	 * Keep in mind that a ChainMessage will always begin with the first message in the chain,
+	 * And that the next message to be said is stored in the NBT of the consort itself.
+	 */
 	public static class ChainMessage extends MessageType
 	{
 		protected String nbtName;
@@ -283,19 +415,90 @@ public abstract class MessageType
 		}
 	}
 	
+	//This class functions like a chain message, except that it will select a single entry randomly each time, instead of looping.
+	public static class RandomMessage extends MessageType
+	{
+		protected String nbtName;
+		protected MessageType[] messages;
+		protected RandomKeepResult keepMethod;
+		
+		public RandomMessage(String name, RandomKeepResult keepMethod, MessageType... messages)
+		{
+			this.nbtName = name;
+			this.keepMethod = keepMethod;
+			this.messages = messages;
+		}
+		
+		@Override
+		public String getString()
+		{
+			return nbtName;
+		}
+		
+		@Override
+		public ITextComponent getMessage(EntityConsort consort, EntityPlayer player, String chainIdentifier)
+		{
+			NBTTagCompound nbt;
+			if(keepMethod.equals(RandomKeepResult.KEEP_CONSORT))
+				nbt = consort.getMessageTag();
+			else nbt = consort.getMessageTagForPlayer(player);
+			
+			if(!keepMethod.equals(RandomKeepResult.SKIP))
+				if(nbt.hasKey(this.getString()))
+				{
+					int i = nbt.getInteger(this.getString());
+					return messages[i].getMessage(consort, player, MessageType.addTo(chainIdentifier, messages[i].getString()));
+				}
+			
+			int i = consort.getRNG().nextInt(messages.length);
+			
+			if(!keepMethod.equals(RandomKeepResult.SKIP))
+				nbt.setInteger(this.getString(), i);
+			
+			return messages[i].getMessage(consort, player, MessageType.addTo(chainIdentifier, messages[i].getString()));
+		}
+
+		@Override
+		public ITextComponent getFromChain(EntityConsort consort, EntityPlayer player, String chainIdentifier,
+				String fromChain)
+		{
+			if(fromChain.isEmpty())
+				return null;
+			int i = fromChain.indexOf(':');
+			if(i == -1)
+				i = fromChain.length();
+			String messageName = fromChain.substring(0, i);
+			fromChain = i == fromChain.length() ? "" : fromChain.substring(i + 1);
+			
+			for(MessageType message : messages)
+				if(message.getString().equals(messageName))
+					return message.getFromChain(consort, player, MessageType.addTo(chainIdentifier, messageName), fromChain);
+			
+			return null;
+		}
+	}
+	
+	public enum RandomKeepResult
+	{
+		SKIP,
+		KEEP_PLAYER,
+		KEEP_CONSORT
+	}
+	
 	public static class ChoiceMessage extends MessageType
 	{
 		protected boolean repeat;
-		protected SingleMessage message;
+		protected MessageType message;
 		protected SingleMessage[] options;
 		protected MessageType[] results;
+		protected boolean acceptNull = false;
 		
-		public ChoiceMessage(SingleMessage message, SingleMessage[] options, MessageType[] results)
+		public ChoiceMessage(MessageType message, SingleMessage[] options, MessageType[] results)
 		{
 			this(false, message, options, results);
 		}
 		
-		public ChoiceMessage(boolean repeat, SingleMessage message, SingleMessage[] options, MessageType[] results)
+		public ChoiceMessage(boolean repeat, MessageType message, SingleMessage[] options, MessageType[] results)
 		{
 			if(options.length != results.length)
 				throw new IllegalArgumentException("Option and result arrays must be of equal size!");
@@ -303,6 +506,16 @@ public abstract class MessageType
 			this.message = message;
 			this.options = options;
 			this.results = results;
+		}
+		
+		/**
+		 * Has to be used when one of the options is a delay message. Will slightly mess with PurchaseMessage, ItemRequirement, or GiveItemMessage.
+		 * If you need to do a combination of those two, ask Kirderf, as a certain addition to the system is needed. (Note to self, use exceptions instead of null for the three latter to distinguish their return from delay messages)
+		 */
+		public ChoiceMessage setAcceptNull()
+		{
+			acceptNull = true;
+			return this;
 		}
 		
 		@Override
@@ -330,6 +543,9 @@ public abstract class MessageType
 			} else
 			{
 				ITextComponent question = message.getMessage(consort, player, chainIdentifier);
+				if(question == null)
+					return null;
+				
 				String commandStart = "/consortReply " + consort.getEntityId() + " "
 						+ (chainIdentifier.isEmpty() ? "" : chainIdentifier + ":");
 				question.appendText("\n");
@@ -341,6 +557,7 @@ public abstract class MessageType
 							createMessage(consort, player, options[i].unlocalizedMessage, options[i].args, false));
 					option.getStyle().setClickEvent(
 							new ClickEvent(ClickEvent.Action.RUN_COMMAND, commandStart + options[i].getString()));
+					option.getStyle().setColor(TextFormatting.GRAY);
 					question.appendSibling(option);
 				}
 				
@@ -365,7 +582,7 @@ public abstract class MessageType
 			
 			NBTTagCompound nbt = consort.getMessageTagForPlayer(player);
 			
-			MessageType message = null;
+			MessageType message;
 			if(nbt.getString("currentMessage").equals(this.getString()) && !nbt.hasKey(this.getString())
 					&& fromChain.isEmpty())
 				for(int index = 0; index < options.length; index++)
@@ -373,16 +590,30 @@ public abstract class MessageType
 					{
 						message = results[index];
 						
-						ITextComponent text = message.getMessage(consort, player, addTo(chainIdentifier, message.getString()));
 						
-						if(text != null)
+						if(acceptNull) //Stuff has to be done before the message, as if it's null, it will send from the getMessage function
 						{
 							if(!repeat)
 								nbt.setInteger(this.getString(), index);
 							
-							player.sendMessage(new TextComponentTranslation("chat.type.text", player.getDisplayName(),
-									createMessage(consort, player, options[index].unlocalizedMessage + ".reply",
-											options[index].args, false)));
+							ITextComponent innerMessage = createMessage(consort, player, options[index].unlocalizedMessage + ".reply", options[index].args, false);
+							
+							ITextComponent out = new TextComponentTranslation("chat.type.text", player.getDisplayName(), innerMessage);
+							
+							player.sendMessage(out);
+						}
+						ITextComponent text = message.getMessage(consort, player, addTo(chainIdentifier, message.getString()));
+						
+						if(text != null && !acceptNull)
+						{
+							if(!repeat)
+								nbt.setInteger(this.getString(), index);
+							
+							ITextComponent innerMessage = createMessage(consort, player, options[index].unlocalizedMessage + ".reply", options[index].args, false);
+							
+							ITextComponent out = new TextComponentTranslation("chat.type.text", player.getDisplayName(), innerMessage);
+							
+							player.sendMessage(out);
 						}
 						
 						return text;
@@ -401,7 +632,139 @@ public abstract class MessageType
 			
 			return null;
 		}
+	}
+	
+	/**
+	 * Used with a list of messages to make those messages send separately, with a delay in between
+	 * Note: Will always repeat right now, so pay attention to what is happening if you want to use nested messages
+	 */
+	public static class DelayMessage extends MessageType
+	{
+		protected String name;
+		protected MessageType[] messages;
+		protected int[] delay;
 		
+		/**
+		 * Used to create a delay message. Name will default to that of the first message.
+		 * @param delay A list of delays in tick-form. First entry is the time between the first and second message, and so on.
+		 *                    Will loop back to the beginning of the array when going out of bounds, so the array do not need to be of full size if you want to use the same value constantly
+		 * @param messages The messages that will be sent when triggered
+		 */
+		public DelayMessage(int[] delay, MessageType... messages)
+		{
+			this(messages[0].getString(), delay, messages);
+		}
+		
+		/**
+		 * Used to create a delay message.
+		 * @param name Text used to identify the component and to be used as a key for nbt
+		 * @param delay A list of delays in tick-form. First entry is the time between the first and second message, and so on.
+		 *                    Will loop back to the beginning of the array when going out of bounds, so the array do not need to be of full size if you want to use the same value constantly
+		 * @param messages The messages that will be sent when triggered
+		 */
+		public DelayMessage(String name, int[] delay, MessageType... messages)
+		{
+			this.name = name;
+			this.delay = delay;
+			this.messages = messages;
+		}
+		
+		@Override
+		public String getString()
+		{
+			return name;
+		}
+		
+		@Override
+		public ITextComponent getMessage(EntityConsort consort, EntityPlayer player, String chainIdentifier)
+		{
+			consort.getMessageTag().setString(this.getString(), chainIdentifier);
+			
+			NBTTagCompound nbt = consort.getMessageTagForPlayer(player);
+			
+			if(!nbt.hasKey(this.getString()) || consort.updatingMessage != this)
+			{
+				nbt.setInteger(this.getString(), consort.messageTicksLeft - delay[0]);
+				nbt.setInteger(this.getString()+".i", 0);
+				consort.updatingMessage = this;
+				ITextComponent text = messages[0].getMessage(consort, player, MessageType.addTo(chainIdentifier, messages[0].getString()));
+				if(text != null)
+					player.sendMessage(text);
+				
+			} else if(nbt.getInteger(this.getString()+".i") == messages.length - 1)
+			{
+				return messages[messages.length - 1].getMessage(consort, player, MessageType.addTo(chainIdentifier, messages[messages.length - 1].getString()));
+			}
+			
+			return null;
+		}
+		
+		@Override
+		public ITextComponent getFromChain(EntityConsort consort, EntityPlayer player, String chainIdentifier, String fromChain)
+		{
+			if(fromChain.isEmpty())
+				return null;
+			int i = fromChain.indexOf(':');
+			if(i == -1)
+				i = fromChain.length();
+			String messageName = fromChain.substring(0, i);
+			fromChain = i == fromChain.length() ? "" : fromChain.substring(i + 1);
+			
+			for(MessageType message : messages)
+				if(message.getString().equals(messageName))
+					return message.getFromChain(consort, player, MessageType.addTo(chainIdentifier, messageName), fromChain);
+			
+			return null;
+		}
+		
+		public void onTickUpdate(EntityConsort consort)
+		{
+			NBTTagCompound messageTags = consort.getMessageTag();
+			String chainIdentifier = messageTags.getString(this.getString());
+			boolean update = false;
+			for(String key : messageTags.getKeySet())
+			{
+				NBTTagCompound nbt = messageTags.getCompoundTag(key);
+				if(!nbt.hasKey(this.getString()))
+					continue;
+				
+				EntityPlayer player = consort.getServer().getPlayerList().getPlayerByUUID(UUID.fromString(key));
+				if(player == null)
+					nbt.removeTag(this.getString());
+				else
+				{
+					int i = nbt.getInteger(this.getString()+".i");
+					int time = nbt.getInteger(this.getString());
+					if(time >= consort.messageTicksLeft)
+					{
+						i++;
+						time -= delay[i % delay.length];
+						nbt.setInteger(this.getString(), time);
+						nbt.setInteger(this.getString() + ".i", i);
+						
+						if(i == messages.length - 1)
+						{
+							ITextComponent text = consort.message.getMessage(consort, player);
+							if(text != null)
+								player.sendMessage(text);
+							
+							nbt.removeTag(this.getString());
+							nbt.removeTag(this.getString() + ".i");
+						} else
+						{
+							
+							update = true;
+							ITextComponent text = messages[i].getMessage(consort, player, MessageType.addTo(chainIdentifier, messages[i].getString()));
+							if(text != null)
+								player.sendMessage(text);
+						}
+					} else update = true;
+				}
+			}
+			
+			if(!update)
+				consort.updatingMessage = null;
+		}
 	}
 	
 	public static class PurchaseMessage extends MessageType

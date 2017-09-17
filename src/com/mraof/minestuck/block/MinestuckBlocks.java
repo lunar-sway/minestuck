@@ -41,6 +41,7 @@ public class MinestuckBlocks
 	public static Block castIronStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.CAST_IRON)).setRegistryName("cast_iron_stairs").setUnlocalizedName("stairsMinestuck.castIron");
 	public static Block log = new BlockMinestuckLog().setRegistryName("log");
 	public static Block woodenCactus = new BlockCactusSpecial(SoundType.WOOD, "axe").setRegistryName("wooden_cactus").setHardness(1.0F).setResistance(2.5F).setUnlocalizedName("woodenCactus");
+	public static Block rabbitSpawner = new BlockMobSpawner().setRegistryName("rabbit_spawner").setUnlocalizedName("rabbitSpawner");
 	
 	//Ores
 	public static Block oreCruxite = (BlockCruxiteOre) new BlockCruxiteOre().setRegistryName("ore_cruxite");
@@ -86,7 +87,8 @@ public class MinestuckBlocks
 				blockComputerOff, blockComputerOn,
 				blockGoldSeeds, glowystoneWire,
 				primedTnt, unstableTnt, instantTnt, woodenExplosiveButton, stoneExplosiveButton,
-				blockOil, blockBlood, blockBrainJuice};
+				blockOil, blockBlood, blockBrainJuice,
+				rabbitSpawner};
 		
 		for(Block block : blocks)
 			registry.register(block);

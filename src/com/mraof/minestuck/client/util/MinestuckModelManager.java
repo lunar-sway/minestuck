@@ -177,6 +177,7 @@ public class MinestuckModelManager
 	{
 		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())
 			register(chessTile, type.ordinal(), "chesstile_"+type.name);
+		register(rabbitSpawner);
 		register(skaiaPortal);
 		register(transportalizer);
 		register(blockComputerOff);
