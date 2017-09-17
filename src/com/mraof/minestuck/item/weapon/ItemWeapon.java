@@ -6,6 +6,7 @@ import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.Pair;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -46,7 +47,7 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 	{
 		super(ToolMaterial.IRON);
 		this.maxStackSize = 1;
-		this.setCreativeTab(MinestuckItems.tabMinestuck);
+		this.setCreativeTab(CreativeTabs.COMBAT);	//Needed to place recipes in the combat/tools tab
 		this.setMaxDamage(maxUses);
 		this.weaponDamage = damageVsEntity;
 		this.enchantability = enchantability;
@@ -67,7 +68,13 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 			terminus = Math.max(terminus, 1);
 		}
 	}
-
+	
+	@Override
+	protected boolean isInCreativeTab(CreativeTabs targetTab)
+	{
+		return targetTab == CreativeTabs.SEARCH || targetTab == MinestuckItems.tabMinestuck;
+	}
+	
 	protected double getAttackDamage(ItemStack stack)
 	{
 		return weaponDamage;

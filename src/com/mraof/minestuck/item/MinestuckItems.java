@@ -6,6 +6,7 @@ import com.mraof.minestuck.block.BlockMinestuckLog;
 import com.mraof.minestuck.block.BlockMinestuckStone;
 import com.mraof.minestuck.entity.item.EntityCrewPoster;
 import com.mraof.minestuck.entity.item.EntitySbahjPoster;
+import com.mraof.minestuck.item.block.ItemBlockCraftingTab;
 import com.mraof.minestuck.item.block.ItemBlockLayered;
 import com.mraof.minestuck.item.block.ItemSburbMachine;
 import com.mraof.minestuck.item.weapon.*;
@@ -185,7 +186,7 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlock(goldOreSandstone));
 		registerItemBlock(registry, new ItemBlock(goldOreSandstoneRed));
 		
-		registerItemBlock(registry, new ItemBlock(cruxiteBlock));
+		registerItemBlock(registry, new ItemBlockCraftingTab(cruxiteBlock, CreativeTabs.BUILDING_BLOCKS));
 		registerItemBlock(registry, new ItemBlock(genericObject));
 		registerItemBlock(registry, new ItemSburbMachine(sburbMachine));
 		registerItemBlock(registry, new ItemMultiTexture(crockerMachine, crockerMachine, new ItemMultiTexture.Mapper()
@@ -210,7 +211,7 @@ public class MinestuckItems
 				}));
 		registerItemBlock(registry, new ItemBlock(glowingMushroom));
 		registerItemBlock(registry, new ItemBlock(glowingLog));
-		registerItemBlock(registry, new ItemBlock(glowingPlanks));
+		registerItemBlock(registry, new ItemBlockCraftingTab(glowingPlanks, CreativeTabs.BUILDING_BLOCKS));
 		registerItemBlock(registry, new ItemMultiTexture(stone, stone, new ItemMultiTexture.Mapper()
 		{
 			@Override
@@ -219,10 +220,10 @@ public class MinestuckItems
 				return BlockMinestuckStone.BlockType.getFromMeta(input.getMetadata()).getUnlocalizedName();
 			}
 		}));
-		registerItemBlock(registry, new ItemBlock(coarseStoneStairs));
-		registerItemBlock(registry, new ItemBlock(shadeBrickStairs));
-		registerItemBlock(registry, new ItemBlock(frostBrickStairs));
-		registerItemBlock(registry, new ItemBlock(castIronStairs));
+		registerItemBlock(registry, new ItemBlockCraftingTab(coarseStoneStairs, CreativeTabs.BUILDING_BLOCKS));
+		registerItemBlock(registry, new ItemBlockCraftingTab(shadeBrickStairs, CreativeTabs.BUILDING_BLOCKS));
+		registerItemBlock(registry, new ItemBlockCraftingTab(frostBrickStairs, CreativeTabs.BUILDING_BLOCKS));
+		registerItemBlock(registry, new ItemBlockCraftingTab(castIronStairs, CreativeTabs.BUILDING_BLOCKS));
 		registerItemBlock(registry, new ItemMultiTexture(log, log, new ItemMultiTexture.Mapper()
 		{
 			@Override
