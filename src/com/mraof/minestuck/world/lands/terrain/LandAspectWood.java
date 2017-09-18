@@ -38,6 +38,7 @@ public class LandAspectWood extends TerrainLandAspect
 		registry.setBlockState("structure_secondary_stairs", Blocks.JUNGLE_STAIRS.getDefaultState());
 		registry.setBlockState("fall_fluid", Blocks.WATER.getDefaultState());
 		registry.setBlockState("light_block", MinestuckBlocks.glowingLog.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE));
+		registry.setBlockState("bush", Blocks.RED_MUSHROOM.getDefaultState());
 	}
 	
 	@Override
