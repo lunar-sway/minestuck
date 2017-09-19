@@ -17,6 +17,9 @@ public class MinestuckBlocks
 {
 	
 	//Blocks
+	/////////////////////////////
+	public static Block PunchDesignex;
+	////////////////////////////
 	public static Block chessTile;
 	public static BlockColoredDirt coloredDirt;
 	public static Block skaiaPortal;
@@ -85,6 +88,7 @@ public class MinestuckBlocks
 		cruxiteBlock = GameRegistry.register(new Block(Material.ROCK, MapColor.LIGHT_BLUE).setRegistryName("cruxite_block")).setUnlocalizedName("cruxiteBlock").setHardness(3.0F).setCreativeTab(Minestuck.tabMinestuck);
 		genericObject = GameRegistry.register(new BlockCustom(Material.GOURD, MapColor.LIME, SoundType.WOOD).setRegistryName("generic_object")).setUnlocalizedName("genericObject").setHardness(1.0F).setCreativeTab(Minestuck.tabMinestuck);
 		sburbMachine = GameRegistry.register(new BlockSburbMachine().setRegistryName("sburb_machine"));
+		PunchDesignex= GameRegistry.register(new BlockPunchDesignex().setRegistryName("punch_designex"));
 		crockerMachine = GameRegistry.register(new BlockCrockerMachine().setRegistryName("crocker_machine"));
 		blockComputerOff = GameRegistry.register(new BlockComputerOff().setRegistryName("computer_standard"));
 		blockComputerOn = GameRegistry.register(new BlockComputerOn().setRegistryName("computer_standard_on"));
