@@ -17,9 +17,7 @@ public class MinestuckBlocks
 {
 	
 	//Blocks
-	/////////////////////////////
 	public static Block PunchDesignex;
-	////////////////////////////
 	public static Block chessTile;
 	public static BlockColoredDirt coloredDirt;
 	public static Block skaiaPortal;
