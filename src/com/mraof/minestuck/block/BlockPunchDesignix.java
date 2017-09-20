@@ -10,16 +10,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockPunchDesignex extends BlockLargeMachine{
+public class BlockPunchDesignix extends BlockLargeMachine{
 
 	public static final PropertyEnum<enumParts> PART = PropertyEnum.<enumParts>create("part",enumParts.class);
 
-	public BlockPunchDesignex() {
+	public BlockPunchDesignix() {
 		super(2,2,1);
 		this.setUnlocalizedName("punch_designex");
 		this.setDefaultState(this.getStateFromMeta(0));

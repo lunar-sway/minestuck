@@ -160,7 +160,7 @@ public class MinestuckItems
 		registerItemBlock(new ItemBlock(cruxiteBlock));
 		registerItemBlock(new ItemBlock(genericObject));
 		registerItemBlock(new ItemSburbMachine(sburbMachine));
-		registerItemBlock(new ItemBlock(PunchDesignex));
+		registerItemBlock(new ItemBlock(punchDesignix));
 		registerItemBlock(new ItemMultiTexture(crockerMachine, crockerMachine, new ItemMultiTexture.Mapper()
 				{
 					@Override
