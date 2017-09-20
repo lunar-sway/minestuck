@@ -1,7 +1,6 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.Minestuck;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -23,11 +22,14 @@ public class MinestuckBlocks
 	public static BlockCruxiteOre oreCruxite;
 	public static Block cruxiteBlock;
 	public static Block genericObject;
+	
 	public static Block sburbMachine;
 	public static Block crockerMachine;
 	public static Block blockComputerOn;
 	public static Block blockComputerOff;
 	public static Block transportalizer;
+	public static Block punchDesignix;
+	
 	public static BlockGoldSeeds blockGoldSeeds;
 	public static Block returnNode;
 	public static Block gate;
@@ -85,6 +87,7 @@ public class MinestuckBlocks
 		cruxiteBlock = GameRegistry.register(new Block(Material.ROCK, MapColor.LIGHT_BLUE).setRegistryName("cruxite_block")).setUnlocalizedName("cruxiteBlock").setHardness(3.0F).setCreativeTab(Minestuck.tabMinestuck);
 		genericObject = GameRegistry.register(new BlockCustom(Material.GOURD, MapColor.LIME, SoundType.WOOD).setRegistryName("generic_object")).setUnlocalizedName("genericObject").setHardness(1.0F).setCreativeTab(Minestuck.tabMinestuck);
 		sburbMachine = GameRegistry.register(new BlockSburbMachine().setRegistryName("sburb_machine"));
+		punchDesignix = GameRegistry.register(new BlockPunchDesignix().setRegistryName("punch_designix"));
 		crockerMachine = GameRegistry.register(new BlockCrockerMachine().setRegistryName("crocker_machine"));
 		blockComputerOff = GameRegistry.register(new BlockComputerOff().setRegistryName("computer_standard"));
 		blockComputerOn = GameRegistry.register(new BlockComputerOn().setRegistryName("computer_standard_on"));

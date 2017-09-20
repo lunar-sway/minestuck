@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "part=bottom_right":     { "model": "minestuck:punch_designix_bottom_right" },
+        "part=bottom_left":     { "model": "minestuck:punch_designix_bottom_left" },
+        "part=top_right":     { "model": "minestuck:punch_designix_top_right" },
+        "part=top_left":     { "model": "minestuck:punch_designix_top_left" }
+    }
+}
