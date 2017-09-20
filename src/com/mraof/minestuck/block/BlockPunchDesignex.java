@@ -10,7 +10,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockPunchDesignex extends BlockLargeMachine{
@@ -20,7 +22,14 @@ public class BlockPunchDesignex extends BlockLargeMachine{
 	public BlockPunchDesignex() {
 		super(2,2,1);
 		this.setUnlocalizedName("punch_designex");
-	}    
+		this.setDefaultState(this.getStateFromMeta(0));
+		
+	} 
+	//not sure how to do this.
+	//@Override
+	//public AxisAlignedBB getBoundingBox(IBlockState state,IBlockAccess source,BlockPos pos){
+		
+	//}
 	protected BlockStateContainer createBlockState()
     {
         return new BlockStateContainer(this, new IProperty[] {PART});
