@@ -1,14 +1,18 @@
 package com.mraof.minestuck.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Stores the array with colors that the player picks from.
+ * Also has two variables related to color selection for clientside.
+ */
 public class ColorCollector
 {
-	protected static List<Integer> colors;
+	private static List<Integer> colors;
 //	protected static boolean customColor;
 	
 	@SideOnly(Side.CLIENT)

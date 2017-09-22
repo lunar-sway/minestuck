@@ -1,5 +1,8 @@
 package com.mraof.minestuck.util;
 
+import com.mraof.minestuck.Minestuck;
+import net.minecraftforge.fml.common.Mod;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,10 +10,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
-import net.minecraftforge.fml.common.Mod;
-
-import com.mraof.minestuck.Minestuck;
-
+/**
+ * Supposed to check for new versions, and fetch any changes.
+ * This has not been used for quite a while, and there is
+ * probably nothing at http://minestuck.mraof.com/ to check against anymore.
+ */
 public class UpdateChecker extends Thread
 {
 	public static boolean outOfDate = false;
