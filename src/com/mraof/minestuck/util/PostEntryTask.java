@@ -1,13 +1,23 @@
 package com.mraof.minestuck.util;
 
-import static com.mraof.minestuck.MinestuckConfig.artifactRange;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 
+import static com.mraof.minestuck.MinestuckConfig.artifactRange;
+
+/**
+ * Represents a task for updating blocks copied over into the entry.
+ * To reduce time, and still reduce lightning and "floating" liquids,
+ * this was created to handle such tasks during the ticks right after entry instead of during entry.
+ */
 public class PostEntryTask
 {
+	/**
+	 * The maximum amount of time (in milliseconds) to spend updating blocks,
+	 * before leaving the rest for the next game tick.
+	 */
 	private static final long MIN_TIME = 20;
 	
 	private final int dimension;

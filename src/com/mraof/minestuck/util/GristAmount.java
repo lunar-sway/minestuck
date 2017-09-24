@@ -1,25 +1,32 @@
 package com.mraof.minestuck.util;
 
-
-public class GristAmount {
+/**
+ * Container for a GristType + integer combination that might be useful when iterating through a GristSet.
+ */
+public class GristAmount
+{
 	private GristType type;
 	private int amount;
 
-	public GristAmount(GristType type, int amount) {
+	public GristAmount(GristType type, int amount)
+	{
 		this.type = type;
 		this.amount = amount;
 	}
 	
-	public GristType getType() {
+	public GristType getType()
+	{
 		return type;
 	}
 
-	public int getAmount() {
+	public int getAmount()
+	{
 		return amount;
 	}
 	
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		return "gristAmount:[type="+type.getName()+",amount="+amount+"]";
 	}
 	
