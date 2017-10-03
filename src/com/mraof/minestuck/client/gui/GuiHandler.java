@@ -1,6 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.inventory.ContainerCrockerMachine;
+import com.mraof.minestuck.inventory.ContainerPunchDesignix;
 import com.mraof.minestuck.inventory.ContainerSburbMachine;
 import com.mraof.minestuck.tileentity.*;
 import net.minecraft.client.Minecraft;
@@ -30,7 +31,7 @@ public class GuiHandler implements IGuiHandler
 			else if(tileEntity instanceof TileEntityCrockerMachine)
 				return new ContainerCrockerMachine(player.inventory, (TileEntityCrockerMachine) tileEntity); 
 			else if(tileEntity instanceof TileEntityPunchDesignix)
-				return new GuiPunchDesignix(player.inventory,(TileEntityPunchDesignix) tileEntity);
+				return new ContainerPunchDesignix(player.inventory,(TileEntityPunchDesignix) tileEntity);
 				
 		return null;
 	}

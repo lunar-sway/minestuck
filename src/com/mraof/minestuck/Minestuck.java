@@ -29,7 +29,6 @@ import com.mraof.minestuck.world.lands.structure.MapGenLandStructure;
 import com.mraof.minestuck.world.lands.structure.village.ConsortVillageComponents;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -118,6 +117,7 @@ public class Minestuck
 		//register Tile Entities
 		GameRegistry.registerTileEntity(TileEntitySkaiaPortal.class, "Minstuck.GatePortal");
 		GameRegistry.registerTileEntity(TileEntitySburbMachine.class, "Minestuck.SburbMachine");
+		GameRegistry.registerTileEntity(TileEntityPunchDesignix.class, "minestuck:punch_designix");
 		GameRegistry.registerTileEntity(TileEntityCrockerMachine.class, "Minestuck.CrockerMachine");
 		GameRegistry.registerTileEntity(TileEntityComputer.class, "Minestuck.ComputerSburb");
 		GameRegistry.registerTileEntity(TileEntityTransportalizer.class, "Minestuck.Transportalizer");

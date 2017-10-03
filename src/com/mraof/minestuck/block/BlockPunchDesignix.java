@@ -49,7 +49,7 @@ public class BlockPunchDesignix extends BlockLargeMachine{
 	}
 	@Override
 	public boolean onBlockActivated(World worldIn,BlockPos pos,IBlockState state,EntityPlayer playerIn,EnumHand hand,EnumFacing facing,float hitX,float hitY,float hitZ){
-		if(worldIn.isRemote){
+		if(!worldIn.isRemote){
 			playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.MACHINE.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
 
 		}
@@ -58,13 +58,10 @@ public class BlockPunchDesignix extends BlockLargeMachine{
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
 	
-		if (worldIn.isRemote){
 			System.out.println(meta);
 			//if (meta==0){
 				return new TileEntityPunchDesignix();
 			//}
-		}
-			return null;
 	}
 	
 	
