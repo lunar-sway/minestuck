@@ -1,16 +1,22 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.client.gui.GuiHandler;
+import com.mraof.minestuck.tileentity.TileEntityPunchDesignix;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 public class BlockPunchDesignix extends BlockLargeMachine{
@@ -33,25 +39,55 @@ public class BlockPunchDesignix extends BlockLargeMachine{
         return new BlockStateContainer(this, new IProperty[] {PART});
     }
 	@Override
-	public boolean isOpaqueCube(IBlockState state){
-		return false;
-	}
-	@Override
 	public void onBlockPlacedBy(World worldIn,BlockPos pos,IBlockState state,EntityLivingBase placer, ItemStack stack){
 		if(placer!=null && !(worldIn.isRemote)){
 			worldIn.setBlockState(pos, state.withProperty(PART, enumParts.BOTTOM_LEFT));
 			worldIn.setBlockState(pos.east(), state.withProperty(PART, enumParts.BOTTOM_RIGHT));
 			worldIn.setBlockState(pos.up(),state.withProperty(PART, enumParts.TOP_LEFT));
 			worldIn.setBlockState(pos.up().east(), state.withProperty(PART, enumParts.TOP_RIGHT));
-			
 		}
 	}
 	@Override
 	public boolean onBlockActivated(World worldIn,BlockPos pos,IBlockState state,EntityPlayer playerIn,EnumHand hand,EnumFacing facing,float hitX,float hitY,float hitZ){
-		if(worldIn.isRemote){
+		if(!worldIn.isRemote){
+			playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.MACHINE.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
+
 		}
 		return true;
 	}
+	@Override
+	public TileEntity createNewTileEntity(World worldIn, int meta) {
+	
+			System.out.println(meta);
+			//if (meta==0){
+				return new TileEntityPunchDesignix();
+			//}
+	}
+	
+	
+	
+	
+	
+	
+
+	
+	
+	
+	
+	
+	@Override
+	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player)
+	{
+		return new ItemStack(Item.getItemFromBlock(this), 1, state.getValue(PART).ordinal());
+	}
+	
+	
+	
+	
+	
+	
+	
+	//Block state handling
 	public static enum enumParts implements IStringSerializable
 	{
 		BOTTOM_LEFT,
@@ -104,6 +140,8 @@ public class BlockPunchDesignix extends BlockLargeMachine{
 			return 0;
 		}
 	}
+
+
 	
 
 }
