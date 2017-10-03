@@ -1,19 +1,19 @@
 package com.mraof.minestuck.block;
 
 
-import java.util.List;
-
-import net.minecraft.block.Block;
+import com.mraof.minestuck.Minestuck;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import com.mraof.minestuck.Minestuck;
+import java.util.List;
 
-public class BlockLargeMachine extends Block {
+public abstract class BlockLargeMachine extends BlockContainer {
 	public int Xlength;
 	public int Zwidth;
 	public int Yheight;
@@ -57,5 +57,15 @@ public class BlockLargeMachine extends Block {
 	@Override
 	public int getMetaFromState(IBlockState state) {
 	    return 1;
+	}
+	// have the individual machines take care of this
+
+	@Override
+	public EnumBlockRenderType getRenderType(IBlockState state){
+		return EnumBlockRenderType.MODEL;
+	}
+	@Override
+	public boolean isOpaqueCube(IBlockState state){
+		return false;
 	}
 }
