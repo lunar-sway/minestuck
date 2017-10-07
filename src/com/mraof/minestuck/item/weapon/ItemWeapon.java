@@ -122,9 +122,9 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 		this.setHarvestLevel(toolClass, harvestLevel);
 		return this;
 	}
-
+	
 	@Override
-	public float getStrVsBlock(ItemStack stack, IBlockState state)
+	public float getDestroySpeed(ItemStack stack, IBlockState state)
 	{
 		for(String tool : getToolClasses(stack))
 		{
@@ -133,7 +133,7 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 				return efficiency;
 			}
 		}
-		return super.getStrVsBlock(stack, state);
+		return super.getDestroySpeed(stack, state);
 	}
 
 

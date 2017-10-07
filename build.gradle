@@ -38,7 +38,7 @@ repositories {
 //apply plugin: 'forge'
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.12.1-1.2." + System.getenv()['BUILD_NUMBER']
+version = "1.12.2-1.2." + System.getenv()['BUILD_NUMBER']
 group= "com.mraof.minestuck"
 archivesBaseName = "Minestuck"
 
@@ -48,18 +48,18 @@ compileJava {
 }
 
 minecraft {
-    version = "1.12.1-14.22.1.2478"
+    version = "1.12.2-14.23.0.2503"
     runDir = "run"
 
-    mappings = "snapshot_20170712"
+    mappings = "snapshot_20171003"
 
     replaceIn "com/mraof/minestuck/Minestuck.java"
     replace "@VERSION@", project.version
 }
 
 dependencies {
-    def mc_version = "1.12.1"
-    def jei_version = "4.7.8.95"
+    def mc_version = "1.12.2"
+    def jei_version = "4.8.0.105"
     // http://chickenbones.net/maven
     //compile "codechicken:CodeChickenLib:1.10.2-2.4.3.124:universal"
     //compile "codechicken:CodeChickenCore:1.10.2-2.3.5.91:universal"

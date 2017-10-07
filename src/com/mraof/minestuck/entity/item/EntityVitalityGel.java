@@ -66,7 +66,7 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 			return false;
 		} else
 		{
-			this.setBeenAttacked();
+			this.markVelocityChanged();
 			this.health = (int)((float)this.health - amount);
 			
 			if (this.health <= 0)
@@ -126,7 +126,7 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 		
 		if (this.targetCycle < this.cycle - 20 + this.getEntityId() % 100)
 		{
-			if (this.closestPlayer == null || this.closestPlayer.getDistanceSqToEntity(this) > d0 * d0)
+			if (this.closestPlayer == null || this.closestPlayer.getDistanceSq(this) > d0 * d0)
 			{
 				this.closestPlayer = this.world.getClosestPlayerToEntity(this, d0);
 			}

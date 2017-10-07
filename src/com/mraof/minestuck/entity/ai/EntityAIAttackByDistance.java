@@ -124,7 +124,7 @@ public class EntityAIAttackByDistance extends EntityAIBase
 
 		if (d0 <= (double)this.field_82642_h && this.ticksSeeingTarget >= 20)
 		{
-			this.entityHost.getNavigator().clearPathEntity();
+			this.entityHost.getNavigator().clearPath();
 		}
 		else
 		{

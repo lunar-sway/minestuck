@@ -99,7 +99,7 @@ public class EntityAIAttackOnCollideWithRate extends EntityAIBase
 	public void resetTask()
 	{
 		this.entityTarget = null;
-		this.attacker.getNavigator().clearPathEntity();
+		this.attacker.getNavigator().clearPath();
 	}
 
 	/**

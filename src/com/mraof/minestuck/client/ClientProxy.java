@@ -59,7 +59,7 @@ public class ClientProxy extends CommonProxy
 		mc.getItemColors().registerItemColorHandler(new IItemColor()
 		{
 			@Override
-			public int getColorFromItemstack(ItemStack stack, int tintIndex)
+			public int colorMultiplier(ItemStack stack, int tintIndex)
 			{
 				if(tintIndex == 0 || tintIndex == 1)
 				{

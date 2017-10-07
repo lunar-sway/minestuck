@@ -76,7 +76,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 			return false;
 		} else
 		{
-			this.setBeenAttacked();
+			this.markVelocityChanged();
 			this.gristHealth = (int)((float)this.gristHealth - amount);
 			
 			if (this.gristHealth <= 0)
@@ -133,7 +133,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 
 		if (this.targetCycle < this.cycle - 20 + this.getEntityId() % 100) //Why should I care about the entityId
 		{
-			if (this.closestPlayer == null || this.closestPlayer.getDistanceSqToEntity(this) > d0 * d0)
+			if (this.closestPlayer == null || this.closestPlayer.getDistanceSq(this) > d0 * d0)
 			{
 				this.closestPlayer = this.world.getClosestPlayerToEntity(this, d0);
 			}
