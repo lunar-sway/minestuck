@@ -1,8 +1,22 @@
 package com.mraof.minestuck.util;
 
+import com.mraof.minestuck.item.MinestuckItems;
+import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraft.world.World;
+
+/**
+ * Contains classes for custom recipe types.
+ */
 public class CraftingRecipes
 {
 	
+	/*public static class NonMirroredRecipe extends ShapedRecipes
+	 *
+	 * Regular recipes can typically be made independent on if the ingredients are put to the left or the right, as long as the shape remains.
+	 * With this class, that possible mirror is not possible, and the recipe will instead only follow the patten exactly.
+	 */
 	/*public static class NonMirroredRecipe extends ShapedRecipes
 	{
 		
@@ -63,6 +77,10 @@ public class CraftingRecipes
 		}
 	}
 	
+	/**
+	 * Any recipes made out of this instance will not accept captchalogue cards as ingredients, unless said cards are empty and blank.
+	 * Beware that this class extends NoMirroredRecipe.
+	 */
 	public static class EmptyCardRecipe extends NonMirroredRecipe
 	{
 		

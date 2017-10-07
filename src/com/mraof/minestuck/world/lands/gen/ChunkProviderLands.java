@@ -111,7 +111,7 @@ public class ChunkProviderLands implements IChunkGenerator
 		BiomeProperties properties = new BiomeProperties(((WorldProviderLands)this.landWorld.provider).getDimensionName()).setTemperature(temperature).setRainfall(rainfall).setBaseBiome("medium");
 		if(temperature <= 0.1)
 			properties.setSnowEnabled();
-		biomeLands = new BiomeMinestuck(properties);
+		biomeLands = new BiomeMinestuck(properties).setRegistryName("minestuck", "medium");
 	}
 	
 	public void sortDecorators()	//Called after an aspect have added elements to the decorators list.

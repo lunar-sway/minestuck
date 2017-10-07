@@ -111,13 +111,22 @@ public class TileEntityTransportalizer extends TileEntity implements ITickable
 			}
 			
 			if(!destTransportalizer.getEnabled()) { return; } // Fail silently to make it look as though the player entered an ID that doesn't map to a transportalizer.
-			IBlockState block0 = world.getBlockState(location.pos.up());
-			IBlockState block1 = world.getBlockState(location.pos.up(2));
+			IBlockState block0 = this.world.getBlockState(this.pos.up());
+			IBlockState block1 = this.world.getBlockState(this.pos.up(2));
 			if(block0.getMaterial().blocksMovement() || block1.getMaterial().blocksMovement())
 			{
 				entity.timeUntilPortal = entity.getPortalCooldown();
 				if(entity instanceof EntityPlayerMP)
-					((EntityPlayerMP) entity).sendMessage(new TextComponentTranslation("message.transportalizer.destinationBlocked"));
+					entity.sendMessage(new TextComponentTranslation("message.transportalizer.blocked"));
+				return;
+			}
+			block0 = world.getBlockState(location.pos.up());
+			block1 = world.getBlockState(location.pos.up(2));
+			if(block0.getMaterial().blocksMovement() || block1.getMaterial().blocksMovement())
+			{
+				entity.timeUntilPortal = entity.getPortalCooldown();
+				if(entity instanceof EntityPlayerMP)
+					entity.sendMessage(new TextComponentTranslation("message.transportalizer.destinationBlocked"));
 				return;
 			}
 			

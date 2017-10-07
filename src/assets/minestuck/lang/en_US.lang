@@ -536,7 +536,7 @@ item.candyCorn.name=Candy Corn
 item.candyAmber.name=Amber Gummy Worm
 item.candyAmethyst.name=Amethyst Hard Candy
 item.candyArtifact.name=Artifact War Head
-item.candyBuild.name=Build Gusher
+item.candyBuild.name=Build Gushers
 item.candyCaulk.name=Caulk Pretzel
 item.candyChalk.name=Chalk Candy Cigarette
 item.candyCobalt.name=Cobalt Gum
@@ -736,11 +736,13 @@ minestuck.config.canBreakGates=Can Break Gates
 minestuck.config.canBreakGates.tooltip=Lets gates be destroyed by explosions. Turning this off will make gates use the same explosion resistance as bedrock.
 minestuck.config.disableGiclops=Disable Giclops
 minestuck.config.disableGiclops.tooltip=Right now, the giclops pathfinding is currently causing huge amounts of lag due to their size. This option is a short-term solution that will disable giclops spawning and remove all existing giclopses.
+
 message.selectDefaultColor=Default color selected. You can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!
 message.selectColor=If you want to change the color, you can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!
 message.privateComputerMessage=You are not allowed to access other players computers.
 message.transportalizer.transportalizerDisabled=This transportalizer is currently disabled with a redstone signal.
 message.transportalizer.destinationBlocked=The destination seems to be blocked.
+message.transportalizer.blocked=The transportalizer appears to need more space above it to function.
 message.gateDestroyed=The destination gate seems to have been destroyed.
 message.gateMissingLand=The land this gate leads to does not exist yet!
 

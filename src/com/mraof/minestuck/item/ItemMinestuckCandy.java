@@ -8,7 +8,7 @@ import net.minecraft.util.NonNullList;
 
 public class ItemMinestuckCandy extends ItemFood
 {
-	public static final String[] NAMES = new String[]{"candy_corn","amber_gummy_worm","amethyst_hard_candy","artifact_war_head","build_gusher",
+	public static final String[] NAMES = new String[]{"candy_corn","amber_gummy_worm","amethyst_hard_candy","artifact_war_head","build_gushers",
 		"caulk_pretzel","chalk_candy_cigarette","cobalt_gum","diamond_mint","garnet_twix","gold_candy_ribbon",
 		"iodine_licorice","marble_jawbreaker","mercury_sixlets","quartz_jelly_bean","ruby_lollipop","rust_gummy_eye",
 		"shale_peep","sulfur_candy_apple","tar_black_licorice","uranium_gummy_bear","zillium_skittles"};
