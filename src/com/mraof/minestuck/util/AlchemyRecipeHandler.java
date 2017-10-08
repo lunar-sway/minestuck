@@ -505,8 +505,6 @@ public class AlchemyRecipeHandler
 	public static void registerMinestuckRecipes() {
 		
 		//set up crafting recipes
-		
-		//CraftingHelper.register();
 		/*RecipeSorter.register("minestuck:notmirrored", CraftingRecipes.NonMirroredRecipe.class, RecipeSorter.Category.SHAPED, "before:minecraft:shaped");
 		RecipeSorter.register("minestuck:emptycard", CraftingRecipes.EmptyCardRecipe.class, RecipeSorter.Category.SHAPED, "before:minecraft:shaped");
 		
