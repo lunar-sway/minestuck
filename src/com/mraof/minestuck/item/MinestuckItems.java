@@ -227,6 +227,8 @@ public class MinestuckItems
 		registerItemBlock(new ItemBlock(woodenExplosiveButton));
 		registerItemBlock(new ItemBlock(stoneExplosiveButton));
 		
+		registerItemBlock(new ItemBlock(uraniumCooker));
+		
 		//hammers
 		clawHammer = GameRegistry.register(new ItemWeapon(131, 4.0D, -2.4D, 10, "clawHammer").setTool("pickaxe", 0, 1.0F).setRegistryName("claw_hammer"));
 		sledgeHammer = GameRegistry.register(new ItemWeapon(250, 6.0D, -2.8D, 8, "sledgeHammer").setTool("pickaxe", 2, 4.0F).setRegistryName("sledge_hammer"));
@@ -263,7 +265,8 @@ public class MinestuckItems
 		qPHammerAxe = GameRegistry.register(new ItemPogoWeapon(800, 8.0D, -3.0D, 30, "qPHammerAxe", 0.6).setTool("axe", 2, 7.0F).setTool("pickaxe", 1, 2.0F).setTerminus(-1, 50).setRegistryName("piston_powered_pogo_axehammer"));
 		rubyCroak = GameRegistry.register(new ItemWeapon(2000, 11.0D, -3.0D, 30, "rubyCroak").setTool("axe", 3, 8.0F).setRegistryName("ruby_croak"));
 		hephaestusLumber = GameRegistry.register(new ItemFireWeapon(3000, 11.0D, -3.0D, 30, "hephaestusLumber", 30).setTool("axe", 3, 9.0F).setRegistryName("hephaestus_lumberjack"));
-		qFHammerAxe = GameRegistry.register(new ItemPogoWeapon(2048, 11.0D, -3.0D, 0, "qFHammerAxe", 0.7).setTool("axe", 3, 7.0F).setTool("pickaxe", 2, 3.0F).setTerminus(-1, 100).setRegistryName("fission_focused_fault_feller"));
+		qFHammerAxe = GameRegistry.register(new ItemPogoWeapon(2048, 11.0D, -3.0D, 0, "qFHammerAxe", 0.7).setTool("axe", 3, 9.0F).setTool("pickaxe", 2, 4.0F).setTerminus(-1, 100).setRegistryName("fission_focused_fault_feller"));
+		//qCHammerAxe = GameRegistry.register(new ItemPogoWeapon(4096, 11.0D, -3.0D, 0, "qCHammerAxe", 0.8).setTool("axe", 4, 11.0F).setTool("pickaxe", 3, 6.0F).setTerminus(-1, 200).setRegistryName("cobble_crushing_comet_carver"));
 
 		//Dice
 		dice = GameRegistry.register(new ItemWeapon(51, 6, 3, 6, "dice").setRegistryName("dice"));

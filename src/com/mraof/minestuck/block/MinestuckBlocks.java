@@ -56,6 +56,8 @@ public class MinestuckBlocks
 	public static Block instantTnt;
 	public static Block woodenExplosiveButton;
 	public static Block stoneExplosiveButton;
+	
+	public static Block uraniumCooker;
 
 	public static Block blockOil;
 	public static Block blockBlood;
@@ -116,6 +118,9 @@ public class MinestuckBlocks
 		instantTnt = GameRegistry.register(new BlockTNTSpecial(false, false, true).setRegistryName("instant_tnt")).setUnlocalizedName("instantTnt");
 		woodenExplosiveButton = GameRegistry.register(new BlockButtonSpecial(true, true).setRegistryName("wooden_button_explosive")).setUnlocalizedName("buttonTnt");
 		stoneExplosiveButton = GameRegistry.register(new BlockButtonSpecial(false, true).setRegistryName("stone_button_explosive")).setUnlocalizedName("buttonTnt");
+		
+		uraniumCooker = GameRegistry.register(new Block(Material.IRON).setRegistryName("uranium_cooker")).setUnlocalizedName("uraniumCooker");
+		
 		//fluids
 		fluidOil = new Fluid("Oil", new ResourceLocation("minestuck", "blocks/oil_still"), new ResourceLocation("minestuck", "blocks/oil_flowing"));
 		FluidRegistry.registerFluid(fluidOil);

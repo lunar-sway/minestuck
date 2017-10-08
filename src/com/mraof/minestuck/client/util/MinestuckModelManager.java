@@ -228,6 +228,8 @@ public class MinestuckModelManager
 		register(instantTnt);
 		register(woodenExplosiveButton);
 		register(stoneExplosiveButton);
+
+		register(uraniumCooker);
 		
 	}
 	
@@ -279,6 +281,8 @@ public class MinestuckModelManager
 			ModelBakery.registerItemVariants(Item.getItemFromBlock(stone), new ResourceLocation("minestuck:"+type.getName()));
 		for(BlockMinestuckLog.BlockType type : BlockMinestuckLog.BlockType.values())
 			ModelBakery.registerItemVariants(Item.getItemFromBlock(log), new ResourceLocation("minestuck:"+type.getName()+"_log"));
+		
+		ModelBakery.registerItemVariants(Item.getItemFromBlock(uraniumCooker), new ResourceLocation("minestuck:uranium_cooker"));
 		
 		ModelLoader.setCustomStateMapper(blockOil, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
 		ModelLoader.setCustomStateMapper(blockBlood, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
