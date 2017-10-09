@@ -150,7 +150,6 @@ public class MinestuckItems
 				return theBlock.getUnlocalizedName();
 			}
 		});
-		registerItemBlock(new ItemBlock(rabbitSpawner));
 		registerItemBlock(new ItemBlock(coalOreNetherrack));
 		registerItemBlock(new ItemBlock(ironOreSandstone));
 		registerItemBlock(new ItemBlock(ironOreSandstoneRed));

@@ -169,7 +169,6 @@ public class MinestuckModelManager
 		//Blocks
 		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())
 			register(chessTile, type.ordinal(), "chesstile_"+type.name);
-		register(rabbitSpawner);
 		register(skaiaPortal);
 		register(transportalizer);
 		register(blockComputerOff);
@@ -276,6 +275,13 @@ public class MinestuckModelManager
 				return Collections.emptyMap();	//We're not using any models for rendering the return node
 			}});
 		ModelLoader.setCustomStateMapper(gate, new IStateMapper()
+		{
+			@Override
+			public Map putStateModelLocations(Block block)
+			{
+				return Collections.emptyMap();
+			}});
+		ModelLoader.setCustomStateMapper(rabbitSpawner, new IStateMapper()
 		{
 			@Override
 			public Map putStateModelLocations(Block block)
