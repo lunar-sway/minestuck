@@ -75,6 +75,12 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 		return targetTab == CreativeTabs.SEARCH || targetTab == MinestuckItems.tabMinestuck;
 	}
 	
+	@Override
+	public CreativeTabs[] getCreativeTabs()
+	{
+		return new CreativeTabs[] {MinestuckItems.tabMinestuck};
+	}
+	
 	protected double getAttackDamage(ItemStack stack)
 	{
 		return weaponDamage;

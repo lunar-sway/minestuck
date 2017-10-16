@@ -4,7 +4,7 @@ import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.GristSet;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.BlankRecipeWrapper;
+import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 
@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by mraof on 2017 January 23 at 2:41 AM.
  */
-public class AlchemiterRecipeWrapper extends BlankRecipeWrapper
+public class AlchemiterRecipeWrapper implements IRecipeWrapper
 {
     private final ItemStack stack;
     private final GristSet grist;
