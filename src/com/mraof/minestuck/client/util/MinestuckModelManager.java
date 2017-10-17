@@ -194,6 +194,7 @@ public class MinestuckModelManager
 			register(crockerMachine, type.ordinal(), "machine_"+type.getName());
 		register(punchDesignix);
 		register(totemlathe);
+		register(alchemiter);
 		register(glowingMushroom);
 		register(glowingLog);
 		register(glowingPlanks);

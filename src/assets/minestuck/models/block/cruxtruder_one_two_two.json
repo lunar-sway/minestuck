@@ -1,0 +1,267 @@
+{
+	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
+	"textures": {
+		"0": "minestuck:machines/cruxtruder/untitled",
+		"3": "minestuck:machines/cruxtruder/untitled",
+		"particle": "minestuck:machines/cruxtruder/untitled"
+	},
+	"elements": [
+		{
+			"name": "Timer Bottom - 2",
+			"from": [7, -2, 2],
+			"to": [14, -0.8000000000000007, 14],
+			"faces": {
+				"north": {
+					"uv": [0, 13.875, 10.8, 15.975],
+					"texture": "#3"
+				},
+				"east": {
+					"uv": [4.5, 6.75, 5.05, 12.425],
+					"texture": "#3",
+					"rotation": 270
+				},
+				"south": {
+					"uv": [0, 14.9375, 10, 16],
+					"texture": "#3"
+				},
+				"west": {"uv": [0, 0, 11, 11], "texture": "#0"},
+				"up": {
+					"uv": [0, 13.6875, 4.1625, 16],
+					"texture": "#3"
+				},
+				"down": {"uv": [0, 0, 11, 11], "texture": "#0"}
+			}
+		},
+		{
+			"name": "Timer Side1 - 2",
+			"from": [-4.5, 11.5, 2],
+			"to": [2.5, 12.7, 3.5],
+			"faces": {
+				"north": {
+					"uv": [0, 13.875, 10.8, 15.975],
+					"texture": "#3"
+				},
+				"east": {"uv": [0, -1, 11, 11], "texture": "#0"},
+				"south": {"uv": [1, 0, 11, 11], "texture": "#0"},
+				"west": {"uv": [0, 0, 11, 1], "texture": "#0"},
+				"up": {
+					"uv": [4.4375, 7.25, 5.175, 11.925],
+					"texture": "#3",
+					"rotation": 90
+				},
+				"down": {"uv": [0, 0, 11, 11], "texture": "#0"}
+			},
+			"rotation": {
+				"origin": [-8, -8, 8],
+				"axis": "z",
+				"angle": -45
+			}
+		},
+		{
+			"name": "Timer Side2 - 2",
+			"from": [-4.5, 11.5, 12.5],
+			"to": [2.5, 12.7, 14],
+			"faces": {
+				"north": {"uv": [0, 0, 10, 11], "texture": "#0"},
+				"east": {"uv": [0, -1, 11, 11], "texture": "#0"},
+				"south": {
+					"uv": [0, 14.9375, 10, 16],
+					"texture": "#3"
+				},
+				"west": {"uv": [0, 0, 10, 11], "texture": "#0"},
+				"up": {
+					"uv": [4.4375, 7.25, 5.175, 11.925],
+					"texture": "#3",
+					"rotation": 270
+				},
+				"down": {"uv": [0, 0, 11, 11], "texture": "#0"}
+			},
+			"rotation": {
+				"origin": [-8, -8, 8],
+				"axis": "z",
+				"angle": -45
+			}
+		},
+		{
+			"name": "Timer Side3 - 2",
+			"from": [-5.5, 7.5, 12.5],
+			"to": [1.5, 11.7, 14],
+			"faces": {
+				"north": {"uv": [0, 0, 7, 4.2], "texture": "#0"},
+				"east": {
+					"uv": [0, 0, 1.5, 7.199999999999999],
+					"texture": "#0"
+				},
+				"south": {
+					"uv": [0, 14.9375, 10, 16],
+					"texture": "#3"
+				},
+				"west": {"uv": [0, 2, 1.5, 4.2], "texture": "#0"},
+				"up": {"uv": [0, 0, 11, 9], "texture": "#0"},
+				"down": {"uv": [0, 0, 7, 1.5], "texture": "#0"}
+			},
+			"rotation": {
+				"origin": [-8, -8, 8],
+				"axis": "z",
+				"angle": -45
+			}
+		},
+		{
+			"name": "Timer Side4 - 2",
+			"from": [-5.5, 7.5, 2],
+			"to": [1.5, 11.7, 3.5],
+			"faces": {
+				"north": {
+					"uv": [0, 13.875, 10.8, 15.975],
+					"texture": "#3"
+				},
+				"east": {"uv": [0, 0, 1.5, 4.2], "texture": "#0"},
+				"south": {"uv": [0, 0, 7, 4.2], "texture": "#0"},
+				"west": {"uv": [0, 0, 1.5, 4.2], "texture": "#0"},
+				"up": {"uv": [0, 1, 7, 1.5], "texture": "#0"},
+				"down": {"uv": [0, 0, 7, 1.5], "texture": "#0"}
+			},
+			"rotation": {
+				"origin": [-8, -8, 8],
+				"axis": "z",
+				"angle": -45
+			}
+		},
+		{
+			"name": "Timer Top - 2",
+			"from": [4.100000000000001, 3, 2],
+			"to": [9.100000000000001, 4.199999999999999, 14],
+			"faces": {
+				"north": {
+					"uv": [0, 13.875, 10.8, 15.975],
+					"texture": "#3"
+				},
+				"east": {
+					"uv": [0, 13.6875, 4.1625, 16],
+					"texture": "#3"
+				},
+				"south": {
+					"uv": [0, 14.9375, 10, 16],
+					"texture": "#3"
+				},
+				"west": {"uv": [0, 0, 11, 11], "texture": "#0"},
+				"up": {
+					"uv": [4.0625, 6.75, 4.8625, 12.425],
+					"texture": "#3"
+				},
+				"down": {"uv": [0, 0, 11, 11], "texture": "#0"}
+			}
+		},
+		{
+			"name": "Timer Screen - 2",
+			"from": [-4.5, 11.2, 3.5],
+			"to": [2.5, 12.399999999999999, 12.5],
+			"faces": {
+				"north": {
+					"uv": [0, 0, 7, 1.2000000000000002],
+					"texture": "#0"
+				},
+				"east": {
+					"uv": [0, 0, 9, 1.2000000000000002],
+					"texture": "#0"
+				},
+				"south": {
+					"uv": [0, 0, 7, 1.2000000000000002],
+					"texture": "#0"
+				},
+				"west": {
+					"uv": [0, 0, 9, 1.2000000000000002],
+					"texture": "#0"
+				},
+				"up": {
+					"uv": [4.125, 6.6875, 10.3625, 12.55],
+					"texture": "#3"
+				},
+				"down": {"uv": [0, 0, 7, 9], "texture": "#0"}
+			},
+			"rotation": {
+				"origin": [-8, -8, 8],
+				"axis": "z",
+				"angle": -45
+			}
+		},
+		{
+			"name": "Cruxtruder Middle5",
+			"from": [0, 0, 0],
+			"to": [7, 7, 16],
+			"faces": {
+				"north": {
+					"uv": [4.5, 6.6875, 10.05, 12.4875],
+					"texture": "#3"
+				},
+				"east": {
+					"uv": [5.125, 6.6875, 9.05, 11.55],
+					"texture": "#3"
+				},
+				"south": {
+					"uv": [4.5, 6.6875, 10.05, 12.4875],
+					"texture": "#3"
+				},
+				"west": {
+					"uv": [4.5, 6.6875, 10.05, 12.4875],
+					"texture": "#3"
+				},
+				"up": {
+					"uv": [6.1875, 9.125, 8.05, 12.425],
+					"texture": "#3",
+					"rotation": 270
+				},
+				"down": {
+					"uv": [4.5, 6.8125, 10.05, 12.3625],
+					"texture": "#3"
+				}
+			}
+		},
+		{
+			"name": "Cruxtruder Middle6",
+			"from": [0, 7, 0],
+			"to": [6, 8, 16],
+			"faces": {
+				"north": {
+					"uv": [4, 15.4375, 9.4875, 15.9875],
+					"texture": "#3"
+				},
+				"east": {
+					"uv": [4, 15.4375, 9.4875, 15.9875],
+					"texture": "#3"
+				},
+				"south": {
+					"uv": [4, 15.4375, 9.4875, 15.9875],
+					"texture": "#3"
+				},
+				"west": {
+					"uv": [4, 15.4375, 9.4875, 15.9875],
+					"texture": "#3"
+				},
+				"up": {
+					"uv": [6.1875, 9.125, 8.05, 12.425],
+					"texture": "#3",
+					"rotation": 270
+				},
+				"down": {
+					"uv": [4.5, 6.8125, 10.05, 12.3625],
+					"texture": "#3",
+					"rotation": 180
+				}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "group",
+			"origin": [8, 8, 8],
+			"isOpen": true,
+			"display": {
+				"visibility": true,
+				"export": true,
+				"autouv": true
+			},
+			"children": [7, 8, 2, 5, 1, 0, 6, 3, 4]
+		}
+	]
+}

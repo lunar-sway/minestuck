@@ -1,20 +1,51 @@
 package com.mraof.minestuck.tileentity;
 
+import com.mraof.minestuck.block.BlockPunchDesignix;
+import com.mraof.minestuck.block.BlockPunchDesignix.enumParts;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.CombinationRegistry;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
 
 public class TileEntityPunchDesignix extends TileEntityMachine
 {
 	public PlayerIdentifier owner;
 	public GristType selectedGrist = GristType.Build;
 	public int color = -1;
-	
+	public boolean isMaster;
+	public boolean destroyed=false;
+	public BlockPunchDesignix.enumParts part;
+	//constructor
+	public TileEntityPunchDesignix(IBlockState state){
+		part = state.getValue(BlockPunchDesignix.PART);
+		if(part==enumParts.BOTTOM_LEFT){
+			isMaster=true;
+		}else{
+			isMaster=false;
+		}
+	}
+	public BlockPos GetMasterPos(IBlockState state){
+
+		switch(part){
+		case BOTTOM_LEFT:return getPos();		
+		case BOTTOM_RIGHT:return getPos().west();
+		case TOP_LEFT:return getPos().down();
+		case TOP_RIGHT:return getPos().down().west();
+		}
+		return getPos();
+	}
+	public boolean isMaster(){
+		return isMaster;
+	}
+
+
 	@Override
 	public boolean isAutomatic()
 	{
@@ -30,6 +61,7 @@ public class TileEntityPunchDesignix extends TileEntityMachine
 	@Override
 	public int getSizeInventory()
 	{
+		
 		return 3;
 	}
 	

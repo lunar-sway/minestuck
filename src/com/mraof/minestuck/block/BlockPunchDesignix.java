@@ -1,16 +1,22 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.BlockSburbMachine.MachineType;
 import com.mraof.minestuck.client.gui.GuiHandler;
+import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.tileentity.TileEntityPunchDesignix;
+import com.mraof.minestuck.tileentity.TileEntitySburbMachine;
+
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -38,6 +44,36 @@ public class BlockPunchDesignix extends BlockLargeMachine{
     {
         return new BlockStateContainer(this, new IProperty[] {PART});
     }
+
+	@Override
+	public boolean onBlockActivated(World worldIn,BlockPos pos,IBlockState state,EntityPlayer playerIn,EnumHand hand,EnumFacing facing,float hitX,float hitY,float hitZ){
+		
+		TileEntityPunchDesignix te=(TileEntityPunchDesignix)worldIn.getTileEntity(pos);
+		BlockPos MasterPos=te.GetMasterPos(state);
+		if(!worldIn.isRemote && !((TileEntityPunchDesignix)worldIn.getTileEntity(MasterPos)).destroyed){
+			if(worldIn.getTileEntity(pos)instanceof TileEntityPunchDesignix){				
+				if(te.isMaster()){
+					playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.MACHINE.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
+					
+				}else{
+					playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.MACHINE.ordinal(), worldIn, MasterPos.getX(), MasterPos.getY(), MasterPos.getZ());
+				}
+			}
+		}
+		return true;
+	}
+	@Override
+	public TileEntity createNewTileEntity(World worldIn, int meta) {
+			return new TileEntityPunchDesignix(this.getStateFromMeta(meta));
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	@Override
 	public void onBlockPlacedBy(World worldIn,BlockPos pos,IBlockState state,EntityLivingBase placer, ItemStack stack){
 		if(placer!=null && !(worldIn.isRemote)){
@@ -47,39 +83,25 @@ public class BlockPunchDesignix extends BlockLargeMachine{
 			worldIn.setBlockState(pos.up().east(), state.withProperty(PART, enumParts.TOP_RIGHT));
 		}
 	}
-	@Override
-	public boolean onBlockActivated(World worldIn,BlockPos pos,IBlockState state,EntityPlayer playerIn,EnumHand hand,EnumFacing facing,float hitX,float hitY,float hitZ){
-		if(!worldIn.isRemote){
-			playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.MACHINE.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
-
-		}
-		return true;
-	}
-	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
-	
-			System.out.println(meta);
-			//if (meta==0){
-				return new TileEntityPunchDesignix();
-			//}
-	}
-	
-	
-	
-	
-	
-	
-
-	
-	
-	
-	
 	
 	@Override
-	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player)
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
-		return new ItemStack(Item.getItemFromBlock(this), 1, state.getValue(PART).ordinal());
+	
+		BlockPos MasterPos=((TileEntityPunchDesignix)worldIn.getTileEntity(pos)).GetMasterPos(state);
+		TileEntityPunchDesignix te = (TileEntityPunchDesignix) worldIn.getTileEntity(MasterPos);
+		te.destroyed=true;
+		InventoryHelper.dropInventoryItems(worldIn, pos, te);
+		
+		super.breakBlock(worldIn, pos, state);
 	}
+	
+	
+
+	
+	
+	
+	
 	
 	
 	
@@ -127,17 +149,15 @@ public class BlockPunchDesignix extends BlockLargeMachine{
 	}
 	@Override
 	public int getMetaFromState(IBlockState state){
-		IBlockState defaultState=this.getDefaultState();
-		if(state==defaultState.withProperty(PART,enumParts.BOTTOM_LEFT)){
+		enumParts part=state.getValue(PART);
+		switch(part){
+		case BOTTOM_LEFT: return 0;
+		case BOTTOM_RIGHT:return 1;
+		case TOP_LEFT: return 2;
+		case TOP_RIGHT:return 3;	
+		default:
 			return 0;
-		}else if(state==defaultState.withProperty(PART,enumParts.BOTTOM_RIGHT)){
-			return 1;
-		}else if(state==defaultState.withProperty(PART,enumParts.TOP_LEFT)){
-			return 2;
-		}else if(state==defaultState.withProperty(PART,enumParts.TOP_RIGHT)){
-			return 3;
-		}else{
-			return 0;
+		
 		}
 	}
 

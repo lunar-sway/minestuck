@@ -30,6 +30,7 @@ public class MinestuckBlocks
 	public static Block transportalizer;
 	public static Block punchDesignix;
 	public static Block totemlathe;
+	public static Block alchemiter;
 	
 	public static BlockGoldSeeds blockGoldSeeds;
 	public static Block returnNode;
@@ -90,6 +91,7 @@ public class MinestuckBlocks
 		sburbMachine = GameRegistry.register(new BlockSburbMachine().setRegistryName("sburb_machine"));
 		punchDesignix = GameRegistry.register(new BlockPunchDesignix().setRegistryName("punch_designix"));
 		totemlathe= GameRegistry.register(new BlockTotemlathe().setRegistryName("totemlathe"));
+		alchemiter= GameRegistry.register(new BlockAlchemiter().setRegistryName("alchemiter"));
 		crockerMachine = GameRegistry.register(new BlockCrockerMachine().setRegistryName("crocker_machine"));
 		blockComputerOff = GameRegistry.register(new BlockComputerOff().setRegistryName("computer_standard"));
 		blockComputerOn = GameRegistry.register(new BlockComputerOn().setRegistryName("computer_standard_on"));

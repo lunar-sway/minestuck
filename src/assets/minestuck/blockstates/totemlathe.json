@@ -1,0 +1,15 @@
+{
+    "variants": {
+        "part=bottom_left":     { "model": "minestuck:totemlathe_bottom_left" },
+        "part=bottom_midleft":     { "model": "minestuck:totemlathe_bottom_midleft" },
+        "part=bottom_midright":     { "model": "minestuck:totemlathe_bottom_midright" },
+        "part=bottom_right":     { "model": "minestuck:totemlathe_bottom_right" },
+        "part=mid_left":     { "model": "minestuck:totemlathe_mid_left" },
+        "part=mid_midleft":     { "model": "minestuck:totemlathe_mid_midleft" },
+        "part=mid_midright":     { "model": "minestuck:totemlathe_mid_midright" },
+        "part=mid_right":     { "model": "minestuck:totemlathe_mid_right" },
+        "part=top_left":     { "model": "minestuck:totemlathe_top_left" },
+        "part=top_midleft":     { "model": "minestuck:totemlathe_top_midleft" },
+        "part=top_midright":     { "model": "minestuck:totemlathe_top_midright" }
+    }
+}

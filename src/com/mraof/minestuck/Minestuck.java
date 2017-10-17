@@ -116,8 +116,10 @@ public class Minestuck
 		MinestuckEntities.registerEntities();
 		//register Tile Entities
 		GameRegistry.registerTileEntity(TileEntitySkaiaPortal.class, "Minstuck.GatePortal");
-		GameRegistry.registerTileEntity(TileEntitySburbMachine.class, "Minestuck.SburbMachine");
-		GameRegistry.registerTileEntity(TileEntityPunchDesignix.class, "minestuck:punch_designix");
+		GameRegistry.registerTileEntity(TileEntitySburbMachine.class, "Minestuck.sburbMachine");
+		GameRegistry.registerTileEntity(TileEntityPunchDesignix.class, "Minestuck:punch_designix");
+		GameRegistry.registerTileEntity(TileEntityTotemlathe.class, "Minestuck:totemlathe");
+		GameRegistry.registerTileEntity(TileEntityAlchemiter.class,"Minestuck:alchemiter");
 		GameRegistry.registerTileEntity(TileEntityCrockerMachine.class, "Minestuck.CrockerMachine");
 		GameRegistry.registerTileEntity(TileEntityComputer.class, "Minestuck.ComputerSburb");
 		GameRegistry.registerTileEntity(TileEntityTransportalizer.class, "Minestuck.Transportalizer");
