@@ -190,49 +190,25 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlockCraftingTab(cruxiteBlock, CreativeTabs.BUILDING_BLOCKS));
 		registerItemBlock(registry, new ItemBlock(genericObject));
 		registerItemBlock(registry, new ItemSburbMachine(sburbMachine));
-		registerItemBlock(registry, new ItemMultiTexture(crockerMachine, crockerMachine, new ItemMultiTexture.Mapper()
-				{
-					@Override
-					public String apply(ItemStack input)
-					{
-						return BlockCrockerMachine.MachineType.values()[input.getItemDamage()].getUnlocalizedName();
-					}
-				}));
+		registerItemBlock(registry, new ItemMultiTexture(crockerMachine, crockerMachine,
+				(ItemStack input) -> BlockCrockerMachine.MachineType.values()[input.getItemDamage() % BlockCrockerMachine.MachineType.values().length].getUnlocalizedName()));
 		registerItemBlock(registry, new ItemBlock(blockComputerOff));
 		registerItemBlock(registry, new ItemBlock(transportalizer));
 		
 		registerItemBlock(registry, new ItemBlockLayered(layeredSand));
-		registerItemBlock(registry, new ItemMultiTexture(coloredDirt, coloredDirt, new ItemMultiTexture.Mapper()
-				{
-					@Override
-					public String apply(ItemStack input)
-					{
-						return BlockColoredDirt.BlockType.values()[input.getItemDamage()].getName();
-					}
-				}));
+		registerItemBlock(registry, new ItemMultiTexture(coloredDirt, coloredDirt,
+				(ItemStack input) -> BlockColoredDirt.BlockType.values()[input.getItemDamage() % BlockColoredDirt.BlockType.values().length].getName()));
 		registerItemBlock(registry, new ItemBlock(glowingMushroom));
 		registerItemBlock(registry, new ItemBlock(glowingLog));
 		registerItemBlock(registry, new ItemBlockCraftingTab(glowingPlanks, CreativeTabs.BUILDING_BLOCKS));
-		registerItemBlock(registry, new ItemMultiTexture(stone, stone, new ItemMultiTexture.Mapper()
-		{
-			@Override
-			public String apply(ItemStack input)
-			{
-				return BlockMinestuckStone.BlockType.getFromMeta(input.getMetadata()).getUnlocalizedName();
-			}
-		}));
+		registerItemBlock(registry, new ItemMultiTexture(stone, stone,
+				(ItemStack input) -> BlockMinestuckStone.BlockType.getFromMeta(input.getMetadata()).getUnlocalizedName()));
 		registerItemBlock(registry, new ItemBlockCraftingTab(coarseStoneStairs, CreativeTabs.BUILDING_BLOCKS));
 		registerItemBlock(registry, new ItemBlockCraftingTab(shadeBrickStairs, CreativeTabs.BUILDING_BLOCKS));
 		registerItemBlock(registry, new ItemBlockCraftingTab(frostBrickStairs, CreativeTabs.BUILDING_BLOCKS));
 		registerItemBlock(registry, new ItemBlockCraftingTab(castIronStairs, CreativeTabs.BUILDING_BLOCKS));
-		registerItemBlock(registry, new ItemMultiTexture(log, log, new ItemMultiTexture.Mapper()
-		{
-			@Override
-			public String apply(ItemStack input)
-			{
-				return BlockMinestuckLog.BlockType.values()[input.getItemDamage()].getUnlocalizedName();
-			}
-		}));
+		registerItemBlock(registry, new ItemMultiTexture(log, log,
+				(ItemStack input) -> BlockMinestuckLog.BlockType.values()[input.getItemDamage() % BlockMinestuckLog.BlockType.values().length].getUnlocalizedName()));
 		registerItemBlock(registry, new ItemBlock(woodenCactus));
 		
 		registerItemBlock(registry, new ItemBlock(primedTnt));
