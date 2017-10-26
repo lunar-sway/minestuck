@@ -1,8 +1,7 @@
 package com.mraof.minestuck.entity;
 
-import java.lang.reflect.Constructor;
-import java.util.Set;
-
+import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.util.Debug;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.entity.EntityLiving;
@@ -23,9 +22,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 
-import com.mojang.authlib.GameProfile;
-import com.mraof.minestuck.editmode.ServerEditHandler;
-import com.mraof.minestuck.util.Debug;
+import java.lang.reflect.Constructor;
+import java.util.Set;
 
 public class EntityDecoy extends EntityLiving {
 	
@@ -63,7 +61,7 @@ public class EntityDecoy extends EntityLiving {
 		super(world);
 		this.setEntityBoundingBox(player.getEntityBoundingBox());
 		height = player.height;
-		this.player = new DecoyPlayer(world, this);
+		this.player = new DecoyPlayer(world, this, player);
 		for(String key : (Set<String>) player.getEntityData().getKeySet())
 			this.player.getEntityData().setTag(key, player.getEntityData().getTag(key).copy());
 		this.posX = player.posX;
@@ -275,9 +273,11 @@ public class EntityDecoy extends EntityLiving {
 		
 		EntityDecoy decoy;
 		
-		DecoyPlayer(WorldServer par1World, EntityDecoy decoy)
+		DecoyPlayer(WorldServer par1World, EntityDecoy decoy, EntityPlayerMP player)
 		{
-			super(par1World, new GameProfile(null, "Decoy"));
+			super(par1World, player.getGameProfile());
+			player.getServer().getPlayerList().getPlayerAdvancements(player);
+			//Fixes annoying NullPointerException when unlocking advancement, caused by just creating the fake player
 			this.decoy = decoy;
 			this.setHealth(decoy.getHealth());
 		}

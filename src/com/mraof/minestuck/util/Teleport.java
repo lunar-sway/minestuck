@@ -182,6 +182,8 @@ public class Teleport
 		if(portalInvincibilityField == null)
 		fieldSearch: {
 			FakePlayer fake = new FakePlayer(player.getServerWorld(), player.getGameProfile());
+			player.getServer().getPlayerList().getPlayerAdvancements(player);
+			//Fixes annoying NullPointerException when unlocking advancement, caused by just creating the fake player
 			try
 			{	//For dev environments with patch similar to 
 				if(checkFieldForBoolean(EntityPlayerMP.class.getDeclaredField("invulnerableDimensionChange"), fake))
