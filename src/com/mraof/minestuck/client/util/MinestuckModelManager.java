@@ -177,7 +177,6 @@ public class MinestuckModelManager
 	{
 		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())
 			register(chessTile, type.ordinal(), "chesstile_"+type.name);
-		register(rabbitSpawner);
 		register(skaiaPortal);
 		register(transportalizer);
 		register(blockComputerOff);
@@ -229,6 +228,7 @@ public class MinestuckModelManager
 		ModelLoader.setCustomStateMapper(woodenCactus, new StateMap.Builder().ignore(BlockCactus.AGE).build());
 		ModelLoader.setCustomStateMapper(returnNode, (Block block) -> Collections.emptyMap());
 		ModelLoader.setCustomStateMapper(gate, (Block block) -> Collections.emptyMap());
+		ModelLoader.setCustomStateMapper(rabbitSpawner, (Block block) -> Collections.emptyMap());
 	}
 	
 	private static void register(Item item)
