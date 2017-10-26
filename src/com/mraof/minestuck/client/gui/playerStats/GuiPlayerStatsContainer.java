@@ -74,6 +74,14 @@ public abstract class GuiPlayerStatsContainer extends GuiContainer
 			drawTexturedModalRect(xOffset + guiWidth - tabWidth, yOffset -tabHeight + tabOverlap, 2*tabWidth, 0, tabWidth, tabHeight);
 	}
 	
+	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks)
+	{
+		this.drawDefaultBackground();
+		super.drawScreen(mouseX, mouseY, partialTicks);
+		this.renderHoveredToolTip(mouseX, mouseY);
+	}
+	
 	protected void drawActiveTabAndIcons()
 	{
 		GlStateManager.color(1,1,1);
