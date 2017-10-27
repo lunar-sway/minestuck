@@ -1,8 +1,20 @@
 {
     "variants": {
-        "part=bottom_right":     { "model": "minestuck:punch_designix_bottom_right" },
-        "part=bottom_left":     { "model": "minestuck:punch_designix_bottom_left" },
-        "part=top_right":     { "model": "minestuck:punch_designix_top_right" },
-        "part=top_left":     { "model": "minestuck:punch_designix_top_left" }
+        "facing=south,part=bottom_right": { "model": "minestuck:punch_designix_bottom_right" },
+        "facing=south,part=bottom_left":  { "model": "minestuck:punch_designix_bottom_left" },
+        "facing=south,part=top_right":    { "model": "minestuck:punch_designix_top_right" },
+        "facing=south,part=top_left":     { "model": "minestuck:punch_designix_top_left" },
+        "facing=west,part=bottom_right":  { "model": "minestuck:punch_designix_bottom_right", "y": 90 },
+        "facing=west,part=bottom_left":   { "model": "minestuck:punch_designix_bottom_left", "y": 90 },
+        "facing=west,part=top_right":     { "model": "minestuck:punch_designix_top_right", "y": 90 },
+        "facing=west,part=top_left":      { "model": "minestuck:punch_designix_top_left", "y": 90 },
+        "facing=north,part=bottom_right": { "model": "minestuck:punch_designix_bottom_right", "y": 180 },
+        "facing=north,part=bottom_left":  { "model": "minestuck:punch_designix_bottom_left", "y": 180 },
+        "facing=north,part=top_right":    { "model": "minestuck:punch_designix_top_right", "y": 180 },
+        "facing=north,part=top_left":     { "model": "minestuck:punch_designix_top_left", "y": 180 },
+        "facing=east,part=bottom_right":  { "model": "minestuck:punch_designix_bottom_right", "y": 270 },
+        "facing=east,part=bottom_left":   { "model": "minestuck:punch_designix_bottom_left", "y": 270 },
+        "facing=east,part=top_right":     { "model": "minestuck:punch_designix_top_right", "y": 270 },
+        "facing=east,part=top_left":      { "model": "minestuck:punch_designix_top_left", "y": 270 }
     }
 }
