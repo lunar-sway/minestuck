@@ -1,13 +1,11 @@
 package com.mraof.minestuck.inventory.captchalouge;
 
 import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
-import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler.ModusType;
-import com.mraof.minestuck.item.MinestuckItems;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -35,7 +33,7 @@ public abstract class Modus
 	
 	public abstract ItemStack getItem(int id, boolean asCard);
 	
-	public abstract boolean canSwitchFrom(ModusType modus);
+	public abstract boolean canSwitchFrom(Modus modus);
 	
 	public abstract int getSize();
 	
@@ -47,10 +45,10 @@ public abstract class Modus
 	@SideOnly(Side.CLIENT)
 	public String getName()
 	{
-		ModusType type = ModusType.getType(this);
+		ResourceLocation type = CaptchaDeckHandler.getType(this.getClass());
 		if(type == null)
 			return "";
-		else return new ItemStack(MinestuckItems.modusCard, 1, type.metadata).getDisplayName();
+		else return CaptchaDeckHandler.getItem(type).getDisplayName();
 	}
 	
 }

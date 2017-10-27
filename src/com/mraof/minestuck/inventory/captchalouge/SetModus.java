@@ -3,7 +3,6 @@ package com.mraof.minestuck.inventory.captchalouge;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.captchalouge.SetGuiHandler;
 import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
-import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler.ModusType;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import net.minecraft.item.ItemStack;
@@ -178,7 +177,7 @@ public class SetModus extends Modus
 	}
 	
 	@Override
-	public boolean canSwitchFrom(ModusType modus)
+	public boolean canSwitchFrom(Modus modus)
 	{
 		return false;
 	}

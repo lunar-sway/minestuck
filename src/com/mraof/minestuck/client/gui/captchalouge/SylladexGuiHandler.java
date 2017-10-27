@@ -291,6 +291,21 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 	 */
 	public abstract void updatePosition();
 	
+	public ResourceLocation getCardTexture(GuiCard card)
+	{
+		return cardTexture;
+	}
+	
+	public int getCardTextureX(GuiCard card)
+	{
+		return textureIndex*CARD_WIDTH;
+	}
+	
+	public int getCardTextureY(GuiCard card)
+	{
+		return 96;
+	}
+	
 	public static class GuiCard
 	{
 		
@@ -330,7 +345,7 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 
 		protected void drawItemBackground()
 		{
-			gui.mc.getTextureManager().bindTexture(SylladexGuiHandler.cardTexture);
+			gui.mc.getTextureManager().bindTexture(gui.getCardTexture(this));
 			int minX = 0, maxX = CARD_WIDTH, minY = 0, maxY = CARD_HEIGHT;
 			if(this.xPos + minX < gui.mapX)
 				minX += gui.mapX - (this.xPos + minX);
@@ -341,7 +356,7 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 			else if(this.yPos + maxY > gui.mapY + gui.mapHeight)
 				maxY -= (this.yPos + maxY) - (gui.mapY + gui.mapHeight);
 			gui.drawTexturedModalRect(this.xPos + minX - gui.mapX, this.yPos + minY - gui.mapY,	//Gui pos
-					gui.textureIndex*CARD_WIDTH + minX, 96 + minY,	//Texture pos
+					gui.getCardTextureX(this) + minX, gui.getCardTextureY(this) + minY,	//Texture pos
 					maxX - minX, maxY - minY);	//Size
 		}
 		

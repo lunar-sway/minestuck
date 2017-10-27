@@ -41,10 +41,14 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.Random;
 
-@Mod(modid = "minestuck", name = "Minestuck", version = "@VERSION@", guiFactory = "com.mraof.minestuck.client.gui.MinestuckGuiFactory", acceptedMinecraftVersions = "[1.12,1.12.2]")
+import static com.mraof.minestuck.Minestuck.MOD_ID;
+import static com.mraof.minestuck.Minestuck.MOD_NAME;
+
+@Mod(modid = MOD_ID, name = MOD_NAME, version = "@VERSION@", guiFactory = "com.mraof.minestuck.client.gui.MinestuckGuiFactory", acceptedMinecraftVersions = "[1.12,1.12.2]")
 public class Minestuck
 {
 	public static final String MOD_NAME = "Minestuck";
+	public static final String MOD_ID = "minestuck";
 	
 	/**
 	 * True only if the minecraft application is client-sided 

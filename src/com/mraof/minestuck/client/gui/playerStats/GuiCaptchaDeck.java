@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.gui.playerStats;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalouge.ContainerCaptchaDeck;
 import com.mraof.minestuck.inventory.captchalouge.Modus;
-import com.mraof.minestuck.item.ItemModus;
+import com.mraof.minestuck.item.ItemCaptchaCard;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
@@ -79,10 +79,10 @@ public class GuiCaptchaDeck extends GuiPlayerStatsContainer implements GuiYesNoC
 		if(button == this.modusButton && !container.inventory.getStackInSlot(0).isEmpty())
 		{
 			ItemStack stack = container.inventory.getStackInSlot(0);
-			if(stack.getItem() instanceof ItemModus)
+			if(!(stack.getItem() instanceof ItemCaptchaCard))
 			{
-				Modus newModus = CaptchaDeckHandler.ModusType.getType(stack.getItemDamage()).createInstance(Side.CLIENT);
-				if(CaptchaDeckHandler.clientSideModus != null && !newModus.canSwitchFrom(CaptchaDeckHandler.ModusType.getType(CaptchaDeckHandler.clientSideModus)))
+				Modus newModus = CaptchaDeckHandler.createInstance(CaptchaDeckHandler.getType(stack), Side.CLIENT);
+				if(newModus != null && CaptchaDeckHandler.clientSideModus != null && newModus.getClass() != CaptchaDeckHandler.clientSideModus.getClass() && !newModus.canSwitchFrom(CaptchaDeckHandler.clientSideModus))
 				{
 					mc.currentScreen = new GuiYesNo(this, I18n.format("gui.emptySylladex1"), I18n.format("gui.emptySylladex2"), 0)
 					{

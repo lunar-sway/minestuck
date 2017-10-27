@@ -3,7 +3,6 @@ package com.mraof.minestuck.inventory.captchalouge;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
 import com.mraof.minestuck.client.gui.captchalouge.TreeGuiHandler;
-import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler.ModusType;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
@@ -158,7 +157,7 @@ public class TreeModus extends Modus
 	}
 	
 	@Override
-	public boolean canSwitchFrom(ModusType modus)
+	public boolean canSwitchFrom(Modus modus)
 	{
 		return false;
 	}
