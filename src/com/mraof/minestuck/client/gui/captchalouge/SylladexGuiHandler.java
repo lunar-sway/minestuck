@@ -291,13 +291,13 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 	 */
 	public abstract void updatePosition();
 	
-	protected static class GuiCard
+	public static class GuiCard
 	{
 		
 		protected SylladexGuiHandler gui;
-		protected ItemStack item;
-		protected int index;
-		protected int xPos, yPos;
+		public ItemStack item;
+		public int index;
+		public int xPos, yPos;
 		
 		protected GuiCard()
 		{
@@ -330,7 +330,7 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 
 		protected void drawItemBackground()
 		{
-			gui.mc.getTextureManager().bindTexture(gui.cardTexture);
+			gui.mc.getTextureManager().bindTexture(SylladexGuiHandler.cardTexture);
 			int minX = 0, maxX = CARD_WIDTH, minY = 0, maxY = CARD_HEIGHT;
 			if(this.xPos + minX < gui.mapX)
 				minX += gui.mapX - (this.xPos + minX);
@@ -378,9 +378,9 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 		
 	}
 	
-	protected static class ModusSizeCard extends GuiCard
+	public static class ModusSizeCard extends GuiCard
 	{
-		protected int size;
+		public int size;
 		
 		public ModusSizeCard(SylladexGuiHandler gui, int size, int xPos, int yPos)
 		{
