@@ -1,14 +1,13 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.block.BlockPunchDesignix;
-import com.mraof.minestuck.block.BlockPunchDesignix.enumParts;
+import com.mraof.minestuck.block.BlockPunchDesignix.EnumParts;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.CombinationRegistry;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -21,11 +20,11 @@ public class TileEntityPunchDesignix extends TileEntityMachine
 	public int color = -1;
 	public boolean isMaster;
 	public boolean destroyed=false;
-	public BlockPunchDesignix.enumParts part;
+	public EnumParts part;
 	//constructor
 	public TileEntityPunchDesignix(IBlockState state){
 		part = state.getValue(BlockPunchDesignix.PART);
-		if(part==enumParts.BOTTOM_LEFT){
+		if(part== EnumParts.BOTTOM_LEFT){
 			isMaster=true;
 		}else{
 			isMaster=false;

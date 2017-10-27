@@ -13,7 +13,9 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public abstract class BlockLargeMachine extends BlockContainer {
+public abstract class BlockLargeMachine extends BlockContainer
+{
+	
 	public int Xlength;
 	public int Zwidth;
 	public int Yheight;
