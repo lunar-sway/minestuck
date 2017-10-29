@@ -1,5 +1,7 @@
 package com.mraof.minestuck.entity.item;
 
+import com.mraof.minestuck.editmode.ClientEditHandler;
+import com.mraof.minestuck.editmode.ServerEditHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -15,13 +17,10 @@ import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.mraof.minestuck.editmode.ClientEditHandler;
-import com.mraof.minestuck.editmode.ServerEditHandler;
-
 public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnData
 {
 	public int cycle;
-
+	
 	public int age = 0;
 	private int healAmount = 1;
 	private int health = 5;
@@ -29,6 +28,8 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 	private EntityPlayer closestPlayer;
 
 	private int targetCycle;
+	
+	public float animationOffset;
 
 	public EntityVitalityGel(World world, double x, double y, double z, int healAmount)
 	{
@@ -47,6 +48,7 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 	public EntityVitalityGel(World par1World)
 	{
 		super(par1World);
+		animationOffset = (float) (Math.random() * Math.PI * 2.0D);
 	}
 	
 	/**
