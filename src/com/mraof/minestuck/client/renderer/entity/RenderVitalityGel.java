@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 
 public class RenderVitalityGel extends Render<EntityVitalityGel>
 {
@@ -21,10 +22,10 @@ public class RenderVitalityGel extends Render<EntityVitalityGel>
 	}
 	
 	@Override
-	public void doRender(EntityVitalityGel entity, double d0, double d1, double d2, float f, float f1)
+	public void doRender(EntityVitalityGel entity, double x, double y, double z, float entityYaw, float partialTicks)
 	{
 		GlStateManager.pushMatrix();
-		GlStateManager.translate((float)d0, (float)d1 + entity.getSizeByValue()/2, (float)d2);
+		GlStateManager.translate((float)x, (float)y + entity.getSizeByValue()/2, (float)z);
 		this.bindEntityTexture(entity);
 		BufferBuilder vertexbuffer = Tessellator.getInstance().getBuffer();
 		int j = entity.getBrightnessForRender();
@@ -34,8 +35,12 @@ public class RenderVitalityGel extends Render<EntityVitalityGel>
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
 		GlStateManager.rotate(-this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
-		float f11 = entity.getSizeByValue();
-		GlStateManager.scale(f11, f11, f11);
+		
+		float size = entity.getSizeByValue();
+		GlStateManager.scale(size, size, size);
+		float scaleFactor = MathHelper.sin((entity.age + partialTicks)/ 10f + entity.animationOffset);
+		GlStateManager.scale(1 + scaleFactor*0.07f, 1 - scaleFactor*0.05f, 1);
+		
 		vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_NORMAL);
 		vertexbuffer.pos(-0.5D, -0.25D, 0.0D).tex(0.0D, 1.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
 		vertexbuffer.pos(0.5D, -0.25D, 0.0D).tex(1.0D, 1.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
