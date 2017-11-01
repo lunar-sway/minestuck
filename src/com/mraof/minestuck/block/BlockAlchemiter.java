@@ -1,12 +1,14 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.client.gui.GuiHandler;
+import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -14,13 +16,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.BlockTotemlathe.enumParts;
-import com.mraof.minestuck.client.gui.GuiHandler;
-import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
-import com.mraof.minestuck.tileentity.TileEntityPunchDesignix;
-import com.mraof.minestuck.tileentity.TileEntityTotemlathe;
 
 public class BlockAlchemiter extends BlockLargeMachine{
 
@@ -101,26 +96,13 @@ public class BlockAlchemiter extends BlockLargeMachine{
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
 	
-		BlockPos MasterPos=((TileEntityPunchDesignix)worldIn.getTileEntity(pos)).GetMasterPos(state);
+		/*BlockPos MasterPos=((TileEntityPunchDesignix)worldIn.getTileEntity(pos)).GetMasterPos(state);
 		TileEntityPunchDesignix te = (TileEntityPunchDesignix) worldIn.getTileEntity(MasterPos);
 		te.destroyed=true;
-		InventoryHelper.dropInventoryItems(worldIn, pos, te);
+		InventoryHelper.dropInventoryItems(worldIn, pos, te);*/
 		
 		super.breakBlock(worldIn, pos, state);
 	}
-	
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	//Block state handling
 	public static enum enumParts implements IStringSerializable

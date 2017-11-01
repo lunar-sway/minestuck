@@ -16,6 +16,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public class BlockPunchDesignix extends BlockLargeMachine
@@ -45,17 +46,11 @@ public class BlockPunchDesignix extends BlockLargeMachine
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
-		TileEntityPunchDesignix te=(TileEntityPunchDesignix)worldIn.getTileEntity(pos);
-		BlockPos MasterPos=te.GetMasterPos(state);
-		if(!worldIn.isRemote && !((TileEntityPunchDesignix)worldIn.getTileEntity(MasterPos)).destroyed){
-			if(worldIn.getTileEntity(pos)instanceof TileEntityPunchDesignix){				
-				if(te.isMaster()){
-					playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.MACHINE.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
-					
-				}else{
-					playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.MACHINE.ordinal(), worldIn, MasterPos.getX(), MasterPos.getY(), MasterPos.getZ());
-				}
-			}
+		BlockPos MasterPos = getMainPos(state, pos);
+		TileEntity te = worldIn.getTileEntity(pos);
+		if(!worldIn.isRemote && te != null && te instanceof TileEntityPunchDesignix && !((TileEntityPunchDesignix)te).destroyed)
+		{
+			playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.MACHINE.ordinal(), worldIn, MasterPos.getX(), MasterPos.getY(), MasterPos.getZ());
 		}
 		return true;
 	}
@@ -67,14 +62,16 @@ public class BlockPunchDesignix extends BlockLargeMachine
 	}
 	
 	@Override
-	public void onBlockPlacedBy(World worldIn,BlockPos pos,IBlockState state,EntityLivingBase placer, ItemStack stack)
+	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
 	{
-		if(placer!=null && !(worldIn.isRemote))
+		EnumFacing facing = EnumFacing.getHorizontal(MathHelper.floor((double)(placer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3).getOpposite();
+		state = state.withProperty(DIRECTION, facing);
+		if(!(worldIn.isRemote))
 		{
 			worldIn.setBlockState(pos, state.withProperty(PART, EnumParts.BOTTOM_LEFT));
-			worldIn.setBlockState(pos.east(), state.withProperty(PART, EnumParts.BOTTOM_RIGHT));
+			worldIn.setBlockState(pos.offset(facing.rotateYCCW()), state.withProperty(PART, EnumParts.BOTTOM_RIGHT));
 			worldIn.setBlockState(pos.up(),state.withProperty(PART, EnumParts.TOP_LEFT));
-			worldIn.setBlockState(pos.up().east(), state.withProperty(PART, EnumParts.TOP_RIGHT));
+			worldIn.setBlockState(pos.up().offset(facing.rotateYCCW()), state.withProperty(PART, EnumParts.TOP_RIGHT));
 		}
 	}
 	
@@ -82,10 +79,13 @@ public class BlockPunchDesignix extends BlockLargeMachine
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
 	
-		BlockPos MasterPos=((TileEntityPunchDesignix)worldIn.getTileEntity(pos)).GetMasterPos(state);
-		TileEntityPunchDesignix te = (TileEntityPunchDesignix) worldIn.getTileEntity(MasterPos);
-		te.destroyed=true;
-		InventoryHelper.dropInventoryItems(worldIn, pos, te);
+		BlockPos masterPos = getMainPos(state, pos);
+		TileEntityPunchDesignix te = (TileEntityPunchDesignix) worldIn.getTileEntity(masterPos);
+		if(te != null)
+		{
+			te.destroyed = true;
+			InventoryHelper.dropInventoryItems(worldIn, pos, te);
+		}
 		
 		super.breakBlock(worldIn, pos, state);
 	}
@@ -113,6 +113,19 @@ public class BlockPunchDesignix extends BlockLargeMachine
 		EnumFacing facing = state.getValue(DIRECTION);
 		
 		return part.ordinal() + facing.getHorizontalIndex()*4;
+	}
+	
+	public BlockPos getMainPos(IBlockState state, BlockPos pos)
+	{
+		EnumFacing facing = state.getValue(DIRECTION);
+		switch(state.getValue(PART))
+		{
+			case TOP_LEFT: return pos;
+			case TOP_RIGHT: return pos.offset(facing.rotateY());
+			case BOTTOM_LEFT: return pos.up();
+			case BOTTOM_RIGHT: return pos.up().offset(facing.rotateY());
+		}
+		return pos;
 	}
 	
 	public enum EnumParts implements IStringSerializable

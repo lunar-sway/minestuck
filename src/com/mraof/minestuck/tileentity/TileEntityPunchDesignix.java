@@ -11,7 +11,6 @@ import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
 
 public class TileEntityPunchDesignix extends TileEntityMachine
 {
@@ -30,16 +29,7 @@ public class TileEntityPunchDesignix extends TileEntityMachine
 			isMaster=false;
 		}
 	}
-	public BlockPos GetMasterPos(IBlockState state){
-
-		switch(part){
-		case BOTTOM_LEFT:return getPos();		
-		case BOTTOM_RIGHT:return getPos().west();
-		case TOP_LEFT:return getPos().down();
-		case TOP_RIGHT:return getPos().down().west();
-		}
-		return getPos();
-	}
+	
 	public boolean isMaster(){
 		return isMaster;
 	}
