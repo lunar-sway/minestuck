@@ -1,40 +1,17 @@
 package com.mraof.minestuck.tileentity;
 
-import com.mraof.minestuck.block.BlockPunchDesignix;
-import com.mraof.minestuck.block.BlockPunchDesignix.EnumParts;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.CombinationRegistry;
-import com.mraof.minestuck.util.GristType;
-import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class TileEntityPunchDesignix extends TileEntityMachine
 {
-	public PlayerIdentifier owner;
-	public GristType selectedGrist = GristType.Build;
-	public int color = -1;
-	public boolean isMaster;
-	public boolean destroyed=false;
-	public EnumParts part;
+	public boolean broken = false;
 	//constructor
-	public TileEntityPunchDesignix(IBlockState state){
-		part = state.getValue(BlockPunchDesignix.PART);
-		if(part== EnumParts.BOTTOM_LEFT){
-			isMaster=true;
-		}else{
-			isMaster=false;
-		}
-	}
+	public TileEntityPunchDesignix() {}
 	
-	public boolean isMaster(){
-		return isMaster;
-	}
-
-
 	@Override
 	public boolean isAutomatic()
 	{
@@ -58,21 +35,14 @@ public class TileEntityPunchDesignix extends TileEntityMachine
 	public void readFromNBT(NBTTagCompound tagCompound)
 	{
 		super.readFromNBT(tagCompound);
-		
-		if(tagCompound.hasKey("gristType"))
-			this.selectedGrist = GristType.values()[tagCompound.getInteger("gristType")];
-		
-		if(tagCompound.hasKey("color"))
-			this.color = tagCompound.getInteger("color");
-		
-		if(tagCompound.hasKey("owner") || tagCompound.hasKey("ownerMost"))
-			owner = IdentifierHandler.load(tagCompound, "owner");
+		this.broken = tagCompound.getBoolean("broken");
 	}
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound)
 	{
 		super.writeToNBT(tagCompound);
+		tagCompound.setBoolean("broken", this.broken);
 		return tagCompound;
 	}
 	

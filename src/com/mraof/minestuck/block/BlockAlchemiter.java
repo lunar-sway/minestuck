@@ -42,7 +42,7 @@ public class BlockAlchemiter extends BlockLargeMachine{
 		
 		//TileEntityPunchDesignix te=(TileEntityPunchDesignix)worldIn.getTileEntity(pos);
 		//BlockPos MasterPos=te.GetMasterPos(state);
-		if(!worldIn.isRemote /*&& !((TileEntityPunchDesignix)worldIn.getTileEntity(MasterPos)).destroyed*/){
+		if(!worldIn.isRemote /*&& !((TileEntityPunchDesignix)worldIn.getTileEntity(MasterPos)).broken*/){
 			//if(worldIn.getTileEntity(pos)instanceof TileEntityPunchDesignix){				
 				//if(te.isMaster()){
 					playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.MACHINE.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
@@ -98,7 +98,7 @@ public class BlockAlchemiter extends BlockLargeMachine{
 	
 		/*BlockPos MasterPos=((TileEntityPunchDesignix)worldIn.getTileEntity(pos)).GetMasterPos(state);
 		TileEntityPunchDesignix te = (TileEntityPunchDesignix) worldIn.getTileEntity(MasterPos);
-		te.destroyed=true;
+		te.broken=true;
 		InventoryHelper.dropInventoryItems(worldIn, pos, te);*/
 		
 		super.breakBlock(worldIn, pos, state);

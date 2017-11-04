@@ -55,13 +55,7 @@ public abstract class BlockLargeMachine extends BlockContainer
 	{
 	    return getDefaultState();
 	}
-
-	@Override
-	public int getMetaFromState(IBlockState state) {
-	    return 1;
-	}
-	// have the individual machines take care of this
-
+	
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state){
 		return EnumBlockRenderType.MODEL;

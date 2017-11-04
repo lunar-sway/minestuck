@@ -46,19 +46,27 @@ public class BlockPunchDesignix extends BlockLargeMachine
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
-		BlockPos MasterPos = getMainPos(state, pos);
-		TileEntity te = worldIn.getTileEntity(pos);
-		if(!worldIn.isRemote && te != null && te instanceof TileEntityPunchDesignix && !((TileEntityPunchDesignix)te).destroyed)
+		BlockPos mainPos = getMainPos(state, pos);
+		TileEntity te = worldIn.getTileEntity(mainPos);
+		if(!worldIn.isRemote && te != null && te instanceof TileEntityPunchDesignix && !((TileEntityPunchDesignix)te).broken)
 		{
-			playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.MACHINE.ordinal(), worldIn, MasterPos.getX(), MasterPos.getY(), MasterPos.getZ());
+			playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.MACHINE.ordinal(), worldIn, mainPos.getX(), mainPos.getY(), mainPos.getZ());
 		}
 		return true;
 	}
 	
 	@Override
+	public boolean hasTileEntity(IBlockState state)
+	{
+		return state.getValue(PART) == EnumParts.TOP_LEFT;
+	}
+	
+	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta)
 	{
-		return new TileEntityPunchDesignix(this.getStateFromMeta(meta));
+		if(meta % 4 == EnumParts.TOP_LEFT.ordinal())
+			return new TileEntityPunchDesignix();
+		else return null;
 	}
 	
 	@Override
@@ -79,12 +87,13 @@ public class BlockPunchDesignix extends BlockLargeMachine
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
 	
-		BlockPos masterPos = getMainPos(state, pos);
-		TileEntityPunchDesignix te = (TileEntityPunchDesignix) worldIn.getTileEntity(masterPos);
-		if(te != null)
+		BlockPos mainPos = getMainPos(state, pos);
+		TileEntity te = worldIn.getTileEntity(mainPos);
+		if(te != null && te instanceof TileEntityPunchDesignix)
 		{
-			te.destroyed = true;
-			InventoryHelper.dropInventoryItems(worldIn, pos, te);
+			TileEntityPunchDesignix designix = (TileEntityPunchDesignix) te;
+			designix.broken = true;
+			InventoryHelper.dropInventoryItems(worldIn, pos, designix);
 		}
 		
 		super.breakBlock(worldIn, pos, state);

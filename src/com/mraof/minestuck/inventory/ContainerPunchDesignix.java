@@ -2,7 +2,6 @@ package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tileentity.TileEntityPunchDesignix;
-import com.mraof.minestuck.util.IdentifierHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -28,12 +27,10 @@ public class ContainerPunchDesignix extends Container
 	public ContainerPunchDesignix(InventoryPlayer inventoryPlayer, TileEntityPunchDesignix te)
 	{
 		tileEntity = te;
-		te.owner = IdentifierHandler.encode(inventoryPlayer.player);
 		
-			addSlotToContainer(new Slot(tileEntity, 0, designixInputX, designixInputY));
-			addSlotToContainer(new SlotInput(tileEntity, 1, designixCardsX, designixCardsY, MinestuckItems.captchaCard));
-			addSlotToContainer(new SlotOutput(tileEntity, 2, designixOutputX, designixOutputY));
-			
+		addSlotToContainer(new Slot(tileEntity, 0, designixInputX, designixInputY));
+		addSlotToContainer(new SlotInput(tileEntity, 1, designixCardsX, designixCardsY, MinestuckItems.captchaCard));
+		addSlotToContainer(new SlotOutput(tileEntity, 2, designixOutputX, designixOutputY));
 		
 		bindPlayerInventory(inventoryPlayer);
 	}
@@ -59,7 +56,7 @@ public class ContainerPunchDesignix extends Container
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotNumber)
 	{
 		ItemStack itemstack = ItemStack.EMPTY;
-		Slot slot = (Slot)this.inventorySlots.get(slotNumber);
+		Slot slot = this.inventorySlots.get(slotNumber);
 		int allSlots = this.inventorySlots.size();
 		
 		if (slot != null && slot.getHasStack())
