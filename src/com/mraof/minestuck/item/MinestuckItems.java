@@ -49,6 +49,7 @@ public class MinestuckItems
 	public static Item blacksmithHammer = new ItemWeapon(450, 7.0D, -2.8D, 10, "blacksmithHammer").setTool("pickaxe", 2, 3.5F).setRegistryName("blacksmith_hammer");
 	public static Item pogoHammer = new ItemPogoWeapon(400, 7.0D, -2.8D, 8, "pogoHammer", 0.7).setTool("pickaxe", 1, 2.0F).setRegistryName("pogo_hammer");
 	public static Item telescopicSassacrusher = new ItemWeapon(1024, 9.0D, -2.9D, 15, "telescopicSassacrusher").setTool("pickaxe", 2, 5.0F).setRegistryName("telescopic_sassacrusher");
+	public static Item regiHammer = new ItemWeapon(812, 6.0D, -2.4D, 5, "regiHammer").setRegistryName("regi_hammer");
 	public static Item fearNoAnvil = new ItemPotionWeapon(2048, 10.0D, -2.8D, 12, "fearNoAnvil", new PotionEffect(MobEffects.SLOWNESS,100,3)).setTool("pickaxe", 3, 7.0F).setRegistryName("fear_no_anvil");
 	public static Item zillyhooHammer = new ItemWeapon(3000, 11.0D, -2.8D, 30, "zillyhooHammer").setTool("pickaxe", 4, 15.0F).setRegistryName("zillyhoo_hammer");
 	public static Item popamaticVrillyhoo = new ItemWeapon(3000, 0.0D, -2.8D, 30, "popamaticVrillyhoo").setTool("pickaxe", 4, 15.0F).setRegistryName("popamatic_vrillyhoo");
@@ -96,7 +97,9 @@ public class MinestuckItems
 	public static Item spikedClub = new ItemWeapon(500, 5.5D, -2.2D, 5, "spikedClub").setRegistryName("spiked_club");
 	//canes
 	public static Item cane = new ItemWeapon(100, 2.0D, -2.0D, 15, "cane").setRegistryName("cane");
-	public static Item spearCane = new ItemWeapon(300, 4.0D, -2.0D, 13, "spearCane").setRegistryName("spear_cane");
+	public static Item ironCane = new ItemWeapon(450, 3.5D, -2.0D, 10, "ironCane").setRegistryName("iron_cane");
+	public static Item spearCane = new ItemWeapon(300, 5.0D, -2.0D, 13, "spearCane").setRegistryName("spear_cane");
+	public static Item regiCane = new ItemWeapon(812, 6.0D, -2.0D, 7, "regiCane").setRegistryName("regi_cane");
 	public static Item dragonCane = new ItemWeapon(300, 6.5D, -2.0D, 20, "dragonCane").setRegistryName("dragon_cane");
 	//Spoons/forks
 	public static Item woodenSpoon = new ItemWeapon(59, 2.0D, -2.2D, 5, "woodenSpoon").setRegistryName("wooden_spoon");
@@ -222,6 +225,7 @@ public class MinestuckItems
 		registry.register(blacksmithHammer);
 		registry.register(pogoHammer);
 		registry.register(telescopicSassacrusher);
+		registry.register(regiHammer);
 		registry.register(fearNoAnvil);
 		registry.register(zillyhooHammer);
 		registry.register(popamaticVrillyhoo);
@@ -274,7 +278,9 @@ public class MinestuckItems
 
 		//canes
 		registry.register(cane);
+		registry.register(ironCane);
 		registry.register(spearCane);
+		registry.register(regiCane);
 		registry.register(dragonCane);
 		
 		//Spoons/forks

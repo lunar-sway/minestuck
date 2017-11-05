@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:iron_cane"
+    ]
+  },
+  "criteria": {
+    "has_cane": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minestuck:cane"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:iron_cane"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_cane",
+      "has_the_recipe"
+    ]
+  ]
+}

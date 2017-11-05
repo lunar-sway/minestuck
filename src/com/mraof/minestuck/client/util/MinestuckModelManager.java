@@ -59,6 +59,7 @@ public class MinestuckModelManager
 		register(blacksmithHammer);
 		register(pogoHammer);
 		register(telescopicSassacrusher);
+		register(regiHammer);
 		register(fearNoAnvil);
 		register(popamaticVrillyhoo);
 		register(scarletZillyhoo);
@@ -107,7 +108,9 @@ public class MinestuckModelManager
 		register(spikedClub);
 		
 		register(cane);
+		register(ironCane);
 		register(spearCane);
+		register(regiCane);
 		register(dragonCane);
 		
 		register(woodenSpoon);
