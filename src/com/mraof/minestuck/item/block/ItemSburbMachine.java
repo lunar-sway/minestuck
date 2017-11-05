@@ -2,7 +2,6 @@ package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.BlockSburbMachine;
 import com.mraof.minestuck.tileentity.TileEntitySburbMachine;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,14 +16,8 @@ public class ItemSburbMachine extends ItemMultiTexture
 {
 	public ItemSburbMachine(Block block) 
 	{
-		super(block, block, new ItemMultiTexture.Mapper()
-		{
-			@Override
-			public String apply(ItemStack input)
-			{
-				return BlockSburbMachine.MachineType.values()[input.getMetadata()].getUnlocalizedName();
-			}
-		});
+		super(block, block,
+				(ItemStack input) -> BlockSburbMachine.MachineType.values()[input.getMetadata() % BlockSburbMachine.MachineType.values().length].getUnlocalizedName());
 	}
 	
 	@Override

@@ -6,7 +6,6 @@ import com.mraof.minestuck.modSupport.*;
 import com.mraof.minestuck.modSupport.minetweaker.MinetweakerSupport;
 import com.mraof.minestuck.world.storage.loot.conditions.LandAspectLootCondition;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockPrismarine;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.init.Blocks;
@@ -15,17 +14,13 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.ShapedRecipes;
-import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraft.item.crafting.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.conditions.LootConditionManager;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
@@ -509,42 +504,15 @@ public class AlchemyRecipeHandler
 	
 	public static void registerMinestuckRecipes() {
 		
-		//set up vanilla recipes
-		RecipeSorter.register("minestuck:notmirrored", CraftingRecipes.NonMirroredRecipe.class, RecipeSorter.Category.SHAPED, "before:minecraft:shaped");
+		//set up crafting recipes
+		/*RecipeSorter.register("minestuck:notmirrored", CraftingRecipes.NonMirroredRecipe.class, RecipeSorter.Category.SHAPED, "before:minecraft:shaped");
 		RecipeSorter.register("minestuck:emptycard", CraftingRecipes.EmptyCardRecipe.class, RecipeSorter.Category.SHAPED, "before:minecraft:shaped");
 		
-		GameRegistry.addRecipe(new ItemStack(blockComputerOff,1,0),new Object[]{ "XXX","XYX","XXX",'Y',new ItemStack(cruxiteBlock),'X',new ItemStack(Items.IRON_INGOT,1)});
-		GameRegistry.addRecipe(new ItemStack(cruxiteBlock),new Object[]{ "XXX","XXX","XXX",'X',new ItemStack(rawCruxite, 1)});
-		cardRecipe = GameRegistry.addShapedRecipe(new ItemStack(captchaCard,8,0),new Object[]{ "XXX","XYX","XXX",'Y',new ItemStack(rawCruxite, 1),'X',new ItemStack(Items.PAPER,1)});
-		cardRecipeAdded = true;
-		GameRegistry.addRecipe(new ItemStack(clawHammer),new Object[]{ " XX","XY "," Y ",'X',new ItemStack(Items.IRON_INGOT),'Y',new ItemStack(Items.STICK)});
-		GameRegistry.addRecipe(new ItemStack(woodenSpoon),new Object[]{ " X "," Y "," Y ",'X',new ItemStack(Items.BOWL),'Y',new ItemStack(Items.STICK)});
-		GameRegistry.addRecipe(new ItemStack(chessboard),new Object[]{ "XYX","YXY","XYX",'X',new ItemStack(Blocks.STAINED_HARDENED_CLAY,1,0),'Y',new ItemStack(Blocks.STAINED_HARDENED_CLAY,1,15)});
-		GameRegistry.addRecipe(new ItemStack(chessboard),new Object[]{ "XYX","YXY","XYX",'Y',new ItemStack(Blocks.STAINED_HARDENED_CLAY,1,0),'X',new ItemStack(Blocks.STAINED_HARDENED_CLAY,1,15)});
-		GameRegistry.addRecipe(new ItemStack(disk, 1, 0),new Object[]{ "X X"," Y ","X X",'X',new ItemStack(rawCruxite, 1),'Y',new ItemStack(Items.IRON_INGOT,1)});
-		GameRegistry.addRecipe(new ItemStack(disk, 1, 1),new Object[]{ " X ","XYX"," X ",'X',new ItemStack(rawCruxite, 1),'Y',new ItemStack(Items.IRON_INGOT,1)});
-		GameRegistry.addShapelessRecipe(new ItemStack(rawCruxite, 9), new ItemStack(cruxiteBlock));
-		GameRegistry.addRecipe(new ItemStack(cane, 1), new Object[] {"  X", " X ", "X  ", 'X', new ItemStack(Items.STICK, 1)});
-		GameRegistry.addRecipe(new ItemStack(deuceClub, 1), new Object[] {"  Y", " X ", "X  ", 'X', new ItemStack(Items.STICK, 1), 'Y', new ItemStack(Blocks.PLANKS, 1)});
-		GameRegistry.addRecipe(new ItemStack(fork, 1), new Object[] {"X X"," X "," X ", 'X', new ItemStack(Blocks.STONE,1)});
-		GameRegistry.addRecipe(new ItemStack(sickle, 1), new Object[] {" XX","X  "," Y ", 'X', new ItemStack(Items.IRON_INGOT), 'Y', new ItemStack(Items.STICK)});
-		GameRegistry.addRecipe(new ItemStack(katana, 1), new Object[] {"  X"," X ","Y  ", 'X', new ItemStack(Items.IRON_INGOT), 'Y', new ItemStack(Items.STICK)});
-		GameRegistry.addRecipe(new ItemStack(sledgeHammer, 1), new Object[] {"XZX"," Y "," Y ", 'X', new ItemStack(Items.IRON_INGOT), 'Y', new ItemStack(Items.STICK), 'Z', new ItemStack(Blocks.STONE)});
 		ItemStack crux = new ItemStack(rawCruxite);
 		ItemStack cruxBl = new ItemStack(cruxiteBlock);
 		ItemStack card = new ItemStack(captchaCard);
 		GameRegistry.addRecipe(new CraftingRecipes.EmptyCardRecipe(3, 1, new ItemStack[]{cruxBl.copy(), card.copy(), crux.copy()}, new ItemStack(modusCard, 1, 0)));
-		GameRegistry.addRecipe(new CraftingRecipes.EmptyCardRecipe(3, 1, new ItemStack[]{crux.copy(), card.copy(), cruxBl.copy()}, new ItemStack(modusCard, 1, 1)));
-		GameRegistry.addRecipe(new ItemStack(coarseStoneStairs, 4), new Object[] {"X  ", "XX ", "XXX", 'X', new ItemStack(stone, 1, BlockMinestuckStone.COARSE_META)});
-		GameRegistry.addRecipe(new ItemStack(shadeBrickStairs, 4), new Object[] {"X  ", "XX ", "XXX", 'X', new ItemStack(stone, 1, BlockMinestuckStone.SHADE_META)});
-		GameRegistry.addRecipe(new ItemStack(frostBrickStairs, 4), new Object[] {"X  ", "XX ", "XXX", 'X', new ItemStack(stone, 1, BlockMinestuckStone.FROST_META)});
-		GameRegistry.addRecipe(new ItemStack(castIronStairs, 4), new Object[] {"X  ", "XX ", "XXX", 'X', new ItemStack(stone, 1, BlockMinestuckStone.CAST_META)});
-		GameRegistry.addRecipe(new ItemStack(stone, 4, BlockMinestuckStone.SHADE_META), new Object[] {"XX", "XX", 'X', new ItemStack(stone, 1, BlockMinestuckStone.SHADE_SMOOTH_META)});
-		GameRegistry.addRecipe(new ItemStack(Blocks.PLANKS, 3, BlockPlanks.EnumType.SPRUCE.getMetadata()), new Object[] {"X", 'X', new ItemStack(woodenCactus)});
-		GameRegistry.addShapelessRecipe(new ItemStack(glowingPlanks, 4), new ItemStack(glowingLog));
-		GameRegistry.addShapelessRecipe(new ItemStack(salad,1),new Object[]{ new ItemStack(Blocks.LEAVES,1,WILDCARD_VALUE),new ItemStack(Items.BOWL)});
-		GameRegistry.addShapelessRecipe(new ItemStack(salad,1),new Object[]{ new ItemStack(Blocks.LEAVES2,1,WILDCARD_VALUE),new ItemStack(Items.BOWL)});
-		GameRegistry.addShapelessRecipe(new ItemStack(bugOnAStick, 3), jarOfBugs, Items.STICK, Items.STICK, Items.STICK);
+		GameRegistry.addRecipe(new CraftingRecipes.EmptyCardRecipe(3, 1, new ItemStack[]{crux.copy(), card.copy(), cruxBl.copy()}, new ItemStack(modusCard, 1, 1)));*///TODO Figure out recipe names and groups
 		GameRegistry.addSmelting(goldSeeds, new ItemStack(Items.GOLD_NUGGET), 0.1F);
 		GameRegistry.addSmelting(ironOreSandstone, new ItemStack(Items.IRON_INGOT), 0.7F);
 		GameRegistry.addSmelting(ironOreSandstoneRed, new ItemStack(Items.IRON_INGOT), 0.7F);
@@ -575,13 +543,14 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(cruxiteApple, 1), false, new GristSet());
 		GristRegistry.addGristConversion(new ItemStack(cruxitePotion, 1), false, new GristSet());
 		
-		GristRegistry.addGristConversion(new ItemStack(CatClaws),false,new GristSet(new GristType[] {GristType.Build,GristType.Rust},new int[] {15,5}));
+		GristRegistry.addGristConversion(new ItemStack(catClaws),false,new GristSet(new GristType[] {GristType.Build,GristType.Rust},new int[] {15,5}));
 		
 		GristRegistry.addGristConversion(new ItemStack(clawHammer), false, new GristSet(GristType.Build, 8));
 		GristRegistry.addGristConversion(new ItemStack(sledgeHammer), false, new GristSet(new GristType[] {GristType.Build, GristType.Shale}, new int[] {10, 4}));
 		GristRegistry.addGristConversion(new ItemStack(blacksmithHammer), false, new GristSet(new GristType[] {GristType.Rust, GristType.Sulfur, GristType.Caulk}, new int[] {8, 9, 5}));
 		GristRegistry.addGristConversion(new ItemStack(pogoHammer), false, new GristSet(new GristType[] {GristType.Build, GristType.Shale}, new int[] {20, 16}));
 		GristRegistry.addGristConversion(new ItemStack(telescopicSassacrusher), false, new GristSet(new GristType[] {GristType.Shale, GristType.Tar, GristType.Mercury}, new int[] {39, 18, 23}));
+		GristRegistry.addGristConversion(new ItemStack(regiHammer), false, new GristSet(new GristType[] {GristType.Amethyst, GristType.Tar,GristType.Gold}, new int[] {25, 70, 34}));
 		GristRegistry.addGristConversion(new ItemStack(fearNoAnvil), false, new GristSet(new GristType[] {GristType.Build, GristType.Garnet, GristType.Diamond, GristType.Gold, GristType.Quartz}, new int[] {999, 150, 54, 61, 1}));
 		
 		GristRegistry.addGristConversion(new ItemStack(cactusCutlass), false, new GristSet(new GristType[] {GristType.Amber, GristType.Marble}, new int[] {7, 2}));
@@ -617,6 +586,8 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(spikedClub), false, new GristSet(new GristType[] {GristType.Build, GristType.Garnet, GristType.Iodine}, new int[] {46, 38, 13}));
 		
 		GristRegistry.addGristConversion(new ItemStack(spearCane), false, new GristSet(new GristType[] {GristType.Build, GristType.Mercury, GristType.Amber}, new int[] {28, 14, 11}));
+		GristRegistry.addGristConversion(new ItemStack(regiCane), false, new GristSet(new GristType[] {GristType.Amethyst, GristType.Tar,GristType.Gold}, new int[] {30, 55, 32}));
+		
 		GristRegistry.addGristConversion(new ItemStack(transportalizer), false, new GristSet(new GristType[] {GristType.Build, GristType.Amethyst, GristType.Rust, GristType.Uranium}, new int[] {350, 27, 36, 18}));
 		GristRegistry.addGristConversion(new ItemStack(modusCard, 1, 2), true, new GristSet(GristType.Build, 140));
 		GristRegistry.addGristConversion(new ItemStack(modusCard, 1, 3), true, new GristSet(new GristType[] {GristType.Build, GristType.Amber}, new int[] {400, 35}));
@@ -737,17 +708,24 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Blocks.ANVIL), new ItemStack(sledgeHammer), MODE_AND, false, false, new ItemStack(blacksmithHammer));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.IRON_BLOCK), new ItemStack(sledgeHammer), MODE_AND, false, false, new ItemStack(blacksmithHammer));
 		CombinationRegistry.addCombination(new ItemStack(Items.SLIME_BALL), new ItemStack(sledgeHammer), MODE_AND, false, false, new ItemStack(pogoHammer));
+		CombinationRegistry.addCombination(new ItemStack(clawHammer), new ItemStack(chessboard), MODE_AND, false, true, new ItemStack(regiHammer));
 		CombinationRegistry.addCombination(new ItemStack(blacksmithHammer), new ItemStack(Items.CLOCK), MODE_OR, false, false, new ItemStack(fearNoAnvil));
 		CombinationRegistry.addCombination(new ItemStack(sledgeHammer), new ItemStack(Items.BOOK), MODE_AND, false, false, new ItemStack(telescopicSassacrusher));
 		
 		//canes
-		CombinationRegistry.addCombination(new ItemStack(cane), new ItemStack(Items.STONE_SWORD), MODE_OR, false, false, new ItemStack(spearCane));
 		CombinationRegistry.addCombination(new ItemStack(cane), new ItemStack(Items.IRON_SWORD), MODE_OR, false, false, new ItemStack(spearCane));
 		CombinationRegistry.addCombination(new ItemStack(cane), new ItemStack(katana), MODE_OR, false, false, new ItemStack(spearCane));
+		CombinationRegistry.addCombination(new ItemStack(ironCane), new ItemStack(Items.STONE_SWORD), MODE_OR, false, false, new ItemStack(spearCane));
+		CombinationRegistry.addCombination(new ItemStack(ironCane), new ItemStack(Items.IRON_SWORD), MODE_OR, false, false, new ItemStack(spearCane));
+		CombinationRegistry.addCombination(new ItemStack(ironCane), new ItemStack(katana), MODE_OR, false, false, new ItemStack(spearCane));
+		CombinationRegistry.addCombination(new ItemStack(cane), new ItemStack(chessboard), MODE_AND, false, true, new ItemStack(regiCane));
+		CombinationRegistry.addCombination(new ItemStack(ironCane), new ItemStack(chessboard), MODE_AND, false, true, new ItemStack(regiCane));
 		
 		//spoons/sporks/forks
 		CombinationRegistry.addCombination(new ItemStack(woodenSpoon), new ItemStack(Items.IRON_INGOT), MODE_AND, false, false, new ItemStack(silverSpoon));
 		CombinationRegistry.addCombination(new ItemStack(silverSpoon), new ItemStack(Items.CAKE), MODE_AND, false, false, new ItemStack(crockerSpork));
+		CombinationRegistry.addCombination(new ItemStack(fork), new ItemStack(chessboard), MODE_AND, false, true, new ItemStack(skaiaFork));
+		CombinationRegistry.addCombination(new ItemStack(fork), new ItemStack(woodenSpoon), MODE_OR, false, false, new ItemStack(spork));
 		
 		CombinationRegistry.addCombination(new ItemStack(crockerSpork), new ItemStack(captchaCard), MODE_OR, false, true, new ItemStack(crockerMachine, 1, 0));
 		CombinationRegistry.addCombination(new ItemStack(Items.ENDER_PEARL), new ItemStack(Blocks.IRON_BLOCK), MODE_AND, false, false, new ItemStack(transportalizer));
@@ -758,7 +736,7 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination("treeLeaves", modusCard, OreDictionary.WILDCARD_VALUE, MODE_OR, new ItemStack(modusCard, 1, 3));	//Not planks and logs though. Too little branch-related.
 		CombinationRegistry.addCombination(new ItemStack(modusCard), new ItemStack(blockComputerOff), MODE_AND, false, true, new ItemStack(modusCard, 1, 4));
 		CombinationRegistry.addCombination(new ItemStack(modusCard), new ItemStack(Items.ITEM_FRAME), MODE_AND, false, true, new ItemStack(modusCard, 1, 5));
-		CombinationRegistry.addCombination(new ItemStack(Blocks.IRON_BARS),new ItemStack(Items.LEATHER), MODE_AND, false, true, new ItemStack(CatClaws));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.IRON_BARS),new ItemStack(Items.LEATHER), MODE_AND, false, true, new ItemStack(catClaws));
 		CombinationRegistry.addCombination(new ItemStack(Items.WHEAT_SEEDS), new ItemStack(Items.GOLD_NUGGET), MODE_AND, new ItemStack(goldSeeds));
 		CombinationRegistry.addCombination(new ItemStack(Items.WHEAT_SEEDS), new ItemStack(Items.GOLD_INGOT), MODE_AND, new ItemStack(goldSeeds));
 		CombinationRegistry.addCombination(new ItemStack(Items.BOAT), new ItemStack(Items.MINECART), MODE_OR, new ItemStack(metalBoat, 1, 0));
@@ -810,8 +788,6 @@ public class AlchemyRecipeHandler
 				CombinationRegistry.addCombination(new ItemStack(metalBoots[i]), prismarine, MODE_OR, false, false, new ItemStack(prismarineBoots));
 			}
 		
-		CombinationRegistry.addCombination(new ItemStack(fork), new ItemStack(chessboard), MODE_AND, false, true, new ItemStack(skaiaFork));
-		CombinationRegistry.addCombination(new ItemStack(fork), new ItemStack(woodenSpoon), MODE_OR, false, false, new ItemStack(spork));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.TNT), new ItemStack(Blocks.STONE_BUTTON), MODE_OR, new ItemStack(primedTnt));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.TNT), new ItemStack(Blocks.WOODEN_BUTTON), MODE_OR, new ItemStack(primedTnt));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.TNT), new ItemStack(Blocks.REDSTONE_TORCH), MODE_OR, new ItemStack(unstableTnt));
@@ -948,8 +924,9 @@ public class AlchemyRecipeHandler
 			return ItemStack.EMPTY;
 		}
 		
-		if (!Item.REGISTRY.containsKey(new ResourceLocation(tag.getString("contentID")))) {return ItemStack.EMPTY;}
-		ItemStack newItem = new ItemStack((Item)Item.REGISTRY.getObject(new ResourceLocation(tag.getString(("contentID")))), 1, tag.getInteger("contentMeta"));
+		Item item = Item.REGISTRY.getObject(new ResourceLocation(tag.getString(("contentID"))));
+		if (item == null) {return ItemStack.EMPTY;}
+		ItemStack newItem = new ItemStack(item, 1, tag.getInteger("contentMeta"));
 		
 		if(tag.hasKey("contentTags"))
 			newItem.setTagCompound(tag.getCompoundTag("contentTags"));
@@ -1021,7 +998,7 @@ public class AlchemyRecipeHandler
 		int invalid = 0;
 		
 		Debug.debug("Looking for dynamic grist conversions...");
-		for (Object recipe : CraftingManager.getInstance().getRecipeList())
+		for (IRecipe recipe : CraftingManager.REGISTRY)
 		{
 			try
 			{
@@ -1087,7 +1064,8 @@ public class AlchemyRecipeHandler
 			}
 			if (GristRegistry.getGristConversion(newRecipe.getRecipeOutput()) != null) {return false;};
 			GristSet set = new GristSet();
-			for (ItemStack item : newRecipe.recipeItems) {
+			for (Ingredient ingredient : newRecipe.recipeItems) {
+				ItemStack item = ingredient == Ingredient.EMPTY ? ItemStack.EMPTY : ingredient.getMatchingStacks()[0];
 				if (GristRegistry.getGristConversion(item) != null) {
 					//Debug.print("	Adding compo: "+item);
 					set.addGrist(GristRegistry.getGristConversion(item));
@@ -1127,8 +1105,9 @@ public class AlchemyRecipeHandler
 			}
 			if (GristRegistry.getGristConversion(newRecipe.getRecipeOutput()) != null) {return false;};
 			GristSet set = new GristSet();
-			for (ItemStack item : newRecipe.recipeItems)
+			for (Ingredient ingredient : newRecipe.recipeItems)
 			{
+				ItemStack item = ingredient == Ingredient.EMPTY ? ItemStack.EMPTY : ingredient.getMatchingStacks()[0];
 				if (GristRegistry.getGristConversion(item) != null)
 				{
 					set.addGrist(GristRegistry.getGristConversion(item));
@@ -1167,21 +1146,13 @@ public class AlchemyRecipeHandler
 				lookedOver.put(Arrays.asList(newRecipe.getRecipeOutput().getItem(),newRecipe.getRecipeOutput().getHasSubtypes() ? newRecipe.getRecipeOutput().getItemDamage() : 0),true);
 			}
 			GristSet set = new GristSet();
-			for (Object obj : newRecipe.getInput())
+			for (Ingredient ingredient : newRecipe.getIngredients())
 			{
 				ItemStack item = null;
-				if (obj == null)
+				if (ingredient == Ingredient.EMPTY)
 					continue;
-				if (obj instanceof List)
-				{
-					if (((List<?>) obj).size() == 0)
-					{
-						break;
-					}
-					item = (ItemStack) ((List<?>) obj).get(0);
-				} else {
-					item = (ItemStack) obj;
-				}
+				item = ingredient.getMatchingStacks()[0];
+				
 				if (GristRegistry.getGristConversion(item) != null) {
 					//Debug.print("	Adding compo: "+item);
 					set.addGrist(GristRegistry.getGristConversion(item));
@@ -1220,18 +1191,10 @@ public class AlchemyRecipeHandler
 			}
 			if (GristRegistry.getGristConversion(newRecipe.getRecipeOutput()) != null) {return false;};
 			GristSet set = new GristSet();
-			for (Object obj : newRecipe.getInput()) {
+			for (Ingredient ingredient : newRecipe.getIngredients()) {
 				ItemStack item = null;
-				if (obj == null) {break;}
-				if (obj instanceof List) {
-					if (((List<?>) obj).size() == 0) {
-						//Debug.print("	Input list was empty!");
-						break;
-					}
-					item = (ItemStack) ((List<?>) obj).get(0);
-				} else {
-					item = (ItemStack) obj;
-				}
+				if (ingredient == Ingredient.EMPTY) {break;}
+				item = ingredient.getMatchingStacks()[0];
 				if (GristRegistry.getGristConversion(item) != null)
 				{
 					set.addGrist(GristRegistry.getGristConversion(item));
@@ -1320,7 +1283,7 @@ public class AlchemyRecipeHandler
 	
 	public static void addOrRemoveRecipes(boolean addCardRecipe)
 	{
-		if(addCardRecipe && !cardRecipeAdded)
+		/*if(addCardRecipe && !cardRecipeAdded)
 		{
 			CraftingManager.getInstance().getRecipeList().add(cardRecipe);
 			cardRecipeAdded = true;
@@ -1329,7 +1292,7 @@ public class AlchemyRecipeHandler
 		{
 			CraftingManager.getInstance().getRecipeList().remove(cardRecipe);
 			cardRecipeAdded = false;
-		}
+		}*/
 	}
 	
 }

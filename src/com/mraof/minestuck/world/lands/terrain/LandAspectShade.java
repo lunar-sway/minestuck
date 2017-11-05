@@ -38,6 +38,7 @@ public class LandAspectShade extends TerrainLandAspect
 		registry.setBlockState("torch", Blocks.REDSTONE_TORCH.getDefaultState());
 		registry.setBlockState("mushroom_1", MinestuckBlocks.glowingMushroom.getDefaultState());
 		registry.setBlockState("mushroom_2", MinestuckBlocks.glowingMushroom.getDefaultState());
+		registry.setBlockState("bush", MinestuckBlocks.glowingMushroom.getDefaultState());
 	}
 	
 	@Override

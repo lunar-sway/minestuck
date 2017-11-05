@@ -28,9 +28,10 @@ import net.minecraft.world.biome.Biome.BiomeProperties;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
-import net.minecraft.world.chunk.IChunkGenerator;
+import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class ChunkProviderLands implements IChunkGenerator
@@ -110,7 +111,7 @@ public class ChunkProviderLands implements IChunkGenerator
 		BiomeProperties properties = new BiomeProperties(((WorldProviderLands)this.landWorld.provider).getDimensionName()).setTemperature(temperature).setRainfall(rainfall).setBaseBiome("medium");
 		if(temperature <= 0.1)
 			properties.setSnowEnabled();
-		biomeLands = new BiomeMinestuck(properties);
+		biomeLands = new BiomeMinestuck(properties).setRegistryName("minestuck", "medium");
 	}
 	
 	public void sortDecorators()	//Called after an aspect have added elements to the decorators list.
@@ -125,31 +126,30 @@ public class ChunkProviderLands implements IChunkGenerator
 	
 	public void mergeFogColor(Vec3d fogColor, float strength)
 	{
-		double d1 = (this.skyColor.xCoord + fogColor.xCoord*strength)/(1 + strength);
-		double d2 = (this.skyColor.yCoord + fogColor.yCoord*strength)/(1 + strength);
-		double d3 = (this.skyColor.zCoord + fogColor.zCoord*strength)/(1 + strength);
+		double d1 = (this.skyColor.x + fogColor.x*strength)/(1 + strength);
+		double d2 = (this.skyColor.y + fogColor.y*strength)/(1 + strength);
+		double d3 = (this.skyColor.z + fogColor.z*strength)/(1 + strength);
 		this.skyColor = new Vec3d(d1, d2, d3);
 	}
 	
 	@Override
-	public Chunk provideChunk(int chunkX, int chunkZ) 
+	public Chunk generateChunk(int x, int z)
 	{
-		ChunkPrimer primer = terrainGenerator.createChunk(chunkX, chunkZ);
+		ChunkPrimer primer = terrainGenerator.createChunk(x, z);
 		
-		Chunk chunk = new Chunk(this.landWorld, primer, chunkX, chunkZ);
+		Chunk chunk = new Chunk(this.landWorld, primer, x, z);
 		chunk.generateSkylightMap();
 		
-		Biome[] biomes = landWorld.getBiomeProvider().getBiomes(null, chunkX * 16, chunkZ * 16, 16, 16);
+		Biome[] biomes = landWorld.getBiomeProvider().getBiomes(null, x * 16, z * 16, 16, 16);
 		
 		byte[] chunkBiomes = chunk.getBiomeArray();
 		for(int i = 0; i < chunkBiomes.length; i++)
 			chunkBiomes[i] = (byte) Biome.getIdForBiome(biomes[i]);
 		
-		structureHandler.generate(landWorld, chunkX, chunkZ, primer);
-		villageHandler.generate(landWorld, chunkX, chunkZ, primer);
+		structureHandler.generate(landWorld, x, z, primer);
+		villageHandler.generate(landWorld, x, z, primer);
 		return chunk;
 	}
-	
 	
 	@Override
 	public void populate(int chunkX, int chunkZ) 
@@ -244,16 +244,17 @@ public class ChunkProviderLands implements IChunkGenerator
 		return creatureType == EnumCreatureType.CREATURE ? this.consortList : null;
 	}
 	
-	/**
-	 * Redirected to in World.findClosestStructure()
-	 * Only used in vanilla by ender eye when looking for a stronghold.
-	 * var1: The world object; var2: The name of the structure type;
-	 * var3: The locators position;
-	 */
+	@Nullable
 	@Override
-	public BlockPos getStrongholdGen(World worldIn, String structureName, BlockPos position, boolean p_180513_4_)
+	public BlockPos getNearestStructurePos(World worldIn, String structureName, BlockPos position, boolean findUnexplored)
 	{
-		return null;
+		return null;	//TODO
+	}
+	
+	@Override
+	public boolean isInsideStructure(World worldIn, String structureName, BlockPos pos)
+	{
+		return false;	//TODO
 	}
 	
 	@Override

@@ -70,7 +70,7 @@ public class GateHandler
 				{
 					int clientDim = clientConnection.getClientDimension();
 					BlockPos gatePos = getGatePos(-1, clientDim);
-					WorldServer world = player.mcServer.worldServerForDimension(clientDim);
+					WorldServer world = player.mcServer.getWorld(clientDim);
 					
 					if(gatePos == null)
 					{
@@ -114,7 +114,7 @@ public class GateHandler
 		{
 			if(gateId != 1)
 			{
-				WorldServer world = player.mcServer.worldServerForDimension(location.dim);
+				WorldServer world = player.mcServer.getWorld(location.dim);
 				
 				IBlockState block = world.getBlockState(location.pos);
 				

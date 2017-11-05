@@ -69,7 +69,7 @@ public abstract class MessageType
 				obj[i] = player.getName();
 			} else if(args[i].equals("landName"))
 			{
-				World world = consort.getServer().worldServerForDimension(consort.homeDimension);
+				World world = consort.getServer().getWorld(consort.homeDimension);
 				if(world != null && consort.world.provider instanceof WorldProviderLands)
 				{
 					ChunkProviderLands chunkProvider = (ChunkProviderLands) world.provider.createChunkGenerator();

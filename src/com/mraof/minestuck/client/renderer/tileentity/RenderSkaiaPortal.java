@@ -1,36 +1,30 @@
 package com.mraof.minestuck.client.renderer.tileentity;
 
-import java.nio.FloatBuffer;
-import java.util.Random;
-
-import org.lwjgl.opengl.GL11;
-
+import com.mraof.minestuck.tileentity.TileEntitySkaiaPortal;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.GLAllocation;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntityTippedArrow;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
+import org.lwjgl.opengl.GL11;
 
-import com.mraof.minestuck.tileentity.TileEntitySkaiaPortal;
+import java.nio.FloatBuffer;
+import java.util.Random;
 
-public class RenderSkaiaPortal extends TileEntitySpecialRenderer 
+public class RenderSkaiaPortal extends TileEntitySpecialRenderer<TileEntitySkaiaPortal>
 {
 	private static final ResourceLocation tunnel = new ResourceLocation("minestuck","textures/tunnel.png");
     private static final ResourceLocation particlefield = new ResourceLocation("minestuck","textures/particlefield.png");
     
     FloatBuffer floatBuffer = GLAllocation.createDirectFloatBuffer(16);
-
-	public void renderGatePortalTileEntity(TileEntitySkaiaPortal par1TileEntityGatePortal, double par2, double par4, double par6, float par8)
-    {
-		Entity temp = new EntityTippedArrow(par1TileEntityGatePortal.getWorld());
+	
+	@Override
+	public void render(TileEntitySkaiaPortal te, double x, double y, double z, float partialTicks, int destroyStage, float alpha)
+	{
+		Entity temp = new EntityTippedArrow(te.getWorld());
 		Vec3d position = ActiveRenderInfo.projectViewFromEntity(temp, 0);	//TODO temp solution for removed getter
 		
 		float var9 = (float)this.rendererDispatcher.entityX;
@@ -65,11 +59,11 @@ public class RenderSkaiaPortal extends TileEntitySpecialRenderer
                 var16 = 0.5F;
             }
 
-            float var18 = (float) (-(par4 + var13));
-			float var19 = var18 + (float) position.yCoord;
-			float var20 = var18 + var15 + (float) position.yCoord;
+            float var18 = (float) (-(y + var13));
+			float var19 = var18 + (float) position.y;
+			float var20 = var18 + var15 + (float) position.y;
 			float var21 = var19 / var20;
-			var21 += (float) (par4 + var13);
+			var21 += (float) (y + var13);
 			GlStateManager.translate(var9, var21, var11);
 			GlStateManager.texGen(GlStateManager.TexGen.S, GL11.GL_OBJECT_LINEAR);
 			GlStateManager.texGen(GlStateManager.TexGen.T, GL11.GL_OBJECT_LINEAR);
@@ -93,9 +87,9 @@ public class RenderSkaiaPortal extends TileEntitySpecialRenderer
 			GlStateManager.rotate((var14 * var14 * 4321 + var14 * 9) * 2.0F, 0.0F, 0.0F, 1.0F);
 			GlStateManager.translate(-0.5F, -0.5F, 0.0F);
 			GlStateManager.translate(-var9, -var11, -var10);
-			var19 = var18 + (float) position.xCoord;
-			GlStateManager.translate(((float) position.xCoord) * var15 / var19, ((float) position.zCoord) * var15 / var19, -var10);
-			VertexBuffer var24 = Tessellator.getInstance().getBuffer();
+			var19 = var18 + (float) position.x;
+			GlStateManager.translate(((float) position.x) * var15 / var19, ((float) position.z) * var15 / var19, -var10);
+			BufferBuilder var24 = Tessellator.getInstance().getBuffer();
 			var24.begin(7, DefaultVertexFormats.POSITION_TEX);
 			var21 = var12.nextFloat() * 0.5F + 0.1F;
             float var22 = var12.nextFloat() * 0.5F + 0.4F;
@@ -109,10 +103,10 @@ public class RenderSkaiaPortal extends TileEntitySpecialRenderer
             }
 			
 			GlStateManager.color(var21 * var17, var22 * var17, var23 * var17, 1.0F);
-			var24.pos(par2, par4 + var13, par6).tex(0, 0).endVertex();
-			var24.pos(par2, par4 + var13, par6 + 1.0D).tex(0, 1).endVertex();
-			var24.pos(par2 + 1.0D, par4 + var13, par6 + 1.0D).tex(1, 1).endVertex();
-			var24.pos(par2 + 1.0D, par4 + var13, par6).tex(1, 0).endVertex();
+			var24.pos(x, y + var13, z).tex(0, 0).endVertex();
+			var24.pos(x, y + var13, z + 1.0D).tex(0, 1).endVertex();
+			var24.pos(x + 1.0D, y + var13, z + 1.0D).tex(1, 1).endVertex();
+			var24.pos(x + 1.0D, y + var13, z).tex(1, 0).endVertex();
 			Tessellator.getInstance().draw();
 			GlStateManager.popMatrix();
 			GlStateManager.matrixMode(GL11.GL_MODELVIEW);
@@ -132,11 +126,4 @@ public class RenderSkaiaPortal extends TileEntitySpecialRenderer
         this.floatBuffer.flip();
         return this.floatBuffer;
     }
-	
-	@Override
-	public void renderTileEntityAt(TileEntity par1TileEntity, double par2, double par4, double par6, float par8, int par9)
-	{
-		this.renderGatePortalTileEntity((TileEntitySkaiaPortal)par1TileEntity, par2, par4, par6, par8);
-	}
-	
 }

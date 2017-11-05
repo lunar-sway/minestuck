@@ -3,7 +3,6 @@ package com.mraof.minestuck.entity.ai;
 import com.mraof.minestuck.entity.carapacian.EntityCarapacian;
 import com.mraof.minestuck.entity.carapacian.EnumEntityKingdom;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
-
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.util.math.BlockPos;
@@ -43,11 +42,11 @@ public class EntityAIMoveToBattle extends EntityAIBase
 	public void startExecuting()
 	{
 		
-		this.target.getNavigator().tryMoveToXYZ(destination.xCoord, destination.yCoord, destination.zCoord, target.getWanderSpeed());
+		this.target.getNavigator().tryMoveToXYZ(destination.x, destination.y, destination.z, target.getWanderSpeed());
 	}
 	
 	@Override
-	public boolean continueExecuting()
+	public boolean shouldContinueExecuting()
 	{
 		return !this.target.getNavigator().noPath();
 	}

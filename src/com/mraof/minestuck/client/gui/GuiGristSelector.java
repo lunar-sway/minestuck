@@ -1,8 +1,5 @@
 package com.mraof.minestuck.client.gui;
 
-import java.io.IOException;
-import java.util.Arrays;
-
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
@@ -10,15 +7,17 @@ import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.MinestuckPlayerData;
-
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+
+import java.io.IOException;
+import java.util.Arrays;
 
 public class GuiGristSelector extends GuiScreen
 {
@@ -52,7 +51,7 @@ public class GuiGristSelector extends GuiScreen
 		this.drawTexturedModalRect(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
 		String cacheMessage = I18n.format("gui.selectGrist");
-		mc.fontRendererObj.drawString(cacheMessage, (this.width / 2) - mc.fontRendererObj.getStringWidth(cacheMessage) / 2, yOffset + 12, 0x404040);
+		mc.fontRenderer.drawString(cacheMessage, (this.width / 2) - mc.fontRenderer.getStringWidth(cacheMessage) / 2, yOffset + 12, 0x404040);
 		
 		GlStateManager.color(1,1,1);
 		GlStateManager.disableRescaleNormal();
@@ -81,15 +80,15 @@ public class GuiGristSelector extends GuiScreen
 				tooltip = gristId*2 + 1;
 			
 			this.drawIcon(gristXOffset + gristIconX, gristYOffset + gristIconY, "textures/grist/" + GristType.values()[gristId].getName()+ ".png");
-			mc.fontRendererObj.drawString(amount, gristXOffset + gristCountX, gristYOffset + gristCountY, 0xddddee);
+			mc.fontRenderer.drawString(amount, gristXOffset + gristCountX, gristYOffset + gristCountY, 0xddddee);
 			
 		}
 		
 		if (tooltip != -1)
 			if(tooltip % 2 == 0)
 				drawHoveringText(Arrays.asList(I18n.format("grist.format", GristType.values()[tooltip/2].getDisplayName())),
-						xcor, ycor, fontRendererObj);
-			else drawHoveringText(Arrays.asList(String.valueOf(clientGrist.getGrist(GristType.values()[tooltip/2]))), xcor, ycor, fontRendererObj);
+						xcor, ycor, fontRenderer);
+			else drawHoveringText(Arrays.asList(String.valueOf(clientGrist.getGrist(GristType.values()[tooltip/2]))), xcor, ycor, fontRenderer);
 	}
 	
 	private void drawIcon(int x,int y,String location) 
@@ -103,7 +102,7 @@ public class GuiGristSelector extends GuiScreen
 		int iconU = 0;
 		int iconV = 0;
 		
-		VertexBuffer render = Tessellator.getInstance().getBuffer();
+		BufferBuilder render = Tessellator.getInstance().getBuffer();
 		render.begin(7, DefaultVertexFormats.POSITION_TEX);
 		render.pos(x, y + iconY, 0D).tex((iconU)*scale, (iconV + iconY)*scale).endVertex();
 		render.pos(x + iconX, y + iconY, 0D).tex((iconU + iconX)*scale, (iconV + iconY)*scale).endVertex();

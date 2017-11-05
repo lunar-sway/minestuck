@@ -1,19 +1,20 @@
 package com.mraof.minestuck.jei;
 
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.ColorCollector;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.BlankRecipeCategory;
-import mezz.jei.api.recipe.IRecipeHandler;
-import mezz.jei.api.recipe.IRecipeWrapper;
+import mezz.jei.api.recipe.IRecipeCategory;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 /**
  * Created by mraof on 2017 January 23 at 2:38 AM.
  */
-public class AlchemiterRecipeCategory extends BlankRecipeCategory<AlchemiterRecipeWrapper> implements IRecipeHandler<AlchemiterRecipeWrapper>
+public class AlchemiterRecipeCategory implements IRecipeCategory<AlchemiterRecipeWrapper>
 {
     private IDrawable background;
 
@@ -22,11 +23,17 @@ public class AlchemiterRecipeCategory extends BlankRecipeCategory<AlchemiterReci
         ResourceLocation alchemiterBackground = new ResourceLocation("minestuck:textures/gui/alchemiter.png");
         background = guiHelper.createDrawable(alchemiterBackground, 8, 15, 160, 56);
     }
-
-    @Override
+	
+	@Override
+	public String getModName()
+	{
+		return Minestuck.MOD_NAME;
+	}
+	
+	@Override
     public String getUid()
     {
-        return "alchemiter";
+        return "minestuck.alchemiter";
     }
 
     @Override
@@ -46,33 +53,9 @@ public class AlchemiterRecipeCategory extends BlankRecipeCategory<AlchemiterReci
     {
         recipeLayout.getItemStacks().init(0, true, 18, 4);
         recipeLayout.getItemStacks().init(1, false, 126, 4);
-        recipeLayout.getItemStacks().set(ingredients);
-    }
-
-    /**
-     * Returns the class of the Recipe handled by this IRecipeHandler.
-     */
-    @Override
-    public Class<AlchemiterRecipeWrapper> getRecipeClass()
-    {
-        return AlchemiterRecipeWrapper.class;
-    }
-
-    @Override
-    public String getRecipeCategoryUid(AlchemiterRecipeWrapper recipe)
-    {
-        return "alchemiter";
-    }
-
-    @Override
-    public IRecipeWrapper getRecipeWrapper(AlchemiterRecipeWrapper recipe)
-    {
-        return recipe;
-    }
-
-    @Override
-    public boolean isRecipeValid(AlchemiterRecipeWrapper recipe)
-    {
-        return true;
+        ItemStack inputDowel = ingredients.getInputs(ItemStack.class).get(0).get(0).copy();
+        inputDowel.setItemDamage(ColorCollector.playerColor + 1);
+        recipeLayout.getItemStacks().set(0, inputDowel);
+        recipeLayout.getItemStacks().set(1, ingredients.getOutputs(ItemStack.class).get(0));
     }
 }

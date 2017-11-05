@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "minestuck:stairs",
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minestuck:stone",
+      "data":0
+    }
+  },
+  "result": {
+    "item": "minestuck:coarse_stone_stairs",
+    "count": 4
+  }
+}

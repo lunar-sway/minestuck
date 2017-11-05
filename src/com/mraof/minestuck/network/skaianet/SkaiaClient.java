@@ -1,37 +1,31 @@
 package com.mraof.minestuck.network.skaianet;
 
-import io.netty.buffer.ByteBuf;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiComputer;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.SkaianetInfoPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.network.SkaianetInfoPacket;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.*;
 
 @SideOnly(Side.CLIENT)
 public class SkaiaClient
 {
 	
 	//Variables
-	static Map<Integer, Map<Integer, String>> openServers = new HashMap<Integer, Map<Integer, String>>();
-	static List<SburbConnection> connections = new ArrayList<SburbConnection>();
-	static Map<Integer, Boolean> serverWaiting = new HashMap<Integer, Boolean>();
-	static Map<Integer, Boolean> resumingClient = new HashMap<Integer, Boolean>();
-	static TileEntityComputer te = null;
+	private static Map<Integer, Map<Integer, String>> openServers = new HashMap<Integer, Map<Integer, String>>();
+	private static List<SburbConnection> connections = new ArrayList<SburbConnection>();
+	private static Map<Integer, Boolean> serverWaiting = new HashMap<Integer, Boolean>();
+	private static Map<Integer, Boolean> resumingClient = new HashMap<Integer, Boolean>();
+	private static TileEntityComputer te = null;
 	public static int playerId;	//The id that this player is expected to have.
 	
 	public static void clear()

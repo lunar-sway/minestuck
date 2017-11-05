@@ -1,19 +1,12 @@
 package com.mraof.minestuck.item.weapon;
 
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.PriorityQueue;
-
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.Pair;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -26,6 +19,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.PriorityQueue;
 
 //TODO add system for Minestuck weapons that can replace enchantments
 public class ItemWeapon extends ItemSword //To allow enchantments such as sharpness
@@ -50,7 +47,7 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 	{
 		super(ToolMaterial.IRON);
 		this.maxStackSize = 1;
-		this.setCreativeTab(Minestuck.tabMinestuck);
+		this.setCreativeTab(CreativeTabs.COMBAT);	//Needed to place recipes in the combat/tools tab
 		this.setMaxDamage(maxUses);
 		this.weaponDamage = damageVsEntity;
 		this.enchantability = enchantability;
@@ -71,7 +68,19 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 			terminus = Math.max(terminus, 1);
 		}
 	}
-
+	
+	@Override
+	protected boolean isInCreativeTab(CreativeTabs targetTab)
+	{
+		return targetTab == CreativeTabs.SEARCH || targetTab == MinestuckItems.tabMinestuck;
+	}
+	
+	@Override
+	public CreativeTabs[] getCreativeTabs()
+	{
+		return new CreativeTabs[] {MinestuckItems.tabMinestuck};
+	}
+	
 	protected double getAttackDamage(ItemStack stack)
 	{
 		return weaponDamage;
@@ -119,9 +128,9 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 		this.setHarvestLevel(toolClass, harvestLevel);
 		return this;
 	}
-
+	
 	@Override
-	public float getStrVsBlock(ItemStack stack, IBlockState state)
+	public float getDestroySpeed(ItemStack stack, IBlockState state)
 	{
 		for(String tool : getToolClasses(stack))
 		{
@@ -130,7 +139,7 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 				return efficiency;
 			}
 		}
-		return super.getStrVsBlock(stack, state);
+		return super.getDestroySpeed(stack, state);
 	}
 
 
@@ -139,7 +148,7 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 	{
 		if(this == MinestuckItems.clawHammer)
 		{
-			player.addStat(MinestuckAchievementHandler.getHammer);
+			//player.addStat(MinestuckAchievementHandler.getHammer);
 		}
 	}
 	

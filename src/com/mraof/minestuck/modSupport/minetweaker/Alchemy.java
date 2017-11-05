@@ -1,4 +1,4 @@
-package com.mraof.minestuck.modSupport.minetweaker;
+/*package com.mraof.minestuck.modSupport.minetweaker;
 
 import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
@@ -149,4 +149,4 @@ public class Alchemy
 		
 		return grist;
 	}
-}
+}*/

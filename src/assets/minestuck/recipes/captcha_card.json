@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XXX",
+    "X#X",
+    "XXX"
+  ],
+  "key": {
+    "#": {
+      "item": "minestuck:raw_cruxite"
+    },
+    "X": {
+      "item": "minecraft:paper"
+    }
+  },
+  "result": {
+    "item": "minestuck:captcha_card",
+    "count": 8
+  }
+}

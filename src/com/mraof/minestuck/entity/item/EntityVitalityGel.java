@@ -1,5 +1,7 @@
 package com.mraof.minestuck.entity.item;
 
+import com.mraof.minestuck.editmode.ClientEditHandler;
+import com.mraof.minestuck.editmode.ServerEditHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -15,13 +17,10 @@ import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.mraof.minestuck.editmode.ClientEditHandler;
-import com.mraof.minestuck.editmode.ServerEditHandler;
-
 public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnData
 {
 	public int cycle;
-
+	
 	public int age = 0;
 	private int healAmount = 1;
 	private int health = 5;
@@ -29,6 +28,8 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 	private EntityPlayer closestPlayer;
 
 	private int targetCycle;
+	
+	public float animationOffset;
 
 	public EntityVitalityGel(World world, double x, double y, double z, int healAmount)
 	{
@@ -47,6 +48,7 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 	public EntityVitalityGel(World par1World)
 	{
 		super(par1World);
+		animationOffset = (float) (Math.random() * Math.PI * 2.0D);
 	}
 	
 	/**
@@ -67,7 +69,7 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 			return false;
 		} else
 		{
-			this.setBeenAttacked();
+			this.markVelocityChanged();
 			this.health = (int)((float)this.health - amount);
 			
 			if (this.health <= 0)
@@ -82,13 +84,14 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 	@Override
 	protected void entityInit() {}
 	
+	
 	@SideOnly(Side.CLIENT)
 	@Override
-	public int getBrightnessForRender(float par1)
+	public int getBrightnessForRender()
 	{
 		float f1 = 0.5F;
 
-		int i = super.getBrightnessForRender(par1);
+		int i = super.getBrightnessForRender();
 		int j = i & 255;
 		int k = i >> 16 & 255;
 		j += (int)(f1 * 15.0F * 16.0F);
@@ -126,7 +129,7 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 		
 		if (this.targetCycle < this.cycle - 20 + this.getEntityId() % 100)
 		{
-			if (this.closestPlayer == null || this.closestPlayer.getDistanceSqToEntity(this) > d0 * d0)
+			if (this.closestPlayer == null || this.closestPlayer.getDistanceSq(this) > d0 * d0)
 			{
 				this.closestPlayer = this.world.getClosestPlayerToEntity(this, d0);
 			}

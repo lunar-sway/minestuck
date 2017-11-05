@@ -1,5 +1,9 @@
 package com.mraof.minestuck.network.skaianet;
 
+import com.mraof.minestuck.editmode.DeployList;
+import com.mraof.minestuck.network.MinestuckPacket;
+import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -7,12 +11,8 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.mraof.minestuck.editmode.DeployList;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-
-public class SburbConnection {
+public class SburbConnection
+{
 	
 	ComputerData client;
 	/**
@@ -58,7 +58,8 @@ public class SburbConnection {
 	public double posX, posZ;
 	public boolean useCoordinates;
 	
-	SburbConnection(){
+	SburbConnection()
+	{
 		this.canSplit = true;
 		this.isActive = true;
 	}
@@ -116,7 +117,7 @@ public class SburbConnection {
 			nbt.setBoolean("isActive", isActive);
 			nbt.setBoolean("enteredGame", enteredGame);
 			nbt.setBoolean("canSplit", canSplit);
-			NBTTagList list = (NBTTagList) unregisteredItems.copy();
+			NBTTagList list = unregisteredItems.copy();
 			for(ItemStack stack : DeployList.getItemList())
 			{
 				NBTTagCompound itemData = stack.writeToNBT(new NBTTagCompound());
@@ -163,7 +164,7 @@ public class SburbConnection {
 			}
 			if(nbt.hasKey("canSplit"))
 				canSplit = nbt.getBoolean("canSplit");
-			NBTTagList list = (NBTTagList) nbt.getTagList("givenItems", 10);
+			NBTTagList list = nbt.getTagList("givenItems", 10);
 			for(int i = 0; i < list.tagCount(); i++)
 			{
 				NBTTagCompound itemTag = list.getCompoundTagAt(i);

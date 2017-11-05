@@ -1,20 +1,19 @@
 package com.mraof.minestuck.world.lands.decorator.structure;
 
-import java.util.Random;
-
+import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import java.util.Random;
 
 
 public class RabbitHoleDecorator extends SimpleStructureDecorator
 {
-	public RabbitHoleDecorator(Biome biome)
+	public RabbitHoleDecorator(Biome... biome)
 	{
 		super(biome);
 	}
@@ -30,14 +29,15 @@ public class RabbitHoleDecorator extends SimpleStructureDecorator
 	{
 
 		IBlockState ground = provider.getSurfaceBlock();
+		IBlockState bush = provider.blockRegistry.getBlockState("bush");
 		IBlockState air = Blocks.AIR.getDefaultState();
 
 		BlockPos newpos = pos;
-		while ((world.getBlockState(newpos) == air))
+		while (world.isAirBlock(newpos))
 		{
 			newpos = newpos.down();
 		}
-		while (world.getBlockState(newpos.up()) != air)
+		while (!world.isAirBlock(newpos.up()))
 		{
 			newpos = newpos.up();
 		}
@@ -60,22 +60,22 @@ public class RabbitHoleDecorator extends SimpleStructureDecorator
 		//check wich way it should be facing
 		if (world.getBlockState(new BlockPos(xCoord, yCoord - 1, zCoord)).getMaterial().isLiquid())
 			return null;
-		if (world.getBlockState(newpos.north()) == air)
+		if (world.isAirBlock(newpos.north()))
 		{
 			rotation = false;
 			mirror = false;
 		}
-		else if (world.getBlockState(newpos.east()) == air)
+		else if (world.isAirBlock(newpos.east()))
 		{
 			rotation = true;
 			mirror = true;
 		}
-		else if (world.getBlockState(newpos.south()) == air)
+		else if (world.isAirBlock(newpos.south()))
 		{
 			rotation = false;
 			mirror = true;
 		}
-		else if (world.getBlockState(newpos.west()) == air)
+		else if (world.isAirBlock(newpos.west()))
 		{
 			rotation = true;
 			mirror = false;
@@ -84,7 +84,7 @@ public class RabbitHoleDecorator extends SimpleStructureDecorator
 
 		if (mirror)
 		{
-			placeBlock(world, Blocks.DEADBUSH.getDefaultState(), 0, 0, 1);
+			placeBlock(world, bush, 0, 0, 1);
 			placeBlock(world, air, 0, 0, 0);
 			placeBlock(world, air, 0, -1, 0);
 			placeBlock(world, air, 0, -1, -1);
@@ -92,21 +92,20 @@ public class RabbitHoleDecorator extends SimpleStructureDecorator
 		}
 		else
 		{
-			placeBlock(world, Blocks.DEADBUSH.getDefaultState(), 0, 0, -1);
+			placeBlock(world, bush, 0, 0, -1);
 			placeBlock(world, air, 0, 0, 0);
 			placeBlock(world, air, 0, -1, 0);
 			placeBlock(world, air, 0, -1, 1);
 			placeBlock(world, MinestuckBlocks.rabbitSpawner.getDefaultState(), 0, -1, 2);
 		}
-
-		System.out.println(ground);
+		
 		return null;
 	}
 
 	@Override
 	public int getCount(Random random)
 	{
-		return 5;
+		return 1;
 	}
 }
 

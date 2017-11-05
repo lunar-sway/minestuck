@@ -1,14 +1,13 @@
 package com.mraof.minestuck.jei;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.BlankRecipeCategory;
-import mezz.jei.api.recipe.IRecipeHandler;
-import mezz.jei.api.recipe.IRecipeWrapper;
+import mezz.jei.api.recipe.IRecipeCategory;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -19,7 +18,7 @@ import java.util.List;
 /**
  * Created by mraof on 2017 January 23 at 6:50 AM.
  */
-public class DesignixRecipeCategory extends BlankRecipeCategory<DesignixRecipeWrapper> implements IRecipeHandler<DesignixRecipeWrapper>
+public class DesignixRecipeCategory implements IRecipeCategory<DesignixRecipeWrapper>
 {
     private IDrawable background;
 
@@ -28,11 +27,17 @@ public class DesignixRecipeCategory extends BlankRecipeCategory<DesignixRecipeWr
         ResourceLocation punchDesignixBackground = new ResourceLocation("minestuck:textures/gui/designix.png");
         background = guiHelper.createDrawable(punchDesignixBackground, 43, 25, 94, 42);
     }
-
+    
+    @Override
+    public String getModName()
+    {
+        return Minestuck.MOD_NAME;
+    }
+    
     @Override
     public String getUid()
     {
-        return "punchDesignix";
+        return "minestuck.punchDesignix";
     }
 
     @Override
@@ -66,32 +71,5 @@ public class DesignixRecipeCategory extends BlankRecipeCategory<DesignixRecipeWr
         List<ItemStack> outputs = new ArrayList<ItemStack>(ingredients.getOutputs(ItemStack.class).get(0));
         outputs.add(AlchemyRecipeHandler.createCard(outputs.get(0), true));
         stackGroup.set(2, outputs);
-    }
-
-    /**
-     * Returns the class of the Recipe handled by this IRecipeHandler.
-     */
-    @Override
-    public Class<DesignixRecipeWrapper> getRecipeClass()
-    {
-        return DesignixRecipeWrapper.class;
-    }
-
-    @Override
-    public String getRecipeCategoryUid(DesignixRecipeWrapper recipe)
-    {
-        return "punchDesignix";
-    }
-
-    @Override
-    public IRecipeWrapper getRecipeWrapper(DesignixRecipeWrapper recipe)
-    {
-        return recipe;
-    }
-
-    @Override
-    public boolean isRecipeValid(DesignixRecipeWrapper recipe)
-    {
-        return true;
     }
 }

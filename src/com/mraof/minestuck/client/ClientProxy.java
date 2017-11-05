@@ -1,10 +1,14 @@
 package com.mraof.minestuck.client;
 
+import com.mraof.minestuck.CommonProxy;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.model.*;
 import com.mraof.minestuck.client.renderer.entity.*;
 import com.mraof.minestuck.client.renderer.tileentity.RenderGate;
 import com.mraof.minestuck.client.renderer.tileentity.RenderSkaiaPortal;
 import com.mraof.minestuck.client.settings.MinestuckKeyHandler;
+import com.mraof.minestuck.client.util.MinestuckModelManager;
+import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.entity.EntityBigPart;
 import com.mraof.minestuck.entity.EntityDecoy;
 import com.mraof.minestuck.entity.carapacian.EntityBishop;
@@ -37,7 +41,8 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ClientProxy
+@SideOnly(Side.CLIENT)
+public class ClientProxy extends CommonProxy
 {
 	
 	public static EntityPlayer getClientPlayer()	//Note: can't get the client player directly from FMLClientHandler either, as the server side will still crash because of the return type
@@ -45,7 +50,6 @@ public class ClientProxy
 		return FMLClientHandler.instance().getClientPlayerEntity();
 	}
 	
-	@SideOnly(Side.CLIENT)
 	public static void registerRenderers() 
 	{
 		Minecraft mc = Minecraft.getMinecraft();
@@ -55,7 +59,7 @@ public class ClientProxy
 		mc.getItemColors().registerItemColorHandler(new IItemColor()
 		{
 			@Override
-			public int getColorFromItemstack(ItemStack stack, int tintIndex)
+			public int colorMultiplier(ItemStack stack, int tintIndex)
 			{
 				if(tintIndex == 0 || tintIndex == 1)
 				{
@@ -74,8 +78,8 @@ public class ClientProxy
 		}, MinestuckItems.cruxiteDowel, MinestuckItems.cruxiteApple, MinestuckItems.cruxitePotion);
 	}
 	
-	@SideOnly(Side.CLIENT)
-	public static void registerSided()
+	@Override
+	public void preInit()
 	{
 		RenderingRegistry.registerEntityRenderingHandler(EntityNakagator.class, RenderEntityMinestuck.getFactory(new ModelNakagator(), 0.5F));
 		RenderingRegistry.registerEntityRenderingHandler(EntitySalamander.class, RenderEntityMinestuck.getFactory(new ModelSalamander(), 0.5F));
@@ -149,7 +153,7 @@ public class ClientProxy
 			@Override
 			public Render<EntityCrewPoster> createRenderFor(RenderManager manager)
 			{
-				return new RenderHangingArt(manager, "midnight_poster");
+				return new RenderHangingArt<>(manager, "midnight_poster");
 			}
 		});
 		RenderingRegistry.registerEntityRenderingHandler(EntitySbahjPoster.class, new IRenderFactory<EntitySbahjPoster>()
@@ -157,11 +161,19 @@ public class ClientProxy
 			@Override
 			public Render<EntitySbahjPoster> createRenderFor(RenderManager manager)
 			{
-				return new RenderHangingArt(manager, "sbahj_poster");
+				return new RenderHangingArt<>(manager, "sbahj_poster");
 			}
 		});
 		
 		MinecraftForge.EVENT_BUS.register(new MinestuckKeyHandler());
 		MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
+		MinecraftForge.EVENT_BUS.register(MinestuckModelManager.class);
+	}
+	
+	@Override
+	public void init()
+	{
+		MinecraftForge.EVENT_BUS.register(ClientEditHandler.instance);
+		MinecraftForge.EVENT_BUS.register(new MinestuckConfig());
 	}
 }

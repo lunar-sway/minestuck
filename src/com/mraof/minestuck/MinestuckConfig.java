@@ -79,7 +79,7 @@ public class MinestuckConfig
 	public static int landEditRange;
 	public static int cardResolution;
 	public static int initialModusSize;
-	public static int[] defaultModusTypes;
+	public static String[] defaultModusTypes;
 	public static int modusMaxSize;
 	public static int cardCost;
 	/**
@@ -153,8 +153,8 @@ public class MinestuckConfig
 		}
 		
 		initialModusSize = config.get("Modus", "initialModusSize", 5).setMinValue(0).setLanguageKey("minestuck.config.initialModusSize").getInt();
-		defaultModusTypes = config.get("Modus", "defaultModusType", new int[] {0, 1},
-				"An array with the possible modus types to be assigned. (0: Stack, 1: Queue, 2: QueueStack, 3: Tree)", 0, 3).setLanguageKey("minestuck.config.defaultModusType").getIntList();
+		defaultModusTypes = config.get("Modus", "defaultModusTypes", new String[] {"minestuck:stack", "minestuck:queue"},
+				"An array with the possible modus types to be assigned. Written with mod-id and modus name, for example \"minestuck:queue_stack\" or \"minestuck:hashmap\"").setLanguageKey("minestuck.config.defaultModusType").getStringList();
 		modusMaxSize = config.get("Modus", "modusMaxSize", 0, "The max size on a modus. Ignored if the value is 0.").setMinValue(0).setLanguageKey("minestuck.config.modusMaxSize").getInt();
 		if(initialModusSize > modusMaxSize && modusMaxSize > 0)
 			initialModusSize = modusMaxSize;

@@ -1,7 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.Minestuck;
-
+import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.IProperty;
@@ -16,8 +15,6 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockMinestuckLog extends BlockLog
 {
@@ -26,7 +23,7 @@ public class BlockMinestuckLog extends BlockLog
 	public BlockMinestuckLog()
 	{
 		super();
-		setCreativeTab(Minestuck.tabMinestuck);
+		setCreativeTab(MinestuckItems.tabMinestuck);
 		setDefaultState(blockState.getBaseState().withProperty(VARIANT, BlockType.VINE_OAK).withProperty(LOG_AXIS, BlockLog.EnumAxis.Y));
 		setUnlocalizedName("logMinestuck");
 	}
@@ -57,7 +54,7 @@ public class BlockMinestuckLog extends BlockLog
 	}
 	
 	@Override
-	public MapColor getMapColor(IBlockState state)
+	public MapColor getMapColor(IBlockState state, IBlockAccess worldIn, BlockPos pos)
 	{
 		BlockType type = state.getValue(VARIANT);
 		if(state.getValue(LOG_AXIS).equals(EnumAxis.Y))
@@ -66,11 +63,10 @@ public class BlockMinestuckLog extends BlockLog
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list)
+	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items)
 	{
 		for(BlockType type : BlockType.values())
-			list.add(new ItemStack(itemIn, 1, type.ordinal()));
+			items.add(new ItemStack(this, 1, type.ordinal()));
 	}
 	
 	@Override
@@ -97,16 +93,17 @@ public class BlockMinestuckLog extends BlockLog
 		return 5;
 	}
 	
-	public static enum BlockType implements IStringSerializable
+	public enum BlockType implements IStringSerializable
 	{
 		VINE_OAK("vine_oak", "vineOak", MapColor.WOOD, MapColor.OBSIDIAN),
-		FLOWERY_VINE_OAK("flowery_vine_oak", "floweryVineOak", MapColor.WOOD, MapColor.OBSIDIAN);
+		FLOWERY_VINE_OAK("flowery_vine_oak", "floweryVineOak", MapColor.WOOD, MapColor.OBSIDIAN),
+		FROST("frost", "frost", MapColor.ICE, MapColor.ICE);
 		
 		private final String name;
 		private final String unlocalizedName;
 		private final MapColor topColor, sideColor;
 		
-		private BlockType(String name, String unlocalizedName, MapColor topColor, MapColor sideColor)
+		BlockType(String name, String unlocalizedName, MapColor topColor, MapColor sideColor)
 		{
 			this.name = name;
 			this.unlocalizedName = unlocalizedName;

@@ -1,18 +1,14 @@
 package com.mraof.minestuck.util;
 
-import java.util.Set;
-import java.util.UUID;
-
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.PlayerDataPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.network.PlayerDataPacket;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeMap;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -21,6 +17,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.MathHelper;
+
+import java.util.Set;
+import java.util.UUID;
 
 public class Echeladder
 {
@@ -151,7 +150,7 @@ public class Echeladder
 	
 	public void resendAttributes(EntityPlayer player)
 	{
-		Set<IAttributeInstance> attributesToSend = ((AttributeMap) player.getAttributeMap()).getAttributeInstanceSet();
+		Set<IAttributeInstance> attributesToSend = ((AttributeMap) player.getAttributeMap()).getDirtyInstances();
 		
 		attributesToSend.add(player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH));
 	}

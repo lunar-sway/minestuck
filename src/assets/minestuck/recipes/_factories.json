@@ -1,0 +1,6 @@
+{
+  "recipes": {
+    "not_mirrored": "com.mraof.minestuck.util.CraftingRecipes$NonMirroredRecipe$Factory",
+    "empty_card": "com.mraof.minestuck.util.CraftingRecipes$EmptyCardRecipe$Factory"
+  }
+}

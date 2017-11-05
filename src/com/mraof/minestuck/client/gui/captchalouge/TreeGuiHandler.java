@@ -1,16 +1,15 @@
 package com.mraof.minestuck.client.gui.captchalouge;
 
-import java.io.IOException;
-
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.resources.I18n;
-
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.inventory.captchalouge.TreeModus;
 import com.mraof.minestuck.inventory.captchalouge.TreeModus.TreeNode;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.resources.I18n;
+
+import java.io.IOException;
 
 public class TreeGuiHandler extends SylladexGuiHandler
 {
@@ -38,8 +37,8 @@ public class TreeGuiHandler extends SylladexGuiHandler
 	@Override
 	public void drawScreen(int xcor, int ycor, float f)
 	{
-		guiButton.xPosition = (width - GUI_WIDTH)/2 + 15;
-		guiButton.yPosition = (height - GUI_HEIGHT)/2 + 175;
+		guiButton.x = (width - GUI_WIDTH)/2 + 15;
+		guiButton.y = (height - GUI_HEIGHT)/2 + 175;
 		boolean autobalance = MinestuckConfig.clientTreeAutobalance == 0 ? modus.autobalance : MinestuckConfig.clientTreeAutobalance == 1;
 		guiButton.displayString = I18n.format(autobalance ? "gui.autobalance.on" : "gui.autobalance.off");
 		guiButton.enabled = MinestuckConfig.clientTreeAutobalance == 0;

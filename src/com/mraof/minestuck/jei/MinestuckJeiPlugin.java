@@ -4,10 +4,12 @@ import com.mraof.minestuck.block.BlockSburbMachine;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.CombinationRegistry;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
 import mezz.jei.api.*;
 import mezz.jei.api.ingredients.IModIngredientRegistration;
+import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -23,6 +25,9 @@ import java.util.Map;
 @JEIPlugin
 public class MinestuckJeiPlugin implements IModPlugin
 {
+	AlchemiterRecipeCategory alchemiterCategory;
+	TotemLatheRecipeCategory totemLatheCategory;
+	DesignixRecipeCategory designixCategory;
     @Override
     public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry)
     {
@@ -34,13 +39,21 @@ public class MinestuckJeiPlugin implements IModPlugin
     public void registerIngredients(IModIngredientRegistration registry)
     {
     }
-
-    @Override
+	
+	@Override
+	public void registerCategories(IRecipeCategoryRegistration registry)
+	{
+		alchemiterCategory = new AlchemiterRecipeCategory(registry.getJeiHelpers().getGuiHelper());
+		registry.addRecipeCategories(alchemiterCategory);
+		totemLatheCategory = new TotemLatheRecipeCategory(registry.getJeiHelpers().getGuiHelper());
+		registry.addRecipeCategories(totemLatheCategory);
+		designixCategory = new DesignixRecipeCategory(registry.getJeiHelpers().getGuiHelper());
+		registry.addRecipeCategories(designixCategory);
+	}
+	
+	@Override
     public void register(IModRegistry registry)
     {
-        AlchemiterRecipeCategory alchemiterRecipeCategory = new AlchemiterRecipeCategory(registry.getJeiHelpers().getGuiHelper());
-        registry.addRecipeCategories(alchemiterRecipeCategory);
-        registry.addRecipeHandlers(alchemiterRecipeCategory);
         ArrayList<AlchemiterRecipeWrapper> alchemiterRecipes = new ArrayList<AlchemiterRecipeWrapper>();
         for(Map.Entry<List<Object>, GristSet> entry : GristRegistry.getAllConversions().entrySet())
         {
@@ -49,18 +62,11 @@ public class MinestuckJeiPlugin implements IModPlugin
                 alchemiterRecipes.add(new AlchemiterRecipeWrapper(stack, entry.getValue()));
             }
         }
-        registry.addRecipes(alchemiterRecipes);
-        registry.addRecipeCategoryCraftingItem(new ItemStack(MinestuckBlocks.sburbMachine, 1, BlockSburbMachine.MachineType.ALCHEMITER.ordinal()), "alchemiter");
+        registry.addRecipes(alchemiterRecipes, alchemiterCategory.getUid());
+        registry.addRecipeCatalyst(new ItemStack(MinestuckBlocks.sburbMachine, 1, BlockSburbMachine.MachineType.ALCHEMITER.ordinal()), alchemiterCategory.getUid());
 
-        TotemLatheRecipeCategory totemLatheRecipeCategory = new TotemLatheRecipeCategory(registry.getJeiHelpers().getGuiHelper());
-        registry.addRecipeCategories(totemLatheRecipeCategory);
-        registry.addRecipeHandlers(totemLatheRecipeCategory);
-
-        DesignixRecipeCategory designixRecipeCategory = new DesignixRecipeCategory(registry.getJeiHelpers().getGuiHelper());
-        registry.addRecipeCategories(designixRecipeCategory);
-        registry.addRecipeHandlers(designixRecipeCategory);
-
-        ArrayList<PunchCardRecipeWrapper> punchCardRecipes = new ArrayList<PunchCardRecipeWrapper>();
+        ArrayList<PunchCardRecipeWrapper> latheRecipes = new ArrayList<PunchCardRecipeWrapper>();
+		ArrayList<PunchCardRecipeWrapper> designixRecipes = new ArrayList<PunchCardRecipeWrapper>();
         for(Map.Entry<List<Object>, ItemStack> entry : CombinationRegistry.getAllConversions().entrySet())
         {
             List<ItemStack> firstStacks = getItemStacks(entry.getKey().get(0), (Integer) entry.getKey().get(1));
@@ -69,19 +75,20 @@ public class MinestuckJeiPlugin implements IModPlugin
             {
                 if((Boolean) entry.getKey().get(4) == CombinationRegistry.MODE_AND)
                 {
-                    punchCardRecipes.add(new TotemLatheRecipeWrapper(firstStacks, secondStacks, entry.getValue()));
+					latheRecipes.add(new TotemLatheRecipeWrapper(firstStacks, secondStacks, entry.getValue()));
                 }
                 else
                 {
-                    punchCardRecipes.add(new DesignixRecipeWrapper(firstStacks, secondStacks, entry.getValue()));
+					designixRecipes.add(new DesignixRecipeWrapper(firstStacks, secondStacks, entry.getValue()));
                 }
             }
         }
 
-        System.out.println("Adding " +  punchCardRecipes.size() + " punch card recipes");
-        registry.addRecipes(punchCardRecipes);
-        registry.addRecipeCategoryCraftingItem(new ItemStack(MinestuckBlocks.sburbMachine, 1, BlockSburbMachine.MachineType.TOTEM_LATHE.ordinal()), "totemLathe");
-        registry.addRecipeCategoryCraftingItem(new ItemStack(MinestuckBlocks.sburbMachine, 1, BlockSburbMachine.MachineType.PUNCH_DESIGNIX.ordinal()), "punchDesignix");
+        Debug.info("Adding " +  (latheRecipes.size() + designixRecipes.size()) + " punch card recipes to the jei plugin");
+        registry.addRecipes(latheRecipes, totemLatheCategory.getUid());
+        registry.addRecipes(designixRecipes, designixCategory.getUid());
+        registry.addRecipeCatalyst(new ItemStack(MinestuckBlocks.sburbMachine, 1, BlockSburbMachine.MachineType.TOTEM_LATHE.ordinal()), totemLatheCategory.getUid());
+        registry.addRecipeCatalyst(new ItemStack(MinestuckBlocks.sburbMachine, 1, BlockSburbMachine.MachineType.PUNCH_DESIGNIX.ordinal()), designixCategory.getUid());
     }
 
     private List<ItemStack> getItemStacks(Object item, int metadata)

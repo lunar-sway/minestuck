@@ -1,11 +1,7 @@
 package com.mraof.minestuck.util;
 
-import java.lang.reflect.Field;
-import java.util.Iterator;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.item.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketEntityEffect;
@@ -19,6 +15,9 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+
+import java.lang.reflect.Field;
+import java.util.Iterator;
 
 public class Teleport
 {
@@ -44,8 +43,8 @@ public class Teleport
 		
 		MinecraftServer mcServer = entity.getServer();
 		int prevDimension = entity.dimension;
-		WorldServer worldFrom = mcServer.worldServerForDimension(prevDimension);
-		WorldServer worldDest = mcServer.worldServerForDimension(destinationDimension);
+		WorldServer worldFrom = mcServer.getWorld(prevDimension);
+		WorldServer worldDest = mcServer.getWorld(destinationDimension);
 		
 		if(entity instanceof EntityPlayerMP)
 		{
@@ -183,6 +182,8 @@ public class Teleport
 		if(portalInvincibilityField == null)
 		fieldSearch: {
 			FakePlayer fake = new FakePlayer(player.getServerWorld(), player.getGameProfile());
+			player.getServer().getPlayerList().getPlayerAdvancements(player);
+			//Fixes annoying NullPointerException when unlocking advancement, caused by just creating the fake player
 			try
 			{	//For dev environments with patch similar to 
 				if(checkFieldForBoolean(EntityPlayerMP.class.getDeclaredField("invulnerableDimensionChange"), fake))

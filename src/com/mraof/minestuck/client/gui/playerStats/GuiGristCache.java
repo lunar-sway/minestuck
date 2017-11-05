@@ -1,21 +1,20 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
-import java.io.IOException;
-import java.util.Arrays;
-
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.ResourceLocation;
-
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.MinestuckPlayerData;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.util.ResourceLocation;
+
+import java.io.IOException;
+import java.util.Arrays;
 
 public class GuiGristCache extends GuiPlayerStats
 {
@@ -49,7 +48,7 @@ public class GuiGristCache extends GuiPlayerStats
 		if(ClientEditHandler.isActive() || MinestuckPlayerData.title == null)
 			cacheMessage = I18n.format("gui.gristCache.name");
 		else cacheMessage = MinestuckPlayerData.title.getTitleName();
-		mc.fontRendererObj.drawString(cacheMessage, (this.width / 2) - mc.fontRendererObj.getStringWidth(cacheMessage) / 2, yOffset + 12, 0x404040);
+		mc.fontRenderer.drawString(cacheMessage, (this.width / 2) - mc.fontRenderer.getStringWidth(cacheMessage) / 2, yOffset + 12, 0x404040);
 		
 		drawActiveTabAndOther(xcor, ycor);
 		
@@ -80,15 +79,15 @@ public class GuiGristCache extends GuiPlayerStats
 				tooltip = gristId*2 + 1;
 			
 			this.drawIcon(gristXOffset + gristIconX, gristYOffset + gristIconY, "textures/grist/" + GristType.values()[gristId].getName()+ ".png");
-			mc.fontRendererObj.drawString(amount, gristXOffset + gristCountX, gristYOffset + gristCountY, 0xddddee);
+			mc.fontRenderer.drawString(amount, gristXOffset + gristCountX, gristYOffset + gristCountY, 0xddddee);
 			
 		}
 		
 		if (tooltip != -1)
 			if(tooltip % 2 == 0)
 				drawHoveringText(Arrays.asList(I18n.format("grist.format", GristType.values()[tooltip/2].getDisplayName())),
-						xcor, ycor, fontRendererObj);
-			else drawHoveringText(Arrays.asList(String.valueOf(clientGrist.getGrist(GristType.values()[tooltip/2]))), xcor, ycor, fontRendererObj);
+						xcor, ycor, fontRenderer);
+			else drawHoveringText(Arrays.asList(String.valueOf(clientGrist.getGrist(GristType.values()[tooltip/2]))), xcor, ycor, fontRenderer);
 	}
 	
 	private void drawIcon(int x,int y,String location) 
@@ -102,7 +101,7 @@ public class GuiGristCache extends GuiPlayerStats
 		int iconU = 0;
 		int iconV = 0;
 		
-		VertexBuffer render = Tessellator.getInstance().getBuffer();
+		BufferBuilder render = Tessellator.getInstance().getBuffer();
 		render.begin(7, DefaultVertexFormats.POSITION_TEX);
 		render.pos(x, y + iconY, 0D).tex((iconU)*scale, (iconV + iconY)*scale).endVertex();
 		render.pos(x + iconX, y + iconY, 0D).tex((iconU + iconX)*scale, (iconV + iconY)*scale).endVertex();

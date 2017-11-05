@@ -142,7 +142,7 @@ public class ClientEditHandler {
 		if(event.getEntity().world.isRemote && event.getPlayer() == ClientProxy.getClientPlayer() && isActive())
 		{
 			InventoryPlayer inventory = event.getPlayer().inventory;
-			ItemStack stack = event.getEntityItem().getEntityItem();
+			ItemStack stack = event.getEntityItem().getItem();
 			int ordinal = DeployList.getOrdinal(stack);
 			if(ordinal >= 0)
 			{

@@ -1,13 +1,8 @@
 package com.mraof.minestuck.entity.carapacian;
 
-import java.util.Random;
-
+import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIAttackRanged;
 import net.minecraft.entity.monster.IMob;
@@ -23,7 +18,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
-import com.mraof.minestuck.item.MinestuckItems;
+import java.util.Random;
 
 public abstract class EntityPawn extends EntityCarapacian implements IRangedAttackMob, IMob
 {
@@ -83,7 +78,7 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 		double d1 = target.getEntityBoundingBox().minY + (double)(target.height / 3.0F) - arrow.posY;
 		double d2 = target.posZ - this.posZ;
 		double d3 = (double)MathHelper.sqrt(d0 * d0 + d2 * d2);
-		arrow.setThrowableHeading(d0, d1 + d3 * 0.2D, d2, 1.6F, 12.0F);
+		arrow.shoot(d0, d1 + d3 * 0.2D, d2, 1.6F, 12.0F);
 		int power = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.POWER, this);
 		int punch = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.PUNCH, this);
 
@@ -195,4 +190,9 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 	}
 	
+	@Override
+	public void setSwingingArms(boolean swingingArms)
+	{
+		//TODO New method; Do something?
+	}
 }

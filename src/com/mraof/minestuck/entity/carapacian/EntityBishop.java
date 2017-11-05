@@ -1,5 +1,7 @@
 package com.mraof.minestuck.entity.carapacian;
 
+import com.mraof.minestuck.entity.ai.EntityAIAttackByDistance;
+import com.mraof.minestuck.entity.ai.EntityAINearestAttackableTargetWithHeight;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IRangedAttackMob;
@@ -11,9 +13,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-
-import com.mraof.minestuck.entity.ai.EntityAIAttackByDistance;
-import com.mraof.minestuck.entity.ai.EntityAINearestAttackableTargetWithHeight;
 
 public abstract class EntityBishop extends EntityCarapacian implements IRangedAttackMob, IMob
 {
@@ -51,9 +50,9 @@ public abstract class EntityBishop extends EntityCarapacian implements IRangedAt
 		entitylargefireball.explosionPower = 1;
 		double d8 = (double)this.width;
 		Vec3d vec3 = this.getLook(1.0F);
-		entitylargefireball.posX = (this.getEntityBoundingBox().minX + this.getEntityBoundingBox().maxX) / 2.0F  + vec3.xCoord * d8;
+		entitylargefireball.posX = (this.getEntityBoundingBox().minX + this.getEntityBoundingBox().maxX) / 2.0F  + vec3.x * d8;
 		entitylargefireball.posY = this.posY + (double)(this.height / 2.0F);
-		entitylargefireball.posZ = (this.getEntityBoundingBox().minZ + this.getEntityBoundingBox().maxZ) / 2.0F + vec3.zCoord * d8;
+		entitylargefireball.posZ = (this.getEntityBoundingBox().minZ + this.getEntityBoundingBox().maxZ) / 2.0F + vec3.z * d8;
 		this.world.spawnEntity(entitylargefireball);
 	}
 	public int getAttackStrength(Entity par1Entity)
@@ -125,5 +124,11 @@ public abstract class EntityBishop extends EntityCarapacian implements IRangedAt
 		EntityAINearestAttackableTargetWithHeight ai = new EntityAINearestAttackableTargetWithHeight(this, EntityLivingBase.class, 256.0F, 0, true, false, attackEntitySelector);
 		ai.setTargetHeightDistance(64);
 		return ai;
+	}
+	
+	@Override
+	public void setSwingingArms(boolean swingingArms)
+	{
+		//TODO New method; do something?
 	}
 }
