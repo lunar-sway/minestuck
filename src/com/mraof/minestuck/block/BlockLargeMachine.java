@@ -1,7 +1,6 @@
 package com.mraof.minestuck.block;
 
-
-import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -23,7 +22,7 @@ public abstract class BlockLargeMachine extends BlockContainer
 	{
 		super(Material.ROCK);
 		this.setHardness(2);
-		this.setCreativeTab(Minestuck.tabMinestuck);
+		this.setCreativeTab(MinestuckItems.tabMinestuck);
 		this.Xlength=length;
 		this.Yheight=width;
 		this.Zwidth=height;	
