@@ -41,6 +41,7 @@ public class MinestuckBlocks
 	public static Block castIronStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.CAST_IRON)).setRegistryName("cast_iron_stairs").setUnlocalizedName("stairsMinestuck.castIron");
 	public static Block log = new BlockMinestuckLog().setRegistryName("log");
 	public static Block woodenCactus = new BlockCactusSpecial(SoundType.WOOD, "axe").setRegistryName("wooden_cactus").setHardness(1.0F).setResistance(2.5F).setUnlocalizedName("woodenCactus");
+	public static Block sugarCube = new BlockCustom(Material.SAND, MapColor.SNOW, SoundType.SAND).setRegistryName("sugar_cube").setUnlocalizedName("sugarCube").setHardness(0.4F).setCreativeTab(MinestuckItems.tabMinestuck);
 	public static Block rabbitSpawner = new BlockMobSpawner().setRegistryName("rabbit_spawner").setUnlocalizedName("rabbitSpawner");
 	
 	//Ores
@@ -77,7 +78,7 @@ public class MinestuckBlocks
 	{
 		IForgeRegistry<Block> registry = event.getRegistry();
 		//blocks
-		final Block[] blocks = {chessTile, coloredDirt, layeredSand, stone,
+		final Block[] blocks = {chessTile, coloredDirt, layeredSand, stone, sugarCube,
 				log, glowingLog, glowingPlanks, glowingMushroom, woodenCactus,
 				oreCruxite, coalOreNetherrack, ironOreSandstone, ironOreSandstoneRed, goldOreSandstone, goldOreSandstoneRed,
 				cruxiteBlock, genericObject,

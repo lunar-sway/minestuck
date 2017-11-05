@@ -214,6 +214,7 @@ public class MinestuckModelManager
 		for(BlockMinestuckLog.BlockType type : BlockMinestuckLog.BlockType.values())
 			register(log, type.ordinal(), type.getName()+"_log");
 		register(woodenCactus);
+		register(sugarCube);
 		
 		register(primedTnt);
 		register(unstableTnt);

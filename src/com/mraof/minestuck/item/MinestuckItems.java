@@ -212,6 +212,7 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemMultiTexture(log, log,
 				(ItemStack input) -> BlockMinestuckLog.BlockType.values()[input.getItemDamage() % BlockMinestuckLog.BlockType.values().length].getUnlocalizedName()));
 		registerItemBlock(registry, new ItemBlock(woodenCactus));
+		registerItemBlock(registry, new ItemBlock(sugarCube));
 		
 		registerItemBlock(registry, new ItemBlock(primedTnt));
 		registerItemBlock(registry, new ItemBlock(unstableTnt));
