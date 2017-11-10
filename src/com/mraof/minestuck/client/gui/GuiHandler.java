@@ -1,18 +1,20 @@
 package com.mraof.minestuck.client.gui;
 
+import com.mraof.minestuck.inventory.ContainerCrockerMachine;
+import com.mraof.minestuck.inventory.ContainerSburbMachine;
+import com.mraof.minestuck.inventory.ContainerUraniumCooker;
+import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.tileentity.TileEntityCrockerMachine;
+import com.mraof.minestuck.tileentity.TileEntitySburbMachine;
+import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
+import com.mraof.minestuck.tileentity.TileEntityUraniumCooker;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
-
-import com.mraof.minestuck.inventory.ContainerCrockerMachine;
-import com.mraof.minestuck.inventory.ContainerSburbMachine;
-import com.mraof.minestuck.tileentity.TileEntityComputer;
-import com.mraof.minestuck.tileentity.TileEntityCrockerMachine;
-import com.mraof.minestuck.tileentity.TileEntitySburbMachine;
-import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 
 public class GuiHandler implements IGuiHandler 
 {
@@ -32,7 +34,9 @@ public class GuiHandler implements IGuiHandler
 			if(tileEntity instanceof TileEntitySburbMachine)
 				return new ContainerSburbMachine(player.inventory, (TileEntitySburbMachine) tileEntity);
 			else if(tileEntity instanceof TileEntityCrockerMachine)
-				return new ContainerCrockerMachine(player.inventory, (TileEntityCrockerMachine) tileEntity); 
+				return new ContainerCrockerMachine(player.inventory, (TileEntityCrockerMachine) tileEntity);
+			else if(tileEntity instanceof TileEntityUraniumCooker)
+				return new ContainerUraniumCooker(player.inventory, (TileEntityUraniumCooker) tileEntity);
 		
 		return null;
 	}
@@ -48,6 +52,8 @@ public class GuiHandler implements IGuiHandler
 				return new GuiSburbMachine(player.inventory, (TileEntitySburbMachine) tileEntity);
 			else if(tileEntity instanceof TileEntityCrockerMachine)
 				return new GuiCrockerMachine(player.inventory, (TileEntityCrockerMachine) tileEntity);
+			else if(tileEntity instanceof TileEntityUraniumCooker)
+				return new ContainerUraniumCooker(player.inventory, (TileEntityUraniumCooker) tileEntity);
 		
 		if(tileEntity instanceof TileEntityComputer && id == GuiId.COMPUTER.ordinal())
 			return new GuiComputer(Minecraft.getMinecraft(),(TileEntityComputer) tileEntity);
