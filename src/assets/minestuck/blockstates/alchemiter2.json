@@ -1,0 +1,9 @@
+
+{
+	"variants":{
+		"part=zero_one_zero":	{ "model":"minestuck:alchemiter_zero_one_zero"},
+		"part=zero_two_zero":	{ "model":"minestuck:alchemiter_zero_two_zero"},
+		"part=zero_three_zero":	{ "model":"minestuck:alchemiter_zero_three_zero"},
+		"part=zero_four_zero":	{ "model":"minestuck:alchemiter_zero_four_zero"}
+	}
+}

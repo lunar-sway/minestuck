@@ -1,0 +1,16 @@
+
+{
+	"variants":{
+		"part2=zero_two_zero":	{ "model":"minestuck:cruxtruder_zero_two_zero"},
+		"part2=zero_two_one":	{ "model":"minestuck:cruxtruder_zero_two_one"},
+		"part2=zero_two_two":	{ "model":"minestuck:cruxtruder_zero_two_two"},
+		"part2=one_two_zero":	{ "model":"minestuck:cruxtruder_one_two_zero"},
+		"part2=one_two_one":		{ "model":"minestuck:cruxtruder_one_two_one"},		
+		"part2=one_two_two":		{ "model":"minestuck:cruxtruder_one_two_two"},
+		"part2=one_three_one":	{ "model":"minestuck:cruxtruder_one_three_one"},
+		"part2=two_two_zero":	{ "model":"minestuck:cruxtruder_two_two_zero"},
+		"part2=two_two_one":		{ "model":"minestuck:cruxtruder_two_two_one"},
+		"part2=two_two_two":		{ "model":"minestuck:cruxtruder_two_two_two"}
+		
+	}
+}
