@@ -77,7 +77,7 @@ public class GuiAlchemiter extends GuiContainer
 		fontRenderer.drawString(I18n.format("gui."+guis[type.ordinal()]+".name"), 8, 6, 4210752);
 		//draws "Inventory" or your regional equivalent
 		fontRenderer.drawString(I18n.format("container.inventory"), 8, ySize - 96 + 2, 4210752);
-		if (type == MachineType.ALCHEMITER && !te.getStackInSlot(0).isEmpty()) 
+		if ( !te.getStackInSlot(0).isEmpty()) 
 		{
 			//Render grist requirements
 			ItemStack stack = AlchemyRecipeHandler.getDecodedItem(te.getStackInSlot(0));
@@ -87,7 +87,7 @@ public class GuiAlchemiter extends GuiContainer
 			GristSet set = GristRegistry.getGristConversion(stack);
 			boolean useSelectedType = stack.getItem() == MinestuckItems.captchaCard;
 			if(useSelectedType)
-				set = new GristSet(te.selectedGrist, MinestuckConfig.clientCardCost);
+				set = new GristSet(te.getSelectedGrist(), MinestuckConfig.clientCardCost);
 			if(set != null && stack.isItemDamaged())
 			{
 				float multiplier = 1 - stack.getItem().getDamage(stack)/((float) stack.getMaxDamage());
@@ -119,11 +119,9 @@ public class GuiAlchemiter extends GuiContainer
 		
 		//draw progress bar
 		this.mc.getTextureManager().bindTexture(guiProgress);
-		int width = false ? progressWidth : getScaledValue(te.progress, te.maxProgress, progressWidth);
-		int height = true ? progressHeight : getScaledValue(te.progress, te.maxProgress, progressHeight);
-		if(false)
-			this.drawModalRectWithCustomSizedTexture(x+progressX, y+progressY, 0, 0, width, height, progressWidth, progressHeight);
-		else this.drawModalRectWithCustomSizedTexture(x+progressX, y+progressY+progressHeight-height, 0, progressHeight-height, width, height, progressWidth, progressHeight);
+		int width = getScaledValue(te.progress, te.maxProgress, progressWidth);
+		int height = progressHeight;
+		this.drawModalRectWithCustomSizedTexture(x+progressX, y+progressY+progressHeight-height, 0, progressHeight-height, width, height, progressWidth, progressHeight);
 	}
 
 	@Override
@@ -178,7 +176,7 @@ public class GuiAlchemiter extends GuiContainer
 				this.actionPerformed(goButton);
 			}
 		}
-		else if(true && par3 == 0 && mc.player.inventory.getItemStack().isEmpty()
+		else if(par3 == 0 && mc.player.inventory.getItemStack().isEmpty()
 				&& te.getStackInSlot(0) != null && AlchemyRecipeHandler.getDecodedItem(te.getStackInSlot(0)).getItem() == MinestuckItems.captchaCard
 				&& par1 >= guiLeft + 9 && par1 < guiLeft + 167 && par2 >= guiTop + 45 && par2 < guiTop + 70)
 		{

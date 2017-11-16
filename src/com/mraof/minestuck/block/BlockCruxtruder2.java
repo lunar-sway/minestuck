@@ -10,7 +10,7 @@ import net.minecraft.util.math.BlockPos;
 public class BlockCruxtruder2 extends BlockCruxtruder {
 
 
-	public static final PropertyEnum<enumParts> PART2 = PropertyEnum.<enumParts>create("part2",enumParts.class);
+	public static final PropertyEnum<enumParts> PART = PropertyEnum.<enumParts>create("part",enumParts.class);
 	
 	BlockCruxtruder2(){
 		setUnlocalizedName("cruxtruder2");
@@ -19,7 +19,7 @@ public class BlockCruxtruder2 extends BlockCruxtruder {
 	@Override
 	protected BlockStateContainer createBlockState()
     {
-        return new BlockStateContainer(this, new IProperty[] {PART2});
+        return new BlockStateContainer(this, new IProperty[] {PART});
     }
 
 	//Block state handling
@@ -66,7 +66,7 @@ public class BlockCruxtruder2 extends BlockCruxtruder {
 	}
 	@Override
 	public BlockPos GetMasterPos(IBlockState state, BlockPos pos){
-		enumParts part=state.getValue(PART2);
+		enumParts part=state.getValue(PART);
 		switch(part){
 		case ZERO_TWO_ZERO:	return pos.north(0).down(1).west(0);
 		case ZERO_TWO_ONE:	return pos.north(0).down(1).west(1);
@@ -85,16 +85,16 @@ public class BlockCruxtruder2 extends BlockCruxtruder {
 	public IBlockState getStateFromMeta(int meta){
 		IBlockState defaultState=getDefaultState();
 		switch (meta){
-		case 0: return defaultState.withProperty(PART2, enumParts.ZERO_TWO_ZERO);
-		case 1: return defaultState.withProperty(PART2, enumParts.ZERO_TWO_ONE);
-		case 2: return defaultState.withProperty(PART2, enumParts.ZERO_TWO_TWO);
-		case 3: return defaultState.withProperty(PART2, enumParts.ONE_TWO_ZERO);
-		case 4: return defaultState.withProperty(PART2, enumParts.ONE_TWO_ONE);
-		case 5: return defaultState.withProperty(PART2, enumParts.ONE_TWO_TWO);
-		case 6: return defaultState.withProperty(PART2, enumParts.ONE_THREE_ONE);
-		case 7: return defaultState.withProperty(PART2, enumParts.TWO_TWO_ZERO);
-		case 8: return defaultState.withProperty(PART2, enumParts.TWO_TWO_ONE);
-		case 9: return defaultState.withProperty(PART2, enumParts.TWO_TWO_TWO);
+		case 0: return defaultState.withProperty(PART, enumParts.ZERO_TWO_ZERO);
+		case 1: return defaultState.withProperty(PART, enumParts.ZERO_TWO_ONE);
+		case 2: return defaultState.withProperty(PART, enumParts.ZERO_TWO_TWO);
+		case 3: return defaultState.withProperty(PART, enumParts.ONE_TWO_ZERO);
+		case 4: return defaultState.withProperty(PART, enumParts.ONE_TWO_ONE);
+		case 5: return defaultState.withProperty(PART, enumParts.ONE_TWO_TWO);
+		case 6: return defaultState.withProperty(PART, enumParts.ONE_THREE_ONE);
+		case 7: return defaultState.withProperty(PART, enumParts.TWO_TWO_ZERO);
+		case 8: return defaultState.withProperty(PART, enumParts.TWO_TWO_ONE);
+		case 9: return defaultState.withProperty(PART, enumParts.TWO_TWO_TWO);
 		
 		
 		}
@@ -103,7 +103,7 @@ public class BlockCruxtruder2 extends BlockCruxtruder {
 
 	@Override
 	public int getMetaFromState(IBlockState state){
-		enumParts part=state.getValue(PART2);
+		enumParts part=state.getValue(PART);
 	switch(part){
 	case ZERO_TWO_ZERO: return 0;
 	case ZERO_TWO_ONE: 	return 1;

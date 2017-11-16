@@ -86,7 +86,7 @@ public class GuiPunchDesignix extends GuiContainer
 		this.mc.getTextureManager().bindTexture(guiProgress);
 		int width = getScaledValue(te.progress, te.maxProgress, progressWidth);
 		int height = progressHeight ;
-			this.drawModalRectWithCustomSizedTexture(x+progressX, y+progressY, 0, 0, width, height, progressWidth, progressHeight);
+		this.drawModalRectWithCustomSizedTexture(x+progressX, y+progressY, 0, 0, width, height, progressWidth, progressHeight);
 		}
 
 	@Override

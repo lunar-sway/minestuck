@@ -205,6 +205,9 @@ public class MinestuckModelManager
 		register(punchDesignix);
 		register(totemlathe);
 		register(alchemiter);
+		register(alchemiter2);
+		register(cruxtruder);
+		register(cruxtruder2);
 		register(glowingMushroom);
 		register(glowingLog);
 		register(glowingPlanks);

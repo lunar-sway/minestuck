@@ -69,16 +69,16 @@ public class BlockCruxtruder extends BlockLargeMachine{
 	@Override
 	public void onBlockPlacedBy(World worldIn,BlockPos pos,IBlockState state,EntityLivingBase placer, ItemStack stack){
 		if(placer!=null && !(worldIn.isRemote)){
-			worldIn.setBlockState(pos.south(0).up(1).east(0), MinestuckBlocks.cruxtruder2.getDefaultState().withProperty(BlockCruxtruder2.PART2, BlockCruxtruder2.enumParts.ZERO_TWO_ZERO));
-			worldIn.setBlockState(pos.south(0).up(1).east(1), MinestuckBlocks.cruxtruder2.getDefaultState().withProperty(BlockCruxtruder2.PART2, BlockCruxtruder2.enumParts.ZERO_TWO_ONE));
-			worldIn.setBlockState(pos.south(0).up(1).east(2), MinestuckBlocks.cruxtruder2.getDefaultState().withProperty(BlockCruxtruder2.PART2, BlockCruxtruder2.enumParts.ZERO_TWO_TWO));
-			worldIn.setBlockState(pos.south(1).up(1).east(0), MinestuckBlocks.cruxtruder2.getDefaultState().withProperty(BlockCruxtruder2.PART2, BlockCruxtruder2.enumParts.ONE_TWO_ZERO));
-			worldIn.setBlockState(pos.south(1).up(1).east(1), MinestuckBlocks.cruxtruder2.getDefaultState().withProperty(BlockCruxtruder2.PART2, BlockCruxtruder2.enumParts.ONE_TWO_ONE));
-			worldIn.setBlockState(pos.south(1).up(1).east(2), MinestuckBlocks.cruxtruder2.getDefaultState().withProperty(BlockCruxtruder2.PART2, BlockCruxtruder2.enumParts.ONE_TWO_TWO));
-			worldIn.setBlockState(pos.south(1).up(2).east(1), MinestuckBlocks.cruxtruder2.getDefaultState().withProperty(BlockCruxtruder2.PART2, BlockCruxtruder2.enumParts.ONE_THREE_ONE));
-			worldIn.setBlockState(pos.south(2).up(1).east(0), MinestuckBlocks.cruxtruder2.getDefaultState().withProperty(BlockCruxtruder2.PART2, BlockCruxtruder2.enumParts.TWO_TWO_ZERO));
-			worldIn.setBlockState(pos.south(2).up(1).east(1), MinestuckBlocks.cruxtruder2.getDefaultState().withProperty(BlockCruxtruder2.PART2, BlockCruxtruder2.enumParts.TWO_TWO_ONE));
-			worldIn.setBlockState(pos.south(2).up(1).east(2), MinestuckBlocks.cruxtruder2.getDefaultState().withProperty(BlockCruxtruder2.PART2, BlockCruxtruder2.enumParts.TWO_TWO_TWO));
+			worldIn.setBlockState(pos.south(0).up(1).east(0), MinestuckBlocks.cruxtruder2.getDefaultState().withProperty(BlockCruxtruder2.PART, BlockCruxtruder2.enumParts.ZERO_TWO_ZERO));
+			worldIn.setBlockState(pos.south(0).up(1).east(1), MinestuckBlocks.cruxtruder2.getDefaultState().withProperty(BlockCruxtruder2.PART, BlockCruxtruder2.enumParts.ZERO_TWO_ONE));
+			worldIn.setBlockState(pos.south(0).up(1).east(2), MinestuckBlocks.cruxtruder2.getDefaultState().withProperty(BlockCruxtruder2.PART, BlockCruxtruder2.enumParts.ZERO_TWO_TWO));
+			worldIn.setBlockState(pos.south(1).up(1).east(0), MinestuckBlocks.cruxtruder2.getDefaultState().withProperty(BlockCruxtruder2.PART, BlockCruxtruder2.enumParts.ONE_TWO_ZERO));
+			worldIn.setBlockState(pos.south(1).up(1).east(1), MinestuckBlocks.cruxtruder2.getDefaultState().withProperty(BlockCruxtruder2.PART, BlockCruxtruder2.enumParts.ONE_TWO_ONE));
+			worldIn.setBlockState(pos.south(1).up(1).east(2), MinestuckBlocks.cruxtruder2.getDefaultState().withProperty(BlockCruxtruder2.PART, BlockCruxtruder2.enumParts.ONE_TWO_TWO));
+			worldIn.setBlockState(pos.south(1).up(2).east(1), MinestuckBlocks.cruxtruder2.getDefaultState().withProperty(BlockCruxtruder2.PART, BlockCruxtruder2.enumParts.ONE_THREE_ONE));
+			worldIn.setBlockState(pos.south(2).up(1).east(0), MinestuckBlocks.cruxtruder2.getDefaultState().withProperty(BlockCruxtruder2.PART, BlockCruxtruder2.enumParts.TWO_TWO_ZERO));
+			worldIn.setBlockState(pos.south(2).up(1).east(1), MinestuckBlocks.cruxtruder2.getDefaultState().withProperty(BlockCruxtruder2.PART, BlockCruxtruder2.enumParts.TWO_TWO_ONE));
+			worldIn.setBlockState(pos.south(2).up(1).east(2), MinestuckBlocks.cruxtruder2.getDefaultState().withProperty(BlockCruxtruder2.PART, BlockCruxtruder2.enumParts.TWO_TWO_TWO));
 			
 			
 			worldIn.setBlockState(pos.south(0).up(0).east(0), state.withProperty(PART, enumParts.ZERO_ONE_ZERO));

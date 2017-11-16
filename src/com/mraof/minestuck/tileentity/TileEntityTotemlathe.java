@@ -27,40 +27,21 @@ import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 
 public class TileEntityTotemlathe extends TileEntityMachine
 {
-	public PlayerIdentifier owner;
-	public GristType selectedGrist = GristType.Build;
-	public int color = -1;
-	public boolean isMaster;
-	public boolean destroyed=false;
+	private PlayerIdentifier owner;
+	private GristType selectedGrist = GristType.Build;
+	private int color = -1;
+	private boolean destroyed=false;
 	public com.mraof.minestuck.block.BlockTotemlathe.enumParts part;
 	//constructor
-	public TileEntityTotemlathe(IBlockState state){
-		part = state.getValue(BlockTotemlathe.PART);
-		if(part==enumParts.BOTTOM_RIGHT){
-			isMaster=true;
-		}else{
-			isMaster=false;
-		}
+
+	public boolean isDestroyed() {
+		return destroyed;
 	}
-	public BlockPos GetMasterPos(IBlockState state){
-		switch(part){
-		case BOTTOM_RIGHT:return getPos();
-		case BOTTOM_MIDRIGHT:return getPos().north(1);
-		case BOTTOM_MIDLEFT:return getPos().north(2);
-		case BOTTOM_LEFT:return getPos().north(3);
-		case MID_RIGHT:return getPos().down(1);
-		case MID_MIDRIGHT:return getPos().down(1).north(1);
-		case MID_MIDLEFT:return getPos().down(1).north(2);
-		case MID_LEFT:return getPos().down(1).north(3);
-		case TOP_MIDRIGHT:return getPos().down(2).north(1);
-		case TOP_MIDLEFT:return getPos().down(2).north(2);
-		case TOP_LEFT:return getPos().down(2).north(3);
-		}
-		return getPos();
+	
+	public void destroy() {
+		destroyed=true;
 	}
-	public boolean isMaster(){
-		return isMaster;
-	}
+	
 	
 	@Override
 	public boolean isAutomatic()
@@ -88,13 +69,13 @@ public class TileEntityTotemlathe extends TileEntityMachine
 		super.readFromNBT(tagCompound);
 		
 		if(tagCompound.hasKey("gristType"))
-			this.selectedGrist = GristType.values()[tagCompound.getInteger("gristType")];
+			this.setSelectedGrist(GristType.values()[tagCompound.getInteger("gristType")]);
 		
 		if(tagCompound.hasKey("color"))
 			this.color = tagCompound.getInteger("color");
 		
 		if(tagCompound.hasKey("owner") || tagCompound.hasKey("ownerMost"))
-			owner = IdentifierHandler.load(tagCompound, "owner");
+			setOwner(IdentifierHandler.load(tagCompound, "owner"));
 	}
 	
 	@Override
@@ -208,6 +189,22 @@ public class TileEntityTotemlathe extends TileEntityMachine
 	public MachineType getMachineType()
 	{
 		return MachineType.values()[getBlockMetadata()%4];
+	}
+
+	public PlayerIdentifier getOwner() {
+		return owner;
+	}
+
+	public void setOwner(PlayerIdentifier owner) {
+		this.owner = owner;
+	}
+
+	public GristType getSelectedGrist() {
+		return selectedGrist;
+	}
+
+	public void setSelectedGrist(GristType selectedGrist) {
+		this.selectedGrist = selectedGrist;
 	}
 	
 }

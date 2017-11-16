@@ -29,7 +29,7 @@ public class ContainerAlchemiter extends Container
 	public ContainerAlchemiter(InventoryPlayer inventoryPlayer, TileEntityAlchemiter te)
 	{
 		tileEntity = te;
-		te.owner = IdentifierHandler.encode(inventoryPlayer.player);
+		te.setOwner(IdentifierHandler.encode(inventoryPlayer.player));
 		
 
 			addSlotToContainer(new SlotInput(tileEntity, 0, alchemiterInputX, alchemiterInputY, MinestuckItems.cruxiteDowel));

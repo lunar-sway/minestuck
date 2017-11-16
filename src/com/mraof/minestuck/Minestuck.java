@@ -100,6 +100,7 @@ public class Minestuck
 		GameRegistry.registerTileEntity(TileEntityPunchDesignix.class, "Minestuck:punch_designix");
 		GameRegistry.registerTileEntity(TileEntityTotemlathe.class, "Minestuck:totem_lathe");
 		GameRegistry.registerTileEntity(TileEntityAlchemiter.class,"Minestuck:alchemiter");
+		GameRegistry.registerTileEntity(TileEntityCruxtruder.class, "Minestuck:cruxtruder");
 		GameRegistry.registerTileEntity(TileEntityCrockerMachine.class, "minestuck:crocker_machine");
 		GameRegistry.registerTileEntity(TileEntityComputer.class, "minestuck:computer_sburb");
 		GameRegistry.registerTileEntity(TileEntityTransportalizer.class, ",minestuck:transportalizer");

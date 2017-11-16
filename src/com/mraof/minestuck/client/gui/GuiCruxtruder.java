@@ -1,14 +1,26 @@
 package com.mraof.minestuck.client.gui;
 
-import java.io.IOException;
-import java.util.List;
-
+import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.block.BlockSburbMachine.MachineType;
+import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.client.util.GuiUtil;
+import com.mraof.minestuck.inventory.ContainerCruxtruder;
+import com.mraof.minestuck.inventory.ContainerSburbMachine;
+import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckPacket;
+import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.tileentity.TileEntityCruxtruder;
+import com.mraof.minestuck.tileentity.TileEntitySburbMachine;
+import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.util.GristRegistry;
+import com.mraof.minestuck.util.GristSet;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -16,23 +28,11 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.block.BlockSburbMachine.MachineType;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.client.util.GuiUtil;
-import com.mraof.minestuck.inventory.ContainerCruxtruder;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.network.MinestuckChannelHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
-import com.mraof.minestuck.tileentity.TileEntityCruxtruder;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.GristRegistry;
-import com.mraof.minestuck.util.GristSet;
+import java.io.IOException;
+import java.util.List;
 
 public class GuiCruxtruder extends GuiContainer
 {
@@ -57,7 +57,7 @@ public class GuiCruxtruder extends GuiContainer
 	{
 	super(new ContainerCruxtruder(inventoryPlayer, tileEntity));
 	this.te = tileEntity;
-	this.type =MachineType.CRUXTRUDER;
+	this.type = MachineType.CRUXTRUDER;
 	guiBackground = new ResourceLocation("minestuck:textures/gui/" + guis[type.ordinal()] + ".png");
 	guiProgress = new ResourceLocation("minestuck:textures/gui/progress/" + guis[type.ordinal()] + ".png");
 	//this.player = inventoryPlayer.player;
@@ -67,43 +67,23 @@ public class GuiCruxtruder extends GuiContainer
 		progressX = 82;
 		progressY = 42;
 		progressWidth = 10;
-		progressHeight = 13;
-		
-}
+		progressHeight = 13;	
+	}
+	
+	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks)
+	{
+		this.drawDefaultBackground();
+		super.drawScreen(mouseX, mouseY, partialTicks);
+		this.renderHoveredToolTip(mouseX, mouseY);
+	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
 	{
-		fontRendererObj.drawString(I18n.format("gui."+guis[type.ordinal()]+".name"), 8, 6, 4210752);
+		fontRenderer.drawString(I18n.format("gui."+guis[type.ordinal()]+".name"), 8, 6, 4210752);
 		//draws "Inventory" or your regional equivalent
-		fontRendererObj.drawString(I18n.format("container.inventory"), 8, ySize - 96 + 2, 4210752);
-		if (type == MachineType.ALCHEMITER && !te.getStackInSlot(0).isEmpty()) 
-		{
-			//Render grist requirements
-			ItemStack stack = AlchemyRecipeHandler.getDecodedItem(te.getStackInSlot(0));
-			if(type == MachineType.ALCHEMITER && !(te.getStackInSlot(0).hasTagCompound() && te.getStackInSlot(0).getTagCompound().hasKey("contentID")))
-				stack = new ItemStack(MinestuckBlocks.genericObject);
-			
-			GristSet set = GristRegistry.getGristConversion(stack);
-			boolean useSelectedType = stack.getItem() == MinestuckItems.captchaCard;
-			if(useSelectedType)
-				set = new GristSet(te.getselectedGrist(), MinestuckConfig.clientCardCost);
-			if(set != null && stack.isItemDamaged())
-			{
-				float multiplier = 1 - stack.getItem().getDamage(stack)/((float) stack.getMaxDamage());
-				for(int i = 0; i < set.gristTypes.length; i++)
-					if(type == MachineType.ALCHEMITER)
-						set.gristTypes[i] = (int) Math.ceil(set.gristTypes[i]*multiplier);
-					else set.gristTypes[i] = (int) (set.gristTypes[i]*multiplier);
-			}
-			
-			GuiUtil.drawGristBoard(set, useSelectedType ? GuiUtil.GristboardMode.ALCHEMITER_SELECT : GuiUtil.GristboardMode.ALCHEMITER, 9, 45, fontRendererObj);
-			
-			List<String> tooltip = GuiUtil.getGristboardTooltip(set, mouseX - this.guiLeft, mouseY - this.guiTop, 9, 45, fontRendererObj);
-			if(tooltip != null)
-				this.drawHoveringText(tooltip, mouseX - this.guiLeft, mouseY - this.guiTop, fontRendererObj);
-			
-		}
+		fontRenderer.drawString(I18n.format("container.inventory"), 8, ySize - 96 + 2, 4210752);
 	}
 	
 	@Override
@@ -119,11 +99,9 @@ public class GuiCruxtruder extends GuiContainer
 		
 		//draw progress bar
 		this.mc.getTextureManager().bindTexture(guiProgress);
-		int width = type == MachineType.CRUXTRUDER ? progressWidth : getScaledValue(te.progress, te.maxProgress, progressWidth);
-		int height = type != MachineType.CRUXTRUDER ? progressHeight : getScaledValue(te.progress, te.maxProgress, progressHeight);
-		if(type != MachineType.CRUXTRUDER)
-			this.drawModalRectWithCustomSizedTexture(x+progressX, y+progressY, 0, 0, width, height, progressWidth, progressHeight);
-		else this.drawModalRectWithCustomSizedTexture(x+progressX, y+progressY+progressHeight-height, 0, progressHeight-height, width, height, progressWidth, progressHeight);
+		int width =  progressWidth;
+		int height = getScaledValue(te.progress, te.maxProgress, progressHeight);
+		this.drawModalRectWithCustomSizedTexture(x+progressX, y+progressY+progressHeight-height, 0, progressHeight-height, width, height, progressWidth, progressHeight);
 	}
 
 	@Override
@@ -177,8 +155,7 @@ public class GuiCruxtruder extends GuiContainer
 				goButton.playPressSound(this.mc.getSoundHandler());
 				this.actionPerformed(goButton);
 			}
-		}
-		
+		} 
 	}
 	
 	@Override
@@ -208,7 +185,7 @@ public class GuiCruxtruder extends GuiContainer
 	{
 		float f = 1/(float)width;
 		float f1 = 1/(float)height;
-		VertexBuffer render = Tessellator.getInstance().getBuffer();
+		BufferBuilder render = Tessellator.getInstance().getBuffer();
 		render.begin(7, DefaultVertexFormats.POSITION_TEX);
 		render.pos(par1, par2 + par6, 0D).tex((par3)*f, (par4 + par6)*f1).endVertex();
 		render.pos(par1 + par5, par2 + par6, this.zLevel).tex((par3 + par5)*f, (par4 + par6)*f1).endVertex();

@@ -105,7 +105,7 @@ public class ContainerCruxtruder extends Container
 	{
 		if(this.progress != tileEntity.progress && tileEntity.progress != 0)
 			for(IContainerListener listener : listeners)
-				listener.sendProgressBarUpdate(this, 0, tileEntity.progress);	//The server should update and send the progress bar to the client because client and server ticks aren't synchronized
+				listener.sendWindowProperty(this, 0, tileEntity.progress);	//The server should update and send the progress bar to the client because client and server ticks aren't synchronized
 		this.progress = tileEntity.progress;
 	}
 	@Override
