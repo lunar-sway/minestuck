@@ -53,7 +53,7 @@ public class ChunkProviderLands implements IChunkGenerator
 	public ILandTerrainGen terrainGenerator;
 	public MapGenLandStructure structureHandler;
 	public MapGenConsortVillage villageHandler;
-	public int dayCycle;
+	public int dayCycle; //0 = Normal day cycle; 1 = Always day; 2 = Always night.
 	public int weatherType;	//-1:No weather &1: Force rain &2: If thunder &4: Force thunder
 	public float rainfall, temperature;
 	public float oceanChance;
