@@ -111,7 +111,7 @@ public class GuiTotemlathe extends GuiContainer
 			GristSet set = GristRegistry.getGristConversion(stack);
 			boolean useSelectedType = stack.getItem() == MinestuckItems.captchaCard;
 			if(useSelectedType)
-				set = new GristSet(te.selectedGrist, MinestuckConfig.clientCardCost);
+				set = new GristSet(te.getSelectedGrist(), MinestuckConfig.clientCardCost);
 			if(set != null && stack.isItemDamaged())
 			{
 				float multiplier = 1 - stack.getItem().getDamage(stack)/((float) stack.getMaxDamage());

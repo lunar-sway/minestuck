@@ -34,7 +34,7 @@ public class ContainerTotemlathe extends Container
 	{
 		tileEntity = te;
 		te.getMachineType();
-		te.owner = IdentifierHandler.encode(inventoryPlayer.player);
+		te.setOwner(IdentifierHandler.encode(inventoryPlayer.player));
 		
 	
 			addSlotToContainer(new SlotInput(tileEntity, 0, latheCard1X, latheCard1Y, MinestuckItems.captchaCard));

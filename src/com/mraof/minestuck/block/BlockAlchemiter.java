@@ -1,14 +1,12 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.client.gui.GuiHandler;
-import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -16,6 +14,10 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.client.gui.GuiHandler;
+import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
 
 public class BlockAlchemiter extends BlockLargeMachine{
 
@@ -39,25 +41,23 @@ public class BlockAlchemiter extends BlockLargeMachine{
 
 	@Override
 	public boolean onBlockActivated(World worldIn,BlockPos pos,IBlockState state,EntityPlayer playerIn,EnumHand hand,EnumFacing facing,float hitX,float hitY,float hitZ){
-		
-		//TileEntityPunchDesignix te=(TileEntityPunchDesignix)worldIn.getTileEntity(pos);
-		//BlockPos MasterPos=te.GetMasterPos(state);
-		if(!worldIn.isRemote /*&& !((TileEntityPunchDesignix)worldIn.getTileEntity(MasterPos)).broken*/){
-			//if(worldIn.getTileEntity(pos)instanceof TileEntityPunchDesignix){				
-				//if(te.isMaster()){
-					playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.MACHINE.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
-					System.out.println("==========================================");
-				//}else{
-				//	playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.MACHINE.ordinal(), worldIn, MasterPos.getX(), MasterPos.getY(), MasterPos.getZ());
-				//}
+		BlockPos MasterPos=GetMasterPos(state , pos);
+		System.out.println(MasterPos);
+		if(worldIn.getTileEntity(MasterPos) instanceof TileEntityAlchemiter){ 
+			TileEntityAlchemiter te=(TileEntityAlchemiter)worldIn.getTileEntity(MasterPos);
+			//if(!worldIn.isRemote){
+				if(!(te.isDestroyed())){		
+					playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.MACHINE.ordinal(), worldIn, MasterPos.getX(), MasterPos.getY(), MasterPos.getZ());	
+				}
 			//}
 		}
 		return true;
 	}
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
+		if (meta == 0)
 			return new TileEntityAlchemiter();
-		
+		return null;
 	}
 	
 	
@@ -70,13 +70,15 @@ public class BlockAlchemiter extends BlockLargeMachine{
 	@Override
 	public void onBlockPlacedBy(World worldIn,BlockPos pos,IBlockState state,EntityLivingBase placer, ItemStack stack){
 		if(placer!=null && !(worldIn.isRemote)){
+			worldIn.setBlockState(pos.south(0).up(1).west(0), MinestuckBlocks.alchemiter2.getDefaultState().withProperty(BlockAlchemiter2.PART, BlockAlchemiter2.enumParts.ZERO_TWO_ZERO));
+			worldIn.setBlockState(pos.south(0).up(2).west(0), MinestuckBlocks.alchemiter2.getDefaultState().withProperty(BlockAlchemiter2.PART, BlockAlchemiter2.enumParts.ZERO_THREE_ZERO));
+			worldIn.setBlockState(pos.south(0).up(3).west(0), MinestuckBlocks.alchemiter2.getDefaultState().withProperty(BlockAlchemiter2.PART, BlockAlchemiter2.enumParts.ZERO_FOUR_ZERO));
+			
+
 			worldIn.setBlockState(pos.south(0).up(0).west(0), state.withProperty(PART, enumParts.ZERO_ONE_ZERO));
 			worldIn.setBlockState(pos.south(0).up(0).west(1), state.withProperty(PART, enumParts.ZERO_ONE_ONE));
 			worldIn.setBlockState(pos.south(0).up(0).west(2), state.withProperty(PART, enumParts.ZERO_ONE_TWO));
 			worldIn.setBlockState(pos.south(0).up(0).west(3), state.withProperty(PART, enumParts.ZERO_ONE_THREE));
-			worldIn.setBlockState(pos.south(0).up(1).west(0), state.withProperty(PART, enumParts.ZERO_TWO_ZERO));
-			worldIn.setBlockState(pos.south(0).up(2).west(0), state.withProperty(PART, enumParts.ZERO_THREE_ZERO));
-			worldIn.setBlockState(pos.south(0).up(3).west(0), state.withProperty(PART, enumParts.ZERO_FOUR_ZERO));
 			worldIn.setBlockState(pos.south(1).up(0).west(0), state.withProperty(PART, enumParts.ONE_ONE_ZERO));
 			worldIn.setBlockState(pos.south(1).up(0).west(1), state.withProperty(PART, enumParts.ONE_ONE_ONE));
 			worldIn.setBlockState(pos.south(1).up(0).west(2), state.withProperty(PART, enumParts.ONE_ONE_TWO));
@@ -89,20 +91,34 @@ public class BlockAlchemiter extends BlockLargeMachine{
 			worldIn.setBlockState(pos.south(3).up(0).west(1), state.withProperty(PART, enumParts.THREE_ONE_ONE));
 			worldIn.setBlockState(pos.south(3).up(0).west(2), state.withProperty(PART, enumParts.THREE_ONE_TWO));
 			worldIn.setBlockState(pos.south(3).up(0).west(3), state.withProperty(PART, enumParts.TRHEE_ONE_THREE));
+			
 		}
 	}
 	
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
-	
-		/*BlockPos MasterPos=((TileEntityPunchDesignix)worldIn.getTileEntity(pos)).GetMasterPos(state);
-		TileEntityPunchDesignix te = (TileEntityPunchDesignix) worldIn.getTileEntity(MasterPos);
-		te.broken=true;
-		InventoryHelper.dropInventoryItems(worldIn, pos, te);*/
-		
+		BlockPos MasterPos=GetMasterPos(state,pos);
+		if (worldIn.getTileEntity(MasterPos) instanceof TileEntityAlchemiter){
+			TileEntityAlchemiter te = (TileEntityAlchemiter) worldIn.getTileEntity(MasterPos);
+			te.destroy();
+			InventoryHelper.dropInventoryItems(worldIn, pos, te);
+		}	
 		super.breakBlock(worldIn, pos, state);
 	}
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	//Block state handling
 	public static enum enumParts implements IStringSerializable
@@ -111,9 +127,6 @@ public class BlockAlchemiter extends BlockLargeMachine{
 		ZERO_ONE_ONE,
 		ZERO_ONE_TWO,
 		ZERO_ONE_THREE,
-		ZERO_TWO_ZERO,
-		ZERO_THREE_ZERO,
-		ZERO_FOUR_ZERO,
 		ONE_ONE_ZERO,
 		ONE_ONE_ONE,
 		ONE_ONE_TWO,
@@ -135,13 +148,10 @@ public class BlockAlchemiter extends BlockLargeMachine{
 		public String getName()
 		{
 			switch (this){
-			case ZERO_ONE_ZERO:return "zero_one_zero";
+			case ZERO_ONE_ZERO: return "zero_one_zero";
 			case ZERO_ONE_ONE:return "zero_one_one";
 			case ZERO_ONE_TWO:return "zero_one_two";
 			case ZERO_ONE_THREE:return "zero_one_three";
-			case ZERO_TWO_ZERO:return "zero_two_zero";
-			case ZERO_THREE_ZERO:return "zero_three_zero";
-			case ZERO_FOUR_ZERO:return "zero_four_zero";
 			case ONE_ONE_ZERO:return "one_one_zero";
 			case ONE_ONE_ONE:return "one_one_one";
 			case ONE_ONE_TWO:return "one_one_two";
@@ -161,39 +171,78 @@ public class BlockAlchemiter extends BlockLargeMachine{
 		
 
 	}
-	
+	public BlockPos GetMasterPos(IBlockState state, BlockPos pos){
+		enumParts part=state.getValue(BlockAlchemiter.PART);
+		switch(part){
+		case ZERO_ONE_ZERO: return pos.north(0).down(0).east(0);
+		case ZERO_ONE_ONE:	return pos.north(0).down(0).east(1);
+		case ZERO_ONE_TWO:	return pos.north(0).down(0).east(2);
+		case ZERO_ONE_THREE:return pos.north(0).down(0).east(3);
+		case ONE_ONE_ZERO:	return pos.north(1).down(0).east(0);
+		case ONE_ONE_ONE:	return pos.north(1).down(0).east(1);
+		case ONE_ONE_TWO:	return pos.north(1).down(0).east(2);
+		case ONE_ONE_THREE:	return pos.north(1).down(0).east(3);
+		case TWO_ONE_ZERO:	return pos.north(2).down(0).east(0);
+		case TWO_ONE_ONE:	return pos.north(2).down(0).east(1);
+		case TWO_ONE_TWO:	return pos.north(2).down(0).east(2);
+		case TWO_ONE_THREE:	return pos.north(2).down(0).east(3);
+		case THREE_ONE_ZERO:return pos.north(3).down(0).east(0);
+		case THREE_ONE_ONE:	return pos.north(3).down(0).east(1);
+		case THREE_ONE_TWO:	return pos.north(3).down(0).east(2);
+		case TRHEE_ONE_THREE:return pos.north(3).down(0).east(3);
+		}
+		return pos;
+	}
 	@Override
 	public IBlockState getStateFromMeta(int meta){
 		IBlockState defaultState=getDefaultState();
-		//switch (meta){
-		return defaultState;
-		//}
+		switch (meta){
+		case 0: return defaultState.withProperty(PART, enumParts.ZERO_ONE_ZERO);
+		case 1: return defaultState.withProperty(PART, enumParts.ZERO_ONE_ONE);
+		case 2: return defaultState.withProperty(PART, enumParts.ZERO_ONE_TWO);
+		case 3: return defaultState.withProperty(PART, enumParts.ZERO_ONE_THREE);
+		case 4: return defaultState.withProperty(PART, enumParts.ONE_ONE_ZERO);
+		case 5: return defaultState.withProperty(PART, enumParts.ONE_ONE_ONE);
+		case 6: return defaultState.withProperty(PART, enumParts.ONE_ONE_TWO);
+		case 7: return defaultState.withProperty(PART, enumParts.ONE_ONE_THREE);
+		case 8: return defaultState.withProperty(PART, enumParts.TWO_ONE_ZERO);
+		case 9: return defaultState.withProperty(PART, enumParts.TWO_ONE_ONE);
+		case 10: return defaultState.withProperty(PART, enumParts.TWO_ONE_TWO);
+		case 11: return defaultState.withProperty(PART, enumParts.TWO_ONE_THREE);
+		case 12: return defaultState.withProperty(PART, enumParts.THREE_ONE_ZERO);
+		case 13: return defaultState.withProperty(PART, enumParts.THREE_ONE_ONE);
+		case 14: return defaultState.withProperty(PART, enumParts.THREE_ONE_TWO);
+		case 15: return defaultState.withProperty(PART, enumParts.TRHEE_ONE_THREE);
+		
+		}
+		return null;
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state){
 		enumParts part=state.getValue(PART);
-		switch(part){
-/*		case ZERO_ONE_ZERO:return 0;
-		case ZERO_ONE_ONE:return 1;
-		case ZERO_ONE_TWO:return 2;
-		case ZERO_ONE_THREE:return 3; 
-		case ZERO_TWO_ZERO:return 4;
-		case ZERO_THREE_ZERO:return 5;
-		case ZERO_FOUR_ZERO:return 6;
-		case ONE_ONE_ZERO:return 7;
-		case ONE_ONE_ONE:return 8;
-		case ONE_ONE_TWO:return 9 ;
-		case ONE_ONE_THREE:return 10; 
-		case TWO_ONE_ZERO:return 11;
-		case TWO_ONE_ONE:return 12;
-		case TWO_ONE_TWO:return 13;
-		case TWO_ONE_THREE:return 14;
-		case THREE_ONE_ZERO:return 15;
-		case THREE_ONE_ONE:return 16;
-		case THREE_ONE_TWO:return 17;
-		case TRHEE_ONE_THREE:return	18;*/
+	switch(part){
+	case ZERO_ONE_ZERO:	return 0;
+	case ZERO_ONE_ONE:	return 1;
+	case ZERO_ONE_TWO:	return 2;
+	case ZERO_ONE_THREE:return 3;
+	case ONE_ONE_ZERO:	return 4;
+	case ONE_ONE_ONE:	return 5;
+	case ONE_ONE_TWO:	return 6;
+	case ONE_ONE_THREE:	return 7;
+	case TWO_ONE_ZERO:	return 8;
+	case TWO_ONE_ONE:	return 9;
+	case TWO_ONE_TWO:	return 10;
+	case TWO_ONE_THREE:	return 11;
+	case THREE_ONE_ZERO:return 12;
+	case THREE_ONE_ONE:	return 13;
+	case THREE_ONE_TWO:	return 14;
+	case TRHEE_ONE_THREE:return	15;
 		}
 		return 0;
 	}
+	
+	
+	
+	
 }

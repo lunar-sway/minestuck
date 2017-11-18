@@ -199,6 +199,7 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlock(punchDesignix));
 		registerItemBlock(registry, new ItemBlock(totemlathe));
 		registerItemBlock(registry, new ItemBlock(alchemiter));
+		registerItemBlock(registry, new ItemBlock(cruxtruder));
 		
 		registerItemBlock(registry, new ItemBlockLayered(layeredSand));
 		registerItemBlock(registry, new ItemMultiTexture(coloredDirt, coloredDirt,

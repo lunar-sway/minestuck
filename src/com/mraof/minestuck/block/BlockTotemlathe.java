@@ -44,14 +44,10 @@ public class BlockTotemlathe extends BlockLargeMachine{
 	@Override
 	public boolean onBlockActivated(World worldIn,BlockPos pos,IBlockState state,EntityPlayer playerIn,EnumHand hand,EnumFacing facing,float hitX,float hitY,float hitZ){
 		
-		TileEntityTotemlathe te=(TileEntityTotemlathe)worldIn.getTileEntity(pos);
-		BlockPos MasterPos=te.GetMasterPos(state);
-		if(!worldIn.isRemote && !((TileEntityTotemlathe)worldIn.getTileEntity(MasterPos)).destroyed){
-			if(worldIn.getTileEntity(pos)instanceof TileEntityTotemlathe){				
-				if(te.isMaster()){
-					playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.MACHINE.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
-					
-				}else{
+		BlockPos MasterPos=GetMasterPos(state,pos);
+		if(!worldIn.isRemote) {
+			if(worldIn.getTileEntity(MasterPos) instanceof TileEntity) {
+				if(!((TileEntityTotemlathe)worldIn.getTileEntity(MasterPos)).isDestroyed()){		
 					playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.MACHINE.ordinal(), worldIn, MasterPos.getX(), MasterPos.getY(), MasterPos.getZ());
 				}
 			}
@@ -60,7 +56,7 @@ public class BlockTotemlathe extends BlockLargeMachine{
 	}
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileEntityTotemlathe(this.getStateFromMeta(meta));
+		return new TileEntityTotemlathe();
 	}
 	
 	
@@ -90,14 +86,16 @@ public class BlockTotemlathe extends BlockLargeMachine{
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
 	
-		BlockPos MasterPos=((TileEntityTotemlathe)worldIn.getTileEntity(pos)).GetMasterPos(state);
-		TileEntityTotemlathe te = (TileEntityTotemlathe) worldIn.getTileEntity(MasterPos);
-		te.destroyed=true;
-		InventoryHelper.dropInventoryItems(worldIn, pos, te);
-		
+		BlockPos MasterPos=GetMasterPos(state, pos) ;
+		if(worldIn.getTileEntity(MasterPos) instanceof TileEntityTotemlathe) {
+			TileEntityTotemlathe te = (TileEntityTotemlathe) worldIn.getTileEntity(MasterPos);
+			te.destroy();
+			InventoryHelper.dropInventoryItems(worldIn, pos, te);
+		}
 		super.breakBlock(worldIn, pos, state);
 	}	
 	
+
 	public static enum enumParts implements IStringSerializable
 	{
 		BOTTOM_RIGHT,
@@ -133,9 +131,23 @@ public class BlockTotemlathe extends BlockLargeMachine{
 			}
 			return "null";
 		}
-		
-		
-
+	}
+	private BlockPos GetMasterPos(IBlockState state, BlockPos pos) {
+		enumParts part=state.getValue(PART);
+		switch(part){
+		case BOTTOM_RIGHT:return pos;
+		case BOTTOM_MIDRIGHT:return pos.north(1);
+		case BOTTOM_MIDLEFT:return pos.north(2);
+		case BOTTOM_LEFT:return pos.north(3);
+		case MID_RIGHT:return pos.down(1);
+		case MID_MIDRIGHT:return pos.down(1).north(1);
+		case MID_MIDLEFT:return pos.down(1).north(2);
+		case MID_LEFT:return pos.down(1).north(3);
+		case TOP_MIDRIGHT:return pos.down(2).north(1);
+		case TOP_MIDLEFT:return pos.down(2).north(2);
+		case TOP_LEFT:return pos.down(2).north(3);
+		}
+		return pos;
 	}
 	@Override
 	public IBlockState getStateFromMeta(int meta){

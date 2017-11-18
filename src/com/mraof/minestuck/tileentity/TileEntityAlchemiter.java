@@ -1,9 +1,5 @@
 package com.mraof.minestuck.tileentity;
 
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
@@ -18,12 +14,36 @@ import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
 public class TileEntityAlchemiter extends TileEntityMachine
 {
-	public PlayerIdentifier owner;
-	public GristType selectedGrist = GristType.Build;
-	public int color = -1;
+	//still private because programming teacher and data protection
+	private PlayerIdentifier owner;
+	private GristType selectedGrist = GristType.Build;
+	private int color = -1;
 	private int ticks_since_update = 0;
+	private boolean destroyed=false;
+	public PlayerIdentifier getOwner(){
+		return owner;
+	}
+	public void setOwner(PlayerIdentifier Owner){
+		owner= Owner;
+	}
+	
+	
+	
+	//checks if the tile enity should work
+	public boolean isDestroyed(){
+		return destroyed;
+	}
+	//tells the tile entity to stop working
+	public void destroy(){
+		destroyed = true;		
+	}
+
 	
 	@Override
 	public boolean isAutomatic()
@@ -49,7 +69,7 @@ return 2;
 		super.readFromNBT(tagCompound);
 		
 		if(tagCompound.hasKey("gristType"))
-			this.selectedGrist = GristType.values()[tagCompound.getInteger("gristType")];
+			this.setSelectedGrist(GristType.values()[tagCompound.getInteger("gristType")]);
 		
 		if(tagCompound.hasKey("color"))
 			this.color = tagCompound.getInteger("color");
@@ -64,7 +84,7 @@ return 2;
 		super.writeToNBT(tagCompound);
 		
 		if(true)
-			tagCompound.setInteger("gristType", selectedGrist.ordinal());
+			tagCompound.setInteger("gristType", getSelectedGrist().ordinal());
 		
 		if(true && owner != null)
 			owner.saveToNBT(tagCompound, "owner");
@@ -94,7 +114,7 @@ return 2;
 				{return false;}
 				GristSet cost = GristRegistry.getGristConversion(newItem);
 				if(newItem.getItem() == MinestuckItems.captchaCard)
-					cost = new GristSet(selectedGrist, MinestuckConfig.cardCost);
+					cost = new GristSet(getSelectedGrist(), MinestuckConfig.cardCost);
 				if(cost != null && newItem.isItemDamaged())
 				{
 					float multiplier = 1 - newItem.getItem().getDamage(newItem)/((float) newItem.getMaxDamage());
@@ -122,7 +142,7 @@ return 2;
 					}
 					GristSet cost = GristRegistry.getGristConversion(newItem);
 					if (newItem.getItem() == MinestuckItems.captchaCard)
-						cost = new GristSet(selectedGrist, MinestuckConfig.cardCost);
+						cost = new GristSet(getSelectedGrist(), MinestuckConfig.cardCost);
 					if (cost != null && newItem.isItemDamaged()) {
 						float multiplier = 1 - newItem.getItem().getDamage(newItem) / ((float) newItem.getMaxDamage());
 						for (int i = 0; i < cost.gristTypes.length; i++)
@@ -192,7 +212,7 @@ return 2;
 			
 			GristSet cost = GristRegistry.getGristConversion(newItem);
 			if(newItem.getItem() == MinestuckItems.captchaCard)
-				cost = new GristSet(selectedGrist, MinestuckConfig.cardCost);
+				cost = new GristSet(getSelectedGrist(), MinestuckConfig.cardCost);
 			if(newItem.isItemDamaged())
 			{
 				float multiplier = 1 - newItem.getItem().getDamage(newItem)/((float) newItem.getMaxDamage());
@@ -214,6 +234,12 @@ return 2;
 	public String getName()
 	{
 		return "tile.sburbMachine.alchemiter.name";
+	}
+	public GristType getSelectedGrist() {
+		return selectedGrist;
+	}
+	public void setSelectedGrist(GristType selectedGrist) {
+		this.selectedGrist = selectedGrist;
 	}
 	
 

@@ -1,7 +1,7 @@
 {
 	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
 	"textures": {
-		"1": "cruxtruder textures/bodySpirograph",
+		"1": "minestuck:machines/cruxtruder/bodySpirograph",
 		"3": "minestuck:machines/cruxtruder/untitled",
 		"particle": "minestuck:machines/cruxtruder/untitled"
 	},

@@ -1,11 +1,20 @@
 package com.mraof.minestuck.client.gui;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.BlockSburbMachine.MachineType;
-import com.mraof.minestuck.inventory.ContainerPunchDesignix;
+import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.client.util.GuiUtil;
+import com.mraof.minestuck.inventory.ContainerCruxtruder;
+import com.mraof.minestuck.inventory.ContainerSburbMachine;
+import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
-import com.mraof.minestuck.tileentity.TileEntityPunchDesignix;
+import com.mraof.minestuck.tileentity.TileEntityCruxtruder;
+import com.mraof.minestuck.tileentity.TileEntitySburbMachine;
+import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.util.GristRegistry;
+import com.mraof.minestuck.util.GristSet;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -16,14 +25,16 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
+import java.util.List;
 
-public class GuiPunchDesignix extends GuiContainer
+public class GuiCruxtruder extends GuiContainer
 {
 	
 	private static final String[] guis = {"cruxtruder", "designix", "lathe", "alchemiter"};
@@ -31,7 +42,7 @@ public class GuiPunchDesignix extends GuiContainer
 	private ResourceLocation guiBackground;
 	private ResourceLocation guiProgress;
 	private MachineType type;
-	protected TileEntityPunchDesignix te;
+	protected TileEntityCruxtruder te;
 	//private EntityPlayer player;
 	
 	private int progressX;
@@ -42,25 +53,30 @@ public class GuiPunchDesignix extends GuiContainer
 	private int goY;
 	private GuiButton goButton;
 
-	public GuiPunchDesignix (InventoryPlayer inventoryPlayer, TileEntityPunchDesignix tileEntity) 
+	public GuiCruxtruder (InventoryPlayer inventoryPlayer, TileEntityCruxtruder tileEntity) 
 	{
-	super(new ContainerPunchDesignix(inventoryPlayer, tileEntity));
+	super(new ContainerCruxtruder(inventoryPlayer, tileEntity));
 	this.te = tileEntity;
-	this.type = MachineType.PUNCH_DESIGNIX;
+	this.type = MachineType.CRUXTRUDER;
 	guiBackground = new ResourceLocation("minestuck:textures/gui/" + guis[type.ordinal()] + ".png");
 	guiProgress = new ResourceLocation("minestuck:textures/gui/progress/" + guis[type.ordinal()] + ".png");
 	//this.player = inventoryPlayer.player;
 	
 	//sets prgress bar information based on machine type
 
-		progressX = 63;
-		progressY = 38;
-		progressWidth = 43;
-		progressHeight = 17;
-		goX = 66;
-		goY = 55;
-		
-}
+		progressX = 82;
+		progressY = 42;
+		progressWidth = 10;
+		progressHeight = 13;	
+	}
+	
+	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks)
+	{
+		this.drawDefaultBackground();
+		super.drawScreen(mouseX, mouseY, partialTicks);
+		this.renderHoveredToolTip(mouseX, mouseY);
+	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
@@ -68,7 +84,6 @@ public class GuiPunchDesignix extends GuiContainer
 		fontRenderer.drawString(I18n.format("gui."+guis[type.ordinal()]+".name"), 8, 6, 4210752);
 		//draws "Inventory" or your regional equivalent
 		fontRenderer.drawString(I18n.format("container.inventory"), 8, ySize - 96 + 2, 4210752);
-		
 	}
 	
 	@Override
@@ -84,10 +99,10 @@ public class GuiPunchDesignix extends GuiContainer
 		
 		//draw progress bar
 		this.mc.getTextureManager().bindTexture(guiProgress);
-		int width = getScaledValue(te.progress, te.maxProgress, progressWidth);
-		int height = progressHeight ;
-		this.drawModalRectWithCustomSizedTexture(x+progressX, y+progressY, 0, 0, width, height, progressWidth, progressHeight);
-		}
+		int width =  progressWidth;
+		int height = getScaledValue(te.progress, te.maxProgress, progressHeight);
+		this.drawModalRectWithCustomSizedTexture(x+progressX, y+progressY+progressHeight-height, 0, progressHeight-height, width, height, progressWidth, progressHeight);
+	}
 
 	@Override
 	public void initGui()
@@ -140,7 +155,7 @@ public class GuiPunchDesignix extends GuiContainer
 				goButton.playPressSound(this.mc.getSoundHandler());
 				this.actionPerformed(goButton);
 			}
-		}
+		} 
 	}
 	
 	@Override

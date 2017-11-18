@@ -1,8 +1,5 @@
 package com.mraof.minestuck.inventory;
 
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
-import com.mraof.minestuck.util.IdentifierHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -12,29 +9,34 @@ import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
 
-public class ContainerAlchemiter extends Container
-{
+import com.mraof.minestuck.block.BlockSburbMachine.MachineType;
+import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.tileentity.TileEntityCruxtruder;
+import com.mraof.minestuck.util.IdentifierHandler;
 
+public class ContainerCruxtruder extends Container
+{
 	
-	private static final int alchemiterInputX = 27;
-	private static final int alchemiterInputY = 20;
-	private static final int alchemiterOutputX = 135;
-	private static final int alchemiterOutputY = 20;
+	private static final int cruxtruderInputX = 79;
+	private static final int cruxtruderInputY = 57;
+	private static final int cruxtruderOutputX = 79;
+	private static final int cruxtruderOutputY = 19;
 	
-	public TileEntityAlchemiter tileEntity;
 	
+	
+	public TileEntityCruxtruder tileEntity;
+	private MachineType type;
 	private boolean operator = true;
 	private int progress;
 	
-	public ContainerAlchemiter(InventoryPlayer inventoryPlayer, TileEntityAlchemiter te)
+	public ContainerCruxtruder(InventoryPlayer inventoryPlayer, TileEntityCruxtruder te)
 	{
 		tileEntity = te;
+		type = MachineType.CRUXTRUDER;
 		te.setOwner(IdentifierHandler.encode(inventoryPlayer.player));
-		
-
-			addSlotToContainer(new SlotInput(tileEntity, 0, alchemiterInputX, alchemiterInputY, MinestuckItems.cruxiteDowel));
-			addSlotToContainer(new SlotOutput(tileEntity, 1, alchemiterOutputX, alchemiterOutputY));
-		
+	
+			addSlotToContainer(new SlotInput(tileEntity, 0, cruxtruderInputX, cruxtruderInputY, MinestuckItems.rawCruxite));
+			addSlotToContainer(new SlotOutput(tileEntity, 1, cruxtruderOutputX, cruxtruderOutputY));
 		
 		
 		bindPlayerInventory(inventoryPlayer);
@@ -71,7 +73,7 @@ public class ContainerAlchemiter extends Container
 			boolean result = false;
 			
 			
-			
+
 				if (slotNumber <= 1)
 				{
 					//if it's a machine slot
@@ -79,20 +81,23 @@ public class ContainerAlchemiter extends Container
 				} else if (slotNumber > 1)
 				{
 					//if it's an inventory slot with valid contents
-					if (itemstackOrig.getItem() == MinestuckItems.cruxiteDowel)
+					//Debug.print("item ID of " + itemstackOrig.itemID + ". Expected " + Minestuck.rawCruxite.itemID);
+					if (itemstackOrig.getItem() == MinestuckItems.rawCruxite)
+					{
+						//Debug.print("Transferring...");
 						result = mergeItemStack(itemstackOrig,0,1,false);
+					}
 				}
-		
+				
 			
 			if (!result)
 				return ItemStack.EMPTY;
 			
 			if(!itemstackOrig.isEmpty())
 				slot.onSlotChanged();
-		
 		}
-		return itemstack;
 		
+		return itemstack;
 	}
 	
 	@Override
