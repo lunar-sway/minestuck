@@ -1,26 +1,13 @@
 package com.mraof.minestuck.client.gui;
 
+import com.mraof.minestuck.inventory.*;
+import com.mraof.minestuck.tileentity.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
-
-import com.mraof.minestuck.inventory.ContainerAlchemiter;
-import com.mraof.minestuck.inventory.ContainerCrockerMachine;
-import com.mraof.minestuck.inventory.ContainerCruxtruder;
-import com.mraof.minestuck.inventory.ContainerPunchDesignix;
-import com.mraof.minestuck.inventory.ContainerSburbMachine;
-import com.mraof.minestuck.inventory.ContainerTotemlathe;
-import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
-import com.mraof.minestuck.tileentity.TileEntityComputer;
-import com.mraof.minestuck.tileentity.TileEntityCrockerMachine;
-import com.mraof.minestuck.tileentity.TileEntityCruxtruder;
-import com.mraof.minestuck.tileentity.TileEntityPunchDesignix;
-import com.mraof.minestuck.tileentity.TileEntitySburbMachine;
-import com.mraof.minestuck.tileentity.TileEntityTotemlathe;
-import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 
 public class GuiHandler implements IGuiHandler 
 {
@@ -40,9 +27,7 @@ public class GuiHandler implements IGuiHandler
 			if(tileEntity instanceof TileEntitySburbMachine)
 				return new ContainerSburbMachine(player.inventory, (TileEntitySburbMachine) tileEntity);
 			else if(tileEntity instanceof TileEntityCrockerMachine)
-				return new ContainerCrockerMachine(player.inventory, (TileEntityCrockerMachine) tileEntity); 
-			else if(tileEntity instanceof TileEntityPunchDesignix)
-				return new ContainerPunchDesignix(player.inventory,(TileEntityPunchDesignix) tileEntity);
+				return new ContainerCrockerMachine(player.inventory, (TileEntityCrockerMachine) tileEntity);
 			else if(tileEntity instanceof TileEntityTotemlathe)
 				return new ContainerTotemlathe(player.inventory,(TileEntityTotemlathe) tileEntity);
 			else if(tileEntity instanceof TileEntityAlchemiter)
@@ -63,8 +48,6 @@ public class GuiHandler implements IGuiHandler
 				return new GuiSburbMachine(player.inventory, (TileEntitySburbMachine) tileEntity);
 			else if(tileEntity instanceof TileEntityCrockerMachine)
 				return new GuiCrockerMachine(player.inventory, (TileEntityCrockerMachine) tileEntity);
-			else if(tileEntity instanceof TileEntityPunchDesignix)
-				return new GuiPunchDesignix(player.inventory,(TileEntityPunchDesignix) tileEntity);
 			else if(tileEntity instanceof TileEntityTotemlathe)
 				return new GuiTotemlathe(player.inventory,(TileEntityTotemlathe)tileEntity);
 			else if (tileEntity instanceof TileEntityAlchemiter)

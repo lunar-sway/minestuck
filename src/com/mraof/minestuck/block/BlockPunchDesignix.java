@@ -1,15 +1,13 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.tileentity.TileEntityPunchDesignix;
+import com.mraof.minestuck.util.Debug;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -48,10 +46,10 @@ public class BlockPunchDesignix extends BlockLargeMachine
 	{
 		BlockPos mainPos = getMainPos(state, pos);
 		TileEntity te = worldIn.getTileEntity(mainPos);
-		if(!worldIn.isRemote && te != null && te instanceof TileEntityPunchDesignix && !((TileEntityPunchDesignix)te).broken)
-		{
-			playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.MACHINE.ordinal(), worldIn, mainPos.getX(), mainPos.getY(), mainPos.getZ());
-		}
+		if(!worldIn.isRemote && te != null && te instanceof TileEntityPunchDesignix)
+			Debug.info("Activated block for "+state);
+			((TileEntityPunchDesignix) te).onRightClick(playerIn, state);
+		
 		return true;
 	}
 	
@@ -93,7 +91,8 @@ public class BlockPunchDesignix extends BlockLargeMachine
 		{
 			TileEntityPunchDesignix designix = (TileEntityPunchDesignix) te;
 			designix.broken = true;
-			InventoryHelper.dropInventoryItems(worldIn, pos, designix);
+			if(state.getValue(PART).equals(EnumParts.TOP_LEFT))
+				designix.dropItem(true);
 		}
 		
 		super.breakBlock(worldIn, pos, state);

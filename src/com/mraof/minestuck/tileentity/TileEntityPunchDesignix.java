@@ -3,32 +3,131 @@ package com.mraof.minestuck.tileentity;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.CombinationRegistry;
+import com.mraof.minestuck.util.Debug;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 
-public class TileEntityPunchDesignix extends TileEntityMachine
+import static com.mraof.minestuck.block.BlockPunchDesignix.*;
+
+public class TileEntityPunchDesignix extends TileEntity
 {
 	public boolean broken = false;
+	protected ItemStack card = ItemStack.EMPTY;
 	//constructor
 	public TileEntityPunchDesignix() {}
 	
-	@Override
-	public boolean isAutomatic()
+	public ItemStack getCard()
 	{
-		return false;
+		return card;
 	}
 	
-	@Override
-	public boolean allowOverrideStop()
+	public void onRightClick(EntityPlayer player, IBlockState clickedState)
 	{
-		return false;
-	}
-	
-	@Override
-	public int getSizeInventory()
-	{
+		EnumParts part = clickedState.getValue(PART);
+		if(part.equals(EnumParts.TOP_LEFT) && !card.isEmpty())
+		{	//Remove card from punch slot
+			if(player.getHeldItemMainhand().isEmpty())
+				player.setHeldItem(EnumHand.MAIN_HAND, card);
+			else if(!player.inventory.addItemStackToInventory(card))
+				dropItem(false);
+			
+			card = ItemStack.EMPTY;
+			return;
+		}
 		
-		return 3;
+		if(checkStates(clickedState))
+		{
+			ItemStack heldStack = player.getHeldItemMainhand();
+			if(part.equals(EnumParts.TOP_LEFT) && card.isEmpty())
+			{
+				if(!heldStack.isEmpty() && heldStack.getItem() == MinestuckItems.captchaCard)
+					card = heldStack.splitStack(1);	//Insert card into the punch slot
+				
+			} else if(part.equals(EnumParts.TOP_RIGHT))
+			{
+				if(heldStack.isEmpty() || heldStack.getItem() != MinestuckItems.captchaCard)
+					return;	//Not a valid item in hand
+				
+				if(!card.isEmpty() && card.getItem() == MinestuckItems.captchaCard &&
+						heldStack.hasTagCompound() && heldStack.getTagCompound().hasKey("contentID"))
+				{
+					ItemStack output = AlchemyRecipeHandler.getDecodedItem(heldStack);
+					if(!output.isEmpty())
+					{
+						if(card.hasTagCompound() && card.getTagCompound().getBoolean("punched"))
+						{	//|| combination
+							output = CombinationRegistry.getCombination(output, AlchemyRecipeHandler.getDecodedItem(card), CombinationRegistry.MODE_OR);
+							if(!output.isEmpty())
+							{
+								card = AlchemyRecipeHandler.createCard(output, true);
+								effects(true);
+								return;
+							}
+						} else	//Just punch the card regularly
+						{
+							card = AlchemyRecipeHandler.createCard(output, true);
+							effects(true);
+							return;
+						}
+					}
+				}
+				effects(false);
+			}
+		}
+	}
+	
+	private void effects(boolean success)
+	{
+		world.playEvent(success ? 1000 : 1001, pos, 0);
+		if(success)
+		{
+			EnumFacing direction = world.getBlockState(pos).getValue(DIRECTION);
+			int i = direction.getFrontOffsetX() + 1 + (direction.getFrontOffsetZ() + 1) * 3;
+			world.playEvent(2000, pos, i);
+		}
+	}
+	
+	private boolean checkStates(IBlockState state)
+	{
+		if(this.broken)
+			return false;
+		IBlockState currentState = this.getWorld().getBlockState(this.getPos());
+		EnumFacing hOffset = currentState.getValue(DIRECTION).rotateYCCW();
+		if(!world.getBlockState(getPos().offset(hOffset)).equals(currentState.withProperty(PART, EnumParts.TOP_RIGHT)) ||
+			!world.getBlockState(getPos().down()).equals(currentState.withProperty(PART, EnumParts.BOTTOM_LEFT)) ||
+			!world.getBlockState(getPos().down().offset(hOffset)).equals(currentState.withProperty(PART, EnumParts.BOTTOM_RIGHT)))
+		{
+			Debug.info(world.getBlockState(getPos().offset(hOffset))+","+world.getBlockState(getPos().down())+","+world.getBlockState(getPos().down().offset(hOffset)));
+			return false;
+		}
+		
+		if(!state.getValue(DIRECTION).equals(currentState.getValue(DIRECTION)))
+			return false;
+		
+		return true;
+	}
+	
+	public void dropItem(boolean inBlock)
+	{
+		EnumFacing direction = world.getBlockState(this.pos).getValue(DIRECTION);
+		BlockPos dropPos;
+		if(inBlock)
+			dropPos = this.pos;
+		else if(!world.getBlockState(this.pos.offset(direction)).isBlockNormalCube())
+			dropPos = this.pos.offset(direction);
+		else if(!world.getBlockState(this.pos.up()).isBlockNormalCube())
+			dropPos = this.pos.up();
+		else dropPos = this.pos;
+		
+		InventoryHelper.spawnItemStack(world, dropPos.getX(), dropPos.getY(), dropPos.getZ(), card);
+		card = ItemStack.EMPTY;
 	}
 	
 	@Override
@@ -36,6 +135,7 @@ public class TileEntityPunchDesignix extends TileEntityMachine
 	{
 		super.readFromNBT(tagCompound);
 		this.broken = tagCompound.getBoolean("broken");
+		this.card = new ItemStack(tagCompound.getCompoundTag("card"));
 	}
 	
 	@Override
@@ -43,94 +143,7 @@ public class TileEntityPunchDesignix extends TileEntityMachine
 	{
 		super.writeToNBT(tagCompound);
 		tagCompound.setBoolean("broken", this.broken);
+		tagCompound.setTag("card", card.writeToNBT(new NBTTagCompound()));
 		return tagCompound;
 	}
-	
-	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack)
-	{
-		return i == 1 ? itemstack.getItem() == MinestuckItems.captchaCard : i == 0;
-	}
-	
-	@Override
-	public boolean contentsValid()
-	{
-		if(!this.inv.get(0).isEmpty() && !inv.get(1).isEmpty())
-		{
-			ItemStack output = AlchemyRecipeHandler.getDecodedItemDesignix(inv.get(0));
-			if(inv.get(1).hasTagCompound() && inv.get(1).getTagCompound().getBoolean("punched"))
-			{
-				output = CombinationRegistry.getCombination(output,
-						AlchemyRecipeHandler.getDecodedItem(inv.get(1)), CombinationRegistry.MODE_OR);
-			}
-			if(output.isEmpty())
-				return false;
-			if(output.getItem().isDamageable())
-				output.setItemDamage(0);
-			output = AlchemyRecipeHandler.createCard(output, true);
-			return (inv.get(2).isEmpty() || inv.get(2).getCount() < 16 && ItemStack.areItemStackTagsEqual(inv.get(2), output));
-		}
-		else
-		{
-			return false;
-		}
-		
-	}
-	
-	// We're going to want to trigger a block update every 20 ticks to have comparators pull data from the Alchemeter.
-	@Override
-	public void update()
-	{
-		if(world.isRemote)
-			return;
-		super.update();
-	}
-
-	@Override
-	public void processContents()
-	{
-
-		//Create a new card, using CombinationRegistry
-		if(!inv.get(2).isEmpty())
-		{
-			decrStackSize(1, 1);
-			if(!(inv.get(0).hasTagCompound() && inv.get(0).getTagCompound().hasKey("contentID")))
-				decrStackSize(0, 1);
-			this.inv.get(2).grow(1);
-			
-		}else{
-			
-			ItemStack outputItem = AlchemyRecipeHandler.getDecodedItemDesignix(inv.get(0));
-			
-			if(inv.get(1).hasTagCompound() && inv.get(1).getTagCompound().getBoolean("punched"))
-				outputItem = CombinationRegistry.getCombination(outputItem, AlchemyRecipeHandler.getDecodedItem(inv.get(1)), CombinationRegistry.MODE_OR);
-			if(outputItem.getItem().isDamageable())
-				outputItem.setItemDamage(0);
-			
-			//Create card
-			outputItem = AlchemyRecipeHandler.createCard(outputItem, true);
-				
-			setInventorySlotContents(2, outputItem);
-			if(!(inv.get(0).hasTagCompound() && inv.get(0).getTagCompound().hasKey("contentID")))
-				decrStackSize(0, 1);
-			decrStackSize(1, 1);
-		}
-	}
-	
-	@Override
-	public void markDirty()
-	{
-		
-		this.progress = 0;
-		this.ready = false;
-		super.markDirty();
-	}
-
-	@Override
-	public String getName()
-	{
-		return "tile.sburbMachine.PunchDesignix.name";
-	}
-	
-	
 }
