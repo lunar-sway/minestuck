@@ -172,7 +172,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 			Debug.debugf("Total: %d, block: %d", total, bl);
 			
 			Debug.debug("Teleporting entities...");
-			AxisAlignedBB entityTeleportBB = entity.getEntityBoundingBox().expand((double)artifactRange, artifactRange, (double)artifactRange);
+			AxisAlignedBB entityTeleportBB = entity.getEntityBoundingBox().grow((double)artifactRange, artifactRange, (double)artifactRange);
 			List<Entity> list = worldserver0.getEntitiesWithinAABBExcludingEntity(entity, entityTeleportBB);
 			Iterator<Entity> iterator = list.iterator();
 			
