@@ -63,8 +63,8 @@ public class GuiUraniumCooker extends GuiContainer
 		progressY = 23;
 		progressWidth = 71;
 		progressHeight = 10;
-		goX = 72;
-		goY = 31;
+		goX = 69;
+		goY = 69;
 		break;
 	}
 }

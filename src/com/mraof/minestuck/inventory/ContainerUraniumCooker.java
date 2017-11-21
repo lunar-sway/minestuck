@@ -18,12 +18,12 @@ import com.mraof.minestuck.util.IdentifierHandler;
 public class ContainerUraniumCooker extends Container
 {
 	
-	private static final int uraniumInputX = 79;
-	private static final int uraniumInputY = 57;
-	private static final int itemInputX = 79;
-	private static final int itemInputY = 57;
-	private static final int itemOutputX = 79;
-	private static final int itemOutputY = 19;
+	private static final int uraniumInputX = 38;
+	private static final int uraniumInputY = 51;
+	private static final int itemInputX = 38;
+	private static final int itemInputY = 22;
+	private static final int itemOutputX = 117;
+	private static final int itemOutputY = 35;
 	
 	public TileEntityUraniumCooker tileEntity;
 	private com.mraof.minestuck.block.BlockUraniumCooker.MachineType type;
@@ -81,25 +81,30 @@ public class ContainerUraniumCooker extends Container
 			switch (type)
 			{
 			case URANIUM_COOKER:
-				if (slotNumber < 1)
+				if (slotNumber == 0)	//Shift-clicking from the Uranium input
 				{
-					//if it's a machine slot
-					result = mergeItemStack(itemstackOrig,2,allSlots,false);
-				} else if (slotNumber == 1)
+					result = mergeItemStack(itemstackOrig,3,allSlots,false);	//Send into the inventory
+				} else if (slotNumber == 1)	//Shift-clicking from the item input
 				{
-					//if it's an inventory slot with valid contents
-					//Debug.print("item ID of " + itemstackOrig.itemID + ". Expected " + Minestuck.rawCruxite.itemID);
-					if (itemstackOrig.getItem() == MinestuckItems.rawUranium)
-					{
-						//Debug.print("Transferring...");
-						result = mergeItemStack(itemstackOrig,0,1,false);
-					}
-				} else if (slotNumber > 1)
+					result = mergeItemStack(itemstackOrig,3,allSlots,false);	//Send into the inventory
+					
+				} else if (slotNumber == 2)	//Shift-clicking from the output slot
 				{
 					if (itemstackOrig.getItem() == MinestuckItems.rawUranium) 
-						result = mergeItemStack(itemstackOrig,0,1,false);
+						result = mergeItemStack(itemstackOrig,0,1,false);	//Send the uranium back to the uranium input
 					else
-						result = mergeItemStack(itemstackOrig,2,allSlots,false);
+						result = mergeItemStack(itemstackOrig,3,allSlots,false);	//Send the non-uranium to the inventory
+					
+				} else	//Shift-clicking from the inventory
+				{
+					if (itemstackOrig.getItem() == MinestuckItems.rawUranium)
+					{
+						result = mergeItemStack(itemstackOrig,0,1,false);	//Send the uranium to the uranium input
+					} else
+					{
+						result = mergeItemStack(itemstackOrig,1,2,false);	//Send the non-uranium to the other input
+					}
+					
 				}
 				break;
 			}

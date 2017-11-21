@@ -1,5 +1,6 @@
 package com.mraof.minestuck.tileentity;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -14,10 +15,14 @@ import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.FurnaceRecipes;
 
 public class TileEntityUraniumCooker extends TileEntityMachine
 {
+	private HashMap<Item, ItemStack> radiations = new HashMap();
+	
 	@Override
 	public boolean isAutomatic()
 	{
@@ -27,7 +32,7 @@ public class TileEntityUraniumCooker extends TileEntityMachine
 	@Override
 	public boolean allowOverrideStop()
 	{
-		return getMachineType() == MachineType.URANIUM_COOKER;
+		return true;
 	}
 	
 	@Override
@@ -44,23 +49,62 @@ public class TileEntityUraniumCooker extends TileEntityMachine
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack)
 	{
+		if(i == 0 && itemstack.getItem()!=MinestuckItems.rawUranium)
+		{
+			return false;
+		}
+		
 		return true;
 	}
 	
 	@Override
 	public boolean contentsValid()
 	{
-		switch (getMachineType()) {
+		switch (getMachineType())
+		{
 		case URANIUM_COOKER:
 			if(world.isBlockPowered(this.getPos()))
+			{
 				return false;
-			ItemStack input = this.inv.get(0);
-			return (input.getItem() == MinestuckItems.captchaCard
-					&& GristRegistry.getGristConversion(AlchemyRecipeHandler.getDecodedItem(input)) != null
-					&& !input.getTagCompound().getBoolean("punched")
-					&& AlchemyRecipeHandler.getDecodedItem(input).getItem() != MinestuckItems.captchaCard);
+			}
+			
+			ItemStack inputA = this.inv.get(0);
+			ItemStack inputB = this.inv.get(1);
+			ItemStack output = irradiate(inputB);
+			return (inputA.getItem() == MinestuckItems.rawUranium && !inputB.isEmpty());
 		}
 		return false;
+	}
+	
+	private ItemStack irradiate(ItemStack input)
+	{
+		if(radiations.containsKey(input.getItem()))
+		{
+			input = radiations.get(input.getItem());
+		} else
+		{
+			input = FurnaceRecipes.instance().getSmeltingResult(input);
+		}
+		
+		if(input != null)
+			System.err.println("Output stack is " + input.getCount() + " " + input.getItem().getItemStackDisplayName(input));
+		
+		return input;
+	}
+	
+	public void setRadiation(Item in, ItemStack out)
+	{
+		radiations.put(in, out);
+	}
+	
+	public void removeRadiation(Item in)
+	{
+		radiations.remove(in);
+	}
+
+	public Map getRadiations()
+	{
+		return radiations;
 	}
 	
 	@Override
@@ -70,48 +114,19 @@ public class TileEntityUraniumCooker extends TileEntityMachine
 		case URANIUM_COOKER:
 			if(!world.isRemote)
 			{
-				ItemStack item = AlchemyRecipeHandler.getDecodedItem(inv.get(0));
-				GristSet gristSet = GristRegistry.getGristConversion(item);
-				if(item.getCount() != 1)
-					gristSet.scaleGrist(item.getCount());
-				
-				gristSet.scaleGrist(0.9F);
-				
-				if(item.isItemDamaged())
-				{
-					float multiplier = 1 - item.getItem().getDamage(item) / ((float) item.getMaxDamage());
-					for(int i = 0; i < gristSet.gristTypes.length; i++)
-						gristSet.gristTypes[i] = (int) (gristSet.gristTypes[i] * multiplier);
-				}
-				
-				Iterator<Entry<Integer, Integer>> iter = gristSet.getHashtable().entrySet().iterator();
-				while (iter.hasNext())
-				{
-					Map.Entry<Integer, Integer> entry = (Entry<Integer, Integer>) iter.next();
-					int grist = entry.getValue();
-					while (true)
-					{
-						if(grist == 0)
-							break;
-						GristAmount gristAmount = new GristAmount(GristType.values()[entry.getKey()],
-								grist <= 3 ? grist : (world.rand.nextInt(grist) + 1));
-						EntityGrist entity = new EntityGrist(world,
-								this.pos.getX()
-										+ 0.5 /* this.width - this.width / 2 */,
-								this.pos.getY() + 1, this.pos.getZ()
-										+ 0.5 /* this.width - this.width / 2 */,
-								gristAmount);
-						entity.motionX /= 2;
-						entity.motionY /= 2;
-						entity.motionZ /= 2;
-						world.spawnEntity(entity);
-						//Create grist entity of gristAmount
-						grist -= gristAmount.getAmount();
-					}
-				}
-				
+				ItemStack item = inv.get(1);
 			}
-			this.decrStackSize(0, 1);
+			
+			if(inv.get(2).isEmpty())
+			{
+				this.setInventorySlotContents(2, irradiate(this.getStackInSlot(1)));
+			} else
+			{
+				ItemStack newStack = this.getStackInSlot(2);
+				newStack.grow(1);
+				this.setInventorySlotContents(2, newStack);
+			}
+			//this.decrStackSize(1, 1);
 			break;
 		}
 	}

@@ -53,7 +53,7 @@ public class GuiHandler implements IGuiHandler
 			else if(tileEntity instanceof TileEntityCrockerMachine)
 				return new GuiCrockerMachine(player.inventory, (TileEntityCrockerMachine) tileEntity);
 			else if(tileEntity instanceof TileEntityUraniumCooker)
-				return new ContainerUraniumCooker(player.inventory, (TileEntityUraniumCooker) tileEntity);
+				return new GuiUraniumCooker(player.inventory, (TileEntityUraniumCooker) tileEntity);
 		
 		if(tileEntity instanceof TileEntityComputer && id == GuiId.COMPUTER.ordinal())
 			return new GuiComputer(Minecraft.getMinecraft(),(TileEntityComputer) tileEntity);
