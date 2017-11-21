@@ -116,7 +116,7 @@ public class TileEntityPunchDesignix extends TileEntity
 	
 	public void dropItem(boolean inBlock)
 	{
-		EnumFacing direction = world.getBlockState(this.pos).getValue(DIRECTION);
+		EnumFacing direction = inBlock ? null : world.getBlockState(this.pos).getValue(DIRECTION);
 		BlockPos dropPos;
 		if(inBlock)
 			dropPos = this.pos;
