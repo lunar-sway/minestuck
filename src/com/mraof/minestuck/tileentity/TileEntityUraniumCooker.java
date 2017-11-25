@@ -21,12 +21,14 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 
 public class TileEntityUraniumCooker extends TileEntityMachine
 {
-	private HashMap<Item, ItemStack> radiations = new HashMap();
+	private static HashMap<Item, ItemStack> radiations = new HashMap();
+	private short fuel = 0;
+	private short maxFuel = 128;
 	
 	@Override
 	public boolean isAutomatic()
 	{
-		return false;
+		return true;
 	}
 	
 	@Override
@@ -40,7 +42,7 @@ public class TileEntityUraniumCooker extends TileEntityMachine
 	{
 		switch (getMachineType()) {
 		case URANIUM_COOKER:
-			return 1;
+			return 3;
 		default:
 			return 0;
 		}
@@ -55,6 +57,11 @@ public class TileEntityUraniumCooker extends TileEntityMachine
 		}
 		
 		return true;
+	}
+	
+	public void update()
+	{
+		processContents();
 	}
 	
 	@Override
@@ -86,23 +93,24 @@ public class TileEntityUraniumCooker extends TileEntityMachine
 			input = FurnaceRecipes.instance().getSmeltingResult(input);
 		}
 		
-		if(input != null)
+		if(!input.isEmpty())
 			System.err.println("Output stack is " + input.getCount() + " " + input.getItem().getItemStackDisplayName(input));
+		//Usage of System.err is for readability. This is not an error at all.
 		
 		return input;
 	}
 	
-	public void setRadiation(Item in, ItemStack out)
+	public static void setRadiation(Item in, ItemStack out)
 	{
 		radiations.put(in, out);
 	}
 	
-	public void removeRadiation(Item in)
+	public static void removeRadiation(Item in)
 	{
 		radiations.remove(in);
 	}
 
-	public Map getRadiations()
+	public static Map getRadiations()
 	{
 		return radiations;
 	}
@@ -112,25 +120,49 @@ public class TileEntityUraniumCooker extends TileEntityMachine
 	{
 		switch (getMachineType()) {
 		case URANIUM_COOKER:
-			if(!world.isRemote)
-			{
+			//if(!world.isRemote)
+			//{
 				ItemStack item = inv.get(1);
-			}
-			
-			if(inv.get(2).isEmpty())
-			{
-				this.setInventorySlotContents(2, irradiate(this.getStackInSlot(1)));
-			} else
-			{
-				ItemStack newStack = this.getStackInSlot(2);
-				newStack.grow(1);
-				this.setInventorySlotContents(2, newStack);
-			}
-			//this.decrStackSize(1, 1);
+				if(getFuel() <= getMaxFuel()-32 && !inv.get(0).isEmpty())
+				{
+					fuel += 32;
+					this.decrStackSize(0, 1);
+				}
+				if(canIrradiate())
+				{
+					if(inv.get(2).isEmpty() && fuel > 0)
+					{
+						this.setInventorySlotContents(2, irradiate(this.getStackInSlot(1)));
+					} else
+					{
+						this.getStackInSlot(2).grow(irradiate(this.getStackInSlot(1)).getCount());
+					}
+					this.decrStackSize(1, 1);
+					fuel--;
+				}
+			//}
+			//this.markDirty();
 			break;
 		}
 	}
 	
+	private boolean canIrradiate()
+	{
+		ItemStack output = irradiate(inv.get(1));
+		if(fuel>0 && !inv.get(1).isEmpty() && !output.isEmpty())
+		{
+			if(inv.get(2).isEmpty())
+			{
+				return true;
+			}
+			else if(inv.get(2).getMaxStackSize() >= output.getCount() + inv.get(2).getCount())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	@Override
 	public String getName()
 	{
@@ -140,5 +172,21 @@ public class TileEntityUraniumCooker extends TileEntityMachine
 	public MachineType getMachineType()
 	{
 		return MachineType.values()[getBlockMetadata() % 4];
+	}
+
+	public short getFuel() {
+		return fuel;
+	}
+
+	public void setFuel(short fuel) {
+		this.fuel = fuel;
+	}
+
+	public short getMaxFuel() {
+		return maxFuel;
+	}
+
+	public void setMaxFuel(short maxFuel) {
+		this.maxFuel = maxFuel;
 	}
 }

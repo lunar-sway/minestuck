@@ -49,58 +49,34 @@ public class GuiUraniumCooker extends GuiContainer
 
 	public GuiUraniumCooker (InventoryPlayer inventoryPlayer, TileEntityUraniumCooker tileEntity) 
 	{
-	super(new ContainerUraniumCooker(inventoryPlayer, tileEntity));
-	this.te = tileEntity;
-	this.type = tileEntity.getMachineType();
-	guiBackground = new ResourceLocation("minestuck:textures/gui/" + guis[type.ordinal()] + ".png");
-	guiProgress = new ResourceLocation("minestuck:textures/gui/progress/" + guis[type.ordinal()] + ".png");
-	
-	//sets progress bar information based on machine type
-	switch (type)
-	{
-	case URANIUM_COOKER:
-		progressX = 54;
-		progressY = 23;
-		progressWidth = 71;
-		progressHeight = 10;
-		goX = 69;
-		goY = 69;
-		break;
+		super(new ContainerUraniumCooker(inventoryPlayer, tileEntity));
+		this.te = tileEntity;
+		this.type = tileEntity.getMachineType();
+		guiBackground = new ResourceLocation("minestuck:textures/gui/" + guis[type.ordinal()] + ".png");
+		guiProgress = new ResourceLocation("minestuck:textures/gui/progress/" + guis[type.ordinal()] + ".png");
+		
+		//sets progress bar information based on machine type
+		switch (type)
+		{
+		case URANIUM_COOKER:
+			progressX = 54;
+			progressY = 23;
+			progressWidth = 71;
+			progressHeight = 10;
+			goX = 69;
+			goY = 69;
+			break;
+		}
 	}
-}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
 	{
+		//draws "Cookalyzer"
 		fontRendererObj.drawString(I18n.format("gui."+guis[type.ordinal()]+".name"), 8, 6, 4210752);
+		
 		//draws "Inventory" or your regional equivalent
 		fontRendererObj.drawString(I18n.format("container.inventory"), 8, ySize - 96 + 2, 4210752);
-		if (type == MachineType.URANIUM_COOKER && !te.getStackInSlot(0).isEmpty()) 
-		{
-			//Render grist requirements
-			ItemStack stack = AlchemyRecipeHandler.getDecodedItem(te.getStackInSlot(0));
-			
-			GristSet set = GristRegistry.getGristConversion(stack);
-			if(set != null)
-			{
-				float multiplier = stack.getCount();
-				if(multiplier != 1)
-					set = set.scaleGrist(multiplier);
-				set.scaleGrist(0.9F);
-			}
-			if(set != null && stack.isItemDamaged())
-			{
-				float multiplier = 1 - stack.getItem().getDamage(stack)/((float) stack.getMaxDamage());
-				for(int i = 0; i < set.gristTypes.length; i++)
-					set.gristTypes[i] = (int) (set.gristTypes[i]*multiplier);
-			}
-			
-			GuiUtil.drawGristBoard(set, GuiUtil.GristboardMode.GRIST_WIDGET, 9, 45, fontRendererObj);
-			
-			List<String> tooltip = GuiUtil.getGristboardTooltip(set, mouseX - this.guiLeft, mouseY - this.guiTop, 9, 45, fontRendererObj);
-			if(tooltip != null)
-				this.drawHoveringText(tooltip, mouseX - this.guiLeft, mouseY - this.guiTop, fontRendererObj);
-		}
 	}
 	
 	@Override
@@ -116,7 +92,7 @@ public class GuiUraniumCooker extends GuiContainer
 		
 		//draw progress bar
 		this.mc.getTextureManager().bindTexture(guiProgress);
-		int width = getScaledValue(te.progress,te.maxProgress,progressWidth);
+		int width = getScaledValue(te.getFuel(),te.getMaxFuel(),progressWidth);
 		int height = progressHeight;
 		drawModalRectWithCustomSizedTexture(x+progressX, y+progressY, 0, 0, width, height, progressWidth, progressHeight);
 	}
@@ -130,8 +106,6 @@ public class GuiUraniumCooker extends GuiContainer
 		{
 			goButton = new GuiButtonExt(1, (width - xSize) / 2 + goX, (height - ySize) / 2 + goY, 30, 12, te.overrideStop ? "STOP" : "GO");
 			buttonList.add(goButton);
-			if(type == MachineType.URANIUM_COOKER && MinestuckConfig.clientDisableGristWidget)
-				goButton.enabled = false;
 		}
 	}
 	

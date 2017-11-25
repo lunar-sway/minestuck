@@ -389,6 +389,7 @@ gui.cruxtruder.name=Cruxtruder
 gui.designix.name=Punch designix
 gui.lathe.name=Totem Lathe
 gui.alchemiter.name=Alchemiter
+gui.uranium_cooker.name=Cookalyzer
 gui.widget.name=GristWidget 12000
 gui.notAlchemizable=Not Alchemizable
 gui.notAvailable=Not Available
