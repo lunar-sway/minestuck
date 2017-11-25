@@ -59,10 +59,10 @@ public class GuiUraniumCooker extends GuiContainer
 		switch (type)
 		{
 		case URANIUM_COOKER:
-			progressX = 54;
-			progressY = 23;
-			progressWidth = 71;
-			progressHeight = 10;
+			progressX = 67;
+			progressY = 24;
+			progressWidth = 35;
+			progressHeight = 39;
 			goX = 69;
 			goY = 69;
 			break;
@@ -92,9 +92,9 @@ public class GuiUraniumCooker extends GuiContainer
 		
 		//draw progress bar
 		this.mc.getTextureManager().bindTexture(guiProgress);
-		int width = getScaledValue(te.getFuel(),te.getMaxFuel(),progressWidth);
-		int height = progressHeight;
-		drawModalRectWithCustomSizedTexture(x+progressX, y+progressY, 0, 0, width, height, progressWidth, progressHeight);
+		int width = progressWidth;
+		int height = getScaledValue(te.getFuel(),te.getMaxFuel(),progressHeight);
+		drawModalRectWithCustomSizedTexture(x+progressX, y+progressY+progressHeight-height, 0, progressHeight-height, width, height, progressWidth, progressHeight);
 	}
 	
 	@Override

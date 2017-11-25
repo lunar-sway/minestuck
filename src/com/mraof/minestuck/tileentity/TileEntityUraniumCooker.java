@@ -130,12 +130,13 @@ public class TileEntityUraniumCooker extends TileEntityMachine
 				}
 				if(canIrradiate())
 				{
+					final ItemStack temp = irradiate(this.getStackInSlot(1));	//This stack *is* the output stack and should NEVER be changed.
 					if(inv.get(2).isEmpty() && fuel > 0)
 					{
-						this.setInventorySlotContents(2, irradiate(this.getStackInSlot(1)));
+						this.setInventorySlotContents(2, new ItemStack(temp.getItem(), temp.getCount()));
 					} else
 					{
-						this.getStackInSlot(2).grow(irradiate(this.getStackInSlot(1)).getCount());
+						this.getStackInSlot(2).grow(temp.getCount());
 					}
 					this.decrStackSize(1, 1);
 					fuel--;
