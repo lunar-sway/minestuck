@@ -12,6 +12,7 @@ import com.mraof.minestuck.event.MinestuckFluidHandler;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.modSupport.crafttweaker.CraftTweakerSupport;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.skaianet.SessionHandler;
 import com.mraof.minestuck.tileentity.*;
@@ -164,6 +165,9 @@ public class Minestuck
 		if (Loader.isModLoaded("NotEnoughItems")) {
 //			NEIModContainer.plugins.add(new NEIMinestuckConfig());
 		}
+		
+		if(Loader.isModLoaded("crafttweaker"))
+			CraftTweakerSupport.applyRecipes();
 	}
 
 	@EventHandler 
