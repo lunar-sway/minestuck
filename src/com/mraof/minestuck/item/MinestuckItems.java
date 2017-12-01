@@ -113,6 +113,7 @@ public class MinestuckItems
 	//Other
 	public static Item rawCruxite;
 	public static Item rawUranium;
+	public static Item energyCore;
 	public static Item cruxiteDowel;
 	public static Item captchaCard;
 	public static ItemCruxiteArtifact cruxiteApple;
@@ -333,6 +334,7 @@ public class MinestuckItems
 		//misc
 		rawCruxite = GameRegistry.register(new Item().setRegistryName("raw_cruxite")).setUnlocalizedName("rawCruxite").setCreativeTab(Minestuck.tabMinestuck);
 		rawUranium = GameRegistry.register(new Item().setRegistryName("raw_uranium")).setUnlocalizedName("rawUranium").setCreativeTab(Minestuck.tabMinestuck);
+		energyCore = GameRegistry.register(new Item().setRegistryName("energy_core")).setUnlocalizedName("energyCore").setCreativeTab(Minestuck.tabMinestuck);
 		cruxiteDowel = GameRegistry.register(new ItemDowel().setRegistryName("cruxite_dowel"));
 		captchaCard = GameRegistry.register(new ItemCaptchaCard().setRegistryName("captcha_card"));
 		cruxiteApple = (ItemCruxiteArtifact) GameRegistry.register(new ItemCruxiteApple().setRegistryName("cruxite_apple"));

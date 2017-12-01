@@ -110,12 +110,12 @@ public class BlockComputerOff extends Block
 			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
 		ItemStack heldItem = playerIn.getHeldItem(hand);
-		if(playerIn.isSneaking() || !state.getValue(DIRECTION).equals(facing) || !heldItem.isEmpty() && ComputerProgram.getProgramID(heldItem) == -2)
+		if(playerIn.isSneaking() || !EnumFacing.UP.equals(facing) || !heldItem.isEmpty() && ComputerProgram.getProgramID(heldItem) == -2)
 			return false;
 		
 		if(!worldIn.isRemote)
 		{
-			worldIn.setBlockState(pos, MinestuckBlocks.blockComputerOn.getDefaultState().withProperty(DIRECTION, facing), 2);
+			worldIn.setBlockState(pos, MinestuckBlocks.blockComputerOn.getDefaultState().withProperty(DIRECTION, state.getValue(DIRECTION)), 2);
 			
 			TileEntityComputer te = (TileEntityComputer) worldIn.getTileEntity(pos);
 			te.owner = IdentifierHandler.encode(playerIn);

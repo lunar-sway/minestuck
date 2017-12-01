@@ -40,7 +40,7 @@ import com.mraof.minestuck.util.ComputerProgram;
 public class BlockComputerOn extends Block implements ITileEntityProvider
 {
 	protected static final AxisAlignedBB COMPUTER_AABB = new AxisAlignedBB(1/16D, 0.0D, 1/16D, 15/16D, 1/8D, 15/16D);
-	protected static final AxisAlignedBB[] COMPUTER_SCREEN_AABB = {new AxisAlignedBB(6.5/16D, 0.0D, 0.5/16D, 7.5/16D, 13/16D, .05/16D), new AxisAlignedBB(7/8D, 2/16D, 0.0D, 1.0D, 1.0D, 4.5/16D), new AxisAlignedBB(11.5/16D, 2/16D, 7/8D, 1.0D, 1.0D, 1.0D), new AxisAlignedBB(0.0D, 2/16D, 11.5/16D, 1/8D, 1.0D, 1.0D)};
+	protected static final AxisAlignedBB[] COMPUTER_SCREEN_AABB = {new AxisAlignedBB(0.5/16D, 0.0D, 6/16D, 15.5/16D, 13/16D, 7.2/16D), new AxisAlignedBB(8.8/16D, 0.0D, 0.5/16D, 10/16D, 13/16D, 15.5/16), new AxisAlignedBB(0.5/16D, 0.0D, 8.8/16D, 15.5/16D, 13/16D, 10/16D), new AxisAlignedBB(6/16D, 0.0D, 0.5/16D, 7.2/16D, 13/16D, 15.5/16D)};
 
 	public static final PropertyBool BSOD = PropertyBool.create("bsod");
 	

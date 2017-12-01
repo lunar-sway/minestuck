@@ -138,6 +138,7 @@ public class MinestuckModelManager
 		
 		register(rawCruxite);
 		register(rawUranium);
+		register(energyCore);
 		modelRegistry.register(cruxiteDowel, new CruxiteDowelDefinition());
 		modelRegistry.register(captchaCard, new CaptchaCardDefinition());
 		modelRegistry.register(cruxiteApple, new ColoredItemDefinition("minestuck:cruxite_apple"));

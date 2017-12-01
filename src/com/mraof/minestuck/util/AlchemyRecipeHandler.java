@@ -509,7 +509,6 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Items.QUARTZ), new ItemStack(Items.WATER_BUCKET), MODE_OR, new ItemStack(Items.PRISMARINE_CRYSTALS));
 		CombinationRegistry.addCombination(new ItemStack(Items.QUARTZ), new ItemStack(Items.WATER_BUCKET), MODE_AND, new ItemStack(Items.PRISMARINE_SHARD));
 		CombinationRegistry.addCombination(new ItemStack(Items.FEATHER), new ItemStack(Items.ENDER_PEARL), MODE_OR, new ItemStack(Items.ELYTRA));
-		CombinationRegistry.addCombination(new ItemStack(Items.REDSTONE), new ItemStack(Items.GLOWSTONE_DUST), MODE_OR, new ItemStack(MinestuckItems.glowystoneDust));
 	}
 	
 	public static void registerMinestuckRecipes() {
@@ -518,7 +517,7 @@ public class AlchemyRecipeHandler
 		RecipeSorter.register("minestuck:notmirrored", CraftingRecipes.NonMirroredRecipe.class, RecipeSorter.Category.SHAPED, "before:minecraft:shaped");
 		RecipeSorter.register("minestuck:emptycard", CraftingRecipes.EmptyCardRecipe.class, RecipeSorter.Category.SHAPED, "before:minecraft:shaped");
 		
-		GameRegistry.addRecipe(new ItemStack(blockComputerOff,1,0),new Object[]{ "XXX","XYX","XXX",'Y',new ItemStack(cruxiteBlock),'X',new ItemStack(Items.IRON_INGOT,1)});
+		GameRegistry.addRecipe(new ItemStack(blockComputerOff,1,0),new Object[]{ "XXX","XYX","XXX",'Y',new ItemStack(energyCore),'X',new ItemStack(Items.IRON_INGOT,1)});
 		GameRegistry.addRecipe(new ItemStack(cruxiteBlock),new Object[]{ "XXX","XXX","XXX",'X',new ItemStack(rawCruxite, 1)});
 		cardRecipe = GameRegistry.addShapedRecipe(new ItemStack(captchaCard,8,0),new Object[]{ "XXX","XYX","XXX",'Y',new ItemStack(rawCruxite, 1),'X',new ItemStack(Items.PAPER,1)});
 		cardRecipeAdded = true;
@@ -544,6 +543,8 @@ public class AlchemyRecipeHandler
 		GameRegistry.addRecipe(new ItemStack(shadeBrickStairs, 4), new Object[] {"X  ", "XX ", "XXX", 'X', new ItemStack(stone, 1, BlockMinestuckStone.SHADE_META)});
 		GameRegistry.addRecipe(new ItemStack(frostBrickStairs, 4), new Object[] {"X  ", "XX ", "XXX", 'X', new ItemStack(stone, 1, BlockMinestuckStone.FROST_META)});
 		GameRegistry.addRecipe(new ItemStack(castIronStairs, 4), new Object[] {"X  ", "XX ", "XXX", 'X', new ItemStack(stone, 1, BlockMinestuckStone.CAST_META)});
+		GameRegistry.addRecipe(new ItemStack(energyCore),new Object[]{ "CUC", "UCU", "CUC",'C',crux.copy(),'U',new ItemStack(rawUranium)});
+		GameRegistry.addRecipe(new ItemStack(uraniumCooker),new Object[]{ "III", "IFI", "IEI",'I',new ItemStack(Items.IRON_INGOT),'F',new ItemStack(Blocks.FURNACE),'E',new ItemStack(energyCore)});
 		GameRegistry.addRecipe(new ItemStack(stone, 4, BlockMinestuckStone.SHADE_META), new Object[] {"XX", "XX", 'X', new ItemStack(stone, 1, BlockMinestuckStone.SHADE_SMOOTH_META)});
 		GameRegistry.addRecipe(new ItemStack(Blocks.PLANKS, 3, BlockPlanks.EnumType.SPRUCE.getMetadata()), new Object[] {"X", 'X', new ItemStack(woodenCactus)});
 		GameRegistry.addShapelessRecipe(new ItemStack(glowingPlanks, 4), new ItemStack(glowingLog));
@@ -860,8 +861,11 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Blocks.LOG), new ItemStack(Blocks.CACTUS), MODE_OR, false, true, new ItemStack(woodenCactus));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.LOG2), new ItemStack(Blocks.CACTUS), MODE_OR, false, true, new ItemStack(woodenCactus));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.STONE), new ItemStack(carvingTool), MODE_AND, false, true, new ItemStack(stoneSlab));
+		CombinationRegistry.addCombination(new ItemStack(Items.REDSTONE), new ItemStack(Items.GLOWSTONE_DUST), MODE_OR, new ItemStack(glowystoneDust));
+		CombinationRegistry.addCombination(new ItemStack(rawCruxite), new ItemStack(rawUranium), MODE_AND, new ItemStack(energyCore));
 		
-		TileEntityUraniumCooker.setRadiation(Items.BEEF, new ItemStack(MinestuckItems.irradiatedSteak));
+		TileEntityUraniumCooker.setRadiation(Items.BEEF, new ItemStack(irradiatedSteak));
+		TileEntityUraniumCooker.setRadiation(Items.STICK, new ItemStack(upStick));
 		
 		//CombinationRegistry.addCombination(new ItemStack(Items.POTIONITEM, 1, 0), new ItemStack(Items.SUGAR), MODE_OR, false, false, new ItemStack(beverage, 1, 0));		//Tab
 		//CombinationRegistry.addCombination(new ItemStack(Items.POTIONITEM, 1, 0), new ItemStack(Items.DYE, 1, 14), MODE_OR, false, true, new ItemStack(beverage, 1, 1));	//Orange F
