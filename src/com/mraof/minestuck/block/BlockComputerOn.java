@@ -5,26 +5,33 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import javax.annotation.Nullable;
+
 import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.BlockSburbMachine.MachineType;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
@@ -32,7 +39,9 @@ import com.mraof.minestuck.util.ComputerProgram;
 
 public class BlockComputerOn extends Block implements ITileEntityProvider
 {
-	
+	protected static final AxisAlignedBB COMPUTER_AABB = new AxisAlignedBB(1/16D, 0.0D, 1/16D, 15/16D, 1/8D, 15/16D);
+	protected static final AxisAlignedBB[] COMPUTER_SCREEN_AABB = {new AxisAlignedBB(6.5/16D, 0.0D, 0.5/16D, 7.5/16D, 13/16D, .05/16D), new AxisAlignedBB(7/8D, 2/16D, 0.0D, 1.0D, 1.0D, 4.5/16D), new AxisAlignedBB(11.5/16D, 2/16D, 7/8D, 1.0D, 1.0D, 1.0D), new AxisAlignedBB(0.0D, 2/16D, 11.5/16D, 1/8D, 1.0D, 1.0D)};
+
 	public static final PropertyBool BSOD = PropertyBool.create("bsod");
 	
 	public BlockComputerOn()
@@ -43,6 +52,13 @@ public class BlockComputerOn extends Block implements ITileEntityProvider
 		setUnlocalizedName("sburbComputer");
 		setHardness(4.0F);
 		setHarvestLevel("pickaxe", 0);
+		lightOpacity = 1;
+	}
+	
+	@Override
+	public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face)
+	{
+		return false;
 	}
 	
 	@Override
@@ -54,7 +70,8 @@ public class BlockComputerOn extends Block implements ITileEntityProvider
 	@Override
 	public int getMetaFromState(IBlockState state)
 	{
-		return ((Boolean) state.getValue(BSOD) ? 1 : 0) + MinestuckBlocks.blockComputerOff.getMetaFromState(state)*2;	//TODO: Now that I know about block.getActualState, the bsod doesn't have to be part of the block.
+		return ((Boolean) state.getValue(BSOD) ? 1 : 0) + MinestuckBlocks.blockComputerOff.getMetaFromState(state)*2;
+			//TODO: Now that I know about block.getActualState, the bsod doesn't have to be part of the block.
 			//Fix that when there is no need to worry about breaking existing save files
 	}
 	
@@ -166,4 +183,19 @@ public class BlockComputerOn extends Block implements ITileEntityProvider
 		return new ItemStack(MinestuckBlocks.blockComputerOff);
 	}
 	
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+	{
+		return COMPUTER_AABB;
+	}
+	
+	@Override
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_)
+	{
+		super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn, p_185477_7_);
+		EnumFacing roation = (EnumFacing) worldIn.getBlockState(pos).getValue(BlockComputerOff.DIRECTION);
+		AxisAlignedBB bb = COMPUTER_SCREEN_AABB[roation.getHorizontalIndex()].offset(pos);
+		if(entityBox.intersectsWith(bb))
+			collidingBoxes.add(bb);
+	}
 }

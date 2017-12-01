@@ -1,3 +1,6 @@
 {
-    "parent": "minestuck:block/computer_standard"
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "minestuck:items/computer"
+    }
 }
