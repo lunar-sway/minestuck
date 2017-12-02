@@ -1,34 +1,33 @@
 package com.mraof.minestuck.block;
 
-import net.minecraft.block.properties.IProperty;
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.client.gui.GuiHandler;
+import com.mraof.minestuck.tileentity.TileEntityTotemlathe;
+import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.client.gui.GuiHandler;
-import com.mraof.minestuck.tileentity.TileEntityTotemlathe;
-
-public class BlockTotemlathe extends BlockLargeMachine{
-
-	public static final PropertyEnum<enumParts> PART = PropertyEnum.<enumParts>create("part",enumParts.class);
-
+public class BlockTotemlathe extends BlockLargeMachine
+{
+	
+	public static final PropertyEnum<EnumParts> PART = PropertyEnum.create("part", EnumParts.class);
+	public static final PropertyDirection DIRECTION = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+	
 	public BlockTotemlathe() {
-		super(1,3,4);
-		this.setUnlocalizedName("totemlathe");
-		this.setDefaultState(this.getStateFromMeta(0));
+		setUnlocalizedName("totem_lathe");
+		setDefaultState(blockState.getBaseState());
 		
 	} 
 	//not sure how to do this.
@@ -36,67 +35,132 @@ public class BlockTotemlathe extends BlockLargeMachine{
 	//public AxisAlignedBB getBoundingBox(IBlockState state,IBlockAccess source,BlockPos pos){
 		
 	//}
-	protected BlockStateContainer createBlockState()
-    {
-        return new BlockStateContainer(this, new IProperty[] {PART});
-    }
+	
+
 	
 	@Override
-	public boolean onBlockActivated(World worldIn,BlockPos pos,IBlockState state,EntityPlayer playerIn,EnumHand hand,EnumFacing facing,float hitX,float hitY,float hitZ){
-		
-		BlockPos MasterPos=GetMasterPos(state,pos);
-		if(!worldIn.isRemote) {
-			if(worldIn.getTileEntity(MasterPos) instanceof TileEntity) {
-				if(!((TileEntityTotemlathe)worldIn.getTileEntity(MasterPos)).isDestroyed()){		
-					playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.MACHINE.ordinal(), worldIn, MasterPos.getX(), MasterPos.getY(), MasterPos.getZ());
-				}
-			}
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+	{
+		BlockPos mainPos = getMainPos(state, pos);
+		TileEntity te = worldIn.getTileEntity(mainPos);
+		if(!worldIn.isRemote && te != null && te instanceof TileEntityTotemlathe && !((TileEntityTotemlathe)te).isBroken())
+		{
+			playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.MACHINE.ordinal(), worldIn, mainPos.getX(), mainPos.getY(), mainPos.getZ());
 		}
 		return true;
 	}
+	
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileEntityTotemlathe();
+	public boolean hasTileEntity(IBlockState state)
+	{
+		return state.getValue(PART) == EnumParts.TOP_LEFT;
 	}
 	
-	
-	
-	
-	
-	
+	@Override
+	public TileEntity createNewTileEntity(World worldIn, int meta)
+	{
+		if(meta % 11 == EnumParts.TOP_LEFT.ordinal())
+			return new TileEntityTotemlathe();
+		else return null;
+	}
 	
 	@Override
-	public void onBlockPlacedBy(World worldIn,BlockPos pos,IBlockState state,EntityLivingBase placer, ItemStack stack){
-		if(placer!=null && !(worldIn.isRemote)){
-			worldIn.setBlockState(pos, state.withProperty(PART, enumParts.BOTTOM_RIGHT));
-			worldIn.setBlockState(pos.south(1), state.withProperty(PART, enumParts.BOTTOM_MIDRIGHT));
-			worldIn.setBlockState(pos.south(2), state.withProperty(PART, enumParts.BOTTOM_MIDLEFT));
-			worldIn.setBlockState(pos.south(3), state.withProperty(PART, enumParts.BOTTOM_LEFT));
-			worldIn.setBlockState(pos.up(1), state.withProperty(PART, enumParts.MID_RIGHT));
-			worldIn.setBlockState(pos.south(1).up(1), state.withProperty(PART, enumParts.MID_MIDRIGHT));
-			worldIn.setBlockState(pos.south(2).up(1), state.withProperty(PART, enumParts.MID_MIDLEFT));
-			worldIn.setBlockState(pos.south(3).up(1), state.withProperty(PART, enumParts.MID_LEFT));
-			worldIn.setBlockState(pos.south(1).up(2), state.withProperty(PART, enumParts.TOP_MIDRIGHT));
-			worldIn.setBlockState(pos.south(2).up(2), state.withProperty(PART, enumParts.TOP_MIDLEFT));
-			worldIn.setBlockState(pos.south(3).up(2), state.withProperty(PART, enumParts.TOP_LEFT));
+	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
+	{
+		
+		EnumFacing facing = EnumFacing.getHorizontal(MathHelper.floor((double)(placer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3).getOpposite();
+		state = state.withProperty(DIRECTION, facing);
+		
+		if(!(worldIn.isRemote)){
+			worldIn.setBlockState(pos, state.withProperty(PART, EnumParts.BOTTOM_RIGHT));
+			worldIn.setBlockState(pos.offset(facing.rotateYCCW(),1), state.withProperty(PART, EnumParts.BOTTOM_MIDRIGHT));
+			worldIn.setBlockState(pos.offset(facing.rotateYCCW(),2), state.withProperty(PART, EnumParts.BOTTOM_MIDLEFT));
+			worldIn.setBlockState(pos.offset(facing.rotateYCCW(),3), state.withProperty(PART, EnumParts.BOTTOM_LEFT));
+			worldIn.setBlockState(pos.up(1), state.withProperty(PART, EnumParts.MID_RIGHT));
+			worldIn.setBlockState(pos.offset(facing.rotateYCCW(),1).up(1), state.withProperty(PART, EnumParts.MID_MIDRIGHT));
+			worldIn.setBlockState(pos.offset(facing.rotateYCCW(),2).up(1), state.withProperty(PART, EnumParts.MID_MIDLEFT));
+			worldIn.setBlockState(pos.offset(facing.rotateYCCW(),3).up(1), state.withProperty(PART, EnumParts.MID_LEFT));
+			worldIn.setBlockState(pos.offset(facing.rotateYCCW(),1).up(2), state.withProperty(PART, EnumParts.TOP_MIDRIGHT));
+			worldIn.setBlockState(pos.offset(facing.rotateYCCW(),2).up(2), state.withProperty(PART, EnumParts.TOP_MIDLEFT));
+			worldIn.setBlockState(pos.offset(facing.rotateYCCW(),3).up(2), state.withProperty(PART, EnumParts.TOP_LEFT));
 		}
 	}
+	
 
+	
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
 	
-		BlockPos MasterPos=GetMasterPos(state, pos) ;
-		if(worldIn.getTileEntity(MasterPos) instanceof TileEntityTotemlathe) {
-			TileEntityTotemlathe te = (TileEntityTotemlathe) worldIn.getTileEntity(MasterPos);
-			te.destroy();
-			InventoryHelper.dropInventoryItems(worldIn, pos, te);
+		BlockPos mainPos = getMainPos(state, pos);
+		TileEntity te = worldIn.getTileEntity(mainPos);
+		if(te != null && te instanceof TileEntityTotemlathe)
+		{
+			TileEntityTotemlathe designix = (TileEntityTotemlathe) te;
+			designix.Brake();
+			InventoryHelper.dropInventoryItems(worldIn, pos, designix);
 		}
+		
 		super.breakBlock(worldIn, pos, state);
-	}	
+	}
 	
+	
+	
+	
+	
+	//Block state handling
+	
+	
+	@Override
+	protected BlockStateContainer createBlockState()
+	{
+		return new BlockStateContainer(this, PART, DIRECTION);
+	}
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta)
+	{
+		IBlockState defaultState = getDefaultState();
+		EnumParts part = EnumParts.values()[meta % 11];
+		EnumFacing facing = EnumFacing.getHorizontal(meta/11);
+		
+		return defaultState.withProperty(PART, part).withProperty(DIRECTION, facing);
+	}
+	@Override
+	public int getMetaFromState(IBlockState state)
+	{
+		EnumParts part = state.getValue(PART);
+		EnumFacing facing = state.getValue(DIRECTION);
+		return part.ordinal();
+//		return part.ordinal() + facing.getHorizontalIndex()*11;
+	}
 
-	public static enum enumParts implements IStringSerializable
+	
+    /**
+     *returns the block position of the "Main" block
+     *aka the block with the TileEntity for the machine
+     */
+	public BlockPos getMainPos(IBlockState state, BlockPos pos)
+	{
+		EnumFacing facing = state.getValue(DIRECTION);
+		switch(state.getValue(PART))
+		{
+			case BOTTOM_RIGHT:return pos;
+			case BOTTOM_MIDRIGHT:return pos.offset(facing.rotateY());
+			case BOTTOM_MIDLEFT:return pos.offset(facing.rotateY(),2);
+			case BOTTOM_LEFT:return pos.offset(facing.rotateY(),3);
+			case MID_RIGHT:return pos.down(1);
+			case MID_MIDRIGHT:return pos.down(1).offset(facing.rotateY(),1);
+			case MID_MIDLEFT:return pos.down(1).offset(facing.rotateY(),2);
+			case MID_LEFT:return pos.down(1).offset(facing.rotateY(),3);
+			case TOP_MIDRIGHT:return pos.down(2).offset(facing.rotateY(),1);
+			case TOP_MIDLEFT:return pos.down(2).offset(facing.rotateY(),2);
+			case TOP_LEFT:return pos.down(2).offset(facing.rotateY(),3);
+			}
+			return pos;
+	}
+	
+	public static enum EnumParts implements IStringSerializable
 	{
 		BOTTOM_RIGHT,
 		BOTTOM_MIDRIGHT,
@@ -112,83 +176,11 @@ public class BlockTotemlathe extends BlockLargeMachine{
 		;
 		public String toString()
 		{
-			return this.getName();
+			return getName();
 		}
 		public String getName()
 		{
-			switch (this){
-			case BOTTOM_RIGHT:return"bottom_right";
-			case BOTTOM_MIDRIGHT:return"bottom_midright";
-			case BOTTOM_MIDLEFT:return"bottom_midleft";
-			case BOTTOM_LEFT:return"bottom_left";
-			case MID_RIGHT:return"mid_right";
-			case MID_MIDRIGHT:return"mid_midright";
-			case MID_MIDLEFT:return"mid_midleft";
-			case MID_LEFT:return"mid_left";
-			case TOP_MIDRIGHT:return"top_midright";	
-			case TOP_MIDLEFT:return"top_midleft";	
-			case TOP_LEFT:return"top_left";	
-			}
-			return "null";
+			return name().toLowerCase();
 		}
 	}
-	private BlockPos GetMasterPos(IBlockState state, BlockPos pos) {
-		enumParts part=state.getValue(PART);
-		switch(part){
-		case BOTTOM_RIGHT:return pos;
-		case BOTTOM_MIDRIGHT:return pos.north(1);
-		case BOTTOM_MIDLEFT:return pos.north(2);
-		case BOTTOM_LEFT:return pos.north(3);
-		case MID_RIGHT:return pos.down(1);
-		case MID_MIDRIGHT:return pos.down(1).north(1);
-		case MID_MIDLEFT:return pos.down(1).north(2);
-		case MID_LEFT:return pos.down(1).north(3);
-		case TOP_MIDRIGHT:return pos.down(2).north(1);
-		case TOP_MIDLEFT:return pos.down(2).north(2);
-		case TOP_LEFT:return pos.down(2).north(3);
-		}
-		return pos;
-	}
-	@Override
-	public IBlockState getStateFromMeta(int meta){
-		IBlockState defaultState=this.getDefaultState();
-		switch (meta){
-		case 0:return(defaultState.withProperty(PART, enumParts.BOTTOM_RIGHT));
-		case 1:return(defaultState.withProperty(PART, enumParts.BOTTOM_MIDRIGHT));
-		case 2:return(defaultState.withProperty(PART, enumParts.BOTTOM_MIDLEFT));
-		case 3:return(defaultState.withProperty(PART, enumParts.BOTTOM_LEFT));
-		case 4:return(defaultState.withProperty(PART, enumParts.MID_RIGHT));
-		case 5:return(defaultState.withProperty(PART, enumParts.MID_MIDRIGHT));
-		case 6:return(defaultState.withProperty(PART, enumParts.MID_MIDLEFT));
-		case 7:return(defaultState.withProperty(PART, enumParts.MID_LEFT));
-		case 8:return(defaultState.withProperty(PART, enumParts.TOP_MIDRIGHT));
-		case 9:return(defaultState.withProperty(PART, enumParts.TOP_MIDLEFT));
-		case 10:return(defaultState.withProperty(PART, enumParts.TOP_LEFT));
-		}
-		return null;
-	}
-	@Override
-	public int getMetaFromState(IBlockState state){
-		enumParts part=state.getValue(PART);
-		
-		switch (part){
-		case BOTTOM_RIGHT:return(0);
-		case BOTTOM_MIDRIGHT:return(1);
-		case BOTTOM_MIDLEFT:return(2);
-		case BOTTOM_LEFT:return(3);
-		case MID_RIGHT:return(4);
-		case MID_MIDRIGHT:return(5);
-		case MID_MIDLEFT:return(6);
-		case MID_LEFT:return(7);
-		case TOP_MIDRIGHT:return(8);
-		case TOP_MIDLEFT:return(9);
-		case TOP_LEFT:return(10);
-		default:return(0);		
-		}
-		
-	}
-
-
-	
-
 }

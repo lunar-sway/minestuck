@@ -24,9 +24,8 @@ public class BlockCruxtruder extends BlockLargeMachine{
 	public static final PropertyEnum<enumParts> PART = PropertyEnum.<enumParts>create("part",enumParts.class);
 
 	public BlockCruxtruder() {
-		super(1,1,1);
 		setUnlocalizedName("cruxtruder");
-		//setDefaultState(getStateFromMeta(0));
+		setDefaultState(getStateFromMeta(0));
 		
 	} 
 	//not sure how to do this.

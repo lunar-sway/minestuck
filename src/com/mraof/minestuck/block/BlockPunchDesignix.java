@@ -26,10 +26,8 @@ public class BlockPunchDesignix extends BlockLargeMachine
 	public static final PropertyDirection DIRECTION = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	
 	public BlockPunchDesignix() {
-		super(2,2,1);
-		this.setUnlocalizedName("punch_designix");
-		this.setDefaultState(this.blockState.getBaseState());
-		
+		setUnlocalizedName("punch_designix");
+		setDefaultState(blockState.getBaseState());
 	} 
 	//not sure how to do this.
 	//@Override
@@ -37,11 +35,7 @@ public class BlockPunchDesignix extends BlockLargeMachine
 		
 	//}
 	
-	@Override
-	public boolean isFullCube(IBlockState state)
-	{
-		return false;
-	}
+
 	
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
@@ -72,6 +66,7 @@ public class BlockPunchDesignix extends BlockLargeMachine
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
 	{
+
 		EnumFacing facing = EnumFacing.getHorizontal(MathHelper.floor((double)(placer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3).getOpposite();
 		state = state.withProperty(DIRECTION, facing);
 		if(!(worldIn.isRemote))
@@ -82,6 +77,7 @@ public class BlockPunchDesignix extends BlockLargeMachine
 			worldIn.setBlockState(pos.up().offset(facing.rotateYCCW()), state.withProperty(PART, EnumParts.TOP_RIGHT));
 		}
 	}
+
 	
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
@@ -99,7 +95,13 @@ public class BlockPunchDesignix extends BlockLargeMachine
 		super.breakBlock(worldIn, pos, state);
 	}
 	
+	
+	
+	
+	
 	//Block state handling
+	
+	
 	@Override
 	protected BlockStateContainer createBlockState()
 	{
@@ -109,7 +111,7 @@ public class BlockPunchDesignix extends BlockLargeMachine
 	@Override
 	public IBlockState getStateFromMeta(int meta)
 	{
-		IBlockState defaultState = this.getDefaultState();
+		IBlockState defaultState = getDefaultState();
 		EnumParts part = EnumParts.values()[meta % 4];
 		EnumFacing facing = EnumFacing.getHorizontal(meta/4);
 		
@@ -124,6 +126,11 @@ public class BlockPunchDesignix extends BlockLargeMachine
 		return part.ordinal() + facing.getHorizontalIndex()*4;
 	}
 	
+	
+    /**
+     *returns the block position of the "Main" block
+     *aka the block with the TileEntity for the machine
+     */
 	public BlockPos getMainPos(IBlockState state, BlockPos pos)
 	{
 		EnumFacing facing = state.getValue(DIRECTION);
@@ -147,13 +154,13 @@ public class BlockPunchDesignix extends BlockLargeMachine
 		@Override
 		public String toString()
 		{
-			return this.getName();
+			return getName();
 		}
 		
 		@Override
 		public String getName()
 		{
-			return this.name().toLowerCase();
+			return name().toLowerCase();
 		}
 	}
 }
