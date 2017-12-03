@@ -1,7 +1,8 @@
 {
-	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
+	"parent": "block/orientable",
 	"textures": {
-		"2": "minestuck:blocks/uranium_cooker"
+		"2": "minestuck:blocks/uranium_cooker",
+		"front": "minestuck:blocks/uranium_cooker"
 	},
 	"elements": [
 		{

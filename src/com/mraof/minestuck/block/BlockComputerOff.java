@@ -42,6 +42,19 @@ public class BlockComputerOff extends Block
 		setHarvestLevel("pickaxe", 0);
 		this.setCreativeTab(Minestuck.tabMinestuck);
 		lightOpacity = 1;
+		this.translucent=true;
+	}
+	
+	@Override
+	public boolean isFullCube(IBlockState state)
+	{
+		return false;
+	}
+	
+	@Override
+	public boolean isOpaqueCube(IBlockState state)
+	{
+		return false;
 	}
 	
 	@Override

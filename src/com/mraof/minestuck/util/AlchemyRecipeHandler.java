@@ -680,6 +680,7 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(grasshopper), new GristSet(new GristType[] {GristType.Iodine, GristType.Amber}, new int[] {3, 7}));
 		GristRegistry.addGristConversion(new ItemStack(jarOfBugs), new GristSet(new GristType[] {GristType.Build, GristType.Chalk}, new int[] {5, 3}));
 		GristRegistry.addGristConversion(new ItemStack(onion), new GristSet(new GristType[] {GristType.Iodine}, new int[] {3}));
+		GristRegistry.addGristConversion(new ItemStack(irradiatedSteak), false, new GristSet(new GristType[] {GristType.Iodine, GristType.Uranium}, new int[] {12, 1}));
 		GristRegistry.addGristConversion(primedTnt, new GristSet(new GristType[] {GristType.Build, GristType.Chalk, GristType.Sulfur}, new int[] {8, 10, 14}));
 		GristRegistry.addGristConversion(unstableTnt, new GristSet(new GristType[] {GristType.Build, GristType.Chalk, GristType.Sulfur}, new int[] {5, 11, 15}));
 		GristRegistry.addGristConversion(instantTnt, new GristSet(new GristType[] {GristType.Build, GristType.Chalk, GristType.Sulfur}, new int[] {6, 11, 17}));
@@ -724,7 +725,8 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Items.IRON_AXE), new ItemStack(Blocks.PISTON), MODE_AND, false, true, new ItemStack(copseCrusher));
 		CombinationRegistry.addCombination(new ItemStack(Items.WOODEN_AXE), new ItemStack(Blocks.ANVIL), MODE_AND, false, true, new ItemStack(blacksmithBane));
 		CombinationRegistry.addCombination("record", Items.IRON_AXE, OreDictionary.WILDCARD_VALUE, MODE_AND, new ItemStack(scraxe));
-		CombinationRegistry.addCombination(new ItemStack(copseCrusher), new ItemStack(pogoHammer), MODE_AND, false, true, new ItemStack(qPHammerAxe));
+		CombinationRegistry.addCombination(new ItemStack(copseCrusher), new ItemStack(pogoHammer), MODE_AND, new ItemStack(qPHammerAxe));
+		CombinationRegistry.addCombination(new ItemStack(qPHammerAxe), new ItemStack(energyCore), MODE_AND, new ItemStack(qFHammerAxe));
 		CombinationRegistry.addCombination(new ItemStack(Items.IRON_AXE), new ItemStack(Blocks.REDSTONE_BLOCK), MODE_AND, false, true, new ItemStack(rubyCroak));
 		CombinationRegistry.addCombination(new ItemStack(Items.GOLDEN_AXE), new ItemStack(Items.LAVA_BUCKET), MODE_AND, false, true, new ItemStack(hephaestusLumber));
 		
@@ -862,10 +864,19 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Blocks.LOG2), new ItemStack(Blocks.CACTUS), MODE_OR, false, true, new ItemStack(woodenCactus));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.STONE), new ItemStack(carvingTool), MODE_AND, false, true, new ItemStack(stoneSlab));
 		CombinationRegistry.addCombination(new ItemStack(Items.REDSTONE), new ItemStack(Items.GLOWSTONE_DUST), MODE_OR, new ItemStack(glowystoneDust));
+		
+		//Uranium-based non-weapon and uranium cooker recipes
 		CombinationRegistry.addCombination(new ItemStack(rawCruxite), new ItemStack(rawUranium), MODE_AND, new ItemStack(energyCore));
+		CombinationRegistry.addCombination(new ItemStack(rawUranium), new ItemStack(Items.COOKED_BEEF), MODE_OR, new ItemStack(irradiatedSteak));
 		
 		TileEntityUraniumCooker.setRadiation(Items.BEEF, new ItemStack(irradiatedSteak));
 		TileEntityUraniumCooker.setRadiation(Items.STICK, new ItemStack(upStick));
+		TileEntityUraniumCooker.setRadiation(Items.MUSHROOM_STEW, new ItemStack(Items.SLIME_BALL));
+		Item ectoSlime = Item.REGISTRY.getObject(new ResourceLocation("minestuckarsenal", "blue_ecto_slime"));
+		if(ectoSlime != null)
+		{
+			TileEntityUraniumCooker.setRadiation(ectoSlime, new ItemStack(Items.SLIME_BALL));
+		}
 		
 		//CombinationRegistry.addCombination(new ItemStack(Items.POTIONITEM, 1, 0), new ItemStack(Items.SUGAR), MODE_OR, false, false, new ItemStack(beverage, 1, 0));		//Tab
 		//CombinationRegistry.addCombination(new ItemStack(Items.POTIONITEM, 1, 0), new ItemStack(Items.DYE, 1, 14), MODE_OR, false, true, new ItemStack(beverage, 1, 1));	//Orange F

@@ -15,15 +15,31 @@ import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
 
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class TileEntityUraniumCooker extends TileEntityMachine
 {
 	private static HashMap<Item, ItemStack> radiations = new HashMap();
 	private short fuel = 0;
 	private short maxFuel = 128;
+	
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound in)
+	{
+		super.writeToNBT(in);
+		in.setShort("fuel", fuel);
+		return in;
+	}
+	@Override
+	public void readFromNBT(NBTTagCompound in)
+	{
+		super.readFromNBT(in);
+		fuel = in.getShort("fuel");
+	}
 	
 	@Override
 	public boolean isAutomatic()
@@ -93,13 +109,10 @@ public class TileEntityUraniumCooker extends TileEntityMachine
 			input = FurnaceRecipes.instance().getSmeltingResult(input);
 		}
 		
-		if(!input.isEmpty())
-			System.err.println("Output stack is " + input.getCount() + " " + input.getItem().getItemStackDisplayName(input));
-		//Usage of System.err is for readability. This is not an error at all.
-		
 		return input;
 	}
 	
+	//This is called mostly from AlchemyRecipeHandler
 	public static void setRadiation(Item in, ItemStack out)
 	{
 		radiations.put(in, out);
@@ -138,7 +151,13 @@ public class TileEntityUraniumCooker extends TileEntityMachine
 					{
 						this.getStackInSlot(2).grow(temp.getCount());
 					}
-					this.decrStackSize(1, 1);
+					if(this.getStackInSlot(1).getItem() == Items.MUSHROOM_STEW)
+					{
+						this.setInventorySlotContents(1, new ItemStack(Items.BOWL));
+					} else
+					{
+						this.decrStackSize(1, 1);
+					}
 					fuel--;
 				}
 			//}

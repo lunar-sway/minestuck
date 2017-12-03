@@ -1,9 +1,7 @@
 {
     "parent": "block/orientable",
     "textures": {
-        "top": "minestuck:blocks/phernalia_frame",
-        "front": "minestuck:blocks/computer_front_off",
-        "side": "minestuck:blocks/phernalia_frame",
+        "front": "minestuck:blocks/keys",
         "0": "minestuck:blocks/keys",
         "1": "minestuck:blocks/cable",
         "3": "minestuck:blocks/cable",

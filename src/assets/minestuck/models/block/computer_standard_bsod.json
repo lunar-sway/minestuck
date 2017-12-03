@@ -1,12 +1,10 @@
 {
     "parent": "block/orientable",
     "textures": {
-        "top": "minestuck:blocks/phernalia_frame",
-        "front": "minestuck:blocks/bsod_front",
-        "side": "minestuck:blocks/phernalia_frame",
+        "front": "minestuck:blocks/keys",
         "0": "minestuck:blocks/keys",
         "1": "minestuck:blocks/cable",
-        "3": "minestuck:blocks/vga",
+        "3": "minestuck:blocks/bsod",
         "4": "minestuck:blocks/vga",
         "5": "minestuck:blocks/cable2",
         "6": "minestuck:blocks/comp_front"

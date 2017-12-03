@@ -47,12 +47,24 @@ public class BlockComputerOn extends Block implements ITileEntityProvider
 	public BlockComputerOn()
 	{
 		super(Material.ROCK);
-		
 		setDefaultState(getDefaultState().withProperty(BSOD, false));
 		setUnlocalizedName("sburbComputer");
 		setHardness(4.0F);
 		setHarvestLevel("pickaxe", 0);
 		lightOpacity = 1;
+		this.translucent=true;
+	}
+	
+	@Override
+	public boolean isFullCube(IBlockState state)
+	{
+		return false;
+	}
+	
+	@Override
+	public boolean isOpaqueCube(IBlockState state)
+	{
+		return false;
 	}
 	
 	@Override
