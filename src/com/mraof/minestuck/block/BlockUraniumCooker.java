@@ -26,6 +26,7 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -35,6 +36,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockUraniumCooker extends BlockContainer
 {
 	protected static final AxisAlignedBB URANIUM_COOKER_AABB = new AxisAlignedBB(1/4D, 0.0D, 1/4D, 3/4D, 11/32D, 3/4D);
+	public static final PropertyDirection DIRECTION = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	
 	public static enum MachineType implements IStringSerializable
 	{
@@ -71,23 +73,60 @@ public class BlockUraniumCooker extends BlockContainer
 		setDefaultState(getDefaultState());
 		this.setCreativeTab(Minestuck.tabMinestuck);
 	}
-	
+
 	@Override
 	protected BlockStateContainer createBlockState()
 	{
-		return new BlockStateContainer(this);
+		return new BlockStateContainer(this, DIRECTION);
 	}
 	
 	@Override
 	public int getMetaFromState(IBlockState state)
 	{
-		return 0;
+		return ((EnumFacing)state.getValue(DIRECTION)).ordinal() - 2;
 	}
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta)
 	{
-		return getDefaultState();
+		return getDefaultState().withProperty(DIRECTION, EnumFacing.values()[meta + 2]);
+	}
+	
+	public static void setDefaultDirection(World world, int x, int y, int z)
+	{
+		if (!world.isRemote)
+		{
+			IBlockState block = world.getBlockState(new BlockPos(x, y, z - 1));
+			IBlockState block1 = world.getBlockState(new BlockPos(x, y, z + 1));
+			IBlockState block2 = world.getBlockState(new BlockPos(x - 1, y, z));
+			IBlockState block3 = world.getBlockState(new BlockPos(x + 1, y, z));
+			byte b0 = 0;
+
+			if (block.isFullBlock() && !block1.isFullBlock())
+			{
+				b0 = 3;
+			}
+
+			if (block1.isFullBlock() && !block.isFullBlock())
+			{
+				b0 = 2;
+			}
+
+			if (block2.isFullBlock() && !block3.isFullBlock())
+			{
+				b0 = 5;
+			}
+
+			if (block3.isFullBlock() && !block2.isFullBlock())
+			{
+				b0 = 4;
+			}
+			
+			if(b0 == 0)
+				b0 = (byte) (block3.isFullBlock() ? 2 : 5);
+			
+			world.setBlockState(new BlockPos(x, y, z), world.getBlockState(new BlockPos(x, y, z)).withProperty(DIRECTION, EnumFacing.values()[b0]), 2);
+		}
 	}
 	
 	@Override
@@ -126,7 +165,9 @@ public class BlockUraniumCooker extends BlockContainer
 			return false;
 		
 		if(!worldIn.isRemote)
+		{
 			playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.MACHINE.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
+		}
 		return true;
 	}
 	
@@ -150,6 +191,16 @@ public class BlockUraniumCooker extends BlockContainer
 	public TileEntity createNewTileEntity(World worldIn, int meta)
 	{
 		return new TileEntityUraniumCooker();
+	}
+	
+	@Override
+	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
+	{
+		int l = MathHelper.floor((double)(placer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		
+		EnumFacing facing = new EnumFacing[]{EnumFacing.NORTH, EnumFacing.EAST, EnumFacing.SOUTH, EnumFacing.WEST}[l];
+		
+		worldIn.setBlockState(pos, state.withProperty(DIRECTION, facing), 2);
 	}
 	
 	@Override

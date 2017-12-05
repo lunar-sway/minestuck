@@ -191,7 +191,7 @@ public class TileEntityUraniumCooker extends TileEntityMachine
 	
 	public MachineType getMachineType()
 	{
-		return MachineType.values()[getBlockMetadata() % 4];
+		return MachineType.values()[getBlockMetadata() % 1];
 	}
 
 	public short getFuel() {
