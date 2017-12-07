@@ -29,12 +29,12 @@ public class BlockMobSpawner extends Block
     @Override
     public void randomTick(World worldIn, BlockPos pos, IBlockState state, Random random)
     {
-      //  if (worldIn.isAirBlock(pos.down()))
-      //  {
+        if (worldIn.isAirBlock(pos.down()))
+        {
             worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
-     //   }
-     //   else
-      //  {
+        }
+        else
+        {
       //      EntityRabbit entity = new EntityRabbit(worldIn);
       //      entity.setPosition(pos.getX() + .5, pos.getY(), pos.getZ() + .5);
       //      entity.onInitialSpawn(null, null);
