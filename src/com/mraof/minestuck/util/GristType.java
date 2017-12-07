@@ -121,7 +121,7 @@ public class GristType extends IForgeRegistryEntry.Impl<GristType> implements Co
 	public static void registerSkills(RegistryEvent.Register<GristType> event)
 	{
 		event.getRegistry().registerAll(
-				Amber.setRegistryName("minestuck", "attack"),
+				Amber.setRegistryName("minestuck", "amber"),
 				Amethyst.setRegistryName("minestuck", "amethyst"),
 				Artifact.setRegistryName("minestuck", "artifact"),
 				Build.setRegistryName("minestuck", "build"),
