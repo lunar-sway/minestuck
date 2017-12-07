@@ -618,8 +618,10 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(spork), new GristSet(new GristType[]{GristType.Build}, new int[]{13}));
 		GristRegistry.addGristConversion(new ItemStack(candy, 1, 0), new GristSet(new GristType[] {GristType.Chalk, GristType.Sulfur, GristType.Iodine}, new int[] {1, 1, 1}));
 		
-		for(int i = 0; i < 21; i++)
-			GristRegistry.addGristConversion(new ItemStack(candy, 1, i+1), new GristSet(GristType.values()[i], 3));
+		for(GristType type : GristType.REGISTRY.getValues())
+		{
+			GristRegistry.addGristConversion(new ItemStack(candy, 1, type.getId() + 1), new GristSet(type, 3));
+		}
 		
 		GristRegistry.addGristConversion(new ItemStack(beverage, 1, 0), new GristSet(new GristType[] {GristType.Cobalt, GristType.Iodine}, new int[] {1, 1}));		//Tab
 		GristRegistry.addGristConversion(new ItemStack(beverage, 1, 1), new GristSet(new GristType[] {GristType.Cobalt, GristType.Amber}, new int[] {1, 1}));		//Faygo (orange)

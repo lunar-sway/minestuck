@@ -11,6 +11,7 @@ import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.event.MinestuckFluidHandler;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
+import com.mraof.minestuck.item.ItemMinestuckCandy;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.modSupport.crafttweaker.CraftTweakerSupport;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
@@ -100,7 +101,7 @@ public class Minestuck
 		GameRegistry.registerTileEntity(TileEntitySburbMachine.class, "minestuck:sburb_machine");
 		GameRegistry.registerTileEntity(TileEntityCrockerMachine.class, "minestuck:crocker_machine");
 		GameRegistry.registerTileEntity(TileEntityComputer.class, "minestuck:computer_sburb");
-		GameRegistry.registerTileEntity(TileEntityTransportalizer.class, ",minestuck:transportalizer");
+		GameRegistry.registerTileEntity(TileEntityTransportalizer.class, "minestuck:transportalizer");
 		GameRegistry.registerTileEntity(TileEntityGate.class, "minestuck:gate");
 		
 		MinestuckDimensionHandler.register();
@@ -138,6 +139,9 @@ public class Minestuck
 		StructureCastlePieces.registerComponents();
 		MapGenLandStructure.registerStructures();
 		ConsortVillageComponents.registerComponents();
+		
+		//update candy
+		((ItemMinestuckCandy) MinestuckItems.candy).updateCandy();
 		
 		//register recipes
 		AlchemyRecipeHandler.registerVanillaRecipes();

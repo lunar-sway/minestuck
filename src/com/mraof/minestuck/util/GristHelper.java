@@ -1,11 +1,7 @@
 package com.mraof.minestuck.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Iterator;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Random;
 
 import javax.annotation.Nonnull;
 
@@ -27,9 +23,9 @@ public class GristHelper {
 
 	static
 	{
-		secondaryGristMap = new HashMap<GristType, ArrayList<GristType>>();
+		secondaryGristMap = new HashMap<>();
 		for(GristType type : GristType.values())
-			secondaryGristMap.put(type, new ArrayList<GristType>());
+			secondaryGristMap.put(type, new ArrayList<>());
 		secondaryGristMap.get(GristType.Amber).add(GristType.Rust);
 		secondaryGristMap.get(GristType.Amber).add(GristType.Sulfur);
 		secondaryGristMap.get(GristType.Amethyst).add(GristType.Quartz);
@@ -74,7 +70,7 @@ public class GristHelper {
 	{
 		while (true)
 		{
-			GristType randGrist = GristType.values()[random.nextInt(GristType.allGrists)];
+			GristType randGrist = GristType.values().get(random.nextInt(GristType.values().size()));
 			if (randGrist.getRarity() > random.nextFloat() && randGrist != GristType.Artifact)
 				return randGrist;
 		}
@@ -120,16 +116,15 @@ public class GristHelper {
 	
 	public static boolean canAfford(GristSet base, GristSet cost) {
 		if (base == null || cost == null) {return false;}
-		Hashtable<Integer, Integer> reqs = cost.getHashtable();
+		Map<GristType, Integer> reqs = cost.getMap();
 		
 		if (reqs != null) {
-			Iterator<Entry<Integer, Integer>> it = reqs.entrySet().iterator();
-			while (it.hasNext()) {
-				Entry<Integer, Integer> pairs = it.next();
-				int type = (Integer) pairs.getKey();
-				int need = (Integer) pairs.getValue();
-				int have = base.getGrist(GristType.values()[type]);
-				
+			for (Entry<GristType, Integer> pairs : reqs.entrySet())
+			{
+				GristType type = pairs.getKey();
+				int need = pairs.getValue();
+				int have = base.getGrist(type);
+
 				if (need > have) return false;
 			}
 			return true;
@@ -142,13 +137,12 @@ public class GristHelper {
 	 */
 	public static void decrease(PlayerIdentifier player, GristSet set)
 	{
-		Hashtable<Integer, Integer> reqs = set.getHashtable();
+		Map<GristType, Integer> reqs = set.getMap();
 		if (reqs != null) {
-			Iterator<Entry<Integer, Integer>> it = reqs.entrySet().iterator();
-			while (it.hasNext()) {
-				Entry<Integer, Integer> pairs = it.next();
-				setGrist(player, GristType.values()[(Integer) pairs.getKey()], getGrist(player, GristType.values()[(Integer)pairs.getKey()]) - (Integer)pairs.getValue());
-				notifyServer(player, GristType.values()[(Integer) pairs.getKey()].getName(), pairs.getValue(), "spent");
+			for (Entry<GristType, Integer> pairs : reqs.entrySet())
+			{
+				setGrist(player, pairs.getKey(), getGrist(player, pairs.getKey()) - pairs.getValue());
+				notifyServer(player, pairs.getKey().getName(), pairs.getValue(), "spent");
 			}
 		}
 	}
@@ -175,16 +169,14 @@ public class GristHelper {
 	
 	public static void increase(PlayerIdentifier player, GristSet set)
 	{
-		Hashtable<Integer, Integer> reqs = set.getHashtable();
+		Map<GristType, Integer> reqs = set.getMap();
 		if (reqs != null)
 		{
-			Iterator<Entry<Integer, Integer>> it = reqs.entrySet().iterator();
 			EntityPlayerMP gristOwner = player.getPlayer();
-			while (it.hasNext())
+			for (Entry<GristType, Integer> pairs : reqs.entrySet())
 			{
-				Entry<Integer, Integer> pairs = it.next();
-				setGrist(player, GristType.values()[(Integer) pairs.getKey()], getGrist(player, GristType.values()[(Integer)pairs.getKey()]) + (Integer)pairs.getValue());
-				notify(player, GristType.values()[(Integer) pairs.getKey()].getName(), pairs.getValue(), "gained");
+				setGrist(player, pairs.getKey(), getGrist(player, pairs.getKey()) + pairs.getValue());
+				notify(player, pairs.getKey().getName(), pairs.getValue(), "gained");
 			}
 		}
 	}

@@ -7,6 +7,7 @@ import com.mraof.minestuck.item.ItemMinestuckBeverage;
 import com.mraof.minestuck.item.ItemMinestuckCandy;
 import com.mraof.minestuck.item.ItemModus;
 import com.mraof.minestuck.item.weapon.ItemDualWeapon;
+import com.mraof.minestuck.util.GristType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCactus;
 import net.minecraft.block.BlockTNT;
@@ -153,8 +154,30 @@ public class MinestuckModelManager
 		for(int i = 0; i < ItemMetalBoat.NAMES.length; i++)
 			register(metalBoat, i, "boat_" + ItemMetalBoat.NAMES[i]);
 		register(obsidianBucket);
-		for(int i = 0; i < ItemMinestuckCandy.NAMES.length; i++)
-			register(candy, i, ItemMinestuckCandy.NAMES[i]);
+
+		register(candy, 0, "candy_corn");
+		register(candy, GristType.REGISTRY.getID(GristType.Amber) + 1, "amber_gummy_worm");
+		register(candy, GristType.REGISTRY.getID(GristType.Amethyst) + 1, "amethyst_hard_candy");
+		register(candy, GristType.REGISTRY.getID(GristType.Artifact) + 1, "artifact_war_head");
+		register(candy, GristType.REGISTRY.getID(GristType.Build) + 1, "build_gushers");
+		register(candy, GristType.REGISTRY.getID(GristType.Caulk) + 1, "caulk_pretzel");
+		register(candy, GristType.REGISTRY.getID(GristType.Chalk) + 1, "chalk_candy_cigarette");
+		register(candy, GristType.REGISTRY.getID(GristType.Cobalt) + 1, "cobalt_gum");
+		register(candy, GristType.REGISTRY.getID(GristType.Diamond) + 1, "diamond_mint");
+		register(candy, GristType.REGISTRY.getID(GristType.Garnet) + 1, "garnet_twix");
+		register(candy, GristType.REGISTRY.getID(GristType.Gold) + 1, "gold_candy_ribbon");
+		register(candy, GristType.REGISTRY.getID(GristType.Iodine) + 1, "iodine_licorice");
+		register(candy, GristType.REGISTRY.getID(GristType.Marble) + 1, "marble_jawbreaker");
+		register(candy, GristType.REGISTRY.getID(GristType.Mercury) + 1, "mercury_sixlets");
+		register(candy, GristType.REGISTRY.getID(GristType.Quartz) + 1, "quartz_jelly_bean");
+		register(candy, GristType.REGISTRY.getID(GristType.Ruby) + 1, "ruby_lollipop");
+		register(candy, GristType.REGISTRY.getID(GristType.Rust) + 1, "rust_gummy_eye");
+		register(candy, GristType.REGISTRY.getID(GristType.Shale) + 1, "shale_peep");
+		register(candy, GristType.REGISTRY.getID(GristType.Sulfur) + 1, "sulfur_candy_apple");
+		register(candy, GristType.REGISTRY.getID(GristType.Tar) + 1, "tar_black_licorice");
+		register(candy, GristType.REGISTRY.getID(GristType.Uranium) + 1, "uranium_gummy_bear");
+		register(candy, GristType.REGISTRY.getID(GristType.Zillium) + 1, "zillium_skittles");
+		
 		for(int i = 0; i < ItemMinestuckBeverage.NAMES.length; i++)
 			register(beverage, i, ItemMinestuckBeverage.NAMES[i]);
 		register(bugOnAStick);

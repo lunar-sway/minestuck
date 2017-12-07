@@ -144,7 +144,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 					int candy = (gristType.getAmount() + 2)/4;
 					int gristAmount = gristType.getAmount() - candy*2;
 					if(candy > 0)
-						this.world.spawnEntity(new EntityItem(world, randX(), this.posY, randZ(), new ItemStack(MinestuckItems.candy, candy, gristType.getType().ordinal() + 1)));
+						this.world.spawnEntity(new EntityItem(world, randX(), this.posY, randZ(), new ItemStack(MinestuckItems.candy, candy, gristType.getType().getId() + 1)));
 					if(gristAmount > 0)
 						this.world.spawnEntity(new EntityGrist(world, randX(), this.posY, randZ(),new GristAmount(gristType.getType(), gristAmount)));
 				}
@@ -253,13 +253,13 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	@Override
 	public void writeSpawnData(ByteBuf buffer)
 	{
-		buffer.writeInt(type.ordinal());
+		buffer.writeInt(type.getId());
 	}
 	
 	@Override
 	public void readSpawnData(ByteBuf additionalData)
 	{
-		applyGristType(GristType.values()[additionalData.readInt()], false);
+		applyGristType(GristType.REGISTRY.getValue(additionalData.readInt()), false);
 		this.textureResource = new ResourceLocation("minestuck", this.getTexture());
 	}
 	
