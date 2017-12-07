@@ -23,21 +23,22 @@ public class BlockMobSpawner extends Block
         this.setTickRandomly(true);
         
     }
-   
-    
+   //*
+   //*should just delete it's self for now
+   //*    
     @Override
     public void randomTick(World worldIn, BlockPos pos, IBlockState state, Random random)
     {
-        if (worldIn.isAirBlock(pos.down()))
-        {
+      //  if (worldIn.isAirBlock(pos.down()))
+      //  {
             worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
-        }
-        else
-        {
-            EntityRabbit entity = new EntityRabbit(worldIn);
-            entity.setPosition(pos.getX() + .5, pos.getY(), pos.getZ() + .5);
-            entity.onInitialSpawn(null, null);
-            worldIn.spawnEntity(entity);
+     //   }
+     //   else
+      //  {
+      //      EntityRabbit entity = new EntityRabbit(worldIn);
+      //      entity.setPosition(pos.getX() + .5, pos.getY(), pos.getZ() + .5);
+      //      entity.onInitialSpawn(null, null);
+      //      worldIn.spawnEntity(entity);
             
         }
     }
