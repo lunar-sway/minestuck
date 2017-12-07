@@ -32,7 +32,7 @@ public class GuiGristCache extends GuiPlayerStats
 	{
 		super.initGui();
 		this.previousButton = new GuiButtonExt(1, this.xOffset + 8, this.yOffset + 8, 16, 16, "<");
-		this.nextButton = new GuiButtonExt(2, this.xOffset + guiWidth - 16, this.yOffset + 8, 16, 16, ">");
+		this.nextButton = new GuiButtonExt(2, this.xOffset + guiWidth - 24, this.yOffset + 8, 16, 16, ">");
 		if(GristType.REGISTRY.getValues().size() > rows * columns)
 		{
 			this.buttonList.add(this.nextButton);
@@ -56,9 +56,9 @@ public class GuiGristCache extends GuiPlayerStats
 			cacheMessage = I18n.format("gui.gristCache.name");
 		else cacheMessage = MinestuckPlayerData.title.getTitleName();
 		mc.fontRenderer.drawString(cacheMessage, (this.width / 2) - mc.fontRenderer.getStringWidth(cacheMessage) / 2, yOffset + 12, 0x404040);
+		super.drawScreen(xcor, ycor, par3);
 
 		drawActiveTabAndOther(xcor, ycor);
-		super.drawScreen(xcor, ycor, par3);
 
 		GlStateManager.color(1, 1, 1);
 		GlStateManager.disableRescaleNormal();

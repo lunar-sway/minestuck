@@ -45,7 +45,7 @@ public class GuiGristSelector extends GuiScreenMinestuck
 		int xOffset = (width - guiWidth) / 2;
 		int yOffset = (height - guiHeight) / 2;
 		this.previousButton = new GuiButtonExt(1, (this.width) + 8, yOffset + 8, 16, 16, "<");
-		this.nextButton = new GuiButtonExt(2, xOffset + guiWidth - 16, yOffset + 8, 16, 16, ">");
+		this.nextButton = new GuiButtonExt(2, xOffset + guiWidth - 24, yOffset + 8, 16, 16, ">");
 		if(GristType.REGISTRY.getValues().size() > rows * columns)
 		{
 			this.buttonList.add(this.nextButton);
