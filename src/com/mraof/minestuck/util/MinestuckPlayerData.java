@@ -209,6 +209,7 @@ public class MinestuckPlayerData
 					gristTag.setInteger("amount", this.gristCache.getGrist(type));
 					list.appendTag(gristTag);
 				}
+				nbt.setTag("grist", list);
 			}
 			if (this.title != null)
 			{

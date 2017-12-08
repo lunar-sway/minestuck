@@ -1,19 +1,20 @@
 package com.mraof.minestuck.util;
 
-import java.util.*;
-import java.util.Map.Entry;
-
-import javax.annotation.Nonnull;
-
 import com.mraof.minestuck.editmode.EditData;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextComponentTranslation;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Random;
 
 public class GristHelper {
 	private static Random random = new Random();
@@ -172,7 +173,6 @@ public class GristHelper {
 		Map<GristType, Integer> reqs = set.getMap();
 		if (reqs != null)
 		{
-			EntityPlayerMP gristOwner = player.getPlayer();
 			for (Entry<GristType, Integer> pairs : reqs.entrySet())
 			{
 				setGrist(player, pairs.getKey(), getGrist(player, pairs.getKey()) + pairs.getValue());
