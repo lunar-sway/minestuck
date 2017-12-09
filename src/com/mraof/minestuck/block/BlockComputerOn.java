@@ -1,20 +1,14 @@
 package com.mraof.minestuck.block;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import javax.annotation.Nullable;
-
-import java.util.Random;
-
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.client.gui.GuiHandler;
+import com.mraof.minestuck.network.skaianet.SkaiaClient;
+import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.util.ComputerProgram;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -30,12 +24,9 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.BlockSburbMachine.MachineType;
-import com.mraof.minestuck.client.gui.GuiHandler;
-import com.mraof.minestuck.network.skaianet.SkaiaClient;
-import com.mraof.minestuck.tileentity.TileEntityComputer;
-import com.mraof.minestuck.util.ComputerProgram;
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class BlockComputerOn extends Block implements ITileEntityProvider
 {
@@ -205,9 +196,9 @@ public class BlockComputerOn extends Block implements ITileEntityProvider
 	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_)
 	{
 		super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn, p_185477_7_);
-		EnumFacing roation = (EnumFacing) worldIn.getBlockState(pos).getValue(BlockComputerOff.DIRECTION);
+		EnumFacing roation = worldIn.getBlockState(pos).getValue(BlockComputerOff.DIRECTION);
 		AxisAlignedBB bb = COMPUTER_SCREEN_AABB[roation.getHorizontalIndex()].offset(pos);
-		if(entityBox.intersectsWith(bb))
+		if(entityBox.intersects(bb))
 			collidingBoxes.add(bb);
 	}
 }

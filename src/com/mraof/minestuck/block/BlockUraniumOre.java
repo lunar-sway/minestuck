@@ -1,8 +1,6 @@
 package com.mraof.minestuck.block;
 
-import java.util.List;
-import java.util.Random;
-
+import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
@@ -16,11 +14,8 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.item.MinestuckItems;
+import java.util.Random;
 
 public class BlockUraniumOre extends Block 
 {
@@ -36,8 +31,7 @@ public class BlockUraniumOre extends Block
 		setResistance(5.0F);	//Values normally used by ores
 		setLightLevel(0.2F);
 		setHarvestLevel("pickaxe", 1);
-		setDefaultState(getBlockState(Blocks.STONE.getDefaultState()));
-		this.setCreativeTab(Minestuck.tabMinestuck);
+		this.setCreativeTab(MinestuckItems.tabMinestuck);
 	}
 	
 	@Override
@@ -96,7 +90,7 @@ public class BlockUraniumOre extends Block
 		return new BlockStateContainer(this, BLOCK_TYPE);
 	}
 	
-	public IBlockState getBlockState(IBlockState ground)
+	public static IBlockState getBlockState(IBlockState ground)
 	{
 		int meta = 0;
 		if(ground.getBlock() == Blocks.STONE)
@@ -110,15 +104,14 @@ public class BlockUraniumOre extends Block
 		else if(ground.getBlock() == Blocks.RED_SANDSTONE)
 			meta = 4;
 		
-		return getBlockState().getBaseState().withProperty(BLOCK_TYPE, meta);
+		return MinestuckBlocks.oreUranium.getBlockState().getBaseState().withProperty(BLOCK_TYPE, meta);
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list)
+	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items)
 	{
 		for(int i = 0; i < 5; i++)
-			list.add(new ItemStack(itemIn, 1, i));
+			items.add(new ItemStack(this, 1, i));
 	}
 	
 }

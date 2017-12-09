@@ -1,20 +1,23 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "XXX",
-    "X#X",
-    "XXX"
+    "III",
+    "IFI",
+    "IEI"
   ],
   "key": {
-    "X": {
+    "I": {
       "item": "minecraft:iron_ingot"
     },
-    "#": {
+    "F": {
+      "item": "minecraft:furnace"
+    },
+    "E": {
       "item": "minestuck:energy_core"
     }
   },
   "result": {
-    "item": "minestuck:computer_standard",
+    "item": "minestuck:uranium_cooker",
     "count": 1
   }
 }

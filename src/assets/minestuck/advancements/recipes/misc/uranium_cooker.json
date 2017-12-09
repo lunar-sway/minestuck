@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "minestuck:computer_standard"
+      "minestuck:uranium_cooker"
     ]
   },
   "criteria": {
@@ -16,17 +16,17 @@
         ]
       }
     },
-    "has_the_recipe": {
+    "has_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "minestuck:computer_standard"
+        "recipe": "minestuck:uranium_cooker"
       }
     }
   },
   "requirements": [
     [
       "has_item",
-      "has_the_recipe"
+      "has_recipe"
     ]
   ]
 }

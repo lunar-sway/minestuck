@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "minestuck:computer_standard"
+      "minestuck:energy_core"
     ]
   },
   "criteria": {
@@ -11,22 +11,22 @@
       "conditions": {
         "items": [
           {
-            "item": "minestuck:energy_core"
+            "item": "minestuck:raw_uranium"
           }
         ]
       }
     },
-    "has_the_recipe": {
+    "has_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "minestuck:computer_standard"
+        "recipe": "minestuck:energy_core"
       }
     }
   },
   "requirements": [
     [
       "has_item",
-      "has_the_recipe"
+      "has_recipe"
     ]
   ]
 }

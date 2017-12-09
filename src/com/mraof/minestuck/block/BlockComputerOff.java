@@ -21,9 +21,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import java.util.List;
-
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class BlockComputerOff extends Block
 {
@@ -156,9 +155,9 @@ public class BlockComputerOff extends Block
 	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_)
 	{
 		super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn, p_185477_7_);
-		EnumFacing roation = (EnumFacing) worldIn.getBlockState(pos).getValue(DIRECTION);
+		EnumFacing roation = worldIn.getBlockState(pos).getValue(DIRECTION);
 		AxisAlignedBB bb = COMPUTER_SCREEN_AABB[roation.getHorizontalIndex()].offset(pos);
-		if(entityBox.intersectsWith(bb))
+		if(entityBox.intersects(bb))
 			collidingBoxes.add(bb);
 	}
 }
