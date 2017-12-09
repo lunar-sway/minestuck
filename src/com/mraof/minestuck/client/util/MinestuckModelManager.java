@@ -80,6 +80,7 @@ public class MinestuckModelManager
 		register(scarletRibbitar);
 		register(doggMachete);
 		register(cobaltSabre);
+		register(quantumSabre);
 		
 		register(blacksmithBane);
 		register(scraxe);
@@ -87,6 +88,7 @@ public class MinestuckModelManager
 		register(hephaestusLumber);
 		register(copseCrusher);
 		register(qPHammerAxe);
+		register(qFHammerAxe);
 		
 		
 		register(dice);
@@ -113,6 +115,8 @@ public class MinestuckModelManager
 		register(spearCane);
 		register(regiCane);
 		register(dragonCane);
+		register(pogoCane);
+		register(upStick);
 		
 		register(woodenSpoon);
 		register(silverSpoon);
@@ -134,6 +138,8 @@ public class MinestuckModelManager
 		register(prismarineBoots);
 		
 		register(rawCruxite);
+		register(rawUranium);
+		register(energyCore);
 		ModelLoader.registerItemVariants(cruxiteDowel, new ResourceLocation("minestuck:dowel_uncarved"), new ResourceLocation("minestuck:dowel_carved"), new ResourceLocation("minestuck:dowel_uncarved_blank"), new ResourceLocation("minestuck:dowel_carved_blank"));
 		ModelLoader.setCustomMeshDefinition(cruxiteDowel, new CruxiteDowelDefinition());
 		ModelLoader.registerItemVariants(captchaCard, new ResourceLocation("minestuck:card_empty"), new ResourceLocation("minestuck:card_full"), new ResourceLocation("minestuck:card_punched"));
@@ -187,6 +193,8 @@ public class MinestuckModelManager
 		register(jarOfBugs);
 		register(onion);
 		register(salad);
+		register(irradiatedSteak);
+		
 		register(threshDvd);
 		register(crewPoster);
 		register(sbahjPoster);
@@ -197,6 +205,7 @@ public class MinestuckModelManager
 		register(recordEmissaryOfDance);
 		register(recordDanceStab);
 		register(glowystoneDust);
+		register(fakeArms);
 	}
 	
 	private static void blockModels()
@@ -211,6 +220,11 @@ public class MinestuckModelManager
 		register(oreCruxite, 2, "cruxite_cobblestone");
 		register(oreCruxite, 3, "cruxite_sandstone");
 		register(oreCruxite, 4, "cruxite_sandstone_red");
+		register(oreUranium, 0, "uranium_stone");
+		register(oreUranium, 1, "uranium_netherrack");
+		register(oreUranium, 2, "uranium_cobblestone");
+		register(oreUranium, 3, "uranium_sandstone");
+		register(oreUranium, 4, "uranium_sandstone_red");
 		register(cruxiteBlock);
 		register(genericObject);
 		register(coalOreNetherrack);
@@ -244,6 +258,8 @@ public class MinestuckModelManager
 		register(instantTnt);
 		register(woodenExplosiveButton);
 		register(stoneExplosiveButton);
+
+		register(uraniumCooker);
 		
 		ModelLoader.setCustomStateMapper(blockOil, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
 		ModelLoader.setCustomStateMapper(blockBlood, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());

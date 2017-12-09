@@ -4,6 +4,7 @@ import com.mraof.minestuck.editmode.EditData;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -18,7 +19,7 @@ import java.util.Random;
 
 public class GristHelper {
 	private static Random random = new Random();
-	private static final boolean SHOULD_OUTPUT_GRIST_CHANGES = true;
+	private static final boolean SHOULD_OUTPUT_GRIST_CHANGES = MinestuckConfig.showGristChanges;
 	
 	public static HashMap<GristType, ArrayList<GristType>> secondaryGristMap;
 

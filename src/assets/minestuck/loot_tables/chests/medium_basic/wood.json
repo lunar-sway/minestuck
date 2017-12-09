@@ -8,7 +8,7 @@
                     "entryName": "darkoak_planks",
                     "type": "item",
                     "name": "minecraft:planks",
-                    "weight": 10,
+                    "weight": 5,
                     "quality": -2,
                     "functions": [
                         {
@@ -28,7 +28,7 @@
                     "entryName": "jungle_planks",
                     "type": "item",
                     "name": "minecraft:planks",
-                    "weight": 15,
+                    "weight": 8,
                     "quality": -2,
                     "functions": [
                         {
@@ -48,7 +48,7 @@
                     "entryName": "oak_planks",
                     "type": "item",
                     "name": "minecraft:planks",
-                    "weight": 15,
+                    "weight": 8,
                     "quality": -2,
                     "functions": [
                         {
@@ -80,7 +80,7 @@
                     "entryName": "jungle_logs",
                     "type": "item",
                     "name": "minecraft:log",
-                    "weight": 10,
+                    "weight": 5,
                     "quality": -2,
                     "functions": [
                         {
@@ -100,7 +100,7 @@
                     "entryName": "oak_logs",
                     "type": "item",
                     "name": "minecraft:log",
-                    "weight": 8,
+                    "weight": 4,
                     "quality": -2,
                     "functions": [
                         {
@@ -172,7 +172,7 @@
                     "entryName": "glowing_logs",
                     "type": "item",
                     "name": "minestuck:glowing_log",
-                    "weight": 8,
+                    "weight": 4,
                     "quality": -2,
                     "functions": [
                         {
@@ -188,7 +188,7 @@
                     "entryName": "iron_ingots",
                     "type": "item",
                     "name": "minecraft:iron_ingot",
-                    "weight": 2,
+                    "weight": 4,
                     "quality": 2,
                     "functions": [
                         {
@@ -228,6 +228,21 @@
                             "damage": {
                                 "min": 0.75,
                                 "max": 1
+                            }
+                        }
+                    ]
+                },
+                {
+                    "entryName": "cocoa_beans",
+                    "type": "item",
+                    "name": "minestuck:dye",
+                    "weight": 3,
+                    "quality": 0,
+                    "functions": [
+                        {
+                            "function": "set_data",
+                            "damage": {
+                                "data": 3
                             }
                         }
                     ]

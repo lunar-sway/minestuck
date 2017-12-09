@@ -53,9 +53,12 @@ public class MinestuckConfig
 	public static boolean alchemyIcons;
 	@SideOnly(Side.CLIENT)
 	public static boolean preEntryEcheladder;
+	@SideOnly(Side.CLIENT)
+	public static boolean showGristChanges;
 	
 	public static boolean hardMode = false;
 	public static boolean generateCruxiteOre;
+	public static boolean generateUraniumOre;
 	public static boolean privateComputers;
 	public static boolean globalSession;
 	public static boolean forceMaxSize = true;
@@ -82,6 +85,7 @@ public class MinestuckConfig
 	public static String[] defaultModusTypes;
 	public static int modusMaxSize;
 	public static int cardCost;
+	public static int oreMultiplier;
 	/**
 	 * 0: Make the player's new server player his/her old server player's server player
 	 * 1: The player that lost his/her server player will have an idle main connection until someone without a client player connects to him/her.
@@ -141,10 +145,12 @@ public class MinestuckConfig
 			deployConfigurations = new boolean[1];
 			deployConfigurations[0] = config.get("General", "deployCard", false, "Determines if a card with a captcha card punched on it should be added to the deploy list or not.").setLanguageKey("minestuck.config.deployCard").setRequiresWorldRestart(true).getBoolean();
 			cardCost = config.get("General", "cardCost", 1, "An integer that determines how much a captchalouge card costs to alchemize").setMinValue(1).setLanguageKey("minestuck.config.cardCost").setRequiresWorldRestart(true).getInt();
+			oreMultiplier = config.get("General", "oreMultiplier", 1, "Multiplies the cost for the 'contents' of an ore. Set to 0 to disable alchemizing ores.").setMinValue(0).setLanguageKey("minestuck.config.oreMultiplier").setRequiresWorldRestart(true).getInt();
 			cardRecipe = config.get("General", "cardRecipe", true, "Set this to false to remove the captcha card crafting recipe.").setLanguageKey("minestuck.config.cardRecipe").setRequiresWorldRestart(true).getBoolean();
 			
 			globalSession = config.get("General", "globalSession", false, "Whenether all connetions should be put into a single session or not.").setRequiresWorldRestart(true).setLanguageKey("minestuck.config.globalSession").getBoolean();
 			generateCruxiteOre = config.get("General", "generateCruxiteOre", true, "If cruxite ore should be generated in the overworld.").setRequiresWorldRestart(true).setLanguageKey("minestuck.config.generateCruxiteOre").getBoolean();
+			generateUraniumOre = config.get("General", "generateUraniumOre", true, "If uranium ore should be generated in the overworld.").setRequiresWorldRestart(true).setLanguageKey("minestuck.config.generateUraniumOre").getBoolean();
 			overworldEditRange = config.get("General", "overworldEditRange", 15, "A number that determines how far away from the computer an editmode player may be before entry.", 3, 50).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.overworldEditRange").getInt();
 			landEditRange = config.get("General", "landEditRange", 30, "A number that determines how far away from the center of the brought land that an editmode player may be after entry.", 3, 50).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.landEditRange").getInt();
 			disableGristWidget = config.get("General", "disableGristWidget", false).setLanguageKey("minestuck.config.disableGristWidget").setRequiresWorldRestart(true).getBoolean();
@@ -167,7 +173,19 @@ public class MinestuckConfig
 		dropItemsInCards = config.get("Modus", "dropItemsInCards", true, "When sylladexes are droppable, this option determines if items should be dropped inside of cards or items and cards as different stacks.").setLanguageKey("minestuck.config.dropItemsInCards").getBoolean();
 		
 		privateComputers = config.get("General", "privateComputers", true, "True if computers should only be able to be used by the owner.").setLanguageKey("minestuck.config.privateComputers").getBoolean();
+
+		deployConfigurations = new boolean[1];
+		deployConfigurations[0] = config.get("General", "deployCard", false, "Determines if a card with a captcha card punched on it should be added to the deploy list or not.").setLanguageKey("minestuck.config.deployCard").setRequiresWorldRestart(true).getBoolean();
+		cardCost = config.get("General", "cardCost", 1, "An integer that determines how much a captchalouge card costs to alchemize").setMinValue(1).setLanguageKey("minestuck.config.cardCost").setRequiresWorldRestart(true).getInt();
+		oreMultiplier = config.get("General", "oreMultiplier", 1, "Multiplies the cost for the 'contents' of an ore. Set to 0 to disable alchemizing ores.").setMinValue(0).setLanguageKey("minestuck.config.oreMultiplier").setRequiresWorldRestart(true).getInt();
+		cardRecipe = config.get("General", "cardRecipe", true, "Set this to false to remove the captcha card crafting recipe.").setLanguageKey("minestuck.config.cardRecipe").setRequiresWorldRestart(true).getBoolean();
 		
+		generateCruxiteOre = config.get("General", "generateCruxiteOre", true, "If cruxite ore should be generated in the overworld.").setRequiresWorldRestart(true).setLanguageKey("minestuck.config.generateCruxiteOre").getBoolean();
+		generateUraniumOre = config.get("General", "generateUraniumOre", false, "If uranium ore should be generated in the overworld.").setRequiresWorldRestart(true).setLanguageKey("minestuck.config.generateUraniumOre").getBoolean();
+		globalSession = config.get("General", "globalSession", false, "Whenether all connetions should be put into a single session or not.").setLanguageKey("minestuck.config.globalSession").getBoolean();
+		overworldEditRange = config.get("General", "overworldEditRange", 15, "A number that determines how far away from the computer an editmode player may be before entry.", 3, 50).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.overworldEditRange").getInt();
+		landEditRange = config.get("General", "landEditRange", 30, "A number that determines how far away from the center of the brought land that an editmode player may be after entry.", 3, 50).setRequiresWorldRestart(true).setLanguageKey("minestuck.config.landEditRange").getInt();
+
 		artifactRange = config.get("General", "artifactRange", 30, "Radius of the land brought into the medium.", 3, 50).setLanguageKey("minestuck.config.artifactRange").getInt();
 		entryCrater = config.get("General", "entryCrater", true, "Disable this to prevent craters from people entering the medium.").setLanguageKey("minestuck.config.entryCrater").getBoolean();
 		adaptEntryBlockHeight = config.get("General", "adaptEntryBlockHeight", true, "Adapt the transferred height to make the top non-air block to be placed at y:128. Makes entry take slightly longer.").setLanguageKey("minestuck.config.adaptEntryBlockHeight").getBoolean();
@@ -177,6 +195,7 @@ public class MinestuckConfig
 		playerSelectedTitle = config.get("General", "playerSelectedTitle", false, "Enable this to let players select their own title. They will however not be able to select the Lord or Muse as class.").setLanguageKey("minestuck.config.playerSelectedTitle").getBoolean();
 		canBreakGates = config.get("General", "canBreakGates", true, "Lets gates be destroyed by explosions. Turning this off will make gates use the same explosion resistance as bedrock.").setLanguageKey("minestuck.config.canBreakGates").getBoolean();
 		disableGiclops = config.get("General", "disableGiclops", false, "Right now, the giclops pathfinding is currently causing huge amounts of lag due to their size. This option is a short-term solution that will disable giclops spawning and remove all existing giclopses.").setLanguageKey("minestuck.config.disableGiclops").getBoolean();
+		showGristChanges = config.get("General", "showGristChanges", true, "If this is true, grist change messages will appear").setLanguageKey("minestuck.config.showGristChanges").getBoolean();
 		if(config.hasKey("General", "hardMode"))
 			hardMode = config.get("General", "hardMode", false).getBoolean();	//Not fully fleshed out yet
 		
