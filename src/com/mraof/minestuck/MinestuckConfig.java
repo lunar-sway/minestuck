@@ -53,7 +53,7 @@ public class MinestuckConfig
 	public static boolean alchemyIcons;
 	@SideOnly(Side.CLIENT)
 	public static boolean preEntryEcheladder;
-	@SideOnly(Side.CLIENT)
+	//@SideOnly(Side.CLIENT)
 	public static boolean showGristChanges;
 	
 	public static boolean hardMode = false;
