@@ -122,6 +122,7 @@ public class Minestuck
 		GameRegistry.registerTileEntity(TileEntityComputer.class, "Minestuck.ComputerSburb");
 		GameRegistry.registerTileEntity(TileEntityTransportalizer.class, "Minestuck.Transportalizer");
 		GameRegistry.registerTileEntity(TileEntityGate.class, "Minestuck.Gate");
+		GameRegistry.registerTileEntity(TileEntityUraniumCooker.class, "minestuck.uranium_cooker");
 		
 		MinestuckDimensionHandler.register();
 		

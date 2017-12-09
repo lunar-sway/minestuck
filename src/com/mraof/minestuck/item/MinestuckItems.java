@@ -16,6 +16,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.*;
+import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -53,6 +54,7 @@ public class MinestuckItems
 	public static Item scarletRibbitar;
 	public static Item doggMachete;
 	public static Item cobaltSabre;
+	public static Item quantumSabre;
 	//axes
 	public static Item copseCrusher;
 	public static Item blacksmithBane;
@@ -60,6 +62,7 @@ public class MinestuckItems
 	public static Item qPHammerAxe;
 	public static Item rubyCroak;
 	public static Item hephaestusLumber;
+	public static Item qFHammerAxe;
 	//Dice
 	public static Item dice;
 	public static Item fluoriteOctet;
@@ -82,6 +85,8 @@ public class MinestuckItems
 	public static Item cane;
 	public static Item spearCane;
 	public static Item dragonCane;
+	public static Item pogoCane;
+	public static Item upStick;
 	//Spoons/forks
 	public static Item woodenSpoon;
 	public static Item silverSpoon;
@@ -104,8 +109,11 @@ public class MinestuckItems
 	public static Item jarOfBugs;
 	public static Item onion;
 	public static Item salad;
+	public static Item irradiatedSteak;
 	//Other
 	public static Item rawCruxite;
+	public static Item rawUranium;
+	public static Item energyCore;
 	public static Item cruxiteDowel;
 	public static Item captchaCard;
 	public static ItemCruxiteArtifact cruxiteApple;
@@ -132,10 +140,12 @@ public class MinestuckItems
 	public static Item frogStatueReplica;
 	public static Item stoneSlab;
 	public static Item glowystoneDust;
-	
+	public static Item fakeArms;
+
 	public static Item.ToolMaterial toolEmerald;
 	public static ItemArmor.ArmorMaterial armorPrismarine;
-	
+	public static Item.ToolMaterial toolUranium = EnumHelper.addToolMaterial("URANIUM", 3, 1220, 12.0F, 6.0F, 15);
+
 	public static void registerItems()
 	{
 		
@@ -143,6 +153,14 @@ public class MinestuckItems
 		registerItemBlock(new ItemBlock(skaiaPortal));
 		
 		registerItemBlock(new ItemMultiTexture(oreCruxite, oreCruxite, new String[0])
+		{
+			@Override
+			public String getUnlocalizedName(ItemStack stack)
+			{
+				return theBlock.getUnlocalizedName();
+			}
+		});
+		registerItemBlock(new ItemMultiTexture(oreUranium, oreUranium, new String[0])
 		{
 			@Override
 			public String getUnlocalizedName(ItemStack stack)
@@ -210,6 +228,8 @@ public class MinestuckItems
 		registerItemBlock(new ItemBlock(woodenExplosiveButton));
 		registerItemBlock(new ItemBlock(stoneExplosiveButton));
 		
+		registerItemBlock(new ItemBlock(uraniumCooker));
+		
 		//hammers
 		clawHammer = GameRegistry.register(new ItemWeapon(131, 4.0D, -2.4D, 10, "clawHammer").setTool("pickaxe", 0, 1.0F).setRegistryName("claw_hammer"));
 		sledgeHammer = GameRegistry.register(new ItemWeapon(250, 6.0D, -2.8D, 8, "sledgeHammer").setTool("pickaxe", 2, 4.0F).setRegistryName("sledge_hammer"));
@@ -221,7 +241,7 @@ public class MinestuckItems
 		popamaticVrillyhoo = GameRegistry.register(new ItemWeapon(3000, 0.0D, -2.8D, 30, "popamaticVrillyhoo").setTool("pickaxe", 4, 15.0F).setRegistryName("popamatic_vrillyhoo"));
 		scarletZillyhoo = GameRegistry.register(new ItemFireWeapon(2000, 11.0D, -2.8D, 16, "scarletZillyhoo", 50).setTool("pickaxe", 3, 4.0F).setRegistryName("scarlet_zillyhoo"));
 		mwrthwl = GameRegistry.register(new ItemWeapon(2000, 10.5D, -2.8D, 16, "mwrthwl").setTool("pickaxe", 3, 4.0F).setRegistryName("mwrthwl"));
-		
+
 		//blades
 		sord = GameRegistry.register(new ItemSord(59, 2, -2.4D, 5, "sord").setRegistryName("sord"));
 		cactusCutlass = GameRegistry.register(new ItemWeapon(104, 4, -2.4D, 10, "cactaceaeCutlass").setRegistryName("cactaceae_cutlass"));
@@ -237,15 +257,18 @@ public class MinestuckItems
 		scarletRibbitar = GameRegistry.register(new ItemWeapon(2000, 7, -2.4D, 30, "scarletRibbitar").setRegistryName("scarlet_ribbitar"));
 		doggMachete = GameRegistry.register(new ItemWeapon(1000, 5, -2.4D, 30, "doggMachete").setRegistryName("dogg_machete"));
 		cobaltSabre = GameRegistry.register(new ItemFireWeapon(300, 7, -2.4D, 10, "cobaltSabre", 30).setRegistryName("cobalt_sabre"));
+		quantumSabre = GameRegistry.register(new ItemPotionWeapon(toolUranium, 600, 8, -2.4D, 5, "quantumSabre", new PotionEffect(MobEffects.WITHER, 100, 1)).setRegistryName("quantum_sabre"));
 		
 		//axes
 		copseCrusher = GameRegistry.register(new ItemWeapon(400, 6.0D, -3.0D, 20, "copseCrusher", -1, 20).setTool("axe", 2, 7.0F).setRegistryName("copse_crusher"));
 		blacksmithBane = GameRegistry.register(new ItemWeapon(413, 9.0D, -3.0D, 15, "blacksmithBane").setTool("axe", 2, 6.0F).setRegistryName("blacksmith_bane"));
 		scraxe = GameRegistry.register(new ItemWeapon(500, 10.0D, -3.0D, 20, "scraxe").setTool("axe", 2, 7.0F).setRegistryName("scraxe"));
 		qPHammerAxe = GameRegistry.register(new ItemPogoWeapon(800, 8.0D, -3.0D, 30, "qPHammerAxe", 0.6).setTool("axe", 2, 7.0F).setTool("pickaxe", 1, 2.0F).setTerminus(-1, 50).setRegistryName("piston_powered_pogo_axehammer"));
-		rubyCroak = GameRegistry.register(new ItemWeapon(2000, 11.0D, -2.9D, 30, "rubyCroak").setTool("axe", 3, 8.0F).setRegistryName("ruby_croak"));
+		rubyCroak = GameRegistry.register(new ItemWeapon(2000, 11.0D, -3.0D, 30, "rubyCroak").setTool("axe", 3, 8.0F).setRegistryName("ruby_croak"));
 		hephaestusLumber = GameRegistry.register(new ItemFireWeapon(3000, 11.0D, -3.0D, 30, "hephaestusLumber", 30).setTool("axe", 3, 9.0F).setRegistryName("hephaestus_lumberjack"));
-		
+		qFHammerAxe = GameRegistry.register(new ItemPogoWeapon(2048, 11.0D, -3.0D, 0, "qFHammerAxe", 0.7).setTool("axe", 3, 9.0F).setTool("pickaxe", 2, 4.0F).setTerminus(-1, 100).setRegistryName("fission_focused_fault_feller"));
+		//qCHammerAxe = GameRegistry.register(new ItemPogoWeapon(4096, 11.0D, -3.0D, 0, "qCHammerAxe", 0.8).setTool("axe", 4, 11.0F).setTool("pickaxe", 3, 6.0F).setTerminus(-1, 200).setRegistryName("cobble_crushing_comet_carver"));
+
 		//Dice
 		dice = GameRegistry.register(new ItemWeapon(51, 6, 3, 6, "dice").setRegistryName("dice"));
 		fluoriteOctet = GameRegistry.register(new ItemWeapon(67, 15, 6, 8, "fluoriteOctet").setRegistryName("fluorite_octet"));
@@ -270,7 +293,9 @@ public class MinestuckItems
 		cane = GameRegistry.register(new ItemWeapon(100, 2.0D, -2.0D, 15, "cane").setRegistryName("cane"));
 		spearCane = GameRegistry.register(new ItemWeapon(300, 4.0D, -2.0D, 13, "spearCane").setRegistryName("spear_cane"));
 		dragonCane = GameRegistry.register(new ItemWeapon(300, 6.5D, -2.0D, 20, "dragonCane").setRegistryName("dragon_cane"));
-		
+		pogoCane = GameRegistry.register(new ItemPogoWeapon(500, 3.0D, -2.0D, 15, "pogoCane", 0.6).setRegistryName("pogo_cane"));
+		upStick = GameRegistry.register(new ItemWeapon(ToolMaterial.WOOD, 1, 0.0D, 0.0D, 0, "upStick").setUnbreakable().setRegistryName("uranium_powered_stick"));
+
 		//Spoons/forks
 		woodenSpoon = GameRegistry.register(new ItemWeapon(59, 2.0D, -2.2D, 5, "woodenSpoon").setRegistryName("wooden_spoon"));
 		silverSpoon = GameRegistry.register(new ItemWeapon(250, 2.5D, -2.2D, 12, "silverSpoon").setRegistryName("silver_spoon"));
@@ -285,7 +310,7 @@ public class MinestuckItems
 		emeraldPickaxe = GameRegistry.register(new ItemMinestuckPickaxe(toolEmerald).setRegistryName("emerald_pickaxe")).setUnlocalizedName("pickaxeEmerald").setCreativeTab(Minestuck.tabMinestuck);
 		emeraldShovel = GameRegistry.register(new ItemSpade(toolEmerald).setRegistryName("emerald_shovel")).setUnlocalizedName("shovelEmerald").setCreativeTab(Minestuck.tabMinestuck);
 		emeraldHoe = GameRegistry.register(new ItemHoe(toolEmerald).setRegistryName("emerald_hoe")).setUnlocalizedName("hoeEmerald").setCreativeTab(Minestuck.tabMinestuck);
-		
+
 		//armor
 		armorPrismarine = EnumHelper.addArmorMaterial("PRISMARINE", "minestuck:prismarine", 20, new int[]{3, 7, 6, 2}, 15, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0F);
 		armorPrismarine.repairMaterial = new ItemStack(Items.PRISMARINE_SHARD);
@@ -293,7 +318,7 @@ public class MinestuckItems
 		prismarineChestplate = GameRegistry.register(new ItemArmor(armorPrismarine, 0, EntityEquipmentSlot.CHEST).setRegistryName("prismarine_chestplate")).setUnlocalizedName("chestplatePrismarine").setCreativeTab(Minestuck.tabMinestuck);
 		prismarineLeggings = GameRegistry.register(new ItemArmor(armorPrismarine, 0, EntityEquipmentSlot.LEGS).setRegistryName("prismarine_leggings")).setUnlocalizedName("leggingsPrismarine").setCreativeTab(Minestuck.tabMinestuck);
 		prismarineBoots = GameRegistry.register(new ItemArmor(armorPrismarine, 0, EntityEquipmentSlot.FEET).setRegistryName("prismarine_boots")).setUnlocalizedName("bootsPrismarine").setCreativeTab(Minestuck.tabMinestuck);
-		
+
 		//food
 		candy = GameRegistry.register(new ItemMinestuckCandy().setRegistryName("candy"));
 		beverage = GameRegistry.register(new ItemMinestuckBeverage().setRegistryName("beverage"));
@@ -304,9 +329,12 @@ public class MinestuckItems
 		jarOfBugs = GameRegistry.register(new ItemFood(3, 0.2F, false).setRegistryName("jar_of_bugs")).setUnlocalizedName("jarOfBugs").setCreativeTab(Minestuck.tabMinestuck);
 		onion = GameRegistry.register(new ItemFood(2, 0.2F, false).setRegistryName("onion")).setUnlocalizedName("onion").setCreativeTab(Minestuck.tabMinestuck);
 		salad = GameRegistry.register(new ItemSoup(1).setRegistryName("salad").setUnlocalizedName("salad").setCreativeTab(Minestuck.tabMinestuck));
-		
+		irradiatedSteak = GameRegistry.register(new ItemFood(4, 0.4F, true).setPotionEffect(new PotionEffect(MobEffects.WITHER, 100, 1), 0.9F).setRegistryName("irradiated_steak").setUnlocalizedName("irradiatedSteak").setCreativeTab(Minestuck.tabMinestuck));
+
 		//misc
 		rawCruxite = GameRegistry.register(new Item().setRegistryName("raw_cruxite")).setUnlocalizedName("rawCruxite").setCreativeTab(Minestuck.tabMinestuck);
+		rawUranium = GameRegistry.register(new Item().setRegistryName("raw_uranium")).setUnlocalizedName("rawUranium").setCreativeTab(Minestuck.tabMinestuck);
+		energyCore = GameRegistry.register(new Item().setRegistryName("energy_core")).setUnlocalizedName("energyCore").setCreativeTab(Minestuck.tabMinestuck);
 		cruxiteDowel = GameRegistry.register(new ItemDowel().setRegistryName("cruxite_dowel"));
 		captchaCard = GameRegistry.register(new ItemCaptchaCard().setRegistryName("captcha_card"));
 		cruxiteApple = (ItemCruxiteArtifact) GameRegistry.register(new ItemCruxiteApple().setRegistryName("cruxite_apple"));
@@ -338,11 +366,12 @@ public class MinestuckItems
 		frogStatueReplica = GameRegistry.register(new Item().setRegistryName("frog_statue_replica")).setUnlocalizedName("frogStatueReplica").setCreativeTab(Minestuck.tabMinestuck);
 		stoneSlab = GameRegistry.register(new Item().setRegistryName("stone_slab")).setUnlocalizedName("stoneSlab").setCreativeTab(Minestuck.tabMinestuck);
 		glowystoneDust = GameRegistry.register(new ItemGlowystoneDust().setRegistryName("glowystone_dust")).setUnlocalizedName("glowystoneDust").setCreativeTab(Minestuck.tabMinestuck);
-		
+		fakeArms = GameRegistry.register(new Item().setRegistryName("fake_arms")).setUnlocalizedName("fakeArms").setCreativeTab(Minestuck.tabMinestuck);
+
 		//Music disks
 		recordEmissaryOfDance = GameRegistry.register(new ItemMinestuckRecord("emissary", Minestuck.soundEmissaryOfDance).setRegistryName("record_emissary").setUnlocalizedName("record"));
 		recordDanceStab = GameRegistry.register(new ItemMinestuckRecord("danceStab", Minestuck.soundDanceStabDance).setRegistryName("record_dance_stab").setUnlocalizedName("record"));
-		
+
 		minestuckBucket.addBlock(blockOil.getDefaultState());
 		minestuckBucket.addBlock(blockBlood.getDefaultState());
 		minestuckBucket.addBlock(blockBrainJuice.getDefaultState());
@@ -350,8 +379,10 @@ public class MinestuckItems
 		{
 			minestuckBucket.addBlock(block.getDefaultState());
 		}*/
+		
+		toolUranium.setRepairItem(new ItemStack(rawUranium));
 	}
-	
+
 	private static Item registerItemBlock(ItemBlock item)
 	{
 		return GameRegistry.register(item.setRegistryName(item.block.getRegistryName()));

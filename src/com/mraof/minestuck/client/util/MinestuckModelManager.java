@@ -43,7 +43,6 @@ public class MinestuckModelManager
 		ItemModelMesher modelRegistry = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
 		
 		//Items
-
 		register(sledgeHammer);
 		register(blacksmithHammer);
 		register(pogoHammer);
@@ -67,6 +66,7 @@ public class MinestuckModelManager
 		register(scarletRibbitar);
 		register(doggMachete);
 		register(cobaltSabre);
+		register(quantumSabre);
 		
 		register(blacksmithBane);
 		register(scraxe);
@@ -74,6 +74,7 @@ public class MinestuckModelManager
 		register(hephaestusLumber);
 		register(copseCrusher);
 		register(qPHammerAxe);
+		register(qFHammerAxe);
 		
 		
 		register(dice);
@@ -97,6 +98,8 @@ public class MinestuckModelManager
 		register(cane);
 		register(spearCane);
 		register(dragonCane);
+		register(pogoCane);
+		register(upStick);
 		
 		register(woodenSpoon);
 		register(silverSpoon);
@@ -128,6 +131,8 @@ public class MinestuckModelManager
 		register(prismarineBoots);
 		
 		register(rawCruxite);
+		register(rawUranium);
+		register(energyCore);
 		modelRegistry.register(cruxiteDowel, new CruxiteDowelDefinition());
 		modelRegistry.register(captchaCard, new CaptchaCardDefinition());
 		modelRegistry.register(cruxiteApple, new ColoredItemDefinition("minestuck:cruxite_apple"));
@@ -155,6 +160,8 @@ public class MinestuckModelManager
 		register(jarOfBugs);
 		register(onion);
 		register(salad);
+		register(irradiatedSteak);
+		
 		register(threshDvd);
 		register(crewPoster);
 		register(sbahjPoster);
@@ -165,6 +172,7 @@ public class MinestuckModelManager
 		register(recordEmissaryOfDance);
 		register(recordDanceStab);
 		register(glowystoneDust);
+		register(fakeArms);
 		
 		//Blocks
 		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())
@@ -177,6 +185,11 @@ public class MinestuckModelManager
 		register(oreCruxite, 2, "cruxite_cobblestone");
 		register(oreCruxite, 3, "cruxite_sandstone");
 		register(oreCruxite, 4, "cruxite_sandstone_red");
+		register(oreUranium, 0, "uranium_stone");
+		register(oreUranium, 1, "uranium_netherrack");
+		register(oreUranium, 2, "uranium_cobblestone");
+		register(oreUranium, 3, "uranium_sandstone");
+		register(oreUranium, 4, "uranium_sandstone_red");
 		register(cruxiteBlock);
 		register(genericObject);
 		register(coalOreNetherrack);
@@ -209,6 +222,8 @@ public class MinestuckModelManager
 		register(instantTnt);
 		register(woodenExplosiveButton);
 		register(stoneExplosiveButton);
+
+		register(uraniumCooker);
 		
 	}
 	
@@ -248,6 +263,7 @@ public class MinestuckModelManager
 		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())
 			ModelBakery.registerItemVariants(Item.getItemFromBlock(chessTile), new ResourceLocation("minestuck:chesstile_"+type.name));
 		ModelBakery.registerItemVariants(Item.getItemFromBlock(oreCruxite), new ResourceLocation("minestuck:cruxite_stone"), new ResourceLocation("minestuck:cruxite_netherrack"), new ResourceLocation("minestuck:cruxite_cobblestone"), new ResourceLocation("minestuck:cruxite_sandstone"), new ResourceLocation("minestuck:cruxite_sandstone_red"));
+		ModelBakery.registerItemVariants(Item.getItemFromBlock(oreUranium), new ResourceLocation("minestuck:uranium_stone"), new ResourceLocation("minestuck:uranium_netherrack"), new ResourceLocation("minestuck:uranium_cobblestone"), new ResourceLocation("minestuck:uranium_sandstone"), new ResourceLocation("minestuck:uranium_sandstone_red"));
 		for(BlockColoredDirt.BlockType type : BlockColoredDirt.BlockType.values())
 			ModelBakery.registerItemVariants(Item.getItemFromBlock(coloredDirt), new ResourceLocation("minestuck:colored_dirt_"+type.name));
 		for(BlockSburbMachine.MachineType type : BlockSburbMachine.MachineType.values())
@@ -258,6 +274,8 @@ public class MinestuckModelManager
 			ModelBakery.registerItemVariants(Item.getItemFromBlock(stone), new ResourceLocation("minestuck:"+type.getName()));
 		for(BlockMinestuckLog.BlockType type : BlockMinestuckLog.BlockType.values())
 			ModelBakery.registerItemVariants(Item.getItemFromBlock(log), new ResourceLocation("minestuck:"+type.getName()+"_log"));
+		
+		ModelBakery.registerItemVariants(Item.getItemFromBlock(uraniumCooker), new ResourceLocation("minestuck:uranium_cooker"));
 		
 		ModelLoader.setCustomStateMapper(blockOil, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
 		ModelLoader.setCustomStateMapper(blockBlood, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
