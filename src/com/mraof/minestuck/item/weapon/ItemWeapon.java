@@ -1,18 +1,9 @@
 package com.mraof.minestuck.item.weapon;
 
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.PriorityQueue;
-import java.util.Random;
-
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import com.mraof.minestuck.util.Pair;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -28,6 +19,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.PriorityQueue;
 
 //TODO add system for Minestuck weapons that can replace enchantments
 public class ItemWeapon extends ItemSword //To allow enchantments such as sharpness
@@ -58,7 +53,7 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 	{
 		super(material);
 		this.maxStackSize = 1;
-		this.setCreativeTab(Minestuck.tabMinestuck);
+		this.setCreativeTab(MinestuckItems.tabMinestuck);
 		this.setMaxDamage(maxUses);
 		this.weaponDamage = damageVsEntity;
 		this.enchantability = enchantability;
@@ -148,7 +143,7 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 	{
 		if(this == MinestuckItems.clawHammer)
 		{
-			player.addStat(MinestuckAchievementHandler.getHammer);
+			//player.addStat(MinestuckAchievementHandler.getHammer);
 		}
 	}
 

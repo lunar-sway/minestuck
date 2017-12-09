@@ -1,5 +1,7 @@
 package com.mraof.minestuck.entity.item;
 
+import com.mraof.minestuck.editmode.ClientEditHandler;
+import com.mraof.minestuck.editmode.ServerEditHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -14,9 +16,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.mraof.minestuck.editmode.ClientEditHandler;
-import com.mraof.minestuck.editmode.ServerEditHandler;
 
 public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnData
 {
@@ -82,13 +81,14 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 	@Override
 	protected void entityInit() {}
 	
+	
 	@SideOnly(Side.CLIENT)
 	@Override
-	public int getBrightnessForRender(float par1)
+	public int getBrightnessForRender()
 	{
 		float f1 = 0.5F;
 
-		int i = super.getBrightnessForRender(par1);
+		int i = super.getBrightnessForRender();
 		int j = i & 255;
 		int k = i >> 16 & 255;
 		j += (int)(f1 * 15.0F * 16.0F);

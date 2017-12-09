@@ -1,7 +1,5 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.Minestuck;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -20,7 +18,7 @@ public class ItemObsidianBucket extends Item
 	public ItemObsidianBucket()
 	{
 		setUnlocalizedName("bucketObsidian");
-		setCreativeTab(Minestuck.tabMinestuck);
+		setCreativeTab(MinestuckItems.tabMinestuck);
 		setMaxStackSize(1);
 	}
 	

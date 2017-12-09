@@ -1,13 +1,8 @@
 package com.mraof.minestuck.entity.carapacian;
 
-import java.util.Random;
-
+import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIAttackRanged;
 import net.minecraft.entity.monster.IMob;
@@ -23,7 +18,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
-import com.mraof.minestuck.item.MinestuckItems;
+import java.util.Random;
 
 public abstract class EntityPawn extends EntityCarapacian implements IRangedAttackMob, IMob
 {
@@ -195,4 +190,9 @@ public abstract class EntityPawn extends EntityCarapacian implements IRangedAtta
 		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 	}
 	
+	@Override
+	public void setSwingingArms(boolean swingingArms)
+	{
+		//TODO New method; Do something?
+	}
 }

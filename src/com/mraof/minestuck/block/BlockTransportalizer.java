@@ -1,5 +1,9 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.client.gui.GuiHandler;
+import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -14,10 +18,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.client.gui.GuiHandler;
-import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
-
 public class BlockTransportalizer extends BlockContainer
 {
 	protected static final AxisAlignedBB TRANSPORTALIZER_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1/2D, 1.0D);
@@ -25,7 +25,7 @@ public class BlockTransportalizer extends BlockContainer
 	public BlockTransportalizer()
 	{
 		super(Material.IRON);
-		this.setCreativeTab(Minestuck.tabMinestuck);
+		this.setCreativeTab(MinestuckItems.tabMinestuck);
 		this.setUnlocalizedName("transportalizer");
 		this.setHardness(3.0F);
 		setHarvestLevel("pickaxe", 0);

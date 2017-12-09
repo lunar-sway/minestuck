@@ -1,22 +1,22 @@
 package com.mraof.minestuck.block;
 
-import java.util.Random;
-
-import com.mraof.minestuck.Minestuck;
-
+import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class BlockGlowingMushroom extends BlockBush
 {
 	public BlockGlowingMushroom()
 	{
 		super();
-		setCreativeTab(Minestuck.tabMinestuck);
+		setCreativeTab(MinestuckItems.tabMinestuck);
 		setUnlocalizedName("glowingMushroom");
 		setLightLevel(0.75F);
 		setSoundType(SoundType.PLANT);
@@ -64,7 +64,7 @@ public class BlockGlowingMushroom extends BlockBush
 	}
 	
 	@Override
-	public MapColor getMapColor(IBlockState state)
+	public MapColor getMapColor(IBlockState state, IBlockAccess worldIn, BlockPos pos)
 	{
 		return MapColor.DIAMOND;
 	}

@@ -1,22 +1,20 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
-import static com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats.*;
-
-import java.io.IOException;
-import java.util.Arrays;
-
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats.EditmodeGuiType;
-import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats.NormalGuiType;
+import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats.*;
 import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
-
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.Container;
+
+import java.io.IOException;
+import java.util.Arrays;
+
+import static com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats.*;
 
 public abstract class GuiPlayerStatsContainer extends GuiContainer
 {
@@ -105,7 +103,7 @@ public abstract class GuiPlayerStatsContainer extends GuiContainer
 				else if(xcor < xOffset + i*(tabWidth + 2) + tabWidth
 						&& (!mode || !NormalGuiType.values()[i].reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || mc.playerController.isInCreativeMode()))
 					drawHoveringText(Arrays.asList(I18n.format(mode? NormalGuiType.values()[i].name:EditmodeGuiType.values()[i].name)),
-							xcor - guiLeft, ycor - guiTop, fontRendererObj);
+							xcor - guiLeft, ycor - guiTop, fontRenderer);
 		GlStateManager.enableDepth();
 		GlStateManager.disableLighting();
 	}

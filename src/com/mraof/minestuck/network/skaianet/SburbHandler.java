@@ -724,7 +724,7 @@ public class SburbHandler
 			
 			Vec3d pos = titleSelectionMap.remove(player);
 			
-			player.setPosition(pos.xCoord, pos.yCoord, pos.zCoord);
+			player.setPosition(pos.x, pos.y, pos.z);
 			MinestuckItems.cruxiteApple.onArtifactActivated(player.world, player);
 			
 		} else Debug.warnf("%s tried to select a title without entering.", player.getName());

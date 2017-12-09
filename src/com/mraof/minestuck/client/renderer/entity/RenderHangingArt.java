@@ -1,10 +1,10 @@
 package com.mraof.minestuck.client.renderer.entity;
 
 import com.mraof.minestuck.entity.item.EntityHangingArt;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -82,7 +82,7 @@ public class RenderHangingArt<T extends EntityHangingArt> extends Render<T>
 				float f21 = (float)(textureV + height - blockV * 16) / 256.0F;
 				float f22 = (float)(textureV + height - (blockV + 1) * 16) / 256.0F;
 				Tessellator tessellator = Tessellator.getInstance();
-				VertexBuffer vertexbuffer = tessellator.getBuffer();
+				BufferBuilder vertexbuffer = tessellator.getBuffer();
 				vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_NORMAL);
 				vertexbuffer.pos((double)upperU, (double)lowerV, -0.5D).tex((double)f20, (double)f21).normal(0.0F, 0.0F, -1.0F).endVertex();
 				vertexbuffer.pos((double)lowerU, (double)lowerV, -0.5D).tex((double)f19, (double)f21).normal(0.0F, 0.0F, -1.0F).endVertex();

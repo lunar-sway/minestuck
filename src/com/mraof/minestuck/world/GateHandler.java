@@ -1,9 +1,5 @@
 package com.mraof.minestuck.world;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-
 import com.google.common.collect.Lists;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
@@ -13,7 +9,6 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Location;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,6 +18,10 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 public class GateHandler
 {
@@ -71,7 +70,7 @@ public class GateHandler
 				{
 					int clientDim = clientConnection.getClientDimension();
 					BlockPos gatePos = getGatePos(-1, clientDim);
-					WorldServer world = player.mcServer.worldServerForDimension(clientDim);
+					WorldServer world = player.mcServer.getWorld(clientDim);
 					
 					if(gatePos == null)
 					{
@@ -115,7 +114,7 @@ public class GateHandler
 		{
 			if(gateId != 1)
 			{
-				WorldServer world = player.mcServer.worldServerForDimension(location.dim);
+				WorldServer world = player.mcServer.getWorld(location.dim);
 				
 				IBlockState block = world.getBlockState(location.pos);
 				

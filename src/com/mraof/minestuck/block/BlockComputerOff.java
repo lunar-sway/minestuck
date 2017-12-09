@@ -1,5 +1,9 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.util.ComputerProgram;
+import com.mraof.minestuck.util.IdentifierHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;

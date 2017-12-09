@@ -5,7 +5,6 @@ import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.client.util.MinestuckModelManager;
 import com.mraof.minestuck.command.*;
-import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.editmode.DeployList;
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.MinestuckEntities;
@@ -21,6 +20,7 @@ import com.mraof.minestuck.tracker.ConnectionListener;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.gen.OreHandler;
 import com.mraof.minestuck.world.gen.structure.StructureCastlePieces;
 import com.mraof.minestuck.world.gen.structure.StructureCastleStart;
@@ -28,17 +28,14 @@ import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.structure.MapGenLandStructure;
 import com.mraof.minestuck.world.lands.structure.village.ConsortVillageComponents;
 import com.mraof.minestuck.world.storage.MinestuckSaveHandler;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -48,9 +45,10 @@ import java.util.Random;
 //import codechicken.nei.NEIModContainer;
 //import com.mraof.minestuck.nei.NEIMinestuckConfig;
 
-@Mod(modid = "minestuck", name = "Minestuck", version = "@VERSION@", guiFactory = "com.mraof.minestuck.client.gui.MinestuckGuiFactory", acceptedMinecraftVersions = "[1.11]")
+@Mod(modid = "minestuck", name = "Minestuck", version = "@VERSION@", guiFactory = "com.mraof.minestuck.client.gui.MinestuckGuiFactory", acceptedMinecraftVersions = "[1.12]")
 public class Minestuck
 {
+	public static final String MOD_NAME = "Minestuck";
 	
 	/**
 	 * True only if the minecraft application is client-sided 
@@ -65,12 +63,10 @@ public class Minestuck
 	@Instance("minestuck")
 	public static Minestuck instance;
 	
-	public static CreativeTabs tabMinestuck;
+	@SidedProxy(clientSide = "com.mraof.minestuck.client.ClientProxy", serverSide = "com.mraof.minestuck.CommonProxy")
+	public static CommonProxy proxy;
 
 	public static long worldSeed = 0;	//TODO proper usage of seed when generating titles, land aspects, and land dimension data
-	
-	public static SoundEvent soundEmissaryOfDance;
-	public static SoundEvent soundDanceStabDance;
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) 
@@ -83,29 +79,12 @@ public class Minestuck
 		
 		//(new UpdateChecker()).start();
 		
-		//Register the Minestuck creative tab
-		tabMinestuck = new CreativeTabs("tabMinestuck")
-		{
-			@Override
-			public ItemStack getTabIconItem()
-			{
-				return new ItemStack(MinestuckItems.zillyhooHammer);
-			}
-		};
+		proxy.preInit();
 		
-		ResourceLocation soundLocation = new ResourceLocation("minestuck", "record.emissary");
-		soundEmissaryOfDance = GameRegistry.register(new SoundEvent(soundLocation), soundLocation);
-		soundLocation = new ResourceLocation("minestuck", "record.danceStab");
-		soundDanceStabDance = GameRegistry.register(new SoundEvent(soundLocation), soundLocation);
-		
-		MinestuckBlocks.registerBlocks();
-		MinestuckItems.registerItems();
-		
-		if(isClientRunning)
-		{
-			ClientProxy.registerSided();
-			MinestuckModelManager.registerVariants();
-		}
+		MinecraftForge.EVENT_BUS.register(MinestuckSoundHandler.instance);
+		MinecraftForge.EVENT_BUS.register(MinestuckBlocks.class);
+		MinecraftForge.EVENT_BUS.register(MinestuckItems.class);
+		MinecraftForge.EVENT_BUS.register(BiomeMinestuck.class);
 		
 		MinestuckAchievementHandler.prepareAchievementPage();
 		
@@ -150,11 +129,7 @@ public class Minestuck
 		MinecraftForge.EVENT_BUS.register(MinestuckChannelHandler.instance);
 		MinecraftForge.EVENT_BUS.register(new ConnectionListener());
 		
-		if(event.getSide().isClient())
-		{
-			MinecraftForge.EVENT_BUS.register(ClientEditHandler.instance);
-			MinecraftForge.EVENT_BUS.register(new MinestuckConfig());
-		}
+		proxy.init();
 		
 		//register channel handler
 		MinestuckChannelHandler.setupChannel();

@@ -1,10 +1,8 @@
 package com.mraof.minestuck.tileentity;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Random;
-
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.Location;
+import com.mraof.minestuck.util.Teleport;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -16,9 +14,10 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.WorldServer;
 
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.Location;
-import com.mraof.minestuck.util.Teleport;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Random;
 
 public class TileEntityTransportalizer extends TileEntity implements ITickable
 {
@@ -101,7 +100,7 @@ public class TileEntityTransportalizer extends TileEntity implements ITickable
 		}
 		if(location != null && location.pos.getY() != -1)
 		{
-			WorldServer world = entity.getServer().worldServerForDimension(location.dim);
+			WorldServer world = entity.getServer().getWorld(location.dim);
 			TileEntityTransportalizer destTransportalizer = (TileEntityTransportalizer) world.getTileEntity(location.pos);
 			if(destTransportalizer == null)
 			{

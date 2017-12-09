@@ -1,13 +1,15 @@
 package com.mraof.minestuck.network.skaianet;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import com.google.common.collect.Lists;
+import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+import com.mraof.minestuck.util.MinestuckPlayerData;
+import com.mraof.minestuck.util.Title;
+import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import com.mraof.minestuck.world.lands.LandAspectRegistry;
+import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -18,19 +20,10 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.chunk.IChunkGenerator;
+import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.common.DimensionManager;
 
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.MinestuckPlayerData;
-import com.mraof.minestuck.util.Title;
-import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
-import com.mraof.minestuck.world.lands.LandAspectRegistry;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import com.google.common.collect.Lists;
-import com.mraof.minestuck.MinestuckConfig;
+import java.util.*;
 
 /**
  * Handles session related stuff like title generation, consort choosing, and other session management stuff.
@@ -511,7 +504,7 @@ public class SessionHandler {
 					if(c.enteredGame && DimensionManager.isDimensionRegistered(c.clientHomeLand))
 					{
 						LandAspectRegistry.AspectCombination aspects = MinestuckDimensionHandler.getAspects(c.clientHomeLand);
-						IChunkGenerator chunkGen = server.worldServerForDimension(c.clientHomeLand).provider.createChunkGenerator();
+						IChunkGenerator chunkGen = server.getWorld(c.clientHomeLand).provider.createChunkGenerator();
 						if(chunkGen instanceof ChunkProviderLands)
 						{
 							ChunkProviderLands landChunkGen = (ChunkProviderLands) chunkGen;

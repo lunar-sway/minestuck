@@ -1,7 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.Minestuck;
-
+import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -10,14 +9,11 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockMinestuckStone extends Block
 {
@@ -37,7 +33,7 @@ public class BlockMinestuckStone extends Block
 	{
 		super(Material.ROCK);
 		setDefaultState(blockState.getBaseState().withProperty(VARIANT, BlockType.COARSE));
-		setCreativeTab(Minestuck.tabMinestuck);
+		setCreativeTab(MinestuckItems.tabMinestuck);
 		setHardness(1.5F);
 		setResistance(10.0F);
 		setSoundType(SoundType.STONE);
@@ -75,11 +71,10 @@ public class BlockMinestuckStone extends Block
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list)
+	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items)
 	{
 		for(BlockType type : BlockType.values())
-			list.add(new ItemStack(itemIn, 1, type.getMetadata()));
+			items.add(new ItemStack(this, 1, type.getMetadata()));
 	}
 	
 	public static enum BlockType implements IStringSerializable

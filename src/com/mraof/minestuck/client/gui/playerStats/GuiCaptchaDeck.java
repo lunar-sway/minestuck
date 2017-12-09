@@ -8,7 +8,6 @@ import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -70,7 +69,7 @@ public class GuiCaptchaDeck extends GuiPlayerStatsContainer implements GuiYesNoC
 		drawTabTooltip(xcor, ycor);
 		
 		String message = I18n.format("gui.captchaDeck.name");
-		mc.fontRendererObj.drawString(message, (this.width / 2) - mc.fontRendererObj.getStringWidth(message) / 2 - guiLeft, yOffset + 12 - guiTop, 0x404040);
+		mc.fontRenderer.drawString(message, (this.width / 2) - mc.fontRenderer.getStringWidth(message) / 2 - guiLeft, yOffset + 12 - guiTop, 0x404040);
 		
 	}
 	

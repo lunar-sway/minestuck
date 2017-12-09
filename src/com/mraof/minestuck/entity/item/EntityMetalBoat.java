@@ -1,9 +1,7 @@
 package com.mraof.minestuck.entity.item;
 
-import io.netty.buffer.ByteBuf;
-
 import com.mraof.minestuck.item.MinestuckItems;
-
+import io.netty.buffer.ByteBuf;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.MoverType;
@@ -120,7 +118,7 @@ public class EntityMetalBoat extends EntityBoat implements IEntityAdditionalSpaw
 			return false;
 		else if (!this.world.isRemote && !this.isDead)
 		{
-			if (this.getPassengers().contains(source.getEntity()) && source instanceof EntityDamageSourceIndirect)
+			if (this.getPassengers().contains(source.getTrueSource()) && source instanceof EntityDamageSourceIndirect)
 				return false;
 			else
 			{
@@ -128,7 +126,7 @@ public class EntityMetalBoat extends EntityBoat implements IEntityAdditionalSpaw
 				this.setTimeSinceHit(10);
 				this.setDamageTaken(this.getDamageTaken() + amount * 10.0F);
 				this.setBeenAttacked();
-				boolean flag = source.getEntity() instanceof EntityPlayer && ((EntityPlayer)source.getEntity()).capabilities.isCreativeMode;
+				boolean flag = source.getTrueSource() instanceof EntityPlayer && ((EntityPlayer)source.getTrueSource()).capabilities.isCreativeMode;
 				
 				if (flag || this.getDamageTaken() > 40.0F)
 				{

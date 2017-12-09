@@ -1,16 +1,12 @@
 package com.mraof.minestuck.client.util;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.block.BlockChessTile;
-import com.mraof.minestuck.block.BlockColoredDirt;
-import com.mraof.minestuck.block.BlockCrockerMachine;
-import com.mraof.minestuck.block.BlockMinestuckLog;
-import com.mraof.minestuck.block.BlockMinestuckStone;
-import com.mraof.minestuck.block.BlockSburbMachine;
+import com.mraof.minestuck.block.*;
+import com.mraof.minestuck.item.ItemMetalBoat;
 import com.mraof.minestuck.item.ItemMinestuckBeverage;
 import com.mraof.minestuck.item.ItemMinestuckCandy;
+import com.mraof.minestuck.item.ItemModus;
 import com.mraof.minestuck.item.weapon.ItemDualWeapon;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCactus;
 import net.minecraft.block.BlockTNT;
@@ -86,7 +82,7 @@ public class MinestuckModelManager
 		register(dice);
 		register(fluoriteOctet);
 		
-		modelRegistry.register(CatClaws, new DualWeaponDefinition(CatClaws));
+		modelRegistry.register(catClaws, new DualWeaponDefinition(catClaws));
 		
 		register(sickle);
 		register(homesSmellYaLater);
@@ -149,16 +145,16 @@ public class MinestuckModelManager
 		register(minestuckBucket, 0, "bucket_oil");
 		register(minestuckBucket, 1, "bucket_blood");
 		register(minestuckBucket, 2, "bucket_brain_juice");
-		for(int i = 0; i < modusCard.modusNames.length; i++)
-			register(modusCard, i, "modus_" + modusCard.modusNames[i]);
+		for(int i = 0; i < ItemModus.NAMES.length; i++)
+			register(modusCard, i, "modus_" + ItemModus.NAMES[i]);
 		register(goldSeeds);
-		for(int i = 0; i < metalBoat.names.length; i++)
-			register(metalBoat, i, "boat_" + metalBoat.names[i]);
+		for(int i = 0; i < ItemMetalBoat.NAMES.length; i++)
+			register(metalBoat, i, "boat_" + ItemMetalBoat.NAMES[i]);
 		register(obsidianBucket);
-		for(int i = 0; i < ItemMinestuckCandy.modelNames.length; i++)
-			register(candy, i, ItemMinestuckCandy.modelNames[i]);
-		for(int i = 0; i < ItemMinestuckBeverage.modelNames.length; i++)
-			register(beverage, i, ItemMinestuckBeverage.modelNames[i]);
+		for(int i = 0; i < ItemMinestuckCandy.NAMES.length; i++)
+			register(candy, i, ItemMinestuckCandy.NAMES[i]);
+		for(int i = 0; i < ItemMinestuckBeverage.NAMES.length; i++)
+			register(beverage, i, ItemMinestuckBeverage.NAMES[i]);
 		register(bugOnAStick);
 		register(chocolateBeetle);
 		register(coneOfFlies);
@@ -242,7 +238,7 @@ public class MinestuckModelManager
 	{
 		//Items
 		ModelBakery.registerItemVariants(crockerSpork, new ResourceLocation("minestuck:crocker_fork"), new ResourceLocation("minestuck:crocker_spoon"));
-		ModelBakery.registerItemVariants(CatClaws,new ResourceLocation("minestuck:catclaws_sheathed"), new ResourceLocation("minestuck:catclaws_drawn"));
+		ModelBakery.registerItemVariants(catClaws, new ResourceLocation("minestuck:catclaws_sheathed"), new ResourceLocation("minestuck:catclaws_drawn"));
 		ModelBakery.registerItemVariants(cruxiteDowel, new ResourceLocation("minestuck:dowel_uncarved"), new ResourceLocation("minestuck:dowel_carved"), new ResourceLocation("minestuck:dowel_uncarved_blank"), new ResourceLocation("minestuck:dowel_carved_blank"));
 		ModelBakery.registerItemVariants(cruxiteApple, new ResourceLocation("minestuck:cruxite_apple"), new ResourceLocation("minestuck:cruxite_apple_blank"));
 		ModelBakery.registerItemVariants(cruxitePotion, new ResourceLocation("minestuck:cruxite_potion"), new ResourceLocation("minestuck:cruxite_potion_blank"));
@@ -256,15 +252,15 @@ public class MinestuckModelManager
 		}
 		ModelBakery.registerItemVariants(clawHammer, new ResourceLocation("minestuck:claw_hammer_old"));
 		
-		ResourceLocation[] resLoc = new ResourceLocation[modusCard.modusNames.length];
+		ResourceLocation[] resLoc = new ResourceLocation[ItemModus.NAMES.length];
 		for(int i = 0; i < resLoc.length; i++)
-			resLoc[i] = new ResourceLocation("minestuck:modus_" + modusCard.modusNames[i]);
+			resLoc[i] = new ResourceLocation("minestuck:modus_" + ItemModus.NAMES[i]);
 		ModelBakery.registerItemVariants(modusCard, resLoc);
-		for(String s : metalBoat.names)
+		for(String s : ItemMetalBoat.NAMES)
 			ModelBakery.registerItemVariants(metalBoat, new ResourceLocation("minestuck:boat_" + s));
-		for(String s : ItemMinestuckCandy.modelNames)
+		for(String s : ItemMinestuckCandy.NAMES)
 			ModelBakery.registerItemVariants(candy, new ResourceLocation("minestuck:"+s));
-		for(String s : ItemMinestuckBeverage.modelNames)
+		for(String s : ItemMinestuckBeverage.NAMES)
 			ModelBakery.registerItemVariants(beverage, new ResourceLocation("minestuck:"+s));
 		
 		//Blocks

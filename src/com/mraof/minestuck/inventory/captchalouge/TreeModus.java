@@ -9,7 +9,6 @@ import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.MinestuckAchievementHandler;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -137,8 +136,8 @@ public class TreeModus extends Modus
 			return ItemStack.EMPTY;
 		}
 		
-		if(id == 0 && node.getSize() >= 16)
-			player.addStat(MinestuckAchievementHandler.treeModus);
+		/*if(id == 0 && node.getSize() >= 16)
+			player.addStat(MinestuckAchievementHandler.treeModus);*/
 		
 		
 		ArrayList<ItemStack> list = node.removeItems(id);

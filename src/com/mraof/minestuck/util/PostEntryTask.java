@@ -1,10 +1,11 @@
 package com.mraof.minestuck.util;
 
-import static com.mraof.minestuck.MinestuckConfig.artifactRange;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
+
+import static com.mraof.minestuck.MinestuckConfig.artifactRange;
 
 public class PostEntryTask
 {
@@ -49,7 +50,7 @@ public class PostEntryTask
 	
 	public boolean onTick(MinecraftServer server)
 	{
-		WorldServer world = server.worldServerForDimension(dimension);
+		WorldServer world = server.getWorld(dimension);
 		
 		if(world == null)
 		{

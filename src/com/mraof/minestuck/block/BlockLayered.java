@@ -1,7 +1,6 @@
 package com.mraof.minestuck.block;
 
-import java.util.Random;
-
+import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
@@ -14,7 +13,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.mraof.minestuck.Minestuck;
+import java.util.Random;
 
 public class BlockLayered extends Block
 {
@@ -27,7 +26,7 @@ public class BlockLayered extends Block
 	{
 		super(iconBlock.getMaterial());
 		
-		this.setCreativeTab(Minestuck.tabMinestuck);
+		this.setCreativeTab(MinestuckItems.tabMinestuck);
 		this.fullBlock = iconBlock;
 		setSoundType(fullBlock.getBlock().getSoundType());
 	}
