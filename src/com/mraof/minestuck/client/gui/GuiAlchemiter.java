@@ -11,6 +11,7 @@ import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -91,10 +92,17 @@ public class GuiAlchemiter extends GuiContainer
 			if(set != null && stack.isItemDamaged())
 			{
 				float multiplier = 1 - stack.getItem().getDamage(stack)/((float) stack.getMaxDamage());
-				for(int i = 0; i < set.gristTypes.length; i++)
-					if(type == MachineType.ALCHEMITER)
-						set.gristTypes[i] = (int) Math.ceil(set.gristTypes[i]*multiplier);
-					else set.gristTypes[i] = (int) (set.gristTypes[i]*multiplier);
+				for (GristAmount amount : set.getArray())
+				{
+					if (type == MachineType.ALCHEMITER)
+					{
+						set.setGrist(amount.getType(), (int) Math.ceil(amount.getAmount() * multiplier));
+					}
+					else
+					{
+						set.setGrist(amount.getType(), (int) (amount.getAmount() * multiplier));
+					}
+				}
 			}
 			
 			GuiUtil.drawGristBoard(set, useSelectedType ? GuiUtil.GristboardMode.ALCHEMITER_SELECT : GuiUtil.GristboardMode.ALCHEMITER, 9, 45, fontRenderer);

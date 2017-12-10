@@ -1,23 +1,15 @@
 package com.mraof.minestuck.tileentity;
 
-import com.mraof.minestuck.block.BlockSburbMachine.MachineType;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.CombinationRegistry;
-import com.mraof.minestuck.util.GristType;
-import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class TileEntityTotemlathe extends TileEntityMachine
 {
-	private PlayerIdentifier owner;
-	private GristType selectedGrist = GristType.Build;
-	private int color = -1;
 	private boolean broken=false;
 	
 	//constructor
@@ -55,15 +47,6 @@ public class TileEntityTotemlathe extends TileEntityMachine
 	public void readFromNBT(NBTTagCompound tagCompound)
 	{
 		super.readFromNBT(tagCompound);
-		
-		if(tagCompound.hasKey("gristType"))
-			this.setSelectedGrist(GristType.values()[tagCompound.getInteger("gristType")]);
-		
-		if(tagCompound.hasKey("color"))
-			this.color = tagCompound.getInteger("color");
-		
-		if(tagCompound.hasKey("owner") || tagCompound.hasKey("ownerMost"))
-			setOwner(IdentifierHandler.load(tagCompound, "owner"));
 	}
 	
 	@Override
@@ -160,11 +143,8 @@ public class TileEntityTotemlathe extends TileEntityMachine
 	@Override
 	public void markDirty()
 	{
-		if(getMachineType() == MachineType.PUNCH_DESIGNIX || getMachineType() == MachineType.TOTEM_LATHE)
-		{
-			this.progress = 0;
-			this.ready = false;
-		}
+		this.progress = 0;
+		this.ready = false;
 		super.markDirty();
 	}
 
@@ -172,27 +152,6 @@ public class TileEntityTotemlathe extends TileEntityMachine
 	public String getName()
 	{
 		return "tile.sburbMachine.Totemlathe.name";
-	}
-	
-	public MachineType getMachineType()
-	{
-		return MachineType.values()[getBlockMetadata()%4];
-	}
-
-	public PlayerIdentifier getOwner() {
-		return owner;
-	}
-
-	public void setOwner(PlayerIdentifier owner) {
-		this.owner = owner;
-	}
-
-	public GristType getSelectedGrist() {
-		return selectedGrist;
-	}
-
-	public void setSelectedGrist(GristType selectedGrist) {
-		this.selectedGrist = selectedGrist;
 	}
 	
 }
