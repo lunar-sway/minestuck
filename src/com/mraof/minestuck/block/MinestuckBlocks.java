@@ -54,12 +54,15 @@ public class MinestuckBlocks
 	
 	//Ores
 	public static Block oreCruxite = (BlockCruxiteOre) new BlockCruxiteOre().setRegistryName("ore_cruxite");
+	public static BlockUraniumOre oreUranium = (BlockUraniumOre) new BlockUraniumOre().setRegistryName("ore_uranium").setUnlocalizedName("oreUranium");
 	public static Block coalOreNetherrack = new BlockVanillaOre(BlockVanillaOre.OreType.COAL).setRegistryName("coal_ore_netherrack").setUnlocalizedName("oreCoal");
 	public static Block ironOreSandstone = new BlockVanillaOre(BlockVanillaOre.OreType.IRON).setRegistryName("iron_ore_sandstone").setUnlocalizedName("oreIron");
 	public static Block ironOreSandstoneRed = new BlockVanillaOre(BlockVanillaOre.OreType.IRON).setRegistryName("iron_ore_sandstone_red").setUnlocalizedName("oreIron");
 	public static Block goldOreSandstone = new BlockVanillaOre(BlockVanillaOre.OreType.GOLD).setRegistryName("gold_ore_sandstone").setUnlocalizedName("oreGold");
 	public static Block goldOreSandstoneRed = new BlockVanillaOre(BlockVanillaOre.OreType.GOLD).setRegistryName("gold_ore_sandstone_red").setUnlocalizedName("oreGold");
 	
+	public static Block uraniumCooker = new BlockUraniumCooker().setRegistryName("uranium_cooker").setUnlocalizedName("uraniumCooker");
+
 	public static Block primedTnt = new BlockTNTSpecial(true, false, false).setRegistryName("primed_tnt").setUnlocalizedName("primedTnt");
 	public static Block unstableTnt = new BlockTNTSpecial(false, true, false).setRegistryName("unstable_tnt").setUnlocalizedName("unstableTnt");
 	public static Block instantTnt = new BlockTNTSpecial(false, false, true).setRegistryName("instant_tnt").setUnlocalizedName("instantTnt");
@@ -88,11 +91,12 @@ public class MinestuckBlocks
 		//blocks
 		final Block[] blocks = {chessTile, coloredDirt, layeredSand, stone, sugarCube,
 				log, glowingLog, glowingPlanks, glowingMushroom, woodenCactus,
-				oreCruxite, coalOreNetherrack, ironOreSandstone, ironOreSandstoneRed, goldOreSandstone, goldOreSandstoneRed,
+				oreCruxite, oreUranium, coalOreNetherrack, ironOreSandstone, ironOreSandstoneRed, goldOreSandstone, goldOreSandstoneRed,
 				cruxiteBlock, genericObject,
 				coarseStoneStairs, shadeBrickStairs, frostBrickStairs, castIronStairs,
 				skaiaPortal, returnNode, gate,
-				sburbMachine, crockerMachine, transportalizer, punchDesignix, totemlathe, alchemiter,alchemiter2,cruxtruder,cruxtruder2,
+				sburbMachine, crockerMachine, transportalizer, uraniumCooker,
+				punchDesignix, totemlathe, alchemiter,alchemiter2,cruxtruder,cruxtruder2,
 				blockComputerOff, blockComputerOn,
 				blockGoldSeeds, glowystoneWire,
 				primedTnt, unstableTnt, instantTnt, woodenExplosiveButton, stoneExplosiveButton,
@@ -108,11 +112,11 @@ public class MinestuckBlocks
 		/*liquidGrists = new Block[GristType.allGrists];
 		gristFluids = new Fluid[GristType.allGrists];
 		for(GristType grist : GristType.values()) {
-			gristFluids[grist.ordinal()] = new Fluid(grist.getName(), new ResourceLocation("minestuck", "blocks/Liquid" + grist.getName() + "Still"), new ResourceLocation("minestuck", "blocks/Liquid" + grist.getName() + "Flowing"));
-			FluidRegistry.registerFluid(gristFluids[grist.ordinal()]);
-			liquidGrists[grist.ordinal()] = GameRegistry.register(new BlockFluidGrist(gristFluids[grist.ordinal()], Material.WATER).setRegistryName("liquid_" + grist.getName())).setUnlocalizedName("liquid_" + grist.getName());
+			gristFluids[grist.getId()] = new Fluid(grist.getName(), new ResourceLocation("minestuck", "blocks/Liquid" + grist.getName() + "Still"), new ResourceLocation("minestuck", "blocks/Liquid" + grist.getName() + "Flowing"));
+			FluidRegistry.registerFluid(gristFluids[grist.getId()]);
+			liquidGrists[grist.getId()] = GameRegistry.register(new BlockFluidGrist(gristFluids[grist.getId()], Material.WATER).setRegistryName("liquid_" + grist.getName())).setUnlocalizedName("liquid_" + grist.getName());
 		}*/
-		
+
 		cruxiteBlock.setHarvestLevel("pickaxe", 0);
 	}
 	

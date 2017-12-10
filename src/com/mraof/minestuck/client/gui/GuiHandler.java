@@ -2,6 +2,7 @@ package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.inventory.*;
 import com.mraof.minestuck.tileentity.*;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -28,6 +29,8 @@ public class GuiHandler implements IGuiHandler
 				return new ContainerSburbMachine(player.inventory, (TileEntitySburbMachine) tileEntity);
 			else if(tileEntity instanceof TileEntityCrockerMachine)
 				return new ContainerCrockerMachine(player.inventory, (TileEntityCrockerMachine) tileEntity);
+			else if(tileEntity instanceof TileEntityUraniumCooker)
+				return new ContainerUraniumCooker(player.inventory, (TileEntityUraniumCooker) tileEntity);
 			else if(tileEntity instanceof TileEntityTotemlathe)
 				return new ContainerTotemlathe(player.inventory,(TileEntityTotemlathe) tileEntity);
 			else if(tileEntity instanceof TileEntityAlchemiter)
@@ -48,6 +51,8 @@ public class GuiHandler implements IGuiHandler
 				return new GuiSburbMachine(player.inventory, (TileEntitySburbMachine) tileEntity);
 			else if(tileEntity instanceof TileEntityCrockerMachine)
 				return new GuiCrockerMachine(player.inventory, (TileEntityCrockerMachine) tileEntity);
+			else if(tileEntity instanceof TileEntityUraniumCooker)
+				return new GuiUraniumCooker(player.inventory, (TileEntityUraniumCooker) tileEntity);
 			else if(tileEntity instanceof TileEntityTotemlathe)
 				return new GuiTotemlathe(player.inventory,(TileEntityTotemlathe)tileEntity);
 			else if (tileEntity instanceof TileEntityAlchemiter)

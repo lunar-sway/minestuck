@@ -19,6 +19,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.*;
+import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -43,6 +44,7 @@ public class MinestuckItems
 };
 	public static Item.ToolMaterial toolEmerald = EnumHelper.addToolMaterial("EMERALD", 3, 1220, 12.0F, 4.0F, 12).setRepairItem(new ItemStack(Items.EMERALD));;
 	public static ItemArmor.ArmorMaterial armorPrismarine = EnumHelper.addArmorMaterial("PRISMARINE", "minestuck:prismarine", 20, new int[]{3, 7, 6, 2}, 15, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0F);
+	public static Item.ToolMaterial toolUranium = EnumHelper.addToolMaterial("URANIUM", 3, 1220, 12.0F, 6.0F, 15);
 	
 	//hammers
 	public static Item clawHammer = new ItemWeapon(131, 4.0D, -2.4D, 10, "clawHammer").setTool("pickaxe", 0, 1.0F).setRegistryName("claw_hammer");
@@ -71,6 +73,7 @@ public class MinestuckItems
 	public static Item scarletRibbitar = new ItemWeapon(2000, 7, -2.4D, 30, "scarletRibbitar").setRegistryName("scarlet_ribbitar");
 	public static Item doggMachete = new ItemWeapon(1000, 5, -2.4D, 30, "doggMachete").setRegistryName("dogg_machete");
 	public static Item cobaltSabre = new ItemFireWeapon(300, 7, -2.4D, 10, "cobaltSabre", 30).setRegistryName("cobalt_sabre");
+	public static Item quantumSabre = new ItemPotionWeapon(toolUranium, 600, 8, -2.4D, 5, "quantumSabre", new PotionEffect(MobEffects.WITHER, 100, 1)).setRegistryName("quantum_sabre");
 	//axes
 	public static Item copseCrusher = new ItemWeapon(400, 6.0D, -3.0D, 20, "copseCrusher", -1, 20).setTool("axe", 2, 7.0F).setRegistryName("copse_crusher");
 	public static Item blacksmithBane = new ItemWeapon(413, 9.0D, -3.0D, 15, "blacksmithBane").setTool("axe", 2, 6.0F).setRegistryName("blacksmith_bane");
@@ -78,6 +81,7 @@ public class MinestuckItems
 	public static Item qPHammerAxe = new ItemPogoWeapon(800, 8.0D, -3.0D, 30, "qPHammerAxe", 0.6).setTool("axe", 2, 7.0F).setTool("pickaxe", 1, 2.0F).setTerminus(-1, 50).setRegistryName("piston_powered_pogo_axehammer");
 	public static Item rubyCroak = new ItemWeapon(2000, 11.0D, -2.9D, 30, "rubyCroak").setTool("axe", 3, 8.0F).setRegistryName("ruby_croak");
 	public static Item hephaestusLumber = new ItemFireWeapon(3000, 11.0D, -3.0D, 30, "hephaestusLumber", 30).setTool("axe", 3, 9.0F).setRegistryName("hephaestus_lumberjack");
+	public static Item qFHammerAxe = new ItemPogoWeapon(2048, 11.0D, -3.0D, 0, "qFHammerAxe", 0.7).setTool("axe", 3, 9.0F).setTool("pickaxe", 2, 4.0F).setTerminus(-1, 100).setRegistryName("fission_focused_fault_feller");
 	//Dice
 	public static Item dice = new ItemWeapon(51, 6, 3, 6, "dice").setRegistryName("dice");
 	public static Item fluoriteOctet = new ItemWeapon(67, 15, 6, 8, "fluoriteOctet").setRegistryName("fluorite_octet");
@@ -102,6 +106,8 @@ public class MinestuckItems
 	public static Item spearCane = new ItemWeapon(300, 5.0D, -2.0D, 13, "spearCane").setRegistryName("spear_cane");
 	public static Item regiCane = new ItemWeapon(812, 6.0D, -2.0D, 7, "regiCane").setRegistryName("regi_cane");
 	public static Item dragonCane = new ItemWeapon(300, 6.5D, -2.0D, 20, "dragonCane").setRegistryName("dragon_cane");
+	public static Item pogoCane = new ItemPogoWeapon(500, 3.0D, -2.0D, 15, "pogoCane", 0.6).setRegistryName("pogo_cane");
+	public static Item upStick = new ItemWeapon(ToolMaterial.WOOD, 1, 0.0D, 0.0D, 0, "upStick").setUnbreakable().setRegistryName("uranium_powered_stick");
 	//Spoons/forks
 	public static Item woodenSpoon = new ItemWeapon(59, 2.0D, -2.2D, 5, "woodenSpoon").setRegistryName("wooden_spoon");
 	public static Item silverSpoon = new ItemWeapon(250, 2.5D, -2.2D, 12, "silverSpoon").setRegistryName("silver_spoon");
@@ -130,8 +136,11 @@ public class MinestuckItems
 	public static Item jarOfBugs = new ItemFood(3, 0.2F, false).setRegistryName("jar_of_bugs").setUnlocalizedName("jarOfBugs").setCreativeTab(tabMinestuck);
 	public static Item onion = new ItemFood(2, 0.2F, false).setRegistryName("onion").setUnlocalizedName("onion").setCreativeTab(tabMinestuck);
 	public static Item salad = new ItemSoup(1).setRegistryName("salad").setUnlocalizedName("salad").setCreativeTab(tabMinestuck);
+	public static Item irradiatedSteak = new ItemFood(4, 0.4F, true).setPotionEffect(new PotionEffect(MobEffects.WITHER, 100, 1), 0.9F).setRegistryName("irradiated_steak").setUnlocalizedName("irradiatedSteak").setCreativeTab(MinestuckItems.tabMinestuck);
 	//Other
 	public static Item rawCruxite = new Item().setRegistryName("raw_cruxite").setUnlocalizedName("rawCruxite").setCreativeTab(tabMinestuck);
+	public static Item rawUranium = new Item().setRegistryName("raw_uranium").setUnlocalizedName("rawUranium").setCreativeTab(MinestuckItems.tabMinestuck);
+	public static Item energyCore = new Item().setRegistryName("energy_core").setUnlocalizedName("energyCore").setCreativeTab(MinestuckItems.tabMinestuck);
 	public static Item cruxiteDowel = new ItemDowel().setRegistryName("cruxite_dowel");
 	public static Item captchaCard = new ItemCaptchaCard().setRegistryName("captcha_card");
 	public static ItemCruxiteArtifact cruxiteApple = (ItemCruxiteArtifact) new ItemCruxiteApple().setRegistryName("cruxite_apple");
@@ -163,6 +172,7 @@ public class MinestuckItems
 	public static Item frogStatueReplica = new Item().setRegistryName("frog_statue_replica").setUnlocalizedName("frogStatueReplica").setCreativeTab(tabMinestuck);
 	public static Item stoneSlab = new Item().setRegistryName("stone_slab").setUnlocalizedName("stoneSlab").setCreativeTab(tabMinestuck);
 	public static Item glowystoneDust = new ItemGlowystoneDust().setRegistryName("glowystone_dust").setUnlocalizedName("glowystoneDust").setCreativeTab(tabMinestuck);
+	public static Item fakeArms = new Item().setRegistryName("fake_arms").setUnlocalizedName("fakeArms").setCreativeTab(MinestuckItems.tabMinestuck);
 	//Music disks
 	public static Item recordEmissaryOfDance = new ItemMinestuckRecord("emissary", MinestuckSoundHandler.soundEmissaryOfDance).setRegistryName("record_emissary").setUnlocalizedName("record");
 	public static Item recordDanceStab = new ItemMinestuckRecord("danceStab", MinestuckSoundHandler.soundDanceStabDance).setRegistryName("record_dance_stab").setUnlocalizedName("record");
@@ -177,6 +187,14 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlock(skaiaPortal));
 		
 		registerItemBlock(registry, new ItemMultiTexture(oreCruxite, oreCruxite, new String[0])
+		{
+			@Override
+			public String getUnlocalizedName(ItemStack stack)
+			{
+				return block.getUnlocalizedName();
+			}
+		});
+		registerItemBlock(registry, new ItemMultiTexture(oreUranium, oreUranium, new String[0])
 		{
 			@Override
 			public String getUnlocalizedName(ItemStack stack)
@@ -225,6 +243,8 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlock(woodenExplosiveButton));
 		registerItemBlock(registry, new ItemBlock(stoneExplosiveButton));
 		
+		registerItemBlock(registry, new ItemBlock(uraniumCooker));
+		
 		//hammers
 		registry.register(clawHammer);
 		registry.register(sledgeHammer);
@@ -253,6 +273,7 @@ public class MinestuckItems
 		registry.register(scarletRibbitar);
 		registry.register(doggMachete);
 		registry.register(cobaltSabre);
+		registry.register(quantumSabre);
 		
 		//axes
 		registry.register(copseCrusher);
@@ -261,6 +282,7 @@ public class MinestuckItems
 		registry.register(qPHammerAxe);
 		registry.register(rubyCroak);
 		registry.register(hephaestusLumber);
+		registry.register(qFHammerAxe);
 		
 		//Dice
 		registry.register(dice);
@@ -288,7 +310,8 @@ public class MinestuckItems
 		registry.register(spearCane);
 		registry.register(regiCane);
 		registry.register(dragonCane);
-		
+		registry.register(pogoCane);
+		registry.register(upStick);
 		//Spoons/forks
 		registry.register(woodenSpoon);
 		registry.register(silverSpoon);
@@ -319,9 +342,12 @@ public class MinestuckItems
 		registry.register(jarOfBugs);
 		registry.register(onion);
 		registry.register(salad);
+		registry.register(irradiatedSteak);
 		
 		//misc
 		registry.register(rawCruxite);
+		registry.register(rawUranium);
+		registry.register(energyCore);
 		registry.register(cruxiteDowel);
 		registry.register(captchaCard);
 		registry.register(cruxiteApple);
@@ -341,6 +367,7 @@ public class MinestuckItems
 		registry.register(frogStatueReplica);
 		registry.register(stoneSlab);
 		registry.register(glowystoneDust);
+		registry.register(fakeArms);
 		
 		//Music disks
 		registry.register(recordEmissaryOfDance);
@@ -354,8 +381,10 @@ public class MinestuckItems
 		{
 			minestuckBucket.addBlock(block.getDefaultState());
 		}*/
+		
+		toolUranium.setRepairItem(new ItemStack(rawUranium));
 	}
-	
+
 	private static Item registerItemBlock(IForgeRegistry<Item> registry, ItemBlock item)
 	{
 		registry.register(item.setRegistryName(item.getBlock().getRegistryName()));
