@@ -217,7 +217,7 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlock(transportalizer));
 		registerItemBlock(registry, new ItemLargeMachine(punchDesignix,2,2,1));
 		registerItemBlock(registry, new ItemLargeMachine(totemlathe,4,3,1));
-		registerItemBlock(registry, new ItemLargeMachine(alchemiter,4,4,4));
+		registerItemBlock(registry, new ItemLargeMachine(alchemiter[0],4,4,4));
 		registerItemBlock(registry, new ItemLargeMachine(cruxtruder,3,3,3));
 		
 		registerItemBlock(registry, new ItemBlockLayered(layeredSand));

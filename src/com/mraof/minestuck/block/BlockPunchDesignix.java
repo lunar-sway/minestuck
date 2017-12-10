@@ -29,7 +29,7 @@ public class BlockPunchDesignix extends BlockLargeMachine
 		setUnlocalizedName("punch_designix");
 		setDefaultState(blockState.getBaseState());
 	} 
-	//not sure how to do this.
+	
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
 	{

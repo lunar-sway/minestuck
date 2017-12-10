@@ -4,7 +4,6 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.*;
 import com.mraof.minestuck.item.ItemMetalBoat;
 import com.mraof.minestuck.item.ItemMinestuckBeverage;
-import com.mraof.minestuck.item.ItemMinestuckCandy;
 import com.mraof.minestuck.item.ItemModus;
 import com.mraof.minestuck.item.weapon.ItemDualWeapon;
 import com.mraof.minestuck.util.GristType;
@@ -241,8 +240,8 @@ public class MinestuckModelManager
 			register(crockerMachine, type.ordinal(), "machine_"+type.getName());
 		register(punchDesignix);
 		register(totemlathe);
-		register(alchemiter);
-		register(alchemiter2);
+		register(alchemiter[0]);
+		register(alchemiter[1]);
 		register(cruxtruder);
 		register(cruxtruder2);
 		register(glowingMushroom);
