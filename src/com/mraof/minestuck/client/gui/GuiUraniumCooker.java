@@ -20,7 +20,7 @@ import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
 
-public class GuiUraniumCooker extends GuiContainer
+public class GuiUraniumCooker extends GuiMachine
 {
 	
 	private static final String[] guis = {"uranium_cooker"};
@@ -36,11 +36,10 @@ public class GuiUraniumCooker extends GuiContainer
 	private int progressHeight;
 	private int goX;
 	private int goY;
-	private GuiButton goButton;
 
 	public GuiUraniumCooker (InventoryPlayer inventoryPlayer, TileEntityUraniumCooker tileEntity) 
 	{
-		super(new ContainerUraniumCooker(inventoryPlayer, tileEntity));
+		super(new ContainerUraniumCooker(inventoryPlayer, tileEntity), tileEntity);
 		this.te = tileEntity;
 		this.type = tileEntity.getMachineType();
 		guiBackground = new ResourceLocation("minestuck:textures/gui/" + guis[type.ordinal()] + ".png");
