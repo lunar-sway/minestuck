@@ -100,17 +100,17 @@ public class GuiGristSelector extends GuiScreenMinestuck
 			int offset = 0;
 			for (GristType type : types)
 			{
-				int row = offset / 7;
-				int column = offset % 7;
-				int gristXOffset = xOffset + gristIconX + (gristDisplayXOffset * row - row);
-				int gristYOffset = yOffset + gristIconY + (gristDisplayYOffset * column - column);
+				int row = offset / columns;
+				int column = offset % columns;
+				int gristXOffset = xOffset + gristIconX + (gristDisplayXOffset * column - column);
+				int gristYOffset = yOffset + gristIconY + (gristDisplayYOffset * row - row);
 				if (isPointInRegion(gristXOffset, gristYOffset, 16, 16, xcor, ycor))
 				{
 					otherGui.te.selectedGrist = type;
 					otherGui.width = this.width;
 					otherGui.height = this.height;
 					mc.currentScreen = otherGui;
-					MinestuckPacket packet = MinestuckPacket.makePacket(Type.MACHINE_STATE, offset);
+					MinestuckPacket packet = MinestuckPacket.makePacket(Type.MACHINE_STATE, type);
 					MinestuckChannelHandler.sendToServer(packet);
 					break;
 				}
