@@ -25,7 +25,7 @@ public class TileEntityAlchemiter extends TileEntityMachine
 	private GristType selectedGrist = GristType.Build;
 	private int color = -1;
 	private int ticks_since_update = 0;
-	private boolean destroyed=false;
+	private boolean broken=false;
 	public PlayerIdentifier getOwner(){
 		return owner;
 	}
@@ -36,12 +36,12 @@ public class TileEntityAlchemiter extends TileEntityMachine
 	
 	
 	//checks if the tile enity should work
-	public boolean isDestroyed(){
-		return destroyed;
+	public boolean isBroken() {
+		return broken;
 	}
 	//tells the tile entity to stop working
-	public void destroy(){
-		destroyed = true;		
+	public void Break() {
+		broken = true;		
 	}
 
 	
@@ -241,6 +241,7 @@ return 2;
 	public void setSelectedGrist(GristType selectedGrist) {
 		this.selectedGrist = selectedGrist;
 	}
+
 	
 
 	

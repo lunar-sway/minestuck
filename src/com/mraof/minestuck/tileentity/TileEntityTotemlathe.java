@@ -1,45 +1,33 @@
 package com.mraof.minestuck.tileentity;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayerMP;
+import com.mraof.minestuck.block.BlockSburbMachine.MachineType;
+import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.util.CombinationRegistry;
+import com.mraof.minestuck.util.GristType;
+import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
-
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.block.BlockSburbMachine.MachineType;
-import com.mraof.minestuck.block.BlockTotemlathe;
-import com.mraof.minestuck.block.BlockTotemlathe.enumParts;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.CombinationRegistry;
-import com.mraof.minestuck.util.GristHelper;
-import com.mraof.minestuck.util.GristRegistry;
-import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.GristType;
-import com.mraof.minestuck.util.MinestuckAchievementHandler;
-import com.mraof.minestuck.util.MinestuckPlayerData;
-import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 
 public class TileEntityTotemlathe extends TileEntityMachine
 {
 	private PlayerIdentifier owner;
 	private GristType selectedGrist = GristType.Build;
 	private int color = -1;
-	private boolean destroyed=false;
-	public com.mraof.minestuck.block.BlockTotemlathe.enumParts part;
+	private boolean broken=false;
+	
 	//constructor
 
-	public boolean isDestroyed() {
-		return destroyed;
+	public boolean isBroken() {
+		return broken;
 	}
 	
-	public void destroy() {
-		destroyed=true;
+	public void Brake() {
+		broken=true;
 	}
 	
 	
