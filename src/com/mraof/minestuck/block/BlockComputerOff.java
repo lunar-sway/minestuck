@@ -5,6 +5,7 @@ import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.ComputerProgram;
 import com.mraof.minestuck.util.IdentifierHandler;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
@@ -69,7 +70,7 @@ public class BlockComputerOff extends Block
 	@Override
 	public int getMetaFromState(IBlockState state)
 	{
-		return ((EnumFacing)state.getValue(DIRECTION)).ordinal() - 2;
+		return (state.getValue(DIRECTION)).ordinal() - 2;
 	}
 	
 	@Override
@@ -155,9 +156,15 @@ public class BlockComputerOff extends Block
 	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_)
 	{
 		super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn, p_185477_7_);
-		EnumFacing roation = worldIn.getBlockState(pos).getValue(DIRECTION);
-		AxisAlignedBB bb = COMPUTER_SCREEN_AABB[roation.getHorizontalIndex()].offset(pos);
+		EnumFacing rotation = state.getValue(DIRECTION);
+		AxisAlignedBB bb = COMPUTER_SCREEN_AABB[rotation.getHorizontalIndex()].offset(pos);
 		if(entityBox.intersects(bb))
 			collidingBoxes.add(bb);
+	}
+	
+	@Override
+	public EnumPushReaction getMobilityFlag(IBlockState state)
+	{
+		return EnumPushReaction.BLOCK;
 	}
 }

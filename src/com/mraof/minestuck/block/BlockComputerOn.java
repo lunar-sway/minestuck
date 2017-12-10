@@ -5,63 +5,32 @@ import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
 import com.mraof.minestuck.util.ComputerProgram;
-import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
 import java.util.*;
 import java.util.Map.Entry;
 
-public class BlockComputerOn extends Block implements ITileEntityProvider
+public class BlockComputerOn extends BlockComputerOff implements ITileEntityProvider
 {
-	protected static final AxisAlignedBB COMPUTER_AABB = new AxisAlignedBB(1/16D, 0.0D, 1/16D, 15/16D, 1/8D, 15/16D);
-	protected static final AxisAlignedBB[] COMPUTER_SCREEN_AABB = {new AxisAlignedBB(0.5/16D, 0.0D, 6/16D, 15.5/16D, 13/16D, 7.2/16D), new AxisAlignedBB(8.8/16D, 0.0D, 0.5/16D, 10/16D, 13/16D, 15.5/16), new AxisAlignedBB(0.5/16D, 0.0D, 8.8/16D, 15.5/16D, 13/16D, 10/16D), new AxisAlignedBB(6/16D, 0.0D, 0.5/16D, 7.2/16D, 13/16D, 15.5/16D)};
-
 	public static final PropertyBool BSOD = PropertyBool.create("bsod");
 	
 	public BlockComputerOn()
 	{
-		super(Material.ROCK);
+		super();
 		setDefaultState(getDefaultState().withProperty(BSOD, false));
-		setUnlocalizedName("sburbComputer");
-		setHardness(4.0F);
-		setHarvestLevel("pickaxe", 0);
-		lightOpacity = 1;
-		this.translucent=true;
-	}
-	
-	@Override
-	public boolean isFullCube(IBlockState state)
-	{
-		return false;
-	}
-	
-	@Override
-	public boolean isOpaqueCube(IBlockState state)
-	{
-		return false;
-	}
-	
-	@Override
-	public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face)
-	{
-		return false;
 	}
 	
 	@Override
@@ -73,7 +42,7 @@ public class BlockComputerOn extends Block implements ITileEntityProvider
 	@Override
 	public int getMetaFromState(IBlockState state)
 	{
-		return ((Boolean) state.getValue(BSOD) ? 1 : 0) + MinestuckBlocks.blockComputerOff.getMetaFromState(state)*2;
+		return (state.getValue(BSOD) ? 1 : 0) + MinestuckBlocks.blockComputerOff.getMetaFromState(state)*2;
 			//TODO: Now that I know about block.getActualState, the bsod doesn't have to be part of the block.
 			//Fix that when there is no need to worry about breaking existing save files
 	}
@@ -157,7 +126,7 @@ public class BlockComputerOn extends Block implements ITileEntityProvider
 			Map.Entry<Integer, Boolean> pairs = it.next();
 			if(!pairs.getValue())
 				continue;
-			int program = (Integer) pairs.getKey();
+			int program = pairs.getKey();
 
 			float rx = rand.nextFloat() * 0.8F + 0.1F;
 			float ry = rand.nextFloat() * 0.8F + 0.1F;
@@ -168,7 +137,7 @@ public class BlockComputerOn extends Block implements ITileEntityProvider
 			entityItem.motionZ = rand.nextGaussian() * factor;
 			world.spawnEntity(entityItem);
 		}
-		if((Boolean) state.getValue(BSOD))
+		if(state.getValue(BSOD))
 		{
 			float rx = rand.nextFloat() * 0.8F + 0.1F;
 			float ry = rand.nextFloat() * 0.8F + 0.1F;
@@ -184,21 +153,5 @@ public class BlockComputerOn extends Block implements ITileEntityProvider
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player)
 	{
 		return new ItemStack(MinestuckBlocks.blockComputerOff);
-	}
-	
-	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
-	{
-		return COMPUTER_AABB;
-	}
-	
-	@Override
-	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_)
-	{
-		super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn, p_185477_7_);
-		EnumFacing roation = worldIn.getBlockState(pos).getValue(BlockComputerOff.DIRECTION);
-		AxisAlignedBB bb = COMPUTER_SCREEN_AABB[roation.getHorizontalIndex()].offset(pos);
-		if(entityBox.intersects(bb))
-			collidingBoxes.add(bb);
 	}
 }
