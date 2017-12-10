@@ -1,25 +1,15 @@
 package com.mraof.minestuck.tileentity;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.BlockUraniumCooker.MachineType;
-import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.GristAmount;
-import com.mraof.minestuck.util.GristRegistry;
-import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.GristType;
-
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class TileEntityUraniumCooker extends TileEntityMachine
 {
@@ -109,7 +99,7 @@ public class TileEntityUraniumCooker extends TileEntityMachine
 			input = FurnaceRecipes.instance().getSmeltingResult(input);
 		}
 		
-		return input;
+		return input.copy();
 	}
 	
 	//This is called mostly from AlchemyRecipeHandler
@@ -136,20 +126,20 @@ public class TileEntityUraniumCooker extends TileEntityMachine
 			//if(!world.isRemote)
 			//{
 				ItemStack item = inv.get(1);
-				if(getFuel() <= getMaxFuel()-32 && !inv.get(0).isEmpty())
-				{
+				if(getFuel() <= getMaxFuel() - 32 && inv.get(0).getItem() == MinestuckItems.rawUranium)
+				{	//Refill fuel
 					fuel += 32;
 					this.decrStackSize(0, 1);
 				}
 				if(canIrradiate())
 				{
-					final ItemStack temp = irradiate(this.getStackInSlot(1));	//This stack *is* the output stack and should NEVER be changed.
+					ItemStack output = irradiate(this.getStackInSlot(1));
 					if(inv.get(2).isEmpty() && fuel > 0)
 					{
-						this.setInventorySlotContents(2, new ItemStack(temp.getItem(), temp.getCount()));
+						this.setInventorySlotContents(2, output);
 					} else
 					{
-						this.getStackInSlot(2).grow(temp.getCount());
+						this.getStackInSlot(2).grow(output.getCount());
 					}
 					if(this.getStackInSlot(1).getItem() == Items.MUSHROOM_STEW)
 					{
@@ -169,13 +159,14 @@ public class TileEntityUraniumCooker extends TileEntityMachine
 	private boolean canIrradiate()
 	{
 		ItemStack output = irradiate(inv.get(1));
-		if(fuel>0 && !inv.get(1).isEmpty() && !output.isEmpty())
+		if(fuel > 0 && !inv.get(1).isEmpty() && !output.isEmpty())
 		{
-			if(inv.get(2).isEmpty())
+			ItemStack out = inv.get(2);
+			if(out.isEmpty())
 			{
 				return true;
 			}
-			else if(inv.get(2).getMaxStackSize() >= output.getCount() + inv.get(2).getCount())
+			else if(out.getMaxStackSize() >= output.getCount() + out.getCount() && out.isItemEqual(output))
 			{
 				return true;
 			}
