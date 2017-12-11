@@ -75,7 +75,7 @@ public class TileEntitySburbMachine extends TileEntityMachine
 		super.writeToNBT(tagCompound);
 
 		if (getMachineType() == MachineType.ALCHEMITER)
-			tagCompound.setInteger("gristType", selectedGrist.getId());
+			tagCompound.setString("gristType", selectedGrist.getRegistryName().toString());
 
 		if (getMachineType() == MachineType.CRUXTRUDER)
 			tagCompound.setInteger("color", color);
