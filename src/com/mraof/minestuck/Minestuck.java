@@ -83,6 +83,8 @@ public class Minestuck
 		
 		proxy.preInit();
 		
+		MinestuckItems.createItems();
+		
 		MinecraftForge.EVENT_BUS.register(MinestuckSoundHandler.instance);
 		MinecraftForge.EVENT_BUS.register(MinestuckBlocks.class);
 		MinecraftForge.EVENT_BUS.register(MinestuckItems.class);
