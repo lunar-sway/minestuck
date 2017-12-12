@@ -1,10 +1,14 @@
 package com.mraof.minestuck.tileentity;
 
+import com.jcraft.jorbis.Block;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.block.BlockCrockerMachine;
 import com.mraof.minestuck.block.BlockCrockerMachine.MachineType;
 import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.*;
+
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 
 import java.util.Map.Entry;
@@ -34,6 +38,13 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 			default:
 				return 0;
 		}
+	}
+	
+	@Override
+	public void setInventorySlotContents(int index, ItemStack stack)
+	{
+		super.setInventorySlotContents(index, stack);
+		recheckState();
 	}
 
 	@Override
@@ -111,6 +122,7 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 
 				}
 				this.decrStackSize(0, 1);
+				recheckState();
 				break;
 		}
 	}
@@ -124,5 +136,16 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 	public MachineType getMachineType()
 	{
 		return MachineType.values()[getBlockMetadata() % 4];
+	}
+	
+	public void recheckState()
+	{
+		if(this.getStackInSlot(0).getCount()==0)
+		{
+			BlockCrockerMachine.setState(false, world, this.getPos());
+		} else
+		{
+			BlockCrockerMachine.setState(true, world, this.getPos());
+		}
 	}
 }
