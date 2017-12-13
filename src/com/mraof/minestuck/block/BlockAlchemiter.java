@@ -1,11 +1,8 @@
 package com.mraof.minestuck.block;
 
-import org.omg.IOP.Encoding;
-
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
-
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -22,12 +19,21 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class BlockAlchemiter extends BlockLargeMachine{
-	public static final PropertyEnum<EnumParts> PART = PropertyEnum.<EnumParts>create("part",EnumParts.class);
+public class BlockAlchemiter extends BlockLargeMachine
+{
+	public final PropertyEnum<EnumParts> PART;
 	public static final PropertyDirection DIRECTION = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-
-	public BlockAlchemiter() 
+	
+	public final int index;
+	
+	public BlockAlchemiter(int index)
 	{
+		super();
+		this.index = index;
+		if(index == 0)
+			PART = PropertyEnum.create("part",EnumParts.class, EnumParts.TOTEM_CORNER, EnumParts.TOTEM_PAD, EnumParts.LOWER_ROD, EnumParts.UPPER_ROD);
+		else PART = PropertyEnum.create("part",EnumParts.class, EnumParts.EDGE_LEFT, EnumParts.EDGE_RIGHT, EnumParts.CORNER, EnumParts.CENTER_PAD);
+		
 		setUnlocalizedName("alchemiter");
 		setDefaultState(getStateFromMeta(0));
 		
@@ -53,52 +59,45 @@ public class BlockAlchemiter extends BlockLargeMachine{
 	@Override
 	public boolean hasTileEntity(IBlockState state)
 	{
-		return state.getValue(PART) == EnumParts.ZERO_ONE_ZERO;
+		return state.getValue(PART) == EnumParts.TOTEM_CORNER;
 	}
-	
 	
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta)
 	{
-		if(meta % 4 == EnumParts.ZERO_ONE_ZERO.ordinal())
+		if(index == 0 && meta % 4 == EnumParts.TOTEM_CORNER.ordinal())
 			return new TileEntityAlchemiter();
 		return null;
 	}
 	
-	////////////////////////////vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 	@Override
 	public void onBlockPlacedBy(World worldIn,BlockPos pos,IBlockState state,EntityLivingBase placer, ItemStack stack)
 	{
 		EnumFacing facing = EnumFacing.getHorizontal(MathHelper.floor((double)(placer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3);
-		state=state.withProperty(DIRECTION, facing);
-		IBlockState state2=MinestuckBlocks.alchemiter2.getDefaultState().withProperty(DIRECTION, facing);
 		if(placer!=null && !(worldIn.isRemote)){
-			worldIn.setBlockState(pos.offset(facing,0).up(0).offset(facing.rotateY(),0), state.withProperty(PART, EnumParts.ZERO_ONE_ZERO));			
-			worldIn.setBlockState(pos.offset(facing,0).up(1).offset(facing.rotateY(),0), state.withProperty(PART, EnumParts.ZERO_TWO_ZERO));
-			worldIn.setBlockState(pos.offset(facing,0).up(2).offset(facing.rotateY(),0), state.withProperty(PART, EnumParts.ZERO_THREE_ZERO));
-			worldIn.setBlockState(pos.offset(facing,0).up(3).offset(facing.rotateY(),0), state.withProperty(PART, EnumParts.ZERO_FOUR_ZERO));
+			worldIn.setBlockState(pos.up(0), getBlockState(EnumParts.TOTEM_CORNER, facing));
+			worldIn.setBlockState(pos.up(1), getBlockState(EnumParts.TOTEM_PAD, facing));
+			worldIn.setBlockState(pos.up(2), getBlockState(EnumParts.LOWER_ROD, facing));
+			worldIn.setBlockState(pos.up(3), getBlockState(EnumParts.UPPER_ROD, facing));
 			
-			
-			worldIn.setBlockState(pos.offset(facing,0).up(0).offset(facing.rotateY(),1), state2.withProperty(BlockAlchemiter2.PART, BlockAlchemiter2.EnumParts.ZERO_ONE_ONE));
-			worldIn.setBlockState(pos.offset(facing,0).up(0).offset(facing.rotateY(),2), state2.withProperty(BlockAlchemiter2.PART, BlockAlchemiter2.EnumParts.ZERO_ONE_TWO));
-			worldIn.setBlockState(pos.offset(facing,0).up(0).offset(facing.rotateY(),3), state2.withProperty(BlockAlchemiter2.PART, BlockAlchemiter2.EnumParts.ZERO_ONE_THREE));			
-			worldIn.setBlockState(pos.offset(facing,1).up(0).offset(facing.rotateY(),1), state2.withProperty(BlockAlchemiter2.PART, BlockAlchemiter2.EnumParts.ONE_ONE_ONE));
-			worldIn.setBlockState(pos.offset(facing,1).up(0).offset(facing.rotateY(),0), state2.withProperty(BlockAlchemiter2.PART, BlockAlchemiter2.EnumParts.ZERO_ONE_TWO).withProperty(DIRECTION, facing.rotateY()));
-			worldIn.setBlockState(pos.offset(facing,1).up(0).offset(facing.rotateY(),2), state2.withProperty(BlockAlchemiter2.PART, BlockAlchemiter2.EnumParts.ONE_ONE_ONE).withProperty(DIRECTION, facing.rotateYCCW() ));
-			worldIn.setBlockState(pos.offset(facing,1).up(0).offset(facing.rotateY(),3), state2.withProperty(BlockAlchemiter2.PART, BlockAlchemiter2.EnumParts.ZERO_ONE_ONE).withProperty(DIRECTION, facing.rotateYCCW() ));
-			worldIn.setBlockState(pos.offset(facing,2).up(0).offset(facing.rotateY(),0), state2.withProperty(BlockAlchemiter2.PART, BlockAlchemiter2.EnumParts.ZERO_ONE_ONE).withProperty(DIRECTION, facing.rotateY() ));
-			worldIn.setBlockState(pos.offset(facing,2).up(0).offset(facing.rotateY(),1), state2.withProperty(BlockAlchemiter2.PART, BlockAlchemiter2.EnumParts.ONE_ONE_ONE).withProperty(DIRECTION, facing.rotateY() ));
-			worldIn.setBlockState(pos.offset(facing,2).up(0).offset(facing.rotateY(),2), state2.withProperty(BlockAlchemiter2.PART, BlockAlchemiter2.EnumParts.ONE_ONE_ONE).withProperty(DIRECTION, facing.rotateY().rotateY() ));
-			worldIn.setBlockState(pos.offset(facing,2).up(0).offset(facing.rotateY(),3), state2.withProperty(BlockAlchemiter2.PART, BlockAlchemiter2.EnumParts.ZERO_ONE_TWO).withProperty(DIRECTION, facing.rotateYCCW()));
-			worldIn.setBlockState(pos.offset(facing,3).up(0).offset(facing.rotateY(),0), state2.withProperty(BlockAlchemiter2.PART, BlockAlchemiter2.EnumParts.ZERO_ONE_THREE).withProperty(DIRECTION, facing.rotateY().rotateY()));
-			worldIn.setBlockState(pos.offset(facing,3).up(0).offset(facing.rotateY(),1), state2.withProperty(BlockAlchemiter2.PART, BlockAlchemiter2.EnumParts.ZERO_ONE_TWO).withProperty(DIRECTION, facing.rotateY().rotateY()));
-			worldIn.setBlockState(pos.offset(facing,3).up(0).offset(facing.rotateY(),2), state2.withProperty(BlockAlchemiter2.PART, BlockAlchemiter2.EnumParts.ZERO_ONE_ONE).withProperty(DIRECTION, facing.rotateY().rotateY() ));
-			worldIn.setBlockState(pos.offset(facing,3).up(0).offset(facing.rotateY(),3), state2.withProperty(BlockAlchemiter2.PART, BlockAlchemiter2.EnumParts.ZERO_ONE_THREE).withProperty(DIRECTION, facing.rotateYCCW()));
-
-			
+			worldIn.setBlockState(pos.offset(facing,0).offset(facing.rotateY(),1), getBlockState(EnumParts.EDGE_LEFT, facing));
+			worldIn.setBlockState(pos.offset(facing,0).offset(facing.rotateY(),2), getBlockState(EnumParts.EDGE_RIGHT, facing));
+			worldIn.setBlockState(pos.offset(facing,0).offset(facing.rotateY(),3), getBlockState(EnumParts.CORNER, facing));
+			worldIn.setBlockState(pos.offset(facing,1).offset(facing.rotateY(),1), getBlockState(EnumParts.CENTER_PAD, facing));
+			worldIn.setBlockState(pos.offset(facing,1).offset(facing.rotateY(),0), getBlockState(EnumParts.EDGE_RIGHT, facing.rotateY()));
+			worldIn.setBlockState(pos.offset(facing,1).offset(facing.rotateY(),2), getBlockState(EnumParts.CENTER_PAD, facing.rotateYCCW()));
+			worldIn.setBlockState(pos.offset(facing,1).offset(facing.rotateY(),3), getBlockState(EnumParts.EDGE_LEFT, facing.rotateYCCW()));
+			worldIn.setBlockState(pos.offset(facing,2).offset(facing.rotateY(),0), getBlockState(EnumParts.EDGE_RIGHT, facing.rotateY()));
+			worldIn.setBlockState(pos.offset(facing,2).offset(facing.rotateY(),1), getBlockState(EnumParts.CENTER_PAD, facing.rotateY()));
+			worldIn.setBlockState(pos.offset(facing,2).offset(facing.rotateY(),2), getBlockState(EnumParts.CENTER_PAD, facing.getOpposite()));
+			worldIn.setBlockState(pos.offset(facing,2).offset(facing.rotateY(),3), getBlockState(EnumParts.EDGE_RIGHT, facing.rotateYCCW()));
+			worldIn.setBlockState(pos.offset(facing,3).offset(facing.rotateY(),0), getBlockState(EnumParts.CORNER, facing.getOpposite()));
+			worldIn.setBlockState(pos.offset(facing,3).offset(facing.rotateY(),1), getBlockState(EnumParts.EDGE_RIGHT, facing.getOpposite()));
+			worldIn.setBlockState(pos.offset(facing,3).offset(facing.rotateY(),2), getBlockState(EnumParts.EDGE_LEFT, facing.getOpposite()));
+			worldIn.setBlockState(pos.offset(facing,3).offset(facing.rotateY(),3), getBlockState(EnumParts.CORNER, facing.rotateYCCW()));
 		}
 	}
-	///////////////////////////////^^^^^^^^^^^^^^^^^^^^^^^^^^^
+	
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
@@ -113,72 +112,72 @@ public class BlockAlchemiter extends BlockLargeMachine{
 		super.breakBlock(worldIn, pos, state);
 	}
 	
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	//Block state handling
-
+	@Override
 	protected BlockStateContainer createBlockState()
     {
         return new BlockStateContainer(this,PART,DIRECTION);
     }
 	
 	@Override
-	public IBlockState getStateFromMeta(int meta){
+	public IBlockState getStateFromMeta(int meta)
+	{
 		IBlockState defaultState=getDefaultState();		
-		EnumParts part = EnumParts.values()[meta % 4];
+		EnumParts part = EnumParts.values()[index*4 + meta % 4];
 		EnumFacing facing = EnumFacing.getHorizontal(meta/4);
-		
 
 		return defaultState.withProperty(PART, part).withProperty(DIRECTION, facing);
 	}
-	public int getMetaFromState(IBlockState state){
+	
+	@Override
+	public int getMetaFromState(IBlockState state)
+	{
 		EnumParts part = state.getValue(PART);
 		EnumFacing facing = state.getValue(DIRECTION);
-		return part.ordinal()+facing.getHorizontalIndex()*4;
+		return (part.ordinal()%4) + facing.getHorizontalIndex()*4;
 	}
 	
     /**
      *returns the block position of the "Main" block
      *aka the block with the TileEntity for the machine
      */
-	public BlockPos getMainPos(IBlockState state, BlockPos pos){
-		EnumParts part=state.getValue(BlockAlchemiter.PART);
-		switch(part){
-		case ZERO_ONE_ZERO: return pos.north(0).down(0).east(0);
-		case ZERO_TWO_ZERO:	return pos.north(0).down(1).east(0);
-		case ZERO_THREE_ZERO:return pos.north(0).down(2).east(0);
-		case ZERO_FOUR_ZERO:return pos.north(0).down(3).east(0);
-
-		
+	public BlockPos getMainPos(IBlockState state, BlockPos pos)
+	{
+		EnumParts part=state.getValue(this.PART);
+		switch(part)
+		{
+			case TOTEM_CORNER: return pos.north(0).down(0).east(0);
+			case TOTEM_PAD:	return pos.north(0).down(1).east(0);
+			case LOWER_ROD:return pos.north(0).down(2).east(0);
+			case UPPER_ROD:return pos.north(0).down(3).east(0);
 		}
 		return pos;
 	}
-	public static enum EnumParts implements IStringSerializable
-	{
-		ZERO_ONE_ZERO,	
-		ZERO_TWO_ZERO,
-		ZERO_THREE_ZERO,
-		ZERO_FOUR_ZERO;
-		
-
-
 	
+	public static IBlockState getBlockState(EnumParts parts, EnumFacing direction)
+	{
+		BlockAlchemiter block = MinestuckBlocks.alchemiter[parts.ordinal() < 4 ? 0 : 1];
+		IBlockState state = block.getDefaultState();
+		return state.withProperty(block.PART, parts).withProperty(DIRECTION, direction);
+	}
+	
+	public enum EnumParts implements IStringSerializable
+	{
+		TOTEM_CORNER,
+		TOTEM_PAD,
+		LOWER_ROD,
+		UPPER_ROD,
+		EDGE_LEFT,
+		EDGE_RIGHT,
+		CORNER,
+		CENTER_PAD;
 		
+		@Override
 		public String toString()
 		{
 			return getName();
 		}
+		@Override
 		public String getName()
 		{
 			return name().toLowerCase();

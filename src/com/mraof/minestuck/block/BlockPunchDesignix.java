@@ -1,7 +1,5 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.tileentity.TileEntityPunchDesignix;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
@@ -9,14 +7,15 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockPunchDesignix extends BlockLargeMachine
@@ -25,15 +24,20 @@ public class BlockPunchDesignix extends BlockLargeMachine
 	public static final PropertyEnum<EnumParts> PART = PropertyEnum.create("part", EnumParts.class);
 	public static final PropertyDirection DIRECTION = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	
-	public BlockPunchDesignix() {
+	public BlockPunchDesignix()
+	{
 		setUnlocalizedName("punch_designix");
 		setDefaultState(blockState.getBaseState());
 	} 
-	//not sure how to do this.
-	//@Override
-	//public AxisAlignedBB getBoundingBox(IBlockState state,IBlockAccess source,BlockPos pos){
+	
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+	{
+		EnumParts parts = state.getValue(PART);
+		EnumFacing facing = state.getValue(DIRECTION);
 		
-	//}
+		return parts.BOUNDING_BOX[facing.getHorizontalIndex()];
+	}
 	
 
 	
@@ -42,10 +46,9 @@ public class BlockPunchDesignix extends BlockLargeMachine
 	{
 		BlockPos mainPos = getMainPos(state, pos);
 		TileEntity te = worldIn.getTileEntity(mainPos);
-		if(!worldIn.isRemote && te != null && te instanceof TileEntityPunchDesignix && !((TileEntityPunchDesignix)te).broken)
-		{
-			playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.MACHINE.ordinal(), worldIn, mainPos.getX(), mainPos.getY(), mainPos.getZ());
-		}
+		if(!worldIn.isRemote && te != null && te instanceof TileEntityPunchDesignix)
+			((TileEntityPunchDesignix) te).onRightClick(playerIn, state);
+		
 		return true;
 	}
 	
@@ -89,7 +92,8 @@ public class BlockPunchDesignix extends BlockLargeMachine
 		{
 			TileEntityPunchDesignix designix = (TileEntityPunchDesignix) te;
 			designix.broken = true;
-			InventoryHelper.dropInventoryItems(worldIn, pos, designix);
+			if(state.getValue(PART).equals(EnumParts.TOP_LEFT))
+				designix.dropItem(true);
 		}
 		
 		super.breakBlock(worldIn, pos, state);
@@ -146,10 +150,21 @@ public class BlockPunchDesignix extends BlockLargeMachine
 	
 	public enum EnumParts implements IStringSerializable
 	{
-		BOTTOM_LEFT,
-		BOTTOM_RIGHT,
-		TOP_LEFT,
-		TOP_RIGHT;
+		BOTTOM_LEFT(new AxisAlignedBB(5/16D, 0.0D, 0.0D, 1.0D, 1.0D, 11/16D), new AxisAlignedBB(5/16D, 0.0D, 5/16D, 1.0D, 1.0D, 1.0D),
+				new AxisAlignedBB(0.0D, 0.0D, 5/16D, 11/16D, 1.0D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 11/16D, 1.0D, 11/16D)),
+		BOTTOM_RIGHT(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 13/16D, 1.0D, 11/16D), new AxisAlignedBB(5/16D, 0.0D, 0.0D, 1.0D, 1.0D, 13/16D),
+				new AxisAlignedBB(3/16D, 0.0D, 5/16D, 1.0D, 1.0D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 3/16D, 11/16D, 1.0D, 1.0D)),
+		TOP_LEFT(new AxisAlignedBB(5/16D, 0.0D, 0.0D, 1.0D, 6/16D, 6/16D), new AxisAlignedBB(10/16D, 0.0D, 5/16D, 1.0D, 6/16D, 1.0D),
+				new AxisAlignedBB(0.0D, 0.0D, 10/16D, 11/16D, 6/16D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 6/16D, 6/16D, 11/16D)),
+		TOP_RIGHT(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 13/16D, 6/16D, 6/16D), new AxisAlignedBB(10/16D, 0.0D, 0.0D, 1.0D, 6/16D, 13/16D),
+				new AxisAlignedBB(3/16D, 0.0D, 10/16D, 1.0D, 6/16D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 3/16D, 6/16D, 6/16D, 1.0D));
+		
+		private final AxisAlignedBB[] BOUNDING_BOX;
+		
+		EnumParts(AxisAlignedBB... bb)
+		{
+			BOUNDING_BOX = bb;
+		}
 		
 		@Override
 		public String toString()

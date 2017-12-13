@@ -23,8 +23,9 @@ public class BlockMobSpawner extends Block
         this.setTickRandomly(true);
         
     }
-   
-    
+   //*
+   //*should just delete it's self for now
+   //*    
     @Override
     public void randomTick(World worldIn, BlockPos pos, IBlockState state, Random random)
     {
@@ -34,10 +35,10 @@ public class BlockMobSpawner extends Block
         }
         else
         {
-            EntityRabbit entity = new EntityRabbit(worldIn);
-            entity.setPosition(pos.getX() + .5, pos.getY(), pos.getZ() + .5);
-            entity.onInitialSpawn(null, null);
-            worldIn.spawnEntity(entity);
+      //      EntityRabbit entity = new EntityRabbit(worldIn);
+      //      entity.setPosition(pos.getX() + .5, pos.getY(), pos.getZ() + .5);
+      //      entity.onInitialSpawn(null, null);
+      //      worldIn.spawnEntity(entity);
             
         }
     }

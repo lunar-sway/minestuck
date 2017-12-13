@@ -3,7 +3,8 @@
 /build
 /bin
 /gradle.properties
-.*
+.idea
+.gradle
 /eclipse
 *~
 /gradle

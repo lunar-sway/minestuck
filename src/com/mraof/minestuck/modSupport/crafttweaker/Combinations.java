@@ -1,40 +1,44 @@
-/*package com.mraof.minestuck.modSupport.minetweaker;
-
-import java.util.Arrays;
-import java.util.List;
+package com.mraof.minestuck.modSupport.crafttweaker;
 
 import com.mraof.minestuck.util.CombinationRegistry;
-
-import crafttweaker.CraftTweakerAPI;
+import crafttweaker.IAction;
+import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IItemStack;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @ZenClass("minestuck.Combinations")
+@ZenRegister
 public class Combinations
 {
+	static List<IAction> recipes = new ArrayList<>();
 	
 	@ZenMethod
 	public static void addRecipe(IItemStack input1, IItemStack input2, String mode, IItemStack output)
 	{
 		ItemStack stack1 = (ItemStack) input1.getInternal();
 		ItemStack stack2 = (ItemStack) input2.getInternal();
-		CraftTweakerAPI.apply(new SetRecipe(stack1.getItem(), stack1.getItemDamage(), stack2.getItem(), stack2.getItemDamage(), getMode(mode), (ItemStack) output.getInternal()));
+		
+		recipes.add(new SetRecipe(stack1.getItem(), stack1.getItemDamage(), stack2.getItem(), stack2.getItemDamage(), getMode(mode), (ItemStack) output.getInternal()));
 	}
 	
 	@ZenMethod
 	public static void addOreDictRecipe(IItemStack input1, String input2, String mode, IItemStack output)
 	{
 		ItemStack stack = (ItemStack) input1.getInternal();
-		CraftTweakerAPI.apply(new SetRecipe(stack.getItem(), stack.getItemDamage(), input2, OreDictionary.WILDCARD_VALUE, getMode(mode), (ItemStack) output.getInternal()));
+		recipes.add(new SetRecipe(stack.getItem(), stack.getItemDamage(), input2, OreDictionary.WILDCARD_VALUE, getMode(mode), (ItemStack) output.getInternal()));
 	}
 	
 	@ZenMethod
 	public static void addFullOreDictRecipe(String input1, String input2, String mode, IItemStack output)
 	{
-		CraftTweakerAPI.apply(new SetRecipe(input1, OreDictionary.WILDCARD_VALUE, input2, OreDictionary.WILDCARD_VALUE, getMode(mode), (ItemStack) output.getInternal()));
+		recipes.add(new SetRecipe(input1, OreDictionary.WILDCARD_VALUE, input2, OreDictionary.WILDCARD_VALUE, getMode(mode), (ItemStack) output.getInternal()));
 	}
 	
 	@ZenMethod
@@ -42,20 +46,20 @@ public class Combinations
 	{
 		ItemStack stack1 = (ItemStack) input1.getInternal();
 		ItemStack stack2 = (ItemStack) input2.getInternal();
-		CraftTweakerAPI.apply(new SetRecipe(stack1.getItem(), stack1.getItemDamage(), stack2.getItem(), stack2.getItemDamage(), getMode(mode), null));
+		recipes.add(new SetRecipe(stack1.getItem(), stack1.getItemDamage(), stack2.getItem(), stack2.getItemDamage(), getMode(mode), null));
 	}
 	
 	@ZenMethod
 	public static void removeOreDictRecipe(IItemStack input1, String input2, String mode)
 	{
 		ItemStack stack = (ItemStack) input1.getInternal();
-		CraftTweakerAPI.apply(new SetRecipe(stack.getItem(), stack.getItemDamage(), input2, OreDictionary.WILDCARD_VALUE, getMode(mode), null));
+		recipes.add(new SetRecipe(stack.getItem(), stack.getItemDamage(), input2, OreDictionary.WILDCARD_VALUE, getMode(mode), null));
 	}
 	
 	@ZenMethod
 	public static void removeFullOreDictRecipe(String input1, String input2, String mode)
 	{
-		CraftTweakerAPI.apply(new SetRecipe(input1, OreDictionary.WILDCARD_VALUE, input2, OreDictionary.WILDCARD_VALUE, getMode(mode), null));
+		recipes.add(new SetRecipe(input1, OreDictionary.WILDCARD_VALUE, input2, OreDictionary.WILDCARD_VALUE, getMode(mode), null));
 	}
 	
 	private static boolean getMode(String mode)
@@ -67,12 +71,11 @@ public class Combinations
 		else throw new IllegalArgumentException("\""+mode+"doesn't match either AND or OR!");
 	}
 	
-	private static class SetRecipe implements IUndoableAction
+	private static class SetRecipe implements IAction
 	{
 		
 		private final List<Object> inputs;
 		private final ItemStack output;
-		private ItemStack outputOld;
 		
 		public SetRecipe(Object input1, int meta1, Object input2, int meta2, boolean mode, ItemStack output)
 		{
@@ -88,46 +91,17 @@ public class Combinations
 		@Override
 		public void apply()
 		{
-			outputOld = CombinationRegistry.getAllConversions().remove(inputs);
+			CombinationRegistry.getAllConversions().remove(inputs);
 			if(output != null)
 				CombinationRegistry.getAllConversions().put(inputs, output);
-		}
-		
-		@Override
-		public void undo()
-		{
-			if(outputOld == null)
-				CombinationRegistry.getAllConversions().remove(inputs);
-			else CombinationRegistry.getAllConversions().put(inputs, outputOld);
-		}
-		
-		@Override
-		public boolean canUndo()
-		{
-			return true;
 		}
 
 		@Override
 		public String describe()
 		{
 			if(output == null)
-				return "Removing Combination Recipe for \""+output.getDisplayName()+"\"";
+				return "Removing Combination Recipe with ingredients \""+inputs+"\"";
 			else return "Adding Combination Recipe for \""+output.getDisplayName()+"\"";
 		}
-
-		@Override
-		public String describeUndo()
-		{
-			if(output == null)
-				return "Reversing removal of Combination Recipe for \""+output.getDisplayName()+"\"";
-			else return "Removing Combination Recipe for \""+output.getDisplayName()+"\"";
-		}
-
-		@Override
-		public Object getOverrideKey()
-		{
-			return null;
-		}
-		
 	}
-}*/
+}

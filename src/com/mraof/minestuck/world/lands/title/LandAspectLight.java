@@ -1,12 +1,13 @@
 package com.mraof.minestuck.world.lands.title;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.util.math.Vec3d;
-
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.decorator.PillarDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
+import net.minecraft.block.BlockColored;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.util.math.Vec3d;
 
 public class LandAspectLight extends TitleLandAspect
 {
@@ -34,6 +35,7 @@ public class LandAspectLight extends TitleLandAspect
 	@Override
 	protected void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
+		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.ORANGE));
 		chunkProvider.blockRegistry.setBlockState("torch", Blocks.TORCH.getDefaultState());
 		
 		chunkProvider.decorators.add(new PillarDecorator("light_block", 0.5F, false, BiomeMinestuck.mediumNormal, BiomeMinestuck.mediumOcean));

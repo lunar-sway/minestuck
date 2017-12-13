@@ -252,7 +252,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	
 	public static int typeInt(GristType type)
 	{
-		return type == null ? -1 : type.ordinal();
+		return type == null ? -1 : type.getId();
 	
 	}
 	
@@ -281,7 +281,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 			this.setDead();
 			return;
 		}
-		this.gristType = GristType.values()[typeOffset];
+		this.gristType = GristType.REGISTRY.getValue(typeOffset);
 		this.gristValue = data.readInt();
 		this.setSize(this.getSizeByValue(), 0.5F);
 //		this.yOffset = this.height / 2.0F;

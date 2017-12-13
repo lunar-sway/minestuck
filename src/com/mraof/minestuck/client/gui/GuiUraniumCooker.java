@@ -1,18 +1,15 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mraof.minestuck.block.BlockSburbMachine.MachineType;
-import com.mraof.minestuck.inventory.ContainerPunchDesignix;
+import com.mraof.minestuck.block.BlockUraniumCooker.MachineType;
+import com.mraof.minestuck.inventory.ContainerUraniumCooker;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
-import com.mraof.minestuck.tileentity.TileEntityPunchDesignix;
+import com.mraof.minestuck.tileentity.TileEntityUraniumCooker;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.SoundEvents;
@@ -23,16 +20,15 @@ import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
 
-public class GuiPunchDesignix extends GuiContainer
+public class GuiUraniumCooker extends GuiContainer
 {
 	
-	private static final String[] guis = {"cruxtruder", "designix", "lathe", "alchemiter"};
+	private static final String[] guis = {"uranium_cooker"};
 	
 	private ResourceLocation guiBackground;
 	private ResourceLocation guiProgress;
 	private MachineType type;
-	protected TileEntityPunchDesignix te;
-	//private EntityPlayer player;
+	protected TileEntityUraniumCooker te;
 	
 	private int progressX;
 	private int progressY;
@@ -42,33 +38,44 @@ public class GuiPunchDesignix extends GuiContainer
 	private int goY;
 	private GuiButton goButton;
 
-	public GuiPunchDesignix (InventoryPlayer inventoryPlayer, TileEntityPunchDesignix tileEntity) 
+	public GuiUraniumCooker (InventoryPlayer inventoryPlayer, TileEntityUraniumCooker tileEntity) 
 	{
-	super(new ContainerPunchDesignix(inventoryPlayer, tileEntity));
-	this.te = tileEntity;
-	this.type = MachineType.PUNCH_DESIGNIX;
-	guiBackground = new ResourceLocation("minestuck:textures/gui/" + guis[type.ordinal()] + ".png");
-	guiProgress = new ResourceLocation("minestuck:textures/gui/progress/" + guis[type.ordinal()] + ".png");
-	//this.player = inventoryPlayer.player;
-	
-	//sets prgress bar information based on machine type
-
-		progressX = 63;
-		progressY = 38;
-		progressWidth = 43;
-		progressHeight = 17;
-		goX = 66;
-		goY = 55;
+		super(new ContainerUraniumCooker(inventoryPlayer, tileEntity));
+		this.te = tileEntity;
+		this.type = tileEntity.getMachineType();
+		guiBackground = new ResourceLocation("minestuck:textures/gui/" + guis[type.ordinal()] + ".png");
+		guiProgress = new ResourceLocation("minestuck:textures/gui/progress/" + guis[type.ordinal()] + ".png");
 		
-}
+		//sets progress bar information based on machine type
+		switch (type)
+		{
+		case URANIUM_COOKER:
+			progressX = 67;
+			progressY = 24;
+			progressWidth = 35;
+			progressHeight = 39;
+			goX = 69;
+			goY = 69;
+			break;
+		}
+	}
+	
+	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks)
+	{
+		this.drawDefaultBackground();
+		super.drawScreen(mouseX, mouseY, partialTicks);
+		this.renderHoveredToolTip(mouseX, mouseY);
+	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
 	{
+		//draws "Cookalyzer"
 		fontRenderer.drawString(I18n.format("gui."+guis[type.ordinal()]+".name"), 8, 6, 4210752);
+		
 		//draws "Inventory" or your regional equivalent
 		fontRenderer.drawString(I18n.format("container.inventory"), 8, ySize - 96 + 2, 4210752);
-		
 	}
 	
 	@Override
@@ -84,11 +91,11 @@ public class GuiPunchDesignix extends GuiContainer
 		
 		//draw progress bar
 		this.mc.getTextureManager().bindTexture(guiProgress);
-		int width = getScaledValue(te.progress, te.maxProgress, progressWidth);
-		int height = progressHeight ;
-		this.drawModalRectWithCustomSizedTexture(x+progressX, y+progressY, 0, 0, width, height, progressWidth, progressHeight);
-		}
-
+		int width = progressWidth;
+		int height = getScaledValue(te.getFuel(),te.getMaxFuel(),progressHeight);
+		drawModalRectWithCustomSizedTexture(x+progressX, y+progressY+progressHeight-height, 0, progressHeight-height, width, height, progressWidth, progressHeight);
+	}
+	
 	@Override
 	public void initGui()
 	{
@@ -164,22 +171,6 @@ public class GuiPunchDesignix extends GuiContainer
 	}
 	
 	/**
-	 * Draws a box like drawModalRect, but with custom width and height values.
-	 */
-	public void drawCustomBox(int par1, int par2, int par3, int par4, int par5, int par6, int width, int height)
-	{
-		float f = 1/(float)width;
-		float f1 = 1/(float)height;
-		BufferBuilder render = Tessellator.getInstance().getBuffer();
-		render.begin(7, DefaultVertexFormats.POSITION_TEX);
-		render.pos(par1, par2 + par6, 0D).tex((par3)*f, (par4 + par6)*f1).endVertex();
-		render.pos(par1 + par5, par2 + par6, this.zLevel).tex((par3 + par5)*f, (par4 + par6)*f1).endVertex();
-		render.pos(par1 + par5, par2, this.zLevel).tex((par3 + par5)*f, (par4)*f1).endVertex();
-		render.pos(par1, par2, this.zLevel).tex((par3)*f, (par4)*f1).endVertex();
-		Tessellator.getInstance().draw();
-	}
-	
-	/**
 	 * Returns a number to be used in calculation of progress bar length.
 	 * 
 	 * @param progress the progress done.
@@ -191,4 +182,5 @@ public class GuiPunchDesignix extends GuiContainer
 	{
 		return (int) ((float) imageMax*((float)progress/(float)max));
 	}
+	
 }

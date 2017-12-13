@@ -4,16 +4,8 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.GristHelper;
-import com.mraof.minestuck.util.GristRegistry;
-import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.GristType;
-import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-import com.mraof.minestuck.util.MinestuckAchievementHandler;
-import com.mraof.minestuck.util.MinestuckPlayerData;
-
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,7 +15,6 @@ public class TileEntityAlchemiter extends TileEntityMachine
 	//still private because programming teacher and data protection
 	private PlayerIdentifier owner;
 	private GristType selectedGrist = GristType.Build;
-	private int color = -1;
 	private int ticks_since_update = 0;
 	private boolean broken=false;
 	public PlayerIdentifier getOwner(){
@@ -69,10 +60,11 @@ return 2;
 		super.readFromNBT(tagCompound);
 		
 		if(tagCompound.hasKey("gristType"))
-			this.setSelectedGrist(GristType.values()[tagCompound.getInteger("gristType")]);
-		
-		if(tagCompound.hasKey("color"))
-			this.color = tagCompound.getInteger("color");
+			this.selectedGrist = GristType.getTypeFromString(tagCompound.getString("gristType"));
+		if(this.selectedGrist == null)
+		{
+			this.selectedGrist = GristType.Build;
+		}
 		
 		if(tagCompound.hasKey("owner") || tagCompound.hasKey("ownerMost"))
 			owner = IdentifierHandler.load(tagCompound, "owner");
@@ -83,10 +75,9 @@ return 2;
 	{
 		super.writeToNBT(tagCompound);
 		
-		if(true)
-			tagCompound.setInteger("gristType", getSelectedGrist().ordinal());
+		tagCompound.setString("gristType", selectedGrist.getRegistryName().toString());
 		
-		if(true && owner != null)
+		if(owner != null)
 			owner.saveToNBT(tagCompound, "owner");
 		return tagCompound;
 	}
@@ -118,8 +109,10 @@ return 2;
 				if(cost != null && newItem.isItemDamaged())
 				{
 					float multiplier = 1 - newItem.getItem().getDamage(newItem)/((float) newItem.getMaxDamage());
-					for(int i = 0; i < cost.gristTypes.length; i++)
-						cost.gristTypes[i] = (int) Math.ceil(cost.gristTypes[i]*multiplier);
+					for (GristAmount amount : cost.getArray())
+					{
+						cost.setGrist(amount.getType(), (int) Math.ceil(amount.getAmount() * multiplier));
+					}
 				}
 				return GristHelper.canAfford(MinestuckPlayerData.getGristSet(this.owner), cost);
 			}
@@ -145,8 +138,10 @@ return 2;
 						cost = new GristSet(getSelectedGrist(), MinestuckConfig.cardCost);
 					if (cost != null && newItem.isItemDamaged()) {
 						float multiplier = 1 - newItem.getItem().getDamage(newItem) / ((float) newItem.getMaxDamage());
-						for (int i = 0; i < cost.gristTypes.length; i++)
-							cost.gristTypes[i] = (int) Math.ceil(cost.gristTypes[i] * multiplier);
+						for (GristAmount amount : cost.getArray())
+						{
+							cost.setGrist(amount.getType(), (int) Math.ceil(amount.getAmount() * multiplier));
+						}
 					}
 					// We need to run the check 16 times. Don't want to hammer the game with too many of these, so the comparators are only told to update every 20 ticks.
 					// Additionally, we need to check if the item in the slot is empty. Otherwise, it will attempt to check the cost for air, which cannot be alchemized anyway.
@@ -215,9 +210,11 @@ return 2;
 				cost = new GristSet(getSelectedGrist(), MinestuckConfig.cardCost);
 			if(newItem.isItemDamaged())
 			{
-				float multiplier = 1 - newItem.getItem().getDamage(newItem)/((float) newItem.getMaxDamage());
-				for(int i = 0; i < cost.gristTypes.length; i++)
-					cost.gristTypes[i] = (int) Math.ceil(cost.gristTypes[i]*multiplier);
+				float multiplier = 1 - newItem.getItem().getDamage(newItem) / ((float) newItem.getMaxDamage());
+				for (GristAmount amount : cost.getArray())
+				{
+					cost.setGrist(amount.getType(), (int) Math.ceil(amount.getAmount() * multiplier));
+				}
 			}
 			GristHelper.decrease(owner, cost);
 			MinestuckPlayerTracker.updateGristCache(owner);

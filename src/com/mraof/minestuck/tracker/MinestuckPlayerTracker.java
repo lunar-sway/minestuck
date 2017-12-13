@@ -155,15 +155,13 @@ public class MinestuckPlayerTracker {
 	 */
 	public static void updateGristCache(PlayerIdentifier player)
 	{
-		int[] gristValues = new int[GristType.allGrists];
-		for(int typeInt = 0; typeInt < gristValues.length; typeInt++)
-			gristValues[typeInt] = GristHelper.getGrist(player, GristType.values()[typeInt]);
+		GristSet gristSet = MinestuckPlayerData.getGristSet(player);
 		
 		//The player
 		EntityPlayerMP playerMP = player.getPlayer();
 		if(playerMP != null)
 		{
-			MinestuckPacket packet = MinestuckPacket.makePacket(Type.GRISTCACHE, gristValues, false);
+			MinestuckPacket packet = MinestuckPacket.makePacket(Type.GRISTCACHE, gristSet, false);
 			MinestuckChannelHandler.sendToPlayer(packet, playerMP);
 		}
 		
@@ -172,7 +170,7 @@ public class MinestuckPlayerTracker {
 		if(c != null && ServerEditHandler.getData(c) != null)
 		{
 			EntityPlayerMP editor = ServerEditHandler.getData(c).getEditor();
-			MinestuckPacket packet = MinestuckPacket.makePacket(Type.GRISTCACHE, gristValues, true);
+			MinestuckPacket packet = MinestuckPacket.makePacket(Type.GRISTCACHE, gristSet, true);
 			MinestuckChannelHandler.sendToPlayer(packet, editor);
 		}
 	}
