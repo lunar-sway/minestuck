@@ -141,9 +141,9 @@ public class BlockCrockerMachine extends BlockContainer
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
-        TileEntityMachine te = (TileEntityMachine) worldIn.getTileEntity(pos);
-        InventoryHelper.dropInventoryItems(worldIn, pos, te);
-    	super.breakBlock(worldIn, pos, state);
+		TileEntityMachine te = (TileEntityMachine) worldIn.getTileEntity(pos);
+		InventoryHelper.dropInventoryItems(worldIn, pos, te);
+		super.breakBlock(worldIn, pos, state);
 	}
 	
 	
@@ -178,22 +178,22 @@ public class BlockCrockerMachine extends BlockContainer
 		return new ItemStack(Item.getItemFromBlock(this), 1, state.getValue(MACHINE_TYPE).ordinal());
 	}
 
-    @Override
+	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos)
 	{
-    	TileEntity te = worldIn.getTileEntity(pos);
-    	if(!(te instanceof TileEntityMachine))
-    	{
-    		return state;
-    	}
-    	
-    	if(((TileEntityMachine)te).getStackInSlot(0).isEmpty())
-    	{
-    		return state.withProperty(HAS_ITEM, false);
-    	} else
-    	{
-    		return state.withProperty(HAS_ITEM, true);
-    	}
+		TileEntity te = worldIn.getTileEntity(pos);
+		if(!(te instanceof TileEntityMachine))
+		{
+			return state;
+		}
+		
+		if(((TileEntityMachine)te).getStackInSlot(0).isEmpty())
+		{
+			return state.withProperty(HAS_ITEM, false);
+		} else
+		{
+			return state.withProperty(HAS_ITEM, true);
+		}
 	}
 
 	public static void updateItem(boolean b, World world, BlockPos pos)
