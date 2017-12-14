@@ -1,5 +1,7 @@
 package com.mraof.minestuck.block;
 
+import java.util.Random;
+
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.item.MinestuckItems;
@@ -31,7 +33,6 @@ import net.minecraft.world.World;
 public class BlockCrockerMachine extends BlockContainer
 {
 	protected static final AxisAlignedBB[] GRIST_WIDGET_AABB = {new AxisAlignedBB(2/16D, 0.0D, 5/16D, 14/16D, 2.1/16D, 12/16D), new AxisAlignedBB(4/16D, 0.0D, 2/16D, 11/16D, 2.1/16D, 14/16D),new AxisAlignedBB(2/16D, 0.0D, 4/16D, 14/16D, 2.1/16D, 11/16D), new AxisAlignedBB(5/16D, 0.0D, 2/16D, 12/16D, 2.1/16D, 14/16D)};
-	private static boolean keepInventory = false;
 	
 	public static enum MachineType implements IStringSerializable
 	{
@@ -57,7 +58,7 @@ public class BlockCrockerMachine extends BlockContainer
 	
 	public static final PropertyEnum<MachineType> MACHINE_TYPE = PropertyEnum.create("machine_type", MachineType.class);
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
-	public static final PropertyBool HAS_CARD = PropertyBool.create("has_card");
+	public static final PropertyBool HAS_ITEM = PropertyBool.create("has_item");
 	
 	protected BlockCrockerMachine()
 	{
@@ -66,14 +67,24 @@ public class BlockCrockerMachine extends BlockContainer
 		setUnlocalizedName("crockerMachine");
 		setHardness(3.0F);
 		setHarvestLevel("pickaxe", 0);
-		setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.SOUTH).withProperty(HAS_CARD, false));
+		setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.SOUTH).withProperty(HAS_ITEM, false));
 		this.setCreativeTab(MinestuckItems.tabMinestuck);
+		this.setTickRandomly(true);
+	}
+	
+	@Override
+	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand)
+	{
+		super.randomDisplayTick(stateIn, worldIn, pos, rand);
+		TileEntity te = worldIn.getTileEntity(pos);
+		if(te instanceof TileEntityCrockerMachine)
+			((TileEntityCrockerMachine) te).recheckState();
 	}
 	
 	@Override
 	protected BlockStateContainer createBlockState()
 	{
-		return new BlockStateContainer(this, MACHINE_TYPE, FACING, HAS_CARD);
+		return new BlockStateContainer(this, MACHINE_TYPE, FACING, HAS_ITEM);
 	}
 	
 	@Override
@@ -85,7 +96,7 @@ public class BlockCrockerMachine extends BlockContainer
 	@Override
 	public IBlockState getStateFromMeta(int meta)
 	{
-		return getDefaultState().withProperty(MACHINE_TYPE, MachineType.values()[meta%4]).withProperty(FACING, EnumFacing.getHorizontal(meta/4)).withProperty(HAS_CARD, false);
+		return getDefaultState().withProperty(MACHINE_TYPE, MachineType.values()[meta%4]).withProperty(FACING, EnumFacing.getHorizontal(meta/4));
 	}
 	
 	@Override
@@ -130,11 +141,8 @@ public class BlockCrockerMachine extends BlockContainer
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
-        if (!keepInventory)
-        {
-        	TileEntityMachine te = (TileEntityMachine) worldIn.getTileEntity(pos);
-        	InventoryHelper.dropInventoryItems(worldIn, pos, te);
-        }
+        TileEntityMachine te = (TileEntityMachine) worldIn.getTileEntity(pos);
+        InventoryHelper.dropInventoryItems(worldIn, pos, te);
     	super.breakBlock(worldIn, pos, state);
 	}
 	
@@ -170,32 +178,6 @@ public class BlockCrockerMachine extends BlockContainer
 		return new ItemStack(Item.getItemFromBlock(this), 1, state.getValue(MACHINE_TYPE).ordinal());
 	}
 
-    public static void setState(boolean hasCard, World worldIn, BlockPos pos)
-    {
-        IBlockState iblockstate = worldIn.getBlockState(pos);
-        TileEntity tileentity = worldIn.getTileEntity(pos);
-        keepInventory = true;
-
-        if (hasCard)
-        {
-            worldIn.setBlockState(pos, MinestuckBlocks.crockerMachine.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)).withProperty(HAS_CARD, true), 3);
-            worldIn.setBlockState(pos, MinestuckBlocks.crockerMachine.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)).withProperty(HAS_CARD, true), 3);
-        }
-        else
-        {
-            worldIn.setBlockState(pos, MinestuckBlocks.crockerMachine.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
-            worldIn.setBlockState(pos, MinestuckBlocks.crockerMachine.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
-        }
-
-        keepInventory = false;
-
-        if (tileentity != null)
-        {
-            tileentity.validate();
-            worldIn.setTileEntity(pos, tileentity);
-        }
-    }
-
     @Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos)
 	{
@@ -207,10 +189,16 @@ public class BlockCrockerMachine extends BlockContainer
     	
     	if(((TileEntityMachine)te).getStackInSlot(0).isEmpty())
     	{
-    		return state.withProperty(HAS_CARD, false);
+    		return state.withProperty(HAS_ITEM, false);
     	} else
     	{
-    		return state.withProperty(HAS_CARD, true);
+    		return state.withProperty(HAS_ITEM, true);
     	}
+	}
+
+	public static void updateItem(boolean b, World world, BlockPos pos)
+	{
+		IBlockState oldState = world.getBlockState(pos);
+		world.notifyBlockUpdate(pos, oldState, oldState.withProperty(HAS_ITEM, b), 3);
 	}
 }

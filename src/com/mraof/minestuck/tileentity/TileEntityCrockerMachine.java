@@ -46,11 +46,47 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 		super.setInventorySlotContents(index, stack);
 		recheckState();
 	}
+	
+	@Override
+	public ItemStack decrStackSize(int index, int count)
+	{
+		ItemStack out = super.decrStackSize(index, count);
+		if(index==0 && getMachineType() == MachineType.GRIST_WIDGET)
+		{
+			recheckState();
+		}
+		return out;
+	}
+	
+	@Override
+	public ItemStack removeStackFromSlot(int index)
+	{
+		ItemStack out = super.removeStackFromSlot(index);
+		if(index==0 && getMachineType() == MachineType.GRIST_WIDGET)
+		{
+			recheckState();
+		}
+		return out;
+	}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack)
 	{
-		return true;
+		switch (getMachineType())
+		{
+			case GRIST_WIDGET:
+				if(i!=0 || itemstack.getItem() != MinestuckItems.captchaCard)
+				{
+					return false;
+				}
+				else
+				{
+					return (!itemstack.getTagCompound().getBoolean("punched")
+					&& AlchemyRecipeHandler.getDecodedItem(itemstack).getItem() != MinestuckItems.captchaCard);
+				}
+			default:
+				return true;
+		}
 	}
 
 	@Override
@@ -140,12 +176,13 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 	
 	public void recheckState()
 	{
+		IBlockState oldState = world.getBlockState(this.getPos());
 		if(this.getStackInSlot(0).getCount()==0)
 		{
-			BlockCrockerMachine.setState(false, world, this.getPos());
+			BlockCrockerMachine.updateItem(false, world, this.getPos());
 		} else
 		{
-			BlockCrockerMachine.setState(true, world, this.getPos());
+			BlockCrockerMachine.updateItem(true, world, this.getPos());
 		}
 	}
 }
