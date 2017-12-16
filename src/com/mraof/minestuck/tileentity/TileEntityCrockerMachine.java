@@ -1,6 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.block.BlockCrockerMachine;
 import com.mraof.minestuck.block.BlockCrockerMachine.MachineType;
 import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.item.MinestuckItems;
@@ -11,7 +12,8 @@ import java.util.Map.Entry;
 
 public class TileEntityCrockerMachine extends TileEntityMachine
 {
-
+	boolean hasItem;
+	
 	@Override
 	public boolean isAutomatic()
 	{
@@ -35,13 +37,44 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 				return 0;
 		}
 	}
-
+	
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack)
 	{
-		return true;
+		switch (getMachineType())
+		{
+			case GRIST_WIDGET:
+				if(i!=0 || itemstack.getItem() != MinestuckItems.captchaCard)
+				{
+					return false;
+				}
+				else
+				{
+					return (!itemstack.getTagCompound().getBoolean("punched")
+					&& AlchemyRecipeHandler.getDecodedItem(itemstack).getItem() != MinestuckItems.captchaCard);
+				}
+			default:
+				return true;
+		}
 	}
-
+	
+	@Override
+	public void update()
+	{
+		super.update();
+		switch(getMachineType())
+		{
+			case GRIST_WIDGET:
+				boolean item = this.getStackInSlot(0).getCount() == 0;
+				if(item != hasItem)
+				{
+					hasItem = item;
+					resendState();
+				}
+				break;
+		}
+	}
+	
 	@Override
 	public boolean contentsValid()
 	{
@@ -124,5 +157,16 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 	public MachineType getMachineType()
 	{
 		return MachineType.values()[getBlockMetadata() % 4];
+	}
+	
+	public void resendState()
+	{
+		if(hasItem)
+		{
+			BlockCrockerMachine.updateItem(false, world, this.getPos());
+		} else
+		{
+			BlockCrockerMachine.updateItem(true, world, this.getPos());
+		}
 	}
 }
