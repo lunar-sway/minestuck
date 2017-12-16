@@ -1,21 +1,19 @@
 package com.mraof.minestuck.tileentity;
 
-import com.jcraft.jorbis.Block;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.BlockCrockerMachine;
 import com.mraof.minestuck.block.BlockCrockerMachine.MachineType;
 import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.*;
-
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 
 import java.util.Map.Entry;
 
 public class TileEntityCrockerMachine extends TileEntityMachine
 {
-
+	boolean hasItem;
+	
 	@Override
 	public boolean isAutomatic()
 	{
@@ -41,35 +39,6 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 	}
 	
 	@Override
-	public void setInventorySlotContents(int index, ItemStack stack)
-	{
-		super.setInventorySlotContents(index, stack);
-		recheckState();
-	}
-	
-	@Override
-	public ItemStack decrStackSize(int index, int count)
-	{
-		ItemStack out = super.decrStackSize(index, count);
-		if(index==0 && getMachineType() == MachineType.GRIST_WIDGET)
-		{
-			recheckState();
-		}
-		return out;
-	}
-	
-	@Override
-	public ItemStack removeStackFromSlot(int index)
-	{
-		ItemStack out = super.removeStackFromSlot(index);
-		if(index==0 && getMachineType() == MachineType.GRIST_WIDGET)
-		{
-			recheckState();
-		}
-		return out;
-	}
-
-	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack)
 	{
 		switch (getMachineType())
@@ -88,7 +57,24 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 				return true;
 		}
 	}
-
+	
+	@Override
+	public void update()
+	{
+		super.update();
+		switch(getMachineType())
+		{
+			case GRIST_WIDGET:
+				boolean item = this.getStackInSlot(0).getCount() == 0;
+				if(item != hasItem)
+				{
+					hasItem = item;
+					resendState();
+				}
+				break;
+		}
+	}
+	
 	@Override
 	public boolean contentsValid()
 	{
@@ -158,7 +144,6 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 
 				}
 				this.decrStackSize(0, 1);
-				recheckState();
 				break;
 		}
 	}
@@ -174,10 +159,9 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 		return MachineType.values()[getBlockMetadata() % 4];
 	}
 	
-	public void recheckState()
+	public void resendState()
 	{
-		IBlockState oldState = world.getBlockState(this.getPos());
-		if(this.getStackInSlot(0).getCount()==0)
+		if(hasItem)
 		{
 			BlockCrockerMachine.updateItem(false, world, this.getPos());
 		} else

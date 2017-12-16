@@ -1,7 +1,5 @@
 package com.mraof.minestuck.block;
 
-import java.util.Random;
-
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.item.MinestuckItems;
@@ -18,7 +16,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -69,16 +66,6 @@ public class BlockCrockerMachine extends BlockContainer
 		setHarvestLevel("pickaxe", 0);
 		setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.SOUTH).withProperty(HAS_ITEM, false));
 		this.setCreativeTab(MinestuckItems.tabMinestuck);
-		this.setTickRandomly(true);
-	}
-	
-	@Override
-	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand)
-	{
-		super.randomDisplayTick(stateIn, worldIn, pos, rand);
-		TileEntity te = worldIn.getTileEntity(pos);
-		if(te instanceof TileEntityCrockerMachine)
-			((TileEntityCrockerMachine) te).recheckState();
 	}
 	
 	@Override
@@ -162,8 +149,8 @@ public class BlockCrockerMachine extends BlockContainer
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
 	{
-		EnumFacing rotation = (EnumFacing) state.getValue(FACING);
-		MachineType type = (MachineType) state.getValue(MACHINE_TYPE);
+		EnumFacing rotation = state.getValue(FACING);
+		MachineType type = state.getValue(MACHINE_TYPE);
 		
 		switch(type)
 		{
