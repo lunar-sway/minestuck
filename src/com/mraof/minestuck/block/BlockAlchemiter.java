@@ -21,23 +21,28 @@ import net.minecraft.world.World;
 
 public class BlockAlchemiter extends BlockLargeMachine
 {
+	public static final PropertyEnum<EnumParts> PART1 = PropertyEnum.create("part",EnumParts.class, EnumParts.TOTEM_CORNER, EnumParts.TOTEM_PAD, EnumParts.LOWER_ROD, EnumParts.UPPER_ROD);
+	public static final PropertyEnum<EnumParts> PART2 = PropertyEnum.create("part",EnumParts.class, EnumParts.EDGE_LEFT, EnumParts.EDGE_RIGHT, EnumParts.CORNER, EnumParts.CENTER_PAD);
 	public final PropertyEnum<EnumParts> PART;
 	public static final PropertyDirection DIRECTION = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	
 	public final int index;
 	
-	public BlockAlchemiter(int index)
+	public BlockAlchemiter()
+	{
+		this(0, PART1);
+		
+	}
+	public BlockAlchemiter(int index, PropertyEnum<EnumParts> property)
 	{
 		super();
 		this.index = index;
-		if(index == 0)
-			PART = PropertyEnum.create("part",EnumParts.class, EnumParts.TOTEM_CORNER, EnumParts.TOTEM_PAD, EnumParts.LOWER_ROD, EnumParts.UPPER_ROD);
-		else PART = PropertyEnum.create("part",EnumParts.class, EnumParts.EDGE_LEFT, EnumParts.EDGE_RIGHT, EnumParts.CORNER, EnumParts.CENTER_PAD);
+		this.PART = property;
 		
 		setUnlocalizedName("alchemiter");
 		setDefaultState(getStateFromMeta(0));
-		
-	} 
+	}
+	
 	//not sure how to do this.
 	//@Override
 	//public AxisAlignedBB getBoundingBox(IBlockState state,IBlockAccess source,BlockPos pos){
@@ -116,7 +121,7 @@ public class BlockAlchemiter extends BlockLargeMachine
 	@Override
 	protected BlockStateContainer createBlockState()
     {
-        return new BlockStateContainer(this,PART,DIRECTION);
+        return new BlockStateContainer(this,PART1,DIRECTION);
     }
 	
 	@Override
@@ -159,6 +164,26 @@ public class BlockAlchemiter extends BlockLargeMachine
 		BlockAlchemiter block = MinestuckBlocks.alchemiter[parts.ordinal() < 4 ? 0 : 1];
 		IBlockState state = block.getDefaultState();
 		return state.withProperty(block.PART, parts).withProperty(DIRECTION, direction);
+	}
+	
+	public static class BlockAlchemiter2 extends BlockAlchemiter
+	{
+		public BlockAlchemiter2()
+		{
+			super(1, PART2);
+		}
+		
+		@Override
+		protected BlockStateContainer createBlockState()
+		{
+			return new BlockStateContainer(this,PART2,DIRECTION);
+		}
+	}
+	
+	public static BlockAlchemiter[] createBlocks()
+	{
+		return new BlockAlchemiter[] {(BlockAlchemiter) new BlockAlchemiter().setRegistryName("alchemiter"),
+				(BlockAlchemiter) new BlockAlchemiter2().setRegistryName("alchemiter2")};
 	}
 	
 	public enum EnumParts implements IStringSerializable
