@@ -34,7 +34,6 @@ public class GuiCrockerMachine extends GuiMachine
 	private int progressHeight;
 	private int goX;
 	private int goY;
-	private GuiButton goButton;
 
 	public GuiCrockerMachine(InventoryPlayer inventoryPlayer, TileEntityCrockerMachine tileEntity)
 	{
@@ -82,7 +81,9 @@ public class GuiCrockerMachine extends GuiMachine
 			{
 				float multiplier = stack.getCount();
 				if (multiplier != 1)
+				{
 					set = set.scaleGrist(multiplier);
+				}
 				set.scaleGrist(0.9F);
 			}
 			if (set != null && stack.isItemDamaged())
