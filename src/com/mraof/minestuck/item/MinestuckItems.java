@@ -78,7 +78,7 @@ public class MinestuckItems
 	public static Item blacksmithBane = new ItemWeapon(413, 9.0D, -3.0D, 15, "blacksmithBane").setTool("axe", 2, 6.0F).setRegistryName("blacksmith_bane");
 	public static Item scraxe = new ItemWeapon(500, 10.0D, -3.0D, 20, "scraxe").setTool("axe", 2, 7.0F).setRegistryName("scraxe");
 	public static Item qPHammerAxe = new ItemPogoWeapon(800, 8.0D, -3.0D, 30, "qPHammerAxe", 0.6).setTool("axe", 2, 7.0F).setTool("pickaxe", 1, 2.0F).setTerminus(-1, 50).setRegistryName("piston_powered_pogo_axehammer");
-	public static Item rubyCroak = new ItemWeapon(2000, 11.0D, -2.9D, 30, "rubyCroak").setTool("axe", 3, 8.0F).setRegistryName("ruby_croak");
+	public static Item rubyCroak = new ItemWeapon(2000, 11.0D, -3.0D, 30, "rubyCroak").setTool("axe", 3, 8.0F).setRegistryName("ruby_croak");
 	public static Item hephaestusLumber = new ItemFireWeapon(3000, 11.0D, -3.0D, 30, "hephaestusLumber", 30).setTool("axe", 3, 9.0F).setRegistryName("hephaestus_lumberjack");
 	public static Item qFHammerAxe = new ItemPogoWeapon(2048, 11.0D, -3.0D, 0, "qFHammerAxe", 0.7).setTool("axe", 3, 9.0F).setTool("pickaxe", 2, 4.0F).setTerminus(-1, 100).setRegistryName("fission_focused_fault_feller");
 	//Dice
