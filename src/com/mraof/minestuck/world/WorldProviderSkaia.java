@@ -1,13 +1,12 @@
 package com.mraof.minestuck.world;
 
+import com.mraof.minestuck.world.gen.ChunkProviderSkaia;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Biomes;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.biome.BiomeProviderSingle;
-import net.minecraft.world.chunk.IChunkGenerator;
-
-import com.mraof.minestuck.world.gen.ChunkProviderSkaia;
+import net.minecraft.world.gen.IChunkGenerator;
 
 public class WorldProviderSkaia extends WorldProvider 
 {
@@ -27,19 +26,14 @@ public class WorldProviderSkaia extends WorldProvider
 	@Override
 	protected void init()
 	{
+		this.hasSkyLight = true;
 		this.biomeProvider = new BiomeProviderSingle(Biomes.PLAINS);
 	}
 	
 	@Override
 	public float calculateCelestialAngle(long par1, float par3)
 	{
-		return 12000.0F;
-	}
-
-	@Override
-	public boolean isSurfaceWorld()
-	{
-		return false;
+		return 1.0F;
 	}
 	
 	@Override

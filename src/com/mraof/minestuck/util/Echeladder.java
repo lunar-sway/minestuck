@@ -1,18 +1,14 @@
 package com.mraof.minestuck.util;
 
-import java.util.Set;
-import java.util.UUID;
-
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.PlayerDataPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.network.PlayerDataPacket;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
-
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeMap;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -21,6 +17,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.MathHelper;
+
+import java.util.Set;
+import java.util.UUID;
 
 public class Echeladder
 {
@@ -32,7 +31,7 @@ public class Echeladder
 	
 	private static final UUID echeladderHealthBoostModifierUUID = UUID.fromString("5b49a45b-ff22-4720-8f10-dfd745c3abb8");	//TODO Might be so that only one is needed, as we only add one modifier for each attribute.
 	private static final UUID echeladderDamageBoostModifierUUID = UUID.fromString("a74176fd-bf4e-4153-bb68-197dbe4109b2");
-	private static final int[] UNDERLING_BONUSES = new int[] {10, 120, 450, 2500};	//Bonuses for first time killing an underling
+	private static final int[] UNDERLING_BONUSES = new int[] {10, 120, 450, 1200, 2500};	//Bonuses for first time killing an underling
 	private static final int[] ALCHEMY_BONUSES = new int[] {30, 400, 3000};
 													//	0				4						9							14								19								24									29										34
 	private static final int[] BOONDOLLARS = new int[] {0, 50, 75, 105, 140, 170, 200, 250, 320, 425, 575, 790, 1140, 1630, 2230, 2980, 3850, 4800, 6000, 7500, 9500, 11900, 15200, 19300, 24400, 45000, 68000, 95500, 124000, 180000, 260000, 425000, 632000, 880000, 1000000};
@@ -151,7 +150,7 @@ public class Echeladder
 	
 	public void resendAttributes(EntityPlayer player)
 	{
-		Set<IAttributeInstance> attributesToSend = ((AttributeMap) player.getAttributeMap()).getAttributeInstanceSet();
+		Set<IAttributeInstance> attributesToSend = ((AttributeMap) player.getAttributeMap()).getDirtyInstances();
 		
 		attributesToSend.add(player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH));
 	}

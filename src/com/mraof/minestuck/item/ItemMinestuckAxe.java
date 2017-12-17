@@ -8,9 +8,9 @@ public class ItemMinestuckAxe extends ItemAxe
 	{
 		super(ToolMaterial.IRON);
 		this.toolMaterial = material;
-		this.damageVsEntity = damage;
+		this.attackDamage = damage;
 		this.attackSpeed = speed;
 		this.setMaxDamage(material.getMaxUses());
-		this.efficiencyOnProperMaterial = material.getEfficiencyOnProperMaterial();
+		this.efficiency = material.getEfficiency();
 	}
 }

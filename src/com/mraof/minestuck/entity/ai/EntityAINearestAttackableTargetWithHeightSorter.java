@@ -1,8 +1,8 @@
 package com.mraof.minestuck.entity.ai;
 
-import java.util.Comparator;
-
 import net.minecraft.entity.Entity;
+
+import java.util.Comparator;
 
 public class EntityAINearestAttackableTargetWithHeightSorter implements Comparator<Entity> 
 {
@@ -18,9 +18,9 @@ public class EntityAINearestAttackableTargetWithHeightSorter implements Comparat
 	
 	public int compareDistanceSq(Entity par1Entity, Entity par2Entity)
 	{
-		double d0 = this.theEntity.getDistanceSqToEntity(par1Entity);
-		double d1 = this.theEntity.getDistanceSqToEntity(par2Entity);
-		return d0 < d1 ? -1 : (d0 > d1 ? 1 : 0);
+		double d0 = this.theEntity.getDistanceSq(par1Entity);
+		double d1 = this.theEntity.getDistanceSq(par2Entity);
+		return Double.compare(d0, d1);
 	}
 	
 	@Override

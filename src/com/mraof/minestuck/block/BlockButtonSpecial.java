@@ -1,10 +1,7 @@
 package com.mraof.minestuck.block;
 
-import java.util.Random;
-
-import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.Debug;
-
 import net.minecraft.block.BlockButton;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -14,6 +11,8 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class BlockButtonSpecial extends BlockButton
 {
@@ -25,7 +24,7 @@ public class BlockButtonSpecial extends BlockButton
 		super(wooden);
 		this.explosive = explosive;
 		this.wooden = wooden;
-		setCreativeTab(Minestuck.tabMinestuck);
+		setCreativeTab(MinestuckItems.tabMinestuck);
 		setHardness(0.5F);
 		if(wooden)
 			setSoundType(SoundType.WOOD);

@@ -1,5 +1,9 @@
 package com.mraof.minestuck.entity.item;
 
+import com.mraof.minestuck.editmode.ClientEditHandler;
+import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+import com.mraof.minestuck.util.*;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -14,15 +18,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.mraof.minestuck.editmode.ClientEditHandler;
-import com.mraof.minestuck.editmode.ServerEditHandler;
-import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
-import com.mraof.minestuck.util.GristAmount;
-import com.mraof.minestuck.util.GristHelper;
-import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.GristType;
-import com.mraof.minestuck.util.IdentifierHandler;
 
 public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 {
@@ -81,7 +76,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 			return false;
 		} else
 		{
-			this.setBeenAttacked();
+			this.markVelocityChanged();
 			this.gristHealth = (int)((float)this.gristHealth - amount);
 			
 			if (this.gristHealth <= 0)
@@ -95,11 +90,11 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	
 	@SideOnly(Side.CLIENT)
 	@Override
-	public int getBrightnessForRender(float par1)
+	public int getBrightnessForRender()
 	{
 		float f1 = 0.5F;
 
-		int i = super.getBrightnessForRender(par1);
+		int i = super.getBrightnessForRender();
 		int j = i & 255;
 		int k = i >> 16 & 255;
 		j += (int)(f1 * 15.0F * 16.0F);
@@ -138,7 +133,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 
 		if (this.targetCycle < this.cycle - 20 + this.getEntityId() % 100) //Why should I care about the entityId
 		{
-			if (this.closestPlayer == null || this.closestPlayer.getDistanceSqToEntity(this) > d0 * d0)
+			if (this.closestPlayer == null || this.closestPlayer.getDistanceSq(this) > d0 * d0)
 			{
 				this.closestPlayer = this.world.getClosestPlayerToEntity(this, d0);
 			}
@@ -257,7 +252,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 	
 	public static int typeInt(GristType type)
 	{
-		return type == null ? -1 : type.ordinal();
+		return type == null ? -1 : type.getId();
 	
 	}
 	
@@ -286,7 +281,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 			this.setDead();
 			return;
 		}
-		this.gristType = GristType.values()[typeOffset];
+		this.gristType = GristType.REGISTRY.getValue(typeOffset);
 		this.gristValue = data.readInt();
 		this.setSize(this.getSizeByValue(), 0.5F);
 //		this.yOffset = this.height / 2.0F;

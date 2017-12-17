@@ -1,6 +1,7 @@
 package com.mraof.minestuck.entity.consort;
 
 import com.mraof.minestuck.entity.EntityMinestuck;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIWander;
@@ -23,6 +24,7 @@ public abstract class EntityConsort extends EntityMinestuck
 	NBTTagCompound messageData;
 	EnumConsort.MerchantType merchantType = EnumConsort.MerchantType.NONE;
 	int homeDimension;
+	MessageType.DelayMessage updatingMessage; //Change to an interface/array if more message components need tick updates
 	
 	public EntityConsort(World world)
 	{
@@ -53,8 +55,8 @@ public abstract class EntityConsort extends EntityMinestuck
 					messageTicksLeft = 24000 + world.rand.nextInt(24000);
 					messageData = new NBTTagCompound();
 				}
-				ITextComponent text = message.getMessage(this, player);
-				if(text != null)
+				ITextComponent text = message.getMessage(this, player);    //TODO Make sure to catch any issues here
+				if (text != null)
 					player.sendMessage(text);
 			}
 			
@@ -67,12 +69,21 @@ public abstract class EntityConsort extends EntityMinestuck
 	public void onLivingUpdate()
 	{
 		super.onLivingUpdate();
+		if(world.isRemote)
+			return;
+		
 		if(messageTicksLeft > 0)
 			messageTicksLeft--;
 		else
 		{
 			message = null;
 			messageData = null;
+			updatingMessage = null;
+		}
+		
+		if(updatingMessage != null)
+		{
+			updatingMessage.onTickUpdate(this);
 		}
 	}
 	
@@ -132,7 +143,9 @@ public abstract class EntityConsort extends EntityMinestuck
 		if(compound.hasKey("dialogue", 8))
 		{
 			message = ConsortDialogue.getMessageFromString(compound.getString("dialogue"));
-			messageTicksLeft = compound.getInteger("messageTicks");
+			if(compound.hasKey("messageTicks", 99))
+				messageTicksLeft = compound.getInteger("messageTicks");
+			else messageTicksLeft = 24000;	//Used to make summoning with a specific message slightly easier
 			messageData = compound.getCompoundTag("messageData");
 		}
 		
@@ -158,6 +171,14 @@ public abstract class EntityConsort extends EntityMinestuck
 	protected boolean canDespawn()
 	{
 		return false;
+	}
+	
+	@Override
+	public boolean isCreatureType(EnumCreatureType type, boolean forSpawnCount)
+	{
+		if(forSpawnCount && this.isNoDespawnRequired())
+			return false;
+		return type.equals(EnumCreatureType.CREATURE);
 	}
 	
 	public abstract EnumConsort getConsortType();

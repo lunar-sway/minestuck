@@ -1,48 +1,41 @@
 package com.mraof.minestuck.tileentity;
 
+import com.mraof.minestuck.block.BlockChessTile;
+import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.util.Location;
+import com.mraof.minestuck.util.Teleport;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 
-import com.mraof.minestuck.block.BlockChessTile;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.util.Location;
-import com.mraof.minestuck.util.Teleport;
-
 public class TileEntitySkaiaPortal extends TileEntity implements Teleport.ITeleporter
 {
-	public Location destination;
+	public Location destination = new Location();
 	
 	@Override
 	public void setPos(BlockPos posIn)
 	{
 		super.setPos(posIn);
-		if(destination.pos.getY() < 0)
-			destination.pos = posIn;
 	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) 
 	{
 		super.readFromNBT(nbt);
-		destination = new Location(nbt.getInteger("DestinationX"), nbt.getInteger("DestinationY"), nbt.getInteger("DestinationZ"), nbt.getInteger("Destination"));
-		
-		if(destination.pos.getY() == 0)
-		{
-			destination.pos = this.pos;
-		}
+		destination.pos = new BlockPos(nbt.getInteger("destX"), nbt.getInteger("destY"), nbt.getInteger("destZ"));
+		destination.dim = nbt.getInteger("destDim");
 	}
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) 
 	{
 		super.writeToNBT(tagCompound);
-		tagCompound.setInteger("Destination", this.destination.dim);
-		tagCompound.setInteger("DestinationX", destination.pos.getX());
-		tagCompound.setInteger("DestinationY", destination.pos.getY());
-		tagCompound.setInteger("DestinationZ", destination.pos.getZ());
+		tagCompound.setInteger("destDim", this.destination.dim);
+		tagCompound.setInteger("destX", destination.pos.getX());
+		tagCompound.setInteger("destY", destination.pos.getY());
+		tagCompound.setInteger("destZ", destination.pos.getZ());
 		return tagCompound;
 	}
 	
@@ -50,6 +43,13 @@ public class TileEntitySkaiaPortal extends TileEntity implements Teleport.ITelep
 	{
 		if(destination.dim != this.world.provider.getDimension())
 		{
+			if(destination.pos.getY() < 0)
+			{
+				WorldServer world = entity.getServer().getWorld(destination.dim);
+				if(world == null)
+					return;
+				destination.pos = world.getTopSolidOrLiquidBlock(new BlockPos(entity)).up(5);
+			}
 			if(!Teleport.teleportEntity(entity, this.destination.dim, this, destination.pos))
 				return;
 		}

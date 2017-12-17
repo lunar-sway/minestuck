@@ -46,7 +46,7 @@ public class SburbHandler
 {
 	static Map<EntityPlayer, Vec3d> titleSelectionMap = new HashMap<EntityPlayer, Vec3d>();
 	
-	static void generateTitle(PlayerIdentifier player)
+	private static void generateTitle(PlayerIdentifier player)
 	{
 		if(MinestuckPlayerData.getTitle(player) != null)
 			if(MinestuckConfig.playerSelectedTitle)
@@ -319,7 +319,7 @@ public class SburbHandler
 		TitleLandAspect landAspect = LandAspectRegistry.getSingleLandAspect(title.getHeroAspect());
 		if(landAspect != null)
 			data.landTitle = landAspect;	//This part could be made more robust for when landTerrain is already defined
-		CommandBase.notifyCommandListener(sender, command, "commands.sburbSession.titleSuccess", playerName, title.getTitleName());
+		CommandBase.notifyCommandListener(sender, command, "commands.sburbSession.titleSuccess", playerName, title.asTextComponent());
 	}
 	
 	public static void predefineTerrainLandAspect(MinecraftServer server, ICommandSender sender, ICommand command, String playerName, String sessionName, TerrainLandAspect aspect) throws CommandException
@@ -513,12 +513,13 @@ public class SburbHandler
 	public static int availableTier(PlayerIdentifier client)
 	{
 		Session s = getPlayerSession(client);
-		if(s == null) {
+		if(s == null)
 			return -1;
-		}
 		if(s.completed)
 			return Integer.MAX_VALUE;
 		SburbConnection c = SkaianetHandler.getClientConnection(client);
+		if(c == null)
+			return -1;
 		int count = -1;
 		for(SburbConnection conn : s.connections)
 			if(conn.enteredGame)
@@ -597,7 +598,7 @@ public class SburbHandler
 		
 		ArrayList<SpawnListEntry> list = new ArrayList<SpawnListEntry>();
 		
-		int impWeight = 0, ogreWeight = 0, basiliskWeight = 0, giclopsWeight = 0;
+		int impWeight, ogreWeight = 0, basiliskWeight = 0, lichWeight = 0, giclopsWeight = 0;
 		
 		if(difficulty < 8)
 			impWeight = difficulty + 1;
@@ -613,6 +614,9 @@ public class SburbHandler
 				if(difficulty < 26)
 					basiliskWeight = (difficulty - 14)/2;
 				else basiliskWeight = 6;
+				if(difficulty < 28)
+					lichWeight = (difficulty - 12)/3;
+				else lichWeight = 6;
 				if(difficulty >= 20)
 					if(difficulty < 30)
 						giclopsWeight = (difficulty - 17)/3;
@@ -626,6 +630,8 @@ public class SburbHandler
 			list.add(new SpawnListEntry(EntityOgre.class, ogreWeight, ogreWeight >= 5 ? 2 : 1, Math.max(1, ogreWeight/2)));
 		if(basiliskWeight > 0)
 			list.add(new SpawnListEntry(EntityBasilisk.class, basiliskWeight, 1, Math.max(1, basiliskWeight/2)));
+		if(lichWeight > 0)
+			list.add(new SpawnListEntry(EntityLich.class, lichWeight, 1, Math.max(1, lichWeight/2)));
 		if(giclopsWeight > 0 && !MinestuckConfig.disableGiclops)
 			list.add(new SpawnListEntry(EntityGiclops.class, giclopsWeight, 1, Math.max(1, giclopsWeight/2)));
 		
@@ -634,7 +640,8 @@ public class SburbHandler
 		return list;
 	}
 	
-	static void onFirstItemGiven(SburbConnection connection) {
+	static void onFirstItemGiven(SburbConnection connection)
+	{
 		
 	}
 	
@@ -719,7 +726,7 @@ public class SburbHandler
 			
 			Vec3d pos = titleSelectionMap.remove(player);
 			
-			player.setPosition(pos.xCoord, pos.yCoord, pos.zCoord);
+			player.setPosition(pos.x, pos.y, pos.z);
 			MinestuckItems.cruxiteApple.onArtifactActivated(player.world, player);
 			
 		} else Debug.warnf("%s tried to select a title without entering.", player.getName());

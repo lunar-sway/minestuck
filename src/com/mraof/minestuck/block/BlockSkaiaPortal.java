@@ -1,8 +1,7 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tileentity.TileEntitySkaiaPortal;
-import com.mraof.minestuck.util.Location;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -35,7 +34,7 @@ public class BlockSkaiaPortal extends BlockContainer
 		super(material);
 		
 		setUnlocalizedName("skaiaPortal");
-		this.setCreativeTab(Minestuck.tabMinestuck);
+		this.setCreativeTab(MinestuckItems.tabMinestuck);
 	}
 	
 	@Override
@@ -50,7 +49,7 @@ public class BlockSkaiaPortal extends BlockContainer
 		if (entity.getRidingEntity() == null && entity.getPassengers().isEmpty() && !world.isRemote && entity.timeUntilPortal == 0)
 		{
 			TileEntitySkaiaPortal portal = (TileEntitySkaiaPortal) world.getTileEntity(pos);
-				portal.teleportEntity(entity);
+			portal.teleportEntity(entity);
 		}
 	}
 	
@@ -59,7 +58,7 @@ public class BlockSkaiaPortal extends BlockContainer
 	@SideOnly(Side.CLIENT)
 	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
 	{
-		return side.getAxis().isHorizontal() ? false : super.shouldSideBeRendered(blockState, blockAccess, pos, side);
+		return !side.getAxis().isHorizontal() && super.shouldSideBeRendered(blockState, blockAccess, pos, side);
 	}
 	
 	@Override
@@ -72,7 +71,6 @@ public class BlockSkaiaPortal extends BlockContainer
 	public TileEntity createNewTileEntity(World world, int metadata)
 	{
 		TileEntitySkaiaPortal tileEntity = (TileEntitySkaiaPortal) this.createNewTileEntity(world);
-		tileEntity.destination = new Location();
 		tileEntity.destination.dim = MinestuckDimensionHandler.skaiaDimensionId == world.provider.getDimension() ? 0 : MinestuckDimensionHandler.skaiaDimensionId;
 		return tileEntity;
 	}
@@ -112,7 +110,7 @@ public class BlockSkaiaPortal extends BlockContainer
 	@Override
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player)
 	{
-		return null;
+		return ItemStack.EMPTY;
 	}
 	
 //	/**

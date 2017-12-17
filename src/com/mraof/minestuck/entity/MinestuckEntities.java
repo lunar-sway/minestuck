@@ -26,6 +26,7 @@ public final class MinestuckEntities
 		registerEntity(EntityImp.class, "imp");
 		registerEntity(EntityOgre.class, "ogre");
 		registerEntity(EntityBasilisk.class, "basilisk");
+		registerEntity(EntityLich.class, "lich");
 		registerEntity(EntityGiclops.class, "giclops");
 		registerEntity(EntityWyrm.class, "wyrm");
 		registerEntity(EntityBlackPawn.class, "dersitePawn", "dersite_pawn");

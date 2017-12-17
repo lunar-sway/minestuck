@@ -1,37 +1,31 @@
 package com.mraof.minestuck.client.util;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.block.BlockChessTile;
-import com.mraof.minestuck.block.BlockColoredDirt;
-import com.mraof.minestuck.block.BlockCrockerMachine;
-import com.mraof.minestuck.block.BlockMinestuckLog;
-import com.mraof.minestuck.block.BlockMinestuckStone;
-import com.mraof.minestuck.block.BlockSburbMachine;
+import com.mraof.minestuck.block.*;
+import com.mraof.minestuck.item.ItemMetalBoat;
 import com.mraof.minestuck.item.ItemMinestuckBeverage;
 import com.mraof.minestuck.item.ItemMinestuckCandy;
+import com.mraof.minestuck.item.ItemModus;
 import com.mraof.minestuck.item.weapon.ItemDualWeapon;
-
+import com.mraof.minestuck.util.GristType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCactus;
 import net.minecraft.block.BlockTNT;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.ItemModelMesher;
-import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.BlockFluidBase;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Collections;
-import java.util.Map;
 
 import static com.mraof.minestuck.block.MinestuckBlocks.*;
 import static com.mraof.minestuck.item.MinestuckItems.*;
@@ -40,20 +34,33 @@ import static com.mraof.minestuck.item.MinestuckItems.*;
 public class MinestuckModelManager
 {
 	
-	/**
-	 * Called during init.
-	 * Tells the game which models that are used for different item states.
-	 */
-	public static void registerTextures()
+	@SubscribeEvent
+	public static void handleModelRegistry(ModelRegistryEvent event)
 	{
-		ItemModelMesher modelRegistry = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
+		itemModels();
+		blockModels();
+	}
+	
+	private static void itemModels()
+	{
+		//3D Models
+		if(MinestuckConfig.oldItemModels)
+		{
+			register(clawHammer, 0, "claw_hammer_old");
+			register(zillyhooHammer, 0, "zillyhoo_hammer_old");
+		} else
+		{
+			//register(clawHammer);
+			register(clawHammer, 0, "claw_hammer_old");	//Until the issues with the model are fixed
+			register(zillyhooHammer);
+		}
 		
-		//Items
-
+		//Other
 		register(sledgeHammer);
 		register(blacksmithHammer);
 		register(pogoHammer);
 		register(telescopicSassacrusher);
+		register(regiHammer);
 		register(fearNoAnvil);
 		register(popamaticVrillyhoo);
 		register(scarletZillyhoo);
@@ -62,7 +69,7 @@ public class MinestuckModelManager
 		register(sord);
 		register(cactusCutlass);
 		register(katana);
-		register(unbreakableKatana, 0, "katana");
+		register(unbreakableKatana);
 		register(firePoker);
 		register(hotHandle);
 		register(caledscratch);
@@ -73,6 +80,7 @@ public class MinestuckModelManager
 		register(scarletRibbitar);
 		register(doggMachete);
 		register(cobaltSabre);
+		register(quantumSabre);
 		
 		register(blacksmithBane);
 		register(scraxe);
@@ -80,12 +88,14 @@ public class MinestuckModelManager
 		register(hephaestusLumber);
 		register(copseCrusher);
 		register(qPHammerAxe);
+		register(qFHammerAxe);
 		
 		
 		register(dice);
 		register(fluoriteOctet);
 		
-		modelRegistry.register(CatClaws, new DualWeaponDefinition(CatClaws));
+		ModelLoader.registerItemVariants(catClaws, new ResourceLocation("minestuck:catclaws_sheathed"), new ResourceLocation("minestuck:catclaws_drawn"));
+		ModelLoader.setCustomMeshDefinition(catClaws, new DualWeaponDefinition(catClaws));
 		
 		register(sickle);
 		register(homesSmellYaLater);
@@ -101,26 +111,20 @@ public class MinestuckModelManager
 		register(spikedClub);
 		
 		register(cane);
+		register(ironCane);
 		register(spearCane);
+		register(regiCane);
 		register(dragonCane);
+		register(pogoCane);
+		register(upStick);
 		
 		register(woodenSpoon);
 		register(silverSpoon);
-		modelRegistry.register(crockerSpork, new CrockerSporkDefinition());
+		ModelLoader.registerItemVariants(crockerSpork, new ResourceLocation("minestuck:crocker_fork"), new ResourceLocation("minestuck:crocker_spoon"));
+		ModelLoader.setCustomMeshDefinition(crockerSpork, new CrockerSporkDefinition());
 		register(skaiaFork);
 		register(fork);
 		register(spork);
-		
-		if(MinestuckConfig.oldItemModels)
-		{
-			register(clawHammer, 0, "claw_hammer_old");
-			register(zillyhooHammer, 0, "zillyhoo_hammer_old");
-		} else
-		{
-			//register(clawHammer);
-			register(clawHammer, 0, "claw_hammer_old");	//Until the issues with the model are fixed
-			register(zillyhooHammer);
-		}
 		
 		register(emeraldSword);
 		register(emeraldAxe);
@@ -134,26 +138,54 @@ public class MinestuckModelManager
 		register(prismarineBoots);
 		
 		register(rawCruxite);
-		modelRegistry.register(cruxiteDowel, new CruxiteDowelDefinition());
-		modelRegistry.register(captchaCard, new CaptchaCardDefinition());
-		modelRegistry.register(cruxiteApple, new ColoredItemDefinition("minestuck:cruxite_apple"));
-		modelRegistry.register(cruxitePotion, new ColoredItemDefinition("minestuck:cruxite_potion"));
+		register(rawUranium);
+		register(energyCore);
+		ModelLoader.registerItemVariants(cruxiteDowel, new ResourceLocation("minestuck:dowel_uncarved"), new ResourceLocation("minestuck:dowel_carved"), new ResourceLocation("minestuck:dowel_uncarved_blank"), new ResourceLocation("minestuck:dowel_carved_blank"));
+		ModelLoader.setCustomMeshDefinition(cruxiteDowel, new CruxiteDowelDefinition());
+		ModelLoader.registerItemVariants(captchaCard, new ResourceLocation("minestuck:card_empty"), new ResourceLocation("minestuck:card_full"), new ResourceLocation("minestuck:card_punched"));
+		ModelLoader.setCustomMeshDefinition(captchaCard, new CaptchaCardDefinition());
+		ModelLoader.registerItemVariants(cruxiteApple, new ResourceLocation("minestuck:cruxite_apple"), new ResourceLocation("minestuck:cruxite_apple_blank"));
+		ModelLoader.setCustomMeshDefinition(cruxiteApple, new ColoredItemDefinition("minestuck:cruxite_apple"));
+		ModelLoader.registerItemVariants(cruxitePotion, new ResourceLocation("minestuck:cruxite_potion"), new ResourceLocation("minestuck:cruxite_potion_blank"));
+		ModelLoader.setCustomMeshDefinition(cruxitePotion, new ColoredItemDefinition("minestuck:cruxite_potion"));
 		register(disk, 0, "disk_client");
 		register(disk, 1, "disk_server");
 		register(chessboard);
 		register(minestuckBucket, 0, "bucket_oil");
 		register(minestuckBucket, 1, "bucket_blood");
 		register(minestuckBucket, 2, "bucket_brain_juice");
-		for(int i = 0; i < modusCard.modusNames.length; i++)
-			register(modusCard, i, "modus_" + modusCard.modusNames[i]);
+		for(int i = 0; i < ItemModus.NAMES.length; i++)
+			register(modusCard, i, "modus_" + ItemModus.NAMES[i]);
 		register(goldSeeds);
-		for(int i = 0; i < metalBoat.names.length; i++)
-			register(metalBoat, i, "boat_" + metalBoat.names[i]);
+		for(int i = 0; i < ItemMetalBoat.NAMES.length; i++)
+			register(metalBoat, i, "boat_" + ItemMetalBoat.NAMES[i]);
 		register(obsidianBucket);
-		for(int i = 0; i < ItemMinestuckCandy.modelNames.length; i++)
-			register(candy, i, ItemMinestuckCandy.modelNames[i]);
-		for(int i = 0; i < ItemMinestuckBeverage.modelNames.length; i++)
-			register(beverage, i, ItemMinestuckBeverage.modelNames[i]);
+
+		register(candy, 0, "candy_corn");
+		register(candy, GristType.REGISTRY.getID(GristType.Amber) + 1, "amber_gummy_worm");
+		register(candy, GristType.REGISTRY.getID(GristType.Amethyst) + 1, "amethyst_hard_candy");
+		register(candy, GristType.REGISTRY.getID(GristType.Artifact) + 1, "artifact_war_head");
+		register(candy, GristType.REGISTRY.getID(GristType.Build) + 1, "build_gushers");
+		register(candy, GristType.REGISTRY.getID(GristType.Caulk) + 1, "caulk_pretzel");
+		register(candy, GristType.REGISTRY.getID(GristType.Chalk) + 1, "chalk_candy_cigarette");
+		register(candy, GristType.REGISTRY.getID(GristType.Cobalt) + 1, "cobalt_gum");
+		register(candy, GristType.REGISTRY.getID(GristType.Diamond) + 1, "diamond_mint");
+		register(candy, GristType.REGISTRY.getID(GristType.Garnet) + 1, "garnet_twix");
+		register(candy, GristType.REGISTRY.getID(GristType.Gold) + 1, "gold_candy_ribbon");
+		register(candy, GristType.REGISTRY.getID(GristType.Iodine) + 1, "iodine_licorice");
+		register(candy, GristType.REGISTRY.getID(GristType.Marble) + 1, "marble_jawbreaker");
+		register(candy, GristType.REGISTRY.getID(GristType.Mercury) + 1, "mercury_sixlets");
+		register(candy, GristType.REGISTRY.getID(GristType.Quartz) + 1, "quartz_jelly_bean");
+		register(candy, GristType.REGISTRY.getID(GristType.Ruby) + 1, "ruby_lollipop");
+		register(candy, GristType.REGISTRY.getID(GristType.Rust) + 1, "rust_gummy_eye");
+		register(candy, GristType.REGISTRY.getID(GristType.Shale) + 1, "shale_peep");
+		register(candy, GristType.REGISTRY.getID(GristType.Sulfur) + 1, "sulfur_candy_apple");
+		register(candy, GristType.REGISTRY.getID(GristType.Tar) + 1, "tar_black_licorice");
+		register(candy, GristType.REGISTRY.getID(GristType.Uranium) + 1, "uranium_gummy_bear");
+		register(candy, GristType.REGISTRY.getID(GristType.Zillium) + 1, "zillium_skittles");
+		
+		for(int i = 0; i < ItemMinestuckBeverage.NAMES.length; i++)
+			register(beverage, i, ItemMinestuckBeverage.NAMES[i]);
 		register(bugOnAStick);
 		register(chocolateBeetle);
 		register(coneOfFlies);
@@ -161,6 +193,8 @@ public class MinestuckModelManager
 		register(jarOfBugs);
 		register(onion);
 		register(salad);
+		register(irradiatedSteak);
+		
 		register(threshDvd);
 		register(crewPoster);
 		register(sbahjPoster);
@@ -171,8 +205,11 @@ public class MinestuckModelManager
 		register(recordEmissaryOfDance);
 		register(recordDanceStab);
 		register(glowystoneDust);
-		
-		//Blocks
+		register(fakeArms);
+	}
+	
+	private static void blockModels()
+	{
 		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())
 			register(chessTile, type.ordinal(), "chesstile_"+type.name);
 		register(skaiaPortal);
@@ -183,6 +220,11 @@ public class MinestuckModelManager
 		register(oreCruxite, 2, "cruxite_cobblestone");
 		register(oreCruxite, 3, "cruxite_sandstone");
 		register(oreCruxite, 4, "cruxite_sandstone_red");
+		register(oreUranium, 0, "uranium_stone");
+		register(oreUranium, 1, "uranium_netherrack");
+		register(oreUranium, 2, "uranium_cobblestone");
+		register(oreUranium, 3, "uranium_sandstone");
+		register(oreUranium, 4, "uranium_sandstone_red");
 		register(cruxiteBlock);
 		register(genericObject);
 		register(coalOreNetherrack);
@@ -209,62 +251,15 @@ public class MinestuckModelManager
 		for(BlockMinestuckLog.BlockType type : BlockMinestuckLog.BlockType.values())
 			register(log, type.ordinal(), type.getName()+"_log");
 		register(woodenCactus);
+		register(sugarCube);
 		
 		register(primedTnt);
 		register(unstableTnt);
 		register(instantTnt);
 		register(woodenExplosiveButton);
 		register(stoneExplosiveButton);
-		
-	}
-	
-	/**
-	 * Called during pre-init after the blocks and items have been both created and registered.
-	 * Tells which models that should be loaded for the different items.
-	 */
-	public static void registerVariants()
-	{
-		//Items
-		ModelBakery.registerItemVariants(crockerSpork, new ResourceLocation("minestuck:crocker_fork"), new ResourceLocation("minestuck:crocker_spoon"));
-		ModelBakery.registerItemVariants(CatClaws,new ResourceLocation("minestuck:catclaws_sheathed"), new ResourceLocation("minestuck:catclaws_drawn"));
-		ModelBakery.registerItemVariants(cruxiteDowel, new ResourceLocation("minestuck:dowel_uncarved"), new ResourceLocation("minestuck:dowel_carved"), new ResourceLocation("minestuck:dowel_uncarved_blank"), new ResourceLocation("minestuck:dowel_carved_blank"));
-		ModelBakery.registerItemVariants(cruxiteApple, new ResourceLocation("minestuck:cruxite_apple"), new ResourceLocation("minestuck:cruxite_apple_blank"));
-		ModelBakery.registerItemVariants(cruxitePotion, new ResourceLocation("minestuck:cruxite_potion"), new ResourceLocation("minestuck:cruxite_potion_blank"));
-		ModelBakery.registerItemVariants(disk, new ResourceLocation("minestuck:disk_client"), new ResourceLocation("minestuck:disk_server"));
-		ModelBakery.registerItemVariants(minestuckBucket, new ResourceLocation("minestuck:bucket_blood"), new ResourceLocation("minestuck:bucket_oil"), new ResourceLocation("minestuck:bucket_brain_juice"));
-		ModelBakery.registerItemVariants(captchaCard, new ResourceLocation("minestuck:card_empty"), new ResourceLocation("minestuck:card_full"), new ResourceLocation("minestuck:card_punched"));
-		ModelBakery.registerItemVariants(unbreakableKatana, new ResourceLocation("minestuck:katana"));
-		if(MinestuckConfig.oldItemModels)
-		{
-			ModelBakery.registerItemVariants(zillyhooHammer, new ResourceLocation("minestuck:zillyhoo_hammer_old"));
-		}
-		ModelBakery.registerItemVariants(clawHammer, new ResourceLocation("minestuck:claw_hammer_old"));
-		
-		ResourceLocation[] resLoc = new ResourceLocation[modusCard.modusNames.length];
-		for(int i = 0; i < resLoc.length; i++)
-			resLoc[i] = new ResourceLocation("minestuck:modus_" + modusCard.modusNames[i]);
-		ModelBakery.registerItemVariants(modusCard, resLoc);
-		for(String s : metalBoat.names)
-			ModelBakery.registerItemVariants(metalBoat, new ResourceLocation("minestuck:boat_" + s));
-		for(String s : ItemMinestuckCandy.modelNames)
-			ModelBakery.registerItemVariants(candy, new ResourceLocation("minestuck:"+s));
-		for(String s : ItemMinestuckBeverage.modelNames)
-			ModelBakery.registerItemVariants(beverage, new ResourceLocation("minestuck:"+s));
-		
-		//Blocks
-		for(BlockChessTile.BlockType type : BlockChessTile.BlockType.values())
-			ModelBakery.registerItemVariants(Item.getItemFromBlock(chessTile), new ResourceLocation("minestuck:chesstile_"+type.name));
-		ModelBakery.registerItemVariants(Item.getItemFromBlock(oreCruxite), new ResourceLocation("minestuck:cruxite_stone"), new ResourceLocation("minestuck:cruxite_netherrack"), new ResourceLocation("minestuck:cruxite_cobblestone"), new ResourceLocation("minestuck:cruxite_sandstone"), new ResourceLocation("minestuck:cruxite_sandstone_red"));
-		for(BlockColoredDirt.BlockType type : BlockColoredDirt.BlockType.values())
-			ModelBakery.registerItemVariants(Item.getItemFromBlock(coloredDirt), new ResourceLocation("minestuck:colored_dirt_"+type.name));
-		for(BlockSburbMachine.MachineType type : BlockSburbMachine.MachineType.values())
-			ModelBakery.registerItemVariants(Item.getItemFromBlock(sburbMachine), new ResourceLocation("minestuck:machine_"+type.getName()));
-		for(BlockCrockerMachine.MachineType type : BlockCrockerMachine.MachineType.values())
-			ModelBakery.registerItemVariants(Item.getItemFromBlock(crockerMachine), new ResourceLocation("minestuck:machine_"+type.getName()));
-		for(BlockMinestuckStone.BlockType type : BlockMinestuckStone.BlockType.values())
-			ModelBakery.registerItemVariants(Item.getItemFromBlock(stone), new ResourceLocation("minestuck:"+type.getName()));
-		for(BlockMinestuckLog.BlockType type : BlockMinestuckLog.BlockType.values())
-			ModelBakery.registerItemVariants(Item.getItemFromBlock(log), new ResourceLocation("minestuck:"+type.getName()+"_log"));
+
+		register(uraniumCooker);
 		
 		ModelLoader.setCustomStateMapper(blockOil, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
 		ModelLoader.setCustomStateMapper(blockBlood, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
@@ -274,32 +269,19 @@ public class MinestuckModelManager
 		ModelLoader.setCustomStateMapper(instantTnt, (new StateMap.Builder()).ignore(BlockTNT.EXPLODE).build());
 		ModelLoader.setCustomStateMapper(log, (new StateMap.Builder()).withName(BlockMinestuckLog.VARIANT).withSuffix("_log").build());
 		ModelLoader.setCustomStateMapper(woodenCactus, new StateMap.Builder().ignore(BlockCactus.AGE).build());
-		ModelLoader.setCustomStateMapper(returnNode, new IStateMapper()
-		{
-			@Override
-			public Map putStateModelLocations(Block block)
-			{
-				return Collections.emptyMap();	//We're not using any models for rendering the return node
-			}});
-		ModelLoader.setCustomStateMapper(gate, new IStateMapper()
-		{
-			@Override
-			public Map putStateModelLocations(Block block)
-			{
-				return Collections.emptyMap();
-			}});
+		ModelLoader.setCustomStateMapper(returnNode, (Block block) -> Collections.emptyMap());
+		ModelLoader.setCustomStateMapper(gate, (Block block) -> Collections.emptyMap());
+		ModelLoader.setCustomStateMapper(rabbitSpawner, (Block block) -> Collections.emptyMap());
 	}
 	
 	private static void register(Item item)
 	{
-		ItemModelMesher modelRegistry = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
-		modelRegistry.register(item, 0, new ModelResourceLocation((ResourceLocation) Item.REGISTRY.getNameForObject(item), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(Item.REGISTRY.getNameForObject(item), "inventory"));
 	}
 	
 	private static void register(Item item, int meta, String modelResource)
 	{
-		ItemModelMesher modelRegistry = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
-		modelRegistry.register(item, meta, new ModelResourceLocation("minestuck:"+modelResource, "inventory"));
+		ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation("minestuck:"+modelResource, "inventory"));
 	}
 	
 	private static void register(Block block)

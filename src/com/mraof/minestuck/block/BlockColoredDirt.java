@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -10,7 +11,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving.SpawnPlacementType;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
@@ -18,10 +18,6 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.mraof.minestuck.Minestuck;
 
 public class BlockColoredDirt extends Block
 {
@@ -49,7 +45,7 @@ public class BlockColoredDirt extends Block
 	public BlockColoredDirt()
 	{
 		super(Material.GROUND);
-		this.setCreativeTab(Minestuck.tabMinestuck);
+		this.setCreativeTab(MinestuckItems.tabMinestuck);
 		setSoundType(SoundType.GROUND);
 		setDefaultState(getBlockState().getBaseState().withProperty(BLOCK_TYPE, BlockType.BLUE));
 	}
@@ -79,11 +75,10 @@ public class BlockColoredDirt extends Block
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list)
+	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items)
 	{
 		for(int i = 0; i < BlockType.values().length; i++)
-			list.add(new ItemStack(this, 1, i));
+			items.add(new ItemStack(this, 1, i));
 	}
 	
 	
@@ -94,13 +89,13 @@ public class BlockColoredDirt extends Block
 	}
 	
 	@Override
-	public MapColor getMapColor(IBlockState state)
+	public MapColor getMapColor(IBlockState state, IBlockAccess worldIn, BlockPos pos)
 	{
 		switch((BlockType) state.getValue(BLOCK_TYPE))
 		{
 		case BLUE: return MapColor.BLUE;
 		case THOUGHT: return MapColor.LIME;
-		default: return super.getMapColor(state);
+		default: return super.getMapColor(state, worldIn, pos);
 		}
 	}
 	

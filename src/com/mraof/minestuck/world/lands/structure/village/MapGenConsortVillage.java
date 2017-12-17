@@ -83,7 +83,7 @@ public class MapGenConsortVillage extends MapGenStructure
 	
 	@Nullable
 	@Override
-	public BlockPos getClosestStrongholdPos(World worldIn, BlockPos pos, boolean p_180706_3_)
+	public BlockPos getNearestStructurePos(World worldIn, BlockPos pos, boolean findUnexplored)
 	{
 		return null;
 	}

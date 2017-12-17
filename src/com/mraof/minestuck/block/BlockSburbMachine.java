@@ -2,6 +2,7 @@ package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiHandler;
+import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 import com.mraof.minestuck.tileentity.TileEntitySburbMachine;
 import com.mraof.minestuck.util.IdentifierHandler;
@@ -27,8 +28,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -78,7 +77,7 @@ public class BlockSburbMachine extends BlockContainer
 		setHardness(3.0F);
 		setHarvestLevel("pickaxe", 0);
 		setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.SOUTH));
-		this.setCreativeTab(Minestuck.tabMinestuck);
+		this.setCreativeTab(MinestuckItems.tabMinestuck);
 
 	}
 	
@@ -107,11 +106,10 @@ public class BlockSburbMachine extends BlockContainer
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list)
+	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items)
 	{
 		for(int i = 0; i < 4; i++)
-			list.add(new ItemStack(this, 1, i));
+			items.add(new ItemStack(this, 1, i));
 	}
 	
 	@Override
@@ -162,6 +160,12 @@ public class BlockSburbMachine extends BlockContainer
 		if(te != null)
 			return te.comparatorValue();
 		return 0;
+	}
+	
+	@Override
+	public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side)
+	{
+		return side!=null;
 	}
 
 	@Override
@@ -230,7 +234,7 @@ public class BlockSburbMachine extends BlockContainer
 		{
 			EnumFacing roation = (EnumFacing) getActualState(state, worldIn, pos).getValue(FACING);
 			AxisAlignedBB bb = ALCHEMITER_POLE_AABB[roation.getHorizontalIndex()].offset(pos);
-			if(entityBox.intersectsWith(bb))
+			if(entityBox.intersects(bb))
 				collidingBoxes.add(bb);
 		}
 	}

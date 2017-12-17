@@ -1,8 +1,8 @@
 package com.mraof.minestuck.network;
 
-import java.util.LinkedList;
-import java.util.EnumMap;
-
+import com.mraof.minestuck.client.ClientProxy;
+import com.mraof.minestuck.network.MinestuckPacket.Type;
+import com.mraof.minestuck.util.Debug;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -19,9 +19,8 @@ import net.minecraftforge.fml.common.network.FMLOutboundHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
-import com.mraof.minestuck.client.ClientProxy;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
-import com.mraof.minestuck.util.Debug;
+import java.util.EnumMap;
+import java.util.LinkedList;
 
 public class MinestuckChannelHandler extends FMLIndexedMessageToMessageCodec<MinestuckPacket> 
 {
@@ -75,7 +74,7 @@ public class MinestuckChannelHandler extends FMLIndexedMessageToMessageCodec<Min
 				synchronized(serverQueue)
 				{
 					INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
-					serverPlayers.addLast(((NetHandlerPlayServer) netHandler).playerEntity);
+					serverPlayers.addLast(((NetHandlerPlayServer) netHandler).player);
 					serverQueue.addLast(msg);
 				}
 				break;

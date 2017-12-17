@@ -1,15 +1,14 @@
 package com.mraof.minestuck.entity.ai;
 
-import java.util.Iterator;
-import java.util.List;
-
 import com.google.common.base.Predicate;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.util.math.AxisAlignedBB;
+
+import java.util.Iterator;
+import java.util.List;
 
 public class EntityAIHurtByTargetAllied extends EntityAITarget {
 	Predicate<Entity> entitySelector;
@@ -29,7 +28,7 @@ public class EntityAIHurtByTargetAllied extends EntityAITarget {
 	public boolean shouldExecute()
 	{
 		int i = this.taskOwner.getRevengeTimer();
-		return i != this.revengeTimer && this.isSuitableTarget(this.taskOwner.getAITarget(), false);
+		return i != this.revengeTimer && this.isSuitableTarget(this.taskOwner.getAttackTarget(), false);
 	}
 
 	/**
@@ -38,20 +37,20 @@ public class EntityAIHurtByTargetAllied extends EntityAITarget {
 	@Override
 	public void startExecuting()
 	{
-		this.taskOwner.setAttackTarget(this.taskOwner.getAITarget());
+		this.taskOwner.setAttackTarget(this.taskOwner.getAttackTarget());
 		this.revengeTimer = this.taskOwner.getRevengeTimer();
 		
 		double d0 = this.getTargetDistance();
-		List<?> list = this.taskOwner.world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(this.taskOwner.posX, this.taskOwner.posY, this.taskOwner.posZ, this.taskOwner.posX + 1.0D, this.taskOwner.posY + 1.0D, this.taskOwner.posZ + 1.0D).expand(d0, 10.0D, d0), entitySelector);
+		List<?> list = this.taskOwner.world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(this.taskOwner.posX, this.taskOwner.posY, this.taskOwner.posZ, this.taskOwner.posX + 1.0D, this.taskOwner.posY + 1.0D, this.taskOwner.posZ + 1.0D).grow(d0, 10.0D, d0), entitySelector);
 		Iterator<?> iterator = list.iterator();
 		
 		while (iterator.hasNext())
 		{
 			EntityCreature entitycreature = (EntityCreature)iterator.next();
 			
-			if (this.taskOwner != entitycreature && entitycreature.getAttackTarget() == null && !entitycreature.isOnSameTeam(this.taskOwner.getAITarget()))
+			if (this.taskOwner != entitycreature && entitycreature.getAttackTarget() == null && !entitycreature.isOnSameTeam(this.taskOwner.getAttackTarget()))
 			{
-				entitycreature.setAttackTarget(this.taskOwner.getAITarget());
+				entitycreature.setAttackTarget(this.taskOwner.getAttackTarget());
 			}
 		}
 

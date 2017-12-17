@@ -1,7 +1,5 @@
 package com.mraof.minestuck.item;
 
-import java.util.List;
-
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.material.Material;
 import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
@@ -15,14 +13,10 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 
-import com.mraof.minestuck.Minestuck;
+import java.util.List;
 
 public abstract class ItemCustomBoat extends Item
 {
@@ -30,7 +24,7 @@ public abstract class ItemCustomBoat extends Item
 	public ItemCustomBoat()
 	{
 		this.maxStackSize = 1;
-		setCreativeTab(Minestuck.tabMinestuck);
+		setCreativeTab(MinestuckItems.tabMinestuck);
 		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, new BehaivorDispenseCustomBoat());
 	}
 	
@@ -64,7 +58,7 @@ public abstract class ItemCustomBoat extends Item
 			Vec3d vec32 = playerIn.getLook(f);
 			boolean flag = false;
 			float f9 = 1.0F;
-			List list = worldIn.getEntitiesWithinAABBExcludingEntity(playerIn, playerIn.getEntityBoundingBox().addCoord(vec32.xCoord * d3, vec32.yCoord * d3, vec32.zCoord * d3).expand((double)f9, (double)f9, (double)f9));
+			List list = worldIn.getEntitiesWithinAABBExcludingEntity(playerIn, playerIn.getEntityBoundingBox().expand(vec32.x * d3, vec32.y * d3, vec32.z * d3).grow((double)f9));
 			
 			for (int i = 0; i < list.size(); ++i)
 			{
@@ -75,7 +69,7 @@ public abstract class ItemCustomBoat extends Item
 					float f10 = entity.getCollisionBorderSize();
 					AxisAlignedBB axisalignedbb = entity.getEntityBoundingBox().expand((double)f10, (double)f10, (double)f10);
 					
-					if (axisalignedbb.isVecInside(vec3))
+					if (axisalignedbb.contains(vec3))
 					{
 						flag = true;
 					}
@@ -100,7 +94,7 @@ public abstract class ItemCustomBoat extends Item
 					Entity entityboat = createBoat(itemstack, worldIn, (double)((float)blockpos.getX() + 0.5F), (double)((float)blockpos.getY() + 1.0F), (double)((float)blockpos.getZ() + 0.5F));
 					entityboat.rotationYaw = (float)(((MathHelper.floor((double)(playerIn.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3) - 1) * 90);
 					
-					if (!worldIn.getCollisionBoxes(entityboat, entityboat.getEntityBoundingBox().expandXyz(-0.1D)).isEmpty())
+					if (!worldIn.getCollisionBoxes(entityboat, entityboat.getEntityBoundingBox().grow(-0.1D)).isEmpty())
 					{
 						return new ActionResult(EnumActionResult.FAIL, itemstack);
 					}

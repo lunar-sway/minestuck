@@ -1,8 +1,25 @@
 package com.mraof.minestuck.item;
 
-import java.util.Iterator;
-import java.util.List;
-
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.block.BlockGate;
+import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.event.ServerEventHandler;
+import com.mraof.minestuck.network.skaianet.SburbConnection;
+import com.mraof.minestuck.network.skaianet.SburbHandler;
+import com.mraof.minestuck.network.skaianet.SkaianetHandler;
+import com.mraof.minestuck.tileentity.TileEntityComputer;
+import com.mraof.minestuck.tileentity.TileEntityGate;
+import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
+import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.IdentifierHandler;
+import com.mraof.minestuck.util.PostEntryTask;
+import com.mraof.minestuck.util.Teleport;
+import com.mraof.minestuck.world.GateHandler;
+import com.mraof.minestuck.world.MinestuckDimensionHandler;
+import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -22,36 +39,18 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
-import static com.mraof.minestuck.MinestuckConfig.artifactRange;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.block.BlockGate;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.editmode.ServerEditHandler;
-import com.mraof.minestuck.event.ServerEventHandler;
-import com.mraof.minestuck.network.skaianet.SburbConnection;
-import com.mraof.minestuck.network.skaianet.SburbHandler;
-import com.mraof.minestuck.network.skaianet.SkaianetHandler;
-import com.mraof.minestuck.tileentity.TileEntityComputer;
-import com.mraof.minestuck.tileentity.TileEntityGate;
-import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
-import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.util.MinestuckAchievementHandler;
-import com.mraof.minestuck.util.PostEntryTask;
-import com.mraof.minestuck.util.Teleport;
-import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.world.GateHandler;
-import com.mraof.minestuck.world.MinestuckDimensionHandler;
-import com.mraof.minestuck.world.lands.LandAspectRegistry;
+import java.util.Iterator;
+import java.util.List;
+
+import static com.mraof.minestuck.MinestuckConfig.artifactRange;
 
 public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITeleporter
 {
 	
 	public ItemCruxiteArtifact() 
 	{
-		this.setCreativeTab(Minestuck.tabMinestuck);
+		this.setCreativeTab(MinestuckItems.tabMinestuck);
 		setUnlocalizedName("cruxiteArtifact");
 		this.maxStackSize = 1;
 		setHasSubtypes(true);
@@ -102,7 +101,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 	{
 		if(entity instanceof EntityPlayerMP)
 		{
-			((EntityPlayerMP) entity).addStat(MinestuckAchievementHandler.enterMedium);
+			//((EntityPlayerMP) entity).addStat(MinestuckAchievementHandler.enterMedium);
 			Debug.infof("Starting entry for player %s", entity.getName());
 			int x = (int) entity.posX;
 			if(entity.posX < 0) x--;
@@ -173,7 +172,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 			Debug.debugf("Total: %d, block: %d", total, bl);
 			
 			Debug.debug("Teleporting entities...");
-			AxisAlignedBB entityTeleportBB = entity.getEntityBoundingBox().expand((double)artifactRange, artifactRange, (double)artifactRange);
+			AxisAlignedBB entityTeleportBB = entity.getEntityBoundingBox().grow((double)artifactRange, artifactRange, (double)artifactRange);
 			List<Entity> list = worldserver0.getEntitiesWithinAABBExcludingEntity(entity, entityTeleportBB);
 			Iterator<Entity> iterator = list.iterator();
 			
@@ -303,15 +302,16 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 		ExtendedBlockStorage blockStorage2 = getBlockStorage(c2, y2 >> 4);
 		
 		blockStorage.set(x, j, z, blockStorage2.get(x, j2, z));
-		blockStorage.getBlocklightArray().set(x, j, z, blockStorage2.getBlocklightArray().get(x, j2, z));
-		blockStorage.getSkylightArray().set(x, j, z, blockStorage2.getSkylightArray().get(x, j2, z));
+		blockStorage.setBlockLight(x, j, z, blockStorage2.getBlockLight(x, j2, z));
+		if(blockStorage2.getSkyLight() != null)
+			blockStorage.setSkyLight(x, j, z, blockStorage2.getSkyLight(x, j2, z));
 	}
 	
 	private static ExtendedBlockStorage getBlockStorage(Chunk c, int y)
 	{
 		ExtendedBlockStorage blockStorage = c.getBlockStorageArray()[y];
 		if(blockStorage == null)
-			blockStorage = c.getBlockStorageArray()[y] = new ExtendedBlockStorage(y << 4, !c.getWorld().provider.hasNoSky());
+			blockStorage = c.getBlockStorageArray()[y] = new ExtendedBlockStorage(y << 4, c.getWorld().provider.hasSkyLight());
 		return blockStorage;
 	}
 	

@@ -1,14 +1,12 @@
 package com.mraof.minestuck.inventory.captchalouge;
 
+import com.mraof.minestuck.client.gui.captchalouge.QueuestackGuiHandler;
+import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
+import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.mraof.minestuck.client.gui.captchalouge.QueuestackGuiHandler;
-import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
-import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler.ModusType;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
 
 public class QueuestackModus extends StackModus {
 	
@@ -41,12 +39,6 @@ public class QueuestackModus extends StackModus {
 			return AlchemyRecipeHandler.createCard(id == 0 ? list.removeFirst() : list.removeLast(), false);
 		}
 		else return id == 0 ? list.removeFirst() : list.removeLast();
-	}
-	
-	@Override
-	public boolean canSwitchFrom(ModusType modus)
-	{
-		return modus == ModusType.STACK || modus == ModusType.QUEUE;
 	}
 	
 	@Override

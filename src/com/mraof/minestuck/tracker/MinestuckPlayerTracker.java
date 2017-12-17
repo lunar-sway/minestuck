@@ -19,6 +19,7 @@ import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -65,10 +66,13 @@ public class MinestuckPlayerTracker {
 		if(CaptchaDeckHandler.getModus(player) == null && MinestuckConfig.defaultModusTypes.length > 0 && !MinestuckPlayerData.getData(player).givenModus)
 		{
 			int index = player.world.rand.nextInt(MinestuckConfig.defaultModusTypes.length);
-			Modus modus = CaptchaDeckHandler.ModusType.getType(MinestuckConfig.defaultModusTypes[index]).createInstance(Side.SERVER);
-			modus.player = player;
-			modus.initModus(null, MinestuckConfig.initialModusSize);
-			CaptchaDeckHandler.setModus(player, modus);
+			Modus modus = CaptchaDeckHandler.createInstance(new ResourceLocation(MinestuckConfig.defaultModusTypes[index]), Side.SERVER);
+			if(modus != null)
+			{
+				modus.player = player;
+				modus.initModus(null, MinestuckConfig.initialModusSize);
+				CaptchaDeckHandler.setModus(player, modus);
+			} else Debug.warnf("Couldn't create a modus by the name %s.", MinestuckConfig.defaultModusTypes[index]);
 		}
 		
 		if(CaptchaDeckHandler.getModus(player) != null)
@@ -151,15 +155,13 @@ public class MinestuckPlayerTracker {
 	 */
 	public static void updateGristCache(PlayerIdentifier player)
 	{
-		int[] gristValues = new int[GristType.allGrists];
-		for(int typeInt = 0; typeInt < gristValues.length; typeInt++)
-			gristValues[typeInt] = GristHelper.getGrist(player, GristType.values()[typeInt]);
+		GristSet gristSet = MinestuckPlayerData.getGristSet(player);
 		
 		//The player
 		EntityPlayerMP playerMP = player.getPlayer();
 		if(playerMP != null)
 		{
-			MinestuckPacket packet = MinestuckPacket.makePacket(Type.GRISTCACHE, gristValues, false);
+			MinestuckPacket packet = MinestuckPacket.makePacket(Type.GRISTCACHE, gristSet, false);
 			MinestuckChannelHandler.sendToPlayer(packet, playerMP);
 		}
 		
@@ -168,7 +170,7 @@ public class MinestuckPlayerTracker {
 		if(c != null && ServerEditHandler.getData(c) != null)
 		{
 			EntityPlayerMP editor = ServerEditHandler.getData(c).getEditor();
-			MinestuckPacket packet = MinestuckPacket.makePacket(Type.GRISTCACHE, gristValues, true);
+			MinestuckPacket packet = MinestuckPacket.makePacket(Type.GRISTCACHE, gristSet, true);
 			MinestuckChannelHandler.sendToPlayer(packet, editor);
 		}
 	}

@@ -1,19 +1,18 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Random;
-
-import org.lwjgl.input.Mouse;
-
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.util.Echeladder;
 import com.mraof.minestuck.util.MinestuckPlayerData;
-
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import org.lwjgl.input.Mouse;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Random;
 
 /**
  * @author Kirderf1
@@ -129,16 +128,16 @@ public class GuiEcheladder extends GuiPlayerStats
 				drawRect(xOffset + 90, y, xOffset + 236, y + 12, backgrounds.length > rung ? backgrounds[rung] : (textColor^0xFFFFFFFF));
 			} else if(rung == currentRung + 1 && animationCycle == 0)
 			{
-				int bg = rand.nextInt(0xFFFFFF)^0xFFFFFFFF;
+				int bg = ~rand.nextInt(0xFFFFFF);
 				if(backgrounds.length > rung)
 					bg = backgrounds[rung];
 				else if(textColors.length > rung)
-					bg = textColors[rung]^0xFFFFFFFF;
+					bg = ~textColors[rung];
 				drawRect(xOffset + 90, y + 10, xOffset + 90 + (int)(146*MinestuckPlayerData.rungProgress), y + 12, bg);
 			} else rand.nextInt(0xFFFFFF);
 			
 			String s = I18n.hasKey("echeladder.rung"+rung) ? I18n.format("echeladder.rung"+rung) : "Rung "+(rung+1);
-			mc.fontRendererObj.drawString(s, xOffset+ladderXOffset - mc.fontRendererObj.getStringWidth(s) / 2, y + 2, textColor);
+			mc.fontRenderer.drawString(s, xOffset+ladderXOffset - mc.fontRenderer.getStringWidth(s) / 2, y + 2, textColor);
 		}
 		GlStateManager.color(1,1,1);
 		
@@ -156,21 +155,21 @@ public class GuiEcheladder extends GuiPlayerStats
 		this.drawTexturedModalRect(xOffset + 5, yOffset + 7, 238, 16, 18, 18);
 		
 		String msg = I18n.format("gui.echeladder.name");
-		mc.fontRendererObj.drawString(msg, xOffset + 168 - mc.fontRendererObj.getStringWidth(msg)/2, yOffset + 12, 0x404040);
+		mc.fontRenderer.drawString(msg, xOffset + 168 - mc.fontRenderer.getStringWidth(msg)/2, yOffset + 12, 0x404040);
 		
 		int attack = (int) Math.round(100*Echeladder.attackBonus(currentRung));
-		mc.fontRendererObj.drawString(I18n.format("gui.echeladder.attack.name"), xOffset + 24, yOffset + 30, 0x404040);
-		mc.fontRendererObj.drawString(attack+"%", xOffset + 26, yOffset + 39, 0x0094FF);
+		mc.fontRenderer.drawString(I18n.format("gui.echeladder.attack.name"), xOffset + 24, yOffset + 30, 0x404040);
+		mc.fontRenderer.drawString(attack+"%", xOffset + 26, yOffset + 39, 0x0094FF);
 		
-		double health = 10 + Echeladder.healthBoost(currentRung)/2.0;
-		mc.fontRendererObj.drawString(I18n.format("gui.echeladder.health.name"), xOffset + 24, yOffset + 84, 0x404040);
-		mc.fontRendererObj.drawString(String.valueOf(health), xOffset + 26, yOffset + 93, 0x0094FF);
+		double health = ClientProxy.getClientPlayer().getMaxHealth()/2;	//10 + Echeladder.healthBoost(currentRung)/2.0;
+		mc.fontRenderer.drawString(I18n.format("gui.echeladder.health.name"), xOffset + 24, yOffset + 84, 0x404040);
+		mc.fontRenderer.drawString(String.valueOf(health), xOffset + 26, yOffset + 93, 0x0094FF);
 		
-		mc.fontRendererObj.drawString("=", xOffset + 25, yOffset + 12, 0x404040);	//Should this be black, or the same blue as the numbers?
-		mc.fontRendererObj.drawString(String.valueOf(MinestuckPlayerData.boondollars), xOffset + 27 + mc.fontRendererObj.getCharWidth('='), yOffset + 12, 0x0094FF);
+		mc.fontRenderer.drawString("=", xOffset + 25, yOffset + 12, 0x404040);	//Should this be black, or the same blue as the numbers?
+		mc.fontRenderer.drawString(String.valueOf(MinestuckPlayerData.boondollars), xOffset + 27 + mc.fontRenderer.getCharWidth('='), yOffset + 12, 0x0094FF);
 		
-		mc.fontRendererObj.drawString(I18n.format("gui.echeladder.cache.name"), xOffset + 24, yOffset + 138, 0x404040);
-		mc.fontRendererObj.drawString("Unlimited", xOffset + 26, yOffset + 147, 0x0094FF);
+		mc.fontRenderer.drawString(I18n.format("gui.echeladder.cache.name"), xOffset + 24, yOffset + 138, 0x404040);
+		mc.fontRenderer.drawString("Unlimited", xOffset + 26, yOffset + 147, 0x0094FF);
 		
 		String tooltip = null;
 		if(fromRung < currentRung)
@@ -189,9 +188,9 @@ public class GuiEcheladder extends GuiPlayerStats
 				
 				String str = "+"+(Math.round(100*Echeladder.attackBonus(rung)) - Math.round(100*Echeladder.attackBonus(rung - 1)))+"%!";
 				drawRect(xOffset + 5 + 32*(index%2), yOffset + 50 + 15*(index/2), xOffset + 35 + 32*(index%2), yOffset + 62 + 15*(index/2), bg);
-				int strX = xOffset + 20 + 32*(index%2) - mc.fontRendererObj.getStringWidth(str)/2, strY = yOffset + 52 + 15*(index/2);
-				mc.fontRendererObj.drawString(str, strX, strY, textColor);
-				if(ycor >= strY && ycor < strY + mc.fontRendererObj.FONT_HEIGHT && xcor >= strX && xcor < strX + mc.fontRendererObj.getStringWidth(str))
+				int strX = xOffset + 20 + 32*(index%2) - mc.fontRenderer.getStringWidth(str)/2, strY = yOffset + 52 + 15*(index/2);
+				mc.fontRenderer.drawString(str, strX, strY, textColor);
+				if(ycor >= strY && ycor < strY + mc.fontRenderer.FONT_HEIGHT && xcor >= strX && xcor < strX + mc.fontRenderer.getStringWidth(str))
 				{
 					int diff = (int) Math.round(100*Echeladder.attackBonus(rung)*Echeladder.getUnderlingDamageModifier(rung));
 					diff -= Math.round(100*Echeladder.attackBonus(rung - 1)*Echeladder.getUnderlingDamageModifier(rung - 1));
@@ -201,10 +200,10 @@ public class GuiEcheladder extends GuiPlayerStats
 				double d = (Echeladder.healthBoost(rung) - Echeladder.healthBoost(rung - 1))/2D;
 				str = "+"+(d == 0 ? d : d+"!");
 				drawRect(xOffset + 5 + 32*(index%2), yOffset + 104 + 15*(index/2), xOffset + 35 + 32*(index%2), yOffset + 116 + 15*(index/2), bg);
-				strX = xOffset + 20 + 32*(index%2) - mc.fontRendererObj.getStringWidth(str)/2;
+				strX = xOffset + 20 + 32*(index%2) - mc.fontRenderer.getStringWidth(str)/2;
 				strY = yOffset + 106 + 15*(index/2);
-				mc.fontRendererObj.drawString(str, strX, strY, textColor);
-				if(ycor >= strY && ycor < strY + mc.fontRendererObj.FONT_HEIGHT && xcor >= strX && xcor < strX + mc.fontRendererObj.getStringWidth(str))
+				mc.fontRenderer.drawString(str, strX, strY, textColor);
+				if(ycor >= strY && ycor < strY + mc.fontRenderer.FONT_HEIGHT && xcor >= strX && xcor < strX + mc.fontRenderer.getStringWidth(str))
 				{
 					int diff = (int) Math.round(1000*Echeladder.getUnderlingProtectionModifier(rung - 1));
 					diff -= Math.round(1000*Echeladder.getUnderlingProtectionModifier(rung));
@@ -217,9 +216,9 @@ public class GuiEcheladder extends GuiPlayerStats
 		
 		if(tooltip != null)
 			drawHoveringText(Arrays.asList(tooltip), xcor, ycor);
-		else if(ycor >= yOffset + 39 && ycor < yOffset + 39 + mc.fontRendererObj.FONT_HEIGHT && xcor >= xOffset + 26 && xcor < xOffset + 26 + mc.fontRendererObj.getStringWidth(attack+"%"))
+		else if(ycor >= yOffset + 39 && ycor < yOffset + 39 + mc.fontRenderer.FONT_HEIGHT && xcor >= xOffset + 26 && xcor < xOffset + 26 + mc.fontRenderer.getStringWidth(attack+"%"))
 			drawHoveringText(Arrays.asList(I18n.format("gui.echeladder.damageUnderling"), Math.round(attack*Echeladder.getUnderlingDamageModifier(currentRung)) + "%"), xcor, ycor);
-		else if(ycor >= yOffset + 93 && ycor < yOffset + 93 + mc.fontRendererObj.FONT_HEIGHT && xcor >= xOffset + 26 && xcor < xOffset + 26 + mc.fontRendererObj.getStringWidth(String.valueOf(health)))
+		else if(ycor >= yOffset + 93 && ycor < yOffset + 93 + mc.fontRenderer.FONT_HEIGHT && xcor >= xOffset + 26 && xcor < xOffset + 26 + mc.fontRenderer.getStringWidth(String.valueOf(health)))
 			drawHoveringText(Arrays.asList(I18n.format("gui.echeladder.protectionUnderling"), String.format("%.1f", 100*Echeladder.getUnderlingProtectionModifier(currentRung))+"%"), xcor, ycor);
 	}
 	

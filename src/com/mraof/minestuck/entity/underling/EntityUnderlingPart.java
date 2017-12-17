@@ -1,16 +1,13 @@
 package com.mraof.minestuck.entity.underling;
 
+import com.mraof.minestuck.entity.IEntityMultiPart;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.boss.EntityDragon;
-import net.minecraft.entity.boss.EntityDragonPart;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-
-import com.mraof.minestuck.entity.IEntityMultiPart;
 
 public class EntityUnderlingPart extends EntityLiving implements IEntityAdditionalSpawnData
 {

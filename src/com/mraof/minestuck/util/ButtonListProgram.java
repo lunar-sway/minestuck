@@ -1,18 +1,17 @@
 package com.mraof.minestuck.util;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map.Entry;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.util.text.translation.I18n;
-
 import com.mraof.minestuck.client.gui.GuiComputer;
 import com.mraof.minestuck.network.ClearMessagePacket;
 import com.mraof.minestuck.network.skaianet.ComputerData;
 import com.mraof.minestuck.tileentity.TileEntityComputer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.util.text.translation.I18n;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map.Entry;
 
 public abstract class ButtonListProgram extends ComputerProgram {
 	
@@ -132,9 +131,9 @@ public abstract class ButtonListProgram extends ComputerProgram {
 		int yOffset = (gui.height / 2) - (GuiComputer.ySize / 2);
 		gui.drawTexturedModalRect((gui.width / 2) - (GuiComputer.xSize / 2), yOffset, 0, 0, GuiComputer.xSize, GuiComputer.ySize);
 		if(te.latestmessage.get(te.programSelected) == null || te.latestmessage.get(te.programSelected).isEmpty())
-			mc.fontRendererObj.drawString(message, (gui.width - GuiComputer.xSize) / 2 + 15, (gui.height - GuiComputer.ySize) / 2 + 45, 4210752);
+			mc.fontRenderer.drawString(message, (gui.width - GuiComputer.xSize) / 2 + 15, (gui.height - GuiComputer.ySize) / 2 + 45, 4210752);
 		else 
-			mc.fontRendererObj.drawString(I18n.translateToLocal(te.latestmessage.get(te.programSelected)), (gui.width - GuiComputer.xSize) / 2  + 15, (gui.height - GuiComputer.ySize) / 2 + 45, 4210752);
+			mc.fontRenderer.drawString(I18n.translateToLocal(te.latestmessage.get(te.programSelected)), (gui.width - GuiComputer.xSize) / 2  + 15, (gui.height - GuiComputer.ySize) / 2 + 45, 4210752);
 	}
 	
 	/**

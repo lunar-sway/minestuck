@@ -1,23 +1,21 @@
 package com.mraof.minestuck.network;
 
-import io.netty.buffer.ByteBuf;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.EnumSet;
-
 import com.mraof.minestuck.editmode.ServerEditHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalouge.ContainerCaptchaDeck;
 import com.mraof.minestuck.util.Debug;
-
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.EnumSet;
 
 public class CaptchaDeckPacket extends MinestuckPacket
 {
@@ -120,7 +118,7 @@ public class CaptchaDeckPacket extends MinestuckPacket
 			
 			if(this.type == MODUS && player.openContainer instanceof ContainerCaptchaDeck)
 				CaptchaDeckHandler.useItem((EntityPlayerMP) player);
-			else if(this.type == CAPTCHALOUGE && player.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND) != null)
+			else if(this.type == CAPTCHALOUGE && !player.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).isEmpty())
 				CaptchaDeckHandler.captchalougeItem((EntityPlayerMP) player);
 			else if(this.type == GET)
 				CaptchaDeckHandler.getItem((EntityPlayerMP) player, itemIndex, getCard);

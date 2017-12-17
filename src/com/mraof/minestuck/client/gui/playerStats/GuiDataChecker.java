@@ -1,19 +1,11 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-
-import org.lwjgl.input.Mouse;
-
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.EnumClass;
 import com.mraof.minestuck.util.LocalizedObject;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiChat;
@@ -25,6 +17,12 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
+import org.lwjgl.input.Mouse;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 public class GuiDataChecker extends GuiScreen
 {
@@ -122,17 +120,17 @@ public class GuiDataChecker extends GuiScreen
 			List<IDataComponent> list = guiComponent.getComponentList();
 			for(int i = 0; i < 5; i++)
 			{
-				 mc.fontRendererObj.drawString(guiComponent.getName(), xOffset + 9, yOffset + 15 - mc.fontRendererObj.FONT_HEIGHT/2, 0);
+				 mc.fontRenderer.drawString(guiComponent.getName(), xOffset + 9, yOffset + 15 - mc.fontRenderer.FONT_HEIGHT/2, 0);
 				IDataComponent component = i + index < list.size() ? list.get(i + index) : null;
 				if(component != null && !component.isButton())
 				{
 					GlStateManager.color(1, 1, 1);
 					this.mc.getTextureManager().bindTexture(guiBackground);
 					drawTexturedModalRect(xOffset + 5, yOffset + LIST_Y + i*22, 0, 236, 180, 20);
-					mc.fontRendererObj.drawString(component.getName(), xOffset + 9, yOffset + LIST_Y + 10 - mc.fontRendererObj.FONT_HEIGHT/2 + i*22, 0);
+					mc.fontRenderer.drawString(component.getName(), xOffset + 9, yOffset + LIST_Y + 10 - mc.fontRenderer.FONT_HEIGHT/2 + i*22, 0);
 				}
 			}
-		} else mc.fontRendererObj.drawString("Retrieving data from server...", xOffset + 9, yOffset + 15 - mc.fontRendererObj.FONT_HEIGHT/2, 0);
+		} else mc.fontRenderer.drawString("Retrieving data from server...", xOffset + 9, yOffset + 15 - mc.fontRenderer.FONT_HEIGHT/2, 0);
 		
 		GlStateManager.color(1, 1, 1);
 		int textureIndex = canScroll ? 232 : 244;

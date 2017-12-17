@@ -1,15 +1,14 @@
 package com.mraof.minestuck.network.skaianet;
 
-import net.minecraft.nbt.NBTTagCompound;
-
 import com.mraof.minestuck.util.EnumAspect;
 import com.mraof.minestuck.util.EnumClass;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
+import net.minecraft.nbt.NBTTagCompound;
 
-public class PredefineData
+class PredefineData
 {
 	Title title;
 	TerrainLandAspect landTerrain;

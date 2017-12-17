@@ -1,9 +1,6 @@
 package com.mraof.minestuck.block;
 
-import java.util.Random;
-
-import com.mraof.minestuck.Minestuck;
-
+import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.block.BlockCactus;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -12,6 +9,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.Random;
+
 public class BlockCactusSpecial extends BlockCactus
 {
 	private String toolType;
@@ -19,7 +18,7 @@ public class BlockCactusSpecial extends BlockCactus
 	public BlockCactusSpecial(SoundType soundType, String effectiveTool)
 	{
 		super();
-		this.setCreativeTab(Minestuck.tabMinestuck);
+		this.setCreativeTab(MinestuckItems.tabMinestuck);
 		setSoundType(soundType);
 		this.toolType = effectiveTool;
 	}

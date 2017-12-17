@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class GristRegistry {
-	private static Hashtable<List<Object>, GristSet> gristRecipes = new Hashtable<List<Object>, GristSet>();
+	private static Hashtable<List<Object>, GristSet> gristRecipes = new Hashtable<>();
 	
 	/**
 	 * Creates a item-grist conversion ratio for an ItemStack. Used in the Alchemiter and GristWidget.
@@ -37,7 +37,7 @@ public class GristRegistry {
 	
 	public static void addGristConversion(String name, GristSet grist)
 	{
-		gristRecipes.put(Arrays.asList((Object) name, OreDictionary.WILDCARD_VALUE), grist);
+		gristRecipes.put(Arrays.asList(name, OreDictionary.WILDCARD_VALUE), grist);
 	}
 	
 	/**

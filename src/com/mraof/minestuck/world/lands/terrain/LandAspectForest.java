@@ -1,19 +1,21 @@
 package com.mraof.minestuck.world.lands.terrain;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.mraof.minestuck.entity.consort.EnumConsort;
-import com.mraof.minestuck.world.lands.decorator.*;
-import net.minecraft.block.BlockStoneBrick;
-import net.minecraft.block.BlockLog.EnumAxis;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.math.Vec3d;
-
 import com.mraof.minestuck.block.BlockMinestuckLog;
 import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
+import com.mraof.minestuck.world.lands.decorator.*;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
+import net.minecraft.block.BlockColored;
+import net.minecraft.block.BlockLog.EnumAxis;
+import net.minecraft.block.BlockStoneBrick;
+import net.minecraft.block.BlockTallGrass;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.util.math.Vec3d;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class LandAspectForest extends TerrainLandAspect
 {
@@ -29,6 +31,9 @@ public class LandAspectForest extends TerrainLandAspect
 		registry.setBlockState("structure_secondary_decorative", Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED));
 		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.getDefaultState());
 		registry.setBlockState("village_path", Blocks.GRASS_PATH.getDefaultState());
+		registry.setBlockState("bush", Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.FERN));
+		registry.setBlockState("structure_wool_1", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.GREEN));
+		registry.setBlockState("structure_wool_3", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.BROWN));
 	}
 	
 	@Override

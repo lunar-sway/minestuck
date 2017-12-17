@@ -1,21 +1,21 @@
 package com.mraof.minestuck.world.gen;
 
-import java.util.Random;
-
+import com.google.common.base.Predicate;
+import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.block.BlockCruxiteOre;
+import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.world.WorldProviderLands;
+import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraftforge.fml.common.IWorldGenerator;
 
-import com.google.common.base.Predicate;
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.world.WorldProviderLands;
-import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
+import java.util.Random;
 
 public class OreHandler implements IWorldGenerator
 {
@@ -27,6 +27,11 @@ public class OreHandler implements IWorldGenerator
 		{
 			this.addOreSpawn(MinestuckBlocks.oreCruxite.getDefaultState(), world, random, chunkX * 16, chunkZ * 16, 16, 16, 6 + random.nextInt(3), 10, 0, 60);
 		}
+		
+		if(world.provider.isSurfaceWorld() && (MinestuckConfig.generateUraniumOre || chunkGenerator instanceof ChunkProviderLands))
+		{
+			this.addOreSpawn(MinestuckBlocks.oreUranium.getDefaultState(), world, random, chunkX * 16, chunkZ * 16, 16, 16, 3 + random.nextInt(3), 10, 0, 30);
+		}
 	}
 	
 	public void addOreSpawn(IBlockState block, World world, Random random, int blockXPos, int blockZPos, int maxX, int maxZ, int maxVeinSize, int chancesToSpawn, int minY, int maxY)
@@ -37,7 +42,9 @@ public class OreHandler implements IWorldGenerator
 		if(world.provider instanceof WorldProviderLands)
 			groundType = ((ChunkProviderLands) world.provider.createChunkGenerator()).getGroundBlock();
 		if(block.getBlock() == MinestuckBlocks.oreCruxite)
-			block = MinestuckBlocks.oreCruxite.getBlockState(groundType);
+			block = BlockCruxiteOre.getBlockState(groundType);
+		if(block.getBlock() == MinestuckBlocks.oreUranium)
+			block = MinestuckBlocks.oreUranium.getBlockState(groundType);
 		for(int x = 0; x < chancesToSpawn; x++)
 		{
 			int posX = blockXPos + random.nextInt(maxX);

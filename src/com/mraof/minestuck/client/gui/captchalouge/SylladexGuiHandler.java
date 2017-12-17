@@ -1,16 +1,10 @@
 package com.mraof.minestuck.client.gui.captchalouge;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
-import org.lwjgl.input.Mouse;
-
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -26,6 +20,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.input.Mouse;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 @SideOnly(Side.CLIENT)
 public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCallback
@@ -78,8 +76,8 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 	{
 		this.drawDefaultBackground();
 		
-		emptySylladex.xPosition = (width - GUI_WIDTH)/2 + 140;
-		emptySylladex.yPosition = (height - GUI_HEIGHT)/2 + 175;
+		emptySylladex.x = (width - GUI_WIDTH)/2 + 140;
+		emptySylladex.y = (height - GUI_HEIGHT)/2 + 175;
 		
 		int mouseWheel = Mouse.getDWheel();
 		float prevScroll = scroll;
@@ -157,10 +155,10 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 		mc.getTextureManager().bindTexture(sylladexFrame);
 		drawTexturedModalRect(xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
-		mc.fontRendererObj.drawString(I18n.format("gui.sylladex"), xOffset + 15, yOffset + 5, 0x404040);
+		mc.fontRenderer.drawString(I18n.format("gui.sylladex"), xOffset + 15, yOffset + 5, 0x404040);
 		
 		String str = CaptchaDeckHandler.clientSideModus.getName();
-		mc.fontRendererObj.drawString(str, xOffset + GUI_WIDTH - mc.fontRendererObj.getStringWidth(str) - 16, yOffset + 5, 0x404040);
+		mc.fontRenderer.drawString(str, xOffset + GUI_WIDTH - mc.fontRenderer.getStringWidth(str) - 16, yOffset + 5, 0x404040);
 		
 		super.drawScreen(xcor, ycor, f);
 		
@@ -293,13 +291,28 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 	 */
 	public abstract void updatePosition();
 	
-	protected static class GuiCard
+	public ResourceLocation getCardTexture(GuiCard card)
+	{
+		return cardTexture;
+	}
+	
+	public int getCardTextureX(GuiCard card)
+	{
+		return textureIndex*CARD_WIDTH;
+	}
+	
+	public int getCardTextureY(GuiCard card)
+	{
+		return 96;
+	}
+	
+	public static class GuiCard
 	{
 		
 		protected SylladexGuiHandler gui;
-		protected ItemStack item;
-		protected int index;
-		protected int xPos, yPos;
+		public ItemStack item;
+		public int index;
+		public int xPos, yPos;
 		
 		protected GuiCard()
 		{
@@ -332,7 +345,7 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 
 		protected void drawItemBackground()
 		{
-			gui.mc.getTextureManager().bindTexture(gui.cardTexture);
+			gui.mc.getTextureManager().bindTexture(gui.getCardTexture(this));
 			int minX = 0, maxX = CARD_WIDTH, minY = 0, maxY = CARD_HEIGHT;
 			if(this.xPos + minX < gui.mapX)
 				minX += gui.mapX - (this.xPos + minX);
@@ -343,7 +356,7 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 			else if(this.yPos + maxY > gui.mapY + gui.mapHeight)
 				maxY -= (this.yPos + maxY) - (gui.mapY + gui.mapHeight);
 			gui.drawTexturedModalRect(this.xPos + minX - gui.mapX, this.yPos + minY - gui.mapY,	//Gui pos
-					gui.textureIndex*CARD_WIDTH + minX, 96 + minY,	//Texture pos
+					gui.getCardTextureX(this) + minX, gui.getCardTextureY(this) + minY,	//Texture pos
 					maxX - minX, maxY - minY);	//Size
 		}
 		
@@ -363,12 +376,12 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 					GlStateManager.disableLighting();
 					GlStateManager.disableDepth();
 					GlStateManager.disableBlend();
-					gui.mc.fontRendererObj.drawStringWithShadow(stackSize, x + 16 - gui.mc.fontRendererObj.getStringWidth(stackSize), y + 8, 0xC6C6C6);
+					gui.mc.fontRenderer.drawStringWithShadow(stackSize, x + 16 - gui.mc.fontRenderer.getStringWidth(stackSize), y + 8, 0xC6C6C6);
 					GlStateManager.enableLighting();
 					GlStateManager.enableDepth();
 					GlStateManager.enableBlend();
 				}
-				gui.itemRender.renderItemOverlayIntoGUI(gui.mc.fontRendererObj, item, x, y, "");
+				gui.itemRender.renderItemOverlayIntoGUI(gui.mc.fontRenderer, item, x, y, "");
 			}
 		}
 		
@@ -380,9 +393,9 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 		
 	}
 	
-	protected static class ModusSizeCard extends GuiCard
+	public static class ModusSizeCard extends GuiCard
 	{
-		protected int size;
+		public int size;
 		
 		public ModusSizeCard(SylladexGuiHandler gui, int size, int xPos, int yPos)
 		{
@@ -403,14 +416,14 @@ public abstract class SylladexGuiHandler extends GuiScreen implements GuiYesNoCa
 			if(size > 1)
 			{
 				String stackSize = String.valueOf(size);
-				int x = this.xPos - gui.mapX + 18 - gui.mc.fontRendererObj.getStringWidth(stackSize);
+				int x = this.xPos - gui.mapX + 18 - gui.mc.fontRenderer.getStringWidth(stackSize);
 				int y = this.yPos - gui.mapY + 15;
-				if(x >= gui.mapWidth || y >= gui.mapHeight || x + gui.mc.fontRendererObj.getStringWidth(stackSize) < 0 || y + gui.fontRendererObj.FONT_HEIGHT < 0)
+				if(x >= gui.mapWidth || y >= gui.mapHeight || x + gui.mc.fontRenderer.getStringWidth(stackSize) < 0 || y + gui.fontRenderer.FONT_HEIGHT < 0)
 					return;
 				GlStateManager.disableLighting();
 				GlStateManager.disableDepth();
 				GlStateManager.disableBlend();
-				gui.mc.fontRendererObj.drawStringWithShadow(stackSize, x, y, 0xC6C6C6);
+				gui.mc.fontRenderer.drawStringWithShadow(stackSize, x, y, 0xC6C6C6);
 				GlStateManager.enableLighting();
 				GlStateManager.enableDepth();
 				GlStateManager.enableBlend();

@@ -14,6 +14,7 @@ import com.mraof.minestuck.world.lands.gen.RiverFreeTerrainGen;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockRegistry;
 import net.minecraft.block.*;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.gen.feature.WorldGenCactus;
 import net.minecraft.world.gen.feature.WorldGenDeadBush;
@@ -35,7 +36,7 @@ public class LandAspectSand extends TerrainLandAspect
 	
 	public LandAspectSand(Variant variation)
 	{
-		variations = new ArrayList<TerrainLandAspect>();
+		variations = new ArrayList<>();
 		type = variation;
 		
 		if(type == Variant.SAND)
@@ -77,6 +78,8 @@ public class LandAspectSand extends TerrainLandAspect
 		registry.setBlockState("structure_planks", Blocks.PLANKS.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.ACACIA));
 		registry.setBlockState("structure_planks_slab", Blocks.WOODEN_SLAB.getDefaultState().withProperty(BlockWoodSlab.VARIANT, BlockPlanks.EnumType.ACACIA));
 		registry.setBlockState("river", registry.getBlockState("upper"));
+		registry.setBlockState("structure_wool_1", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.YELLOW));
+		registry.setBlockState("structure_wool_3", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.MAGENTA));
 	}
 	
 	@Override

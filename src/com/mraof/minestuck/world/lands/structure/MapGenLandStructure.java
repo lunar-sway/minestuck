@@ -1,18 +1,10 @@
 package com.mraof.minestuck.world.lands.structure;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
-
 import com.mraof.minestuck.block.BlockGate;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.biome.BiomeMinestuck;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.BlockPos;
@@ -23,6 +15,9 @@ import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureStart;
+
+import javax.annotation.Nullable;
+import java.util.*;
 
 public class MapGenLandStructure extends MapGenStructure
 {
@@ -148,8 +143,8 @@ public class MapGenLandStructure extends MapGenStructure
 	
 	public void placeReturnNodes(World world, Random rand, ChunkPos coords, BlockPos decoratorPos)
 	{
-		int x = coords.chunkXPos;
-		int z = coords.chunkZPos;
+		int x = coords.x;
+		int z = coords.z;
 		
 		if (x < 0)
 			x -= this.MAX_NODE_DISTANCE - 1;
@@ -164,7 +159,7 @@ public class MapGenLandStructure extends MapGenStructure
 		x += random.nextInt(this.MAX_NODE_DISTANCE - this.MIN_NODE_DISTANCE);
 		z += random.nextInt(this.MAX_NODE_DISTANCE - this.MIN_NODE_DISTANCE);
 		
-		if(coords.chunkXPos == x && coords.chunkZPos == z)
+		if(coords.x == x && coords.z == z)
 		{
 			BlockPos nodePos;
 			if(decoratorPos == null)
@@ -207,8 +202,9 @@ public class MapGenLandStructure extends MapGenStructure
 		}
 	}
 	
+	@Nullable
 	@Override
-	public BlockPos getClosestStrongholdPos(World worldIn, BlockPos pos, boolean p_180706_3_)
+	public BlockPos getNearestStructurePos(World worldIn, BlockPos pos, boolean findUnexplored)
 	{
 		// TODO Auto-generated method stub
 		return null;

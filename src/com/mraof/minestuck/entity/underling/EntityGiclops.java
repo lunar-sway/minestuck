@@ -161,15 +161,15 @@ public class EntityGiclops extends EntityUnderling implements IBigEntity
 	public void onDeath(DamageSource cause)
 	{
 		super.onDeath(cause);
-		Entity entity = cause.getEntity();
+		Entity entity = cause.getTrueSource();
 		if(this.dead && !this.world.isRemote && type != null)
 		{
 			computePlayerProgress((int) (500*type.getPower() + 1000));
 			if(entity != null && entity instanceof EntityPlayerMP)
 			{
-				((EntityPlayerMP) entity).addStat(MinestuckAchievementHandler.killGiclops);
+				//((EntityPlayerMP) entity).addStat(MinestuckAchievementHandler.killGiclops);
 				Echeladder ladder = MinestuckPlayerData.getData((EntityPlayerMP) entity).echeladder;
-				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 3));
+				ladder.checkBonus((byte) (Echeladder.UNDERLING_BONUS_OFFSET + 4));
 			}
 		}
 	}

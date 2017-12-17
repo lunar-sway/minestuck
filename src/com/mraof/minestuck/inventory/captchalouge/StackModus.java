@@ -1,20 +1,18 @@
 package com.mraof.minestuck.inventory.captchalouge;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.captchalouge.StackGuiHandler;
 import com.mraof.minestuck.client.gui.captchalouge.SylladexGuiHandler;
-import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler.ModusType;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Iterator;
+import java.util.LinkedList;
 
 public class StackModus extends Modus
 {
@@ -169,9 +167,9 @@ public class StackModus extends Modus
 	}
 
 	@Override
-	public boolean canSwitchFrom(ModusType modus)
+	public boolean canSwitchFrom(Modus modus)
 	{
-		return modus == ModusType.QUEUE || modus == ModusType.QUEUE_STACK;
+		return modus instanceof StackModus;
 	}
 	
 	@Override

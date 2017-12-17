@@ -134,7 +134,7 @@ public class ServerEditHandler
 		MinestuckPacket packet = MinestuckPacket.makePacket(Type.SERVER_EDIT);
 		MinestuckChannelHandler.sendToPlayer(packet, player);
 		
-		if(damageSource != null && damageSource.getSourceOfDamage() != player)
+		if(damageSource != null && damageSource.getImmediateSource() != player)
 			player.attackEntityFrom(damageSource, damage);
 	}
 	
@@ -172,7 +172,7 @@ public class ServerEditHandler
 	{
 		
 		double posX, posY = 0, posZ;
-		WorldServer world = player.getServer().worldServerForDimension(c.enteredGame()?c.getClientDimension():c.getClientData().getDimension());
+		WorldServer world = player.getServer().getWorld(c.enteredGame()?c.getClientDimension():c.getClientData().getDimension());
 		
 		if(c.useCoordinates)
 		{
@@ -247,7 +247,7 @@ public class ServerEditHandler
 		if(!event.getEntity().world.isRemote && getData(event.getPlayer()) != null)
 		{
 			EditData data = getData(event.getPlayer());
-			ItemStack stack = event.getEntityItem().getEntityItem();
+			ItemStack stack = event.getEntityItem().getItem();
 			if(DeployList.containsItemStack(stack) && !isBlockItem(stack.getItem()))
 			{
 				GristSet cost = data.connection.givenItems()[DeployList.getOrdinal(stack)]

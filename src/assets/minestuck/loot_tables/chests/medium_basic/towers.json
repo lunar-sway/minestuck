@@ -18,6 +18,21 @@
                             }
                         }
                     ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:iron_cane",
+                    "weight": 5,
+                    "quality": 1,
+                    "functions": [
+                        {
+                            "function": "set_damage",
+                            "damage": {
+                                "min": 0.75,
+                                "max": 1
+                            }
+                        }
+                    ]
                 }
             ]
         }

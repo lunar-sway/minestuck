@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  I",
+    " I ",
+    "I  "
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "minestuck:cane",
+    "count": 1
+  }
+}
