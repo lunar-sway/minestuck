@@ -22,7 +22,7 @@ public abstract class EntityConsort extends EntityMinestuck
 	ConsortDialogue.ConditionedMessage message;
 	int messageTicksLeft;
 	NBTTagCompound messageData;
-	EnumConsort.MerchantType merchantType = EnumConsort.MerchantType.NONE;
+	public EnumConsort.MerchantType merchantType = EnumConsort.MerchantType.NONE;
 	int homeDimension;
 	MessageType.DelayMessage updatingMessage; //Change to an interface/array if more message components need tick updates
 	

@@ -35,19 +35,19 @@ public class InventoryConsortMerchant implements IInventory
 	@Override
 	public ItemStack decrStackSize(int index, int count)
 	{
-		return null;
+		return ItemStack.EMPTY;
 	}
 	
 	@Override
 	public ItemStack removeStackFromSlot(int index)
 	{
-		return null;
+		return ItemStack.EMPTY;
 	}
 	
 	@Override
 	public void setInventorySlotContents(int index, ItemStack stack)
 	{
-	
+		inv.set(index, stack);
 	}
 	
 	@Override
