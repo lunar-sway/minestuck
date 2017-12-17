@@ -1,5 +1,6 @@
 package com.mraof.minestuck.entity.consort;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.util.text.TextFormatting;
 
 public enum EnumConsort
@@ -18,7 +19,7 @@ public enum EnumConsort
 		this.color = color;
 	}
 	
-	public boolean isConsort(EntityConsort consort)
+	public boolean isConsort(Entity consort)
 	{
 		return consortClass.isInstance(consort);
 	}

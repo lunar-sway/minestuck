@@ -6,16 +6,6 @@
             "entries": [
                 {
                     "type": "item",
-                    "name": "minecraft:dirt",
-                    "weight": 5
-                },
-                {
-                    "type": "item",
-                    "name": "minecraft:stick",
-                    "weight": 8
-                },
-                {
-                    "type": "item",
                     "name": "minecraft:planks",
                     "weight": 8,
                     "functions": [
@@ -27,11 +17,6 @@
                             }
                         }
                     ]
-                },
-                {
-                    "type": "item",
-                    "name": "minecraft:wooden_sword",
-                    "weight": 5
                 },
                 {
                     "type": "item",
@@ -65,11 +50,6 @@
                 },
                 {
                     "type": "item",
-                    "name": "minecraft:cobblestone",
-                    "weight": 5
-                },
-                {
-                    "type": "item",
                     "name": "minecraft:poisonous_potato",
                     "weight": 10
                 },
@@ -79,42 +59,6 @@
                     "weight": 10
                 },
                 {
-                    "entryName": "granite",
-                    "type": "item",
-                    "name": "minecraft:stone",
-                    "weight": 8,
-                    "functions": [
-                        {
-                            "function": "set_data",
-                            "data": 1
-                        }
-                    ]
-                },
-                {
-                "entryName": "diorite",
-                    "type": "item",
-                    "name": "minecraft:stone",
-                    "weight": 8,
-                    "functions": [
-                        {
-                            "function": "set_data",
-                            "data": 3
-                        }
-                    ]
-                },
-                {
-                    "entryName": "andesite",
-                    "type": "item",
-                    "name": "minecraft:stone",
-                    "weight": 8,
-                    "functions": [
-                        {
-                            "function": "set_data",
-                            "data": 5
-                        }
-                    ]
-                },
-                {
                     "type": "item",
                     "name": "minecraft:deadbush",
                     "weight": 10
@@ -122,11 +66,6 @@
                 {
                     "type": "item",
                     "name": "minecraft:oak_stairs",
-                    "weight": 5
-                },
-                {
-                    "type": "item",
-                    "name": "minecraft:fence",
                     "weight": 5
                 },
                 {
@@ -202,6 +141,56 @@
                     "type": "item",
                     "name": "minestuck:thresh_dvd",
                     "weight": 10
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:onion",
+                    "weight": 5,
+                    "conditions": [
+                        {
+                            "condition": "minestuck:consort",
+                            "consort": "nakagator"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:beverage",
+                    "weight": 5,
+                    "conditions": [
+                        {
+                            "condition": "minestuck:consort",
+                            "consort": "salamander"
+                        }
+                    ],
+                    "functions": [
+                        {
+                            "function": "set_data",
+                            "data": 0
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:jar_of_bugs",
+                    "weight": 5,
+                    "conditions": [
+                        {
+                            "condition": "minestuck:consort",
+                            "consort": "turtle"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:grasshopper",
+                    "weight": 5,
+                    "conditions": [
+                        {
+                            "condition": "minestuck:consort",
+                            "consort": "iguana"
+                        }
+                    ]
                 }
             ]
         }

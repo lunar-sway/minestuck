@@ -822,7 +822,7 @@ public abstract class MessageType
 				if(!repeat)
 					nbt.setBoolean(nbtName, true);
 				
-				LootContext.Builder contextBuilder = new LootContext.Builder((WorldServer) consort.world);
+				LootContext.Builder contextBuilder = new LootContext.Builder((WorldServer) consort.world).withLootedEntity(consort);
 				for(ItemStack itemstack : consort.world.getLootTableManager().getLootTableFromLocation(item)
 						.generateLootForPools(consort.world.rand, contextBuilder.build()))
 				{
