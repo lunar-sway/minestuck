@@ -30,7 +30,7 @@ public class MinestuckBlocks
 	public static Block transportalizer = new BlockTransportalizer().setRegistryName("transportalizer");
 	public static Block punchDesignix = new BlockPunchDesignix().setRegistryName("punch_designix");
 	public static Block totemlathe = new BlockTotemlathe().setRegistryName("totem_lathe");
-	public static BlockAlchemiter[] alchemiter = {(BlockAlchemiter) new BlockAlchemiter(0).setRegistryName("alchemiter"), (BlockAlchemiter) new BlockAlchemiter(1).setRegistryName("alchemiter2")};
+	public static BlockAlchemiter[] alchemiter = BlockAlchemiter.createBlocks();
 	public static Block cruxtruder=new BlockCruxtruder().setRegistryName("cruxtruder");
 	public static Block cruxtruder2=new BlockCruxtruder2().setRegistryName("cruxtruder2");
 	

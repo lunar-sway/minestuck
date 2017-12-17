@@ -5,6 +5,9 @@
 /gradle.properties
 .idea
 .gradle
+.classpath
+.project
+.settings/org.eclipse.jdt.core.prefs
 /eclipse
 *~
 /gradle
@@ -13,3 +16,4 @@
 /run
 /out
 *.iml
+/.settings
