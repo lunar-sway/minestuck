@@ -1097,7 +1097,13 @@ public abstract class MessageType
 		@Override
 		public ITextComponent getMessage(EntityConsort consort, EntityPlayer player, String chainIdentifier)
 		{
+			if(consort.stock == null)
+			{
+				consort.stock = ConsortRewardHandler.generateStock(lootTable, consort, consort.world.rand);
+			}
+			
 			player.openGui(Minestuck.instance, GuiHandler.GuiId.MERCHANT.ordinal(), player.world, (int) consort.posX, (int) consort.posY, (int) consort.posZ);
+			
 			if(player.openContainer instanceof ContainerConsortMerchant)
 			{
 				((ContainerConsortMerchant) player.openContainer).setConsort(consort);

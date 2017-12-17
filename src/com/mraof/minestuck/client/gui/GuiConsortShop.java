@@ -39,6 +39,14 @@ public class GuiConsortShop extends GuiContainer //It probably doesn't even need
 		
 		this.mc.getTextureManager().bindTexture(portrait);
 		drawModalRectWithCustomSizedTexture(x+119, y+40, 0, 0, 64, 64, 64, 64);
+		
+		for(int i = 0; i < container.prices.length; i++)
+		{
+			if(container.getSlot(i).getStack().isEmpty())
+				continue;
+			String cost = String.valueOf(container.prices[i])+"£";
+			mc.fontRenderer.drawString(cost, x + 25 - mc.fontRenderer.getStringWidth(cost)/2 + 35*(i%3), y + 54 + 33*(i/3), 0x000000);
+		}
 	}
 	
 	@Override

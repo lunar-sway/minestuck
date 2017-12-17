@@ -1,13 +1,16 @@
 package com.mraof.minestuck.entity.consort;
 
 import com.mraof.minestuck.entity.EntityMinestuck;
+import com.mraof.minestuck.util.Pair;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -15,6 +18,9 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class EntityConsort extends EntityMinestuck
 {
@@ -25,6 +31,7 @@ public abstract class EntityConsort extends EntityMinestuck
 	public EnumConsort.MerchantType merchantType = EnumConsort.MerchantType.NONE;
 	int homeDimension;
 	MessageType.DelayMessage updatingMessage; //Change to an interface/array if more message components need tick updates
+	public List<Pair<ItemStack, Integer>> stock;
 	
 	public EntityConsort(World world)
 	{
@@ -79,6 +86,7 @@ public abstract class EntityConsort extends EntityMinestuck
 			message = null;
 			messageData = null;
 			updatingMessage = null;
+			stock = null;
 		}
 		
 		if(updatingMessage != null)
@@ -133,6 +141,19 @@ public abstract class EntityConsort extends EntityMinestuck
 		
 		compound.setInteger("merchant", merchantType.ordinal());
 		compound.setInteger("homeDim", homeDimension);
+		
+		if(merchantType != EnumConsort.MerchantType.NONE && stock != null)
+		{
+			NBTTagList list = new NBTTagList();
+			for(Pair<ItemStack, Integer> values : stock)
+			{
+				NBTTagCompound nbt = new NBTTagCompound();
+				values.object1.writeToNBT(nbt);
+				nbt.setInteger("price", values.object2);
+				list.appendTag(nbt);
+			}
+			compound.setTag("stock", list);
+		}
 	}
 	
 	@Override
@@ -154,6 +175,18 @@ public abstract class EntityConsort extends EntityMinestuck
 		if(compound.hasKey("homeDim", 99))
 			homeDimension = compound.getInteger("homeDim");
 		else homeDimension = this.world.provider.getDimension();
+		
+		if(merchantType != EnumConsort.MerchantType.NONE && compound.hasKey("stock", 9))
+		{
+			stock = new ArrayList<>();
+			NBTTagList list = compound.getTagList("stock", 10);
+			for(int i = 0; i < list.tagCount() && stock.size() < 9; i++)
+			{
+				NBTTagCompound nbt = list.getCompoundTagAt(i);
+				ItemStack stack = new ItemStack(nbt);
+				stock.add(new Pair<>(stack, nbt.getInteger("price")));
+			}
+		}
 	}
 	
 	@Override

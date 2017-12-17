@@ -1,6 +1,7 @@
 package com.mraof.minestuck.util;
 
 import com.mraof.minestuck.block.BlockMinestuckStone;
+import com.mraof.minestuck.entity.consort.ConsortRewardHandler;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.modSupport.*;
 import com.mraof.minestuck.tileentity.TileEntityUraniumCooker;
@@ -39,6 +40,7 @@ public class AlchemyRecipeHandler
 {
 	public static final ResourceLocation BASIC_MEDIUM_CHEST = new ResourceLocation("minestuck", "chests/medium_basic");
 	public static final ResourceLocation CONSORT_JUNK_REWARD = new ResourceLocation("minestuck", "gameplay/consort_junk");
+	public static final ResourceLocation CONSORT_FOOD_STOCK = new ResourceLocation("minestuck", "gameplay/consort_food");
 	public static final int ORE_COST_MULTIPLIER = 1;
 	
 	private static HashMap<List<Object>, Object> recipeList;
@@ -866,6 +868,9 @@ public class AlchemyRecipeHandler
 		//CombinationRegistry.addCombination(new ItemStack(beverage, 1, 2), new ItemStack(Items.DYE, 1, 9), MODE_AND, true, true, new ItemStack(beverage, 1, 8));				//Peach F
 		//CombinationRegistry.addCombination(new ItemStack(beverage, 1, 1), new ItemStack(Blocks.TNT), MODE_OR, true, false, new ItemStack(beverage, 1, 9));					//Redpop F
 		
+		ConsortRewardHandler.registerPrice(new ItemStack(onion), 4, 7);
+		ConsortRewardHandler.registerPrice(new ItemStack(jarOfBugs), 5, 10);
+		ConsortRewardHandler.registerPrice(new ItemStack(grasshopper), 10, 15);
 		//Register chest loot
 		LootConditionManager.registerCondition(new LandAspectLootCondition.Serializer());
 		LootConditionManager.registerCondition(new ConsortLootCondition.Serializer());

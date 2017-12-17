@@ -1,0 +1,25 @@
+{
+    "pools": [
+        {
+            "rolls": 4,
+            "name":"main",
+            "entries": [
+                {
+                    "type": "item",
+                    "name": "minestuck:onion",
+                    "weight": 8
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:jar_of_bugs",
+                    "weight": 8
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:grasshopper",
+                    "weight": 8
+                }
+            ]
+        }
+    ]
+}

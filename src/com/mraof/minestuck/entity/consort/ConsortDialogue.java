@@ -12,7 +12,6 @@ import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
 import java.util.*;
@@ -215,7 +214,7 @@ public class ConsortDialogue
 																new SingleMessage("hungry.finally"))),
 														new SingleMessage("hungry.end") }) })));
 		
-		addMessage(true, EnumConsort.MerchantType.FOOD, new MerchantGuiMessage(new SingleMessage("buyFood"), new ResourceLocation("minestuck", "")));
+		addMessage(true, EnumConsort.MerchantType.FOOD, new MerchantGuiMessage(new SingleMessage("buyFood"), AlchemyRecipeHandler.CONSORT_FOOD_STOCK));
 	}
 	
 	public static void addMessage(MessageType message, String... args)
