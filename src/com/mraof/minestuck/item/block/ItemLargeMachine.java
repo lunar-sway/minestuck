@@ -68,7 +68,8 @@ public class ItemLargeMachine extends ItemBlock
             for(int x = 0; x<Xlength; x++){
             	for (int y=0;y<Yheight;y++){
             		for (int z=0; z<Zwidth;z++){
-            			if (!worldIn.isAirBlock(pos.offset( enumfacing.rotateY() , x ).offset(enumfacing,z).up(y))){
+            			System.out.println();
+            			if (!worldIn.mayPlace(getBlock(), pos.offset( enumfacing.rotateY() , x ).offset(enumfacing,z).up(y), false, EnumFacing.UP, player)){
             					
             				return EnumActionResult.FAIL;
             			}

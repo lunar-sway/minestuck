@@ -1,5 +1,6 @@
 {
 	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
+	"ambientocclusion": false,
 	"textures": {
 		"0": "minestuck:machines/alchemiter/untitled",
 		"2": "minestuck:machines/alchemiter/untitled6",
@@ -19,7 +20,8 @@
 				"west": {"uv": [0, 0, 16, 9.25], "texture": "#5"},
 				"up": {"uv": [0, 0, 16, 9.25], "texture": "#5"},
 				"down": {"uv": [0, 0, 16, 9.25], "texture": "#5"}
-			}
+			},
+			"type": "cube"
 		},
 		{
 			"name": "BigTube4",
@@ -36,7 +38,8 @@
 					"rotation": 90
 				},
 				"down": {"uv": [0, 0, 7, 2.5], "texture": "#0"}
-			}
+			},
+			"type": "cube"
 		},
 		{
 			"name": "Tube1",
@@ -44,12 +47,13 @@
 			"to": [9.5, 16, 13],
 			"faces": {
 				"north": {"uv": [0, 0, 16, 9.25], "texture": "#0"},
-				"east": {"uv": [0, 0, 3, 25], "texture": "#0"},
-				"south": {"uv": [0, 0, 3, 25], "texture": "#0"},
-				"west": {"uv": [0, 0, 3, 25], "texture": "#0"},
-				"up": {"uv": [0, 0, 3, 25], "texture": "#0"},
-				"down": {"uv": [0, 0, 3, 25], "texture": "#0"}
-			}
+				"east": {"uv": [0, 0, 3, 16], "texture": "#0"},
+				"south": {"uv": [0, 0, 3, 16], "texture": "#0"},
+				"west": {"uv": [0, 0, 3, 16], "texture": "#0"},
+				"up": {"uv": [0, 0, 3, 16], "texture": "#0"},
+				"down": {"uv": [0, 0, 3, 16], "texture": "#0"}
+			},
+			"type": "cube"
 		},
 		{
 			"name": "Tube9",
@@ -62,7 +66,8 @@
 				"west": {"uv": [0, 0, 1.5, 1.5], "texture": "#2"},
 				"up": {"uv": [0, 0, 1.5, 1.5], "texture": "#2"},
 				"down": {"uv": [0, 0, 1.5, 1.5], "texture": "#2"}
-			}
+			},
+			"type": "cube"
 		},
 		{
 			"name": "Tube10",
@@ -75,7 +80,8 @@
 				"west": {"uv": [0, 0, 1.5, 1.5], "texture": "#2"},
 				"up": {"uv": [0, 0, 1.5, 1.5], "texture": "#2"},
 				"down": {"uv": [0, 0, 1.5, 1.5], "texture": "#2"}
-			}
+			},
+			"type": "cube"
 		},
 		{
 			"name": "Tube11",
@@ -88,8 +94,8 @@
 				"west": {"uv": [0, 0, 1.5, 1.5], "texture": "#2"},
 				"up": {"uv": [0, 0, 1.5, 1.5], "texture": "#2"},
 				"down": {"uv": [0, 0, 1.5, 1.5], "texture": "#2"}
-			}
+			},
+			"type": "cube"
 		}
-	],
-	"groups": [0, 1, 2, 3, 4, 5]
+	]
 }
