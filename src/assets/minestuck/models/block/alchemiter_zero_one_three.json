@@ -1,5 +1,6 @@
 {
 	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
+	"ambientocclusion": false,
 	"textures": {
 		"0": "minestuck:machines/alchemiter/untitled",
 		"1": "minestuck:machines/alchemiter/alchemiter6",
@@ -13,12 +14,13 @@
 			"to": [16, 16, 16],
 			"faces": {
 				"north": {"uv": [0, 0, 16, 9.25], "texture": "#0"},
-				"east": {"uv": [0, 0, 44, 4], "texture": "#0"},
-				"south": {"uv": [0, 0, 44, 4], "texture": "#0"},
-				"west": {"uv": [0, 0, 44, 4], "texture": "#0"},
+				"east": {"uv": [0, 0, 16, 4], "texture": "#0"},
+				"south": {"uv": [0, 0, 16, 4], "texture": "#0"},
+				"west": {"uv": [0, 0, 16, 4], "texture": "#0"},
 				"up": {"uv": [15.5, 0, 16, 0.5], "texture": "#1"},
-				"down": {"uv": [0, 0, 44, 4], "texture": "#0"}
-			}
+				"down": {"uv": [0, 0, 16, 4], "texture": "#0"}
+			},
+			"type": "cube"
 		},
 		{
 			"name": "Base5",
@@ -26,12 +28,13 @@
 			"to": [16, 7, 16],
 			"faces": {
 				"north": {"uv": [0, 0, 16, 9.25], "texture": "#0"},
-				"east": {"uv": [0, 0, 64, 6], "texture": "#0"},
-				"south": {"uv": [0, 0, 64, 6], "texture": "#0"},
-				"west": {"uv": [0, 0, 64, 6], "texture": "#0"},
-				"up": {"uv": [0, 0, 64, 6], "texture": "#0"},
-				"down": {"uv": [0, 0, 64, 6], "texture": "#0"}
-			}
+				"east": {"uv": [0, 0, 16, 6], "texture": "#0"},
+				"south": {"uv": [0, 0, 16, 6], "texture": "#0"},
+				"west": {"uv": [0, 0, 16, 6], "texture": "#0"},
+				"up": {"uv": [0, 0, 16, 6], "texture": "#0"},
+				"down": {"uv": [0, 0, 16, 6], "texture": "#0"}
+			},
+			"type": "cube"
 		},
 		{
 			"name": "_&/3%6-7A",
@@ -39,12 +42,13 @@
 			"to": [16, 10.5, 16],
 			"faces": {
 				"north": {"uv": [0, 0, 16, 9.25], "texture": "#0"},
-				"east": {"uv": [0, 0, 52, 3.5], "texture": "#0"},
-				"south": {"uv": [0, 0, 52, 3.5], "texture": "#0"},
-				"west": {"uv": [0, 0, 52, 3.5], "texture": "#0"},
-				"up": {"uv": [0, 0, 52, 3.5], "texture": "#0"},
-				"down": {"uv": [0, 0, 52, 3.5], "texture": "#0"}
-			}
+				"east": {"uv": [0, 0, 16, 3.5], "texture": "#0"},
+				"south": {"uv": [0, 0, 16, 3.5], "texture": "#0"},
+				"west": {"uv": [0, 0, 16, 3.5], "texture": "#0"},
+				"up": {"uv": [0, 0, 16, 3.5], "texture": "#0"},
+				"down": {"uv": [0, 0, 16, 3.5], "texture": "#0"}
+			},
+			"type": "cube"
 		},
 		{
 			"name": "Base6",
@@ -52,12 +56,13 @@
 			"to": [16, 11, 16],
 			"faces": {
 				"north": {"uv": [0, 0, 16, 9.25], "texture": "#0"},
-				"east": {"uv": [0, 0, 50, 0.5], "texture": "#0"},
-				"south": {"uv": [0, 0, 50, 0.5], "texture": "#0"},
-				"west": {"uv": [0, 0, 50, 0.5], "texture": "#0"},
-				"up": {"uv": [0, 0, 50, 0.5], "texture": "#0"},
-				"down": {"uv": [0, 0, 50, 0.5], "texture": "#0"}
-			}
+				"east": {"uv": [0, 0, 16, 0.5], "texture": "#0"},
+				"south": {"uv": [0, 0, 16, 0.5], "texture": "#0"},
+				"west": {"uv": [0, 0, 16, 0.5], "texture": "#0"},
+				"up": {"uv": [0, 0, 16, 0.5], "texture": "#0"},
+				"down": {"uv": [0, 0, 16, 0.5], "texture": "#0"}
+			},
+			"type": "cube"
 		},
 		{
 			"name": "Plate2",
@@ -65,12 +70,13 @@
 			"to": [16, 12.5, 16],
 			"faces": {
 				"north": {"uv": [0, 0, 16, 9.25], "texture": "#0"},
-				"east": {"uv": [0, 0, 44, 1.5], "texture": "#0"},
-				"south": {"uv": [0, 0, 44, 1.5], "texture": "#0"},
-				"west": {"uv": [0, 0, 44, 1.5], "texture": "#0"},
-				"up": {"uv": [0, 0, 44, 1.5], "texture": "#0"},
-				"down": {"uv": [0, 0, 44, 1.5], "texture": "#0"}
-			}
+				"east": {"uv": [0, 0, 16, 1.5], "texture": "#0"},
+				"south": {"uv": [0, 0, 16, 1.5], "texture": "#0"},
+				"west": {"uv": [0, 0, 16, 1.5], "texture": "#0"},
+				"up": {"uv": [0, 0, 16, 1.5], "texture": "#0"},
+				"down": {"uv": [0, 0, 16, 1.5], "texture": "#0"}
+			},
+			"type": "cube"
 		},
 		{
 			"name": "Plate5",
@@ -83,8 +89,8 @@
 				"west": {"uv": [0, 0, 16, 9.25], "texture": "#5"},
 				"up": {"uv": [0, 0, 16, 9.25], "texture": "#5"},
 				"down": {"uv": [0, 0, 16, 9.25], "texture": "#5"}
-			}
+			},
+			"type": "cube"
 		}
-	],
-	"groups": [0, 1, 2, 3, 4, 5]
+	]
 }
