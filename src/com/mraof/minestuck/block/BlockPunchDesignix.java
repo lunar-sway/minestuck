@@ -5,16 +5,13 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -38,8 +35,6 @@ public class BlockPunchDesignix extends BlockLargeMachine
 		
 		return parts.BOUNDING_BOX[facing.getHorizontalIndex()];
 	}
-	
-
 	
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
@@ -67,22 +62,6 @@ public class BlockPunchDesignix extends BlockLargeMachine
 	}
 	
 	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
-	{
-
-		EnumFacing facing = EnumFacing.getHorizontal(MathHelper.floor((double)(placer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3).getOpposite();
-		state = state.withProperty(DIRECTION, facing);
-		if(!(worldIn.isRemote))
-		{
-			worldIn.setBlockState(pos, state.withProperty(PART, EnumParts.BOTTOM_LEFT));
-			worldIn.setBlockState(pos.offset(facing.rotateYCCW()), state.withProperty(PART, EnumParts.BOTTOM_RIGHT));
-			worldIn.setBlockState(pos.up(),state.withProperty(PART, EnumParts.TOP_LEFT));
-			worldIn.setBlockState(pos.up().offset(facing.rotateYCCW()), state.withProperty(PART, EnumParts.TOP_RIGHT));
-		}
-	}
-
-	
-	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
 	
@@ -99,13 +78,7 @@ public class BlockPunchDesignix extends BlockLargeMachine
 		super.breakBlock(worldIn, pos, state);
 	}
 	
-	
-	
-	
-	
 	//Block state handling
-	
-	
 	@Override
 	protected BlockStateContainer createBlockState()
 	{
