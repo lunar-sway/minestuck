@@ -53,7 +53,7 @@ public class BlockAlchemiter extends BlockLargeMachine
 	@Override
 	public boolean onBlockActivated(World worldIn,BlockPos pos,IBlockState state,EntityPlayer playerIn,EnumHand hand,EnumFacing facing,float hitX,float hitY,float hitZ)
 	{
-		BlockPos mainPos = getMainPos(state, pos);
+		BlockPos mainPos = getMainPos(state, pos, worldIn);
 		TileEntity te = worldIn.getTileEntity(mainPos);
 		if(!worldIn.isRemote && te != null && te instanceof TileEntityAlchemiter && !((TileEntityAlchemiter)te).isBroken())
 		{
@@ -106,7 +106,7 @@ public class BlockAlchemiter extends BlockLargeMachine
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
-		BlockPos mainPos=getMainPos(state,pos);
+		BlockPos mainPos=getMainPos(state,pos, worldIn);
 		TileEntity te = worldIn.getTileEntity(mainPos);
 		if (te instanceof TileEntityAlchemiter)
 		{
@@ -146,17 +146,32 @@ public class BlockAlchemiter extends BlockLargeMachine
      *returns the block position of the "Main" block
      *aka the block with the TileEntity for the machine
      */
-	public BlockPos getMainPos(IBlockState state, BlockPos pos)
+	public BlockPos getMainPos(IBlockState state, BlockPos pos, World world)
 	{
-		EnumParts part=state.getValue(this.PART);
+		return getMainPos(state, pos, world, 4);
+	}
+	public BlockPos getMainPos(IBlockState state, BlockPos pos, World world, int count)
+	{
+		EnumParts part = state.getValue(PART);
+		EnumFacing facing = state.getValue(DIRECTION);
 		switch(part)
 		{
-			case TOTEM_CORNER: return pos.north(0).down(0).east(0);
-			case TOTEM_PAD:	return pos.north(0).down(1).east(0);
-			case LOWER_ROD:return pos.north(0).down(2).east(0);
-			case UPPER_ROD:return pos.north(0).down(3).east(0);
+			case TOTEM_CORNER: return pos;
+			case TOTEM_PAD:	return pos.down(1);
+			case LOWER_ROD: return pos.down(2);
+			case UPPER_ROD: return pos.down(3);
+			default:
+				if(count == 0)	//Prevents potential recursion crashes
+					return new BlockPos(0, -1, 0);
+				if(part == EnumParts.CENTER_PAD)
+					pos = pos.offset(facing.rotateYCCW()).offset(facing.getOpposite());
+				else pos = pos.offset(facing.rotateYCCW(), part == EnumParts.EDGE_LEFT ? 1 : part == EnumParts.EDGE_RIGHT ? 2 : 3);
+				IBlockState newState = world.getBlockState(pos);
+				if(newState.equals(getBlockState(EnumParts.TOTEM_CORNER, facing))
+						|| newState.equals(getBlockState(EnumParts.CORNER, facing.rotateY())))
+					return ((BlockAlchemiter) newState.getBlock()).getMainPos(newState, pos, world, count - 1);
+				else return new BlockPos(0, -1, 0);
 		}
-		return pos;
 	}
 	
 	public static IBlockState getBlockState(EnumParts parts, EnumFacing direction)

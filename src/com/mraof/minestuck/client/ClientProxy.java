@@ -3,6 +3,7 @@ package com.mraof.minestuck.client;
 import com.mraof.minestuck.CommonProxy;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.model.*;
+import com.mraof.minestuck.client.renderer.RenderMachineOutline;
 import com.mraof.minestuck.client.renderer.entity.*;
 import com.mraof.minestuck.client.renderer.tileentity.RenderGate;
 import com.mraof.minestuck.client.renderer.tileentity.RenderSkaiaPortal;
@@ -175,5 +176,6 @@ public class ClientProxy extends CommonProxy
 	{
 		MinecraftForge.EVENT_BUS.register(ClientEditHandler.instance);
 		MinecraftForge.EVENT_BUS.register(new MinestuckConfig());
+		MinecraftForge.EVENT_BUS.register(RenderMachineOutline.class);
 	}
 }

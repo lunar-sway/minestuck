@@ -68,7 +68,7 @@ public class BlockTotemlathe extends BlockLargeMachine
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
 	{
 		
-		EnumFacing facing = EnumFacing.getHorizontal(MathHelper.floor((double)(placer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3).getOpposite();
+		EnumFacing facing = EnumFacing.getHorizontal(MathHelper.floor((double)(placer.rotationYaw * 4.0F / 360.0F) + 0.5D) + 2 & 3).getOpposite();
 		state = state.withProperty(DIRECTION, facing);
 		
 		if(!(worldIn.isRemote)){
