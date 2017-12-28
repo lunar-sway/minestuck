@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.BlockPunchDesignix;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -32,6 +33,7 @@ public class ItemPunchDesignix extends ItemBlock
 			return EnumActionResult.FAIL;
 		} else
 		{
+			Block block = worldIn.getBlockState(pos).getBlock();
 			boolean flag = block.isReplaceable(worldIn, pos);
 			
 			if (!flag)
@@ -60,7 +62,7 @@ public class ItemPunchDesignix extends ItemBlock
 		}
 	}
 	
-	public boolean canPlaceAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing facing)
+	public static boolean canPlaceAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing facing)
 	{
 		for (int x = 0; x < 2; x++)
 		{
@@ -68,7 +70,7 @@ public class ItemPunchDesignix extends ItemBlock
 				return false;
 			for (int y = 0; y < 2; y++)
 			{
-				if (!world.mayPlace(this.block, pos.offset(facing.rotateYCCW(), x).up(y), false, EnumFacing.UP, null))
+				if (!world.mayPlace(MinestuckBlocks.punchDesignix, pos.offset(facing.rotateYCCW(), x).up(y), false, EnumFacing.UP, null))
 					return false;
 			}
 		}
