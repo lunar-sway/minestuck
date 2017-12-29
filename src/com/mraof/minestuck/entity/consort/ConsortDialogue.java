@@ -17,6 +17,8 @@ import net.minecraft.util.text.ITextComponent;
 import java.util.*;
 
 import static com.mraof.minestuck.entity.consort.MessageType.*;
+import static com.mraof.minestuck.world.lands.LandAspectRegistry.fromNameTerrain;
+import static com.mraof.minestuck.world.lands.LandAspectRegistry.fromNameTitle;
 
 /**
  * Handles message registry, message selection and contains the main message
@@ -35,30 +37,57 @@ public class ConsortDialogue
 	public static void init()
 	{
 		
-		addMessage(LandAspectRegistry.fromNameTitle("wind"), "dadWind");
-		addMessage(LandAspectRegistry.fromNameTitle("pulse"), "koolaid");
-		addMessage(LandAspectRegistry.fromNameTitle("pulse"), "murderRain");
-		addMessage(LandAspectRegistry.fromNameTitle("thunder"), "skeletonHorse");
-		addMessage(LandAspectRegistry.fromNameTitle("thunder"), "blueMoon");
-		addMessage(LandAspectRegistry.fromNameTitle("rabbits"), "bunnyBirthday");
-		addMessage(LandAspectRegistry.fromNameTitle("rabbits"), "rabbitEating");
-		addMessage(null, Sets.newHashSet(LandAspectRegistry.fromNameTitle("monsters").getVariations()), null, null,
-				new SingleMessage("petZombie"));
-		addMessage(LandAspectRegistry.fromNameTitle("monsters"), "spiderRaid");
-		addMessage(LandAspectRegistry.fromNameTitle("towers"), "bugTreasure");
-		addMessage(LandAspectRegistry.fromNameTitle("towers"), "towerGone");
-		addMessage(LandAspectRegistry.fromNameTitle("thought"), "glassBooks");
-		addMessage(LandAspectRegistry.fromNameTitle("thought"), "bookFood");
-		addMessage(LandAspectRegistry.fromNameTitle("cake"), "cakeRecipe");
-		addMessage(LandAspectRegistry.fromNameTitle("cake"), "cakeRegen");
-		addMessage(LandAspectRegistry.fromNameTitle("clockwork"), "gearTechnology");
-		addMessage(LandAspectRegistry.fromNameTitle("clockwork"), "evilGears");
+		addMessage(fromNameTitle("wind"), "dadWind");
+		addMessage(fromNameTitle("wind"), new ChainMessage(new SingleMessage("pyre1"), new SingleMessage("pyre2")));
+		addMessage(fromNameTitle("pulse"), "koolaid");
+		addMessage(fromNameTitle("pulse"), "murderRain");
+		addMessage(fromNameTitle("pulse"), "swimming");
+		addMessage(fromNameTitle("thunder"), "skeletonHorse");
+		addMessage(fromNameTitle("thunder"), "blueMoon");
+		addMessage(fromNameTitle("thunder"), new ChainMessage(new SingleMessage("reckoning1"), new SingleMessage("reckoning2"), new SingleMessage("reckoning3", "consortType")));
+		addMessage(fromNameTitle("rabbits"), "bunnyBirthday");
+		addMessage(fromNameTitle("rabbits"), "rabbitEating");
+		addMessage(fromNameTitle("rabbits"), "edgyLifeHatred");
+		addMessage(fromNameTitle("monsters"), "petZombie");
+		addMessage(null, Sets.newHashSet(fromNameTitle("monsters")), null, null,
+				new SingleMessage("spiderRaid"));
+		addMessage(fromNameTitle("monsters"), "monstersona");
+		addMessage(fromNameTitle("towers"), "bugTreasure");
+		addMessage(fromNameTitle("towers"), "towerGone");
+		addMessage(fromNameTitle("towers"), "noTowerTreasure");
+		addMessage(fromNameTitle("thought"), "glassBooks");
+		addMessage(fromNameTitle("thought"), "bookFood");
+		addMessage(fromNameTitle("thought"), "toEat");
+		addMessage(fromNameTitle("cake"), "mysteryRecipe");
+		addMessage(fromNameTitle("cake"), "cakeRegen");
+		addMessage(fromNameTitle("cake"), "cakeRecipe");
+		addMessage(fromNameTitle("clockwork"), "gearTechnology");
+		addMessage(fromNameTitle("clockwork"), "evilGears");
+		addMessage(fromNameTitle("clockwork"), "ticking");
 		addMessage(LandAspectRegistry.frogAspect, "frogCreation");
 		addMessage(LandAspectRegistry.frogAspect, "frogImitation");
-		addMessage(LandAspectRegistry.fromNameTitle("light"), "blindness");
-		addMessage(LandAspectRegistry.fromNameTitle("light"), "doctorsInside");
-		addMessage(LandAspectRegistry.fromNameTitle("silence"), "murderSilence");
-		addMessage(LandAspectRegistry.fromNameTitle("silence"), "silentUnderlings");
+		addMessage(fromNameTitle("buckets"), "lewdBuckets");
+		addMessage(fromNameTitle("light"), "blindness");
+		addMessage(fromNameTitle("light"), "doctorsInside");
+		addMessage(fromNameTitle("light"), "staring");
+		addMessage(fromNameTitle("silence"), "murderSilence");
+		addMessage(fromNameTitle("silence"), "silentUnderlings");
+		addMessage(fromNameTitle("silence"), new ChainMessage(new SingleMessage("listening1"), new SingleMessage("listening2")));
+		
+		addMessage(fromNameTerrain("shade"),
+				new ChainMessage(2, new SingleMessage("mushFarm1"), new SingleMessage("mushFarm2"), new SingleMessage("mushFarm3"),
+						new SingleMessage("mushFarm4"), new SingleMessage("mushFarm5"), new SingleMessage("mushFarm6"),
+						new SingleMessage("mushFarm7")));
+		addMessage(fromNameTerrain("shade"), new ChoiceMessage(new SingleMessage("mushroomPizza"),
+				new SingleMessage[]{new SingleMessage("mushroomPizza.on"), new SingleMessage("mushroomPizza.off")},
+				new MessageType[]{new SingleMessage("mushroomPizza.on.consortReply"), new SingleMessage("mushroomPizza.off.consortReply")}));
+		addMessage(fromNameTerrain("heat"), "gettingHot");
+		addMessage(fromNameTerrain("wood"), "properFuneral");
+		addMessage(fromNameTerrain("sand"), "sandSurfing");
+		addMessage(fromNameTerrain("sandstone"), "knockoff");
+		addMessage(fromNameTitle("frost"), new ChainMessage(new SingleMessage("frozen1"), new DescriptionMessage("frozen2")));
+		addMessage(fromNameTerrain("rock"), "allOres");
+		addMessage(fromNameTerrain("forest"), "allTrees");
 		
 		addMessage(true, "denizenMention");
 		addMessage(true, "floatingIsland");
@@ -68,6 +97,8 @@ public class ConsortDialogue
 		//		addMessage("village"); Did not work as intended
 		addMessage(LandAspectRegistry.fromNameTerrain("shade"), "lazyKing");
 		addMessage("musicInvention");
+		addMessage("wyrm");
+		addMessage("heroicStench");
 		
 		MessageType raps = new RandomMessage("rapBattles", RandomKeepResult.KEEP_CONSORT,
 				new DelayMessage(new int[] {17, 17, 30},
@@ -116,10 +147,6 @@ public class ConsortDialogue
 		
 		addMessage(true, "awaitHero", "landName", "consortTypes", "playerTitleLand");
 		addMessage(true, "watchSkaia");
-		addMessage(LandAspectRegistry.fromNameTerrain("shade"),
-				new ChainMessage(2, new SingleMessage("mushFarm1"), new SingleMessage("mushFarm2"), new SingleMessage("mushFarm3"),
-						new SingleMessage("mushFarm4"), new SingleMessage("mushFarm5"), new SingleMessage("mushFarm6"),
-						new SingleMessage("mushFarm7")));
 
 		addMessage(EnumSet.of(EnumConsort.TURTLE), new SingleMessage("zazzerpan"));
 		addMessage(EnumSet.of(EnumConsort.SALAMANDER), new SingleMessage("texasHistory", "landName"));
@@ -255,26 +282,26 @@ public class ConsortDialogue
 	{
 		if(aspect == null)
 			Debug.warn("Land aspect is null for consort message " + message + ", this is probably not intended");
-		addMessage(aspect == null ? null : Sets.newHashSet(aspect), null, null, null, new SingleMessage(message, args));
+		addMessage(aspect == null ? null : Sets.newHashSet(aspect.getVariations()), null, null, null, new SingleMessage(message, args));
 	}
 	
 	public static void addMessage(TitleLandAspect aspect, String message, String... args)
 	{
-		addMessage(null, aspect == null ? null : Sets.newHashSet(aspect), null, null, new SingleMessage(message, args));
+		addMessage(null, aspect == null ? null : Sets.newHashSet(aspect.getVariations()), null, null, new SingleMessage(message, args));
 	}
 	
 	public static void addMessage(TerrainLandAspect aspect, MessageType message)
 	{
 		if(aspect == null)
 			Debug.warn("Land aspect is null for consort message " + message + ", this is probably not intended");
-		addMessage(aspect == null ? null : Sets.newHashSet(aspect), null, null, null, message);
+		addMessage(aspect == null ? null : Sets.newHashSet(aspect.getVariations()), null, null, null, message);
 	}
 	
 	public static void addMessage(TitleLandAspect aspect, MessageType message)
 	{
 		if(aspect == null)
 			Debug.warn("Land aspect is null for consort message " + message + ", this is probably not intended");
-		addMessage(null, aspect == null ? null : Sets.newHashSet(aspect), null, null, message);
+		addMessage(null, aspect == null ? null : Sets.newHashSet(aspect.getVariations()), null, null, message);
 	}
 	
 	public static void addMessage(Set<TerrainLandAspect> aspects1, Set<TitleLandAspect> aspects2, EnumSet<EnumConsort> consort,
