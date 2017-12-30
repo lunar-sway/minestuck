@@ -3,6 +3,7 @@ package com.mraof.minestuck.entity.consort;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
@@ -10,6 +11,7 @@ import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
@@ -29,7 +31,7 @@ import static com.mraof.minestuck.world.lands.LandAspectRegistry.fromNameTitle;
 public class ConsortDialogue
 {
 	
-	private static final List<ConditionedMessage> messages = new LinkedList<ConditionedMessage>();
+	private static final List<DialogueWrapper> messages = new LinkedList<DialogueWrapper>();
 	
 	/**
 	 * Make sure to call after land registry
@@ -98,7 +100,9 @@ public class ConsortDialogue
 		addMessage(LandAspectRegistry.fromNameTerrain("shade"), "lazyKing");
 		addMessage("musicInvention");
 		addMessage("wyrm");
-		addMessage("heroicStench");
+		addMessage(true, new ConditionedMessage(new SingleMessage("heroicStench"), new SingleMessage("leechStench"),
+				(EntityConsort consort, EntityPlayer player) -> SburbHandler.hasEntered((EntityPlayerMP) player)));
+		addMessage(Sets.newHashSet(fromNameTerrain("heat")), Sets.newHashSet(fromNameTitle("cake")), null, null, new SingleMessage("fireCakes"));
 		
 		MessageType raps = new RandomMessage("rapBattles", RandomKeepResult.KEEP_CONSORT,
 				new DelayMessage(new int[] {17, 17, 30},
@@ -257,6 +261,11 @@ public class ConsortDialogue
 		addMessage(reqLand, null, null, new SingleMessage(message, args));
 	}
 	
+	public static void addMessage(boolean reqLand, MessageType message)
+	{
+		addMessage(reqLand, null, null, message);
+	}
+	
 	public static void addMessage(boolean reqLand, EnumConsort.MerchantType merchantType, MessageType message)
 	{
 		addMessage(reqLand, null, EnumSet.of(merchantType), message);
@@ -270,8 +279,8 @@ public class ConsortDialogue
 	public static void addMessage(boolean reqLand, EnumSet<EnumConsort> consort, EnumSet<EnumConsort.MerchantType> merchantTypes,
 			MessageType message)
 	{
-		ConditionedMessage msg = new ConditionedMessage();
-		msg.messageType = message;
+		DialogueWrapper msg = new DialogueWrapper();
+		msg.messageStart = message;
 		msg.reqLand = reqLand;
 		msg.consortRequirement = consort;
 		msg.merchantRequirement = merchantTypes;
@@ -307,8 +316,8 @@ public class ConsortDialogue
 	public static void addMessage(Set<TerrainLandAspect> aspects1, Set<TitleLandAspect> aspects2, EnumSet<EnumConsort> consort,
 			EnumSet<EnumConsort.MerchantType> merchantTypes, MessageType message)
 	{
-		ConditionedMessage msg = new ConditionedMessage();
-		msg.messageType = message;
+		DialogueWrapper msg = new DialogueWrapper();
+		msg.messageStart = message;
 		msg.reqLand = true;
 		msg.aspect1Requirement = aspects1;
 		msg.aspect2Requirement = aspects2;
@@ -317,13 +326,13 @@ public class ConsortDialogue
 		messages.add(msg);
 	}
 	
-	public static ConditionedMessage getRandomMessage(EntityConsort consort, EntityPlayer player)
+	public static DialogueWrapper getRandomMessage(EntityConsort consort, EntityPlayer player)
 	{
 		LandAspectRegistry.AspectCombination aspects = MinestuckDimensionHandler.getAspects(consort.homeDimension);
 		
-		List<ConditionedMessage> list = new ArrayList<ConditionedMessage>();
+		List<DialogueWrapper> list = new ArrayList<DialogueWrapper>();
 		
-		for(ConditionedMessage message : messages)
+		for(DialogueWrapper message : messages)
 		{
 			if(message.reqLand && aspects == null)
 				continue;
@@ -342,23 +351,23 @@ public class ConsortDialogue
 		return list.get(consort.world.rand.nextInt(list.size()));
 	}
 	
-	public static ConditionedMessage getMessageFromString(String name)
+	public static DialogueWrapper getMessageFromString(String name)
 	{
-		for(ConditionedMessage message : messages)
+		for(DialogueWrapper message : messages)
 			if(message.getString().equals(name))
 				return message;
 		return null;
 	}
 	
-	public static class ConditionedMessage
+	public static class DialogueWrapper
 	{
-		private ConditionedMessage()
+		private DialogueWrapper()
 		{
 		}
 		
 		private boolean reqLand;
 		
-		private MessageType messageType;
+		private MessageType messageStart;
 		
 		private Set<TerrainLandAspect> aspect1Requirement;
 		private Set<TitleLandAspect> aspect2Requirement;
@@ -368,17 +377,17 @@ public class ConsortDialogue
 		
 		public ITextComponent getMessage(EntityConsort consort, EntityPlayer player)
 		{
-			return messageType.getMessage(consort, player, "");
+			return messageStart.getMessage(consort, player, "");
 		}
 		
 		public ITextComponent getFromChain(EntityConsort consort, EntityPlayer player, String fromChain)
 		{
-			return messageType.getFromChain(consort, player, "", fromChain);
+			return messageStart.getFromChain(consort, player, "", fromChain);
 		}
 		
 		public String getString()
 		{
-			return messageType.getString();
+			return messageStart.getString();
 		}
 	}
 }

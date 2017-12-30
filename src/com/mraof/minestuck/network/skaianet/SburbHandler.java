@@ -662,6 +662,13 @@ public class SburbHandler
 				return false;
 		return true;
 	}
+	
+	public static boolean hasEntered(EntityPlayerMP player)
+	{
+		PlayerIdentifier identifier = IdentifierHandler.encode(player);
+		SburbConnection c = SkaianetHandler.getMainConnection(identifier, true);
+		return c != null && c.enteredGame();
+	}
 
 	static void onConnectionCreated(SburbConnection c)
 	{

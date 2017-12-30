@@ -121,7 +121,8 @@ consort.toEat=To eat, or not to eat, that is the question.
 
 consort.mysteryRecipe=All of the villagers here are trying to crack the mystery of how to make the frosted bread we see all day on our walks.
 consort.cakeRegen=I heard all the cakes magically regenerate if you don't completely eat them! That's completely stupid!
-consort.cakeRecipe=Let's see, the recipe calls for 5 tbsp. of sugar, 2 tbsp. vanilla, 1 large grasshopper… what are you looking at?
+consort.cakeRecipe=Let's see, the recipe calls for 5 tbsp. of sugar, 2 tbsp. vanilla, 1 large grasshopper... what are you looking at?
+consort.fireCakes=If you're not careful, anything can set you on fire here, even the cakes!
 
 consort.gearTechnology=Legends say the giant gears were used for technology no consort has ever seen before. That's absurd! It's obviously food!
 consort.evilGears=My neighbor says the gears are evil! He also said that swords are used for combat, so he's probably insane.
@@ -137,7 +138,7 @@ consort.staring=Are you staring at me? No, really! I can't see because I'm blind
 
 consort.murderSilence=This is a great place for murder. No one will hear you scream.
 consort.silentUnderlings=This place is so quiet and peaceful. Too bad we can't hear underlings about to kill us.
-consort.listening1=Shhh, they can hear you…
+consort.listening1=Shhh, they can hear you...
 consort.listening2=Just kidding, no one can hear you! The land itself muffles your words!
 
 consort.mushFarm1=Someone's gotta be farmin' all these goddamn fuckin' mushrooms, pain in the ass through truly it be.
@@ -221,6 +222,7 @@ consort.lazyKing=I feel like our king just sits around doing nothing but eating 
 consort.musicInvention=I invented music, y'kno! My favorite song goes like ba ba dum, dum ba dum.
 consort.wyrm=Legends speak of the Wyrm, a giant ivory pillar that radiates joy and happiness and uselessness.
 consort.heroicStench=You smell kind of... heroic... like a hero, perhaps? It makes me kinda nervous to be around you!
+consort.leechStench=You smell like you're leeching from the success from another hero... is this true?
 
 consort.rapBattle=I challenge you to a rap battle! Accept challenge? Y/N
 consort.rapBattle.accept=Accept this consort's challenge!
