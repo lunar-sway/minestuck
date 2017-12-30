@@ -235,15 +235,13 @@
                 {
                     "entryName": "cocoa_beans",
                     "type": "item",
-                    "name": "minestuck:dye",
+                    "name": "minecraft:dye",
                     "weight": 3,
                     "quality": 0,
                     "functions": [
                         {
                             "function": "set_data",
-                            "damage": {
-                                "data": 3
-                            }
+                            "data": 3
                         }
                     ]
                 },
