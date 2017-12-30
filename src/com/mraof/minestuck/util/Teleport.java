@@ -50,6 +50,18 @@ public class Teleport
 		{
 			PlayerList playerList = mcServer.getPlayerList();
 			EntityPlayerMP player = (EntityPlayerMP) entity;
+			
+			if(teleporter != null)
+			{
+				if(teleporter.prepareDestination(new BlockPos(x, y, z), entity, worldFrom))
+				{
+					teleporter.finalizeDestination(entity, worldFrom, worldDest);
+				} else
+				{
+					return false;
+				}
+			}
+			
 			try
 			{
 				setPortalInvincibilityWithReflection(player);
@@ -65,9 +77,8 @@ public class Teleport
 			worldFrom.removeEntityDangerously(player);
 			player.isDead = false;
 			
-			player.setPosition(x, y, z);
-			if(teleporter != null)
-				teleporter.makeDestination(player, worldFrom, worldDest);
+			//player.setPosition(x, y, z);
+			
 			worldDest.spawnEntity(player);
 			worldDest.updateEntityWithOptionalForce(entity, false);
 			player.setWorld(worldDest);
@@ -103,7 +114,15 @@ public class Teleport
 			entity.writeToNBT(nbt);
 			
 			if(teleporter != null)
-				teleporter.makeDestination(entity, worldFrom, worldDest);
+			{
+				if(teleporter.prepareDestination(new BlockPos(x, y, z), entity, worldFrom))
+				{
+					teleporter.finalizeDestination(entity, worldFrom, worldDest);
+				} else
+				{
+					return false;
+				}
+			}
 			worldDest.updateEntityWithOptionalForce(entity, false);
 			
 			nbt.removeTag("Dimension");
@@ -151,9 +170,17 @@ public class Teleport
 //			player.connection.sendPacket(respawnPacket);
 //			playerList.updatePermissionLevel(player);
 			
-			player.setPosition(x, y, z);
 			if(teleporter != null)
-				teleporter.makeDestination(player, world, world);
+			{
+				if (teleporter.prepareDestination(new BlockPos(x, y, z), entity, world))
+				{
+					teleporter.finalizeDestination(entity, world, world);
+				} else
+				{
+					return false;
+				}
+			}
+			player.setPosition(x, y, z);
 //			world.updateEntityWithOptionalForce(entity, false);
 			
 //			playerList.preparePlayer(player, world);
@@ -165,10 +192,18 @@ public class Teleport
 			return true;
 		} else if(!entity.isDead)
 		{
-			entity.setPosition(x, y, z);
 			if(teleporter != null)
-				teleporter.makeDestination(entity, (WorldServer) entity.world, (WorldServer) entity.world);
+			{
+				if (teleporter.prepareDestination(new BlockPos(x, y, z), entity, (WorldServer) entity.world))
+				{
+					teleporter.finalizeDestination(entity, (WorldServer) entity.world, (WorldServer) entity.world);
+				} else
+				{
+					return false;
+				}
+			}
 			
+			entity.setPosition(x, y, z);
 			return true;
 		}
 		
@@ -196,7 +231,8 @@ public class Teleport
 	
 	public interface ITeleporter
 	{
-		void makeDestination(Entity entity, WorldServer worldserver, WorldServer worldserver1);
+		boolean prepareDestination(BlockPos pos, Entity entity, WorldServer worldserver);
+		void finalizeDestination(Entity entity, WorldServer worldserver, WorldServer worldserver1);
 	}
 	
 }
