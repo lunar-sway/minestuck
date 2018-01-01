@@ -286,8 +286,11 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 									worldserver1.setTileEntity(pos1, te1);
 									if(tileEntity instanceof TileEntityComputer)
 										SkaianetHandler.movingComputer((TileEntityComputer) tileEntity, (TileEntityComputer) te1);
-								}
-								if(isEdgeX || isEdgeZ || blockY == minY || blockY == maxY-1)
+
+									try {
+										worldserver0.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
+									} catch (NullPointerException e) {e.printStackTrace();}
+								} else if(isEdgeX || isEdgeZ || blockY == minY || blockY == maxY-1)
 								{
 									worldserver0.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 								} else

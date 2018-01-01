@@ -172,7 +172,7 @@ public class BlockSburbMachine extends BlockContainer
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
 		TileEntityMachine te = (TileEntityMachine) worldIn.getTileEntity(pos);
-		InventoryHelper.dropInventoryItems(worldIn, pos, te);
+		if(te != null) InventoryHelper.dropInventoryItems(worldIn, pos, te);
 		
 		super.breakBlock(worldIn, pos, state);
 	}
