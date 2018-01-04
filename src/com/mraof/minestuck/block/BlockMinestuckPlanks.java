@@ -1,8 +1,11 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.item.MinestuckItems;
-import net.minecraft.block.BlockLog;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -16,30 +19,30 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
-public class BlockMinestuckLog extends BlockLog
+public class BlockMinestuckPlanks extends Block
 {
 	public static final PropertyEnum<BlockType> VARIANT = PropertyEnum.create("variant", BlockType.class);
 	
-	public BlockMinestuckLog()
+	public BlockMinestuckPlanks()
 	{
-		super();
+		super(Material.WOOD);
 		setCreativeTab(MinestuckItems.tabMinestuck);
-		setDefaultState(blockState.getBaseState().withProperty(VARIANT, BlockType.VINE_OAK).withProperty(LOG_AXIS, BlockLog.EnumAxis.Y));
-		setUnlocalizedName("logMinestuck");
+		setDefaultState(blockState.getBaseState().withProperty(VARIANT, BlockType.VINE_OAK));
+		setUnlocalizedName("planksMinestuck");
+		this.setHardness(2.0F);
+		this.setSoundType(SoundType.WOOD);
 	}
 	
 	@Override
 	protected BlockStateContainer createBlockState()
 	{
-		return new BlockStateContainer(this, new IProperty[] {VARIANT, LOG_AXIS});
+		return new BlockStateContainer(this, new IProperty[] {VARIANT});
 	}
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta)
 	{
-		IBlockState iblockstate = this.getDefaultState().withProperty(VARIANT, BlockType.values()[meta&3]);
-		iblockstate = iblockstate.withProperty(LOG_AXIS, BlockLog.EnumAxis.values()[(meta>>2)&3]);
-		
+		IBlockState iblockstate = this.getDefaultState().withProperty(VARIANT, BlockType.values()[meta]);
 		return iblockstate;
 	}
 	
@@ -47,9 +50,6 @@ public class BlockMinestuckLog extends BlockLog
 	public int getMetaFromState(IBlockState state)
 	{
 		int i = state.getValue(VARIANT).ordinal();
-		
-		i |= state.getValue(LOG_AXIS).ordinal()<<2;
-		
 		return i;
 	}
 	
@@ -57,9 +57,7 @@ public class BlockMinestuckLog extends BlockLog
 	public MapColor getMapColor(IBlockState state, IBlockAccess worldIn, BlockPos pos)
 	{
 		BlockType type = state.getValue(VARIANT);
-		if(state.getValue(LOG_AXIS).equals(EnumAxis.Y))
-			return type.topColor;
-		else return type.sideColor;
+		return type.color;
 	}
 	
 	@Override
@@ -95,21 +93,32 @@ public class BlockMinestuckLog extends BlockLog
 	
 	public enum BlockType implements IStringSerializable
 	{
-		VINE_OAK("vine_oak", "vineOak", MapColor.WOOD, MapColor.OBSIDIAN),
-		FLOWERY_VINE_OAK("flowery_vine_oak", "floweryVineOak", MapColor.WOOD, MapColor.OBSIDIAN),
-		FROST("frost", "frost", MapColor.ICE, MapColor.ICE),
-		RAINBOW("rainbow", "rainbow", MapColor.WOOD, MapColor.WOOD);
+		ASPECT_BLOOD("aspect_blood", "aspectBlood", MapColor.WOOD),
+		ASPECT_BREATH("aspect_breath", "aspectBreath", MapColor.WOOD),
+		ASPECT_DOOM("aspect_doom", "aspectDoom", MapColor.WOOD),
+		ASPECT_HEART("aspect_heart", "aspectHeart", MapColor.WOOD),
+		ASPECT_HOPE("aspect_hope", "aspectHope", MapColor.WOOD),
+		ASPECT_LIFE("aspect_life", "aspectLife", MapColor.WOOD),
+		ASPECT_LIGHT("aspect_light", "aspectLight", MapColor.WOOD),
+		ASPECT_MIND("aspect_mind", "aspectMind", MapColor.WOOD),
+		ASPECT_RAGE("aspect_rage", "aspectRage", MapColor.WOOD),
+		ASPECT_SPACE("aspect_space", "aspectSpace", MapColor.WOOD),
+		ASPECT_TIME("aspect_time", "aspectTime", MapColor.WOOD),
+		ASPECT_VOID("aspect_void", "aspectVoid", MapColor.WOOD),
+		VINE_OAK("vine_oak", "vineOak", MapColor.WOOD),
+		FLOWERY_VINE_OAK("flowery_vine_oak", "floweryVineOak", MapColor.WOOD),
+		FROST("frost", "frost", MapColor.WOOD),
+		RAINBOW("rainbow", "rainbow", MapColor.WOOD);
 		
 		private final String name;
 		private final String unlocalizedName;
-		private final MapColor topColor, sideColor;
+		private final MapColor color;
 		
-		BlockType(String name, String unlocalizedName, MapColor topColor, MapColor sideColor)
+		BlockType(String name, String unlocalizedName, MapColor color)
 		{
 			this.name = name;
 			this.unlocalizedName = unlocalizedName;
-			this.topColor = topColor;
-			this.sideColor = sideColor;
+			this.color = color;
 		}
 		
 		@Override

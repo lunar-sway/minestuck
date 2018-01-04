@@ -96,7 +96,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 					if(!Teleport.teleportEntity(player, destinationId, this))
 					{
 						Debug.warn("Was not able to teleport player "+player.getName()+" into the medium! Might be caused by mod collision.");
-						player.sendMessage(new TextComponentString("Your Entry was unsuccessful! Is there a block nearby you don't have permissions to move?"));
+						player.sendMessage(new TextComponentString("Your Entry was unsuccessful! If no explanation was given, this might be a mod collision."));
 					}
 					else MinestuckPlayerTracker.sendLandEntryMessage(player);
 				}
@@ -155,13 +155,13 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 						}
 						else if(!creative && (gotBlock == Blocks.COMMAND_BLOCK || gotBlock == Blocks.CHAIN_COMMAND_BLOCK || gotBlock == Blocks.REPEATING_COMMAND_BLOCK))
 						{
-							((EntityPlayerMP) player).sendStatusMessage(new TextComponentString("You are not allowed to move command blocks; Entry failed"), false);
+							((EntityPlayerMP) player).sendStatusMessage(new TextComponentString("You are not allowed to move command blocks."), false);
 							return false;
 						} else if(gotBlock == MinestuckBlocks.blockComputerOn)
 						{
 							if(((TileEntityComputer)te).owner.getPlayer() != player)
 							{
-								((EntityPlayerMP) player).sendStatusMessage(new TextComponentString("You are not allowed to move other players' computers; Entry failed"), false);
+								((EntityPlayerMP) player).sendStatusMessage(new TextComponentString("You are not allowed to move other players' computers."), false);
 								return false;
 							} else
 							{
@@ -182,6 +182,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 			
 			if(foundComputer == false && MinestuckConfig.needComputer)
 			{
+				((EntityPlayerMP) player).sendStatusMessage(new TextComponentString("You need to bring your computer if you want to play Sburb!"), false);
 				return false;
 			}
 			
