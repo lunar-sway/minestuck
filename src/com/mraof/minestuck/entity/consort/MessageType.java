@@ -3,6 +3,7 @@ package com.mraof.minestuck.entity.consort;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.inventory.ContainerConsortMerchant;
+import com.mraof.minestuck.inventory.InventoryConsortMerchant;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
@@ -1097,16 +1098,16 @@ public abstract class MessageType
 		@Override
 		public ITextComponent getMessage(EntityConsort consort, EntityPlayer player, String chainIdentifier)
 		{
-			if(consort.stock == null)
+			if(consort.stocks == null)
 			{
-				consort.stock = ConsortRewardHandler.generateStock(lootTable, consort, consort.world.rand);
+				consort.stocks = new InventoryConsortMerchant(consort, ConsortRewardHandler.generateStock(lootTable, consort, consort.world.rand));
 			}
 			
 			player.openGui(Minestuck.instance, GuiHandler.GuiId.MERCHANT.ordinal(), player.world, (int) consort.posX, (int) consort.posY, (int) consort.posZ);
 			
 			if(player.openContainer instanceof ContainerConsortMerchant)
 			{
-				((ContainerConsortMerchant) player.openContainer).setConsort(consort);
+				((ContainerConsortMerchant) player.openContainer).setInventory(consort.stocks);
 			}
 			
 			return initMessage.getMessage(consort, player, chainIdentifier);

@@ -1,56 +1,45 @@
 package com.mraof.minestuck.inventory;
 
-import com.mraof.minestuck.entity.consort.EntityConsort;
-import com.mraof.minestuck.entity.consort.EnumConsort;
-import com.mraof.minestuck.util.Pair;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerConsortMerchant extends Container
 {
-	private final InventoryConsortMerchant inventory;
+	public InventoryConsortMerchant inventory;
 	
 	private EntityPlayer player;
-	private EntityConsort consort;
-	public EnumConsort consortType;
-	public EnumConsort.MerchantType merchantType;
-	public int[] prices = new int[9];
+	
+	public ContainerConsortMerchant(EntityPlayer player, InventoryConsortMerchant inv)
+	{
+		this(player);
+		setInventory(inv);
+	}
 	
 	public ContainerConsortMerchant(EntityPlayer player)
 	{
-		inventory = new InventoryConsortMerchant();
 		this.player = player;
+	}
+	
+	public void setInventory(InventoryConsortMerchant inv)
+	{
+		inventory = inv;
 		
 		for(int i = 0; i < 9; i++)
 			this.addSlotToContainer(new SlotConsortMerchant(inventory, i, 17 + 35*(i%3), 35 + 33*(i/3)));
+		
+		for(IContainerListener listener : this.listeners)
+			listener.sendAllWindowProperties(this, inventory);
 	}
 	
-	public void setConsort(EntityConsort consort)
+	@Override
+	public void addListener(IContainerListener listener)
 	{
-		this.consort = consort;
-		consortType = consort.getConsortType();
-		merchantType = consort.merchantType;
-		
-		for(int i = 0; i < consort.stock.size(); i++)
-		{
-			Pair<ItemStack, Integer> item = consort.stock.get(i);
-			inventory.setInventorySlotContents(i, item.object1);
-			prices[i] = item.object2;
-			for(IContainerListener listener : listeners)
-			{
-				listener.sendWindowProperty(this, i, item.object2);	//Kinda inefficient when it comes to packages
-			}
-		}
-		
-		for(IContainerListener listener : listeners)
-		{
-			listener.sendWindowProperty(this, -1, consortType.ordinal());
-			listener.sendWindowProperty(this, -2, merchantType.ordinal());
-		}
+		super.addListener(listener);
+		if(inventory != null)
+			listener.sendAllWindowProperties(this, inventory);
 	}
 	
 	@Override
@@ -63,11 +52,6 @@ public class ContainerConsortMerchant extends Container
 	@Override
 	public void updateProgressBar(int id, int data)
 	{
-		if(id == -1)
-			consortType = EnumConsort.values()[data % EnumConsort.values().length];
-		else if(id == -2)
-			merchantType = EnumConsort.MerchantType.values()[data % EnumConsort.MerchantType.values().length];
-		else if(id >= 0 && id < 9)
-			prices[id] = data;
+		inventory.setField(id, data);
 	}
 }

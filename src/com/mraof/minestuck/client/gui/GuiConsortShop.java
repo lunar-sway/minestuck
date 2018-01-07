@@ -1,21 +1,24 @@
 package com.mraof.minestuck.client.gui;
 
+import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
 import com.mraof.minestuck.inventory.ContainerConsortMerchant;
+import com.mraof.minestuck.inventory.InventoryConsortMerchant;
+import com.mraof.minestuck.util.MinestuckPlayerData;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiConsortShop extends GuiContainer //It probably doesn't even need to be a container to achieve this result
+public class GuiConsortShop extends GuiContainer
 {
 	private ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/consort_shop.png");
 	private ResourceLocation portrait;
-	public ContainerConsortMerchant container;
+	public InventoryConsortMerchant inv;
 	
 	public GuiConsortShop(EntityPlayer player)
 	{
-		super(new ContainerConsortMerchant(player));
-		container = (ContainerConsortMerchant) this.inventorySlots;
+		super(new ContainerConsortMerchant(player, new InventoryConsortMerchant()));
+		inv = ((ContainerConsortMerchant) this.inventorySlots).inventory;
 		xSize = 192;
 		ySize = 137;
 	}
@@ -23,12 +26,12 @@ public class GuiConsortShop extends GuiContainer //It probably doesn't even need
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
 	{
-		if(container.consortType == null || container.merchantType == null)
+		if(inv.getConsortType() == null || inv.getMerchantType() == null)
 			return;
 		
 		if(portrait == null)
 			portrait = new ResourceLocation("minestuck",
-					"textures/gui/store/"+container.consortType.name().toLowerCase()+"_"+container.merchantType.name().toLowerCase()+".png");
+					"textures/gui/store/"+inv.getConsortType().name().toLowerCase()+"_"+inv.getMerchantType().name().toLowerCase()+".png");
 		
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		
@@ -40,11 +43,17 @@ public class GuiConsortShop extends GuiContainer //It probably doesn't even need
 		this.mc.getTextureManager().bindTexture(portrait);
 		drawModalRectWithCustomSizedTexture(x+119, y+40, 0, 0, 64, 64, 64, 64);
 		
-		for(int i = 0; i < container.prices.length; i++)
+		this.mc.getTextureManager().bindTexture(GuiPlayerStats.icons);
+		this.drawTexturedModalRect(x + 5, y + 7, 238, 16, 18, 18);
+		
+		mc.fontRenderer.drawString(String.valueOf(MinestuckPlayerData.boondollars), x + 25, y + 12, 0x0094FF);
+		
+		for (int i = 0; i < 9; i++)
 		{
-			if(container.getSlot(i).getStack().isEmpty())
+			int price = inv.getField(i + 2);
+			if (price == 0 || inv.getStackInSlot(i).isEmpty())
 				continue;
-			String cost = String.valueOf(container.prices[i])+"£";
+			String cost = String.valueOf(price)+"£";
 			mc.fontRenderer.drawString(cost, x + 25 - mc.fontRenderer.getStringWidth(cost)/2 + 35*(i%3), y + 54 + 33*(i/3), 0x000000);
 		}
 	}
