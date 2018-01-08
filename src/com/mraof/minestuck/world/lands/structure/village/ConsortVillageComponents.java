@@ -411,7 +411,7 @@ public class ConsortVillageComponents
 					consort.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 					
 					consort.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(consort)), null);
-					//TODO More preparations, such as home location or set merchant by parameter
+					//TODO More preparations, such as home location or set type by parameter
 					world.spawnEntity(consort);
 				} catch(Exception e)
 				{

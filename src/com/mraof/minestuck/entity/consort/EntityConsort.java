@@ -134,7 +134,7 @@ public abstract class EntityConsort extends EntityMinestuck
 			compound.setTag("messageData", messageData);
 		}
 		
-		compound.setInteger("merchant", merchantType.ordinal());
+		compound.setInteger("type", merchantType.ordinal());
 		compound.setInteger("homeDim", homeDimension);
 		
 		if(merchantType != EnumConsort.MerchantType.NONE && stocks != null)
@@ -155,7 +155,7 @@ public abstract class EntityConsort extends EntityMinestuck
 			messageData = compound.getCompoundTag("messageData");
 		}
 		
-		merchantType = EnumConsort.MerchantType.values()[MathHelper.clamp(compound.getInteger("merchant"), 0, EnumConsort.MerchantType.values().length - 1)];
+		merchantType = EnumConsort.MerchantType.values()[MathHelper.clamp(compound.getInteger("type"), 0, EnumConsort.MerchantType.values().length - 1)];
 		
 		if(compound.hasKey("homeDim", 99))
 			homeDimension = compound.getInteger("homeDim");

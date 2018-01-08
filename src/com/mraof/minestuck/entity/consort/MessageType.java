@@ -108,7 +108,7 @@ public abstract class MessageType
 			} else if(args[i].equals("consortSound"))
 			{
 				obj[i] = new TextComponentTranslation("consort.sound." + s);
-			} else if(args[i].equals("consortType"))
+			} else if(args[i].equals("consort"))
 			{
 				obj[i] = new TextComponentTranslation("entity." + s + ".name");
 			} else if(args[i].equals("consortTypes"))
@@ -1074,15 +1074,15 @@ public abstract class MessageType
 	public static class MerchantGuiMessage extends MessageType
 	{
 		protected String nbtName;
-		protected SingleMessage initMessage;
+		protected MessageType initMessage;
 		protected ResourceLocation lootTable;
 		
-		public MerchantGuiMessage(SingleMessage message, ResourceLocation location)
+		public MerchantGuiMessage(MessageType message, ResourceLocation location)
 		{
 			this(message.getString(), message, location);
 		}
 		
-		public MerchantGuiMessage(String name, SingleMessage message, ResourceLocation location)
+		public MerchantGuiMessage(String name, MessageType message, ResourceLocation location)
 		{
 			nbtName = name;
 			initMessage = message;
