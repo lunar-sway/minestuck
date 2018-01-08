@@ -4,7 +4,6 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.*;
 import com.mraof.minestuck.item.ItemMetalBoat;
 import com.mraof.minestuck.item.ItemMinestuckBeverage;
-import com.mraof.minestuck.item.ItemMinestuckCandy;
 import com.mraof.minestuck.item.ItemModus;
 import com.mraof.minestuck.item.weapon.ItemDualWeapon;
 import com.mraof.minestuck.util.GristType;
@@ -252,6 +251,11 @@ public class MinestuckModelManager
 			register(log, type.ordinal(), type.getName()+"_log");
 		register(woodenCactus);
 		register(sugarCube);
+		register(appleCake);
+		register(blueCake);
+		register(coldCake);
+		register(redCake);
+		register(hotCake);
 		
 		register(primedTnt);
 		register(unstableTnt);

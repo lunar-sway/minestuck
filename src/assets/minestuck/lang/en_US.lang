@@ -90,28 +90,87 @@ consort.dots=...
 consort.sadface=:(
 
 consort.dadWind=My dad was blown away in one of the recent wind storms.
+consort.pyre1=If only I was faster than the wind! That would be fun!
+consort.pyre2=Actually, nevermind. I would be burned on a pyre for being a witch due to our primal society.
+
 consort.koolaid=Some people say the oceans of blood are actually kool-aid. I'm too scared to taste it for myself.
 consort.murderRain=You don't want to know what it's like to be outside when it rains. You can't tell who's a murderer or who forgot an umbrella!
+consort.swimming=If you're looking for a good land to swim in, it's definitely not this one.
+
 consort.skeletonHorse=Some people say at night, skeletons riding skeleton horses come through the town.
 consort.blueMoon=Every once in a blue moon, lightning strikes and burns down the village. We have to rebuild it!
+consort.reckoning1=Those darn doomsayers, preaching about the Apocalypse and The Reckoning and such!
+consort.reckoning2=What's The Reckoning? It's when meteors from The Veil are sent towards Skaia.
+consort.reckoning3=Like any reasonable %s believes in that!
+
 consort.bunnyBirthday=Our daughter wants a bunny for her birthday, even though she caught six in the past three hours.
 consort.rabbitEating=One time our village ran out of food and we tried eating rabbits. It was a dark period in our village history.
+consort.edgyLifeHatred=This place is just so full of life! I despise it.
+
 consort.petZombie=I've heard moaning coming from our son's bedroom. I found out he's keeping a pet zombie in there! Tamed it n' everything!
 consort.spiderRaid=A few giant spiders raided our village last night, taking all of our bugs! Those monsters...
+consort.monstersona=What's your monster-sona? Mine is a zombie.
+
 consort.bugTreasure=Legends say underneath the tower to the north is a Captain Lizardtail's buried treasure! Literal tons of bugs, they say!
 consort.towerGone=That tower over there was built by my great grandpa Fjorgenheimer! You can tell by how its about to fall apa- oh it fell apart.
+consort.noTowerTreasure=I feel ripped off. I was born in a land full of magical towers but none of them have treasure!
+
 consort.glassBooks=Our smartest villager read all the books in the library and now knows how to make glass jars! He's a gift from the big frog above!
 consort.bookFood=We ate all the books in the nearby college ruins. It turns out thousand-year-old leather doesn't make the best dinner.
-consort.cakeRecipe=All of the villagers here are trying to crack the mystery of how to make the frosted bread we see all day on our walks.
+consort.toEat=To eat, or not to eat, that is the question.
+
+consort.mysteryRecipe=All of the villagers here are trying to crack the mystery of how to make the frosted bread we see all day on our walks.
 consort.cakeRegen=I heard all the cakes magically regenerate if you don't completely eat them! That's completely stupid!
+consort.cakeRecipe=Let's see, the recipe calls for 5 tbsp. of sugar, 2 tbsp. vanilla, 1 large grasshopper... what are you looking at?
+consort.fireCakes=If you're not careful, anything can set you on fire here, even the cakes!
+
 consort.gearTechnology=Legends say the giant gears were used for technology no consort has ever seen before. That's absurd! It's obviously food!
 consort.evilGears=My neighbor says the gears are evil! He also said that swords are used for combat, so he's probably insane.
+consort.ticking=The ticking keeps me up all night. It keeps us all up all night. Save us.
+
 consort.frogCreation=We are thankful for all the frogs that They gave to us when the universe was created. They, of course, is the genesis frog. I feel bad for the fool who has to make another!
 consort.frogImitation=Ribbit, ribbit! I'm a frog! I don't care what you say!
+consort.lewdBuckets=Some may call our land lewd, but the buckets are just so fun to swim in!
+
 consort.blindness=God, it's bright. Half of our village is blind. It's beginning to become a serious problem.
 consort.doctorsInside=Our best village doctors found that staying outside in the blinding light for too long is not good for us. Most of us stay inside all our lives. It's sad.
+consort.staring=Are you staring at me? No, really! I can't see because I'm blind.
+
 consort.murderSilence=This is a great place for murder. No one will hear you scream.
 consort.silentUnderlings=This place is so quiet and peaceful. Too bad we can't hear underlings about to kill us.
+consort.listening1=Shhh, they can hear you...
+consort.listening2=Just kidding, no one can hear you! The land itself muffles your words!
+
+consort.mushFarm1=Someone's gotta be farmin' all these goddamn fuckin' mushrooms, pain in the ass through truly it be.
+consort.mushFarm2=So that's what I'm doing.
+consort.mushFarm3=Standing around here.
+consort.mushFarm4=farmin' all these
+consort.mushFarm5=goddamn
+consort.mushFarm6=fuckin
+consort.mushFarm7=mushrooms
+consort.mushroomPizza=Do you put glow mushrooms on your pizza or leave them off?
+consort.mushroomPizza.on=Put them on
+consort.mushroomPizza.on.reply=I put them on!
+consort.mushroomPizza.on.consortReply=Good! I was afraid I'd have to kill you!
+consort.mushroomPizza.off=Leave them off
+consort.mushroomPizza.off.reply=I leave them off!
+consort.mushroomPizza.off.consortReply=You are a despicable person.
+
+consort.gettingHot=Is it getting hot in here or is it just me?
+
+consort.properFuneral=Good thing we settled our village on our own pyre! If lightning strikes, we would already have a proper funeral!
+
+consort.sandSurfing=Sand-surfing is my new favorite sport! Too bad you can't really move, though.
+
+consort.knockoff=I kind of feel like we're a stale, knockoff sand land.
+
+consort.frozen1=My neighbors were complaining the other night about the snow.
+consort.frozen2=Personally, the cold never really bothered me anyways.
+consort.frozen2.desc=You hear a faint “ba-dum tss” in the distance.
+
+consort.allOres=Jokes on the losers in other lands, we have ALL the resources! All of them!
+
+consort.allTrees=Jokes on the losers in other lands, we have ALL the trees! All of them!
 
 consort.zazzerpan=Old wizard Zazzerpan would be turning in his grave if he saw the horrors that walk these lands. Those giclopses sure are terrifying!
 consort.texasHistory=The place was %s, the year, was 20XX.
@@ -127,7 +186,7 @@ consort.whoops=Beware the man who speaks in hands, wait...wrong game.
 consort.fourthWall=Maybe you should do something more productive than talking to NPCs.
 
 consort.hats=I like crumpled hats, they're comfy and easy to wear!
-consort.cult1=We would love to invite you, %s of %s, to our secret wizards cult.
+consort.cult1=We would love to invite you, %s, to our secret wizards cult.
 consort.cult2=Meet me by dawn with mercury, salt, and sulfur to begin the initiation.
 consort.wwizard=Secret wizards? Th-there are no secret wizards! Wh-what're you speaking of, o-outlandish traveller?
 consort.stockMarket=I bought a bunch of stocks on the market... Now I'm broke...
@@ -161,6 +220,9 @@ consort.frogWalk=Frog, it's such a wonderful day to just walk around a village.
 consort.deliciousHair=Holy leapin' god, you have such wonderful hair! Can I eat some?
 consort.lazyKing=I feel like our king just sits around doing nothing but eating weird glowing mushrooms! So lazy!
 consort.musicInvention=I invented music, y'kno! My favorite song goes like ba ba dum, dum ba dum.
+consort.wyrm=Legends speak of the Wyrm, a giant ivory pillar that radiates joy and happiness and uselessness.
+consort.heroicStench=You smell kind of... heroic... like a hero, perhaps? It makes me kinda nervous to be around you!
+consort.leechStench=You smell like you're leeching from the success from another hero... is this true?
 
 consort.rapBattle=I challenge you to a rap battle! Accept challenge? Y/N
 consort.rapBattle.accept=Accept this consort's challenge!
@@ -208,13 +270,6 @@ consort.sound.minestuck.turtle=...
 
 consort.awaitHero=Here, in the %s, we %s worship the %s. We wait and hope for the day that they awaken.
 consort.watchSkaia=Sometimes, I look up in the sky to see Skaia and wish I could visit there some day...
-consort.mushFarm1=Someone's gotta be farmin' all these goddamn fuckin' mushrooms, pain in the ass through truly it be.
-consort.mushFarm2=So that's what I'm doing.
-consort.mushFarm3=Standing around here.
-consort.mushFarm4=farmin' all these
-consort.mushFarm5=goddamn
-consort.mushFarm6=fuckin
-consort.mushFarm7=mushrooms
 consort.titlePresence=I sense the presence of the %s. Tell me if you see them, ok?
 consort.titlePresence.iam=Present yourself as the %s.
 consort.titlePresence.iam.reply=I am the %s.
@@ -871,6 +926,11 @@ tile.logMinestuck.floweryVineOak.name=Flowery Vine Oak Logs
 tile.logMinestuck.frost.name=Frost Logs
 tile.woodenCactus.name=Wooden Cactus
 tile.sugarCube.name=Sugar Cube
+tile.appleCake.name=Apple Cake
+tile.blueCake.name=Blue Cake
+tile.coldCake.name=Really Cold Cake
+tile.redCake.name=Red Cake
+tile.hotCake.name=Really Hot Cake
 tile.primedTnt.name=Primed TNT
 tile.unstableTnt.name=Unstable TNT
 tile.instantTnt.name=Instant TNT

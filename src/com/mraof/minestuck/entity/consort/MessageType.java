@@ -419,6 +419,53 @@ public abstract class MessageType
 		}
 	}
 	
+	public static class ConditionedMessage extends MessageType
+	{
+		String nbtName;
+		Condition condition;
+		MessageType message1, message2;
+		
+		public ConditionedMessage(MessageType message1, MessageType message2, Condition condition)
+		{
+			this(message1.getString(), message1, message2, condition);
+		}
+		
+		public ConditionedMessage(String nbtName, MessageType message1, MessageType message2, Condition condition)
+		{
+			this.nbtName = nbtName;
+			this.condition = condition;
+			this.message1 = message1;
+			this.message2 = message2;
+		}
+		
+		@Override
+		public String getString()
+		{
+			return nbtName;
+		}
+		
+		@Override
+		public ITextComponent getMessage(EntityConsort consort, EntityPlayer player, String chainIdentifier)
+		{
+			if (condition.testFor(consort, player))
+				return message1.getMessage(consort, player, chainIdentifier);
+			else return message2.getMessage(consort, player, chainIdentifier);
+		}
+		
+		@Override
+		public ITextComponent getFromChain(EntityConsort consort, EntityPlayer player, String chainIdentifier, String fromChain)
+		{
+			if (condition.testFor(consort, player))
+				return message1.getFromChain(consort, player, chainIdentifier, fromChain);
+			else return message2.getFromChain(consort, player, chainIdentifier, fromChain);
+		}
+		
+		public interface Condition
+		{
+			boolean testFor(EntityConsort consort, EntityPlayer player);
+		}
+	}
+	
 	//This class functions like a chain message, except that it will select a single entry randomly each time, instead of looping.
 	public static class RandomMessage extends MessageType
 	{
