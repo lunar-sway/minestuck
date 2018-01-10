@@ -83,13 +83,24 @@ public class ConsortDialogue
 		addMessage(fromNameTerrain("shade"), new ChoiceMessage(new SingleMessage("mushroomPizza"),
 				new SingleMessage[]{new SingleMessage("mushroomPizza.on"), new SingleMessage("mushroomPizza.off")},
 				new MessageType[]{new SingleMessage("mushroomPizza.on.consortReply"), new SingleMessage("mushroomPizza.off.consortReply")}));
+		addMessage(Sets.newHashSet(fromNameTerrain("shade")), allExcept(fromNameTitle("thunder")), null, null, new SingleMessage("fireHazard"));
 		addMessage(fromNameTerrain("heat"), "gettingHot");
+		addMessage(fromNameTerrain("heat"), "lavaCrickets");
 		addMessage(fromNameTerrain("wood"), "properFuneral");
+		addMessage(fromNameTerrain("wood"), new ChainMessage(new SingleMessage("splinters1"), new SingleMessage("splinters2")));
 		addMessage(fromNameTerrain("sand"), "sandSurfing");
+		addMessage(fromNameTerrain("sand"), new ChoiceMessage(new SingleMessage("camel"), new SingleMessage[]{new SingleMessage("camel.yes"), new SingleMessage("camel.no")},
+				new MessageType[]{new SingleMessage("camel.noCamel"), new SingleMessage("camel.dancingCamel")}));
 		addMessage(fromNameTerrain("sandstone"), "knockoff");
-		addMessage(fromNameTitle("frost"), new ChainMessage(new SingleMessage("frozen1"), new DescriptionMessage("frozen2")));
+		addMessage(fromNameTerrain("sandstone"), new ChainMessage(new SingleMessage("sandless1", "denizen"), new SingleMessage("sandless2")));
+		addMessage(fromNameTerrain("frost"), new ChainMessage(new SingleMessage("frozen1"), new DescriptionMessage("frozen2")));
+		addMessage(fromNameTerrain("frost"), new ChoiceMessage(new SingleMessage("furCoat"), new SingleMessage[]{new SingleMessage("furCoat.pay"), new SingleMessage("furCoat.ignore")},
+				new MessageType[]{new PurchaseMessage(AlchemyRecipeHandler.CONSORT_JUNK_REWARD, 100, new ChainMessage(1, new SingleMessage("furCoat.grattitude"), new SingleMessage("thankYou"))),
+						new SingleMessage("furCoat.death")}));
 		addMessage(fromNameTerrain("rock"), "allOres");
+		addMessage(fromNameTerrain("rock"), "rockfu", "landName");
 		addMessage(fromNameTerrain("forest"), "allTrees");
+		addMessage(fromNameTerrain("forest"), "reallyLikesTrees");
 		
 		addMessage(true, "denizenMention");
 		addMessage(true, "floatingIsland");
@@ -324,6 +335,19 @@ public class ConsortDialogue
 		msg.consortRequirement = consort;
 		msg.merchantRequirement = merchantTypes;
 		messages.add(msg);
+	}
+	
+	public static Set<TitleLandAspect> allExcept(TitleLandAspect... aspects)
+	{
+		Set<TitleLandAspect> set = new HashSet<>();
+		names: for (String name : LandAspectRegistry.getNamesTitle())
+		{
+			for (TitleLandAspect aspect : aspects)
+				if (aspect.getPrimaryName().equals(name))
+					continue names;
+			set.add(LandAspectRegistry.fromNameTitle(name));
+		}
+		return set;
 	}
 	
 	public static DialogueWrapper getRandomMessage(EntityConsort consort, EntityPlayer player)

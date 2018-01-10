@@ -86,6 +86,7 @@ computer.clientSessionFull=Client player's session is full
 consort.cantAfford=You don't have enough boondollars for that!
 consort.missingItem=You need a %s for that!
 consort.thanks=Thanks!
+consort.thankYou=Thank you!
 consort.dots=...
 consort.sadface=:(
 
@@ -155,22 +156,44 @@ consort.mushroomPizza.on.consortReply=Good! I was afraid I'd have to kill you!
 consort.mushroomPizza.off=Leave them off
 consort.mushroomPizza.off.reply=I leave them off!
 consort.mushroomPizza.off.consortReply=You are a despicable person.
+consort.fireHazard=Our land is a fire waiting to happen! Hopefully there isn't any lightning!
 
 consort.gettingHot=Is it getting hot in here or is it just me?
+consort.lavaCrickets=Have you ever had a lava-roasted cricket? The lava really brings out the cricket juices.
 
 consort.properFuneral=Good thing we settled our village on our own pyre! If lightning strikes, we would already have a proper funeral!
+consort.splinters1=Be careful not to walk barefoot here, you could get a splinter!
+consort.splinters2=Some of our kind have died due to the amount of splinters they received while on a walk.
 
 consort.sandSurfing=Sand-surfing is my new favorite sport! Too bad you can't really move, though.
+consort.camel=Want to buy a used camel? Only 2000 boondollars.
+consort.camel.yes=Why not? Seems like a good price for a camel!
+consort.camel.yes.reply=Sure!
+consort.camel.noCamel=Hahaha! Sucker! I have no camel! Cya later! 8)
+consort.camel.no=Of course not! You know better!
+consort.camel.no.reply=Not at all!
+consort.camel.dancingCamel=Are you sure? Too bad! The camel knew how to dance, too!
 
 consort.knockoff=I kind of feel like we're a stale, knockoff sand land.
+consort.sandless1=According to legend, %s ate all the sand here leaving nothing but sandstone!
+consort.sandless2=I'm kidding, I made that up on the spot. I had no other dialogue.
 
 consort.frozen1=My neighbors were complaining the other night about the snow.
 consort.frozen2=Personally, the cold never really bothered me anyways.
 consort.frozen2.desc=You hear a faint “ba-dum tss” in the distance.
+consort.furCoat=Darn! I only need 100 more boondollars for a nice, fur coat! I’m going to freeze!
+consort.furCoat.pay=Give them the boondollars [Pay 100 boondollars]
+consort.furCoat.pay.reply=Here you go!
+consort.furCoat.grattitude=Oh, thank you! Now I won't freeze to death out here! Take this as a token of gratitude!
+consort.furCoat.ignore=Don't give them any of your hard-earned boondollars!
+consort.furCoat.ignore.reply=Sorry, but I can't help you.
+consort.furCoat.death=I guess I'll just die then...
 
 consort.allOres=Jokes on the losers in other lands, we have ALL the resources! All of them!
+consort.rockfu=Here in %s, we practice rock-fu! Learn the way of the rock to CRUSH your enemies into a fine rock powder!
 
 consort.allTrees=Jokes on the losers in other lands, we have ALL the trees! All of them!
+consort.reallyLikesTrees=Do you like trees? I really like trees. I am one with the tree. Trees. TREES. TREEEES!
 
 consort.zazzerpan=Old wizard Zazzerpan would be turning in his grave if he saw the horrors that walk these lands. Those giclopses sure are terrifying!
 consort.texasHistory=The place was %s, the year, was 20XX.
