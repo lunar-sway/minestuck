@@ -139,7 +139,7 @@ public class TileEntityComputer extends TileEntity
 		if(id == -1)
 		{
 			IBlockState state = world.getBlockState(pos);
-			return state.getBlock() == MinestuckBlocks.blockComputerOn ? (Boolean) state.getValue(BlockComputerOn.BSOD) : false;
+			return state.getBlock() instanceof BlockComputerOn ? (Boolean) state.getValue(BlockComputerOn.BSOD) : false;
 		}
 		return installedPrograms.get(id) == null ? false:installedPrograms.get(id);
 	}

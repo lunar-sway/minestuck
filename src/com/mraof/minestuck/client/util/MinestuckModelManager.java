@@ -248,8 +248,29 @@ public class MinestuckModelManager
 		register(shadeBrickStairs);
 		register(frostBrickStairs);
 		register(castIronStairs);
+		
+		register(endLog);
 		for(BlockMinestuckLog.BlockType type : BlockMinestuckLog.BlockType.values())
 			register(log, type.ordinal(), type.getName()+"_log");
+
+		for(BlockMinestuckPlanks.BlockType type : BlockMinestuckPlanks.BlockType.values())
+			register(planks, type.ordinal(), type.getName()+"_planks");
+		for(BlockMinestuckLeaves1.BlockType type : BlockMinestuckLeaves1.BlockType.values())
+			register(leaves1, type.ordinal(), type.getName()+"_leaves");
+		
+		for(BlockAspectSapling.BlockType type : BlockAspectSapling.BlockType.values())
+			register(aspectSapling, type.ordinal(), type.getName()+"_sapling");
+		
+		for(BlockAspectLog.BlockType type : BlockAspectLog.BlockType.values())
+			register(aspectLog1, type.ordinal(), type.getName()+"_log");
+		for(BlockAspectLog2.BlockType type : BlockAspectLog2.BlockType.values())
+			register(aspectLog2, type.ordinal(), type.getName()+"_log");
+		for(BlockAspectLog3.BlockType type : BlockAspectLog3.BlockType.values())
+			register(aspectLog3, type.ordinal(), type.getName()+"_log");
+		
+		for(BlockVanityLaptopOff.BlockType type : BlockVanityLaptopOff.BlockType.values())
+			register(blockLaptopOff, type.ordinal(), type.getName()+"_computer");
+		
 		register(woodenCactus);
 		register(sugarCube);
 		
@@ -268,6 +289,11 @@ public class MinestuckModelManager
 		ModelLoader.setCustomStateMapper(unstableTnt, (new StateMap.Builder()).ignore(BlockTNT.EXPLODE).build());
 		ModelLoader.setCustomStateMapper(instantTnt, (new StateMap.Builder()).ignore(BlockTNT.EXPLODE).build());
 		ModelLoader.setCustomStateMapper(log, (new StateMap.Builder()).withName(BlockMinestuckLog.VARIANT).withSuffix("_log").build());
+		ModelLoader.setCustomStateMapper(leaves1, (new StateMap.Builder()).withName(BlockMinestuckLeaves1.VARIANT).withSuffix("_leaves").build());
+		ModelLoader.setCustomStateMapper(aspectSapling, (new StateMap.Builder()).withName(BlockAspectSapling.VARIANT).withSuffix("_sapling").build());
+		ModelLoader.setCustomStateMapper(aspectLog1, (new StateMap.Builder()).withName(BlockAspectLog.VARIANT).withSuffix("_log").build());
+		ModelLoader.setCustomStateMapper(aspectLog2, (new StateMap.Builder()).withName(BlockAspectLog2.VARIANT).withSuffix("_log").build());
+		ModelLoader.setCustomStateMapper(aspectLog3, (new StateMap.Builder()).withName(BlockAspectLog3.VARIANT).withSuffix("_log").build());
 		ModelLoader.setCustomStateMapper(woodenCactus, new StateMap.Builder().ignore(BlockCactus.AGE).build());
 		ModelLoader.setCustomStateMapper(returnNode, (Block block) -> Collections.emptyMap());
 		ModelLoader.setCustomStateMapper(gate, (Block block) -> Collections.emptyMap());

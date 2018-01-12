@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "axis=y":  { "model": "minestuck:aspect_void_log" },
+        "axis=z":   { "model": "minestuck:aspect_void_log", "x": 90 },
+        "axis=x":   { "model": "minestuck:aspect_void_log", "x": 90, "y": 90 },
+        "axis=none": { "model": "minestuck:aspect_void_log_bark" }
+    }
+}

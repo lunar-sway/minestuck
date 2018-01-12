@@ -2,8 +2,12 @@ package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.block.BlockColoredDirt;
 import com.mraof.minestuck.block.BlockCrockerMachine;
+import com.mraof.minestuck.block.BlockMinestuckLeaves;
+import com.mraof.minestuck.block.BlockMinestuckLeaves1;
 import com.mraof.minestuck.block.BlockMinestuckLog;
+import com.mraof.minestuck.block.BlockMinestuckPlanks;
 import com.mraof.minestuck.block.BlockMinestuckStone;
+import com.mraof.minestuck.block.BlockVanityLaptopOff;
 import com.mraof.minestuck.entity.item.EntityCrewPoster;
 import com.mraof.minestuck.entity.item.EntitySbahjPoster;
 import com.mraof.minestuck.item.block.ItemBlockCraftingTab;
@@ -29,6 +33,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import static com.mraof.minestuck.block.MinestuckBlocks.*;
+
+import com.mraof.minestuck.block.BlockAspectLog;
+import com.mraof.minestuck.block.BlockAspectLog2;
+import com.mraof.minestuck.block.BlockAspectLog3;
+import com.mraof.minestuck.block.BlockAspectSapling;
 
 public class MinestuckItems
 {
@@ -227,8 +236,29 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlockCraftingTab(shadeBrickStairs, CreativeTabs.BUILDING_BLOCKS));
 		registerItemBlock(registry, new ItemBlockCraftingTab(frostBrickStairs, CreativeTabs.BUILDING_BLOCKS));
 		registerItemBlock(registry, new ItemBlockCraftingTab(castIronStairs, CreativeTabs.BUILDING_BLOCKS));
+		
+		registerItemBlock(registry, new ItemBlock(endLog));
 		registerItemBlock(registry, new ItemMultiTexture(log, log,
 				(ItemStack input) -> BlockMinestuckLog.BlockType.values()[input.getItemDamage() % BlockMinestuckLog.BlockType.values().length].getUnlocalizedName()));
+		
+		registerItemBlock(registry, new ItemMultiTexture(leaves1, leaves1,
+				(ItemStack input) -> BlockMinestuckLeaves1.BlockType.values()[input.getItemDamage() % BlockMinestuckLeaves1.BlockType.values().length].getUnlocalizedName()));
+		registerItemBlock(registry, new ItemMultiTexture(planks, planks,
+				(ItemStack input) -> BlockMinestuckPlanks.BlockType.values()[input.getItemDamage() % BlockMinestuckPlanks.BlockType.values().length].getUnlocalizedName()));
+
+		registerItemBlock(registry, new ItemMultiTexture(aspectSapling, aspectSapling,
+				(ItemStack input) -> BlockAspectSapling.BlockType.values()[input.getItemDamage() % BlockAspectSapling.BlockType.values().length].getUnlocalizedName()));
+		
+		registerItemBlock(registry, new ItemMultiTexture(aspectLog1, aspectLog1,
+				(ItemStack input) -> BlockAspectLog.BlockType.values()[input.getItemDamage() % BlockAspectLog.BlockType.values().length].getUnlocalizedName()));
+		registerItemBlock(registry, new ItemMultiTexture(aspectLog2, aspectLog2,
+				(ItemStack input) -> BlockAspectLog2.BlockType.values()[input.getItemDamage() % BlockAspectLog2.BlockType.values().length].getUnlocalizedName()));
+		registerItemBlock(registry, new ItemMultiTexture(aspectLog3, aspectLog3,
+				(ItemStack input) -> BlockAspectLog3.BlockType.values()[input.getItemDamage() % BlockAspectLog3.BlockType.values().length].getUnlocalizedName()));
+		
+		registerItemBlock(registry, new ItemMultiTexture(blockLaptopOff, blockLaptopOff,
+				(ItemStack input) -> BlockVanityLaptopOff.BlockType.values()[input.getItemDamage() % BlockVanityLaptopOff.BlockType.values().length].getUnlocalizedName()));
+		
 		registerItemBlock(registry, new ItemBlock(woodenCactus));
 		registerItemBlock(registry, new ItemBlock(sugarCube));
 		
