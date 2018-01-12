@@ -1,20 +1,26 @@
 package com.mraof.minestuck.tileentity;
 
+import static com.mraof.minestuck.block.BlockPunchDesignix.DIRECTION;
+import static com.mraof.minestuck.block.BlockPunchDesignix.PART;
+
+import com.mraof.minestuck.block.BlockPunchDesignix;
+import com.mraof.minestuck.block.BlockPunchDesignix.EnumParts;
 import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.CombinationRegistry;
 import com.mraof.minestuck.util.Debug;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-
-import static com.mraof.minestuck.block.BlockPunchDesignix.*;
 
 public class TileEntityPunchDesignix extends TileEntity
 {
@@ -22,7 +28,13 @@ public class TileEntityPunchDesignix extends TileEntity
 	protected ItemStack card = ItemStack.EMPTY;
 	//constructor
 	public TileEntityPunchDesignix() {}
-	
+	//setters&getters
+	void setCard(ItemStack Card){
+		if (Card.getItem()==MinestuckItems.captchaCard||Card.isEmpty()) {
+			this.card=Card;
+			resendState();
+		}
+	}	
 	public ItemStack getCard()
 	{
 		return card;
@@ -38,7 +50,7 @@ public class TileEntityPunchDesignix extends TileEntity
 			else if(!player.inventory.addItemStackToInventory(card))
 				dropItem(false);
 			
-			card = ItemStack.EMPTY;
+			setCard(ItemStack.EMPTY);
 			return;
 		}
 		
@@ -48,7 +60,7 @@ public class TileEntityPunchDesignix extends TileEntity
 			if(part.equals(EnumParts.TOP_LEFT) && card.isEmpty())
 			{
 				if(!heldStack.isEmpty() && heldStack.getItem() == MinestuckItems.captchaCard)
-					card = heldStack.splitStack(1);	//Insert card into the punch slot
+					setCard(heldStack.splitStack(1));	//Insert card into the punch slot
 				
 			} else if(part.equals(EnumParts.TOP_RIGHT))
 			{
@@ -66,14 +78,15 @@ public class TileEntityPunchDesignix extends TileEntity
 							output = CombinationRegistry.getCombination(output, AlchemyRecipeHandler.getDecodedItem(card), CombinationRegistry.MODE_OR);
 							if(!output.isEmpty())
 							{
-								card = AlchemyRecipeHandler.createCard(output, true);
+								setCard(AlchemyRecipeHandler.createCard(output, true));
 								effects(true);
 								return;
 							}
 						} else	//Just punch the card regularly
 						{
-							card = AlchemyRecipeHandler.createCard(output, true);
+							setCard(AlchemyRecipeHandler.createCard(output, true));
 							effects(true);
+
 							return;
 						}
 					}
@@ -127,7 +140,7 @@ public class TileEntityPunchDesignix extends TileEntity
 		else dropPos = this.pos;
 		
 		InventoryHelper.spawnItemStack(world, dropPos.getX(), dropPos.getY(), dropPos.getZ(), card);
-		card = ItemStack.EMPTY;
+		setCard(ItemStack.EMPTY);
 	}
 	
 	@Override
@@ -136,7 +149,9 @@ public class TileEntityPunchDesignix extends TileEntity
 		super.readFromNBT(tagCompound);
 		this.broken = tagCompound.getBoolean("broken");
 		this.card = new ItemStack(tagCompound.getCompoundTag("card"));
+
 	}
+
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound)
@@ -145,5 +160,36 @@ public class TileEntityPunchDesignix extends TileEntity
 		tagCompound.setBoolean("broken", this.broken);
 		tagCompound.setTag("card", card.writeToNBT(new NBTTagCompound()));
 		return tagCompound;
+	}
+	//my interpritation on kirderf's addition
+	@Override
+	public NBTTagCompound getUpdateTag(){
+		NBTTagCompound nbt;
+		nbt = super.getUpdateTag();
+		nbt.setTag("card",card.writeToNBT(new NBTTagCompound()));
+//		card.writeToNBT(nbt);
+		return nbt;
+	}
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		SPacketUpdateTileEntity packet;
+		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setTag("card",card.writeToNBT(new NBTTagCompound()));
+		card.writeToNBT(nbt);
+		packet = new SPacketUpdateTileEntity(this.pos, 0, nbt);				
+		return packet;
+	}
+	
+	
+	//my interpretation on ben's addition 
+	public void resendState()
+	{
+		if(card.isEmpty())
+		{
+			BlockPunchDesignix.updateItem(false, world, this.getPos());
+		} else
+		{
+			BlockPunchDesignix.updateItem(true, world, this.getPos());
+		}
 	}
 }

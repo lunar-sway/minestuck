@@ -64,7 +64,7 @@ public class BlockCrockerMachine extends BlockContainer
 		setUnlocalizedName("crockerMachine");
 		setHardness(3.0F);
 		setHarvestLevel("pickaxe", 0);
-		setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.SOUTH).withProperty(HAS_ITEM, false));
+		setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.SOUTH));
 		this.setCreativeTab(MinestuckItems.tabMinestuck);
 	}
 	

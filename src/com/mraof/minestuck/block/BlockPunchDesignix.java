@@ -1,6 +1,10 @@
 package com.mraof.minestuck.block;
 
+import java.util.Random;
+
 import com.mraof.minestuck.tileentity.TileEntityPunchDesignix;
+
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -20,7 +24,7 @@ public class BlockPunchDesignix extends BlockLargeMachine
 	
 	public static final PropertyEnum<EnumParts> PART = PropertyEnum.create("part", EnumParts.class);
 	public static final PropertyDirection DIRECTION = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-	
+	public static final PropertyBool HASCARD= PropertyBool.create("hascard");
 	public BlockPunchDesignix()
 	{
 		setUnlocalizedName("punch_designix");
@@ -41,9 +45,8 @@ public class BlockPunchDesignix extends BlockLargeMachine
 	{
 		BlockPos mainPos = getMainPos(state, pos);
 		TileEntity te = worldIn.getTileEntity(mainPos);
-		if(!worldIn.isRemote && te != null && te instanceof TileEntityPunchDesignix)
+		if( te != null && te instanceof TileEntityPunchDesignix)
 			((TileEntityPunchDesignix) te).onRightClick(playerIn, state);
-		
 		return true;
 	}
 	
@@ -82,7 +85,7 @@ public class BlockPunchDesignix extends BlockLargeMachine
 	@Override
 	protected BlockStateContainer createBlockState()
 	{
-		return new BlockStateContainer(this, PART, DIRECTION);
+		return new BlockStateContainer(this, PART, DIRECTION,HASCARD);
 	}
 	
 	@Override
@@ -107,6 +110,8 @@ public class BlockPunchDesignix extends BlockLargeMachine
     /**
      *returns the block position of the "Main" block
      *aka the block with the TileEntity for the machine
+     *@pram the state of the block
+     *@pram the position the block 
      */
 	public BlockPos getMainPos(IBlockState state, BlockPos pos)
 	{
@@ -119,6 +124,24 @@ public class BlockPunchDesignix extends BlockLargeMachine
 			case BOTTOM_RIGHT: return pos.up().offset(facing.rotateY());
 		}
 		return pos;
+	}
+	
+	@Override
+	public IBlockState getActualState(IBlockState state,IBlockAccess worldIn,BlockPos pos) {
+		if (state.getValue(PART)==EnumParts.TOP_LEFT ) {
+			BlockPos mainPos = getMainPos(state, pos);
+			TileEntity te = worldIn.getTileEntity(mainPos);
+			return state.withProperty(HASCARD, !((TileEntityPunchDesignix)te).getCard().isEmpty());
+		}
+		return state;	
+	}
+	
+	public static void updateItem(boolean b, World world, BlockPos pos)
+	{
+		IBlockState oldState = world.getBlockState(pos);
+		
+		world.notifyBlockUpdate(pos, oldState, oldState.withProperty(HASCARD, b), 1);
+		world.notifyBlockUpdate(pos, oldState, oldState.withProperty(HASCARD, b), 3);
 	}
 	
 	public enum EnumParts implements IStringSerializable
