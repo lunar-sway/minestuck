@@ -1,23 +1,20 @@
 package com.mraof.minestuck.client.util;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.ResourceLocation;
-
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
 import com.mraof.minestuck.util.MinestuckPlayerData;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.util.ResourceLocation;
+
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 public class GuiUtil
 {
@@ -92,7 +89,7 @@ public class GuiUtil
 				
 				GlStateManager.color(1, 1, 1);
 				GlStateManager.disableLighting();
-				Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("minestuck", "textures/grist/" + type.getName()+ ".png"));
+				Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation(type.getIcon().getResourceDomain(), "textures/grist/" + type.getIcon().getResourcePath()+ ".png"));
 				Gui.drawModalRectWithCustomSizedTexture(boardX + needStrWidth + 1 + index%GRIST_BOARD_WIDTH, boardY + 8*row, 0, 0, 8, 8, 8, 8);
 				
 				index += needStrWidth + 10 + fontRenderer.getStringWidth(haveStr);
