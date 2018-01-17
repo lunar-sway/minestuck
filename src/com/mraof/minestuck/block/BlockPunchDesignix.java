@@ -1,7 +1,5 @@
 package com.mraof.minestuck.block;
 
-import java.util.Random;
-
 import com.mraof.minestuck.tileentity.TileEntityPunchDesignix;
 
 import net.minecraft.block.properties.PropertyBool;

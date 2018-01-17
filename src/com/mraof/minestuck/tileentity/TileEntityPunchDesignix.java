@@ -161,13 +161,11 @@ public class TileEntityPunchDesignix extends TileEntity
 		tagCompound.setTag("card", card.writeToNBT(new NBTTagCompound()));
 		return tagCompound;
 	}
-	//my interpritation on kirderf's addition
 	@Override
 	public NBTTagCompound getUpdateTag(){
 		NBTTagCompound nbt;
 		nbt = super.getUpdateTag();
 		nbt.setTag("card",card.writeToNBT(new NBTTagCompound()));
-//		card.writeToNBT(nbt);
 		return nbt;
 	}
 	@Override
@@ -181,7 +179,6 @@ public class TileEntityPunchDesignix extends TileEntity
 	}
 	
 	
-	//my interpretation on ben's addition 
 	public void resendState()
 	{
 		if(card.isEmpty())

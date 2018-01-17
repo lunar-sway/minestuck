@@ -1,5 +1,7 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.block.BlockTotemlathe.EnumParts;
+
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -45,20 +47,7 @@ public class BlockCruxtruder2 extends BlockCruxtruder {
 		}
 		public String getName()
 		{
-			switch (this){
-
-			case ZERO_TWO_ZERO:return "zero_two_zero";
-			case ZERO_TWO_ONE:return "zero_two_one";
-			case ZERO_TWO_TWO:return "zero_two_two";
-			case ONE_TWO_ZERO:return "one_two_zero";
-			case ONE_TWO_ONE:return "one_two_one";
-			case ONE_TWO_TWO:return "one_two_two";
-			case ONE_THREE_ONE:return "one_three_one";
-			case TWO_TWO_ZERO:return "two_two_zero";
-			case TWO_TWO_ONE:return "two_two_one";
-			case TWO_TWO_TWO:return "two_two_two";
-			}
-			return "null";
+			return name().toLowerCase();
 		}
 		
 		
@@ -119,7 +108,7 @@ public class BlockCruxtruder2 extends BlockCruxtruder {
 		return 0;
 	}
 	
-	
+
 	
 	
 }

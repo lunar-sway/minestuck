@@ -49,7 +49,6 @@ public class BlockTotemlathe extends BlockLargeMachine
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
 		BlockPos mainPos = getMainPos(state, pos);
-		System.out.println(mainPos);
 		TileEntity te = worldIn.getTileEntity(mainPos);
 		if(!worldIn.isRemote && te != null && te instanceof TileEntityTotemlathe)
 			((TileEntityTotemlathe) te).onRightClick(playerIn, state);
@@ -66,7 +65,7 @@ public class BlockTotemlathe extends BlockLargeMachine
 	public TileEntity createNewTileEntity(World worldIn, int meta)
 	{
 		
-		if(meta % 11 == EnumParts.BOTTOM_LEFT.ordinal())
+		if(meta % 4 == EnumParts.BOTTOM_LEFT.ordinal())
 			return new TileEntityTotemlathe();
 		else return null;
 	}
@@ -80,11 +79,10 @@ public class BlockTotemlathe extends BlockLargeMachine
 		{
 			TileEntityTotemlathe lathe = (TileEntityTotemlathe) te;
 			lathe.Brake();
-			if(state.getValue(PART).equals(EnumParts.BOTTOM_LEFT))
+			if(state instanceof BlockTotemlathe &&state.getValue(PART).equals(EnumParts.BOTTOM_LEFT))
 				lathe.dropCard1(true);
 				lathe.dropCard2(true);
-			if(state.getValue(PART).equals(EnumParts.MID_MIDLEFT))
-				lathe.dropDowel(true);
+
 		}
 		
 		super.breakBlock(worldIn, pos, state);
@@ -96,19 +94,22 @@ public class BlockTotemlathe extends BlockLargeMachine
 		
 		EnumFacing facing = EnumFacing.getHorizontal(MathHelper.floor((double)(placer.rotationYaw * 4.0F / 360.0F) + 0.5D) + 2 & 3).getOpposite();
 		state = state.withProperty(DIRECTION, facing);
+		IBlockState state2=MinestuckBlocks.totemlathe2.getDefaultState().withProperty(BlockTotemlathe2.DIRECTION, facing);
+		IBlockState state3=MinestuckBlocks.totemlathe3.getDefaultState().withProperty(BlockTotemlathe3.DIRECTION, facing);
+		
 		
 		if(!(worldIn.isRemote)){
 			worldIn.setBlockState(pos.offset(facing.rotateY(),3), state.withProperty(PART, EnumParts.BOTTOM_RIGHT));
 			worldIn.setBlockState(pos.offset(facing.rotateY(),2), state.withProperty(PART, EnumParts.BOTTOM_MIDRIGHT));
 			worldIn.setBlockState(pos.offset(facing.rotateY(),1), state.withProperty(PART, EnumParts.BOTTOM_MIDLEFT));
 			worldIn.setBlockState(pos, state.withProperty(PART, EnumParts.BOTTOM_LEFT));
-			worldIn.setBlockState(pos.offset(facing.rotateY(),3).up(1), state.withProperty(PART, EnumParts.MID_RIGHT));
-			worldIn.setBlockState(pos.offset(facing.rotateY(),2).up(1), state.withProperty(PART, EnumParts.MID_MIDRIGHT));
-			worldIn.setBlockState(pos.offset(facing.rotateY(),1).up(1), state.withProperty(PART, EnumParts.MID_MIDLEFT));
-			worldIn.setBlockState(pos.up(1), state.withProperty(PART, EnumParts.MID_LEFT));
-			worldIn.setBlockState(pos.offset(facing.rotateY(),2).up(2), state.withProperty(PART, EnumParts.TOP_MIDRIGHT));
-			worldIn.setBlockState(pos.offset(facing.rotateY(),1).up(2), state.withProperty(PART, EnumParts.TOP_MIDLEFT));
-			worldIn.setBlockState(pos.up(2), state.withProperty(PART, EnumParts.TOP_LEFT));
+			worldIn.setBlockState(pos.offset(facing.rotateY(),3).up(1), state2.withProperty(BlockTotemlathe2.PART, BlockTotemlathe2.EnumParts.MID_RIGHT));
+			worldIn.setBlockState(pos.offset(facing.rotateY(),2).up(1), state2.withProperty(BlockTotemlathe2.PART, BlockTotemlathe2.EnumParts.MID_MIDRIGHT));
+			worldIn.setBlockState(pos.offset(facing.rotateY(),1).up(1), state2.withProperty(BlockTotemlathe2.PART, BlockTotemlathe2.EnumParts.MID_MIDLEFT));
+			worldIn.setBlockState(pos.up(1), state2.withProperty(BlockTotemlathe2.PART, BlockTotemlathe2.EnumParts.MID_LEFT));
+			worldIn.setBlockState(pos.offset(facing.rotateY(),2).up(2), state3.withProperty(BlockTotemlathe3.PART, BlockTotemlathe3.EnumParts.TOP_MIDRIGHT));
+			worldIn.setBlockState(pos.offset(facing.rotateY(),1).up(2), state3.withProperty(BlockTotemlathe3.PART, BlockTotemlathe3.EnumParts.TOP_MIDLEFT));
+			worldIn.setBlockState(pos.up(2), state3.withProperty(BlockTotemlathe3.PART, BlockTotemlathe3.EnumParts.TOP_LEFT));
 		}
 	}
 	
@@ -133,8 +134,8 @@ public class BlockTotemlathe extends BlockLargeMachine
 	public IBlockState getStateFromMeta(int meta)
 	{
 		IBlockState defaultState = getDefaultState();
-		EnumParts part = EnumParts.values()[meta % 11];
-		EnumFacing facing = EnumFacing.getHorizontal(meta/11);
+		EnumParts part = EnumParts.values()[meta % 4];
+		EnumFacing facing = EnumFacing.getHorizontal(meta/4);
 		
 		return defaultState.withProperty(PART, part).withProperty(DIRECTION, facing);
 	}
@@ -143,8 +144,7 @@ public class BlockTotemlathe extends BlockLargeMachine
 	{
 		EnumParts part = state.getValue(PART);
 		EnumFacing facing = state.getValue(DIRECTION);
-		return part.ordinal();
-//		return part.ordinal() + facing.getHorizontalIndex()*11;
+		return part.ordinal() + facing.getHorizontalIndex()*4;
 	}
 
 	
@@ -162,13 +162,6 @@ public class BlockTotemlathe extends BlockLargeMachine
 			case BOTTOM_MIDRIGHT:return pos.offset(facing.rotateYCCW(),2);
 			case BOTTOM_MIDLEFT:return pos.offset(facing.rotateYCCW(),1);
 			case BOTTOM_LEFT:return pos;
-			case MID_RIGHT:return pos.down(1).offset(facing.rotateYCCW(),3);
-			case MID_MIDRIGHT:return pos.down(1).offset(facing.rotateYCCW(),2);
-			case MID_MIDLEFT:return pos.down(1).offset(facing.rotateYCCW(),1);
-			case MID_LEFT:return pos.down(1);
-			case TOP_MIDRIGHT:return pos.down(2).offset(facing.rotateYCCW(),2);
-			case TOP_MIDLEFT:return pos.down(2).offset(facing.rotateYCCW(),1);
-			case TOP_LEFT:return pos.down(2);
 			}
 			return pos;
 	}
@@ -181,15 +174,8 @@ public class BlockTotemlathe extends BlockLargeMachine
 		BOTTOM_RIGHT,
 		BOTTOM_MIDRIGHT,
 		BOTTOM_MIDLEFT,
-		BOTTOM_LEFT,
-		MID_RIGHT,
-		MID_MIDRIGHT,
-		MID_MIDLEFT,
-		MID_LEFT,
-		TOP_MIDRIGHT,
-		TOP_MIDLEFT,
-		TOP_LEFT;
-		;
+		BOTTOM_LEFT;
+		
 	private final AxisAlignedBB[] BOUNDING_BOX;
 		
 		EnumParts(AxisAlignedBB... bb)

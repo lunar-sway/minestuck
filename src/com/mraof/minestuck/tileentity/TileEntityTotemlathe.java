@@ -3,12 +3,16 @@ package com.mraof.minestuck.tileentity;
 import static com.mraof.minestuck.block.BlockPunchDesignix.DIRECTION;
 import static com.mraof.minestuck.block.BlockTotemlathe.PART;
 
+import com.mraof.minestuck.block.BlockTotemlathe;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.block.BlockTotemlathe.EnumParts;
+import com.mraof.minestuck.block.BlockTotemlathe2;
+import com.mraof.minestuck.block.BlockTotemlathe3;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.CombinationRegistry;
 
+import akka.actor.FSM.State;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
@@ -53,10 +57,9 @@ public class TileEntityTotemlathe extends TileEntityMachine
 	
 	public void onRightClick(EntityPlayer player, IBlockState clickedState)
 	{
-		EnumParts part = clickedState.getValue(PART);
 		ItemStack heldStack =player.getHeldItemMainhand();
 		//if they have clicked on the part that holds the chapta cards.
-		if (part.equals(EnumParts.BOTTOM_LEFT))	{
+		if (clickedState.getBlock()==MinestuckBlocks.totemlathe && clickedState.getValue(BlockTotemlathe.PART).equals(BlockTotemlathe.EnumParts.BOTTOM_LEFT))	{
 			if(!card1.isEmpty()){
 				if(!card2.isEmpty()){
 					player.inventory.addItemStackToInventory(card2);
@@ -74,7 +77,7 @@ public class TileEntityTotemlathe extends TileEntityMachine
 		
 		
 		//if they have clicked the dowel block
-		if (part== EnumParts.MID_MIDLEFT) {
+		if (clickedState.getBlock()==MinestuckBlocks.totemlathe2 &&  clickedState.getValue(BlockTotemlathe2.PART)== BlockTotemlathe2.EnumParts.MID_MIDLEFT) {
 			if (dowel.isEmpty()) {
 				if(heldStack.getItem()==MinestuckItems.cruxiteDowel) {
 					setDowel(heldStack.splitStack(1));
@@ -87,7 +90,7 @@ public class TileEntityTotemlathe extends TileEntityMachine
 		
 		
 		//if they have clicked on the lever
-		if (part == EnumParts.TOP_MIDRIGHT) {
+		if (clickedState.getBlock()==MinestuckBlocks.totemlathe3 && clickedState.getValue(BlockTotemlathe3.PART) == BlockTotemlathe3.EnumParts.TOP_MIDRIGHT) {
 			//carve the dowel.
 			processContents();
 		}
