@@ -76,9 +76,9 @@ public class BlockTotemlathe extends BlockLargeMachine
 		{
 			TileEntityTotemlathe lathe = (TileEntityTotemlathe) te;
 			lathe.Brake();
-			if(state instanceof BlockTotemlathe &&state.getValue(PART).equals(EnumParts.BOTTOM_LEFT))
-				lathe.dropCard1(true);
-				lathe.dropCard2(true);
+			lathe.dropCard1(true,pos);
+			lathe.dropCard2(true,pos);
+			lathe.dropDowel(true,pos);
 
 		}
 		
@@ -172,19 +172,26 @@ public class BlockTotemlathe extends BlockLargeMachine
 			TileEntity te = worldIn.getTileEntity(mainPos);
 			return state.withProperty(HASCARD, !((TileEntityTotemlathe)te).getCard1().isEmpty());
 		}
+		
 		return state;	
 	}
 	/**
 	 * updates the block and tile entities, ensuring that if the server is changed, the client will also be changed as well.
-	 * @param b weather or not hascard should be true
+	 * @param hascard 
 	 * @param world
 	 * @param pos
 	 */
-	public static void updateItem(boolean b, World world, BlockPos pos)
+	public static void updateItem(boolean hascard,boolean hasdowel, World world, BlockPos pos)
 	{
 		IBlockState oldState = world.getBlockState(pos);
+		EnumFacing facing =oldState.getValue(DIRECTION);
+		IBlockState oldState2 = world.getBlockState(pos.offset(facing.rotateY(),1).up(1));
 		
-		world.notifyBlockUpdate(pos, oldState, oldState.withProperty(HASCARD, b), 3);
+		world.notifyBlockUpdate(pos, oldState, oldState.withProperty(HASCARD, hascard), 3);
+//		world.notifyBlockUpdate(pos.up(1), oldState2,oldState2.withProperty(BlockTotemlathe2.HASDOWEL,true) ,3);
+//		world.notifyBlockUpdate(pos.offset(facing.rotateY(),1).up(1), oldState2,oldState2.withProperty(BlockTotemlathe2.HASDOWEL,true) ,3);
+//		world.notifyBlockUpdate(pos.offset(facing.rotateY(),1).up(2), oldState2,oldState2.withProperty(BlockTotemlathe2.HASDOWEL,true) ,3);
+//		world.notifyBlockUpdate(pos.offset(facing.rotateY(),1).up(3), oldState2,oldState2.withProperty(BlockTotemlathe2.HASDOWEL,true) ,3);
 	}
 
 	public static enum EnumParts implements IStringSerializable

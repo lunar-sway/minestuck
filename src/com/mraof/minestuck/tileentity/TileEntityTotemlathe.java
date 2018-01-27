@@ -50,11 +50,14 @@ public class TileEntityTotemlathe extends TileEntity
 		return card2;
 	}
 	public void setDowel(ItemStack stack) {
-		if (stack.getItem()==MinestuckItems.cruxiteDowel||stack==ItemStack.EMPTY) 
+		if (stack.getItem()==MinestuckItems.cruxiteDowel||stack==ItemStack.EMPTY) {
 			dowel=stack;
+			resendState();
+		}
 	}
 	public ItemStack getDowel() {
 		return dowel;
+		
 	}
 	
 	public void onRightClick(EntityPlayer player, IBlockState clickedState)
@@ -100,48 +103,47 @@ public class TileEntityTotemlathe extends TileEntity
 		}
 		
 	}
-	public void dropCard1(boolean inBlock) {
+	public void dropCard1(boolean inBlock,BlockPos pos) {
 		EnumFacing direction = inBlock ? null : world.getBlockState(this.pos).getValue(DIRECTION);
 		BlockPos dropPos;
 		if(inBlock)
-			dropPos = this.pos;
-		else if(!world.getBlockState(this.pos.offset(direction)).isBlockNormalCube())
-			dropPos = this.pos.offset(direction);
-		else if(!world.getBlockState(this.pos.up()).isBlockNormalCube())
-			dropPos = this.pos.up();
-		else dropPos = this.pos;
+			dropPos = pos;
+		else if(!world.getBlockState(pos.offset(direction)).isBlockNormalCube())
+			dropPos = pos.offset(direction);
+		else if(!world.getBlockState(pos.up()).isBlockNormalCube())
+			dropPos = pos.up();
+		else dropPos = pos;
 		
 		InventoryHelper.spawnItemStack(world, dropPos.getX(), dropPos.getY(), dropPos.getZ(), card1);
 		setCard1(ItemStack.EMPTY);
 	}
-	public void dropCard2(boolean inBlock) {
+	public void dropCard2(boolean inBlock,BlockPos pos) {
 		EnumFacing direction = inBlock ? null : world.getBlockState(this.pos).getValue(DIRECTION);
 		BlockPos dropPos;
 		if(inBlock)
-			dropPos = this.pos;
-		else if(!world.getBlockState(this.pos.offset(direction)).isBlockNormalCube())
-			dropPos = this.pos.offset(direction);
-		else if(!world.getBlockState(this.pos.up()).isBlockNormalCube())
-			dropPos = this.pos.up();
-		else dropPos = this.pos;
+			dropPos = pos;
+		else if(!world.getBlockState(pos.offset(direction)).isBlockNormalCube())
+			dropPos = pos.offset(direction);
+		else if(!world.getBlockState(pos.up()).isBlockNormalCube())
+			dropPos = pos.up();
+		else dropPos = pos;
 		
 		InventoryHelper.spawnItemStack(world, dropPos.getX(), dropPos.getY(), dropPos.getZ(), card2);
-		setCard2( ItemStack.EMPTY);
+		setCard2(ItemStack.EMPTY);
 	}
-	public void dropDowel(boolean inBlock) {
+	public void dropDowel(boolean inBlock,BlockPos pos) {
 		EnumFacing direction = inBlock ? null : world.getBlockState(this.pos).getValue(DIRECTION);
 		BlockPos dropPos;
 		if(inBlock)
-			dropPos = this.pos;
-		else if(!world.getBlockState(this.pos.offset(direction)).isBlockNormalCube())
-			dropPos = this.pos.offset(direction);
-		else if(!world.getBlockState(this.pos.up()).isBlockNormalCube())
-			dropPos = this.pos.up();
-		else dropPos = this.pos;
+			dropPos = pos;
+		else if(!world.getBlockState(pos.offset(direction)).isBlockNormalCube())
+			dropPos = pos.offset(direction);
+		else if(!world.getBlockState(pos.up()).isBlockNormalCube())
+			dropPos = pos.up();
+		else dropPos = pos;
 		
 		InventoryHelper.spawnItemStack(world, dropPos.getX(), dropPos.getY(), dropPos.getZ(), dowel);
-		setDowel( ItemStack.EMPTY);
-	
+		setDowel(ItemStack.EMPTY);
 	}
 	
 	public boolean isBroken() {
@@ -181,6 +183,7 @@ public class TileEntityTotemlathe extends TileEntity
 		NBTTagCompound nbt;
 		nbt = super.getUpdateTag();
 		nbt.setTag("card1",card1.writeToNBT(new NBTTagCompound()));
+		nbt.setTag("dowel", dowel.writeToNBT(new NBTTagCompound()));
 		return nbt;
 	}
 	@Override
@@ -189,6 +192,8 @@ public class TileEntityTotemlathe extends TileEntity
 		NBTTagCompound nbt = new NBTTagCompound();
 		nbt.setTag("card1",card1.writeToNBT(new NBTTagCompound()));
 		card1.writeToNBT(nbt);
+		nbt.setTag("dowel", dowel.writeToNBT(new NBTTagCompound()));
+		dowel.writeToNBT(nbt);
 		packet = new SPacketUpdateTileEntity(this.pos, 0, nbt);				
 		return packet;
 	}
@@ -197,11 +202,20 @@ public class TileEntityTotemlathe extends TileEntity
 	{
 		if(card1.isEmpty())
 		{
-			BlockPunchDesignix.updateItem(false, world, this.getPos());
+			if(dowel.isEmpty()) {
+				BlockTotemlathe.updateItem(false,false, world, this.getPos());
+			}else {
+				BlockTotemlathe.updateItem(false,true, world, this.getPos());
+			}
 		} else
 		{
-			BlockPunchDesignix.updateItem(true, world, this.getPos());
+			if (dowel.isEmpty()) {
+				BlockTotemlathe.updateItem(true,false, world, this.getPos());	
+			}else{
+				BlockTotemlathe.updateItem(true,true, world, this.getPos());
+			}
 		}
+		
 	}
 	public void processContents()
 	{

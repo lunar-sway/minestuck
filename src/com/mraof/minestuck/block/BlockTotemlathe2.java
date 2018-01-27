@@ -1,36 +1,38 @@
 package com.mraof.minestuck.block;
 
 
-import com.mraof.minestuck.block.BlockTotemlathe.EnumParts;
 import com.mraof.minestuck.tileentity.TileEntityTotemlathe;
+import com.mraof.minestuck.util.AlchemyRecipeHandler;
 
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.IBlockAccess;
 
 public class BlockTotemlathe2 extends BlockTotemlathe {
 
 	public static final PropertyEnum<EnumParts> PART = PropertyEnum.create("part", EnumParts.class);
 	public static final PropertyDirection DIRECTION = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-	
+	public static final PropertyEnum<EnumDowel> HASDOWEL = PropertyEnum.create("hasdowel",EnumDowel.class);
 	
 	public BlockTotemlathe2(){
 		setUnlocalizedName("totem_lathe2");
 	}
 	
-
+	
 	
 	@Override
 	protected BlockStateContainer createBlockState()
 	{
-		return new BlockStateContainer(this, PART, DIRECTION);
+		return new BlockStateContainer(this, PART, DIRECTION,HASDOWEL);
 	}
 	
 	@Override
@@ -68,6 +70,41 @@ public class BlockTotemlathe2 extends BlockTotemlathe {
 			return pos;
 	}
 	
+	@Override
+	public IBlockState getActualState(IBlockState state,IBlockAccess worldIn,BlockPos pos) {
+		BlockPos mainPos = getMainPos(state, pos);
+		TileEntity te = worldIn.getTileEntity(mainPos);
+		if (te instanceof TileEntityTotemlathe&&state.getBlock()==MinestuckBlocks.totemlathe2 ) {
+			if(!((TileEntityTotemlathe)te).getDowel().isEmpty()) {				
+				if(AlchemyRecipeHandler.getDecodedItem(((TileEntityTotemlathe)te).getDowel()).isEmpty()){
+					return state.withProperty(HASDOWEL, EnumDowel.UNCARVED_DOWEL);
+				}else {
+					return state.withProperty(HASDOWEL, EnumDowel.CARVED_DOWEL);
+				}
+			}
+		}
+		return state.withProperty(HASDOWEL,EnumDowel.NO_DOWEL);	
+	}
+
+	public static enum EnumDowel implements IStringSerializable
+	{
+		NO_DOWEL,
+		UNCARVED_DOWEL,
+		CARVED_DOWEL;
+
+		@Override
+		public String toString()
+		{
+			return getName();
+		}
+		
+		@Override
+		public String getName()
+		{
+			return name().toLowerCase();
+		}
+	}
+	
 	public static enum EnumParts implements IStringSerializable
 	{
 		//(new AxisAlignedBB(5/16D, 0.0D, 0.0D, 1.0D, 1.0D, 11/16D), new AxisAlignedBB(5/16D, 0.0D, 5/16D, 1.0D, 1.0D, 1.0D),
@@ -103,17 +140,5 @@ public class BlockTotemlathe2 extends BlockTotemlathe {
 	{
 		return false;
 	}
-	@Override
-	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
-	{
-	
-		BlockPos mainPos = getMainPos(state, pos);
-		TileEntity te = worldIn.getTileEntity(mainPos);
-		if( te instanceof TileEntityTotemlathe) {
-			TileEntityTotemlathe lathe=(TileEntityTotemlathe)te;
-			if( state.getValue(PART).equals(EnumParts.MID_MIDLEFT))
-				lathe.dropDowel(true);
-		}
-		super.breakBlock(worldIn, pos, state);
-	}
+
 }
