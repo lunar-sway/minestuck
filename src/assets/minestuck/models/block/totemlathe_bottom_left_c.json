@@ -1,10 +1,10 @@
 {
 	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
 	"textures": {
-		"0": "/Untitled",
-		"1": "Punch Designix/Card",
-		"2": "/Untitled2",
-		"particle": "/Untitled"
+		"0": "minestuck:machines/totemlathe/untitled",
+		"1": "minestuck:machines/punch_designix/card",
+		"2": "minestuck:machines/totemlathe/untitled2",
+		"particle": "minestuck:machines/totemlathe/untitled"
 	},
 	"elements": [
 		{

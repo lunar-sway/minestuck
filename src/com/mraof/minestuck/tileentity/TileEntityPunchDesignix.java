@@ -6,7 +6,6 @@ import static com.mraof.minestuck.block.BlockPunchDesignix.PART;
 import com.mraof.minestuck.block.BlockPunchDesignix;
 import com.mraof.minestuck.block.BlockPunchDesignix.EnumParts;
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.CombinationRegistry;
 import com.mraof.minestuck.util.Debug;

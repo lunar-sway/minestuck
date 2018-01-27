@@ -138,7 +138,6 @@ public class BlockPunchDesignix extends BlockLargeMachine
 	{
 		IBlockState oldState = world.getBlockState(pos);
 		
-		world.notifyBlockUpdate(pos, oldState, oldState.withProperty(HASCARD, b), 1);
 		world.notifyBlockUpdate(pos, oldState, oldState.withProperty(HASCARD, b), 3);
 	}
 	

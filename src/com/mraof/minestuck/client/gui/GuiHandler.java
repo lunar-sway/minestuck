@@ -31,8 +31,6 @@ public class GuiHandler implements IGuiHandler
 				return new ContainerCrockerMachine(player.inventory, (TileEntityCrockerMachine) tileEntity);
 			else if(tileEntity instanceof TileEntityUraniumCooker)
 				return new ContainerUraniumCooker(player.inventory, (TileEntityUraniumCooker) tileEntity);
-			else if(tileEntity instanceof TileEntityTotemlathe)
-				return new ContainerTotemlathe(player.inventory,(TileEntityTotemlathe) tileEntity);
 			else if(tileEntity instanceof TileEntityAlchemiter)
 				return new ContainerAlchemiter(player.inventory,(TileEntityAlchemiter) tileEntity);
 			else if(tileEntity instanceof TileEntityCruxtruder)
@@ -53,8 +51,6 @@ public class GuiHandler implements IGuiHandler
 				return new GuiCrockerMachine(player.inventory, (TileEntityCrockerMachine) tileEntity);
 			else if(tileEntity instanceof TileEntityUraniumCooker)
 				return new GuiUraniumCooker(player.inventory, (TileEntityUraniumCooker) tileEntity);
-			else if(tileEntity instanceof TileEntityTotemlathe)
-				return new GuiTotemlathe(player.inventory,(TileEntityTotemlathe)tileEntity);
 			else if (tileEntity instanceof TileEntityAlchemiter)
 				return new GuiAlchemiter(player.inventory, (TileEntityAlchemiter)tileEntity);
 			else if(tileEntity instanceof TileEntityCruxtruder)

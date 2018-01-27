@@ -1,17 +1,14 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.BlockPunchDesignix.EnumParts;
-import com.mraof.minestuck.client.gui.GuiHandler;
-import com.mraof.minestuck.tileentity.TileEntityPunchDesignix;
 import com.mraof.minestuck.tileentity.TileEntityTotemlathe;
+
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -28,7 +25,7 @@ public class BlockTotemlathe extends BlockLargeMachine
 	
 	public static final PropertyEnum<EnumParts> PART = PropertyEnum.create("part", EnumParts.class);
 	public static final PropertyDirection DIRECTION = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-	
+	public static final PropertyBool HASCARD = PropertyBool.create("hascard");
 	public BlockTotemlathe() {
 		setUnlocalizedName("totem_lathe");
 		setDefaultState(blockState.getBaseState());
@@ -50,7 +47,7 @@ public class BlockTotemlathe extends BlockLargeMachine
 	{
 		BlockPos mainPos = getMainPos(state, pos);
 		TileEntity te = worldIn.getTileEntity(mainPos);
-		if(!worldIn.isRemote && te != null && te instanceof TileEntityTotemlathe)
+		if(te != null && te instanceof TileEntityTotemlathe)
 			((TileEntityTotemlathe) te).onRightClick(playerIn, state);
 		return true;
 	}
@@ -86,6 +83,8 @@ public class BlockTotemlathe extends BlockLargeMachine
 		}
 		
 		super.breakBlock(worldIn, pos, state);
+		
+		
 	}
 	
 	@Override
@@ -127,7 +126,7 @@ public class BlockTotemlathe extends BlockLargeMachine
 	@Override
 	protected BlockStateContainer createBlockState()
 	{
-		return new BlockStateContainer(this, PART, DIRECTION);
+		return new BlockStateContainer(this, PART, DIRECTION,HASCARD);
 	}
 	
 	@Override
@@ -166,6 +165,28 @@ public class BlockTotemlathe extends BlockLargeMachine
 			return pos;
 	}
 	
+	@Override
+	public IBlockState getActualState(IBlockState state,IBlockAccess worldIn,BlockPos pos) {
+		if (state.getBlock()==MinestuckBlocks.totemlathe && state.getValue(PART)==EnumParts.BOTTOM_LEFT ) {
+			BlockPos mainPos = getMainPos(state, pos);
+			TileEntity te = worldIn.getTileEntity(mainPos);
+			return state.withProperty(HASCARD, !((TileEntityTotemlathe)te).getCard1().isEmpty());
+		}
+		return state;	
+	}
+	/**
+	 * updates the block and tile entities, ensuring that if the server is changed, the client will also be changed as well.
+	 * @param b weather or not hascard should be true
+	 * @param world
+	 * @param pos
+	 */
+	public static void updateItem(boolean b, World world, BlockPos pos)
+	{
+		IBlockState oldState = world.getBlockState(pos);
+		
+		world.notifyBlockUpdate(pos, oldState, oldState.withProperty(HASCARD, b), 3);
+	}
+
 	public static enum EnumParts implements IStringSerializable
 	{
 		//(new AxisAlignedBB(5/16D, 0.0D, 0.0D, 1.0D, 1.0D, 11/16D), new AxisAlignedBB(5/16D, 0.0D, 5/16D, 1.0D, 1.0D, 1.0D),
@@ -176,7 +197,7 @@ public class BlockTotemlathe extends BlockLargeMachine
 		BOTTOM_MIDLEFT,
 		BOTTOM_LEFT;
 		
-	private final AxisAlignedBB[] BOUNDING_BOX;
+		private final AxisAlignedBB[] BOUNDING_BOX;
 		
 		EnumParts(AxisAlignedBB... bb)
 		{
