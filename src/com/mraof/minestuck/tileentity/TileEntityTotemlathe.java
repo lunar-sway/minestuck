@@ -2,7 +2,6 @@ package com.mraof.minestuck.tileentity;
 
 import static com.mraof.minestuck.block.BlockPunchDesignix.DIRECTION;
 
-import com.mraof.minestuck.block.BlockPunchDesignix;
 import com.mraof.minestuck.block.BlockTotemlathe;
 import com.mraof.minestuck.block.BlockTotemlathe2;
 import com.mraof.minestuck.block.BlockTotemlathe3;
@@ -202,20 +201,30 @@ public class TileEntityTotemlathe extends TileEntity
 	{
 		if(card1.isEmpty())
 		{
-			if(dowel.isEmpty()) {
-				BlockTotemlathe.updateItem(false,false, world, this.getPos());
+			if(!dowel.isEmpty()) {				
+				if(AlchemyRecipeHandler.getDecodedItem(dowel).isEmpty()){
+					BlockTotemlathe.updateItem(false,BlockTotemlathe2.EnumDowel.UNCARVED_DOWEL , world, pos);
+				}else {
+					BlockTotemlathe.updateItem(false,BlockTotemlathe2.EnumDowel.CARVED_DOWEL , world, pos);
+				}
 			}else {
-				BlockTotemlathe.updateItem(false,true, world, this.getPos());
+				BlockTotemlathe.updateItem(false,BlockTotemlathe2.EnumDowel.NO_DOWEL, world, pos);
 			}
 		} else
 		{
-			if (dowel.isEmpty()) {
-				BlockTotemlathe.updateItem(true,false, world, this.getPos());	
-			}else{
-				BlockTotemlathe.updateItem(true,true, world, this.getPos());
+			if(!dowel.isEmpty()) {				
+				if(AlchemyRecipeHandler.getDecodedItem(dowel).isEmpty()){
+					BlockTotemlathe.updateItem(true,BlockTotemlathe2.EnumDowel.UNCARVED_DOWEL , world, pos);
+				}else {
+					BlockTotemlathe.updateItem(true,BlockTotemlathe2.EnumDowel.CARVED_DOWEL , world, pos);
+				}
+			}else {
+				BlockTotemlathe.updateItem(true,BlockTotemlathe2.EnumDowel.NO_DOWEL, world, pos);
 			}
 		}
 		
+		
+
 	}
 	public void processContents()
 	{
