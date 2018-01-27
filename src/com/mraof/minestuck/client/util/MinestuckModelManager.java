@@ -257,6 +257,11 @@ public class MinestuckModelManager
 			register(log, type.ordinal(), type.getName()+"_log");
 		register(woodenCactus);
 		register(sugarCube);
+		register(appleCake);
+		register(blueCake);
+		register(coldCake);
+		register(redCake);
+		register(hotCake);
 		
 		register(primedTnt);
 		register(unstableTnt);

@@ -5,7 +5,10 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.MobEffects;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.BlockFluidClassic;
@@ -53,6 +56,11 @@ public class MinestuckBlocks
 	public static Block woodenCactus = new BlockCactusSpecial(SoundType.WOOD, "axe").setRegistryName("wooden_cactus").setHardness(1.0F).setResistance(2.5F).setUnlocalizedName("woodenCactus");
 	public static Block sugarCube = new BlockCustom(Material.SAND, MapColor.SNOW, SoundType.SAND).setRegistryName("sugar_cube").setUnlocalizedName("sugarCube").setHardness(0.4F).setCreativeTab(MinestuckItems.tabMinestuck);
 	public static Block rabbitSpawner = new BlockMobSpawner().setRegistryName("rabbit_spawner").setUnlocalizedName("rabbitSpawner");
+	public static Block appleCake = new BlockSimpleCake(2, 0.5F, null).setRegistryName("apple_cake").setUnlocalizedName("appleCake");
+	public static Block blueCake = new BlockSimpleCake(2, 0.3F, (EntityPlayer player) -> player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 150, 0))).setRegistryName("blue_cake").setUnlocalizedName("blueCake");
+	public static Block coldCake = new BlockSimpleCake(2, 0.3F, (EntityPlayer player) -> player.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 200, 1))).setRegistryName("cold_cake").setUnlocalizedName("coldCake");
+	public static Block redCake = new BlockSimpleCake(2, 0.1F, (EntityPlayer player) -> player.heal(1)).setRegistryName("red_cake").setUnlocalizedName("redCake");
+	public static Block hotCake = new BlockSimpleCake(2, 0.1F, (EntityPlayer player) -> player.setFire(4)).setRegistryName("hot_cake").setUnlocalizedName("hotCake");
 	
 	//Ores
 	public static Block oreCruxite = (BlockCruxiteOre) new BlockCruxiteOre().setRegistryName("ore_cruxite");
@@ -101,6 +109,7 @@ public class MinestuckBlocks
 				punchDesignix, totemlathe,totemlathe2,totemlathe3, alchemiter[0],alchemiter[1],cruxtruder,cruxtruder2,
 				blockComputerOff, blockComputerOn,
 				blockGoldSeeds, glowystoneWire,
+				appleCake, blueCake, coldCake, redCake, hotCake,
 				primedTnt, unstableTnt, instantTnt, woodenExplosiveButton, stoneExplosiveButton,
 				blockOil, blockBlood, blockBrainJuice,
 				rabbitSpawner};

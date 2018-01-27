@@ -355,6 +355,11 @@ public class MinestuckItems
 				(ItemStack input) -> BlockMinestuckLog.BlockType.values()[input.getItemDamage() % BlockMinestuckLog.BlockType.values().length].getUnlocalizedName()));
 		registerItemBlock(registry, new ItemBlock(woodenCactus));
 		registerItemBlock(registry, new ItemBlock(sugarCube));
+		registerItemBlock(registry, new ItemBlock(appleCake)).setMaxStackSize(1);
+		registerItemBlock(registry, new ItemBlock(blueCake)).setMaxStackSize(1);
+		registerItemBlock(registry, new ItemBlock(coldCake)).setMaxStackSize(1);
+		registerItemBlock(registry, new ItemBlock(redCake)).setMaxStackSize(1);
+		registerItemBlock(registry, new ItemBlock(hotCake)).setMaxStackSize(1);
 
 		registerItemBlock(registry, new ItemBlock(primedTnt));
 		registerItemBlock(registry, new ItemBlock(unstableTnt));
