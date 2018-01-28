@@ -58,13 +58,23 @@ public class ConsortRewardHandler
 		LootContext.Builder contextBuilder = new LootContext.Builder((WorldServer) consort.world).withLootedEntity(consort);
 		List<ItemStack> itemStacks = consort.world.getLootTableManager().getLootTableFromLocation(lootTable).generateLootForPools(rand, contextBuilder.build());
 		List<Pair<ItemStack, Integer>> itemPriceList = new ArrayList<>();
-		for(ItemStack stack : itemStacks)
+		stackLoop:
+		for (ItemStack stack : itemStacks)
 		{
+			for (Pair<ItemStack, Integer> pair : itemPriceList)
+			{
+				if (ItemStack.areItemsEqual(pair.object1, stack) && ItemStack.areItemStackTagsEqual(pair.object1, stack))
+				{
+					pair.object1.grow(stack.getCount());
+					continue stackLoop;
+				}
+			}
+			
 			int price = getPrice(stack, rand);
-			if(price >= 0 && itemPriceList.size() < 9)
+			if (price >= 0 && itemPriceList.size() < 9)
 				itemPriceList.add(new Pair<>(stack, price));
-			if(price < 0)
-				Debug.warn("Couldn't find a boondollar price for "+stack);
+			if (price < 0)
+				Debug.warn("Couldn't find a boondollar price for " + stack);
 		}
 		return itemPriceList;
 	}

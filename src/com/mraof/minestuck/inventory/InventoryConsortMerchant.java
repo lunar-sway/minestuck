@@ -2,7 +2,13 @@ package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.entity.consort.EntityConsort;
 import com.mraof.minestuck.entity.consort.EnumConsort;
+import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckPacket;
+import com.mraof.minestuck.network.PlayerDataPacket;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.Pair;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -10,6 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -50,7 +57,7 @@ public class InventoryConsortMerchant implements IInventory
 		consortType = consort.getConsortType();
 		merchantType = consort.merchantType;
 		
-		for(int i = 0; i < stocks.size(); i++)
+		for (int i = 0; i < stocks.size(); i++)
 		{
 			Pair<ItemStack, Integer> entry = stocks.get(i);
 			inv.set(i, entry.object1);
@@ -58,10 +65,42 @@ public class InventoryConsortMerchant implements IInventory
 		}
 	}
 	
+	protected void handlePurchase(EntityPlayer player, boolean all, int index)
+	{
+		if (!player.world.isRemote && index >= 0 && index < inv.size())
+		{
+			ItemStack stack = inv.get(index);
+			if (stack.isEmpty())
+				return;
+			MinestuckPlayerData.PlayerData playerData = MinestuckPlayerData.getData(player);
+			int amountPurchased = Math.min(playerData.boondollars / prices[index], all ? stack.getCount() : 1);
+			if (amountPurchased == 0)
+			{
+				player.sendMessage(new TextComponentTranslation("consort.cantAfford"));
+			} else
+			{
+				playerData.boondollars -= amountPurchased * prices[index];
+				ItemStack items = stack.splitStack(amountPurchased);
+				
+				if (!player.addItemStackToInventory(items))
+				{
+					EntityItem entity = player.dropItem(items, false);
+					if (entity != null)
+						entity.setNoPickupDelay();
+					else Debug.warn("Couldn't spawn in an item purchased from a consort! "+items);
+				} else player.inventoryContainer.detectAndSendChanges();
+				
+				player.openContainer.detectAndSendChanges();
+				MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(MinestuckPacket.Type.PLAYER_DATA,
+						PlayerDataPacket.BOONDOLLAR, playerData.boondollars), player);
+			}
+		}
+	}
+	
 	public NBTTagList writeToNBT()
 	{
 		NBTTagList list = new NBTTagList();
-		for(int i = 0; i < 9; i++)
+		for (int i = 0; i < 9; i++)
 		{
 			NBTTagCompound nbt = inv.get(i).writeToNBT(new NBTTagCompound());
 			nbt.setInteger("price", prices[i]);

@@ -7,17 +7,44 @@
                 {
                     "type": "item",
                     "name": "minestuck:onion",
-                    "weight": 8
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 5
+                            }
+                        }
+                    ]
                 },
                 {
                     "type": "item",
                     "name": "minestuck:jar_of_bugs",
-                    "weight": 8
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 5
+                            }
+                        }
+                    ]
                 },
                 {
                     "type": "item",
                     "name": "minestuck:grasshopper",
-                    "weight": 8
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 5
+                            }
+                        }
+                    ]
                 }
             ]
         }
