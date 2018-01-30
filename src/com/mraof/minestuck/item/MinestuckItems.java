@@ -252,7 +252,7 @@ public class MinestuckItems
 		beverage = new ItemMinestuckBeverage().setRegistryName("beverage");
 		bugOnAStick = new ItemFood(1, 0.1F, false).setRegistryName("bug_on_stick").setUnlocalizedName("bugOnAStick").setCreativeTab(tabMinestuck);
 		chocolateBeetle = new ItemFood(3, 0.4F, false).setRegistryName("chocolate_beetle").setUnlocalizedName("chocolateBeetle").setCreativeTab(tabMinestuck);
-		coneOfFlies = new ItemFood(2, 0.1F, false).setRegistryName("cone_of_flies").setUnlocalizedName("coneOfFlies").setCreativeTab(tabMinestuck);
+		coneOfFlies = new ItemFood(1, 0.1F, false).setRegistryName("cone_of_flies").setUnlocalizedName("coneOfFlies").setCreativeTab(tabMinestuck);
 		grasshopper = new ItemFood(4, 0.5F, false).setRegistryName("grasshopper").setUnlocalizedName("grasshopper").setCreativeTab(tabMinestuck);
 		jarOfBugs = new ItemFood(3, 0.2F, false).setRegistryName("jar_of_bugs").setUnlocalizedName("jarOfBugs").setCreativeTab(tabMinestuck);
 		onion = new ItemFood(2, 0.2F, false).setRegistryName("onion").setUnlocalizedName("onion").setCreativeTab(tabMinestuck);

@@ -49,7 +49,7 @@ public class ConsortRewardHandler
 		
 		public int generatePrice(Random rand)
 		{
-			return min + rand.nextInt(max - min);
+			return min + rand.nextInt(max - min + 1);
 		}
 	}
 	

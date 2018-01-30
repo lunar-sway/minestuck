@@ -880,9 +880,33 @@ public class AlchemyRecipeHandler
 		//CombinationRegistry.addCombination(new ItemStack(beverage, 1, 2), new ItemStack(Items.DYE, 1, 9), MODE_AND, true, true, new ItemStack(beverage, 1, 8));				//Peach F
 		//CombinationRegistry.addCombination(new ItemStack(beverage, 1, 1), new ItemStack(Blocks.TNT), MODE_OR, true, false, new ItemStack(beverage, 1, 9));					//Redpop F
 		
-		ConsortRewardHandler.registerPrice(new ItemStack(onion), 4, 7);
-		ConsortRewardHandler.registerPrice(new ItemStack(jarOfBugs), 5, 10);
-		ConsortRewardHandler.registerPrice(new ItemStack(grasshopper), 10, 15);
+		ConsortRewardHandler.registerPrice(new ItemStack(onion), 9, 15);
+		ConsortRewardHandler.registerPrice(new ItemStack(jarOfBugs), 12, 18);
+		ConsortRewardHandler.registerPrice(new ItemStack(bugOnAStick), 4, 6);
+		ConsortRewardHandler.registerPrice(new ItemStack(coneOfFlies), 4, 6);
+		ConsortRewardHandler.registerPrice(new ItemStack(grasshopper), 90, 110);
+		ConsortRewardHandler.registerPrice(new ItemStack(salad), 10, 14);
+		ConsortRewardHandler.registerPrice(new ItemStack(chocolateBeetle), 30, 35);
+		ConsortRewardHandler.registerPrice(new ItemStack(glowingMushroom), 10, 15);
+		ConsortRewardHandler.registerPrice(new ItemStack(coldCake), 250, 250);
+		ConsortRewardHandler.registerPrice(new ItemStack(blueCake), 250, 250);
+		ConsortRewardHandler.registerPrice(new ItemStack(hotCake), 250, 250);
+		ConsortRewardHandler.registerPrice(new ItemStack(redCake), 250, 250);
+		
+		ConsortRewardHandler.registerPrice(new ItemStack(Items.POTATO), 12, 15);
+		ConsortRewardHandler.registerPrice(new ItemStack(Items.MUSHROOM_STEW), 95, 130);
+		ConsortRewardHandler.registerPrice(new ItemStack(Items.CARROT), 15, 18);
+		ConsortRewardHandler.registerPrice(new ItemStack(Items.APPLE), 25, 30);
+		ConsortRewardHandler.registerPrice(new ItemStack(Items.WHEAT), 10, 15);
+		ConsortRewardHandler.registerPrice(new ItemStack(Items.WHEAT_SEEDS), 15, 20);
+		ConsortRewardHandler.registerPrice(new ItemStack(Items.BEETROOT_SOUP), 70, 90);
+		ConsortRewardHandler.registerPrice(new ItemStack(Items.BEETROOT), 10, 15);
+		ConsortRewardHandler.registerPrice(new ItemStack(Items.BEEF), 110, 130);
+		ConsortRewardHandler.registerPrice(new ItemStack(Blocks.RED_MUSHROOM), 15, 20);
+		ConsortRewardHandler.registerPrice(new ItemStack(Blocks.BROWN_MUSHROOM), 10, 15);
+		ConsortRewardHandler.registerPrice(new ItemStack(Items.DYE, 3), 25, 35);
+		ConsortRewardHandler.registerPrice(new ItemStack(Items.MILK_BUCKET), 40, 50);
+		
 		//Register chest loot
 		LootConditionManager.registerCondition(new LandAspectLootCondition.Serializer());
 		LootConditionManager.registerCondition(new ConsortLootCondition.Serializer());

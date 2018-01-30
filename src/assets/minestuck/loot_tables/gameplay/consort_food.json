@@ -12,36 +12,903 @@
                         {
                             "function": "set_count",
                             "count": {
-                                "min": 1,
-                                "max": 5
+                                "min": 3,
+                                "max": 10
                             }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:consort",
+                            "consort": [ "iguana", "nakagator" ]
                         }
                     ]
                 },
                 {
                     "type": "item",
                     "name": "minestuck:jar_of_bugs",
+                    "weight": 5,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 3,
+                                "max": 10
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:consort",
+                            "consort": [ "salamander", "turtle" ]
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:bug_on_stick",
                     "weight": 8,
                     "functions": [
                         {
                             "function": "set_count",
                             "count": {
-                                "min": 1,
-                                "max": 5
+                                "min": 3,
+                                "max": 10
                             }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:consort",
+                            "consort": [ "salamander", "turtle" ]
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:cone_of_flies",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 3,
+                                "max": 10
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:consort",
+                            "consort": [ "salamander", "iguana" ]
                         }
                     ]
                 },
                 {
                     "type": "item",
                     "name": "minestuck:grasshopper",
+                    "weight": 5,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 3,
+                                "max": 10
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:potato",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 3,
+                                "max": 10
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:consort",
+                            "consort": [ "salamander", "turtle" ]
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:mushroom_stew",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 3,
+                                "max": 10
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:consort",
+                            "consort": "salamander"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:salad",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 3,
+                                "max": 10
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:consort",
+                            "consort": "turtle"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:carrot",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 3,
+                                "max": 10
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:consort",
+                            "consort": "turtle"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:apple",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 3,
+                                "max": 10
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:consort",
+                            "consort": "iguana"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:chocolate_beetle",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 3,
+                                "max": 10
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:consort",
+                            "consort": [ "iguana", "nakagator" ]
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:wheat",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 3,
+                                "max": 10
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:consort",
+                            "consort": "iguana"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:wheat_seeds",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 3,
+                                "max": 10
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:consort",
+                            "consort": "iguana"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:beetroot_soup",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 3,
+                                "max": 10
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:consort",
+                            "consort": "nakagator"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:beef",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 3,
+                                "max": 10
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:consort",
+                            "consort": "nakagator"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:beetroot",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 3,
+                                "max": 10
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:consort",
+                            "consort": "nakagator"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:glowing_mushroom",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 3,
+                                "max": 6
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "shade"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:red_mushroom",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 3,
+                                "max": 6
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "wood"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:brown_mushroom",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 3,
+                                "max": 6
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "wood"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:dye",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 3,
+                                "max": 6
+                            }
+                        },
+                        {
+                            "function": "set_data",
+                            "data": 3
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "forests"
+                        }
+                    ]
+                },
+                {
+                    "type": "loot_table",
+                    "name": "minestuck:gameplay/special/cold_cake",
+                    "weight": 4,
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "frost"
+                        }
+                    ]
+                },
+                {
+                    "type": "loot_table",
+                    "name": "minestuck:gameplay/special/hot_cake",
+                    "weight": 4,
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "heat"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:milk_bucket",
                     "weight": 8,
                     "functions": [
                         {
                             "function": "set_count",
                             "count": {
                                 "min": 1,
-                                "max": 5
+                                "max": 3
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "buckets"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:egg",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 3,
+                                "max": 6
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "cake"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:rabbit_stew",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 2,
+                                "max": 4
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "rabbits"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:beverage",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        },
+                        {
+                            "function": "set_data",
+                            "data": 1
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "light"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:beverage",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        },
+                        {
+                            "function": "set_data",
+                            "data": 2
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "clockwork"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:beverage",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        },
+                        {
+                            "function": "set_data",
+                            "data": 3
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "silence"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:beverage",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        },
+                        {
+                            "function": "set_data",
+                            "data": 4
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "wind"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:beverage",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        },
+                        {
+                            "function": "set_data",
+                            "data": 5
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "towers"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:beverage",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        },
+                        {
+                            "function": "set_data",
+                            "data": 6
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "monsters"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:beverage",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        },
+                        {
+                            "function": "set_data",
+                            "data": 7
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "thought"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:beverage",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        },
+                        {
+                            "function": "set_data",
+                            "data": 8
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "thunder"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:beverage",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        },
+                        {
+                            "function": "set_data",
+                            "data": 9
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "pulse"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "rolls": {
+                "min": 1,
+                "max": 2
+            },
+            "name": "special",
+            "entries": [
+                {
+                    "type": "item",
+                    "name": "minecraft:poisonous_potato",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:consort",
+                            "consort": "salamander"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:melon",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 3,
+                                "max": 6
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:consort",
+                            "consort": "salamander"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:gold_seeds",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:consort",
+                            "consort": "turtle"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:fish",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:consort",
+                            "consort": "turtle"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:cookie",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:consort",
+                            "consort": "iguana"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:apple_cake",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:consort",
+                            "consort": "iguana"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:beverage",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 3,
+                                "max": 6
+                            }
+                        },
+                        {
+                            "function": "set_data",
+                            "data": 0
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:consort",
+                            "consort": "nakagator"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:irradiated_steak",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:consort",
+                            "consort": "nakagator"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:pumpkin_pie",
+                    "weight": 3,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 2
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:golden_apple",
+                    "weight": 1
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:candy",
+                    "weight": 15,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        },
+                        {
+                            "function": "set_data",
+                            "data": {
+                                "min": 0,
+                                "max": 21
                             }
                         }
                     ]
