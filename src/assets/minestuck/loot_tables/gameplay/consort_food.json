@@ -1,7 +1,7 @@
 {
     "pools": [
         {
-            "rolls": 4,
+            "rolls": 5,
             "name":"main",
             "entries": [
                 {
@@ -379,9 +379,10 @@
                     ]
                 },
                 {
+                    "entryName": "cocoa_beans",
                     "type": "item",
                     "name": "minecraft:dye",
-                    "weight": 8,
+                    "weight": 2,
                     "functions": [
                         {
                             "function": "set_count",
@@ -398,14 +399,59 @@
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
-                            "land_aspect": "forests"
+                            "land_aspect": "forest"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:potion",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 3,
+                                "max": 6
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "sand"
+                        }
+                    ]
+                },
+                {
+                    "entryName": "salmon",
+                    "type": "item",
+                    "name": "minecraft:fish",
+                    "weight": 8,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 3,
+                                "max": 6
+                            }
+                        },
+                        {
+                            "function": "set_data",
+                            "data": 1
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "sandstone"
                         }
                     ]
                 },
                 {
                     "type": "loot_table",
                     "name": "minestuck:gameplay/special/cold_cake",
-                    "weight": 4,
+                    "weight": 2,
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
@@ -416,7 +462,7 @@
                 {
                     "type": "loot_table",
                     "name": "minestuck:gameplay/special/hot_cake",
-                    "weight": 4,
+                    "weight": 2,
                     "conditions": [
                         {
                             "condition": "minestuck:land_aspect",
@@ -427,7 +473,7 @@
                 {
                     "type": "item",
                     "name": "minecraft:milk_bucket",
-                    "weight": 8,
+                    "weight": 2,
                     "functions": [
                         {
                             "function": "set_count",
@@ -447,7 +493,7 @@
                 {
                     "type": "item",
                     "name": "minecraft:egg",
-                    "weight": 8,
+                    "weight": 2,
                     "functions": [
                         {
                             "function": "set_count",
@@ -467,7 +513,7 @@
                 {
                     "type": "item",
                     "name": "minecraft:rabbit_stew",
-                    "weight": 8,
+                    "weight": 2,
                     "functions": [
                         {
                             "function": "set_count",
@@ -485,9 +531,10 @@
                     ]
                 },
                 {
+                    "entryName": "orange_faygo",
                     "type": "item",
                     "name": "minestuck:beverage",
-                    "weight": 8,
+                    "weight": 2,
                     "functions": [
                         {
                             "function": "set_count",
@@ -509,9 +556,10 @@
                     ]
                 },
                 {
+                    "entryName": "candy_apple_faygo",
                     "type": "item",
                     "name": "minestuck:beverage",
-                    "weight": 8,
+                    "weight": 2,
                     "functions": [
                         {
                             "function": "set_count",
@@ -533,9 +581,10 @@
                     ]
                 },
                 {
+                    "entryName": "cola_faygo",
                     "type": "item",
                     "name": "minestuck:beverage",
-                    "weight": 8,
+                    "weight": 2,
                     "functions": [
                         {
                             "function": "set_count",
@@ -557,9 +606,10 @@
                     ]
                 },
                 {
+                    "entryName": "cotton_candy_faygo",
                     "type": "item",
                     "name": "minestuck:beverage",
-                    "weight": 8,
+                    "weight": 2,
                     "functions": [
                         {
                             "function": "set_count",
@@ -581,9 +631,10 @@
                     ]
                 },
                 {
+                    "entryName": "creme_soda_faygo",
                     "type": "item",
                     "name": "minestuck:beverage",
-                    "weight": 8,
+                    "weight": 2,
                     "functions": [
                         {
                             "function": "set_count",
@@ -605,9 +656,10 @@
                     ]
                 },
                 {
+                    "entryName": "grape_faygo",
                     "type": "item",
                     "name": "minestuck:beverage",
-                    "weight": 8,
+                    "weight": 2,
                     "functions": [
                         {
                             "function": "set_count",
@@ -629,9 +681,10 @@
                     ]
                 },
                 {
+                    "entryName": "moonmist_faygo",
                     "type": "item",
                     "name": "minestuck:beverage",
-                    "weight": 8,
+                    "weight": 2,
                     "functions": [
                         {
                             "function": "set_count",
@@ -653,9 +706,10 @@
                     ]
                 },
                 {
+                    "entryName": "peach_faygo",
                     "type": "item",
                     "name": "minestuck:beverage",
-                    "weight": 8,
+                    "weight": 2,
                     "functions": [
                         {
                             "function": "set_count",
@@ -677,9 +731,10 @@
                     ]
                 },
                 {
+                    "entryName": "redpop_faygo",
                     "type": "item",
                     "name": "minestuck:beverage",
-                    "weight": 8,
+                    "weight": 2,
                     "functions": [
                         {
                             "function": "set_count",
@@ -770,6 +825,7 @@
                     ]
                 },
                 {
+                    "entryName": "fish",
                     "type": "item",
                     "name": "minecraft:fish",
                     "weight": 8,
@@ -830,6 +886,7 @@
                     ]
                 },
                 {
+                    "entryName": "tab",
                     "type": "item",
                     "name": "minestuck:beverage",
                     "weight": 8,
