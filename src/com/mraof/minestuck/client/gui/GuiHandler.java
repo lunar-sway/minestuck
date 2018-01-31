@@ -33,8 +33,6 @@ public class GuiHandler implements IGuiHandler
 				return new ContainerUraniumCooker(player.inventory, (TileEntityUraniumCooker) tileEntity);
 			else if(tileEntity instanceof TileEntityAlchemiter)
 				return new ContainerAlchemiter(player.inventory,(TileEntityAlchemiter) tileEntity);
-			else if(tileEntity instanceof TileEntityCruxtruder)
-				return new ContainerCruxtruder(player.inventory,(TileEntityCruxtruder) tileEntity);
 		return null;
 	}
 
@@ -53,8 +51,6 @@ public class GuiHandler implements IGuiHandler
 				return new GuiUraniumCooker(player.inventory, (TileEntityUraniumCooker) tileEntity);
 			else if (tileEntity instanceof TileEntityAlchemiter)
 				return new GuiAlchemiter(player.inventory, (TileEntityAlchemiter)tileEntity);
-			else if(tileEntity instanceof TileEntityCruxtruder)
-				return new GuiCruxtruder(player.inventory,(TileEntityCruxtruder)tileEntity);
 		if(tileEntity instanceof TileEntityComputer && id == GuiId.COMPUTER.ordinal())
 			return new GuiComputer(Minecraft.getMinecraft(),(TileEntityComputer) tileEntity);
 		

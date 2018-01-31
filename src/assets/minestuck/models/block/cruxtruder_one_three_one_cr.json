@@ -1,7 +1,7 @@
 {
 	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
 	"textures": {
-		"2": "minestuck:machines/cruxtruder/dowel_texture",
+		"2": "minestuck:machines/totemlathe/dowel_texture",
 		"3": "minestuck:machines/cruxtruder/untitled",
 		"1_3": "minestuck:machines/cruxtruder/untitled",
 		"particle": "minestuck:machines/cruxtruder/untitled"
