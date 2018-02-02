@@ -392,6 +392,11 @@ public class ConsortVillageComponents
 		
 		protected void spawnConsort(int x, int y, int z, StructureBoundingBox boundingBox, World world)
 		{
+			spawnConsort(x, y, z, boundingBox, world, EnumConsort.MerchantType.NONE);
+		}
+		
+		protected void spawnConsort(int x, int y, int z, StructureBoundingBox boundingBox, World world, EnumConsort.MerchantType type)
+		{
 			BlockPos pos = new BlockPos(this.getXWithOffset(x, z), this.getYWithOffset(y), this.getZWithOffset(x, z));
 			
 			if(boundingBox.isVecInside(pos))
@@ -411,6 +416,8 @@ public class ConsortVillageComponents
 					consort.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 					
 					consort.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(consort)), null);
+					if(type != EnumConsort.MerchantType.NONE)
+						consort.merchantType = type;
 					//TODO More preparations, such as home location or set type by parameter
 					world.spawnEntity(consort);
 				} catch(Exception e)
@@ -752,8 +759,8 @@ public class ConsortVillageComponents
 			this.setBlockState(worldIn, lightBlock, 2, 6, 16, structureBoundingBoxIn);
 			this.setBlockState(worldIn, lightBlock, 11, 6, 16, structureBoundingBoxIn);
 			
-			this.spawnConsort(4, 1, 15, structureBoundingBoxIn, worldIn);
-			this.spawnConsort(9, 1, 15, structureBoundingBoxIn, worldIn);
+			this.spawnConsort(4, 1, 15, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD);
+			this.spawnConsort(9, 1, 15, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD);
 			
 			return true;
 		}
@@ -1096,9 +1103,9 @@ public class ConsortVillageComponents
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 11, 9, 1, 11, 9, 8, fence, fence, false);
 			this.setBlockState(worldIn, fence, 10, 9, 1, structureBoundingBoxIn);
 			
-			this.spawnConsort(5, 1, 5, structureBoundingBoxIn, worldIn);
-			this.spawnConsort(6, 5, 5, structureBoundingBoxIn, worldIn);
-			this.spawnConsort(5, 9, 5, structureBoundingBoxIn, worldIn);
+			this.spawnConsort(5, 1, 5, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD);
+			this.spawnConsort(6, 5, 5, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD);
+			this.spawnConsort(5, 9, 5, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD);
 			
 			return true;
 		}
