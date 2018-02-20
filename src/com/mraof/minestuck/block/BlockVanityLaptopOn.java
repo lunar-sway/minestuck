@@ -5,6 +5,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import javax.annotation.Nullable;
+
 import java.util.Random;
 
 import com.mraof.minestuck.Minestuck;
@@ -20,12 +23,14 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
@@ -36,6 +41,9 @@ public class BlockVanityLaptopOn extends BlockComputerOff implements ITileEntity
 	public static final PropertyEnum<BlockType> VARIANT = BlockVanityLaptopOff.VARIANT;
 	public static final PropertyDirection DIRECTION = BlockVanityLaptopOff.DIRECTION;
 	public static final PropertyBool BSOD = BlockComputerOn.BSOD;
+	
+	protected static final AxisAlignedBB COMPUTER_AABB = new AxisAlignedBB(1/32D, 0.0D, 7/32D, 31/32D, 0.5/16D, 24.8/32D);
+	protected static final AxisAlignedBB COMPUTER_SCREEN_AABB = new AxisAlignedBB(0.5/16D, 0.5D/16, 11.8/16D, 15.5/16D, 9.5/16D, 12.4/16D);
 	
 	public BlockVanityLaptopOn()
 	{
@@ -91,11 +99,12 @@ public class BlockVanityLaptopOn extends BlockComputerOff implements ITileEntity
 				tileEntity.closeAll();
 				worldIn.setBlockState(pos, state.withProperty(BSOD, true), 2);
 				tileEntity.installedPrograms.put(id, true);
+				tileEntity.markBlockForUpdate();
 				System.out.println("A laptop has been BSOD'd!");
 			}
 			else tileEntity.installedPrograms.put(id, true);
 			tileEntity.markDirty();
-			worldIn.notifyBlockUpdate(pos, state, state, 3);
+			worldIn.notifyBlockUpdate(pos, state, getActualState(state, worldIn, pos), 3);
 			return true;
 		}
 
@@ -154,6 +163,29 @@ public class BlockVanityLaptopOn extends BlockComputerOff implements ITileEntity
 			entityItem.motionY = rand.nextGaussian() * factor + 0.2F;
 			entityItem.motionZ = rand.nextGaussian() * factor;
 			world.spawnEntity(entityItem);
+		}
+	}
+	
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+	{
+		if(state.getValue(VARIANT)==BlockType.LUNCH_TOP)
+		{
+			return modifyAABBForDirection(state.getValue(DIRECTION), new AxisAlignedBB(5/16D, 0.0D, 5/16D, 11/16D, 3.5/16D, 10/16D));
+		}
+		return modifyAABBForDirection(state.getValue(DIRECTION), COMPUTER_AABB);
+	}
+	
+	@Override
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_)
+	{
+		super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn, p_185477_7_);
+		if(state.getValue(VARIANT)!=BlockType.LUNCH_TOP)
+		{
+			EnumFacing rotation = state.getValue(DIRECTION);
+			AxisAlignedBB bb = modifyAABBForDirection(rotation, COMPUTER_SCREEN_AABB).offset(pos);
+			if(entityBox.intersects(bb))
+				collidingBoxes.add(bb);
 		}
 	}
 	

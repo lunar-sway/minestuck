@@ -61,6 +61,7 @@ public class TileEntitySkaiaPortal extends TileEntity implements Teleport.ITelep
 	@Override
 	public boolean prepareDestination(BlockPos pos, Entity entity, WorldServer worldserver)
 	{
+		entity.setPosition(pos.getX(), pos.getY(), pos.getZ());
 		return true;
 	}
 

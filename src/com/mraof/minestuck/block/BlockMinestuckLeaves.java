@@ -74,21 +74,19 @@ public abstract class BlockMinestuckLeaves extends Block implements net.minecraf
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
-		int i = 1;
-		int j = 2;
-		int k = pos.getX();
-		int l = pos.getY();
-		int i1 = pos.getZ();
+		int i = pos.getX();
+		int j = pos.getY();
+		int k = pos.getZ();
 
-		if (worldIn.isAreaLoaded(new BlockPos(k - 2, l - 2, i1 - 2), new BlockPos(k + 2, l + 2, i1 + 2)))
+		if (worldIn.isAreaLoaded(new BlockPos(i - 2, j - 2, k - 2), new BlockPos(i + 2, j + 2, k + 2)))
 		{
-			for (int j1 = -1; j1 <= 1; ++j1)
+			for (int i1 = -1; i1 <= 1; ++i1)
 			{
-				for (int k1 = -1; k1 <= 1; ++k1)
+				for (int j1 = -1; j1 <= 1; ++j1)
 				{
-					for (int l1 = -1; l1 <= 1; ++l1)
+					for (int k1 = -1; k1 <= 1; ++k1)
 					{
-						BlockPos blockpos = pos.add(j1, k1, l1);
+						BlockPos blockpos = pos.add(i1, j1, k1);
 						IBlockState iblockstate = worldIn.getBlockState(blockpos);
 
 						if (iblockstate.getBlock().isLeaves(iblockstate, worldIn, blockpos))
@@ -214,7 +212,7 @@ public abstract class BlockMinestuckLeaves extends Block implements net.minecraf
 		}
 	}
 
-	private void destroy(World worldIn, BlockPos pos)
+	protected void destroy(World worldIn, BlockPos pos)
 	{
 		this.dropBlockAsItem(worldIn, pos, worldIn.getBlockState(pos), 0);
 		worldIn.setBlockToAir(pos);

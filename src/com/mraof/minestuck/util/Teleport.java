@@ -60,6 +60,9 @@ public class Teleport
 				{
 					return false;
 				}
+			} else
+			{
+				player.setPosition(x, y, z);
 			}
 			
 			try

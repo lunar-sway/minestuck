@@ -34,11 +34,8 @@ import java.util.List;
 
 public class BlockVanityLaptopOff extends BlockComputerOff
 {
-	protected static final AxisAlignedBB[] COMPUTER_AABB = {
-			new AxisAlignedBB(1/16D, 0.0D, 1/16D, 15/16D, .55/16D, 15/16D),
-			new AxisAlignedBB(1/16D, 0.0D, 1/16D, 15/16D, .55/16D, 15/16D),
-			new AxisAlignedBB(1/16D, 0.0D, 1/16D, 15/16D, .55/16D, 15/16D),
-			new AxisAlignedBB(1/16D, 0.0D, 1/16D, 15/16D, .55/16D, 15/16D)};
+	protected static final AxisAlignedBB COMPUTER_AABB = new AxisAlignedBB(1/32D, 0.0D, 7/32D, 31/32D, 0.5/16D, 24.8/32D);
+	protected static final AxisAlignedBB COMPUTER_SCREEN_AABB = new AxisAlignedBB(0.5/16D, 0.5D/16, 11.8/16D, 15.5/16D, 9.5/16D, 12.4/16D);
 
 	public static final PropertyEnum<BlockType> VARIANT = PropertyEnum.create("type", BlockType.class);
 	public static final PropertyDirection DIRECTION = BlockComputerOff.DIRECTION;
@@ -118,15 +115,28 @@ public class BlockVanityLaptopOff extends BlockComputerOff
 	{
 		if(state.getValue(VARIANT)==BlockType.LUNCH_TOP)
 		{
-			return new AxisAlignedBB(1/16D, 0.0D, 1/16D, 15/16D, .55/16D, 15/16D);
+			return modifyAABBForDirection(state.getValue(DIRECTION), new AxisAlignedBB(5/16D, 0.0D, 5/16D, 11/16D, 3.5/16D, 10/16D));
 		}
-		return COMPUTER_AABB[state.getValue(DIRECTION).ordinal() - 2];
+		return modifyAABBForDirection(state.getValue(DIRECTION), COMPUTER_AABB);
 	}
 	
 	@Override
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player)
 	{
 		return new ItemStack(MinestuckBlocks.blockLaptopOff, state.getValue(VARIANT).ordinal());
+	}
+	
+	@Override
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_)
+	{
+		super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn, p_185477_7_);
+		if(state.getValue(VARIANT)!=BlockType.LUNCH_TOP)
+		{
+			EnumFacing rotation = state.getValue(DIRECTION);
+			AxisAlignedBB bb = modifyAABBForDirection(rotation, COMPUTER_SCREEN_AABB).offset(pos);
+			if(entityBox.intersects(bb))
+				collidingBoxes.add(bb);
+		}
 	}
 	
 	public enum BlockType implements IStringSerializable
