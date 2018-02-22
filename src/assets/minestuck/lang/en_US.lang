@@ -832,6 +832,8 @@ minestuck.config.canBreakGates=Can Break Gates
 minestuck.config.canBreakGates.tooltip=Lets gates be destroyed by explosions. Turning this off will make gates use the same explosion resistance as bedrock.
 minestuck.config.disableGiclops=Disable Giclops
 minestuck.config.disableGiclops.tooltip=Right now, the giclops pathfinding is currently causing huge amounts of lag due to their size. This option is a short-term solution that will disable giclops spawning and remove all existing giclopses.
+minestuck.config.forbiddenDimensionsTpz=Transportalizer-Forbidden Dimensions
+minestuck.config.forbiddenDimensionsTpz.tooltip=A list of dimension id's that you cannot travel to or from using transportalizers.
 
 message.selectDefaultColor=Default color selected. You can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!
 message.selectColor=If you want to change the color, you can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!
@@ -839,6 +841,8 @@ message.privateComputerMessage=You are not allowed to access other players compu
 message.transportalizer.transportalizerDisabled=This transportalizer is currently disabled with a redstone signal.
 message.transportalizer.destinationBlocked=The destination seems to be blocked.
 message.transportalizer.blocked=The transportalizer appears to need more space above it to function.
+message.transportalizer.forbidden=Transportalizers have been disabled for this dimension.
+message.transportalizer.forbiddenDest=Transportalizers have been disabled for the destination dimension.
 message.gateDestroyed=The destination gate seems to have been destroyed.
 message.gateMissingLand=The land this gate leads to does not exist yet!
 
