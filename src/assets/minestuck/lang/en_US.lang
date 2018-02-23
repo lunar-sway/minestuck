@@ -834,6 +834,8 @@ minestuck.config.disableGiclops=Disable Giclops
 minestuck.config.disableGiclops.tooltip=Right now, the giclops pathfinding is currently causing huge amounts of lag due to their size. This option is a short-term solution that will disable giclops spawning and remove all existing giclopses.
 minestuck.config.forbiddenDimensionsTpz=Transportalizer-Forbidden Dimensions
 minestuck.config.forbiddenDimensionsTpz.tooltip=A list of dimension id's that you cannot travel to or from using transportalizers.
+minestuck.config.oreMultiplier=Ore Multiplier
+minestuck.config.oreMultiplier.tooltip=Multiplies the cost for the 'contents' of an ore. Set to 0 to disable alchemizing ores.
 
 message.selectDefaultColor=Default color selected. You can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!
 message.selectColor=If you want to change the color, you can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!
