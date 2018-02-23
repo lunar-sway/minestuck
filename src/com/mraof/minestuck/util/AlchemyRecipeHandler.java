@@ -1,5 +1,6 @@
 package com.mraof.minestuck.util;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.BlockMinestuckStone;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.modSupport.*;
@@ -38,7 +39,7 @@ public class AlchemyRecipeHandler
 {
 	public static final ResourceLocation BASIC_MEDIUM_CHEST = new ResourceLocation("minestuck", "chests/medium_basic");
 	public static final ResourceLocation CONSORT_JUNK_REWARD = new ResourceLocation("minestuck", "gameplay/consort_junk");
-	public static final int ORE_COST_MULTIPLIER = 1;
+	public static final int ORE_COST_MULTIPLIER = MinestuckConfig.oreMultiplier;
 	
 	private static HashMap<List<Object>, Object> recipeList;
 	private static HashMap<List<Object>, Boolean> lookedOver;
@@ -355,21 +356,24 @@ public class AlchemyRecipeHandler
 		}
 		
 		//ore related
-		CombinationRegistry.addCombination(new ItemStack(Items.COAL),new ItemStack(Blocks.STONE),MODE_AND, new ItemStack(Blocks.COAL_ORE));
+		if(ORE_COST_MULTIPLIER != 0)
+		{
+			CombinationRegistry.addCombination(new ItemStack(Items.COAL),new ItemStack(Blocks.STONE),MODE_AND, new ItemStack(Blocks.COAL_ORE));
+			CombinationRegistry.addCombination(new ItemStack(Items.DIAMOND),new ItemStack(Blocks.STONE),MODE_AND, new ItemStack(Blocks.DIAMOND_ORE));
+			CombinationRegistry.addCombination(new ItemStack(Items.DYE,1,4),new ItemStack(Blocks.STONE),MODE_AND, new ItemStack(Blocks.LAPIS_ORE));
+			CombinationRegistry.addCombination(new ItemStack(Items.EMERALD),new ItemStack(Blocks.STONE),MODE_AND, new ItemStack(Blocks.EMERALD_ORE));
+			CombinationRegistry.addCombination(new ItemStack(Items.GOLD_INGOT),new ItemStack(Blocks.STONE),MODE_AND, new ItemStack(Blocks.GOLD_ORE));
+			CombinationRegistry.addCombination(new ItemStack(Items.IRON_INGOT),new ItemStack(Blocks.STONE),MODE_AND, new ItemStack(Blocks.IRON_ORE));
+			CombinationRegistry.addCombination(new ItemStack(Items.QUARTZ),new ItemStack(Blocks.NETHERRACK),MODE_AND, new ItemStack(Blocks.QUARTZ_ORE));
+			CombinationRegistry.addCombination(new ItemStack(Items.REDSTONE),new ItemStack(Blocks.STONE),MODE_AND, new ItemStack(Blocks.REDSTONE_ORE));
+		}
 		CombinationRegistry.addCombination(new ItemStack(Items.COAL),new ItemStack(Blocks.STONE),MODE_OR, new ItemStack(Blocks.COAL_BLOCK));
-		CombinationRegistry.addCombination(new ItemStack(Items.DIAMOND),new ItemStack(Blocks.STONE),MODE_AND, new ItemStack(Blocks.DIAMOND_ORE));
 		CombinationRegistry.addCombination(new ItemStack(Items.DIAMOND),new ItemStack(Blocks.STONE),MODE_OR, new ItemStack(Blocks.DIAMOND_BLOCK));
-		CombinationRegistry.addCombination(new ItemStack(Items.DYE,1,4),new ItemStack(Blocks.STONE),MODE_AND, new ItemStack(Blocks.LAPIS_ORE));
 		CombinationRegistry.addCombination(new ItemStack(Items.DYE,1,4),new ItemStack(Blocks.STONE),MODE_OR, new ItemStack(Blocks.LAPIS_BLOCK));
-		CombinationRegistry.addCombination(new ItemStack(Items.EMERALD),new ItemStack(Blocks.STONE),MODE_AND, new ItemStack(Blocks.EMERALD_ORE));
 		CombinationRegistry.addCombination(new ItemStack(Items.EMERALD),new ItemStack(Blocks.STONE),MODE_OR, new ItemStack(Blocks.EMERALD_BLOCK));
-		CombinationRegistry.addCombination(new ItemStack(Items.GOLD_INGOT),new ItemStack(Blocks.STONE),MODE_AND, new ItemStack(Blocks.GOLD_ORE));
 		CombinationRegistry.addCombination(new ItemStack(Items.GOLD_INGOT),new ItemStack(Blocks.STONE),MODE_OR, new ItemStack(Blocks.GOLD_BLOCK));
-		CombinationRegistry.addCombination(new ItemStack(Items.IRON_INGOT),new ItemStack(Blocks.STONE),MODE_AND, new ItemStack(Blocks.IRON_ORE));
 		CombinationRegistry.addCombination(new ItemStack(Items.IRON_INGOT),new ItemStack(Blocks.STONE),MODE_OR, new ItemStack(Blocks.IRON_BLOCK));
-		CombinationRegistry.addCombination(new ItemStack(Items.QUARTZ),new ItemStack(Blocks.NETHERRACK),MODE_AND, new ItemStack(Blocks.QUARTZ_ORE));
 		CombinationRegistry.addCombination(new ItemStack(Items.QUARTZ),new ItemStack(Blocks.STONE),MODE_OR, new ItemStack(Blocks.QUARTZ_BLOCK));
-		CombinationRegistry.addCombination(new ItemStack(Items.REDSTONE),new ItemStack(Blocks.STONE),MODE_AND, new ItemStack(Blocks.REDSTONE_ORE));
 		CombinationRegistry.addCombination(new ItemStack(Items.REDSTONE),new ItemStack(Blocks.STONE),MODE_OR, new ItemStack(Blocks.REDSTONE_BLOCK));
 		
 		CombinationRegistry.addCombination(new ItemStack(Blocks.STONE), new ItemStack(Blocks.STONEBRICK, 1, 2), MODE_AND, new ItemStack(Blocks.STONEBRICK, 1, 0));
@@ -775,12 +779,15 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Items.IRON_SHOVEL), new ItemStack(Items.MUSHROOM_STEW), MODE_AND, new ItemStack(silverSpoon));
 		CombinationRegistry.addCombination(new ItemStack(Items.IRON_SHOVEL), new ItemStack(Items.RABBIT_STEW), MODE_AND, new ItemStack(silverSpoon));
 		CombinationRegistry.addCombination(new ItemStack(Items.IRON_SHOVEL), new ItemStack(Items.BEETROOT_SOUP), MODE_AND, new ItemStack(silverSpoon));
-		
-		CombinationRegistry.addCombination(new ItemStack(Items.COAL), new ItemStack(Blocks.NETHERRACK), MODE_AND, new ItemStack(coalOreNetherrack));
-		CombinationRegistry.addCombination(new ItemStack(Items.IRON_INGOT), new ItemStack(Blocks.SANDSTONE), MODE_AND, new ItemStack(ironOreSandstone));
-		CombinationRegistry.addCombination(new ItemStack(Items.IRON_INGOT), new ItemStack(Blocks.RED_SANDSTONE), MODE_AND, new ItemStack(ironOreSandstoneRed));
-		CombinationRegistry.addCombination(new ItemStack(Items.GOLD_INGOT), new ItemStack(Blocks.SANDSTONE), MODE_AND, new ItemStack(goldOreSandstone));
-		CombinationRegistry.addCombination(new ItemStack(Items.GOLD_INGOT), new ItemStack(Blocks.RED_SANDSTONE), MODE_AND, new ItemStack(goldOreSandstoneRed));
+
+		if(ORE_COST_MULTIPLIER != 0)
+		{
+			CombinationRegistry.addCombination(new ItemStack(Items.COAL), new ItemStack(Blocks.NETHERRACK), MODE_AND, new ItemStack(coalOreNetherrack));
+			CombinationRegistry.addCombination(new ItemStack(Items.IRON_INGOT), new ItemStack(Blocks.SANDSTONE), MODE_AND, new ItemStack(ironOreSandstone));
+			CombinationRegistry.addCombination(new ItemStack(Items.IRON_INGOT), new ItemStack(Blocks.RED_SANDSTONE), MODE_AND, new ItemStack(ironOreSandstoneRed));
+			CombinationRegistry.addCombination(new ItemStack(Items.GOLD_INGOT), new ItemStack(Blocks.SANDSTONE), MODE_AND, new ItemStack(goldOreSandstone));
+			CombinationRegistry.addCombination(new ItemStack(Items.GOLD_INGOT), new ItemStack(Blocks.RED_SANDSTONE), MODE_AND, new ItemStack(goldOreSandstoneRed));
+		}
 		
 		CombinationRegistry.addCombination(new ItemStack(Items.DIAMOND_SWORD), new ItemStack(Items.EMERALD), MODE_OR, false, false, new ItemStack(emeraldSword));
 		CombinationRegistry.addCombination(new ItemStack(Items.DIAMOND_AXE), new ItemStack(Items.EMERALD), MODE_OR, false, false, new ItemStack(emeraldAxe));
