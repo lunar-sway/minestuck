@@ -1,15 +1,14 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
+
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -17,6 +16,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockAlchemiter extends BlockLargeMachine
@@ -25,6 +25,7 @@ public class BlockAlchemiter extends BlockLargeMachine
 	public static final PropertyEnum<EnumParts> PART2 = PropertyEnum.create("part",EnumParts.class, EnumParts.EDGE_LEFT, EnumParts.EDGE_RIGHT, EnumParts.CORNER, EnumParts.CENTER_PAD);
 	public final PropertyEnum<EnumParts> PART;
 	public static final PropertyDirection DIRECTION = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+	public static final PropertyBool HASDOWEL = PropertyBool.create("has_dowel");
 	
 	public final int index;
 	
@@ -55,10 +56,8 @@ public class BlockAlchemiter extends BlockLargeMachine
 	{
 		BlockPos mainPos = getMainPos(state, pos, worldIn);
 		TileEntity te = worldIn.getTileEntity(mainPos);
-		if(!worldIn.isRemote && te != null && te instanceof TileEntityAlchemiter && !((TileEntityAlchemiter)te).isBroken())
-		{
-			playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.MACHINE.ordinal(), worldIn, mainPos.getX(), mainPos.getY(), mainPos.getZ());	
-		}
+		if( te != null && te instanceof TileEntityAlchemiter)
+			((TileEntityAlchemiter) te).onRightClick(playerIn, state);
 		return true;
 	}
 	@Override
@@ -106,14 +105,17 @@ public class BlockAlchemiter extends BlockLargeMachine
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
-		BlockPos mainPos=getMainPos(state,pos, worldIn);
+	
+		BlockPos mainPos = getMainPos(state, pos,worldIn);
 		TileEntity te = worldIn.getTileEntity(mainPos);
-		if (te instanceof TileEntityAlchemiter)
+		if(te != null && te instanceof TileEntityAlchemiter)
 		{
 			TileEntityAlchemiter alchemiter = (TileEntityAlchemiter) te;
-			alchemiter.Break();
-			InventoryHelper.dropInventoryItems(worldIn, pos, alchemiter);
-		}	
+			alchemiter.brake();
+			if(state.getValue(PART).equals(EnumParts.TOTEM_PAD))
+				alchemiter.dropItem(true);
+		}
+		
 		super.breakBlock(worldIn, pos, state);
 	}
 	
@@ -121,8 +123,21 @@ public class BlockAlchemiter extends BlockLargeMachine
 	@Override
 	protected BlockStateContainer createBlockState()
     {
-        return new BlockStateContainer(this,PART1,DIRECTION);
+        return new BlockStateContainer(this,PART1,DIRECTION,HASDOWEL);
     }
+	
+	@Override
+	public IBlockState getActualState(IBlockState state,IBlockAccess worldIn,BlockPos pos){
+		TileEntity te;
+		te=worldIn.getTileEntity((getMainPos(state, pos , (World) worldIn)));
+		if (state.getValue(PART)==EnumParts.TOTEM_PAD) {
+			if(te instanceof TileEntityAlchemiter) {
+				return state.withProperty(HASDOWEL,!((TileEntityAlchemiter)te).getDowel().isEmpty());
+			}
+		}
+		
+		return state;
+	}
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta)
@@ -222,5 +237,13 @@ public class BlockAlchemiter extends BlockLargeMachine
 		{
 			return name().toLowerCase();
 		}
+	}
+	
+
+	public static void updateItem(boolean b, World world, BlockPos pos)
+	{
+		IBlockState oldState = world.getBlockState(pos);
+		
+		world.notifyBlockUpdate(pos, oldState, oldState.withProperty(HASDOWEL, b), 3);
 	}
 }
