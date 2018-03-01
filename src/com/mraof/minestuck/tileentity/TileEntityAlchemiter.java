@@ -1,22 +1,47 @@
 package com.mraof.minestuck.tileentity;
 
+
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.block.BlockAlchemiter;
+import com.mraof.minestuck.block.BlockAlchemiter.EnumParts;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
 import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 
-public class TileEntityAlchemiter extends TileEntityMachine
+public class TileEntityAlchemiter extends TileEntity
 {
 	//still private because programming teacher and data protection
 	private PlayerIdentifier owner;
 	private GristType selectedGrist = GristType.Build;
-	private int ticks_since_update = 0;
 	private boolean broken=false;
+	private ItemStack dowel=ItemStack.EMPTY;
+
+	
+	public void setDowel(ItemStack newDowel) {
+		if(newDowel.getItem()==MinestuckItems.cruxiteDowel||newDowel==ItemStack.EMPTY) {
+			dowel=newDowel;
+			resendState();
+			
+		}
+	}
+	public ItemStack getDowel() {
+		return dowel;
+	}
+	
 	public PlayerIdentifier getOwner(){
 		return owner;
 	}
@@ -31,28 +56,27 @@ public class TileEntityAlchemiter extends TileEntityMachine
 		return broken;
 	}
 	//tells the tile entity to stop working
-	public void Break() {
+	public void brake() {
 		broken = true;		
 	}
 
 	
-	@Override
-	public boolean isAutomatic()
+	public void dropItem(boolean inBlock)
 	{
-		return false;
+		BlockPos dropPos;
+		if(inBlock)
+			dropPos = this.pos;
+		else if(!world.getBlockState(this.pos).isBlockNormalCube())
+			dropPos = this.pos;
+		else if(!world.getBlockState(this.pos.up()).isBlockNormalCube())
+			dropPos = this.pos.up();
+		else dropPos = this.pos;
+		
+		InventoryHelper.spawnItemStack(world, dropPos.getX(), dropPos.getY(), dropPos.getZ(), dowel);
+		setDowel(ItemStack.EMPTY);
 	}
 	
-	@Override
-	public boolean allowOverrideStop()
-	{
-		return true;
-	}
-	
-	@Override
-	public int getSizeInventory()
-	{
-return 2;
-	}
+
 	
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound)
@@ -68,6 +92,9 @@ return 2;
 		
 		if(tagCompound.hasKey("owner") || tagCompound.hasKey("ownerMost"))
 			owner = IdentifierHandler.load(tagCompound, "owner");
+		
+		if(tagCompound.hasKey("dowel")) 
+			dowel = new ItemStack(tagCompound.getCompoundTag("dowel"));
 	}
 	
 	@Override
@@ -79,119 +106,122 @@ return 2;
 		
 		if(owner != null)
 			owner.saveToNBT(tagCompound, "owner");
+
+		if(dowel!= null)
+			tagCompound.setTag("dowel", dowel.writeToNBT(new NBTTagCompound()));
+		
 		return tagCompound;
 	}
 	
 	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack)
-	{
-	 return i == 0 ? itemstack.getItem() == MinestuckItems.cruxiteDowel : false;
-
+	public NBTTagCompound getUpdateTag(){
+		NBTTagCompound nbt;
+		nbt = super.getUpdateTag();
+		nbt.setTag("dowel",dowel.writeToNBT(new NBTTagCompound()));
+		return nbt;
 	}
-	
 	@Override
-	public boolean contentsValid()
-	{
-
-			if(!world.isBlockPowered(this.getPos()) && !this.inv.get(0).isEmpty() && this.owner != null)
-			{
-				//Check owner's cache: Do they have everything they need?
-				ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(this.inv.get(0));
-				if (newItem.isEmpty())
-					if(!inv.get(0).hasTagCompound() || !inv.get(0).getTagCompound().hasKey("contentID"))
-						newItem = new ItemStack(MinestuckBlocks.genericObject);
-					else return false;
-				if (!inv.get(1).isEmpty() && (inv.get(1).getItem() != newItem.getItem() || inv.get(1).getItemDamage() != newItem.getItemDamage() || inv.get(1).getMaxStackSize() <= inv.get(1).getCount()))
-				{return false;}
-				GristSet cost = GristRegistry.getGristConversion(newItem);
-				if(newItem.getItem() == MinestuckItems.captchaCard)
-					cost = new GristSet(getSelectedGrist(), MinestuckConfig.cardCost);
-				if(cost != null && newItem.isItemDamaged())
-				{
-					float multiplier = 1 - newItem.getItem().getDamage(newItem)/((float) newItem.getMaxDamage());
-					for (GristAmount amount : cost.getArray())
-					{
-						cost.setGrist(amount.getType(), (int) Math.ceil(amount.getAmount() * multiplier));
-					}
-				}
-				return GristHelper.canAfford(MinestuckPlayerData.getGristSet(this.owner), cost);
-			}
-			else
-			{
-				return false;
-			}
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		SPacketUpdateTileEntity packet;
+		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setTag("dowel",dowel.writeToNBT(new NBTTagCompound()));
+		dowel.writeToNBT(nbt);
+		packet = new SPacketUpdateTileEntity(this.pos, 0, nbt);				
+		return packet;
 	}
 	
 	public int comparatorValue()
 	{
-				if (getStackInSlot(0) != null && owner != null) {
-					ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(getStackInSlot(0));
-					if (newItem.isEmpty())
-						if (!getStackInSlot(0).hasTagCompound() || !getStackInSlot(0).getTagCompound().hasKey("contentID"))
-							newItem = new ItemStack(MinestuckBlocks.genericObject);
-						else return 0;
-					if (!getStackInSlot(1).isEmpty() && (getStackInSlot(1).getItem() != newItem.getItem() || getStackInSlot(1).getItemDamage() != newItem.getItemDamage() || getStackInSlot(1).getMaxStackSize() <= getStackInSlot(1).getCount())) {
-						return 0;
+		if (dowel != null && owner != null) {
+			ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(dowel);
+			if (newItem.isEmpty())
+				if (!dowel.hasTagCompound() || !dowel.getTagCompound().hasKey("contentID"))
+					newItem = new ItemStack(MinestuckBlocks.genericObject);
+				else return 0;
+			GristSet cost = GristRegistry.getGristConversion(newItem);
+			if (newItem.getItem() == MinestuckItems.captchaCard)
+				cost = new GristSet(getSelectedGrist(), MinestuckConfig.cardCost);
+			if (cost != null && newItem.isItemDamaged()) {
+				float multiplier = 1 - newItem.getItem().getDamage(newItem) / ((float) newItem.getMaxDamage());
+				for (GristAmount amount : cost.getArray())
+				{
+					cost.setGrist(amount.getType(), (int) Math.ceil(amount.getAmount() * multiplier));
+				}
+			}
+			// We need to run the check 16 times. Don't want to hammer the game with too many of these, so the comparators are only told to update every 20 ticks.
+			// Additionally, we need to check if the item in the slot is empty. Otherwise, it will attempt to check the cost for air, which cannot be alchemized anyway.
+			if (cost != null && !dowel.isEmpty()) {
+				GristSet scale_cost;
+				for (int lvl = 1; lvl <= 17; lvl++) {
+					// We went through fifteen item cost checks and could still afford it. No sense in checking more than this.
+					if (lvl == 17) {
+						return 15;
 					}
-					GristSet cost = GristRegistry.getGristConversion(newItem);
-					if (newItem.getItem() == MinestuckItems.captchaCard)
-						cost = new GristSet(getSelectedGrist(), MinestuckConfig.cardCost);
-					if (cost != null && newItem.isItemDamaged()) {
-						float multiplier = 1 - newItem.getItem().getDamage(newItem) / ((float) newItem.getMaxDamage());
-						for (GristAmount amount : cost.getArray())
-						{
-							cost.setGrist(amount.getType(), (int) Math.ceil(amount.getAmount() * multiplier));
-						}
-					}
-					// We need to run the check 16 times. Don't want to hammer the game with too many of these, so the comparators are only told to update every 20 ticks.
-					// Additionally, we need to check if the item in the slot is empty. Otherwise, it will attempt to check the cost for air, which cannot be alchemized anyway.
-					if (cost != null && !getStackInSlot(0).isEmpty()) {
-						GristSet scale_cost;
-						for (int lvl = 1; lvl <= 17; lvl++) {
-							// We went through fifteen item cost checks and could still afford it. No sense in checking more than this.
-							if (lvl == 17) {
-								return 15;
-							}
-							// We need to make a copy to preserve the original grist amounts and avoid scaling values that have already been scaled. Keeps scaling linear as opposed to exponential.
-							scale_cost = cost.copy().scaleGrist(lvl);
-							if (!GristHelper.canAfford(MinestuckPlayerData.getGristSet(owner), scale_cost)) {
-								return lvl - 1;
-							}
-						}
-						return 0;
+					// We need to make a copy to preserve the original grist amounts and avoid scaling values that have already been scaled. Keeps scaling linear as opposed to exponential.
+					scale_cost = cost.copy().scaleGrist(lvl);
+					if (!GristHelper.canAfford(MinestuckPlayerData.getGristSet(owner), scale_cost)) {
+						return lvl - 1;
 					}
 				}
+				return 0;
+			}
+		}
 		
 		return 0;
 	}
 	
-	// We're going to want to trigger a block update every 20 ticks to have comparators pull data from the Alchemeter.
-	@Override
-	public void update()
-	{
-		if(world.isRemote)
-			return;
-
-				if(this.ticks_since_update == 20)
-				{
-					world.updateComparatorOutputLevel(this.getPos(), this.blockType);
-					this.ticks_since_update = 0;
-				} else {
-					this.ticks_since_update++;
-				}
 	
-		super.update();
-	}
+	public void onRightClick(EntityPlayer player, IBlockState clickedState)
+	{
+		BlockAlchemiter alchemiter=(BlockAlchemiter)clickedState.getBlock();
+		EnumParts part = clickedState.getValue(alchemiter.PART);
+		if(part.equals(EnumParts.TOTEM_PAD) && !dowel.isEmpty())
+		{	//Remove card from punch slot
+			if(player.getHeldItemMainhand().isEmpty())
+				player.setHeldItem(EnumHand.MAIN_HAND, dowel);
+			else if(!player.inventory.addItemStackToInventory(dowel))
+				dropItem(false);
+			
+			setDowel(ItemStack.EMPTY);
+			return;
+		}
+		
 
-	@Override
+		ItemStack heldStack = player.getHeldItemMainhand();
+		if(part.equals(EnumParts.TOTEM_PAD) && dowel.isEmpty())
+		{
+			if(!heldStack.isEmpty() && heldStack.getItem() == MinestuckItems.cruxiteDowel)
+				setDowel(heldStack.splitStack(1));	//Insert card into the punch slot
+		} 
+		//it it's part of the pad
+		if(part==EnumParts.CENTER_PAD||part==EnumParts.CORNER||part==EnumParts.EDGE_LEFT||part==EnumParts.EDGE_RIGHT) {
+			/**
+			 * bring up the gui
+			 * and stuff
+			 * 
+			 * 
+			 * 
+			 */
+		}
+			
+			
+	}
+	
+	
+
+
 	public void processContents()
 	{
 
-			ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(this.inv.get(0));
+			ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(dowel);
 			
 			if(newItem.isEmpty())
 				newItem = new ItemStack(MinestuckBlocks.genericObject);
-			
+			/**
+			 *spawn item on pad
+			 * 
+			 * 
+			 *
 			if (inv.get(1).isEmpty())
 			{
 				setInventorySlotContents(1,newItem);
@@ -200,6 +230,7 @@ return 2;
 			{
 				this.inv.get(1).grow(1);
 			}
+			*/
 			
 			EntityPlayerMP player = owner.getPlayer();
 			if(player != null)
@@ -227,11 +258,7 @@ return 2;
 		super.markDirty();
 	}
 
-	@Override
-	public String getName()
-	{
-		return "tile.sburbMachine.alchemiter.name";
-	}
+
 	public GristType getSelectedGrist() {
 		return selectedGrist;
 	}
@@ -239,6 +266,17 @@ return 2;
 		this.selectedGrist = selectedGrist;
 	}
 
+	
+	public void resendState()
+	{
+		if(dowel.isEmpty())
+		{
+			BlockAlchemiter.updateItem(false, world, this.getPos());
+		} else
+		{
+			BlockAlchemiter.updateItem(true, world, this.getPos());
+		}
+	}
 	
 
 	
