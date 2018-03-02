@@ -1,6 +1,5 @@
 package com.mraof.minestuck.tileentity;
 
-import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Location;
 import com.mraof.minestuck.util.Teleport;
@@ -96,7 +95,7 @@ public class TileEntityTransportalizer extends TileEntity implements ITickable
 		{
 			entity.timeUntilPortal = entity.getPortalCooldown();
 			if(entity instanceof EntityPlayerMP)
-				entity.sendMessage(new TextComponentTranslation("message.transportalizer.transportalizerDisabled"));
+				((EntityPlayerMP) entity).sendMessage(new TextComponentTranslation("message.transportalizer.transportalizerDisabled"));
 			return;
 		}
 		if(location != null && location.pos.getY() != -1)
@@ -112,16 +111,6 @@ public class TileEntityTransportalizer extends TileEntity implements ITickable
 			}
 			
 			if(!destTransportalizer.getEnabled()) { return; } // Fail silently to make it look as though the player entered an ID that doesn't map to a transportalizer.
-			
-			for(int id : MinestuckConfig.forbiddenDimensionsTpz)
-				if(this.world.provider.getDimension() == id || location.dim == id)
-				{
-					entity.timeUntilPortal = entity.getPortalCooldown();
-					if(entity instanceof EntityPlayerMP)
-						entity.sendMessage(new TextComponentTranslation(this.world.provider.getDimension() == id ?"message.transportalizer.forbidden":"message.transportalizer.forbiddenDest"));
-					return;
-				}
-			
 			IBlockState block0 = this.world.getBlockState(this.pos.up());
 			IBlockState block1 = this.world.getBlockState(this.pos.up(2));
 			if(block0.getMaterial().blocksMovement() || block1.getMaterial().blocksMovement())

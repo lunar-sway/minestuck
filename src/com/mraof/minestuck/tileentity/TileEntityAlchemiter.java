@@ -1,9 +1,13 @@
 package com.mraof.minestuck.tileentity;
 
 
+import java.util.Iterator;
+
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.BlockAlchemiter;
 import com.mraof.minestuck.block.BlockAlchemiter.EnumParts;
+import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
@@ -11,22 +15,25 @@ import com.mraof.minestuck.util.*;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class TileEntityAlchemiter extends TileEntity
 {
 	//still private because programming teacher and data protection
 	private PlayerIdentifier owner;
-	private GristType selectedGrist = GristType.Build;
+	public GristType selectedGrist = GristType.Build;
 	private boolean broken=false;
 	private ItemStack dowel=ItemStack.EMPTY;
 
@@ -202,41 +209,53 @@ public class TileEntityAlchemiter extends TileEntity
 			 * 
 			 * 
 			 */
+			player.openGui(Minestuck.instance, GuiHandler.GuiId.ALCHEMITER.ordinal(), world, pos.getX(), pos.getY(), pos.getZ());
+
+			
 		}
 			
 			
 	}
 	
+
 	
-
-
-	public void processContents()
+	public void processContents(int quantity)
 	{
+		if(quantity==0) {
+			return;
+		}
+		EnumFacing facing = world.getBlockState(pos).getValue(BlockAlchemiter.DIRECTION);
+		ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(dowel);
+		if( !(dowel.hasTagCompound() && dowel.getTagCompound().hasKey("contentID")))
+			newItem = new ItemStack(MinestuckBlocks.genericObject);
+		BlockPos pos =this.getPos().offset(facing).offset(facing.rotateY()).up();
+		newItem.setCount(quantity);
+		GristSet cost = GristRegistry.getGristConversion(newItem);
+		EntityPlayerMP player = owner.getPlayer();
 
-			ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(dowel);
-			
-			if(newItem.isEmpty())
-				newItem = new ItemStack(MinestuckBlocks.genericObject);
-			/**
-			 *spawn item on pad
-			 * 
-			 * 
-			 *
-			if (inv.get(1).isEmpty())
-			{
-				setInventorySlotContents(1,newItem);
+		
+		for (GristAmount amount : cost.getArray()) {
+			cost.setGrist(amount.getType(), amount.getAmount()*quantity);
+		}
+		
+		boolean CanAfford=true;
+		
+		
+		
+		for (GristAmount amount : cost.getArray()) {
+			GristType type=amount.getType();
+			//if they dont have enough of said grist type
+			if(!(cost.getGrist(type) <= MinestuckPlayerData.getClientGrist().getGrist(type))) {
+				CanAfford=false;
 			}
-			else
-			{
-				this.inv.get(1).grow(1);
-			}
-			*/
-			
-			EntityPlayerMP player = owner.getPlayer();
+		}
+		
+		if(CanAfford){
+			EntityItem item=new EntityItem(world, pos.getX(),pos.getY(), pos.getZ(),newItem);
+			world.spawnEntity(item);
 			if(player != null)
 				MinestuckAchievementHandler.onAlchemizedItem(newItem, player);
 			
-			GristSet cost = GristRegistry.getGristConversion(newItem);
 			if(newItem.getItem() == MinestuckItems.captchaCard)
 				cost = new GristSet(getSelectedGrist(), MinestuckConfig.cardCost);
 			if(newItem.isItemDamaged())
@@ -250,6 +269,7 @@ public class TileEntityAlchemiter extends TileEntity
 			GristHelper.decrease(owner, cost);
 			MinestuckPlayerTracker.updateGristCache(owner);
 		}
+	}
 	
 	
 	@Override

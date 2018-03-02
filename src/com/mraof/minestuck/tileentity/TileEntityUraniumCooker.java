@@ -7,7 +7,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -58,7 +57,7 @@ public class TileEntityUraniumCooker extends TileEntityMachine
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack)
 	{
-		if(i == 0 && itemstack.getItem()!= MinestuckItems.rawUranium)
+		if(i == 0 && itemstack.getItem()!=MinestuckItems.rawUranium)
 		{
 			return false;
 		}
@@ -174,29 +173,7 @@ public class TileEntityUraniumCooker extends TileEntityMachine
 		}
 		return false;
 	}
-	
-	@Override
-	public int[] getSlotsForFace(EnumFacing side)
-	{
-		if(side == EnumFacing.UP)
-			return new int[] {1};
-		if(side == EnumFacing.DOWN)
-			return new int[] {2};
-		else return new int[] {0};
-	}
-	
-	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction)
-	{
-		return true;
-	}
-	
-	@Override
-	public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction)
-	{
-		return true;
-	}
-	
+
 	@Override
 	public String getName()
 	{

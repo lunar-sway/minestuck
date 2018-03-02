@@ -1,19 +1,30 @@
 package com.mraof.minestuck.block;
 
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
+
+import javax.annotation.Nullable;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mraof.minestuck.item.MinestuckItems;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.*;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -21,11 +32,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
 
 public class BlockGlowystoneWire extends Block
 {
@@ -423,14 +429,8 @@ public class BlockGlowystoneWire extends Block
 	{
 		return new BlockStateContainer(this, new IProperty[] {NORTH, EAST, SOUTH, WEST});
 	}
-	
-	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face)
-	{
-		return BlockFaceShape.UNDEFINED;
-	}
-	
-	public enum EnumAttachPosition implements IStringSerializable
+
+	static enum EnumAttachPosition implements IStringSerializable
 	{
 		UP("up"),
 		SIDE("side"),
@@ -438,7 +438,7 @@ public class BlockGlowystoneWire extends Block
 
 		private final String name;
 
-		EnumAttachPosition(String name)
+		private EnumAttachPosition(String name)
 		{
 			this.name = name;
 		}

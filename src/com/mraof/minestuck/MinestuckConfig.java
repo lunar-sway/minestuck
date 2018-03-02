@@ -93,7 +93,6 @@ public class MinestuckConfig
 	 */
 	public static int escapeFailureMode;
 	public static int preEntryRungLimit;
-	public static int[] forbiddenDimensionsTpz;
 	public static byte treeModusSetting;
 	public static byte hashmapChatModusSetting;
 	/**
@@ -119,7 +118,6 @@ public class MinestuckConfig
 		MinestuckAchievementHandler.idOffset = config.get("IDs", "statsIdStart", 413).setRequiresMcRestart(true).setLanguageKey("minestuck.config.statsIdStart").getInt();
 		
 		keepDimensionsLoaded = config.get("General", "keepDimensionsLoaded", true, "").setLanguageKey("minestuck.config.keepDimensionsLoaded").setRequiresMcRestart(true).getBoolean();
-		oreMultiplier = config.get("General", "oreMultiplier", 1, "Multiplies the cost for the 'contents' of an ore. Set to 0 to disable alchemizing ores.").setMinValue(0).setLanguageKey("minestuck.config.oreMultiplier").setRequiresMcRestart(true).getInt();
 		
 		//Debug.isDebugMode = config.get("General", "Print Debug Messages", true, "Whenether the game should print debug messages or not.").setShowInGui(false).getBoolean();
 		
@@ -147,6 +145,7 @@ public class MinestuckConfig
 			deployConfigurations = new boolean[1];
 			deployConfigurations[0] = config.get("General", "deployCard", false, "Determines if a card with a captcha card punched on it should be added to the deploy list or not.").setLanguageKey("minestuck.config.deployCard").setRequiresWorldRestart(true).getBoolean();
 			cardCost = config.get("General", "cardCost", 1, "An integer that determines how much a captchalouge card costs to alchemize").setMinValue(1).setLanguageKey("minestuck.config.cardCost").setRequiresWorldRestart(true).getInt();
+			oreMultiplier = config.get("General", "oreMultiplier", 1, "Multiplies the cost for the 'contents' of an ore. Set to 0 to disable alchemizing ores.").setMinValue(0).setLanguageKey("minestuck.config.oreMultiplier").setRequiresWorldRestart(true).getInt();
 			cardRecipe = config.get("General", "cardRecipe", true, "Set this to false to remove the captcha card crafting recipe.").setLanguageKey("minestuck.config.cardRecipe").setRequiresWorldRestart(true).getBoolean();
 			
 			globalSession = config.get("General", "globalSession", false, "Whenether all connetions should be put into a single session or not.").setRequiresWorldRestart(true).setLanguageKey("minestuck.config.globalSession").getBoolean();
@@ -197,7 +196,6 @@ public class MinestuckConfig
 		canBreakGates = config.get("General", "canBreakGates", true, "Lets gates be broken by explosions. Turning this off will make gates use the same explosion resistance as bedrock.").setLanguageKey("minestuck.config.canBreakGates").getBoolean();
 		disableGiclops = config.get("General", "disableGiclops", false, "Right now, the giclops pathfinding is currently causing huge amounts of lag due to their size. This option is a short-term solution that will disable giclops spawning and remove all existing giclopses.").setLanguageKey("minestuck.config.disableGiclops").getBoolean();
 		showGristChanges = config.get("General", "showGristChanges", true, "If this is true, grist change messages will appear").setLanguageKey("minestuck.config.showGristChanges").getBoolean();
-		forbiddenDimensionsTpz = config.get("General", "forbiddenDimensionsTpz", new int[0], "A list of dimension id's that you cannot travel to or from using transportalizers.").setLanguageKey("minestuck.config.forbiddenDimensionsTpz").getIntList();
 		if(config.hasKey("General", "hardMode"))
 			hardMode = config.get("General", "hardMode", false).getBoolean();	//Not fully fleshed out yet
 		

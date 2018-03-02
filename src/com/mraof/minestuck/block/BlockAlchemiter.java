@@ -1,6 +1,8 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
+import com.mraof.minestuck.tileentity.TileEntitySburbMachine;
+import com.mraof.minestuck.util.IdentifierHandler;
 
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
@@ -58,6 +60,7 @@ public class BlockAlchemiter extends BlockLargeMachine
 		TileEntity te = worldIn.getTileEntity(mainPos);
 		if( te != null && te instanceof TileEntityAlchemiter)
 			((TileEntityAlchemiter) te).onRightClick(playerIn, state);
+			((TileEntityAlchemiter) te).setOwner(IdentifierHandler.encode(playerIn));
 		return true;
 	}
 	@Override
@@ -91,7 +94,7 @@ public class BlockAlchemiter extends BlockLargeMachine
 			worldIn.setBlockState(pos.offset(facing,1).offset(facing.rotateY(),0), getBlockState(EnumParts.EDGE_RIGHT, facing.rotateY()));
 			worldIn.setBlockState(pos.offset(facing,1).offset(facing.rotateY(),2), getBlockState(EnumParts.CENTER_PAD, facing.rotateYCCW()));
 			worldIn.setBlockState(pos.offset(facing,1).offset(facing.rotateY(),3), getBlockState(EnumParts.EDGE_LEFT, facing.rotateYCCW()));
-			worldIn.setBlockState(pos.offset(facing,2).offset(facing.rotateY(),0), getBlockState(EnumParts.EDGE_RIGHT, facing.rotateY()));
+			worldIn.setBlockState(pos.offset(facing,2).offset(facing.rotateY(),0), getBlockState(EnumParts.EDGE_LEFT, facing.rotateY()));
 			worldIn.setBlockState(pos.offset(facing,2).offset(facing.rotateY(),1), getBlockState(EnumParts.CENTER_PAD, facing.rotateY()));
 			worldIn.setBlockState(pos.offset(facing,2).offset(facing.rotateY(),2), getBlockState(EnumParts.CENTER_PAD, facing.getOpposite()));
 			worldIn.setBlockState(pos.offset(facing,2).offset(facing.rotateY(),3), getBlockState(EnumParts.EDGE_RIGHT, facing.rotateYCCW()));
@@ -243,7 +246,7 @@ public class BlockAlchemiter extends BlockLargeMachine
 	public static void updateItem(boolean b, World world, BlockPos pos)
 	{
 		IBlockState oldState = world.getBlockState(pos);
-		
-		world.notifyBlockUpdate(pos, oldState, oldState.withProperty(HASDOWEL, b), 3);
+		if (oldState.getBlock()==MinestuckBlocks.alchemiter[0]||oldState.getBlock()==MinestuckBlocks.alchemiter[1])
+			world.notifyBlockUpdate(pos, oldState, oldState.withProperty(HASDOWEL, b), 3);
 	}
 }

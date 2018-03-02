@@ -23,6 +23,8 @@ public class GuiUtil
 	{
 		ALCHEMITER,
 		ALCHEMITER_SELECT,
+		LARGE_ALCHEMITER,
+		LARGE_ALCHEMITER_SELECT,
 		GRIST_WIDGET;
 	}
 	
@@ -32,13 +34,13 @@ public class GuiUtil
 	{
 		if (grist == null)
 		{
-			fontRenderer.drawString(I18n.format("gui.notAlchemizable"), 9, 45, 16711680);
+			fontRenderer.drawString(I18n.format("gui.notAlchemizable"), boardX, boardY, 16711680);
 			return;
 		}
 		
 		if (grist.isEmpty())
 		{
-			fontRenderer.drawString(I18n.format("gui.free"), 9, 45, 65280);
+			fontRenderer.drawString(I18n.format("gui.free"), boardX, boardY, 65280);
 			return;
 		}
 		
@@ -61,6 +63,9 @@ public class GuiUtil
 				
 				String needStr = addSuffix(need), haveStr = addSuffix(have);
 				fontRenderer.drawString(needStr + " " + type.getDisplayName() + " (" + haveStr + ")", boardX + GRIST_BOARD_WIDTH/2*col, boardY + GRIST_BOARD_HEIGHT/3*row, color);
+				//ensure that one line is rendered on the large alchemiter
+				if(mode==GristboardMode.LARGE_ALCHEMITER||mode==GristboardMode.LARGE_ALCHEMITER_SELECT)
+					place+=2;
 				
 				place++;
 				
@@ -92,8 +97,13 @@ public class GuiUtil
 				Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation(type.getIcon().getResourceDomain(), "textures/grist/" + type.getIcon().getResourcePath()+ ".png"));
 				Gui.drawModalRectWithCustomSizedTexture(boardX + needStrWidth + 1 + index%GRIST_BOARD_WIDTH, boardY + 8*row, 0, 0, 8, 8, 8, 8);
 				
-				index += needStrWidth + 10 + fontRenderer.getStringWidth(haveStr);
-				index = Math.min(index + 6, (row + 1)*158);
+				//ensure the large alchemiter gui has one grist type to a line
+				if(mode==GristboardMode.LARGE_ALCHEMITER||mode==GristboardMode.LARGE_ALCHEMITER_SELECT) {
+					index=(row+1)*158;
+				}else {
+					index += needStrWidth + 10 + fontRenderer.getStringWidth(haveStr);
+					index = Math.min(index + 6, (row + 1)*158);
+				}
 			}
 		}
 	}
@@ -174,7 +184,9 @@ public class GuiUtil
 	{
 		switch(mode)
 		{
-		case ALCHEMITER: return hasEnough ? 0x00FF00 : 0xFF0000; 
+		case LARGE_ALCHEMITER://dont break
+		case ALCHEMITER: return hasEnough ? 0x00FF00 : 0xFF0000;
+		case LARGE_ALCHEMITER_SELECT://dont break;
 		case ALCHEMITER_SELECT: return 0x0000FF;
 		case GRIST_WIDGET:
 		default: return 0x000000;

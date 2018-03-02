@@ -1,13 +1,8 @@
 package com.mraof.minestuck.world.lands.decorator.structure;
 
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.decorator.BiomeSpecificDecorator;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
-import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockUtil;
-import net.minecraft.block.*;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -28,7 +23,6 @@ public class OasisDecorator extends BiomeSpecificDecorator
 		
 		int runthroughs = random.nextInt(3) + 4;
 		
-		//Generate water placement
 		for(int i = 0; i < runthroughs; i++)
 		{
 			double xSize = random.nextDouble() * 5D + 5D;
@@ -55,7 +49,6 @@ public class OasisDecorator extends BiomeSpecificDecorator
 			}
 		}
 		
-		//Figure out water level and if the ground is flat enough
 		int yMin = 256, yMax = 0;
 		for (int x = 1; x < 15; x++)
 		{
@@ -75,9 +68,6 @@ public class OasisDecorator extends BiomeSpecificDecorator
 		
 		pos = pos.up(yMin - pos.getY());
 		
-		BlockPos treePos = null;
-		int blockCount = 0;	//Cool way of 100% picking a position while iterating through and checking alternatives; same as used by dispensers
-		//Place blocks that make up the base of the oasis
 		for (int x = 0; x < 16; x++)
 		{
 			for (int z = 0; z < 16; z++)
@@ -92,78 +82,10 @@ public class OasisDecorator extends BiomeSpecificDecorator
 				
 				if (!blocks[((x * 16) + z) * 4 + 3] && hasBlock2(blocks, x, 3, z))
 				{
-					BlockPos surfacePos = world.getTopSolidOrLiquidBlock(pos.add(x - 8, 0, z - 8));
-					world.setBlockState(surfacePos.down(), Blocks.GRASS.getDefaultState(), 2);
-					if (random.nextInt(5) == 0)
-						world.setBlockState(surfacePos, Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.GRASS), 2);
-					if (hasBlock1(blocks, x, 3, z, true))
-					{
-						blockCount++;
-						if (random.nextInt(blockCount) == 0)
-							treePos = surfacePos;
-					}
-				} else if (blocks[((x * 16) + z) * 4 + 3])
-					for (int y = 0; y < 4; y++)
+					world.setBlockState(world.getTopSolidOrLiquidBlock(pos.add(x - 8, 0, z - 8)).down(), Blocks.GRASS.getDefaultState(), 2);
+				} else if(blocks[((x * 16) + z) * 4 + 3])
+					for(int y = 0; y < 4; y++)
 						world.setBlockState(pos.add(x - 8, y + 1, z - 8), Blocks.AIR.getDefaultState(), 2);
-			}
-		}
-		
-		if(treePos != null)	//This should never not be the case
-		{
-			int posX = treePos.getX() + 8 - pos.getX();
-			int posZ = treePos.getZ() + 8 - pos.getZ();
-			int topX = Math.max(4, Math.min(11, posX - 2 + random.nextInt(3)));
-			int topZ = Math.max(4, Math.min(11, posZ - 2 + random.nextInt(3)));
-			BlockPos topPos = pos.add(topX - 8, treePos.getY() - pos.getY() + 5 + random.nextInt(2), topZ - 8);
-			IBlockState log = Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.JUNGLE);
-			IBlockState leaves = Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.JUNGLE).withProperty(BlockLeaves.CHECK_DECAY, false);
-			
-			BlockPos diff = topPos.subtract(treePos);
-			int logChecks = 12;
-			for (int i = 0; i <= logChecks; i++)
-			{
-				BlockPos currentPos = treePos.add(diff.getX() * i / logChecks, diff.getY() * i / logChecks, diff.getZ() * i / logChecks);
-				world.setBlockState(currentPos, log, 2);
-			}
-			
-			for (int x = -4; x <= 4; x++)
-			{
-				for (int z = -4; z <= 4; z++)
-				{
-					int lowerY = 1;
-					if (random.nextDouble() < BlockPos.ORIGIN.getDistance(x, 0, z) / 4)
-						lowerY = 0;
-					int upperY = Math.min(4, 4 - Math.max(Math.abs(x), Math.abs(z)) + random.nextInt(2));
-					if (Math.abs(x) == 4 || Math.abs(z) == 4)
-						lowerY -= Math.abs(random.nextInt(4) - random.nextInt(4));
-					for (int y = lowerY; y <= upperY; y++)
-						world.setBlockState(topPos.add(x, y, z), leaves, 2);
-				}
-			}
-			world.setBlockState(topPos.up(), log, 2);
-		}
-		
-		if(random.nextInt(25) == 0)
-		{
-			BlockPos chestPos = null;
-			for (int y = 1; y < 4 && chestPos == null; y++)
-			{
-				int count = 0;
-				for (int x = 1; x < 15; x++)
-				{
-					for (int z = 1; z < 15; z++)
-						if (blocks[((x * 16) + z) * 4 + y])
-						{
-							count++;
-							if(random.nextInt(count) == 0)
-								chestPos = pos.add(x - 8, y - 3, z - 8);
-						}
-				}
-			}
-			
-			if(chestPos != null)
-			{
-				StructureBlockUtil.placeLootChest(chestPos, world, null, EnumFacing.getHorizontal(random.nextInt(4)), AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, random);
 			}
 		}
 		

@@ -1,8 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.block.BlockPunchDesignix.EnumParts;
 import com.mraof.minestuck.tileentity.TileEntityCruxtruder;
-import com.mraof.minestuck.tileentity.TileEntityPunchDesignix;
 
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
@@ -34,8 +32,9 @@ public class BlockCruxtruder2 extends BlockCruxtruder {
 	public static void updateItem(boolean b, World world, BlockPos pos)
 	{
 		IBlockState oldState = world.getBlockState(pos);
-		
-		world.notifyBlockUpdate(pos, oldState, oldState.withProperty(DOWELOUT, b), 3);
+
+		if (oldState.getBlock()==MinestuckBlocks.cruxtruder2)
+			world.notifyBlockUpdate(pos, oldState, oldState.withProperty(DOWELOUT, b), 3);
 	}
 
 	//Block state handling

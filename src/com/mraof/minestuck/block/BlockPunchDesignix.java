@@ -137,8 +137,8 @@ public class BlockPunchDesignix extends BlockLargeMachine
 	public static void updateItem(boolean b, World world, BlockPos pos)
 	{
 		IBlockState oldState = world.getBlockState(pos);
-		
-		world.notifyBlockUpdate(pos, oldState, oldState.withProperty(HASCARD, b), 3);
+		if (oldState.getBlock()==MinestuckBlocks.punchDesignix)
+			world.notifyBlockUpdate(pos, oldState, oldState.withProperty(HASCARD, b), 3);
 	}
 	
 	public enum EnumParts implements IStringSerializable

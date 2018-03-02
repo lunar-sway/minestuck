@@ -18,6 +18,7 @@ public class GuiHandler implements IGuiHandler
 		COMPUTER,
 		TRANSPORTALIZER,
 		COLOR,
+		ALCHEMITER,
 	}
 	
 	@Override
@@ -47,6 +48,7 @@ public class GuiHandler implements IGuiHandler
 				return new GuiCrockerMachine(player.inventory, (TileEntityCrockerMachine) tileEntity);
 			else if(tileEntity instanceof TileEntityUraniumCooker)
 				return new GuiUraniumCooker(player.inventory, (TileEntityUraniumCooker) tileEntity);
+		
 		if(tileEntity instanceof TileEntityComputer && id == GuiId.COMPUTER.ordinal())
 			return new GuiComputer(Minecraft.getMinecraft(),(TileEntityComputer) tileEntity);
 		
@@ -55,6 +57,9 @@ public class GuiHandler implements IGuiHandler
 		
 		if(id == GuiId.COLOR.ordinal())
 			return new GuiColorSelector(false);
+		
+		if(tileEntity instanceof TileEntityAlchemiter && id==GuiId.ALCHEMITER.ordinal())
+			return new GuiAlchemiter((TileEntityAlchemiter) tileEntity );
 		
 		return null;
 		
