@@ -7,6 +7,7 @@ import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.*;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 
 import java.util.Map.Entry;
 
@@ -147,7 +148,25 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 				break;
 		}
 	}
-
+	
+	@Override
+	public int[] getSlotsForFace(EnumFacing side)
+	{
+		return new int[]{0};
+	}
+	
+	@Override
+	public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction)
+	{
+		return true;
+	}
+	
+	@Override
+	public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction)
+	{
+		return true;
+	}
+	
 	@Override
 	public String getName()
 	{

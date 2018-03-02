@@ -10,8 +10,6 @@
 .settings/org.eclipse.jdt.core.prefs
 /eclipse
 *~
-/gradle
-*.bat
 *.launch
 /run
 /out
