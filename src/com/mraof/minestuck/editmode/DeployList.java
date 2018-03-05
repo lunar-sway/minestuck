@@ -1,5 +1,7 @@
 package com.mraof.minestuck.editmode;
 
+import static com.mraof.minestuck.block.MinestuckBlocks.alchemiter;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -12,6 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.ItemCruxiteArtifact;
 import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.block.ItemLargeMachine;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;
@@ -28,11 +31,21 @@ public class DeployList
 	
 	public static void registerItems()
 	{
-		registerItem(new ItemStack(MinestuckBlocks.sburbMachine,1,0), new GristSet(), new GristSet(GristType.Build, 100), 0);
-		registerItem(new ItemStack(MinestuckBlocks.sburbMachine,1,2), new GristSet(), new GristSet(GristType.Build, 100), 0);
+
+		 
+		
+		registerItem(new ItemStack(MinestuckBlocks.alchemiter[0],1,0),new GristSet(), new GristSet(GristType.Build, 100),0);
+		registerItem(new ItemStack(MinestuckBlocks.cruxtruder,1,0),new GristSet(), new GristSet(GristType.Build, 100),0);
+		registerItem(new ItemStack(MinestuckBlocks.totemlathe,1,0),new GristSet(), new GristSet(GristType.Build, 100),0);
+		registerItem(new ItemStack(MinestuckBlocks.punchDesignix,1,0),new GristSet(), new GristSet(GristType.Build, 100),0);
+		
+		
+//		registerItem(new ItemStack(MinestuckBlocks.sburbMachine,1,0), new GristSet(), new GristSet(GristType.Build, 100), 0);
+//		registerItem(new ItemStack(MinestuckBlocks.sburbMachine,1,2), new GristSet(), new GristSet(GristType.Build, 100), 0);
 		registerItem(AlchemyRecipeHandler.createCard(new ItemStack(MinestuckItems.cruxiteApple), true), new GristSet(), null, 0);
-		registerItem(new ItemStack(MinestuckBlocks.sburbMachine,1,3), new GristSet(), new GristSet(GristType.Build, 100), 0);
-		registerItem(new ItemStack(MinestuckBlocks.sburbMachine,1,1), new GristSet(GristType.Shale, 4), 0);
+//		registerItem(new ItemStack(MinestuckBlocks.sburbMachine,1,3), new GristSet(), new GristSet(GristType.Build, 100), 0);
+//		registerItem(new ItemStack(MinestuckBlocks.sburbMachine,1,1), new GristSet(GristType.Shale, 4), 0);
+		
 	}
 	
 	public static void registerItem(ItemStack stack)

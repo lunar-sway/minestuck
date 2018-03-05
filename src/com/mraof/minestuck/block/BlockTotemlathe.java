@@ -186,15 +186,16 @@ public class BlockTotemlathe extends BlockLargeMachine
 	public static void updateItem(boolean hascard,BlockTotemlathe2.EnumDowel hasdowel, World world, BlockPos pos)
 	{
 		IBlockState oldState = world.getBlockState(pos);
-		if (oldState.getBlock()==MinestuckBlocks.totemlathe) {
+		IBlockState oldState2 = world.getBlockState(pos.up());
+		if (oldState.getBlock()==MinestuckBlocks.totemlathe&&oldState2.getBlock()==MinestuckBlocks.totemlathe2) {
 			EnumFacing facing =oldState.getValue(DIRECTION);
 			//updates all items that should update
 			world.notifyBlockUpdate(pos, oldState, oldState.withProperty(HASCARD, hascard), 3);
 		
-			world.notifyBlockUpdate(pos.up(1), oldState,oldState.withProperty(BlockTotemlathe2.HASDOWEL,hasdowel) ,3);
-			world.notifyBlockUpdate(pos.offset(facing.rotateY(),1).up(1), oldState,oldState.withProperty(BlockTotemlathe2.HASDOWEL,hasdowel) ,3);
-			world.notifyBlockUpdate(pos.offset(facing.rotateY(),2).up(1), oldState,oldState.withProperty(BlockTotemlathe2.HASDOWEL,hasdowel) ,3);
-			world.notifyBlockUpdate(pos.offset(facing.rotateY(),3).up(1), oldState,oldState.withProperty(BlockTotemlathe2.HASDOWEL,hasdowel) ,3);
+			world.notifyBlockUpdate(pos.up(1), oldState2,oldState2.withProperty(BlockTotemlathe2.HASDOWEL,hasdowel) ,3);
+			world.notifyBlockUpdate(pos.offset(facing.rotateY(),1).up(1), oldState2,oldState2.withProperty(BlockTotemlathe2.HASDOWEL,hasdowel) ,3);
+			world.notifyBlockUpdate(pos.offset(facing.rotateY(),2).up(1), oldState2,oldState2.withProperty(BlockTotemlathe2.HASDOWEL,hasdowel) ,3);
+			world.notifyBlockUpdate(pos.offset(facing.rotateY(),3).up(1), oldState2,oldState2.withProperty(BlockTotemlathe2.HASDOWEL,hasdowel) ,3);
 		}
 	}
 
