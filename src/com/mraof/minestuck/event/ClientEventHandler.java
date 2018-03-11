@@ -1,8 +1,20 @@
 package com.mraof.minestuck.event;
 
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.client.gui.GuiColorSelector;
+import com.mraof.minestuck.client.gui.playerStats.GuiDataChecker;
+import com.mraof.minestuck.client.gui.playerStats.GuiEcheladder;
+import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
+import com.mraof.minestuck.inventory.ContainerConsortMerchant;
+import com.mraof.minestuck.inventory.ContainerEditmode;
+import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
+import com.mraof.minestuck.network.skaianet.SkaiaClient;
+import com.mraof.minestuck.util.ColorCollector;
+import com.mraof.minestuck.util.MinestuckPlayerData;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -11,18 +23,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.client.gui.GuiColorSelector;
-import com.mraof.minestuck.client.gui.playerStats.GuiDataChecker;
-import com.mraof.minestuck.client.gui.playerStats.GuiEcheladder;
-import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
-import com.mraof.minestuck.inventory.ContainerEditmode;
-import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
-import com.mraof.minestuck.network.skaianet.SkaiaClient;
-import com.mraof.minestuck.util.ColorCollector;
-import com.mraof.minestuck.util.MinestuckPlayerData;
 
 /**
  * Used to track mixed client sided events.
@@ -69,11 +69,23 @@ public class ClientEventHandler
 		//Add config check
 		{
 			ItemStack stack = event.getItemStack();
-			if(stack.getItem().getRegistryName().getResourceDomain().equals(Minestuck.class.getAnnotation(Mod.class).modid()))
+			if(event.getEntityPlayer() != null && event.getEntityPlayer().openContainer instanceof ContainerConsortMerchant
+					&& event.getEntityPlayer().openContainer.getInventory().contains(stack))
+			{
+				String name = "store."+stack.getUnlocalizedName()+".name";
+				String tooltip = "store."+stack.getUnlocalizedName()+".tooltip";
+				String oldName = event.getToolTip().get(0);
+				event.getToolTip().clear();
+				if(I18n.hasKey(name))
+					event.getToolTip().add(I18n.format(name));
+				else event.getToolTip().add(stack.getDisplayName());
+				if(I18n.hasKey(tooltip))
+					event.getToolTip().add(I18n.format(tooltip));
+			} else if(stack.getItem().getRegistryName().getResourceDomain().equals(Minestuck.class.getAnnotation(Mod.class).modid()))
 			{
 				String name = stack.getUnlocalizedName() + ".tooltip";
-				if(I18n.canTranslate(name))
-					event.getToolTip().add(1, I18n.translateToLocal(name));
+				if(I18n.hasKey(name))
+					event.getToolTip().add(1, I18n.format(name));
 			}
 		}
 	}

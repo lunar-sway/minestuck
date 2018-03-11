@@ -348,6 +348,30 @@ consort.generalShop=We have generic goods for generic people!
 consort.gotTheGoods=You want the goods? We got the goods.
 consort.risingShop=We have top tier goods for a top tier god!
 
+store.item.onion.name=Cool Veggie
+store.item.pumpkinPie.name=Tasty Pie
+store.item.pumpkinPie.tooltip=This pie appeared in storage a few days ago out of nowhere. No idea where it came from, but it sure is tasty!
+store.item.wheatSeeds.tooltip=You know what tastes even better than those plant grains? Their seeds, of course!
+store.item.mushroomStew.tooltip=Do you enjoy mushrooms? Then this'll be a delicacy!
+store.item.rawBeef.tooltip=You want something RAW? We've got BEEF.
+store.item.waterBottle.tooltip=Stay hydrated with our oasis water.
+store.item.tab.name=Sugary Drink
+store.item.tab.tooltip=This drink is too sweet for this world. Have a taste!
+store.item.carrots.tooltip=want to try something orange? We've got carrots straight from the ground.
+store.item.salad.name=Handpicked Greens
+store.item.salad.tooltip=A bowl of our fine, handpicked greens. The perfect meal.
+store.item.grasshopper.tooltip=This extra-large grasshopper makes a perfect dinner.
+store.item.coneOfFlies.tooltip=Want a cone of flies? They're quite popular with the kids. Everyone else too, honestly.
+store.item.chocolateBeetle.tooltip=The wonders of cocoa beans has given us this delicacy. Try now!
+
+store.tile.coldCake.name=Blue Cake?
+store.tile.coldCake.tooltip=It's blue, so I'm pretty sure that it's the fabled Blue Cake. It is said to get you moving!
+store.tile.blueCake.name=ColdCake?
+store.tile.blueCake.tooltip=Be careful with that one. It could be a Cold Cake. One bite and it will freeze you more than this weather does.
+store.tile.hotCake.name=Red Cake
+store.tile.redCake.name=Hot Cake
+store.tile.glowingMushroom.tooltip=This mushroom tastes a bit better than any other around here, according to myself!
+
 denizen.blood.name=Jormungandr
 denizen.breath.name=Typheus
 denizen.doom.name=Nemesis
@@ -589,7 +613,7 @@ item.upStick.tooltip=Never runs out of uranium!
 item.woodenSpoon.name=Wooden Spoon
 item.woodenSpoon.tooltip=Like the kind you would eat your soup with
 item.silverSpoon.name=Silver Spoon
-item.silverSpoon.tooltip=I ship it with diamond tiara
+item.silverSpoon.name=Could be the first silver object you've seen so far
 item.crockerSpoon.name=Junior Battlemaster's Bowlbuster Stirring Solution 50000
 item.crockerSpoon.tooltip=Whip your foes into shape and bake a cake all at the same time!
 item.crockerFork.name=Junior Battlemaster's Bowlbuster Poking Solution 50000
@@ -635,7 +659,7 @@ item.chestplatePrismarine.name=Prismarine Chestplate
 item.leggingsPrismarine.name=Prismarine Leggings
 item.bootsPrismarine.name=Prismarine Boots
 item.fork.name=Fork
-item.spork.name=Spork 
+item.spork.name=Spork
 item.candyCorn.name=Candy Corn
 item.candyAmber.name=Amber Gummy Worm
 item.candyAmethyst.name=Amethyst Hard Candy
@@ -693,6 +717,8 @@ item.record.emissary.desc=Catboss - Emissary of Dance
 item.record.danceStab.desc=Catboss - Dance-Stab-Dance
 item.fakeArms.name=Fake Arm
 item.fakeArms.tooltip=Fool your friends with this super-realistic fake arm!
+item.rockCookie.name=Rock Cookie
+item.rockCookie.tooltip=It's as edible as a rock
 
 itemGroup.tabMinestuck=Minestuck
 

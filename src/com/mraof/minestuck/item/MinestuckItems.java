@@ -136,6 +136,7 @@ public class MinestuckItems
 	public static Item onion;
 	public static Item salad;
 	public static Item irradiatedSteak;
+	public static Item rockCookie;
 	//Other
 	public static Item rawCruxite;
 	public static Item rawUranium;
@@ -257,11 +258,12 @@ public class MinestuckItems
 		jarOfBugs = new ItemFood(3, 0.2F, false).setRegistryName("jar_of_bugs").setUnlocalizedName("jarOfBugs").setCreativeTab(tabMinestuck);
 		onion = new ItemFood(2, 0.2F, false).setRegistryName("onion").setUnlocalizedName("onion").setCreativeTab(tabMinestuck);
 		salad = new ItemSoup(1).setRegistryName("salad").setUnlocalizedName("salad").setCreativeTab(tabMinestuck);
-		irradiatedSteak = new ItemFood(4, 0.4F, true).setPotionEffect(new PotionEffect(MobEffects.WITHER, 100, 1), 0.9F).setRegistryName("irradiated_steak").setUnlocalizedName("irradiatedSteak").setCreativeTab(MinestuckItems.tabMinestuck);
+		irradiatedSteak = new ItemFood(4, 0.4F, true).setPotionEffect(new PotionEffect(MobEffects.WITHER, 100, 1), 0.9F).setRegistryName("irradiated_steak").setUnlocalizedName("irradiatedSteak").setCreativeTab(tabMinestuck);
+		rockCookie = new Item().setRegistryName("rock_cookie").setUnlocalizedName("rockCookie").setCreativeTab(tabMinestuck);
 		//Other
 		rawCruxite = new Item().setRegistryName("raw_cruxite").setUnlocalizedName("rawCruxite").setCreativeTab(tabMinestuck);
-		rawUranium = new Item().setRegistryName("raw_uranium").setUnlocalizedName("rawUranium").setCreativeTab(MinestuckItems.tabMinestuck);
-		energyCore = new Item().setRegistryName("energy_core").setUnlocalizedName("energyCore").setCreativeTab(MinestuckItems.tabMinestuck);
+		rawUranium = new Item().setRegistryName("raw_uranium").setUnlocalizedName("rawUranium").setCreativeTab(tabMinestuck);
+		energyCore = new Item().setRegistryName("energy_core").setUnlocalizedName("energyCore").setCreativeTab(tabMinestuck);
 		cruxiteDowel = new ItemDowel().setRegistryName("cruxite_dowel");
 		captchaCard = new ItemCaptchaCard().setRegistryName("captcha_card");
 		cruxiteApple = (ItemCruxiteArtifact) new ItemCruxiteApple().setRegistryName("cruxite_apple");
@@ -295,7 +297,7 @@ public class MinestuckItems
 		frogStatueReplica = new Item().setRegistryName("frog_statue_replica").setUnlocalizedName("frogStatueReplica").setCreativeTab(tabMinestuck);
 		stoneSlab = new Item().setRegistryName("stone_slab").setUnlocalizedName("stoneSlab").setCreativeTab(tabMinestuck);
 		glowystoneDust = new ItemGlowystoneDust().setRegistryName("glowystone_dust").setUnlocalizedName("glowystoneDust").setCreativeTab(tabMinestuck);
-		fakeArms = new Item().setRegistryName("fake_arms").setUnlocalizedName("fakeArms").setCreativeTab(MinestuckItems.tabMinestuck);
+		fakeArms = new Item().setRegistryName("fake_arms").setUnlocalizedName("fakeArms").setCreativeTab(null);
 		//Music disks
 		recordEmissaryOfDance = new ItemMinestuckRecord("emissary", MinestuckSoundHandler.soundEmissaryOfDance).setRegistryName("record_emissary").setUnlocalizedName("record");
 		recordDanceStab = new ItemMinestuckRecord("danceStab", MinestuckSoundHandler.soundDanceStabDance).setRegistryName("record_dance_stab").setUnlocalizedName("record");
@@ -468,6 +470,7 @@ public class MinestuckItems
 		registry.register(onion);
 		registry.register(salad);
 		registry.register(irradiatedSteak);
+		registry.register(rockCookie);
 
 		//misc
 		registry.register(rawCruxite);

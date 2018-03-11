@@ -404,6 +404,7 @@
                     ]
                 },
                 {
+                    "entryName": "water_bottle",
                     "type": "item",
                     "name": "minecraft:potion",
                     "weight": 8,
@@ -414,6 +415,10 @@
                                 "min": 3,
                                 "max": 6
                             }
+                        },
+                        {
+                            "function": "set_nbt",
+                            "tag": "{Potion:\"water\"}"
                         }
                     ],
                     "conditions": [
@@ -467,6 +472,26 @@
                         {
                             "condition": "minestuck:land_aspect",
                             "land_aspect": "heat"
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "minestuck:rock_cookie",
+                    "weight": 5,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 8,
+                                "max": 12
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "condition": "minestuck:land_aspect",
+                            "land_aspect": "rock"
                         }
                     ]
                 },
