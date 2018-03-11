@@ -175,7 +175,9 @@ public class MinestuckPlayerData
 					for (NBTBase nbtBase : nbt.getTagList("grist", 10))
 					{
 						NBTTagCompound gristTag = (NBTTagCompound) nbtBase;
-						this.gristCache.setGrist(GristType.getTypeFromString(gristTag.getString("id")), gristTag.getInteger("amount"));
+						GristType type = GristType.getTypeFromString(gristTag.getString("id"));
+						if(type != null)
+							this.gristCache.setGrist(type, gristTag.getInteger("amount"));
 					}
 				}
 			}
