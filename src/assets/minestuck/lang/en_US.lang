@@ -37,7 +37,7 @@ commands.gristSend.usage=/gristSend <player> <gristtype value ...>
 commands.gristSend.success=Successfully gave grist to %s: %s
 commands.gristSend.notPermitted=You are not permitted to send grist to %s.
 commands.invalidSubCommand=Invalid Command: "%s"
-commands.sburbSession.usage=/sburbSession <session name> <add|name|title|landTerrain|landTitle> [values ...]
+commands.sburbSession.usage=/sburbSession <session name> <add|name|title|landTerrain|landTitle|define> [values ...]
 commands.sburbSession.addSuccess=Successfully added/removed %d/%d players.
 commands.sburbSession.rename=Renamed "%3$s"'s session "%1$s" to "%2$s".
 commands.sburbSession.name=Named "%2$s"'s session as "%1$s".
@@ -56,6 +56,8 @@ commands.sburbServer.usage=/sburbServer <client player> <server player>
 commands.sburbServer.success=Successfully set %s's server player as %s.
 commands.setRung.usage=/setRung <target player> <target rung> [progress]
 commands.setRung.success=Successfully changed %s's rung to %d with %d%% progress.
+commands.porkhollow.usage/porkhollow <send|take> [target player] <amount>
+commands.porkhollow.sendSuccess=Successfully sent %s boondollars to %s.
 
 computer.buttonClear=Clear message
 computer.buttonClose=Disconnect
