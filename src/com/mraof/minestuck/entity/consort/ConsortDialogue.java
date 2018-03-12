@@ -15,6 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.text.ITextComponent;
 
 import java.util.*;
@@ -242,9 +243,10 @@ public class ConsortDialogue
 																new SingleMessage("hungry.finally"))),
 														new SingleMessage("hungry.end") }) })));
 		
-		addMessage(new MerchantGuiMessage(new SingleMessage("foodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).reqLand();
-		addMessage(new MerchantGuiMessage(new SingleMessage("fastFood"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).reqLand();
-		addMessage(new MerchantGuiMessage(new SingleMessage("groceryStore"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).reqLand();
+		addMessage(new MerchantGuiMessage(new SingleMessage("foodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).consort(EnumConsort.SALAMANDER).reqLand();
+		addMessage(new MerchantGuiMessage(new SingleMessage("fastFood"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).consort(EnumConsort.NAKAGATOR).reqLand();
+		addMessage(new MerchantGuiMessage(new SingleMessage("groceryStore"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).consort(EnumConsort.IGUANA).reqLand();
+		addMessage(new MerchantGuiMessage(new SingleMessage("tastyWelcome"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).consort(EnumConsort.TURTLE).reqLand();
 		addMessage(new MerchantGuiMessage(new SingleMessage("breathFoodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("wind"));
 		addMessage(new MerchantGuiMessage(new SingleMessage("bloodFoodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("pulse"));
 		addMessage(new MerchantGuiMessage(new SingleMessage("lifeFoodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("rabbits"));
@@ -300,7 +302,7 @@ public class ConsortDialogue
 			list.add(message);
 		}
 		
-		return list.get(consort.world.rand.nextInt(list.size()));
+		return WeightedRandom.getRandomItem(consort.world.rand, list);
 	}
 	
 	public static DialogueWrapper getMessageFromString(String name)
@@ -311,10 +313,11 @@ public class ConsortDialogue
 		return null;
 	}
 	
-	public static class DialogueWrapper
+	public static class DialogueWrapper extends WeightedRandom.Item
 	{
 		private DialogueWrapper()
 		{
+			super(10);
 		}
 		
 		private boolean reqLand;
@@ -395,6 +398,12 @@ public class ConsortDialogue
 		public DialogueWrapper type(MerchantType... types)
 		{
 			merchantRequirement = EnumSet.of(types[0], types);
+			return this;
+		}
+		
+		public DialogueWrapper weight(int weight)
+		{
+			itemWeight = weight;
 			return this;
 		}
 		
