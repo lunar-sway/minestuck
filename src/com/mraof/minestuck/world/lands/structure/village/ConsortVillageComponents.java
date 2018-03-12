@@ -405,10 +405,15 @@ public class ConsortVillageComponents
 		
 		protected void spawnConsort(int x, int y, int z, StructureBoundingBox boundingBox, World world)
 		{
-			spawnConsort(x, y, z, boundingBox, world, EnumConsort.MerchantType.NONE);
+			spawnConsort(x, y, z, boundingBox, world, EnumConsort.MerchantType.NONE, 48);
 		}
 		
-		protected void spawnConsort(int x, int y, int z, StructureBoundingBox boundingBox, World world, EnumConsort.MerchantType type)
+		protected void spawnConsort(int x, int y, int z, StructureBoundingBox boundingBox, World world, int maxHomeDistance)
+		{
+			spawnConsort(x, y, z, boundingBox, world, EnumConsort.MerchantType.NONE, maxHomeDistance);
+		}
+		
+		protected void spawnConsort(int x, int y, int z, StructureBoundingBox boundingBox, World world, EnumConsort.MerchantType type, int maxHomeDistance)
 		{
 			BlockPos pos = new BlockPos(this.getXWithOffset(x, z), this.getYWithOffset(y), this.getZWithOffset(x, z));
 			
@@ -428,10 +433,11 @@ public class ConsortVillageComponents
 					EntityConsort consort = c.getConstructor(World.class).newInstance(world);
 					consort.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 					
+					consort.merchantType = type;
+					consort.setHomePosAndDistance(pos, maxHomeDistance);
+					
 					consort.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(consort)), null);
-					if(type != EnumConsort.MerchantType.NONE)
-						consort.merchantType = type;
-					//TODO More preparations, such as home location or set type by parameter
+					
 					world.spawnEntity(consort);
 				} catch(Exception e)
 				{
@@ -696,7 +702,7 @@ public class ConsortVillageComponents
 			
 			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 3, 1, 1, EnumFacing.NORTH, (BlockDoor) doorBlock.getBlock());
 			
-			this.spawnConsort(3, 1, 5,structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD);
+			this.spawnConsort(3, 1, 5,structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD, 1);
 			
 			return true;
 		}
@@ -875,8 +881,8 @@ public class ConsortVillageComponents
 			this.setBlockState(worldIn, lightBlock, 2, 6, 16, structureBoundingBoxIn);
 			this.setBlockState(worldIn, lightBlock, 11, 6, 16, structureBoundingBoxIn);
 			
-			this.spawnConsort(4, 1, 15, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD);
-			this.spawnConsort(9, 1, 15, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD);
+			this.spawnConsort(4, 1, 15, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD, 1);
+			this.spawnConsort(9, 1, 15, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD, 1);
 			
 			return true;
 		}
@@ -1219,9 +1225,9 @@ public class ConsortVillageComponents
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 11, 9, 1, 11, 9, 8, fence, fence, false);
 			this.setBlockState(worldIn, fence, 10, 9, 1, structureBoundingBoxIn);
 			
-			this.spawnConsort(5, 1, 5, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD);
-			this.spawnConsort(6, 5, 5, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD);
-			this.spawnConsort(5, 9, 5, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD);
+			this.spawnConsort(5, 1, 5, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD, 1);
+			this.spawnConsort(6, 5, 5, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD, 1);
+			this.spawnConsort(5, 9, 5, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD, 1);
 			
 			return true;
 		}
@@ -1496,6 +1502,7 @@ public class ConsortVillageComponents
 			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
 			IBlockState fence = provider.blockRegistry.getBlockState("village_fence");
 			IBlockState planks = provider.blockRegistry.getBlockState("structure_planks");
+			IBlockState plankSlab = provider.blockRegistry.getBlockState("structure_planks_slab");
 			IBlockState surface = provider.blockRegistry.getBlockState("surface");
 			IBlockState dirt = Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.COARSE_DIRT);
 			IBlockState wool = provider.blockRegistry.getBlockState("structure_wool_"+woolType);
@@ -1518,6 +1525,7 @@ public class ConsortVillageComponents
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 1, 5, 5, 3, 5, fence, fence, false);
 			
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 1, 1, 4, 1, 1, planks, planks, false);
+			setBlockState(worldIn, plankSlab, 3, 1, 2, structureBoundingBoxIn);
 			
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 1, 1, 0, 3, 5, wool, wool, false);
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 1, 1, 6, 3, 5, wool, wool, false);
@@ -1528,16 +1536,16 @@ public class ConsortVillageComponents
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 4, 2, 1, 4, 4, wool, wool, false);
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 4, 2, 5, 4, 4, wool, wool, false);
 			
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 5, 2, 2, 5, 4, wool, wool, false);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 5, 2, 4, 5, 4, wool, wool, false);
-			this.setBlockState(worldIn, wool, 3, 5, 2, structureBoundingBoxIn);
-			this.setBlockState(worldIn, wool, 3, 6, 3, structureBoundingBoxIn);
-			this.setBlockState(worldIn, wool, 3, 5, 4, structureBoundingBoxIn);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 5, 2, 2, 5, 4, wool, wool, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 5, 2, 4, 5, 4, wool, wool, false);
+			setBlockState(worldIn, wool, 3, 5, 2, structureBoundingBoxIn);
+			setBlockState(worldIn, wool, 3, 6, 3, structureBoundingBoxIn);
+			setBlockState(worldIn, wool, 3, 5, 4, structureBoundingBoxIn);
 			
-			this.setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.EAST), 1, 2, 4, structureBoundingBoxIn);
-			this.setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.WEST), 5, 2, 4, structureBoundingBoxIn);
+			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.EAST), 1, 2, 4, structureBoundingBoxIn);
+			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.WEST), 5, 2, 4, structureBoundingBoxIn);
 			
-			this.spawnConsort(3, 1, 2, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD);
+			spawnConsort(3, 2, 2, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD, 1);
 			
 			return true;
 		}

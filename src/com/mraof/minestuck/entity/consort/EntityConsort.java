@@ -4,9 +4,7 @@ import com.mraof.minestuck.entity.EntityMinestuck;
 import com.mraof.minestuck.inventory.InventoryConsortMerchant;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
@@ -33,9 +31,22 @@ public abstract class EntityConsort extends EntityMinestuck
 		super(world);
 		setSize(0.6F, 1.5F);
 		this.experienceValue = 1;
-		this.tasks.addTask(5, new EntityAIWander(this, 0.6F));
-		this.tasks.addTask(6, new EntityAILookIdle(this));
-		this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+	}
+	
+	@Override
+	protected void initEntityAI()
+	{
+		tasks.addTask(0, new EntityAISwimming(this));
+		tasks.addTask(1, new EntityAIPanic(this, 1.0D));
+		tasks.addTask(4, new EntityAIMoveTowardsRestriction(this, 0.6F));
+		tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+		tasks.addTask(7, new EntityAILookIdle(this));
+	}
+	
+	protected void applyAdditionalAITasks()
+	{
+		if(!hasHome() || getMaximumHomeDistance() > 1)
+			tasks.addTask(5, new EntityAIWander(this, 0.5F));
 	}
 	
 	@Override
@@ -139,6 +150,17 @@ public abstract class EntityConsort extends EntityMinestuck
 		
 		if(merchantType != EnumConsort.MerchantType.NONE && stocks != null)
 			compound.setTag("stock", stocks.writeToNBT());
+		
+		if(hasHome())
+		{
+			NBTTagCompound nbt = new NBTTagCompound();
+			BlockPos home = getHomePosition();
+			nbt.setInteger("homeX", home.getX());
+			nbt.setInteger("homeY", home.getY());
+			nbt.setInteger("homeZ", home.getZ());
+			nbt.setInteger("maxHomeDistance", (int) getMaximumHomeDistance());
+			compound.setTag("homePos", nbt);
+		}
 	}
 	
 	@Override
@@ -164,17 +186,31 @@ public abstract class EntityConsort extends EntityMinestuck
 		if(merchantType != EnumConsort.MerchantType.NONE && compound.hasKey("stock", 9))
 		{
 			stocks = new InventoryConsortMerchant(this, compound.getTagList("stock", 10));
-			
 		}
+		
+		if(compound.hasKey("homePos", 10))
+		{
+			NBTTagCompound nbt = compound.getCompoundTag("homePos");
+			BlockPos pos = new BlockPos(nbt.getInteger("homeX"), nbt.getInteger("homeY"), nbt.getInteger("homeZ"));
+			setHomePosAndDistance(pos, nbt.getInteger("maxHomeDistance"));
+		}
+		
+		applyAdditionalAITasks();
 	}
 	
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata)
 	{
-		if(this.rand.nextInt(30) == 0)
+		if(merchantType == EnumConsort.MerchantType.NONE && this.rand.nextInt(30) == 0)
+		{
 			merchantType = EnumConsort.MerchantType.SHADY;
+			if(hasHome())
+				setHomePosAndDistance(getHomePosition(), (int) (getMaximumHomeDistance()*0.4F));
+		}
 		
 		homeDimension = world.provider.getDimension();
+		
+		applyAdditionalAITasks();
 		
 		return super.onInitialSpawn(difficulty, livingdata);
 	}

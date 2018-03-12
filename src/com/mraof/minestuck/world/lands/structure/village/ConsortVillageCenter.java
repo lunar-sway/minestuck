@@ -234,11 +234,11 @@ public class ConsortVillageCenter
 			this.setBlockState(worldIn, torch, 1, 2, 4, structureBoundingBoxIn);
 			this.setBlockState(worldIn, torch, 6, 2, 4, structureBoundingBoxIn);
 			
-			this.spawnConsort(0, 2, 3, boundingBox, worldIn, EnumConsort.MerchantType.FOOD);
-			this.spawnConsort(0, 2, 5, boundingBox, worldIn, EnumConsort.MerchantType.FOOD);
-			this.spawnConsort(7, 2, 3, boundingBox, worldIn, EnumConsort.MerchantType.FOOD);
-			this.spawnConsort(7, 2, 5, boundingBox, worldIn, EnumConsort.MerchantType.FOOD);
-			this.spawnConsort(3, 2, 9, boundingBox, worldIn, EnumConsort.MerchantType.FOOD);
+			this.spawnConsort(0, 2, 3, boundingBox, worldIn, EnumConsort.MerchantType.FOOD, 1);
+			this.spawnConsort(0, 2, 5, boundingBox, worldIn, EnumConsort.MerchantType.FOOD, 1);
+			this.spawnConsort(7, 2, 3, boundingBox, worldIn, EnumConsort.MerchantType.FOOD, 1);
+			this.spawnConsort(7, 2, 5, boundingBox, worldIn, EnumConsort.MerchantType.FOOD, 1);
+			this.spawnConsort(3, 2, 9, boundingBox, worldIn, EnumConsort.MerchantType.FOOD, 1);
 			
 			return true;
 		}

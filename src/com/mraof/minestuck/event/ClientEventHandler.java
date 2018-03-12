@@ -14,7 +14,9 @@ import com.mraof.minestuck.util.ColorCollector;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionUtils;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -72,9 +74,12 @@ public class ClientEventHandler
 			if(event.getEntityPlayer() != null && event.getEntityPlayer().openContainer instanceof ContainerConsortMerchant
 					&& event.getEntityPlayer().openContainer.getInventory().contains(stack))
 			{
-				String name = "store."+stack.getUnlocalizedName()+".name";
-				String tooltip = "store."+stack.getUnlocalizedName()+".tooltip";
-				String oldName = event.getToolTip().get(0);
+				String unlocalized = stack.getUnlocalizedName();
+				if(stack.getItem() instanceof ItemPotion)
+					unlocalized = PotionUtils.getPotionFromItem(stack).getNamePrefixed("potion.");
+				
+				String name = "store."+unlocalized+".name";
+				String tooltip = "store."+unlocalized+".tooltip";
 				event.getToolTip().clear();
 				if(I18n.hasKey(name))
 					event.getToolTip().add(I18n.format(name));
