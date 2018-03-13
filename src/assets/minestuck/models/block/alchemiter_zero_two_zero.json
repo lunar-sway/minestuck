@@ -1,12 +1,11 @@
 {
 	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
-	"ambientocclusion": false,
 	"textures": {
 		"0": "minestuck:machines/alchemiter/untitled",
 		"2": "minestuck:machines/alchemiter/untitled6",
 		"4": "minestuck:machines/alchemiter/untitled5",
 		"5": "minestuck:machines/alchemiter/untitled2",
-		"particle": "minestuck:machines/alchemiter/untitled"
+		"particle": "minestuck:machines/totemlathe/untitled"
 	},
 	"elements": [
 		{
@@ -46,12 +45,12 @@
 			"from": [6.5, 0, 10],
 			"to": [9.5, 16, 13],
 			"faces": {
-				"north": {"uv": [0, 0, 16, 9.25], "texture": "#0"},
-				"east": {"uv": [0, 0, 3, 16], "texture": "#0"},
-				"south": {"uv": [0, 0, 3, 16], "texture": "#0"},
-				"west": {"uv": [0, 0, 3, 16], "texture": "#0"},
-				"up": {"uv": [0, 0, 3, 16], "texture": "#0"},
-				"down": {"uv": [0, 0, 3, 16], "texture": "#0"}
+				"north": {"uv": [7, 4, 10, 11], "texture": "#0"},
+				"east": {"uv": [7, 4, 10, 11], "texture": "#0"},
+				"south": {"uv": [7, 4, 10, 11], "texture": "#0"},
+				"west": {"uv": [7, 4, 10, 11], "texture": "#0"},
+				"up": {"uv": [7, 4, 10, 11], "texture": "#0"},
+				"down": {"uv": [7, 4, 10, 11], "texture": "#0"}
 			},
 			"type": "cube"
 		},
@@ -97,5 +96,6 @@
 			},
 			"type": "cube"
 		}
-	]
+	],
+	"display": {}
 }

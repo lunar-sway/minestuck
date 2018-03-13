@@ -101,7 +101,7 @@ public class TileEntityAlchemiter extends TileEntity
 			owner = IdentifierHandler.load(tagCompound, "owner");
 		
 		if(tagCompound.hasKey("dowel")) 
-			dowel = new ItemStack(tagCompound.getCompoundTag("dowel"));
+			setDowel(new ItemStack(tagCompound.getCompoundTag("dowel")));
 	}
 	
 	@Override
