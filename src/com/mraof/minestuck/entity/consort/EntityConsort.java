@@ -2,6 +2,7 @@ package com.mraof.minestuck.entity.consort;
 
 import com.mraof.minestuck.entity.EntityMinestuck;
 import com.mraof.minestuck.inventory.InventoryConsortMerchant;
+import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.ai.*;
@@ -23,6 +24,7 @@ public abstract class EntityConsort extends EntityMinestuck
 	NBTTagCompound messageData;
 	public EnumConsort.MerchantType merchantType = EnumConsort.MerchantType.NONE;
 	int homeDimension;
+	boolean visitedSkaia;
 	MessageType.DelayMessage updatingMessage; //Change to an interface/array if more message components need tick updates
 	public InventoryConsortMerchant stocks;
 	
@@ -99,6 +101,9 @@ public abstract class EntityConsort extends EntityMinestuck
 		{
 			updatingMessage.onTickUpdate(this);
 		}
+		
+		if(MinestuckDimensionHandler.isSkaia(dimension))
+			visitedSkaia = true;
 	}
 	
 	@Override
@@ -161,6 +166,8 @@ public abstract class EntityConsort extends EntityMinestuck
 			nbt.setInteger("maxHomeDistance", (int) getMaximumHomeDistance());
 			compound.setTag("homePos", nbt);
 		}
+		
+		compound.setBoolean("skaia", visitedSkaia);
 	}
 	
 	@Override
@@ -195,6 +202,8 @@ public abstract class EntityConsort extends EntityMinestuck
 			setHomePosAndDistance(pos, nbt.getInteger("maxHomeDistance"));
 		}
 		
+		visitedSkaia = compound.getBoolean("skaia");
+		
 		applyAdditionalAITasks();
 	}
 	
@@ -209,6 +218,7 @@ public abstract class EntityConsort extends EntityMinestuck
 		}
 		
 		homeDimension = world.provider.getDimension();
+		visitedSkaia = rand.nextFloat() < 0.1F;
 		
 		applyAdditionalAITasks();
 		

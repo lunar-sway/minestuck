@@ -65,7 +65,7 @@ public class ConsortDialogue
 		addMessage("mysteryRecipe").landTitleSpecific(fromNameTitle("cake"));
 		addMessage("cakeRegen").landTitleSpecific(fromNameTitle("cake"));
 		addMessage("cakeRecipe").landTitleSpecific(fromNameTitle("cake"));
-		addMessage("gearTechnology").landTitleSpecific(fromNameTitle("clockwork"));
+		addMessage("gearTechnology").landTitleSpecific(fromNameTitle("clockwork")).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
 		addMessage("evilGears").landTitleSpecific(fromNameTitle("clockwork"));
 		addMessage("ticking").landTitleSpecific(fromNameTitle("clockwork"));
 		addMessage("frogCreation").landTitleSpecific(LandAspectRegistry.frogAspect);
@@ -94,16 +94,16 @@ public class ConsortDialogue
 		addMessage("allTrees").landTerrain(fromNameTerrain("forest"));
 		
 		addMessage("denizenMention").reqLand();
-		addMessage("floatingIsland").reqLand();
-		addMessage("ringFishing");
-		addMessage("frogWalk");
-		addMessage("deliciousHair");
+		addMessage("floatingIsland").consortReq(consort -> consort.getDistanceSq(consort.world.getSpawnPoint()) < 65536).reqLand();
+		addMessage("ringFishing").consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
+		addMessage("frogWalk").consort(EnumConsort.TURTLE);
+		addMessage("deliciousHair").consort(EnumConsort.IGUANA);
 		//		addMessage("village"); Did not work as intended
 		addMessage("lazyKing").landTerrain(fromNameTerrain("shade"));
-		addMessage("musicInvention");
-		addMessage("wyrm");
-		addMessage(new ConditionedMessage(new SingleMessage("heroicStench"), new SingleMessage("leechStench"),
-				(EntityConsort consort, EntityPlayer player) -> SburbHandler.hasEntered((EntityPlayerMP) player))).reqLand();
+		addMessage("musicInvention").consort(EnumConsort.NAKAGATOR, EnumConsort.SALAMANDER);
+		addMessage("wyrm").consort(EnumConsort.TURTLE, EnumConsort.IGUANA);
+		addMessage(new ConditionedMessage((EntityConsort consort, EntityPlayer player) -> SburbHandler.hasEntered((EntityPlayerMP) player),
+				new SingleMessage("heroicStench"), new SingleMessage("leechStench"))).reqLand();
 		addMessage(new SingleMessage("fireCakes")).landTerrain(fromNameTerrain("heat")).landTitle(fromNameTitle("cake"));
 		
 		MessageType raps = new RandomMessage("rapBattles", RandomKeepResult.KEEP_CONSORT,
@@ -149,10 +149,15 @@ public class ConsortDialogue
 					new SingleMessage("rapBattle.denyAnswer")
 				}
 			).setAcceptNull()
-		);
+		).consort(EnumConsort.NAKAGATOR, EnumConsort.IGUANA);
 		
 		addMessage("awaitHero", "landName", "consortTypes", "playerTitleLand").reqLand();
-		addMessage("watchSkaia").reqLand();
+		addMessage(new ConditionedMessage("skaia", (EntityConsort consort, EntityPlayer player) -> !consort.visitedSkaia, new SingleMessage("watchSkaia"),
+				new ConditionedMessage((EntityConsort consort, EntityPlayer player) -> MinestuckDimensionHandler.isSkaia(consort.dimension),
+						new SingleMessage("atSkaia1", "consortSound2"), new SingleMessage("visitedSkaia")))).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA, EnumConsort.NAKAGATOR).reqLand();
+		addMessage(new ConditionedMessage("skaiaTurtle", (EntityConsort consort, EntityPlayer player) -> !consort.visitedSkaia, new SingleMessage("watchSkaia"),
+				new ConditionedMessage((EntityConsort consort, EntityPlayer player) -> MinestuckDimensionHandler.isSkaia(consort.dimension),
+						new SingleMessage("atSkaia2"), new SingleMessage("visitedSkaia")))).consort(EnumConsort.TURTLE).reqLand();
 		
 		addMessage(new SingleMessage("zazzerpan")).consort(EnumConsort.TURTLE);
 		addMessage(new SingleMessage("texasHistory", "landName")).consort(EnumConsort.TURTLE);
@@ -164,7 +169,7 @@ public class ConsortDialogue
 		addMessage(new SingleMessage("stockMarket")).consort(EnumConsort.NAKAGATOR);
 		addMessage(new SingleMessage("identity", "playerTitleLand", "playerNameLand")).consort(EnumConsort.SALAMANDER);
 		addMessage(new ChainMessage(1, new SingleMessage("unknown1"), new SingleMessage("unknown2"))).consort(EnumConsort.TURTLE);
-		addMessage(new ChainMessage(1, new SingleMessage("cult1", "playerTitle"), new SingleMessage("cult2")));
+		addMessage(new ChainMessage(1, new SingleMessage("cult1", "playerTitle"), new SingleMessage("cult2"))).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
 
 		addMessage(new ChoiceMessage(new DescriptionMessage("peppyOffer"),
 				new SingleMessage[] { new SingleMessage("peppyOffer.buy"), new SingleMessage("peppyOffer.deny") },
@@ -175,12 +180,12 @@ public class ConsortDialogue
 								new SingleMessage[] { new SingleMessage("peppyOffer.denyAgain"), new SingleMessage("peppyOffer.buy2") },
 								new MessageType[] { new SingleMessage("dots"),
 										new PurchaseMessage(false, AlchemyRecipeHandler.CONSORT_JUNK_REWARD, 500, "purchase",
-												new SingleMessage("peppyOffer.purchase")) }) })).type(MerchantType.SHADY);
+												new SingleMessage("peppyOffer.purchase")) }) })).type(MerchantType.SHADY).consort(EnumConsort.NAKAGATOR, EnumConsort.IGUANA);
 
 
 		addMessage(new ChoiceMessage(true, new SingleMessage("titlePresence", "playerTitle"),
 				new SingleMessage[] { new SingleMessage("titlePresence.iam", "playerTitle"), new SingleMessage("titlePresence.agree") },
-				new MessageType[] { new SingleMessage("titlePresence.iamAnswer"), new SingleMessage("thanks") })).reqLand();
+				new MessageType[] { new SingleMessage("titlePresence.iamAnswer", "consortSound2"), new SingleMessage("thanks") })).consort(EnumConsort.IGUANA, EnumConsort.SALAMANDER).reqLand();
 		
 		addMessage(new ChoiceMessage(new DescriptionMessage("shadyOffer"),
 				new SingleMessage[]
@@ -210,11 +215,11 @@ public class ConsortDialogue
 								}
 						)
 				}
-		)).type(MerchantType.SHADY);
+		)).type(MerchantType.SHADY).consort(EnumConsort.SALAMANDER, EnumConsort.TURTLE);
 		
 		addMessage(new ChoiceMessage(true, new SingleMessage("denizen", "denizen"),
 				new SingleMessage[] { new SingleMessage("denizen.what"), new SingleMessage("denizen.askAlignment") },
-				new MessageType[] { new SingleMessage("denizen.explain", "playerClassLand"), new SingleMessage("denizen.alignment") })).reqLand();
+				new MessageType[] { new SingleMessage("denizen.explain", "playerClassLand"), new SingleMessage("denizen.alignment") })).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA, EnumConsort.TURTLE).reqLand();
 		
 		List<ItemStack> hungryList = ImmutableList.of(new ItemStack(Items.COOKIE), new ItemStack(MinestuckItems.bugOnAStick),
 				new ItemStack(MinestuckItems.grasshopper), new ItemStack(MinestuckItems.chocolateBeetle),
@@ -223,7 +228,7 @@ public class ConsortDialogue
 						new ChoiceMessage(new SingleMessage("hungry.askFood", "nbtItem:hungry.item"),
 								new SingleMessage[] { new SingleMessage("hungry.accept"), new SingleMessage("hungry.deny") },
 								new MessageType[] { new GiveItemMessage("hungry.item", 0, new SingleMessage("hungry.thanks")),
-										new SingleMessage("sadface") })));
+										new SingleMessage("sadface") }))).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
 		addMessage(new ItemRequirement("hungry2", hungryList, false, true, false,
 						new SingleMessage(
 								"hungry"),
@@ -241,12 +246,12 @@ public class ConsortDialogue
 												new MessageType[] { new GiveItemMessage("hungry.sellItem", "hungry2.item", 10,
 														new ChainMessage(1, new DescriptionMessage("hungry.finally", "nbtItem:hungry2.item"),
 																new SingleMessage("hungry.finally"))),
-														new SingleMessage("hungry.end") }) })));
+														new SingleMessage("hungry.end") }) }))).consort(EnumConsort.SALAMANDER, EnumConsort.NAKAGATOR);
 		
-		addMessage(new MerchantGuiMessage(new SingleMessage("foodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).consort(EnumConsort.SALAMANDER).reqLand();
-		addMessage(new MerchantGuiMessage(new SingleMessage("fastFood"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).consort(EnumConsort.NAKAGATOR).reqLand();
-		addMessage(new MerchantGuiMessage(new SingleMessage("groceryStore"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).consort(EnumConsort.IGUANA).reqLand();
-		addMessage(new MerchantGuiMessage(new SingleMessage("tastyWelcome"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).consort(EnumConsort.TURTLE).reqLand();
+		addMessage(new MerchantGuiMessage(new SingleMessage("foodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).consort(EnumConsort.SALAMANDER);
+		addMessage(new MerchantGuiMessage(new SingleMessage("fastFood"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).consort(EnumConsort.NAKAGATOR);
+		addMessage(new MerchantGuiMessage(new SingleMessage("groceryStore"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).consort(EnumConsort.IGUANA);
+		addMessage(new MerchantGuiMessage(new SingleMessage("tastyWelcome"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).consort(EnumConsort.TURTLE);
 		addMessage(new MerchantGuiMessage(new SingleMessage("breathFoodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("wind"));
 		addMessage(new MerchantGuiMessage(new SingleMessage("bloodFoodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("pulse"));
 		addMessage(new MerchantGuiMessage(new SingleMessage("lifeFoodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("rabbits"));
@@ -299,6 +304,8 @@ public class ConsortDialogue
 			if(message.merchantRequirement == null && consort.merchantType != EnumConsort.MerchantType.NONE
 					|| message.merchantRequirement != null && !message.merchantRequirement.contains(consort.merchantType))
 				continue;
+			if(message.additionalRequirement != null && !message.additionalRequirement.apply(consort))
+				continue;
 			list.add(message);
 		}
 		
@@ -330,6 +337,7 @@ public class ConsortDialogue
 		private Set<TitleLandAspect> aspect2RequirementS;
 		private EnumSet<EnumConsort> consortRequirement;
 		private EnumSet<MerchantType> merchantRequirement;
+		private ConsortRequirement additionalRequirement;
 		
 		public DialogueWrapper reqLand()
 		{
@@ -401,6 +409,12 @@ public class ConsortDialogue
 			return this;
 		}
 		
+		public DialogueWrapper consortReq(ConsortRequirement req)
+		{
+			additionalRequirement = req;
+			return this;
+		}
+		
 		public DialogueWrapper weight(int weight)
 		{
 			itemWeight = weight;
@@ -421,5 +435,10 @@ public class ConsortDialogue
 		{
 			return messageStart.getString();
 		}
+	}
+	
+	public interface ConsortRequirement
+	{
+		boolean apply(EntityConsort consort);
 	}
 }

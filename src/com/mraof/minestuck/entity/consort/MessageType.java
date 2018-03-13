@@ -108,6 +108,9 @@ public abstract class MessageType
 			} else if(args[i].equals("consortSound"))
 			{
 				obj[i] = new TextComponentTranslation("consort.sound." + s);
+			} else if(args[i].equals("consortSound2"))
+			{
+				obj[i] = new TextComponentTranslation("consort.sound2." + s);
 			} else if(args[i].equals("consort"))
 			{
 				obj[i] = new TextComponentTranslation("entity." + s + ".name");
@@ -425,12 +428,12 @@ public abstract class MessageType
 		Condition condition;
 		MessageType message1, message2;
 		
-		public ConditionedMessage(MessageType message1, MessageType message2, Condition condition)
+		public ConditionedMessage(Condition condition, MessageType message1, MessageType message2)
 		{
-			this(message1.getString(), message1, message2, condition);
+			this(message1.getString(), condition, message1, message2);
 		}
 		
-		public ConditionedMessage(String nbtName, MessageType message1, MessageType message2, Condition condition)
+		public ConditionedMessage(String nbtName, Condition condition, MessageType message1, MessageType message2)
 		{
 			this.nbtName = nbtName;
 			this.condition = condition;

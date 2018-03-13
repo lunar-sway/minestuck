@@ -476,7 +476,7 @@ public class ConsortVillageComponents
 			this.setBlockState(worldIn, wallBlock, 5, 2, 2, structureBoundingBoxIn);
 			this.setBlockState(worldIn, wallBlock, 5, 2, 5, structureBoundingBoxIn);
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 5,3,2,5,5, 5, wallBlock, wallBlock, false);
-			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 3, 1, 1, EnumFacing.NORTH, (BlockDoor) doorBlock.getBlock());
+			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 3, 1, 1, EnumFacing.SOUTH, (BlockDoor) doorBlock.getBlock());
 			
 			this.spawnConsort(2, 1, 3, structureBoundingBoxIn, worldIn);
 			this.spawnConsort(3, 1, 4,structureBoundingBoxIn, worldIn);
