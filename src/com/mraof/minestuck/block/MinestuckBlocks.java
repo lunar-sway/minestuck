@@ -48,7 +48,7 @@ public class MinestuckBlocks
 	public static Block rabbitSpawner = new BlockMobSpawner().setRegistryName("rabbit_spawner").setUnlocalizedName("rabbitSpawner");
 	public static Block appleCake = new BlockSimpleCake(2, 0.5F, null).setRegistryName("apple_cake").setUnlocalizedName("appleCake");
 	public static Block blueCake = new BlockSimpleCake(2, 0.3F, (EntityPlayer player) -> player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 150, 0))).setRegistryName("blue_cake").setUnlocalizedName("blueCake");
-	public static Block coldCake = new BlockSimpleCake(2, 0.3F, (EntityPlayer player) -> player.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 200, 1))).setRegistryName("cold_cake").setUnlocalizedName("coldCake");
+	public static Block coldCake = new BlockSimpleCake(2, 0.3F, (EntityPlayer player) -> {player.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 200, 1));player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 200, 1));}).setRegistryName("cold_cake").setUnlocalizedName("coldCake");
 	public static Block redCake = new BlockSimpleCake(2, 0.1F, (EntityPlayer player) -> player.heal(1)).setRegistryName("red_cake").setUnlocalizedName("redCake");
 	public static Block hotCake = new BlockSimpleCake(2, 0.1F, (EntityPlayer player) -> player.setFire(4)).setRegistryName("hot_cake").setUnlocalizedName("hotCake");
 	

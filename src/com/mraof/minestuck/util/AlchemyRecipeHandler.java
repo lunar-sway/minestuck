@@ -925,7 +925,8 @@ public class AlchemyRecipeHandler
 		ConsortRewardHandler.registerPrice(new ItemStack(Items.POTIONITEM), 5, 10);
 		ConsortRewardHandler.registerPrice(new ItemStack(Items.FISH, 1, 1), 40, 60);
 		ConsortRewardHandler.registerPrice(new ItemStack(Items.MILK_BUCKET), 40, 50);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.EGG), 10, 15);
+		ConsortRewardHandler.registerPrice(new ItemStack(Items.EGG), 30, 45);
+		ConsortRewardHandler.registerPrice(new ItemStack(Items.SUGAR), 50, 80);
 		ConsortRewardHandler.registerPrice(new ItemStack(Items.RABBIT_STEW), 130, 150);
 		ConsortRewardHandler.registerPrice(new ItemStack(Items.POISONOUS_POTATO), 50, 60);
 		ConsortRewardHandler.registerPrice(new ItemStack(Items.MELON), 70, 80);

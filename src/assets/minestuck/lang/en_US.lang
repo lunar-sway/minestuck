@@ -359,6 +359,7 @@ consort.gotTheGoods=You want the goods? We got the goods.
 consort.risingShop=We have top tier goods for a top tier god!
 
 store.item.onion.name=Cool Veggie
+store.item.onion.tooltip=This cool vegetable is so good that it will make you cry!
 store.item.pumpkinPie.name=Tasty Pie
 store.item.pumpkinPie.tooltip=This pie appeared in storage a few days ago out of nowhere. No idea where it came from, but it sure is tasty!
 store.item.seeds.tooltip=You know what tastes even better than those plant grains? Their seeds, of course!
@@ -373,13 +374,21 @@ store.item.salad.tooltip=A bowl of our fine, handpicked greens. The perfect meal
 store.item.grasshopper.tooltip=This extra-large grasshopper makes a perfect dinner.
 store.item.coneOfFlies.tooltip=Want a cone of flies? They're quite popular with the kids. Everyone else too, honestly.
 store.item.chocolateBeetle.tooltip=The wonders of cocoa beans has given us this delicacy. Try now!
+store.item.goldSeeds.tooltip=Do you like regular seeds? This here is the luxury variant!
+store.item.milk.tooltip=You won't find this in a regular bucket!
+store.item.potatoPoisonous.name=Green Potato
+store.item.potatoPoisonous.tooltip=This here is a rare green potato. Can you imagine how this one would taste?
+store.item.sugar.tooltip=I have discovered that this substance is the secret ingredient for the cakes around here!
 
 store.tile.coldCake.name=Blue Cake?
 store.tile.coldCake.tooltip=It's blue, so I'm pretty sure that it's the fabled Blue Cake. It is said to get you moving!
-store.tile.blueCake.name=ColdCake?
+store.tile.blueCake.name=Cold Cake?
 store.tile.blueCake.tooltip=Be careful with that one. It could be a Cold Cake. One bite and it will freeze you more than this weather does.
-store.tile.hotCake.name=Red Cake
-store.tile.redCake.name=Hot Cake
+store.tile.hotCake.name=Red Cake?
+store.tile.hotCake.tooltip=Did you know that red cakes heal you? I'm 90%% sure that this is one of those cakes.
+store.tile.redCake.name=Hot Cake?
+store.tile.redCake.tooltip=Play a prank on your friends with this really hot cake!
+store.tile.appleCake.tooltip=Cakes are truly the best when made with apples!
 store.tile.glowingMushroom.tooltip=This mushroom tastes a bit better than any other around here, according to myself!
 
 denizen.blood.name=Jormungandr
