@@ -461,6 +461,7 @@ public class ConsortVillageComponents
 			IBlockState wallBlock = provider.blockRegistry.getBlockState("structure_primary");
 			IBlockState floorBlock = provider.blockRegistry.getBlockState("upper");
 			IBlockState doorBlock = provider.blockRegistry.getBlockState("village_door");
+			IBlockState torch = provider.blockRegistry.getBlockState("torch");
 			
 			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 2, 4, 5, 5);
 			this.clearFront(worldIn, structureBoundingBoxIn, 1, 4, 1, 0);
@@ -477,6 +478,8 @@ public class ConsortVillageComponents
 			this.setBlockState(worldIn, wallBlock, 5, 2, 5, structureBoundingBoxIn);
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 5,3,2,5,5, 5, wallBlock, wallBlock, false);
 			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 3, 1, 1, EnumFacing.SOUTH, (BlockDoor) doorBlock.getBlock());
+			
+			this.setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.EAST), 1, 3, 4, structureBoundingBoxIn);
 			
 			this.spawnConsort(2, 1, 3, structureBoundingBoxIn, worldIn);
 			this.spawnConsort(3, 1, 4,structureBoundingBoxIn, worldIn);
@@ -522,6 +525,7 @@ public class ConsortVillageComponents
 			IBlockState wallBlock = provider.blockRegistry.getBlockState("structure_primary");
 			IBlockState floorBlock = provider.blockRegistry.getBlockState("upper");
 			IBlockState doorBlock = provider.blockRegistry.getBlockState("village_door");
+			IBlockState torch = provider.blockRegistry.getBlockState("torch");
 			
 			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 2, 5, 13, 6);
 			this.clearFront(worldIn, structureBoundingBoxIn, 1, 5, 1, 0);
@@ -570,6 +574,8 @@ public class ConsortVillageComponents
 			this.fillWithAir(worldIn, structureBoundingBoxIn, 6, 2, 3, 6, 2, 5);
 			
 			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 3, 1, 1, EnumFacing.SOUTH, (BlockDoor) doorBlock.getBlock());
+			this.setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.NORTH), 3, 3, 6, structureBoundingBoxIn);
+			this.setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.SOUTH), 3, 7, 2, structureBoundingBoxIn);
 			
 			this.spawnConsort(2, 1, 4,structureBoundingBoxIn, worldIn);
 			this.spawnConsort(3, 1, 5,structureBoundingBoxIn, worldIn);
