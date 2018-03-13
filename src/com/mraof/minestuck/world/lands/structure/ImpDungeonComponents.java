@@ -1,26 +1,24 @@
 package com.mraof.minestuck.world.lands.structure;
 
-import java.util.List;
-import java.util.Random;
-
 import com.mraof.minestuck.block.BlockGate;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockUtil;
-
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.template.TemplateManager;
+
+import java.util.List;
+import java.util.Random;
 
 public class ImpDungeonComponents
 {
@@ -204,7 +202,7 @@ public class ImpDungeonComponents
 		}
 	}
 	
-	public static abstract class ImpDungeonComponent extends StructureComponent
+	public static abstract class ImpDungeonComponent extends StructureComponentUtil
 	{
 		protected boolean[] corridors = new boolean[0];
 		
@@ -222,76 +220,6 @@ public class ImpDungeonComponents
 		{
 			for(int i = 0; i < corridors.length; i++)
 				corridors[i] = tagCompound.getBoolean("bl"+i);
-		}
-		
-		@Override
-		protected int getXWithOffset(int x, int z)
-		{
-			EnumFacing enumfacing = this.getCoordBaseMode();
-			
-			if (enumfacing == null)
-				return x;
-			else switch (enumfacing)
-			{
-			case NORTH:
-				return this.boundingBox.maxX - x;
-			case SOUTH:
-				return this.boundingBox.minX + x;
-			case WEST:
-				return this.boundingBox.maxX - z;
-			case EAST:
-				return this.boundingBox.minX + z;
-			default:
-				return x;
-			}
-		}
-		
-		@Override
-		protected int getZWithOffset(int x, int z)
-		{
-			EnumFacing enumfacing = this.getCoordBaseMode();
-			
-			if (enumfacing == null)
-				return z;
-			else switch (enumfacing)
-			{
-			case NORTH:
-				return this.boundingBox.maxZ - z;
-			case SOUTH:
-				return this.boundingBox.minZ + z;
-			case WEST:
-				return this.boundingBox.minZ + x;
-			case EAST:
-				return this.boundingBox.maxZ - x;
-			default:
-				return z;
-			}
-		}
-		
-		@Override
-		protected void setBlockState(World worldIn, IBlockState blockstateIn, int x, int y, int z, StructureBoundingBox boundingboxIn)
-		{
-			BlockPos blockpos = new BlockPos(this.getXWithOffset(x, z), this.getYWithOffset(y), this.getZWithOffset(x, z));
-			
-			if (boundingboxIn.isVecInside(blockpos))
-			{
-				EnumFacing facing = this.getCoordBaseMode();
-				switch(facing)
-				{
-				case NORTH:
-					blockstateIn = blockstateIn.withRotation(Rotation.CLOCKWISE_180);
-					break;
-				case WEST:
-					blockstateIn = blockstateIn.withRotation(Rotation.CLOCKWISE_90);
-					break;
-				case EAST:
-					blockstateIn = blockstateIn.withRotation(Rotation.COUNTERCLOCKWISE_90);
-					break;
-				default:
-				}
-				
-				worldIn.setBlockState(blockpos, blockstateIn, 2);
-			}
 		}
 	}
 	

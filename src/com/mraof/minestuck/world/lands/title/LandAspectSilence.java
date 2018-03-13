@@ -43,6 +43,7 @@ public class LandAspectSilence extends TitleLandAspect
 	protected void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.BLACK));
+		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.CARPET.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.BLUE));
 		chunkProvider.decorators.add(new PumpkinDecorator());
 		if(chunkProvider.blockRegistry.getCustomBlock("torch") == null)
 			chunkProvider.blockRegistry.setBlockState("torch", Blocks.REDSTONE_TORCH.getDefaultState());
