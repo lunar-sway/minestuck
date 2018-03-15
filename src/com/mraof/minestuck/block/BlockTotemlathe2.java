@@ -25,6 +25,7 @@ public class BlockTotemlathe2 extends BlockTotemlathe {
 	
 	public BlockTotemlathe2(){
 		setUnlocalizedName("totem_lathe2");
+		setDefaultState(blockState.getBaseState().withProperty(HASDOWEL, EnumDowel.NO_DOWEL));
 	}
 	
 	

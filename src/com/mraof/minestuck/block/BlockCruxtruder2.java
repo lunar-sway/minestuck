@@ -21,6 +21,7 @@ public class BlockCruxtruder2 extends BlockCruxtruder {
 	public static final PropertyBool DOWELOUT=PropertyBool.create("dowelout");
 	BlockCruxtruder2(){
 		setUnlocalizedName("cruxtruder2");
+		setDefaultState(blockState.getBaseState().withProperty(HASLID, true).withProperty(DOWELOUT, false));
 	}
 	
 	@Override

@@ -186,8 +186,8 @@ public class BlockTotemlathe extends BlockLargeMachine
 	public static void updateItem(boolean hascard,BlockTotemlathe2.EnumDowel hasdowel, World world, BlockPos pos)
 	{
 		IBlockState oldState = world.getBlockState(pos);
-		IBlockState oldState2 = world.getBlockState(pos.up());
-		if (oldState.getBlock()==MinestuckBlocks.totemlathe&&oldState2.getBlock()==MinestuckBlocks.totemlathe2) {
+		IBlockState oldState2=world.getBlockState(pos.up());
+		if (oldState.getBlock()==MinestuckBlocks.totemlathe) {
 			EnumFacing facing =oldState.getValue(DIRECTION);
 			//updates all items that should update
 			world.notifyBlockUpdate(pos, oldState, oldState.withProperty(HASCARD, hascard), 3);

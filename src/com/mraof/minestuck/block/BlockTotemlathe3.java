@@ -1,18 +1,14 @@
 package com.mraof.minestuck.block;
 
 
-import com.mraof.minestuck.tileentity.TileEntityTotemlathe;
-
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class BlockTotemlathe3 extends BlockTotemlathe{
 

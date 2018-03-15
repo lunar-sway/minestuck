@@ -22,7 +22,7 @@ public class BlockCruxtruder extends BlockLargeMachine{
 
 	public BlockCruxtruder() {
 		setUnlocalizedName("cruxtruder");
-		setDefaultState(getStateFromMeta(0));
+		setDefaultState(blockState.getBaseState());
 		
 	} 
 	//not sure how to do this.

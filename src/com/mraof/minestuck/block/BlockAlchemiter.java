@@ -43,7 +43,10 @@ public class BlockAlchemiter extends BlockLargeMachine
 		this.PART = property;
 		
 		setUnlocalizedName("alchemiter");
-		setDefaultState(getStateFromMeta(0));
+		setDefaultState(blockState.getBaseState());
+		if (index==0) {
+			setDefaultState(blockState.getBaseState().withProperty(HASDOWEL, false));
+		}
 	}
 	
 	//not sure how to do this.
@@ -54,7 +57,7 @@ public class BlockAlchemiter extends BlockLargeMachine
 
 
 	@Override
-	public boolean onBlockActivated(World worldIn,BlockPos pos,IBlockState state,EntityPlayer playerIn,EnumHand hand,EnumFacing facing,float hitX,float hitY,float hitZ)
+	public  boolean onBlockActivated(World worldIn,BlockPos pos,IBlockState state,EntityPlayer playerIn,EnumHand hand,EnumFacing facing,float hitX,float hitY,float hitZ)
 	{
 		BlockPos mainPos = getMainPos(state, pos, worldIn);
 		TileEntity te = worldIn.getTileEntity(mainPos);
@@ -132,7 +135,7 @@ public class BlockAlchemiter extends BlockLargeMachine
 	@Override
 	public IBlockState getActualState(IBlockState state,IBlockAccess worldIn,BlockPos pos){
 		TileEntity te;
-		te=worldIn.getTileEntity((getMainPos(state, pos , (World) worldIn)));
+		te=worldIn.getTileEntity((getMainPos(state, pos , worldIn)));
 		if (state.getValue(PART)==EnumParts.TOTEM_PAD) {
 			if(te instanceof TileEntityAlchemiter) {
 				return state.withProperty(HASDOWEL,!((TileEntityAlchemiter)te).getDowel().isEmpty());
@@ -164,11 +167,11 @@ public class BlockAlchemiter extends BlockLargeMachine
      *returns the block position of the "Main" block
      *aka the block with the TileEntity for the machine
      */
-	public BlockPos getMainPos(IBlockState state, BlockPos pos, World world)
+	public BlockPos getMainPos(IBlockState state, BlockPos pos, IBlockAccess world)
 	{
 		return getMainPos(state, pos, world, 4);
 	}
-	public BlockPos getMainPos(IBlockState state, BlockPos pos, World world, int count)
+	public BlockPos getMainPos(IBlockState state, BlockPos pos, IBlockAccess world, int count)
 	{
 		EnumParts part = state.getValue(PART);
 		EnumFacing facing = state.getValue(DIRECTION);
@@ -245,8 +248,11 @@ public class BlockAlchemiter extends BlockLargeMachine
 
 	public static void updateItem(boolean b, World world, BlockPos pos)
 	{
-		IBlockState oldState = world.getBlockState(pos);
-		if (oldState.getBlock()==MinestuckBlocks.alchemiter[0]||oldState.getBlock()==MinestuckBlocks.alchemiter[1])
-			world.notifyBlockUpdate(pos, oldState, oldState.withProperty(HASDOWEL, b), 3);
+		pos=pos.up();
+		if(!(world == null)) {
+			IBlockState oldState = world.getBlockState(pos.up());
+			if (oldState.getBlock()==MinestuckBlocks.alchemiter[0]||oldState.getBlock()==MinestuckBlocks.alchemiter[1])
+				world.notifyBlockUpdate(pos.up(), oldState, oldState.withProperty(HASDOWEL, b), 3);
+		}
 	}
 }

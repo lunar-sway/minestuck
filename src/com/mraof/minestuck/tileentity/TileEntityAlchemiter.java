@@ -47,6 +47,7 @@ public class TileEntityAlchemiter extends TileEntity
 	}
 	public ItemStack getDowel() {
 		return dowel;
+		
 	}
 	
 	public PlayerIdentifier getOwner(){
@@ -291,7 +292,7 @@ public class TileEntityAlchemiter extends TileEntity
 	{
 		if(dowel.isEmpty())
 		{
-			BlockAlchemiter.updateItem(false, world, this.getPos());
+			BlockAlchemiter.updateItem(false, world,getPos());
 		} else
 		{
 			BlockAlchemiter.updateItem(true, world, this.getPos());

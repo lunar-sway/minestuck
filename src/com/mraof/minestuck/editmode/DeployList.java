@@ -37,7 +37,7 @@ public class DeployList
 		registerItem(new ItemStack(MinestuckBlocks.alchemiter[0],1,0),new GristSet(), new GristSet(GristType.Build, 100),0);
 		registerItem(new ItemStack(MinestuckBlocks.cruxtruder,1,0),new GristSet(), new GristSet(GristType.Build, 100),0);
 		registerItem(new ItemStack(MinestuckBlocks.totemlathe,1,0),new GristSet(), new GristSet(GristType.Build, 100),0);
-		registerItem(new ItemStack(MinestuckBlocks.punchDesignix,1,0),new GristSet(), new GristSet(GristType.Build, 100),0);
+		registerItem(new ItemStack(MinestuckBlocks.punchDesignix,1,0),new GristSet(GristType.Shale, 4), 0);
 		
 		
 //		registerItem(new ItemStack(MinestuckBlocks.sburbMachine,1,0), new GristSet(), new GristSet(GristType.Build, 100), 0);
