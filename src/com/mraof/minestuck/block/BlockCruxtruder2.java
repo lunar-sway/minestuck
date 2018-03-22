@@ -68,7 +68,7 @@ public class BlockCruxtruder2 extends BlockCruxtruder {
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
 	{
 
-		if(state.getValue(HASLID)) {
+		if(state.getValue(HASLID)&&state.getValue(PART)==EnumParts.ONE_THREE_ONE) {
 			worldIn.setBlockState(pos, state.withProperty(HASLID, false));
 			//spawn lid entity???(that dosn't exist yet)
 		}else {			

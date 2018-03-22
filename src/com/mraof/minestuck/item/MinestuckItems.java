@@ -335,9 +335,9 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlock(blockComputerOff));
 		registerItemBlock(registry, new ItemBlock(transportalizer));
 		registerItemBlock(registry, new ItemPunchDesignix(punchDesignix));
-		registerItemBlock(registry, new ItemLargeMachine(totemlathe,4,3,1));
-		registerItemBlock(registry, new ItemLargeMachine(alchemiter[0],4,4,4));
-		registerItemBlock(registry, new ItemLargeMachine(cruxtruder,3,3,3));
+		registerItemBlock(registry, new ItemTotemLathe(totemlathe));
+		registerItemBlock(registry, new ItemAlchemiter(alchemiter[0]));
+		registerItemBlock(registry, new ItemCruxtruder(cruxtruder));
 		
 		registerItemBlock(registry, new ItemBlockLayered(layeredSand));
 		registerItemBlock(registry, new ItemMultiTexture(coloredDirt, coloredDirt,

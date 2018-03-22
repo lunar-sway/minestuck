@@ -14,7 +14,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.ItemCruxiteArtifact;
 import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.item.block.ItemLargeMachine;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.GristSet;
 import com.mraof.minestuck.util.GristType;

@@ -87,37 +87,6 @@ public class BlockTotemlathe extends BlockLargeMachine
 		
 	}
 	
-	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
-	{
-		
-		EnumFacing facing = EnumFacing.getHorizontal(MathHelper.floor((double)(placer.rotationYaw * 4.0F / 360.0F) + 0.5D) + 2 & 3).getOpposite();
-		state = state.withProperty(DIRECTION, facing);
-		IBlockState state2=MinestuckBlocks.totemlathe2.getDefaultState().withProperty(BlockTotemlathe2.DIRECTION, facing);
-		IBlockState state3=MinestuckBlocks.totemlathe3.getDefaultState().withProperty(BlockTotemlathe3.DIRECTION, facing);
-		
-		
-		if(!(worldIn.isRemote)){
-			worldIn.setBlockState(pos.offset(facing.rotateY(),3), state.withProperty(PART, EnumParts.BOTTOM_RIGHT));
-			worldIn.setBlockState(pos.offset(facing.rotateY(),2), state.withProperty(PART, EnumParts.BOTTOM_MIDRIGHT));
-			worldIn.setBlockState(pos.offset(facing.rotateY(),1), state.withProperty(PART, EnumParts.BOTTOM_MIDLEFT));
-			worldIn.setBlockState(pos, state.withProperty(PART, EnumParts.BOTTOM_LEFT));
-			worldIn.setBlockState(pos.offset(facing.rotateY(),3).up(1), state2.withProperty(BlockTotemlathe2.PART, BlockTotemlathe2.EnumParts.MID_RIGHT));
-			worldIn.setBlockState(pos.offset(facing.rotateY(),2).up(1), state2.withProperty(BlockTotemlathe2.PART, BlockTotemlathe2.EnumParts.MID_MIDRIGHT));
-			worldIn.setBlockState(pos.offset(facing.rotateY(),1).up(1), state2.withProperty(BlockTotemlathe2.PART, BlockTotemlathe2.EnumParts.MID_MIDLEFT));
-			worldIn.setBlockState(pos.up(1), state2.withProperty(BlockTotemlathe2.PART, BlockTotemlathe2.EnumParts.MID_LEFT));
-			worldIn.setBlockState(pos.offset(facing.rotateY(),2).up(2), state3.withProperty(BlockTotemlathe3.PART, BlockTotemlathe3.EnumParts.TOP_MIDRIGHT));
-			worldIn.setBlockState(pos.offset(facing.rotateY(),1).up(2), state3.withProperty(BlockTotemlathe3.PART, BlockTotemlathe3.EnumParts.TOP_MIDLEFT));
-			worldIn.setBlockState(pos.up(2), state3.withProperty(BlockTotemlathe3.PART, BlockTotemlathe3.EnumParts.TOP_LEFT));
-		}
-	}
-	
-
-	
-
-	
-	
-	
 	
 	
 	//Block state handling

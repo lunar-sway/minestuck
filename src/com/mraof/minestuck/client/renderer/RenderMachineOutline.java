@@ -1,7 +1,11 @@
 package com.mraof.minestuck.client.renderer;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.item.block.ItemAlchemiter;
+import com.mraof.minestuck.item.block.ItemCruxtruder;
 import com.mraof.minestuck.item.block.ItemPunchDesignix;
+import com.mraof.minestuck.item.block.ItemTotemLathe;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -41,7 +45,10 @@ public class RenderMachineOutline
 	
 	private static boolean renderCheckItem(EntityPlayerSP player, ItemStack stack, RenderGlobal render, RayTraceResult rayTraceResult, float partialTicks)
 	{
-		if(stack.getItem() == Item.getItemFromBlock(MinestuckBlocks.punchDesignix))
+		if(stack.getItem() == Item.getItemFromBlock(MinestuckBlocks.punchDesignix)
+				||stack.getItem()==Item.getItemFromBlock(MinestuckBlocks.totemlathe)
+				||stack.getItem()==Item.getItemFromBlock(MinestuckBlocks.cruxtruder)
+				||stack.getItem()==Item.getItemFromBlock(MinestuckBlocks.alchemiter[0]))
 		{
 			BlockPos pos = rayTraceResult.getBlockPos();
 			
@@ -59,17 +66,33 @@ public class RenderMachineOutline
 					|| placedFacing.getFrontOffsetZ() > 0 && hitX < 0.5F || placedFacing.getFrontOffsetZ() < 0 && hitX >= 0.5F)
 				pos = pos.offset(placedFacing.rotateY());
 			
-			boolean placeable = ItemPunchDesignix.canPlaceAt(stack, player, player.world, pos, placedFacing);
 			
 			if(placedFacing == EnumFacing.EAST || placedFacing == EnumFacing.NORTH)
 				pos = pos.offset(placedFacing.rotateYCCW());	//The bounding box is symmetrical, so doing this gets rid of some rendering cases
 			
 			boolean r = placedFacing.getAxis() == EnumFacing.Axis.Z;
-			
+			boolean f = placedFacing== EnumFacing.NORTH||placedFacing==EnumFacing.EAST;
+			System.out.println(r+" , "+f);
 			double d1 = player.lastTickPosX + (player.posX - player.lastTickPosX) * (double)partialTicks;
 			double d2 = player.lastTickPosY + (player.posY - player.lastTickPosY) * (double)partialTicks;
 			double d3 = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * (double)partialTicks;
-			AxisAlignedBB boundingBox = new AxisAlignedBB(0,0,0, (r ? 2 : 1), 2, (r ? 1 : 2)).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
+			boolean placeable;
+			AxisAlignedBB boundingBox;
+			int i1=false?1:true?2:1;
+			if(stack.getItem() == Item.getItemFromBlock(MinestuckBlocks.punchDesignix)) {
+				boundingBox = new AxisAlignedBB(0,0,0, (r ? 2 : 1), 2, (r ? 1 : 2)).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
+				placeable = ItemPunchDesignix.canPlaceAt(stack, player, player.world, pos, placedFacing);
+			}else if(stack.getItem() == Item.getItemFromBlock(MinestuckBlocks.totemlathe)) {
+				boundingBox = new AxisAlignedBB((f?(r ? -2 : 0):0),0,(f?(r ? 0 : -2):0), (f? (r ? 2 : 1):(r ? 4 : 1)), 3, (f? (r ? 1 : 2) : (r ? 1 : 4))).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
+				placeable = ItemTotemLathe.canPlaceAt(stack, player, player.world, pos, placedFacing);
+			}else if(stack.getItem() == Item.getItemFromBlock(MinestuckBlocks.cruxtruder)) {
+				boundingBox=new AxisAlignedBB((f?(r ? -1 : -2):0),0,(f?(r ? 0 : -1):(r? -2 : 0)), (f? (r ? 2 : 1):3), 3, (f? (r ? 3 : 2) : (r ? 1 : 3))).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
+				placeable= ItemCruxtruder.canPlaceAt(stack, player, player.world, pos, placedFacing);
+			}else {
+				boundingBox=new AxisAlignedBB((f?(r ? -2 : -3):(r ? 0:0)),0,(f?(r ? 0 : -2):(r? -3 : 0)), (f? (r ? 2 : 1):(r ? 4 : 4)), 4, (f? (r ? 4 : 2) : (r ? 1 : 4))).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
+				placeable= ItemAlchemiter.canPlaceAt(stack, player, player.world, pos, placedFacing);
+			
+			}
 			GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 			GlStateManager.glLineWidth(2.0F);
 			GlStateManager.disableTexture2D();
@@ -78,9 +101,7 @@ public class RenderMachineOutline
 			GlStateManager.depthMask(true);
 			GlStateManager.enableTexture2D();
 			GlStateManager.disableBlend();
-		}
-		else return false;
-		
+		}		
 		return true;
 	}
 }

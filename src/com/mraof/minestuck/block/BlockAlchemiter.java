@@ -61,7 +61,8 @@ public class BlockAlchemiter extends BlockLargeMachine
 	{
 		BlockPos mainPos = getMainPos(state, pos, worldIn);
 		TileEntity te = worldIn.getTileEntity(mainPos);
-		if( te != null && te instanceof TileEntityAlchemiter)
+		
+		if( te != null && te instanceof TileEntityAlchemiter&&playerIn!=null)
 			((TileEntityAlchemiter) te).onRightClick(playerIn, state);
 			((TileEntityAlchemiter) te).setOwner(IdentifierHandler.encode(playerIn));
 		return true;
@@ -83,29 +84,7 @@ public class BlockAlchemiter extends BlockLargeMachine
 	@Override
 	public void onBlockPlacedBy(World worldIn,BlockPos pos,IBlockState state,EntityLivingBase placer, ItemStack stack)
 	{
-		EnumFacing facing = EnumFacing.getHorizontal(MathHelper.floor((double)(placer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3);
-		if(placer!=null && !(worldIn.isRemote)){
-			worldIn.setBlockState(pos.up(0), getBlockState(EnumParts.TOTEM_CORNER, facing));
-			worldIn.setBlockState(pos.up(1), getBlockState(EnumParts.TOTEM_PAD, facing));
-			worldIn.setBlockState(pos.up(2), getBlockState(EnumParts.LOWER_ROD, facing));
-			worldIn.setBlockState(pos.up(3), getBlockState(EnumParts.UPPER_ROD, facing));
-			
-			worldIn.setBlockState(pos.offset(facing,0).offset(facing.rotateY(),1), getBlockState(EnumParts.EDGE_LEFT, facing));
-			worldIn.setBlockState(pos.offset(facing,0).offset(facing.rotateY(),2), getBlockState(EnumParts.EDGE_RIGHT, facing));
-			worldIn.setBlockState(pos.offset(facing,0).offset(facing.rotateY(),3), getBlockState(EnumParts.CORNER, facing));
-			worldIn.setBlockState(pos.offset(facing,1).offset(facing.rotateY(),1), getBlockState(EnumParts.CENTER_PAD, facing));
-			worldIn.setBlockState(pos.offset(facing,1).offset(facing.rotateY(),0), getBlockState(EnumParts.EDGE_RIGHT, facing.rotateY()));
-			worldIn.setBlockState(pos.offset(facing,1).offset(facing.rotateY(),2), getBlockState(EnumParts.CENTER_PAD, facing.rotateYCCW()));
-			worldIn.setBlockState(pos.offset(facing,1).offset(facing.rotateY(),3), getBlockState(EnumParts.EDGE_LEFT, facing.rotateYCCW()));
-			worldIn.setBlockState(pos.offset(facing,2).offset(facing.rotateY(),0), getBlockState(EnumParts.EDGE_LEFT, facing.rotateY()));
-			worldIn.setBlockState(pos.offset(facing,2).offset(facing.rotateY(),1), getBlockState(EnumParts.CENTER_PAD, facing.rotateY()));
-			worldIn.setBlockState(pos.offset(facing,2).offset(facing.rotateY(),2), getBlockState(EnumParts.CENTER_PAD, facing.getOpposite()));
-			worldIn.setBlockState(pos.offset(facing,2).offset(facing.rotateY(),3), getBlockState(EnumParts.EDGE_RIGHT, facing.rotateYCCW()));
-			worldIn.setBlockState(pos.offset(facing,3).offset(facing.rotateY(),0), getBlockState(EnumParts.CORNER, facing.getOpposite()));
-			worldIn.setBlockState(pos.offset(facing,3).offset(facing.rotateY(),1), getBlockState(EnumParts.EDGE_RIGHT, facing.getOpposite()));
-			worldIn.setBlockState(pos.offset(facing,3).offset(facing.rotateY(),2), getBlockState(EnumParts.EDGE_LEFT, facing.getOpposite()));
-			worldIn.setBlockState(pos.offset(facing,3).offset(facing.rotateY(),3), getBlockState(EnumParts.CORNER, facing.rotateYCCW()));
-		}
+
 	}
 	
 	@Override
