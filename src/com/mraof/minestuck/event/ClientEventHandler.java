@@ -6,6 +6,7 @@ import com.mraof.minestuck.client.gui.GuiColorSelector;
 import com.mraof.minestuck.client.gui.playerStats.GuiDataChecker;
 import com.mraof.minestuck.client.gui.playerStats.GuiEcheladder;
 import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
+import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.inventory.ContainerConsortMerchant;
 import com.mraof.minestuck.inventory.ContainerEditmode;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
@@ -78,14 +79,17 @@ public class ClientEventHandler
 				if(stack.getItem() instanceof ItemPotion)
 					unlocalized = PotionUtils.getPotionFromItem(stack).getNamePrefixed("potion.");
 				
+				EnumConsort type = ((ContainerConsortMerchant)event.getEntityPlayer().openContainer).inventory.getConsortType();
+				String arg1 = I18n.format("entity.minestuck." + type.getName() + ".name");
+				
 				String name = "store."+unlocalized+".name";
 				String tooltip = "store."+unlocalized+".tooltip";
 				event.getToolTip().clear();
 				if(I18n.hasKey(name))
-					event.getToolTip().add(I18n.format(name));
+					event.getToolTip().add(I18n.format(name, arg1));
 				else event.getToolTip().add(stack.getDisplayName());
 				if(I18n.hasKey(tooltip))
-					event.getToolTip().add(I18n.format(tooltip));
+					event.getToolTip().add(I18n.format(tooltip, arg1));
 			} else if(stack.getItem().getRegistryName().getResourceDomain().equals(Minestuck.class.getAnnotation(Mod.class).modid()))
 			{
 				String name = stack.getUnlocalizedName() + ".tooltip";

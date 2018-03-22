@@ -378,7 +378,13 @@ store.item.goldSeeds.tooltip=Do you like regular seeds? This here is the luxury 
 store.item.milk.tooltip=You won't find this in a regular bucket!
 store.item.potatoPoisonous.name=Green Potato
 store.item.potatoPoisonous.tooltip=This here is a rare green potato. Can you imagine how this one would taste?
+store.item.bugOnAStick.tooltip=Who doesn't like bugs? Someone who haven't had a bug on a stick. That's who.
 store.item.sugar.tooltip=I have discovered that this substance is the secret ingredient for the cakes around here!
+store.item.potato.tooltip=The staple food of any Irish %1$s, grown in %1$s Ireland.
+store.item.jarOfBugs.tooltip=It's like a bug on a stick but in a jar! What's not to love about it?
+store.item.dyePowder.brown.tooltip=This is supposedly able to be made into a sweet bar. We just eat them raw.
+store.item.fish.salmon.raw.tooltip=Ah, salmon. Chicken of the river.
+store.item.fish.cod.raw.tooltip=More vague than 'salmon,' perfect for tricking people into thinking this is actually food.
 
 store.tile.coldCake.name=Blue Cake?
 store.tile.coldCake.tooltip=It's blue, so I'm pretty sure that it's the fabled Blue Cake. It is said to get you moving!
