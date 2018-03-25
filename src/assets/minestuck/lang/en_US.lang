@@ -836,6 +836,8 @@ minestuck.config.forbiddenDimensionsTpz=Transportalizer-Forbidden Dimensions
 minestuck.config.forbiddenDimensionsTpz.tooltip=A list of dimension id's that you cannot travel to or from using transportalizers.
 minestuck.config.oreMultiplier=Ore Multiplier
 minestuck.config.oreMultiplier.tooltip=Multiplies the cost for the 'contents' of an ore. Set to 0 to disable alchemizing ores.
+minestuck.config.stopSecondEntry=Stop Second Entry
+minestuck.config.stopSecondEntry.tooltip=If this is true, players may only use an artifact once, even if they end up in the overworld again.
 
 message.selectDefaultColor=Default color selected. You can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!
 message.selectColor=If you want to change the color, you can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!
