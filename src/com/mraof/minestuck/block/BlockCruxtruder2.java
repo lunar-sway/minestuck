@@ -9,6 +9,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -41,13 +42,26 @@ public class BlockCruxtruder2 extends BlockCruxtruder {
 	//Block state handling
 	public static enum EnumParts implements IStringSerializable
 	{
-		ONE_ONE_ONE,
-		ONE_TWO_ONE,
-		ONE_THREE_ONE;	
+		ONE_ONE_ONE(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D)),
+		ONE_TWO_ONE(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D)),
+		ONE_THREE_ONE(new AxisAlignedBB(3/16D, 0.0D, 3/16D, 13/16D, 12/16D, 13/16D));
+		
+		private final AxisAlignedBB[] BOUNDING_BOX;
+		public AxisAlignedBB getBoundingBox(int i){
+			return BOUNDING_BOX[i];
+		}
+		EnumParts(AxisAlignedBB... bb)
+		{
+			BOUNDING_BOX = bb;
+		}
+		
+		@Override
 		public String toString()
 		{
 			return getName();
 		}
+		
+		@Override
 		public String getName()
 		{
 			return name().toLowerCase();

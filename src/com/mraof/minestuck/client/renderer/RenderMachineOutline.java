@@ -72,7 +72,6 @@ public class RenderMachineOutline
 			
 			boolean r = placedFacing.getAxis() == EnumFacing.Axis.Z;
 			boolean f = placedFacing== EnumFacing.NORTH||placedFacing==EnumFacing.EAST;
-			System.out.println(r+" , "+f);
 			double d1 = player.lastTickPosX + (player.posX - player.lastTickPosX) * (double)partialTicks;
 			double d2 = player.lastTickPosY + (player.posY - player.lastTickPosY) * (double)partialTicks;
 			double d3 = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * (double)partialTicks;

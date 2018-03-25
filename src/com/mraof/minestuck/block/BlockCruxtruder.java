@@ -12,8 +12,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockCruxtruder extends BlockLargeMachine{
@@ -26,10 +28,19 @@ public class BlockCruxtruder extends BlockLargeMachine{
 		
 	} 
 	//not sure how to do this.
-	//@Override
-	//public AxisAlignedBB getBoundingBox(IBlockState state,IBlockAccess source,BlockPos pos){
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state,IBlockAccess source,BlockPos pos){
+		if( state.getBlock()==MinestuckBlocks.cruxtruder){
+			EnumParts parts = state.getValue(PART);
+			return parts.BOUNDING_BOX[0];
+		}
+		else {
+			BlockCruxtruder2.EnumParts parts = state.getValue(BlockCruxtruder2.PART);
+			return parts.getBoundingBox(0);
+		}
+		//EnumFacing facing = state.getValue(DIRECTION);
 		
-	//}
+	}
 
 
 	@Override
@@ -116,25 +127,33 @@ public class BlockCruxtruder extends BlockLargeMachine{
 	//Block state handling
 	public static enum EnumParts implements IStringSerializable
 	{
+		ZERO_ONE_ZERO(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1D, 14/16D, 1D)),
+		ZERO_ONE_ONE(new AxisAlignedBB (0.0D, 0.0D, 0.0D, 1D, 14/16D, 1D)),
+		ZERO_ONE_TWO(new AxisAlignedBB (0.0D, 0.0D, 0.0D, 1D, 14/16D, 1D)),
+		ONE_ONE_ZERO(new AxisAlignedBB (0.0D, 0.0D, 0.0D, 1D, 14/16D,1D)),
+		ONE_ONE_TWO(new AxisAlignedBB  (0.0D, 0.0D, 0.0D, 1D, 14/16D, 1D)),
+		TWO_ONE_ZERO(new AxisAlignedBB (0.0D, 0.0D, 0.0D, 1D, 14/16D, 1D)),
+		TWO_ONE_ONE(new AxisAlignedBB  (0.0D, 0.0D, 0.0D, 1D, 14/16D, 1D)),
+		TWO_ONE_TWO(new AxisAlignedBB  (0.0D, 0.0D, 0.0D, 1D, 14/16D, 1D)),
+		
+		//AxisAlignedBB(x1, y1, z1, x2, y2, z2)
+		ZERO_TWO_ZERO(new AxisAlignedBB(/**/9/16D, -2/16D, 9/16D, 1.0D, 8/16D, 1.0D)),
+		ZERO_TWO_ONE(new AxisAlignedBB (0.0D, -2/16D, 2/16D, 1.0D, 8/16D, 1.0D)),
+		ZERO_TWO_TWO(new AxisAlignedBB (/**/0.0D, -2/16D, 9/16D, 7/16D, 8/16D, 1.0D)),
+		ONE_TWO_ZERO(new AxisAlignedBB (2/16D, -2/16D, 0.0D, 1.0D, 8/16D, 1.0D)),
+		ONE_TWO_TWO(new AxisAlignedBB  (0.0D, -2/16D, 0.0D, 14/16D, 8/16D, 1.0D)),
+		TWO_TWO_ZERO(new AxisAlignedBB (/**/9/16D, -2/16D, 0.0D, 1.0D, 8/16D, 7/16D)),
+		TWO_TWO_ONE(new AxisAlignedBB  (0.0D, -2/16D, 0.0D, 1.0D, 8/16D, 14/16D)),
+		TWO_TWO_TWO(new AxisAlignedBB  (/**/0.0D, -2/16D, 0.0D, 7/16D, 8/16D, 7/16D));
+		
+		private final AxisAlignedBB[] BOUNDING_BOX;
+		
+		EnumParts(AxisAlignedBB... bb)
+		{
 
-		ZERO_ONE_ZERO,
-		ZERO_ONE_ONE,
-		ZERO_ONE_TWO,
-		ONE_ONE_ZERO,
-		ONE_ONE_TWO,
-		TWO_ONE_ZERO,
-		TWO_ONE_ONE,
-		TWO_ONE_TWO,
-		
-		
-		ZERO_TWO_ZERO,
-		ZERO_TWO_ONE,
-		ZERO_TWO_TWO,
-		ONE_TWO_ZERO,
-		ONE_TWO_TWO,
-		TWO_TWO_ZERO,
-		TWO_TWO_ONE,
-		TWO_TWO_TWO,;
+			
+			BOUNDING_BOX = bb;
+		}
 		
 		@Override
 		public String toString()
