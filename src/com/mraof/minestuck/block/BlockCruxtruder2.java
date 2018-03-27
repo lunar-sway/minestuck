@@ -120,8 +120,6 @@ public class BlockCruxtruder2 extends BlockCruxtruder {
 
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		System.out.println(meta%3);
-		System.out.println(EnumParts.ONE_THREE_ONE.ordinal());
 		if ((meta%3)==EnumParts.ONE_THREE_ONE.ordinal())
 				return new TileEntityCruxtruder();
 		return null;

@@ -46,7 +46,6 @@ public class BlockCruxtruder extends BlockLargeMachine{
 	@Override
 	public boolean onBlockActivated(World worldIn,BlockPos pos,IBlockState state,EntityPlayer playerIn,EnumHand hand,EnumFacing facing,float hitX,float hitY,float hitZ){
 		BlockPos mainPos = getMainPos(state, pos);
-		System.out.println(mainPos);
 		TileEntity te = worldIn.getTileEntity(mainPos);
 		if( te != null && te instanceof TileEntityCruxtruder)
 			((TileEntityCruxtruder) te).onRightClick(playerIn, state);

@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.block.BlockPunchDesignix.EnumParts;
 import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
 import com.mraof.minestuck.tileentity.TileEntitySburbMachine;
 import com.mraof.minestuck.util.IdentifierHandler;
@@ -16,6 +17,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
@@ -50,10 +52,14 @@ public class BlockAlchemiter extends BlockLargeMachine
 	}
 	
 	//not sure how to do this.
-	//@Override
-	//public AxisAlignedBB getBoundingBox(IBlockState state,IBlockAccess source,BlockPos pos){
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+	{
+		EnumParts parts = state.getValue(PART);
+		EnumFacing facing = state.getValue(DIRECTION);
 		
-	//}
+		return parts.BOUNDING_BOX[facing.getHorizontalIndex()];
+	}
 
 
 	@Override
@@ -203,20 +209,37 @@ public class BlockAlchemiter extends BlockLargeMachine
 	
 	public enum EnumParts implements IStringSerializable
 	{
-		TOTEM_CORNER,
-		TOTEM_PAD,
-		LOWER_ROD,
-		UPPER_ROD,
-		EDGE_LEFT,
-		EDGE_RIGHT,
-		CORNER,
-		CENTER_PAD;
+		TOTEM_CORNER(new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),
+				     new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D)),
+		TOTEM_PAD(   new AxisAlignedBB(6.5/16D,0.0D,2/16D,14/16D,1.0D,13/16D),new AxisAlignedBB(3/16D,0.0D,6.5/16D,14/16D,1.0D,14/16D),
+				     new AxisAlignedBB(2/16D,0.0D,3/16D,9.5/16D,1.0D,14/16D),new AxisAlignedBB(2/16D,0.0D,2/16D,13/16D,1.0D,9.5/16D)),
+		LOWER_ROD(   new AxisAlignedBB(6.5/16D,0.0D,4/16D,9.5/16D,1.0D,13/16D),new AxisAlignedBB(3/16D,0.0D,6.5/16D,12/16D,1.0D,9.5/16D),
+				     new AxisAlignedBB(6.5/16D,0.0D,3/16D,9.5/16D,1.0D,12/16D),new AxisAlignedBB(4/16D,0.0D,6.5/16D,13/16D,1.0D,9.5/16D)),
+		UPPER_ROD(   new AxisAlignedBB(6.5/16D,0.0D,0/16D,9.5/16D,1.0D,13/16D),new AxisAlignedBB(3/16D,0.0D,6.5/16D,16/16D,1.0D,9.5/16D),
+				     new AxisAlignedBB(6.5/16D,0.0D,3/16D,9.5/16D,1.0D,16/16D),new AxisAlignedBB(0/16D,0.0D,6.5/16D,13/16D,1.0D,9.5/16D)),
+		
+		EDGE_LEFT(   new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),
+				     new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D)),
+		EDGE_RIGHT(  new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),
+				     new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D)),
+		CORNER(      new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),
+ 			         new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D)),
+		CENTER_PAD(  new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),
+				     new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D));
+		
+		private final AxisAlignedBB[] BOUNDING_BOX;
+		
+		EnumParts(AxisAlignedBB... bb)
+		{
+			BOUNDING_BOX = bb;
+		}
 		
 		@Override
 		public String toString()
 		{
 			return getName();
 		}
+		
 		@Override
 		public String getName()
 		{
