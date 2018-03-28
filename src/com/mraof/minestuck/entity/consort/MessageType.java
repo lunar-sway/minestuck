@@ -136,7 +136,7 @@ public abstract class MessageType
 			{
 				NBTTagCompound nbt = consort.getMessageTagForPlayer(player);
 				ItemStack stack = new ItemStack(nbt.getCompoundTag(args[i].substring(8)));
-				if(stack != null)
+				if(!stack.isEmpty())
 					obj[i] = new TextComponentTranslation(stack.getUnlocalizedName() + ".name");
 				else obj[i] = "Item";
 			}

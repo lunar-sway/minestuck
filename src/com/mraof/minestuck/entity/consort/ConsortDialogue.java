@@ -85,13 +85,23 @@ public class ConsortDialogue
 		addMessage(new ChoiceMessage(new SingleMessage("mushroomPizza"),
 				new SingleMessage[]{new SingleMessage("mushroomPizza.on"), new SingleMessage("mushroomPizza.off")},
 				new MessageType[]{new SingleMessage("mushroomPizza.on.consortReply"), new SingleMessage("mushroomPizza.off.consortReply")})).landTerrain(fromNameTerrain("shade"));
+		addMessage("fireHazard").landTerrain(fromNameTerrain("shade"), fromNameTerrain("wood")).landTitle(allExcept(fromNameTitle("thunder")));
 		addMessage("gettingHot").landTerrain(fromNameTerrain("heat"));
+		addMessage("lavaCrickets").landTerrain(fromNameTerrain("heat"));
 		addMessage("properFuneral").landTerrain(fromNameTerrain("wood"));
+		addMessage(new ChainMessage(new SingleMessage("splinters1"), new SingleMessage("splinters2"))).landTerrain(fromNameTerrain("wood"));
 		addMessage("sandSurfing").landTerrain(fromNameTerrain("sand"));
+		addMessage(new ChoiceMessage(new SingleMessage("camel"), new SingleMessage[]{new SingleMessage("camel.yes"), new SingleMessage("camel.no")},
+				new MessageType[]{new SingleMessage("camel.noCamel"), new SingleMessage("camel.dancingCamel")})).landTerrain(fromNameTerrain("sand"));
 		addMessage("knockoff").landTerrain(fromNameTerrain("sandstone"));
 		addMessage(new ChainMessage(new SingleMessage("frozen1"), new DescriptionMessage("frozen2"))).landTerrain(fromNameTerrain("frost"));
+		addMessage(new ChoiceMessage(new SingleMessage("furCoat"), new SingleMessage[]{new SingleMessage("furCoat.pay"), new SingleMessage("furCoat.ignore")},
+				new MessageType[]{new PurchaseMessage(AlchemyRecipeHandler.CONSORT_JUNK_REWARD, 100, new ChainMessage(1, new SingleMessage("furCoat.grattitude"), new SingleMessage("thankYou"))),
+						new SingleMessage("furCoat.death")})).landTerrain(fromNameTerrain("frost"));
 		addMessage("allOres").landTerrain(fromNameTerrain("rock"));
+		addMessage("rockfu", "landName").landTerrain(fromNameTerrain("rock"));
 		addMessage("allTrees").landTerrain(fromNameTerrain("forest"));
+		addMessage("reallyLikesTrees").landTerrain(fromNameTerrain("forest"));
 		
 		addMessage("denizenMention").reqLand();
 		addMessage("floatingIsland").consortReq(consort -> consort.getDistanceSq(consort.world.getSpawnPoint()) < 65536).reqLand();
@@ -279,6 +289,19 @@ public class ConsortDialogue
 		msg.messageStart = message;
 		messages.add(msg);
 		return msg;
+	}
+	
+	public static TitleLandAspect[] allExcept(TitleLandAspect... aspects)
+	{
+		Set<TitleLandAspect> set = new HashSet<>();
+		names: for (String name : LandAspectRegistry.getNamesTitle())
+		{
+			for (TitleLandAspect aspect : aspects)
+				if (aspect.getPrimaryName().equals(name))
+					continue names;
+			set.add(LandAspectRegistry.fromNameTitle(name));
+		}
+		return set.toArray(new TitleLandAspect[set.size()]);
 	}
 	
 	public static DialogueWrapper getRandomMessage(EntityConsort consort, EntityPlayer player)

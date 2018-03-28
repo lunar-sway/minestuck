@@ -128,7 +128,7 @@ public class GuiColorSelector extends GuiScreen
 	@Override
 	public void onGuiClosed()
 	{
-		if(firstTime)
+		if(firstTime && mc != null && mc.player != null)
 		{
 			ITextComponent message;
 			if(ColorCollector.playerColor == -1)
