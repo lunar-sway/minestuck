@@ -108,14 +108,14 @@ public class BlockTotemlathe2 extends BlockTotemlathe {
 	
 	public static enum EnumParts implements IStringSerializable
 	{
-		MID_RIGHT(	 new AxisAlignedBB(1/16D, 0/16D,  7/16D, 14/16D, 4/16D, 12/16D),new AxisAlignedBB(4/16D,  0/16D, 1/16D,  9/16D, 4/16D, 14/16D),
-					 new AxisAlignedBB(2/16D, 0/16D,  4/16D, 15/16D, 4/16D,  9/16D),new AxisAlignedBB(7/16D,  0/16D, 2/16D, 12/16D, 4/16D, 15/16D)),
-		MID_MIDRIGHT(new AxisAlignedBB(9/16D, 12/16D, 7/16D, 16/16D,  1.0D, 12/16D),new AxisAlignedBB(4/16D, 12/16D, 9/16D,  9/16D,  1.0D, 16/16D),
-					 new AxisAlignedBB(0/16D, 12/16D, 4/16D,  7/16D,  1.0D,  9/16D),new AxisAlignedBB(7/16D, 12/16D, 0/16D, 12/16D,  1.0D,  7/16D)),
-		MID_MIDLEFT( new AxisAlignedBB(0/16D, 0/16D,  5/16D, 16/16D,  1.0D, 14/16D),new AxisAlignedBB(2/16D,  0/16D, 0/16D, 11/16D,  1.0D, 16/16D),
-					 new AxisAlignedBB(0/16D, 0/16D,  2/16D, 16/16D,  1.0D, 11/16D),new AxisAlignedBB(5/16D,  0/16D, 0/16D, 14/16D,  1.0D, 16/16D)),
-		MID_LEFT(	 new AxisAlignedBB(0/16D, 0/16D,  5/16D, 14/16D,  1.0D, 14/16D),new AxisAlignedBB(2/16D,  0/16D, 0/16D, 11/16D,  1.0D, 14/16D),
-					 new AxisAlignedBB(2/16D, 0/16D,  2/16D, 16/16D,  1.0D, 11/16D),new AxisAlignedBB(5/16D,  0/16D, 2/16D, 14/16D,  1.0D, 16/16D));
+		//(new AxisAlignedBB(5/16D, 0.0D, 0.0D, 1.0D, 1.0D, 11/16D), new AxisAlignedBB(5/16D, 0.0D, 5/16D, 1.0D, 1.0D, 1.0D),
+		//new AxisAlignedBB(0.0D, 0.0D, 5/16D, 11/16D, 1.0D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 11/16D, 1.0D, 11/16D)),
+		// try out code later to see if i can find out how it works
+
+		MID_RIGHT,
+		MID_MIDRIGHT,
+		MID_MIDLEFT,
+		MID_LEFT;
 		
 	private final AxisAlignedBB[] BOUNDING_BOX;
 		
@@ -134,10 +134,6 @@ public class BlockTotemlathe2 extends BlockTotemlathe {
 		public String getName()
 		{
 			return name().toLowerCase();
-		}
-
-		public AxisAlignedBB getBoundingBox(int i) {
-			return BOUNDING_BOX[i];
 		}
 	}
 	@Override

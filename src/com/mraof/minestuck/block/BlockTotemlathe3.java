@@ -66,12 +66,9 @@ public class BlockTotemlathe3 extends BlockTotemlathe{
 		//new AxisAlignedBB(0.0D, 0.0D, 5/16D, 11/16D, 1.0D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 11/16D, 1.0D, 11/16D)),
 		// try out code later to see if i can find out how it works
 		
-		TOP_MIDRIGHT(new AxisAlignedBB(8/16D, 0/16D, 6/16D, 16/16D,  12/16D, 14/16D),new AxisAlignedBB(2/16D,  0/16D, 8/16D, 10/16D,  12/16D, 16/16D),
-					 new AxisAlignedBB(0/16D, 0/16D, 2/16D,  8/16D,  12/16D, 10/16D),new AxisAlignedBB(6/16D,  0/16D, 0/16D, 14/16D,  12/16D,  8/16D)),
-		TOP_MIDLEFT( new AxisAlignedBB(0/16D, 0/16D, 6/16D, 16/16D,  12/16D, 14/16D),new AxisAlignedBB(2/16D,  0/16D, 0/16D, 10/16D,  12/16D, 16/16D),
-					 new AxisAlignedBB(0/16D, 0/16D, 2/16D, 16/16D,  12/16D, 10/16D),new AxisAlignedBB(6/16D,  0/16D, 0/16D, 14/16D,  12/16D, 16/16D)),
-		TOP_LEFT(	 new AxisAlignedBB(0/16D, 0/16D, 6/16D, 16/16D,  12/16D, 14/16D),new AxisAlignedBB(2/16D,  0/16D, 0/16D, 10/16D,  12/16D, 16/16D),
-					 new AxisAlignedBB(0/16D, 0/16D, 2/16D, 16/16D,  12/16D, 10/16D),new AxisAlignedBB(6/16D,  0/16D, 0/16D, 14/16D,  12/16D, 16/16D));
+		TOP_MIDRIGHT,
+		TOP_MIDLEFT,
+		TOP_LEFT;
 		
 	private final AxisAlignedBB[] BOUNDING_BOX;
 		
@@ -90,10 +87,6 @@ public class BlockTotemlathe3 extends BlockTotemlathe{
 		public String getName()
 		{
 			return name().toLowerCase();
-		}
-
-		public AxisAlignedBB getBoundingBox(int i) {
-			return(BOUNDING_BOX[i]);
 		}
 	}
 
