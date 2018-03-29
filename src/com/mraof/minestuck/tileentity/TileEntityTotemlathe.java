@@ -82,7 +82,9 @@ public class TileEntityTotemlathe extends TileEntity
 		
 		
 		//if they have clicked the dowel block
-		if (clickedState.getBlock()==MinestuckBlocks.totemlathe2 &&  clickedState.getValue(BlockTotemlathe2.PART)== BlockTotemlathe2.EnumParts.MID_MIDLEFT) {
+		if (clickedState.getBlock()==MinestuckBlocks.totemlathe2 
+				&&(clickedState.getValue(BlockTotemlathe2.PART)== BlockTotemlathe2.EnumParts.MID_MIDLEFT
+				||clickedState.getValue(BlockTotemlathe2.PART)== BlockTotemlathe2.EnumParts.MID_MIDRIGHT)){
 			if (dowel.isEmpty()) {
 				if(heldStack.getItem()==MinestuckItems.cruxiteDowel) {
 					setDowel(heldStack.splitStack(1));

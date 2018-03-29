@@ -61,7 +61,7 @@ public class TileEntityPunchDesignix extends TileEntity
 				if(!heldStack.isEmpty() && heldStack.getItem() == MinestuckItems.captchaCard)
 					setCard(heldStack.splitStack(1));	//Insert card into the punch slot
 				
-			} else if(part.equals(EnumParts.TOP_RIGHT))
+			} else if(part.equals(EnumParts.TOP_RIGHT)||part.equals(EnumParts.BOTTOM_RIGHT))
 			{
 				if(heldStack.isEmpty() || heldStack.getItem() != MinestuckItems.captchaCard)
 					return;	//Not a valid item in hand

@@ -77,7 +77,6 @@ public class MinestuckConfig
 	public static boolean playerSelectedTitle;
 	public static boolean canBreakGates;
 	public static boolean disableGiclops;
-	public static boolean stopSecondEntry;
 	public static int artifactRange;
 	public static int overworldEditRange;
 	public static int landEditRange;
@@ -197,11 +196,6 @@ public class MinestuckConfig
 		canBreakGates = config.get("General", "canBreakGates", true, "Lets gates be broken by explosions. Turning this off will make gates use the same explosion resistance as bedrock.").setLanguageKey("minestuck.config.canBreakGates").getBoolean();
 		disableGiclops = config.get("General", "disableGiclops", false, "Right now, the giclops pathfinding is currently causing huge amounts of lag due to their size. This option is a short-term solution that will disable giclops spawning and remove all existing giclopses.").setLanguageKey("minestuck.config.disableGiclops").getBoolean();
 		showGristChanges = config.get("General", "showGristChanges", true, "If this is true, grist change messages will appear").setLanguageKey("minestuck.config.showGristChanges").getBoolean();
-<<<<<<< HEAD
-=======
-		forbiddenDimensionsTpz = config.get("General", "forbiddenDimensionsTpz", new int[0], "A list of dimension id's that you cannot travel to or from using transportalizers.").setLanguageKey("minestuck.config.forbiddenDimensionsTpz").getIntList();
-		stopSecondEntry = config.get("General", "stopSecondEntry", false, "If this is true, players may only use an artifact once, even if they end up in the overworld again.").setLanguageKey("minestuck.config.stopSecondEntry").getBoolean();
->>>>>>> refs/remotes/mraof/1.12
 		if(config.hasKey("General", "hardMode"))
 			hardMode = config.get("General", "hardMode", false).getBoolean();	//Not fully fleshed out yet
 		

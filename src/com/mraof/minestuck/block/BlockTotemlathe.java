@@ -32,13 +32,25 @@ public class BlockTotemlathe extends BlockLargeMachine
 		
 	} 
 	//not sure how to do this.
-	//@Override
-	//public AxisAlignedBB getBoundingBox(IBlockState state,IBlockAccess source,BlockPos pos){
-	//EnumParts parts = state.getValue(PART);
-	//EnumFacing facing = state.getValue(DIRECTION);
-	
-	//return parts.BOUNDING_BOX[facing.getHorizontalIndex()];
-	//}
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state,IBlockAccess source,BlockPos pos){		
+		if(state.getBlock()==MinestuckBlocks.totemlathe) {
+			EnumParts parts = state.getValue(PART);
+			EnumFacing facing = state.getValue(DIRECTION);
+			
+			return parts.BOUNDING_BOX[facing.getHorizontalIndex()];
+		}else if(state.getBlock()==MinestuckBlocks.totemlathe2) {
+			BlockTotemlathe2.EnumParts parts = state.getValue(BlockTotemlathe2.PART);
+			EnumFacing facing = state.getValue(BlockTotemlathe2.DIRECTION);
+				
+			return parts.getBoundingBox(facing.getHorizontalIndex());
+		}else {
+			BlockTotemlathe3.EnumParts parts = state.getValue(BlockTotemlathe3.PART);
+			EnumFacing facing = state.getValue(BlockTotemlathe3.DIRECTION);
+				
+			return parts.getBoundingBox(facing.getHorizontalIndex());
+		}
+	}
 	
 
 	
@@ -170,13 +182,14 @@ public class BlockTotemlathe extends BlockLargeMachine
 
 	public static enum EnumParts implements IStringSerializable
 	{
-		//(new AxisAlignedBB(5/16D, 0.0D, 0.0D, 1.0D, 1.0D, 11/16D), new AxisAlignedBB(5/16D, 0.0D, 5/16D, 1.0D, 1.0D, 1.0D),
-		//new AxisAlignedBB(0.0D, 0.0D, 5/16D, 11/16D, 1.0D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 11/16D, 1.0D, 11/16D)),
-		// try out code later to see if i can find out how it works
-		BOTTOM_RIGHT,
-		BOTTOM_MIDRIGHT,
-		BOTTOM_MIDLEFT,
-		BOTTOM_LEFT;
+		BOTTOM_RIGHT(	new AxisAlignedBB(6/16D, 0/16D, 5/16D, 16/16D, 1.0D, 14/16D),new AxisAlignedBB(2/16D, 0/16D, 6/16D, 11/16D, 1.0D, 16/16D),
+						new AxisAlignedBB(0/16D, 0/16D, 2/16D, 10/16D, 1.0D, 11/16D),new AxisAlignedBB(5/16D, 0/16D, 0/16D, 14/16D, 1.0D, 10/16D)),
+		BOTTOM_MIDRIGHT(new AxisAlignedBB(0/16D, 0/16D, 5/16D, 16/16D, 1.0D, 14/16D),new AxisAlignedBB(2/16D, 0/16D, 0/16D, 11/16D, 1.0D, 16/16D),
+						new AxisAlignedBB(0/16D, 0/16D, 2/16D, 16/16D, 1.0D, 11/16D),new AxisAlignedBB(5/16D, 0/16D, 0/16D, 14/16D, 1.0D, 16/16D)),
+		BOTTOM_MIDLEFT(	new AxisAlignedBB(0/16D, 0/16D, 5/16D, 16/16D, 1.0D, 14/16D),new AxisAlignedBB(2/16D, 0/16D, 0/16D, 11/16D, 1.0D, 16/16D),
+						new AxisAlignedBB(0/16D, 0/16D, 2/16D, 16/16D, 1.0D, 11/16D),new AxisAlignedBB(5/16D, 0/16D, 0/16D, 14/16D, 1.0D, 16/16D)),
+		BOTTOM_LEFT(	new AxisAlignedBB(0/16D, 0/16D, 5/16D, 14/16D, 1.0D, 14/16D),new AxisAlignedBB(2/16D, 0/16D, 0/16D, 11/16D, 1.0D, 14/16D),
+						new AxisAlignedBB(2/16D, 0/16D, 2/16D, 16/16D, 1.0D, 11/16D),new AxisAlignedBB(5/16D, 0/16D, 2/16D, 14/16D, 1.0D, 16/16D));
 		
 		private final AxisAlignedBB[] BOUNDING_BOX;
 		

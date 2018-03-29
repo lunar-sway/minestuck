@@ -832,15 +832,6 @@ minestuck.config.canBreakGates=Can Break Gates
 minestuck.config.canBreakGates.tooltip=Lets gates be destroyed by explosions. Turning this off will make gates use the same explosion resistance as bedrock.
 minestuck.config.disableGiclops=Disable Giclops
 minestuck.config.disableGiclops.tooltip=Right now, the giclops pathfinding is currently causing huge amounts of lag due to their size. This option is a short-term solution that will disable giclops spawning and remove all existing giclopses.
-<<<<<<< HEAD
-=======
-minestuck.config.forbiddenDimensionsTpz=Transportalizer-Forbidden Dimensions
-minestuck.config.forbiddenDimensionsTpz.tooltip=A list of dimension id's that you cannot travel to or from using transportalizers.
-minestuck.config.oreMultiplier=Ore Multiplier
-minestuck.config.oreMultiplier.tooltip=Multiplies the cost for the 'contents' of an ore. Set to 0 to disable alchemizing ores.
-minestuck.config.stopSecondEntry=Stop Second Entry
-minestuck.config.stopSecondEntry.tooltip=If this is true, players may only use an artifact once, even if they end up in the overworld again.
->>>>>>> refs/remotes/mraof/1.12
 
 message.selectDefaultColor=Default color selected. You can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!
 message.selectColor=If you want to change the color, you can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!
@@ -888,6 +879,10 @@ tile.genericObject.name=Perfectly Generic Object
 tile.skaiaPortal.name=Skaia Portal
 tile.oreCruxite.name=Cruxite Ore
 tile.oreUranium.name=Uranium Ore
+tile.cruxtruder.name=Cruxtruder
+tile.punch_designix.name=Punch Designix
+tile.totem_lathe.name=Totem lathe
+tile.alchemiter.name=Alchemiter
 tile.sburbMachine.cruxtruder.name=Cruxtruder
 tile.sburbMachine.punchDesignix.name=Punch Designix
 tile.sburbMachine.totemLathe.name=Totem Lathe
