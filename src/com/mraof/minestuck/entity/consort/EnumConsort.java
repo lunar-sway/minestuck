@@ -3,6 +3,8 @@ package com.mraof.minestuck.entity.consort;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.text.TextFormatting;
 
+import java.util.Random;
+
 public enum EnumConsort
 {
 	SALAMANDER(EntitySalamander.class, "salamander", TextFormatting.YELLOW),
@@ -41,10 +43,19 @@ public enum EnumConsort
 		return consortClass;
 	}
 	
+	public static MerchantType getRandomMerchant(Random rand)
+	{
+		float f = rand.nextFloat();
+		if(f < 0.4f)
+			return MerchantType.FOOD;
+		else return MerchantType.GENERAL;
+	}
+	
 	public enum MerchantType
 	{
 		NONE,
 		SHADY,
 		FOOD,
+		GENERAL,
 	}
 }

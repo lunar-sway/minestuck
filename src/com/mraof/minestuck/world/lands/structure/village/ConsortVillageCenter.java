@@ -236,9 +236,9 @@ public class ConsortVillageCenter
 			
 			this.spawnConsort(0, 2, 3, boundingBox, worldIn, EnumConsort.MerchantType.FOOD, 1);
 			this.spawnConsort(0, 2, 5, boundingBox, worldIn, EnumConsort.MerchantType.FOOD, 1);
-			this.spawnConsort(7, 2, 3, boundingBox, worldIn, EnumConsort.MerchantType.FOOD, 1);
-			this.spawnConsort(7, 2, 5, boundingBox, worldIn, EnumConsort.MerchantType.FOOD, 1);
-			this.spawnConsort(3, 2, 9, boundingBox, worldIn, EnumConsort.MerchantType.FOOD, 1);
+			this.spawnConsort(7, 2, 3, boundingBox, worldIn, EnumConsort.MerchantType.GENERAL, 1);
+			this.spawnConsort(7, 2, 5, boundingBox, worldIn, EnumConsort.MerchantType.GENERAL, 1);
+			this.spawnConsort(3, 2, 9, boundingBox, worldIn, EnumConsort.getRandomMerchant(randomIn), 1);
 			
 			return true;
 		}
@@ -462,8 +462,8 @@ public class ConsortVillageCenter
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 4, 7, 7, 4, 7, primary, primary, false);
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 7, 4, 5, 7, 4, 6, primary, primary, false);
 			
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 4, 0, 4, 4, 0, stairsS, stairsS, false);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 4, 7, 4, 4, 7, stairsN, stairsN, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 4, 0, 4, 4, 0, stairsN, stairsN, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 4, 7, 4, 4, 7, stairsS, stairsS, false);
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 4, 3, 0, 4, 4, stairsW, stairsW, false);
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 7, 4, 3, 7, 4, 4, stairsE, stairsE, false);
 			

@@ -682,7 +682,7 @@ public class ConsortVillageComponents
 			
 			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 3, 1, 1, EnumFacing.SOUTH, (BlockDoor) doorBlock.getBlock());
 			
-			this.spawnConsort(3, 1, 5,structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD, 1);
+			this.spawnConsort(3, 1, 5,structureBoundingBoxIn, worldIn, EnumConsort.getRandomMerchant(randomIn), 1);
 			
 			return true;
 		}
@@ -861,8 +861,8 @@ public class ConsortVillageComponents
 			this.setBlockState(worldIn, lightBlock, 2, 6, 16, structureBoundingBoxIn);
 			this.setBlockState(worldIn, lightBlock, 11, 6, 16, structureBoundingBoxIn);
 			
-			this.spawnConsort(4, 1, 15, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD, 1);
-			this.spawnConsort(9, 1, 15, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD, 1);
+			this.spawnConsort(4, 1, 15, structureBoundingBoxIn, worldIn, EnumConsort.getRandomMerchant(randomIn), 1);
+			this.spawnConsort(9, 1, 15, structureBoundingBoxIn, worldIn, EnumConsort.getRandomMerchant(randomIn), 1);
 			
 			return true;
 		}
@@ -1224,8 +1224,8 @@ public class ConsortVillageComponents
 			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.WEST), 8, 10, 3, structureBoundingBoxIn);
 			
 			spawnConsort(5, 1, 5, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD, 1);
-			spawnConsort(6, 5, 5, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD, 1);
-			spawnConsort(5, 9, 5, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD, 1);
+			spawnConsort(6, 5, 5, structureBoundingBoxIn, worldIn, EnumConsort.getRandomMerchant(randomIn), 1);
+			spawnConsort(5, 9, 5, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.GENERAL, 1);
 			
 			return true;
 		}
@@ -1419,8 +1419,8 @@ public class ConsortVillageComponents
 			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.SOUTH), 8, 17, 4, structureBoundingBoxIn);
 			
 			spawnConsort(5, 3, 5, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD, 1);
-			spawnConsort(6, 7, 6, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD, 1);
-			spawnConsort(5, 11, 3, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD, 1);
+			spawnConsort(6, 7, 6, structureBoundingBoxIn, worldIn, EnumConsort.getRandomMerchant(randomIn), 1);
+			spawnConsort(5, 11, 3, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.GENERAL, 1);
 			
 			return true;
 		}
@@ -1738,7 +1738,7 @@ public class ConsortVillageComponents
 			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.EAST), 1, 2, 4, structureBoundingBoxIn);
 			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.WEST), 5, 2, 4, structureBoundingBoxIn);
 			
-			spawnConsort(3, 2, 2, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD, 1);
+			spawnConsort(3, 2, 2, structureBoundingBoxIn, worldIn, EnumConsort.getRandomMerchant(randomIn), 1);
 			
 			return true;
 		}

@@ -22,6 +22,7 @@ import java.util.*;
 
 import static com.mraof.minestuck.entity.consort.MessageType.*;
 import static com.mraof.minestuck.util.AlchemyRecipeHandler.CONSORT_FOOD_STOCK;
+import static com.mraof.minestuck.util.AlchemyRecipeHandler.CONSORT_GENERAL_STOCK;
 import static com.mraof.minestuck.world.lands.LandAspectRegistry.fromNameTerrain;
 import static com.mraof.minestuck.world.lands.LandAspectRegistry.fromNameTitle;
 
@@ -277,6 +278,22 @@ public class ConsortDialogue
 		addMessage(new MerchantGuiMessage(new SingleMessage("rageFoodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("monsters"));
 		addMessage(new MerchantGuiMessage(new DescriptionMessage("hopeFoodShop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(fromNameTitle("towers"));
 		
+		addMessage(new MerchantGuiMessage(new SingleMessage("generalShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL);
+		addMessage(new MerchantGuiMessage(new SingleMessage("gotTheGoods"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL);
+		addMessage(new MerchantGuiMessage(new SingleMessage("risingShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL);
+		addMessage(new MerchantGuiMessage(new SingleMessage("breathGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("wind"));
+		addMessage(new MerchantGuiMessage(new SingleMessage("bloodGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("pulse"));
+		addMessage(new MerchantGuiMessage(new SingleMessage("lifeGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("rabbits"));
+		addMessage(new MerchantGuiMessage(new SingleMessage("doomGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("thunder"));
+		addMessage(new MerchantGuiMessage(new SingleMessage("frogGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(LandAspectRegistry.frogAspect);
+		addMessage(new MerchantGuiMessage(new SingleMessage("spaceGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("buckets"));
+		addMessage(new MerchantGuiMessage(new SingleMessage("timeGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("clockwork"));
+		addMessage(new MerchantGuiMessage(new SingleMessage("mindGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("thought"));
+		addMessage(new MerchantGuiMessage(new SingleMessage("heartGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("cake"));
+		addMessage(new MerchantGuiMessage(new SingleMessage("lightGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("light"));
+		addMessage(new MerchantGuiMessage(new SingleMessage("voidGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("silence"));
+		addMessage(new MerchantGuiMessage(new SingleMessage("rageGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("monsters"));
+		addMessage(new MerchantGuiMessage(new DescriptionMessage("hopeGeneralShop"), CONSORT_GENERAL_STOCK)).type(MerchantType.GENERAL).landTitle(fromNameTitle("towers"));
 	}
 	
 	public static DialogueWrapper addMessage(String message, String... args)
