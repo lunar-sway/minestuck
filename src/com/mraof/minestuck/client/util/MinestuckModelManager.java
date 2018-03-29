@@ -2,6 +2,7 @@ package com.mraof.minestuck.client.util;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.*;
+import com.mraof.minestuck.item.ItemBoondollars;
 import com.mraof.minestuck.item.ItemMetalBoat;
 import com.mraof.minestuck.item.ItemMinestuckBeverage;
 import com.mraof.minestuck.item.ItemModus;
@@ -139,6 +140,9 @@ public class MinestuckModelManager
 		register(rawCruxite);
 		register(rawUranium);
 		register(energyCore);
+		ModelLoader.registerItemVariants(boondollars, new ResourceLocation("minestuck:boondollars0"), new ResourceLocation("minestuck:boondollars1"), new ResourceLocation("minestuck:boondollars2"),
+				new ResourceLocation("minestuck:boondollars3"), new ResourceLocation("minestuck:boondollars4"), new ResourceLocation("minestuck:boondollars5"), new ResourceLocation("minestuck:boondollars6"));
+		ModelLoader.setCustomMeshDefinition(boondollars, new BoondollarsDefinition());
 		ModelLoader.registerItemVariants(cruxiteDowel, new ResourceLocation("minestuck:dowel_uncarved"), new ResourceLocation("minestuck:dowel_carved"), new ResourceLocation("minestuck:dowel_uncarved_blank"), new ResourceLocation("minestuck:dowel_carved_blank"));
 		ModelLoader.setCustomMeshDefinition(cruxiteDowel, new CruxiteDowelDefinition());
 		ModelLoader.registerItemVariants(captchaCard, new ResourceLocation("minestuck:card_empty"), new ResourceLocation("minestuck:card_full"), new ResourceLocation("minestuck:card_punched"));
@@ -370,6 +374,31 @@ public class MinestuckModelManager
 				else str = "card_full";
 			}
 			else str = "card_empty";
+			return new ModelResourceLocation("minestuck:" + str, "inventory");
+		}
+	}
+	
+	private static class BoondollarsDefinition implements ItemMeshDefinition
+	{
+		@Override
+		public ModelResourceLocation getModelLocation(ItemStack stack)
+		{
+			int size = ItemBoondollars.getCount(stack);
+			String str;
+			if(size < 5)
+				str = "boondollars0";
+			else if(size < 15)
+				str = "boondollars1";
+			else if(size < 50)
+				str = "boondollars2";
+			else if(size < 100)
+				str = "boondollars3";
+			else if(size < 250)
+				str = "boondollars4";
+			else if(size < 1000)
+				str = "boondollars5";
+			else str = "boondollars6";
+			
 			return new ModelResourceLocation("minestuck:" + str, "inventory");
 		}
 	}

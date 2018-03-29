@@ -58,6 +58,8 @@ commands.setRung.usage=/setRung <target player> <target rung> [progress]
 commands.setRung.success=Successfully changed %s's rung to %d with %d%% progress.
 commands.porkhollow.usage/porkhollow <send|take> [target player] <amount>
 commands.porkhollow.sendSuccess=Successfully sent %s boondollars to %s.
+commands.porkhollow.takeSuccess=Successfully took out %s boondollars from your porkhollow.
+commands.porkhollow.notEnough=You don't have enough boondollars.
 
 computer.buttonClear=Clear message
 computer.buttonClose=Disconnect
@@ -767,6 +769,8 @@ item.fakeArms.name=Fake Arm
 item.fakeArms.tooltip=Fool your friends with this super-realistic fake arm!
 item.rockCookie.name=Rock Cookie
 item.rockCookie.tooltip=It's as edible as a rock
+item.boondollars.name=Boondollars
+item.boondollars.amount=Amount: %s
 
 itemGroup.tabMinestuck=Minestuck
 

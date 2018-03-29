@@ -138,6 +138,7 @@ public class MinestuckItems
 	public static Item irradiatedSteak;
 	public static Item rockCookie;
 	//Other
+	public static Item boondollars;
 	public static Item rawCruxite;
 	public static Item rawUranium;
 	public static Item energyCore;
@@ -261,6 +262,7 @@ public class MinestuckItems
 		irradiatedSteak = new ItemFood(4, 0.4F, true).setPotionEffect(new PotionEffect(MobEffects.WITHER, 100, 1), 0.9F).setRegistryName("irradiated_steak").setUnlocalizedName("irradiatedSteak").setCreativeTab(tabMinestuck);
 		rockCookie = new Item().setRegistryName("rock_cookie").setUnlocalizedName("rockCookie").setCreativeTab(tabMinestuck);
 		//Other
+		boondollars = new ItemBoondollars().setRegistryName("boondollars");
 		rawCruxite = new Item().setRegistryName("raw_cruxite").setUnlocalizedName("rawCruxite").setCreativeTab(tabMinestuck);
 		rawUranium = new Item().setRegistryName("raw_uranium").setUnlocalizedName("rawUranium").setCreativeTab(tabMinestuck);
 		energyCore = new Item().setRegistryName("energy_core").setUnlocalizedName("energyCore").setCreativeTab(tabMinestuck);
@@ -473,6 +475,7 @@ public class MinestuckItems
 		registry.register(rockCookie);
 
 		//misc
+		registry.register(boondollars);
 		registry.register(rawCruxite);
 		registry.register(rawUranium);
 		registry.register(energyCore);

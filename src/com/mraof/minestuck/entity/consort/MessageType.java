@@ -4,16 +4,11 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.inventory.ContainerConsortMerchant;
 import com.mraof.minestuck.inventory.InventoryConsortMerchant;
-import com.mraof.minestuck.network.MinestuckChannelHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
-import com.mraof.minestuck.network.PlayerDataPacket;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.util.MinestuckPlayerData;
-import com.mraof.minestuck.util.MinestuckPlayerData.PlayerData;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
@@ -862,15 +857,13 @@ public abstract class MessageType
 			if(!repeat && nbt.getBoolean(nbtName))
 				return message.getMessage(consort, player, chainIdentifier);
 			
-			PlayerData data = MinestuckPlayerData.getData(player);
-			if(data.boondollars < cost)
+			if(!MinestuckPlayerData.addBoondollars(player, -cost))
 			{
 				player.sendMessage(createMessage(consort, player, "cantAfford", new String[0], false));
 				
 				return null;
 			} else
 			{
-				data.boondollars -= cost;
 				if(!repeat)
 					nbt.setBoolean(nbtName, true);
 				
@@ -880,10 +873,6 @@ public abstract class MessageType
 				{
 					player.entityDropItem(itemstack, 0.0F);
 				}
-				
-				MinestuckChannelHandler.sendToPlayer(
-						MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.BOONDOLLAR, data.boondollars),
-						player);
 				
 				return message.getMessage(consort, player, chainIdentifier);
 			}
@@ -1099,9 +1088,7 @@ public abstract class MessageType
 			{
 				if(boondollars != 0)
 				{
-					MinestuckPlayerData.getData(player).boondollars += boondollars;
-					MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.PLAYER_DATA,
-							PlayerDataPacket.BOONDOLLAR, MinestuckPlayerData.getData(player).boondollars), player);
+					MinestuckPlayerData.addBoondollars(player, boondollars);
 				}
 				nbt.setBoolean(this.getString(), true);
 				return next.getMessage(consort, player, chainIdentifier);

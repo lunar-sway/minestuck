@@ -4,6 +4,9 @@ import com.mraof.minestuck.editmode.ClientEditHandler;
 import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalouge.Modus;
 import com.mraof.minestuck.network.GristCachePacket;
+import com.mraof.minestuck.network.MinestuckChannelHandler;
+import com.mraof.minestuck.network.MinestuckPacket;
+import com.mraof.minestuck.network.PlayerDataPacket;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
@@ -122,7 +125,18 @@ public class MinestuckPlayerData
 			return getClientGrist();
 		else return getGristSet(IdentifierHandler.encode(player));
 	}
-
+	
+	public static boolean addBoondollars(EntityPlayer player, int boons)
+	{
+		PlayerData data = MinestuckPlayerData.getData(player);
+		if(data.boondollars + boons < 0)
+			return false;
+		data.boondollars += boons;
+		
+		MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(MinestuckPacket.Type.PLAYER_DATA, PlayerDataPacket.BOONDOLLAR, data.boondollars), player);
+		return true;
+	}
+	
 	public static class PlayerData
 	{
 

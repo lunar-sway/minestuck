@@ -2,9 +2,6 @@ package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.entity.consort.EntityConsort;
 import com.mraof.minestuck.entity.consort.EnumConsort;
-import com.mraof.minestuck.network.MinestuckChannelHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.PlayerDataPacket;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MinestuckPlayerData;
 import com.mraof.minestuck.util.Pair;
@@ -79,7 +76,7 @@ public class InventoryConsortMerchant implements IInventory
 				player.sendMessage(new TextComponentTranslation("consort.cantAfford"));
 			} else
 			{
-				playerData.boondollars -= amountPurchased * prices[index];
+				MinestuckPlayerData.addBoondollars(player, -(amountPurchased * prices[index]));
 				ItemStack items = stack.splitStack(amountPurchased);
 				
 				if (!player.addItemStackToInventory(items))
@@ -91,8 +88,6 @@ public class InventoryConsortMerchant implements IInventory
 				} else player.inventoryContainer.detectAndSendChanges();
 				
 				player.openContainer.detectAndSendChanges();
-				MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(MinestuckPacket.Type.PLAYER_DATA,
-						PlayerDataPacket.BOONDOLLAR, playerData.boondollars), player);
 			}
 		}
 	}
