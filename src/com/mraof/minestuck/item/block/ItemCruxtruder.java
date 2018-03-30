@@ -1,10 +1,9 @@
 package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.BlockCruxtruder;
+import com.mraof.minestuck.block.BlockCruxtruder.EnumParts;
 import com.mraof.minestuck.block.BlockCruxtruder2;
 import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.block.BlockCruxtruder.EnumParts;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -48,9 +47,7 @@ public class ItemCruxtruder extends ItemBlock
 			EnumFacing placedFacing = EnumFacing.getHorizontal(i).getOpposite();
 			ItemStack itemstack = player.getHeldItem(hand);
 			
-			if(placedFacing.getFrontOffsetX() > 0 && hitZ >= 0.5F || placedFacing.getFrontOffsetX() < 0 && hitZ < 0.5F
-					|| placedFacing.getFrontOffsetZ() > 0 && hitX < 0.5F || placedFacing.getFrontOffsetZ() < 0 && hitX >= 0.5F)
-				pos = pos.offset(placedFacing.rotateY());
+			pos = pos.offset(placedFacing.rotateY());
 			
 			if (!itemstack.isEmpty())
 			{
@@ -95,18 +92,17 @@ public class ItemCruxtruder extends ItemBlock
 			break;
 		case NORTH:pos = pos.west(2);
 			break;
-		case SOUTH:pos=pos.north(2);
+		case SOUTH: pos = pos.north(2);
 			break;
-		case WEST:pos=pos;
-			break;
+		case WEST:
 		default:
 			break;
 		
 		}
 		
 		
-		if(player!=null && !(world.isRemote)){
-			
+		if(player!=null && !(world.isRemote))
+		{
 
 			world.setBlockState(pos.south(1).up(0).east(1), MinestuckBlocks.cruxtruder2.getDefaultState().withProperty(BlockCruxtruder2.PART, BlockCruxtruder2.EnumParts.ONE_ONE_ONE));
 			world.setBlockState(pos.south(1).up(1).east(1), MinestuckBlocks.cruxtruder2.getDefaultState().withProperty( BlockCruxtruder2.PART, BlockCruxtruder2.EnumParts.ONE_TWO_ONE));

@@ -1,9 +1,8 @@
 package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.BlockAlchemiter;
-import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.block.BlockAlchemiter.EnumParts;
-
+import com.mraof.minestuck.block.MinestuckBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -46,6 +45,8 @@ public class ItemAlchemiter extends ItemBlock
 			int i = MathHelper.floor((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 			EnumFacing placedFacing = EnumFacing.getHorizontal(i).getOpposite();
 			ItemStack itemstack = player.getHeldItem(hand);
+			
+			pos = pos.offset(placedFacing.rotateY());
 			
 			if(placedFacing.getFrontOffsetX() > 0 && hitZ >= 0.5F || placedFacing.getFrontOffsetX() < 0 && hitZ < 0.5F
 					|| placedFacing.getFrontOffsetZ() > 0 && hitX < 0.5F || placedFacing.getFrontOffsetZ() < 0 && hitX >= 0.5F)
