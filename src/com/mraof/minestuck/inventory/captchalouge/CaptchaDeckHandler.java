@@ -3,6 +3,7 @@ package com.mraof.minestuck.inventory.captchalouge;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.ClientProxy;
+import com.mraof.minestuck.item.ItemBoondollars;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
@@ -170,7 +171,7 @@ public class CaptchaDeckHandler
 				if(!modus.increaseSize())
 					failed++;
 			
-			if(content != null)
+			if(!content.isEmpty())
 				for(int i = 0; i < item.getCount() - failed; i++)
 				{
 					ItemStack toPut = content.copy();
@@ -194,6 +195,14 @@ public class CaptchaDeckHandler
 	{
 		ItemStack stack = player.getHeldItemMainhand();
 		Modus modus = getModus(player);
+		
+		if(stack.getItem() == MinestuckItems.boondollars)
+		{
+			MinestuckPlayerData.addBoondollars(player, ItemBoondollars.getCount(stack));
+			stack.setCount(0);
+			return;
+		}
+		
 		if(modus != null && !stack.isEmpty())
 		{
 			boolean card1 = false, card2 = true;

@@ -7,6 +7,7 @@ import com.mraof.minestuck.modSupport.*;
 import com.mraof.minestuck.tileentity.TileEntityUraniumCooker;
 import com.mraof.minestuck.world.storage.loot.conditions.ConsortLootCondition;
 import com.mraof.minestuck.world.storage.loot.conditions.LandAspectLootCondition;
+import com.mraof.minestuck.world.storage.loot.functions.SetBoondollarCount;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPrismarine;
 import net.minecraft.block.BlockStoneBrick;
@@ -20,6 +21,7 @@ import net.minecraft.item.crafting.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.conditions.LootConditionManager;
+import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
@@ -949,7 +951,7 @@ public class AlchemyRecipeHandler
 		ConsortRewardHandler.registerPrice(new ItemStack(log, 1, 1), 25, 40);
 		ConsortRewardHandler.registerPrice(new ItemStack(log, 1, 2), 20, 32);
 		ConsortRewardHandler.registerPrice(new ItemStack(woodenCactus), 50, 60);
-		ConsortRewardHandler.registerPrice(new ItemStack(sugarCube), 100, 120);
+		ConsortRewardHandler.registerPrice(new ItemStack(sugarCube), 200, 240);
 		
 		ConsortRewardHandler.registerPrice(new ItemStack(Items.POTATO), 12, 15);
 		ConsortRewardHandler.registerPrice(new ItemStack(Items.MUSHROOM_STEW), 95, 130);
@@ -972,7 +974,7 @@ public class AlchemyRecipeHandler
 		ConsortRewardHandler.registerPrice(new ItemStack(Items.POISONOUS_POTATO), 50, 60);
 		ConsortRewardHandler.registerPrice(new ItemStack(Items.MELON), 70, 80);
 		ConsortRewardHandler.registerPrice(new ItemStack(Items.FISH, 1, 0), 90, 100);
-		ConsortRewardHandler.registerPrice(new ItemStack(Items.COOKIE), 60, 70);
+		ConsortRewardHandler.registerPrice(new ItemStack(Items.COOKIE), 120, 150);
 		ConsortRewardHandler.registerPrice(new ItemStack(Items.PUMPKIN_PIE), 120, 160);
 		ConsortRewardHandler.registerPrice(new ItemStack(Items.GOLDEN_APPLE), 2500, 2500);
 		ConsortRewardHandler.registerPrice(new ItemStack(Items.DYE, 1, 4), 25, 35);
@@ -1031,6 +1033,7 @@ public class AlchemyRecipeHandler
 		//Register chest loot
 		LootConditionManager.registerCondition(new LandAspectLootCondition.Serializer());
 		LootConditionManager.registerCondition(new ConsortLootCondition.Serializer());
+		LootFunctionManager.registerFunction(new SetBoondollarCount.Serializer());
 		/*if(MinestuckConfig.cardLoot)
 		{
 			ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(new WeightedRandomChestContent(captchaCard, 0, 1, 3, 10));
