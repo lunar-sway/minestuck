@@ -11,7 +11,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -65,7 +64,7 @@ public class BlockCrockerMachine extends BlockContainer
 		setUnlocalizedName("crockerMachine");
 		setHardness(3.0F);
 		setHarvestLevel("pickaxe", 0);
-		setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.SOUTH).withProperty(HAS_ITEM, false));
+		setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.SOUTH));
 		this.setCreativeTab(MinestuckItems.tabMinestuck);
 	}
 	
@@ -188,11 +187,5 @@ public class BlockCrockerMachine extends BlockContainer
 	{
 		IBlockState oldState = world.getBlockState(pos);
 		world.notifyBlockUpdate(pos, oldState, oldState.withProperty(HAS_ITEM, b), 3);
-	}
-	
-	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face)
-	{
-		return BlockFaceShape.UNDEFINED;
 	}
 }

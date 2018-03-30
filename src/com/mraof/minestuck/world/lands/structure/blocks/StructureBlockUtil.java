@@ -1,5 +1,7 @@
 package com.mraof.minestuck.world.lands.structure.blocks;
 
+import java.util.Random;
+
 import net.minecraft.block.BlockChest;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
@@ -11,8 +13,6 @@ import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
-
-import java.util.Random;
 
 public class StructureBlockUtil
 {
@@ -45,7 +45,7 @@ public class StructureBlockUtil
 	
 	public static boolean placeLootChest(BlockPos pos, World world, StructureBoundingBox bb, EnumFacing facing, ResourceLocation lootTable, Random rand)
 	{
-		if(bb == null || bb.isVecInside(pos))
+		if(bb.isVecInside(pos))
 		{
 			world.setBlockState(pos, Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, facing), 2);
 			

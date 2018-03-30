@@ -1,14 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mraof.minestuck.inventory.ContainerConsortMerchant;
-import com.mraof.minestuck.inventory.ContainerCrockerMachine;
-import com.mraof.minestuck.inventory.ContainerSburbMachine;
-import com.mraof.minestuck.inventory.ContainerUraniumCooker;
-import com.mraof.minestuck.tileentity.TileEntityComputer;
-import com.mraof.minestuck.tileentity.TileEntityCrockerMachine;
-import com.mraof.minestuck.tileentity.TileEntitySburbMachine;
-import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
-import com.mraof.minestuck.tileentity.TileEntityUraniumCooker;
+import com.mraof.minestuck.inventory.*;
+import com.mraof.minestuck.tileentity.*;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,6 +19,7 @@ public class GuiHandler implements IGuiHandler
 		TRANSPORTALIZER,
 		COLOR,
 		MERCHANT,
+		ALCHEMITER,
 	}
 	
 	@Override
@@ -71,6 +65,9 @@ public class GuiHandler implements IGuiHandler
 		
 		if(id == GuiId.MERCHANT.ordinal())
 			return new GuiConsortShop(player);
+		
+		if(tileEntity instanceof TileEntityAlchemiter && id == GuiId.ALCHEMITER.ordinal())
+			return new GuiAlchemiter((TileEntityAlchemiter) tileEntity);
 		
 		return null;
 		

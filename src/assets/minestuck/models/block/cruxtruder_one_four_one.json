@@ -1,0 +1,82 @@
+{
+	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
+	"textures": {
+		"1": "minestuck:machines/cruxtruder/bodyspirograph",
+		"3": "minestuck:machines/cruxtruder/untitled",
+		"particle": "cruxtruder textures/untitled"
+	},
+	"elements": [
+		{
+			"name": "Cruxtruder Tube4",
+			"from": [3, 0.5, 4],
+			"to": [13, 4, 14],
+			"faces": {
+				"north": {
+					"uv": [4.375, 6.625, 10.2375, 12.55],
+					"texture": "#3"
+				},
+				"east": {
+					"uv": [4.375, 6.625, 10.2375, 12.55],
+					"texture": "#3"
+				},
+				"south": {
+					"uv": [4.375, 6.625, 10.2375, 12.55],
+					"texture": "#3"
+				},
+				"west": {
+					"uv": [4.375, 6.625, 10.2375, 12.55],
+					"texture": "#3"
+				},
+				"up": {
+					"uv": [0, 0, 15.9875, 15.9875],
+					"texture": "#1"
+				},
+				"down": {
+					"uv": [4.375, 6.75, 10.2375, 12.425],
+					"texture": "#3"
+				}
+			},
+			"type": "cube"
+		},
+		{
+			"name": "Cruxtruder Tube3",
+			"from": [4, 0, 5],
+			"to": [12, 0.5, 13],
+			"faces": {
+				"north": {
+					"uv": [13.1875, 14.4375, 16, 16],
+					"texture": "#3"
+				},
+				"east": {
+					"uv": [13.1875, 14.4375, 16, 16],
+					"texture": "#3"
+				},
+				"south": {
+					"uv": [13.1875, 14.4375, 16, 16],
+					"texture": "#3"
+				},
+				"west": {
+					"uv": [13.1875, 14.4375, 16, 16],
+					"texture": "#3"
+				},
+				"up": {
+					"uv": [13.1875, 14.4375, 16, 16],
+					"texture": "#3"
+				},
+				"down": {
+					"uv": [13.1875, 14.4375, 16, 16],
+					"texture": "#3"
+				}
+			},
+			"type": "cube"
+		}
+	],
+	"groups": [
+		{
+			"name": "group",
+			"isOpen": true,
+			"display": {"visibility": true, "autouv": true},
+			"children": [0, 1]
+		}
+	]
+}

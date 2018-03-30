@@ -1,0 +1,95 @@
+{
+	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
+	"ambientocclusion": false,
+	"textures": {
+		"0": "minestuck:machines/alchemiter/untitled",
+		"2": "minestuck:machines/alchemiter/untitled6",
+		"particle": "minestuck:machines/alchemiter/untitled"
+	},
+	"elements": [
+		{
+			"name": "Tube2",
+			"from": [6.5, 0, 10],
+			"to": [9.5, 3.5, 13],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 9.25], "texture": "#0"},
+				"east": {"uv": [0, 0, 3, 16], "texture": "#0"},
+				"south": {"uv": [0, 0, 3, 16], "texture": "#0"},
+				"west": {"uv": [0, 0, 3, 16], "texture": "#0"},
+				"up": {"uv": [0, 0, 3, 16], "texture": "#0"},
+				"down": {"uv": [0, 0, 3, 16], "texture": "#0"}
+			},
+			"type": "cube"
+		},
+		{
+			"name": "Tube2",
+			"from": [7, 3.5, 10.5],
+			"to": [9, 5, 12.5],
+			"faces": {
+				"north": {"uv": [0, 0, 2, 1.5], "texture": "#2"},
+				"east": {"uv": [0, 0, 2, 1.5], "texture": "#2"},
+				"south": {"uv": [0, 0, 2, 1.5], "texture": "#2"},
+				"west": {"uv": [0, 0, 2, 1.5], "texture": "#2"},
+				"up": {"uv": [0, 0, 2, 1.5], "texture": "#2"},
+				"down": {"uv": [0, 0, 2, 1.5], "texture": "#2"}
+			},
+			"type": "cube"
+		},
+		{
+			"name": "Tube3",
+			"from": [7, 4, 10.5],
+			"to": [9, 5.5, 12.5],
+			"faces": {
+				"north": {"uv": [0, 0, 2, 1.5], "texture": "#2"},
+				"east": {"uv": [0, 0, 2, 1.5], "texture": "#2"},
+				"south": {"uv": [0, 0, 2, 1.5], "texture": "#2"},
+				"west": {"uv": [0, 0, 2, 1.5], "texture": "#2"},
+				"up": {"uv": [0, 0, 2, 1.5], "texture": "#2"},
+				"down": {"uv": [0, 0, 2, 1.5], "texture": "#2"}
+			},
+			"type": "cube"
+		},
+		{
+			"name": "Tube5",
+			"from": [6.5, 5.5, 10],
+			"to": [9.5, 16, 13],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 9.25], "texture": "#0"},
+				"east": {"uv": [0, 0, 3, 16], "texture": "#0"},
+				"south": {"uv": [0, 0, 3, 16], "texture": "#0"},
+				"west": {"uv": [0, 0, 3, 16], "texture": "#0"},
+				"up": {"uv": [0, 0, 3, 16], "texture": "#0"},
+				"down": {"uv": [0, 0, 3, 16], "texture": "#0"}
+			},
+			"type": "cube"
+		},
+		{
+			"name": "Tube8",
+			"from": [6.5, 0, 6.5],
+			"to": [9.5, 16, 9.5],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 9.25], "texture": "#0"},
+				"east": {"uv": [0, 0, 3, 16], "texture": "#0"},
+				"south": {"uv": [0, 0, 3, 16], "texture": "#0"},
+				"west": {"uv": [0, 0, 3, 16], "texture": "#0"},
+				"up": {"uv": [0, 0, 3, 16], "texture": "#0"},
+				"down": {"uv": [0, 0, 3, 16], "texture": "#0"}
+			},
+			"type": "cube"
+		},
+		{
+			"name": "Tube12",
+			"from": [7, 0, 4],
+			"to": [9, 16, 6],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 9.25], "texture": "#0"},
+				"east": {"uv": [0, 0, 2, 16], "texture": "#0"},
+				"south": {"uv": [0, 0, 2, 16], "texture": "#0"},
+				"west": {"uv": [0, 0, 2, 16], "texture": "#0"},
+				"up": {"uv": [0, 0, 2, 16], "texture": "#0"},
+				"down": {"uv": [0, 0, 2, 16], "texture": "#0"}
+			},
+			"type": "cube"
+		}
+	]
+}

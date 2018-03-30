@@ -6,9 +6,7 @@ import com.mraof.minestuck.block.BlockMinestuckLog;
 import com.mraof.minestuck.block.BlockMinestuckStone;
 import com.mraof.minestuck.entity.item.EntityCrewPoster;
 import com.mraof.minestuck.entity.item.EntitySbahjPoster;
-import com.mraof.minestuck.item.block.ItemBlockCraftingTab;
-import com.mraof.minestuck.item.block.ItemBlockLayered;
-import com.mraof.minestuck.item.block.ItemSburbMachine;
+import com.mraof.minestuck.item.block.*;
 import com.mraof.minestuck.item.weapon.*;
 import com.mraof.minestuck.util.MinestuckSoundHandler;
 import net.minecraft.creativetab.CreativeTabs;
@@ -304,7 +302,6 @@ public class MinestuckItems
 		recordEmissaryOfDance = new ItemMinestuckRecord("emissary", MinestuckSoundHandler.soundEmissaryOfDance).setRegistryName("record_emissary").setUnlocalizedName("record");
 		recordDanceStab = new ItemMinestuckRecord("danceStab", MinestuckSoundHandler.soundDanceStabDance).setRegistryName("record_dance_stab").setUnlocalizedName("record");
 	}
-
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event)
 	{
@@ -343,7 +340,11 @@ public class MinestuckItems
 				(ItemStack input) -> BlockCrockerMachine.MachineType.values()[input.getItemDamage() % BlockCrockerMachine.MachineType.values().length].getUnlocalizedName()));
 		registerItemBlock(registry, new ItemBlock(blockComputerOff));
 		registerItemBlock(registry, new ItemBlock(transportalizer));
-
+		registerItemBlock(registry, new ItemPunchDesignix(punchDesignix));
+		registerItemBlock(registry, new ItemTotemLathe(totemlathe));
+		registerItemBlock(registry, new ItemAlchemiter(alchemiter[0]));
+		registerItemBlock(registry, new ItemCruxtruder(cruxtruder));
+		
 		registerItemBlock(registry, new ItemBlockLayered(layeredSand));
 		registerItemBlock(registry, new ItemMultiTexture(coloredDirt, coloredDirt,
 				(ItemStack input) -> BlockColoredDirt.BlockType.values()[input.getItemDamage() % BlockColoredDirt.BlockType.values().length].getName()));
@@ -503,7 +504,7 @@ public class MinestuckItems
 		//Music disks
 		registry.register(recordEmissaryOfDance);
 		registry.register(recordDanceStab);
-
+		
 		minestuckBucket.addBlock(blockOil.getDefaultState());
 		minestuckBucket.addBlock(blockBlood.getDefaultState());
 		minestuckBucket.addBlock(blockBrainJuice.getDefaultState());

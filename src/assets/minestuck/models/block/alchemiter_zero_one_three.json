@@ -1,0 +1,96 @@
+{
+	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
+	"ambientocclusion": false,
+	"textures": {
+		"0": "minestuck:machines/alchemiter/untitled",
+		"1": "minestuck:machines/alchemiter/alchemiter6",
+		"5": "minestuck:machines/alchemiter/untitled2",
+		"particle": "minestuck:machines/alchemiter/untitled"
+	},
+	"elements": [
+		{
+			"name": "Plate8",
+			"from": [10, 13, 10],
+			"to": [16, 16, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 9.25], "texture": "#0"},
+				"east": {"uv": [0, 0, 16, 4], "texture": "#0"},
+				"south": {"uv": [0, 0, 16, 4], "texture": "#0"},
+				"west": {"uv": [0, 0, 16, 4], "texture": "#0"},
+				"up": {"uv": [15.5, 0, 16, 0.5], "texture": "#1"},
+				"down": {"uv": [0, 0, 16, 4], "texture": "#0"}
+			},
+			"type": "cube"
+		},
+		{
+			"name": "Base5",
+			"from": [0, 0, 0],
+			"to": [16, 7, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 9.25], "texture": "#0"},
+				"east": {"uv": [0, 0, 16, 6], "texture": "#0"},
+				"south": {"uv": [0, 0, 16, 6], "texture": "#0"},
+				"west": {"uv": [0, 0, 16, 6], "texture": "#0"},
+				"up": {"uv": [0, 0, 16, 6], "texture": "#0"},
+				"down": {"uv": [0, 0, 16, 6], "texture": "#0"}
+			},
+			"type": "cube"
+		},
+		{
+			"name": "_&/3%6-7A",
+			"from": [6, 7, 6],
+			"to": [16, 10.5, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 9.25], "texture": "#0"},
+				"east": {"uv": [0, 0, 16, 3.5], "texture": "#0"},
+				"south": {"uv": [0, 0, 16, 3.5], "texture": "#0"},
+				"west": {"uv": [0, 0, 16, 3.5], "texture": "#0"},
+				"up": {"uv": [0, 0, 16, 3.5], "texture": "#0"},
+				"down": {"uv": [0, 0, 16, 3.5], "texture": "#0"}
+			},
+			"type": "cube"
+		},
+		{
+			"name": "Base6",
+			"from": [7, 10.5, 7],
+			"to": [16, 11, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 9.25], "texture": "#0"},
+				"east": {"uv": [0, 0, 16, 0.5], "texture": "#0"},
+				"south": {"uv": [0, 0, 16, 0.5], "texture": "#0"},
+				"west": {"uv": [0, 0, 16, 0.5], "texture": "#0"},
+				"up": {"uv": [0, 0, 16, 0.5], "texture": "#0"},
+				"down": {"uv": [0, 0, 16, 0.5], "texture": "#0"}
+			},
+			"type": "cube"
+		},
+		{
+			"name": "Plate2",
+			"from": [10, 11, 10],
+			"to": [16, 12.5, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 9.25], "texture": "#0"},
+				"east": {"uv": [0, 0, 16, 1.5], "texture": "#0"},
+				"south": {"uv": [0, 0, 16, 1.5], "texture": "#0"},
+				"west": {"uv": [0, 0, 16, 1.5], "texture": "#0"},
+				"up": {"uv": [0, 0, 16, 1.5], "texture": "#0"},
+				"down": {"uv": [0, 0, 16, 1.5], "texture": "#0"}
+			},
+			"type": "cube"
+		},
+		{
+			"name": "Plate5",
+			"from": [11, 12.5, 11],
+			"to": [16, 13, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 9.25], "texture": "#5"},
+				"east": {"uv": [0, 0, 16, 9.25], "texture": "#5"},
+				"south": {"uv": [0, 0, 16, 9.25], "texture": "#5"},
+				"west": {"uv": [0, 0, 16, 9.25], "texture": "#5"},
+				"up": {"uv": [0, 0, 16, 9.25], "texture": "#5"},
+				"down": {"uv": [0, 0, 16, 9.25], "texture": "#5"}
+			},
+			"type": "cube"
+		}
+	]
+}

@@ -1,0 +1,22 @@
+{
+	"variants":{	
+		"dowelout=false,haslid=false,part=one_one_one":		{ "model":"minestuck:cruxtruder_one_one_one"},	
+		"dowelout=false,haslid=false,part=one_two_one":		{ "model":"minestuck:cruxtruder_one_two_one"},	
+		"dowelout=false,haslid=false,part=one_three_one":	{ "model":"minestuck:cruxtruder_one_three_one_nl"},
+		
+		
+		"dowelout=true,haslid=false,part=one_one_one":		{ "model":"minestuck:cruxtruder_one_one_one"},	
+		"dowelout=true,haslid=false,part=one_two_one":		{ "model":"minestuck:cruxtruder_one_two_one"},	
+		"dowelout=true,haslid=false,part=one_three_one":	{ "model":"minestuck:cruxtruder_one_three_one_cr"},
+		
+		
+		"dowelout=false,haslid=true,part=one_one_one":		{ "model":"minestuck:cruxtruder_one_one_one"},	
+		"dowelout=false,haslid=true,part=one_two_one":		{ "model":"minestuck:cruxtruder_one_two_one"},	
+		"dowelout=false,haslid=true,part=one_three_one":	{ "model":"minestuck:cruxtruder_one_three_one"},
+		
+		
+		"dowelout=true,haslid=true,part=one_one_one":		{ "model":"minestuck:cruxtruder_one_one_one"},	
+		"dowelout=true,haslid=true,part=one_two_one":		{ "model":"minestuck:cruxtruder_one_two_one"},	
+		"dowelout=true,haslid=true,part=one_three_one":		{ "model":"minestuck:cruxtruder_one_three_one"}
+	}
+}
