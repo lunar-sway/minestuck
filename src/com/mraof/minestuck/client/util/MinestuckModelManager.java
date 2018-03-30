@@ -14,6 +14,7 @@ import net.minecraft.block.BlockTNT;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -246,9 +247,7 @@ public class MinestuckModelManager
 		register(punchDesignix);
 		register(totemlathe);
 		register(alchemiter[0]);
-		register(alchemiter[1]);
 		register(cruxtruder);
-		register(cruxtruder2);
 		register(glowingMushroom);
 		register(glowingLog);
 		register(glowingPlanks);
@@ -301,12 +300,18 @@ public class MinestuckModelManager
 	
 	private static void register(Block block)
 	{
-		register(Item.getItemFromBlock(block));
+		Item item = Item.getItemFromBlock(block);
+		if(item == Items.AIR)
+			throw new IllegalArgumentException("That block doesn't have an item, and this method is only intended for blocks with a connected itemblock.");
+		register(item);
 	}
 	
 	private static void register(Block block, int meta, String modelResource)
 	{
-		register(Item.getItemFromBlock(block), meta, modelResource);
+		Item item = Item.getItemFromBlock(block);
+		if(item == Items.AIR)
+			throw new IllegalArgumentException("That block doesn't have an item, and this method is only intended for blocks with a connected itemblock.");
+		register(item, meta, modelResource);
 	}
 	
 	private static class CrockerSporkDefinition implements ItemMeshDefinition
