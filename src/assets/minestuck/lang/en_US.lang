@@ -849,6 +849,7 @@ message.transportalizer.forbidden=Transportalizers have been disabled for this d
 message.transportalizer.forbiddenDest=Transportalizers have been disabled for the destination dimension.
 message.gateDestroyed=The destination gate seems to have been destroyed.
 message.gateMissingLand=The land this gate leads to does not exist yet!
+message.hashmap=[HASHMAP] %s %% %s -> %s
 
 both=Both
 off=Off

@@ -169,7 +169,7 @@ public class MinestuckConfig
 		String setting = config.get("Modus", "itemDropMode", "cardsAndItems", "Determines which items from the modus that are dropped on death. \"items\": Only the items are dropped. \"cardsAndItems\": Both items and cards are dropped. (So that you have at most initialModusSize amount of cards) \"all\": Everything is dropped, even the modus.", new String[] {"items", "cardsAndItems", "all"}).setLanguageKey("minestuck.config.itemDropMode").getString();
 		if(setting.equals("items"))
 			sylladexDropMode = 0;
-		if(setting.equals("cardsAndItems"))
+		else if(setting.equals("cardsAndItems"))
 			sylladexDropMode = 1;
 		else sylladexDropMode = 2;
 		dropItemsInCards = config.get("Modus", "dropItemsInCards", true, "When sylladexes are droppable, this option determines if items should be dropped inside of cards or items and cards as different stacks.").setLanguageKey("minestuck.config.dropItemsInCards").getBoolean();
