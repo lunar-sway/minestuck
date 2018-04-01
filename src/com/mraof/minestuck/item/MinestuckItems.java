@@ -67,13 +67,13 @@ public class MinestuckItems
 	public static Item cobaltSabre = new ItemFireWeapon(300, 7, -2.4D, 10, "cobaltSabre", 30).setRegistryName("cobalt_sabre");
 	public static Item quantumSabre = new ItemPotionWeapon(toolUranium, 600, 8, -2.4D, 5, "quantumSabre", new PotionEffect(MobEffects.WITHER, 100, 1)).setRegistryName("quantum_sabre");
 	//axes
-	public static Item copseCrusher = new ItemWeapon(400, 6.0D, -3.0D, 20, "copseCrusher", -1, 20).setTool("axe", 2, 7.0F).setRegistryName("copse_crusher");
+	public static Item copseCrusher = new ItemFarmine(400, 6.0D, -3.0D, 20, "copseCrusher", -1, 20).setTool("axe", 2, 7.0F).setRegistryName("copse_crusher");
 	public static Item blacksmithBane = new ItemWeapon(413, 9.0D, -3.0D, 15, "blacksmithBane").setTool("axe", 2, 6.0F).setRegistryName("blacksmith_bane");
 	public static Item scraxe = new ItemWeapon(500, 10.0D, -3.0D, 20, "scraxe").setTool("axe", 2, 7.0F).setRegistryName("scraxe");
-	public static Item qPHammerAxe = new ItemPogoWeapon(800, 8.0D, -3.0D, 30, "qPHammerAxe", 0.6).setTool("axe", 2, 7.0F).setTool("pickaxe", 1, 2.0F).setTerminus(-1, 50).setRegistryName("piston_powered_pogo_axehammer");
+	public static Item qPHammerAxe = new ItemPogoFarmine(800, 8.0D, -3.0D, 30, "qPHammerAxe", -1, 50,0.6).setTool("axe", 2, 7.0F).setTool("pickaxe", 1, 2.0F).setRegistryName("piston_powered_pogo_axehammer");
 	public static Item rubyCroak = new ItemWeapon(2000, 11.0D, -2.9D, 30, "rubyCroak").setTool("axe", 3, 8.0F).setRegistryName("ruby_croak");
 	public static Item hephaestusLumber = new ItemFireWeapon(3000, 11.0D, -3.0D, 30, "hephaestusLumber", 30).setTool("axe", 3, 9.0F).setRegistryName("hephaestus_lumberjack");
-	public static Item qFHammerAxe = new ItemPogoWeapon(2048, 11.0D, -3.0D, 0, "qFHammerAxe", 0.7).setTool("axe", 3, 9.0F).setTool("pickaxe", 2, 4.0F).setTerminus(-1, 100).setRegistryName("fission_focused_fault_feller");
+	public static Item qFHammerAxe = new ItemPogoFarmine(2048, 11.0D, -3.0D, 0, "qFHammerAxe", -1, 100, 0.7).setTool("axe", 3, 9.0F).setTool("pickaxe", 2, 4.0F).setRegistryName("fission_focused_fault_feller");
 	//Dice
 	public static Item dice = new ItemWeapon(51, 6, 3, 6, "dice").setRegistryName("dice");
 	public static Item fluoriteOctet = new ItemWeapon(67, 15, 6, 8, "fluoriteOctet").setRegistryName("fluorite_octet");
