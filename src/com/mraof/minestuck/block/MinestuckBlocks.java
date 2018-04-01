@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.TabMinestuck;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -24,8 +24,8 @@ public class MinestuckBlocks
 	public static Block skaiaPortal = new BlockSkaiaPortal(Material.PORTAL).setRegistryName("skaia_portal");
 	
 	public static Block coloredDirt = new BlockColoredDirt().setRegistryName("colored_dirt").setUnlocalizedName("coloredDirt").setHardness(0.5F);
-	public static Block cruxiteBlock = new Block(Material.ROCK, MapColor.LIGHT_BLUE).setRegistryName("cruxite_block").setUnlocalizedName("cruxiteBlock").setHardness(3.0F).setCreativeTab(MinestuckItems.tabMinestuck);
-	public static Block genericObject = new BlockCustom(Material.GOURD, MapColor.LIME, SoundType.WOOD).setRegistryName("generic_object").setUnlocalizedName("genericObject").setHardness(1.0F).setCreativeTab(MinestuckItems.tabMinestuck);
+	public static Block cruxiteBlock = new Block(Material.ROCK, MapColor.LIGHT_BLUE).setRegistryName("cruxite_block").setUnlocalizedName("cruxiteBlock").setHardness(3.0F).setCreativeTab(TabMinestuck.instance);
+	public static Block genericObject = new BlockCustom(Material.GOURD, MapColor.LIME, SoundType.WOOD).setRegistryName("generic_object").setUnlocalizedName("genericObject").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);
 	public static Block sburbMachine = new BlockSburbMachine().setRegistryName("sburb_machine");
 	public static Block crockerMachine = new BlockCrockerMachine().setRegistryName("crocker_machine");
 	public static Block blockComputerOff = new BlockComputerOff().setRegistryName("computer_standard");
@@ -36,7 +36,7 @@ public class MinestuckBlocks
 	public static Block gate = new BlockGate().setRegistryName("gate");
 	public static Block glowingMushroom = new BlockGlowingMushroom().setRegistryName("glowing_mushroom");
 	public static Block glowingLog = new BlockGlowingLog().setRegistryName("glowing_log");
-	public static Block glowingPlanks = new BlockCustom(Material.WOOD, MapColor.LIGHT_BLUE, SoundType.WOOD).setFireInfo(5, 20).setRegistryName("glowing_planks").setUnlocalizedName("glowingPlanks").setLightLevel(0.5F).setHardness(2.0F).setResistance(5.0F).setCreativeTab(MinestuckItems.tabMinestuck);
+	public static Block glowingPlanks = new BlockCustom(Material.WOOD, MapColor.LIGHT_BLUE, SoundType.WOOD).setFireInfo(5, 20).setRegistryName("glowing_planks").setUnlocalizedName("glowingPlanks").setLightLevel(0.5F).setHardness(2.0F).setResistance(5.0F).setCreativeTab(TabMinestuck.instance);
 	public static Block stone = new BlockMinestuckStone().setRegistryName("stone");
 	public static Block coarseStoneStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.COARSE)).setRegistryName("coarse_stone_stairs").setUnlocalizedName("stairsMinestuck.coarse");
 	public static Block shadeBrickStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.SHADE_BRICK)).setRegistryName("shade_brick_stairs").setUnlocalizedName("stairsMinestuck.shadeBrick");
@@ -44,7 +44,7 @@ public class MinestuckBlocks
 	public static Block castIronStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.CAST_IRON)).setRegistryName("cast_iron_stairs").setUnlocalizedName("stairsMinestuck.castIron");
 	public static Block log = new BlockMinestuckLog().setRegistryName("log");
 	public static Block woodenCactus = new BlockCactusSpecial(SoundType.WOOD, "axe").setRegistryName("wooden_cactus").setHardness(1.0F).setResistance(2.5F).setUnlocalizedName("woodenCactus");
-	public static Block sugarCube = new BlockCustom(Material.SAND, MapColor.SNOW, SoundType.SAND).setRegistryName("sugar_cube").setUnlocalizedName("sugarCube").setHardness(0.4F).setCreativeTab(MinestuckItems.tabMinestuck);
+	public static Block sugarCube = new BlockCustom(Material.SAND, MapColor.SNOW, SoundType.SAND).setRegistryName("sugar_cube").setUnlocalizedName("sugarCube").setHardness(0.4F).setCreativeTab(TabMinestuck.instance);
 	public static Block rabbitSpawner = new BlockMobSpawner().setRegistryName("rabbit_spawner").setUnlocalizedName("rabbitSpawner");
 	public static Block appleCake = new BlockSimpleCake(2, 0.5F, null).setRegistryName("apple_cake").setUnlocalizedName("appleCake");
 	public static Block blueCake = new BlockSimpleCake(2, 0.3F, (EntityPlayer player) -> player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 150, 0))).setRegistryName("blue_cake").setUnlocalizedName("blueCake");

@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.TabMinestuck;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
@@ -15,7 +15,7 @@ public class BlockGlowingLog extends BlockLog
 	public BlockGlowingLog()
 	{
 		super();
-		setCreativeTab(MinestuckItems.tabMinestuck);
+		setCreativeTab(TabMinestuck.instance);
 		setUnlocalizedName("glowingLog");
 		setLightLevel(0.75F);
 		setDefaultState(blockState.getBaseState().withProperty(LOG_AXIS, BlockLog.EnumAxis.Y));

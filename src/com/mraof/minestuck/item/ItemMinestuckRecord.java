@@ -8,6 +8,6 @@ public class ItemMinestuckRecord extends ItemRecord
 	public ItemMinestuckRecord(String recordName, SoundEvent soundIn)
 	{
 		super(recordName, soundIn);
-		setCreativeTab(MinestuckItems.tabMinestuck);
+		setCreativeTab(TabMinestuck.instance);
 	}
 }

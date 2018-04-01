@@ -2,7 +2,7 @@ package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiHandler;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.TabMinestuck;
 import com.mraof.minestuck.tileentity.TileEntityCrockerMachine;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 import net.minecraft.block.BlockContainer;
@@ -32,7 +32,7 @@ public class BlockCrockerMachine extends BlockContainer
 {
 	protected static final AxisAlignedBB[] GRIST_WIDGET_AABB = {new AxisAlignedBB(2/16D, 0.0D, 5/16D, 14/16D, 2.1/16D, 12/16D), new AxisAlignedBB(4/16D, 0.0D, 2/16D, 11/16D, 2.1/16D, 14/16D),new AxisAlignedBB(2/16D, 0.0D, 4/16D, 14/16D, 2.1/16D, 11/16D), new AxisAlignedBB(5/16D, 0.0D, 2/16D, 12/16D, 2.1/16D, 14/16D)};
 	
-	public static enum MachineType implements IStringSerializable
+	public enum MachineType implements IStringSerializable
 	{
 		GRIST_WIDGET("gristWidget");
 		
@@ -66,7 +66,7 @@ public class BlockCrockerMachine extends BlockContainer
 		setHardness(3.0F);
 		setHarvestLevel("pickaxe", 0);
 		setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.SOUTH).withProperty(HAS_ITEM, false));
-		this.setCreativeTab(MinestuckItems.tabMinestuck);
+		this.setCreativeTab(TabMinestuck.instance);
 	}
 	
 	@Override

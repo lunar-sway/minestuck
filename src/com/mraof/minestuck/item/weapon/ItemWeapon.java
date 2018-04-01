@@ -3,6 +3,7 @@ package com.mraof.minestuck.item.weapon;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.TabMinestuck;
 import com.mraof.minestuck.util.Pair;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -80,13 +81,13 @@ public class ItemWeapon extends ItemSword //To allow enchantments such as sharpn
 	@Override
 	protected boolean isInCreativeTab(CreativeTabs targetTab)
 	{
-		return targetTab == CreativeTabs.SEARCH || targetTab == MinestuckItems.tabMinestuck;
+		return targetTab == CreativeTabs.SEARCH || targetTab == TabMinestuck.instance;
 	}
 	
 	@Override
 	public CreativeTabs[] getCreativeTabs()
 	{
-		return new CreativeTabs[] {MinestuckItems.tabMinestuck};
+		return new CreativeTabs[] {TabMinestuck.instance};
 	}
 	
 	protected double getAttackDamage(ItemStack stack)
