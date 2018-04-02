@@ -101,16 +101,29 @@ consort.pyre2=Actually, nevermind. I would be burned on a pyre for being a witch
 consort.koolaid=Some people say the oceans of blood are actually kool-aid. I'm too scared to taste it for myself.
 consort.murderRain=You don't want to know what it's like to be outside when it rains. You can't tell who's a murderer or who forgot an umbrella!
 consort.swimming=If you're looking for a good land to swim in, it's definitely not this one.
+consort.bloodSurprise=OH GOD IS THAT BLOOD oh wait nevermind.
 
 consort.skeletonHorse=Some people say at night, skeletons riding skeleton horses come through the town.
 consort.blueMoon=Every once in a blue moon, lightning strikes and burns down the village. We have to rebuild it!
 consort.reckoning1=Those darn doomsayers, preaching about the Apocalypse and The Reckoning and such!
 consort.reckoning2=What's The Reckoning? It's when meteors from The Veil are sent towards Skaia.
 consort.reckoning3=Like any reasonable %s believes in that!
+consort.lightningStrike=You don't want to be struck by lightning. No one does.
+consort.thunderDeath.1=We're lucky to have rain with this weather.
+consort.thunderDeath.2=Otherwise the thunder would surely have been our death.
+consort.hardcore=This land is HARDCORE! There's lava and lightning wherever you go!
+consort.thunderThrow.1=Nemesis has been throwing thunder for generations, not stopping for even a moment.
+consort.thunderThrow.2=They are even doing it in their sleep. Can you believe that?
 
 consort.bunnyBirthday=Our daughter wants a bunny for her birthday, even though she caught six in the past three hours.
 consort.rabbitEating=One time our village ran out of food and we tried eating rabbits. It was a dark period in our village history.
 consort.edgyLifeHatred=This place is just so full of life! I despise it.
+consort.rabbit.foodShortage.1=This land is already pretty desolate. There being lots of rabbits eating everything they find doesn't help!
+consort.rabbit.foodShortage.2=But with that many rabbits around, there sure are other ways of getting food...
+consort.rabbit.food.1=I sure wonder where the rabbits are getting their food from.
+consort.rabbit.food.2a=There's not really much food to be found in this desolate place.
+consort.rabbit.food.3a=Except maybe cacti, but would rabbits eat something that prickly?
+consort.rabbit.food.2b=I mean, there's not really much else than mushrooms around here.
 
 consort.petZombie=I've heard moaning coming from our son's bedroom. I found out he's keeping a pet zombie in there! Tamed it n' everything!
 consort.spiderRaid=A few giant spiders raided our village last night, taking all of our bugs! Those monsters...
@@ -128,6 +141,7 @@ consort.mysteryRecipe=All of the villagers here are trying to crack the mystery 
 consort.cakeRegen=I heard all the cakes magically regenerate if you don't completely eat them! That's completely stupid!
 consort.cakeRecipe=Let's see, the recipe calls for 5 tbsp. of sugar, 2 tbsp. vanilla, 1 large grasshopper... what are you looking at?
 consort.fireCakes=If you're not careful, anything can set you on fire here, even the cakes!
+consort.frosting=When we start talking about cakes, the others start mentioning frosting. I'm not sure I get what they're talking about!
 
 consort.gearTechnology=Legends say the giant gears were used for technology no consort has ever seen before. That's absurd! It's obviously food!
 consort.evilGears=My neighbor says the gears are evil! He also said that swords are used for combat, so he's probably insane.
@@ -136,23 +150,42 @@ consort.ticking=The ticking keeps me up all night. It keeps us all up all night.
 consort.frogCreation=We are thankful for all the frogs that They gave to us when the universe was created. They, of course, is the genesis frog. I feel bad for the fool who has to make another!
 consort.frogImitation=Ribbit, ribbit! I'm a frog! I don't care what you say!
 consort.lewdBuckets=Some may call our land lewd, but the buckets are just so fun to swim in!
+consort.waterBuckets=The buckets are a great source of water, as long as you pick the ones with water...
+consort.warmBuckets=Did you know that some buckets provide warmth? I tend to curl up next to one from time to time.
+consort.oilBucket.1=Did you know that the buckets sometimes hold something other than oil?
+consort.oilBucket.2=In some cases, they even contain something drinkable!
 
 consort.blindness=God, it's bright. Half of our village is blind. It's beginning to become a serious problem.
 consort.doctorsInside=Our best village doctors found that staying outside in the blinding light for too long is not good for us. Most of us stay inside all our lives. It's sad.
 consort.staring=Are you staring at me? No, really! I can't see because I'm blind.
+consort.sunglasses.1=You'd better wear sunglasses, else you might not see where you're going.
+consort.sunglasses.2=This is not the best place to wander blindly in.
+consort.brightSnow.1=You would think that the light would melt more snow.
+consort.brightSnow.2=But nope, the snow stays as frozen as ever!
+consort.glimmeringSnow=Isn't it wonderful how much the snow is glimmering in the light?
+consort.glimmeringSand=Isn't it wonderful how much the sand is glimmering in the light?
+consort.lightPillars=Those light pillars... they somehow make me think of the legend of the wyrm.
 
 consort.murderSilence=This is a great place for murder. No one will hear you scream.
 consort.silentUnderlings=This place is so quiet and peaceful. Too bad we can't hear underlings about to kill us.
-consort.listening1=Shhh, they can hear you...
-consort.listening2=Just kidding, no one can hear you! The land itself muffles your words!
+consort.listening.1=Shhh, they can hear you...
+consort.listening.2=Just kidding, no one can hear you! The land itself muffles your words!
+consort.calmness=The sense of calmness in the air, it's kind of unnerving!
 
-consort.mushFarm1=Someone's gotta be farmin' all these goddamn fuckin' mushrooms, pain in the ass through truly it be.
-consort.mushFarm2=So that's what I'm doing.
-consort.mushFarm3=Standing around here.
-consort.mushFarm4=farmin' all these
-consort.mushFarm5=goddamn
-consort.mushFarm6=fuckin
-consort.mushFarm7=mushrooms
+consort.climbHigh=Climb up high and you'll be up for a great view!
+consort.heightFear.towers.1=I'd climb up one of those towers and look at the view, but I am scared of heights.
+consort.heightFear.towers.2=I meanI'd  what if I slipped and fell off the stairs?
+consort.heightFear.rock.1=I'd climb up one of those rocks and look at the view, but I am scared of heights.
+consort.heightFear.rock.2=I mean what if I fell down and landed on my back?
+consort.heightFear.panic=AAH, I am scared of heights!
+
+consort.mushFarm.1=Someone's gotta be farmin' all these goddamn fuckin' mushrooms, pain in the ass through truly it be.
+consort.mushFarm.2=So that's what I'm doing.
+consort.mushFarm.3=Standing around here.
+consort.mushFarm.4=farmin' all these
+consort.mushFarm.5=goddamn
+consort.mushFarm.6=fuckin
+consort.mushFarm.7=mushrooms
 consort.mushroomPizza=Do you put glow mushrooms on your pizza or leave them off?
 consort.mushroomPizza.on=Put them on
 consort.mushroomPizza.on.reply=I put them on!
@@ -164,10 +197,11 @@ consort.fireHazard=Our land is a fire waiting to happen! Hopefully there isn't a
 
 consort.gettingHot=Is it getting hot in here or is it just me?
 consort.lavaCrickets=Have you ever had a lava-roasted cricket? The lava really brings out the cricket juices.
+consort.stepIntoFire=You'd better watch where you're going. Wouldn't want you to step right into some fire.
 
 consort.properFuneral=Good thing we settled our village on our own pyre! If lightning strikes, we would already have a proper funeral!
-consort.splinters1=Be careful not to walk barefoot here, you could get a splinter!
-consort.splinters2=Some of our kind have died due to the amount of splinters they received while on a walk.
+consort.splinters.1=Be careful not to walk barefoot here, you could get a splinter!
+consort.splinters.2=Some of our kind have died due to the amount of splinters they received while on a walk.
 
 consort.sandSurfing=Sand-surfing is my new favorite sport! Too bad you can't really move, though.
 consort.camel=Want to buy a used camel? Only 2000 boondollars.
@@ -179,8 +213,10 @@ consort.camel.no.reply=Not at all!
 consort.camel.dancingCamel=Are you sure? Too bad! The camel knew how to dance, too!
 
 consort.knockoff=I kind of feel like we're a stale, knockoff sand land.
-consort.sandless1=According to legend, %s ate all the sand here leaving nothing but sandstone!
-consort.sandless2=I'm kidding, I made that up on the spot. I had no other dialogue.
+consort.sandless.1=According to legend, %s ate all the sand here leaving nothing but sandstone!
+consort.sandless.2=I'm kidding, I made that up on the spot. I had no other dialogue.
+consort.redBetter=Red is muck better than yellow, don't you think?
+consort.yellowBetter=In our village, we have tales of monsters that are atttracted to red. That's why everything is yellow!
 
 consort.frozen1=My neighbors were complaining the other night about the snow.
 consort.frozen2=Personally, the cold never really bothered me anyways.
@@ -192,6 +228,7 @@ consort.furCoat.grattitude=Oh, thank you! Now I won't freeze to death out here! 
 consort.furCoat.ignore=Don't give them any of your hard-earned boondollars!
 consort.furCoat.ignore.reply=Sorry, but I can't help you.
 consort.furCoat.death=I guess I'll just die then...
+consort.tentProtection=These tents doesn't protect against the cold very well, but they are good enough.
 
 consort.allOres=Jokes on the losers in other lands, we have ALL the resources! All of them!
 consort.rockfu=Here in %s, we practice rock-fu! Learn the way of the rock to CRUSH your enemies into a fine rock powder!
@@ -213,16 +250,16 @@ consort.whoops=Beware the man who speaks in hands, wait...wrong game.
 consort.fourthWall=Maybe you should do something more productive than talking to NPCs.
 
 consort.hats=I like crumpled hats, they're comfy and easy to wear!
-consort.cult1=We would love to invite you, %s, to our secret wizards cult.
-consort.cult2=Meet me by dawn with mercury, salt, and sulfur to begin the initiation.
+consort.cult.1=We would love to invite you, %s, to our secret wizards cult.
+consort.cult.2=Meet me by dawn with mercury, salt, and sulfur to begin the initiation.
 consort.wwizard=Secret wizards? Th-there are no secret wizards! Wh-what're you speaking of, o-outlandish traveller?
 consort.stockMarket=I bought a bunch of stocks on the market... Now I'm broke...
 
-consort.college1=Please, I need to pay for my children to attend college...
-consort.college2=Wow, you have so many boondollars! I'll never make that much in my short, amphibious lifetime.
+consort.college.1=Please, I need to pay for my children to attend college...
+consort.college.2=Wow, you have so many boondollars! I'll never make that much in my short, amphibious lifetime.
 
-consort.unknown1=They are coming...
-consort.unknown2=Huh? 'Who the fuck is They'? What kind of question is that?! I don't know! Who the fuck are you?
+consort.unknown.1=They are coming...
+consort.unknown.2=Huh? 'Who the fuck is They'? What kind of question is that?! I don't know! Who the fuck are you?
 
 consort.identity=I heard that the true name of the %s is %s. Isn't that cool?
 
@@ -301,8 +338,8 @@ consort.sound2.minestuck.turtle=..!
 
 consort.awaitHero=Here, in the %s, we %s worship the %s. We wait and hope for the day that they awaken.
 consort.watchSkaia=Sometimes, I look up in the sky to see Skaia and wish I could visit there some day...
-consort.atSkaia1=OH MY %s! I'M ACTUALLY ON SKAIA!
-consort.atSkaia2=Oh my...! I'm actually on skaia!
+consort.atSkaia.1=OH MY %s! I'M ACTUALLY ON SKAIA!
+consort.atSkaia.2=Oh my...! I'm actually on skaia!
 consort.visitedSkaia=You know, I have actually visited skaia at one point!
 consort.titlePresence=I sense the presence of the %s. Tell me if you see them, ok?
 consort.titlePresence.iam=Present yourself as the %s.

@@ -755,26 +755,26 @@ public class ConsortVillageCenter
 			this.blockPillar(6, 1, 2, structureBoundingBoxIn, worldIn, primary);
 			this.blockPillar(6, 1, 6, structureBoundingBoxIn, worldIn, primary);
 			
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 1, 0, 6, 1, 0, stairsN, stairsN, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 1, 0, 6, 1, 0, stairsS, stairsS, false);
 			this.setBlockState(worldIn, stairsE, 2, 1, 1, structureBoundingBoxIn);
 			this.setBlockState(worldIn, stairsW, 6, 1, 1, structureBoundingBoxIn);
-			this.setBlockState(worldIn, stairsN, 1, 1, 1, structureBoundingBoxIn);
-			this.setBlockState(worldIn, stairsN, 7, 1, 1, structureBoundingBoxIn);
+			this.setBlockState(worldIn, stairsS, 1, 1, 1, structureBoundingBoxIn);
+			this.setBlockState(worldIn, stairsS, 7, 1, 1, structureBoundingBoxIn);
 			this.setBlockState(worldIn, stairsE, 1, 1, 2, structureBoundingBoxIn);
 			this.setBlockState(worldIn, stairsW, 7, 1, 2, structureBoundingBoxIn);
-			this.setBlockState(worldIn, stairsN, 0, 1, 2, structureBoundingBoxIn);
-			this.setBlockState(worldIn, stairsN, 8, 1, 2, structureBoundingBoxIn);
+			this.setBlockState(worldIn, stairsS, 0, 1, 2, structureBoundingBoxIn);
+			this.setBlockState(worldIn, stairsS, 8, 1, 2, structureBoundingBoxIn);
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 1, 3, 0, 1, 5, stairsE, stairsE, false);
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 8, 1, 3, 8, 1, 5, stairsW, stairsW, false);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 1, 8, 6, 1, 8, stairsS, stairsS, false);
+			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 1, 8, 6, 1, 8, stairsN, stairsN, false);
 			this.setBlockState(worldIn, stairsE, 2, 1, 7, structureBoundingBoxIn);
 			this.setBlockState(worldIn, stairsW, 6, 1, 7, structureBoundingBoxIn);
-			this.setBlockState(worldIn, stairsS, 1, 1, 7, structureBoundingBoxIn);
-			this.setBlockState(worldIn, stairsS, 7, 1, 7, structureBoundingBoxIn);
+			this.setBlockState(worldIn, stairsN, 1, 1, 7, structureBoundingBoxIn);
+			this.setBlockState(worldIn, stairsN, 7, 1, 7, structureBoundingBoxIn);
 			this.setBlockState(worldIn, stairsE, 1, 1, 6, structureBoundingBoxIn);
 			this.setBlockState(worldIn, stairsW, 7, 1, 6, structureBoundingBoxIn);
-			this.setBlockState(worldIn, stairsS, 0, 1, 6, structureBoundingBoxIn);
-			this.setBlockState(worldIn, stairsS, 8, 1, 6, structureBoundingBoxIn);
+			this.setBlockState(worldIn, stairsN, 0, 1, 6, structureBoundingBoxIn);
+			this.setBlockState(worldIn, stairsN, 8, 1, 6, structureBoundingBoxIn);
 			
 			this.setBlockState(worldIn, primary, 4, 5, 1, structureBoundingBoxIn);
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 2, 1, 3, 6, 1, primary, primary, false);
