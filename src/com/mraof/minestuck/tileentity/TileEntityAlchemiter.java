@@ -125,6 +125,7 @@ public class TileEntityAlchemiter extends TileEntity
 	public NBTTagCompound getUpdateTag(){
 		NBTTagCompound nbt;
 		nbt = super.getUpdateTag();
+		nbt.setBoolean("broken",isBroken());
 		nbt.setTag("dowel",dowel.writeToNBT(new NBTTagCompound()));
 		return nbt;
 	}
@@ -132,6 +133,7 @@ public class TileEntityAlchemiter extends TileEntity
 	public SPacketUpdateTileEntity getUpdatePacket() {
 		SPacketUpdateTileEntity packet;
 		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setBoolean("broken", isBroken());
 		nbt.setTag("dowel",dowel.writeToNBT(new NBTTagCompound()));
 		dowel.writeToNBT(nbt);
 		packet = new SPacketUpdateTileEntity(this.pos, 0, nbt);				
@@ -181,38 +183,39 @@ public class TileEntityAlchemiter extends TileEntity
 	
 	public void onRightClick(EntityPlayer player, IBlockState clickedState)
 	{
-		BlockAlchemiter alchemiter=(BlockAlchemiter)clickedState.getBlock();
-		EnumParts part = clickedState.getValue(alchemiter.PART);
-		if(part.equals(EnumParts.TOTEM_PAD) && !dowel.isEmpty())
-		{	//Remove card from punch slot
-			if(player.getHeldItemMainhand().isEmpty())
-				player.setHeldItem(EnumHand.MAIN_HAND, dowel);
-			else if(!player.inventory.addItemStackToInventory(dowel))
-				dropItem(false);
+		if(!isBroken()) {
+			BlockAlchemiter alchemiter=(BlockAlchemiter)clickedState.getBlock();
+			EnumParts part = clickedState.getValue(alchemiter.PART);
+			if(part.equals(EnumParts.TOTEM_PAD) && !dowel.isEmpty())
+			{	//Remove card from punch slot
+				if(player.getHeldItemMainhand().isEmpty())
+					player.setHeldItem(EnumHand.MAIN_HAND, dowel);
+				else if(!player.inventory.addItemStackToInventory(dowel))
+					dropItem(false);
+				
+				setDowel(ItemStack.EMPTY);
+				return;
+			}
 			
-			setDowel(ItemStack.EMPTY);
-			return;
-		}
-		
-
-		ItemStack heldStack = player.getHeldItemMainhand();
-		if(part.equals(EnumParts.TOTEM_PAD) && dowel.isEmpty())
-		{
-			if(!heldStack.isEmpty() && heldStack.getItem() == MinestuckItems.cruxiteDowel)
-				setDowel(heldStack.splitStack(1));	//Insert card into the punch slot
-		} 
-		//it it's part of the pad
-		if(part==EnumParts.CENTER_PAD||part==EnumParts.CORNER||part==EnumParts.EDGE_LEFT||part==EnumParts.EDGE_RIGHT) {
-			/**
-			 * bring up the gui
-			 * and stuff
-			 * 
-			 * 
-			 * 
-			 */
-			player.openGui(Minestuck.instance, GuiHandler.GuiId.ALCHEMITER.ordinal(), world, pos.getX(), pos.getY(), pos.getZ());
-
-			
+	
+			ItemStack heldStack = player.getHeldItemMainhand();
+			if(part.equals(EnumParts.TOTEM_PAD) && dowel.isEmpty())
+			{
+				if(!heldStack.isEmpty() && heldStack.getItem() == MinestuckItems.cruxiteDowel)
+					setDowel(heldStack.splitStack(1));	//Insert card into the punch slot
+			} 
+			//it it's part of the pad
+			if(part==EnumParts.CENTER_PAD||part==EnumParts.CORNER||part==EnumParts.EDGE_LEFT||part==EnumParts.EDGE_RIGHT) {
+				/**
+				 * bring up the gui
+				 * and stuff
+				 * 
+				 * 
+				 * 
+				 */
+				player.openGui(Minestuck.instance, GuiHandler.GuiId.ALCHEMITER.ordinal(), world, pos.getX(), pos.getY(), pos.getZ());
+	
+			}
 		}
 			
 			

@@ -16,6 +16,7 @@ import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -61,46 +62,48 @@ public class TileEntityTotemlathe extends TileEntity
 	
 	public void onRightClick(EntityPlayer player, IBlockState clickedState)
 	{
-		ItemStack heldStack =player.getHeldItemMainhand();
-		//if they have clicked on the part that holds the chapta cards.
-		if (clickedState.getBlock()==MinestuckBlocks.totemlathe && clickedState.getValue(BlockTotemlathe.PART).equals(BlockTotemlathe.EnumParts.BOTTOM_LEFT))	{
-			if(!card1.isEmpty()){
-				if(!card2.isEmpty()){
-					player.inventory.addItemStackToInventory(card2);
-				}else if(heldStack.getItem()==MinestuckItems.captchaCard){
-					setCard2(heldStack.splitStack(1));
+		if(!isBroken()) {
+			ItemStack heldStack =player.getHeldItemMainhand();
+			//if they have clicked on the part that holds the chapta cards.
+			if (clickedState.getBlock()==MinestuckBlocks.totemlathe && clickedState.getValue(BlockTotemlathe.PART).equals(BlockTotemlathe.EnumParts.BOTTOM_LEFT))	{
+				if(!card1.isEmpty()){
+					if(!card2.isEmpty()){
+						player.inventory.addItemStackToInventory(card2);
+					}else if(heldStack.getItem()==MinestuckItems.captchaCard){
+						setCard2(heldStack.splitStack(1));
+					}
+					else {
+						player.inventory.addItemStackToInventory(card1);
+						resendState();
+					}
 				}
-				else {
-					player.inventory.addItemStackToInventory(card1);
+				else if(heldStack.getItem()==MinestuckItems.captchaCard) {
+						setCard1(heldStack.splitStack(1));
+					}
+			}
+			
+			
+			//if they have clicked the dowel block
+			if (clickedState.getBlock()==MinestuckBlocks.totemlathe2 
+					&&(clickedState.getValue(BlockTotemlathe2.PART)== BlockTotemlathe2.EnumParts.MID_MIDLEFT
+					||clickedState.getValue(BlockTotemlathe2.PART)== BlockTotemlathe2.EnumParts.MID_MIDRIGHT)){
+				if (dowel.isEmpty()) {
+					if(heldStack.getItem()==MinestuckItems.cruxiteDowel) {
+						setDowel(heldStack.splitStack(1));
+					}
+				}else {
+					player.inventory.addItemStackToInventory(dowel);
 					resendState();
 				}
 			}
-			else if(heldStack.getItem()==MinestuckItems.captchaCard) {
-					setCard1(heldStack.splitStack(1));
-				}
-		}
-		
-		
-		//if they have clicked the dowel block
-		if (clickedState.getBlock()==MinestuckBlocks.totemlathe2 
-				&&(clickedState.getValue(BlockTotemlathe2.PART)== BlockTotemlathe2.EnumParts.MID_MIDLEFT
-				||clickedState.getValue(BlockTotemlathe2.PART)== BlockTotemlathe2.EnumParts.MID_MIDRIGHT)){
-			if (dowel.isEmpty()) {
-				if(heldStack.getItem()==MinestuckItems.cruxiteDowel) {
-					setDowel(heldStack.splitStack(1));
-				}
-			}else {
-				player.inventory.addItemStackToInventory(dowel);
-				resendState();
+			
+			
+			
+			//if they have clicked on the lever
+			if (clickedState.getBlock()==MinestuckBlocks.totemlathe3 && clickedState.getValue(BlockTotemlathe3.PART) == BlockTotemlathe3.EnumParts.TOP_MIDRIGHT) {
+				//carve the dowel.
+				processContents();
 			}
-		}
-		
-		
-		
-		//if they have clicked on the lever
-		if (clickedState.getBlock()==MinestuckBlocks.totemlathe3 && clickedState.getValue(BlockTotemlathe3.PART) == BlockTotemlathe3.EnumParts.TOP_MIDRIGHT) {
-			//carve the dowel.
-			processContents();
 		}
 		
 	}
@@ -173,7 +176,7 @@ public class TileEntityTotemlathe extends TileEntity
 	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound)
 	{
 		super.writeToNBT(tagCompound);
-		tagCompound.setBoolean("broken", broken);
+		tagCompound.setBoolean("broken", isBroken());
 		tagCompound.setTag("card1", card1.writeToNBT(new NBTTagCompound()));
 		tagCompound.setTag("card2", card2.writeToNBT(new NBTTagCompound()));
 		tagCompound.setTag("dowel", dowel.writeToNBT(new NBTTagCompound()));
@@ -183,6 +186,7 @@ public class TileEntityTotemlathe extends TileEntity
 	public NBTTagCompound getUpdateTag(){
 		NBTTagCompound nbt;
 		nbt = super.getUpdateTag();
+		nbt.setBoolean("broken", isBroken());
 		nbt.setTag("card1",card1.writeToNBT(new NBTTagCompound()));
 		nbt.setTag("dowel", dowel.writeToNBT(new NBTTagCompound()));
 		return nbt;
@@ -191,6 +195,7 @@ public class TileEntityTotemlathe extends TileEntity
 	public SPacketUpdateTileEntity getUpdatePacket() {
 		SPacketUpdateTileEntity packet;
 		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setBoolean("broken", isBroken());
 		nbt.setTag("card1",card1.writeToNBT(new NBTTagCompound()));
 		card1.writeToNBT(nbt);
 		nbt.setTag("dowel", dowel.writeToNBT(new NBTTagCompound()));
@@ -198,6 +203,7 @@ public class TileEntityTotemlathe extends TileEntity
 		packet = new SPacketUpdateTileEntity(this.pos, 0, nbt);				
 		return packet;
 	}
+
 	
 	public void resendState()
 	{
@@ -232,22 +238,24 @@ public class TileEntityTotemlathe extends TileEntity
 	{
 	
 		ItemStack output;
-		if(!card1.isEmpty() && !card2.isEmpty())
-			if(!card1.hasTagCompound() || !card1.getTagCompound().getBoolean("punched") || !card2.hasTagCompound() || !card2.getTagCompound().getBoolean("punched"))
-				output = new ItemStack(MinestuckBlocks.genericObject);
-			else output = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(card1), AlchemyRecipeHandler.getDecodedItem(card2), CombinationRegistry.MODE_AND);
-		else
-		{
-			ItemStack input = card1.isEmpty() ? card2 : card1;
-			if(!input.hasTagCompound() || !input.getTagCompound().getBoolean("punched"))
-				output = new ItemStack(MinestuckBlocks.genericObject);
-			else output = AlchemyRecipeHandler.getDecodedItem(input);
-		}
+		if(!dowel.isEmpty()) {
+			if(!card1.isEmpty() && !card2.isEmpty())
+				if(!card1.hasTagCompound() || !card1.getTagCompound().getBoolean("punched") || !card2.hasTagCompound() || !card2.getTagCompound().getBoolean("punched"))
+					output = new ItemStack(MinestuckBlocks.genericObject);
+				else output = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(card1), AlchemyRecipeHandler.getDecodedItem(card2), CombinationRegistry.MODE_AND);
+			else
+			{
+				ItemStack input = card1.isEmpty() ? card2 : card1;
+				if(!input.hasTagCompound() || !input.getTagCompound().getBoolean("punched"))
+					output = new ItemStack(MinestuckBlocks.genericObject);
+				else output = AlchemyRecipeHandler.getDecodedItem(input);
+			}
+			
+			ItemStack outputDowel = output.getItem().equals(Item.getItemFromBlock(MinestuckBlocks.genericObject)) ? new ItemStack(MinestuckItems.cruxiteDowel) : AlchemyRecipeHandler.createEncodedItem(output, false);
+			outputDowel.setItemDamage(dowel.getItemDamage());
 		
-		ItemStack outputDowel = output.getItem().equals(Item.getItemFromBlock(MinestuckBlocks.genericObject)) ? new ItemStack(MinestuckItems.cruxiteDowel) : AlchemyRecipeHandler.createEncodedItem(output, false);
-		outputDowel.setItemDamage(dowel.getItemDamage());
-				
-		setDowel(outputDowel);
+			setDowel(outputDowel);
+		}
 
 	}
 	
