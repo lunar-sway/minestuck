@@ -425,6 +425,11 @@ store.item.frogStatueReplica.tooltip=Some say it's creepy, some say it's cute, o
 store.item.stoneSlab.tooltip=It's pretty rock, but I wouldn't advise rolling on it.
 store.item.pogoClub.tooltip=Strive to touch the sky, and smash a few skulls on the way up!
 store.item.flint.tooltip=Imported from the Land of Gravel and Arrows! Probably. Maybe.
+store.item.diamond.tooltip=This looks kinda useless, but it's too shiny to sell for cheap!
+store.item.emerald.tooltip=This looks kinda useless. It probably is, actually. No one will notice if I sell it for a lot, right?
+store.item.cactaceaeCutlass.tooltip=It's not as quenchy, but if it comes down to it you can always drink the blood of your foes.
+store.item.copseCrusher.tooltip=Good for crushing trees and your enemies!
+store.item.firePoker.tooltip=Make sure you don't drop this like it's hot. Because it is hot.
 
 store.tile.coldCake.name=Blue Cake?
 store.tile.coldCake.tooltip=It's blue, so I'm pretty sure that it's the fabled Blue Cake. It is said to get you moving!
