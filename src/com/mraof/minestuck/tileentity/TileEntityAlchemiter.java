@@ -1,19 +1,28 @@
 package com.mraof.minestuck.tileentity;
 
 
-import java.util.Iterator;
-
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.BlockAlchemiter;
+import com.mraof.minestuck.block.BlockTotemlathe;
 import com.mraof.minestuck.block.BlockAlchemiter.EnumParts;
-import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
-import com.mraof.minestuck.util.*;
+import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.GristAmount;
+import com.mraof.minestuck.util.GristHelper;
+import com.mraof.minestuck.util.GristRegistry;
+import com.mraof.minestuck.util.GristSet;
+import com.mraof.minestuck.util.GristType;
+import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
+import com.mraof.minestuck.util.MinestuckAchievementHandler;
+import com.mraof.minestuck.util.MinestuckPlayerData;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,12 +31,10 @@ import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class TileEntityAlchemiter extends TileEntity
 {
@@ -84,7 +91,46 @@ public class TileEntityAlchemiter extends TileEntity
 		setDowel(ItemStack.EMPTY);
 	}
 	
+	private boolean checkStates(IBlockState state){
+		if(this.broken)
+			return false;
+		Block[] block=MinestuckBlocks.alchemiter;
+		EnumFacing hOffset = getWorld().getBlockState(this.getPos()).getValue(BlockAlchemiter.DIRECTION).rotateY();
+		
+		if(
+			! world.getBlockState(getPos()).getBlock().equals(block[0])||
+			! world.getBlockState(getPos().up()).getBlock().equals(block[0])||
+			! world.getBlockState(getPos().up(2)).getBlock().equals(block[0])||
+			! world.getBlockState(getPos().up(3)).getBlock().equals(block[0])||
+			
+			
+			! world.getBlockState(getPos().offset(hOffset)).getBlock().equals(block[1])||
+			! world.getBlockState(getPos().offset(hOffset,2)).getBlock().equals(block[1])||
+			! world.getBlockState(getPos().offset(hOffset,3)).getBlock().equals(block[1])||
 
+			! world.getBlockState(getPos().offset(hOffset.rotateYCCW())).getBlock().equals(block[1])||
+			! world.getBlockState(getPos().offset(hOffset.rotateYCCW()).offset(hOffset)).getBlock().equals(block[1])||
+			! world.getBlockState(getPos().offset(hOffset.rotateYCCW()).offset(hOffset,2)).getBlock().equals(block[1])||
+			! world.getBlockState(getPos().offset(hOffset.rotateYCCW()).offset(hOffset,3)).getBlock().equals(block[1])||
+			
+			! world.getBlockState(getPos().offset(hOffset.rotateYCCW(),2)).getBlock().equals(block[1])||
+			! world.getBlockState(getPos().offset(hOffset.rotateYCCW(),2).offset(hOffset)).getBlock().equals(block[1])||
+			! world.getBlockState(getPos().offset(hOffset.rotateYCCW(),2).offset(hOffset,2)).getBlock().equals(block[1])||
+			! world.getBlockState(getPos().offset(hOffset.rotateYCCW(),2).offset(hOffset,3)).getBlock().equals(block[1])||
+	
+			
+			! world.getBlockState(getPos().offset(hOffset.rotateYCCW(),3)).getBlock().equals(block[1])||
+			! world.getBlockState(getPos().offset(hOffset.rotateYCCW(),3).offset(hOffset)).getBlock().equals(block[1])||
+			! world.getBlockState(getPos().offset(hOffset.rotateYCCW(),3).offset(hOffset,2)).getBlock().equals(block[1])||
+			! world.getBlockState(getPos().offset(hOffset.rotateYCCW(),3).offset(hOffset,3)).getBlock().equals(block[1])
+	
+					) {
+			Debug.info(world.getBlockState(getPos().offset(hOffset))+","+world.getBlockState(getPos().down())+","+world.getBlockState(getPos().down().offset(hOffset)));
+			return false;
+		}
+		
+		return true;
+	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound)
@@ -125,6 +171,7 @@ public class TileEntityAlchemiter extends TileEntity
 	public NBTTagCompound getUpdateTag(){
 		NBTTagCompound nbt;
 		nbt = super.getUpdateTag();
+		nbt.setBoolean("broken",isBroken());
 		nbt.setTag("dowel",dowel.writeToNBT(new NBTTagCompound()));
 		return nbt;
 	}
@@ -132,6 +179,7 @@ public class TileEntityAlchemiter extends TileEntity
 	public SPacketUpdateTileEntity getUpdatePacket() {
 		SPacketUpdateTileEntity packet;
 		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setBoolean("broken", isBroken());
 		nbt.setTag("dowel",dowel.writeToNBT(new NBTTagCompound()));
 		dowel.writeToNBT(nbt);
 		packet = new SPacketUpdateTileEntity(this.pos, 0, nbt);				
@@ -181,38 +229,39 @@ public class TileEntityAlchemiter extends TileEntity
 	
 	public void onRightClick(EntityPlayer player, IBlockState clickedState)
 	{
-		BlockAlchemiter alchemiter=(BlockAlchemiter)clickedState.getBlock();
-		EnumParts part = clickedState.getValue(alchemiter.PART);
-		if(part.equals(EnumParts.TOTEM_PAD) && !dowel.isEmpty())
-		{	//Remove card from punch slot
-			if(player.getHeldItemMainhand().isEmpty())
-				player.setHeldItem(EnumHand.MAIN_HAND, dowel);
-			else if(!player.inventory.addItemStackToInventory(dowel))
-				dropItem(false);
+		if(checkStates(clickedState)) {
+			BlockAlchemiter alchemiter=(BlockAlchemiter)clickedState.getBlock();
+			EnumParts part = clickedState.getValue(alchemiter.PART);
+			if(part.equals(EnumParts.TOTEM_PAD) && !dowel.isEmpty())
+			{	//Remove card from punch slot
+				if(player.getHeldItemMainhand().isEmpty())
+					player.setHeldItem(EnumHand.MAIN_HAND, dowel);
+				else if(!player.inventory.addItemStackToInventory(dowel))
+					dropItem(false);
+				
+				setDowel(ItemStack.EMPTY);
+				return;
+			}
 			
-			setDowel(ItemStack.EMPTY);
-			return;
-		}
-		
-
-		ItemStack heldStack = player.getHeldItemMainhand();
-		if(part.equals(EnumParts.TOTEM_PAD) && dowel.isEmpty())
-		{
-			if(!heldStack.isEmpty() && heldStack.getItem() == MinestuckItems.cruxiteDowel)
-				setDowel(heldStack.splitStack(1));	//Insert card into the punch slot
-		} 
-		//it it's part of the pad
-		if(part==EnumParts.CENTER_PAD||part==EnumParts.CORNER||part==EnumParts.EDGE_LEFT||part==EnumParts.EDGE_RIGHT) {
-			/**
-			 * bring up the gui
-			 * and stuff
-			 * 
-			 * 
-			 * 
-			 */
-			player.openGui(Minestuck.instance, GuiHandler.GuiId.ALCHEMITER.ordinal(), world, pos.getX(), pos.getY(), pos.getZ());
-
-			
+	
+			ItemStack heldStack = player.getHeldItemMainhand();
+			if(part.equals(EnumParts.TOTEM_PAD) && dowel.isEmpty())
+			{
+				if(!heldStack.isEmpty() && heldStack.getItem() == MinestuckItems.cruxiteDowel)
+					setDowel(heldStack.splitStack(1));	//Insert card into the punch slot
+			} 
+			//it it's part of the pad
+			if(part==EnumParts.CENTER_PAD||part==EnumParts.CORNER||part==EnumParts.EDGE_LEFT||part==EnumParts.EDGE_RIGHT) {
+				/**
+				 * bring up the gui
+				 * and stuff
+				 * 
+				 * 
+				 * 
+				 */
+				player.openGui(Minestuck.instance, GuiHandler.GuiId.ALCHEMITER.ordinal(), world, pos.getX(), pos.getY(), pos.getZ());
+	
+			}
 		}
 			
 			

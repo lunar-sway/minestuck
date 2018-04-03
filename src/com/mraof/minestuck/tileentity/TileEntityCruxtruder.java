@@ -10,6 +10,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import scala.util.Random;
 
@@ -41,19 +42,21 @@ public class TileEntityCruxtruder extends TileEntity
 	}
 
 	public void onRightClick(EntityPlayer player, IBlockState clickedState) {
-		if(clickedState.getBlock()==MinestuckBlocks.cruxtruder2
-				&& clickedState.getValue(BlockCruxtruder2.PART)== BlockCruxtruder2.EnumParts.ONE_THREE_ONE
-				&& clickedState.getValue(BlockCruxtruder2.HASLID)==false)
-		{
-			if(dowelOut) {
-				if(!world.isRemote) {
-					ItemStack dowel=new ItemStack(MinestuckItems.cruxiteDowel, 1, color + 1);
-					EntityItem dowelEntity =new EntityItem(world, pos.getX(), pos.up().getY(), pos.getZ(), dowel);
-					world.spawnEntity(dowelEntity);
+		if(!isDestroyed()) {
+			if(clickedState.getBlock()==MinestuckBlocks.cruxtruder2
+					&& clickedState.getValue(BlockCruxtruder2.PART)== BlockCruxtruder2.EnumParts.ONE_THREE_ONE
+					&& clickedState.getValue(BlockCruxtruder2.HASLID)==false)
+			{
+				if(dowelOut) {
+					if(!world.isRemote) {
+						ItemStack dowel=new ItemStack(MinestuckItems.cruxiteDowel, 1, color + 1);
+						EntityItem dowelEntity =new EntityItem(world, pos.getX(), pos.up().getY(), pos.getZ(), dowel);
+						world.spawnEntity(dowelEntity);
+					}
+					setDowelOut(false);
+				}else {
+					setDowelOut(true);
 				}
-				setDowelOut(false);
-			}else {
-				setDowelOut(true);
 			}
 		}
 	}
@@ -80,6 +83,22 @@ public class TileEntityCruxtruder extends TileEntity
 		tagCompound.setBoolean("destroyed", destroyed);
 		tagCompound.setBoolean("dowelOut", dowelOut);
 		return tagCompound;
+	}
+	@Override
+	public NBTTagCompound getUpdateTag(){
+		NBTTagCompound nbt;
+		nbt = super.getUpdateTag();
+		nbt.setBoolean("destroyed", destroyed);
+		return nbt;
+	}
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		SPacketUpdateTileEntity packet;
+		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setBoolean("destroyed",destroyed);
+		//dowel.writeToNBT(nbt);
+		packet = new SPacketUpdateTileEntity(this.pos, 0, nbt);				
+		return packet;
 	}
 	
 	public void resendState()
