@@ -1,7 +1,5 @@
 package com.mraof.minestuck.client.gui;
 
-import java.util.List;
-
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.util.GuiUtil;
@@ -14,51 +12,51 @@ import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
-
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiAlchemiter extends GuiScreen  {
+import java.util.List;
+
+public class GuiAlchemiter extends GuiScreen
+{
 	
 	
-		private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/large_alchemiter.png");
-		private static final int guiWidth = 159, guiHeight = 102;
-		private TileEntityAlchemiter alchemiter;
-		private int itemQuantity;
+	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/large_alchemiter.png");
+	private static final int guiWidth = 159, guiHeight = 102;
+	private TileEntityAlchemiter alchemiter;
+	private int itemQuantity;
+	
+	public GuiAlchemiter(TileEntityAlchemiter te)
+	{
+		alchemiter = te;
+		itemQuantity = 1;
+	}
+	
+	@Override
+	public void initGui()
+	{
+		GuiButton alchemize = new GuiButton(0, (width-100)/2,(height-guiHeight)/2+110, 100, 20, "ALCHEMIZE");
 		
-		public GuiAlchemiter(TileEntityAlchemiter te) {
-			alchemiter = te;
-			itemQuantity=1;
-		}
-
+		GuiButton hundredsUp = new GuiButton(1,(width-guiWidth)/2+52,(height-guiHeight)/2+10,18,18,"^");
+		GuiButton tensUp = new GuiButton(2,(width-guiWidth)/2+31,(height-guiHeight)/2+10,18,18,"^");
+		GuiButton onesUp = new GuiButton(3,(width-guiWidth)/2+10,(height-guiHeight)/2+10,18,18,"^");
+		GuiButton hundredsDown = new GuiButton(4,(width-guiWidth)/2+52,(height-guiHeight)/2+74,18,18,"v");
+		GuiButton tensDown =new GuiButton(5,(width-guiWidth)/2+31,(height-guiHeight)/2+74,18,18,"v");
+		GuiButton onesDown = new GuiButton(6,(width-guiWidth)/2+10,(height-guiHeight)/2+74,18,18,"v");
+		//GuiLabel ones = new GuiLabel(fontRendererObj, p_i45540_2_, p_i45540_3_, p_i45540_4_, p_i45540_5_, p_i45540_6_, p_i45540_7_)
 		
-		@Override
-		public void initGui()
-		{
-			GuiButton alchemize = new GuiButton(0, (width-100)/2,(height-guiHeight)/2+110, 100, 20, "ALCHEMIZE");
-
-			GuiButton hundrids_up = new GuiButton(1,(width-guiWidth)/2+52,(height-guiHeight)/2+10,18,18,"^");
-			GuiButton tens_up = new GuiButton(2,(width-guiWidth)/2+31,(height-guiHeight)/2+10,18,18,"^");
-			GuiButton ones_up = new GuiButton(3,(width-guiWidth)/2+10,(height-guiHeight)/2+10,18,18,"^");
-			GuiButton hundrids_down = new GuiButton(4,(width-guiWidth)/2+52,(height-guiHeight)/2+74,18,18,"v");
-			GuiButton tens_down =new GuiButton(5,(width-guiWidth)/2+31,(height-guiHeight)/2+74,18,18,"v");
-			GuiButton ones_down = new GuiButton(6,(width-guiWidth)/2+10,(height-guiHeight)/2+74,18,18,"v");
-			//GuiLabel ones = new GuiLabel(fontRendererObj, p_i45540_2_, p_i45540_3_, p_i45540_4_, p_i45540_5_, p_i45540_6_, p_i45540_7_)
-			
-			buttonList.add(alchemize);
-			buttonList.add(ones_up);
-			buttonList.add(tens_up);
-			buttonList.add(hundrids_up);
-			buttonList.add(ones_down);
-			buttonList.add(tens_down);
-			buttonList.add(hundrids_down);
-			
-			
-		}
-		
+		buttonList.add(alchemize);
+		buttonList.add(onesUp);
+		buttonList.add(tensUp);
+		buttonList.add(hundredsUp);
+		buttonList.add(onesDown);
+		buttonList.add(tensDown);
+		buttonList.add(hundredsDown);
+	}
+	
 		@Override
 		public void drawScreen(int mouseX, int mouseY, float partialTicks)
 		{
@@ -110,52 +108,34 @@ public class GuiAlchemiter extends GuiScreen  {
 		}
 		
 		
-		@Override
-		public boolean doesGuiPauseGame() {
-			return false;
-		}
+	@Override
+	public boolean doesGuiPauseGame() {
+		return false;
+	}
+	
+	@Override
+	protected void actionPerformed(GuiButton button)
+	{
 		
-
-		
-		
-		@Override
-		protected void actionPerformed(GuiButton button)
+		if (button.id == 0)
 		{
-		
-			if(button.id==0) {
-
-				MinestuckPacket packet = MinestuckPacket.makePacket(Type.ALCHEMITER_PACKET,alchemiter,itemQuantity);
-				MinestuckChannelHandler.sendToServer(packet);
-				this.mc.displayGuiScreen(null);
-
-			}
-			else if(button.id<=3){
-				if((int)(itemQuantity/Math.pow(10, button.id-1))%10!=9) {
-					itemQuantity+=Math.pow(10,button.id-1);
-				}
-			}
-			else {
-				if((int)(itemQuantity/Math.pow(10, button.id-4))%10!=0) {
-					itemQuantity-=Math.pow(10,button.id-4);
-				}
-			}
 			
+			MinestuckPacket packet = MinestuckPacket.makePacket(Type.ALCHEMITER_PACKET, alchemiter, itemQuantity);
+			MinestuckChannelHandler.sendToServer(packet);
+			this.mc.displayGuiScreen(null);
 			
-		}
-		/*
-		@Override
-		public void onGuiClosed()
+		} else if (button.id <= 3)
 		{
-			if(firstTime && mc != null && mc.player != null)
+			if ((int) (itemQuantity / Math.pow(10, button.id - 1)) % 10 != 9)
 			{
-				ITextComponent message;
-				if(ColorCollector.playerColor == -1)
-					message = new TextComponentTranslation("message.selectDefaultColor");
-				else message = new TextComponentTranslation("message.selectColor");
-				this.mc.player.sendMessage(new TextComponentString("[Minestuck] ").appendSibling(message));
+				itemQuantity += Math.pow(10, button.id - 1);
+			}
+		} else
+		{
+			if ((int) (itemQuantity / Math.pow(10, button.id - 4)) % 10 != 0)
+			{
+				itemQuantity -= Math.pow(10, button.id - 4);
 			}
 		}
-		
-	}*/
-
+	}
 }

@@ -1,8 +1,8 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
-import com.mraof.minestuck.util.IdentifierHandler;
-
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
@@ -43,7 +43,8 @@ public class BlockAlchemiter extends BlockLargeMachine
 		
 		setUnlocalizedName("alchemiter");
 		setDefaultState(blockState.getBaseState());
-		if (index==0) {
+		if (index == 0)
+		{
 			setDefaultState(blockState.getBaseState().withProperty(HASDOWEL, false));
 		}
 	}
@@ -58,18 +59,30 @@ public class BlockAlchemiter extends BlockLargeMachine
 		return parts.BOUNDING_BOX[facing.getHorizontalIndex()];
 	}
 
-
 	@Override
-	public  boolean onBlockActivated(World worldIn,BlockPos pos,IBlockState state,EntityPlayer playerIn,EnumHand hand,EnumFacing facing,float hitX,float hitY,float hitZ)
+	public  boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
+		if (worldIn.isRemote)
+		{
+			EnumParts part = state.getValue(PART);
+			if (part == EnumParts.CENTER_PAD || part == EnumParts.CORNER || part == EnumParts.EDGE_LEFT || part == EnumParts.EDGE_RIGHT || part == EnumParts.TOTEM_CORNER)
+			{
+				BlockPos mainPos = getMainPos(state, pos, worldIn);
+				playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.ALCHEMITER.ordinal(), worldIn, mainPos.getX(), mainPos.getY(), mainPos.getZ());
+			}
+			return true;
+		}
+		
 		BlockPos mainPos = getMainPos(state, pos, worldIn);
 		TileEntity te = worldIn.getTileEntity(mainPos);
 		
-		if( te != null && te instanceof TileEntityAlchemiter&&playerIn!=null)
+		if (te instanceof TileEntityAlchemiter && playerIn != null)
+		{
 			((TileEntityAlchemiter) te).onRightClick(playerIn, state);
-			((TileEntityAlchemiter) te).setOwner(IdentifierHandler.encode(playerIn));
+		}
 		return true;
 	}
+	
 	@Override
 	public boolean hasTileEntity(IBlockState state)
 	{
@@ -99,7 +112,7 @@ public class BlockAlchemiter extends BlockLargeMachine
 		if(te != null && te instanceof TileEntityAlchemiter)
 		{
 			TileEntityAlchemiter alchemiter = (TileEntityAlchemiter) te;
-			alchemiter.brake();
+			alchemiter.breakMachine();
 			if(state.getValue(PART).equals(EnumParts.TOTEM_PAD))
 				alchemiter.dropItem(true);
 		}

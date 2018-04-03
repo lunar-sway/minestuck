@@ -39,7 +39,7 @@ public class TileEntityPunchDesignix extends TileEntity
 			if(world != null)
 			{
 				IBlockState state = world.getBlockState(pos);
-				this.world.notifyBlockUpdate(pos, state, state, 2);
+				world.notifyBlockUpdate(pos, state, state, 2);
 			}
 		}
 	}
