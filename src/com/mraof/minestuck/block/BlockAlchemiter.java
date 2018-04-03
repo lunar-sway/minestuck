@@ -1,8 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.block.BlockPunchDesignix.EnumParts;
 import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
-import com.mraof.minestuck.tileentity.TileEntitySburbMachine;
 import com.mraof.minestuck.util.IdentifierHandler;
 
 import net.minecraft.block.properties.PropertyBool;
@@ -19,7 +17,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
