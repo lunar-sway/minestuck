@@ -342,9 +342,6 @@ public class MinestuckModelManager
 		}
 	}
 	
-
-
-	
 	private static class CruxiteDowelDefinition implements ItemMeshDefinition
 	{
 		@Override

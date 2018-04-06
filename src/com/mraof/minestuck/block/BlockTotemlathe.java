@@ -7,16 +7,13 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -172,19 +169,19 @@ public class BlockTotemlathe extends BlockLargeMachine
 			world.notifyBlockUpdate(pos, oldState, oldState.withProperty(HASCARD, hascard), 3);
 			oldState = world.getBlockState(pos.up(1));
 			if (oldState.getBlock()==MinestuckBlocks.totemlathe2) {
-				world.notifyBlockUpdate(pos.up(1), oldState, oldState.withProperty(BlockTotemlathe2.HASDOWEL, hasdowel), 3);
+				world.notifyBlockUpdate(pos.up(1), oldState, oldState.withProperty(BlockTotemlathe2.HAS_DOWEL, hasdowel), 3);
 			}
 			oldState = world.getBlockState(pos.offset(facing.rotateY(),1).up(1));
 			if (oldState.getBlock()==MinestuckBlocks.totemlathe2) {
-				world.notifyBlockUpdate(pos.offset(facing.rotateY(),1).up(1), oldState, oldState.withProperty(BlockTotemlathe2.HASDOWEL, hasdowel), 3);
+				world.notifyBlockUpdate(pos.offset(facing.rotateY(),1).up(1), oldState, oldState.withProperty(BlockTotemlathe2.HAS_DOWEL, hasdowel), 3);
 			}
 			oldState = world.getBlockState(pos.offset(facing.rotateY(),2).up(1));
 			if (oldState.getBlock()==MinestuckBlocks.totemlathe2) {
-				world.notifyBlockUpdate(pos.offset(facing.rotateY(),2).up(1), oldState, oldState.withProperty(BlockTotemlathe2.HASDOWEL, hasdowel), 3);
+				world.notifyBlockUpdate(pos.offset(facing.rotateY(),2).up(1), oldState, oldState.withProperty(BlockTotemlathe2.HAS_DOWEL, hasdowel), 3);
 			}
 			oldState = world.getBlockState(pos.offset(facing.rotateY(),3).up(1));
 			if (oldState.getBlock()==MinestuckBlocks.totemlathe2) {
-				world.notifyBlockUpdate(pos.offset(facing.rotateY(),3).up(1), oldState, oldState.withProperty(BlockTotemlathe2.HASDOWEL, hasdowel), 3);
+				world.notifyBlockUpdate(pos.offset(facing.rotateY(),3).up(1), oldState, oldState.withProperty(BlockTotemlathe2.HAS_DOWEL, hasdowel), 3);
 			}
 		}
 	}

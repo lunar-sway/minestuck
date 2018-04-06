@@ -3,7 +3,6 @@ package com.mraof.minestuck.block;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
-import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -23,10 +22,9 @@ import net.minecraft.world.World;
 public class BlockAlchemiter extends BlockLargeMachine
 {
 	public static final PropertyEnum<EnumParts> PART1 = PropertyEnum.create("part",EnumParts.class, EnumParts.TOTEM_CORNER, EnumParts.TOTEM_PAD, EnumParts.LOWER_ROD, EnumParts.UPPER_ROD);
-	public static final PropertyEnum<EnumParts> PART2 = PropertyEnum.create("part",EnumParts.class, EnumParts.EDGE_LEFT, EnumParts.EDGE_RIGHT, EnumParts.CORNER, EnumParts.CENTER_PAD);
+	public static final PropertyEnum<EnumParts> PART2 = PropertyEnum.create("part",EnumParts.class, EnumParts.SIDE_LEFT, EnumParts.SIDE_RIGHT, EnumParts.CORNER, EnumParts.CENTER_PAD);
 	public final PropertyEnum<EnumParts> PART;
 	public static final PropertyDirection DIRECTION = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-	public static final PropertyBool HASDOWEL = PropertyBool.create("has_dowel");
 	
 	public final int index;
 	
@@ -42,11 +40,6 @@ public class BlockAlchemiter extends BlockLargeMachine
 		this.PART = property;
 		
 		setUnlocalizedName("alchemiter");
-		setDefaultState(blockState.getBaseState());
-		if (index == 0)
-		{
-			setDefaultState(blockState.getBaseState().withProperty(HASDOWEL, false));
-		}
 	}
 	
 	//not sure how to do this.
@@ -65,7 +58,7 @@ public class BlockAlchemiter extends BlockLargeMachine
 		if (worldIn.isRemote)
 		{
 			EnumParts part = state.getValue(PART);
-			if (part == EnumParts.CENTER_PAD || part == EnumParts.CORNER || part == EnumParts.EDGE_LEFT || part == EnumParts.EDGE_RIGHT || part == EnumParts.TOTEM_CORNER)
+			if (part == EnumParts.CENTER_PAD || part == EnumParts.CORNER || part == EnumParts.SIDE_LEFT || part == EnumParts.SIDE_RIGHT || part == EnumParts.TOTEM_CORNER)
 			{
 				BlockPos mainPos = getMainPos(state, pos, worldIn);
 				playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.ALCHEMITER.ordinal(), worldIn, mainPos.getX(), mainPos.getY(), mainPos.getZ());
@@ -86,13 +79,13 @@ public class BlockAlchemiter extends BlockLargeMachine
 	@Override
 	public boolean hasTileEntity(IBlockState state)
 	{
-		return state.getValue(PART) == EnumParts.TOTEM_CORNER;
+		return state.getValue(PART) == EnumParts.TOTEM_PAD;
 	}
 	
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta)
 	{
-		if(index == 0 && meta % 4 == EnumParts.TOTEM_CORNER.ordinal())
+		if(index == 0 && meta % 4 == EnumParts.TOTEM_PAD.ordinal())
 			return new TileEntityAlchemiter();
 		return null;
 	}
@@ -124,19 +117,28 @@ public class BlockAlchemiter extends BlockLargeMachine
 	@Override
 	protected BlockStateContainer createBlockState()
     {
-        return new BlockStateContainer(this,PART1,DIRECTION,HASDOWEL);
+        return new BlockStateContainer(this, PART1, DIRECTION, BlockTotemlathe2.HAS_DOWEL);
     }
 	
 	@Override
-	public IBlockState getActualState(IBlockState state,IBlockAccess worldIn,BlockPos pos){
+	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos)
+	{
 		TileEntity te;
-		te=worldIn.getTileEntity((getMainPos(state, pos , worldIn)));
-		if (state.getValue(PART)==EnumParts.TOTEM_PAD) {
-			if(te instanceof TileEntityAlchemiter) {
-				return state.withProperty(HASDOWEL,!((TileEntityAlchemiter)te).getDowel().isEmpty());
+		te = worldIn.getTileEntity((getMainPos(state, pos, worldIn)));
+		if(state.getValue(PART) == EnumParts.TOTEM_PAD)
+		{
+			if(te instanceof TileEntityAlchemiter)
+			{
+				ItemStack dowel = ((TileEntityAlchemiter) te).getDowel();
+				BlockTotemlathe2.EnumDowel type = BlockTotemlathe2.EnumDowel.NO_DOWEL;
+				if(!dowel.isEmpty())
+					if(dowel.hasTagCompound() && dowel.getTagCompound().hasKey("contentID"))
+						type = BlockTotemlathe2.EnumDowel.CARVED_DOWEL;
+					else type = BlockTotemlathe2.EnumDowel.UNCARVED_DOWEL;
+				return state.withProperty(BlockTotemlathe2.HAS_DOWEL, type);
 			}
 		}
-		
+
 		return state;
 	}
 	
@@ -166,22 +168,22 @@ public class BlockAlchemiter extends BlockLargeMachine
 	{
 		return getMainPos(state, pos, world, 4);
 	}
-	public BlockPos getMainPos(IBlockState state, BlockPos pos, IBlockAccess world, int count)
+	private BlockPos getMainPos(IBlockState state, BlockPos pos, IBlockAccess world, int count)
 	{
 		EnumParts part = state.getValue(PART);
 		EnumFacing facing = state.getValue(DIRECTION);
 		switch(part)
 		{
-			case TOTEM_CORNER: return pos;
-			case TOTEM_PAD:	return pos.down(1);
-			case LOWER_ROD: return pos.down(2);
-			case UPPER_ROD: return pos.down(3);
+			case TOTEM_CORNER: return pos.up();
+			case TOTEM_PAD:	return pos;
+			case LOWER_ROD: return pos.down(1);
+			case UPPER_ROD: return pos.down(2);
 			default:
 				if(count == 0)	//Prevents potential recursion crashes
 					return new BlockPos(0, -1, 0);
 				if(part == EnumParts.CENTER_PAD)
 					pos = pos.offset(facing.rotateYCCW()).offset(facing.getOpposite());
-				else pos = pos.offset(facing.rotateYCCW(), part == EnumParts.EDGE_LEFT ? 1 : part == EnumParts.EDGE_RIGHT ? 2 : 3);
+				else pos = pos.offset(facing.rotateYCCW(), part == EnumParts.SIDE_LEFT ? 1 : part == EnumParts.SIDE_RIGHT ? 2 : 3);
 				IBlockState newState = world.getBlockState(pos);
 				if(newState.equals(getBlockState(EnumParts.TOTEM_CORNER, facing))
 						|| newState.equals(getBlockState(EnumParts.CORNER, facing.rotateY())))
@@ -228,9 +230,9 @@ public class BlockAlchemiter extends BlockLargeMachine
 		UPPER_ROD(   new AxisAlignedBB(6.5/16D,0.0D,0/16D,9.5/16D,1.0D,13/16D),new AxisAlignedBB(3/16D,0.0D,6.5/16D,16/16D,1.0D,9.5/16D),
 				     new AxisAlignedBB(6.5/16D,0.0D,3/16D,9.5/16D,1.0D,16/16D),new AxisAlignedBB(0/16D,0.0D,6.5/16D,13/16D,1.0D,9.5/16D)),
 		
-		EDGE_LEFT(   new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),
+		SIDE_LEFT(   new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),
 				     new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D)),
-		EDGE_RIGHT(  new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),
+		SIDE_RIGHT(  new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),
 				     new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D)),
 		CORNER(      new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),
  			         new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D)),
@@ -254,17 +256,6 @@ public class BlockAlchemiter extends BlockLargeMachine
 		public String getName()
 		{
 			return name().toLowerCase();
-		}
-	}
-	
-
-	public static void updateItem(boolean b, World world, BlockPos pos)
-	{
-		pos=pos.up();
-		if(!(world == null)) {
-			IBlockState oldState = world.getBlockState(pos.up());
-			if (oldState.getBlock()==MinestuckBlocks.alchemiter[0]||oldState.getBlock()==MinestuckBlocks.alchemiter[1])
-				world.notifyBlockUpdate(pos.up(), oldState, oldState.withProperty(HASDOWEL, b), 3);
 		}
 	}
 }

@@ -83,34 +83,34 @@ public class TileEntityAlchemiter extends TileEntity
 			return false;
 		Block[] block=MinestuckBlocks.alchemiter;
 		EnumFacing hOffset = getWorld().getBlockState(this.getPos()).getValue(BlockAlchemiter.DIRECTION).rotateY();
-		
+		BlockPos pos = getPos().down();
 		if(
-			! world.getBlockState(getPos()).getBlock().equals(block[0])||
-			! world.getBlockState(getPos().up()).getBlock().equals(block[0])||
-			! world.getBlockState(getPos().up(2)).getBlock().equals(block[0])||
-			! world.getBlockState(getPos().up(3)).getBlock().equals(block[0])||
+			! world.getBlockState(pos).getBlock().equals(block[0])||
+			! world.getBlockState(pos.up()).getBlock().equals(block[0])||
+			! world.getBlockState(pos.up(2)).getBlock().equals(block[0])||
+			! world.getBlockState(pos.up(3)).getBlock().equals(block[0])||
 			
-			! world.getBlockState(getPos().offset(hOffset)).getBlock().equals(block[1])||
-			! world.getBlockState(getPos().offset(hOffset,2)).getBlock().equals(block[1])||
-			! world.getBlockState(getPos().offset(hOffset,3)).getBlock().equals(block[1])||
+			! world.getBlockState(pos.offset(hOffset)).getBlock().equals(block[1])||
+			! world.getBlockState(pos.offset(hOffset,2)).getBlock().equals(block[1])||
+			! world.getBlockState(pos.offset(hOffset,3)).getBlock().equals(block[1])||
 
-			! world.getBlockState(getPos().offset(hOffset.rotateYCCW())).getBlock().equals(block[1])||
-			! world.getBlockState(getPos().offset(hOffset.rotateYCCW()).offset(hOffset)).getBlock().equals(block[1])||
-			! world.getBlockState(getPos().offset(hOffset.rotateYCCW()).offset(hOffset,2)).getBlock().equals(block[1])||
-			! world.getBlockState(getPos().offset(hOffset.rotateYCCW()).offset(hOffset,3)).getBlock().equals(block[1])||
+			! world.getBlockState(pos.offset(hOffset.rotateYCCW())).getBlock().equals(block[1])||
+			! world.getBlockState(pos.offset(hOffset.rotateYCCW()).offset(hOffset)).getBlock().equals(block[1])||
+			! world.getBlockState(pos.offset(hOffset.rotateYCCW()).offset(hOffset,2)).getBlock().equals(block[1])||
+			! world.getBlockState(pos.offset(hOffset.rotateYCCW()).offset(hOffset,3)).getBlock().equals(block[1])||
 			
-			! world.getBlockState(getPos().offset(hOffset.rotateYCCW(),2)).getBlock().equals(block[1])||
-			! world.getBlockState(getPos().offset(hOffset.rotateYCCW(),2).offset(hOffset)).getBlock().equals(block[1])||
-			! world.getBlockState(getPos().offset(hOffset.rotateYCCW(),2).offset(hOffset,2)).getBlock().equals(block[1])||
-			! world.getBlockState(getPos().offset(hOffset.rotateYCCW(),2).offset(hOffset,3)).getBlock().equals(block[1])||
+			! world.getBlockState(pos.offset(hOffset.rotateYCCW(),2)).getBlock().equals(block[1])||
+			! world.getBlockState(pos.offset(hOffset.rotateYCCW(),2).offset(hOffset)).getBlock().equals(block[1])||
+			! world.getBlockState(pos.offset(hOffset.rotateYCCW(),2).offset(hOffset,2)).getBlock().equals(block[1])||
+			! world.getBlockState(pos.offset(hOffset.rotateYCCW(),2).offset(hOffset,3)).getBlock().equals(block[1])||
 			
-			! world.getBlockState(getPos().offset(hOffset.rotateYCCW(),3)).getBlock().equals(block[1])||
-			! world.getBlockState(getPos().offset(hOffset.rotateYCCW(),3).offset(hOffset)).getBlock().equals(block[1])||
-			! world.getBlockState(getPos().offset(hOffset.rotateYCCW(),3).offset(hOffset,2)).getBlock().equals(block[1])||
-			! world.getBlockState(getPos().offset(hOffset.rotateYCCW(),3).offset(hOffset,3)).getBlock().equals(block[1])
+			! world.getBlockState(pos.offset(hOffset.rotateYCCW(),3)).getBlock().equals(block[1])||
+			! world.getBlockState(pos.offset(hOffset.rotateYCCW(),3).offset(hOffset)).getBlock().equals(block[1])||
+			! world.getBlockState(pos.offset(hOffset.rotateYCCW(),3).offset(hOffset,2)).getBlock().equals(block[1])||
+			! world.getBlockState(pos.offset(hOffset.rotateYCCW(),3).offset(hOffset,3)).getBlock().equals(block[1])
 	
 					) {
-			Debug.info(world.getBlockState(getPos().offset(hOffset))+","+world.getBlockState(getPos().down())+","+world.getBlockState(getPos().down().offset(hOffset)));
+			Debug.info(world.getBlockState(pos.offset(hOffset))+","+world.getBlockState(pos.down())+","+world.getBlockState(pos.down().offset(hOffset)));
 			return false;
 		}
 		
@@ -255,16 +255,5 @@ public class TileEntityAlchemiter extends TileEntity
 	public void setSelectedGrist(GristType selectedGrist)
 	{
 		this.selectedGrist = selectedGrist;
-	}
-	
-	public void resendState()
-	{
-		if(dowel.isEmpty())
-		{
-			BlockAlchemiter.updateItem(false, world, getPos());
-		} else
-		{
-			BlockAlchemiter.updateItem(true, world, this.getPos());
-		}
 	}
 }
