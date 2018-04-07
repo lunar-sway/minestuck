@@ -1,6 +1,7 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.TabMinestuck;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
@@ -30,7 +31,7 @@ public class BlockCruxiteOre extends Block
 		setHardness(3.0F);
 		setResistance(5.0F);	//Values normally used by ores
 		setHarvestLevel("pickaxe", 0);
-		this.setCreativeTab(MinestuckItems.tabMinestuck);
+		this.setCreativeTab(TabMinestuck.instance);
 	}
 	
 	@Override

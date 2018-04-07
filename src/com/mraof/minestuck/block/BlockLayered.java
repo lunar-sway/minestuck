@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.TabMinestuck;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
@@ -26,7 +26,7 @@ public class BlockLayered extends Block
 	{
 		super(iconBlock.getMaterial());
 		
-		this.setCreativeTab(MinestuckItems.tabMinestuck);
+		this.setCreativeTab(TabMinestuck.instance);
 		this.fullBlock = iconBlock;
 		setSoundType(fullBlock.getBlock().getSoundType());
 	}

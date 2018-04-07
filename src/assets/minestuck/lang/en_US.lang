@@ -989,6 +989,7 @@ message.transportalizer.destinationBlocked=The destination seems to be blocked.
 message.transportalizer.blocked=The transportalizer appears to need more space above it to function.
 message.gateDestroyed=The destination gate seems to have been destroyed.
 message.gateMissingLand=The land this gate leads to does not exist yet!
+message.hashmap=[HASHMAP] %s %% %s -> %s
 
 both=Both
 off=Off
