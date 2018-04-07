@@ -129,7 +129,7 @@ public class MinestuckItems
 	public static Item onion = new ItemFood(2, 0.2F, false).setRegistryName("onion").setUnlocalizedName("onion").setCreativeTab(TabMinestuck.instance);
 	public static Item salad = new ItemSoup(1).setRegistryName("salad").setUnlocalizedName("salad").setCreativeTab(TabMinestuck.instance);
 	public static Item irradiatedSteak = new ItemFood(4, 0.4F, true).setPotionEffect(new PotionEffect(MobEffects.WITHER, 100, 1), 0.9F).setRegistryName("irradiated_steak").setUnlocalizedName("irradiatedSteak").setCreativeTab(TabMinestuck.instance);
-	public static Item rockCookie = new Item().setRegistryName("rock_cookie").setUnlocalizedName("rockCookie").setCreativeTab(TabMinestuck.tabMinestuck);
+	public static Item rockCookie = new Item().setRegistryName("rock_cookie").setUnlocalizedName("rockCookie").setCreativeTab(TabMinestuck.instance);
 	//Other
 	public static Item boondollars = new ItemBoondollars().setRegistryName("boondollars");
 	public static Item rawCruxite = new Item().setRegistryName("raw_cruxite").setUnlocalizedName("rawCruxite").setCreativeTab(TabMinestuck.instance);
