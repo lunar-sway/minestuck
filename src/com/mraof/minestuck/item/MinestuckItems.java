@@ -32,6 +32,8 @@ import static com.mraof.minestuck.block.MinestuckBlocks.*;
 
 public class MinestuckItems
 {
+	@Deprecated
+	public static CreativeTabs tabMinestuck = TabMinestuck.instance;
 	
 	public static Item.ToolMaterial toolEmerald = EnumHelper.addToolMaterial("EMERALD", 3, 1220, 12.0F, 4.0F, 12).setRepairItem(new ItemStack(Items.EMERALD));
 	public static ItemArmor.ArmorMaterial armorPrismarine = EnumHelper.addArmorMaterial("PRISMARINE", "minestuck:prismarine", 20, new int[]{3, 7, 6, 2}, 15, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0F);
