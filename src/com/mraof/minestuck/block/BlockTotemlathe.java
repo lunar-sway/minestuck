@@ -22,7 +22,7 @@ public class BlockTotemlathe extends BlockLargeMachine
 	
 	public static final PropertyEnum<EnumParts> PART = PropertyEnum.create("part", EnumParts.class);
 	public static final PropertyDirection DIRECTION = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-	public static final PropertyBool HASCARD = PropertyBool.create("hascard");
+	public static final PropertyBool HAS_CARD = PropertyBool.create("has_card");
 	public BlockTotemlathe() {
 		setUnlocalizedName("totem_lathe");
 		setDefaultState(blockState.getBaseState());
@@ -104,7 +104,7 @@ public class BlockTotemlathe extends BlockLargeMachine
 	@Override
 	protected BlockStateContainer createBlockState()
 	{
-		return new BlockStateContainer(this, PART, DIRECTION,HASCARD);
+		return new BlockStateContainer(this, PART, DIRECTION, HAS_CARD);
 	}
 	
 	@Override
@@ -148,7 +148,7 @@ public class BlockTotemlathe extends BlockLargeMachine
 		if (state.getBlock()==MinestuckBlocks.totemlathe && state.getValue(PART)==EnumParts.BOTTOM_LEFT ) {
 			BlockPos mainPos = getMainPos(state, pos);
 			TileEntity te = worldIn.getTileEntity(mainPos);
-			return state.withProperty(HASCARD, !((TileEntityTotemlathe)te).getCard1().isEmpty());
+			return state.withProperty(HAS_CARD, !((TileEntityTotemlathe)te).getCard1().isEmpty());
 		}
 		
 		return state;	
@@ -166,7 +166,7 @@ public class BlockTotemlathe extends BlockLargeMachine
 		IBlockState oldState = world.getBlockState(pos);
 		if (oldState.getBlock()==MinestuckBlocks.totemlathe) {
 			EnumFacing facing =oldState.getValue(DIRECTION);
-			world.notifyBlockUpdate(pos, oldState, oldState.withProperty(HASCARD, hascard), 3);
+			world.notifyBlockUpdate(pos, oldState, oldState.withProperty(HAS_CARD, hascard), 3);
 			oldState = world.getBlockState(pos.up(1));
 			if (oldState.getBlock()==MinestuckBlocks.totemlathe2) {
 				world.notifyBlockUpdate(pos.up(1), oldState, oldState.withProperty(BlockTotemlathe2.HAS_DOWEL, hasdowel), 3);

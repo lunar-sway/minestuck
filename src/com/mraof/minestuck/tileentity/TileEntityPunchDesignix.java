@@ -4,6 +4,7 @@ import com.mraof.minestuck.block.BlockPunchDesignix.EnumParts;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.CombinationRegistry;
+import com.mraof.minestuck.util.Debug;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
@@ -128,6 +129,7 @@ public class TileEntityPunchDesignix extends TileEntity
 				!world.getBlockState(getPos().down().offset(hOffset)).equals(currentState.withProperty(PART, EnumParts.BOTTOM_RIGHT)))
 		{
 			broken = true;
+			Debug.warnf("Failed to notice a block being broken or misplaced at the punch designix at %s", getPos());
 			return false;
 		}
 		

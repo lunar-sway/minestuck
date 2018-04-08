@@ -51,17 +51,25 @@ public class BlockAlchemiter extends BlockLargeMachine
 		
 		return parts.BOUNDING_BOX[facing.getHorizontalIndex()];
 	}
-
+	
+	@Override
+	public boolean isFullCube(IBlockState state)
+	{
+		return state.getValue(PART) == EnumParts.CENTER_PAD;
+	}
+	
 	@Override
 	public  boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
-		if (worldIn.isRemote)
+		if(worldIn.isRemote)
 		{
 			EnumParts part = state.getValue(PART);
-			if (part == EnumParts.CENTER_PAD || part == EnumParts.CORNER || part == EnumParts.SIDE_LEFT || part == EnumParts.SIDE_RIGHT || part == EnumParts.TOTEM_CORNER)
+			if(part == EnumParts.CENTER_PAD || part == EnumParts.CORNER || part == EnumParts.SIDE_LEFT || part == EnumParts.SIDE_RIGHT || part == EnumParts.TOTEM_CORNER)
 			{
 				BlockPos mainPos = getMainPos(state, pos, worldIn);
-				playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.ALCHEMITER.ordinal(), worldIn, mainPos.getX(), mainPos.getY(), mainPos.getZ());
+				TileEntity te = worldIn.getTileEntity(mainPos);
+				if(te instanceof TileEntityAlchemiter && !((TileEntityAlchemiter) te).isBroken())
+					playerIn.openGui(Minestuck.instance, GuiHandler.GuiId.ALCHEMITER.ordinal(), worldIn, mainPos.getX(), mainPos.getY(), mainPos.getZ());
 			}
 			return true;
 		}

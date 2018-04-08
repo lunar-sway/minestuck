@@ -1,68 +1,68 @@
 {
     "variants": {
 
-        "facing=south,hasdowel=no_dowel,part=mid_left":     	{ "model": "minestuck:totemlathe_mid_left", "y":270 },
-        "facing=south,hasdowel=no_dowel,part=mid_midleft":     { "model": "minestuck:totemlathe_mid_midleft", "y":270 },
-        "facing=south,hasdowel=no_dowel,part=mid_midright":    { "model": "minestuck:totemlathe_mid_midright", "y":270 },
-        "facing=south,hasdowel=no_dowel,part=mid_right":     	{ "model": "minestuck:totemlathe_mid_right", "y":270 },
+        "dowel=no_dowel,facing=south,part=mid_left":     	{ "model": "minestuck:totemlathe_mid_left", "y":270 },
+        "dowel=no_dowel,facing=south,part=mid_midleft":     { "model": "minestuck:totemlathe_mid_midleft", "y":270 },
+        "dowel=no_dowel,facing=south,part=mid_midright":    { "model": "minestuck:totemlathe_mid_midright", "y":270 },
+        "dowel=no_dowel,facing=south,part=mid_right":     	{ "model": "minestuck:totemlathe_mid_right", "y":270 },
         
-        "facing=west,hasdowel=no_dowel,part=mid_left":     	{ "model": "minestuck:totemlathe_mid_left", "y":0},
-        "facing=west,hasdowel=no_dowel,part=mid_midleft":     { "model": "minestuck:totemlathe_mid_midleft" ,"y":0},
-        "facing=west,hasdowel=no_dowel,part=mid_midright":    { "model": "minestuck:totemlathe_mid_midright", "y":0},
-        "facing=west,hasdowel=no_dowel,part=mid_right":     	{ "model": "minestuck:totemlathe_mid_right" ,"y":0},
+        "dowel=no_dowel,facing=west,part=mid_left":     	{ "model": "minestuck:totemlathe_mid_left", "y":0},
+        "dowel=no_dowel,facing=west,part=mid_midleft":     { "model": "minestuck:totemlathe_mid_midleft" ,"y":0},
+        "dowel=no_dowel,facing=west,part=mid_midright":    { "model": "minestuck:totemlathe_mid_midright", "y":0},
+        "dowel=no_dowel,facing=west,part=mid_right":     	{ "model": "minestuck:totemlathe_mid_right" ,"y":0},
         
-        "facing=north,hasdowel=no_dowel,part=mid_left":     	{ "model": "minestuck:totemlathe_mid_left" ,"y":90},
-        "facing=north,hasdowel=no_dowel,part=mid_midleft":     { "model": "minestuck:totemlathe_mid_midleft" ,"y":90},
-        "facing=north,hasdowel=no_dowel,part=mid_midright":    { "model": "minestuck:totemlathe_mid_midright" ,"y":90},
-        "facing=north,hasdowel=no_dowel,part=mid_right":     	{ "model": "minestuck:totemlathe_mid_right" ,"y":90},
+        "dowel=no_dowel,facing=north,part=mid_left":     	{ "model": "minestuck:totemlathe_mid_left" ,"y":90},
+        "dowel=no_dowel,facing=north,part=mid_midleft":     { "model": "minestuck:totemlathe_mid_midleft" ,"y":90},
+        "dowel=no_dowel,facing=north,part=mid_midright":    { "model": "minestuck:totemlathe_mid_midright" ,"y":90},
+        "dowel=no_dowel,facing=north,part=mid_right":     	{ "model": "minestuck:totemlathe_mid_right" ,"y":90},
    
-        "facing=east,hasdowel=no_dowel,part=mid_left":     	{ "model": "minestuck:totemlathe_mid_left" ,"y":180},
-        "facing=east,hasdowel=no_dowel,part=mid_midleft":     { "model": "minestuck:totemlathe_mid_midleft" ,"y":180},
-        "facing=east,hasdowel=no_dowel,part=mid_midright":    { "model": "minestuck:totemlathe_mid_midright" ,"y":180},
-        "facing=east,hasdowel=no_dowel,part=mid_right":     	{ "model": "minestuck:totemlathe_mid_right","y":180 },
+        "dowel=no_dowel,facing=east,part=mid_left":     	{ "model": "minestuck:totemlathe_mid_left" ,"y":180},
+        "dowel=no_dowel,facing=east,part=mid_midleft":     { "model": "minestuck:totemlathe_mid_midleft" ,"y":180},
+        "dowel=no_dowel,facing=east,part=mid_midright":    { "model": "minestuck:totemlathe_mid_midright" ,"y":180},
+        "dowel=no_dowel,facing=east,part=mid_right":     	{ "model": "minestuck:totemlathe_mid_right","y":180 },
         
         
-        "facing=south,hasdowel=uncarved_dowel,part=mid_left":     	{ "model": "minestuck:totemlathe_mid_left", "y":270 },
-        "facing=south,hasdowel=uncarved_dowel,part=mid_midleft":     { "model": "minestuck:totemlathe_mid_midleft_d", "y":270 },
-        "facing=south,hasdowel=uncarved_dowel,part=mid_midright":    { "model": "minestuck:totemlathe_mid_midright_d", "y":270 },
-        "facing=south,hasdowel=uncarved_dowel,part=mid_right":     	{ "model": "minestuck:totemlathe_mid_right_d", "y":270 },
+        "facing=south,dowel=uncarved_dowel,part=mid_left":     	{ "model": "minestuck:totemlathe_mid_left", "y":270 },
+        "facing=south,dowel=uncarved_dowel,part=mid_midleft":     { "model": "minestuck:totemlathe_mid_midleft_d", "y":270 },
+        "facing=south,dowel=uncarved_dowel,part=mid_midright":    { "model": "minestuck:totemlathe_mid_midright_d", "y":270 },
+        "facing=south,dowel=uncarved_dowel,part=mid_right":     	{ "model": "minestuck:totemlathe_mid_right_d", "y":270 },
         
-        "facing=west,hasdowel=uncarved_dowel,part=mid_left":     	{ "model": "minestuck:totemlathe_mid_left", "y":0},
-        "facing=west,hasdowel=uncarved_dowel,part=mid_midleft":     { "model": "minestuck:totemlathe_mid_midleft_d" ,"y":0},
-        "facing=west,hasdowel=uncarved_dowel,part=mid_midright":    { "model": "minestuck:totemlathe_mid_midright_d", "y":0},
-        "facing=west,hasdowel=uncarved_dowel,part=mid_right":     	{ "model": "minestuck:totemlathe_mid_right_d" ,"y":0},
+        "facing=west,dowel=uncarved_dowel,part=mid_left":     	{ "model": "minestuck:totemlathe_mid_left", "y":0},
+        "facing=west,dowel=uncarved_dowel,part=mid_midleft":     { "model": "minestuck:totemlathe_mid_midleft_d" ,"y":0},
+        "facing=west,dowel=uncarved_dowel,part=mid_midright":    { "model": "minestuck:totemlathe_mid_midright_d", "y":0},
+        "facing=west,dowel=uncarved_dowel,part=mid_right":     	{ "model": "minestuck:totemlathe_mid_right_d" ,"y":0},
         
-        "facing=north,hasdowel=uncarved_dowel,part=mid_left":     	{ "model": "minestuck:totemlathe_mid_left" ,"y":90},
-        "facing=north,hasdowel=uncarved_dowel,part=mid_midleft":     { "model": "minestuck:totemlathe_mid_midleft_d" ,"y":90},
-        "facing=north,hasdowel=uncarved_dowel,part=mid_midright":    { "model": "minestuck:totemlathe_mid_midright_d" ,"y":90},
-        "facing=north,hasdowel=uncarved_dowel,part=mid_right":     	{ "model": "minestuck:totemlathe_mid_right_d" ,"y":90},
+        "facing=north,dowel=uncarved_dowel,part=mid_left":     	{ "model": "minestuck:totemlathe_mid_left" ,"y":90},
+        "facing=north,dowel=uncarved_dowel,part=mid_midleft":     { "model": "minestuck:totemlathe_mid_midleft_d" ,"y":90},
+        "facing=north,dowel=uncarved_dowel,part=mid_midright":    { "model": "minestuck:totemlathe_mid_midright_d" ,"y":90},
+        "facing=north,dowel=uncarved_dowel,part=mid_right":     	{ "model": "minestuck:totemlathe_mid_right_d" ,"y":90},
    
-        "facing=east,hasdowel=uncarved_dowel,part=mid_left":     	{ "model": "minestuck:totemlathe_mid_left" ,"y":180},
-        "facing=east,hasdowel=uncarved_dowel,part=mid_midleft":     { "model": "minestuck:totemlathe_mid_midleft_d" ,"y":180},
-        "facing=east,hasdowel=uncarved_dowel,part=mid_midright":    { "model": "minestuck:totemlathe_mid_midright_d" ,"y":180},
-        "facing=east,hasdowel=uncarved_dowel,part=mid_right":     	{ "model": "minestuck:totemlathe_mid_right_d","y":180 },
+        "facing=east,dowel=uncarved_dowel,part=mid_left":     	{ "model": "minestuck:totemlathe_mid_left" ,"y":180},
+        "facing=east,dowel=uncarved_dowel,part=mid_midleft":     { "model": "minestuck:totemlathe_mid_midleft_d" ,"y":180},
+        "facing=east,dowel=uncarved_dowel,part=mid_midright":    { "model": "minestuck:totemlathe_mid_midright_d" ,"y":180},
+        "facing=east,dowel=uncarved_dowel,part=mid_right":     	{ "model": "minestuck:totemlathe_mid_right_d","y":180 },
         
         
         
         
-        "facing=south,hasdowel=carved_dowel,part=mid_left":     	{ "model": "minestuck:totemlathe_mid_left", "y":270 },
-        "facing=south,hasdowel=carved_dowel,part=mid_midleft":     { "model": "minestuck:totemlathe_mid_midleft_d", "y":270 },
-        "facing=south,hasdowel=carved_dowel,part=mid_midright":    { "model": "minestuck:totemlathe_mid_midright_cd", "y":270 },
-        "facing=south,hasdowel=carved_dowel,part=mid_right":     	{ "model": "minestuck:totemlathe_mid_right_d", "y":270 },
+        "facing=south,dowel=carved_dowel,part=mid_left":     	{ "model": "minestuck:totemlathe_mid_left", "y":270 },
+        "facing=south,dowel=carved_dowel,part=mid_midleft":     { "model": "minestuck:totemlathe_mid_midleft_d", "y":270 },
+        "facing=south,dowel=carved_dowel,part=mid_midright":    { "model": "minestuck:totemlathe_mid_midright_cd", "y":270 },
+        "facing=south,dowel=carved_dowel,part=mid_right":     	{ "model": "minestuck:totemlathe_mid_right_d", "y":270 },
         
-        "facing=west,hasdowel=carved_dowel,part=mid_left":     	{ "model": "minestuck:totemlathe_mid_left", "y":0},
-        "facing=west,hasdowel=carved_dowel,part=mid_midleft":     { "model": "minestuck:totemlathe_mid_midleft_d" ,"y":0},
-        "facing=west,hasdowel=carved_dowel,part=mid_midright":    { "model": "minestuck:totemlathe_mid_midright_cd", "y":0},
-        "facing=west,hasdowel=carved_dowel,part=mid_right":     	{ "model": "minestuck:totemlathe_mid_right_d" ,"y":0},
+        "facing=west,dowel=carved_dowel,part=mid_left":     	{ "model": "minestuck:totemlathe_mid_left", "y":0},
+        "facing=west,dowel=carved_dowel,part=mid_midleft":     { "model": "minestuck:totemlathe_mid_midleft_d" ,"y":0},
+        "facing=west,dowel=carved_dowel,part=mid_midright":    { "model": "minestuck:totemlathe_mid_midright_cd", "y":0},
+        "facing=west,dowel=carved_dowel,part=mid_right":     	{ "model": "minestuck:totemlathe_mid_right_d" ,"y":0},
         
-        "facing=north,hasdowel=carved_dowel,part=mid_left":     	{ "model": "minestuck:totemlathe_mid_left" ,"y":90},
-        "facing=north,hasdowel=carved_dowel,part=mid_midleft":     { "model": "minestuck:totemlathe_mid_midleft_d" ,"y":90},
-        "facing=north,hasdowel=carved_dowel,part=mid_midright":    { "model": "minestuck:totemlathe_mid_midright_cd" ,"y":90},
-        "facing=north,hasdowel=carved_dowel,part=mid_right":     	{ "model": "minestuck:totemlathe_mid_right_d" ,"y":90},
+        "facing=north,dowel=carved_dowel,part=mid_left":     	{ "model": "minestuck:totemlathe_mid_left" ,"y":90},
+        "facing=north,dowel=carved_dowel,part=mid_midleft":     { "model": "minestuck:totemlathe_mid_midleft_d" ,"y":90},
+        "facing=north,dowel=carved_dowel,part=mid_midright":    { "model": "minestuck:totemlathe_mid_midright_cd" ,"y":90},
+        "facing=north,dowel=carved_dowel,part=mid_right":     	{ "model": "minestuck:totemlathe_mid_right_d" ,"y":90},
    
-        "facing=east,hasdowel=carved_dowel,part=mid_left":     	{ "model": "minestuck:totemlathe_mid_left" ,"y":180},
-        "facing=east,hasdowel=carved_dowel,part=mid_midleft":     { "model": "minestuck:totemlathe_mid_midleft_d" ,"y":180},
-        "facing=east,hasdowel=carved_dowel,part=mid_midright":    { "model": "minestuck:totemlathe_mid_midright_cd" ,"y":180},
-        "facing=east,hasdowel=carved_dowel,part=mid_right":     	{ "model": "minestuck:totemlathe_mid_right","y_d":180 }
+        "facing=east,dowel=carved_dowel,part=mid_left":     	{ "model": "minestuck:totemlathe_mid_left" ,"y":180},
+        "facing=east,dowel=carved_dowel,part=mid_midleft":     { "model": "minestuck:totemlathe_mid_midleft_d" ,"y":180},
+        "facing=east,dowel=carved_dowel,part=mid_midright":    { "model": "minestuck:totemlathe_mid_midright_cd" ,"y":180},
+        "facing=east,dowel=carved_dowel,part=mid_right":     	{ "model": "minestuck:totemlathe_mid_right","y_d":180 }
     }
 }

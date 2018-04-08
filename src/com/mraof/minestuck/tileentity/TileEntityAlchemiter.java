@@ -22,11 +22,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class TileEntityAlchemiter extends TileEntity
 {
-	//still private because programming teacher and data protection
-	public GristType selectedGrist = GristType.Build;
+	private GristType selectedGrist = GristType.Build;
 	private boolean broken = false;
 	private ItemStack dowel = ItemStack.EMPTY;
 	
@@ -49,7 +49,9 @@ public class TileEntityAlchemiter extends TileEntity
 		
 	}
 	
-	//checks if the tile enity should work
+	/**
+	 * @return true if the machine is marked as broken
+	 */
 	public boolean isBroken()
 	{
 		return broken;
@@ -58,7 +60,12 @@ public class TileEntityAlchemiter extends TileEntity
 	//tells the tile entity to stop working
 	public void breakMachine()
 	{
-		broken = true;		
+		broken = true;
+		if(world != null)
+		{
+			IBlockState state = world.getBlockState(pos);
+			world.notifyBlockUpdate(pos, state, state, 2);
+		}
 	}
 
 	
@@ -81,36 +88,31 @@ public class TileEntityAlchemiter extends TileEntity
 	{
 		if(this.broken)
 			return false;
-		Block[] block=MinestuckBlocks.alchemiter;
-		EnumFacing hOffset = getWorld().getBlockState(this.getPos()).getValue(BlockAlchemiter.DIRECTION).rotateY();
+		
+		EnumFacing facing = getWorld().getBlockState(this.getPos()).getValue(BlockAlchemiter.DIRECTION);
 		BlockPos pos = getPos().down();
-		if(
-			! world.getBlockState(pos).getBlock().equals(block[0])||
-			! world.getBlockState(pos.up()).getBlock().equals(block[0])||
-			! world.getBlockState(pos.up(2)).getBlock().equals(block[0])||
-			! world.getBlockState(pos.up(3)).getBlock().equals(block[0])||
-			
-			! world.getBlockState(pos.offset(hOffset)).getBlock().equals(block[1])||
-			! world.getBlockState(pos.offset(hOffset,2)).getBlock().equals(block[1])||
-			! world.getBlockState(pos.offset(hOffset,3)).getBlock().equals(block[1])||
-
-			! world.getBlockState(pos.offset(hOffset.rotateYCCW())).getBlock().equals(block[1])||
-			! world.getBlockState(pos.offset(hOffset.rotateYCCW()).offset(hOffset)).getBlock().equals(block[1])||
-			! world.getBlockState(pos.offset(hOffset.rotateYCCW()).offset(hOffset,2)).getBlock().equals(block[1])||
-			! world.getBlockState(pos.offset(hOffset.rotateYCCW()).offset(hOffset,3)).getBlock().equals(block[1])||
-			
-			! world.getBlockState(pos.offset(hOffset.rotateYCCW(),2)).getBlock().equals(block[1])||
-			! world.getBlockState(pos.offset(hOffset.rotateYCCW(),2).offset(hOffset)).getBlock().equals(block[1])||
-			! world.getBlockState(pos.offset(hOffset.rotateYCCW(),2).offset(hOffset,2)).getBlock().equals(block[1])||
-			! world.getBlockState(pos.offset(hOffset.rotateYCCW(),2).offset(hOffset,3)).getBlock().equals(block[1])||
-			
-			! world.getBlockState(pos.offset(hOffset.rotateYCCW(),3)).getBlock().equals(block[1])||
-			! world.getBlockState(pos.offset(hOffset.rotateYCCW(),3).offset(hOffset)).getBlock().equals(block[1])||
-			! world.getBlockState(pos.offset(hOffset.rotateYCCW(),3).offset(hOffset,2)).getBlock().equals(block[1])||
-			! world.getBlockState(pos.offset(hOffset.rotateYCCW(),3).offset(hOffset,3)).getBlock().equals(block[1])
-	
-					) {
-			Debug.info(world.getBlockState(pos.offset(hOffset))+","+world.getBlockState(pos.down())+","+world.getBlockState(pos.down().offset(hOffset)));
+		if(!world.getBlockState(pos.up(3)).equals(BlockAlchemiter.getBlockState(EnumParts.UPPER_ROD, facing)) ||
+				!world.getBlockState(pos.up(2)).equals(BlockAlchemiter.getBlockState(EnumParts.LOWER_ROD, facing)) ||
+				!world.getBlockState(pos.up()).equals(BlockAlchemiter.getBlockState(EnumParts.TOTEM_PAD, facing)) ||
+				!world.getBlockState(pos).equals(BlockAlchemiter.getBlockState(EnumParts.TOTEM_CORNER, facing)) ||
+				!world.getBlockState(pos.offset(facing.rotateY())).equals(BlockAlchemiter.getBlockState(EnumParts.SIDE_LEFT, facing)) ||
+				!world.getBlockState(pos.offset(facing.rotateY(), 2)).equals(BlockAlchemiter.getBlockState(EnumParts.SIDE_RIGHT, facing)) ||
+				!world.getBlockState(pos.offset(facing).offset(facing.rotateY())).equals(BlockAlchemiter.getBlockState(EnumParts.CENTER_PAD, facing)) ||
+				!world.getBlockState(pos.offset(facing.rotateY(), 3)).equals(BlockAlchemiter.getBlockState(EnumParts.CORNER, facing)) ||
+				!world.getBlockState(pos.offset(facing).offset(facing.rotateY(), 3)).equals(BlockAlchemiter.getBlockState(EnumParts.SIDE_LEFT, facing.rotateYCCW())) ||
+				!world.getBlockState(pos.offset(facing, 2).offset(facing.rotateY(), 3)).equals(BlockAlchemiter.getBlockState(EnumParts.SIDE_RIGHT, facing.rotateYCCW())) ||
+				!world.getBlockState(pos.offset(facing).offset(facing.rotateY(), 2)).equals(BlockAlchemiter.getBlockState(EnumParts.CENTER_PAD, facing.rotateYCCW())) ||
+				!world.getBlockState(pos.offset(facing, 3).offset(facing.rotateY(), 3)).equals(BlockAlchemiter.getBlockState(EnumParts.CORNER, facing.rotateYCCW())) ||
+				!world.getBlockState(pos.offset(facing, 3).offset(facing.rotateY(), 2)).equals(BlockAlchemiter.getBlockState(EnumParts.SIDE_LEFT, facing.getOpposite())) ||
+				!world.getBlockState(pos.offset(facing, 3).offset(facing.rotateY(), 1)).equals(BlockAlchemiter.getBlockState(EnumParts.SIDE_RIGHT, facing.getOpposite())) ||
+				!world.getBlockState(pos.offset(facing, 2).offset(facing.rotateY(), 2)).equals(BlockAlchemiter.getBlockState(EnumParts.CENTER_PAD, facing.getOpposite())) ||
+				!world.getBlockState(pos.offset(facing, 3)).equals(BlockAlchemiter.getBlockState(EnumParts.CORNER, facing.getOpposite())) ||
+				!world.getBlockState(pos.offset(facing, 2)).equals(BlockAlchemiter.getBlockState(EnumParts.SIDE_LEFT, facing.rotateY())) ||
+				!world.getBlockState(pos.offset(facing)).equals(BlockAlchemiter.getBlockState(EnumParts.SIDE_RIGHT, facing.rotateY())) ||
+				!world.getBlockState(pos.offset(facing, 2).offset(facing.rotateY(), 1)).equals(BlockAlchemiter.getBlockState(EnumParts.CENTER_PAD, facing.rotateY())))
+		{
+			breakMachine();
+			Debug.warnf("Failed to notice a block being broken or misplaced at the alchemiter at %s", getPos());
 			return false;
 		}
 		
@@ -129,6 +131,8 @@ public class TileEntityAlchemiter extends TileEntity
 			this.selectedGrist = GristType.Build;
 		}
 		
+		broken = tagCompound.getBoolean("broken");
+		
 		if(tagCompound.hasKey("dowel")) 
 			setDowel(new ItemStack(tagCompound.getCompoundTag("dowel")));
 	}
@@ -140,6 +144,8 @@ public class TileEntityAlchemiter extends TileEntity
 		
 		tagCompound.setString("gristType", selectedGrist.getRegistryName().toString());
 		
+		tagCompound.setBoolean("broken", isBroken());
+		
 		if(dowel!= null)
 			tagCompound.setTag("dowel", dowel.writeToNBT(new NBTTagCompound()));
 		
@@ -149,11 +155,7 @@ public class TileEntityAlchemiter extends TileEntity
 	@Override
 	public NBTTagCompound getUpdateTag()
 	{
-		NBTTagCompound nbt;
-		nbt = super.getUpdateTag();
-		nbt.setBoolean("broken", isBroken());
-		nbt.setTag("dowel", dowel.writeToNBT(new NBTTagCompound()));
-		return nbt;
+		return writeToNBT(new NBTTagCompound());
 	}
 	
 	@Override

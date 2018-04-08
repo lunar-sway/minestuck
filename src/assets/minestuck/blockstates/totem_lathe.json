@@ -1,44 +1,44 @@
 {
     "variants": {
-        "facing=south,hascard=false,part=bottom_left":   	{ "model": "minestuck:totemlathe_bottom_left", "y":270},
-        "facing=south,hascard=false,part=bottom_midleft":  { "model": "minestuck:totemlathe_bottom_midleft", "y":270 },
-        "facing=south,hascard=false,part=bottom_midright": { "model": "minestuck:totemlathe_bottom_midright", "y":270 },
-        "facing=south,hascard=false,part=bottom_right":	{ "model": "minestuck:totemlathe_bottom_right", "y":270 },
+        "facing=south,has_card=false,part=bottom_left":   	{ "model": "minestuck:totemlathe_bottom_left", "y":270},
+        "facing=south,has_card=false,part=bottom_midleft":  { "model": "minestuck:totemlathe_bottom_midleft", "y":270 },
+        "facing=south,has_card=false,part=bottom_midright": { "model": "minestuck:totemlathe_bottom_midright", "y":270 },
+        "facing=south,has_card=false,part=bottom_right":	{ "model": "minestuck:totemlathe_bottom_right", "y":270 },
         
-         "facing=west,hascard=false,part=bottom_left":   	{ "model": "minestuck:totemlathe_bottom_left", "y":0 },
-        "facing=west,hascard=false,part=bottom_midleft":  { "model": "minestuck:totemlathe_bottom_midleft","y":0 },
-        "facing=west,hascard=false,part=bottom_midright": { "model": "minestuck:totemlathe_bottom_midright", "y":0},
-        "facing=west,hascard=false,part=bottom_right":	{ "model": "minestuck:totemlathe_bottom_right","y":0 },
+         "facing=west,has_card=false,part=bottom_left":   	{ "model": "minestuck:totemlathe_bottom_left", "y":0 },
+        "facing=west,has_card=false,part=bottom_midleft":  { "model": "minestuck:totemlathe_bottom_midleft","y":0 },
+        "facing=west,has_card=false,part=bottom_midright": { "model": "minestuck:totemlathe_bottom_midright", "y":0},
+        "facing=west,has_card=false,part=bottom_right":	{ "model": "minestuck:totemlathe_bottom_right","y":0 },
 
-        "facing=north,hascard=false,part=bottom_left":   	{ "model": "minestuck:totemlathe_bottom_left","y":90 },
-        "facing=north,hascard=false,part=bottom_midleft":  { "model": "minestuck:totemlathe_bottom_midleft","y":90 },
-        "facing=north,hascard=false,part=bottom_midright": { "model": "minestuck:totemlathe_bottom_midright" ,"y":90},
-        "facing=north,hascard=false,part=bottom_right":	{ "model": "minestuck:totemlathe_bottom_right" ,"y":90},
+        "facing=north,has_card=false,part=bottom_left":   	{ "model": "minestuck:totemlathe_bottom_left","y":90 },
+        "facing=north,has_card=false,part=bottom_midleft":  { "model": "minestuck:totemlathe_bottom_midleft","y":90 },
+        "facing=north,has_card=false,part=bottom_midright": { "model": "minestuck:totemlathe_bottom_midright" ,"y":90},
+        "facing=north,has_card=false,part=bottom_right":	{ "model": "minestuck:totemlathe_bottom_right" ,"y":90},
         
-        "facing=east,hascard=false,part=bottom_left":   	{ "model": "minestuck:totemlathe_bottom_left" ,"y":180},
-        "facing=east,hascard=false,part=bottom_midleft":  { "model": "minestuck:totemlathe_bottom_midleft","y":180 },
-        "facing=east,hascard=false,part=bottom_midright": { "model": "minestuck:totemlathe_bottom_midright" ,"y":180},
-        "facing=east,hascard=false,part=bottom_right":	{ "model": "minestuck:totemlathe_bottom_right" ,"y":180},  
+        "facing=east,has_card=false,part=bottom_left":   	{ "model": "minestuck:totemlathe_bottom_left" ,"y":180},
+        "facing=east,has_card=false,part=bottom_midleft":  { "model": "minestuck:totemlathe_bottom_midleft","y":180 },
+        "facing=east,has_card=false,part=bottom_midright": { "model": "minestuck:totemlathe_bottom_midright" ,"y":180},
+        "facing=east,has_card=false,part=bottom_right":	{ "model": "minestuck:totemlathe_bottom_right" ,"y":180},  
         
         
-		"facing=south,hascard=true,part=bottom_left":   	{ "model": "minestuck:totemlathe_bottom_left_c", "y":270},
-        "facing=south,hascard=true,part=bottom_midleft":  { "model": "minestuck:totemlathe_bottom_midleft", "y":270 },
-        "facing=south,hascard=true,part=bottom_midright": { "model": "minestuck:totemlathe_bottom_midright", "y":270 },
-        "facing=south,hascard=true,part=bottom_right":	{ "model": "minestuck:totemlathe_bottom_right", "y":270 },
+		"facing=south,has_card=true,part=bottom_left":   	{ "model": "minestuck:totemlathe_bottom_left_c", "y":270},
+        "facing=south,has_card=true,part=bottom_midleft":  { "model": "minestuck:totemlathe_bottom_midleft", "y":270 },
+        "facing=south,has_card=true,part=bottom_midright": { "model": "minestuck:totemlathe_bottom_midright", "y":270 },
+        "facing=south,has_card=true,part=bottom_right":	{ "model": "minestuck:totemlathe_bottom_right", "y":270 },
         
-         "facing=west,hascard=true,part=bottom_left":   	{ "model": "minestuck:totemlathe_bottom_left_c", "y":0 },
-        "facing=west,hascard=true,part=bottom_midleft":  { "model": "minestuck:totemlathe_bottom_midleft","y":0 },
-        "facing=west,hascard=true,part=bottom_midright": { "model": "minestuck:totemlathe_bottom_midright", "y":0},
-        "facing=west,hascard=true,part=bottom_right":	{ "model": "minestuck:totemlathe_bottom_right","y":0 },
+         "facing=west,has_card=true,part=bottom_left":   	{ "model": "minestuck:totemlathe_bottom_left_c", "y":0 },
+        "facing=west,has_card=true,part=bottom_midleft":  { "model": "minestuck:totemlathe_bottom_midleft","y":0 },
+        "facing=west,has_card=true,part=bottom_midright": { "model": "minestuck:totemlathe_bottom_midright", "y":0},
+        "facing=west,has_card=true,part=bottom_right":	{ "model": "minestuck:totemlathe_bottom_right","y":0 },
 
-        "facing=north,hascard=true,part=bottom_left":   	{ "model": "minestuck:totemlathe_bottom_left_c","y":90 },
-        "facing=north,hascard=true,part=bottom_midleft":  { "model": "minestuck:totemlathe_bottom_midleft","y":90 },
-        "facing=north,hascard=true,part=bottom_midright": { "model": "minestuck:totemlathe_bottom_midright" ,"y":90},
-        "facing=north,hascard=true,part=bottom_right":	{ "model": "minestuck:totemlathe_bottom_right" ,"y":90},
+        "facing=north,has_card=true,part=bottom_left":   	{ "model": "minestuck:totemlathe_bottom_left_c","y":90 },
+        "facing=north,has_card=true,part=bottom_midleft":  { "model": "minestuck:totemlathe_bottom_midleft","y":90 },
+        "facing=north,has_card=true,part=bottom_midright": { "model": "minestuck:totemlathe_bottom_midright" ,"y":90},
+        "facing=north,has_card=true,part=bottom_right":	{ "model": "minestuck:totemlathe_bottom_right" ,"y":90},
         
-        "facing=east,hascard=true,part=bottom_left":   	{ "model": "minestuck:totemlathe_bottom_left_c" ,"y":180},
-        "facing=east,hascard=true,part=bottom_midleft":  { "model": "minestuck:totemlathe_bottom_midleft","y":180 },
-        "facing=east,hascard=true,part=bottom_midright": { "model": "minestuck:totemlathe_bottom_midright" ,"y":180},
-        "facing=east,hascard=true,part=bottom_right":	{ "model": "minestuck:totemlathe_bottom_right" ,"y":180}      
+        "facing=east,has_card=true,part=bottom_left":   	{ "model": "minestuck:totemlathe_bottom_left_c" ,"y":180},
+        "facing=east,has_card=true,part=bottom_midleft":  { "model": "minestuck:totemlathe_bottom_midleft","y":180 },
+        "facing=east,has_card=true,part=bottom_midright": { "model": "minestuck:totemlathe_bottom_midright" ,"y":180},
+        "facing=east,has_card=true,part=bottom_right":	{ "model": "minestuck:totemlathe_bottom_right" ,"y":180}      
     }
 }
