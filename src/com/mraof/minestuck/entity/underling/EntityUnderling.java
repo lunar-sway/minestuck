@@ -47,8 +47,6 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	protected EntityListFilter attackEntitySelector;
 	//The type of the underling
 	protected GristType type;
-	//Name of underling, used in getting the texture and actually naming it
-	public String underlingName;
 	public boolean fromSpawner;
 	public boolean dropCandy;
 	
@@ -59,11 +57,10 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	//random used in randomly choosing a type of creature
 	protected static Random randStatic = new Random();
 	
-	public EntityUnderling(World par1World, String underlingName) 
+	public EntityUnderling(World par1World)
 	{
 		super(par1World);
 		
-		this.underlingName = underlingName;
 		enemyClasses = new ArrayList<Class<? extends EntityLivingBase>>();
 		setEnemies();
 
@@ -115,6 +112,8 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	protected abstract double getAttackDamage();
 	
 	protected abstract int getVitalityGel();
+	
+	protected abstract String getUnderlingName();
 	
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn)
@@ -169,16 +168,16 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	public String getTexture() 
 	{
 		if(type == null)
-			return "textures/mobs/underlings/" + GristType.Shale.getName() + '_' + underlingName + ".png";
-		return "textures/mobs/underlings/" + type.getName() + '_' + underlingName + ".png";
+			return "textures/mobs/underlings/" + GristType.Shale.getName() + '_' + getUnderlingName() + ".png";
+		return "textures/mobs/underlings/" + type.getName() + '_' + getUnderlingName() + ".png";
 	}
 	
 	@Override
 	public String getName() 
 	{
 		if(type != null)
-			return I18n.translateToLocalFormatted("entity.minestuck." + underlingName + ".type", type.getDisplayName());
-		else return I18n.translateToFallback("entity.minestuck." + underlingName + ".name");
+			return I18n.translateToLocalFormatted("entity.minestuck." + getUnderlingName() + ".type", type.getDisplayName());
+		else return I18n.translateToFallback("entity.minestuck." + getUnderlingName() + ".name");
 	}
 	
 	@Override
@@ -213,7 +212,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	public void writeEntityToNBT(NBTTagCompound tagCompound) 
 	{
 		super.writeEntityToNBT(tagCompound);
-		tagCompound.setString("type", this.type.getName());
+		tagCompound.setString("type", type.getRegistryName().toString());
 		tagCompound.setBoolean("spawned", fromSpawner);
 		if(hasHome())
 		{

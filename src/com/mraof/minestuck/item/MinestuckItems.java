@@ -10,6 +10,7 @@ import com.mraof.minestuck.item.block.ItemBlockCraftingTab;
 import com.mraof.minestuck.item.block.ItemBlockLayered;
 import com.mraof.minestuck.item.block.ItemSburbMachine;
 import com.mraof.minestuck.item.weapon.*;
+import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MinestuckSoundHandler;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityHanging;
@@ -250,6 +251,7 @@ public class MinestuckItems
 		registry.register(telescopicSassacrusher);
 		registry.register(regiHammer);
 		registry.register(fearNoAnvil);
+		Debug.info(Item.REGISTRY.getNameForObject(fearNoAnvil));
 		registry.register(zillyhooHammer);
 		registry.register(popamaticVrillyhoo);
 		registry.register(scarletZillyhoo);
