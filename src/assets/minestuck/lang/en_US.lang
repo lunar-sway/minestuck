@@ -56,7 +56,7 @@ commands.sburbServer.usage=/sburbServer <client player> <server player>
 commands.sburbServer.success=Successfully set %s's server player as %s.
 commands.setRung.usage=/setRung <target player> <target rung> [progress]
 commands.setRung.success=Successfully changed %s's rung to %d with %d%% progress.
-commands.porkhollow.usage/porkhollow <send|take> [target player] <amount>
+commands.porkhollow.usage=/porkhollow <send|take> [target player] <amount>
 commands.porkhollow.sendSuccess=Successfully sent %s boondollars to %s.
 commands.porkhollow.takeSuccess=Successfully took out %s boondollars from your porkhollow.
 commands.porkhollow.notEnough=You don't have enough boondollars.
@@ -215,7 +215,7 @@ consort.camel.dancingCamel=Are you sure? Too bad! The camel knew how to dance, t
 consort.knockoff=I kind of feel like we're a stale, knockoff sand land.
 consort.sandless.1=According to legend, %s ate all the sand here leaving nothing but sandstone!
 consort.sandless.2=I'm kidding, I made that up on the spot. I had no other dialogue.
-consort.redBetter=Red is muck better than yellow, don't you think?
+consort.redBetter=Red is much better than yellow, don't you think?
 consort.yellowBetter=In our village, we have tales of monsters that are atttracted to red. That's why everything is yellow!
 
 consort.frozen1=My neighbors were complaining the other night about the snow.
@@ -721,7 +721,7 @@ item.upStick.tooltip=Never runs out of uranium!
 item.woodenSpoon.name=Wooden Spoon
 item.woodenSpoon.tooltip=Like the kind you would eat your soup with
 item.silverSpoon.name=Silver Spoon
-item.silverSpoon.name=Could be the first silver object you've seen so far
+item.silverSpoon.tooltip=Could be the first silver object you've seen so far
 item.crockerSpoon.name=Junior Battlemaster's Bowlbuster Stirring Solution 50000
 item.crockerSpoon.tooltip=Whip your foes into shape and bake a cake all at the same time!
 item.crockerFork.name=Junior Battlemaster's Bowlbuster Poking Solution 50000
