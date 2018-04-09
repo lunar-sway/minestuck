@@ -290,7 +290,7 @@ public class MinestuckModelManager
 	
 	private static void register(Item item)
 	{
-		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(Item.REGISTRY.getNameForObject(item), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 	}
 	
 	private static void register(Item item, int meta, String modelResource)
