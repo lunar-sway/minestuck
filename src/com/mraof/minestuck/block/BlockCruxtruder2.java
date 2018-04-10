@@ -31,16 +31,8 @@ public class BlockCruxtruder2 extends BlockCruxtruder {
         return new BlockStateContainer(this, new IProperty[] {PART,HASLID,DOWELOUT});
     }
 	
-	public static void updateItem(boolean b, World world, BlockPos pos)
-	{
-		IBlockState oldState = world.getBlockState(pos);
-
-		if (oldState.getBlock()==MinestuckBlocks.cruxtruder2)
-			world.notifyBlockUpdate(pos, oldState, oldState.withProperty(DOWELOUT, b), 3);
-	}
-
 	//Block state handling
-	public static enum EnumParts implements IStringSerializable
+	public enum EnumParts implements IStringSerializable
 	{
 		ONE_ONE_ONE(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D)),
 		ONE_TWO_ONE(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D)),

@@ -18,13 +18,13 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockCruxtruder extends BlockLargeMachine{
-
-	public static final PropertyEnum<EnumParts> PART = PropertyEnum.<EnumParts>create("part",EnumParts.class);
-
-	public BlockCruxtruder() {
+public class BlockCruxtruder extends BlockLargeMachine
+{
+	public static final PropertyEnum<EnumParts> PART = PropertyEnum.create("part", EnumParts.class);
+	
+	public BlockCruxtruder()
+	{
 		setUnlocalizedName("cruxtruder");
-		setDefaultState(blockState.getBaseState());
 		
 	} 
 	//not sure how to do this.
@@ -44,15 +44,19 @@ public class BlockCruxtruder extends BlockLargeMachine{
 
 
 	@Override
-	public boolean onBlockActivated(World worldIn,BlockPos pos,IBlockState state,EntityPlayer playerIn,EnumHand hand,EnumFacing facing,float hitX,float hitY,float hitZ){
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+	{
+		if(worldIn.isRemote)
+			return true;
 		BlockPos mainPos = getMainPos(state, pos);
 		TileEntity te = worldIn.getTileEntity(mainPos);
-		if( te != null && te instanceof TileEntityCruxtruder)
+		if(te instanceof TileEntityCruxtruder)
 			((TileEntityCruxtruder) te).onRightClick(playerIn, state);
 		return true;
 	}
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
+	public TileEntity createNewTileEntity(World worldIn, int meta)
+	{
 		return null;
 	}
 	
