@@ -51,6 +51,7 @@ public class MinestuckBlocks
 	public static Block coldCake = new BlockSimpleCake(2, 0.3F, (EntityPlayer player) -> player.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 200, 1))).setRegistryName("cold_cake").setUnlocalizedName("coldCake");
 	public static Block redCake = new BlockSimpleCake(2, 0.1F, (EntityPlayer player) -> player.heal(1)).setRegistryName("red_cake").setUnlocalizedName("redCake");
 	public static Block hotCake = new BlockSimpleCake(2, 0.1F, (EntityPlayer player) -> player.setFire(4)).setRegistryName("hot_cake").setUnlocalizedName("hotCake");
+	public static Block reverseCake = new BlockSimpleCake(2, 0.1F, null).setRegistryName("reverse_cake").setUnlocalizedName("cake");
 	
 	//Ores
 	public static Block oreCruxite = (BlockCruxiteOre) new BlockCruxiteOre().setRegistryName("ore_cruxite");
@@ -98,7 +99,7 @@ public class MinestuckBlocks
 				sburbMachine, crockerMachine, transportalizer, uraniumCooker,
 				blockComputerOff, blockComputerOn,
 				blockGoldSeeds, glowystoneWire,
-				appleCake, blueCake, coldCake, redCake, hotCake,
+				appleCake, blueCake, coldCake, redCake, hotCake, reverseCake,
 				primedTnt, unstableTnt, instantTnt, woodenExplosiveButton, stoneExplosiveButton,
 				blockOil, blockBlood, blockBrainJuice,
 				rabbitSpawner};

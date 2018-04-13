@@ -682,6 +682,7 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(coldCake), new GristSet(new GristType[] {GristType.Cobalt, GristType.Marble}, new int[] {15, 12}));
 		GristRegistry.addGristConversion(new ItemStack(redCake), new GristSet(new GristType[] {GristType.Rust, GristType.Chalk, GristType.Iodine, GristType.Garnet}, new int[] {20, 9, 6, 1}));
 		GristRegistry.addGristConversion(new ItemStack(hotCake), new GristSet(new GristType[] {GristType.Sulfur, GristType.Iodine}, new int[] {17, 10}));
+		GristRegistry.addGristConversion(new ItemStack(reverseCake), new GristSet(new GristType[] {GristType.Amber, GristType.Chalk, GristType.Iodine}, new int[] {10, 24, 11}));
 		
 		//add Designix and Lathe combinations
 		
@@ -858,6 +859,8 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Items.CAKE), new ItemStack(Items.LAVA_BUCKET), MODE_OR, new ItemStack(hotCake));
 		CombinationRegistry.addCombination(new ItemStack(Items.CAKE), new ItemStack(Items.BLAZE_POWDER), MODE_OR, new ItemStack(hotCake));
 		CombinationRegistry.addCombination(new ItemStack(Items.CAKE), new ItemStack(Blocks.MAGMA), MODE_OR, new ItemStack(hotCake));
+		CombinationRegistry.addCombination(new ItemStack(Items.CAKE), new ItemStack(Blocks.GLASS), MODE_OR, new ItemStack(reverseCake));
+		CombinationRegistry.addCombination(new ItemStack(Items.CAKE), new ItemStack(Blocks.GLASS_PANE), MODE_OR, new ItemStack(reverseCake));
 		
 		//Uranium-based non-weapon and uranium cooker recipes
 		CombinationRegistry.addCombination(new ItemStack(rawCruxite), new ItemStack(rawUranium), MODE_AND, new ItemStack(energyCore));
