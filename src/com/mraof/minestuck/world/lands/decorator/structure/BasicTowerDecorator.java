@@ -2,6 +2,8 @@ package com.mraof.minestuck.world.lands.decorator.structure;
 
 import java.util.Random;
 
+import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.world.lands.structure.blocks.StructureBlockUtil;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -175,13 +177,34 @@ public class BasicTowerDecorator extends SimpleStructureDecorator
 			}
 		}
 		
+		EnumFacing facing;
+		BlockPos chestPos;
 		if(offset.getZ() == -1 && offset.getX() != 1)
+		{
 			offset = offset.north(2);
-		else if(offset.getX() == -1)
+			chestPos = new BlockPos(xCoord, yCoord + height + 2, zCoord + 3);
+			facing = EnumFacing.NORTH;
+		} else if(offset.getX() == -1)
+		{
 			offset = offset.west(2).north();
-		else if(offset.getZ() == 1)
+			chestPos = new BlockPos(xCoord + 3, yCoord + height + 2, zCoord);
+			facing = EnumFacing.WEST;
+		} else if(offset.getZ() == 1)
+		{
 			offset = offset.south().west();
-		else offset = offset.east();
+			chestPos = new BlockPos(xCoord, yCoord + height + 2, zCoord - 3);
+			facing = EnumFacing.SOUTH;
+		} else
+		{
+			offset = offset.east();
+			chestPos = new BlockPos(xCoord - 3, yCoord + height + 2, zCoord);
+			facing = EnumFacing.EAST;
+		}
+		
+		if(random.nextInt(50) == 0)
+		{
+			StructureBlockUtil.placeLootChest(chestPos, world, null, facing, AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, random);
+		}
 		
 		return new BlockPos(xCoord + offset.getX(), yCoord + height + 2, zCoord + offset.getZ());
 	}

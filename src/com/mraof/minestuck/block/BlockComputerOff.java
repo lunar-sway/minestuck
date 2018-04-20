@@ -8,6 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -160,6 +161,12 @@ public class BlockComputerOff extends Block
 		AxisAlignedBB bb = COMPUTER_SCREEN_AABB[rotation.getHorizontalIndex()].offset(pos);
 		if(entityBox.intersects(bb))
 			collidingBoxes.add(bb);
+	}
+	
+	@Override
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face)
+	{
+		return BlockFaceShape.UNDEFINED;
 	}
 	
 	@Override
