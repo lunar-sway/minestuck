@@ -79,7 +79,7 @@ public class ClientProxy extends CommonProxy
 				else return -1;
 			}
 		}, MinestuckItems.cruxiteDowel, MinestuckItems.cruxiteApple, MinestuckItems.cruxitePotion);
-		mc.getBlockColors().registerBlockColorHandler(new BlockColorCruxite(), MinestuckBlocks.alchemiter[0]);
+		mc.getBlockColors().registerBlockColorHandler(new BlockColorCruxite(), MinestuckBlocks.alchemiter[0], MinestuckBlocks.cruxtruder2, MinestuckBlocks.totemlathe2);
 	}
 	
 	@Override

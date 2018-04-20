@@ -1,7 +1,6 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.block.BlockCruxtruder2;
-import com.mraof.minestuck.block.BlockPunchDesignix;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
 
@@ -10,57 +9,74 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import scala.util.Random;
 
 public class TileEntityCruxtruder extends TileEntity
 {
 	private int color = -1;
-	private boolean destroyed=false;
-	private boolean dowelOut=false;
+	private boolean broken = false;
+	private boolean dowelOut = false;
 	
-	
-	public int getColor(){
+	public int getColor()
+	{
 		return color;
 	}
-	public boolean IsDowelOut() {
+	
+	public boolean IsDowelOut()
+	{
 		return dowelOut;
 	}
-	public void setColor(int Color){
+	
+	public void setColor(int Color)
+	{
 		color = Color;
 	}
-	public void setDowelOut(boolean state){
-		dowelOut=state;
-		resendState();
+	
+	public void setDowelOut(boolean isOut)
+	{
+		dowelOut = isOut;
+		if(world != null)
+		{
+			IBlockState state = world.getBlockState(pos);
+			world.notifyBlockUpdate(pos, state, state, 2);
+		}
 	}
-	public boolean isDestroyed(){
-		return destroyed;
+	
+	public boolean isBroken()
+	{
+		return broken;
 	}
-	public void destroy(){
-		destroyed=true;
+	public void destroy()
+	{
+		broken = true;
 	}
 
-	public void onRightClick(EntityPlayer player, IBlockState clickedState) {
-		if(!isDestroyed()) {
-			if(clickedState.getBlock()==MinestuckBlocks.cruxtruder2
-					&& clickedState.getValue(BlockCruxtruder2.PART)== BlockCruxtruder2.EnumParts.ONE_THREE_ONE
-					&& clickedState.getValue(BlockCruxtruder2.HASLID)==false)
+	public void onRightClick(EntityPlayer player, IBlockState clickedState)
+	{
+		if(!isBroken())
+		{
+			if(clickedState.getBlock() == MinestuckBlocks.cruxtruder2
+					&& clickedState.getValue(BlockCruxtruder2.PART) == BlockCruxtruder2.EnumParts.ONE_THREE_ONE
+					&& !clickedState.getValue(BlockCruxtruder2.HASLID))
 			{
-				if(dowelOut) {
-					if(!world.isRemote) {
-						ItemStack dowel=new ItemStack(MinestuckItems.cruxiteDowel, 1, color + 1);
-						EntityItem dowelEntity =new EntityItem(world, pos.getX(), pos.up().getY(), pos.getZ(), dowel);
+				if(dowelOut)
+				{
+					if(!world.isRemote)
+					{
+						ItemStack dowel = new ItemStack(MinestuckItems.cruxiteDowel, 1, color + 1);
+						EntityItem dowelEntity = new EntityItem(world, pos.getX(), pos.up().getY(), pos.getZ(), dowel);
 						world.spawnEntity(dowelEntity);
 					}
 					setDowelOut(false);
-				}else {
+				} else
+				{
 					setDowelOut(true);
 				}
 			}
 		}
 	}
-
 	
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound)
@@ -68,11 +84,11 @@ public class TileEntityCruxtruder extends TileEntity
 		super.readFromNBT(tagCompound);
 		
 		if(tagCompound.hasKey("color"))
-			this.color = tagCompound.getInteger("color");
-		if(tagCompound.hasKey("destroyed")) 
-			this.destroyed=tagCompound.getBoolean("destroyed");
-		if(tagCompound.hasKey("dowelOut"))
-			this.dowelOut=tagCompound.getBoolean("dowelout");
+			color = tagCompound.getInteger("color");
+		if(tagCompound.hasKey("broken"))
+			broken = tagCompound.getBoolean("broken");
+		if(tagCompound.hasKey("dowel"))
+			setDowelOut(tagCompound.getBoolean("dowel"));
 	}
 	
 	@Override
@@ -80,35 +96,25 @@ public class TileEntityCruxtruder extends TileEntity
 	{
 		super.writeToNBT(tagCompound);
 		tagCompound.setInteger("color", color);
-		tagCompound.setBoolean("destroyed", destroyed);
-		tagCompound.setBoolean("dowelOut", dowelOut);
+		tagCompound.setBoolean("broken", broken);
+		tagCompound.setBoolean("dowel", dowelOut);
 		return tagCompound;
 	}
+	
 	@Override
-	public NBTTagCompound getUpdateTag(){
-		NBTTagCompound nbt;
-		nbt = super.getUpdateTag();
-		nbt.setBoolean("destroyed", destroyed);
-		return nbt;
+	public NBTTagCompound getUpdateTag()
+	{
+		return writeToNBT(new NBTTagCompound());
 	}
 	@Override
-	public SPacketUpdateTileEntity getUpdatePacket() {
-		SPacketUpdateTileEntity packet;
-		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setBoolean("destroyed",destroyed);
-		//dowel.writeToNBT(nbt);
-		packet = new SPacketUpdateTileEntity(this.pos, 0, nbt);				
-		return packet;
+	public SPacketUpdateTileEntity getUpdatePacket()
+	{
+		return new SPacketUpdateTileEntity(this.pos, 0, getUpdateTag());
 	}
 	
-	public void resendState()
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
 	{
-		if(!dowelOut)
-		{
-			BlockCruxtruder2.updateItem(false, world, this.getPos());
-		} else
-		{
-			BlockCruxtruder2.updateItem(true, world, this.getPos());
-		}
+		handleUpdateTag(pkt.getNbtCompound());
 	}
 }

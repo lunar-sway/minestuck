@@ -34,18 +34,22 @@ public class TileEntityTotemlathe extends TileEntity
 	public TileEntityTotemlathe() {}
 	//data checking
 
-	public void setCard1(ItemStack stack) {
-		if (stack.getItem()==MinestuckItems.captchaCard||stack==ItemStack.EMPTY) {
-			card1=stack;		
-			resendState();
+	public void setCard1(ItemStack stack)
+	{
+		if(stack.getItem() == MinestuckItems.captchaCard || stack == ItemStack.EMPTY)
+		{
+			card1 = stack;
+			if(world != null)
+				resendState();
 		}
 	}
 	public ItemStack getCard1() {
 		return card1;
 	}
-	public void setCard2(ItemStack stack) {
-		if (stack.getItem()==MinestuckItems.captchaCard||stack==ItemStack.EMPTY) 
-			card2=stack;
+	public void setCard2(ItemStack stack)
+	{
+		if(stack.getItem() == MinestuckItems.captchaCard || stack == ItemStack.EMPTY)
+			card2 = stack;
 	}
 	public ItemStack getCard2() {
 		return card2;

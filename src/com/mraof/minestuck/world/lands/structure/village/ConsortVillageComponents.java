@@ -248,17 +248,24 @@ public class ConsortVillageComponents
 	public static abstract class ConsortVillagePiece extends StructureComponentUtil
 	{
 		protected int averageGroundLvl = -1;
+		protected boolean[] spawns = new boolean[0];
 		
 		@Override
 		protected void writeStructureToNBT(NBTTagCompound tagCompound)
 		{
 			tagCompound.setInteger("HPos", this.averageGroundLvl);
+			
+			for(int i = 0; i < spawns.length; i++)
+				tagCompound.setBoolean("spawn"+i, spawns[i]);
 		}
 		
 		@Override
 		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_)
 		{
 			this.averageGroundLvl = tagCompound.getInteger("HPos");
+			
+			for(int i = 0; i < spawns.length; i++)
+				spawns[i] = tagCompound.getBoolean("spawn"+i);
 		}
 		
 		protected StructureComponent getNextComponentNN(ConsortVillageCenter.VillageCenter start, List<StructureComponent> structureComponents, Random rand, int offsetY, int offsetXZ)
@@ -377,17 +384,17 @@ public class ConsortVillageComponents
 			}
 		}
 		
-		protected void spawnConsort(int x, int y, int z, StructureBoundingBox boundingBox, World world)
+		protected boolean spawnConsort(int x, int y, int z, StructureBoundingBox boundingBox, World world)
 		{
-			spawnConsort(x, y, z, boundingBox, world, EnumConsort.MerchantType.NONE, 48);
+			return spawnConsort(x, y, z, boundingBox, world, EnumConsort.MerchantType.NONE, 48);
 		}
 		
-		protected void spawnConsort(int x, int y, int z, StructureBoundingBox boundingBox, World world, int maxHomeDistance)
+		protected boolean spawnConsort(int x, int y, int z, StructureBoundingBox boundingBox, World world, int maxHomeDistance)
 		{
-			spawnConsort(x, y, z, boundingBox, world, EnumConsort.MerchantType.NONE, maxHomeDistance);
+			return spawnConsort(x, y, z, boundingBox, world, EnumConsort.MerchantType.NONE, maxHomeDistance);
 		}
 		
-		protected void spawnConsort(int x, int y, int z, StructureBoundingBox boundingBox, World world, EnumConsort.MerchantType type, int maxHomeDistance)
+		protected boolean spawnConsort(int x, int y, int z, StructureBoundingBox boundingBox, World world, EnumConsort.MerchantType type, int maxHomeDistance)
 		{
 			BlockPos pos = new BlockPos(this.getXWithOffset(x, z), this.getYWithOffset(y), this.getZWithOffset(x, z));
 			
@@ -397,7 +404,7 @@ public class ConsortVillageComponents
 				if(aspects == null)
 				{
 					Debug.warn("Tried to spawn a consort in a building that is being generated outside of a land dimension.");
-					return;
+					return false;
 				}
 				
 				Class<? extends EntityConsort> c = aspects.aspectTerrain.getConsortType().getConsortClass();
@@ -413,11 +420,13 @@ public class ConsortVillageComponents
 					consort.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(consort)), null);
 					
 					world.spawnEntity(consort);
+					return true;
 				} catch(Exception e)
 				{
 					e.printStackTrace();
 				}
 			}
+			return false;
 		}
 	}
 	
@@ -427,11 +436,12 @@ public class ConsortVillageComponents
 	{
 		public PipeHouse1()
 		{
-		
+			spawns = new boolean[2];
 		}
 		
 		public PipeHouse1(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
 		{
+			this();
 			this.setCoordBaseMode(facing);
 			this.boundingBox = boundingBox;
 		}
@@ -479,10 +489,12 @@ public class ConsortVillageComponents
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 5,3,2,5,5, 5, wallBlock, wallBlock, false);
 			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 3, 1, 1, EnumFacing.SOUTH, (BlockDoor) doorBlock.getBlock());
 			
-			this.setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.EAST), 1, 3, 4, structureBoundingBoxIn);
+			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.EAST), 1, 3, 4, structureBoundingBoxIn);
 			
-			this.spawnConsort(2, 1, 3, structureBoundingBoxIn, worldIn);
-			this.spawnConsort(3, 1, 4,structureBoundingBoxIn, worldIn);
+			if(!spawns[0])
+				spawns[0] = spawnConsort(2, 1, 3, structureBoundingBoxIn, worldIn);
+			if(!spawns[1])
+				spawns[1] = spawnConsort(3, 1, 4,structureBoundingBoxIn, worldIn);
 			return true;
 		}
 	}
@@ -491,11 +503,12 @@ public class ConsortVillageComponents
 	{
 		public HighPipeHouse1()
 		{
-		
+			spawns = new boolean[3];
 		}
 		
 		public HighPipeHouse1(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
 		{
+			this();
 			this.setCoordBaseMode(facing);
 			this.boundingBox = boundingBox;
 		}
@@ -576,10 +589,13 @@ public class ConsortVillageComponents
 			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 3, 1, 1, EnumFacing.SOUTH, (BlockDoor) doorBlock.getBlock());
 			this.setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.NORTH), 3, 3, 6, structureBoundingBoxIn);
 			this.setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.SOUTH), 3, 7, 2, structureBoundingBoxIn);
-			
-			this.spawnConsort(2, 1, 4,structureBoundingBoxIn, worldIn);
-			this.spawnConsort(3, 1, 5,structureBoundingBoxIn, worldIn);
-			this.spawnConsort(4, 1, 4,structureBoundingBoxIn, worldIn);
+
+			if(!spawns[0])
+				spawns[0] = this.spawnConsort(2, 1, 4,structureBoundingBoxIn, worldIn);
+			if(!spawns[1])
+				spawns[1] = this.spawnConsort(3, 1, 5,structureBoundingBoxIn, worldIn);
+			if(!spawns[2])
+				spawns[2] = this.spawnConsort(4, 1, 4,structureBoundingBoxIn, worldIn);
 			
 			return true;
 		}
@@ -589,12 +605,13 @@ public class ConsortVillageComponents
 	{
 		public SmallTowerStore()
 		{
-		
+			spawns = new boolean[1];
 		}
 		
 		public SmallTowerStore(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
 		{
-			this.setCoordBaseMode(facing);
+			this();
+			setCoordBaseMode(facing);
 			this.boundingBox = boundingBox;
 		}
 		
@@ -682,7 +699,8 @@ public class ConsortVillageComponents
 			
 			generateDoor(worldIn, structureBoundingBoxIn, randomIn, 3, 1, 1, EnumFacing.SOUTH, (BlockDoor) doorBlock.getBlock());
 			
-			this.spawnConsort(3, 1, 5,structureBoundingBoxIn, worldIn, EnumConsort.getRandomMerchant(randomIn), 1);
+			if(!spawns[0])
+				spawns[0] = spawnConsort(3, 1, 5,structureBoundingBoxIn, worldIn, EnumConsort.getRandomMerchant(randomIn), 1);
 			
 			return true;
 		}
@@ -694,11 +712,12 @@ public class ConsortVillageComponents
 	{
 		public LoweredShellHouse1()
 		{
-		
+			spawns = new boolean[2];
 		}
 		
 		public LoweredShellHouse1(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
 		{
+			this();
 			this.setCoordBaseMode(facing);
 			this.boundingBox = boundingBox;
 		}
@@ -754,8 +773,10 @@ public class ConsortVillageComponents
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 6, 4, 4, 6, 5, lightBlock, lightBlock, false);
 			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 7, 4, 4, 7, 5, buildBlock, buildBlock, false);
 			
-			this.spawnConsort(2, 1, 5, structureBoundingBoxIn, worldIn);
-			this.spawnConsort(5, 1, 5, structureBoundingBoxIn, worldIn);
+			if(!spawns[0])
+				spawns[0] = spawnConsort(2, 1, 5, structureBoundingBoxIn, worldIn);
+			if(!spawns[1])
+				spawns[1] = spawnConsort(5, 1, 5, structureBoundingBoxIn, worldIn);
 			
 			return true;
 		}
@@ -765,12 +786,13 @@ public class ConsortVillageComponents
 	{
 		public TurtleMarketBuilding1()
 		{
-		
+			spawns = new boolean[2];
 		}
 		
 		public TurtleMarketBuilding1(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
 		{
-			this.setCoordBaseMode(facing);
+			this();
+			setCoordBaseMode(facing);
 			this.boundingBox = boundingBox;
 		}
 		
@@ -861,8 +883,10 @@ public class ConsortVillageComponents
 			this.setBlockState(worldIn, lightBlock, 2, 6, 16, structureBoundingBoxIn);
 			this.setBlockState(worldIn, lightBlock, 11, 6, 16, structureBoundingBoxIn);
 			
-			this.spawnConsort(4, 1, 15, structureBoundingBoxIn, worldIn, EnumConsort.getRandomMerchant(randomIn), 1);
-			this.spawnConsort(9, 1, 15, structureBoundingBoxIn, worldIn, EnumConsort.getRandomMerchant(randomIn), 1);
+			if(!spawns[0])
+				spawns[0] = spawnConsort(4, 1, 15, structureBoundingBoxIn, worldIn, EnumConsort.getRandomMerchant(randomIn), 1);
+			if(!spawns[1])
+				spawns[1] = spawnConsort(9, 1, 15, structureBoundingBoxIn, worldIn, EnumConsort.getRandomMerchant(randomIn), 1);
 			
 			return true;
 		}
@@ -872,11 +896,12 @@ public class ConsortVillageComponents
 	{
 		public TurtleTemple1()
 		{
-		
+			spawns = new boolean[3];
 		}
 		
 		public TurtleTemple1(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
 		{
+			this();
 			this.setCoordBaseMode(facing);
 			this.boundingBox = boundingBox;
 		}
@@ -976,9 +1001,12 @@ public class ConsortVillageComponents
 			setBlockState(worldIn, Blocks.STONE_BUTTON.getDefaultState(), 6, 1, 0, structureBoundingBoxIn);
 			setBlockState(worldIn, Blocks.STONE_BUTTON.getDefaultState().withRotation(Rotation.CLOCKWISE_180), 4, 1, 2, structureBoundingBoxIn);
 			
-			spawnConsort(4, 0, 10, structureBoundingBoxIn, worldIn);
-			spawnConsort(5, 0, 10, structureBoundingBoxIn, worldIn);
-			spawnConsort(6, 0, 10, structureBoundingBoxIn, worldIn);
+			if(!spawns[0])
+				spawns[0] = spawnConsort(4, 0, 10, structureBoundingBoxIn, worldIn);
+			if(!spawns[1])
+				spawns[1] = spawnConsort(5, 0, 10, structureBoundingBoxIn, worldIn);
+			if(!spawns[2])
+				spawns[2] = spawnConsort(6, 0, 10, structureBoundingBoxIn, worldIn);
 			
 			return true;
 		}
@@ -990,11 +1018,12 @@ public class ConsortVillageComponents
 	{
 		public HighNakHousing1()
 		{
-		
+			spawns = new boolean[3];
 		}
 		
 		public HighNakHousing1(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
 		{
+			this();
 			setCoordBaseMode(facing);
 			this.boundingBox = boundingBox;
 		}
@@ -1098,9 +1127,12 @@ public class ConsortVillageComponents
 			setBlockState(worldIn, torch, 4, 9, 5, structureBoundingBoxIn);
 			
 			//Consorts
-			spawnConsort(2, 1, 6, structureBoundingBoxIn, worldIn);
-			spawnConsort(3, 5, 3, structureBoundingBoxIn, worldIn);
-			spawnConsort(5, 9, 6, structureBoundingBoxIn, worldIn);
+			if(!spawns[0])
+				spawns[0] = spawnConsort(2, 1, 6, structureBoundingBoxIn, worldIn);
+			if(!spawns[1])
+				spawns[1] = spawnConsort(3, 5, 3, structureBoundingBoxIn, worldIn);
+			if(!spawns[2])
+				spawns[2] = spawnConsort(5, 9, 6, structureBoundingBoxIn, worldIn);
 			
 			return true;
 		}
@@ -1110,11 +1142,12 @@ public class ConsortVillageComponents
 	{
 		public HighNakMarket1()
 		{
-		
+			spawns = new boolean[3];
 		}
 		
 		public HighNakMarket1(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
 		{
+			this();
 			setCoordBaseMode(facing);
 			this.boundingBox = boundingBox;
 		}
@@ -1223,9 +1256,12 @@ public class ConsortVillageComponents
 			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.EAST), 3, 10, 3, structureBoundingBoxIn);
 			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.WEST), 8, 10, 3, structureBoundingBoxIn);
 			
-			spawnConsort(5, 1, 5, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD, 1);
-			spawnConsort(6, 5, 5, structureBoundingBoxIn, worldIn, EnumConsort.getRandomMerchant(randomIn), 1);
-			spawnConsort(5, 9, 5, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.GENERAL, 1);
+			if(!spawns[0])
+				spawns[0] = spawnConsort(5, 1, 5, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD, 1);
+			if(!spawns[1])
+				spawns[1] = spawnConsort(6, 5, 5, structureBoundingBoxIn, worldIn, EnumConsort.getRandomMerchant(randomIn), 1);
+			if(!spawns[2])
+				spawns[2] = spawnConsort(5, 9, 5, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.GENERAL, 1);
 			
 			return true;
 		}
@@ -1235,11 +1271,12 @@ public class ConsortVillageComponents
 	{
 		public HighNakInn1()
 		{
-		
+			spawns = new boolean[3];
 		}
 		
 		public HighNakInn1(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
 		{
+			this();
 			setCoordBaseMode(facing);
 			this.boundingBox = boundingBox;
 		}
@@ -1418,9 +1455,12 @@ public class ConsortVillageComponents
 			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.SOUTH), 3, 17, 4, structureBoundingBoxIn);
 			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.SOUTH), 8, 17, 4, structureBoundingBoxIn);
 			
-			spawnConsort(5, 3, 5, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD, 1);
-			spawnConsort(6, 7, 6, structureBoundingBoxIn, worldIn, EnumConsort.getRandomMerchant(randomIn), 1);
-			spawnConsort(5, 11, 3, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.GENERAL, 1);
+			if(!spawns[0])
+				spawns[0] = spawnConsort(5, 3, 5, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.FOOD, 1);
+			if(!spawns[1])
+				spawns[1] = spawnConsort(6, 7, 6, structureBoundingBoxIn, worldIn, EnumConsort.getRandomMerchant(randomIn), 1);
+			if(!spawns[2])
+				spawns[2] = spawnConsort(5, 11, 3, structureBoundingBoxIn, worldIn, EnumConsort.MerchantType.GENERAL, 1);
 			
 			return true;
 		}
@@ -1434,12 +1474,13 @@ public class ConsortVillageComponents
 		
 		public SmallTent1()
 		{
-		
+			spawns = new boolean[1];
 		}
 		
 		public SmallTent1(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
 		{
-			this.setCoordBaseMode(facing);
+			this();
+			setCoordBaseMode(facing);
 			this.boundingBox = boundingBox;
 			woolType = 1 + rand.nextInt(3);
 		}
@@ -1454,7 +1495,7 @@ public class ConsortVillageComponents
 		protected void writeStructureToNBT(NBTTagCompound tagCompound)
 		{
 			super.writeStructureToNBT(tagCompound);
-			tagCompound.setInteger("Wool", this.woolType);
+			tagCompound.setInteger("Wool", woolType);
 		}
 		
 		@Override
@@ -1467,16 +1508,16 @@ public class ConsortVillageComponents
 		@Override
 		public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
 		{
-			if (this.averageGroundLvl < 0)
+			if (averageGroundLvl < 0)
 			{
-				this.averageGroundLvl = this.getAverageGroundLevel(worldIn, structureBoundingBoxIn);
+				averageGroundLvl = getAverageGroundLevel(worldIn, structureBoundingBoxIn);
 				
-				if (this.averageGroundLvl < 0)
+				if (averageGroundLvl < 0)
 				{
 					return true;
 				}
 				
-				this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.minY - 1, 0);
+				boundingBox.offset(0, averageGroundLvl - boundingBox.minY - 1, 0);
 			}
 			
 			ChunkProviderLands provider = (ChunkProviderLands) worldIn.provider.createChunkGenerator();
@@ -1486,29 +1527,30 @@ public class ConsortVillageComponents
 			IBlockState wool = provider.blockRegistry.getBlockState("structure_wool_"+woolType);
 			
 			//Floor
-			this.fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 1, 7, 6, 5);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 1, 7, 0, 5, surface, surface, false);
+			fillWithAir(worldIn, structureBoundingBoxIn, 1, 1, 1, 7, 6, 5);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 1, 7, 0, 5, surface, surface, false);
 			for(int x = 1; x < 8; x++)
 				for(int z = 1; z < 6; z++)
 					if(randomIn.nextFloat() < 0.15f)
-						this.setBlockState(worldIn, dirt, x, 0, z,  structureBoundingBoxIn);
+						setBlockState(worldIn, dirt, x, 0, z,  structureBoundingBoxIn);
 			
 			//Remove blocks in front of the building
-			this.clearFront(worldIn, structureBoundingBoxIn, 1, 7, 1, 0);
+			clearFront(worldIn, structureBoundingBoxIn, 1, 7, 1, 0);
 			
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 1, 3, 4, 4, 3, fence, fence, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 1, 3, 4, 4, 3, fence, fence, false);
 			
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 1, 1, 0, 1, 5, wool, wool, false);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 8, 1, 1, 8, 1, 5, wool, wool, false);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 2, 1, 1, 2, 5, wool, wool, false);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 7, 2, 1, 7, 2, 5, wool, wool, false);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 3, 1, 2, 3, 5, wool, wool, false);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 3, 1, 6, 3, 5, wool, wool, false);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 4, 1, 3, 4, 5, wool, wool, false);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 4, 1, 5, 4, 5, wool, wool, false);
-			this.fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 5, 1, 4, 5, 5, wool, wool, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 1, 1, 0, 1, 5, wool, wool, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 8, 1, 1, 8, 1, 5, wool, wool, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 2, 1, 1, 2, 5, wool, wool, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 7, 2, 1, 7, 2, 5, wool, wool, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 2, 3, 1, 2, 3, 5, wool, wool, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 3, 1, 6, 3, 5, wool, wool, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 4, 1, 3, 4, 5, wool, wool, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 5, 4, 1, 5, 4, 5, wool, wool, false);
+			fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 5, 1, 4, 5, 5, wool, wool, false);
 			
-			this.spawnConsort(3, 1, 3, structureBoundingBoxIn, worldIn);
+			if(!spawns[0])
+				spawns[0] = spawnConsort(3, 1, 3, structureBoundingBoxIn, worldIn);
 			
 			return true;
 		}
@@ -1520,11 +1562,12 @@ public class ConsortVillageComponents
 		
 		public LargeTent1()
 		{
-		
+			spawns = new boolean[4];
 		}
 		
 		public LargeTent1(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
 		{
+			this();
 			this.setCoordBaseMode(facing);
 			this.boundingBox = boundingBox;
 			woolType = 1 + rand.nextInt(3);
@@ -1540,14 +1583,14 @@ public class ConsortVillageComponents
 		protected void writeStructureToNBT(NBTTagCompound tagCompound)
 		{
 			super.writeStructureToNBT(tagCompound);
-			tagCompound.setInteger("Wool", this.woolType);
+			tagCompound.setInteger("Wool", woolType);
 		}
 		
 		@Override
 		protected void readStructureFromNBT(NBTTagCompound tagCompound, TemplateManager p_143011_2_)
 		{
 			super.readStructureFromNBT(tagCompound, p_143011_2_);
-			this.woolType = tagCompound.getInteger("Wool");
+			woolType = tagCompound.getInteger("Wool");
 		}
 		
 		@Override
@@ -1632,10 +1675,14 @@ public class ConsortVillageComponents
 			this.setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.WEST), 10, 3, 5, structureBoundingBoxIn);
 			this.setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.WEST), 10, 3, 11, structureBoundingBoxIn);
 			
-			this.spawnConsort(2, 1, 5, structureBoundingBoxIn, worldIn);
-			this.spawnConsort(2, 1, 11, structureBoundingBoxIn, worldIn);
-			this.spawnConsort(9, 1, 5, structureBoundingBoxIn, worldIn);
-			this.spawnConsort(9, 1, 11, structureBoundingBoxIn, worldIn);
+			if(!spawns[0])
+				spawns[0] = spawnConsort(2, 1, 5, structureBoundingBoxIn, worldIn);
+			if(!spawns[1])
+				spawns[1] = spawnConsort(2, 1, 11, structureBoundingBoxIn, worldIn);
+			if(!spawns[2])
+				spawns[2] = spawnConsort(9, 1, 5, structureBoundingBoxIn, worldIn);
+			if(!spawns[3])
+				spawns[3] = spawnConsort(9, 1, 11, structureBoundingBoxIn, worldIn);
 			
 			return true;
 		}
@@ -1647,11 +1694,12 @@ public class ConsortVillageComponents
 		
 		public SmallTentStore()
 		{
-		
+			spawns = new boolean[1];
 		}
 		
 		public SmallTentStore(ConsortVillageCenter.VillageCenter start, Random rand, StructureBoundingBox boundingBox, EnumFacing facing)
 		{
+			this();
 			this.setCoordBaseMode(facing);
 			this.boundingBox = boundingBox;
 			woolType = 1 + rand.nextInt(3);
@@ -1738,7 +1786,8 @@ public class ConsortVillageComponents
 			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.EAST), 1, 2, 4, structureBoundingBoxIn);
 			setBlockState(worldIn, torch.withProperty(BlockTorch.FACING, EnumFacing.WEST), 5, 2, 4, structureBoundingBoxIn);
 			
-			spawnConsort(3, 2, 2, structureBoundingBoxIn, worldIn, EnumConsort.getRandomMerchant(randomIn), 1);
+			if(!spawns[0])
+				spawns[0] = spawnConsort(3, 2, 2, structureBoundingBoxIn, worldIn, EnumConsort.getRandomMerchant(randomIn), 1);
 			
 			return true;
 		}

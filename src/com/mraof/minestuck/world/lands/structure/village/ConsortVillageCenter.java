@@ -100,20 +100,21 @@ public class ConsortVillageCenter
 	{
 		public VillageMarketCenter()
 		{
-			super();
+			spawns = new boolean[5];
 		}
 		
 		public VillageMarketCenter(List<ConsortVillageComponents.PieceWeight> pieceWeightList, int x, int z, Random rand)
 		{
 			super(pieceWeightList);
-			this.setCoordBaseMode(EnumFacing.Plane.HORIZONTAL.random(rand));
+			spawns = new boolean[5];
+			setCoordBaseMode(EnumFacing.Plane.HORIZONTAL.random(rand));
 			
-			if (this.getCoordBaseMode().getAxis() == EnumFacing.Axis.Z)
+			if (getCoordBaseMode().getAxis() == EnumFacing.Axis.Z)
 			{
-				this.boundingBox = new StructureBoundingBox(x, 64, z, x + 8 - 1, 78, z + 10 - 1);
+				boundingBox = new StructureBoundingBox(x, 64, z, x + 8 - 1, 78, z + 10 - 1);
 			} else
 			{
-				this.boundingBox = new StructureBoundingBox(x, 64, z, x + 10 - 1, 78, z + 8 - 1);
+				boundingBox = new StructureBoundingBox(x, 64, z, x + 10 - 1, 78, z + 8 - 1);
 			}
 		}
 		
@@ -231,14 +232,19 @@ public class ConsortVillageCenter
 			this.fillWithAir(worldIn, structureBoundingBoxIn, 0, 1, 7, 1, 2, 9);
 			this.fillWithAir(worldIn, structureBoundingBoxIn, 5, 1, 7, 7, 2, 9);
 			
-			this.setBlockState(worldIn, torch, 1, 2, 4, structureBoundingBoxIn);
-			this.setBlockState(worldIn, torch, 6, 2, 4, structureBoundingBoxIn);
+			setBlockState(worldIn, torch, 1, 2, 4, structureBoundingBoxIn);
+			setBlockState(worldIn, torch, 6, 2, 4, structureBoundingBoxIn);
 			
-			this.spawnConsort(0, 2, 3, boundingBox, worldIn, EnumConsort.MerchantType.FOOD, 1);
-			this.spawnConsort(0, 2, 5, boundingBox, worldIn, EnumConsort.MerchantType.FOOD, 1);
-			this.spawnConsort(7, 2, 3, boundingBox, worldIn, EnumConsort.MerchantType.GENERAL, 1);
-			this.spawnConsort(7, 2, 5, boundingBox, worldIn, EnumConsort.MerchantType.GENERAL, 1);
-			this.spawnConsort(3, 2, 9, boundingBox, worldIn, EnumConsort.getRandomMerchant(randomIn), 1);
+			if(!spawns[0])
+				spawns[0] = spawnConsort(0, 2, 3, boundingBox, worldIn, EnumConsort.MerchantType.FOOD, 1);
+			if(!spawns[1])
+				spawns[1] = spawnConsort(0, 2, 5, boundingBox, worldIn, EnumConsort.MerchantType.FOOD, 1);
+			if(!spawns[2])
+				spawns[2] = spawnConsort(7, 2, 3, boundingBox, worldIn, EnumConsort.MerchantType.GENERAL, 1);
+			if(!spawns[3])
+				spawns[3] = spawnConsort(7, 2, 5, boundingBox, worldIn, EnumConsort.MerchantType.GENERAL, 1);
+			if(!spawns[4])
+				spawns[4] = spawnConsort(3, 2, 9, boundingBox, worldIn, EnumConsort.getRandomMerchant(randomIn), 1);
 			
 			return true;
 		}

@@ -107,7 +107,7 @@ public class HashmapModus extends Modus
 		list.set(index, item);
 		
 		if(ejectByChat && MinestuckConfig.hashmapChatModusSetting != 2 || MinestuckConfig.hashmapChatModusSetting == 1)
-			this.player.sendMessage(new TextComponentTranslation("[HASHMAP] %s %% %s -> %s", item.getTextComponent(), getSize(), index));
+			this.player.sendMessage(new TextComponentTranslation("message.hashmap", item.getTextComponent(), getSize(), index));
 		
 		return true;
 	}
@@ -269,7 +269,7 @@ public class HashmapModus extends Modus
 			player.inventory.setInventorySlotContents(player.inventory.currentItem, stack);
 		else CaptchaDeckHandler.launchAnyItem(player, stack);
 		
-		this.player.sendMessage(new TextComponentTranslation("[HASHMAP] %s %% %s = %s -> %s", i, getSize(), index, stack.getTextComponent()));
+		this.player.sendMessage(new TextComponentTranslation("message.hashmap", i, getSize(), index, stack.getTextComponent()));
 	}
 	
 }

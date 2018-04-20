@@ -24,7 +24,7 @@ public class EntityGiclops extends EntityUnderling implements IBigEntity
 
 	public EntityGiclops(World world)
 	{
-		super(world, "giclops");
+		super(world);
 
 		setSize(8.0F, 12.0F);
 		this.stepHeight = 2;
@@ -33,6 +33,12 @@ public class EntityGiclops extends EntityUnderling implements IBigEntity
 		partGroup.addBox(-5, 0, -0.5, 3, 2, 3);
 		partGroup.addBox(1, 0, -0.5, 3, 2, 3);
 		partGroup.createEntities(world);
+	}
+	
+	@Override
+	protected String getUnderlingName()
+	{
+		return "giclops";
 	}
 	
 	@Override

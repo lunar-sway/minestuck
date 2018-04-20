@@ -11,28 +11,26 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
-import javax.annotation.Nullable;
-
 public class BlockColorCruxite implements IBlockColor
 {
-    @Override
-    public int colorMultiplier(IBlockState state, @Nullable IBlockAccess worldIn, @Nullable BlockPos pos, int tintIndex)
-    {
-        if(tintIndex == 0)
-        {
-            TileEntity tileEntity = worldIn.getTileEntity(pos);
-            ItemStack dowel = ItemStack.EMPTY;
-            if(state.getBlock() == MinestuckBlocks.alchemiter[0])
-            {
-                if(state.getValue(BlockAlchemiter.PART1) == BlockAlchemiter.EnumParts.TOTEM_PAD && tileEntity instanceof TileEntityAlchemiter)
-                    dowel = ((TileEntityAlchemiter)tileEntity).getDowel();
-            }
-
-            if(!dowel.isEmpty())
-            {
-                return dowel.getMetadata() == 0 ? 0x99D9EA : ColorCollector.getColor(dowel.getMetadata() - 1);
-            }
-        }
-        return -1;
-    }
+	@Override
+	public int colorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex)
+	{
+		if(tintIndex == 0)
+		{
+			TileEntity tileEntity = worldIn.getTileEntity(pos);
+			ItemStack dowel = ItemStack.EMPTY;
+			if(state.getBlock() == MinestuckBlocks.alchemiter[0])
+			{
+				if(state.getValue(BlockAlchemiter.PART1) == BlockAlchemiter.EnumParts.TOTEM_PAD && tileEntity instanceof TileEntityAlchemiter)
+					dowel = ((TileEntityAlchemiter)tileEntity).getDowel();
+			}
+			
+			if(!dowel.isEmpty())
+			{
+				return dowel.getMetadata() == 0 ? 0x99D9EA : ColorCollector.getColor(dowel.getMetadata() - 1);
+			}
+		}
+		return -1;
+	}
 }
