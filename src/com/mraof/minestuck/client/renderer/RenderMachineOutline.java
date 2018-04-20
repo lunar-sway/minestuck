@@ -45,7 +45,7 @@ public class RenderMachineOutline
 	private static boolean renderCheckItem(EntityPlayerSP player, ItemStack stack, RenderGlobal render, RayTraceResult rayTraceResult, float partialTicks)
 	{
 		if(stack.getItem() == Item.getItemFromBlock(MinestuckBlocks.punchDesignix)
-				||stack.getItem()==Item.getItemFromBlock(MinestuckBlocks.totemlathe)
+				||stack.getItem()==Item.getItemFromBlock(MinestuckBlocks.totemlathe[0])
 				||stack.getItem()==Item.getItemFromBlock(MinestuckBlocks.cruxtruder)
 				||stack.getItem()==Item.getItemFromBlock(MinestuckBlocks.alchemiter[0]))
 		{
@@ -86,7 +86,7 @@ public class RenderMachineOutline
 				
 				boundingBox = new AxisAlignedBB(0, 0, 0, (r ? 2 : 1), 2, (r ? 1 : 2)).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
 				placeable = ItemPunchDesignix.canPlaceAt(stack, player, player.world, placementPos, placedFacing);
-			} else if(stack.getItem() == Item.getItemFromBlock(MinestuckBlocks.totemlathe))
+			} else if(stack.getItem() == Item.getItemFromBlock(MinestuckBlocks.totemlathe[0]))
 			{
 				pos = pos.offset(placedFacing.rotateY());
 				

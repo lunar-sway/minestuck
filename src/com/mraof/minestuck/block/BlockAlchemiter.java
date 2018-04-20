@@ -21,8 +21,8 @@ import net.minecraft.world.World;
 
 public class BlockAlchemiter extends BlockLargeMachine
 {
-	public static final PropertyEnum<EnumParts> PART1 = PropertyEnum.create("part",EnumParts.class, EnumParts.TOTEM_CORNER, EnumParts.TOTEM_PAD, EnumParts.LOWER_ROD, EnumParts.UPPER_ROD);
-	public static final PropertyEnum<EnumParts> PART2 = PropertyEnum.create("part",EnumParts.class, EnumParts.SIDE_LEFT, EnumParts.SIDE_RIGHT, EnumParts.CORNER, EnumParts.CENTER_PAD);
+	public static final PropertyEnum<EnumParts> PART1 = PropertyEnum.create("part", EnumParts.class, EnumParts.TOTEM_CORNER, EnumParts.TOTEM_PAD, EnumParts.LOWER_ROD, EnumParts.UPPER_ROD);
+	public static final PropertyEnum<EnumParts> PART2 = PropertyEnum.create("part", EnumParts.class, EnumParts.SIDE_LEFT, EnumParts.SIDE_RIGHT, EnumParts.CORNER, EnumParts.CENTER_PAD);
 	public final PropertyEnum<EnumParts> PART;
 	public static final PropertyDirection DIRECTION = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	
@@ -125,7 +125,7 @@ public class BlockAlchemiter extends BlockLargeMachine
 	@Override
 	protected BlockStateContainer createBlockState()
     {
-        return new BlockStateContainer(this, PART1, DIRECTION, BlockTotemlathe2.HAS_DOWEL);
+        return new BlockStateContainer(this, PART1, DIRECTION, BlockTotemLathe.HAS_DOWEL);
     }
 	
 	@Override
@@ -138,12 +138,12 @@ public class BlockAlchemiter extends BlockLargeMachine
 			if(te instanceof TileEntityAlchemiter)
 			{
 				ItemStack dowel = ((TileEntityAlchemiter) te).getDowel();
-				BlockTotemlathe2.EnumDowel type = BlockTotemlathe2.EnumDowel.NO_DOWEL;
+				BlockTotemLathe.EnumDowel type = BlockTotemLathe.EnumDowel.NO_DOWEL;
 				if(!dowel.isEmpty())
 					if(dowel.hasTagCompound() && dowel.getTagCompound().hasKey("contentID"))
-						type = BlockTotemlathe2.EnumDowel.CARVED_DOWEL;
-					else type = BlockTotemlathe2.EnumDowel.UNCARVED_DOWEL;
-				return state.withProperty(BlockTotemlathe2.HAS_DOWEL, type);
+						type = BlockTotemLathe.EnumDowel.CARVED_DOWEL;
+					else type = BlockTotemLathe.EnumDowel.UNCARVED_DOWEL;
+				return state.withProperty(BlockTotemLathe.HAS_DOWEL, type);
 			}
 		}
 
@@ -217,7 +217,7 @@ public class BlockAlchemiter extends BlockLargeMachine
 		@Override
 		protected BlockStateContainer createBlockState()
 		{
-			return new BlockStateContainer(this,PART2,DIRECTION);
+			return new BlockStateContainer(this, PART2, DIRECTION);
 		}
 	}
 	

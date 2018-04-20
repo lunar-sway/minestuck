@@ -1,9 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
 
-import com.mraof.minestuck.block.BlockTotemlathe;
-import com.mraof.minestuck.block.BlockTotemlathe2;
-import com.mraof.minestuck.block.BlockTotemlathe3;
+import com.mraof.minestuck.block.BlockTotemLathe;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
@@ -23,15 +21,15 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
-public class TileEntityTotemlathe extends TileEntity
+public class TileEntityTotemLathe extends TileEntity
 {
-	private boolean broken=false;
+	private boolean broken = false;
 	//two cards so that we can preform the && alchemy operation
 	protected ItemStack card1 = ItemStack.EMPTY;
 	protected ItemStack card2 = ItemStack.EMPTY;
 	protected ItemStack dowel = ItemStack.EMPTY;
 	//constructor
-	public TileEntityTotemlathe() {}
+	public TileEntityTotemLathe() {}
 	//data checking
 
 	public void setCard1(ItemStack stack)
@@ -40,33 +38,44 @@ public class TileEntityTotemlathe extends TileEntity
 		{
 			card1 = stack;
 			if(world != null)
-				resendState();
+			{
+				IBlockState state = world.getBlockState(pos);
+				world.notifyBlockUpdate(pos, state, state, 2);
+			}
 		}
 	}
-	public ItemStack getCard1() {
+	
+	public ItemStack getCard1()
+	{
 		return card1;
 	}
+	
 	public void setCard2(ItemStack stack)
 	{
 		if(stack.getItem() == MinestuckItems.captchaCard || stack == ItemStack.EMPTY)
 			card2 = stack;
 	}
-	public ItemStack getCard2() {
+	
+	public ItemStack getCard2()
+	{
 		return card2;
 	}
 	
-	public boolean isBroken() {
+	public boolean isBroken()
+	{
 		return broken;
 	}
 	
-	public void Brake() {
-		broken=true;
+	public void setBroken()
+	{
+		broken = true;
 	}
 	
-	public void setDowel(ItemStack stack) {
-		if (stack.getItem()==MinestuckItems.cruxiteDowel||stack==ItemStack.EMPTY) {
-			dowel=stack;
-			resendState();
+	public void setDowel(ItemStack stack)
+	{
+		if (stack.getItem() == MinestuckItems.cruxiteDowel || stack==ItemStack.EMPTY)
+		{
+			dowel = stack;
 			if(world != null)
 			{
 			    IBlockState state = world.getBlockState(pos);
@@ -74,49 +83,60 @@ public class TileEntityTotemlathe extends TileEntity
 			}
 		}
 	}
-	public ItemStack getDowel() {
+	public ItemStack getDowel()
+	{
 		return dowel;
 		
 	}
 	
 	public void onRightClick(EntityPlayer player, IBlockState clickedState)
 	{
-		if(checkStates(clickedState)) {
-			ItemStack heldStack =player.getHeldItemMainhand();
+		if(checkStates(clickedState))
+		{
+			ItemStack heldStack = player.getHeldItemMainhand();
+			BlockTotemLathe.EnumParts part = BlockTotemLathe.getPart(clickedState);
 			//if they have clicked on the part that holds the chapta cards.
-			if (clickedState.getBlock()==MinestuckBlocks.totemlathe && clickedState.getValue(BlockTotemlathe.PART).equals(BlockTotemlathe.EnumParts.BOTTOM_LEFT))	{
-				if(!card1.isEmpty()){
-					if(!card2.isEmpty()){
+			if(part == BlockTotemLathe.EnumParts.BOTTOM_LEFT)
+			{
+				if(!card1.isEmpty())
+				{
+					if(!card2.isEmpty())
+					{
 						player.inventory.addItemStackToInventory(card2);
-					}else if(heldStack.getItem()==MinestuckItems.captchaCard){
+						setCard2(ItemStack.EMPTY);
+					} else if(heldStack.getItem() == MinestuckItems.captchaCard)
+					{
 						setCard2(heldStack.splitStack(1));
-					}
-					else {
+					} else
+					{
 						player.inventory.addItemStackToInventory(card1);
-						resendState();
+						setCard1(ItemStack.EMPTY);
 					}
+				} else if(heldStack.getItem() == MinestuckItems.captchaCard)
+				{
+					setCard1(heldStack.splitStack(1));
 				}
-				else if(heldStack.getItem()==MinestuckItems.captchaCard) {
-						setCard1(heldStack.splitStack(1));
-					}
 			}			
 			
 			//if they have clicked the dowel block
-			if (clickedState.getBlock()==MinestuckBlocks.totemlathe2 
-					&&(clickedState.getValue(BlockTotemlathe2.PART)== BlockTotemlathe2.EnumParts.MID_MIDLEFT
-					||clickedState.getValue(BlockTotemlathe2.PART)== BlockTotemlathe2.EnumParts.MID_MIDRIGHT)){
-				if (dowel.isEmpty()) {
-					if(heldStack.getItem()==MinestuckItems.cruxiteDowel) {
+			if (part == BlockTotemLathe.EnumParts.MID_MIDLEFT || part == BlockTotemLathe.EnumParts.MID_MIDRIGHT)
+			{
+				if (dowel.isEmpty())
+				{
+					if(heldStack.getItem() == MinestuckItems.cruxiteDowel)
+					{
 						setDowel(heldStack.splitStack(1));
 					}
-				}else {
+				} else
+				{
 					player.inventory.addItemStackToInventory(dowel);
 					setDowel(ItemStack.EMPTY);
 				}
 			}
 			
 			//if they have clicked on the lever
-			if (clickedState.getBlock()==MinestuckBlocks.totemlathe3 && clickedState.getValue(BlockTotemlathe3.PART) == BlockTotemlathe3.EnumParts.TOP_MIDRIGHT) {
+			if (part == BlockTotemLathe.EnumParts.TOP_MIDRIGHT)
+			{
 				//carve the dowel.
 				processContents();
 			}
@@ -124,13 +144,14 @@ public class TileEntityTotemlathe extends TileEntity
 		
 	}
 	
-	private boolean checkStates(IBlockState state){
-		if(this.broken)
+	private boolean checkStates(IBlockState state)
+	{
+		if(isBroken())
 			return false;
-		EnumFacing hOffset = this.getWorld().getBlockState(this.getPos()).getValue(BlockTotemlathe.DIRECTION).rotateY();
-		Block Block1=MinestuckBlocks.totemlathe;
-		Block Block2=MinestuckBlocks.totemlathe2;
-		Block Block3=MinestuckBlocks.totemlathe3;
+		EnumFacing hOffset = this.getWorld().getBlockState(this.getPos()).getValue(BlockTotemLathe.DIRECTION).rotateY();
+		Block Block1 = MinestuckBlocks.totemlathe[0];
+		Block Block2 = MinestuckBlocks.totemlathe[1];
+		Block Block3 = MinestuckBlocks.totemlathe[2];
 		
 		if(	!world.getBlockState(getPos()).getBlock().equals(Block1) ||
 			!world.getBlockState(getPos().offset(hOffset,1)).getBlock().equals(Block1) ||
@@ -149,42 +170,31 @@ public class TileEntityTotemlathe extends TileEntity
 			Debug.info(world.getBlockState(getPos().offset(hOffset))+","+world.getBlockState(getPos().down())+","+world.getBlockState(getPos().down().offset(hOffset)));
 			return false;
 		}
-
 		
 		return true;
 	}
 	
 	
-	public void dropCard1(boolean inBlock,BlockPos pos) {
-		EnumFacing direction = inBlock ? null : world.getBlockState(this.pos).getValue(BlockTotemlathe.DIRECTION);
-		BlockPos dropPos;
-		if(inBlock)
-			dropPos = pos;
-		else if(!world.getBlockState(pos.offset(direction)).isBlockNormalCube())
-			dropPos = pos.offset(direction);
-		else if(!world.getBlockState(pos.up()).isBlockNormalCube())
-			dropPos = pos.up();
-		else dropPos = pos;
-		
-		InventoryHelper.spawnItemStack(world, dropPos.getX(), dropPos.getY(), dropPos.getZ(), card1);
+	public void dropCard1(boolean inBlock,BlockPos pos)
+	{
+		dropItem(inBlock, pos, getCard1());
 		setCard1(ItemStack.EMPTY);
 	}
-	public void dropCard2(boolean inBlock,BlockPos pos) {
-		EnumFacing direction = inBlock ? null : world.getBlockState(this.pos).getValue(BlockTotemlathe.DIRECTION);
-		BlockPos dropPos;
-		if(inBlock)
-			dropPos = pos;
-		else if(!world.getBlockState(pos.offset(direction)).isBlockNormalCube())
-			dropPos = pos.offset(direction);
-		else if(!world.getBlockState(pos.up()).isBlockNormalCube())
-			dropPos = pos.up();
-		else dropPos = pos;
-		
-		InventoryHelper.spawnItemStack(world, dropPos.getX(), dropPos.getY(), dropPos.getZ(), card2);
+	
+	public void dropCard2(boolean inBlock,BlockPos pos)
+	{
+		dropItem(inBlock, pos, getCard2());
 		setCard2(ItemStack.EMPTY);
 	}
-	public void dropDowel(boolean inBlock,BlockPos pos) {
-		EnumFacing direction = inBlock ? null : world.getBlockState(this.pos).getValue(BlockTotemlathe.DIRECTION);
+	public void dropDowel(boolean inBlock, BlockPos pos)
+	{
+		dropItem(inBlock, pos, getDowel());
+		setDowel(ItemStack.EMPTY);
+	}
+	
+	private void dropItem(boolean inBlock, BlockPos pos, ItemStack stack)
+	{
+		EnumFacing direction = inBlock ? null : world.getBlockState(this.pos).getValue(BlockTotemLathe.DIRECTION);
 		BlockPos dropPos;
 		if(inBlock)
 			dropPos = pos;
@@ -194,12 +204,8 @@ public class TileEntityTotemlathe extends TileEntity
 			dropPos = pos.up();
 		else dropPos = pos;
 		
-		InventoryHelper.spawnItemStack(world, dropPos.getX(), dropPos.getY(), dropPos.getZ(), dowel);
-		setDowel(ItemStack.EMPTY);
+		InventoryHelper.spawnItemStack(world, dropPos.getX(), dropPos.getY(), dropPos.getZ(), stack);
 	}
-
-	
-
 	
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound)
@@ -223,62 +229,28 @@ public class TileEntityTotemlathe extends TileEntity
 		return tagCompound;
 	}
 	@Override
-	public NBTTagCompound getUpdateTag(){
-		NBTTagCompound nbt;
-		nbt = super.getUpdateTag();
-		nbt.setBoolean("broken", broken);
-		nbt.setTag("card1",card1.writeToNBT(new NBTTagCompound()));
-		nbt.setTag("card2",card2.writeToNBT(new NBTTagCompound()));
-		nbt.setTag("dowel", dowel.writeToNBT(new NBTTagCompound()));
-		return nbt;
+	public NBTTagCompound getUpdateTag()
+	{
+		return writeToNBT(new NBTTagCompound());
 	}
 	@Override
-	public SPacketUpdateTileEntity getUpdatePacket() {
-		SPacketUpdateTileEntity packet;
-		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setBoolean("broken", broken);
-		nbt.setTag("card1",card1.writeToNBT(new NBTTagCompound()));
-		nbt.setTag("card2",card2.writeToNBT(new NBTTagCompound()));
-		nbt.setTag("dowel", dowel.writeToNBT(new NBTTagCompound()));
-		packet = new SPacketUpdateTileEntity(this.pos, 0, nbt);				
-		return packet;
-	}
-
-	
-	public void resendState()
+	public SPacketUpdateTileEntity getUpdatePacket()
 	{
-		if(card1.isEmpty())
-		{
-			if(!dowel.isEmpty()) {				
-				if(AlchemyRecipeHandler.getDecodedItem(dowel).isEmpty()){
-					BlockTotemlathe.updateItem(false,BlockTotemlathe2.EnumDowel.UNCARVED_DOWEL , world, pos);
-				}else {
-					BlockTotemlathe.updateItem(false,BlockTotemlathe2.EnumDowel.CARVED_DOWEL , world, pos);
-				}
-			}else {
-				BlockTotemlathe.updateItem(false,BlockTotemlathe2.EnumDowel.NO_DOWEL, world, pos);
-			}
-		} else
-		{
-			if(!dowel.isEmpty()) {				
-				if(AlchemyRecipeHandler.getDecodedItem(dowel).isEmpty()){
-					BlockTotemlathe.updateItem(true,BlockTotemlathe2.EnumDowel.UNCARVED_DOWEL , world, pos);
-				}else {
-					BlockTotemlathe.updateItem(true,BlockTotemlathe2.EnumDowel.CARVED_DOWEL , world, pos);
-				}
-			}else {
-				BlockTotemlathe.updateItem(true,BlockTotemlathe2.EnumDowel.NO_DOWEL, world, pos);
-			}
-		}
-		
-		
-
+		return new SPacketUpdateTileEntity(this.pos, 0, getUpdateTag());
 	}
+	
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
+	{
+		handleUpdateTag(pkt.getNbtCompound());
+	}
+	
 	public void processContents()
 	{
 	
 		ItemStack output;
-		if(!dowel.isEmpty()) {
+		if(!dowel.isEmpty())
+		{
 			if(!card1.isEmpty() && !card2.isEmpty())
 				if(!card1.hasTagCompound() || !card1.getTagCompound().getBoolean("punched") || !card2.hasTagCompound() || !card2.getTagCompound().getBoolean("punched"))
 					output = new ItemStack(MinestuckBlocks.genericObject);
@@ -296,12 +268,5 @@ public class TileEntityTotemlathe extends TileEntity
 		
 			setDowel(outputDowel);
 		}
-		
-
-
 	}
-	
-
-
-	
 }

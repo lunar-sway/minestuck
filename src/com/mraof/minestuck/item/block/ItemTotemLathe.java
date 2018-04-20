@@ -1,9 +1,7 @@
 package com.mraof.minestuck.item.block;
 
-import com.mraof.minestuck.block.BlockTotemlathe;
-import com.mraof.minestuck.block.BlockTotemlathe.EnumParts;
-import com.mraof.minestuck.block.BlockTotemlathe2;
-import com.mraof.minestuck.block.BlockTotemlathe3;
+import com.mraof.minestuck.block.BlockTotemLathe;
+import com.mraof.minestuck.block.BlockTotemLathe.EnumParts;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -59,7 +57,7 @@ public class ItemTotemLathe extends ItemBlock
 				if(!canPlaceAt(itemstack, player, worldIn, pos, placedFacing))
 					return EnumActionResult.FAIL;
 				
-				IBlockState state = this.block.getDefaultState().withProperty(BlockTotemlathe.DIRECTION, placedFacing).withProperty(BlockTotemlathe.PART, BlockTotemlathe.EnumParts.BOTTOM_LEFT);
+				IBlockState state = this.block.getDefaultState().withProperty(BlockTotemLathe.DIRECTION, placedFacing).withProperty(BlockTotemLathe.PART1, BlockTotemLathe.EnumParts.BOTTOM_LEFT);
 				this.placeBlockAt(itemstack, player, worldIn, pos, facing, hitX, hitY, hitZ, state);
 				return EnumActionResult.SUCCESS;
 			}
@@ -75,7 +73,7 @@ public class ItemTotemLathe extends ItemBlock
 				return false;
 			for (int y = 0; y < 3; y++)
 			{
-				if (!world.mayPlace(MinestuckBlocks.totemlathe, pos.offset(facing.rotateYCCW(), x).up(y), false, EnumFacing.UP, null))
+				if (!world.mayPlace(MinestuckBlocks.totemlathe[0], pos.offset(facing.rotateYCCW(), x).up(y), false, EnumFacing.UP, null))
 					return false;
 			}
 		}
@@ -86,23 +84,23 @@ public class ItemTotemLathe extends ItemBlock
 	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState)
 	{
 		EnumFacing facing = EnumFacing.getHorizontal(MathHelper.floor((double)(player.rotationYaw * 4.0F / 360.0F) + 0.5D) + 2 & 3).getOpposite();
-		newState = newState.withProperty(BlockTotemlathe.DIRECTION, facing);
-		IBlockState state2=MinestuckBlocks.totemlathe2.getDefaultState().withProperty(BlockTotemlathe2.DIRECTION, facing);
-		IBlockState state3=MinestuckBlocks.totemlathe3.getDefaultState().withProperty(BlockTotemlathe3.DIRECTION, facing);
+		newState = newState.withProperty(BlockTotemLathe.DIRECTION, facing);
+		IBlockState state2=MinestuckBlocks.totemlathe[1].getDefaultState().withProperty(BlockTotemLathe.DIRECTION, facing);
+		IBlockState state3=MinestuckBlocks.totemlathe[2].getDefaultState().withProperty(BlockTotemLathe.DIRECTION, facing);
 		
 		
 		if(!(world.isRemote)){
-			world.setBlockState(pos.offset(facing.rotateY(),3), newState.withProperty(BlockTotemlathe.PART, EnumParts.BOTTOM_RIGHT));
-			world.setBlockState(pos.offset(facing.rotateY(),2), newState.withProperty(BlockTotemlathe.PART, EnumParts.BOTTOM_MIDRIGHT));
-			world.setBlockState(pos.offset(facing.rotateY(),1), newState.withProperty(BlockTotemlathe.PART, EnumParts.BOTTOM_MIDLEFT));
-			world.setBlockState(pos, newState.withProperty(BlockTotemlathe.PART, EnumParts.BOTTOM_LEFT));
-			world.setBlockState(pos.offset(facing.rotateY(),3).up(1), state2.withProperty(BlockTotemlathe2.PART, BlockTotemlathe2.EnumParts.MID_RIGHT));
-			world.setBlockState(pos.offset(facing.rotateY(),2).up(1), state2.withProperty(BlockTotemlathe2.PART, BlockTotemlathe2.EnumParts.MID_MIDRIGHT));
-			world.setBlockState(pos.offset(facing.rotateY(),1).up(1), state2.withProperty(BlockTotemlathe2.PART, BlockTotemlathe2.EnumParts.MID_MIDLEFT));
-			world.setBlockState(pos.up(1), state2.withProperty(BlockTotemlathe2.PART, BlockTotemlathe2.EnumParts.MID_LEFT));
-			world.setBlockState(pos.offset(facing.rotateY(),2).up(2), state3.withProperty(BlockTotemlathe3.PART, BlockTotemlathe3.EnumParts.TOP_MIDRIGHT));
-			world.setBlockState(pos.offset(facing.rotateY(),1).up(2), state3.withProperty(BlockTotemlathe3.PART, BlockTotemlathe3.EnumParts.TOP_MIDLEFT));
-			world.setBlockState(pos.up(2), state3.withProperty(BlockTotemlathe3.PART, BlockTotemlathe3.EnumParts.TOP_LEFT));
+			world.setBlockState(pos.offset(facing.rotateY(),3), newState.withProperty(BlockTotemLathe.PART1, EnumParts.BOTTOM_RIGHT));
+			world.setBlockState(pos.offset(facing.rotateY(),2), newState.withProperty(BlockTotemLathe.PART1, EnumParts.BOTTOM_MIDRIGHT));
+			world.setBlockState(pos.offset(facing.rotateY(),1), newState.withProperty(BlockTotemLathe.PART1, EnumParts.BOTTOM_MIDLEFT));
+			world.setBlockState(pos, newState.withProperty(BlockTotemLathe.PART1, EnumParts.BOTTOM_LEFT));
+			world.setBlockState(pos.offset(facing.rotateY(),3).up(1), state2.withProperty(BlockTotemLathe.PART2, BlockTotemLathe.EnumParts.MID_RIGHT));
+			world.setBlockState(pos.offset(facing.rotateY(),2).up(1), state2.withProperty(BlockTotemLathe.PART2, BlockTotemLathe.EnumParts.MID_MIDRIGHT));
+			world.setBlockState(pos.offset(facing.rotateY(),1).up(1), state2.withProperty(BlockTotemLathe.PART2, BlockTotemLathe.EnumParts.MID_MIDLEFT));
+			world.setBlockState(pos.up(1), state2.withProperty(BlockTotemLathe.PART2, BlockTotemLathe.EnumParts.MID_LEFT));
+			world.setBlockState(pos.offset(facing.rotateY(),2).up(2), state3.withProperty(BlockTotemLathe.PART3, BlockTotemLathe.EnumParts.TOP_MIDRIGHT));
+			world.setBlockState(pos.offset(facing.rotateY(),1).up(2), state3.withProperty(BlockTotemLathe.PART3, BlockTotemLathe.EnumParts.TOP_MIDLEFT));
+			world.setBlockState(pos.up(2), state3.withProperty(BlockTotemLathe.PART3, BlockTotemLathe.EnumParts.TOP_LEFT));
 		}
 		return true;
 	}

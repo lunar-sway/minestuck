@@ -245,7 +245,7 @@ public class MinestuckModelManager
 		for(BlockCrockerMachine.MachineType type : BlockCrockerMachine.MachineType.values())
 			register(crockerMachine, type.ordinal(), "machine_"+type.getName());
 		register(punchDesignix);
-		register(totemlathe);
+		register(totemlathe[0]);
 		register(alchemiter[0]);
 		register(cruxtruder);
 		register(glowingMushroom);

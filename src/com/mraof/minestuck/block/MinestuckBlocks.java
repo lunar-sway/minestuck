@@ -32,9 +32,7 @@ public class MinestuckBlocks
 	public static Block blockComputerOn = new BlockComputerOn().setRegistryName("computer_standard_on");
 	public static Block transportalizer = new BlockTransportalizer().setRegistryName("transportalizer");
 	public static Block punchDesignix = new BlockPunchDesignix().setRegistryName("punch_designix");
-	public static Block totemlathe = new BlockTotemlathe().setRegistryName("totem_lathe");
-	public static Block totemlathe2= new BlockTotemlathe2().setRegistryName("totem_lathe2");
-	public static Block totemlathe3= new BlockTotemlathe3().setRegistryName("totem_lathe3");
+	public static Block totemlathe[] = BlockTotemLathe.createBlocks();
 	
 	public static BlockAlchemiter[] alchemiter = BlockAlchemiter.createBlocks();
 	public static Block cruxtruder=new BlockCruxtruder().setRegistryName("cruxtruder");
@@ -107,7 +105,7 @@ public class MinestuckBlocks
 				coarseStoneStairs, shadeBrickStairs, frostBrickStairs, castIronStairs,
 				skaiaPortal, returnNode, gate,
 				sburbMachine, crockerMachine, transportalizer, uraniumCooker,
-				punchDesignix, totemlathe,totemlathe2,totemlathe3, alchemiter[0],alchemiter[1],cruxtruder,cruxtruder2,
+				punchDesignix, totemlathe[0], totemlathe[1], totemlathe[2], alchemiter[0], alchemiter[1], cruxtruder, cruxtruder2,
 				blockComputerOff, blockComputerOn,
 				blockGoldSeeds, glowystoneWire,
 				appleCake, blueCake, coldCake, redCake, hotCake, reverseCake,
