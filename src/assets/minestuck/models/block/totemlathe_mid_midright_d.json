@@ -78,28 +78,28 @@
 				"north": {
 					"uv": [0, 0, 16, 16],
 					"texture": "#2",
-					"rotation": 270
+					"rotation": 270, "tintindex": 0
 				},
-				"east": {"uv": [0, 0, 16, 16], "texture": "#2"},
+				"east": {"uv": [0, 0, 16, 16], "texture": "#2", "tintindex": 0},
 				"south": {
 					"uv": [0, 0, 16, 16],
 					"texture": "#2",
-					"rotation": 90
+					"rotation": 90, "tintindex": 0
 				},
 				"west": {
 					"uv": [0, 0, 16, 16],
 					"texture": "#2",
-					"rotation": 180
+					"rotation": 180, "tintindex": 0
 				},
 				"up": {
 					"uv": [0, 0, 16, 16],
 					"texture": "#2",
-					"rotation": 270
+					"rotation": 270, "tintindex": 0
 				},
 				"down": {
 					"uv": [0, 0, 16, 16],
 					"texture": "#2",
-					"rotation": 90
+					"rotation": 90, "tintindex": 0
 				}
 			},
 			"rotation": {
@@ -117,28 +117,28 @@
 				"north": {
 					"uv": [0, 0, 16, 16],
 					"texture": "#2",
-					"rotation": 270
+					"rotation": 270, "tintindex": 0
 				},
-				"east": {"uv": [0, 0, 16, 16], "texture": "#2"},
+				"east": {"uv": [0, 0, 16, 16], "texture": "#2", "tintindex": 0},
 				"south": {
 					"uv": [0, 0, 16, 16],
 					"texture": "#2",
-					"rotation": 90
+					"rotation": 90, "tintindex": 0
 				},
 				"west": {
 					"uv": [0, 0, 16, 16],
 					"texture": "#2",
-					"rotation": 180
+					"rotation": 180, "tintindex": 0
 				},
 				"up": {
 					"uv": [0, 0, 16, 16],
 					"texture": "#2",
-					"rotation": 270
+					"rotation": 270, "tintindex": 0
 				},
 				"down": {
 					"uv": [0, 0, 16, 16],
 					"texture": "#2",
-					"rotation": 90
+					"rotation": 90, "tintindex": 0
 				}
 			},
 			"rotation": {
@@ -156,28 +156,28 @@
 				"north": {
 					"uv": [0, 0, 16, 16],
 					"texture": "#2",
-					"rotation": 270
+					"rotation": 270, "tintindex": 0
 				},
-				"east": {"uv": [0, 0, 16, 16], "texture": "#2"},
+				"east": {"uv": [0, 0, 16, 16], "texture": "#2", "tintindex": 0},
 				"south": {
 					"uv": [0, 0, 16, 16],
 					"texture": "#2",
-					"rotation": 90
+					"rotation": 90, "tintindex": 0
 				},
 				"west": {
 					"uv": [0, 0, 16, 16],
 					"texture": "#2",
-					"rotation": 180
+					"rotation": 180, "tintindex": 0
 				},
 				"up": {
 					"uv": [0, 0, 16, 16],
 					"texture": "#2",
-					"rotation": 270
+					"rotation": 270, "tintindex": 0
 				},
 				"down": {
 					"uv": [0, 0, 16, 16],
 					"texture": "#2",
-					"rotation": 90
+					"rotation": 90, "tintindex": 0
 				}
 			},
 			"rotation": {
@@ -195,28 +195,28 @@
 				"north": {
 					"uv": [0, 0, 16, 16],
 					"texture": "#2",
-					"rotation": 270
+					"rotation": 270, "tintindex": 0
 				},
-				"east": {"uv": [0, 0, 16, 16], "texture": "#2"},
+				"east": {"uv": [0, 0, 16, 16], "texture": "#2", "tintindex": 0},
 				"south": {
 					"uv": [0, 0, 16, 16],
 					"texture": "#2",
-					"rotation": 90
+					"rotation": 90, "tintindex": 0
 				},
 				"west": {
 					"uv": [0, 0, 16, 16],
 					"texture": "#2",
-					"rotation": 180
+					"rotation": 180, "tintindex": 0
 				},
 				"up": {
 					"uv": [0, 0, 16, 16],
 					"texture": "#2",
-					"rotation": 270
+					"rotation": 270, "tintindex": 0
 				},
 				"down": {
 					"uv": [0, 0, 16, 16],
 					"texture": "#2",
-					"rotation": 90
+					"rotation": 90, "tintindex": 0
 				}
 			},
 			"rotation": {
@@ -234,28 +234,28 @@
 				"north": {
 					"uv": [0, 0, 16, 16],
 					"texture": "#2",
-					"rotation": 270
+					"rotation": 270, "tintindex": 0
 				},
-				"east": {"uv": [0, 0, 16, 16], "texture": "#2"},
+				"east": {"uv": [0, 0, 16, 16], "texture": "#2", "tintindex": 0},
 				"south": {
 					"uv": [0, 0, 16, 16],
 					"texture": "#2",
-					"rotation": 90
+					"rotation": 90, "tintindex": 0
 				},
 				"west": {
 					"uv": [0, 0, 16, 16],
 					"texture": "#2",
-					"rotation": 180
+					"rotation": 180, "tintindex": 0
 				},
 				"up": {
 					"uv": [0, 0, 16, 16],
 					"texture": "#2",
-					"rotation": 270
+					"rotation": 270, "tintindex": 0
 				},
 				"down": {
 					"uv": [0, 0, 16, 16],
 					"texture": "#2",
-					"rotation": 90
+					"rotation": 90, "tintindex": 0
 				}
 			},
 			"rotation": {

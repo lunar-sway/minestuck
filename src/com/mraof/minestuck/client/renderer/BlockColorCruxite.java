@@ -1,8 +1,10 @@
 package com.mraof.minestuck.client.renderer;
 
 import com.mraof.minestuck.block.BlockAlchemiter;
+import com.mraof.minestuck.block.BlockTotemLathe;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
+import com.mraof.minestuck.tileentity.TileEntityTotemLathe;
 import com.mraof.minestuck.util.ColorCollector;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.color.IBlockColor;
@@ -18,12 +20,18 @@ public class BlockColorCruxite implements IBlockColor
 	{
 		if(tintIndex == 0)
 		{
-			TileEntity tileEntity = worldIn.getTileEntity(pos);
 			ItemStack dowel = ItemStack.EMPTY;
 			if(state.getBlock() == MinestuckBlocks.alchemiter[0])
 			{
+				TileEntity tileEntity = worldIn.getTileEntity(pos);
 				if(state.getValue(BlockAlchemiter.PART1) == BlockAlchemiter.EnumParts.TOTEM_PAD && tileEntity instanceof TileEntityAlchemiter)
-					dowel = ((TileEntityAlchemiter)tileEntity).getDowel();
+					dowel = ((TileEntityAlchemiter) tileEntity).getDowel();
+			} else if(state.getBlock() == MinestuckBlocks.totemlathe[1])
+			{
+				BlockPos mainPos = ((BlockTotemLathe) state.getBlock()).getMainPos(state, pos);
+				TileEntity tileEntity = worldIn.getTileEntity(mainPos);
+				if(tileEntity instanceof TileEntityTotemLathe)
+					dowel = ((TileEntityTotemLathe) tileEntity).getDowel();
 			}
 			
 			if(!dowel.isEmpty())

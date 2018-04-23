@@ -21,6 +21,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nonnull;
+
 public class TileEntityTotemLathe extends TileEntity
 {
 	private boolean broken = false;
@@ -34,7 +36,7 @@ public class TileEntityTotemLathe extends TileEntity
 
 	public void setCard1(ItemStack stack)
 	{
-		if(stack.getItem() == MinestuckItems.captchaCard || stack == ItemStack.EMPTY)
+		if(stack.getItem() == MinestuckItems.captchaCard || stack.isEmpty())
 		{
 			card1 = stack;
 			if(world != null)
@@ -45,6 +47,7 @@ public class TileEntityTotemLathe extends TileEntity
 		}
 	}
 	
+	@Nonnull
 	public ItemStack getCard1()
 	{
 		return card1;
@@ -52,7 +55,7 @@ public class TileEntityTotemLathe extends TileEntity
 	
 	public void setCard2(ItemStack stack)
 	{
-		if(stack.getItem() == MinestuckItems.captchaCard || stack == ItemStack.EMPTY)
+		if(stack.getItem() == MinestuckItems.captchaCard || stack.isEmpty())
 			card2 = stack;
 	}
 	
@@ -73,7 +76,7 @@ public class TileEntityTotemLathe extends TileEntity
 	
 	public void setDowel(ItemStack stack)
 	{
-		if (stack.getItem() == MinestuckItems.cruxiteDowel || stack==ItemStack.EMPTY)
+		if (stack.getItem() == MinestuckItems.cruxiteDowel || stack.isEmpty())
 		{
 			dowel = stack;
 			if(world != null)

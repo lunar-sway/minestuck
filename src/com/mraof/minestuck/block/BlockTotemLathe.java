@@ -35,6 +35,7 @@ public class BlockTotemLathe extends BlockLargeMachine
 	public BlockTotemLathe()
 	{
 		this(0, PART1);
+		setDefaultState(getDefaultState().withProperty(HAS_CARD, false));
 	}
 	
 	public BlockTotemLathe(int index, PropertyEnum<EnumParts> part)
@@ -76,7 +77,7 @@ public class BlockTotemLathe extends BlockLargeMachine
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta)
 	{
-		if(index == 0 && meta % 4 == EnumParts.BOTTOM_LEFT.ordinal())
+		if(meta / 4 + index * 4 == EnumParts.BOTTOM_LEFT.ordinal())
 			return new TileEntityTotemLathe();
 		else return null;
 	}
@@ -126,12 +127,12 @@ public class BlockTotemLathe extends BlockLargeMachine
 	}
 	
 	@Override
-	public IBlockState getActualState(IBlockState state,IBlockAccess worldIn,BlockPos pos)
+	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos)
 	{
 		BlockPos mainPos = getMainPos(state, pos);
 		TileEntity te = worldIn.getTileEntity(mainPos);
 		
-		if(state.getValue(PART) == EnumParts.BOTTOM_LEFT)
+		if(te instanceof TileEntityTotemLathe && state.getValue(PART) == EnumParts.BOTTOM_LEFT)
 		{
 			return state.withProperty(HAS_CARD, !((TileEntityTotemLathe) te).getCard1().isEmpty());
 		}
@@ -147,9 +148,9 @@ public class BlockTotemLathe extends BlockLargeMachine
 					{
 					return state.withProperty(HAS_DOWEL, EnumDowel.CARVED_DOWEL);
 				}
-			}
+			} else return state.withProperty(HAS_DOWEL, EnumDowel.NO_DOWEL);
 		}
-		return state.withProperty(HAS_DOWEL, EnumDowel.NO_DOWEL);
+		return state;
 	}
 	
     /**
