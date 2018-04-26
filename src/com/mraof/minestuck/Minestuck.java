@@ -174,7 +174,6 @@ public class Minestuck
 	public void serverAboutToStart(FMLServerAboutToStartEvent event)
 	{
 		isServerRunning = true;
-		AlchemyRecipeHandler.addOrRemoveRecipes(MinestuckConfig.cardRecipe);
 		TileEntityTransportalizer.transportalizers.clear();
 		DeployList.applyConfigValues(MinestuckConfig.deployConfigurations);
 	}

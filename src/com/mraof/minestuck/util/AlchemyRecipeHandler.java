@@ -43,8 +43,6 @@ public class AlchemyRecipeHandler
 	private static HashMap<List<Object>, Object> recipeList;
 	private static HashMap<List<Object>, Boolean> lookedOver;
 	private static int returned = 0;
-	private static IRecipe cardRecipe;
-	private volatile static boolean cardRecipeAdded;
 
 	public static void registerVanillaRecipes() {
 		
@@ -1315,19 +1313,4 @@ public class AlchemyRecipeHandler
 		
 		OreDictionary.registerOre(name, item);
 	}
-	
-	public static void addOrRemoveRecipes(boolean addCardRecipe)
-	{
-		/*if(addCardRecipe && !cardRecipeAdded)
-		{
-			CraftingManager.getInstance().getRecipeList().add(cardRecipe);
-			cardRecipeAdded = true;
-		}
-		else if(!addCardRecipe && cardRecipeAdded)
-		{
-			CraftingManager.getInstance().getRecipeList().remove(cardRecipe);
-			cardRecipeAdded = false;
-		}*/
-	}
-	
 }
