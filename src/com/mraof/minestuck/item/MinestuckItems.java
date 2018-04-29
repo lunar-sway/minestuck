@@ -121,7 +121,7 @@ public class MinestuckItems
 	//Food
 	public static Item candy = new ItemMinestuckCandy();
 	public static Item beverage = new ItemMinestuckBeverage();
-	public static Item bugOnAStick = new ItemFood(1, 0.1F, false).setCreativeTab(TabMinestuck.instance);
+	public static Item bugOnAStick = new ItemFood(1, 0.1F, false).setUnlocalizedName("bugOnAStick").setCreativeTab(TabMinestuck.instance);
 	public static Item chocolateBeetle = new ItemFood(3, 0.4F, false).setUnlocalizedName("chocolateBeetle").setCreativeTab(TabMinestuck.instance);
 	public static Item coneOfFlies = new ItemFood(2, 0.1F, false).setUnlocalizedName("coneOfFlies").setCreativeTab(TabMinestuck.instance);
 	public static Item grasshopper = new ItemFood(4, 0.5F, false).setUnlocalizedName("grasshopper").setCreativeTab(TabMinestuck.instance);
@@ -236,6 +236,7 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlock(coldCake)).setMaxStackSize(1);
 		registerItemBlock(registry, new ItemBlock(redCake)).setMaxStackSize(1);
 		registerItemBlock(registry, new ItemBlock(hotCake)).setMaxStackSize(1);
+		registerItemBlock(registry, new ItemBlock(reverseCake)).setMaxStackSize(1);
 
 		registerItemBlock(registry, new ItemBlock(primedTnt));
 		registerItemBlock(registry, new ItemBlock(unstableTnt));

@@ -266,6 +266,7 @@ public class MinestuckModelManager
 		register(coldCake);
 		register(redCake);
 		register(hotCake);
+		register(reverseCake);
 		
 		register(primedTnt);
 		register(unstableTnt);

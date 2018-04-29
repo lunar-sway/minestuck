@@ -66,7 +66,10 @@ public class LandAspectCake extends TitleLandAspect
 			}
 			else if(f < 0.4F)
 				return MinestuckBlocks.appleCake.getDefaultState().withProperty(BlockCake.BITES, bites);
-			else return Blocks.CAKE.getDefaultState().withProperty(BlockCake.BITES, bites);
+			else if(random.nextFloat() < 0.01)
+				return MinestuckBlocks.reverseCake.getDefaultState().withProperty(BlockCake.BITES, bites);
+			else
+				return Blocks.CAKE.getDefaultState().withProperty(BlockCake.BITES, bites);
 		}
 		
 		@Override
