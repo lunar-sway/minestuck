@@ -48,7 +48,7 @@ compileJava {
 }
 
 minecraft {
-    version = "1.12.2-14.23.2.2611"
+    version = "1.12.2-14.23.3.2655"
     runDir = "run"
 
     mappings = "snapshot_20171003"
@@ -59,7 +59,7 @@ minecraft {
 
 dependencies {
     def mc_version = "1.12.2"
-    def jei_version = "4.8.5.159"
+    def jei_version = "4.9.1.168"
     // http://chickenbones.net/maven
     //compile "codechicken:CodeChickenLib:1.10.2-2.4.3.124:universal"
     //compile "codechicken:CodeChickenCore:1.10.2-2.3.5.91:universal"
