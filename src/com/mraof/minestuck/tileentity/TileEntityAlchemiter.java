@@ -185,6 +185,7 @@ public class TileEntityAlchemiter extends TileEntity
 						player.setHeldItem(EnumHand.MAIN_HAND, dowel);
 					else if (!player.inventory.addItemStackToInventory(dowel))
 						dropItem(false);
+					else player.inventoryContainer.detectAndSendChanges();
 					
 					setDowel(ItemStack.EMPTY);
 				} else

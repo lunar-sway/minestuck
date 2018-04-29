@@ -1,6 +1,7 @@
 package com.mraof.minestuck.inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.item.ItemStack;
@@ -61,5 +62,13 @@ public class ContainerConsortMerchant extends Container
 	public void updateProgressBar(int id, int data)
 	{
 		inventory.setField(id, data);
+	}
+	
+	@Override
+	public void onContainerClosed(EntityPlayer playerIn)
+	{
+		super.onContainerClosed(playerIn);
+		if(playerIn instanceof EntityPlayerMP)
+			((EntityPlayerMP) playerIn).sendContainerToPlayer(playerIn.inventoryContainer);
 	}
 }

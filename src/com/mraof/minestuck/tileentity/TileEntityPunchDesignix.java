@@ -60,6 +60,7 @@ public class TileEntityPunchDesignix extends TileEntity
 				player.setHeldItem(EnumHand.MAIN_HAND, card);
 			else if (!player.inventory.addItemStackToInventory(card))
 				dropItem(false);
+			else player.inventoryContainer.detectAndSendChanges();
 			
 			setCard(ItemStack.EMPTY);
 			return;
