@@ -19,40 +19,62 @@ public class CombinationRegistry {
 	public static final boolean MODE_AND  = true;
 	public static final boolean MODE_OR = false;
 	
+	public enum Mode
+	{
+		MODE_AND("&&"),
+		MODE_OR("||");
+		
+		String str;
+		
+		Mode(String str)
+		{
+			this.str = str;
+		}
+		
+		public String getStr()
+		{
+			return str;
+		}
+	}
+	
 	/**
 	 * Creates an entry for a result of combining the cards of two items. Used in the Punch Designix.
 	 */
-	public static void addCombination(@Nonnull ItemStack input1, @Nonnull ItemStack input2, boolean mode, @Nonnull ItemStack output) {
-		addCombination(input1, input2, mode, true, true, output);
+	public static void addCombination(@Nonnull ItemStack input1, @Nonnull ItemStack input2, Mode mode, @Nonnull ItemStack output) {
+		addCombination(input1, input2, mode, !input1.getItem().isDamageable(), !input2.getItem().isDamageable(), output);
 	}
 	
 	
-	public static void addCombination(@Nonnull ItemStack input1, @Nonnull ItemStack input2, boolean mode, boolean useDamage1, boolean useDamage2, @Nonnull ItemStack output)
+	public static void addCombination(@Nonnull ItemStack input1, @Nonnull ItemStack input2, Mode mode, boolean useDamage1, boolean useDamage2, @Nonnull ItemStack output)
 	{
+		if(useDamage1 && input1.getItem().isDamageable())
+			Debug.warnf("Item %s in a recipe for %s appears to be using damage value. This might not be intended.", input1, output);
+		if(useDamage2 && input2.getItem().isDamageable())
+			Debug.warnf("Item %s in a recipe for %s appears to be using damage value. This might not be intended.", input2, output);
 		addCombination(input1.getItem(), useDamage1 ? input1.getItemDamage() : OreDictionary.WILDCARD_VALUE, input2.getItem(), useDamage2 ? input2.getItemDamage() : OreDictionary.WILDCARD_VALUE, mode, output);
 	}
 	
-	public static void addCombination(String oreDictInput, @Nonnull ItemStack itemInput, boolean useDamage, boolean mode, @Nonnull ItemStack output)
+	public static void addCombination(String oreDictInput, @Nonnull ItemStack itemInput, boolean useDamage, Mode mode, @Nonnull ItemStack output)
 	{
 		addCombination(oreDictInput, itemInput.getItem(), useDamage ? itemInput.getItemDamage() : OreDictionary.WILDCARD_VALUE, mode, output);
 	}
 	
-	public static void addCombination(String oreDictInput, Item item, int damage, boolean mode, @Nonnull ItemStack output)
+	public static void addCombination(String oreDictInput, Item item, int damage, Mode mode, @Nonnull ItemStack output)
 	{
 		addCombination(oreDictInput, OreDictionary.WILDCARD_VALUE, item, damage, mode, output);
 	}
 	
-	public static void addCombination(String oreDictInput, Block block, int damage, boolean mode, @Nonnull ItemStack output)
+	public static void addCombination(String oreDictInput, Block block, int damage, Mode mode, @Nonnull ItemStack output)
 	{
 		addCombination(oreDictInput, OreDictionary.WILDCARD_VALUE, Item.getItemFromBlock(block), damage, mode, output);
 	}
 	
-	public static void addCombination(String input1, String input2, boolean mode, @Nonnull ItemStack output)
+	public static void addCombination(String input1, String input2, Mode mode, @Nonnull ItemStack output)
 	{
 		addCombination(input1, OreDictionary.WILDCARD_VALUE, input2, OreDictionary.WILDCARD_VALUE, mode, output);
 	}
 	
-	private static void addCombination(Object input1, int damage1, Object input2, int damage2, boolean mode, @Nonnull ItemStack output)
+	private static void addCombination(Object input1, int damage1, Object input2, int damage2, Mode mode, @Nonnull ItemStack output)
 	{
 		try
 		{
@@ -62,8 +84,8 @@ public class CombinationRegistry {
 				throw new IllegalArgumentException("Output is not defined.");
 		} catch(IllegalArgumentException e)
 		{
-			FMLLog.warning("[Minestuck] An argument for a combination recipe was found invalid. Reason: "+e.getMessage());
-			FMLLog.warning("[Minestuck] The recipe in question: %s %s %s -> %s", input1 instanceof Item ? ((Item) input1).getUnlocalizedName() : input1, mode ? "&&" : "||", input2 instanceof Item ? ((Item) input2).getUnlocalizedName() : input2, output == null || output.getItem() == null ? null : output);
+			Debug.warnf("[Minestuck] An argument for a combination recipe was found invalid. Reason: "+e.getMessage());
+			Debug.warnf("[Minestuck] The recipe in question: %s %s %s -> %s", input1 instanceof Item ? ((Item) input1).getUnlocalizedName() : input1, mode.getStr(), input2 instanceof Item ? ((Item) input2).getUnlocalizedName() : input2, output == null || output.getItem() == null ? null : output);
 			return;
 		}
 		

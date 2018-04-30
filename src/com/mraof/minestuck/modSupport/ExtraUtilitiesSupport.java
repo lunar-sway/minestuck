@@ -26,8 +26,8 @@ public class ExtraUtilitiesSupport extends ModSupport
 		{
 			Block enderLily = ((Block) Class.forName("com.rwtema.extrautils.ExtraUtils").getField("enderLily").get(null));
 			GristRegistry.addGristConversion(new ItemStack(enderLily), new GristSet(new GristType[]{GristType.Uranium, GristType.Iodine}, new int[]{24, 6}));
-			CombinationRegistry.addCombination(new ItemStack(Items.WHEAT_SEEDS), new ItemStack(Items.ENDER_PEARL), CombinationRegistry.MODE_OR,  new ItemStack(enderLily));
-			CombinationRegistry.addCombination(new ItemStack(Items.WHEAT_SEEDS), new ItemStack(Items.ENDER_EYE), CombinationRegistry.MODE_OR,  new ItemStack(enderLily));	//Might as well do this too
+			CombinationRegistry.addCombination(new ItemStack(Items.WHEAT_SEEDS), new ItemStack(Items.ENDER_PEARL), CombinationRegistry.Mode.MODE_OR,  new ItemStack(enderLily));
+			CombinationRegistry.addCombination(new ItemStack(Items.WHEAT_SEEDS), new ItemStack(Items.ENDER_EYE), CombinationRegistry.Mode.MODE_OR,  new ItemStack(enderLily));	//Might as well do this too
 		}
 		
 		if(Class.forName("com.rwtema.extrautils.ExtraUtils").getField("transferPipeEnabled").getBoolean(null))

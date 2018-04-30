@@ -19,11 +19,13 @@ public class GristRegistry {
 	 */
 	public static void addGristConversion(@Nonnull ItemStack item, GristSet grist)
 	{
-		addGristConversion(item, true, grist);
+		addGristConversion(item, !item.getItem().isDamageable(), grist);
 	}
 
 	public static void addGristConversion(@Nonnull ItemStack item, boolean useDamage, GristSet grist)
 	{
+		if(useDamage && item.getItem().isDamageable())
+			Debug.warnf("Item %s appears to be using damage value in a grist recipe. This might not be intended.", item);
 		gristRecipes.put(Arrays.asList(item.getItem(), useDamage ? item.getItemDamage() : OreDictionary.WILDCARD_VALUE), grist);
 	}
 	public static void addGristConversion(Block block, GristSet grist)

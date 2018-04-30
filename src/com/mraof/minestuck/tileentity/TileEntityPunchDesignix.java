@@ -83,6 +83,9 @@ public class TileEntityPunchDesignix extends TileEntity
 					ItemStack output = AlchemyRecipeHandler.getDecodedItem(heldStack);
 					if (!output.isEmpty())
 					{
+						if(output.getItem().isDamageable())
+							output.setItemDamage(0);
+						
 						if (card.hasTagCompound() && card.getTagCompound().getBoolean("punched"))
 						{    //|| combination
 							output = CombinationRegistry.getCombination(output, AlchemyRecipeHandler.getDecodedItem(card), CombinationRegistry.MODE_OR);
