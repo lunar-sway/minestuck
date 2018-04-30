@@ -1091,7 +1091,7 @@ public class AlchemyRecipeHandler
 		
 		registerRecipes(new Minegicka3Support(), "minegicka3", false);
 		registerRecipes(new NeverSayNetherSupport(), "nsn", false);
-		registerRecipes(new ExtraUtilitiesSupport(), "ExtraUtilities", false);
+		registerRecipes(new ExtraUtilitiesSupport(), "extrautils2", false);
 		registerRecipes(new TinkersConstructSupport(), "TConstruct", false);
 		
 	}

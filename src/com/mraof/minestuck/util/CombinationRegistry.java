@@ -16,8 +16,6 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class CombinationRegistry {
 	private static Hashtable<List<Object>, ItemStack> combRecipes = new Hashtable<List<Object>, ItemStack>();
-	public static final boolean MODE_AND  = true;
-	public static final boolean MODE_OR = false;
 	
 	public enum Mode
 	{
@@ -34,6 +32,11 @@ public class CombinationRegistry {
 		public String getStr()
 		{
 			return str;
+		}
+		
+		public boolean asBool()
+		{
+			return this == MODE_AND;
 		}
 	}
 	
@@ -110,7 +113,7 @@ public class CombinationRegistry {
 	 * Returns an entry for a result of combining the cards of two items. Used in the Punch Designix.
 	 */
 	@Nonnull
-	public static ItemStack getCombination(@Nonnull ItemStack input1, @Nonnull ItemStack input2, boolean mode)
+	public static ItemStack getCombination(@Nonnull ItemStack input1, @Nonnull ItemStack input2, Mode mode)
 	{
 		ItemStack item;
 		if (input1.isEmpty() || input2.isEmpty()) {return ItemStack.EMPTY;}
@@ -135,15 +138,15 @@ public class CombinationRegistry {
 		}
 		
 		if(item.isEmpty())
-			if(input1.getItem().equals(MinestuckBlocks.genericObject))
-				return mode?input1:input2;
-			else if(input2.getItem().equals(MinestuckBlocks.genericObject))
-				return mode?input2:input1;
+			if(input1.getItem().equals(Item.getItemFromBlock(MinestuckBlocks.genericObject)))
+				return mode == Mode.MODE_AND ? input1 : input2;
+			else if(input2.getItem().equals(Item.getItemFromBlock(MinestuckBlocks.genericObject)))
+				return mode == Mode.MODE_AND ? input2 : input1;
 		return item;
 	}
 	
 	@Nonnull
-	private static ItemStack getCombination(Object input1, int damage1, Object input2, int damage2, boolean mode)
+	private static ItemStack getCombination(Object input1, int damage1, Object input2, int damage2, Mode mode)
 	{
 		ItemStack item;
 		boolean b1 = damage1 != OreDictionary.WILDCARD_VALUE, b2 = damage2 != OreDictionary.WILDCARD_VALUE;

@@ -88,7 +88,7 @@ public class TileEntityPunchDesignix extends TileEntity
 						
 						if (card.hasTagCompound() && card.getTagCompound().getBoolean("punched"))
 						{    //|| combination
-							output = CombinationRegistry.getCombination(output, AlchemyRecipeHandler.getDecodedItem(card), CombinationRegistry.MODE_OR);
+							output = CombinationRegistry.getCombination(output, AlchemyRecipeHandler.getDecodedItem(card), CombinationRegistry.Mode.MODE_OR);
 							if (!output.isEmpty())
 							{
 								setCard(AlchemyRecipeHandler.createCard(output, true));

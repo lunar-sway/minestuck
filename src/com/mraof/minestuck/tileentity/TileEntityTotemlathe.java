@@ -282,7 +282,7 @@ public class TileEntityTotemlathe extends TileEntity
 			if(!card1.isEmpty() && !card2.isEmpty())
 				if(!card1.hasTagCompound() || !card1.getTagCompound().getBoolean("punched") || !card2.hasTagCompound() || !card2.getTagCompound().getBoolean("punched"))
 					output = new ItemStack(MinestuckBlocks.genericObject);
-				else output = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(card1), AlchemyRecipeHandler.getDecodedItem(card2), CombinationRegistry.MODE_AND);
+				else output = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(card1), AlchemyRecipeHandler.getDecodedItem(card2), CombinationRegistry.Mode.MODE_AND);
 			else
 			{
 				ItemStack input = card1.isEmpty() ? card2 : card1;
