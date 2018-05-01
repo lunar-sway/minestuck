@@ -2,7 +2,7 @@ package com.mraof.minestuck.tileentity;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -14,7 +14,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 
-public abstract class TileEntityMachine extends TileEntity implements IInventory, ITickable
+public abstract class TileEntityMachine extends TileEntity implements ISidedInventory, ITickable
 {
 
 	public int progress = 0;

@@ -1,27 +1,68 @@
-
 {
-	"variants":{
-		"facing=south,part=totem_corner":	{ "model":"minestuck:alchemiter_zero_one_zero"},
-		"facing=south,part=totem_pad":		{ "model":"minestuck:alchemiter_zero_two_zero"},
-		"facing=south,part=lower_rod":		{ "model":"minestuck:alchemiter_zero_three_zero"},
-		"facing=south,part=upper_rod":		{ "model":"minestuck:alchemiter_zero_four_zero"},
-		
-		"facing=west,part=totem_corner":	{ "model":"minestuck:alchemiter_zero_one_zero","y":90},
-		"facing=west,part=totem_pad":		{ "model":"minestuck:alchemiter_zero_two_zero","y":90},
-		"facing=west,part=lower_rod":		{ "model":"minestuck:alchemiter_zero_three_zero","y":90},
-		"facing=west,part=upper_rod":		{ "model":"minestuck:alchemiter_zero_four_zero","y":90},
-				
-		"facing=north,part=totem_corner":	{ "model":"minestuck:alchemiter_zero_one_zero","y":180},
-		"facing=north,part=totem_pad":		{ "model":"minestuck:alchemiter_zero_two_zero","y":180},
-		"facing=north,part=lower_rod":		{ "model":"minestuck:alchemiter_zero_three_zero","y":180},
-		"facing=north,part=upper_rod":		{ "model":"minestuck:alchemiter_zero_four_zero","y":180},
-
-		"facing=east,part=totem_corner":	{ "model":"minestuck:alchemiter_zero_one_zero","y":270},
-		"facing=east,part=totem_pad":		{ "model":"minestuck:alchemiter_zero_two_zero","y":270},
-		"facing=east,part=lower_rod":		{ "model":"minestuck:alchemiter_zero_three_zero","y":270},
-		"facing=east,part=upper_rod":		{ "model":"minestuck:alchemiter_zero_four_zero","y":270}
-		
-		
-	
-	}
+    "multipart": [
+        {
+            "when": { "part": "totem_corner", "facing": "south" },
+            "apply": { "model": "minestuck:alchemiter_totem_corner" }
+        },
+        {
+            "when": { "part": "totem_corner", "facing": "west" },
+            "apply": { "model": "minestuck:alchemiter_totem_corner", "y": 90 }
+        },
+        {
+            "when": { "part": "totem_corner", "facing": "north" },
+            "apply": { "model": "minestuck:alchemiter_totem_corner", "y": 180 }
+        },
+        {
+            "when": { "part": "totem_corner", "facing": "east" },
+            "apply": { "model": "minestuck:alchemiter_totem_corner", "y": 270 }
+        },
+        {
+            "when": { "part": "totem_pad", "facing": "south" },
+            "apply": { "model": "minestuck:alchemiter_totem_pad" }
+        },
+        {
+            "when": { "part": "totem_pad", "facing": "west" },
+            "apply": { "model": "minestuck:alchemiter_totem_pad", "y": 90 }
+        },
+        {
+            "when": { "part": "totem_pad", "facing": "north" },
+            "apply": { "model": "minestuck:alchemiter_totem_pad", "y": 180 }
+        },
+        {
+            "when": { "part": "totem_pad", "facing": "east" },
+            "apply": { "model": "minestuck:alchemiter_totem_pad", "y": 270 }
+        },
+        {
+            "when": { "dowel": "uncarved_dowel", "facing": "south" },
+            "apply": { "model": "minestuck:alchemiter_dowel" }
+        },
+        {
+            "when": { "dowel": "uncarved_dowel", "facing": "west" },
+            "apply": { "model": "minestuck:alchemiter_dowel", "y": 90 }
+        },
+        {
+            "when": { "dowel": "uncarved_dowel", "facing": "north" },
+            "apply": { "model": "minestuck:alchemiter_dowel", "y": 180 }
+        },
+        {
+            "when": { "dowel": "uncarved_dowel", "facing": "east" },
+            "apply": { "model": "minestuck:alchemiter_dowel", "y": 270 }
+        },
+        {
+            "when": { "dowel": "carved_dowel", "facing": "south" },
+            "apply": { "model": "minestuck:alchemiter_totem" }
+        },
+        {
+            "when": { "dowel": "carved_dowel", "facing": "west" },
+            "apply": { "model": "minestuck:alchemiter_totem", "y": 90 }
+        },
+        {
+            "when": { "dowel": "carved_dowel", "facing": "north" },
+            "apply": { "model": "minestuck:alchemiter_totem", "y": 180 }
+        },
+        {
+            "when": { "dowel": "carved_dowel", "facing": "east" },
+            "apply": { "model": "minestuck:alchemiter_totem", "y": 270 }
+        }
+    ]
 }

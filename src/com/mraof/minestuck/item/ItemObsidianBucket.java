@@ -18,7 +18,7 @@ public class ItemObsidianBucket extends Item
 	public ItemObsidianBucket()
 	{
 		setUnlocalizedName("bucketObsidian");
-		setCreativeTab(MinestuckItems.tabMinestuck);
+		setCreativeTab(TabMinestuck.instance);
 		setMaxStackSize(1);
 	}
 	

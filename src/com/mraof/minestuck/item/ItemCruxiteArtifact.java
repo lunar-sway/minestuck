@@ -50,7 +50,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 	
 	public ItemCruxiteArtifact() 
 	{
-		this.setCreativeTab(MinestuckItems.tabMinestuck);
+		this.setCreativeTab(TabMinestuck.instance);
 		setUnlocalizedName("cruxiteArtifact");
 		this.maxStackSize = 1;
 		setHasSubtypes(true);
@@ -149,14 +149,10 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 						bl += System.currentTimeMillis() - t;
 						if((te) != null)
 						{
-							TileEntity te1 = null;
-							try {
-								te1 = te.getClass().newInstance();
-							} catch (Exception e) {e.printStackTrace();	continue;}
 							NBTTagCompound nbt = new NBTTagCompound();
 							te.writeToNBT(nbt);
 							nbt.setInteger("y", pos1.getY());
-							te1.readFromNBT(nbt);
+							TileEntity te1 = TileEntity.create(worldserver1, nbt);
 							worldserver1.removeTileEntity(pos1);
 							worldserver1.setTileEntity(pos1, te1);
 							if(te instanceof TileEntityComputer)

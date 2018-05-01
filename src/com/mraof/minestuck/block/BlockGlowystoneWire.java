@@ -14,6 +14,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -429,8 +430,14 @@ public class BlockGlowystoneWire extends Block
 	{
 		return new BlockStateContainer(this, new IProperty[] {NORTH, EAST, SOUTH, WEST});
 	}
-
-	static enum EnumAttachPosition implements IStringSerializable
+	
+	@Override
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face)
+	{
+		return BlockFaceShape.UNDEFINED;
+	}
+	
+	public enum EnumAttachPosition implements IStringSerializable
 	{
 		UP("up"),
 		SIDE("side"),
@@ -438,7 +445,7 @@ public class BlockGlowystoneWire extends Block
 
 		private final String name;
 
-		private EnumAttachPosition(String name)
+		EnumAttachPosition(String name)
 		{
 			this.name = name;
 		}

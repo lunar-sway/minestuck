@@ -41,8 +41,7 @@ public class ItemPunchDesignix extends ItemBlock
 				pos = pos.up();
 			}
 			
-			int i = MathHelper.floor((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-			EnumFacing placedFacing = EnumFacing.getHorizontal(i).getOpposite();
+			EnumFacing placedFacing = player.getHorizontalFacing().getOpposite();
 			ItemStack itemstack = player.getHeldItem(hand);
 			
 			if(placedFacing.getFrontOffsetX() > 0 && hitZ >= 0.5F || placedFacing.getFrontOffsetX() < 0 && hitZ < 0.5F

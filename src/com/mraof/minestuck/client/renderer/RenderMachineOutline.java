@@ -1,7 +1,10 @@
 package com.mraof.minestuck.client.renderer;
 
 import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.item.block.ItemAlchemiter;
+import com.mraof.minestuck.item.block.ItemCruxtruder;
 import com.mraof.minestuck.item.block.ItemPunchDesignix;
+import com.mraof.minestuck.item.block.ItemTotemLathe;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -41,7 +44,10 @@ public class RenderMachineOutline
 	
 	private static boolean renderCheckItem(EntityPlayerSP player, ItemStack stack, RenderGlobal render, RayTraceResult rayTraceResult, float partialTicks)
 	{
-		if(stack.getItem() == Item.getItemFromBlock(MinestuckBlocks.punchDesignix))
+		if(stack.getItem() == Item.getItemFromBlock(MinestuckBlocks.punchDesignix)
+				||stack.getItem()==Item.getItemFromBlock(MinestuckBlocks.totemlathe[0])
+				||stack.getItem()==Item.getItemFromBlock(MinestuckBlocks.cruxtruder)
+				||stack.getItem()==Item.getItemFromBlock(MinestuckBlocks.alchemiter[0]))
 		{
 			BlockPos pos = rayTraceResult.getBlockPos();
 			
@@ -51,36 +57,82 @@ public class RenderMachineOutline
 			if (!flag)
 				pos = pos.up();
 			
-			int i = MathHelper.floor((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-			EnumFacing placedFacing = EnumFacing.getHorizontal(i).getOpposite();
+			EnumFacing placedFacing = player.getHorizontalFacing().getOpposite();
 			double hitX = rayTraceResult.hitVec.x - pos.getX(), hitZ = rayTraceResult.hitVec.z - pos.getZ();
-			
-			if(placedFacing.getFrontOffsetX() > 0 && hitZ >= 0.5F || placedFacing.getFrontOffsetX() < 0 && hitZ < 0.5F
-					|| placedFacing.getFrontOffsetZ() > 0 && hitX < 0.5F || placedFacing.getFrontOffsetZ() < 0 && hitX >= 0.5F)
-				pos = pos.offset(placedFacing.rotateY());
-			
-			boolean placeable = ItemPunchDesignix.canPlaceAt(stack, player, player.world, pos, placedFacing);
-			
-			if(placedFacing == EnumFacing.EAST || placedFacing == EnumFacing.NORTH)
-				pos = pos.offset(placedFacing.rotateYCCW());	//The bounding box is symmetrical, so doing this gets rid of some rendering cases
-			
 			boolean r = placedFacing.getAxis() == EnumFacing.Axis.Z;
-			
+			boolean f = placedFacing== EnumFacing.NORTH || placedFacing==EnumFacing.EAST;
 			double d1 = player.lastTickPosX + (player.posX - player.lastTickPosX) * (double)partialTicks;
 			double d2 = player.lastTickPosY + (player.posY - player.lastTickPosY) * (double)partialTicks;
 			double d3 = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * (double)partialTicks;
-			AxisAlignedBB boundingBox = new AxisAlignedBB(0,0,0, (r ? 2 : 1), 2, (r ? 1 : 2)).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
+			
+			boolean placeable;
+			AxisAlignedBB boundingBox;
+			
 			GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 			GlStateManager.glLineWidth(2.0F);
 			GlStateManager.disableTexture2D();
 			GlStateManager.depthMask(false);	//GL stuff was copied from the standard mouseover bounding box drawing, which is likely why the alpha isn't working
+			
+			if(stack.getItem() == Item.getItemFromBlock(MinestuckBlocks.punchDesignix))
+			{
+				if (placedFacing.getFrontOffsetX() > 0 && hitZ >= 0.5F || placedFacing.getFrontOffsetX() < 0 && hitZ < 0.5F
+						|| placedFacing.getFrontOffsetZ() > 0 && hitX < 0.5F || placedFacing.getFrontOffsetZ() < 0 && hitX >= 0.5F)
+					pos = pos.offset(placedFacing.rotateY());
+				
+				BlockPos placementPos = pos;
+				if (placedFacing == EnumFacing.EAST || placedFacing == EnumFacing.NORTH)
+					pos = pos.offset(placedFacing.rotateYCCW());    //The bounding box is symmetrical, so doing this gets rid of some rendering cases
+				
+				boundingBox = new AxisAlignedBB(0, 0, 0, (r ? 2 : 1), 2, (r ? 1 : 2)).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
+				placeable = ItemPunchDesignix.canPlaceAt(stack, player, player.world, placementPos, placedFacing);
+			} else if(stack.getItem() == Item.getItemFromBlock(MinestuckBlocks.totemlathe[0]))
+			{
+				pos = pos.offset(placedFacing.rotateY());
+				
+				if (placedFacing.getFrontOffsetX() > 0 && hitZ >= 0.5F || placedFacing.getFrontOffsetX() < 0 && hitZ < 0.5F
+						|| placedFacing.getFrontOffsetZ() > 0 && hitX < 0.5F || placedFacing.getFrontOffsetZ() < 0 && hitX >= 0.5F)
+					pos = pos.offset(placedFacing.rotateY());
+				
+				BlockPos placementPos = pos;
+				if (placedFacing == EnumFacing.EAST || placedFacing == EnumFacing.NORTH)
+					pos = pos.offset(placedFacing.rotateYCCW(), 3);    //The bounding box is symmetrical, so doing this gets rid of some rendering cases
+				
+				boundingBox = new AxisAlignedBB(0, 0, 0, (r ? 4 : 1), 3, (r ? 1 : 4)).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
+				placeable = ItemTotemLathe.canPlaceAt(stack, player, player.world, placementPos, placedFacing);
+			} else if(stack.getItem() == Item.getItemFromBlock(MinestuckBlocks.cruxtruder))
+			{
+				BlockPos placementPos = pos.offset(placedFacing.rotateY());
+				pos = pos.offset(placedFacing.getOpposite()).add(-1, 0, -1);
+				
+				boundingBox = new AxisAlignedBB(0,0,0, 3, 3, 3).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
+				placeable = ItemCruxtruder.canPlaceAt(stack, player, player.world, placementPos, placedFacing);
+			} else	//Alchemiter
+			{
+				pos = pos.offset(placedFacing.rotateY());
+				
+				if (placedFacing.getFrontOffsetX() > 0 && hitZ >= 0.5F || placedFacing.getFrontOffsetX() < 0 && hitZ < 0.5F
+						|| placedFacing.getFrontOffsetZ() > 0 && hitX < 0.5F || placedFacing.getFrontOffsetZ() < 0 && hitX >= 0.5F)
+					pos = pos.offset(placedFacing.rotateY());
+				
+				BlockPos placementPos = pos;
+				if (placedFacing == EnumFacing.EAST || placedFacing == EnumFacing.NORTH)
+					pos = pos.offset(placedFacing.rotateYCCW(), 3);
+				if(placedFacing == EnumFacing.EAST || placedFacing == EnumFacing.SOUTH)
+					pos = pos.offset(placedFacing.getOpposite(), 3);
+				
+				boundingBox = new AxisAlignedBB(0, 0, 0, 4, 4, 4).offset(pos).offset(-d1, -d2, -d3).shrink(0.002);
+				placeable = ItemAlchemiter.canPlaceAt(stack, player, player.world, placementPos, placedFacing);
+				
+				//If you don't want the extra details to the alchemiter outline, comment out the following two lines
+				RenderGlobal.drawSelectionBoundingBox(new AxisAlignedBB(1F/4F,1,1F/4F, 3F/4F, 4, 3F/4F).offset(placementPos).offset(-d1, -d2, -d3).shrink(0.002), placeable ? 0 : 1, placeable ? 1 : 0, 0, 0.5F);
+				RenderGlobal.drawSelectionBoundingBox(new AxisAlignedBB(0,0,0, 4, 1, 4).offset(pos).offset(-d1, -d2, -d3).shrink(0.002), placeable ? 0 : 1, placeable ? 1 : 0, 0, 0.5F);
+			}
+			
 			RenderGlobal.drawSelectionBoundingBox(boundingBox, placeable ? 0 : 1, placeable ? 1 : 0, 0, 0.5F);
 			GlStateManager.depthMask(true);
 			GlStateManager.enableTexture2D();
 			GlStateManager.disableBlend();
-		}
-		else return false;
-		
+		}		
 		return true;
 	}
 }

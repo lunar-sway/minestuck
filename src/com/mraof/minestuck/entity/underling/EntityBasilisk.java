@@ -10,31 +10,35 @@ import net.minecraft.world.World;
 
 public class EntityBasilisk extends EntityUnderling implements IEntityMultiPart 
 {
-	private EntityAIAttackOnCollideWithRate entityAIAttackOnCollideWithRate;
 	EntityUnderlingPart tail;
 	
 	public EntityBasilisk(World world) 
 	{
-		super(world, "basilisk");
+		super(world);
 		this.setSize(3F, 2F);
 		tail = new EntityUnderlingPart(this, 0, 3F, 2F);
 		world.spawnEntity(tail);
 	}
-
+	
+	@Override
+	protected String getUnderlingName()
+	{
+		return "basilisk";
+	}
+	
+	@Override
+	protected void initEntityAI()
+	{
+		super.initEntityAI();
+		EntityAIAttackOnCollideWithRate aiAttack = new EntityAIAttackOnCollideWithRate(this, .3F, 40, false);
+		aiAttack.setDistanceMultiplier(1.2F);
+		this.tasks.addTask(3, aiAttack);
+	}
+	
 	@Override
 	public GristSet getGristSpoils() 
 	{
 		return GristHelper.getRandomDrop(type, 6);
-	}
-
-	@Override
-	protected void setCombatTask() 
-	{
-		if(entityAIAttackOnCollideWithRate == null)
-			entityAIAttackOnCollideWithRate = new EntityAIAttackOnCollideWithRate(this, .3F, 40, false);
-		entityAIAttackOnCollideWithRate.setDistanceMultiplier(1.2F);
-		this.tasks.removeTask(this.entityAIAttackOnCollideWithRate);
-		this.tasks.addTask(4, entityAIAttackOnCollideWithRate);
 	}
 	
 	@Override

@@ -2,7 +2,9 @@ package com.mraof.minestuck.client;
 
 import com.mraof.minestuck.CommonProxy;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.model.*;
+import com.mraof.minestuck.client.renderer.BlockColorCruxite;
 import com.mraof.minestuck.client.renderer.RenderMachineOutline;
 import com.mraof.minestuck.client.renderer.entity.*;
 import com.mraof.minestuck.client.renderer.tileentity.RenderGate;
@@ -77,6 +79,7 @@ public class ClientProxy extends CommonProxy
 				else return -1;
 			}
 		}, MinestuckItems.cruxiteDowel, MinestuckItems.cruxiteApple, MinestuckItems.cruxitePotion);
+		mc.getBlockColors().registerBlockColorHandler(new BlockColorCruxite(), MinestuckBlocks.alchemiter[0], MinestuckBlocks.cruxtruder2, MinestuckBlocks.totemlathe[1]);
 	}
 	
 	@Override

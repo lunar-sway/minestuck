@@ -98,7 +98,8 @@ public class CommandGrist extends CommandBase
 		{
 			StringBuilder grist = new StringBuilder();
 			for (GristAmount amount : MinestuckPlayerData.getGristSet(identifier).getArray())
-				grist.append("\n").append(amount.getAmount()).append(" ").append(amount.getType().getDisplayName());    //TODO properly translate display name for client side
+				if(amount.getAmount() != 0)
+					grist.append("\n").append(amount.getAmount()).append(" ").append(amount.getType().getDisplayName());    //TODO properly translate display name for client side
 
 			sender.sendMessage(new TextComponentTranslation("commands.grist.get", displayName, grist.toString()));
 		}

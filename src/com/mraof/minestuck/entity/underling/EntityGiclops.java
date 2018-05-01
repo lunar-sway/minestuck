@@ -20,12 +20,11 @@ import net.minecraftforge.common.ForgeHooks;
 
 public class EntityGiclops extends EntityUnderling implements IBigEntity
 {
-	private EntityAIAttackOnCollideWithRate entityAIAttackOnCollideWithRate;
 	private PartGroup partGroup;
 
 	public EntityGiclops(World world)
 	{
-		super(world, "giclops");
+		super(world);
 
 		setSize(8.0F, 12.0F);
 		this.stepHeight = 2;
@@ -35,21 +34,26 @@ public class EntityGiclops extends EntityUnderling implements IBigEntity
 		partGroup.addBox(1, 0, -0.5, 3, 2, 3);
 		partGroup.createEntities(world);
 	}
+	
+	@Override
+	protected String getUnderlingName()
+	{
+		return "giclops";
+	}
+	
+	@Override
+	protected void initEntityAI()
+	{
+		super.initEntityAI();
+		EntityAIAttackOnCollideWithRate aiAttack = new EntityAIAttackOnCollideWithRate(this, .3F, 50, false);
+		aiAttack.setDistanceMultiplier(1.1F);
+		this.tasks.addTask(3, aiAttack);
+	}
 
 	@Override
 	public GristSet getGristSpoils()
 	{
 		return GristHelper.getRandomDrop(type, 10);
-	}
-
-	@Override
-	protected void setCombatTask() 
-	{
-		if(entityAIAttackOnCollideWithRate == null)
-			entityAIAttackOnCollideWithRate = new EntityAIAttackOnCollideWithRate(this, .3F, 50, false);
-		entityAIAttackOnCollideWithRate.setDistanceMultiplier(1.1F);
-		this.tasks.removeTask(this.entityAIAttackOnCollideWithRate);
-		this.tasks.addTask(4, entityAIAttackOnCollideWithRate);
 	}
 
 	@Override

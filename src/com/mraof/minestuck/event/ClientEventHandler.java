@@ -1,8 +1,27 @@
 package com.mraof.minestuck.event;
 
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.client.gui.GuiColorSelector;
+import com.mraof.minestuck.client.gui.playerStats.GuiDataChecker;
+import com.mraof.minestuck.client.gui.playerStats.GuiEcheladder;
+import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
+import com.mraof.minestuck.entity.consort.EnumConsort;
+import com.mraof.minestuck.inventory.ContainerConsortMerchant;
+import com.mraof.minestuck.inventory.ContainerEditmode;
+import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
+import com.mraof.minestuck.network.skaianet.SkaiaClient;
+import com.mraof.minestuck.util.ColorCollector;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.MinestuckPlayerData;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraft.potion.PotionUtils;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -11,18 +30,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.client.gui.GuiColorSelector;
-import com.mraof.minestuck.client.gui.playerStats.GuiDataChecker;
-import com.mraof.minestuck.client.gui.playerStats.GuiEcheladder;
-import com.mraof.minestuck.client.gui.playerStats.GuiPlayerStats;
-import com.mraof.minestuck.inventory.ContainerEditmode;
-import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
-import com.mraof.minestuck.network.skaianet.SkaiaClient;
-import com.mraof.minestuck.util.ColorCollector;
-import com.mraof.minestuck.util.MinestuckPlayerData;
 
 /**
  * Used to track mixed client sided events.
@@ -51,7 +58,7 @@ public class ClientEventHandler
 	@SubscribeEvent
 	public void onClientTick(TickEvent.ClientTickEvent event)
 	{
-		if(event.phase == TickEvent.Phase.START)
+		if(event.phase == TickEvent.Phase.END)
 		{
 			if(ColorCollector.displaySelectionGui && Minecraft.getMinecraft().currentScreen == null)
 			{
@@ -69,13 +76,36 @@ public class ClientEventHandler
 		//Add config check
 		{
 			ItemStack stack = event.getItemStack();
-			if(stack.getItem().getRegistryName().getResourceDomain().equals(Minestuck.class.getAnnotation(Mod.class).modid()))
+			if(event.getEntityPlayer() != null && event.getEntityPlayer().openContainer instanceof ContainerConsortMerchant
+					&& event.getEntityPlayer().openContainer.getInventory().contains(stack))
+			{
+				String unlocalized = stack.getUnlocalizedName();
+				if(stack.getItem() instanceof ItemPotion)
+					unlocalized = PotionUtils.getPotionFromItem(stack).getNamePrefixed("potion.");
+				
+				EnumConsort type = ((ContainerConsortMerchant)event.getEntityPlayer().openContainer).inventory.getConsortType();
+				String arg1 = I18n.format("entity.minestuck." + type.getName() + ".name");
+				
+				String name = "store."+unlocalized+".name";
+				String tooltip = "store."+unlocalized+".tooltip";
+				event.getToolTip().clear();
+				if(I18n.hasKey(name))
+					event.getToolTip().add(I18n.format(name, arg1));
+				else event.getToolTip().add(stack.getDisplayName());
+				if(I18n.hasKey(tooltip))
+					event.getToolTip().add(I18n.format(tooltip, arg1));
+			} else if(stack.getItem().getRegistryName().getResourceDomain().equals(Minestuck.class.getAnnotation(Mod.class).modid()))
 			{
 				String name = stack.getUnlocalizedName() + ".tooltip";
-				if(I18n.canTranslate(name))
-					event.getToolTip().add(1, I18n.translateToLocal(name));
+				if(I18n.hasKey(name))
+					event.getToolTip().add(1, I18n.format(name));
 			}
 		}
 	}
 	
+	@SubscribeEvent
+	public void onModelBake(ModelBakeEvent event)
+	{
+		Debug.info(event.getModelManager().getModel(new ModelResourceLocation("minestuck:alchemiter#facing=east,has_dowel=true,part=totem_pad")));
+	}
 }

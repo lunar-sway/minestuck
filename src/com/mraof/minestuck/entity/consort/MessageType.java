@@ -1,15 +1,14 @@
 package com.mraof.minestuck.entity.consort;
 
-import com.mraof.minestuck.network.MinestuckChannelHandler;
-import com.mraof.minestuck.network.MinestuckPacket;
-import com.mraof.minestuck.network.MinestuckPacket.Type;
-import com.mraof.minestuck.network.PlayerDataPacket;
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.client.gui.GuiHandler;
+import com.mraof.minestuck.inventory.ContainerConsortMerchant;
+import com.mraof.minestuck.inventory.InventoryConsortMerchant;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
 import com.mraof.minestuck.util.IdentifierHandler;
 import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 import com.mraof.minestuck.util.MinestuckPlayerData;
-import com.mraof.minestuck.util.MinestuckPlayerData.PlayerData;
 import com.mraof.minestuck.util.Title;
 import com.mraof.minestuck.world.WorldProviderLands;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
@@ -104,7 +103,10 @@ public abstract class MessageType
 			} else if(args[i].equals("consortSound"))
 			{
 				obj[i] = new TextComponentTranslation("consort.sound." + s);
-			} else if(args[i].equals("consortType"))
+			} else if(args[i].equals("consortSound2"))
+			{
+				obj[i] = new TextComponentTranslation("consort.sound2." + s);
+			} else if(args[i].equals("consort"))
 			{
 				obj[i] = new TextComponentTranslation("entity." + s + ".name");
 			} else if(args[i].equals("consortTypes"))
@@ -129,7 +131,7 @@ public abstract class MessageType
 			{
 				NBTTagCompound nbt = consort.getMessageTagForPlayer(player);
 				ItemStack stack = new ItemStack(nbt.getCompoundTag(args[i].substring(8)));
-				if(stack != null)
+				if(!stack.isEmpty())
 					obj[i] = new TextComponentTranslation(stack.getUnlocalizedName() + ".name");
 				else obj[i] = "Item";
 			}
@@ -412,6 +414,53 @@ public abstract class MessageType
 			if(text != null) //Only update if everything is correctly performed
 				nbt.setInteger(this.getString(), index);
 			return text;
+		}
+	}
+	
+	public static class ConditionedMessage extends MessageType
+	{
+		String nbtName;
+		Condition condition;
+		MessageType message1, message2;
+		
+		public ConditionedMessage(Condition condition, MessageType message1, MessageType message2)
+		{
+			this(message1.getString(), condition, message1, message2);
+		}
+		
+		public ConditionedMessage(String nbtName, Condition condition, MessageType message1, MessageType message2)
+		{
+			this.nbtName = nbtName;
+			this.condition = condition;
+			this.message1 = message1;
+			this.message2 = message2;
+		}
+		
+		@Override
+		public String getString()
+		{
+			return nbtName;
+		}
+		
+		@Override
+		public ITextComponent getMessage(EntityConsort consort, EntityPlayer player, String chainIdentifier)
+		{
+			if (condition.testFor(consort, player))
+				return message1.getMessage(consort, player, chainIdentifier);
+			else return message2.getMessage(consort, player, chainIdentifier);
+		}
+		
+		@Override
+		public ITextComponent getFromChain(EntityConsort consort, EntityPlayer player, String chainIdentifier, String fromChain)
+		{
+			if (condition.testFor(consort, player))
+				return message1.getFromChain(consort, player, chainIdentifier, fromChain);
+			else return message2.getFromChain(consort, player, chainIdentifier, fromChain);
+		}
+		
+		public interface Condition
+		{
+			boolean testFor(EntityConsort consort, EntityPlayer player);
 		}
 	}
 	
@@ -808,28 +857,22 @@ public abstract class MessageType
 			if(!repeat && nbt.getBoolean(nbtName))
 				return message.getMessage(consort, player, chainIdentifier);
 			
-			PlayerData data = MinestuckPlayerData.getData(player);
-			if(data.boondollars < cost)
+			if(!MinestuckPlayerData.addBoondollars(player, -cost))
 			{
 				player.sendMessage(createMessage(consort, player, "cantAfford", new String[0], false));
 				
 				return null;
 			} else
 			{
-				data.boondollars -= cost;
 				if(!repeat)
 					nbt.setBoolean(nbtName, true);
 				
-				LootContext.Builder contextBuilder = new LootContext.Builder((WorldServer) consort.world);
+				LootContext.Builder contextBuilder = new LootContext.Builder((WorldServer) consort.world).withLootedEntity(consort);
 				for(ItemStack itemstack : consort.world.getLootTableManager().getLootTableFromLocation(item)
 						.generateLootForPools(consort.world.rand, contextBuilder.build()))
 				{
 					player.entityDropItem(itemstack, 0.0F);
 				}
-				
-				MinestuckChannelHandler.sendToPlayer(
-						MinestuckPacket.makePacket(Type.PLAYER_DATA, PlayerDataPacket.BOONDOLLAR, data.boondollars),
-						player);
 				
 				return message.getMessage(consort, player, chainIdentifier);
 			}
@@ -1045,9 +1088,7 @@ public abstract class MessageType
 			{
 				if(boondollars != 0)
 				{
-					MinestuckPlayerData.getData(player).boondollars += boondollars;
-					MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(Type.PLAYER_DATA,
-							PlayerDataPacket.BOONDOLLAR, MinestuckPlayerData.getData(player).boondollars), player);
+					MinestuckPlayerData.addBoondollars(player, boondollars);
 				}
 				nbt.setBoolean(this.getString(), true);
 				return next.getMessage(consort, player, chainIdentifier);
@@ -1064,6 +1105,55 @@ public abstract class MessageType
 				String fromChain)
 		{
 			return next.getFromChain(consort, player, chainIdentifier, fromChain);
+		}
+	}
+	
+	public static class MerchantGuiMessage extends MessageType
+	{
+		protected String nbtName;
+		protected MessageType initMessage;
+		protected ResourceLocation lootTable;
+		
+		public MerchantGuiMessage(MessageType message, ResourceLocation location)
+		{
+			this(message.getString(), message, location);
+		}
+		
+		public MerchantGuiMessage(String name, MessageType message, ResourceLocation location)
+		{
+			nbtName = name;
+			initMessage = message;
+			lootTable = location;
+		}
+		
+		@Override
+		public String getString()
+		{
+			return nbtName;
+		}
+		
+		@Override
+		public ITextComponent getMessage(EntityConsort consort, EntityPlayer player, String chainIdentifier)
+		{
+			if(consort.stocks == null)
+			{
+				consort.stocks = new InventoryConsortMerchant(consort, ConsortRewardHandler.generateStock(lootTable, consort, consort.world.rand));
+			}
+			
+			player.openGui(Minestuck.instance, GuiHandler.GuiId.MERCHANT.ordinal(), player.world, (int) consort.posX, (int) consort.posY, (int) consort.posZ);
+			
+			if(player.openContainer instanceof ContainerConsortMerchant)
+			{
+				((ContainerConsortMerchant) player.openContainer).setInventory(consort.stocks);
+			}
+			
+			return initMessage.getMessage(consort, player, chainIdentifier);
+		}
+		
+		@Override
+		public ITextComponent getFromChain(EntityConsort consort, EntityPlayer player, String chainIdentifier, String fromChain)
+		{
+			return null;
 		}
 	}
 }

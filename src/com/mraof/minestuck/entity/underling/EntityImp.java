@@ -9,12 +9,16 @@ import net.minecraft.world.World;
 
 public class EntityImp extends EntityUnderling
 {
-	private EntityAIAttackOnCollideWithRate entityAIAttackOnCollideWithRate = new EntityAIAttackOnCollideWithRate(this, .4F, 20, false);
-
 	public EntityImp(World world) 
 	{
-		super(world, "imp");
+		super(world);
 		setSize(0.75F, 1.5F);
+	}
+	
+	@Override
+	protected String getUnderlingName()
+	{
+		return "imp";
 	}
 	
 	@Override
@@ -24,13 +28,13 @@ public class EntityImp extends EntityUnderling
 	}
 	
 	@Override
-	protected void setCombatTask() 
+	protected void initEntityAI()
 	{
-		if(entityAIAttackOnCollideWithRate == null)
-			entityAIAttackOnCollideWithRate = new EntityAIAttackOnCollideWithRate(this, .4F, 20, false);
-		this.tasks.removeTask(this.entityAIAttackOnCollideWithRate);
-		this.tasks.addTask(4, entityAIAttackOnCollideWithRate);
+		super.initEntityAI();
+		EntityAIAttackOnCollideWithRate aiAttack = new EntityAIAttackOnCollideWithRate(this, .4F, 20, false);
+		this.tasks.addTask(3, aiAttack);
 	}
+	
 	@Override
 	protected double getWanderSpeed() 
 	{

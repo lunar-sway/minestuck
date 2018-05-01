@@ -36,6 +36,7 @@ public class LandAspectPulse extends TitleLandAspect
 	protected void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.RED));
+		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.CARPET.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.BROWN));
 		chunkProvider.oceanChance = Math.max(chunkProvider.oceanChance, 0.2F);
 		
 		chunkProvider.blockRegistry.setBlockState("ocean", MinestuckBlocks.blockBlood.getDefaultState());

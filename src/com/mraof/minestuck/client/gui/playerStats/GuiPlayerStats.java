@@ -27,9 +27,9 @@ import java.util.Arrays;
 public abstract class GuiPlayerStats extends GuiScreenMinestuck
 {
 	
-	static final ResourceLocation icons = new ResourceLocation("minestuck", "textures/gui/icons.png");
+	public static final ResourceLocation icons = new ResourceLocation("minestuck", "textures/gui/icons.png");
 	
-	public static enum NormalGuiType
+	public enum NormalGuiType
 	{
 		
 		CAPTCHA_DECK(GuiCaptchaDeck.class, "gui.captchaDeck.name", true, false),

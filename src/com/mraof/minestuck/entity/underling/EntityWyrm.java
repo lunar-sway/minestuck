@@ -1,17 +1,15 @@
 package com.mraof.minestuck.entity.underling;
 
+import com.mraof.minestuck.entity.IEntityMultiPart;
+import com.mraof.minestuck.util.GristHelper;
+import com.mraof.minestuck.util.GristSet;
 import io.netty.buffer.ByteBuf;
-
-import java.util.ArrayList;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
-import com.mraof.minestuck.entity.IEntityMultiPart;
-import com.mraof.minestuck.util.GristHelper;
-import com.mraof.minestuck.util.GristSet;
+import java.util.ArrayList;
 
 public class EntityWyrm extends EntityUnderling implements IEntityMultiPart
 {
@@ -19,9 +17,15 @@ public class EntityWyrm extends EntityUnderling implements IEntityMultiPart
 	public ArrayList<Integer> partIds = new ArrayList<Integer>();
 	public EntityWyrm(World world)
 	{
-		super(world, "wyrm");
+		super(world);
 	}
-
+	
+	@Override
+	protected String getUnderlingName()
+	{
+		return "wyrm";
+	}
+	
 	@Override
 	public void writeSpawnData(ByteBuf buffer)
 	{
@@ -65,11 +69,6 @@ public class EntityWyrm extends EntityUnderling implements IEntityMultiPart
 	public GristSet getGristSpoils()
 	{
 		return GristHelper.getRandomDrop(type, 87);
-	}
-
-	@Override
-	protected void setCombatTask()
-	{
 	}
 
 	@Override

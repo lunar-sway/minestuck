@@ -17,10 +17,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
@@ -36,19 +33,18 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class EntityUnderling extends EntityMinestuck implements IEntityAdditionalSpawnData, IMob
 {
-
-	protected List<Class<? extends EntityLivingBase>> enemyClasses;
 	@SuppressWarnings("unchecked")
-	protected static EntityListFilter underlingSelector = new EntityListFilter(Arrays.<Class<? extends EntityLivingBase>>asList(EntityImp.class, EntityOgre.class, EntityBasilisk.class, EntityLich.class, EntityGiclops.class));
+	protected static EntityListFilter underlingSelector = new EntityListFilter(Arrays.asList(EntityImp.class, EntityOgre.class, EntityBasilisk.class, EntityLich.class, EntityGiclops.class));
 	protected EntityListFilter attackEntitySelector;
 	//The type of the underling
 	protected GristType type;
-	//Name of underling, used in getting the texture and actually naming it
-	public String underlingName;
 	public boolean fromSpawner;
 	public boolean dropCandy;
 	
@@ -56,30 +52,25 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	
 	protected Map<EntityPlayerMP, Double> damageMap = new HashMap<EntityPlayerMP, Double>();	//Map that stores how much damage each player did to this to this underling. Null is used for environmental or other non-player damage
 	
-	//random used in randomly choosing a type of creature
-	protected static Random randStatic = new Random();
-	
-	public EntityUnderling(World par1World, String underlingName) 
+	public EntityUnderling(World par1World)
 	{
 		super(par1World);
+	}
+	
+	@Override
+	protected void initEntityAI()
+	{
+		attackEntitySelector = new EntityListFilter(new ArrayList<>());
+		attackEntitySelector.entityList.add(EntityPlayerMP.class);
 		
-		this.underlingName = underlingName;
-		enemyClasses = new ArrayList<Class<? extends EntityLivingBase>>();
-		setEnemies();
-
-		this.tasks.addTask(1, new EntityAISwimming(this));
-		this.targetTasks.addTask(1, new EntityAIHurtByTargetAllied(this, underlingSelector));
-		this.targetTasks.addTask(2, new EntityAINearestAttackableTargetWithHeight(this, EntityPlayer.class, 128.0F, 2, true, false));
-		this.targetTasks.addTask(2, this.entityAINearestAttackableTargetWithHeight());
-		this.tasks.addTask(5, new EntityAIWander(this, this.getWanderSpeed()));
-		this.tasks.addTask(6, new EntityAILookIdle(this));
-		this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-
-		if (par1World != null && !par1World.isRemote)
-		{
-			this.setCombatTask();
-		}
-
+		tasks.addTask(1, new EntityAISwimming(this));
+		tasks.addTask(4, new EntityAIMoveTowardsRestriction(this, getWanderSpeed()));
+		tasks.addTask(5, new EntityAIWander(this, getWanderSpeed()));
+		tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+		tasks.addTask(7, new EntityAILookIdle(this));
+		
+		targetTasks.addTask(1, new EntityAIHurtByTargetAllied(this, underlingSelector));
+		targetTasks.addTask(2, new EntityAINearestAttackableTargetWithHeight(this, EntityLivingBase.class, 128.0F, 2, true, false, attackEntitySelector));
 	}
 	
 	@Override
@@ -105,8 +96,6 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	
 	//used when getting how much grist should be dropped on death
 	public abstract GristSet getGristSpoils();
-
-	protected abstract void setCombatTask();
 	
 	protected abstract float getKnockbackResistance();
 	
@@ -115,6 +104,8 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	protected abstract double getAttackDamage();
 	
 	protected abstract int getVitalityGel();
+	
+	protected abstract String getUnderlingName();
 	
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn)
@@ -169,16 +160,16 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	public String getTexture() 
 	{
 		if(type == null)
-			return "textures/mobs/underlings/" + GristType.Shale.getName() + '_' + underlingName + ".png";
-		return "textures/mobs/underlings/" + type.getName() + '_' + underlingName + ".png";
+			return "textures/mobs/underlings/" + GristType.Shale.getName() + '_' + getUnderlingName() + ".png";
+		return "textures/mobs/underlings/" + type.getName() + '_' + getUnderlingName() + ".png";
 	}
 	
 	@Override
 	public String getName() 
 	{
 		if(type != null)
-			return I18n.translateToLocalFormatted("entity.minestuck." + underlingName + ".type", type.getDisplayName());
-		else return I18n.translateToFallback("entity.minestuck." + underlingName + ".name");
+			return I18n.translateToLocalFormatted("entity.minestuck." + getUnderlingName() + ".type", type.getDisplayName());
+		else return I18n.translateToFallback("entity.minestuck." + getUnderlingName() + ".name");
 	}
 	
 	@Override
@@ -190,30 +181,20 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 			this.addEnemy(par1EntityLivingBase.getClass());
 		}
 	}
-	public void setEnemies()
-	{
-		attackEntitySelector = new EntityListFilter(enemyClasses);
-	}
 
 	public void addEnemy(Class<? extends EntityLivingBase> enemyClass)
 	{
-		if(!enemyClasses.contains(enemyClass))
+		if(!attackEntitySelector.entityList.contains(enemyClass) && !underlingSelector.entityList.contains(enemyClass))
 		{
-			enemyClasses.add(enemyClass);
-			this.setEnemies();
-			this.setCombatTask();
+			attackEntitySelector.entityList.add(enemyClass);
 		}
-	}
-	EntityAINearestAttackableTargetWithHeight entityAINearestAttackableTargetWithHeight()
-	{
-		return new EntityAINearestAttackableTargetWithHeight(this, EntityLivingBase.class, 128.0F, 2, true, false, attackEntitySelector);
 	}
 	
 	@Override
 	public void writeEntityToNBT(NBTTagCompound tagCompound) 
 	{
 		super.writeEntityToNBT(tagCompound);
-		tagCompound.setString("type", this.type.getName());
+		tagCompound.setString("type", type.getRegistryName().toString());
 		tagCompound.setBoolean("spawned", fromSpawner);
 		if(hasHome())
 		{

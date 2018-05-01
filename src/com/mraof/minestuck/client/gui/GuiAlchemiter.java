@@ -1,10 +1,8 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.block.BlockSburbMachine.MachineType;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.util.GuiUtil;
-import com.mraof.minestuck.inventory.ContainerAlchemiter;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
@@ -14,231 +12,130 @@ import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import com.mraof.minestuck.util.GristAmount;
 import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
-import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 
-import java.io.IOException;
 import java.util.List;
 
-public class GuiAlchemiter extends GuiContainer
+public class GuiAlchemiter extends GuiScreen
 {
 	
-	private static final String[] guis = {"cruxtruder", "designix", "lathe", "alchemiter"};
 	
-	private ResourceLocation guiBackground;
-	private ResourceLocation guiProgress;
-	private MachineType type;
-	protected TileEntityAlchemiter te;
-	//private EntityPlayer player;
+	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/large_alchemiter.png");
+	private static final int guiWidth = 159, guiHeight = 102;
+	private TileEntityAlchemiter alchemiter;
+	private int itemQuantity;
 	
-	private int progressX;
-	private int progressY;
-	private int progressWidth;
-	private int progressHeight;
-	private int goX;
-	private int goY;
-	private GuiButton goButton;
-
-	public GuiAlchemiter (InventoryPlayer inventoryPlayer, TileEntityAlchemiter tileEntity) 
+	public GuiAlchemiter(TileEntityAlchemiter te)
 	{
-	super(new ContainerAlchemiter(inventoryPlayer, tileEntity));
-	this.te = tileEntity;
-	this.type = MachineType.ALCHEMITER;
-	guiBackground = new ResourceLocation("minestuck:textures/gui/" + guis[type.ordinal()] + ".png");
-	guiProgress = new ResourceLocation("minestuck:textures/gui/progress/" + guis[type.ordinal()] + ".png");
-	//this.player = inventoryPlayer.player;
-	
-	//sets prgress bar information based on machine type
-	
-		progressX = 54;
-		progressY = 23;
-		progressWidth = 71;
-		progressHeight = 10;
-		goX = 72;
-		goY = 31;
-		
-}
-
-	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
-	{
-		fontRenderer.drawString(I18n.format("gui."+guis[type.ordinal()]+".name"), 8, 6, 4210752);
-		//draws "Inventory" or your regional equivalent
-		fontRenderer.drawString(I18n.format("container.inventory"), 8, ySize - 96 + 2, 4210752);
-		if ( !te.getStackInSlot(0).isEmpty()) 
-		{
-			//Render grist requirements
-			ItemStack stack = AlchemyRecipeHandler.getDecodedItem(te.getStackInSlot(0));
-			if(type == MachineType.ALCHEMITER && !(te.getStackInSlot(0).hasTagCompound() && te.getStackInSlot(0).getTagCompound().hasKey("contentID")))
-				stack = new ItemStack(MinestuckBlocks.genericObject);
-			
-			GristSet set = GristRegistry.getGristConversion(stack);
-			boolean useSelectedType = stack.getItem() == MinestuckItems.captchaCard;
-			if(useSelectedType)
-				set = new GristSet(te.getSelectedGrist(), MinestuckConfig.clientCardCost);
-			if(set != null && stack.isItemDamaged())
-			{
-				float multiplier = 1 - stack.getItem().getDamage(stack)/((float) stack.getMaxDamage());
-				for (GristAmount amount : set.getArray())
-				{
-					if (type == MachineType.ALCHEMITER)
-					{
-						set.setGrist(amount.getType(), (int) Math.ceil(amount.getAmount() * multiplier));
-					}
-					else
-					{
-						set.setGrist(amount.getType(), (int) (amount.getAmount() * multiplier));
-					}
-				}
-			}
-			
-			GuiUtil.drawGristBoard(set, useSelectedType ? GuiUtil.GristboardMode.ALCHEMITER_SELECT : GuiUtil.GristboardMode.ALCHEMITER, 9, 45, fontRenderer);
-			
-			List<String> tooltip = GuiUtil.getGristboardTooltip(set, mouseX - this.guiLeft, mouseY - this.guiTop, 9, 45, fontRenderer);
-			if(tooltip != null)
-				this.drawHoveringText(tooltip, mouseX - this.guiLeft, mouseY - this.guiTop, fontRenderer);
-			
-		}
+		alchemiter = te;
+		itemQuantity = 1;
 	}
 	
-	@Override
-	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
-	{
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		
-		//draw background
-		this.mc.getTextureManager().bindTexture(guiBackground);
-		int x = (width - xSize) / 2;
-		int y = (height - ySize) / 2;
-		this.drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
-		
-		//draw progress bar
-		this.mc.getTextureManager().bindTexture(guiProgress);
-		int width = getScaledValue(te.progress, te.maxProgress, progressWidth);
-		int height = progressHeight;
-		this.drawModalRectWithCustomSizedTexture(x+progressX, y+progressY+progressHeight-height, 0, progressHeight-height, width, height, progressWidth, progressHeight);
-	}
-
 	@Override
 	public void initGui()
 	{
-		super.initGui();
+		GuiButton alchemize = new GuiButton(0, (width-100)/2,(height-guiHeight)/2+110, 100, 20, "ALCHEMIZE");
 		
-		if(!te.isAutomatic())
-		{
-			goButton = new GuiButtonExt(1, (width - xSize) / 2 + goX, (height - ySize) / 2 + goY, 30, 12, te.overrideStop ? "STOP" : "GO");
-			buttonList.add(goButton);
-		}
+		GuiButton hundredsUp = new GuiButton(1,(width-guiWidth)/2+52,(height-guiHeight)/2+10,18,18,"^");
+		GuiButton tensUp = new GuiButton(2,(width-guiWidth)/2+31,(height-guiHeight)/2+10,18,18,"^");
+		GuiButton onesUp = new GuiButton(3,(width-guiWidth)/2+10,(height-guiHeight)/2+10,18,18,"^");
+		GuiButton hundredsDown = new GuiButton(4,(width-guiWidth)/2+52,(height-guiHeight)/2+74,18,18,"v");
+		GuiButton tensDown =new GuiButton(5,(width-guiWidth)/2+31,(height-guiHeight)/2+74,18,18,"v");
+		GuiButton onesDown = new GuiButton(6,(width-guiWidth)/2+10,(height-guiHeight)/2+74,18,18,"v");
+		//GuiLabel ones = new GuiLabel(fontRendererObj, p_i45540_2_, p_i45540_3_, p_i45540_4_, p_i45540_5_, p_i45540_6_, p_i45540_7_)
+		
+		buttonList.add(alchemize);
+		buttonList.add(onesUp);
+		buttonList.add(tensUp);
+		buttonList.add(hundredsUp);
+		buttonList.add(onesDown);
+		buttonList.add(tensDown);
+		buttonList.add(hundredsDown);
 	}
 	
-	@Override
-	protected void actionPerformed(GuiButton guibutton)
-	{
-		
-		if (guibutton == goButton)
+		@Override
+		public void drawScreen(int mouseX, int mouseY, float partialTicks)
 		{
-			if (Mouse.getEventButton() == 0 && !te.overrideStop)
-			{
-				//Tell the machine to go once
-				MinestuckPacket packet = MinestuckPacket.makePacket(Type.GOBUTTON,true,false);
-				MinestuckChannelHandler.sendToServer(packet);
-				
-				te.ready = true;
-				te.overrideStop = false;
-				goButton.displayString = I18n.format(te.overrideStop ? "gui.buttonStop" : "gui.buttonGo");
-			}
-			else if (Mouse.getEventButton() == 1 && te.allowOverrideStop())
-			{
-				//Tell the machine to go until stopped
-				MinestuckPacket packet = MinestuckPacket.makePacket(Type.GOBUTTON,true,!te.overrideStop);
-				MinestuckChannelHandler.sendToServer(packet);
-				
-				te.overrideStop = !te.overrideStop;
-				goButton.displayString = I18n.format(te.overrideStop ? "gui.buttonStop" : "gui.buttonGo");
-			}
-		}
-	}
-	
-	@Override
-	protected void mouseClicked(int par1, int par2, int par3) throws IOException
-	{
-		super.mouseClicked(par1,par2,par3);
-		if (par3 == 1)
-		{
-			if(goButton != null && goButton.mousePressed(this.mc, par1, par2))
-			{
-				goButton.playPressSound(this.mc.getSoundHandler());
-				this.actionPerformed(goButton);
-			}
-		}
-		else if(par3 == 0 && mc.player.inventory.getItemStack().isEmpty()
-				&& te.getStackInSlot(0) != null && AlchemyRecipeHandler.getDecodedItem(te.getStackInSlot(0)).getItem() == MinestuckItems.captchaCard
-				&& par1 >= guiLeft + 9 && par1 < guiLeft + 167 && par2 >= guiTop + 45 && par2 < guiTop + 70)
-		{
-			//mc.currentScreen = new GuiGristSelector(this);
-			mc.currentScreen.setWorldAndResolution(mc, width, height);
-		}
-	}
-	
-	@Override
-	protected void keyTyped(char typedChar, int keyCode) throws IOException
-	{
-		super.keyTyped(typedChar, keyCode);
-		
-		if(keyCode == 28)
-		{
-			this.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+			int xOffset = (width - guiWidth)/2;
+			int yOffset = (height - guiHeight)/2;
 			
-			boolean mode = te.allowOverrideStop() && (Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54));
-			MinestuckPacket packet = MinestuckPacket.makePacket(Type.GOBUTTON,true, mode && !te.overrideStop);
+			this.drawDefaultBackground();	
+			
+			
+			
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+
+			this.mc.getTextureManager().bindTexture(guiBackground);
+			this.drawTexturedModalRect(xOffset, yOffset, 0, 0, guiWidth, guiHeight);
+			
+			mc.fontRenderer.drawString(Integer.toString(((int)(itemQuantity/Math.pow(10,2))%10)), (width-guiWidth)/2+15,(height-guiHeight)/2+46, 16777215);
+			mc.fontRenderer.drawString(Integer.toString(((int)(itemQuantity/Math.pow(10,1))%10)), (width-guiWidth)/2+36,(height-guiHeight)/2+46, 16777215);
+			mc.fontRenderer.drawString(Integer.toString(((int)(itemQuantity/Math.pow(10,0))%10)), (width-guiWidth)/2+57,(height-guiHeight)/2+46, 16777215);
+			
+			//Render grist requirements
+			ItemStack stack = AlchemyRecipeHandler.getDecodedItem(alchemiter.getDowel());
+			if( !(alchemiter.getDowel().hasTagCompound() && alchemiter.getDowel().getTagCompound().hasKey("contentID")))
+				stack = new ItemStack(MinestuckBlocks.genericObject);
+
+			GristSet set = GristRegistry.getGristConversion(stack);
+			boolean useSelectedType = stack.getItem() == MinestuckItems.captchaCard;
+			if (useSelectedType)
+				set = new GristSet(alchemiter.getSelectedGrist(), MinestuckConfig.clientCardCost);
+			if (set != null && stack.isItemDamaged())
+			{
+				float multiplier = 1 - stack.getItem().getDamage(stack) / ((float) stack.getMaxDamage());
+				for (GristAmount amount : set.getArray())
+				{
+					set.setGrist(amount.getType(), (int)( Math.ceil(amount.getAmount() * multiplier)));
+				}
+				
+			}
+			for (GristAmount amount : set.getArray())
+			{
+				set.setGrist(amount.getType(), amount.getAmount()*itemQuantity);
+			}
+			
+			GuiUtil.drawGristBoard(set, useSelectedType ? GuiUtil.GristboardMode.LARGE_ALCHEMITER_SELECT : GuiUtil.GristboardMode.LARGE_ALCHEMITER, (width-guiWidth)/2+88,(height-guiHeight)/2+13, fontRenderer);
+			
+			List<String> tooltip = GuiUtil.getGristboardTooltip(set, mouseX , mouseY , 9, 45, fontRenderer);
+			if (tooltip != null)
+				this.drawHoveringText(tooltip, mouseX , mouseY , fontRenderer);
+			super.drawScreen(mouseX, mouseY, partialTicks);
+		}
+		
+		
+	@Override
+	public boolean doesGuiPauseGame() {
+		return false;
+	}
+	
+	@Override
+	protected void actionPerformed(GuiButton button)
+	{
+		
+		if (button.id == 0)
+		{
+			
+			MinestuckPacket packet = MinestuckPacket.makePacket(Type.ALCHEMITER_PACKET, alchemiter, itemQuantity);
 			MinestuckChannelHandler.sendToServer(packet);
+			this.mc.displayGuiScreen(null);
 			
-			if(!mode)
-				te.ready = true;
-			te.overrideStop = mode && !te.overrideStop;
-			goButton.displayString = I18n.format(te.overrideStop ? "gui.buttonStop" : "gui.buttonGo");
+		} else if (button.id <= 3)
+		{
+			if ((int) (itemQuantity / Math.pow(10, button.id - 1)) % 10 != 9)
+			{
+				itemQuantity += Math.pow(10, button.id - 1);
+			}
+		} else
+		{
+			if ((int) (itemQuantity / Math.pow(10, button.id - 4)) % 10 != 0)
+			{
+				itemQuantity -= Math.pow(10, button.id - 4);
+			}
 		}
-	}
-	
-	/**
-	 * Draws a box like drawModalRect, but with custom width and height values.
-	 */
-	public void drawCustomBox(int par1, int par2, int par3, int par4, int par5, int par6, int width, int height)
-	{
-		float f = 1/(float)width;
-		float f1 = 1/(float)height;
-		BufferBuilder render = Tessellator.getInstance().getBuffer();
-		render.begin(7, DefaultVertexFormats.POSITION_TEX);
-		render.pos(par1, par2 + par6, 0D).tex((par3)*f, (par4 + par6)*f1).endVertex();
-		render.pos(par1 + par5, par2 + par6, this.zLevel).tex((par3 + par5)*f, (par4 + par6)*f1).endVertex();
-		render.pos(par1 + par5, par2, this.zLevel).tex((par3 + par5)*f, (par4)*f1).endVertex();
-		render.pos(par1, par2, this.zLevel).tex((par3)*f, (par4)*f1).endVertex();
-		Tessellator.getInstance().draw();
-	}
-	
-	/**
-	 * Returns a number to be used in calculation of progress bar length.
-	 * 
-	 * @param progress the progress done.
-	 * @param max The maximum amount of progress.
-	 * @param imageMax The length of the progress bar image to scale to
-	 * @return The length the progress bar should be shown to
-	 */
-	public int getScaledValue(int progress,int max,int imageMax)
-	{
-		return (int) ((float) imageMax*((float)progress/(float)max));
 	}
 }

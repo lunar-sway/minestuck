@@ -10,14 +10,28 @@ import net.minecraft.world.World;
 //Makes non-stop ogre puns
 public class EntityOgre extends EntityUnderling 
 {
-	private EntityAIAttackOnCollideWithRate entityAIAttackOnCollideWithRate;
 	public EntityOgre(World world)
 	{
-		super(world, "ogre");
+		super(world);
 		setSize(3.0F, 4.5F);
 		this.stepHeight = 1.0F;
 	}
-
+	
+	@Override
+	protected String getUnderlingName()
+	{
+		return "ogre";
+	}
+	
+	@Override
+	protected void initEntityAI()
+	{
+		super.initEntityAI();
+		EntityAIAttackOnCollideWithRate aiAttack = new EntityAIAttackOnCollideWithRate(this, .3F, 40, false);
+		aiAttack.setDistanceMultiplier(1.2F);
+		this.tasks.addTask(3, aiAttack);
+	}
+	
 	@Override
 	public GristSet getGristSpoils()
 	{
@@ -25,19 +39,11 @@ public class EntityOgre extends EntityUnderling
 	}
 	
 	@Override
-	protected void setCombatTask() 
-	{
-		if(entityAIAttackOnCollideWithRate == null)
-			entityAIAttackOnCollideWithRate = new EntityAIAttackOnCollideWithRate(this, .3F, 40, false);
-		entityAIAttackOnCollideWithRate.setDistanceMultiplier(1.2F);
-		this.tasks.removeTask(this.entityAIAttackOnCollideWithRate);
-		this.tasks.addTask(4, entityAIAttackOnCollideWithRate);
-	}
-	@Override
 	protected double getWanderSpeed() 
 	{
 		return 0.65;
 	}
+	
 	@Override
 	protected float getMaximumHealth() 
 	{

@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.TabMinestuck;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -16,7 +16,7 @@ public class BlockGlowingMushroom extends BlockBush
 	public BlockGlowingMushroom()
 	{
 		super();
-		setCreativeTab(MinestuckItems.tabMinestuck);
+		setCreativeTab(TabMinestuck.instance);
 		setUnlocalizedName("glowingMushroom");
 		setLightLevel(0.75F);
 		setSoundType(SoundType.PLANT);

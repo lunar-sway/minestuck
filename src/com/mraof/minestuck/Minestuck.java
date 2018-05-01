@@ -83,8 +83,6 @@ public class Minestuck
 		
 		proxy.preInit();
 		
-		MinestuckItems.createItems();
-		
 		MinecraftForge.EVENT_BUS.register(MinestuckSoundHandler.instance);
 		MinecraftForge.EVENT_BUS.register(MinestuckBlocks.class);
 		MinecraftForge.EVENT_BUS.register(MinestuckItems.class);
@@ -102,7 +100,7 @@ public class Minestuck
 		GameRegistry.registerTileEntity(TileEntitySkaiaPortal.class, "minestuck:gate_portal");
 		GameRegistry.registerTileEntity(TileEntitySburbMachine.class, "minestuck:sburb_machine");
 		GameRegistry.registerTileEntity(TileEntityPunchDesignix.class, "Minestuck:punch_designix");
-		GameRegistry.registerTileEntity(TileEntityTotemlathe.class, "Minestuck:totem_lathe");
+		GameRegistry.registerTileEntity(TileEntityTotemLathe.class, "Minestuck:totem_lathe");
 		GameRegistry.registerTileEntity(TileEntityAlchemiter.class,"Minestuck:alchemiter");
 		GameRegistry.registerTileEntity(TileEntityCruxtruder.class, "Minestuck:cruxtruder");
 		GameRegistry.registerTileEntity(TileEntityCrockerMachine.class, "minestuck:crocker_machine");
@@ -170,22 +168,16 @@ public class Minestuck
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) 
 	{
-		AlchemyRecipeHandler.registerDynamicRecipes();
-
-		//register NEI stuff
-		if (Loader.isModLoaded("NotEnoughItems")) {
-//			NEIModContainer.plugins.add(new NEIMinestuckConfig());
-		}
-		
 		if(Loader.isModLoaded("crafttweaker"))
 			CraftTweakerSupport.applyRecipes();
+		
+		AlchemyRecipeHandler.registerDynamicRecipes();
 	}
 
 	@EventHandler 
 	public void serverAboutToStart(FMLServerAboutToStartEvent event)
 	{
 		isServerRunning = true;
-		AlchemyRecipeHandler.addOrRemoveRecipes(MinestuckConfig.cardRecipe);
 		TileEntityTransportalizer.transportalizers.clear();
 		DeployList.applyConfigValues(MinestuckConfig.deployConfigurations);
 	}
@@ -219,6 +211,7 @@ public class Minestuck
 		event.registerServerCommand(new CommandSetRung());
 		event.registerServerCommand(new CommandConsortReply());
 		event.registerServerCommand(new CommandToStructure());
+		event.registerServerCommand(new CommandPorkhollow());
 		
 		worldSeed = event.getServer().worlds[0].getSeed();
 		ServerEventHandler.lastDay = event.getServer().worlds[0].getWorldTime() / 24000L;

@@ -45,7 +45,7 @@ public class StructureBlockUtil
 	
 	public static boolean placeLootChest(BlockPos pos, World world, StructureBoundingBox bb, EnumFacing facing, ResourceLocation lootTable, Random rand)
 	{
-		if(bb.isVecInside(pos))
+		if(bb == null || bb.isVecInside(pos))
 		{
 			world.setBlockState(pos, Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, facing), 2);
 			

@@ -36,6 +36,7 @@ public class LandAspectLight extends TitleLandAspect
 	protected void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.ORANGE));
+		chunkProvider.blockRegistry.setBlockState("carpet", Blocks.CARPET.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.ORANGE));
 		chunkProvider.blockRegistry.setBlockState("torch", Blocks.TORCH.getDefaultState());
 		
 		chunkProvider.decorators.add(new PillarDecorator("light_block", 0.5F, false, BiomeMinestuck.mediumNormal, BiomeMinestuck.mediumOcean));

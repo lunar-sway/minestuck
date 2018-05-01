@@ -1,126 +1,120 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.tileentity.TileEntityCruxtruder;
+
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 public class BlockCruxtruder2 extends BlockCruxtruder {
 
 
-	public static final PropertyEnum<enumParts> PART = PropertyEnum.<enumParts>create("part",enumParts.class);
-	
+	public static final PropertyEnum<EnumParts> PART = PropertyEnum.<EnumParts>create("part",EnumParts.class);
+	public static final PropertyBool HASLID=PropertyBool.create("haslid");
+	public static final PropertyBool DOWELOUT=PropertyBool.create("dowelout");
 	BlockCruxtruder2(){
 		setUnlocalizedName("cruxtruder2");
+		setDefaultState(blockState.getBaseState().withProperty(HASLID, true).withProperty(DOWELOUT, false));
 	}
 	
 	@Override
 	protected BlockStateContainer createBlockState()
     {
-        return new BlockStateContainer(this, new IProperty[] {PART});
+        return new BlockStateContainer(this, new IProperty[] {PART,HASLID,DOWELOUT});
     }
-
-	//Block state handling
-	public static enum enumParts implements IStringSerializable
-	{
-
-
-		ZERO_TWO_ZERO,
-		ZERO_TWO_ONE,
-		ZERO_TWO_TWO,
-		ONE_TWO_ZERO,
-		ONE_TWO_ONE,
-		ONE_TWO_TWO,
-		ONE_THREE_ONE,
-		TWO_TWO_ZERO,
-		TWO_TWO_ONE,
-		TWO_TWO_TWO;
 	
+	//Block state handling
+	public enum EnumParts implements IStringSerializable
+	{
+		ONE_ONE_ONE(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D)),
+		ONE_TWO_ONE(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D)),
+		ONE_THREE_ONE(new AxisAlignedBB(3/16D, 0.0D, 3/16D, 13/16D, 12/16D, 13/16D));
 		
+		private final AxisAlignedBB[] BOUNDING_BOX;
+		public AxisAlignedBB getBoundingBox(int i){
+			return BOUNDING_BOX[i];
+		}
+		EnumParts(AxisAlignedBB... bb)
+		{
+			BOUNDING_BOX = bb;
+		}
+		
+		@Override
 		public String toString()
 		{
 			return getName();
 		}
+		
+		@Override
 		public String getName()
 		{
-			switch (this){
-
-			case ZERO_TWO_ZERO:return "zero_two_zero";
-			case ZERO_TWO_ONE:return "zero_two_one";
-			case ZERO_TWO_TWO:return "zero_two_two";
-			case ONE_TWO_ZERO:return "one_two_zero";
-			case ONE_TWO_ONE:return "one_two_one";
-			case ONE_TWO_TWO:return "one_two_two";
-			case ONE_THREE_ONE:return "one_three_one";
-			case TWO_TWO_ZERO:return "two_two_zero";
-			case TWO_TWO_ONE:return "two_two_one";
-			case TWO_TWO_TWO:return "two_two_two";
-			}
-			return "null";
+			return name().toLowerCase();
 		}
-		
-		
-
 	}
 	@Override
-	public BlockPos GetMasterPos(IBlockState state, BlockPos pos){
-		enumParts part=state.getValue(PART);
+	public BlockPos getMainPos(IBlockState state, BlockPos pos){
+		EnumParts part=state.getValue(PART);
 		switch(part){
-		case ZERO_TWO_ZERO:	return pos.north(0).down(1).west(0);
-		case ZERO_TWO_ONE:	return pos.north(0).down(1).west(1);
-		case ZERO_TWO_TWO:	return pos.north(0).down(1).west(2);
-		case ONE_TWO_ZERO:	return pos.north(1).down(1).west(0);
-		case ONE_TWO_ONE:	return pos.north(1).down(1).west(1);
-		case ONE_TWO_TWO:	return pos.north(1).down(1).west(2);
-		case ONE_THREE_ONE:	return pos.north(1).down(2).west(1);
-		case TWO_TWO_ZERO:	return pos.north(2).down(1).west(0);
-		case TWO_TWO_ONE:	return pos.north(2).down(1).west(1);
-		case TWO_TWO_TWO:	return pos.north(2).down(1).west(2);
+		case ONE_ONE_ONE: 	return pos.up(2);
+		case ONE_TWO_ONE:	return pos.up();
+		case ONE_THREE_ONE:	return pos;
 		}
 		return pos;
 	}
+	
 	@Override
-	public IBlockState getStateFromMeta(int meta){
-		IBlockState defaultState=getDefaultState();
-		switch (meta){
-		case 0: return defaultState.withProperty(PART, enumParts.ZERO_TWO_ZERO);
-		case 1: return defaultState.withProperty(PART, enumParts.ZERO_TWO_ONE);
-		case 2: return defaultState.withProperty(PART, enumParts.ZERO_TWO_TWO);
-		case 3: return defaultState.withProperty(PART, enumParts.ONE_TWO_ZERO);
-		case 4: return defaultState.withProperty(PART, enumParts.ONE_TWO_ONE);
-		case 5: return defaultState.withProperty(PART, enumParts.ONE_TWO_TWO);
-		case 6: return defaultState.withProperty(PART, enumParts.ONE_THREE_ONE);
-		case 7: return defaultState.withProperty(PART, enumParts.TWO_TWO_ZERO);
-		case 8: return defaultState.withProperty(PART, enumParts.TWO_TWO_ONE);
-		case 9: return defaultState.withProperty(PART, enumParts.TWO_TWO_TWO);
-		
-		
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
+	{
+
+		if(state.getValue(HASLID)&&state.getValue(PART)==EnumParts.ONE_THREE_ONE) {
+			worldIn.setBlockState(pos, state.withProperty(HASLID, false));
+			//spawn lid entity???(that dosn't exist yet)
+		}else {			
+			super.breakBlock(worldIn, pos, state);
 		}
-		return null;
+	}
+	
+	@Override
+	public IBlockState getActualState(IBlockState state,IBlockAccess worldIn,BlockPos pos) {
+		if (state.getValue(PART)==EnumParts.ONE_THREE_ONE ) {
+			BlockPos mainPos = getMainPos(state, pos);
+			TileEntity te = worldIn.getTileEntity(mainPos);
+			return state.withProperty(DOWELOUT, ((TileEntityCruxtruder)te).IsDowelOut());
+		}
+		return state;	
+	}
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta)
+	{
+		IBlockState defaultState = getDefaultState();
+		EnumParts part = EnumParts.values()[meta%3];
+		Boolean haslid=meta/3==1?true:false;
+		return defaultState.withProperty(PART, part).withProperty(HASLID, haslid);
+	}
+	@Override
+	public int getMetaFromState(IBlockState state)
+	{
+		EnumParts part = state.getValue(PART);
+		if(state.getValue(HASLID))
+			return part.ordinal();
+		else
+			return part.ordinal()+3;
 	}
 
 	@Override
-	public int getMetaFromState(IBlockState state){
-		enumParts part=state.getValue(PART);
-	switch(part){
-	case ZERO_TWO_ZERO: return 0;
-	case ZERO_TWO_ONE: 	return 1;
-	case ZERO_TWO_TWO:	return 2;
-	case ONE_TWO_ZERO:	return 3;
-	case ONE_TWO_ONE:	return 4;
-	case ONE_TWO_TWO:	return 5;
-	case ONE_THREE_ONE:	return 6;
-	case TWO_TWO_ZERO:	return 7;
-	case TWO_TWO_ONE:	return 8;
-	case TWO_TWO_TWO:	return 9;
+	public TileEntity createNewTileEntity(World worldIn, int meta) {
+		if ((meta%3)==EnumParts.ONE_THREE_ONE.ordinal())
+				return new TileEntityCruxtruder();
+		return null;
 	}
-		return 0;
-	}
-	
-	
-	
-	
 }
 

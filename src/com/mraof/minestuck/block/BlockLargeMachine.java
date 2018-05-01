@@ -1,18 +1,18 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.TabMinestuck;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 
 import java.util.List;
 
@@ -35,7 +35,7 @@ public abstract class BlockLargeMachine extends BlockContainer
 	{
 		super(Material.ROCK);
 		this.setHardness(2);
-		this.setCreativeTab(MinestuckItems.tabMinestuck);
+		this.setCreativeTab(TabMinestuck.instance);
 	}	
 	//keeps the blocks from dropping something
 	@Override
@@ -57,5 +57,17 @@ public abstract class BlockLargeMachine extends BlockContainer
 	@Override
 	public boolean isOpaqueCube(IBlockState state){
 		return false;
+	}
+	
+	@Override
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face)
+	{
+		return BlockFaceShape.UNDEFINED;
+	}
+	
+	@Override
+	public BlockRenderLayer getBlockLayer()
+	{
+		return BlockRenderLayer.CUTOUT_MIPPED;
 	}
 }

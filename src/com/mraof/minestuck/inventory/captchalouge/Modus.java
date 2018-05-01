@@ -12,7 +12,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public abstract class Modus
 {
 	
-	public EntityPlayer player;
+	public EntityPlayer player;	//TODO remove this and replace this by adding the player as argument in methods next version shift
+	//This change will break addons that add their own modus
 	public Side side;
 	
 	/**

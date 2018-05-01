@@ -1,9 +1,9 @@
 package com.mraof.minestuck.util;
 
 import com.mraof.minestuck.Minestuck;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.RegistryNamespaced;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -64,9 +64,9 @@ public class GristType extends IForgeRegistryEntry.Impl<GristType> implements Co
 		return REGISTRY.getValues();
 	}
 
-	public String getDisplayName()
+	public String getDisplayName()	//TODO Phase out serverside usage of this method
 	{
-		return I18n.format("grist." + name);
+		return I18n.translateToLocal("grist." + name);
 	}
 
 	/**

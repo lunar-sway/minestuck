@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.TabMinestuck;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockMinestuckStone extends Block
@@ -33,7 +34,7 @@ public class BlockMinestuckStone extends Block
 	{
 		super(Material.ROCK);
 		setDefaultState(blockState.getBaseState().withProperty(VARIANT, BlockType.COARSE));
-		setCreativeTab(MinestuckItems.tabMinestuck);
+		setCreativeTab(TabMinestuck.instance);
 		setHardness(1.5F);
 		setResistance(10.0F);
 		setSoundType(SoundType.STONE);
@@ -75,6 +76,12 @@ public class BlockMinestuckStone extends Block
 	{
 		for(BlockType type : BlockType.values())
 			items.add(new ItemStack(this, 1, type.getMetadata()));
+	}
+	
+	@Override
+	public MapColor getMapColor(IBlockState state, IBlockAccess worldIn, BlockPos pos)
+	{
+		return state.getValue(VARIANT).color;
 	}
 	
 	public enum BlockType implements IStringSerializable
