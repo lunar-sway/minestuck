@@ -69,7 +69,7 @@ public class BlockCruxtruder extends BlockLargeMachine
 	
 	@Override
 	public void onBlockPlacedBy(World worldIn,BlockPos pos,IBlockState state,EntityLivingBase placer, ItemStack stack){
-		EnumFacing facing = EnumFacing.getHorizontal(MathHelper.floor((double)(placer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3).getOpposite();
+		EnumFacing facing = placer.getHorizontalFacing().getOpposite();
 		switch (facing) {
 
 		case EAST:pos = pos.north(2).west(2);

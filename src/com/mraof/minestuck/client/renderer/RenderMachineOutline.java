@@ -57,8 +57,7 @@ public class RenderMachineOutline
 			if (!flag)
 				pos = pos.up();
 			
-			int i = MathHelper.floor((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-			EnumFacing placedFacing = EnumFacing.getHorizontal(i).getOpposite();
+			EnumFacing placedFacing = player.getHorizontalFacing().getOpposite();
 			double hitX = rayTraceResult.hitVec.x - pos.getX(), hitZ = rayTraceResult.hitVec.z - pos.getZ();
 			boolean r = placedFacing.getAxis() == EnumFacing.Axis.Z;
 			boolean f = placedFacing== EnumFacing.NORTH || placedFacing==EnumFacing.EAST;

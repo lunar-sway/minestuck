@@ -42,8 +42,7 @@ public class ItemTotemLathe extends ItemBlock
 				pos = pos.up();
 			}
 			
-			int i = MathHelper.floor((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-			EnumFacing placedFacing = EnumFacing.getHorizontal(i).getOpposite();
+			EnumFacing placedFacing = player.getHorizontalFacing().getOpposite();
 			ItemStack itemstack = player.getHeldItem(hand);
 			
 			pos = pos.offset(placedFacing.rotateY());
@@ -83,17 +82,18 @@ public class ItemTotemLathe extends ItemBlock
 	@Override
 	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState)
 	{
-		EnumFacing facing = EnumFacing.getHorizontal(MathHelper.floor((double)(player.rotationYaw * 4.0F / 360.0F) + 0.5D) + 2 & 3).getOpposite();
+		EnumFacing facing = player.getHorizontalFacing().getOpposite();
 		newState = newState.withProperty(BlockTotemLathe.DIRECTION, facing);
-		IBlockState state2=MinestuckBlocks.totemlathe[1].getDefaultState().withProperty(BlockTotemLathe.DIRECTION, facing);
-		IBlockState state3=MinestuckBlocks.totemlathe[2].getDefaultState().withProperty(BlockTotemLathe.DIRECTION, facing);
+		IBlockState state2 = MinestuckBlocks.totemlathe[1].getDefaultState().withProperty(BlockTotemLathe.DIRECTION, facing);
+		IBlockState state3 = MinestuckBlocks.totemlathe[2].getDefaultState().withProperty(BlockTotemLathe.DIRECTION, facing);
 		
 		
-		if(!(world.isRemote)){
-			world.setBlockState(pos.offset(facing.rotateY(),3), newState.withProperty(BlockTotemLathe.PART1, EnumParts.BOTTOM_RIGHT));
-			world.setBlockState(pos.offset(facing.rotateY(),2), newState.withProperty(BlockTotemLathe.PART1, EnumParts.BOTTOM_MIDRIGHT));
-			world.setBlockState(pos.offset(facing.rotateY(),1), newState.withProperty(BlockTotemLathe.PART1, EnumParts.BOTTOM_MIDLEFT));
+		if(!(world.isRemote))
+		{
 			world.setBlockState(pos, newState.withProperty(BlockTotemLathe.PART1, EnumParts.BOTTOM_LEFT));
+			world.setBlockState(pos.offset(facing.rotateYCCW(),1), newState.withProperty(BlockTotemLathe.PART1, EnumParts.BOTTOM_MIDLEFT));
+			world.setBlockState(pos.offset(facing.rotateYCCW(),2), newState.withProperty(BlockTotemLathe.PART1, EnumParts.BOTTOM_MIDRIGHT));
+			world.setBlockState(pos.offset(facing.rotateYCCW(),3), newState.withProperty(BlockTotemLathe.PART1, EnumParts.BOTTOM_RIGHT));
 			world.setBlockState(pos.offset(facing.rotateY(),3).up(1), state2.withProperty(BlockTotemLathe.PART2, BlockTotemLathe.EnumParts.MID_RIGHT));
 			world.setBlockState(pos.offset(facing.rotateY(),2).up(1), state2.withProperty(BlockTotemLathe.PART2, BlockTotemLathe.EnumParts.MID_MIDRIGHT));
 			world.setBlockState(pos.offset(facing.rotateY(),1).up(1), state2.withProperty(BlockTotemLathe.PART2, BlockTotemLathe.EnumParts.MID_MIDLEFT));

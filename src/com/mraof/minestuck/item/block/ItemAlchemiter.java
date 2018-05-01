@@ -42,8 +42,7 @@ public class ItemAlchemiter extends ItemBlock
 				pos = pos.up();
 			}
 			
-			int i = MathHelper.floor((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-			EnumFacing placedFacing = EnumFacing.getHorizontal(i).getOpposite();
+			EnumFacing placedFacing = player.getHorizontalFacing().getOpposite();
 			ItemStack itemstack = player.getHeldItem(hand);
 			
 			pos = pos.offset(placedFacing.rotateY());
@@ -85,8 +84,9 @@ public class ItemAlchemiter extends ItemBlock
 	@Override
 	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState)
 	{
-		EnumFacing facing = EnumFacing.getHorizontal(MathHelper.floor((double)(player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3);
-		if(player!=null && !(world.isRemote)){
+		EnumFacing facing = player.getHorizontalFacing();
+		if(!world.isRemote)
+		{
 			world.setBlockState(pos.up(0), BlockAlchemiter.getBlockState(EnumParts.TOTEM_CORNER, facing));
 			world.setBlockState(pos.up(1), BlockAlchemiter.getBlockState(EnumParts.TOTEM_PAD, facing));
 			world.setBlockState(pos.up(2), BlockAlchemiter.getBlockState(EnumParts.LOWER_ROD, facing));
