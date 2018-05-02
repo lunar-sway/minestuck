@@ -46,15 +46,17 @@ public class GuiAlchemiter extends GuiScreen
 		GuiButton hundredsDown = new GuiButton(4,(width-guiWidth)/2+52,(height-guiHeight)/2+74,18,18,"v");
 		GuiButton tensDown =new GuiButton(5,(width-guiWidth)/2+31,(height-guiHeight)/2+74,18,18,"v");
 		GuiButton onesDown = new GuiButton(6,(width-guiWidth)/2+10,(height-guiHeight)/2+74,18,18,"v");
-		//GuiLabel ones = new GuiLabel(fontRendererObj, p_i45540_2_, p_i45540_3_, p_i45540_4_, p_i45540_5_, p_i45540_6_, p_i45540_7_)
-		
+
 		buttonList.add(alchemize);
-		buttonList.add(onesUp);
-		buttonList.add(tensUp);
-		buttonList.add(hundredsUp);
-		buttonList.add(onesDown);
-		buttonList.add(tensDown);
-		buttonList.add(hundredsDown);
+		//dont add the buttons if the item is free
+		if(!getGristCost().isEmpty()) {
+			buttonList.add(onesUp);
+			buttonList.add(tensUp);
+			buttonList.add(hundredsUp);
+			buttonList.add(onesDown);
+			buttonList.add(tensDown);
+			buttonList.add(hundredsDown);
+		}
 	}
 	
 		@Override
@@ -77,29 +79,20 @@ public class GuiAlchemiter extends GuiScreen
 			mc.fontRenderer.drawString(Integer.toString(((int)(itemQuantity/Math.pow(10,0))%10)), (width-guiWidth)/2+57,(height-guiHeight)/2+46, 16777215);
 			
 			//Render grist requirements
-			ItemStack stack = AlchemyRecipeHandler.getDecodedItem(alchemiter.getDowel());
-			if( !(alchemiter.getDowel().hasTagCompound() && alchemiter.getDowel().getTagCompound().hasKey("contentID")))
-				stack = new ItemStack(MinestuckBlocks.genericObject);
-
-			GristSet set = GristRegistry.getGristConversion(stack);
-			boolean useSelectedType = stack.getItem() == MinestuckItems.captchaCard;
-			if (useSelectedType)
-				set = new GristSet(alchemiter.getSelectedGrist(), MinestuckConfig.clientCardCost);
-			if (set != null && stack.isItemDamaged())
-			{
-				float multiplier = 1 - stack.getItem().getDamage(stack) / ((float) stack.getMaxDamage());
-				for (GristAmount amount : set.getArray())
-				{
-					set.setGrist(amount.getType(), (int)( Math.ceil(amount.getAmount() * multiplier)));
-				}
 				
-			}
-			for (GristAmount amount : set.getArray())
-			{
-				set.setGrist(amount.getType(), amount.getAmount()*itemQuantity);
+			
+			//Calculate the grist set
+			GristSet set;
+			set=getGristCost();
+			//disable number buttons if cost is free
+			if(set.isEmpty()) {
+				
+				///////////////////////////////////////////////
+				//do something
+				////////////////////////////////////////////////
 			}
 			
-			GuiUtil.drawGristBoard(set, useSelectedType ? GuiUtil.GristboardMode.LARGE_ALCHEMITER_SELECT : GuiUtil.GristboardMode.LARGE_ALCHEMITER, (width-guiWidth)/2+88,(height-guiHeight)/2+13, fontRenderer);
+			GuiUtil.drawGristBoard(set, AlchemyRecipeHandler.getDecodedItem(alchemiter.getDowel()).getItem() == MinestuckItems.captchaCard ? GuiUtil.GristboardMode.LARGE_ALCHEMITER_SELECT : GuiUtil.GristboardMode.LARGE_ALCHEMITER, (width-guiWidth)/2+88,(height-guiHeight)/2+13, fontRenderer);
 			
 			List<String> tooltip = GuiUtil.getGristboardTooltip(set, mouseX , mouseY , 9, 45, fontRenderer);
 			if (tooltip != null)
@@ -137,5 +130,44 @@ public class GuiAlchemiter extends GuiScreen
 				itemQuantity -= Math.pow(10, button.id - 4);
 			}
 		}
+	}
+	private GristSet getGristCost() {
+		GristSet set;
+		ItemStack stack;
+		boolean useSelectedType;
+
+		//get the item in the dowel
+		stack = AlchemyRecipeHandler.getDecodedItem(alchemiter.getDowel());
+		
+		//set the item as a generic object if there is nothing in the dowel
+		if( !(alchemiter.getDowel().hasTagCompound() && alchemiter.getDowel().getTagCompound().hasKey("contentID")))
+			stack = new ItemStack(MinestuckBlocks.genericObject);
+		
+		//get the grist cost of stack
+		set = GristRegistry.getGristConversion(stack);
+
+		//if the item is a captcha card do other stuff
+		useSelectedType = stack.getItem() == MinestuckItems.captchaCard;
+		if (useSelectedType)
+			set = new GristSet(alchemiter.getSelectedGrist(), MinestuckConfig.clientCardCost);
+		
+		//remove damage from the item
+		if (set != null && stack.isItemDamaged())
+		{
+			float multiplier = 1 - stack.getItem().getDamage(stack) / ((float) stack.getMaxDamage());
+			for (GristAmount amount : set.getArray())
+			{
+				set.setGrist(amount.getType(), (int)( Math.ceil(amount.getAmount() * multiplier)));
+			}
+			
+		}
+		
+		//multiply cost by quantity
+		for (GristAmount amount : set.getArray())
+		{
+			set.setGrist(amount.getType(), amount.getAmount()*itemQuantity);
+		}
+		
+		return set;
 	}
 }
