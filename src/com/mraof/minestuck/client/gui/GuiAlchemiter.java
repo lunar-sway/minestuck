@@ -84,14 +84,7 @@ public class GuiAlchemiter extends GuiScreen
 			//Calculate the grist set
 			GristSet set;
 			set=getGristCost();
-			//disable number buttons if cost is free
-			if(set.isEmpty()) {
-				
-				///////////////////////////////////////////////
-				//do something
-				////////////////////////////////////////////////
-			}
-			
+
 			GuiUtil.drawGristBoard(set, AlchemyRecipeHandler.getDecodedItem(alchemiter.getDowel()).getItem() == MinestuckItems.captchaCard ? GuiUtil.GristboardMode.LARGE_ALCHEMITER_SELECT : GuiUtil.GristboardMode.LARGE_ALCHEMITER, (width-guiWidth)/2+88,(height-guiHeight)/2+13, fontRenderer);
 			
 			List<String> tooltip = GuiUtil.getGristboardTooltip(set, mouseX , mouseY , 9, 45, fontRenderer);
