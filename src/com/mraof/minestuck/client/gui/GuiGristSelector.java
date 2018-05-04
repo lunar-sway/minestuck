@@ -5,6 +5,7 @@ import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.util.GristType;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
@@ -24,7 +25,7 @@ public class GuiGristSelector extends GuiScreenMinestuck
 
 	private static final int guiWidth = 226, guiHeight = 190;
 
-	private GuiSburbMachine otherGui;
+	private GuiScreen otherGui;
 	private int page = 0;
 	private GuiButtonExt previousButton;
 	private GuiButtonExt nextButton;
@@ -32,6 +33,10 @@ public class GuiGristSelector extends GuiScreenMinestuck
 	protected GuiGristSelector(GuiSburbMachine guiMachine)
 	{
 		this.otherGui = guiMachine;
+	}
+
+	public GuiGristSelector(GuiAlchemiter guiAlchemiter) {
+		this.otherGui=guiAlchemiter;
 	}
 
 	/**
@@ -106,7 +111,11 @@ public class GuiGristSelector extends GuiScreenMinestuck
 				int gristYOffset = yOffset + gristIconY + (gristDisplayYOffset * row - row);
 				if (isPointInRegion(gristXOffset, gristYOffset, 16, 16, xcor, ycor))
 				{
-					otherGui.te.selectedGrist = type;
+					if(otherGui instanceof GuiSburbMachine) {
+						((GuiSburbMachine)otherGui).te.selectedGrist = type;
+					}else if(otherGui instanceof GuiAlchemiter) {
+						((GuiAlchemiter)otherGui).getAlchemiter().setSelectedGrist(type);
+					}
 					otherGui.width = this.width;
 					otherGui.height = this.height;
 					mc.currentScreen = otherGui;

@@ -200,22 +200,24 @@ public class TileEntityAlchemiter extends TileEntity
 	
 	public void processContents(int quantity, EntityPlayer player)
 	{
+		//prevent null errors
 		if (quantity == 0)
 		{
 			return;
 		}
+		
 		EnumFacing facing = world.getBlockState(pos).getValue(BlockAlchemiter.DIRECTION);
 		ItemStack newItem = AlchemyRecipeHandler.getDecodedItem(dowel);
+		//set the item as a generic object if it's otherwise null
 		if (!(dowel.hasTagCompound() && dowel.getTagCompound().hasKey("contentID")))
 			newItem = new ItemStack(MinestuckBlocks.genericObject);
-		BlockPos pos = this.getPos().offset(facing).offset(facing.rotateY()).up();
+		//get the position to spawn the item
+		BlockPos spawnPos = this.getPos().offset(facing).offset(facing.rotateY()).up();
+		//set the stack size
 		newItem.setCount(quantity);
-		GristSet cost = GristRegistry.getGristConversion(newItem);
+		//get the grist cost
+		GristSet cost =getGristCost(quantity);
 		
-		for (GristAmount amount : cost.getArray())
-		{
-			cost.setGrist(amount.getType(), amount.getAmount() * quantity);
-		}
 		
 		boolean canAfford = true;
 		
@@ -229,7 +231,7 @@ public class TileEntityAlchemiter extends TileEntity
 		
 		if (canAfford)
 		{
-			EntityItem item = new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), newItem);
+			EntityItem item = new EntityItem(world, spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), newItem);
 			world.spawnEntity(item);
 			if (player != null)
 				MinestuckAchievementHandler.onAlchemizedItem(newItem, player);
@@ -248,6 +250,46 @@ public class TileEntityAlchemiter extends TileEntity
 			GristHelper.decrease(pid, cost);
 			MinestuckPlayerTracker.updateGristCache(pid);
 		}
+	}
+	
+	public GristSet getGristCost(int quantity) {
+		GristSet set;
+		ItemStack stack;
+		boolean useSelectedType;
+
+		//get the item in the dowel
+		stack = AlchemyRecipeHandler.getDecodedItem(getDowel());
+		
+		//set the item as a generic object if there is nothing in the dowel
+		if( !(getDowel().hasTagCompound() && getDowel().getTagCompound().hasKey("contentID")))
+			stack = new ItemStack(MinestuckBlocks.genericObject);
+		
+		//get the grist cost of stack
+		set = GristRegistry.getGristConversion(stack);
+
+		//if the item is a captcha card do other stuff
+		useSelectedType = stack.getItem() == MinestuckItems.captchaCard;
+		if (useSelectedType)
+			set = new GristSet(getSelectedGrist(), MinestuckConfig.clientCardCost);
+		
+		//remove damage from the item
+		if (set != null && stack.isItemDamaged())
+		{
+			float multiplier = 1 - stack.getItem().getDamage(stack) / ((float) stack.getMaxDamage());
+			for (GristAmount amount : set.getArray())
+			{
+				set.setGrist(amount.getType(), (int)( Math.ceil(amount.getAmount() * multiplier)));
+			}
+			
+		}
+		
+		//multiply cost by quantity
+		for (GristAmount amount : set.getArray())
+		{
+			set.setGrist(amount.getType(), amount.getAmount()*quantity);
+		}
+		
+		return set;
 	}
 
 	public GristType getSelectedGrist()
