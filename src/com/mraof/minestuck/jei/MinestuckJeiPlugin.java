@@ -54,7 +54,7 @@ public class MinestuckJeiPlugin implements IModPlugin
 	@Override
     public void register(IModRegistry registry)
     {
-        ArrayList<AlchemiterRecipeWrapper> alchemiterRecipes = new ArrayList<AlchemiterRecipeWrapper>();
+        ArrayList<AlchemiterRecipeWrapper> alchemiterRecipes = new ArrayList<>();
         for(Map.Entry<List<Object>, GristSet> entry : GristRegistry.getAllConversions().entrySet())
         {
             for(ItemStack stack : getItemStacks(entry.getKey().get(0), (Integer) entry.getKey().get(1)))
@@ -65,15 +65,15 @@ public class MinestuckJeiPlugin implements IModPlugin
         registry.addRecipes(alchemiterRecipes, alchemiterCategory.getUid());
         registry.addRecipeCatalyst(new ItemStack(MinestuckBlocks.sburbMachine, 1, BlockSburbMachine.MachineType.ALCHEMITER.ordinal()), alchemiterCategory.getUid());
 
-        ArrayList<PunchCardRecipeWrapper> latheRecipes = new ArrayList<PunchCardRecipeWrapper>();
-		ArrayList<PunchCardRecipeWrapper> designixRecipes = new ArrayList<PunchCardRecipeWrapper>();
+        ArrayList<PunchCardRecipeWrapper> latheRecipes = new ArrayList<>();
+		ArrayList<PunchCardRecipeWrapper> designixRecipes = new ArrayList<>();
         for(Map.Entry<List<Object>, ItemStack> entry : CombinationRegistry.getAllConversions().entrySet())
         {
             List<ItemStack> firstStacks = getItemStacks(entry.getKey().get(0), (Integer) entry.getKey().get(1));
             List<ItemStack> secondStacks = getItemStacks(entry.getKey().get(2), (Integer) entry.getKey().get(3));
             if(!(firstStacks.isEmpty() || secondStacks.isEmpty()))
             {
-                if((Boolean) entry.getKey().get(4) == CombinationRegistry.MODE_AND)
+                if(entry.getKey().get(4) == CombinationRegistry.Mode.MODE_AND)
                 {
 					latheRecipes.add(new TotemLatheRecipeWrapper(firstStacks, secondStacks, entry.getValue()));
                 }

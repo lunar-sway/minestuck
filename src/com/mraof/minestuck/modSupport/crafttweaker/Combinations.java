@@ -62,12 +62,12 @@ public class Combinations
 		recipes.add(new SetRecipe(input1, OreDictionary.WILDCARD_VALUE, input2, OreDictionary.WILDCARD_VALUE, getMode(mode), null));
 	}
 	
-	private static boolean getMode(String mode)
+	private static CombinationRegistry.Mode getMode(String mode)
 	{
 		if(mode.equals("&") || mode.equals("&&") || mode.toLowerCase().equals("and"))
-			return CombinationRegistry.MODE_AND;
+			return CombinationRegistry.Mode.MODE_AND;
 		else if(mode.equals("|") || mode.equals("||") || mode.toLowerCase().equals("or"))
-			return CombinationRegistry.MODE_OR;
+			return CombinationRegistry.Mode.MODE_OR;
 		else throw new IllegalArgumentException("\""+mode+"doesn't match either AND or OR!");
 	}
 	
@@ -77,7 +77,7 @@ public class Combinations
 		private final List<Object> inputs;
 		private final ItemStack output;
 		
-		public SetRecipe(Object input1, int meta1, Object input2, int meta2, boolean mode, ItemStack output)
+		public SetRecipe(Object input1, int meta1, Object input2, int meta2, CombinationRegistry.Mode mode, ItemStack output)
 		{
 			int index = input1.hashCode() - input2.hashCode();
 			if(index == 0)

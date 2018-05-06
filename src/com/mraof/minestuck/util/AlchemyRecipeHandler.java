@@ -35,8 +35,7 @@ import java.util.Map.Entry;
 import static com.mraof.minestuck.MinestuckConfig.oreMultiplier;
 import static com.mraof.minestuck.block.MinestuckBlocks.*;
 import static com.mraof.minestuck.item.MinestuckItems.*;
-import static com.mraof.minestuck.util.CombinationRegistry.MODE_AND;
-import static com.mraof.minestuck.util.CombinationRegistry.MODE_OR;
+import static com.mraof.minestuck.util.CombinationRegistry.Mode.*;
 import static net.minecraftforge.oredict.OreDictionary.WILDCARD_VALUE;
 
 public class AlchemyRecipeHandler
@@ -458,8 +457,8 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Blocks.GLOWSTONE), new ItemStack(Blocks.REDSTONE_TORCH), MODE_AND, new ItemStack(Blocks.REDSTONE_LAMP));
 		CombinationRegistry.addCombination(new ItemStack(Items.PRISMARINE_SHARD), new ItemStack(Items.DIAMOND), MODE_OR, new ItemStack(Items.PRISMARINE_CRYSTALS));
 		CombinationRegistry.addCombination(new ItemStack(Items.PRISMARINE_SHARD), new ItemStack(Items.EMERALD), MODE_OR, new ItemStack(Items.PRISMARINE_CRYSTALS));
-		CombinationRegistry.addCombination(new ItemStack(Blocks.TALLGRASS), new ItemStack(Blocks.SAND), false, false, MODE_OR, new ItemStack(Blocks.DEADBUSH));
-		CombinationRegistry.addCombination(new ItemStack(Blocks.TALLGRASS), new ItemStack(Blocks.SAND), false, false, MODE_AND, new ItemStack(Blocks.CACTUS));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.TALLGRASS), new ItemStack(Blocks.SAND), MODE_OR, false, false, new ItemStack(Blocks.DEADBUSH));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.TALLGRASS), new ItemStack(Blocks.SAND), MODE_AND, false, false, new ItemStack(Blocks.CACTUS));
 		CombinationRegistry.addCombination("treeSapling", Blocks.SAND, WILDCARD_VALUE, MODE_AND, new ItemStack(Blocks.DEADBUSH));
 		CombinationRegistry.addCombination(new ItemStack(Items.ENDER_PEARL), new ItemStack(Blocks.CHEST), MODE_AND, new ItemStack(Blocks.ENDER_CHEST));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.GLASS), new ItemStack(Blocks.SNOW), MODE_AND, new ItemStack(Blocks.ICE));
@@ -471,7 +470,7 @@ public class AlchemyRecipeHandler
 		for(int i = 0; i <= 2; i++)
 			CombinationRegistry.addCombination(new ItemStack(Blocks.SANDSTONE, 1, i), new ItemStack(Items.DYE, 1, EnumDyeColor.RED.getDyeDamage()), MODE_AND, new ItemStack(Blocks.RED_SANDSTONE, 1, i));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.SANDSTONE_STAIRS), new ItemStack(Items.DYE, 1, EnumDyeColor.RED.getDyeDamage()), MODE_AND, new ItemStack(Blocks.RED_SANDSTONE_STAIRS));
-		CombinationRegistry.addCombination(new ItemStack(Items.BOOK), new ItemStack(Blocks.PLANKS), true, false, MODE_OR, new ItemStack(Blocks.BOOKSHELF));
+		CombinationRegistry.addCombination(new ItemStack(Items.BOOK), new ItemStack(Blocks.PLANKS), MODE_OR, true, false, new ItemStack(Blocks.BOOKSHELF));
 		CombinationRegistry.addCombination("record", Blocks.NOTEBLOCK, WILDCARD_VALUE, MODE_AND, new ItemStack(Blocks.JUKEBOX));
 		CombinationRegistry.addCombination("stickWood", Blocks.VINE, WILDCARD_VALUE, MODE_AND, new ItemStack(Blocks.LADDER));
 		CombinationRegistry.addCombination("treeLeaves", Blocks.LADDER, WILDCARD_VALUE, MODE_OR, new ItemStack(Blocks.VINE));
@@ -499,9 +498,9 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Items.BOOK), new ItemStack(Items.EXPERIENCE_BOTTLE), MODE_AND, new ItemStack(Blocks.ENCHANTING_TABLE));
 		CombinationRegistry.addCombination("treeLeaves", new ItemStack(Items.WATER_BUCKET), true, MODE_OR, new ItemStack(Blocks.WATERLILY));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.CRAFTING_TABLE), new ItemStack(Blocks.IRON_BLOCK), MODE_OR, new ItemStack(Blocks.ANVIL));
-		CombinationRegistry.addCombination(new ItemStack(Items.WOODEN_SWORD), new ItemStack(Items.ARROW), false, true, MODE_OR, new ItemStack(Items.BOW));
-		CombinationRegistry.addCombination(new ItemStack(Blocks.RED_FLOWER), new ItemStack(Items.BRICK), false, true, MODE_AND, new ItemStack(Items.FLOWER_POT));
-		CombinationRegistry.addCombination(new ItemStack(Blocks.YELLOW_FLOWER), new ItemStack(Items.BRICK), false, true, MODE_AND, new ItemStack(Items.FLOWER_POT));
+		CombinationRegistry.addCombination(new ItemStack(Items.WOODEN_SWORD), new ItemStack(Items.ARROW), MODE_OR, false, true, new ItemStack(Items.BOW));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.RED_FLOWER), new ItemStack(Items.BRICK), MODE_AND, false, true, new ItemStack(Items.FLOWER_POT));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.YELLOW_FLOWER), new ItemStack(Items.BRICK), MODE_AND, false, true, new ItemStack(Items.FLOWER_POT));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.COBBLESTONE), new ItemStack(Items.LAVA_BUCKET), MODE_AND, new ItemStack(Blocks.NETHERRACK));
 		CombinationRegistry.addCombination(new ItemStack(Items.EMERALD), new ItemStack(Items.COAL), MODE_AND, new ItemStack(Items.DIAMOND));
 		CombinationRegistry.addCombination(new ItemStack(Items.EMERALD), new ItemStack(Items.DYE, 1, EnumDyeColor.BLUE.getDyeDamage()), MODE_AND, new ItemStack(Items.DIAMOND));
@@ -702,8 +701,8 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Items.IRON_SWORD), new ItemStack(Items.BLAZE_ROD), MODE_OR, false, true, new ItemStack(hotHandle));
 		CombinationRegistry.addCombination(new ItemStack(Items.IRON_SWORD), new ItemStack(chessboard), MODE_AND, false, true, new ItemStack(regisword));
 		CombinationRegistry.addCombination(new ItemStack(katana), new ItemStack(chessboard), MODE_AND, false, true, new ItemStack(regisword));
-		CombinationRegistry.addCombination(new ItemStack(katana), new ItemStack(Blocks.OBSIDIAN), MODE_AND, new ItemStack(unbreakableKatana));
-		CombinationRegistry.addCombination(new ItemStack(hotHandle), new ItemStack(Blocks.LAPIS_BLOCK), MODE_OR, new ItemStack(cobaltSabre));
+		CombinationRegistry.addCombination(new ItemStack(katana), new ItemStack(Blocks.OBSIDIAN), MODE_AND, false, true, new ItemStack(unbreakableKatana));
+		CombinationRegistry.addCombination(new ItemStack(hotHandle), new ItemStack(Blocks.LAPIS_BLOCK), MODE_OR, false, true, new ItemStack(cobaltSabre));
 		
 		//axes
 		CombinationRegistry.addCombination(new ItemStack(Items.IRON_AXE), new ItemStack(Blocks.PISTON), MODE_AND, false, true, new ItemStack(copseCrusher));
@@ -749,6 +748,14 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Items.STICK), new ItemStack(rawUranium), MODE_OR, false, false, new ItemStack(upStick));
 		
 		//spoons/sporks/forks
+		CombinationRegistry.addCombination(new ItemStack(Items.WOODEN_SHOVEL), new ItemStack(Items.BOWL), MODE_AND, false, true, new ItemStack(woodenSpoon));
+		CombinationRegistry.addCombination(new ItemStack(Items.WOODEN_SHOVEL), new ItemStack(Items.MUSHROOM_STEW), MODE_AND, false, true, new ItemStack(woodenSpoon));
+		CombinationRegistry.addCombination(new ItemStack(Items.WOODEN_SHOVEL), new ItemStack(Items.RABBIT_STEW), MODE_AND, false, true, new ItemStack(woodenSpoon));
+		CombinationRegistry.addCombination(new ItemStack(Items.WOODEN_SHOVEL), new ItemStack(Items.BEETROOT_SOUP), MODE_AND, false, true, new ItemStack(woodenSpoon));
+		CombinationRegistry.addCombination(new ItemStack(Items.IRON_SHOVEL), new ItemStack(Items.BOWL), MODE_AND, false, true, new ItemStack(silverSpoon));
+		CombinationRegistry.addCombination(new ItemStack(Items.IRON_SHOVEL), new ItemStack(Items.MUSHROOM_STEW), MODE_AND, false, true, new ItemStack(silverSpoon));
+		CombinationRegistry.addCombination(new ItemStack(Items.IRON_SHOVEL), new ItemStack(Items.RABBIT_STEW), MODE_AND, false, true, new ItemStack(silverSpoon));
+		CombinationRegistry.addCombination(new ItemStack(Items.IRON_SHOVEL), new ItemStack(Items.BEETROOT_SOUP), MODE_AND, false, true, new ItemStack(silverSpoon));
 		CombinationRegistry.addCombination(new ItemStack(woodenSpoon), new ItemStack(Items.IRON_INGOT), MODE_AND, false, false, new ItemStack(silverSpoon));
 		CombinationRegistry.addCombination(new ItemStack(silverSpoon), new ItemStack(Items.CAKE), MODE_AND, false, false, new ItemStack(crockerSpork));
 		CombinationRegistry.addCombination(new ItemStack(fork), new ItemStack(chessboard), MODE_AND, false, true, new ItemStack(skaiaFork));
@@ -781,14 +788,6 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Blocks.LOG2), new ItemStack(glowingMushroom), MODE_OR, false, true, new ItemStack(glowingLog));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.PLANKS), new ItemStack(glowingMushroom), MODE_OR, false, true, new ItemStack(glowingPlanks));
 		CombinationRegistry.addCombination(new ItemStack(Items.SUGAR), new ItemStack(Items.WHEAT_SEEDS), MODE_AND, new ItemStack(candy, 1, 0));
-		CombinationRegistry.addCombination(new ItemStack(Items.WOODEN_SHOVEL), new ItemStack(Items.BOWL), MODE_AND, new ItemStack(woodenSpoon));
-		CombinationRegistry.addCombination(new ItemStack(Items.WOODEN_SHOVEL), new ItemStack(Items.MUSHROOM_STEW), MODE_AND, new ItemStack(woodenSpoon));
-		CombinationRegistry.addCombination(new ItemStack(Items.WOODEN_SHOVEL), new ItemStack(Items.RABBIT_STEW), MODE_AND, new ItemStack(woodenSpoon));
-		CombinationRegistry.addCombination(new ItemStack(Items.WOODEN_SHOVEL), new ItemStack(Items.BEETROOT_SOUP), MODE_AND, new ItemStack(woodenSpoon));
-		CombinationRegistry.addCombination(new ItemStack(Items.IRON_SHOVEL), new ItemStack(Items.BOWL), MODE_AND, new ItemStack(silverSpoon));
-		CombinationRegistry.addCombination(new ItemStack(Items.IRON_SHOVEL), new ItemStack(Items.MUSHROOM_STEW), MODE_AND, new ItemStack(silverSpoon));
-		CombinationRegistry.addCombination(new ItemStack(Items.IRON_SHOVEL), new ItemStack(Items.RABBIT_STEW), MODE_AND, new ItemStack(silverSpoon));
-		CombinationRegistry.addCombination(new ItemStack(Items.IRON_SHOVEL), new ItemStack(Items.BEETROOT_SOUP), MODE_AND, new ItemStack(silverSpoon));
 		
 		if(oreMultiplier != 0)
 		{
@@ -1094,7 +1093,7 @@ public class AlchemyRecipeHandler
 			{
 				Block ironChest = ((Block) (Class.forName("cpw.mods.ironchest.IronChest").getField("ironChestBlock").get(null)));
 				GristRegistry.addGristConversion(ironChest, 0, new GristSet(new GristType[] {GristType.Build, GristType.Rust}, new int[] {16, 128}));
-				CombinationRegistry.addCombination(new ItemStack(Blocks.CHEST), new ItemStack(Items.IRON_INGOT), true, new ItemStack(ironChest, 1, 0));
+				CombinationRegistry.addCombination(new ItemStack(Blocks.CHEST), new ItemStack(Items.IRON_INGOT), MODE_AND, new ItemStack(ironChest, 1, 0));
 			}
 		}
 		catch(Exception e) 
@@ -1105,7 +1104,7 @@ public class AlchemyRecipeHandler
 		
 		registerRecipes(new Minegicka3Support(), "minegicka3", false);
 		registerRecipes(new NeverSayNetherSupport(), "nsn", false);
-		registerRecipes(new ExtraUtilitiesSupport(), "ExtraUtilities", false);
+		registerRecipes(new ExtraUtilitiesSupport(), "extrautils2", false);
 		registerRecipes(new TinkersConstructSupport(), "TConstruct", false);
 		
 	}
