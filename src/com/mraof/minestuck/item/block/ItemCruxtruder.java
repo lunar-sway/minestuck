@@ -3,11 +3,17 @@ package com.mraof.minestuck.item.block;
 import com.mraof.minestuck.block.BlockCruxtruder;
 import com.mraof.minestuck.block.BlockCruxtruder.EnumParts;
 import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.editmode.EditData;
+import com.mraof.minestuck.editmode.ServerEditHandler;
+import com.mraof.minestuck.tileentity.TileEntityCruxtruder;
+import com.mraof.minestuck.util.Debug;
+import com.mraof.minestuck.util.MinestuckPlayerData;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -110,6 +116,18 @@ public class ItemCruxtruder extends ItemBlock
 			world.setBlockState(pos.south(1).up(0).east(1), newState.withProperty(BlockCruxtruder.PART, EnumParts.CENTER).withProperty(BlockCruxtruder.DIRECTION, facing));
 			world.setBlockState(pos.south(1).up(1).east(1), newState.withProperty(BlockCruxtruder.PART, EnumParts.TUBE).withProperty(BlockCruxtruder.DIRECTION, facing));
 			world.setBlockState(pos.south().up(2).east(), MinestuckBlocks.cruxtruderLid.getDefaultState());
+			
+			TileEntity te = world.getTileEntity(pos.add( 1, 1, 1));
+			if(te instanceof TileEntityCruxtruder)
+			{
+				int color;
+				EditData editData = ServerEditHandler.getData(player);
+				if(editData != null)
+					color = MinestuckPlayerData.getData(editData.getTarget()).color;
+				else color = MinestuckPlayerData.getData(player).color;
+				
+				((TileEntityCruxtruder) te).setColor(color);
+			} else Debug.warnf("Placed cruxtruder, but can't find tile entity. Instead found %s.", te);
 		}
 		
 		return true;
