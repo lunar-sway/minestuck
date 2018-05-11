@@ -23,12 +23,7 @@ public class LandAspectBuckets extends TitleLandAspect	//Yes, buckets
 	}
 	
 	@Override
-	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
-	{
-	}
-	
-	@Override
-	protected void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
+	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.BLUE));
 		chunkProvider.decorators.add(new BucketDecorator(BiomeMinestuck.mediumNormal, BiomeMinestuck.mediumRough));

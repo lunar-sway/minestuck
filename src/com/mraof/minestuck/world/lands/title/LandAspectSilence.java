@@ -31,7 +31,7 @@ public class LandAspectSilence extends TitleLandAspect
 	}
 	
 	@Override
-	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
+	public void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.dayCycle = 2;
 		
@@ -40,7 +40,7 @@ public class LandAspectSilence extends TitleLandAspect
 	}
 	
 	@Override
-	protected void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
+	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.BLACK));
 		chunkProvider.decorators.add(new PumpkinDecorator());

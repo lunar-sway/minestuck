@@ -17,14 +17,4 @@ public class LandAspectNull extends TitleLandAspect
 		return new String[] {"Null"};
 	}
 	
-	@Override
-	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
-	{
-	}
-	
-	@Override
-	protected void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
-	{
-	}
-	
 }

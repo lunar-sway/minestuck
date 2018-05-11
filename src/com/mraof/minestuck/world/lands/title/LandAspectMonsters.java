@@ -61,7 +61,7 @@ public class LandAspectMonsters extends TitleLandAspect
 	}
 	
 	@Override
-	protected void prepareChunkProvider(ChunkProviderLands chunkProvider)
+	public void prepareChunkProvider(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.dayCycle = 2;
 		chunkProvider.monsterList.addAll(this.monsterList);
@@ -70,7 +70,7 @@ public class LandAspectMonsters extends TitleLandAspect
 	}
 	
 	@Override
-	protected void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
+	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider)
 	{
 		chunkProvider.blockRegistry.setBlockState("structure_wool_2", Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.SILVER));
 		if(chunkProvider.blockRegistry.getCustomBlock("torch") == null)
