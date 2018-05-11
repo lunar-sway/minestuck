@@ -8,10 +8,7 @@ import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.entity.item.EntityVitalityGel;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.skaianet.SburbHandler;
-import com.mraof.minestuck.util.Echeladder;
-import com.mraof.minestuck.util.GristAmount;
-import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.GristType;
+import com.mraof.minestuck.util.*;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -344,6 +341,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 			totalModifier += modifiers[i];
 		}
 		
+		Debug.debugf("%s players are splitting on %s progress from %s", playerList.length, progress, getUnderlingName());
 		if(totalModifier > maxSharedProgress)
 			for(int i = 0; i < playerList.length; i++)
 				Echeladder.increaseProgress(playerList[i], (int) (maxProgress*modifiers[i]/totalModifier));
