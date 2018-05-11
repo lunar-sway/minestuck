@@ -31,14 +31,14 @@ public class MinestuckBlocks
 	public static Block blockComputerOff = new BlockComputerOff().setRegistryName("computer_standard");
 	public static Block blockComputerOn = new BlockComputerOn().setRegistryName("computer_standard_on");
 	public static Block transportalizer = new BlockTransportalizer().setRegistryName("transportalizer");
+	
 	public static Block punchDesignix = new BlockPunchDesignix().setRegistryName("punch_designix");
 	public static Block totemlathe[] = BlockTotemLathe.createBlocks();
-	
 	public static BlockAlchemiter[] alchemiter = BlockAlchemiter.createBlocks();
-	public static Block cruxtruder=new BlockCruxtruder().setRegistryName("cruxtruder");
-	public static Block cruxtruder2=new BlockCruxtruder2().setRegistryName("cruxtruder2");
+	public static Block cruxtruder = new BlockCruxtruder().setRegistryName("cruxtruder");
+	public static Block cruxtruderLid = new BlockCruxtruderLid().setRegistryName("cruxtruder_lid");
 	
-	
+	public static Block cruxiteDowel = new BlockCruxtiteDowel().setRegistryName("cruxite_dowel");
 	public static Block blockGoldSeeds = new BlockGoldSeeds().setRegistryName("gold_seeds");
 	public static Block returnNode = new BlockReturnNode().setRegistryName("return_node");
 	public static Block gate = new BlockGate().setRegistryName("gate");
@@ -101,11 +101,11 @@ public class MinestuckBlocks
 		final Block[] blocks = {chessTile, coloredDirt, layeredSand, stone, sugarCube,
 				log, glowingLog, glowingPlanks, glowingMushroom, woodenCactus,
 				oreCruxite, oreUranium, coalOreNetherrack, ironOreSandstone, ironOreSandstoneRed, goldOreSandstone, goldOreSandstoneRed,
-				cruxiteBlock, genericObject,
+				cruxiteBlock, genericObject, cruxiteDowel,
 				coarseStoneStairs, shadeBrickStairs, frostBrickStairs, castIronStairs,
 				skaiaPortal, returnNode, gate,
 				sburbMachine, crockerMachine, transportalizer, uraniumCooker,
-				punchDesignix, totemlathe[0], totemlathe[1], totemlathe[2], alchemiter[0], alchemiter[1], cruxtruder, cruxtruder2,
+				punchDesignix, totemlathe[0], totemlathe[1], totemlathe[2], alchemiter[0], alchemiter[1], cruxtruder, cruxtruderLid,
 				blockComputerOff, blockComputerOn,
 				blockGoldSeeds, glowystoneWire,
 				appleCake, blueCake, coldCake, redCake, hotCake, reverseCake,

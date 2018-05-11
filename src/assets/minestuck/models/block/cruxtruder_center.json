@@ -1,0 +1,8 @@
+{
+	"parent": "block/cube_bottom_top",
+	"textures": {
+		"bottom": "minestuck:machines/cruxtruder/down_center",
+		"top": "minestuck:machines/cruxtruder/top_tube",
+		"side": "minestuck:machines/cruxtruder/inside"
+	}
+}

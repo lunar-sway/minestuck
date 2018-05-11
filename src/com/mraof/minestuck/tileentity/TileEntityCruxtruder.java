@@ -1,6 +1,7 @@
 package com.mraof.minestuck.tileentity;
 
-import com.mraof.minestuck.block.BlockCruxtruder2;
+import com.mraof.minestuck.block.BlockCruxtiteDowel;
+import com.mraof.minestuck.block.BlockCruxtruder;
 import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.item.MinestuckItems;
 
@@ -12,36 +13,21 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 
 public class TileEntityCruxtruder extends TileEntity
 {
 	private int color = -1;
 	private boolean broken = false;
-	private boolean dowelOut = false;
 	
 	public int getColor()
 	{
 		return color;
 	}
 	
-	public boolean IsDowelOut()
-	{
-		return dowelOut;
-	}
-	
 	public void setColor(int Color)
 	{
 		color = Color;
-	}
-	
-	public void setDowelOut(boolean isOut)
-	{
-		dowelOut = isOut;
-		if(world != null)
-		{
-			IBlockState state = world.getBlockState(pos);
-			world.notifyBlockUpdate(pos, state, state, 2);
-		}
 	}
 	
 	public boolean isBroken()
@@ -57,22 +43,19 @@ public class TileEntityCruxtruder extends TileEntity
 	{
 		if(!isBroken())
 		{
-			if(clickedState.getBlock() == MinestuckBlocks.cruxtruder2
-					&& clickedState.getValue(BlockCruxtruder2.PART) == BlockCruxtruder2.EnumParts.ONE_THREE_ONE
-					&& !clickedState.getValue(BlockCruxtruder2.HASLID))
+			if(clickedState.getValue(BlockCruxtruder.PART) == BlockCruxtruder.EnumParts.TUBE)
 			{
-				if(dowelOut)
+				BlockPos pos = getPos().up();
+				IBlockState state = getWorld().getBlockState(pos);
+				if(state.getBlock() == MinestuckBlocks.cruxiteDowel)
 				{
-					if(!world.isRemote)
-					{
-						ItemStack dowel = new ItemStack(MinestuckItems.cruxiteDowel, 1, color + 1);
-						EntityItem dowelEntity = new EntityItem(world, pos.getX(), pos.up().getY(), pos.getZ(), dowel);
-						world.spawnEntity(dowelEntity);
-					}
-					setDowelOut(false);
-				} else
+					BlockCruxtiteDowel.dropDowel(getWorld(), pos);
+				} else if(state.getBlock().isReplaceable(getWorld(), pos))
 				{
-					setDowelOut(true);
+					world.setBlockState(pos, MinestuckBlocks.cruxiteDowel.getDefaultState());
+					TileEntity te = world.getTileEntity(pos);
+					if(te instanceof TileEntityItemStack)
+						((TileEntityItemStack) te).getStack().setItemDamage(color + 1);
 				}
 			}
 		}
@@ -87,8 +70,6 @@ public class TileEntityCruxtruder extends TileEntity
 			color = tagCompound.getInteger("color");
 		if(tagCompound.hasKey("broken"))
 			broken = tagCompound.getBoolean("broken");
-		if(tagCompound.hasKey("dowel"))
-			setDowelOut(tagCompound.getBoolean("dowel"));
 	}
 	
 	@Override
@@ -97,7 +78,6 @@ public class TileEntityCruxtruder extends TileEntity
 		super.writeToNBT(tagCompound);
 		tagCompound.setInteger("color", color);
 		tagCompound.setBoolean("broken", broken);
-		tagCompound.setBoolean("dowel", dowelOut);
 		return tagCompound;
 	}
 	

@@ -1,12 +1,12 @@
 {
 	"textures": {
-		"particle": "minestuck:machines/alchemiter/totem",
-		"totem": "minestuck:machines/alchemiter/totem"
+		"particle": "minestuck:machines/totem",
+		"totem": "minestuck:machines/totem"
 	},
 	"elements": [
 		{
-			"from": [8, 4, 3],
-			"to": [14, 12, 7],
+			"from": [ 8, 4, 3 ],
+			"to": [ 14, 12, 7 ],
 			"faces": {
 				"north": { "uv": [ 0,  8,  6, 16], "texture": "#totem", "tintindex": 0 },
 				"east":  { "uv": [ 1,  8,  5, 16], "texture": "#totem", "tintindex": 0 },
@@ -17,8 +17,8 @@
 			}
 		},
 		{
-			"from": [9, 4, 2],
-			"to": [13, 12, 3],
+			"from": [ 9, 4, 2 ],
+			"to": [ 13, 12, 3 ],
 			"faces": {
 				"north": { "uv": [ 1,  8,  5, 16], "texture": "#totem", "tintindex": 0 },
 				"east":  { "uv": [ 5,  8,  6, 16], "texture": "#totem", "tintindex": 0 },
@@ -28,9 +28,8 @@
 			}
 		},
 		{
-			"name": "cube",
-			"from": [9, 4, 7],
-			"to": [13, 12, 8],
+			"from": [ 9, 4, 7 ],
+			"to": [ 13, 12, 8 ],
 			"faces": {
 				"east":  { "uv": [ 0,  8,  1, 16], "texture": "#totem", "tintindex": 0 },
 				"south": { "uv": [ 1,  8,  5, 16], "texture": "#totem", "tintindex": 0 },
