@@ -70,7 +70,7 @@
                 {
                     "entryName": "cocoa_beans",
                     "type": "item",
-                    "name": "minestuck:dye",
+                    "name": "minecraft:dye",
                     "weight": 3,
                     "quality": 0,
                     "functions": [
