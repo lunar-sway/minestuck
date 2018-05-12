@@ -1,7 +1,7 @@
 {
 	"textures": {
-		"particle": "minestuck:machines/alchemiter/totem",
-		"totem": "minestuck:machines/alchemiter/totem"
+		"particle": "minestuck:machines/totem",
+		"totem": "minestuck:machines/totem"
 	},
 	"elements": [
 		{

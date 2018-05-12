@@ -78,6 +78,7 @@ public class MinestuckConfig
 	public static boolean disableGiclops;
 	public static boolean stopSecondEntry;
 	public static boolean gristRefund;
+	public static boolean cruxtruderIntake;
 	public static int artifactRange;
 	public static int overworldEditRange;
 	public static int landEditRange;
@@ -198,6 +199,7 @@ public class MinestuckConfig
 		forbiddenDimensionsTpz = config.get("General", "forbiddenDimensionsTpz", new int[0], "A list of dimension id's that you cannot travel to or from using transportalizers.").setLanguageKey("minestuck.config.forbiddenDimensionsTpz").getIntList();
 		stopSecondEntry = config.get("General", "stopSecondEntry", false, "If this is true, players may only use an artifact once, even if they end up in the overworld again.").setLanguageKey("minestuck.config.stopSecondEntry").getBoolean();
 		gristRefund = config.get("General", "gristRefund", false, "Enable this and players will get a (full) grist refund from breaking blocks in editmode.").setLanguageKey("minestuck.config.gristRefund").getBoolean();
+		cruxtruderIntake = config.get("General", "cruxtruderIntake", false, "If enabled, the regular cruxtruder will require raw cruxite to function, which is inserted through the pipe.").setLanguageKey("minestuck.config.cruxtruderIntake").getBoolean();
 		if(config.hasKey("General", "hardMode"))
 			hardMode = config.get("General", "hardMode", false).getBoolean();	//Not fully fleshed out yet
 		

@@ -53,6 +53,14 @@ public class BlockAlchemiter extends BlockLargeMachine
 	}
 	
 	@Override
+	public boolean isOpaqueCube(IBlockState state)
+	{
+		if(PART == null)
+			return false;
+		return state.getValue(PART) == EnumParts.CENTER_PAD;
+	}
+	
+	@Override
 	public boolean isFullCube(IBlockState state)
 	{
 		return state.getValue(PART) == EnumParts.CENTER_PAD;

@@ -1,22 +1,24 @@
 
 {
-	"variants":{
-		"part=zero_one_zero":	{ "model":"minestuck:cruxtruder_zero_one_zero"},
-		"part=zero_one_one":	{ "model":"minestuck:cruxtruder_zero_one_one"},
-		"part=zero_one_two":	{ "model":"minestuck:cruxtruder_zero_one_two"},
-		"part=one_one_zero":	{ "model":"minestuck:cruxtruder_one_one_zero"},	
-		"part=one_one_two":		{ "model":"minestuck:cruxtruder_one_one_two"},
-		"part=two_one_zero":	{ "model":"minestuck:cruxtruder_two_one_zero"},
-		"part=two_one_one":		{ "model":"minestuck:cruxtruder_two_one_one"},
-		"part=two_one_two":		{ "model":"minestuck:cruxtruder_two_one_two"},
-		
-		"part=zero_two_zero":	{ "model":"minestuck:cruxtruder_zero_two_zero"},
-		"part=zero_two_one":	{ "model":"minestuck:cruxtruder_zero_two_one"},
-		"part=zero_two_two":	{ "model":"minestuck:cruxtruder_zero_two_two"},
-		"part=one_two_zero":	{ "model":"minestuck:cruxtruder_one_two_zero"},	
-		"part=one_two_two":		{ "model":"minestuck:cruxtruder_one_two_two"},
-		"part=two_two_zero":	{ "model":"minestuck:cruxtruder_two_two_zero"},
-		"part=two_two_one":		{ "model":"minestuck:cruxtruder_two_two_one"},
-		"part=two_two_two":		{ "model":"minestuck:cruxtruder_two_two_two"}
-	}
+    "variants": {
+        "facing=north,part=base_corner": { "model": "minestuck:cruxtruder_base_corner" },
+        "facing=north,part=base_side":   { "model": "minestuck:cruxtruder_base_side" },
+        "facing=north,part=center":      { "model": "minestuck:cruxtruder_center" },
+        "facing=north,part=tube":        { "model": "minestuck:cruxtruder_tube" },
+        
+        "facing=east,part=base_corner":  { "model": "minestuck:cruxtruder_base_corner", "y": 90 },
+        "facing=east,part=base_side":    { "model": "minestuck:cruxtruder_base_side", "y": 90 },
+        "facing=east,part=center":       { "model": "minestuck:cruxtruder_center", "y": 90 },
+        "facing=east,part=tube":         { "model": "minestuck:cruxtruder_tube", "y": 90 },
+        
+        "facing=south,part=base_corner": { "model": "minestuck:cruxtruder_base_corner", "y": 180 },
+        "facing=south,part=base_side":   { "model": "minestuck:cruxtruder_base_side", "y": 180 },
+        "facing=south,part=center":      { "model": "minestuck:cruxtruder_center", "y": 180 },
+        "facing=south,part=tube":        { "model": "minestuck:cruxtruder_tube", "y": 180 },
+        
+        "facing=west,part=base_corner":  { "model": "minestuck:cruxtruder_base_corner", "y": 270 },
+        "facing=west,part=base_side":    { "model": "minestuck:cruxtruder_base_side", "y": 270 },
+        "facing=west,part=center":       { "model": "minestuck:cruxtruder_center", "y": 270 },
+        "facing=west,part=tube":         { "model": "minestuck:cruxtruder_tube", "y": 270 }
+    }
 }
