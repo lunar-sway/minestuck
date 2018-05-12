@@ -1,5 +1,6 @@
 package com.mraof.minestuck.tileentity;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.BlockCruxtiteDowel;
 import com.mraof.minestuck.block.BlockCruxtruder;
 import com.mraof.minestuck.block.MinestuckBlocks;
@@ -19,6 +20,7 @@ public class TileEntityCruxtruder extends TileEntity
 {
 	private int color = -1;
 	private boolean broken = false;
+	private int material = 0;
 	
 	public int getColor()
 	{
@@ -39,23 +41,44 @@ public class TileEntityCruxtruder extends TileEntity
 		broken = true;
 	}
 
-	public void onRightClick(EntityPlayer player, IBlockState clickedState)
+	public void onRightClick(EntityPlayer player, boolean top)
 	{
 		if(!isBroken())
 		{
-			if(clickedState.getValue(BlockCruxtruder.PART) == BlockCruxtruder.EnumParts.TUBE)
+			BlockPos pos = getPos().up();
+			IBlockState state = getWorld().getBlockState(pos);
+			if(top && MinestuckConfig.cruxtruderIntake && state.getBlock().isReplaceable(getWorld(), pos) && material < 64 && material > -1)
 			{
-				BlockPos pos = getPos().up();
-				IBlockState state = getWorld().getBlockState(pos);
+				ItemStack stack = player.getHeldItemMainhand();
+				if(stack.getItem() != MinestuckItems.rawCruxite)
+					stack = player.getHeldItemOffhand();
+				if(stack.getItem() == MinestuckItems.rawCruxite)
+				{
+					int count = 1;
+					if(player.isSneaking())
+						count = Math.min(64 - material, stack.getCount());
+					stack.shrink(count);
+					material += count;
+				}
+			} else if(!top)
+			{
 				if(state.getBlock() == MinestuckBlocks.cruxiteDowel)
 				{
 					BlockCruxtiteDowel.dropDowel(getWorld(), pos);
 				} else if(state.getBlock().isReplaceable(getWorld(), pos))
 				{
-					world.setBlockState(pos, MinestuckBlocks.cruxiteDowel.getDefaultState());
-					TileEntity te = world.getTileEntity(pos);
-					if(te instanceof TileEntityItemStack)
-						((TileEntityItemStack) te).getStack().setItemDamage(color + 1);
+					if(MinestuckConfig.cruxtruderIntake && material == 0)
+					{
+						world.playEvent(1001, pos, 0);
+					} else
+					{
+						world.setBlockState(pos, MinestuckBlocks.cruxiteDowel.getDefaultState());
+						TileEntity te = world.getTileEntity(pos);
+						if(te instanceof TileEntityItemStack)
+							((TileEntityItemStack) te).getStack().setItemDamage(color + 1);
+						if(material > 0)
+							material--;
+					}
 				}
 			}
 		}
