@@ -91,7 +91,6 @@ public class ContainerCrockerMachine extends Container
 					//if it's an inventory slot with valid contents
 					result = mergeItemStack(itemstackOrig, 0, 1, false);
 				}
-				tileEntity.recheckState();
 				break;
 			}
 			

@@ -1,6 +1,7 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.TabMinestuck;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
@@ -31,7 +32,7 @@ public class BlockUraniumOre extends Block
 		setResistance(5.0F);	//Values normally used by ores
 		setLightLevel(0.2F);
 		setHarvestLevel("pickaxe", 1);
-		this.setCreativeTab(MinestuckItems.tabMinestuck);
+		this.setCreativeTab(TabMinestuck.instance);
 	}
 	
 	@Override

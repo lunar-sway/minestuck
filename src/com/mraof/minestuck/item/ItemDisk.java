@@ -15,7 +15,7 @@ public class ItemDisk extends Item
 		super();
 		this.maxStackSize = 1;
 		this.setHasSubtypes(true);
-		this.setCreativeTab(MinestuckItems.tabMinestuck);
+		this.setCreativeTab(TabMinestuck.instance);
 		this.setUnlocalizedName("disk");
 	}
 	

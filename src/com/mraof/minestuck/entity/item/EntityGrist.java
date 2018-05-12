@@ -177,7 +177,7 @@ public class EntityGrist extends Entity implements IEntityAdditionalSpawnData
 		++this.cycle;
 		++this.gristAge;
 
-		if (this.gristAge >= 60000)
+		if (this.gristAge >= 6000)
 		{
 			this.setDead();
 		}

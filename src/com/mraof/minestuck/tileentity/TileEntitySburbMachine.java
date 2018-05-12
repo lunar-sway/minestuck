@@ -11,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 
 public class TileEntitySburbMachine extends TileEntityMachine
 {
@@ -91,13 +92,13 @@ public class TileEntitySburbMachine extends TileEntityMachine
 		switch (getMachineType())
 		{
 			case CRUXTRUDER:
-				return i == 0 ? itemstack.getItem() == MinestuckItems.rawCruxite : false;
+				return i == 0 && itemstack.getItem() == MinestuckItems.rawCruxite;
 			case PUNCH_DESIGNIX:
-				return i == 1 ? itemstack.getItem() == MinestuckItems.captchaCard : i == 0;
+				return i == 0 || i == 1 && itemstack.getItem() == MinestuckItems.captchaCard;
 			case TOTEM_LATHE:
-				return i == 0 || i == 1 ? itemstack.getItem() == MinestuckItems.captchaCard : i == 2 ? itemstack.getItem() == MinestuckItems.cruxiteDowel : false;
+				return (i == 0 || i == 1) && itemstack.getItem() == MinestuckItems.captchaCard || i == 2 && itemstack.getItem() == MinestuckItems.cruxiteDowel;
 			case ALCHEMITER:
-				return i == 0 ? itemstack.getItem() == MinestuckItems.cruxiteDowel : false;
+				return i == 0 && itemstack.getItem() == MinestuckItems.cruxiteDowel;
 		}
 		return true;
 	}
@@ -378,7 +379,52 @@ public class TileEntitySburbMachine extends TileEntityMachine
 				break;
 		}
 	}
-
+	
+	@Override
+	public int[] getSlotsForFace(EnumFacing side)
+	{
+		switch(getMachineType())
+		{
+			case ALCHEMITER:
+				if(side == EnumFacing.DOWN)
+					return new int[] {1};
+				else return new int[] {0};
+			case CRUXTRUDER:
+				if(side == EnumFacing.DOWN)
+					return new int[] {1};
+				else return new int[] {0};
+			case TOTEM_LATHE:
+				if(side == EnumFacing.UP)
+					return new int[] {2};
+				if(side == EnumFacing.DOWN)
+					return new int[] {0, 1, 3};
+				else return new int[] {0, 1};
+			case PUNCH_DESIGNIX:
+				if(side == EnumFacing.UP)
+					return new int[] {1};
+				if(side == EnumFacing.DOWN)
+					return new int[] {0, 2};
+				else return new int[] {0};
+		}
+		return new int[0];
+	}
+	
+	@Override
+	public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction)
+	{
+		return isItemValidForSlot(index, itemStackIn);
+	}
+	
+	@Override
+	public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction)
+	{
+		if(getMachineType() == MachineType.TOTEM_LATHE && (index == 0 || index == 1))
+			return !inv.get(3).isEmpty();	//Only remove input cards when an output has been produced
+		if(getMachineType() == MachineType.PUNCH_DESIGNIX && index == 0)
+			return !inv.get(2).isEmpty();	//Same but for the punch designix
+		return true;
+	}
+	
 	@Override
 	public void markDirty()
 	{

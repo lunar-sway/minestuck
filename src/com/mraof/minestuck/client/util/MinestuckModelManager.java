@@ -4,7 +4,6 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.*;
 import com.mraof.minestuck.item.ItemMetalBoat;
 import com.mraof.minestuck.item.ItemMinestuckBeverage;
-import com.mraof.minestuck.item.ItemMinestuckCandy;
 import com.mraof.minestuck.item.ItemModus;
 import com.mraof.minestuck.item.weapon.ItemDualWeapon;
 import com.mraof.minestuck.util.GristType;
@@ -273,6 +272,12 @@ public class MinestuckModelManager
 		
 		register(woodenCactus);
 		register(sugarCube);
+		register(appleCake);
+		register(blueCake);
+		register(coldCake);
+		register(redCake);
+		register(hotCake);
+		register(reverseCake);
 		
 		register(primedTnt);
 		register(unstableTnt);
@@ -302,7 +307,7 @@ public class MinestuckModelManager
 	
 	private static void register(Item item)
 	{
-		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(Item.REGISTRY.getNameForObject(item), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 	}
 	
 	private static void register(Item item, int meta, String modelResource)
