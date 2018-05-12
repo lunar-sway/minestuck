@@ -88,6 +88,8 @@ public class Minestuck
 		MinecraftForge.EVENT_BUS.register(MinestuckItems.class);
 		MinecraftForge.EVENT_BUS.register(BiomeMinestuck.class);
 		
+		MinestuckSoundHandler.initSound();
+		
 		MinestuckAchievementHandler.prepareAchievementPage();
 		
 	}
