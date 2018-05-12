@@ -173,7 +173,7 @@ public class EntityVitalityGel extends Entity implements IEntityAdditionalSpawnD
 		++this.cycle;
 		++this.age;
 
-		if (this.age >= 60000)
+		if (this.age >= 6000)
 		{
 			this.setDead();
 		}

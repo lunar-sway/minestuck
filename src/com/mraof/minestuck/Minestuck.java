@@ -163,23 +163,17 @@ public class Minestuck
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) 
-	{
-		AlchemyRecipeHandler.registerDynamicRecipes();
-
-		//register NEI stuff
-		if (Loader.isModLoaded("NotEnoughItems")) {
-//			NEIModContainer.plugins.add(new NEIMinestuckConfig());
-		}
-		
+	{		
 		if(Loader.isModLoaded("crafttweaker"))
 			CraftTweakerSupport.applyRecipes();
+		
+		AlchemyRecipeHandler.registerDynamicRecipes();
 	}
 
 	@EventHandler 
 	public void serverAboutToStart(FMLServerAboutToStartEvent event)
 	{
 		isServerRunning = true;
-		AlchemyRecipeHandler.addOrRemoveRecipes(MinestuckConfig.cardRecipe);
 		TileEntityTransportalizer.transportalizers.clear();
 		DeployList.applyConfigValues(MinestuckConfig.deployConfigurations);
 	}

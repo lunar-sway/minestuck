@@ -63,7 +63,7 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 	
 	public ItemCruxiteArtifact() 
 	{
-		this.setCreativeTab(MinestuckItems.tabMinestuck);
+		this.setCreativeTab(TabMinestuck.instance);
 		setUnlocalizedName("cruxiteArtifact");
 		this.maxStackSize = 1;
 		setHasSubtypes(true);
@@ -80,12 +80,23 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 				
 				SburbConnection c = SkaianetHandler.getMainConnection(IdentifierHandler.encode(player), true);
 				
-				if(c == null || !c.enteredGame() || !MinestuckDimensionHandler.isLandDimension(player.world.provider.getDimension()))
+				if(c == null || !c.enteredGame() || !MinestuckConfig.stopSecondEntry && !MinestuckDimensionHandler.isLandDimension(player.world.provider.getDimension()))
 				{
-					int destinationId;
+					
 					if(c != null && c.enteredGame())
-						destinationId = c.getClientDimension();
-					else destinationId = LandAspectRegistry.createLand(player);
+					{
+						World newWorld = player.getServer().getWorld(c.getClientDimension());
+						if(newWorld == null)
+						{
+							return;
+						}
+						BlockPos pos = newWorld.provider.getRandomizedSpawnPoint();
+						Teleport.teleportEntity(player, c.getClientDimension(), null, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F);
+						
+						return;
+					}
+					
+					int destinationId = LandAspectRegistry.createLand(player);
 					
 					if(destinationId == -1)	//Something bad happened further down and the problem should be written in the server console
 					{
@@ -272,17 +283,10 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 								if(tileEntity != null)
 								{
 									BlockPos pos1 = pos.up(yDiff);
-									worldserver0.removeTileEntity(pos);
-									worldserver1.setTileEntity(pos1, tileEntity);
-									
-									TileEntity te1 = null;
-									try {
-										te1 = tileEntity.getClass().newInstance();
-									} catch (Exception e) {e.printStackTrace();}
 									NBTTagCompound nbt = new NBTTagCompound();
 									tileEntity.writeToNBT(nbt);
 									nbt.setInteger("y", pos1.getY());
-									te1.readFromNBT(nbt);
+									TileEntity te1 = TileEntity.create(worldserver1, nbt);
 									worldserver1.removeTileEntity(pos1);
 									worldserver1.setTileEntity(pos1, te1);
 									if(tileEntity instanceof TileEntityComputer)

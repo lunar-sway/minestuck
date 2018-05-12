@@ -69,7 +69,8 @@ public class GristSet
 	 */
 	public GristSet setGrist(GristType type, int amount)
 	{
-		this.gristTypes.put(type, amount);
+		if(type != null)
+			gristTypes.put(type, amount);
 		return this;
 	}
 

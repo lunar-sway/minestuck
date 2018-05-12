@@ -136,6 +136,9 @@ public class MinestuckPlayerTracker {
 	public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) 
 	{
 		MinestuckPlayerData.getData(event.player).echeladder.updateEcheladderBonuses(event.player);
+		Modus modus = MinestuckPlayerData.getData(event.player).modus;
+		if(modus != null)
+			modus.player = event.player;
 	}
 	
 	public static Set<String> dataCheckerPermission = new HashSet<String>();

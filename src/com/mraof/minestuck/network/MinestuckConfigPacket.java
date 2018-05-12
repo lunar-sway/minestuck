@@ -27,7 +27,6 @@ public class MinestuckConfigPacket extends MinestuckPacket
 	
 	boolean giveItems;
 	boolean easyDesignix;
-	boolean cardRecipe;
 	boolean disableGristWidget;
 	boolean dataChecker;
 	boolean preEntryEcheladder;
@@ -45,7 +44,6 @@ public class MinestuckConfigPacket extends MinestuckPacket
 			data.writeInt(MinestuckConfig.landEditRange);
 			data.writeInt(ContainerHandler.windowIdStart);
 			data.writeBoolean(MinestuckConfig.giveItems);
-			data.writeBoolean(MinestuckConfig.cardRecipe);
 			data.writeBoolean(MinestuckConfig.hardMode);
 			
 			for(int i = 0; i < MinestuckConfig.deployConfigurations.length; i++)
@@ -74,7 +72,6 @@ public class MinestuckConfigPacket extends MinestuckPacket
 			landEditRange = data.readInt();
 			windowIdStart = data.readInt();
 			giveItems = data.readBoolean();
-			cardRecipe = data.readBoolean();
 			hardMode = data.readBoolean();
 			
 			deployValues = new boolean[MinestuckConfig.deployConfigurations.length];
@@ -107,7 +104,6 @@ public class MinestuckConfigPacket extends MinestuckPacket
 			if(!Minestuck.isServerRunning)
 			{
 				DeployList.applyConfigValues(deployValues);
-				AlchemyRecipeHandler.addOrRemoveRecipes(cardRecipe);
 			}
 		} else
 		{
