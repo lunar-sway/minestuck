@@ -118,6 +118,9 @@ public class WorldProviderLands extends WorldProvider
 		else
 		{
 			dimOut = c.getClientDimension();
+			
+			if(!player.hasSpawnDimension())
+				player.setSpawnDimension(dimOut);
 		}
 		
 		return dimOut;

@@ -85,6 +85,9 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 					
 					int destinationId = LandAspectRegistry.createLand(player);
 					
+					if(!player.hasSpawnDimension())
+						player.setSpawnDimension(destinationId);
+					
 					if(destinationId == -1)	//Something bad happened further down and the problem should be written in the server console
 					{
 						player.sendMessage(new TextComponentString("Something went wrong during entry. More details in the server console."));
