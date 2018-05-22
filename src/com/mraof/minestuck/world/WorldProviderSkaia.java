@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.IdentifierHandler;
@@ -11,7 +12,6 @@ import net.minecraft.init.Biomes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
-import net.minecraft.world.WorldProvider.WorldSleepResult;
 import net.minecraft.world.biome.BiomeProviderSingle;
 import net.minecraft.world.gen.IChunkGenerator;
 
@@ -60,7 +60,7 @@ public class WorldProviderSkaia extends WorldProvider
 		{
 			dimOut = c.getClientDimension();
 			
-			if(!player.hasSpawnDimension())
+			if(!player.hasSpawnDimension() || MinestuckConfig.overwriteSpawnDimension)
 				player.setSpawnDimension(dimOut);
 		}
 		

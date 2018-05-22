@@ -85,9 +85,6 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 					
 					int destinationId = LandAspectRegistry.createLand(player);
 					
-					if(!player.hasSpawnDimension())
-						player.setSpawnDimension(destinationId);
-					
 					if(destinationId == -1)	//Something bad happened further down and the problem should be written in the server console
 					{
 						player.sendMessage(new TextComponentString("Something went wrong during entry. More details in the server console."));
@@ -99,7 +96,13 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 						Debug.warn("Was not able to teleport player "+player.getName()+" into the medium! Likely caused by mod collision.");
 						player.sendMessage(new TextComponentString("Was not able to teleport you into the medium! Likely caused by mod collision."));
 					}
-					else MinestuckPlayerTracker.sendLandEntryMessage(player);
+					else
+					{
+						MinestuckPlayerTracker.sendLandEntryMessage(player);
+						
+						if(!player.hasSpawnDimension() || MinestuckConfig.overwriteSpawnDimension)
+							player.setSpawnDimension(destinationId);
+					}
 				}
 			}
 		} catch(Exception e)
