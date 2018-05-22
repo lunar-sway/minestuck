@@ -1,9 +1,10 @@
 package com.mraof.minestuck.client.util;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-
+import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.util.GristAmount;
+import com.mraof.minestuck.util.GristSet;
+import com.mraof.minestuck.util.GristType;
+import com.mraof.minestuck.util.MinestuckPlayerData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -11,11 +12,9 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.util.GristAmount;
-import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.GristType;
-import com.mraof.minestuck.util.MinestuckPlayerData;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 public class GuiUtil
 {
@@ -90,7 +89,7 @@ public class GuiUtil
 				
 				GlStateManager.color(1, 1, 1);
 				GlStateManager.disableLighting();
-				Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("minestuck", "textures/grist/" + type.getName()+ ".png"));
+				Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation(type.getIcon().getResourceDomain(), "textures/grist/" + type.getIcon().getResourcePath()+ ".png"));
 				Gui.drawModalRectWithCustomSizedTexture(boardX + needStrWidth + 1 + index%GRIST_BOARD_WIDTH, boardY + 8*row, 0, 0, 8, 8, 8, 8);
 				
 				index += needStrWidth + 10 + fontRenderer.getStringWidth(haveStr);
@@ -121,14 +120,14 @@ public class GuiUtil
 					String needStr = addSuffix(need);
 					
 					if(!needStr.equals(String.valueOf(need)) && mouseX >= GRIST_BOARD_WIDTH/2*col && mouseX < GRIST_BOARD_WIDTH/2*col + fontRenderer.getStringWidth(needStr))
-						return Arrays.asList(String.valueOf(need));
+						return Collections.singletonList(String.valueOf(need));
 					
 					int width = fontRenderer.getStringWidth(needStr + " " + entry.getType().getDisplayName() + " (");
 					int have = playerGrist.getGrist(entry.getType());
 					String haveStr = addSuffix(have);
 					
 					if(!haveStr.equals(String.valueOf(have)) && mouseX >= boardX + GRIST_BOARD_WIDTH/2*col + width && mouseX < boardX + GRIST_BOARD_WIDTH/2*col + width + fontRenderer.getStringWidth(haveStr))
-						return Arrays.asList(String.valueOf(have));
+						return Collections.singletonList(String.valueOf(have));
 				}
 				
 				place++;
@@ -156,11 +155,11 @@ public class GuiUtil
 				if(mouseY >= 8*row && mouseY < 8*row + 8)
 				{
 					if(!needStr.equals(String.valueOf(need)) && mouseX >= index%GRIST_BOARD_WIDTH && mouseX < index%GRIST_BOARD_WIDTH + needStrWidth)
-						return Arrays.asList(String.valueOf(need));
+						return Collections.singletonList(String.valueOf(need));
 					else if(mouseX >= index%158 + needStrWidth + 1 && mouseX < index%158+ needStrWidth + 9)
-						return Arrays.asList(type.getDisplayName());
+						return Collections.singletonList(type.getDisplayName());
 					else if(!haveStr.equals(String.valueOf(have)) && mouseX >= index%158 + needStrWidth + 10 + fontRenderer.getCharWidth('(') && mouseX < index%158 + needStrWidth + 10 + fontRenderer.getStringWidth("("+haveStr))
-						return Arrays.asList(String.valueOf(have));
+						return Collections.singletonList(String.valueOf(have));
 				}
 				
 				index += needStrWidth + 10 + haveStrWidth;
@@ -190,4 +189,5 @@ public class GuiUtil
 			return (n/1000) + "K";
 		else return (n/1000000) + "M";
 	}
+
 }

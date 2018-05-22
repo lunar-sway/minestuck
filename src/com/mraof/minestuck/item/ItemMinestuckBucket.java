@@ -26,7 +26,7 @@ public class ItemMinestuckBucket extends ItemBucket	//Unsure if anything more sh
 	{
 		super(Blocks.AIR);
 		setUnlocalizedName("minestuckBucket");
-		setCreativeTab(MinestuckItems.tabMinestuck);
+		setCreativeTab(TabMinestuck.instance);
 	}
 	
 	@Override

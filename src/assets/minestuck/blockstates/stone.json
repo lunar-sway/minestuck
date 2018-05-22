@@ -8,6 +8,7 @@
         "variant=frost_tile": { "model": "minestuck:frost_tile" },
         "variant=frost_chiseled": { "model": "minestuck:frost_chiseled" },
         "variant=cast_iron": { "model": "minestuck:cast_iron" },
-        "variant=cast_iron_chiseled": { "model": "minestuck:cast_iron_chiseled" }
+        "variant=cast_iron_chiseled": { "model": "minestuck:cast_iron_chiseled" },
+        "variant=black_stone": { "model": "minestuck:black_stone" }
     }
 }

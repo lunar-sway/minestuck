@@ -1,11 +1,11 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.TabMinestuck;
 import com.mraof.minestuck.tileentity.TileEntitySkaiaPortal;
-import com.mraof.minestuck.util.Location;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -35,7 +35,7 @@ public class BlockSkaiaPortal extends BlockContainer
 		super(material);
 		
 		setUnlocalizedName("skaiaPortal");
-		this.setCreativeTab(MinestuckItems.tabMinestuck);
+		this.setCreativeTab(TabMinestuck.instance);
 	}
 	
 	@Override
@@ -50,7 +50,7 @@ public class BlockSkaiaPortal extends BlockContainer
 		if (entity.getRidingEntity() == null && entity.getPassengers().isEmpty() && !world.isRemote && entity.timeUntilPortal == 0)
 		{
 			TileEntitySkaiaPortal portal = (TileEntitySkaiaPortal) world.getTileEntity(pos);
-				portal.teleportEntity(entity);
+			portal.teleportEntity(entity);
 		}
 	}
 	
@@ -59,7 +59,7 @@ public class BlockSkaiaPortal extends BlockContainer
 	@SideOnly(Side.CLIENT)
 	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
 	{
-		return side.getAxis().isHorizontal() ? false : super.shouldSideBeRendered(blockState, blockAccess, pos, side);
+		return !side.getAxis().isHorizontal() && super.shouldSideBeRendered(blockState, blockAccess, pos, side);
 	}
 	
 	@Override
@@ -72,7 +72,6 @@ public class BlockSkaiaPortal extends BlockContainer
 	public TileEntity createNewTileEntity(World world, int metadata)
 	{
 		TileEntitySkaiaPortal tileEntity = (TileEntitySkaiaPortal) this.createNewTileEntity(world);
-		tileEntity.destination = new Location();
 		tileEntity.destination.dim = MinestuckDimensionHandler.skaiaDimensionId == world.provider.getDimension() ? 0 : MinestuckDimensionHandler.skaiaDimensionId;
 		return tileEntity;
 	}
@@ -112,7 +111,7 @@ public class BlockSkaiaPortal extends BlockContainer
 	@Override
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player)
 	{
-		return null;
+		return ItemStack.EMPTY;
 	}
 	
 //	/**
@@ -140,4 +139,9 @@ public class BlockSkaiaPortal extends BlockContainer
 		((TileEntitySkaiaPortal) world.getTileEntity(new BlockPos(x, y, z))).destination.dim = destinationDimension;
 	}
 	
+	@Override
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face)
+	{
+		return BlockFaceShape.UNDEFINED;
+	}
 }

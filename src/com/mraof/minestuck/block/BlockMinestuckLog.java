@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.TabMinestuck;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.IProperty;
@@ -23,7 +23,7 @@ public class BlockMinestuckLog extends BlockLog
 	public BlockMinestuckLog()
 	{
 		super();
-		setCreativeTab(MinestuckItems.tabMinestuck);
+		setCreativeTab(TabMinestuck.instance);
 		setDefaultState(blockState.getBaseState().withProperty(VARIANT, BlockType.VINE_OAK).withProperty(LOG_AXIS, BlockLog.EnumAxis.Y));
 		setUnlocalizedName("logMinestuck");
 	}
@@ -93,16 +93,17 @@ public class BlockMinestuckLog extends BlockLog
 		return 5;
 	}
 	
-	public static enum BlockType implements IStringSerializable
+	public enum BlockType implements IStringSerializable
 	{
 		VINE_OAK("vine_oak", "vineOak", MapColor.WOOD, MapColor.OBSIDIAN),
-		FLOWERY_VINE_OAK("flowery_vine_oak", "floweryVineOak", MapColor.WOOD, MapColor.OBSIDIAN);
+		FLOWERY_VINE_OAK("flowery_vine_oak", "floweryVineOak", MapColor.WOOD, MapColor.OBSIDIAN),
+		FROST("frost", "frost", MapColor.ICE, MapColor.ICE);
 		
 		private final String name;
 		private final String unlocalizedName;
 		private final MapColor topColor, sideColor;
 		
-		private BlockType(String name, String unlocalizedName, MapColor topColor, MapColor sideColor)
+		BlockType(String name, String unlocalizedName, MapColor topColor, MapColor sideColor)
 		{
 			this.name = name;
 			this.unlocalizedName = unlocalizedName;

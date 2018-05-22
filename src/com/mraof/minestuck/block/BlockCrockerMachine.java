@@ -2,14 +2,16 @@ package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiHandler;
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.TabMinestuck;
 import com.mraof.minestuck.tileentity.TileEntityCrockerMachine;
 import com.mraof.minestuck.tileentity.TileEntityMachine;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -28,9 +30,9 @@ import net.minecraft.world.World;
 
 public class BlockCrockerMachine extends BlockContainer
 {
-	protected static final AxisAlignedBB[] GRIST_WIDGET_AABB = {new AxisAlignedBB(0.0D, 0.0D, 1/4D, 1.0D, 1/4D, 3/4D), new AxisAlignedBB(1/4D, 0.0D, 0.0D, 3/4D, 1/4D, 1.0D)};
+	protected static final AxisAlignedBB[] GRIST_WIDGET_AABB = {new AxisAlignedBB(2/16D, 0.0D, 5/16D, 14/16D, 2.1/16D, 12/16D), new AxisAlignedBB(4/16D, 0.0D, 2/16D, 11/16D, 2.1/16D, 14/16D),new AxisAlignedBB(2/16D, 0.0D, 4/16D, 14/16D, 2.1/16D, 11/16D), new AxisAlignedBB(5/16D, 0.0D, 2/16D, 12/16D, 2.1/16D, 14/16D)};
 	
-	public static enum MachineType implements IStringSerializable
+	public enum MachineType implements IStringSerializable
 	{
 		GRIST_WIDGET("gristWidget");
 		
@@ -54,6 +56,7 @@ public class BlockCrockerMachine extends BlockContainer
 	
 	public static final PropertyEnum<MachineType> MACHINE_TYPE = PropertyEnum.create("machine_type", MachineType.class);
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
+	public static final PropertyBool HAS_ITEM = PropertyBool.create("has_item");
 	
 	protected BlockCrockerMachine()
 	{
@@ -62,14 +65,14 @@ public class BlockCrockerMachine extends BlockContainer
 		setUnlocalizedName("crockerMachine");
 		setHardness(3.0F);
 		setHarvestLevel("pickaxe", 0);
-		setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.SOUTH));
-		this.setCreativeTab(MinestuckItems.tabMinestuck);
+		setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.SOUTH).withProperty(HAS_ITEM, false));
+		this.setCreativeTab(TabMinestuck.instance);
 	}
 	
 	@Override
 	protected BlockStateContainer createBlockState()
 	{
-		return new BlockStateContainer(this, MACHINE_TYPE, FACING);
+		return new BlockStateContainer(this, MACHINE_TYPE, FACING, HAS_ITEM);
 	}
 	
 	@Override
@@ -128,7 +131,6 @@ public class BlockCrockerMachine extends BlockContainer
 	{
 		TileEntityMachine te = (TileEntityMachine) worldIn.getTileEntity(pos);
 		InventoryHelper.dropInventoryItems(worldIn, pos, te);
-		
 		super.breakBlock(worldIn, pos, state);
 	}
 	
@@ -148,12 +150,12 @@ public class BlockCrockerMachine extends BlockContainer
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
 	{
-		EnumFacing rotation = (EnumFacing) state.getValue(FACING);
-		MachineType type = (MachineType) state.getValue(MACHINE_TYPE);
+		EnumFacing rotation = state.getValue(FACING);
+		MachineType type = state.getValue(MACHINE_TYPE);
 		
 		switch(type)
 		{
-		case GRIST_WIDGET: return GRIST_WIDGET_AABB[rotation.getHorizontalIndex()%2];
+		case GRIST_WIDGET: return GRIST_WIDGET_AABB[rotation.getHorizontalIndex()%4];
 		default: return super.getBoundingBox(state, source, pos);
 		}
 	}
@@ -163,5 +165,34 @@ public class BlockCrockerMachine extends BlockContainer
 	{
 		return new ItemStack(Item.getItemFromBlock(this), 1, state.getValue(MACHINE_TYPE).ordinal());
 	}
+
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos)
+	{
+		TileEntity te = worldIn.getTileEntity(pos);
+		if(!(te instanceof TileEntityMachine))
+		{
+			return state;
+		}
+		
+		if(((TileEntityMachine)te).getStackInSlot(0).isEmpty())
+		{
+			return state.withProperty(HAS_ITEM, false);
+		} else
+		{
+			return state.withProperty(HAS_ITEM, true);
+		}
+	}
+
+	public static void updateItem(boolean b, World world, BlockPos pos)
+	{
+		IBlockState oldState = world.getBlockState(pos);
+		world.notifyBlockUpdate(pos, oldState, oldState.withProperty(HAS_ITEM, b), 3);
+	}
 	
+	@Override
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face)
+	{
+		return BlockFaceShape.UNDEFINED;
+	}
 }

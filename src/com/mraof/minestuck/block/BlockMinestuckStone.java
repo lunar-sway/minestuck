@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.TabMinestuck;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -33,7 +33,7 @@ public class BlockMinestuckStone extends Block
 	{
 		super(Material.ROCK);
 		setDefaultState(blockState.getBaseState().withProperty(VARIANT, BlockType.COARSE));
-		setCreativeTab(MinestuckItems.tabMinestuck);
+		setCreativeTab(TabMinestuck.instance);
 		setHardness(1.5F);
 		setResistance(10.0F);
 		setSoundType(SoundType.STONE);
@@ -77,7 +77,7 @@ public class BlockMinestuckStone extends Block
 			items.add(new ItemStack(this, 1, type.getMetadata()));
 	}
 	
-	public static enum BlockType implements IStringSerializable
+	public enum BlockType implements IStringSerializable
 	{
 		COARSE(0, "coarse_stone", "coarse", 2.0F, MapColor.STONE),
 		COARSE_CHISELED(1, "coarse_chiseled", "coarseChiseled", 2.0F, MapColor.STONE),
@@ -87,7 +87,8 @@ public class BlockMinestuckStone extends Block
 		FROST_TILE(5, "frost_tile", "frostTile", 1.5F, MapColor.ICE),
 		FROST_CHISELED(6, "frost_chiseled", "frostChiseled", 1.5F, MapColor.ICE),
 		CAST_IRON(7, "cast_iron", "castIron", 3.0F, MapColor.IRON),
-		CAST_IRON_CHISELED(8, "cast_iron_chiseled", "castIronChiseled", 3.0F, MapColor.IRON);
+		CAST_IRON_CHISELED(8, "cast_iron_chiseled", "castIronChiseled", 3.0F, MapColor.IRON),
+		BLACK_STONE(9, "black_stone", "blackStone", 2.5F, MapColor.BLACK);
 		
 		private final int metadata;
 		private final String name;
@@ -95,7 +96,7 @@ public class BlockMinestuckStone extends Block
 		private final float hardness;
 		private final MapColor color;
 		
-		private BlockType(int metadata, String name, String unlocalizedName, float hardness, MapColor color)
+		BlockType(int metadata, String name, String unlocalizedName, float hardness, MapColor color)
 		{
 			this.metadata = metadata;
 			this.name = name;
