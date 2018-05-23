@@ -88,6 +88,7 @@ public class MinestuckConfig
 	public static int modusMaxSize;
 	public static int cardCost;
 	public static int oreMultiplier;
+	public static int maxAlchemitable;
 	/**
 	 * 0: Make the player's new server player his/her old server player's server player
 	 * 1: The player that lost his/her server player will have an idle main connection until someone without a client player connects to him/her.
@@ -179,7 +180,7 @@ public class MinestuckConfig
 		deployConfigurations = new boolean[1];
 		deployConfigurations[0] = config.get("General", "deployCard", false, "Determines if a card with a captcha card punched on it should be added to the deploy list or not.").setLanguageKey("minestuck.config.deployCard").setRequiresWorldRestart(true).getBoolean();
 		cardCost = config.get("General", "cardCost", 1, "An integer that determines how much a captchalouge card costs to alchemize").setMinValue(1).setLanguageKey("minestuck.config.cardCost").setRequiresWorldRestart(true).getInt();
-		
+
 		generateCruxiteOre = config.get("General", "generateCruxiteOre", true, "If cruxite ore should be generated in the overworld.").setRequiresWorldRestart(true).setLanguageKey("minestuck.config.generateCruxiteOre").getBoolean();
 		generateUraniumOre = config.get("General", "generateUraniumOre", false, "If uranium ore should be generated in the overworld.").setRequiresWorldRestart(true).setLanguageKey("minestuck.config.generateUraniumOre").getBoolean();
 		globalSession = config.get("General", "globalSession", false, "Whenether all connetions should be put into a single session or not.").setLanguageKey("minestuck.config.globalSession").getBoolean();
@@ -200,6 +201,8 @@ public class MinestuckConfig
 		stopSecondEntry = config.get("General", "stopSecondEntry", false, "If this is true, players may only use an artifact once, even if they end up in the overworld again.").setLanguageKey("minestuck.config.stopSecondEntry").getBoolean();
 		gristRefund = config.get("General", "gristRefund", false, "Enable this and players will get a (full) grist refund from breaking blocks in editmode.").setLanguageKey("minestuck.config.gristRefund").getBoolean();
 		cruxtruderIntake = config.get("General", "cruxtruderIntake", false, "If enabled, the regular cruxtruder will require raw cruxite to function, which is inserted through the pipe.").setLanguageKey("minestuck.config.cruxtruderIntake").getBoolean();
+		maxAlchemitable=config.get("General", "maxAlchemitable", 999,"the maximum number of items alchemitable in a single go").setLanguageKey("minestuck.config.maxAlchemitable").getInt();
+		
 		if(config.hasKey("General", "hardMode"))
 			hardMode = config.get("General", "hardMode", false).getBoolean();	//Not fully fleshed out yet
 		
