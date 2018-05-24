@@ -3,6 +3,7 @@ package com.mraof.minestuck.client.gui;
 import java.io.IOException;
 import java.util.List;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
@@ -25,11 +26,12 @@ public class GuiAlchemiter extends GuiScreen
 	private static final int guiWidth = 159, guiHeight = 102;
 	private TileEntityAlchemiter alchemiter;
 	private int itemQuantity;
-	
+	public static int maxAlchemitable;
 	public GuiAlchemiter(TileEntityAlchemiter te)
 	{
 		alchemiter = te;
 		itemQuantity = 1;
+		maxAlchemitable=MinestuckConfig.maxAlchemitable;
 	}
 	
 	public TileEntityAlchemiter getAlchemiter() {
@@ -126,7 +128,9 @@ public class GuiAlchemiter extends GuiScreen
 		{
 			if ((int) (itemQuantity / Math.pow(10, button.id - 1)) % 10 != 9)
 			{
-				itemQuantity += Math.pow(10, button.id - 1);
+				if(itemQuantity+Math.pow(10, button.id - 1)<=maxAlchemitable) {
+					itemQuantity += Math.pow(10, button.id - 1);
+				}
 			}
 		} else
 		{

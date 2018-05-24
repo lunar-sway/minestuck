@@ -528,7 +528,7 @@ public class AlchemyRecipeHandler
 		GameRegistry.addSmelting(goldOreSandstone, new ItemStack(Items.GOLD_INGOT), 1.0F);
 		GameRegistry.addSmelting(goldOreSandstoneRed, new ItemStack(Items.GOLD_INGOT), 1.0F);
 		GameRegistry.addSmelting(woodenCactus, new ItemStack(Items.COAL, 1, 1), 0.15F);
-		GameRegistry.addSmelting(cruxiteDowel, new ItemStack(MinestuckItems.rawCruxite), 0.1F);
+		GameRegistry.addSmelting(com.mraof.minestuck.item.MinestuckItems.cruxiteDowel, new ItemStack(MinestuckItems.rawCruxite), 0.1F);
 		
 		//Register ore dictionary entries
 		OreDictionary.registerOre("oreCoal", coalOreNetherrack);
@@ -1178,7 +1178,7 @@ public class AlchemyRecipeHandler
 			nbt.setString("contentID", Item.REGISTRY.getNameForObject(item.getItem()).toString());
 			nbt.setInteger("contentMeta", item.getItemDamage());
 		}
-		ItemStack stack = new ItemStack(registerToCard ? captchaCard : cruxiteDowel);
+		ItemStack stack = new ItemStack(registerToCard ? captchaCard : com.mraof.minestuck.item.MinestuckItems.cruxiteDowel);
 		stack.setTagCompound(nbt);
 		return stack;
 	}
