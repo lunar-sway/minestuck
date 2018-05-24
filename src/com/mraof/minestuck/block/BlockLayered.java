@@ -19,7 +19,7 @@ public class BlockLayered extends Block
 {
 	protected static final AxisAlignedBB[] LAYERED_AABB = {new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1/8D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 2/8D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 3/8D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 4/8D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 5/8D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 6/8D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 7/8D, 1.0D)};
 	
-	public IBlockState fullBlock;
+	public IBlockState full_block;	//Not named fullBlock because that creates confusion when using Minestuck as a development library.
 	public static final PropertyInteger SIZE = PropertyInteger.create("size", 1, 7);
 	
 	public BlockLayered(IBlockState iconBlock)
@@ -27,8 +27,8 @@ public class BlockLayered extends Block
 		super(iconBlock.getMaterial());
 		
 		this.setCreativeTab(TabMinestuck.instance);
-		this.fullBlock = iconBlock;
-		setSoundType(fullBlock.getBlock().getSoundType());
+		this.full_block = iconBlock;
+		setSoundType(full_block.getBlock().getSoundType());
 	}
 	
 	@Override
@@ -105,7 +105,7 @@ public class BlockLayered extends Block
 
 	public boolean changeHeight(World world, BlockPos pos, int metadata)
 	{
-		IBlockState block = (metadata <= 7 ? getDefaultState().withProperty(SIZE, metadata) : this.fullBlock);
+		IBlockState block = (metadata <= 7 ? getDefaultState().withProperty(SIZE, metadata) : this.full_block);
 		return  world.setBlockState(pos, block, 3);
 	}
 
