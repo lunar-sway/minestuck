@@ -21,8 +21,8 @@ public interface ILandAspect<A extends ILandAspect>
 	
 	public IGateStructure getGateStructure();
 	
-	abstract void prepareChunkProvider(ChunkProviderLands chunkProvider);
-	abstract void prepareChunkProviderServer(ChunkProviderLands chunkProvider);
+	void prepareChunkProvider(ChunkProviderLands chunkProvider);
+	void prepareChunkProviderServer(ChunkProviderLands chunkProvider);
 	
 	List<A> getVariations();
 	

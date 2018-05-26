@@ -87,7 +87,9 @@ public abstract class TerrainLandAspect implements ILandAspect<TerrainLandAspect
 		return new GateStructurePillar();
 	}
 	
+	@Override
 	public void prepareChunkProvider(ChunkProviderLands chunkProvider){}
+	@Override
 	public void prepareChunkProviderServer(ChunkProviderLands chunkProvider){}
 	
 	public abstract EnumConsort getConsortType();
