@@ -51,7 +51,7 @@ public class LandAspectSilence extends TitleLandAspect
 	@Override
 	public boolean isAspectCompatible(TerrainLandAspect aspect)
 	{
-		return (aspect.getWeatherType() == -1 || (aspect.getWeatherType() & 1) != 0)/*rain is noisy*/ && aspect.getDayCycleMode() != 1;
+		return (aspect.getWeatherType() == -1 || (aspect.getWeatherType() & 1) == 1)/*snow is quiet, rain is noisy*/ && aspect.getDayCycleMode() != 1;
 	}
 	
 	private static class PumpkinDecorator extends SingleBlockDecorator
