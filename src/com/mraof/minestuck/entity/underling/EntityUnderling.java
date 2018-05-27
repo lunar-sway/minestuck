@@ -52,7 +52,7 @@ public abstract class EntityUnderling extends EntityMinestuck implements IEntity
 	protected Map<EntityPlayerMP, Double> damageMap = new HashMap<EntityPlayerMP, Double>();	//Map that stores how much damage each player did to this to this underling. Null is used for environmental or other non-player damage
 	
 	//random used in randomly choosing a type of creature
-	protected static Random randStatic = new Random();
+	protected static Random randStatic = MinestuckRandom.getRandom();
 	
 	public EntityUnderling(World par1World)
 	{

@@ -76,7 +76,7 @@ public class SburbHandler
 		
 		if(title == null)
 		{
-			Random rand = new Random(Minestuck.worldSeed^player.hashCode());
+			Random rand = MinestuckRandom.getPlayerSpecificRandom(player);
 			rand.nextInt();	//Avoid using same data as the artifact generation
 			
 			ArrayList<Title> usedTitles = new ArrayList<Title>();
@@ -407,7 +407,7 @@ public class SburbHandler
 	//Continue if you think you can do it.
 	static void finishSession(ICommandSender sender, ICommand command, Session session) throws CommandException
 	{
-		Random rand = new Random();	//What seed?	//How about Minestuck.worldSeed?
+		Random rand = MinestuckRandom.getRandom();
 		Set<PlayerIdentifier> unregisteredPlayers = session.getPlayerList();
 		unregisteredPlayers.removeAll(session.predefinedPlayers.keySet());
 		if(!unregisteredPlayers.isEmpty())
@@ -676,7 +676,7 @@ public class SburbHandler
 
 	static void onConnectionCreated(SburbConnection c)
 	{
-		Random rand = new Random(Minestuck.worldSeed^c.getClientIdentifier().hashCode());
+		Random rand = MinestuckRandom.getPlayerSpecificRandom(c.getClientIdentifier());
 		c.artifactType = rand.nextInt(2);
 		Debug.infof("Randomized artifact type to be: %d for player %s.", c.artifactType, c.getClientIdentifier().getUsername());
 	}

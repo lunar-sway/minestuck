@@ -1,6 +1,8 @@
 package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.util.Pair;
+import com.mraof.minestuck.util.MinestuckRandom;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -89,7 +91,7 @@ public class ItemFarmine extends ItemWeapon
 		Comparator<Pair> comparator = new PairedIntComparator();
 		PriorityQueue<Pair> candidates = new PriorityQueue<Pair>(comparator);
 		Block block = blockState.getBlock();
-		Item drop = block.getItemDropped(blockState, r, 0);
+		Item drop = block.getItemDropped(blockState, MinestuckRandom.getRandom(), 0);
 		int damageDrop = block.damageDropped(blockState);
 		
 		//If the tool can't harvest the block, or the player is sneaking,
@@ -140,7 +142,7 @@ public class ItemFarmine extends ItemWeapon
 								BlockPos newBlock = new BlockPos(curr.getX() + i, curr.getY() + j, curr.getZ() + k);
 								IBlockState newstate = worldIn.getBlockState(newBlock);
 								if (newstate.getBlock().equals(block)
-										&& newstate.getBlock().getItemDropped(newstate, r, 0) == drop
+										&& newstate.getBlock().getItemDropped(newstate, MinestuckRandom.getRandom(), 0) == drop
 										&& newstate.getBlock().damageDropped(newstate) == damageDrop)
 								{
 									candidates.add(new Pair(newBlock, rad - 1));
@@ -172,7 +174,7 @@ public class ItemFarmine extends ItemWeapon
 						BlockPos newBlock = new BlockPos(pos.getX() + i, pos.getY() + j, pos.getZ() + k);
 						IBlockState newstate = worldIn.getBlockState(newBlock);
 						if (newstate.getBlock().equals(block)
-								&& newstate.getBlock().getItemDropped(newstate, r, 0) == drop
+								&& newstate.getBlock().getItemDropped(newstate, MinestuckRandom.getRandom(), 0) == drop
 								&& newstate.getBlock().damageDropped(newstate) == damageDrop
 								&& damage < stack.getMaxDamage() - stack.getItemDamage())
 						{
