@@ -78,7 +78,6 @@ public class MinestuckConfig
 	public static boolean disableGiclops;
 	public static boolean stopSecondEntry;
 	public static boolean gristRefund;
-	public static boolean overwriteSpawnDimension;
 	public static int artifactRange;
 	public static int overworldEditRange;
 	public static int landEditRange;
@@ -200,7 +199,6 @@ public class MinestuckConfig
 		forbiddenDimensionsTpz = config.get("General", "forbiddenDimensionsTpz", new int[0], "A list of dimension id's that you cannot travel to or from using transportalizers.").setLanguageKey("minestuck.config.forbiddenDimensionsTpz").getIntList();
 		stopSecondEntry = config.get("General", "stopSecondEntry", false, "If this is true, players may only use an artifact once, even if they end up in the overworld again.").setLanguageKey("minestuck.config.stopSecondEntry").getBoolean();
 		gristRefund = config.get("General", "gristRefund", false, "Enable this and players will get a (full) grist refund from breaking blocks in editmode.").setLanguageKey("minestuck.config.gristRefund").getBoolean();
-		overwriteSpawnDimension = config.get("General", "overwriteSpawnDimension", false, "Enabling this causes Minestuck to overwrite existing personal spawn dimensions. Only enable this if you're not respawning in your Land when you want to.").setLanguageKey("minestuck.config.overwriteSpawnDimension").getBoolean();
 		if(config.hasKey("General", "hardMode"))
 			hardMode = config.get("General", "hardMode", false).getBoolean();	//Not fully fleshed out yet
 		

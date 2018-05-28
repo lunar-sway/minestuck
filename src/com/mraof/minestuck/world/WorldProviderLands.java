@@ -1,6 +1,5 @@
 package com.mraof.minestuck.world;
 
-import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.network.skaianet.SburbConnection;
 import com.mraof.minestuck.network.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Debug;
@@ -119,9 +118,6 @@ public class WorldProviderLands extends WorldProvider
 		else
 		{
 			dimOut = c.getClientDimension();
-			
-			if(!player.hasSpawnDimension() || MinestuckConfig.overwriteSpawnDimension)
-				player.setSpawnDimension(dimOut);
 		}
 		
 		return dimOut;
