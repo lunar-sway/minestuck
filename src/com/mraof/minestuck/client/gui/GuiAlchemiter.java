@@ -130,10 +130,29 @@ public class GuiAlchemiter extends GuiScreen
 			
 			if (button.id <= 3)	{
 				change=(int)Math.pow(10, button.id-1);
+				//custom modulo function
+			
+				if(itemQuantity+change>maxAlchemitable) {
+					int powTen=(int)Math.pow(10,button.id-1);
+					change= 0-(maxAlchemitable/powTen)*powTen;
+					//because it's only a problem about half the time
+					if(itemQuantity+change<0) {
+						itemQuantity+=powTen;
+					}
+				}
 			} else{
 				change=0-(int)Math.pow(10, button.id - 4);
+				//custom modulo function
+				if(itemQuantity+change<=0) {
+					int powTen=(int)Math.pow(10,button.id-4);
+					change=(maxAlchemitable/powTen)*powTen;
+					//because it's only a problem about half the time
+					if(itemQuantity+change>maxAlchemitable) {
+						itemQuantity-=powTen;
+					}
+				}				
 			}
-			itemQuantity=Math.floorMod(itemQuantity+change, maxAlchemitable);
+			itemQuantity=(itemQuantity+change);
 		}
 	}
 	
