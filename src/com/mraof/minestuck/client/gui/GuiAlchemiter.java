@@ -124,20 +124,16 @@ public class GuiAlchemiter extends GuiScreen
 			MinestuckChannelHandler.sendToServer(packet);
 			this.mc.displayGuiScreen(null);
 			
-		} else if (button.id <= 3)
-		{
-			if ((int) (itemQuantity / Math.pow(10, button.id - 1)) % 10 != 9)
-			{
-				if(itemQuantity+Math.pow(10, button.id - 1)<=maxAlchemitable) {
-					itemQuantity += Math.pow(10, button.id - 1);
-				}
+		} else {
+			//the amount the button changes the amount
+			int change;
+			
+			if (button.id <= 3)	{
+				change=(int)Math.pow(10, button.id-1);
+			} else{
+				change=0-(int)Math.pow(10, button.id - 4);
 			}
-		} else
-		{
-			if ((int) (itemQuantity / Math.pow(10, button.id - 4)) % 10 != 0)
-			{
-				itemQuantity -= Math.pow(10, button.id - 4);
-			}
+			itemQuantity=Math.floorMod(itemQuantity+change, maxAlchemitable);
 		}
 	}
 	
