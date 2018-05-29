@@ -246,6 +246,8 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemMultiTexture(aspectSapling, aspectSapling,
 				(ItemStack input) -> BlockAspectSapling.BlockType.values()[input.getItemDamage() % BlockAspectSapling.BlockType.values().length].getUnlocalizedName()));
 		
+		registerItemBlock(registry, new ItemBlock(rainbowSapling));
+		
 		registerItemBlock(registry, new ItemMultiTexture(aspectLog1, aspectLog1,
 				(ItemStack input) -> BlockAspectLog.BlockType.values()[input.getItemDamage() % BlockAspectLog.BlockType.values().length].getUnlocalizedName()));
 		registerItemBlock(registry, new ItemMultiTexture(aspectLog2, aspectLog2,

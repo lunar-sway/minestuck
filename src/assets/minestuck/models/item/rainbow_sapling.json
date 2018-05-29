@@ -1,3 +1,6 @@
 {
-    "parent": "minestuck:block/rainbow_sapling"
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "minestuck:blocks/rainbow_sapling_rgb"
+    }
 }

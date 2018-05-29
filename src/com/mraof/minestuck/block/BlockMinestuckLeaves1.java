@@ -6,6 +6,7 @@ import java.util.Random;
 
 import com.mraof.minestuck.block.BlockAspectSapling.BlockType;
 import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.util.MinestuckRandom;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -18,6 +19,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
@@ -112,13 +114,34 @@ public class BlockMinestuckLeaves1 extends BlockMinestuckLeaves
 	}
 
 	@Override
-	protected void dropApple(World worldIn, BlockPos pos, IBlockState state, int chance) {}
+	protected void dropApple(World worldIn, BlockPos pos, IBlockState state, int chance)
+	{
+		if(state.getValue(VARIANT)==BlockType.RAINBOW && worldIn.rand.nextInt(chance) == 0)
+		{
+			int i = worldIn.rand.nextInt(16);
+			spawnAsEntity(worldIn, pos, new ItemStack(Items.DYE, 1, i));
+		}
+	}
 
 	@Override
-	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		// TODO Auto-generated method stub
-		return null;
+	public Item getItemDropped(IBlockState state, Random rand, int fortune)
+	{
+		Block drop = MinestuckBlocks.aspectSapling;
+		if(state.getValue(VARIANT)==BlockType.RAINBOW)
+		{
+			drop = MinestuckBlocks.rainbowSapling;
+		}
+		return Item.getItemFromBlock(drop);
 	}
+	
+	@Override
+    public int damageDropped(IBlockState state)
+    {
+		if(state.getValue(VARIANT)==BlockType.RAINBOW)
+			return 0;
+		else
+			return BlockAspectSapling.BlockType.values()[getMetaFromState(state)].ordinal();
+    }
 
 	@Override
 	protected BlockStateContainer createBlockState()

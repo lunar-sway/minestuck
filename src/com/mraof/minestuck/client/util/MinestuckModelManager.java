@@ -260,6 +260,8 @@ public class MinestuckModelManager
 		for(BlockAspectSapling.BlockType type : BlockAspectSapling.BlockType.values())
 			register(aspectSapling, type.ordinal(), type.getName()+"_sapling");
 		
+		register(rainbowSapling);
+		
 		for(BlockAspectLog.BlockType type : BlockAspectLog.BlockType.values())
 			register(aspectLog1, type.ordinal(), type.getName()+"_log");
 		for(BlockAspectLog2.BlockType type : BlockAspectLog2.BlockType.values())

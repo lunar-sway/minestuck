@@ -1,20 +1,28 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.item.TabMinestuck;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 
 public class MinestuckBlocks
@@ -49,6 +57,7 @@ public class MinestuckBlocks
 	public static Block leaves1 = new BlockMinestuckLeaves1().setRegistryName("leaves");
 	public static Block planks = new BlockMinestuckPlanks().setRegistryName("planks");
 	public static Block aspectSapling = new BlockAspectSapling().setRegistryName("aspect_sapling");
+	public static Block rainbowSapling = new BlockRainbowSapling().setRegistryName("rainbow_sapling");
 	public static Block aspectLog1 = new BlockAspectLog().setRegistryName("aspect_log_1");
 	public static Block aspectLog2 = new BlockAspectLog2().setRegistryName("aspect_log_2");
 	public static Block aspectLog3 = new BlockAspectLog3().setRegistryName("aspect_log_3");
@@ -100,7 +109,7 @@ public class MinestuckBlocks
 		IForgeRegistry<Block> registry = event.getRegistry();
 		//blocks
 		final Block[] blocks = {chessTile, coloredDirt, layeredSand, stone, sugarCube,
-				log, endLog, leaves1, planks, aspectSapling, aspectLog1, aspectLog2, aspectLog3, glowingLog, glowingPlanks, glowingMushroom, woodenCactus,
+				log, leaves1, planks, aspectSapling, rainbowSapling, aspectLog1, aspectLog2, aspectLog3, glowingLog, glowingPlanks, glowingMushroom, woodenCactus,
 				oreCruxite, oreUranium, coalOreNetherrack, ironOreSandstone, ironOreSandstoneRed, goldOreSandstone, goldOreSandstoneRed,
 				cruxiteBlock, genericObject,
 				coarseStoneStairs, shadeBrickStairs, frostBrickStairs, castIronStairs,

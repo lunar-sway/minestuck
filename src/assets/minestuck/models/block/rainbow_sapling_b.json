@@ -1,0 +1,6 @@
+{
+    "parent": "block/cross",
+    "textures": {
+        "cross": "minestuck:blocks/rainbow_sapling_b"
+    }
+}

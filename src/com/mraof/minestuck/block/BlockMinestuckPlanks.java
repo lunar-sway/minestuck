@@ -1,6 +1,7 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.TabMinestuck;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -26,7 +27,7 @@ public class BlockMinestuckPlanks extends Block
 	public BlockMinestuckPlanks()
 	{
 		super(Material.WOOD);
-		setCreativeTab(MinestuckItems.tabMinestuck);
+		setCreativeTab(TabMinestuck.instance);
 		setDefaultState(blockState.getBaseState().withProperty(VARIANT, BlockType.VINE_OAK));
 		setUnlocalizedName("planksMinestuck");
 		this.setHardness(2.0F);
@@ -63,8 +64,12 @@ public class BlockMinestuckPlanks extends Block
 	@Override
 	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items)
 	{
-		for(BlockType type : BlockType.values())
+		for(int i=0; i<12; i++)
+		{
+			BlockType type = BlockType.values()[i];
 			items.add(new ItemStack(this, 1, type.ordinal()));
+		}
+		items.add(new ItemStack(this, 1, BlockType.values()[15].ordinal()));
 	}
 	
 	@Override
