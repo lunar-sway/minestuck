@@ -94,13 +94,52 @@ public class MinestuckBlocks
 	public static Fluid fluidOil = createFluid("oil", new ResourceLocation("minestuck", "blocks/oil_still"), new ResourceLocation("minestuck", "blocks/oil_flowing"), "tile.oil");
 	public static Fluid fluidBlood = createFluid("blood", new ResourceLocation("minestuck", "blocks/blood_still"), new ResourceLocation("minestuck", "blocks/blood_flowing"), "tile.blood");
 	public static Fluid fluidBrainJuice = createFluid("brain_juice", new ResourceLocation("minestuck", "blocks/brain_juice_still"), new ResourceLocation("minestuck", "blocks/brain_juice_flowing"), "tile.brainJuice");
+	public static Fluid fluidWatercolors = createFluid("watercolors", new ResourceLocation("minestuck", "blocks/watercolors_still"), new ResourceLocation("minestuck", "blocks/watercolors_flowing"), "tile.watercolors");
 	
-	public static Block blockOil = new BlockFluidClassic(fluidOil, Material.WATER).setRegistryName("block_oil").setUnlocalizedName("oil");
-	public static Block blockBlood = new BlockFluidClassic(fluidBlood, Material.WATER).setRegistryName("block_blood").setUnlocalizedName("blood");
-	public static Block blockBrainJuice = new BlockFluidClassic(fluidBrainJuice, Material.WATER).setRegistryName("block_brain_juice").setUnlocalizedName("brainJuice");
+	public static Block blockOil = new BlockFluidClassic(fluidOil, Material.WATER){
+		@SideOnly (Side.CLIENT)
+		@Override
+		public Vec3d getFogColor(World world, BlockPos pos, IBlockState state, Entity entity, Vec3d originalColor, float partialTicks)
+		{
+			return new Vec3d(0.0, 0.0, 0.0);
+		}
+	}.setRegistryName("block_oil").setUnlocalizedName("oil").setLightOpacity(2);
+	
+	public static Block blockBlood = new BlockFluidClassic(fluidBlood, Material.WATER){
+		@SideOnly (Side.CLIENT)
+		@Override
+		public Vec3d getFogColor(World world, BlockPos pos, IBlockState state, Entity entity, Vec3d originalColor, float partialTicks)
+		{
+			return new Vec3d(0.8, 0.0, 0.0);
+		}
+	}.setRegistryName("block_blood").setUnlocalizedName("blood").setLightOpacity(1);
+	
+	public static Block blockBrainJuice = new BlockFluidClassic(fluidBrainJuice, Material.WATER){
+		@SideOnly (Side.CLIENT)
+		@Override
+		public Vec3d getFogColor(World world, BlockPos pos, IBlockState state, Entity entity, Vec3d originalColor, float partialTicks)
+		{
+			return new Vec3d(0.55, 0.25, 0.7);
+		}
+	}.setRegistryName("block_brain_juice").setUnlocalizedName("brainJuice").setLightOpacity(1);
+	
+	public static Block blockWatercolors = new BlockFluidClassic(fluidWatercolors, Material.WATER){
+		@SideOnly (Side.CLIENT)
+		@Override
+		public Vec3d getFogColor(World world, BlockPos pos, IBlockState state, Entity entity, Vec3d originalColor, float partialTicks)
+		{
+			Vec3d newColor = new Vec3d(0.0, 20.0, 30.0);
+			newColor = newColor.rotateYaw((float) (entity.posX / 2.0));
+			newColor = newColor.rotatePitch((float) (entity.posZ / 2.0));
+			newColor = newColor.rotateYaw((float) (entity.posY));
+			newColor = newColor.normalize();
+			newColor = new Vec3d(newColor.x % 1.0, newColor.y % 1.0, newColor.z % 1.0);
+			
+			return newColor;
+		}
+	}.setRegistryName("block_watercolors").setUnlocalizedName("watercolors").setLightOpacity(1);
 
 	public static Block[] liquidGrists;
-	
 	public static Fluid[] gristFluids;
 
 	@SubscribeEvent
@@ -119,7 +158,7 @@ public class MinestuckBlocks
 				blockGoldSeeds, glowystoneWire,
 				appleCake, blueCake, coldCake, redCake, hotCake, reverseCake,
 				primedTnt, unstableTnt, instantTnt, woodenExplosiveButton, stoneExplosiveButton,
-				blockOil, blockBlood, blockBrainJuice,
+				blockOil, blockBlood, blockBrainJuice, blockWatercolors,
 				rabbitSpawner};
 		
 		for(Block block : blocks)

@@ -7,8 +7,10 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.function.BiConsumer;
 
+import net.minecraft.block.BlockColored;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -16,57 +18,80 @@ import com.mraof.minestuck.util.CoordPair;
 import com.mraof.minestuck.world.lands.decorator.MesaDecorator.BlockRestorer;
 import com.mraof.minestuck.world.lands.gen.ChunkProviderLands;
 
-public class RockDecorator extends BiomeSpecificDecorator
+/**
+ * A decorator that generates Mesas. By default, generates the rainbow mesas seen in rainbow Lands.
+ * However, this generator is heavily customizable by resetting the information in the decorator prior to using it.
+ *  
+ * @author BenjaminK
+ *
+ */
+public class MesaDecorator extends BiomeSpecificDecorator
 {
+	private float frequency = 0.04F;
+	private float priority = 0.6F;
+	private int tallness = 7;
+	private float altFrequency = 0.025F;
+	private IBlockState baseBlock[] = {Blocks.STAINED_HARDENED_CLAY.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.RED), 
+			Blocks.STAINED_HARDENED_CLAY.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.ORANGE), 
+			Blocks.STAINED_HARDENED_CLAY.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.YELLOW), 
+			Blocks.STAINED_HARDENED_CLAY.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.GREEN), 
+			Blocks.STAINED_HARDENED_CLAY.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.CYAN), 
+			Blocks.STAINED_HARDENED_CLAY.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.BLUE), 
+			Blocks.STAINED_HARDENED_CLAY.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.PURPLE), 
+			Blocks.STAINED_HARDENED_CLAY.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.MAGENTA)};
+	private IBlockState altBlock[] = {Blocks.RED_GLAZED_TERRACOTTA.getDefaultState(),
+			Blocks.ORANGE_GLAZED_TERRACOTTA.getDefaultState(), 
+			Blocks.YELLOW_GLAZED_TERRACOTTA.getDefaultState(),
+			Blocks.GREEN_GLAZED_TERRACOTTA.getDefaultState(), 
+			Blocks.CYAN_GLAZED_TERRACOTTA.getDefaultState(), 
+			Blocks.BLUE_GLAZED_TERRACOTTA.getDefaultState(), 
+			Blocks.PURPLE_GLAZED_TERRACOTTA.getDefaultState(), 
+			Blocks.MAGENTA_GLAZED_TERRACOTTA.getDefaultState() };
+	private IBlockState baseCore = Blocks.AIR.getDefaultState();
+	private IBlockState altCore = Blocks.BEACON.getDefaultState();
+	
 	private boolean stomps=false;
 	
 	@Override
 	public int getCount(Random random)
 	{
-		return random.nextFloat() < 0.02 ? 1 : 0;
+		return random.nextFloat() < frequency ? 1 : 0;
 	}
 	
 	@Override
 	public BlockPos generate(World world, Random random, BlockPos pos, ChunkProviderLands provider)
 	{
 		pos = world.getTopSolidOrLiquidBlock(pos);
-		int height = random.nextInt(7) + 10;
+		int height = random.nextInt(tallness) + tallness + 3;
 		
 		if(world.getBlockState(pos.up(height*2/3)).getMaterial().isLiquid())	//At least 1/3rd of the height should be above the liquid surface
 			return null;
-		float plateauSize = 0.2F + random.nextFloat()*(height/25F);
 		
-		BlockPos nodePos = generateRock(pos.up(height), height, plateauSize, world, random, provider);
-		stomps = false;
+		float plateauSize = 0.6F + random.nextFloat()*(height/10F);
+		boolean isAlt = random.nextFloat()<altFrequency;
 		
-/*		float rockRarity = plateauSize + height/15F + random.nextFloat()*0.5F - 0.5F;
+		BlockPos nodePos = generateMesa(pos.up(height), height, plateauSize, world, random, provider, isAlt);
 		
-		if(rockRarity > 1F)
+		if(stomps == false)
 		{
-			generateSubRock(pos, height, plateauSize, world, random, provider);
-			rockRarity -= 1F;
+			if (isAlt ? altCore!=null : baseCore!=null)
+			{
+				world.setBlockState(nodePos, isAlt?altCore:baseCore, 2);
+			}
+		} else
+		{
+			world.setBlockState(nodePos, Blocks.AIR.getDefaultState(), 2);
 		}
-		if(random.nextFloat() < rockRarity)
-			generateSubRock(pos, height, plateauSize, world, random, provider);*/
+		stomps = false;
 		
 		return nodePos;
 	}
 	
-	private void generateSubRock(BlockPos pos, int heightOld, float plateauOld, World world, Random rand, ChunkProviderLands provider)
-	{
-		int height = 5 + rand.nextInt((int) ((heightOld - 6)*0.75));
-		BlockPos newPos = pos.add(rand.nextInt(10) - 5, 0, rand.nextInt(10) - 5);
-		newPos = world.getTopSolidOrLiquidBlock(newPos).up(height);
-		float plateauSize = rand.nextFloat()*plateauOld*0.75F;
-		
-		generateRock(newPos, height, plateauSize, world, rand, provider);
-		stomps = false;
-	}
-	
-	private BlockPos generateRock(BlockPos rockPos, int height, float plateauSize, World world, Random random, ChunkProviderLands provider)
+	//TODO: Figure out how this code even works, make it more readable (and possibly more efficient), and make the same changes to RockDecorator.generateRock() 
+	private BlockPos generateMesa(BlockPos rockPos, int height, float plateauSize, World world, Random random, ChunkProviderLands provider, boolean isAlt)
 	{
 		float xSlope = random.nextFloat(), zSlope = random.nextFloat();
-		IBlockState block = provider.getGroundBlock();
+		IBlockState groundBlock = provider.getGroundBlock();
 		
 		Map<CoordPair, Integer> heightMap = new HashMap<CoordPair, Integer>();
 		Queue<BlockPos> toProcess = new LinkedList<BlockPos>();
@@ -146,13 +171,13 @@ public class RockDecorator extends BiomeSpecificDecorator
 						stomps=true;
 						break;
 					}
-					heightMap.put(coord, rockPos.getY() - h);
+					heightMap.put(coord, pos.getY());
 					if(checkCoord(coord, heightMap))
 						toProcess2.add(new BlockEntry(coord, entry.spreadChance));
 				}
 			} else entry.spreadChance += 0.5F;
 			
-			if(!world.getBlockState(new BlockPos(entry.pos.x, rockPos.getY() - h - 1, entry.pos.z)).equals(block))
+			if(!world.getBlockState(new BlockPos(entry.pos.x, rockPos.getY() - h - 1, entry.pos.z)).equals(groundBlock))
 				toProcess2.add(entry);
 		}
 		
@@ -161,15 +186,10 @@ public class RockDecorator extends BiomeSpecificDecorator
 			BlockPos pos = new BlockPos(entry.getKey().x, entry.getValue(), entry.getKey().z);
 			do
 			{
-				if(provider.villageHandler.isPositionInStructure(world, pos) || provider.structureHandler.isPositionInStructure(world, pos) || stomps==true)
-				{
-					stomps=true;
-					break;
-				}
 				was.put(pos, world.getBlockState(pos));
-				world.setBlockState(pos, block, 2);
+				world.setBlockState(pos, isAlt?altBlock[pos.getY() % altBlock.length]:baseBlock[pos.getY() % baseBlock.length], 2);
 				pos = pos.down();
-			} while(!world.getBlockState(pos).equals(block));
+			} while(!world.getBlockState(pos).equals(groundBlock));
 		}
 		
 		CoordPair nodePos = new CoordPair(rockPos.getX(), rockPos.getZ());
@@ -232,10 +252,59 @@ public class RockDecorator extends BiomeSpecificDecorator
 		}
 	}
 	
+	/*
+	 * Getters
+	 */
+
 	@Override
-	public float getPriority()
-	{
-		return 0.8F;
-	}
+	// getPriority works exactly the same way as it does in every other decorator.
+	// Documentation should be provided with the method overridden.
+	// The need to override and define this method at all could be avoided by defining it as a default method in ILandDecorator.
+	// However, that functionality is exclusive to Java 8, and Minestuck tries to maintain compatibility as far back as Java 6.
+	public float getPriority() { return priority; }
 	
+	public float getFrequency() { return frequency; }
+	
+	public int getTallness() { return tallness; }
+	
+	public float getAltFrequency() { return altFrequency; }
+	
+	public IBlockState[] getBaseBlock() { return baseBlock; }
+	
+	public IBlockState[] getAltBlock() { return altBlock; }
+	
+	/*
+	 * Setters
+	 */
+	
+	public MesaDecorator setPriority(float priority)
+	{
+		this.priority = priority;
+		return this;
+	}
+
+	public MesaDecorator setFrequency(float frequency) {
+		this.frequency = frequency;
+		return this;
+	}
+
+	public MesaDecorator setTallness(int tallness) {
+		this.tallness = tallness;
+		return this;
+	}
+
+	public MesaDecorator setAltFrequency(float altFrequency) {
+		this.altFrequency = altFrequency;
+		return this;
+	}
+
+	public MesaDecorator setAltBlock(IBlockState[] altBlock) {
+		this.altBlock= altBlock;
+		return this;
+	}
+
+	public MesaDecorator setBaseBlock(IBlockState[] baseBlock) {
+		this.baseBlock = baseBlock;
+		return this;
+	}
 }

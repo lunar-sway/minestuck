@@ -101,6 +101,16 @@ public class ConsortDialogue
 		addMessage(fromNameTerrain("rock"), "rockfu", "landName");
 		addMessage(fromNameTerrain("forest"), "allTrees");
 		addMessage(fromNameTerrain("forest"), "reallyLikesTrees");
+		addMessage(fromNameTerrain("rainbow"), "genericGreen");
+		addMessage(fromNameTerrain("rainbow"), "overwhelmingColors");
+		addMessage(fromNameTerrain("rainbow"), "sawRainbow");
+		addMessage(fromNameTerrain("rainbow"), "sunglasses");
+		addMessage(fromNameTerrain("rainbow"), "whatIsWool");
+		addMessage(fromNameTerrain("rainbow"), "loveColors");
+		addMessage(fromNameTerrain("rainbow"), new ChainMessage(new SingleMessage("typesOfColors1"), new SingleMessage("typesOfColors2"), new SingleMessage("typesOfColors3"),
+				new SingleMessage("typesOfColors4"), new SingleMessage("typesOfColors5"), new SingleMessage("typesOfColors6"), new SingleMessage("typesOfColors7"), new SingleMessage("typesOfColors8"),
+				new SingleMessage("typesOfColors9"), new SingleMessage("typesOfColors10"), new SingleMessage("typesOfColors11"), new SingleMessage("typesOfColors12"), new SingleMessage("typesOfColors13"),
+				new SingleMessage("typesOfColors14"), new SingleMessage("typesOfColors15"), new SingleMessage("typesOfColors16"), new SingleMessage("typesOfColors17"), new SingleMessage("typesOfColors18")));
 		
 		addMessage(true, "denizenMention");
 		addMessage(true, "floatingIsland");

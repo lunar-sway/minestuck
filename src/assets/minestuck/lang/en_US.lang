@@ -1,4 +1,4 @@
-
+﻿
 achievement.getHammer=Get Hammer
 achievement.getHammer.desc=Get the Claw Hammer
 achievement.mineCruxite=Mine Cruxite
@@ -194,6 +194,31 @@ consort.rockfu=Here in %s, we practice rock-fu! Learn the way of the rock to CRU
 
 consort.allTrees=Jokes on the losers in other lands, we have ALL the trees! All of them!
 consort.reallyLikesTrees=Do you like trees? I really like trees. I am one with the tree. Trees. TREES. TREEEES!
+
+consort.genericGreen=Have you ever noticed rainbow wood looks green from a distance? I wonder if green is somehow more generic than other colors.
+consort.overwhelmingColors=We salamanders aren't used to such bright Lands. All the light and colors everywhere can be really overwhelming!
+consort.sawRainbow=I saw a rainbow yesterday! Normally I see way more than that.
+consort.sunglasses=Some sunglasses would be really great in a Land like this. Too bad I don't have ears!
+consort.whatIsWool=I have no clue what the ground here is made of. I've never seen anything like it anywhere else!
+consort.loveColors=People ask me, "What's your favorite color?" I can't pick! I love them all! They're all special in their own way! Well, except green.
+consort.typesOfColors1=In the additive color system, there are three primary colors: red, green, and blue.
+consort.typesOfColors2=In the subtractive color system, there are also three primary colors, but those are magenta, yellow, and cyan.
+consort.typesOfColors3=In the additive system, mixing red and green makes yellow, mixing green and blue makes cyan, and mixing blue and red makes magenta.
+consort.typesOfColors4=In the subtractive system, mixing magenta and yellow makes red, mixing yellow and cyan makes green, and mixing cyan and magenta makes blue!
+consort.typesOfColors5=These six colors make up the color wheel: red, yellow, green, cyan, blue, magenta, and then back to red.
+consort.typesOfColors6=When you look at a rainbow, you don't see magenta, because the blue on one end doesn't mix with the red on the other end.
+consort.typesOfColors7=You do, however, see purple, which is between magenta and blue. Short answer for why that is, your eyes are lying to you.
+consort.typesOfColors8=Beyond the six main colors, however, there are also six other colors: pink, brown, orange, lime, light blue, and purple.
+consort.typesOfColors9=In addition, there are also the tones of white, light gray, gray, and black.
+consort.typesOfColors10=In the additive system, mixing all the colors together makes white.
+consort.typesOfColors11=In the subtractive system, mixing all the colors together makes black.
+consort.typesOfColors12=When dealing with dye, however, you can find some unusual combinations, or lack of combinations.
+consort.typesOfColors13=Dyes work largely on the subtractive color system, but they don't always mix the way they should.
+consort.typesOfColors14=This is because dyes, while vibrant, are imperfect representations of their respective colors.
+consort.typesOfColors15=Lime, for example, should be a mix of yellow and green. To get lime dye, though, you need to mix cactus green with white dye instead.
+consort.typesOfColors16=When mixing red and blue to get magenta, the blue overpowers the red and you get purple. You have to mix the purple with not just red, but pink to get magenta.
+consort.typesOfColors17=Dye is weird like that.
+consort.typesOfColors18=...what, you're still listening to me? Wow. No one's ever listened to the whole thing before. Would you like to hear it again?
 
 consort.zazzerpan=Old wizard Zazzerpan would be turning in his grave if he saw the horrors that walk these lands. Those giclopses sure are terrifying!
 consort.texasHistory=The place was %s, the year, was 20XX.
@@ -712,6 +737,8 @@ land.shade=Shade
 land.wood=Wood
 land.oak=Oak
 land.lumber=Lumber
+land.rainbow=Rainbow
+land.colors=Colors
 
 land.bucket=Buckets
 land.cake=Cake
