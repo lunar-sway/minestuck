@@ -13,6 +13,12 @@ public class ItemPogoFarmine extends ItemFarmine
 {
 	private double pogoMotion;
 	
+	public ItemPogoFarmine(ToolMaterial material, int maxUses, double damageVsEntity, double weaponSpeed, int enchantability, String name, int r, int t, double pogoMotion)
+	{
+		super(material, maxUses, damageVsEntity, weaponSpeed, enchantability, name, r, t);
+		this.pogoMotion = pogoMotion;
+	}
+	
 	public ItemPogoFarmine(int maxUses, double damageVsEntity, double weaponSpeed, int enchantability, String name, int r, int t, double pogoMotion)
 	{
 		super(maxUses, damageVsEntity, weaponSpeed, enchantability, name, r, t);
