@@ -53,8 +53,6 @@ public class MinestuckConfig
 	public static boolean alchemyIcons;
 	@SideOnly(Side.CLIENT)
 	public static boolean preEntryEcheladder;
-	//@SideOnly(Side.CLIENT)
-	public static boolean showGristChanges;
 	
 	public static boolean hardMode = false;
 	public static boolean generateCruxiteOre;
@@ -76,6 +74,7 @@ public class MinestuckConfig
 	public static boolean playerSelectedTitle;
 	public static boolean canBreakGates;
 	public static boolean disableGiclops;
+	public static boolean showGristChanges;
 	public static boolean stopSecondEntry;
 	public static boolean gristRefund;
 	public static boolean needComputer;

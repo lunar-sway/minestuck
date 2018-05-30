@@ -194,7 +194,6 @@ public class GristHelper {
 					//"true" sends the message to the action bar (like bed messages), while "false" sends it to the chat.
 					player.getPlayer().sendStatusMessage(new TextComponentTranslation("You " + action + " " + difference + " " + type + " grist."), true);
 				}
-				
 			}
 		}
 	}

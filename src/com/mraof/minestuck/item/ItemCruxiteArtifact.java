@@ -227,7 +227,6 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 			List<Entity> list = worldserver0.getEntitiesWithinAABBExcludingEntity(player, entityTeleportBB);
 			Iterator<Entity> iterator = list.iterator();
 			
-			player.setPositionAndUpdate(player.posX, player.posY + yDiff, player.posZ);
 			while (iterator.hasNext())
 			{
 				Entity e = iterator.next();
@@ -316,6 +315,9 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 					}
 				}
 			}
+			
+			player.setPositionAndUpdate(player.posX, player.posY + yDiff, player.posZ);
+			
 			SkaianetHandler.clearMovingList();
 			
 //			if(!creative || MinestuckConfig.entryCrater)
