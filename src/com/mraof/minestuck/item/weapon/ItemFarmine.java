@@ -185,9 +185,9 @@ public class ItemFarmine extends ItemWeapon
 								&& newstate.getBlock().damageDropped(newstate) == damageDrop
 								&& damage < stack.getMaxDamage() - stack.getItemDamage())
 						{
+							newstate.getBlock().dropBlockAsItem(worldIn, pos, newstate, 0);
 							if(playerIn instanceof EntityPlayer)
-								block.removedByPlayer(newstate, worldIn, newBlock, (EntityPlayer) playerIn, true);
-							block.dropBlockAsItem(worldIn, pos, newstate, 0);
+								newstate.getBlock().removedByPlayer(newstate, worldIn, newBlock, (EntityPlayer) playerIn, true);
 							worldIn.setBlockToAir(newBlock);
 							damage++;
 						}
@@ -201,9 +201,9 @@ public class ItemFarmine extends ItemWeapon
 		{
 			for (BlockPos blockToBreak : blocksToBreak)
 			{
+				worldIn.getBlockState(blockToBreak).getBlock().dropBlockAsItem(worldIn, pos, worldIn.getBlockState(blockToBreak), 0);
 				if(playerIn instanceof EntityPlayer)
 					block.removedByPlayer(worldIn.getBlockState(blockToBreak), worldIn, blockToBreak, (EntityPlayer) playerIn, true);
-				worldIn.getBlockState(blockToBreak).getBlock().dropBlockAsItem(worldIn, pos, worldIn.getBlockState(blockToBreak), 0);
 				worldIn.setBlockToAir(blockToBreak);
 			}
 			
