@@ -118,7 +118,7 @@ public class TileEntitySburbMachine extends TileEntityMachine
 					if (inv.get(1).hasTagCompound() && inv.get(1).getTagCompound().getBoolean("punched"))
 					{
 						output = CombinationRegistry.getCombination(output,
-								AlchemyRecipeHandler.getDecodedItem(inv.get(1)), CombinationRegistry.MODE_OR);
+								AlchemyRecipeHandler.getDecodedItem(inv.get(1)), CombinationRegistry.Mode.MODE_OR);
 					}
 					if (output.isEmpty())
 						return false;
@@ -141,7 +141,7 @@ public class TileEntitySburbMachine extends TileEntityMachine
 							return inv.get(3).isEmpty() || !(inv.get(3).hasTagCompound() && inv.get(3).getTagCompound().hasKey("contentID"));
 						else
 						{
-							ItemStack output = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(inv.get(0)), AlchemyRecipeHandler.getDecodedItem(inv.get(1)), CombinationRegistry.MODE_AND);
+							ItemStack output = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(inv.get(0)), AlchemyRecipeHandler.getDecodedItem(inv.get(1)), CombinationRegistry.Mode.MODE_AND);
 							return !output.isEmpty() && (inv.get(3).isEmpty() || AlchemyRecipeHandler.getDecodedItem(inv.get(3)).isItemEqual(output));
 						}
 					}
@@ -303,7 +303,7 @@ public class TileEntitySburbMachine extends TileEntityMachine
 				ItemStack outputItem = AlchemyRecipeHandler.getDecodedItemDesignix(inv.get(0));
 
 				if (inv.get(1).hasTagCompound() && inv.get(1).getTagCompound().getBoolean("punched"))
-					outputItem = CombinationRegistry.getCombination(outputItem, AlchemyRecipeHandler.getDecodedItem(inv.get(1)), CombinationRegistry.MODE_OR);
+					outputItem = CombinationRegistry.getCombination(outputItem, AlchemyRecipeHandler.getDecodedItem(inv.get(1)), CombinationRegistry.Mode.MODE_OR);
 				if (outputItem.getItem().isDamageable())
 					outputItem.setItemDamage(0);
 
@@ -328,7 +328,7 @@ public class TileEntitySburbMachine extends TileEntityMachine
 					if (!inv.get(0).hasTagCompound() || !inv.get(0).getTagCompound().getBoolean("punched") || !inv.get(1).hasTagCompound() || !inv.get(1).getTagCompound().getBoolean("punched"))
 						output = new ItemStack(MinestuckBlocks.genericObject);
 					else
-						output = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(inv.get(0)), AlchemyRecipeHandler.getDecodedItem(inv.get(1)), CombinationRegistry.MODE_AND);
+						output = CombinationRegistry.getCombination(AlchemyRecipeHandler.getDecodedItem(inv.get(0)), AlchemyRecipeHandler.getDecodedItem(inv.get(1)), CombinationRegistry.Mode.MODE_AND);
 				else
 				{
 					ItemStack input = inv.get(0).isEmpty() ? inv.get(1) : inv.get(0);

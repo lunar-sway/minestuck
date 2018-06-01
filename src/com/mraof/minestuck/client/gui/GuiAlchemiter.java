@@ -1,7 +1,9 @@
 package com.mraof.minestuck.client.gui;
 
+import java.io.IOException;
+import java.util.List;
+
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
@@ -9,16 +11,12 @@ import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
 import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.GristAmount;
-import com.mraof.minestuck.util.GristRegistry;
 import com.mraof.minestuck.util.GristSet;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-
-import java.util.List;
 
 public class GuiAlchemiter extends GuiScreen
 {
@@ -28,33 +26,51 @@ public class GuiAlchemiter extends GuiScreen
 	private static final int guiWidth = 159, guiHeight = 102;
 	private TileEntityAlchemiter alchemiter;
 	private int itemQuantity;
-	
+	public static int maxAlchemitable;
 	public GuiAlchemiter(TileEntityAlchemiter te)
 	{
 		alchemiter = te;
 		itemQuantity = 1;
+		maxAlchemitable=MinestuckConfig.maxAlchemitable;
 	}
+	
+	public TileEntityAlchemiter getAlchemiter() {
+		return alchemiter;
+	}
+	
+	GuiButton alchemize;
+	
+	GuiButton hundredsUp;
+	GuiButton tensUp;
+	GuiButton onesUp;
+	GuiButton hundredsDown;
+	GuiButton tensDown;
+	GuiButton onesDown;
+	
+	
 	
 	@Override
 	public void initGui()
 	{
-		GuiButton alchemize = new GuiButton(0, (width-100)/2,(height-guiHeight)/2+110, 100, 20, "ALCHEMIZE");
+		alchemize = new GuiButton(0, (width-100)/2,(height-guiHeight)/2+110, 100, 20, "ALCHEMIZE");
 		
-		GuiButton hundredsUp = new GuiButton(1,(width-guiWidth)/2+52,(height-guiHeight)/2+10,18,18,"^");
-		GuiButton tensUp = new GuiButton(2,(width-guiWidth)/2+31,(height-guiHeight)/2+10,18,18,"^");
-		GuiButton onesUp = new GuiButton(3,(width-guiWidth)/2+10,(height-guiHeight)/2+10,18,18,"^");
-		GuiButton hundredsDown = new GuiButton(4,(width-guiWidth)/2+52,(height-guiHeight)/2+74,18,18,"v");
-		GuiButton tensDown =new GuiButton(5,(width-guiWidth)/2+31,(height-guiHeight)/2+74,18,18,"v");
-		GuiButton onesDown = new GuiButton(6,(width-guiWidth)/2+10,(height-guiHeight)/2+74,18,18,"v");
-		//GuiLabel ones = new GuiLabel(fontRendererObj, p_i45540_2_, p_i45540_3_, p_i45540_4_, p_i45540_5_, p_i45540_6_, p_i45540_7_)
-		
+		hundredsUp = new GuiButton(1,(width-guiWidth)/2+52,(height-guiHeight)/2+10,18,18,"^");
+		tensUp = new GuiButton(2,(width-guiWidth)/2+31,(height-guiHeight)/2+10,18,18,"^");
+		onesUp = new GuiButton(3,(width-guiWidth)/2+10,(height-guiHeight)/2+10,18,18,"^");
+		hundredsDown = new GuiButton(4,(width-guiWidth)/2+52,(height-guiHeight)/2+74,18,18,"v");
+		tensDown =new GuiButton(5,(width-guiWidth)/2+31,(height-guiHeight)/2+74,18,18,"v");
+		onesDown = new GuiButton(6,(width-guiWidth)/2+10,(height-guiHeight)/2+74,18,18,"v");
+
 		buttonList.add(alchemize);
-		buttonList.add(onesUp);
-		buttonList.add(tensUp);
-		buttonList.add(hundredsUp);
-		buttonList.add(onesDown);
-		buttonList.add(tensDown);
-		buttonList.add(hundredsDown);
+		//dont add the buttons if the item is free
+		if(!alchemiter.getGristCost(itemQuantity).isEmpty()) {
+			buttonList.add(onesUp);
+			buttonList.add(tensUp);
+			buttonList.add(hundredsUp);
+			buttonList.add(onesDown);
+			buttonList.add(tensDown);
+			buttonList.add(hundredsDown);
+		}
 	}
 	
 		@Override
@@ -77,30 +93,14 @@ public class GuiAlchemiter extends GuiScreen
 			mc.fontRenderer.drawString(Integer.toString(((int)(itemQuantity/Math.pow(10,0))%10)), (width-guiWidth)/2+57,(height-guiHeight)/2+46, 16777215);
 			
 			//Render grist requirements
-			ItemStack stack = AlchemyRecipeHandler.getDecodedItem(alchemiter.getDowel());
-			if( !(alchemiter.getDowel().hasTagCompound() && alchemiter.getDowel().getTagCompound().hasKey("contentID")))
-				stack = new ItemStack(MinestuckBlocks.genericObject);
-
-			GristSet set = GristRegistry.getGristConversion(stack);
-			boolean useSelectedType = stack.getItem() == MinestuckItems.captchaCard;
-			if (useSelectedType)
-				set = new GristSet(alchemiter.getSelectedGrist(), MinestuckConfig.clientCardCost);
-			if (set != null && stack.isItemDamaged())
-			{
-				float multiplier = 1 - stack.getItem().getDamage(stack) / ((float) stack.getMaxDamage());
-				for (GristAmount amount : set.getArray())
-				{
-					set.setGrist(amount.getType(), (int)( Math.ceil(amount.getAmount() * multiplier)));
-				}
 				
-			}
-			for (GristAmount amount : set.getArray())
-			{
-				set.setGrist(amount.getType(), amount.getAmount()*itemQuantity);
-			}
 			
-			GuiUtil.drawGristBoard(set, useSelectedType ? GuiUtil.GristboardMode.LARGE_ALCHEMITER_SELECT : GuiUtil.GristboardMode.LARGE_ALCHEMITER, (width-guiWidth)/2+88,(height-guiHeight)/2+13, fontRenderer);
-			
+			//Calculate the grist set
+			GristSet set;
+			set=alchemiter.getGristCost(itemQuantity);
+			//draw the grist board
+			GuiUtil.drawGristBoard(set, AlchemyRecipeHandler.getDecodedItem(alchemiter.getDowel()).getItem() == MinestuckItems.captchaCard ? GuiUtil.GristboardMode.LARGE_ALCHEMITER_SELECT : GuiUtil.GristboardMode.LARGE_ALCHEMITER, (width-guiWidth)/2+88,(height-guiHeight)/2+13, fontRenderer);
+			//draw the grist
 			List<String> tooltip = GuiUtil.getGristboardTooltip(set, mouseX , mouseY , 9, 45, fontRenderer);
 			if (tooltip != null)
 				this.drawHoveringText(tooltip, mouseX , mouseY , fontRenderer);
@@ -124,18 +124,59 @@ public class GuiAlchemiter extends GuiScreen
 			MinestuckChannelHandler.sendToServer(packet);
 			this.mc.displayGuiScreen(null);
 			
-		} else if (button.id <= 3)
-		{
-			if ((int) (itemQuantity / Math.pow(10, button.id - 1)) % 10 != 9)
-			{
-				itemQuantity += Math.pow(10, button.id - 1);
+		} else {
+			//the amount the button changes the amount
+			int change;
+			
+			if (button.id <= 3)	{
+				change=(int)Math.pow(10, button.id-1);
+				//custom modulo function
+			
+				if(itemQuantity+change>maxAlchemitable) {
+					int powTen=(int)Math.pow(10,button.id-1);
+					change= 0-(maxAlchemitable/powTen)*powTen;
+					//because it's only a problem about half the time
+					if(itemQuantity+change<0) {
+						itemQuantity+=powTen;
+					}
+				}
+			} else{
+				change=0-(int)Math.pow(10, button.id - 4);
+				//custom modulo function
+				if(itemQuantity+change<=0) {
+					int powTen=(int)Math.pow(10,button.id-4);
+					change=(maxAlchemitable/powTen)*powTen;
+					//because it's only a problem about half the time
+					if(itemQuantity+change>maxAlchemitable) {
+						itemQuantity-=powTen;
+					}
+				}				
 			}
-		} else
-		{
-			if ((int) (itemQuantity / Math.pow(10, button.id - 4)) % 10 != 0)
-			{
-				itemQuantity -= Math.pow(10, button.id - 4);
-			}
+			itemQuantity=(itemQuantity+change);
 		}
 	}
+	
+	
+	
+	@Override
+	protected void mouseClicked(int par1, int par2, int par3) throws IOException
+	{
+		super.mouseClicked(par1, par2, par3);
+		if (par3 == 1)
+		{
+			if (alchemize != null && alchemize.mousePressed(this.mc, par1, par2))
+			{
+				alchemize.playPressSound(this.mc.getSoundHandler());
+				this.actionPerformed(alchemize);
+			}
+		}
+		else if ( par3 == 0 && mc.player.inventory.getItemStack().isEmpty()
+				&& alchemiter.getDowel() != null && AlchemyRecipeHandler.getDecodedItem(alchemiter.getDowel()).getItem() == MinestuckItems.captchaCard
+				&& par1 >= (width-guiWidth)/2 +80  && par1 < (width-guiWidth)/2 + 150 && par2 >= (height-guiHeight)/2 + 8 && par2 < (height-guiHeight)/2 + 93)
+		{
+			mc.currentScreen = new GuiGristSelector(this);
+			mc.currentScreen.setWorldAndResolution(mc, width, height);
+		}
+	}
+	
 }

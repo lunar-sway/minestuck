@@ -13,6 +13,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 import java.util.List;
 
@@ -70,4 +71,10 @@ public abstract class BlockLargeMachine extends BlockContainer
 	{
 		return BlockRenderLayer.CUTOUT_MIPPED;
 	}
+	//keep the game from crashing when a machine is blown up
+	@Override
+    public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune)
+    {
+    	
+    }
 }
