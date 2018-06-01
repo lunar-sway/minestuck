@@ -1090,6 +1090,7 @@ tile.unstableTnt.name=Unstable TNT
 tile.instantTnt.name=Instant TNT
 tile.buttonTnt.name=TNT Button
 tile.uraniumCooker.name=Cookalyzer
+tile.cruxtruderLid.name=Cruxtruder Lid
 
 title.format=%1$s of %2$s
 title.bard=Bard
