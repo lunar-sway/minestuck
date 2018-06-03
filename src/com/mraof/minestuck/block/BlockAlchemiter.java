@@ -3,6 +3,7 @@ package com.mraof.minestuck.block;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.GuiHandler;
 import com.mraof.minestuck.tileentity.TileEntityAlchemiter;
+import com.mraof.minestuck.util.AlchemyRecipeHandler;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -21,7 +22,7 @@ import net.minecraft.world.World;
 
 public class BlockAlchemiter extends BlockLargeMachine
 {
-	public static final PropertyEnum<EnumParts> PART1 = PropertyEnum.create("part", EnumParts.class, EnumParts.TOTEM_CORNER, EnumParts.TOTEM_PAD, EnumParts.LOWER_ROD, EnumParts.UPPER_ROD);
+	public static final PropertyEnum<EnumParts> PART1 = PropertyEnum.create("part", EnumParts.class, EnumParts.TOTEM_CORNER, EnumParts.TOTEM_PAD, EnumParts.LOWER_ROD, EnumParts.UPPER_ROD, EnumParts.TOTEM_PAD_DOWEL);
 	public static final PropertyEnum<EnumParts> PART2 = PropertyEnum.create("part", EnumParts.class, EnumParts.SIDE_LEFT, EnumParts.SIDE_RIGHT, EnumParts.CORNER, EnumParts.CENTER_PAD);
 	public final PropertyEnum<EnumParts> PART;
 	public static final PropertyDirection DIRECTION = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
@@ -49,7 +50,7 @@ public class BlockAlchemiter extends BlockLargeMachine
 		EnumParts parts = state.getValue(PART);
 		EnumFacing facing = state.getValue(DIRECTION);
 		
-		return parts.BOUNDING_BOX[facing.getHorizontalIndex()];
+		return parts.getBoundingBox(facing);
 	}
 	
 	@Override
@@ -95,7 +96,7 @@ public class BlockAlchemiter extends BlockLargeMachine
 	@Override
 	public boolean hasTileEntity(IBlockState state)
 	{
-		return state.getValue(PART) == EnumParts.TOTEM_PAD;
+		return state.getValue(PART).isTotemPad();
 	}
 	
 	@Override
@@ -104,12 +105,6 @@ public class BlockAlchemiter extends BlockLargeMachine
 		if(index == 0 && meta % 4 == EnumParts.TOTEM_PAD.ordinal())
 			return new TileEntityAlchemiter();
 		return null;
-	}
-	
-	@Override
-	public void onBlockPlacedBy(World worldIn,BlockPos pos,IBlockState state,EntityLivingBase placer, ItemStack stack)
-	{
-
 	}
 	
 	@Override
@@ -122,7 +117,7 @@ public class BlockAlchemiter extends BlockLargeMachine
 		{
 			TileEntityAlchemiter alchemiter = (TileEntityAlchemiter) te;
 			alchemiter.breakMachine();
-			if(state.getValue(PART).equals(EnumParts.TOTEM_PAD))
+			if(state.getValue(PART).isTotemPad())
 				alchemiter.dropItem(true);
 		}
 		
@@ -133,7 +128,7 @@ public class BlockAlchemiter extends BlockLargeMachine
 	@Override
 	protected BlockStateContainer createBlockState()
     {
-        return new BlockStateContainer(this, PART1, DIRECTION, BlockTotemLathe.HAS_DOWEL);
+        return new BlockStateContainer(this, PART1, DIRECTION);
     }
 	
 	@Override
@@ -141,17 +136,17 @@ public class BlockAlchemiter extends BlockLargeMachine
 	{
 		TileEntity te;
 		te = worldIn.getTileEntity((getMainPos(state, pos, worldIn)));
-		if(state.getValue(PART) == EnumParts.TOTEM_PAD)
+		if(state.getValue(PART).isTotemPad())
 		{
 			if(te instanceof TileEntityAlchemiter)
 			{
 				ItemStack dowel = ((TileEntityAlchemiter) te).getDowel();
-				BlockTotemLathe.EnumDowel type = BlockTotemLathe.EnumDowel.NO_DOWEL;
+				EnumParts type = EnumParts.TOTEM_PAD;
 				if(!dowel.isEmpty())
-					if(dowel.hasTagCompound() && dowel.getTagCompound().hasKey("contentID"))
-						type = BlockTotemLathe.EnumDowel.CARVED_DOWEL;
-					else type = BlockTotemLathe.EnumDowel.UNCARVED_DOWEL;
-				return state.withProperty(BlockTotemLathe.HAS_DOWEL, type);
+					if(AlchemyRecipeHandler.hasDecodedItem(dowel))
+						type = EnumParts.TOTEM_PAD_TOTEM;
+					else type = EnumParts.TOTEM_PAD_DOWEL;
+				return state.withProperty(PART, type);
 			}
 		}
 
@@ -161,7 +156,7 @@ public class BlockAlchemiter extends BlockLargeMachine
 	@Override
 	public IBlockState getStateFromMeta(int meta)
 	{
-		IBlockState defaultState=getDefaultState();		
+		IBlockState defaultState = getDefaultState();
 		EnumParts part = EnumParts.values()[index*4 + meta % 4];
 		EnumFacing facing = EnumFacing.getHorizontal(meta/4);
 
@@ -172,6 +167,8 @@ public class BlockAlchemiter extends BlockLargeMachine
 	public int getMetaFromState(IBlockState state)
 	{
 		EnumParts part = state.getValue(PART);
+		if(part.isTotemPad())
+			part = EnumParts.TOTEM_PAD;
 		EnumFacing facing = state.getValue(DIRECTION);
 		return (part.ordinal()%4) + facing.getHorizontalIndex()*4;
 	}
@@ -191,7 +188,7 @@ public class BlockAlchemiter extends BlockLargeMachine
 		switch(part)
 		{
 			case TOTEM_CORNER: return pos.up();
-			case TOTEM_PAD:	return pos;
+			case TOTEM_PAD: case TOTEM_PAD_DOWEL: case TOTEM_PAD_TOTEM: return pos;
 			case LOWER_ROD: return pos.down(1);
 			case UPPER_ROD: return pos.down(2);
 			default:
@@ -253,13 +250,22 @@ public class BlockAlchemiter extends BlockLargeMachine
 		CORNER(      new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),
  			         new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D)),
 		CENTER_PAD(  new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),
-				     new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D));
+				     new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D),new AxisAlignedBB(0.0D,0.0D,0.0D,1.0D,1.0D,1.0D)),
+		TOTEM_PAD_DOWEL(new AxisAlignedBB(6.5/16D,0.0D,2/16D,14/16D,1.0D,13/16D),new AxisAlignedBB(3/16D,0.0D,6.5/16D,14/16D,1.0D,14/16D),
+				new AxisAlignedBB(2/16D,0.0D,3/16D,9.5/16D,1.0D,14/16D),new AxisAlignedBB(2/16D,0.0D,2/16D,13/16D,1.0D,9.5/16D)),
+		TOTEM_PAD_TOTEM(new AxisAlignedBB(6.5/16D,0.0D,2/16D,14/16D,1.0D,13/16D),new AxisAlignedBB(3/16D,0.0D,6.5/16D,14/16D,1.0D,14/16D),
+				     new AxisAlignedBB(2/16D,0.0D,3/16D,9.5/16D,1.0D,14/16D),new AxisAlignedBB(2/16D,0.0D,2/16D,13/16D,1.0D,9.5/16D));
 		
 		private final AxisAlignedBB[] BOUNDING_BOX;
 		
 		EnumParts(AxisAlignedBB... bb)
 		{
 			BOUNDING_BOX = bb;
+		}
+		
+		public AxisAlignedBB getBoundingBox(EnumFacing facing)
+		{
+			return BOUNDING_BOX[facing.getHorizontalIndex() % BOUNDING_BOX.length];
 		}
 		
 		@Override
@@ -272,6 +278,11 @@ public class BlockAlchemiter extends BlockLargeMachine
 		public String getName()
 		{
 			return name().toLowerCase();
+		}
+		
+		public boolean isTotemPad()
+		{
+			return this == TOTEM_PAD || this == TOTEM_PAD_DOWEL || this == TOTEM_PAD_TOTEM;
 		}
 	}
 }

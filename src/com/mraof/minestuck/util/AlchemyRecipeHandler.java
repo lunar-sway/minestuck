@@ -1125,15 +1125,11 @@ public class AlchemyRecipeHandler
 	@Nonnull
 	public static ItemStack getDecodedItem(ItemStack card)
 	{
-		
-		if (card.isEmpty()) {return ItemStack.EMPTY;}
-		
-		NBTTagCompound tag = card.getTagCompound();
-		
-		if (tag == null || !tag.hasKey("contentID"))
+		if (!hasDecodedItem(card))
 		{
 			return ItemStack.EMPTY;
 		}
+		NBTTagCompound tag = card.getTagCompound();
 		
 		Item item = Item.REGISTRY.getObject(new ResourceLocation(tag.getString(("contentID"))));
 		if (item == null) {return ItemStack.EMPTY;}
@@ -1146,6 +1142,11 @@ public class AlchemyRecipeHandler
 		
 		return newItem;
 		
+	}
+	
+	public static boolean hasDecodedItem(ItemStack item)
+	{
+		return item.hasTagCompound() && item.getTagCompound().hasKey("contentID", 8);
 	}
 	
 	/**

@@ -1,26 +1,23 @@
-
 {
-	"variants":{
-		"facing=south,part=side_left":	{ "model":"minestuck:alchemiter_side_left"},
-		"facing=south,part=side_right":	{ "model":"minestuck:alchemiter_side_right"},
-		"facing=south,part=corner":		{ "model":"minestuck:alchemiter_corner"},
-		"facing=south,part=center_pad":	{ "model":"minestuck:alchemiter_center"},
+	"variants": {
+		"facing=south,part=side_left":	{ "model":"minestuck:alchemiter_side_left" },
+		"facing=south,part=side_right":	{ "model":"minestuck:alchemiter_side_right" },
+		"facing=south,part=corner":		{ "model":"minestuck:alchemiter_corner" },
+		"facing=south,part=center_pad":	{ "model":"minestuck:alchemiter_center" },
 		
+		"facing=west,part=side_left":	{ "model":"minestuck:alchemiter_side_left", "y":90 },
+		"facing=west,part=side_right":	{ "model":"minestuck:alchemiter_side_right", "y":90 },
+		"facing=west,part=corner":		{ "model":"minestuck:alchemiter_corner", "y":90 },
+		"facing=west,part=center_pad":	{ "model":"minestuck:alchemiter_center", "y":90 },
 		
-		"facing=west,part=side_left":	{ "model":"minestuck:alchemiter_side_left", "y":90},
-		"facing=west,part=side_right":	{ "model":"minestuck:alchemiter_side_right", "y":90},
-		"facing=west,part=corner":		{ "model":"minestuck:alchemiter_corner", "y":90},
-		"facing=west,part=center_pad":	{ "model":"minestuck:alchemiter_center", "y":90},
+		"facing=north,part=side_left":	{ "model":"minestuck:alchemiter_side_left", "y":180 },
+		"facing=north,part=side_right":	{ "model":"minestuck:alchemiter_side_right", "y":180 },
+		"facing=north,part=corner":		{ "model":"minestuck:alchemiter_corner", "y":180 },
+		"facing=north,part=center_pad":	{ "model":"minestuck:alchemiter_center", "y":180 },
 		
-		"facing=north,part=side_left":	{ "model":"minestuck:alchemiter_side_left", "y":180},
-		"facing=north,part=side_right":	{ "model":"minestuck:alchemiter_side_right", "y":180},
-		"facing=north,part=corner":		{ "model":"minestuck:alchemiter_corner", "y":180},
-		"facing=north,part=center_pad":	{ "model":"minestuck:alchemiter_center", "y":180},
-		
-
-		"facing=east,part=side_left":	{ "model":"minestuck:alchemiter_side_left", "y":270},
-		"facing=east,part=side_right":	{ "model":"minestuck:alchemiter_side_right", "y":270},
-		"facing=east,part=corner":		{ "model":"minestuck:alchemiter_corner", "y":270},
-		"facing=east,part=center_pad":	{ "model":"minestuck:alchemiter_center", "y":270}
+		"facing=east,part=side_left":	{ "model":"minestuck:alchemiter_side_left", "y":270 },
+		"facing=east,part=side_right":	{ "model":"minestuck:alchemiter_side_right", "y":270 },
+		"facing=east,part=corner":		{ "model":"minestuck:alchemiter_corner", "y":270 },
+		"facing=east,part=center_pad":	{ "model":"minestuck:alchemiter_center", "y":270 }
 	}
 }
