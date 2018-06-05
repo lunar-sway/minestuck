@@ -7,13 +7,43 @@ import com.mraof.minestuck.entity.item.EntityGrist;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.util.*;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
 import java.util.Map.Entry;
 
 public class TileEntityCrockerMachine extends TileEntityMachine
 {
+	public IdentifierHandler.PlayerIdentifier owner;
 	boolean hasItem;
+	
+	public GristSet getGristWidgetResult()
+	{
+		ItemStack item = AlchemyRecipeHandler.getDecodedItem(inv.get(0));
+		GristSet gristSet = GristRegistry.getGristConversion(item);
+		if(inv.get(0).getItem() != MinestuckItems.captchaCard || AlchemyRecipeHandler.isPunchedCard(inv.get(0))
+				|| item.getItem() == MinestuckItems.captchaCard || gristSet == null)
+			return null;
+		
+		if (item.getCount() != 1)
+			gristSet.scaleGrist(item.getCount());
+		
+		if (item.isItemDamaged())
+		{
+			float multiplier = 1 - item.getItem().getDamage(item) / ((float) item.getMaxDamage());
+			for (GristAmount amount : gristSet.getArray())
+			{
+				gristSet.setGrist(amount.getType(), (int) (amount.getAmount() * multiplier));
+			}
+		}
+		return gristSet;
+	}
+	
+	public int getGristWidgetBoondollarValue()
+	{
+		GristSet set = getGristWidgetResult();
+		return set == null ? 0 : Math.max(1, (int) Math.pow(set.getValue(), 1/1.5));
+	}
 	
 	@Override
 	public boolean isAutomatic()
@@ -86,11 +116,8 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 					return false;
 				if (world.isBlockPowered(this.getPos()))
 					return false;
-				ItemStack input = this.inv.get(0);
-				return (input.getItem() == MinestuckItems.captchaCard
-						&& GristRegistry.getGristConversion(AlchemyRecipeHandler.getDecodedItem(input)) != null
-						&& !input.getTagCompound().getBoolean("punched")
-						&& AlchemyRecipeHandler.getDecodedItem(input).getItem() != MinestuckItems.captchaCard);
+				int i = getGristWidgetBoondollarValue();
+				return owner != null && i != 0 && i <= MinestuckPlayerData.getData(owner).boondollars;
 		}
 		return false;
 	}
@@ -101,52 +128,60 @@ public class TileEntityCrockerMachine extends TileEntityMachine
 		switch (getMachineType())
 		{
 			case GRIST_WIDGET:
-				if (!world.isRemote)
+				GristSet gristSet = getGristWidgetResult();
+				
+				if(!MinestuckPlayerData.addBoondollars(owner, -getGristWidgetBoondollarValue()))
 				{
-					ItemStack item = AlchemyRecipeHandler.getDecodedItem(inv.get(0));
-					GristSet gristSet = GristRegistry.getGristConversion(item);
-					if (item.getCount() != 1)
-						gristSet.scaleGrist(item.getCount());
-
-					gristSet.scaleGrist(0.9F);
-
-					if (item.isItemDamaged())
+					Debug.warnf("Failed to remove boondollars for a grist widget from %s's porkhollow", owner.getUsername());
+					return;
+				}
+				
+				for (Entry<GristType, Integer> entry : gristSet.getMap().entrySet())
+				{
+					int grist = entry.getValue();
+					while(true)
 					{
-						float multiplier = 1 - item.getItem().getDamage(item) / ((float) item.getMaxDamage());
-						for (GristAmount amount : gristSet.getArray())
-						{
-							gristSet.setGrist(amount.getType(), (int) (amount.getAmount() * multiplier));
-						}
+						if(grist == 0)
+							break;
+						GristAmount gristAmount = new GristAmount(entry.getKey(),
+								grist <= 3 ? grist : (world.rand.nextInt(grist) + 1));
+						EntityGrist entity = new EntityGrist(world,
+								this.pos.getX()
+										+ 0.5 /* this.width - this.width / 2 */,
+								this.pos.getY() + 1, this.pos.getZ()
+								+ 0.5 /* this.width - this.width / 2 */,
+								gristAmount);
+						entity.motionX /= 2;
+						entity.motionY /= 2;
+						entity.motionZ /= 2;
+						world.spawnEntity(entity);
+						//Create grist entity of gristAmount
+						grist -= gristAmount.getAmount();
 					}
-
-					for (Entry<GristType, Integer> entry : gristSet.getMap().entrySet())
-					{
-						int grist = entry.getValue();
-						while (true)
-						{
-							if (grist == 0)
-								break;
-							GristAmount gristAmount = new GristAmount(entry.getKey(),
-									grist <= 3 ? grist : (world.rand.nextInt(grist) + 1));
-							EntityGrist entity = new EntityGrist(world,
-									this.pos.getX()
-											+ 0.5 /* this.width - this.width / 2 */,
-									this.pos.getY() + 1, this.pos.getZ()
-									+ 0.5 /* this.width - this.width / 2 */,
-									gristAmount);
-							entity.motionX /= 2;
-							entity.motionY /= 2;
-							entity.motionZ /= 2;
-							world.spawnEntity(entity);
-							//Create grist entity of gristAmount
-							grist -= gristAmount.getAmount();
-						}
-					}
-
 				}
 				this.decrStackSize(0, 1);
 				break;
 		}
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound tagCompound)
+	{
+		super.readFromNBT(tagCompound);
+		
+		if(IdentifierHandler.hasIdentifier(tagCompound, "owner"))
+			owner = IdentifierHandler.load(tagCompound, "owner");
+	}
+	
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound)
+	{
+		super.writeToNBT(tagCompound);
+		
+		if(getMachineType() == MachineType.GRIST_WIDGET && owner != null)
+			owner.saveToNBT(tagCompound, "owner");
+		
+		return tagCompound;
 	}
 	
 	@Override

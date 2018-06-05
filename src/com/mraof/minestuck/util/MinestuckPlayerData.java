@@ -128,12 +128,19 @@ public class MinestuckPlayerData
 	
 	public static boolean addBoondollars(EntityPlayer player, int boons)
 	{
-		PlayerData data = MinestuckPlayerData.getData(player);
+		return addBoondollars(IdentifierHandler.encode(player), boons);
+	}
+	
+	public static boolean addBoondollars(PlayerIdentifier id, int boons)
+	{
+		PlayerData data = MinestuckPlayerData.getData(id);
 		if(data.boondollars + boons < 0)
 			return false;
 		data.boondollars += boons;
 		
-		MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(MinestuckPacket.Type.PLAYER_DATA, PlayerDataPacket.BOONDOLLAR, data.boondollars), player);
+		EntityPlayer player = id.getPlayer();
+		if(player != null)
+			MinestuckChannelHandler.sendToPlayer(MinestuckPacket.makePacket(MinestuckPacket.Type.PLAYER_DATA, PlayerDataPacket.BOONDOLLAR, data.boondollars), player);
 		return true;
 	}
 	

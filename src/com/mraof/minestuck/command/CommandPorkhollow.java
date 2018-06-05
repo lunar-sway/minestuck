@@ -61,7 +61,7 @@ public class CommandPorkhollow extends CommandBase    //Much like /gristSend and
 				
 				player.sendMessage(new TextComponentTranslation("commands.porkhollow.takeSuccess", amount));
 			} else throw new CommandException("commands.porkhollow.notEnough");
-		}
+		} else throw new WrongUsageException(this.getUsage(sender));
 	}
 	
 	@Override

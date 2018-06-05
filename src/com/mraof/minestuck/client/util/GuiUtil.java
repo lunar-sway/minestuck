@@ -19,7 +19,7 @@ import java.util.List;
 public class GuiUtil
 {
 	
-	public static enum GristboardMode
+	public enum GristboardMode
 	{
 		ALCHEMITER,
 		ALCHEMITER_SELECT,

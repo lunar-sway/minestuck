@@ -25,7 +25,7 @@ public class BlockColorCruxite implements IBlockColor
 			if(state.getBlock() == MinestuckBlocks.alchemiter[0])
 			{
 				TileEntity tileEntity = worldIn.getTileEntity(pos);
-				if(state.getValue(BlockAlchemiter.PART1) == BlockAlchemiter.EnumParts.TOTEM_PAD && tileEntity instanceof TileEntityAlchemiter)
+				if(state.getValue(BlockAlchemiter.PART1).isTotemPad() && tileEntity instanceof TileEntityAlchemiter)
 					dowel = ((TileEntityAlchemiter) tileEntity).getDowel();
 			} else if(state.getBlock() == MinestuckBlocks.totemlathe[1])
 			{

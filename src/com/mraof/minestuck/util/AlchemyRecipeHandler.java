@@ -1144,6 +1144,11 @@ public class AlchemyRecipeHandler
 		
 	}
 	
+	public static boolean isPunchedCard(ItemStack item)
+	{
+		return item.getItem() == MinestuckItems.captchaCard && item.hasTagCompound() && item.getTagCompound().getBoolean("punched");
+	}
+	
 	public static boolean hasDecodedItem(ItemStack item)
 	{
 		return item.hasTagCompound() && item.getTagCompound().hasKey("contentID", 8);

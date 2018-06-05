@@ -54,19 +54,19 @@ public class TileEntitySburbMachine extends TileEntityMachine
 	{
 		super.readFromNBT(tagCompound);
 
-		if (tagCompound.hasKey("gristType"))
+		if(tagCompound.hasKey("gristType"))
 		{
 			this.selectedGrist = GristType.getTypeFromString(tagCompound.getString("gristType"));
-			if (this.selectedGrist == null)
+			if(this.selectedGrist == null)
 			{
 				this.selectedGrist = GristType.Build;
 			}
 		}
 
-		if (tagCompound.hasKey("color"))
+		if(tagCompound.hasKey("color"))
 			this.color = tagCompound.getInteger("color");
 
-		if (tagCompound.hasKey("owner") || tagCompound.hasKey("ownerMost"))
+		if(IdentifierHandler.hasIdentifier(tagCompound, "owner"))
 			owner = IdentifierHandler.load(tagCompound, "owner");
 	}
 

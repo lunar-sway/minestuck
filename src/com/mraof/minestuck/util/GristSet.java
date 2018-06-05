@@ -63,7 +63,18 @@ public class GristSet
 	{
 		return this.gristTypes.getOrDefault(type, 0);
 	}
-
+	
+	/**
+	 * @return a value estimate for this grist set
+	 */
+	public float getValue()
+	{
+		float sum = 0;
+		for(GristAmount amount : getArray())
+			sum += amount.getValue();
+		return sum;
+	}
+	
 	/**
 	 * Sets the amount of grist, given a type of grist and the new amount.
 	 */
