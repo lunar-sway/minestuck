@@ -1,5 +1,10 @@
 package com.mraof.minestuck.item;
 
+import static com.mraof.minestuck.MinestuckConfig.artifactRange;
+
+import java.util.Iterator;
+import java.util.List;
+
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.BlockGate;
@@ -20,6 +25,7 @@ import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.MinestuckDimensionHandler;
 import com.mraof.minestuck.world.lands.LandAspectRegistry;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -39,11 +45,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
-
-import java.util.Iterator;
-import java.util.List;
-
-import static com.mraof.minestuck.MinestuckConfig.artifactRange;
 
 public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITeleporter
 {
@@ -86,7 +87,10 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 						Debug.warn("Was not able to teleport player "+player.getName()+" into the medium! Likely caused by mod collision.");
 						player.sendMessage(new TextComponentString("Was not able to teleport you into the medium! Likely caused by mod collision."));
 					}
-					else MinestuckPlayerTracker.sendLandEntryMessage(player);
+					else
+					{
+						MinestuckPlayerTracker.sendLandEntryMessage(player);
+					}
 				}
 			}
 		} catch(Exception e)
