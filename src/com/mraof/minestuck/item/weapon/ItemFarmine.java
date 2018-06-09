@@ -3,6 +3,7 @@ package com.mraof.minestuck.item.weapon;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.PriorityQueue;
 
 import com.mraof.minestuck.util.Pair;
@@ -34,6 +35,8 @@ import net.minecraft.world.World;
  * @author BenjaminK
  *
  */
+//TODO: Fix the issue where breaking the bottom half of a door drops two doors
+//TODO: Fix the issue where gravel is not equivalent to gravel, due to the randomness in its drops
 public class ItemFarmine extends ItemWeapon
 {
 	private int radius;
@@ -300,13 +303,16 @@ public class ItemFarmine extends ItemWeapon
 	 * This implementation was chosen because it provides cheap lookup.
 	 * This is good, because associations are checked in large batches within a single server tick.
 	 * A block is mapped to a set of all the blocks associated with it.
-	 * @return Returns (or is supposed to return) a deep clone of this tool's private association map. 
+	 * @return Returns a deep clone of this tool's private association map. 
 	 */
 	public HashMap<Block, HashSet<Block>> getAssociations()
 	{
 		HashMap<Block, HashSet<Block>> out = new HashMap<Block, HashSet<Block>>();
-		//TODO: Add security code so that this doesn't return the ACTUAL association storage, but just a copy of it.
-		//Using .clone() is not sufficient.
+		for(Block b : farMineEquivalencies.keySet())
+		{
+			out.put(b, (HashSet<Block>) farMineEquivalencies.get(b).clone());
+		}
+		
 		return out;
 	}
 	
