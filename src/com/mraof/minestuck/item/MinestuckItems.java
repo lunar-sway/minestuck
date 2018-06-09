@@ -275,6 +275,9 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlock(hotCake)).setMaxStackSize(1);
 		registerItemBlock(registry, new ItemBlock(reverseCake)).setMaxStackSize(1);
 		
+		registerItemBlock(registry, new ItemBlock(coarseEndStone));
+		registerItemBlock(registry, new ItemBlock(endGrass));
+		
 		registerItemBlock(registry, new ItemBlock(primedTnt));
 		registerItemBlock(registry, new ItemBlock(unstableTnt));
 		registerItemBlock(registry, new ItemBlock(instantTnt));

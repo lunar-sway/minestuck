@@ -682,6 +682,8 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(stone, 1, 6), new GristSet(new GristType[] {GristType.Build, GristType.Cobalt}, new int[] {3, 1}));
 		GristRegistry.addGristConversion(new ItemStack(stone, 1, 7), new GristSet(new GristType[] {GristType.Build, GristType.Rust}, new int[] {3, 2}));
 		GristRegistry.addGristConversion(new ItemStack(stone, 1, 8), new GristSet(new GristType[] {GristType.Build, GristType.Rust}, new int[] {3, 2}));
+		GristRegistry.addGristConversion(new ItemStack(coarseEndStone), false, new GristSet(new GristType[] {GristType.Caulk, GristType.Build}, new int[] {3, 4}));
+		GristRegistry.addGristConversion(new ItemStack(endGrass), false, new GristSet(new GristType[] {GristType.Caulk, GristType.Build}, new int[] {3, 4}));
 		GristRegistry.addGristConversion(new ItemStack(log, 1, 0), new GristSet(new GristType[] {GristType.Build}, new int[] {4}));
 		GristRegistry.addGristConversion(new ItemStack(log, 1, 1), new GristSet(new GristType[] {GristType.Build, GristType.Iodine}, new int[] {4, 1}));
 		GristRegistry.addGristConversion(new ItemStack(log, 1, 3), new GristSet(new GristType[] {GristType.Build}, new int[] {4}));
@@ -860,6 +862,9 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Blocks.STONEBRICK, 1, BlockStoneBrick.CHISELED_META), new ItemStack(Blocks.PACKED_ICE), MODE_AND, new ItemStack(stone, 1, BlockMinestuckStone.FROST_CHISELED_META));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.IRON_BLOCK), new ItemStack(Items.LAVA_BUCKET), MODE_AND, new ItemStack(stone, 1, BlockMinestuckStone.CAST_META));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.STONEBRICK, 1, BlockStoneBrick.CHISELED_META), new ItemStack(stone, 1, BlockMinestuckStone.CAST_META), MODE_OR, new ItemStack(stone, 1, BlockMinestuckStone.CAST_CHISELED_META));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.DIRT, 1, 2), new ItemStack(Blocks.END_STONE), MODE_OR, new ItemStack(coarseEndStone));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.GRASS), new ItemStack(Blocks.END_STONE), MODE_OR, new ItemStack(endGrass));
+		CombinationRegistry.addCombination(new ItemStack(Blocks.MYCELIUM), new ItemStack(Blocks.END_STONE), MODE_OR, new ItemStack(endGrass));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.LOG, 1, 0), new ItemStack(Blocks.VINE), MODE_AND, new ItemStack(log, 1, 0));
 		CombinationRegistry.addCombination(new ItemStack(log, 1, 0), new ItemStack(Blocks.YELLOW_FLOWER), MODE_OR, true, false, new ItemStack(log, 1, 1));
 		CombinationRegistry.addCombination(new ItemStack(log, 1, 0), new ItemStack(Blocks.RED_FLOWER), MODE_OR, true, false, new ItemStack(log, 1, 1));

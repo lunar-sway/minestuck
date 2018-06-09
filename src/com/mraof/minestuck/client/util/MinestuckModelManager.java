@@ -230,10 +230,12 @@ public class MinestuckModelManager
 		register(cruxiteBlock);
 		register(genericObject);
 		register(coalOreNetherrack);
+		register(ironOreEndStone);
 		register(ironOreSandstone);
 		register(ironOreSandstoneRed);
 		register(goldOreSandstone);
 		register(goldOreSandstoneRed);
+		register(redstoneOreEndStone);
 		for(BlockColoredDirt.BlockType type : BlockColoredDirt.BlockType.values())
 			register(coloredDirt, type.ordinal(), "colored_dirt_"+type.name);
 		register(layeredSand);
@@ -283,6 +285,9 @@ public class MinestuckModelManager
 		register(redCake);
 		register(hotCake);
 		register(reverseCake);
+		
+		register(coarseEndStone);
+		register(endGrass);
 		
 		register(primedTnt);
 		register(unstableTnt);

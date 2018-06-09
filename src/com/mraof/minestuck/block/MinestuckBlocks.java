@@ -71,6 +71,9 @@ public class MinestuckBlocks
 	public static Block hotCake = new BlockSimpleCake(2, 0.1F, (EntityPlayer player) -> player.setFire(4)).setRegistryName("hot_cake").setUnlocalizedName("hotCake");
 	public static Block reverseCake = new BlockSimpleCake(2, 0.1F, null).setRegistryName("reverse_cake").setUnlocalizedName("cake");
 	
+	public static Block endGrass = new BlockEndGrass().setRegistryName("end_grass");
+	public static Block coarseEndStone = new BlockEndStoneCoarse().setRegistryName("coarse_end_stone");
+	
 	//Ores
 	public static Block oreCruxite = (BlockCruxiteOre) new BlockCruxiteOre().setRegistryName("ore_cruxite");
 	public static BlockUraniumOre oreUranium = (BlockUraniumOre) new BlockUraniumOre().setRegistryName("ore_uranium").setUnlocalizedName("oreUranium");
@@ -159,6 +162,7 @@ public class MinestuckBlocks
 				blockComputerOff, blockComputerOn, blockLaptopOff, blockLaptopOn,
 				blockGoldSeeds, glowystoneWire,
 				appleCake, blueCake, coldCake, redCake, hotCake, reverseCake,
+				coarseEndStone, endGrass,
 				primedTnt, unstableTnt, instantTnt, woodenExplosiveButton, stoneExplosiveButton,
 				blockOil, blockBlood, blockBrainJuice, blockWatercolors,
 				rabbitSpawner};
