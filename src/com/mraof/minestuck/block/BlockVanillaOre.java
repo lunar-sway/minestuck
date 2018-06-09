@@ -31,7 +31,8 @@ public class BlockVanillaOre extends Block
 		LAPIS,
 		DIAMOND,
 		EMERALD,
-		QUARTZ;
+		QUARTZ,
+		REDSTONE;
 	}
 	
 	public final OreType oreType;
@@ -57,6 +58,7 @@ public class BlockVanillaOre extends Block
 		case DIAMOND: return Items.DIAMOND;
 		case EMERALD: return Items.EMERALD;
 		case QUARTZ: return Items.QUARTZ;
+		case REDSTONE: return Items.REDSTONE;
 		default: return Item.getItemFromBlock(this);
 		}
 	}
@@ -64,13 +66,17 @@ public class BlockVanillaOre extends Block
 	@Override
 	public int quantityDropped(Random random)
 	{
-		return oreType == OreType.LAPIS ? 4 + random.nextInt(5) : 1;
+		return oreType == OreType.LAPIS ? 4 + random.nextInt(5) : oreType == OreType.REDSTONE ? 4 + random.nextInt(2) : 1;
 	}
 	
 	@Override
 	public int quantityDroppedWithBonus(int fortune, Random random)
 	{
-		if(fortune > 0 && oreType != OreType.IRON && oreType != OreType.GOLD)
+		if(oreType == OreType.REDSTONE)
+		{
+			return this.quantityDropped(random) + random.nextInt(fortune + 1);
+		}
+		else if(fortune > 0 && oreType != OreType.IRON && oreType != OreType.GOLD)
 		{
 			int j = random.nextInt(fortune + 2) - 1;
 			
@@ -100,6 +106,8 @@ public class BlockVanillaOre extends Block
 				j = MathHelper.getInt(rand, 2, 5);
 			else if(oreType == OreType.QUARTZ)
 				j = MathHelper.getInt(rand, 2, 5);
+			else if(oreType == OreType.REDSTONE)
+				j = MathHelper.getInt(rand, 1, 6);
 			
 			return j;
 		}
@@ -132,6 +140,7 @@ public class BlockVanillaOre extends Block
 		case DIAMOND: return new ItemStack(Blocks.DIAMOND_ORE);
 		case EMERALD: return new ItemStack(Blocks.EMERALD_ORE);
 		case QUARTZ: return new ItemStack(Blocks.QUARTZ_ORE);
+		case REDSTONE: return new ItemStack(Blocks.REDSTONE_ORE);
 		default: return new ItemStack(this);
 		}
 	}

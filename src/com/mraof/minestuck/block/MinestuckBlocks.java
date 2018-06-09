@@ -75,10 +75,12 @@ public class MinestuckBlocks
 	public static Block oreCruxite = (BlockCruxiteOre) new BlockCruxiteOre().setRegistryName("ore_cruxite");
 	public static BlockUraniumOre oreUranium = (BlockUraniumOre) new BlockUraniumOre().setRegistryName("ore_uranium").setUnlocalizedName("oreUranium");
 	public static Block coalOreNetherrack = new BlockVanillaOre(BlockVanillaOre.OreType.COAL).setRegistryName("coal_ore_netherrack").setUnlocalizedName("oreCoal");
+	public static Block ironOreEndStone = new BlockVanillaOre(BlockVanillaOre.OreType.IRON).setRegistryName("iron_ore_end_stone").setUnlocalizedName("oreIron");
 	public static Block ironOreSandstone = new BlockVanillaOre(BlockVanillaOre.OreType.IRON).setRegistryName("iron_ore_sandstone").setUnlocalizedName("oreIron");
 	public static Block ironOreSandstoneRed = new BlockVanillaOre(BlockVanillaOre.OreType.IRON).setRegistryName("iron_ore_sandstone_red").setUnlocalizedName("oreIron");
 	public static Block goldOreSandstone = new BlockVanillaOre(BlockVanillaOre.OreType.GOLD).setRegistryName("gold_ore_sandstone").setUnlocalizedName("oreGold");
 	public static Block goldOreSandstoneRed = new BlockVanillaOre(BlockVanillaOre.OreType.GOLD).setRegistryName("gold_ore_sandstone_red").setUnlocalizedName("oreGold");
+	public static Block redstoneOreEndStone = new BlockVanillaOre(BlockVanillaOre.OreType.REDSTONE).setRegistryName("redstone_ore_end_stone").setUnlocalizedName("oreRedstone");
 	
 	public static Block uraniumCooker = new BlockUraniumCooker().setRegistryName("uranium_cooker").setUnlocalizedName("uraniumCooker");
 
@@ -149,7 +151,7 @@ public class MinestuckBlocks
 		//blocks
 		final Block[] blocks = {chessTile, coloredDirt, layeredSand, stone, sugarCube,
 				log, leaves1, planks, aspectSapling, rainbowSapling, aspectLog1, aspectLog2, aspectLog3, glowingLog, glowingPlanks, glowingMushroom, woodenCactus,
-				oreCruxite, oreUranium, coalOreNetherrack, ironOreSandstone, ironOreSandstoneRed, goldOreSandstone, goldOreSandstoneRed,
+				oreCruxite, oreUranium, coalOreNetherrack, ironOreEndStone, ironOreSandstone, ironOreSandstoneRed, goldOreSandstone, goldOreSandstoneRed, redstoneOreEndStone,
 				cruxiteBlock, genericObject,
 				coarseStoneStairs, shadeBrickStairs, frostBrickStairs, castIronStairs,
 				skaiaPortal, returnNode, gate,

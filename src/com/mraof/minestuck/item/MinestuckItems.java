@@ -192,11 +192,11 @@ public class MinestuckItems
 	public static void registerItems(RegistryEvent.Register<Item> event)
 	{
 		armorPrismarine.repairMaterial = new ItemStack(Items.PRISMARINE_SHARD);
-
+		
 		IForgeRegistry<Item> registry = event.getRegistry();
 		registerItemBlock(registry, new ItemMultiTexture(chessTile, chessTile, new String[]{"black", "white", "darkgrey", "lightgrey"}));
 		registerItemBlock(registry, new ItemBlock(skaiaPortal));
-
+		
 		registerItemBlock(registry, new ItemMultiTexture(oreCruxite, oreCruxite, new String[0])
 		{
 			@Override
@@ -214,11 +214,13 @@ public class MinestuckItems
 			}
 		});
 		registerItemBlock(registry, new ItemBlock(coalOreNetherrack));
+		registerItemBlock(registry, new ItemBlock(ironOreEndStone));
 		registerItemBlock(registry, new ItemBlock(ironOreSandstone));
 		registerItemBlock(registry, new ItemBlock(ironOreSandstoneRed));
 		registerItemBlock(registry, new ItemBlock(goldOreSandstone));
 		registerItemBlock(registry, new ItemBlock(goldOreSandstoneRed));
-
+		registerItemBlock(registry, new ItemBlock(redstoneOreEndStone));
+		
 		registerItemBlock(registry, new ItemBlockCraftingTab(cruxiteBlock, CreativeTabs.BUILDING_BLOCKS));
 		registerItemBlock(registry, new ItemBlock(genericObject));
 		registerItemBlock(registry, new ItemSburbMachine(sburbMachine));
@@ -226,7 +228,7 @@ public class MinestuckItems
 				(ItemStack input) -> BlockCrockerMachine.MachineType.values()[input.getItemDamage() % BlockCrockerMachine.MachineType.values().length].getUnlocalizedName()));
 		registerItemBlock(registry, new ItemBlock(blockComputerOff));
 		registerItemBlock(registry, new ItemBlock(transportalizer));
-
+		
 		registerItemBlock(registry, new ItemBlockLayered(layeredSand));
 		registerItemBlock(registry, new ItemMultiTexture(coloredDirt, coloredDirt,
 				(ItemStack input) -> BlockColoredDirt.BlockType.values()[input.getItemDamage() % BlockColoredDirt.BlockType.values().length].getName()));
@@ -248,7 +250,7 @@ public class MinestuckItems
 				(ItemStack input) -> BlockMinestuckLeaves1.BlockType.values()[input.getItemDamage() % BlockMinestuckLeaves1.BlockType.values().length].getUnlocalizedName()));
 		registerItemBlock(registry, new ItemMultiTexture(planks, planks,
 				(ItemStack input) -> BlockMinestuckPlanks.BlockType.values()[input.getItemDamage() % BlockMinestuckPlanks.BlockType.values().length].getUnlocalizedName()));
-
+		
 		registerItemBlock(registry, new ItemMultiTexture(aspectSapling, aspectSapling,
 				(ItemStack input) -> BlockAspectSapling.BlockType.values()[input.getItemDamage() % BlockAspectSapling.BlockType.values().length].getUnlocalizedName()));
 		
@@ -272,7 +274,7 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlock(redCake)).setMaxStackSize(1);
 		registerItemBlock(registry, new ItemBlock(hotCake)).setMaxStackSize(1);
 		registerItemBlock(registry, new ItemBlock(reverseCake)).setMaxStackSize(1);
-
+		
 		registerItemBlock(registry, new ItemBlock(primedTnt));
 		registerItemBlock(registry, new ItemBlock(unstableTnt));
 		registerItemBlock(registry, new ItemBlock(instantTnt));
@@ -293,7 +295,7 @@ public class MinestuckItems
 		registry.register(popamaticVrillyhoo.setRegistryName("popamatic_vrillyhoo"));
 		registry.register(scarletZillyhoo.setRegistryName("scarlet_zillyhoo"));
 		registry.register(mwrthwl.setRegistryName("mwrthwl"));
-
+		
 		//blades
 		registry.register(sord.setRegistryName("sord"));
 		registry.register(cactusCutlass.setRegistryName("cactaceae_cutlass"));
@@ -310,7 +312,7 @@ public class MinestuckItems
 		registry.register(doggMachete.setRegistryName("dogg_machete"));
 		registry.register(cobaltSabre.setRegistryName("cobalt_sabre"));
 		registry.register(quantumSabre.setRegistryName("quantum_sabre"));
-
+		
 		//axes
 		registry.register(copseCrusher.setRegistryName("copse_crusher"));
 		registry.register(blacksmithBane.setRegistryName("blacksmith_bane"));
@@ -319,7 +321,7 @@ public class MinestuckItems
 		registry.register(rubyCroak.setRegistryName("ruby_croak"));
 		registry.register(hephaestusLumber.setRegistryName("hephaestus_lumberjack"));
 		registry.register(qFHammerAxe.setRegistryName("fission_focused_fault_feller"));
-
+		
 		//Dice
 		registry.register(dice.setRegistryName("dice"));
 		registry.register(fluoriteOctet.setRegistryName("fluorite_octet"));
