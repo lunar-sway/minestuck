@@ -220,7 +220,14 @@ consort.typesOfColors16=When mixing red and blue to get magenta, the blue overpo
 consort.typesOfColors17=Dye is weird like that.
 consort.typesOfColors18=...what, you're still listening to me? Wow. No one's ever listened to the whole thing before. Would you like to hear it again?
 
-consort.zazzerpan=Old wizard Zazzerpan would be turning in his grave if he saw the horrors that walk these lands. Those giclopses sure are terrifying!
+consort.atTheEnd=This may be the start of our conversation, but now we're at the end.
+consort.chorusFruit=Never eat fruit. Last time I tried it, I blacked out and came to somewhere else! Stick to bugs like a normal person!
+consort.endGrass=The grass in this place just keeps growing everywhere! I don't even know how it takes root in the stone like that.
+consort.grassCurse=Rumors say that %s got mad one day and cursed the world with all this grass everywhere. It gets into our homes!
+consort.uselessPogo=I once found this piece of junk that launched me upward when I hit the ground with it. It really hurt when I came back down, and I didn't get anywhere!
+consort.uselessElytra=One time, I saw a guy with some weird wing-looking things on his back. He could glide with them, but without being able to stay in the air, what's the point?
+
+consort.zazzerpan=Old wizard Zazzerpan would be turning in his grave if he saw the horrors that walk these lands. Those giclopes sure are terrifying!
 consort.texasHistory=The place was %s, the year, was 20XX.
 
 consort.cantSee=We spent a lot of time making this shop looks really nice, we may have overdone it though, I can barely see over this counter.
@@ -741,6 +748,8 @@ land.oak=Oak
 land.lumber=Lumber
 land.rainbow=Rainbow
 land.colors=Colors
+land.end=End
+land.dimension=Dimension
 
 land.bucket=Buckets
 land.cake=Cake

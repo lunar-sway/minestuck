@@ -111,6 +111,12 @@ public class ConsortDialogue
 				new SingleMessage("typesOfColors4"), new SingleMessage("typesOfColors5"), new SingleMessage("typesOfColors6"), new SingleMessage("typesOfColors7"), new SingleMessage("typesOfColors8"),
 				new SingleMessage("typesOfColors9"), new SingleMessage("typesOfColors10"), new SingleMessage("typesOfColors11"), new SingleMessage("typesOfColors12"), new SingleMessage("typesOfColors13"),
 				new SingleMessage("typesOfColors14"), new SingleMessage("typesOfColors15"), new SingleMessage("typesOfColors16"), new SingleMessage("typesOfColors17"), new SingleMessage("typesOfColors18")));
+		addMessage(fromNameTerrain("end"), "atTheEnd");
+		addMessage(fromNameTerrain("end"), "chorusFruit");
+		addMessage(fromNameTerrain("end"), "endGrass");
+		addMessage(fromNameTerrain("end"), "grassCurse", "denizen");
+		addMessage(fromNameTerrain("end"), "uselessPogo");
+		addMessage(fromNameTerrain("end"), "uselessElytra");
 		
 		addMessage(true, "denizenMention");
 		addMessage(true, "floatingIsland");
