@@ -3,21 +3,19 @@ package com.mraof.minestuck.item.weapon;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.PriorityQueue;
+import java.util.Random;
 
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.util.Pair;
-import com.mraof.minestuck.util.MinestuckRandom;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -36,7 +34,6 @@ import net.minecraft.world.World;
  *
  */
 //TODO: Fix the issue where breaking the bottom half of a door drops two doors
-//TODO: Fix the issue where gravel is not equivalent to gravel, due to the randomness in its drops
 public class ItemFarmine extends ItemWeapon
 {
 	private int radius;
@@ -60,31 +57,18 @@ public class ItemFarmine extends ItemWeapon
 	{
 		farMineForbiddenBlocks.add(Blocks.OBSIDIAN);
 		
-		HashSet set = new HashSet<Block>();
-		set.add(Blocks.LIT_REDSTONE_ORE);
-		farMineEquivalencies.put(Blocks.REDSTONE_ORE, (HashSet<Block>) set.clone());
+		addAssociation(Blocks.REDSTONE_ORE, Blocks.LIT_REDSTONE_ORE);
+		addAssociation(Blocks.FURNACE, Blocks.LIT_FURNACE);
+		addAssociation(Blocks.REDSTONE_LAMP, Blocks.LIT_REDSTONE_LAMP);
+		addAssociation(Blocks.DAYLIGHT_DETECTOR, Blocks.DAYLIGHT_DETECTOR_INVERTED);
+		addAssociation(Blocks.DIRT, Blocks.GRASS);
+		addAssociation(Blocks.DIRT, Blocks.MYCELIUM);
+		addAssociation(Blocks.DIRT, Blocks.GRASS_PATH);
+		addAssociation(Blocks.END_STONE, MinestuckBlocks.endGrass);
 		
-		set.clear();
-		set.add(Blocks.REDSTONE_ORE);
-		farMineEquivalencies.put(Blocks.LIT_REDSTONE_ORE, (HashSet<Block>) set.clone());
-		
-		set.clear();
-		set.add(Blocks.MONSTER_EGG);
-		farMineEquivalencies.put(Blocks.COBBLESTONE, (HashSet<Block>) set.clone());
-		farMineEquivalencies.put(Blocks.STONE, (HashSet<Block>) set.clone());
-		farMineEquivalencies.put(Blocks.STONEBRICK, (HashSet<Block>) set.clone());
-
-		set.clear();
-		set.add(Blocks.DIRT);
-		farMineEquivalencies.put(Blocks.GRASS, (HashSet<Block>) set.clone());
-		farMineEquivalencies.put(Blocks.MYCELIUM, (HashSet<Block>) set.clone());
-		farMineEquivalencies.put(Blocks.GRASS_PATH, (HashSet<Block>) set.clone());
-		
-		set.clear();
-		set.add(Blocks.GRASS);
-		set.add(Blocks.MYCELIUM);
-		set.add(Blocks.GRASS_PATH);
-		farMineEquivalencies.put(Blocks.DIRT, (HashSet<Block>) set.clone());
+		addOneWayAssociation(Blocks.COBBLESTONE, Blocks.MONSTER_EGG);
+		addOneWayAssociation(Blocks.STONE, Blocks.MONSTER_EGG);
+		addOneWayAssociation(Blocks.STONEBRICK, Blocks.MONSTER_EGG);
 	}
 	
 	@Override
@@ -98,7 +82,7 @@ public class ItemFarmine extends ItemWeapon
 		Comparator<Pair> comparator = new PairedIntComparator();
 		PriorityQueue<Pair> candidates = new PriorityQueue<Pair>(comparator);
 		Block block = blockState.getBlock();
-		Item drop = block.getItemDropped(blockState, MinestuckRandom.getRandom(), 0);
+		Item drop = block.getItemDropped(blockState, new Random(0), 0);		//Must define the drop using a predetermined seed to establish equivalency with random methods 
 		int damageDrop = block.damageDropped(blockState);
 		HashSet<Block> equals = farMineEquivalencies.get(block);
 		if(equals==null) equals = new HashSet<Block>();	
@@ -145,25 +129,24 @@ public class ItemFarmine extends ItemWeapon
 				{
 					//Iterates across all blocks in a 3x3 cube centered on this block.
 					for (int i = -1; i < 2; i++)
-					{
 						for (int j = -1; j < 2; j++)
-						{
 							for (int k = -1; k < 2; k++)
 							{
-								BlockPos newBlock = new BlockPos(curr.getX() + i, curr.getY() + j, curr.getZ() + k);
-								IBlockState newstate = worldIn.getBlockState(newBlock);
-								if (	equals.contains(newstate.getBlock()) || newstate.getBlock().equals(block)
-										&& newstate.getBlock().getItemDropped(newstate, MinestuckRandom.getRandom(), 0) == drop
-										&& newstate.getBlock().damageDropped(newstate) == damageDrop)
+								if(i==0 && j==0 && k==0)
+									continue;
+								BlockPos newBlockPos = new BlockPos(curr.getX() + i, curr.getY() + j, curr.getZ() + k);
+								IBlockState newState = worldIn.getBlockState(newBlockPos);
+								Block newBlock = newState.getBlock();
+								if (	equals.contains(newBlock) || newBlock.equals(block)
+										&& newBlock.getItemDropped(newState, new Random(0), 0) == drop
+										&& newBlock.damageDropped(newState) == damageDrop)
 								{
-									candidates.add(new Pair(newBlock, rad - 1));
+									candidates.add(new Pair(newBlockPos, rad - 1));
 								}
 							}
-						}
-					}
 				}
 			}	
-		
+			
 			if (blocksToBreak.size() + 1 > stack.getMaxDamage() - stack.getItemDamage()
 					|| blocksToBreak.size() + 1 > terminus)
 			{
@@ -176,31 +159,29 @@ public class ItemFarmine extends ItemWeapon
 		{
 			int damage = 1;
 			for (int i = -1; i < 2; i++)
-			{
 				for (int j = -1; j < 2; j++)
-				{
 					for (int k = -1; k < 2; k++)
 					{
-						BlockPos newBlock = new BlockPos(pos.getX() + i, pos.getY() + j, pos.getZ() + k);
-						IBlockState newstate = worldIn.getBlockState(newBlock);
-						if ( equals.contains(newstate.getBlock()) || newstate.getBlock().equals(block)
-								&& newstate.getBlock().getItemDropped(newstate, MinestuckRandom.getRandom(), 0) == drop
-								&& newstate.getBlock().damageDropped(newstate) == damageDrop
+						BlockPos newBlockPos = new BlockPos(pos.getX() + i, pos.getY() + j, pos.getZ() + k);
+						IBlockState newState = worldIn.getBlockState(newBlockPos);
+						Block newBlock = newState.getBlock();
+						if ( equals.contains(newBlock) || newBlock.equals(block)
+								&& newBlock.getItemDropped(newState, new Random(0), 0) == drop
+								&& newBlock.damageDropped(newState) == damageDrop
 								&& damage < stack.getMaxDamage() - stack.getItemDamage())
 						{
-							newstate.getBlock().dropBlockAsItem(worldIn, pos, newstate, 0);
+							newState.getBlock().dropBlockAsItem(worldIn, pos, newState, 0);
 							if(playerIn instanceof EntityPlayer)
-								newstate.getBlock().removedByPlayer(newstate, worldIn, newBlock, (EntityPlayer) playerIn, true);
-							worldIn.setBlockToAir(newBlock);
+								newState.getBlock().removedByPlayer(newState, worldIn, newBlockPos, (EntityPlayer) playerIn, true);
+							worldIn.setBlockToAir(newBlockPos);
 							damage++;
 						}
 					}
-				}
-			}
+			
 			if (isDamageable())
 				stack.damageItem(damage, playerIn);
 			
-		} else    //Otherwise, break ALL the blocks!
+		} else	//Otherwise, break ALL the blocks!
 		{
 			for (BlockPos blockToBreak : blocksToBreak)
 			{
@@ -239,11 +220,12 @@ public class ItemFarmine extends ItemWeapon
 	
 	/**
 	 * Determines if the farmining tool will consider one block equivalent to another.
+	 * Only tests if the equivalencies list considers the blocks to be the same.
 	 * @param a The block whose nature is the test of equivalence
 	 * @param b The block whose equivalency is being tested
-	 * @return Returns true if <code>b</code> is equivalent to <code>a</code>
+	 * @return Returns true if <code>b</code> is forced to be equivalent to <code>a</code>
 	 */
-	private boolean isEquivalent(Block a, Block b)
+	public boolean isEquivalent(Block a, Block b)
 	{
 		HashSet e = farMineEquivalencies.get(a);
 		return e != null && e.contains(b);
