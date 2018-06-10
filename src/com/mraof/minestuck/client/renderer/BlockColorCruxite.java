@@ -19,7 +19,7 @@ public class BlockColorCruxite implements IBlockColor
 	@Override
 	public int colorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex)
 	{
-		if(tintIndex == 0)
+		if(tintIndex == 0 || tintIndex == 1)
 		{
 			ItemStack dowel = ItemStack.EMPTY;
 			if(state.getBlock() == MinestuckBlocks.alchemiter[0])
@@ -42,7 +42,15 @@ public class BlockColorCruxite implements IBlockColor
 			
 			if(!dowel.isEmpty())
 			{
-				return dowel.getMetadata() == 0 ? 0x99D9EA : ColorCollector.getColor(dowel.getMetadata() - 1);
+				int color = dowel.getMetadata() == 0 ? 0x99D9EA : ColorCollector.getColor(dowel.getMetadata() - 1);
+				if(tintIndex == 1)
+				{
+					int i0 = ((color & 255) + 255)/2;
+					int i1 = (((color >> 8) & 255) + 255)/2;
+					int i2 = (((color >> 16) & 255) + 255)/2;
+					color = i0 | (i1 << 8) | (i2 << 16);
+				}
+				return color;
 			}
 		}
 		return -1;

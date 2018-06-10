@@ -22,7 +22,7 @@ import net.minecraft.world.World;
 
 public class BlockAlchemiter extends BlockLargeMachine
 {
-	public static final PropertyEnum<EnumParts> PART1 = PropertyEnum.create("part", EnumParts.class, EnumParts.TOTEM_CORNER, EnumParts.TOTEM_PAD, EnumParts.LOWER_ROD, EnumParts.UPPER_ROD, EnumParts.TOTEM_PAD_DOWEL);
+	public static final PropertyEnum<EnumParts> PART1 = PropertyEnum.create("part", EnumParts.class, EnumParts.TOTEM_CORNER, EnumParts.TOTEM_PAD, EnumParts.LOWER_ROD, EnumParts.UPPER_ROD, EnumParts.TOTEM_PAD_DOWEL, EnumParts.TOTEM_PAD_TOTEM);
 	public static final PropertyEnum<EnumParts> PART2 = PropertyEnum.create("part", EnumParts.class, EnumParts.SIDE_LEFT, EnumParts.SIDE_RIGHT, EnumParts.CORNER, EnumParts.CENTER_PAD);
 	public final PropertyEnum<EnumParts> PART;
 	public static final PropertyDirection DIRECTION = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
@@ -113,7 +113,7 @@ public class BlockAlchemiter extends BlockLargeMachine
 	
 		BlockPos mainPos = getMainPos(state, pos,worldIn);
 		TileEntity te = worldIn.getTileEntity(mainPos);
-		if(te != null && te instanceof TileEntityAlchemiter)
+		if(te instanceof TileEntityAlchemiter)
 		{
 			TileEntityAlchemiter alchemiter = (TileEntityAlchemiter) te;
 			alchemiter.breakMachine();

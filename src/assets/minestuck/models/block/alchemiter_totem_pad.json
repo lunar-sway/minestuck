@@ -8,8 +8,8 @@
 	"elements": [
 		{
 			"name": "rod",
-			"from": [10, 0, 12],
-			"to": [14, 14, 16],
+			"from": [ 10, 0, 12 ],
+			"to": [ 14, 14, 16 ],
 			"faces": {
 				"north": { "uv": [0, 4, 2, 11], "texture": "#rod" },
 				"east":  { "uv": [0, 4, 2, 11], "texture": "#rod" },
@@ -21,8 +21,8 @@
 		},
 		{
 			"name": "rod_top",
-			"from": [11, 14, 13],
-			"to": [13, 16, 15],
+			"from": [ 11, 14, 13 ],
+			"to": [ 13, 16, 15 ],
 			"faces": {
 				"north": { "uv": [0, 0, 1, 1], "texture": "#rod" },
 				"east":  { "uv": [0, 0, 1, 1], "texture": "#rod" },
@@ -33,8 +33,8 @@
 		},
 		{
 			"name": "pad",
-			"from": [8, 0, 2],
-			"to": [14, 4, 8],
+			"from": [ 8, 0, 2 ],
+			"to": [ 14, 4, 8 ],
 			"faces": {
 				"north": { "uv": [0,  0,  6,  4], "texture": "#pad" },
 				"east":  { "uv": [0,  8,  6, 12], "texture": "#pad" },
