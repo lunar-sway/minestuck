@@ -104,6 +104,7 @@ public class MinestuckBlocks
 	public static Fluid fluidBlood = createFluid("blood", new ResourceLocation("minestuck", "blocks/blood_still"), new ResourceLocation("minestuck", "blocks/blood_flowing"), "tile.blood");
 	public static Fluid fluidBrainJuice = createFluid("brain_juice", new ResourceLocation("minestuck", "blocks/brain_juice_still"), new ResourceLocation("minestuck", "blocks/brain_juice_flowing"), "tile.brainJuice");
 	public static Fluid fluidWatercolors = createFluid("watercolors", new ResourceLocation("minestuck", "blocks/watercolors_still"), new ResourceLocation("minestuck", "blocks/watercolors_flowing"), "tile.watercolors");
+	public static Fluid fluidEnder = createFluid("ender", new ResourceLocation("minestuck", "blocks/ender_still"), new ResourceLocation("minestuck", "blocks/ender_flowing"), "tile.ender");
 	
 	public static Block blockOil = new BlockFluidClassic(fluidOil, Material.WATER){
 		@SideOnly (Side.CLIENT)
@@ -147,7 +148,9 @@ public class MinestuckBlocks
 			return newColor;
 		}
 	}.setRegistryName("block_watercolors").setUnlocalizedName("watercolors").setLightOpacity(1);
-
+	
+	public static Block blockEnder = new BlockFluidEnder(fluidEnder, Material.WATER).setRegistryName("block_ender");
+	
 	public static Block[] liquidGrists;
 	public static Fluid[] gristFluids;
 
@@ -168,7 +171,7 @@ public class MinestuckBlocks
 				appleCake, blueCake, coldCake, redCake, hotCake, reverseCake,
 				coarseEndStone, endGrass, treatedPlanks, endLog, endLeaves, endPlanks, endSapling,
 				primedTnt, unstableTnt, instantTnt, woodenExplosiveButton, stoneExplosiveButton,
-				blockOil, blockBlood, blockBrainJuice, blockWatercolors,
+				blockOil, blockBlood, blockBrainJuice, blockWatercolors, blockEnder,
 				rabbitSpawner};
 		
 		for(Block block : blocks)

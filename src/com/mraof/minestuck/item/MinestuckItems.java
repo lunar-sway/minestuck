@@ -422,6 +422,7 @@ public class MinestuckItems
 		minestuckBucket.addBlock(blockBlood.getDefaultState());
 		minestuckBucket.addBlock(blockBrainJuice.getDefaultState());
 		minestuckBucket.addBlock(blockWatercolors.getDefaultState());
+		minestuckBucket.addBlock(blockEnder.getDefaultState());
 		/*for(Block block : liquidGrists)
 		{
 			minestuckBucket.addBlock(block.getDefaultState());

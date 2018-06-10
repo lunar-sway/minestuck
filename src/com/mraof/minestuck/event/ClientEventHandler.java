@@ -2,6 +2,7 @@ package com.mraof.minestuck.event;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.block.MinestuckBlocks;
 import com.mraof.minestuck.client.gui.GuiColorSelector;
 import com.mraof.minestuck.client.gui.playerStats.GuiDataChecker;
 import com.mraof.minestuck.client.gui.playerStats.GuiEcheladder;
@@ -11,9 +12,17 @@ import com.mraof.minestuck.inventory.captchalouge.CaptchaDeckHandler;
 import com.mraof.minestuck.network.skaianet.SkaiaClient;
 import com.mraof.minestuck.util.ColorCollector;
 import com.mraof.minestuck.util.MinestuckPlayerData;
+
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.translation.I18n;
+import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -77,4 +86,14 @@ public class ClientEventHandler
 		}
 	}
 	
+	@SubscribeEvent
+	public void onFogRender(EntityViewRenderEvent.FogDensity event)
+	{
+		if (event.getState().getBlock() == MinestuckBlocks.blockEnder)
+		{
+			event.setCanceled(true);
+			event.setDensity(Float.MAX_VALUE);
+			GlStateManager.setFog(GlStateManager.FogMode.EXP);
+		}
+	}
 }

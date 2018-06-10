@@ -73,6 +73,19 @@
                             "data": 3
                         }
                     ]
+                },
+                {
+                    "entryName": "ender_bucket",
+                    "type": "item",
+                    "name": "minestuck:minestuck_bucket",
+                    "weight": 5,
+                    "quality": 0,
+                    "functions": [
+                        {
+                            "function": "set_data",
+                            "data": 4
+                        }
+                    ]
                 }
             ]
         }
