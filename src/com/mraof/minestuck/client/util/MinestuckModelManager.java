@@ -286,6 +286,8 @@ public class MinestuckModelManager
 		register(hotCake);
 		register(reverseCake);
 		
+		register(floweryMossBrick);
+		register(floweryMossStone);
 		register(treatedPlanks);
 		register(coarseEndStone);
 		register(endLog);

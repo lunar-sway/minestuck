@@ -70,6 +70,8 @@ public class MinestuckBlocks
 	public static Block hotCake = new BlockSimpleCake(2, 0.1F, (EntityPlayer player) -> player.setFire(4)).setRegistryName("hot_cake").setUnlocalizedName("hotCake");
 	public static Block reverseCake = new BlockSimpleCake(2, 0.1F, null).setRegistryName("reverse_cake").setUnlocalizedName("cake");
 	
+	public static Block floweryMossStone = new BlockCustom(Material.ROCK, MapColor.GRAY, SoundType.STONE).setRegistryName("flowery_moss_stone").setUnlocalizedName("floweryMossStone").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);
+	public static Block floweryMossBrick = new BlockCustom(Material.ROCK, MapColor.GRAY, SoundType.STONE).setRegistryName("flowery_moss_brick").setUnlocalizedName("floweryMossBrick").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);
 	public static Block treatedPlanks = new BlockCustom(Material.WOOD, MapColor.WOOD, SoundType.WOOD).setFireInfo(1, 0).setRegistryName("treated_planks").setUnlocalizedName("treatedPlanks").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);
 	public static Block endLog = new BlockEndLog().setRegistryName("end_log");
 	public static Block endLeaves = new BlockEndLeaves().setRegistryName("end_leaves");
@@ -169,7 +171,7 @@ public class MinestuckBlocks
 				blockComputerOff, blockComputerOn, blockLaptopOff, blockLaptopOn,
 				blockGoldSeeds, glowystoneWire,
 				appleCake, blueCake, coldCake, redCake, hotCake, reverseCake,
-				coarseEndStone, endGrass, treatedPlanks, endLog, endLeaves, endPlanks, endSapling,
+				coarseEndStone, endGrass, treatedPlanks, endLog, endLeaves, endPlanks, endSapling, floweryMossStone, floweryMossBrick,
 				primedTnt, unstableTnt, instantTnt, woodenExplosiveButton, stoneExplosiveButton,
 				blockOil, blockBlood, blockBrainJuice, blockWatercolors, blockEnder,
 				rabbitSpawner};

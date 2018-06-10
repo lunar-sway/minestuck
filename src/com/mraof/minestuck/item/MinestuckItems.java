@@ -274,6 +274,8 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlock(hotCake)).setMaxStackSize(1);
 		registerItemBlock(registry, new ItemBlock(reverseCake)).setMaxStackSize(1);
 		
+		registerItemBlock(registry, new ItemBlock(floweryMossBrick));
+		registerItemBlock(registry, new ItemBlock(floweryMossStone));
 		registerItemBlock(registry, new ItemBlock(treatedPlanks));
 		registerItemBlock(registry, new ItemBlock(coarseEndStone));
 		registerItemBlock(registry, new ItemBlock(endLog));
@@ -287,9 +289,9 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlock(instantTnt));
 		registerItemBlock(registry, new ItemBlock(woodenExplosiveButton));
 		registerItemBlock(registry, new ItemBlock(stoneExplosiveButton));
-
+		
 		registerItemBlock(registry, new ItemBlock(uraniumCooker));
-
+		
 		//hammers
 		registry.register(clawHammer.setRegistryName("claw_hammer"));
 		registry.register(sledgeHammer.setRegistryName("sledge_hammer"));

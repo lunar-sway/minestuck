@@ -67,7 +67,7 @@
                     ],
                     "type": "loot_table",
                     "name": "minestuck:chests/medium_basic/rainbow",
-                    "weight": 2
+                    "weight": 10
                 },
                 {
                     "conditions": [
