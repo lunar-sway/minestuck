@@ -55,7 +55,7 @@ public class TileEntityCruxtruder extends TileEntity
 				if(stack.getItem() == MinestuckItems.rawCruxite)
 				{
 					int count = 1;
-					if(player.isSneaking())
+					if(player.isSneaking())	//Doesn't actually work just yet
 						count = Math.min(64 - material, stack.getCount());
 					stack.shrink(count);
 					material += count;
@@ -93,6 +93,7 @@ public class TileEntityCruxtruder extends TileEntity
 			color = tagCompound.getInteger("color");
 		if(tagCompound.hasKey("broken"))
 			broken = tagCompound.getBoolean("broken");
+		material = tagCompound.getInteger("material");
 	}
 	
 	@Override
@@ -101,6 +102,7 @@ public class TileEntityCruxtruder extends TileEntity
 		super.writeToNBT(tagCompound);
 		tagCompound.setInteger("color", color);
 		tagCompound.setBoolean("broken", broken);
+		tagCompound.setInteger("material", material);
 		return tagCompound;
 	}
 	
