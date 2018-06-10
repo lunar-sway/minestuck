@@ -26,6 +26,12 @@ public class BlockCruxtruderLid extends Block
 	}
 	
 	@Override
+	public boolean isFullCube(IBlockState state)
+	{
+		return false;
+	}
+	
+	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
 	{
 		return BLOCK_AABB;

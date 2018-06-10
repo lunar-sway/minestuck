@@ -198,36 +198,29 @@ public class BlockTotemLathe extends BlockLargeMachine
 	
 	public enum EnumParts implements IStringSerializable
 	{
-		BOTTOM_LEFT(	new AxisAlignedBB(0/16D, 0/16D, 5/16D, 14/16D, 1.0D, 14/16D),new AxisAlignedBB(2/16D, 0/16D, 0/16D, 11/16D, 1.0D, 14/16D),
-						new AxisAlignedBB(2/16D, 0/16D, 2/16D, 16/16D, 1.0D, 11/16D),new AxisAlignedBB(5/16D, 0/16D, 2/16D, 14/16D, 1.0D, 16/16D)),
-		BOTTOM_MIDLEFT(	new AxisAlignedBB(0/16D, 0/16D, 5/16D, 16/16D, 1.0D, 14/16D),new AxisAlignedBB(2/16D, 0/16D, 0/16D, 11/16D, 1.0D, 16/16D),
-						new AxisAlignedBB(0/16D, 0/16D, 2/16D, 16/16D, 1.0D, 11/16D),new AxisAlignedBB(5/16D, 0/16D, 0/16D, 14/16D, 1.0D, 16/16D)),
-		BOTTOM_MIDRIGHT(new AxisAlignedBB(0/16D, 0/16D, 5/16D, 16/16D, 1.0D, 14/16D),new AxisAlignedBB(2/16D, 0/16D, 0/16D, 11/16D, 1.0D, 16/16D),
-						new AxisAlignedBB(0/16D, 0/16D, 2/16D, 16/16D, 1.0D, 11/16D),new AxisAlignedBB(5/16D, 0/16D, 0/16D, 14/16D, 1.0D, 16/16D)),
-		BOTTOM_RIGHT(	new AxisAlignedBB(6/16D, 0/16D, 5/16D, 16/16D, 1.0D, 14/16D),new AxisAlignedBB(2/16D, 0/16D, 6/16D, 11/16D, 1.0D, 16/16D),
-						new AxisAlignedBB(0/16D, 0/16D, 2/16D, 10/16D, 1.0D, 11/16D),new AxisAlignedBB(5/16D, 0/16D, 0/16D, 14/16D, 1.0D, 10/16D)),
+		BOTTOM_LEFT(	new AxisAlignedBB(0.0D, 0.0D, 1/16D, 1.0D, 1.0D, 13/16D)),
+		BOTTOM_MIDLEFT(	new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 12/16D)),
+		BOTTOM_MIDRIGHT(new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 12/16D, 12/16D)),
+		BOTTOM_RIGHT(	new AxisAlignedBB(0.0D, 0.0D, 1/16D, 12/16D, 1.0D, 11/16D)),
 		
-		MID_LEFT(		new AxisAlignedBB(0/16D, 0/16D,  5/16D, 14/16D,  1.0D, 14/16D),new AxisAlignedBB(2/16D,  0/16D, 0/16D, 11/16D,  1.0D, 14/16D),
-						new AxisAlignedBB(2/16D, 0/16D,  2/16D, 16/16D,  1.0D, 11/16D),new AxisAlignedBB(5/16D,  0/16D, 2/16D, 14/16D,  1.0D, 16/16D)),
-		MID_MIDLEFT(	new AxisAlignedBB(0/16D, 0/16D,  5/16D, 16/16D,  1.0D, 14/16D),new AxisAlignedBB(2/16D,  0/16D, 0/16D, 11/16D,  1.0D, 16/16D),
-						new AxisAlignedBB(0/16D, 0/16D,  2/16D, 16/16D,  1.0D, 11/16D),new AxisAlignedBB(5/16D,  0/16D, 0/16D, 14/16D,  1.0D, 16/16D)),
-		MID_MIDRIGHT(	new AxisAlignedBB(9/16D, 12/16D, 7/16D, 16/16D,  1.0D, 12/16D),new AxisAlignedBB(4/16D, 12/16D, 9/16D,  9/16D,  1.0D, 16/16D),
-						new AxisAlignedBB(0/16D, 12/16D, 4/16D,  7/16D,  1.0D,  9/16D),new AxisAlignedBB(7/16D, 12/16D, 0/16D, 12/16D,  1.0D,  7/16D)),
-		MID_RIGHT(		new AxisAlignedBB(1/16D, 0/16D,  7/16D, 14/16D, 4/16D, 12/16D),new AxisAlignedBB(4/16D,  0/16D, 1/16D,  9/16D, 4/16D, 14/16D),
-						new AxisAlignedBB(2/16D, 0/16D,  4/16D, 15/16D, 4/16D,  9/16D),new AxisAlignedBB(7/16D,  0/16D, 2/16D, 12/16D, 4/16D, 15/16D)),
+		MID_LEFT(		new AxisAlignedBB(0/16D, 0/16D,  5/16D, 14/16D,  1.0D, 14/16D)),
+		MID_MIDLEFT(	new AxisAlignedBB(0/16D, 0/16D,  5/16D, 16/16D,  1.0D, 14/16D)),
+		MID_MIDRIGHT(	new AxisAlignedBB(9/16D, 12/16D, 7/16D, 16/16D,  1.0D, 12/16D)),
+		MID_RIGHT(		new AxisAlignedBB(1/16D, 0/16D,  7/16D, 14/16D, 4/16D, 12/16D)),
 		
-		TOP_MIDRIGHT(	new AxisAlignedBB(8/16D, 0/16D, 6/16D, 16/16D,  12/16D, 14/16D),new AxisAlignedBB(2/16D,  0/16D, 8/16D, 10/16D,  12/16D, 16/16D),
-					 	new AxisAlignedBB(0/16D, 0/16D, 2/16D,  8/16D,  12/16D, 10/16D),new AxisAlignedBB(6/16D,  0/16D, 0/16D, 14/16D,  12/16D,  8/16D)),
-		TOP_MIDLEFT(	new AxisAlignedBB(0/16D, 0/16D, 6/16D, 16/16D,  12/16D, 14/16D),new AxisAlignedBB(2/16D,  0/16D, 0/16D, 10/16D,  12/16D, 16/16D),
-						new AxisAlignedBB(0/16D, 0/16D, 2/16D, 16/16D,  12/16D, 10/16D),new AxisAlignedBB(6/16D,  0/16D, 0/16D, 14/16D,  12/16D, 16/16D)),
-		TOP_LEFT(		new AxisAlignedBB(0/16D, 0/16D, 6/16D, 16/16D,  12/16D, 14/16D),new AxisAlignedBB(2/16D,  0/16D, 0/16D, 10/16D,  12/16D, 16/16D),
-						new AxisAlignedBB(0/16D, 0/16D, 2/16D, 16/16D,  12/16D, 10/16D),new AxisAlignedBB(6/16D,  0/16D, 0/16D, 14/16D,  12/16D, 16/16D));
+		TOP_MIDRIGHT(	new AxisAlignedBB(8/16D, 0/16D, 6/16D, 16/16D,  12/16D, 14/16D)),
+		TOP_MIDLEFT(	new AxisAlignedBB(0/16D, 0/16D, 6/16D, 16/16D,  12/16D, 14/16D)),
+		TOP_LEFT(		new AxisAlignedBB(0/16D, 0/16D, 6/16D, 16/16D,  12/16D, 14/16D));
 		
 		private final AxisAlignedBB[] BOUNDING_BOX;
 		
-		EnumParts(AxisAlignedBB... bb)
+		EnumParts(AxisAlignedBB bb)
 		{
-			BOUNDING_BOX = bb;
+			BOUNDING_BOX = new AxisAlignedBB[4];
+			BOUNDING_BOX[0] = bb;
+			BOUNDING_BOX[1] = new AxisAlignedBB(1 - bb.maxZ, bb.minY, bb.minX, 1 - bb.minZ, bb.maxY, bb.maxX);
+			BOUNDING_BOX[2] = new AxisAlignedBB(1 - bb.maxX, bb.minY, 1- bb.maxZ, 1 - bb.minX, bb.maxY, 1 - bb.minZ);
+			BOUNDING_BOX[3] = new AxisAlignedBB(bb.minZ, bb.minY, 1 - bb.maxX, bb.maxZ, bb.maxY, 1 - bb.minX);
 		}
 		
 		@Override
