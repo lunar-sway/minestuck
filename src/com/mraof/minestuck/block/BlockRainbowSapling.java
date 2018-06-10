@@ -52,37 +52,24 @@ public class BlockRainbowSapling extends BlockBush implements IGrowable
 		return SAPLING_AABB;
 	}
 	
-	/**
-	 * Gets the metadata of the item this Block can drop. This method is called when the block gets destroyed. It
-	 * returns the metadata of the dropped item based on the old metadata of the block.
-	 */
 	@Override
 	public int damageDropped(IBlockState state)
 	{
 		return 0;
 	}
 	
-	/**
-	 * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks)
-	 */
 	@Override
 	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items)
 	{
 		items.add(new ItemStack(this, 1, 0));
 	}
 	
-	/**
-	 * Convert the given metadata into a BlockState for this Block
-	 */
 	@Override
 	public IBlockState getStateFromMeta(int meta)
 	{
 		return this.getDefaultState().withProperty(GROWN_SOME, meta%2==1).withProperty(RED, meta>7).withProperty(GREEN, meta%8 > 3).withProperty(BLUE, meta%4>1);
 	}
 	
-	/**
-	 * Convert the BlockState into the correct metadata value
-	 */
 	@Override
 	public int getMetaFromState(IBlockState state)
 	{

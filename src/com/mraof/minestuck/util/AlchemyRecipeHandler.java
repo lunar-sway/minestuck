@@ -528,6 +528,7 @@ public class AlchemyRecipeHandler
 		GameRegistry.addSmelting(redstoneOreEndStone, new ItemStack(Items.REDSTONE), 0.7F);
 		GameRegistry.addSmelting(woodenCactus, new ItemStack(Items.COAL, 1, 1), 0.15F);
 		GameRegistry.addSmelting(cruxiteDowel, new ItemStack(MinestuckItems.rawCruxite), 0.1F);
+		GameRegistry.addSmelting(log, new ItemStack(Items.COAL, 1, 1), 0.15F);
 		
 		//Register ore dictionary entries
 		OreDictionary.registerOre("oreCoal", coalOreNetherrack);
@@ -537,6 +538,10 @@ public class AlchemyRecipeHandler
 		OreDictionary.registerOre("oreGold", goldOreSandstone);
 		OreDictionary.registerOre("oreGold", goldOreSandstoneRed);
 		OreDictionary.registerOre("oreRedstone", redstoneOreEndStone);
+		OreDictionary.registerOre("treeLeaves",	new ItemStack(leaves1, 1, OreDictionary.WILDCARD_VALUE));
+		OreDictionary.registerOre("logWood",	new ItemStack(log, 1, OreDictionary.WILDCARD_VALUE));
+		OreDictionary.registerOre("plankWood",	new ItemStack(planks, 1, OreDictionary.WILDCARD_VALUE));
+		OreDictionary.registerOre("treeSapling",rainbowSapling);
 		OreDictionary.registerOre("plankWood",	treatedPlanks);
 		
 		coalOreNetherrack.setHarvestLevel("pickaxe", Blocks.COAL_ORE.getHarvestLevel(Blocks.COAL_ORE.getDefaultState()));
@@ -547,10 +552,6 @@ public class AlchemyRecipeHandler
 		goldOreSandstoneRed.setHarvestLevel("pickaxe", Blocks.GOLD_ORE.getHarvestLevel(Blocks.GOLD_ORE.getDefaultState()));
 		redstoneOreEndStone.setHarvestLevel("pickaxe", Blocks.REDSTONE_ORE.getHarvestLevel(Blocks.REDSTONE_ORE.getDefaultState()));
 		
-		OreDictionary.registerOre("logWood",	new ItemStack(log, 1, OreDictionary.WILDCARD_VALUE));
-		OreDictionary.registerOre("plankWood",	new ItemStack(planks, 1, OreDictionary.WILDCARD_VALUE));
-		OreDictionary.registerOre("treeSapling",new ItemStack(rainbowSapling, 1, OreDictionary.WILDCARD_VALUE));
-		OreDictionary.registerOre("treeLeaves",	new ItemStack(leaves1, 1, OreDictionary.WILDCARD_VALUE));
 		OreDictionary.registerOre("logWood",	glowingLog);
 		OreDictionary.registerOre("plankWood",	glowingPlanks);
 		
@@ -685,11 +686,12 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(stone, 1, 8), new GristSet(new GristType[] {GristType.Build, GristType.Rust}, new int[] {3, 2}));
 		GristRegistry.addGristConversion(new ItemStack(coarseEndStone), false, new GristSet(new GristType[] {GristType.Caulk, GristType.Build}, new int[] {3, 4}));
 		GristRegistry.addGristConversion(new ItemStack(endGrass), false, new GristSet(new GristType[] {GristType.Caulk, GristType.Build}, new int[] {3, 4}));
-		GristRegistry.addGristConversion(new ItemStack(log, 1, 0), new GristSet(new GristType[] {GristType.Build}, new int[] {4}));
-		GristRegistry.addGristConversion(new ItemStack(log, 1, 1), new GristSet(new GristType[] {GristType.Build, GristType.Iodine}, new int[] {4, 1}));
-		GristRegistry.addGristConversion(new ItemStack(log, 1, 3), new GristSet(new GristType[] {GristType.Build}, new int[] {4}));
-		GristRegistry.addGristConversion(new ItemStack(leaves1, 1, 3), new GristSet(GristType.Build, 1));
+		GristRegistry.addGristConversion(new ItemStack(log, 1, 0), new GristSet(new GristType[] {GristType.Build}, new int[] {8}));
+		GristRegistry.addGristConversion(new ItemStack(log, 1, 1), new GristSet(new GristType[] {GristType.Build, GristType.Iodine}, new int[] {7, 1}));
+		GristRegistry.addGristConversion(new ItemStack(log, 1, 2), new GristSet(new GristType[] {GristType.Build, GristType.Cobalt}, new int[] {7, 1}));
+		GristRegistry.addGristConversion(new ItemStack(log, 1, 3), new GristSet(new GristType[] {GristType.Build}, new int[] {8}));
 		GristRegistry.addGristConversion(treatedPlanks, new GristSet(new GristType[] {GristType.Build}, new int[] {2}));
+		GristRegistry.addGristConversion(new ItemStack(leaves1), false, new GristSet(GristType.Build, 1));
 		GristRegistry.addGristConversion(rainbowSapling, new GristSet(GristType.Build, 16));
 		GristRegistry.addGristConversion(new ItemStack(sbahjPoster), new GristSet(new GristType[] {GristType.Build}, new int[] {4}));
 		GristRegistry.addGristConversion(new ItemStack(crewPoster), new GristSet(new GristType[] {GristType.Tar, GristType.Rust}, new int[] {3, 2}));

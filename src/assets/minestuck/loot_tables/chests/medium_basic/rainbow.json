@@ -2,13 +2,13 @@
     "pools": [
         {
             "name": "rainbow",
-            "rolls": 4,
+            "rolls": 1,
             "entries": [
                 {
                     "type": "item",
                     "name": "minecraft:dye",
                     "weight": 12,
-                    "quality": 0,
+                    "quality": -3,
                     "functions": [
                         {
                             "function": "set_data",
@@ -30,7 +30,7 @@
                     "type": "item",
                     "name": "minecraft:wool",
                     "weight": 3,
-                    "quality": 0,
+                    "quality": -1,
                     "functions": [
                         {
                             "function": "set_data",
@@ -52,7 +52,7 @@
                     "type": "item",
                     "name": "minecraft:glass",
                     "weight": 3,
-                    "quality": 0,
+                    "quality": -1,
                     "functions": [
 						{
                             "function": "set_count",
@@ -89,9 +89,24 @@
                 },
                 {
                     "type": "item",
+                    "name": "minestuck:beverage",
+                    "weight": 3,
+                    "quality": 1,
+                    "functions": [
+                        {
+                            "function": "set_data",
+                            "data": {
+								"min": 0,
+								"max": 9
+							}
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
                     "name": "minecraft:hardened_clay",
                     "weight": 2,
-                    "quality": 0,
+                    "quality": 1,
                     "functions": [
 						{
                             "function": "set_count",
@@ -106,7 +121,7 @@
                     "type": "item",
                     "name": "minecraft:painting",
                     "weight": 2,
-                    "quality": 0,
+                    "quality": 2,
                     "functions": [
 						{
                             "function": "set_count",
