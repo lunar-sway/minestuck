@@ -86,7 +86,7 @@ public class ConsortDialogue
 		addMessage(Sets.newHashSet(fromNameTerrain("shade")), allExcept(fromNameTitle("thunder")), null, null, new SingleMessage("fireHazard"));
 		addMessage(fromNameTerrain("heat"), "gettingHot");
 		addMessage(fromNameTerrain("heat"), "lavaCrickets");
-		addMessage(fromNameTerrain("wood"), "properFuneral");
+		addMessage(fromNameTerrain("wood"), "woodTreatments");
 		addMessage(fromNameTerrain("wood"), new ChainMessage(new SingleMessage("splinters1"), new SingleMessage("splinters2")));
 		addMessage(fromNameTerrain("sand"), "sandSurfing");
 		addMessage(fromNameTerrain("sand"), new ChoiceMessage(new SingleMessage("camel"), new SingleMessage[]{new SingleMessage("camel.yes"), new SingleMessage("camel.no")},

@@ -537,6 +537,7 @@ public class AlchemyRecipeHandler
 		OreDictionary.registerOre("oreGold", goldOreSandstone);
 		OreDictionary.registerOre("oreGold", goldOreSandstoneRed);
 		OreDictionary.registerOre("oreRedstone", redstoneOreEndStone);
+		OreDictionary.registerOre("plankWood",	treatedPlanks);
 		
 		coalOreNetherrack.setHarvestLevel("pickaxe", Blocks.COAL_ORE.getHarvestLevel(Blocks.COAL_ORE.getDefaultState()));
 		ironOreEndStone.setHarvestLevel("pickaxe", Blocks.IRON_ORE.getHarvestLevel(Blocks.IRON_ORE.getDefaultState()));
@@ -688,6 +689,7 @@ public class AlchemyRecipeHandler
 		GristRegistry.addGristConversion(new ItemStack(log, 1, 1), new GristSet(new GristType[] {GristType.Build, GristType.Iodine}, new int[] {4, 1}));
 		GristRegistry.addGristConversion(new ItemStack(log, 1, 3), new GristSet(new GristType[] {GristType.Build}, new int[] {4}));
 		GristRegistry.addGristConversion(new ItemStack(leaves1, 1, 3), new GristSet(GristType.Build, 1));
+		GristRegistry.addGristConversion(treatedPlanks, new GristSet(new GristType[] {GristType.Build}, new int[] {2}));
 		GristRegistry.addGristConversion(rainbowSapling, new GristSet(GristType.Build, 16));
 		GristRegistry.addGristConversion(new ItemStack(sbahjPoster), new GristSet(new GristType[] {GristType.Build}, new int[] {4}));
 		GristRegistry.addGristConversion(new ItemStack(crewPoster), new GristSet(new GristType[] {GristType.Tar, GristType.Rust}, new int[] {3, 2}));
@@ -868,6 +870,7 @@ public class AlchemyRecipeHandler
 		CombinationRegistry.addCombination(new ItemStack(Blocks.LOG, 1, 0), new ItemStack(Blocks.VINE), MODE_AND, new ItemStack(log, 1, 0));
 		CombinationRegistry.addCombination(new ItemStack(log, 1, 0), new ItemStack(Blocks.YELLOW_FLOWER), MODE_OR, true, false, new ItemStack(log, 1, 1));
 		CombinationRegistry.addCombination(new ItemStack(log, 1, 0), new ItemStack(Blocks.RED_FLOWER), MODE_OR, true, false, new ItemStack(log, 1, 1));
+		CombinationRegistry.addCombination("plankWood", new ItemStack(Blocks.NETHERRACK), MODE_OR, false, new ItemStack(treatedPlanks));
 		CombinationRegistry.addCombination(new ItemStack(Items.WOODEN_SWORD), new ItemStack(Blocks.CACTUS), MODE_OR, false, true, new ItemStack(woodenCactus));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.PLANKS), new ItemStack(Blocks.CACTUS), MODE_OR, false, true, new ItemStack(woodenCactus));
 		CombinationRegistry.addCombination(new ItemStack(Blocks.LOG), new ItemStack(Blocks.CACTUS), MODE_OR, false, true, new ItemStack(woodenCactus));

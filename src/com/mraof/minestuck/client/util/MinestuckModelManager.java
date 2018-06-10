@@ -286,6 +286,7 @@ public class MinestuckModelManager
 		register(hotCake);
 		register(reverseCake);
 		
+		register(treatedPlanks);
 		register(coarseEndStone);
 		register(endGrass);
 		

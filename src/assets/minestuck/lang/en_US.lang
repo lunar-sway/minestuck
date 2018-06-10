@@ -161,7 +161,7 @@ consort.fireHazard=Our land is a fire waiting to happen! Hopefully there isn't a
 consort.gettingHot=Is it getting hot in here or is it just me?
 consort.lavaCrickets=Have you ever had a lava-roasted cricket? The lava really brings out the cricket juices.
 
-consort.properFuneral=Good thing we settled our village on our own pyre! If lightning strikes, we would already have a proper funeral!
+consort.woodTreatments=We figured out how to treat the wood to make it less flammable. I hope we didn't miss a spot.
 consort.splinters1=Be careful not to walk barefoot here, you could get a splinter!
 consort.splinters2=Some of our kind have died due to the amount of splinters they received while on a walk.
 
@@ -953,6 +953,7 @@ tile.stairsMinestuck.coarse.name=Coarse Stone Stairs
 tile.stairsMinestuck.shadeBrick.name=Shade Brick Stairs
 tile.stairsMinestuck.frostBrick.name=Frostbrick Stairs
 tile.stairsMinestuck.castIron.name=Cast-Iron Stairs
+tile.treatedPlanks.name=Treated Planks
 tile.logMinestuck.vineOak.name=Vine Oak Logs
 tile.logMinestuck.floweryVineOak.name=Flowery Vine Oak Logs
 tile.logMinestuck.frost.name=Frost Logs

@@ -71,6 +71,7 @@ public class MinestuckBlocks
 	public static Block hotCake = new BlockSimpleCake(2, 0.1F, (EntityPlayer player) -> player.setFire(4)).setRegistryName("hot_cake").setUnlocalizedName("hotCake");
 	public static Block reverseCake = new BlockSimpleCake(2, 0.1F, null).setRegistryName("reverse_cake").setUnlocalizedName("cake");
 	
+	public static Block treatedPlanks = new BlockCustom(Material.WOOD, MapColor.WOOD, SoundType.WOOD).setFireInfo(1, 0).setRegistryName("treated_planks").setUnlocalizedName("treatedPlanks").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);
 	public static Block endGrass = new BlockEndGrass().setRegistryName("end_grass");
 	public static Block coarseEndStone = new BlockEndStoneCoarse().setRegistryName("coarse_end_stone");
 	
@@ -162,7 +163,7 @@ public class MinestuckBlocks
 				blockComputerOff, blockComputerOn, blockLaptopOff, blockLaptopOn,
 				blockGoldSeeds, glowystoneWire,
 				appleCake, blueCake, coldCake, redCake, hotCake, reverseCake,
-				coarseEndStone, endGrass,
+				coarseEndStone, endGrass, treatedPlanks,
 				primedTnt, unstableTnt, instantTnt, woodenExplosiveButton, stoneExplosiveButton,
 				blockOil, blockBlood, blockBrainJuice, blockWatercolors,
 				rabbitSpawner};
