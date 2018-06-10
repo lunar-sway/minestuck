@@ -1,6 +1,7 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.item.TabMinestuck;
+
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.IProperty;
@@ -12,7 +13,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -20,13 +20,14 @@ import net.minecraft.world.World;
 
 public class BlockEndLog extends BlockLog
 {
-	public static final PropertyEnum<BlockLog.EnumAxis> SECOND_AXIS = PropertyEnum.<BlockLog.EnumAxis>create("axis2", BlockLog.EnumAxis.class);
+	public static final PropertyEnum<EnumAxis> SECOND_AXIS = PropertyEnum.<EnumAxis>create("axis2", EnumAxis.class);
+	public static final int LEAF_SUSTAIN_DISTANCE = 6;
 	
 	public BlockEndLog()
 	{
 		super();
-		setCreativeTab(MinestuckItems.tabMinestuck);
-		setDefaultState(blockState.getBaseState().withProperty(SECOND_AXIS, BlockLog.EnumAxis.NONE).withProperty(LOG_AXIS, BlockLog.EnumAxis.Y));
+		setCreativeTab(TabMinestuck.instance);
+		setDefaultState(blockState.getBaseState().withProperty(SECOND_AXIS, EnumAxis.NONE).withProperty(LOG_AXIS, EnumAxis.Y));
 		setUnlocalizedName("logEnd");
 	}
 	
@@ -41,23 +42,23 @@ public class BlockEndLog extends BlockLog
 	{
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 		EnumFacing playerFacing = EnumFacing.getDirectionFromEntityLiving(pos, placer);
-		BlockLog.EnumAxis toSecond;
+		EnumAxis toSecond;
 		switch(playerFacing)
 		{
 		case DOWN:
 		case UP:
-			toSecond = BlockLog.EnumAxis.Y;
+			toSecond = EnumAxis.Y;
 			break;
 		case EAST:
 		case WEST:
-			toSecond = BlockLog.EnumAxis.X;
+			toSecond = EnumAxis.X;
 			break;
 		case NORTH:
 		case SOUTH:
-			toSecond = BlockLog.EnumAxis.Z;
+			toSecond = EnumAxis.Z;
 			break;
 		default:
-			toSecond = BlockLog.EnumAxis.NONE;
+			toSecond = EnumAxis.NONE;
 			break;
 		}
 		worldIn.setBlockState(pos, state.withProperty(SECOND_AXIS, toSecond), 2);
@@ -66,8 +67,8 @@ public class BlockEndLog extends BlockLog
 	@Override
 	public IBlockState getStateFromMeta(int meta)
 	{
-		IBlockState iblockstate = this.getDefaultState().withProperty(SECOND_AXIS, BlockLog.EnumAxis.values()[(meta-1)&3]);
-		iblockstate = iblockstate.withProperty(LOG_AXIS, BlockLog.EnumAxis.values()[(meta>>2)&3]);
+		IBlockState iblockstate = this.getDefaultState().withProperty(SECOND_AXIS, EnumAxis.values()[(meta-1)&3]);
+		iblockstate = iblockstate.withProperty(LOG_AXIS, EnumAxis.values()[(meta>>2)&3]);
 		
 		return iblockstate;
 	}
@@ -115,6 +116,65 @@ public class BlockEndLog extends BlockLog
 	@Override
 	public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face)
 	{
-		return 1;
+		return 250;
+	}
+	
+	public void generateLeaves(World world, BlockPos pos, IBlockState state)
+	{
+		EnumAxis primary = state.getValue(LOG_AXIS);
+		EnumAxis secondary = state.getValue(SECOND_AXIS);
+		
+		if(primary == EnumAxis.X || secondary == EnumAxis.X)
+		{
+			leaves(world, pos.east(), 0);
+			leaves(world, pos.west(), 0);
+		}
+		if(primary == EnumAxis.Y || secondary == EnumAxis.Y)
+		{
+			leaves(world, pos.up(), 0);
+			leaves(world, pos.down(), 0);
+		}
+		if(primary == EnumAxis.Z || secondary == EnumAxis.Z)
+		{
+			leaves(world, pos.south(), 0);
+			leaves(world, pos.north(), 0);
+		}
+	}
+	
+	private void leaves(World world, BlockPos curr, int distance)
+	{
+		IBlockState blockState = world.getBlockState(curr);
+		if(blockState.getBlock().canBeReplacedByLeaves(blockState, world, curr))
+		{
+			if(distance > LEAF_SUSTAIN_DISTANCE - 1)
+			{
+				return;
+			} else if(distance < LEAF_SUSTAIN_DISTANCE - 1)
+			{
+				world.setBlockState(curr, MinestuckBlocks.endLeaves.getDefaultState().withProperty(BlockEndLeaves.DISTANCE, distance), 2);
+				leaves(world, curr.south(),	distance + 1);
+				leaves(world, curr.north(),	distance + 1);
+				leaves(world, curr.up(),	distance + 1);
+				leaves(world, curr.down(),	distance + 1);
+				leaves(world, curr.east(),	distance + 2);
+				leaves(world, curr.west(),	distance + 2);
+			} else
+			{
+				world.setBlockState(curr, MinestuckBlocks.endLeaves.getDefaultState().withProperty(BlockEndLeaves.DISTANCE, distance), 2);
+				return;
+			}
+		} else if (blockState.getBlock() == MinestuckBlocks.endLeaves)
+		{
+			if(world.getBlockState(curr).getValue(BlockEndLeaves.DISTANCE) > distance)
+			{
+				world.setBlockState(curr, MinestuckBlocks.endLeaves.getDefaultState().withProperty(BlockEndLeaves.DISTANCE, distance), 2);
+				leaves(world, curr.south(),	distance + 1);
+				leaves(world, curr.north(),	distance + 1);
+				leaves(world, curr.up(),	distance + 1);
+				leaves(world, curr.down(),	distance + 1);
+				leaves(world, curr.east(),	distance + 2);
+				leaves(world, curr.west(),	distance + 2);
+			}
+		}
 	}
 }

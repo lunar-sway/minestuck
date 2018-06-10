@@ -53,7 +53,6 @@ public class MinestuckBlocks
 	public static Block frostBrickStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.FROST_BRICK)).setRegistryName("frost_brick_stairs").setUnlocalizedName("stairsMinestuck.frostBrick");
 	public static Block castIronStairs = new BlockMinestuckStairs(stone.getDefaultState().withProperty(BlockMinestuckStone.VARIANT, BlockMinestuckStone.BlockType.CAST_IRON)).setRegistryName("cast_iron_stairs").setUnlocalizedName("stairsMinestuck.castIron");
 	public static Block log = new BlockMinestuckLog().setRegistryName("log");
-	public static Block endLog = new BlockEndLog().setRegistryName("end_log");
 	public static Block leaves1 = new BlockMinestuckLeaves1().setRegistryName("leaves");
 	public static Block planks = new BlockMinestuckPlanks().setRegistryName("planks");
 	public static Block aspectSapling = new BlockAspectSapling().setRegistryName("aspect_sapling");
@@ -72,6 +71,10 @@ public class MinestuckBlocks
 	public static Block reverseCake = new BlockSimpleCake(2, 0.1F, null).setRegistryName("reverse_cake").setUnlocalizedName("cake");
 	
 	public static Block treatedPlanks = new BlockCustom(Material.WOOD, MapColor.WOOD, SoundType.WOOD).setFireInfo(1, 0).setRegistryName("treated_planks").setUnlocalizedName("treatedPlanks").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);
+	public static Block endLog = new BlockEndLog().setRegistryName("end_log");
+	public static Block endLeaves = new BlockEndLeaves().setRegistryName("end_leaves");
+	public static Block endPlanks = new BlockCustom(Material.WOOD, MapColor.SAND, SoundType.WOOD).setFireInfo(1, 250).setRegistryName("end_planks").setUnlocalizedName("endPlanks").setHardness(1.0F).setCreativeTab(TabMinestuck.instance);
+	public static Block endSapling = new BlockEndSapling().setRegistryName("end_sapling");
 	public static Block endGrass = new BlockEndGrass().setRegistryName("end_grass");
 	public static Block coarseEndStone = new BlockEndStoneCoarse().setRegistryName("coarse_end_stone");
 	
@@ -163,7 +166,7 @@ public class MinestuckBlocks
 				blockComputerOff, blockComputerOn, blockLaptopOff, blockLaptopOn,
 				blockGoldSeeds, glowystoneWire,
 				appleCake, blueCake, coldCake, redCake, hotCake, reverseCake,
-				coarseEndStone, endGrass, treatedPlanks,
+				coarseEndStone, endGrass, treatedPlanks, endLog, endLeaves, endPlanks, endSapling,
 				primedTnt, unstableTnt, instantTnt, woodenExplosiveButton, stoneExplosiveButton,
 				blockOil, blockBlood, blockBrainJuice, blockWatercolors,
 				rabbitSpawner};

@@ -242,7 +242,6 @@ public class MinestuckItems
 		registerItemBlock(registry, new ItemBlockCraftingTab(frostBrickStairs, CreativeTabs.BUILDING_BLOCKS));
 		registerItemBlock(registry, new ItemBlockCraftingTab(castIronStairs, CreativeTabs.BUILDING_BLOCKS));
 		
-		registerItemBlock(registry, new ItemBlock(endLog));
 		registerItemBlock(registry, new ItemMultiTexture(log, log,
 				(ItemStack input) -> BlockMinestuckLog.BlockType.values()[input.getItemDamage() % BlockMinestuckLog.BlockType.values().length].getUnlocalizedName()));
 		
@@ -277,6 +276,10 @@ public class MinestuckItems
 		
 		registerItemBlock(registry, new ItemBlock(treatedPlanks));
 		registerItemBlock(registry, new ItemBlock(coarseEndStone));
+		registerItemBlock(registry, new ItemBlock(endLog));
+		registerItemBlock(registry, new ItemBlock(endLeaves));
+		registerItemBlock(registry, new ItemBlock(endPlanks));
+		registerItemBlock(registry, new ItemBlock(endSapling));
 		registerItemBlock(registry, new ItemBlock(endGrass));
 		
 		registerItemBlock(registry, new ItemBlock(primedTnt));

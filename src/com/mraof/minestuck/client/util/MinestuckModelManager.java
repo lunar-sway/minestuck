@@ -253,7 +253,6 @@ public class MinestuckModelManager
 		register(frostBrickStairs);
 		register(castIronStairs);
 		
-		register(endLog);
 		for(BlockMinestuckLog.BlockType type : BlockMinestuckLog.BlockType.values())
 			register(log, type.ordinal(), type.getName()+"_log");
 
@@ -288,6 +287,10 @@ public class MinestuckModelManager
 		
 		register(treatedPlanks);
 		register(coarseEndStone);
+		register(endLog);
+		register(endLeaves);
+		register(endPlanks);
+		register(endSapling);
 		register(endGrass);
 		
 		register(primedTnt);
