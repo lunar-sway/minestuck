@@ -1,0 +1,8 @@
+{
+    "parent": "block/cube_bottom_top",
+    "textures": {
+        "bottom": "minestuck:machines/alchemiter/down_center",
+        "top": "minestuck:machines/alchemiter/center_top",
+        "side": "minestuck:machines/alchemiter/inside"
+    }
+}

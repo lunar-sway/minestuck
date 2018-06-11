@@ -2,10 +2,7 @@ package com.mraof.minestuck.entity;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.carapacian.*;
-import com.mraof.minestuck.entity.consort.EntityIguana;
-import com.mraof.minestuck.entity.consort.EntityNakagator;
-import com.mraof.minestuck.entity.consort.EntitySalamander;
-import com.mraof.minestuck.entity.consort.EntityTurtle;
+import com.mraof.minestuck.entity.consort.*;
 import com.mraof.minestuck.entity.item.*;
 import com.mraof.minestuck.entity.underling.*;
 import net.minecraft.entity.Entity;
@@ -19,10 +16,10 @@ public final class MinestuckEntities
 	public static void registerEntities()
 	{
 		//register entities
-		registerEntity(EntitySalamander.class, "salamander");
-		registerEntity(EntityNakagator.class, "nakagator");
-		registerEntity(EntityIguana.class, "iguana");
-		registerEntity(EntityTurtle.class, "turtle");
+		registerEntity(EntitySalamander.class, EnumConsort.SALAMANDER.getName());
+		registerEntity(EntityNakagator.class, EnumConsort.NAKAGATOR.getName());
+		registerEntity(EntityIguana.class, EnumConsort.IGUANA.getName());
+		registerEntity(EntityTurtle.class, EnumConsort.TURTLE.getName());
 		registerEntity(EntityImp.class, "imp");
 		registerEntity(EntityOgre.class, "ogre");
 		registerEntity(EntityBasilisk.class, "basilisk");

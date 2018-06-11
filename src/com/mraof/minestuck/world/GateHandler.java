@@ -120,7 +120,7 @@ public class GateHandler
 				
 				if(block.getBlock() != MinestuckBlocks.gate)
 				{
-					Debug.debugf("Can't find destination gate at %s. Probably destroyed.", location);
+					Debug.debugf("Can't find destination gate at %s. Probably broken.", location);
 					player.sendMessage(new TextComponentTranslation("message.gateDestroyed"));
 					return;
 				}

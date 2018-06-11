@@ -2,9 +2,7 @@ package com.mraof.minestuck.client.util;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.*;
-import com.mraof.minestuck.item.ItemMetalBoat;
-import com.mraof.minestuck.item.ItemMinestuckBeverage;
-import com.mraof.minestuck.item.ItemModus;
+import com.mraof.minestuck.item.*;
 import com.mraof.minestuck.item.weapon.ItemDualWeapon;
 import com.mraof.minestuck.util.GristType;
 import net.minecraft.block.Block;
@@ -13,6 +11,7 @@ import net.minecraft.block.BlockTNT;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -139,6 +138,9 @@ public class MinestuckModelManager
 		register(rawCruxite);
 		register(rawUranium);
 		register(energyCore);
+		ModelLoader.registerItemVariants(boondollars, new ResourceLocation("minestuck:boondollars0"), new ResourceLocation("minestuck:boondollars1"), new ResourceLocation("minestuck:boondollars2"),
+				new ResourceLocation("minestuck:boondollars3"), new ResourceLocation("minestuck:boondollars4"), new ResourceLocation("minestuck:boondollars5"), new ResourceLocation("minestuck:boondollars6"));
+		ModelLoader.setCustomMeshDefinition(boondollars, new BoondollarsDefinition());
 		ModelLoader.registerItemVariants(cruxiteDowel, new ResourceLocation("minestuck:dowel_uncarved"), new ResourceLocation("minestuck:dowel_carved"), new ResourceLocation("minestuck:dowel_uncarved_blank"), new ResourceLocation("minestuck:dowel_carved_blank"));
 		ModelLoader.setCustomMeshDefinition(cruxiteDowel, new CruxiteDowelDefinition());
 		ModelLoader.registerItemVariants(captchaCard, new ResourceLocation("minestuck:card_empty"), new ResourceLocation("minestuck:card_full"), new ResourceLocation("minestuck:card_punched"));
@@ -195,6 +197,7 @@ public class MinestuckModelManager
 		register(onion);
 		register(salad);
 		register(irradiatedSteak);
+		register(rockCookie);
 		
 		register(threshDvd);
 		register(crewPoster);
@@ -244,6 +247,11 @@ public class MinestuckModelManager
 			register(sburbMachine, type.ordinal(), "machine_"+type.getName());
 		for(BlockCrockerMachine.MachineType type : BlockCrockerMachine.MachineType.values())
 			register(crockerMachine, type.ordinal(), "machine_"+type.getName());
+		register(punchDesignix);
+		register(totemlathe[0]);
+		register(alchemiter[0]);
+		register(cruxtruder);
+		register(cruxtruderLid);
 		register(glowingMushroom);
 		register(glowingLog);
 		register(glowingPlanks);
@@ -336,12 +344,18 @@ public class MinestuckModelManager
 	
 	private static void register(Block block)
 	{
-		register(Item.getItemFromBlock(block));
+		Item item = Item.getItemFromBlock(block);
+		if(item == Items.AIR)
+			throw new IllegalArgumentException("That block doesn't have an item, and this method is only intended for blocks with a connected itemblock.");
+		register(item);
 	}
 	
 	private static void register(Block block, int meta, String modelResource)
 	{
-		register(Item.getItemFromBlock(block), meta, modelResource);
+		Item item = Item.getItemFromBlock(block);
+		if(item == Items.AIR)
+			throw new IllegalArgumentException("That block doesn't have an item, and this method is only intended for blocks with a connected itemblock.");
+		register(item, meta, modelResource);
 	}
 	
 	private static class CrockerSporkDefinition implements ItemMeshDefinition
@@ -371,9 +385,6 @@ public class MinestuckModelManager
 			
 		}
 	}
-	
-
-
 	
 	private static class CruxiteDowelDefinition implements ItemMeshDefinition
 	{
@@ -415,6 +426,31 @@ public class MinestuckModelManager
 				else str = "card_full";
 			}
 			else str = "card_empty";
+			return new ModelResourceLocation("minestuck:" + str, "inventory");
+		}
+	}
+	
+	private static class BoondollarsDefinition implements ItemMeshDefinition
+	{
+		@Override
+		public ModelResourceLocation getModelLocation(ItemStack stack)
+		{
+			int size = ItemBoondollars.getCount(stack);
+			String str;
+			if(size < 5)
+				str = "boondollars0";
+			else if(size < 15)
+				str = "boondollars1";
+			else if(size < 50)
+				str = "boondollars2";
+			else if(size < 100)
+				str = "boondollars3";
+			else if(size < 250)
+				str = "boondollars4";
+			else if(size < 1000)
+				str = "boondollars5";
+			else str = "boondollars6";
+			
 			return new ModelResourceLocation("minestuck:" + str, "inventory");
 		}
 	}
