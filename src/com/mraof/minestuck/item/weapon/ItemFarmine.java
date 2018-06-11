@@ -11,11 +11,14 @@ import com.mraof.minestuck.util.Pair;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -33,7 +36,6 @@ import net.minecraft.world.World;
  * @author BenjaminK
  *
  */
-//TODO: Fix the issue where breaking the bottom half of a door drops two doors
 public class ItemFarmine extends ItemWeapon
 {
 	private int radius;
@@ -71,6 +73,17 @@ public class ItemFarmine extends ItemWeapon
 		addOneWayAssociation(Blocks.STONEBRICK, Blocks.MONSTER_EGG);
 	}
 	
+	/**
+	* Called when a Block is destroyed using this Item. Returns true to trigger the "Use Item" statistic.
+	* This is the method that performs farmining calculations and destruction.
+	* @param stack The ItemStack being used to destroy the block. This should always be an instance of ItemFarmine.
+	* This method also respects the presence of Silk Touch or Fortune on this ItemStack.
+	* @param worldIn The world where the blocks being destroyed can be found.
+	* @param blockState The state of the initial block being destroyed.
+	* @param pos The position of the initial block being destroyed.
+	* @param playerIn The player doing the actual destroying. This MUST be an instance of EntityPlayer or no farmining will occur!
+	* @return Returns false if and only if the world is remote.
+	*/
 	@Override
 	public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState blockState, BlockPos pos, EntityLivingBase playerIn)
 	{
@@ -82,14 +95,16 @@ public class ItemFarmine extends ItemWeapon
 		Comparator<Pair> comparator = new PairedIntComparator();
 		PriorityQueue<Pair> candidates = new PriorityQueue<Pair>(comparator);
 		Block block = blockState.getBlock();
-		Item drop = block.getItemDropped(blockState, new Random(0), 0);		//Must define the drop using a predetermined seed to establish equivalency with random methods 
+		int fortuneLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, stack);
+		//Must define the drop using a predetermined seed to establish equivalency with random methods
+		Item drop = block.getItemDropped(blockState, new Random(0), fortuneLevel); 
 		int damageDrop = block.damageDropped(blockState);
 		HashSet<Block> equals = farMineEquivalencies.get(block);
 		if(equals==null) equals = new HashSet<Block>();	
 		
-		//If the tool can't harvest the block, or the player is sneaking,
+		//If the tool can't harvest the block, or the player isn't actually a player, or the player is sneaking,
 		//or the tool doesn't farmine, or it's one of those blocks that breaks instantly, don't farmine.
-		if (!canHarvestBlock(blockState, stack) || playerIn.isSneaking()
+		if (!canHarvestBlock(blockState, stack) || !(playerIn instanceof EntityPlayer) || playerIn.isSneaking()
 				|| terminus == 1 || radius==0 || Math.abs(blockState.getBlockHardness(worldIn, pos)) < 0.000000001)
 		{
 			if (!isDamageable())
@@ -117,7 +132,7 @@ public class ItemFarmine extends ItemWeapon
 		HashSet<BlockPos> blocksToBreak = new HashSet<BlockPos>();
 		boolean passedBreakLimit = false;
 
-		while (!candidates.isEmpty() && passedBreakLimit == false)
+		while (!candidates.isEmpty())
 		{
 			BlockPos curr = (BlockPos) candidates.peek().object1;
 			int rad = (Integer) candidates.poll().object2;
@@ -129,7 +144,9 @@ public class ItemFarmine extends ItemWeapon
 				{
 					//Iterates across all blocks in a 3x3 cube centered on this block.
 					for (int i = -1; i < 2; i++)
+					{
 						for (int j = -1; j < 2; j++)
+						{
 							for (int k = -1; k < 2; k++)
 							{
 								if(i==0 && j==0 && k==0)
@@ -138,65 +155,63 @@ public class ItemFarmine extends ItemWeapon
 								IBlockState newState = worldIn.getBlockState(newBlockPos);
 								Block newBlock = newState.getBlock();
 								if (	equals.contains(newBlock) || newBlock.equals(block)
-										&& newBlock.getItemDropped(newState, new Random(0), 0) == drop
+										&& newBlock.getItemDropped(newState, new Random(0), fortuneLevel) == drop
 										&& newBlock.damageDropped(newState) == damageDrop)
 								{
 									candidates.add(new Pair(newBlockPos, rad - 1));
 								}
 							}
+						}
+					}
 				}
 			}	
 			
-			if (blocksToBreak.size() + 1 > stack.getMaxDamage() - stack.getItemDamage()
-					|| blocksToBreak.size() + 1 > terminus)
+			//If you passed the maximum blocks you can break, stop trying to add more blocks to the list.
+			if (blocksToBreak.size() + 1 > stack.getMaxDamage() - stack.getItemDamage() || blocksToBreak.size() + 1 > terminus)
 			{
 				passedBreakLimit = true;
+				break;
 			}
 		}
 		
-		//If you passed the break limit, only harvest a 3x3 area.
-		if (passedBreakLimit)
+		//If you passed the break limit, then cut back to a 3x3x3 area
+		if(passedBreakLimit)
 		{
-			int damage = 1;
+			blocksToBreak.clear();
+			
 			for (int i = -1; i < 2; i++)
+			{
 				for (int j = -1; j < 2; j++)
+				{
 					for (int k = -1; k < 2; k++)
 					{
 						BlockPos newBlockPos = new BlockPos(pos.getX() + i, pos.getY() + j, pos.getZ() + k);
 						IBlockState newState = worldIn.getBlockState(newBlockPos);
 						Block newBlock = newState.getBlock();
 						if ( equals.contains(newBlock) || newBlock.equals(block)
-								&& newBlock.getItemDropped(newState, new Random(0), 0) == drop
+								&& newBlock.getItemDropped(newState, new Random(0), fortuneLevel) == drop
 								&& newBlock.damageDropped(newState) == damageDrop
-								&& damage < stack.getMaxDamage() - stack.getItemDamage())
+								&& blocksToBreak.size()+1 < stack.getMaxDamage() - stack.getItemDamage())
 						{
-							newState.getBlock().dropBlockAsItem(worldIn, pos, newState, 0);
-							if(playerIn instanceof EntityPlayer)
-								newState.getBlock().removedByPlayer(newState, worldIn, newBlockPos, (EntityPlayer) playerIn, true);
-							worldIn.setBlockToAir(newBlockPos);
-							damage++;
+							blocksToBreak.add(newBlockPos);
 						}
 					}
-			
-			if (isDamageable())
-				stack.damageItem(damage, playerIn);
-			
-		} else	//Otherwise, break ALL the blocks!
-		{
-			for (BlockPos blockToBreak : blocksToBreak)
-			{
-				worldIn.getBlockState(blockToBreak).getBlock().dropBlockAsItem(worldIn, pos, worldIn.getBlockState(blockToBreak), 0);
-				if(playerIn instanceof EntityPlayer)
-					block.removedByPlayer(worldIn.getBlockState(blockToBreak), worldIn, blockToBreak, (EntityPlayer) playerIn, true);
-				worldIn.setBlockToAir(blockToBreak);
+				}
 			}
-			
-			//We add 1 because that means the tool will always take at least 2 damage.
-			//This is important because all ItemWeapons take at least 2 damage whenever it breaks a block.
-			//This is because ItemWeapon extends ItemSword.
-			if (isDamageable())
-				stack.damageItem(blocksToBreak.size() + 1, playerIn);
 		}
+		
+		//Now, break ALL of the blocks!
+		for (BlockPos blockToBreak : blocksToBreak)
+		{
+			IBlockState state = worldIn.getBlockState(blockToBreak);
+			harvestBlock(worldIn, state.getBlock(), blockToBreak, state, (EntityPlayer) playerIn, stack);
+		}
+		
+		//We add 1 because that means the tool will always take at least 2 damage.
+		//This is important because all ItemWeapons take at least 2 damage whenever it breaks a block.
+		//This is because ItemWeapon extends ItemSword.
+		if (isDamageable())
+			stack.damageItem(blocksToBreak.size() + 1, playerIn);
 		
 		return true;
 	}
@@ -229,6 +244,20 @@ public class ItemFarmine extends ItemWeapon
 	{
 		HashSet e = farMineEquivalencies.get(a);
 		return e != null && e.contains(b);
+	}
+	
+	private boolean harvestBlock(World world, Block block, BlockPos pos, IBlockState state, EntityLivingBase playerIn, ItemStack stack)
+	{
+		EntityPlayer player = (EntityPlayer) playerIn;
+		
+		TileEntity te = world.getTileEntity(pos);
+		if(block.removedByPlayer(state, world, pos, player, true))
+		{
+			block.onBlockDestroyedByPlayer(world, pos, state);
+			block.harvestBlock(world, player, pos, state, te, stack);
+			return true;
+		}
+		return false;
 	}
 	
 	/*
