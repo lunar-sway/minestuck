@@ -2,6 +2,7 @@ package com.mraof.minestuck.network.skaianet;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.command.CommandSburbSession;
 import com.mraof.minestuck.entity.underling.*;
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
@@ -15,10 +16,13 @@ import com.mraof.minestuck.world.lands.LandAspectRegistry;
 import com.mraof.minestuck.world.lands.LandAspectRegistry.AspectCombination;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandAspect;
 import com.mraof.minestuck.world.lands.title.TitleLandAspect;
+
+import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.command.ServerCommandManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -46,15 +50,15 @@ public class SburbHandler
 {
 	static Map<EntityPlayer, Vec3d> titleSelectionMap = new HashMap<EntityPlayer, Vec3d>();
 	
-	private static void generateTitle(PlayerIdentifier player)
+	private static Title produceTitle(PlayerIdentifier player)
 	{
 		if(MinestuckPlayerData.getTitle(player) != null)
 			if(MinestuckConfig.playerSelectedTitle)
-				return;	//Should be generated using the title-selection gui
+				return null;	//Should be generated using the title-selection gui
 			else
 			{
 				Debug.warnf("Trying to generate a title for %s when a title is already assigned!", player.getUsername());
-				return;
+				return null;
 			}
 		
 		Session session = getPlayerSession(player);
@@ -64,7 +68,7 @@ public class SburbHandler
 			else
 			{
 				Debug.logger.warn(String.format("Trying to generate a title for %s before creating a session!", player.getUsername()), new Throwable().fillInStackTrace());
-				return;
+				return null;
 			}
 		
 		Title title = null;
@@ -153,7 +157,14 @@ public class SburbHandler
 				title = new Title(titleClass, titleAspect);
 			}
 		}
-		
+		return title;
+	}
+	
+	private static void generateTitle(PlayerIdentifier player)
+	{
+		Title title = produceTitle(player);
+		if(title==null)
+			return;
 		MinestuckPlayerData.setTitle(player, title);
 		MinestuckPlayerTracker.updateTitle(player.getPlayer());
 	}
@@ -649,13 +660,27 @@ public class SburbHandler
 		
 	}
 	
-	static void onGameEntered(SburbConnection connection)
+	static void onLandCreated(SburbConnection c)
 	{
-		generateTitle(connection.getClientIdentifier());
-		getPlayerSession(connection.getClientIdentifier()).checkIfCompleted();
-		genLandAspects(connection);
+//		Session session = getPlayerSession(c.clientIdentifier);
+//		PlayerIdentifier identifier = c.clientIdentifier;
+//		Title title = produceTitle(identifier);
+//		
+//		Title playerTitle = MinestuckPlayerData.getTitle(identifier);
+//		if(playerTitle == null)
+//		{
+//			PredefineData data = session.predefinedPlayers.get(identifier);
+//			data.title = title;
+//		}
 		
-		
+		generateTitle(c.getClientIdentifier());
+		genLandAspects(c);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
+	}
+	
+	static void onGameEntered(SburbConnection c)
+	{
+		generateTitle(c.getClientIdentifier());
+		getPlayerSession(c.getClientIdentifier()).checkIfCompleted();
 	}
 	
 	public static boolean canSelectColor(EntityPlayerMP player)
@@ -738,7 +763,7 @@ public class SburbHandler
 			Vec3d pos = titleSelectionMap.remove(player);
 			
 			player.setPosition(pos.x, pos.y, pos.z);
-			MinestuckItems.cruxiteApple.onArtifactActivated(player.world, player);
+			MinestuckItems.cruxiteApple.onArtifactActivated(player);
 			
 		} else Debug.warnf("%s tried to select a title without entering.", player.getName());
 	}

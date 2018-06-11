@@ -69,20 +69,20 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 		setHasSubtypes(true);
 	}
 	
-	public void onArtifactActivated(World world, EntityPlayer player)
+	public void onArtifactActivated(EntityPlayer player)
 	{
 		try
 		{
-			if(!world.isRemote && player.world.provider.getDimension() != -1)
+			if(!player.world.isRemote && player.world.provider.getDimension() != -1)
 			{
 				if(!SburbHandler.shouldEnterNow(player))
 					return;
 				
 				SburbConnection c = SkaianetHandler.getMainConnection(IdentifierHandler.encode(player), true);
 				
+				//Only preforms Entry if you have no connection, haven't Entered, or you're not in a Land and additional Entries are permitted.
 				if(c == null || !c.enteredGame() || !MinestuckConfig.stopSecondEntry && !MinestuckDimensionHandler.isLandDimension(player.world.provider.getDimension()))
 				{
-					
 					if(c != null && c.enteredGame())
 					{
 						World newWorld = player.getServer().getWorld(c.getClientDimension());
@@ -90,26 +90,34 @@ public abstract class ItemCruxiteArtifact extends Item implements Teleport.ITele
 						{
 							return;
 						}
+						
+						//Teleports the player to their home in the Medium, without any bells or whistles.
 						BlockPos pos = newWorld.provider.getRandomizedSpawnPoint();
 						Teleport.teleportEntity(player, c.getClientDimension(), null, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F);
 						
 						return;
 					}
 					
-					int destinationId = LandAspectRegistry.createLand(player);
-					
-					if(destinationId == -1)	//Something bad happened further down and the problem should be written in the server console
+					//Teleportation code is now called from enterMedium(), which is called from createLand.
+					//createLand will return -1 if Entry fails for any reason, including the teleporter being null or returning false in prepareDestination().
+					//Whatever the problem is, relevant information should be printed to the console.
+					if(LandAspectRegistry.createLand(player, this) == -1)
 					{
-						player.sendMessage(new TextComponentString("Something went wrong during entry. More details in the server console."));
-						return;
+						player.sendMessage(new TextComponentString("Something went wrong creating your Land. More details in the server console."));
+					}
+					else
+					{
+						c = SburbHandler.getConnectionForDimension(player.dimension);	//This is viable as we know the player was not in any Land dimension prior to the Entry attempt.
+						if(c != null)
+						{
+							MinestuckPlayerTracker.sendLandEntryMessage(player);
+						} else
+						{
+							player.sendMessage(new TextComponentString("Something went wrong taking you to your Land. Don't worry: it's still there, and you can try again."));
+						}
 					}
 					
-					if(!Teleport.teleportEntity(player, destinationId, this))
-					{
-						Debug.warn("Was not able to teleport player "+player.getName()+" into the medium! Might be caused by mod collision.");
-						player.sendMessage(new TextComponentString("Your Entry was unsuccessful! If no explanation was given, this might be a mod collision."));
-					}
-					else MinestuckPlayerTracker.sendLandEntryMessage(player);
+					return;
 				}
 			}
 		} catch(Exception e)
