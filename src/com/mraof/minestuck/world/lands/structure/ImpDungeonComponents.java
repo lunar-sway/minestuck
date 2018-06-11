@@ -1080,6 +1080,7 @@ public class ImpDungeonComponents
 	public static class OgreCorridor extends ImpDungeonComponent
 	{
 		private boolean chestPos;
+		private boolean ogreSpawned;
 		
 		public OgreCorridor()
 		{
@@ -1115,6 +1116,7 @@ public class ImpDungeonComponents
 		{
 			super.writeStructureToNBT(tagCompound);
 			tagCompound.setBoolean("ch", chestPos);
+			tagCompound.setBoolean("spwn", ogreSpawned);
 		}
 		
 		@Override
@@ -1122,14 +1124,15 @@ public class ImpDungeonComponents
 		{
 			super.readStructureFromNBT(tagCompound, templates);
 			chestPos = tagCompound.getBoolean("ch");
+			ogreSpawned = tagCompound.getBoolean("spwn");
 		}
 		
 		@Override
 		protected boolean connectFrom(EnumFacing facing)
 		{
-			if(getCoordBaseMode().getAxis().equals(facing.getAxis()))
+			if(getCoordBaseMode().equals(facing.getOpposite()))
 			{
-				corridors[getCoordBaseMode().equals(facing)?1:0] = false;
+				corridors[0] = false;
 				return true;
 			}
 			return false;
@@ -1182,7 +1185,8 @@ public class ImpDungeonComponents
 			chestPos = new BlockPos(this.getXWithOffset(x, 5), this.getYWithOffset(1), this.getZWithOffset(x, 5));
 			StructureBlockUtil.placeLootChest(chestPos, worldIn, structureBoundingBoxIn, getCoordBaseMode().rotateYCCW(), AlchemyRecipeHandler.BASIC_MEDIUM_CHEST, randomIn);
 			
-			spawnOgre(this.boundingBox.minX + 3, this.boundingBox.minZ + 4, worldIn, randomIn);
+			if(!ogreSpawned && structureBoundingBoxIn.isVecInside(new BlockPos(getXWithOffset(3, 4), getYWithOffset(1), getZWithOffset(3, 4))))
+			spawnOgre(3, 1, 4, worldIn, randomIn);
 			
 			if(corridors[0])
 				fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 0, 9, 4, 3, 9, wallBlock, wallBlock, false);
@@ -1190,19 +1194,20 @@ public class ImpDungeonComponents
 			return true;
 		}
 		
-		private void spawnOgre(int xPos, int zPos, World worldIn, Random rand)
+		private void spawnOgre(int xPos, int yPos, int zPos, World worldIn, Random rand)
 		{
+			BlockPos pos = new BlockPos(getXWithOffset(xPos, zPos), getYWithOffset(yPos), getZWithOffset(xPos, zPos));
 			EntityOgre ogre = new EntityOgre(worldIn);
-			ogre.setPositionAndRotation(xPos, this.boundingBox.minY+1, zPos, rand.nextFloat()*360F, 0);
+			ogre.setPositionAndRotation(pos.getX(), pos.getY(), pos.getZ(), rand.nextFloat()*360F, 0);
 			ogre.onInitialSpawn(null, null);
-			ogre.setHomePosAndDistance(new BlockPos(this.getXWithOffset(3, 3), this.getYWithOffset(1), this.getZWithOffset(3, 3)), 2);
+			ogre.setHomePosAndDistance(pos, 2);
 			worldIn.spawnEntity(ogre);
 		}
 	}
 	
 	public static class LargeSpawnerCorridor extends ImpDungeonComponent
 	{
-private boolean spawner1, spawner2, chestPos;
+		private boolean spawner1, spawner2, chestPos;
 		
 		public LargeSpawnerCorridor()
 		{
@@ -1213,7 +1218,9 @@ private boolean spawner1, spawner2, chestPos;
 		{
 			this();
 			boolean mirror = ctxt.rand.nextBoolean();
-			setCoordBaseMode(coordBaseMode);
+			if(mirror)
+				setCoordBaseMode(coordBaseMode.getOpposite());
+			else setCoordBaseMode(coordBaseMode);
 			
 			int xWidth = getCoordBaseMode().getAxis().equals(EnumFacing.Axis.X) ? 10 : 10;
 			int zWidth = getCoordBaseMode().getAxis().equals(EnumFacing.Axis.Z) ? 10 : 10;
@@ -1238,7 +1245,7 @@ private boolean spawner1, spawner2, chestPos;
 			
 			int xOffset = coordBaseMode.getFrontOffsetX();
 			int zOffset = coordBaseMode.getFrontOffsetZ();
-			corridors[mirror ? 0 : 1] = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.add(xOffset*8, 0, zOffset*8), coordBaseMode, index + 1);
+			corridors[mirror ? 0 : 1] = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.add(xOffset*10, 0, zOffset*10), coordBaseMode, index + 1);
 			
 		}
 		
@@ -1319,7 +1326,7 @@ private boolean spawner1, spawner2, chestPos;
 			if(corridors[0])
 				fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 0, 5, 3, 0, wallBlock, wallBlock, false);
 			if(corridors[1])
-				fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 8, 5, 3, 9, wallBlock, wallBlock, false);
+				fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 9, 5, 3, 9, wallBlock, wallBlock, false);
 			
 			return true;
 		}	
