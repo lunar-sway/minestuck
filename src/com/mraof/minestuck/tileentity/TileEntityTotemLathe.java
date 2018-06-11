@@ -99,7 +99,7 @@ public class TileEntityTotemLathe extends TileEntity
 			ItemStack heldStack = player.getHeldItemMainhand();
 			BlockTotemLathe.EnumParts part = BlockTotemLathe.getPart(clickedState);
 			//if they have clicked on the part that holds the chapta cards.
-			if(part == BlockTotemLathe.EnumParts.BOTTOM_LEFT)
+			if(part.isBottomLeft())
 			{
 				if(!card1.isEmpty())
 				{

@@ -207,7 +207,7 @@ public class BlockAlchemiter extends BlockLargeMachine
 	
 	public static IBlockState getBlockState(EnumParts parts, EnumFacing direction)
 	{
-		BlockAlchemiter block = MinestuckBlocks.alchemiter[parts.ordinal() < 4 ? 0 : 1];
+		BlockAlchemiter block = MinestuckBlocks.alchemiter[PART1.getAllowedValues().contains(parts) ? 0 : 1];
 		IBlockState state = block.getDefaultState();
 		return state.withProperty(block.PART, parts).withProperty(DIRECTION, direction);
 	}
@@ -228,8 +228,7 @@ public class BlockAlchemiter extends BlockLargeMachine
 	
 	public static BlockAlchemiter[] createBlocks()
 	{
-		return new BlockAlchemiter[] {(BlockAlchemiter) new BlockAlchemiter().setRegistryName("alchemiter"),
-				(BlockAlchemiter) new BlockAlchemiter2().setRegistryName("alchemiter2")};
+		return new BlockAlchemiter[] {new BlockAlchemiter(), new BlockAlchemiter2()};
 	}
 	
 	public enum EnumParts implements IStringSerializable
