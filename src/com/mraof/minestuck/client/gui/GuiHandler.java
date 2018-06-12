@@ -1,14 +1,8 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mraof.minestuck.inventory.ContainerCrockerMachine;
-import com.mraof.minestuck.inventory.ContainerSburbMachine;
-import com.mraof.minestuck.inventory.ContainerUraniumCooker;
-import com.mraof.minestuck.tileentity.TileEntityComputer;
-import com.mraof.minestuck.tileentity.TileEntityCrockerMachine;
-import com.mraof.minestuck.tileentity.TileEntitySburbMachine;
-import com.mraof.minestuck.tileentity.TileEntityTransportalizer;
-import com.mraof.minestuck.tileentity.TileEntityUraniumCooker;
 
+import com.mraof.minestuck.inventory.*;
+import com.mraof.minestuck.tileentity.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -37,7 +31,12 @@ public class GuiHandler implements IGuiHandler
 				return new ContainerCrockerMachine(player.inventory, (TileEntityCrockerMachine) tileEntity);
 			else if(tileEntity instanceof TileEntityUraniumCooker)
 				return new ContainerUraniumCooker(player.inventory, (TileEntityUraniumCooker) tileEntity);
-		
+			else if(tileEntity instanceof TileEntityTotemlathe)
+				return new ContainerTotemlathe(player.inventory, (TileEntityTotemlathe) tileEntity);
+			else if(tileEntity instanceof TileEntityAlchemiter)
+				return new ContainerAlchemiter(player.inventory, (TileEntityAlchemiter) tileEntity);
+			else if(tileEntity instanceof TileEntityCruxtruder)
+				return new ContainerCruxtruder(player.inventory, (TileEntityCruxtruder) tileEntity);
 		return null;
 	}
 
@@ -54,8 +53,14 @@ public class GuiHandler implements IGuiHandler
 				return new GuiCrockerMachine(player.inventory, (TileEntityCrockerMachine) tileEntity);
 			else if(tileEntity instanceof TileEntityUraniumCooker)
 				return new GuiUraniumCooker(player.inventory, (TileEntityUraniumCooker) tileEntity);
+			else if(tileEntity instanceof TileEntityTotemlathe)
+				return new GuiTotemlathe(player.inventory,(TileEntityTotemlathe)tileEntity);
+			else if (tileEntity instanceof TileEntityAlchemiter)
+				return new GuiAlchemiter(player.inventory, (TileEntityAlchemiter)tileEntity);
+			else if(tileEntity instanceof TileEntityCruxtruder)
+				return new GuiCruxtruder(player.inventory,(TileEntityCruxtruder)tileEntity);
 		
-		if(tileEntity instanceof TileEntityComputer && id == GuiId.COMPUTER.ordinal())
+    if(tileEntity instanceof TileEntityComputer && id == GuiId.COMPUTER.ordinal())
 			return new GuiComputer(Minecraft.getMinecraft(),(TileEntityComputer) tileEntity);
 		
 		if(id == GuiId.TRANSPORTALIZER.ordinal() && tileEntity instanceof TileEntityTransportalizer)

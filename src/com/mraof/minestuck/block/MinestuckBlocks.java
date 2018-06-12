@@ -41,6 +41,14 @@ public class MinestuckBlocks
 	public static Block blockLaptopOff = new BlockVanityLaptopOff().setRegistryName("vanity_laptop");
 	public static Block blockLaptopOn = new BlockVanityLaptopOn().setRegistryName("vanity_laptop_on");
 	public static Block transportalizer = new BlockTransportalizer().setRegistryName("transportalizer");
+	public static Block punchDesignix = new BlockPunchDesignix().setRegistryName("punch_designix");
+	public static Block totemlathe = new BlockTotemlathe().setRegistryName("totem_lathe");
+	public static Block alchemiter = new BlockAlchemiter().setRegistryName("alchemiter");
+	public static Block alchemiter2=new BlockAlchemiter2().setRegistryName("alchemiter2");
+	public static Block cruxtruder=new BlockCruxtruder().setRegistryName("cruxtruder");
+	public static Block cruxtruder2=new BlockCruxtruder2().setRegistryName("cruxtruder2");
+	
+	
 	public static Block blockGoldSeeds = new BlockGoldSeeds().setRegistryName("gold_seeds");
 	public static Block returnNode = new BlockReturnNode().setRegistryName("return_node");
 	public static Block gate = new BlockGate().setRegistryName("gate");
@@ -167,7 +175,7 @@ public class MinestuckBlocks
 				cruxiteBlock, genericObject,
 				coarseStoneStairs, shadeBrickStairs, frostBrickStairs, castIronStairs,
 				skaiaPortal, returnNode, gate,
-				sburbMachine, crockerMachine, transportalizer, uraniumCooker,
+				sburbMachine, crockerMachine, transportalizer, punchDesignix, totemlathe, alchemiter, alchemiter2, cruxtruder, cruxtruder2, uraniumCooker,
 				blockComputerOff, blockComputerOn, blockLaptopOff, blockLaptopOn,
 				blockGoldSeeds, glowystoneWire,
 				appleCake, blueCake, coldCake, redCake, hotCake, reverseCake,
