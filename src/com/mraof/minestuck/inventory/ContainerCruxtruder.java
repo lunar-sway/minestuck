@@ -1,5 +1,7 @@
 package com.mraof.minestuck.inventory;
 
+import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.tileentity.TileEntityCruxtruder;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -8,11 +10,6 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
-
-import com.mraof.minestuck.block.BlockSburbMachine.MachineType;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.tileentity.TileEntityCruxtruder;
-import com.mraof.minestuck.util.IdentifierHandler;
 
 public class ContainerCruxtruder extends Container
 {
@@ -25,18 +22,15 @@ public class ContainerCruxtruder extends Container
 	
 	
 	public TileEntityCruxtruder tileEntity;
-	private MachineType type;
 	private boolean operator = true;
 	private int progress;
 	
 	public ContainerCruxtruder(InventoryPlayer inventoryPlayer, TileEntityCruxtruder te)
 	{
 		tileEntity = te;
-		type = MachineType.CRUXTRUDER;
-		te.setOwner(IdentifierHandler.encode(inventoryPlayer.player));
 	
-			addSlotToContainer(new SlotInput(tileEntity, 0, cruxtruderInputX, cruxtruderInputY, MinestuckItems.rawCruxite));
-			addSlotToContainer(new SlotOutput(tileEntity, 1, cruxtruderOutputX, cruxtruderOutputY));
+		addSlotToContainer(new SlotInput(tileEntity, 0, cruxtruderInputX, cruxtruderInputY, MinestuckItems.rawCruxite));
+		addSlotToContainer(new SlotOutput(tileEntity, 1, cruxtruderOutputX, cruxtruderOutputY));
 		
 		
 		bindPlayerInventory(inventoryPlayer);

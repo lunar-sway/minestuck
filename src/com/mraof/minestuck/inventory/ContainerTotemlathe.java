@@ -2,7 +2,6 @@ package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.tileentity.TileEntityTotemlathe;
-import com.mraof.minestuck.util.IdentifierHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -33,9 +32,6 @@ public class ContainerTotemlathe extends Container
 	public ContainerTotemlathe(InventoryPlayer inventoryPlayer, TileEntityTotemlathe te)
 	{
 		tileEntity = te;
-		te.getMachineType();
-		te.setOwner(IdentifierHandler.encode(inventoryPlayer.player));
-		
 	
 			addSlotToContainer(new SlotInput(tileEntity, 0, latheCard1X, latheCard1Y, MinestuckItems.captchaCard));
 			addSlotToContainer(new SlotInput(tileEntity, 1, latheCard2X, latheCard2Y, MinestuckItems.captchaCard));

@@ -1,45 +1,25 @@
 package com.mraof.minestuck.tileentity;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayerMP;
+import com.mraof.minestuck.block.MinestuckBlocks;
+import com.mraof.minestuck.item.MinestuckItems;
+import com.mraof.minestuck.util.AlchemyRecipeHandler;
+import com.mraof.minestuck.util.CombinationRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
-
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.block.BlockSburbMachine.MachineType;
-import com.mraof.minestuck.block.BlockTotemlathe;
-import com.mraof.minestuck.block.BlockTotemlathe.enumParts;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.item.MinestuckItems;
-import com.mraof.minestuck.tracker.MinestuckPlayerTracker;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.CombinationRegistry;
-import com.mraof.minestuck.util.GristHelper;
-import com.mraof.minestuck.util.GristRegistry;
-import com.mraof.minestuck.util.GristSet;
-import com.mraof.minestuck.util.GristType;
-import com.mraof.minestuck.util.MinestuckAchievementHandler;
-import com.mraof.minestuck.util.MinestuckPlayerData;
-import com.mraof.minestuck.util.IdentifierHandler;
-import com.mraof.minestuck.util.IdentifierHandler.PlayerIdentifier;
 
 public class TileEntityTotemlathe extends TileEntityMachine
 {
-	private PlayerIdentifier owner;
-	private GristType selectedGrist = GristType.Build;
-	private int color = -1;
-	private boolean destroyed=false;
-	public com.mraof.minestuck.block.BlockTotemlathe.enumParts part;
+	private boolean broken=false;
+	
 	//constructor
 
-	public boolean isDestroyed() {
-		return destroyed;
+	public boolean isBroken() {
+		return broken;
 	}
 	
-	public void destroy() {
-		destroyed=true;
+	public void Brake() {
+		broken=true;
 	}
 	
 	
@@ -67,15 +47,6 @@ public class TileEntityTotemlathe extends TileEntityMachine
 	public void readFromNBT(NBTTagCompound tagCompound)
 	{
 		super.readFromNBT(tagCompound);
-		
-		if(tagCompound.hasKey("gristType"))
-			this.setSelectedGrist(GristType.values()[tagCompound.getInteger("gristType")]);
-		
-		if(tagCompound.hasKey("color"))
-			this.color = tagCompound.getInteger("color");
-		
-		if(tagCompound.hasKey("owner") || tagCompound.hasKey("ownerMost"))
-			setOwner(IdentifierHandler.load(tagCompound, "owner"));
 	}
 	
 	@Override
@@ -172,11 +143,8 @@ public class TileEntityTotemlathe extends TileEntityMachine
 	@Override
 	public void markDirty()
 	{
-		if(getMachineType() == MachineType.PUNCH_DESIGNIX || getMachineType() == MachineType.TOTEM_LATHE)
-		{
-			this.progress = 0;
-			this.ready = false;
-		}
+		this.progress = 0;
+		this.ready = false;
 		super.markDirty();
 	}
 
@@ -184,27 +152,6 @@ public class TileEntityTotemlathe extends TileEntityMachine
 	public String getName()
 	{
 		return "tile.sburbMachine.Totemlathe.name";
-	}
-	
-	public MachineType getMachineType()
-	{
-		return MachineType.values()[getBlockMetadata()%4];
-	}
-
-	public PlayerIdentifier getOwner() {
-		return owner;
-	}
-
-	public void setOwner(PlayerIdentifier owner) {
-		this.owner = owner;
-	}
-
-	public GristType getSelectedGrist() {
-		return selectedGrist;
-	}
-
-	public void setSelectedGrist(GristType selectedGrist) {
-		this.selectedGrist = selectedGrist;
 	}
 	
 }

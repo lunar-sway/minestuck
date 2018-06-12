@@ -13,6 +13,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 import com.mraof.minestuck.Minestuck;
@@ -24,9 +25,8 @@ public class BlockCruxtruder extends BlockLargeMachine{
 	public static final PropertyEnum<enumParts> PART = PropertyEnum.<enumParts>create("part",enumParts.class);
 
 	public BlockCruxtruder() {
-		super(1,1,1);
 		setUnlocalizedName("cruxtruder");
-		//setDefaultState(getStateFromMeta(0));
+		setDefaultState(getStateFromMeta(0));
 		
 	} 
 	//not sure how to do this.
@@ -68,6 +68,21 @@ public class BlockCruxtruder extends BlockLargeMachine{
 	
 	@Override
 	public void onBlockPlacedBy(World worldIn,BlockPos pos,IBlockState state,EntityLivingBase placer, ItemStack stack){
+		EnumFacing facing = EnumFacing.getHorizontal(MathHelper.floor((double)(placer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3).getOpposite();
+		switch (facing) {
+
+		case EAST:pos = pos.north(2).west(2);
+			break;
+		case NORTH:pos = pos.west(2);
+			break;
+		case SOUTH:pos=pos.north(2);
+			break;
+		case WEST:pos=pos;
+			break;
+		
+		}
+		
+		
 		if(placer!=null && !(worldIn.isRemote)){
 			worldIn.setBlockState(pos.south(0).up(1).east(0), MinestuckBlocks.cruxtruder2.getDefaultState().withProperty(BlockCruxtruder2.PART, BlockCruxtruder2.enumParts.ZERO_TWO_ZERO));
 			worldIn.setBlockState(pos.south(0).up(1).east(1), MinestuckBlocks.cruxtruder2.getDefaultState().withProperty(BlockCruxtruder2.PART, BlockCruxtruder2.enumParts.ZERO_TWO_ONE));

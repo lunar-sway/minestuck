@@ -1,18 +1,10 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.block.BlockSburbMachine.MachineType;
-import com.mraof.minestuck.block.MinestuckBlocks;
-import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.inventory.ContainerTotemlathe;
-import com.mraof.minestuck.item.MinestuckItems;
 import com.mraof.minestuck.network.MinestuckChannelHandler;
 import com.mraof.minestuck.network.MinestuckPacket;
 import com.mraof.minestuck.network.MinestuckPacket.Type;
 import com.mraof.minestuck.tileentity.TileEntityTotemlathe;
-import com.mraof.minestuck.util.AlchemyRecipeHandler;
-import com.mraof.minestuck.util.GristRegistry;
-import com.mraof.minestuck.util.GristSet;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -23,14 +15,12 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
-import java.util.List;
 
 public class GuiTotemlathe extends GuiContainer
 {
@@ -39,7 +29,6 @@ public class GuiTotemlathe extends GuiContainer
 	
 	private ResourceLocation guiBackground;
 	private ResourceLocation guiProgress;
-	private MachineType type;
 	protected TileEntityTotemlathe te;
 	//private EntityPlayer player;
 	
@@ -55,79 +44,25 @@ public class GuiTotemlathe extends GuiContainer
 	{
 	super(new ContainerTotemlathe(inventoryPlayer, tileEntity));
 	this.te = tileEntity;
-	this.type = MachineType.TOTEM_LATHE;
-	guiBackground = new ResourceLocation("minestuck:textures/gui/" + guis[type.ordinal()] + ".png");
-	guiProgress = new ResourceLocation("minestuck:textures/gui/progress/" + guis[type.ordinal()] + ".png");
+	guiBackground = new ResourceLocation("minestuck:textures/gui/lathe.png");
+	guiProgress = new ResourceLocation("minestuck:textures/gui/progress/lathe.png");
 	//this.player = inventoryPlayer.player;
 	
 	//sets prgress bar information based on machine type
-	switch (type) {
-	case CRUXTRUDER:
-		progressX = 82;
-		progressY = 42;
-		progressWidth = 10;
-		progressHeight = 13;
-		break;
-	case PUNCH_DESIGNIX:
-		progressX = 63;
-		progressY = 38;
-		progressWidth = 43;
-		progressHeight = 17;
-		goX = 66;
-		goY = 55;
-		break;
-	case TOTEM_LATHE:
 		progressX = 81;
 		progressY = 33;
 		progressWidth = 44;
 		progressHeight = 17;
 		goX = 85;
 		goY = 53;
-		break;
-	case ALCHEMITER:
-		progressX = 54;
-		progressY = 23;
-		progressWidth = 71;
-		progressHeight = 10;
-		goX = 72;
-		goY = 31;
-		break;
-	}
 }
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
 	{
-		fontRenderer.drawString(I18n.format("gui."+guis[type.ordinal()]+".name"), 8, 6, 4210752);
+		fontRenderer.drawString(I18n.format("gui.lathe.name"), 8, 6, 4210752);
 		//draws "Inventory" or your regional equivalent
 		fontRenderer.drawString(I18n.format("container.inventory"), 8, ySize - 96 + 2, 4210752);
-		if (type == MachineType.ALCHEMITER && !te.getStackInSlot(0).isEmpty()) 
-		{
-			//Render grist requirements
-			ItemStack stack = AlchemyRecipeHandler.getDecodedItem(te.getStackInSlot(0));
-			if(type == MachineType.ALCHEMITER && !(te.getStackInSlot(0).hasTagCompound() && te.getStackInSlot(0).getTagCompound().hasKey("contentID")))
-				stack = new ItemStack(MinestuckBlocks.genericObject);
-			
-			GristSet set = GristRegistry.getGristConversion(stack);
-			boolean useSelectedType = stack.getItem() == MinestuckItems.captchaCard;
-			if(useSelectedType)
-				set = new GristSet(te.getSelectedGrist(), MinestuckConfig.clientCardCost);
-			if(set != null && stack.isItemDamaged())
-			{
-				float multiplier = 1 - stack.getItem().getDamage(stack)/((float) stack.getMaxDamage());
-				for(int i = 0; i < set.gristTypes.length; i++)
-					if(type == MachineType.ALCHEMITER)
-						set.gristTypes[i] = (int) Math.ceil(set.gristTypes[i]*multiplier);
-					else set.gristTypes[i] = (int) (set.gristTypes[i]*multiplier);
-			}
-			
-			GuiUtil.drawGristBoard(set, useSelectedType ? GuiUtil.GristboardMode.ALCHEMITER_SELECT : GuiUtil.GristboardMode.ALCHEMITER, 9, 45, fontRenderer);
-			
-			List<String> tooltip = GuiUtil.getGristboardTooltip(set, mouseX - this.guiLeft, mouseY - this.guiTop, 9, 45, fontRenderer);
-			if(tooltip != null)
-				this.drawHoveringText(tooltip, mouseX - this.guiLeft, mouseY - this.guiTop, fontRenderer);
-			
-		}
 	}
 	
 	@Override
@@ -143,11 +78,9 @@ public class GuiTotemlathe extends GuiContainer
 		
 		//draw progress bar
 		this.mc.getTextureManager().bindTexture(guiProgress);
-		int width = type == MachineType.CRUXTRUDER ? progressWidth : getScaledValue(te.progress, te.maxProgress, progressWidth);
-		int height = type != MachineType.CRUXTRUDER ? progressHeight : getScaledValue(te.progress, te.maxProgress, progressHeight);
-		if(type != MachineType.CRUXTRUDER)
-			this.drawModalRectWithCustomSizedTexture(x+progressX, y+progressY, 0, 0, width, height, progressWidth, progressHeight);
-		else this.drawModalRectWithCustomSizedTexture(x+progressX, y+progressY+progressHeight-height, 0, progressHeight-height, width, height, progressWidth, progressHeight);
+		int width = getScaledValue(te.progress, te.maxProgress, progressWidth);
+		int height = progressHeight;
+		this.drawModalRectWithCustomSizedTexture(x+progressX, y+progressY, 0, 0, width, height, progressWidth, progressHeight);
 	}
 
 	@Override

@@ -3,10 +3,14 @@ package com.mraof.minestuck.block;
 import com.mraof.minestuck.item.MinestuckItems;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -14,18 +18,24 @@ import java.util.List;
 
 public abstract class BlockLargeMachine extends BlockContainer
 {
+	public static final PropertyDirection DIRECTION = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	
-	public int Xlength;
-	public int Zwidth;
-	public int Yheight;
-	public BlockLargeMachine(int length, int width, int height) 
+	@Override
+	protected BlockStateContainer createBlockState()
+	{
+		return new BlockStateContainer(this, DIRECTION);
+		
+	}
+	@Override
+	public boolean isFullCube(IBlockState state) {
+		return false;
+	}
+
+	public BlockLargeMachine() 
 	{
 		super(Material.ROCK);
 		this.setHardness(2);
 		this.setCreativeTab(MinestuckItems.tabMinestuck);
-		this.Xlength=length;
-		this.Yheight=width;
-		this.Zwidth=height;	
 	}	
 	//keeps the blocks from dropping something
 	@Override
@@ -33,21 +43,6 @@ public abstract class BlockLargeMachine extends BlockContainer
 	{
 		return null;	
 	}
-	//make sure that the machine will fit where it's trying to be placed
-    public boolean canPlaceBlockAt(World worldIn, BlockPos pos)
-    {
-    	for(int x = 0; x<Xlength; x++){
-    		for (int y=0;y<Yheight;y++){
-    			for (int z=0; z<Zwidth;z++){
-    				if (!super.canPlaceBlockAt(worldIn, pos.add(x, y, z))){
-    					return false;
-    				}
-    			}
-    		}
-    	}
-    	return true;
-    	
-    }
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) 
